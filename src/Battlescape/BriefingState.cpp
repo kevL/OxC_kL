@@ -19,7 +19,7 @@
 
 #include "BriefingState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "AliensCrashState.h"
 #include "BattlescapeState.h"
@@ -29,22 +29,20 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom
@@ -59,7 +57,6 @@ BriefingState::BriefingState(
 		Craft* craft,
 		Base* base)
 {
-	//Log(LOG_INFO) << "Create BriefingState";
 	_screen = true;
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -74,8 +71,8 @@ BriefingState::BriefingState(
 
 
 	const std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	std::string music = OpenXcom::res_MUSIC_GEO_BRIEFING; // default, safety.
-	int backpal = 0; // default.
+	std::string music = OpenXcom::res_MUSIC_GEO_BRIEFING;
+	int backpal = 0;
 
 	if (mission == "STR_UFO_CRASH_RECOVERY")
 		music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
@@ -103,23 +100,6 @@ BriefingState::BriefingState(
 		backpal = 6;
 		music = OpenXcom::res_MUSIC_GEO_BRIEF_MARS2;
 	}
-/*	if (mission == "STR_TERROR_MISSION"
-		|| mission == "STR_BASE_DEFENSE")
-	{
-		backpal = 2;
-		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE;
-	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING"
-		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		backpal = 6;
-		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR;
-	}
-	else
-	{
-		backpal = 0;
-		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND;
-	} */
 
 	setPalette("PAL_GEOSCAPE", backpal);
 	_game->getResourcePack()->playMusic(music);
@@ -194,7 +174,6 @@ BriefingState::BriefingState(
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap();
 
-	// Show respective mission briefing
 	if (mission == "STR_ALIEN_BASE_ASSAULT"
 		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
@@ -210,7 +189,7 @@ BriefingState::BriefingState(
 	_txtBriefing->setText(tr(briefingtext.str()));
 
 	if (mission == "STR_BASE_DEFENSE")
-		base->setIsRetaliationTarget(false); // And make sure the base is unmarked.
+		base->setIsRetaliationTarget(false);
 }
 
 /**
@@ -218,7 +197,6 @@ BriefingState::BriefingState(
  */
 BriefingState::~BriefingState()
 {
-	//Log(LOG_INFO) << "Delete BriefingState";
 }
 
 /**
@@ -227,17 +205,19 @@ BriefingState::~BriefingState()
  */
 void BriefingState::btnOkClick(Action*)
 {
+	_game->getResourcePack()->fadeMusic(_game, 335);
+
 	_game->popState();
 
 	Options::baseXResolution = Options::baseXBattlescape;
 	Options::baseYResolution = Options::baseYBattlescape;
 	_game->getScreen()->resetDisplay(false);
 
-	BattlescapeState* const bs = new BattlescapeState(); // <- ah there it is! kL_note
+	BattlescapeState* const bs = new BattlescapeState(); // <- ah there it is!
+
 	int
 		liveAliens = 0,
 		liveSoldiers = 0;
-
 	bs->getBattleGame()->tallyUnits(
 								liveAliens,
 								liveSoldiers);

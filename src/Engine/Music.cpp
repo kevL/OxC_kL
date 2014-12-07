@@ -19,13 +19,13 @@
 
 #include "Music.h"
 
-#include "Exception.h"
+//#include "Exception.h"
 #include "Language.h"
-#include "Logger.h"
-#include "Options.h"
+//#include "Logger.h"
+//#include "Options.h"
 
-#include "Adlib/adlplayer.h"
-#include "AdlibMusic.h"
+//#include "Adlib/adlplayer.h"
+//#include "AdlibMusic.h"
 
 
 namespace OpenXcom
@@ -98,7 +98,7 @@ void Music::load(
 void Music::play(int loop) const
 {
 #ifndef __NO_MUSIC
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 		stop();
 
@@ -117,7 +117,7 @@ void Music::play(int loop) const
 void Music::stop()
 {
 #ifndef __NO_MUSIC
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 		func_mute();
 		Mix_HookMusic(NULL, NULL);
@@ -132,7 +132,7 @@ void Music::stop()
 void Music::pause()
 {
 #ifndef __NO_MUSIC
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 		Mix_PauseMusic();
 		if (Mix_GetMusicType(NULL) == MUS_NONE)
@@ -147,7 +147,7 @@ void Music::pause()
 void Music::resume()
 {
 #ifndef __NO_MUSIC
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 		Mix_ResumeMusic();
 		if (Mix_GetMusicType(NULL) == MUS_NONE)

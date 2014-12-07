@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -53,6 +53,7 @@ AliensCrashState::AliensCrashState()
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
@@ -73,6 +74,9 @@ AliensCrashState::AliensCrashState()
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
+
+
+//	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_DEBRIEFING);
 }
 
 /**
@@ -88,6 +92,8 @@ AliensCrashState::~AliensCrashState()
  */
 void AliensCrashState::btnOkClick(Action*)
 {
+//	_game->getResourcePack()->fadeMusic(_game, 900);
+
 	_game->popState();
 	_game->pushState(new DebriefingState());
 }

@@ -4400,7 +4400,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1416609595 f:\git\openxcom\src\resource\resourcepack.h
+1417918432 f:\git\openxcom\src\resource\resourcepack.h
 
 1416256249 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
@@ -5520,16 +5520,12 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1415853534 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
+1417922634 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
 	"AbortMissionState.h"
-	<sstream>
-	<vector>
 	"BattlescapeState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
@@ -5675,19 +5671,17 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
-1415853535 source:f:\git\openxcom\src\battlescape\alienscrashstate.cpp
+1417921921 source:f:\git\openxcom\src\battlescape\alienscrashstate.cpp
 	"AliensCrashState.h"
 	"DebriefingState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1413136955 f:\git\openxcom\src\battlescape\alienscrashstate.h
+1417921815 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
 1416930052 f:\git\openxcom\src\battlescape\debriefingstate.h
@@ -5697,7 +5691,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1417890051 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1417918456 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5756,7 +5750,7 @@
 1417390461 f:\git\openxcom\src\battlescape\infoboxstate.h
 	"../Engine/State.h"
 
-1413136956 f:\git\openxcom\src\battlescape\nextturnstate.h
+1417924612 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
 1414466486 f:\git\openxcom\src\battlescape\unitdiebstate.h
@@ -5848,7 +5842,7 @@
 	<exception>
 	<string>
 
-1416210827 f:\git\openxcom\src\resource\xcomresourcepack.h
+1417922856 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 	"../Engine/Options.h"
 
@@ -5902,7 +5896,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1417885736 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1417924694 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6029,9 +6023,8 @@
 1414466440 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1416207608 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1417921744 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
-	<sstream>
 	"AliensCrashState.h"
 	"BattlescapeState.h"
 	"InventoryState.h"
@@ -6039,19 +6032,14 @@
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
-	"../Savegame/Ufo.h"
 
 1417447952 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
@@ -6253,7 +6241,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1417631783 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1417921488 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6263,11 +6251,9 @@
 	"TileEngine.h"
 	"UnitInfoState.h"
 	"../Engine/Action.h"
-	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
-	"../Engine/Palette.h"
 	"../Engine/Sound.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
@@ -6288,7 +6274,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1417894012 source:f:\git\openxcom\src\battlescape\map.cpp
+1417931283 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6418,24 +6404,20 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1416139651 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1417925862 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
-	<sstream>
 	"BattlescapeState.h"
 	"DebriefingState.h"
 	"Map.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Engine/Timer.h"
 	"../Menu/SaveGameState.h"
 	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
+	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
@@ -6527,7 +6509,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1417891300 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1417895470 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6702,7 +6684,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1417893085 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1417895670 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -6950,14 +6932,9 @@
 	"LocalizedText.h"
 	"Language.h"
 
-1416258592 source:f:\git\openxcom\src\engine\music.cpp
+1417918657 source:f:\git\openxcom\src\engine\music.cpp
 	"Music.h"
-	"Exception.h"
 	"Language.h"
-	"Logger.h"
-	"Options.h"
-	"Adlib/adlplayer.h"
-	"AdlibMusic.h"
 
 1413136956 source:f:\git\openxcom\src\engine\opengl.cpp
 	"OpenGL.h"
@@ -7300,16 +7277,13 @@
 1413136957 f:\git\openxcom\src\geoscape\confirmnewbasestate.h
 	"../Engine/State.h"
 
-1416037867 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
+1417921152 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
 	"ConfirmCydoniaState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/BriefingState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/RNG.h"
 	"../Engine/Surface.h"
 	"../Interface/Window.h"
 	"../Interface/Text.h"
@@ -7346,17 +7320,12 @@
 1416060399 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1416687501 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1417921131 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
-	"../Engine/Exception.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/RNG.h"
 	"../Engine/Surface.h"
 	"../Geoscape/GeoscapeState.h"
 	"../Interface/Text.h"
@@ -8959,15 +8928,11 @@
 1413136962 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1416609595 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1417919340 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
-	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Font.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 	"../Engine/Surface.h"

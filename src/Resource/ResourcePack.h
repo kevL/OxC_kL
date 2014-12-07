@@ -145,7 +145,7 @@ private:
 
 			/// Gets a particular sound.
 			Sound* getSound(
-					const std::string& set,
+					const std::string& soundSet,
 					unsigned int sound) const;
 
 			/// Gets a particular palette.

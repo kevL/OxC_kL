@@ -47,7 +47,7 @@ private:
 	static const int NEXT_TURN_DELAY = 1000;
 
 	BattlescapeState* _state;
-	SavedBattleGame* _battleGame;
+	SavedBattleGame* _savedBattle;
 //	Surface* _bg;
 	Text
 		* _txtTitle,
@@ -62,7 +62,7 @@ private:
 	public:
 		/// Creates the Next Turn state.
 		NextTurnState(
-				SavedBattleGame* battleGame,
+				SavedBattleGame* savedBattle,
 				BattlescapeState* state);
 		/// Cleans up the Next Turn state.
 		~NextTurnState();

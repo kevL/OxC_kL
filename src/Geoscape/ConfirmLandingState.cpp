@@ -24,13 +24,13 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BriefingState.h"
 
-#include "../Engine/Exception.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
 
 #include "../Geoscape/GeoscapeState.h"
@@ -144,8 +144,8 @@ ConfirmLandingState::ConfirmLandingState(
 		{
 			//Log(LOG_INFO) << ". . terrain NOT valid";
 			const double
-				lon = craft->getLongitude(),
-				lat = craft->getLatitude();
+				lon = ufo->getLongitude(),
+				lat = ufo->getLatitude();
 
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
@@ -155,7 +155,7 @@ ConfirmLandingState::ConfirmLandingState(
 			{
 				if ((*i)->getRules()->insideRegion(
 												lon,
-												lat))
+												lat) == true)
 				{
 					for (std::vector<City*>::const_iterator
 							j = (*i)->getRules()->getCities()->begin();
@@ -182,12 +182,12 @@ ConfirmLandingState::ConfirmLandingState(
 												ruleDeploy->getTerrains().size() - 1);
 				_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 
-				if (lat < 0.0 // northern hemisphere
+				if (lat < 0. // northern hemisphere
 					&& _terrain->getName() == "NATIVEURBAN")
 				{
 					_terrain = _game->getRuleset()->getTerrain("DAWNURBANA");
 				}
-				else if (lat > 0.0 // southern hemisphere
+				else if (lat > 0. // southern hemisphere
 					&& _terrain->getName() == "DAWNURBANA")
 				{
 					_terrain = _game->getRuleset()->getTerrain("NATIVEURBAN");
@@ -217,9 +217,9 @@ ConfirmLandingState::ConfirmLandingState(
 						if (*j == texture
 							&& (_terrain->getHemisphere() == 0
 								|| (_terrain->getHemisphere() < 0
-									&& lat < 0.0)
+									&& lat < 0.)
 								|| (_terrain->getHemisphere() > 0
-									&& lat >= 0.0)))
+									&& lat >= 0.)))
 						{
 							//Log(LOG_INFO) << ". . . . . _terrain = " << *i;
 							choice.push_back(_terrain);
@@ -341,6 +341,8 @@ void ConfirmLandingState::init()
  */
 void ConfirmLandingState::btnYesClick(Action*)
 {
+	_game->getResourcePack()->fadeMusic(_game, 335);
+
 	_game->popState();
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
@@ -392,7 +394,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 /**
  * Returns the craft to base and closes the window.
- * kL: CHANGE the craft goes into Patrol mode.
+ * kL CHANGE: the craft goes into Patrol mode.
  * @param action - pointer to an Action
  */
 void ConfirmLandingState::btnNoClick(Action*)

@@ -21,13 +21,13 @@
 
 //#include <SDL_mixer.h>
 
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
+//#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Font.h"
 #include "../Engine/Game.h" // fadeMusic()
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Surface.h"
@@ -202,7 +202,7 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
  */
 Music* ResourcePack::getMusic(const std::string& name) const
 {
-	if (Options::mute)
+	if (Options::mute == true)
 		return _muteMusic;
 
 	return getRandomMusic(name, ""); // sza_MusicRules
@@ -217,7 +217,7 @@ void ResourcePack::playMusic(
 		const std::string& name,
 		const std::string& terrain) // kL: sza_MusicRules
 {
-	if (Options::mute)
+	if (Options::mute == true)
 		return;
 
 	if (_playingMusic != name)
@@ -270,9 +270,9 @@ void ResourcePack::fadeMusic(
  */
 Music* ResourcePack::getRandomMusic(
 		const std::string& name,
-		const std::string& terrain) const // kL: sza_MusicRules
+		const std::string& terrain) const // sza_MusicRules
 {
-	if (Options::mute)
+	if (Options::mute == true)
 		return _muteMusic;
 
 	if (terrain.empty() == true)
@@ -361,14 +361,14 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
  * @return, pointer to the Sound
  */
 Sound* ResourcePack::getSound(
-		const std::string& set,
+		const std::string& soundSet,
 		unsigned int sound) const
 {
 	if (Options::mute)
 		return _muteSound;
 	else
 	{
-		const std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
+		const std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(soundSet);
 
 		if (_sounds.end() != i)
 			return i->second->getSound(sound);

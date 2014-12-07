@@ -2198,7 +2198,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 											_currentAction.actor->getPosition(),
 											_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
 					{
-						if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+						if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == true)
 						{
 							_parentState->getGame()->getResourcePack()->getSoundByDepth(
 																					_save->getDepth(),

@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_ALIENSDIEDSTATE_H
-#define OPENXCOM_ALIENSDIEDSTATE_H
+#ifndef OPENXCOM_ALIENSCRASHSTATE_H
+#define OPENXCOM_ALIENSCRASHSTATE_H
 
 #include "../Engine/State.h"
 

@@ -670,7 +670,7 @@ void Projectile::applyAccuracy(
 
 
 	// kL_note: *** This is for Throwing and AcidSpitt only ***
-	accuracy = accuracy * 50. + 65.; // arbitrary adjustment.
+	accuracy = accuracy * 50. + 68.4; // arbitrary adjustment.
 
 	double perfectToss = 100.;
 	const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());

@@ -19,7 +19,7 @@
 
 #include "NextTurnState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "BattlescapeState.h"
 #include "DebriefingState.h"
@@ -28,9 +28,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
@@ -41,7 +40,7 @@
 //#include "../Interface/TurnCounter.h" // kL, extern 'kL_TurnCount'
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -52,14 +51,14 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Next Turn screen.
- * @param battleGame	- pointer to the SavedBattleGame
+ * @param savedBattle	- pointer to the SavedBattleGame
  * @param state			- pointer to the BattlescapeState
  */
 NextTurnState::NextTurnState(
-		SavedBattleGame* battleGame,
+		SavedBattleGame* savedBattle,
 		BattlescapeState* state)
 	:
-		_battleGame(battleGame),
+		_savedBattle(savedBattle),
 		_state(state),
 		_timer(NULL)
 //		_turnCounter(NULL)
@@ -76,7 +75,7 @@ NextTurnState::NextTurnState(
 //							0,
 //							0);
 
-	battleGame->setPaletteByDepth(this);
+	_savedBattle->setPaletteByDepth(this);
 
 	add(_window);
 	add(_txtTitle, "messageWindows", "battlescape");
@@ -86,6 +85,7 @@ NextTurnState::NextTurnState(
 //	add(_bg);
 
 	centerAllSurfaces();
+
 
 /*	_bg->setX(0);
 	_bg->setY(0);
@@ -98,7 +98,7 @@ NextTurnState::NextTurnState(
 				Palette::blockOffset(0)+15); */
 
 	// make this screen line up with the hidden movement screen
-	int y = state->getMap()->getMessageY();
+	const int y = state->getMap()->getMessageY();
 
 	_window->setY(y);
 	_txtTitle->setY(y + 68);
@@ -120,14 +120,14 @@ NextTurnState::NextTurnState(
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast();
-	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
+	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
 
 //	_txtSide->setColor(Palette::blockOffset(0)-1);
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast();
 	_txtSide->setText(tr("STR_SIDE")
-						.arg(tr(_battleGame->getSide() == FACTION_PLAYER? "STR_XCOM": "STR_ALIENS")));
+						.arg(tr(_savedBattle->getSide() == FACTION_PLAYER? "STR_XCOM": "STR_ALIENS")));
 
 //	_txtMessage->setColor(Palette::blockOffset(0)-1);
 	_txtMessage->setBig();
@@ -140,7 +140,7 @@ NextTurnState::NextTurnState(
 	kL_noReveal = true;
 	//Log(LOG_INFO) << ". preReveal TRUE";
 
-	if (Options::skipNextTurnScreen)
+	if (Options::skipNextTurnScreen == true)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
 		_timer->onTimer((StateHandler)& NextTurnState::close);
@@ -154,7 +154,7 @@ NextTurnState::NextTurnState(
  */
 NextTurnState::~NextTurnState()
 {
-	if (Options::skipNextTurnScreen) // kL
+	if (Options::skipNextTurnScreen == true)
 		delete _timer;
 }
 
@@ -169,11 +169,11 @@ void NextTurnState::handle(Action* action)
 	if (action->getDetails()->type == SDL_KEYDOWN
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-//		kL_TurnCount = _battleGame->getTurn();
+//		kL_TurnCount = _savedBattle->getTurn();
 //		_turnCounter = _state->getTurnCounter();
 //		_turnCounter->update();
 
-		_state->updateTurn(); // kL
+		_state->updateTurn();
 		close();
 	}
 }
@@ -193,18 +193,16 @@ void NextTurnState::think()
 void NextTurnState::close()
 {
 	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
-	_battleGame->getBattleGame()->cleanupDeleted();
+	_savedBattle->getBattleGame()->cleanupDeleted();
 
 	_game->popState();
 
 	int
 		liveAliens = 0,
 		liveSoldiers = 0;
-
 	_state->getBattleGame()->tallyUnits(
 									liveAliens,
 									liveSoldiers);
-
 	if (liveAliens == 0
 		|| liveSoldiers == 0)
 	{
@@ -216,29 +214,67 @@ void NextTurnState::close()
 	{
 		_state->btnCenterClick(NULL);
 
-		if (_battleGame->getSide() == FACTION_PLAYER)		// kL
+		if (_savedBattle->getSide() == FACTION_PLAYER)
 		{
-			_state->getBattleGame()->setupCursor();			// kL
-			_state->getGame()->getCursor()->setVisible();	// kL
+			_state->getBattleGame()->setupCursor();
+			_state->getGame()->getCursor()->setVisible();
 
-			// Autosave every set amount of turns
-			if (_battleGame->getTurn() == 1
-				|| _battleGame->getTurn() %Options::autosaveFrequency == 0)
+			if (_savedBattle->getTurn() == 1)
 			{
-				if (_game->getSavedGame()->isIronman() == true)
-					_game->pushState(new SaveGameState(
-													OPT_BATTLESCAPE,
-													SAVE_IRONMAN,
-													_palette));
-				else if (Options::autosave)
-					_game->pushState(new SaveGameState(
-													OPT_BATTLESCAPE,
-													SAVE_AUTO_BATTLESCAPE,
-													_palette));
+				if ((_savedBattle->getTurn() %Options::autosaveFrequency) == 0)
+				{
+					if (_game->getSavedGame()->isIronman() == true)
+						_game->pushState(new SaveGameState(
+														OPT_BATTLESCAPE,
+														SAVE_IRONMAN,
+														_palette));
+					else if (Options::autosave == true)
+						_game->pushState(new SaveGameState(
+														OPT_BATTLESCAPE,
+														SAVE_AUTO_BATTLESCAPE,
+														_palette));
+				}
+			}
+			else
+			{
+				std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+				std::string terrain;
+
+				const std::string mission = _savedBattle->getMissionType();
+				if (mission == "STR_UFO_CRASH_RECOVERY")
+				{
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
+					terrain = _savedBattle->getTerrain();
+				}
+				else if (mission == "STR_UFO_GROUND_ASSAULT")
+				{
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
+					terrain = _savedBattle->getTerrain();
+				}
+				else if (mission == "STR_ALIEN_BASE_ASSAULT")
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
+				else if (mission == "STR_BASE_DEFENSE")
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
+				else if (mission == "STR_TERROR_MISSION")
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
+				else if (mission == "STR_MARS_CYDONIA_LANDING")
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
+				else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
+					music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
+
+				_game->getResourcePack()->fadeMusic(_game, 475);
+				_game->getResourcePack()->playMusic(
+												music,
+												terrain);
 			}
 		}
 		else
-			_state->getGame()->getCursor()->setVisible(false); // kL
+		{
+			_game->getResourcePack()->fadeMusic(_game, 475);
+			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
+
+			_state->getGame()->getCursor()->setVisible(false);
+		}
 	}
 }
 

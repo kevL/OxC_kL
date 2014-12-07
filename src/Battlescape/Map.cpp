@@ -680,8 +680,8 @@ void Map::drawTerrain(Surface* surface)
 	const bool
 		pathPreview = _save->getPathfinding()->isPathPreviewed();
 	bool
-		floor,
-		object;
+		hasFloor,
+		hasObject;
 
 	if (_waypoints.empty() == false
 		|| (pathPreview == true
@@ -746,8 +746,8 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					tileColor = tile->getMarkerColor();
-					floor = false;
-					object = false;
+					hasFloor = false;
+					hasObject = false;
 
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
@@ -760,7 +760,7 @@ void Map::drawTerrain(Surface* surface)
 								tileShade);
 
 						// kL_begin:
-						floor = true;
+						hasFloor = true;
 
 						Tile* tileEastDown = _save->getTile(mapPosition + Position(1, 0, -1));
 						if (tileEastDown != NULL)
@@ -824,9 +824,9 @@ void Map::drawTerrain(Surface* surface)
 													surface,
 													screenPosition.x + offset.x + 9 + 16,
 													screenPosition.y + offset.y + 4 + 32,
-													10,
+													0, // 10
 													false,
-													6); // 1=white, 2=yellow-red, 3=red, 6=lt.brown
+													9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
 										}
 									}
 								}
@@ -1294,7 +1294,7 @@ void Map::drawTerrain(Surface* surface)
 							&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == 9))
 						{
-							object = true;
+							hasObject = true;
 
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
@@ -1318,8 +1318,8 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 						// kL_begin:
-						if (floor == false
-							&& object == false)
+						if (hasFloor == false
+							&& hasObject == false)
 						{
 							Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
 							if (tileBelow != NULL)
@@ -1380,9 +1380,9 @@ void Map::drawTerrain(Surface* surface)
 													surface,
 													screenPosition.x + offset.x + 9,
 													screenPosition.y + offset.y + 4 + 24,
-													10,
+													0, // 10
 													false,
-													6); // 1=white, 2=yellow-red, 3=red, 6=lt.brown
+													9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
 										}
 									}
 								}
@@ -1653,9 +1653,9 @@ void Map::drawTerrain(Surface* surface)
 														surface,
 														screenPosition.x + offset.x + 9,
 														screenPosition.y + offset.y + 4,
-														10,
+														0, // 10
 														false,
-														6); // 1=white, 2=yellow-red, 3=red, 6=lt.brown
+														9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
 											}
 										}
 									}
@@ -2190,7 +2190,7 @@ void Map::drawTerrain(Surface* surface)
 									- _arrow->getHeight()
 //kL								+ arrowBob[_cursorFrame],
 									+ static_cast<int>( // kL
-										-4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
+										-4. * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
 								0);
 		}
 		else // DarkDefender
@@ -2207,7 +2207,7 @@ void Map::drawTerrain(Surface* surface)
 //kL							+ arrowBob[_animFrame],
 //kL							+ arrowBob[_cursorFrame], // DarkDefender
 								+ static_cast<int>( // kL
-									4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
+									4. * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
 							0);
 	}
 

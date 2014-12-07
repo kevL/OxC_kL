@@ -116,6 +116,8 @@ namespace OpenXcom
  */
 BattlescapeState::BattlescapeState()
 	:
+		_savedGame(_game->getSavedGame()),
+		_savedBattle(_game->getSavedGame()->getSavedBattle()),
 //		_reserve(0),
 		_xBeforeMouseScrolling(0),
 		_yBeforeMouseScrolling(0),
@@ -131,9 +133,6 @@ BattlescapeState::BattlescapeState()
 		_showConsole(2)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
-	_savedGame = _game->getSavedGame();
-	_savedBattle = _savedGame->getSavedBattle();
-
 	std::fill_n(
 			_visibleUnit,
 			20,
@@ -514,7 +513,7 @@ BattlescapeState::BattlescapeState()
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
 	srfOverload->blit(_weight); */
-	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(6)+10); // brown
+	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(8)); // (8)=blue // (6)+10=brown
 	_weight->setVisible(false);
 
 	_btnWounds->setVisible(false);
@@ -822,11 +821,19 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAuto->setGroup(&_reserve); */
 
 	std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+	std::string terrain;
+
 	const std::string mission = _savedBattle->getMissionType();
 	if (mission == "STR_UFO_CRASH_RECOVERY")
+	{
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
+		terrain = _savedBattle->getTerrain();
+	}
 	else if (mission == "STR_UFO_GROUND_ASSAULT")
+	{
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
+		terrain = _savedBattle->getTerrain();
+	}
 	else if (mission == "STR_ALIEN_BASE_ASSAULT")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
 	else if (mission == "STR_BASE_DEFENSE")
@@ -840,7 +847,7 @@ BattlescapeState::BattlescapeState()
 
 	_game->getResourcePack()->playMusic(
 									music,
-									_savedBattle->getTerrain());
+									terrain);
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
@@ -2465,7 +2472,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		return;
 
 
-	if (calcFoV)
+	if (calcFoV == true)
 		_savedBattle->getTileEngine()->calculateFOV(selectedUnit);
 
 	int j = 0;
@@ -2505,7 +2512,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 	const int strength = static_cast<int>(Round(
-							static_cast<double>(selectedUnit->getBaseStats()->strength) * (selectedUnit->getAccuracyModifier() / 2.0 + 0.5)));
+						 static_cast<double>(selectedUnit->getBaseStats()->strength) * (selectedUnit->getAccuracyModifier() / 2. + 0.5)));
 	if (selectedUnit->getCarriedWeight() > strength)
 		_weight->setVisible();
 

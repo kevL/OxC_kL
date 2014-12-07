@@ -25,9 +25,9 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Window.h"
@@ -107,6 +107,8 @@ ConfirmCydoniaState::~ConfirmCydoniaState()
  */
 void ConfirmCydoniaState::btnYesClick(Action*)
 {
+	_game->getResourcePack()->fadeMusic(_game, 335);
+
 	_game->popState();
 	_game->popState();
 
