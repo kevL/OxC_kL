@@ -5544,10 +5544,9 @@
 1417969372 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
-1415853531 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1417988850 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
-	"../Engine/Palette.h"
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"

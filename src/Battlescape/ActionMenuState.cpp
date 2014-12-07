@@ -347,8 +347,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			}
 
 			if (targetUnit == NULL
-				&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																						_action->actor->getPosition(),
+				&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
+																						_action->actor->getPosition(), // cf. TileEngine::reactionShot()
 																						_action->actor->getDirection(),
 																						_action->actor,
 																						NULL,

@@ -20,7 +20,7 @@
 #include "ActionMenuItem.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
@@ -57,11 +57,11 @@ ActionMenuItem::ActionMenuItem(
 		_tu(0)
 {
 	Font
-		* big = game->getResourcePack()->getFont("FONT_BIG"),
-		* small = game->getResourcePack()->getFont("FONT_SMALL");
-	Language* lang = game->getLanguage();
+		* const big = game->getResourcePack()->getFont("FONT_BIG"),
+		* const small = game->getResourcePack()->getFont("FONT_SMALL");
+	Language* const lang = game->getLanguage();
 
-	Element* actionMenu = game->getRuleset()->getInterface("battlescape")->getElement("actionMenu");
+	const Element* const actionMenu = game->getRuleset()->getInterface("battlescape")->getElement("actionMenu");
 
 	_highlightModifier = actionMenu->TFTDMode? 12: 4;
 
@@ -181,8 +181,8 @@ void ActionMenuItem::draw()
 
 /**
  * Processes a mouse hover in event.
- * @param action - pointer to an Action
- * @param state - pointer to a state
+ * @param action	- pointer to an Action
+ * @param state		- pointer to a state
  */
 void ActionMenuItem::mouseIn(Action* action, State* state)
 {
@@ -196,8 +196,8 @@ void ActionMenuItem::mouseIn(Action* action, State* state)
 
 /**
  * Processes a mouse hover out event.
- * @param action - pointer to an Action
- * @param state - pointer to a state
+ * @param action	- pointer to an Action
+ * @param state		- pointer to a state
  */
 void ActionMenuItem::mouseOut(Action* action, State* state)
 {

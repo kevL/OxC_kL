@@ -117,7 +117,6 @@ void TileEngine::calculateSunShading(Tile* tile)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading()";
 	const int layer = 0; // Ambient lighting layer.
-
 	int light = 15 - _battleSave->getGlobalShade();
 
 	// At night/dusk sun isn't dropping shades blocked by roofs
@@ -171,8 +170,8 @@ void TileEngine::calculateSunShading(Tile* tile)
 void TileEngine::calculateTerrainLighting()
 {
 	const int
-		layer		= 1,	// static lighting layer
-		fireLight	= 15;	// amount of light a fire generates
+		layer = 1,		// static lighting layer
+		fireLight = 15;	// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;
@@ -188,8 +187,8 @@ void TileEngine::calculateTerrainLighting()
 			++i)
 	{
 		// only floors and objects can light up
-		if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)
-			&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
+		if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
+			&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource() != 0)
 		{
 			addLight(
 					_battleSave->getTiles()[i]->getPosition(),
@@ -197,8 +196,8 @@ void TileEngine::calculateTerrainLighting()
 					layer);
 		}
 
-		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
+		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
+			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource() != 0)
 		{
 			addLight(
 					_battleSave->getTiles()[i]->getPosition(),
@@ -206,21 +205,21 @@ void TileEngine::calculateTerrainLighting()
 					layer);
 		}
 
-		if (_battleSave->getTiles()[i]->getFire())
+		if (_battleSave->getTiles()[i]->getFire() != 0)
 			addLight(
 					_battleSave->getTiles()[i]->getPosition(),
 					fireLight,
 					layer);
 
-		for (std::vector<BattleItem*>::iterator
-				it = _battleSave->getTiles()[i]->getInventory()->begin();
-				it != _battleSave->getTiles()[i]->getInventory()->end();
-				++it)
+		for (std::vector<BattleItem*>::const_iterator
+				j = _battleSave->getTiles()[i]->getInventory()->begin();
+				j != _battleSave->getTiles()[i]->getInventory()->end();
+				++j)
 		{
-			if ((*it)->getRules()->getBattleType() == BT_FLARE)
+			if ((*j)->getRules()->getBattleType() == BT_FLARE)
 				addLight(
 						_battleSave->getTiles()[i]->getPosition(),
-						(*it)->getRules()->getPower(),
+						(*j)->getRules()->getPower(),
 						layer);
 		}
 	}
@@ -232,9 +231,9 @@ void TileEngine::calculateTerrainLighting()
 void TileEngine::calculateUnitLighting()
 {
 	const int
-		layer		= 2,	// Dynamic lighting layer.
-		unitLight	= 12,	// amount of light a unit generates
-		fireLight	= 15;	// amount of light a fire generates
+		layer = 2,		// Dynamic lighting layer.
+		unitLight = 12,	// amount of light a unit generates
+		fireLight = 15;	// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;
@@ -259,7 +258,7 @@ void TileEngine::calculateUnitLighting()
 					layer);
 		}
 
-		if ((*i)->getFire()) // add lighting of units on fire
+		if ((*i)->getFire() != 0) // add lighting of units on fire
 			addLight(
 					(*i)->getPosition(),
 					fireLight,
@@ -330,7 +329,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	unit->clearVisibleUnits();
 	unit->clearVisibleTiles();
 
-	if (unit->isOut(true, true))
+	if (unit->isOut(true, true) == true)
 		return false;
 
 	bool ret = false;
@@ -338,7 +337,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	const size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
 
 	int dir;
-	if (Options::strafe
+	if (Options::strafe == true
 		&& unit->getTurretType() > -1)
 	{
 		dir = unit->getTurretDirection();
@@ -346,7 +345,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	else
 		dir = unit->getDirection();
 
-	const bool swap = (dir == 0 || dir == 4);
+	const bool swapXY = (dir == 0 || dir == 4);
 
 	const int
 		sign_x[8] = { 1, 1, 1, 1,-1,-1,-1,-1},
@@ -409,8 +408,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				if (distSqr <= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)
 				{
 					const int
-						deltaPos_x = (sign_x[dir] * (swap? y: x)),
-						deltaPos_y = (sign_y[dir] * (swap? x: y));
+						deltaPos_x = (sign_x[dir] * (swapXY? y: x)),
+						deltaPos_y = (sign_y[dir] * (swapXY? x: y));
 
 					testPos.x = unitPos.x + deltaPos_x;
 					testPos.y = unitPos.y + deltaPos_y;
@@ -1017,13 +1016,13 @@ bool TileEngine::canTargetUnit(
 		relX = static_cast<int>(std::floor(static_cast<float>( relPos.y) * normal + 0.5f)),
 		relY = static_cast<int>(std::floor(static_cast<float>(-relPos.x) * normal + 0.5f)),
 		sliceTargets[10] =
-	{
-		 0,		 0,
-		 relX,	 relY,
-		-relX,	-relY,
-		 relY,	-relX,
-		-relY,	 relX
-	};
+		{
+			 0,		 0,
+			 relX,	 relY,
+			-relX,	-relY,
+			 relY,	-relX,
+			-relY,	 relX
+		};
 
 	if (potentialUnit->isOut() == false)
 		heightRange = potentialUnit->getHeight();
@@ -1175,8 +1174,10 @@ bool TileEngine::canTargetTile(
 		minZ = maxZ = 0;
 	}
 	else
+	{
 		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (part is not a tileObject)";
 		return false;
+	}
 
 	if (minZfound == false) // find out height range
 	{
@@ -1203,8 +1204,7 @@ bool TileEngine::canTargetTile(
 									targetVoxel.y + tY,
 									targetVoxel.z + j * 2),
 							NULL,
-							true)
-						== part) // bingo
+							true) == part) // bingo
 				{
 					if (minZfound == false)
 					{
@@ -1245,8 +1245,7 @@ bool TileEngine::canTargetTile(
 									targetVoxel.y + tY,
 									targetVoxel.z + j * 2),
 							NULL,
-							true)
-						== part) // bingo
+							true) == part) // bingo
 				{
 					if (maxZfound == false)
 					{
@@ -1266,7 +1265,7 @@ bool TileEngine::canTargetTile(
 	if (minZ > maxZ)
 		minZ = maxZ;
 
-	int
+	const int
 		rangeZ = maxZ - minZ,
 		centerZ = (maxZ + minZ) / 2;
 
@@ -1586,10 +1585,10 @@ bool TileEngine::reactionShot(
 						&& canMelee == false;
 					++i)
 			{
-				canMelee = validMeleeRange(
-										unit,
-										target,
-										i);
+				canMelee = validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
+										unit, // see also, AI do_grenade_action .....
+										target, // darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
+										i); // cf. ActionMenuState::btnActionMenuItemClick()
 			}
 
 			if (canMelee == false)
@@ -5018,9 +5017,9 @@ int TileEngine::castedShade(const Position& voxel)
 	int start_z = voxel.z;
 	Position testCoord = voxel / Position(16, 16, 24);
 
-	Tile* tile = _battleSave->getTile(testCoord);
-	while (tile
-		&& tile->isVoid()
+	const Tile* tile = _battleSave->getTile(testCoord);
+	while (tile != NULL
+		&& tile->isVoid() == true
 		&& tile->getUnit() != NULL)
 	{
 		start_z = testCoord.z * 24;
@@ -5053,13 +5052,13 @@ int TileEngine::castedShade(const Position& voxel)
  */
 bool TileEngine::isVoxelVisible(const Position& voxel)
 {
-	int start_z = voxel.z + 3; // slight Z adjust
+	const int start_z = voxel.z + 3; // slight Z adjust
 	if (start_z / 24 != voxel.z / 24)
 		return true; // visible!
 
 	Position testVoxel = voxel;
 
-	int end_z = (start_z / 24) * 24 + 24;
+	const int end_z = (start_z / 24) * 24 + 24;
 	for (int // only OBJECT can cause additional occlusion (because of any shape)
 			z = start_z;
 			z < end_z;
@@ -5108,7 +5107,7 @@ int TileEngine::voxelCheck(
 		BattleUnit* excludeAllBut)
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
-	Tile* tileTarget = _battleSave->getTile(posTarget / Position(16, 16, 24)); // converts to tilespace -> Tile
+	const Tile* tileTarget = _battleSave->getTile(posTarget / Position(16, 16, 24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". tileTarget " << tileTarget->getPosition();
 	// check if we are out of the map
 	if (tileTarget == NULL
@@ -5120,8 +5119,8 @@ int TileEngine::voxelCheck(
 		return VOXEL_OUTOFBOUNDS;
 	}
 
-	Tile* tileBelow = _battleSave->getTile(tileTarget->getPosition() + Position(0, 0,-1));
-	if (tileTarget->isVoid()
+	const Tile* const tileBelow = _battleSave->getTile(tileTarget->getPosition() + Position(0, 0,-1));
+	if (tileTarget->isVoid() == true
 		&& tileTarget->getUnit() == NULL
 		&& (tileBelow == NULL
 			|| tileBelow->getUnit() == NULL))
@@ -5133,14 +5132,14 @@ int TileEngine::voxelCheck(
 	// kL_note: should allow items to be thrown through a gravLift down to the floor below
 	if ((posTarget.z %24 == 0
 			|| posTarget.z %24 == 1)
-		&& tileTarget->getMapData(MapData::O_FLOOR)
-		&& tileTarget->getMapData(MapData::O_FLOOR)->isGravLift())
+		&& tileTarget->getMapData(MapData::O_FLOOR) != NULL
+		&& tileTarget->getMapData(MapData::O_FLOOR)->isGravLift() == true)
 	{
 		//Log(LOG_INFO) << "voxelCheck() isGravLift";
 		//Log(LOG_INFO) << ". level = " << tileTarget->getPosition().z;
 		if (tileTarget->getPosition().z == 0
-			|| (tileBelow
-				&& tileBelow->getMapData(MapData::O_FLOOR)
+			|| (tileBelow != NULL
+				&& tileBelow->getMapData(MapData::O_FLOOR) != NULL
 				&& tileBelow->getMapData(MapData::O_FLOOR)->isGravLift() == false))
 		{
 			//Log(LOG_INFO) << ". vC() ret VOXEL_FLOOR";
@@ -5155,13 +5154,13 @@ int TileEngine::voxelCheck(
 			i < 4;
 			++i)
 	{
-		if (tileTarget->isUfoDoorOpen(i))
+		if (tileTarget->isUfoDoorOpen(i) == true)
 			continue;
 
-		MapData* dataTarget = tileTarget->getMapData(i);
-		if (dataTarget)
+		const MapData* const dataTarget = tileTarget->getMapData(i);
+		if (dataTarget != NULL)
 		{
-			int
+			const int
 				x = 15 - posTarget.x %16,	// x-direction is reversed
 				y = posTarget.y %16;		// y-direction is standard
 
@@ -5177,16 +5176,16 @@ int TileEngine::voxelCheck(
 
 	if (excludeAllUnits == false)
 	{
-		BattleUnit* buTarget = tileTarget->getUnit();
+		const BattleUnit* buTarget = tileTarget->getUnit();
 		// sometimes there is unit on the tile below, but sticks up into this tile with its head.
 		if (buTarget == NULL
-			&& tileTarget->hasNoFloor(0))
+			&& tileTarget->hasNoFloor(0) == true)
 		{
 			tileTarget = _battleSave->getTile(Position( // tileBelow
 													posTarget.x / 16,
 													posTarget.y / 16,
 													posTarget.z / 24 - 1));
-			if (tileTarget)
+			if (tileTarget != NULL)
 				buTarget = tileTarget->getUnit();
 		}
 
@@ -5195,24 +5194,23 @@ int TileEngine::voxelCheck(
 			&& (excludeAllBut == NULL
 				|| buTarget == excludeAllBut)
 			&& (onlyVisible == false
-				|| buTarget->getVisible()))
+				|| buTarget->getVisible() == true))
 		{
-			Position pTarget_bu = buTarget->getPosition();
-			int tz = pTarget_bu.z * 24 + buTarget->getFloatHeight() - tileTarget->getTerrainLevel(); // floor-level voxel
+			const Position pTarget_bu = buTarget->getPosition();
+			const int tz = pTarget_bu.z * 24 + buTarget->getFloatHeight() - tileTarget->getTerrainLevel(); // floor-level voxel
 
 			if (posTarget.z > tz
 				&& posTarget.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
-				int
-					entry = 0,
-
+				int entry = 0;
+				const int
 					x = posTarget.x %16, // where on the x-axis
 					y = posTarget.y %16; // where on the y-axis
 				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
 
 				if (buTarget->getArmor()->getSize() > 1) // for large units...
 				{
-					Position pTarget_tile = tileTarget->getPosition();
+					const Position pTarget_tile = tileTarget->getPosition();
 					entry = ((pTarget_tile.x - pTarget_bu.x) + ((pTarget_tile.y - pTarget_bu.y) * 2));
 				}
 
@@ -5744,7 +5742,6 @@ bool TileEngine::validMeleeRange(
 //kL					&& !tileTarget_above->hasNoFloor(tileTarget)) // kL_note: floaters...
 					{
 						//Log(LOG_INFO) << ". . . targetUnit on tileAbove";
-
 						tileTarget = tileTarget_above;
 					}
 					else if (tileTarget_below != NULL // kL_note: can reach target standing on a rise only 1/3 up z-axis on adjacent tileBelow.
@@ -5753,7 +5750,6 @@ bool TileEngine::validMeleeRange(
 						&& tileTarget_below->getTerrainLevel() < -7) // kL
 					{
 						//Log(LOG_INFO) << ". . . targetUnit on tileBelow";
-
 						tileTarget = tileTarget_below;
 					}
 				}
