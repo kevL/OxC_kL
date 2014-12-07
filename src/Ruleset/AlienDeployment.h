@@ -20,10 +20,12 @@
 #ifndef OPENXCOM_ALIENDEPLOYMENT_H
 #define OPENXCOM_ALIENDEPLOYMENT_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
+
+#include "../Resource/XcomResourcePack.h"
 
 
 namespace OpenXcom
@@ -52,21 +54,50 @@ struct DeploymentData
 };
 
 
+struct BriefingData
+{
+	bool
+		showCraft,
+		showTarget;
+	int
+		palette,
+		textOffset;
+	std::string
+		music,
+		background;
+
+	BriefingData()
+		:
+			palette(0),
+			textOffset(0),
+			music(OpenXcom::res_MUSIC_GEO_BRIEFING),
+			background("BACK16.SCR"),
+			showCraft(true),
+			showTarget(true)
+	{
+		/* Empty by Design */
+	};
+};
+
+
 /**
  * Represents a specific type of Alien Deployment.
- * Contains constant info about an Alien Deployment, like the number of aliens
+ * Contains constant info about an Alien Deployment like the number of aliens
  * for each alien type and what items they carry (itemset depends on alien
- * technology advancement level 0, 1 or 2).
- * - deployment type can be a craft's name, but also alien base or cydonia.
+ * technology advancement level).
+ * - deployment type can be a craft's name but also alien base or cydonia
  * - alienRank is used to check which nodeRanks can be used to deploy this unit
- *   + to match to a specific unit (=race/rank combination) that should be deployed.
+ *   + to match to a specific unit (=race/rank combination) that should be deployed
  * @sa Node
  */
 class AlienDeployment
 {
 
 private:
-
+	bool
+		_finalDestination,
+		_finalMission,
+		_noRetreat;
 	int
 		_civilians,
 		_height,
@@ -83,9 +114,10 @@ private:
 	std::vector<std::string> _terrains;
 	std::vector<DeploymentData> _data;
 
+	BriefingData _briefingData;
+
 
 	public:
-
 		/// Creates a blank Alien Deployment ruleset.
 		AlienDeployment(const std::string& type);
 		/// Cleans up the Alien Deployment ruleset.
@@ -125,34 +157,17 @@ private:
 
 		/// Gets the script to use for this deployment.
 		std::string getScript() const;
+
+		/// Checks if aborting this mission will fail the game (all mars and t'leth stages).
+		const bool isNoRetreat() const;
+		/// Checks if this is the destination for the final mission (mars stage 1, t'leth stage 1).
+		const bool isFinalDestination() const;
+		/// Checks if winning this mission will complete the game (mars stage 2, t'leth stage 3).
+		const bool isFinalMission() const;
+		/// Gets the briefing data for this mission type.
+		BriefingData getBriefingData() const;
 };
 
-}
-
-
-namespace YAML
-{
-	template<>
-	struct convert<OpenXcom::ItemSet>
-	{
-		static Node encode(const OpenXcom::ItemSet& rhs)
-		{
-			Node node;
-			node = rhs.items;
-
-			return node;
-		}
-
-		static bool decode(const Node& node, OpenXcom::ItemSet& rhs)
-		{
-			if (!node.IsSequence())
-				return false;
-
-			rhs.items = node.as< std::vector<std::string> >(rhs.items);
-
-			return true;
-		}
-	};
 }
 
 #endif

@@ -5564,6 +5564,9 @@ alienDeployments:
     civilians: 16
     terrains:
       - URBAN
+    briefing:
+      palette: 2
+      music: GEO_BRIEF_TERRORSITE
   - type: STR_ALIEN_BASE_ASSAULT
     script: ALIENBASE
     data:
@@ -5714,6 +5717,9 @@ alienDeployments:
     terrains:
       - UBASE
     shade: 15
+    briefing:
+      music: GEO_BRIEF_BASEASSAULT
+      background: BACK01.SCR
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 6 #terrorist1
@@ -5877,11 +5883,16 @@ alienDeployments:
     terrains:
       - XBASE
     shade: 5
+    briefing:
+      palette: 2
+      music: GEO_BRIEF_BASEDEFENSE
+#      showTarget: false
+#      textOffset: -16
   - type: STR_MARS_CYDONIA_LANDING
     data:
       - alienRank: 6 #terrorist1
-        lowQty: 2
-        highQty: 4
+        lowQty: 3
+        highQty: 6
         dQty: 2
         percentageOutsideUfo: 100
         itemSets:
@@ -5892,9 +5903,9 @@ alienDeployments:
           -
             []
       - alienRank: 0 #commander
-        lowQty: 3
-        highQty: 5
-        dQty: 1
+        lowQty: 4
+        highQty: 6
+        dQty: 2
         percentageOutsideUfo: 0
         itemSets:
           -
@@ -5914,9 +5925,9 @@ alienDeployments:
             - STR_BLASTER_BOMB
             - STR_ALIEN_GRENADE
       - alienRank: 1 #leader
-        lowQty: 3
-        highQty: 6
-        dQty: 2
+        lowQty: 4
+        highQty: 8
+        dQty: 3
         percentageOutsideUfo: 0
         itemSets:
           -
@@ -5932,9 +5943,9 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 5 #soldier
-        lowQty: 4
-        highQty: 7
-        dQty: 3
+        lowQty: 6
+        highQty: 10
+        dQty: 4
         percentageOutsideUfo: 60
         itemSets:
           -
@@ -5952,13 +5963,20 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
             - STR_ALIEN_GRENADE
-    width: 60 #50 -> need to up qty's above
-    length: 60 #50
+    width: 60
+    length: 60
     height: 4
     terrains:
       - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
+    race: STR_SECTOID
+    noRetreat: true
+    finalDestination: true
+    briefing:
+      palette: 6
+      music: GEO_BRIEF_MARS1
+#      textOffset: -16
   - type: STR_MARS_THE_FINAL_ASSAULT
     script: BOSSBATTLE
     data:
@@ -6127,6 +6145,15 @@ alienDeployments:
       - UBASE
     shade: 15
     race: STR_MIXED
+    noRetreat: true
+    finalMission: true
+    briefing:
+      palette: 6
+      music: GEO_BRIEF_MARS2
+      background: BACK01.SCR
+#      showTarget: false
+#      showCraft: false
+#      textOffset: -16
 research:
   - name: STR_LASER_WEAPONS
     cost: 50

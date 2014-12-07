@@ -118,6 +118,7 @@ BattlescapeState::BattlescapeState()
 	:
 		_savedGame(_game->getSavedGame()),
 		_savedBattle(_game->getSavedGame()->getSavedBattle()),
+		_rules(_game->getRuleset()),
 //		_reserve(0),
 		_xBeforeMouseScrolling(0),
 		_yBeforeMouseScrolling(0),
@@ -141,8 +142,8 @@ BattlescapeState::BattlescapeState()
 	const int
 		screenWidth			= Options::baseXResolution,
 		screenHeight		= Options::baseYResolution,
-		iconsWidth			= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w, // 320
-		iconsHeight			= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h, // 56
+		iconsWidth			= _rules->getInterface("battlescape")->getElement("icons")->w, // 320
+		iconsHeight			= _rules->getInterface("battlescape")->getElement("icons")->h, // 56
 		visibleMapHeight	= screenHeight - iconsHeight,
 		x					= screenWidth / 2 - iconsWidth / 2,
 		y					= screenHeight - iconsHeight;
@@ -208,8 +209,8 @@ BattlescapeState::BattlescapeState()
 	_numAmmoRight		= new NumberText(30, 5, x + 280, y + 4);
 
 	const int
-		visibleUnitX = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->x,
-		visibleUnitY = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->y;
+		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
+		visibleUnitY = _rules->getInterface("battlescape")->getElement("visibleUnits")->y;
 
 	for (int
 			i = 0,
@@ -297,9 +298,9 @@ BattlescapeState::BattlescapeState()
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
-	if (_game->getRuleset()->getInterface("battlescape")->getElement("pathfinding"))
+	if (_rules->getInterface("battlescape")->getElement("pathfinding"))
 	{
-		const Element* const pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
+		const Element* const pathing = _rules->getInterface("battlescape")->getElement("pathfinding");
 
 		Pathfinding::green = pathing->color;
 		Pathfinding::yellow = pathing->color2;
@@ -335,7 +336,7 @@ BattlescapeState::BattlescapeState()
 	icons->blit(_icons);
 
 	// this is a hack to fix the single transparent pixel on TFTD's icon panel.
-	if (_game->getRuleset()->getInterface("battlescape")->getElement("icons")->TFTDMode)
+	if (_rules->getInterface("battlescape")->getElement("icons")->TFTDMode)
 		_icons->setPixelColor(46, 44, 8);
 
 	add(_rank, "rank", "battlescape", _icons);
@@ -398,8 +399,8 @@ BattlescapeState::BattlescapeState()
 	add(_txtDebug);
 
 	add(_warning, "warning", "battlescape", _icons);
-	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
-	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1));
+	_warning->setColor(_rules->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
+	_warning->setTextColor(_rules->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1));
 
 	add(_btnLaunch);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
@@ -761,7 +762,7 @@ BattlescapeState::BattlescapeState()
 		Options::keyBattleCenterEnemy10
 	};
 
-	const Uint8 color = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->color;
+	const Uint8 color = _rules->getInterface("battlescape")->getElement("visibleUnits")->color;
 
 	for (int
 			i = 0;
@@ -3414,13 +3415,13 @@ void BattlescapeState::finishBattle(
 	if (mission != "STR_UFO_GROUND_ASSAULT"
 		&& mission != "STR_UFO_CRASH_RECOVERY")
 	{
-		nextStage = _game->getRuleset()->getDeployment(mission)->getNextStage();
+		nextStage = _rules->getDeployment(mission)->getNextStage();
 	}
 
 	if (nextStage.empty() == false	// if there is a next mission stage, and
 		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
 	{
-/*		std::string nextStageRace = _game->getRuleset()->getDeployment(mission)->getNextStageRace();
+/*		std::string nextStageRace = _rules->getDeployment(mission)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
 				ts = _savedGame->getTerrorSites()->begin();
@@ -3444,7 +3445,7 @@ void BattlescapeState::finishBattle(
 
 		if (nextStageRace.empty() == true)
 			nextStageRace = "STR_MIXED";
-		else if (_game->getRuleset()->getAlienRace(nextStageRace) == NULL)
+		else if (_rules->getAlienRace(nextStageRace) == NULL)
 		{
 			throw Exception(nextStageRace + " race not found.");
 		} */
@@ -3472,9 +3473,9 @@ void BattlescapeState::finishBattle(
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if ((mission == "STR_MARS_THE_FINAL_ASSAULT"
-					|| mission == "STR_MARS_CYDONIA_LANDING")
-				&& _savedGame->getMonthsPassed() > -1)
+			if (_rules->getDeployment(_savedBattle->getMissionType()) != NULL
+				&& _rules->getDeployment(_savedBattle->getMissionType())->isNoRetreat() == true
+				&& _savedGame->getMonthsPassed() != -1)
 			{
 				_game->pushState(new DefeatState());
 			}
@@ -3485,8 +3486,9 @@ void BattlescapeState::finishBattle(
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (mission == "STR_MARS_THE_FINAL_ASSAULT"
-				&& _savedGame->getMonthsPassed() > -1)
+			if (_rules->getDeployment(_savedBattle->getMissionType()) != NULL
+				&& _rules->getDeployment(_savedBattle->getMissionType())->isFinalMission() == true
+				&& _savedGame->getMonthsPassed() != -1)
 			{
 				_game->pushState(new VictoryState());
 			}

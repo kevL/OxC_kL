@@ -3740,7 +3740,8 @@ int TileEngine::blockage(
 				case 2: // east
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
-						|| bigWall == Pathfinding::BIGWALL_WEST)
+						|| bigWall == Pathfinding::BIGWALL_WEST
+						|| bigWall == Pathfinding::BIGWALL_W_N)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 2 east )";
 						return 0;
@@ -3752,7 +3753,8 @@ int TileEngine::blockage(
 						|| bigWall == Pathfinding::BIGWALL_WEST
 						|| ( //visLike &&
 							bigWall == Pathfinding::BIGWALL_NESW
-							&& trueDir == false))
+							&& trueDir == false)
+						|| bigWall == Pathfinding::BIGWALL_W_N)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
 						return 0;
@@ -3762,7 +3764,8 @@ int TileEngine::blockage(
 				case 4: // south
 					if (bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_EAST
-						|| bigWall == Pathfinding::BIGWALL_NORTH)
+						|| bigWall == Pathfinding::BIGWALL_NORTH
+						|| bigWall == Pathfinding::BIGWALL_W_N)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 4 south )";
 						return 0;

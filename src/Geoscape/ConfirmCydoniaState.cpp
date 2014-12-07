@@ -36,6 +36,7 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedBattleGame.h"
@@ -114,12 +115,24 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 
 	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
-	bgame->setMissionType("STR_MARS_CYDONIA_LANDING");
 
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	for (std::vector<std::string>::const_iterator
+			i = _game->getRuleset()->getDeploymentsList().begin();
+			i != _game->getRuleset()->getDeploymentsList().end();
+			++i)
+	{
+		AlienDeployment* deployment = _game->getRuleset()->getDeployment(*i);
+		if (deployment->isFinalDestination() == true)
+		{
+			bgame->setMissionType(*i);
+			bgen.setAlienRace(deployment->getRace());
+
+			break;
+		}
+	}
+
 	bgen.setCraft(_craft);
-	bgen.setAlienRace("STR_SECTOID");
-	bgen.setWorldShade(15);
 	bgen.run();
 
 	_game->pushState(new BriefingState(_craft));

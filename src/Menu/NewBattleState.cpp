@@ -19,11 +19,11 @@
 
 #include "NewBattleState.h"
 
-#include <algorithm>
-#include <cmath>
-#include <fstream>
+//#include <algorithm>
+//#include <cmath>
+//#include <fstream>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "../Basescape/CraftInfoState.h"
 
@@ -32,14 +32,14 @@
 #include "../Battlescape/BriefingState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
+//#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 
 #include "../Interface/ComboBox.h"
 #include "../Interface/Frame.h"
@@ -48,8 +48,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // kL: sza_MusicRules
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleCraft.h"
@@ -593,11 +592,16 @@ void NewBattleState::btnOkClick(Action*)
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType(_missionTypes[_cbxMission->getSelected()]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	Base* base = NULL;
 
 	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
-		bgen.setBase(_craft->getBase());
+	{
+		base = _craft->getBase();
+		bgen.setBase(base);
+		_craft = NULL;
+	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
 	{
 		AlienBase* const ab = new AlienBase();
@@ -605,14 +609,8 @@ void NewBattleState::btnOkClick(Action*)
 		ab->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 		_craft->setDestination(ab);
 		bgen.setAlienBase(ab);
-		bgen.setCraft(_craft);
 
 		_game->getSavedGame()->getAlienBases()->push_back(ab);
-	}
-	else if (_missionTypes[_cbxMission->getSelected()] == "STR_MARS_CYDONIA_LANDING"
-		|| _missionTypes[_cbxMission->getSelected()] == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		bgen.setCraft(_craft);
 	}
 	else if (_craft != NULL
 		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]) != NULL)
@@ -623,8 +621,8 @@ void NewBattleState::btnOkClick(Action*)
 		bgen.setUfo(ufo);
 		bgen.setCraft(_craft);
 
-//		if (_terrainTypes[_cbxTerrain->getSelected()] == "FOREST")
-		if (RNG::percent(50) == true)
+		if (_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()])->getHemisphere() < 0)
+//		if (RNG::percent(50) == true)
 			ufo->setLatitude(0.5);
 		else
 			ufo->setLatitude(-0.5);
@@ -658,16 +656,10 @@ void NewBattleState::btnOkClick(Action*)
 	bgen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 	bgen.setAlienItemlevel(_slrAlienTech->getValue());
 	bgame->setDepth(_slrDepth->getValue());
+	bgen.setCraft(_craft);
 
 	bgen.run();
-//	_game->pushState(new BattlescapeState());
 
-	Base* base = NULL;
-	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
-	{
-		base = _craft->getBase();
-		_craft = NULL;
-	}
 
 	_game->popState();
 	_game->popState();

@@ -40,6 +40,7 @@ class ImageButton;
 class InteractiveSurface;
 class Map;
 class NumberText;
+class Ruleset;
 class SavedBattleGame;
 class SavedGame;
 class Surface;
@@ -141,9 +142,7 @@ private:
 		* _numDirTur,
 		* _numLayers,
 		* _numWounds;
-	Position
-		_cursorPosition,
-		_mapOffsetBeforeDragScroll;
+	Ruleset* _rules;
 	SavedBattleGame* _savedBattle;
 	SavedGame* _savedGame;
 	Surface
@@ -174,6 +173,10 @@ private:
 	WarningMessage* _warning;
 
 	std::vector<State*> _popups;
+
+	Position
+		_cursorPosition,
+		_mapOffsetBeforeDragScroll;
 
 	/// Popups a context sensitive list of actions the user can choose from.
 	void handleItemClick(BattleItem* item);

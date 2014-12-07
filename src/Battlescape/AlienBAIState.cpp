@@ -2698,7 +2698,7 @@ void AlienBAIState::selectMeleeOrRanged()
 		meleeOdds += (power - 50) / 2;
 
 	if (_visibleEnemies > 1)
-		meleeOdds -= 5 * (_visibleEnemies - 1);
+		meleeOdds -= 15 * (_visibleEnemies - 1);
 
 	if (meleeOdds > 0
 		&& _unit->getHealth() > _unit->getBaseStats()->health * 2 / 3)
@@ -2709,7 +2709,7 @@ void AlienBAIState::selectMeleeOrRanged()
 			meleeOdds += 10 * _unit->getAggression(); */
 		meleeOdds += 10 * _unit->getAggression(); // kL
 
-		if (RNG::percent(meleeOdds))
+		if (RNG::percent(meleeOdds) == true)
 		{
 			_rifle = false;
 
@@ -2719,7 +2719,6 @@ void AlienBAIState::selectMeleeOrRanged()
 			_reachableWithAttack = _save->getPathfinding()->findReachable(
 																	_unit,
 																	preShotTU);
-
 			return;
 		}
 	}

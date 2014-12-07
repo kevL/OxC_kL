@@ -5537,14 +5537,12 @@
 1413136955 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1417317107 f:\git\openxcom\src\battlescape\battlescapestate.h
+1417974124 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
-1416825873 f:\git\openxcom\src\ruleset\aliendeployment.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1417969372 f:\git\openxcom\src\ruleset\aliendeployment.h
+	"../Resource/XcomResourcePack.h"
 
 1415853531 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
@@ -5618,7 +5616,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1417793415 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1417967202 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5785,7 +5783,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1417794395 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1417968290 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5896,7 +5894,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1417924694 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1417974260 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6023,7 +6021,7 @@
 1414466440 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1417921744 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1417973908 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -6036,6 +6034,8 @@
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/XcomResourcePack.h"
+	"../Ruleset/AlienDeployment.h"
+	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
 	"../Savegame/SavedBattleGame.h"
@@ -6486,7 +6486,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1417889657 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1417940864 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6587,7 +6587,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1417891158 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1417968016 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -7277,7 +7277,7 @@
 1413136957 f:\git\openxcom\src\geoscape\confirmnewbasestate.h
 	"../Engine/State.h"
 
-1417921152 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
+1417965805 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
 	"ConfirmCydoniaState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BattlescapeState.h"
@@ -7289,6 +7289,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/AlienDeployment.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
@@ -8272,32 +8273,23 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1416749817 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1417965618 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
-	<algorithm>
-	<cmath>
-	<fstream>
-	<yaml-cpp/yaml.h>
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/BriefingState.h"
 	"../Engine/Action.h"
-	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Logger.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/RNG.h"
 	"../Interface/ComboBox.h"
 	"../Interface/Frame.h"
 	"../Interface/Slider.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 	"../Ruleset/AlienDeployment.h"
 	"../Ruleset/RuleCraft.h"
@@ -8981,9 +8973,8 @@
 1413136960 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1416825994 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1417968374 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
-	"../Engine/RNG.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"

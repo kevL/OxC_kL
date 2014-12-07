@@ -19,11 +19,35 @@
 
 #include "AlienDeployment.h"
 
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 
 namespace YAML
 {
+
+template<>
+struct convert<OpenXcom::ItemSet>
+{
+	///
+	static Node encode(const OpenXcom::ItemSet& rhs)
+	{
+		Node node;
+		node = rhs.items;
+
+		return node;
+	}
+
+	///
+	static bool decode(const Node& node, OpenXcom::ItemSet& rhs)
+	{
+		if (node.IsSequence() == false)
+			return false;
+
+		rhs.items = node.as< std::vector<std::string> >(rhs.items);
+
+		return true;
+	}
+};
 
 template<>
 struct convert<OpenXcom::DeploymentData>
@@ -58,7 +82,42 @@ struct convert<OpenXcom::DeploymentData>
 		rhs.dQty					= node["dQty"]					.as<int>(rhs.dQty);
 		rhs.extraQty				= node["extraQty"]				.as<int>(0); // give this a default, as it's not 100% needed, unlike the others.
 		rhs.percentageOutsideUfo	= node["percentageOutsideUfo"]	.as<int>(rhs.percentageOutsideUfo);
-		rhs.itemSets				= node["itemSets"]				.as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+		rhs.itemSets				= node["itemSets"]				.as<std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+
+		return true;
+	}
+};
+
+template<>
+struct convert<OpenXcom::BriefingData>
+{
+	///
+	static Node encode(const OpenXcom::BriefingData& rhs)
+	{
+		Node node;
+
+		node["palette"]		= rhs.palette;
+		node["textOffset"]	= rhs.textOffset;
+		node["music"]		= rhs.music;
+		node["background"]	= rhs.background;
+		node["showCraft"]	= rhs.showCraft;
+		node["showTarget"]	= rhs.showTarget;
+
+		return node;
+	}
+
+	///
+	static bool decode(const Node& node, OpenXcom::BriefingData& rhs)
+	{
+		if (node.IsMap() == false)
+			return false;
+
+		rhs.palette		= node["palette"]	.as<int>(rhs.palette);
+		rhs.textOffset	= node["textOffset"].as<int>(rhs.textOffset);
+		rhs.music		= node["music"]		.as<std::string>(rhs.music);
+		rhs.background	= node["background"].as<std::string>(rhs.background);
+		rhs.showCraft	= node["showCraft"]	.as<bool>(rhs.showCraft);
+		rhs.showTarget	= node["showTarget"].as<bool>(rhs.showTarget);
 
 		return true;
 	}
@@ -81,7 +140,10 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_length(0),
 		_height(0),
 		_civilians(0),
-		_shade(-1)
+		_shade(-1),
+		_noRetreat(false),
+		_finalDestination(false),
+		_finalMission(false)
 {
 }
 
@@ -98,17 +160,21 @@ AlienDeployment::~AlienDeployment()
  */
 void AlienDeployment::load(const YAML::Node& node)
 {
-	_type			= node["type"]			.as<std::string>(_type);
-	_data			= node["data"]			.as< std::vector<DeploymentData> >(_data);
-	_width			= node["width"]			.as<int>(_width);
-	_length			= node["length"]		.as<int>(_length);
-	_height			= node["height"]		.as<int>(_height);
-	_civilians		= node["civilians"]		.as<int>(_civilians);
-	_terrains		= node["terrains"]		.as<std::vector<std::string> >(_terrains);
-	_shade			= node["shade"]			.as<int>(_shade);
-	_nextStage		= node["nextStage"]		.as<std::string>(_nextStage);
-	_race			= node["race"]			.as<std::string>(_race);
-	_script			= node["script"]		.as<std::string>(_script);
+	_type				= node["type"]				.as<std::string>(_type);
+	_data				= node["data"]				.as< std::vector<DeploymentData> >(_data);
+	_width				= node["width"]				.as<int>(_width);
+	_length				= node["length"]			.as<int>(_length);
+	_height				= node["height"]			.as<int>(_height);
+	_civilians			= node["civilians"]			.as<int>(_civilians);
+	_terrains			= node["terrains"]			.as<std::vector<std::string> >(_terrains);
+	_shade				= node["shade"]				.as<int>(_shade);
+	_nextStage			= node["nextStage"]			.as<std::string>(_nextStage);
+	_race				= node["race"]				.as<std::string>(_race);
+	_noRetreat			= node["noRetreat"]			.as<bool>(_noRetreat);
+	_finalDestination	= node["finalDestination"]	.as<bool>(_finalDestination);
+	_finalMission		= node["finalMission"]		.as<bool>(_finalMission);
+	_script				= node["script"]			.as<std::string>(_script);
+	_briefingData		= node["briefing"]			.as<BriefingData>(_briefingData);
 }
 
 /**
@@ -123,7 +189,7 @@ std::string AlienDeployment::getType() const
 
 /**
  * Gets a pointer to the data.
- * @return, pointer to the data
+ * @return, pointer to a vector holding the DeploymentData
  */
 std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
@@ -164,9 +230,7 @@ int AlienDeployment::getCivilians() const
 {
 	if (!_terrains.empty())
 	{
-		unsigned terrain = RNG::generate(
-										0,
-										_terrains.size() - 1);
+		unsigned terrain = RNG::generate(0, _terrains.size() - 1);
 		return _terrains.at(terrain);
 	}
 	return "";
@@ -215,6 +279,42 @@ std::string AlienDeployment::getRace() const
 std::string AlienDeployment::getScript() const
 {
 	return _script;
+}
+
+/**
+ * Gets if aborting this mission will fail the game.
+ * @return, true if aborting this mission will fail the game
+ */
+const bool AlienDeployment::isNoRetreat() const
+{
+	return _noRetreat;
+}
+
+/**
+ * Gets if winning this mission completes the game.
+ * @return, true if winning this mission completes the game
+ */
+const bool AlienDeployment::isFinalDestination() const
+{
+	return _finalDestination;
+}
+
+/**
+ * Gets if winning this mission completes the game.
+ * @return, true if winning this mission completes the game
+ */
+const bool AlienDeployment::isFinalMission() const
+{
+	return _finalMission;
+}
+
+/**
+ * Gets the briefing data for this mission type.
+ * @return, data for the briefing window to use
+ */
+BriefingData AlienDeployment::getBriefingData() const
+{
+	return _briefingData;
 }
 
 }
