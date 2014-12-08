@@ -65,6 +65,7 @@
 
 #include <set>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <stdint.h>
 #include <sys/stat.h>

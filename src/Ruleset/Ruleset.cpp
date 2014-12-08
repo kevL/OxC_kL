@@ -2207,12 +2207,12 @@ int Ruleset::getMaxRadarRange() const
 			i != _facilitiesIndex.end();
 			++i)
 	{
-		RuleBaseFacility* rule = getBaseFacility(*i);
+		const RuleBaseFacility* const rule = getBaseFacility(*i);
 
 		if (rule == NULL)
 			continue;
 
-		int range = rule->getRadarRange();
+		const int range = rule->getRadarRange();
 		if (range > ret)
 			ret = range;
 	}

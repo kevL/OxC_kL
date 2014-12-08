@@ -20,11 +20,11 @@
 #ifndef OPENXCOM_BASE_H
 #define OPENXCOM_BASE_H
 
-#include <cstdint>
-#include <string>
-#include <vector>
+//#include <cstdint>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "Target.h"
 
@@ -69,19 +69,19 @@ private:
 	size_t _curSoldier; // kL
 
 	ItemContainer* _items;
-	const Ruleset* _rule;
+	const Ruleset* const _rules;
 
 	std::wstring _name;
 
 	std::vector<BaseFacility*>
-									_defenses,
-									_facilities;
-	std::vector<Craft*>				_crafts;
-	std::vector<Production*>		_productions;
-	std::vector<ResearchProject*>	_research;
-	std::vector<Soldier*>			_soldiers;
-	std::vector<Transfer*>			_transfers;
-	std::vector<Vehicle*>			_vehicles;
+		_defenses,
+		_facilities;
+	std::vector<Craft*> _crafts;
+	std::vector<Production*> _productions;
+	std::vector<ResearchProject*> _research;
+	std::vector<Soldier*> _soldiers;
+	std::vector<Transfer*> _transfers;
+	std::vector<Vehicle*> _vehicles;
 
 	/// Determines space taken up by ammo clips about to rearm craft.
 //	double getIgnoredStores();
@@ -89,7 +89,7 @@ private:
 
 	public:
 		/// Creates a new base.
-		Base(const Ruleset* rule);
+		Base(const Ruleset* rules);
 		/// Cleans up the base.
 		~Base();
 
@@ -158,7 +158,7 @@ private:
 		/// Gets the base's used storage space.
 		double getUsedStores();
 		/// Checks if the base's stores are overfull.
-		bool storesOverfull(double offset = 0.0);
+		bool storesOverfull(double offset = 0.);
 
 		/// Gets the base's available storage space.
 		int getAvailableStores() const;

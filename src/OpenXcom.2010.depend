@@ -4402,11 +4402,7 @@
 
 1417918432 f:\git\openxcom\src\resource\resourcepack.h
 
-1416256249 f:\git\openxcom\src\savegame\base.h
-	<cstdint>
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1418004047 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1415929980 f:\git\openxcom\src\savegame\target.h
@@ -5560,7 +5556,7 @@
 1413136958 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1417580143 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1417989018 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -6586,7 +6582,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1417968016 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1417989086 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -7508,7 +7504,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1417844494 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1418003435 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -9063,7 +9059,7 @@
 1413136961 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1417089102 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1418003768 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -9183,10 +9179,8 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1417533169 source:f:\git\openxcom\src\savegame\base.cpp
+1418005368 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
-	<stack>
-	"../fmath.h"
 	"BaseFacility.h"
 	"Craft.h"
 	"CraftWeapon.h"
@@ -9199,9 +9193,6 @@
 	"Ufo.h"
 	"Vehicle.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Geoscape/GeoscapeState.h"
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/RuleCraft.h"

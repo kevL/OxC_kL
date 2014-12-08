@@ -1882,7 +1882,6 @@ void GeoscapeState::time10Minutes()
 							&& (*c)->detect(*u) == true)
 						{
 							contact = true;
-							break;
 						}
 					}
 				}
@@ -1941,7 +1940,6 @@ void GeoscapeState::time10Minutes()
 							&& (*c)->detect(*u) == true)
 						{
 							contact = true;
-							break;
 						}
 					}
 				}

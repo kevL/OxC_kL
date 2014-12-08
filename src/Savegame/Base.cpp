@@ -17,15 +17,15 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "Base.h"
 
 //#include <algorithm>
 //#include <cmath>
-#include <stack>
+//#include <stack>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "BaseFacility.h"
 #include "Craft.h"
@@ -40,9 +40,9 @@
 #include "Vehicle.h"
 
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
 
@@ -63,10 +63,10 @@ namespace OpenXcom
  * Initializes an empty base.
  * @param rule - pointer to Ruleset
  */
-Base::Base(const Ruleset* rule)
+Base::Base(const Ruleset* const rules)
 	:
 		Target(),
-		_rule(rule),
+		_rules(rules),
 		_scientists(0),
 		_engineers(0),
 		_inBattlescape(false),
@@ -189,10 +189,10 @@ void Base::load(
 				++i)
 		{
 			std::string type = (*i)["type"].as<std::string>();
-			if (_rule->getBaseFacility(type))
+			if (_rules->getBaseFacility(type))
 			{
 				BaseFacility* f = new BaseFacility(
-												_rule->getBaseFacility(type),
+												_rules->getBaseFacility(type),
 												this);
 				f->load(*i);
 
@@ -207,14 +207,14 @@ void Base::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (_rule->getCraft(type))
+		if (_rules->getCraft(type))
 		{
 			Craft* c = new Craft(
-							_rule->getCraft(type),
+							_rules->getCraft(type),
 							this);
 			c->load(
 					*i,
-					_rule,
+					_rules,
 					save);
 
 			_crafts.push_back(c);
@@ -227,11 +227,11 @@ void Base::load(
 			++i)
 	{
 		Soldier* s = new Soldier(
-							_rule->getSoldier("XCOM"),
-							_rule->getArmor("STR_ARMOR_NONE_UC"));
+							_rules->getSoldier("XCOM"),
+							_rules->getArmor("STR_ARMOR_NONE_UC"));
 		s->load(
 				*i,
-				_rule,
+				_rules,
 				save);
 		s->setCraft(NULL);
 
@@ -264,10 +264,10 @@ void Base::load(
 			)
 	{
 		if (std::find(
-					_rule->getItemsList().begin(),
-					_rule->getItemsList().end(),
+					_rules->getItemsList().begin(),
+					_rules->getItemsList().end(),
 					i->first)
-				== _rule->getItemsList().end())
+				== _rules->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -291,7 +291,7 @@ void Base::load(
 		if (t->load(
 				*i,
 				this,
-				_rule,
+				_rules,
 				save))
 		{
 			_transfers.push_back(t);
@@ -304,9 +304,9 @@ void Base::load(
 			++i)
 	{
 		std::string research = (*i)["project"].as<std::string>();
-		if (_rule->getResearch(research))
+		if (_rules->getResearch(research))
 		{
-			ResearchProject* r = new ResearchProject(_rule->getResearch(research));
+			ResearchProject* r = new ResearchProject(_rules->getResearch(research));
 			r->load(*i);
 
 			_research.push_back(r);
@@ -321,10 +321,10 @@ void Base::load(
 			++i)
 	{
 		std::string item = (*i)["item"].as<std::string>();
-		if (_rule->getManufacture(item))
+		if (_rules->getManufacture(item))
 		{
 			Production* p = new Production(
-										_rule->getManufacture(item),
+										_rules->getManufacture(item),
 										0);
 			p->load(*i);
 
@@ -545,17 +545,17 @@ void Base::setEngineers(int engineers)
  */
 int Base::detect(Target* target) const
 {
-	double dist = insideRadarRange(target);
+	double targetDist = insideRadarRange(target);
 
-	if (AreSame(dist, 0.))
+	if (AreSame(targetDist, 0.))
 		return 0;
 
 	int ret = 0;
 
-	if (dist < 0.)
+	if (targetDist < 0.)
 	{
-		ret++;
-		dist = -dist;
+		++ret;
+		targetDist = -targetDist;
 	}
 
 	int chance = 0;
@@ -567,8 +567,8 @@ int Base::detect(Target* target) const
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			const double range = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
-			if (range > dist)
+			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			if (radarRange > targetDist)
 				chance += (*i)->getRules()->getRadarChance();
 		}
 	}
@@ -577,7 +577,7 @@ int Base::detect(Target* target) const
 	if (ufo != NULL)
 	{
 		chance += ufo->getVisibility();
-		chance = static_cast<int>(Round(static_cast<double>(chance) / 3.)); // per 10 min.
+		chance = static_cast<int>(Round(static_cast<double>(chance) / 3.)); // per 10-min.
 
 		if (RNG::percent(chance) == true)
 			ret += 2;
@@ -587,38 +587,42 @@ int Base::detect(Target* target) const
 }
 
 /**
- * Returns if a certain target is inside the base's
- * radar range, taking in account the positions of both.
+ * Returns if a certain target is inside this Base's radar range
+ * taking in account the global positions of both.
  * @param target - pointer to UFO
  * @return,	great circle distance to UFO, negative if hyperdetected
  */
 double Base::insideRadarRange(Target* target) const
 {
-	//Log(LOG_INFO) << "Base::insideRadarRange()";
-	double ret = 0.; // lets hope UFO is not *right on top of Base* Lol
+	const double targetDist = getDistance(target) * earthRadius;
+	if (targetDist > static_cast<double>(_rules->getMaxRadarRange()) * greatCircleConversionFactor)
+		return 0.;
 
-	const double targetDistance = getDistance(target) * earthRadius; // great circle distance
-	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
-	if (targetDistance > static_cast<double>(_rule->getMaxRadarRange()) * greatCircleConversionFactor)
-		return ret;
+
+	double ret = 0.; // lets hope UFO is not *right on top of Base* Lol
+	bool hyperDet = false;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
-			i != _facilities.end();
+			i != _facilities.end()
+				&& hyperDet == false;
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
 			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
-			if (targetDistance < radarRange)
+			if (targetDist < radarRange)
 			{
-				ret = targetDistance;
+				ret = targetDist; // identical value for every i; looking only for hyperDet after 1st iteration.
 
 				if ((*i)->getRules()->isHyperwave() == true)
-					ret = -ret;
+					hyperDet = true;
 			}
 		}
 	}
+
+	if (hyperDet == true)
+		ret = -ret;
 
 	return ret;
 }
@@ -786,14 +790,14 @@ int Base::getAvailableQuarters() const
  */
 double Base::getUsedStores()
 {
-	double total = _items->getTotalSize(_rule);
+	double total = _items->getTotalSize(_rules);
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
 			i != _crafts.end();
 			++i)
 	{
-		total += (*i)->getItems()->getTotalSize(_rule);
+		total += (*i)->getItems()->getTotalSize(_rules);
 
 		for (std::vector<Vehicle*>::const_iterator
 				j = (*i)->getVehicles()->begin();
@@ -811,13 +815,13 @@ double Base::getUsedStores()
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			total += _rule->getItem((*i)->getItems())->getSize()
+			total += _rules->getItem((*i)->getItems())->getSize()
 				   * static_cast<double>((*i)->getQuantity());
 		}
 		else if ((*i)->getType() == TRANSFER_CRAFT)
 		{
 			Craft* craft = (*i)->getCraft();
-			total += craft->getItems()->getTotalSize(_rule);
+			total += craft->getItems()->getTotalSize(_rules);
 
 			for (std::vector<Vehicle*>::const_iterator
 					j = craft->getVehicles()->begin();
@@ -899,7 +903,7 @@ int Base::getAvailableStores() const
 						const int baseQty = getItems()->getItem(clip);
 						if (baseQty > 0)
 						{
-							const int clipSize = _rule->getItem(clip)->getClipSize();
+							const int clipSize = _rules->getItem(clip)->getClipSize();
 							if (clipSize > 0)
 							{
 								const int toLoad = static_cast<int>(ceil(
@@ -909,7 +913,7 @@ int Base::getAvailableStores() const
 								space += static_cast<double>(std::min(
 																	baseQty,
 																	toLoad))
-										* static_cast<double>(_rule->getItem(clip)->getSize());
+										* static_cast<double>(_rules->getItem(clip)->getSize());
 							}
 						}
 					}
@@ -1146,7 +1150,7 @@ int Base::getDefenseValue() const
 		total = 0,
 		range = 0;
 
-	int minRadarRange = _rule->getMinRadarRange();
+	int minRadarRange = _rules->getMinRadarRange();
 	if (minRadarRange == 0)
 		return 0;
 
@@ -1192,7 +1196,7 @@ int Base::getShortRangeValue() const // kL
 		{
 			range = (*i)->getRules()->getRadarRange();
 			if (range > 0
-				&& range < _rule->getRadarCutoffRange() + 1)
+				&& range < _rules->getRadarCutoffRange() + 1)
 			{
 				total += (*i)->getRules()->getRadarChance();
 
@@ -1212,7 +1216,7 @@ int Base::getShortRangeValue() const // kL
 /*kL int Base::getLongRangeDetection() const
 {
 	int total = 0;
-	int minRadarRange = _rule->getMinRadarRange();
+	int minRadarRange = _rules->getMinRadarRange();
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1245,7 +1249,7 @@ int Base::getLongRangeValue() const // kL
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getRadarRange() > _rule->getRadarCutoffRange())
+			&& (*i)->getRules()->getRadarRange() > _rules->getRadarCutoffRange())
 		{
 			total += (*i)->getRules()->getRadarChance();
 
@@ -1329,9 +1333,9 @@ int Base::getPersonnelMaintenance() const
 {
 	int total = 0;
 
-	total += getTotalSoldiers() * _rule->getSoldierCost();
-	total += getTotalEngineers() * _rule->getEngineerCost();
-	total += getTotalScientists() * _rule->getScientistCost();
+	total += getTotalSoldiers() * _rules->getSoldierCost();
+	total += getTotalEngineers() * _rules->getEngineerCost();
+	total += getTotalScientists() * _rules->getScientistCost();
 
 	return total;
 }
@@ -1843,7 +1847,7 @@ int Base::getUsedContainment() const
 			i != _items->getContents()->end();
 			++i)
 	{
-		if (_rule->getItem(i->first)->getAlien() != NULL)
+		if (_rules->getItem(i->first)->getAlien() != NULL)
 			total += i->second;
 	}
 
@@ -1853,7 +1857,7 @@ int Base::getUsedContainment() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM
-			&& _rule->getItem((*i)->getItems())->getAlien() != NULL)
+			&& _rules->getItem((*i)->getItems())->getAlien() != NULL)
 		{
 			total += (*i)->getQuantity();
 		}
@@ -1868,7 +1872,7 @@ int Base::getUsedContainment() const
 		{
 			const RuleResearch* const rpRule = (*i)->getRules();
 			if (rpRule->needItem() == true
-				&& _rule->getUnit(rpRule->getName()) != NULL)
+				&& _rules->getUnit(rpRule->getName()) != NULL)
 			{
 				++total;
 			}
@@ -2131,12 +2135,12 @@ void Base::setupDefenses()
 		const std::string itemId = (i)->first;
 		const int itemQty = (i)->second;
 
-		RuleItem* const itemRule = _rule->getItem(itemId);
+		RuleItem* const itemRule = _rules->getItem(itemId);
 		if (itemRule->isFixed() == true)
 		{
 			int unitSize = 4;
-			if (_rule->getUnit(itemId))
-				unitSize = _rule->getArmor(_rule->getUnit(itemId)->getArmor())->getSize();
+			if (_rules->getUnit(itemId))
+				unitSize = _rules->getArmor(_rules->getUnit(itemId)->getArmor())->getSize();
 
 			if (itemRule->getCompatibleAmmo()->empty() == true) // so this vehicle does not need ammo
 			{
@@ -2157,7 +2161,7 @@ void Base::setupDefenses()
 			}
 			else // this vehicle needs ammo
 			{
-				const RuleItem* const ammoRule = _rule->getItem(itemRule->getCompatibleAmmo()->front());
+				const RuleItem* const ammoRule = _rules->getItem(itemRule->getCompatibleAmmo()->front());
 				const int ammoPerVehicle = ammoRule->getClipSize();
 
 				const int baseQty = _items->getItem(ammoRule->getType()) / ammoPerVehicle;
@@ -2678,7 +2682,7 @@ void Base::cleanupDefenses(bool reclaimItems)
 			_items->addItem(type);
 			if (rule->getCompatibleAmmo()->empty() == false)
 			{
-				const RuleItem* const ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
+				const RuleItem* const ammo = _rules->getItem(rule->getCompatibleAmmo()->front());
 				const int ammoPerVehicle = ammo->getClipSize();
 				_items->addItem(
 							ammo->getType(),
