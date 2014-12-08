@@ -275,7 +275,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
+			Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
 			if (_parent->getTileEngine()->validMeleeRange(
 													_unit->getPosition(),
 													_unit->getDirection(),
@@ -283,7 +283,7 @@ void ProjectileFlyBState::init()
 													NULL,
 													&_action.target) == false)
 			{
-				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
+				Log(LOG_INFO) << ". . . out of hit range, EXIT";
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
 			}
@@ -1090,9 +1090,9 @@ void ProjectileFlyBState::cancel()
  * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange(
-		const BattleAction* action,
+		const BattleAction* const action,
 		const Position origin,
-		const Tile* target)
+		const Tile* const target)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
 	if (action->type != BA_THROW) // this is a celatid spit.
@@ -1120,7 +1120,7 @@ bool ProjectileFlyBState::validThrowRange(
 				- offset_z
 				+ target->getTerrainLevel();
 	const double maxDist = static_cast<double>(
-							getMaxThrowDistance( // tilespace
+						   getMaxThrowDistance( // tilespace
 											weight,
 											static_cast<int>(Round(
 												static_cast<double>(action->actor->getBaseStats()->strength) * (action->actor->getAccuracyModifier() / 2. + 0.5))),
@@ -1143,12 +1143,12 @@ bool ProjectileFlyBState::validThrowRange(
 
 	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
 //	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
-	const bool ret = throwDist < maxDist;
+//	const bool ret = throwDist < maxDist;
 	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
 	//				<< " < maxDist " << (int)maxDist
 	//				<< " : return " << ret;
 
-	return ret;
+	return (throwDist < maxDist);
 }
 
 /**

@@ -118,11 +118,11 @@ private:
 //kL	int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
-				Position* originVoxel,
+				const Position* const originVoxel,
 				const Tile* const tile,
-				Position* scanVoxel,
+				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit,
-				const BattleUnit* potentialUnit = NULL);
+				const BattleUnit* unit = NULL);
 		/// Check validity for targetting a tile.
 		bool canTargetTile(Position* originVoxel,
 				Tile* tile,
@@ -217,28 +217,28 @@ private:
 		int calculateLine(
 				const Position& origin,
 				const Position& target,
-				bool storeTrajectory,
-				std::vector<Position>* trajectory,
+				const bool storeTrajectory,
+				std::vector<Position>* const trajectory,
 				const BattleUnit* const excludeUnit,
-				bool doVoxelCheck = true,
-				bool onlyVisible = false,
-				BattleUnit* excludeAllBut = NULL);
+				const bool doVoxelCheck = true,
+				const bool onlyVisible = false,
+				const BattleUnit* const excludeAllBut = NULL);
 		/// Calculates a parabola trajectory.
 		int calculateParabola(
 				const Position& origin,
 				const Position& target,
 				bool storeTrajectory,
-				std::vector<Position>* trajectory,
+				std::vector<Position>* const trajectory,
 				const BattleUnit* const excludeUnit,
-				double arc,
+				const double arc,
 				const Position delta);
 		/// Validates a throwing action.
 		bool validateThrow(
-				BattleAction& action,
-				Position originVoxel,
-				Position targetVoxel,
-				double* curve = NULL,
-				int* voxelType = NULL);
+				const BattleAction& action,
+				const Position originVoxel,
+				const Position targetVoxel,
+				double* const curve = NULL,
+				int* const voxelType = NULL);
 
 		/// Checks the distance between two positions.
 		int distance(
@@ -273,17 +273,17 @@ private:
 		int faceWindow(const Position& position);
 
 		/// Calculates the z voxel for shadows.
-		int castedShade(const Position& voxel);
+		int castedShade(const Position& voxel) const;
 
 		/// Checks the visibility of a given voxel.
-		bool isVoxelVisible(const Position& voxel);
+		bool isVoxelVisible(const Position& voxel) const;
 		/// Checks what type of voxel occupies posTarget in voxel space.
 		int voxelCheck(
-				const Position& posTarget,
+				const Position& targetPos,
 				const BattleUnit* const excludeUnit = NULL,
-				bool excludeAllUnits = false,
-				bool onlyVisible = false,
-				BattleUnit* excludeAllBut = NULL);
+				const bool excludeAllUnits = false,
+				const bool onlyVisible = false,
+				const BattleUnit* const excludeAllBut = NULL) const;
 
 		/// Get direction to a target-point
 		int getDirectionTo(

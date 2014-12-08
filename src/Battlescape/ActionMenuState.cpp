@@ -19,8 +19,8 @@
 
 #include "ActionMenuState.h"
 
-#include <cmath>
-#include <sstream>
+//#include <cmath>
+//#include <sstream>
 
 #include "ActionMenuItem.h"
 #include "MedikitState.h"
@@ -32,8 +32,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 
@@ -406,10 +406,10 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			_game->popState();
 		}
 		else if (_action->type == BA_STUN
-				|| _action->type == BA_HIT)
+			|| _action->type == BA_HIT)
 		{
-			if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																					_action->actor->getPosition(),
+			if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
+																					_action->actor->getPosition(), // cf. TileEngine::reactionShot()
 																					_action->actor->getDirection(),
 																					_action->actor,
 																					NULL,
