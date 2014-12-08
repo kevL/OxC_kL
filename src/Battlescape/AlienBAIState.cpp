@@ -1419,7 +1419,7 @@ bool AlienBAIState::selectPointNearTarget(
 
 	const int
 		unitSize = _unit->getArmor()->getSize(),
-		targetsize = target->getArmor()->getSize();
+		targetSize = target->getArmor()->getSize();
 	size_t distance = 1000;
 
 	for (int
@@ -1429,12 +1429,12 @@ bool AlienBAIState::selectPointNearTarget(
 	{
 		for (int
 				x = -unitSize;
-				x <= targetsize;
+				x <= targetSize;
 				++x)
 		{
 			for (int
 					y = -unitSize;
-					y <= targetsize;
+					y <= targetSize;
 					++y)
 			{
 				if (x || y) // skip the unit itself
