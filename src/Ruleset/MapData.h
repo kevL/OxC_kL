@@ -276,7 +276,7 @@ private:
 		void setNoFloor(bool isNoFloor);
 
 		/// Check if this is an xcom base object.
-		bool isBaseModule();
+		bool isBaseModule() const;
 
 		/// Sets this tile as not stopping LOS. // kL_note: "not" drop more LSD.
 //		void setStopLOS(bool stopLOS);

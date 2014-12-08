@@ -514,7 +514,7 @@ BattlescapeState::BattlescapeState()
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
 	srfOverload->blit(_weight); */
-	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(8)); // (8)=blue // (6)+10=brown
+	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(8)+3); // (8)=blue // (6)+10=brown
 	_weight->setVisible(false);
 
 	_btnWounds->setVisible(false);

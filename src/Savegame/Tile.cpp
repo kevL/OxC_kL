@@ -1323,7 +1323,7 @@ void Tile::setDangerous()
  * Gets the danger flag on this tile.
  * @return, true if the tile is considered dangerous to aLiens
  */
-bool Tile::getDangerous()
+bool Tile::getDangerous() const
 {
 	return _danger;
 }

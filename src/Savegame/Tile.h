@@ -312,7 +312,7 @@ protected:
 		/// Sets the danger flag on this tile (so the AI will avoid it).
 		void setDangerous();
 		/// Checks the danger flag on this tile.
-		bool getDangerous();
+		bool getDangerous() const;
 
 		/// Adds a particle to this tile's array.
 		void addParticle(Particle* particle);

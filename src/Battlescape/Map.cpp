@@ -816,15 +816,15 @@ void Map::drawTerrain(Surface* surface)
 										}
 
 										const int strength = static_cast<int>(Round(
-																static_cast<double>(bu->getBaseStats()->strength) * (bu->getAccuracyModifier() / 2.0 + 0.5)));
+															 static_cast<double>(bu->getBaseStats()->strength) * (bu->getAccuracyModifier() / 2. + 0.5)));
 										if (bu->getCarriedWeight() > strength)
 										{
-											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
+											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // dot
 											tmpSurface->blitNShade(
 													surface,
 													screenPosition.x + offset.x + 9 + 16,
 													screenPosition.y + offset.y + 4 + 32,
-													0, // 10
+													1, // 10
 													false,
 													9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
 										}
@@ -1372,15 +1372,15 @@ void Map::drawTerrain(Surface* surface)
 										}
 
 										const int strength = static_cast<int>(Round(
-																static_cast<double>(buBelow->getBaseStats()->strength) * (buBelow->getAccuracyModifier() / 2.0 + 0.5)));
+															 static_cast<double>(buBelow->getBaseStats()->strength) * (buBelow->getAccuracyModifier() / 2. + 0.5)));
 										if (buBelow->getCarriedWeight() > strength)
 										{
-											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
+											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // dot
 											tmpSurface->blitNShade(
 													surface,
 													screenPosition.x + offset.x + 9,
 													screenPosition.y + offset.y + 4 + 24,
-													0, // 10
+													1, // 10
 													false,
 													9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
 										}
@@ -1645,15 +1645,15 @@ void Map::drawTerrain(Surface* surface)
 											}
 
 											const int strength = static_cast<int>(Round(
-																	static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
+																 static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
 											if (unit->getCarriedWeight() > strength)
 											{
-												tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
+												tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // dot
 												tmpSurface->blitNShade(
 														surface,
 														screenPosition.x + offset.x + 9,
 														screenPosition.y + offset.y + 4,
-														0, // 10
+														1, // 10
 														false,
 														9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
 											}

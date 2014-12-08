@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_UNITWALKBSTATE_H
 #define OPENXCOM_UNITWALKBSTATE_H
 
-#include <climits>
+//#include <climits>
 
 #include "BattlescapeGame.h"
 #include "BattleState.h"
@@ -71,9 +71,11 @@ private:
 
 	/// Handles some calculations when the path is finished.
 	void postPathProcedures();
+	/// Gets a suitable final facing direction for aLiens.
+	int getFinalDirection() const;
 
-	/// kL. Checks visibility for new opponents.
-	bool visForUnits();
+	/// Checks visibility for new opponents.
+	bool visForUnits() const;
 
 	/// Handles some calculations when the walking is finished.
 	void setNormalWalkSpeed(bool gravLift);

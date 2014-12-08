@@ -122,7 +122,7 @@ private:
 				const Tile* const tile,
 				Position* scanVoxel,
 				const BattleUnit* const excludeUnit,
-				BattleUnit* potentialUnit = NULL);
+				const BattleUnit* potentialUnit = NULL);
 		/// Check validity for targetting a tile.
 		bool canTargetTile(Position* originVoxel,
 				Tile* tile,

@@ -970,7 +970,7 @@ bool TileEngine::canTargetUnit(
 		const Tile* const tile,
 		Position* scanVoxel,
 		const BattleUnit* const excludeUnit,
-		BattleUnit* potentialUnit)
+		const BattleUnit* potentialUnit)
 {
 	Position targetVoxel = Position(
 								tile->getPosition().x * 16 + 8,
@@ -5841,8 +5841,8 @@ int TileEngine::faceWindow(const Position& position)
 /**
  * Returns the direction from origin to target.
  * kL_note: This function is almost identical to BattleUnit::directionTo().
- * @param origin - Reference to the origin point of the action
- * @param target - Reference to the target point of the action
+ * @param origin - reference to the origin point of the action
+ * @param target - reference to the target point of the action
  * @return, direction
  */
 int TileEngine::getDirectionTo(

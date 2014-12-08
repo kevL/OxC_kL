@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_ALIENBAISTATE_H
 #define OPENXCOM_ALIENBAISTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "BattleAIState.h"
 #include "Position.h"
@@ -168,7 +168,7 @@ protected:
 
 		/// Checks to make sure a target is valid, given the parameters.
 		bool validTarget(
-				BattleUnit* unit,
+				const BattleUnit* const unit,
 				bool assessDanger = false,
 				bool includeCivs = false) const;
 

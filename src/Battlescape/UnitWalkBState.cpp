@@ -29,8 +29,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h" // kL, for turning on/off visUnit indicators.
 
@@ -45,6 +44,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 
 
@@ -966,15 +966,16 @@ void UnitWalkBState::postPathProcedures()
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
-		int dirFinal = _action.finalFacing;
+		int finalDir = _action.finalFacing;
 
 		if (_action.finalAction == true)
 			_unit->dontReselect();
 
 		if (_unit->getCharging() != NULL)
 		{
+			//Log(LOG_INFO) << ". . charging = TRUE";
 			const Position targetPos = _unit->getCharging()->getPosition();
-			dirFinal = _parent->getTileEngine()->getDirectionTo(
+			finalDir = _parent->getTileEngine()->getDirectionTo(
 															_unit->getPosition(),
 															targetPos);
 			// kL_notes (pre-above):
@@ -983,12 +984,11 @@ void UnitWalkBState::postPathProcedures()
 			// Cheat: face closest xCom op based on a percentage (perhaps alien 'value' or rank)
 			// cf. void AggroBAIState::setAggroTarget(BattleUnit *unit)
 			// and bool TileEngine::calculateFOV(BattleUnit *unit)
-			//Log(LOG_INFO) << ". . charging = TRUE";
 
 			if (_parent->getTileEngine()->validMeleeRange(
 														_unit,
 														_action.actor->getCharging(),
-														dirFinal))
+														finalDir))
 			{
 				BattleAction action;
 				action.actor = _unit;
@@ -1058,15 +1058,17 @@ void UnitWalkBState::postPathProcedures()
 		}
 		else if (_unit->isHiding() == true)
 		{
-//			dirFinal = _unit->getDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
-
+//			finalDir = _unit->getDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
 			_unit->setHiding(false);
 			_unit->dontReselect();
 		}
 
-		if (dirFinal != -1)
+		if (finalDir == -1)
+			finalDir = getFinalDirection();
+
+		if (finalDir != -1)
 		{
-			_unit->lookAt(dirFinal %8);
+			_unit->lookAt(finalDir %8);
 
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
@@ -1092,12 +1094,54 @@ void UnitWalkBState::postPathProcedures()
 }
 
 /**
- * kL. Checks visibility for new opponents.
+ * Gets a suitable final facing direction for aLiens.
+ * @return, direction to face
+ */
+int UnitWalkBState::getFinalDirection() const
+{
+	const int
+		diff = static_cast<int>(_parent->getBattlescapeState()->getGame()->getSavedGame()->getDifficulty()),
+		alienRank = _unit->getRankInt();
+
+	if (RNG::percent((diff + 1) * 20 - alienRank * 5) == false)
+		return -1;
+
+	BattleUnit* faceUnit = NULL;
+
+	int testDist = 255;
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _parent->getSave()->getUnits()->begin();
+			i != _parent->getSave()->getUnits()->end();
+			++i)
+	{
+		if ((*i)->getFaction() == FACTION_PLAYER
+			&& (*i)->isOut(true, true) == false
+			&& (*i)->getTurnsExposed() <= _unit->getIntelligence())
+		{
+			const int dist = _parent->getSave()->getTileEngine()->distance(
+																	(*i)->getPosition(),
+																	_unit->getPosition());
+			if (dist < testDist)
+			{
+				testDist = dist;
+				faceUnit = *i;
+			}
+		}
+	}
+
+	if (faceUnit != NULL)
+		return _unit->directionTo(faceUnit->getPosition());
+
+	return -1;
+}
+
+/**
+ * Checks visibility for new opponents.
  * @return, true if a new enemy is spotted
  */
-bool UnitWalkBState::visForUnits()
+bool UnitWalkBState::visForUnits() const
 {
-	if (_falling)
+	if (_falling == true)
 		return false;
 
 	bool newVis = false;

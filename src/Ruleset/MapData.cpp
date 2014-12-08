@@ -668,7 +668,7 @@ void MapData::setNoFloor(bool isNoFloor)
  * Check if this is an xcom base object.
  * @return, true if it is a base object
  */
-bool MapData::isBaseModule()
+bool MapData::isBaseModule() const
 {
 	return _baseModule;
 }

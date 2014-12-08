@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "BattlescapeGame.h"
 
@@ -48,9 +48,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Interface/Cursor.h"
