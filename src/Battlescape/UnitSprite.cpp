@@ -17,18 +17,17 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "UnitSprite.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "../Battlescape/Position.h"
 
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/ShaderDraw.h"
-#include "../Engine/ShaderMove.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/ShaderDraw.h"
+//#include "../Engine/ShaderMove.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Resource/ResourcePack.h"
@@ -356,10 +355,10 @@ void UnitSprite::drawRoutine0()
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
 
-		if (_unit->getGeoscapeSoldier()
-			&& Options::battleHairBleach)
+		if (Options::battleHairBleach == true
+			&& _unit->getGeoscapeSoldier() != NULL)
 		{
-			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
+			const SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 			if (look != LOOK_BLONDE)
 			{
 				Uint8
@@ -374,13 +373,12 @@ void UnitSprite::drawRoutine0()
 						hair_color = (10<<4) + 4;
 					break;
 					case LOOK_ORIENTAL:
-						face_color = 10<<4;
+						face_color = (10<<4);
 						hair_color = (15<<4) + 5;
 					break;
 					case LOOK_AFRICAN:
 						face_color = (10<<4) + 3;
 						hair_color = (10<<4) + 6;
-					break;
 				}
 
 				lock();
@@ -395,7 +393,8 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (_drawingRoutine == 0 || _helmet)
+	if (_drawingRoutine == 0
+		|| _helmet)
 	{
 		if ((_unit->getGender() == GENDER_FEMALE
 				&& _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE)
@@ -435,7 +434,7 @@ void UnitSprite::drawRoutine0()
 		leftArm = _unitSurface->getFrame(larmWalk[unitDir] + walkPhase);
 		rightArm = _unitSurface->getFrame(rarmWalk[unitDir] + walkPhase);
 
-		// kL_note: This needs to be removed because I already changed the sprites:
+		// kL_note: This needs to be removed because I already changed/ fixed the sprites:
 /*		if (_drawingRoutine == 10
 			&& unitDir == 3)
 		{
@@ -641,16 +640,16 @@ void UnitSprite::drawRoutine0()
 	}
 
 	Surface
-		* newTorso		= new Surface(*torso),
-		* newLegs		= new Surface(*legs),
-		* newLeftArm	= new Surface(*leftArm),
-		* newRightArm	= new Surface(*rightArm);
+		* const newTorso	= new Surface(*torso),
+		* const newLegs		= new Surface(*legs),
+		* const newLeftArm	= new Surface(*leftArm),
+		* const newRightArm	= new Surface(*rightArm);
 
-	if (_unit->getGeoscapeSoldier()
-		&& Options::battleHairBleach
-		&& _drawingRoutine == 0)
+	if (Options::battleHairBleach == true
+		&& _drawingRoutine == 0
+		&& _unit->getGeoscapeSoldier() != NULL)
 	{
-		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
+		const SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 		if (look != LOOK_BLONDE)
 		{
 			Uint8
@@ -665,13 +664,12 @@ void UnitSprite::drawRoutine0()
 					hair_color = (10<<4) + 4;
 				break;
 				case LOOK_ORIENTAL:
-					face_color = 10<<4;
+					face_color = (10<<4);
 					hair_color = (15<<4) + 5;
 				break;
 				case LOOK_AFRICAN:
 					face_color = (10<<4) + 3;
 					hair_color = (10<<4) + 6;
-				break;
 			}
 
 			lock();

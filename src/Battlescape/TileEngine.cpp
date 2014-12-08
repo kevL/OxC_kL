@@ -4123,7 +4123,7 @@ Tile* TileEngine::checkForTerrainExplosions()
 			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		if (_battleSave->getTiles()[i]->getExplosive())
+		if (_battleSave->getTiles()[i]->getExplosive() != 0)
 			return _battleSave->getTiles()[i];
 	}
 

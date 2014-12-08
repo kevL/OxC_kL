@@ -6669,14 +6669,9 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1417895670 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1418053105 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
-	<cmath>
 	"../Battlescape/Position.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/ShaderDraw.h"
-	"../Engine/ShaderMove.h"
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
@@ -6719,7 +6714,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1418017827 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1418018342 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
