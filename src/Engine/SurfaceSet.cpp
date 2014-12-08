@@ -19,14 +19,12 @@
 
 #include "SurfaceSet.h"
 
-#include <fstream>
+//#include <fstream>
 
-#include <SDL_endian.h>
+//#include <SDL_endian.h>
 
 #include "Surface.h"
-#include "Exception.h"
-
-#include "Logger.h" // kL
+//#include "Exception.h"
 
 
 namespace OpenXcom
@@ -47,7 +45,7 @@ SurfaceSet::SurfaceSet(
 }
 
 /**
- * Performs a deep copy of an existing surface set.
+ * Performs a deep copy of an existing SurfaceSet.
  * @param other Surface set to copy from.
  */
 SurfaceSet::SurfaceSet(const SurfaceSet& other)
@@ -80,7 +78,7 @@ SurfaceSet::~SurfaceSet()
 
 /**
  * Loads the contents of an X-Com set of PCK/TAB image files
- * into the surface. The PCK file contains an RLE compressed
+ * into this SurfaceSet. The PCK file contains an RLE compressed
  * image, while the TAB file contains the offsets to each
  * frame in the image.
  * @param pck Filename of the PCK image.
@@ -206,7 +204,7 @@ void SurfaceSet::loadPck(
 }
 
 /**
- * Loads the contents of an X-Com DAT image file into the surface.
+ * Loads the contents of an X-Com DAT image file into this SurfaceSet.
  * Unlike the PCK, a DAT file is an uncompressed image with no
  * offsets so these have to be figured out manually, usually
  * by splitting the image into equal portions.
@@ -275,7 +273,7 @@ void SurfaceSet::loadDat(const std::string& filename)
 }
 
 /**
- * Returns a particular frame from the surface set.
+ * Returns a particular frame from this SurfaceSet.
  * @param i - frame number in the set
  * @return, pointer to the respective Surface
  */
@@ -288,7 +286,7 @@ Surface* SurfaceSet::getFrame(const int i)
 }
 
 /**
- * Creates and returns a particular frame in the surface set.
+ * Creates and returns a particular frame in this SurfaceSet.
  * @param i Frame number in the set.
  * @return Pointer to the respective surface.
  */
@@ -302,7 +300,7 @@ Surface* SurfaceSet::addFrame(const int i)
 }
 
 /**
- * Returns the full width of a frame in the set.
+ * Returns the full width of a frame in this SurfaceSet.
  * @return Width in pixels.
  */
 int SurfaceSet::getWidth() const
@@ -311,7 +309,7 @@ int SurfaceSet::getWidth() const
 }
 
 /**
- * Returns the full height of a frame in the set.
+ * Returns the full height of a frame in this SurfaceSet.
  * @return Height in pixels.
  */
 int SurfaceSet::getHeight() const
@@ -320,8 +318,7 @@ int SurfaceSet::getHeight() const
 }
 
 /**
- * Returns the total amount of frames currently
- * stored in the set.
+ * Returns the total amount of frames currently stored in this SurfaceSet.
  * @return Number of frames.
  */
 size_t SurfaceSet::getTotalFrames() const

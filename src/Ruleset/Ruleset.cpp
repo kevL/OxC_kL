@@ -59,10 +59,10 @@
 #include "UfoTrajectory.h"
 #include "Unit.h"
 
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -1805,13 +1805,22 @@ const std::vector<std::vector<int> >& Ruleset::getAlienItemLevels() const
 }
 
 /**
- * Gets the Defined starting base.
- * @return, reference to the starting base definition
+ * Gets the pre-defined starting base.
+ * @return, reference to a default base
  */
-const YAML::Node& Ruleset::getStartingBase()
+const YAML::Node& Ruleset::getStartingBase() const
 {
 	return _startingBase;
 }
+
+/**
+ * Gets the pre-defined start time of a game.
+ * @return, address of the time a game starts
+ */
+/* const GameTime& Ruleset::getStartingTime() const
+{
+	return _startingTime;
+} */
 
 /**
  * Gets an MCDPatch.
@@ -2101,7 +2110,7 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 	for (int // Check for duplicates
 			i = 0;
 			i < 10
-				&& duplicate;
+				&& duplicate == true;
 			++i)
 	{
 		delete soldier;
@@ -2148,7 +2157,6 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 //						getStatStrings(),
 //						(Options::psiStrengthEval
 //							&& save->isResearched(getPsiRequirements())));
-
 	return soldier;
 }
 

@@ -20,11 +20,11 @@
 #ifndef OPENXCOM_SURFACESET_H
 #define OPENXCOM_SURFACESET_H
 
-#include <map>
-#include <string>
-#include <vector>
+//#include <map>
+//#include <string>
+//#include <vector>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom

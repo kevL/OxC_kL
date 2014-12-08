@@ -2149,8 +2149,8 @@ void BattleUnit::prepareUnitTurn()
 	int prepTU = getBaseStats()->tu;
 
 	double underLoad = static_cast<double>(getBaseStats()->strength) / static_cast<double>(getCarriedWeight());
-	underLoad *= getAccuracyModifier() / 2.0 + 0.5;
-	if (underLoad < 1.0)
+	underLoad *= getAccuracyModifier() / 2. + 0.5;
+	if (underLoad < 1.)
 		prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
@@ -2207,7 +2207,7 @@ void BattleUnit::prepareUnitTurn()
 	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile;
 	// fire damage by hit is caused by TileEngine::explode().
 	if (_fire > 0)
-		_fire--;
+		--_fire;
 
 	if (_health < 0)
 		_health = 0;
@@ -2224,8 +2224,7 @@ void BattleUnit::prepareUnitTurn()
 		&& (_armor->getSize() == 1
 			|| isOut() == false)
 		&& (_geoscapeSoldier != NULL
-			|| (_unitRules
-				&& _unitRules->getMechanical() == false)))
+			|| _unitRules->getMechanical() == false))
 	{
 		healStun(1); // recover stun 1pt/turn
 	}
@@ -2233,17 +2232,17 @@ void BattleUnit::prepareUnitTurn()
 	if (isOut() == false)
 	{
 		int panic = 100 - (2 * getMorale());
-		if (RNG::percent(panic))
+		if (RNG::percent(panic) == true)
 		{
 			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
 
-			if (RNG::percent(30))
+			if (RNG::percent(30) == true)
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
 		else if (panic > 0					// successfully avoided Panic
 			&& _geoscapeSoldier != NULL)
 		{
-			_expBravery++;
+			++_expBravery;
 		}
 	}
 

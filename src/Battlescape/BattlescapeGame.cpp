@@ -2566,10 +2566,10 @@ void BattlescapeGame::moveUpDown(
 		if ((SDL_GetModState() & KMOD_ALT) != 0)
 			return;
 
-		_currentAction.target.z++;
+		++_currentAction.target.z;
 	}
 	else
-		_currentAction.target.z--;
+		--_currentAction.target.z;
 
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
@@ -2578,7 +2578,7 @@ void BattlescapeGame::moveUpDown(
 	_currentAction.dash = false;
 	_currentAction.actor->setDashing(false);
 
-	if (Options::strafe
+	if (Options::strafe == true
 		&& (SDL_GetModState() & KMOD_CTRL) != 0
 		&& unit->getGeoscapeSoldier() != NULL)
 	{

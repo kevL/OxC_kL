@@ -1063,10 +1063,7 @@ void SavedBattleGame::endBattleTurn()
 				++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
-			{
-				(*i)->dontReselect(); // either zero tu's or set no reselect
-				(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
-			}
+				(*i)->dontReselect();
 		} // kL_end.
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
@@ -1083,7 +1080,7 @@ void SavedBattleGame::endBattleTurn()
 			//Log(LOG_INFO) << ". . nextFactionUnit == 0";
 			prepareBattleTurn();
 			//Log(LOG_INFO) << ". . prepareBattleTurn DONE";
-			_turn++;
+			++_turn;
 
 			_side = FACTION_PLAYER;
 
@@ -1112,7 +1109,7 @@ void SavedBattleGame::endBattleTurn()
 		//Log(LOG_INFO) << ". end Faction_Neutral";
 
 		prepareBattleTurn();
-		_turn++;
+		++_turn;
 
 		_side = FACTION_PLAYER;
 
@@ -1155,7 +1152,8 @@ void SavedBattleGame::endBattleTurn()
 	{
 		const int rand = RNG::generate(0, 5);
 		if (_turn > 17 + rand
-			|| liveAliens < rand - 1)
+			|| (_turn > 8
+				&& liveAliens < rand - 1))
 		{
 			_cheating = true;
 		}
@@ -1167,41 +1165,31 @@ void SavedBattleGame::endBattleTurn()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->getFaction() == _side)	// this causes an Mc'd unit to lose its turn. Because its faction
-											// hasn't reverted until *after* bu->prepareUnitTurn() runs. So it
-											// actually switches at the _end_ of its original faction's turn ...
-			(*i)->prepareUnitTurn();		// Reverts faction, tu/stun recovery, Fire damage, etc.
+		(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
+
+		if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
+			(*i)->prepareUnitTurn();		// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
+
+		// if newSide=XCOM, xCom agents DO NOT revert to xCom; MC'd aLiens revert to aLien.
+		// if newSide=Alien, xCom agents revert to xCom; MC'd aLiens DO NOT revert to aLien.
 
 
-		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
+		if ((*i)->isOut(true, true) == true)
+			(*i)->setTurnsExposed(255);
+		else if ((*i)->getFaction() == FACTION_HOSTILE
+			|| _cheating == true) // aLiens know where xCom is when cheating ~turn20
 		{
-//			(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only. MOVED UP ^
-
-			if ((*i)->isOut(true, true))
-				(*i)->setTurnsExposed(255);
-			else if (_cheating == true
-				&& _side == FACTION_HOSTILE)
-			{
-				(*i)->setTurnsExposed(0); // they see you.
-			}
-			else if ((*i)->getTurnsExposed() < 255
-				&& _side == FACTION_PLAYER)
-			{
-				(*i)->setTurnsExposed((*i)->getTurnsExposed() + 1);
-			}
+			(*i)->setTurnsExposed(0); // aLiens always know where their buddies are, Mc'd or not.
 		}
-		else
+		else if ((*i)->getTurnsExposed() < 255
+			&& _side == FACTION_PLAYER)
 		{
+			(*i)->setTurnsExposed((*i)->getTurnsExposed() + 1);
+		}
+
+
+		if ((*i)->getFaction() != FACTION_PLAYER)
 			(*i)->setVisible(false);
-//			(*i)->convertToFaction((*i)->getOriginalFaction());
-
-			if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
-				(*i)->setTurnsExposed(0);	// aLiens always know where their buddies are,
-											// Mc'd or not.
-		}
-
-//		if ((*i)->getFaction() == _side)
-//			(*i)->prepareUnitTurn();
 	}
 	//Log(LOG_INFO) << "done looping units";
 

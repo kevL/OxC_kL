@@ -316,8 +316,10 @@ protected:
 		/// Gets the alien item level table.
 		const std::vector<std::vector<int> >& getAlienItemLevels() const;
 
-		/// Gets the Defined starting base.
-		const YAML::Node& getStartingBase();
+		/// Gets the pre-defined starting base.
+		const YAML::Node& getStartingBase() const;
+		/// Gets the pre-defined start time of a game.
+//		const GameTime& getStartingTime() const;
 
 		/// Gets an MCDPatch.
 		MCDPatch* getMCDPatch(const std::string name) const;

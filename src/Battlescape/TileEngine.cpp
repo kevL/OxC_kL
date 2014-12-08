@@ -980,7 +980,7 @@ bool TileEngine::canTargetUnit(
 		const BattleUnit* const excludeUnit,
 		const BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::canTargetUnit()";
+	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
 	const Position targetVoxel = Position(
 										tile->getPosition().x * 16 + 8,
 										tile->getPosition().y * 16 + 8,
@@ -994,14 +994,14 @@ bool TileEngine::canTargetUnit(
 		unit = tile->getUnit();
 		if (unit == NULL)
 		{
-			Log(LOG_INFO) << ". no Unit, ret FALSE";
+			//Log(LOG_INFO) << ". no Unit, ret FALSE";
 			return false; // no unit in this tile, even if it's elevated and appearing in it.
 		}
 	}
 
 	if (unit == excludeUnit) // skip self
 	{
-		Log(LOG_INFO) << ". hit vs Self, ret FALSE";
+		//Log(LOG_INFO) << ". hit vs Self, ret FALSE";
 		return false;
 	}
 
@@ -1059,25 +1059,25 @@ bool TileEngine::canTargetUnit(
 			++i)
 	{
 		scanVoxel->z = targetCenterHeight + heightFromCenter[i];
-		Log(LOG_INFO) << ". iterate heightRange, i = " << i << ", scan.Z = " << scanVoxel->z;
+		//Log(LOG_INFO) << ". iterate heightRange, i = " << i << ", scan.Z = " << scanVoxel->z;
 
 		for (int
 				j = 0;
 				j < 5;
 				++j)
 		{
-			Log(LOG_INFO) << ". . iterate j = " << j;
+			//Log(LOG_INFO) << ". . iterate j = " << j;
 			if (i < heightRange - 1
 				&& j > 2)
 			{
-				Log(LOG_INFO) << ". . . out of bounds, break (j)";
+				//Log(LOG_INFO) << ". . . out of bounds, break (j)";
 				break; // skip unnecessary checks
 			}
 
 			scanVoxel->x = targetVoxel.x + sliceTargets[j * 2];
 			scanVoxel->y = targetVoxel.y + sliceTargets[j * 2 + 1];
-			Log(LOG_INFO) << ". . scan.X = " << scanVoxel->x;
-			Log(LOG_INFO) << ". . scan.Y = " << scanVoxel->y;
+			//Log(LOG_INFO) << ". . scan.X = " << scanVoxel->x;
+			//Log(LOG_INFO) << ". . scan.Y = " << scanVoxel->y;
 
 			_trajectory.clear();
 
@@ -1087,7 +1087,7 @@ bool TileEngine::canTargetUnit(
 										false,
 										&_trajectory,
 										excludeUnit);
-			Log(LOG_INFO) << ". . testLine = " << test;
+			//Log(LOG_INFO) << ". . testLine = " << test;
 
 			if (test == VOXEL_UNIT)
 			{
@@ -1096,19 +1096,19 @@ bool TileEngine::canTargetUnit(
 						x <= targetSize;
 						++x)
 				{
-					Log(LOG_INFO) << ". . . iterate x-Size";
+					//Log(LOG_INFO) << ". . . iterate x-Size";
 					for (int
 							y = 0;
 							y <= targetSize;
 							++y)
 					{
-						Log(LOG_INFO) << ". . . iterate y-Size";
+						//Log(LOG_INFO) << ". . . iterate y-Size";
 						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
 							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
 							&& _trajectory.at(0).z >= targetMinHeight
 							&& _trajectory.at(0).z <= targetMaxHeight)
 						{
-							Log(LOG_INFO) << ". . . . Unit found @ voxel, ret TRUE";
+							//Log(LOG_INFO) << ". . . . Unit found @ voxel, ret TRUE";
 							return true;
 						}
 					}
@@ -1118,13 +1118,13 @@ bool TileEngine::canTargetUnit(
 				&& hypothetical == true
 				&& _trajectory.empty() == false)
 			{
-				Log(LOG_INFO) << ". . hypothetical Found, ret TRUE";
+				//Log(LOG_INFO) << ". . hypothetical Found, ret TRUE";
 				return true;
 			}
 		}
 	}
 
-	Log(LOG_INFO) << "TileEngine::canTargetUnit() exit FALSE";
+	//Log(LOG_INFO) << "TileEngine::canTargetUnit() exit FALSE";
 	return false;
 }
 
@@ -5174,7 +5174,7 @@ int TileEngine::voxelCheck(
 		}
 	}
 
-	// first we check TERRAIN tile/voxel data,
+	// first check TERRAIN tile/voxel data
 	// not to allow 2x2 units to stick through walls
 	for (int // terrain parts [0=floor, 1/2=walls, 3=content-object]
 			i = 0;
@@ -5191,9 +5191,9 @@ int TileEngine::voxelCheck(
 				x = 15 - targetPos.x %16,	// x-direction is reversed
 				y = targetPos.y %16;		// y-direction is standard
 
-			const int LoftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y); // wtf
-			if (LoftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146
-				&& _voxelData->at(LoftIdx) & (1 << x))
+			const int loftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y); // wtf
+			if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146
+				&& _voxelData->at(loftIdx) & (1 << x))
 			{
 				//Log(LOG_INFO) << ". vC() ret = " << i;
 				return i;
@@ -5241,9 +5241,9 @@ int TileEngine::voxelCheck(
 					entry = ((pTarget_tile.x - unitPos.x) + ((pTarget_tile.y - unitPos.y) * 2));
 				}
 
-				const int LoftIdx = ((targetUnit->getLoftemps(entry) * 16) + y);
-				//Log(LOG_INFO) << "LoftIdx = " << LoftIdx;
-				if (_voxelData->at(LoftIdx) & (1 << x)) // if the voxelData at LoftIdx is "1" solid:
+				const int loftIdx = ((targetUnit->getLoftemps(entry) * 16) + y);
+				//Log(LOG_INFO) << "loftIdx = " << loftIdx;
+				if (_voxelData->at(loftIdx) & (1 << x)) // if the voxelData at loftIdx is "1" solid:
 				{
 					//Log(LOG_INFO) << ". vC() ret VOXEL_UNIT";
 					return VOXEL_UNIT;
@@ -5716,13 +5716,13 @@ bool TileEngine::validMeleeRange(
 		BattleUnit* target,
 		Position* dest)
 {
-	Log(LOG_INFO) << "TileEngine::validMeleeRange()";
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (dir < 0 || 7 < dir)
 	{
-		Log(LOG_INFO) << ". dir inValid, EXIT false";
+		//Log(LOG_INFO) << ". dir inValid, EXIT false";
 		return false;
 	}
-	Log(LOG_INFO) << ". dir = " << dir;
+	//Log(LOG_INFO) << ". dir = " << dir;
 
 
 	Position posTarget;
@@ -5746,7 +5746,7 @@ bool TileEngine::validMeleeRange(
 				y <= unitSize;
 				++y)
 		{
-			Log(LOG_INFO) << ". iterate over Size";
+			//Log(LOG_INFO) << ". iterate over Size";
 
 			tileOrigin = _battleSave->getTile(Position(pos + Position(x, y, 0)));
 			tileTarget = _battleSave->getTile(Position(pos + Position(x, y, 0) + posTarget));
@@ -5754,20 +5754,20 @@ bool TileEngine::validMeleeRange(
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
 			{
-				Log(LOG_INFO) << ". tile Origin & Target VALID";
+				//Log(LOG_INFO) << ". tile Origin & Target VALID";
 				tileTarget_above = _battleSave->getTile(Position(pos + Position(x, y, 1) + posTarget));
 				tileTarget_below = _battleSave->getTile(Position(pos + Position(x, y,-1) + posTarget));
 
 				if (tileTarget->getUnit() == NULL) // kL
 				{
-					Log(LOG_INFO) << ". . no targetUnit";
+					//Log(LOG_INFO) << ". . no targetUnit";
 
 //kL				if (tileOrigin->getTerrainLevel() <= -16
 					if (tileTarget_above != NULL // kL_note: standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
 						&& tileOrigin->getTerrainLevel() < -7) // kL
 //kL					&& !tileTarget_above->hasNoFloor(tileTarget)) // kL_note: floaters...
 					{
-						Log(LOG_INFO) << ". . . targetUnit on tileAbove";
+						//Log(LOG_INFO) << ". . . targetUnit on tileAbove";
 						tileTarget = tileTarget_above;
 					}
 					else if (tileTarget_below != NULL // kL_note: can reach target standing on a rise only 1/3 up z-axis on adjacent tileBelow.
@@ -5775,18 +5775,18 @@ bool TileEngine::validMeleeRange(
 //kL					&& tileTarget_below->getTerrainLevel() <= -16)
 						&& tileTarget_below->getTerrainLevel() < -7) // kL
 					{
-						Log(LOG_INFO) << ". . . targetUnit on tileBelow";
+						//Log(LOG_INFO) << ". . . targetUnit on tileBelow";
 						tileTarget = tileTarget_below;
 					}
 				}
 
 				if (tileTarget->getUnit() != NULL)
 				{
-					Log(LOG_INFO) << ". . targeted tileUnit is valid ID = " << tileTarget->getUnit()->getId();
+					//Log(LOG_INFO) << ". . targeted tileUnit is valid ID = " << tileTarget->getUnit()->getId();
 					if (target == NULL
 						|| target == tileTarget->getUnit())
 					{
-						Log(LOG_INFO) << ". . . target and tileUnit are same";
+						//Log(LOG_INFO) << ". . . target and tileUnit are same";
 						const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16, 16, 24))
 												   + Position(
 															8,
@@ -5803,11 +5803,11 @@ bool TileEngine::validMeleeRange(
 										&voxelTarget,
 										attacker) == true)
 						{
-							Log(LOG_INFO) << ". . . . canTargetUnit TRUE";
+							//Log(LOG_INFO) << ". . . . canTargetUnit TRUE";
 							if (dest != NULL)
 								*dest = tileTarget->getPosition();
 
-							Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
+							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
 							return true;
 						}
 					}
@@ -5815,7 +5815,8 @@ bool TileEngine::validMeleeRange(
 			}
 		}
 	}
-	Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
+
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
 	return false;
 }
 

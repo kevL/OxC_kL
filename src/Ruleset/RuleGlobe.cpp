@@ -67,7 +67,7 @@ RuleGlobe::~RuleGlobe()
 
 /**
  * Loads the globe from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void RuleGlobe::load(const YAML::Node& node)
 {
@@ -132,7 +132,7 @@ void RuleGlobe::load(const YAML::Node& node)
 
 /**
  * Returns the list of polygons in the globe.
- * @return Pointer to the list of polygons.
+ * @return, pointer to a list of pointers to Polygons
  */
 std::list<Polygon*>* RuleGlobe::getPolygons()
 {
@@ -141,7 +141,7 @@ std::list<Polygon*>* RuleGlobe::getPolygons()
 
 /**
  * Returns the list of polylines in the globe.
- * @return Pointer to the list of polylines.
+ * @return, pointer to a list of pointers to Polylines
  */
 std::list<Polyline*>* RuleGlobe::getPolylines()
 {
@@ -151,7 +151,7 @@ std::list<Polyline*>* RuleGlobe::getPolylines()
 /**
  * Loads a series of map polar coordinates in X-Com format,
  * converts them and stores them in a set of polygons.
- * @param filename Filename of the DAT file.
+ * @param filename - filename of DAT file
  * @sa http://www.ufopaedia.org/index.php?title=WORLD.DAT
  */
 void RuleGlobe::loadDat(const std::string& filename)
@@ -191,10 +191,10 @@ void RuleGlobe::loadDat(const std::string& filename)
 				i < points;
 				++i)
 		{
-			// Correct X-Com degrees and convert to radians
+			// correct X-Com degrees and convert to radians
 			double
-				lonRad = value[j++] * 0.125f * M_PI / 180.,
-				latRad = value[j++] * 0.125f * M_PI / 180.;
+				lonRad = value[j++] * 0.125 * M_PI / 180.,
+				latRad = value[j++] * 0.125 * M_PI / 180.;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);

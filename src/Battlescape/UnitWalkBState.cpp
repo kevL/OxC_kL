@@ -85,7 +85,6 @@ UnitWalkBState::UnitWalkBState(
 UnitWalkBState::~UnitWalkBState()
 {
 	//Log(LOG_INFO) << "Delete UnitWalkBState";
-	// note I wonder if setDashing(false) would work here
 }
 
 /**

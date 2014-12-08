@@ -446,8 +446,8 @@ void Base::setName(const std::wstring& name)
  */
 int Base::getMarker() const
 {
-	// Cheap hack to hide bases when they haven't been placed yet
-	if (AreSame(_lon, 0.0) && AreSame(_lat, 0.0))
+	// cheap hack to hide Bases when they haven't been placed yet
+	if (AreSame(_lon, 0.) && AreSame(_lat, 0.))
 		return -1;
 
 	return 0;

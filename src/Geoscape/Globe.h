@@ -64,8 +64,9 @@ private:
 //		NUM_TEXTURES	= 13;
 //kL	static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
 
-	static const double ROTATE_LONGITUDE;
-	static const double ROTATE_LATITUDE;
+	static const double
+		ROTATE_LONGITUDE,
+		ROTATE_LATITUDE;
 
 	bool
 //		_blink, // they typed it to (int)

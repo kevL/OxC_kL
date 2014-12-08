@@ -275,7 +275,6 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-			Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
 			if (_parent->getTileEngine()->validMeleeRange(
 													_unit->getPosition(),
 													_unit->getDirection(),
@@ -283,7 +282,6 @@ void ProjectileFlyBState::init()
 													NULL,
 													&_action.target) == false)
 			{
-				Log(LOG_INFO) << ". . . out of hit range, EXIT";
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
 			}

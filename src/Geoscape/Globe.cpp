@@ -29,17 +29,17 @@
 #include "GeoscapeState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/FastLineClip.h"
-#include "../Engine/Font.h"
+//#include "../Engine/FastLineClip.h"
+//#include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/LocalizedText.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
-#include "../Engine/ShaderMove.h"
-#include "../Engine/ShaderRepeat.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/LocalizedText.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
+//#include "../Engine/ShaderMove.h"
+//#include "../Engine/ShaderRepeat.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
@@ -1901,24 +1901,30 @@ void Globe::drawDetail()
 					j < (*i)->getPoints() - 1;
 					++j)
 			{
+				const double
+					lon0 = (*i)->getLongitude(j),
+					lat0 = (*i)->getLatitude(j),
+					lon1 = (*i)->getLongitude(j + 1),
+					lat1 = (*i)->getLatitude(j + 1);
+
 				if (pointBack( // don't draw if polyline is facing back
-						(*i)->getLongitude(j),
-						(*i)->getLatitude(j)) == true
+							lon0,
+							lat0) == true
 					|| pointBack(
-							(*i)->getLongitude(j + 1),
-							(*i)->getLatitude(j + 1)) == true)
+							lon1,
+							lat1) == true)
 				{
 					continue;
 				}
 
 				polarToCart( // convert coordinates
-						(*i)->getLongitude(j),
-						(*i)->getLatitude(j),
+						lon0,
+						lat0,
 						&x[0],
 						&y[0]);
 				polarToCart(
-						(*i)->getLongitude(j + 1),
-						(*i)->getLatitude(j + 1),
+						lon1,
+						lat1,
 						&x[1],
 						&y[1]);
 
@@ -1949,24 +1955,31 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
+				const double
+					lon = (*j)->getLongitude(),
+					lat = (*j)->getLatitude();
+
 				if (pointBack( // don't draw if city is facing back
-						(*j)->getLongitude(),
-						(*j)->getLatitude()))
+							lon,
+							lat) == true)
 				{
 					continue;
 				}
 
 				polarToCart( // convert coordinates
-						(*j)->getLongitude(),
-						(*j)->getLatitude(),
+						lon,
+						lat,
 						&x,
 						&y);
 
 				// code for using SurfaceSet for markers:
 				Surface* const marker = _markerSet->getFrame(CITY_MARKER);
-				marker->setX(x - 1);
-				marker->setY(y - 1);
-				marker->blit(_countries); // end.
+				if (marker != NULL)
+				{
+					marker->setX(x - 1);
+					marker->setY(y - 1);
+					marker->blit(_countries); // end.
+				}
 
 /*				_mkCity->setX(x - 1);
 				_mkCity->setY(y - 1);
@@ -1977,6 +1990,12 @@ void Globe::drawDetail()
 	}
 
 	Text* const label = new Text(100, 9, 0, 0);
+	Sint16
+		x,
+		y;
+	double
+		lon,
+		lat;
 
 	if (_zoom > 2 // draw the country labels
 		&& Options::globeDetail == true)
@@ -1989,25 +2008,24 @@ void Globe::drawDetail()
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(14)+3);
 
-		Sint16
-			x,
-			y;
-
 		for (std::vector<Country*>::const_iterator
 				i = _game->getSavedGame()->getCountries()->begin();
 				i != _game->getSavedGame()->getCountries()->end();
 				++i)
 		{
+			lon = (*i)->getRules()->getLabelLongitude(),
+			lat = (*i)->getRules()->getLabelLatitude();
+
 			if (pointBack( // don't draw if label is facing back
-					(*i)->getRules()->getLabelLongitude(),
-					(*i)->getRules()->getLabelLatitude()))
+						lon,
+						lat) == true)
 			{
 				continue;
 			}
 
 			polarToCart( // convert coordinates
-					(*i)->getRules()->getLabelLongitude(),
-					(*i)->getRules()->getLabelLatitude(),
+					lon,
+					lat,
 					&x,
 					&y);
 
@@ -2030,10 +2048,6 @@ void Globe::drawDetail()
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(10)+7);
 
-		Sint16
-			x,
-			y;
-
 		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
 				i != _game->getSavedGame()->getRegions()->end();
@@ -2044,16 +2058,19 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
+				lon = (*j)->getLongitude(),
+				lat = (*j)->getLatitude();
+
 				if (pointBack( // don't draw if label is facing back
-						(*j)->getLongitude(),
-						(*j)->getLatitude()) == true)
+							lon,
+							lat) == true)
 				{
 					continue;
 				}
 
 				polarToCart( // convert coordinates
-						(*j)->getLongitude(),
-						(*j)->getLatitude(),
+						lon,
+						lat,
 						&x,
 						&y);
 
@@ -2078,34 +2095,34 @@ void Globe::drawDetail()
 //		label->setColor(Palette::blockOffset(11)); // purple
 //		label->setHighContrast();
 
-		Sint16
-			x,
-			y;
-
 		for (std::vector<Base*>::const_iterator
 				i = _game->getSavedGame()->getBases()->begin();
 				i != _game->getSavedGame()->getBases()->end();
 				++i)
 		{
+			lon = (*i)->getLongitude(),
+			lat = (*i)->getLatitude();
+
 			// cheap hack to hide a base when it hasn't been placed yet
-			if ((AreSame((*i)->getLongitude(), 0.) == false
-					|| AreSame((*i)->getLatitude(), 0.) == false)
-				&& pointBack( // don't draw if city is facing back
-						(*i)->getLongitude(),
-						(*i)->getLatitude()) == false)
+			if ((*i)->getMarker() == -1
+				|| pointBack( // don't draw if city is facing back
+							lon,
+							lat) == true)
 			{
-				polarToCart( // convert coordinates
-						(*i)->getLongitude(),
-						(*i)->getLatitude(),
-						&x,
-						&y);
-
-				label->setX(x - 3);
-				label->setY(y - 10);
-				label->setText((*i)->getName());
-
-				label->blit(_countries);
+				continue;
 			}
+
+			polarToCart( // convert coordinates
+					lon,
+					lat,
+					&x,
+					&y);
+
+			label->setX(x - 3);
+			label->setY(y - 10);
+			label->setText((*i)->getName());
+
+			label->blit(_countries);
 		}
 	}
 
