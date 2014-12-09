@@ -31,8 +31,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Menu/ErrorMessageState.h"
@@ -81,15 +81,15 @@ ManufactureInfoState::ManufactureInfoState(
 }
 
 /**
- * kL. Cleans up the ManufactureInfo state.
+ * Cleans up the ManufactureInfo state.
  */
-ManufactureInfoState::~ManufactureInfoState() // not implemented yet.
+ManufactureInfoState::~ManufactureInfoState()
 {
 	delete _timerMoreEngineer;
 	delete _timerLessEngineer;
 	delete _timerMoreUnit;
 	delete _timerLessUnit;
-} // kL_end.
+}
 
 /**
  * Builds screen User Interface.
@@ -356,8 +356,8 @@ void ManufactureInfoState::updateTimeTotal()
 	{
 		int hoursLeft;
 
-		if (_production->getSellItems()
-			|| _production->getInfiniteAmount())
+		if (_production->getSellItems() == true
+			|| _production->getInfiniteAmount() == true)
 		{
 			hoursLeft = (_production->getAmountProduced() + 1) * _production->getRules()->getManufactureTime()
 						- _production->getTimeSpent();
@@ -368,7 +368,7 @@ void ManufactureInfoState::updateTimeTotal()
 
 
 		int engs = _production->getAssignedEngineers();
-		if (!Options::canManufactureMoreItemsPerHour)
+		if (Options::canManufactureMoreItemsPerHour == false)
 			engs = std::min(
 							engs,
 							_production->getRules()->getManufactureTime());
@@ -481,7 +481,7 @@ void ManufactureInfoState::lessEngineer(int change)
 		change = std::min(
 						change,
 						assigned);
-		_production->setAssignedEngineers(assigned-change);
+		_production->setAssignedEngineers(assigned - change);
 		_base->setEngineers(_base->getEngineers() + change);
 
 		setAssignedEngineer();
@@ -592,25 +592,24 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
  */
 void ManufactureInfoState::moreUnitClick(Action* action)
 {
-	if (_production->getInfiniteAmount())
+	if (_production->getInfiniteAmount() == true)
 		return; // We can't increase over infinite :) [cf. Cantor]
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_production->getRules()->getCategory() == "STR_CRAFT")
 		{
-//			moreUnit(std::numeric_limits<int>::max()); // kL_note: RMB won't start the timer ....
-			_game->pushState(new ErrorMessageState(
-												tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
-												_palette,
-												Palette::blockOffset(15)+1,
-												"BACK17.SCR",
-												6));
+			moreUnit(std::numeric_limits<int>::max()); // kL_note: RMB won't start the timer ....
+//			_game->pushState(new ErrorMessageState(
+//												tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
+//												_palette,
+//												Palette::blockOffset(15)+1,
+//												"BACK17.SCR",
+//												6));
 		}
 		else
 		{
 			_production->setInfiniteAmount(true);
-
 			setAssignedEngineer();
 		}
 	}

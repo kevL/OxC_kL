@@ -4944,7 +4944,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1413136953 f:\git\openxcom\src\basescape\manufacturestartstate.h
+1418108978 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
 1415853535 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
@@ -6485,7 +6485,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1418080754 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1418093105 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

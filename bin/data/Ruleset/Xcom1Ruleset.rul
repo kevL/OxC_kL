@@ -3716,12 +3716,12 @@ soldiers:
   - type: XCOM
     minStats:
       tu: 45
-      stamina: 30
+      stamina: 35
       health: 25
       bravery: 10
       reactions: 35
-      firing: 45
-      throwing: 50
+      firing: 55
+      throwing: 55
       strength: 20
       psiStrength: 1
       psiSkill: 15
@@ -3730,14 +3730,14 @@ soldiers:
       tu: 60
       stamina: 60
       health: 35
-      bravery: 60
+      bravery: 50
       reactions: 55
-      firing: 65
-      throwing: 70
+      firing: 70
+      throwing: 75
       strength: 35
       psiStrength: 100
       psiSkill: 25
-      melee: 60
+      melee: 55
     statCaps:
       tu: 88
       stamina: 112

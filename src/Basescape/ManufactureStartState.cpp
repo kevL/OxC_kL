@@ -47,8 +47,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the productions start screen.
- * @param base Pointer to the base to get info from.
- * @param item The RuleManufacture to produce.
+ * @param base - pointer to the Base to get info from
+ * @param item - pointer to RuleManufacture to produce
  */
 ManufactureStartState::ManufactureStartState(
 		Base* base,
@@ -59,7 +59,6 @@ ManufactureStartState::ManufactureStartState(
 {
 	_screen = false;
 
-	// kL_begin: ManufactureStartState, use Fucking #'s. thanks
 	_window					= new Window(this, 320, 170, 0, 15);
 	_txtTitle				= new Text(300, 16, 10, 26);
 
@@ -77,7 +76,6 @@ ManufactureStartState::ManufactureStartState(
 
 	_btnCancel				= new TextButton(130, 16, 20, 160);
 	_btnStart				= new TextButton(130, 16, 170, 160);
-	// kL_end.
 
 	setPalette("PAL_BASESCAPE", 6);
 
@@ -194,7 +192,7 @@ ManufactureStartState::ManufactureStartState(
 
 /**
  * Returns to previous screen.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureStartState::btnCancelClick(Action*)
 {
@@ -203,7 +201,7 @@ void ManufactureStartState::btnCancelClick(Action*)
 
 /**
  * Go to the Production settings screen.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureStartState::btnStartClick(Action*)
 {
