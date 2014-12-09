@@ -252,7 +252,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 
 	_sel = _lstSoldiers->getSelectedRow();
 
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // note: Swap LMB & RMB
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_base->getSoldiers()->at(_sel)->isInPsiTraining() == false)
 		{
@@ -276,7 +276,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 			_base->getSoldiers()->at(_sel)->setPsiTraining();
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(

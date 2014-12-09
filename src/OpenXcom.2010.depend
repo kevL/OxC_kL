@@ -4890,7 +4890,7 @@
 1413136961 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1415923504 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1418109547 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4901,8 +4901,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Engine/Timer.h"
 	"../Menu/ErrorMessageState.h"
 	"../Resource/ResourcePack.h"
@@ -4927,7 +4925,7 @@
 1413136961 f:\git\openxcom\src\savegame\production.h
 	<yaml-cpp/yaml.h>
 
-1417537081 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
+1418108967 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
 	"ManufactureInfoState.h"
 	"../Engine/Game.h"

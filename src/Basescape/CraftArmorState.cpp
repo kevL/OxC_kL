@@ -237,7 +237,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // NOTE: left & right swappped.
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (!
 			(soldier->getCraft()
@@ -257,7 +257,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 												6));
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
