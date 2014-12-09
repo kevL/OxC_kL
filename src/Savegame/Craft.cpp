@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "Craft.h"
 
@@ -154,18 +154,18 @@ void Craft::load(
 		{
 			std::string type = (*i)["type"].as<std::string>();
 			if (type != "0"
-				&& rules->getCraftWeapon(type))
+				&& rules->getCraftWeapon(type) != NULL)
 			{
-				CraftWeapon* cw = new CraftWeapon(
-											rules->getCraftWeapon(type),
-											0);
+				CraftWeapon* const cw = new CraftWeapon(
+													rules->getCraftWeapon(type),
+													0);
 				cw->load(*i);
 				_weapons[j] = cw;
 			}
 			else
 				_weapons[j] = 0;
 
-			j++;
+			++j;
 		}
 	}
 
@@ -606,7 +606,7 @@ int Craft::getNumSoldiers() const
 			++i)
 	{
 		if ((*i)->getCraft() == this)
-			ret++;
+			++ret;
 	}
 
 	return ret;
@@ -704,7 +704,7 @@ void Craft::setFuel(const int fuel)
 int Craft::getFuelPercentage() const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel()))
+			std::floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel()))
 			* 100.));
 }
 
@@ -737,7 +737,7 @@ void Craft::setDamage(const int damage)
 int Craft::getDamagePercent() const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
+			std::floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
 			* 100.));
 }
 
@@ -833,7 +833,7 @@ int Craft::getFuelLimit(Base* base) const
 
 	const double speedRads = static_cast<double>(_rules->getMaxSpeed()) * unitToRads / 6.; // per 10-min.
 
-	return static_cast<int>(ceil(
+	return static_cast<int>(std::ceil(
 		   static_cast<double>(getFuelConsumption()) * distRads * patrol_factor / speedRads));
 }
 
@@ -853,7 +853,7 @@ void Craft::think()
 	if (_takeoff == 0)
 		moveTarget();
 	else
-		_takeoff--;
+		--_takeoff;
 
 	if (reachedDestination() == true
 		&& _dest == dynamic_cast<Target*>(_base))
@@ -894,10 +894,10 @@ void Craft::checkup()
 		if (*i == NULL)
 			continue;
 
-		cw++;
+		++cw;
 
 		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-			loaded++;
+			++loaded;
 		else
 			(*i)->setRearming();
 	}
@@ -979,7 +979,7 @@ std::string Craft::rearm(const Ruleset* rules)
 		if (*i != NULL
 			&& (*i)->getRearming() == true)
 		{
-			test = "";
+			test.clear();
 
 			const std::string clip = (*i)->getRules()->getClipItem();
 			const int baseClips = _base->getItems()->getItem(clip);
@@ -1120,7 +1120,7 @@ int Craft::getVehicleCount(const std::string& vehicle) const
 			++i)
 	{
 		if ((*i)->getRules()->getType() == vehicle)
-			total++;
+			++total;
 	}
 
 	return total;
@@ -1260,7 +1260,7 @@ int Craft::getDowntime(bool& delayed)
 
 	if (_damage > 0)
 	{
-		hours += static_cast<int>(ceil(
+		hours += static_cast<int>(std::ceil(
 				 static_cast<double>(_damage)
 					/ static_cast<double>(_rules->getRepairRate())
 				 / 2.));
@@ -1276,7 +1276,7 @@ int Craft::getDowntime(bool& delayed)
 		{
 			const int reqQty = (*i)->getRules()->getAmmoMax() - (*i)->getAmmo();
 
-			hours += static_cast<int>(ceil(
+			hours += static_cast<int>(std::ceil(
 					 static_cast<double>(reqQty)
 						/ static_cast<double>((*i)->getRules()->getRearmRate())
 					 / 2.));
@@ -1316,7 +1316,7 @@ int Craft::getDowntime(bool& delayed)
 	{
 		const int reqQty = _rules->getMaxFuel() - _fuel;
 
-		hours += static_cast<int>(ceil(
+		hours += static_cast<int>(std::ceil(
 				 static_cast<double>(reqQty)
 					/ static_cast<double>(_rules->getRefuelRate())
 				 / 2.));

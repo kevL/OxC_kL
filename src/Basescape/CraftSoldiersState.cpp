@@ -314,8 +314,10 @@ void CraftSoldiersState::init()
 
 //	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
 //	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
-	_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
-					.arg(craft->getSpaceUsed())
+	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
+//					.arg(craft->getSpaceUsed())
+					.arg(craft->getNumSoldiers())
+					.arg(craft->getNumVehicles())
 					.arg(craft->getSpaceAvailable()));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(craft->getLoadCapacity())
@@ -551,17 +553,18 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 
 		_lstSoldiers->setRowColor(row, color);
 
-		_txtSpace->setText(tr("STR_SPACE_USED_FREE_") // (tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()))
-						.arg(craft->getSpaceUsed())
+		_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
+//						.arg(craft->getSpaceUsed())
+						.arg(craft->getNumSoldiers())
+						.arg(craft->getNumVehicles())
 						.arg(craft->getSpaceAvailable()));
-		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_") // (tr("STR_SPACE_USED").arg(craft->getSpaceUsed()))
+		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 						.arg(craft->getLoadCapacity())
 						.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
 		_game->pushState(new SoldierInfoState(
 											_base,
 											row));

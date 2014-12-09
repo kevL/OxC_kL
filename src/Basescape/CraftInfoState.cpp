@@ -79,9 +79,9 @@ CraftInfoState::CraftInfoState(
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 	_txtStatus		= new Text(80, 9, 224, 10);
 
-	_txtFuel		= new Text(82, 17, 16, 28);
+	_txtFuel		= new Text(80, 17, 16, 28);
 	_txtRadar		= new Text(80, 9, 120, 28);
-	_txtDamage		= new Text(82, 17, 228, 28);
+	_txtDamage		= new Text(80, 17, 226, 28);
 
 	_btnW1			= new TextButton(24, 32, 16, 48);
 	_btnW2			= new TextButton(24, 32, 282, 48);
@@ -156,6 +156,7 @@ CraftInfoState::CraftInfoState(
 
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
+	_txtDamage->setAlign(ALIGN_RIGHT);
 
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);

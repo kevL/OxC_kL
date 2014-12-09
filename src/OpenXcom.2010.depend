@@ -4603,7 +4603,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417536957 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1418121020 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4643,7 +4643,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1417536348 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1418162549 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4763,7 +4763,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417820591 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1418162494 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Engine/Action.h"
@@ -5758,7 +5758,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1417968290 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1418158731 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -7116,7 +7116,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1417398524 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1418121045 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
 	"PsiTrainingState.h"
@@ -9192,7 +9192,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1417839062 source:f:\git\openxcom\src\savegame\craft.cpp
+1418162331 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"

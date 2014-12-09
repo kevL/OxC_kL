@@ -157,8 +157,10 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-	_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
-					.arg(craft->getSpaceUsed())
+	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
+//					.arg(craft->getSpaceUsed())
+					.arg(craft->getNumSoldiers())
+					.arg(craft->getNumVehicles())
 					.arg(craft->getSpaceAvailable()));
 
 	_txtLoad->setColor(Palette::blockOffset(15)+1);
@@ -473,8 +475,10 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 1, ss1.str());
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
 
-	_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
-					.arg(craft->getSpaceUsed())
+	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
+//					.arg(craft->getSpaceUsed())
+					.arg(craft->getNumSoldiers())
+					.arg(craft->getNumVehicles())
 					.arg(craft->getSpaceAvailable()));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(craft->getLoadCapacity())

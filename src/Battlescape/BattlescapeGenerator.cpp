@@ -4286,7 +4286,7 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 				_blocks[x][y]->getSizeX(),
 				_blocks[x][y]->getSizeY());
 
-		for (int
+/*		for (int
 				dx = x;
 				dx != x + (_blocks[x][y]->getSizeX() / 10);
 				++dx)
@@ -4294,11 +4294,23 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 			for (int
 					dy = y;
 					dy != y + (_blocks[x][y]->getSizeY() / 10);
-					++dy)
-			{
-				_blocks[dx][dy] = 0;
+					++dy) */
+		int // Falko_begin:
+			delx = (_blocks[x][y]->getSizeX() / 10),
+			dely = (_blocks[x][y]->getSizeY() / 10);
 
-				_blocksToDo++;
+		for (int
+				dx = x;
+				dx != x + delx;
+				++dx)
+		{
+			for (int
+					dy = y;
+					dy != y + dely;
+					++dy)
+			{ // Falko_end.
+				_blocks[dx][dy] = 0;
+				++_blocksToDo;
 			}
 		}
 
