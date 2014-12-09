@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "BattleUnit.h"
 
@@ -36,9 +36,9 @@
 #include "../Battlescape/Pathfinding.h"
 
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Engine/Surface.h"
@@ -1562,21 +1562,25 @@ void BattleUnit::startFalling()
  */
 void BattleUnit::keepFalling()
 {
-	if (_diedByFire)
+	if (_diedByFire == true)
 		_fallPhase = _armor->getDeathFrames();
 	else
-		_fallPhase++;
+		++_fallPhase;
 
 	if (_fallPhase == _armor->getDeathFrames())
 	{
-		_fallPhase--;
+		--_fallPhase;
 
 		if (_health == 0)
+		{
 			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
 			_status = STATUS_DEAD;
+		}
 		else
+		{
 			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
 			_status = STATUS_UNCONSCIOUS;
+		}
 	}
 
 	_cacheInvalid = true;
@@ -1602,7 +1606,7 @@ void BattleUnit::startAiming() // kL
 	_status = STATUS_AIMING;
 	_aimPhase = 0;
 
-	if (_visible)
+	if (_visible == true)
 //		|| _faction == FACTION_PLAYER) // all Faction_Player is visible ...
 	{
 		_cacheInvalid = true;
@@ -1616,7 +1620,7 @@ void BattleUnit::keepAiming() // kL
 {
 	if (++_aimPhase == _armor->getShootFrames())
 	{
-		_aimPhase--;
+		--_aimPhase;
 		_status = STATUS_STANDING;
 	}
 
@@ -1647,12 +1651,12 @@ bool BattleUnit::isOut(
 		bool checkStun) const
 {
 	//Log(LOG_INFO) << "BattleUnit::isOut() ID = " << getId();
-	if (checkHealth
+	if (checkHealth == true
 		&& getHealth() == 0)
 	{
 			return true;
 	}
-	else if (checkStun
+	else if (checkStun == true
 		&& getStun() >= getHealth())
 	{
 			return true;

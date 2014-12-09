@@ -209,7 +209,7 @@ void AlienBAIState::think(BattleAction* action)
 	_visibleEnemies		= selectNearestTarget();
 	_spottingEnemies	= getSpottingUnits(_unit->getPosition());
 
-	_melee		= (_unit->getMeleeWeapon().empty() == false);
+	_melee		= (_unit->getMeleeWeapon().empty() == false); // kL_note: or STR_FIST
 	_rifle		= false;
 	_blaster	= false;
 	_grenade	= false; // kL

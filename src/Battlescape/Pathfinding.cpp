@@ -29,8 +29,8 @@
 #include "../Battlescape/TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
@@ -1885,7 +1885,8 @@ bool Pathfinding::canFallDown(
  * @param bu		- pointer to a BattleUnit
  * @param startPos	- start Position
  * @param dir		- up or down
- * @return,	-1 kneeling (stop unless on gravLift)
+ * @return,	-2 can't fly
+			-1 kneeling (stop unless on gravLift)
 			 0 blocked (stop)
 			 1 gravLift (go)
 			 2 flying (go unless blocked)
@@ -1902,19 +1903,19 @@ int Pathfinding::validateUpDown(
 					&destPos);
 	destPos += startPos;
 
-	Tile
+	const Tile
 		* const startTile = _save->getTile(startPos),
 		* const destTile = _save->getTile(destPos);
 
 	if (destTile == NULL)
 		return 0;
 
-	const bool gravLift = startTile->getMapData(MapData::O_FLOOR)
+	const bool gravLift = startTile->getMapData(MapData::O_FLOOR) != NULL
 					   && startTile->getMapData(MapData::O_FLOOR)->isGravLift()
-					   && destTile->getMapData(MapData::O_FLOOR)
+					   && destTile->getMapData(MapData::O_FLOOR) != NULL
 					   && destTile->getMapData(MapData::O_FLOOR)->isGravLift();
 
-	if (gravLift)
+	if (gravLift == true)
 		return 1;
 	else if (bu->getMovementType() == MT_FLY)
 	{
@@ -1924,9 +1925,9 @@ int Pathfinding::validateUpDown(
 			return -2;
 		}
 
-		Tile* const belowStart = _save->getTile(startPos + Position(0, 0,-1));
+		const Tile* const belowStart = _save->getTile(startPos + Position(0, 0,-1));
 		if ((dir == DIR_UP
-				&& destTile->hasNoFloor(NULL)) // flying up only possible when there is no roof
+				&& destTile->hasNoFloor(startTile)) // flying up only possible when there is no roof
 			|| (dir == DIR_DOWN
 				&& startTile->hasNoFloor(belowStart))) // flying down only possible when there is no floor
 		{

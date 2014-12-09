@@ -4718,7 +4718,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417730512 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1418165092 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4782,15 +4782,13 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1417001574 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1418164999 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Geoscape/Globe.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
@@ -6406,7 +6404,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1417311005 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1418168702 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6414,8 +6412,6 @@
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/TileEngine.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/BattleItem.h"

@@ -996,6 +996,7 @@ void UnitWalkBState::postPathProcedures()
 				action.type = BA_HIT;
 				action.weapon = _unit->getMainHandWeapon();
 
+// if (action.weapon == NULL)
 				const std::string meleeWeapon = _unit->getMeleeWeapon();
 				bool instaWeapon = false;
 
