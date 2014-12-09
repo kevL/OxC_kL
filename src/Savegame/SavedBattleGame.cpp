@@ -1177,6 +1177,7 @@ void SavedBattleGame::endBattleTurn()
 		if ((*i)->isOut(true, true) == true)
 			(*i)->setTurnsExposed(255);
 		else if ((*i)->getFaction() == FACTION_HOSTILE
+			|| (*i)->getOriginalFaction() == FACTION_HOSTILE
 			|| _cheating == true) // aLiens know where xCom is when cheating ~turn20
 		{
 			(*i)->setTurnsExposed(0); // aLiens always know where their buddies are, Mc'd or not.
@@ -1232,7 +1233,7 @@ bool SavedBattleGame::getDebugMode() const
  * Gets the BattlescapeState.
  * @return, pointer to the BattlescapeState
  */
-BattlescapeState* SavedBattleGame::getBattleState()
+BattlescapeState* SavedBattleGame::getBattleState() const
 {
 	return _battleState;
 }
@@ -1241,7 +1242,7 @@ BattlescapeState* SavedBattleGame::getBattleState()
  * Gets the BattlescapeGame.
  * @return, pointer to the BattlescapeGame
  */
-BattlescapeGame* SavedBattleGame::getBattleGame()
+BattlescapeGame* SavedBattleGame::getBattleGame() const
 {
 	return _battleState->getBattleGame();
 }

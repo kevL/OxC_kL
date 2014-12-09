@@ -1933,13 +1933,13 @@ BattleUnit* TileEngine::hit(
 										unitSize,
 										unitSize,
 										targetUnit->getFloatHeight() - tile->getTerrainLevel()),
-					relativePos = targetPos_voxel
-								- targetPos
-								- Position(
-										0,
-										0,
-										vertOffset);
-				//Log(LOG_INFO) << "TileEngine::hit() relPos " << relativePos;
+					relPos = targetPos_voxel
+						   - targetPos
+						   - Position(
+									0,
+									0,
+									vertOffset);
+				//Log(LOG_INFO) << "TileEngine::hit() relPos " << relPos;
 
 				double delta = 100.;
 				if (type == DT_HE
@@ -1961,7 +1961,7 @@ BattleUnit* TileEngine::hit(
 									  || type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
 
 				power = targetUnit->damage(
-										relativePos,
+										relPos,
 										power,
 										type,
 										ignoreArmor);

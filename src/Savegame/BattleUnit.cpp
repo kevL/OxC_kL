@@ -1315,20 +1315,19 @@ int BattleUnit::damage(
 				abs_y = std::abs(relPos.y);
 
 			if (abs_y > abs_x * 2)
-//				relDir = 8 + 4 * static_cast<int>(relPos.y > 0);
-				relDir = 8 + 4 * static_cast<int>(relPos.y < 0);	// hit from South (y-pos) or North (y-neg)
+				relDir = 8 + 4 * static_cast<int>(relPos.y > 0);	// hit from South (y-pos) or North (y-neg)
 			else if (abs_x > abs_y * 2)
 				relDir = 10 + 4 * static_cast<int>(relPos.x < 0);	// hit from East (x-pos) or West (x-neg)
 			else
 			{
-				if (relPos.x < 0)		// hit from West (x-neg)
+				if (relPos.x < 0)	// hit from West (x-neg)
 				{
 					if (relPos.y > 0)
 						relDir = 13;	// hit from SouthWest (y-pos)
 					else
 						relDir = 15;	// hit from NorthWest (y-neg)
 				}
-				else					// hit from East (x-pos)
+				else				// hit from East (x-pos)
 				{
 					if (relPos.y > 0)
 						relDir = 11;	// hit from SouthEast (y-pos)

@@ -27,7 +27,7 @@
 #include "UnitDieBState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
@@ -119,10 +119,13 @@ void ExplosionBState::init()
 				&& _item->getRules()->isStrengthApplied() == true)
 			{
 				int extraPower = static_cast<int>(Round(
-							static_cast<double>(_unit->getBaseStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
+								 static_cast<double>(_unit->getBaseStats()->strength) * (_unit->getAccuracyModifier() / 2. + 0.5)));
 
 				if (_pistolWhip == true)
 					extraPower /= 2; // pistolwhipping adds only 1/2 extraPower.
+
+				if (_unit->isKneeled() == true)
+					extraPower /= 2; // kneeled units further half extraPower.
 
 				_power += extraPower;
 			}
@@ -436,7 +439,7 @@ void ExplosionBState::explode()
 
 	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
-	SavedBattleGame* const save = _parent->getSave();
+	const SavedBattleGame* const save = _parent->getSave();
 	TileEngine* const tileEngine = save->getTileEngine();
 
 	if (_hit == true)

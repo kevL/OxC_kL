@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "ProjectileFlyBState.h"
 
@@ -34,9 +34,9 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
@@ -921,7 +921,7 @@ void ProjectileFlyBState::think()
 																				_unit->getFiringAccuracy(
 																									_action.type,
 																									_action.weapon)
-																								- i * 0.05)); // pellet spread.
+																								- i * 0.023)); // pellet spread.
 								if (_projectileImpact != VOXEL_EMPTY)
 								{
 									proj->skipTrajectory(); // as above: skip the shot to the end of its path
@@ -1283,7 +1283,7 @@ void ProjectileFlyBState::performMeleeAttack()
 												-1,
 												_parent->getMap()->getSoundAngle(_action.target));
 
-	if (!_parent->getSave()->getDebugMode()
+	if (_parent->getSave()->getDebugMode() == false
 		&& _action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& _ammo != NULL
 		&& _ammo->spendBullet() == false)

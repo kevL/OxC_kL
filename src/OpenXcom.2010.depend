@@ -4697,7 +4697,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417795521 f:\git\openxcom\src\savegame\savedbattlegame.h
+1418089096 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1417889858 f:\git\openxcom\src\savegame\battleunit.h
@@ -6138,7 +6138,7 @@
 1413726104 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1418021716 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1418089163 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6147,7 +6147,6 @@
 	"TileEngine.h"
 	"UnitDieBState.h"
 	"../Engine/Game.h"
-	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
@@ -6486,7 +6485,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1418063359 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1418080754 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6498,9 +6497,6 @@
 	"Projectile.h"
 	"TileEngine.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
@@ -6564,7 +6560,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1418074876 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1418089472 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -9171,7 +9167,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1418071189 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1418091429 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -9279,7 +9275,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1418073437 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1418089096 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

@@ -298,9 +298,9 @@ private:
 		bool getUnitsFalling() const;
 
 		/// Gets a pointer to the BattlescapeState.
-		BattlescapeState* getBattleState();
+		BattlescapeState* getBattleState() const;
 		/// Gets a pointer to the BattlescapeGame.
-		BattlescapeGame* getBattleGame();
+		BattlescapeGame* getBattleGame() const;
 		/// Sets the pointer to the BattlescapeState.
 		void setBattleState(BattlescapeState* bs);
 
