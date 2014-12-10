@@ -69,7 +69,7 @@ CraftsState::CraftsState(Base* base)
 	_txtName	= new Text(102, 9, 16, 49);
 	_txtStatus	= new Text(76, 9, 118, 49);
 
-	_txtWeapons	= new Text(50, 27, 241, 33);
+	_txtWeapons	= new Text(50, 27, 235, 33);
 //	_txtWeapon	= new Text(44, 17, 194, 49);
 //	_txtCrew	= new Text(27, 9, 230, 49);
 //	_txtHwp		= new Text(24, 9, 257, 49);
@@ -137,7 +137,7 @@ CraftsState::CraftsState(Base* base)
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCrafts->setArrowColumn(275, ARROW_VERTICAL);
-	_lstCrafts->setColumns(5, 91, 126, 25, 15, 15);
+	_lstCrafts->setColumns(5, 91, 120, 25, 15, 15);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin();
@@ -162,7 +162,7 @@ void CraftsState::init()
 
 	_lstCrafts->clearList();
 
-	RuleCraft* rule;
+	const RuleCraft* craftRule;
 
 	size_t row = 0;
 	for (std::vector<Craft*>::const_iterator
@@ -176,19 +176,19 @@ void CraftsState::init()
 			ss2,
 			ss3;
 
-		rule = (*i)->getRules();
+		craftRule = (*i)->getRules();
 
-		if (rule->getWeapons() > 0)
-			ss1 << (*i)->getNumWeapons() << L"/" << rule->getWeapons();
+		if (craftRule->getWeapons() > 0)
+			ss1 << (*i)->getNumWeapons() << L"/" << craftRule->getWeapons();
 		else
 			ss1 << L"-";
 
-		if (rule->getSoldiers() > 0)
+		if (craftRule->getSoldiers() > 0)
 			ss2 << (*i)->getNumSoldiers();
 		else
 			ss2 << L"-";
 
-		if (rule->getVehicles() > 0)
+		if (craftRule->getVehicles() > 0)
 			ss3 << (*i)->getNumVehicles();
 		else
 			ss3 << L"-";
@@ -281,7 +281,7 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 	}
 	else
 	{
-		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL)
 		{
 			if (craft->isInDogfight() == true) // chase UFO
@@ -363,7 +363,6 @@ void CraftsState::btnOkClick(Action*)
 		&& _base->storesOverfull() == true)
 	{
 		_game->pushState(new SellState(_base));
-
 		_game->pushState(new ErrorMessageState(
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,

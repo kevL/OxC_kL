@@ -67,10 +67,10 @@ private:
 		_damage,
 		_id,
 		_crashId,
-		_landId,
-		_shootingAt,
+		_crashPower,
 		_hitFrame,
-		_crashPower;
+		_landId,
+		_shootingAt;
 	size_t
 		_secondsRemaining,
 		_trajectoryPoint;

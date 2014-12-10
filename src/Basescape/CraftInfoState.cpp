@@ -289,8 +289,7 @@ void CraftInfoState::init()
 
 		int x = 0;
 
-		bit = baseBits->getFrame(38);
-//		bit->setY(0);
+		bit = baseBits->getFrame(38); // soldier graphic
 		for (int
 				i = 0;
 				i < _craft->getNumSoldiers();
@@ -301,8 +300,8 @@ void CraftInfoState::init()
 			bit->blit(_crew);
 		}
 
-		bit = baseBits->getFrame(40);
-//		bit->setY(0);
+		bit = baseBits->getFrame(40); // vehicle graphic
+		bit->setY(2);
 		x = 0;
 		for (int
 				i = 0;
@@ -314,7 +313,8 @@ void CraftInfoState::init()
 			bit->blit(_equip);
 		}
 
-		bit = baseBits->getFrame(39);
+		bit = baseBits->getFrame(39); // equip't gra'hic
+		bit->setY(0);
 		for (int
 				i = 0;
 				i < _craft->getNumEquipment();

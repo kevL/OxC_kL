@@ -590,7 +590,7 @@ int Base::detect(Target* target) const
  * Returns if a certain target is inside this Base's radar range
  * taking in account the global positions of both.
  * @param target - pointer to UFO
- * @return,	great circle distance to UFO (negative if hyperdetected)
+ * @return, great circle distance to UFO (negative if hyperdetected)
  */
 double Base::insideRadarRange(Target* target) const
 {

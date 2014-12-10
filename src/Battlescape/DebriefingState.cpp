@@ -32,10 +32,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -182,7 +182,7 @@ DebriefingState::DebriefingState()
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
-//kL	_txtQuantity->setAlign(ALIGN_RIGHT);
+//	_txtQuantity->setAlign(ALIGN_RIGHT);
 
 	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));
@@ -219,8 +219,8 @@ DebriefingState::DebriefingState()
 
 	int
 		total = 0,
-		stats_y = 0,
-		recovery_y = 0,
+		stats_offY = 0,
+		recov_offY = 0,
 		civiliansSaved = 0,
 		civiliansDead = 0;
 
@@ -251,7 +251,7 @@ DebriefingState::DebriefingState()
 								tr((*i)->item).c_str(),
 								ss.str().c_str(),
 								ss2.str().c_str());
-			recovery_y += 8;
+			recov_offY += 8;
 		}
 		else
 		{
@@ -260,7 +260,7 @@ DebriefingState::DebriefingState()
 							tr((*i)->item).c_str(),
 							ss.str().c_str(),
 							ss2.str().c_str());
-			stats_y += 8;
+			stats_offY += 8;
 		}
 
 		if ((*i)->item == "STR_CIVILIANS_SAVED")
@@ -291,16 +291,16 @@ DebriefingState::DebriefingState()
 					tr("STR_TOTAL_UC").c_str(),
 					ss3.str().c_str());
 
-	if (recovery_y > 0)
+	if (recov_offY > 0)
 	{
-		_txtRecovery->setY(_lstStats->getY() + stats_y + 5);
+		_txtRecovery->setY(_lstStats->getY() + stats_offY + 5);
 		_lstRecovery->setY(_txtRecovery->getY() + 8);
-		_lstTotal->setY(_lstRecovery->getY() + recovery_y + 5);
+		_lstTotal->setY(_lstRecovery->getY() + recov_offY + 5);
 	}
 	else
 	{
 		_txtRecovery->setText(L"");
-		_lstTotal->setY(_lstStats->getY() + stats_y + 5);
+		_lstTotal->setY(_lstStats->getY() + stats_offY + 5);
 	}
 
 	// add the points to activity scores
@@ -521,7 +521,7 @@ void DebriefingState::btnOkClick(Action*)
 				_game->pushState(new ManageAlienContainmentState(
 																_base,
 																OPT_BATTLESCAPE,
-																false)); // kL_add. Do not allow researchHelp!
+																false)); // Do not allow researchHelp!
 				_game->pushState(new ErrorMessageState(
 													tr("STR_CONTAINMENT_EXCEEDED")
 														.arg(_base->getName()).c_str(),
@@ -600,7 +600,6 @@ class ClearAlienBase
 
 private:
 	const AlienBase* _base;
-
 
 	public:
 		/// Remembers the base.
@@ -693,8 +692,8 @@ void DebriefingState::prepareDebriefing()
 
 	SavedBattleGame* const battle = _savedGame->getSavedBattle();
 
-	const bool aborted = (battle->isAborted() == true);
-	bool missionAccomplished = (aborted == false);
+	const bool aborted = battle->isAborted();
+	bool missionAccomplished = !aborted;
 
 	Base* base = NULL;
 	Craft* craft = NULL;
@@ -917,15 +916,15 @@ void DebriefingState::prepareDebriefing()
 			if ((*i)->getStatus() == STATUS_UNCONSCIOUS
 				|| (*i)->getFaction() == FACTION_HOSTILE)
 			{
-				soldierOut++;
+				++soldierOut;
 			}
 
-			soldierLive++;
+			++soldierLive;
 		}
 		else if ((*i)->getOriginalFaction() == FACTION_PLAYER
 			&& (*i)->getStatus() == STATUS_DEAD)
 		{
-			soldierDead++;
+			++soldierDead;
 		}
 	}
 
@@ -993,7 +992,6 @@ void DebriefingState::prepareDebriefing()
 					i < battle->getMapSizeXYZ();
 					++i)
 			{
-				// get recoverable map data objects from the battlescape map
 				if (battle->getTiles()[i]->getMapData(3) != NULL
 					&& battle->getTiles()[i]->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
 				{
@@ -1366,7 +1364,7 @@ void DebriefingState::prepareDebriefing()
 
 	if ((aborted == false
 			|| missionAccomplished == true)	// RECOVER UFO:
-		&& soldierLive > 0)		// Run through all tiles to recover UFO components and items.
+		&& soldierLive > 0)					// Run through all tiles to recover UFO components and items.
 	{
 		if (mission == "STR_BASE_DEFENSE")
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
@@ -1454,7 +1452,7 @@ void DebriefingState::prepareDebriefing()
 					++i)
 			{
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
-					&& (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+					&& battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 				{
 					recoverItems(
 							battle->getTiles()[i]->getInventory(),
@@ -1523,14 +1521,14 @@ void DebriefingState::prepareDebriefing()
 		{
 			// reequip crafts (only those on the base) after a base defense mission;
 			for (std::vector<Craft*>::const_iterator
-					c = base->getCrafts()->begin();
-					c != base->getCrafts()->end();
-					++c)
+					i = base->getCrafts()->begin();
+					i != base->getCrafts()->end();
+					++i)
 			{
-				if ((*c)->getStatus() != "STR_OUT")
+				if ((*i)->getStatus() != "STR_OUT")
 					reequipCraft(
 								base,
-								*c,
+								*i,
 								false);
 			}
 
@@ -1839,9 +1837,9 @@ void DebriefingState::recoverItems(
 	{
 		if ((*i)->getRules()->getName() == _rules->getAlienFuel())
 			addStat( // special case of an item counted as a stat
-					_rules->getAlienFuel(),
-					100,
-					50);
+				_rules->getAlienFuel(),
+				100,
+				50);
 		else
 		{
 			if ((*i)->getRules()->getRecoveryPoints() != 0
@@ -1862,7 +1860,7 @@ void DebriefingState::recoverItems(
 						if ((*i)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 						{
 							// ADD STUNNED ALIEN COUNTING HERE_kL
-							_aliensStunned++; // kL: for Nike Cross determination.
+							++_aliensStunned; // for Nike Cross determination.
 
 							if (base->getAvailableContainment() > 0) // should this do +1 containment per loop ...
 								addStat(

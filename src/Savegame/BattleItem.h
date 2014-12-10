@@ -36,9 +36,6 @@ class Tile;
 
 /**
  * Represents a single item in the battlescape.
- * Contains battle-related info about an item like the position, ammo quantity, ...
- * @sa RuleItem
- * @sa Item
  */
 class BattleItem
 {

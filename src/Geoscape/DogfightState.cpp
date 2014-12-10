@@ -1001,7 +1001,7 @@ void DogfightState::moveCraft()
 					{
 						//Log(LOG_INFO) << "hit";
 						const int damage = RNG::generate(
-														proj->getDamage() / 2,
+														(proj->getDamage() + 1) / 2, // round up.
 														proj->getDamage());
 						_ufo->setDamage(_ufo->getDamage() + damage);
 
@@ -1020,10 +1020,6 @@ void DogfightState::moveCraft()
 
 						setStatus("STR_UFO_HIT");
 						playSoundFX(ResourcePack::UFO_HIT, true);
-/*						_game->getResourcePack()->getSound(
-														"GEO.CAT",
-														ResourcePack::UFO_HIT)
-													->play(); */
 
 						proj->removeProjectile();
 					}
@@ -1055,7 +1051,7 @@ void DogfightState::moveCraft()
 					if (RNG::percent(proj->getAccuracy()) == true)
 					{
 						const int damage = RNG::generate(
-													_ufo->getRules()->getWeaponPower() / 10,
+													(_ufo->getRules()->getWeaponPower() + 9) / 10, // round up.
 													_ufo->getRules()->getWeaponPower());
 						if (damage != 0)
 						{
@@ -1063,10 +1059,6 @@ void DogfightState::moveCraft()
 							drawCraftDamage();
 							setStatus("STR_INTERCEPTOR_DAMAGED");
 							playSoundFX(ResourcePack::INTERCEPTOR_HIT, true);
-/*							_game->getResourcePack()->getSound(
-															"GEO.CAT",
-															ResourcePack::INTERCEPTOR_HIT)
-														->play(); */
 
 							if ((_mode == _btnCautious
 									&& _craft->getDamagePercent() > 60)
@@ -1169,7 +1161,9 @@ void DogfightState::moveCraft()
 		{
 			if (_ufo->getShootingAt() == 0)
 			{
-				_ufo->setShootingAt(_interceptionNumber);
+				_ufo->setShootingAt(RNG::generate( // kL_rand
+												1,
+												_interceptionNumber));
 				_ufoWtimer->start();
 
 				ufoFireWeapon();
@@ -1223,10 +1217,6 @@ void DogfightState::moveCraft()
 
 		_timeout += 30;
 		playSoundFX(ResourcePack::INTERCEPTOR_EXPLODE);
-/*		_game->getResourcePack()->getSound(
-										"GEO.CAT",
-										ResourcePack::INTERCEPTOR_EXPLODE)
-									->play(); */
 
 		finalRun = true;
 		_destroyCraft = true;
@@ -1237,7 +1227,7 @@ void DogfightState::moveCraft()
 		_w2Timer->stop();
 	}
 
-	if (_end == false // end dogfight if UFO is crashed, or destroyed
+	if (_end == false // end dogfight if UFO is crashed or destroyed
 		&& _ufo->isCrashed() == true)
 	{
 //		_ufoBreakingOff = false;
@@ -1253,12 +1243,12 @@ void DogfightState::moveCraft()
 		// check for retaliation trigger.
 		if (RNG::percent(4 + (_diff * 4)) == true)
 		{
-			std::string targetRegion; // spawn retaliation mission.
+			std::string targetRegion;							// spawn retaliation mission.
 			if (RNG::percent(50 - (_diff * 6)) == true)
-				targetRegion = _ufo->getMission()->getRegion(); // Attack on UFO's mission region
-			else // try to find and attack the originating base.
+				targetRegion = _ufo->getMission()->getRegion();	// Attack on UFO's mission region
+			else												// try to find and attack the originating base.
 				targetRegion = _savedGame->locateRegion(*_craft->getBase())->getRules()->getType();
-				// TODO: If the base is removed, the mission is cancelled.
+																// TODO: If the base is removed, the mission is cancelled.
 
 			// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
 			if (_savedGame->getAlienMission(
@@ -1291,10 +1281,6 @@ void DogfightState::moveCraft()
 			{
 				setStatus("STR_UFO_DESTROYED");
 				playSoundFX(ResourcePack::UFO_EXPLODE);
-/*				_game->getResourcePack()->getSound(
-												"GEO.CAT",
-												ResourcePack::UFO_EXPLODE)
-											->play(); */
 
 				for (std::vector<Region*>::const_iterator
 						region = _savedGame->getRegions()->begin();
@@ -1335,10 +1321,6 @@ void DogfightState::moveCraft()
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
 				playSoundFX(ResourcePack::UFO_CRASH);
-/*				_game->getResourcePack()->getSound(
-												"GEO.CAT",
-												ResourcePack::UFO_CRASH)
-											->play(); */
 
 				for (std::vector<Region*>::const_iterator
 						region = _savedGame->getRegions()->begin();
@@ -1436,16 +1418,12 @@ void DogfightState::fireWeapon1()
 			ss << w1->getAmmo();
 			_txtAmmo1->setText(ss.str());
 
-			CraftWeaponProjectile* const p = w1->fire();
-			p->setDirection(D_UP);
-			p->setHorizontalPosition(HP_LEFT);
-			_projectiles.push_back(p);
+			CraftWeaponProjectile* const proj = w1->fire();
+			proj->setDirection(D_UP);
+			proj->setHorizontalPosition(HP_LEFT);
+			_projectiles.push_back(proj);
 
 			playSoundFX(w1->getRules()->getSound(), true);
-/*			_game->getResourcePack()->getSound(
-											"GEO.CAT",
-											w1->getRules()->getSound())
-										->play(); */
 		}
 	}
 }
@@ -1464,28 +1442,23 @@ void DogfightState::fireWeapon2()
 			ss << w2->getAmmo();
 			_txtAmmo2->setText(ss.str());
 
-			CraftWeaponProjectile* const p = w2->fire();
-			p->setDirection(D_UP);
-			p->setHorizontalPosition(HP_RIGHT);
-			_projectiles.push_back(p);
+			CraftWeaponProjectile* const proj = w2->fire();
+			proj->setDirection(D_UP);
+			proj->setHorizontalPosition(HP_RIGHT);
+			_projectiles.push_back(proj);
 
 			playSoundFX(w2->getRules()->getSound(), true);
-/*			_game->getResourcePack()->getSound(
-											"GEO.CAT",
-											w2->getRules()->getSound())
-										->play(); */
 		}
 	}
 }
 
 /**
- * Each time a UFO will try to fire its cannons a calculation
- * is made. There's only 10% chance that it will actually fire.
+ * Each time a UFO fires its cannons a new reload interval is calculated.
  */
 void DogfightState::ufoFireWeapon()
 {
 	Uint32 reload = static_cast<Uint32>(
-						static_cast<int>(_ufoFireInterval)
+					static_cast<int>(_ufoFireInterval)
 						+ RNG::generate(
 									5,
 									_ufo->getRules()->getWeaponReload())
@@ -1506,10 +1479,6 @@ void DogfightState::ufoFireWeapon()
 	_projectiles.push_back(proj);
 
 	playSoundFX(ResourcePack::UFO_FIRE, true);
-/*	_game->getResourcePack()->getSound(
-									"GEO.CAT",
-									ResourcePack::UFO_FIRE)
-								->play(); */
 }
 
 /**
@@ -1836,8 +1805,8 @@ void DogfightState::drawUfo()
 	}
 
 	const int
-		currentUfoXposition = _battle->getWidth() / 2 - 6,
-		currentUfoYposition = _battle->getHeight() - (_currentDist / 8) - 6;
+		curUfoXpos = _battle->getWidth() / 2 - 6,
+		curUfoYpos = _battle->getHeight() - (_currentDist / 8) - 6;
 
 	for (int
 			y = 0;
@@ -1861,15 +1830,15 @@ void DogfightState::drawUfo()
 				}
 
 				const Uint8 radarPixelColor = _window->getPixelColor(
-																currentUfoXposition + x + 3,
-																currentUfoYposition + y + 3); // + 3 'cause of the window frame
+																curUfoXpos + x + 3,
+																curUfoYpos + y + 3); // + 3 'cause of the window frame
 				Uint8 color = radarPixelColor - pixelOffset;
 				if (color < 108)
 					color = 108;
 
 				_battle->setPixelColor(
-									currentUfoXposition + x,
-									currentUfoYposition + y,
+									curUfoXpos + x,
+									curUfoYpos + y,
 									color);
 			}
 		}
@@ -1880,18 +1849,18 @@ void DogfightState::drawUfo()
  * Draws projectiles on the radar screen.
  * Depending on what type of projectile it is, its shape will be different.
  * Currently works for original sized blobs 3 x 6 pixels.
- * @param p - pointer to CraftWeaponProjectile
+ * @param proj - pointer to CraftWeaponProjectile
  */
-void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
+void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
 {
 	if (_minimized == true)
 		return;
 
-	int xPos = _battle->getWidth() / 2 + p->getHorizontalPosition();
-	if (p->getGlobalType() == CWPGT_MISSILE) // Draw missiles.
+	int xPos = _battle->getWidth() / 2 + proj->getHorizontalPosition();
+	if (proj->getGlobalType() == CWPGT_MISSILE) // Draw missiles.
 	{
-		xPos -= 1;
-		const int yPos = _battle->getHeight() - p->getPosition() / 8;
+		--xPos;
+		const int yPos = _battle->getHeight() - proj->getPosition() / 8;
 		for (int
 				x = 0;
 				x < 3;
@@ -1902,7 +1871,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 					y < 6;
 					++y)
 			{
-				const int pixelOffset = _projectileBlobs[p->getType()][y][x];
+				const int pixelOffset = _projectileBlobs[proj->getType()][y][x];
 				if (pixelOffset == 0)
 					continue;
 				else
@@ -1922,12 +1891,12 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 			}
 		}
 	}
-	else if (p->getGlobalType() == CWPGT_BEAM) // Draw beams.
+	else if (proj->getGlobalType() == CWPGT_BEAM) // Draw beams.
 	{
 		const int
 			yStart = _battle->getHeight() - 2,
 			yEnd = _battle->getHeight() - (_currentDist / 8);
-		const Uint8 pixelOffset = p->getState();
+		const Uint8 pixelOffset = proj->getState();
 
 		for (int
 				y = yStart;

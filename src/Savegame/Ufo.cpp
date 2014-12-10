@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "Ufo.h"
 
@@ -34,9 +34,9 @@
 #include "SavedGame.h"
 #include "Waypoint.h"
 
-#include "../Engine/Exception.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
@@ -86,10 +86,10 @@ Ufo::~Ufo()
 			i != _followers.end();
 			)
 	{
-		Craft* const c = dynamic_cast<Craft*>(*i);
-		if (c != NULL)
+		Craft* const craft = dynamic_cast<Craft*>(*i);
+		if (craft != NULL)
 		{
-			c->returnToBase();
+			craft->returnToBase();
 			i = _followers.begin();
 		}
 		else
@@ -121,7 +121,6 @@ class matchMissionID
 
 private:
 	int _id;
-
 
 	public:
 		/// Store ID for later comparisons.
@@ -202,7 +201,6 @@ void Ufo::load(
 																	matchMissionID(missionID));
 		if (found == game.getAlienMissions().end())
 		{
-			// Corrupt save file.
 			throw Exception("Unknown mission, save file is corrupt.");
 		}
 
@@ -380,10 +378,9 @@ void Ufo::setDamage(int damage)
  */
 int Ufo::getDamagePercent() const
 {
-	return static_cast<int>(
-			std::floor(
+	return static_cast<int>(std::floor(
 				static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())
-				* 100.));
+		   * 100.));
 }
 
 /**

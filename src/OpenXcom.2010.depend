@@ -4641,7 +4641,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1418186678 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1418237910 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4713,7 +4713,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1418165092 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1418244699 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4808,7 +4808,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1417667012 f:\git\openxcom\src\savegame\ufo.h
+1418242902 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5373,7 +5373,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1418187577 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1418237285 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5580,7 +5580,7 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1418172251 f:\git\openxcom\src\savegame\battleitem.h
+1418241770 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
 1418011504 f:\git\openxcom\src\savegame\tile.h
@@ -6041,7 +6041,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1417131298 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1418240186 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6052,10 +6052,6 @@
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/RNG.h"
-	"../Engine/Screen.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
 	"../Interface/Text.h"
@@ -7361,7 +7357,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1417843904 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1418244096 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -9108,7 +9104,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1418187307 source:f:\git\openxcom\src\savegame\base.cpp
+1418238188 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -9168,7 +9164,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1418162331 source:f:\git\openxcom\src\savegame\craft.cpp
+1418237445 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -9371,15 +9367,13 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1417666949 source:f:\git\openxcom\src\savegame\ufo.cpp
+1418243108 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
 	"SavedGame.h"
 	"Waypoint.h"
-	"../Engine/Exception.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
