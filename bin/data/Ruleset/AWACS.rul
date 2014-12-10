@@ -5,7 +5,7 @@ crafts:
     sprite: 26
     fuelMax: 135000
     damageMax: 125
-    speedMax: 410
+    speedMax: 435
     accel: 1
     costBuy: 500000
     costRent: 335000
@@ -34,8 +34,8 @@ crafts:
     listOrder: 209
     sprite: 28
     fuelMax: 225000
-    damageMax: 75
-    speedMax: 380
+    damageMax: 80
+    speedMax: 382
     accel: 1
     costSell: 650000
     costRent: 20000

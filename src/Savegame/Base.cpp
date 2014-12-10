@@ -628,11 +628,11 @@ double Base::insideRadarRange(Target* target) const
 }
 
 /**
- * Returns the amount of soldiers contained in the base without any assignments.
- * @param combatReady - does what it says on the tin. ( bull..)
+ * Returns the amount of soldiers with neither a Craft assignment nor wounds at this Base.
+ * @param combatReady - does what it says on the tin. [ bull..] (default false)
  * @return, number of soldiers
  */
-int Base::getAvailableSoldiers(bool combatReady) const
+int Base::getAvailableSoldiers(const bool combatReady) const
 {
 	int total = 0;
 
@@ -644,15 +644,15 @@ int Base::getAvailableSoldiers(bool combatReady) const
 		if (combatReady == false
 			&& (*i)->getCraft() == NULL)
 		{
-			total++;
+			++total;
 		}
-		else if (combatReady
+		else if (combatReady == true
 			&& (((*i)->getCraft() != NULL
 					&& (*i)->getCraft()->getStatus() != "STR_OUT")
 				|| ((*i)->getCraft() == NULL
 					&& (*i)->getWoundRecovery() == 0)))
 		{
-			total++;
+			++total;
 		}
 	}
 

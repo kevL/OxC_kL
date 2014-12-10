@@ -34,10 +34,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
-#include "../Engine/LocalizedText.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/LocalizedText.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 
@@ -142,6 +142,7 @@ SoldiersState::SoldiersState(Base* base)
 	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(tr("STR_INVENTORY"));
 	_btnEquip->onMouseClick((ActionHandler)& SoldiersState::btnEquipClick);
+	_btnEquip->setVisible(_base->getAvailableSoldiers(true) > 0);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));

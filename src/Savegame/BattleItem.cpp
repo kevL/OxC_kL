@@ -316,7 +316,7 @@ RuleInventory* BattleItem::getSlot() const
  * Sets the item's inventory slot.
  * @param slot - the slot id
  */
-void BattleItem::setSlot(RuleInventory* slot)
+void BattleItem::setSlot(RuleInventory* const slot)
 {
 	_inventorySlot = slot;
 }

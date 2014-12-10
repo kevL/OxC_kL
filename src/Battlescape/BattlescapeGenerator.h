@@ -150,10 +150,10 @@ private:
 //			bool allowSecondClip = false
 
 	/// Deploys the aliens, according to the alien deployment rules.
-	void deployAliens(AlienDeployment* deployment);
+	void deployAliens(AlienDeployment* const deployRule);
 	/// Adds an alien to the game.
 	BattleUnit* addAlien(
-			Unit* rules,
+			Unit* const unitRule,
 			int alienRank,
 			bool outside);
 

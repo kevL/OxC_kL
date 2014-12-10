@@ -106,7 +106,7 @@ private:
 		/// Gets the item's inventory slot.
 		RuleInventory* getSlot() const;
 		/// Sets the item's inventory slot.
-		void setSlot(RuleInventory* slot);
+		void setSlot(RuleInventory* const slot);
 		/// Gets the item's inventory X position.
 		int getSlotX() const;
 		/// Sets the item's inventory X position.

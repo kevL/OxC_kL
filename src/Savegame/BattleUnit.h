@@ -408,7 +408,7 @@ private:
 
 	BattleAIState* _currentAIState;
 //	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
-	BattlescapeGame* _battleGame;
+	const BattlescapeGame* _battleGame;
 	BattleUnit* _charging;
 	Surface* _cache[5];
 	Tile* _tile;
@@ -497,13 +497,13 @@ private:
 		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
-				UnitFaction faction,
-				int id,
-				Armor* armor,
+				const UnitFaction faction,
+				const int id,
+				Armor* const armor,
 				const int diff,
 				const int depth,
 				const int month = 0, // for upping aLien stats as time progresses.
-				BattlescapeGame* battleGame = NULL); // for playing sound when hit (only civies).
+				BattlescapeGame* const battleGame = NULL); // for playing sound when hit (only civies).
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
 

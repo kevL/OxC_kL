@@ -1444,11 +1444,11 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 /**
  * Adds an item to an XCom soldier (auto-equip ONLY). kL_note: I don't use this part.
  * Or an XCom tank, also adds items & terrorWeapons to aLiens, deployAliens()!
- * @param item				- pointer to the Item
- * @param unit				- pointer to the Unit
+ * @param item				- pointer to the BattleItem
+ * @param unit				- pointer to the BattleUnit
  * @param allowSecondClip	- true to allow the unit to take a second clip
  *							(only applies to xcom soldiers, aliens are allowed regardless)
- * @return, true if the item was placed
+ * @return, true if item was placed
  */
 bool BattlescapeGenerator::addItem(
 		BattleItem* item,
@@ -1490,6 +1490,7 @@ bool BattlescapeGenerator::addItem(
 				placed = true;
 			}
 		break;
+
 		case BT_AMMO:
 		{
 			// find handheld weapons that can be loaded with this ammo
@@ -1560,6 +1561,7 @@ bool BattlescapeGenerator::addItem(
 			}
 		}
 		break;
+
 		case BT_GRENADE: // includes AlienGrenades & SmokeGrenades & HE-Packs.
 		case BT_PROXIMITYGRENADE:
 			for (int
@@ -1578,6 +1580,7 @@ bool BattlescapeGenerator::addItem(
 				}
 			}
 		break;
+
 		case BT_MINDPROBE:
 		case BT_MEDIKIT:
 		case BT_SCANNER:
@@ -1796,14 +1799,14 @@ bool BattlescapeGenerator::addItem(
 
 /**
  * Deploys the aLiens according to the AlienDeployment rules.
- * @param deployment - pointer to the AlienDeployment rule
+ * @param deployRule - pointer to the AlienDeployment rule
  */
-void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
+void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule)
 {
-	if (deployment->getRace().empty() == false
+	if (deployRule->getRace().empty() == false
 		&& _alienRace.empty() == true) //&& month != -1
 	{
-		_alienRace = deployment->getRace();
+		_alienRace = deployRule->getRace();
 	}
 
 	if (_battleSave->getDepth() > 0
@@ -1814,7 +1817,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 
 	if (_game->getRuleset()->getAlienRace(_alienRace) == NULL)
 	{
-		throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
+		throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployRule: " + deployRule->getType());
 	}
 
 	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
@@ -1822,9 +1825,9 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 	int month = _savedGame->getMonthsPassed();
 	if (month != -1)
 	{
-		const int aiLevel_maximum = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
-		if (month > aiLevel_maximum)
-			month = aiLevel_maximum;
+		const int aiLevel_top = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
+		if (month > aiLevel_top)
+			month = aiLevel_top;
 	}
 	else
 		month = _alienItemLevel;
@@ -1840,9 +1843,9 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 	BattleUnit* unit = NULL;
 	Unit* unitRule = NULL;
 
-	for (std::vector<DeploymentData>::iterator
-			data = deployment->getDeploymentData()->begin();
-			data != deployment->getDeploymentData()->end();
+	for (std::vector<DeploymentData>::const_iterator
+			data = deployRule->getDeploymentData()->begin();
+			data != deployRule->getDeploymentData()->end();
 			++data)
 	{
 		alienName = race->getMember((*data).alienRank);
@@ -1925,10 +1928,10 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 				// with a weapon which is the alien's name with suffix _WEAPON
 				if (unitRule->isLivingWeapon() == true)
 				{
-					std::string terroristWeapon = unitRule->getRace().substr(4);
-					terroristWeapon += "_WEAPON";
+					std::string terrorWeapon = unitRule->getRace().substr(4);
+					terrorWeapon += "_WEAPON";
 
-					itemRule = _rules->getItem(terroristWeapon);
+					itemRule = _rules->getItem(terrorWeapon);
 					if (itemRule != NULL)
 					{
 						item = new BattleItem( // terror aLiens add their weapons
@@ -1948,7 +1951,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 				{
 					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
 
-					for (std::vector<std::string>::iterator
+					for (std::vector<std::string>::const_iterator
 							setItem = (*data).itemSets.at(itemLevel).items.begin();
 							setItem != (*data).itemSets.at(itemLevel).items.end();
 							++setItem)
@@ -1975,26 +1978,26 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 
 /**
  * Adds an alien to the game and places him on a free spawnpoint.
- * @param rules		- pointer to the Unit rule which holds info about aLiens
+ * @param unitRule	- pointer to the Unit rule which holds info about aLiens
  * @param alienRank	- rank of the alien, used for spawn point search
  * @param outside	- true if the alien should spawn outside the UFO
  * @return, pointer to the created BattleUnit
  */
 BattleUnit* BattlescapeGenerator::addAlien(
-		Unit* rules,
+		Unit* const unitRule,
 		int alienRank,
 		bool outside)
 {
 	const int
-		difficulty = static_cast<int>(_savedGame->getDifficulty()),
+		diff = static_cast<int>(_savedGame->getDifficulty()),
 		month = _savedGame->getMonthsPassed();
 
 	BattleUnit* const unit = new BattleUnit(
-										rules,
+										unitRule,
 										FACTION_HOSTILE,
-										_unitSequence++,
-										_rules->getArmor(rules->getArmor()),
-										difficulty,
+										++_unitSequence,
+										_rules->getArmor(unitRule->getArmor()),
+										diff,
 										_battleSave->getDepth(),
 										month);
 
@@ -2017,8 +2020,8 @@ BattleUnit* BattlescapeGenerator::addAlien(
 				++i)
 		{
 			node = _battleSave->getSpawnNode(
-									Node::nodeRank[alienRank][i],
-									unit);
+										Node::nodeRank[alienRank][i],
+										unit);
 		}
 	}
 
@@ -2037,7 +2040,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		int dir = -1;
 
 		Position craft = _battleSave->getUnits()->at(0)->getPosition();
-		if (RNG::percent(difficulty * 20) == true
+		if (RNG::percent(diff * 20) == true
 			&& _battleSave->getTileEngine()->distance(
 													node->getPosition(),
 													craft) < 25)
@@ -2051,7 +2054,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 			dir = RNG::generate(0, 7);
 		unit->setDirection(dir);
 
-//		if (difficulty == 0) // kL_note: moved to BattleUnit::adjustStats()
+//		if (diff == 0) // kL_note: moved to BattleUnit::adjustStats()
 //			unit->halveArmor();
 
 		_battleSave->getUnits()->push_back(unit);

@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_UNIT_H
 #define OPENXCOM_UNIT_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

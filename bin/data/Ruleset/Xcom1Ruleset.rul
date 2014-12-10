@@ -227,6 +227,7 @@ crafts:
     costSell: 4200000
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
+    repairRate: 2
     radarRange: 800
     sightRange: 1200
     score: 350
@@ -245,6 +246,7 @@ crafts:
     maxItems: 72 # 6 x soldier cap.
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
+    repairRate: 3
     radarRange: 800
     sightRange: 1200
     score: 355
@@ -286,6 +288,7 @@ crafts:
     maxItems: 156 # 6 x soldier cap.
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
+    repairRate: 5
     radarRange: 1000
     sightRange: 1500
     score: 475

@@ -138,7 +138,7 @@ private:
 		double insideRadarRange(Target* target) const;
 
 		/// Gets the base's available soldiers.
-		int getAvailableSoldiers(bool combatReady = false) const;
+		int getAvailableSoldiers(const bool combatReady = false) const;
 		/// Gets the base's total soldiers.
 		int getTotalSoldiers() const;
 		/// Gets the base's available scientists.

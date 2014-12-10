@@ -210,13 +210,13 @@ BattleUnit::BattleUnit(
  */
 BattleUnit::BattleUnit(
 		Unit* unit,
-		UnitFaction faction,
-		int id,
-		Armor* armor,
+		const UnitFaction faction,
+		const int id,
+		Armor* const armor,
 		const int diff,
 		const int depth,
 		const int month,
-		BattlescapeGame* battleGame) // May be NULL
+		BattlescapeGame* const battleGame) // May be NULL
 	:
 		_unitRules(unit),
 		_geoscapeSoldier(NULL),
@@ -1988,19 +1988,19 @@ double BattleUnit::getFiringAccuracy(
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy() ID " << getId();
 	if (actionType == BA_LAUNCH)
-		return 1.0;
+		return 1.;
 
 	double ret;
 
 	if (actionType == BA_HIT
 		|| actionType == BA_STUN) // note: BA_STUN is not used in code.
 	{
-		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.0;
+		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.;
 		//Log(LOG_INFO) << ". weaponACU = " << item->getRules()->getAccuracyMelee() << " ret[1] = " << ret;
 
-		if (item->getRules()->isSkillApplied())
+		if (item->getRules()->isSkillApplied() == true)
 		{
-			ret = ret * static_cast<double>(getBaseStats()->melee) / 100.0;
+			ret = ret * static_cast<double>(getBaseStats()->melee) / 100.;
 			//Log(LOG_INFO) << ". meleeStat = " << getBaseStats()->melee << " ret[2] = " << ret;
 		}
 	}
@@ -2013,12 +2013,12 @@ double BattleUnit::getFiringAccuracy(
 		else if (actionType == BA_AUTOSHOT)
 			acu = item->getRules()->getAccuracyAuto();
 
-		ret = static_cast<double>(acu * getBaseStats()->firing) / 10000.0;
+		ret = static_cast<double>(acu * getBaseStats()->firing) / 10000.;
 
-		if (_kneeled)
+		if (_kneeled == true)
 			ret *= 1.16;
 
-		if (item->getRules()->isTwoHanded()
+		if (item->getRules()->isTwoHanded() == true
 			&& getItem("STR_RIGHT_HAND") != NULL
 			&& getItem("STR_LEFT_HAND") != NULL)
 		{
@@ -2673,7 +2673,7 @@ const BattleItem* const BattleUnit::getGrenade() const // holy crap const.
 }
 
 /**
- * Gets the name of any melee weapon we may be carrying, or a built in one.
+ * Gets the name of any melee weapon this BattleUnit may be carrying, or a built in one.
  * @return, the name of a melee weapon
  */
 std::string BattleUnit::getMeleeWeapon() const
@@ -2697,20 +2697,20 @@ std::string BattleUnit::getMeleeWeapon() const
 }
 /* BattleItem *BattleUnit::getMeleeWeapon()
 {
-	BattleItem *meele = getItem("STR_RIGHT_HAND");
-	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
+	BattleItem *melee = getItem("STR_RIGHT_HAND");
+	if (melee && melee->getRules()->getBattleType() == BT_MELEE)
 	{
-		return meele;
+		return melee;
 	}
-	meele = getItem("STR_LEFT_HAND");
-	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
+	melee = getItem("STR_LEFT_HAND");
+	if (melee && melee->getRules()->getBattleType() == BT_MELEE)
 	{
-		return meele;
+		return melee;
 	}
-	meele = getSpecialWeapon(BT_MELEE);
-	if (meele)
+	melee = getSpecialWeapon(BT_MELEE);
+	if (melee)
 	{
-		return meele;
+		return melee;
 	}
 	return 0;
 } */
@@ -4225,6 +4225,10 @@ void BattleUnit::goToTimeOut()
 
 /**
  * Helper function used by BattleUnit::setSpecialWeapon().
+ * @param save -
+ * @param unit -
+ * @param rule -
+ * @return, pointer to BattleItem
  */
 /* static inline BattleItem *createItem(SavedBattleGame *save, BattleUnit *unit, RuleItem *rule)
 {
@@ -4235,8 +4239,9 @@ void BattleUnit::goToTimeOut()
 } */
 
 /**
- * Set special weapon that is handled outside inventory.
- * @param save
+ * Sets special weapon that is handled outside inventory.
+ * @param save -
+ * @param rule -
  */
 /* void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule)
 {
@@ -4267,7 +4272,9 @@ void BattleUnit::goToTimeOut()
 } */
 
 /**
- * Get special weapon.
+ * Gets special weapon.
+ * @param type -
+ * @return, pointer to BattleItem
  */
 /* BattleItem *BattleUnit::getSpecialWeapon(BattleType type) const
 {
@@ -4282,8 +4289,8 @@ void BattleUnit::goToTimeOut()
 } */
 
 /**
- * Get the unit's statistics.
- * @return, BattleUnitStatistics statistics
+ * Get this BattleUnit's battle statistics.
+ * @return, pointer to BattleUnitStatistics
  */
 BattleUnitStatistics* BattleUnit::getStatistics() const
 {

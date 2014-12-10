@@ -19,7 +19,7 @@
 
 #include "Unit.h"
 
-#include "../Engine/Exception.h"
+//#include "../Engine/Exception.h"
 
 
 namespace OpenXcom
@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Creates a certain type of unit.
- * @param type - reference a string defining the Unit's type
+ * @param type - reference the Unit's type
  */
 Unit::Unit(const std::string& type)
 	:
@@ -56,7 +56,6 @@ Unit::Unit(const std::string& type)
  */
 Unit::~Unit()
 {
-	//Log(LOG_INFO) << "Delete Unit";
 }
 
 /**
@@ -68,7 +67,6 @@ void Unit::load(
 		const YAML::Node& node,
 		int modIndex)
 {
-	//Log(LOG_INFO) << "Unit::load()";
 	_type			= node["type"]					.as<std::string>(_type);
 	_race			= node["race"]					.as<std::string>(_race);
 	_rank			= node["rank"]					.as<std::string>(_rank);

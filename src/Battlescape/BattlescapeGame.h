@@ -284,17 +284,17 @@ private:
 		void setupCursor();
 
 		/// Gets the map.
-		Map* getMap();
+		Map* getMap() const;
 		/// Gets the save.
-		SavedBattleGame* getSave();
+		SavedBattleGame* getSave() const;
 		/// Gets the tilengine.
-		TileEngine* getTileEngine();
+		TileEngine* getTileEngine() const;
 		/// Gets the pathfinding.
-		Pathfinding* getPathfinding();
+		Pathfinding* getPathfinding() const;
 		/// Gets the resourcepack.
-		ResourcePack* getResourcePack();
+		ResourcePack* getResourcePack() const;
 		/// Gets the ruleset.
-		const Ruleset* getRuleset() const;
+		const Ruleset* const getRuleset() const;
 
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()

@@ -2782,7 +2782,7 @@ BattleUnit* BattlescapeGame::convertUnit(
  * Gets the map.
  * @return, pointer to Map
  */
-Map* BattlescapeGame::getMap()
+Map* BattlescapeGame::getMap() const
 {
 	return _parentState->getMap();
 }
@@ -2791,7 +2791,7 @@ Map* BattlescapeGame::getMap()
  * Gets the battle game save data object.
  * @return, pointer to SavedBattleGame
  */
-SavedBattleGame* BattlescapeGame::getSave()
+SavedBattleGame* BattlescapeGame::getSave() const
 {
 	return _save;
 }
@@ -2800,7 +2800,7 @@ SavedBattleGame* BattlescapeGame::getSave()
  * Gets the tilengine.
  * @return, pointer to TileEngine
  */
-TileEngine* BattlescapeGame::getTileEngine()
+TileEngine* BattlescapeGame::getTileEngine() const
 {
 	return _save->getTileEngine();
 }
@@ -2809,7 +2809,7 @@ TileEngine* BattlescapeGame::getTileEngine()
  * Gets the pathfinding.
  * @return, pointer to Pathfinding
  */
-Pathfinding* BattlescapeGame::getPathfinding()
+Pathfinding* BattlescapeGame::getPathfinding() const
 {
 	return _save->getPathfinding();
 }
@@ -2818,7 +2818,7 @@ Pathfinding* BattlescapeGame::getPathfinding()
  * Gets the resourcepack.
  * @return, pointer to ResourcePack
  */
-ResourcePack* BattlescapeGame::getResourcePack()
+ResourcePack* BattlescapeGame::getResourcePack() const
 {
 	return _parentState->getGame()->getResourcePack();
 }
@@ -2827,7 +2827,7 @@ ResourcePack* BattlescapeGame::getResourcePack()
  * Gets the ruleset.
  * @return, pointer to Ruleset
  */
-const Ruleset* BattlescapeGame::getRuleset() const
+const Ruleset* const BattlescapeGame::getRuleset() const
 {
 	return _parentState->getGame()->getRuleset();
 }
