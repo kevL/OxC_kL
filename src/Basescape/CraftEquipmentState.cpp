@@ -123,13 +123,12 @@ CraftEquipmentState::CraftEquipmentState(
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(tr("STR_UNLOAD_CRAFT"));
 	_btnClear->onMouseClick((ActionHandler)& CraftEquipmentState::btnClearClick);
-//	_btnClear->setVisible(newBattle);
 
 	_btnInventory->setColor(Palette::blockOffset(15)+1);
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftEquipmentState::btnInventoryClick);
-	_btnInventory->setVisible(hasCrew && newBattle == false);
-//	_btnInventory->setVisible(hasCrew || newBattle); // kL
+	_btnInventory->setVisible(hasCrew
+							  && newBattle == false);
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));

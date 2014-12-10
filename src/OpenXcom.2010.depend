@@ -5373,7 +5373,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1416332842 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1418187577 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5383,10 +5383,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/LocalizedText.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Geoscape/AllocatePsiTrainingState.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
@@ -5402,13 +5398,11 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1417535899 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1418186797 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -5661,7 +5655,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1418170798 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1418236081 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5751,20 +5745,15 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1418172503 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1418236546 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
 	"Inventory.h"
 	"Pathfinding.h"
 	"TileEngine.h"
-	"../Engine/CrossPlatform.h"
-	"../Engine/Exception.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Ruleset/AlienDeployment.h"
 	"../Ruleset/AlienRace.h"
 	"../Ruleset/Armor.h"
@@ -6474,7 +6463,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1418093105 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1418236431 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -9119,7 +9108,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1418067568 source:f:\git\openxcom\src\savegame\base.cpp
+1418187307 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"

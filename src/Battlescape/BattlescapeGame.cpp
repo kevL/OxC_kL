@@ -1722,7 +1722,8 @@ bool BattlescapeGame::checkReservedTU(
 	}
 
 	// aLiens reserve TUs as a percentage rather than just enough for a single action.
-	if (_save->getSide() == FACTION_HOSTILE)
+	if (_save->getSide() == FACTION_HOSTILE
+		&& _debugPlay == false)
 	{
 		AlienBAIState* ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
 		if (ai != NULL)

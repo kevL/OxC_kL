@@ -422,7 +422,7 @@ int Craft::getId() const
  */
 std::wstring Craft::getName(Language* lang) const
 {
-	if (_name.empty())
+	if (_name.empty() == true)
 		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
 
 	return _name;
@@ -439,7 +439,7 @@ void Craft::setName(const std::wstring& newName)
 
 /**
  * Gets the globe marker for this Craft.
- * @return, marker sprite, -1 if none
+ * @return, marker sprite (-1 none)
  */
 int Craft::getMarker() const
 {
@@ -502,7 +502,6 @@ std::string Craft::getAltitude() const
 {
 	const Ufo* const ufo = dynamic_cast<Ufo*>(_dest);
 
-	// kL_begin:
 	if (ufo != NULL)
 	{
 		if (ufo->getAltitude() != "STR_GROUND")
@@ -514,20 +513,16 @@ std::string Craft::getAltitude() const
 	{
 		switch (RNG::generate(0, 3))
 		{
-			case 0:
-//				return "STR_VERY_LOW";
-			case 1:
-				return "STR_LOW_UC";
-			case 2:
-				return "STR_HIGH_UC";
-			case 3:
-				return"STR_VERY_HIGH";
+			case 0: //return "STR_VERY_LOW";
+			case 1: return "STR_LOW_UC";
+			case 2: return "STR_HIGH_UC";
+			case 3: return "STR_VERY_HIGH";
 		}
 	}
 
 	return "STR_VERY_LOW";
-} // kL_end.
-// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
+}
+// Craft::getAltitude(), add strings for based xCom craft.
 /*	if (u)
 	{
 		if (u->getAltitude() != "STR_GROUND")
@@ -547,7 +542,7 @@ std::string Craft::getAltitude() const
 	else
 	{
 		return "STR_VERY_LOW";
-	} */ // kL_end.
+	} */
 
 /**
  * Sets the destination this Craft is heading to.

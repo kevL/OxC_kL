@@ -275,7 +275,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-			if (_parent->getTileEngine()->validMeleeRange(
+/*			if (_parent->getTileEngine()->validMeleeRange(
 													_unit->getPosition(),
 													_unit->getDirection(),
 													_unit,
@@ -285,8 +285,8 @@ void ProjectileFlyBState::init()
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
 			}
-			else
-				performMeleeAttack();
+			else */ // was checked via ActionMenu click
+			performMeleeAttack();
 
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 			return;
@@ -950,11 +950,7 @@ void ProjectileFlyBState::think()
 						}
 					}
 
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR
-						|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
-					{
-						_parent->getSave()->getTile(_action.target)->ignite(15);
-					}
+					// Silacoid floorburn was here; moved down to PerformMeleeAttack()
 
 					if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL_add. This section is only for SoldierDiary mod.
 						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
@@ -1292,6 +1288,12 @@ void ProjectileFlyBState::performMeleeAttack()
 
 		if (_action.weapon != NULL) // kL, in case the weapon just spent itself as a bullet -- jic.
 			_action.weapon->setAmmoItem(NULL);
+	}
+
+	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR
+		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+	{
+		_parent->getSave()->getTile(_action.target)->ignite(15);
 	}
 
 	_parent->getMap()->setCursorType(CT_NONE);

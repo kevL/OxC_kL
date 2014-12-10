@@ -30,13 +30,13 @@
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 
 //kL #include "../Resource/XcomResourcePack.h"
 
@@ -4289,16 +4289,7 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 				_blocks[x][y]->getSizeX(),
 				_blocks[x][y]->getSizeY());
 
-/*		for (int
-				dx = x;
-				dx != x + (_blocks[x][y]->getSizeX() / 10);
-				++dx)
-		{
-			for (int
-					dy = y;
-					dy != y + (_blocks[x][y]->getSizeY() / 10);
-					++dy) */
-		int // Falko_begin:
+		const int
 			delx = (_blocks[x][y]->getSizeX() / 10),
 			dely = (_blocks[x][y]->getSizeY() / 10);
 
@@ -4311,7 +4302,7 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 					dy = y;
 					dy != y + dely;
 					++dy)
-			{ // Falko_end.
+			{
 				_blocks[dx][dy] = 0;
 				++_blocksToDo;
 			}

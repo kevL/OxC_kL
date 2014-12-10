@@ -590,7 +590,7 @@ int Base::detect(Target* target) const
  * Returns if a certain target is inside this Base's radar range
  * taking in account the global positions of both.
  * @param target - pointer to UFO
- * @return,	great circle distance to UFO, negative if hyperdetected
+ * @return,	great circle distance to UFO (negative if hyperdetected)
  */
 double Base::insideRadarRange(Target* target) const
 {
@@ -613,7 +613,7 @@ double Base::insideRadarRange(Target* target) const
 			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (targetDist < radarRange)
 			{
-				ret = targetDist; // identical value for every i; looking only for hyperDet after 1st iteration.
+				ret = targetDist; // identical value for every i; looking only for hyperDet after 1st successful iteration.
 
 				if ((*i)->getRules()->isHyperwave() == true)
 					hyperDet = true;
