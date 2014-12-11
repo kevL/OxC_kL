@@ -380,7 +380,7 @@ int Ufo::getDamagePercent() const
 {
 	return static_cast<int>(std::floor(
 				static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())
-		   * 100.));
+			* 100.));
 }
 
 /**
@@ -740,7 +740,7 @@ void Ufo::setDestination(Target* dest)
 }
 
 /**
- *
+ * Gets the Craft this Ufo is shooting at in a dogfight.
  * @return,
  */
 int Ufo::getShootingAt() const
@@ -749,7 +749,7 @@ int Ufo::getShootingAt() const
 }
 
 /**
- *
+ * Sets the Craft this Ufo is shooting at in a dogfight.
  * @param target -
  */
 void Ufo::setShootingAt(int target)

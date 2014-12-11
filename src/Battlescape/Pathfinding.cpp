@@ -1247,7 +1247,7 @@ int Pathfinding::getTUCost(
 
 
 		totalCost = static_cast<int>(Round( // ok, round those tanks up!
-					ceil(static_cast<double>(totalCost) / static_cast<double>((unitSize + 1) * (unitSize + 1)))));
+					std::ceil(static_cast<double>(totalCost) / static_cast<double>((unitSize + 1) * (unitSize + 1)))));
 		//Log(LOG_INFO) << ". totalCost = " << totalCost;
 	}
 

@@ -29,7 +29,10 @@
 namespace OpenXcom
 {
 
-const int STANDOFF_DIST = 560;
+const int
+	ENGAGE_DIST		= 650,
+	STANDOFF_DIST	= 580,
+	TIMEOUT			= 38;
 
 
 class Craft;
@@ -72,20 +75,20 @@ private:
 		_diff,
 		_timeout,
 		_timeScale,
-		_currentDist,
+		_dist,
 		_targetDist,
 
 		_ufoSize,
 		_craftHeight,
 		_craftHeight_pre,
 		_currentCraftDamageColor,
-		_interceptionNumber,
+		_intercept,
 
 		_x,
 		_y,
 		_minimizedIconX,
 		_minimizedIconY;
-	size_t _interceptionsCount;
+	size_t _interceptQty;
 	Uint32 _ufoFireInterval;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
@@ -126,7 +129,7 @@ private:
 		* _moveTimer,
 		* _w1Timer,
 		* _w2Timer,
-		* _ufoWtimer,
+		* _ufoWTimer,
 		* _ufoEscapeTimer,
 		* _craftDamageAnimTimer;
 	Ufo* _ufo;
@@ -220,11 +223,11 @@ private:
 		void btnMinimizedIconClick(Action* action);
 
 		/// Gets interception number.
-		int getInterceptionNumber() const;
+		int getInterceptSlot() const;
 		/// Sets interception number.
-		void setInterceptionNumber(const int number);
+		void setInterceptSlot(const int intercept);
 		/// Sets interceptions count.
-		void setInterceptionsCount(const size_t interceptions);
+		void setInterceptQty(const size_t intercepts);
 
 		/// Calculates window position according to opened interception windows.
 		void calculateWindowPosition();
@@ -236,6 +239,11 @@ private:
 
 		/// Gets pointer to the UFO in this dogfight.
 		Ufo* getUfo() const;
+		/// Gets pointer to the xCom Craft in this dogfight.
+		Craft* getCraft() const;
+
+		/// Gets the current distance between UFO and Craft.
+		int getDistance() const;
 };
 
 }

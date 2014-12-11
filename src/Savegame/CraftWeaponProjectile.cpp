@@ -21,10 +21,11 @@
 
 //#include <iostream>
 
-#include "../Engine/Palette.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
+
+#include "../Ruleset/RuleCraftWeapon.h"
 
 
 namespace OpenXcom

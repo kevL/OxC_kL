@@ -833,12 +833,12 @@ GeoscapeState::~GeoscapeState()
 	}
 
 	for (
-			i = _dogfightsToBeStarted.begin();
-			i != _dogfightsToBeStarted.end();
+			i = _dogfightsToStart.begin();
+			i != _dogfightsToStart.end();
 			)
 	{
 		delete *i;
-		i = _dogfightsToBeStarted.erase(i);
+		i = _dogfightsToStart.erase(i);
 	}
 }
 
@@ -1139,7 +1139,7 @@ void GeoscapeState::timeAdvance()
 		}
 	}
 
-	_pause = (_dogfightsToBeStarted.empty() == false);
+	_pause = (_dogfightsToStart.empty() == false);
 
 	timeDisplay();
 	_globe->draw();
@@ -1424,7 +1424,7 @@ void GeoscapeState::time5Seconds()
 					{
 						case Ufo::FLYING:
 							// Not more than 4 interceptions at a time. kL_note: I thought you could do 6 in orig.
-							if (_dogfights.size() + _dogfightsToBeStarted.size() > 3)
+							if (_dogfights.size() + _dogfightsToStart.size() > 3)
 							{
 								++j;
 								continue;
@@ -1433,7 +1433,7 @@ void GeoscapeState::time5Seconds()
 							if ((*j)->isInDogfight() == false
 								&& AreSame((*j)->getDistance(ufo), 0.)) // craft ran into a UFO
 							{
-								_dogfightsToBeStarted.push_back(new DogfightState(
+								_dogfightsToStart.push_back(new DogfightState(
 																				_globe,
 																				*j,
 																				ufo,
@@ -3181,36 +3181,27 @@ void GeoscapeState::btnInterceptClick(Action*)
  */
 void GeoscapeState::btnBasesClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
-
+	soundPop->play(Mix_GroupAvailable(0));
 	timerReset();
 
 	if (_savedGame->getBases()->empty() == false)
 	{
-		//Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
-
-		const size_t totalBases = _savedGame->getBases()->size();
-		//Log(LOG_INFO) << ". . totalBases = " << totalBases;
 		if (kL_currentBase == 0
-			|| kL_currentBase >= totalBases)
+			|| kL_currentBase >= _savedGame->getBases()->size())
 		{
 			_game->pushState(new BasescapeState(
 											_savedGame->getBases()->front(),
 											_globe));
 		}
 		else
-		{
-			//Log(LOG_INFO) << ". . . . currentBase is VALID";
 			_game->pushState(new BasescapeState(
 											_savedGame->getBases()->at(kL_currentBase),
 											_globe));
-		}
 	}
 	else
 		_game->pushState(new BasescapeState(
 										NULL,
 										_globe));
-	//Log(LOG_INFO) << ". . exit btnBasesClick()";
 }
 
 /**
@@ -3219,7 +3210,7 @@ void GeoscapeState::btnBasesClick(Action*)
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+	soundPop->play(Mix_GroupAvailable(0));
 
 	timerReset();
 	_game->pushState(new GraphsState(_savedGame->getCurrentGraph()));
@@ -3456,8 +3447,8 @@ void GeoscapeState::handleDogfights()
 	{
 		if ((*i)->isMinimized() == true)
 			++_minimizedDogfights;
-//kL	else
-//kL		_globe->rotateStop();
+//		else
+//			_globe->rotateStop();
 
 		(*i)->think();
 
@@ -3485,7 +3476,7 @@ void GeoscapeState::handleDogfights()
  * Gets the number of minimized dogfights.
  * @return, number of minimized dogfights
  */
-int GeoscapeState::minimizedDogfightsCount()
+int GeoscapeState::minimizedDogfightsCount() const
 {
 	int ret = 0;
 
@@ -3524,31 +3515,31 @@ void GeoscapeState::startDogfight()
 
 		timerReset();
 
-		while (_dogfightsToBeStarted.empty() == false)
+		while (_dogfightsToStart.empty() == false)
 		{
-			_dogfights.push_back(_dogfightsToBeStarted.back());
-			_dogfightsToBeStarted.pop_back();
+			_dogfights.push_back(_dogfightsToStart.back());
+			_dogfightsToStart.pop_back();
 
-			_dogfights.back()->setInterceptionNumber(getFirstFreeDogfightSlot());
-			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
+			_dogfights.back()->setInterceptSlot(getNextDogfightSlot());
+			_dogfights.back()->setInterceptQty(_dogfights.size() + _dogfightsToStart.size());
 		}
 
-		// Set correct number of interceptions for every dogfight.
+		// Set correct number of interceptions for every [all] dogfight[s].
 		for (std::list<DogfightState*>::const_iterator
 				i = _dogfights.begin();
 				i != _dogfights.end();
 				++i)
 		{
-			(*i)->setInterceptionsCount(_dogfights.size());
+			(*i)->setInterceptQty(_dogfights.size());
 		}
 	}
 }
 
 /**
- * Returns the first free dogfight slot.
+ * Gets the first free dogfight slot available.
  * @return, the next slot open
  */
-int GeoscapeState::getFirstFreeDogfightSlot()
+int GeoscapeState::getNextDogfightSlot() const
 {
 	int slot = 1;
 
@@ -3557,11 +3548,20 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 			i != _dogfights.end();
 			++i)
 	{
-		if ((*i)->getInterceptionNumber() == slot)
+		if ((*i)->getInterceptSlot() == slot)
 			++slot;
 	}
 
 	return slot;
+}
+
+/**
+ * Gets the dogfights.
+ * @return, reference to the list of pointers to DogfightStates
+ */
+std::list<DogfightState*>& GeoscapeState::getDogfights()
+{
+	return _dogfights;
 }
 
 /**
@@ -3619,7 +3619,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const RuleAlienMission& missionRules = *_game->getRuleset()->getAlienMission(targetMission);
 		const std::string& missionRace = missionRules.generateRace(_savedGame->getMonthsPassed());
 
-		AlienMission* otherMission = new AlienMission(missionRules);
+		AlienMission* const otherMission = new AlienMission(missionRules);
 		otherMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion, *_game->getRuleset());
 		otherMission->setRace(missionRace);
@@ -3642,7 +3642,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		std::string research = _game->getRuleset()->getAlienMissionList().front();
 		const RuleAlienMission& missionRules = *_game->getRuleset()->getAlienMission(research);
 
-		AlienMission* otherMission = new AlienMission(missionRules);
+		AlienMission* const otherMission = new AlienMission(missionRules);
 		otherMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion, *_game->getRuleset());
 		std::string sectoid = missionRules.getTopRace(_savedGame->getMonthsPassed());
@@ -3712,8 +3712,8 @@ void GeoscapeState::btnTimerClick(Action* action)
 
 /**
  * Updates the scale.
- * @param dX - delta of X
- * @param dY - delta of Y
+ * @param dX - reference to delta of X
+ * @param dY - reference to delta of Y
  */
 void GeoscapeState::resize(
 		int& dX,

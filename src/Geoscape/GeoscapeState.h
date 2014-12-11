@@ -135,7 +135,7 @@ private:
 	std::list<State*> _popups;
 	std::list<DogfightState*>
 		_dogfights,
-		_dogfightsToBeStarted;
+		_dogfightsToStart;
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
@@ -246,11 +246,14 @@ private:
 		/// Multi-dogfights logic handling.
 		void handleDogfights();
 		/// Gets the number of minimized dogfights.
-		int minimizedDogfightsCount();
+		int minimizedDogfightsCount() const;
 		/// Starts a new dogfight.
 		void startDogfight();
-		/// Get first free dogfight slot.
-		int getFirstFreeDogfightSlot();
+		/// Gets first free dogfight slot.
+		int getNextDogfightSlot() const;
+
+		/// Gets the dogfights.
+		std::list<DogfightState*>& getDogfights();
 
 		/// Handler for clicking the timer button.
 		void btnTimerClick(Action* action);

@@ -1770,8 +1770,8 @@ bool SavedGame::isResearched(const std::vector<std::string>& research) const
 
 /**
  * Returns pointer to the Soldier given its unique ID.
- * @param id, A soldier's unique id.
- * @return, Pointer to Soldier.
+ * @param id - a soldier's unique id
+ * @return, pointer to Soldier
  */
 Soldier* SavedGame::getSoldier(int id) const
 {
@@ -1944,7 +1944,7 @@ void SavedGame::inspectSoldiers(
 		{
 			if ((*j)->getRank() == (SoldierRank)rank)
 			{
-				(*total)++;
+				++(*total);
 
 				int score = getSoldierScore(*j);
 				if (score > highestScore)
@@ -1963,7 +1963,7 @@ void SavedGame::inspectSoldiers(
 			if ((*j)->getType() == TRANSFER_SOLDIER
 				&& (*j)->getSoldier()->getRank() == (SoldierRank)rank)
 			{
-				(*total)++;
+				++(*total);
 
 				int score = getSoldierScore((*j)->getSoldier());
 				if (score > highestScore)
@@ -1983,16 +1983,16 @@ void SavedGame::inspectSoldiers(
  */
 int SavedGame::getSoldierScore(Soldier* soldier)
 {
-	UnitStats* stats = soldier->getCurrentStats();
+	const UnitStats* const stats = soldier->getCurrentStats();
 
 	int score = 2 * stats->health
-				+ 2 * stats->stamina
-				+ 4 * stats->reactions
-				+ 4 * stats->bravery
-				+ 3 * (stats->tu + 2 * (stats->firing))
-				+ stats->melee
-				+ stats->throwing
-				+ stats->strength;
+			  + 2 * stats->stamina
+			  + 4 * stats->reactions
+			  + 4 * stats->bravery
+			  + 3 * (stats->tu + 2 * (stats->firing))
+			  + stats->melee
+			  + stats->throwing
+			  + stats->strength;
 
 	if (stats->psiSkill > 0)
 		score += stats->psiStrength
@@ -2030,7 +2030,8 @@ bool SavedGame::getDebugMode() const
 }
 
 
-/** @brief Match a mission based on region and type.
+/**
+ * @brief Match a mission based on region and type.
  * This function object will match alien missions based on region and type.
  */
 class matchRegionAndType
@@ -2061,9 +2062,9 @@ private:
 
 /**
  * Find a mission from the active alien missions.
- * @param region The region ID.
- * @param type The mission type ID.
- * @return A pointer to the mission, or 0 if no mission matched.
+ * @param region	- the region ID
+ * @param type		- the mission type ID
+ * @return, pointer to the AlienMission (NULL if no mission matched)
  */
 AlienMission* SavedGame::getAlienMission(
 		const std::string& region,
@@ -2077,7 +2078,7 @@ AlienMission* SavedGame::getAlienMission(
 										region,
 										type));
 	if (am == _activeMissions.end())
-		return 0;
+		return NULL;
 
 	return *am;
 }
