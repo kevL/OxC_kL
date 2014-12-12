@@ -3557,7 +3557,7 @@ int GeoscapeState::getNextDogfightSlot() const
 
 /**
  * Gets the dogfights.
- * @return, reference to the list of pointers to DogfightStates
+ * @return, reference to a list of pointers to DogfightStates
  */
 std::list<DogfightState*>& GeoscapeState::getDogfights()
 {

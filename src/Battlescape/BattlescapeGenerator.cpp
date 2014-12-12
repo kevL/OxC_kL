@@ -2292,24 +2292,22 @@ int BattlescapeGenerator::loadMAP(
 			}
 		} */
 
-//		_battleSave->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
-//		_battleSave->getTile(Position(x, y, z))->setDiscovered(
-//															discovered
-//															|| mapblock->isFloorRevealed(z), 2);
-//		_battleSave->getTile(Position(x, y, z))->setDiscovered(mapblock->isFloorRevealed(z), 2);
-
-		x++;
+		_battleSave->getTile(Position(x, y, z))->setDiscovered(
+															discovered == true
+																|| mapblock->isFloorRevealed(z) == true,
+															2);
+		++x;
 
 		if (x == size_x + offset_x)
 		{
 			x = offset_x;
-			y++;
+			++y;
 		}
 
 		if (y == size_y + offset_y)
 		{
 			y = offset_y;
-			z--;
+			--z;
 		}
 	}
 
@@ -2552,7 +2550,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 			posEntry = bu->getPosition();
 		}
 
-		tries--;
+		--tries;
 	}
 
 	if (tries > 0

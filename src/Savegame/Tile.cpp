@@ -1031,7 +1031,7 @@ void Tile::removeItem(BattleItem* item)
 
 /**
  * Get the topmost item sprite to draw on the battlescape.
- * @return, sprite ID in floorob, or -1 when no item
+ * @return, sprite ID in floorob (-1 if none)
  */
 int Tile::getTopItemSprite() const
 {

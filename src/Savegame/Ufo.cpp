@@ -740,8 +740,8 @@ void Ufo::setDestination(Target* dest)
 }
 
 /**
- * Gets the Craft this Ufo is shooting at in a dogfight.
- * @return,
+ * Gets the intercept this Ufo is shooting at in a dogfight.
+ * @return, interception number
  */
 int Ufo::getShootingAt() const
 {
@@ -749,8 +749,8 @@ int Ufo::getShootingAt() const
 }
 
 /**
- * Sets the Craft this Ufo is shooting at in a dogfight.
- * @param target -
+ * Sets the intercept this Ufo is shooting at in a dogfight.
+ * @param target - interception number
  */
 void Ufo::setShootingAt(int target)
 {

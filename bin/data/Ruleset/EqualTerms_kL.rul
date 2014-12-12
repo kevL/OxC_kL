@@ -1394,6 +1394,7 @@ extraSprites:
       518: Resources/EqualTerms1/Shotgun/EleriumShotgunAmmo_f.png
       519: Resources/EqualTerms1/IncendiaryGrenade/IncenGren_f.png
       520: Resources/EqualTerms1/SSRL/SSRL_f.png
+      521: Resources/EqualTerms1/RocketLauncher/APFSDSRocket_f.png
 #------------------------------------------------------------------------------
   - type: HANDOB.PCK
     width: 256

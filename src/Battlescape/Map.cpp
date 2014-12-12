@@ -1310,11 +1310,12 @@ void Map::drawTerrain(Surface* surface)
 						if (sprite != -1)
 						{
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-							tmpSurface->blitNShade(
-									surface,
-									screenPosition.x,
-									screenPosition.y + tile->getTerrainLevel(),
-									tileShade);
+							if (tmpSurface)
+								tmpSurface->blitNShade(
+										surface,
+										screenPosition.x,
+										screenPosition.y + tile->getTerrainLevel(),
+										tileShade);
 						}
 
 						// kL_begin:
