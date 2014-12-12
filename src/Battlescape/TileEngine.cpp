@@ -3560,6 +3560,7 @@ int TileEngine::verticalBlockage(
  * @param startTile The tile where the power starts.
  * @param endTile The adjacent tile where the power ends.
  * @param type The type of power/damage.
+ * @param skipObject
  * @return Amount of blockage of this power.
  */
 /* int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject)
@@ -3589,7 +3590,7 @@ int TileEngine::verticalBlockage(
 			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 			if (!skipObject)
-				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_DOWN);
 		}
 	}
 	else if (direction > 0) // up
@@ -3605,7 +3606,7 @@ int TileEngine::verticalBlockage(
 			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 			if (!skipObject)
-				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_UP);
 		}
 	}
 
@@ -3667,6 +3668,7 @@ int TileEngine::blockage(
 							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
 							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
 					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)	// all floors that block LoS should have their stopLOS flag set true, if not gravLift floor.
+																					// Might want to check hasNoFloor() flag.
 				{
 					//Log(LOG_INFO) << ". . . . Ret 1000[0] part = " << part << " " << tile->getPosition();
 					return 1000;

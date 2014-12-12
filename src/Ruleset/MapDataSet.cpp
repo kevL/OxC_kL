@@ -19,15 +19,15 @@
 
 #include "MapDataSet.h"
 
-#include <fstream>
-#include <sstream>
+//#include <fstream>
+//#include <sstream>
 
-#include <SDL_endian.h>
+//#include <SDL_endian.h>
 
 #include "MapData.h"
 
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 //#include "../Engine/Logger.h"
 #include "../Engine/SurfaceSet.h"
@@ -191,8 +191,8 @@ void MapDataSet::loadData()
 
 	// Load file
 	std::ifstream mapFile ( // init.
-							CrossPlatform::getDataFile(s.str()).c_str(),
-							std::ios::in | std::ios::binary);
+						CrossPlatform::getDataFile(s.str()).c_str(),
+						std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(s.str() + " not found");
