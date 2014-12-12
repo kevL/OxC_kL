@@ -70,10 +70,11 @@ private:
 
 
 	public:
-		static const int SLOT_W = 16;
-		static const int SLOT_H = 16;
-		static const int HAND_W = 2;
-		static const int HAND_H = 3;
+		static const int
+			SLOT_W = 16,
+			SLOT_H = 16,
+			HAND_W = 2,
+			HAND_H = 3;
 
 		/// Creates a blank inventory ruleset.
 		RuleInventory(const std::string& id);
@@ -109,9 +110,9 @@ private:
 				int y) const;
 
 		/// Gets a certain cost in the inventory.
-		int getCost(RuleInventory* slot) const;
+		int getCost(const RuleInventory* const slot) const;
 
-		///
+		/// Gets the list order.
 		int getListOrder() const;
 };
 

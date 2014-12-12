@@ -643,7 +643,7 @@ void BattlescapeGame::endGameTurn()
 				)
 		{
 			if ((*j)->getRules()->getBattleType() == BT_GRENADE
-				&& (*j)->getFuseTimer() == 0) // it's a grenade to explode now
+				&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
 			{
 				pos.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
 				pos.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
@@ -706,7 +706,7 @@ void BattlescapeGame::endGameTurn()
 		{
 			if ((*i)->getOwner() == NULL
 				&& (*i)->getRules()->getBattleType() == BT_GRENADE
-				&& (*i)->getFuseTimer() > 0)
+				&& (*i)->getFuseTimer() > 1)
 			{
 				(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
 			}
@@ -3360,7 +3360,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 								++i)
 						{
 							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
-								&& (*i)->getFuseTimer() == 0)
+								&& (*i)->getFuseTimer() != -1)
 							{
 								int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765
 								_save->getPathfinding()->vectorToDirection(

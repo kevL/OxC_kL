@@ -20,12 +20,12 @@
 #ifndef OPENXCOM_RULEINTERFACE_H
 #define OPENXCOM_RULEINTERFACE_H
 
-#include <string>
-#include <map>
+//#include <string>
+//#include <map>
 
-#include <SDL.h>
+//#include <SDL.h>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -62,11 +62,11 @@ private:
 		/// Destructor.
 		~RuleInterface();
 
-		/// Load from YAML.
+		/// Loads from YAML.
 		void load(const YAML::Node& node);
 
-		/// Get an element.
-		Element* getElement(const std::string id);
+		/// Gets an element.
+		const Element* const getElement(const std::string id) const;
 };
 
 }

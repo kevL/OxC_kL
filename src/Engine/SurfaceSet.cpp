@@ -347,7 +347,8 @@ void SurfaceSet::setPalette(
 }
 
 /**
- *
+ * Gets a map of the frames in this SurfaceSet.
+ * @return, pointer to a map of ints w/ pointers to Surface corresponding to the frames
  */
 std::map<int, Surface*>* SurfaceSet::getFrames()
 {

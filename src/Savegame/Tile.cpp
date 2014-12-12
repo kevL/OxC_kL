@@ -1012,7 +1012,7 @@ void Tile::addItem(
  * Remove an item from the tile.
  * @param item - pointer to a BattleItem
  */
-void Tile::removeItem(BattleItem* item)
+void Tile::removeItem(BattleItem* const item)
 {
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();

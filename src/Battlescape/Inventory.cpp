@@ -29,9 +29,9 @@
 #include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
@@ -81,12 +81,12 @@ Inventory::Inventory(
 		_game(game),
 		_selUnit(NULL),
 		_selItem(NULL),
-		_tu(true),
+		_tuMode(true),
 		_base(base),
 		_groundOffset(0),
 		_fuseFrame(0),
 		_grenadeFuses(),	// kL
-		_primeGrenade(-1),	// kL
+		_prime(-1),			// kL
 		_tuCost(-1)			// kL
 {
 	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
@@ -157,7 +157,7 @@ void Inventory::setPalette(
  */
 void Inventory::setTuMode(bool tu)
 {
-	_tu = tu;
+	_tuMode = tu;
 }
 
 /**
@@ -196,10 +196,10 @@ void Inventory::drawGrid()
 				_game->getResourcePack()->getFont("FONT_SMALL"),
 				_game->getLanguage());
 
-	RuleInterface* rule = _game->getRuleset()->getInterface("inventory");
+	const RuleInterface* const rule = _game->getRuleset()->getInterface("inventory");
 	text.setColor(rule->getElement("textSlots")->color); // Palette::blockOffset(4)-1
 
-	Uint8 color = rule->getElement("grid")->color; // Palette::blockOffset(0)+8
+	const Uint8 color = rule->getElement("grid")->color; // Palette::blockOffset(0)+8
 	bool doLabel;
 
 	for (std::map<std::string, RuleInventory*>::const_iterator
@@ -224,8 +224,8 @@ void Inventory::drawGrid()
 				r.h = RuleInventory::SLOT_H + 1;
 				_grid->drawRect(&r, color);
 
-				r.x++;
-				r.y++;
+				++r.x;
+				++r.y;
 				r.w -= 2;
 				r.h -= 2;
 				_grid->drawRect(&r, 0);
@@ -241,8 +241,8 @@ void Inventory::drawGrid()
 			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
 			_grid->drawRect(&r, color);
 
-			r.x++;
-			r.y++;
+			++r.x;
+			++r.y;
 			r.w -= 2;
 			r.h -= 2;
 			_grid->drawRect(&r, 0);
@@ -269,8 +269,8 @@ void Inventory::drawGrid()
 					r.h = RuleInventory::SLOT_H + 1;
 					_grid->drawRect(&r, color);
 
-					r.x++;
-					r.y++;
+					++r.x;
+					++r.y;
 					r.w -= 2;
 					r.h -= 2;
 					_grid->drawRect(&r, 0);
@@ -299,11 +299,11 @@ void Inventory::drawItems()
 	_items->clear();
 	_grenadeFuses.clear();
 
-	Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
+	const Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
 
 	if (_selUnit != NULL)
 	{
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 
 		for (std::vector<BattleItem*>::const_iterator // Soldier items
 				i = _selUnit->getInventory()->begin();
@@ -314,7 +314,7 @@ void Inventory::drawItems()
 				continue;
 
 
-			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
+			Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			if (frame != NULL) // kL, safety.
 			{
 				if ((*i)->getSlot()->getType() == INV_SLOT)
@@ -344,14 +344,14 @@ void Inventory::drawItems()
 			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
 		}
 
-		Surface* stackLayer = new Surface(
-										getWidth(),
-										getHeight(),
-										0,
-										0);
+		Surface* const stackLayer = new Surface(
+											getWidth(),
+											getHeight(),
+											0,
+											0);
 		stackLayer->setPalette(getPalette());
 
-		for (std::vector<BattleItem*>::iterator // Ground items
+		for (std::vector<BattleItem*>::const_iterator // Ground items
 				i = _selUnit->getTile()->getInventory()->begin();
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
@@ -367,7 +367,7 @@ void Inventory::drawItems()
 			}
 
 //			Log(LOG_INFO) << "Inventory::drawItems() bigSprite = " << (*i)->getRules()->getBigSprite();
-			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
+			Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			if (frame != NULL) // kL, safety.
 			{
 				frame->setX(
@@ -394,9 +394,7 @@ void Inventory::drawItems()
 									- 4);
 
 				if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 9)
-				{
 					_stackNumber->setX(_stackNumber->getX()-4);
-				}
 
 				_stackNumber->setY(
 								((*i)->getSlot()->getY()
@@ -419,14 +417,14 @@ void Inventory::drawItems()
 
 /**
  * Moves an item to a specified slot in the selected unit's inventory.
- * @param item	- pointer to a battle item
- * @param slot	- pointer to an inventory slot, or NULL if none
+ * @param item	- pointer to a BattleItem
+ * @param slot	- pointer to RuleInventory slot (NULL if none)
  * @param x		- X position in slot (default 0)
  * @param y		- Y position in slot (default 0)
  */
 void Inventory::moveItem(
-		BattleItem* item,
-		RuleInventory* slot,
+		BattleItem* const item,
+		RuleInventory* const slot,
 		int x,
 		int y)
 {
@@ -595,21 +593,21 @@ void Inventory::setMouseOverItem(BattleItem* item)
  */
 void Inventory::think()
 {
-	if (_primeGrenade > -1) // kL_begin ->
+	if (_prime > -1) // kL_begin ->
 	{
 		std::wstring activated;
 
-		if (_primeGrenade > 0)
-			activated = Text::formatNumber(_primeGrenade) + L" ";
+		if (_prime > 0)
+			activated = Text::formatNumber(_prime) + L" ";
 
 		activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 
-		if (_primeGrenade > 0)
-			activated += L" " + Text::formatNumber(_primeGrenade);
+		if (_prime > 0)
+			activated += L" " + Text::formatNumber(_prime);
 
 		_warning->showMessage(activated);
 
-		_primeGrenade = -1;
+		_prime = -1;
 	} // kL_end.
 
 /*	int
@@ -618,7 +616,7 @@ void Inventory::think()
 	SDL_GetMouseState(&x, &y);
 
 	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
-	SDL_WarpMouse(x, y); */		// move the mouse back to avoid cursor creep
+	SDL_WarpMouse(x, y);		// move the mouse back to avoid cursor creep */
 
 	_warning->think();
 	_animTimer->think(NULL, this);
@@ -657,29 +655,29 @@ void Inventory::blit(Surface* surface)
  */
 void Inventory::mouseOver(Action* action, State* state)
 {
-	_selection->setX(static_cast<int>(
-						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
-	_selection->setY(static_cast<int>(
-						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
+	_selection->setX(static_cast<int>(std::floor(
+					action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
+	_selection->setY(static_cast<int>(std::floor(
+					action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
 
 	if (_selUnit == NULL)
 		return;
 
 	int
-		x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
-		y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
+		x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
+		y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
-	RuleInventory* slot = getSlotInPosition(&x, &y);
+	RuleInventory* const slot = getSlotInPosition(&x, &y);
 	if (slot != NULL)
 	{
 		std::string warning; // kL_begin:
-		if (_tu
+		if (_tuMode == true
 			&& _selItem != NULL
 			&& fitItem(
 					slot,
 					_selItem,
 					warning,
-					true))
+					true) == true)
 		{
 			_tuCost = _selItem->getSlot()->getCost(slot);
 		}
@@ -690,7 +688,7 @@ void Inventory::mouseOver(Action* action, State* state)
 			if (slot->getType() == INV_GROUND)
 				x += _groundOffset;
 
-			BattleItem* item = _selUnit->getItem(slot, x, y);
+			BattleItem* const item = _selUnit->getItem(slot, x, y);
 			setMouseOverItem(item);
 		}
 	}
@@ -700,10 +698,10 @@ void Inventory::mouseOver(Action* action, State* state)
 		setMouseOverItem(NULL);
 	}
 
-	_selection->setX(static_cast<int>(
-						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
-	_selection->setY(static_cast<int>(
-						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
+	_selection->setX(static_cast<int>(std::floor(
+					action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
+	_selection->setY(static_cast<int>(std::floor(
+					action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -723,32 +721,33 @@ void Inventory::mouseClick(Action* action, State* state)
 		if (_selItem == NULL) // Pickup item
 		{
 			int
-				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
-				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
+				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
+				y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
+			RuleInventory* const slot = getSlotInPosition(&x, &y);
 
-			RuleInventory* slot = getSlotInPosition(&x, &y);
 			if (slot != NULL)
 			{
 				if (slot->getType() == INV_GROUND)
 					x += _groundOffset;
 
-				BattleItem* item = _selUnit->getItem(
-													slot,
-													x,
-													y);
+				BattleItem* const item = _selUnit->getItem(
+														slot,
+														x,
+														y);
 				if (item != NULL)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						bool placed = false;
-						bool toGround = true;
+						bool
+							placed = false,
+							toGround = true;
 						std::string warning;
 
 						RuleInventory* newSlot = NULL;
 
 						if (slot->getType() == INV_HAND
 							|| (slot->getType() != INV_GROUND
-								&& (_tu == false
+								&& (_tuMode == false
 									|| _selUnit->getOriginalFaction() != FACTION_PLAYER)))
 						{
 							newSlot = _game->getRuleset()->getInventory("STR_GROUND");
@@ -772,10 +771,10 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (newSlot == NULL)
 							return;
 
-						if (toGround)
+						if (toGround == true)
 						{
-							if (!_tu
-								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
+							if (_tuMode == false
+								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)) == true)
 							{
 								placed = true;
 								moveItem(
@@ -799,7 +798,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							if (fitItem(
 										newSlot,
 										item,
-										warning))
+										warning) == true)
 							{
 								placed = true;
 							}
@@ -807,7 +806,7 @@ void Inventory::mouseClick(Action* action, State* state)
 								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 						}
 
-						if (placed)
+						if (placed == true)
 						{
 							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.
 							mouseOver(action, state);
@@ -817,7 +816,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						setSelectedItem(item);
 
-						int explTurn = item->getFuseTimer();
+						const int explTurn = item->getFuseTimer();
 						if (explTurn > -1)
 						{
 							std::wstring activated;
@@ -853,28 +852,28 @@ void Inventory::mouseClick(Action* action, State* state)
 				if (slot->getType() == INV_GROUND)
 					x += _groundOffset;
 
-				BattleItem* item = _selUnit->getItem(
-													slot,
-													x,
-													y);
+				BattleItem* const item = _selUnit->getItem(
+														slot,
+														x,
+														y);
 
-				bool canStack = (slot->getType() == INV_GROUND
+				const bool canStack = (slot->getType() == INV_GROUND
 									&& canBeStacked(
 												item,
-												_selItem));
+												_selItem) == true);
 
 				if (item == NULL // Put item in empty slot, or stack it, if possible.
 					|| item == _selItem
-					|| canStack)
+					|| canStack == true)
 				{
-					if (!overlapItems(_selUnit, _selItem, slot, x, y)
+					if (overlapItems(_selUnit, _selItem, slot, x, y) == false
 						&& slot->fitItemInSlot(
 											_selItem->getRules(),
 											x,
-											y))
+											y) == true)
 					{
-						if (!_tu
-							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						if (_tuMode == false
+							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)) == true)
 						{
 							_tuCost = -1; // kL
 
@@ -900,10 +899,10 @@ void Inventory::mouseClick(Action* action, State* state)
 //							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 					}
-					else if (canStack)
+					else if (canStack == true)
 					{
-						if (!_tu
-							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						if (_tuMode == false
+							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)) == true)
 						{
 							_tuCost = -1; // kL
 
@@ -938,12 +937,11 @@ void Inventory::mouseClick(Action* action, State* state)
 						if ((*i) == _selItem->getRules()->getType())
 						{
 							wrong = false;
-
 							break;
 						}
 					}
 
-					if (wrong)
+					if (wrong == true)
 					{
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
 //						mouseOver(action, state); // kL, refresh tuCost visibility.
@@ -957,8 +955,8 @@ void Inventory::mouseClick(Action* action, State* state)
 //							mouseOver(action, state); // kL, refresh tuCost visibility.
 //							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
-						else if (!_tu
-							|| _selUnit->spendTimeUnits(15))
+						else if (_tuMode == false
+							|| _selUnit->spendTimeUnits(15) == true)
 						{
 							_tuCost = -1; // kL
 
@@ -993,8 +991,8 @@ void Inventory::mouseClick(Action* action, State* state)
 			else
 			{
 				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
-				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX();
-				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
+				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX();
+				y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
 				slot = getSlotInPosition(&x, &y);
 				if (slot != NULL
@@ -1002,13 +1000,13 @@ void Inventory::mouseClick(Action* action, State* state)
 				{
 					x += _groundOffset;
 
-					BattleItem* item = _selUnit->getItem(slot, x, y);
+					BattleItem* const item = _selUnit->getItem(slot, x, y);
 					if (canBeStacked(
 									item,
-									_selItem))
+									_selItem) == true)
 					{
-						if (!_tu
-							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						if (_tuMode == false
+							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)) == true)
 						{
 							moveItem(
 									_selItem,
@@ -1042,28 +1040,28 @@ void Inventory::mouseClick(Action* action, State* state)
 		if (_selItem == NULL)
 		{
 			//Log(LOG_INFO) << ". no selected item";
-			if (!_base
-				|| Options::includePrimeStateInSavedLayout)
+			if (_base == false
+				|| Options::includePrimeStateInSavedLayout == true)
 			{
 				//Log(LOG_INFO) << ". not at base";
-				if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
-							// ergo preBattlescape inventory screen is active.
+				if (_tuMode == false)	// kL_note: ie. TurnUnits have not been instantiated yet:
+										// ergo preBattlescape inventory screen is active.
 				{
 					//Log(LOG_INFO) << ". preBattle screen";
 					int
 						x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
 						y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
-					RuleInventory* slot = getSlotInPosition(&x, &y);
+					RuleInventory* const slot = getSlotInPosition(&x, &y);
 					if (slot != NULL)
 					{
 						if (slot->getType() == INV_GROUND)
 							x += _groundOffset;
 
-						BattleItem* item = _selUnit->getItem(slot, x, y);
+						BattleItem* const item = _selUnit->getItem(slot, x, y);
 						if (item != NULL)
 						{
-							BattleType itemType = item->getRules()->getBattleType();
+							const BattleType itemType = item->getRules()->getBattleType();
 							if (BT_GRENADE == itemType
 								|| BT_PROXIMITYGRENADE == itemType)
 							{
@@ -1181,8 +1179,8 @@ bool Inventory::unload()
 		}
 	}
 
-	if (_tu == false
-		|| _selUnit->spendTimeUnits(8))
+	if (_tuMode == false
+		|| _selUnit->spendTimeUnits(10) == true) // should break out to Ruleset value. Also, reload TU ....
 	{
 		moveItem(
 				_selItem->getAmmoItem(),
@@ -1216,12 +1214,13 @@ bool Inventory::unload()
  */
 void Inventory::arrangeGround(bool alterOffset)
 {
-	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
+	RuleInventory* const ground = _game->getRuleset()->getInventory("STR_GROUND");
 
 	bool fit = false;
-	int
+	const int
 		slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W,
-		slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H,
+		slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
+	int
 		x = 0,
 		y = 0,
 		xMax = 0;
@@ -1276,7 +1275,7 @@ void Inventory::arrangeGround(bool alterOffset)
 																y + yd);
 							fit = (item == NULL);
 
-							if (canBeStacked(item, *i))
+							if (canBeStacked(item, *i) == true)
 								fit = true;
 						}
 					}
@@ -1296,11 +1295,11 @@ void Inventory::arrangeGround(bool alterOffset)
 				}
 				else
 				{
-					y++;
+					++y;
 					if (y > slotsY - (*i)->getRules()->getInventoryHeight())
 					{
 						y = 0;
-						x++;
+						++x;
 					}
 				}
 			}
@@ -1355,7 +1354,7 @@ bool Inventory::fitItem(
 									x2,
 									y2))
 			{
-				if (_tu
+				if (_tuMode == true
 					&& test == true)
 				{
 					placed = true;
@@ -1367,8 +1366,8 @@ bool Inventory::fitItem(
 									x2,
 									y2) == false)
 				{
-					if (_tu == false
-						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
+					if (_tuMode == false
+						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)) == true)
 					{
 						placed = true;
 
@@ -1436,7 +1435,7 @@ void Inventory::drawPrimers()
 	if (_fuseFrame == 22)
 		_fuseFrame = 0;
 
-	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
+	Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
 	for (std::vector<std::pair<int, int> >::const_iterator
 			i = _grenadeFuses.begin();
 			i != _grenadeFuses.end();
@@ -1460,7 +1459,7 @@ void Inventory::drawPrimers()
  */
 void Inventory::setPrimeGrenade(int turn) // kL
 {
-	_primeGrenade = turn;
+	_prime = turn;
 }
 
 /**

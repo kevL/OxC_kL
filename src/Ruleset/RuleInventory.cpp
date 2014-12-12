@@ -83,29 +83,26 @@ RuleInventory::~RuleInventory()
 
 /**
  * Loads the inventory from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this inventory.
+ * @param node - reference a YAML node
+ * @param listOrder - the list weight for this inventory
  */
 void RuleInventory::load(
 		const YAML::Node &node,
 		int listOrder)
 {
-	_id	= node["id"].as<std::string>(_id);
-	_x	= node["x"].as<int>(_x);
-	_y	= node["y"].as<int>(_y);
-
-	_type = (InventoryType)node["type"].as<int>(_type);
-
-	_slots = node["slots"].as<std::vector<RuleSlot> >(_slots);
-	_costs = node["costs"].as<std::map<std::string, int> >(_costs);
-
-	_listOrder = node["listOrder"].as<int>(listOrder);
+	_id			= node["id"]					.as<std::string>(_id);
+	_x			= node["x"]						.as<int>(_x);
+	_y			= node["y"]						.as<int>(_y);
+	_type		= (InventoryType)node["type"]	.as<int>(_type);
+	_slots		= node["slots"]					.as<std::vector<RuleSlot> >(_slots);
+	_costs		= node["costs"]					.as<std::map<std::string, int> >(_costs);
+	_listOrder	= node["listOrder"]				.as<int>(listOrder);
 }
 
 /**
- * Gets the language string that names
- * this inventory section. Each section has a unique name.
- * @return The section name.
+ * Gets the language string that names this inventory section.
+ * Each section has a unique name.
+ * @return, the section name
  */
 std::string RuleInventory::getId() const
 {
@@ -114,7 +111,7 @@ std::string RuleInventory::getId() const
 
 /**
  * Gets the X position of the inventory section on the screen.
- * @return The X position in pixels.
+ * @return, the X position in pixels
  */
 int RuleInventory::getX() const
 {
@@ -123,7 +120,7 @@ int RuleInventory::getX() const
 
 /**
  * Gets the Y position of the inventory section on the screen.
- * @return The Y position in pixels.
+ * @return, the Y position in pixels
  */
 int RuleInventory::getY() const
 {
@@ -134,8 +131,8 @@ int RuleInventory::getY() const
  * Gets the type of the inventory section.
  * Slot-based contain a limited number of slots.
  * Hands only contain one slot but can hold any item.
- * Ground can hold infinite items but don't attach to soldiers.
- * @return, The inventory type.
+ * Ground can hold infinite items but it doesn't attach to soldiers.
+ * @return, the InventoryType
  */
 InventoryType RuleInventory::getType() const
 {
@@ -144,7 +141,7 @@ InventoryType RuleInventory::getType() const
 
 /**
  * Gets all the slots in the inventory section.
- * @return The list of slots.
+ * @return, pointer to a vector of RuleSlot-structs
  */
 std::vector<struct RuleSlot>* RuleInventory::getSlots()
 {
@@ -153,15 +150,15 @@ std::vector<struct RuleSlot>* RuleInventory::getSlots()
 
 /**
  * Gets the slot located in the specified mouse position.
- * @param x Mouse X position. Returns the slot's X position.
- * @param y Mouse Y position. Returns the slot's Y position.
- * @return True if there's a slot there.
+ * @param x - mouse X position; returns the slot's X position
+ * @param y - mouse Y position; returns the slot's Y position
+ * @return, true if there's a slot here
  */
 bool RuleInventory::checkSlotInPosition(
 		int* x,
 		int* y) const
 {
-	int
+	const int
 		mouseX = *x,
 		mouseY = *y;
 
@@ -177,7 +174,7 @@ bool RuleInventory::checkSlotInPosition(
 					yy < HAND_H;
 					++yy)
 			{
-				if (mouseX >= _x + xx * SLOT_W
+				if (   mouseX >= _x + xx * SLOT_W
 					&& mouseX < _x + (xx + 1) * SLOT_W
 					&& mouseY >= _y + yy * SLOT_H
 					&& mouseY < _y + (yy + 1) * SLOT_H)
@@ -192,13 +189,15 @@ bool RuleInventory::checkSlotInPosition(
 	}
 	else if (_type == INV_GROUND)
 	{
-		if (mouseX >= _x
+		if (   mouseX >= _x
 			&& mouseX < 320
 			&& mouseY >= _y
 			&& mouseY < 200)
 		{
-			*x = static_cast<int>(floor(static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
-			*y = static_cast<int>(floor(static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
+			*x = static_cast<int>(std::floor(
+					static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
+			*y = static_cast<int>(std::floor(
+					static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
 
 			return true;
 		}
@@ -242,8 +241,9 @@ bool RuleInventory::fitItemInSlot(
 		return true;
 	else if (_type == INV_GROUND)
 	{
-		int width	= (320 - _x) / SLOT_W;
-		int height	= (200 - _y) / SLOT_H;
+		const int
+			width = (320 - _x) / SLOT_W,
+			height = (200 - _y) / SLOT_H;
 		int xOffset = 0;
 
 		while (x >= xOffset + width)
@@ -260,7 +260,7 @@ bool RuleInventory::fitItemInSlot(
 					++yy)
 			{
 				if (!
-						(xx >= xOffset
+						(  xx >= xOffset
 						&& xx < xOffset + width
 						&& yy >= 0
 						&& yy < height))
@@ -274,7 +274,7 @@ bool RuleInventory::fitItemInSlot(
 	}
 	else
 	{
-		int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
+		const int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
 		int foundSlots = 0;
 
 		for (std::vector<RuleSlot>::const_iterator
@@ -283,7 +283,7 @@ bool RuleInventory::fitItemInSlot(
 					&& foundSlots < totalSlots;
 				++i)
 		{
-			if (i->x >= x
+			if (   i->x >= x
 				&& i->x < x + item->getInventoryWidth()
 				&& i->y >= y
 				&& i->y < y + item->getInventoryHeight())
@@ -301,7 +301,7 @@ bool RuleInventory::fitItemInSlot(
  * @param slot - the new section id
  * @return, the time unit cost
  */
-int RuleInventory::getCost(RuleInventory* slot) const
+int RuleInventory::getCost(const RuleInventory* const slot) const
 {
 	if (slot == this)
 		return 0;
@@ -310,7 +310,7 @@ int RuleInventory::getCost(RuleInventory* slot) const
 }
 
 /**
- *
+ * Gets the list order.
  */
 int RuleInventory::getListOrder() const
 {

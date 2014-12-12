@@ -795,8 +795,8 @@ void ProjectileFlyBState::think()
 					--pos.y;
 
 				BattleItem* const item = _parent->getMap()->getProjectile()->getItem();
-				if (Options::battleInstantGrenade == true
-					&& item->getRules()->getBattleType() == BT_GRENADE
+				if ( //Options::battleInstantGrenade == true && // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
+					item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getFuseTimer() == 0)
 				{
 					_parent->statePushFront(new ExplosionBState( // it's a hot grenade set to explode immediately

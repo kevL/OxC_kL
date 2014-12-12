@@ -270,7 +270,7 @@ protected:
 				BattleItem* item,
 				RuleInventory* ground);
 		/// Removes item
-		void removeItem(BattleItem* item);
+		void removeItem(BattleItem* const item);
 
 		/// Gets top-most item-sprite
 		int getTopItemSprite() const;

@@ -85,7 +85,7 @@ private:
 				int firstcolor = 0,
 				int ncolors = 256);
 
-		///
+		/// Gets a map of the frames in this SurfaceSet.
 		std::map<int, Surface*>* getFrames();
 };
 

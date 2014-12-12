@@ -50,13 +50,13 @@ class Inventory
 private:
 	bool
 		_base,
-		_tu;
+		_tuMode;
 	int
 		_fuseFrame,
 		_depth,
 		_groundOffset,
 		_tuCost, // kL
-		_primeGrenade; // kL
+		_prime; // kL
 
 	BattleItem
 		* _mouseOverItem,
@@ -77,8 +77,8 @@ private:
 
 	/// Moves an item to a specified slot.
 	void moveItem(
-			BattleItem* item,
-			RuleInventory* slot,
+			BattleItem* const item,
+			RuleInventory* const slot,
 			int x = 0,
 			int y = 0);
 	/// Gets the slot in the specified position.

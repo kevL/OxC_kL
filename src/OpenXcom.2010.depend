@@ -4561,7 +4561,7 @@
 	"State.h"
 	"Surface.h"
 
-1418066603 f:\git\openxcom\src\engine\surfaceset.h
+1418416532 f:\git\openxcom\src\engine\surfaceset.h
 
 1413136960 f:\git\openxcom\src\ruleset\rulecraft.h
 	<string>
@@ -5580,10 +5580,10 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1418241770 f:\git\openxcom\src\savegame\battleitem.h
+1418418160 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
-1418011504 f:\git\openxcom\src\savegame\tile.h
+1418417948 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -5743,7 +5743,7 @@
 1413136958 f:\git\openxcom\src\interface\cursor.h
 	"../Engine/Surface.h"
 
-1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
+1418417769 f:\git\openxcom\src\ruleset\ruleinventory.h
 
 1418348307 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
@@ -5784,7 +5784,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1416923963 f:\git\openxcom\src\battlescape\inventory.h
+1418418193 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
 1413136956 f:\git\openxcom\src\engine\crossplatform.h
@@ -6159,7 +6159,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1416924063 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1418418861 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6168,9 +6168,6 @@
 	"../Engine/Font.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Engine/Sound.h"
 	"../Engine/SurfaceSet.h"
 	"../Engine/Timer.h"
@@ -6417,16 +6414,13 @@
 1413136956 source:f:\git\openxcom\src\battlescape\position.cpp
 	"Position.h"
 
-1415853531 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
+1418419368 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
 	"PrimeGrenadeState.h"
-	<cmath>
-	<sstream>
 	"Inventory.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
-	"../Engine/Palette.h"
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
@@ -8968,7 +8962,7 @@
 1415166994 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
-1413136961 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
+1418417769 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
 	"RuleInventory.h"
 	"RuleItem.h"
 
@@ -9133,7 +9127,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1418172251 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1418418160 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -9344,7 +9338,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1418358869 source:f:\git\openxcom\src\savegame\tile.cpp
+1418417948 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"
@@ -11699,13 +11693,9 @@
 1416893453 f:\git\openxcom\src\ufopaedia\articlestatetftd.h
 	"ArticleState.h"
 
-1413136961 f:\git\openxcom\src\ruleset\ruleinterface.h
-	<string>
-	<map>
-	<SDL.h>
-	<yaml-cpp/yaml.h>
+1418415974 f:\git\openxcom\src\ruleset\ruleinterface.h
 
-1415850343 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
+1418415974 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"
 
 1413136958 f:\git\openxcom\src\interface\battlescapebutton.h

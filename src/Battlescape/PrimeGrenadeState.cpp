@@ -19,8 +19,8 @@
 
 #include "PrimeGrenadeState.h"
 
-#include <cmath>
-#include <sstream>
+//#include <cmath>
+//#include <sstream>
 
 #include "Inventory.h"
 
@@ -28,7 +28,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
@@ -66,13 +66,14 @@ PrimeGrenadeState::PrimeGrenadeState(
 {
 	_screen = false;
 
-	_fraTop		= new Frame(192, 27, 65, 37);
-	_txtTitle	= new Text(192, 18, 65, 43);
+	_fraTop			= new Frame(192, 27, 65, 37);
+	_txtTitle		= new Text(192, 18, 65, 43);
 
-	_srfBG		= new Surface(192, 93, 65, 45);
+	_srfBG			= new Surface(192, 93, 65, 45);
 
-	_txtTurn0	= new Text(190, 18, 66, 67);
-	_isfBtn0	= new InteractiveSurface(190, 22, 66, 65);
+	_isfBtn0		= new InteractiveSurface(190, 22, 66, 65);
+	if (Options::battleInstantGrenade == true)
+		_txtTurn0	= new Text(190, 18, 66, 67);
 
 	int
 		x = 67,
@@ -95,12 +96,12 @@ PrimeGrenadeState::PrimeGrenadeState(
 							y + ((i / 8) * 24) - 3);
 	}
 
-	if (inInventoryView)
+	if (inInventoryView == true)
 		setPalette("PAL_BATTLESCAPE");
 	else
 		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	Element* grenadeBackground = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
+	const Element* const eleBG = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
 
 	add(_srfBG);
 	_srfBG->drawRect(
@@ -108,7 +109,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 					0,
 					_srfBG->getWidth(),
 					_srfBG->getHeight(),
-					grenadeBackground->color); //Palette::blockOffset(6)+9);
+					eleBG->color); //Palette::blockOffset(6)+9);
 
 	add(_fraTop, "grenadeMenu", "battlescape");
 	_fraTop->setSecondaryColor(Palette::blockOffset(8)+4);
@@ -122,8 +123,6 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_txtTitle->setHighContrast();
 
 	add(_isfBtn0);
-	_isfBtn0->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
-
 	_isfBtn0->drawRect(
 					0,
 					0,
@@ -137,15 +136,20 @@ PrimeGrenadeState::PrimeGrenadeState(
 					_isfBtn0->getHeight() - 2,
 					Palette::blockOffset(6)+12);
 
-	add(_txtTurn0);
-	std::wostringstream ss0;
-	ss0 << 0;
-	_txtTurn0->setText(ss0.str());
-	_txtTurn0->setBig();
-	_txtTurn0->setColor(Palette::blockOffset(1)-1);
-	_txtTurn0->setHighContrast();
-	_txtTurn0->setAlign(ALIGN_CENTER);
-	_txtTurn0->setVerticalAlign(ALIGN_MIDDLE);
+	if (Options::battleInstantGrenade == true)
+	{
+		_isfBtn0->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
+
+		add(_txtTurn0);
+		std::wostringstream ss0;
+		ss0 << 0;
+		_txtTurn0->setText(ss0.str());
+		_txtTurn0->setBig();
+		_txtTurn0->setColor(Palette::blockOffset(1)-1);
+		_txtTurn0->setHighContrast();
+		_txtTurn0->setAlign(ALIGN_CENTER);
+		_txtTurn0->setVerticalAlign(ALIGN_MIDDLE);
+	}
 
 	for (int
 			i = 0;
@@ -161,13 +165,13 @@ PrimeGrenadeState::PrimeGrenadeState(
 		square.y = 0;
 		square.w = _isfBtn[i]->getWidth();
 		square.h = _isfBtn[i]->getHeight();
-		_isfBtn[i]->drawRect(&square, grenadeBackground->border); //Palette::blockOffset(0)+15);
+		_isfBtn[i]->drawRect(&square, eleBG->border); //Palette::blockOffset(0)+15);
 
-		square.x++; // inside fill
-		square.y++;
+		++square.x; // inside fill
+		++square.y;
 		square.w -= 2;
 		square.h -= 2;
-		_isfBtn[i]->drawRect(&square, grenadeBackground->color2); //Palette::blockOffset(6)+12);
+		_isfBtn[i]->drawRect(&square, eleBG->color2); //Palette::blockOffset(6)+12);
 
 		add(_txtTurn[i], "grenadeMenu", "battlescape");
 		std::wostringstream ss;
