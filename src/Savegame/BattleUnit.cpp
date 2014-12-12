@@ -1139,10 +1139,9 @@ Surface* BattleUnit::getCache(
  * Kneels or stands this unit.
  * @param kneeled - true to kneel, false to stand up
  */
-void BattleUnit::kneel(bool kneeled)
+void BattleUnit::kneel(bool kneel)
 {
-	//Log(LOG_INFO) << "BattleUnit::kneel()";
-	_kneeled = kneeled;
+	_kneeled = kneel;
 	_cacheInvalid = true;
 }
 

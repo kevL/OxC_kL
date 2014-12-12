@@ -545,7 +545,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 bool BattlescapeGame::kneel(BattleUnit* bu)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
-	if (bu->getGeoscapeSoldier() != NULL)
+	if (bu->getGeoscapeSoldier() != NULL
+		&& bu->getFaction() == bu->getOriginalFaction())
 	{
 		if (bu->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
@@ -594,8 +595,23 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 		else
 			_parentState->warning("STR_ACTION_NOT_ALLOWED_FLOAT");
 	}
-	else
-		_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN"); // or HWP ...
+	else if (bu->getGeoscapeSoldier() != NULL) // MC'd xCom agent, trying to stand & walk by AI.
+	{
+		if (bu->getTimeUnits() > 9
+			&& bu->getEnergy() > 4)
+		{
+			bu->spendTimeUnits(10);
+			bu->spendEnergy(5);
+
+			bu->kneel(false);
+			getMap()->cacheUnits();
+		}
+	}
+	else // MOB has Unit-rules
+	{
+		if (bu->getUnitRules()->getMechanical() == false)
+			_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN");
+	}
 
 	return false;
 }

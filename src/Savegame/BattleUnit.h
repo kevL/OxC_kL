@@ -596,7 +596,7 @@ private:
 				int part = 0) const;
 
 		/// Kneels or stands this unit.
-		void kneel(bool kneeled);
+		void kneel(bool kneel);
 		/// Gets if this unit is kneeled.
 		bool isKneeled() const;
 

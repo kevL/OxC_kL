@@ -1031,7 +1031,7 @@ void Tile::removeItem(BattleItem* item)
 
 /**
  * Get the topmost item sprite to draw on the battlescape.
- * @return, sprite ID in floorob (-1 if none)
+ * @return, sprite ID in floorob (-1 none)
  */
 int Tile::getTopItemSprite() const
 {
@@ -1044,8 +1044,8 @@ int Tile::getTopItemSprite() const
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i)->getRules()->getBattleType() == BT_CORPSE)	// kL
-			return (*i)->getRules()->getFloorSprite();		// kL
+		if ((*i)->getRules()->getBattleType() == BT_CORPSE)
+			return (*i)->getRules()->getFloorSprite();
 
 		if ((*i)->getRules()->getWeight() > weight)
 		{
