@@ -1450,7 +1450,7 @@ void Inventory::drawPrimers()
 					3); // red
 	}
 
-	_fuseFrame++;
+	++_fuseFrame;
 }
 
 /**

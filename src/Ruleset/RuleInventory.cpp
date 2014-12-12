@@ -288,7 +288,7 @@ bool RuleInventory::fitItemInSlot(
 				&& i->y >= y
 				&& i->y < y + item->getInventoryHeight())
 			{
-				foundSlots++;
+				++foundSlots;
 			}
 		}
 

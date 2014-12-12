@@ -17,11 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "City.h"
 
-#include <math.h>
+//#include <math.h>
 
 
 namespace OpenXcom
@@ -58,8 +58,8 @@ City::~City()
 void City::load(const YAML::Node &node)
 {
 	_name	= node["name"].as<std::string>(_name);
-	_lon	= node["lon"].as<double>(_lon) * M_PI / 180.0;
-	_lat	= node["lat"].as<double>(_lat) * M_PI / 180.0;
+	_lon	= node["lon"].as<double>(_lon) * M_PI / 180.;
+	_lat	= node["lat"].as<double>(_lat) * M_PI / 180.;
 }
 
 /**

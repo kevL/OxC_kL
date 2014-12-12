@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_CIVILIANBAISTATE_H
 #define OPENXCOM_CIVILIANBAISTATE_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "BattleAIState.h"
 #include "Position.h"

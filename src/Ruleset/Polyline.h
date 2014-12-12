@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_POLYLINE_H
 #define OPENXCOM_POLYLINE_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

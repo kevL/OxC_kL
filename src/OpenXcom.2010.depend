@@ -5624,11 +5624,8 @@
 	<string>
 	"BattlescapeGame.h"
 
-1416194324 f:\git\openxcom\src\battlescape\map.h
-	<set>
-	<vector>
+1418422396 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
-	"../Engine/Options.h"
 	"../Engine/InteractiveSurface.h"
 
 1416558479 f:\git\openxcom\src\savegame\node.h
@@ -5655,7 +5652,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1418364625 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1418419968 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5695,8 +5692,7 @@
 1417447347 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
-1413605504 f:\git\openxcom\src\battlescape\civilianbaistate.h
-	<yaml-cpp/yaml.h>
+1418422361 f:\git\openxcom\src\battlescape\civilianbaistate.h
 	"BattleAIState.h"
 	"Position.h"
 
@@ -6099,9 +6095,7 @@
 1413136959 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
-1413136960 f:\git\openxcom\src\ruleset\rulecountry.h
-	<string>
-	<yaml-cpp/yaml.h>
+1418422535 f:\git\openxcom\src\ruleset\rulecountry.h
 
 1417181013 f:\git\openxcom\src\savegame\alienmission.h
 
@@ -7013,7 +7007,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1418066584 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1418416532 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	"Surface.h"
 
@@ -7565,9 +7559,7 @@
 	<string>
 	"../Engine/State.h"
 
-1413136960 f:\git\openxcom\src\ruleset\city.h
-	<string>
-	<yaml-cpp/yaml.h>
+1418422481 f:\git\openxcom\src\ruleset\city.h
 
 1417180581 f:\git\openxcom\src\ruleset\rulealienmission.h
 
@@ -11427,13 +11419,11 @@
 	"../Interface/TextEdit.h"
 	"../Interface/TextList.h"
 
-1413407313 f:\git\openxcom\src\ruleset\statstring.h
-	<yaml-cpp/yaml.h>
+1418422606 f:\git\openxcom\src\ruleset\statstring.h
 	"Unit.h"
 	"StatStringCondition.h"
 
-1413612033 f:\git\openxcom\src\ruleset\statstringcondition.h
-	<string>
+1418422665 f:\git\openxcom\src\ruleset\statstringcondition.h
 
 1413136959 f:\git\openxcom\src\menu\loadgamestate.h
 	<string>
@@ -11695,7 +11685,7 @@
 
 1418415974 f:\git\openxcom\src\ruleset\ruleinterface.h
 
-1418415974 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
+1418421568 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"
 
 1413136958 f:\git\openxcom\src\interface\battlescapebutton.h

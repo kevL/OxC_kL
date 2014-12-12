@@ -20,12 +20,12 @@
 #ifndef OPENXCOM_MAP_H
 #define OPENXCOM_MAP_H
 
-#include <set>
-#include <vector>
+//#include <set>
+//#include <vector>
 
 #include "Position.h"
 
-#include "../Engine/Options.h"
+//#include "../Engine/Options.h"
 #include "../Engine/InteractiveSurface.h"
 
 

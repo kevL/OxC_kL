@@ -17,12 +17,12 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "Map.h"
 
-#include <cmath>
-#include <fstream>
+//#include <cmath>
+//#include <fstream>
 
 #include "BattlescapeMessage.h"
 #include "BattlescapeState.h"
@@ -39,11 +39,11 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 

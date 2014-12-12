@@ -463,8 +463,7 @@ void AlienBAIState::think(BattleAction* action)
 					costTU += _unit->getActionTUs(
 												BA_PRIME,
 												action->weapon);
-
-//					action->weapon->setFuseTimer(0); // kL: but this is going to be done in ProjectileFlyBState.
+					// Prime is done in ProjectileFlyBState.
 				}
 
 				_unit->spendTimeUnits(costTU); // cf. grenadeAction()
@@ -2306,7 +2305,7 @@ void AlienBAIState::grenadeAction()
 			costTU += _unit->getActionTUs(
 										BA_PRIME,
 										grenade);
-
+		// Prime is done in ProjectileFlyBState.
 		costTU += _unit->getActionTUs(
 									BA_THROW,
 									grenade);

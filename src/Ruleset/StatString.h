@@ -10,17 +10,17 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_STATSTRING_H
 #define OPENXCOM_STATSTRING_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "Unit.h"
 #include "StatStringCondition.h"
@@ -116,6 +116,7 @@ class StatString
 private:
 	std::string _stringToBeAddedIfAllConditionsAreMet;
 	std::vector<StatStringCondition*> _conditions;
+
 	StatStringCondition* getCondition(
 			const std::string& conditionName,
 			const YAML::Node& node);

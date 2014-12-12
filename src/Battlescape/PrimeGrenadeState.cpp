@@ -92,7 +92,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 		_txtTurn[i] = new Text(
 							20,
 							20,
-							x + (((i %8) * 24)),
+							x + ((i %8) * 24),
 							y + ((i / 8) * 24) - 3);
 	}
 

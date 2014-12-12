@@ -17,11 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "Polyline.h"
 
-#include <cmath>
+//#include <cmath>
 
 
 namespace OpenXcom

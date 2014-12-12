@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "Camera.h"
 
@@ -27,7 +27,7 @@
 #include "Map.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 
 

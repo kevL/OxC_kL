@@ -17,7 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
+
 #include "AlienMission.h"
 
 //#include <algorithm>
@@ -38,10 +39,10 @@
 #include "Ufo.h"
 #include "Waypoint.h"
 
-#include "../Engine/Exception.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/RNG.h"
 
 #include "../Geoscape/Globe.h"
 

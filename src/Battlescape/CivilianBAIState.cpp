@@ -17,19 +17,19 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "CivilianBAIState.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "BattlescapeState.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 
 #include "../Ruleset/Armor.h"
 

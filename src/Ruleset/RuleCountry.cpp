@@ -17,13 +17,13 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "RuleCountry.h"
 
-#include <math.h>
+//#include <math.h>
 
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 
 namespace OpenXcom

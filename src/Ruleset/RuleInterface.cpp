@@ -89,9 +89,9 @@ void RuleInterface::load(const YAML::Node& node)
  * @param id - a string defining the element
  * @return, pointer to Element
  */
-const Element* const RuleInterface::getElement(const std::string id) const
+const Element* const RuleInterface::getElement(const std::string id) const // <- why i hate const. There is likely NO optimization done despite this.
 {
-	std::map<std::string, Element>::const_iterator i = _elements.find(id);
+	const std::map<std::string, Element>::const_iterator i = _elements.find(id);
 	if (_elements.end() != i)
 		return &i->second;
 	else

@@ -17,12 +17,12 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
+//#define _USE_MATH_DEFINES
 
 #include "MonthlyReportState.h"
 
-#include <cmath>
-#include <sstream>
+//#include <cmath>
+//#include <sstream>
 
 #include "DefeatState.h"
 #include "Globe.h"
@@ -32,8 +32,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Menu/SaveGameState.h"
 
