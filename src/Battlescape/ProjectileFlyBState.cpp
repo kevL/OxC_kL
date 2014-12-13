@@ -344,12 +344,12 @@ void ProjectileFlyBState::init()
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store that target voxel.
-		Tile* const targetTile = _parent->getSave()->getTile(_action.target);
+		const Tile* const targetTile = _parent->getSave()->getTile(_action.target);
 		Position hitPos;
 
-		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
-																	_action,
-																	_parent->getSave()->getTile(_origin));
+		const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
+																		_action,
+																		_parent->getSave()->getTile(_origin));
 		if (targetTile->getUnit() != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has unit";
@@ -476,13 +476,13 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
-	_action.autoShotCount++;
+	++_action.autoShotCount;
 
 	if (_unit->getGeoscapeSoldier() != NULL // kL_add.
 		&& (_action.type != BA_THROW
 			|| _action.type != BA_LAUNCH))
 	{
-		_unit->getStatistics()->shotsFiredCounter++;
+		++_unit->getStatistics()->shotsFiredCounter;
 	}
 
 	Projectile* const projectile = new Projectile(
@@ -516,6 +516,7 @@ bool ProjectileFlyBState::createNewProjectile()
 				&& (_projectileItem->getRules()->getBattleType() == BT_GRENADE
 					|| _projectileItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 			{
+				//Log(LOG_INFO) << ". . auto-prime for AI, unitID " << _unit->getId();
 				_projectileItem->setFuseTimer(0);
 			}
 
@@ -859,7 +860,7 @@ void ProjectileFlyBState::think()
 				if (shotAt != NULL // Only counts for guns, not throws or launches
 					&& shotAt->getGeoscapeSoldier() != NULL) // kL_add. SoldierDiary
 				{
-					shotAt->getStatistics()->shotAtCounter++;
+					++shotAt->getStatistics()->shotAtCounter;
 				}
 
 				if (_action.type == BA_LAUNCH
@@ -972,16 +973,16 @@ void ProjectileFlyBState::think()
 								statsVictim = victim->getStatistics();
 
 							if (statsVictim != NULL)
-								statsVictim->hitCounter++;
+								++statsVictim->hitCounter;
 
 							if (victim->getOriginalFaction() == FACTION_PLAYER
 								&& _unit->getOriginalFaction() == FACTION_PLAYER)
 							{
 								if (statsVictim != NULL)
-									statsVictim->shotByFriendlyCounter++;
+									++statsVictim->shotByFriendlyCounter;
 
 								if (statsUnit != NULL)
-									statsUnit->shotFriendlyCounter++;
+									++statsUnit->shotFriendlyCounter;
 							}
 
 							const BattleUnit* const target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
@@ -989,21 +990,21 @@ void ProjectileFlyBState::think()
 							{
 								if (statsUnit != NULL)
 								{
-									statsUnit->shotsLandedCounter++;
+									++statsUnit->shotsLandedCounter;
 
 									const int dist = _parent->getTileEngine()->distance(
 																					victim->getPosition(),
 																					_unit->getPosition());
 
 									if (dist > 30)
-										statsUnit->longDistanceHitCounter++;
+										++statsUnit->longDistanceHitCounter;
 
 									if (dist > static_cast<int>(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon)
 																			* 35.))
 									{
-										statsUnit->lowAccuracyHitCounter++;
+										++statsUnit->lowAccuracyHitCounter;
 									}
 								}
 							}
@@ -1097,7 +1098,7 @@ bool ProjectileFlyBState::validThrowRange(
 	}
 
 	int weight = action->weapon->getRules()->getWeight();
-	if (action->weapon->getAmmoItem()
+	if (action->weapon->getAmmoItem() != NULL
 		&& action->weapon->getAmmoItem() != action->weapon)
 	{
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
@@ -1231,6 +1232,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
+	//Log(LOG_INFO) << ". meleeAttack, weapon = " << _action.weapon->getRules()->getType();
+	//Log(LOG_INFO) << ". meleeAttack, ammo = " << _ammo->getRules()->getType();
 	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
 	bool success = false;
 	const int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
@@ -1248,6 +1251,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	int sound = -1;
 	if (success == false)
 	{
+		//Log(LOG_INFO) << ". meleeAttack MISS, unitID " << _unit->getId();
 		sound = ResourcePack::ITEM_THROW;
 
 		if (_ammo->getRules()->getBattleType() == BT_MELEE
@@ -1260,6 +1264,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 	else
 	{
+		//Log(LOG_INFO) << ". meleeAttack HIT, unitID " << _unit->getId();
 		sound = ResourcePack::ITEM_DROP;
 
 		if (_ammo->getRules()->getBattleType() == BT_MELEE)
@@ -1306,7 +1311,6 @@ void ProjectileFlyBState::performMeleeAttack()
 											NULL,
 											true,
 											success)); // kL_add.
-
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
 }
 

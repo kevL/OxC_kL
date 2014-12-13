@@ -380,12 +380,14 @@ void UnitDieBState::convertUnitToCorpse()
 					x < unitSize;
 					++x)
 			{
+				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
+
+				// This block is lifted from TileEngine::explode(), switch(DT_IN).
 				if (_unit->getUnitRules() != NULL
 					&& _unit->getUnitRules()->getMechanical() == true
 					&& RNG::percent(19) == true)
 				{
-					tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
-					Tile // This block is lifted from TileEngine::explode(), switch(DT_IN).
+					Tile
 						* explTile = tile,
 						* explBelow = _parent->getSave()->getTile(explTile->getPosition() + Position(0, 0,-1));
 
@@ -410,7 +412,6 @@ void UnitDieBState::convertUnitToCorpse()
 														17 - (explTile->getFlammability() / 5))));
 					}
 				}
-
 
 				BattleItem* const corpse = new BattleItem(
 													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),

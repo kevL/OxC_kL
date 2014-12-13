@@ -966,12 +966,12 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 
 /**
  * Checks for another unit available for targeting and what particular voxel.
- * @param originVoxel	- pointer to voxel of trace origin (eye or gun's barrel)
- * @param tile			- pointer to a tile to check for
+ * @param originVoxel	- pointer to voxel of trace origin (eg. gun's barrel)
+ * @param tile			- pointer to Tile to check for
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
  * @param unit			- pointer to a hypothetical unit to draw a virtual Line of Fire for AI; if left NULL this function behaves normally (default NULL)
- * @return, true if the unit can be targeted
+ * @return, true if a unit can be targeted
  */
 bool TileEngine::canTargetUnit(
 		const Position* const originVoxel,
@@ -1130,19 +1130,19 @@ bool TileEngine::canTargetUnit(
 
 /**
  * Checks for a tile part available for targeting and what particular voxel.
- * @param originVoxel, Voxel of trace origin (gun's barrel).
- * @param tile, The tile to check for.
- * @param part, Tile part to check for.
- * @param scanVoxel, Is returned coordinate of hit.
- * @param excludeUnit, Is self (not to hit self).
- * @return, True if the tile can be targetted.
+ * @param originVoxel	- pointer to the Position voxel of trace origin (eg. gun's barrel)
+ * @param tile			- pointer to the Tile to check for
+ * @param part			- tile part to check for
+ * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
+ * @param excludeUnit	- pointer to unitSelf (to not hit self)
+ * @return, true if tile can be targetted
  */
 bool TileEngine::canTargetTile(
-		Position* originVoxel,
-		Tile* tile,
-		int part,
-		Position* scanVoxel,
-		BattleUnit* excludeUnit)
+		const Position* const originVoxel,
+		const Tile* const tile,
+		const int part,
+		Position* const scanVoxel,
+		const BattleUnit* const excludeUnit)
 {
 	static int
 		sliceObjectSpiral[82] =
@@ -3901,7 +3901,7 @@ void TileEngine::setProjectileDirection(const int dir)
  * @param tile - pointer to Tile affected
  * @return, true if the objective was destroyed
  */
-bool TileEngine::detonate(Tile* tile)
+bool TileEngine::detonate(Tile* const tile)
 {
 	const int expl = tile->getExplosive();
 	if (expl == 0) // no damage applied for this tile
@@ -3924,7 +3924,7 @@ bool TileEngine::detonate(Tile* tile)
 		3	// 8 - content
 	};
 
-	Position pos = tile->getPosition();
+	const Position pos = tile->getPosition();
 
 	Tile* tiles[9];
 	tiles[0] = _battleSave->getTile(Position(				// tileUp, floor
@@ -3940,10 +3940,10 @@ bool TileEngine::detonate(Tile* tile)
 											pos.y + 1,
 											pos.z));
 	tiles[3]												// floor
-				= tiles[4]									// westwall
-				= tiles[5]									// northwall
-				= tiles[6]									// content
-				= tile;
+			= tiles[4]										// westwall
+			= tiles[5]										// northwall
+			= tiles[6]										// content
+			= tile;
 	tiles[7] = _battleSave->getTile(Position(				// tileNorth, bigwall south
 											pos.x,
 											pos.y - 1,
@@ -4052,7 +4052,7 @@ bool TileEngine::detonate(Tile* tile)
 		}
 
 		// iterate through tile armor and destroy if can
-		while (tiles[i]->getMapData(curPart)
+		while (tiles[i]->getMapData(curPart) != NULL
 			&& tiles[i]->getMapData(curPart)->getArmor() * 2 <= explTest
 			&& tiles[i]->getMapData(curPart)->getArmor() != 255)
 		{
@@ -4069,9 +4069,9 @@ bool TileEngine::detonate(Tile* tile)
 			destroyed = true;
 
 			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
-				&& tiles[i]->getMapData(curPart)->isBaseModule())
+				&& tiles[i]->getMapData(curPart)->isBaseModule() == true)
 			{
-				--(_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second);
+				_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 			}
 
 			// this trick is to follow transformed object parts (object can become a ground)
@@ -4090,7 +4090,7 @@ bool TileEngine::detonate(Tile* tile)
 
 
 			curPart = curPart2;
-			if (tiles[i]->getMapData(curPart)) // take new values
+			if (tiles[i]->getMapData(curPart) != NULL) // take new values
 			{
 				fireProof = tiles[i]->getFlammability(curPart);
 				fuel = tiles[i]->getFuel(curPart) + 1;
@@ -5186,8 +5186,8 @@ int TileEngine::voxelCheck(
 				x = 15 - targetPos.x %16,	// x-direction is reversed
 				y = targetPos.y %16;		// y-direction is standard
 
-			const int loftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y); // wtf
-			if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146
+			const int loftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y);
+			if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
 				&& _voxelData->at(loftIdx) & (1 << x))
 			{
 				//Log(LOG_INFO) << ". vC() ret = " << i;
@@ -5224,7 +5224,7 @@ int TileEngine::voxelCheck(
 			if (targetPos.z > target_z
 				&& targetPos.z <= target_z + targetUnit->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
-				int entry = 0;
+				int ent = 0;
 				const int
 					x = targetPos.x %16, // where on the x-axis
 					y = targetPos.y %16; // where on the y-axis
@@ -5233,12 +5233,13 @@ int TileEngine::voxelCheck(
 				if (targetUnit->getArmor()->getSize() > 1) // for large units...
 				{
 					const Position pTarget_tile = targetTile->getPosition();
-					entry = ((pTarget_tile.x - unitPos.x) + ((pTarget_tile.y - unitPos.y) * 2));
+					ent = ((pTarget_tile.x - unitPos.x) + ((pTarget_tile.y - unitPos.y) * 2));
 				}
 
-				const int loftIdx = ((targetUnit->getLoftemps(entry) * 16) + y);
+				const int loftIdx = ((targetUnit->getLoftemps(ent) * 16) + y);
 				//Log(LOG_INFO) << "loftIdx = " << loftIdx;
-				if (_voxelData->at(loftIdx) & (1 << x)) // if the voxelData at loftIdx is "1" solid:
+				if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 ^above)
+					&& _voxelData->at(loftIdx) & (1 << x)) // if the voxelData at loftIdx is "1" solid:
 				{
 					//Log(LOG_INFO) << ". vC() ret VOXEL_UNIT";
 					return VOXEL_UNIT;

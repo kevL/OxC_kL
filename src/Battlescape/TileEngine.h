@@ -124,11 +124,12 @@ private:
 				const BattleUnit* const excludeUnit,
 				const BattleUnit* unit = NULL);
 		/// Check validity for targetting a tile.
-		bool canTargetTile(Position* originVoxel,
-				Tile* tile,
-				int part,
-				Position* scanVoxel,
-				BattleUnit* excludeUnit);
+		bool canTargetTile(
+				const Position* const originVoxel,
+				const Tile* const tile,
+				const int part,
+				Position* const scanVoxel,
+				const BattleUnit* const excludeUnit);
 
 		/// Checks reaction fire.
 		bool checkReactionFire(
@@ -192,7 +193,7 @@ private:
 		/// Sets the final direction from which a missile or thrown-object came.
 		void setProjectileDirection(const int dir);
 		/// Blows this tile up.
-		bool detonate(Tile* tile);
+		bool detonate(Tile* const tile);
 		/// Checks if a destroyed tile starts an explosion.
 		Tile* checkForTerrainExplosions();
 
