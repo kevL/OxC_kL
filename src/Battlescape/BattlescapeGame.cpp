@@ -643,6 +643,7 @@ void BattlescapeGame::endGameTurn()
 				)
 		{
 			if ((*j)->getRules()->getBattleType() == BT_GRENADE
+				&& (*j)->getFuseTimer() != -1
 				&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
 			{
 				pos.x = _save->getTiles()[i]->getPosition().x * 16 + 8;

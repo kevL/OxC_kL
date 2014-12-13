@@ -382,7 +382,7 @@ void UnitDieBState::convertUnitToCorpse()
 			{
 				if (_unit->getUnitRules() != NULL
 					&& _unit->getUnitRules()->getMechanical() == true
-					&& RNG::percent(20) == true)
+					&& RNG::percent(19) == true)
 				{
 					tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
 					Tile // This block is lifted from TileEngine::explode(), switch(DT_IN).
