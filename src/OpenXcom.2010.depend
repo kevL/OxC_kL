@@ -5710,7 +5710,7 @@
 1417924612 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1414466486 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1418428203 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -6510,7 +6510,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1418089472 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1418430682 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6534,7 +6534,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1416614073 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1418430660 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6544,9 +6544,6 @@
 	"TileEngine.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
@@ -8900,14 +8897,9 @@
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1416603039 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1418425883 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
-	<fstream>
-	<sstream>
-	<SDL_endian.h>
 	"MapData.h"
-	"../Engine/CrossPlatform.h"
-	"../Engine/Exception.h"
 	"../Engine/Game.h"
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"

@@ -28,9 +28,9 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
@@ -380,13 +380,45 @@ void UnitDieBState::convertUnitToCorpse()
 					x < unitSize;
 					++x)
 			{
+				if (_unit->getUnitRules() != NULL
+					&& _unit->getUnitRules()->getMechanical() == true
+					&& RNG::percent(20) == true)
+				{
+					tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
+					Tile // This block is lifted from TileEngine::explode(), switch(DT_IN).
+						* explTile = tile,
+						* explBelow = _parent->getSave()->getTile(explTile->getPosition() + Position(0, 0,-1));
+
+					while (explTile != NULL // safety.
+						&& explTile->getPosition().z > 0
+						&& explTile->getMapData(MapData::O_OBJECT) == NULL // only floors & content can catch fire.
+						&& explTile->getMapData(MapData::O_FLOOR) == NULL
+						&& explTile->hasNoFloor(explBelow) == true)
+					{
+						explTile = explBelow;
+						explBelow = _parent->getSave()->getTile(explTile->getPosition() + Position(0, 0,-1));
+					}
+
+					if (explTile != NULL // safety.
+						&& explTile->getFire() == 0)
+					{
+						explTile->setFire(explTile->getFuel() + RNG::generate(1, 3)); // Could use a ruleset-factor in here.
+						explTile->setSmoke(std::max(
+												1,
+												std::min(
+														6,
+														17 - (explTile->getFlammability() / 5))));
+					}
+				}
+
+
 				BattleItem* const corpse = new BattleItem(
 													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),
 													_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 
 				// check in case unit was displaced by another unit
-				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
+//				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
 				if (tile != NULL // kL, safety. ( had a CTD when ethereal dies on water )
 					&& tile->getUnit() == _unit)
 				{
@@ -398,7 +430,7 @@ void UnitDieBState::convertUnitToCorpse()
 								corpse,
 								true);
 
-				i++;
+				++i;
 			}
 		}
 	}

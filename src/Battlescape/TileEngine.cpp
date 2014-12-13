@@ -2188,10 +2188,10 @@ void TileEngine::explode(
 				te <= 360;
 				te += 3)
 		{
-			sin_te = sin(static_cast<double>(te) * M_PI / 180.0);
-			cos_te = cos(static_cast<double>(te) * M_PI / 180.0);
-			sin_fi = sin(static_cast<double>(fi) * M_PI / 180.0);
-			cos_fi = cos(static_cast<double>(fi) * M_PI / 180.0);
+			sin_te = std::sin(static_cast<double>(te) * M_PI / 180.);
+			cos_te = std::cos(static_cast<double>(te) * M_PI / 180.);
+			sin_fi = std::sin(static_cast<double>(fi) * M_PI / 180.);
+			cos_fi = std::cos(static_cast<double>(fi) * M_PI / 180.);
 
 			origin = _battleSave->getTile(Position(
 												centerX,
@@ -2199,7 +2199,7 @@ void TileEngine::explode(
 												centerZ));
 
 			_powerE = _powerT = power;	// initialize _powerE & _powerT for each ray.
-			r = 0.0;					// initialize radial length, also.
+			r = 0.;						// initialize radial length, also.
 
 			while (_powerE > 0
 				&& r - 0.5 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
@@ -2215,9 +2215,9 @@ void TileEngine::explode(
 				vect_y = static_cast<double>(centerY) + r * cos_te * cos_fi;
 				vect_z = static_cast<double>(centerZ) + r * sin_fi;
 
-				tileX = static_cast<int>(floor(vect_x));
-				tileY = static_cast<int>(floor(vect_y));
-				tileZ = static_cast<int>(floor(vect_z));
+				tileX = static_cast<int>(std::floor(vect_x));
+				tileY = static_cast<int>(std::floor(vect_y));
+				tileZ = static_cast<int>(std::floor(vect_z));
 
 				destTile = _battleSave->getTile(Position(
 														tileX,
@@ -2602,19 +2602,16 @@ void TileEngine::explode(
 
 							Tile // NOTE: Should check if tileBelow's have already had napalm drop on them from this explosion ....
 								* fireTile = destTile,
-								* tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
+								* tileBelow = _battleSave->getTile(fireTile->getPosition() + Position(0, 0,-1));
 
-							if (fireTile->getPosition().z > 0
+							while (fireTile != NULL // safety.
+								&& fireTile->getPosition().z > 0
 								&& fireTile->getMapData(MapData::O_OBJECT) == NULL
 								&& fireTile->getMapData(MapData::O_FLOOR) == NULL
 								&& fireTile->hasNoFloor(tileBelow) == true)
 							{
-								while (fireTile->hasNoFloor(tileBelow)
-									&& fireTile->getPosition().z > 0)
-								{
-									fireTile = tileBelow;
-									tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
-								}
+								fireTile = tileBelow;
+								tileBelow = _battleSave->getTile(fireTile->getPosition() + Position(0, 0,-1));
 							}
 
 //							if (fireTile->isVoid() == false)
@@ -2625,19 +2622,15 @@ void TileEngine::explode(
 								// So this is, like, napalm from an incendiary round, while ignite() is for parts
 								// of the tile itself self-igniting.
 
-//							tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
-							if (fireTile->getFire() == 0
-								&& (fireTile->getMapData(MapData::O_OBJECT) // only floors & content can catch fire.
-									|| fireTile->getMapData(MapData::O_FLOOR)
-									|| fireTile->hasNoFloor(tileBelow) == false)) // these might be somewhat redundant ... cf above^
+							if (fireTile != NULL // safety.
+								&& fireTile->getFire() == 0)
 							{
-								//Log(LOG_INFO) << ". . . set Fire to TILE";
 								fireTile->setFire(fireTile->getFuel() + 1);
 								fireTile->setSmoke(std::max(
 														1,
 														std::min(
-																17 - (fireTile->getFlammability() / 10),
-																13)));
+																13,
+																17 - (fireTile->getFlammability() / 10))));
 							}
 //							}
 
@@ -2764,7 +2757,7 @@ void TileEngine::explode(
 				}
 
 				origin = destTile;
-				r += 1.0;
+				r += 1.;
 				//Log(LOG_INFO) << " ";
 			}
 		}
@@ -2777,7 +2770,7 @@ void TileEngine::explode(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getTakenExpl())
+		if ((*i)->getTakenExpl() == true)
 		{
 			//Log(LOG_INFO) << ". . unitTaken ID " << (*i)->getId() << ", reset Taken";
 			(*i)->setTakenExpl(false);
@@ -2793,12 +2786,12 @@ void TileEngine::explode(
 				i != tilesAffected.end();
 				++i)
 		{
-			if (detonate(*i))
+			if (detonate(*i) == true)
 				_battleSave->addDestroyedObjective();
 
 			applyGravity(*i);
 
-			Tile* tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0, 0, 1));
+			Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0, 0, 1));
 			if (tileAbove != NULL)
 				applyGravity(tileAbove);
 		}
@@ -4035,7 +4028,7 @@ bool TileEngine::detonate(Tile* tile)
 			volume = 0,
 			curPart = parts[i],
 			curPart2,
-			diemcd;
+			dieMCD;
 
 		fireProof = tiles[i]->getFlammability(curPart);
 		fuel = tiles[i]->getFuel(curPart) + 1;
@@ -4078,13 +4071,13 @@ bool TileEngine::detonate(Tile* tile)
 			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
 				&& tiles[i]->getMapData(curPart)->isBaseModule())
 			{
-				_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
+				--(_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second);
 			}
 
 			// this trick is to follow transformed object parts (object can become a ground)
-			diemcd = tiles[i]->getMapData(curPart)->getDieMCD();
-			if (diemcd != 0)
-				curPart2 = tiles[i]->getMapData(curPart)->getDataset()->getObjects()->at(diemcd)->getObjectType();
+			dieMCD = tiles[i]->getMapData(curPart)->getDieMCD();
+			if (dieMCD != 0)
+				curPart2 = tiles[i]->getMapData(curPart)->getDataset()->getObjects()->at(dieMCD)->getObjectType();
 			else
 				curPart2 = curPart;
 
@@ -4107,8 +4100,8 @@ bool TileEngine::detonate(Tile* tile)
 		// set tile on fire
 		if (fireProof * 2 < explTest)
 		{
-			if (tiles[i]->getMapData(MapData::O_FLOOR)
-				|| tiles[i]->getMapData(MapData::O_OBJECT))
+			if (tiles[i]->getMapData(MapData::O_FLOOR) != NULL
+				|| tiles[i]->getMapData(MapData::O_OBJECT) != NULL)
 			{
 				tiles[i]->setFire(fuel);
 				tiles[i]->setSmoke(std::max(

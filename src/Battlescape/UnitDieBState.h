@@ -22,7 +22,7 @@
 
 #include "BattleState.h"
 
-#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleItem.h" // ItemDamageType
 
 
 namespace OpenXcom
