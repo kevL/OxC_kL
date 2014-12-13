@@ -46,6 +46,7 @@ class SavedGame;
 class Surface;
 class Text;
 class TextList;
+class Tile;
 class Timer;
 //class TurnCounter; // kL
 class WarningMessage;
@@ -60,7 +61,7 @@ class BattlescapeState
 {
 
 private:
-	static const int VISIBLE_MAX = 20; // was 10
+	static const int VISIBLE_MAX = 20;
 
 	bool
 		_firstInit,
@@ -160,12 +161,15 @@ private:
 		* _txtFloor,
 		* _txtHasKill,
 		* _txtName,
+		* _txtSmoke,
 		* _txtShade,
 		* _txtTerrain,
 //		* _txtTooltip;
 		* _txtTurn;
 //	TextList* _lstConsole;
-	TextList* _lstExp;
+	TextList
+		* _lstSoldierInfo,
+		* _lstTileInfo;
 	Timer
 		* _animTimer,
 		* _gameTimer;
@@ -392,6 +396,8 @@ private:
 
 		/// kL. Updates experience data for the currently selected soldier.
 		void updateExpData(); // kL
+		/// kL. Updates tile info for the tile under mouseover.
+		void updateTileInfo(const Tile* const tile); // kL
 
 		/// kL. Animates a red cross icon when an injured soldier is selected.
 		void flashMedic(); // kL

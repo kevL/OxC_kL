@@ -5514,7 +5514,7 @@
 1413136955 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1417974124 f:\git\openxcom\src\battlescape\battlescapestate.h
+1418459419 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5847,7 +5847,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1418422320 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1418459443 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"

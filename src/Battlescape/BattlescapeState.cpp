@@ -149,7 +149,9 @@ BattlescapeState::BattlescapeState()
 		y					= screenHeight - iconsHeight;
 
 	_txtBaseLabel	= new Text(80, 9, screenWidth - 81, 0);
-	_txtFloor		= new Text(25, 9, screenWidth - 26, 10);
+//	_txtFloor		= new Text(25, 9, screenWidth - 26, 50);
+//	_txtSmoke		= new Text(30, 17, screenWidth - 31, 60);
+	_lstTileInfo	= new TextList(18, 25, screenWidth - 19, 60);
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(
@@ -284,7 +286,7 @@ BattlescapeState::BattlescapeState()
 	_txtTerrain		= new Text(150, 9, 1, 0);
 	_txtShade		= new Text(50, 9, 1, 10);
 	_txtTurn		= new Text(50, 9, 1, 20);
-	_lstExp			= new TextList(25, 57, 1, 37);
+	_lstSoldierInfo	= new TextList(25, 57, 1, 37);
 	_txtHasKill		= new Text(10, 9, 1, 95);
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
@@ -443,12 +445,22 @@ BattlescapeState::BattlescapeState()
 	}
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
 
-	add(_txtFloor);
-	_txtFloor->setColor(Palette::blockOffset(8)); // blue
-	_txtFloor->setHighContrast();
-	_txtFloor->setAlign(ALIGN_RIGHT);
-	_txtFloor->setText(L"floor");
-	_txtFloor->setVisible(false);
+	add(_lstTileInfo);
+	_lstTileInfo->setColor(Palette::blockOffset(8)); // blue
+	_lstTileInfo->setHighContrast();
+	_lstTileInfo->setColumns(2, 12, 6);
+
+//	add(_txtFloor);
+//	_txtFloor->setColor(Palette::blockOffset(8)); // blue
+//	_txtFloor->setHighContrast();
+//	_txtFloor->setAlign(ALIGN_RIGHT);
+//	_txtFloor->setText(L"Floor");
+//	_txtFloor->setVisible(false);
+
+//	add(_txtSmoke);
+//	_txtSmoke->setColor(Palette::blockOffset(8)); // blue
+//	_txtSmoke->setHighContrast();
+//	_txtSmoke->setAlign(ALIGN_RIGHT);
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(8));
@@ -474,7 +486,7 @@ BattlescapeState::BattlescapeState()
 	add(_txtTerrain);
 	add(_txtShade);
 	add(_txtTurn);
-	add(_lstExp);
+	add(_lstSoldierInfo);
 	add(_txtHasKill);
 
 	_txtTerrain->setColor(Palette::blockOffset(9)); // yellow
@@ -489,9 +501,9 @@ BattlescapeState::BattlescapeState()
 	_txtTurn->setHighContrast();
 	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
 
-	_lstExp->setColor(Palette::blockOffset(8)); // blue
-	_lstExp->setHighContrast();
-	_lstExp->setColumns(2, 10, 15);
+	_lstSoldierInfo->setColor(Palette::blockOffset(8)); // blue
+	_lstSoldierInfo->setHighContrast();
+	_lstSoldierInfo->setColumns(2, 10, 15);
 
 	_txtHasKill->setColor(Palette::blockOffset(9)); // yellow
 	_txtHasKill->setHighContrast();
@@ -798,17 +810,17 @@ BattlescapeState::BattlescapeState()
 //	_numMorale->setColor(Palette::blockOffset(12));
 //	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale();
-	_barTimeUnits->setMax(100.0);
+	_barTimeUnits->setMax(100.);
 //	_barEnergy->setColor(Palette::blockOffset(1));
 	_barEnergy->setScale();
-	_barEnergy->setMax(100.0);
+	_barEnergy->setMax(100.);
 //	_barHealth->setColor(Palette::blockOffset(2));
 //	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale();
-	_barHealth->setMax(100.0);
+	_barHealth->setMax(100.);
 //	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale();
-	_barMorale->setMax(100.0);
+	_barMorale->setMax(100.);
 
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast();
@@ -1142,7 +1154,7 @@ void BattlescapeState::mapOver(Action* action)
 //		_txtConsole4->setText(L"");
 
 		bool showInfo = true;
-		_txtFloor->setVisible(false);
+//		_txtFloor->setVisible(false);
 
 		Position pos;
 		_map->getSelectorPosition(&pos);
@@ -1308,15 +1320,32 @@ void BattlescapeState::mapOver(Action* action)
 				_txtConsole1->setText(woss1.str());
 				_txtConsole2->setText(woss2.str());
 			}
-			else if (tile->hasNoFloor(_savedBattle->getTile(pos + Position(0, 0,-1))) == false)
-				_txtFloor->setVisible();
+//			else if (tile->hasNoFloor(_savedBattle->getTile(pos + Position(0, 0,-1))) == false)
+//				_txtFloor->setVisible();
+
+			updateTileInfo(tile);
+/*			std::wstring smokeInfo;
+			if (tile->getSmoke() > 0)
+				smokeInfo = L"sk " + Text::formatNumber(tile->getSmoke(), L"", false);
+			else
+				smokeInfo = L"";
+
+			smokeInfo += L"\n";
+
+			if (tile->getFire() > 0)
+				smokeInfo += L"fr " + Text::formatNumber(tile->getFire(), L"", false);
+			else
+				smokeInfo += L"";
+
+			_txtSmoke->setText(smokeInfo); */
 		}
 
 		_txtTerrain->setVisible(showInfo);
 		_txtShade->setVisible(showInfo);
 		_txtTurn->setVisible(showInfo);
-		_lstExp->setVisible(showInfo);
+		_lstSoldierInfo->setVisible(showInfo);
 		_txtHasKill->setVisible(showInfo);
+//		_txtSmoke->setVisible(showInfo);
 	} // kL_end.
 }
 
@@ -1745,9 +1774,9 @@ void BattlescapeState::btnKneelClick(Action*)
  */
 void BattlescapeState::btnInventoryClick(Action*)
 {
-	if (_savedBattle->getDebugMode())
+	if (_savedBattle->getDebugMode() == true)
 	{
-		for (std::vector<BattleUnit*>::iterator
+		for (std::vector<BattleUnit*>::const_iterator
 				i = _savedBattle->getUnits()->begin();
 				i != _savedBattle->getUnits()->end();
 				++i)
@@ -1768,7 +1797,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 	{
 		const BattleUnit* const unit = _savedBattle->getSelectedUnit();
 
-		if (_savedBattle->getDebugMode()
+		if (_savedBattle->getDebugMode() == true
 			|| (unit->getGeoscapeSoldier() != NULL
 //				|| (unit->getUnitRules() &&
 				|| (unit->getUnitRules()->getMechanical() == false
@@ -1798,7 +1827,7 @@ void BattlescapeState::btnInventoryClick(Action*)
  */
 void BattlescapeState::btnCenterClick(Action*)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		_map->getCamera()->centerOnPosition(_savedBattle->getSelectedUnit()->getPosition());
 		_map->refreshSelectorPosition();
@@ -1811,7 +1840,7 @@ void BattlescapeState::btnCenterClick(Action*)
  */
 void BattlescapeState::btnNextSoldierClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		selectNextFactionUnit(true);
 		_map->refreshSelectorPosition();
@@ -1824,7 +1853,7 @@ void BattlescapeState::btnNextSoldierClick(Action*)
  */
 void BattlescapeState::btnNextStopClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 		selectNextFactionUnit(true, true);
 }
 
@@ -1834,7 +1863,7 @@ void BattlescapeState::btnNextStopClick(Action*)
  */
 void BattlescapeState::btnPrevSoldierClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 		selectPreviousFactionUnit(true);
 }
 
@@ -1868,12 +1897,12 @@ void BattlescapeState::selectNextFactionUnit(
 			return;
 
 		BattleUnit* unit = _savedBattle->selectNextFactionUnit(
-												checkReselect,
-												setDontReselect,
-												checkInventory);
+															checkReselect,
+															setDontReselect,
+															checkInventory);
 		updateSoldierInfo();
 
-		if (unit)
+		if (unit != NULL)
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
@@ -1899,12 +1928,12 @@ void BattlescapeState::selectPreviousFactionUnit(
 			return;
 
 		BattleUnit* unit = _savedBattle->selectPreviousFactionUnit(
-													checkReselect,
-													setDontReselect,
-													checkInventory);
+																checkReselect,
+																setDontReselect,
+																checkInventory);
 		updateSoldierInfo();
 
-		if (unit)
+		if (unit != NULL)
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
@@ -1927,7 +1956,7 @@ void BattlescapeState::btnShowLayersClick(Action*)
  */
 void BattlescapeState::btnHelpClick(Action*)
 {
-	if (allowButtons(true))
+	if (allowButtons(true) == true)
 		_game->pushState(new PauseState(OPT_BATTLESCAPE));
 }
 
@@ -2303,7 +2332,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
-			_lstExp->setVisible();
+			_lstSoldierInfo->setVisible();
 			_txtHasKill->setVisible();
 		}
 /*		else if (_showConsole == 3)
@@ -2325,7 +2354,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
-			_lstExp->setVisible();
+			_lstSoldierInfo->setVisible();
 			_txtHasKill->setVisible();
 		} */
 
@@ -2375,7 +2404,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 bool BattlescapeState::playableUnitSelected()
 {
 	return _savedBattle->getSelectedUnit() != NULL
-		&& allowButtons();
+		&& allowButtons() == true;
 }
 
 /**
@@ -3552,10 +3581,12 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtTerrain->setVisible();
 	_txtShade->setVisible();
 	_txtTurn->setVisible();
-	_lstExp->setVisible();
+	_lstSoldierInfo->setVisible();
 	_txtHasKill->setVisible();
 
-	_txtFloor->setVisible(false);
+	_lstTileInfo->setVisible(false);
+//	_txtFloor->setVisible(false);
+//	_txtSmoke->setVisible(false);
 }
 
 /**
@@ -3565,6 +3596,9 @@ void BattlescapeState::mouseInIcons(Action*)
 void BattlescapeState::mouseOutIcons(Action*)
 {
 	_mouseOverIcons = false;
+
+	_lstTileInfo->setVisible();
+//	_txtSmoke->setVisible();
 }
 
 /**
@@ -3588,11 +3622,11 @@ bool BattlescapeState::getMouseOverIcons() const
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
 	return (
-			(allowSaving
+			(allowSaving == true
 					|| _savedBattle->getSide() == FACTION_PLAYER
-					|| _savedBattle->getDebugMode())
-				&& (_battleGame->getPanicHandled()
-					|| _firstInit)
+					|| _savedBattle->getDebugMode() == true)
+				&& (_battleGame->getPanicHandled() == true
+					|| _firstInit == true)
 				&& _map->getProjectile() == NULL);
 }
 
@@ -3609,7 +3643,7 @@ void BattlescapeState::resize(
 	dY = Options::baseYResolution;
 
 	int divisor = 1;
-	double pixelRatioY = 1.0;
+	double pixelRatioY = 1.;
 
 	if (Options::nonSquarePixelRatio)
 		pixelRatioY = 1.2;
@@ -3693,7 +3727,7 @@ void BattlescapeState::updateTurn() // kL
 
 /**
  * kL. Toggles the icons' surfaces' visibility for Hidden Movement.
- * @param vis - true to show show icons
+ * @param vis - true to show show icons and info
  */
 void BattlescapeState::toggleIcons(bool vis)
 {
@@ -3715,11 +3749,15 @@ void BattlescapeState::toggleIcons(bool vis)
 	_btnEndTurn->setVisible(vis);
 	_btnAbort->setVisible(vis);
 
-	_lstExp->setVisible(vis);
+	_lstSoldierInfo->setVisible(vis);
 	_txtHasKill->setVisible(vis);
 
-	if (vis == false)
-		_txtFloor->setVisible(vis);
+	_lstTileInfo->setVisible(vis);
+//	if (vis == false)
+//	{
+//		_txtFloor->setVisible(vis);
+//		_txtSmoke->setVisible(vis);
+//	}
 }
 
 /**
@@ -3815,7 +3853,7 @@ void BattlescapeState::drawFuse()
 		_btnRightHandItem->unlock();
 	}
 
-	_fuseFrame++;
+	++_fuseFrame;
 }
 
 /**
@@ -3860,7 +3898,7 @@ Bar* BattlescapeState::getEnergyBar() const // kL
  */
 void BattlescapeState::updateExpData() // kL
 {
-	_lstExp->clearList();
+	_lstSoldierInfo->clearList();
 	_txtHasKill->setText(L"");
 
 	const BattleUnit* const unit = _savedBattle->getSelectedUnit();
@@ -3899,19 +3937,54 @@ void BattlescapeState::updateExpData() // kL
 			i < 7;
 			++i)
 	{
-		_lstExp->addRow(
-					2,
-					xpType.at(i).c_str(),
-					Text::formatNumber(xp[i]).c_str());
+		_lstSoldierInfo->addRow(
+							2,
+							xpType.at(i).c_str(),
+							Text::formatNumber(xp[i]).c_str());
 
 		if (xp[i] > 10)
-			_lstExp->setCellColor(i, 1, Palette::blockOffset(0));	// white
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(0));	// white
 		else if (xp[i] > 5)
-			_lstExp->setCellColor(i, 1, Palette::blockOffset(10));	// brown
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10));	// brown
 		else if (xp[i] > 2)
-			_lstExp->setCellColor(i, 1, Palette::blockOffset(1));	// orange
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1));	// orange
 		else if (xp[i] > 0)
-			_lstExp->setCellColor(i, 1, Palette::blockOffset(3));	// green
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3));	// green
+	}
+}
+
+/**
+ * kL. Updates tile info for the tile under mouseover.
+ * @param tile - pointer to a Tile
+ */
+void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
+{
+	_lstTileInfo->clearList();
+
+	const int info[] =
+	{
+		1 - static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0, 0,-1)))),
+		tile->getSmoke(),
+		tile->getFire()
+	};
+
+	std::vector<std::wstring> infoType;
+	infoType.push_back(L"f ");
+	infoType.push_back(L"s ");
+	infoType.push_back(L"f ");
+
+
+	for (int
+			i = 0;
+			i < 3;
+			++i)
+	{
+		_lstTileInfo->addRow(
+						2,
+						Text::formatNumber(info[i]).c_str(),
+						infoType.at(i).c_str());
+
+		_lstTileInfo->setCellColor(i, 0, Palette::blockOffset(0));
 	}
 }
 
