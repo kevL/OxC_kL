@@ -294,8 +294,8 @@ private:
 
 		/// determine the origin voxel of a given action.
 		Position getOriginVoxel(
-				BattleAction& action,
-				Tile* tile);
+				const BattleAction& action,
+				const Tile* tile);
 
 		/// mark a region of the map as "dangerous" for a turn.
 		void setDangerZone(

@@ -5723,9 +5723,6 @@ bool TileEngine::validMeleeRange(
 	}
 	//Log(LOG_INFO) << ". dir = " << dir;
 
-	std::vector<BattleUnit*> potentialTargets;
-	const BattleUnit* chosenTarget = NULL;
-
 	Position posTarget;
 	Pathfinding::directionToVector(
 								dir,
@@ -5735,6 +5732,8 @@ bool TileEngine::validMeleeRange(
 		* tileTarget,
 		* tileTarget_above,
 		* tileTarget_below;
+
+	std::vector<BattleUnit*> potentialTargets;
 
 	const int unitSize = attacker->getArmor()->getSize() - 1;
 	for (int
@@ -5821,6 +5820,9 @@ bool TileEngine::validMeleeRange(
 			}
 		}
 	}
+
+
+	const BattleUnit* chosenTarget = NULL;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = potentialTargets.begin();
@@ -5957,8 +5959,8 @@ int TileEngine::getDirectionTo(
  * @return, position of the origin in voxel-space
  */
 Position TileEngine::getOriginVoxel(
-		BattleAction& action,
-		Tile* tile)
+		const BattleAction& action,
+		const Tile* tile)
 {
 //kL	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
 //kL	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
