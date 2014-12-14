@@ -2560,21 +2560,21 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	double stat = static_cast<double>(selectedUnit->getBaseStats()->tu);
 	const int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
-	_barTimeUnits->setValue(ceil(
+	_barTimeUnits->setValue(std::ceil(
 							static_cast<double>(tu) / stat * 100.));
 
 	stat = static_cast<double>(selectedUnit->getBaseStats()->stamina);
 	const int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
-	_barEnergy->setValue(ceil(
+	_barEnergy->setValue(std::ceil(
 							static_cast<double>(energy) / stat * 100.));
 
 	stat = static_cast<double>(selectedUnit->getBaseStats()->health);
 	const int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
-	_barHealth->setValue(ceil(
+	_barHealth->setValue(std::ceil(
 							static_cast<double>(health) / stat * 100.));
-	_barHealth->setValue2(ceil(
+	_barHealth->setValue2(std::ceil(
 							static_cast<double>(selectedUnit->getStun()) / stat * 100.));
 
 	const int morale = selectedUnit->getMorale();
@@ -3949,8 +3949,6 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 							2,
 							L"F",
 							infoType.at(i).c_str());
-
-			_lstTileInfo->setCellColor(i, 0, color);
 		}
 		else
 		{
@@ -3969,9 +3967,9 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 							2,
 							value.c_str(),
 							infoType.at(i).c_str());
-
-			_lstTileInfo->setCellColor(i, 0, color);
 		}
+
+		_lstTileInfo->setCellColor(i, 0, color);
 	}
 }
 
