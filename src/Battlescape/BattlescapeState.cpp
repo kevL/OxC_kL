@@ -149,8 +149,6 @@ BattlescapeState::BattlescapeState()
 		y					= screenHeight - iconsHeight;
 
 	_txtBaseLabel	= new Text(80, 9, screenWidth - 81, 0);
-//	_txtFloor		= new Text(25, 9, screenWidth - 26, 50);
-//	_txtSmoke		= new Text(30, 17, screenWidth - 31, 60);
 	_lstTileInfo	= new TextList(18, 25, screenWidth - 19, 60);
 
 	// Create buttonbar - this should be on the centerbottom of the screen
@@ -253,12 +251,12 @@ BattlescapeState::BattlescapeState()
 					32,
 					24,
 					screenWidth - 32,
-					0);
+					10);
 	_btnPsi		= new BattlescapeButton(
 					32,
 					24,
 					screenWidth - 32,
-					25);
+					35);
 
 	_txtName		= new Text(136, 9, _icons->getX() + 135, _icons->getY() + 32);
 
@@ -449,18 +447,6 @@ BattlescapeState::BattlescapeState()
 	_lstTileInfo->setColor(Palette::blockOffset(8)); // blue
 	_lstTileInfo->setHighContrast();
 	_lstTileInfo->setColumns(2, 12, 6);
-
-//	add(_txtFloor);
-//	_txtFloor->setColor(Palette::blockOffset(8)); // blue
-//	_txtFloor->setHighContrast();
-//	_txtFloor->setAlign(ALIGN_RIGHT);
-//	_txtFloor->setText(L"Floor");
-//	_txtFloor->setVisible(false);
-
-//	add(_txtSmoke);
-//	_txtSmoke->setColor(Palette::blockOffset(8)); // blue
-//	_txtSmoke->setHighContrast();
-//	_txtSmoke->setAlign(ALIGN_RIGHT);
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(8));
@@ -1154,7 +1140,6 @@ void BattlescapeState::mapOver(Action* action)
 //		_txtConsole4->setText(L"");
 
 		bool showInfo = true;
-//		_txtFloor->setVisible(false);
 
 		Position pos;
 		_map->getSelectorPosition(&pos);
@@ -1169,7 +1154,7 @@ void BattlescapeState::mapOver(Action* action)
 
 				size_t row = 0;
 				std::wostringstream
-					woss,	// tst
+					woss,	// test
 					woss1,	// Console #1
 					woss2;	// Console #2
 				std::wstring
@@ -1320,24 +1305,8 @@ void BattlescapeState::mapOver(Action* action)
 				_txtConsole1->setText(woss1.str());
 				_txtConsole2->setText(woss2.str());
 			}
-//			else if (tile->hasNoFloor(_savedBattle->getTile(pos + Position(0, 0,-1))) == false)
-//				_txtFloor->setVisible();
 
 			updateTileInfo(tile);
-/*			std::wstring smokeInfo;
-			if (tile->getSmoke() > 0)
-				smokeInfo = L"sk " + Text::formatNumber(tile->getSmoke(), L"", false);
-			else
-				smokeInfo = L"";
-
-			smokeInfo += L"\n";
-
-			if (tile->getFire() > 0)
-				smokeInfo += L"fr " + Text::formatNumber(tile->getFire(), L"", false);
-			else
-				smokeInfo += L"";
-
-			_txtSmoke->setText(smokeInfo); */
 		}
 
 		_txtTerrain->setVisible(showInfo);
@@ -1345,7 +1314,6 @@ void BattlescapeState::mapOver(Action* action)
 		_txtTurn->setVisible(showInfo);
 		_lstSoldierInfo->setVisible(showInfo);
 		_txtHasKill->setVisible(showInfo);
-//		_txtSmoke->setVisible(showInfo);
 	} // kL_end.
 }
 
@@ -1896,10 +1864,10 @@ void BattlescapeState::selectNextFactionUnit(
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _savedBattle->selectNextFactionUnit(
-															checkReselect,
-															setDontReselect,
-															checkInventory);
+		BattleUnit* const unit = _savedBattle->selectNextFactionUnit(
+																checkReselect,
+																setDontReselect,
+																checkInventory);
 		updateSoldierInfo();
 
 		if (unit != NULL)
@@ -1927,10 +1895,10 @@ void BattlescapeState::selectPreviousFactionUnit(
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _savedBattle->selectPreviousFactionUnit(
-																checkReselect,
-																setDontReselect,
-																checkInventory);
+		BattleUnit* const unit = _savedBattle->selectPreviousFactionUnit(
+																	checkReselect,
+																	setDontReselect,
+																	checkInventory);
 		updateSoldierInfo();
 
 		if (unit != NULL)
@@ -2006,8 +1974,9 @@ void BattlescapeState::btnStatsClick(Action* action)
 			&& SDL_MOUSEBUTTONUP == action->getDetails()->type
 			&& SDL_BUTTON_LEFT == action->getDetails()->button.button)
 		{
-			int posX = action->getXMouse();
-			int posY = action->getYMouse();
+			const int
+				posX = action->getXMouse(),
+				posY = action->getYMouse();
 			if ((posX < Camera::SCROLL_BORDER * action->getXScale()
 					&& posX > 0)
 				|| posX > (_map->getWidth() - Camera::SCROLL_BORDER) * action->getXScale()
@@ -2276,7 +2245,7 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
 
-		Action a = Action(&ev, 0.0, 0.0, 0, 0);
+		Action a = Action(&ev, 0., 0., 0, 0);
 		action->getSender()->mousePress(&a, this);
 
 		if (_battleGame->getSave()->getSelectedUnit() != NULL)
@@ -2592,32 +2561,32 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	const int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setValue(ceil(
-							static_cast<double>(tu) / stat * 100.0));
+							static_cast<double>(tu) / stat * 100.));
 
 	stat = static_cast<double>(selectedUnit->getBaseStats()->stamina);
 	const int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setValue(ceil(
-							static_cast<double>(energy) / stat * 100.0));
+							static_cast<double>(energy) / stat * 100.));
 
 	stat = static_cast<double>(selectedUnit->getBaseStats()->health);
 	const int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_barHealth->setValue(ceil(
-							static_cast<double>(health) / stat * 100.0));
+							static_cast<double>(health) / stat * 100.));
 	_barHealth->setValue2(ceil(
-							static_cast<double>(selectedUnit->getStun()) / stat * 100.0));
+							static_cast<double>(selectedUnit->getStun()) / stat * 100.));
 
 	const int morale = selectedUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
 	_barMorale->setValue(morale);
 
 
-	BattleItem
+	const BattleItem
 		* const rtItem = selectedUnit->getItem("STR_RIGHT_HAND"),
 		* const ltItem = selectedUnit->getItem("STR_LEFT_HAND");
 
-	std::string activeHand = selectedUnit->getActiveHand();
+	const std::string activeHand = selectedUnit->getActiveHand();
 	if (activeHand != "")
 	{
 		int
@@ -2659,32 +2628,32 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			}
 		}
 
-		if (tuLaunch)
+		if (tuLaunch != 0)
 		{
 			_numTULaunch->setValue(tuLaunch);
 			_numTULaunch->setVisible();
 		}
 
-		if (tuAim)
+		if (tuAim != 0)
 		{
 			_numTUAim->setValue(tuAim);
 			_numTUAim->setVisible();
 		}
 
-		if (tuAuto)
+		if (tuAuto != 0)
 		{
 			_numTUAuto->setValue(tuAuto);
 			_numTUAuto->setVisible();
 		}
 
-		if (tuSnap)
+		if (tuSnap != 0)
 		{
 			_numTUSnap->setValue(tuSnap);
 			_numTUSnap->setVisible();
 		}
 	}
 
-	if (rtItem)
+	if (rtItem != NULL)
 	{
 		rtItem->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -2692,18 +2661,18 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_btnRightHandItem->setVisible();
 
 		if (rtItem->getRules()->getBattleType() == BT_FIREARM
-			&& (rtItem->needsAmmo()
+			&& (rtItem->needsAmmo() == true
 				|| rtItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible();
-			if (rtItem->getAmmoItem())
+			if (rtItem->getAmmoItem() != NULL)
 				_numAmmoRight->setValue(rtItem->getAmmoItem()->getAmmoQuantity());
 			else
 				_numAmmoRight->setValue(0);
 		}
 	}
 
-	if (ltItem)
+	if (ltItem != NULL)
 	{
 		ltItem->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -2711,11 +2680,11 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_btnLeftHandItem->setVisible();
 
 		if (ltItem->getRules()->getBattleType() == BT_FIREARM
-			&& (ltItem->needsAmmo()
+			&& (ltItem->needsAmmo() == true
 				|| ltItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible();
-			if (ltItem->getAmmoItem())
+			if (ltItem->getAmmoItem() != NULL)
 				_numAmmoLeft->setValue(ltItem->getAmmoItem()->getAmmoQuantity());
 			else
 				_numAmmoLeft->setValue(0);
@@ -3585,8 +3554,6 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtHasKill->setVisible();
 
 	_lstTileInfo->setVisible(false);
-//	_txtFloor->setVisible(false);
-//	_txtSmoke->setVisible(false);
 }
 
 /**
@@ -3598,7 +3565,6 @@ void BattlescapeState::mouseOutIcons(Action*)
 	_mouseOverIcons = false;
 
 	_lstTileInfo->setVisible();
-//	_txtSmoke->setVisible();
 }
 
 /**
@@ -3753,11 +3719,6 @@ void BattlescapeState::toggleIcons(bool vis)
 	_txtHasKill->setVisible(vis);
 
 	_lstTileInfo->setVisible(vis);
-//	if (vis == false)
-//	{
-//		_txtFloor->setVisible(vis);
-//		_txtSmoke->setVisible(vis);
-//	}
 }
 
 /**
@@ -3765,7 +3726,6 @@ void BattlescapeState::toggleIcons(bool vis)
  */
 void BattlescapeState::refreshVisUnits() // kL
 {
-	//Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
 	if (playableUnitSelected() == false)
 		return;
 
@@ -3782,10 +3742,7 @@ void BattlescapeState::refreshVisUnits() // kL
 
 	BattleUnit* selectedUnit = NULL;
 	if (_savedBattle->getSelectedUnit())
-	{
 		selectedUnit = _savedBattle->getSelectedUnit();
-		//Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
-	}
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -3896,7 +3853,7 @@ Bar* BattlescapeState::getEnergyBar() const // kL
 /**
  * kL. Updates experience data for the currently selected soldier.
  */
-void BattlescapeState::updateExpData() // kL
+void BattlescapeState::updateExperienceInfo() // kL
 {
 	_lstSoldierInfo->clearList();
 	_txtHasKill->setText(L"");
@@ -3913,13 +3870,13 @@ void BattlescapeState::updateExpData() // kL
 
 
 	std::vector<std::wstring> xpType;
-	xpType.push_back(L"f ");
-	xpType.push_back(L"t ");
-	xpType.push_back(L"m ");
-	xpType.push_back(L"r ");
-	xpType.push_back(L"b ");
-	xpType.push_back(L"p ");
-	xpType.push_back(L"p ");
+	xpType.push_back(L"f "); // firing
+	xpType.push_back(L"t "); // throwing
+	xpType.push_back(L"m "); // melee
+	xpType.push_back(L"r "); // reactions
+	xpType.push_back(L"b "); // bravery
+	xpType.push_back(L"p "); // psiSkill
+	xpType.push_back(L"p "); // psiStrength
 
 	const int xp[] =
 	{
@@ -3963,15 +3920,15 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 
 	const int info[] =
 	{
-		1 - static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0, 0,-1)))),
+		static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0, 0,-1)))),
 		tile->getSmoke(),
 		tile->getFire()
 	};
 
 	std::vector<std::wstring> infoType;
-	infoType.push_back(L"f ");
-	infoType.push_back(L"s ");
-	infoType.push_back(L"f ");
+	infoType.push_back(L"F "); // Floor
+	infoType.push_back(L"s "); // smoke
+	infoType.push_back(L"f "); // fire
 
 
 	for (int
@@ -3979,12 +3936,42 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 			i < 3;
 			++i)
 	{
-		_lstTileInfo->addRow(
-						2,
-						Text::formatNumber(info[i]).c_str(),
-						infoType.at(i).c_str());
+		Uint8 color;
 
-		_lstTileInfo->setCellColor(i, 0, Palette::blockOffset(0));
+		if (i == 0)
+		{
+			if (info[i] == 0)
+				color = Palette::blockOffset(3); // green, Floor
+			else
+				color = Palette::blockOffset(1); // orange, NO Floor
+
+			_lstTileInfo->addRow(
+							2,
+							L"F",
+							infoType.at(i).c_str());
+
+			_lstTileInfo->setCellColor(i, 0, color);
+		}
+		else
+		{
+			if (i == 1)
+				color = Palette::blockOffset(0); // white, smoke
+			else
+				color = Palette::blockOffset(2); // red, fire
+
+			std::wstring value;
+			if (info[i] != 0)
+				value = Text::formatNumber(info[i]).c_str();
+			else
+				value = L"";
+
+			_lstTileInfo->addRow(
+							2,
+							value.c_str(),
+							infoType.at(i).c_str());
+
+			_lstTileInfo->setCellColor(i, 0, color);
+		}
 	}
 }
 

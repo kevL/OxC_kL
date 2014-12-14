@@ -158,10 +158,8 @@ private:
 //		* _txtConsole3,
 //		* _txtConsole4,
 		* _txtDebug,
-		* _txtFloor,
 		* _txtHasKill,
 		* _txtName,
-		* _txtSmoke,
 		* _txtShade,
 		* _txtTerrain,
 //		* _txtTooltip;
@@ -395,7 +393,7 @@ private:
 		Bar* getEnergyBar() const; // kL
 
 		/// kL. Updates experience data for the currently selected soldier.
-		void updateExpData(); // kL
+		void updateExperienceInfo(); // kL
 		/// kL. Updates tile info for the tile under mouseover.
 		void updateTileInfo(const Tile* const tile); // kL
 

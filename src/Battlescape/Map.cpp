@@ -67,10 +67,10 @@
 #include "../Ruleset/Ruleset.h"
 
 /*
-1) Map origin is top corner.
-2) X axis goes downright. (width of the map)
-3) Y axis goes downleft. (length of the map
-4) Z axis goes up (height of the map)
+Map origin is top corner (NW corner).
+- X axis goes downright (width of the map) eastward
+- Y axis goes downleft (length of the map) southward
+- Z axis goes up (height of the map) upward
 
    0,0
     /\
@@ -125,18 +125,17 @@ Map::Map(
 		_smoothingEngaged(false),
 		_noDraw(false)
 {
-	//Log(LOG_INFO) << "Create Map";
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 	_messageColor = _game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color;
 
 	_previewSetting	= Options::battleNewPreviewPath;
-	if (Options::traceAI) // turn everything on because we want to see the markers.
+	if (Options::traceAI == true) // turn everything on because we want to see the markers.
 		_previewSetting = PATH_FULL;
 
-	_res			= _game->getResourcePack();
-	_spriteWidth	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
-	_spriteHeight	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
+	_res = _game->getResourcePack();
+	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
+	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
@@ -191,7 +190,6 @@ Map::Map(
  */
 Map::~Map()
 {
-	//Log(LOG_INFO) << "Delete Map";
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
 	delete _arrow;
@@ -205,7 +203,7 @@ Map::~Map()
  */
 void Map::init()
 {
-	// load the unit-selected bobbing-arrow into a surface
+	// load the unit-selected bobbing arrow into a surface
 	const int
 		f = Palette::blockOffset(1),	// Fill, yellow
 		b = 14,							// Border, black
@@ -346,7 +344,7 @@ void Map::draw()
 //	Surface::draw();
 	clear(Palette::blockOffset(0)+15);
 
-	Tile* tile = NULL;
+	const Tile* tile = NULL;
 
 	if (_projectile != NULL)
 //kL	&& _save->getSide() == FACTION_PLAYER)
@@ -357,7 +355,7 @@ void Map::draw()
 									_projectile->getPosition(0).y / 16,
 									_projectile->getPosition(0).z / 24));
 		if (tile != NULL
-			&& (tile->getVisible()
+			&& (tile->getVisible() == true
 				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
 			//Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
@@ -370,7 +368,7 @@ void Map::draw()
 
 	if (_explosions.empty() == false)
 	{
-		for (std::list<Explosion*>::iterator
+		for (std::list<Explosion*>::const_iterator
 				i = _explosions.begin();
 				i != _explosions.end();
 				++i)
@@ -380,8 +378,8 @@ void Map::draw()
 										(*i)->getPosition().y / 16,
 										(*i)->getPosition().z / 24));
 			if (tile != NULL
-				&& (tile->getVisible()
-					|| (*i)->isBig()
+				&& (tile->getVisible() == true
+					|| (*i)->isBig() == true
 					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
 			{
 				_explosionInFOV = true;
@@ -405,12 +403,12 @@ void Map::draw()
 	if (_noDraw == false) // don't draw if MiniMap is open.
 	{
 		if (_save->getSelectedUnit() == NULL
-			|| (_save->getSelectedUnit()
-				&& _save->getSelectedUnit()->getVisible())
-			|| _unitDying
-			|| _save->getDebugMode()
-			|| _projectileInFOV
-			|| _explosionInFOV)
+			|| (_save->getSelectedUnit() != NULL
+				&& _save->getSelectedUnit()->getVisible() == true)
+			|| _unitDying == true
+			|| _save->getDebugMode() == true
+			|| _projectileInFOV == true
+			|| _explosionInFOV == true)
 		{
 			//Log(LOG_INFO) << ". . drawTerrain()";
 			kL_noReveal = false;
@@ -422,8 +420,8 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . blit( Hidden Movement )";
 			if (kL_noReveal == false)
 			{
-				SDL_Delay(372);
 				kL_noReveal = true;
+				SDL_Delay(372);
 			}
 
 			_hidden->blit(this);
@@ -556,7 +554,7 @@ void Map::drawTerrain(Surface* surface)
 
 		if (_projectileInFOV == true)
 		{
-			if (Options::battleSmoothCamera)
+			if (Options::battleSmoothCamera == true)
 			{
 				if (_launch == true)
 				{
@@ -597,7 +595,7 @@ void Map::drawTerrain(Surface* surface)
 								surface->getWidth() / 2 - bulletScreen.x,
 								_visibleMapHeight / 2 - bulletScreen.y);
 
-					int posBullet_z = _projectile->getPosition().z / 24;
+					const int posBullet_z = _projectile->getPosition().z / 24;
 					if (_camera->getViewLevel() != posBullet_z)
 					{
 						if (_camera->getViewLevel() > posBullet_z)
@@ -672,10 +670,8 @@ void Map::drawTerrain(Surface* surface)
 
 	beginY -= (_camera->getViewLevel() * 2);
 	beginX -= (_camera->getViewLevel() * 2);
-	if (beginX < 0)
-		beginX = 0;
-	if (beginY < 0)
-		beginY = 0;
+	if (beginX < 0) beginX = 0;
+	if (beginY < 0) beginY = 0;
 
 	const bool
 		pathPreview = _save->getPathfinding()->isPathPreviewed();
@@ -727,7 +723,7 @@ void Map::drawTerrain(Surface* surface)
 										&screenPosition);
 				screenPosition += _camera->getMapOffset();
 
-				if (screenPosition.x > -_spriteWidth // only render cells that are inside the surface
+				if (   screenPosition.x > -_spriteWidth // only render cells that are inside the surface
 					&& screenPosition.x < surface->getWidth() + _spriteWidth
 					&& screenPosition.y > -_spriteHeight
 					&& screenPosition.y < surface->getHeight() + _spriteHeight)
@@ -737,7 +733,7 @@ void Map::drawTerrain(Surface* surface)
 					if (tile == NULL)
 						continue;
 
-					if (tile->isDiscovered(2))
+					if (tile->isDiscovered(2) == true)
 						tileShade = tile->getShade();
 					else
 					{
@@ -762,11 +758,11 @@ void Map::drawTerrain(Surface* surface)
 						// kL_begin:
 						hasFloor = true;
 
-						Tile* tileEastDown = _save->getTile(mapPosition + Position(1, 0, -1));
+						const Tile* const tileEastDown = _save->getTile(mapPosition + Position(1, 0, -1));
 						if (tileEastDown != NULL)
 						{
-							BattleUnit* bu = tileEastDown->getUnit();
-							Tile* tileEast = _save->getTile(mapPosition + Position(1, 0, 0));
+							BattleUnit* const bu = tileEastDown->getUnit();
+							const Tile* const tileEast = _save->getTile(mapPosition + Position(1, 0, 0));
 							if (bu != NULL
 								&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
 							{
@@ -774,7 +770,8 @@ void Map::drawTerrain(Surface* surface)
 								// also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								// ... should probably be a subfunction
 								if (bu != _save->getSelectedUnit()
-									&& bu->getGeoscapeSoldier() != NULL)
+									&& bu->getGeoscapeSoldier() != NULL
+									&& bu->getFaction() == bu->getOriginalFaction())
 								{
 									Position offset;
 									calculateWalkingOffset(bu, &offset);
@@ -848,9 +845,9 @@ void Map::drawTerrain(Surface* surface)
 						{
 							if (_cursorType != CT_AIM)
 							{
-								if (unit
-									&& (unit->getVisible()
-										|| _save->getDebugMode())
+								if (unit != NULL
+									&& (unit->getVisible() == true
+										|| _save->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _save->getSide()))
 								{
@@ -861,8 +858,9 @@ void Map::drawTerrain(Surface* surface)
 							}
 							else // CT_AIM ->
 							{
-								if (unit
-									&& (unit->getVisible() || _save->getDebugMode()))
+								if (unit != NULL
+									&& (unit->getVisible() == true
+										|| _save->getDebugMode() == true))
 								{
 									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
 								}
@@ -894,7 +892,7 @@ void Map::drawTerrain(Surface* surface)
 // START ADVANCED DRAWING CYCLE:
 					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
-						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
+						const Tile* const tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* buNorth = NULL;
 
 						int
@@ -904,7 +902,7 @@ void Map::drawTerrain(Surface* surface)
 							tileNorthWestShade,
 							tileSouthWestShade;
 
-						if (tileNorth->isDiscovered(2))
+						if (tileNorth->isDiscovered(2) == true)
 						{
 							buNorth = tileNorth->getUnit();
 							tileNorthShade = tileNorth->getShade();
@@ -913,12 +911,12 @@ void Map::drawTerrain(Surface* surface)
 							tileNorthShade = 16;
 
 						// Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
-						if (buNorth
-							&& buNorth->getVisible()
+						if (buNorth != NULL
+							&& buNorth->getVisible() == true
 							&& buNorth->getStatus() == STATUS_WALKING
 							&& tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
-							Position tileOffset = Position(16,-8, 0);
+							const Position tileOffset = Position(16,-8, 0);
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending
 							// on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
@@ -954,8 +952,8 @@ void Map::drawTerrain(Surface* surface)
 									|| buNorth->getDirection() == 4)
 								&& mapPosition.y >= 2)
 							{
-								Tile* tileTwoNorth = _save->getTile(mapPosition - Position(0, 2, 0));
-								if (tileTwoNorth->isDiscovered(2))
+								const Tile* const tileTwoNorth = _save->getTile(mapPosition - Position(0, 2, 0));
+								if (tileTwoNorth->isDiscovered(2) == true)
 									tileTwoNorthShade = tileTwoNorth->getShade();
 								else
 									tileTwoNorthShade = 16;
@@ -975,8 +973,8 @@ void Map::drawTerrain(Surface* surface)
 							// Phase III: render any south wall type objects in the tile to the northWest
 							if (mapPosition.x > 0)
 							{
-								Tile* tileNorthWest = _save->getTile(mapPosition - Position(1, 1, 0));
-								if (tileNorthWest->isDiscovered(2))
+								const Tile* const tileNorthWest = _save->getTile(mapPosition - Position(1, 1, 0));
+								if (tileNorthWest->isDiscovered(2) == true)
 									tileNorthWestShade = tileNorthWest->getShade();
 								else
 									tileNorthWestShade = 16;
@@ -994,7 +992,7 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// Phase IV: render any south or east wall type objects in the tile to the north
-							if (tileNorth->getMapData(MapData::O_OBJECT)
+							if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > 5
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 							{
@@ -1016,8 +1014,8 @@ void Map::drawTerrain(Surface* surface)
 										|| buNorth->getDirection() == 5)
 									&& mapPosition.y < endY - 1)
 								{
-									Tile* tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
-									if (tileSouthWest->isDiscovered(2))
+									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
+									if (tileSouthWest->isDiscovered(2) == true)
 										tileSouthWestShade = tileSouthWest->getShade();
 									else
 										tileSouthWestShade = 16;
@@ -1033,11 +1031,11 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Phase VI: we need to re-render everything in the tile to the west.
-								Tile* tileWest = _save->getTile(mapPosition - Position(1, 0, 0));
-								BattleUnit* buWest = NULL;
+								const Tile* const tileWest = _save->getTile(mapPosition - Position(1, 0, 0));
+								const BattleUnit* buWest = NULL;
 
 								int tileWestShade;
-								if (tileWest->isDiscovered(2))
+								if (tileWest->isDiscovered(2) == true)
 								{
 									buWest = tileWest->getUnit();
 									tileWestShade = tileWest->getShade();
@@ -1049,9 +1047,9 @@ void Map::drawTerrain(Surface* surface)
 								if (tmpSurface
 									&& buNorth != unit)
 								{
-									if ((tileWest->getMapData(MapData::O_WESTWALL)->isDoor()
-											|| tileWest->getMapData(MapData::O_WESTWALL)->isUFODoor())
-										&& tileWest->isDiscovered(0))
+									if ((tileWest->getMapData(MapData::O_WESTWALL)->isDoor() == true
+											|| tileWest->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
+										&& tileWest->isDiscovered(0) == true)
 									{
 										wallShade = tileWest->getShade();
 									}
@@ -1069,9 +1067,9 @@ void Map::drawTerrain(Surface* surface)
 								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
 								if (tmpSurface)
 								{
-									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor()
-											|| tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-										&& tileWest->isDiscovered(1))
+									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() == true
+											|| tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
+										&& tileWest->isDiscovered(1) == true)
 									{
 										wallShade = tileWest->getShade();
 									}
@@ -1113,7 +1111,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// draw an item on top of the floor (if any)
-								int sprite = tileWest->getTopItemSprite();
+								const int sprite = tileWest->getTopItemSprite();
 								if (sprite != -1)
 								{
 									tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
@@ -1126,13 +1124,13 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw soldier
-								if (buWest
+								if (buWest != NULL
 									&& buWest->getStatus() != STATUS_WALKING
-									&& (!tileWest->getMapData(MapData::O_OBJECT)
+									&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
-									&& (buWest->getVisible()
-										|| _save->getDebugMode()))
+									&& (buWest->getVisible() == true
+										|| _save->getDebugMode() == true))
 								{
 									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 									int part = 0;
@@ -1168,8 +1166,8 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
-								if (tileWest->getSmoke()
-									&& tileWest->isDiscovered(2))
+								if (tileWest->getSmoke() > 0
+									&& tileWest->isDiscovered(2) == true)
 								{
 									frame = 0;
 									int shade = 0;
@@ -1200,7 +1198,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw object
-								if (tileWest->getMapData(MapData::O_OBJECT)
+								if (tileWest->getMapData(MapData::O_OBJECT) != NULL
 									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() > 5
 									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 								{
@@ -1245,9 +1243,9 @@ void Map::drawTerrain(Surface* surface)
 						tmpSurface = tile->getSprite(MapData::O_WESTWALL);
 						if (tmpSurface)
 						{
-							if (tile->isDiscovered(0)
-								&& (tile->getMapData(MapData::O_WESTWALL)->isDoor()
-									|| tile->getMapData(MapData::O_WESTWALL)->isUFODoor()))
+							if (tile->isDiscovered(0) == true
+								&& (tile->getMapData(MapData::O_WESTWALL)->isDoor() == true
+									|| tile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true))
 							{
 								wallShade = tile->getShade();
 							}
@@ -1265,9 +1263,9 @@ void Map::drawTerrain(Surface* surface)
 						tmpSurface = tile->getSprite(MapData::O_NORTHWALL);
 						if (tmpSurface)
 						{
-							if (tile->isDiscovered(1)
-								&& (tile->getMapData(MapData::O_NORTHWALL)->isDoor()
-									|| tile->getMapData(MapData::O_NORTHWALL)->isUFODoor()))
+							if (tile->isDiscovered(1) == true
+								&& (tile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
+									|| tile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true))
 							{
 								wallShade = tile->getShade();
 							}
@@ -1290,7 +1288,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 						// Draw object
-						if (tile->getMapData(MapData::O_OBJECT)
+						if (tile->getMapData(MapData::O_OBJECT) != NULL
 							&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == 9))
 						{
@@ -1322,19 +1320,18 @@ void Map::drawTerrain(Surface* surface)
 						if (hasFloor == false
 							&& hasObject == false)
 						{
-							Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
+							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
 							if (tileBelow != NULL)
 							{
 								// make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
-								BattleUnit* buBelow = tileBelow->getUnit();
+								BattleUnit* const buBelow = tileBelow->getUnit();
 								if (buBelow != NULL
 									&& buBelow->getGeoscapeSoldier() != NULL
-									&& buBelow != _save->getSelectedUnit())
+									&& buBelow != _save->getSelectedUnit()
+									&& buBelow->getFaction() == buBelow->getOriginalFaction())
 								{
 									Position offset;
-									calculateWalkingOffset(
-														buBelow,
-														&offset);
+									calculateWalkingOffset(buBelow, &offset);
 
 									if (buBelow->getFatalWounds() > 0)
 									{
@@ -1397,14 +1394,14 @@ void Map::drawTerrain(Surface* surface)
 					{
 						tmpSurface = 0;
 
-						if (_projectile->getItem()) // thrown item ( grenade, etc.)
+						if (_projectile->getItem() != NULL) // thrown item ( grenade, etc.)
 						{
 							tmpSurface = _projectile->getSprite();
 
 							Position voxelPos = _projectile->getPosition();
 							// draw shadow on the floor
 							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-							if (voxelPos.x / 16 >= itX
+							if (   voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
@@ -1443,7 +1440,7 @@ void Map::drawTerrain(Surface* surface)
 						else // fired projectile ( a bullet-sprite, not a thrown item )
 						{
 							// draw bullet on the correct tile
-							if (itX >= bulletLowX
+							if (   itX >= bulletLowX
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
@@ -1475,7 +1472,7 @@ void Map::drawTerrain(Surface* surface)
 										Position voxelPos = _projectile->getPosition(1 - i);
 										// draw shadow on the floor
 										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-										if (voxelPos.x / 16 == itX
+										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
 //kL										&& _save->getTileEngine()->isVoxelVisible(voxelPos))
@@ -1495,7 +1492,7 @@ void Map::drawTerrain(Surface* surface)
 
 										// draw bullet itself
 										voxelPos = _projectile->getPosition(1 - i);
-										if (voxelPos.x / 16 == itX
+										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
 //kL										&& _save->getTileEngine()->isVoxelVisible(voxelPos))
@@ -1522,7 +1519,7 @@ void Map::drawTerrain(Surface* surface)
 					unit = tile->getUnit();
 					if (unit != NULL
 						&& (unit->getVisible() == true
-							|| _save->getDebugMode()))
+							|| _save->getDebugMode() == true))
 					{
 						//Log(LOG_INFO) << "draw Soldier ID = " << unit->getId();
 
@@ -1577,13 +1574,14 @@ void Map::drawTerrain(Surface* surface)
 							// kL_begin:
 //							if (drawRankIcon == true)
 							{
-								Tile* tileUp = _save->getTile(mapPosition + Position(0, 0, 1));
-								if (tileUp
+								const Tile* const tileUp = _save->getTile(mapPosition + Position(0, 0, 1));
+								if (tileUp != NULL
 									&& (tileUp->getSprite(MapData::O_FLOOR) == NULL
 										|| _camera->getViewLevel() == itZ))
 								{
 									if (unit != _save->getSelectedUnit()
-										&& unit->getGeoscapeSoldier() != NULL)
+										&& unit->getGeoscapeSoldier() != NULL
+										&& unit->getFaction() == unit->getOriginalFaction())
 //										&& unit->getUnitRules() == NULL)
 										//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
 //										&& unit->getFaction() == FACTION_PLAYER
@@ -1697,17 +1695,17 @@ void Map::drawTerrain(Surface* surface)
 					} // kL_end.
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs
-					Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
+					const Tile* const tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
 
 					if (itZ > 0
-						&& tile->hasNoFloor(tileBelow))
+						&& tile->hasNoFloor(tileBelow) == true)
 					{
-						Tile* ttile = _save->getTile(Position(itX, itY, itZ - 1));
-						BattleUnit* tunit = _save->selectUnit(Position(itX, itY, itZ - 1));
-						if (tunit
-							&& tunit->getVisible()
+						const Tile* const ttile = _save->getTile(Position(itX, itY, itZ - 1));
+						BattleUnit* const tunit = _save->selectUnit(Position(itX, itY, itZ - 1));
+						if (tunit != NULL
+							&& tunit->getVisible() == true
 							&& ttile->getTerrainLevel() < 0
-							&& ttile->isDiscovered(2))
+							&& ttile->isDiscovered(2) == true)
 						{
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending
 							// on the relative x/y position of this tile vs the actual unit position.
@@ -1746,7 +1744,7 @@ void Map::drawTerrain(Surface* surface)
 
 					// Draw smoke/fire
 					if (tile->getSmoke() > 0
-						&& tile->isDiscovered(2))
+						&& tile->isDiscovered(2) == true)
 					{
 						frame = 0;
 						int shade = 0;
@@ -1824,11 +1822,11 @@ void Map::drawTerrain(Surface* surface)
 
 					// Draw Path Preview
 					if (tile->getPreview() != -1
-						&& tile->isDiscovered(0)
+						&& tile->isDiscovered(0) == true
 						&& (_previewSetting & PATH_ARROWS))
 					{
 						if (itZ > 0
-							&& tile->hasNoFloor(tileBelow))
+							&& tile->hasNoFloor(tileBelow) == true)
 						{
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(11);
 							if (tmpSurface)
@@ -1860,7 +1858,7 @@ void Map::drawTerrain(Surface* surface)
 					if (tile->isVoid() == false) // THIS CAME BEFORE Draw Path Preview above in Old builds.
 					{
 						// Draw object
-						if (tile->getMapData(MapData::O_OBJECT)
+						if (tile->getMapData(MapData::O_OBJECT) != NULL
 							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > 5
 							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 						{
@@ -1886,9 +1884,9 @@ void Map::drawTerrain(Surface* surface)
 						{
 							if (_cursorType != CT_AIM)
 							{
-								if (unit
-									&& (unit->getVisible()
-										|| _save->getDebugMode())
+								if (unit != NULL
+									&& (unit->getVisible() == true
+										|| _save->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _save->getSide()))
 								{
@@ -1899,8 +1897,9 @@ void Map::drawTerrain(Surface* surface)
 							}
 							else // CT_AIM ->
 							{
-								if (unit
-									&& (unit->getVisible() || _save->getDebugMode()))
+								if (unit != NULL
+									&& (unit->getVisible() == true
+										|| _save->getDebugMode() == true))
 								{
 									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
 								}
@@ -1916,77 +1915,59 @@ void Map::drawTerrain(Surface* surface)
 									0);
 
 							// UFOExtender Accuracy: display adjusted accuracy value on crosshair (and more).
-							if (Options::battleUFOExtenderAccuracy)
+							if (Options::battleUFOExtenderAccuracy == true)
 							{
-//								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-/*								if (action->type == BA_SNAPSHOT
-									|| action->type == BA_AUTOSHOT
-									|| action->type == BA_AIMEDSHOT
-									|| action->type == BA_THROW) */
-//								{
 								if (_cursorType == CT_AIM) // indicator for Firing.
 								{
 									// kL_note: Use stuff from ProjectileFlyBState::init()
 									// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
 									// to turn accuracy to 'red 0' if target is out of LoS/LoF.
-									BattleAction* action = _save->getBattleGame()->getCurrentAction();
+									const BattleAction* const action = _save->getBattleGame()->getCurrentAction();
 
-									int accuracy = static_cast<int>(Round( // _save->getSelectedUnit()->
-															action->actor->getFiringAccuracy(
-																						action->type,
-																						action->weapon)
-																					* 100.));
+									int accuracy = static_cast<int>(Round(
+														action->actor->getFiringAccuracy(
+																					action->type,
+																					action->weapon)
+																				* 100.));
 
-									RuleItem* weapon = action->weapon->getRules();
-
-									int
-										upperLimit = 200,
-										lowerLimit = weapon->getMinRange(),
+									const RuleItem* const weaponRule = action->weapon->getRules();
+									const int
+										lowerLimit = weaponRule->getMinRange(),
 										distance = _save->getTileEngine()->distance(
 																				Position(
 																						itX,
 																						itY,
 																						itZ),
 																				action->actor->getPosition());
-
+									int upperLimit = 200;
 									switch (action->type)
 									{
-										case BA_AIMEDSHOT:
-											upperLimit = weapon->getAimRange();
-										break;
-										case BA_SNAPSHOT:
-											upperLimit = weapon->getSnapRange();
-										break;
-										case BA_AUTOSHOT:
-											upperLimit = weapon->getAutoRange();
-										break;
-
-										default:
-										break;
+										case BA_AIMEDSHOT: upperLimit = weaponRule->getAimRange(); break;
+										case BA_SNAPSHOT: upperLimit = weaponRule->getSnapRange(); break;
+										case BA_AUTOSHOT: upperLimit = weaponRule->getAutoRange();
 									}
 
 									Uint8 color = Palette::blockOffset(3)+3; // green
 
 									if (distance > upperLimit)
 									{
-										accuracy -= (distance - upperLimit) * weapon->getDropoff();
+										accuracy -= (distance - upperLimit) * weaponRule->getDropoff();
 										color = Palette::blockOffset(1)+2; // orange
 									}
 									else if (distance < lowerLimit)
 									{
-										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
+										accuracy -= (lowerLimit - distance) * weaponRule->getDropoff();
 										color = Palette::blockOffset(1)+2; // orange
 									}
 
 									if (accuracy < 1 // zero accuracy or out of range: set it red.
-										|| distance > weapon->getMaxRange())
+										|| distance > weaponRule->getMaxRange())
 									{
 										accuracy = 0;
 										color = Palette::blockOffset(2)+3; // red
 									}
 
-									//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
-									_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
+									_txtAccuracy->setValue(static_cast<unsigned int>(accuracy));
 									_txtAccuracy->setColor(color);
 									_txtAccuracy->draw();
 									_txtAccuracy->blitNShade(
@@ -1997,38 +1978,31 @@ void Map::drawTerrain(Surface* surface)
 								}
 								else if (_cursorType == CT_THROW) // indicator for Throwing.
 								{
-									//Log(LOG_INFO) << "Map::drawTerrain()";
-									BattleAction* action = _save->getBattleGame()->getCurrentAction();
-									Position
-										posOrigin = action->actor->getPosition(),
-										posTarget = Position(
+									BattleAction* const action = _save->getBattleGame()->getCurrentAction();
+									action->target = Position(
 															itX,
 															itY,
 															itZ);
-									action->target = posTarget;
 
-									Position originVoxel = _save->getTileEngine()->getOriginVoxel(
-																								*action,
-																								NULL);
-									Position targetVoxel = Position(
-																itX * 16 + 8,
-																itY * 16 + 8,
-																itZ * 24 + 2);
-									targetVoxel.z -= _save->getTile(posTarget)->getTerrainLevel();
-									//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
-									//Log(LOG_INFO) << ". targetVoxel = " << targetVoxel;
+									const Position
+										originVoxel = _save->getTileEngine()->getOriginVoxel(
+																						*action,
+																						NULL),
+										targetVoxel = Position(
+															itX * 16 + 8,
+															itY * 16 + 8,
+															itZ * 24 + 2 - _save->getTile(action->target)->getTerrainLevel());
 
-									unsigned accuracy = 0;
+									unsigned int accuracy = 0;
 									Uint8 color = Palette::blockOffset(2)+3; // red
 
 									const bool canThrow = _save->getTileEngine()->validateThrow(
 																							*action,
 																							originVoxel,
 																							targetVoxel);
-									//Log(LOG_INFO) << ". canThrow = " << canThrow;
 									if (canThrow == true)
 									{
-										accuracy = static_cast<unsigned>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.));
+										accuracy = static_cast<unsigned int>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.));
 										color = Palette::blockOffset(3)+3; // green
 									}
 
@@ -2041,7 +2015,6 @@ void Map::drawTerrain(Surface* surface)
 														screenPosition.y,
 														0);
 								}
-//								}
 							}
 						}
 						else if (_camera->getViewLevel() > itZ)
@@ -2059,9 +2032,9 @@ void Map::drawTerrain(Surface* surface)
 						if (_cursorType > 2
 							&& _camera->getViewLevel() == itZ)
 						{
-							int aFrame[6] = {0, 0, 0, 11, 13, 15};
+							const int arrowFrame[6] = {0, 0, 0, 11, 13, 15};
 
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(aFrame[_cursorType] + (_animFrame / 4));
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(arrowFrame[_cursorType] + (_animFrame / 4));
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
@@ -2070,8 +2043,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-					// Draw waypoints if any on this tile
-					int
+					int // Draw waypoints if any on this tile
 						waypid = 1,
 						waypXOff = 2,
 						waypYOff = 2;
@@ -2113,14 +2085,14 @@ void Map::drawTerrain(Surface* surface)
 							}
 						}
 
-						waypid++;
+						++waypid;
 					}
 
 
 					// kL_begin:
 					if (itZ == 0) // draw border-marks only on ground tiles
 					{
-						if (itX == 0
+						if (   itX == 0
 							|| itX == _save->getMapSizeX() - 1
 							|| itY == 0
 							|| itY == _save->getMapSizeY() - 1)
@@ -2154,11 +2126,12 @@ void Map::drawTerrain(Surface* surface)
 	// end Tiles_z looping.
 
 
-//kL	unit = (BattleUnit*)_save->getSelectedUnit();
-	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
-	if (unit
+//	unit = (BattleUnit*)_save->getSelectedUnit();
+//	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
+	unit = _save->getSelectedUnit();
+	if (unit != NULL
 		&& (_save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode())
+			|| _save->getDebugMode() == true)
 		&& unit->getPosition().z <= _camera->getViewLevel())
 	{
 		_camera->convertMapToScreen(
@@ -2176,7 +2149,7 @@ void Map::drawTerrain(Surface* surface)
 		if (unit->getArmor()->getSize() > 1)
 			offset.y += 6;
 
-		if (unit->isKneeled()
+		if (unit->isKneeled() == true
 			&& getCursorType() != CT_NONE) // DarkDefender
 		{
 			offset.y -= 5;
@@ -2212,7 +2185,7 @@ void Map::drawTerrain(Surface* surface)
 							0);
 	}
 
-	if (pathPreview)
+	if (pathPreview == true)
 	{
 		// make a border for the pathfinding display
 //		if (wpID) wpID->setBordered(true);
@@ -2242,7 +2215,7 @@ void Map::drawTerrain(Surface* surface)
 					screenPosition += _camera->getMapOffset();
 
 					// only render cells that are inside the surface
-					if (screenPosition.x > -_spriteWidth
+					if (   screenPosition.x > -_spriteWidth
 						&& screenPosition.x < surface->getWidth() + _spriteWidth
 						&& screenPosition.y > -_spriteHeight
 						&& screenPosition.y < surface->getHeight() + _spriteHeight)
@@ -2260,10 +2233,10 @@ void Map::drawTerrain(Surface* surface)
 //						int offset_y = 0; // kL
 						if (_previewSetting & PATH_ARROWS)
 						{
-							Tile* tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));
+							const Tile* const tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));
 
 							if (itZ > 0
-								&& tile->hasNoFloor(tileBelow))
+								&& tile->hasNoFloor(tileBelow) == true)
 							{
 								tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
 								if (tmpSurface)
@@ -2276,7 +2249,7 @@ void Map::drawTerrain(Surface* surface)
 											tile->getMarkerColor());
 							}
 
-							int overlay = tile->getPreview() + 12;
+							const int overlay = tile->getPreview() + 12;
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 							if (tmpSurface)
 								tmpSurface->blitNShade(
@@ -2295,7 +2268,7 @@ void Map::drawTerrain(Surface* surface)
 							if (tile->getTUMarker() > 9)
 								offset_x = 4;
 
-							if (_save->getSelectedUnit()
+							if (_save->getSelectedUnit() != NULL
 								&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
 								offset_y += 1;
@@ -2310,22 +2283,22 @@ void Map::drawTerrain(Surface* surface)
 							if (!(_previewSetting & PATH_ARROWS))
 							{
 								wpID->blitNShade(
-												surface,
-												screenPosition.x + 16 - offset_x,
-//kL											screenPosition.y + 29 - offset_y,
-												screenPosition.y + 37 - offset_y, // kL
-												0,
-												false,
-												tile->getMarkerColor());
+											surface,
+											screenPosition.x + 16 - offset_x,
+//											screenPosition.y + 29 - offset_y,
+											screenPosition.y + 37 - offset_y, // kL
+											0,
+											false,
+											tile->getMarkerColor());
 							}
 							else
 							{
 								wpID->blitNShade(
-												surface,
-												screenPosition.x + 16 - offset_x,
-//kL											screenPosition.y + 22 - offset_y,
-												screenPosition.y + 30 - offset_y, // kL
-												0);
+											surface,
+											screenPosition.x + 16 - offset_x,
+//											screenPosition.y + 22 - offset_y,
+											screenPosition.y + 30 - offset_y, // kL
+											0);
 							}
 						}
 					}
@@ -2333,14 +2306,14 @@ void Map::drawTerrain(Surface* surface)
 			}
 		}
 
-		// remove the border in case it's being used for missile waypoints.
+		// remove the border in case it's used for missile waypoints.
 //		if (wpID) wpID->setBordered(false);
 	}
 
 	delete wpID;
 
 
-	if (_explosionInFOV) // check if we got hit or explosion animations
+	if (_explosionInFOV == true) // check if we got hit or explosion animations
 	{
 		for (std::list<Explosion*>::const_iterator
 				i = _explosions.begin();
@@ -2353,7 +2326,7 @@ void Map::drawTerrain(Surface* surface)
 
 			if ((*i)->getCurrentFrame() > -1)
 			{
-				if ((*i)->isBig()) // explosion, http://ufopaedia.org/index.php?title=X1.PCK
+				if ((*i)->isBig() == true) // explosion, http://ufopaedia.org/index.php?title=X1.PCK
 				{
 					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 					tmpSurface->blitNShade(

@@ -1234,7 +1234,7 @@ void Tile::setMarkerColor(int color)
  * Gets the marker color on this tile.
  * @return, color of marker
  */
-int Tile::getMarkerColor()
+int Tile::getMarkerColor() const
 {
 	return _markerColor;
 }
@@ -1252,7 +1252,7 @@ void Tile::setVisible(bool vis)
  * Gets the tile visible flag.
  * @return, true if visible
  */
-bool Tile::getVisible()
+bool Tile::getVisible() const
 {
 	return _visible;
 }

@@ -288,12 +288,12 @@ protected:
 		/// Sets the tile marker color.
 		void setMarkerColor(int color);
 		/// Gets the tile marker color.
-		int getMarkerColor();
+		int getMarkerColor() const;
 
 		/// Sets the tile visible flag.
 		void setVisible(bool vis = true); // kL
 		/// Gets the tile visible flag.
-		bool getVisible(); // kL
+		bool getVisible() const; // kL
 
 		/// Sets the direction (used for path previewing)
 		void setPreview(int dir);

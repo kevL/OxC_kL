@@ -188,7 +188,7 @@ void BattlescapeGame::think()
 				_save->getBattleState()->updateSoldierInfo();
 			}
 
-			_parentState->updateExpData(); // kL
+			_parentState->updateExperienceInfo(); // kL
 		}
 
 		if (_save->getUnitsFalling() == true)

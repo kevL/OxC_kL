@@ -5393,8 +5393,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
 //				if (action->actor->getFaction() == FACTION_PLAYER
-				if (victim->getOriginalFaction() == FACTION_HOSTILE // aLiens must be reduced to 50- Morale before MC.
-					&& victim->getMorale() > 50)
+				if (victim->getOriginalFaction() == FACTION_HOSTILE // aLiens should be reduced to 50- Morale before MC.
+//					&& victim->getMorale() > 50)
+					&& RNG::percent(victim->getMorale() - 50) == true)
 				{
 					_battleSave->getBattleState()->warning("STR_PSI_RESIST");
 					return false;
@@ -5472,8 +5473,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 				calculateFOV(victim->getPosition());
 
 				// if all units from either faction are mind controlled - auto-end the mission.
-				if (Options::allowPsionicCapture
-					&& Options::battleAutoEnd
+				if (Options::allowPsionicCapture == true
+					&& Options::battleAutoEnd == true
 					&& _battleSave->getSide() == FACTION_PLAYER)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits";
@@ -5499,12 +5500,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
-		else if (victim->getOriginalFaction() == FACTION_PLAYER
-			&& Options::allowPsiStrengthImprovement)
+		else if (Options::allowPsiStrengthImprovement == true
+			&& victim->getOriginalFaction() == FACTION_PLAYER)
 		{
-			int resistXP = 1; // xCom resisted xCom
+			int resistXP = 1; // xCom resisted an xCom attempt
 			if (action->actor->getFaction() == FACTION_HOSTILE)
-				resistXP++; // xCom resisted aLien
+				++resistXP; // xCom resisted an aLien
 
 			victim->addPsiStrengthExp(resistXP);
 		}

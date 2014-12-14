@@ -444,12 +444,12 @@ void TextList::addRow(
 			shape2 = ARROW_SMALL_RIGHT;
 		}
 
-		ArrowButton* a1 = new ArrowButton(
-										shape1,
-										11,
-										8,
-										getX() + _arrowPos,
-										getY());
+		ArrowButton* const a1 = new ArrowButton(
+											shape1,
+											11,
+											8,
+											getX() + _arrowPos,
+											getY());
 		a1->setListButton();
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
@@ -458,12 +458,12 @@ void TextList::addRow(
 		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
 
-		ArrowButton* a2 = new ArrowButton(
-										shape2,
-										11,
-										8,
-										getX() + _arrowPos + 12,
-										getY());
+		ArrowButton* const a2 = new ArrowButton(
+											shape2,
+											11,
+											8,
+											getX() + _arrowPos + 12,
+											getY());
 		a2->setListButton();
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
