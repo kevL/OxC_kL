@@ -1810,7 +1810,7 @@ void UnitSprite::drawRoutine11()
 }
 
 /**
-* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16). // <- wtf. says routine 15 below.
+* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
 */
 void UnitSprite::drawRoutine12()
 {
@@ -1823,7 +1823,7 @@ void UnitSprite::drawRoutine12()
 	srf = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
 
-	if (_unit->getStatus() == STATUS_COLLAPSING && _drawingRoutine == 15)
+	if (_unit->getStatus() == STATUS_COLLAPSING && _drawingRoutine == 16)
 	{
 		// biodrone death frames
 		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());

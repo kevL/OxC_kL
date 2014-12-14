@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_NEWBATTLESTATE_H
 #define OPENXCOM_NEWBATTLESTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/State.h"
 

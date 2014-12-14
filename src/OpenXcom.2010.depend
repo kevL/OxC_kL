@@ -5572,7 +5572,7 @@
 1413136956 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1418548630 f:\git\openxcom\src\battlescape\tileengine.h
+1418593401 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5917,7 +5917,7 @@
 	<math.h>
 	"SDL.h"
 
-1413468655 f:\git\openxcom\src\battlescape\briefingstate.h
+1418595359 f:\git\openxcom\src\battlescape\briefingstate.h
 	"../Engine/State.h"
 
 1417396721 f:\git\openxcom\src\battlescape\minimapstate.h
@@ -5971,7 +5971,7 @@
 1414466440 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1417973908 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1418595437 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -6507,7 +6507,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1418553930 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1418593954 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6598,7 +6598,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1418053105 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1418593600 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -8147,9 +8147,7 @@
 	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 
-1413136959 f:\git\openxcom\src\menu\newbattlestate.h
-	<string>
-	<vector>
+1418594005 f:\git\openxcom\src\menu\newbattlestate.h
 	"../Engine/State.h"
 
 1413136959 f:\git\openxcom\src\menu\newgamestate.h
@@ -8161,7 +8159,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1417965618 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1418595265 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"

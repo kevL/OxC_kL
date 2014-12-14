@@ -5853,7 +5853,7 @@ bool TileEngine::validMeleeRange(
 
 /**
  * Gets the AI to look through a window.
- * @param position - reference the current position
+ * @param position - reference the current Position
  * @return, direction or -1 when no window found
  */
 int TileEngine::faceWindow(const Position& position)

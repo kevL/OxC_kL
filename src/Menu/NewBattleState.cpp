@@ -530,8 +530,9 @@ void NewBattleState::initSave()
 		}
 
 		UnitStats* const stats = soldier->getCurrentStats();
-//kL	stats->bravery = (int)ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
-		stats->bravery = static_cast<int>(floor((static_cast<double>(stats->bravery) / 10.0) + 0.5)) * 10; // kL, lulzor
+//		stats->bravery = (int)ceil(stats->bravery / 10.) * 10; // keep it a multiple of 10
+		stats->bravery = static_cast<int>(std::floor(
+						(static_cast<double>(stats->bravery) / 10.) + 0.5)) * 10; // kL, lulzor
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())
@@ -600,7 +601,7 @@ void NewBattleState::btnOkClick(Action*)
 	{
 		base = _craft->getBase();
 		bgen.setBase(base);
-		_craft = NULL;
+//		_craft = NULL;
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
 	{

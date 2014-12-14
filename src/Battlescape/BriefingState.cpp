@@ -57,8 +57,8 @@ namespace OpenXcom
  * @param base	- pointer to the Base in the mission (default NULL)
  */
 BriefingState::BriefingState(
-		Craft* craft,
-		Base* base)
+		const Craft* const craft,
+		Base* const base)
 {
 	_screen = true;
 
@@ -80,7 +80,7 @@ BriefingState::BriefingState(
 		background, // default: "BACK16.SCR", Ruleset/AlienDeployment.h
 		music; // default: OpenXcom::res_MUSIC_GEO_BRIEFING, Ruleset/AlienDeployment.h
 
-	AlienDeployment* deployment = _game->getRuleset()->getDeployment(mission);
+	const AlienDeployment* const deployment = _game->getRuleset()->getDeployment(mission);
 	if (deployment == NULL) // landing site or crash site.
 	{
 		backpal = 0;
@@ -93,7 +93,7 @@ BriefingState::BriefingState(
 	}
 	else
 	{
-		BriefingData dataBrief = deployment->getBriefingData();
+		const BriefingData dataBrief = deployment->getBriefingData();
 
 		backpal = dataBrief.palette;
 		background = dataBrief.background;
