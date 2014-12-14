@@ -352,7 +352,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																						_action->actor->getDirection(),
 																						_action->actor,
 																						NULL,
-																						&_action->target))
+																						&_action->target,
+																						false))
 			{
 				const Tile* const tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
 				if (tile != NULL

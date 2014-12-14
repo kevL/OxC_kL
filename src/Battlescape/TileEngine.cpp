@@ -5685,9 +5685,9 @@ Tile* TileEngine::applyGravity(Tile* tile)
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
-		BattleUnit* attacker,
-		BattleUnit* target,
-		int dir)
+		const BattleUnit* const attacker,
+		const BattleUnit* const target,
+		const int dir)
 {
 	return validMeleeRange(
 						attacker->getPosition(),
@@ -5699,19 +5699,21 @@ bool TileEngine::validMeleeRange(
 
 /**
  * Validates the melee range between a tile and a unit.
- * @param pos		- position to check from
- * @param dir		- direction to check
- * @param attacker	- pointer to an attacking unit
- * @param target	- pointer to the unit to attack (NULL = any unit)
- * @param dest		- pointer to destination position
+ * @param origin		- Position to check from
+ * @param dir			- direction to check
+ * @param attacker		- pointer to an attacking BattleUnit
+ * @param target		- pointer to the BattleUnit to attack (NULL = any unit)
+ * @param dest			- pointer to destination Position
+ * @param preferEnemy	- true if attacking a hostile unit; false if using medi-kit
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
-		Position pos,
-		int dir,
-		BattleUnit* attacker,
-		BattleUnit* target,
-		Position* dest)
+		const Position origin,
+		const int dir,
+		const BattleUnit* const attacker,
+		const BattleUnit* const target,
+		Position* const dest,
+		const bool preferEnemy)
 {
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (dir < 0 || 7 < dir)
@@ -5721,6 +5723,8 @@ bool TileEngine::validMeleeRange(
 	}
 	//Log(LOG_INFO) << ". dir = " << dir;
 
+	std::vector<BattleUnit*> potentialTargets;
+	const BattleUnit* chosenTarget = NULL;
 
 	Position posTarget;
 	Pathfinding::directionToVector(
@@ -5745,31 +5749,31 @@ bool TileEngine::validMeleeRange(
 		{
 			//Log(LOG_INFO) << ". iterate over Size";
 
-			tileOrigin = _battleSave->getTile(Position(pos + Position(x, y, 0)));
-			tileTarget = _battleSave->getTile(Position(pos + Position(x, y, 0) + posTarget));
+			tileOrigin = _battleSave->getTile(Position(origin + Position(x, y, 0)));
+			tileTarget = _battleSave->getTile(Position(origin + Position(x, y, 0) + posTarget));
 
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
 			{
 				//Log(LOG_INFO) << ". tile Origin & Target VALID";
-				tileTarget_above = _battleSave->getTile(Position(pos + Position(x, y, 1) + posTarget));
-				tileTarget_below = _battleSave->getTile(Position(pos + Position(x, y,-1) + posTarget));
+				tileTarget_above = _battleSave->getTile(Position(origin + Position(x, y, 1) + posTarget));
+				tileTarget_below = _battleSave->getTile(Position(origin + Position(x, y,-1) + posTarget));
 
 				if (tileTarget->getUnit() == NULL) // kL
 				{
 					//Log(LOG_INFO) << ". . no targetUnit";
 
-//kL				if (tileOrigin->getTerrainLevel() <= -16
+//					if (tileOrigin->getTerrainLevel() <= -16
 					if (tileTarget_above != NULL // kL_note: standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
 						&& tileOrigin->getTerrainLevel() < -7) // kL
-//kL					&& !tileTarget_above->hasNoFloor(tileTarget)) // kL_note: floaters...
+//						&& !tileTarget_above->hasNoFloor(tileTarget)) // kL_note: floaters...
 					{
 						//Log(LOG_INFO) << ". . . targetUnit on tileAbove";
 						tileTarget = tileTarget_above;
 					}
 					else if (tileTarget_below != NULL // kL_note: can reach target standing on a rise only 1/3 up z-axis on adjacent tileBelow.
 						&& tileTarget->hasNoFloor(tileTarget_below) == true
-//kL					&& tileTarget_below->getTerrainLevel() <= -16)
+//						&& tileTarget_below->getTerrainLevel() <= -16)
 						&& tileTarget_below->getTerrainLevel() < -7) // kL
 					{
 						//Log(LOG_INFO) << ". . . targetUnit on tileBelow";
@@ -5804,8 +5808,13 @@ bool TileEngine::validMeleeRange(
 							if (dest != NULL)
 								*dest = tileTarget->getPosition();
 
-							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
-							return true;
+							if (target != NULL)
+							{
+								//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
+								return true;
+							}
+							else
+								potentialTargets.push_back(tileTarget->getUnit());
 						}
 					}
 				}
@@ -5813,8 +5822,31 @@ bool TileEngine::validMeleeRange(
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
-	return false;
+	for (std::vector<BattleUnit*>::const_iterator
+			i = potentialTargets.begin();
+			i != potentialTargets.end();
+			++i)
+	{
+		if (chosenTarget == NULL)
+			chosenTarget = *i;
+		else if ((preferEnemy == true
+				&& (*i)->getFaction() != attacker->getFaction())
+			|| (preferEnemy == false
+				&& (*i)->getFaction() == attacker->getFaction()))
+//				&& (*i)->getFatalWounds() > chosenTarget->getFatalWounds()))
+		{
+			chosenTarget = *i;
+		}
+	}
+
+	if (dest != NULL
+		&& chosenTarget != NULL)
+	{
+		*dest = chosenTarget->getPosition();
+	}
+
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT = " << (int)(chosenTarget != NULL);
+	return (chosenTarget != NULL);
 }
 
 /**

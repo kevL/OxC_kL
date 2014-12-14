@@ -259,16 +259,17 @@ private:
 
 		/// Returns melee validity between two units.
 		bool validMeleeRange(
-				BattleUnit* attacker,
-				BattleUnit* target,
-				int dir);
+				const BattleUnit* const attacker,
+				const BattleUnit* const target,
+				const int dir);
 		/// Returns validity of a melee attack from a given position.
 		bool validMeleeRange(
-				Position pos,
-				int dir,
-				BattleUnit* attacker,
-				BattleUnit* target,
-				Position* dest);
+				const Position origin,
+				const int dir,
+				const BattleUnit* const attacker,
+				const BattleUnit* const target,
+				Position* const dest,
+				const bool preferEnemy = true);
 
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& position);
