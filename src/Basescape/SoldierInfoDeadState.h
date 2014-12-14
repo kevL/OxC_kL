@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SOLDIERDEADINFOSTATE_H
 #define OPENXCOM_SOLDIERDEADINFOSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -113,7 +113,7 @@ private:
 		/// Updates the dead soldier info.
 		void init();
 
-		/// Set the soldier Id.
+		/// Sets the soldier Id.
 		void setSoldierID(size_t soldierID);
 
 		/// Handler for clicking the OK button.

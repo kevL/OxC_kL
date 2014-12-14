@@ -5325,16 +5325,13 @@
 1417634507 f:\git\openxcom\src\ruleset\rulesoldier.h
 	"../Ruleset/Unit.h"
 
-1417820485 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1418544550 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	"SoldierInfoDeadState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -5847,7 +5844,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1418514789 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1418523038 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6858,7 +6855,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1417312163 source:f:\git\openxcom\src\engine\options.cpp
+1418523297 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
@@ -6924,7 +6921,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1416059667 source:f:\git\openxcom\src\engine\screen.cpp
+1418523168 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -11531,7 +11528,7 @@
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
 
-1413136955 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
+1418543377 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
 1415853534 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
@@ -11556,7 +11553,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1417541726 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1418543840 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	"SoldierDiaryMissionState.h"
 	"SoldierDiaryPerformanceState.h"
@@ -11564,8 +11561,6 @@
 	"SoldierInfoDeadState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -11680,19 +11675,15 @@
 1418422502 source:f:\git\openxcom\src\ruleset\polygon.cpp
 	"Polygon.h"
 
-1413136955 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
-	<vector>
+1418543905 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
 	"../Engine/State.h"
 
-1415853532 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
+1418544392 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
 	"SoldierInfoDeadState.h"
-	<sstream>
 	"SoldierDiaryOverviewState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Bar.h"

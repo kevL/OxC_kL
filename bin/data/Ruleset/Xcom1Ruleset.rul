@@ -421,7 +421,7 @@ items:
     transferTime: 48
   - type: STR_AVALANCHE_MISSILES
     size: 1.3
-    costBuy: 85000
+    costBuy: 87200
     costSell: 17000
     transferTime: 48
     clipSize: 1
@@ -2786,66 +2786,87 @@ terrains:
       - name: XBASE_00
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_01
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_02
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_03
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_04
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_05
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_06
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_07
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_08
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_09
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_10
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_11
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_12
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_13
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_14
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_15
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_16
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_17
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_18
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_19
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
       - name: XBASE_20
         width: 10
         length: 10
+        revealedFloors: [ 0,1 ]
 mapScripts:
   - type: DEFAULT #forest, mountain
     commands:
@@ -9196,6 +9217,9 @@ extraStrings:
       STR_TOTAL_NET_UC: "TOTAL net"
       STR_LOADOUT: "Loadout"
       STR_RADAR_RANGE: "radar> {0}"
+      STR_DATE_DEATH: "Date o' Death"
+      STR_DATE_MISSION: "Date o' Mission"
+      STR_DATE_RECRUIT: "Recruited"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

@@ -1538,7 +1538,7 @@ inline void BattlescapeState::handle(Action* action)
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-			if (Options::debug)
+			if (Options::debug == true)
 			{
 				if (action->getDetails()->key.keysym.sym == SDLK_d			// "ctrl-d" - enable debug mode
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
@@ -1558,7 +1558,7 @@ inline void BattlescapeState::handle(Action* action)
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Influenza bacterium dispersed");
-					for (std::vector<BattleUnit*>::iterator
+					for (std::vector<BattleUnit*>::const_iterator
 							i = _savedBattle->getUnits()->begin();
 							i !=_savedBattle->getUnits()->end();
 							++i)
@@ -1571,10 +1571,10 @@ inline void BattlescapeState::handle(Action* action)
 						}
 					}
 				}
-				else if (action->getDetails()->key.keysym.sym == SDLK_F11)	// f11 - voxel map dump
+				else if (action->getDetails()->key.keysym.sym == SDLK_F10)	// f10 - voxel map dump
 					saveVoxelMap();
-				else if (action->getDetails()->key.keysym.sym == SDLK_F9	// f9 - ai
-					&& Options::traceAI)
+				else if (action->getDetails()->key.keysym.sym == SDLK_F9	// f9 - ai dump
+					&& Options::traceAI == true)
 				{
 					saveAIMap();
 				}
@@ -1582,19 +1582,19 @@ inline void BattlescapeState::handle(Action* action)
 			else if (_savedGame->isIronman() == false)						// quick save and quick load
 			{
 				// not works in debug mode to prevent conflict in hotkeys by default
-				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave) // f6
 					_game->pushState(new SaveGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
-				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad) // f5
 					_game->pushState(new LoadGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
 			}
 
-			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
+			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView) // f11
 				saveVoxelView();											// voxel view dump
 		}
 	}

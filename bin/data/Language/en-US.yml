@@ -1177,7 +1177,7 @@ en-US:
   STR_ALL_ALIENS_KILLED_IN_CRASH: "All Aliens killed in crash.{NEWLINE}{NEWLINE}Recovery Initiated"
   STR_RESET: "Reset"
   STR_MEMORIAL: ".eulogy"
-  STR_DATE_UC: "Date o' Death"
+  STR_DATE_UC: "Date"
   STR_SOLDIERS_RECRUITED: "Soldiers recruited> {ALT}{0}"
   STR_SOLDIERS_LOST: "Soldiers lost> {ALT}{0}"
   STR_PSISTRENGTHEVAL: "Psi-Strength evaluation"

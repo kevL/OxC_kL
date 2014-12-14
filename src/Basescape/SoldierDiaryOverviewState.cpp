@@ -28,8 +28,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -50,7 +50,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldiers screen.
- * @param base					- pointer to the base to get info from
+ * @param base					- pointer to the Base to get info from
  * @param soldierId				- ID of the selected soldier
  * @param soldierInfoState		-
  * @param soldierInfoDeadState	-
@@ -178,7 +178,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_txtStatus->setText(tr("STR_STATUS"));
 
 	_txtDate->setColor(Palette::blockOffset(15)+1);
-	_txtDate->setText(tr("STR_DATE_UC"));
+	_txtDate->setText(tr("STR_DATE_MISSION"));
 
 	_lstDiary->setColor(Palette::blockOffset(13));
 	_lstDiary->setArrowColor(Palette::blockOffset(15)+1);
@@ -234,7 +234,7 @@ void SoldierDiaryOverviewState::init()
 
 	if (_base == NULL)
 	{
-		if (_listDead->empty())
+		if (_listDead->empty() == true)
 		{
 			_game->popState();
 			return;
@@ -248,7 +248,7 @@ void SoldierDiaryOverviewState::init()
 	}
 	else
 	{
-		if (_list->empty())
+		if (_list->empty() == true)
 		{
 			_game->popState();
 			return;
@@ -264,15 +264,15 @@ void SoldierDiaryOverviewState::init()
 
 	_lstDiary->clearList();
 
-	std::vector<MissionStatistics*>* missionStatistics = _game->getSavedGame()->getMissionStatistics();
+	std::vector<MissionStatistics*>* const missionStatistics = _game->getSavedGame()->getMissionStatistics();
 	size_t row = 0;
 
-	for (std::vector<MissionStatistics*>::reverse_iterator
+	for (std::vector<MissionStatistics*>::const_reverse_iterator
 			j = missionStatistics->rbegin();
 			j != missionStatistics->rend();
 			++j)
 	{
-		int missionId = (*j)->id;
+		const int missionId = (*j)->id;
 		bool wasOnMission = false;
 
 		if (_base == NULL)
@@ -284,7 +284,7 @@ void SoldierDiaryOverviewState::init()
 						k != _soldierDead->getDiary()->getMissionIdList().end();
 						++k)
 				{
-					if (missionId == *k)
+					if (*k == missionId)
 					{
 						wasOnMission = true;
 						break;
@@ -299,7 +299,7 @@ void SoldierDiaryOverviewState::init()
 					k != _soldier->getDiary()->getMissionIdList().end();
 					++k)
 			{
-				if (missionId == *k)
+				if (*k == missionId)
 				{
 					wasOnMission = true;
 					break;
@@ -310,56 +310,56 @@ void SoldierDiaryOverviewState::init()
 		if (wasOnMission == false)
 			continue;
 
-		// See if this mission is part of the soldier's vector of missions
-		std::wstringstream
-			wssSuccess,
-			wssRating,
-			wssScore,
+		// This mission is part of the soldier's vector of missions.
+		std::wostringstream
+			wossSuccess,
+			wossRating,
+			wossScore,
 
-			wssRegion,
-			wssCountry,
+			wossRegion,
+			wossCountry,
 
-			wssHour,
-			wssMinute,
-			wssDay,
-			wssMonth,
-			wssYear;
+			wossHour,
+			wossMinute,
+			wossDay,
+			wossMonth,
+			wossYear;
 
-		if ((*j)->success)
-			wssSuccess << tr("STR_MISSION_WIN");
+		if ((*j)->success == true)
+			wossSuccess << tr("STR_MISSION_WIN");
 		else
-			wssSuccess << tr("STR_MISSION_LOSS");
+			wossSuccess << tr("STR_MISSION_LOSS");
 
-		wssRating << tr((*j)->rating.c_str());
-		wssScore << (*j)->score;
+		wossRating << tr((*j)->rating.c_str());
+		wossScore << (*j)->score;
 
-		wssRegion << tr((*j)->region.c_str());
-		wssCountry << tr((*j)->country.c_str());
+		wossRegion << tr((*j)->region.c_str());
+		wossCountry << tr((*j)->country.c_str());
 
-		wssMonth << tr((*j)->time.getMonthString().c_str());
-		wssDay << (*j)->time.getDayString(_game->getLanguage());
-		wssYear << (*j)->time.getYear();
+		wossMonth << tr((*j)->time.getMonthString().c_str());
+		wossDay << (*j)->time.getDayString(_game->getLanguage());
+		wossYear << (*j)->time.getYear();
 
-		std::wstringstream
-			wssStatus,
-			wssLocation;
+		std::wostringstream
+			wossStatus,
+			wossLocation;
 
 		if ((*j)->country == "STR_UNKNOWN")
-			wssLocation << wssRegion.str().c_str();
+			wossLocation << wossRegion.str().c_str();
 		else
-			wssLocation << wssCountry.str().c_str();
+			wossLocation << wossCountry.str().c_str();
 
-		wssStatus << wssSuccess.str().c_str() << " - " << wssRating.str().c_str();
+		wossStatus << wossSuccess.str().c_str() << " - " << wossRating.str().c_str();
 
 		_lstDiary->addRow(
 						5,
-						wssLocation.str().c_str(),
-						wssStatus.str().c_str(),
-						wssDay.str().c_str(),
-						wssMonth.str().c_str(),
-						wssYear.str().c_str());
+						wossLocation.str().c_str(),
+						wossStatus.str().c_str(),
+						wossDay.str().c_str(),
+						wossMonth.str().c_str(),
+						wossYear.str().c_str());
 
-		row++;
+		++row;
 	}
 
 	_lstDiary->scrollTo(_curRow);
@@ -402,12 +402,12 @@ void SoldierDiaryOverviewState::btnKillsClick(Action*)
 {
 	_curRow = _lstDiary->getScroll();
 
-	int _display = 0;
+	const int display = 0;
 	_game->pushState(new SoldierDiaryPerformanceState(
 												_base,
 												_soldierID,
 												this,
-												_display));
+												display));
 }
 
 /**
@@ -418,12 +418,12 @@ void SoldierDiaryOverviewState::btnMissionsClick(Action*)
 {
 	_curRow = _lstDiary->getScroll();
 
-	int _display = 1;
+	const int display = 1;
 	_game->pushState(new SoldierDiaryPerformanceState(
 												_base,
 												_soldierID,
 												this,
-												_display));
+												display));
 }
 
 /**
@@ -434,12 +434,12 @@ void SoldierDiaryOverviewState::btnCommendationsClick(Action*)
 {
 	_curRow = _lstDiary->getScroll();
 
-	int _display = 2;
+	const int display = 2;
 	_game->pushState(new SoldierDiaryPerformanceState(
 												_base,
 												_soldierID,
 												this,
-												_display));
+												display));
 }
 
 /**
@@ -459,7 +459,7 @@ void SoldierDiaryOverviewState::btnPrevClick(Action*)
 	if (_soldierID == 0)
 		_soldierID = rows - 1;
 	else
-		_soldierID--;
+		--_soldierID;
 
 	init();
 }
@@ -478,7 +478,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action*)
 	else
 		rows = _list->size();
 
-	_soldierID++;
+	++_soldierID;
 	if (_soldierID >= rows)
 		_soldierID = 0;
 
@@ -495,7 +495,7 @@ void SoldierDiaryOverviewState::lstDiaryInfoClick(Action*)
 //	{
 	_curRow = _lstDiary->getScroll();
 
-	size_t row = _lstDiary->getRows() - _lstDiary->getSelectedRow() - 1;
+	const size_t row = _lstDiary->getRows() - _lstDiary->getSelectedRow() - 1;
 	_game->pushState(new SoldierDiaryMissionState(
 												_base,
 												_soldierID,

@@ -164,23 +164,18 @@ Surface* Screen::getSurface()
  */
 void Screen::handle(Action* action)
 {
-	if (Options::debug)
+	if (Options::debug == true)
 	{
 		if (action->getDetails()->type == SDL_KEYDOWN
 			&& action->getDetails()->key.keysym.sym == SDLK_F8)
 		{
 			switch (Timer::gameSlowSpeed)
 			{
-				case 1:
-					Timer::gameSlowSpeed = 5;
-				break;
-				case 5:
-					Timer::gameSlowSpeed = 15;
-				break;
+				case 1: Timer::gameSlowSpeed = 5;	break;
+				case 5: Timer::gameSlowSpeed = 15;	break;
 
 				default:
 					Timer::gameSlowSpeed = 1;
-				break;
 			}
 		}
 	}

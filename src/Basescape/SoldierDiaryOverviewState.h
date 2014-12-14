@@ -38,8 +38,7 @@ class Window;
 
 
 /**
- * Medals screen that lets the player
- * see all the medals a soldier has.
+ * Medals screen that lets the player see all the medals a soldier has.
  */
 class SoldierDiaryOverviewState
 	:

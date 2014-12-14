@@ -19,7 +19,7 @@
 
 #include "SoldierInfoDeadState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "SoldierDiaryOverviewState.h"
 
@@ -27,8 +27,8 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/LocalizedText.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -79,9 +79,8 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_txtMissions	= new Text(100, 9, 130, 49);
 	_txtKills		= new Text(100, 9, 230, 49);
 
-	int
-		step = 11,
-		yPos = 80;
+	const int step = 11;
+	int yPos = 80;
 
 	_txtTimeUnits	= new Text(120, 9, 6, yPos);
 	_numTimeUnits	= new Text(18, 9, 131, yPos);
@@ -201,6 +200,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 
 	centerAllSurfaces();
 
+
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
@@ -238,7 +238,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_txtKills->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtDeath->setColor(Palette::blockOffset(13)+10);
-	_txtDeath->setText(tr("STR_DATE_UC"));
+	_txtDeath->setText(tr("STR_DATE_DEATH"));
 
 	_txtDate->setColor(Palette::blockOffset(13));
 
@@ -382,7 +382,7 @@ void SoldierInfoDeadState::init()
 {
 	State::init();
 
-	if (_list->empty())
+	if (_list->empty() == true)
 	{
 		_game->popState();
 		return;
@@ -394,13 +394,10 @@ void SoldierInfoDeadState::init()
 	_soldier = _list->at(_soldierID);
 	_txtSoldier->setText(_soldier->getName());
 
-	UnitStats* initial = _soldier->getInitStats();
-	UnitStats* current = _soldier->getCurrentStats();
-
-	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(_soldier->getRankSprite())->setX(0);
-	texture->getFrame(_soldier->getRankSprite())->setY(0);
-	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
+	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	baseBits->getFrame(_soldier->getRankSprite())->setX(0);
+	baseBits->getFrame(_soldier->getRankSprite())->setY(0);
+	baseBits->getFrame(_soldier->getRankSprite())->blit(_rank);
 
 	_gender->clear();
 	Surface* gender;
@@ -408,10 +405,11 @@ void SoldierInfoDeadState::init()
 		gender = _game->getResourcePack()->getSurface("GENDER_M");
 	else
 		gender = _game->getResourcePack()->getSurface("GENDER_F");
+
 	if (gender != NULL)
 		gender->blit(_gender);
 
-	SoldierDeath* death = _soldier->getDeath();
+	const SoldierDeath* const death = _soldier->getDeath();
 	std::wostringstream date;
 	date << death->getTime()->getDayString(_game->getLanguage());
 	date << L" ";
@@ -420,6 +418,10 @@ void SoldierInfoDeadState::init()
 	date << death->getTime()->getYear();
 	_txtDate->setText(date.str());
 
+
+	const UnitStats
+		* const initial = _soldier->getInitStats(),
+		* const current = _soldier->getCurrentStats();
 
 	std::wostringstream ss;
 
@@ -527,8 +529,8 @@ void SoldierInfoDeadState::init()
 	int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
 
 	if (current->psiSkill >= minPsi
-		|| (Options::psiStrengthEval
-			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+		|| (Options::psiStrengthEval == true
+			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 	{
 		ss.str(L"");
 		ss << current->psiStrength;
@@ -588,7 +590,7 @@ void SoldierInfoDeadState::btnNextClick(Action*)
 	if (_soldierID == 0)
 		_soldierID = _list->size() - 1;
 	else
-		_soldierID--;
+		--_soldierID;
 
 	init();
 }
@@ -600,7 +602,7 @@ void SoldierInfoDeadState::btnNextClick(Action*)
  */
 void SoldierInfoDeadState::btnPrevClick(Action*)
 {
-	_soldierID++;
+	++_soldierID;
 
 	if (_soldierID >= _list->size())
 		_soldierID = 0;
@@ -610,6 +612,7 @@ void SoldierInfoDeadState::btnPrevClick(Action*)
 
 /**
  * Set the soldier Id.
+ * @param soldierID - the ID for the current soldier
  */
 void SoldierInfoDeadState::setSoldierID(size_t soldierID)
 {
