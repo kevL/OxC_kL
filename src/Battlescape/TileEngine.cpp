@@ -5832,8 +5832,8 @@ bool TileEngine::validMeleeRange(
 		else if ((preferEnemy == true
 				&& (*i)->getFaction() != attacker->getFaction())
 			|| (preferEnemy == false
-				&& (*i)->getFaction() == attacker->getFaction()))
-//				&& (*i)->getFatalWounds() > chosenTarget->getFatalWounds()))
+				&& (*i)->getFaction() == attacker->getFaction()
+				&& (*i)->getFatalWounds() > chosenTarget->getFatalWounds()))
 		{
 			chosenTarget = *i;
 		}
