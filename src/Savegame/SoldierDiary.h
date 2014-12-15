@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SOLDIERDIARY_H
 #define OPENXCOM_SOLDIERDIARY_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "BattleUnit.h"
 #include "SavedGame.h"
@@ -68,7 +68,7 @@ private:
 		/// Get commendation noun.
 		std::string getNoun() const;
 		/// Get the commendation's decoration level's name.
-		std::string getDecorationLevelName(int skipCounter) const;
+		std::string getDecorationLevelName(const int skip) const;
 		/// Get the commendation's decoration description.
 		std::string getDecorationDescription() const;
 		/// kL. Get the commendation's decoration class.
@@ -140,8 +140,8 @@ private:
 			int criteria); */
 	///
 	void awardCommendation(
-			std::string type,
-			std::string noun = "noNoun");
+			const std::string type,
+			const std::string noun = "noNoun");
 
 
 	public:
@@ -159,18 +159,18 @@ private:
 
 		/// Update the diary statistics.
 		void updateDiary(
-				BattleUnitStatistics* unitStatistics,
-				MissionStatistics* missionStatistics,
-				Ruleset* rules);
+				const BattleUnitStatistics* const unitStatistics,
+				MissionStatistics* const missionStatistics,
+				const Ruleset* const rules);
 
 		/// Get the list of kills, mapped by rank.
-		std::map<std::string, int> getAlienRankTotal();
+		std::map<std::string, int> getAlienRankTotal() const;
 		/// Get the list of kills, mapped by race.
-		std::map<std::string, int> getAlienRaceTotal();
+		std::map<std::string, int> getAlienRaceTotal() const;
 		/// Get the list of kills, mapped by weapon used.
-		std::map<std::string, int> getWeaponTotal();
+		std::map<std::string, int> getWeaponTotal() const;
 		/// Get the list of kills, mapped by weapon ammo used.
-		std::map<std::string, int> getWeaponAmmoTotal();
+		std::map<std::string, int> getWeaponAmmoTotal() const;
 		/// Get the list of missions, mapped by region.
 		std::map<std::string, int>& getRegionTotal();
 		/// Get the list of missions, mapped by country.
@@ -197,7 +197,7 @@ private:
 		std::vector<SoldierCommendations*>* getSoldierCommendations();
 
 		/// Manage commendations, return true if a medal is awarded.
-		bool manageCommendations(Ruleset *rules);
+		bool manageCommendations(const Ruleset* const rules);
 
 		/// Increment the soldier's service time.
 		void addMonthlyService();

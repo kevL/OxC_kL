@@ -29,9 +29,9 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
-#include "../Engine/LocalizedText.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/LocalizedText.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -255,7 +255,7 @@ void CraftSoldiersState::init()
 
 	size_t row = 0;
 
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i,
@@ -263,7 +263,7 @@ void CraftSoldiersState::init()
 	{
 		_lstSoldiers->addRow(
 							3,
-							(*i)->getName(true, 19).c_str(),
+							(*i)->getName().c_str(),
 							tr((*i)->getRankString()).c_str(),
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 

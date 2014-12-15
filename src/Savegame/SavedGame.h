@@ -20,12 +20,12 @@
 #ifndef OPENXCOM_SAVEDGAME_H
 #define OPENXCOM_SAVEDGAME_H
 
-#include <map>
-#include <string>
-#include <vector>
+//#include <map>
+//#include <string>
+//#include <vector>
 
-#include <time.h>
-#include <stdint.h>
+//#include <time.h>
+//#include <stdint.h>
 
 #include "CraftId.h"
 #include "GameTime.h"
@@ -49,7 +49,7 @@ class RuleResearch;
 class Ruleset;
 class SavedBattleGame;
 class Soldier;
-class SoldierDead; // kL
+class SoldierDead;
 class Target;
 class TerrorSite;
 class TextList;
@@ -239,14 +239,13 @@ private:
 		_ironman,
 		_warned;
 	int
-		_curGraph, // kL
-//		_curGraphRowCountry, // kL
+		_curGraph,
 		_monthsPassed;
-//kL	_globeZoom,
+//		_globeZoom,
 	size_t
-		_curRowMatrix, // kL
-		_globeZoom; // kL
-//kL	_selectedBase;
+		_curRowMatrix,
+		_globeZoom;
+//		_selectedBase;
 	double
 		_globeLat,
 		_globeLon;
@@ -273,20 +272,19 @@ private:
 		_income,
 		_maintenance;
 
-	std::vector<AlienBase*>				_alienBases;
-	std::vector<AlienMission*>			_activeMissions;
-	std::vector<Base*>					_bases;
-	std::vector<Country*>				_countries;
-	std::vector<MissionStatistics*>		_missionStatistics;
-	std::vector<Region*>				_regions;
+	std::vector<AlienBase*> _alienBases;
+	std::vector<AlienMission*> _activeMissions;
+	std::vector<Base*> _bases;
+	std::vector<Country*> _countries;
+	std::vector<MissionStatistics*> _missionStatistics;
+	std::vector<Region*> _regions;
 	std::vector<const RuleResearch*>
-										_discovered,
-										_poppedResearch;
-	std::vector<Soldier*>				_soldiers; // kL
-	std::vector<SoldierDead*>			_deadSoldiers; // kL
-	std::vector<TerrorSite*>			_terrorSites;
-	std::vector<Ufo*>					_ufos;
-	std::vector<Waypoint*>				_waypoints;
+		_discovered,
+		_poppedResearch;
+	std::vector<SoldierDead*> _deadSoldiers;
+	std::vector<TerrorSite*> _terrorSites;
+	std::vector<Ufo*> _ufos;
+	std::vector<Waypoint*> _waypoints;
 
 	///
 	void getDependableResearchBasic(
@@ -354,12 +352,12 @@ private:
 		/// Handles monthly funding.
 		void monthlyFunding();
 
+		/// Sets new funds.
+		void setFunds(int64_t funds);
 		/// Gets the current funds.
 		int64_t getFunds() const;
 		/// Gets the list of funds from previous months.
 		std::vector<int64_t>& getFundsList();
-		/// Sets new funds.
-		void setFunds(int64_t funds);
 
 		/// Returns a list of maintenance costs
 		std::vector<int64_t>& getMaintenances();
@@ -447,7 +445,7 @@ private:
 		void inspectSoldiers(
 				Soldier** highestRanked,
 				size_t* total,
-				int rank);
+				int soldierRank);
 
 		///  Returns the list of alien bases.
 		std::vector<AlienBase*>* getAlienBases();
@@ -537,13 +535,12 @@ private:
 		void removePoppedResearch(const RuleResearch* research);
 
 		/// Gets the list of dead soldiers.
-//kL	std::vector<Soldier*>* getDeadSoldiers();
-		std::vector<SoldierDead*>* getDeadSoldiers(); // kL
+		std::vector<SoldierDead*>* getDeadSoldiers();
 
 		/// Gets the last selected player base.
-//kL	Base* getSelectedBase();
+//		Base* getSelectedBase();
 		/// Set the last selected player base.
-//kL	void setSelectedBase(size_t base);
+//		void setSelectedBase(size_t base);
 
 		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 		int getSoldierScore(Soldier* soldier);
@@ -562,7 +559,7 @@ private:
 		std::vector<MissionStatistics*>* getMissionStatistics();
 
 		/// Returns the craft corresponding to the specified unique id.
-//kL	Craft* findCraftByUniqueId(const CraftId& craftId) const;
+//		Craft* findCraftByUniqueId(const CraftId& craftId) const;
 };
 
 }

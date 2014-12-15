@@ -40,8 +40,8 @@ SoldierDeath::~SoldierDeath()
 }
 
 /**
- * Loads the death from a YAML file.
- * @param node, YAML node.
+ * Loads the death time from a YAML file.
+ * @param node - reference a YAML node
  */
 void SoldierDeath::load(const YAML::Node& node)
 {
@@ -49,8 +49,8 @@ void SoldierDeath::load(const YAML::Node& node)
 }
 
 /**
- * Saves the death to a YAML file.
- * @return, YAML node.
+ * Saves the death time to a YAML file.
+ * @return, YAML node
  */
 YAML::Node SoldierDeath::save() const
 {
@@ -62,8 +62,8 @@ YAML::Node SoldierDeath::save() const
 }
 
 /**
- * Returns the time of death of this soldier.
- * @return, Pointer to the time.
+ * Returns the time of death of a soldier.
+ * @return, address of GameTime
  */
 const GameTime* SoldierDeath::getTime() const
 {
@@ -71,8 +71,8 @@ const GameTime* SoldierDeath::getTime() const
 }
 
 /**
- * Sets the time of death of this soldier.
- * @param time, The time of death.
+ * Sets the time of death of a soldier.
+ * @param time - the time of death
  */
 void SoldierDeath::setTime(GameTime time)
 {

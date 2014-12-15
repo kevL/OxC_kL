@@ -55,8 +55,6 @@ private:
 		_displayKills,
 		_displayMissions,
 		_displayAwards;
-	int
-		_display; // 0 displays kills, 1 displays missions, 2 displays commendations
 	size_t
 		_lastScrollPos,
 		_soldierID;
@@ -119,10 +117,10 @@ private:
 	public:
 		/// Creates the Soldiers state.
 		SoldierDiaryPerformanceState(
-				Base* base,
-				size_t soldierID,
-				SoldierDiaryOverviewState* soldierDiaryState,
-				int display);
+				Base* const base,
+				const size_t soldierID,
+				SoldierDiaryOverviewState* const soldierDiaryState,
+				const int display);
 		/// Cleans up the Soldiers state.
 		~SoldierDiaryPerformanceState();
 

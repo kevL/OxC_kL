@@ -1341,17 +1341,10 @@ void GeoscapeState::time5Seconds()
 					{
 						if ((*soldier)->getCraft() == *j)
 						{
-							SoldierDeath* const death = new SoldierDeath();
-							death->setTime(*_savedGame->getTime());
+							(*soldier)->die(_savedGame);
 
-							SoldierDead* const dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
-							_savedGame->getDeadSoldiers()->push_back(dead);
-
-							const int iD = (*soldier)->getId();
-							soldier = (*i)->getSoldiers()->erase(soldier); // erase Soldier from Base_soldiers vector.
-
-							delete _savedGame->getSoldier(iD); // delete Soldier instance.
-							// note: Could return any armor the soldier was wearing to Stores.
+							delete _savedGame->getSoldier((*soldier)->getId());
+							soldier = (*i)->getSoldiers()->erase(soldier);
 						}
 						else
 							++soldier;
@@ -2606,11 +2599,11 @@ void GeoscapeState::time1Day()
 
 //kL		std::string name = research->getLookup().empty()? research->getName(): research->getLookup();
 			std::string name = research->getLookup();
-			if (name.empty())
+			if (name.empty() == true)
 				name = research->getName(); // duh!
 			//Log(LOG_INFO) << ". Research = " << name;
 
-			if (_savedGame->isResearched(name))
+			if (_savedGame->isResearched(name) == true)
 			{
 				//Log(LOG_INFO) << ". newResearch NULL, already been researched";
 				newResearch = NULL;
@@ -2647,7 +2640,7 @@ void GeoscapeState::time1Day()
 											_game->getRuleset(),
 											*b);
 
-			if (newResearch) // check for possible researching weapon before clip
+			if (newResearch != NULL) // check for possible researching weapon before clip
 			{
 				RuleItem* item = _game->getRuleset()->getItem(newResearch->getName());
 				if (item
@@ -2730,7 +2723,7 @@ void GeoscapeState::time1Day()
 
 		//Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
 		//Log(LOG_INFO) << ". Soldiers";
-		for (std::vector<Soldier*>::const_iterator // handle soldier wounds
+		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
 				soldier = (*b)->getSoldiers()->begin();
 				soldier != (*b)->getSoldiers()->end();
 				)
@@ -2739,7 +2732,7 @@ void GeoscapeState::time1Day()
 			//Log(LOG_INFO) << ". Soldier = " << (*soldier)->getId();
 			//Log(LOG_INFO) << ". woundPercent = " << (*soldier)->getWoundPercent();
 			if ((*soldier)->getWoundPercent() > 10							// more than 10% wounded
-				&& RNG::percent((*soldier)->getWoundPercent() / 5) == true)	// %chance to die today
+				&& RNG::percent((*soldier)->getWoundPercent() / 5) == true)	// so, %chance to die today
 			{
 				//Log(LOG_INFO) << ". . he's dead, Jim!!";
 				timerReset();
@@ -2748,17 +2741,10 @@ void GeoscapeState::time1Day()
 										(*soldier)->getName(),
 										(*b)->getName()));
 
-				// kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
-				SoldierDeath* const death = new SoldierDeath();
-				death->setTime(*_savedGame->getTime());
+				(*soldier)->die(_savedGame);
 
-				SoldierDead* const dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
-				_savedGame->getDeadSoldiers()->push_back(dead);
-
-				const int iD = (*soldier)->getId();
-				soldier = (*b)->getSoldiers()->erase(soldier); // erase Soldier from Base_soldiers vector.
-
-				delete _savedGame->getSoldier(iD); // delete Soldier instance.
+				delete _savedGame->getSoldier((*soldier)->getId());
+				soldier = (*b)->getSoldiers()->erase(soldier);
 				// note: Could return any armor the soldier was wearing to Stores.
 			}
 			else

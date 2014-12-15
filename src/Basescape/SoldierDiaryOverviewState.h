@@ -79,7 +79,7 @@ private:
 	public:
 		/// Creates the Soldiers state.
 		SoldierDiaryOverviewState(
-				Base* base,
+				Base* const base,
 				size_t soldierID,
 				SoldierInfoState* soldierInfoState,
 				SoldierInfoDeadState* soldierInfoDeadState); // kL

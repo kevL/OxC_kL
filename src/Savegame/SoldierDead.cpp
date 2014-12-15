@@ -19,7 +19,6 @@
 
 #include "SoldierDead.h"
 
-#include "Soldier.h"
 #include "SoldierDeath.h"
 #include "SoldierDiary.h"
 
@@ -31,24 +30,35 @@ namespace OpenXcom
 
 /**
  * Initializes a new dead soldier.
+ * @param name			-
+ * @param id			-
+ * @param unitRank		-
+ * @param gender		-
+ * @param look			-
+ * @param missions		-
+ * @param kills			-
+ * @param death			- pointer to SoldierDeath time
+ * @param initialStats	-
+ * @param currentStats	-
+ * @param diary			- pointer to SoldierDiary
  */
 SoldierDead::SoldierDead(
-		std::wstring name,
-		int id,
-		SoldierRank rank,
-		SoldierGender gender,
-		SoldierLook look,
-		int missions,
-		int kills,
-		SoldierDeath* death,
-		UnitStats initialStats,
-		UnitStats currentStats,
-		SoldierDiary* diary)
+		const std::wstring name,
+		const int id,
+		const SoldierRank unitRank,
+		const SoldierGender gender,
+		const SoldierLook look,
+		const int missions,
+		const int kills,
+		SoldierDeath* const death,
+		const UnitStats initialStats,
+		const UnitStats currentStats,
+		SoldierDiary* const diary)
 		// base if I want to...
 	:
 		_name(name),
 		_id(id),
-		_rank(rank),
+		_rank(unitRank),
 		_gender(gender),
 		_look(look),
 		_missions(missions),
@@ -58,12 +68,11 @@ SoldierDead::SoldierDead(
 		_currentStats(currentStats)
 //		_diary(diary)
 {
-	// copy diary instead of resetting a pointer,
+	// Copy the diary instead of setting a pointer,
 	// because delete Soldier will delete the old diary
-	// (unless you want to do tricky things that i don't)
+	// (unless you want to do tricky things that i don't).
 //	if (_diary == NULL)
 	_diary = new SoldierDiary();
-
 	_diary = diary;
 }
 
@@ -77,22 +86,20 @@ SoldierDead::~SoldierDead()
 }
 
 /**
- * Loads the dead soldier from a YAML file.
- * @param node, YAML node.
- * @param rule, Game ruleset.
+ * Loads a dead soldier from a YAML file.
+ * @param node - reference a YAML node
  */
-void SoldierDead::load(
-		const YAML::Node& node)
+void SoldierDead::load(const YAML::Node& node)
 {
-	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
-	_id				= node["id"].as<int>(_id);
-	_initialStats	= node["initialStats"].as<UnitStats>(_initialStats);
-	_currentStats	= node["currentStats"].as<UnitStats>(_currentStats);
-	_rank			= (SoldierRank)node["rank"].as<int>();
-	_gender			= (SoldierGender)node["gender"].as<int>();
-	_look			= (SoldierLook)node["look"].as<int>();
-	_missions		= node["missions"].as<int>(_missions);
-	_kills			= node["kills"].as<int>(_kills);
+	_name			= Language::utf8ToWstr(node["name"]	.as<std::string>());
+	_id				= node["id"]						.as<int>(_id);
+	_initialStats	= node["initialStats"]				.as<UnitStats>(_initialStats);
+	_currentStats	= node["currentStats"]				.as<UnitStats>(_currentStats);
+	_rank			= (SoldierRank)node["rank"]			.as<int>();
+	_gender			= (SoldierGender)node["gender"]		.as<int>();
+	_look			= (SoldierLook)node["look"]			.as<int>();
+	_missions		= node["missions"]					.as<int>(_missions);
+	_kills			= node["kills"]						.as<int>(_kills);
 
 	_death = new SoldierDeath();
 	_death->load(node["death"]);
@@ -105,8 +112,8 @@ void SoldierDead::load(
 }
 
 /**
- * Saves the dead soldier to a YAML file.
- * @return, YAML node.
+ * Saves this dead soldier to a YAML file.
+ * @return, YAML node
  */
 YAML::Node SoldierDead::save() const
 {
@@ -124,9 +131,9 @@ YAML::Node SoldierDead::save() const
 
 	node["death"]			= _death->save();
 
-	if (_diary != NULL // kL
-		&& (!_diary->getMissionIdList().empty()
-			|| !_diary->getSoldierCommendations()->empty()))
+	if (_diary != NULL
+		&& (_diary->getMissionIdList().empty() == false
+			|| _diary->getSoldierCommendations()->empty() == false))
 	{
 		node["diary"] = _diary->save();
 	}
@@ -135,8 +142,8 @@ YAML::Node SoldierDead::save() const
 }
 
 /**
- * Returns the dead soldier's full name.
- * @return, Soldier name.
+ * Returns this dead soldier's full name.
+ * @return, name string
  */
 std::wstring SoldierDead::getName() const
 {
@@ -144,8 +151,8 @@ std::wstring SoldierDead::getName() const
 }
 
 /**
- * Returns a localizable-string representation of the dead soldier's military rank.
- * @return, String ID for rank.
+ * Returns a localizable-string representation of this dead soldier's military rank.
+ * @return, string ID of rank
  */
 std::string SoldierDead::getRankString() const
 {
@@ -157,18 +164,15 @@ std::string SoldierDead::getRankString() const
 		case RANK_CAPTAIN:		return "STR_CAPTAIN";
 		case RANK_COLONEL:		return "STR_COLONEL";
 		case RANK_COMMANDER:	return "STR_COMMANDER";
-
-		default:
-			return "";
 	}
 
 	return "";
 }
 
 /**
- * Returns a graphic representation of the dead soldier's military rank.
+ * Returns a graphic representation of this dead soldier's military rank.
  * @note THE MEANING OF LIFE
- * @return, Sprite ID for rank.
+ * @return, sprite ID of rank
  */
 int SoldierDead::getRankSprite() const
 {
@@ -176,8 +180,8 @@ int SoldierDead::getRankSprite() const
 }
 
 /**
- * Returns the dead soldier's military rank.
- * @return, Rank enum.
+ * Returns this dead soldier's military rank.
+ * @return, rank enum
  */
 SoldierRank SoldierDead::getRank() const
 {
@@ -185,8 +189,8 @@ SoldierRank SoldierDead::getRank() const
 }
 
 /**
- * Returns the dead soldier's amount of missions.
- * @return, Missions.
+ * Returns this dead soldier's amount of missions.
+ * @return, missions
  */
 int SoldierDead::getMissions() const
 {
@@ -194,8 +198,8 @@ int SoldierDead::getMissions() const
 }
 
 /**
- * Returns the dead soldier's amount of kills.
- * @return, Kills.
+ * Returns this dead soldier's amount of kills.
+ * @return, kills
  */
 int SoldierDead::getKills() const
 {
@@ -203,8 +207,8 @@ int SoldierDead::getKills() const
 }
 
 /**
- * Returns the dead soldier's gender.
- * @return, Gender.
+ * Returns this dead soldier's gender.
+ * @return, gender enum
  */
 SoldierGender SoldierDead::getGender() const
 {
@@ -212,8 +216,8 @@ SoldierGender SoldierDead::getGender() const
 }
 
 /**
- * Returns the dead soldier's look.
- * @return, Look.
+ * Returns this dead soldier's look.
+ * @return, look enum
  */
 SoldierLook SoldierDead::getLook() const
 {
@@ -221,9 +225,9 @@ SoldierLook SoldierDead::getLook() const
 }
 
 /**
- * Returns the dead soldier's unique ID. Each dead soldier
- * can be identified by its ID. (not it's name)
- * @return, Unique ID.
+ * Returns this dead soldier's unique ID.
+ * Each dead soldier can be identified by its ID (not it's name).
+ * @return, unique ID
  */
 int SoldierDead::getId() const
 {
@@ -231,7 +235,8 @@ int SoldierDead::getId() const
 }
 
 /**
- * Get pointer to initial stats.
+ * Gets pointer to initial stats.
+ * @return, pointer to UnitStats struct
  */
 UnitStats* SoldierDead::getInitStats()
 {
@@ -239,7 +244,8 @@ UnitStats* SoldierDead::getInitStats()
 }
 
 /**
- * Get pointer to current stats.
+ * Gets pointer to current stats.
+ * @return, pointer to UnitStats struct
  */
 UnitStats* SoldierDead::getCurrentStats()
 {
@@ -259,7 +265,7 @@ SoldierDeath* SoldierDead::getDeath() const
  * Gets the soldier's diary.
  * @return, pointer to SoldierDiary
  */
-SoldierDiary* SoldierDead::getDiary()
+SoldierDiary* SoldierDead::getDiary() const
 {
 	return _diary;
 }

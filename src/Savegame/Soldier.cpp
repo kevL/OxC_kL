@@ -74,9 +74,9 @@ Soldier::Soldier(
 
 	if (names != NULL)
 	{
-		UnitStats
-			minStats = rules->getMinStats(),
-			maxStats = rules->getMaxStats();
+		const UnitStats
+			minStats = _rules->getMinStats(),
+			maxStats = _rules->getMaxStats();
 
 		_initialStats.tu			= RNG::generate(minStats.tu, maxStats.tu);
 		_initialStats.stamina		= RNG::generate(minStats.stamina, maxStats.stamina);
@@ -94,14 +94,14 @@ Soldier::Soldier(
 
 		_currentStats = _initialStats;
 
-		_look = (SoldierLook)RNG::generate(0, 3);
+		_look = static_cast<SoldierLook>(RNG::generate(0, 3));
 //		_gender = (SoldierGender)RNG::generate(0, 1);
 
 		// kL_begin: gender Ratios
-		RuleGender gRatio = rules->getGenderRatio();
-		double
-			male = static_cast<double>(gRatio.male),
-			total = static_cast<double>(male + gRatio.female);
+		const RuleGender* const gRatio = _rules->getGenderRatio();
+		const double
+			male = static_cast<double>(gRatio->male),
+			total = static_cast<double>(male + gRatio->female);
 
 		if (AreSame(total, 0.)
 			|| RNG::percent(static_cast<int>(Round(male / total * 100.))))
@@ -118,7 +118,7 @@ Soldier::Soldier(
 		if (names->empty() == false)
 		{
 			size_t nationality = RNG::generate(0, names->size() - 1);
-			_name = names->at(nationality)->genName(&_gender, rules->getFemaleFrequency());
+			_name = names->at(nationality)->genName(&_gender, _rules->getFemaleFrequency());
 
 			// Once we add the ability to mod in extra looks, this will
 			// need to reference the ruleset for the maximum amount of looks.
@@ -127,7 +127,7 @@ Soldier::Soldier(
 		else
 		{
 			_name	= L"";
-			_gender = (RNG::percent(rules->getFemaleFrequency())? GENDER_FEMALE: GENDER_MALE);
+			_gender = (RNG::percent(_rules->getFemaleFrequency())? GENDER_FEMALE: GENDER_MALE);
 			_look	= (SoldierLook)RNG::generate(0, 3);
 		} */
 	}
@@ -209,7 +209,7 @@ void Soldier::load(
 
 /**
  * Saves the soldier to a YAML file.
- * @return, YAML node.
+ * @return, YAML node
  */
 YAML::Node Soldier::save() const
 {
@@ -265,7 +265,7 @@ RuleSoldier* Soldier::getRules() const
 
 /**
  * Gets this Soldier's initial stats.
- * @return, pointer to UnitStats
+ * @return, address of UnitStats
  */
 UnitStats* Soldier::getInitStats()
 {
@@ -274,7 +274,7 @@ UnitStats* Soldier::getInitStats()
 
 /**
  * Gets this Soldier's current stats.
- * @return, pointer to UnitStats
+ * @return, address of UnitStats
  */
 UnitStats* Soldier::getCurrentStats()
 {
@@ -297,6 +297,11 @@ int Soldier::getId() const
  * @param maxLength		- restrict length to this value
  * @return, soldier name
  */
+std::wstring Soldier::getName() const
+{
+	return _name;
+}
+/*
 std::wstring Soldier::getName(
 		bool statstring,
 		size_t maxLength) const
@@ -313,15 +318,9 @@ std::wstring Soldier::getName(
 		else
 			return _name + L"/" + _statString;
 	}
-/*	else if (_recovery > 0)
-	{
-		std::wostringstream wStr;
-		wStr << _name << L" (" << _recovery << L")";
-		return wStr.str();
-	} */ // kL_add.
 
 	return _name;
-}
+} */
 
 /**
  * Changes this Soldier's full name.
@@ -528,7 +527,7 @@ void Soldier::setWoundRecovery(int recovery)
  */
 void Soldier::heal()
 {
-	_recovery--;
+	--_recovery;
 
 	if (_recovery < 0)
 		_recovery = 0;
@@ -747,33 +746,36 @@ int Soldier::getPsiStrImprovement()
 
 /**
  * Kills this Soldier in the Geoscape.
- * @param death - pointer to SoldierDeath time-data
+ * @param savedGame - pointer to the SavedGame
  * @return, pointer to SoldierDead
  */
-SoldierDead* Soldier::die(SoldierDeath* death)
+void Soldier::die(SavedGame* const savedGame)
 {
-	SoldierDead* dead = new SoldierDead(
-									_name,
-									_id,
-									_rank,
-									_gender,
-									_look,
-									_missions,
-									_kills,
-									death,
-									_initialStats,
-									_currentStats,
-									_diary);
-									// base if I want to...
+	SoldierDeath* deathTime = new SoldierDeath();
+	deathTime->setTime(*savedGame->getTime());
 
-	return dead;
+	SoldierDead* deadSoldier = new SoldierDead(
+											_name,
+											_id,
+											_rank,
+											_gender,
+											_look,
+											_missions,
+											_kills,
+											deathTime,
+											_initialStats,
+											_currentStats,
+											_diary);
+											// base if I want to...
+
+	savedGame->getDeadSoldiers()->push_back(deadSoldier);
 }
 
 /**
  * Gets this Soldier's diary.
  * @return, pointer to SoldierDiary
  */
-SoldierDiary* Soldier::getDiary()
+SoldierDiary* Soldier::getDiary() const
 {
 	return _diary;
 }

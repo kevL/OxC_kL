@@ -103,27 +103,27 @@ enum UnitBodyPart
 struct BattleUnitKills
 {
 	std::string
-		rank,
-		race,
-		weapon,
-		weaponAmmo;
+		_rank,
+		_race,
+		_weapon,
+		_weaponAmmo;
 	int
-		mission,
-		turn;
-	UnitFaction faction;
-	UnitStatus status;
+		_mission,
+		_turn;
+	UnitFaction _faction;
+	UnitStatus _status;
 
 
 	/// Makes turn unique across all kills.
 	int makeTurnUnique()
 	{
-		return turn += mission * 300; // Maintains divisibility by 3 as well.
+		return _turn += _mission * 300; // Maintains divisibility by 3 as well.
 	}
 
 	/// Checks to see if turn was on HOSTILE side.
-	bool hostileTurn()
+	bool hostileTurn() const
 	{
-		if ((turn - 1) %3 == 0)
+		if ((_turn - 1) %3 == 0)
 			return true;
 
 		return false;
@@ -132,28 +132,29 @@ struct BattleUnitKills
 	///
 	void load(const YAML::Node &node)
 	{
-		rank		= node["rank"]					.as<std::string>(rank);
-		race		= node["race"]					.as<std::string>(race);
-		weapon		= node["weapon"]				.as<std::string>(weapon);
-		weaponAmmo	= node["weaponAmmo"]			.as<std::string>(weaponAmmo);
-		status		= (UnitStatus)node["status"]	.as<int>();
-		faction		= (UnitFaction)node["faction"]	.as<int>();
-		mission		= node["mission"]				.as<int>(mission);
-		turn		= node["turn"]					.as<int>(turn);
+		_rank		= node["rank"]					.as<std::string>(_rank);
+		_race		= node["race"]					.as<std::string>(_race);
+		_weapon		= node["weapon"]				.as<std::string>(_weapon);
+		_weaponAmmo	= node["weaponAmmo"]			.as<std::string>(_weaponAmmo);
+		_status		= (UnitStatus)node["status"]	.as<int>();
+		_faction	= (UnitFaction)node["faction"]	.as<int>();
+		_mission	= node["mission"]				.as<int>(_mission);
+		_turn		= node["turn"]					.as<int>(_turn);
 	}
 
 	///
 	YAML::Node save() const
 	{
 		YAML::Node node;
-		node["rank"]		= rank;
-		node["race"]		= race;
-		node["weapon"]		= weapon;
-		node["weaponAmmo"]	= weaponAmmo;
-		node["status"]		= (int)status;
-		node["faction"]		= (int)faction;
-		node["mission"]		= mission;
-		node["turn"]		= turn;
+
+		node["rank"]		= _rank;
+		node["race"]		= _race;
+		node["weapon"]		= _weapon;
+		node["weaponAmmo"]	= _weaponAmmo;
+		node["status"]		= (int)_status;
+		node["faction"]		= (int)_faction;
+		node["mission"]		= _mission;
+		node["turn"]		= _turn;
 
 		return node;
 	}
@@ -161,7 +162,7 @@ struct BattleUnitKills
 	/// Converts victim Status to string.
 	std::string getUnitStatusString() const
 	{
-		switch (status)
+		switch (_status)
 		{
 			case STATUS_DEAD:			return "STATUS_DEAD";
 			case STATUS_UNCONSCIOUS:	return "STATUS_UNCONSCIOUS";
@@ -173,7 +174,7 @@ struct BattleUnitKills
 	/// Converts victim Faction to string.
 	std::string getUnitFactionString() const
 	{
-		switch (faction)
+		switch (_faction)
 		{
 			case FACTION_PLAYER:	return "FACTION_PLAYER";
 			case FACTION_HOSTILE:	return "FACTION_HOSTILE";
@@ -191,23 +192,23 @@ struct BattleUnitKills
 
 	/// cTor.
 	BattleUnitKills(
-			std::string Rank,
-			std::string Race,
-			std::string Weapon,
-			std::string WeaponAmmo,
-			UnitFaction Faction,
-			UnitStatus Status,
-			int Mission,
-			int Turn)
+			std::string unitRank,
+			std::string race,
+			std::string weapon,
+			std::string weaponAmmo,
+			UnitFaction faction,
+			UnitStatus status,
+			int mission,
+			int turn)
 		:
-			rank(Rank),
-			race(Race),
-			weapon(Weapon),
-			weaponAmmo(WeaponAmmo),
-			faction(Faction),
-			status(Status),
-			mission(Mission),
-			turn(Turn)
+			_rank(unitRank),
+			_race(race),
+			_weapon(weapon),
+			_weaponAmmo(weaponAmmo),
+			_faction(faction),
+			_status(status),
+			_mission(mission),
+			_turn(turn)
 	{
 	}
 
@@ -216,6 +217,7 @@ struct BattleUnitKills
 	{
 	}
 };
+
 
 /**
  * Container for battle unit statistics.
@@ -244,14 +246,14 @@ struct BattleUnitStatistics
 
 
 	/// Checks if unit has fired on a friendly.
-	bool hasFriendlyFired()
+	bool hasFriendlyFired() const
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator
 				i = kills.begin();
 				i != kills.end();
 				++i)
 		{
-			if ((*i)->faction == FACTION_PLAYER)
+			if ((*i)->_faction == FACTION_PLAYER)
 				return true;
 		}
 
@@ -313,7 +315,7 @@ struct BattleUnitStatistics
 		node["lowAccuracyHitCounter"]	= lowAccuracyHitCounter;
 		node["shotsFiredCounter"]		= shotsFiredCounter;
 		node["shotsLandedCounter"]		= shotsLandedCounter;
-		if (nikeCross)
+		if (nikeCross == true)
 			node["nikeCross"]			= nikeCross;
 
 		return node;

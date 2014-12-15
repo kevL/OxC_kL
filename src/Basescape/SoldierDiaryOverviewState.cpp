@@ -56,7 +56,7 @@ namespace OpenXcom
  * @param soldierInfoDeadState	-
  */
 SoldierDiaryOverviewState::SoldierDiaryOverviewState(
-		Base* base,
+		Base* const base,
 		size_t soldierID,
 		SoldierInfoState* soldierInfoState,
 		SoldierInfoDeadState* soldierInfoDeadState) // kL
@@ -234,11 +234,11 @@ void SoldierDiaryOverviewState::init()
 
 	if (_base == NULL)
 	{
-		if (_listDead->empty() == true)
+/*		if (_listDead->empty() == true)
 		{
 			_game->popState();
 			return;
-		}
+		} */ // should never happen. Btn won't be visible if listDead is empty.
 
 		if (_soldierID >= _listDead->size())
 			_soldierID = 0;
@@ -248,11 +248,11 @@ void SoldierDiaryOverviewState::init()
 	}
 	else
 	{
-		if (_list->empty() == true)
+/*		if (_list->empty() == true)
 		{
 			_game->popState();
 			return;
-		}
+		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
 
 		if (_soldierID >= _list->size())
 			_soldierID = 0;
@@ -264,8 +264,8 @@ void SoldierDiaryOverviewState::init()
 
 	_lstDiary->clearList();
 
-	std::vector<MissionStatistics*>* const missionStatistics = _game->getSavedGame()->getMissionStatistics();
-	size_t row = 0;
+	const std::vector<MissionStatistics*>* const missionStatistics = _game->getSavedGame()->getMissionStatistics();
+//	size_t row = 0;
 
 	for (std::vector<MissionStatistics*>::const_reverse_iterator
 			j = missionStatistics->rbegin();
@@ -358,8 +358,7 @@ void SoldierDiaryOverviewState::init()
 						wossDay.str().c_str(),
 						wossMonth.str().c_str(),
 						wossYear.str().c_str());
-
-		++row;
+//		++row;
 	}
 
 	_lstDiary->scrollTo(_curRow);

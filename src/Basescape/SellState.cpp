@@ -27,9 +27,9 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -238,7 +238,7 @@ SellState::SellState(
 
 			_lstItems->addRow(
 							4,
-							(*i)->getName(true).c_str(),
+							(*i)->getName().c_str(),
 							L"1",
 							L"0",
 							Text::formatFunding(0).c_str());

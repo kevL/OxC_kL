@@ -63,8 +63,8 @@ class Language;
 class Ruleset;
 class RuleSoldier;
 class SavedGame;
-class SoldierDead;
-class SoldierDeath;
+//class SoldierDead;
+//class SoldierDeath;
 class SoldierDiary;
 class SoldierNamePool;
 
@@ -88,9 +88,8 @@ private:
 		_missions,
 		_recovery;
 
-	std::wstring
-		_name,
-		_statString;
+	std::wstring _name;
+//		_statString;
 
 	Armor* _armor;
 	Craft* _craft;
@@ -137,9 +136,10 @@ private:
 		int getId() const;
 
 		/// Gets the soldier's name.
-		std::wstring getName(
+		std::wstring getName() const;
+/*		std::wstring getName(
 				bool statstring = false,
-				size_t maxLength = 20) const;
+				size_t maxLength = 20) const; */
 		/// Sets the soldier's name.
 		void setName(const std::wstring& name);
 
@@ -206,11 +206,11 @@ private:
 		/// Gets this soldier's psiStrength improvement score for this month.
 		int getPsiStrImprovement();
 
-		/// Kills the soldier and sends it to the dead soldiers' List.
-		SoldierDead* die(SoldierDeath* death);
+		/// Kills the soldier and sends it to the dead soldiers' bin.
+		void die(SavedGame* const savedGame);
 
 		/// Gets the soldier's diary.
-		SoldierDiary* getDiary();
+		SoldierDiary* getDiary() const;
 
 		/// Calculates a statString.
 //		void calcStatString(

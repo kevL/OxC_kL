@@ -398,8 +398,8 @@ DebriefingState::DebriefingState()
 					k != statistics->kills.end();
 					++k)
 			{
-				if ((*k)->faction == FACTION_HOSTILE)
-					soldierAlienKills++;
+				if ((*k)->_faction == FACTION_HOSTILE)
+					++soldierAlienKills;
 			}
 
 			// NOTE re. Nike Cross:
@@ -1069,7 +1069,7 @@ void DebriefingState::prepareDebriefing()
 		}
 
 
-		int value = (*i)->getValue();
+		const int value = (*i)->getValue();
 		const UnitFaction origFact = (*i)->getOriginalFaction();
 		const UnitStatus status = (*i)->getStatus();
 
@@ -1100,16 +1100,10 @@ void DebriefingState::prepareDebriefing()
 						{
 							(*i)->updateGeoscapeStats(*j);
 
-							// kL_begin: sorta mirror GeoscapeState::time1Day()
-							SoldierDeath* death = new SoldierDeath();
-							death->setTime(*_savedGame->getTime());
+							(*j)->die(_savedGame);
 
-							SoldierDead* dead = (*j)->die(death); // converts Soldier to SoldierDead class instance.
-							_savedGame->getDeadSoldiers()->push_back(dead);
-
-							int iD = (*i)->getId(); // get ID from battleunit; could also use (*j) instead.
-							base->getSoldiers()->erase(j); // erase Soldier from Base_soldiers vector.
-							delete _savedGame->getSoldier(iD); // delete Soldier instance.
+							delete _savedGame->getSoldier((*i)->getId());
+							base->getSoldiers()->erase(j);
 
 							// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
 							break;
@@ -1154,7 +1148,7 @@ void DebriefingState::prepareDebriefing()
 					// so game is not aborted, or aborted and unit is on exit area
 					(*i)->postMissionProcedures(_savedGame);
 
-					soldierExit++;
+					++soldierExit;
 
 					if (soldier != NULL)
 					{
@@ -1201,15 +1195,10 @@ void DebriefingState::prepareDebriefing()
 							{
 								(*i)->updateGeoscapeStats(*j);
 
-								SoldierDeath* const death = new SoldierDeath();
-								death->setTime(*_savedGame->getTime());
+								(*j)->die(_savedGame);
 
-								SoldierDead* const dead = (*j)->die(death); // converts Soldier to SoldierDead class instance.
-								_savedGame->getDeadSoldiers()->push_back(dead);
-
-								int iD = (*i)->getId(); // get ID from battleunit; could also use (*j) instead.
-								base->getSoldiers()->erase(j); // erase Soldier from Base_soldiers vector.
-								delete _savedGame->getSoldier(iD); // delete Soldier instance.
+								delete _savedGame->getSoldier((*i)->getId());
+								base->getSoldiers()->erase(j);
 
 								// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
 								break;

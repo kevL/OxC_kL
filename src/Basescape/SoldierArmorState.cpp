@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -101,7 +101,7 @@ SoldierArmorState::SoldierArmorState(
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(soldier->getName(true));
+	_txtSoldier->setText(soldier->getName());
 
 	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));

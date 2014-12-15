@@ -20,11 +20,9 @@
 #ifndef OPENXCOM_SOLDIERDEAD_H
 #define OPENXCOM_SOLDIERDEAD_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
-
-#include "../Ruleset/Unit.h"
+//#include <yaml-cpp/yaml.h>
 
 #include "../Savegame/Soldier.h"
 
@@ -36,9 +34,9 @@ class SoldierDeath;
 
 
 /**
- * Represents a dead soldier killed by the player.
+ * Represents a dead soldier.
  * Dead Soldiers have a wide variety of stats that affect
- * our memory of their heroic, and not so heroic, battles.
+ * our memory of their heroic, and not so heroic battles.
  */
 class SoldierDead
 {
@@ -65,17 +63,17 @@ private:
 	public:
 		/// Creates a new dead soldier.
 		SoldierDead(
-				std::wstring name,
-				int id,
-				SoldierRank rank,
-				SoldierGender gender,
-				SoldierLook look,
-				int missions,
-				int kills,
-				SoldierDeath* death,
-				UnitStats initialStats,
-				UnitStats currentStats,
-				SoldierDiary* diary);
+				const std::wstring name,
+				const int id,
+				const SoldierRank unitRank,
+				const SoldierGender gender,
+				const SoldierLook look,
+				const int missions,
+				const int kills,
+				SoldierDeath* const death,
+				const UnitStats initialStats,
+				const UnitStats currentStats,
+				SoldierDiary* const diary);
 				// base if I want to...
 		/// Cleans up the dead soldier.
 		~SoldierDead();
@@ -117,7 +115,7 @@ private:
 		SoldierDeath* getDeath() const;
 
 		/// Gets the soldier's diary.
-		SoldierDiary* getDiary();
+		SoldierDiary* getDiary() const;
 };
 
 }

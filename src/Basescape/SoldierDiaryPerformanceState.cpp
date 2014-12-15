@@ -28,9 +28,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h" // kL
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Text.h"
@@ -53,21 +52,20 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldiers screen.
- * @param base						- pointer to the base to get info from
+ * @param base						- pointer to the Base to get info from
  * @param soldierId					- ID of the selected soldier
  * @param soldierDiaryOverviewState	- pointer to said
- * @param display					- subscreen to display
+ * @param display					- 0 displays kills, 1 displays missions, 2 displays commendations
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
-		Base* base,
-		size_t soldierID,
-		SoldierDiaryOverviewState* soldierDiaryOverviewState,
-		int display)
+		Base* const base,
+		const size_t soldierID,
+		SoldierDiaryOverviewState* const soldierDiaryOverviewState,
+		const int display)
 	:
 		_base(base),
 		_soldierID(soldierID),
 		_soldierDiaryOverviewState(soldierDiaryOverviewState),
-		_display(display),
 		_lastScrollPos(0)
 {
 	//Log(LOG_INFO) << "Create SoldierDiaryPerformanceState";
@@ -82,19 +80,19 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		_listDead = NULL;
 	}
 
-	if (_display == 0)
+	if (display == 0)
 	{
 		_displayKills = true;
 		_displayMissions = false;
 		_displayAwards = false;
 	}
-	else if (_display == 1)
+	else if (display == 1)
 	{
 		_displayKills = false;
 		_displayMissions = true;
 		_displayAwards = false;
 	}
-	else // _display == 2
+	else // display == 2
 	{
 		_displayKills = false;
 		_displayMissions = false;
@@ -416,7 +414,7 @@ void SoldierDiaryPerformanceState::init()
 	_lstAwards->scrollTo(0);
 	_lastScrollPos = 0;
 
-	_txtRace->setVisible(_displayKills); // set visibility for kills
+	_txtRace->setVisible(_displayKills); // set visibility for Kill stats
 	_txtRank->setVisible(_displayKills);
 	_txtWeapon->setVisible(_displayKills);
 	_lstRace->setVisible(_displayKills);
@@ -424,7 +422,7 @@ void SoldierDiaryPerformanceState::init()
 	_lstWeapon->setVisible(_displayKills);
 	_lstKillTotals->setVisible(_displayKills);
 
-	_txtLocation->setVisible(_displayMissions); // set visibility for missions
+	_txtLocation->setVisible(_displayMissions); // set visibility for Mission stats
 	_txtType->setVisible(_displayMissions);
 	_txtUFO->setVisible(_displayMissions);
 	_lstLocation->setVisible(_displayMissions);
@@ -432,7 +430,7 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->setVisible(_displayMissions);
 	_lstMissionTotals->setVisible(_displayMissions);
 
-	if (_game->getRuleset()->getCommendation().empty() == true) // set visibility for awards
+	if (_game->getRuleset()->getCommendation().empty() == true) // set visibility for Award stats
 		_displayAwards = false;
 
 	_txtMedalName->setVisible(_displayAwards);
@@ -469,63 +467,59 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->clearList();
 	_lstAwards->clearList();
 
-	if (_base == NULL) // kL
+	SoldierDiary* diary = NULL;
+
+	if (_base == NULL)
 	{
-		if (_listDead->empty() == true)
+/*		if (_listDead->empty() == true)
 		{
 			_game->popState();
 			return;
-		}
+		} */ // should never happen. Btn won't be visible if listDead is empty.
 
 		if (_soldierID >= _listDead->size())
 			_soldierID = 0;
 
 		_soldierDead = _listDead->at(_soldierID);
-
-		if (_soldierDead->getDiary() != NULL) // kL
-		{
-			_lstKillTotals->addRow(
-								2,
-								tr("STR_KILLS").arg(_soldierDead->getDiary()->getKillTotal()).c_str(),
-								tr("STR_STUNS").arg(_soldierDead->getDiary()->getStunTotal()).c_str());
-			_lstMissionTotals->addRow(
-								4,
-								tr("STR_MISSIONS").arg(_soldierDead->getDiary()->getMissionTotal()).c_str(),
-								tr("STR_WINS").arg(_soldierDead->getDiary()->getWinTotal()).c_str(),
-								tr("STR_SCORE_VALUE").arg(_soldierDead->getDiary()->getScoreTotal()).c_str(),
-								tr("STR_DAYS_WOUNDED").arg(_soldierDead->getDiary()->getDaysWoundedTotal()).c_str());
-		}
+		diary = _soldierDead->getDiary();
 
 		_txtTitle->setText(_soldierDead->getName());
 	}
 	else
 	{
-		if (_list->empty() == true)
+/*		if (_list->empty() == true)
 		{
 			_game->popState();
 			return;
-		}
+		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
 
 		if (_soldierID >= _list->size())
 			_soldierID = 0;
 
 		_soldier = _list->at(_soldierID);
-
-		_lstKillTotals->addRow(
-							2,
-							tr("STR_KILLS").arg(_soldier->getDiary()->getKillTotal()).c_str(),
-							tr("STR_STUNS").arg(_soldier->getDiary()->getStunTotal()).c_str());
-		_lstMissionTotals->addRow(
-							4,
-							tr("STR_MISSIONS").arg(_soldier->getDiary()->getMissionTotal()).c_str(),
-							tr("STR_WINS").arg(_soldier->getDiary()->getWinTotal()).c_str(),
-							tr("STR_SCORE_VALUE").arg(_soldier->getDiary()->getScoreTotal()).c_str(),
-							tr("STR_DAYS_WOUNDED").arg(_soldier->getDiary()->getDaysWoundedTotal()).c_str());
+		diary = _soldier->getDiary();
 
 		_txtTitle->setText(_soldier->getName());
 	}
 
-	TextList* const lstArray[6] =
+
+	if (diary == NULL)
+		return;
+
+
+	_lstKillTotals->addRow( // Kill stats ->
+						2,
+						tr("STR_KILLS").arg(diary->getKillTotal()).c_str(),
+						tr("STR_STUNS").arg(diary->getStunTotal()).c_str());
+	_lstMissionTotals->addRow(
+						4,
+						tr("STR_MISSIONS").arg(diary->getMissionTotal()).c_str(),
+						tr("STR_WINS").arg(diary->getWinTotal()).c_str(),
+						tr("STR_SCORE_VALUE").arg(diary->getScoreTotal()).c_str(),
+						tr("STR_DAYS_WOUNDED").arg(diary->getDaysWoundedTotal()).c_str());
+
+
+	TextList* const lstArray[6] = // Mission stats ->
 	{
 		_lstRace,
 		_lstRank,
@@ -535,190 +529,86 @@ void SoldierDiaryPerformanceState::init()
 		_lstUFO
 	};
 
-	size_t row = 0;
-
-	if (_base == NULL) // kL
+	const std::map<std::string, int> mapArray[6] =
 	{
-		if (_soldierDead->getDiary() != NULL) // kL
-		{
-			std::map<std::string, int> mapArray[6] =
-			{
-				_soldierDead->getDiary()->getAlienRaceTotal(),
-				_soldierDead->getDiary()->getAlienRankTotal(),
-				_soldierDead->getDiary()->getWeaponTotal(),
-				_soldierDead->getDiary()->getRegionTotal(),
-				_soldierDead->getDiary()->getTypeTotal(),
-				_soldierDead->getDiary()->getUFOTotal()
-			};
+		diary->getAlienRaceTotal(),
+		diary->getAlienRankTotal(),
+		diary->getWeaponTotal(),
+		diary->getRegionTotal(),
+		diary->getTypeTotal(),
+		diary->getUFOTotal()
+	};
 
-			for (int
-					i = 0;
-					i != 6;
-					++i)
-			{
-				row = 0;
-
-				for (std::map<std::string, int>::const_iterator
-						j = mapArray[i].begin();
-						j != mapArray[i].end();
-						++j)
-				{
-					if ((*j).first == "NO_UFO")
-						continue;
-
-					std::wstringstream
-						ss1,
-						ss2;
-
-					ss1 << tr((*j).first.c_str());
-					ss2 << (*j).second;
-
-					lstArray[i]->addRow(
-									2,
-									ss1.str().c_str(),
-									ss2.str().c_str());
-
-					lstArray[i]->setCellColor(row, 0, Palette::blockOffset(13)+5);
-
-					++row;
-				}
-			}
-		}
-	}
-	else
+	for (int
+			i = 0;
+			i != 6;
+			++i)
 	{
-		std::map<std::string, int> mapArray[6] =
+		size_t row = 0;
+
+		for (std::map<std::string, int>::const_iterator
+				j = mapArray[i].begin();
+				j != mapArray[i].end();
+				++j)
 		{
-			_soldier->getDiary()->getAlienRaceTotal(),
-			_soldier->getDiary()->getAlienRankTotal(),
-			_soldier->getDiary()->getWeaponTotal(),
-			_soldier->getDiary()->getRegionTotal(),
-			_soldier->getDiary()->getTypeTotal(),
-			_soldier->getDiary()->getUFOTotal()
-		};
-
-		for (int
-				i = 0;
-				i != 6;
-				++i)
-		{
-			row = 0;
-
-			for (std::map<std::string, int>::const_iterator
-					j = mapArray[i].begin();
-					j != mapArray[i].end();
-					++j)
-			{
-				if ((*j).first == "NO_UFO")
-					continue;
-
-				std::wstringstream
-					ss1,
-					ss2;
-
-				ss1 << tr((*j).first.c_str());
-				ss2 << (*j).second;
-
-				lstArray[i]->addRow(
-								2,
-								ss1.str().c_str(),
-								ss2.str().c_str());
-
-				lstArray[i]->setCellColor(row, 0, Palette::blockOffset(13)+5);
-
-				++row;
-			}
-		}
-	}
-
-	if (_base == NULL) // kL
-	{
-		if (_soldierDead->getDiary() != NULL) // kL
-		{
-			for (std::vector<SoldierCommendations*>::const_iterator
-					i = _soldierDead->getDiary()->getSoldierCommendations()->begin();
-					i != _soldierDead->getDiary()->getSoldierCommendations()->end();
-					++i)
-			{
-				if (_game->getRuleset()->getCommendation().empty() == true)
-					break;
-
-				const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
-
-				std::wstringstream
-					ss1,
-					ss2,
-					ss3,
-					ss4;
-
-				if ((*i)->getNoun() != "noNoun")
-				{
-					ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-					ss4 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
-				}
-				else
-				{
-					ss1 << tr((*i)->getType().c_str());
-					ss4 << tr(rule->getDescription().c_str());
-				}
-
-				ss2 << tr((*i)->getDecorationDescription().c_str());
-				ss3 << tr((*i)->getDecorationClass().c_str());
-
-				_lstAwards->addRow(
-								3,
-								ss1.str().c_str(),
-								ss2.str().c_str(),
-								ss3.str().c_str());
-
-				_commendationsListEntry.push_back(ss4.str().c_str());
-
-				drawSprites();
-			}
-		}
-	}
-	else
-	{
-		for (std::vector<SoldierCommendations*>::const_iterator
-				i = _soldier->getDiary()->getSoldierCommendations()->begin();
-				i != _soldier->getDiary()->getSoldierCommendations()->end();
-				++i)
-		{
-			if (_game->getRuleset()->getCommendation().empty() == true)
-				break;
-
-			const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+			if ((*j).first == "NO_UFO")
+				continue;
 
 			std::wstringstream
 				ss1,
-				ss2,
-				ss3,
-				ss4;
+				ss2;
 
-			if ((*i)->getNoun() != "noNoun")
-			{
-				ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-				ss4 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
-			}
-			else
-			{
-				ss1 << tr((*i)->getType().c_str());
-				ss4 << tr(rule->getDescription().c_str());
-			}
+			ss1 << tr((*j).first.c_str());
+			ss2 << (*j).second;
 
-			ss2 << tr((*i)->getDecorationDescription().c_str());
-			ss3 << tr((*i)->getDecorationClass().c_str());
-
-			_lstAwards->addRow(
-							3,
+			lstArray[i]->addRow(
+							2,
 							ss1.str().c_str(),
-							ss2.str().c_str(),
-							ss3.str().c_str());
-
-			_commendationsListEntry.push_back(ss4.str().c_str());
-
-			drawSprites();
+							ss2.str().c_str());
+			lstArray[i]->setCellColor(row++, 0, Palette::blockOffset(13)+5);
 		}
+	}
+
+
+	for (std::vector<SoldierCommendations*>::const_iterator // Award stats ->
+			i = diary->getSoldierCommendations()->begin();
+			i != diary->getSoldierCommendations()->end();
+			++i)
+	{
+		if (_game->getRuleset()->getCommendation().empty() == true)
+			break;
+
+		const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+
+		std::wstringstream
+			ss1,
+			ss2,
+			ss3,
+			ss4;
+
+		if ((*i)->getNoun() != "noNoun")
+		{
+			ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
+			ss4 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+		}
+		else
+		{
+			ss1 << tr((*i)->getType().c_str());
+			ss4 << tr(rule->getDescription().c_str());
+		}
+
+		ss2 << tr((*i)->getDecorationDescription().c_str());
+		ss3 << tr((*i)->getDecorationClass().c_str());
+
+		_lstAwards->addRow(
+						3,
+						ss1.str().c_str(),
+						ss2.str().c_str(),
+						ss3.str().c_str());
+
+		_commendationsListEntry.push_back(ss4.str().c_str());
+
+		drawSprites();
 	}
 	//Log(LOG_INFO) << "SoldierDiaryPerformanceState::init EXIT";
 }

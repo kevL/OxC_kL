@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SOLDIERDEATH_H
 #define OPENXCOM_SOLDIERDEATH_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "GameTime.h"
 

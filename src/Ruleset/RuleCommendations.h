@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_RULECOMMENDATIONS_H
 #define OPENXCOM_RULECOMMENDATIONS_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

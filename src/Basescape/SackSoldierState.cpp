@@ -21,8 +21,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -71,6 +71,7 @@ SackSoldierState::SackSoldierState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -94,7 +95,7 @@ SackSoldierState::SackSoldierState(
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+10);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName(true));
+	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName());
 }
 
 /**
@@ -105,18 +106,17 @@ SackSoldierState::~SackSoldierState()
 }
 
 /**
- * Sacks the soldier and returns
- * to the previous screen.
+ * Sacks the soldier and returns to the previous screen.
  * @param action - pointer to an Action
  */
 void SackSoldierState::btnOkClick(Action*)
 {
-	Soldier* soldier = _base->getSoldiers()->at(_soldierId);
+	const Soldier* const soldier = _base->getSoldiers()->at(_soldierId);
 	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
 		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
 
-	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
 	delete soldier;
+	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
 
 	_game->popState();
 }

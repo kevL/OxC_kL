@@ -92,7 +92,7 @@ private:
 		std::string getArmor() const;
 
 		/// kL. Gets the gender ratio struct.
-		RuleGender getGenderRatio() const; // kL
+		const RuleGender* const getGenderRatio() const; // kL
 		/// Gets the female appearance ratio.
 //		int getFemaleFrequency() const;
 };

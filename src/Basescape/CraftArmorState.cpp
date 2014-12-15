@@ -28,8 +28,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -159,7 +159,7 @@ void CraftArmorState::init()
 	{
 		_lstSoldiers->addRow(
 							3,
-							(*i)->getName(true).c_str(),
+							(*i)->getName().c_str(),
 							tr((*i)->getArmor()->getType()).c_str(),
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 

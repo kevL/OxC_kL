@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SOLDIERDIARYMISSIONSTATE_H
 #define OPENXCOM_SOLDIERDIARYMISSIONSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -38,8 +38,7 @@ class Window;
 
 
 /**
- * Select Mission window that shows
- * mission details for a soldier.
+ * Select Mission window that shows mission details for a soldier.
  */
 class SoldierDiaryMissionState
 	:
@@ -76,9 +75,9 @@ private:
 	public:
 		/// Creates the Soldier Diary Mission state.
 		SoldierDiaryMissionState(
-				Base* base,
-				size_t soldierId,
-				size_t rowEntry);
+				Base* const base,
+				const size_t soldierId,
+				const size_t rowEntry);
 		/// Cleans up the Soldier Diary Mission state.
 		~SoldierDiaryMissionState();
 

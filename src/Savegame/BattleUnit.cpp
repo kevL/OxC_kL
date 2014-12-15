@@ -135,7 +135,7 @@ BattleUnit::BattleUnit(
 		_floorAbove(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-	_name			= soldier->getName(true);
+	_name			= soldier->getName();
 	_id				= soldier->getId();
 	_rank			= soldier->getRankString();
 
@@ -2923,6 +2923,7 @@ void BattleUnit::addMeleeExp(int qty)
 
 /**
  * Adds a mission and kill counts to Soldier's stats.
+ * @param soldier - pointer to a Soldier
  */
 void BattleUnit::updateGeoscapeStats(Soldier* soldier)
 {
