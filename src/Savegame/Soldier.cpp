@@ -745,9 +745,8 @@ int Soldier::getPsiStrImprovement()
 } */
 
 /**
- * Kills this Soldier in the Geoscape.
+ * Kills this Soldier in Debriefing or the Geoscape.
  * @param savedGame - pointer to the SavedGame
- * @return, pointer to SoldierDead
  */
 void Soldier::die(SavedGame* const savedGame)
 {

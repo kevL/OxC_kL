@@ -1035,6 +1035,22 @@ void Tile::removeItem(BattleItem* const item)
  */
 int Tile::getTopItemSprite() const
 {
+	if (_inventory.empty() == true)
+		return -1;
+
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		if ((*i)->getUnit() != NULL
+			&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)
+		{
+			return (*i)->getRules()->getFloorSprite();
+		}
+	}
+
 	int
 		weight = -1,
 		sprite = -1;

@@ -611,7 +611,7 @@ void SavedGame::load(
 			++i)
 	{
 /*kL
-	Soldier* s = new Soldier(
+		Soldier* s = new Soldier(
 						rule->getSoldier("XCOM"),
 						rule->getArmor("STR_ARMOR_NONE_UC"));
 		s->load(
@@ -619,20 +619,20 @@ void SavedGame::load(
 				rule,
 				this);
 		_deadSoldiers.push_back(s); */
-		SoldierDead* const dead = new SoldierDead( // kL_begin ->
-											L"",
-											0,
-											RANK_ROOKIE,
-											GENDER_MALE,
-											LOOK_BLONDE,
-											0,
-											0,
-											NULL,
-											UnitStats(),
-											UnitStats(),
-											NULL);
-		dead->load(*i);
-		_deadSoldiers.push_back(dead); // kL_end.
+		SoldierDead* const deadSoldier = new SoldierDead( // kL_begin ->
+													L"",
+													0,
+													RANK_ROOKIE,
+													GENDER_MALE,
+													LOOK_BLONDE,
+													0,
+													0,
+													NULL,
+													UnitStats(),
+													UnitStats(),
+													NULL);
+		deadSoldier->load(*i);
+		_deadSoldiers.push_back(deadSoldier); // kL_end.
 	}
 
 	for (YAML::const_iterator

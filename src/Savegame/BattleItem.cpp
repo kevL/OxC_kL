@@ -225,7 +225,7 @@ bool BattleItem::spendBullet()
 		return true;	// less than 0 denotes self-powered weapons. But ...
 						// let ==0 be a fudge-factor.
 
-	_ammoQty--;
+	--_ammoQty;
 
 	if (_ammoQty == 0)
 		return false;
@@ -276,16 +276,16 @@ void BattleItem::setPreviousOwner(BattleUnit* owner)
  */
 void BattleItem::moveToOwner(BattleUnit* owner)
 {
-//kL	_previousOwner = _owner? _owner: owner;
-	_previousOwner = owner;
-	if (_owner)
+	if (_owner != NULL)
 		_previousOwner = _owner;
+	else
+		_previousOwner = owner;
 
 	_owner = owner;
 
 	if (_previousOwner != NULL)
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = _previousOwner->getInventory()->begin();
 				i != _previousOwner->getInventory()->end();
 				++i)
@@ -293,7 +293,6 @@ void BattleItem::moveToOwner(BattleUnit* owner)
 			if (*i == this)
 			{
 				_previousOwner->getInventory()->erase(i);
-
 				break;
 			}
 		}
