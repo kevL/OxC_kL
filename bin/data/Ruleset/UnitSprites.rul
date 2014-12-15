@@ -1,4 +1,5 @@
 extraSprites:
+# ---- BigObs ---- #
   - type: BIGOBS.PCK
     width: 256
     height: 384
@@ -6,6 +7,7 @@ extraSprites:
     subY: 48
     files:
       0: Resources/Sprites/Units/bigobs/bigobs.png
+# ---- FloorOb ---- #
   - type: FLOOROB.PCK
     width: 256
     height: 400
@@ -13,6 +15,7 @@ extraSprites:
     subY: 40
     files:
       0: Resources/Sprites/Units/floorob/floorob.png
+# ---- HandOb ---- #
   - type: HANDOB.PCK
     width: 512
     height: 320
@@ -20,13 +23,8 @@ extraSprites:
     subY: 40
     files:
       0: Resources/Sprites/Units/handob/handob.png
-  - type: SECTOID.PCK
-    width: 512
-    height: 680
-    subX: 32
-    subY: 40
-    files:
-      0: Resources/Sprites/Units/sectoid/sectoid.png
+# ------------------------ #
+# ---- Mobile Objects ---- #
   - type: CYBER.PCK
     width: 256
     height: 320
@@ -34,3 +32,24 @@ extraSprites:
     subY: 40
     files:
       0: Resources/Sprites/Units/cybam/cybam.png
+  - type: SECTOID.PCK
+    width: 512
+    height: 680
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/sectoid/sectoid.png
+  - type: TANKS.PCK
+    width: 256
+    height: 320
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/tanks/tanks.png
+  - type: X_ROB.PCK
+    width: 256
+    height: 320
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/x_rob/x_rob.png

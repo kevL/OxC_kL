@@ -279,6 +279,11 @@ research:
       - STR_MUTON_NAVIGATOR
       - STR_SECTOID_NAVIGATOR
       - STR_WASPITE_NAVIGATOR
+  - name: STR_ALLOY_TANK_ARMOR
+    cost: 4200
+    points: 15
+    dependencies:
+      - STR_ALIEN_ALLOYS
   - name: STR_UFO_NAVIGATION
     cost: 45000
     points: 30
@@ -306,7 +311,6 @@ research:
     dependencies:
       - STR_ALIEN_ALLOYS
   - name: STR_UNMANNED_AIRCRAFT
-#    listOrder: 3107
     cost: 6000
     points: 20
     dependencies:

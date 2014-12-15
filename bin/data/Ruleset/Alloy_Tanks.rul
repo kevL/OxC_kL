@@ -1,0 +1,250 @@
+items:
+  - type: STR_TANK_CANNON_ALLOY
+    battleType: 1
+    size: 6
+    costSell: 420000
+    transferTime: 96
+    weight: 1
+    bigSprite: 57
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 4
+    fireSound: 12
+    compatibleAmmo:
+      - STR_HWP_CANNON_SHELLS
+    accuracySnap: 60
+    accuracyAimed: 90
+    tuSnap: 33
+    tuAimed: 80
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 0
+    listOrder: 1150
+  - type: STR_TANK_ROCKET_LAUNCHER_ALLOY
+    battleType: 1
+    size: 6
+    costSell: 480000
+    transferTime: 96
+    weight: 1
+    bigSprite: 58
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_HWP_ROCKETS
+    accuracySnap: 55
+    accuracyAimed: 115
+    tuSnap: 45
+    tuAimed: 75
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 1
+    listOrder: 1350
+  - type: STR_TANK_LASER_CANNON_ALLOY
+    damageType: 4
+    battleType: 1
+    size: 6
+    costSell: 792000
+    transferTime: 96
+    weight: 1
+    bigSprite: 59
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 7
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 110
+    accuracySnap: 50
+    accuracyAimed: 85
+    tuSnap: 33
+    tuAimed: 75
+    clipSize: -1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    turretType: 2
+    listOrder: 1550
+armors:
+  - type: TANK_ARMOR_ALLOY
+    spriteSheet: ALLOYTANKS.PCK
+    corpseBattle:
+      - TANK_CORPSE_1
+      - TANK_CORPSE_2
+      - TANK_CORPSE_3
+      - TANK_CORPSE_4
+    frontArmor: 110
+    sideArmor: 100
+    rearArmor: 95
+    underArmor: 85
+    drawingRoutine: 2
+    size: 2
+    loftempsSet: [92, 89, 90, 91]
+    damageModifier:
+      - 1.0 #none
+      - 1.06 #ap
+      - 0.37 #in
+      - 0.73 #he
+      - 0.99 #laser
+      - 0.97 #plasma
+      - 0.0 #stun
+      - 0.77 #melee
+      - 0.43 #acid
+      - 0.0 #smoke
+units:
+  - type: STR_TANK_CANNON_ALLOY
+    race: STR_TANK_CANNON_ALLOY
+    stats:
+      tu: 80
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: TANK_ARMOR_ALLOY
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    energyRecovery: 50
+    deathSound: 23
+    moveSound: 14
+  - type: STR_TANK_ROCKET_LAUNCHER_ALLOY
+    race: STR_TANK_ROCKET_LAUNCHER_ALLOY
+    stats:
+      tu: 80
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 70
+    armor: TANK_ARMOR_ALLOY
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    energyRecovery: 50
+    deathSound: 23
+    moveSound: 14
+  - type: STR_TANK_LASER_CANNON
+    race: STR_TANK_LASER_CANNON
+    stats:
+      tu: 80
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 7
+    armor: TANK_ARMOR_ALLOY
+    standHeight: 16
+    kneelHeight: 16
+    value: 20
+    energyRecovery: 50
+    deathSound: 23
+    moveSound: 14
+manufacture:
+  - name: STR_TANK_CANNON_ALLOY
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_ALLOY_TANK_ARMOR
+    space: 23
+    time: 1200
+    cost: 340000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 22
+    listOrder: 425
+  - name: STR_TANK_ROCKET_LAUNCHER_ALLOY
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_ALLOY_TANK_ARMOR
+    space: 23
+    time: 1200
+    cost: 360000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 22
+    listOrder: 475
+  - name: STR_TANK_LASER_CANNON_ALLOY
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_LASER_CANNON
+      - STR_ALLOY_TANK_ARMOR
+    space: 23
+    time: 1350
+    cost: 594000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 25
+    listOrder: 550
+ufopaedia:
+  - id: STR_TANK_CANNON_ALLOY
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    requires:
+      - STR_ALLOY_TANK_ARMOR
+    text: STR_TANK_CANNON_ALLOY_UFOPEDIA
+    weapon: STR_CANNON
+    listOrder: 1425
+  - id: STR_TANK_ROCKET_LAUNCHER_ALLOY
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    requires:
+      - STR_ALLOY_TANK_ARMOR
+    text: STR_TANK_ROCKET_LAUNCHER_ALLOY_UFOPEDIA
+    weapon: STR_ROCKET_LAUNCHER
+    listOrder: 1450
+  - id: STR_TANK_LASER_CANNON_ALLOY
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    requires:
+      - STR_LASER_CANNON
+      - STR_ALLOY_TANK_ARMOR
+    text: STR_TANK_LASER_CANNON_ALLOY_UFOPEDIA
+    weapon: STR_LASER_CANNON
+    listOrder: 1475
+extraSprites:
+  - type: ALLOYTANKS.PCK
+    width: 256
+    height: 640
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Alloy_Tanks/Alloy_Tanks.png
+  - type: BIGOBS.PCK
+    files:
+      72: Resources/Alloy_Tanks/ATC_BIGOB.png
+      73: Resources/Alloy_Tanks/ATRL_BIGOB.png
+      74: Resources/Alloy_Tanks/ATL_BIGOB.png
+extraStrings:
+  - type: en-US
+    strings:
+      STR_ALLOY_TANK_ARMOR: "Alloy HWP Armor"
+      STR_TANK_CANNON_ALLOY: "Alloy Tank/Cannon"
+      STR_TANK_CANNON_ALLOY_UFOPEDIA: "This is a standard Cannon HWP that has been refitted with light, strong alien alloy armor. Its performance is similar to the original, but it is slightly faster can take much more abuse."
+      STR_TANK_LASER_CANNON_ALLOY: "Alloy Tank/Laser"
+      STR_TANK_LASER_CANNON_ALLOY_UFOPEDIA: "The pinnacle of X-COM tracked HWP technology. It employs both the powerful laser cannon designed by our scientists, and light, strong alien alloy armor."
+      STR_TANK_ROCKET_LAUNCHER_ALLOY: "Alloy Tank/Rocket Launcher"
+      STR_TANK_ROCKET_LAUNCHER_ALLOY_UFOPEDIA: "This is a standard Rocket Launcher HWP that has been refitted with light, strong alien alloy armor. Its performance is similar to the original, but its longevity under fire has been greatly increased, and it is somewhat quicker."
+  - type: en-GB
+    strings:
+      STR_ALLOY_TANK_ARMOR: Alloy HWP Armour
+      STR_TANK_CANNON_ALLOY: Alloy Tank/Cannon
+      STR_TANK_CANNON_ALLOY_UFOPEDIA: This is a standard Cannon HWP that has been refitted with light, strong alien alloy armour. Its performance is similar to the original, but it is slightly faster can take much more abuse.
+      STR_TANK_LASER_CANNON_ALLOY: Alloy Tank/Laser
+      STR_TANK_LASER_CANNON_ALLOY_UFOPEDIA: The pinnacle of X-COM tracked HWP technology. It employs both the powerful laser cannon designed by our scientists, and light, strong alien alloy armour.
+      STR_TANK_ROCKET_LAUNCHER_ALLOY: Alloy Tank/Rocket Launcher
+      STR_TANK_ROCKET_LAUNCHER_ALLOY_UFOPEDIA: This is a standard Rocket Launcher HWP that has been refitted with light, strong alien alloy armour. Its performance is similar to the original, but its longevity under fire has been greatly increased, and it is somewhat quicker.
