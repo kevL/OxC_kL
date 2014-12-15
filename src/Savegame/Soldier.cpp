@@ -197,7 +197,7 @@ void Soldier::load(
 
 	if (node["diary"])
 	{
-		_diary = new SoldierDiary();
+//		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
 	}
 
@@ -764,7 +764,7 @@ void Soldier::die(SavedGame* const savedGame)
 											deathTime,
 											_initialStats,
 											_currentStats,
-											_diary);
+											*_diary);
 											// base if I want to...
 
 	savedGame->getDeadSoldiers()->push_back(deadSoldier);

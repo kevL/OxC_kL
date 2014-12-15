@@ -629,8 +629,7 @@ void SavedGame::load(
 													0,
 													NULL,
 													UnitStats(),
-													UnitStats(),
-													NULL);
+													UnitStats());
 		deadSoldier->load(*i);
 		_deadSoldiers.push_back(deadSoldier); // kL_end.
 	}

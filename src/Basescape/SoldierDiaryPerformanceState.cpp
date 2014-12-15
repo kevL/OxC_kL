@@ -23,7 +23,7 @@
 
 #include "SoldierDiaryOverviewState.h"
 #include "SoldierInfoState.h"
-#include "SoldierInfoDeadState.h" // kL
+#include "SoldierInfoDeadState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -43,7 +43,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDead.h" // kL
+#include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDiary.h"
 
 
@@ -54,8 +54,10 @@ namespace OpenXcom
  * Initializes all the elements in the Soldiers screen.
  * @param base						- pointer to the Base to get info from
  * @param soldierId					- ID of the selected soldier
- * @param soldierDiaryOverviewState	- pointer to said
- * @param display					- 0 displays kills, 1 displays missions, 2 displays commendations
+ * @param soldierDiaryOverviewState	- pointer to SoldierDiaryOverviewState
+ * @param display					- 0 displays Kills stats
+									  1 displays Missions stats
+									  2 displays Awards stats
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		Base* const base,
@@ -66,7 +68,8 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		_base(base),
 		_soldierID(soldierID),
 		_soldierDiaryOverviewState(soldierDiaryOverviewState),
-		_lastScrollPos(0)
+		_lastScrollPos(0),
+		_diary(NULL)
 {
 	//Log(LOG_INFO) << "Create SoldierDiaryPerformanceState";
 	if (_base == NULL) // kL
@@ -467,8 +470,6 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->clearList();
 	_lstAwards->clearList();
 
-	SoldierDiary* diary = NULL;
-
 	if (_base == NULL)
 	{
 /*		if (_listDead->empty() == true)
@@ -480,10 +481,10 @@ void SoldierDiaryPerformanceState::init()
 		if (_soldierID >= _listDead->size())
 			_soldierID = 0;
 
-		_soldierDead = _listDead->at(_soldierID);
-		diary = _soldierDead->getDiary();
+		const SoldierDead* const deadSoldier = _listDead->at(_soldierID);
+		_diary = deadSoldier->getDiary();
 
-		_txtTitle->setText(_soldierDead->getName());
+		_txtTitle->setText(deadSoldier->getName());
 	}
 	else
 	{
@@ -496,27 +497,27 @@ void SoldierDiaryPerformanceState::init()
 		if (_soldierID >= _list->size())
 			_soldierID = 0;
 
-		_soldier = _list->at(_soldierID);
-		diary = _soldier->getDiary();
+		const Soldier* const soldier = _list->at(_soldierID);
+		_diary = soldier->getDiary();
 
-		_txtTitle->setText(_soldier->getName());
+		_txtTitle->setText(soldier->getName());
 	}
 
 
-	if (diary == NULL)
+	if (_diary == NULL) // safety.
 		return;
 
 
 	_lstKillTotals->addRow( // Kill stats ->
 						2,
-						tr("STR_KILLS").arg(diary->getKillTotal()).c_str(),
-						tr("STR_STUNS").arg(diary->getStunTotal()).c_str());
+						tr("STR_KILLS").arg(_diary->getKillTotal()).c_str(),
+						tr("STR_STUNS").arg(_diary->getStunTotal()).c_str());
 	_lstMissionTotals->addRow(
 						4,
-						tr("STR_MISSIONS").arg(diary->getMissionTotal()).c_str(),
-						tr("STR_WINS").arg(diary->getWinTotal()).c_str(),
-						tr("STR_SCORE_VALUE").arg(diary->getScoreTotal()).c_str(),
-						tr("STR_DAYS_WOUNDED").arg(diary->getDaysWoundedTotal()).c_str());
+						tr("STR_MISSIONS").arg(_diary->getMissionTotal()).c_str(),
+						tr("STR_WINS").arg(_diary->getWinTotal()).c_str(),
+						tr("STR_SCORE_VALUE").arg(_diary->getScoreTotal()).c_str(),
+						tr("STR_DAYS_WOUNDED").arg(_diary->getDaysWoundedTotal()).c_str());
 
 
 	TextList* const lstArray[6] = // Mission stats ->
@@ -531,12 +532,12 @@ void SoldierDiaryPerformanceState::init()
 
 	const std::map<std::string, int> mapArray[6] =
 	{
-		diary->getAlienRaceTotal(),
-		diary->getAlienRankTotal(),
-		diary->getWeaponTotal(),
-		diary->getRegionTotal(),
-		diary->getTypeTotal(),
-		diary->getUFOTotal()
+		_diary->getAlienRaceTotal(),
+		_diary->getAlienRankTotal(),
+		_diary->getWeaponTotal(),
+		_diary->getRegionTotal(),
+		_diary->getTypeTotal(),
+		_diary->getUFOTotal()
 	};
 
 	for (int
@@ -571,8 +572,8 @@ void SoldierDiaryPerformanceState::init()
 
 
 	for (std::vector<SoldierCommendations*>::const_iterator // Award stats ->
-			i = diary->getSoldierCommendations()->begin();
-			i != diary->getSoldierCommendations()->end();
+			i = _diary->getSoldierCommendations()->begin();
+			i != _diary->getSoldierCommendations()->end();
 			++i)
 	{
 		if (_game->getRuleset()->getCommendation().empty() == true)
@@ -621,7 +622,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 	if (_displayAwards == false)
 		return;
 
-	for (int // clear sprites
+	for (int
 			i = 0;
 			i != LIST_ROWS;
 			++i)
@@ -630,75 +631,34 @@ void SoldierDiaryPerformanceState::drawSprites()
 		_srfDecor[i]->clear();
 	}
 
-	const int scroll = _lstAwards->getScroll(); // start here
-	int j = 0; // current location in the vector
+	const int scroll = _lstAwards->getScroll();
+	int j = 0;
 
-	if (_base == NULL) // kL
+	for (std::vector<SoldierCommendations*>::const_iterator
+			i = _diary->getSoldierCommendations()->begin();
+			i != _diary->getSoldierCommendations()->end();
+			++i,
+				++j)
 	{
-		if (_listDead->at(_soldierID)->getDiary() != NULL) // kL
+		const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+
+		if (j < scroll
+			|| j - scroll >= static_cast<int>(_srfSprite.size()))
 		{
-			for (std::vector<SoldierCommendations*>::const_iterator
-					i = _listDead->at(_soldierID)->getDiary()->getSoldierCommendations()->begin();
-					i != _listDead->at(_soldierID)->getDiary()->getSoldierCommendations()->end();
-					++i)
-			{
-				const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
-
-				if (j < scroll // skip awards that are not visible in the textlist
-					|| j - scroll >= static_cast<int>(_srfSprite.size()))
-				{
-					++j;
-
-					continue;
-				}
-
-				const int sprite = rule->getSprite();
-				_sstSprite->getFrame(sprite)->setX(0); // handle award sprites
-				_sstSprite->getFrame(sprite)->setY(0);
-				_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
-
-				const int decor = (*i)->getDecorationLevelInt();
-				if (decor != 0) // handle award decoration sprites
-				{
-					_sstDecor->getFrame(decor)->setX(0);
-					_sstDecor->getFrame(decor)->setY(0);
-					_sstDecor->getFrame(decor)->blit(_srfDecor[j - scroll]);
-				}
-
-				++j;
-			}
+			continue; // skip awards that are not visible on the list
 		}
-	}
-	else
-	{
-		for (std::vector<SoldierCommendations*>::const_iterator
-				i = _list->at(_soldierID)->getDiary()->getSoldierCommendations()->begin();
-				i != _list->at(_soldierID)->getDiary()->getSoldierCommendations()->end();
-				++i)
+
+		const int sprite = rule->getSprite(); // handle award sprites
+		_sstSprite->getFrame(sprite)->setX(0);
+		_sstSprite->getFrame(sprite)->setY(0);
+		_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
+
+		const int decor = (*i)->getDecorationLevelInt(); // handle award decoration sprites
+		if (decor != 0)
 		{
-			const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
-
-			if (j < scroll // skip awards that are not visible in the textlist
-				|| j - scroll >= static_cast<int>(_srfSprite.size()))
-			{
-				++j;
-				continue;
-			}
-
-			const int sprite = rule->getSprite();
-			_sstSprite->getFrame(sprite)->setX(0); // handle award sprites
-			_sstSprite->getFrame(sprite)->setY(0);
-			_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
-
-			const int decor = (*i)->getDecorationLevelInt();
-			if (decor != 0) // handle award decoration sprites
-			{
-				_sstDecor->getFrame(decor)->setX(0);
-				_sstDecor->getFrame(decor)->setY(0);
-				_sstDecor->getFrame(decor)->blit(_srfDecor[j - scroll]);
-			}
-
-			++j;
+			_sstDecor->getFrame(decor)->setX(0);
+			_sstDecor->getFrame(decor)->setY(0);
+			_sstDecor->getFrame(decor)->blit(_srfDecor[j - scroll]);
 		}
 	}
 }

@@ -36,7 +36,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDead.h" // kL
+#include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDiary.h"
 
 
@@ -58,17 +58,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		_soldierId(soldierId),
 		_rowEntry(rowEntry)
 {
-	if (_base == NULL)
-	{
-		_list = NULL;
-		_listDead = _game->getSavedGame()->getDeadSoldiers();
-	}
-	else
-	{
-		_list = _base->getSoldiers();
-		_listDead = NULL;
-	}
-
 	_screen = false;
 
 	_window			= new Window(this, 252, 133, 34, 36, POPUP_BOTH);
@@ -109,46 +98,53 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	size_t missionId;
 	int daysWounded;
 
+	SoldierDiary* diary;
+
 	if (_base == NULL)
 	{
-		if (_listDead->empty() == true)
+		const std::vector<SoldierDead*>* const deadList = _game->getSavedGame()->getDeadSoldiers();
+
+/*		if (deadList->empty() == true)
 		{
 			_game->popState();
 			return;
-		}
+		} */ // should never happen. Btn won't be visible if listDead is empty.
 
-		if (_soldierId >= _listDead->size())
+		if (_soldierId >= deadList->size())
 			_soldierId = 0;
 
-		_soldierDead = _listDead->at(_soldierId);
-		_soldier = NULL;
+		const SoldierDead* const deadSoldier = deadList->at(_soldierId);
+		diary = deadSoldier->getDiary();
 
-		missionId = _soldierDead->getDiary()->getMissionIdList().at(_rowEntry);
+		missionId = diary->getMissionIdList().at(_rowEntry);
 		if (missionId > static_cast<int>(missionStatistics->size()))
 			missionId = 0;
 
-		daysWounded = missionStatistics->at(missionId)->injuryList[_soldierDead->getId()];
+		daysWounded = missionStatistics->at(missionId)->injuryList[deadSoldier->getId()];
 	}
 	else
 	{
-		if (_list->empty() == true)
+		const std::vector<Soldier*>* const liveList = _base->getSoldiers();
+
+/*		if (liveList->empty() == true)
 		{
 			_game->popState();
 			return;
-		}
+		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
 
-		if (_soldierId >= _list->size())
+		if (_soldierId >= liveList->size())
 			_soldierId = 0;
 
-		_soldier = _list->at(_soldierId);
-		_soldierDead = NULL;
+		const Soldier* const soldier = liveList->at(_soldierId);
+		diary = soldier->getDiary();
 
-		missionId = _soldier->getDiary()->getMissionIdList().at(_rowEntry);
+		missionId = diary->getMissionIdList().at(_rowEntry);
 		if (missionId > static_cast<int>(missionStatistics->size()))
 			missionId = 0;
 
-		daysWounded = missionStatistics->at(missionId)->injuryList[_soldier->getId()];
+		daysWounded = missionStatistics->at(missionId)->injuryList[soldier->getId()];
 	}
+
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
@@ -216,90 +212,44 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	size_t row = 0;
 //	bool stunOrKill = false;
 
-	if (_base == NULL)
+	for (std::vector<BattleUnitKills*>::const_iterator
+			j = diary->getKills().begin();
+			j != diary->getKills().end();
+			++j)
 	{
-		for (std::vector<BattleUnitKills*>::const_iterator
-				j = _soldierDead->getDiary()->getKills().begin();
-				j != _soldierDead->getDiary()->getKills().end();
-				++j)
+		if ((*j)->_mission == missionId)
 		{
-			if ((*j)->_mission == missionId)
+			std::wostringstream
+				wossRace,
+				wossRank,
+				wossWeapon,
+				wossUnit,
+				wossStatus;
+//				wossAmmo;
+
+			wossRace << tr((*j)->_race.c_str());
+			wossRank << tr((*j)->_rank.c_str());
+			wossWeapon << tr((*j)->_weapon.c_str());
+			wossUnit << wossRace.str().c_str() << " " << wossRank.str().c_str();
+
+			if ((*j)->getUnitStatusString() == "STATUS_DEAD")
 			{
-				std::wostringstream
-					wossRace,
-					wossRank,
-					wossWeapon,
-					wossUnit,
-					wossStatus;
-//					wossAmmo;
-
-				wossRace << tr((*j)->_race.c_str());
-				wossRank << tr((*j)->_rank.c_str());
-				wossWeapon << tr((*j)->_weapon.c_str());
-				wossUnit << wossRace.str().c_str() << " " << wossRank.str().c_str();
-
-				if ((*j)->getUnitStatusString() == "STATUS_DEAD")
-				{
-					wossStatus << tr("STR_KILLED").c_str();
-					++killQty;
-//					stunOrKill = true;
-				}
-				else
-				{
-					wossStatus << tr("STR_STUNNED").c_str();
-//					stunOrKill = true;
-				}
-
-				_lstKills->addRow(
-								3,
-								wossStatus.str().c_str(),
-								wossUnit.str().c_str(),
-								wossWeapon.str().c_str());
-				_lstKills->setCellColor(row++, 0, Palette::blockOffset(13)+5);
+				wossStatus << tr("STR_KILLED").c_str();
+				++killQty;
+//				stunOrKill = true;
 			}
-		}
-	}
-	else
-	{
-		for (std::vector<BattleUnitKills*>::const_iterator
-				j = _soldier->getDiary()->getKills().begin();
-				j != _soldier->getDiary()->getKills().end();
-				++j)
-		{
-			if ((*j)->_mission == missionId)
+			else
 			{
-				std::wostringstream
-					wossRace,
-					wossRank,
-					wossWeapon,
-					wossUnit,
-					wossStatus;
-//					wossAmmo;
-
-				wossRace << tr((*j)->_race.c_str());
-				wossRank << tr((*j)->_rank.c_str());
-				wossWeapon << tr((*j)->_weapon.c_str());
-				wossUnit << wossRace.str().c_str() << " " << wossRank.str().c_str();
-
-				if ((*j)->getUnitStatusString() == "STATUS_DEAD")
-				{
-					wossStatus << tr("STR_KILLED").c_str();
-					++killQty;
-//					stunOrKill = true;
-				}
-				else
-				{
-					wossStatus << tr("STR_STUNNED").c_str();
-//					stunOrKill = true;
-				}
-
-				_lstKills->addRow(
-								3,
-								wossStatus.str().c_str(),
-								wossUnit.str().c_str(),
-								wossWeapon.str().c_str());
-				_lstKills->setCellColor(row++, 0, Palette::blockOffset(13)+5);
+				wossStatus << tr("STR_STUNNED").c_str();
+//				stunOrKill = true;
 			}
+
+			_lstKills->addRow(
+							3,
+							wossStatus.str().c_str(),
+							wossUnit.str().c_str(),
+							wossWeapon.str().c_str());
+			_lstKills->setCellColor(row++, 0, Palette::blockOffset(13)+5);
 		}
 	}
 

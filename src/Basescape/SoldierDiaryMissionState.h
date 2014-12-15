@@ -29,8 +29,6 @@ namespace OpenXcom
 {
 
 class Base;
-class Soldier;
-class SoldierDead; // kL
 class Text;
 class TextButton;
 class TextList;
@@ -50,12 +48,7 @@ private:
 		_rowEntry,
 		_soldierId;
 
-	std::vector<Soldier*>* _list;
-	std::vector<SoldierDead*>* _listDead; // kL
-
 	Base* _base;
-	Soldier* _soldier;
-	SoldierDead* _soldierDead; // kL
 
 	TextButton* _btnOk;
 	Window* _window;

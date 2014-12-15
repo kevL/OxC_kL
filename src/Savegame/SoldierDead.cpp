@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new dead soldier.
+ * Initializes a new dead soldier. Used for Soldiers dying IG.
  * @param name			-
  * @param id			-
  * @param unitRank		-
@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param death			- pointer to SoldierDeath time
  * @param initialStats	-
  * @param currentStats	-
- * @param diary			- pointer to SoldierDiary
+ * @param diary			- copy of SoldierDiary from the recently deceased Soldier
  */
 SoldierDead::SoldierDead(
 		const std::wstring name,
@@ -53,8 +53,7 @@ SoldierDead::SoldierDead(
 		SoldierDeath* const death,
 		const UnitStats initialStats,
 		const UnitStats currentStats,
-		SoldierDiary* const diary)
-		// base if I want to...
+		SoldierDiary diary) // base if I want to...
 	:
 		_name(name),
 		_id(id),
@@ -66,14 +65,38 @@ SoldierDead::SoldierDead(
 		_death(death),
 		_initialStats(initialStats),
 		_currentStats(currentStats)
-//		_diary(diary)
 {
-	// Copy the diary instead of setting a pointer,
-	// because delete Soldier will delete the old diary
-	// (unless you want to do tricky things that i don't).
-//	if (_diary == NULL)
 	_diary = new SoldierDiary();
-	_diary = diary;
+	*_diary = diary; // copy diary from previous owner ....
+}
+
+/**
+ * Creates a new dead soldier without a diary. Used for loading a SaveGame.
+ */
+SoldierDead::SoldierDead(
+		const std::wstring name,
+		const int id,
+		const SoldierRank unitRank,
+		const SoldierGender gender,
+		const SoldierLook look,
+		const int missions,
+		const int kills,
+		SoldierDeath* const death,
+		const UnitStats initialStats,
+		const UnitStats currentStats)
+	:
+		_name(name),
+		_id(id),
+		_rank(unitRank),
+		_gender(gender),
+		_look(look),
+		_missions(missions),
+		_kills(kills),
+		_death(death),
+		_initialStats(initialStats),
+		_currentStats(currentStats)
+{
+	_diary = new SoldierDiary(); // empty diary. Should fill up from YAML save.
 }
 
 /**
@@ -106,7 +129,7 @@ void SoldierDead::load(const YAML::Node& node)
 
 	if (node["diary"])
 	{
-		_diary = new SoldierDiary();
+//		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
 	}
 }

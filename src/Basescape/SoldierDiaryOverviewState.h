@@ -28,9 +28,9 @@ namespace OpenXcom
 
 class Base;
 class Soldier;
-class SoldierDead; // kL
+class SoldierDead;
 class SoldierInfoState;
-class SoldierInfoDeadState; // kL
+class SoldierInfoDeadState;
 class Text;
 class TextButton;
 class TextList;
@@ -51,17 +51,15 @@ private:
 		_curRow;
 
 	std::vector<Soldier*>* _list;
-	std::vector<SoldierDead*>* _listDead; // kL
+	std::vector<SoldierDead*>* _listDead;
 
 	Base* _base;
 	SoldierInfoState* _soldierInfoState;
-	SoldierInfoDeadState* _soldierInfoDeadState; // kL
-	Soldier* _soldier;
-	SoldierDead* _soldierDead; // kL
+	SoldierInfoDeadState* _soldierInfoDeadState;
 
 	Text
 		* _txtTitle,
-		* _txtBaseLabel, // kL
+		* _txtBaseLabel,
 		* _txtLocation,
 		* _txtStatus,
 		* _txtDate;
@@ -82,7 +80,7 @@ private:
 				Base* const base,
 				size_t soldierID,
 				SoldierInfoState* soldierInfoState,
-				SoldierInfoDeadState* soldierInfoDeadState); // kL
+				SoldierInfoDeadState* soldierInfoDeadState);
 		/// Cleans up the Soldiers state.
 		~SoldierDiaryOverviewState();
 

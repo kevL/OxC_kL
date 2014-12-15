@@ -61,7 +61,7 @@ private:
 
 
 	public:
-		/// Creates a new dead soldier.
+		/// Creates a new dead soldier. Used for Soldiers dying IG.
 		SoldierDead(
 				const std::wstring name,
 				const int id,
@@ -73,8 +73,19 @@ private:
 				SoldierDeath* const death,
 				const UnitStats initialStats,
 				const UnitStats currentStats,
-				SoldierDiary* const diary);
-				// base if I want to...
+				SoldierDiary diary); // + Base if I want to...
+		/// Creates a new dead soldier without a diary. Used for loading SaveGame.
+		SoldierDead(
+				const std::wstring name,
+				const int id,
+				const SoldierRank unitRank,
+				const SoldierGender gender,
+				const SoldierLook look,
+				const int missions,
+				const int kills,
+				SoldierDeath* const death,
+				const UnitStats initialStats,
+				const UnitStats currentStats);
 		/// Cleans up the dead soldier.
 		~SoldierDead();
 

@@ -24,7 +24,7 @@
 #include "SoldierDiaryMissionState.h"
 #include "SoldierDiaryPerformanceState.h"
 #include "SoldierInfoState.h"
-#include "SoldierInfoDeadState.h" // kL
+#include "SoldierInfoDeadState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -41,7 +41,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDead.h" // kL
+#include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDiary.h"
 
 
@@ -59,19 +59,17 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 		Base* const base,
 		size_t soldierID,
 		SoldierInfoState* soldierInfoState,
-		SoldierInfoDeadState* soldierInfoDeadState) // kL
+		SoldierInfoDeadState* soldierInfoDeadState)
 	:
 		_base(base),
 		_soldierID(soldierID),
 		_soldierInfoState(soldierInfoState),
 		_soldierInfoDeadState(soldierInfoDeadState),
-		_soldier(NULL),
-		_soldierDead(NULL),
 		_curRow(0)
 {
 	if (_base == NULL)
 	{
-		_listDead = _game->getSavedGame()->getDeadSoldiers(); // kL
+		_listDead = _game->getSavedGame()->getDeadSoldiers();
 		_list = NULL;
 	}
 	else
@@ -232,6 +230,8 @@ void SoldierDiaryOverviewState::init()
 {
 	State::init();
 
+	SoldierDiary* diary = NULL;
+
 	if (_base == NULL)
 	{
 /*		if (_listDead->empty() == true)
@@ -243,8 +243,10 @@ void SoldierDiaryOverviewState::init()
 		if (_soldierID >= _listDead->size())
 			_soldierID = 0;
 
-		_soldierDead = _listDead->at(_soldierID);
-		_txtTitle->setText(_soldierDead->getName());
+		const SoldierDead* const deadSoldier = _listDead->at(_soldierID);
+		diary = deadSoldier->getDiary();
+
+		_txtTitle->setText(deadSoldier->getName());
 	}
 	else
 	{
@@ -257,111 +259,89 @@ void SoldierDiaryOverviewState::init()
 		if (_soldierID >= _list->size())
 			_soldierID = 0;
 
-		_soldier = _list->at(_soldierID);
-		_txtTitle->setText(_soldier->getName());
+		const Soldier* const soldier = _list->at(_soldierID);
+		diary = soldier->getDiary();
+
+		_txtTitle->setText(soldier->getName());
 	}
 
 
 	_lstDiary->clearList();
 
+	if (diary == NULL) // safety.
+		return;
+
+
 	const std::vector<MissionStatistics*>* const missionStatistics = _game->getSavedGame()->getMissionStatistics();
-//	size_t row = 0;
-
 	for (std::vector<MissionStatistics*>::const_reverse_iterator
-			j = missionStatistics->rbegin();
-			j != missionStatistics->rend();
-			++j)
+			i = missionStatistics->rbegin();
+			i != missionStatistics->rend();
+			++i)
 	{
-		const int missionId = (*j)->id;
-		bool wasOnMission = false;
+		const int missionId = (*i)->id;
 
-		if (_base == NULL)
+		for (std::vector<int>::const_iterator
+				j = diary->getMissionIdList().begin();
+				j != diary->getMissionIdList().end();
+				++j)
 		{
-			if (_soldierDead->getDiary() != NULL) // kL: dead soldiers are initialized w/ NULL diaries ...
+			if (*j == missionId)
 			{
-				for (std::vector<int>::const_iterator
-						k = _soldierDead->getDiary()->getMissionIdList().begin();
-						k != _soldierDead->getDiary()->getMissionIdList().end();
-						++k)
-				{
-					if (*k == missionId)
-					{
-						wasOnMission = true;
-						break;
-					}
-				}
+				// This mission is in the soldier's vector of missions.
+				std::wostringstream
+					wossSuccess,
+					wossRating,
+					wossScore,
+
+					wossRegion,
+					wossCountry,
+
+					wossHour,
+					wossMinute,
+					wossDay,
+					wossMonth,
+					wossYear;
+
+				if ((*i)->success == true)
+					wossSuccess << tr("STR_MISSION_WIN");
+				else
+					wossSuccess << tr("STR_MISSION_LOSS");
+
+				wossRating << tr((*i)->rating.c_str());
+				wossScore << (*i)->score;
+
+				wossRegion << tr((*i)->region.c_str());
+				wossCountry << tr((*i)->country.c_str());
+
+				wossMonth << tr((*i)->time.getMonthString().c_str());
+				wossDay << (*i)->time.getDayString(_game->getLanguage());
+				wossYear << (*i)->time.getYear();
+
+				std::wostringstream
+					wossStatus,
+					wossLocation;
+
+				if ((*i)->country == "STR_UNKNOWN")
+					wossLocation << wossRegion.str().c_str();
+				else
+					wossLocation << wossCountry.str().c_str();
+
+				wossStatus << wossSuccess.str().c_str() << " - " << wossRating.str().c_str();
+
+				_lstDiary->addRow(
+								5,
+								wossLocation.str().c_str(),
+								wossStatus.str().c_str(),
+								wossDay.str().c_str(),
+								wossMonth.str().c_str(),
+								wossYear.str().c_str());
+				break;
 			}
 		}
-		else
-		{
-			for (std::vector<int>::const_iterator
-					k = _soldier->getDiary()->getMissionIdList().begin();
-					k != _soldier->getDiary()->getMissionIdList().end();
-					++k)
-			{
-				if (*k == missionId)
-				{
-					wasOnMission = true;
-					break;
-				}
-			}
-		}
-
-		if (wasOnMission == false)
-			continue;
-
-		// This mission is part of the soldier's vector of missions.
-		std::wostringstream
-			wossSuccess,
-			wossRating,
-			wossScore,
-
-			wossRegion,
-			wossCountry,
-
-			wossHour,
-			wossMinute,
-			wossDay,
-			wossMonth,
-			wossYear;
-
-		if ((*j)->success == true)
-			wossSuccess << tr("STR_MISSION_WIN");
-		else
-			wossSuccess << tr("STR_MISSION_LOSS");
-
-		wossRating << tr((*j)->rating.c_str());
-		wossScore << (*j)->score;
-
-		wossRegion << tr((*j)->region.c_str());
-		wossCountry << tr((*j)->country.c_str());
-
-		wossMonth << tr((*j)->time.getMonthString().c_str());
-		wossDay << (*j)->time.getDayString(_game->getLanguage());
-		wossYear << (*j)->time.getYear();
-
-		std::wostringstream
-			wossStatus,
-			wossLocation;
-
-		if ((*j)->country == "STR_UNKNOWN")
-			wossLocation << wossRegion.str().c_str();
-		else
-			wossLocation << wossCountry.str().c_str();
-
-		wossStatus << wossSuccess.str().c_str() << " - " << wossRating.str().c_str();
-
-		_lstDiary->addRow(
-						5,
-						wossLocation.str().c_str(),
-						wossStatus.str().c_str(),
-						wossDay.str().c_str(),
-						wossMonth.str().c_str(),
-						wossYear.str().c_str());
-//		++row;
 	}
 
 	_lstDiary->scrollTo(_curRow);
+}
 /*	if (row > 0 // all taken care of in TextList
 		&& _lstDiary->getScroll() >= row)
 	{
@@ -369,7 +349,6 @@ void SoldierDiaryOverviewState::init()
 	}
 	else if (_curRow > 0)
 		_lstDiary->scrollTo(_curRow); */
-}
 
 /**
  * Set the soldier's ID.

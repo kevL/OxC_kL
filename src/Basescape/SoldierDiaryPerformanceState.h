@@ -28,7 +28,8 @@ namespace OpenXcom
 
 class Base;
 class Soldier;
-class SoldierDead; // kL
+class SoldierDead;
+class SoldierDiary;
 class SoldierDiaryOverviewState;
 class Surface;
 class SurfaceSet;
@@ -62,14 +63,13 @@ private:
 	std::vector<std::wstring> _commendationsListEntry;
 
 	std::vector<Soldier*>* _list;
-	std::vector<SoldierDead*>* _listDead; // kL
+	std::vector<SoldierDead*>* _listDead;
 	std::vector<Surface*>
 		_srfSprite,
 		_srfDecor;
 
 	Base* _base;
-	Soldier* _soldier;
-	SoldierDead* _soldierDead; // kL
+	SoldierDiary* _diary;
 	SoldierDiaryOverviewState* _soldierDiaryOverviewState;
 
 	SurfaceSet
@@ -77,7 +77,7 @@ private:
 		* _sstDecor;
 	Text
 		* _txtTitle,
-		* _txtBaseLabel, // kL
+		* _txtBaseLabel,
 
 		* _txtRank,
 		* _txtRace,
@@ -89,7 +89,7 @@ private:
 
 		* _txtMedalName,
 		* _txtMedalLevel,
-		* _txtMedalClass, // kL
+		* _txtMedalClass,
 		* _txtMedalInfo;
 	TextButton
 		* _btnOk,

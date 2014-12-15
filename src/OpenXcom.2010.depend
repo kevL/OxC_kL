@@ -5343,7 +5343,7 @@
 1325720122 f:\git\openxcom\deps\include\sdl\sdl_types.h
 	"SDL_stdinc.h"
 
-1418633237 f:\git\openxcom\src\savegame\soldierdead.h
+1418648371 f:\git\openxcom\src\savegame\soldierdead.h
 	"../Savegame/Soldier.h"
 
 1418632347 f:\git\openxcom\src\savegame\soldierdeath.h
@@ -9062,7 +9062,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1418418160 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1418645006 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -9199,7 +9199,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1418637617 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1418648125 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -9230,7 +9230,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1418607837 source:f:\git\openxcom\src\savegame\soldier.cpp
+1418647976 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -9244,7 +9244,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
 
-1418633246 source:f:\git\openxcom\src\savegame\soldierdead.cpp
+1418648580 source:f:\git\openxcom\src\savegame\soldierdead.cpp
 	"SoldierDead.h"
 	"SoldierDeath.h"
 	"SoldierDiary.h"
@@ -11493,7 +11493,7 @@
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
 
-1418604103 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
+1418651263 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
 1418612939 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
@@ -11511,10 +11511,10 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1418602907 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
+1418650766 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
 	"../Engine/State.h"
 
-1418620369 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1418651270 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	"SoldierDiaryMissionState.h"
 	"SoldierDiaryPerformanceState.h"
@@ -11533,7 +11533,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1418604650 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1418651488 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
 1413640078 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
@@ -11562,7 +11562,7 @@
 	<string>
 	"../Engine/State.h"
 
-1418622085 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1418651488 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
