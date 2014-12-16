@@ -4798,7 +4798,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1418334650 f:\git\openxcom\src\savegame\ufo.h
+1418696070 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5473,7 +5473,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1417922634 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
+1418695078 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
 	"AbortMissionState.h"
 	"BattlescapeState.h"
 	"../Engine/Action.h"
@@ -5809,9 +5809,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413136962 f:\git\openxcom\src\savegame\terrorsite.h
-	<string>
-	<yaml-cpp/yaml.h>
+1418716838 f:\git\openxcom\src\savegame\terrorsite.h
 	"Target.h"
 
 1417390306 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
@@ -6008,7 +6006,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1418689168 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1418705173 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6068,7 +6066,8 @@
 
 1418422535 f:\git\openxcom\src\ruleset\rulecountry.h
 
-1417181013 f:\git\openxcom\src\savegame\alienmission.h
+1418719872 f:\git\openxcom\src\savegame\alienmission.h
+	"SavedGame.h"
 
 1414438829 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
@@ -7306,7 +7305,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1418333611 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1418718012 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7392,7 +7391,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1418638586 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1418713504 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -9004,7 +9003,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1418422696 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1418719872 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -9199,7 +9198,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1418687859 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1418717607 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -9257,9 +9256,8 @@
 	"Target.h"
 	"Craft.h"
 
-1413136962 source:f:\git\openxcom\src\savegame\terrorsite.cpp
+1418716818 source:f:\git\openxcom\src\savegame\terrorsite.cpp
 	"TerrorSite.h"
-	<sstream>
 	"../Engine/Language.h"
 
 1418645006 source:f:\git\openxcom\src\savegame\tile.cpp
@@ -9284,7 +9282,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1418334590 source:f:\git\openxcom\src\savegame\ufo.cpp
+1418696070 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
@@ -11562,7 +11560,7 @@
 	<string>
 	"../Engine/State.h"
 
-1418651488 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1418692708 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"

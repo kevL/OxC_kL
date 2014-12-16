@@ -161,7 +161,7 @@ void Ufo::load(
 	_direction			= node["direction"]			.as<std::string>(_direction);
 	_detected			= node["detected"]			.as<bool>(_detected);
 	_hyperDetected		= node["hyperDetected"]		.as<bool>(_hyperDetected);
-	_secondsRemaining	= node["secondsRemaining"]	.as<size_t>(_secondsRemaining);
+	_secondsRemaining	= node["secondsRemaining"]	.as<int>(_secondsRemaining);
 	_inBattlescape		= node["inBattlescape"]		.as<bool>(_inBattlescape);
 	_terrain			= node["terrain"]			.as<std::string>(_terrain); // kL
 
@@ -406,7 +406,7 @@ void Ufo::setDetected(bool detected)
  * After this many seconds this Ufo will take off if landed, or disappear if crashed.
  * @return, amount of seconds
  */
-size_t Ufo::getSecondsRemaining() const
+int Ufo::getSecondsRemaining() const
 {
 	return _secondsRemaining;
 }
@@ -416,9 +416,9 @@ size_t Ufo::getSecondsRemaining() const
  * After this many seconds this Ufo will take off if landed, or disappear if crashed.
  * @param seconds - amount of seconds
  */
-void Ufo::setSecondsRemaining(size_t seconds)
+void Ufo::setSecondsRemaining(int seconds)
 {
-	_secondsRemaining = seconds;
+	_secondsRemaining = std::max(0, seconds);
 }
 
 /**

@@ -455,22 +455,22 @@ void SavedGame::load(
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
 
-	_monthsPassed			= doc["monthsPassed"].as<int>(_monthsPassed);
-//	_radarLines				= doc["radarLines"].as<bool>(_radarLines);
-//	_detail					= doc["detail"].as<bool>(_detail);
-	_graphRegionToggles		= doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
+	_monthsPassed			= doc["monthsPassed"]		.as<int>(_monthsPassed);
+//	_radarLines				= doc["radarLines"]			.as<bool>(_radarLines);
+//	_detail					= doc["detail"]				.as<bool>(_detail);
+	_graphRegionToggles		= doc["graphRegionToggles"]	.as<std::string>(_graphRegionToggles);
 	_graphCountryToggles	= doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles	= doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
-	_funds					= doc["funds"].as<std::vector<int64_t> >(_funds);
-	_maintenance			= doc["maintenance"].as<std::vector<int64_t> >(_maintenance);
-	_researchScores			= doc["researchScores"].as<std::vector<int> >(_researchScores);
-	_income					= doc["income"].as<std::vector<int64_t> >(_income);				// kL
-	_expenditure			= doc["expenditure"].as<std::vector<int64_t> >(_expenditure);	// kL
-	_warned					= doc["warned"].as<bool>(_warned);
-	_globeLon				= doc["globeLon"].as<double>(_globeLon);
-	_globeLat				= doc["globeLat"].as<double>(_globeLat);
-	_globeZoom				= doc["globeZoom"].as<int>(_globeZoom);
-	_ids					= doc["ids"].as<std::map<std::string, int> >(_ids);
+	_funds					= doc["funds"]				.as<std::vector<int64_t> >(_funds);
+	_maintenance			= doc["maintenance"]		.as<std::vector<int64_t> >(_maintenance);
+	_researchScores			= doc["researchScores"]		.as<std::vector<int> >(_researchScores);
+	_income					= doc["income"]				.as<std::vector<int64_t> >(_income);		// kL
+	_expenditure			= doc["expenditure"]		.as<std::vector<int64_t> >(_expenditure);	// kL
+	_warned					= doc["warned"]				.as<bool>(_warned);
+	_globeLon				= doc["globeLon"]			.as<double>(_globeLon);
+	_globeLat				= doc["globeLat"]			.as<double>(_globeLat);
+	_globeZoom				= doc["globeZoom"]			.as<int>(_globeZoom);
+	_ids					= doc["ids"]				.as<std::map<std::string, int> >(_ids);
 
 	for (YAML::const_iterator
 			i = doc["countries"].begin();
@@ -516,16 +516,16 @@ void SavedGame::load(
 	// Missions must be loaded before UFOs.
 	const YAML::Node& missions = doc["alienMissions"];
 	for (YAML::const_iterator
-			it = missions.begin();
-			it != missions.end();
-			++it)
+			i = missions.begin();
+			i != missions.end();
+			++i)
 	{
-		std::string missionType = (*it)["type"].as<std::string>();
-		const RuleAlienMission& mRule = *rule->getAlienMission(missionType);
-		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
-		mission->load(
-					*it,
-					*this);
+		const std::string missionType = (*i)["type"].as<std::string>();
+		const RuleAlienMission& missionRule = *rule->getAlienMission(missionType);
+		std::auto_ptr<AlienMission> mission (new AlienMission( // init.
+															missionRule,
+															*this));
+		mission->load(*i);
 		_activeMissions.push_back(mission.release());
 	}
 

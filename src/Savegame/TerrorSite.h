@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_TERRORSITE_H
 #define OPENXCOM_TERRORSITE_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "Target.h"
 
@@ -40,8 +40,9 @@ class TerrorSite
 
 private:
 	bool _inBattlescape;
-	int _id;
-	size_t _secondsRemaining;
+	int
+		_id,
+		_secondsRemaining;
 	std::string _race;
 
 
@@ -61,7 +62,7 @@ private:
 		/// Gets the terror site's ID.
 		int getId() const;
 		/// Sets the terror site's ID.
-		void setId(int id);
+		void setId(const int id);
 
 		/// Gets the terror site's name.
 		std::wstring getName(Language* lang) const;
@@ -70,9 +71,9 @@ private:
 		int getMarker() const;
 
 		/// Gets the seconds until this terror site expires.
-		size_t getSecondsRemaining() const;
+		int getSecondsRemaining() const;
 		/// Sets the seconds until this terror site expires.
-		void setSecondsRemaining(size_t seconds);
+		void setSecondsRemaining(int seconds);
 
 		/// Gets the terror site's alien race.
 		std::string getAlienRace() const;

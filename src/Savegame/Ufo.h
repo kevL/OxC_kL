@@ -70,10 +70,9 @@ private:
 		_crashPower,
 		_hitFrame,
 		_landId,
-		_shootingAt;
-	size_t
 		_secondsRemaining,
-		_trajectoryPoint;
+		_shootingAt;
+	size_t _trajectoryPoint;
 
 	AlienMission* _mission;
 	RuleUfo* _rules;
@@ -138,9 +137,9 @@ private:
 		void setDetected(bool detected = true);
 
 		/// Gets the UFO's seconds left on the ground.
-		size_t getSecondsRemaining() const;
+		int getSecondsRemaining() const;
 		/// Sets the UFO's seconds left on the ground.
-		void setSecondsRemaining(size_t seconds);
+		void setSecondsRemaining(int seconds);
 
 		/// Gets the UFO's direction.
 		std::string getDirection() const;
@@ -149,7 +148,7 @@ private:
 		/// Sets the UFO's altitude.
 		void setAltitude(const std::string& altitude);
 
-		/// Gets the UFO status
+		/// Gets the UFO status.
 		enum UfoStatus getStatus() const
 		{
 			return _status;

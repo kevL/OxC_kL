@@ -102,12 +102,12 @@ AbortMissionState::AbortMissionState(
 			if ((nextStage.empty() == false
 					&& (*i)->isInExitArea(END_POINT))
 				|| (nextStage == ""
-					&& (*i)->isInExitArea()))
+					&& (*i)->isInExitArea() == true))
 			{
-				_inExitArea++;
+				++_inExitArea;
 			}
 			else
-				_outExitArea++;
+				++_outExitArea;
 		}
 	}
 

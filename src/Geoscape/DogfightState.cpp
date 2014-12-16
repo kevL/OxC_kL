@@ -1282,7 +1282,6 @@ void DogfightState::moveCraft()
 		AlienMission* const mission = _ufo->getMission();
 		mission->ufoShotDown(
 						*_ufo,
-						*_game,
 						*_globe);
 
 
@@ -1302,7 +1301,9 @@ void DogfightState::moveCraft()
 										"STR_ALIEN_RETALIATION") == NULL)
 			{
 				const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
-				AlienMission* const mission = new AlienMission(rule);
+				AlienMission* const mission = new AlienMission(
+															rule,
+															*_savedGame);
 
 				mission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 				mission->setRegion(

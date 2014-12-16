@@ -24,6 +24,8 @@
 
 //#include <yaml-cpp/yaml.h>
 
+#include "SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -57,16 +59,16 @@ private:
 		_nextWave,
 		_spawnCountdown;
 
-	const AlienBase* _base;
-	const RuleAlienMission& _rule;
-
 	std::string
 		_race,
 		_region;
 
+	const AlienBase* _base;
+	const RuleAlienMission& _rule;
+	SavedGame& _savedGame;
+
 	/// Spawns a UFO, based on mission rules.
 	Ufo* spawnUfo(
-			const SavedGame& game,
 			const Ruleset& ruleset,
 			const Globe& globe,
 			const RuleUfo& ufoRule,
@@ -79,14 +81,14 @@ private:
 
 	public:
 		/// Creates a mission of the specified type.
-		AlienMission(const RuleAlienMission& rule);
+		AlienMission(
+				const RuleAlienMission& rule,
+				SavedGame& savedGame);
 		/// Cleans up the mission info.
 		~AlienMission();
 
 		/// Loads the mission from YAML.
-		void load(
-				const YAML::Node& node,
-				SavedGame& game);
+		void load(const YAML::Node& node);
 		/// Saves the mission to YAML.
 		YAML::Node save() const;
 
@@ -128,7 +130,7 @@ private:
 		/// Gets the alien base for this mission.
 		const AlienBase* getAlienBase() const;
 		/// Sets the alien base for this mission.
-		void setAlienBase(const AlienBase* base);
+		void setAlienBase(const AlienBase* const base);
 
 		/// Gets if this mission over.
 		bool isOver() const;
@@ -159,19 +161,17 @@ private:
 		/// Handles UFO lifting from the ground.
 		void ufoLifting(
 				Ufo& ufo,
-				Game& engine,
+				const Game& engine,
 				const Globe& globe);
 		/// Handles UFO shot down.
 		void ufoShotDown(
-				Ufo& ufo,
-				Game& engine,
+				const Ufo& ufo,
 				const Globe& globe);
 
 		/// Handles Points for mission successes.
 		void addScore(
 				const double lon,
-				const double lat,
-				Game& engine);
+				const double lat);
 
 		/// Selects a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
 		std::pair<double, double> getWaypoint(

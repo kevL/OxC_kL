@@ -19,7 +19,7 @@
 
 #include "TerrorSite.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Language.h"
 
@@ -55,7 +55,7 @@ void TerrorSite::load(const YAML::Node& node)
 	Target::load(node);
 
 	_id					= node["id"].as<int>(_id);
-	_secondsRemaining	= node["secondsRemaining"].as<size_t>(_secondsRemaining);
+	_secondsRemaining	= node["secondsRemaining"].as<int>(_secondsRemaining);
 	_race				= node["race"].as<std::string>(_race);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
 }
@@ -94,7 +94,7 @@ YAML::Node TerrorSite::saveId() const
 
 /**
  * Returns the terror site's unique ID.
- * @return Unique ID.
+ * @return, unique ID
  */
 int TerrorSite::getId() const
 {
@@ -103,9 +103,9 @@ int TerrorSite::getId() const
 
 /**
  * Changes the terror site's unique ID.
- * @param id Unique ID.
+ * @param id - unique ID
  */
-void TerrorSite::setId(int id)
+void TerrorSite::setId(const int id)
 {
 	_id = id;
 }
@@ -133,7 +133,7 @@ int TerrorSite::getMarker() const
  * Returns the number of seconds remaining before the terror site expires.
  * @return Amount of seconds.
  */
-size_t TerrorSite::getSecondsRemaining() const
+int TerrorSite::getSecondsRemaining() const
 {
 	return _secondsRemaining;
 }
@@ -142,9 +142,9 @@ size_t TerrorSite::getSecondsRemaining() const
  * Changes the number of seconds before the terror site expires.
  * @param seconds Amount of seconds.
  */
-void TerrorSite::setSecondsRemaining(size_t seconds)
+void TerrorSite::setSecondsRemaining(int seconds)
 {
-	_secondsRemaining = seconds;
+	_secondsRemaining = std::max(0, seconds);
 }
 
 /**

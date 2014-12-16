@@ -2065,9 +2065,10 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
 	{
 		if (ufo->getStatus() == Ufo::CRASHED)
 		{
-			if (ufo->getSecondsRemaining() >= 30 * 60)
+			const int sec = ufo->getSecondsRemaining();
+			if (sec >= 30 * 60)
 			{
-				ufo->setSecondsRemaining(ufo->getSecondsRemaining() - 30 * 60);
+				ufo->setSecondsRemaining(sec - 30 * 60);
 				return;
 			}
 
@@ -2176,9 +2177,7 @@ void GeoscapeState::time30Minutes()
 	}
 	//Log(LOG_INFO) << ". . handled craft maintenance & alien base detection";
 
-	const int
-		diff = static_cast<int>(_savedGame->getDifficulty()),
-		pts = _savedGame->getMonthsPassed() / 3 + diff;
+	const int pts = _savedGame->getMonthsPassed() / 3 + static_cast<int>(_savedGame->getDifficulty());
 	int aLienPts = 0;
 //	pts = pts * _game->getRuleset()->getAlienMission("STR_ALIEN_*")->getPoints() / 100; // kL_stuff
 
@@ -2447,8 +2446,9 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
 	{
 		// Spawn supply mission for this base.
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
-
-		AlienMission* const mission = new AlienMission(rule);
+		AlienMission* const mission = new AlienMission(
+													rule,
+													_save);
 		mission->setRegion(
 					_save.locateRegion(*base)->getRules()->getType(),
 					_ruleset);
@@ -2968,11 +2968,13 @@ void GeoscapeState::time1Month()
 												(*i)->getLatitude()) == true)
 				{
 					if (_savedGame->getAlienMission(
-															(*j)->getRules()->getType(),
-															"STR_ALIEN_RETALIATION") == NULL)
+												(*j)->getRules()->getType(),
+												"STR_ALIEN_RETALIATION") == NULL)
 					{
 						const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
-						AlienMission* mission = new AlienMission(rule);
+						AlienMission* mission = new AlienMission(
+																rule,
+																*_savedGame);
 						mission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 						mission->setRegion(
 										(*j)->getRules()->getType(),
@@ -3605,7 +3607,9 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const RuleAlienMission& missionRules = *_game->getRuleset()->getAlienMission(targetMission);
 		const std::string& missionRace = missionRules.generateRace(_savedGame->getMonthsPassed());
 
-		AlienMission* const otherMission = new AlienMission(missionRules);
+		AlienMission* const otherMission = new AlienMission(
+														missionRules,
+														*_savedGame);
 		otherMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion, *_game->getRuleset());
 		otherMission->setRace(missionRace);
@@ -3628,7 +3632,9 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		std::string research = _game->getRuleset()->getAlienMissionList().front();
 		const RuleAlienMission& missionRules = *_game->getRuleset()->getAlienMission(research);
 
-		AlienMission* const otherMission = new AlienMission(missionRules);
+		AlienMission* const otherMission = new AlienMission(
+														missionRules,
+														*_savedGame);
 		otherMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion, *_game->getRuleset());
 		std::string sectoid = missionRules.getTopRace(_savedGame->getMonthsPassed());
@@ -3672,7 +3678,9 @@ void GeoscapeState::setupTerrorMission()
 	const RuleAlienMission& terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
 	const std::string& terrorRace = terrorRules.generateRace(_savedGame->getMonthsPassed());
 
-	AlienMission* const terrorMission = new AlienMission(terrorRules);
+	AlienMission* const terrorMission = new AlienMission(
+													terrorRules,
+													*_savedGame);
 	terrorMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 	terrorMission->setRegion(
 						region->getType(),

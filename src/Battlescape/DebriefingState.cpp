@@ -858,12 +858,12 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape() == true)
 		{
-			_missionStatistics->ufo = (*i)->getRules()->getType();
-
 			(*i)->setInBattlescape(false);
 
-			if ((*i)->getStatus() == Ufo::LANDED
-				&& aborted == true)
+			_missionStatistics->ufo = (*i)->getRules()->getType();
+
+			if (aborted == true
+				&& (*i)->getStatus() == Ufo::LANDED)
 			{
 				(*i)->setSecondsRemaining(15); // UFO lifts off ...
 			}
@@ -872,9 +872,9 @@ void DebriefingState::prepareDebriefing()
 			{
 				delete *i;
 				_savedGame->getUfos()->erase(i); // UFO disappears.
-
-				break;
 			}
+
+			break;
 		}
 	}
 
