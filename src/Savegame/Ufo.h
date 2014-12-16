@@ -110,6 +110,8 @@ private:
 
 		/// Gets the UFO's ruleset.
 		RuleUfo* getRules() const;
+		/// Sets the UFO's ruleset.
+		void changeRules(RuleUfo* rules);
 
 		/// Handles UFO logic.
 		void think();

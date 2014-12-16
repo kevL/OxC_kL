@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_REGION_H
 #define OPENXCOM_REGION_H
 
-#include <vector>
-#include <yaml-cpp/yaml.h>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -63,16 +63,16 @@ private:
 		/// Gets the region's ruleset.
 		RuleRegion* getRules() const;
 
-		/// add xcom activity in this region
+		/// Adds xcom activity in this region.
 		void addActivityXcom(int activity);
-		/// add alien activity in this region
+		/// Adds alien activity in this region.
 		void addActivityAlien(int activity);
-		/// get xcom activity to this region
-		const std::vector<int>& getActivityXcom() const;
-		/// get xcom activity to this region
-		const std::vector<int>& getActivityAlien() const;
+		/// Gets xcom activity for this region.
+		std::vector<int>& getActivityXcom();
+		/// Gets xcom activity for this region.
+		std::vector<int>& getActivityAlien();
 
-		/// store last month's counters, start new counters.
+		/// Stores last month's counters, starts new counters.
 		void newMonth();
 
 		/// kL. Handles recent alien activity in this region for GraphsState blink.

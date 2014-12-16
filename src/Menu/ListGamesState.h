@@ -20,12 +20,12 @@
 #ifndef OPENXCOM_LISTGAMESSTATE_H
 #define OPENXCOM_LISTGAMESSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "OptionsBaseState.h"
 
-#include "../Engine/Options.h"
+//#include "../Engine/Options.h"
 #include "../Engine/State.h"
 
 #include "../Savegame/SavedGame.h"
@@ -53,9 +53,7 @@ protected:
 	bool
 		_autoquick,
 		_inEditMode, // kL
-		_showMsg,
-		_sortable,
-		_noUI;
+		_sortable;
 	size_t _firstValidRow;
 
 	OptionsOrigin _origin;
@@ -69,8 +67,7 @@ protected:
 		* _txtDate,
 		* _txtDelete,
 		* _txtDetails;
-	TextButton
-		* _btnCancel;
+	TextButton* _btnCancel;
 	TextList* _lstSaves;
 	Window* _window;
 

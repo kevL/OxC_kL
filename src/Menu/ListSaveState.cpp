@@ -22,11 +22,11 @@
 #include "SaveGameState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
+//#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"

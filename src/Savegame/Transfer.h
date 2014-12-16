@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_TRANSFER_H
 #define OPENXCOM_TRANSFER_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -30,9 +30,9 @@ namespace OpenXcom
 
 enum TransferType
 {
-	TRANSFER_SOLDIER,	// 0
+	TRANSFER_ITEM,		// 0
 	TRANSFER_CRAFT,		// 1
-	TRANSFER_ITEM,		// 2
+	TRANSFER_SOLDIER,	// 2
 	TRANSFER_SCIENTIST,	// 3
 	TRANSFER_ENGINEER	// 4
 };
@@ -64,8 +64,8 @@ private:
 
 	std::string _itemId;
 
-	Craft *_craft;
-	Soldier *_soldier;
+	Craft* _craft;
+	Soldier* _soldier;
 
 
 	public:
@@ -93,7 +93,7 @@ private:
 		/// Sets the craft of the transfer.
 		void setCraft(Craft* craft);
 		/// Gets the craft of the transfer.
-		Craft* getCraft();
+		Craft* getCraft() const;
 
 		/// Gets the items of the transfer.
 		std::string getItems() const;
@@ -116,7 +116,7 @@ private:
 		void advance(Base* base);
 
 		/// Get a pointer to the soldier being transferred.
-		Soldier* getSoldier();
+		Soldier* getSoldier() const;
 };
 
 }

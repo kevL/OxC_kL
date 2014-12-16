@@ -97,7 +97,8 @@ Craft::Craft(
 		_weapons.push_back(0);
 	}
 
-	setBase(base);
+	if (base != NULL)
+		setBase(base);
 
 	_loadCap = _rules->getMaxItems() + _rules->getSoldiers() * 10;
 }

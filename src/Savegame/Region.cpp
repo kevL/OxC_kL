@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Initializes a region of the specified type.
- * @param rules Pointer to ruleset.
+ * @param rules - pointer to RuleRegion
  */
 Region::Region(RuleRegion* rules)
 	:
@@ -48,7 +48,7 @@ Region::~Region()
 
 /**
  * Loads the region from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void Region::load(const YAML::Node& node)
 {
@@ -60,7 +60,7 @@ void Region::load(const YAML::Node& node)
 
 /**
  * Saves the region to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Region::save() const
 {
@@ -77,7 +77,7 @@ YAML::Node Region::save() const
 
 /**
  * Returns the ruleset for the region's type.
- * @return, Pointer to ruleset.
+ * @return, pointer to RuleRegion
  */
 RuleRegion* Region::getRules() const
 {
@@ -104,18 +104,18 @@ void Region::addActivityAlien(int activity)
 
 /**
  * Gets the region's xcom activity level.
- * @return, activity level.
+ * @return, activity level
  */
-const std::vector<int>& Region::getActivityXcom() const
+std::vector<int>& Region::getActivityXcom()
 {
 	return _activityXcom;
 }
 
 /**
  * Gets the region's alien activity level.
- * @return, activity level.
+ * @return, activity level
  */
-const std::vector<int>& Region::getActivityAlien() const
+std::vector<int>& Region::getActivityAlien()
 {
 	return _activityAlien;
 }

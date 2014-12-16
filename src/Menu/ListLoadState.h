@@ -34,14 +34,20 @@ class ListLoadState
 		public ListGamesState
 {
 
-public:
-	/// Creates the Load Game state.
-	ListLoadState(OptionsOrigin origin);
-	/// Cleans up the Load Game state.
-	~ListLoadState();
+private:
+	TextButton* _btnOld;
 
-	/// Handler for clicking the Saves list.
-	void lstSavesPress(Action* action);
+
+	public:
+		/// Creates the Load Game state.
+		ListLoadState(OptionsOrigin origin);
+		/// Cleans up the Load Game state.
+		~ListLoadState();
+
+		/// Handler for clicking the Original X-Com button.
+		void btnOldClick(Action* action);
+		/// Handler for clicking the Saves list.
+		void lstSavesPress(Action* action);
 };
 
 }

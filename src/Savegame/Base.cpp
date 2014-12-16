@@ -1922,7 +1922,7 @@ void Base::setInBattlescape(bool inBattle)
 
 /**
  * Marks this Base as a valid alien retaliation target.
- * @param mark - Mark (if @c true) or unmark (if @c false) the base
+ * @param mark - Mark (if @c true) or unmark (if @c false) the base (default true)
  */
 void Base::setIsRetaliationTarget(bool mark)
 {

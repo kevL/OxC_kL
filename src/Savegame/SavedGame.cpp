@@ -1091,6 +1091,15 @@ int SavedGame::getId(const std::string& name)
 }
 
 /**
+ * Resets the list of unique object IDs.
+ * @param ids - new ID list
+ */
+void SavedGame::setIds(const std::map<std::string, int>& ids)
+{
+	_ids = ids;
+}
+
+/**
  * Returns the list of countries in the game world.
  * @return, pointer to a vector of pointers to the Countries
  */
@@ -1215,10 +1224,12 @@ void SavedGame::setBattleGame(SavedBattleGame* battleGame)
  * Adds a ResearchProject to the list of already discovered ResearchProjects.
  * @param resRule	- the newly found ResearchProject
  * @param rules		- the game Ruleset (NULL if single battle skirmish)
+ * @param score		- true to score points for research done (default true)
  */
 void SavedGame::addFinishedResearch(
 		const RuleResearch* resRule,
-		const Ruleset* rules)
+		const Ruleset* rules,
+		bool score)
 {
 	const std::vector<const RuleResearch*>::const_iterator i = std::find(
 																	_discovered.begin(),
@@ -1235,7 +1246,9 @@ void SavedGame::addFinishedResearch(
 		} */ // i don't want to do this. I'd have to create RuleResearch's for each new armor!!!
 
 		removePoppedResearch(resRule);
-		addResearchScore(resRule->getPoints());
+
+		if (score == true)
+			addResearchScore(resRule->getPoints());
 	}
 
 	if (rules != NULL)

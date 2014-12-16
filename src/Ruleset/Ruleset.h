@@ -319,7 +319,7 @@ protected:
 		/// Gets the pre-defined starting base.
 		const YAML::Node& getStartingBase() const;
 		/// Gets the pre-defined start time of a game.
-//		const GameTime& getStartingTime() const;
+		const GameTime& getStartingTime() const;
 
 		/// Gets an MCDPatch.
 		MCDPatch* getMCDPatch(const std::string name) const;

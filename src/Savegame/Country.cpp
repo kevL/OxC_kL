@@ -19,8 +19,8 @@
 
 #include "Country.h"
 
-#include "../Engine/Logger.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/RNG.h"
 
 #include "../Ruleset/RuleCountry.h"
 
@@ -120,7 +120,7 @@ std::string Country::getType() const
  * Returns the country's current monthly funding.
  * @return, reference to a vector of monthly funds
  */
-const std::vector<int>& Country::getFunding() const
+std::vector<int>& Country::getFunding()
 {
 	return _funding;
 }
@@ -172,7 +172,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return, reference to a vector of activity levels
  */
-const std::vector<int>& Country::getActivityXcom() const
+std::vector<int>& Country::getActivityXcom()
 {
 	return _activityXcom;
 }
@@ -181,7 +181,7 @@ const std::vector<int>& Country::getActivityXcom() const
  * Gets the country's alien activity level.
  * @return, reference to a vector of activity levels
  */
-const std::vector<int>& Country::getActivityAlien() const
+std::vector<int>& Country::getActivityAlien()
 {
 	return _activityAlien;
 }
@@ -305,6 +305,14 @@ void Country::setNewPact()
 bool Country::getPact() const
 {
 	return _pact;
+}
+
+/**
+ * Sign a new pact.
+ */
+void Country::setPact()
+{
+	 _pact = true;
 }
 
 /**

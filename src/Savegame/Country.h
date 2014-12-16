@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_COUNTRY_H
 #define OPENXCOM_COUNTRY_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -73,34 +73,36 @@ private:
 		std::string getType() const; // kL
 
 		/// Gets the country's funding.
-		const std::vector<int>& getFunding() const;
+		std::vector<int>& getFunding();
 		/// Sets the country's funding.
 		void setFunding(int funding);
 
-		/// get the country's satisfaction level
+		/// Gets the country's satisfaction level.
 		int getSatisfaction() const;
 
-		/// add xcom activity in this country
+		/// Adds xcom activity in this country.
 		void addActivityXcom(int activity);
-		/// add alien activity in this country
+		/// Adds alien activity in this country.
 		void addActivityAlien(int activity);
-		/// get xcom activity in this country
-		const std::vector<int>& getActivityXcom() const;
-		/// get alien activity in this country
-		const std::vector<int>& getActivityAlien() const;
+		/// Gets xcom activity for this country.
+		std::vector<int>& getActivityXcom();
+		/// Gets alien activity for this country.
+		std::vector<int>& getActivityAlien();
 
-		/// store last month's counters, start new counters, set this month's change.
+		/// Stores last month's counters, starts new counters, sets this month's change.
 		void newMonth(
 				const int xcomTotal,
 				const int alienTotal,
 				const int diff);
 
-		/// are we signing a new pact?
+		/// Gets if they're signing a new pact w/ aLiens.
 		bool getNewPact() const;
-		/// sign a pact at the end of this month.
+		/// Signs a pact at the end of this month.
 		void setNewPact();
-		/// have we signed a pact?
+		/// Gets if they already signed a pact w/ aLiens.
 		bool getPact() const;
+		/// Signs a pact w/ aLiens immediately!1
+		void setPact();
 
 		/// kL. Handles recent alien activity in this country for GraphsState blink.
 		bool recentActivity( // kL

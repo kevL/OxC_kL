@@ -1817,10 +1817,10 @@ const YAML::Node& Ruleset::getStartingBase() const
  * Gets the pre-defined start time of a game.
  * @return, address of the time a game starts
  */
-/* const GameTime& Ruleset::getStartingTime() const
+const GameTime& Ruleset::getStartingTime() const
 {
 	return _startingTime;
-} */
+}
 
 /**
  * Gets an MCDPatch.

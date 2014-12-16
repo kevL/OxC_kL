@@ -194,7 +194,7 @@ void Transfer::setCraft(Craft* craft)
  * Gets the craft being transferred.
  * @return, pointer to the Craft
  */
-Craft* Transfer::getCraft()
+Craft* Transfer::getCraft() const
 {
 	return _craft;
 }
@@ -289,7 +289,7 @@ TransferType Transfer::getType() const
  */
 void Transfer::advance(Base* base)
 {
-	_hours--;
+	--_hours;
 
 	if (_hours == 0)
 	{
@@ -316,7 +316,7 @@ void Transfer::advance(Base* base)
  * Get a pointer to the soldier being transferred.
  * @return, pointer to the Soldier being transferred
  */
-Soldier* Transfer::getSoldier()
+Soldier* Transfer::getSoldier() const
 {
 	return _soldier;
 }
