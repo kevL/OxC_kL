@@ -1947,7 +1947,7 @@ void SavedGame::inspectSoldiers(
 			{
 				++(*total);
 
-				int score = getSoldierScore(*j);
+				const int score = getSoldierScore(*j);
 				if (score > highestScore)
 				{
 					highestScore = score;
@@ -1966,7 +1966,7 @@ void SavedGame::inspectSoldiers(
 			{
 				++(*total);
 
-				int score = getSoldierScore((*j)->getSoldier());
+				const int score = getSoldierScore((*j)->getSoldier());
 				if (score > highestScore)
 				{
 					highestScore = score;

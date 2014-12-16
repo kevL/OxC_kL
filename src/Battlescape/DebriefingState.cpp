@@ -121,7 +121,7 @@ DebriefingState::DebriefingState()
 
 	_missionStatistics = new MissionStatistics();
 
-	if (Options::storageLimitsEnforced)
+	if (Options::storageLimitsEnforced == true)
 		_limitsEnforced = 1;
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -733,7 +733,7 @@ void DebriefingState::prepareDebriefing()
 				{
 					if ((*k)->getRules()->insideRegion(
 													craftLon,
-													craftLat))
+													craftLat) == true)
 					{
 						_region = *k;
 						_missionStatistics->region = _region->getRules()->getType();
@@ -748,7 +748,7 @@ void DebriefingState::prepareDebriefing()
 				{
 					if ((*k)->getRules()->insideCountry(
 													craftLon,
-													craftLat))
+													craftLat) == true)
 					{
 						_country = *k;
 						_missionStatistics->country = _country->getRules()->getType();
@@ -839,20 +839,16 @@ void DebriefingState::prepareDebriefing()
 	_base = base;
 	_baseLabel = _base->getName(_game->getLanguage());
 
-	// kL_begin: Do all missionTypes here, for SoldierDiary race stat.
+
+	// kL_begin: Do all aLienRace types here for SoldierDiary stat.
 	if (_savedGame->getMonthsPassed() != -1)
 	{
 		if (battle->getAlienRace().empty() == false) // safety.
-		{
-			//Log(LOG_INFO) << ". race = " << battle->getAlienRace();
 			_missionStatistics->alienRace = battle->getAlienRace();
-		}
 		else
-		{
-			//Log(LOG_INFO) << ". race UNKNOWN";
 			_missionStatistics->alienRace = "STR_UNKNOWN";
-		}
 	} // kL_end.
+
 
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo*>::const_iterator
@@ -863,8 +859,6 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape() == true)
 		{
 			_missionStatistics->ufo = (*i)->getRules()->getType();
-//kL		if (_savedGame->getMonthsPassed() != -1)
-//kL			_missionStatistics->alienRace = (*i)->getAlienRace();
 
 			(*i)->setInBattlescape(false);
 
@@ -892,8 +886,6 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape() == true)
 		{
-//kL		_missionStatistics->alienRace = (*i)->getAlienRace();
-
 			delete *i;
 			_savedGame->getTerrorSites()->erase(i);
 
@@ -1010,8 +1002,6 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i)->isInBattlescape() == true)
 			{
-//kL			_missionStatistics->alienRace = (*i)->getAlienRace();
-
 				if (destroyAlienBase == true)
 				{
 					addStat(
@@ -1477,12 +1467,12 @@ void DebriefingState::prepareDebriefing()
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->name)
 			{
-				int alloy = 10;
+				int alloys = 10;
 				if (mission == "STR_ALIEN_BASE_ASSAULT")
-					alloy = 150;
+					alloys = 150;
 
-				(*i)->qty = (*i)->qty / alloy;
-				(*i)->score = (*i)->score / alloy;
+				(*i)->qty = (*i)->qty / alloys;
+				(*i)->score = (*i)->score / alloys;
 			}
 
 			// recoverable battlescape tiles are now converted to items and put in base inventory
@@ -1503,7 +1493,7 @@ void DebriefingState::prepareDebriefing()
 					base,
 					craft,
 					true);
-//	else // kL, maybe...
+
 	if (mission == "STR_BASE_DEFENSE")
 	{
 		if (_destroyXCOMBase == false)

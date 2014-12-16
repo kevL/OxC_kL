@@ -50,6 +50,7 @@ SoldierDiary::SoldierDiary()
 //		_missionIdList(),
 //		_commendations(),
 		_scoreTotal(0),
+		_pointTotal(0),
 		_killTotal(0),
 		_missionTotal(0),
 		_winTotal(0),
@@ -140,6 +141,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_typeTotal						= node["typeTotal"]						.as<std::map<std::string, int> >(_typeTotal);
 	_UFOTotal						= node["UFOTotal"]						.as<std::map<std::string, int> >(_UFOTotal);
 	_scoreTotal						= node["scoreTotal"]					.as<int>(_scoreTotal);
+	_pointTotal						= node["pointTotal"]					.as<int>(_pointTotal);
 	_killTotal						= node["killTotal"]						.as<int>(_killTotal);
 	_missionTotal					= node["missionTotal"]					.as<int>(_missionTotal);
 	_winTotal						= node["winTotal"]						.as<int>(_winTotal);
@@ -202,6 +204,7 @@ YAML::Node SoldierDiary::save() const
 	if (_typeTotal.empty() == false)		node["typeTotal"]					= _typeTotal;
 	if (_UFOTotal.empty() == false)			node["UFOTotal"]					= _UFOTotal;
 	if (_scoreTotal)						node["scoreTotal"]					= _scoreTotal;
+	if (_pointTotal)						node["pointTotal"]					= _pointTotal;
 	if (_killTotal)							node["killTotal"]					= _killTotal;
 	if (_missionTotal)						node["missionTotal"]				= _missionTotal;
 	if (_winTotal)							node["winTotal"]					= _winTotal;
@@ -237,7 +240,7 @@ YAML::Node SoldierDiary::save() const
 }
 
 /**
- * Update soldier diary statistics.
+ * Updates this SoldierDiary's statistics.
  * @param unitStatistics	- pointer to BattleUnitStatistics to get stats from
  * @param missionStatistics	- pointer to MissionStatistics to get stats from
  * @param rules				- pointer to Ruleset
@@ -279,6 +282,7 @@ void SoldierDiary::updateDiary(
 	++_typeTotal[missionStatistics->getMissionTypeLowerCase().c_str()];
 	++_UFOTotal[missionStatistics->ufo.c_str()];
 	_scoreTotal += missionStatistics->score;
+	_pointTotal += missionStatistics->points;
 
 	if (missionStatistics->success)
 	{
@@ -934,6 +938,14 @@ std::map<std::string, int>& SoldierDiary::getUFOTotal()
 int SoldierDiary::getScoreTotal() const
 {
 	return _scoreTotal;
+}
+
+/**
+ * Gets the total point-value of aLiens killed or stunned.
+ */
+int SoldierDiary::getScorePoints() const
+{
+	return _pointTotal;
 }
 
 /**

@@ -40,7 +40,7 @@ class Window;
 
 
 /**
- * Diary screen that lists totals.
+ * Diary screens that list Kills/ Missions/ Awards totals.
  */
 class SoldierDiaryPerformanceState
 	:

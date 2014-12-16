@@ -46,7 +46,6 @@ class CivilianBAIState;
 class Language;
 class Node;
 class RuleInventory;
-//class SavedBattleGame;
 class SavedGame;
 class Soldier;
 class Surface;
@@ -109,7 +108,9 @@ struct BattleUnitKills
 		_weaponAmmo;
 	int
 		_mission,
-		_turn;
+		_turn,
+		_points;
+
 	UnitFaction _faction;
 	UnitStatus _status;
 
@@ -140,6 +141,7 @@ struct BattleUnitKills
 		_faction	= (UnitFaction)node["faction"]	.as<int>();
 		_mission	= node["mission"]				.as<int>(_mission);
 		_turn		= node["turn"]					.as<int>(_turn);
+		_points		= node["points"]				.as<int>(_points);
 	}
 
 	///
@@ -155,6 +157,7 @@ struct BattleUnitKills
 		node["faction"]		= (int)_faction;
 		node["mission"]		= _mission;
 		node["turn"]		= _turn;
+		node["points"]		= _points;
 
 		return node;
 	}
@@ -199,7 +202,8 @@ struct BattleUnitKills
 			UnitFaction faction,
 			UnitStatus status,
 			int mission,
-			int turn)
+			int turn,
+			int points)
 		:
 			_rank(unitRank),
 			_race(race),
@@ -208,7 +212,8 @@ struct BattleUnitKills
 			_faction(faction),
 			_status(status),
 			_mission(mission),
-			_turn(turn)
+			_turn(turn),
+			_points(points)
 	{
 	}
 
@@ -220,7 +225,7 @@ struct BattleUnitKills
 
 
 /**
- * Container for battle unit statistics.
+ * Container for BattleUnitStatistics.
  */
 struct BattleUnitStatistics
 {

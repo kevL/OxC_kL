@@ -63,21 +63,21 @@ private:
 		/// Saves the commendation information to YAML.
 		YAML::Node save() const;
 
-		/// Get commendation name.
+		/// Gets commendation name.
 		std::string getType() const;
-		/// Get commendation noun.
+		/// Gets commendation noun.
 		std::string getNoun() const;
-		/// Get the commendation's decoration level's name.
+		/// Gets the commendation's decoration level's name.
 		std::string getDecorationLevelName(const int skip) const;
-		/// Get the commendation's decoration description.
+		/// Gets the commendation's decoration description.
 		std::string getDecorationDescription() const;
-		/// kL. Get the commendation's decoration class.
+		/// kL. Gets the commendation's decoration class.
 		std::string getDecorationClass() const; // kL
-		/// Get the commendation's decoration level's int.
+		/// Gets the commendation's decoration level's int.
 		int getDecorationLevelInt() const;
-		/// Get the newness of the commendation.
+		/// Gets the newness of the commendation.
 		bool isNew() const;
-		/// Set the commendation newness to false.
+		/// Sets the commendation newness to false.
 		void makeOld();
 		/// Increment decoration level. Sets _isNew to true.
 		void addDecoration();
@@ -90,6 +90,7 @@ class SoldierDiary
 private:
 	int
 		_scoreTotal,
+		_pointTotal,
 		_killTotal,
 		_missionTotal,
 		_winTotal,
@@ -163,37 +164,39 @@ private:
 				MissionStatistics* const missionStatistics,
 				const Ruleset* const rules);
 
-		/// Get the list of kills, mapped by rank.
+		/// Gets the list of kills, mapped by rank.
 		std::map<std::string, int> getAlienRankTotal() const;
-		/// Get the list of kills, mapped by race.
+		/// Gets the list of kills, mapped by race.
 		std::map<std::string, int> getAlienRaceTotal() const;
-		/// Get the list of kills, mapped by weapon used.
+		/// Gets the list of kills, mapped by weapon used.
 		std::map<std::string, int> getWeaponTotal() const;
-		/// Get the list of kills, mapped by weapon ammo used.
+		/// Gets the list of kills, mapped by weapon ammo used.
 		std::map<std::string, int> getWeaponAmmoTotal() const;
-		/// Get the list of missions, mapped by region.
+		/// Gets the list of missions, mapped by region.
 		std::map<std::string, int>& getRegionTotal();
-		/// Get the list of missions, mapped by country.
+		/// Gets the list of missions, mapped by country.
 		std::map<std::string, int>& getCountryTotal();
-		/// Get the list of missions, mapped by type.
+		/// Gets the list of missions, mapped by type.
 		std::map<std::string, int>& getTypeTotal();
-		/// Get the list of missions, mapped by UFO.
+		/// Gets the list of missions, mapped by UFO.
 		std::map<std::string, int>& getUFOTotal();
 
-		/// Get the total score.
+		/// Gets the total score.
 		int getScoreTotal() const;
-		/// Get the total number of kills.
+		/// Gets the total point-value of aLiens killed or stunned.
+		int getScorePoints() const;
+		/// Gets the total number of kills.
 		int getKillTotal() const;
-		/// Get the total number of missions.
+		/// Gets the total number of missions.
 		int getMissionTotal() const;
-		/// Get the total number of wins.
+		/// Gets the total number of wins.
 		int getWinTotal() const;
-		/// Get the total number of stuns.
+		/// Gets the total number of stuns.
 		int getStunTotal() const;
-		/// Get the total number of days wounded.
+		/// Gets the total number of days wounded.
 		int getDaysWoundedTotal() const;
 
-		/// Get the solder's commendations.
+		/// Gets the solder's commendations.
 		std::vector<SoldierCommendations*>* getSoldierCommendations();
 
 		/// Manage commendations, return true if a medal is awarded.
@@ -202,10 +205,10 @@ private:
 		/// Increment the soldier's service time.
 		void addMonthlyService();
 
-		/// Get the mission id list.
+		/// Gets the mission id list.
 		std::vector<int>& getMissionIdList();
 
-		/// Get the kill list.
+		/// Gets the kill list.
 		std::vector<BattleUnitKills*>& getKills();
 };
 

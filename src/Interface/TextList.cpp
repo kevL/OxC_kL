@@ -1378,9 +1378,7 @@ void TextList::mouseOver(Action* action, State* state)
 		_selRow = std::max(
 						0,
 						static_cast<int>(_scroll)
-						+ static_cast<int>(
-										floor(action->getRelativeYMouse()
-										/ (static_cast<double>(h) * action->getYScale()))));
+						+ static_cast<int>(std::floor(action->getRelativeYMouse() / (static_cast<double>(h) * action->getYScale()))));
 
 		if (_selRow < _texts.size()
 			&& _selRow < _scroll + _visibleRows)

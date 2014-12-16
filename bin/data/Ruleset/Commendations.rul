@@ -138,7 +138,7 @@ extraStrings:
       STR_DAYLIGHT_TYPE: "TIME> {ALT}{0}"
       STR_DAY: "Day"
       STR_NIGHT: "Night"
-      STR_DAYS_WOUNDED: "DAYS OUT> {ALT}{0}"
+      STR_DAYS_WOUNDED: "FURLOUGH> {ALT}{0}"
       STR_KILLS_UC: "KILLS"
       STR_MISSIONS_UC: "MISSIONS"
       STR_KILLS_BY_RACE: "RACE"

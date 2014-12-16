@@ -222,7 +222,7 @@ private:
 
 		/// Checks for casualties in battle.
 		void checkForCasualties(
-				BattleItem* weapon,
+				const BattleItem* const weapon,
 				BattleUnit* slayer,
 				bool hidden = false,
 				bool terrain = false);

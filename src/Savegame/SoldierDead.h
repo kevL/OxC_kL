@@ -74,7 +74,7 @@ private:
 				const UnitStats initialStats,
 				const UnitStats currentStats,
 				SoldierDiary diary); // + Base if I want to...
-		/// Creates a new dead soldier without a diary. Used for loading SaveGame.
+		/// Creates a new dead soldier without a diary. Used for loading a SaveGame.
 		SoldierDead(
 				const std::wstring name,
 				const int id,
