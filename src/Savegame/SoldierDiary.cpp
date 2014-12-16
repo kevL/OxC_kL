@@ -423,6 +423,8 @@ bool SoldierDiary::manageCommendations(const Ruleset* const rules)
 						&& _winTotal < (*j).second.at(nextComLevel["noNoun"]))
 					|| ((*j).first == "totalScore"
 						&& _scoreTotal < (*j).second.at(nextComLevel["noNoun"]))
+					|| ((*j).first == "totalPoints"
+						&& _pointTotal < (*j).second.at(nextComLevel["noNoun"]))
 					|| ((*j).first == "totalStuns"
 						&& _stunTotal < (*j).second.at(nextComLevel["noNoun"]))
 					|| ((*j).first == "totalDaysWounded"

@@ -303,7 +303,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 
 	_lstKillTotals->setColor(Palette::blockOffset(13)+5);
 	_lstKillTotals->setSecondaryColor(Palette::blockOffset(13));
-//	_lstKillTotals->setColumns(2, 50, 50);
 	_lstKillTotals->setColumns(3, 70, 70, 70);
 	_lstKillTotals->setBackground(_window);
 
