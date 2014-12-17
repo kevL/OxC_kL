@@ -2232,6 +2232,8 @@
 		<Unit filename="Menu/IntroState.h" />
 		<Unit filename="Menu/ListGamesState.cpp" />
 		<Unit filename="Menu/ListGamesState.h" />
+		<Unit filename="Menu/ListLoadOriginalState.cpp" />
+		<Unit filename="Menu/ListLoadOriginalState.h" />
 		<Unit filename="Menu/ListLoadState.cpp" />
 		<Unit filename="Menu/ListLoadState.h" />
 		<Unit filename="Menu/ListSaveState.cpp" />
@@ -3004,6 +3006,9 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Savegame/SaveConverter.cpp" />
+		<Unit filename="Savegame/SaveConverter.h" />
+		<Unit filename="Savegame/SaveConverterXcom1.h" />
 		<Unit filename="Savegame/SavedBattleGame.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -3371,6 +3376,7 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="pch.h">
+			<Option compile="1" />
 			<Option weight="0" />
 			<Option compiler="msvc10" use="1" buildCommand='$compiler /nologo $options $includes /c /Tp&quot;$file&quot; /Yc&quot;F:\GIT\OpenXcom\src\pch.h&quot;' />
 			<Option target="Debug Win32" />

@@ -54,11 +54,11 @@ ListLoadState::ListLoadState(OptionsOrigin origin)
 	if (origin != OPT_MENU)
 		_btnOld->setVisible(false);
 	else
-		_btnCancel->setX(180); */
+		_btnCancel->setX(180);
 
 	_btnOld->setColor(Palette::blockOffset(8)+5);
 	_btnOld->setText(L"original");
-	_btnOld->onMouseClick((ActionHandler)& ListLoadState::btnOldClick);
+	_btnOld->onMouseClick((ActionHandler)& ListLoadState::btnOldClick); */
 
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 
