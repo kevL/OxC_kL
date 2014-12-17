@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_POSITION_H
 #define OPENXCOM_POSITION_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -66,7 +66,7 @@ public:
 	{
 	};
 
-	Position& operator= (const Position& pos)
+	Position& operator=(const Position& pos)
 	{
 		if (this != &pos) // kL: cf. Unit.h
 		{
@@ -78,14 +78,14 @@ public:
 		return *this;
 	}
 
-	Position operator+ (const Position& pos) const
+	Position operator+(const Position& pos) const
 	{
 		return Position(
 						x + pos.x,
 						y + pos.y,
 						z + pos.z);
 	}
-	Position& operator+= (const Position& pos)
+	Position& operator+=(const Position& pos)
 	{
 		x += pos.x;
 		y += pos.y;
@@ -94,14 +94,14 @@ public:
 		return *this;
 	}
 
-	Position operator- (const Position& pos) const
+	Position operator-(const Position& pos) const
 	{
 		return Position(
 						x - pos.x,
 						y - pos.y,
 						z - pos.z);
 	}
-	Position& operator-= (const Position& pos)
+	Position& operator-=(const Position& pos)
 	{
 		x -= pos.x;
 		y -= pos.y;
@@ -110,14 +110,14 @@ public:
 		return *this;
 	}
 
-	Position operator* (const Position& pos) const
+	Position operator*(const Position& pos) const
 	{
 		return Position(
 						x * pos.x,
 						y * pos.y,
 						z * pos.z);
 	}
-	Position& operator*= (const Position& pos)
+	Position& operator*=(const Position& pos)
 	{
 		x *= pos.x;
 		y *= pos.y;
@@ -125,30 +125,30 @@ public:
 
 		return *this;
 	}
-	Position operator* (const int v) const
+	Position operator*(const int vect) const
 	{
 		return Position(
-						x * v,
-						y * v,
-						z * v);
+						x * vect,
+						y * vect,
+						z * vect);
 	}
-	Position& operator*= (const int v)
+	Position& operator*=(const int vect)
 	{
-		x *= v;
-		y *= v;
-		z *= v;
+		x *= vect;
+		y *= vect;
+		z *= vect;
 
 		return *this;
 	}
 
-	Position operator/ (const Position& pos) const
+	Position operator/(const Position& pos) const
 	{
 		return Position(
 						x / pos.x,
 						y / pos.y,
 						z / pos.z);
 	}
-	Position& operator/= (const Position& pos)
+	Position& operator/=(const Position& pos)
 	{
 		x /= pos.x;
 		y /= pos.y;
@@ -156,24 +156,24 @@ public:
 
 		return *this;
 	}
-	Position operator/ (const int v) const
+	Position operator/(const int vect) const
 	{
 		return Position(
-						x / v,
-						y / v,
-						z / v);
+						x / vect,
+						y / vect,
+						z / vect);
 	}
-	Position& operator/= (const int v) // kL_begin:
+	Position& operator/=(const int vect)	// kL_begin:
 	{
-		x /= v;
-		y /= v;
-		z /= v;
+		x /= vect;
+		y /= vect;
+		z /= vect;
 
 		return *this;
-	} // kL_end.
+	}										// kL_end.
 
 	/// == operator
-	bool operator== (const Position& pos) const
+	bool operator==(const Position& pos) const
 	{
 		return
 			   x == pos.x
@@ -182,7 +182,7 @@ public:
 	}
 
 	/// != operator
-	bool operator!= (const Position& pos) const
+	bool operator!=(const Position& pos) const
 	{
 		return
 			   x != pos.x
@@ -191,7 +191,7 @@ public:
 	}
 };
 
-inline std::ostream& operator<< (
+inline std::ostream& operator<<(
 		std::ostream& out,
 		const Position& pos)
 {
@@ -200,7 +200,7 @@ inline std::ostream& operator<< (
 	return out;
 }
 
-inline std::wostream& operator<< (
+inline std::wostream& operator<<(
 		std::wostream& wout,
 		const Position& pos)
 {
@@ -220,9 +220,11 @@ namespace YAML
 template<>
 struct convert<OpenXcom::Position>
 {
+	///
 	static Node encode(const OpenXcom::Position& rhs)
 	{
 		Node node;
+
 		node.push_back(rhs.x);
 		node.push_back(rhs.y);
 		node.push_back(rhs.z);
@@ -230,6 +232,7 @@ struct convert<OpenXcom::Position>
 		return node;
 	}
 
+	///
 	static bool decode(
 			const Node& node,
 			OpenXcom::Position& rhs)

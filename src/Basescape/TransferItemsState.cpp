@@ -31,8 +31,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -562,7 +562,6 @@ void TransferItemsState::init()
 	if (_curRow > 0)
 		_lstItems->scrollTo(_curRow);
 
-	// kL_note: hm does not use draw()
 
 	std::wostringstream
 		ss1,
@@ -617,7 +616,7 @@ void TransferItemsState::completeTransfer()
 {
 	_reset = true;
 
-	const int time = static_cast<int>(floor(6. + _distance / 10.));
+	const int time = static_cast<int>(std::floor(6. + _distance / 10.));
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _totalCost);
 	_baseFrom->setCashSpent(_totalCost);
 

@@ -57,7 +57,7 @@ struct UnitStats
 		melee;
 
 //	http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
-/*	MyClass& MyClass::operator=(const MyClass &rhs)
+/*	MyClass& MyClass::operator= (const MyClass& rhs)
 {
 	// Only do assignment if RHS is a different object from this.
 	if (this != &rhs)

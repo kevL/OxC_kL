@@ -19,15 +19,15 @@
 
 #include "NewResearchListState.h"
 
-#include <algorithm>
+//#include <algorithm>
 
 #include "ResearchInfoState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -168,8 +168,8 @@ void NewResearchListState::fillProjectList()
 
 			_offlines.push_back(*i);
 
-			row++;
-			_cutoff++;
+			++row;
+			++_cutoff;
 		}
 		//else Log(LOG_INFO) << ". already online: " << (*i)->getRules()->getName();
 	}
@@ -193,8 +193,7 @@ void NewResearchListState::fillProjectList()
 
 			_lstResearch->setRowColor(row, Palette::blockOffset(13));
 
-			row++;
-
+			++row;
 			++i;
 		}
 		else

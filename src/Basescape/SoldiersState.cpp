@@ -119,9 +119,6 @@ SoldiersState::SoldiersState(Base* base)
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+10);
 	_txtSoldiers->setAlign(ALIGN_RIGHT);
-	std::wostringstream ss;
-	ss << _base->getTotalSoldiers();
-	_txtSoldiers->setText(ss.str());
 
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
@@ -194,6 +191,10 @@ void SoldiersState::init()
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	// end pre-battle Equip.
+
+	std::wostringstream ss; // in case soldier is told to GTFO.
+	ss << _base->getTotalSoldiers();
+	_txtSoldiers->setText(ss.str());
 
 
 	_lstSoldiers->clearList();

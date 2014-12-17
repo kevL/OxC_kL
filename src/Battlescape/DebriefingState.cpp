@@ -774,7 +774,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		if ((*i)->isInBattlescape() == true) // in case we DON'T have a craft (base defense)
+		if ((*i)->isInBattlescape() == true) // in case we DON'T have a craft (ie. baseDefense)
 		{
 			base = *i;
 			base->setInBattlescape(false);
@@ -1092,7 +1092,7 @@ void DebriefingState::prepareDebriefing()
 
 							(*j)->die(_savedGame);
 
-							delete _savedGame->getSoldier((*i)->getId());
+							delete *j;
 							base->getSoldiers()->erase(j);
 
 							// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
@@ -1187,7 +1187,7 @@ void DebriefingState::prepareDebriefing()
 
 								(*j)->die(_savedGame);
 
-								delete _savedGame->getSoldier((*i)->getId());
+								delete *j;
 								base->getSoldiers()->erase(j);
 
 								// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!

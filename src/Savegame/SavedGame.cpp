@@ -230,7 +230,6 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	} */
-
 	for (std::vector<SoldierDead*>::const_iterator
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();
@@ -803,7 +802,6 @@ void SavedGame::save(const std::string& filename) const
 
 	node["alienStrategy"] = _alienStrategy->save();
 
-//kL	for (std::vector<Soldier*>::const_iterator
 	for (std::vector<SoldierDead*>::const_iterator // kL
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();

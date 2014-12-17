@@ -764,8 +764,7 @@ void Soldier::die(SavedGame* const savedGame)
 											deathTime,
 											_initialStats,
 											_currentStats,
-											*_diary);
-											// base if I want to...
+											*_diary); // base if I want to...
 
 	savedGame->getDeadSoldiers()->push_back(deadSoldier);
 }

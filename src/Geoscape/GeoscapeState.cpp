@@ -1343,7 +1343,7 @@ void GeoscapeState::time5Seconds()
 						{
 							(*soldier)->die(_savedGame);
 
-							delete _savedGame->getSoldier((*soldier)->getId());
+							delete *soldier;
 							soldier = (*i)->getSoldiers()->erase(soldier);
 						}
 						else
@@ -2228,7 +2228,7 @@ void GeoscapeState::time30Minutes()
 		{
 			if ((*k)->getRules()->insideRegion(
 											lon,
-											lat))
+											lat) == true)
 			{
 				(*k)->addActivityAlien(aLienPts); // one point per UFO in-Region per half hour
 				(*k)->recentActivity();
@@ -2246,7 +2246,7 @@ void GeoscapeState::time30Minutes()
 		{
 			if ((*k)->getRules()->insideCountry(
 											lon,
-											lat))
+											lat) == true)
 			{
 				(*k)->addActivityAlien(aLienPts); // two points per UFO in-Country per half hour <- no, KEEP IT CONSISTENT, pending investigation.
 				(*k)->recentActivity();
@@ -2597,10 +2597,11 @@ void GeoscapeState::time1Day()
 			//if (newResearch) Log(LOG_INFO) << ". newResearch Valid";
 			//else Log(LOG_INFO) << ". newResearch NOT valid"; // end_TEST
 
-//kL		std::string name = research->getLookup().empty()? research->getName(): research->getLookup();
-			std::string name = research->getLookup();
+			std::string name;
 			if (name.empty() == true)
-				name = research->getName(); // duh!
+				name = research->getName();
+			else
+				name = research->getLookup();
 			//Log(LOG_INFO) << ". Research = " << name;
 
 			if (_savedGame->isResearched(name) == true)
@@ -2721,30 +2722,34 @@ void GeoscapeState::time1Day()
 			delete *rp; // DONE Research.
 		}
 
-		//Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
 		//Log(LOG_INFO) << ". Soldiers";
 		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
 				soldier = (*b)->getSoldiers()->begin();
 				soldier != (*b)->getSoldiers()->end();
 				)
 		{
-			// kL_begin:
-			//Log(LOG_INFO) << ". Soldier = " << (*soldier)->getId();
-			//Log(LOG_INFO) << ". woundPercent = " << (*soldier)->getWoundPercent();
-			if ((*soldier)->getWoundPercent() > 10							// more than 10% wounded
-				&& RNG::percent((*soldier)->getWoundPercent() / 5) == true)	// so, %chance to die today
+			//Log(LOG_INFO) << ". Soldier = " << (*soldier)->getId() << " woundPct = " << (*soldier)->getWoundPercent();
+			if ((*soldier)->getWoundPercent() > 10
+				&& RNG::percent((*soldier)->getWoundPercent() / 5) == true)	// more than 10% wounded, %chance to die today
 			{
-				//Log(LOG_INFO) << ". . he's dead, Jim!!";
+				//Log(LOG_INFO) << ". . he's dead, Jim!!" << (*soldier)->getId();
 				timerReset();
 
 				popup(new SoldierDiedState(
 										(*soldier)->getName(),
 										(*b)->getName()));
 
-				(*soldier)->die(_savedGame);
+				(*soldier)->die(_savedGame); // holy * This copies the Diary-object
+				// so to delete Soldier-instance I need to use a CopyConstructor
+				// on either or both of SoldierDiary and SoldierCommendations.
+				// Oh, and maybe an operator= assignment overload also.
+				// Learning C++ is like standing around while 20 people constantly
+				// throw cow's dung at you. (But don't mention "const" or they'll throw
+				// twice as fast.) i miss you, Alan Turing ....
 
-				delete _savedGame->getSoldier((*soldier)->getId());
+				delete *soldier;
 				soldier = (*b)->getSoldiers()->erase(soldier);
+
 				// note: Could return any armor the soldier was wearing to Stores.
 			}
 			else
@@ -2754,7 +2759,8 @@ void GeoscapeState::time1Day()
 					(*soldier)->heal();
 
 				++soldier;
-			} // kL_end.
+			}
+			//Log(LOG_INFO) << ". Soldier DONE";
 		}
 		//Log(LOG_INFO) << ". iterate Soldiers DONE";
 
@@ -2903,8 +2909,8 @@ void GeoscapeState::time1Day()
 								*_savedGame));
 
 	// Autosave 3 times a month. kL_note: every day.
-//kL	int day = _savedGame->getTime()->getDay();
-//kL	if (day == 10 || day == 20)
+//	int day = _savedGame->getTime()->getDay();
+//	if (day == 10 || day == 20)
 //	{
 	if (_savedGame->isIronman() == true)
 		popup(new SaveGameState(

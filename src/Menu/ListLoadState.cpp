@@ -28,6 +28,8 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Palette.h"
 
+#include "../Geoscape/GeoscapeState.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -87,10 +89,12 @@ void ListLoadState::btnOldClick(Action*)
  */
 void ListLoadState::lstSavesPress(Action* action)
 {
-	ListGamesState::lstSavesPress(action);
+	ListGamesState::lstSavesPress(action); // RMB.
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
+		kL_currentBase = 0;
+
 		if (_origin == OPT_MENU
 			|| (_origin == OPT_GEOSCAPE
 				&& _saves[_lstSaves->getSelectedRow()].mode == MODE_BATTLESCAPE)

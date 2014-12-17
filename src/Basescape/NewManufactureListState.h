@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_NEWMANUFACTURELISTSTATE_H
 #define OPENXCOM_NEWMANUFACTURELISTSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 

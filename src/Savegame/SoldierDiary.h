@@ -148,10 +148,15 @@ private:
 	public:
 		/// Creates a new soldier-diary and loads its contents from YAML.
 		SoldierDiary(const YAML::Node& node);
-		/// Construct a diary.
+		/// Constructs a diary.
 		SoldierDiary();
-		/// Deconstruct a diary.
+		/// Constructs a Copy of a diary.
+		SoldierDiary(const SoldierDiary& copyThis);
+		/// Deconstructs a diary.
 		~SoldierDiary();
+
+		/// - operator Assignment overload -
+		SoldierDiary& operator= (const SoldierDiary& assignThis);
 
 		/// Load a diary.
 		void load(const YAML::Node& node);

@@ -84,7 +84,7 @@ Base::Base(const Ruleset* const rules)
  */
 Base::~Base()
 {
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
@@ -92,7 +92,7 @@ Base::~Base()
 		delete *i;
 	}
 
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _soldiers.begin();
 			i != _soldiers.end();
 			++i)
@@ -100,17 +100,17 @@ Base::~Base()
 		delete *i;
 	}
 
-	for (std::vector<Craft*>::iterator
+	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
 			i != _crafts.end();
 			++i)
 	{
-		for (std::vector<Vehicle*>::iterator
+		for (std::vector<Vehicle*>::const_iterator
 				j = (*i)->getVehicles()->begin();
 				j != (*i)->getVehicles()->end();
 				++j)
 		{
-			for (std::vector<Vehicle*>::iterator
+			for (std::vector<Vehicle*>::const_iterator
 					k = _vehicles.begin();
 					k != _vehicles.end();
 					++k)
@@ -118,7 +118,6 @@ Base::~Base()
 				if (*k == *j) // to avoid calling a vehicle's destructor twice
 				{
 					_vehicles.erase(k);
-
 					break;
 				}
 			}
@@ -127,7 +126,7 @@ Base::~Base()
 		delete *i;
 	}
 
-	for (std::vector<Transfer*>::iterator
+	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
 			i != _transfers.end();
 			++i)
@@ -135,7 +134,7 @@ Base::~Base()
 		delete *i;
 	}
 
-	for (std::vector<Production*>::iterator
+	for (std::vector<Production*>::const_iterator
 			i = _productions.begin();
 			i != _productions.end();
 			++i)
@@ -145,7 +144,7 @@ Base::~Base()
 
 	delete _items;
 
-	for (std::vector<ResearchProject*>::iterator
+	for (std::vector<ResearchProject*>::const_iterator
 			i = _research.begin();
 			i != _research.end();
 			++i)
@@ -153,7 +152,7 @@ Base::~Base()
 		delete *i;
 	}
 
-	for (std::vector<Vehicle*>::iterator
+	for (std::vector<Vehicle*>::const_iterator
 			i = _vehicles.begin();
 			i != _vehicles.end();
 			++i)
@@ -195,7 +194,6 @@ void Base::load(
 												_rules->getBaseFacility(type),
 												this);
 				f->load(*i);
-
 				_facilities.push_back(f);
 			}
 		}
@@ -216,7 +214,6 @@ void Base::load(
 					*i,
 					_rules,
 					save);
-
 			_crafts.push_back(c);
 		}
 	}
@@ -239,7 +236,7 @@ void Base::load(
 		{
 			CraftId craftId = Craft::loadId(craft);
 
-			for (std::vector<Craft*>::iterator
+			for (std::vector<Craft*>::const_iterator
 					j = _crafts.begin();
 					j != _crafts.end();
 					++j)
@@ -247,7 +244,6 @@ void Base::load(
 				if ((*j)->getUniqueId() == craftId)
 				{
 					s->setCraft(*j);
-
 					break;
 				}
 			}
@@ -258,7 +254,7 @@ void Base::load(
 
 	_items->load(node["items"]);
 	// Some old saves have bad items, better get rid of them to avoid further bugs
-	for (std::map<std::string, int>::iterator
+	for (std::map<std::string, int>::const_iterator
 			i = _items->getContents()->begin();
 			i != _items->getContents()->end();
 			)
@@ -266,8 +262,7 @@ void Base::load(
 		if (std::find(
 					_rules->getItemsList().begin(),
 					_rules->getItemsList().end(),
-					i->first)
-				== _rules->getItemsList().end())
+					i->first) == _rules->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -308,7 +303,6 @@ void Base::load(
 		{
 			ResearchProject* r = new ResearchProject(_rules->getResearch(research));
 			r->load(*i);
-
 			_research.push_back(r);
 		}
 		else
@@ -327,7 +321,6 @@ void Base::load(
 										_rules->getManufacture(item),
 										0);
 			p->load(*i);
-
 			_productions.push_back(p);
 		}
 		else
@@ -1379,10 +1372,10 @@ void Base::removeProduction(Production* prod)
 {
 	_engineers += prod->getAssignedEngineers();
 
-	std::vector<Production*>::iterator i = std::find(
-												_productions.begin(),
-												_productions.end(),
-												prod);
+	std::vector<Production*>::const_iterator i = std::find(
+														_productions.begin(),
+														_productions.end(),
+														prod);
 	if (i != _productions.end())
 		_productions.erase(i);
 }
@@ -1828,7 +1821,7 @@ int Base::getUsedPsiLabs() const
 			++s)
 	{
 		if ((*s)->isInPsiTraining())
-			total ++;
+			++total;
 	}
 
 	return total;
@@ -2055,7 +2048,7 @@ int Base::getGravShields() const
 		if ((*i)->getBuildTime() == 0
 			&& (*i)->getRules()->isGravShield())
 		{
-			total++;
+			++total;
 		}
 	}
 
@@ -2628,7 +2621,6 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 				if (del) */
 				{
 					delete *i;
-
 					i = _transfers.erase(i);
 				}
 				else

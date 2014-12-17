@@ -88,7 +88,7 @@ void ItemContainer::removeItem(
 		const std::string& id,
 		int qty)
 {
-	if (id.empty()
+	if (id.empty() == true
 		|| _qty.find(id) == _qty.end())
 	{
 		return;
@@ -107,7 +107,7 @@ void ItemContainer::removeItem(
  */
 int ItemContainer::getItem(const std::string& id) const
 {
-	if (id.empty())
+	if (id.empty() == true)
 		return 0;
 
 	std::map<std::string, int>::const_iterator it = _qty.find(id);

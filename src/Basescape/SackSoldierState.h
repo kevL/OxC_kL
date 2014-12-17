@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class Base;
-//class Soldier;
 class Text;
 class TextButton;
 class Window;

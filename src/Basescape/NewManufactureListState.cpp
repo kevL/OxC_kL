@@ -19,14 +19,14 @@
 
 #include "NewManufactureListState.h"
 
-#include <algorithm>
+//#include <algorithm>
 
 #include "ManufactureStartState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
@@ -51,8 +51,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the productions list screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the Base to get info from
  */
 NewManufactureListState::NewManufactureListState(
 		Base* base)
@@ -155,7 +154,6 @@ NewManufactureListState::NewManufactureListState(
 void NewManufactureListState::init()
 {
 	State::init();
-
 	fillProductionList();
 }
 

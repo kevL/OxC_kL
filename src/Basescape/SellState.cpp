@@ -510,9 +510,10 @@ void SellState::btnOkClick(Action*)
 
 					delete _soldiers[i];
 				break;
+
 				case SELL_CRAFT:
 				{
-					Craft* craft = _crafts[getCraftIndex(i)];
+					Craft* const craft = _crafts[getCraftIndex(i)];
 
 					for (std::vector<CraftWeapon*>::const_iterator // remove weapons from craft
 							j = craft->getWeapons()->begin();
@@ -571,12 +572,15 @@ void SellState::btnOkClick(Action*)
 					delete craft;
 				}
 				break;
+
 				case SELL_SCIENTIST:
 					_base->setScientists(_base->getScientists() - _qtys[i]);
 				break;
+
 				case SELL_ENGINEER:
 					_base->setEngineers(_base->getEngineers() - _qtys[i]);
 				break;
+
 				case SELL_ITEM:
 					if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
 					{

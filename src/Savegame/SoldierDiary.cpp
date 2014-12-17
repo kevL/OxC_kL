@@ -42,13 +42,6 @@ SoldierDiary::SoldierDiary(const YAML::Node& node)
  */
 SoldierDiary::SoldierDiary()
 	:
-//		_killList(),
-//		_regionTotal(),
-//		_countryTotal(),
-//		_typeTotal(),
-//		_UFOTotal(),
-//		_missionIdList(),
-//		_commendations(),
 		_scoreTotal(0),
 		_pointTotal(0),
 		_killTotal(0),
@@ -82,7 +75,110 @@ SoldierDiary::SoldierDiary()
 		_trapKillTotal(0),
 		_alienBaseAssaultTotal(0),
 		_allAliensKilledTotal(0)
+//		_killList(),
+//		_regionTotal(),
+//		_countryTotal(),
+//		_typeTotal(),
+//		_UFOTotal(),
+//		_missionIdList(),
+//		_commendations(),
+{}
+
+/**
+ * Constructs a Copy of this SoldierDiary.
+ */
+SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
+	:
+		_scoreTotal(copyThis._scoreTotal),
+		_pointTotal(copyThis._pointTotal),
+		_killTotal(copyThis._killTotal),
+		_missionTotal(copyThis._missionTotal),
+		_winTotal(copyThis._winTotal),
+		_stunTotal(copyThis._stunTotal),
+		_daysWoundedTotal(copyThis._daysWoundedTotal),
+		_baseDefenseMissionTotal(copyThis._baseDefenseMissionTotal),
+		_totalShotByFriendlyCounter(copyThis._totalShotByFriendlyCounter),
+		_totalShotFriendlyCounter(copyThis._totalShotFriendlyCounter),
+		_loneSurvivorTotal(copyThis._loneSurvivorTotal),
+		_terrorMissionTotal(copyThis._terrorMissionTotal),
+		_nightMissionTotal(copyThis._nightMissionTotal),
+		_nightTerrorMissionTotal(copyThis._nightTerrorMissionTotal),
+		_monthsService(copyThis._monthsService),
+		_unconsciousTotal(copyThis._unconsciousTotal),
+		_shotAtCounterTotal(copyThis._shotAtCounterTotal),
+		_hitCounterTotal(copyThis._hitCounterTotal),
+		_ironManTotal(copyThis._ironManTotal),
+		_importantMissionTotal(copyThis._importantMissionTotal),
+		_longDistanceHitCounterTotal(copyThis._longDistanceHitCounterTotal),
+		_lowAccuracyHitCounterTotal(copyThis._lowAccuracyHitCounterTotal),
+		_shotsFiredCounterTotal(copyThis._shotsFiredCounterTotal),
+		_shotsLandedCounterTotal(copyThis._shotsLandedCounterTotal),
+		_shotAtCounter10in1Mission(copyThis._shotAtCounter10in1Mission),
+		_hitCounter5in1Mission(copyThis._hitCounter5in1Mission),
+		_reactionFireTotal(copyThis._reactionFireTotal),
+		_timesWoundedTotal(copyThis._timesWoundedTotal),
+		_valiantCruxTotal(copyThis._valiantCruxTotal),
+		_KIA(copyThis._KIA),
+		_trapKillTotal(copyThis._trapKillTotal),
+		_alienBaseAssaultTotal(copyThis._alienBaseAssaultTotal),
+		_allAliensKilledTotal(copyThis._allAliensKilledTotal),
+
+		_missionIdList(copyThis._missionIdList),
+
+		_regionTotal(copyThis._regionTotal),
+		_countryTotal(copyThis._countryTotal),
+		_typeTotal(copyThis._typeTotal),
+		_UFOTotal(copyThis._UFOTotal)
 {
+	for (size_t
+			i = 0;
+			i != copyThis._commendations.size();
+			++i)
+	{
+		if (copyThis._commendations.at(i) != NULL)
+		{
+			std::string
+				type = copyThis._commendations.at(i)->getType(),
+				noun = copyThis._commendations.at(i)->getNoun();
+
+			_commendations.push_back(new SoldierCommendations(
+															type,
+															noun));
+		}
+	}
+
+	for (size_t
+			i = 0;
+			i != copyThis._killList.size();
+			++i)
+	{
+		if (copyThis._killList.at(i) != NULL)
+		{
+			std::string
+				unitRank = copyThis._killList.at(i)->_rank,
+				race = copyThis._killList.at(i)->_race,
+				weapon = copyThis._killList.at(i)->_weapon,
+				weaponAmmo = copyThis._killList.at(i)->_weaponAmmo;
+			int
+				mission = copyThis._killList.at(i)->_mission,
+				turn = copyThis._killList.at(i)->_turn,
+				points = copyThis._killList.at(i)->_points;
+
+			UnitFaction faction = copyThis._killList.at(i)->_faction;
+			UnitStatus status = copyThis._killList.at(i)->_status;
+
+			_killList.push_back(new BattleUnitKills(
+												unitRank,
+												race,
+												weapon,
+												weaponAmmo,
+												faction,
+												status,
+												mission,
+												turn,
+												points));
+		}
+	}
 }
 
 /**
@@ -105,6 +201,124 @@ SoldierDiary::~SoldierDiary()
 	{
 		delete *i;
 	}
+}
+
+/**
+ * Overloads assignment operator.
+ */
+SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
+{
+	if (this != &assignThis)
+	{
+		_scoreTotal = assignThis._scoreTotal;
+		_pointTotal = assignThis._pointTotal;
+		_killTotal = assignThis._killTotal;
+		_missionTotal = assignThis._missionTotal;
+		_winTotal = assignThis._winTotal;
+		_stunTotal = assignThis._stunTotal;
+		_daysWoundedTotal = assignThis._daysWoundedTotal;
+		_baseDefenseMissionTotal = assignThis._baseDefenseMissionTotal;
+		_totalShotByFriendlyCounter = assignThis._totalShotByFriendlyCounter;
+		_totalShotFriendlyCounter = assignThis._totalShotFriendlyCounter;
+		_loneSurvivorTotal = assignThis._loneSurvivorTotal;
+		_terrorMissionTotal = assignThis._terrorMissionTotal;
+		_nightMissionTotal = assignThis._nightMissionTotal;
+		_nightTerrorMissionTotal = assignThis._nightTerrorMissionTotal;
+		_monthsService = assignThis._monthsService;
+		_unconsciousTotal = assignThis._unconsciousTotal;
+		_shotAtCounterTotal = assignThis._shotAtCounterTotal;
+		_hitCounterTotal = assignThis._hitCounterTotal;
+		_ironManTotal = assignThis._ironManTotal;
+		_importantMissionTotal = assignThis._importantMissionTotal;
+		_longDistanceHitCounterTotal = assignThis._longDistanceHitCounterTotal;
+		_lowAccuracyHitCounterTotal = assignThis._lowAccuracyHitCounterTotal;
+		_shotsFiredCounterTotal = assignThis._shotsFiredCounterTotal;
+		_shotsLandedCounterTotal = assignThis._shotsLandedCounterTotal;
+		_shotAtCounter10in1Mission = assignThis._shotAtCounter10in1Mission;
+		_hitCounter5in1Mission = assignThis._hitCounter5in1Mission;
+		_reactionFireTotal = assignThis._reactionFireTotal;
+		_timesWoundedTotal = assignThis._timesWoundedTotal;
+		_valiantCruxTotal = assignThis._valiantCruxTotal;
+		_KIA = assignThis._KIA;
+		_trapKillTotal = assignThis._trapKillTotal;
+		_alienBaseAssaultTotal = assignThis._alienBaseAssaultTotal;
+		_allAliensKilledTotal = assignThis._allAliensKilledTotal;
+
+		_missionIdList = assignThis._missionIdList;
+
+		_regionTotal = assignThis._regionTotal;
+		_countryTotal = assignThis._countryTotal;
+		_typeTotal = assignThis._typeTotal;
+		_UFOTotal = assignThis._UFOTotal;
+
+		for (std::vector<SoldierCommendations*>::const_iterator
+				i = _commendations.begin();
+				i != _commendations.end();
+				++i)
+		{
+			delete *i;
+		}
+
+		for (std::vector<BattleUnitKills*>::const_iterator
+				i = _killList.begin();
+				i != _killList.end();
+				++i)
+		{
+			delete *i;
+		}
+
+		for (size_t
+				i = 0;
+				i != assignThis._commendations.size();
+				++i)
+		{
+			if (assignThis._commendations.at(i) != NULL)
+			{
+				std::string
+					type = assignThis._commendations.at(i)->getType(),
+					noun = assignThis._commendations.at(i)->getNoun();
+
+				_commendations.push_back(new SoldierCommendations(
+																type,
+																noun));
+			}
+		}
+
+		for (size_t
+				i = 0;
+				i != assignThis._killList.size();
+				++i)
+		{
+			if (assignThis._killList.at(i) != NULL)
+			{
+				std::string
+					unitRank = assignThis._killList.at(i)->_rank,
+					race = assignThis._killList.at(i)->_race,
+					weapon = assignThis._killList.at(i)->_weapon,
+					weaponAmmo = assignThis._killList.at(i)->_weaponAmmo;
+				int
+					mission = assignThis._killList.at(i)->_mission,
+					turn = assignThis._killList.at(i)->_turn,
+					points = assignThis._killList.at(i)->_points;
+
+				UnitFaction faction = assignThis._killList.at(i)->_faction;
+				UnitStatus status = assignThis._killList.at(i)->_status;
+
+				_killList.push_back(new BattleUnitKills(
+													unitRank,
+													race,
+													weapon,
+													weaponAmmo,
+													faction,
+													status,
+													mission,
+													turn,
+													points));
+			}
+		}
+	}
+
+	return *this;
 }
 
 /**
@@ -791,7 +1005,7 @@ void SoldierDiary::awardCommendation(
 {
 	bool newCom = true;
 
-	for (std::vector<SoldierCommendations*>::iterator
+	for (std::vector<SoldierCommendations*>::const_iterator
 			i = _commendations.begin();
 			i != _commendations.end();
 			++i)
@@ -1023,15 +1237,13 @@ SoldierCommendations::SoldierCommendations(
 		_noun(noun),
 		_decorationLevel(0),
 		_isNew(true)
-{
-}
+{}
 
 /**
  * dTor.
  */
 SoldierCommendations::~SoldierCommendations()
-{
-}
+{}
 
 /**
  * Loads the SoldierCommendations from a YAML file.
