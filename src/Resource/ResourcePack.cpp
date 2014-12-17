@@ -276,9 +276,9 @@ Music* ResourcePack::getRandomMusic(
 		return _muteMusic;
 
 	if (terrain.empty() == true)
-		Log(LOG_DEBUG) << "MUSIC : Request " << name;
+		Log(LOG_DEBUG) << "MUSIC: Request " << name;
 	else
-		Log(LOG_DEBUG) << "MUSIC : Request " << name << " for terrainType " << terrain;
+		Log(LOG_DEBUG) << "MUSIC: Request " << name << " for terrainType " << terrain;
 
 	if (_musicAssignment.find(name) == _musicAssignment.end())
 	{
@@ -297,8 +297,8 @@ Music* ResourcePack::getRandomMusic(
 	const int musicRand = SDL_GetTicks() %musicCodes.size();
 	const std::pair<std::string, int> randMusic = musicCodes[musicRand];
 
-	//Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
-	Log(LOG_INFO) << "MUSIC : " << randMusic.first;
+	//Log(LOG_DEBUG) << "MUSIC: " << randMusic.first;
+	Log(LOG_INFO) << "MUSIC: " << randMusic.first;
 
 	Music* const music = _musicFile.at(randMusic.first);
 

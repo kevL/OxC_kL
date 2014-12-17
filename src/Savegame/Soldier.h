@@ -179,7 +179,7 @@ private:
 		/// Gets the soldier armor.
 		Armor* getArmor() const;
 		/// Sets the soldier armor.
-		void setArmor(Armor* armor);
+		void setArmor(Armor* const armor);
 
 		/// Gets the soldier's wound recovery time.
 		int getWoundRecovery() const;

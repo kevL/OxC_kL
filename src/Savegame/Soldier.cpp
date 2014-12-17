@@ -496,7 +496,7 @@ Armor* Soldier::getArmor() const
  * Sets this Soldier's current armor.
  * @param armor - pointer to Armor rule
  */
-void Soldier::setArmor(Armor* armor)
+void Soldier::setArmor(Armor* const armor)
 {
 	_armor = armor;
 }

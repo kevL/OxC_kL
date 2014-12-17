@@ -142,10 +142,11 @@ std::string RuleTerrain::getName() const
 
 /**
  * Gets a random mapblock within the given constraints.
- * @param maxsize	- the maximum size of the mapblock (10 or 20 or 999 - don't care)
- * @param type		- the MapBlockType that the returned MapBlock must be (MapBlock.h enum)
+ * @param maxSizeX	- the maximum X size of the mapblock
+ * @param maxSizeY	- the maximum Y size of the mapblock
+ * @param group		- the group Type
  * @param force		- true to enforce the max size (default false)
- * @return, pointer to a mapblock or NULL if none found
+ * @return, pointer to a MapBlock or NULL if not found
  */
 MapBlock* RuleTerrain::getRandomMapBlock(
 		int maxSizeX,
@@ -153,7 +154,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 		int group,
 		bool force)
 {
-	std::vector<MapBlock*> compliantMapBlocks;
+	std::vector<MapBlock*> compliantBlocks;
 
 	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
@@ -168,24 +169,23 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 					&& (*i)->getSizeY() < maxSizeY))
 			&& (*i)->isInGroup(group) == true)
 		{
-			compliantMapBlocks.push_back((*i));
+			compliantBlocks.push_back((*i));
 		}
 	}
 
-	if (compliantMapBlocks.empty() == true)
+	if (compliantBlocks.empty() == true)
 		return NULL;
 
 	const size_t mapBlock = static_cast<size_t>(RNG::generate(
 															0,
-															static_cast<int>(compliantMapBlocks.size()) - 1));
-
-	return compliantMapBlocks[mapBlock];
+															static_cast<int>(compliantBlocks.size()) - 1));
+	return compliantBlocks[mapBlock];
 }
 
 /**
  * Gets a MapBlock with a given name.
  * @param name - reference the name of a MapBlock
- * @return, pointer to MapBlock or NULL if not found
+ * @return, pointer to a MapBlock or NULL if not found
  */
 MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 {
@@ -203,7 +203,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 
 /**
  * Gets a mapdata object.
- * @param id			- pointer to the ID in the terrain
+ * @param id			- pointer to the ID of the terrain
  * @param mapDataSetID	- pointer to the ID of the MapDataSet
  * @return, pointer to MapData object
  */
@@ -225,7 +225,7 @@ MapData* RuleTerrain::getMapData(
 			break;
 
 		*id -= dataSet->getSize();
-		(*mapDataSetID)++;
+		++(*mapDataSetID);
 	}
 
 	if (i == _mapDataSets.end())

@@ -92,7 +92,7 @@ private:
 	Base* _base;
 	Craft* _craft;
 	Game* _game;
-	MapBlock* _dumby;
+	MapBlock* _testBlock;
 	ResourcePack* _res;
 	Ruleset* _rules;
 	RuleTerrain
@@ -101,7 +101,7 @@ private:
 	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
 	TerrorSite* _terror;
-	Tile* _tileCraft;
+	Tile* _tileEquipt;
 	Ufo* _ufo;
 
 	std::string
@@ -112,11 +112,11 @@ private:
 	/// Sets the map size and associated vars.
 	void init();
 	/// Generates a new battlescape map.
-	void generateMap(const std::vector<MapScript*>* script);
+	void generateMap(const std::vector<MapScript*>* const script);
 
 	/// Loads an XCom MAP file.
 	int loadMAP(
-			MapBlock* mapblock,
+			MapBlock* const mapblock,
 			int offset_x,
 			int offset_y,
 			RuleTerrain* terrainRule,
@@ -180,7 +180,7 @@ private:
 
 	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
 	bool addCraft(
-			MapBlock* craftMap,
+			const MapBlock* const craftMap,
 			MapScript* command,
 			SDL_Rect& craftPos);
 	/// Adds a line (generally a road) to the map.
@@ -191,7 +191,7 @@ private:
 	bool addBlock(
 			int x,
 			int y,
-			MapBlock* block);
+			MapBlock* const block);
 
 	/// Load the nodes from the associated map blocks.
 	void loadNodes();

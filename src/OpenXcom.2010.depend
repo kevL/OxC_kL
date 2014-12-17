@@ -4368,7 +4368,7 @@
 	<sstream>
 	<string>
 
-1418634848 f:\git\openxcom\src\savegame\soldier.h
+1418851026 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
 1418809850 f:\git\openxcom\src\ruleset\unit.h
@@ -4663,7 +4663,7 @@
 1417535931 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
-1418171218 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1418853707 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
@@ -5702,7 +5702,7 @@
 
 1418417769 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1418720283 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1418854922 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -8768,7 +8768,7 @@
 1413136962 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1417919340 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1418852949 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Font.h"
 	"../Engine/Game.h"
@@ -9211,7 +9211,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1418797355 source:f:\git\openxcom\src\savegame\soldier.cpp
+1418851026 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11552,7 +11552,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1418825284 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1418828642 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
