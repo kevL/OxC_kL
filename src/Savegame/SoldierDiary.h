@@ -150,12 +150,12 @@ private:
 		SoldierDiary(const YAML::Node& node);
 		/// Constructs a diary.
 		SoldierDiary();
-		/// Constructs a Copy of a diary.
+		/// Constructs a copy of a diary.
 		SoldierDiary(const SoldierDiary& copyThis);
 		/// Deconstructs a diary.
 		~SoldierDiary();
 
-		/// - operator Assignment overload -
+		/// Overloads assignment operator.
 		SoldierDiary& operator= (const SoldierDiary& assignThis);
 
 		/// Load a diary.

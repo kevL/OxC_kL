@@ -2597,11 +2597,9 @@ void GeoscapeState::time1Day()
 			//if (newResearch) Log(LOG_INFO) << ". newResearch Valid";
 			//else Log(LOG_INFO) << ". newResearch NOT valid"; // end_TEST
 
-			std::string name;
+			std::string name = research->getLookup();
 			if (name.empty() == true)
 				name = research->getName();
-			else
-				name = research->getLookup();
 			//Log(LOG_INFO) << ". Research = " << name;
 
 			if (_savedGame->isResearched(name) == true)

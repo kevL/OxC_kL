@@ -85,7 +85,7 @@ SoldierDiary::SoldierDiary()
 {}
 
 /**
- * Constructs a Copy of this SoldierDiary.
+ * Constructs a copy of this SoldierDiary.
  */
 SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 	:
