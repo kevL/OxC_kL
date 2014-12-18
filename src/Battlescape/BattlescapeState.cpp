@@ -1239,7 +1239,7 @@ void BattlescapeState::mapOver(Action* action)
 					{
 						if (row == 24)
 						{
-							woss << L"> more >";
+							woss << L"> more >>";
 							++row;
 						}
 
@@ -1280,7 +1280,7 @@ void BattlescapeState::mapOver(Action* action)
 					if (row > 26) // Console #2
 					{
 						if (row == 50)
-							woss << L"> more >";
+							woss << L"> more >>";
 
 						woss2.str(L"");
 						woss2 << woss.str();
@@ -1305,9 +1305,9 @@ void BattlescapeState::mapOver(Action* action)
 				_txtConsole1->setText(woss1.str());
 				_txtConsole2->setText(woss2.str());
 			}
-
-			updateTileInfo(tile);
 		}
+
+		updateTileInfo(tile);
 
 		_txtTerrain->setVisible(showInfo);
 		_txtShade->setVisible(showInfo);
@@ -3918,6 +3918,13 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 {
 	_lstTileInfo->clearList();
 
+	if (tile == NULL
+		|| tile->isDiscovered(2) == false)
+	{
+		return;
+	}
+
+
 	const int info[] =
 	{
 		static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0, 0,-1)))),
@@ -3940,14 +3947,21 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 
 		if (i == 0)
 		{
+			std::wstring hasFloor;
 			if (info[i] == 0)
+			{
+				hasFloor = L"F";
 				color = Palette::blockOffset(3); // green, Floor
+			}
 			else
+			{
+				hasFloor = L"-";
 				color = Palette::blockOffset(1); // orange, NO Floor
+			}
 
 			_lstTileInfo->addRow(
 							2,
-							L"F",
+							hasFloor.c_str(),
 							infoType.at(i).c_str());
 		}
 		else

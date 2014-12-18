@@ -1159,7 +1159,7 @@ void BattlescapeGame::checkForCasualties(
 }
 
 /**
- * Shows the infoboxes in the queue (if any).
+ * Shows the infoboxes in the queue if any.
  */
 void BattlescapeGame::showInfoBoxQueue()
 {
@@ -1175,7 +1175,7 @@ void BattlescapeGame::showInfoBoxQueue()
 }
 
 /**
- * Handles the result of non target actions,
+ * Handles the result of non target actions
  * like priming a grenade or performing a melee attack.
  */
 void BattlescapeGame::handleNonTargetAction()
@@ -1187,9 +1187,8 @@ void BattlescapeGame::handleNonTargetAction()
 
 		if (_currentAction.type == BA_PRIME
 			|| _currentAction.type == BA_DEFUSE)
-//			&& _currentAction.value > -1)
 		{
-			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_PRIME";
+			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_PRIME or _DEFUSE";
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_currentAction.weapon->setFuseTimer(_currentAction.value);
@@ -1210,7 +1209,7 @@ void BattlescapeGame::handleNonTargetAction()
 		else if (_currentAction.type == BA_USE
 			|| _currentAction.type == BA_LAUNCH)
 		{
-			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_USE or BA_LAUNCH";
+			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_USE or _LAUNCH";
 			if (_currentAction.result.length() > 0)
 			{
 				_parentState->warning(_currentAction.result);
@@ -1253,7 +1252,7 @@ void BattlescapeGame::handleNonTargetAction()
  */
 void BattlescapeGame::setupCursor()
 {
-	getMap()->refreshSelectorPosition(); // kL
+	getMap()->refreshSelectorPosition();
 
 	if (_currentAction.targeting)
 	{

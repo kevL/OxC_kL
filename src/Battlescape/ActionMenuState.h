@@ -40,7 +40,7 @@ class ActionMenuState
 {
 
 private:
-	ActionMenuItem* _actionMenu[6];
+	ActionMenuItem* _menuItem[6];
 	BattleAction* _action;
 
 
@@ -63,8 +63,8 @@ private:
 		/// Handler for right-clicking anything.
 		void handle(Action* action);
 		/// Handler for clicking a action menu item.
-		void btnActionMenuItemClick(Action* action);
-		/// Update the resolution settings, we just resized the window.
+		void btnActionMenuClick(Action* action);
+		/// Updates the resolution settings, just resized the window.
 		void resize(
 				int& dX,
 				int& dY);

@@ -29,7 +29,7 @@ namespace OpenXcom
 class BattleItem;
 class Frame;
 class InteractiveSurface;
-class Inventory; // kL
+class Inventory;
 class Surface;
 class Text;
 
@@ -51,13 +51,13 @@ private:
 	BattleItem* _grenade;
 	Frame* _fraTop;
 	InteractiveSurface
-		* _isfBtn0, // kL
+		* _isfBtn0,
 		* _isfBtn[24];
-	Inventory* _inventory; // kL
+	Inventory* _inventory;
 	Surface
 		* _srfBG;
 	Text
-		* _txtTurn0, // kL
+		* _txtTurn0,
 		* _txtTurn[24],
 		* _txtTitle;
 
@@ -68,7 +68,7 @@ private:
 				BattleAction* action,
 				bool inInventoryView,
 				BattleItem* grenade,
-				Inventory* inventory = NULL); // kL_add.
+				Inventory* inventory = NULL);
 		/// Cleans up the Prime Grenade state.
 		~PrimeGrenadeState();
 

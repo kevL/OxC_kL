@@ -51,7 +51,7 @@ namespace OpenXcom
  * @param action			- pointer to the BattleAction (BattlescapeGame.h)
  * @param inInventoryView	- true if called from inventory
  * @param grenade			- pointer to associated grenade
- * @param inventory			- pointer to Inventory
+ * @param inventory			- pointer to Inventory (default NULL)
  */
 PrimeGrenadeState::PrimeGrenadeState(
 		BattleAction* action,
@@ -72,10 +72,8 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_srfBG			= new Surface(192, 93, 65, 45);
 
 	_isfBtn0		= new InteractiveSurface(190, 22, 66, 65);
-	if (Options::battleInstantGrenade == true)
-		_txtTurn0	= new Text(190, 18, 66, 67);
 
-	int
+	const int
 		x = 67,
 		y = 92;
 
@@ -140,10 +138,10 @@ PrimeGrenadeState::PrimeGrenadeState(
 	{
 		_isfBtn0->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
 
+		_txtTurn0 = new Text(190, 18, 66, 67);
 		add(_txtTurn0);
-		std::wostringstream ss0;
-		ss0 << 0;
-		_txtTurn0->setText(ss0.str());
+
+		_txtTurn0->setText(L"0");
 		_txtTurn0->setBig();
 		_txtTurn0->setColor(Palette::blockOffset(1)-1);
 		_txtTurn0->setHighContrast();
@@ -205,7 +203,10 @@ void PrimeGrenadeState::handle(Action* action)
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_inInventoryView == false)
+		{
 			_action->value = -1;
+			_action->type = BA_NONE;
+		}
 
 		_game->popState();
 	}
@@ -223,7 +224,10 @@ void PrimeGrenadeState::btnClick(Action* action)
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_inInventoryView == false)
+		{
 			_action->value = -1;
+			_action->type = BA_NONE;
+		}
 
 		_game->popState();
 		return;

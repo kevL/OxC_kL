@@ -73,15 +73,15 @@ ActionMenuState::ActionMenuState(
 			i < 6;
 			++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(
+		_menuItem[i] = new ActionMenuItem(
 										i,
 										_game,
 										x,
 										y);
-		add(_actionMenu[i]);
+		add(_menuItem[i]);
 
-		_actionMenu[i]->setVisible(false);
-		_actionMenu[i]->onMouseClick((ActionHandler)& ActionMenuState::btnActionMenuItemClick);
+		_menuItem[i]->setVisible(false);
+		_menuItem[i]->onMouseClick((ActionHandler)& ActionMenuState::btnActionMenuClick);
 	}
 
 	// Build the popup menu
@@ -245,15 +245,15 @@ void ActionMenuState::addItem(
 
 
 
-	_actionMenu[*id]->setAction(
+	_menuItem[*id]->setAction(
 							baType,
 							tr(desc),
 							s1,
 							s2,
 							tu);
-	_actionMenu[*id]->setVisible();
+	_menuItem[*id]->setVisible();
 
-	(*id)++;
+	++(*id);
 }
 
 /**
@@ -278,27 +278,27 @@ void ActionMenuState::handle(Action* action)
  * Executes the action corresponding to this action menu item.
  * @param action - pointer to an Action
  */
-void ActionMenuState::btnActionMenuItemClick(Action* action)
+void ActionMenuState::btnActionMenuClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
 	const RuleItem* const weapon = _action->weapon->getRules();
 	int btnID = -1;
 
-	for (size_t // got to find out which button was pressed
+	for (size_t // find out which button was pressed
 			i = 0;
-			i < sizeof(_actionMenu) / sizeof(_actionMenu[0])
+			i < sizeof(_menuItem) / sizeof(_menuItem[0])
 				&& btnID == -1;
 			++i)
 	{
-		if (action->getSender() == _actionMenu[i])
+		if (action->getSender() == _menuItem[i])
 			btnID = i;
 	}
 
 	if (btnID != -1)
 	{
-		_action->TU = _actionMenu[btnID]->getTUs();
-		_action->type = _actionMenu[btnID]->getAction();
+		_action->TU = _menuItem[btnID]->getTUs();
+		_action->type = _menuItem[btnID]->getAction();
 
 		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
@@ -347,8 +347,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			}
 
 			if (targetUnit == NULL
-				&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
-																						_action->actor->getPosition(), // cf. TileEngine::reactionShot()
+				&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+																						_action->actor->getPosition(),
 																						_action->actor->getDirection(),
 																						_action->actor,
 																						NULL,
