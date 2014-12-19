@@ -2151,16 +2151,14 @@ void BattleUnit::prepUnit()
 	if (isOut() == false)
 		initTU();
 
-	_health -= getFatalWounds(); // suffer from fatal wounds
-
 	// Fire damage is in Battlescape/BattlescapeGame::endTurnPhase(), standing on fire tile;
 	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile;
 	// fire damage by hit is caused by TileEngine::explode().
 	if (_fire > 0)
 		--_fire;
 
-	if (_health < 0)
-		_health = 0;
+	_health -= getFatalWounds(); // suffer from fatal wounds
+	if (_health < 0) _health = 0;
 
 	if (_health == 0 // if unit is dead, AI state disappears
 		&& _currentAIState != NULL)

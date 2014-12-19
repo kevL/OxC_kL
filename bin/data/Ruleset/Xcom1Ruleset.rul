@@ -538,10 +538,10 @@ items:
     hitAnimation: 36
     power: 186
     damageType: 4
-    accuracySnap: 55
-    accuracyAimed: 130
-    tuSnap: 36
-    tuAimed: 92
+    accuracySnap: 56
+    accuracyAimed: 128
+    tuSnap: 37
+    tuAimed: 93
     battleType: 1
     fixedWeapon: true
     clipSize: -1
@@ -3799,7 +3799,7 @@ units:
     value: 35
     deathSound: 23
     moveSound: 14
-    energyRecovery: 100
+    energyRecovery: 75
     isMechanical: true
     isPsiImmune: true
   - type: STR_TANK_ROCKET_LAUNCHER
@@ -3822,7 +3822,7 @@ units:
     value: 40
     deathSound: 23
     moveSound: 14
-    energyRecovery: 100
+    energyRecovery: 75
     isMechanical: true
     isPsiImmune: true
   - type: STR_TANK_LASER_CANNON
@@ -3845,7 +3845,7 @@ units:
     value: 45
     deathSound: 23
     moveSound: 14
-    energyRecovery: 100
+    energyRecovery: 75
     isMechanical: true
     isPsiImmune: true
   - type: STR_HOVERTANK_PLASMA
@@ -3869,7 +3869,7 @@ units:
     value: 50
     deathSound: 23
     moveSound: 40
-    energyRecovery: 100
+    energyRecovery: 85
     isMechanical: true
     isPsiImmune: true
   - type: STR_HOVERTANK_LAUNCHER
@@ -3893,7 +3893,7 @@ units:
     value: 55
     deathSound: 23
     moveSound: 40
-    energyRecovery: 100
+    energyRecovery: 85
     isMechanical: true
     isPsiImmune: true
   - type: MALE_CIVILIAN

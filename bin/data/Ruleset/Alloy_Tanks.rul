@@ -4,18 +4,18 @@ items:
     size: 6
     costSell: 420000
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 57
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 4
     fireSound: 12
     compatibleAmmo:
       - STR_HWP_CANNON_SHELLS
-    accuracySnap: 60
-    accuracyAimed: 90
-    tuSnap: 33
-    tuAimed: 80
+    accuracySnap: 58
+    accuracyAimed: 98
+    tuSnap: 34
+    tuAimed: 83
     fixedWeapon: true
     invWidth: 2
     invHeight: 3
@@ -26,18 +26,18 @@ items:
     size: 6
     costSell: 480000
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 58
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 0
     fireSound: 52
     compatibleAmmo:
       - STR_HWP_ROCKETS
-    accuracySnap: 55
-    accuracyAimed: 115
-    tuSnap: 45
-    tuAimed: 75
+    accuracySnap: 58
+    accuracyAimed: 119
+    tuSnap: 43
+    tuAimed: 64
     fixedWeapon: true
     invWidth: 2
     invHeight: 3
@@ -49,19 +49,19 @@ items:
     size: 6
     costSell: 792000
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 59
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 7
     fireSound: 11
     hitSound: 19
     hitAnimation: 36
-    power: 110
-    accuracySnap: 50
-    accuracyAimed: 85
-    tuSnap: 33
-    tuAimed: 75
+    power: 186
+    accuracySnap: 56
+    accuracyAimed: 128
+    tuSnap: 37
+    tuAimed: 93
     clipSize: -1
     fixedWeapon: true
     invWidth: 2
@@ -98,7 +98,7 @@ units:
   - type: STR_TANK_CANNON_ALLOY
     race: STR_TANK_CANNON_ALLOY
     stats:
-      tu: 80
+      tu: 70
       stamina: 100
       health: 90
       bravery: 110
@@ -106,20 +106,22 @@ units:
       firing: 60
       throwing: 0
       strength: 60
-      psiStrength: 100
+      psiStrength: 200
       psiSkill: 0
-      melee: 70
+      melee: 0
     armor: TANK_ARMOR_ALLOY
     standHeight: 16
     kneelHeight: 16
     value: 20
-    energyRecovery: 50
+    energyRecovery: 80
     deathSound: 23
     moveSound: 14
+    isMechanical: true
+    isPsiImmune: true
   - type: STR_TANK_ROCKET_LAUNCHER_ALLOY
     race: STR_TANK_ROCKET_LAUNCHER_ALLOY
     stats:
-      tu: 80
+      tu: 70
       stamina: 100
       health: 90
       bravery: 110
@@ -127,20 +129,22 @@ units:
       firing: 60
       throwing: 0
       strength: 60
-      psiStrength: 100
+      psiStrength: 200
       psiSkill: 0
-      melee: 70
+      melee: 0
     armor: TANK_ARMOR_ALLOY
     standHeight: 16
     kneelHeight: 16
     value: 20
-    energyRecovery: 50
+    energyRecovery: 80
     deathSound: 23
     moveSound: 14
-  - type: STR_TANK_LASER_CANNON
-    race: STR_TANK_LASER_CANNON
+    isMechanical: true
+    isPsiImmune: true
+  - type: STR_TANK_LASER_CANNON_ALLOY
+    race: STR_TANK_LASER_CANNON_ALLOY
     stats:
-      tu: 80
+      tu: 70
       stamina: 100
       health: 90
       bravery: 110
@@ -148,16 +152,18 @@ units:
       firing: 60
       throwing: 0
       strength: 60
-      psiStrength: 100
+      psiStrength: 200
       psiSkill: 0
-      melee: 7
+      melee: 0
     armor: TANK_ARMOR_ALLOY
     standHeight: 16
     kneelHeight: 16
     value: 20
-    energyRecovery: 50
+    energyRecovery: 80
     deathSound: 23
     moveSound: 14
+    isMechanical: true
+    isPsiImmune: true
 manufacture:
   - name: STR_TANK_CANNON_ALLOY
     category: STR_HEAVY_WEAPONS_PLATFORM
@@ -188,7 +194,7 @@ manufacture:
     time: 1350
     cost: 594000
     requiredItems:
-      STR_ALIEN_ALLOYS: 25
+      STR_ALIEN_ALLOYS: 26
     listOrder: 550
 ufopaedia:
   - id: STR_TANK_CANNON_ALLOY
