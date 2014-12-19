@@ -665,9 +665,11 @@ UnitStatus BattleUnit::getStatus() const
  * Sets a unit's status.
  * @param status - UnitStatus enum (BattleUnit.h)
  */
-void BattleUnit::setStatus(int status)
+void BattleUnit::setStatus(const UnitStatus status)
 {
-	switch (status)
+	_status = status;
+}
+/*	switch (status)
 	{
 		case 0:		_status = STATUS_STANDING;		return;
 		case 1:		_status = STATUS_WALKING;		return;
@@ -684,15 +686,13 @@ void BattleUnit::setStatus(int status)
 
 		default:
 			_status = STATUS_STANDING;
-		return;
-	}
-}
+	} */
 
 /**
  * Initialises variables to start walking.
  * @param direction		- the direction to walk
- * @param destination	- reference the position we should end up at
- * @param tileBelow		- pointer to the tile below destination position
+ * @param destination	- reference the Position we should end up at
+ * @param tileBelow		- pointer to the Tile below destination position
  * @param cache			- true to redraw the unit's sprite ( not used. )
  */
 void BattleUnit::startWalking(
@@ -2148,60 +2148,8 @@ void BattleUnit::prepUnit()
 	_faction = _originalFaction;
 	_unitsSpottedThisTurn.clear();
 
-	int prepTU = getBaseStats()->tu;
-
-	double underLoad = static_cast<double>(getBaseStats()->strength) / static_cast<double>(getCarriedWeight());
-	underLoad *= getAccuracyModifier() / 2. + 0.5;
-	if (underLoad < 1.)
-		prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
-
-	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	if (_faction == FACTION_PLAYER)
-		prepTU -= (prepTU * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
-
-	if (prepTU < 12)
-		prepTU = 12;
-
-	setTimeUnits(prepTU);
-
-	if (isOut() == false) // recover energy
-	{
-		// kL_begin: advanced Energy recovery
-		int
-			stamina = getBaseStats()->stamina,
-			enron = stamina;
-
-		if (_faction == FACTION_PLAYER)
-		{
-			if (_geoscapeSoldier != NULL)
-			{
-				if (isKneeled() == true)
-					enron /= 2;
-				else
-					enron /= 3;
-			}
-			else // xCom tank.
-				enron = enron * 4 / 5; // value in Ruleset is 100%
-		}
-		else // aLiens.
-			enron = enron * _unitRules->getEnergyRecovery() / 100;
-
-		enron = static_cast<int>(Round(static_cast<double>(enron) * getAccuracyModifier()));
-		// kL_end.
-
-		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
-		// kL_note: Only xCom gets fatal wounds, atm.
-		if (_faction == FACTION_PLAYER)
-			enron -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
-
-		_energy += enron;
-
-		if (_energy > stamina)
-			_energy = stamina;
-	}
-
-	if (_energy < 12)
-		_energy = 12;
+	if (isOut() == false)
+		initTU();
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
@@ -2214,7 +2162,7 @@ void BattleUnit::prepUnit()
 	if (_health < 0)
 		_health = 0;
 
-	if (_health == 0 // if unit is dead, AI state should be gone
+	if (_health == 0 // if unit is dead, AI state disappears
 		&& _currentAIState != NULL)
 	{
 		_currentAIState->exit();
@@ -2250,6 +2198,53 @@ void BattleUnit::prepUnit()
 
 	_dontReselect = false;
 	_motionPoints = 0;
+}
+
+/**
+ * Calculates and resets this BattleUnit's time units and energy.
+ * @param preBattle - true for pre-battle initialization (default false)
+ */
+void BattleUnit::initTU(bool preBattle)
+{
+	int initTU = _stats.tu;
+	double underLoad = static_cast<double>(_stats.strength) / static_cast<double>(getCarriedWeight());
+	underLoad *= getAccuracyModifier() / 2. + 0.5;
+	if (underLoad < 1.)
+		initTU = static_cast<int>(Round(static_cast<double>(initTU) * underLoad));
+
+	// Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
+	if (preBattle == false
+		&& _geoscapeSoldier != NULL)
+	{
+		initTU -= (initTU * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
+	}
+
+	_tu = std::max(12, initTU);
+
+	if (preBattle == false)
+	{
+		int initEnergy = _stats.stamina; // advanced Energy recovery
+		if (_geoscapeSoldier != NULL)
+		{
+			if (_kneeled == true)
+				initEnergy /= 2;
+			else
+				initEnergy /= 3;
+		}
+		else // aLiens & Tanks.
+			initEnergy = initEnergy * _unitRules->getEnergyRecovery() / 100;
+
+		initEnergy = static_cast<int>(Round(static_cast<double>(initEnergy) * getAccuracyModifier()));
+
+		// Each fatal wound to the body reduces a Soldier's
+		// energy recovery by 10% of his/her current energy.
+		// note: only xCom Soldiers get fatal wounds, atm
+		if (_geoscapeSoldier != NULL)
+			initEnergy -= _energy * getFatalWound(BODYPART_TORSO) * 10 / 100;
+
+		initEnergy += _energy;
+		setEnergy(std::max(12, initEnergy));
+	}
 }
 
 /**
@@ -4213,13 +4208,13 @@ MovementType BattleUnit::getMovementType() const
 }
 
 /**
- * Sets this unit to "time-out" status,
+ * Sets this unit to "time-out" status
  * meaning they will NOT take part in the current battle.
  */
-void BattleUnit::goToTimeOut()
+/* void BattleUnit::goToTimeOut()
 {
 	_status = STATUS_TIME_OUT;
-}
+} */
 
 /**
  * Helper function used by BattleUnit::setSpecialWeapon().

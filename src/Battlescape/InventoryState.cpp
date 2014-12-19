@@ -747,35 +747,14 @@ void InventoryState::btnOkClick(Action*)
 			}
 		} */
 
-		// kL_begin:
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleGame->getUnits()->begin();
 				i != _battleGame->getUnits()->end();
 				++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
-			{
-				//Log(LOG_INFO) << "\n. bu ID = " << (*i)->getId();
-				int prepTU = (*i)->getBaseStats()->tu;
-				//Log(LOG_INFO) << ". tu = " << prepTU;
-
-				double underLoad = static_cast<double>((*i)->getBaseStats()->strength) / static_cast<double>((*i)->getCarriedWeight());
-				underLoad *= (*i)->getAccuracyModifier() / 2. + 0.5; // This *could* affect 2nd part of a Multi-Stage mission.
-				//Log(LOG_INFO) << ". strength = " << (*i)->getStats()->strength;
-				//Log(LOG_INFO) << ". underLoad = " << underLoad;
-				if (underLoad < 1.)
-				{
-					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
-					//Log(LOG_INFO) << ". prepTU[0] = " << prepTU;
-				}
-
-				if (prepTU < 12)
-					prepTU = 12;
-
-				//Log(LOG_INFO) << ". prepTU[1] = " << prepTU;
-				(*i)->setTimeUnits(prepTU);
-			}
-		} // kL_end.
+				(*i)->initTU(true);
+		}
 	}
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }

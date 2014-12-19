@@ -299,13 +299,13 @@ void BattlescapeGenerator::nextStage()
 			(*i)->instaKill();
 		} */
 
-		if ((*i)->getStatus() != STATUS_DEAD					// If they're not dead
-			&& ((_battleSave->isAborted() == true						// and if mission aborted
-					&& (*i)->getOriginalFaction() == FACTION_PLAYER		// and they're xCom
-					&& (*i)->isInExitArea(END_POINT) == false)			// but they're not on the exit,
-				|| (*i)->getOriginalFaction() != FACTION_PLAYER))	// Or they're not xCom at all.
+		if ((*i)->getStatus() != STATUS_DEAD
+			&& ((*i)->getOriginalFaction() != FACTION_PLAYER)
+				|| (_battleSave->isAborted() == true
+					&& (*i)->getOriginalFaction() == FACTION_PLAYER
+					&& (*i)->isInExitArea(END_POINT) == false))
 		{
-			(*i)->goToTimeOut();
+			(*i)->setStatus(STATUS_TIME_OUT);
 		}
 
 		if ((*i)->getTile() != NULL)

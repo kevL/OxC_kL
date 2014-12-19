@@ -65,8 +65,8 @@ enum UnitStatus
 	STATUS_UNCONSCIOUS,	//  7
 	STATUS_PANICKING,	//  8
 	STATUS_BERSERK,		//  9
-	STATUS_TIME_OUT,	// 10
-	STATUS_DISABLED		// 11 kL, dead or unconscious but doesn't know it yet.
+	STATUS_TIME_OUT,	// 10 won't participate in a 'next stage' battle.
+	STATUS_DISABLED		// 11 dead or unconscious but doesn't know it yet.
 };
 
 enum UnitFaction
@@ -553,7 +553,7 @@ private:
 		/// Gets this unit's status.
 		UnitStatus getStatus() const;
 		/// Sets this unit's status.
-		void setStatus(int status);
+		void setStatus(const UnitStatus status);
 
 		/// Starts the walkingPhase.
 		void startWalking(
@@ -727,6 +727,8 @@ private:
 
 		/// Prepares this unit for a new turn.
 		void prepUnit();
+		/// Calculates and resets this BattleUnit's time units and energy.
+		void initTU(bool preBattle = false);
 
 		/// Changes this unit's morale.
 		void moraleChange(int change);
@@ -1045,7 +1047,7 @@ private:
 		};
 
 		/// Puts the unit in the corner to think about what he's done.
-		void goToTimeOut();
+//		void goToTimeOut();
 
 		/// Creates special weapon for the unit.
 //		void setSpecialWeapon(SavedBattleGame* save, const Ruleset* rule);

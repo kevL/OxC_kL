@@ -5307,6 +5307,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 						&& victim->getUnitRules()->getPsiImmune() == true;
 	if (psiImmune == false)
 	{
+		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
+			action->actor->addPsiSkillExp();
+		else if (victim->getOriginalFaction() == FACTION_PLAYER
+			&& Options::allowPsiStrengthImprovement == true)
+		{
+			victim->addPsiStrengthExp();
+		}
+
 		const UnitStats
 			* const statsActor = action->actor->getBaseStats(),
 			* const statsVictim = victim->getBaseStats();
@@ -5324,15 +5332,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 			bonusSkill = 21; // ... arbitrary kL
 		}
 
-		double
-			attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.;
+		double attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.;
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 		//Log(LOG_INFO) << ". . . dist = " << (int)dist;
 
 		attack -= dist * 2.;
-
 		attack -= defense;
+
 		if (action->type == BA_MINDCONTROL)
 			attack += 15.;
 		else
@@ -5340,15 +5347,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 		attack *= 100.;
 		attack /= 56.;
-
-
-		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
-			action->actor->addPsiSkillExp();
-		else if (victim->getOriginalFaction() == FACTION_PLAYER
-			&& Options::allowPsiStrengthImprovement)
-		{
-			victim->addPsiStrengthExp();
-		}
 
 		const int success = static_cast<int>(attack);
 
@@ -5415,52 +5413,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				victim->moraleChange(morale);
 
 				victim->convertToFaction(action->actor->getFaction());
-
-				// kL_begin: taken from BattleUnit::prepUnit()
-				int prepTU = statsVictim->tu;
-				double underLoad = static_cast<double>(statsVictim->strength) / static_cast<double>(victim->getCarriedWeight());
-				underLoad *= victim->getAccuracyModifier() / 2. + 0.5;
-				if (underLoad < 1.)
-					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
-
-				// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-				if (victim->getOriginalFaction() == FACTION_PLAYER)
-					prepTU -= (prepTU * (victim->getFatalWound(BODYPART_LEFTLEG) + victim->getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
-
-				if (prepTU < 12)
-					prepTU = 12;
-
-				victim->setTimeUnits(prepTU);
-
-				int // advanced Energy recovery
-					stamina = statsVictim->stamina,
-					enron = stamina;
-
-				if (victim->getGeoscapeSoldier() != NULL)
-				{
-					if (victim->isKneeled() == true)
-						enron /= 2;
-					else
-						enron /= 3;
-				}
-				else // aLiens.
-					enron = enron * victim->getUnitRules()->getEnergyRecovery() / 100;
-
-				enron = static_cast<int>(Round(static_cast<double>(enron) * victim->getAccuracyModifier()));
-
-				// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
-				// kL_note: Only xCom gets fatal wounds, atm.
-				if (victim->getOriginalFaction() == FACTION_PLAYER)
-					enron -= (victim->getEnergy() * (victim->getFatalWound(BODYPART_TORSO) * 10)) / 100;
-
-				enron += victim->getEnergy();
-
-				if (enron < 12)
-					enron = 12;
-
-				victim->setEnergy(enron);
-
-
+				victim->initTU();
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);
 
