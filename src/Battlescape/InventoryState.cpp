@@ -731,7 +731,7 @@ void InventoryState::btnOkClick(Action*)
 		_battleGame->resetUnitTiles();
 
 //		Tile* invTile = _battleGame->getSelectedUnit()->getTile();
-		Tile* invTile = _battleGame->getBattleInventory(); // kL
+		Tile* const invTile = _battleGame->getBattleInventory(); // kL
 		_battleGame->randomizeItemLocations(invTile);	// This doesn't seem to happen on second stage of Multi-State MISSIONS.
 														// In fact, none of this !_tuMode InventoryState appears to run for 2nd staged missions.
 														// and BattlescapeGenerator::nextStage() has its own bu->prepUnit() call ....
@@ -760,10 +760,10 @@ void InventoryState::btnOkClick(Action*)
 				//Log(LOG_INFO) << ". tu = " << prepTU;
 
 				double underLoad = static_cast<double>((*i)->getBaseStats()->strength) / static_cast<double>((*i)->getCarriedWeight());
-				underLoad *= (*i)->getAccuracyModifier() / 2.0 + 0.5; // This *could* affect 2nd part of a Multi-Stage mission.
+				underLoad *= (*i)->getAccuracyModifier() / 2. + 0.5; // This *could* affect 2nd part of a Multi-Stage mission.
 				//Log(LOG_INFO) << ". strength = " << (*i)->getStats()->strength;
 				//Log(LOG_INFO) << ". underLoad = " << underLoad;
-				if (underLoad < 1.0)
+				if (underLoad < 1.)
 				{
 					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
 					//Log(LOG_INFO) << ". prepTU[0] = " << prepTU;

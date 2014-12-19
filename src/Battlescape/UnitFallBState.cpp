@@ -142,10 +142,10 @@ void UnitFallBState::think()
 										+ Position(0, 0,-1));
 
 		falling = fallCheck
-					&& (*unit)->getPosition().z != 0
-					&& (*unit)->getTile()->hasNoFloor(tBelow)
-//					&& (*unit)->getMovementType() != MT_FLY // done above in fallCheck
-					&& (*unit)->getWalkingPhase() == 0;
+			   && (*unit)->getPosition().z != 0
+			   && (*unit)->getTile()->hasNoFloor(tBelow)
+//			   && (*unit)->getMovementType() != MT_FLY // done above in fallCheck
+			   && (*unit)->getWalkingPhase() == 0;
 
 		BattleUnit* uBelow = NULL;
 
@@ -321,8 +321,8 @@ void UnitFallBState::think()
 													escapeTiles.end(),
 													t) != escapeTiles.end(),
 								alreadyOccupied = t
-												&& t->getUnit()
-												&& t->getUnit() != uBelow,
+											   && t->getUnit()
+											   && t->getUnit() != uBelow,
 								hasFloor = t
 										&& t->hasNoFloor(tBelow2) == false,
 								movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(
@@ -332,11 +332,11 @@ void UnitFallBState::think()
 																								uBelow),
 								unitCanFly = uBelow->getMovementType() == MT_FLY,
 								canMoveToTile = t
-											&& alreadyOccupied == false
-											&& alreadyTaken == false
-											&& aboutToBeOccupiedFromAbove == false
-											&& movementBlocked == false
-											&& (hasFloor == true
+											 && alreadyOccupied == false
+											 && alreadyTaken == false
+											 && aboutToBeOccupiedFromAbove == false
+											 && movementBlocked == false
+											 && (hasFloor == true
 												|| unitCanFly == true);
 
 							if (canMoveToTile == true)
@@ -400,7 +400,7 @@ void UnitFallBState::think()
 		if ((*unit)->getStatus() == STATUS_STANDING) // just standing around, done falling.
 		{
 			//Log(LOG_INFO) << ". STATUS_STANDING";
-			if (falling)
+			if (falling == true)
 			{
 				//Log(LOG_INFO) << ". . falling (again?) -> startWalking()";
 				Position destination = (*unit)->getPosition() + Position(0, 0,-1);

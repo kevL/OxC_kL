@@ -1179,45 +1179,31 @@ void Tile::prepareTileTurn()
  */
 void Tile::endTilePhase()
 {
-	float armorVulnerability = _unit->getArmor()->getDamageModifier(DT_IN);
+	const float armorVulnerability = _unit->getArmor()->getDamageModifier(DT_IN);
 
-	if (_smoke > 0)	// need to check if unit is unconscious (ie. a corpse item on this tile) and if so give unit damage.
-//		&& _unit	// this stuff is all done in BattlescapeGame::endTurnPhase(), call to here.
-//		&& _unit->isOut(true) == false
-//		&& (_unit->getType() == "SOLDIER"
-//			|| (_unit->getUnitRules()
-//				&& _unit->getUnitRules()->getMechanical() == false)))
+	if (_smoke > 0)	// need to check if a unit is unconscious (ie. a body-item on this tile) and if so do damage.
 	{
-		if (_fire)
+		if (_fire > 0)
 		{
-//			int burn = static_cast<int>(Round(40.f * armorVulnerability));
-			//Log(LOG_INFO) << "Tile::endTilePhase(), ID " << _unit->getId() << " burn = " << burn;
-			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set the unit on fire. Do damage from fire here, too.
+			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set _unit on fire. Do damage from fire here, too.
 			{
 				const int dur = RNG::generate(
 											0,
 											static_cast<int>(Round(5.f * armorVulnerability)));
 				if (dur > _unit->getFire())
-				{
-					//Log(LOG_INFO) << ". dur = " << dur;
 					_unit->setFire(dur);
-				}
 			}
 		}
 
-		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this unit out.
-		{
-//			int power = (_smoke / 4) + 1;
-			//Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " power = " << power;
+		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock _unit out.
 			_unit->damage(
 						Position(0, 0, 0),
 						_smoke / 4 + 1,
 						DT_SMOKE, // -> DT_STUN
 						true);
-		}
 	}
 
-	if (_unit->getFire() > 0 // kL: moved here from BattlescapeGame::endTurnPhase()
+	if (_unit->getFire() > 0
 		&& armorVulnerability > 0.f)
 	{
 		_unit->damage(

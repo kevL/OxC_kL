@@ -22,25 +22,25 @@
 //#include <climits>
 //#include <sstream>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "../Basescape/BasescapeState.h" // kL: soundPop
 
 #include "../Battlescape/Position.h"
 
-#include "../Engine/AdlibMusic.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/AdlibMusic.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Font.h"
-#include "../Engine/GMCat.h"
+//#include "../Engine/GMCat.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h" // kL
-#include "../Engine/ShaderDraw.h"
-#include "../Engine/ShaderMove.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h" // kL
+//#include "../Engine/ShaderDraw.h"
+//#include "../Engine/ShaderMove.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Surface.h"
@@ -613,7 +613,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 //							".flac",
 //							".mp3",
 //							".mod",
-//							".wav" // kL_add ( also add "." and remove them below )
+							".wav" // kL_add ( also added "." and removed them below )
 						};
 
 						for (size_t
@@ -964,7 +964,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 	// define GUI sound Fx
 	TextButton::soundPress		= getSound("GEO.CAT", ResourcePack::BUTTON_PRESS);		// #0 bleep
-//kL	Window::soundPopup[0]	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah
+//	Window::soundPopup[0]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah
 	Window::soundPopup[1]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[1]);	// #2 swish1
 	Window::soundPopup[2]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);	// #3 swish2
 	GeoscapeState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Geo->Base & Geo->Graphs
@@ -1162,7 +1162,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 								}
 							}
 
-							offset++;
+							++offset;
 						}
 						catch (Exception &e)
 						{
@@ -1379,7 +1379,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						else
 							_sounds[setName]->addSound(offset + soundPack->getModIndex())->load(s.str());
 
-						offset++;
+						++offset;
 					}
 					catch (Exception &e)
 					{
@@ -1745,14 +1745,14 @@ bool XcomResourcePack::isImageFile(std::string extension)
 				toupper);
 
 	return extension == ".BMP"
-			|| extension == ".LBM"
-			|| extension == ".IFF"
-			|| extension == ".PCX"
-			|| extension == ".GIF"
-			|| extension == ".PNG"
-			|| extension == ".TGA"
-			|| extension == ".TIF";
-//			|| extension == "TIFF"; // kL_note: why not .TIFF (prob because only the last 4 chars are passed in)
+		|| extension == ".LBM"
+		|| extension == ".IFF"
+		|| extension == ".PCX"
+		|| extension == ".GIF"
+		|| extension == ".PNG"
+		|| extension == ".TGA"
+		|| extension == ".TIF";
+//		|| extension == "TIFF"; // kL_note: why not .TIFF (prob because only the last 4 chars are passed in)
 
 			/* // arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
 			extension == ".ICO" ||

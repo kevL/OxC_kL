@@ -455,7 +455,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
 									spottedUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
-																	// Only reactionFire should set them Exposed during xCom's turn.
+																		// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
 						}
@@ -503,7 +503,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											i < trajSize;
 											++i)
 									{
-										Position trajPos = _trajectory.at(i);
+										const Position trajPos = _trajectory.at(i);
 
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
 										Tile* const visTile = _battleSave->getTile(trajPos);
@@ -711,10 +711,7 @@ bool TileEngine::visible(
 		return false;
 
 	if (unit->getFaction() == targetUnit->getFaction())
-	{
-		if (unit->getId() == 1000001) Log(LOG_INFO) << "visible() ret TRUE vs " << targetUnit->getId();
 		return true;
-	}
 
 
 	const int dist = distance(
@@ -812,7 +809,6 @@ bool TileEngine::visible(
 		}
 	}
 
-	if (unit->getId() == 1000001) Log(LOG_INFO) << "visible() ret " << (int)isSeen << " vs " << targetUnit->getId();
 	return isSeen;
 }
 
@@ -852,7 +848,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 	{
 		while (originVoxel.z >= (unit->getPosition().z + 1) * 24)
 		{
-			originVoxel.z--; // careful with that ceiling, Eugene.
+			--originVoxel.z; // careful with that ceiling, Eugene.
 		}
 	}
 

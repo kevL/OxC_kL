@@ -5702,7 +5702,7 @@
 
 1418417769 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1418951286 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1418971345 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5754,9 +5754,8 @@
 	<exception>
 	<string>
 
-1417922856 f:\git\openxcom\src\resource\xcomresourcepack.h
+1418974718 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
-	"../Engine/Options.h"
 
 1413136960 f:\git\openxcom\src\ruleset\alienrace.h
 	<string>
@@ -6138,7 +6137,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1418951286 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1419012715 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6469,7 +6468,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1418967886 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1419012249 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6603,7 +6602,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1418951286 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1418971474 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -8777,24 +8776,13 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1417122009 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1418975675 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
-	"../fmath.h"
 	"../Basescape/BasescapeState.h"
 	"../Battlescape/Position.h"
-	"../Engine/AdlibMusic.h"
-	"../Engine/CrossPlatform.h"
-	"../Engine/Exception.h"
 	"../Engine/Font.h"
-	"../Engine/GMCat.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
-	"../Engine/ShaderDraw.h"
-	"../Engine/ShaderMove.h"
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 	"../Engine/Surface.h"
@@ -9152,7 +9140,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1418965449 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1418971576 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
