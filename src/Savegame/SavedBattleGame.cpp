@@ -496,6 +496,7 @@ void SavedBattleGame::loadMapResources(Game* game)
 	_tileEngine->calculateSunShading();
 	_tileEngine->calculateTerrainLighting();
 	_tileEngine->calculateUnitLighting();
+
 	_tileEngine->recalculateFOV();
 }
 
@@ -1196,14 +1197,13 @@ void SavedBattleGame::endBattlePhase()
 	}
 	//Log(LOG_INFO) << "done looping units";
 
-	// redo calculateFOV() *after* aliens & civies have been set notVisible -> AND *only* after a calcLighting has been done !
-	//Log(LOG_INFO) << ". calculateTerrainLighting()";
+	_tileEngine->calculateSunShading();
 	_tileEngine->calculateTerrainLighting();
-	//Log(LOG_INFO) << ". calculateUnitLighting()";
-	_tileEngine->calculateUnitLighting();
-	//Log(LOG_INFO) << ". recalculateFoV()";
+	_tileEngine->calculateUnitLighting(); // turn off MCed alien lighting.
+
+	// redo calculateFOV() *after* aliens & civies have been set
+	// notVisible -> AND *only* after a calcLighting has been done !
 	_tileEngine->recalculateFOV();
-	//Log(LOG_INFO) << "done recalculateFoV";
 
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();

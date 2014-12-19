@@ -2051,16 +2051,13 @@ BattleUnit* TileEngine::hit(
 			}
 		}
 
-		//Log(LOG_INFO) << ". applyGravity()";
 		applyGravity(tile);
-		//Log(LOG_INFO) << ". calculateSunShading()";
-		calculateSunShading();									// roofs could have been destroyed
-		//Log(LOG_INFO) << ". calculateTerrainLighting()";
-		calculateTerrainLighting();								// fires could have been started
-		//Log(LOG_INFO) << ". calculateFOV()";
-//		calculateFOV(targetPos_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
-		calculateFOV(targetPos_tile);
 
+		calculateSunShading();		// roofs could have been destroyed
+		calculateTerrainLighting();	// fires could have been started
+//		calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
+
+		calculateFOV(targetPos_tile);
 
 		//if (targetUnit) Log(LOG_INFO) << "TileEngine::hit() EXIT, return targetUnit";
 		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[0]";
@@ -2802,9 +2799,9 @@ void TileEngine::explode(
 
 	calculateSunShading();		// roofs could have been destroyed
 	calculateTerrainLighting();	// fires could have been started
+//	calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
 
-//kL	calculateFOV(voxelTarget / Position(16, 16, 24));
-	recalculateFOV(); // kL
+	recalculateFOV();
 	//Log(LOG_INFO) << "TileEngine::explode() EXIT";
 }
 

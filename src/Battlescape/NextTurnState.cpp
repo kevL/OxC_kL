@@ -216,8 +216,11 @@ void NextTurnState::close()
 
 		if (_savedBattle->getSide() == FACTION_PLAYER)
 		{
+//			if (_savedBattle->getDebugMode() == false)
+//			{
 			_state->getBattleGame()->setupCursor();
 			_state->getGame()->getCursor()->setVisible();
+//			}
 
 			const int turn = _savedBattle->getTurn();
 
@@ -274,7 +277,8 @@ void NextTurnState::close()
 			_game->getResourcePack()->fadeMusic(_game, 473);
 			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
 
-			_state->getGame()->getCursor()->setVisible(false);
+			if (_savedBattle->getDebugMode() == false)
+				_state->getGame()->getCursor()->setVisible(false);
 		}
 	}
 }

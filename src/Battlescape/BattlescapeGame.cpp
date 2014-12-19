@@ -749,25 +749,23 @@ void BattlescapeGame::endTurnPhase()
 
 
 
-	if (_save->getSide() == FACTION_PLAYER)
+	if (_save->getDebugMode() == false)
 	{
-		setupCursor();
-		_save->getBattleState()->toggleIcons(true);
-	}
-	else
-	{
-		getMap()->setCursorType(CT_NONE);
-		_save->getBattleState()->toggleIcons(false);
+		if (_save->getSide() == FACTION_PLAYER)
+		{
+			setupCursor();
+			_save->getBattleState()->toggleIcons(true);
+		}
+		else
+		{
+			getMap()->setCursorType(CT_NONE);
+			_save->getBattleState()->toggleIcons(false);
+		}
 	}
 
 	checkForCasualties(
 					NULL,
 					NULL);
-
-	// turn off MCed alien lighting.
-	// kL_note: This needs to be done earlier than this ...
-//	_save->getTileEngine()->calculateUnitLighting();
-	// Try at the last of SBG::endBattlePhase() ...
 
 	if (_save->allObjectivesDestroyed() == true)
 	{

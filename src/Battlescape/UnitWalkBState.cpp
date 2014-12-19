@@ -1078,13 +1078,15 @@ void UnitWalkBState::postPathProcedures()
 			}
 		}
 	}
-	else if (_parent->getPanicHandled() == false) // todo: set the unit to aggrostate and try to find cover
+	else if (_parent->getPanicHandled() == false) // TODO: set the unit to aggrostate and try to find cover
 		_unit->setTimeUnits(0);
 
 
 	_terrain->calculateUnitLighting();
+
 //	_terrain->calculateFOV(_unit);
 	_terrain->calculateFOV(_unit->getPosition()); // kL, in case unit opened a door and stopped without doing Status_WALKING
+
 
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
