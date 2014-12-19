@@ -219,23 +219,24 @@ void NextTurnState::close()
 			_state->getBattleGame()->setupCursor();
 			_state->getGame()->getCursor()->setVisible();
 
-			if (_savedBattle->getTurn() == 1)
+			const int turn = _savedBattle->getTurn();
+
+			if (turn == 1
+				|| (turn %Options::autosaveFrequency) == 0)
 			{
-				if ((_savedBattle->getTurn() %Options::autosaveFrequency) == 0)
-				{
-					if (_game->getSavedGame()->isIronman() == true)
-						_game->pushState(new SaveGameState(
-														OPT_BATTLESCAPE,
-														SAVE_IRONMAN,
-														_palette));
-					else if (Options::autosave == true)
-						_game->pushState(new SaveGameState(
-														OPT_BATTLESCAPE,
-														SAVE_AUTO_BATTLESCAPE,
-														_palette));
-				}
+				if (_game->getSavedGame()->isIronman() == true)
+					_game->pushState(new SaveGameState(
+													OPT_BATTLESCAPE,
+													SAVE_IRONMAN,
+													_palette));
+				else if (Options::autosave == true)
+					_game->pushState(new SaveGameState(
+													OPT_BATTLESCAPE,
+													SAVE_AUTO_BATTLESCAPE,
+													_palette));
 			}
-			else
+
+			if (turn != 1)
 			{
 				std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
 				std::string terrain;
@@ -262,7 +263,7 @@ void NextTurnState::close()
 				else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 					music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 
-				_game->getResourcePack()->fadeMusic(_game, 475);
+				_game->getResourcePack()->fadeMusic(_game, 473);
 				_game->getResourcePack()->playMusic(
 												music,
 												terrain);
@@ -270,7 +271,7 @@ void NextTurnState::close()
 		}
 		else
 		{
-			_game->getResourcePack()->fadeMusic(_game, 475);
+			_game->getResourcePack()->fadeMusic(_game, 473);
 			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
 
 			_state->getGame()->getCursor()->setVisible(false);

@@ -1863,7 +1863,6 @@ void BattleUnit::setEnergy(int energy)
  */
 void BattleUnit::setUnitVisible(bool flag)
 {
-	Log(LOG_INFO) << "BU::setUnitVisible() " << _id << " vis = " << (int)flag;
 	_visible = flag;
 }
 
@@ -2143,7 +2142,6 @@ double BattleUnit::getInitiative(int tuSpent)
  */
 void BattleUnit::prepUnit()
 {
-	Log(LOG_INFO) << "BattleUnit::prepUnit() ID " << _id;
 	if (_status == STATUS_TIME_OUT)
 		return;
 
@@ -2235,7 +2233,7 @@ void BattleUnit::prepUnit()
 
 	if (isOut() == false)
 	{
-		int panic = 100 - (2 * getMorale());
+		const int panic = 100 - (2 * getMorale());
 		if (RNG::percent(panic) == true)
 		{
 			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
@@ -2252,8 +2250,6 @@ void BattleUnit::prepUnit()
 
 	_dontReselect = false;
 	_motionPoints = 0;
-
-	Log(LOG_INFO) << "BattleUnit::prepUnit() EXIT";
 }
 
 /**

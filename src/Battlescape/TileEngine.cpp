@@ -251,7 +251,7 @@ void TileEngine::calculateUnitLighting()
 		_battleSave->getTiles()[i]->resetLight(layer);
 	}
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			++i)
@@ -309,7 +309,7 @@ void TileEngine::addLight(
 					z < _battleSave->getMapSizeZ();
 					++z)
 			{
-				int distance = static_cast<int>(Round(sqrt(static_cast<double>(x * x + y * y))));
+				int distance = static_cast<int>(Round(std::sqrt(static_cast<double>(x * x + y * y))));
 
 				if (_battleSave->getTile(Position(pos.x + x, pos.y + y, z)))
 					_battleSave->getTile(Position(pos.x + x, pos.y + y, z))->addLight(power - distance, layer);
@@ -431,9 +431,6 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									unit,
 									_battleSave->getTile(testPos)) == true)
 						{
-							//if (spottedUnit->getId() == 1000009) Log(LOG_INFO) << "calcFoV, unit = " << unit->getId();
-							if (unit->getId() == 1000001) Log(LOG_INFO) << "scout spots ID " << spottedUnit->getId();
-
 							if (spottedUnit->getUnitVisible() == false)
 								ret = true;
 
@@ -714,7 +711,10 @@ bool TileEngine::visible(
 		return false;
 
 	if (unit->getFaction() == targetUnit->getFaction())
+	{
+		if (unit->getId() == 1000001) Log(LOG_INFO) << "visible() ret TRUE vs " << targetUnit->getId();
 		return true;
+	}
 
 
 	const int dist = distance(
@@ -812,6 +812,7 @@ bool TileEngine::visible(
 		}
 	}
 
+	if (unit->getId() == 1000001) Log(LOG_INFO) << "visible() ret " << (int)isSeen << " vs " << targetUnit->getId();
 	return isSeen;
 }
 

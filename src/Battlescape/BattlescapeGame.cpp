@@ -728,7 +728,7 @@ void BattlescapeGame::endTurnPhase()
 				&& ((*i)->getGeoscapeSoldier() != NULL
 					|| (*i)->getUnitRules()->getMechanical() == false))
 			{
-				tile->endTilePhase(); // smoke & fire stuff.
+				tile->endTilePhase(); // damage tile-unit w/ Fire & Smoke.
 			}
 		}
 	} // kL_end.
@@ -744,7 +744,10 @@ void BattlescapeGame::endTurnPhase()
 			liveSoldiers,
 			true);
 
-	_save->endBattlePhase(); // <- this rolls over Faction-turns.
+
+	_save->endBattlePhase(); // <- This rolls over Faction-turns.
+
+
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -762,7 +765,9 @@ void BattlescapeGame::endTurnPhase()
 					NULL);
 
 	// turn off MCed alien lighting.
-	_save->getTileEngine()->calculateUnitLighting();
+	// kL_note: This needs to be done earlier than this ...
+//	_save->getTileEngine()->calculateUnitLighting();
+	// Try at the last of SBG::endBattlePhase() ...
 
 	if (_save->allObjectivesDestroyed() == true)
 	{

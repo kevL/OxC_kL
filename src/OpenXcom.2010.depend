@@ -4683,7 +4683,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1418951286 f:\git\openxcom\src\savegame\savedbattlegame.h
+1418967611 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1418951286 f:\git\openxcom\src\savegame\battleunit.h
@@ -5544,7 +5544,7 @@
 1418418160 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
-1418951286 f:\git\openxcom\src\savegame\tile.h
+1418958725 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -5613,7 +5613,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1418951286 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1418967012 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -6294,7 +6294,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1417925862 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1418961124 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeState.h"
 	"DebriefingState.h"
@@ -6469,7 +6469,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1418954290 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1418966222 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -9050,7 +9050,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1418951286 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1418964586 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -9152,7 +9152,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1418956609 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1418965449 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -9495,11 +9495,11 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404092164 f:\git\openxcom\deps\include\boost\exception
+1418958360 f:\git\openxcom\deps\include\boost\exception
 
-1404092159 f:\git\openxcom\deps\include\boost\utility
+1418958354 f:\git\openxcom\deps\include\boost\utility
 
-1404092164 f:\git\openxcom\deps\include\boost\iterator
+1418958360 f:\git\openxcom\deps\include\boost\iterator
 
 1383296148 f:\git\openxcom\src\\dirent.h
 	<stdio.h>
@@ -9720,7 +9720,7 @@
 	<xfwrap>
 	<xfwrap>
 
-1404092159 f:\git\openxcom\deps\include\boost\type_traits
+1418958355 f:\git\openxcom\deps\include\boost\type_traits
 
 1295409728 c:\program files\microsoft visual studio 10.0\vc\include\intrin.h
 	<crtdefs.h>

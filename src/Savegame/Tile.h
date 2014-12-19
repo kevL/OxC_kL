@@ -279,7 +279,7 @@ protected:
 
 		/// New turn preparations.
 		void prepareTileTurn();
-		/// kL. Ends this tile's turn. Units catch on fire.
+		/// Ends this tile's turn. Units catch on fire.
 		void endTilePhase();
 
 		/// Gets inventory on this tile.
