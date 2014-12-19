@@ -173,7 +173,7 @@ private:
 
 
 	/// Ends the turn.
-	void endGameTurn();
+	void endTurnPhase();
 	/// Picks the first soldier that is panicking.
 	bool handlePanickingPlayer();
 	/// Common function for hanlding panicking units.

@@ -317,7 +317,7 @@ void BattlescapeGenerator::nextStage()
 
 	while (_battleSave->getSide() != FACTION_PLAYER)
 	{
-		_battleSave->endBattleTurn();
+		_battleSave->endBattlePhase();
 	}
 
 	_battleSave->resetTurnCounter();
@@ -393,12 +393,12 @@ void BattlescapeGenerator::nextStage()
 					}
 
 					_tileEquipt->setUnit(*j);
-					(*j)->setVisible(false);
+					(*j)->setUnitVisible(false);
 
 					if ((*j)->getId() > highestSoldierID)
 						highestSoldierID = (*j)->getId();
 
-					(*j)->prepareUnitTurn();
+					(*j)->prepUnit();
 				}
 			}
 		}
@@ -787,7 +787,7 @@ void BattlescapeGenerator::deployXCOM()
 		if ((*i)->getFaction() == FACTION_PLAYER) // kL_note: not really necessary because only xCom is on the field atm. Could exclude tanks ....
 		{
 			_tileEquipt->setUnit(*i);
-			(*i)->setVisible(false);
+			(*i)->setUnitVisible(false);
 		}
 	}
 	//Log(LOG_INFO) << ". setUnit(s) DONE";

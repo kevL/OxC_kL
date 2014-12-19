@@ -72,9 +72,9 @@ UnitDieBState::UnitDieBState(
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-	_unit->setVisible(); // TEST.
+	_unit->setUnitVisible(); // TEST.
 
-	if (_unit->getVisible() == true)
+	if (_unit->getUnitVisible() == true)
 	{
 		Camera* const deathCam = _parent->getMap()->getCamera();
 		if (deathCam->isOnScreen(_unit->getPosition()) == false)

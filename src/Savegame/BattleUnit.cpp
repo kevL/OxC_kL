@@ -1857,11 +1857,13 @@ void BattleUnit::setEnergy(int energy)
 }
 
 /**
- * Sets whether this unit is visible.
+ * Sets whether this unit is visible to the player;
+ * that is should it be drawn on the Map.
  * @param flag - true if visible (default true)
  */
-void BattleUnit::setVisible(bool flag)
+void BattleUnit::setUnitVisible(bool flag)
 {
+	Log(LOG_INFO) << "BU::setUnitVisible() " << _id << " vis = " << (int)flag;
 	_visible = flag;
 }
 
@@ -1869,7 +1871,7 @@ void BattleUnit::setVisible(bool flag)
  * Gets whether this unit is visible.
  * @return, true if visible
  */
-bool BattleUnit::getVisible() const
+bool BattleUnit::getUnitVisible() const
 {
 	if (getFaction() == FACTION_PLAYER)
 		return true;
@@ -1878,9 +1880,9 @@ bool BattleUnit::getVisible() const
 }
 
 /**
- * Adds a unit to a vector of spotted and/or visible units (they're different).
- * Visible units are currently seen; unitsSpottedThisTurn are just that.
- * @note Don't confuse either of those with the 'visible-to-XCOM' flag.
+ * Adds a unit to this BattleUnits vector(s) of spotted and/or visible units;
+ * visible units are currently seen - unitsSpottedThisTurn are just that.
+ * @note Don't confuse either of these with the 'visible-to-player' flag.
  * @param unit - pointer to a seen BattleUnit
  * @return, true if the seen unit was NOT previously flagged as a 'visibleUnit'
  */
@@ -1968,7 +1970,7 @@ void BattleUnit::clearVisibleTiles()
 			j != _visibleTiles.end();
 			++j)
 	{
-		(*j)->setVisible(false);
+		(*j)->setTileVisible(false);
 	}
 
 	_visibleTiles.clear();
@@ -2139,9 +2141,9 @@ double BattleUnit::getInitiative(int tuSpent)
 /**
  * Prepares unit for a new turn.
  */
-void BattleUnit::prepareUnitTurn()
+void BattleUnit::prepUnit()
 {
-	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() ID " << getId();
+	Log(LOG_INFO) << "BattleUnit::prepUnit() ID " << _id;
 	if (_status == STATUS_TIME_OUT)
 		return;
 
@@ -2175,7 +2177,7 @@ void BattleUnit::prepareUnitTurn()
 		{
 			if (_geoscapeSoldier != NULL)
 			{
-				if (isKneeled())
+				if (isKneeled() == true)
 					enron /= 2;
 				else
 					enron /= 3;
@@ -2205,7 +2207,7 @@ void BattleUnit::prepareUnitTurn()
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
-	// Fire damage is in Battlescape/BattlescapeGame::endGameTurn(), standing on fire tile;
+	// Fire damage is in Battlescape/BattlescapeGame::endTurnPhase(), standing on fire tile;
 	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile;
 	// fire damage by hit is caused by TileEngine::explode().
 	if (_fire > 0)
@@ -2251,7 +2253,7 @@ void BattleUnit::prepareUnitTurn()
 	_dontReselect = false;
 	_motionPoints = 0;
 
-	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() EXIT";
+	Log(LOG_INFO) << "BattleUnit::prepUnit() EXIT";
 }
 
 /**

@@ -1074,12 +1074,12 @@ int Tile::getTopItemSprite() const
 }
 
 /**
- * kL. Gets if this Tile has an unconscious xCom unit in its inventory.
+ * Gets if this Tile has an unconscious xCom unit in its inventory.
  * @return,	0 - no living Soldier
  *			1 - stunned Soldier
  *			2 - stunned and wounded Soldier
  */
-int Tile::getHasUnconsciousSoldier() const // kL
+int Tile::getHasUnconsciousSoldier() const
 {
 	int ret = 0;
 
@@ -1172,17 +1172,17 @@ void Tile::prepareTileTurn()
 }
 
 /**
- * kL. Ends this tile's turn. Units catch on fire.
+ * Ends this tile's turn. Units catch on fire.
  * Separated from prepareTileTurn() above so that units take
  * damage before smoke/fire spreads to them; this is so that units
  * have to end their turn on a tile for smoke/fire to affect them.
  */
-void Tile::endTileTurn()
+void Tile::endTilePhase()
 {
 	float armorVulnerability = _unit->getArmor()->getDamageModifier(DT_IN);
 
 	if (_smoke > 0)	// need to check if unit is unconscious (ie. a corpse item on this tile) and if so give unit damage.
-//		&& _unit	// this stuff is all done in BattlescapeGame::endGameTurn(), call to here.
+//		&& _unit	// this stuff is all done in BattlescapeGame::endTurnPhase(), call to here.
 //		&& _unit->isOut(true) == false
 //		&& (_unit->getType() == "SOLDIER"
 //			|| (_unit->getUnitRules()
@@ -1191,7 +1191,7 @@ void Tile::endTileTurn()
 		if (_fire)
 		{
 //			int burn = static_cast<int>(Round(40.f * armorVulnerability));
-			//Log(LOG_INFO) << "Tile::endTileTurn(), ID " << _unit->getId() << " burn = " << burn;
+			//Log(LOG_INFO) << "Tile::endTilePhase(), ID " << _unit->getId() << " burn = " << burn;
 			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set the unit on fire. Do damage from fire here, too.
 			{
 				const int dur = RNG::generate(
@@ -1217,7 +1217,7 @@ void Tile::endTileTurn()
 		}
 	}
 
-	if (_unit->getFire() > 0 // kL: moved here from BattlescapeGame::endGameTurn()
+	if (_unit->getFire() > 0 // kL: moved here from BattlescapeGame::endTurnPhase()
 		&& armorVulnerability > 0.f)
 	{
 		_unit->damage(
@@ -1257,9 +1257,9 @@ int Tile::getMarkerColor() const
 
 /**
  * Sets the tile visible flag.
- * @param visibility - true if visible
+ * @param vis - true if visible (default true)
  */
-void Tile::setVisible(bool vis)
+void Tile::setTileVisible(bool vis)
 {
 	_visible = vis;
 }
@@ -1268,7 +1268,7 @@ void Tile::setVisible(bool vis)
  * Gets the tile visible flag.
  * @return, true if visible
  */
-bool Tile::getVisible() const
+bool Tile::getTileVisible() const
 {
 	return _visible;
 }

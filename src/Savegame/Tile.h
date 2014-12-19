@@ -275,12 +275,12 @@ protected:
 		/// Gets top-most item-sprite
 		int getTopItemSprite() const;
 		/// kL. Gets if the tile has an unconscious xCom unit in its inventory.
-		int getHasUnconsciousSoldier() const; // kL
+		int getHasUnconsciousSoldier() const;
 
 		/// New turn preparations.
 		void prepareTileTurn();
 		/// kL. Ends this tile's turn. Units catch on fire.
-		void endTileTurn(); // kL
+		void endTilePhase();
 
 		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();
@@ -291,9 +291,9 @@ protected:
 		int getMarkerColor() const;
 
 		/// Sets the tile visible flag.
-		void setVisible(bool vis = true); // kL
+		void setTileVisible(bool vis = true);
 		/// Gets the tile visible flag.
-		bool getVisible() const; // kL
+		bool getTileVisible() const;
 
 		/// Sets the direction (used for path previewing)
 		void setPreview(int dir);

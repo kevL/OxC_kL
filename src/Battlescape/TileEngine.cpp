@@ -424,38 +424,40 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 					if (_battleSave->getTile(testPos) != NULL)
 					{
-						BattleUnit* const seenUnit = _battleSave->getTile(testPos)->getUnit();
-						if (seenUnit != NULL
-							&& seenUnit->isOut(true, true) == false
+						BattleUnit* const spottedUnit = _battleSave->getTile(testPos)->getUnit();
+						if (spottedUnit != NULL
+							&& spottedUnit->isOut(true, true) == false
 							&& visible(
 									unit,
 									_battleSave->getTile(testPos)) == true)
 						{
-							if (seenUnit->getVisible() == false)
+							//if (spottedUnit->getId() == 1000009) Log(LOG_INFO) << "calcFoV, unit = " << unit->getId();
+							if (unit->getId() == 1000001) Log(LOG_INFO) << "scout spots ID " << spottedUnit->getId();
+
+							if (spottedUnit->getUnitVisible() == false)
 								ret = true;
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
-								seenUnit->getTile()->setVisible();
-
-								if (seenUnit->getVisible() == false)
-									seenUnit->setVisible();
+//								if (spottedUnit->getUnitVisible() == false)
+								spottedUnit->setUnitVisible();
+								spottedUnit->getTile()->setTileVisible();
 							}
 
 							if ((unit->getFaction() == FACTION_PLAYER
-									&& seenUnit->getFaction() == FACTION_HOSTILE)
+									&& spottedUnit->getFaction() == FACTION_HOSTILE)
 								|| (unit->getFaction() == FACTION_HOSTILE
-									&& seenUnit->getFaction() != FACTION_HOSTILE))
+									&& spottedUnit->getFaction() != FACTION_HOSTILE))
 							{
-								// adds seenUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
-								unit->addToVisibleUnits(seenUnit);
-								unit->addToVisibleTiles(seenUnit->getTile());
+								// adds spottedUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
+								unit->addToVisibleUnits(spottedUnit);
+								unit->addToVisibleTiles(spottedUnit->getTile());
 
 								if (_battleSave->getSide() == FACTION_HOSTILE
 									&& unit->getFaction() == FACTION_HOSTILE
-									&& seenUnit->getFaction() != FACTION_HOSTILE)
+									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
-									seenUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
+									spottedUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
 																	// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
@@ -508,7 +510,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
 										Tile* const visTile = _battleSave->getTile(trajPos);
-										visTile->setVisible();
+										visTile->setTileVisible();
 										visTile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
@@ -733,9 +735,8 @@ bool TileEngine::visible(
 	// kL_note: this leads to problems with large units trying to shoot around corners, b.t.w.
 	// because it might See with a clear LoS, but the LoF is taken from a different, offset voxel.
 	// further, i think Lines of Sight and Fire determinations are getting mixed up somewhere!!!
-	Position
-		originVoxel = getSightOriginVoxel(unit),
-		scanVoxel;
+	const Position originVoxel = getSightOriginVoxel(unit);
+	Position scanVoxel;
 	std::vector<Position> _trajectory;
 
 	// kL_note: Is an intermediary object *not* obstructing viewing
@@ -5216,7 +5217,7 @@ int TileEngine::voxelCheck(
 			&& (excludeAllBut == NULL
 				|| targetUnit == excludeAllBut)
 			&& (onlyVisible == false
-				|| targetUnit->getVisible() == true))
+				|| targetUnit->getUnitVisible() == true))
 		{
 			const Position unitPos = targetUnit->getPosition();
 			const int target_z = unitPos.z * 24 + targetUnit->getFloatHeight() - targetTile->getTerrainLevel(); // floor-level voxel
@@ -5421,7 +5422,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 				victim->convertToFaction(action->actor->getFaction());
 
-				// kL_begin: taken from BattleUnit::prepareUnitTurn()
+				// kL_begin: taken from BattleUnit::prepUnit()
 				int prepTU = statsVictim->tu;
 				double underLoad = static_cast<double>(statsVictim->strength) / static_cast<double>(victim->getCarriedWeight());
 				underLoad *= victim->getAccuracyModifier() / 2. + 0.5;

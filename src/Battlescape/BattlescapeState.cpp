@@ -1431,7 +1431,12 @@ void BattlescapeState::mapClick(Action* action)
 	if (_savedBattle->getDebugMode() == true)
 	{
 		std::wostringstream ss;
-		ss << L"Clicked " << pos;
+		ss << L"pos " << pos;
+		if (_savedBattle->getTile(pos)
+			&& _savedBattle->getTile(pos)->getUnit())
+		{
+			ss << L" unit " << _savedBattle->getTile(pos)->getUnit()->getId();
+		}
 		debug(ss.str());
 	}
 
@@ -1750,7 +1755,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 				++i)
 		{
 			if ((*i)->getFaction() == _savedBattle->getSide())
-				(*i)->prepareUnitTurn();
+				(*i)->prepUnit();
 
 			updateSoldierInfo();
 		}
@@ -3740,11 +3745,8 @@ void BattlescapeState::refreshVisUnits() // kL
 		_visibleUnit[i] = NULL;
 	}
 
-	BattleUnit* selectedUnit = NULL;
-	if (_savedBattle->getSelectedUnit())
-		selectedUnit = _savedBattle->getSelectedUnit();
-
 	int j = 0;
+	BattleUnit* const selectedUnit = _savedBattle->getSelectedUnit();
 	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()

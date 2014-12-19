@@ -355,7 +355,7 @@ void Map::draw()
 									_projectile->getPosition(0).y / 16,
 									_projectile->getPosition(0).z / 24));
 		if (tile != NULL
-			&& (tile->getVisible() == true
+			&& (tile->getTileVisible() == true
 				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
 			//Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
@@ -378,7 +378,7 @@ void Map::draw()
 										(*i)->getPosition().y / 16,
 										(*i)->getPosition().z / 24));
 			if (tile != NULL
-				&& (tile->getVisible() == true
+				&& (tile->getTileVisible() == true
 					|| (*i)->isBig() == true
 					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
 			{
@@ -404,7 +404,7 @@ void Map::draw()
 	{
 		if (_save->getSelectedUnit() == NULL
 			|| (_save->getSelectedUnit() != NULL
-				&& _save->getSelectedUnit()->getVisible() == true)
+				&& _save->getSelectedUnit()->getUnitVisible() == true)
 			|| _unitDying == true
 			|| _save->getDebugMode() == true
 			|| _projectileInFOV == true
@@ -846,7 +846,7 @@ void Map::drawTerrain(Surface* surface)
 							if (_cursorType != CT_AIM)
 							{
 								if (unit != NULL
-									&& (unit->getVisible() == true
+									&& (unit->getUnitVisible() == true
 										|| _save->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _save->getSide()))
@@ -859,7 +859,7 @@ void Map::drawTerrain(Surface* surface)
 							else // CT_AIM ->
 							{
 								if (unit != NULL
-									&& (unit->getVisible() == true
+									&& (unit->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
 									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
@@ -912,7 +912,7 @@ void Map::drawTerrain(Surface* surface)
 
 						// Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
 						if (buNorth != NULL
-							&& buNorth->getVisible() == true
+							&& buNorth->getUnitVisible() == true
 							&& buNorth->getStatus() == STATUS_WALKING
 							&& tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
@@ -1129,7 +1129,7 @@ void Map::drawTerrain(Surface* surface)
 									&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
-									&& (buWest->getVisible() == true
+									&& (buWest->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
 									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
@@ -1518,7 +1518,7 @@ void Map::drawTerrain(Surface* surface)
 					// Draw soldier
 					unit = tile->getUnit();
 					if (unit != NULL
-						&& (unit->getVisible() == true
+						&& (unit->getUnitVisible() == true
 							|| _save->getDebugMode() == true))
 					{
 						//Log(LOG_INFO) << "draw Soldier ID = " << unit->getId();
@@ -1703,7 +1703,7 @@ void Map::drawTerrain(Surface* surface)
 						const Tile* const ttile = _save->getTile(Position(itX, itY, itZ - 1));
 						BattleUnit* const tunit = _save->selectUnit(Position(itX, itY, itZ - 1));
 						if (tunit != NULL
-							&& tunit->getVisible() == true
+							&& tunit->getUnitVisible() == true
 							&& ttile->getTerrainLevel() < 0
 							&& ttile->isDiscovered(2) == true)
 						{
@@ -1885,7 +1885,7 @@ void Map::drawTerrain(Surface* surface)
 							if (_cursorType != CT_AIM)
 							{
 								if (unit != NULL
-									&& (unit->getVisible() == true
+									&& (unit->getUnitVisible() == true
 										|| _save->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _save->getSide()))
@@ -1898,7 +1898,7 @@ void Map::drawTerrain(Surface* surface)
 							else // CT_AIM ->
 							{
 								if (unit != NULL
-									&& (unit->getVisible() == true
+									&& (unit->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
 									frame = 7 + (_animFrame / 2); // yellow animated crosshairs

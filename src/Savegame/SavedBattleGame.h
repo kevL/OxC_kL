@@ -237,7 +237,7 @@ private:
 		/// Gets the turn number.
 		int getTurn() const;
 		/// Ends the turn.
-		void endBattleTurn();
+		void endBattlePhase();
 		/// Sets debug mode.
 		void setDebugMode();
 		/// Gets debug mode.

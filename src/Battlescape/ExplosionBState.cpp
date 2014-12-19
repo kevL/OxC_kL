@@ -424,7 +424,7 @@ void ExplosionBState::cancel()
  * kL_note: This function passes to TileEngine::explode() or TileEngine::hit()
  * depending on if it came from a bullet/psi/melee/spit or an actual explosion;
  * that is, "explode" here means "attack has happened". Typically called from
- * either ProjectileFlyBState::think() or BattlescapeGame::endGameTurn()/checkForProximityGrenades()
+ * either ProjectileFlyBState::think() or BattlescapeGame::endTurnPhase()/checkForProximityGrenades()
  */
 void ExplosionBState::explode()
 {

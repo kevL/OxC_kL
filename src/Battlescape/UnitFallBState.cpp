@@ -22,15 +22,15 @@
 #include "BattleAIState.h"
 #include "BattlescapeState.h"
 #include "Camera.h"
-//kL #include "ExplosionBState.h"
+//#include "ExplosionBState.h"
 #include "Map.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -46,7 +46,7 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitFallBState.
- * @param parent Pointer to the Battlescape.
+ * @param parent - pointer to the BattlescapeGame
  */
 UnitFallBState::UnitFallBState(BattlescapeGame* parent)
 	:
@@ -84,7 +84,7 @@ void UnitFallBState::init()
 void UnitFallBState::think()
 {
 	//Log(LOG_INFO) << "UnitFallBState::think()";
-	for (std::list<BattleUnit*>::iterator
+	for (std::list<BattleUnit*>::const_iterator
 			unit = _parent->getSave()->getFallingUnits()->begin();
 			unit != _parent->getSave()->getFallingUnits()->end();
 			)
@@ -108,30 +108,27 @@ void UnitFallBState::think()
 		bool
 			fallCheck = true,
 			falling = true,
-			onScreen = (*unit)->getVisible()
-					&& _parent->getMap()->getCamera()->isOnScreen(
-																(*unit)->getPosition());
-//																true);
-		int size = (*unit)->getArmor()->getSize() - 1;
+			onScreen = (*unit)->getUnitVisible()
+					&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition()); // ,true);
+		const int unitSize = (*unit)->getArmor()->getSize() - 1;
 		Tile* tBelow = NULL;
 
 		for (int
-				x = size; // units = 0; large = 1
+				x = unitSize; // units = 0; large = 1
 				x > -1;
 				--x)
 		{
 			for (int
-					y = size; // units = 0; large = 1
+					y = unitSize; // units = 0; large = 1
 					y > -1;
 					--y)
 			{
 				tBelow = _parent->getSave()->getTile(
 												(*unit)->getPosition()
 												+ Position(x, y,-1));
-				if (!_parent->getSave()->getTile(
+				if (_parent->getSave()->getTile(
 											(*unit)->getPosition()
-											+ Position(x, y, 0))
-										->hasNoFloor(tBelow)
+											+ Position(x, y, 0))->hasNoFloor(tBelow) == false
 					|| (*unit)->getMovementType() == MT_FLY)
 				{
 					//Log(LOG_INFO) << ". . fallCheck set FALSE";
@@ -147,7 +144,7 @@ void UnitFallBState::think()
 		falling = fallCheck
 					&& (*unit)->getPosition().z != 0
 					&& (*unit)->getTile()->hasNoFloor(tBelow)
-//kL				&& (*unit)->getMovementType() != MT_FLY // done above in fallCheck
+//					&& (*unit)->getMovementType() != MT_FLY // done above in fallCheck
 					&& (*unit)->getWalkingPhase() == 0;
 
 		BattleUnit* uBelow = NULL;
@@ -155,14 +152,12 @@ void UnitFallBState::think()
 		if (falling)
 		{
 			for (int // tile(s) that unit is falling into:
-//kL					x = (*unit)->getArmor()->getSize() - 1;
-					x = size;
+					x = unitSize;
 					x > -1;
 					--x)
 			{
 				for (int
-//kL						y = (*unit)->getArmor()->getSize() - 1;
-						y = size;
+						y = unitSize;
 						y > -1;
 						--y)
 				{
@@ -174,19 +169,18 @@ void UnitFallBState::think()
 			}
 
 			// Check each tile for units that need moving out of the way.
-			for (std::vector<Tile*>::iterator
+			for (std::vector<Tile*>::const_iterator
 					i = _tilesToFallInto.begin();
 					i < _tilesToFallInto.end();
 					++i)
 			{
 				uBelow = (*i)->getUnit();
-				if (uBelow
-					&& (*unit) != uBelow	// falling units do not fall on themselves
-					&& !(std::find(			// already added
+				if (uBelow != NULL
+					&& *unit != uBelow	// falling units do not fall on themselves
+					&& std::find(		// already added
 								_unitsToMove.begin(),
 								_unitsToMove.end(),
-								uBelow)
-							!= _unitsToMove.end()))
+								uBelow) == _unitsToMove.end())
 				{
 					//Log(LOG_INFO) << ". . . Move, ID " << uBelow->getId();
 					_unitsToMove.push_back(uBelow);
@@ -216,20 +210,19 @@ void UnitFallBState::think()
 		{
 			// Reset tiles moved from
 			for (int
-					x = size;
+					x = unitSize;
 					x > -1;
 					--x)
 			{
 				for (int
-						y = size;
+						y = unitSize;
 						y > -1;
 						--y)
 				{
 					// A falling unit might have already taken up this position so check that this unit is still here.
 					if (_parent->getSave()->getTile(
 												(*unit)->getLastPosition()
-												+ Position(x, y, 0))->getUnit()
-											== *unit)
+												+ Position(x, y, 0))->getUnit() == *unit)
 					{
 						//Log(LOG_INFO) << ". Tile is not occupied";
 						_parent->getSave()->getTile(
@@ -241,12 +234,12 @@ void UnitFallBState::think()
 
 			// Update tiles moved to.
 			for (int
-					x = size;
+					x = unitSize;
 					x > -1;
 					--x)
 			{
 				for (int
-						y = size;
+						y = unitSize;
 						y > -1;
 						--y)
 				{
@@ -266,7 +259,7 @@ void UnitFallBState::think()
 			{
 				//Log(LOG_INFO) << ". unitsToMove not empty";
 				std::vector<Tile*> escapeTiles;
-				for (std::vector<BattleUnit*>::iterator
+				for (std::vector<BattleUnit*>::const_iterator
 						u = _unitsToMove.begin();
 						u < _unitsToMove.end();
 						)
@@ -276,7 +269,7 @@ void UnitFallBState::think()
 					bool escape = false;
 
 					// We need to move all sections of the unit out of the way.
-					int uSize = uBelow->getArmor()->getSize() - 1;
+					const int uSize = uBelow->getArmor()->getSize() - 1;
 					std::vector<Position> bodySections;
 					for (int
 							x = uSize;
@@ -304,7 +297,7 @@ void UnitFallBState::think()
 						Position offset;
 						Pathfinding::directionToVector(dir, &offset);
 
-						for (std::vector<Position>::iterator
+						for (std::vector<Position>::const_iterator
 								body = bodySections.begin();
 								body < bodySections.end();
 								)
@@ -318,22 +311,20 @@ void UnitFallBState::think()
 
 							bool
 								aboutToBeOccupiedFromAbove = t
-														&& std::find(
-																_tilesToFallInto.begin(),
-																_tilesToFallInto.end(),
-																t)
-															!= _tilesToFallInto.end(),
+														  && std::find(
+																	_tilesToFallInto.begin(),
+																	_tilesToFallInto.end(),
+																	t) != _tilesToFallInto.end(),
 								alreadyTaken = t
 											&& std::find(
 													escapeTiles.begin(),
 													escapeTiles.end(),
-													t)
-												!= escapeTiles.end(),
+													t) != escapeTiles.end(),
 								alreadyOccupied = t
 												&& t->getUnit()
 												&& t->getUnit() != uBelow,
 								hasFloor = t
-										&& !t->hasNoFloor(tBelow2),
+										&& t->hasNoFloor(tBelow2) == false,
 								movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(
 																								tCurrent,
 																								t,
@@ -345,10 +336,10 @@ void UnitFallBState::think()
 											&& alreadyTaken == false
 											&& aboutToBeOccupiedFromAbove == false
 											&& movementBlocked == false
-											&& (hasFloor
-												|| unitCanFly);
+											&& (hasFloor == true
+												|| unitCanFly == true);
 
-							if (canMoveToTile)
+							if (canMoveToTile == true)
 								++body; // Check next section of the unit.
 							else
 								break; // Try next direction.
@@ -472,10 +463,9 @@ void UnitFallBState::think()
 
 	//Log(LOG_INFO) << ". done main recursion";
 
-	if (_parent->getSave()->getFallingUnits()->empty())
+	if (_parent->getSave()->getFallingUnits()->empty() == true)
 	{
 		//Log(LOG_INFO) << ". Falling units EMPTY";
-
 		_tilesToFallInto.clear();
 		_unitsToMove.clear();
 

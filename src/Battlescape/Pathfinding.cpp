@@ -192,7 +192,7 @@ void Pathfinding::calculate(
 	while (destTile->getTerrainLevel() == -24
 		&& destPos.z != _save->getMapSizeZ())
 	{
-		destPos.z++;
+		++destPos.z;
 		destTile = _save->getTile(destPos);
 	}
 
@@ -205,7 +205,7 @@ void Pathfinding::calculate(
 						destTile,
 						unit->getArmor()->getSize()))
 		{
-			destPos.z--;
+			--destPos.z;
 			destTile = _save->getTile(destPos);
 			//Log(LOG_INFO) << ". canFallDown() -1 level, destPos = " << destPos;
 		}
@@ -257,13 +257,13 @@ void Pathfinding::calculate(
 						const BattleUnit* const testUnit = testTile->getUnit();
 						if (testUnit != unit
 							&& testUnit != missileTarget
-							&& testUnit->getVisible() == true)
+							&& testUnit->getUnitVisible() == true)
 						{
 							return;
 						}
 					}
 
-					i++;
+					++i;
 				}
 			}
 		}
@@ -496,7 +496,7 @@ bool Pathfinding::bresenhamPath(
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 
 			if (sneak == true
-				&& _save->getTile(nextPoint)->getVisible())
+				&& _save->getTile(nextPoint)->getTileVisible())
 			{
 				return false;
 			}
@@ -636,7 +636,7 @@ bool Pathfinding::aStarPath(
 				continue;
 
 			if (sneak == true
-				&& _save->getTile(nextPos)->getVisible())
+				&& _save->getTile(nextPos)->getTileVisible())
 			{
 				tuCost *= 2; // avoid being seen
 			}
@@ -1464,7 +1464,7 @@ BIGWALL_E_S		// 8
 
 			if (_unit != NULL
 				&& _unit->getFaction() == FACTION_PLAYER
-				&& tileUnit->getVisible() == true)
+				&& tileUnit->getUnitVisible() == true)
 			{
 				return true; // player knows about visible units only
 			}
@@ -1491,8 +1491,8 @@ BIGWALL_E_S		// 8
 			Position pos = tile->getPosition();
 			while (pos.z >= 0)
 			{
-				Tile* const testTile = _save->getTile(pos);
-				BattleUnit* tileUnit = testTile->getUnit();
+				const Tile* const testTile = _save->getTile(pos);
+				const BattleUnit* const tileUnit = testTile->getUnit();
 
 				if (tileUnit != NULL
 					&& tileUnit != _unit)
@@ -1518,7 +1518,7 @@ BIGWALL_E_S		// 8
 				if (testTile->hasNoFloor(NULL) == false)
 					break;
 
-				pos.z--;
+				--pos.z;
 			}
 		}
 	}

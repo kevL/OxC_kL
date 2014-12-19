@@ -271,13 +271,16 @@ void SavedBattleGame::load(
 	{
 		const UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
 		const int id = (*i)["soldierId"].as<int>();
+		Log(LOG_INFO) << "SBG:load() ID[0] " << id;
 
 		BattleUnit* unit = NULL;
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
+		{
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
 								_depth,
 								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
+		}
 		else
 		{
 			const std::string
@@ -295,15 +298,20 @@ void SavedBattleGame::load(
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 
+		//Log(LOG_INFO) << "SBG:load() ID[1] " << unit->getId();
 		unit->load(*i);
+		//Log(LOG_INFO) << "SBG:load() ID[2] " << unit->getId();
 		_units.push_back(unit);
+		//Log(LOG_INFO) << "SBG:load() ID[3] " << _units.back()->getId();
 
 		if (faction == FACTION_PLAYER)
 		{
+			//Log(LOG_INFO) << ". faction is Player";
 			if (unit->getId() == selectedUnit
 				|| (_selectedUnit == NULL
 					&& unit->isOut() == false))
 			{
+				//Log(LOG_INFO) << ". . set selUnit = " << unit->getId();
 				_selectedUnit = unit;
 			}
 
@@ -1040,9 +1048,9 @@ int SavedBattleGame::getTurn() const
 /**
  * Ends the current faction-turn and progresses to the next one.
  */
-void SavedBattleGame::endBattleTurn()
+void SavedBattleGame::endBattlePhase()
 {
-	//Log(LOG_INFO) << "SavedBattleGame::endBattleTurn()";
+	Log(LOG_INFO) << "SavedBattleGame::endBattlePhase()";
 	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Player";
@@ -1056,10 +1064,10 @@ void SavedBattleGame::endBattleTurn()
 		_side = FACTION_HOSTILE;
 		_selectedUnit = NULL;
 
-		// kL_begin: sbg::endBattleTurn() no Reselect xCom units at endTurn!!!
+		// kL_begin: sbg::endBattlePhase() no Reselect xCom units at endTurn!!!
 		for (std::vector<BattleUnit*>::const_iterator
-				i = getUnits()->begin();
-				i != getUnits()->end();
+				i = _units.begin();
+				i != _units.end();
 				++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
@@ -1160,15 +1168,17 @@ void SavedBattleGame::endBattleTurn()
 		//Log(LOG_INFO) << "done custom cheating";
 	}
 
+	Log(LOG_INFO) << ". endBattlePhase() faction = " << (int)_side;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
 	{
+		Log(LOG_INFO) << ". . endBattlePhase() iterate units, curID = " << (*i)->getId();
 		(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
 
 		if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
-			(*i)->prepareUnitTurn();		// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
+			(*i)->prepUnit();				// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
 
 		// if newSide=XCOM, xCom agents DO NOT revert to xCom; MC'd aLiens revert to aLien.
 		// if newSide=Alien, xCom agents revert to xCom; MC'd aLiens DO NOT revert to aLien.
@@ -1190,18 +1200,22 @@ void SavedBattleGame::endBattleTurn()
 
 
 		if ((*i)->getFaction() != FACTION_PLAYER)
-			(*i)->setVisible(false);
+		{
+			if ((*i)->getId() == 1000009) Log(LOG_INFO) << ". . . 1000009 setVis FALSE";
+			(*i)->setUnitVisible(false);
+		}
 	}
 	//Log(LOG_INFO) << "done looping units";
 
 	// redo calculateFOV() *after* aliens & civies have been set notVisible
+	Log(LOG_INFO) << ". recalculateFoV()";
 	_tileEngine->recalculateFOV();
 	//Log(LOG_INFO) << "done recalculateFoV";
 
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
 
-	//Log(LOG_INFO) << "SavedBattleGame::endBattleTurn() EXIT";
+	Log(LOG_INFO) << "SavedBattleGame::endBattlePhase() EXIT";
 }
 
 /**
@@ -1261,19 +1275,21 @@ void SavedBattleGame::setBattleState(BattlescapeState* bs)
  */
 void SavedBattleGame::resetUnitTiles()
 {
+	Log(LOG_INFO) << "SBG::resetUnitTiles()";
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
 	{
+		Log(LOG_INFO) << ". ID " << (*i)->getId();
 		if ((*i)->isOut() == false)
 		{
 			const int unitSize = (*i)->getArmor()->getSize() - 1;
 
-			if ((*i)->getTile() != NULL
-				&& (*i)->getTile()->getUnit() == *i)
+			if ((*i)->getTile() != NULL // remove unit from its current tile
+				&& (*i)->getTile()->getUnit() == *i) // wtf, is this super-safety ......
 			{
-				for (int // remove Unit from its current tile
+				for (int
 						x = unitSize;
 						x > -1;
 						--x)
@@ -1288,7 +1304,7 @@ void SavedBattleGame::resetUnitTiles()
 				}
 			}
 
-			for (int // set Unit onto its proper tile
+			for (int // set unit onto its proper tile
 					x = unitSize;
 					x > -1;
 					--x)
@@ -1307,8 +1323,9 @@ void SavedBattleGame::resetUnitTiles()
 		}
 
 		if ((*i)->getFaction() == FACTION_PLAYER)
-			(*i)->setVisible();
+			(*i)->setUnitVisible();
 	}
+	Log(LOG_INFO) << "SBG::resetUnitTiles() EXIT";
 }
 
 /**
@@ -1705,7 +1722,7 @@ Node* SavedBattleGame::getPatrolNode(
  */
 void SavedBattleGame::prepareBattleTurn()
 {
-	//Log(LOG_INFO) << "SavedBattleGame::prepareBattleTurn()";
+	Log(LOG_INFO) << "SavedBattleGame::prepareBattleTurn()";
 	std::vector<Tile*>
 		tilesOnFire,
 		tilesOnSmoke;
@@ -1874,7 +1891,9 @@ void SavedBattleGame::prepareBattleTurn()
 	reviveUnconsciousUnits();
 
 	getTileEngine()->calculateTerrainLighting(); // kL
+	Log(LOG_INFO) << ". recalculateFOV()";
 	getTileEngine()->recalculateFOV(); // kL
+	Log(LOG_INFO) << "SavedBattleGame::prepareBattleTurn() EXIT";
 }
 
 /**

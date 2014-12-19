@@ -66,7 +66,7 @@ enum UnitStatus
 	STATUS_PANICKING,	//  8
 	STATUS_BERSERK,		//  9
 	STATUS_TIME_OUT,	// 10
-	STATUS_DISABLED		// 11 kL, dead or stunned but doesn't know it yet.
+	STATUS_DISABLED		// 11 kL, dead or unconscious but doesn't know it yet.
 };
 
 enum UnitFaction
@@ -680,9 +680,9 @@ private:
 		void setEnergy(int energy);
 
 		/// Sets whether this unit is visible.
-		void setVisible(bool flag = true);
+		void setUnitVisible(bool flag = true);
 		/// Gets whether this unit is visible.
-		bool getVisible() const;
+		bool getUnitVisible() const;
 		/// Adds unit to visible units.
 		bool addToVisibleUnits(BattleUnit* unit);
 		/// Gets the list of visible units.
@@ -726,7 +726,7 @@ private:
 		double getInitiative(int tuSpent = 0);
 
 		/// Prepares this unit for a new turn.
-		void prepareUnitTurn();
+		void prepUnit();
 
 		/// Changes this unit's morale.
 		void moraleChange(int change);

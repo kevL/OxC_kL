@@ -140,7 +140,7 @@ void UnitWalkBState::think()
 		return;
 	}
 
-	_onScreen = _unit->getVisible();
+	_onScreen = _unit->getUnitVisible();
 //				&& (_walkCam->isOnScreen(_unit->getPosition(), true)
 //					|| _walkCam->isOnScreen(_unit->getDestination(), true));
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
@@ -827,7 +827,7 @@ bool UnitWalkBState::doStatusStand_end()
 	_tileSwitchDone = false;
 
 	if (_unit->getFaction() != FACTION_PLAYER)
-		_unit->setVisible(false);
+		_unit->setUnitVisible(false);
 	else
 	{
 		BattlescapeState* battleState = _parent->getSave()->getBattleState();
@@ -835,14 +835,14 @@ bool UnitWalkBState::doStatusStand_end()
 		double stat = static_cast<double>(_unit->getBaseStats()->tu);
 		const int tu = _unit->getTimeUnits();
 		battleState->getTimeUnitsField()->setValue(static_cast<unsigned>(tu));
-		battleState->getTimeUnitsBar()->setValue(ceil(
-											static_cast<double>(tu) / stat * 100.0));
+		battleState->getTimeUnitsBar()->setValue(std::ceil(
+											static_cast<double>(tu) / stat * 100.));
 
 		stat = static_cast<double>(_unit->getBaseStats()->stamina);
 		const int energy = _unit->getEnergy();
 		battleState->getEnergyField()->setValue(static_cast<unsigned>(energy));
-		battleState->getEnergyBar()->setValue(ceil(
-											static_cast<double>(energy) / stat * 100.0));
+		battleState->getEnergyBar()->setValue(std::ceil(
+											static_cast<double>(energy) / stat * 100.));
 	}
 
 	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR // if the unit burns floortiles, burn floortiles
@@ -919,7 +919,7 @@ void UnitWalkBState::doStatusTurn()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusTurn() : " << _unit->getId();
 	if (_preStepTurn)	// turning during walking costs no tu
-		_preStepCost++;		// except before the first step.
+		++_preStepCost;	// except before the first step.
 
 	_unit->turn();
 
@@ -1106,7 +1106,7 @@ int UnitWalkBState::getFinalDirection() const
 	if (RNG::percent((diff + 1) * 20 - alienRank * 5) == false)
 		return -1;
 
-	BattleUnit* faceUnit = NULL;
+	const BattleUnit* faceUnit = NULL;
 
 	int testDist = 255;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1193,7 +1193,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
  */
 void UnitWalkBState::playMovementSound()
 {
-	if (_unit->getVisible() == false
+	if (_unit->getUnitVisible() == false
 		&& _parent->getSave()->getDebugMode() == false)
 //		|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
 //			&& !_walkCam->isOnScreen(_unit->getDestination(), true)))

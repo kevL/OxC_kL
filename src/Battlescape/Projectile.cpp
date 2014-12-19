@@ -275,7 +275,7 @@ int Projectile::calculateTrajectory(
 			{
 				const BattleUnit* const hitUnit = _save->getTile(hitPos)->getUnit();
 				if (hitUnit != targetUnit
-					&& hitUnit->getVisible() == true)
+					&& hitUnit->getUnitVisible() == true)
 				{
 					_trajectory.clear();
 					return VOXEL_EMPTY;

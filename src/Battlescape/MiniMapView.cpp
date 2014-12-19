@@ -200,7 +200,7 @@ void MiniMapView::draw()
 
 				const BattleUnit* const unit = tile->getUnit();
 				if (unit != NULL
-					&& unit->getVisible() == true) // visible, alive units
+					&& unit->getUnitVisible() == true) // visible, alive units
 				{
 					const int
 						unitSize = unit->getArmor()->getSize(),

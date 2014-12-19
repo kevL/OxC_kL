@@ -261,7 +261,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	}
 
 
-	unit->setVisible(false);
+	unit->setUnitVisible(false);
 
 	// might need this: populate _visibleUnit for a newly-created alien
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI(), calculateFOV() call";
@@ -270,7 +270,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		// it should also hide units when they've killed the guy spotting them;
 		// it's also for good luck
 
-	BattleAIState* ai = unit->getCurrentAIState();
+	const BattleAIState* ai = unit->getCurrentAIState();
 	if (ai == NULL)
 	{
 		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
@@ -290,7 +290,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		ai = unit->getCurrentAIState();
 	}
 
-	_AIActionCounter++;
+	++_AIActionCounter;
 	if (_AIActionCounter == 1)
 	{
 		_playedAggroSound = false;
@@ -619,7 +619,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 /**
  * Ends the turn.
  */
-void BattlescapeGame::endGameTurn()
+void BattlescapeGame::endTurnPhase()
 {
 	_debugPlay = false;
 	_AISecondMove = false;
@@ -728,7 +728,7 @@ void BattlescapeGame::endGameTurn()
 				&& ((*i)->getGeoscapeSoldier() != NULL
 					|| (*i)->getUnitRules()->getMechanical() == false))
 			{
-				tile->endTileTurn(); // smoke & fire stuff.
+				tile->endTilePhase(); // smoke & fire stuff.
 			}
 		}
 	} // kL_end.
@@ -744,7 +744,7 @@ void BattlescapeGame::endGameTurn()
 			liveSoldiers,
 			true);
 
-	_save->endBattleTurn(); // <- this rolls over Faction-turns.
+	_save->endBattlePhase(); // <- this rolls over Faction-turns.
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -1307,7 +1307,7 @@ void BattlescapeGame::handleState()
 		{
 			_states.pop_front();
 
-			endGameTurn();
+			endTurnPhase();
 			return;
 		}
 		else
@@ -1357,7 +1357,7 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 		{
 			_states.pop_front();
 
-			endGameTurn();
+			endTurnPhase();
 			return;
 		}
 		else
@@ -1629,9 +1629,9 @@ void BattlescapeGame::popState()
 
 			if (_states.empty() == true)
 			{
-				//Log(LOG_INFO) << ". endGameTurn()";
-				endGameTurn();
-				//Log(LOG_INFO) << ". endGameTurn() DONE return";
+				//Log(LOG_INFO) << ". endTurnPhase()";
+				endTurnPhase();
+				//Log(LOG_INFO) << ". endTurnPhase() DONE return";
 				return;
 			}
 			else
@@ -1889,12 +1889,12 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
 	_save->setSelectedUnit(unit);
-//	unit->setVisible(); // kL
+//	unit->setUnitVisible(); // kL
 
 	_parentState->getMap()->setCursorType(CT_NONE);
 
 	// show a little infobox with the name of the unit and "... is panicking"
-	if (unit->getVisible() == true
+	if (unit->getUnitVisible() == true
 		|| !Options::noAlienPanicMessages)
 	{
 		getMap()->getCamera()->centerOnPosition(unit->getPosition());
@@ -2188,7 +2188,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			//Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
 			if (_save->selectUnit(posTarget)
 				&& _save->selectUnit(posTarget)->getFaction() != _save->getSelectedUnit()->getFaction()
-				&& _save->selectUnit(posTarget)->getVisible())
+				&& _save->selectUnit(posTarget)->getUnitVisible())
 			{
 				if (_currentAction.weapon->getRules()->isLOSRequired() == false
 					|| std::find(
@@ -2236,7 +2236,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			//Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
 			if (_save->selectUnit(posTarget)
 				&& _save->selectUnit(posTarget)->getFaction() != _save->getSelectedUnit()->getFaction()
-				&& _save->selectUnit(posTarget)->getVisible())
+				&& _save->selectUnit(posTarget)->getUnitVisible())
 			{
 				bool aLienPsi = (_currentAction.weapon == NULL);
 				if (aLienPsi)
@@ -2384,7 +2384,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 		BattleUnit* const unit = _save->selectUnit(posTarget);
 		if (unit != NULL
 			&& unit != _save->getSelectedUnit()
-			&& (unit->getVisible() == true
+			&& (unit->getUnitVisible() == true
 				|| _debugPlay == true))
 		{
 			if (unit->getFaction() == _save->getSide()) // -= select unit =- //
@@ -2684,7 +2684,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 		int dirFace) // kL_add.
 {
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;
-	const bool visible = unit->getVisible();
+	const bool visible = unit->getUnitVisible();
 
 	getSave()->getBattleState()->showPsiButton(false);
 	getSave()->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
@@ -2774,7 +2774,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	getTileEngine()->applyGravity(convertedUnit->getTile());
 	getTileEngine()->calculateFOV(convertedUnit->getPosition());
 
-	convertedUnit->setVisible(visible);
+	convertedUnit->setUnitVisible(visible);
 
 //	convertedUnit->getCurrentAIState()->think();
 
