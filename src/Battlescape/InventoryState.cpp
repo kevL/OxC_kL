@@ -73,7 +73,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Inventory screen.
- * @param tuMode - true if in battle and inventory usage costs time units
+ * @param tuMode - true if in battle when inventory usage costs time units
  * @param parent - pointer to parent BattlescapeState
  */
 InventoryState::InventoryState(
@@ -1072,7 +1072,7 @@ void InventoryState::handle(Action* action)
 }
 
 /**
- * Sets the extra-info fields on mouseover and inv-clicks.
+ * Sets the extra-info fields on mouseover and mouseclicks.
  * @param item		- pointer to an item
  * @param itemRule	- pointer to item's RuleItem
  * @param ammo		- pointer to item's ammo
@@ -1083,7 +1083,6 @@ void InventoryState::setExtraInfo(
 		const RuleItem* const itemRule,
 		const BattleItem* const ammo)
 {
-		// kL_begin:
 		std::wostringstream label;
 		bool isArt = false;
 
@@ -1104,7 +1103,7 @@ void InventoryState::setExtraInfo(
 		}
 
 		int weight = itemRule->getWeight();
-		if (ammo
+		if (ammo != NULL
 			&& ammo != item)
 		{
 			weight += ammo->getRules()->getWeight();
@@ -1153,7 +1152,6 @@ void InventoryState::setExtraInfo(
 		}
 		else
 			_txtUseTU->setText(L"");
-		// kL_end.
 }
 
 /**

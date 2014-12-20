@@ -23,7 +23,7 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Frame.h"

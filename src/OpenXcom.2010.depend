@@ -4664,7 +4664,7 @@
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
-1419056900 f:\git\openxcom\src\battlescape\inventorystate.h
+1419061489 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
@@ -6092,18 +6092,17 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1417390641 source:f:\git\openxcom\src\battlescape\infoboxstate.cpp
+1419061695 source:f:\git\openxcom\src\battlescape\infoboxstate.cpp
 	"InfoboxState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
-	"../Engine/Palette.h"
 	"../Engine/Timer.h"
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1419053102 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1419061177 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6134,7 +6133,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1419058921 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1419061735 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"

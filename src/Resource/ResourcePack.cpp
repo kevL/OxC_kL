@@ -21,7 +21,7 @@
 
 //#include <SDL_mixer.h>
 
-//#include "../Engine/Adlib/adlplayer.h" // kL_fade
+//#include "../Engine/Adlib/adlplayer.h" // kL: func_fade()
 #include "../Engine/Font.h"
 #include "../Engine/Game.h" // fadeMusic()
 //#include "../Engine/Logger.h"

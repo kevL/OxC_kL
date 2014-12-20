@@ -85,9 +85,9 @@ Inventory::Inventory(
 		_base(base),
 		_groundOffset(0),
 		_fuseFrame(0),
-		_grenadeFuses(),
 		_prime(-1),
 		_tuCost(-1)
+//		_grenadeFuses()
 {
 	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 

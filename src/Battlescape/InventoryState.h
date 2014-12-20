@@ -50,7 +50,6 @@ class InventoryState
 
 private:
 	const bool _tuMode;
-
 //	std::string _currentTooltip;
 
 	BattlescapeButton
@@ -89,18 +88,17 @@ private:
 		* _txtUseTU,
 		* _txtThrowTU,
 		* _txtPsiTU;
-
 //	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
 
-	/// Update the visibility and icons for the template buttons.
-//	void _updateTemplateButtons(bool isVisible);
 	/// Refresh the hover status of the mouse.
 	void _refreshMouse();
-	/// Sets the extra-info fields on mouseover and inv-clicks.
+	/// Sets the extra-info fields on mouseover and mouseclicks.
 	void setExtraInfo(
 			const BattleItem* const item,
 			const RuleItem* const itemRule,
 			const BattleItem* const ammo);
+	/// Update the visibility and icons for the template buttons.
+//	void _updateTemplateButtons(bool isVisible);
 
 
 	public:
@@ -136,10 +134,6 @@ private:
 
 		/// Handler for clicking the Clear Inventory button.
 		void btnClearInventoryClick(Action* action);
-		/// Handler for clicking on the Create Template button.
-//		void btnCreateTemplateClick(Action* action);
-		/// Handler for clicking the Apply Template button.
-//		void btnApplyTemplateClick(Action* action);
 
 		/// Handler for clicking on inventory items.
 		void invClick(Action* action);
@@ -156,6 +150,10 @@ private:
 //		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
 //		void txtTooltipOut(Action* action);
+		/// Handler for clicking on the Create Template button.
+//		void btnCreateTemplateClick(Action* action);
+		/// Handler for clicking the Apply Template button.
+//		void btnApplyTemplateClick(Action* action);
 };
 
 }

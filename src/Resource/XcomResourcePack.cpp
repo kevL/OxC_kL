@@ -609,11 +609,11 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 //						{
 						const std::string exts[] =
 						{
-							".ogg",
+							".ogg"
 //							".flac",
 //							".mp3",
 //							".mod",
-							".wav" // kL_add ( also added "." and removed them below )
+//							".wav" // kL_add ( also added "." and removed them below )
 						};
 
 						for (size_t
