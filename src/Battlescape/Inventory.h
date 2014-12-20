@@ -55,8 +55,8 @@ private:
 		_fuseFrame,
 		_depth,
 		_groundOffset,
-		_tuCost, // kL
-		_prime; // kL
+		_tuCost,
+		_prime;
 
 	BattleItem
 		* _mouseOverItem,
@@ -118,6 +118,14 @@ private:
 		/// Draws the inventory items.
 		void drawItems();
 
+		/// Checks for item overlap.
+		static bool overlapItems(
+				BattleUnit* unit,
+				BattleItem* item,
+				RuleInventory* slot,
+				int x = 0,
+				int y = 0);
+
 		/// Gets the currently selected item.
 		BattleItem* getSelectedItem() const;
 		/// Sets the currently selected item.
@@ -144,35 +152,26 @@ private:
 
 		/// Arranges items on the ground.
 		void arrangeGround(bool alterOffset = true);
-
 		/// Attempts to place an item in an inventory slot.
 		bool fitItem(
 				RuleInventory* newSlot,
 				BattleItem* item,
 				std::string& warning,
-				bool test = false); // kL_add.
+				bool test = false);
 		/// Checks if two items can be stacked on one another.
 		bool canBeStacked(
 				BattleItem* itemA,
 				BattleItem* itemB);
-		/// Checks for item overlap.
-		static bool overlapItems(
-				BattleUnit* unit,
-				BattleItem* item,
-				RuleInventory* slot,
-				int x = 0,
-				int y = 0);
 
 		/// Shows a warning message.
 		void showWarning(const std::wstring& msg);
-		/// Show priming warnings on grenades.
+		/// Shows priming warnings on grenades.
 		void drawPrimers();
+		/// Sets grenade to show a warning in Inventory.
+		void setPrimeGrenade(int turn);
 
-		/// kL. Sets grenade to show a warning in Inventory.
-		void setPrimeGrenade(int turn); // kL
-
-		/// kL. Gets the TU cost for moving items around.
-		int getTUCost() const; // kL
+		/// Gets the TU cost for moving items around.
+		int getTUCost() const;
 };
 
 }

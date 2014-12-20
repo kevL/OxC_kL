@@ -1728,38 +1728,46 @@ int BattleUnit::getActionTUs(
 		case BA_DEFUSE:
 			cost = 15;
 		break;
+
 		case BA_PRIME:
 			cost = 45;
 		break;
+
 		case BA_THROW:
 			cost = 23;
 		break;
+
 		case BA_LAUNCH:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTULaunch();
 		break;
+
 		case BA_AIMEDSHOT:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUAimed();
 		break;
+
 		case BA_AUTOSHOT:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUAuto();
 		break;
+
 		case BA_SNAPSHOT:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUSnap();
 		break;
+
 		case BA_STUN:
 		case BA_HIT:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUMelee();
 		break;
+
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
@@ -1775,7 +1783,6 @@ int BattleUnit::getActionTUs(
 						// could be free, or cost=0; so really cost=-1 ought be
 						// implemented, to mean 'cannot do' ......
 						// (ofc this default is rather meaningless, but there is a point)
-		break;
 	}
 
 

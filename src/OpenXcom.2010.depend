@@ -4626,10 +4626,7 @@
 1418011296 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1416921658 f:\git\openxcom\src\ruleset\ruleitem.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1419058053 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1418237910 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -4667,7 +4664,7 @@
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
-1417472392 f:\git\openxcom\src\battlescape\inventorystate.h
+1419056900 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
@@ -5741,7 +5738,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1418418193 f:\git\openxcom\src\battlescape\inventory.h
+1419053102 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
 1413136956 f:\git\openxcom\src\engine\crossplatform.h
@@ -6106,7 +6103,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1418421974 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1419053102 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6137,7 +6134,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1419016846 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1419058921 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -8873,10 +8870,9 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1417562416 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1419058053 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
-	"../Engine/Logger.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 
@@ -9038,7 +9034,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1419017911 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1419057556 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

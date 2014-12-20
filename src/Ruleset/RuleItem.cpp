@@ -21,7 +21,7 @@
 
 #include "RuleInventory.h"
 
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -1041,54 +1041,54 @@ const int RuleItem::getVaporProbability() const
 }
 
 /**
- * kL. Gets the item's default BattleAction.
+ * Gets the item's default BattleAction.
  * Used to show a TU cost in InventoryState. Lifted from ActionMenuState cTor.
  * @return, BattleActionType enum
  */
-BattleActionType RuleItem::getDefaultAction() const // kL
+BattleActionType RuleItem::getDefaultAction() const
 {
-	if (isFixed())
+	if (_fixedWeapon == true)		// isFixed()
 		return BA_NONE;
 
-	if (getBattleType() == BT_FIREARM)
+	if (_battleType == BT_FIREARM)	// getBattleType()
 	{
-		if (isWaypoint())
+		if (_waypoint == true)		// isWaypoint()
 			return BA_LAUNCH;
 
-		if (getAccuracySnap() != 0)
+		if (_accuracySnap != 0)		// getAccuracySnap()
 			return BA_SNAPSHOT;
 
-		if (getAccuracyAuto() != 0)
+		if (_accuracyAuto != 0)		// getAccuracyAuto()
 			return BA_AUTOSHOT;
 
-		if (getAccuracyAimed() != 0)
+		if (_accuracyAimed != 0)	// getAccuracyAimed()
 			return BA_AIMEDSHOT;
 	}
 
-	if (getBattleType() == BT_GRENADE
-		|| getBattleType() == BT_PROXIMITYGRENADE)
+	if (_battleType == BT_GRENADE
+		|| _battleType == BT_PROXIMITYGRENADE)
 	{
 		return BA_PRIME;
 	}
 
-	if (getBattleType() == BT_MEDIKIT
-		|| getBattleType() == BT_SCANNER
-		|| getBattleType() == BT_MINDPROBE)
+	if (_battleType == BT_MEDIKIT
+		|| _battleType == BT_SCANNER
+		|| _battleType == BT_MINDPROBE)
 	{
 		return BA_USE;
 	}
 
-	if (getBattleType() == BT_PSIAMP)
+	if (_battleType == BT_PSIAMP)
 		return BA_PANIC;
 
-	if (getTUMelee())
+	if (_tuMelee != 0)				// getTUMelee()
 		return BA_HIT;
 
 	return BA_NONE;
 }
 
 /**
- * kL. Checks if an item is exempt from research.
+ * Checks if an item is exempt from research.
  * Currently this is used to exclude SHADICS ARMORS from getting marked
  * as unresearched in various lists, such as Stores & Transfers ...
  * This boolean should be set in the Rulesets under these ITEMS respectively.
@@ -1096,11 +1096,9 @@ BattleActionType RuleItem::getDefaultAction() const // kL
  * Note: put in Ruleset done.
  * @return, true if this item shows in lists without being researched
  */
-bool RuleItem::isResearchExempt() const // kL
+bool RuleItem::isResearchExempt() const
 {
 	return _noResearch;
-
-	//Log(LOG_INFO) << ". type = " << getType();
 /*	if (getType() == "STR_BLACKSUIT_ARMOR"
 		|| getType() == "STR_BLUESUIT_ARMOR"
 		|| getType() == "STR_GREENSUIT_ARMOR"
@@ -1118,7 +1116,6 @@ bool RuleItem::isResearchExempt() const // kL
 	{
 		return true;
 	}
-
 	return false; */
 }
 

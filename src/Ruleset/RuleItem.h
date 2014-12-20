@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_RULEITEM_H
 #define OPENXCOM_RULEITEM_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "../Battlescape/BattlescapeGame.h" // kL, BattleActionType
 
@@ -383,11 +383,11 @@ private:
 		/// Gets the vapor cloud probability.
 		const int getVaporProbability() const;
 
-		/// kL. Gets the item's default BattleAction.
-		BattleActionType getDefaultAction() const; // kL
+		/// Gets the item's default BattleAction.
+		BattleActionType getDefaultAction() const;
 
-		/// kL. Checks if an item is exempt from research.
-		bool isResearchExempt() const; // kL
+		/// Checks if an item is exempt from research.
+		bool isResearchExempt() const;
 };
 
 }

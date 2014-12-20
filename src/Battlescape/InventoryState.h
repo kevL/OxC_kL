@@ -30,9 +30,11 @@ namespace OpenXcom
 
 class BattlescapeButton;
 class BattlescapeState;
+class BattleItem;
 class BattleUnit;
 class Inventory;
 class NumberText;
+class RuleItem;
 class SavedBattleGame;
 class Surface;
 class Text;
@@ -94,6 +96,11 @@ private:
 //	void _updateTemplateButtons(bool isVisible);
 	/// Refresh the hover status of the mouse.
 	void _refreshMouse();
+	/// Sets the extra-info fields on mouseover and inv-clicks.
+	void setExtraInfo(
+			const BattleItem* const item,
+			const RuleItem* const itemRule,
+			const BattleItem* const ammo);
 
 
 	public:
@@ -122,19 +129,17 @@ private:
 
 		/// Handler for clicking the Unload weapon button.
 		void btnUnloadClick(Action* action);
-
 		/// Handler for clicking on the Ground -> button.
 		void btnGroundClick(Action* action);
-
 		/// Handler for clicking the Rank button.
 		void btnRankClick(Action* action);
 
+		/// Handler for clicking the Clear Inventory button.
+		void btnClearInventoryClick(Action* action);
 		/// Handler for clicking on the Create Template button.
 //		void btnCreateTemplateClick(Action* action);
 		/// Handler for clicking the Apply Template button.
 //		void btnApplyTemplateClick(Action* action);
-		/// Handler for clicking the Clear Inventory button.
-		void btnClearInventoryClick(Action* action);
 
 		/// Handler for clicking on inventory items.
 		void invClick(Action* action);

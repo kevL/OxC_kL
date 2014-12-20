@@ -61,9 +61,9 @@ namespace OpenXcom
  * @param game		- pointer to core Game
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
- * @param base		- true if inventory is accessed from Basescape's CraftEquip screen
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
+ * @param base		- true if inventory is accessed from Basescape (default false)
  */
 Inventory::Inventory(
 		Game* game,
@@ -85,9 +85,9 @@ Inventory::Inventory(
 		_base(base),
 		_groundOffset(0),
 		_fuseFrame(0),
-		_grenadeFuses(),	// kL
-		_prime(-1),			// kL
-		_tuCost(-1)			// kL
+		_grenadeFuses(),
+		_prime(-1),
+		_tuCost(-1)
 {
 	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 
@@ -131,8 +131,8 @@ Inventory::~Inventory()
 /**
  * Replaces a certain amount of colors in the inventory's palette.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void Inventory::setPalette(
 		SDL_Color* colors,
@@ -315,7 +315,7 @@ void Inventory::drawItems()
 
 
 			Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			if (frame != NULL) // kL, safety.
+			if (frame != NULL) // safety.
 			{
 				if ((*i)->getSlot()->getType() == INV_SLOT)
 				{
@@ -341,7 +341,7 @@ void Inventory::drawItems()
 														frame->getX(),
 														frame->getY()));
 			}
-			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
+			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite();
 		}
 
 		Surface* const stackLayer = new Surface(
@@ -366,9 +366,8 @@ void Inventory::drawItems()
 				continue;
 			}
 
-//			Log(LOG_INFO) << "Inventory::drawItems() bigSprite = " << (*i)->getRules()->getBigSprite();
 			Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			if (frame != NULL) // kL, safety.
+			if (frame != NULL) // safety.
 			{
 				frame->setX(
 							(*i)->getSlot()->getX()
@@ -383,7 +382,7 @@ void Inventory::drawItems()
 														frame->getX(),
 														frame->getY()));
 			}
-			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
+			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite();
 
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1) // item stacking
 			{
@@ -418,10 +417,11 @@ void Inventory::drawItems()
 /**
  * Moves an item to a specified slot in the selected unit's inventory.
  * @param item	- pointer to a BattleItem
- * @param slot	- pointer to RuleInventory slot (NULL if none)
+ * @param slot	- pointer to RuleInventory slot or NULL if none
  * @param x		- X position in slot (default 0)
  * @param y		- Y position in slot (default 0)
  */
+// private:
 void Inventory::moveItem(
 		BattleItem* const item,
 		RuleInventory* const slot,
@@ -444,7 +444,7 @@ void Inventory::moveItem(
 				item->moveToOwner(NULL);
 				_selUnit->getTile()->addItem(item, item->getSlot());
 
-				if (item->getUnit()
+				if (item->getUnit() != NULL
 					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{
 					item->getUnit()->setPosition(_selUnit->getPosition());
@@ -457,7 +457,7 @@ void Inventory::moveItem(
 				_selUnit->getTile()->removeItem(item);
 //				item->setTurnFlag(false);
 
-				if (item->getUnit()
+				if (item->getUnit() != NULL
 					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{
 					item->getUnit()->setPosition(Position(-1,-1,-1));
@@ -476,8 +476,8 @@ void Inventory::moveItem(
  * @param unit	- pointer to current unit
  * @param item	- pointer to battle item
  * @param slot	- pointer to inventory slot, or NULL if none
- * @param x		- X position in slot
- * @param y		- Y position in slot
+ * @param x		- X position in slot (default 0)
+ * @param y		- Y position in slot (default 0)
  * @return, true if there's overlap
  */
 bool Inventory::overlapItems(
@@ -522,6 +522,7 @@ bool Inventory::overlapItems(
  * @param y - pointer to mouse Y position; returns the slot's Y position
  * @return, pointer to slot rules, or NULL if none
  */
+// private:
 RuleInventory* Inventory::getSlotInPosition(
 		int* x,
 		int* y) const
@@ -540,7 +541,7 @@ RuleInventory* Inventory::getSlotInPosition(
 
 /**
  * Returns the item currently grabbed by the player.
- * @return, pointer to selected item, or NULL if none
+ * @return, pointer to selected BattleItem or NULL if none
  */
 BattleItem* Inventory::getSelectedItem() const
 {
@@ -549,7 +550,7 @@ BattleItem* Inventory::getSelectedItem() const
 
 /**
  * Changes the item currently grabbed by the player.
- * @param item - pointer to selected item, or NULL if none
+ * @param item - pointer to selected BattleItem or NULL if none
  */
 void Inventory::setSelectedItem(BattleItem* item)
 {
@@ -572,7 +573,7 @@ void Inventory::setSelectedItem(BattleItem* item)
 
 /**
  * Returns the item currently under mouse cursor.
- * @return, pointer to item, or NULL if none
+ * @return, pointer to a BattleItem or NULL if none
  */
 BattleItem* Inventory::getMouseOverItem() const
 {
@@ -581,7 +582,7 @@ BattleItem* Inventory::getMouseOverItem() const
 
 /**
  * Changes the item currently under mouse cursor.
- * @param item - pointer to item, or NULL if none
+ * @param item - pointer to a BattleItem or NULL if none
  */
 void Inventory::setMouseOverItem(BattleItem* item)
 {
@@ -624,7 +625,7 @@ void Inventory::think()
 
 /**
  * Blits the inventory elements.
- * @param surface Pointer to surface to blit onto.
+ * @param surface - pointer to Surface to blit onto
  */
 void Inventory::blit(Surface* surface)
 {
@@ -639,19 +640,9 @@ void Inventory::blit(Surface* surface)
 }
 
 /**
- * kL. Handles the cursor out.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
- */
-/* void Inventory::mouseOut(Action* action, State* state) // kL
-{
-	_tuCost->setVisible(false);
-} */
-
-/**
  * Handles the cursor over.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Inventory::mouseOver(Action* action, State* state)
 {
@@ -708,8 +699,8 @@ void Inventory::mouseOver(Action* action, State* state)
 
 /**
  * Handles the cursor click. Picks up / drops an item.
- * @param action, Pointer to an action.
- * @param state, State that the action handlers belong to.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Inventory::mouseClick(Action* action, State* state)
 {
@@ -875,7 +866,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (_tuMode == false
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)) == true)
 						{
-							_tuCost = -1; // kL
+							_tuCost = -1;
 
 							moveItem(
 									_selItem,
@@ -904,7 +895,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (_tuMode == false
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)) == true)
 						{
-							_tuCost = -1; // kL
+							_tuCost = -1;
 
 							moveItem(
 									_selItem,
@@ -958,7 +949,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						else if (_tuMode == false
 							|| _selUnit->spendTimeUnits(15) == true)
 						{
-							_tuCost = -1; // kL
+							_tuCost = -1;
 
 							moveItem(
 									_selItem,
@@ -1034,7 +1025,7 @@ void Inventory::mouseClick(Action* action, State* state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_tuCost = -1; // kL
+		_tuCost = -1;
 
 		//Log(LOG_INFO) << "Inventory: SDL_BUTTON_RIGHT";
 		if (_selItem == NULL)
@@ -1049,8 +1040,8 @@ void Inventory::mouseClick(Action* action, State* state)
 				{
 					//Log(LOG_INFO) << ". preBattle screen";
 					int
-						x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
-						y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
+						x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
+						y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
 					RuleInventory* const slot = getSlotInPosition(&x, &y);
 					if (slot != NULL)
@@ -1072,20 +1063,16 @@ void Inventory::mouseClick(Action* action, State* state)
 										item->setFuseTimer(0);
 										arrangeGround(false);
 
-//										std::wstring activated = Text::formatNumber(0) + L" ";
-//										activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-//										activated += L" " + Text::formatNumber(0);
-
 										const std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 										_warning->showMessage(activated);
 									}
 									else
-										// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
+										// This is where activation warning for nonProxy preBattle grenades goes.
 										_game->pushState(new PrimeGrenadeState(
 																			NULL,
 																			true,
 																			item,
-																			this)); // kL_add.
+																			this));
 								}
 								else
 								{
@@ -1100,7 +1087,6 @@ void Inventory::mouseClick(Action* action, State* state)
 				}
 				else
 				{
-					//Log(LOG_INFO) << ". in Battle";
 					_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
 
 /*kL: now done in InventoryState::dTor()
@@ -1121,11 +1107,9 @@ void Inventory::mouseClick(Action* action, State* state)
 					} */
 				}
 			}
-			//else Log(LOG_INFO) << ". in CraftEquip";
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". drop item to ground";
 			if (_selItem->getSlot()->getType() == INV_GROUND)
 				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
 
@@ -1141,7 +1125,7 @@ void Inventory::mouseClick(Action* action, State* state)
 	SDL_GetMouseState(&x, &y);
 
 	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
-	SDL_WarpMouse(x, y); */		// move the mouse back to avoid cursor creep
+	SDL_WarpMouse(x, y);		// move the mouse back to avoid cursor creep */
 }
 
 /**
@@ -1153,6 +1137,7 @@ bool Inventory::unload()
 {
 	if (_selItem == NULL)
 		return false;
+
 
 	if (_selItem->getAmmoItem() == NULL
 		&& _selItem->getRules()->getCompatibleAmmo()->empty() == false)
@@ -1210,7 +1195,7 @@ bool Inventory::unload()
  * Arranges items on the ground for the inventory display.
  * Since items on the ground aren't assigned to anyone
  * they don't actually have permanent slot positions.
- * @param alterOffset - true to alter the ground offset
+ * @param alterOffset - true to alter the ground offset (default true)
  */
 void Inventory::arrangeGround(bool alterOffset)
 {
@@ -1333,7 +1318,7 @@ bool Inventory::fitItem(
 		RuleInventory* newSlot,
 		BattleItem* item,
 		std::string& warning,
-		bool test) // kL_add
+		bool test)
 {
 	bool placed = false;
 
@@ -1418,7 +1403,7 @@ bool Inventory::canBeStacked(
 
 /**
  * Shows a warning message.
- * @param msg The message to show.
+ * @param msg - reference a message to show
  */
 void Inventory::showWarning(const std::wstring& msg)
 {
@@ -1454,19 +1439,19 @@ void Inventory::drawPrimers()
 }
 
 /**
- * kL. Sets grenade to show a warning in Inventory.
+ * Sets grenade to show a warning in Inventory.
  * @param turn - turns until grenade is to explode
  */
-void Inventory::setPrimeGrenade(int turn) // kL
+void Inventory::setPrimeGrenade(int turn)
 {
 	_prime = turn;
 }
 
 /**
- * kL. Gets the TU cost for moving items around.
+ * Gets the TU cost for moving items around.
  * @return, time unit cost
  */
-int Inventory::getTUCost() const // kL
+int Inventory::getTUCost() const
 {
 	return _tuCost;
 }
