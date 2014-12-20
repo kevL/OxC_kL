@@ -237,7 +237,10 @@ private:
 		void resetCameraSmoothing();
 
 		/// kL. Sets whether to draw or not.
-		void Map::setNoDraw(bool noDraw); // kL
+		void setNoDraw(bool noDraw); // kL
+
+		/// kL. Gets the SavedBattleGame.
+		SavedBattleGame* getSavedBattle() const; // kL
 };
 
 }

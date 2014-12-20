@@ -135,6 +135,12 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/ufograph/icons.png
+  - type: ICONS_LAYER
+    width: 32
+    height: 16
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/icons_layer.png
   - type: SCANBORD
     width: 320
     height: 200

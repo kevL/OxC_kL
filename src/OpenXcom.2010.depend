@@ -5472,7 +5472,7 @@
 1413136955 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1418513648 f:\git\openxcom\src\battlescape\battlescapestate.h
+1419087288 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5582,7 +5582,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1418422396 f:\git\openxcom\src\battlescape\map.h
+1419085378 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5610,7 +5610,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1418970805 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1419085045 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5647,7 +5647,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1417447347 f:\git\openxcom\src\battlescape\camera.h
+1419083368 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1418422361 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -5802,7 +5802,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1418951286 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1419088300 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5949,11 +5949,13 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1418422316 source:f:\git\openxcom\src\battlescape\camera.cpp
+1419087289 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
+	"BattlescapeState.h"
 	"Map.h"
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
+	"../Savegame/SavedBattleGame.h"
 
 1415853534 source:f:\git\openxcom\src\battlescape\cannotreequipstate.cpp
 	"CannotReequipState.h"
@@ -6166,7 +6168,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1418951286 source:f:\git\openxcom\src\battlescape\map.cpp
+1419085832 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8761,7 +8763,7 @@
 1413136962 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1418852949 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1419080832 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Font.h"
 	"../Engine/Game.h"
@@ -8772,7 +8774,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1418975675 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1419080663 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Basescape/BasescapeState.h"
 	"../Battlescape/Position.h"

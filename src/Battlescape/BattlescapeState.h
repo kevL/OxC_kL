@@ -147,9 +147,10 @@ private:
 	SavedBattleGame* _savedBattle;
 	SavedGame* _savedGame;
 	Surface
-		* _weight,
+		* _iconsLayer,
 		* _kneel,
-		* _rank;
+		* _rank,
+		* _weight;
 //		* _srfWounds;
 	Text
 		* _txtBaseLabel,
@@ -239,6 +240,8 @@ private:
 		void btnMapUpClick(Action* action);
 		/// Handler for clicking the Map Down button.
 		void btnMapDownClick(Action* action);
+		/// Sets the level on the icons' Layers button.
+		void setLayerValue(int level);
 		/// Handler for clicking the Show Map button.
 		void btnShowMapClick(Action* action);
 		/// Handler for clicking the Kneel button.
@@ -377,8 +380,8 @@ private:
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
 		void toggleIcons(bool vis); // kL
 
-		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
-		void refreshVisUnits(); // kL
+		/// Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
+		void refreshVisUnits();
 
 		/// kL. Shows primer warnings on all live grenades. Adapted from Inventory.
 		void drawFuse(); // kL

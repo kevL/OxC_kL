@@ -24,11 +24,14 @@
 //#include <cmath>
 //#include <fstream>
 
+#include "BattlescapeState.h"
 #include "Map.h"
 
 #include "../Engine/Action.h"
 //#include "../Engine/Options.h"
 #include "../Engine/Timer.h"
+
+#include "../Savegame/SavedBattleGame.h"
 
 
 namespace OpenXcom
@@ -429,7 +432,7 @@ void Camera::scrollXY(
 
 	_map->refreshSelectorPosition();
 
-	if (redraw)
+	if (redraw == true)
 //kL	_map->invalidate();
 		_map->draw(); // kL, old code.
 }
@@ -462,8 +465,10 @@ void Camera::up()
 {
 	if (_mapOffset.z < _mapsize_z - 1)
 	{
-		_mapOffset.z++;
-//kL	_mapOffset.y += _spriteHeight * 3 / 5;
+		_map->getSavedBattle()->getBattleState()->setLayerValue(++_mapOffset.z);
+
+//		++_mapOffset.z;
+//		_mapOffset.y += _spriteHeight * 3 / 5;
 		_mapOffset.y += (_spriteHeight / 2) + 4; // kL
 
 		_map->draw();
@@ -477,8 +482,10 @@ void Camera::down()
 {
 	if (_mapOffset.z > 0)
 	{
-		_mapOffset.z--;
-//kL	_mapOffset.y -= _spriteHeight * 3 / 5;
+		_map->getSavedBattle()->getBattleState()->setLayerValue(--_mapOffset.z);
+
+//		--_mapOffset.z;
+//		_mapOffset.y -= _spriteHeight * 3 / 5;
 		_mapOffset.y -= (_spriteHeight / 2) + 4; // kL
 
 		_map->draw();
@@ -506,6 +513,7 @@ void Camera::setViewLevel(int viewLevel)
 			0,
 			_mapsize_z - 1);
 
+	_map->getSavedBattle()->getBattleState()->setLayerValue(_mapOffset.z);
 	_map->draw();
 }
 
@@ -539,6 +547,8 @@ void Camera::centerOnPosition(
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) + 16);
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
 	_mapOffset.z = _center.z;
+
+	_map->getSavedBattle()->getBattleState()->setLayerValue(_mapOffset.z);
 
 	if (redraw == true)
 		_map->draw();
@@ -621,13 +631,13 @@ void Camera::convertVoxelToScreen(
 					mapPosition,
 					screenPos);
 
-	double
+	const double
 		dx = voxelPos.x - (mapPosition.x * 16),
 		dy = voxelPos.y - (mapPosition.y * 16),
 		dz = voxelPos.z - (mapPosition.z * 24);
 
 	screenPos->x += static_cast<int>(dx - dy) + (_spriteWidth / 2);
-	screenPos->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
+	screenPos->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.)) + (dx / 2.) + (dy / 2.) - dz);
 	screenPos->x += _mapOffset.x;
 	screenPos->y += _mapOffset.y;
 }
@@ -672,7 +682,7 @@ void Camera::setMapOffset(Position pos)
  * Toggles showing all map layers.
  * @return, new layers setting
  */
-unsigned Camera::toggleShowAllLayers()
+unsigned int Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 
@@ -696,7 +706,7 @@ bool Camera::getShowAllLayers() const
  */
 bool Camera::isOnScreen(
 		const Position& mapPos) const
-//kL	const bool unitWalking) const
+//		const bool unitWalking) const
 {
 	Position screenPos;
 	convertMapToScreen(

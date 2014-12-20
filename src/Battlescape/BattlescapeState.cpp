@@ -151,12 +151,13 @@ BattlescapeState::BattlescapeState()
 	_txtBaseLabel	= new Text(80, 9, screenWidth - 81, 0);
 	_lstTileInfo	= new TextList(18, 25, screenWidth - 19, 60);
 
-	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new InteractiveSurface(
-								iconsWidth,
-								iconsHeight,
-								x,
-								y);
+	// Create buttonbar - this should appear at the centerbottom of the screen
+	_icons			= new InteractiveSurface(
+										iconsWidth,
+										iconsHeight,
+										x,
+										y);
+	_iconsLayer		= new Surface(32, 16, x + 208, y);
 
 	// Create the battlemap view
 	// The actual map height is the total height minus the height of the buttonbar
@@ -169,6 +170,7 @@ BattlescapeState::BattlescapeState()
 				visibleMapHeight);
 
 	_numLayers	= new NumberText(3, 5, x + 232, y + 6);
+//	_numLayers	= new NumberText(3, 5, x + 223, y + 6);
 	_numDir		= new NumberText(3, 5, x + 150, y + 6);
 	_numDirTur	= new NumberText(3, 5, x + 167, y + 6);
 
@@ -258,7 +260,7 @@ BattlescapeState::BattlescapeState()
 					screenWidth - 32,
 					35);
 
-	_txtName		= new Text(136, 9, _icons->getX() + 135, _icons->getY() + 32);
+	_txtName		= new Text(136, 9, x + 135, y + 32);
 
 	_numTULaunch	= new NumberText(8, 10, x + 230, y + 34);
 	_numTUAim		= new NumberText(8, 10, x + 241, y + 34);
@@ -318,7 +320,7 @@ BattlescapeState::BattlescapeState()
 	Surface* const icons = _game->getResourcePack()->getSurface("ICONS.PCK");
 
 	// Add in custom reserve buttons
-	if (_game->getResourcePack()->getSurface("TFTDReserve"))
+	if (_game->getResourcePack()->getSurface("TFTDReserve") != NULL)
 	{
 		Surface* const tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve"); // 'Resources/UI/reserve.png'
 		tftdIcons->setX(48);
@@ -336,8 +338,8 @@ BattlescapeState::BattlescapeState()
 	icons->blit(_icons);
 
 	// this is a hack to fix the single transparent pixel on TFTD's icon panel.
-	if (_rules->getInterface("battlescape")->getElement("icons")->TFTDMode)
-		_icons->setPixelColor(46, 44, 8);
+//	if (_rules->getInterface("battlescape")->getElement("icons")->TFTDMode)
+//		_icons->setPixelColor(46, 44, 8);
 
 	add(_rank, "rank", "battlescape", _icons);
 	add(_btnWounds);
@@ -353,15 +355,16 @@ BattlescapeState::BattlescapeState()
 	add(_btnNextSoldier, "buttonNextSoldier", "battlescape", _icons);
 	add(_btnNextStop, "buttonNextStop", "battlescape", _icons);
 	add(_btnShowLayers, "buttonShowLayers", "battlescape", _icons);
-	add(_numLayers, "numLayers", "battlescape", _icons);
 	add(_btnOptions, "buttonHelp", "battlescape", _icons);
 	add(_btnEndTurn, "buttonEndTurn", "battlescape", _icons);
 	add(_btnAbort, "buttonAbort", "battlescape", _icons);
 	add(_btnStats, "buttonStats", "battlescape", _icons);
 	add(_numDir);
 	add(_numDirTur);
-	add(_kneel); // this has to go overtop _btns.
-	add(_weight); // this has to go overtop _btns.
+	add(_iconsLayer);										// goes overtop _btns
+	add(_numLayers, "numLayers", "battlescape", _icons);	// goes overtop _iconsLayer
+	add(_kneel);											// this has to go overtop _btns
+	add(_weight);											// this has to go overtop _rank
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTULaunch);
 	add(_numTUAim);
@@ -385,6 +388,8 @@ BattlescapeState::BattlescapeState()
 	add(_numAmmoLeft, "numAmmoLeft", "battlescape", _icons);
 	add(_btnRightHandItem, "buttonRightHand", "battlescape", _icons);
 	add(_numAmmoRight, "numAmmoRight", "battlescape", _icons);
+
+//	_iconsLayer->setVisible(false);
 
 	for (int
 			i = 0;
@@ -495,7 +500,7 @@ BattlescapeState::BattlescapeState()
 	_txtHasKill->setHighContrast();
 
 //	_numLayers->setColor(Palette::blockOffset(5)+12);
-	_numLayers->setValue(1);
+//	_numLayers->setValue(1);
 
 	_numDir->setColor(Palette::blockOffset(5)+12);
 	_numDir->setValue(0);
@@ -928,6 +933,8 @@ void BattlescapeState::init()
 		_btnReserveAimed->setGroup(&_reserve);
 		_btnReserveAuto->setGroup(&_reserve); */
 	}
+
+	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel()));
 
 	// kL_begin:
 /*	_txtFloor->setVisible(false);
@@ -1687,6 +1694,17 @@ void BattlescapeState::btnMapDownClick(Action*)
 }
 
 /**
+ * Sets the level on the icons' Layers button.
+ * @param level - Z level
+ */
+void BattlescapeState::setLayerValue(int level)
+{
+	if (level < 0)
+		level = 0;
+	_numLayers->setValue(static_cast<unsigned int>(level));
+}
+
+/**
  * Shows the minimap.
  * @param action - pointer to an Action
  */
@@ -1920,7 +1938,17 @@ void BattlescapeState::selectPreviousFactionUnit(
  */
 void BattlescapeState::btnShowLayersClick(Action*)
 {
-	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
+//	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
+
+	const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2)? true: false;
+
+	if (showLayers == false)
+		_iconsLayer->clear();
+	else
+	{
+		Surface* const iconsLayer = _game->getResourcePack()->getSurface("ICONS_LAYER");
+		iconsLayer->blit(_iconsLayer);
+	}
 }
 
 /**
@@ -3703,6 +3731,7 @@ void BattlescapeState::updateTurn() // kL
 void BattlescapeState::toggleIcons(bool vis)
 {
 	_icons->setVisible(vis);
+	_iconsLayer->setVisible(vis);
 	_numLayers->setVisible(vis);
 
 	_btnUnitUp->setVisible(vis);
@@ -3727,12 +3756,13 @@ void BattlescapeState::toggleIcons(bool vis)
 }
 
 /**
- * kL. Refreshes the visUnits indicators for UnitWalk/TurnBStates.
+ * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
  */
-void BattlescapeState::refreshVisUnits() // kL
+void BattlescapeState::refreshVisUnits()
 {
 	if (playableUnitSelected() == false)
 		return;
+
 
 	for (int // remove red target indicators
 			i = 0;

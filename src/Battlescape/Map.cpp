@@ -32,7 +32,7 @@
 #include "Pathfinding.h"
 #include "Position.h"
 #include "Projectile.h"
-#include "ProjectileFlyBState.h" // kL
+#include "ProjectileFlyBState.h"
 #include "TileEngine.h"
 #include "UnitSprite.h"
 
@@ -3028,6 +3028,15 @@ void Map::resetCameraSmoothing()
 void Map::setNoDraw(bool noDraw) // kL
 {
 	_noDraw = noDraw;
+}
+
+/**
+ * kL. Gets the SavedBattleGame.
+ * @return, pointer to SavedBattleGame
+ */
+SavedBattleGame* Map::getSavedBattle() const // kL
+{
+	return _save;
 }
 
 }

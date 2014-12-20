@@ -2405,8 +2405,8 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 		{
 			Pathfinding* const pf = _save->getPathfinding();
 			const bool
-				mod_CTRL = (SDL_GetModState() &KMOD_CTRL) != 0,
-				mod_ALT = (SDL_GetModState() &KMOD_ALT) != 0,
+				mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
+				mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
 				isTank = _currentAction.actor->getUnitRules() != NULL
 					  && _currentAction.actor->getUnitRules()->getMechanical();
 
