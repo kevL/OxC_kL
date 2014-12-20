@@ -5802,7 +5802,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1419088300 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1419089362 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -7497,7 +7497,7 @@
 	<string>
 	"../Engine/State.h"
 
-1418422481 f:\git\openxcom\src\ruleset\city.h
+1419089710 f:\git\openxcom\src\ruleset\city.h
 
 1417180581 f:\git\openxcom\src\ruleset\rulealienmission.h
 
@@ -7510,7 +7510,7 @@
 	<string>
 	<vector>
 
-1418422432 source:f:\git\openxcom\src\geoscape\globe.cpp
+1419091018 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8817,7 +8817,7 @@
 1417539671 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
-1418422472 source:f:\git\openxcom\src\ruleset\city.cpp
+1419089906 source:f:\git\openxcom\src\ruleset\city.cpp
 	"City.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\extrasounds.cpp

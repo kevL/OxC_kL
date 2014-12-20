@@ -40,26 +40,26 @@ City::City(
 	:
 		_name(name),
 		_lon(lon),
-		_lat(lat)
-{
-}
+		_lat(lat),
+		_zoomLevel(4)
+{}
 
 /**
  * dTor.
  */
 City::~City()
-{
-}
+{}
 
 /**
  * Loads the region type from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
-void City::load(const YAML::Node &node)
+void City::load(const YAML::Node& node)
 {
-	_name	= node["name"].as<std::string>(_name);
-	_lon	= node["lon"].as<double>(_lon) * M_PI / 180.;
-	_lat	= node["lat"].as<double>(_lat) * M_PI / 180.;
+	_name		= node["name"]	.as<std::string>(_name);
+	_lon		= node["lon"]	.as<double>(_lon) * M_PI / 180.;
+	_lat		= node["lat"]	.as<double>(_lat) * M_PI / 180.;
+	_zoomLevel	= node["zoom"]	.as<size_t>(_zoomLevel);
 }
 
 /**
@@ -87,6 +87,15 @@ double City::getLatitude() const
 double City::getLongitude() const
 {
 	return _lon;
+}
+
+/**
+ * Returns the the minimal zoom level that is required to show name of this City on geoscape.
+ * @return, required zoom level
+ */
+size_t City::getZoomLevel() const
+{
+	return _zoomLevel;
 }
 
 }

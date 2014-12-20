@@ -363,8 +363,8 @@ BattlescapeState::BattlescapeState()
 	add(_numDirTur);
 	add(_iconsLayer);										// goes overtop _btns
 	add(_numLayers, "numLayers", "battlescape", _icons);	// goes overtop _iconsLayer
-	add(_kneel);											// this has to go overtop _btns
-	add(_weight);											// this has to go overtop _rank
+	add(_kneel);											// goes overtop _btns
+	add(_weight);											// goes overtop _rank
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTULaunch);
 	add(_numTUAim);

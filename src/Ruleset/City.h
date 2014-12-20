@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CITY_H
 #define OPENXCOM_CITY_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -35,6 +35,7 @@ class City
 {
 
 private:
+	size_t _zoomLevel;
 	double
 		_lon,
 		_lat;
@@ -61,6 +62,9 @@ private:
 		double getLatitude() const;
 		/// Gets the city's longitude.
 		double getLongitude() const;
+
+		/// Gets the level of zoom that shows city name.
+		size_t getZoomLevel() const;
 };
 
 }

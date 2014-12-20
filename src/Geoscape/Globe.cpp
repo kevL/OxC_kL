@@ -1878,15 +1878,17 @@ void Globe::drawVHLine(
  */
 void Globe::drawDetail()
 {
-	//Log(LOG_INFO) << "Globe::drawDetail()";
 	_countries->clear();
-
 //	if (!Options::globeDetail) return;
 
-	if (_zoom > 0 // draw the country borders
-		&& Options::globeDetail == true)
+	double
+		lon,
+		lat;
+
+	if (Options::globeDetail == true // draw the country borders
+		&& _zoom > 0)
 	{
-		_countries->lock(); // lock the surface
+		_countries->lock();
 		for (std::list<Polyline*>::const_iterator
 				i = _rules->getPolylines()->begin();
 				i != _rules->getPolylines()->end();
@@ -1902,14 +1904,14 @@ void Globe::drawDetail()
 					++j)
 			{
 				const double
-					lon0 = (*i)->getLongitude(j),
-					lat0 = (*i)->getLatitude(j),
+					lon = (*i)->getLongitude(j),
+					lat = (*i)->getLatitude(j),
 					lon1 = (*i)->getLongitude(j + 1),
 					lat1 = (*i)->getLatitude(j + 1);
 
 				if (pointBack( // don't draw if polyline is facing back
-							lon0,
-							lat0) == true
+							lon,
+							lat) == true
 					|| pointBack(
 							lon1,
 							lat1) == true)
@@ -1918,8 +1920,8 @@ void Globe::drawDetail()
 				}
 
 				polarToCart( // convert coordinates
-						lon0,
-						lat0,
+						lon,
+						lat,
 						&x[0],
 						&y[0]);
 				polarToCart(
@@ -1936,15 +1938,15 @@ void Globe::drawDetail()
 								Palette::blockOffset(10)+2);
 			}
 		}
-		_countries->unlock(); // unlock the surface
+		_countries->unlock();
 	}
+
+	Sint16
+		x,
+		y;
 
 	if (_zoom > 1) // draw the city markers
 	{
-		Sint16
-			x,
-			y;
-
 		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
 				i != _game->getSavedGame()->getRegions()->end();
@@ -1990,15 +1992,8 @@ void Globe::drawDetail()
 	}
 
 	Text* const label = new Text(100, 9, 0, 0);
-	Sint16
-		x,
-		y;
-	double
-		lon,
-		lat;
 
-	if (_zoom > 2 // draw the country labels
-		&& Options::globeDetail == true)
+	if (Options::globeDetail == true)
 	{
 		label->setPalette(getPalette());
 		label->initText(
@@ -2006,60 +2001,18 @@ void Globe::drawDetail()
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(14)+3);
 
-		for (std::vector<Country*>::const_iterator
-				i = _game->getSavedGame()->getCountries()->begin();
-				i != _game->getSavedGame()->getCountries()->end();
-				++i)
+		if (_zoom > 2)
 		{
-			lon = (*i)->getRules()->getLabelLongitude(),
-			lat = (*i)->getRules()->getLabelLatitude();
+			label->setColor(Palette::blockOffset(14)+3); // draw the country labels
 
-			if (pointBack( // don't draw if label is facing back
-						lon,
-						lat) == true)
+			for (std::vector<Country*>::const_iterator
+					i = _game->getSavedGame()->getCountries()->begin();
+					i != _game->getSavedGame()->getCountries()->end();
+					++i)
 			{
-				continue;
-			}
-
-			polarToCart( // convert coordinates
-					lon,
-					lat,
-					&x,
-					&y);
-
-			label->setX(x - 50);
-			label->setY(y);
-			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
-
-			label->blit(_countries);
-		}
-	}
-
-	if (_zoom > 3 // draw the city labels
-		&& Options::globeDetail == true)
-	{
-		label->setPalette(getPalette());
-		label->initText(
-					_game->getResourcePack()->getFont("FONT_BIG"),
-					_game->getResourcePack()->getFont("FONT_SMALL"),
-					_game->getLanguage());
-		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(10)+7);
-
-		for (std::vector<Region*>::const_iterator
-				i = _game->getSavedGame()->getRegions()->begin();
-				i != _game->getSavedGame()->getRegions()->end();
-				++i)
-		{
-			for (std::vector<City*>::const_iterator
-					j = (*i)->getRules()->getCities()->begin();
-					j != (*i)->getRules()->getCities()->end();
-					++j)
-			{
-				lon = (*j)->getLongitude(),
-				lat = (*j)->getLatitude();
+				lon = (*i)->getRules()->getLabelLongitude(),
+				lat = (*i)->getRules()->getLabelLatitude();
 
 				if (pointBack( // don't draw if label is facing back
 							lon,
@@ -2075,25 +2028,54 @@ void Globe::drawDetail()
 						&y);
 
 				label->setX(x - 50);
-				label->setY(y + 2);
-				label->setText(_game->getLanguage()->getString((*j)->getName()));
+				label->setY(y);
+				label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
 
 				label->blit(_countries);
 			}
 		}
-	}
 
-	if (Options::globeDetail == true) // draw xCom base labels
-	{
-		label->setPalette(getPalette());
-		label->initText(
-					_game->getResourcePack()->getFont("FONT_BIG"),
-					_game->getResourcePack()->getFont("FONT_SMALL"),
-					_game->getLanguage());
+		label->setColor(Palette::blockOffset(10)+7); // draw the city labels
+
+		for (std::vector<Region*>::const_iterator
+				i = _game->getSavedGame()->getRegions()->begin();
+				i != _game->getSavedGame()->getRegions()->end();
+				++i)
+		{
+			for (std::vector<City*>::const_iterator
+					j = (*i)->getRules()->getCities()->begin();
+					j != (*i)->getRules()->getCities()->end();
+					++j)
+			{
+				if (_zoom >= (*j)->getZoomLevel())
+				{
+					lon = (*j)->getLongitude(),
+					lat = (*j)->getLatitude();
+
+					if (pointBack( // don't draw if label is facing back
+								lon,
+								lat) == true)
+					{
+						continue;
+					}
+
+					polarToCart( // convert coordinates
+							lon,
+							lat,
+							&x,
+							&y);
+
+					label->setX(x - 50);
+					label->setY(y + 2);
+					label->setText(_game->getLanguage()->getString((*j)->getName()));
+
+					label->blit(_countries);
+				}
+			}
+		}
+
+		label->setColor(Palette::blockOffset(6)+4); // draw xCom base labels
 		label->setAlign(ALIGN_LEFT);
-		label->setColor(Palette::blockOffset(6)+4); // lavender
-//		label->setColor(Palette::blockOffset(11)); // purple
-//		label->setHighContrast();
 
 		for (std::vector<Base*>::const_iterator
 				i = _game->getSavedGame()->getBases()->begin();
@@ -2106,8 +2088,8 @@ void Globe::drawDetail()
 			// cheap hack to hide a base when it hasn't been placed yet
 			if ((*i)->getMarker() == -1
 				|| pointBack( // don't draw if city is facing back
-							lon,
-							lat) == true)
+						lon,
+						lat) == true)
 			{
 				continue;
 			}
@@ -2238,7 +2220,6 @@ void Globe::drawDetail()
 			canSwitchDebugType = false;
 		}
 	}
-	//Log(LOG_INFO) << "Globe::drawDetail() EXIT";
 }
 
 /**
