@@ -374,7 +374,7 @@ bool UnitWalkBState::doStatusStand()
 			&& _pf->getPath().empty() == false) // <- don't bother with this if it's the end of movement/ State.
 		{
 			if (_unit->getGeoscapeSoldier() != NULL
-				|| _unit->getUnitRules()->getMechanical() == false)
+				|| _unit->getUnitRules()->isMechanical() == false)
 			{
 				//Log(LOG_INFO) << ". STANDING strafeMove, setFaceDirection() -> " << _unit->getDirection();
 				_unit->setFaceDirection(_unit->getDirection());
@@ -1245,7 +1245,7 @@ void UnitWalkBState::playMovementSound()
 				else // !_falling
 				{
 					if (_unit->getUnitRules() != NULL
-						&& _unit->getUnitRules()->getMechanical() == true)
+						&& _unit->getUnitRules()->isMechanical() == true)
 					{
 						sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
 					}

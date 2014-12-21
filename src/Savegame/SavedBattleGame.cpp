@@ -1896,8 +1896,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			++i)
 	{
 		if ((*i)->getGeoscapeSoldier() != NULL
-//			|| ((*i)->getUnitRules() &&
-			|| ((*i)->getUnitRules()->getMechanical() == false
+			|| ((*i)->getUnitRules()->isMechanical() == false
 				&& (*i)->getArmor()->getSize() == 1))
 		{
 			Position originPos = (*i)->getPosition();
@@ -1925,27 +1924,20 @@ void SavedBattleGame::reviveUnconsciousUnits()
 										*i,
 										originPos) == true)
 				{
-					// recover from unconscious
-//kL				(*i)->turn(); // -> STATUS_STANDING
-					(*i)->setStatus(STATUS_STANDING); // kL
+					(*i)->setStatus(STATUS_STANDING);
 
-//kL				(*i)->kneel(false);
-					if ((*i)->getOriginalFaction() == FACTION_PLAYER)
-						(*i)->kneel(true); // kL
+					if ((*i)->getGeoscapeSoldier() != NULL)
+						(*i)->kneel(true);
 
-					// Map::cacheUnit(BattleUnit* unit)
-//					UnitSprite::setBattleUnit(unit, part);
-					// UnitSprite::setBattleUnit(BattleUnit* unit, int part);
 					(*i)->setCache(NULL);
 
-					(*i)->setDirection(RNG::generate(0, 7));	// kL
-					(*i)->setTimeUnits(0);						// kL
+					(*i)->setDirection(RNG::generate(0, 7));
+					(*i)->setTimeUnits(0);
 
 					_tileEngine->calculateUnitLighting();
 					_tileEngine->calculateFOV(*i);
 
 					removeUnconsciousBodyItem(*i);
-
 					break;
 				}
 			}

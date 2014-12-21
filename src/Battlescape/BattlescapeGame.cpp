@@ -609,7 +609,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 	}
 	else // MOB has Unit-rules
 	{
-		if (bu->getUnitRules()->getMechanical() == false)
+		if (bu->getUnitRules()->isMechanical() == false)
 			_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN");
 	}
 
@@ -726,7 +726,7 @@ void BattlescapeGame::endTurnPhase()
 			if (tile != NULL
 				&& (*i)->getHealth() > 0
 				&& ((*i)->getGeoscapeSoldier() != NULL
-					|| (*i)->getUnitRules()->getMechanical() == false))
+					|| (*i)->getUnitRules()->isMechanical() == false))
 			{
 				tile->endTilePhase(); // damage tile-unit w/ Fire & Smoke.
 			}
@@ -988,17 +988,20 @@ void BattlescapeGame::checkForCasualties(
 						const int courage = 10 * bonus / 100;
 						slayer->moraleChange(courage); // double what rest of squad gets below
 					}
-
 					// slayer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
 					// ... except aLiens, who don't care.
-					if (slayer->getOriginalFaction() == FACTION_PLAYER
+					else if (slayer->getOriginalFaction() == FACTION_PLAYER
 						&& victim->getOriginalFaction() == FACTION_PLAYER)
 					{
-						const int chagrin = 5000 / bonus;
-						slayer->moraleChange(-chagrin); // huge chagrin!
+						int chagrin = 5000 / bonus; // huge chagrin!
+						if (victim->getUnitRules() != NULL
+							&& victim->getUnitRules()->isMechanical() == true)
+						{
+							chagrin /= 2;
+						}
+						slayer->moraleChange(-chagrin);
 					}
-
-					if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
+					else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
 					{
 						if (slayer->getOriginalFaction() == FACTION_PLAYER)
 						{
@@ -2408,7 +2411,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
 				mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
 				isTank = _currentAction.actor->getUnitRules() != NULL
-					  && _currentAction.actor->getUnitRules()->getMechanical();
+					  && _currentAction.actor->getUnitRules()->isMechanical();
 
 			if (bPreviewed == true
 				&& (_currentAction.target != posTarget

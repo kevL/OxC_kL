@@ -321,9 +321,9 @@ private:
 		const bool isFemale() const;
 
 		/// Gets if this Unit is a mechanical apparatus.
-		const bool getMechanical() const;
+		const bool isMechanical() const;
 		/// Gets if this Unit is immune to psionic attacks.
-		const bool getPsiImmune() const;
+		const bool isPsiImmune() const;
 };
 
 }

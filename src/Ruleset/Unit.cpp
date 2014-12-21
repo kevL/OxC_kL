@@ -323,7 +323,7 @@ const bool Unit::isFemale() const
  * etc.
  * @return, true if this is a non-organic, purely mechanical unit on the battlefield
  */
-const bool Unit::getMechanical() const
+const bool Unit::isMechanical() const
 {
 	return _isMechanical;
 }
@@ -332,7 +332,7 @@ const bool Unit::getMechanical() const
  * Gets if this Unit is immune to psionic attacks.
  * @return, true if unit is immune to Psi
  */
-const bool Unit::getPsiImmune() const
+const bool Unit::isPsiImmune() const
 {
 	return _isPsiImmune;
 }

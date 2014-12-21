@@ -1131,7 +1131,7 @@ void Tile::prepareTileTurn()
 		&& _unit->isOut(true) == false
 		&& (_unit->getType() == "SOLDIER"
 			|| (_unit->getUnitRules()
-				&& _unit->getUnitRules()->getMechanical() == false)))
+				&& _unit->getUnitRules()->isMechanical() == false)))
 //		&& _unit->getArmor()->getSize() == 1)
 	{
 		if (_fire)

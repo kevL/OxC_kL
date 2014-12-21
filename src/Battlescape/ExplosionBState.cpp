@@ -527,7 +527,7 @@ void ExplosionBState::explode()
 				&& (victim->getGeoscapeSoldier() != NULL
 //					|| victim->getUnitRules()->getRace() == "STR_CIVILIAN"
 //					|| (victim->getUnitRules() &&
-					|| victim->getUnitRules()->getMechanical() == false)
+					|| victim->getUnitRules()->isMechanical() == false)
 //				&& victim->getTurretType() == -1
 				&& victim->getSpawnUnit().empty() == true
 //				&& victim->getSpecialAbility() == SPECAB_NONE // kL

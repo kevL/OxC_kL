@@ -1392,7 +1392,7 @@ int BattleUnit::damage(
 		if (type == DT_STUN
 			&& (_geoscapeSoldier != NULL	// note that this should be obviated in the rules for Armor damage vulnerability.
 				|| (_unitRules				// Rather than here
-					&& _unitRules->getMechanical() == false
+					&& _unitRules->isMechanical() == false
 					&& _race != "STR_ZOMBIE")))
 		{
 			_stunLevel += power;
@@ -1418,7 +1418,7 @@ int BattleUnit::damage(
 			else
 			{
 				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
-					|| (_unitRules->getMechanical() == false	// or to non-mechanical units
+					|| (_unitRules->isMechanical() == false	// or to non-mechanical units
 						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
 				{
 					_stunLevel += RNG::generate(0, power / 3);
@@ -1451,7 +1451,7 @@ int BattleUnit::damage(
 		&& _status != STATUS_UNCONSCIOUS
 		&& type != DT_STUN
 		&& (_geoscapeSoldier != NULL
-			|| _unitRules->getMechanical() == false))
+			|| _unitRules->isMechanical() == false))
 	{
 		playHitSound(); // kL
 	}
@@ -1530,7 +1530,7 @@ int BattleUnit::getStun() const
 void BattleUnit::knockOut(BattlescapeGame* battle)
 {
 	if (getArmor()->getSize() > 1		// large units die
-		|| _unitRules->getMechanical())	// so do scout drones
+		|| _unitRules->isMechanical())	// so do scout drones
 	{
 		_health = 0;
 	}
@@ -2179,7 +2179,7 @@ void BattleUnit::prepUnit()
 		&& (_armor->getSize() == 1
 			|| isOut() == false)
 		&& (_geoscapeSoldier != NULL
-			|| _unitRules->getMechanical() == false))
+			|| _unitRules->isMechanical() == false))
 	{
 		healStun(1); // recover stun 1pt/turn
 	}
@@ -3381,14 +3381,14 @@ bool BattleUnit::isWoundable() const
 {
 	return _geoscapeSoldier != NULL
 	   || (Options::alienBleeding
-			&& _unitRules->getMechanical() == false
+			&& _unitRules->isMechanical() == false
 			&& _race != "STR_ZOMBIE");
 
 /*	if (_geoscapeSoldier != NULL)
 		return true;
 
 	if (Options::alienBleeding
-		&& _unitRules->getMechanical() == false
+		&& _unitRules->isMechanical() == false
 		&& _race != "STR_ZOMBIE")
 	{
 		return true;
@@ -3404,13 +3404,13 @@ bool BattleUnit::isWoundable() const
 bool BattleUnit::isFearable() const
 {
 	return _geoscapeSoldier != NULL
-	   || (_unitRules->getMechanical() == false
+	   || (_unitRules->isMechanical() == false
 			&& _race != "STR_ZOMBIE");
 
 /*	if (_geoscapeSoldier != NULL)
 		return true;
 
-	if (_unitRules->getMechanical() == false
+	if (_unitRules->isMechanical() == false
 		&& _race != "STR_ZOMBIE")
 	{
 		return true;
@@ -4122,7 +4122,7 @@ bool BattleUnit::hasInventory() const
 /*	if (_geoscapeSoldier != NULL)
 		return true;
 
-	if (_unitRules->getMechanical() == false
+	if (_unitRules->isMechanical() == false
 		&& _rank != "STR_LIVE_TERRORIST")
 	{
 		return true;
@@ -4130,7 +4130,7 @@ bool BattleUnit::hasInventory() const
 
 	return false; */
 	return _geoscapeSoldier != NULL
-		|| (_unitRules->getMechanical() == false
+		|| (_unitRules->isMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");
 }
 

@@ -4169,7 +4169,7 @@ int TileEngine::unitOpensDoor(
 
 	if (rightClick
 		&& unit->getUnitRules() != NULL
-		&& unit->getUnitRules()->getMechanical())
+		&& unit->getUnitRules()->isMechanical() == true)
 	{
 		return door;
 	}
@@ -5304,7 +5304,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 	//Log(LOG_INFO) << "psiAttack: vs ID " << victim->getId();
 
 	const bool psiImmune = victim->getUnitRules() != NULL
-						&& victim->getUnitRules()->getPsiImmune() == true;
+						&& victim->getUnitRules()->isPsiImmune() == true;
 	if (psiImmune == false)
 	{
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)

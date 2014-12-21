@@ -1789,7 +1789,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 		if (_savedBattle->getDebugMode() == true
 			|| (unit->getGeoscapeSoldier() != NULL
 //				|| (unit->getUnitRules() &&
-				|| (unit->getUnitRules()->getMechanical() == false
+				|| (unit->getUnitRules()->isMechanical() == false
 					&& unit->getRankString() != "STR_LIVE_TERRORIST")))
 		{
 			// clean up the waypoints

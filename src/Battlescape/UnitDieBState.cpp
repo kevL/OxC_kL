@@ -384,7 +384,7 @@ void UnitDieBState::convertUnitToCorpse()
 
 				// This block is lifted from TileEngine::explode(), switch(DT_IN).
 				if (_unit->getUnitRules() != NULL
-					&& _unit->getUnitRules()->getMechanical() == true
+					&& _unit->getUnitRules()->isMechanical() == true
 					&& RNG::percent(19) == true)
 				{
 					Tile

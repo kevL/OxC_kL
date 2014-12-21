@@ -152,7 +152,7 @@ void Pathfinding::calculate(
 		if (_movementType == MT_FLY
 			&& _modALT == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
 			&& (unit->getGeoscapeSoldier() != NULL
-				|| unit->getUnitRules()->getMechanical() == false)	// hovertanks & cyberdiscs always hover.
+				|| unit->getUnitRules()->isMechanical() == false)	// hovertanks & cyberdiscs always hover.
 			&& unit->getRaceString() != "STR_FLOATER"				// floaters always float
 			&& unit->getRaceString() != "STR_CELATID")				// celatids always .. float.
 																	// Ethereals *can* walk, but they don't like to.
@@ -272,7 +272,7 @@ void Pathfinding::calculate(
 
 	const Position startPos = unit->getPosition();
 	const bool isTank = unit->getUnitRules() != NULL
-					 && unit->getUnitRules()->getMechanical();
+					 && unit->getUnitRules()->isMechanical();
 
 	_strafeMove = strafeRejected == false
 			   && Options::strafe == true
@@ -1168,7 +1168,7 @@ int Pathfinding::getTUCost(
 				int delta = std::abs((dir + 4) %8 - _unit->getDirection());
 
 				if (_unit->getUnitRules() != NULL
-					&& _unit->getUnitRules()->getMechanical() == true
+					&& _unit->getUnitRules()->isMechanical() == true
 					&& 1 < delta && delta < 7)
 				{
 					_strafeMove = false; // illegal direction for tank-strafe.
