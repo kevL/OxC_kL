@@ -704,7 +704,7 @@ private:
 		/// Calculates throwing accuracy.
 		double getThrowingAccuracy();
 		/// Calculates this unit's accuracy modifier.
-		double getAccuracyModifier(BattleItem* item = NULL);
+		double getAccuracyModifier(const BattleItem* const item = NULL);
 
 		/// Sets this unit's armor value.
 		void setArmor(
@@ -942,7 +942,7 @@ private:
 		BattleUnit* getCharging();
 
 		/// Gets the carried weight in strength units.
-		int getCarriedWeight(BattleItem* dragItem = NULL) const;
+		int getCarriedWeight(const BattleItem* const dragItem = NULL) const;
 
 		/// Sets how many turns this unit will be exposed for.
 		void setTurnsExposed(int turns);
@@ -1028,7 +1028,7 @@ private:
 		void breathe();
 
 		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
-		void setFloorAbove(bool floorAbove);
+		void setFloorAbove(const bool floorAbove);
 		/// Gets the flag for "floor above me".
 		bool getFloorAbove() const;
 

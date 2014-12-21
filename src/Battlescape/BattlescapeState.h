@@ -150,7 +150,7 @@ private:
 		* _iconsLayer,
 		* _kneel,
 		* _rank,
-		* _weight;
+		* _overWeight;
 //		* _srfWounds;
 	Text
 		* _txtBaseLabel,

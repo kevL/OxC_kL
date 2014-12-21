@@ -241,15 +241,15 @@ void Map::init()
 	_arrow->unlock();
 
 	// DarkDefender_begin:
-	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
-							 0, 0, 0, 0, b, 0, 0, 0, 0,
-							 0, 0, 0, b, f, b, 0, 0, 0,
-							 0, 0, b, f, f, f, b, 0, 0,
-							 0, b, f, f, f, f, f, b, 0,
-							 b, f, f, f, f, f, f, f, b,
-							 b, b, b, f, f, f, b, b, b,
-							 0, 0, b, f, f, f, b, 0, 0,
-							 0, 0, b, b, b, b, b, 0, 0 };
+	const int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+								   0, 0, 0, 0, b, 0, 0, 0, 0,
+								   0, 0, 0, b, f, b, 0, 0, 0,
+								   0, 0, b, f, f, f, b, 0, 0,
+								   0, b, f, f, f, f, f, b, 0,
+								   b, f, f, f, f, f, f, f, b,
+								   b, b, b, f, f, f, b, b, b,
+								   0, 0, b, f, f, f, b, 0, 0,
+								   0, 0, b, b, b, b, b, 0, 0 };
 
 	_arrow_kneel = new Surface(9, 9);
 	_arrow_kneel->setPalette(this->getPalette());
@@ -311,7 +311,7 @@ void Map::init()
 				}
 			}
 		}
-	} */ // kL_end.
+	} // kL_end. */
 }
 
 /**
@@ -338,16 +338,16 @@ void Map::draw()
 //	_redraw = false;
 
 	// Normally call for a Surface::draw();
-	// but we don't want to clear the background with color 0, which is transparent
-	// (aka black) -- we use color 15 because that actually corresponds to the
-	// colour we DO want in all variations of the xcom and tftd palettes.
+	// but you don't want to clear the background with color 0, which is transparent
+	// (aka black) -- you use color 15 because that actually corresponds to the
+	// colour you DO want in all variations of the xcom and tftd palettes.
 //	Surface::draw();
 	clear(Palette::blockOffset(0)+15);
 
 	const Tile* tile = NULL;
 
 	if (_projectile != NULL)
-//kL	&& _save->getSide() == FACTION_PLAYER)
+//		&& _save->getSide() == FACTION_PLAYER)
 	{
 		//Log(LOG_INFO) << "Map::draw() _projectile = true";
 		tile = _save->getTile(Position(
@@ -356,7 +356,7 @@ void Map::draw()
 									_projectile->getPosition(0).z / 24));
 		if (tile != NULL
 			&& (tile->getTileVisible() == true
-				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
+				|| _save->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
 		{
 			//Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
 			_projectileInFOV = true;
@@ -503,7 +503,7 @@ void Map::drawTerrain(Surface* surface)
 		endY	= _save->getMapSizeY() - 1,
 		endZ	= _camera->getViewLevel();
 
-	if (_camera->getShowAllLayers())
+	if (_camera->getShowAllLayers() == true)
 		endZ = _save->getMapSizeZ() - 1;
 
 
@@ -579,7 +579,7 @@ void Map::drawTerrain(Surface* surface)
 
 				if (_smoothingEngaged == false)
 				{
-					Position target = _projectile->getFinalTarget();
+					const Position target = _projectile->getFinalTarget();
 					if (_camera->isOnScreen(target) == false
 						|| bulletScreen.x < 1
 						|| bulletScreen.x > surface->getWidth() - 1
@@ -755,21 +755,22 @@ void Map::drawTerrain(Surface* surface)
 								screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(),
 								tileShade);
 
-						// kL_begin:
+						// kL_begin #1 of 3:
 						hasFloor = true;
 
-						const Tile* const tileEastDown = _save->getTile(mapPosition + Position(1, 0, -1));
-						if (tileEastDown != NULL)
+						const Tile* const tileEast = _save->getTile(mapPosition + Position(1, 0, 0));
+						if (tileEast->getSprite(MapData::O_FLOOR) == NULL)
 						{
-							BattleUnit* const bu = tileEastDown->getUnit();
-							const Tile* const tileEast = _save->getTile(mapPosition + Position(1, 0, 0));
-							if (bu != NULL
-								&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
+							const Tile* const tileEastDown = _save->getTile(mapPosition + Position(1, 0,-1));
+							if (tileEastDown != NULL)
 							{
-								// from below_ 'Draw soldier'. This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
+								// from below_ 'Draw soldier'.
+								// This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
 								// also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								// ... should probably be a subfunction
-								if (bu != _save->getSelectedUnit()
+								BattleUnit* const bu = tileEastDown->getUnit();
+								if (bu != NULL
+									&& bu != _save->getSelectedUnit()
 									&& bu->getGeoscapeSoldier() != NULL
 									&& bu->getFaction() == bu->getOriginalFaction())
 								{
@@ -788,7 +789,7 @@ void Map::drawTerrain(Surface* surface)
 													0);
 										}
 
-										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
+										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										tmpSurface->blitNShade(
 												surface,
 												screenPosition.x + offset.x + 4 + 16,
@@ -812,7 +813,7 @@ void Map::drawTerrain(Surface* surface)
 													0);
 										}
 
-										const int strength = static_cast<int>(Round(
+/*										const int strength = static_cast<int>(Round(
 															 static_cast<double>(bu->getBaseStats()->strength) * (bu->getAccuracyModifier() / 2. + 0.5)));
 										if (bu->getCarriedWeight() > strength)
 										{
@@ -823,8 +824,8 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y + offset.y + 4 + 32,
 													1, // 10
 													false,
-													9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
-										}
+													1); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
+										} */
 									}
 								}
 							}
@@ -898,7 +899,7 @@ void Map::drawTerrain(Surface* surface)
 						int
 							tileNorthShade,
 							tileTwoNorthShade,
-//kL						tileWestShade,
+//							tileWestShade,
 							tileNorthWestShade,
 							tileSouthWestShade;
 
@@ -1316,7 +1317,7 @@ void Map::drawTerrain(Surface* surface)
 										tileShade);
 						}
 
-						// kL_begin:
+						// kL_begin #2 of 3:
 						if (hasFloor == false
 							&& hasObject == false)
 						{
@@ -1326,8 +1327,8 @@ void Map::drawTerrain(Surface* surface)
 								// make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								BattleUnit* const buBelow = tileBelow->getUnit();
 								if (buBelow != NULL
-									&& buBelow->getGeoscapeSoldier() != NULL
 									&& buBelow != _save->getSelectedUnit()
+									&& buBelow->getGeoscapeSoldier() != NULL
 									&& buBelow->getFaction() == buBelow->getOriginalFaction())
 								{
 									Position offset;
@@ -1345,7 +1346,7 @@ void Map::drawTerrain(Surface* surface)
 													0);
 										}
 
-										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
+										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										tmpSurface->blitNShade(
 												surface,
 												screenPosition.x + offset.x + 4,
@@ -1369,7 +1370,7 @@ void Map::drawTerrain(Surface* surface)
 													0);
 										}
 
-										const int strength = static_cast<int>(Round(
+/*										const int strength = static_cast<int>(Round(
 															 static_cast<double>(buBelow->getBaseStats()->strength) * (buBelow->getAccuracyModifier() / 2. + 0.5)));
 										if (buBelow->getCarriedWeight() > strength)
 										{
@@ -1380,8 +1381,8 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y + offset.y + 4 + 24,
 													1, // 10
 													false,
-													9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
-										}
+													1); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
+										} */
 									}
 								}
 							}
@@ -1420,7 +1421,7 @@ void Map::drawTerrain(Surface* surface)
 
 							voxelPos = _projectile->getPosition();
 							// draw thrown object
-							if (voxelPos.x / 16 >= itX
+							if (   voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
@@ -1515,7 +1516,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-					// Draw soldier
+					// Draw BattleUnit ->
 					unit = tile->getUnit();
 					if (unit != NULL
 						&& (unit->getUnitVisible() == true
@@ -1553,110 +1554,99 @@ void Map::drawTerrain(Surface* surface)
 
 							if (unit->getBreathFrame() > 0)
 							{
-//kL							if (unit->getStatus() == STATUS_AIMING) // enlarge the unit sprite when aiming to accomodate the weapon. adjust as necessary.
-//kL								offset.x = 0;
+								// kL_note: Don't throw my offsets off ...
+								int bubbleOffset_x = offset.x;
+								if (unit->getStatus() == STATUS_AIMING)	// enlarge the unit sprite when aiming to accomodate the weapon
+									bubbleOffset_x = 0;					// adjust as necessary
 
-								// lower the bubbles for shorter or kneeling units.
-//kL							offset.y += (22 - unit->getHeight());
-//kL_note: Don't throw my offsets off ...
+								const int bubbleOffset_y = offset.y + (22 - unit->getHeight()); // lower the bubbles for shorter or kneeling units
 
 								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
 								if (tmpSurface)
 								{
 									tmpSurface->blitNShade(
 											surface,
-											screenPosition.x + offset.x,
-											screenPosition.y + offset.y - 30,
+											screenPosition.x + bubbleOffset_x,
+											screenPosition.y + bubbleOffset_y - 30,
 											tileShade);
 								}
 							}
 
-							// kL_begin:
-//							if (drawRankIcon == true)
+							// kL_begin #3 of 3:
+							const Tile* const tileUp = _save->getTile(mapPosition + Position(0, 0, 1));
+							if (_camera->getViewLevel() == itZ
+								|| (tileUp != NULL
+									&& tileUp->getSprite(MapData::O_FLOOR) == NULL))
 							{
-								const Tile* const tileUp = _save->getTile(mapPosition + Position(0, 0, 1));
-								if (tileUp != NULL
-									&& (tileUp->getSprite(MapData::O_FLOOR) == NULL
-										|| _camera->getViewLevel() == itZ))
+								if (unit != _save->getSelectedUnit()
+									&& unit->getGeoscapeSoldier() != NULL
+									&& unit->getFaction() == unit->getOriginalFaction())
 								{
-									if (unit != _save->getSelectedUnit()
-										&& unit->getGeoscapeSoldier() != NULL
-										&& unit->getFaction() == unit->getOriginalFaction())
-//										&& unit->getUnitRules() == NULL)
-										//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
-//										&& unit->getFaction() == FACTION_PLAYER
-//										&& unit->getTurretType() == -1) // no tanks, pls
+									if (unit->getFatalWounds() > 0)
 									{
-										if (unit->getFatalWounds() > 0)
-//											&& unit->getFatalWounds() < 10)
+										tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+										if (tmpSurface != NULL)
 										{
-											tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
-											if (tmpSurface != NULL)
-											{
-												tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + offset.x + 2,
-														screenPosition.y + offset.y + 3,
-														0);
-											}
-
-//											tmpSurface->drawRect(1, 1, 7, 5, 0); // clear it.
-//											tmpSurface->drawRect(1, 1, 7, 5, Palette::blockOffset(2)+2); // red block on rankIcon.
-											//Log(LOG_INFO) << ". wounded Soldier ID = " << unit->getId();
-											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 4,
+													screenPosition.x + offset.x + 2,
+													screenPosition.y + offset.y + 3,
+													0);
+										}
+
+										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross;
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + offset.x + 4,
+												screenPosition.y + offset.y + 4,
+												_animFrame * 2,
+												false,
+												3); // 1=white, 3=red.
+
+/*										if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
+										{
+										SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
+										tmpSurface = setDigits->getFrame(unit->getFatalWounds());
+										if (tmpSurface != NULL)
+										{
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 7,
 													screenPosition.y + offset.y + 4,
-													_animFrame * 2,
+													0,
 													false,
 													3); // 1=white, 3=red.
-
-//											if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
-//											{
-/*											SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
-											tmpSurface = setDigits->getFrame(unit->getFatalWounds());
-											if (tmpSurface != NULL)
-											{
-												tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + offset.x + 7,
-														screenPosition.y + offset.y + 4,
-														0,
-														false,
-														3); // 1=white, 3=red.
-											} */
-//											}
 										}
-										else
+										} */
+									}
+									else
+									{
+										std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+
+										tmpSurface = _res->getSurface(soldierRank);
+										if (tmpSurface != NULL)
 										{
-											std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
-											soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
-
-											tmpSurface = _res->getSurface(soldierRank);
-											if (tmpSurface != NULL)
-											{
-												tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + offset.x + 2,
-														screenPosition.y + offset.y + 3,
-														0);
-											}
-
-											const int strength = static_cast<int>(Round(
-																 static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
-											if (unit->getCarriedWeight() > strength)
-											{
-												tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // dot
-												tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + offset.x + 9,
-														screenPosition.y + offset.y + 4,
-														1, // 10
-														false,
-														9); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
-											}
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 2,
+													screenPosition.y + offset.y + 3,
+													0);
 										}
+
+/*										const int strength = static_cast<int>(Round(
+															 static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
+										if (unit->getCarriedWeight() > strength)
+										{
+											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // dot
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 9,
+													screenPosition.y + offset.y + 4,
+													1, // 10
+													false,
+													1); // 1=white, 2=yellow-red, 3=red, 6=lt.brown, 9=blue
+										} */
 									}
 								}
 							} // kL_end.
@@ -1683,7 +1673,7 @@ void Map::drawTerrain(Surface* surface)
 							if (status == 2)
 								color = 3; // red, wounded unconscious soldier
 
-							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
+							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x + 2,
@@ -1718,6 +1708,7 @@ void Map::drawTerrain(Surface* surface)
 							{
 								Position offset;
 								calculateWalkingOffset(tunit, &offset);
+
 								offset.y += 24;
 								tmpSurface->blitNShade(
 										surface,
@@ -1815,7 +1806,6 @@ void Map::drawTerrain(Surface* surface)
 												(*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixelColor(
 																																		vaporX,
 																																		vaporY)]);
-								break;
 							}
 						}
 					}
@@ -1865,10 +1855,10 @@ void Map::drawTerrain(Surface* surface)
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
 								tmpSurface->blitNShade(
-													surface,
-													screenPosition.x,
-													screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
-													tileShade);
+										surface,
+										screenPosition.x,
+										screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
+										tileShade);
 						}
 					}
 
@@ -1942,9 +1932,9 @@ void Map::drawTerrain(Surface* surface)
 									int upperLimit = 200;
 									switch (action->type)
 									{
-										case BA_AIMEDSHOT: upperLimit = weaponRule->getAimRange(); break;
-										case BA_SNAPSHOT: upperLimit = weaponRule->getSnapRange(); break;
-										case BA_AUTOSHOT: upperLimit = weaponRule->getAutoRange();
+										case BA_AIMEDSHOT:	upperLimit = weaponRule->getAimRange();		break;
+										case BA_SNAPSHOT:	upperLimit = weaponRule->getSnapRange();	break;
+										case BA_AUTOSHOT:	upperLimit = weaponRule->getAutoRange();
 									}
 
 									Uint8 color = Palette::blockOffset(3)+3; // green
@@ -2097,18 +2087,7 @@ void Map::drawTerrain(Surface* surface)
 							|| itY == 0
 							|| itY == _save->getMapSizeY() - 1)
 						{
-/*							SCANG.DAT:
-							264 - gray, dark
-							043 - gray, medium dark
-							377 - gray, dark (bit of slate blue)
-							233 - gray, medium
-							376 - gray, medium light (bit of slate blue)
-							392 - gray, light
-							330 - gray, square cross
-							331 - brown, small light square
-							373 - gray, fancy cross
-							409 - blue, big square */
-							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(330);
+							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(330); // gray square cross
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x + 14,
@@ -2356,7 +2335,6 @@ void Map::drawTerrain(Surface* surface)
 			}
 		}
 	}
-
 	surface->unlock();
 	//Log(LOG_INFO) << "Map::drawTerrain() EXIT";
 }
@@ -2525,7 +2503,7 @@ void Map::getSelectorPosition(Position* pos) const
  * @param offset	- pointer to the offset to return the calculation
  */
 void Map::calculateWalkingOffset(
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		Position* offset)
 {
 	const int
@@ -2650,8 +2628,7 @@ void Map::calculateWalkingOffset(
 					if (_save->getTile(Position(
 											unit->getPosition().x,
 											unit->getPosition().y,
-											z))
-										->hasNoFloor(NULL) == false)
+											z))->hasNoFloor(NULL) == false)
 					{
 						unit->setFloorAbove(true);
 						break;

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_PARTICLE_H
 #define OPENXCOM_PARTICLE_H
 
-#include <SDL_types.h>
+//#include <SDL_types.h>
 
 
 namespace OpenXcom

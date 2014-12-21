@@ -4680,10 +4680,10 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1418967611 f:\git\openxcom\src\savegame\savedbattlegame.h
+1419133075 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1419018720 f:\git\openxcom\src\savegame\battleunit.h
+1419130693 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5472,7 +5472,7 @@
 1413136955 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1419087288 f:\git\openxcom\src\battlescape\battlescapestate.h
+1419135957 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5582,7 +5582,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1419085378 f:\git\openxcom\src\battlescape\map.h
+1419131045 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -6319,7 +6319,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1418951286 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1419125897 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6600,7 +6600,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1418971474 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1419126069 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9035,7 +9035,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1419057556 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1419131014 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11650,12 +11650,11 @@
 
 1417665723 f:\git\openxcom\src\savegame\craftid.h
 
-1413136956 source:f:\git\openxcom\src\battlescape\particle.cpp
+1419132018 source:f:\git\openxcom\src\battlescape\particle.cpp
 	"Particle.h"
 	"Position.h"
 
-1413136956 f:\git\openxcom\src\battlescape\particle.h
-	<SDL_types.h>
+1419132027 f:\git\openxcom\src\battlescape\particle.h
 
 1417222646 f:\git\openxcom\src\ruleset\mapscript.h
 	"MapBlock.h"

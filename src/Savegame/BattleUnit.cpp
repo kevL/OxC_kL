@@ -2054,7 +2054,7 @@ double BattleUnit::getThrowingAccuracy()
  * @param item - pointer to a BattleItem (default NULL)
  * @return, modifier
  */
-double BattleUnit::getAccuracyModifier(BattleItem* item)
+double BattleUnit::getAccuracyModifier(const BattleItem* const item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
 	double ret = static_cast<double>(_health) / static_cast<double>(getBaseStats()->health);
@@ -3655,7 +3655,7 @@ BattleUnit* BattleUnit::getCharging()
  * @param dragItem - item to ignore
  * @return, weight
  */
-int BattleUnit::getCarriedWeight(BattleItem* dragItem) const
+int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 {
 	int weight = _armor->getWeight();
 	//Log(LOG_INFO) << "wt armor = " << weight;
@@ -4188,7 +4188,7 @@ void BattleUnit::breathe()
  * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
  * @param floorAbove - true if there is a floor
  */
-void BattleUnit::setFloorAbove(bool floorAbove)
+void BattleUnit::setFloorAbove(const bool floorAbove)
 {
 	_floorAbove = floorAbove;
 }

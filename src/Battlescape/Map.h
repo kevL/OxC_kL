@@ -174,7 +174,7 @@ private:
 
 		/// Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
 		void calculateWalkingOffset(
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				Position* offset);
 
 		/// Sets the 3D cursor type.

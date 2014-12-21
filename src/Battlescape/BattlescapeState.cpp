@@ -176,7 +176,7 @@ BattlescapeState::BattlescapeState()
 
 	_kneel		= new Surface( 2,  2, x + 115, y + 19);
 	_rank		= new Surface(26, 23, x + 107, y + 33);
-	_weight		= new Surface( 2,  2, x + 130, y + 34);
+	_overWeight	= new Surface( 2,  2, x + 130, y + 34);
 
 	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
 	_numWounds	= new NumberText(9, 9, x, y - 20); // X gets adjusted in updateSoldierInfo()
@@ -364,7 +364,7 @@ BattlescapeState::BattlescapeState()
 	add(_iconsLayer);										// goes overtop _btns
 	add(_numLayers, "numLayers", "battlescape", _icons);	// goes overtop _iconsLayer
 	add(_kneel);											// goes overtop _btns
-	add(_weight);											// goes overtop _rank
+	add(_overWeight);										// goes overtop _rank
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTULaunch);
 	add(_numTUAim);
@@ -516,15 +516,13 @@ BattlescapeState::BattlescapeState()
 /*	Surface* srfOverload = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(97); // 274, brown dot 2px; 97, red sq 3px
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
-	srfOverload->blit(_weight); */
-	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(8)+3); // (8)=blue // (6)+10=brown
-	_weight->setVisible(false);
+	srfOverload->blit(_overWeight); */
+	_overWeight->drawRect(0, 0, 2, 2, Palette::blockOffset(0)); // (8)=blue // (6)+10=brown
+	_overWeight->setVisible(false);
 
 	_btnWounds->setVisible(false);
 	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
 
-//	_numWounds->setColor(Palette::blockOffset(0)+3); // light gray
-//	_numWounds->setColor(Palette::blockOffset(0)+1); // white
 	_numWounds->setColor(Palette::blockOffset(9)); // yellow
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
@@ -2437,7 +2435,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numAmmoLeft		->setVisible(false);
 
 	_kneel		->setVisible(false);
-	_weight		->setVisible(false);
+	_overWeight		->setVisible(false);
 	_numDir		->setVisible(false);
 	_numDirTur	->setVisible(false);
 
@@ -2546,7 +2544,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	const int strength = static_cast<int>(Round(
 						 static_cast<double>(selectedUnit->getBaseStats()->strength) * (selectedUnit->getAccuracyModifier() / 2. + 0.5)));
 	if (selectedUnit->getCarriedWeight() > strength)
-		_weight->setVisible();
+		_overWeight->setVisible();
 
 	_numDir->setValue(selectedUnit->getDirection());
 	_numDir->setVisible();
