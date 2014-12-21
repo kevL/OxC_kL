@@ -336,7 +336,6 @@ struct BattleUnitStatistics
 	BattleUnitStatistics()
 		:
 			wasUnconscious(false),
-//			kills(),
 			shotAtCounter(0),
 			hitCounter(0),
 			shotByFriendlyCounter(0),
@@ -349,6 +348,7 @@ struct BattleUnitStatistics
 			shotsLandedCounter(0),
 			KIA(false),
 			nikeCross(false)
+//			kills()
 	{
 	}
 

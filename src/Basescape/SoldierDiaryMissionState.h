@@ -60,7 +60,8 @@ private:
 		* _txtUFO,
 		* _txtRace,
 		* _txtDaylight,
-		* _txtDaysWounded;
+		* _txtDaysWounded,
+		* _txtPoints;
 	TextList* _lstKills;
 
 

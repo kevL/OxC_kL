@@ -192,12 +192,12 @@ private:
 		int getScorePoints() const;
 		/// Gets the total number of kills.
 		int getKillTotal() const;
+		/// Gets the total number of stuns.
+		int getStunTotal() const;
 		/// Gets the total number of missions.
 		int getMissionTotal() const;
 		/// Gets the total number of wins.
 		int getWinTotal() const;
-		/// Gets the total number of stuns.
-		int getStunTotal() const;
 		/// Gets the total number of days wounded.
 		int getDaysWoundedTotal() const;
 

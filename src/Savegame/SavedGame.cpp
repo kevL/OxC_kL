@@ -802,7 +802,7 @@ void SavedGame::save(const std::string& filename) const
 
 	node["alienStrategy"] = _alienStrategy->save();
 
-	for (std::vector<SoldierDead*>::const_iterator // kL
+	for (std::vector<SoldierDead*>::const_iterator
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();
 			++i)

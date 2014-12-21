@@ -104,8 +104,8 @@ struct MissionStatistics
 	int
 		shade,
 		id,
-		score,
-		points;
+		score;
+//		points;
 
 	std::string
 		alienRace,
@@ -143,7 +143,7 @@ struct MissionStatistics
 		ufo			= node["ufo"]			.as<std::string>(ufo);
 		success		= node["success"]		.as<bool>(success);
 		score		= node["score"]			.as<int>(score);
-		points		= node["points"]		.as<int>(points);
+//		points		= node["points"]		.as<int>(points);
 		rating		= node["rating"]		.as<std::string>(rating);
 		alienRace	= node["alienRace"]		.as<std::string>(alienRace);
 		shade		= node["shade"]			.as<int>(shade);
@@ -164,7 +164,7 @@ struct MissionStatistics
 		node["ufo"]			= ufo;
 		node["success"]		= success;
 		node["score"]		= score;
-		node["points"]		= points;
+//		node["points"]		= points;
 		node["rating"]		= rating;
 		node["alienRace"]	= alienRace;
 		node["shade"]		= shade;
@@ -195,7 +195,7 @@ struct MissionStatistics
 			ufo("NO_UFO"),
 			success(false),
 			score(0),
-			points(0),
+//			points(0),
 			rating(""),
 			alienRace("STR_UNKNOWN"),
 			shade(0),

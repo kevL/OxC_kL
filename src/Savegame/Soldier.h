@@ -21,7 +21,6 @@
 #define OPENXCOM_SOLDIER_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 //#include "../Ruleset/StatString.h"
@@ -187,8 +186,8 @@ private:
 		void setWoundRecovery(int recovery);
 		/// Heals wound recoveries.
 		void heal();
-		/// kL. Gets a soldier's wounds as a percent.
-		int getWoundPercent() const; // kL
+		/// Gets a soldier's wounds as a percent.
+		int getWoundPercent() const;
 
 		/// Gets the soldier's equipment-layout.
 		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();

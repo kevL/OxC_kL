@@ -909,33 +909,37 @@ void BattlescapeGame::checkForCasualties(
 		BattleUnit* const victim = *i; // kL
 
 		// Awards: decide victim race and rank
-		killStatPoints = victim->getValue();
-
-		if (victim->getOriginalFaction() == FACTION_PLAYER)	// <- xCom ->
+		if (slayer != NULL
+			&& slayer->getGeoscapeSoldier() != NULL)
 		{
-			killStatPoints = -killStatPoints;
+			killStatPoints = victim->getValue();
 
-			if (victim->getGeoscapeSoldier() != NULL)		// Soldiers
+			if (victim->getOriginalFaction() == FACTION_PLAYER)	// <- xCom DIED
 			{
-				killStatRank = victim->getGeoscapeSoldier()->getRankString();
+				killStatPoints = -killStatPoints;
+
+				if (victim->getGeoscapeSoldier() != NULL)	// Soldier
+				{
+					killStatRace = "STR_HUMAN";
+					killStatRank = victim->getGeoscapeSoldier()->getRankString();
+				}
+				else										// HWP
+				{
+					killStatRace = "STR_TANK";
+					killStatRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
+				}
+			}
+			else if (victim->getOriginalFaction() == FACTION_HOSTILE)	// <- aLien DIED
+			{
+				killStatRace = victim->getUnitRules()->getRace();
+				killStatRank = victim->getUnitRules()->getRank();
+			}
+			else if (victim->getOriginalFaction() == FACTION_NEUTRAL)	// <- Civilian DIED
+			{
+				killStatPoints = -killStatPoints * 2;
 				killStatRace = "STR_HUMAN";
+				killStatRank = "STR_CIVILIAN";
 			}
-			else											// HWPs
-			{
-				killStatRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
-				killStatRace = "STR_TANK";
-			}
-		}
-		else if (victim->getOriginalFaction() == FACTION_HOSTILE)	// <- Aliens ->
-		{
-			killStatRank = victim->getUnitRules()->getRank();
-			killStatRace = victim->getUnitRules()->getRace();
-		}
-		else if (victim->getOriginalFaction() == FACTION_NEUTRAL)	// <- Civilians ->
-		{
-			killStatPoints = -killStatPoints * 2;
-			killStatRank = "STR_CIVILIAN";
-			killStatRace = "STR_HUMAN";
 		}
 
 
@@ -955,7 +959,6 @@ void BattlescapeGame::checkForCasualties(
 				if (slayer->isFearable() == true)
 				{
 					if (slayer->getGeoscapeSoldier() != NULL)
-//kL					&& slayer->getOriginalFaction() == FACTION_PLAYER)
 					{
 						slayer->getStatistics()->kills.push_back(new BattleUnitKills(
 																				killStatRank,
@@ -1121,6 +1124,8 @@ void BattlescapeGame::checkForCasualties(
 			&& victim->getStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
 			&& victim->getStatus() != STATUS_DISABLED)	// kL
 		{
+			(*i)->setStatus(STATUS_DISABLED); // kL
+
 			if (slayer != NULL
 				&& slayer->getGeoscapeSoldier() != NULL)
 			{
@@ -1141,8 +1146,6 @@ void BattlescapeGame::checkForCasualties(
 			{
 				victim->getStatistics()->wasUnconscious = true;
 			}
-
-			(*i)->setStatus(STATUS_DISABLED); // kL
 
 			statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
 										this,
