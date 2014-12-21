@@ -802,12 +802,12 @@ int Pathfinding::getTUCost(
 				&& aboveDest->hasNoFloor(destTile) == false
 				&& triedStairs == false)
 			{
-				partsGoingUp++;
+				++partsGoingUp;
 
 				if (partsGoingUp > unitSize)
 				{
-					vertOffset.z++;
-					destPos->z++;
+					++vertOffset.z;
+					++destPos->z;
 					destTile = _save->getTile(*destPos + offsetPos);
 					belowDest = _save->getTile(*destPos + Position(x, y,-1));
 
@@ -820,11 +820,11 @@ int Pathfinding::getTUCost(
 				&& belowDest != NULL
 				&& belowDest->getTerrainLevel() < -11)	// higher than 1-half up.
 			{
-				partsGoingDown++;
+				++partsGoingDown;
 
 				if (partsGoingDown == (unitSize + 1) * (unitSize + 1))
 				{
-					destPos->z--;
+					--destPos->z;
 					destTile = _save->getTile(*destPos + offsetPos);
 					belowDest = _save->getTile(*destPos + Position(x, y,-1));
 
@@ -885,7 +885,7 @@ int Pathfinding::getTUCost(
 				&& _movementType != MT_FLY
 				&& canFallDown(startTile) == true)
 			{
-				partsFalling++;
+				++partsFalling;
 
 				if (partsFalling == (unitSize + 1) * (unitSize + 1))
 				{
@@ -947,7 +947,7 @@ int Pathfinding::getTUCost(
 
 				// climbing up a level costs one extra
 				if (vertOffset.z > 0)
-					cost++;
+					++cost;
 
 				// if we don't want to fall down and there is no floor,
 				// we can't know the TUs so it defaults to 4
@@ -979,7 +979,7 @@ int Pathfinding::getTUCost(
 //							wallTU += wallTU / 2;
 
 						wallCost += wallTU;
-						sides++;
+						++sides;
 
 						if (startTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
 							|| startTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
@@ -1009,7 +1009,7 @@ int Pathfinding::getTUCost(
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
-							sides++;
+							++sides;
 
 							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
 								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
@@ -1030,7 +1030,7 @@ int Pathfinding::getTUCost(
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
-							sides++;
+							++sides;
 
 							if (aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
 								|| aboveDestTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
@@ -1060,7 +1060,7 @@ int Pathfinding::getTUCost(
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
-							sides++;
+							++sides;
 
 							if (destTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
 								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
@@ -1081,7 +1081,7 @@ int Pathfinding::getTUCost(
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
-							sides++;
+							++sides;
 
 							if (aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
 								|| aboveDestTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
@@ -1105,7 +1105,7 @@ int Pathfinding::getTUCost(
 					if (wallTU > 0)
 					{
 						wallCost += wallTU;
-						sides++;
+						++sides;
 
 						if (startTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
 							|| startTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
@@ -1147,11 +1147,11 @@ int Pathfinding::getTUCost(
 				&& destTile->getFire() > 0)
 			{
 				cost += 32;	// try to find a better path, but don't exclude this path entirely.
-							// See UnitWalkBState::doStatusStand(), where this is subracted again.
+							// See UnitWalkBState::doStatusStand(), where this is subtracted again.
 			}
 
 			// TFTD thing: tiles on fire are cost 2 TUs more for whatever reason.
-			// kL_note: Let's make it a UFO thing too.
+			// kL_note: Let's make it a UFO thing, too.
 			if (destTile->getFire() > 0)
 //				&& _save->getDepth() > 0)
 			{
@@ -1176,10 +1176,10 @@ int Pathfinding::getTUCost(
 				else if (_unit->getDirection() != dir) // if not dashing straight ahead 1 tile.
 				{
 					delta = std::min(
-									std::abs(8 + dir - _unit->getDirection()),
-									std::min(
-											std::abs(_unit->getDirection() - dir),
-											std::abs(8 + _unit->getDirection() - dir)));
+								std::abs(8 + dir - _unit->getDirection()),
+								std::min(
+									std::abs(_unit->getDirection() - dir),
+									std::abs(8 + _unit->getDirection() - dir)));
 					if (delta == 4)
 						delta = 2;
 
@@ -1197,7 +1197,7 @@ int Pathfinding::getTUCost(
 	{
 		//Log(LOG_INFO) << "getTUCost() unitSize > 0";
 		// - check the path between part 0,0 and part 1,1 at destination position
-		Tile
+		const Tile
 			* const ulTile = _save->getTile(*destPos),
 			* const lrTile = _save->getTile(*destPos + Position(1, 1, 0));
 		if (isBlocked(
@@ -1210,7 +1210,7 @@ int Pathfinding::getTUCost(
 		}
 
 		// - then check the path between part 1,0 and part 0,1 at destination position
-		Tile
+		const Tile
 			* const urTile = _save->getTile(*destPos + Position(1, 0, 0)),
 			* const llTile = _save->getTile(*destPos + Position(0, 1, 0));
 		if (isBlocked(
@@ -1356,10 +1356,10 @@ void Pathfinding::abortPath()
  * @return, true if path is blocked
  */
 bool Pathfinding::isBlocked( // private
-		Tile* tile,
+		const Tile* const tile,
 		const int part,
-		BattleUnit* missileTarget,
-		int bigWallExclusion)
+		const BattleUnit* const missileTarget,
+		const int bigWallExclusion)
 {
 	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
 	if (tile == NULL) // probably outside the map here
@@ -1525,9 +1525,9 @@ BIGWALL_E_S		// 8
 
 	// missiles can't pathfind through closed doors. kL: neither can proxy mines.
 	if (missileTarget != NULL
-		&& tile->getMapData(part)
-		&& (tile->getMapData(part)->isDoor()
-			|| (tile->getMapData(part)->isUFODoor()
+		&& tile->getMapData(part) != NULL
+		&& (tile->getMapData(part)->isDoor() == true
+			|| (tile->getMapData(part)->isUFODoor() == true
 				&& tile->isUfoDoorOpen(part) == false)))
 	{
 		return true;
@@ -1535,8 +1535,7 @@ BIGWALL_E_S		// 8
 
 	if (tile->getTUCost( // blocking part
 					part,
-					_movementType)
-				== 255)
+					_movementType) == 255)
 	{
 		//Log(LOG_INFO) << "isBlocked() EXIT true, part = " << part << " MT = " << (int)_movementType;
 		return true;
@@ -1555,10 +1554,10 @@ BIGWALL_E_S		// 8
  * @return, true if path is blocked
  */
 bool Pathfinding::isBlocked( // public
-		Tile* startTile,
-		Tile* /* endTile */,
+		const Tile* const startTile,
+		const Tile* /* endTile */,
 		const int dir,
-		BattleUnit* missileTarget)
+		const BattleUnit* const missileTarget)
 {
 	//Log(LOG_INFO) << "Pathfinding::isBlocked() #1";
 
@@ -1761,12 +1760,12 @@ bool Pathfinding::isBlocked( // public
  */
 // aha! (kL) This is why that sectoid stood in the air: it walked off
 // the top of a building but there was a cyberdisc below!!! NOT.
-bool Pathfinding::canFallDown(Tile* tile)
+bool Pathfinding::canFallDown(const Tile* const tile)
 {
 	if (tile->getPosition().z == 0) // already on lowest maplevel
 		return false;
 
-	Tile* const tileBelow = _save->getTile(tile->getPosition() - Position(0, 0, 1));
+	const Tile* const tileBelow = _save->getTile(tile->getPosition() - Position(0, 0, 1));
 
 	return tile->hasNoFloor(tileBelow);
 }
@@ -1778,7 +1777,7 @@ bool Pathfinding::canFallDown(Tile* tile)
  * @return, true if a unit on tile can fall down
  */
 bool Pathfinding::canFallDown(
-		Tile* tile,
+		const Tile* const tile,
 		int unitSize)
 {
 	for (int
@@ -1792,7 +1791,7 @@ bool Pathfinding::canFallDown(
 				++y)
 		{
 			const Position checkPos = tile->getPosition() + Position(x, y, 0);
-			Tile* const checkTile = _save->getTile(checkPos);
+			const Tile* const checkTile = _save->getTile(checkPos);
 
 			if (canFallDown(checkTile) == false)
 				return false;

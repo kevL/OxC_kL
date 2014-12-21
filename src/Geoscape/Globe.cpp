@@ -1903,9 +1903,9 @@ void Globe::drawDetail()
 					j < (*i)->getPoints() - 1;
 					++j)
 			{
+				lon = (*i)->getLongitude(j),
+				lat = (*i)->getLatitude(j);
 				const double
-					lon = (*i)->getLongitude(j),
-					lat = (*i)->getLatitude(j),
 					lon1 = (*i)->getLongitude(j + 1),
 					lat1 = (*i)->getLatitude(j + 1);
 
@@ -2047,18 +2047,18 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
+				lon = (*j)->getLongitude(),
+				lat = (*j)->getLatitude();
+
+				if (pointBack( // don't draw if label is facing back
+							lon,
+							lat) == true)
+				{
+					continue;
+				}
+
 				if (_zoom >= (*j)->getZoomLevel())
 				{
-					lon = (*j)->getLongitude(),
-					lat = (*j)->getLatitude();
-
-					if (pointBack( // don't draw if label is facing back
-								lon,
-								lat) == true)
-					{
-						continue;
-					}
-
 					polarToCart( // convert coordinates
 							lon,
 							lat,

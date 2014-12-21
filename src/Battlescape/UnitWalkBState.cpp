@@ -413,9 +413,9 @@ bool UnitWalkBState::doStatusStand()
 			&& tileDest->getFire() > 0)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
-			// we artificially inflate the TU cost by 32 points in getTUCost
+			// The TU cost was artificially inflated by 32 points in getTUCost,
 			// under these conditions, so we have to deflate it here.
-			// See: Pathfinding::getTUCost(), where this was inflated.
+			// See: Pathfinding::getTUCost(), where TU cost was inflated.
 			tu -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
@@ -433,8 +433,8 @@ bool UnitWalkBState::doStatusStand()
 		{
 			if (gravLift == false)
 			{
-				if (_action.dash // allow dash when moving vertically 1 tile (or more).
-					|| (_action.strafe
+				if (_action.dash == true // allow dash when moving vertically 1 tile (or more).
+					|| (_action.strafe == true
 						&& dir >= _pf->DIR_UP))
 				{
 					tu -= _pf->getOpenDoor();
@@ -446,13 +446,13 @@ bool UnitWalkBState::doStatusStand()
 
 				std::string armorType = _unit->getArmor()->getType();
 
-				if (_unit->hasFlightSuit()
+				if (_unit->hasFlightSuit() == true
 					&& _pf->getMovementType() == MT_FLY)
 				{
 					energy -= 2; // zippy.
 				}
-				else if (_unit->hasPowerSuit()
-					|| (_unit->hasFlightSuit()
+				else if (_unit->hasPowerSuit() == true
+					|| (_unit->hasFlightSuit() == true
 						&& _pf->getMovementType() == MT_WALK))
 				{
 					energy -= 1; // good stuff

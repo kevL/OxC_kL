@@ -68,10 +68,10 @@ private:
 
 	/// Determines whether a tile blocks a movementType.
 	bool isBlocked(
-			Tile* tile,
+			const Tile* const tile,
 			const int part,
-			BattleUnit* missileTarget = NULL,
-			int bigWallExclusion = -1);
+			const BattleUnit* const missileTarget = NULL,
+			const int bigWallExclusion = -1);
 	/// Tries to find a straight line path between two positions.
 	bool bresenhamPath(
 			const Position& origin,
@@ -88,10 +88,10 @@ private:
 			int maxTUCost = 1000);
 
 	/// Determines whether a unit can fall down from this tile.
-	bool canFallDown(Tile* tile);
+	bool canFallDown(const Tile* const tile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(
-			Tile* tile,
+			const Tile* const tile,
 			int unitSize);
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.
@@ -139,10 +139,10 @@ private:
 
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
 		bool isBlocked(
-				Tile* startTile,
-				Tile* endTile,
+				const Tile* const startTile,
+				const Tile* endTile,
 				const int dir,
-				BattleUnit* missileTarget = NULL);
+				const BattleUnit* const missileTarget = NULL);
 
 		/// Aborts the current path.
 		void abortPath();

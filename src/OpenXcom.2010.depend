@@ -5522,7 +5522,7 @@
 1413136955 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1417312382 f:\git\openxcom\src\battlescape\pathfinding.h
+1419125291 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -7510,7 +7510,7 @@
 	<string>
 	<vector>
 
-1419091018 source:f:\git\openxcom\src\geoscape\globe.cpp
+1419124646 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8817,7 +8817,7 @@
 1417539671 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
-1419089906 source:f:\git\openxcom\src\ruleset\city.cpp
+1419091466 source:f:\git\openxcom\src\ruleset\city.cpp
 	"City.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
