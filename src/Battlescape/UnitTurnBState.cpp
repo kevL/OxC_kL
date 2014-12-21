@@ -110,10 +110,9 @@ void UnitTurnBState::init()
 		if (_action.type == BA_NONE)
 		{
 			int sound = -1;
-
 			const int door = _parent->getTileEngine()->unitOpensDoor(
-																	_unit,
-																	true);
+																_unit,
+																true);
 			if (door == 0)
 			{
 				//Log(LOG_INFO) << ". open door PlaySound";
@@ -132,10 +131,9 @@ void UnitTurnBState::init()
 			if (sound != -1)
 				_parent->getResourcePack()->getSoundByDepth(
 														_parent->getDepth(),
-														sound)
-													->play(
-														-1,
-														_parent->getMap()->getSoundAngle(_unit->getPosition()));
+														sound)->play(
+																-1,
+																_parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 
 		_parent->popState();

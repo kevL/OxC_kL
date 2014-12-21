@@ -4149,9 +4149,9 @@ Tile* TileEngine::checkForTerrainExplosions()
 
 /**
  * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
- * @param unit			- pointer to a BattleUnit trying the door
- * @param rightClick	- true if the player right-clicked (default false)
- * @param dir			- direction to check for a door (default -1)
+ * @param unit		- pointer to a BattleUnit trying the door
+ * @param rhtClick	- true if the player right-clicked (default false)
+ * @param dir		- direction to check for a door (default -1)
  * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
  *			 0 normal door opened, make a squeaky sound and you can walk through;
  *			 1 ufo door is starting to open, make a whoosh sound, don't walk through;
@@ -4160,26 +4160,27 @@ Tile* TileEngine::checkForTerrainExplosions()
  *			 5 would contravene fire reserve
  */
 int TileEngine::unitOpensDoor(
-		BattleUnit* unit,
-		bool rightClick,
+		BattleUnit* const unit,
+		const bool rhtClick,
 		int dir)
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
 	int door = -1;
 
-	if (rightClick
-		&& unit->getUnitRules() != NULL
-		&& unit->getUnitRules()->isMechanical() == true)
+	if (dir == -1)
+		dir = unit->getDirection();
+
+	if (rhtClick
+		&& (unit->getUnitRules() != NULL
+				&& unit->getUnitRules()->isMechanical() == true)
+			|| dir %2 == 1) // RMB works only for cardinal directions
 	{
 		return door;
 	}
 
-	if (dir == -1)
-		dir = unit->getDirection();
-
 	Tile* tile = NULL;
 	int
-		TUCost = 0,
+		tuCost = 0,
 		z = 0;
 
 	if (unit->getTile()->getTerrainLevel() < -12)
@@ -4198,7 +4199,7 @@ int TileEngine::unitOpensDoor(
 					&& door == -1;
 				++y)
 		{
-			std::vector<std::pair<Position, int> > checkPositions;
+			std::vector<std::pair<Position, int> > checkPos;
 			tile = _battleSave->getTile(
 								unit->getPosition()
 								+ Position(x, y, z));
@@ -4211,114 +4212,110 @@ int TileEngine::unitOpensDoor(
 			switch (dir)
 			{
 				case 0: // north
-						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
+						checkPos.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
 					if (x != 0)
-						checkPositions.push_back(std::make_pair(Position(0,-1, 0), MapData::O_WESTWALL));	// one tile north
+						checkPos.push_back(std::make_pair(Position(0,-1, 0), MapData::O_WESTWALL));	// one tile north
 				break;
 				case 1: // north east
-						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));	// one tile north-east
-					if (rightClick)
+						checkPos.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
+						checkPos.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));	// one tile north-east
+					if (rhtClick == true)
 					{
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL));	// one tile east
 					}
-/*					if (rightClick
+/*					if (rhtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 1)) // kL
 					{
-						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));	// one tile north-east
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
+						checkPos.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));	// one tile north-east
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL));	// one tile east
 					} */
 				break;
 				case 2: // east
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
 				break;
 				case 3: // south-east
 					if (y == 0)
-						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));	// one tile south-east
+						checkPos.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));	// one tile south-east
 					if (x == 0)
-						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
-					if (rightClick)
+						checkPos.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
+					if (rhtClick == true)
 					{
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
-						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 					}
-/*					if (rightClick
+/*					if (rhtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 3)) // kL
 					{
-						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
-						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
-						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));	// one tile south-east
-						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
+						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
+						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));	// one tile south-east
+						checkPos.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
 					} */
 				break;
 				case 4: // south
-						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 				break;
 				case 5: // south-west
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL));	// one tile south-west
-					if (rightClick)
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
+						checkPos.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL));	// one tile south-west
+					if (rhtClick == true)
 					{
-						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL));	// one tile south
-						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 					}
-/*					if (rightClick
+/*					if (rhtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 5)) // kL
 					{
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position( 0, 1, 0), MapData::O_WESTWALL));	// one tile south
-						checkPositions.push_back(std::make_pair(Position( 0, 1, 0), MapData::O_NORTHWALL));	// one tile south
-						checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL));	// one tile south-west
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
+						checkPos.push_back(std::make_pair(Position( 0, 1, 0), MapData::O_WESTWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position( 0, 1, 0), MapData::O_NORTHWALL));	// one tile south
+						checkPos.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL));	// one tile south-west
 					} */
 				break;
 				case 6: // west
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 					if (y != 0)
-						checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
+						checkPos.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
 				break;
 				case 7: // north-west
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
 					if (x != 0)
-						checkPositions.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_WESTWALL));	// one tile north
+						checkPos.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_WESTWALL));	// one tile north
 					if (y != 0)
-						checkPositions.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_NORTHWALL));	// one tile north
-					if (rightClick)
+						checkPos.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_NORTHWALL));	// one tile north
+					if (rhtClick == true)
 					{
-						checkPositions.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
-						checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
+						checkPos.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
+						checkPos.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
 					}
-/*					if (rightClick
+/*					if (rhtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 7)) // kL
 					{
 						//Log(LOG_INFO) << ". north-west";
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
-						checkPositions.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
-						checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
+						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
+						checkPos.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
+						checkPos.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
 					} */
-				break;
-
-				default:
-				break;
 			}
 
 
 			int part = 0;
 
 			for (std::vector<std::pair<Position, int> >::const_iterator
-					i = checkPositions.begin();
-					i != checkPositions.end()
+					i = checkPos.begin();
+					i != checkPos.end()
 						&& door == -1;
 					++i)
 			{
 				tile = _battleSave->getTile(
-									posUnit
-										+ Position(x, y, z)
-										+ i->first);
+										posUnit
+											+ Position(x, y, z)
+											+ i->first);
 				if (tile != NULL)
 				{
 					door = tile->openDoor(
@@ -4328,52 +4325,49 @@ int TileEngine::unitOpensDoor(
 					if (door != -1)
 					{
 						part = i->second;
-
 						if (door == 1)
-						{
 							openAdjacentDoors(
 											posUnit
 												+ Position(x, y, z)
 												+ i->first,
 											i->second);
-						}
 					}
 				}
 			}
 
 			if (door == 0
-				&& rightClick == true)
+				&& rhtClick == true)
 			{
 				if (part == MapData::O_WESTWALL)
 					part = MapData::O_NORTHWALL;
 				else
 					part = MapData::O_WESTWALL;
 
-				TUCost = tile->getTUCost(
-										part,
-										unit->getMovementType());
-				//Log(LOG_INFO) << ". normal door, RMB, part = " << part << ", TUcost = " << TUCost;
+				tuCost = tile->getTUCost(
+									part,
+									unit->getMovementType());
+				//Log(LOG_INFO) << ". normal door, RMB, part = " << part << ", TUcost = " << tuCost;
 			}
 			else if (door == 1
 				|| door == 4)
 			{
-				TUCost = tile->getTUCost(
-										part,
-										unit->getMovementType());
-				//Log(LOG_INFO) << ". UFO door, part = " << part << ", TUcost = " << TUCost;
+				tuCost = tile->getTUCost(
+									part,
+									unit->getMovementType());
+				//Log(LOG_INFO) << ". UFO door, part = " << part << ", TUcost = " << tuCost;
 			}
 		}
 	}
 
-	if (TUCost != 0)
+	if (tuCost != 0)
 	{
-		if (_battleSave->getBattleGame()->checkReservedTU(unit, TUCost) == true)
+		if (_battleSave->getBattleGame()->checkReservedTU(unit, tuCost) == true)
 		{
-			if (unit->spendTimeUnits(TUCost) == true)
+			if (unit->spendTimeUnits(tuCost) == true)
 			{
 //				tile->animate(); // ensures frame advances for ufo doors to update TU cost
 
-				if (rightClick == true) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
+				if (rhtClick == true) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
 					_battleSave->getBattleGame()->checkForProximityGrenades(unit); // kL
 
@@ -4415,7 +4409,7 @@ int TileEngine::unitOpensDoor(
  * @param part	- the wall to test
  * @param dir	- the direction to check out
  */
-bool TileEngine::testAdjacentDoor(
+/* bool TileEngine::testAdjacentDoor(
 		Position pos,
 		int part,
 		int dir)
@@ -4424,21 +4418,10 @@ bool TileEngine::testAdjacentDoor(
 	switch (dir)
 	{
 		// only Northwall-doors are handled at present
-		case 1: // northwall in tile to east
-			offset = Position(1, 0, 0);
-		break;
-		case 3: // northwall in tile to south-east
-			offset = Position(1, 1, 0);
-		break;
-		case 5: // northwall in tile to south-west
-			offset = Position(-1, 1, 0);
-		break;
-		case 7: // northwall in tile to west
-			offset = Position(-1, 0, 0);
-		break;
-
-		default:
-		break;
+		case 1: offset = Position( 1, 0, 0);	break;	// northwall in tile to east
+		case 3: offset = Position( 1, 1, 0);	break;	// northwall in tile to south-east
+		case 5: offset = Position(-1, 1, 0);	break;	// northwall in tile to south-west
+		case 7: offset = Position(-1, 0, 0);			// northwall in tile to west
 	}
 
 	const Tile* const tile = _battleSave->getTile(pos + offset);
@@ -4450,7 +4433,7 @@ bool TileEngine::testAdjacentDoor(
 	}
 
 	return false;
-}
+} */
 
 /**
  * Opens any doors connected to this wall at this position,
@@ -4522,11 +4505,11 @@ int TileEngine::closeUfoDoors()
 				* const tile = _battleSave->getTiles()[i],
 				* const tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0)),
 				* const tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
-			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL)
+			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL) == true
 					&& tileNorth != NULL
 					&& tileNorth->getUnit() != NULL // probly not needed.
 					&& tileNorth->getUnit() == bu)
-				|| (tile->isUfoDoorOpen(MapData::O_WESTWALL)
+				|| (tile->isUfoDoorOpen(MapData::O_WESTWALL) == true
 					&& tileWest != NULL
 					&& tileWest->getUnit() != NULL // probly not needed.
 					&& tileWest->getUnit() == bu))

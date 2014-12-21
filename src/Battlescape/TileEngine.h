@@ -197,16 +197,16 @@ private:
 		/// Checks if a destroyed tile starts an explosion.
 		Tile* checkForTerrainExplosions();
 
-		/// Unit opens door?
+		/// Tries to open a door.
 		int unitOpensDoor(
-				BattleUnit* unit,
-				bool rightClick = false,
+				BattleUnit* const unit,
+				const bool rhtClick = false,
 				int dir = -1);
 		/// kL. Checks for a door connected to this wall at this position.
-		bool TileEngine::testAdjacentDoor( // kL
+/*		bool TileEngine::testAdjacentDoor( // kL
 				Position pos,
 				int part,
-				int dir);
+				int dir); */
 		/// Opens any doors this door is connected to.
 		void openAdjacentDoors(
 				Position pos,

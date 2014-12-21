@@ -444,8 +444,6 @@ bool UnitWalkBState::doStatusStand()
 					energy = energy * 3 / 2;
 				}
 
-				std::string armorType = _unit->getArmor()->getType();
-
 				if (_unit->hasFlightSuit() == true
 					&& _pf->getMovementType() == MT_FLY)
 				{
@@ -458,7 +456,7 @@ bool UnitWalkBState::doStatusStand()
 					energy -= 1; // good stuff
 				}
 				// else if (coveralls){} // normal energy expenditure
-				else if (armorType == "STR_PERSONAL_ARMOR_UC")
+				else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
 					energy += 1; // *clunk*clunk*
 			}
 			else // gravLift
@@ -489,6 +487,7 @@ bool UnitWalkBState::doStatusStand()
 
 			_pf->abortPath();
 			_parent->popState();
+
 			return false;
 		}
 		else if (energy > _unit->getEnergy())
@@ -502,6 +501,7 @@ bool UnitWalkBState::doStatusStand()
 
 			_pf->abortPath();
 			_parent->popState();
+
 			return false;
 		}
 		else if (_parent->getPanicHandled() == true
@@ -512,6 +512,7 @@ bool UnitWalkBState::doStatusStand()
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
+
 			return false;
 		}
 		// we are looking in the wrong way, turn first (unless strafing)
@@ -525,6 +526,7 @@ bool UnitWalkBState::doStatusStand()
 
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
+
 			return false;
 		}
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
@@ -532,9 +534,9 @@ bool UnitWalkBState::doStatusStand()
 			//Log(LOG_INFO) << ". . check for doors";
 			int sound = -1;
 			const int door = _terrain->unitOpensDoor(
-													_unit,
-													false,
-													dir);
+												_unit,
+												false,
+												dir);
 
 			if (door == 3) // ufo door still opening ...
 			{
@@ -556,10 +558,9 @@ bool UnitWalkBState::doStatusStand()
 			{
 				_parent->getResourcePack()->getSoundByDepth(
 														_parent->getDepth(),
-														sound)
-													->play(
-														-1,
-														_parent->getMap()->getSoundAngle(_unit->getPosition()));
+														sound)->play(
+																-1,
+																_parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 				if (sound == ResourcePack::SLIDING_DOOR_OPEN)
 					return false; // don't start walking yet, wait for the ufo door to open
@@ -571,6 +572,7 @@ bool UnitWalkBState::doStatusStand()
 		{
 			_parent->popState();
 //			postPathProcedures(); // .. one or the other i suppose.
+
 			return false;
 		}
 
@@ -616,6 +618,7 @@ bool UnitWalkBState::doStatusStand()
 					_parent->getMap()->cacheUnit(_unit);
 
 					_parent->popState();
+
 					return false;
 				}
 			}
@@ -666,6 +669,7 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". unit direction = " << _unit->getDirection();
 		//Log(LOG_INFO) << ". . postPathProcedures()";
 		postPathProcedures();
+
 		return false;
 	}
 
