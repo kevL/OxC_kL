@@ -1611,21 +1611,18 @@ class DetectXCOMBase
 {
 
 private:
-	const int _diffLevel;
-	const Base& _base; // !< The target Base.
+	const int _diff;
+	const Base& _base;
 
 	public:
 		/// Create a detector for the given base.
 		DetectXCOMBase(
 				const Base& base,
-				int diffLevel)
+				int diff)
 			:
 				_base(base),
-				_diffLevel(diffLevel)
-		{
-			//Log(LOG_INFO) << "DetectXCOMBase";
-			/* Empty by design. */
-		}
+				_diff(diff)
+		{}
 
 		/// Attempt detection
 		bool operator()(const Ufo* ufo) const;
@@ -1641,7 +1638,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 	bool ret = false;
 
-	if (ufo->isCrashed())
+	if (ufo->isCrashed() == true)
 	{
 		//Log(LOG_INFO) << ". . Crashed UFOs can't detect!";
 		return false;
@@ -1652,9 +1649,9 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		return false;
 	}
 	else if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
-		&& !Options::aggressiveRetaliation)
+		&& Options::aggressiveRetaliation == false)
 	{
-		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
+		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is TRUE";
 		return false;
 	}
 	else
@@ -1672,22 +1669,18 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		}
 		else
 		{
-			const double div = targetDist * 12.0 / ufoRange; // should use log() ...
+			const double detFactor = targetDist * 12. / ufoRange; // should use log() ...
 			int chance = static_cast<int>(
-							static_cast<double>(_base.getDetectionChance(_diffLevel) + ufo->getDetectors())
-							/ div);
+						 static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / detFactor);
 			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
-				&& Options::aggressiveRetaliation)
+				&& Options::aggressiveRetaliation == true)
 			{
 				//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
 				chance += 5;
 			}
 
-			if (chance > 0)
-			{
-				//Log(LOG_INFO) << ". . . chance = " << chance;
-				ret = RNG::percent(chance);
-			}
+			//Log(LOG_INFO) << ". . . chance = " << chance;
+			ret = RNG::percent(chance);
 		}
 	}
 
@@ -1751,20 +1744,20 @@ void GeoscapeState::time10Minutes()
 				for (std::vector<AlienBase*>::const_iterator // patrol for aLien bases.
 						ab = _savedGame->getAlienBases()->begin();
 						ab != _savedGame->getAlienBases()->end();
-						ab++)
+						++ab)
 				{
 					if ((*ab)->isDiscovered() == true)
 						continue;
 
 					const double
 						craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor,
-						targetDistance = (*c)->getDistance(*ab) * earthRadius;
+						targetDist = (*c)->getDistance(*ab) * earthRadius;
 					//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
-					//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
+					//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
-					if (targetDistance < craftRadar)
+					if (targetDist < craftRadar)
 					{
-						const int chance = 100 - (diff * 10) - static_cast<int>(targetDistance * 50.0 / craftRadar);
+						const int chance = 100 - (diff * 10) - static_cast<int>(targetDist * 50. / craftRadar);
 						//Log(LOG_INFO) << ". . . craft in Range, chance = " << chance;
 
 						if (RNG::percent(chance) == true)
@@ -1839,10 +1832,10 @@ void GeoscapeState::time10Minutes()
 
 			if ((*u)->getDetected() == false)
 			{
+				const bool hyperDet_pre = (*u)->getHyperDetected();
 				bool
-					contact = false,
 					hyperDet = false,
-					hyperDet_pre = (*u)->getHyperDetected();
+					contact = false;
 
 				for (std::vector<Base*>::const_iterator
 						b = _savedGame->getBases()->begin();
@@ -1897,10 +1890,10 @@ void GeoscapeState::time10Minutes()
 			}
 			else // ufo is already detected
 			{
+				const bool hyperDet_pre = (*u)->getHyperDetected();
 				bool
-					contact = false,
 					hyperDet = false,
-					hyperDet_pre = (*u)->getHyperDetected();
+					contact = false;
 
 				for (std::vector<Base*>::const_iterator
 						b = _savedGame->getBases()->begin();

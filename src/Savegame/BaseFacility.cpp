@@ -156,7 +156,7 @@ void BaseFacility::setBuildTime(int time)
  */
 void BaseFacility::build()
 {
-	_buildTime--;
+	--_buildTime;
 }
 
 /**

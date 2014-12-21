@@ -1981,16 +1981,9 @@ bool Base::getIsRetaliationTarget() const
 /**
  * Calculates the chance for aLiens to detect this base.
  * Big bases without mindshields are easier to detect.
- * @param diff - the current difficulty setting
+ * @param diff - the game's difficulty setting
  * @return, detection chance
  */
-/*kL size_t Base::getDetectionChance(int diff) const
-{
-	size_t mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
-	size_t completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
-	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + diff / 2);
-} */
-// kL_begin: rewrite getDetectionChance()
 int Base::getDetectionChance(int diff) const
 {
 	//Log(LOG_INFO) << "Base::getDetectionChance()";
@@ -2005,20 +1998,12 @@ int Base::getDetectionChance(int diff) const
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			facQty++;
+			++facQty;
 
-			if ((*i)->getRules()->isMindShield())
-				shields++;
+			if ((*i)->getRules()->isMindShield() == true)
+				++shields;
 		}
 	}
-/*	int facQty = static_cast<int>(std::count_if( // Lol.
-											_facilities.begin(),
-											_facilities.end(),
-											isCompleted()));
-	int shields = static_cast<int>(std::count_if(
-											_facilities.begin(),
-											_facilities.end(),
-											isMindShield())); */
 
 	facQty = facQty / 6 + 9;
 	shields = shields * 2 + 1;
@@ -2026,10 +2011,10 @@ int Base::getDetectionChance(int diff) const
 	//Log(LOG_INFO) << ". shields = " << shields;
 	//Log(LOG_INFO) << ". diff = " << diff;
 
-	int detchance = facQty / shields + diff;
+	//int detchance = facQty / shields + diff;
 	//Log(LOG_INFO) << ". detchance = " << detchance;
 
-	return detchance;
+	return facQty / shields + diff;
 }
 
 /**
@@ -2046,7 +2031,7 @@ int Base::getGravShields() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->isGravShield())
+			&& (*i)->getRules()->isGravShield() == true)
 		{
 			++total;
 		}
@@ -2068,7 +2053,7 @@ void Base::setupDefenses()
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getDefenseValue())
+			&& (*i)->getRules()->getDefenseValue() > 0)
 		{
 			_defenses.push_back(*i);
 		}
@@ -2236,7 +2221,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 	std::list<std::vector<BaseFacility*>::const_iterator> ret;
 
 	if (remFac != NULL
-		&& remFac->getRules()->isLift()) // Theoretically this is impossible, but sanity check is good :)
+		&& remFac->getRules()->isLift() == true) // Theoretically this is impossible, but sanity check is good :)
 	{
 		for (std::vector<BaseFacility*>::const_iterator
 				i = _facilities.begin();
@@ -2252,7 +2237,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 
 	std::vector<std::pair<std::vector<BaseFacility*>::const_iterator, bool>* > facConnStates;
 	std::pair<std::vector<BaseFacility*>::const_iterator, bool>* grid[BASE_SIZE][BASE_SIZE];
-	BaseFacility* lift = NULL;
+	const BaseFacility* lift = NULL;
 
 	for (int
 			x = 0;
@@ -2401,9 +2386,9 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 	{
 		// destroy crafts and any production of crafts
 		// as this will mean there is no hangar to contain it
-		if ((*fac)->getCraft())
+		if ((*fac)->getCraft() != NULL)
 		{
-			if ((*fac)->getCraft()->getNumSoldiers()) // remove all soldiers
+			if ((*fac)->getCraft()->getNumSoldiers() > 0) // remove all soldiers
 			{
 				for (std::vector<Soldier*>::const_iterator
 						i = _soldiers.begin();
@@ -2417,7 +2402,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 
 			while ((*fac)->getCraft()->getItems()->getContents()->empty() == false) // remove all items
 			{
-				std::map<std::string, int>::const_iterator i = (*fac)->getCraft()->getItems()->getContents()->begin();
+				const std::map<std::string, int>::const_iterator i = (*fac)->getCraft()->getItems()->getContents()->begin();
 				_items->addItem(
 							i->first,
 							i->second);
@@ -2503,7 +2488,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getLaboratories())
+	else if ((*fac)->getRules()->getLaboratories() > 0)
 	{
 		// lab destruction: enforce lab space limits.
 		// take scientists off projects until it all evens out.
@@ -2536,7 +2521,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getWorkshops())
+	else if ((*fac)->getRules()->getWorkshops() > 0)
 	{
 		// workshop destruction: similar to lab destruction, but we'll lay off engineers instead. kL_note: huh!!!!
 		// in this case, however, production IS cancelled, as it takes up space in the workshop.
@@ -2565,7 +2550,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getStorage())
+	else if ((*fac)->getRules()->getStorage() > 0)
 	{
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
@@ -2587,7 +2572,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getPersonnel())
+	else if ((*fac)->getRules()->getPersonnel() > 0)
 	{
 		// as above, we won't actually fire people, but we'll block any new ones coming in.
 		if (_transfers.empty() == false
