@@ -517,7 +517,7 @@ BattlescapeState::BattlescapeState()
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
 	srfOverload->blit(_overWeight); */
-	_overWeight->drawRect(0, 0, 2, 2, Palette::blockOffset(0)); // (8)=blue // (6)+10=brown
+	_overWeight->drawRect(0, 0, 2, 2, Palette::blockOffset(0)+1);
 	_overWeight->setVisible(false);
 
 	_btnWounds->setVisible(false);
@@ -2435,7 +2435,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numAmmoLeft		->setVisible(false);
 
 	_kneel		->setVisible(false);
-	_overWeight		->setVisible(false);
+	_overWeight	->setVisible(false);
 	_numDir		->setVisible(false);
 	_numDirTur	->setVisible(false);
 

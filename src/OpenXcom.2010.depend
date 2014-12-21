@@ -5802,7 +5802,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1419136063 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1419138913 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6168,7 +6168,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1419085832 source:f:\git\openxcom\src\battlescape\map.cpp
+1419136470 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

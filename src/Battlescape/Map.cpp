@@ -759,7 +759,8 @@ void Map::drawTerrain(Surface* surface)
 						hasFloor = true;
 
 						const Tile* const tileEast = _save->getTile(mapPosition + Position(1, 0, 0));
-						if (tileEast->getSprite(MapData::O_FLOOR) == NULL)
+						if (tileEast != NULL
+							&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
 						{
 							const Tile* const tileEastDown = _save->getTile(mapPosition + Position(1, 0,-1));
 							if (tileEastDown != NULL)
