@@ -4405,7 +4405,7 @@
 
 1415929980 f:\git\openxcom\src\savegame\target.h
 
-1419161506 f:\git\openxcom\src\savegame\savedgame.h
+1419175126 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -7553,16 +7553,12 @@
 	<vector>
 	"ShaderDraw.h"
 
-1416687564 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1419215098 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Engine/Sound.h"
 	"../Engine/Surface.h"
 	"../Engine/Timer.h"
@@ -11449,7 +11445,7 @@
 1418651263 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1419169054 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1419173143 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11535,7 +11531,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1419166664 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1419175212 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"

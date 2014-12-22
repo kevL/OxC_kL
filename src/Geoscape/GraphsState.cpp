@@ -25,10 +25,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
@@ -111,11 +111,11 @@ GraphsState::GraphsState(int curGraph)
 {
 	_bg				= new InteractiveSurface(320, 200, 0, 0);
 	_bg->onMousePress(
-					(ActionHandler)& GraphsState::shiftButtons,
-					SDL_BUTTON_WHEELUP);
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDL_BUTTON_WHEELUP);
 	_bg->onMousePress(
-					(ActionHandler)& GraphsState::shiftButtons,
-					SDL_BUTTON_WHEELDOWN);
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDL_BUTTON_WHEELDOWN);
 
 	_btnUfoRegion	= new InteractiveSurface(31, 24, 97, 0);
 	_btnXcomRegion	= new InteractiveSurface(31, 24, 129, 0);
@@ -123,7 +123,7 @@ GraphsState::GraphsState(int curGraph)
 	_btnXcomCountry	= new InteractiveSurface(31, 24, 193, 0);
 	_btnIncome		= new InteractiveSurface(31, 24, 225, 0);
 	_btnFinance		= new InteractiveSurface(31, 24, 257, 0);
-	_btnGeoscape	= new InteractiveSurface(31, 28, 289, 0); // on-off trick using +y to drop to Geo-btn.
+	_btnGeoscape	= new InteractiveSurface(31, 24, 289, 0);
 
 	_btnReset		= new TextButton(40, 16, 97, 26);
 
@@ -181,7 +181,7 @@ GraphsState::GraphsState(int curGraph)
 		blinkXCOM = false;
 
 	/* REGIONS */
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::const_iterator
 			region = _game->getSavedGame()->getRegions()->begin();
 			region != _game->getSavedGame()->getRegions()->end();
 			++region)
@@ -314,7 +314,7 @@ GraphsState::GraphsState(int curGraph)
 	blinkXCOM = false;
 
 	/* COUNTRIES */
-	for (std::vector<Country*>::iterator
+	for (std::vector<Country*>::const_iterator
 			country = _game->getSavedGame()->getCountries()->begin();
 			country != _game->getSavedGame()->getCountries()->end();
 			++country)
@@ -447,25 +447,25 @@ GraphsState::GraphsState(int curGraph)
 
 	/* FINANCE */
 	for (size_t
-			iter = 0;
-			iter < 5;
-			++iter)
+			i = 0;
+			i < 5;
+			++i)
 	{
 		_btnFinances.push_back(new ToggleTextButton(
 												82,
 												16,
 												0,
-												static_cast<int>(iter) * 16));
+												static_cast<int>(i) * 16));
 		_financeToggles.push_back(false);
 
-		_btnFinances.at(iter)->setColor(Palette::blockOffset(9)+7);
-		_btnFinances.at(iter)->setInvertColor((static_cast<Uint8>(iter) * 4) - 42);
-		_btnFinances.at(iter)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
+		_btnFinances.at(i)->setColor(Palette::blockOffset(9)+7);
+		_btnFinances.at(i)->setInvertColor((static_cast<Uint8>(i) * 4) - 42);
+		_btnFinances.at(i)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
-		add(_btnFinances.at(iter));
+		add(_btnFinances.at(i));
 
 		_financeLines.push_back(new Surface(320, 200, 0, 0));
-		add(_financeLines.at(iter));
+		add(_financeLines.at(i));
 	}
 
 	_btnFinances.at(0)->setText(tr("STR_INCOME"));
@@ -639,28 +639,15 @@ GraphsState::GraphsState(int curGraph)
 
 	switch (curGraph)
 	{
-		case 0:
-			btnUfoRegionClick(NULL);
-		break;
-		case 1:
-			btnXcomRegionClick(NULL);
-		break;
-		case 2:
-			btnUfoCountryClick(NULL);
-		break;
-		case 3:
-			btnXcomCountryClick(NULL);
-		break;
-		case 4:
-			btnIncomeClick(NULL);
-		break;
-		case 5:
-			btnFinanceClick(NULL);
-		break;
+		case 0: btnUfoRegionClick(NULL);	break;
+		case 1: btnXcomRegionClick(NULL);	break;
+		case 2: btnUfoCountryClick(NULL);	break;
+		case 3: btnXcomCountryClick(NULL);	break;
+		case 4: btnIncomeClick(NULL);		break;
+		case 5: btnFinanceClick(NULL);		break;
 
 		default:
 			btnUfoRegionClick(NULL);
-		break;
 	}
 
 

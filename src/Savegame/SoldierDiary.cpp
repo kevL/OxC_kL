@@ -1159,7 +1159,7 @@ int SoldierDiary::getScoreTotal() const
 }
 
 /**
- * Gets the total point-value of aLiens killed or stunned. WRONG!!!!!
+ * Gets the total point-value of aLiens killed or stunned.
  */
 int SoldierDiary::getScorePoints() const
 {
