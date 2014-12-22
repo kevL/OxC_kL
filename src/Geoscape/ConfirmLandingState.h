@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class Craft;
-class RuleTerrain; // kL
+class RuleTerrain;
 class Text;
 class TextButton;
 class Window;
@@ -75,6 +75,11 @@ private:
 
 		/// initialize the state, make a sanity check.
 		void init();
+
+		/// Selects a terrain type for crashed or landed UFOs.
+		RuleTerrain* selectTerrain(const double lat);
+		/// Selects a terrain type for missions at cities.
+		RuleTerrain* selectCityTerrain(const double lat);
 
 		/// Handler for clicking the Yes button.
 		void btnYesClick(Action* action);

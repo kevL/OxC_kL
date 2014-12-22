@@ -21,7 +21,6 @@
 #define OPENXCOM_UFO_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "CraftId.h"
@@ -82,7 +81,7 @@ private:
 	std::string
 		_altitude,
 		_direction,
-		_terrain; // kL
+		_terrain;
 
 	CraftId _shotDownByCraftId;
 
@@ -240,15 +239,15 @@ private:
 		/// Sets the UFO's hit frame.
 		void setHitFrame(int frame);
 
-		/// kL. Gets the UFO's powerSource explosive-power-factor.
-		int getCrashPower() const; // kL
-		/// kL. Sets the UFO's powerSource explosive-power-factor.
-		void setCrashPower(int percent); // kL
+		/// Gets the UFO's powerSource explosive-power-factor.
+		int getCrashPower() const;
+		/// Sets the UFO's powerSource explosive-power-factor.
+		void setCrashPower(int percent);
 
-		/// kL. Gets a crashed or landed UFO's terrainType.
-		std::string getTerrain() const; // kL
-		/// kL. Sets a crashed or landed UFO's terrainType.
-		void setTerrain(std::string terrain); // kL
+		/// Gets a crashed or landed UFO's terrainType.
+		std::string getTerrain() const;
+		/// Sets a crashed or landed UFO's terrainType.
+		void setTerrain(const std::string& terrain);
 };
 
 }

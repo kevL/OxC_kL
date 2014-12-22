@@ -4792,7 +4792,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1418720406 f:\git\openxcom\src\savegame\ufo.h
+1419218880 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5790,7 +5790,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1418716838 f:\git\openxcom\src\savegame\terrorsite.h
+1419218856 f:\git\openxcom\src\savegame\terrorsite.h
 	"Target.h"
 
 1417390306 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
@@ -7182,7 +7182,7 @@
 1416060399 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1417921131 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1419225630 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -7210,7 +7210,7 @@
 	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
 
-1416606723 f:\git\openxcom\src\geoscape\confirmlandingstate.h
+1419223987 f:\git\openxcom\src\geoscape\confirmlandingstate.h
 	"../Engine/State.h"
 
 1415853533 source:f:\git\openxcom\src\geoscape\confirmnewbasestate.cpp
@@ -9217,7 +9217,7 @@
 	"Target.h"
 	"Craft.h"
 
-1418716818 source:f:\git\openxcom\src\savegame\terrorsite.cpp
+1419218946 source:f:\git\openxcom\src\savegame\terrorsite.cpp
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
@@ -9243,7 +9243,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1418720468 source:f:\git\openxcom\src\savegame\ufo.cpp
+1419218880 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

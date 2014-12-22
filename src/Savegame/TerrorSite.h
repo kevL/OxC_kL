@@ -43,7 +43,9 @@ private:
 	int
 		_id,
 		_secondsRemaining;
-	std::string _race;
+	std::string
+		_race,
+		_terrain;
 
 
 	public:
@@ -75,15 +77,20 @@ private:
 		/// Sets the seconds until this terror site expires.
 		void setSecondsRemaining(int seconds);
 
+		/// Sets the TerrorSite's battlescape status.
+		void setInBattlescape(bool inbattle);
+		/// Gets if the TerrorSite is in battlescape.
+		bool isInBattlescape() const;
+
 		/// Gets the terror site's alien race.
 		std::string getAlienRace() const;
 		/// Sets the terror site's alien race.
 		void setAlienRace(const std::string& race);
 
-		/// Sets the TerrorSite's battlescape status.
-		void setInBattlescape(bool inbattle);
-		/// Gets if the TerrorSite is in battlescape.
-		bool isInBattlescape() const;
+		/// Gets this TerrorSite's terrainType.
+		std::string getTerrain() const;
+		/// Sets this TerrorSite's terrainType.
+		void setTerrain(const std::string& terrain);
 };
 
 }

@@ -48,7 +48,7 @@ TerrorSite::~TerrorSite()
 
 /**
  * Loads the terror site from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void TerrorSite::load(const YAML::Node& node)
 {
@@ -62,7 +62,7 @@ void TerrorSite::load(const YAML::Node& node)
 
 /**
  * Saves the terror site to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node TerrorSite::save() const
 {
@@ -80,7 +80,7 @@ YAML::Node TerrorSite::save() const
 
 /**
  * Saves the terror site's unique identifiers to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node TerrorSite::saveId() const
 {
@@ -112,8 +112,8 @@ void TerrorSite::setId(const int id)
 
 /**
  * Returns the terror site's unique identifying name.
- * @param lang Language to get strings from.
- * @return Full name.
+ * @param lang - Language to get strings from
+ * @return, full name
  */
 std::wstring TerrorSite::getName(Language* lang) const
 {
@@ -122,7 +122,7 @@ std::wstring TerrorSite::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the terror site.
- * @return Marker sprite, -1 if none.
+ * @return, marker sprite (-1 none)
  */
 int TerrorSite::getMarker() const
 {
@@ -131,7 +131,7 @@ int TerrorSite::getMarker() const
 
 /**
  * Returns the number of seconds remaining before the terror site expires.
- * @return Amount of seconds.
+ * @return, seconds remaining
  */
 int TerrorSite::getSecondsRemaining() const
 {
@@ -140,7 +140,7 @@ int TerrorSite::getSecondsRemaining() const
 
 /**
  * Changes the number of seconds before the terror site expires.
- * @param seconds Amount of seconds.
+ * @param seconds - seconds remaining
  */
 void TerrorSite::setSecondsRemaining(int seconds)
 {
@@ -148,8 +148,26 @@ void TerrorSite::setSecondsRemaining(int seconds)
 }
 
 /**
+ * Gets this TerrorSite's battlescape status.
+ * @return, true if in the battlescape
+ */
+bool TerrorSite::isInBattlescape() const
+{
+	return _inBattlescape;
+}
+
+/**
+ * Sets this TerrorSite's battlescape status.
+ * @param inbattle - true if in the battlescape
+ */
+void TerrorSite::setInBattlescape(bool inbattle)
+{
+	_inBattlescape = inbattle;
+}
+
+/**
  * Returns the alien race currently residing in the terror site.
- * @return Alien race.
+ * @return, alien race
  */
 std::string TerrorSite::getAlienRace() const
 {
@@ -158,7 +176,7 @@ std::string TerrorSite::getAlienRace() const
 
 /**
  * Changes the alien race currently residing in the terror site.
- * @param race Alien race.
+ * @param race - reference the alien race string
  */
 void TerrorSite::setAlienRace(const std::string& race)
 {
@@ -166,21 +184,20 @@ void TerrorSite::setAlienRace(const std::string& race)
 }
 
 /**
- * Gets the terror site's battlescape status.
- * @return bool
+ * Gets this TerrorSite's terrainType.
  */
-bool TerrorSite::isInBattlescape() const
+std::string TerrorSite::getTerrain() const
 {
-	return _inBattlescape;
+	return _terrain;
 }
 
 /**
- * Sets the terror site's battlescape status.
- * @param inbattle .
+ * Sets this TerrorSite's terrainType.
+ * @param terrain - reference the terrain string
  */
-void TerrorSite::setInBattlescape(bool inbattle)
+void TerrorSite::setTerrain(const std::string& terrain)
 {
-	_inBattlescape = inbattle;
+	_terrain = terrain;
 }
 
 }

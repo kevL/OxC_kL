@@ -498,24 +498,29 @@ void BattlescapeGenerator::run()
 
 	if (ruleDeploy->getTerrains().empty() == true) // UFO crashed/landed
 	{
-		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTexture = " << _worldTexture;
-		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTerrain = " << _worldTerrain->getName();
+		Log(LOG_INFO) << "bGen::run() deployment-terrains NOT valid";
 		if (_worldTerrain == NULL) // kL
 		{
-			double lat = 0.;
+			Log(LOG_INFO) << ". worldTexture = " << _worldTexture;
+			double lat;
 			if (_ufo != NULL)
 				lat = _ufo->getLatitude();
+			else
+				lat = 0.;
 
 			_terrain = getTerrain(
 								_worldTexture,
 								lat);
 		}
 		else
+		{
+			Log(LOG_INFO) << ". worldTerrain = " << _worldTerrain->getName();
 			_terrain = _worldTerrain; // kL
+		}
 	}
 	else // set-piece battle like Cydonia or Terror site or Base assault/defense
 	{
-		//Log(LOG_INFO) << "Generator run() terrains available = " << ruleDeploy->getTerrains().size();
+		Log(LOG_INFO) << "bGen::run() deployment-terrains Valid, qty = " << ruleDeploy->getTerrains().size();
 		const size_t pick = RNG::generate(
 										0,
 										ruleDeploy->getTerrains().size() - 1);

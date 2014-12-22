@@ -389,8 +389,7 @@ void Ufo::setDamage(int damage)
 int Ufo::getDamagePercent() const
 {
 	return static_cast<int>(std::floor(
-				static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())
-			* 100.));
+		   static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100.));
 }
 
 /**
@@ -852,7 +851,7 @@ std::string Ufo::getTerrain() const
  * Sets this Ufo's terrain type when it crashes or lands.
  * @param terrain - the terrain type
  */
-void Ufo::setTerrain(std::string terrain)
+void Ufo::setTerrain(const std::string& terrain)
 {
 	_terrain = terrain;
 }

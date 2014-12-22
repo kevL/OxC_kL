@@ -129,148 +129,109 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
 
-//	if (texture < 0)
-//		texture = 0; -> _texture, too.
 
-//	TerrorSite* ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	// NOTE: the following terrain stuff can and may* fall through to BattlescapeGenerator.
+	// *for Base assault/defense and Cydonia missions; here is concerned only with UFOs and TerrorSites
+
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	TerrorSite* const ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
 
-	if (ufo != NULL) // NOTE: all this terrain stuff can and may fall through to BattlescapeGenerator.
+	if (ufo != NULL
+		|| ts != NULL)
 	{
-		const std::string terrain = ufo->getTerrain(); // Ufo-object stores the terrain value.
-		//Log(LOG_INFO) << ". ufo VALID tex " << texture << ", terrain = " << terrain;
+		double lat; // lon;
+		std::string terrain;
 
-		if (terrain == "")
+		if (ufo != NULL)
 		{
-			//Log(LOG_INFO) << ". . terrain NOT valid";
-			const double
-				lon = ufo->getLongitude(),
+			Log(LOG_INFO) << ". ufo VALID, tex " << _texture;
+			terrain = ufo->getTerrain(); // Ufo-object stores the terrain value.
+			if (terrain.empty() == true)
+			{
+				const double lon = ufo->getLongitude();
 				lat = ufo->getLatitude();
 
-			for (std::vector<Region*>::const_iterator
-					i = _game->getSavedGame()->getRegions()->begin();
-					i != _game->getSavedGame()->getRegions()->end()
-						&& _city == false;
-					++i)
-			{
-				if ((*i)->getRules()->insideRegion(
-												lon,
-												lat) == true)
-				{
-					for (std::vector<City*>::const_iterator
-							j = (*i)->getRules()->getCities()->begin();
-							j != (*i)->getRules()->getCities()->end()
-								&& _city == false;
-							++j)
-					{
-						if (AreSame(lon, (*j)->getLongitude())
-							&& AreSame(lat, (*j)->getLatitude()))
-						{
-							_city = true;
-						}
-					}
-				}
-			}
-
-			if (_city == true) // use these terrains for _city missions.
-			{
-				//Log(LOG_INFO) << ". . . city VALID";
-
-				const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
-				const size_t pick = RNG::generate(
-												0,
-												ruleDeploy->getTerrains().size() - 1);
-				_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
-
-				if (lat < 0. // northern hemisphere
-					&& _terrain->getName() == "NATIVEURBAN")
-				{
-					_terrain = _game->getRuleset()->getTerrain("DAWNURBANA");
-				}
-				else if (lat > 0. // southern hemisphere
-					&& _terrain->getName() == "DAWNURBANA")
-				{
-					_terrain = _game->getRuleset()->getTerrain("NATIVEURBAN");
-				}
-			}
-			else
-			{
-				//Log(LOG_INFO) << ". . . city NOT valid";
-
-				std::vector<RuleTerrain*> choice;
-
-				const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
-				for (std::vector<std::string>::const_iterator
-						i = terrains.begin();
-						i != terrains.end();
+				for (std::vector<Region*>::const_iterator
+						i = _game->getSavedGame()->getRegions()->begin();
+						i != _game->getSavedGame()->getRegions()->end()
+							&& _city == false;
 						++i)
 				{
-					//Log(LOG_INFO) << ". . . terrain = " << *i;
-					_terrain = _game->getRuleset()->getTerrain(*i);
-
-					for (std::vector<int>::const_iterator
-							j = _terrain->getTextures()->begin();
-							j != _terrain->getTextures()->end();
-							++j)
+					if ((*i)->getRules()->insideRegion(
+													lon,
+													lat) == true)
 					{
-						//Log(LOG_INFO) << ". . . . texture = " << *j;
-						if (*j == texture
-							&& (_terrain->getHemisphere() == 0
-								|| (_terrain->getHemisphere() < 0
-									&& lat < 0.)
-								|| (_terrain->getHemisphere() > 0
-									&& lat >= 0.)))
+						for (std::vector<City*>::const_iterator
+								j = (*i)->getRules()->getCities()->begin();
+								j != (*i)->getRules()->getCities()->end()
+									&& _city == false;
+								++j)
 						{
-							//Log(LOG_INFO) << ". . . . . _terrain = " << *i;
-							choice.push_back(_terrain);
+							if (AreSame(lon, (*j)->getLongitude())
+								&& AreSame(lat, (*j)->getLatitude()))
+							{
+								_city = true;
+							}
 						}
 					}
 				}
+			}
+			else // ufo's terrainType has already been set before
+			{
+				Log(LOG_INFO) << ". . terrain VALID: " << terrain;
+				_terrain = _game->getRuleset()->getTerrain(terrain);
+			}
+		}
+		else // ts != NULL
+		{
+			Log(LOG_INFO) << ". ts VALID, tex " << _texture;
+			terrain = ts->getTerrain(); // TerrorSite-object stores the terrain value.
+			if (terrain.empty() == true)
+			{
+//				lon = ts->getLongitude(),
+				lat = ts->getLatitude();
 
-				size_t pick = static_cast<size_t>(RNG::generate(
-															0,
-															static_cast<int>(choice.size()) - 1));
-				_terrain = choice.at(pick);
-				//Log(LOG_INFO) << ". . # terrains = " << static_cast<int>(choice.size());
-				//Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
+				_city = true;
+			}
+			else // terrorSite's terrainType has already been set before
+			{
+				Log(LOG_INFO) << ". . terrain VALID: " << terrain;
+				_terrain = _game->getRuleset()->getTerrain(terrain);
+			}
+		}
+
+		if (_terrain == NULL)
+		{
+			if (_city == true) // use TerrorSite terrains for UFOs' _city missions.
+			{
+				Log(LOG_INFO) << ". . . TS or city VALID";
+				_terrain = selectCityTerrain(lat);
+			}
+			else // ufo
+			{
+				Log(LOG_INFO) << ". . . UFO is NOT at a City";
+				_terrain = selectTerrain(lat);
 			}
 
-			ufo->setTerrain(_terrain->getName());
-			_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(_terrain->getName())));
+			if (ufo != NULL)
+				ufo->setTerrain(_terrain->getName());
+			else // terrorSite
+				ts->setTerrain(_terrain->getName());
 		}
-		else
-		{
-			//Log(LOG_INFO) << ". . terrain VALID: " << terrain;
 
-			_terrain = _game->getRuleset()->getTerrain(terrain);
-			_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(terrain)));
-		}
+		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(_terrain->getName())));
 	}
-//	else if (ts != NULL)
-//	{
-// TODO: TerrorSites will have to go in here ... they choose terrain/textures differently. See 'city' above^
-//	}
 	else
 	{
-		//Log(LOG_INFO) << ". ufo NOT valid";
+		Log(LOG_INFO) << ". ufo/terrorsite NOT valid";
 		_txtTexture->setVisible(false);
 		_txtShade->setVisible(false);
 	}
 
-/*kL
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
-	_txtMessage->setWordWrap();
-	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_NEAR_DESTINATION")
-						 .arg(_craft->getName(_game->getLanguage()))
-						 .arg(_craft->getDestination()->getName(_game->getLanguage()))); */
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
-	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtMessage->setBig();
-	_txtMessage->setAlign(ALIGN_CENTER);
-//	_txtMessage->setWordWrap();
 	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_AT")
 						 .arg(_craft->getName(_game->getLanguage())));
 
@@ -278,7 +239,6 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage2->setSecondaryColor(Palette::blockOffset(5)+4);
 	_txtMessage2->setBig();
 	_txtMessage2->setAlign(ALIGN_CENTER);
-//	_txtMessage2->setWordWrap();
 
 	std::wostringstream ss;
 	ss << L""; // blank if no UFO.
@@ -320,8 +280,7 @@ ConfirmLandingState::ConfirmLandingState(
  * dTor
  */
 ConfirmLandingState::~ConfirmLandingState()
-{
-}
+{}
 
 /**
  * Make sure we aren't returning to base.
@@ -333,6 +292,74 @@ void ConfirmLandingState::init()
 	const Base* const base = dynamic_cast<Base*>(_craft->getDestination());
 	if (base == _craft->getBase())
 		_game->popState();
+}
+
+/**
+ * Selects a terrain type for crashed or landed UFOs.
+ * @param lat - latitude of the UFO
+ */
+RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
+{
+	std::vector<RuleTerrain*> terrainChoices;
+
+	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator
+			i = terrains.begin();
+			i != terrains.end();
+			++i)
+	{
+		Log(LOG_INFO) << ". . . terrain = " << *i;
+		RuleTerrain* terrainRule = _game->getRuleset()->getTerrain(*i);
+
+		for (std::vector<int>::const_iterator
+				j = terrainRule->getTextures()->begin();
+				j != terrainRule->getTextures()->end();
+				++j)
+		{
+			Log(LOG_INFO) << ". . . . texture = " << *j;
+			if (*j == _texture
+				&& (terrainRule->getHemisphere() == 0
+					|| (terrainRule->getHemisphere() < 0
+						&& lat < 0.)
+					|| (terrainRule->getHemisphere() > 0
+						&& lat >= 0.)))
+			{
+				Log(LOG_INFO) << ". . . . . terrainRule = " << *i;
+				terrainChoices.push_back(terrainRule);
+			}
+		}
+	}
+
+	const size_t choice = static_cast<size_t>(RNG::generate(
+														0,
+														static_cast<int>(terrainChoices.size()) - 1));
+	return terrainChoices.at(choice);
+}
+
+/**
+ * Selects a terrain type for missions at cities.
+ * @param lat - latitude of the city
+ */
+RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
+{
+	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
+	const size_t choice = RNG::generate(
+									0,
+									ruleDeploy->getTerrains().size() - 1);
+	RuleTerrain* terrainRule = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(choice));
+
+	if (lat < 0. // northern hemisphere
+		&& terrainRule->getName() == "NATIVEURBAN")
+	{
+		terrainRule = _game->getRuleset()->getTerrain("DAWNURBANA");
+	}
+	else if (lat > 0. // southern hemisphere
+		&& terrainRule->getName() == "DAWNURBANA")
+	{
+		terrainRule = _game->getRuleset()->getTerrain("NATIVEURBAN");
+	}
+
+	return terrainRule;
 }
 
 /**
