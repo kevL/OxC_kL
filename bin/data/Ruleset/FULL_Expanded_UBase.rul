@@ -1,5 +1,8 @@
 terrains:
   - name: UBASE
+#    script: ALIENBASE # note: Done
+#    in alienDeployment, type: STR_ALIEN_BASE_ASSAULT
+#    & type: STR_MARS_THE_FINAL_ASSAULT ( script: BOSSBATTLE )
     mapDataSets:
       - BLANKS
       - U_BASE
@@ -7,12 +10,13 @@ terrains:
       - U_PODS
       - BRAIN
       - U_BASE2
-    largeBlockLimit: 3
+#    largeBlockLimit: 3
     mapBlocks:
       - name: UBASE_00
         width: 20
         length: 20
-        type: 7
+        groups: 3
+#        type: 7
       - name: UBASE_01
         width: 20
         length: 20
@@ -22,11 +26,15 @@ terrains:
       - name: UBASE_03
         width: 20
         length: 20
+#        items:
+#          STR_ELERIUM_115:
+#            - [2, 14, 1]
       - name: UBASE_04
         width: 10
         length: 10
+        groups: 2
         revealedFloors: 1
-        type: 6
+#        type: 6
       - name: UBASE_05
         width: 10
         length: 10
@@ -36,7 +44,8 @@ terrains:
       - name: UBASE_07
         width: 10
         length: 10
-        type: 4
+#        groups: 1
+#        type: 4
       - name: UBASE_08
         width: 10
         length: 10
@@ -49,31 +58,40 @@ terrains:
       - name: UBASE_11
         width: 10
         length: 10
+#       UBASE_12 is impassable, 13 and 14 are apparently unused.
+#       In the interest of preserving an original experience they have been
+#       disabled by being added to group 5, which is unused in the scripts.
       - name: UBASE_12
         width: 10
         length: 10
         items:
           STR_ELERIUM_115:
             - [4, 4, 0]
-        maxCount: 1
+#        groups: 5
+#        maxCount: 1
       - name: UBASE_13
         width: 10
         length: 10
+#        groups: 5
       - name: UBASE_14
         width: 10
         length: 10
+#        groups: 5
       - name: UBASE_15
         width: 20
         length: 20
-        type: 8
+        groups: 4
+#        type: 8
       - name: UBASE_19
         width: 20
         length: 20
-        type: 7
+        groups: 3
+#        type: 7
       - name: UBASE_20
         width: 20
         length: 20
-        type: 7
+        groups: 3
+#        type: 7
       - name: UBASE_21
         width: 20
         length: 20
@@ -87,7 +105,7 @@ terrains:
         width: 10
         length: 10
         revealedFloors: 1
-        type: 6
+#        type: 6
       - name: UBASE_25
         width: 10
         length: 10
@@ -112,7 +130,7 @@ terrains:
         items:
           STR_ELERIUM_115:
             - [4, 4, 0]
-        maxCount: 1
+#        maxCount: 1
       - name: UBASE_33
         width: 10
         length: 10
@@ -137,11 +155,16 @@ terrains:
       - name: UBASE_40
         width: 20
         length: 20
+        items:
+          STR_ELERIUM_115:
+            - [1, 9, 1]
+            - [9, 1, 1]
+            - [9, 17, 1]
+            - [17, 9, 1]
       - name: UBASE_41
         width: 20
         length: 20
         items:
           STR_ELERIUM_115:
             - [3, 9, 1]
-          STR_ELERIUM_115:
             - [15, 9, 1]

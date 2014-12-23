@@ -236,11 +236,11 @@ private:
 		/// Resets the camera smoothing bool.
 		void resetCameraSmoothing();
 
-		/// kL. Sets whether to draw or not.
-		void setNoDraw(bool noDraw); // kL
+		/// Sets whether to draw or not.
+		void setNoDraw(bool noDraw);
 
-		/// kL. Gets the SavedBattleGame.
-		SavedBattleGame* getSavedBattle() const; // kL
+		/// Gets the SavedBattleGame.
+		SavedBattleGame* getSavedBattle() const;
 };
 
 }

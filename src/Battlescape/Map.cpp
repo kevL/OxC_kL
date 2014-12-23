@@ -2081,7 +2081,9 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// kL_begin:
-					if (itZ == 0) // draw border-marks only on ground tiles
+					if ((itZ == 0 // draw border-sprite only on ground tiles
+							&& _save->getGroundLevel() == -1)
+						|| itZ == _save->getGroundLevel())
 					{
 						if (   itX == 0
 							|| itX == _save->getMapSizeX() - 1
@@ -3000,19 +3002,19 @@ void Map::resetCameraSmoothing()
 }
 
 /**
- * kL. Sets whether to draw or not.
+ * Sets whether to draw or not.
  * @param noDraw - true to stop this Map from drawing
  */
-void Map::setNoDraw(bool noDraw) // kL
+void Map::setNoDraw(bool noDraw)
 {
 	_noDraw = noDraw;
 }
 
 /**
- * kL. Gets the SavedBattleGame.
+ * Gets the SavedBattleGame.
  * @return, pointer to SavedBattleGame
  */
-SavedBattleGame* Map::getSavedBattle() const // kL
+SavedBattleGame* Map::getSavedBattle() const
 {
 	return _save;
 }

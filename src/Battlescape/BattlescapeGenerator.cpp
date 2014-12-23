@@ -337,6 +337,7 @@ void BattlescapeGenerator::nextStage()
 
 
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
+
 	if (_rules->getMapScript(ruleDeploy->getScript()) != NULL)
 		script = _rules->getMapScript(ruleDeploy->getScript());
 	else if (ruleDeploy->getScript().empty() == false)
@@ -514,13 +515,19 @@ void BattlescapeGenerator::run()
 		}
 		else
 		{
-			Log(LOG_INFO) << ". worldTerrain = " << _worldTerrain->getName();
+			Log(LOG_INFO) << ". ufo mission worldTerrain = " << _worldTerrain->getName();
 			_terrain = _worldTerrain; // kL
 		}
 	}
+	else if (_mission == "STR_TERROR_MISSION" // kL ->
+		&& _worldTerrain != NULL)
+	{
+		Log(LOG_INFO) << ". terror mission worldTerrain = " << _worldTerrain->getName();
+		_terrain = _worldTerrain; // kL_end.
+	}
 	else // set-piece battle like Cydonia or Terror site or Base assault/defense
 	{
-		Log(LOG_INFO) << "bGen::run() deployment-terrains Valid, qty = " << ruleDeploy->getTerrains().size();
+		Log(LOG_INFO) << "bGen::run() Choose terrain from deployment, qty = " << ruleDeploy->getTerrains().size();
 		const size_t pick = RNG::generate(
 										0,
 										ruleDeploy->getTerrains().size() - 1);
@@ -569,8 +576,13 @@ void BattlescapeGenerator::run()
 
 
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
-	if (_rules->getMapScript(ruleDeploy->getScript()))
+	Log(LOG_INFO) << "bGen::run() script = " << _terrain->getScript();
+
+	if (_rules->getMapScript(ruleDeploy->getScript())) // alienDeployment script overrides terrain script <-
+	{
 		script = _rules->getMapScript(ruleDeploy->getScript());
+		Log(LOG_INFO) << "bGen::run() script = " << ruleDeploy->getScript();
+	}
 	else if (ruleDeploy->getScript().empty() == false)
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
@@ -2219,7 +2231,10 @@ int BattlescapeGenerator::loadMAP(
 			z += i;
 
 			if (craft == true)
+			{
 				_craftZ = i;
+				_battleSave->setGroundLevel(i);
+			}
 
 			break;
 		}

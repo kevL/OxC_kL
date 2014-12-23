@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "../Resource/XcomResourcePack.h"

@@ -369,7 +369,7 @@ protected:
 		const std::vector<SDL_Color>* getTransparencies() const;
 
 		/// Gets the list of MapScripts.
-		const std::vector<MapScript*>* getMapScript(std::string id) const;
+		const std::vector<MapScript*>* getMapScript(const std::string& id) const;
 };
 
 }

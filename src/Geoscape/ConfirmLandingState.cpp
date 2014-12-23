@@ -309,7 +309,7 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 			++i)
 	{
 		Log(LOG_INFO) << ". . . terrain = " << *i;
-		RuleTerrain* terrainRule = _game->getRuleset()->getTerrain(*i);
+		RuleTerrain* const terrainRule = _game->getRuleset()->getTerrain(*i);
 
 		for (std::vector<int>::const_iterator
 				j = terrainRule->getTextures()->begin();
@@ -347,17 +347,20 @@ RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 									0,
 									ruleDeploy->getTerrains().size() - 1);
 	RuleTerrain* terrainRule = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(choice));
+	Log(LOG_INFO) << "cityTerrain = " << ruleDeploy->getTerrains().at(choice);
 
-	if (lat < 0. // northern hemisphere
+/*	if (lat < 0. // northern hemisphere
 		&& terrainRule->getName() == "NATIVEURBAN")
 	{
+		Log(LOG_INFO) << ". north: switching from Native to Dawn A";
 		terrainRule = _game->getRuleset()->getTerrain("DAWNURBANA");
 	}
 	else if (lat > 0. // southern hemisphere
 		&& terrainRule->getName() == "DAWNURBANA")
 	{
+		Log(LOG_INFO) << ". south: switching from Dawn A to Native";
 		terrainRule = _game->getRuleset()->getTerrain("NATIVEURBAN");
-	}
+	} */
 
 	return terrainRule;
 }

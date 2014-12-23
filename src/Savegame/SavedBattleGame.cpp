@@ -22,7 +22,6 @@
 //#include <vector>
 //#include <deque>
 //#include <queue>
-
 //#include <assert.h>
 
 #include "BattleItem.h"
@@ -41,9 +40,9 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -84,7 +83,8 @@ SavedBattleGame::SavedBattleGame()
 		_depth(0),
 		_kneelReserved(false),
 		_invBattle(NULL),
-		_ambience(-1)
+		_ambience(-1),
+		_groundLevel(-1)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
@@ -2597,40 +2597,58 @@ int SavedBattleGame::getAmbientSound() const
 }
 
 /**
- * kL. Sets the battlescape inventory tile when BattlescapeGenerator runs.
+ * Sets the battlescape inventory tile when BattlescapeGenerator runs.
  * For use in base missions to randomize item locations.
  * @param invBattle - pointer to the tile where battle inventory is created
  */
-void SavedBattleGame::setBattleInventory(Tile* invBattle) // kL
+void SavedBattleGame::setBattleInventory(Tile* invBattle)
 {
 	_invBattle = invBattle;
 }
 
 /**
- * kL. Gets the inventory tile for preBattle InventoryState OK click.
+ * Gets the inventory tile for preBattle InventoryState OK click.
  */
-Tile* SavedBattleGame::getBattleInventory() const // kL
+Tile* SavedBattleGame::getBattleInventory() const
 {
 	return _invBattle;
 }
 
 /**
- * kL. Sets the alien race for this battle.
+ * Sets the alien race for this battle.
  * Currently used only for Base Defense missions, but should fill for other missions also.
  */
-void SavedBattleGame::setAlienRace(const std::string& alienRace) // kL
+void SavedBattleGame::setAlienRace(const std::string& alienRace)
 {
 	_alienRace = alienRace;
 }
 
 /**
- * kL. Gets the alien race participating in this battle.
+ * Gets the alien race participating in this battle.
  * Currently used only to get the alien race for SoldierDiary statistics
  * after a Base Defense mission.
  */
-const std::string& SavedBattleGame::getAlienRace() const // kL
+const std::string& SavedBattleGame::getAlienRace() const
 {
 	return _alienRace;
+}
+
+/**
+ * Sets the ground level.
+ * @param level - ground level as determined in BattlescapeGenerator.
+ */
+void SavedBattleGame::setGroundLevel(const int level)
+{
+	_groundLevel = level;
+}
+
+/**
+ * Gets the ground level.
+ * @return, ground level
+ */
+int SavedBattleGame::getGroundLevel() const
+{
+	return _groundLevel;
 }
 
 }

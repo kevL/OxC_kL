@@ -67,6 +67,7 @@ private:
 		_ambience,
 		_depth,
 		_globalShade,
+		_groundLevel,
 		_itemId,
 		_mapsize_x,
 		_mapsize_y,
@@ -366,15 +367,20 @@ private:
 		/// Gets the ambient sound effect;
 		int getAmbientSound() const;
 
-		/// kL. Sets the inventory tile when BattlescapeGenerator runs.
-		void setBattleInventory(Tile* invBattle); // kL
-		/// kL. Gets the inventory tile for preBattle InventoryState OK click.
-		Tile* getBattleInventory() const; // kL
+		/// Sets the inventory tile when BattlescapeGenerator runs.
+		void setBattleInventory(Tile* invBattle);
+		/// Gets the inventory tile for preBattle InventoryState OK click.
+		Tile* getBattleInventory() const;
 
-		/// kL. Sets the alien race for this battle game.
-		void setAlienRace(const std::string& alienRace); // kL
-		/// kL. Gets the alien race participating in this battle game.
-		const std::string& getAlienRace() const; // kL
+		/// Sets the alien race for this battle game.
+		void setAlienRace(const std::string& alienRace);
+		/// Gets the alien race participating in this battle game.
+		const std::string& getAlienRace() const;
+
+		/// Sets the ground level.
+		void setGroundLevel(const int level);
+		/// Gets the ground level.
+		int SavedBattleGame::getGroundLevel() const;
 };
 
 }

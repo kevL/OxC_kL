@@ -49,7 +49,7 @@ RuleTerrain::RuleTerrain(const std::string& name)
  */
 RuleTerrain::~RuleTerrain()
 {
-	for (std::vector<MapBlock*>::iterator
+	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
 			i != _mapBlocks.end();
 			++i)
@@ -60,8 +60,8 @@ RuleTerrain::~RuleTerrain()
 
 /**
  * Loads the terrain from a YAML file.
- * @param node YAML node.
- * @param ruleset Ruleset for the terrain.
+ * @param node		- reference a YAML node
+ * @param ruleset	- game's Ruleset
  */
 void RuleTerrain::load(
 		const YAML::Node& node,
@@ -241,7 +241,7 @@ MapData* RuleTerrain::getMapData(
 }
 
 /**
- * Gets the array of globe texture IDs this terrain is loaded on.
+ * Gets the array of globe texture IDs this terrain is loaded for.
  * @return, pointer to the array of texture IDs
  */
 std::vector<int>* RuleTerrain::getTextures()
@@ -250,7 +250,7 @@ std::vector<int>* RuleTerrain::getTextures()
 }
 
 /**
- * Gets the hemishpere this terrain occurs on:
+ * Gets the hemishpere this terrain occurs in:
  *	-1 = northern
  *	 0 = either
  *	 1 = southern.
@@ -301,7 +301,7 @@ const int RuleTerrain::getAmbience() const
  * Gets the generation script name.
  * @return, the name of the script to use
  */
-const std::string RuleTerrain::getScript() const
+const std::string& RuleTerrain::getScript() const
 {
 	return _script;
 }
