@@ -5211,18 +5211,23 @@ int TileEngine::voxelCheck(
 
 				if (targetUnit->getArmor()->getSize() > 1) // for large units...
 				{
-					const Position pTarget_tile = targetTile->getPosition();
-					ent = ((pTarget_tile.x - unitPos.x) + ((pTarget_tile.y - unitPos.y) * 2));
+					const Position tilePos = targetTile->getPosition();
+					ent = (tilePos.x - unitPos.x) + ((tilePos.y - unitPos.y) * 2);
+					//Log(LOG_INFO) << ". vC, large unit, LoFT entry = " << ent;
 				}
 
-				const int loftIdx = ((targetUnit->getLoftemps(ent) * 16) + y);
-				//Log(LOG_INFO) << "loftIdx = " << loftIdx;
+//				if (ent > -1)
+//				{
+				const int loftIdx = (targetUnit->getLoftemps(ent) * 16) + y;
+				//Log(LOG_INFO) << "loftIdx = " << loftIdx << " vD-size = " << (int)_voxelData->size();
 				if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 ^above)
 					&& _voxelData->at(loftIdx) & (1 << x)) // if the voxelData at loftIdx is "1" solid:
 				{
 					//Log(LOG_INFO) << ". vC() ret VOXEL_UNIT";
 					return VOXEL_UNIT;
 				}
+//				}
+//				else Log(LOG_INFO) << "ERROR TileEngine::voxelCheck() LoFT entry = " << ent;
 			}
 		}
 	}

@@ -164,7 +164,7 @@ void UnitWalkBState::think()
 			}
 		}
 
-		if (!doStatusWalk())
+		if (doStatusWalk() == false)
 			return;
 
 
@@ -195,7 +195,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-			if (!doStatusStand_end())
+			if (doStatusStand_end() == false)
 				return;
 			else
 				_parent->getBattlescapeState()->refreshVisUnits();
@@ -233,7 +233,7 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
 		//Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
-		if (!doStatusStand())
+		if (doStatusStand() == false)
 			return;
 		else // Destination is not valid until *after* doStatusStand() runs.
 		{
@@ -684,7 +684,8 @@ bool UnitWalkBState::doStatusStand()
 bool UnitWalkBState::doStatusWalk()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusWalk() : " << _unit->getId();
-	Tile* tileBelow = NULL;
+	const Tile* tileBelow = NULL;
+//	Position pos = _unit->getPosition();
 
 	if (_parent->getSave()->getTile(_unit->getDestination())->getUnit() == NULL  // next tile must be not occupied
 		// kL_note: and, if not flying, the position directly below the tile must not be occupied...
@@ -727,8 +728,9 @@ bool UnitWalkBState::doStatusWalk()
 		_tileSwitchDone = true;
 
 		bool fallCheck = true;
+//		Position posSized;
 
-		int unitSize = _unit->getArmor()->getSize() - 1;
+		const int unitSize = _unit->getArmor()->getSize() - 1;
 		for (int
 				x = unitSize;
 				x > -1;
@@ -739,22 +741,17 @@ bool UnitWalkBState::doStatusWalk()
 					y > -1;
 					--y)
 			{
+//				posSized = pos + Position(x, y, 0);
 				tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
 
-				if ( //kL _unit->getMovementType() == MT_FLY ||
-					_parent->getSave()->getTile(
-											_unit->getPosition() + Position(x, y, 0))
-										->hasNoFloor(tileBelow)
-									== false)
+				if (_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
 				{
 					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
 					fallCheck = false;
 				}
 
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
-				_parent->getSave()->getTile(
-										_unit->getLastPosition() + Position(x, y, 0))
-									->setUnit(NULL);
+				_parent->getSave()->getTile(_unit->getLastPosition() + Position(x, y, 0))->setUnit(NULL);
 			}
 		} // -> might move to doStatusStand_end()
 
@@ -769,12 +766,10 @@ bool UnitWalkBState::doStatusWalk()
 					--y)
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
-				_parent->getSave()->getTile(
-										_unit->getPosition() + Position(x, y, 0))
-									->setUnit(
-											_unit,
-											_parent->getSave()->getTile(
-																	_unit->getPosition() + Position(x, y,-1)));
+//				posSized = pos + Position(x, y, 0);
+				_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->setUnit(
+														_unit,
+														_parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1)));
 			}
 		}
 
@@ -782,9 +777,11 @@ bool UnitWalkBState::doStatusWalk()
 				&& _unit->getPosition().z != 0
 				&& _pf->getMovementType() != MT_FLY;
 
-		if (_falling)
+		if (_falling == true)
 		{
 			//Log(LOG_INFO) << ". falling";
+//			pos = _unit->getPosition();
+
 			for (int
 					x = unitSize;
 					x > -1;
@@ -798,8 +795,8 @@ bool UnitWalkBState::doStatusWalk()
 					tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
 					//if (tileBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
 
-					if (tileBelow
-						&& tileBelow->getUnit())
+					if (tileBelow != NULL
+						&& tileBelow->getUnit() != NULL)
 					{
 						//Log(LOG_INFO) << ". . . another unit already occupies lower tile";
 						_falling = false;
@@ -834,7 +831,7 @@ bool UnitWalkBState::doStatusStand_end()
 		_unit->setUnitVisible(false);
 	else
 	{
-		BattlescapeState* battleState = _parent->getSave()->getBattleState();
+		const BattlescapeState* const battleState = _parent->getSave()->getBattleState();
 
 		double stat = static_cast<double>(_unit->getBaseStats()->tu);
 		const int tu = _unit->getTimeUnits();
@@ -855,11 +852,11 @@ bool UnitWalkBState::doStatusStand_end()
 		// kL_add: Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
 
-		Position pos = _unit->getPosition() * Position(16, 16, 24)
-					 + Position(
-							8,
-							8,
-							-(_unit->getTile()->getTerrainLevel()));
+		const Position pos = _unit->getPosition() * Position(16, 16, 24)
+						   + Position(
+									8,
+									8,
+									-(_unit->getTile()->getTerrainLevel()));
 		_parent->getTileEngine()->hit(
 									pos,
 									_unit->getBaseStats()->strength, // * _unit->getAccuracyModifier(),
@@ -878,12 +875,12 @@ bool UnitWalkBState::doStatusStand_end()
 	// of all units within maximum distance (20 tiles) of current unit.
 	_terrain->calculateFOV(_unit->getPosition());
 
-	if (_parent->checkForProximityGrenades(_unit)) // kL_add: Put checkForSilacoid() here!
+	if (_parent->checkForProximityGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
 	{
 		_parent->popState();
 		return false;
 	}
-	else if (newVis)
+	else if (newVis == true)
 	{
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
@@ -893,6 +890,7 @@ bool UnitWalkBState::doStatusStand_end()
 
 		_pf->abortPath();
 		_parent->popState();
+
 		return false;
 	}
 	else if (_falling == false) // check for reaction fire
@@ -907,6 +905,7 @@ bool UnitWalkBState::doStatusStand_end()
 
 			_pf->abortPath();
 			_parent->popState();
+
 			return false;
 		}
 		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
@@ -1270,13 +1269,13 @@ void UnitWalkBState::playMovementSound()
 }
 
 /**
- * kL. For determining if a flying unit turns flight off at start of movement.
+ * For determining if a flying unit turns flight off at start of movement.
  * NOTE: _falling should always be false when this is called in init().
  * NOTE: And unit must be capable of flight for this to be relevant.
  * NOTE: This could get problemmatic if/when falling onto nonFloors like water,
  *		 and/or if there is another unit on tileBelow.
  */
-void UnitWalkBState::doFallCheck() // kL
+void UnitWalkBState::doFallCheck()
 {
 	if (_pf->getMovementType() == MT_FLY
 		|| _unit->getPosition().z == 0
@@ -1289,12 +1288,12 @@ void UnitWalkBState::doFallCheck() // kL
 }
 
 /**
- * kL. Checks if there is ground below when unit is falling.
+ * Checks if there is ground below when unit is falling.
  * NOTE: Pathfinding already has a function canFallDown() that could be used for
  * a couple places here in UnitWalkBState; does not have 'descent' though.
  @param descent - how many levels below current to check for ground (default 0)
  */
-bool UnitWalkBState::groundCheck(int descent) // kL
+bool UnitWalkBState::groundCheck(int descent)
 {
 	Tile* tBelow = NULL;
 	int unitSize = _unit->getArmor()->getSize() - 1;

@@ -2027,14 +2027,14 @@ bool SavedBattleGame::setUnitPosition(
 			if (getPathfinding()->isBlocked(
 										getTile(pos),
 										NULL,
-										dir))
+										dir) == true)
 			{
 				return false;
 			}
 		}
 	}
 
-	if (testOnly)
+	if (testOnly == true)
 		return true;
 
 

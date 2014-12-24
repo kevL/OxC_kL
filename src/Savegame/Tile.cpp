@@ -915,7 +915,7 @@ Surface* Tile::getSprite(int part) const
 /**
  * Sets a unit on this tile.
  * @param unit		- pointer to a unit
- * @param tileBelow	- pointer to the tile below this tile
+ * @param tileBelow	- pointer to the tile below this tile (default NULL)
  */
 void Tile::setUnit(
 		BattleUnit* unit,

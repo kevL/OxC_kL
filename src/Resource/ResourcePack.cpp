@@ -51,6 +51,7 @@ int
 	ResourcePack::FLYING_SOUND				= 15,
 	ResourcePack::FLYING_SOUND_HQ			= 70, // kL
 	ResourcePack::ITEM_RELOAD				= 17,
+	ResourcePack::ITEM_UNLOAD				= 74, // kL
 	ResourcePack::SLIDING_DOOR_OPEN			= 20,
 	ResourcePack::SLIDING_DOOR_CLOSE		= 21,
 	ResourcePack::WALK_OFFSET				= 22,
@@ -59,14 +60,14 @@ int
 	ResourcePack::MALE_SCREAM[3]			= {41, 42, 43},
 	ResourcePack::FEMALE_SCREAM[3]			= {44, 45, 46},
 
-	ResourcePack::UFO_FIRE					= 9, // was 8
+	ResourcePack::UFO_FIRE					= 9,	// was 8
 	ResourcePack::UFO_HIT					= 12,
-	ResourcePack::UFO_CRASH					= 11, // was 10
+	ResourcePack::UFO_CRASH					= 11,	// was 10
 	ResourcePack::UFO_EXPLODE				= 11,
 	ResourcePack::INTERCEPTOR_HIT			= 10,
 	ResourcePack::INTERCEPTOR_EXPLODE		= 13,
 
-	ResourcePack::SMOKE_OFFSET				= 7, // was 8
+	ResourcePack::SMOKE_OFFSET				= 7,	// was 8
 	ResourcePack::UNDERWATER_SMOKE_OFFSET	= 0;
 
 

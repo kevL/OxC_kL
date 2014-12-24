@@ -83,10 +83,10 @@ private:
 	/// Handles the stepping sounds.
 	void playMovementSound();
 
-	/// kL. For determining if a flying unit turns flight off at start of movement.
-	void doFallCheck(); // kL
-	/// kL. Checks if there is ground below when unit is falling.
-	bool groundCheck(int descent = 0); // kL
+	/// For determining if a flying unit turns flight off at start of movement.
+	void doFallCheck();
+	/// Checks if there is ground below when unit is falling.
+	bool groundCheck(int descent = 0);
 
 
 	public:

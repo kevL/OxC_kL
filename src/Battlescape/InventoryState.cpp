@@ -781,7 +781,8 @@ void InventoryState::btnUnloadClick(Action*)
 		updateStats();
 		_game->getResourcePack()->getSoundByDepth(
 											0,
-											ResourcePack::ITEM_RELOAD)->play();
+											ResourcePack::ITEM_UNLOAD)
+										->play();
 	}
 }
 

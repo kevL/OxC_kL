@@ -526,7 +526,7 @@ int BattleUnit::getId() const
 /**
  * Changes this BattleUnit's position.
  * @param pos			- new position
- * @param updateLastPos	- true to update old position
+ * @param updateLastPos	- true to update old position (default true)
  */
 void BattleUnit::setPosition(
 		const Position& pos,
@@ -748,7 +748,7 @@ void BattleUnit::startWalking(
  * @param cache		- true to refresh the unit cache / redraw this unit's sprite
  */
 void BattleUnit::keepWalking(
-		Tile* tileBelow,
+		const Tile* const tileBelow,
 		bool cache)
 {
 	_walkPhase++;

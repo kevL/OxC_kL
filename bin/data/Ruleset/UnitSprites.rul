@@ -46,6 +46,13 @@ extraSprites:
     subY: 40
     files:
       0: Resources/Sprites/Units/tanks/tanks.png
+  - type: X_REAP.PCK
+    width: 256
+    height: 800
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/x_reap/x_reap.png
   - type: X_ROB.PCK
     width: 256
     height: 320

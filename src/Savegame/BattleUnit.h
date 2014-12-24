@@ -563,7 +563,7 @@ private:
 				bool cache);
 		/// Advances the walkingPhase.
 		void keepWalking(
-				Tile* tileBelow,
+				const Tile* const tileBelow,
 				bool cache);
 		/// Gets the walking phase for animation and sound.
 		int getWalkingPhase() const;
