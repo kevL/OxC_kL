@@ -2388,38 +2388,38 @@ mapScripts:
     commands:
     - type: addUFO
     - type: addCraft
-    - type: addBlock
-      size: 2
-      executions: 2
+#    - type: addBlock
+#      size: 2
+#      executions: 2
     - type: fillArea
   - type: FARM
     commands:
     - type: addUFO
     - type: addCraft
     - type: fillArea
-      blocks:  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
-      maxUses: [3, 3, 3, 3, 3, 3, 3, 3, 3,  3,  3,  3,  3,  3,  3,  3,  3,  3]
+#      blocks:  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+#      maxUses: [3, 3, 3, 3, 3, 3, 3, 3, 3,  3,  3,  3,  3,  3,  3,  3,  3,  3]
   - type: DESERT
     commands:
     - type: addUFO
     - type: addCraft
-    - type: addBlock
-      size: 2
-      executions: 3
+#    - type: addBlock
+#      size: 2
+#      executions: 3
     - type: fillArea
   - type: JUNGLE
     commands:
     - type: addUFO
     - type: addCraft
     - type: fillArea
-      blocks: [3, 4, 5, 6, 7, 8, 9, 10, 11]
-      freqs:  [2, 2, 2, 2, 2, 2, 2,  1,  1]
+#      blocks: [3, 4, 5, 6, 7, 8, 9, 10, 11]
+#      freqs:  [2, 2, 2, 2, 2, 2, 2,  1,  1]
   - type: POLAR
     commands:
     - type: addUFO
     - type: addCraft
-    - type: addBlock
-      size: 2
+#    - type: addBlock
+#      size: 2
     - type: fillArea
   - type: URBAN
     commands:
@@ -8723,6 +8723,7 @@ extraStrings:
       STR_USE_: "use {ALT}{0}"
       STR_RELOAD_: "reload {ALT}{0}"
       STR_PRIME_: "prime {ALT}{0}"
+      STR_DEFUSE_: "deFuse {ALT}{0}"
       STR_THROW_: "throw {ALT}{0}"
       STR_LAUNCH_: "launch {ALT}{0}"
       STR_SNAP_: "snap {ALT}{0}"

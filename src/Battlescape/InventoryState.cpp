@@ -117,7 +117,7 @@ InventoryState::InventoryState(
 	_txtPStr	= new Text(40, 9, 237, 64);
 	_txtPSkill	= new Text(40, 9, 237, 72);
 
-	_txtUseTU	= new Text(40, 9, 245, 123);
+	_txtUseTU	= new Text(45, 9, 245, 123);
 	_txtThrowTU	= new Text(40, 9, 245, 132);
 	_txtPsiTU	= new Text(40, 9, 245, 141);
 
@@ -957,7 +957,7 @@ void InventoryState::invMouseOver(Action* action)
 	{
 		_tuCost->setValue(_inv->getTUCost());
 		_tuCost->setVisible(_tuMode
-							&& _inv->getTUCost() > 0);
+						 && _inv->getTUCost() > 0);
 
 //		_updateTemplateButtons(false);
 		return;
@@ -1114,7 +1114,7 @@ void InventoryState::setExtraInfo(
 
 
 		const BattleUnit* const unit = _battleGame->getSelectedUnit();
-		const BattleActionType bat = itemRule->getDefaultAction();
+		const BattleActionType bat = itemRule->getDefaultAction(item->getFuseTimer() > -1);
 
 		if (unit != NULL
 			&& isArt == false
@@ -1138,6 +1138,7 @@ void InventoryState::setExtraInfo(
 					case BA_AUTOSHOT:	actionType = "STR_BURST_";	break;
 					case BA_AIMEDSHOT:	actionType = "STR_SCOPE_";	break;
 					case BA_PRIME:		actionType = "STR_PRIME_";	break;
+					case BA_DEFUSE:		actionType = "STR_DEFUSE_";	break;
 					case BA_USE:		actionType = "STR_USE_";	break;
 					case BA_PANIC:		actionType = "STR_PSI_";	break;
 					case BA_HIT:		actionType = "STR_ATTACK_";

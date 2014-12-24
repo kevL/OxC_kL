@@ -56,7 +56,7 @@ terrains:
         width: 20
         length: 20
   - name: COMRCURBAN
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - COMROADS
@@ -540,7 +540,7 @@ terrains:
         width: 20
         length: 20
   - name: DAWNURBANA
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - DAWNROADS
@@ -749,7 +749,7 @@ terrains:
 #        groups: 3
 #        maxCount: 2
   - name: DAWNURBANB
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - DAWNROADS
@@ -1156,7 +1156,7 @@ terrains:
         width: 20
         length: 20
   - name: INDUSTRIALURBAN
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
@@ -1317,7 +1317,7 @@ terrains:
         width: 10
         length: 10
   - name: MADURBAN
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - ROADS
@@ -1647,7 +1647,7 @@ terrains:
         width: 20
         length: 20
   - name: NATIVEURBAN
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - JUNGLE
@@ -1997,7 +1997,7 @@ terrains:
         width: 20
         length: 20
   - name: PORTURBAN
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
@@ -2109,7 +2109,7 @@ terrains:
         groups: 3
 #        type: 3
   - name: RAILYARDURBAN
-    script: URBAN # works ...
+    script: URBAN
     mapDataSets:
       - BLANKS
       - PORTROADS

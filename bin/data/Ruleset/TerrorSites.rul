@@ -8,7 +8,7 @@
 #      - URBAN2
 terrains:
   - name: URBAN
-    script: URBAN # works ...
+    script: URBAN
     textures: [10]
     mapDataSets:
       - BLANKS
@@ -71,7 +71,7 @@ terrains:
         width: 10
         length: 10
   - name: URBAN2
-    script: URBAN # works ...
+    script: URBAN
     textures: [10]
     mapDataSets:
       - BLANKS

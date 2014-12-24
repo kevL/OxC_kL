@@ -32,9 +32,9 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/BattlescapeButton.h"
@@ -135,11 +135,11 @@ MiniMapState::MiniMapState(
 	_txtLevel->setBig();
 //	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast();
-	std::wostringstream s;
+	std::wostringstream level;
 	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
-		s << tr("STR_LEVEL_SHORT");
-	s << camera->getViewLevel();
-	_txtLevel->setText(s.str());
+		level << tr("STR_LEVEL_SHORT");
+	level << camera->getViewLevel();
+	_txtLevel->setText(level.str());
 
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)& MiniMapState::animate);
@@ -207,11 +207,11 @@ void MiniMapState::btnOkClick(Action*)
  */
 void MiniMapState::btnLevelUpClick(Action*)
 {
-	std::wostringstream s;
+	std::wostringstream level;
 	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
-		s << tr("STR_LEVEL_SHORT");
-	s << _miniView->up();
-	_txtLevel->setText(s.str());
+		level << tr("STR_LEVEL_SHORT");
+	level << _miniView->up();
+	_txtLevel->setText(level.str());
 }
 
 /**
@@ -220,11 +220,11 @@ void MiniMapState::btnLevelUpClick(Action*)
  */
 void MiniMapState::btnLevelDownClick(Action*)
 {
-	std::wostringstream s;
+	std::wostringstream level;
 	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
-		s << tr("STR_LEVEL_SHORT");
-	s << _miniView->down();
-	_txtLevel->setText(s.str());
+		level << tr("STR_LEVEL_SHORT");
+	level << _miniView->down();
+	_txtLevel->setText(level.str());
 }
 
 /**

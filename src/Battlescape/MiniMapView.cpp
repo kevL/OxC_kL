@@ -30,8 +30,8 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Cursor.h"
@@ -659,7 +659,7 @@ void MiniMapView::stopScrolling(Action* action)
  */
 void MiniMapView::animate()
 {
-	_frame++;
+	++_frame;
 
 	if (_frame > MAX_FRAME)
 		_frame = 0;

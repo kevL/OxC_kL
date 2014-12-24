@@ -1043,9 +1043,10 @@ const int RuleItem::getVaporProbability() const
 /**
  * Gets the item's default BattleAction.
  * Used to show a TU cost in InventoryState. Lifted from ActionMenuState cTor.
+ * @param isPrimed - true if checking a grenade and it's primed (default false)
  * @return, BattleActionType enum
  */
-BattleActionType RuleItem::getDefaultAction() const
+BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 {
 	if (_fixedWeapon == true)		// isFixed()
 		return BA_NONE;
@@ -1068,7 +1069,10 @@ BattleActionType RuleItem::getDefaultAction() const
 	if (_battleType == BT_GRENADE
 		|| _battleType == BT_PROXIMITYGRENADE)
 	{
-		return BA_PRIME;
+		if (isPrimed == false)
+			return BA_PRIME;
+		else
+			return BA_DEFUSE;
 	}
 
 	if (_battleType == BT_MEDIKIT

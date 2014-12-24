@@ -384,7 +384,7 @@ private:
 		const int getVaporProbability() const;
 
 		/// Gets the item's default BattleAction.
-		BattleActionType getDefaultAction() const;
+		BattleActionType getDefaultAction(const bool isPrimed = false) const;
 
 		/// Checks if an item is exempt from research.
 		bool isResearchExempt() const;
