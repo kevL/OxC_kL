@@ -1263,7 +1263,7 @@ void BattlescapeGame::setupCursor()
 {
 	getMap()->refreshSelectorPosition();
 
-	if (_currentAction.targeting)
+	if (_currentAction.targeting == true)
 	{
 		if (_currentAction.type == BA_THROW)
 			getMap()->setCursorType(CT_THROW);
@@ -1282,7 +1282,7 @@ void BattlescapeGame::setupCursor()
 	{
 		_currentAction.actor = _save->getSelectedUnit();
 
-		if (_currentAction.actor)
+		if (_currentAction.actor != NULL)
 			getMap()->setCursorType(
 								CT_NORMAL,
 								_currentAction.actor->getArmor()->getSize());
@@ -1302,7 +1302,7 @@ bool BattlescapeGame::playableUnitSelected()
 {
 	return _save->getSelectedUnit() != NULL
 		&& (_save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode());
+			|| _save->getDebugMode() == true);
 }
 
 /**
@@ -1343,7 +1343,7 @@ void BattlescapeGame::statePushFront(BattleState* bs)
  */
 void BattlescapeGame::statePushNext(BattleState* bs)
 {
-	if (_states.empty())
+	if (_states.empty() == true)
 	{
 		_states.push_front(bs);
 		bs->init();
@@ -1358,7 +1358,7 @@ void BattlescapeGame::statePushNext(BattleState* bs)
  */
 void BattlescapeGame::statePushBack(BattleState* bs)
 {
-	if (_states.empty())
+	if (_states.empty() == true)
 	{
 		_states.push_front(bs);
 
@@ -1386,11 +1386,11 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 void BattlescapeGame::popState()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::popState()";
-	if (Options::traceAI)
-	{
-		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with "
-			<< (_save->getSelectedUnit()? _save->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
-	}
+//	if (Options::traceAI)
+//	{
+//		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with "
+//			<< (_save->getSelectedUnit()? _save->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
+//	}
 
 	if (_states.empty() == true)
 	{

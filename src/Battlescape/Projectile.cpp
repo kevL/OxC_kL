@@ -96,7 +96,7 @@ Projectile::Projectile(
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
-			_speed = _speed * 3 / 7;
+			_speed = _speed * 4 / 7;
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
@@ -367,8 +367,7 @@ int Projectile::calculateThrow(double accuracy)
 	Position targetVoxel = Position( // determine the target voxel, aim at the center of the floor
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 2);
-	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
+								_action.target.z * 24 + 2 - _save->getTile(_action.target)->getTerrainLevel());
 
 	const BattleUnit* targetUnit = NULL;
 	if (_action.type != BA_THROW) // celatid acid-spit
@@ -408,20 +407,20 @@ int Projectile::calculateThrow(double accuracy)
 										&ret) == true)
 	{
 		//Log(LOG_INFO) << ". validateThrow() TRUE";
-		// Finally do a parabola calculation and store that trajectory - make sure it's valid.
+		// Do a parabola calculation and store that trajectory - make sure it's valid.
 		int test = VOXEL_OUTOFBOUNDS;
 		while (test == VOXEL_OUTOFBOUNDS)
 		{
-			Position targetDelta = targetVoxel; // apply some accuracy modifiers
+			Position delta = targetVoxel;
 			applyAccuracy(
 						originVoxel,
-						&targetDelta,
+						&delta,
 						accuracy,
 						true,
 						_save->getTile(_action.target),
 						false);
 
-			targetDelta -= targetVoxel;
+			delta -= targetVoxel;
 
 			_trajectory.clear();
 
@@ -432,13 +431,13 @@ int Projectile::calculateThrow(double accuracy)
 														&_trajectory,
 														_action.actor,
 														arc,
-														targetDelta);
+														delta);
 			//Log(LOG_INFO) << ". . calculateParabola() = " << test;
 
 			// kL_begin: See also TileEngine::validateThrow()
 			if (_action.type == BA_THROW)
 			{
-				const Tile* const targetTile = _save->getTile(_trajectory.back() / Position(16, 16, 24));
+				const Tile* const targetTile = _save->getTile(_trajectory.back() / Position(16, 16, 24)); // _trajectory.at(0) <- see TileEngine::validateThrow()
 				if (targetTile != NULL
 					&& targetTile->getMapData(MapData::O_OBJECT) != NULL
 					&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
@@ -454,13 +453,14 @@ int Projectile::calculateThrow(double accuracy)
 
 		return ret;
 	}
+
 	//Log(LOG_INFO) << ". validateThrow() FALSE";
 	return VOXEL_OUTOFBOUNDS;
 }
 /*	static const double maxDeviation = 0.125;
-	static const double minDeviation = 0.0;
+	static const double minDeviation = 0.;
 	double baseDeviation = std::max(
-								0.0,
+								0.,
 								maxDeviation - (maxDeviation * accuracy) + minDeviation);
 	//Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
@@ -471,8 +471,8 @@ int Projectile::calculateThrow(double accuracy)
 	{
 		_trajectory.clear();
 
-		double deviation = RNG::boxMuller(0.0, baseDeviation);
-		//Log(LOG_INFO) << ". . boxMuller() deviation = " << deviation + 1.0;
+		double deviation = RNG::boxMuller(0., baseDeviation);
+		//Log(LOG_INFO) << ". . boxMuller() deviation = " << deviation + 1.;
 		ret = _save->getTileEngine()->calculateParabola(
 													originVoxel,
 													targetVoxel,
@@ -480,7 +480,7 @@ int Projectile::calculateThrow(double accuracy)
 													&_trajectory,
 													bu,
 													arc,
-													1.0 + deviation); */
+													1. + deviation); */
 
 /*			Position endPoint = _trajectory.back();
 			endPoint.x /= 16;
@@ -508,7 +508,7 @@ int Projectile::calculateThrow(double accuracy)
 					&_trajectory,
 					bu,
 					arc,
-					1.0); */
+					1.); */
 
 /**
  * Calculates the new target in voxel space, based on a given accuracy modifier.
@@ -537,10 +537,10 @@ void Projectile::applyAccuracy(
 		delta_y = origin.y - target->y,
 		delta_z = origin.z - target->z; // kL_add.
 
-	const double targetDist = sqrt(
-								  static_cast<double>(delta_x * delta_x)
-								+ static_cast<double>(delta_y * delta_y)
-								+ static_cast<double>(delta_z * delta_z)); // kL_add.
+	const double targetDist = std::sqrt(
+									static_cast<double>(delta_x * delta_x)
+								  + static_cast<double>(delta_y * delta_y)
+								  + static_cast<double>(delta_z * delta_z)); // kL_add.
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
@@ -586,8 +586,8 @@ void Projectile::applyAccuracy(
 				modifier = static_cast<double>((rule->getDropoff() * (targetDist_tSpace - longLimit)) / 100);
 
 			accuracy = std::max(
-								0.,
-								accuracy - modifier);
+							0.,
+							accuracy - modifier);
 		}
 
 		if (Options::battleRangeBasedAccuracy)
@@ -636,7 +636,7 @@ void Projectile::applyAccuracy(
 			// The angle deviations are spread using a normal distribution:
 			const double
 				dH = RNG::boxMuller(0., deviation / 6.),			// horizontal miss in radians
-				dV = RNG::boxMuller(0., deviation / (6. * 1.77)),	// vertical miss in radians
+				dV = RNG::boxMuller(0., deviation / (6. * 1.69)),	// vertical miss in radians
 
 				te = atan2(
 						static_cast<double>(target->y - origin.y),
@@ -670,7 +670,7 @@ void Projectile::applyAccuracy(
 
 
 	// kL_note: *** This is for Throwing and AcidSpitt only ***
-	accuracy = accuracy * 50. + 68.4; // arbitrary adjustment.
+	accuracy = accuracy * 50. + 68.5; // arbitrary adjustment.
 
 	double perfectToss = 100.;
 	const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
@@ -703,38 +703,38 @@ void Projectile::applyAccuracy(
 		double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 
 		// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-		if (RNG::generate(0.0, 1.0) < accuracy) // check if we hit
+		if (RNG::generate(0., 1.) < accuracy) // check if we hit
 		{
-			dRot = 0.0; // we hit, so no deviation
-			dTilt = 0.0;
+			dRot = 0.; // we hit, so no deviation
+			dTilt = 0.;
 		}
 		else
 		{
-			dRot = RNG::boxMuller(0.0, baseDeviation);
-			dTilt = RNG::boxMuller(0.0, baseDeviation / 2.0); // tilt deviation is halved
+			dRot = RNG::boxMuller(0., baseDeviation);
+			dTilt = RNG::boxMuller(0., baseDeviation / 2.); // tilt deviation is halved
 		}
 		rotation += dRot; // add deviations
 		tilt += dTilt; */
 
 		const double
-			rotation = atan2(
-							static_cast<double>(target->y - origin.y),
-							static_cast<double>(target->x - origin.x))
-						* 180.0 / M_PI,
-			tilt = atan2(
-						static_cast<double>(target->z - origin.z),
-						sqrt(
-							  static_cast<double>(target->x - origin.x) * static_cast<double>(target->x - origin.x)
-							+ static_cast<double>(target->y - origin.y) * static_cast<double>(target->y - origin.y)))
-						* 180.0 / M_PI;
+			rotation = std::atan2(
+								static_cast<double>(target->y - origin.y),
+								static_cast<double>(target->x - origin.x))
+							* 180. / M_PI,
+			tilt = std::atan2(
+							static_cast<double>(target->z - origin.z),
+							std::sqrt(
+								  static_cast<double>(target->x - origin.x) * static_cast<double>(target->x - origin.x)
+								+ static_cast<double>(target->y - origin.y) * static_cast<double>(target->y - origin.y)))
+							* 180. / M_PI;
 
 		// calculate new target
 		// this new target can be very far out of the map, but we don't care about that right now
 		const double
-			cos_fi = cos(tilt * M_PI / 180.0),
-			sin_fi = sin(tilt * M_PI / 180.0),
-			cos_te = cos(rotation * M_PI / 180.0),
-			sin_te = sin(rotation * M_PI / 180.0);
+			cos_fi = std::cos(tilt * M_PI / 180.),
+			sin_fi = std::sin(tilt * M_PI / 180.),
+			cos_te = std::cos(rotation * M_PI / 180.),
+			sin_te = std::sin(rotation * M_PI / 180.);
 
 		target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos_te * cos_fi);
 		target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin_te * cos_fi);
@@ -754,11 +754,11 @@ bool Projectile::traceProjectile()
 			i < _speed;
 			++i)
 	{
-		_position++;
+		++_position;
 
 		if (_position == _trajectory.size())
 		{
-			_position--; // ie. don't pass the end of the _trajectory vector
+			--_position; // ie. don't pass the end of the _trajectory vector
 			return false;
 		}
 
@@ -971,10 +971,10 @@ void Projectile::addVaporCloud()
 }
 
 /**
- * kL. Gets a pointer to the BattleAction actor directly.
+ * Gets a pointer to the BattleAction actor directly.
  * @return, pointer to the currently acting BattleUnit
  */
-BattleUnit* Projectile::getActor() const // kL
+BattleUnit* Projectile::getActor() const
 {
 	return _action.actor;
 }

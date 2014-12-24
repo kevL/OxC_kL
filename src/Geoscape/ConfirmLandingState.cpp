@@ -345,7 +345,7 @@ RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
 	const size_t choice = static_cast<size_t>(RNG::generate(
 														0,
-														static_cast<int>(ruleDeploy->getTerrains().size() - 1)));
+														static_cast<int>(ruleDeploy->getTerrains().size()) - 1));
 	RuleTerrain* terrainRule = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(choice));
 	Log(LOG_INFO) << "cityTerrain = " << ruleDeploy->getTerrains().at(choice);
 

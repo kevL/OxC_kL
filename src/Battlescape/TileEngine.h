@@ -232,13 +232,13 @@ private:
 				std::vector<Position>* const trajectory,
 				const BattleUnit* const excludeUnit,
 				const double arc,
-				const Position delta);
+				const Position delta = Position(0,0,0));
 		/// Validates a throwing action.
 		bool validateThrow(
 				const BattleAction& action,
 				const Position originVoxel,
 				const Position targetVoxel,
-				double* const curve = NULL,
+				double* const arc = NULL,
 				int* const voxelType = NULL);
 
 		/// Checks the distance between two positions.
@@ -255,7 +255,7 @@ private:
 		bool psiAttack(BattleAction* action);
 
 		/// Applies gravity to anything that occupies this tile.
-		Tile* applyGravity(Tile* tile);
+		Tile* applyGravity(Tile* const tile);
 
 		/// Returns melee validity between two units.
 		bool validMeleeRange(

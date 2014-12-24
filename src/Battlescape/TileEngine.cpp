@@ -4781,7 +4781,7 @@ int TileEngine::calculateLine(
  * @param excludeUnit		- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
  * @param arc				- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
  * @param acu				- the deviation of the angles that should be taken into account. 1.0 is perfection. // now superceded by @param delta...
- * @param delta				- the deviation of the angles that should be taken into account, (0,0,0) is perfection
+ * @param delta				- the deviation of the angles that should be taken into account, (0,0,0) is perfection (default Position(0,0,0))
  * @return,  -1 hit nothing
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit
@@ -4893,7 +4893,7 @@ int TileEngine::calculateParabola(
  * @param action		- reference the action to validate
  * @param originVoxel	- the origin point of the action
  * @param targetVoxel	- the target point of the action
- * @param curve			- pointer to a curvature of the throw (default NULL)
+ * @param arc			- pointer to a curvature of the throw (default NULL)
  * @param voxelType		- pointer to a type of voxel at which this parabola terminates (default NULL)
  * @return, true if throw is valid
  */
@@ -4901,23 +4901,23 @@ bool TileEngine::validateThrow(
 						const BattleAction& action,
 						const Position originVoxel,
 						const Position targetVoxel,
-						double* const curve,
+						double* const arc,
 						int* const voxelType)
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
-	double arc = 0.; // higher arc means lower arc IG.
+	double parabolicCoefficient = 0.; // higher arc means lower arc IG.
 
 	const Position targetPos = targetVoxel / Position(16, 16, 24);
 	if (targetPos != originVoxel / Position(16, 16, 24))
 	{
-		arc = 0.78;
+		parabolicCoefficient = 0.78;
 
 		// kL_note: Unfortunately, this prevents weak units from throwing heavy
 		// objects at their own feet. ( needs starting arc ~0.8, less if kneeled )
 /*		if (action.type == BA_THROW)
 		{
-			arc += 0.8;
-//			arc += std::max(
+			parabolicCoefficient += 0.8;
+//			parabolicCoefficient += std::max(
 //						0.48,
 //						1.73 / sqrt(
 //									sqrt(
@@ -4929,35 +4929,35 @@ bool TileEngine::validateThrow(
 		{
 			// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
 			// curvature should be approximately 1.06358350461 at this point.
-//			arc = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
-//			arc += 1.0635835046056873518242669985672;
-			arc += 1.0;
+//			parabolicCoefficient = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
+//			parabolicCoefficient += 1.0635835046056873518242669985672;
+			parabolicCoefficient += 1.0;
 		}
 
 		if (action.actor->isKneeled() == true)
-			arc -= 0.5; // stock: 0.1 */
+			parabolicCoefficient -= 0.5; // stock: 0.1 */
 	}
-	//Log(LOG_INFO) << ". starting arc = " << arc;
+	//Log(LOG_INFO) << ". starting arc = " << parabolicCoefficient;
 
-	const Tile* const tileTarget = _battleSave->getTile(action.target);
+	const Tile* const targetTile = _battleSave->getTile(action.target);
 
 	if (ProjectileFlyBState::validThrowRange(
 										&action,
 										originVoxel,
-										tileTarget) == false)
+										targetTile) == false)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
 		return false;
 	}
 
 	if (action.type == BA_THROW
-		&& tileTarget != NULL
-		&& tileTarget->getMapData(MapData::O_OBJECT) != NULL
-		&& (tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
-			|| tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+		&& targetTile != NULL
+		&& targetTile->getMapData(MapData::O_OBJECT) != NULL
+		&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+			|| targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
 //		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-//		&& tileTarget->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+//		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		return false; // prevent Grenades from landing on diagonal BigWalls.
 	}
@@ -4965,9 +4965,9 @@ bool TileEngine::validateThrow(
 
 	bool found = false;
 	while (found == false // try several different curvatures
-		&& arc < 5.)
+		&& parabolicCoefficient < 8.3)
 	{
-		//Log(LOG_INFO) << ". . arc = " << arc;
+		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient;
 
 //		int test = VOXEL_OUTOFBOUNDS;
 		std::vector<Position> trajectory;
@@ -4977,11 +4977,12 @@ bool TileEngine::validateThrow(
 										false,
 										&trajectory,
 										action.actor,
-										arc,
-										Position(0, 0, 0));
+										parabolicCoefficient);
 		//Log(LOG_INFO) << ". . calculateParabola() = " << test;
 
 		if (test != VOXEL_OUTOFBOUNDS
+			&& test != VOXEL_WESTWALL
+			&& test != VOXEL_NORTHWALL
 			&& (trajectory.at(0) / Position(16, 16, 24)) == targetPos)
 		{
 			//Log(LOG_INFO) << ". . . found TRUE";
@@ -4991,17 +4992,17 @@ bool TileEngine::validateThrow(
 				*voxelType = test;
 		}
 		else
-			arc += 0.5;
+			parabolicCoefficient += 0.3;
 	}
 
-	if (arc > 5.)
+	if (parabolicCoefficient >= 8.3)
 	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 5";
+		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 8.3";
 		return false;
 	}
 
-	if (curve != NULL)
-		*curve = arc;
+	if (arc != NULL)
+		*arc = parabolicCoefficient;
 
 	//Log(LOG_INFO) << ". vT() ret TRUE";
 	return true;
@@ -5449,11 +5450,11 @@ bool TileEngine::psiAttack(BattleAction* action)
 }
 
 /**
- * Applies gravity to a tile. Causes items and units to drop.
- * @param tile - pointer to a tile from which stuff is going to drop
- * @return, pointer to the tile where stuff eventually ends up
+ * Applies gravity to a tile - causes items and units to drop.
+ * @param tile - pointer to a Tile to check
+ * @return, pointer to the Tile where stuff ends up
  */
-Tile* TileEngine::applyGravity(Tile* tile)
+Tile* TileEngine::applyGravity(Tile* const tile)
 {
 	if (tile == NULL)
 		return NULL;
@@ -5462,8 +5463,9 @@ Tile* TileEngine::applyGravity(Tile* tile)
 	if (pos.z == 0)
 		return tile;
 
-	BattleUnit* unit = tile->getUnit();
-	bool hasNoItems = tile->getInventory()->empty();
+
+	const bool hasNoItems = tile->getInventory()->empty();
+	BattleUnit* const unit = tile->getUnit();
 
 	if (unit == NULL
 		&& hasNoItems == true)
@@ -5476,22 +5478,24 @@ Tile* TileEngine::applyGravity(Tile* tile)
 		* dtb = NULL;
 	Position posBelow = pos;
 
-	if (unit)
+	if (unit != NULL)
 	{
+		int unitSize = unit->getArmor()->getSize();
+
 		while (posBelow.z > 0)
 		{
 			bool canFall = true;
 
 			for (int
 					y = 0;
-					y < unit->getArmor()->getSize()
-						&& canFall;
+					y < unitSize
+						&& canFall == true;
 					++y)
 			{
 				for (int
 						x = 0;
-						x < unit->getArmor()->getSize()
-							&& canFall;
+						x < unitSize
+							&& canFall == true;
 						++x)
 				{
 					dt = _battleSave->getTile(Position(
@@ -5510,20 +5514,20 @@ Tile* TileEngine::applyGravity(Tile* tile)
 			if (canFall == false)
 				break;
 
-			posBelow.z--;
+			--posBelow.z;
 		}
 
 		if (posBelow != pos)
 		{
-			if (unit->isOut())
+			if (unit->isOut() == true)
 			{
 				for (int
-						y = unit->getArmor()->getSize() - 1;
+						y = unitSize - 1;
 						y > -1;
 						--y)
 				{
 					for (int
-							x = unit->getArmor()->getSize() - 1;
+							x = unitSize - 1;
 							x > -1;
 							--x)
 					{
@@ -5574,7 +5578,7 @@ Tile* TileEngine::applyGravity(Tile* tile)
 		if (dt->hasNoFloor(dtb) == false)
 			break;
 
-		posBelow.z--;
+		--posBelow.z;
 	}
 
 	if (posBelow != pos)
@@ -5583,21 +5587,21 @@ Tile* TileEngine::applyGravity(Tile* tile)
 
 		if (hasNoItems == false)
 		{
-			for (std::vector<BattleItem*>::iterator
+			for (std::vector<BattleItem*>::const_iterator
 					i = tile->getInventory()->begin();
 					i != tile->getInventory()->end();
 					++i)
 			{
-				if ((*i)->getUnit()) // corpse
-//					&& tile->getPosition() == (*i)->getUnit()->getPosition())
-//				{
+				if ((*i)->getUnit() != NULL // corpse
+					&& tile->getPosition() == (*i)->getUnit()->getPosition())
+				{
 					(*i)->getUnit()->setPosition(dt->getPosition());
-//				}
+				}
 
 //				if (dt != tile)
 				dt->addItem(
-							*i,
-							(*i)->getSlot());
+						*i,
+						(*i)->getSlot());
 			}
 
 //			if (tile != dt) // clear tile
