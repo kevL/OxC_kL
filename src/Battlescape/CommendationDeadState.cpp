@@ -55,7 +55,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 	setPalette("PAL_GEOSCAPE", 0);
 
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS);
+//	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS); // note: Moved to DebriefingState.
 
 	add(_window);
 	add(_txtTitle);

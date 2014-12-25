@@ -52,7 +52,7 @@ private:
 
 	public:
 		/// Creates the Medals state.
-		CommendationDeadState(std::vector<SoldierDead*> soldiers);
+		CommendationDeadState(std::vector<SoldierDead*> soldiersKIA);
 		/// Cleans up the Medals state.
 		~CommendationDeadState();
 

@@ -611,6 +611,8 @@ void DebriefingState::btnOkClick(Action*)
 
 			if (playAwardMusic == true)
 				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS);
+			else
+				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 		}
 
 		if (_savedGame->isIronman() == true) // Autosave after mission

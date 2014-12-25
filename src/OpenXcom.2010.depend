@@ -9142,7 +9142,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1419496409 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1419499373 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -9187,7 +9187,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
 
-1418825691 source:f:\git\openxcom\src\savegame\soldierdead.cpp
+1419499327 source:f:\git\openxcom\src\savegame\soldierdead.cpp
 	"SoldierDead.h"
 	"SoldierDeath.h"
 	"SoldierDiary.h"
@@ -11428,7 +11428,7 @@
 1418651263 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1419474516 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1419499290 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11473,7 +11473,7 @@
 
 1418607947 f:\git\openxcom\src\ruleset\rulecommendations.h
 
-1419494207 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1419499267 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11488,7 +11488,7 @@
 1419493420 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1419474575 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1419499304 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
