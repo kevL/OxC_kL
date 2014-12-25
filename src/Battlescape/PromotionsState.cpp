@@ -100,8 +100,8 @@ PromotionsState::PromotionsState()
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(3, 126, 70, 81);
-	_lstSoldiers->setSelectable();
-	_lstSoldiers->setBackground(_window);
+//	_lstSoldiers->setSelectable();
+//	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
 
 	for (std::vector<Base*>::const_iterator
@@ -115,13 +115,11 @@ PromotionsState::PromotionsState()
 				++j)
 		{
 			if ((*j)->isPromoted() == true)
-			{
 				_lstSoldiers->addRow(
 									3,
 									(*j)->getName().c_str(),
 									tr((*j)->getRankString()).c_str(),
 									(*i)->getName().c_str());
-			}
 		}
 	}
 }

@@ -140,11 +140,13 @@ private:
 		void setCellColor(
 				size_t row,
 				size_t column,
-				Uint8 color);
+				Uint8 color,
+				bool contrast = false);
 		/// Sets the text color of a certain row.
 		void setRowColor(
 				size_t row,
-				Uint8 color);
+				Uint8 color,
+				bool contrast = false);
 
 		/// Gets the text of a certain cell.
 		std::wstring getCellText(
@@ -202,11 +204,6 @@ private:
 
 		/// Sets the text list's high contrast color setting.
 		void setHighContrast(bool contrast = true);
-		/// Sets the contrast of a certain cell.
-		void setCellHighContrast(
-				int row,
-				int column,
-				bool contrast = true);
 
 		/// Sets the text list's wordwrap setting.
 		void setWordWrap(bool wrap = true);

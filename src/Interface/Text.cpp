@@ -272,6 +272,15 @@ void Text::setHighContrast(const bool contrast)
 }
 
 /**
+ * Gets if this Text is using high contrast color.
+ * @return, true if high contrast
+ */
+bool Text::getHighContrast() const
+{
+	return _contrast;
+}
+
+/**
  * Changes the way the text is aligned horizontally relative to the drawing area.
  * @param align - horizontal alignment (enum Text.h)
  */

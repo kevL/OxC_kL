@@ -50,7 +50,9 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstSoldiers	= new TextList(285, 145, 16, 28);
+	_lstKIA			= new TextList(285, 9, 16, 28);
+	_lstSoldiers	= new TextList(285, 137, 16, 38);
+//	_lstSoldiers	= new TextList(285, 145, 16, 28);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
@@ -59,6 +61,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 	add(_window);
 	add(_txtTitle);
+	add(_lstKIA);
 	add(_lstSoldiers);
 	add(_btnOk);
 
@@ -73,11 +76,19 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
+	_lstKIA->setColor(Palette::blockOffset(9)); // (8)+10
+	_lstKIA->setColumns(1, 285);
+//	_lstKIA->setSelectable();
+//	_lstKIA->setBackground(_window);
+	_lstKIA->setMargin();
+	_lstKIA->setHighContrast();
+
+	_lstSoldiers->setColor(Palette::blockOffset(9)); // (8)+10
 	_lstSoldiers->setColumns(2, 200, 77);
-	_lstSoldiers->setSelectable();
-	_lstSoldiers->setBackground(_window);
+//	_lstSoldiers->setSelectable();
+//	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
+	_lstSoldiers->setHighContrast();
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
@@ -88,6 +99,24 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CommendationDeadState::btnOkClick,
 					Options::keyCancel);
+
+
+	size_t rowsKIA = soldiersKIA.size();
+	_lstKIA->setHeight(rowsKIA * 8 + 1);
+	_lstSoldiers->setY(_lstSoldiers->getY() + (rowsKIA - 1) * 8);
+	_lstSoldiers->setHeight(_lstSoldiers->getHeight() - (rowsKIA - 1) * 8);
+
+
+	for (std::vector<SoldierDead*>::const_iterator
+			soldier = soldiersKIA.begin();
+			soldier != soldiersKIA.end();
+			++soldier)
+	{
+		_lstKIA->addRow(
+					1,
+					(*soldier)->getName().c_str());
+	}
+
 
 
 	std::string noun;
@@ -175,8 +204,6 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 									2,
 									wss.str().c_str(),
 									tr((*soldierAward)->getDecorationLevelName(skipCounter)).c_str());
-//					_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
-
 					break;
 				}
 			}
@@ -195,8 +222,10 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 										0,
 										tr((*award).first).c_str());
 
-			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
-
+			_lstSoldiers->setRowColor(
+									titleRow,
+									Palette::blockOffset(15)-1,
+									false);
 			titleChosen = true;
 		}
 

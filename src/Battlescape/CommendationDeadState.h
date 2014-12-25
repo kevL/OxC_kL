@@ -46,7 +46,9 @@ private:
 		* _txtName,
 		* _txtTitle;
 	TextButton* _btnOk;
-	TextList* _lstSoldiers;
+	TextList
+		* _lstKIA,
+		* _lstSoldiers;
 	Window* _window;
 
 

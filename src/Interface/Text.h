@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_TEXT_H
 #define OPENXCOM_TEXT_H
 
-#include <string>
-#include <vector>
-
-#include <stdint.h>
+//#include <string>
+//#include <vector>
+//#include <stdint.h>
 
 #include "../Engine/Surface.h"
 
@@ -138,8 +137,11 @@ private:
 
 		/// Sets the text's color invert setting.
 		void setInvert(const bool invert = true);
-		/// Sets the text's high contrast color setting.
+
+		/// Sets this Text's high contrast color setting.
 		void setHighContrast(const bool contrast = true);
+		/// Gets if this Text is using high contrast color.
+		bool getHighContrast() const;
 
 		/// Sets the text's horizontal alignment.
 		void setAlign(TextHAlign align);
@@ -161,8 +163,8 @@ private:
 		int getTextWidth(int line = -1) const;
 		/// Gets the rendered text's height.
 		int getTextHeight(int line = -1) const;
-		/// kL. Adds to the text's height.
-		void addTextHeight(int pixels = 1); // kL
+		/// Adds to the text's height.
+		void addTextHeight(int pixels = 1);
 
 		/// Draws the text.
 		void draw();

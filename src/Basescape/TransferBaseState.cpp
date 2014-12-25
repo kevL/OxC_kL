@@ -160,7 +160,7 @@ TransferBaseState::TransferBaseState(Base* base)
 								Palette::blockOffset(13)+5);
 			_bases.push_back(*i);
 
-			row++;
+			++row;
 		}
 	}
 }

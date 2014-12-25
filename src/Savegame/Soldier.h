@@ -124,7 +124,7 @@ private:
 		YAML::Node save() const;
 
 		/// Gets soldier rules.
-		RuleSoldier* getRules() const;
+		const RuleSoldier* const getRules() const;
 
 		/// Gets a pointer to initial stats.
 		UnitStats* getInitStats();

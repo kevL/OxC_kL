@@ -29,8 +29,8 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 
 namespace OpenXcom
@@ -234,25 +234,32 @@ void TextList::unpress(State* state)
  * @param row		- row number
  * @param column	- column number
  * @param color		- text color
+ * @param contrast	- true for high contrast (default false)
  */
 void TextList::setCellColor(
 		size_t row,
 		size_t column,
-		Uint8 color)
+		Uint8 color,
+		bool contrast)
 {
 	_texts[row][column]->setColor(color);
+
+	if (_texts[row][column]->getHighContrast() != contrast)
+		_texts[row][column]->setHighContrast(contrast);
 
 	_redraw = true;
 }
 
 /**
  * Changes the text color of a whole row in the list.
- * @param row	- row number
- * @param color	- text color
+ * @param row		- row number
+ * @param color		- text color
+ * @param contrast	- true for high contrast (default false)
  */
 void TextList::setRowColor(
 		size_t row,
-		Uint8 color)
+		Uint8 color,
+		bool contrast)
 {
 	for (std::vector<Text*>::const_iterator
 			i = _texts[row].begin();
@@ -260,6 +267,9 @@ void TextList::setRowColor(
 			++i)
 	{
 		(*i)->setColor(color);
+
+		if ((*i)->getHighContrast() != contrast)
+			(*i)->setHighContrast(contrast);
 	}
 
 	_redraw = true;
@@ -708,22 +718,6 @@ void TextList::setHighContrast(bool contrast)
 	}
 
 	_scrollbar->setHighContrast(contrast);
-}
-
-/**
- * Changes the contrast of a specific Text object in the list.
- * @param row		- row number
- * @param column	- column number
- * @param contrast	- contrast setting (default true)
- */
-void TextList::setCellHighContrast(
-		int row,
-		int column,
-		bool contrast)
-{
-	_texts[row][column]->setHighContrast(contrast);
-
-	_redraw = true;
 }
 
 /**

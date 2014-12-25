@@ -202,11 +202,11 @@ InterceptState::InterceptState(
 							ss2.str().c_str(),
 							ss3.str().c_str());
 
-			_lstCrafts->setCellHighContrast(row, 1);
 			_lstCrafts->setCellColor(
 									row,
 									1,
-									_cellColor);
+									_cellColor,
+									true);
 
 			row++;
 		}

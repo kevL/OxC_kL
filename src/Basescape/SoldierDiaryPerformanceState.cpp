@@ -491,13 +491,13 @@ void SoldierDiaryPerformanceState::init()
 		ws3,
 		ws4;
 
-	if (_diary->getMissionTotal() > 0) // Mission stats ->
+	if (_diary->getMissionTotal() != 0) // Mission stats ->
 		ws1 = tr("STR_MISSIONS").arg(_diary->getMissionTotal());
-	if (_diary->getWinTotal() > 0)
+	if (_diary->getWinTotal() != 0)
 		ws2 = tr("STR_WINS").arg(_diary->getWinTotal());
-	if (_diary->getScoreTotal() > 0)
+	if (_diary->getScoreTotal() != 0)
 		ws3 = tr("STR_SCORE_VALUE").arg(_diary->getScoreTotal());
-	if (_diary->getDaysWoundedTotal() > 0)
+	if (_diary->getDaysWoundedTotal() != 0)
 		ws4 = tr("STR_DAYS_WOUNDED").arg(_diary->getDaysWoundedTotal()).arg(L" dy");
 
 	_lstMissionTotals->addRow(
@@ -511,11 +511,11 @@ void SoldierDiaryPerformanceState::init()
 	ws2 =
 	ws3 = L"";
 
-	if (_diary->getKillTotal() > 0) // Kill stats ->
+	if (_diary->getKillTotal() != 0) // Kill stats ->
 		ws1 = tr("STR_KILLS").arg(_diary->getKillTotal());
-	if (_diary->getStunTotal() > 0)
+	if (_diary->getStunTotal() != 0)
 		ws2 = tr("STR_STUNS").arg(_diary->getStunTotal());
-	if (_diary->getScorePoints() > 0)
+	if (_diary->getScorePoints() != 0)
 		ws3 = tr("STR_SCORE_VALUE").arg(_diary->getScorePoints());
 
 	_lstKillTotals->addRow(

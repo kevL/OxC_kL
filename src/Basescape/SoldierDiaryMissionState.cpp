@@ -265,7 +265,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 //		_lstKills->addRow(1, wossKills.str().c_str()); // should change to/add shots-connected ...
 //	}
 
-	if (killQty > 0)
+	if (killQty != 0)
 	{
 		_txtKills->setColor(Palette::blockOffset(13)+5);
 		_txtKills->setSecondaryColor(Palette::blockOffset(13));
@@ -274,7 +274,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	else
 		_txtKills->setVisible(false);
 
-	if (points > 0)
+	if (points != 0)
 	{
 		_txtPoints->setColor(Palette::blockOffset(13)+5);
 		_txtPoints->setSecondaryColor(Palette::blockOffset(13));

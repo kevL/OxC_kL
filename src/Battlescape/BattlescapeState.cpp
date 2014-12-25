@@ -3930,13 +3930,13 @@ void BattlescapeState::updateExperienceInfo() // kL
 							Text::formatNumber(xp[i]).c_str());
 
 		if (xp[i] > 10)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(0));	// white
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(0), true);		// white
 		else if (xp[i] > 5)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10));	// brown
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true);	// brown
 		else if (xp[i] > 2)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1));	// orange
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1), true);		// orange
 		else if (xp[i] > 0)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3));	// green
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3), true);		// green
 	}
 }
 
@@ -4013,7 +4013,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 							infoType.at(i).c_str());
 		}
 
-		_lstTileInfo->setCellColor(i, 0, color);
+		_lstTileInfo->setCellColor(i, 0, color, true);
 	}
 }
 

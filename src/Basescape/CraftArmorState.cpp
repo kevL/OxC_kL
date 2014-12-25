@@ -187,10 +187,8 @@ void CraftArmorState::init()
 			_lstSoldiers->setCellColor(
 									row,
 									2,
-									color);
-			_lstSoldiers->setCellHighContrast(
-											row,
-											2);
+									color,
+									true);
 		}
 	}
 
