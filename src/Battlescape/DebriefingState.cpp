@@ -23,6 +23,7 @@
 
 #include "CannotReequipState.h"
 #include "CommendationState.h"
+#include "CommendationDeadState.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
 
@@ -428,7 +429,7 @@ DebriefingState::DebriefingState()
 								// This makes them ineligible for promotion.
 								// PS, there is no 'geoscape Soldiers list' really; it's
 								// just a variable stored in each xCom-agent/BattleUnit ....
-				const SoldierDead* deadSoldier;
+				SoldierDead* deadSoldier;
 
 				for (std::vector<SoldierDead*>::const_iterator
 						j = _savedGame->getDeadSoldiers()->begin();
@@ -442,10 +443,10 @@ DebriefingState::DebriefingState()
 					}
 				}
 
-				statistics->KIA = true;
+				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
 
 				statistics->daysWounded = 0;
-				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
+				statistics->KIA = true;
 
 				//Log(LOG_INFO) << ". . DEAD updateDiary()";
 				deadSoldier->getDiary()->updateDiary(
@@ -455,13 +456,14 @@ DebriefingState::DebriefingState()
 				//Log(LOG_INFO) << ". . DEAD updateDiary() DONE";
 
 				deadSoldier->getDiary()->manageAwards(_rules);
-//				if (deadSoldier->getDiary()->manageAwards(_rules))
-//					_soldiersCommended.push_back(deadSoldier);
+
+				_soldiersKIA.push_back(deadSoldier);
 			}
 			else
 			{
-				statistics->daysWounded = soldier->getWoundRecovery();
 				_missionStatistics->injuryList[soldier->getId()] = soldier->getWoundRecovery();
+
+				statistics->daysWounded = soldier->getWoundRecovery();
 
 				//Log(LOG_INFO) << ". . updateDiary()";
 				soldier->getDiary()->updateDiary(
@@ -534,8 +536,7 @@ void DebriefingState::btnOkClick(Action*)
 			participants.push_back((*i)->getGeoscapeSoldier());
 	}
 
-	_savedGame->setBattleGame(NULL);	// kL_note: Would it be better to **delete** that ........
-										// It is deleted when SavedGame::setBattleGame() runs the *next Battle*.
+	_savedGame->setBattleGame(NULL);
 	_game->popState();
 
 	if (_savedGame->getMonthsPassed() == -1)
@@ -544,23 +545,44 @@ void DebriefingState::btnOkClick(Action*)
 	{
 		if (_destroyXCOMBase == false)
 		{
+			bool playAwardMusic = false;
+
+			if (_soldiersKIA.empty() == false)
+			{
+				playAwardMusic = true;
+				_game->pushState(new CommendationDeadState(_soldiersKIA));
+			}
+
 			if (_soldiersCommended.empty() == false)
+			{
+				playAwardMusic = true;
 				_game->pushState(new CommendationState(_soldiersCommended));
+			}
 
 			if (_savedGame->handlePromotions(participants))
+			{
+				playAwardMusic = true;
 				_game->pushState(new PromotionsState());
+			}
 
 			if (_missingItems.empty() == false)
+			{
+//				playAwardMusic = true;
 				_game->pushState(new CannotReequipState(_missingItems));
+			}
 
 			if (_noContainment == true)
+			{
+//				playAwardMusic = true;
 				_game->pushState(new NoContainmentState());
+			}
 			else if (_manageContainment == true)
 			{
+//				playAwardMusic = true;
 				_game->pushState(new ManageAlienContainmentState(
-																_base,
-																OPT_BATTLESCAPE,
-																false)); // Do not allow researchHelp!
+															_base,
+															OPT_BATTLESCAPE,
+															false)); // Do not allow researchHelp!
 				_game->pushState(new ErrorMessageState(
 													tr("STR_CONTAINMENT_EXCEEDED")
 														.arg(_base->getName()).c_str(),
@@ -574,6 +596,7 @@ void DebriefingState::btnOkClick(Action*)
 				&& Options::storageLimitsEnforced == true
 				&& _base->storesOverfull() == true)
 			{
+//				playAwardMusic = true;
 				_game->pushState(new SellState(
 											_base,
 											OPT_BATTLESCAPE));
@@ -585,6 +608,9 @@ void DebriefingState::btnOkClick(Action*)
 													"BACK01.SCR",
 													0));
 			}
+
+			if (playAwardMusic == true)
+				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS);
 		}
 
 		if (_savedGame->isIronman() == true) // Autosave after mission

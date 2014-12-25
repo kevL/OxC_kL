@@ -544,7 +544,7 @@ void SoldierDiary::updateDiary(
 		MissionStatistics* const missionStatistics,
 		const Ruleset* const rules)
 {
-	Log(LOG_INFO) << "SoldierDiary::updateDiary()";
+	//Log(LOG_INFO) << "SoldierDiary::updateDiary()";
 	const std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator
 			i = unitKills.begin();
@@ -602,11 +602,11 @@ void SoldierDiary::updateDiary(
 			++_ironManTotal;
 	}
 
-	if (unitStatistics->daysWounded != -1)
-		_daysWoundedTotal += unitStatistics->daysWounded;
-
 	if (unitStatistics->daysWounded > 0)
+	{
+		_daysWoundedTotal += unitStatistics->daysWounded;
 		++_timesWoundedTotal;
+	}
 
 	if (missionStatistics->type == "STR_BASE_DEFENSE")
 		++_baseDefenseMissionTotal;
@@ -645,7 +645,7 @@ void SoldierDiary::updateDiary(
 	_missionIdList.push_back(missionStatistics->id);
 
 //	_missionTotal = _missionIdList.size(); // CAN GET RID OF MISSION TOTAL
-	Log(LOG_INFO) << "SoldierDiary::updateDiary() EXIT";
+	//Log(LOG_INFO) << "SoldierDiary::updateDiary() EXIT";
 }
 
 /**

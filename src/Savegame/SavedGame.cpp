@@ -83,8 +83,7 @@ struct findRuleResearch
 findRuleResearch::findRuleResearch(RuleResearch* toFind)
 	:
 		_toFind(toFind)
-{
-}
+{}
 
 ///
 bool findRuleResearch::operator()(const ResearchProject* r) const
@@ -107,8 +106,7 @@ struct equalProduction
 equalProduction::equalProduction(RuleManufacture* item)
 	:
 		_item(item)
-{
-}
+{}
 
 ///
 bool equalProduction::operator()(const Production* p) const
@@ -1213,7 +1211,6 @@ SavedBattleGame* SavedGame::getSavedBattle()
 void SavedGame::setBattleGame(SavedBattleGame* battleGame)
 {
 	delete _battleGame;
-
 	_battleGame = battleGame;
 }
 

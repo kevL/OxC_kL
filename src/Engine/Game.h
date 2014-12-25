@@ -131,6 +131,8 @@ private:
 		/// Sets whether the mouse cursor is activated.
 		void setInputActive(bool active);
 
+		/// Gets the quantity of currently running states.
+		int getQtyStates() const;
 		/// Returns whether current state is the param state
 		bool isState(State* state) const;
 

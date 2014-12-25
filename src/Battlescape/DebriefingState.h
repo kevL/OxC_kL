@@ -134,6 +134,7 @@ private:
 	std::vector<ReequipStat> _missingItems;
 	std::vector<DebriefingStat*> _stats;
 	std::vector<Soldier*> _soldiersCommended;
+	std::vector<SoldierDead*> _soldiersKIA;
 
 	/// Adds to the debriefing stats.
 	void addStat(

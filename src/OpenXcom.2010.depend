@@ -274,7 +274,7 @@
 1413136956 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1416321627 f:\git\openxcom\src\engine\game.h
+1419497520 f:\git\openxcom\src\engine\game.h
 
 1417628804 f:\git\openxcom\src\engine\language.h
 	<map>
@@ -5603,7 +5603,7 @@
 1417921815 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1416930052 f:\git\openxcom\src\battlescape\debriefingstate.h
+1419494426 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -5982,10 +5982,11 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1419469881 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1419498315 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
+	"CommendationDeadState.h"
 	"NoContainmentState.h"
 	"PromotionsState.h"
 	"../Basescape/ManageAlienContainmentState.h"
@@ -6401,18 +6402,15 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415853534 source:f:\git\openxcom\src\battlescape\promotionsstate.cpp
+1419499213 source:f:\git\openxcom\src\battlescape\promotionsstate.cpp
 	"PromotionsState.h"
-	<sstream>
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
+	"../Resource/XcomResourcePack.h"
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
@@ -6708,7 +6706,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1417827612 source:f:\git\openxcom\src\engine\game.cpp
+1419497512 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -9144,7 +9142,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1419467115 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1419496409 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -11475,7 +11473,7 @@
 
 1418607947 f:\git\openxcom\src\ruleset\rulecommendations.h
 
-1419465829 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1419494207 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11485,12 +11483,9 @@
 	"../Interface/Window.h"
 	"../Resource/XcomResourcePack.h"
 	"../Ruleset/RuleCommendations.h"
-	"../Savegame/Base.h"
-	"../Savegame/SavedGame.h"
-	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1419465734 f:\git\openxcom\src\battlescape\commendationstate.h
+1419493420 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
 1419474575 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
@@ -11513,7 +11508,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1419469688 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1419492191 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
@@ -11796,4 +11791,20 @@
 	"../Ruleset/RuleManufacture.h"
 
 1418723694 f:\git\openxcom\src\savegame\saveconverterxcom1.h
+
+1419494285 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
+	"CommendationDeadState.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Resource/XcomResourcePack.h"
+	"../Ruleset/RuleCommendations.h"
+	"../Savegame/SoldierDead.h"
+	"../Savegame/SoldierDiary.h"
+
+1419493411 f:\git\openxcom\src\battlescape\commendationdeadstate.h
+	"../Engine/State.h"
 

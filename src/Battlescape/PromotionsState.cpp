@@ -19,19 +19,19 @@
 
 #include "PromotionsState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
@@ -70,6 +70,7 @@ PromotionsState::PromotionsState()
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -103,17 +104,17 @@ PromotionsState::PromotionsState()
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
 
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		for (std::vector<Soldier*>::iterator
+		for (std::vector<Soldier*>::const_iterator
 				j = (*i)->getSoldiers()->begin();
 				j != (*i)->getSoldiers()->end();
 				++j)
 		{
-			if ((*j)->isPromoted())
+			if ((*j)->isPromoted() == true)
 			{
 				_lstSoldiers->addRow(
 									3,
@@ -129,8 +130,7 @@ PromotionsState::PromotionsState()
  * dTor.
  */
 PromotionsState::~PromotionsState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.
@@ -138,6 +138,13 @@ PromotionsState::~PromotionsState()
  */
 void PromotionsState::btnOkClick(Action*)
 {
+	//Log(LOG_INFO) << "Promotions, states = " << _game->getQtyStates();
+	if (_game->getQtyStates() == 2) // ie: (1) this, (2) Geoscape
+	{
+		_game->getResourcePack()->fadeMusic(_game, 900);
+		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+	}
+
 	_game->popState();
 }
 

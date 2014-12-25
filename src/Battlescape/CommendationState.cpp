@@ -35,9 +35,6 @@
 
 #include "../Ruleset/RuleCommendations.h"
 
-#include "../Savegame/Base.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDiary.h"
 
 
@@ -57,12 +54,12 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	setPalette("PAL_GEOSCAPE", 0);
 
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS);
+//	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS); // note: Moved to DebriefingState.
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_lstSoldiers);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -129,7 +126,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					++soldierCom)
 			{
 				if ((*soldierCom)->getType() == (*com).first
-					&& (*soldierCom)->isNew()
+					&& (*soldierCom)->isNew() == true
 					&& noun == "noNoun")
 				{
 					(*soldierCom)->makeOld();
@@ -142,7 +139,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					}
 
 					std::wstringstream wss; // Soldier name
-					wss << "  ";
+					wss << L"  ";
 					wss << (*soldier)->getName().c_str();
 
 					int // Decoration level name
@@ -186,7 +183,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 		if (titleRow != row - 1)
 		{
-			if (modularCom) // Medal name
+			if (modularCom == true) // Medal name
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
@@ -211,8 +208,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
  * dTor.
  */
 CommendationState::~CommendationState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.
@@ -220,10 +216,14 @@ CommendationState::~CommendationState()
  */
 void CommendationState::btnOkClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 900);
+	//Log(LOG_INFO) << "Commendation, states = " << _game->getQtyStates();
+	if (_game->getQtyStates() == 2) // ie: (1) this, (2) Geoscape
+	{
+		_game->getResourcePack()->fadeMusic(_game, 900);
+		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+	}
 
 	_game->popState();
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 }
 
 }

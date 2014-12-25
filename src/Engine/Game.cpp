@@ -130,7 +130,7 @@ Game::Game(const std::string& title)
 	_cursor->setColor(Palette::blockOffset(15)+12);
 
 	// Create invisible hardware cursor to workaround bug with absolute positioning pointing devices
-//kL	SDL_ShowCursor(SDL_ENABLE);
+//	SDL_ShowCursor(SDL_ENABLE);
 	SDL_ShowCursor(SDL_DISABLE); // kL
 	Uint8 cursor = 0;
 	SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1, 1, 0, 0));
@@ -270,7 +270,7 @@ void Game::run()
 						case SDL_APPACTIVE:
 							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain? RUNNING: stateRun[Options::pauseMode];
 						break;
-						case SDL_APPMOUSEFOCUS: // We consciously ignore it.
+						case SDL_APPMOUSEFOCUS: // Consciously ignore it.
 						break;
 						case SDL_APPINPUTFOCUS:
 							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain? RUNNING: kbFocusRun[Options::pauseMode];
@@ -386,7 +386,7 @@ void Game::run()
 				if (fps < 1)
 					fps = 1;
 				_timeUntilNextFrame = static_cast<int>(
-										(1000.0f / static_cast<float>(fps))
+											(1000.f / static_cast<float>(fps))
 											- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
 			}
 			else
@@ -424,14 +424,14 @@ void Game::run()
 			}
 		}
 
-		switch (runningState) // Save on CPU
+		switch (runningState)	// Save on CPU
 		{
 			case RUNNING:
-				SDL_Delay(1); // Save CPU from going 100%
+				SDL_Delay(1);	// Save CPU from going 100%
 			break;
 			case SLOWED:
 			case PAUSED:
-				SDL_Delay(100); // More slowing down.
+				SDL_Delay(100);	// More slowing down.
 			break;
 		}
 	}
@@ -540,7 +540,7 @@ FpsCounter* Game::getFpsCounter() const
  * Pops all the states currently in stack and pushes in the new state.
  * A shortcut for cleaning up all the old states when they're not necessary
  * like in one-way transitions.
- * @param state - pointer to the new State.
+ * @param state - pointer to the new State
  */
 void Game::setState(State* state)
 {
@@ -554,7 +554,7 @@ void Game::setState(State* state)
 /**
  * Pushes a new state into the top of the stack and initializes it.
  * The new state will be used once the next game cycle starts.
- * @param state - pointer to the new state
+ * @param state - pointer to the new State
  */
 void Game::pushState(State* state)
 {
@@ -711,6 +711,15 @@ void Game::setInputActive(bool active)
 {
 	_inputActive = active;
 //	_cursor->setVisible(active);
+}
+
+/**
+ * Gets the quantity of currently running states.
+ * @return, qty of states
+ */
+int Game::getQtyStates() const
+{
+	return _states.size();
 }
 
 /**

@@ -288,8 +288,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
  * dTor.
  */
 SoldierDiaryMissionState::~SoldierDiaryMissionState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

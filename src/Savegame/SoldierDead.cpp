@@ -100,7 +100,7 @@ SoldierDead::SoldierDead(
 }
 
 /**
- *
+ * dTor.
  */
 SoldierDead::~SoldierDead()
 {

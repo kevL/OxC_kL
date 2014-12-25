@@ -365,8 +365,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
  * dTor.
  */
 SoldierDiaryPerformanceState::~SoldierDiaryPerformanceState()
-{
-}
+{}
 
 /**
  *  Clears all the variables and reinitializes the list of kills or missions for the soldier.

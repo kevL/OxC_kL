@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_COMMENDATIONSTATE_H
 #define OPENXCOM_COMMENDATIONSTATE_H
 
-//#include <string>
-
 #include "../Engine/State.h"
 
 
