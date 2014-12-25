@@ -1071,20 +1071,19 @@ void SavedGame::setTime(GameTime time)
 
 /**
  * Returns the latest ID for the specified object and increases it.
- * @param name - reference an object name
+ * @param objectType - reference an object string
  * @return, latest ID number
  */
-int SavedGame::getId(const std::string& name)
+int SavedGame::getId(const std::string& objectType)
 {
-	std::map<std::string, int>::iterator i = _ids.find(name);
-
+	std::map<std::string, int>::iterator i = _ids.find(objectType);
 	if (i != _ids.end())
 		return i->second++;
 	else
 	{
-		_ids[name] = 1;
+		_ids[objectType] = 1;
 
-		return _ids[name]++;
+		return _ids[objectType]++;
 	}
 }
 
@@ -1853,12 +1852,12 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 
 	if (filledPositions < 1
 		&& filledPositions2 > 0
-		&& (!Options::fieldPromotions
+		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
 	{
 		// only promote one colonel to commander
 		highestRanked->promoteRank();
-		soldiersPromoted++;
+		++soldiersPromoted;
 	}
 
 	inspectSoldiers(
@@ -1876,11 +1875,11 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 
 	if (filledPositions < soldiersTotal / 23
 		&& filledPositions2 > 0
-		&& (!Options::fieldPromotions
+		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
-		soldiersPromoted++;
+		++soldiersPromoted;
 	}
 
 	inspectSoldiers(
@@ -1898,7 +1897,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 
 	if (filledPositions < soldiersTotal / 11
 		&& filledPositions2 > 0
-		&& (!Options::fieldPromotions
+		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
@@ -1920,11 +1919,11 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 
 	if (filledPositions < soldiersTotal / 5
 		&& filledPositions2 > 0
-		&& (!Options::fieldPromotions
+		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
-		soldiersPromoted++;
+		++soldiersPromoted;
 	}
 
 	return soldiersPromoted > 0;
@@ -1997,20 +1996,20 @@ int SavedGame::getSoldierScore(Soldier* soldier)
 {
 	const UnitStats* const stats = soldier->getCurrentStats();
 
-	int score = 2 * stats->health
-			  + 2 * stats->stamina
-			  + 4 * stats->reactions
-			  + 4 * stats->bravery
-			  + 3 * (stats->tu + 2 * (stats->firing))
+	int score = stats->health * 2
+			  + stats->stamina * 2
+			  + stats->reactions * 4
+			  + stats->bravery * 4
+			  + (stats->tu + stats->firing * 2) * 3
 			  + stats->melee
 			  + stats->throwing
 			  + stats->strength;
 
 	if (stats->psiSkill > 0)
 		score += stats->psiStrength
-				+ 2 * stats->psiSkill;
+			   + stats->psiSkill * 2;
 
-	score += 10 * (soldier->getMissions() + soldier->getKills());
+	score += (soldier->getMissions() + soldier->getKills()) * 10;
 
 	return score;
 }
@@ -2096,8 +2095,8 @@ AlienMission* SavedGame::getAlienMission(
 }
 
 /**
- * adds to this month's research score
- * @param score the amount to add.
+ * Adds to this month's research score
+ * @param score - the amount to add
  */
 void SavedGame::addResearchScore(int score)
 {
@@ -2105,8 +2104,8 @@ void SavedGame::addResearchScore(int score)
 }
 
 /**
- * return the list of research scores
- * @return list of research scores.
+ * Returns the list of research scores
+ * @return, list of research scores
  */
 std::vector<int>& SavedGame::getResearchScores()
 {
@@ -2114,8 +2113,8 @@ std::vector<int>& SavedGame::getResearchScores()
 }
 
 /**
- * return if the player has been warned about poor performance.
- * @return true or false.
+ * Returns if the player has been warned about poor performance.
+ * @return, true if warned
  */
 bool SavedGame::getWarned() const
 {
@@ -2123,8 +2122,8 @@ bool SavedGame::getWarned() const
 }
 
 /**
- * sets the player's "warned" status.
- * @param warned set "warned" to this.
+ * Sets the player's warned status.
+ * @param warned - true if warned
  */
 void SavedGame::setWarned(bool warned)
 {
@@ -2132,7 +2131,8 @@ void SavedGame::setWarned(bool warned)
 }
 
 
-/** @brief Check if a point is contained in a region.
+/**
+ * Checks if a point is contained in a region.
  * This function object checks if a point is contained inside a region.
  */
 class ContainsPoint: public std::unary_function<const Region*, bool>
@@ -2163,33 +2163,31 @@ private:
 };
 
 /**
- * Find the region containing this location.
- * @param lon The longtitude.
- * @param lat The latitude.
- * @return Pointer to the region, or 0.
+ * Finds the region containing this location.
+ * @param lon - the longtitude
+ * @param lat - the latitude
+ * @return, pointer to the Region or NULL
  */
 Region* SavedGame::locateRegion(
 		double lon,
 		double lat) const
 {
-	std::vector<Region*>::const_iterator found = std::find_if(
-														_regions.begin(),
-														_regions.end(),
-														ContainsPoint(
-																	lon,
-																	lat));
+	const std::vector<Region*>::const_iterator found = std::find_if(
+																_regions.begin(),
+																_regions.end(),
+																ContainsPoint(
+																			lon,
+																			lat));
 	if (found != _regions.end())
-	{
 		return *found;
-	}
 
 	return NULL;
 }
 
 /**
  * Find the region containing this target.
- * @param target The target to locate.
- * @return Pointer to the region, or 0.
+ * @param target - the target to locate
+ * @return, pointer to the Region or NULL
  */
 Region* SavedGame::locateRegion(const Target& target) const
 {
@@ -2199,7 +2197,7 @@ Region* SavedGame::locateRegion(const Target& target) const
 }
 
 /**
- * @return the month counter.
+ * @return, the month counter
  */
 int SavedGame::getMonthsPassed() const
 {
@@ -2207,7 +2205,7 @@ int SavedGame::getMonthsPassed() const
 }
 
 /**
- * @return the GraphRegionToggles.
+ * @return, address of the GraphRegionToggles
  */
 const std::string& SavedGame::getGraphRegionToggles() const
 {
@@ -2215,7 +2213,7 @@ const std::string& SavedGame::getGraphRegionToggles() const
 }
 
 /**
- * @return the GraphCountryToggles.
+ * @return, address of the GraphCountryToggles
  */
 const std::string& SavedGame::getGraphCountryToggles() const
 {
@@ -2223,7 +2221,7 @@ const std::string& SavedGame::getGraphCountryToggles() const
 }
 
 /**
- * @return the GraphFinanceToggles.
+ * @return, address of the GraphFinanceToggles
  */
 const std::string& SavedGame::getGraphFinanceToggles() const
 {
@@ -2232,7 +2230,7 @@ const std::string& SavedGame::getGraphFinanceToggles() const
 
 /**
  * Sets the GraphRegionToggles.
- * @param value The new value for GraphRegionToggles.
+ * @param value - reference the new value for GraphRegionToggles
  */
 void SavedGame::setGraphRegionToggles(const std::string& value)
 {
@@ -2241,7 +2239,7 @@ void SavedGame::setGraphRegionToggles(const std::string& value)
 
 /**
  * Sets the GraphCountryToggles.
- * @param value The new value for GraphCountryToggles.
+ * @param value - reference the new value for GraphCountryToggles
  */
 void SavedGame::setGraphCountryToggles(const std::string& value)
 {
@@ -2250,7 +2248,7 @@ void SavedGame::setGraphCountryToggles(const std::string& value)
 
 /**
  * Sets the GraphFinanceToggles.
- * @param value The new value for GraphFinanceToggles.
+ * @param value - reference the new value for GraphFinanceToggles
  */
 void SavedGame::setGraphFinanceToggles(const std::string& value)
 {
@@ -2258,25 +2256,25 @@ void SavedGame::setGraphFinanceToggles(const std::string& value)
 }
 
 /**
- * kL. Sets the current Graph page.
+ * Sets the current Graph page.
  * @param page - current page shown by Graphs
  */
-void SavedGame::setCurrentGraph(int page) // kL
+void SavedGame::setCurrentGraph(int page)
 {
 	_curGraph = page;
 }
 
 /**
- * kL. Gets the current Graph page.
+ * Gets the current Graph page.
  * @return, current page to show in Graphs
  */
-int SavedGame::getCurrentGraph() const // kL
+int SavedGame::getCurrentGraph() const
 {
 	return _curGraph;
 }
 
 /**
- * Increment the month counter.
+ * Increments the month counter.
  */
 void SavedGame::addMonth()
 {
@@ -2292,7 +2290,7 @@ void SavedGame::addMonth()
 } */
 
 /**
- * @return the state of the radar line drawing.
+ * @return, the state of the radar line drawing.
  */
 /* bool SavedGame::getRadarLines()
 {
@@ -2308,7 +2306,7 @@ void SavedGame::addMonth()
 } */
 
 /**
- * @return the state of the detail drawing.
+ * @return, the state of the detail drawing.
  */
 /* bool SavedGame::getDetail()
 {
@@ -2402,19 +2400,19 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers()
 } */
 
 /**
- * kL. Sets the current matrix row.
+ * Sets the current matrix row.
  * @param row - current matrix row
  */
-void SavedGame::setCurrentRowMatrix(size_t row) // kL
+void SavedGame::setCurrentRowMatrix(size_t row)
 {
 	_curRowMatrix = row;
 }
 
 /**
- * kL. Gets the current matrix row.
+ * Gets the current matrix row.
  * @return, current matrix row
  */
-size_t SavedGame::getCurrentRowMatrix() const // kL
+size_t SavedGame::getCurrentRowMatrix() const
 {
 	return _curRowMatrix;
 }

@@ -188,15 +188,15 @@ struct MissionStatistics
 			time(0,0,0,0,0,0,0),
 			region("STR_REGION_UNKNOWN"),
 			country("STR_UNKNOWN"),
-			type(""),
 			ufo("NO_UFO"),
 			success(false),
 			score(0),
-			rating(""),
 			alienRace("STR_UNKNOWN"),
 			shade(0),
-			injuryList(),
 			valiantCrux(false)
+//			injuryList(),
+//			type(""),
+//			rating("")
 	{
 	}
 
@@ -372,7 +372,7 @@ private:
 		void setTime(GameTime time);
 
 		/// Gets the current ID for an object.
-		int getId(const std::string& name);
+		int getId(const std::string& objectType);
 		/// Resets the list of object IDs.
 		void setIds(const std::map<std::string, int>& ids);
 
@@ -514,10 +514,10 @@ private:
 		/// Sets the GraphFinanceToggles.
 		void setGraphFinanceToggles(const std::string& value);
 
-		/// kL. Sets the current Graph page.
-		void setCurrentGraph(int page); // kL
-		/// kL. Gets the current Graph page.
-		int getCurrentGraph() const; // kL
+		/// Sets the current Graph page.
+		void setCurrentGraph(int page);
+		/// Gets the current Graph page.
+		int getCurrentGraph() const;
 
 		/// Increment the month counter.
 		void addMonth();
@@ -530,11 +530,11 @@ private:
 		/// check the current state of the detail drawing
 		bool getDetail(); */
 
-		/// add a research to the "popped up" array
+		/// Adds a research to the "popped up" array.
 		void addPoppedResearch(const RuleResearch* research);
-		/// check if a research is on the "popped up" array
+		/// Checks if a research is on the "popped up" array.
 		bool wasResearchPopped(const RuleResearch* research);
-		/// remove a research from the "popped up" array
+		/// Removes a research from the "popped up" array.
 		void removePoppedResearch(const RuleResearch* research);
 
 		/// Gets the list of dead soldiers.
@@ -553,10 +553,10 @@ private:
 		/// Gets the the last selected armour
 //		std::string getLastSelectedArmor();
 
-		/// kL. Sets the current Matrix row.
-		void setCurrentRowMatrix(size_t row); // kL
-		/// kL. Gets the current Matrix row.
-		size_t getCurrentRowMatrix() const; // kL
+		/// Sets the current Matrix row.
+		void setCurrentRowMatrix(size_t row);
+		/// Gets the current Matrix row.
+		size_t getCurrentRowMatrix() const;
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();

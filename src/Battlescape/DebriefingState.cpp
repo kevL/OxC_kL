@@ -386,19 +386,23 @@ DebriefingState::DebriefingState()
 			i != battle->getUnits()->end();
 			++i)
 	{
-		Soldier* const soldier = (*i)->getGeoscapeSoldier();
+		//Log(LOG_INFO) << "UNIT id " << (*i)->getId();
+		Soldier* soldier = (*i)->getGeoscapeSoldier();
+		// NOTE: In the case of a dead soldier, this pointer is Valid but points to garbage.
+		// Use that.
 		if (soldier != NULL)
 		{
+			//Log(LOG_INFO) << ". soldier VALID";
 			BattleUnitStatistics* const statistics = (*i)->getStatistics();
 
 			int soldierAlienKills = 0;
 
 			for (std::vector<BattleUnitKills*>::const_iterator
-					k = statistics->kills.begin();
-					k != statistics->kills.end();
-					++k)
+					j = statistics->kills.begin();
+					j != statistics->kills.end();
+					++j)
 			{
-				if ((*k)->_faction == FACTION_HOSTILE)
+				if ((*j)->_faction == FACTION_HOSTILE)
 					++soldierAlienKills;
 			}
 
@@ -416,23 +420,58 @@ DebriefingState::DebriefingState()
 				statistics->nikeCross = true;
 			}
 
-			statistics->daysWounded = soldier->getWoundRecovery();
-			_missionStatistics->injuryList[soldier->getId()] = soldier->getWoundRecovery();
 
 			if ((*i)->getStatus() == STATUS_DEAD)
+			{
+				soldier = NULL;	// Zero out the BattleUnit from the geoscape Soldiers list
+								// in this State; it's already gone from his/her former Base.
+								// This makes them ineligible for promotion.
+								// PS, there is no 'geoscape Soldiers list' really; it's
+								// just a variable stored in each xCom-agent/BattleUnit ....
+				const SoldierDead* deadSoldier;
+
+				for (std::vector<SoldierDead*>::const_iterator
+						j = _savedGame->getDeadSoldiers()->begin();
+						j != _savedGame->getDeadSoldiers()->end();
+						++j)
+				{
+					if ((*j)->getId() == (*i)->getId())
+					{
+						deadSoldier = *j;
+						break;
+					}
+				}
+
 				statistics->KIA = true;
 
-			soldier->getDiary()->updateDiary(
-										statistics,
-										_missionStatistics,
-										_rules);
+				statistics->daysWounded = 0;
+				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
 
-			if (soldier->getDiary()->manageCommendations(_rules))
+				//Log(LOG_INFO) << ". . DEAD updateDiary()";
+				deadSoldier->getDiary()->updateDiary(
+												statistics,
+												_missionStatistics,
+												_rules);
+				//Log(LOG_INFO) << ". . DEAD updateDiary() DONE";
+
+				deadSoldier->getDiary()->manageAwards(_rules);
+//				if (deadSoldier->getDiary()->manageAwards(_rules))
+//					_soldiersCommended.push_back(deadSoldier);
+			}
+			else
 			{
-//				if ((*i)->getStatus() != STATUS_DEAD)
-				_soldiersCommended.push_back(soldier);
-//				else if ((*i)->getStatus() == STATUS_DEAD)
-					// Quietly award dead soldiers their commendations.
+				statistics->daysWounded = soldier->getWoundRecovery();
+				_missionStatistics->injuryList[soldier->getId()] = soldier->getWoundRecovery();
+
+				//Log(LOG_INFO) << ". . updateDiary()";
+				soldier->getDiary()->updateDiary(
+											statistics,
+											_missionStatistics,
+											_rules);
+				//Log(LOG_INFO) << ". . updateDiary() DONE";
+
+				if (soldier->getDiary()->manageAwards(_rules) == true)
+					_soldiersCommended.push_back(soldier);
 			}
 		}
 	}
@@ -491,7 +530,7 @@ void DebriefingState::btnOkClick(Action*)
 			i != _savedGame->getSavedBattle()->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getGeoscapeSoldier())
+		if ((*i)->getGeoscapeSoldier() != NULL)
 			participants.push_back((*i)->getGeoscapeSoldier());
 	}
 
@@ -636,7 +675,6 @@ void ClearAlienBase::operator()(AlienMission* am) const
 void DebriefingState::prepareDebriefing()
 {
 	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
-
 	for (std::vector<std::string>::const_iterator
 			i = _rules->getItemsList().begin();
 			i != _rules->getItemsList().end();
@@ -667,7 +705,7 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST"));
 
 	for (std::map<int, SpecialType*>::const_iterator
-			i = _specialTypes.begin(); // <int <name, value> >
+			i = _specialTypes.begin();
 			i != _specialTypes.end();
 			++i)
 	{
@@ -1184,6 +1222,7 @@ void DebriefingState::prepareDebriefing()
 							if (*j == soldier)
 							{
 								(*i)->updateGeoscapeStats(*j);
+								(*i)->setStatus(STATUS_DEAD);
 
 								(*j)->die(_savedGame);
 

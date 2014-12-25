@@ -539,8 +539,7 @@ void Soldier::heal()
 int Soldier::getWoundPercent() const
 {
 	return static_cast<int>(std::floor(
-				static_cast<double>(_recovery) / static_cast<double>(_currentStats.health)
-			* 100.));
+				static_cast<double>(_recovery) / static_cast<double>(_currentStats.health) * 100.));
 }
 
 /**
@@ -818,15 +817,15 @@ void Soldier::autoStat()
 
 	switch (_currentStats.bravery)
 	{
-		case 10: stat << "a";	break;
-		case 20: stat << "b";	break;
-		case 30: stat << "c";	break;
-		case 40: stat << "d";	break;
-		case 50: stat << "e";	break;
-		case 60: stat << "f";	break;
-		case 70: stat << "g";	break;
-		case 80: stat << "h";	break;
-		case 90: stat << "i";	break;
+		case  10: stat << "a";	break;
+		case  20: stat << "b";	break;
+		case  30: stat << "c";	break;
+		case  40: stat << "d";	break;
+		case  50: stat << "e";	break;
+		case  60: stat << "f";	break;
+		case  70: stat << "g";	break;
+		case  80: stat << "h";	break;
+		case  90: stat << "i";	break;
 		case 100: stat << "j";	break;
 
 		default: stat << "z";

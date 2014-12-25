@@ -135,17 +135,11 @@ SoldierMemorialState::SoldierMemorialState()
 	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& SoldierMemorialState::lstSoldiersPress);
 
-	//Log(LOG_INFO) << "SoldierMemorialState::SoldierMemorialState() -> getDeadSoldiers";
 	for (std::vector<SoldierDead*>::const_reverse_iterator
 			i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
 			i != _game->getSavedGame()->getDeadSoldiers()->rend();
 			++i)
-/*	for (std::vector<SoldierDead*>::const_iterator
-			i = _game->getSavedGame()->getDeadSoldiers()->begin();
-			i != _game->getSavedGame()->getDeadSoldiers()->end();
-			++i) */
 	{
-		//Log(LOG_INFO) << ". dead soldier, getSoldierDeath & addRow etc";
 		const SoldierDeath* const death = (*i)->getDeath();
 
 		std::wostringstream

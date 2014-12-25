@@ -86,7 +86,7 @@ private:
 				FLYING_SOUND,
 				FLYING_SOUND_HQ,	// kL
 				ITEM_RELOAD,
-				ITEM_UNLOAD,		// kL
+				ITEM_UNLOAD_HQ,		// kL
 				SLIDING_DOOR_OPEN,
 				SLIDING_DOOR_CLOSE,
 				WALK_OFFSET,

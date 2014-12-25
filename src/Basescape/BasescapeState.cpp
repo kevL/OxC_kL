@@ -463,8 +463,8 @@ void BasescapeState::btnCraftsClick(Action*)
 void BasescapeState::btnAliens(Action*)
 {
 	_game->pushState(new ManageAlienContainmentState(
-													_base,
-													OPT_GEOSCAPE));
+												_base,
+												OPT_GEOSCAPE));
 }
 
 /**
@@ -483,8 +483,8 @@ void BasescapeState::btnResearchClick(Action*)
 void BasescapeState::btnManufactureClick(Action*)
 {
 	_game->pushState(new ManufactureState(
-										_base,
-										this));
+									_base,
+									this));
 }
 
 /**
@@ -530,8 +530,8 @@ void BasescapeState::btnIncTransClick(Action*)
 void BasescapeState::btnFacilitiesClick(Action*)
 {
 	_game->pushState(new BuildFacilitiesState(
-											_base,
-											this));
+										_base,
+										this));
 }
 
 /**
@@ -664,7 +664,7 @@ void BasescapeState::viewLeftClick(Action*)
 
 
 	if (bPop == true)
-		soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+		soundPop->play(Mix_GroupAvailable(0));
 }
 
 /**
@@ -767,7 +767,7 @@ void BasescapeState::miniLeftClick(Action*)
 	{
 		// aka: btnNewBaseClick();
 		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
-		Base* base = new Base(_game->getRuleset());
+		Base* const base = new Base(_game->getRuleset());
 
 		_game->popState();
 		_game->pushState(new BuildNewBaseState(
@@ -787,7 +787,7 @@ void BasescapeState::miniRightClick(Action*)
 
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
-		Base* centBase = _game->getSavedGame()->getBases()->at(base);
+		const Base* const centBase = _game->getSavedGame()->getBases()->at(base);
 		_game->getSavedGame()->setGlobeLongitude(centBase->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(centBase->getLatitude());
 

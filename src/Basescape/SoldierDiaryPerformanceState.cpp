@@ -113,15 +113,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_btnAwards			= new TextButton(70, 16, 164, 177);
 	_btnOk				= new TextButton(70, 16, 242, 177);
 
-	// Kill stats
-	_txtRace			= new Text(98, 16, 16, 36);
-	_txtRank			= new Text(98, 16, 114, 36);
-	_txtWeapon			= new Text(98, 16, 212, 36);
-	_lstRace			= new TextList(98, 113, 16, 52);
-	_lstRank			= new TextList(98, 113, 114, 52);
-	_lstWeapon			= new TextList(98, 113, 212, 52);
-	_lstKillTotals		= new TextList(210, 9, 18, 166);
-
 	// Mission stats
 	_txtLocation		= new Text(92, 16, 16, 36);
 	_txtType			= new Text(114, 16, 108, 36);
@@ -130,6 +121,15 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstType			= new TextList(114, 113, 108, 52);
 	_lstUFO				= new TextList(92, 113, 222, 52);
 	_lstMissionTotals	= new TextList(288, 9, 18, 166);
+
+	// Kill stats
+	_txtRace			= new Text(98, 16, 16, 36);
+	_txtRank			= new Text(98, 16, 114, 36);
+	_txtWeapon			= new Text(98, 16, 212, 36);
+	_lstRace			= new TextList(98, 113, 16, 52);
+	_lstRank			= new TextList(98, 113, 114, 52);
+	_lstWeapon			= new TextList(98, 113, 212, 52);
+	_lstKillTotals		= new TextList(210, 9, 18, 166);
 
 	// Award stats
 	_txtMedalName		= new Text(90, 9, 16, 36);
@@ -275,6 +275,37 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 					Options::keyCancel);
 
 
+	// Mission stats ->
+	_txtLocation->setColor(Palette::blockOffset(15)+1);
+	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
+
+	_txtType->setColor(Palette::blockOffset(15)+1);
+	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
+
+	_txtUFO->setColor(Palette::blockOffset(15)+1);
+	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
+
+	_lstLocation->setColor(Palette::blockOffset(13));
+	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
+	_lstLocation->setColumns(2, 80, 12);
+	_lstLocation->setBackground(_window);
+
+	_lstType->setColor(Palette::blockOffset(13));
+	_lstType->setArrowColor(Palette::blockOffset(15)+1);
+	_lstType->setColumns(2, 100, 14);
+	_lstType->setBackground(_window);
+
+	_lstUFO->setColor(Palette::blockOffset(13));
+	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
+	_lstUFO->setColumns(2, 80, 12);
+	_lstUFO->setBackground(_window);
+
+	_lstMissionTotals->setColor(Palette::blockOffset(13)+5);
+	_lstMissionTotals->setSecondaryColor(Palette::blockOffset(13));
+	_lstMissionTotals->setColumns(4, 70, 70, 70, 78);
+	_lstMissionTotals->setBackground(_window);
+
+
 	// Kill stats ->
 	_txtRace->setColor(Palette::blockOffset(15)+1);
 	_txtRace->setText(tr("STR_KILLS_BY_RACE"));
@@ -305,37 +336,6 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstKillTotals->setSecondaryColor(Palette::blockOffset(13));
 	_lstKillTotals->setColumns(3, 70, 70, 70);
 	_lstKillTotals->setBackground(_window);
-
-
-	// Mission stats ->
-	_txtLocation->setColor(Palette::blockOffset(15)+1);
-	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
-
-	_txtType->setColor(Palette::blockOffset(15)+1);
-	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
-
-	_txtUFO->setColor(Palette::blockOffset(15)+1);
-	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
-
-	_lstLocation->setColor(Palette::blockOffset(13));
-	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
-	_lstLocation->setColumns(2, 80, 12);
-	_lstLocation->setBackground(_window);
-
-	_lstType->setColor(Palette::blockOffset(13));
-	_lstType->setArrowColor(Palette::blockOffset(15)+1);
-	_lstType->setColumns(2, 100, 14);
-	_lstType->setBackground(_window);
-
-	_lstUFO->setColor(Palette::blockOffset(13));
-	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
-	_lstUFO->setColumns(2, 80, 12);
-	_lstUFO->setBackground(_window);
-
-	_lstMissionTotals->setColor(Palette::blockOffset(13)+5);
-	_lstMissionTotals->setSecondaryColor(Palette::blockOffset(13));
-	_lstMissionTotals->setColumns(4, 70, 70, 70, 78);
-	_lstMissionTotals->setBackground(_window);
 
 
 	// Award stats ->
@@ -486,18 +486,44 @@ void SoldierDiaryPerformanceState::init()
 		return;
 
 
-	_lstKillTotals->addRow( // Kill stats ->
-						3,
-						tr("STR_KILLS").arg(_diary->getKillTotal()).c_str(),
-						tr("STR_STUNS").arg(_diary->getStunTotal()).c_str(),
-						tr("STR_SCORE_VALUE").arg(_diary->getScorePoints()).c_str());
+	std::wstring
+		ws1,
+		ws2,
+		ws3,
+		ws4;
 
-	_lstMissionTotals->addRow( // Mission stats ->
+	if (_diary->getMissionTotal() > 0) // Mission stats ->
+		ws1 = tr("STR_MISSIONS").arg(_diary->getMissionTotal());
+	if (_diary->getWinTotal() > 0)
+		ws2 = tr("STR_WINS").arg(_diary->getWinTotal());
+	if (_diary->getScoreTotal() > 0)
+		ws3 = tr("STR_SCORE_VALUE").arg(_diary->getScoreTotal());
+	if (_diary->getDaysWoundedTotal() > 0)
+		ws4 = tr("STR_DAYS_WOUNDED").arg(_diary->getDaysWoundedTotal()).arg(L" dy");
+
+	_lstMissionTotals->addRow(
 						4,
-						tr("STR_MISSIONS").arg(_diary->getMissionTotal()).c_str(),
-						tr("STR_WINS").arg(_diary->getWinTotal()).c_str(),
-						tr("STR_SCORE_VALUE").arg(_diary->getScoreTotal()).c_str(),
-						tr("STR_DAYS_WOUNDED").arg(_diary->getDaysWoundedTotal()).c_str());
+						ws1.c_str(),
+						ws2.c_str(),
+						ws3.c_str(),
+						ws4.c_str());
+
+	ws1 =
+	ws2 =
+	ws3 = L"";
+
+	if (_diary->getKillTotal() > 0) // Kill stats ->
+		ws1 = tr("STR_KILLS").arg(_diary->getKillTotal());
+	if (_diary->getStunTotal() > 0)
+		ws2 = tr("STR_STUNS").arg(_diary->getStunTotal());
+	if (_diary->getScorePoints() > 0)
+		ws3 = tr("STR_SCORE_VALUE").arg(_diary->getScorePoints());
+
+	_lstKillTotals->addRow(
+						3,
+						ws1.c_str(),
+						ws2.c_str(),
+						ws3.c_str());
 
 	TextList* const lstArray[6] = // Kill & Mission stats ->
 	{

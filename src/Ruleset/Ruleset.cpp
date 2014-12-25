@@ -2124,13 +2124,13 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 
 		duplicate = false;
 
-		for (std::vector<Base*>::iterator
+		for (std::vector<Base*>::const_iterator
 				i = save->getBases()->begin();
 				i != save->getBases()->end()
 					&& duplicate == false;
 				++i)
 		{
-			for (std::vector<Soldier*>::iterator
+			for (std::vector<Soldier*>::const_iterator
 					j = (*i)->getSoldiers()->begin();
 					j != (*i)->getSoldiers()->end()
 						&& duplicate == false;
@@ -2140,7 +2140,7 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 					duplicate = true;
 			}
 
-			for (std::vector<Transfer*>::iterator
+			for (std::vector<Transfer*>::const_iterator
 					j = (*i)->getTransfers()->begin();
 					j != (*i)->getTransfers()->end()
 						&& duplicate == false;

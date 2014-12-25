@@ -195,7 +195,11 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	{
 		_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
 		_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
-		_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
+
+		if (daysWounded == -1)
+			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(tr("STR_KIA")).arg(L""));
+		else
+			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded).arg(L" dy"));
 	}
 
 	_lstKills->setColor(Palette::blockOffset(13));

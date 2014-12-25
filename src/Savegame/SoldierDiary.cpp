@@ -75,17 +75,18 @@ SoldierDiary::SoldierDiary()
 		_trapKillTotal(0),
 		_alienBaseAssaultTotal(0),
 		_allAliensKilledTotal(0)
-//		_killList(),
 //		_regionTotal(),
 //		_countryTotal(),
 //		_typeTotal(),
 //		_UFOTotal(),
 //		_missionIdList(),
 //		_commendations(),
+//		_killList()
 {}
 
 /**
- * Constructs a copy of this SoldierDiary.
+ * Constructs a copy of a SoldierDiary.
+ * @param copyThis - reference the diary to copy to this SoldierDiary
  */
 SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 	:
@@ -121,15 +122,51 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 		_KIA(copyThis._KIA),
 		_trapKillTotal(copyThis._trapKillTotal),
 		_alienBaseAssaultTotal(copyThis._alienBaseAssaultTotal),
-		_allAliensKilledTotal(copyThis._allAliensKilledTotal),
-
-		_missionIdList(copyThis._missionIdList),
-
-		_regionTotal(copyThis._regionTotal),
-		_countryTotal(copyThis._countryTotal),
-		_typeTotal(copyThis._typeTotal),
-		_UFOTotal(copyThis._UFOTotal)
+		_allAliensKilledTotal(copyThis._allAliensKilledTotal)
 {
+	for (size_t
+			i = 0;
+			i != copyThis._missionIdList.size();
+			++i)
+	{
+		if (copyThis._missionIdList.at(i) != NULL)
+			_missionIdList.push_back(copyThis._missionIdList.at(i));
+	}
+
+	std::map<std::string, int>::const_iterator i;
+	for (
+			i = copyThis._regionTotal.begin();
+			i != copyThis._regionTotal.end();
+			++i)
+	{
+		_regionTotal[(*i).first] = (*i).second;
+	}
+
+	for (
+			i = copyThis._countryTotal.begin();
+			i != copyThis._countryTotal.end();
+			++i)
+	{
+		_countryTotal[(*i).first] = (*i).second;
+	}
+
+	for (
+			i = copyThis._typeTotal.begin();
+			i != copyThis._typeTotal.end();
+			++i)
+	{
+		_typeTotal[(*i).first] = (*i).second;
+	}
+
+	for (
+			i = copyThis._UFOTotal.begin();
+			i != copyThis._UFOTotal.end();
+			++i)
+	{
+		_UFOTotal[(*i).first] = (*i).second;
+	}
+
+
 	for (size_t
 			i = 0;
 			i != copyThis._commendations.size();
@@ -204,7 +241,9 @@ SoldierDiary::~SoldierDiary()
 }
 
 /**
- * Overloads assignment operator.
+ * Overloads the assignment operator.
+ * @param assignThis - reference the diary to assign to this SoldierDiary
+ * @return, address of the new diary
  */
 SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 {
@@ -244,12 +283,52 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 		_alienBaseAssaultTotal = assignThis._alienBaseAssaultTotal;
 		_allAliensKilledTotal = assignThis._allAliensKilledTotal;
 
-		_missionIdList = assignThis._missionIdList;
+		_missionIdList.clear();
+		for (std::vector<int>::const_iterator
+				i = assignThis._missionIdList.begin();
+				i != assignThis._missionIdList.end();
+				++i)
+		{
+			_missionIdList.push_back(*i);
+		}
 
-		_regionTotal = assignThis._regionTotal;
-		_countryTotal = assignThis._countryTotal;
-		_typeTotal = assignThis._typeTotal;
-		_UFOTotal = assignThis._UFOTotal;
+		_regionTotal.clear();
+		std::map<std::string, int>::const_iterator i;
+		for (
+				i = assignThis._regionTotal.begin();
+				i != assignThis._regionTotal.end();
+				++i)
+		{
+			_regionTotal[(*i).first] = (*i).second;
+		}
+
+		_countryTotal.clear();
+		for (
+				i = assignThis._countryTotal.begin();
+				i != assignThis._countryTotal.end();
+				++i)
+		{
+			_countryTotal[(*i).first] = (*i).second;
+		}
+
+		_typeTotal.clear();
+		for (
+				i = assignThis._typeTotal.begin();
+				i != assignThis._typeTotal.end();
+				++i)
+		{
+			_typeTotal[(*i).first] = (*i).second;
+		}
+
+		_UFOTotal.clear();
+		for (
+				i = assignThis._UFOTotal.begin();
+				i != assignThis._UFOTotal.end();
+				++i)
+		{
+			_UFOTotal[(*i).first] = (*i).second;
+		}
+
 
 		for (std::vector<SoldierCommendations*>::const_iterator
 				i = _commendations.begin();
@@ -465,6 +544,7 @@ void SoldierDiary::updateDiary(
 		MissionStatistics* const missionStatistics,
 		const Ruleset* const rules)
 {
+	Log(LOG_INFO) << "SoldierDiary::updateDiary()";
 	const std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
 	for (std::vector<BattleUnitKills*>::const_iterator
 			i = unitKills.begin();
@@ -522,9 +602,10 @@ void SoldierDiary::updateDiary(
 			++_ironManTotal;
 	}
 
-	_daysWoundedTotal += unitStatistics->daysWounded;
+	if (unitStatistics->daysWounded != -1)
+		_daysWoundedTotal += unitStatistics->daysWounded;
 
-	if (unitStatistics->daysWounded)
+	if (unitStatistics->daysWounded > 0)
 		++_timesWoundedTotal;
 
 	if (missionStatistics->type == "STR_BASE_DEFENSE")
@@ -564,6 +645,7 @@ void SoldierDiary::updateDiary(
 	_missionIdList.push_back(missionStatistics->id);
 
 //	_missionTotal = _missionIdList.size(); // CAN GET RID OF MISSION TOTAL
+	Log(LOG_INFO) << "SoldierDiary::updateDiary() EXIT";
 }
 
 /**
@@ -576,11 +658,11 @@ std::vector<SoldierCommendations*>* SoldierDiary::getSoldierCommendations()
 }
 
 /**
- * Manage the soldier's commendations. Award new ones, if deserved.
+ * Manage the soldier's commendations - award new ones if deserved.
  * @param rules - pointer to Ruleset
  * @return, true if a commendation has been awarded
  */
-bool SoldierDiary::manageCommendations(const Ruleset* const rules)
+bool SoldierDiary::manageAwards(const Ruleset* const rules)
 {
 	bool
 		wasAwarded = false,	// This value is returned if at least one commendation was given.

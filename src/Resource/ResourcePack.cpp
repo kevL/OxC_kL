@@ -51,7 +51,7 @@ int
 	ResourcePack::FLYING_SOUND				= 15,
 	ResourcePack::FLYING_SOUND_HQ			= 70, // kL
 	ResourcePack::ITEM_RELOAD				= 17,
-	ResourcePack::ITEM_UNLOAD				= 74, // kL
+	ResourcePack::ITEM_UNLOAD_HQ			= 74, // kL
 	ResourcePack::SLIDING_DOOR_OPEN			= 20,
 	ResourcePack::SLIDING_DOOR_CLOSE		= 21,
 	ResourcePack::WALK_OFFSET				= 22,

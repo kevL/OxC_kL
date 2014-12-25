@@ -423,7 +423,7 @@ void MonthlyReportState::btnOkClick(Action*)
 				Soldier* const soldier = _savedGame->getSoldier((*j)->getId());
 				soldier->getDiary()->addMonthlyService();
 
-				if (soldier->getDiary()->manageCommendations(_game->getRuleset()) == true)
+				if (soldier->getDiary()->manageAwards(_game->getRuleset()) == true)
 					_soldiersMedalled.push_back(soldier);
 			}
 		}
@@ -435,19 +435,15 @@ void MonthlyReportState::btnOkClick(Action*)
 			_game->pushState(new PsiTrainingState());
 
 		if (_savedGame->isIronman() == true)
-		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN,
 											_palette));
-		}
 		else if (Options::autosave == true)
-		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_AUTO_GEOSCAPE,
 											_palette));
-		}
 	}
 	else
 	{

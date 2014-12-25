@@ -205,7 +205,7 @@ private:
 		std::vector<SoldierCommendations*>* getSoldierCommendations();
 
 		/// Manage commendations, return true if a medal is awarded.
-		bool manageCommendations(const Ruleset* const rules);
+		bool manageAwards(const Ruleset* const rules);
 
 		/// Increment the soldier's service time.
 		void addMonthlyService();

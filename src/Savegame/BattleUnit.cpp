@@ -2873,7 +2873,7 @@ int BattleUnit::getExpPsiStrength() const
  */
 void BattleUnit::addReactionExp()
 {
-	_expReactions++;
+	++_expReactions;
 }
 
 /**
@@ -2881,7 +2881,7 @@ void BattleUnit::addReactionExp()
  */
 void BattleUnit::addFiringExp()
 {
-	_expFiring++;
+	++_expFiring;
 }
 
 /**
@@ -2889,12 +2889,12 @@ void BattleUnit::addFiringExp()
  */
 void BattleUnit::addThrowingExp()
 {
-	_expThrowing++;
+	++_expThrowing;
 }
 
 /**
  * Adds qty to the psiSkill exp counter.
- * @param qty - amount to add
+ * @param qty - amount to add (default 1)
  */
 void BattleUnit::addPsiSkillExp(int qty)
 {
@@ -2903,7 +2903,7 @@ void BattleUnit::addPsiSkillExp(int qty)
 
 /**
  * Adds qty to the psiStrength exp counter.
- * @param qty - amount to add
+ * @param qty - amount to add (default 1)
  */
 void BattleUnit::addPsiStrengthExp(int qty)
 {
@@ -2912,7 +2912,7 @@ void BattleUnit::addPsiStrengthExp(int qty)
 
 /**
  * Adds qty to the melee exp counter.
- * @param qty - amount to add
+ * @param qty - amount to add (default 1)
  */
 void BattleUnit::addMeleeExp(int qty)
 {
@@ -2949,18 +2949,17 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 
 	const int healthLoss = stats->health - _health;
 	soldier->setWoundRecovery(RNG::generate(
-							static_cast<int>((static_cast<double>(healthLoss) * 0.5)),
-							static_cast<int>((static_cast<double>(healthLoss) * 1.5))));
+						static_cast<int>((static_cast<double>(healthLoss) * 0.5)),
+						static_cast<int>((static_cast<double>(healthLoss) * 1.5))));
 
-	if (_expBravery
+	if (_expBravery != 0
 		&& stats->bravery < caps.bravery)
 	{
-//kL	if (_expBravery > RNG::generate(0, 10))
-		if (_expBravery > RNG::generate(0, 9)) // kL
+		if (_expBravery > RNG::generate(0, 8))
 			stats->bravery += 10;
 	}
 
-	if (_expFiring
+	if (_expFiring != 0
 		&& stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
@@ -2974,80 +2973,75 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		} // kL_end.
 	}
 
-	if (_expReactions
+	if (_expReactions != 0
 		&& stats->reactions < caps.reactions)
 	{
 		stats->reactions += improveStat(_expReactions);
 	}
 
-	if (_expMelee
+	if (_expMelee != 0
 		&& stats->melee < caps.melee)
 	{
 		stats->melee += improveStat(_expMelee);
 	}
 
-	if (_expPsiSkill
+	if (_expPsiSkill != 0
 		&& stats->psiSkill < caps.psiSkill)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
 
-	if (_expPsiStrength
+	if (_expPsiStrength != 0
 		&& stats->psiStrength < caps.psiStrength)
 	{
 		stats->psiStrength += improveStat(_expPsiStrength);
 	}
 
-	if (_expThrowing
+	if (_expThrowing != 0
 		&& stats->throwing < caps.throwing)
 	{
 		stats->throwing += improveStat(_expThrowing);
 	}
 
 
-	const bool expPri = _expBravery
-					 || _expReactions
-					 || _expFiring
-					 || _expMelee;
+	const bool expPri = _expBravery != 0
+					 || _expReactions != 0
+					 || _expFiring != 0
+					 || _expMelee != 0;
 
-	if (expPri
-		|| _expPsiSkill
-		|| _expPsiStrength)
+	if (expPri == true
+		|| _expPsiSkill != 0
+		|| _expPsiStrength != 0)
 	{
 //		if (soldier->getRank() == RANK_ROOKIE)
 		if (hasFirstKill() == true)
 			soldier->promoteRank();
 
-		if (expPri)
+		if (expPri == true)
 		{
-			// kL_note: The delta-bits seem odd... thought it should be only 1d6 or so.
 			int delta = caps.tu - stats->tu;
 			if (delta > 0)
 				stats->tu += RNG::generate(
 										0,
-										(delta / 10) + 2)
-									- 1;
+										(delta / 10) + 2) - 1;
 
 			delta = caps.health - stats->health;
 			if (delta > 0)
 				stats->health += RNG::generate(
 										0,
-										(delta / 10) + 2)
-									- 1;
+										(delta / 10) + 2) - 1;
 
 			delta = caps.strength - stats->strength;
 			if (delta > 0)
 				stats->strength += RNG::generate(
 										0,
-										(delta / 10) + 2)
-									- 1;
+										(delta / 10) + 2) - 1;
 
 			delta = caps.stamina - stats->stamina;
 			if (delta > 0)
 				stats->stamina += RNG::generate(
 										0,
-										(delta / 10) + 2)
-									- 1;
+										(delta / 10) + 2) - 1;
 		}
 
 		return true;
@@ -3105,7 +3099,6 @@ int BattleUnit::getMiniMapSpriteIndex() const
 				return 0;
 			else
 				return 12;
-		break;
 	}
 }
 
@@ -3523,7 +3516,7 @@ Soldier* BattleUnit::getGeoscapeSoldier() const
  */
 void BattleUnit::addKillCount()
 {
-	_kills++;
+	++_kills;
 }
 
 /**

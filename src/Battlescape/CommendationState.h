@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_COMMENDATIONSTATE_H
 #define OPENXCOM_COMMENDATIONSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 
@@ -45,8 +45,8 @@ class CommendationState
 
 private:
 	Text
-		* _txtTitle,
-		* _txtName;
+		* _txtName,
+		* _txtTitle;
 	TextButton* _btnOk;
 	TextList* _lstSoldiers;
 	Window* _window;
