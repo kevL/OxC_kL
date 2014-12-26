@@ -19,19 +19,19 @@
 
 #include "MedikitState.h"
 
-#include <iostream>
-#include <sstream>
+//#include <iostream>
+//#include <sstream>
 
 #include "MedikitView.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
+//#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Bar.h"
 #include "../Interface/NumberText.h"
@@ -89,7 +89,7 @@ MedikitTitle::MedikitTitle(
 		int y,
 		const std::wstring& title)
 	:
-		Text(73, 9, 186, y) //(60, 16, 192, y)
+		Text(73, 9, 186, y)
 {
 	this->setText(title);
 	this->setHighContrast();
@@ -114,13 +114,12 @@ class MedikitTxt
  */
 MedikitTxt::MedikitTxt(int y)
 	:
-		Text(33, 17, 220, y) //(30, 22, 220, y)
+		Text(33, 17, 220, y)
 {
 	// Note: we can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
 	this->setHighContrast();
 	this->setAlign(ALIGN_CENTER);
-//	this->setVerticalAlign(ALIGN_MIDDLE); // kL
 }
 
 /**
@@ -142,8 +141,7 @@ class MedikitButton
 MedikitButton::MedikitButton(int y)
 	:
 		InteractiveSurface(25, 21, 192, y)
-{
-}
+{}
 
 /**
  * Initializes the Medikit State.
@@ -342,6 +340,8 @@ void MedikitState::onHealClick(Action*)
 	const RuleItem* const rule = _item->getRules();
 	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
 	{
+		++_unit->getStatistics()->medikitApplications;
+
 		_targetUnit->heal(
 					_mediView->getSelectedPart(),
 					rule->getWoundRecovery(),
@@ -356,7 +356,7 @@ void MedikitState::onHealClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//kL	onEndClick(0);
+//		onEndClick(0);
 	}
 }
 
@@ -373,6 +373,8 @@ void MedikitState::onStimulantClick(Action*)
 	const RuleItem* const rule = _item->getRules();
 	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
 	{
+		++_unit->getStatistics()->medikitApplications;
+
 		_targetUnit->stimulant(
 							rule->getEnergyRecovery(),
 							rule->getStunRecovery());
@@ -390,7 +392,7 @@ void MedikitState::onStimulantClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//kL	onEndClick(0);
+//		onEndClick(0);
 	}
 }
 
@@ -407,6 +409,8 @@ void MedikitState::onPainKillerClick(Action*)
 	const RuleItem* const rule = _item->getRules();
 	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
 	{
+		++_unit->getStatistics()->medikitApplications;
+
 		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pain);
 
@@ -415,7 +419,7 @@ void MedikitState::onPainKillerClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//kL	onEndClick(0);
+//		onEndClick(0);
 	}
 }
 

@@ -121,7 +121,8 @@ private:
 		_KIA,
 		_trapKillTotal,
 		_alienBaseAssaultTotal,
-		_allAliensKilledTotal;
+		_allAliensKilledTotal,
+		_mediApplicationsTotal;
 
 	std::vector<int> _missionIdList;
 	std::vector<SoldierCommendations*> _commendations;

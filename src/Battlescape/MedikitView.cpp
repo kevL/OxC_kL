@@ -19,12 +19,12 @@
 
 #include "MedikitView.h"
 
-#include <iostream>
+//#include <iostream>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Text.h"
@@ -83,7 +83,6 @@ MedikitView::MedikitView(
 		_woundTxt(woundTxt)
 {
 	updateSelectedPart();
-
 	_redraw = true;
 }
 
@@ -92,7 +91,7 @@ MedikitView::MedikitView(
  */
 void MedikitView::draw()
 {
-	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 
 	int
 		wound = 0,
@@ -100,7 +99,7 @@ void MedikitView::draw()
 		red = 3,
 		color;
 
-	if (_game->getRuleset()->getInterface("medikit")
+	if (_game->getRuleset()->getInterface("medikit") != NULL
 		&& _game->getRuleset()->getInterface("medikit")->getElement("body"))
 	{
 		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
@@ -110,14 +109,14 @@ void MedikitView::draw()
 	this->lock();
 	for (size_t
 			i = 0;
-			i < set->getTotalFrames();
-			i++)
+			i < srt->getTotalFrames();
+			++i)
 	{
 		color = green;
 		if (_unit->getFatalWound(i))
 			color = red;
 
-		Surface* surface = set->getFrame(i);
+		Surface* const surface = srt->getFrame(i);
 		surface->blitNShade(
 						this,
 						Surface::getX(),
@@ -142,8 +141,7 @@ void MedikitView::draw()
 	ss1 << _game->getLanguage()->getString(PARTS_STRING[_selectedPart]);
 	_partTxt->setText(ss1.str());
 
-	int fatal_wound = _unit->getFatalWound(_selectedPart);
-	ss2 << fatal_wound;
+	ss2 << _unit->getFatalWound(_selectedPart);
 	_woundTxt->setText(ss2.str());
 }
 
@@ -154,18 +152,18 @@ void MedikitView::draw()
  */
 void MedikitView::mouseClick(Action* action, State*)
 {
-	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 
-	int
+	const int
 		x = static_cast<int>(action->getRelativeXMouse() / action->getXScale()),
 		y = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
 
 	for (size_t
 			i = 0;
-			i < set->getTotalFrames();
-			i++)
+			i < srt->getTotalFrames();
+			++i)
 	{
-		Surface* surface = set->getFrame(i);
+		const Surface* const surface = srt->getFrame(i);
 		if (surface->getPixelColor(x, y))
 		{
 			_selectedPart = i;
@@ -197,10 +195,9 @@ void MedikitView::updateSelectedPart()
 			i < 6;
 			++i)
 	{
-		if (_unit->getFatalWound(i))
+		if (_unit->getFatalWound(i) != 0)
 		{
 			_selectedPart = i;
-
 			break;
 		}
 	}

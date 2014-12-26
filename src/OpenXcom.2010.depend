@@ -4551,7 +4551,7 @@
 	"State.h"
 	"Surface.h"
 
-1418416532 f:\git\openxcom\src\engine\surfaceset.h
+1419567286 f:\git\openxcom\src\engine\surfaceset.h
 
 1413136960 f:\git\openxcom\src\ruleset\rulecraft.h
 	<string>
@@ -4680,7 +4680,7 @@
 1419303591 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1419561127 f:\git\openxcom\src\savegame\battleunit.h
+1419566171 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5979,7 +5979,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1419500149 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1419559807 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6200,19 +6200,13 @@
 1417893740 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 
-1416477670 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1419567762 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
-	<iostream>
-	<sstream>
 	"MedikitView.h"
 	"../Engine/Action.h"
-	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Interface/Bar.h"
 	"../Interface/NumberText.h"
 	"../Interface/Text.h"
@@ -6226,13 +6220,11 @@
 1413136955 f:\git\openxcom\src\battlescape\medikitview.h
 	"../Engine/InteractiveSurface.h"
 
-1415853532 source:f:\git\openxcom\src\battlescape\medikitview.cpp
+1419567322 source:f:\git\openxcom\src\battlescape\medikitview.cpp
 	"MedikitView.h"
-	<iostream>
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Palette.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
@@ -6929,7 +6921,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1418416532 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1419567286 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	"Surface.h"
 
@@ -8093,7 +8085,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1418595265 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1419561270 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -9012,7 +9004,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1419521895 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1419561168 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11415,7 +11407,7 @@
 	"BattleState.h"
 	"../Savegame/SavedGame.h"
 
-1419555755 f:\git\openxcom\src\savegame\soldierdiary.h
+1419565694 f:\git\openxcom\src\savegame\soldierdiary.h
 	"BattleUnit.h"
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
@@ -11503,7 +11495,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1419519601 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1419565971 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"

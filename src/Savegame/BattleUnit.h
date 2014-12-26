@@ -214,13 +214,11 @@ struct BattleUnitKills
 			_mission(mission),
 			_turn(turn),
 			_points(points)
-	{
-	}
+	{}
 
 	/// dTor.
 	~BattleUnitKills()
-	{
-	}
+	{}
 };
 
 
@@ -230,24 +228,25 @@ struct BattleUnitKills
 struct BattleUnitStatistics
 {
 	bool
-		ironMan,							// Tracks if the soldier was the only soldier on the mission
-		KIA,								// Tracks if the soldier was killed in battle
-		loneSurvivor,						// Tracks if the soldier was the only survivor
-		nikeCross,							// Tracks if a soldier killed every alien
-		wasUnconscious;						// Tracks if the soldier fell unconscious
+		ironMan,		// Tracks if the soldier was the only soldier on the mission
+		KIA,			// Tracks if the soldier was killed in battle
+		loneSurvivor,	// Tracks if the soldier was the only survivor
+		nikeCross,		// Tracks if a soldier killed every alien
+		wasUnconscious;	// Tracks if the soldier fell unconscious
 
 	int
-		daysWounded,						// Tracks how many days the unit was wounded for
-		hitCounter,							// Tracks how many times the unit was hit
-		longDistanceHitCounter,				// Tracks how many long distance shots were landed
-		lowAccuracyHitCounter,				// Tracks how many times the unit landed a low probability shot
-		shotAtCounter,						// Tracks how many times the unit was shot at
-		shotByFriendlyCounter,				// Tracks how many times the unit was hit by a friendly
-		shotFriendlyCounter,				// Tracks how many times the unit was hit a friendly
-		shotsFiredCounter,					// Tracks how many times a unit has shot
-		shotsLandedCounter;					// Tracks how many times a unit has hit his target
+		daysWounded,			// Tracks how many days the unit was wounded for
+		hitCounter,				// Tracks how many times the unit was hit
+		longDistanceHitCounter,	// Tracks how many long distance shots were landed
+		lowAccuracyHitCounter,	// Tracks how many times the unit landed a low probability shot
+		shotAtCounter,			// Tracks how many times the unit was shot at
+		shotByFriendlyCounter,	// Tracks how many times the unit was hit by a friendly
+		shotFriendlyCounter,	// Tracks how many times the unit was hit a friendly
+		shotsFiredCounter,		// Tracks how many times a unit has shot
+		shotsLandedCounter,		// Tracks how many times a unit has hit his target
+		medikitApplications;	// Tracks how many times a unit has used the medikit
 
-	std::vector<BattleUnitKills*> kills;	// Tracks kills
+	std::vector<BattleUnitKills*> kills; // Tracks kills
 
 
 	/// Checks if unit has fired on a friendly.
@@ -309,6 +308,7 @@ struct BattleUnitStatistics
 		lowAccuracyHitCounter	= node["lowAccuracyHitCounter"]	.as<int>(lowAccuracyHitCounter);
 		shotsFiredCounter		= node["shotsFiredCounter"]		.as<int>(shotsFiredCounter);
 		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
+		medikitApplications		= node["medikitApplications"]	.as<int>(medikitApplications);
 		nikeCross				= node["nikeCross"]				.as<bool>(nikeCross);
 	}
 
@@ -339,6 +339,7 @@ struct BattleUnitStatistics
 		node["lowAccuracyHitCounter"]	= lowAccuracyHitCounter;
 		node["shotsFiredCounter"]		= shotsFiredCounter;
 		node["shotsLandedCounter"]		= shotsLandedCounter;
+		node["medikitApplications"]		= medikitApplications;
 		if (nikeCross == true)
 			node["nikeCross"]			= nikeCross;
 
@@ -366,7 +367,8 @@ struct BattleUnitStatistics
 			shotsFiredCounter(0),
 			shotsLandedCounter(0),
 			KIA(false),
-			nikeCross(false)
+			nikeCross(false),
+			medikitApplications(0)
 //			kills()
 	{
 	}

@@ -74,7 +74,8 @@ SoldierDiary::SoldierDiary()
 		_KIA(0),
 		_trapKillTotal(0),
 		_alienBaseAssaultTotal(0),
-		_allAliensKilledTotal(0)
+		_allAliensKilledTotal(0),
+		_mediApplicationsTotal(0)
 //		_regionTotal(),
 //		_countryTotal(),
 //		_typeTotal(),
@@ -122,7 +123,8 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 		_KIA(copyThis._KIA),
 		_trapKillTotal(copyThis._trapKillTotal),
 		_alienBaseAssaultTotal(copyThis._alienBaseAssaultTotal),
-		_allAliensKilledTotal(copyThis._allAliensKilledTotal)
+		_allAliensKilledTotal(copyThis._allAliensKilledTotal),
+		_mediApplicationsTotal(copyThis._mediApplicationsTotal)
 {
 	for (size_t
 			i = 0;
@@ -282,6 +284,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 		_trapKillTotal = assignThis._trapKillTotal;
 		_alienBaseAssaultTotal = assignThis._alienBaseAssaultTotal;
 		_allAliensKilledTotal = assignThis._allAliensKilledTotal;
+		_mediApplicationsTotal = assignThis._mediApplicationsTotal;
 
 		_missionIdList.clear();
 		for (std::vector<int>::const_iterator
@@ -465,6 +468,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_trapKillTotal					= node["trapKillTotal"]					.as<int>(_trapKillTotal);
 	_alienBaseAssaultTotal			= node["alienBaseAssaultTotal"]			.as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal			= node["allAliensKilledTotal"]			.as<int>(_allAliensKilledTotal);
+	_mediApplicationsTotal			= node["mediApplicationsTotal"]			.as<int>(_mediApplicationsTotal);
 }
 
 /**
@@ -528,6 +532,7 @@ YAML::Node SoldierDiary::save() const
 	if (_trapKillTotal)						node["trapKillTotal"]				= _trapKillTotal;
 	if (_alienBaseAssaultTotal)				node["alienBaseAssaultTotal"]		= _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal)				node["allAliensKilledTotal"]		= _allAliensKilledTotal;
+	if (_mediApplicationsTotal)				node["mediApplicationsTotal"]		= _mediApplicationsTotal;
 
 	return node;
 }
@@ -632,6 +637,7 @@ void SoldierDiary::updateDiary(
 	_totalShotFriendlyCounter += unitStatistics->shotFriendlyCounter;
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
+	_mediApplicationsTotal += unitStatistics->medikitApplications;
 
 	if (missionStatistics->valiantCrux)
 		++_valiantCruxTotal;
@@ -672,10 +678,10 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 	std::vector<std::string> modularAwards;		// Commendation name.
 
 	// Loop over all possible commendations.
-	const std::map<std::string, RuleCommendations*> awardsList = rules->getCommendations();
+	const std::map<std::string, RuleCommendations*> awardList = rules->getCommendations();
 	for (std::map<std::string, RuleCommendations*>::const_iterator
-			i = awardsList.begin();
-			i != awardsList.end();
+			i = awardList.begin();
+			i != awardList.end();
 			)
 	{
 		modularAwards.clear();
@@ -770,7 +776,9 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| ((*j).first == "totalAlienBaseAssaults"
 						&& _alienBaseAssaultTotal < (*j).second.at(nextAwardLevel["noNoun"]))
 					|| ((*j).first == "totalAllAliensKilled"
-						&& _allAliensKilledTotal < (*j).second.at(nextAwardLevel["noNoun"])))
+						&& _allAliensKilledTotal < (*j).second.at(nextAwardLevel["noNoun"]))
+					|| ((*j).first == "totalMediApplications"
+						&& _mediApplicationsTotal < (*j).second.at(nextAwardLevel["noNoun"])))
 			{
 				doAward = false;
 				break;
@@ -1042,8 +1050,8 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 
 				if (newAward == true)
 					_commendations.push_back(new SoldierCommendations(
-																	(*i).first,
-																	*j));
+																(*i).first,
+																*j));
 			}
 
 			wasAwarded = true;
@@ -1297,8 +1305,10 @@ void SoldierDiary::addMonthlyService()
 }
 
 
-/*____________________________________
-/* ** SOLDIER COMMENDATIONS class ** */
+/*___________________________________/*
+/*
+/* ** SOLDIER COMMENDATIONS class ***
+/*___________________________________*/
 /**
  * Initializes a new SoldierCommendations entry from YAML.
  * @param node - YAML node
