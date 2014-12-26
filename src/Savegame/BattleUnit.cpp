@@ -421,7 +421,7 @@ void BattleUnit::load(const YAML::Node& node)
 
 	if (_geoscapeSoldier != NULL)
 	{
-		_statistics->load(node["tempUnitStatistics"]);
+		_statistics->load(node["diaryStatistics"]);
 
 		_battleOrder	= node["battleOrder"]								.as<size_t>(_battleOrder);
 		_kneeled		= node["kneeled"]									.as<bool>(_kneeled);
@@ -494,18 +494,18 @@ YAML::Node BattleUnit::save() const
 
 	if (_geoscapeSoldier != NULL)
 	{
-		node["tempUnitStatistics"]	= _statistics->save();
+		node["diaryStatistics"]	= _statistics->save();
 
-		node["battleOrder"]			= _battleOrder;
-		node["kneeled"]				= _kneeled;
+		node["battleOrder"]		= _battleOrder;
+		node["kneeled"]			= _kneeled;
 
-		node["expBravery"]			= _expBravery;
-		node["expReactions"]		= _expReactions;
-		node["expFiring"]			= _expFiring;
-		node["expThrowing"]			= _expThrowing;
-		node["expPsiSkill"]			= _expPsiSkill;
-		node["expPsiStrength"]		= _expPsiStrength;
-		node["expMelee"]			= _expMelee;
+		node["expBravery"]		= _expBravery;
+		node["expReactions"]	= _expReactions;
+		node["expFiring"]		= _expFiring;
+		node["expThrowing"]		= _expThrowing;
+		node["expPsiSkill"]		= _expPsiSkill;
+		node["expPsiStrength"]	= _expPsiStrength;
+		node["expMelee"]		= _expMelee;
 	}
 
 	return node;
@@ -3525,7 +3525,8 @@ void BattleUnit::addKillCount()
 bool BattleUnit::hasFirstKill() const
 {
 	return _rankInt == 0
-		&& _kills > 0;
+		&& (_kills > 0 // redundant, but faster
+			|| _statistics->hasKillOrStun());
 }
 
 /**

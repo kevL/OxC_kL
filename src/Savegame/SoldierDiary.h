@@ -71,8 +71,8 @@ private:
 		std::string getDecorationLevelName(const int skip) const;
 		/// Gets the commendation's decoration description.
 		std::string getDecorationDescription() const;
-		/// kL. Gets the commendation's decoration class.
-		std::string getDecorationClass() const; // kL
+		/// Gets the commendation's decoration class.
+		std::string getDecorationClass() const;
 		/// Gets the commendation's decoration level's int.
 		int getDecorationLevelInt() const;
 		/// Gets the newness of the commendation.
@@ -156,7 +156,7 @@ private:
 		~SoldierDiary();
 
 		/// Overloads assignment operator.
-		SoldierDiary& operator= (const SoldierDiary& assignThis);
+		SoldierDiary& operator=(const SoldierDiary& assignThis);
 
 		/// Load a diary.
 		void load(const YAML::Node& node);

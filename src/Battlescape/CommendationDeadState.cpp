@@ -127,7 +127,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 		row = 0,
 		titleRow = 0;
 
-	std::map<std::string, RuleCommendations*> awardList = _game->getRuleset()->getCommendation();
+	std::map<std::string, RuleCommendations*> awardList = _game->getRuleset()->getCommendations();
 	for (std::map<std::string, RuleCommendations*>::const_iterator
 			award = awardList.begin();
 			award != awardList.end();
@@ -224,8 +224,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 			_lstSoldiers->setRowColor(
 									titleRow,
-									Palette::blockOffset(15)-1,
-									false);
+									Palette::blockOffset(15)-1);
 			titleChosen = true;
 		}
 

@@ -1440,7 +1440,7 @@ RuleSoldier* Ruleset::getSoldier(const std::string& name) const
  * Gets the list of commendations.
  * @return, map of commendations
  */
-std::map<std::string, RuleCommendations*> Ruleset::getCommendation() const
+std::map<std::string, RuleCommendations*> Ruleset::getCommendations() const
 {
 	return _commendations;
 }
@@ -2032,7 +2032,7 @@ struct compareRule<ArticleDefinition>
 std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
 
 /**
- * Sorts all our lists according to their weight.
+ * Sorts all lists according to their weight.
  */
 void Ruleset::sortLists()
 {
@@ -2231,10 +2231,10 @@ int Ruleset::getMaxRadarRange() const
 }
 
 /**
- * kL. Gets the cutoff between small & large radars
+ * Gets the cutoff between small & large radars
  * for determining base info values.
  */
-int Ruleset::getRadarCutoffRange() const // kL
+int Ruleset::getRadarCutoffRange() const
 {
 	return _radarCutoff;
 }

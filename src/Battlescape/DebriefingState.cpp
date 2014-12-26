@@ -559,7 +559,7 @@ void DebriefingState::btnOkClick(Action*)
 				_game->pushState(new CommendationState(_soldiersCommended));
 			}
 
-			if (_savedGame->handlePromotions(participants))
+			if (_savedGame->handlePromotions(participants) == true)
 			{
 				playAwardMusic = true;
 				_game->pushState(new PromotionsState());

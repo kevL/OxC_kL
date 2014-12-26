@@ -265,6 +265,25 @@ struct BattleUnitStatistics
 		return false;
 	}
 
+	/// Gets if unit has killed or stunned a hostile.
+	bool hasKillOrStun() const
+	{
+		for (std::vector<BattleUnitKills*>::const_iterator
+				i = kills.begin();
+				i != kills.end();
+				++i)
+		{
+			if ((*i)->_faction == FACTION_HOSTILE
+				&& ((*i)->_status == STATUS_DEAD
+					|| (*i)->_status == STATUS_UNCONSCIOUS))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	///
 	void load(const YAML::Node& node)
 	{

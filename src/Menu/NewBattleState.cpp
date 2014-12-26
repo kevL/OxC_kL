@@ -499,11 +499,6 @@ void NewBattleState::initSave()
 			++i)
 	{
 		Soldier* const soldier = rule->genSoldier(save);
-//		Soldier* soldier = new Soldier(
-//									rule->getSoldier("XCOM"),
-//									rule->getArmor("STR_ARMOR_NONE_UC"),
-//									&rule->getPools(),
-//									save->getId("STR_SOLDIER"));
 
 		for (int
 				n = 0;
@@ -530,7 +525,6 @@ void NewBattleState::initSave()
 		}
 
 		UnitStats* const stats = soldier->getCurrentStats();
-//		stats->bravery = (int)ceil(stats->bravery / 10.) * 10; // keep it a multiple of 10
 		stats->bravery = static_cast<int>(std::floor(
 						(static_cast<double>(stats->bravery) / 10.) + 0.5)) * 10; // kL, lulzor
 

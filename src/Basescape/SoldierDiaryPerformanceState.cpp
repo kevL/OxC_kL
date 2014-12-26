@@ -410,7 +410,7 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->setVisible(_displayMissions);
 	_lstMissionTotals->setVisible(_displayMissions);
 
-	if (_game->getRuleset()->getCommendation().empty() == true) // set visibility for Award stats
+	if (_game->getRuleset()->getCommendations().empty() == true) // set visibility for Award stats
 		_displayAwards = false;
 
 	_txtMedalName->setVisible(_displayAwards);
@@ -580,10 +580,10 @@ void SoldierDiaryPerformanceState::init()
 			i != _diary->getSoldierCommendations()->end();
 			++i)
 	{
-		if (_game->getRuleset()->getCommendation().empty() == true)
+		if (_game->getRuleset()->getCommendations().empty() == true)
 			break;
 
-		const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+		const RuleCommendations* const rule = _game->getRuleset()->getCommendations()[(*i)->getType()];
 
 		std::wstringstream
 			ss1,
@@ -643,7 +643,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 			++i,
 				++j)
 	{
-		const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+		const RuleCommendations* const rule = _game->getRuleset()->getCommendations()[(*i)->getType()];
 
 		if (j < scroll
 			|| j - scroll >= static_cast<int>(_srfSprite.size()))

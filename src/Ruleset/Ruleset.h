@@ -23,9 +23,7 @@
 //#include <map>
 //#include <string>
 //#include <vector>
-
 //#include <SDL.h>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "../Savegame/GameTime.h"
@@ -253,7 +251,7 @@ protected:
 		RuleSoldier* getSoldier(const std::string& name) const;
 
 		/// Gets commendation rules.
-		std::map<std::string, RuleCommendations*> getCommendation() const;
+		std::map<std::string, RuleCommendations*> getCommendations() const;
 
 		/// Gets generated unit rules.
 		Unit* getUnit(const std::string& name) const;
@@ -351,10 +349,10 @@ protected:
 
 		/// Gets the minimum radar's range.
 //		int getMinRadarRange() const;
-		/// kL. Gets maximum radar range out of all facilities.
-		int getMaxRadarRange() const; // kL
-		/// kL. Gets the cutoff between small & large radars.
-		int getRadarCutoffRange() const; // kL
+		/// Gets maximum radar range out of all facilities.
+		int getMaxRadarRange() const;
+		/// Gets the cutoff between small & large radars.
+		int getRadarCutoffRange() const;
 
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string& id) const;

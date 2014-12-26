@@ -957,8 +957,8 @@ void ProjectileFlyBState::think()
 						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
 					{
 						BattleUnit* const victim = _parent->getSave()->getTile(
-																			_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
-																	->getUnit();
+														_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
+															->getUnit();
 						if (victim != NULL)
 //kL						&& victim->isOut() == false)
 						{
@@ -1000,9 +1000,8 @@ void ProjectileFlyBState::think()
 										++statsUnit->longDistanceHitCounter;
 
 									if (dist > static_cast<int>(_unit->getFiringAccuracy(
-																				_action.type,
-																				_action.weapon)
-																			* 35.))
+																					_action.type,
+																					_action.weapon) * 35.))
 									{
 										++statsUnit->lowAccuracyHitCounter;
 									}

@@ -197,7 +197,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 
 	_btnAwards->setColor(Palette::blockOffset(13)+10);
 	_btnAwards->setText(tr("STR_AWARDS_UC"));
-//	if (_game->getRuleset()->getCommendation().empty() == false)
+//	if (_game->getRuleset()->getCommendations().empty() == false)
 //	{
 	_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
 //		_btnAwards->setVisible();
