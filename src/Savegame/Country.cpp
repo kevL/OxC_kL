@@ -30,7 +30,7 @@ namespace OpenXcom
 
 /**
  * Initializes a country of the specified type.
- * @param rules	- rointer to RuleCountry
+ * @param rules	- pointer to RuleCountry
  * @param gen	- true to generate new funding
  */
 Country::Country(

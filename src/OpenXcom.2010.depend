@@ -4513,7 +4513,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1417183177 f:\git\openxcom\src\ruleset\ruleregion.h
+1419662862 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
 1417179335 f:\git\openxcom\src\savegame\weightedoptions.h
@@ -5679,8 +5679,7 @@
 	<string>
 	"BattleState.h"
 
-1413136956 f:\git\openxcom\src\battlescape\unitturnbstate.h
-	<string>
+1419569885 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	"BattleState.h"
 
 1419407415 f:\git\openxcom\src\battlescape\unitwalkbstate.h
@@ -6560,15 +6559,12 @@
 1413136957 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1419155299 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1419569960 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
 	"TileEngine.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
-	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
@@ -8849,7 +8845,7 @@
 1413136961 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1418422559 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1419662999 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	"City.h"
 

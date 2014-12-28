@@ -555,6 +555,7 @@ Tileset:UFO - Terrain
 		PORTURBAN20:${dep}
 		PORTURBAN21:${dep}
 		PORTURBAN22:${dep}
+		PORTURBAN23:${dep}
 	end
 
 	files:railyardurban

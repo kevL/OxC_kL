@@ -737,6 +737,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Battlescape/CommendationDeadState.cpp" />
+		<Unit filename="Battlescape/CommendationDeadState.h" />
 		<Unit filename="Battlescape/CommendationState.cpp" />
 		<Unit filename="Battlescape/CommendationState.h" />
 		<Unit filename="Battlescape/DebriefingState.cpp">

@@ -24,9 +24,9 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
@@ -57,17 +57,13 @@ UnitTurnBState::UnitTurnBState(
 		_chargeTUs(chargeTUs),
 		_unit(NULL),
 		_turret(false)
-{
-	//Log(LOG_INFO) << "Create UnitTurnBState";
-}
+{}
 
 /**
  * Deletes the UnitTurnBState.
  */
 UnitTurnBState::~UnitTurnBState()
-{
-	//Log(LOG_INFO) << "Delete UnitTurnBState";
-}
+{}
 
 /**
  * Initializes the state.
@@ -92,7 +88,7 @@ void UnitTurnBState::init()
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
 	_turret = _unit->getTurretType() != -1
-			&& (_action.strafe
+		   && (_action.strafe
 				|| _action.targeting);
 
 	if (_unit->getPosition().x != _action.target.x

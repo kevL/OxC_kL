@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_UNITTURNBSTATE_H
 #define OPENXCOM_UNITTURNBSTATE_H
 
-#include <string>
-
 #include "BattleState.h"
 
 

@@ -2111,7 +2111,7 @@ void Globe::drawDetail()
 	delete label;
 
 
-	// debug stuff follows...
+	// Debug stuff follows ...
 	static bool canSwitchDebugType = false;
 
 	if (_game->getSavedGame()->getDebugMode() == true)

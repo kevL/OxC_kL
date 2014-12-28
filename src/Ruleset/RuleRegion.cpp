@@ -23,7 +23,6 @@
 
 //#include <assert.h>
 //#include <math.h>
-
 //#include "../fmath.h"
 
 #include "City.h"
@@ -145,8 +144,8 @@ void RuleRegion::load(const YAML::Node& node)
 	if (const YAML::Node& weights = node["missionWeights"])
 		_missionWeights.load(weights);
 
-	_regionWeight = node["regionWeight"].as<size_t>(_regionWeight);
-	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
+	_regionWeight	= node["regionWeight"]	.as<size_t>(_regionWeight);
+	_missionRegion	= node["missionRegion"]	.as<std::string>(_missionRegion);
 }
 
 /**
@@ -193,7 +192,7 @@ bool RuleRegion::insideRegion(
 		else
 			inLon = ((lon >= _lonMin[i]
 						&& lon < 6.283)
-					|| (lon >= 0
+					|| (lon >= 0.
 						&& lon < _lonMax[i]));
 
 		inLat = (lat >= _latMin[i]
@@ -238,7 +237,9 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 {
 	if (zone < _missionZones.size())
 	{
-		const size_t area = RNG::generate(0, _missionZones[zone].areas.size() - 1);
+		const size_t area = RNG::generate(
+										0,
+										static_cast<int>(_missionZones[zone].areas.size()) - 1);
 
 		double
 			lonMin = _missionZones[zone].areas[area].lonMin,
