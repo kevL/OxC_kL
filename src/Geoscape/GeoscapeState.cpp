@@ -923,7 +923,7 @@ void GeoscapeState::handle(Action* action)
 					&& _savedGame->getDebugMode() == true)
 				{
 					_txtDebug->setText(L"");
-					_debug = "DEBUG MODE : ";
+					_debug = "DEBUG MODE : "; // _savedGame->setDebugArgDone("");
 
 					if (_globe->getDebugType() == 0)
 						_debug += "country : ";
@@ -1011,7 +1011,8 @@ void GeoscapeState::think()
 	_dfZoomOutTimer->think(this, NULL);
 	_dfStartTimer->think(this, NULL);
 
-	if (_game->getSavedGame()->getDebugArgDone() == true)
+	if (_game->getSavedGame()->getDebugArgDone() == true
+		&& _debug.compare(0, 5, "DEBUG") == 0)
 	{
 		std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
 		_txtDebug->setText(Language::cpToWstr(debugStr));
@@ -3140,8 +3141,8 @@ Globe* GeoscapeState::getGlobe() const
 void GeoscapeState::globeClick(Action* action)
 {
 	const int
-		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
-		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
+		mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
+		mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -3158,6 +3159,9 @@ void GeoscapeState::globeClick(Action* action)
 
 	if (_savedGame->getDebugMode() == true)
 	{
+		_savedGame->setDebugArg("COORD");
+		_debug = "";
+
 		double
 			lon,
 			lat;
@@ -3172,8 +3176,8 @@ void GeoscapeState::globeClick(Action* action)
 			latDeg = lat / M_PI * 180.;
 
 		std::wostringstream ss;
-		ss << L"rad: " << lon << " , " << lat << std::endl;
-		ss << L"deg: " << lonDeg << " , " << latDeg << std::endl;
+		ss << L"rad Lon " << lon << L"  Lat " << lat << std::endl;
+		ss << L"deg Lon " << lonDeg << L"  Lat " << latDeg; // << std::endl;
 
 		_txtDebug->setText(ss.str());
 	}

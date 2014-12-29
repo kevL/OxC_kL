@@ -2162,7 +2162,9 @@ void Globe::drawDetail()
 
 				if (area == cycleCur)
 				{
-					_game->getSavedGame()->setDebugArg((*i)->getType());
+					if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0)
+						_game->getSavedGame()->setDebugArg((*i)->getType());
+
 					break;
 				}
 				else
@@ -2208,7 +2210,9 @@ void Globe::drawDetail()
 
 				if (area == cycleCur)
 				{
-					_game->getSavedGame()->setDebugArg((*i)->getType());
+					if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0)
+						_game->getSavedGame()->setDebugArg((*i)->getType());
+
 					break;
 				}
 				else
@@ -2278,9 +2282,12 @@ void Globe::drawDetail()
 
 					if (area == cycleCur)
 					{
-						std::ostringstream ostr;
-						ostr << (*i)->getType() << " [" << iter << "]";
-						_game->getSavedGame()->setDebugArg(ostr.str());
+						if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0)
+						{
+							std::ostringstream ostr;
+							ostr << (*i)->getType() << " [" << iter << "]";
+							_game->getSavedGame()->setDebugArg(ostr.str());
+						}
 
 						break;
 					}

@@ -7341,7 +7341,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1419813001 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1419829852 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -7481,7 +7481,7 @@
 	<string>
 	<vector>
 
-1419810365 source:f:\git\openxcom\src\geoscape\globe.cpp
+1419831602 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
