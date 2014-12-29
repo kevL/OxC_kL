@@ -62,6 +62,8 @@ private:
 
 		/// Gets the region's ruleset.
 		RuleRegion* getRules() const;
+		/// Get the region's name.
+		std::string getType() const;
 
 		/// Adds xcom activity in this region.
 		void addActivityXcom(int activity);
@@ -75,16 +77,16 @@ private:
 		/// Stores last month's counters, starts new counters.
 		void newMonth();
 
-		/// kL. Handles recent alien activity in this region for GraphsState blink.
-		bool recentActivity( // kL
+		/// Handles recent alien activity in this region for GraphsState blink.
+		bool recentActivity(
 				bool activity = true,
 				bool graphs = false);
-		/// kL. Handles recent XCOM activity in this region for GraphsState blink.
-		bool recentActivityXCOM( // kL
+		/// Handles recent XCOM activity in this region for GraphsState blink.
+		bool recentActivityXCOM(
 				bool activity = true,
 				bool graphs = false);
-		/// kL. Resets activity.
-		void resetActivity(); // kL
+		/// Resets activity.
+		void resetActivity();
 };
 
 }

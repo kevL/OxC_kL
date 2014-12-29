@@ -22,7 +22,6 @@
 
 //#include <list>
 //#include <string>
-
 //#include <SDL.h>
 
 
@@ -56,6 +55,8 @@ private:
 		_inputActive,
 		_quit;
 	int
+		_debugCycle, // for debugging country areas.
+		_debugCycle_b,
 		_delaytime,
 		_timeUntilNextFrame;
 	unsigned int _timeOfLastFrame;
@@ -144,6 +145,11 @@ private:
 
 		/// Sets up the audio.
 		void initAudio();
+
+		/// Gets the country cycle for debugging country regions.
+		int getDebugCycle() const;
+		/// Sets the country cycle for debugging country regions.
+		void setDebugCycle(const int cycle);
 };
 
 }

@@ -80,7 +80,9 @@ Game::Game(const std::string& title)
 		_quit(false),
 		_init(false),
 		_inputActive(true),
-		_timeUntilNextFrame(0)
+		_timeUntilNextFrame(0),
+		_debugCycle(-1),
+		_debugCycle_b(-1)
 {
 	//Log(LOG_INFO) << "Create Game";
 	Options::reload = false;
@@ -346,12 +348,12 @@ void Game::run()
 						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
 							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
+							Options::captureMouse = (SDL_GrabMode)(Options::captureMouse == SDL_GRAB_QUERY);
 							SDL_WM_GrabInput(Options::captureMouse);
 						}
-						else if (Options::debug)
+						else if (Options::debug == true)
 						{
-							if (action.getDetails()->key.keysym.sym == SDLK_t
+							if (action.getDetails()->key.keysym.sym == SDLK_t // "ctrl-t" engage TestState
 								&& (SDL_GetModState() & KMOD_CTRL) != 0)
 							{
 								setState(new TestState());
@@ -361,6 +363,25 @@ void Game::run()
 							{
 								Options::debugUi = !Options::debugUi;
 								_states.back()->redrawText();
+							}
+							else if (_save->getDebugMode() == true
+								&& action.getDetails()->key.keysym.sym == SDLK_c // kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState)
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							{
+								// "ctrl-c"			- increment to show next area's boundaries
+								// "ctrl-shift-c"	- decrement to show previous area's boundaries
+								// "ctrl-alt-c"		- toggles between show all areas' boundaries & show current area's boundaries (roughly)
+								if ((SDL_GetModState() & KMOD_ALT) != 0)
+									std::swap(_debugCycle, _debugCycle_b);
+								else if ((SDL_GetModState() & KMOD_SHIFT) != 0)
+								{
+									if (_debugCycle != -1)
+										--_debugCycle;
+									else
+										_debugCycle_b = -1; // semi-convenient reset for Cycle_b .... hey, at least there *is* one.
+								}
+								else
+									++_debugCycle;
 							}
 						}
 					}
@@ -814,6 +835,24 @@ void Game::initAudio()
 				Options::musicVolume,
 				Options::uiVolume);
 	}
+}
+
+/**
+ * Gets the country cycle for debugging country regions.
+ * @return, the current country cycle setting
+ */
+int Game::getDebugCycle() const
+{
+	return _debugCycle;
+}
+
+/**
+ * Sets the country cycle for debugging country regions.
+ * @param cycle - the country cycle to set
+ */
+void Game::setDebugCycle(const int cycle)
+{
+	_debugCycle = cycle;
 }
 
 }

@@ -23,7 +23,6 @@
 
 //#include <cmath>
 //#include <sstream>
-
 //#include "../fmath.h"
 
 #include "AlienBase.h"

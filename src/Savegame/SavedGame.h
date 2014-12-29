@@ -197,13 +197,11 @@ struct MissionStatistics
 //			injuryList(),
 //			type(""),
 //			rating("")
-	{
-	}
+	{}
 
 	/// dTor.
 	~MissionStatistics()
-	{
-	}
+	{}
 };
 
 
@@ -236,6 +234,7 @@ class SavedGame
 private:
 	bool
 		_debug,
+		_debugArgDone,
 		_ironman,
 		_warned;
 	int
@@ -258,6 +257,7 @@ private:
 
 	std::wstring _name;
 	std::string
+		_debugArg,
 		_graphRegionToggles,
 		_graphCountryToggles,
 		_graphFinanceToggles;
@@ -557,6 +557,13 @@ private:
 		void setCurrentRowMatrix(size_t row);
 		/// Gets the current Matrix row.
 		size_t getCurrentRowMatrix() const;
+
+		/// Sets a debug argument to GeoscapeState.
+		void setDebugArg(const std::string& debug);
+		/// Gets a debug argument from Globe.
+		std::string getDebugArg() const;
+		/// Gets if the debug argument has been set.
+		bool SavedGame::getDebugArgDone();
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();

@@ -230,7 +230,7 @@ items:
 #------------------------------------------------------------------------------
   - type: STR_SNIPER_RIFLE
     listOrder: 2210
-    size: 0.4
+    size: 0.5
     costBuy: 7950
     costSell: 4800
     weight: 12
@@ -240,10 +240,10 @@ items:
     fireSound: 163
     compatibleAmmo:
       - STR_SNIPER_RIFLE_AMMO
-    accuracySnap: 50
-    accuracyAimed: 150
-    tuSnap: 40
-    tuAimed: 70
+#    accuracySnap: 50
+    accuracyAimed: 147
+#    tuSnap: 40
+    tuAimed: 66
     battleType: 1
     twoHanded: true
     invWidth: 1
@@ -259,15 +259,15 @@ items:
     size: 0.2
     costBuy: 1175
     costSell: 225
-    weight: 4
+    weight: 5
     bigSprite: 511
     floorSprite: 511
     bulletSprite: 15
     hitAnimation: 26
     hitSound: 13
-    power: 80
+    power: 83
     damageType: 1
-    clipSize: 6
+    clipSize: 5
     battleType: 2
     invWidth: 1
     invHeight: 1

@@ -381,7 +381,7 @@ std::wstring Language::cpToWstr(const std::string& src)
 								(int)src.size(),
 								NULL,
 								0);
-	std::wstring wstr(size, 0);
+	std::wstring wstr (size, 0);
 	MultiByteToWideChar(
 					CP_ACP,
 					0,

@@ -198,8 +198,9 @@ private:
 
 
 	public:
-		static Uint8 oceanColor1;
-		static Uint8 oceanColor2;
+		static Uint8
+			oceanColor1,
+			oceanColor2;
 
 		/// Creates a new globe at the specified position and size.
 		Globe(

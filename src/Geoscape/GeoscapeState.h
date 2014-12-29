@@ -78,6 +78,8 @@ private:
 		_dfLon,
 		_dfLat;
 
+	std::string _debug;
+
 	Globe* _globe;
 	ImageButton
 		* _btnIntercept,

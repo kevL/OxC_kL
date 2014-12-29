@@ -85,6 +85,15 @@ RuleRegion* Region::getRules() const
 }
 
 /**
+ * Gets the region's name.
+ * @return, region name
+ */
+std::string Region::getType() const
+{
+	return _rules->getType();
+}
+
+/**
  * Adds to the region's xcom activity level.
  * @param activity - amount to add
  */
@@ -136,12 +145,12 @@ void Region::newMonth()
 }
 
 /**
- * kL. Handles recent aLien activity in this region for GraphsState blink.
+ * Handles recent aLien activity in this region for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Region::recentActivity( // kL
+bool Region::recentActivity(
 		bool activity,
 		bool graphs)
 {
@@ -167,12 +176,12 @@ bool Region::recentActivity( // kL
 }
 
 /**
- * kL. Handles recent XCOM activity in this region for GraphsState blink.
+ * Handles recent XCOM activity in this region for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Region::recentActivityXCOM( // kL
+bool Region::recentActivityXCOM(
 		bool activity,
 		bool graphs)
 {
@@ -198,9 +207,9 @@ bool Region::recentActivityXCOM( // kL
 }
 
 /**
- * kL. Resets activity.
+ * Resets activity.
  */
-void Region::resetActivity() // kL
+void Region::resetActivity()
 {
 	_activityRecent = -1;
 	_activityRecentXCOM = -1;

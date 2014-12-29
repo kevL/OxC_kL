@@ -399,7 +399,7 @@ GeoscapeState::GeoscapeState()
 	_dfZoomOutTimer	= new Timer(Options::dogfightSpeed + 10);
 	_dfStartTimer	= new Timer(Options::dogfightSpeed + 10);
 
-	_txtDebug		= new Text(200, 18, 0, 0);
+	_txtDebug		= new Text(320, 18, 0, 0);
 
 	setPalette("PAL_GEOSCAPE");
 
@@ -888,24 +888,51 @@ void GeoscapeState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (Options::debug == true // "ctrl-d" - enable debug mode
-			&& action->getDetails()->key.keysym.sym == SDLK_d
-			&& (SDL_GetModState() & KMOD_CTRL) != 0)
+		if (Options::debug == true)
 		{
-			_savedGame->setDebugMode();
-
-			if (_savedGame->getDebugMode() == true)
+			if ((SDL_GetModState() & KMOD_CTRL) != 0)
 			{
-//				_txtDebug->setText(L"DEBUG MODE");
-				if (_globe->getDebugType() == 0)
-					_txtDebug->setText(L"DEBUG MODE : countries");
-				else if (_globe->getDebugType() == 1)
-					_txtDebug->setText(L"DEBUG MODE : regions");
-				else if (_globe->getDebugType() == 2)
-					_txtDebug->setText(L"DEBUG MODE : missionZones");
+				if (action->getDetails()->key.keysym.sym == SDLK_d) // "ctrl-d" - enable debug mode
+				{
+					_savedGame->setDebugMode();
+
+					if (_savedGame->getDebugMode() == true)
+					{
+						_debug = "DEBUG MODE : ";
+
+						if (_globe->getDebugType() == 0)
+							_debug += "country : ";
+						else if (_globe->getDebugType() == 1)
+							_debug += "region : ";
+						else if (_globe->getDebugType() == 2)
+							_debug += "missionZones : ";
+/*						if (_globe->getDebugType() == 0)
+							_txtDebug->setText(L"DEBUG MODE : countries");
+						else if (_globe->getDebugType() == 1)
+							_txtDebug->setText(L"DEBUG MODE : regions");
+						else if (_globe->getDebugType() == 2)
+							_txtDebug->setText(L"DEBUG MODE : missionZones"); */
+					}
+					else
+					{
+						_txtDebug->setText(L"");
+						_debug = "";
+					}
+				}
+				else if (action->getDetails()->key.keysym.sym == SDLK_c // "ctrl-c" - cycle areas
+					&& _savedGame->getDebugMode() == true)
+				{
+					_txtDebug->setText(L"");
+					_debug = "DEBUG MODE : ";
+
+					if (_globe->getDebugType() == 0)
+						_debug += "country : ";
+					else if (_globe->getDebugType() == 1)
+						_debug += "region : ";
+					else if (_globe->getDebugType() == 2)
+						_debug += "missionZones : ";
+				}
 			}
-			else
-				_txtDebug->setText(L"");
 		}
 		else if (_savedGame->isIronman() == false) // quick save and quick load
 		{
@@ -984,6 +1011,11 @@ void GeoscapeState::think()
 	_dfZoomOutTimer->think(this, NULL);
 	_dfStartTimer->think(this, NULL);
 
+	if (_game->getSavedGame()->getDebugArgDone() == true)
+	{
+		std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
+		_txtDebug->setText(Language::cpToWstr(debugStr));
+	}
 
 	if (_savedGame->getMonthsPassed() == -1)
 	{
@@ -3140,8 +3172,8 @@ void GeoscapeState::globeClick(Action* action)
 			latDeg = lat / M_PI * 180.;
 
 		std::wostringstream ss;
-		ss << "rad: " << lon << " , " << lat << std::endl;
-		ss << "deg: " << lonDeg << " , " << latDeg << std::endl;
+		ss << L"rad: " << lon << " , " << lat << std::endl;
+		ss << L"deg: " << lonDeg << " , " << latDeg << std::endl;
 
 		_txtDebug->setText(ss.str());
 	}

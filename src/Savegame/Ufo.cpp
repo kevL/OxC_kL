@@ -23,10 +23,8 @@
 
 //#include <sstream>
 //#include <algorithm>
-
 //#include <assert.h>
 //#include <math.h>
-
 //#include "../fmath.h"
 
 #include "AlienMission.h"

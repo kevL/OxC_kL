@@ -274,7 +274,7 @@
 1413136956 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1419497520 f:\git\openxcom\src\engine\game.h
+1419746457 f:\git\openxcom\src\engine\game.h
 
 1417628804 f:\git\openxcom\src\engine\language.h
 	<map>
@@ -4402,7 +4402,7 @@
 
 1415929980 f:\git\openxcom\src\savegame\target.h
 
-1419473369 f:\git\openxcom\src\savegame\savedgame.h
+1419811405 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -4501,7 +4501,7 @@
 1416685067 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1418324966 f:\git\openxcom\src\geoscape\geoscapestate.h
+1419810892 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1413136959 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4528,7 +4528,7 @@
 1415931862 f:\git\openxcom\src\savegame\movingtarget.h
 	"Target.h"
 
-1418721050 f:\git\openxcom\src\savegame\region.h
+1419771534 f:\git\openxcom\src\savegame\region.h
 
 1415853532 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
@@ -4778,7 +4778,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1418066657 f:\git\openxcom\src\geoscape\globe.h
+1419780089 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -6042,7 +6042,7 @@
 1418719872 f:\git\openxcom\src\savegame\alienmission.h
 	"SavedGame.h"
 
-1418721392 f:\git\openxcom\src\savegame\country.h
+1419771534 f:\git\openxcom\src\savegame\country.h
 
 1414137287 source:f:\git\openxcom\src\battlescape\explosion.cpp
 	"Explosion.h"
@@ -6691,7 +6691,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1419497512 source:f:\git\openxcom\src\engine\game.cpp
+1419810271 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6737,7 +6737,7 @@
 	"Action.h"
 	"Options.h"
 
-1417628378 source:f:\git\openxcom\src\engine\language.cpp
+1419809449 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -7150,7 +7150,7 @@
 1413136957 f:\git\openxcom\src\geoscape\confirmdestinationstate.h
 	"../Engine/State.h"
 
-1416060399 f:\git\openxcom\src\savegame\waypoint.h
+1419765444 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
 1419382539 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
@@ -7341,7 +7341,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1419137386 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1419813001 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -7481,7 +7481,7 @@
 	<string>
 	<vector>
 
-1419124646 source:f:\git\openxcom\src\geoscape\globe.cpp
+1419810365 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -9018,11 +9018,11 @@
 	"../Ruleset/RuleSoldier.h"
 	"../Ruleset/Unit.h"
 
-1418722484 source:f:\git\openxcom\src\savegame\country.cpp
+1419739714 source:f:\git\openxcom\src\savegame\country.cpp
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1418720664 source:f:\git\openxcom\src\savegame\craft.cpp
+1419765319 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -9091,7 +9091,7 @@
 	"../Ruleset/RuleManufacture.h"
 	"../Ruleset/Ruleset.h"
 
-1418722579 source:f:\git\openxcom\src\savegame\region.cpp
+1419771534 source:f:\git\openxcom\src\savegame\region.cpp
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
@@ -9125,7 +9125,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1419499373 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1419811405 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -9209,7 +9209,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1419218880 source:f:\git\openxcom\src\savegame\ufo.cpp
+1419765351 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

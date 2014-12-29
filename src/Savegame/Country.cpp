@@ -108,7 +108,7 @@ RuleCountry* Country::getRules() const
 }
 
 /**
- * Get the country's name.
+ * Gets the country's name.
  * @return, country name
  */
 std::string Country::getType() const
@@ -214,7 +214,7 @@ void Country::newMonth(
 	if (xCom > aLien + ((diff + 1) * 20)) // country auto. increases funding
 	{
 		//Log(LOG_INFO) << ". auto funding increase";
-		int cap = getRules()->getFundingCap() * 1000;
+		const int cap = getRules()->getFundingCap() * 1000;
 
 		if (funding + newFunding > cap)
 			newFunding = cap - funding;
@@ -228,7 +228,7 @@ void Country::newMonth(
 		if (RNG::generate(0, xCom) > aLien)
 		{
 			//Log(LOG_INFO) << ". . funding increase";
-			int cap = getRules()->getFundingCap() * 1000;
+			const int cap = getRules()->getFundingCap() * 1000;
 
 			if (funding + newFunding > cap)
 				newFunding = cap - funding;
@@ -237,31 +237,31 @@ void Country::newMonth(
 				_satisfaction = 3;
 		}
 		else if (RNG::generate(0, aLien) > xCom
-			&& newFunding)
+			&& newFunding != 0)
 		{
 			//Log(LOG_INFO) << ". . funding decrease";
 			newFunding = -newFunding;
 			_satisfaction = 1;
 		}
 	}
-	else if (newFunding) // auto. funding decrease
+	else if (newFunding != 0) // auto. funding decrease
 	{
 		//Log(LOG_INFO) << ". auto funding decrease";
 		newFunding = -newFunding;
 		_satisfaction = 1;
 	}
 
-	if (_newPact // about to be in cahoots
+	if (_newPact == true // about to be in cahoots
 		&& _pact == false)
 	{
 		_newPact = false;
 		_pact = true;
 
-		addActivityAlien(100 + 50 * diff); // should this be added to Region also
+		addActivityAlien(100 + diff * 50); // should this be added to Region also
 	}
 
 	// set the new funding and reset the activity meters
-	if (_pact)
+	if (_pact == true)
 		_funding.push_back(0);
 	else if (_satisfaction != 2)
 		_funding.push_back(funding + newFunding);
@@ -325,19 +325,18 @@ bool Country::recentActivity(
 		bool activity,
 		bool graphs)
 {
-	if (activity)
+	if (activity == true)
 		_activityRecent = 0;
 	else if (_activityRecent != -1)
 	{
-		if (graphs)
+		if (graphs == true)
 			return true;
-		else
-		{
-			++_activityRecent;
 
-			if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
-				_activityRecent = -1;
-		}
+
+		++_activityRecent;
+
+		if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
+			_activityRecent = -1;
 	}
 
 	if (_activityRecent == -1)
@@ -356,19 +355,18 @@ bool Country::recentActivityXCOM(
 		bool activity,
 		bool graphs)
 {
-	if (activity)
+	if (activity == true)
 		_activityRecentXCOM = 0;
 	else if (_activityRecentXCOM != -1)
 	{
-		if (graphs)
+		if (graphs == true)
 			return true;
-		else
-		{
-			++_activityRecentXCOM;
 
-			if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
-				_activityRecentXCOM = -1;
-		}
+
+		++_activityRecentXCOM;
+
+		if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
+			_activityRecentXCOM = -1;
 	}
 
 	if (_activityRecentXCOM == -1)

@@ -127,7 +127,7 @@ struct GlobeStaticData
 		{
 			ret.x *= norm;
 			ret.y *= norm;
-			ret.z = sqrt(limit - temp) * norm;
+			ret.z = std::sqrt(limit - temp) * norm;
 
 			return ret;
 		}
@@ -2119,62 +2119,125 @@ void Globe::drawDetail()
 		canSwitchDebugType = true;
 		int color = 0;
 
+		int
+			cycleCur = _game->getDebugCycle(),
+			area = 0;
+
 		if (_debugType == 0) // Country rects.
 		{
+			if (cycleCur >= static_cast<int>(_game->getSavedGame()->getCountries()->size()))
+			{
+				cycleCur = -1;
+				_game->setDebugCycle(-1);
+			}
+
 			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
 					i != _game->getSavedGame()->getCountries()->end();
-					++i)
+					++i,
+						++area)
 			{
-				color += 10;
-
-				for (size_t
-						k = 0;
-						k != (*i)->getRules()->getLatMax().size();
-						++k)
+				if (area == cycleCur
+					|| cycleCur == -1)
 				{
-					const double
-						lon2 = (*i)->getRules()->getLonMax().at(k),
-						lon1 = (*i)->getRules()->getLonMin().at(k),
-						lat2 = (*i)->getRules()->getLatMax().at(k),
-						lat1 = (*i)->getRules()->getLatMin().at(k);
+					color += 10;
 
-					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
-					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
-					drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
-					drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
+					for (size_t
+							j = 0;
+							j != (*i)->getRules()->getLatMax().size();
+							++j)
+					{
+						const double
+							lon2 = (*i)->getRules()->getLonMax().at(j),
+							lon1 = (*i)->getRules()->getLonMin().at(j),
+							lat2 = (*i)->getRules()->getLatMax().at(j),
+							lat1 = (*i)->getRules()->getLatMin().at(j);
+
+						drawVHLine(_countries, lon1, lat1, lon2, lat1, static_cast<Uint8>(color));
+						drawVHLine(_countries, lon1, lat2, lon2, lat2, static_cast<Uint8>(color));
+						drawVHLine(_countries, lon1, lat1, lon1, lat2, static_cast<Uint8>(color));
+						drawVHLine(_countries, lon2, lat1, lon2, lat2, static_cast<Uint8>(color));
+					}
 				}
+
+				if (area == cycleCur)
+				{
+					_game->getSavedGame()->setDebugArg((*i)->getType());
+					break;
+				}
+				else
+					_game->getSavedGame()->setDebugArg("");
 			}
 		}
 		else if (_debugType == 1) // Region rects.
 		{
+			if (cycleCur >= static_cast<int>(_game->getSavedGame()->getRegions()->size()))
+			{
+				cycleCur = -1;
+				_game->setDebugCycle(-1);
+			}
+
+			for (std::vector<Region*>::const_iterator
+					i = _game->getSavedGame()->getRegions()->begin();
+					i != _game->getSavedGame()->getRegions()->end();
+					++i,
+						++area)
+			{
+				if (area == cycleCur
+					|| cycleCur == -1)
+				{
+					color += 10;
+
+					for (size_t
+							j = 0;
+							j != (*i)->getRules()->getLatMax().size();
+							++j)
+					{
+						const double
+							lon2 = (*i)->getRules()->getLonMax().at(j),
+							lon1 = (*i)->getRules()->getLonMin().at(j),
+							lat2 = (*i)->getRules()->getLatMax().at(j),
+							lat1 = (*i)->getRules()->getLatMin().at(j);
+
+						drawVHLine(_countries, lon1, lat1, lon2, lat1, static_cast<Uint8>(color));
+						drawVHLine(_countries, lon1, lat2, lon2, lat2, static_cast<Uint8>(color));
+						drawVHLine(_countries, lon1, lat1, lon1, lat2, static_cast<Uint8>(color));
+						drawVHLine(_countries, lon2, lat1, lon2, lat2, static_cast<Uint8>(color));
+					}
+				}
+
+				if (area == cycleCur)
+				{
+					_game->getSavedGame()->setDebugArg((*i)->getType());
+					break;
+				}
+				else
+					_game->getSavedGame()->setDebugArg("");
+			}
+		}
+		else if (_debugType == 2) // MissionZone rects.
+		{
+			int limit = 0;
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
 					i != _game->getSavedGame()->getRegions()->end();
 					++i)
 			{
-				color += 10;
-
-				for (size_t
-						k = 0;
-						k != (*i)->getRules()->getLatMax().size();
-						++k)
+				for (std::vector<MissionZone>::const_iterator
+						j = (*i)->getRules()->getMissionZones().begin();
+						j != (*i)->getRules()->getMissionZones().end();
+						++j)
 				{
-					const double
-						lon2 = (*i)->getRules()->getLonMax().at(k),
-						lon1 = (*i)->getRules()->getLonMin().at(k),
-						lat2 = (*i)->getRules()->getLatMax().at(k),
-						lat1 = (*i)->getRules()->getLatMin().at(k);
-
-					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
-					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
-					drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
-					drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
+					++limit;
 				}
 			}
-		}
-		else if (_debugType == 2) // MissionZone rects.
-		{
+
+			if (cycleCur >= limit)
+			{
+				cycleCur = -1;
+				_game->setDebugCycle(-1);
+			}
+
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
 					i != _game->getSavedGame()->getRegions()->end();
@@ -2182,30 +2245,51 @@ void Globe::drawDetail()
 			{
 				color = -1;
 
+				int iter = 0;
 				for (std::vector<MissionZone>::const_iterator
 						j = (*i)->getRules()->getMissionZones().begin();
 						j != (*i)->getRules()->getMissionZones().end();
-						++j)
+						++j,
+							++area,
+							++iter)
 				{
-					color += 2;
-
-					for (std::vector<MissionArea>::const_iterator
-							k = (*j).areas.begin();
-							k != (*j).areas.end();
-							++k)
+					if (area == cycleCur
+						|| cycleCur == -1)
 					{
-						const double
-							lon2 = (*k).lonMax * M_PI / 180.,
-							lon1 = (*k).lonMin * M_PI / 180.,
-							lat2 = (*k).latMax * M_PI / 180.,
-							lat1 = (*k).latMin * M_PI / 180.;
+						color += 2;
 
-						drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
-						drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
-						drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
-						drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
+						for (std::vector<MissionArea>::const_iterator
+								k = (*j).areas.begin();
+								k != (*j).areas.end();
+								++k)
+						{
+							const double
+								lon2 = (*k).lonMax * M_PI / 180.,
+								lon1 = (*k).lonMin * M_PI / 180.,
+								lat2 = (*k).latMax * M_PI / 180.,
+								lat1 = (*k).latMin * M_PI / 180.;
+
+							drawVHLine(_countries, lon1, lat1, lon2, lat1, static_cast<Uint8>(color));
+							drawVHLine(_countries, lon1, lat2, lon2, lat2, static_cast<Uint8>(color));
+							drawVHLine(_countries, lon1, lat1, lon1, lat2, static_cast<Uint8>(color));
+							drawVHLine(_countries, lon2, lat1, lon2, lat2, static_cast<Uint8>(color));
+						}
 					}
+
+					if (area == cycleCur)
+					{
+						std::ostringstream ostr;
+						ostr << (*i)->getType() << " [" << iter << "]";
+						_game->getSavedGame()->setDebugArg(ostr.str());
+
+						break;
+					}
+					else
+						_game->getSavedGame()->setDebugArg("");
 				}
+
+				if (area == cycleCur)
+					break;
 			}
 		}
 	}
@@ -3116,6 +3200,7 @@ void Globe::setupRadii(
 
 /**
  * Gets the current debugType for Geoscape messages.
+ * @return, the debug type
  */
 int Globe::getDebugType() const
 {

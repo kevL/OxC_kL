@@ -2415,6 +2415,39 @@ size_t SavedGame::getCurrentRowMatrix() const
 }
 
 /**
+ * Sets a debug argument from Globe for GeoscapeState.
+ * @param arg - debug string
+ */
+void SavedGame::setDebugArg(const std::string& debug)
+{
+	_debugArgDone = true;
+	_debugArg = debug;
+}
+
+/**
+ * Gets a debug argument from Globe for GeoscapeState.
+ * @return, debug string
+ */
+std::string SavedGame::getDebugArg() const
+{
+	return _debugArg;
+}
+
+/**
+ * Gets if the debug argument has just been set - and resets flag if true.
+ * @return, true if debug arg is ready for display
+ */
+bool SavedGame::getDebugArgDone()
+{
+	bool ret = _debugArgDone;
+
+	if (_debugArgDone == true)
+		_debugArgDone = false;
+
+	return ret;
+}
+
+/**
  * Gets mission statistics for soldier commendations.
  * @return, pointer to a vector of pointers to MissionStatistics
  */

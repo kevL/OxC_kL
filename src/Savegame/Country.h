@@ -68,9 +68,8 @@ private:
 
 		/// Gets the country's ruleset.
 		RuleCountry* getRules() const;
-
-		/// kL. Get the country's name.
-		std::string getType() const; // kL
+		/// Get the country's name.
+		std::string getType() const;
 
 		/// Gets the country's funding.
 		std::vector<int>& getFunding();
