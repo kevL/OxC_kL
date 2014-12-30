@@ -185,18 +185,20 @@ protected:
 	/// Loads a ruleset element.
 	template <typename T> T* loadRule(
 			const YAML::Node& node,
-			std::map<std::string, T*>* map,
+			std::map<std::string, T*>* types,
 			std::vector<std::string>* index = 0,
 			const std::string& key = "type");
 
 
 	public:
 		/// Creates a blank ruleset.
-//kL		Ruleset();
+//		Ruleset();
 		Ruleset(Game* game); // kL
 		/// Cleans up the ruleset.
 		~Ruleset();
 
+		/// kL. Reloads the country lines.
+		void reloadCountryLines();
 		/// Loads a ruleset from the given source.
 		void load(const std::string& source);
 

@@ -892,7 +892,8 @@ void GeoscapeState::handle(Action* action)
 		{
 			if ((SDL_GetModState() & KMOD_CTRL) != 0)
 			{
-				if (action->getDetails()->key.keysym.sym == SDLK_d) // "ctrl-d" - enable debug mode
+				if (action->getDetails()->key.keysym.sym == SDLK_d)	// "ctrl-d" - enable debug mode
+																	// ctrl+c is also handled in Game::run() where the 'cycle' is determined.
 				{
 					_savedGame->setDebugMode();
 
@@ -919,8 +920,8 @@ void GeoscapeState::handle(Action* action)
 						_debug = "";
 					}
 				}
-				else if (action->getDetails()->key.keysym.sym == SDLK_c // "ctrl-c" - cycle areas
-					&& _savedGame->getDebugMode() == true)
+				else if (action->getDetails()->key.keysym.sym == SDLK_c	// "ctrl-c" - cycle areas
+					&& _savedGame->getDebugMode() == true)				// ctrl+c is also handled in Game::run() where the 'cycle' is determined.
 				{
 					_txtDebug->setText(L"");
 					_debug = "DEBUG MODE : "; // _savedGame->setDebugArgDone("");
@@ -1011,10 +1012,10 @@ void GeoscapeState::think()
 	_dfZoomOutTimer->think(this, NULL);
 	_dfStartTimer->think(this, NULL);
 
-	if (_game->getSavedGame()->getDebugArgDone() == true
+	if (_game->getSavedGame()->getDebugArgDone() == true // ie. do not write info until Globe actually sets it.
 		&& _debug.compare(0, 5, "DEBUG") == 0)
 	{
-		std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
+		const std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
 		_txtDebug->setText(Language::cpToWstr(debugStr));
 	}
 
@@ -3159,8 +3160,8 @@ void GeoscapeState::globeClick(Action* action)
 
 	if (_savedGame->getDebugMode() == true)
 	{
-		_savedGame->setDebugArg("COORD");
-		_debug = "";
+		_savedGame->setDebugArg("COORD");	// tells think() to stop writing area-info and display lon/lat instead.
+		_debug = "";						// ditto
 
 		double
 			lon,

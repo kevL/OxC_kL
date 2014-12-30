@@ -78,6 +78,7 @@ struct HairBleach
 		Hair		= 9 << 4,
 		Face		= 6 << 4;
 
+	///
 	static inline void func(
 			Uint8& src,
 			const Uint8& cutoff,
@@ -1684,18 +1685,18 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[*i]->loadSpk(path);
 	}
 
-	if (Options::battleHairBleach) // "fix" of hair color of male personal armor
+	if (Options::battleHairBleach == true) // "fix" of hair color of male personal armor
 	{
 		if (_sets.find("XCOM_1.PCK") != _sets.end())
 		{
-			SurfaceSet* xcom_1 = _sets["XCOM_1.PCK"];
+			SurfaceSet* const xcom_1 = _sets["XCOM_1.PCK"];
 
 			for (int // chest frame
 					i = 0;
 					i < 16;
 					++i)
 			{
-				Surface* srf = xcom_1->getFrame(4 * 8 + i);
+				Surface* const srf = xcom_1->getFrame(4 * 8 + i);
 				ShaderMove<Uint8> head = ShaderMove<Uint8>(srf);
 				GraphSubset dim = head.getBaseDomain();
 				srf->lock();
@@ -1715,7 +1716,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					i < 3;
 					++i)
 			{
-				Surface* srf = xcom_1->getFrame(264 + i);
+				Surface* const srf = xcom_1->getFrame(264 + i);
 				ShaderMove<Uint8> head = ShaderMove<Uint8>(srf);
 				GraphSubset dim = head.getBaseDomain();
 				dim.beg_y = 0;

@@ -372,12 +372,54 @@ Ruleset::~Ruleset()
 }
 
 /**
+ * kL. Reloads the country lines from Geography rulefile.
+ */
+void Ruleset::reloadCountryLines()
+{
+	for (std::vector<std::string>::const_iterator
+			i = _countriesIndex.begin();
+			i != _countriesIndex.end();
+			++i)
+	{
+		RuleCountry* const j = getCountry(*i);
+		j->getLonMin().clear();
+		j->getLonMax().clear();
+		j->getLatMin().clear();
+		j->getLatMax().clear();
+	}
+
+	const std::string geography = CrossPlatform::getDataFile("Ruleset/Geography.rul");
+	const YAML::Node doc = YAML::LoadFile(geography);
+	for (YAML::const_iterator
+			i = doc["countries"].begin();
+			i != doc["countries"].end();
+			++i)
+	{
+		const std::string type = (*i)["type"].as<std::string>();
+		RuleCountry* const j = getCountry(type);
+
+		std::vector<std::vector<double> > areas = (*i)["areas"].as<std::vector<std::vector<double> > >(areas);
+		for (size_t
+				k = 0;
+				k != areas.size();
+				++k)
+		{
+			j->getLonMin().push_back(areas[k][0] * M_PI / 180.);
+			j->getLonMax().push_back(areas[k][1] * M_PI / 180.);
+			j->getLatMin().push_back(areas[k][2] * M_PI / 180.);
+			j->getLatMax().push_back(areas[k][3] * M_PI / 180.);
+		}
+	}
+}
+
+/**
  * Loads a ruleset's contents from the given source.
  * @param source - reference the source to use
  */
 void Ruleset::load(const std::string& source)
 {
 	const std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
+
 	if (CrossPlatform::folderExists(dirname) == false)
 		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
@@ -1080,15 +1122,15 @@ void Ruleset::loadFiles(const std::string& dirname)
 /**
  * Loads a rule element, adding/removing from vectors as necessary.
  * @param node	- reference a YAML node
- * @param map	- pointer to a map associated to the rule type
- * @param index	- pointer to a vector of indices for the rule type
- * @param key	- reference the rule key name
+ * @param types	- pointer to a map associated to the rule type
+ * @param index	- pointer to a vector of indices for the rule type (default 0)
+ * @param key	- reference the rule key name (default "type")
  * @return, pointer to new rule if one was created, or NULL if one was removed
  */
 template <typename T>
 T* Ruleset::loadRule(
 		const YAML::Node& node,
-		std::map<std::string, T*>* map,
+		std::map<std::string, T*>* types,
 		std::vector<std::string>* index,
 		const std::string& key)
 {
@@ -1096,14 +1138,14 @@ T* Ruleset::loadRule(
 
 	if (node[key])
 	{
-		std::string type = node[key].as<std::string>();
-		typename std::map<std::string, T*>::iterator i = map->find(type);
-		if (i != map->end())
+		const std::string type = node[key].as<std::string>();
+		typename std::map<std::string, T*>::const_iterator i = types->find(type);
+		if (i != types->end())
 			rule = i->second;
 		else
 		{
 			rule = new T(type);
-			(*map)[type] = rule;
+			(*types)[type] = rule;
 
 			if (index != NULL)
 				index->push_back(type);
@@ -1111,17 +1153,17 @@ T* Ruleset::loadRule(
 	}
 	else if (node["delete"])
 	{
-		std::string type = node["delete"].as<std::string>();
-		typename std::map<std::string, T*>::iterator i = map->find(type);
-		if (i != map->end())
-			map->erase(i);
+		const std::string type = node["delete"].as<std::string>();
+		typename std::map<std::string, T*>::const_iterator i = types->find(type);
+		if (i != types->end())
+			types->erase(i);
 
 		if (index != NULL)
 		{
-			std::vector<std::string>::iterator idx = std::find(
-															index->begin(),
-															index->end(),
-															type);
+			const std::vector<std::string>::const_iterator idx = std::find(
+																		index->begin(),
+																		index->end(),
+																		type);
 			if (idx != index->end())
 				index->erase(idx);
 		}
@@ -1148,13 +1190,13 @@ SavedGame* Ruleset::newSave() const
 	}
 
 	// Adjust funding to total $6M
-//kL	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
-	for (std::vector<Country*>::iterator
+//	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
+	for (std::vector<Country*>::const_iterator
 			i = save->getCountries()->begin();
 			i != save->getCountries()->end();
 			++i)
 	{
-//kL	int funding = (*i)->getFunding().back() + missing;
+//		int funding = (*i)->getFunding().back() + missing;
 		int funding = (*i)->getFunding().back(); // kL
 		if (funding < 0)
 			funding = (*i)->getFunding().back();
@@ -1174,7 +1216,7 @@ SavedGame* Ruleset::newSave() const
 	}
 
 	// Set up starting base
-	Base* base = new Base(this);
+	Base* const base = new Base(this);
 	base->load(
 			_startingBase,
 			save,
@@ -1190,13 +1232,13 @@ SavedGame* Ruleset::newSave() const
 	}
 
 	// Generate soldiers
-	int soldiers = _startingBase["randomSoldiers"].as<int>(0);
+	const int soldiers = _startingBase["randomSoldiers"].as<int>(0);
 	for (int
 			i = 0;
 			i < soldiers;
 			++i)
 	{
-		Soldier* soldier = genSoldier(save);
+		Soldier* const soldier = genSoldier(save);
 //kL	soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}

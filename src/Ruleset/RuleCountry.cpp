@@ -30,38 +30,35 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of country.
- * @param type String defining the type.
+ * Creates a blank ruleset for a certain type of country.
+ * @param type - string defining the type
  */
 RuleCountry::RuleCountry(const std::string& type)
 	:
 		_type(type),
 		_fundingBase(0),
 		_fundingCap(0),
-		_labelLon(0.0),
-		_labelLat(0.0)
-{
-}
+		_labelLon(0.),
+		_labelLat(0.)
+{}
 
 /**
  *
  */
 RuleCountry::~RuleCountry()
-{
-}
+{}
 
 /**
  * Loads the country type from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void RuleCountry::load(const YAML::Node& node)
 {
 	_type			= node["type"].as<std::string>(_type);
 	_fundingBase	= node["fundingBase"].as<int>(_fundingBase);
 	_fundingCap		= node["fundingCap"].as<int>(_fundingCap);
-	_labelLon		= node["labelLon"].as<double>(_labelLon) * M_PI / 180;
-	_labelLat		= node["labelLat"].as<double>(_labelLat) * M_PI / 180;
+	_labelLon		= node["labelLon"].as<double>(_labelLon) * M_PI / 180.;
+	_labelLat		= node["labelLat"].as<double>(_labelLat) * M_PI / 180.;
 
 	std::vector<std::vector<double> > areas;
 	areas = node["areas"].as<std::vector<std::vector<double> > >(areas);
@@ -71,18 +68,17 @@ void RuleCountry::load(const YAML::Node& node)
 			i != areas.size();
 			++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180.0);
-		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
-		_latMin.push_back(areas[i][2] * M_PI / 180.0);
-		_latMax.push_back(areas[i][3] * M_PI / 180.0);
+		_lonMin.push_back(areas[i][0] * M_PI / 180.);
+		_lonMax.push_back(areas[i][1] * M_PI / 180.);
+		_latMin.push_back(areas[i][2] * M_PI / 180.);
+		_latMax.push_back(areas[i][3] * M_PI / 180.);
 	}
 }
 
 /**
- * Gets the language string that names
- * this country. Each country type
- * has a unique name.
- * @return The country's name.
+ * Gets the language string that names this country.
+ * Each country type has a unique name.
+ * @return, the country's name
  */
 std::string RuleCountry::getType() const
 {
@@ -91,20 +87,19 @@ std::string RuleCountry::getType() const
 
 /**
  * Generates the random starting funding for the country.
- * @return, The monthly funding.
+ * @return, the monthly funding
  */
 int RuleCountry::generateFunding() const
 {
 	return RNG::generate(
 					_fundingBase,
-					_fundingBase * 2)
-				* 1000;
+					_fundingBase * 2) * 1000;
 }
 
 /**
  * Gets the country's funding cap.
  * Country funding can never exceed this.
- * @return The funding cap, in thousands.
+ * @return, the funding cap in thousands
  */
 int RuleCountry::getFundingCap() const
 {
@@ -113,7 +108,7 @@ int RuleCountry::getFundingCap() const
 
 /**
  * Gets the longitude of the country's label on the globe.
- * @return The longitude in radians.
+ * @return, the longitude in radians
  */
 double RuleCountry::getLabelLongitude() const
 {
@@ -122,7 +117,7 @@ double RuleCountry::getLabelLongitude() const
 
 /**
  * Gets the latitude of the country's label on the globe.
- * @return The latitude in radians.
+ * @return, the latitude in radians
  */
 double RuleCountry::getLabelLatitude() const
 {
@@ -131,9 +126,9 @@ double RuleCountry::getLabelLatitude() const
 
 /**
  * Checks if a point is inside this country.
- * @param lon Longitude in radians.
- * @param lat Latitude in radians.
- * @return True if it's inside, false if it's outside.
+ * @param lon - longitude in radians
+ * @param lat - latitude in radians
+ * @return, true if it's inside
  */
 bool RuleCountry::insideCountry(
 		double lon,

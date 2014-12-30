@@ -5799,18 +5799,26 @@ bool TileEngine::validMeleeRange(
 int TileEngine::faceWindow(const Position& position)
 {
 	static const Position
-		tileEast = Position(1, 0, 0),
-		tileSouth = Position(0, 1, 0);
+		posEast = Position(1, 0, 0),
+		posSouth = Position(0, 1, 0);
 
 	const Tile* tile = _battleSave->getTile(position);
-	if (tile != NULL
-		&& tile->getMapData(MapData::O_NORTHWALL) != NULL
-		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
+	if (tile != NULL)
 	{
-		return 0;
+		if (tile->getMapData(MapData::O_NORTHWALL) != NULL
+			&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
+		{
+			return 0;
+		}
+
+		if (tile->getMapData(MapData::O_WESTWALL) != NULL
+			&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
+		{
+			return 6;
+		}
 	}
 
-	tile = _battleSave->getTile(position + tileEast);
+	tile = _battleSave->getTile(position + posEast);
 	if (tile != NULL
 		&& tile->getMapData(MapData::O_WESTWALL) != NULL
 		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
@@ -5818,20 +5826,12 @@ int TileEngine::faceWindow(const Position& position)
 		return 2;
 	}
 
-	tile = _battleSave->getTile(position + tileSouth);
+	tile = _battleSave->getTile(position + posSouth);
 	if (tile != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL) != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 	{
 		return 4;
-	}
-
-	tile = _battleSave->getTile(position);
-	if (tile != NULL
-		&& tile->getMapData(MapData::O_WESTWALL) != NULL
-		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
-	{
-		return 6;
 	}
 
 	return -1;

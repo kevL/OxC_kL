@@ -606,7 +606,7 @@ double Globe::lastVisibleLat(double lon) const
 //	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
 //	tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat);
 
-	return atan(-std::cos(_cenLat) * std::cos(lon - _cenLon) / std::sin(_cenLat));
+	return std::atan(-std::cos(_cenLat) * std::cos(lon - _cenLon) / std::sin(_cenLat));
 }
 
 /**
@@ -1291,7 +1291,7 @@ void Globe::rotate()
 }
 
 /**
- * Draws the whole globe, part by part.
+ * Draws the whole globe part by part.
  */
 void Globe::draw()
 {
@@ -1310,7 +1310,7 @@ void Globe::draw()
 }
 
 /**
- * Renders the ocean, shading it according to the time of day.
+ * Renders the ocean shading it according to the time of day.
  */
 void Globe::drawOcean()
 {
@@ -2144,14 +2144,14 @@ void Globe::drawDetail()
 
 					for (size_t
 							j = 0;
-							j != (*i)->getRules()->getLatMax().size();
+							j != (*i)->getRules()->getLonMin().size();
 							++j)
 					{
 						const double
-							lon2 = (*i)->getRules()->getLonMax().at(j),
 							lon1 = (*i)->getRules()->getLonMin().at(j),
-							lat2 = (*i)->getRules()->getLatMax().at(j),
-							lat1 = (*i)->getRules()->getLatMin().at(j);
+							lon2 = (*i)->getRules()->getLonMax().at(j),
+							lat1 = (*i)->getRules()->getLatMin().at(j),
+							lat2 = (*i)->getRules()->getLatMax().at(j);
 
 						drawVHLine(_countries, lon1, lat1, lon2, lat1, static_cast<Uint8>(color));
 						drawVHLine(_countries, lon1, lat2, lon2, lat2, static_cast<Uint8>(color));
@@ -2162,7 +2162,7 @@ void Globe::drawDetail()
 
 				if (area == cycleCur)
 				{
-					if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0)
+					if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0) // ie. don't display area-info if co-ordinates are currently displayed.
 						_game->getSavedGame()->setDebugArg((*i)->getType());
 
 					break;
@@ -2196,10 +2196,10 @@ void Globe::drawDetail()
 							++j)
 					{
 						const double
-							lon2 = (*i)->getRules()->getLonMax().at(j),
 							lon1 = (*i)->getRules()->getLonMin().at(j),
-							lat2 = (*i)->getRules()->getLatMax().at(j),
-							lat1 = (*i)->getRules()->getLatMin().at(j);
+							lon2 = (*i)->getRules()->getLonMax().at(j),
+							lat1 = (*i)->getRules()->getLatMin().at(j),
+							lat2 = (*i)->getRules()->getLatMax().at(j);
 
 						drawVHLine(_countries, lon1, lat1, lon2, lat1, static_cast<Uint8>(color));
 						drawVHLine(_countries, lon1, lat2, lon2, lat2, static_cast<Uint8>(color));
@@ -2210,7 +2210,7 @@ void Globe::drawDetail()
 
 				if (area == cycleCur)
 				{
-					if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0)
+					if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0) // ie. don't display area-info if co-ordinates are currently displayed.
 						_game->getSavedGame()->setDebugArg((*i)->getType());
 
 					break;
@@ -2249,13 +2249,13 @@ void Globe::drawDetail()
 			{
 				color = -1;
 
-				int iter = 0;
+				int zoneType = 0;
 				for (std::vector<MissionZone>::const_iterator
 						j = (*i)->getRules()->getMissionZones().begin();
 						j != (*i)->getRules()->getMissionZones().end();
 						++j,
 							++area,
-							++iter)
+							++zoneType)
 				{
 					if (area == cycleCur
 						|| cycleCur == -1)
@@ -2268,10 +2268,10 @@ void Globe::drawDetail()
 								++k)
 						{
 							const double
-								lon2 = (*k).lonMax * M_PI / 180.,
 								lon1 = (*k).lonMin * M_PI / 180.,
-								lat2 = (*k).latMax * M_PI / 180.,
-								lat1 = (*k).latMin * M_PI / 180.;
+								lon2 = (*k).lonMax * M_PI / 180.,
+								lat1 = (*k).latMin * M_PI / 180.,
+								lat2 = (*k).latMax * M_PI / 180.;
 
 							drawVHLine(_countries, lon1, lat1, lon2, lat1, static_cast<Uint8>(color));
 							drawVHLine(_countries, lon1, lat2, lon2, lat2, static_cast<Uint8>(color));
@@ -2282,10 +2282,10 @@ void Globe::drawDetail()
 
 					if (area == cycleCur)
 					{
-						if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0)
+						if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0) // ie. don't display area-info if co-ordinates are currently displayed.
 						{
 							std::ostringstream ostr;
-							ostr << (*i)->getType() << " [" << iter << "]";
+							ostr << (*i)->getType() << " [" << zoneType << "]";
 							_game->getSavedGame()->setDebugArg(ostr.str());
 						}
 
@@ -2734,7 +2734,6 @@ void Globe::mouseOver(Action* action, State* state)
 	double
 		lon,
 		lat;
-
 	cartToPolar(
 			static_cast<Sint16>(std::floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(std::floor(action->getAbsoluteYMouse())),
@@ -2789,7 +2788,7 @@ void Globe::mouseOver(Action* action, State* state)
 
 		if (!_mouseOverThreshold) // check threshold
 			_mouseOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
-									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
+							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 
 		if (Options::geoDragScrollInvert) // scroll
@@ -2856,8 +2855,8 @@ void Globe::mousePress(Action* action, State* state)
 		lon,
 		lat;
 	cartToPolar(
-			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
-			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 
@@ -2898,8 +2897,8 @@ void Globe::mouseRelease(Action* action, State* state)
 		lon,
 		lat;
 	cartToPolar(
-			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
-			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 
@@ -2930,8 +2929,8 @@ void Globe::mouseClick(Action* action, State* state)
 		lon,
 		lat;
 	cartToPolar(
-			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
-			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 

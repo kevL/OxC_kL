@@ -930,6 +930,7 @@
     <ClCompile Include="Menu\ListLoadOriginalState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\CommendationDeadState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1888,6 +1889,7 @@
     <ClInclude Include="Savegame\SaveConverterXcom1.h">
       <Filter>Savegame</Filter>
     </ClInclude>
+    <ClInclude Include="Battlescape\CommendationDeadState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

@@ -364,9 +364,11 @@ void Game::run()
 								Options::debugUi = !Options::debugUi;
 								_states.back()->redrawText();
 							}
-							else if (_save->getDebugMode() == true
-								&& action.getDetails()->key.keysym.sym == SDLK_c // kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState)
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							else if (_save != NULL
+								&& _save->getDebugMode() == true
+								&& action.getDetails()->key.keysym.sym == SDLK_c	// kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState).
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)			// ctrl+c is also handled in GeoscapeState::handle()
+																					// where decisions are made about what info to show.
 							{
 								// "ctrl-c"			- increment to show next area's boundaries
 								// "ctrl-shift-c"	- decrement to show previous area's boundaries
@@ -382,6 +384,14 @@ void Game::run()
 								}
 								else
 									++_debugCycle;
+							}
+							else if (_save != NULL
+								&& _save->getDebugMode() == true
+								&& action.getDetails()->key.keysym.sym == SDLK_l // "ctrl-l" reload country lines
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							{
+								if (_rules != NULL)
+									_rules->reloadCountryLines();
 							}
 						}
 					}
@@ -768,16 +778,18 @@ bool Game::isQuitting() const
  */
 void Game::defaultLanguage()
 {
-	std::string defaultLang = "en-US";
+	const std::string defaultLang = "en-US";
 
-	if (Options::language.empty()) // No language set, detect based on system
+	if (Options::language.empty() == true) // No language set, detect based on system
 	{
-		std::string locale = CrossPlatform::getLocale();
-		std::string lang = locale.substr(0, locale.find_first_of('-'));
+		const std::string local = CrossPlatform::getLocale();
+		const std::string lang = local.substr(
+											0,
+											local.find_first_of('-'));
 
 		try // Try to load full locale
 		{
-			loadLanguage(locale);
+			loadLanguage(local);
 		}
 		catch (std::exception)
 		{

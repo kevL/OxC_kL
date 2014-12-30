@@ -2439,7 +2439,7 @@ std::string SavedGame::getDebugArg() const
  */
 bool SavedGame::getDebugArgDone()
 {
-	bool ret = _debugArgDone;
+	const bool ret = _debugArgDone;
 
 	if (_debugArgDone == true)
 		_debugArgDone = false;

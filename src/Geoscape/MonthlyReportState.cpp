@@ -154,24 +154,24 @@ MonthlyReportState::MonthlyReportState(
 	if (month == 0)
 	{
 		month = 12;
-		year--;
+		--year;
 	}
 
 	std::string m;
 	switch (month)
 	{
-		case 1:		m = "STR_JAN"; break;
-		case 2:		m = "STR_FEB"; break;
-		case 3:		m = "STR_MAR"; break;
-		case 4:		m = "STR_APR"; break;
-		case 5:		m = "STR_MAY"; break;
-		case 6:		m = "STR_JUN"; break;
-		case 7:		m = "STR_JUL"; break;
-		case 8:		m = "STR_AUG"; break;
-		case 9:		m = "STR_SEP"; break;
-		case 10:	m = "STR_OCT"; break;
-		case 11:	m = "STR_NOV"; break;
-		case 12:	m = "STR_DEC"; break;
+		case  1: m = "STR_JAN"; break;
+		case  2: m = "STR_FEB"; break;
+		case  3: m = "STR_MAR"; break;
+		case  4: m = "STR_APR"; break;
+		case  5: m = "STR_MAY"; break;
+		case  6: m = "STR_JUN"; break;
+		case  7: m = "STR_JUL"; break;
+		case  8: m = "STR_AUG"; break;
+		case  9: m = "STR_SEP"; break;
+		case 10: m = "STR_OCT"; break;
+		case 11: m = "STR_NOV"; break;
+		case 12: m = "STR_DEC";	break;
 
 		default: m = "";
 	}
@@ -247,7 +247,7 @@ MonthlyReportState::MonthlyReportState(
 	{
 		if (_savedGame->getFunds() <= -1000000)
 		{
-			if (_savedGame->getWarned())
+			if (_savedGame->getWarned() == true)
 			{
 				ss4.str(L"");
 				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");

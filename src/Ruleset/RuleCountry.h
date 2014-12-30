@@ -21,7 +21,6 @@
 #define OPENXCOM_RULECOUNTRY_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -80,10 +79,17 @@ private:
 				double lon,
 				double lat) const;
 
-		const std::vector<double>& getLonMax() const {return _lonMax;}
-		const std::vector<double>& getLonMin() const {return _lonMin;}
-		const std::vector<double>& getLatMax() const {return _latMax;}
-		const std::vector<double>& getLatMin() const {return _latMin;}
+		/// Gets this Country's borders.
+//		const std::vector<double>& getLonMin() const {return _lonMin;}
+//		const std::vector<double>& getLonMax() const {return _lonMax;}
+//		const std::vector<double>& getLatMin() const {return _latMin;}
+//		const std::vector<double>& getLatMax() const {return _latMax;}
+
+		// kL: for reloading country lines
+		std::vector<double>& getLonMin() {return _lonMin;}
+		std::vector<double>& getLonMax() {return _lonMax;}
+		std::vector<double>& getLatMin() {return _latMin;}
+		std::vector<double>& getLatMax() {return _latMax;}
 };
 
 }
