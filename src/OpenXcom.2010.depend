@@ -5530,7 +5530,7 @@
 1413136956 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1419396489 f:\git\openxcom\src\battlescape\tileengine.h
+1419944637 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -6440,7 +6440,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1419409238 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1419945226 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6691,7 +6691,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1419904546 source:f:\git\openxcom\src\engine\game.cpp
+1419935090 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7481,7 +7481,7 @@
 	<string>
 	<vector>
 
-1419930629 source:f:\git\openxcom\src\geoscape\globe.cpp
+1419934258 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"

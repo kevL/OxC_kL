@@ -5794,13 +5794,11 @@ bool TileEngine::validMeleeRange(
 /**
  * Gets the AI to look through a window.
  * @param position - reference the current Position
- * @return, direction or -1 when no window found
+ * @return, direction or -1 if no window found
  */
 int TileEngine::faceWindow(const Position& position)
 {
-	static const Position
-		posEast = Position(1, 0, 0),
-		posSouth = Position(0, 1, 0);
+	int ret = -1;
 
 	const Tile* tile = _battleSave->getTile(position);
 	if (tile != NULL)
@@ -5808,33 +5806,45 @@ int TileEngine::faceWindow(const Position& position)
 		if (tile->getMapData(MapData::O_NORTHWALL) != NULL
 			&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 		{
-			return 0;
+			ret = 0;
 		}
-
-		if (tile->getMapData(MapData::O_WESTWALL) != NULL
+		else if (tile->getMapData(MapData::O_WESTWALL) != NULL
 			&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
 		{
-			return 6;
+			ret = 6;
 		}
 	}
 
-	tile = _battleSave->getTile(position + posEast);
+	tile = _battleSave->getTile(position + Position(1, 0, 0));
 	if (tile != NULL
 		&& tile->getMapData(MapData::O_WESTWALL) != NULL
 		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
 	{
-		return 2;
+		ret = 2;
 	}
 
-	tile = _battleSave->getTile(position + posSouth);
+	tile = _battleSave->getTile(position + Position(0, 1, 0));
 	if (tile != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL) != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 	{
-		return 4;
+		ret = 4;
 	}
 
-	return -1;
+
+	if ((ret == 0
+			&& position.y == 0)
+		|| (ret == 2
+			&& position.x == _battleSave->getMapSizeX() - 1)
+		|| (ret == 4
+			&& position.y == _battleSave->getMapSizeY() - 1)
+		|| (ret == 6
+			&& position.x == 0))
+	{
+		ret = -1;
+	}
+
+	return ret;
 }
 
 /**
