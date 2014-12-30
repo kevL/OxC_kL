@@ -1076,7 +1076,7 @@ void GeoscapeState::timeDisplay()
 	ss2 << std::setfill(L'0') << std::setw(2) << _savedGame->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
 
-	ss3 << _savedGame->getTime()->getHour();
+	ss3 << std::setfill(L'0') << std::setw(2) << _savedGame->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
 	int date = _savedGame->getTime()->getDay();
@@ -3164,21 +3164,23 @@ void GeoscapeState::globeClick(Action* action)
 		_debug = "";						// ditto
 
 		double
-			lon,
-			lat;
+			lonRad,
+			latRad;
 		_globe->cartToPolar(
 						mouseX,
 						mouseY,
-						&lon,
-						&lat);
+						&lonRad,
+						&latRad);
 
 		const double
-			lonDeg = lon / M_PI * 180.,
-			latDeg = lat / M_PI * 180.;
+			lonDeg = lonRad / M_PI * 180.,
+			latDeg = latRad / M_PI * 180.;
 
 		std::wostringstream ss;
-		ss << L"rad Lon " << lon << L"  Lat " << lat << std::endl;
-		ss << L"deg Lon " << lonDeg << L"  Lat " << latDeg; // << std::endl;
+		ss << std::fixed << std::setprecision(3)
+			<< L"RAD Lon " << lonRad << L"  Lat " << latRad
+			<< std::endl
+			<< L"DEG Lon " << lonDeg << L"  Lat " << latDeg;
 
 		_txtDebug->setText(ss.str());
 	}
