@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_MINIBASEVIEW_H
 #define OPENXCOM_MINIBASEVIEW_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/InteractiveSurface.h"
 
@@ -90,8 +90,8 @@ private:
 
 		/// Handles timer.
 		void think();
-		/// kL. Blinks the craft status indicators.
-		void MiniBaseView::blink(); // kL
+		/// Blinks the craft status indicators.
+		void MiniBaseView::blink();
 };
 
 }

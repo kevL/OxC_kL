@@ -244,8 +244,7 @@
 1415838250 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1413136953 f:\git\openxcom\src\basescape\minibaseview.h
-	<vector>
+1419969379 f:\git\openxcom\src\basescape\minibaseview.h
 	"../Engine/InteractiveSurface.h"
 
 1413136956 f:\git\openxcom\src\engine\interactivesurface.h
@@ -4882,7 +4881,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/Production.h"
 
-1413136953 f:\git\openxcom\src\basescape\manufactureinfostate.h
+1419970007 f:\git\openxcom\src\basescape\manufactureinfostate.h
 	"../Engine/State.h"
 
 1413136958 f:\git\openxcom\src\interface\arrowbutton.h
@@ -7341,7 +7340,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1419904542 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1419960583 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -9076,7 +9075,7 @@
 1416560913 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1415050286 source:f:\git\openxcom\src\savegame\production.cpp
+1419969867 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	<limits>
 	"Base.h"

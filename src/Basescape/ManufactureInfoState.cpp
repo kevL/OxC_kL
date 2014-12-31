@@ -190,8 +190,6 @@ void ManufactureInfoState::buildUi()
 	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
-//	_txtAllocatedEngineer->setWordWrap();
-//	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+1);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
@@ -204,8 +202,6 @@ void ManufactureInfoState::buildUi()
 	_txtUnitToProduce->setColor(Palette::blockOffset(15)+1);
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
-//	_txtUnitToProduce->setWordWrap();
-//	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
@@ -331,10 +327,7 @@ void ManufactureInfoState::setAssignedEngineer()
 
 	s2 << L"> \x01";
 	if (_production->getInfiniteAmount() == true)
-	{
-//		s2 << Language::utf8ToWstr("∞");
 		s2 << "oo";
-	}
 	else
 		s2 << _production->getAmountTotal();
 

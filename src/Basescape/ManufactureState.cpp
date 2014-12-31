@@ -19,8 +19,8 @@
 
 #include "ManufactureState.h"
 
-#include <limits>
-#include <sstream>
+//#include <limits>
+//#include <sstream>
 
 #include "BasescapeState.h"
 #include "ManufactureInfoState.h"
@@ -29,9 +29,9 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -64,7 +64,6 @@ ManufactureState::ManufactureState(
 		_state(state)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_mini			= new MiniBaseView(128, 16, 180, 26);
 
 	_txtTitle		= new Text(300, 17, 16, 9);
@@ -128,8 +127,6 @@ ManufactureState::ManufactureState(
 	_mini->onMouseClick(
 					(ActionHandler)& ManufactureState::miniClick,
 					SDL_BUTTON_LEFT);
-//	_mini->onMouseOver((ActionHandler)& ManufactureState::viewMouseOver);
-//	_mini->onMouseOut((ActionHandler)& ManufactureState::viewMouseOut);
 
 	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
@@ -137,7 +134,7 @@ ManufactureState::ManufactureState(
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 						(ActionHandler)& ManufactureState::btnOkClick,
 						Options::keyCancel);
@@ -148,7 +145,6 @@ ManufactureState::ManufactureState(
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
 	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
-//	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
@@ -169,44 +165,34 @@ ManufactureState::ManufactureState(
 
 	_txtEngineers->setColor(Palette::blockOffset(15)+1);
 	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
-//	_txtEngineers->setWordWrap();
 	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
-//	_txtProduced->setWordWrap();
 	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
-//	_txtCost->setWordWrap();
 	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
-//	_txtTimeLeft->setWordWrap();
 	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
 	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
-//	_lstManufacture->setAlign(ALIGN_RIGHT);
-//	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin();
-//	_lstManufacture->setWordWrap();
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
-
-//	fillProductionList();
 }
 
 /**
  * dTor.
  */
 ManufactureState::~ManufactureState()
-{
-}
+{}
 
 /**
  * Updates the production list after going to other screens.
@@ -216,8 +202,6 @@ void ManufactureState::init()
 	State::init();
 
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
-
-
 	fillProductionList();
 }
 
@@ -260,61 +244,45 @@ void ManufactureState::fillProductionList()
 
 		s1 << (*i)->getAssignedEngineers();
 
-		if ((*i)->getSellItems())
-			s2 << "$"; // prepend $
+		if ((*i)->getSellItems() == true)
+			s2 << "$";
 		s2 << (*i)->getAmountProduced() << "/";
-		if ((*i)->getInfiniteAmount())
-//kL		s2 << Language::utf8ToWstr("∞");
-			s2 << "oo"; // kL
+		if ((*i)->getInfiniteAmount() == true)
+			s2 << "oo";
 		else
 			s2 << (*i)->getAmountTotal();
 
-//		if ((*i)->getSellItems())
-//			s2 << "$"; // append another dollar $
-
 		s3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
 
-//		if ((*iter)->getInfiniteAmount())
-//kL		s4 << Language::utf8ToWstr("∞");
-//			s4 << "oo"; // kL else
 		if ((*i)->getAssignedEngineers() > 0)
 		{
-			// kL_begin:
 			int hoursLeft;
-
-			if ((*i)->getSellItems()
-				|| (*i)->getInfiniteAmount())
+			if ((*i)->getSellItems() == true
+				|| (*i)->getInfiniteAmount() == true)
 			{
 				hoursLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
-							- (*i)->getTimeSpent();
+						  - (*i)->getTimeSpent();
 			}
 			else
-			{
 				hoursLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
 							- (*i)->getTimeSpent();
-			}
-
 
 			int engs = (*i)->getAssignedEngineers();
-			if (!Options::canManufactureMoreItemsPerHour)
-			{
+			if (Options::canManufactureMoreItemsPerHour == false)
 				engs = std::min(
-								engs,
-								(*i)->getRules()->getManufactureTime());
-			}
+							engs,
+							(*i)->getRules()->getManufactureTime());
 
-//			hoursLeft = static_cast<int>(
-//							ceil(static_cast<double>(hoursLeft) / static_cast<double>((*i)->getAssignedEngineers())));
-			// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
+			// ensure this is rounded up
+			// since it takes an entire hour to manufacture any part of that hour's capacity
 			hoursLeft = (hoursLeft + engs - 1) / engs;
 
-			int daysLeft = hoursLeft / 24;
+			const int daysLeft = hoursLeft / 24;
 			hoursLeft %= 24;
-			s4 << daysLeft << "/" << hoursLeft; // kL_end.
+			s4 << daysLeft << "/" << hoursLeft;
 		}
 		else
-//kL		s4 << L"-";
-			s4 << L"oo"; // kL
+			s4 << L"oo";
 
 		_lstManufacture->addRow
 							(5,
@@ -326,8 +294,7 @@ void ManufactureState::fillProductionList()
 	}
 
 	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE")
-//kL							.arg(_base->getAvailableEngineers()));
-							.arg(_base->getEngineers())); // kL
+							.arg(_base->getEngineers()));
 	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED")
 							.arg(_base->getAllocatedEngineers()));
 	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE")

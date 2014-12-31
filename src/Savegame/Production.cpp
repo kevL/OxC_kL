@@ -168,7 +168,7 @@ ProductProgress Production::step(
 		SavedGame* g,
 		const Ruleset* r)
 {
-	int done = getAmountProduced();
+	const int done = getAmountProduced();
 	_timeSpent += _engineers;
 
 	if (Options::canManufactureMoreItemsPerHour == false
@@ -186,13 +186,12 @@ ProductProgress Production::step(
 		{
 			produced = std::min(
 							getAmountProduced(),
-							_amount)
-						- done;
+							_amount) - done;
 		}
 		else
 			produced = getAmountProduced() - done;
 
-		int count = 0;
+		int qty = 0;
 		do
 		{
 			for (std::map<std::string,int>::const_iterator
@@ -216,7 +215,7 @@ ProductProgress Production::step(
 					// Check if it's fuel OR ammo for a Craft
 					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
-						for (std::vector<Craft*>::iterator
+						for (std::vector<Craft*>::const_iterator
 								c = b->getCrafts()->begin();
 								c != b->getCrafts()->end();
 								++c)
@@ -233,7 +232,7 @@ ProductProgress Production::step(
 								}
 								else if ((*c)->getStatus() == "STR_REARMING")
 								{
-									for (std::vector<CraftWeapon*>::iterator
+									for (std::vector<CraftWeapon*>::const_iterator
 											cw = (*c)->getWeapons()->begin();
 											cw != (*c)->getWeapons()->end();
 											++cw)
@@ -290,10 +289,10 @@ ProductProgress Production::step(
 						}
 					} */
 
-					if (getSellItems()) // <- this may be Fucked. kL_note
+					if (getSellItems() == true) // <- this may be Fucked.
 					{
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
-						b->setCashIncome(r->getItem(i->first)->getSellCost() * i->second); // kL
+						b->setCashIncome(r->getItem(i->first)->getSellCost() * i->second);
 					}
 					else
 						b->getItems()->addItem(
@@ -302,10 +301,9 @@ ProductProgress Production::step(
 				}
 			}
 
-			count++;
-			if (count < produced)
+			++qty;
+			if (qty < produced)
 			{
-				// We need to ensure that player has enough cash/item to produce a new unit
 				if (enoughMoney(g) == false)
 					return PROGRESS_NOT_ENOUGH_MONEY;
 
@@ -315,25 +313,22 @@ ProductProgress Production::step(
 				startItem(b, g);
 			}
 		}
-		while (count < produced);
+		while (qty < produced);
 	}
 
 	if (getAmountProduced() >= _amount
-		&& !getInfiniteAmount())
+		&& getInfiniteAmount() == false)
 	{
 		return PROGRESS_COMPLETE;
 	}
 
 	if (done < getAmountProduced())
 	{
-		// We need to ensure that player has enough cash/item to produce a new unit
-		if (!enoughMoney(g))
+		if (enoughMoney(g) == false)
 			return PROGRESS_NOT_ENOUGH_MONEY;
 
-		if (!enoughMaterials(b))
+		if (enoughMaterials(b) == false)
 			return PROGRESS_NOT_ENOUGH_MATERIALS;
-
-		// kL_note: NOT ENOUGH HANGAR SPACE!!!
 
 		startItem(b, g);
 	}
@@ -366,7 +361,7 @@ void Production::startItem(
 {
 	int cost = _rules->getManufactureCost();
 	g->setFunds(g->getFunds() - cost);
-	b->setCashSpent(cost); // kL
+	b->setCashSpent(cost);
 
 	for (std::map<std::string,int>::const_iterator
 			i = _rules->getRequiredItems().begin();
@@ -382,12 +377,12 @@ void Production::startItem(
  */
 void Production::load(const YAML::Node& node)
 {
-	setAssignedEngineers(node["assigned"].as<int>(getAssignedEngineers()));
-	setTimeSpent(node["spent"].as<int>(getTimeSpent()));
+	setAssignedEngineers(node["assigned"]	.as<int>(getAssignedEngineers()));
+	setTimeSpent(node["spent"]				.as<int>(getTimeSpent()));
 
-	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
-	setInfiniteAmount(node["infinite"].as<bool>(getInfiniteAmount()));
-	setSellItems(node["sell"].as<bool>(getSellItems()));
+	setAmountTotal(node["amount"]			.as<int>(getAmountTotal()));
+	setInfiniteAmount(node["infinite"]		.as<bool>(getInfiniteAmount()));
+	setSellItems(node["sell"]				.as<bool>(getSellItems()));
 
 	// backwards compatiblity
 /*kL

@@ -140,11 +140,11 @@ private:
 
 	/// Updates display of assigned/available engineers and workshop space.
 	void setAssignedEngineer();
-	/// kL. Updates the total time to complete the project.
-	void updateTimeTotal(); // kL
+	/// Updates the total time to complete the project.
+	void updateTimeTotal();
 
-	/// kL. Handler for releasing the Sell button.
-	void btnSellRelease(Action* action); // kL
+	/// Handler for releasing the Sell button.
+	void btnSellRelease(Action* action);
 
 	/// Runs state functionality every cycle.
 	void think();

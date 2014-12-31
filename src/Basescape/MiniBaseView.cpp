@@ -22,7 +22,7 @@
 //#include <cmath>
 
 #include "../Engine/Action.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
@@ -172,24 +172,24 @@ void MiniBaseView::draw()
 				rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
 				drawRect(&rect, Palette::blockOffset(pal)+3);
 
-				rect.x++;
-				rect.y++;
-				rect.w--;
-				rect.h--;
+				++rect.x;
+				++rect.y;
+				--rect.w;
+				--rect.h;
 				drawRect(&rect, Palette::blockOffset(pal)+5);
 
-				rect.x--;
-				rect.y--;
+				--rect.x;
+				--rect.y;
 				drawRect(&rect, Palette::blockOffset(pal)+2);
 
-				rect.x++;
-				rect.y++;
-				rect.w--;
-				rect.h--;
+				++rect.x;
+				++rect.y;
+				--rect.w;
+				--rect.h;
 				drawRect(&rect, Palette::blockOffset(pal)+3);
 
-				rect.x--;
-				rect.y--;
+				--rect.x;
+				--rect.y;
 				setPixelColor(
 							rect.x,
 							rect.y,
@@ -198,17 +198,8 @@ void MiniBaseView::draw()
 			unlock();
 
 
-			// kL_begin: Dot Marks for various base-status indicators.
+			// Dot Marks for various base-status indicators.
 			x = i * (MINI_SIZE + 2);
-
-/*			if (base->getScientists() > 0 // unused Scientists &/or Engineers
-				|| base->getEngineers() > 0)
-			{
-				setPixelColor(
-							x + 2,
-							17,
-							Palette::blockOffset(2)+1); // red
-			} */
 
 			if (base->getTransfers()->empty() == false) // incoming Transfers
 				setPixelColor(
@@ -281,7 +272,7 @@ void MiniBaseView::draw()
 
 					y += 2;
 				}
-			} // kL_end.
+			}
 		}
 	}
 }
@@ -293,7 +284,7 @@ void MiniBaseView::draw()
  */
 void MiniBaseView::mouseOver(Action* action, State* state)
 {
-	_hoverBase = static_cast<size_t>(floor(
+	_hoverBase = static_cast<size_t>(std::floor(
 					action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
 	if (_hoverBase < 0) _hoverBase = 0;
