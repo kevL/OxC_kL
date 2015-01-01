@@ -600,7 +600,9 @@ DogfightState::DogfightState(
 
 	_ufoWTimer->onTimer((StateHandler)& DogfightState::ufoFireWeapon);
 	_ufoFireInterval = static_cast<Uint32>(_ufo->getRules()->getWeaponReload() - _diff * 2);
-	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, _ufoFireInterval / 2))) * _optionSpeed;
+	Uint32 reload = (_ufoFireInterval
+						+ static_cast<Uint32>(RNG::generate(0, static_cast<int>(_ufoFireInterval)) / 2))
+				  * _optionSpeed;
 	if (reload < _optionSpeed)
 		reload = _optionSpeed;
 	_ufoWTimer->setInterval(reload);
@@ -608,8 +610,8 @@ DogfightState::DogfightState(
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
 	Uint32 ufoBreakOffInterval = static_cast<Uint32>(_ufo->getRules()->getBreakOffTime());
-	ufoBreakOffInterval = ufoBreakOffInterval
-							+ static_cast<Uint32>(RNG::generate(0, static_cast<int>(ufoBreakOffInterval)) / 10 - (_diff * 10))
+	ufoBreakOffInterval = (ufoBreakOffInterval
+							+ static_cast<Uint32>(RNG::generate(0, static_cast<int>(ufoBreakOffInterval)) / 10 - (_diff * 10)))
 						* _optionSpeed;
 	if (ufoBreakOffInterval < _optionSpeed * 10)
 		ufoBreakOffInterval = _optionSpeed * 10;
@@ -1476,7 +1478,7 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, _ufoFireInterval / 2))) * _optionSpeed;
+	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, static_cast<int>(_ufoFireInterval)) / 2)) * _optionSpeed;
 	if (reload < _optionSpeed)
 		reload = _optionSpeed;
 	_ufoWTimer->setInterval(reload);
