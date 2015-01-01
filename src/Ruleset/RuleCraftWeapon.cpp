@@ -42,15 +42,13 @@ RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 		_rearmRate(1),
 		_projectileSpeed(0),
 		_projectileType(CWPT_CANNON_ROUND)
-{
-}
+{}
 
 /**
  * dTor.
  */
 RuleCraftWeapon::~RuleCraftWeapon()
-{
-}
+{}
 
 /**
  * Loads the CraftWeapon from a YAML file.

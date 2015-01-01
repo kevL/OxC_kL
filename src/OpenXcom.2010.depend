@@ -4546,7 +4546,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1416739029 f:\git\openxcom\src\engine\timer.h
+1420005417 f:\git\openxcom\src\engine\timer.h
 	"State.h"
 	"Surface.h"
 
@@ -4730,12 +4730,10 @@
 	<vector>
 	"../Engine/State.h"
 
-1413136961 f:\git\openxcom\src\ruleset\rulecraftweapon.h
-	<string>
-	<yaml-cpp/yaml.h>
+1419997495 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
-1415937248 f:\git\openxcom\src\savegame\craftweaponprojectile.h
+1420006466 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 
 1415049551 f:\git\openxcom\src\savegame\craftweapon.h
 	<string>
@@ -4788,7 +4786,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1419218880 f:\git\openxcom\src\savegame\ufo.h
+1420002226 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4863,7 +4861,7 @@
 1413136961 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1418109547 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1419969985 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4918,19 +4916,14 @@
 1418108978 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1415853535 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1419969340 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
-	<limits>
-	<sstream>
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
 	"MiniBaseView.h"
 	"NewManufactureListState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleManufacture.h"
 	"../Ruleset/Ruleset.h"
@@ -4965,10 +4958,9 @@
 	<windows.h>
 	<stddef.h>
 
-1416999340 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1419969515 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
-	"../Engine/Palette.h"
 	"../Engine/SurfaceSet.h"
 	"../Engine/Timer.h"
 	"../Geoscape/GeoscapeState.h"
@@ -5769,9 +5761,7 @@
 1419297434 f:\git\openxcom\src\ruleset\ruleterrain.h
 	"MapBlock.h"
 
-1413136961 f:\git\openxcom\src\ruleset\ruleufo.h
-	<string>
-	<yaml-cpp/yaml.h>
+1419997568 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1413136961 f:\git\openxcom\src\savegame\alienbase.h
 	<string>
@@ -6793,7 +6783,7 @@
 	"Palette.h"
 	"Exception.h"
 
-1417487477 source:f:\git\openxcom\src\engine\rng.cpp
+1420014776 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>
@@ -6920,7 +6910,7 @@
 	"SurfaceSet.h"
 	"Surface.h"
 
-1416741576 source:f:\git\openxcom\src\engine\timer.cpp
+1420085507 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	"Game.h"
 	"Options.h"
@@ -7254,7 +7244,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1418718012 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1420083856 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7287,7 +7277,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1418330706 f:\git\openxcom\src\geoscape\dogfightstate.h
+1420085929 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1417180619 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -8828,7 +8818,7 @@
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
-1415166994 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
+1419997484 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
 1418421364 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
@@ -8908,7 +8898,7 @@
 	"RuleTerrain.h"
 	"../Engine/RNG.h"
 
-1414007206 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1419997817 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
@@ -9050,7 +9040,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1418318224 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1420006525 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
@@ -9208,7 +9198,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1419765351 source:f:\git\openxcom\src\savegame\ufo.cpp
+1420001677 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

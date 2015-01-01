@@ -49,7 +49,6 @@ private:
 	bool
 		_frameSkipping,
 		_running;
-//	int _interval;
 	Uint32
 		_frameSkipStart,
 		_interval,

@@ -43,8 +43,7 @@ RuleUfo::RuleUfo(const std::string& type)
 		_breakOffTime(0),
 		_sightRange(600), // 268 // for detecting xCom bases
 		_battlescapeTerrainData(NULL)
-{
-}
+{}
 
 /**
  * dTor.
@@ -57,7 +56,7 @@ RuleUfo::~RuleUfo()
 /**
  * Loads the UFO from a YAML file.
  * @param node		- reference a YAML node
- * @param ruleset	- pointer to Rule for the Ufo
+ * @param ruleset	- pointer to Ruleset
  */
 void RuleUfo::load(
 		const YAML::Node& node,
@@ -79,7 +78,7 @@ void RuleUfo::load(
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
-		RuleTerrain* rule = new RuleTerrain(terrain["name"].as<std::string>());
+		RuleTerrain* const rule = new RuleTerrain(terrain["name"].as<std::string>());
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
 	}
@@ -89,7 +88,7 @@ void RuleUfo::load(
 /**
  * Gets the language string that names this UFO.
  * Each UFO type has a unique name.
- * @return The Ufo's name.
+ * @return, the Ufo's type
  */
 std::string RuleUfo::getType() const
 {
@@ -98,7 +97,7 @@ std::string RuleUfo::getType() const
 
 /**
  * Gets the size of this type of UFO.
- * @return The Ufo's size.
+ * @return, the Ufo's size
  */
 std::string RuleUfo::getSize() const
 {
@@ -106,9 +105,8 @@ std::string RuleUfo::getSize() const
 }
 
 /**
- * Gets the radius of this type of UFO
- * on the dogfighting window.
- * @return The radius in pixels.
+ * Gets the radius of this type of UFO on the dogfighting window.
+ * @return, the radius in pixels
  */
 int RuleUfo::getRadius() const
 {
@@ -128,7 +126,7 @@ int RuleUfo::getRadius() const
 
 /**
  * Gets the ID of the sprite used to draw the UFO in the Dogfight window.
- * @return The sprite ID.
+ * @return, the sprite ID
  */
 int RuleUfo::getSprite() const
 {
@@ -137,7 +135,7 @@ int RuleUfo::getSprite() const
 
 /**
  * Gets the maximum damage (damage the UFO can take) of the UFO.
- * @return The maximum damage.
+ * @return, the maximum damage
  */
 int RuleUfo::getMaxDamage() const
 {
@@ -146,7 +144,7 @@ int RuleUfo::getMaxDamage() const
 
 /**
  * Gets the maximum speed of the UFO flying around the Geoscape.
- * @return The maximum speed.
+ * @return, the maximum speed
  */
 int RuleUfo::getMaxSpeed() const
 {
@@ -154,8 +152,8 @@ int RuleUfo::getMaxSpeed() const
 }
 
 /**
- * Gets the acceleration of the UFO for taking off / stopping.
- * @return The acceleration.
+ * Gets the acceleration of the UFO for taking off or stopping.
+ * @return, the acceleration
  */
 int RuleUfo::getAcceleration() const
 {
@@ -164,7 +162,7 @@ int RuleUfo::getAcceleration() const
 
 /**
  * Gets the maximum damage done by the UFO's weapons per shot.
- * @return The weapon power.
+ * @return, the weapon power
  */
 int RuleUfo::getWeaponPower() const
 {
@@ -173,7 +171,7 @@ int RuleUfo::getWeaponPower() const
 
 /**
  * Gets the maximum range for the UFO's weapons.
- * @return The weapon range.
+ * @return, the weapon range
  */
 int RuleUfo::getWeaponRange() const
 {
@@ -182,7 +180,7 @@ int RuleUfo::getWeaponRange() const
 
 /**
  * Gets the amount of points the player gets for shooting down the UFO.
- * @return The score.
+ * @return, the score
  */
 int RuleUfo::getScore() const
 {
@@ -191,7 +189,7 @@ int RuleUfo::getScore() const
 
 /**
  * Gets the terrain data needed to draw the UFO in the battlescape.
- * @return The RuleTerrain.
+ * @return, pointer to the RuleTerrain
  */
 RuleTerrain* RuleUfo::getBattlescapeTerrainData()
 {
@@ -200,7 +198,7 @@ RuleTerrain* RuleUfo::getBattlescapeTerrainData()
 
 /**
  * Gets the weapon reload for UFO ships.
- * @return The UFO weapon reload time.
+ * @return, the UFO weapon reload time
  */
 int RuleUfo::getWeaponReload() const
 {
@@ -209,7 +207,7 @@ int RuleUfo::getWeaponReload() const
 
 /**
  * Gets the UFO's break off time.
- * @return The UFO's break off time in game seconds.
+ * @return, the UFO's break off time in game seconds
  */
 int RuleUfo::getBreakOffTime() const
 {
@@ -218,7 +216,7 @@ int RuleUfo::getBreakOffTime() const
 
 /**
  * For user-defined UFOs, use a surface for the "preview" image.
- * @return The name of the surface that represents this UFO.
+ * @return, the name of the surface that represents the UFO
  */
 std::string RuleUfo::getModSprite() const
 {
@@ -227,7 +225,7 @@ std::string RuleUfo::getModSprite() const
 
 /**
  * Gets the UFO's radar range for detecting bases.
- * @return The range in nautical miles.
+ * @return, the range in nautical miles
  */
 int RuleUfo::getSightRange() const
 {

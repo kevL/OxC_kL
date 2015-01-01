@@ -49,7 +49,7 @@ class Ufo;
 
 
 /**
- * Shows a dogfight (interception) between a player craft and an UFO.
+ * Shows a dogfight (interception) between a player craft and a UFO.
  */
 class DogfightState
 	:
@@ -60,6 +60,8 @@ private:
 	static const int
 		_ufoBlobs[8][13][13],
 		_projectileBlobs[4][6][3];
+
+	static Uint32 _changeTarget;
 
 	bool
 		_end,
@@ -74,7 +76,7 @@ private:
 	int
 		_diff,
 		_timeout,
-		_timeScale,
+		_optionSpeed,
 		_dist,
 		_targetDist,
 
@@ -199,7 +201,7 @@ private:
 		/// Draws UFO.
 		void drawUfo();
 		/// Draws projectiles.
-		void drawProjectile(const CraftWeaponProjectile* p);
+		void drawProjectile(const CraftWeaponProjectile* proj);
 		/// Animates craft damage.
 		void animateCraftDamage();
 		/// Updates craft damage.

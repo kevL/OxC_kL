@@ -49,15 +49,13 @@ CraftWeaponProjectile::CraftWeaponProjectile()
 		_toBeRemoved(false),
 		_missed(false),
 		_distanceCovered(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
-CraftWeaponProjectile::~CraftWeaponProjectile(void)
-{
-}
+CraftWeaponProjectile::~CraftWeaponProjectile()
+{}
 
 /**
  * Sets the type of projectile according to the type of weapon it was shot from.
@@ -215,7 +213,7 @@ int CraftWeaponProjectile::getState() const
 
 /**
  * Sets the amount of damage the projectile can do when hitting its target.
- * @param damage - reference the damage
+ * @param damage - reference the damage value
  */
 void CraftWeaponProjectile::setDamage(const int& damage)
 {
@@ -224,7 +222,7 @@ void CraftWeaponProjectile::setDamage(const int& damage)
 
 /**
  * Gets the amount of damage the projectile can do when hitting its target.
- * @return, the damage
+ * @return, the damage to deliver
  */
 int CraftWeaponProjectile::getDamage() const
 {

@@ -90,7 +90,7 @@ private:
 		///
 		CraftWeaponProjectile();
 		///
-		~CraftWeaponProjectile(void);
+		~CraftWeaponProjectile();
 
 		/// Sets projectile type. This determines its speed.
 		void setType(CraftWeaponProjectileType type);
@@ -100,7 +100,7 @@ private:
 		CraftWeaponProjectileGlobalType getGlobalType() const;
 
 		/// Sets projectile direction. This determines it's initial position.
-		void setDirection(const int &directon);
+		void setDirection(const int& directon);
 		/// Gets projectile direction.
 		int getDirection() const;
 

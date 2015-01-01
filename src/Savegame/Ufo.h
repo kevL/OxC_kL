@@ -223,7 +223,7 @@ private:
 		/// Gets the interceptor engaging this Ufo.
 		int getShootingAt() const;
 		/// Sets the interceptor engaging this Ufo.
-		void setShootingAt(int target);
+		void setShootingAt(const int target);
 
 		/// Gets the UFO's landing site ID.
 		int getLandId() const;

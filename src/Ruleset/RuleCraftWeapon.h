@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_RULECRAFTWEAPON_H
 #define OPENXCOM_RULECRAFTWEAPON_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 #include "../Savegame/CraftWeaponProjectile.h"
 

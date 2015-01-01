@@ -90,11 +90,17 @@ int generate(
 		int minRand,
 		int maxRand)
 {
+	//Log(LOG_INFO) << "generate( " << minRand << "," << maxRand << ")";
+	if (minRand == maxRand)
+		return minRand;
+
+	if (minRand > maxRand)
+		std::swap(minRand, maxRand);
+
 	uint64_t rand = next();
-
-	if (maxRand < minRand)	// CyberAngel
-		maxRand = minRand;	// http://openxcom.org/bugs/openxcom/issues/736
-
+	//int ret = static_cast<int>(rand %(maxRand - minRand + 1)) + minRand;
+	//Log(LOG_INFO) << ". = " << ret;
+	//return ret;
 	return (static_cast<int>(rand %(maxRand - minRand + 1)) + minRand);
 }
 
@@ -108,28 +114,16 @@ double generate(
 		double minRand,
 		double maxRand)
 {
-//kL	double rand = static_cast<double>(next());
-
-	// kL_begin:
 	double diff = maxRand - minRand;
-	if (AreSame(diff, 0.))	// kL
-		return minRand;		// kL
+	if (AreSame(diff, 0.))
+		return minRand;
 
-//	diff = (static_cast<double>(UINT64_MAX) / diff);
 	diff = (static_cast<double>(std::numeric_limits<uint64_t>::max()) / diff);
-	if (AreSame(diff, 0.))	// kL
-		return minRand;		// kL
+	if (AreSame(diff, 0.))
+		return minRand;
 
-	double rand = static_cast<double>(next());
-
+	const double rand = static_cast<double>(next());
 	return ((rand / diff) + minRand);
-	// kL_end.
-
-
-//kL	return static_cast<double>(rand / (static_cast<double>(UINT64_MAX) / (maxRand - minRand)) + minRand);
-//		return (double)(rand / ((double)std::numeric_limits<uint64_t>::maxRand() / (maxRand - minRand)) + minRand); // AMDmi3 note.
-
-//	return (rand / (static_cast<double>(UINT64_MAX) / (maxRand - minRand)) + minRand); // kL
 }
 
 /*
@@ -207,11 +201,10 @@ bool percent(int value)
  */
 int generateEx(int maxRand)
 {
-	if (maxRand < 2)	// kL
-		return 0;	// kL
+	if (maxRand < 2)
+		return 0;
 
 	uint64_t rand = next();
-
 	return static_cast<int>(rand %maxRand);
 }
 

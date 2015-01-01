@@ -71,8 +71,7 @@ Ufo::Ufo(RuleUfo* rules)
 		_hitFrame(0)
 //		_terrain("")
 //		_shotDownByCraftId() // kL
-{
-}
+{}
 
 /**
  * Make sure our mission forgets us, and we only delete targets we own (waypoints).
@@ -572,8 +571,8 @@ void Ufo::think()
 			if (_detected == false)
 				_detected = true;
 
-		case DESTROYED: // Do nothing
-		break;
+//		case DESTROYED: // Do nothing
+//		break;
 	}
 }
 
@@ -759,7 +758,7 @@ int Ufo::getShootingAt() const
  * Sets the intercept this Ufo is shooting at in a dogfight.
  * @param target - interception number
  */
-void Ufo::setShootingAt(int target)
+void Ufo::setShootingAt(const int target)
 {
 	_shootingAt = target;
 }

@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_RULEUFO_H
 #define OPENXCOM_RULEUFO_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -34,8 +33,7 @@ class RuleTerrain;
 
 /**
  * Represents a specific type of UFO.
- * Contains constant info about a UFO like
- * speed, weapons, scores, etc.
+ * Contains constant info about a UFO like speed, weapons, scores, etc.
  * @sa Ufo
  */
 class RuleUfo

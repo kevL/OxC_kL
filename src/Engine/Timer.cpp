@@ -89,15 +89,16 @@ Timer::Timer(
  * dTor.
  */
 Timer::~Timer()
-{
-}
+{}
 
 /**
  * Starts the timer running and counting time.
  */
 void Timer::start()
 {
-	_frameSkipStart = _start = slowTick();
+	_frameSkipStart =
+	_start = slowTick();
+
 	_running = true;
 }
 
@@ -111,7 +112,7 @@ void Timer::stop()
 }
 
 /**
- * Returns the time passed since the last interval.
+ * Returns the time passed since the last interval/ since this Timer started.
  * @return, time in milliseconds
  */
 Uint32 Timer::getTime() const
@@ -132,7 +133,7 @@ bool Timer::isRunning() const
 }
 
 /**
- * The timer keeps calculating the passed time while it's running,
+ * The timer keeps calculating the passed time while it's running
  * calling the respective action handler whenever the set interval passes.
  * @param state		- State that the action handler belongs to
  * @param surface	- Surface that the action handler belongs to
@@ -144,6 +145,7 @@ void Timer::think(
 	// must be signed to permit negative numbers
 //	Sint64 current = slowTick();
 	Sint64 current = static_cast<Sint64>(slowTick());
+
 	// this is used to make sure we stop calling *_state on *state
 	// in the loop once *state has been popped and deallocated:
 	const Game* game = NULL;
