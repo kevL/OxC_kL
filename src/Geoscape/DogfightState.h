@@ -61,8 +61,6 @@ private:
 		_ufoBlobs[8][13][13],
 		_projectileBlobs[4][6][3];
 
-	static Uint32 _changeTarget;
-
 	bool
 		_end,
 		_destroyUfo,
@@ -76,7 +74,6 @@ private:
 	int
 		_diff,
 		_timeout,
-		_optionSpeed,
 		_dist,
 		_targetDist,
 
@@ -91,7 +88,11 @@ private:
 		_minimizedIconX,
 		_minimizedIconY;
 	size_t _interceptQty;
-	Uint32 _ufoFireInterval;
+	Uint32
+		_changeTarget,
+		_optionSpeed,
+		_ufoFireInterval;
+
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 

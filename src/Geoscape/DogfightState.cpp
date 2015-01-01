@@ -229,8 +229,6 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 	}
 };
 
-Uint32 DogfightState::_changeTarget = 0;
-
 
 /**
  * Initializes all the elements in the Dogfight window.
@@ -278,7 +276,7 @@ DogfightState::DogfightState(
 	_screen = false;
 
 	_craft->setInDogfight(true);
-	_optionSpeed = 50 + Options::dogfightSpeed;
+	_optionSpeed = 50 + static_cast<Uint32>(Options::dogfightSpeed);
 
 	_window					= new Surface(160, 96, _x, _y);
 	_battle					= new Surface(77, 74, _x + 3, _y + 3);
@@ -602,23 +600,19 @@ DogfightState::DogfightState(
 
 	_ufoWTimer->onTimer((StateHandler)& DogfightState::ufoFireWeapon);
 	_ufoFireInterval = static_cast<Uint32>(_ufo->getRules()->getWeaponReload() - _diff * 2);
-	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, _ufoFireInterval / 2))) * static_cast<Uint32>(_optionSpeed);
-	if (reload < static_cast<Uint32>(_optionSpeed))
-		reload = static_cast<Uint32>(_optionSpeed);
+	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, _ufoFireInterval / 2))) * _optionSpeed;
+	if (reload < _optionSpeed)
+		reload = _optionSpeed;
 	_ufoWTimer->setInterval(reload);
 	_changeTarget = reload;
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
 	Uint32 ufoBreakOffInterval = static_cast<Uint32>(_ufo->getRules()->getBreakOffTime());
-	ufoBreakOffInterval = static_cast<Uint32>(
-						 (static_cast<int>(ufoBreakOffInterval)
-							+ RNG::generate(
-										0,
-										static_cast<int>(ufoBreakOffInterval)) / 10
-							- (_diff * 10))
-						 * _optionSpeed);
-	if (ufoBreakOffInterval < static_cast<Uint32>(_optionSpeed) * 10)
-		ufoBreakOffInterval = static_cast<Uint32>(_optionSpeed) * 10;
+	ufoBreakOffInterval = ufoBreakOffInterval
+							+ static_cast<Uint32>(RNG::generate(0, static_cast<int>(ufoBreakOffInterval)) / 10 - (_diff * 10))
+						* _optionSpeed;
+	if (ufoBreakOffInterval < _optionSpeed * 10)
+		ufoBreakOffInterval = _optionSpeed * 10;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
@@ -1482,13 +1476,11 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, _ufoFireInterval / 2))) * static_cast<Uint32>(_optionSpeed);
-	if (reload < static_cast<Uint32>(_optionSpeed))
-		reload = static_cast<Uint32>(_optionSpeed);
+	Uint32 reload = (_ufoFireInterval + static_cast<Uint32>(RNG::generate(0, _ufoFireInterval / 2))) * _optionSpeed;
+	if (reload < _optionSpeed)
+		reload = _optionSpeed;
 	_ufoWTimer->setInterval(reload);
 	_changeTarget = reload;
-	Log(LOG_INFO) << "ufoFireWeapon() changeTarget = " << _changeTarget;
-
 
 	setStatus("STR_UFO_RETURN_FIRE");
 
@@ -1662,13 +1654,13 @@ void DogfightState::btnCautiousPress(Action*)
 		if (_craft->getRules()->getWeapons() > 0
 			&& _craft->getWeapons()->at(0) != 0)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * _optionSpeed);
+			_w1Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(0)->getRules()->getCautiousReload()) * _optionSpeed);
 		}
 
 		if (_craft->getRules()->getWeapons() > 1
 			&& _craft->getWeapons()->at(1) != 0)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * _optionSpeed);
+			_w2Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(1)->getRules()->getCautiousReload()) * _optionSpeed);
 		}
 
 		minimumDistance();
@@ -1692,13 +1684,13 @@ void DogfightState::btnStandardPress(Action*)
 		if (_craft->getRules()->getWeapons() > 0
 			&& _craft->getWeapons()->at(0) != NULL)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * _optionSpeed);
+			_w1Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(0)->getRules()->getStandardReload()) * _optionSpeed);
 		}
 
 		if (_craft->getRules()->getWeapons() > 1
 			&& _craft->getWeapons()->at(1) != NULL)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * _optionSpeed);
+			_w2Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(1)->getRules()->getStandardReload()) * _optionSpeed);
 		}
 
 		maximumDistance();
@@ -1722,13 +1714,13 @@ void DogfightState::btnAggressivePress(Action*)
 		if (_craft->getRules()->getWeapons() > 0
 			&& _craft->getWeapons()->at(0) != NULL)
 		{
-			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * _optionSpeed);
+			_w1Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload()) * _optionSpeed);
 		}
 
 		if (_craft->getRules()->getWeapons() > 1
 			&& _craft->getWeapons()->at(1) != NULL)
 		{
-			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * _optionSpeed);
+			_w2Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload()) * _optionSpeed);
 		}
 
 		_targetDist = 64;
