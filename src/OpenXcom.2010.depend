@@ -253,7 +253,7 @@
 	"State.h"
 	"Surface.h"
 
-1416738760 f:\git\openxcom\src\engine\surface.h
+1420130451 f:\git\openxcom\src\engine\surface.h
 
 1325792434 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -4372,7 +4372,7 @@
 
 1419151932 f:\git\openxcom\src\ruleset\unit.h
 
-1417628586 f:\git\openxcom\src\engine\options.h
+1420130459 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -4401,7 +4401,7 @@
 
 1415929980 f:\git\openxcom\src\savegame\target.h
 
-1419811405 f:\git\openxcom\src\savegame\savedgame.h
+1420130452 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -4512,7 +4512,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1419662862 f:\git\openxcom\src\ruleset\ruleregion.h
+1420130457 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
 1417179335 f:\git\openxcom\src\savegame\weightedoptions.h
@@ -4550,7 +4550,7 @@
 	"State.h"
 	"Surface.h"
 
-1419567286 f:\git\openxcom\src\engine\surfaceset.h
+1420130438 f:\git\openxcom\src\engine\surfaceset.h
 
 1413136960 f:\git\openxcom\src\ruleset\rulecraft.h
 	<string>
@@ -4583,10 +4583,10 @@
 1416773868 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1419918994 f:\git\openxcom\src\ruleset\ruleset.h
+1420130458 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Savegame/GameTime.h"
 
-1413136961 f:\git\openxcom\src\savegame\gametime.h
+1420130447 f:\git\openxcom\src\savegame\gametime.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -4664,7 +4664,7 @@
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
-1416747920 f:\git\openxcom\src\engine\logger.h
+1420130442 f:\git\openxcom\src\engine\logger.h
 	<sstream>
 	<string>
 	<stdio.h>
@@ -4730,7 +4730,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1419997495 f:\git\openxcom\src\ruleset\rulecraftweapon.h
+1420130461 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
 1420006466 f:\git\openxcom\src\savegame\craftweaponprojectile.h
@@ -4938,7 +4938,7 @@
 1418800025 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
-1416034771 f:\git\openxcom\src\engine\screen.h
+1420130443 f:\git\openxcom\src\engine\screen.h
 	"OpenGL.h"
 
 1413136956 f:\git\openxcom\src\engine\opengl.h
@@ -5143,7 +5143,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1415668320 f:\git\openxcom\src\engine\rng.h
+1420130441 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
 	<cstdint>
 
@@ -5734,7 +5734,7 @@
 	<utility>
 	<vector>
 
-1413136956 f:\git\openxcom\src\engine\exception.h
+1420130441 f:\git\openxcom\src\engine\exception.h
 	<exception>
 	<string>
 
@@ -6668,7 +6668,7 @@
 1413136956 f:\git\openxcom\src\engine\flc.h
 	<SDL.h>
 
-1413136957 f:\git\openxcom\src\engine\zoom.h
+1420130456 f:\git\openxcom\src\engine\zoom.h
 	<SDL.h>
 	"OpenGL.h"
 
@@ -11000,7 +11000,7 @@
 1416200931 f:\git\openxcom\src\ruleset\rulemusic.h
 	<yaml-cpp/yaml.h>
 
-1413136956 f:\git\openxcom\src\engine\optioninfo.h
+1420130442 f:\git\openxcom\src\engine\optioninfo.h
 	<map>
 	<string>
 	<SDL.h>
@@ -11376,7 +11376,7 @@
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1413136962 f:\git\openxcom\src\fmath.h
+1420130439 f:\git\openxcom\src\fmath.h
 	<cmath>
 	<limits>
 
@@ -11593,7 +11593,7 @@
 	<cmath>
 	<algorithm>
 
-1417665723 f:\git\openxcom\src\savegame\craftid.h
+1420130453 f:\git\openxcom\src\savegame\craftid.h
 
 1419132018 source:f:\git\openxcom\src\battlescape\particle.cpp
 	"Particle.h"

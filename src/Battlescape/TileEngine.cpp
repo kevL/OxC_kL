@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -5237,29 +5237,30 @@ int TileEngine::voxelCheck(
 }
 
 /**
- * Calculates the distance between 2 points. Rounded down to first INT.
- * @param pos1 - reference the Position of first square
- * @param pos2 - reference the Position of second square
+ * Calculates the distance between 2 points - rounded to nearest INT.
+ * @param pos1 - reference the first Position
+ * @param pos2 - reference the second Position
  * @return, distance
  */
 int TileEngine::distance(
 		const Position& pos1,
 		const Position& pos2) const
 {
-	int x = pos1.x - pos2.x;
-	int y = pos1.y - pos2.y;
-	int z = pos1.z - pos2.z; // kL
+	int
+		x = pos1.x - pos2.x,
+		y = pos1.y - pos2.y,
+		z = pos1.z - pos2.z; // kL
 
 	return static_cast<int>(Round(
-			sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
+			std::sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
 }
 
 /**
  * Calculates the distance squared between 2 points.
- * No sqrt(), not floating point math, and sometimes it's all you need.
- * @param pos1		- reference the Position of first square
- * @param pos2		- reference the Position of second square
- * @param considerZ	- true to consider the z coordinate
+ * No sqrt() no floating point math and sometimes it's all you need.
+ * @param pos1		- reference the first Position
+ * @param pos2		- reference the second Position
+ * @param considerZ	- true to consider the z coordinate (default true)
  * @return, distance
  */
 int TileEngine::distanceSq(
@@ -5267,9 +5268,14 @@ int TileEngine::distanceSq(
 		const Position& pos2,
 		bool considerZ) const
 {
-	int x = pos1.x - pos2.x;
-	int y = pos1.y - pos2.y;
-	int z = considerZ? (pos1.z - pos2.z): 0;
+	int
+		x = pos1.x - pos2.x,
+		y = pos1.y - pos2.y,
+		z;
+	if (considerZ == true)
+		z = pos1.z - pos2.z;
+	else
+		z = 0;
 
 	return x * x + y * y + z * z;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,7 @@ namespace OpenXcom
 	ArticleStateTFTDUso::ArticleStateTFTDUso(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
 		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
-		
+
 		_lstInfo = new TextList(150, 50, 168, 142);
 		add(_lstInfo);
 

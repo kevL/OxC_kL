@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,7 @@ namespace OpenXcom
 	ArticleStateTFTDCraftWeapon::ArticleStateTFTDCraftWeapon(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
 		RuleCraftWeapon *weapon = _game->getRuleset()->getCraftWeapon(defs->id);
-		
+
 		_lstInfo = new TextList(150, 50, 168, 126);
 		add(_lstInfo);
 

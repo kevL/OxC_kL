@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,33 +49,33 @@ namespace OpenXcom
 		std::wostringstream ss;
 		ss << unit->getStats()->tu;
 		_lstStats->addRow(2, tr("STR_TIME_UNITS").c_str(), ss.str().c_str());
-		
+
 		std::wostringstream ss2;
 		ss2 << unit->getStats()->health;
 		_lstStats->addRow(2, tr("STR_HEALTH").c_str(), ss2.str().c_str());
-		
+
 		std::wostringstream ss3;
 		ss3 << armor->getFrontArmor();
 		_lstStats->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss3.str().c_str());
-		
+
 		std::wostringstream ss4;
 		ss4 << armor->getSideArmor();
 		_lstStats->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss4.str().c_str());
-		
+
 		std::wostringstream ss5;
 		ss5 << armor->getSideArmor();
 		_lstStats->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss5.str().c_str());
-		
+
 		std::wostringstream ss6;
 		ss6 << armor->getRearArmor();
 		_lstStats->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss6.str().c_str());
-		
+
 		std::wostringstream ss7;
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
-		
+
 		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
-				
+
 		if (!item->getCompatibleAmmo()->empty())
 		{
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
@@ -85,7 +85,7 @@ namespace OpenXcom
 			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
 			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
-			
+
 			std::wostringstream ss9;
 			ss9 << ammo->getClipSize();
 			_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());

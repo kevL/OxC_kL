@@ -75,7 +75,7 @@ BEGIN
 
             VALUE "InternalName", "OpenXcom.exe"
 
-            VALUE "LegalCopyright", "Copyright 2010-2014 OpenXcom Developers"
+            VALUE "LegalCopyright", "Copyright 2010-2015 OpenXcom Developers"
 
             VALUE "OriginalFilename", "OpenXcom.exe"
 
