@@ -19,15 +19,15 @@
 
 #include "ResearchInfoState.h"
 
-#include <limits>
-#include <sstream>
+//#include <limits>
+//#include <sstream>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/ArrowButton.h"

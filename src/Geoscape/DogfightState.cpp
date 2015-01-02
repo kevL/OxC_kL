@@ -965,7 +965,7 @@ void DogfightState::moveCraft()
 //					if (ufoSize > 4)
 //						ufoSize = 4;
 
-					const int hitprob = proj->getAccuracy() + (_ufoSize * 5) - (_diff * 5); // Could include UFO speed here.
+					const int hitprob = proj->getAccuracy() + (_ufoSize * 5) - (_diff * 5); // Could include UFO speed here ...
 
 					if (RNG::percent(hitprob) == true)
 					{
@@ -1134,10 +1134,8 @@ void DogfightState::moveCraft()
 				|| _ufo->getShootingAt() == _intercept)
 			{
 				const int weapRange = _ufo->getRules()->getWeaponRange() * 8;
-				const bool targetTest = _dist <= weapRange
-									 && _craft->isDestroyed() == false;
-
-				if (targetTest == true)
+				if (_dist <= weapRange
+					 && _craft->isDestroyed() == false)
 				{
 					int dfQty = 0; // Randomize UFO's target.
 					for (std::list<DogfightState*>::const_iterator
@@ -1175,14 +1173,12 @@ void DogfightState::moveCraft()
 
 							ufoFireWeapon();
 						}
-						else if (_ufoWTimer->isRunning() == true)
+						else if (_ufoWTimer->isRunning() == true
+							&& _changeTarget < _ufoWTimer->getTime()
+							&& RNG::percent(prob) == false)
 						{
-							if (_changeTarget < _ufoWTimer->getTime()
-								&& RNG::percent(prob) == false)
-							{
-								_ufo->setShootingAt(0); // This is where the magic happens, Lulzor!!
-								_ufoWTimer->stop();
-							}
+							_ufo->setShootingAt(0); // This is where the magic happens, Lulzor!!
+							_ufoWTimer->stop();
 						}
 					}
 				}

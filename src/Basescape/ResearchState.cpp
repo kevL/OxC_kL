@@ -19,7 +19,7 @@
 
 #include "ResearchState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "ManageAlienContainmentState.h"
 #include "NewResearchListState.h"
@@ -28,9 +28,9 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
