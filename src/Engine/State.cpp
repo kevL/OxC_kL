@@ -60,12 +60,13 @@ State::State()
 		_screen(true),
 		_modal(NULL)
 {
-	//Log(LOG_INFO) << "Create State";
 	// initialize palette to all black
-	memset(
-		_palette,
-		0,
-		sizeof(_palette));
+	std::memset(
+			_palette,
+			0,
+			sizeof(_palette));
+
+	_cursorColor = _game->getCursor()->getColor();
 }
 
 /**
@@ -519,9 +520,9 @@ void State::setPalette(
 {
 	if (colors != NULL)
 		memcpy(
-				_palette + firstcolor,
-				colors,
-				ncolors * sizeof(SDL_Color));
+			_palette + firstcolor,
+			colors,
+			ncolors * sizeof(SDL_Color));
 
 	if (immediately == true)
 	{
