@@ -1242,7 +1242,7 @@ void BattlescapeState::mapOver(Action* action)
 					{
 						if (row == 24)
 						{
-							woss << L"> more >>";
+							woss << L"> more >>>";
 							++row;
 						}
 
@@ -1283,7 +1283,7 @@ void BattlescapeState::mapOver(Action* action)
 					if (row > 26) // Console #2
 					{
 						if (row == 50)
-							woss << L"> more >>";
+							woss << L"> more >>>";
 
 						woss2.str(L"");
 						woss2 << woss.str();
@@ -1522,12 +1522,13 @@ inline void BattlescapeState::handle(Action* action)
 				|| action->getDetails()->type == SDL_MOUSEBUTTONUP)))
 	{
 		State::handle(action);
-
 /*kL
 		if (_isMouseScrolling
 			&& !Options::battleDragScrollInvert) // newScroll
 		{
-			_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
+			_map->setSelectorPosition(
+								(_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(),
+								(_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
 //			_map->setSelectorPosition( // newScroll
 //								static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
 //								static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()));
@@ -1548,20 +1549,20 @@ inline void BattlescapeState::handle(Action* action)
 		{
 			if (Options::debug == true)
 			{
-				if (action->getDetails()->key.keysym.sym == SDLK_d			// "ctrl-d" - enable debug mode
+				if (action->getDetails()->key.keysym.sym == SDLK_d		// "ctrl-d" - enable debug mode
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					_savedBattle->setDebugMode();
 					debug(L"Debug Mode");
 				}
-				else if (_savedBattle->getDebugMode()						// "ctrl-v" - reset tile visibility
+				else if (_savedBattle->getDebugMode()					// "ctrl-v" - reset tile visibility
 					&& action->getDetails()->key.keysym.sym == SDLK_v
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Resetting tile visibility");
 					_savedBattle->resetTiles();
 				}
-				else if (_savedBattle->getDebugMode()						// "ctrl-k" - kill all aliens
+				else if (_savedBattle->getDebugMode()					// "ctrl-k" - kill all aliens
 					&& action->getDetails()->key.keysym.sym == SDLK_k
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
@@ -1587,23 +1588,23 @@ inline void BattlescapeState::handle(Action* action)
 					saveAIMap();
 				}
 			}
-			else if (_savedGame->isIronman() == false)						// quick save and quick load
+			else if (_savedGame->isIronman() == false)
 			{
 				// not works in debug mode to prevent conflict in hotkeys by default
-				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave) // f6
+				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)		// f6 - quickSave
 					_game->pushState(new SaveGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
-				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad) // f5
+				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)	// f5 - quickLoad
 					_game->pushState(new LoadGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
 			}
 
-			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView) // f11
-				saveVoxelView();											// voxel view dump
+			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)	// f11 - voxel view pic
+				saveVoxelView();
 		}
 	}
 }

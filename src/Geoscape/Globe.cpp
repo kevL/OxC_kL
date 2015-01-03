@@ -17,13 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "Globe.h"
 
 //#include <algorithm>
+//#define _USE_MATH_DEFINES
 //#include <cmath>
-
 //#include "../fmath.h"
 
 #include "GeoscapeState.h"
@@ -83,12 +81,11 @@ const double
 	Globe::ROTATE_LATITUDE	= 0.176;
 
 Uint8
-	Globe::OCEAN_COLOR			= Palette::blockOffset(12),
-//	Globe::oceanColor2			= Palette::blockOffset(13);
-	Globe::COUNTRY_LABEL_COLOR	= 239,
-	Globe::LINE_COLOR			= 162,
-	Globe::CITY_LABEL_COLOR		= 138,
-	Globe::BASE_LABEL_COLOR		= 133;
+	Globe::OCEAN_COLOR			= 192, //Palette::blockOffset(12),
+	Globe::COUNTRY_LABEL_COLOR	= 227, //Palette::blockOffset(14)+3);	//stock 239
+	Globe::LINE_COLOR			= 162, //Palette::blockOffset(10)+2);
+	Globe::CITY_LABEL_COLOR		= 167, //Palette::blockOffset(10)+7);	//stock 138
+	Globe::BASE_LABEL_COLOR		= 100; //Palette::blockOffset(6)+4);	//stock 133;
 
 
 namespace
@@ -1924,7 +1921,7 @@ void Globe::drawDetail()
 								y[0],
 								x[1],
 								y[1],
-								LINE_COLOR); //Palette::blockOffset(10)+2);
+								LINE_COLOR);
 			}
 		}
 		_countries->unlock();
@@ -1993,7 +1990,7 @@ void Globe::drawDetail()
 
 		if (_zoom > 2)
 		{
-			label->setColor(COUNTRY_LABEL_COLOR); //Palette::blockOffset(14)+3); // draw the country labels
+			label->setColor(COUNTRY_LABEL_COLOR); // draw the country labels
 
 			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
@@ -2024,7 +2021,7 @@ void Globe::drawDetail()
 			}
 		}
 
-		label->setColor(CITY_LABEL_COLOR); //Palette::blockOffset(10)+7); // draw the city labels
+		label->setColor(CITY_LABEL_COLOR); // draw the city labels
 
 		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
@@ -2063,7 +2060,7 @@ void Globe::drawDetail()
 			}
 		}
 
-		label->setColor(BASE_LABEL_COLOR); //Palette::blockOffset(6)+4); // draw xCom base labels
+		label->setColor(BASE_LABEL_COLOR); // draw xCom base labels
 		label->setAlign(ALIGN_LEFT);
 
 		for (std::vector<Base*>::const_iterator

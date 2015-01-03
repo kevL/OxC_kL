@@ -4761,7 +4761,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1420185783 f:\git\openxcom\src\geoscape\globe.h
+1420294009 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -7337,7 +7337,7 @@
 	<string>
 	<vector>
 
-1420186449 source:f:\git\openxcom\src\geoscape\globe.cpp
+1420294472 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8029,7 +8029,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1420223696 source:f:\git\openxcom\src\menu\pausestate.cpp
+1420293819 source:f:\git\openxcom\src\menu\pausestate.cpp
 	"PauseState.h"
 	"AbandonGameState.h"
 	"ListLoadState.h"
@@ -8581,7 +8581,7 @@
 1420130446 source:f:\git\openxcom\src\ruleset\rulebasefacility.cpp
 	"RuleBaseFacility.h"
 
-1420130459 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
+1420296430 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
 	"RuleCountry.h"
 
 1420130458 source:f:\git\openxcom\src\ruleset\rulecraft.cpp

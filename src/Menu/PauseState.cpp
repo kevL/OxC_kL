@@ -54,9 +54,11 @@ PauseState::PauseState(OptionsOrigin origin)
 {
 	_screen = false;
 
-	int x = 52;
+	int x;
 	if (_origin == OPT_GEOSCAPE)
 		x = 20;
+	else
+		x = 52;
 
 	_window		= new Window(this, 216, 158, x, 20, POPUP_BOTH);
 
@@ -131,7 +133,7 @@ PauseState::PauseState(OptionsOrigin origin)
 	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();
 
-	if (_game->getSavedGame()->isIronman())
+	if (_game->getSavedGame()->isIronman() == true)
 	{
 		_btnSave->setVisible(false);
 		_btnLoad->setVisible(false);

@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "RuleCountry.h"
 
+//#define _USE_MATH_DEFINES
 //#include <math.h>
 
 //#include "../Engine/RNG.h"
@@ -43,7 +42,7 @@ RuleCountry::RuleCountry(const std::string& type)
 {}
 
 /**
- *
+ * dTor.
  */
 RuleCountry::~RuleCountry()
 {}
@@ -92,7 +91,7 @@ std::string RuleCountry::getType() const
 int RuleCountry::generateFunding() const
 {
 	return RNG::generate(
-					_fundingBase,
+					_fundingBase / 2,
 					_fundingBase * 2) * 1000;
 }
 
@@ -147,7 +146,7 @@ bool RuleCountry::insideCountry(
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
 			inLon = (lon >= _lonMin[i] && lon < 6.283)
-					|| (lon >= 0 && lon < _lonMax[i]);
+					|| (lon >= 0. && lon < _lonMax[i]);
 
 		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 

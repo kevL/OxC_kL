@@ -301,17 +301,16 @@ void ConfirmLandingState::init()
  */
 RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 {
-	std::vector<RuleTerrain*> terrainChoices;
+	std::vector<RuleTerrain*> terrains;
 
-	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+	const std::vector<std::string>& terrainList = _game->getRuleset()->getTerrainList();
 	for (std::vector<std::string>::const_iterator
-			i = terrains.begin();
-			i != terrains.end();
+			i = terrainList.begin();
+			i != terrainList.end();
 			++i)
 	{
 		Log(LOG_INFO) << ". . . terrain = " << *i;
 		RuleTerrain* const terrainRule = _game->getRuleset()->getTerrain(*i);
-
 		for (std::vector<int>::const_iterator
 				j = terrainRule->getTextures()->begin();
 				j != terrainRule->getTextures()->end();
@@ -326,15 +325,15 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 						&& lat >= 0.)))
 			{
 				Log(LOG_INFO) << ". . . . . terrainRule = " << *i;
-				terrainChoices.push_back(terrainRule);
+				terrains.push_back(terrainRule);
 			}
 		}
 	}
 
-	const size_t choice = static_cast<size_t>(RNG::generate(
-														0,
-														static_cast<int>(terrainChoices.size()) - 1));
-	return terrainChoices.at(choice);
+	const size_t pick = static_cast<size_t>(RNG::generate(
+													0,
+													static_cast<int>(terrains.size()) - 1));
+	return terrains.at(pick);
 }
 
 /**
@@ -344,11 +343,11 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 {
 	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
-	const size_t choice = static_cast<size_t>(RNG::generate(
+	const size_t pick = static_cast<size_t>(RNG::generate(
 														0,
 														static_cast<int>(ruleDeploy->getTerrains().size()) - 1));
-	RuleTerrain* terrainRule = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(choice));
-	Log(LOG_INFO) << "cityTerrain = " << ruleDeploy->getTerrains().at(choice);
+	RuleTerrain* const terrainRule = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+	Log(LOG_INFO) << "cityTerrain = " << ruleDeploy->getTerrains().at(pick);
 
 /*	if (lat < 0. // northern hemisphere
 		&& terrainRule->getName() == "NATIVEURBAN")

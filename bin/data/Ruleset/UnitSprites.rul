@@ -40,7 +40,7 @@ extraSprites:
     files:
       0: Resources/Sprites/Units/sectoid/sectoid.png
   - type: TANKS.PCK
-    width: 256
+    width: 512
     height: 320
     subX: 32
     subY: 40
@@ -54,8 +54,8 @@ extraSprites:
     files:
       0: Resources/Sprites/Units/x_reap/x_reap.png
   - type: X_ROB.PCK
-    width: 256
-    height: 320
+    width: 512
+    height: 400
     subX: 32
     subY: 40
     files:
