@@ -22,7 +22,7 @@
 //#include <SDL_mixer.h>
 
 //#include "../Engine/Adlib/adlplayer.h" // kL: func_fade()
-#include "../Engine/Font.h"
+//#include "../Engine/Font.h"
 #include "../Engine/Game.h" // fadeMusic()
 //#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
@@ -44,14 +44,16 @@ int
 	ResourcePack::WINDOW_POPUP[3]			= {1, 2, 3},
 
 	ResourcePack::EXPLOSION_OFFSET			= 0,
+	ResourcePack::UNDERWATER_SMOKE_OFFSET	= 0,
+	ResourcePack::SMOKE_OFFSET				= 7,	// was 8
 
 	ResourcePack::SMALL_EXPLOSION			= 2,
 	ResourcePack::DOOR_OPEN					= 3,
 	ResourcePack::LARGE_EXPLOSION			= 5,
 	ResourcePack::FLYING_SOUND				= 15,
-	ResourcePack::FLYING_SOUND_HQ			= 70, // kL
+	ResourcePack::FLYING_SOUND_HQ			= 70,	// kL
 	ResourcePack::ITEM_RELOAD				= 17,
-	ResourcePack::ITEM_UNLOAD_HQ			= 74, // kL
+	ResourcePack::ITEM_UNLOAD_HQ			= 74,	// kL
 	ResourcePack::SLIDING_DOOR_OPEN			= 20,
 	ResourcePack::SLIDING_DOOR_CLOSE		= 21,
 	ResourcePack::WALK_OFFSET				= 22,
@@ -67,8 +69,12 @@ int
 	ResourcePack::INTERCEPTOR_HIT			= 10,
 	ResourcePack::INTERCEPTOR_EXPLODE		= 13,
 
-	ResourcePack::SMOKE_OFFSET				= 7,	// was 8
-	ResourcePack::UNDERWATER_SMOKE_OFFSET	= 0;
+	ResourcePack::GEOSCAPE_CURSOR			= 252,
+	ResourcePack::BASESCAPE_CURSOR			= 252,
+	ResourcePack::BATTLESCAPE_CURSOR		= 144,
+	ResourcePack::UFOPAEDIA_CURSOR			= 252,
+	ResourcePack::GRAPHS_CURSOR				= 252;
+
 
 
 /**
@@ -462,6 +468,15 @@ Sound* ResourcePack::getSoundByDepth(
 const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
 {
 	return &_transparencyLUTs;
+}
+
+/**
+ * Gets if playing music is playing.
+ * @return, true if playing
+ */
+bool ResourcePack::isMusicPlaying()
+{
+	return _musics[_playingMusic]->isPlaying();
 }
 
 }

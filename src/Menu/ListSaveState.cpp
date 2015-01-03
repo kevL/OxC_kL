@@ -51,10 +51,10 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 {
 	_edtSave		= new TextEdit(this, 168, 9, 0, 0);
 	_btnSaveGame	= new TextButton(134, 16, 170, 177); // kL
-//kL	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman()? 200: 80, 16, 60, 172);
+//	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman()? 200: 80, 16, 60, 172);
 
 	add(_edtSave);
-	add(_btnSaveGame);
+	add(_btnSaveGame, "button", "saveMenus");
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
@@ -63,12 +63,12 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 	else
 		_btnCancel->setX(180); */
 
-	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
+//	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
 	_btnSaveGame->setText(tr("STR_OK"));
 	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveGameClick);
 	_btnSaveGame->setVisible(false); // kL
 
-	_edtSave->setColor(Palette::blockOffset(8)+10);
+	_edtSave->setColor(_lstSaves->getSecondaryColor()); //Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::edtSaveKeyPress);
 
@@ -79,8 +79,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
  * dTor.
  */
 ListSaveState::~ListSaveState()
-{
-}
+{}
 
 /**
  * Updates the save game list with the current list of available savedgames.
@@ -92,7 +91,7 @@ void ListSaveState::updateList()
 					tr("STR_NEW_SAVED_GAME_SLOT").c_str());
 
 	if (_origin != OPT_BATTLESCAPE)
-		_lstSaves->setRowColor(0, Palette::blockOffset(8)+5);
+		_lstSaves->setRowColor(0, _lstSaves->getSecondaryColor()); //Palette::blockOffset(8)+5);
 
 	ListGamesState::updateList();
 }

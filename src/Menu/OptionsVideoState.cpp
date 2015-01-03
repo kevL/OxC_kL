@@ -20,13 +20,13 @@
 #include "OptionsVideoState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
+//#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/ArrowButton.h"
 #include "../Interface/ComboBox.h"
@@ -118,54 +118,50 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	}
 
 	add(_displaySurface);
-	add(_txtDisplayResolution);
-	add(_txtDisplayWidth);
-	add(_txtDisplayX);
-	add(_txtDisplayHeight);
-	add(_btnDisplayResolutionUp);
-	add(_btnDisplayResolutionDown);
+	add(_txtDisplayResolution, "text", "videoMenu");
+	add(_txtDisplayWidth, "resolution", "videoMenu");
+	add(_txtDisplayX, "resolution", "videoMenu");
+	add(_txtDisplayHeight, "resolution", "videoMenu");
+	add(_btnDisplayResolutionUp, "button", "videoMenu");
+	add(_btnDisplayResolutionDown, "button", "videoMenu");
 
-	add(_txtLanguage);
-	add(_txtFilter);
+	add(_txtLanguage, "text", "videoMenu");
+	add(_txtFilter, "text", "videoMenu");
 
-	add(_txtMode);
+	add(_txtMode, "text", "videoMenu");
 
-	add(_txtOptions);
-	add(_btnLetterbox);
-	add(_btnLockMouse);
+	add(_txtOptions, "text", "videoMenu");
+	add(_btnLetterbox, "button", "videoMenu");
+	add(_btnLockMouse, "button", "videoMenu");
 
-	add(_cbxFilter);
-	add(_cbxDisplayMode);
+	add(_cbxFilter, "button", "videoMenu");
+	add(_cbxDisplayMode, "button", "videoMenu");
 
-	add(_txtBattleScale);
-	add(_cbxBattleScale);
+	add(_txtBattleScale, "text", "videoMenu");
+	add(_cbxBattleScale, "button", "videoMenu");
 
-	add(_txtGeoScale);
-	add(_cbxGeoScale);
+	add(_txtGeoScale, "text", "videoMenu");
+	add(_cbxGeoScale, "button", "videoMenu");
 
-	add(_cbxLanguage);
+	add(_cbxLanguage, "button", "videoMenu");
 
 	centerAllSurfaces();
 
-	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
 	_txtDisplayResolution->setText(tr("STR_DISPLAY_RESOLUTION"));
 
 	_displaySurface->setTooltip("STR_DISPLAY_RESOLUTION_DESC");
 	_displaySurface->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_displaySurface->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
-	_txtDisplayWidth->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
 	_txtDisplayWidth->setBig();
 	_txtDisplayWidth->setNumerical(true);
 	_txtDisplayWidth->onChange((ActionHandler)& OptionsVideoState::txtDisplayWidthChange);
 
-	_txtDisplayX->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayX->setAlign(ALIGN_CENTER);
 	_txtDisplayX->setBig();
 	_txtDisplayX->setText(L"x");
 
-	_txtDisplayHeight->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayHeight->setAlign(ALIGN_CENTER);
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setNumerical(true);
@@ -177,19 +173,13 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
 
-	_btnDisplayResolutionUp->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayResolutionUp->onMouseClick((ActionHandler)& OptionsVideoState::btnDisplayResolutionUpClick);
-
-	_btnDisplayResolutionDown->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayResolutionDown->onMouseClick((ActionHandler)& OptionsVideoState::btnDisplayResolutionDownClick);
 
-	_txtMode->setColor(Palette::blockOffset(8)+10);
 	_txtMode->setText(tr("STR_DISPLAY_MODE"));
 
-	_txtOptions->setColor(Palette::blockOffset(8)+10);
 	_txtOptions->setText(tr("STR_DISPLAY_OPTIONS"));
 
-	_btnLetterbox->setColor(Palette::blockOffset(15)-1);
 	_btnLetterbox->setText(tr("STR_LETTERBOXED"));
 	_btnLetterbox->setPressed(Options::keepAspectRatio);
 	_btnLetterbox->onMouseClick((ActionHandler)& OptionsVideoState::btnLetterboxClick);
@@ -197,7 +187,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_btnLetterbox->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_btnLetterbox->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
-	_btnLockMouse->setColor(Palette::blockOffset(15)-1);
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
 	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
 	_btnLockMouse->onMouseClick((ActionHandler)& OptionsVideoState::btnLockMouseClick);
@@ -205,12 +194,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_btnLockMouse->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_btnLockMouse->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
-	_txtLanguage->setColor(Palette::blockOffset(8)+10);
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 
 	std::vector<std::wstring> names;
 	Language::getList(_langs, names);
-	_cbxLanguage->setColor(Palette::blockOffset(15)-1);
 	_cbxLanguage->setOptions(names);
 	for (size_t
 			i = 0;
@@ -277,10 +264,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	else if (Options::useXBRZFilter)
 		selFilter = 3;
 
-	_txtFilter->setColor(Palette::blockOffset(8)+10);
 	_txtFilter->setText(tr("STR_DISPLAY_FILTER"));
 
-	_cbxFilter->setColor(Palette::blockOffset(15)-1);
 	_cbxFilter->setOptions(filterNames);
 	_cbxFilter->setSelected(selFilter);
 	_cbxFilter->onChange((ActionHandler)& OptionsVideoState::cbxFilterChange);
@@ -302,7 +287,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	else if (Options::allowResize)
 		displayMode = 3;
 
-	_cbxDisplayMode->setColor(Palette::blockOffset(15)-1);
 	_cbxDisplayMode->setOptions(displayModes);
 	_cbxDisplayMode->setSelected(displayMode);
 	_cbxDisplayMode->onChange((ActionHandler)& OptionsVideoState::updateDisplayMode);
@@ -310,7 +294,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_cbxDisplayMode->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_cbxDisplayMode->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
-	_txtGeoScale->setColor(Palette::blockOffset(8)+10);
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
 
 	std::vector<std::string> scales;
@@ -321,7 +304,6 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	scales.push_back("STR_HALF_DISPLAY");
 	scales.push_back("STR_FULL_DISPLAY");
 
-	_cbxGeoScale->setColor(Palette::blockOffset(15)-1);
 	_cbxGeoScale->setOptions(scales);
 	_cbxGeoScale->setSelected(Options::geoscapeScale);
 	_cbxGeoScale->onChange((ActionHandler)& OptionsVideoState::updateGeoscapeScale);
@@ -329,10 +311,8 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_cbxGeoScale->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_cbxGeoScale->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
-	_txtBattleScale->setColor(Palette::blockOffset(8)+10);
 	_txtBattleScale->setText(tr("STR_BATTLESCAPE_SCALE"));
 
-	_cbxBattleScale->setColor(Palette::blockOffset(15)-1);
 	_cbxBattleScale->setOptions(scales);
 	_cbxBattleScale->setSelected(Options::battlescapeScale);
 	_cbxBattleScale->onChange((ActionHandler)& OptionsVideoState::updateBattlescapeScale);
@@ -345,8 +325,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
  * dTor.
  */
 OptionsVideoState::~OptionsVideoState()
-{
-}
+{}
 
 /**
  * Selects a bigger display resolution.
@@ -360,7 +339,7 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action*)
 	if (_resCurrent <= 0)
 		_resCurrent = _resAmount - 1;
 	else
-		_resCurrent--;
+		--_resCurrent;
 
 	updateDisplayResolution();
 }
@@ -377,7 +356,7 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action*)
 	if (_resCurrent >= _resAmount - 1)
 		_resCurrent = 0;
 	else
-		_resCurrent++;
+		++_resCurrent;
 
 	updateDisplayResolution();
 }

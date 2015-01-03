@@ -19,13 +19,12 @@
 
 #include "ResearchCompleteState.h"
 
-#include <algorithm>
+//#include <algorithm>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h" // kL
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -35,7 +34,6 @@
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Ufopaedia/Ufopaedia.h"
 
@@ -66,44 +64,47 @@ ResearchCompleteState::ResearchCompleteState(
 	_btnReport		= new TextButton(80, 16, 64, 146);
 	_btnOk			= new TextButton(80, 16, 176, 146);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtResearch);
-	add(_btnReport);
-	add(_btnOk);
+	add(_window, "window", "geoResearch");
+	add(_txtTitle, "text1", "geoResearch");
+	add(_txtResearch, "text2", "geoResearch");
+	add(_btnReport, "button", "geoResearch");
+	add(_btnOk, "button", "geoResearch");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ResearchCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchCompleteState::btnOkClick,
 					Options::keyCancel);
 
-	_btnReport->setColor(Palette::blockOffset(8)+5);
+//	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)& ResearchCompleteState::btnReportClick);
 	_btnReport->onKeyboardPress(
 						(ActionHandler)& ResearchCompleteState::btnReportClick,
 						Options::keyOk);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_RESEARCH_COMPLETED"));
 
-	_txtResearch->setColor(Palette::blockOffset(8)+10);
+//	_txtResearch->setColor(Palette::blockOffset(8)+10);
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
-//kL	_txtResearch->setWordWrap();
-	if (research)
+	if (research != NULL)
 		_txtResearch->setText(tr(research->getName()));
+	else
+		_txtResearch->setVisible(false);
 }
 
 /**
@@ -121,19 +122,12 @@ void ResearchCompleteState::btnOkClick(Action*)
  */
 void ResearchCompleteState::btnReportClick(Action*)
 {
-	//Log(LOG_INFO) << "ResearchCompleteState::btnReportClick()";
-	//if (_research) Log(LOG_INFO) << ". There IS _research";
-
-	//Log(LOG_INFO) << ". popState";
 	_game->popState();
-	//Log(LOG_INFO) << ". popState DONE";
 
-	if (_bonus)
+	if (_bonus != NULL)
 	{
-		//Log(LOG_INFO) << ". . in Bonus";
-
 		std::string bonusName;
-		if (_bonus->getLookup().empty())
+		if (_bonus->getLookup().empty() == true)
 			bonusName = _bonus->getName();
 		else
 			bonusName = _bonus->getLookup();
@@ -143,12 +137,10 @@ void ResearchCompleteState::btnReportClick(Action*)
 							bonusName);
 	}
 
-	if (_research)
+	if (_research != NULL)
 	{
-		//Log(LOG_INFO) << ". . in Research";
-
 		std::string name;
-		if (_research->getLookup().empty())
+		if (_research->getLookup().empty() == true)
 			name = _research->getName();
 		else
 			name = _research->getLookup();

@@ -23,7 +23,6 @@
 
 //#include <cmath>
 //#include <fstream>
-
 //#include <SDL_endian.h>
 
 #include "Polygon.h"
@@ -31,6 +30,9 @@
 
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
+//#include "../Engine/Palette.h"
+
+#include "../Geoscape/Globe.h"
 
 
 namespace OpenXcom
@@ -40,8 +42,7 @@ namespace OpenXcom
  * Creates a blank ruleset for globe contents.
  */
 RuleGlobe::RuleGlobe()
-{
-}
+{}
 
 /**
  * dTor.
@@ -128,6 +129,14 @@ void RuleGlobe::load(const YAML::Node& node)
 			_polylines.push_back(polyline);
 		}
 	}
+
+	Globe::COUNTRY_LABEL_COLOR	= node["countryColor"]	.as<Uint8>(Globe::COUNTRY_LABEL_COLOR);
+	Globe::CITY_LABEL_COLOR		= node["cityColor"]		.as<Uint8>(Globe::CITY_LABEL_COLOR);
+	Globe::BASE_LABEL_COLOR		= node["baseColor"]		.as<Uint8>(Globe::BASE_LABEL_COLOR);
+	Globe::LINE_COLOR			= node["lineColor"]		.as<Uint8>(Globe::LINE_COLOR);
+	
+	if (node["oceanPalette"])
+		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanColor"].as<Uint8>(12));
 }
 
 /**

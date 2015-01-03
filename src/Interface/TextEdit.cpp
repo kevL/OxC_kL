@@ -19,11 +19,11 @@
 
 #include "TextEdit.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Action.h"
-#include "../Engine/Font.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Font.h"
+//#include "../Engine/Options.h"
 #include "../Engine/Timer.h"
 
 

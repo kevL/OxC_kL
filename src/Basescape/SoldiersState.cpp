@@ -87,82 +87,82 @@ SoldiersState::SoldiersState(Base* base)
 	_btnEquip		= new TextButton(56, 16, 193, 177);
 	_btnOk			= new TextButton(56, 16, 254, 177);
 
-	setPalette("PAL_BASESCAPE", 2);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierList")->getElement("palette")->color); //2
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtSoldiers);
-	add(_txtName);
-	add(_txtRank);
-	add(_txtCraft);
-	add(_lstSoldiers);
-	add(_btnMemorial);
-	add(_btnPsi);
-	add(_btnArmor);
-	add(_btnEquip);
-	add(_btnOk);
+	add(_window, "window", "soldierList");
+	add(_txtTitle, "text1", "soldierList");
+	add(_txtBaseLabel, "text2", "soldierList");
+	add(_txtSoldiers, "text2", "soldierList");
+	add(_txtName, "text2", "soldierList");
+	add(_txtRank, "text2", "soldierList");
+	add(_txtCraft, "text2", "soldierList");
+	add(_lstSoldiers, "list", "soldierList");
+	add(_btnMemorial, "button", "soldierList");
+	add(_btnPsi, "button", "soldierList");
+	add(_btnArmor, "button", "soldierList");
+	add(_btnEquip, "button", "soldierList");
+	add(_btnOk, "button", "soldierList");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+1);
+//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SOLDIER_LIST"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtSoldiers->setColor(Palette::blockOffset(13)+10);
+//	_txtSoldiers->setColor(Palette::blockOffset(13)+10);
 	_txtSoldiers->setAlign(ALIGN_RIGHT);
 
-	_btnMemorial->setColor(Palette::blockOffset(13)+10);
+//	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
 	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
-	_btnPsi->setColor(Palette::blockOffset(13)+10);
+//	_btnPsi->setColor(Palette::blockOffset(13)+10);
 	_btnPsi->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsi->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
 	_btnPsi->setVisible(
 					Options::anytimePsiTraining
 					&& _base->getAvailablePsiLabs() > 0);
 
-	_btnArmor->setColor(Palette::blockOffset(13)+10);
+//	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick);
 
-	_btnEquip->setColor(Palette::blockOffset(13)+10);
+//	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(tr("STR_INVENTORY"));
 	_btnEquip->onMouseClick((ActionHandler)& SoldiersState::btnEquipClick);
 	_btnEquip->setVisible(_base->getAvailableSoldiers(true) > 0);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldiersState::btnOkClick,
 					Options::keyCancel);
 
-	_txtName->setColor(Palette::blockOffset(15)+1);
+//	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-	_txtRank->setColor(Palette::blockOffset(15)+1);
+//	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_RANK"));
 
-	_txtCraft->setColor(Palette::blockOffset(15)+1);
+//	_txtCraft->setColor(Palette::blockOffset(15)+1);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
+//	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
+//	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
+	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 117, 93, 71);
 	_lstSoldiers->setSelectable();
-	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstLeftArrowClick);
@@ -173,8 +173,7 @@ SoldiersState::SoldiersState(Base* base)
  * dTor.
  */
 SoldiersState::~SoldiersState()
-{
-}
+{}
 
 /**
  * Updates the soldiers list after going to other screens.
@@ -188,8 +187,8 @@ void SoldiersState::init()
 	_game->getSavedGame()->setBattleGame(NULL);
 	_base->setInBattlescape(false);
 
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+//	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	// end pre-battle Equip.
 
 	std::wostringstream ss; // in case soldier is told to GTFO.
@@ -214,16 +213,18 @@ void SoldiersState::init()
 
 		if ((*i)->getCraft() == NULL)
 		{
-			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
+			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor()); //Palette::blockOffset(15)+6);
 
 			if ((*i)->getWoundRecovery() > 0)
 			{
-				Uint8 color = Palette::blockOffset(3);	// green
+				Uint8 color;
 				const int woundPct = (*i)->getWoundPercent();
 				if (woundPct > 50)
 					color = Palette::blockOffset(6);	// orange
 				else if (woundPct > 10)
 					color = Palette::blockOffset(9);	// yellow
+				else
+					color = Palette::blockOffset(3);	// green
 
 				_lstSoldiers->setCellColor(
 										row,
@@ -423,8 +424,8 @@ void SoldiersState::btnEquipClick(Action*)
 	bgen.runInventory(NULL, _base);
 
 	// Set system colors
-	_game->getCursor()->setColor(Palette::blockOffset(9));
-	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+//	_game->getCursor()->setColor(Palette::blockOffset(9));
+//	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(

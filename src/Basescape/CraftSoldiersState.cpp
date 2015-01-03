@@ -81,56 +81,60 @@ CraftSoldiersState::CraftSoldiersState(
 	_btnUnload		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	setPalette("PAL_BASESCAPE", 2);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("craftSoldiers")->getElement("palette")->color); //2
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-//	add(_txtUsed);
-//	add(_txtAvailable);
-	add(_txtSpace);
-	add(_txtLoad);
-	add(_txtName);
-	add(_txtRank);
-	add(_txtCraft);
-	add(_lstSoldiers);
-	add(_btnUnload);
-	add(_btnOk);
+	add(_window, "window", "craftSoldiers");
+	add(_txtTitle, "text", "craftSoldiers");
+	add(_txtBaseLabel, "text", "craftSoldiers");
+//	add(_txtUsed, "text", "craftSoldiers");
+//	add(_txtAvailable, "text", "craftSoldiers");
+	add(_txtSpace, "text", "craftSoldiers");
+	add(_txtLoad, "text", "craftSoldiers");
+	add(_txtName, "text", "craftSoldiers");
+	add(_txtRank, "text", "craftSoldiers");
+	add(_txtCraft, "text", "craftSoldiers");
+	add(_lstSoldiers, "list", "craftSoldiers");
+	add(_btnUnload, "button", "craftSoldiers");
+	add(_btnOk, "button", "craftSoldiers");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+6);
+//	_colorOtherCraft = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
+
+//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftSoldiersState::btnOkClick,
 					Options::keyCancel);
 
-	_btnUnload->setColor(Palette::blockOffset(13)+10);
+//	_btnUnload->setColor(Palette::blockOffset(13)+10);
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
 	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
+//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 
-	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
+//	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	const Craft* const craft = _base->getCrafts()->at(_craftID);
 	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT").arg(craft->getName(_game->getLanguage())));
 
-	_txtName->setColor(Palette::blockOffset(15)+6);
+//	_txtName->setColor(Palette::blockOffset(15)+6);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-	_txtRank->setColor(Palette::blockOffset(15)+6);
+//	_txtRank->setColor(Palette::blockOffset(15)+6);
 	_txtRank->setText(tr("STR_RANK"));
 
-	_txtCraft->setColor(Palette::blockOffset(15)+6);
+//	_txtCraft->setColor(Palette::blockOffset(15)+6);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 //	_txtUsed->setColor(Palette::blockOffset(15)+6);
@@ -139,13 +143,13 @@ CraftSoldiersState::CraftSoldiersState(
 //	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 //	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtSpace->setColor(Palette::blockOffset(15)+6);
+//	_txtSpace->setColor(Palette::blockOffset(15)+6);
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtLoad->setColor(Palette::blockOffset(15)+6);
+//	_txtLoad->setColor(Palette::blockOffset(15)+6);
 	_txtLoad->setSecondaryColor(Palette::blockOffset(13));
 
-	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
+//	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 116, 85, 71);
@@ -162,8 +166,7 @@ CraftSoldiersState::CraftSoldiersState(
  * dTor.
  */
 CraftSoldiersState::~CraftSoldiersState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.
@@ -183,18 +186,18 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 {
 	const Craft* const craft = _base->getCrafts()->at(_craftID);
 
-	for (std::vector<Soldier*>::iterator // iterate over all soldiers at Base
+	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i)
 	{
-		if ((*i)->getCraft() == craft) // if soldier is on this Craft, unload them
+		if ((*i)->getCraft() == craft)
 			(*i)->setCraft(NULL);
 	}
 
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	init(); // iterate over all listRows and change their stringText and lineColor
+	init();
 }
 
 /**
@@ -262,30 +265,34 @@ void CraftSoldiersState::init()
 				++row)
 	{
 		_lstSoldiers->addRow(
-							3,
-							(*i)->getName().c_str(),
-							tr((*i)->getRankString()).c_str(),
-							(*i)->getCraftString(_game->getLanguage()).c_str());
+						3,
+						(*i)->getName().c_str(),
+						tr((*i)->getRankString()).c_str(),
+						(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		Uint8 color;
 
-		if ((*i)->getCraft() == craft)
-			color = Palette::blockOffset(13);
-		else if ((*i)->getCraft() != NULL)
-			color = Palette::blockOffset(15)+6;
+		if ((*i)->getCraft() == NULL)
+			color = _lstSoldiers->getColor(); //Palette::blockOffset(13)+10;
 		else
-			color = Palette::blockOffset(13)+10;
+		{
+			if ((*i)->getCraft() == craft)
+				color = _lstSoldiers->getSecondaryColor(); //Palette::blockOffset(13);
+			else
+				color = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color; //_colorOtherCraft; //Palette::blockOffset(15)+6;
+		}
 
 		_lstSoldiers->setRowColor(row, color);
 
-		if ((*i)->getWoundRecovery() > 0)
+		if ((*i)->getWoundRecovery() != 0)
 		{
-			Uint8 color = Palette::blockOffset(3); // green
 			const int woundPct = (*i)->getWoundPercent();
 			if (woundPct > 50)
-				color = Palette::blockOffset(6); // orange
+				color = Palette::blockOffset(6);	// orange
 			else if (woundPct > 10)
-				color = Palette::blockOffset(9); // yellow
+				color = Palette::blockOffset(9);	// yellow
+			else
+				color = Palette::blockOffset(3);	// green
 
 			_lstSoldiers->setCellColor(
 									row,
@@ -527,26 +534,36 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
-		if (soldier->getWoundRecovery() > 0)
+		if (soldier->getWoundRecovery() != 0
+			|| (soldier->getCraft() != NULL
+				&& soldier->getCraft()->getStatus() == "STR_OUT"))
+		{
 			return;
+		}
 
 		Craft* const craft = _base->getCrafts()->at(_craftID);
-		Uint8 color = Palette::blockOffset(13)+10;
+		Uint8 color; // = _lstSoldiers->getColor(); //Palette::blockOffset(13)+10;
 
-		if (soldier->getCraft() == craft
-			|| (soldier->getCraft() != NULL
-				&& soldier->getCraft()->getStatus() != "STR_OUT"))
+		if (soldier->getCraft() != NULL
+			&& soldier->getCraft()->getStatus() != "STR_OUT")
 		{
 			soldier->setCraft(NULL);
-			_lstSoldiers->setCellText(row, 2, tr("STR_NONE_UC"));
+			color = _lstSoldiers->getColor(); //Palette::blockOffset(13)+10;
+			_lstSoldiers->setCellText(
+									row,
+									2,
+									tr("STR_NONE_UC"));
 		}
 		else if (soldier->getCraft() == NULL
 			&& craft->getSpaceAvailable() > 0
 			&& craft->getLoadCapacity() - craft->getLoadCurrent() > 9)
 		{
 			soldier->setCraft(craft);
-			_lstSoldiers->setCellText(row, 2, craft->getName(_game->getLanguage()));
-			color = Palette::blockOffset(13);
+			color = _lstSoldiers->getSecondaryColor(); //Palette::blockOffset(13);
+			_lstSoldiers->setCellText(
+									row,
+									2,
+									craft->getName(_game->getLanguage()));
 		}
 
 		_lstSoldiers->setRowColor(row, color);

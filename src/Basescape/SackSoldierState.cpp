@@ -61,39 +61,41 @@ SackSoldierState::SackSoldierState(
 	_btnCancel	= new TextButton(44, 16, 100, 115);
 	_btnOk		= new TextButton(44, 16, 176, 115);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("sackSoldier")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtSoldier);
+	add(_window, "window", "sackSoldier");
+	add(_txtTitle, "text", "sackSoldier");
+	add(_txtSoldier, "text", "sackSoldier");
+	add(_btnCancel, "button", "sackSoldier");
+	add(_btnOk, "button", "sackSoldier");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+1);
+//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
+//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SackSoldierState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SackSoldierState::btnOkClick,
 					Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+6);
+//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SackSoldierState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SackSoldierState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SACK"));
 
-	_txtSoldier->setColor(Palette::blockOffset(13)+10);
+//	_txtSoldier->setColor(Palette::blockOffset(13)+10);
 	_txtSoldier->setAlign(ALIGN_CENTER);
 	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName());
 }
@@ -102,8 +104,7 @@ SackSoldierState::SackSoldierState(
  * dTor.
  */
 SackSoldierState::~SackSoldierState()
-{
-}
+{}
 
 /**
  * Sacks the soldier and returns to the previous screen.

@@ -25,6 +25,9 @@
 
 //#include <SDL.h>
 
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
+
 
 namespace OpenXcom
 {
@@ -53,6 +56,7 @@ protected:
 	static Game* _game;
 
 	bool _screen;
+	Uint8 _cursorColor;
 
 	InteractiveSurface* _modal;
 	SDL_Color _palette[256];

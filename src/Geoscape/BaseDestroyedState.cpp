@@ -22,8 +22,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -60,36 +60,39 @@ BaseDestroyedState::BaseDestroyedState(
 	_btnCenter	= new TextButton(140, 16, 88, 133);
 	_btnOk		= new TextButton(140, 16, 88, 153);
 
-	setPalette("PAL_GEOSCAPE", 7);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color); //7
 
-	add(_window);
-	add(_txtMessage);
-	add(_btnCenter);
-	add(_btnOk);
+	add(_window, "window", "UFOInfo");
+	add(_txtMessage, "text", "UFOInfo");
+	add(_btnCenter, "button", "UFOInfo");
+	add(_btnOk, "button", "UFOInfo");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(8)+5);
+
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(
 						_game->getResourcePack()->getSurface("BACK15.SCR"),
 						37); // kL: x-offset
 
+//	_txtMessage->setColor(Palette::blockOffset(8)+5);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
-	_txtMessage->setColor(Palette::blockOffset(8)+5);
 	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE")
 							.arg(_base->getName()));
 
-	_btnCenter->setColor(Palette::blockOffset(8)+5);
+//	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& BaseDestroyedState::btnCenterClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDestroyedState::btnCenterClick,
 					Options::keyOk);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -146,8 +149,7 @@ BaseDestroyedState::BaseDestroyedState(
  * dTor.
  */
 BaseDestroyedState::~BaseDestroyedState()
-{
-}
+{}
 
 /**
  *

@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class Base;
-//class Craft;
 class Text;
 class TextButton;
 class TextList;
@@ -45,6 +44,7 @@ class CraftSoldiersState
 
 private:
 	size_t _craftID;
+//	Uint8 _colorOtherCraft;
 
 	Base* _base;
 	Text

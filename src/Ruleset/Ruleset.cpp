@@ -21,7 +21,6 @@
 
 //#include <algorithm>
 //#include <fstream>
-
 //#include "../fmath.h"
 
 #include "AlienRace.h"
@@ -1033,6 +1032,12 @@ void Ruleset::loadFile(const std::string& filename)
 		ResourcePack::UFO_EXPLODE			= (*i)["ufoExplode"]		.as<int>(ResourcePack::UFO_EXPLODE);
 		ResourcePack::INTERCEPTOR_HIT		= (*i)["interceptorHit"]	.as<int>(ResourcePack::INTERCEPTOR_HIT);
 		ResourcePack::INTERCEPTOR_EXPLODE	= (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
+
+		ResourcePack::GEOSCAPE_CURSOR		= (*i)["geoscapeCursor"]	.as<int>(ResourcePack::GEOSCAPE_CURSOR);
+		ResourcePack::BASESCAPE_CURSOR		= (*i)["basescapeCursor"]	.as<int>(ResourcePack::BASESCAPE_CURSOR);
+		ResourcePack::BATTLESCAPE_CURSOR	= (*i)["battlescapeCursor"]	.as<int>(ResourcePack::BATTLESCAPE_CURSOR);
+		ResourcePack::UFOPAEDIA_CURSOR		= (*i)["ufopaediaCursor"]	.as<int>(ResourcePack::UFOPAEDIA_CURSOR);
+		ResourcePack::GRAPHS_CURSOR			= (*i)["graphsCursor"]		.as<int>(ResourcePack::GRAPHS_CURSOR);
 	}
 
 	for (YAML::const_iterator

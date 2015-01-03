@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -63,24 +63,24 @@ TransfersState::TransfersState(Base* base)
 
 	_btnOk			= new TextButton(288, 16, 16, 169);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtArrivalTime);
-	add(_lstTransfers);
-	add(_btnOk);
+	add(_window, "window", "transferInfo");
+	add(_txtTitle, "text", "transferInfo");
+	add(_txtBaseLabel, "text", "transferInfo");
+	add(_txtItem, "text", "transferInfo");
+	add(_txtQuantity, "text", "transferInfo");
+	add(_txtArrivalTime, "text", "transferInfo");
+	add(_lstTransfers, "list", "transferInfo");
+	add(_btnOk, "button", "transferInfo");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+6);
+//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
+//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& TransfersState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -90,28 +90,28 @@ TransfersState::TransfersState(Base* base)
 					(ActionHandler)& TransfersState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
+//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFERS_UC"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
+//	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtItem->setColor(Palette::blockOffset(15)+6);
+//	_txtItem->setColor(Palette::blockOffset(15)+6);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(15)+6);
+//	_txtQuantity->setColor(Palette::blockOffset(15)+6);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtArrivalTime->setColor(Palette::blockOffset(15)+6);
+//	_txtArrivalTime->setColor(Palette::blockOffset(15)+6);
 	_txtArrivalTime->setText(tr("STR_ARRIVAL_TIME_HOURS"));
 
-	_lstTransfers->setColor(Palette::blockOffset(13)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
+//	_lstTransfers->setColor(Palette::blockOffset(13)+10);
+//	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
+	_lstTransfers->setBackground(_window);
 	_lstTransfers->setColumns(3, 155, 75, 28);
 	_lstTransfers->setSelectable();
-	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin();
 
 	for (std::vector<Transfer*>::const_iterator
@@ -137,8 +137,7 @@ TransfersState::TransfersState(Base* base)
  * dTor.
  */
 TransfersState::~TransfersState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

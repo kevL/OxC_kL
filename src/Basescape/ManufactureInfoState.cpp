@@ -134,29 +134,31 @@ void ManufactureInfoState::buildUi()
 //	_surfaceUnits = new InteractiveSurface(160, 150, 160, 25);
 //	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtTimeDescr);
-	add(_txtTimeTotal);
-	add(_btnSell);
-	add(_txtAvailableEngineer);
-	add(_txtAvailableSpace);
-	add(_txtAllocatedEngineer);
-	add(_txtAllocated);
-	add(_txtUnitToProduce);
-	add(_txtTodo);
-	add(_txtEngineerUp);
-	add(_btnEngineerUp);
-	add(_txtEngineerDown);
-	add(_btnEngineerDown);
-	add(_txtUnitUp);
-	add(_btnUnitUp);
-	add(_txtUnitDown);
-	add(_btnUnitDown);
-	add(_btnStop);
-	add(_btnOk);
+	add(_window, "window", "manufactureInfo");
+	add(_txtTitle, "text", "manufactureInfo");
+	add(_txtTimeDescr, "text", "manufactureInfo");
+	add(_txtTimeTotal, "text", "manufactureInfo");
+	add(_btnSell, "button1", "manufactureInfo");
+	add(_txtAvailableEngineer, "text", "manufactureInfo");
+	add(_txtAvailableSpace, "text", "manufactureInfo");
+	add(_txtAllocatedEngineer, "text", "manufactureInfo");
+	add(_txtAllocated, "text", "manufactureInfo");
+	add(_txtUnitToProduce, "text", "manufactureInfo");
+	add(_txtTodo, "text", "manufactureInfo");
+	add(_txtEngineerUp, "text", "manufactureInfo");
+	add(_btnEngineerUp, "button1", "manufactureInfo");
+	add(_txtEngineerDown, "text", "manufactureInfo");
+	add(_btnEngineerDown, "button1", "manufactureInfo");
+	add(_txtUnitUp, "text", "manufactureInfo");
+	add(_btnUnitUp, "button1", "manufactureInfo");
+	add(_txtUnitDown, "text", "manufactureInfo");
+	add(_btnUnitDown, "button1", "manufactureInfo");
+	add(_btnStop, "button2", "manufactureInfo");
+	add(_btnOk, "button2", "manufactureInfo");
 
 //	add(_surfaceEngineers);
 //	add(_surfaceUnits);
@@ -164,82 +166,82 @@ void ManufactureInfoState::buildUi()
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+1);
+//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(15)+1);
+//	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setText(tr(_item? _item->getName(): _production->getRules()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtTimeDescr->setColor(Palette::blockOffset(15)+1);
+//	_txtTimeDescr->setColor(Palette::blockOffset(15)+1);
 	_txtTimeDescr->setText(tr("STR_DAYS_HOURS_LEFT"));
 
-	_txtTimeTotal->setColor(Palette::blockOffset(13));
+//	_txtTimeTotal->setColor(Palette::blockOffset(13));
 
-	_btnSell->setColor(Palette::blockOffset(15)+1);
+//	_btnSell->setColor(Palette::blockOffset(15)+1);
 	_btnSell->setText(tr("STR_SELL_PRODUCTION"));
 	_btnSell->onMouseRelease((ActionHandler)& ManufactureInfoState::btnSellRelease);
 
-	_txtAvailableEngineer->setColor(Palette::blockOffset(15)+1);
-	_txtAvailableEngineer->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailableEngineer->setColor(Palette::blockOffset(15)+1);
+//	_txtAvailableEngineer->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAvailableSpace->setColor(Palette::blockOffset(15)+1);
-	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailableSpace->setColor(Palette::blockOffset(15)+1);
+//	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
+//	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
 
-	_txtAllocated->setColor(Palette::blockOffset(15)+1);
+//	_txtAllocated->setColor(Palette::blockOffset(15)+1);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocated->setBig();
 
-	_txtTodo->setColor(Palette::blockOffset(15)+1);
-	_txtTodo->setSecondaryColor(Palette::blockOffset(13));
+//	_txtTodo->setColor(Palette::blockOffset(15)+1);
+//	_txtTodo->setSecondaryColor(Palette::blockOffset(13));
 	_txtTodo->setBig();
 
-	_txtUnitToProduce->setColor(Palette::blockOffset(15)+1);
+//	_txtUnitToProduce->setColor(Palette::blockOffset(15)+1);
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
 
-	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);
+//	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
 
-	_txtEngineerDown->setColor(Palette::blockOffset(15)+1);
+//	_txtEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerDown->setText(tr("STR_DECREASE_UC"));
 
-	_btnEngineerUp->setColor(Palette::blockOffset(15)+1);
+//	_btnEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerUp->onMousePress((ActionHandler)& ManufactureInfoState::moreEngineerPress);
 	_btnEngineerUp->onMouseRelease((ActionHandler)& ManufactureInfoState::moreEngineerRelease);
 	_btnEngineerUp->onMouseClick((ActionHandler)& ManufactureInfoState::moreEngineerClick, 0);
 
-	_btnEngineerDown->setColor(Palette::blockOffset(15)+1);
+//	_btnEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerDown->onMousePress((ActionHandler)& ManufactureInfoState::lessEngineerPress);
 	_btnEngineerDown->onMouseRelease((ActionHandler)& ManufactureInfoState::lessEngineerRelease);
 	_btnEngineerDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessEngineerClick, 0);
 
-	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
+//	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
 	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
 
-	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
+//	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
 	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
-	_btnUnitUp->setColor(Palette::blockOffset(15)+1);
+//	_btnUnitUp->setColor(Palette::blockOffset(15)+1);
 	_btnUnitUp->onMousePress((ActionHandler)& ManufactureInfoState::moreUnitPress);
 	_btnUnitUp->onMouseRelease((ActionHandler)& ManufactureInfoState::moreUnitRelease);
 	_btnUnitUp->onMouseClick((ActionHandler)& ManufactureInfoState::moreUnitClick, 0);
 
-	_btnUnitDown->setColor(Palette::blockOffset(15)+1);
+//	_btnUnitDown->setColor(Palette::blockOffset(15)+1);
 	_btnUnitDown->onMousePress((ActionHandler)& ManufactureInfoState::lessUnitPress);
 	_btnUnitDown->onMouseRelease((ActionHandler)& ManufactureInfoState::lessUnitRelease);
 	_btnUnitDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessUnitClick, 0);
 
-	_btnStop->setColor(Palette::blockOffset(15)+6);
+//	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)& ManufactureInfoState::btnStopClick);
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
+//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ManufactureInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -532,9 +534,9 @@ void ManufactureInfoState::moreUnit(int change)
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
 											_palette,
-											Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
 											"BACK17.SCR",
-											6));
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
 	}
 	else
 	{

@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -65,38 +65,41 @@ DismantleFacilityState::DismantleFacilityState(
 	_btnCancel		= new TextButton(44, 16, 36, 115);
 	_btnOk			= new TextButton(44, 16, 112, 115);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("dismantleFacility")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtFacility);
+	add(_window, "window", "dismantleFacility");
+	add(_txtTitle, "text", "dismantleFacility");
+	add(_txtFacility, "text", "dismantleFacility");
+	add(_btnCancel, "button", "dismantleFacility");
+	add(_btnOk, "button", "dismantleFacility");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)+1);
+
+//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
+//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& DismantleFacilityState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DismantleFacilityState::btnOkClick,
 					Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+6);
+//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& DismantleFacilityState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& DismantleFacilityState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_DISMANTLE"));
 
-	_txtFacility->setColor(Palette::blockOffset(13)+10);
+//	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setAlign(ALIGN_CENTER);
 	_txtFacility->setText(tr(_fac->getRules()->getType()));
 }
@@ -105,8 +108,7 @@ DismantleFacilityState::DismantleFacilityState(
  * dTor.
  */
 DismantleFacilityState::~DismantleFacilityState()
-{
-}
+{}
 
 /**
  * Dismantles the facility and returns to the previous screen.
@@ -114,12 +116,10 @@ DismantleFacilityState::~DismantleFacilityState()
  */
 void DismantleFacilityState::btnOkClick(Action*)
 {
-	if (!_fac->getRules()->isLift())
+	if (_fac->getRules()->isLift() == false)
 	{
 		if (_fac->getBuildTime() > _fac->getRules()->getBuildTime()) // Give refund if this is an unstarted, queued build.
-		{
 			_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _fac->getRules()->getBuildCost());
-		}
 
 		for (std::vector<BaseFacility*>::iterator
 				i = _base->getFacilities()->begin();

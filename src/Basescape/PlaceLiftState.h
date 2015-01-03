@@ -33,8 +33,7 @@ class Text;
 
 
 /**
- * Screen shown when the player has to
- * place the access lift of a base.
+ * Screen shown when the player has to place the access lift of a base.
  */
 class PlaceLiftState
 	:
@@ -55,7 +54,7 @@ private:
 		PlaceLiftState(
 				Base* base,
 				Globe* globe,
-				bool first);
+				bool firstBase);
 		/// Cleans up the Place Lift state.
 		~PlaceLiftState();
 

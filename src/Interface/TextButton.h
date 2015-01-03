@@ -73,6 +73,8 @@ protected:
 		void setColor(Uint8 color);
 		/// Gets the text button's color.
 		Uint8 getColor() const;
+		/// Sets the secondary color of this TextButton.
+		void setSecondaryColor(Uint8 color);
 		/// Sets the text button's text color.
 		void setTextColor(Uint8 color);
 		/// Sets the text size to big.
@@ -107,9 +109,9 @@ protected:
 		void mouseRelease(Action* action, State* state);
 		/// Attaches this button to a combobox.
 		void setComboBox(ComboBox* comboBox);
-		///
+		/// Sets the width of this TextButton.
 		void setWidth(int width);
-		///
+		/// Sets the height of this TextButton.
 		void setHeight(int height);
 };
 

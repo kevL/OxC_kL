@@ -19,14 +19,14 @@
 
 #include "CraftWeaponsState.h"
 
-#include <cmath>
-#include <sstream>
+//#include <cmath>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -37,7 +37,6 @@
 
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -78,45 +77,45 @@ CraftWeaponsState::CraftWeaponsState(
 
 	_btnCancel		= new TextButton(140, 16, 90, 156);
 
-	setPalette("PAL_BASESCAPE", 4);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftWeapons")->getElement("palette")->color); //4
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtArmament);
-	add(_txtQuantity);
-	add(_txtAmmunition);
-	add(_lstWeapons);
-	add(_btnCancel);
+	add(_window, "window", "craftWeapons");
+	add(_txtTitle, "text", "craftWeapons");
+	add(_txtArmament, "text", "craftWeapons");
+	add(_txtQuantity, "text", "craftWeapons");
+	add(_txtAmmunition, "text", "craftWeapons");
+	add(_lstWeapons, "list", "craftWeapons");
+	add(_btnCancel, "button", "craftWeapons");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+6);
+//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(15)+6);
+//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& CraftWeaponsState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& CraftWeaponsState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
+//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ARMAMENT"));
 
-	_txtArmament->setColor(Palette::blockOffset(15)+6);
+//	_txtArmament->setColor(Palette::blockOffset(15)+6);
 	_txtArmament->setText(tr("STR_ARMAMENT"));
 
-	_txtQuantity->setColor(Palette::blockOffset(15)+6);
+//	_txtQuantity->setColor(Palette::blockOffset(15)+6);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
+//	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
 	_txtAmmunition->setText(tr("STR_AMMUNITION_AVAILABLE"));
 	_txtAmmunition->setWordWrap();
 
-	_lstWeapons->setColor(Palette::blockOffset(13)+10);
+//	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
 	_lstWeapons->setColumns(3, 98, 30, 50);
 	_lstWeapons->setSelectable();
@@ -137,9 +136,9 @@ CraftWeaponsState::CraftWeaponsState(
 		const RuleItem* const laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
 		//Log(LOG_INFO) << ". laRule = " << laRule->getType();
 
-//kL	if (_base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
+//		if (_base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
 		if (_game->getSavedGame()->isResearched(laRule->getRequirements()) == true	// requirements have been researched
-			|| laRule->getRequirements().empty() == true)								// or, does not need to be researched
+			|| laRule->getRequirements().empty() == true)							// or, does not need to be researched
 		{
 			//Log(LOG_INFO) << ". . add craft weapon";
 			_weaponRules.push_back(cwRule);
@@ -173,8 +172,7 @@ CraftWeaponsState::CraftWeaponsState(
  * dTor.
  */
 CraftWeaponsState::~CraftWeaponsState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

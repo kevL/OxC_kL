@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
 #define OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -56,9 +56,6 @@ private:
 		_aliensSold;
 //		_researchAliens;
 	size_t _sel;
-	Uint8
-		_color,
-		_color2;
 
 	OptionsOrigin _origin;
 

@@ -66,27 +66,30 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	_btnCancel	= new TextButton(54, 14, 68, 106);
 	_btnOk		= new TextButton(54, 14, 138, 106);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color); //0
 
-	add(_window);
-	add(_txtCost);
-	add(_txtArea);
-	add(_btnCancel);
-	add(_btnOk);
+	add(_window, "genericWindow", "geoscape");
+	add(_txtCost, "genericText", "geoscape");
+	add(_txtArea, "genericText", "geoscape");
+	add(_btnCancel, "genericButton2", "geoscape");
+	add(_btnOk, "genericButton2", "geoscape");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
+//	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmNewBaseState::btnOkClick,
 					Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(15)-1);
+//	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -94,7 +97,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 					Options::keyCancel);
 
 	std::wstring region;
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::const_iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
@@ -110,11 +113,11 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 		}
 	}
 
-	_txtCost->setColor(Palette::blockOffset(15)-1);
+//	_txtCost->setColor(Palette::blockOffset(15)-1);
 	_txtCost->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
 
-	_txtArea->setColor(Palette::blockOffset(15)-1);
+//	_txtArea->setColor(Palette::blockOffset(15)-1);
 	_txtArea->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtArea->setText(tr("STR_AREA_").arg(region));
 }
@@ -123,8 +126,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
  * dTor.
  */
 ConfirmNewBaseState::~ConfirmNewBaseState()
-{
-}
+{}
 
 /**
  * Go to the Place Access Lift screen.
@@ -144,14 +146,12 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 										false));
 	}
 	else
-	{
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NOT_ENOUGH_MONEY"),
 											_palette,
-											Palette::blockOffset(8)+10,
+											_game->getRuleset()->getInterface("geoscape")->getElement("genericWindow")->color, //Palette::blockOffset(8)+10,
 											"BACK01.SCR",
-											0));
-	}
+											_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color)); //0
 }
 
 /**

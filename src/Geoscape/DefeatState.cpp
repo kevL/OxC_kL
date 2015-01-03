@@ -21,14 +21,14 @@
 
 //#include <sstream>
 
-#include "../Engine/CrossPlatform.h"
+//#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
-//kL #include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-//kL #include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -77,7 +77,7 @@ DefeatState::DefeatState()
 		setPalette(screen->getPalette());
 
 		add(_bg[i]);
-		add(_text[i]);
+		add(_text[i], "defeatText", "gameOver");
 
 		screen->blit(_bg[i]);
 		_bg[i]->setVisible(false);
@@ -86,7 +86,7 @@ DefeatState::DefeatState()
 		std::ostringstream ss;
 		ss << "STR_GAME_OVER_" << i + 1;
 		_text[i]->setText(tr(ss.str()));
-		_text[i]->setColor(Palette::blockOffset(15)+9);
+//		_text[i]->setColor(Palette::blockOffset(15)+9);
 		_text[i]->setWordWrap();
 		_text[i]->setVisible(false);
 	}

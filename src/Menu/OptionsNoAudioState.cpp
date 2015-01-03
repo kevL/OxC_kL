@@ -21,7 +21,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 
@@ -43,11 +43,11 @@ OptionsNoAudioState::OptionsNoAudioState(OptionsOrigin origin)
 
 	_txtError = new Text(218, 136, 94, 8);
 
-	add(_txtError);
+	add(_txtError, "text", "audioMenu");
 
 	centerAllSurfaces();
 
-	_txtError->setColor(Palette::blockOffset(8)+10);
+
 	_txtError->setAlign(ALIGN_CENTER);
 	_txtError->setVerticalAlign(ALIGN_MIDDLE);
 	_txtError->setBig();
@@ -59,7 +59,6 @@ OptionsNoAudioState::OptionsNoAudioState(OptionsOrigin origin)
  * dTor.
  */
 OptionsNoAudioState::~OptionsNoAudioState()
-{
-}
+{}
 
 }

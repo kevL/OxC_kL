@@ -54,6 +54,7 @@ private:
 	size_t
 		_itemOffset,
 		_sel;
+	Uint8 _ammoColor;
 	double _storeSize;
 
 	Base* _base;

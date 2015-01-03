@@ -33,15 +33,13 @@ namespace OpenXcom
 RuleInterface::RuleInterface(const std::string& type)
 	:
 		_type(type)
-{
-}
+{}
 
 /**
  * dTor.
  */
 RuleInterface::~RuleInterface()
-{
-}
+{}
 
 /**
  * Loads the elements from a YAML file.
@@ -63,7 +61,8 @@ void RuleInterface::load(const YAML::Node& node)
 			element.h = pos.second;
 		}
 		else
-			element.w = element.h = std::numeric_limits<int>::max();
+			element.w =
+			element.h = std::numeric_limits<int>::max();
 
 		if ((*i)["pos"])
 		{
@@ -72,11 +71,12 @@ void RuleInterface::load(const YAML::Node& node)
 			element.y = pos.second;
 		}
 		else
-			element.x = element.y = std::numeric_limits<int>::max();
+			element.x =
+			element.y = std::numeric_limits<int>::max();
 
-		element.color		= (*i)["color"]		.as<int>(0);
-		element.color2		= (*i)["color2"]	.as<int>(0);
-		element.border		= (*i)["border"]	.as<int>(0);
+		element.color		= (*i)["color"]		.as<int>(std::numeric_limits<int>::max());
+		element.color2		= (*i)["color2"]	.as<int>(std::numeric_limits<int>::max());
+		element.border		= (*i)["border"]	.as<int>(std::numeric_limits<int>::max());
 		element.TFTDMode	= (*i)["TFTDMode"]	.as<bool>(false);
 
 		std::string id = (*i)["id"].as<std::string>("");

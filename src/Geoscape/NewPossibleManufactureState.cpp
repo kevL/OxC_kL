@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -63,21 +63,21 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_btnOk				= new TextButton(160, 14, 80, 149);
 	_btnManufacture		= new TextButton(160, 14, 80, 165);
 
-	setPalette("PAL_GEOSCAPE", 6);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoManufacture")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_btnOk);
-	add(_btnManufacture);
-	add(_txtTitle);
-	add(_lstPossibilities);
+	add(_window, "window", "geoManufacture");
+	add(_txtTitle, "text1", "geoManufacture");
+	add(_lstPossibilities, "text2", "geoManufacture");
+	add(_btnOk, "button", "geoManufacture");
+	add(_btnManufacture, "button", "geoManufacture");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 //myk002	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setText(tr(showManufactureButton? "STR_OK": "STR_MORE")); // myk002
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnOkClick);
@@ -85,7 +85,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 					(ActionHandler)& NewPossibleManufactureState::btnOkClick,
 					Options::keyCancel);
 
-	_btnManufacture->setColor(Palette::blockOffset(8)+5);
+//	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	_btnManufacture->setVisible(showManufactureButton); // myk002
 	_btnManufacture->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnManufactureClick);
@@ -94,12 +94,12 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 					Options::keyOk);
 	_btnManufacture->setVisible(base->getAvailableWorkshops() > 0); // kL
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_WE_CAN_NOW_PRODUCE"));
 
-	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
+//	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);

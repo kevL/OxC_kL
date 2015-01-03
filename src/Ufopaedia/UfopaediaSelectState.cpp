@@ -24,8 +24,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Cursor.h"
@@ -57,35 +57,38 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 	_btnOk			= new TextButton(224, 16, 48, 166);
 	_lstSelection	= new TextList(224, 105, 40, 50);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnOk);
-	add(_lstSelection);
+	add(_window, "window", "ufopaedia");
+	add(_txtTitle, "text", "ufopaedia");
+	add(_btnOk, "button2", "ufopaedia");
+	add(_lstSelection, "list", "ufopaedia");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+//	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ITEM"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
+//	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& UfopaediaSelectState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaSelectState::btnOkClick,
 					Options::keyCancel);
 
-	_lstSelection->setColor(Palette::blockOffset(8)+5);
-	_lstSelection->setArrowColor(Palette::blockOffset(15)-1);
+//	_lstSelection->setColor(Palette::blockOffset(8)+5);
+//	_lstSelection->setArrowColor(Palette::blockOffset(15)-1);
 	_lstSelection->setColumns(1, 206);
-	_lstSelection->setSelectable();
 	_lstSelection->setBackground(_window);
+	_lstSelection->setSelectable();
 	_lstSelection->setMargin(18);
 	_lstSelection->setAlign(ALIGN_CENTER);
 	_lstSelection->onMouseClick((ActionHandler)& UfopaediaSelectState::lstSelectionClick);
@@ -97,8 +100,7 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
  * dTor.
  */
 UfopaediaSelectState::~UfopaediaSelectState()
-{
-}
+{}
 
 /**
  * Initializes the state.
@@ -108,7 +110,7 @@ void UfopaediaSelectState::init()
 	State::init();
 
 	// this is to undo whatever the ufopaedia may have done to the colors.
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**

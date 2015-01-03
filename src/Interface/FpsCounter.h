@@ -66,7 +66,7 @@ private:
 		void handle(Action* action);
 		/// Advances frame counter.
 		void think();
-		// Updates FPS counter.
+		/// Updates FPS counter.
 		void update();
 		/// Draws the FPS counter.
 		void draw();

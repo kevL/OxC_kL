@@ -19,15 +19,15 @@
 
 #include "AlienBaseState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "GeoscapeState.h"
 #include "Globe.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -63,18 +63,20 @@ AlienBaseState::AlienBaseState(
 	_txtTitle	= new Text(308, 60, 6, 60);
 	_btnOk		= new TextButton(50, 12, 135, 180);
 
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("alienBase")->getElement("palette")->color); //3
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnOk);
+	add(_window, "window", "alienBase");
+	add(_txtTitle, "text", "alienBase");
+	add(_btnOk, "button", "alienBase");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+10);
+//	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& AlienBaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -84,12 +86,12 @@ AlienBaseState::AlienBaseState(
 					(ActionHandler)& AlienBaseState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
 
-	double // Check location of base
+	const double // Check location of base
 		lon = _base->getLongitude(),
 		lat = _base->getLatitude();
 
@@ -139,8 +141,7 @@ AlienBaseState::AlienBaseState(
  * dTor.
  */
 AlienBaseState::~AlienBaseState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

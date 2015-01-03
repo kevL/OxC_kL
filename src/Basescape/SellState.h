@@ -69,10 +69,8 @@ private:
 		_itemOffset,
 		_sel;
 	Uint8
-		_color,
-		_color2,
-		_color3,
-		_colorAmmo;
+		_ammoColor,
+		_colorArtefact;
 	double _spaceChange;
 
 	OptionsOrigin _origin;

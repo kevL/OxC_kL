@@ -27,7 +27,6 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
@@ -59,7 +58,6 @@ ResearchState::ResearchState(
 	:
 		_base(base)
 {
-	//Log(LOG_INFO) << "Create ResearchState";
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
@@ -79,92 +77,86 @@ ResearchState::ResearchState(
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
-	setPalette("PAL_BASESCAPE", 1);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtAvailable);
-	add(_txtAllocated);
-	add(_txtSpace);
-	add(_txtProject);
-	add(_txtScientists);
-	add(_txtProgress);
-	add(_lstResearch);
-	add(_btnAliens);
-	add(_btnNew);
-	add(_btnOk);
+	add(_window, "window", "researchMenu");
+	add(_txtTitle, "text", "researchMenu");
+	add(_txtBaseLabel, "text", "researchMenu");
+	add(_txtAvailable, "text", "researchMenu");
+	add(_txtAllocated, "text", "researchMenu");
+	add(_txtSpace, "text", "researchMenu");
+	add(_txtProject, "text", "researchMenu");
+	add(_txtScientists, "text", "researchMenu");
+	add(_txtProgress, "text", "researchMenu");
+	add(_lstResearch, "list", "researchMenu");
+	add(_btnAliens, "button", "researchMenu");
+	add(_btnNew, "button", "researchMenu");
+	add(_btnOk, "button", "researchMenu");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(13)+10);
+
+//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnAliens->setColor(Palette::blockOffset(15)+6);
+//	_btnAliens->setColor(Palette::blockOffset(15)+6);
 	_btnAliens->setText(tr("STR_ALIENS"));
 	_btnAliens->onMouseClick((ActionHandler)& ResearchState::btnAliens);
 	_btnAliens->setVisible(false);
 
-	_btnNew->setColor(Palette::blockOffset(15)+6);
+//	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)& ResearchState::btnNewClick);
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
+//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ResearchState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_RESEARCH"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailable->setColor(Palette::blockOffset(13)+10);
+//	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAllocated->setColor(Palette::blockOffset(13)+10);
+//	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtSpace->setColor(Palette::blockOffset(13)+10);
-	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
+//	_txtSpace->setColor(Palette::blockOffset(13)+10);
+//	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtProject->setColor(Palette::blockOffset(13)+10);
-	_txtProject->setWordWrap();
+//	_txtProject->setColor(Palette::blockOffset(13)+10);
 	_txtProject->setText(tr("STR_RESEARCH_PROJECT"));
 
-	_txtScientists->setColor(Palette::blockOffset(13)+10);
-	_txtScientists->setWordWrap();
+//	_txtScientists->setColor(Palette::blockOffset(13)+10);
 	_txtScientists->setText(tr("STR_SCIENTISTS_ALLOCATED_UC"));
 
-	_txtProgress->setColor(Palette::blockOffset(13)+10);
+//	_txtProgress->setColor(Palette::blockOffset(13)+10);
 	_txtProgress->setText(tr("STR_PROGRESS"));
 
-	_lstResearch->setColor(Palette::blockOffset(15)+6);
-	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-//	_lstResearch->setColumns(4, 149, 59, 48, 17);
+//	_lstResearch->setColor(Palette::blockOffset(15)+6);
+//	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
+	_lstResearch->setBackground(_window);
 	_lstResearch->setColumns(4, 137, 58, 48, 34);
 	_lstResearch->setSelectable();
-	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin();
-//	_lstResearch->setWordWrap();
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
-
-//	init(); // do ya need this -> nope. It runs auto ....
-	//Log(LOG_INFO) << "Create ResearchState EXIT";
 }
 
 /**
  * dTor.
  */
 ResearchState::~ResearchState()
-{
-	//Log(LOG_INFO) << "delete ResearchState";
-}
+{}
 
 /**
  * Returns to the previous screen.

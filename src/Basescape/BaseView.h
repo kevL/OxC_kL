@@ -46,26 +46,30 @@ class BaseView
 {
 
 private:
-	static const int BASE_SIZE = 6;
-	static const int GRID_SIZE = 32;
+	static const int
+		BASE_SIZE = 6,
+		GRID_SIZE = 32;
 
 	bool _blink;
 	int
 		_gridX,
 		_gridY,
 		_selSize;
+	Uint8
+		_cellColor,
+		_selectorColor;
 
-	Base		* _base;
+	Base* _base;
 	BaseFacility
-				* _facilities[BASE_SIZE][BASE_SIZE],
-				* _selFacility;
+		* _facilities[BASE_SIZE][BASE_SIZE],
+		* _selFacility;
 	Font
-				* _big,
-				* _small;
-	Language	* _lang;
-	Surface		* _selector;
-	SurfaceSet	* _texture;
-	Timer		* _timer;
+		* _big,
+		* _small;
+	Language* _lang;
+	Surface* _selector;
+	SurfaceSet* _texture;
+	Timer* _timer;
 
 
 	/// Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
@@ -103,7 +107,7 @@ private:
 		/// Gets the Y position of the currently selected square.
 		int getGridY() const;
 		/// Sets whether the base view is selectable.
-		void setSelectable(int size);
+		void setSelectable(int facSize);
 		/// Checks if a facility can be placed.
 		bool isPlaceable(RuleBaseFacility* rule) const;
 		/// Checks if the placed facility is placed in queue or not.
@@ -124,6 +128,11 @@ private:
 		void mouseOver(Action* action, State* state);
 		/// Special handling for mouse hovering out.
 		void mouseOut(Action* action, State* state);
+
+		///
+		void setColor(Uint8 color);
+		///
+		void setSecondaryColor(Uint8 color);
 };
 
 }

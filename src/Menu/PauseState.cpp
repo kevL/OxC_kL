@@ -28,8 +28,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -73,39 +73,42 @@ PauseState::PauseState(OptionsOrigin origin)
 	if (_origin == OPT_BATTLESCAPE)
 		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	else
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("pauseMenu")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnLoad);
-	add(_btnSave);
-	add(_btnAbandon);
-	add(_btnOptions);
-	add(_btnCancel);
+	add(_window, "window", "pauseMenu");
+	add(_txtTitle, "text", "pauseMenu");
+	add(_btnLoad, "button", "pauseMenu");
+	add(_btnSave, "button", "pauseMenu");
+	add(_btnAbandon, "button", "pauseMenu");
+	add(_btnOptions, "button", "pauseMenu");
+	add(_btnCancel, "button", "pauseMenu");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnLoad->setColor(Palette::blockOffset(15)-1);
+//	_btnLoad->setColor(Palette::blockOffset(15)-1);
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)& PauseState::btnLoadClick);
 
-	_btnSave->setColor(Palette::blockOffset(15)-1);
+//	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)& PauseState::btnSaveClick);
 
-	_btnAbandon->setColor(Palette::blockOffset(15)-1);
+//	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
 	_btnAbandon->onMouseClick((ActionHandler)& PauseState::btnAbandonClick);
 
-	_btnOptions->setColor(Palette::blockOffset(15)-1);
+//	_btnOptions->setColor(Palette::blockOffset(15)-1);
 	_btnOptions->setText(tr("STR_GAME_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)& PauseState::btnOptionsClick);
 	_btnOptions->setVisible(false); // kL
 
-	_btnCancel->setColor(Palette::blockOffset(15)-1);
+//	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& PauseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -120,7 +123,7 @@ PauseState::PauseState(OptionsOrigin origin)
 						(ActionHandler)& PauseState::btnCancelClick,
 						Options::keyBattleOptions);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
@@ -141,8 +144,7 @@ PauseState::PauseState(OptionsOrigin origin)
  * dTor.
  */
 PauseState::~PauseState()
-{
-}
+{}
 
 /**
  * Opens the Load Game screen.

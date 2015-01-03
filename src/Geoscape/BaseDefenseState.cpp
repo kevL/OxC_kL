@@ -30,9 +30,9 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
 
@@ -44,7 +44,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
@@ -82,20 +81,23 @@ BaseDefenseState::BaseDefenseState(
 	_lstDefenses	= new TextList(300, 129, 16, 40);
 	_btnOk			= new TextButton(120, 16, 100, 170);
 
-	setPalette("PAL_BASESCAPE", 2);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color); //2
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_txtInit);
-	add(_lstDefenses);
+	add(_window, "window", "baseDefense");
+	add(_txtTitle, "text", "baseDefense");
+	add(_txtInit, "text", "baseDefense");
+	add(_lstDefenses, "text", "baseDefense"); // "list"
+	add(_btnOk, "button", "baseDefense");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)+6);
+
+//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseDefenseState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -106,15 +108,15 @@ BaseDefenseState::BaseDefenseState(
 					Options::keyCancel);
 	_btnOk->setVisible(false);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_BASE_UNDER_ATTACK").arg(_base->getName()));
 	_txtInit->setVisible(false);
 
-	_txtInit->setColor(Palette::blockOffset(13)+10);
+//	_txtInit->setColor(Palette::blockOffset(13)+10);
 	_txtInit->setText(tr("STR_BASE_DEFENSES_INITIATED"));
 
-	_lstDefenses->setColor(Palette::blockOffset(13)+10);
+//	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
 
 	_gravShields = _base->getGravShields();

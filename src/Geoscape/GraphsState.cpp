@@ -151,10 +151,10 @@ GraphsState::GraphsState(int curGraph)
 	add(_btnFinance);
 	add(_btnGeoscape);
 	add(_btnReset);
-	add(_txtMonths);
-	add(_txtYears);
-	add(_txtTitle);
-	add(_txtFactor);
+	add(_txtMonths, "scale", "graphs");
+	add(_txtYears, "scale", "graphs");
+	add(_txtTitle, "text", "graphs");
+	add(_txtFactor, "text", "graphs");
 	add(_txtScore);
 
 	for (size_t
@@ -167,9 +167,11 @@ GraphsState::GraphsState(int curGraph)
 									10,
 									91,
 									171 - (static_cast<int>(scaleText) * 14)));
-
-		add(_txtScale.at(scaleText));
+		add(_txtScale.at(scaleText), "scale", "graphs");
 	}
+
+//	Uint8 regionTotalColor = _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color;
+//	Uint8 countryTotalColor = _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color;
 
 	size_t offset = 0;
 	Uint8 colorOffset = 0;
@@ -212,7 +214,7 @@ GraphsState::GraphsState(int curGraph)
 													10,
 													0,
 													static_cast<int>(offset) * 10));
-			_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
+//			_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnRegions.at(offset)->setInvertColor(colorOffset * 4 - 42);
 			_btnRegions.at(offset)->setText(tr((*region)->getRules()->getType())); // name of Region
 			_btnRegions.at(offset)->onMousePress(
@@ -225,7 +227,7 @@ GraphsState::GraphsState(int curGraph)
 							(ActionHandler)& GraphsState::shiftButtons,
 							SDL_BUTTON_WHEELDOWN);
 
-			add(_btnRegions.at(offset));
+			add(_btnRegions.at(offset), "button", "graphs");
 
 			_txtRegionActivityAlien.push_back(new Text(
 													24,
@@ -265,25 +267,21 @@ GraphsState::GraphsState(int curGraph)
 	}
 
 	if (_regionToggles.size() < GRAPH_MAX_BUTTONS) // TOTAL btn.
-	{
 		_btnRegionTotal = new ToggleTextButton(
 											65,
 											10,
 											0,
 											static_cast<int>(_regionToggles.size()) * 10);
-	}
 	else
-	{
 		_btnRegionTotal = new ToggleTextButton(
 											65,
 											10,
 											0,
 											static_cast<int>(GRAPH_MAX_BUTTONS) * 10);
-	}
 
 	_regionToggles.push_back(new GraphBtnInfo( // TOTAL btn is the last button in the vector.
 											tr("STR_TOTAL_UC"),
-											Palette::blockOffset(9)+10,
+											Palette::blockOffset(9)+10, //regionTotalColor
 											0,
 											0,
 											0,
@@ -291,13 +289,13 @@ GraphsState::GraphsState(int curGraph)
 											false));
 
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
-	_btnRegionTotal->setInvertColor(Palette::blockOffset(9)+10);
+	_btnRegionTotal->setInvertColor(Palette::blockOffset(9)+10); //regionTotalColor
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
 	_btnRegionTotal->onMousePress(
 					(ActionHandler)& GraphsState::btnRegionListClick,
 					SDL_BUTTON_LEFT);
 
-	add(_btnRegionTotal);
+	add(_btnRegionTotal); //, "button", "graphs"
 
 	_alienRegionLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienRegionLines.at(offset));
@@ -345,7 +343,7 @@ GraphsState::GraphsState(int curGraph)
 													10,
 													0,
 													static_cast<int>(offset) * 10));
-			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
+//			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnCountries.at(offset)->setInvertColor(colorOffset * 4 - 42);
 			_btnCountries.at(offset)->setText(tr((*country)->getRules()->getType())); // name of Country
 			_btnCountries.at(offset)->onMousePress(
@@ -358,7 +356,7 @@ GraphsState::GraphsState(int curGraph)
 							(ActionHandler)& GraphsState::shiftButtons,
 							SDL_BUTTON_WHEELDOWN);
 
-			add(_btnCountries.at(offset));
+			add(_btnCountries.at(offset), "button", "graphs");
 
 			_txtCountryActivityAlien.push_back(new Text(
 													24,
@@ -419,7 +417,7 @@ GraphsState::GraphsState(int curGraph)
 
 	_countryToggles.push_back(new GraphBtnInfo( // TOTAL btn is the last button in the vector.
 											tr("STR_TOTAL_UC"),
-											Palette::blockOffset(9)+10,
+											Palette::blockOffset(9)+10, //countryTotalColor
 											0,
 											0,
 											0,
@@ -427,13 +425,13 @@ GraphsState::GraphsState(int curGraph)
 											false));
 
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
-	_btnCountryTotal->setInvertColor(Palette::blockOffset(9)+10);
+	_btnCountryTotal->setInvertColor(Palette::blockOffset(9)+10); //countryTotalColor
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
 	_btnCountryTotal->onMousePress(
 					(ActionHandler)& GraphsState::btnCountryListClick,
 					SDL_BUTTON_LEFT);
 
-	add(_btnCountryTotal);
+	add(_btnCountryTotal); //, "button", "graphs"
 
 	_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienCountryLines.at(offset));
@@ -458,11 +456,11 @@ GraphsState::GraphsState(int curGraph)
 												static_cast<int>(i) * 16));
 		_financeToggles.push_back(false);
 
-		_btnFinances.at(i)->setColor(Palette::blockOffset(9)+7);
+//		_btnFinances.at(i)->setColor(Palette::blockOffset(9)+7);
 		_btnFinances.at(i)->setInvertColor((static_cast<Uint8>(i) * 4) - 42);
 		_btnFinances.at(i)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
-		add(_btnFinances.at(i));
+		add(_btnFinances.at(i), "button", "graphs");
 
 		_financeLines.push_back(new Surface(320, 200, 0, 0));
 		add(_financeLines.at(i));
@@ -541,7 +539,8 @@ GraphsState::GraphsState(int curGraph)
 					SDL_BUTTON_LEFT);
 
 
-	_bg->drawRect(125, 49, 188, 127, Palette::blockOffset(10)); // set up the grid
+	Uint8 gridColor = _game->getRuleset()->getInterface("graphs")->getElement("graph")->color;
+	_bg->drawRect(125, 49, 188, 127, gridColor); //Palette::blockOffset(10)); // set up the grid
 
 	for (int
 			grid = 0;
@@ -558,7 +557,7 @@ GraphsState::GraphsState(int curGraph)
 					x <= 297 + grid;
 					x += 17)
 			{
-				Uint8 color = Palette::blockOffset(14)+1+grid;
+				Uint8 color = gridColor+1 + grid; //Palette::blockOffset(14);
 				if (grid == 4)
 					color = 0;
 
@@ -592,11 +591,11 @@ GraphsState::GraphsState(int curGraph)
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance. kL_note: and C++
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
 	_txtMonths->addRow(12, L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ");
-	_txtMonths->setRowColor(0, Palette::blockOffset(6)+7);
+//	_txtMonths->setRowColor(0, Palette::blockOffset(6)+7);
 
 	_txtYears->setColumns(6, 34, 34, 34, 34, 34, 34);
 	_txtYears->addRow(6, L" ", L" ", L" ", L" ", L" ", L" ");
-	_txtYears->setRowColor(0, Palette::blockOffset(6)+7);
+//	_txtYears->setRowColor(0, Palette::blockOffset(6)+7);
 
 
 	int month = _game->getSavedGame()->getTime()->getMonth();
@@ -631,7 +630,7 @@ GraphsState::GraphsState(int curGraph)
 			++i)
 	{
 		(*i)->setAlign(ALIGN_RIGHT);
-		(*i)->setColor(Palette::blockOffset(6)+7);
+//		(*i)->setColor(Palette::blockOffset(6)+7);
 	}
 
 
@@ -654,10 +653,10 @@ GraphsState::GraphsState(int curGraph)
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setColor(Palette::blockOffset(8)+7);
+//	_txtTitle->setColor(Palette::blockOffset(8)+7);
 
 	_txtFactor->setText(L"$1000");
-	_txtFactor->setColor(Palette::blockOffset(8)+7);
+//	_txtFactor->setColor(Palette::blockOffset(8)+7);
 
 
 	_btnUfoRegion->onMousePress(
@@ -1576,6 +1575,7 @@ void GraphsState::drawCountryLines()
 	else
 		_xcomCountryLines.back()->clear();
 
+	Uint8 color = _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color2;
 	std::vector<Sint16> newLineVector;
 	for (int
 			i = 0;
@@ -1601,21 +1601,21 @@ void GraphsState::drawCountryLines()
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9)+8);
+						color); //Palette::blockOffset(9)+8);
 			else if (_income)
 				_incomeLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9)+8);
+						color); //Palette::blockOffset(9)+8);
 			else
 				_xcomCountryLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9)+8);
+						color); //Palette::blockOffset(9)+8);
 		}
 	}
 
@@ -1814,6 +1814,7 @@ void GraphsState::drawRegionLines()
 	else
 		_xcomRegionLines.back()->clear();
 
+	Uint8 color = _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color2;
 	std::vector<Sint16> newLineVector;
 	for (int
 			i = 0;
@@ -1840,14 +1841,14 @@ void GraphsState::drawRegionLines()
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9)+8);
+						color); //Palette::blockOffset(9)+8);
 			else
 				_xcomRegionLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9)+8);
+						color); //Palette::blockOffset(9)+8);
 		}
 	}
 

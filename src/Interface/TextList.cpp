@@ -28,7 +28,7 @@
 #include "ScrollBar.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Font.h"
+//#include "../Engine/Font.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
@@ -1480,6 +1480,24 @@ void TextList::setComboBox(ComboBox* comboBox)
 ComboBox* TextList::getComboBox() const
 {
 	return _comboBox;
+}
+
+/**
+ *
+ */
+void TextList::setBorderColor(Uint8 color)
+{
+	_up->setColor(color);
+	_down->setColor(color);
+	_scrollbar->setColor(color);
+}
+
+/**
+ *
+ */
+int TextList::getScrollbarColor()
+{
+	return _scrollbar->getColor();
 }
 
 }

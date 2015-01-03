@@ -34,7 +34,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -71,22 +70,24 @@ SoldierArmorState::SoldierArmorState(
 
 	_btnCancel		= new TextButton(152, 16, 84, 150);
 
-	setPalette("PAL_BASESCAPE", 4);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color); //4
 
-	add(_window);
-//	add(_txtTitle);
-	add(_txtSoldier);
-	add(_txtType);
-	add(_txtQuantity);
-	add(_lstArmor);
-	add(_btnCancel);
+	add(_window, "window", "soldierArmor");
+//	add(_txtTitle, "text", "soldierArmor");
+	add(_txtSoldier, "text", "soldierArmor");
+	add(_txtType, "text", "soldierArmor");
+	add(_txtQuantity, "text", "soldierArmor");
+	add(_lstArmor, "list", "soldierArmor");
+	add(_btnCancel, "button", "soldierArmor");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(13)+10);
+//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+5);
+//	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SoldierArmorState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -95,25 +96,25 @@ SoldierArmorState::SoldierArmorState(
 
 	const Soldier* const soldier = _base->getSoldiers()->at(_soldierID);
 /*
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+//	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(soldier->getName())); */
 
-	_txtSoldier->setColor(Palette::blockOffset(13)+5);
+//	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
 	_txtSoldier->setText(soldier->getName());
 
-	_txtType->setColor(Palette::blockOffset(13)+5);
+//	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+5);
+//	_txtQuantity->setColor(Palette::blockOffset(13)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_lstArmor->setColor(Palette::blockOffset(13));
-	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
+//	_lstArmor->setColor(Palette::blockOffset(13));
+//	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
+	_lstArmor->setBackground(_window);
 	_lstArmor->setColumns(2, 110, 35);
 	_lstArmor->setSelectable();
-	_lstArmor->setBackground(_window);
 	_lstArmor->setMargin();
 
 	const std::vector<std::string>& armors = _game->getRuleset()->getArmorsList();
@@ -139,12 +140,10 @@ SoldierArmorState::SoldierArmorState(
 							ss.str().c_str());
 		}
 		else if (armor->getStoreItem() == "STR_NONE")
-		{
 			_armors.push_back(armor);
 			_lstArmor->addRow(
 							1,
 							tr(armor->getType()).c_str());
-		}
 	}
 
 	_lstArmor->onMouseClick((ActionHandler)& SoldierArmorState::lstArmorClick);
@@ -154,8 +153,7 @@ SoldierArmorState::SoldierArmorState(
  * dTor.
  */
 SoldierArmorState::~SoldierArmorState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

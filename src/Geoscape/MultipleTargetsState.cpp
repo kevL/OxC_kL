@@ -19,7 +19,7 @@
 
 #include "MultipleTargetsState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "ConfirmDestinationState.h"
 #include "GeoscapeCraftState.h"
@@ -31,8 +31,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -81,11 +81,11 @@ MultipleTargetsState::MultipleTargetsState(
 							winY,
 							POPUP_VERTICAL);
 
-		setPalette("PAL_GEOSCAPE", 7);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color); //7
 
-		add(_window);
+		add(_window, "window", "UFOInfo");
 
-		_window->setColor(Palette::blockOffset(8)+5);
+//		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 		for (size_t
@@ -98,11 +98,11 @@ MultipleTargetsState::MultipleTargetsState(
 										BUTTON_HEIGHT,
 										70,
 										btnY);
-			btn->setColor(Palette::blockOffset(8)+5);
+//			btn->setColor(Palette::blockOffset(8)+5);
 			btn->setText(_targets[i]->getName(_game->getLanguage()));
 			btn->onMouseClick((ActionHandler)& MultipleTargetsState::btnTargetClick);
 
-			add(btn);
+			add(btn, "button", "UFOInfo");
 
 			_btnTargets.push_back(btn);
 
@@ -115,14 +115,14 @@ MultipleTargetsState::MultipleTargetsState(
 											BUTTON_HEIGHT,
 											70,
 											btnY);
-		_btnCancel->setColor(Palette::blockOffset(8)+5);
+//		_btnCancel->setColor(Palette::blockOffset(8)+5);
 		_btnCancel->setText(tr("STR_CANCEL"));
 		_btnCancel->onMouseClick((ActionHandler)& MultipleTargetsState::btnCancelClick);
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& MultipleTargetsState::btnCancelClick,
 						Options::keyCancel);
 
-		add(_btnCancel);
+		add(_btnCancel, "button", "UFOInfo");
 		// kL_end.
 /*kL
 		_btnTargets[0]->onKeyboardPress(
@@ -137,8 +137,7 @@ MultipleTargetsState::MultipleTargetsState(
  * dTor.
  */
 MultipleTargetsState::~MultipleTargetsState()
-{
-}
+{}
 
 /**
  * Resets the palette and ignores the window if there's only one target.

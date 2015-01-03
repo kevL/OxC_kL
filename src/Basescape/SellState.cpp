@@ -43,7 +43,6 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
@@ -116,46 +115,49 @@ SellState::SellState(
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color); //0
 	if (origin == OPT_BATTLESCAPE)
 	{
-		setPalette("PAL_GEOSCAPE", 0);
-
-		_color		= Palette::blockOffset(15)-1;
-		_color2		= Palette::blockOffset(8)+10;
-		_color3		= Palette::blockOffset(8)+5;
-		_colorAmmo	= Palette::blockOffset(15)+6;
+//		setPalette("PAL_GEOSCAPE", 0);
+//		_color		= Palette::blockOffset(15)-1;
+//		_color2		= Palette::blockOffset(8)+10;
+		_colorArtefact = Palette::blockOffset(8)+5;
+//		_colorAmmo	= Palette::blockOffset(15)+6;
 	}
 	else
 	{
 		setPalette("PAL_BASESCAPE", 0);
-
-		_color		= Palette::blockOffset(13)+10;
-		_color2		= Palette::blockOffset(13);
-		_color3		= Palette::blockOffset(13)+5;
-		_colorAmmo	= Palette::blockOffset(15)+6;
+//		_color		= Palette::blockOffset(13)+10;
+//		_color2		= Palette::blockOffset(13);
+		_colorArtefact = Palette::blockOffset(13)+5;
+//		_colorAmmo	= Palette::blockOffset(15)+6;
 	}
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtFunds);
-	add(_txtSales);
-	add(_txtItem);
-	add(_txtSpaceUsed);
-	add(_txtQuantity);
-	add(_txtSell);
-	add(_txtValue);
-	add(_lstItems);
-	add(_btnCancel);
-	add(_btnOk);
+	_ammoColor = _game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color;
+
+	add(_window, "window", "sellMenu");
+	add(_txtTitle, "text", "sellMenu");
+	add(_txtBaseLabel, "text", "sellMenu");
+	add(_txtFunds, "text", "sellMenu");
+	add(_txtSales, "text", "sellMenu");
+	add(_txtItem, "text", "sellMenu");
+	add(_txtSpaceUsed, "text", "sellMenu");
+	add(_txtQuantity, "text", "sellMenu");
+	add(_txtSell, "text", "sellMenu");
+	add(_txtValue, "text", "sellMenu");
+	add(_lstItems, "list", "sellMenu");
+	add(_btnCancel, "button", "sellMenu");
+	add(_btnOk, "button", "sellMenu");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(_color);
+//	_window->setColor(_color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(_color);
+//	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)& SellState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -163,7 +165,7 @@ SellState::SellState(
 					Options::keyOk);
 	_btnOk->setVisible(false);
 
-	_btnCancel->setColor(_color);
+//	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -172,28 +174,28 @@ SellState::SellState(
 	if (overfull == true)
 		_btnCancel->setVisible(false);
 
-	_txtTitle->setColor(_color);
+//	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
-	_txtBaseLabel->setColor(_color);
+//	_txtBaseLabel->setColor(_color);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtSales->setColor(_color);
-	_txtSales->setSecondaryColor(_color2);
+//	_txtSales->setColor(_color);
+//	_txtSales->setSecondaryColor(_color2);
 	_txtSales->setText(tr("STR_VALUE_OF_SALES")
 						.arg(Text::formatFunding(_total)));
 
-	_txtFunds->setColor(_color);
-	_txtFunds->setSecondaryColor(_color2);
+//	_txtFunds->setColor(_color);
+//	_txtFunds->setSecondaryColor(_color2);
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_txtItem->setColor(_color);
+//	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtSpaceUsed->setColor(_color);
+//	_txtSpaceUsed->setColor(_color);
 //	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
@@ -202,20 +204,20 @@ SellState::SellState(
 //	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
 	_txtSpaceUsed->setText(ss1.str());
 
-	_txtQuantity->setColor(_color);
+//	_txtQuantity->setColor(_color);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtSell->setColor(_color);
+//	_txtSell->setColor(_color);
 	_txtSell->setText(tr("STR_SELL_SACK"));
 
-	_txtValue->setColor(_color);
+//	_txtValue->setColor(_color);
 	_txtValue->setText(tr("STR_VALUE"));
 
-	_lstItems->setColor(_color);
+//	_lstItems->setColor(_color);
+	_lstItems->setBackground(_window);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 60, 22, 53);
 	_lstItems->setSelectable();
-	_lstItems->setBackground(_window);
 	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& SellState::lstItemsLeftArrowPress);
@@ -315,7 +317,7 @@ SellState::SellState(
 	{
 		int qty = _base->getItems()->getItem(*i);
 
-		if (Options::storageLimitsEnforced
+		if (Options::storageLimitsEnforced == true
 			&& origin == OPT_BATTLESCAPE)
 		{
 			for (std::vector<Transfer*>::const_iterator
@@ -337,7 +339,7 @@ SellState::SellState(
 		}
 
 		if (qty > 0
-			&& (Options::canSellLiveAliens
+			&& (Options::canSellLiveAliens == true
 				|| rules->getItem(*i)->getAlien() == false))
 		{
 			_qtys.push_back(0);
@@ -380,7 +382,7 @@ SellState::SellState(
 				}
 			}
 
-			Uint8 color = _color;
+			Uint8 color;
 
 			if ((rule->getBattleType() == BT_AMMO			// #2 - weapon clips & HWP rounds
 					|| (rule->getBattleType() == BT_NONE	// #0 - craft weapon rounds
@@ -396,7 +398,7 @@ SellState::SellState(
 				}
 				item.insert(0, L"  ");
 
-				color = _colorAmmo;
+				color = _ammoColor;
 			}
 			else
 			{
@@ -408,6 +410,8 @@ SellState::SellState(
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
                 }
+
+				color = _lstItems->getColor();
 			}
 
 			if (save->isResearched(rule->getType()) == false				// not researched
@@ -419,7 +423,7 @@ SellState::SellState(
 				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
-				color = _color3;
+				color = _colorArtefact;
 			}
 
 			std::wostringstream ss;
@@ -431,7 +435,6 @@ SellState::SellState(
 							ss.str().c_str(),
 							L"0",
 							Text::formatFunding(rule->getSellCost()).c_str());
-
 			_lstItems->setRowColor(_qtys.size() - 1, color);
 		}
 	}
@@ -979,7 +982,7 @@ void SellState::updateItemStrings()
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 
 	if (_qtys[_sel] > 0)
-		_lstItems->setRowColor(_sel, _color2);
+		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
 	else
 	{
 		if (_sel > _itemOffset)
@@ -1014,7 +1017,7 @@ void SellState::updateItemStrings()
 				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
-				_lstItems->setRowColor(_sel, _color3);
+				_lstItems->setRowColor(_sel, _colorArtefact);
 			}
 			else
 			{
@@ -1022,14 +1025,14 @@ void SellState::updateItemStrings()
 					|| (rule->getBattleType() == BT_NONE
 						&& rule->getClipSize() > 0))
 				{
-					_lstItems->setRowColor(_sel, _colorAmmo);
+					_lstItems->setRowColor(_sel, _ammoColor);
 				}
 				else
-					_lstItems->setRowColor(_sel, _color);
+					_lstItems->setRowColor(_sel, _lstItems->getColor());
 			}
 		}
 		else
-			_lstItems->setRowColor(_sel, _color);
+			_lstItems->setRowColor(_sel, _lstItems->getColor());
 	}
 
 

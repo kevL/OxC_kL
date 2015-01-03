@@ -83,8 +83,12 @@ const double
 	Globe::ROTATE_LATITUDE	= 0.176;
 
 Uint8
-	Globe::oceanColor1 = Palette::blockOffset(12),
-	Globe::oceanColor2 = Palette::blockOffset(13);
+	Globe::OCEAN_COLOR			= Palette::blockOffset(12),
+//	Globe::oceanColor2			= Palette::blockOffset(13);
+	Globe::COUNTRY_LABEL_COLOR	= 239,
+	Globe::LINE_COLOR			= 162,
+	Globe::CITY_LABEL_COLOR		= 138,
+	Globe::BASE_LABEL_COLOR		= 133;
 
 
 namespace
@@ -192,8 +196,7 @@ struct Ocean
 			const int&,
 			const int&)
 	{
-		dest = Globe::oceanColor1;
-//		dest = Palette::blockOffset(12);
+		dest = Globe::OCEAN_COLOR;
 	}
 };
 
@@ -231,13 +234,10 @@ struct CreateShadow
 		{
 			const Sint16 val = (temp.x > 31.)? 31: static_cast<Sint16>(temp.x);
 			const int d = static_cast<int>(dest & helper::ColorGroup);
-			if (d == Globe::oceanColor1
-				|| d == Globe::oceanColor2)
-//			if (d == Palette::blockOffset(12)
-//				|| d == Palette::blockOffset(13))
+			if (d == Globe::OCEAN_COLOR
+				|| d == Globe::OCEAN_COLOR + 16)
 			{
-				return Globe::oceanColor1 + val; // this pixel is ocean
-//				return Palette::blockOffset(12)+val;
+				return Globe::OCEAN_COLOR + val; // this pixel is ocean
 			}
 			else
 			{
@@ -256,13 +256,10 @@ struct CreateShadow
 		else
 		{
 			const int d = static_cast<int>(dest & helper::ColorGroup);
-			if (d == Globe::oceanColor1
-				|| d == Globe::oceanColor2)
-//			if (static_cast<Uint8>(d) == Palette::blockOffset(12)
-//				|| static_cast<Uint8>(d) == Palette::blockOffset(13))
+			if (d == Globe::OCEAN_COLOR
+				|| d == Globe::OCEAN_COLOR + 16)
 			{
-				return Globe::oceanColor1; // this pixel is ocean
-//				return Palette::blockOffset(12);
+				return Globe::OCEAN_COLOR; // this pixel is ocean
 			}
 			else
 				return dest; // this pixel is land
@@ -340,13 +337,6 @@ Globe::Globe(
 		_debugType(0),
 		_dfChase(false)
 {
-	if (game->getRuleset()->getInterface("geoscape")
-		&& game->getRuleset()->getInterface("geoscape")->getElement("globe"))
-	{
-		Globe::oceanColor1 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color;
-		Globe::oceanColor2 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color2;
-	}
-
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_markerSet	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
 
@@ -1319,8 +1309,7 @@ void Globe::drawOcean()
 			_cenX + 1,
 			_cenY,
 			static_cast<Sint16>(_radius) + 20,
-			oceanColor1);
-//			Palette::blockOffset(12));
+			OCEAN_COLOR);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1551,10 +1540,10 @@ void Globe::XuLine(
 			{
 				const Uint8 colorBlock = (tcol & helper::ColorGroup);
 
-				if (colorBlock == oceanColor1		// Palette::blockOffset(12)
-					|| colorBlock == oceanColor2)	// Palette::blockOffset(13)
+				if (colorBlock == OCEAN_COLOR
+					|| colorBlock == OCEAN_COLOR + 16)
 				{
-					tcol = oceanColor1 + static_cast<Uint8>(shade) + 8; // this pixel is ocean
+					tcol = OCEAN_COLOR + static_cast<Uint8>(shade) + 8; // this pixel is ocean
 				}
 				else // this pixel is land
 				{
@@ -1935,7 +1924,7 @@ void Globe::drawDetail()
 								y[0],
 								x[1],
 								y[1],
-								Palette::blockOffset(10)+2);
+								LINE_COLOR); //Palette::blockOffset(10)+2);
 			}
 		}
 		_countries->unlock();
@@ -2004,7 +1993,7 @@ void Globe::drawDetail()
 
 		if (_zoom > 2)
 		{
-			label->setColor(Palette::blockOffset(14)+3); // draw the country labels
+			label->setColor(COUNTRY_LABEL_COLOR); //Palette::blockOffset(14)+3); // draw the country labels
 
 			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
@@ -2035,7 +2024,7 @@ void Globe::drawDetail()
 			}
 		}
 
-		label->setColor(Palette::blockOffset(10)+7); // draw the city labels
+		label->setColor(CITY_LABEL_COLOR); //Palette::blockOffset(10)+7); // draw the city labels
 
 		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
@@ -2074,7 +2063,7 @@ void Globe::drawDetail()
 			}
 		}
 
-		label->setColor(Palette::blockOffset(6)+4); // draw xCom base labels
+		label->setColor(BASE_LABEL_COLOR); //Palette::blockOffset(6)+4); // draw xCom base labels
 		label->setAlign(ALIGN_LEFT);
 
 		for (std::vector<Base*>::const_iterator

@@ -37,7 +37,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -61,37 +60,39 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 	_btnNo		= new TextButton(80, 20, 70, 142);
 	_btnYes		= new TextButton(80, 20, 170, 142);
 
-	setPalette("PAL_GEOSCAPE", 5);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("geoscape")->getElement("confirmCydonia")->color); //5
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtMessage);
+	add(_window, "window", "confirmCydonia");
+	add(_txtMessage, "text", "confirmCydonia");
+	add(_btnNo, "button", "confirmCydonia");
+	add(_btnYes, "button", "confirmCydonia");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+5);
+//	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& ConfirmCydoniaState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmCydoniaState::btnYesClick,
 					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+5);
+//	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmCydoniaState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& ConfirmCydoniaState::btnNoClick,
 					Options::keyCancel);
 
+//	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setText(tr("STR_ARE_YOU_SURE_CYDONIA"));
 }
 
@@ -99,8 +100,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
  * dTor.
  */
 ConfirmCydoniaState::~ConfirmCydoniaState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

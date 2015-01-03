@@ -19,7 +19,7 @@
 
 #include "PlaceLiftState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "BasescapeState.h"
 #include "BaseView.h"
@@ -27,7 +27,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -48,35 +48,35 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Place Lift screen.
- * @param base	- pointer to the Base to get info from
- * @param globe	- pointer to the geoscape Globe
- * @param first	- true if this a custom starting base
+ * @param base		- pointer to the Base to get info from
+ * @param globe		- pointer to the geoscape Globe
+ * @param firstBase	- true if this a custom starting base
  */
 PlaceLiftState::PlaceLiftState(
 		Base* base,
 		Globe* globe,
-		bool first)
+		bool firstBase)
 	:
 		_base(base),
 		_globe(globe),
-		_first(first)
+		_first(firstBase)
 {
 	_view		= new BaseView(192, 192, 0, 8);
 	_txtTitle	= new Text(320, 9, 0, 0);
 
 	setPalette("PAL_BASESCAPE");
 
-	add(_view);
-	add(_txtTitle);
+	add(_view, "baseView", "basescape");
+	add(_txtTitle, "text", "placeFacility");
 
 	centerAllSurfaces();
+
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
 	_view->onMouseClick((ActionHandler)& PlaceLiftState::viewClick);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
 }
 
@@ -84,8 +84,7 @@ PlaceLiftState::PlaceLiftState(
  * dTor.
  */
 PlaceLiftState::~PlaceLiftState()
-{
-}
+{}
 
 /**
  * Processes clicking on facilities.
@@ -102,21 +101,18 @@ void PlaceLiftState::viewClick(Action*)
 	_base->getFacilities()->push_back(fac);
 
 	_game->popState();
-
 	BasescapeState* bState = new BasescapeState(
 											_base,
 											_globe);
-//kL	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
+//	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
 
 	_game->pushState(bState);
 
-	if (_first)
-	{
+	if (_first == true)
 		_game->pushState(new SelectStartFacilityState(
 													_base,
 													bState,
 													_globe));
-	}
 }
 
 }

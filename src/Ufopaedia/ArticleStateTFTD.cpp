@@ -21,7 +21,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Cursor.h"
@@ -44,7 +44,7 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 		ArticleState(defs->id)
 {
 	setPalette("PAL_BASESCAPE");
-	_game->getCursor()->setColor(Palette::blockOffset(2)+9);
+//	_game->getCursor()->setColor(Palette::blockOffset(2)+9);
 
 	_btnOk->setX(227);
 	_btnOk->setY(179);

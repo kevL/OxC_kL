@@ -78,15 +78,15 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 	_lstKIA->setColor(Palette::blockOffset(9)); // (8)+10
 	_lstKIA->setColumns(1, 285);
-//	_lstKIA->setSelectable();
-//	_lstKIA->setBackground(_window);
+	_lstKIA->setBackground(_window);
+	_lstKIA->setSelectable();
 	_lstKIA->setMargin();
 	_lstKIA->setHighContrast();
 
 	_lstSoldiers->setColor(Palette::blockOffset(9)); // (8)+10
 	_lstSoldiers->setColumns(2, 200, 77);
-//	_lstSoldiers->setSelectable();
-//	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
 	_lstSoldiers->setHighContrast();
 
@@ -101,7 +101,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 					Options::keyCancel);
 
 
-	size_t rowsKIA = soldiersKIA.size();
+	const size_t rowsKIA = soldiersKIA.size();
 	_lstKIA->setHeight(rowsKIA * 8 + 1);
 	_lstSoldiers->setY(_lstSoldiers->getY() + (rowsKIA - 1) * 8);
 	_lstSoldiers->setHeight(_lstSoldiers->getHeight() - (rowsKIA - 1) * 8);

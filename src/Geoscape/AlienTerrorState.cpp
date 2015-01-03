@@ -27,8 +27,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -68,36 +68,38 @@ AlienTerrorState::AlienTerrorState(
 	_btnCentre		= new TextButton(200, 16, 28, 150);
 	_btnCancel		= new TextButton(200, 16, 28, 170);
 
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("terrorSite")->getElement("palette")->color); //3
 
-	add(_window);
-	add(_btnIntercept);
-	add(_btnCentre);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtCity);
+	add(_window, "window", "terrorSite");
+	add(_txtTitle, "text", "terrorSite");
+	add(_txtCity, "text", "terrorSite");
+	add(_btnIntercept, "button", "terrorSite");
+	add(_btnCentre, "button", "terrorSite");
+	add(_btnCancel, "button", "terrorSite");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
 
-	_btnIntercept->setColor(Palette::blockOffset(8)+5);
+//	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& AlienTerrorState::btnInterceptClick);
 
-	_btnCentre->setColor(Palette::blockOffset(8)+5);
+//	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)& AlienTerrorState::btnCentreClick);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
+//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& AlienTerrorState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& AlienTerrorState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap();
@@ -113,8 +115,7 @@ AlienTerrorState::AlienTerrorState(
  * dTor.
  */
 AlienTerrorState::~AlienTerrorState()
-{
-}
+{}
 
 /**
  * Picks a craft to intercept the UFO.

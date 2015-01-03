@@ -19,13 +19,13 @@
 
 #include "ConfirmDestinationState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -69,26 +69,26 @@ ConfirmDestinationState::ConfirmDestinationState(
 	if (wp != NULL
 		&& wp->getId() == 0)
 	{
-		setPalette("PAL_GEOSCAPE", 6);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color2); //6
 	}
 	else
-		setPalette("PAL_GEOSCAPE", 4);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color); //4
 
-	add(_window);
-	add(_txtTarget);
-	add(_btnCancel);
-	add(_btnOk);
+	add(_window, "window", "confirmDestination");
+	add(_txtTarget, "text", "confirmDestination");
+	add(_btnCancel, "button", "confirmDestination");
+	add(_btnOk, "button", "confirmDestination");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_txtTarget->setColor(Palette::blockOffset(15)-1);
+//	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
-//	_txtTarget->setWordWrap();
 	if (wp != NULL
 		&& wp->getId() == 0)
 	{
@@ -97,14 +97,14 @@ ConfirmDestinationState::ConfirmDestinationState(
 	else
 		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ConfirmDestinationState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmDestinationState::btnOkClick,
 					Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
+//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -116,8 +116,7 @@ ConfirmDestinationState::ConfirmDestinationState(
  * dTor.
  */
 ConfirmDestinationState::~ConfirmDestinationState()
-{
-}
+{}
 
 /**
  * Confirms the selected target for the craft.

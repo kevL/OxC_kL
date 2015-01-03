@@ -24,9 +24,9 @@
 #include "Window.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Font.h"
+//#include "../Engine/Font.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Options.h"
 #include "../Engine/State.h"
 
 

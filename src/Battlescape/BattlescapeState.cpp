@@ -93,8 +93,6 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInterface.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
@@ -297,8 +295,8 @@ BattlescapeState::BattlescapeState()
 	_savedBattle->setPaletteByDepth(this);
 
 	// Fix system colors
-	_game->getCursor()->setColor(Palette::blockOffset(9));
-	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+//	_game->getCursor()->setColor(Palette::blockOffset(9));
+//	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	if (_rules->getInterface("battlescape")->getElement("pathfinding"))
 	{
@@ -3525,8 +3523,8 @@ void BattlescapeState::finishBattle(
 				_game->pushState(new DebriefingState());
 		}
 
-		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+//		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+//		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
 }
 

@@ -22,12 +22,12 @@
 #include "ErrorMessageState.h"
 #include "ListGamesState.h"
 
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -62,35 +62,35 @@ DeleteGameState::DeleteGameState(
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", 6);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color); //6
 
 
-	add(_window);
-	add(_txtMessage);
-	add(_btnNo);
-	add(_btnYes);
+	add(_window, "confirmDelete", "saveMenus");
+	add(_txtMessage, "confirmDelete", "saveMenus");
+	add(_btnNo, "confirmDelete", "saveMenus");
+	add(_btnYes, "confirmDelete", "saveMenus");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(8)+10);
+//	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+10);
+//	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)&DeleteGameState::btnYesClick,
 					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+10);
+//	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)&DeleteGameState::btnNoClick,
 					Options::keyCancel);
 
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
+//	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
@@ -104,8 +104,7 @@ DeleteGameState::DeleteGameState(
  * dTor.
  */
 DeleteGameState::~DeleteGameState()
-{
-}
+{}
 
 /**
  *
@@ -130,12 +129,16 @@ void DeleteGameState::btnYesClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												error,
 												_palette,
-												Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+												_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10
+												"BACK01.SCR",
+												_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
 		else
 			_game->pushState(new ErrorMessageState(
 												error,
 												_palette,
-												Palette::blockOffset(0), "TAC00.SCR", -1));
+												_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0)
+												"TAC00.SCR",
+												_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
 	}
 }
 

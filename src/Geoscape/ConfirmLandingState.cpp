@@ -44,7 +44,6 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/City.h"
 #include "../Ruleset/RuleRegion.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
@@ -98,34 +97,36 @@ ConfirmLandingState::ConfirmLandingState(
 	_btnNo			= new TextButton(80, 18, 40, 152);
 	_btnYes			= new TextButton(80, 18, 136, 152);
 
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color); //3
 
-	add(_window);
-	add(_txtBase);
-	add(_txtTexture);
-	add(_txtShade);
-	add(_txtMessage);
-	add(_txtMessage2);
-	add(_txtBegin);
-	add(_btnNo);
-	add(_btnYes);
+	add(_window, "window", "confirmLanding");
+	add(_txtBase, "text", "confirmLanding");
+	add(_txtTexture, "text", "confirmLanding");
+	add(_txtShade, "text", "confirmLanding");
+	add(_txtMessage, "text", "confirmLanding");
+	add(_txtMessage2, "text", "confirmLanding");
+	add(_txtBegin, "text", "confirmLanding");
+	add(_btnNo, "button", "confirmLanding");
+	add(_btnYes, "button", "confirmLanding");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_txtBase->setColor(Palette::blockOffset(8)+10);
+//	_txtBase->setColor(Palette::blockOffset(8)+10);
 	_txtBase->setAlign(ALIGN_LEFT);
 	_txtBase->setText(craft->getBase()->getName(_game->getLanguage()));
 
-	_txtShade->setColor(Palette::blockOffset(8)+10);
+//	_txtShade->setColor(Palette::blockOffset(8)+10);
 	_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtShade->setAlign(ALIGN_RIGHT);
 	_txtShade->setText(tr("STR_SHADE_").arg(shade));
 
-	_txtTexture->setColor(Palette::blockOffset(8)+10);
+//	_txtTexture->setColor(Palette::blockOffset(8)+10);
 	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
 
@@ -228,15 +229,15 @@ ConfirmLandingState::ConfirmLandingState(
 		_txtShade->setVisible(false);
 	}
 
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
-	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
+//	_txtMessage->setColor(Palette::blockOffset(8)+10);
+//	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_AT")
 						 .arg(_craft->getName(_game->getLanguage())));
 
-	_txtMessage2->setColor(Palette::blockOffset(8)+10);
-	_txtMessage2->setSecondaryColor(Palette::blockOffset(5)+4);
+//	_txtMessage2->setColor(Palette::blockOffset(8)+10);
+//	_txtMessage2->setSecondaryColor(Palette::blockOffset(5)+4);
 	_txtMessage2->setBig();
 	_txtMessage2->setAlign(ALIGN_CENTER);
 
@@ -255,20 +256,20 @@ ConfirmLandingState::ConfirmLandingState(
 						 .arg(_craft->getDestination()->getName(_game->getLanguage()))
 						 .arg(ss.str()));
 
-	_txtBegin->setColor(Palette::blockOffset(8)+5);
+//	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
 	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
 
 
-	_btnYes->setColor(Palette::blockOffset(8)+5);
+//	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmLandingState::btnYesClick,
 					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+5);
+//	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress(

@@ -19,13 +19,13 @@
 
 #include "BaseView.h"
 
-#include <cmath>
-#include <limits>
-#include <sstream>
+//#include <cmath>
+//#include <limits>
+//#include <sstream>
 
 #include "../Engine/Action.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -46,8 +46,8 @@ namespace OpenXcom
  * Sets up a base view with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 BaseView::BaseView(
 		int width,
@@ -213,16 +213,16 @@ int BaseView::getGridY() const
 /**
  * If enabled, the base view will respond to player input,
  * highlighting the selected facility.
- * @param size - facility length (0 to disable)
+ * @param facSize - facility length (0 to disable)
  */
-void BaseView::setSelectable(int size)
+void BaseView::setSelectable(int facSize)
 {
-	_selSize = size;
+	_selSize = facSize;
 	if (_selSize > 0)
 	{
 		_selector = new Surface(
-							size * GRID_SIZE,
-							size * GRID_SIZE,
+							facSize * GRID_SIZE,
+							facSize * GRID_SIZE,
 							_x,
 							_y);
 		_selector->setPalette(getPalette());
@@ -232,12 +232,12 @@ void BaseView::setSelectable(int size)
 		r.h = _selector->getHeight();
 		r.x = 0;
 		r.y = 0;
-		_selector->drawRect(&r, Palette::blockOffset(1));
+		_selector->drawRect(&r, _selectorColor); //Palette::blockOffset(1));
 
 		r.w -= 2;
 		r.h -= 2;
-		r.x++;
-		r.y++;
+		++r.x;
+		++r.y;
 		_selector->drawRect(&r, 0);
 
 		_selector->setVisible(false);
@@ -363,23 +363,23 @@ void BaseView::reCalcQueuedBuildings()
 		}
 	}
 
-	while (!facilities.empty()) // applying a simple Dijkstra Algorithm
+	while (facilities.empty() == false) // applying a simple Dijkstra Algorithm
 	{
-		std::vector<BaseFacility*>::iterator min = facilities.begin();
+		std::vector<BaseFacility*>::iterator facMin = facilities.begin();
 		for (std::vector<BaseFacility*>::iterator
 				fac = facilities.begin();
 				fac != facilities.end();
 				++fac)
 		{
-			if ((*fac)->getBuildTime() < (*min)->getBuildTime())
-				min = fac;
+			if ((*fac)->getBuildTime() < (*facMin)->getBuildTime())
+				facMin = fac;
 		}
 
-		BaseFacility* facility = *min;
-		facilities.erase(min);
+		BaseFacility* const facility = *facMin;
+		facilities.erase(facMin);
 
-		RuleBaseFacility* rule = facility->getRules();
-		int
+		const RuleBaseFacility* const rule = facility->getRules();
+		const int
 			x = facility->getX(),
 			y = facility->getY();
 
@@ -455,12 +455,12 @@ void BaseView::blink()
 			r.h = _selector->getHeight();
 			r.x = 0;
 			r.y = 0;
-			_selector->drawRect(&r, Palette::blockOffset(1));
+			_selector->drawRect(&r, _selectorColor); //Palette::blockOffset(1));
 
 			r.w -= 2;
 			r.h -= 2;
-			r.x++;
-			r.y++;
+			++r.x;
+			++r.y;
 			_selector->drawRect(&r, 0);
 		}
 		else
@@ -500,7 +500,7 @@ void BaseView::draw()
 	}
 
 
-	for (std::vector<BaseFacility*>::iterator // draw facility shape
+	for (std::vector<BaseFacility*>::const_iterator // draw facility shape
 			i = _base->getFacilities()->begin();
 			i != _base->getFacilities()->end();
 			++i)
@@ -519,9 +519,9 @@ void BaseView::draw()
 			{
 				Surface* frame;
 
-				int outline = std::max(
-									(*i)->getRules()->getSize() * (*i)->getRules()->getSize(),
-									3);
+				const int outline = std::max(
+										(*i)->getRules()->getSize() * (*i)->getRules()->getSize(),
+										3);
 				if ((*i)->getBuildTime() == 0)
 					frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num);
 				else
@@ -531,19 +531,19 @@ void BaseView::draw()
 				frame->setY(y * GRID_SIZE);
 				frame->blit(this);
 
-				num++;
+				++num;
 			}
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator // draw connectors
+	for (std::vector<BaseFacility*>::const_iterator // draw connectors
 			fac = _base->getFacilities()->begin();
 			fac != _base->getFacilities()->end();
 			++fac)
 	{
 		if ((*fac)->getBuildTime() == 0)
 		{
-			int x = (*fac)->getX() + (*fac)->getRules()->getSize(); // facilities to the right
+			const int x = (*fac)->getX() + (*fac)->getRules()->getSize(); // facilities to the right
 			if (x < BASE_SIZE)
 			{
 				for (int
@@ -554,7 +554,7 @@ void BaseView::draw()
 					if (_facilities[x][y] != NULL
 						&& _facilities[x][y]->getBuildTime() == 0)
 					{
-						Surface* frame = _texture->getFrame(7);
+						Surface* const frame = _texture->getFrame(7);
 						frame->setX(x * GRID_SIZE - GRID_SIZE / 2);
 						frame->setY(y * GRID_SIZE);
 
@@ -563,7 +563,7 @@ void BaseView::draw()
 				}
 			}
 
-			int y = (*fac)->getY() + (*fac)->getRules()->getSize(); // facilities to the bottom
+			const int y = (*fac)->getY() + (*fac)->getRules()->getSize(); // facilities to the bottom
 			if (y < BASE_SIZE)
 			{
 				for (int
@@ -574,7 +574,7 @@ void BaseView::draw()
 					if (_facilities[x][y] != NULL
 						&& _facilities[x][y]->getBuildTime() == 0)
 					{
-						Surface* frame = _texture->getFrame(8);
+						Surface* const frame = _texture->getFrame(8);
 						frame->setX(x * GRID_SIZE);
 						frame->setY(y * GRID_SIZE - GRID_SIZE / 2);
 
@@ -585,7 +585,7 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator // draw facility graphic
+	for (std::vector<BaseFacility*>::const_iterator // draw facility graphic
 			fac = _base->getFacilities()->begin();
 			fac != _base->getFacilities()->end();
 			++fac)
@@ -613,17 +613,17 @@ void BaseView::draw()
 					srfFac->blit(this);
 				}
 
-				num++;
+				++num;
 			}
 		}
 
 		if ((*fac)->getBuildTime() > 0) // draw time remaining
 		{
-			Text* text = new Text(
-								GRID_SIZE * (*fac)->getRules()->getSize(),
-								16,
-								0,
-								0);
+			Text* const text = new Text(
+									GRID_SIZE * (*fac)->getRules()->getSize(),
+									16,
+									0,
+									0);
 
 			text->setPalette(getPalette());
 			text->initText(
@@ -637,7 +637,7 @@ void BaseView::draw()
 			std::wostringstream ss;
 			ss << (*fac)->getBuildTime();
 			text->setAlign(ALIGN_CENTER);
-			text->setColor(Palette::blockOffset(13)+5);
+			text->setColor(_cellColor); //Palette::blockOffset(13)+5);
 			text->setText(ss.str());
 
 			text->blit(this);
@@ -654,7 +654,7 @@ void BaseView::draw()
 		(*fac)->setCraft(NULL); // done above^
 	} */
 
-	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
+	std::vector<Craft*>::const_iterator craft = _base->getCrafts()->begin();
 	for (int // draw crafts left to right, top row to bottom.
 			y = 0;
 			y < BASE_SIZE;
@@ -667,7 +667,7 @@ void BaseView::draw()
 		{
 			if (_facilities[x][y] != NULL)
 			{
-				BaseFacility* fac = _facilities[x][y];
+				BaseFacility* const fac = _facilities[x][y];
 				if (fac->getBuildTime() == 0
 					&& fac->getRules()->getCrafts() > 0
 					&& fac->getCraft() == NULL)
@@ -676,7 +676,7 @@ void BaseView::draw()
 					{
 						if ((*craft)->getStatus() != "STR_OUT")
 						{
-							Surface* srfCraft = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
+							Surface* const srfCraft = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
 							srfCraft->setX(fac->getX() * GRID_SIZE + (fac->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
 							srfCraft->setY(fac->getY() * GRID_SIZE + (fac->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
 
@@ -713,9 +713,9 @@ void BaseView::blit(Surface* surface)
 void BaseView::mouseOver(Action* action, State* state)
 {
 	_gridX = static_cast<int>(
-				floor(action->getRelativeXMouse() / (static_cast<double>(GRID_SIZE) * action->getXScale())));
+				std::floor(action->getRelativeXMouse() / (static_cast<double>(GRID_SIZE) * action->getXScale())));
 	_gridY = static_cast<int>(
-				floor(action->getRelativeYMouse() / (static_cast<double>(GRID_SIZE) * action->getYScale())));
+				std::floor(action->getRelativeYMouse() / (static_cast<double>(GRID_SIZE) * action->getYScale())));
 
 	if (_gridX >= 0
 		&& _gridX < BASE_SIZE
@@ -761,6 +761,22 @@ void BaseView::mouseOut(Action* action, State* state)
 		_selector->setVisible(false);
 
 	InteractiveSurface::mouseOut(action, state);
+}
+
+/**
+ *
+ */
+void BaseView::setColor(Uint8 color)
+{
+	_cellColor = color;
+}
+
+/**
+ *
+ */
+void BaseView::setSecondaryColor(Uint8 color)
+{
+	_selectorColor = color;
 }
 
 }

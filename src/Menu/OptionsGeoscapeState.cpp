@@ -19,13 +19,13 @@
 
 #include "OptionsGeoscapeState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/ComboBox.h"
 #include "../Interface/Slider.h"
@@ -70,29 +70,29 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_txtOptions			= new Text(114, 9, 206, 82);
 	_btnShowFunds		= new ToggleTextButton(104, 16, 206, 92);
 
-	add(_txtScrollSpeed);
-	add(_slrScrollSpeed);
+	add(_txtScrollSpeed, "text", "geoscapeMenu");
+	add(_slrScrollSpeed, "button", "geoscapeMenu");
 
-	add(_txtDogfightSpeed);
-	add(_slrDogfightSpeed);
+	add(_txtDogfightSpeed, "text", "geoscapeMenu");
+	add(_slrDogfightSpeed, "button", "geoscapeMenu");
 
-	add(_txtClockSpeed);
-	add(_slrClockSpeed);
+	add(_txtClockSpeed, "text", "geoscapeMenu");
+	add(_slrClockSpeed, "button", "geoscapeMenu");
 
-	add(_txtGlobeDetails);
-	add(_btnGlobeCountries);
-	add(_btnGlobeRadars);
-	add(_btnGlobePaths);
+	add(_txtGlobeDetails, "text", "geoscapeMenu");
+	add(_btnGlobeCountries, "button", "geoscapeMenu");
+	add(_btnGlobeRadars, "button", "geoscapeMenu");
+	add(_btnGlobePaths, "button", "geoscapeMenu");
 
-	add(_txtOptions);
-	add(_btnShowFunds);
+	add(_txtOptions, "text", "geoscapeMenu");
+	add(_btnShowFunds, "button", "geoscapeMenu");
 
-	add(_txtDragScroll);
-	add(_cbxDragScroll);
+	add(_txtDragScroll, "text", "geoscapeMenu");
+	add(_cbxDragScroll, "button", "geoscapeMenu");
 
 	centerAllSurfaces();
 
-	_txtDragScroll->setColor(Palette::blockOffset(8)+10);
+
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
 
 	std::vector<std::string> dragScrolls;
@@ -101,7 +101,6 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	dragScrolls.push_back("STR_MIDDLE_MOUSE_BUTTON");
 	dragScrolls.push_back("STR_RIGHT_MOUSE_BUTTON");
 
-	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
 	_cbxDragScroll->setSelected(Options::geoDragScrollButton);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
@@ -109,10 +108,8 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_cbxDragScroll->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_cbxDragScroll->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_txtScrollSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
-	_slrScrollSpeed->setColor(Palette::blockOffset(15)-1);
 	_slrScrollSpeed->setRange(100, 10);
 	_slrScrollSpeed->setValue(Options::geoScrollSpeed);
 	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_GEO_DESC");
@@ -120,10 +117,8 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_slrScrollSpeed->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_slrScrollSpeed->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_txtDogfightSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtDogfightSpeed->setText(tr("STR_DOGFIGHT_SPEED"));
 
-	_slrDogfightSpeed->setColor(Palette::blockOffset(15)-1);
 	_slrDogfightSpeed->setRange(40, 10);
 	_slrDogfightSpeed->setValue(Options::dogfightSpeed);
 	_slrDogfightSpeed->setTooltip("STR_DOGFIGHT_SPEED_DESC");
@@ -131,10 +126,8 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_slrDogfightSpeed->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_slrDogfightSpeed->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_txtClockSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtClockSpeed->setText(tr("STR_CLOCK_SPEED"));
 
-	_slrClockSpeed->setColor(Palette::blockOffset(15)-1);
 	_slrClockSpeed->setRange(250, 10);
 	_slrClockSpeed->setValue(Options::geoClockSpeed);
 	_slrClockSpeed->setTooltip("STR_CLOCK_SPEED_DESC");
@@ -142,10 +135,8 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_slrClockSpeed->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_slrClockSpeed->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_txtGlobeDetails->setColor(Palette::blockOffset(8)+10);
 	_txtGlobeDetails->setText(tr("STR_GLOBE_DETAILS"));
 
-	_btnGlobeCountries->setColor(Palette::blockOffset(15)-1);
 	_btnGlobeCountries->setText(tr("STR_GLOBE_COUNTRIES"));
 	_btnGlobeCountries->setPressed(Options::globeDetail);
 	_btnGlobeCountries->setTooltip("STR_GLOBE_COUNTRIES_DESC");
@@ -153,7 +144,6 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_btnGlobeCountries->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_btnGlobeCountries->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_btnGlobeRadars->setColor(Palette::blockOffset(15)-1);
 	_btnGlobeRadars->setText(tr("STR_GLOBE_RADARS"));
 	_btnGlobeRadars->setPressed(Options::globeRadarLines);
 	_btnGlobeRadars->setTooltip("STR_GLOBE_RADARS_DESC");
@@ -161,7 +151,6 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_btnGlobeRadars->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_btnGlobeRadars->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_btnGlobePaths->setColor(Palette::blockOffset(15)-1);
 	_btnGlobePaths->setText(tr("STR_GLOBE_FLIGHT_PATHS"));
 	_btnGlobePaths->setPressed(Options::globeFlightPaths);
 	_btnGlobePaths->setTooltip("STR_GLOBE_FLIGHT_PATHS_DESC");
@@ -169,10 +158,8 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	_btnGlobePaths->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
 	_btnGlobePaths->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
-	_txtOptions->setColor(Palette::blockOffset(8)+10);
 	_txtOptions->setText(tr("STR_USER_INTERFACE_OPTIONS"));
 
-	_btnShowFunds->setColor(Palette::blockOffset(15)-1);
 	_btnShowFunds->setText(tr("STR_SHOW_FUNDS"));
 	_btnShowFunds->setPressed(Options::showFundsOnGeoscape);
 	_btnShowFunds->setTooltip("STR_SHOW_FUNDS_DESC");
@@ -185,8 +172,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
  * dTor.
  */
 OptionsGeoscapeState::~OptionsGeoscapeState()
-{
-}
+{}
 
 /**
  * Changes the Drag Scroll option.

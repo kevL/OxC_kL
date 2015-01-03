@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -63,25 +63,27 @@ FundingState::FundingState()
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("fundingWindow")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtCountry);
-	add(_txtFunding);
-	add(_txtChange);
-	add(_txtScore);
-	add(_lstCountries);
-	add(_lstTotal);
-	add(_btnOk);
+	add(_window, "window", "fundingWindow");
+	add(_txtTitle, "text1", "fundingWindow");
+	add(_txtCountry, "text2", "fundingWindow");
+	add(_txtFunding, "text2", "fundingWindow");
+	add(_txtChange, "text2", "fundingWindow");
+	add(_txtScore, "text2", "fundingWindow");
+	add(_lstCountries, "list", "fundingWindow");
+	add(_lstTotal, "text2", "fundingWindow");
+	add(_btnOk, "button", "fundingWindow");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
+//	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& FundingState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -94,25 +96,25 @@ FundingState::FundingState()
 					(ActionHandler)& FundingState::btnOkClick,
 					Options::keyGeoFunding);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_INTERNATIONAL_RELATIONS"));
 
-	_txtCountry->setColor(Palette::blockOffset(8)+5);
+//	_txtCountry->setColor(Palette::blockOffset(8)+5);
 	_txtCountry->setText(tr("STR_COUNTRY"));
 
-	_txtFunding->setColor(Palette::blockOffset(8)+5);
+//	_txtFunding->setColor(Palette::blockOffset(8)+5);
 	_txtFunding->setText(tr("STR_FUNDING"));
 
-	_txtChange->setColor(Palette::blockOffset(8)+5);
+//	_txtChange->setColor(Palette::blockOffset(8)+5);
 	_txtChange->setText(tr("STR_CHANGE"));
 
-	_txtScore->setColor(Palette::blockOffset(8)+5);
+//	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));
 
-	_lstCountries->setColor(Palette::blockOffset(15)-1);
-	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
+//	_lstCountries->setColor(Palette::blockOffset(15)-1);
+//	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
 //	_lstCountries->setSelectable();
 	_lstCountries->setColumns(6, 94, 60, 6, 54, 6, 54);
 	_lstCountries->setDot();
@@ -225,8 +227,7 @@ FundingState::FundingState()
  * dTor.
  */
 FundingState::~FundingState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

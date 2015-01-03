@@ -28,8 +28,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -73,24 +73,26 @@ CraftPatrolState::CraftPatrolState(
 	_btnCenter		= new TextButton(62, 16, 97, 159);
 	_btnRedirect	= new TextButton(62, 16, 162, 159);
 
-	setPalette("PAL_GEOSCAPE", 4);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color); //4
 
-	add(_window);
-	add(_txtDestination);
-	add(_txtPatrolling);
-	add(_btnOk);
-	add(_btnInfo);
-	add(_btnBase);
-	add(_btnCenter);
-	add(_btnRedirect);
+	add(_window, "window", "geoCraftScreens");
+	add(_txtDestination, "text1", "geoCraftScreens");
+	add(_txtPatrolling, "text1", "geoCraftScreens");
+	add(_btnOk, "button", "geoCraftScreens");
+	add(_btnInfo, "button", "geoCraftScreens");
+	add(_btnBase, "button", "geoCraftScreens");
+	add(_btnCenter, "button", "geoCraftScreens");
+	add(_btnRedirect, "button", "geoCraftScreens");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_txtDestination->setColor(Palette::blockOffset(15)-1);
+//	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
 	_txtDestination->setAlign(ALIGN_CENTER);
 	_txtDestination->setWordWrap();
@@ -98,31 +100,31 @@ CraftPatrolState::CraftPatrolState(
 								 .arg(_craft->getName(_game->getLanguage()))
 								 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-	_txtPatrolling->setColor(Palette::blockOffset(15)+11);
+//	_txtPatrolling->setColor(Palette::blockOffset(15)+11);
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
 	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftPatrolState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnOkClick,
 					Options::keyCancel);
 
-	_btnInfo->setColor(Palette::blockOffset(8)+5);
+//	_btnInfo->setColor(Palette::blockOffset(8)+5);
 	_btnInfo->setText(tr("STR_EQUIP_CRAFT"));
 	_btnInfo->onMouseClick((ActionHandler)& CraftPatrolState::btnInfoClick);
 
-	_btnBase->setColor(Palette::blockOffset(8)+5);
+//	_btnBase->setColor(Palette::blockOffset(8)+5);
 	_btnBase->setText(tr("STR_RETURN_TO_BASE"));
 	_btnBase->onMouseClick((ActionHandler)& CraftPatrolState::btnBaseClick);
 
-	_btnCenter->setColor(Palette::blockOffset(8)+5);
+//	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& CraftPatrolState::btnCenterClick);
 
-	_btnRedirect->setColor(Palette::blockOffset(8)+5);
+//	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)& CraftPatrolState::btnRedirectClick);
 	_btnRedirect->onKeyboardPress(
@@ -134,8 +136,7 @@ CraftPatrolState::CraftPatrolState(
  * dTor.
  */
 CraftPatrolState::~CraftPatrolState()
-{
-}
+{}
 
 /**
  * Closes the window.

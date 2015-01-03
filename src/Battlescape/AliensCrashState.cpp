@@ -42,19 +42,18 @@ namespace OpenXcom
 AliensCrashState::AliensCrashState()
 {
 	_window		= new Window(this, 256, 160, 32, 20);
-	_btnOk		= new TextButton(120, 18, 100, 154);
 	_txtTitle	= new Text(246, 80, 37, 50);
+	_btnOk		= new TextButton(120, 18, 100, 154);
 
 	setPalette("PAL_BATTLESCAPE");
 
-	add(_window);
-	add(_btnOk, "messageWindows", "battlescape");
+	add(_window, "messageWindowBorder", "battlescape");
 	add(_txtTitle, "messageWindows", "battlescape");
+	add(_btnOk, "messageWindowButtons", "battlescape");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -83,8 +82,7 @@ AliensCrashState::AliensCrashState()
  * dTor.
  */
 AliensCrashState::~AliensCrashState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

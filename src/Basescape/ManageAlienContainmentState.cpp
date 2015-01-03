@@ -28,8 +28,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -44,7 +44,6 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -107,7 +106,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 //	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
 
 
-	if (origin == OPT_BATTLESCAPE)
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("manageContainment")->getElement("palette")->color);
+/*	if (origin == OPT_BATTLESCAPE)
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 
@@ -120,37 +122,37 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 		_color  = Palette::blockOffset(13)+10;
 		_color2 = Palette::blockOffset(13);
-	}
+	} */
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtAvailable);
-	add(_txtUsed);
-	add(_txtItem);
-	add(_txtLiveAliens);
-	add(_txtDeadAliens);
-	add(_lstAliens);
-	add(_btnOk);
-	add(_btnCancel);
+	add(_window, "window", "manageContainment");
+	add(_txtTitle, "text", "manageContainment");
+	add(_txtBaseLabel, "text", "manageContainment");
+	add(_txtAvailable, "text", "manageContainment");
+	add(_txtUsed, "text", "manageContainment");
+	add(_txtItem, "text", "manageContainment");
+	add(_txtLiveAliens, "text", "manageContainment");
+	add(_txtDeadAliens, "text", "manageContainment");
+	add(_lstAliens, "list", "manageContainment");
+	add(_btnOk, "button", "manageContainment");
+	add(_btnCancel, "button", "manageContainment");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(_color);
+//	_window->setColor(_color);
 	if (origin == OPT_BATTLESCAPE)
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 	else
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(_color);
+//	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
 	_btnOk->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ManageAlienContainmentState::btnOkClick,
 					Options::keyOk);
 
-	_btnCancel->setColor(_color);
+//	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -158,48 +160,44 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 					Options::keyCancel);
 
 	_btnOk->setVisible(false);
-	if (_overCrowded)
+	if (_overCrowded == true)
 		_btnCancel->setVisible(false);
 
-	if (origin == OPT_BATTLESCAPE)
+/*	if (origin == OPT_BATTLESCAPE)
 		_txtTitle->setColor(Palette::blockOffset(8)+5);
 	else
-		_txtTitle->setColor(_color);
+		_txtTitle->setColor(_color); */
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
 
-	if (origin == OPT_BATTLESCAPE)
+/*	if (origin == OPT_BATTLESCAPE)
 		_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
 	else
-		_txtBaseLabel->setColor(_color);
+		_txtBaseLabel->setColor(_color); */
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtItem->setColor(_color);
+//	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ALIEN"));
 
-	_txtLiveAliens->setColor(_color);
+//	_txtLiveAliens->setColor(_color);
 	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
-//kL	_txtLiveAliens->setWordWrap();
-//kL	_txtLiveAliens->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtDeadAliens->setColor(_color);
+//	_txtDeadAliens->setColor(_color);
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
-//kL	_txtDeadAliens->setWordWrap();
-//kL	_txtDeadAliens->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtAvailable->setColor(_color);
-	_txtAvailable->setSecondaryColor(_color2);
+//	_txtAvailable->setColor(_color);
+//	_txtAvailable->setSecondaryColor(_color2);
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE")
 							.arg(_base->getAvailableContainment() - _base->getUsedContainment()));
 
-	_txtUsed->setColor(_color);
-	_txtUsed->setSecondaryColor(_color2);
+//	_txtUsed->setColor(_color);
+//	_txtUsed->setSecondaryColor(_color2);
 	_txtUsed->setText(tr("STR_SPACE_USED")
-						.arg(_base->getUsedContainment())); // - _researchAliens));
+						.arg(_base->getUsedContainment())); // + _researchAliens));
 
-	_lstAliens->setColor(_color2);
-	_lstAliens->setArrowColor(_color);
+//	_lstAliens->setColor(_color2);
+//	_lstAliens->setArrowColor(_color);
 	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
 	_lstAliens->setColumns(3, 140, 66, 56);
 	_lstAliens->setSelectable();
@@ -320,16 +318,16 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
-												Palette::blockOffset(8)+5,
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color, //Palette::blockOffset(8)+5,
 												"BACK01.SCR",
-												0));
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color)); //0
 		else
 			_game->pushState(new ErrorMessageState(
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
-												Palette::blockOffset(15)+1,
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
 												"BACK13.SCR",
-												6));
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color)); //6
  	}
 }
 
@@ -541,7 +539,13 @@ void ManageAlienContainmentState::updateStrings()
 	ss << qty;
 	ss2 << _qtys[_sel];
 
-	_lstAliens->setRowColor(_sel, (qty != 0)? _color2: _color);
+	Uint8 color;
+	if (qty == 0)
+		color = _lstAliens->getColor();
+	else
+		color = _lstAliens->getSecondaryColor();
+
+	_lstAliens->setRowColor(_sel, color);
 	_lstAliens->setCellText(_sel, 1, ss.str());		// # in Containment
 	_lstAliens->setCellText(_sel, 2, ss2.str());	// # to torture
 
@@ -553,10 +557,6 @@ void ManageAlienContainmentState::updateStrings()
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 
-
-//	bool enoughSpaceToExit = Options::storageLimitsEnforced? spaces > -1: true;
-
-//	_btnOk->setVisible(enoughSpaceToExit);
 	_btnCancel->setVisible(_overCrowded == false);
 	_btnOk->setVisible(_aliensSold > 0
 					&& spaces > -1);

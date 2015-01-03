@@ -51,6 +51,9 @@ private:
 	size_t
 		_base,
 		_hoverBase;
+	Uint8
+		_green,
+		_red;
 
 	SurfaceSet* _texture;
 	Timer* _timer;
@@ -87,6 +90,11 @@ private:
 
 		/// Special handling for mouse hovers.
 		void mouseOver(Action* action, State* state);
+
+		///
+		void setColor(Uint8 color);
+		///
+		void setSecondaryColor(Uint8 color);
 
 		/// Handles timer.
 		void think();

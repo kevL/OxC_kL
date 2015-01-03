@@ -19,8 +19,8 @@
 
 #include "TextButton.h"
 
-#include <SDL.h>
-#include <SDL_mixer.h>
+//#include <SDL.h>
+//#include <SDL_mixer.h>
 
 #include "ComboBox.h"
 #include "Text.h"
@@ -40,8 +40,8 @@ Sound* TextButton::soundPress = 0;
  * The text is centered on the button.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 TextButton::TextButton(
 		int width,
@@ -107,6 +107,16 @@ void TextButton::setColor(Uint8 color)
 Uint8 TextButton::getColor() const
 {
 	return _color;
+}
+
+/**
+ * Sets the secondary color of this TextButton.
+ * @param color - the color
+ */
+void TextButton::setSecondaryColor(Uint8 color)
+{
+	_text->setColor(color);
+	_redraw = true;
 }
 
 /**
@@ -197,7 +207,7 @@ std::wstring TextButton::getText() const
 
 /**
  * Changes the button group this button belongs to.
- * @param group - pointer to a pointer to the pressed button in the group.
+ * @param group - pointer to a pointer to the pressed button in the group
  * Null makes it a regular button.
  */
 void TextButton::setGroup(TextButton** group)
@@ -209,8 +219,8 @@ void TextButton::setGroup(TextButton** group)
 /**
  * Replaces a certain amount of colors in the surface's palette.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void TextButton::setPalette(
 		SDL_Color* colors,
@@ -334,7 +344,7 @@ void TextButton::mousePress(Action* action, State* state)
  */
 void TextButton::mouseRelease(Action* action, State* state)
 {
-	if (isButtonHandled(action->getDetails()->button.button))
+	if (isButtonHandled(action->getDetails()->button.button) == true)
 		draw();
 
 	InteractiveSurface::mouseRelease(action, state);
@@ -357,6 +367,7 @@ void TextButton::setComboBox(ComboBox* comboBox)
 
 /**
  * Sets the width of this TextButton.
+ * @param width - the width to set
  */
 void TextButton::setWidth(int width)
 {
@@ -366,6 +377,7 @@ void TextButton::setWidth(int width)
 
 /**
  * Sets the height of this TextButton.
+ * @param height - the height to set
  */
 void TextButton::setHeight(int height)
 {

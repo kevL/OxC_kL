@@ -28,9 +28,9 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-//kL #include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
@@ -39,8 +39,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Unit.h"
 
@@ -264,8 +262,8 @@ UnitInfoState::UnitInfoState(
 
 	if (_mindProbe == false)
 	{
-		add(_btnPrev);
-		add(_btnNext);
+		add(_btnPrev, "button", "stats");
+		add(_btnNext, "button", "stats");
 	}
 
 	centerAllSurfaces();
@@ -286,9 +284,9 @@ UnitInfoState::UnitInfoState(
 		color = _game->getRuleset()->getInterface("stats")->getElement("text")->color,
 		color2 = _game->getRuleset()->getInterface("stats")->getElement("text")->color2;
 
+//	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
-//	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setHighContrast();
 
 
@@ -529,14 +527,15 @@ UnitInfoState::UnitInfoState(
 
 	if (_mindProbe == false)
 	{
+//		_btnPrev->setColor(Palette::blockOffset(4)+4);
 		_btnPrev->setText(L"<");
-		_btnPrev->setColor(Palette::blockOffset(4)+4);
 		_btnPrev->onMouseClick((ActionHandler)& UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,
 						Options::keyBattlePrevUnit);
+
+//		_btnNext->setColor(Palette::blockOffset(4)+4);
 		_btnNext->setText(L">");
-		_btnNext->setColor(Palette::blockOffset(4)+4);
 		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnNextClick,
@@ -548,8 +547,7 @@ UnitInfoState::UnitInfoState(
  * dTor.
  */
 UnitInfoState::~UnitInfoState()
-{
-}
+{}
 
 /**
  * Updates unit info which can change after going into other screens.
@@ -773,7 +771,7 @@ void UnitInfoState::handle(Action* action)
 	{
 //		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 //			exitClick(action); else
-		if (!_mindProbe)
+		if (_mindProbe == false)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
 				btnNextClick(action);
@@ -789,11 +787,11 @@ void UnitInfoState::handle(Action* action)
 */
 void UnitInfoState::btnPrevClick(Action* action)
 {
-	if (_parent) // so we are here from a Battlescape Game
+	if (_parent != NULL) // so we are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(
 										false,
 										false);
-//kL									_fromInventory);
+//										_fromInventory);
 	else // so we are here from the Craft Equipment screen
 		_battleGame->selectPreviousFactionUnit(
 											false,
@@ -818,7 +816,7 @@ void UnitInfoState::btnNextClick(Action* action)
 		_parent->selectNextFactionUnit(
 									false,
 									false);
-//kL								_fromInventory);
+//									_fromInventory);
 	else // this is from the Craft Equipment screen
 		_battleGame->selectNextFactionUnit(
 										false,
@@ -839,8 +837,7 @@ void UnitInfoState::btnNextClick(Action* action)
  */
 void UnitInfoState::exitClick(Action*)
 {
-/*kL
-	if (_fromInventory == false)
+/*	if (_fromInventory == false)
 	{
 		if (Options::maximizeInfoScreens)
 		{
@@ -853,6 +850,7 @@ void UnitInfoState::exitClick(Action*)
 			_game->getScreen()->resetDisplay(false);
 		}
 	} else */
+
 	if (_fromInventory == true
 		&& _unit->hasInventory() == false)
 	{

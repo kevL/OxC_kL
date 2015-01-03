@@ -104,7 +104,7 @@ Uint8 Bar::getSecondaryColor() const
 
 /**
  * Changes the scale factor used to draw the bar values.
- * @param scale - scale in pixels/unit
+ * @param scale - scale in pixels/unit (default 1.0)
  */
 void Bar::setScale(double scale)
 {

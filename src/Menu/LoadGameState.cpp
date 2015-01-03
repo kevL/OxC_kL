@@ -19,21 +19,21 @@
 
 #include "LoadGameState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "ErrorMessageState.h"
 
 #include "../Battlescape/BattlescapeState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Geoscape/GeoscapeState.h"
 
@@ -115,20 +115,22 @@ void LoadGameState::buildUi(SDL_Color* palette)
 
 	setPalette(palette);
 
-	add(_txtStatus);
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		add(_txtStatus, "textLoad", "battlescape");
+//		_txtStatus->setColor(Palette::blockOffset(1)-1);
+		_txtStatus->setHighContrast();
+	}
+	else
+		add(_txtStatus, "textLoad", "geoscape");
 
 	centerAllSurfaces();
+
 
 	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
-
-	if (_origin == OPT_BATTLESCAPE)
-	{
-		_txtStatus->setColor(Palette::blockOffset(1)-1);
-		_txtStatus->setHighContrast();
-	}
 }
 
 /**
@@ -196,16 +198,16 @@ void LoadGameState::think()
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													Palette::blockOffset(8)+10,
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10
 													"BACK01.SCR",
-													6));
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
 			else
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													Palette::blockOffset(0),
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0)
 													"TAC00.SCR",
-													-1));
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
 
 			if (_game->getSavedGame() == save)
 				_game->setSavedGame(NULL);
@@ -221,16 +223,16 @@ void LoadGameState::think()
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													Palette::blockOffset(8)+10,
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10
 													"BACK01.SCR",
-													6));
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
 			else
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													Palette::blockOffset(0),
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0)
 													"TAC00.SCR",
-													-1));
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
 
 			if (_game->getSavedGame() == save)
 				_game->setSavedGame(NULL);

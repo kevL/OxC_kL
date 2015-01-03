@@ -21,7 +21,6 @@
 
 //#include <climits>
 //#include <sstream>
-
 //#include "../fmath.h"
 
 #include "../Basescape/BasescapeState.h" // kL: soundPop
@@ -31,7 +30,7 @@
 //#include "../Engine/AdlibMusic.h"
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
-#include "../Engine/Font.h"
+//#include "../Engine/Font.h"
 //#include "../Engine/GMCat.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"

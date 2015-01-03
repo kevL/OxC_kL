@@ -74,12 +74,12 @@ AbortMissionState::AbortMissionState(
 
 	_battleGame->setPaletteByDepth(this);
 
-	add(_window);
+	add(_window, "messageWindowBorder", "battlescape");
 	add(_txtInExit, "messageWindows", "battlescape");
 	add(_txtOutsideExit, "messageWindows", "battlescape");
 	add(_txtAbort, "messageWindows", "battlescape");
-	add(_btnCancel, "messageWindows", "battlescape");
-	add(_btnOk, "messageWindows", "battlescape");
+	add(_btnCancel, "messageWindowButtons", "battlescape");
+	add(_btnOk, "messageWindowButtons", "battlescape");
 
 	centerAllSurfaces();
 
@@ -112,7 +112,7 @@ AbortMissionState::AbortMissionState(
 	}
 
 
-	_window->setColor(Palette::blockOffset(0)-1);
+//	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -164,8 +164,7 @@ AbortMissionState::AbortMissionState(
  * dTor.
  */
 AbortMissionState::~AbortMissionState()
-{
-}
+{}
 
 /**
  * Confirms mission abort.

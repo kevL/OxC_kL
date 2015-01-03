@@ -19,7 +19,7 @@
 
 #include "OptionsBaseState.h"
 
-#include <SDL.h>
+//#include <SDL.h>
 
 #include "MainMenuState.h"
 #include "OptionsAdvancedState.h"
@@ -39,9 +39,9 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Geoscape/GeoscapeState.h"
 
@@ -85,89 +85,77 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin)
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("optionsMenu")->getElement("palette")->color);
 
-	add(_window);
+	add(_window, "window", "optionsMenu");
 
-	add(_btnVideo);
-	add(_btnAudio);
-	add(_btnControls);
-	add(_btnGeoscape);
-	add(_btnBattlescape);
-	add(_btnAdvanced);
-	add(_btnMods);
+	add(_btnVideo, "button", "optionsMenu");
+	add(_btnAudio, "button", "optionsMenu");
+	add(_btnControls, "button", "optionsMenu");
+	add(_btnGeoscape, "button", "optionsMenu");
+	add(_btnBattlescape, "button", "optionsMenu");
+	add(_btnAdvanced, "button", "optionsMenu");
+	add(_btnMods, "button", "optionsMenu");
 
-	add(_btnOk);
-	add(_btnCancel);
-	add(_btnDefault);
+	add(_btnOk, "button", "optionsMenu");
+	add(_btnCancel, "button", "optionsMenu");
+	add(_btnDefault, "button", "optionsMenu");
 
-	add(_txtTooltip);
+	add(_txtTooltip, "tooltip", "optionsMenu");
 
-	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnVideo->setColor(Palette::blockOffset(8)+5);
 	_btnVideo->setText(tr("STR_VIDEO"));
 	_btnVideo->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 
-	_btnAudio->setColor(Palette::blockOffset(8)+5);
 	_btnAudio->setText(tr("STR_AUDIO"));
 	_btnAudio->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 
-	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(tr("STR_CONTROLS"));
 	_btnControls->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 
-	_btnGeoscape->setColor(Palette::blockOffset(8)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 
-	_btnBattlescape->setColor(Palette::blockOffset(8)+5);
 	_btnBattlescape->setText(tr("STR_BATTLESCAPE_UC"));
 	_btnBattlescape->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 
-	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
 	_btnAdvanced->setText(tr("STR_ADVANCED"));
 	_btnAdvanced->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 
-	_btnMods->setColor(Palette::blockOffset(8)+5);
 	_btnMods->setText(tr("STR_MODS"));
 	_btnMods->onMousePress(
 					(ActionHandler)& OptionsBaseState::btnGroupPress,
 					SDL_BUTTON_LEFT);
 	_btnMods->setVisible(_origin == OPT_MENU); // Mods require a restart, don't enable them in-game
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& OptionsBaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& OptionsBaseState::btnOkClick,
 					Options::keyOk);
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& OptionsBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& OptionsBaseState::btnCancelClick,
 					Options::keyCancel);
 
-	_btnDefault->setColor(Palette::blockOffset(8)+5);
 	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
 	_btnDefault->onMouseClick((ActionHandler)& OptionsBaseState::btnDefaultClick);
 
-	_txtTooltip->setColor(Palette::blockOffset(8)+5);
 	_txtTooltip->setWordWrap();
 }
 
@@ -175,8 +163,7 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin)
  * dTor.
  */
 OptionsBaseState::~OptionsBaseState()
-{
-}
+{}
 
 void OptionsBaseState::restart(OptionsOrigin origin)
 {

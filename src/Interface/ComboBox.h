@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_COMBOBOX_H
 #define OPENXCOM_COMBOBOX_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/InteractiveSurface.h"
 
@@ -45,11 +45,12 @@ class ComboBox
 {
 
 private:
-	static const int HORIZONTAL_MARGIN;
-	static const int VERTICAL_MARGIN;
-	static const int MAX_ITEMS;
-	static const int BUTTON_WIDTH;
-	static const int TEXT_HEIGHT;
+	static const int
+		HORIZONTAL_MARGIN,
+		VERTICAL_MARGIN,
+		MAX_ITEMS,
+		BUTTON_WIDTH,
+		TEXT_HEIGHT;
 
 	bool _toggled;
 	size_t _sel;
@@ -57,12 +58,12 @@ private:
 
 	ActionHandler _change;
 
-	Language	* _lang;
-	State		* _state;
-	Surface		* _arrow;
-	TextButton	* _button;
-	TextList	* _list;
-	Window		* _window;
+	Language* _lang;
+	State* _state;
+	Surface* _arrow;
+	TextButton* _button;
+	TextList* _list;
+	Window* _window;
 
 	///
 	void drawArrow();

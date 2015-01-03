@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -34,7 +34,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedGame.h"
 
@@ -45,7 +44,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Build Facilities window.
  * @param base	- pointer to the Base to get info from
- * @param state	- pointer to the base state to refresh
+ * @param state	- pointer to the base State to refresh
  */
 BuildFacilitiesState::BuildFacilitiesState(
 		Base* base,
@@ -68,36 +67,38 @@ BuildFacilitiesState::BuildFacilitiesState(
 
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("selectFacility")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-	add(_lstFacilities);
-	add(_btnOk);
+	add(_window, "window", "selectFacility");
+	add(_txtTitle, "text", "selectFacility");
+	add(_lstFacilities, "list", "selectFacility");
+	add(_btnOk, "button", "selectFacility");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(13)+5);
+//	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+5);
+//	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BuildFacilitiesState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BuildFacilitiesState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13));
+//	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INSTALLATION"));
 
-	_lstFacilities->setColor(Palette::blockOffset(13)+5);
+//	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 99);
 	_lstFacilities->setSelectable();
-//kL	_lstFacilities->setScrollable(true, -12);
+//	_lstFacilities->setScrollable(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
 	_lstFacilities->setWordWrap();
@@ -110,8 +111,7 @@ BuildFacilitiesState::BuildFacilitiesState(
  * dTor.
  */
 BuildFacilitiesState::~BuildFacilitiesState()
-{
-}
+{}
 
 /**
  * Populates the build list from the current "available" facilities.
@@ -133,7 +133,7 @@ void BuildFacilitiesState::PopulateBuildList()
 		}
 	}
 
-	for (std::vector<RuleBaseFacility*>::iterator
+	for (std::vector<RuleBaseFacility*>::const_iterator
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)

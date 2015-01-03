@@ -52,13 +52,12 @@ ListLoadState::ListLoadState(OptionsOrigin origin)
 			true)
 {
 /*	_btnOld = new TextButton(80, 16, 60, 172);
-	add(_btnOld);
+	add(_btnOld, "button", "saveMenus");
 	if (origin != OPT_MENU)
 		_btnOld->setVisible(false);
 	else
 		_btnCancel->setX(180);
 
-	_btnOld->setColor(Palette::blockOffset(8)+5);
 	_btnOld->setText(L"original");
 	_btnOld->onMouseClick((ActionHandler)& ListLoadState::btnOldClick); */
 
@@ -71,8 +70,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin)
  * dTor.
  */
 ListLoadState::~ListLoadState()
-{
-}
+{}
 
 /**
  * Switches to Original X-Com saves.

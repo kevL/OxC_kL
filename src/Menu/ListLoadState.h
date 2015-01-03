@@ -37,7 +37,6 @@ class ListLoadState
 private:
 	TextButton* _btnOld;
 
-
 	public:
 		/// Creates the Load Game state.
 		ListLoadState(OptionsOrigin origin);

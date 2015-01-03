@@ -19,22 +19,22 @@
 
 #include "MainMenuState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "ListLoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"
 #include "OptionsVideoState.h"
 
-#include "../version.h"
+//#include "../version.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -80,44 +80,46 @@ MainMenuState::MainMenuState()
 
 	_btnQuit		= new TextButton(192, 20, 64, 144);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnNewGame);
-	add(_btnNewBattle);
-	add(_btnLoad);
-	add(_btnOptions);
-	add(_btnQuit);
+	add(_window, "window", "mainMenu");
+	add(_txtTitle, "text", "mainMenu");
+	add(_btnNewGame, "button", "mainMenu");
+	add(_btnNewBattle, "button", "mainMenu");
+	add(_btnLoad, "button", "mainMenu");
+	add(_btnOptions, "button", "mainMenu");
+	add(_btnQuit, "button", "mainMenu");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnNewGame->setColor(Palette::blockOffset(8)+5);
+//	_btnNewGame->setColor(Palette::blockOffset(8)+5);
 	_btnNewGame->setText(tr("STR_NEW_GAME"));
 	_btnNewGame->onMouseClick((ActionHandler)& MainMenuState::btnNewGameClick);
 
-	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
+//	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
 	_btnNewBattle->setText(tr("STR_NEW_BATTLE"));
 	_btnNewBattle->onMouseClick((ActionHandler)& MainMenuState::btnNewBattleClick);
 
-	_btnLoad->setColor(Palette::blockOffset(8)+5);
+//	_btnLoad->setColor(Palette::blockOffset(8)+5);
 	_btnLoad->setText(tr("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)& MainMenuState::btnLoadClick);
 
-	_btnOptions->setColor(Palette::blockOffset(8)+5);
+//	_btnOptions->setColor(Palette::blockOffset(8)+5);
 	_btnOptions->setText(tr("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)& MainMenuState::btnOptionsClick);
 	_btnOptions->setVisible(false); // kL
 
-	_btnQuit->setColor(Palette::blockOffset(8)+5);
+//	_btnQuit->setColor(Palette::blockOffset(8)+5);
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)& MainMenuState::btnQuitClick);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+//	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
@@ -130,8 +132,8 @@ MainMenuState::MainMenuState()
 
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_START_MAINMENU);
 
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+//	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 
 	SDL_ShowCursor(SDL_ENABLE); // kL: stabilize my cursor. I disabled it in Game and show it here instead.
@@ -141,8 +143,7 @@ MainMenuState::MainMenuState()
  * dTor.
  */
 MainMenuState::~MainMenuState()
-{
-}
+{}
 
 /**
  * Opens the New Game window.

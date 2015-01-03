@@ -19,15 +19,15 @@
 
 #include "OptionsAdvancedState.h"
 
-#include <algorithm>
-#include <iostream>
-#include <sstream>
+//#include <algorithm>
+//#include <iostream>
+//#include <sstream>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
@@ -51,7 +51,10 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 
 	_lstOptions = new TextList(200, 137, 94, 8);
 
-	add(_lstOptions);
+	if (origin != OPT_BATTLESCAPE)
+		add(_lstOptions, "optionLists", "advancedMenu");
+	else
+		add(_lstOptions, "optionLists", "battlescape");
 
 	centerAllSurfaces();
 
@@ -70,8 +73,8 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 
 	_lstOptions->setAlign(ALIGN_RIGHT, 1);
 	_lstOptions->setColumns(2, leftcol, rightcol);
-	_lstOptions->setColor(Palette::blockOffset(8)+10);
-	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
+//	_lstOptions->setColor(Palette::blockOffset(8)+10);
+//	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
 	_lstOptions->setWordWrap();
 	_lstOptions->setSelectable();
 	_lstOptions->setBackground(_window);
@@ -79,12 +82,10 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 	_lstOptions->onMouseOver((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOver);
 	_lstOptions->onMouseOut((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOut);
 
+	_colorGroup = _lstOptions->getSecondaryColor();
+
 //	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleRangeBasedAccuracy", &Options::battleRangeBasedAccuracy)); // kL
 
-	if (origin != OPT_BATTLESCAPE)
-		_colorGroup = Palette::blockOffset(15)-1;
-	else
-		_colorGroup = Palette::blockOffset(1)-1;
 
 	const std::vector<OptionInfo>& options = Options::getOptionInfo();
 	for (std::vector<OptionInfo>::const_iterator

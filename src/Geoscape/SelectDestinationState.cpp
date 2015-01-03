@@ -30,10 +30,10 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -92,7 +92,9 @@ SelectDestinationState::SelectDestinationState(
 
 	_txtError	= new Text(100, 9, 12 + dx, 11);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color); //0
 
 /*	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -101,13 +103,13 @@ SelectDestinationState::SelectDestinationState(
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	add(_window);
-	add(_btnCancel);
-	add(_btnCydonia);
-//	add(_txtTitle);
-	add(_txtError);
+	add(_window, "genericWindow", "geoscape");
+//	add(_txtTitle, "genericText", "geoscape");
+	add(_txtError, "genericText", "geoscape");
+	add(_btnCancel, "genericButton1", "geoscape");
+	add(_btnCydonia, "genericButton1", "geoscape");
 
-	_txtError->setColor(Palette::blockOffset(5)); // (8)+5);
+//	_txtError->setColor(Palette::blockOffset(5)); // (8)+5);
 	_txtError->setText(tr("STR_OUTSIDE_CRAFT_RANGE"));
 	_txtError->setVisible(false);
 
@@ -147,20 +149,20 @@ SelectDestinationState::SelectDestinationState(
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton(); */
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
+//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SelectDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SelectDestinationState::btnCancelClick,
 					Options::keyCancel);
 
-//kL	_txtTitle->setColor(Palette::blockOffset(15)-1);
-//kL	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
-//kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-//kL	_txtTitle->setWordWrap();
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
+//	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+//	_txtTitle->setWordWrap();
 
 
 	bool goCydonia = true; // if all Soldiers have Power or Flight suits .......
@@ -187,7 +189,7 @@ SelectDestinationState::SelectDestinationState(
 
 	if (goCydonia == true)
 	{
-		_btnCydonia->setColor(Palette::blockOffset(8)+5);
+//		_btnCydonia->setColor(Palette::blockOffset(8)+5);
 		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
 	}

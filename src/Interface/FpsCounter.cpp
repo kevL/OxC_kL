@@ -19,13 +19,13 @@
 
 #include "FpsCounter.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "NumberText.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 
@@ -45,12 +45,12 @@ FpsCounter::FpsCounter(
 		int x,
 		int y)
 	:
-		Surface( // kL
+		Surface(
 			width,
 			height,
 			x + 1,
 			y + 30),
-		_frames(0) // kL
+		_frames(0)
 {
 	_visible = Options::fpsCounter;
 
@@ -59,7 +59,6 @@ FpsCounter::FpsCounter(
 	_timer->start();
 
 	_text = new NumberText(width, height, x, y);
-	setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -74,8 +73,8 @@ FpsCounter::~FpsCounter()
 /**
  * Replaces a certain amount of colors in the FPS counter palette.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void FpsCounter::setPalette(
 		SDL_Color* colors,
@@ -143,7 +142,7 @@ void FpsCounter::draw()
  */
 void FpsCounter::addFrame()
 {
-	_frames++;
+	++_frames;
 }
 
 }

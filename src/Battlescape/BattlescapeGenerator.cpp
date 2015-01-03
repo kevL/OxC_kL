@@ -3813,7 +3813,6 @@ bool BattlescapeGenerator::addLine(
 		roadX,
 		roadY,
 		* iterValue = &roadX,
-//		* staticValue = &roadY,
 		limit = _mapsize_x / 10;
 	MapBlockType
 		comparator = MT_NSROAD,
@@ -3822,7 +3821,6 @@ bool BattlescapeGenerator::addLine(
 	if (direction == MD_VERTICAL)
 	{
 		iterValue = &roadY;
-//		staticValue = &roadX;
 		comparator = MT_EWROAD;
 		typeToAdd = MT_NSROAD;
 		limit = _mapsize_y / 10;

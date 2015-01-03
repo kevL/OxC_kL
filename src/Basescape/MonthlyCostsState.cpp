@@ -19,12 +19,12 @@
 
 #include "MonthlyCostsState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -34,7 +34,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
@@ -72,28 +71,31 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtCost);
-	add(_txtQuantity);
-	add(_txtTotal);
-	add(_txtRental);
-	add(_lstCrafts);
-	add(_txtSalaries);
-	add(_lstSalaries);
-	add(_txtIncome);
-	add(_lstMaintenance);
-	add(_lstTotal);
-	add(_btnOk);
+	add(_window, "window", "costsInfo");
+	add(_txtTitle, "text1", "costsInfo");
+	add(_txtCost, "text1", "costsInfo");
+	add(_txtQuantity, "text1", "costsInfo");
+	add(_txtTotal, "text1", "costsInfo");
+	add(_txtRental, "text1", "costsInfo");
+	add(_lstCrafts, "list", "costsInfo");
+	add(_txtSalaries, "text1", "costsInfo");
+	add(_lstSalaries, "list", "costsInfo");
+	add(_txtIncome, "list", "costsInfo");
+	add(_lstMaintenance, "text1", "costsInfo");
+	add(_lstTotal, "text2", "costsInfo");
+	add(_btnOk, "button", "costsInfo");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)+1);
+
+//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+1);
+//	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& MonthlyCostsState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -103,31 +105,31 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 					(ActionHandler)& MonthlyCostsState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+1);
+//	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MONTHLY_COSTS_").arg(_base->getName()));
 
-	_txtCost->setColor(Palette::blockOffset(15)+1);
+//	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST_PER_UNIT"));
 
-	_txtQuantity->setColor(Palette::blockOffset(15)+1);
+//	_txtQuantity->setColor(Palette::blockOffset(15)+1);
 	_txtQuantity->setText(tr("STR_QUANTITY"));
 
-	_txtTotal->setColor(Palette::blockOffset(15)+1);
+//	_txtTotal->setColor(Palette::blockOffset(15)+1);
 	_txtTotal->setText(tr("STR_TOTAL"));
 
-	_txtRental->setColor(Palette::blockOffset(15)+1);
+//	_txtRental->setColor(Palette::blockOffset(15)+1);
 	_txtRental->setText(tr("STR_CRAFT_RENTAL"));
 
-	_txtSalaries->setColor(Palette::blockOffset(15)+1);
+//	_txtSalaries->setColor(Palette::blockOffset(15)+1);
 	_txtSalaries->setText(tr("STR_SALARIES"));
 
-	_txtIncome->setColor(Palette::blockOffset(13)+10);
+//	_txtIncome->setColor(Palette::blockOffset(13)+10);
 	std::wostringstream ss;
 	ss << tr("STR_INCOME") << L" " << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
-	_lstCrafts->setColor(Palette::blockOffset(13)+10);
+//	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(4, 124, 62, 43, 56);
 	_lstCrafts->setDot();
 
@@ -156,14 +158,15 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 		}
 	}
 
-	_lstSalaries->setColor(Palette::blockOffset(13)+10);
+//	_lstSalaries->setColor(Palette::blockOffset(13)+10);
 	_lstSalaries->setColumns(4, 124, 62, 43, 56);
 	_lstSalaries->setDot();
 
 	std::wostringstream
 		ss4,
 		ss5,
-		ss6;
+		ss6,
+		ss7;
 
 	ss4 << _base->getSoldiers()->size();
 	_lstSalaries->addRow(
@@ -192,16 +195,17 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 						Text::formatFunding(_base->getTotalScientists()
 											* _game->getRuleset()->getScientistCost()).c_str());
 
-	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
+//	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
 	_lstMaintenance->setColumns(2, 229, 56);
 	_lstMaintenance->setDot();
+	ss7 << L'\x01' << Text::formatFunding(_base->getFacilityMaintenance());
 	_lstMaintenance->addRow(
 						2,
 						tr("STR_BASE_MAINTENANCE").c_str(),
-						Text::formatFunding(_base->getFacilityMaintenance()).c_str());
-	_lstMaintenance->setCellColor(0, 0, Palette::blockOffset(15)+1);
+						ss7.str().c_str());
+//	_lstMaintenance->setCellColor(0, 0, Palette::blockOffset(15)+1); // kL
 
-	_lstTotal->setColor(Palette::blockOffset(13));
+//	_lstTotal->setColor(Palette::blockOffset(13));
 	_lstTotal->setColumns(2, 45, 56);
 	_lstTotal->setDot();
 	_lstTotal->addRow(

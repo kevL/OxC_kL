@@ -61,6 +61,7 @@ private:
 		_curRow,
 		_offset,
 		_sel;
+	Uint8 _ammoColor;
 	double
 		_distance,
 		_storeSize;

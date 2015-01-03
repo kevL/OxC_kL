@@ -56,8 +56,7 @@ struct compareSaveName
 	compareSaveName(bool reverse)
 		:
 			_reverse(reverse)
-			{
-			}
+			{}
 
 	bool operator()(
 			const SaveInfo& a,
@@ -72,7 +71,6 @@ struct compareSaveName
 	}
 };
 
-
 ///
 struct compareSaveTimestamp
 	:
@@ -83,8 +81,7 @@ struct compareSaveTimestamp
 	compareSaveTimestamp(bool reverse)
 		:
 			_reverse(reverse)
-			{
-			}
+			{}
 
 	bool operator()(
 			const SaveInfo& a,
@@ -136,67 +133,67 @@ ListGamesState::ListGamesState(
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", 6);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("loadPalette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtDelete);
-	add(_txtName);
-	add(_txtDate);
-	add(_sortName);
-	add(_sortDate);
-	add(_lstSaves);
-	add(_txtDetails);
-	add(_btnCancel);
+	add(_window, "window", "saveMenus");
+	add(_txtTitle, "text", "saveMenus");
+	add(_txtDelete, "text", "saveMenus");
+	add(_txtName, "text", "saveMenus");
+	add(_txtDate, "text", "saveMenus");
+	add(_sortName, "text", "saveMenus");
+	add(_sortDate, "text", "saveMenus");
+	add(_lstSaves, "list", "saveMenus");
+	add(_txtDetails, "text", "saveMenus");
+	add(_btnCancel, "button", "saveMenus");
 
 //	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
+//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ListGamesState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& ListGamesState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtDelete->setColor(Palette::blockOffset(15)-1);
+//	_txtDelete->setColor(Palette::blockOffset(15)-1);
 	_txtDelete->setAlign(ALIGN_CENTER);
 	_txtDelete->setText(tr("STR_RIGHT_CLICK_TO_DELETE"));
 
-	_txtName->setColor(Palette::blockOffset(15)-1);
+//	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(tr("STR_NAME"));
 
-	_txtDate->setColor(Palette::blockOffset(15)-1);
+//	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	_lstSaves->setColor(Palette::blockOffset(8)+10);
-	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
+//	_lstSaves->setColor(Palette::blockOffset(8)+10);
+//	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
+	_lstSaves->setBackground(_window);
 	_lstSaves->setColumns(3, 188, 60, 29);
 	_lstSaves->setSelectable();
-	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin();
 	_lstSaves->onMouseOver((ActionHandler)& ListGamesState::lstSavesMouseOver);
 	_lstSaves->onMouseOut((ActionHandler)& ListGamesState::lstSavesMouseOut);
 	_lstSaves->onMousePress((ActionHandler)& ListGamesState::lstSavesPress);
 
-	_txtDetails->setColor(Palette::blockOffset(15)-1);
-	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
+//	_txtDetails->setColor(Palette::blockOffset(15)-1);
+//	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtDetails->setWordWrap();
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);
-	_sortName->setColor(Palette::blockOffset(15)-1);
+//	_sortName->setColor(Palette::blockOffset(15)-1);
 	_sortName->onMouseClick((ActionHandler)& ListGamesState::sortNameClick);
 
 	_sortDate->setX(_sortDate->getX() + _txtDate->getTextWidth() + 5);
-	_sortDate->setColor(Palette::blockOffset(15)-1);
+//	_sortDate->setColor(Palette::blockOffset(15)-1);
 	_sortDate->onMouseClick((ActionHandler)& ListGamesState::sortDateClick);
 
 	updateArrows();
@@ -206,8 +203,7 @@ ListGamesState::ListGamesState(
  * dTor.
  */
 ListGamesState::~ListGamesState()
-{
-}
+{}
 
 /**
  * Refreshes the saves list.
@@ -301,11 +297,13 @@ void ListGamesState::sortList(SaveSort order)
 void ListGamesState::updateList()
 {
 	int row = 0;
+	int color = _lstSaves->getSecondaryColor();
 
 	for (std::vector<SaveInfo>::const_iterator
 			i = _saves.begin();
 			i != _saves.end();
-			++i)
+			++i,
+				++row)
 	{
 		_lstSaves->addRow(
 						3,
@@ -315,10 +313,8 @@ void ListGamesState::updateList()
 		if (i->reserved
 			&& _origin != OPT_BATTLESCAPE)
 		{
-			_lstSaves->setRowColor(row, Palette::blockOffset(8)+5);
+			_lstSaves->setRowColor(row, color); //Palette::blockOffset(8)+5);
 		}
-
-		row++;
 	}
 }
 

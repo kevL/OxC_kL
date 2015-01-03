@@ -33,15 +33,14 @@
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
-#include "../Resource/ResourcePack.h"
-
-#include "../Ruleset/RuleManufacture.h"
-#include "../Ruleset/Ruleset.h"
-
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleManufacture.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
@@ -86,29 +85,29 @@ ManufactureState::ManufactureState(
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
 
-	add(_window);
+	add(_window, "window", "manufactureMenu");
 	add(_mini);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtAvailable);
-	add(_txtAllocated);
-	add(_txtSpace);
-	add(_txtFunds);
-	add(_txtItem);
-	add(_txtEngineers);
-	add(_txtProduced);
-	add(_txtCost);
-	add(_txtTimeLeft);
-	add(_lstManufacture);
-	add(_btnNew);
-	add(_btnOk);
+	add(_txtTitle, "text1", "manufactureMenu");
+	add(_txtBaseLabel, "text1", "manufactureMenu");
+	add(_txtAvailable, "text1", "manufactureMenu");
+	add(_txtAllocated, "text1", "manufactureMenu");
+	add(_txtSpace, "text1", "manufactureMenu");
+	add(_txtFunds, "text1", "manufactureMenu");
+	add(_txtItem, "text2", "manufactureMenu");
+	add(_txtEngineers, "text2", "manufactureMenu");
+	add(_txtProduced, "text2", "manufactureMenu");
+	add(_txtCost, "text2", "manufactureMenu");
+	add(_txtTimeLeft, "text2", "manufactureMenu");
+	add(_lstManufacture, "list", "manufactureMenu");
+	add(_btnNew, "button", "manufactureMenu");
+	add(_btnOk, "button", "manufactureMenu");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+6);
+//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
@@ -128,59 +127,59 @@ ManufactureState::ManufactureState(
 					(ActionHandler)& ManufactureState::miniClick,
 					SDL_BUTTON_LEFT);
 
-	_btnNew->setColor(Palette::blockOffset(13)+10);
+//	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)& ManufactureState::btnNewProductionClick);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 						(ActionHandler)& ManufactureState::btnOkClick,
 						Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
+//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
+//	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
 
-	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailable->setColor(Palette::blockOffset(15)+6);
+//	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAllocated->setColor(Palette::blockOffset(15)+6);
-	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAllocated->setColor(Palette::blockOffset(15)+6);
+//	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtSpace->setColor(Palette::blockOffset(15)+6);
-	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
+//	_txtSpace->setColor(Palette::blockOffset(15)+6);
+//	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtFunds->setColor(Palette::blockOffset(15)+6);
-	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
+//	_txtFunds->setColor(Palette::blockOffset(15)+6);
+//	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_txtItem->setColor(Palette::blockOffset(15)+1);
+//	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtEngineers->setColor(Palette::blockOffset(15)+1);
+//	_txtEngineers->setColor(Palette::blockOffset(15)+1);
 	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtProduced->setColor(Palette::blockOffset(15)+1);
+//	_txtProduced->setColor(Palette::blockOffset(15)+1);
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
 	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtCost->setColor(Palette::blockOffset(15)+1);
+//	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
 	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
-	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
+//	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
 	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
-	_lstManufacture->setColor(Palette::blockOffset(13)+10);
-	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
+//	_lstManufacture->setColor(Palette::blockOffset(13)+10);
+//	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
 	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
 	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);

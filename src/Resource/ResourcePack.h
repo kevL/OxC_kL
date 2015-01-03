@@ -23,7 +23,6 @@
 //#include <map>
 //#include <string>
 //#include <vector>
-
 //#include <SDL.h>
 
 
@@ -79,6 +78,8 @@ private:
 				WINDOW_POPUP[3],
 
 				EXPLOSION_OFFSET,
+				UNDERWATER_SMOKE_OFFSET,
+				SMOKE_OFFSET,
 
 				SMALL_EXPLOSION,
 				DOOR_OPEN,
@@ -102,8 +103,11 @@ private:
 				INTERCEPTOR_HIT,
 				INTERCEPTOR_EXPLODE,
 
-				SMOKE_OFFSET,
-				UNDERWATER_SMOKE_OFFSET;
+				GEOSCAPE_CURSOR,
+				BASESCAPE_CURSOR,
+				BATTLESCAPE_CURSOR,
+				UFOPAEDIA_CURSOR,
+				GRAPHS_CURSOR;
 
 
 			/// Create a new resource pack with a folder's contents.
@@ -165,7 +169,11 @@ private:
 					unsigned int depth,
 					unsigned int sound) const;
 
+			///
 			const std::vector<std::vector<Uint8> >* getLUTs() const;
+
+			///
+			bool isMusicPlaying();
 };
 
 }

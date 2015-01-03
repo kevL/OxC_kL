@@ -21,8 +21,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -31,7 +31,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedGame.h"
 
@@ -51,21 +50,19 @@ ResearchRequiredState::ResearchRequiredState(RuleItem* item)
 	_btnOk		= new TextButton(160, 18, 80, 150);
 	_txtTitle	= new Text(288, 80, 16, 50);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
+	add(_window, "window", "geoResearch");
+	add(_btnOk, "button", "geoResearch");
+	add(_txtTitle, "text1", "geoResearch");
 
 	centerAllSurfaces();
 
-	std::string weapon = item->getType();
-	std::string clip = item->getCompatibleAmmo()->front();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ResearchRequiredState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -75,10 +72,12 @@ ResearchRequiredState::ResearchRequiredState(RuleItem* item)
 					(ActionHandler)& ResearchRequiredState::btnOkClick,
 					Options::keyOk);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	const std::string weapon = item->getType();
+	const std::string clip = item->getCompatibleAmmo()->front();
 	_txtTitle->setText(tr("STR_YOU_NEED_TO_RESEARCH_ITEM_TO_PRODUCE_ITEM")
 					   .arg(tr(clip))
 					   .arg(tr(weapon)));

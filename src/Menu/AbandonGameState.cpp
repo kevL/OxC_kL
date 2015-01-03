@@ -25,9 +25,9 @@
 #include "../Engine/Game.h"
 
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-//kL #include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -65,33 +65,36 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin)
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnNo);
-	add(_btnYes);
+	add(_window, "genericWindow", "geoscape");
+	add(_txtTitle, "genericText", "geoscape");
+	add(_btnNo, "genericButton2", "geoscape");
+	add(_btnYes, "genericButton2", "geoscape");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(15)-1);
+//	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& AbandonGameState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& AbandonGameState::btnYesClick,
 					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(15)-1);
+//	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& AbandonGameState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& AbandonGameState::btnNoClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_ABANDON_GAME_QUESTION"));
@@ -104,8 +107,7 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin)
  * dTor.
  */
 AbandonGameState::~AbandonGameState()
-{
-}
+{}
 
 /**
  * Goes back to the Main Menu.

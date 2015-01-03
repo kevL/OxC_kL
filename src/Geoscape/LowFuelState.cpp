@@ -25,8 +25,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -67,40 +67,40 @@ LowFuelState::LowFuelState(
 	_blinkTimer->start();
 
 
-	setPalette("PAL_GEOSCAPE", 4);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("lowFuel")->getElement("palette")->color); //4
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtMessage);
-	add(_btnOk5Secs);
-	add(_btnOk);
+	add(_window, "window", "lowFuel");
+	add(_txtTitle, "text", "lowFuel");
+	add(_txtMessage, "text", "lowFuel");
+	add(_btnOk5Secs, "button", "lowFuel");
+	add(_btnOk, "button", "lowFuel");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+//	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
-	_txtMessage->setColor(Palette::blockOffset(3)+4); //(8)+10);
+//	_txtMessage->setColor(Palette::blockOffset(3)+4); //(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setVisible(false);
 	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
+//	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& LowFuelState::btnOk5SecsClick,
 					Options::keyOk);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
 	_btnOk->onKeyboardPress(

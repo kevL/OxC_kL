@@ -48,10 +48,8 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/BattleItem.h"
@@ -562,13 +560,13 @@ void InventoryState::updateStats()
 		const int
 			weight = unit->getCarriedWeight(_inv->getSelectedItem()),
 			strength = static_cast<int>(Round(
-								static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
+					   static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
 
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(strength));
 		if (weight > strength)
-			_txtWeight->setSecondaryColor(Palette::blockOffset(2)); // +5 gives green border (high contrast)
+			_txtWeight->setSecondaryColor(_game->getRuleset()->getInterface("inventory")->getElement("weight")->color2); //Palette::blockOffset(2)); // +5 gives green border (high contrast)
 		else
-			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
+			_txtWeight->setSecondaryColor(_game->getRuleset()->getInterface("inventory")->getElement("weight")->color); //Palette::blockOffset(3));
 
 
 		const int psiSkill = unit->getBaseStats()->psiSkill;

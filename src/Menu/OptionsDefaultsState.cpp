@@ -21,8 +21,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -56,33 +56,30 @@ OptionsDefaultsState::OptionsDefaultsState(
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", 0);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtTitle);
+	add(_window, "confirmDefaults", "mainMenu");
+	add(_btnYes, "confirmDefaults", "mainMenu");
+	add(_btnNo, "confirmDefaults", "mainMenu");
+	add(_txtTitle, "confirmDefaults", "mainMenu");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(8)+10);
+
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& OptionsDefaultsState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& OptionsDefaultsState::btnYesClick,
 					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& OptionsDefaultsState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& OptionsDefaultsState::btnNoClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
@@ -96,9 +93,7 @@ OptionsDefaultsState::OptionsDefaultsState(
  * dTor.
  */
 OptionsDefaultsState::~OptionsDefaultsState()
-{
-
-}
+{}
 
 /**
  * Restores the default options.

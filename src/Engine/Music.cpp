@@ -37,8 +37,7 @@ namespace OpenXcom
 Music::Music()
 	:
 		_music(NULL)
-{
-}
+{}
 
 /**
  * Deletes the loaded music content.
@@ -154,6 +153,20 @@ void Music::resume()
 			Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
+}
+
+/**
+ * Returns true if music is playing.
+ * @return, true if playing
+ */
+bool Music::isPlaying()
+{
+#ifndef __NO_MUSIC
+	if (Options::mute == false)
+		return (Mix_Playing(-1) != 0);
+#endif
+
+	return false;
 }
 
 }

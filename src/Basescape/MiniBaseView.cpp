@@ -162,38 +162,40 @@ void MiniBaseView::draw()
 					fac != base->getFacilities()->end();
 					++fac)
 			{
-				Uint8 pal = 2;
+				Uint8 colorBlock;
 				if ((*fac)->getBuildTime() == 0)
-					pal = 3;
+					colorBlock = _green;
+				else
+					colorBlock = _red;
 
 				rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
 				rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
 				rect.w = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
 				rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
-				drawRect(&rect, Palette::blockOffset(pal)+3);
+				drawRect(&rect, colorBlock+3);
 
 				++rect.x;
 				++rect.y;
 				--rect.w;
 				--rect.h;
-				drawRect(&rect, Palette::blockOffset(pal)+5);
+				drawRect(&rect, colorBlock+5);
 
 				--rect.x;
 				--rect.y;
-				drawRect(&rect, Palette::blockOffset(pal)+2);
+				drawRect(&rect, colorBlock+2);
 
 				++rect.x;
 				++rect.y;
 				--rect.w;
 				--rect.h;
-				drawRect(&rect, Palette::blockOffset(pal)+3);
+				drawRect(&rect, colorBlock+3);
 
 				--rect.x;
 				--rect.y;
 				setPixelColor(
 							rect.x,
 							rect.y,
-							Palette::blockOffset(pal)+1);
+							colorBlock+1);
 			}
 			unlock();
 
@@ -291,6 +293,22 @@ void MiniBaseView::mouseOver(Action* action, State* state)
 	if (_hoverBase > 8) _hoverBase = 8;
 
 	InteractiveSurface::mouseOver(action, state);
+}
+
+/**
+ *
+ */
+void MiniBaseView::setColor(Uint8 color)
+{
+	_green = color;
+}
+
+/**
+ *
+ */
+void MiniBaseView::setSecondaryColor(Uint8 color)
+{
+	_red = color;
 }
 
 /**

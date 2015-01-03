@@ -24,7 +24,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 
@@ -66,8 +66,7 @@ PlaceStartFacilityState::PlaceStartFacilityState(
  * dTor.
  */
 PlaceStartFacilityState::~PlaceStartFacilityState()
-{
-}
+{}
 
 /**
  * Processes clicking on facilities.
@@ -81,9 +80,9 @@ void PlaceStartFacilityState::viewClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											tr("STR_CANNOT_BUILD_HERE"),
 											_palette,
-											Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
 											"BACK01.SCR",
-											6));
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
 	}
 	else
 	{

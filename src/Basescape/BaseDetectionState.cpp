@@ -19,12 +19,12 @@
 
 #include "BaseDetectionState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -86,6 +86,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -121,10 +122,10 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	_txtTimePeriod->setAlign(ALIGN_CENTER);
 	_txtTimePeriod->setText(tr("STR_PER10MIN"));
 
+	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 	int
 		facQty = 0,
-		shields = 0,
-		diff = 0;
+		shields = 0;
 
 	std::vector<BaseFacility*>* facs = _base->getFacilities();
 	for (std::vector<BaseFacility*>::const_iterator
@@ -134,18 +135,17 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			facQty++;
+			++facQty;
 
 			if ((*i)->getRules()->isMindShield())
-				shields++;
+				++shields;
 		}
 	}
 
 	facQty	= facQty / 6 + 9;
 	shields	= shields * 2 + 1;
-	diff	= static_cast<int>(_game->getSavedGame()->getDifficulty());
+	const int detchance = facQty / shields + diff;
 
-	int detchance = facQty / shields + diff;
 
 	std::wostringstream
 		val1,
@@ -177,8 +177,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
  * dTor.
  */
 BaseDetectionState::~BaseDetectionState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

@@ -19,17 +19,16 @@
 
 #include "TestState.h"
 
-#include <fstream>
-#include <iostream>
+//#include <fstream>
+//#include <iostream>
+//#include <SDL.h>
 
-#include <SDL.h>
-
-#include "../Engine/Exception.h"
-#include "../Engine/Font.h"
+//#include "../Engine/Exception.h"
+//#include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -74,6 +73,7 @@ TestState::TestState()
 	add(_comboBox);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
@@ -130,8 +130,7 @@ TestState::TestState()
  * dTor.
  */
 TestState::~TestState()
-{
-}
+{}
 
 /**
  *

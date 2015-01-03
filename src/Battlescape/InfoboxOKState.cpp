@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/Frame.h"
@@ -54,7 +54,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 
 	add(_frame, "infoBoxOK", "battlescape");
 	add(_txtTitle, "infoBoxOK", "battlescape");
-	add(_btnOk, "infoBoxOK", "battlescape");
+	add(_btnOk, "infoBoxOKButton", "battlescape");
 
 	centerAllSurfaces();
 
@@ -90,8 +90,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
  * dTor.
  */
 InfoboxOKState::~InfoboxOKState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

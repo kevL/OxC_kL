@@ -58,23 +58,25 @@ PromotionsState::PromotionsState()
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("promotions")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtName);
-	add(_txtRank);
-	add(_txtBase);
-	add(_lstSoldiers);
-	add(_btnOk);
+	add(_window, "window", "promotions");
+	add(_txtTitle, "heading", "promotions");
+	add(_txtName, "text", "promotions");
+	add(_txtRank, "text", "promotions");
+	add(_txtBase, "text", "promotions");
+	add(_lstSoldiers, "list", "promotions");
+	add(_btnOk, "button", "promotions");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
+//	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PromotionsState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -84,24 +86,24 @@ PromotionsState::PromotionsState()
 					(ActionHandler)& PromotionsState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_PROMOTIONS"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_txtName->setColor(Palette::blockOffset(15)-1);
+//	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(tr("STR_NAME"));
 
-	_txtRank->setColor(Palette::blockOffset(15)-1);
+//	_txtRank->setColor(Palette::blockOffset(15)-1);
 	_txtRank->setText(tr("STR_NEW_RANK"));
 
-	_txtBase->setColor(Palette::blockOffset(15)-1);
+//	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setText(tr("STR_BASE"));
 
-	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
+//	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(3, 126, 70, 81);
-//	_lstSoldiers->setSelectable();
-//	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
 
 	for (std::vector<Base*>::const_iterator

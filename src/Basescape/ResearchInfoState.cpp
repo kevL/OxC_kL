@@ -38,7 +38,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -115,49 +114,52 @@ void ResearchInfoState::buildUi()
 
 //	_srfScientists			= new InteractiveSurface(230, 140, 45, 30);
 
-	setPalette("PAL_BASESCAPE", 1);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtAvailableScientist);
-	add(_txtAvailableSpace);
-	add(_txtAllocatedScientist);
-	add(_txtMore);
-	add(_txtLess);
-	add(_btnMore);
-	add(_btnLess);
-	add(_btnCancel);
-	add(_btnOk);
+	add(_window, "window", "allocateResearch");
+	add(_txtTitle, "text", "allocateResearch");
+	add(_txtAvailableScientist, "text", "allocateResearch");
+	add(_txtAvailableSpace, "text", "allocateResearch");
+	add(_txtAllocatedScientist, "text", "allocateResearch");
+	add(_txtMore, "text", "allocateResearch");
+	add(_txtLess, "text", "allocateResearch");
+	add(_btnMore, "button1", "allocateResearch");
+	add(_btnLess, "button1", "allocateResearch");
+	add(_btnCancel, "button2", "allocateResearch");
+	add(_btnOk, "button2", "allocateResearch");
 //	add(_srfScientists);
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(13)+5);
+
+//	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+//	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 	if (_rule != NULL)
 		_txtTitle->setText(tr(_rule->getName()));
 	else
 		_txtTitle->setText(tr(_project->getRules()->getName()));
 
-	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
-	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
+//	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAvailableSpace->setColor(Palette::blockOffset(13)+5);
-	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailableSpace->setColor(Palette::blockOffset(13)+5);
+//	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtAllocatedScientist->setColor(Palette::blockOffset(13)+5);
-	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAllocatedScientist->setColor(Palette::blockOffset(13)+5);
+//	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocatedScientist->setBig();
 
-	_txtMore->setColor(Palette::blockOffset(13)+5);
+//	_txtMore->setColor(Palette::blockOffset(13)+5);
 	_txtMore->setText(tr("STR_INCREASE"));
-	_txtLess->setColor(Palette::blockOffset(13)+5);
-	_txtLess->setText(tr("STR_DECREASE"));
-
 	_txtMore->setBig();
+
+//	_txtLess->setColor(Palette::blockOffset(13)+5);
+	_txtLess->setText(tr("STR_DECREASE"));
 	_txtLess->setBig();
 
 	if (_rule != NULL)
@@ -174,12 +176,12 @@ void ResearchInfoState::buildUi()
 
 	setAssignedScientist();
 
-	_btnMore->setColor(Palette::blockOffset(13)+5);
+//	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)& ResearchInfoState::moreRelease);
 	_btnMore->onMouseClick((ActionHandler)& ResearchInfoState::moreClick, 0);
 
-	_btnLess->setColor(Palette::blockOffset(13)+5);
+//	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnLess->onMousePress((ActionHandler)& ResearchInfoState::lessPress);
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
@@ -190,7 +192,7 @@ void ResearchInfoState::buildUi()
 	_timerLess = new Timer(250);
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
+//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	if (_rule != NULL)
 	{
 		_btnOk->setText(tr("STR_START_PROJECT"));
@@ -211,7 +213,7 @@ void ResearchInfoState::buildUi()
 	}
 	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchInfoState::btnOkClick,

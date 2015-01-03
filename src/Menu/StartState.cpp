@@ -20,6 +20,8 @@
 #include "StartState.h"
 
 //#include "../version.h"
+//#include <SDL_mixer.h>
+//#include <SDL_thread.h>
 
 #include "ErrorMessageState.h"
 #include "IntroState.h"
@@ -45,11 +47,6 @@
 #include "../Interface/Text.h"
 
 #include "../Resource/XcomResourcePack.h"
-
-#include "../Ruleset/Ruleset.h"
-
-//#include <SDL_mixer.h>
-//#include <SDL_thread.h>
 
 
 namespace OpenXcom
@@ -252,7 +249,7 @@ void StartState::think()
 
 			Log(LOG_INFO) << "OpenXcom started!";
 			if (Options::reload == false
-				&& Options::playIntro)
+				&& Options::playIntro == true)
 			{
 				const bool letterbox = Options::keepAspectRatio;
 				Options::keepAspectRatio = true;
@@ -297,9 +294,9 @@ void StartState::think()
 					_game->pushState(new ErrorMessageState(
 														error.str(),
 														state->getPalette(),
-														Palette::blockOffset(8)+10,
+														_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10,
 														"BACK01.SCR",
-														6));
+														_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
 				}
 
 				Options::reload = false;
@@ -307,10 +304,10 @@ void StartState::think()
 
 			_game->getCursor()->setVisible();
 			_game->getFpsCounter()->setVisible(Options::fpsCounter);
-		break;
+//		break;
 
-		default:
-		break;
+//		default:
+//		break;
 	}
 }
 

@@ -29,8 +29,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -42,7 +42,6 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -81,31 +80,32 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_btnOk5Secs		= new TextButton(139, 16, 16, 169);
 	_btnOk			= new TextButton(139, 16, 165, 169);
 
-	setPalette("PAL_GEOSCAPE", 6);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtDestination);
-	add(_lstTransfers);
-//	add(_btnGotoBase);
-	add(_btnOk5Secs);
-	add(_btnOk);
+	add(_window, "window", "itemsArriving");
+	add(_txtTitle, "text1", "itemsArriving");
+	add(_txtItem, "text1", "itemsArriving");
+	add(_txtQuantity, "text1", "itemsArriving");
+	add(_txtDestination, "text1", "itemsArriving");
+	add(_lstTransfers, "text2", "itemsArriving");
+//	add(_btnGotoBase, "button", "itemsArriving");
+	add(_btnOk5Secs, "button", "itemsArriving");
+	add(_btnOk, "button", "itemsArriving");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-/*	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+/*
+//	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
 					Options::keyOk); */
 
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
+//	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ItemsArrivingState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
@@ -115,32 +115,32 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
 					Options::keyOk);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_ITEMS_ARRIVING"));
 
-	_txtItem->setColor(Palette::blockOffset(8)+5);
+//	_txtItem->setColor(Palette::blockOffset(8)+5);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(8)+5);
+//	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtDestination->setColor(Palette::blockOffset(8)+5);
+//	_txtDestination->setColor(Palette::blockOffset(8)+5);
 	_txtDestination->setText(tr("STR_DESTINATION_UC"));
 
-	_lstTransfers->setColor(Palette::blockOffset(8)+10);
-	_lstTransfers->setArrowColor(Palette::blockOffset(8)+5);
+//	_lstTransfers->setColor(Palette::blockOffset(8)+10);
+//	_lstTransfers->setArrowColor(Palette::blockOffset(8)+5);
 	_lstTransfers->setColumns(3, 144, 53, 80);
-	_lstTransfers->setSelectable();
 	_lstTransfers->setBackground(_window);
+	_lstTransfers->setSelectable();
 	_lstTransfers->setMargin();
 	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress);
 
@@ -251,8 +251,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
  * dTor.
  */
 ItemsArrivingState::~ItemsArrivingState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

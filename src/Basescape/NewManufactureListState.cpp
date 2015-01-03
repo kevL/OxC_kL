@@ -39,7 +39,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleManufacture.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
@@ -72,41 +71,44 @@ NewManufactureListState::NewManufactureListState(
 
 	_btnCancel		= new TextButton(288, 16, 16, 154);
 
-	setPalette("PAL_BASESCAPE", 6);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtTitle);
-//	add(_cbxCategory);
-	add(_txtItem);
-	add(_txtCategory);
-	add(_lstManufacture);
-	add(_btnCancel);
+	add(_window, "window", "selectNewManufacture");
+	add(_txtTitle, "text", "selectNewManufacture");
+//	add(_cbxCategory, "catBox", "selectNewManufacture");
+	add(_txtItem, "text", "selectNewManufacture");
+	add(_txtCategory, "text", "selectNewManufacture");
+	add(_lstManufacture, "list", "selectNewManufacture");
+	add(_btnCancel, "button", "selectNewManufacture");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)+1);
+
+//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(15)+1);
+//	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setText(tr("STR_PRODUCTION_ITEMS"));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtItem->setColor(Palette::blockOffset(15)+1);
+//	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtCategory->setColor(Palette::blockOffset(15)+1);
+//	_txtCategory->setColor(Palette::blockOffset(15)+1);
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
-	_lstManufacture->setColumns(2, 148, 129);
-	_lstManufacture->setSelectable();
+//	_lstManufacture->setColor(Palette::blockOffset(13));
+//	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
 	_lstManufacture->setBackground(_window);
+	_lstManufacture->setSelectable();
+	_lstManufacture->setColumns(2, 148, 129);
 	_lstManufacture->setMargin(16);
-	_lstManufacture->setColor(Palette::blockOffset(13));
-	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
+//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -134,7 +136,6 @@ NewManufactureListState::NewManufactureListState(
 			if ((*it)->getCategory().c_str() == _catStrings[x])
 			{
 				addCategory = false;
-
 				break;
 			}
 		}
@@ -143,7 +144,7 @@ NewManufactureListState::NewManufactureListState(
 			_catStrings.push_back((*it)->getCategory().c_str());
 	}
 
-	_cbxCategory->setColor(Palette::blockOffset(15)+1);
+//	_cbxCategory->setColor(Palette::blockOffset(15)+1);
 	_cbxCategory->setOptions(_catStrings);
 	_cbxCategory->onChange((ActionHandler)& NewManufactureListState::cbxCategoryChange); */
 }
@@ -181,7 +182,6 @@ void NewManufactureListState::lstProdClick(Action*)
 		if ((*it)->getName().c_str() == _displayedStrings[_lstManufacture->getSelectedRow()])
 		{
 			rule = *it;
-
 			break;
 		}
 	} */
@@ -193,25 +193,21 @@ void NewManufactureListState::lstProdClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
 											_palette,
-											Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
 											"BACK17.SCR",
-											6));
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
 	}
 	else if (rule->getRequiredSpace() > _base->getFreeWorkshops())
-	{
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NOT_ENOUGH_WORK_SPACE"),
 											_palette,
-											Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
 											"BACK17.SCR",
-											6));
-	}
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
 	else
-	{
 		_game->pushState(new ManufactureStartState(
 												_base,
 												rule));
-	}
 }
 
 /**

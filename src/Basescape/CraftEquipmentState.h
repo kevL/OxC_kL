@@ -49,6 +49,7 @@ private:
 	size_t
 		_craftID,
 		_sel;
+	Uint8 _ammoColor;
 
 	Base* _base;
 	Text

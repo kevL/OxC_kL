@@ -22,21 +22,21 @@
 #include "GeoscapeState.h"
 #include "InterceptState.h"
 
-#include "../Engine/Action.h" // kL
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/TextEdit.h" // kL
+#include "../Interface/TextEdit.h"
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Savegame/AlienBase.h" // kL
-#include "../Savegame/SavedGame.h" // kL
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Target.h"
 
 
@@ -45,7 +45,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Target Info window.
- * @param target	- pointer to the target to show info from
+ * @param target	- pointer to a Target to show info about
  * @param globe		- pointer to Globe
  * @param state		- pointer to GeoscapeState
  */
@@ -59,7 +59,6 @@ TargetInfoState::TargetInfoState(
 		_state(state),
 		_ab(NULL)
 {
-	//Log(LOG_INFO) << "Create TargetInfoState";
 	_screen = false;
 
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
@@ -73,39 +72,39 @@ TargetInfoState::TargetInfoState(
 	_btnIntercept	= new TextButton(160, 16, 48, 119);
 	_btnOk			= new TextButton(160, 16, 48, 137);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("targetInfo")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_edtTarget); // kL
-	add(_txtTargetted);
-	add(_txtFollowers);
-	add(_btnIntercept);
-	add(_btnOk);
+	add(_window, "window", "targetInfo");
+	add(_txtTitle, "text", "targetInfo");
+	add(_edtTarget, "text", "targetInfo");
+	add(_txtTargetted, "text", "targetInfo");
+	add(_txtFollowers, "text", "targetInfo");
+	add(_btnIntercept, "button", "targetInfo");
+	add(_btnOk, "button", "targetInfo");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(8)+10);
+
+//	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& TargetInfoState::btnInterceptClick);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-//kL	_btnOk->setText(tr("STR_CANCEL_UC"));
-	_btnOk->setText(tr("STR_OK")); // kL
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TargetInfoState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+//	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-//kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-//kL	_txtTitle->setWordWrap();
-	_txtTitle->setText(_target->getName(_game->getLanguage()));
+	std::wostringstream ss;
+	ss << L'\x01' << _target->getName(_game->getLanguage());
+	_txtTitle->setText(ss.str().c_str());
 
 	_edtTarget->setVisible(false);
 	for (std::vector<AlienBase*>::const_iterator
@@ -113,14 +112,14 @@ TargetInfoState::TargetInfoState(
 			ab != _game->getSavedGame()->getAlienBases()->end();
 			++ab)
 	{
-		if (_target->getName(_game->getLanguage()) == (*ab)->getName(_game->getLanguage()))
+		if (_target->getName(_game->getLanguage()) == (*ab)->getName(_game->getLanguage())) // should use dynamic_cast on Pointers, w/out name needed
 		{
 			_ab = *ab;
 
-			std::wstring edit = Language::utf8ToWstr((*ab)->getLabel());
+			const std::wstring edit = Language::utf8ToWstr((*ab)->getLabel());
 			_edtTarget->setText(edit);
 
-			_edtTarget->setColor(Palette::blockOffset(15)+1);
+//			_edtTarget->setColor(Palette::blockOffset(15)+1);
 			_edtTarget->onChange((ActionHandler)& TargetInfoState::edtTargetChange);
 
 			_edtTarget->setVisible();
@@ -131,28 +130,28 @@ TargetInfoState::TargetInfoState(
 
 	bool targeted = false;
 
-	_txtFollowers->setColor(Palette::blockOffset(15)+5);
+//	_txtFollowers->setColor(Palette::blockOffset(15)+5);
 	_txtFollowers->setAlign(ALIGN_CENTER);
-	std::wostringstream ss;
-	for (std::vector<Target*>::iterator
+	ss.str(L"");
+	for (std::vector<Target*>::const_iterator
 			i = _target->getFollowers()->begin();
 			i != _target->getFollowers()->end();
 			++i)
 	{
 		ss << (*i)->getName(_game->getLanguage()) << L'\n';
 
-		if (!targeted)
+		if (targeted == false)
 		{
 			targeted = true;
 
-			_txtTargetted->setColor(Palette::blockOffset(15)-1);
+//			_txtTargetted->setColor(Palette::blockOffset(15)-1);
 			_txtTargetted->setAlign(ALIGN_CENTER);
 			_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 		}
 	}
 	_txtFollowers->setText(ss.str());
 
-	if (!targeted)
+	if (targeted == false)
 		_txtTargetted->setVisible(false);
 
 	//Log(LOG_INFO) << "Create TargetInfoState EXIT";
@@ -162,8 +161,7 @@ TargetInfoState::TargetInfoState(
  * dTor.
  */
 TargetInfoState::~TargetInfoState()
-{
-}
+{}
 
 /**
  * Changes the base name.

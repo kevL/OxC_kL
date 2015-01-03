@@ -74,8 +74,8 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(2, 200, 77);
-//	_lstSoldiers->setSelectable();
-//	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);

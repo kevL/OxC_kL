@@ -92,25 +92,27 @@ MonthlyReportState::MonthlyReportState(
 	_txtFailure	= new Text(288, 160, 16, 10);
 	_btnBigOk	= new TextButton(120, 18, 100, 175);
 
-	setPalette("PAL_GEOSCAPE", 3);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color); //3
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtMonth);
-	add(_txtRating);
-	add(_txtChange);
-	add(_txtFailure);
-	add(_txtDesc);
-	add(_btnOk);
-	add(_btnBigOk);
+	add(_window, "window", "monthlyReport");
+	add(_txtTitle, "text1", "monthlyReport");
+	add(_txtMonth, "text1", "monthlyReport");
+	add(_txtRating, "text1", "monthlyReport");
+	add(_txtChange, "text1", "monthlyReport");
+	add(_txtFailure, "text2", "monthlyReport");
+	add(_txtDesc, "text2", "monthlyReport");
+	add(_btnOk, "button", "monthlyReport");
+	add(_btnBigOk, "button", "monthlyReport");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+10);
+//	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -120,7 +122,7 @@ MonthlyReportState::MonthlyReportState(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
 					Options::keyCancel);
 
-	_btnBigOk->setColor(Palette::blockOffset(8)+10);
+//	_btnBigOk->setColor(Palette::blockOffset(8)+10);
 	_btnBigOk->setText(tr("STR_OK"));
 	_btnBigOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
 	_btnBigOk->onKeyboardPress(
@@ -131,12 +133,12 @@ MonthlyReportState::MonthlyReportState(
 					Options::keyCancel);
 	_btnBigOk->setVisible(false);
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 
-	_txtFailure->setColor(Palette::blockOffset(8)+10);
+//	_txtFailure->setColor(Palette::blockOffset(8)+10);
 	_txtFailure->setBig();
 	_txtFailure->setAlign(ALIGN_CENTER);
 	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
@@ -176,8 +178,8 @@ MonthlyReportState::MonthlyReportState(
 		default: m = "";
 	}
 
-	_txtMonth->setColor(Palette::blockOffset(15)-1);
-	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
+//	_txtMonth->setColor(Palette::blockOffset(15)-1);
+//	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
 
 	const int
@@ -208,11 +210,11 @@ MonthlyReportState::MonthlyReportState(
 	std::wostringstream ss3;
 	if (_fundingDiff > 0) ss3 << '+';
 	ss3 << Text::formatFunding(_fundingDiff);
-	_txtChange->setColor(Palette::blockOffset(15)-1);
-	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
+//	_txtChange->setColor(Palette::blockOffset(15)-1);
+//	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
 
-	_txtDesc->setColor(Palette::blockOffset(8)+10);
+//	_txtDesc->setColor(Palette::blockOffset(8)+10);
 	_txtDesc->setWordWrap();
 
 	// calculate satisfaction
@@ -304,8 +306,7 @@ MonthlyReportState::MonthlyReportState(
  * dTor.
  */
 MonthlyReportState::~MonthlyReportState()
-{
-}
+{}
 
 /**
  * Update all our activity counters, gather all our scores,
@@ -454,7 +455,7 @@ void MonthlyReportState::btnOkClick(Action*)
 		}
 		else
 		{
-			_window->setColor(Palette::blockOffset(8)+10);
+			_window->setColor(_game->getRuleset()->getInterface("monthlyReport")->getElement("window")->color2); //Palette::blockOffset(8)+10);
 
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);

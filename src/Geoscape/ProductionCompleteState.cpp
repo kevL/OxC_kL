@@ -19,14 +19,14 @@
 
 #include "ProductionCompleteState.h"
 
-#include <assert.h>
+//#include <assert.h>
 
 #include "GeoscapeState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -71,20 +71,22 @@ ProductionCompleteState::ProductionCompleteState(
 	_btnOk5Secs		= new TextButton(72, 16, 124, 154);
 	_btnOk			= new TextButton(72, 16, 200, 154);
 
-	setPalette("PAL_GEOSCAPE", 6);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("geoManufacture")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_txtMessage);
-	add(_btnGotoBase);
-	add(_btnOk5Secs);
-	add(_btnOk);
+	add(_window, "window", "geoManufacture");
+	add(_txtMessage, "text1", "geoManufacture");
+	add(_btnGotoBase, "button", "geoManufacture");
+	add(_btnOk5Secs, "button", "geoManufacture");
+	add(_btnOk, "button", "geoManufacture");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 //myk002	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setText(tr(showGotoBaseButton? "STR_OK": "STR_MORE")); // myk002
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
@@ -92,14 +94,14 @@ ProductionCompleteState::ProductionCompleteState(
 					(ActionHandler)& ProductionCompleteState::btnOkClick,
 					Options::keyCancel);
 
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
+//	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ProductionCompleteState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnOk5SecsClick,
 					Options::keyGeoSpeed1);
 
-	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+//	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 //	if (_endType == PROGRESS_CONSTRUCTION)			// <- construct facility done.
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 //	else //if (_endType != PROGRESS_CONSTRUCTION)	// <- kL_note: i inverted those
@@ -110,7 +112,7 @@ ProductionCompleteState::ProductionCompleteState(
 					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,
 					Options::keyOk);
 
-	_txtMessage->setColor(Palette::blockOffset(15)-1);
+//	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
@@ -138,7 +140,6 @@ ProductionCompleteState::ProductionCompleteState(
 
 		default:
 			assert(false);
-		break;
 	}
 
 	_txtMessage->setText(str);
@@ -148,8 +149,7 @@ ProductionCompleteState::ProductionCompleteState(
  * dTor.
  */
 ProductionCompleteState::~ProductionCompleteState()
-{
-}
+{}
 
 /**
  * Closes the window.
@@ -167,7 +167,6 @@ void ProductionCompleteState::btnOkClick(Action*)
 void ProductionCompleteState::btnOk5SecsClick(Action*)
 {
 	_state->timerReset();
-
 	_game->popState();
 }
 
@@ -178,7 +177,6 @@ void ProductionCompleteState::btnOk5SecsClick(Action*)
 void ProductionCompleteState::btnGotoBaseClick(Action*)
 {
 	_state->timerReset();
-
 	_game->popState();
 
 /*	if (_endType != PROGRESS_CONSTRUCTION)

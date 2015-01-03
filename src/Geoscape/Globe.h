@@ -199,8 +199,11 @@ private:
 
 	public:
 		static Uint8
-			oceanColor1,
-			oceanColor2;
+			COUNTRY_LABEL_COLOR,
+			LINE_COLOR,
+			CITY_LABEL_COLOR,
+			BASE_LABEL_COLOR,
+			OCEAN_COLOR;
 
 		/// Creates a new globe at the specified position and size.
 		Globe(

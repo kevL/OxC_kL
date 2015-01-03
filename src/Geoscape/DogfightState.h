@@ -72,6 +72,7 @@ private:
 		_endDogfight,
 		_animatingHit;
 	int
+		_color[6], // craft min/max, radar min/max, damage min/max
 		_diff,
 		_timeout,
 		_dist,

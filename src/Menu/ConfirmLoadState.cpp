@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -58,33 +58,34 @@ ConfirmLoadState::ConfirmLoadState(
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", 6);
+		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color); //6
 
-	add(_window);
-	add(_btnYes);
-	add(_btnNo);
-	add(_txtText);
+	add(_window, "confirmLoad", "saveMenus");
+	add(_btnYes, "confirmLoad", "saveMenus");
+	add(_btnNo, "confirmLoad", "saveMenus");
+	add(_txtText, "confirmLoad", "saveMenus");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(15)-1);
+//	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& ConfirmLoadState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmLoadState::btnYesClick,
 					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(15)-1);
+//	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmLoadState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& ConfirmLoadState::btnNoClick,
 					Options::keyCancel);
 
-	_txtText->setColor(Palette::blockOffset(15)-1);
+//	_txtText->setColor(Palette::blockOffset(15)-1);
 	_txtText->setAlign(ALIGN_CENTER);
 	_txtText->setBig();
 	_txtText->setWordWrap();
@@ -98,8 +99,7 @@ ConfirmLoadState::ConfirmLoadState(
  * Cleans up the confirmation state.
  */
 ConfirmLoadState::~ConfirmLoadState()
-{
-}
+{}
 
 /**
  * Proceed to load the save.

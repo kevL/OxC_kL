@@ -41,8 +41,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
@@ -111,28 +111,28 @@ BasescapeState::BasescapeState(
 
 	setPalette("PAL_BASESCAPE");
 
-	add(_view);
-	add(_mini);
+	add(_view, "baseView", "basescape");
+	add(_mini, "miniBase", "basescape");
 
-	add(_txtFacility);
+	add(_txtFacility, "text3", "basescape");
 
-	add(_edtBase);
-	add(_txtRegion);
-	add(_txtFunds);
+	add(_edtBase, "text1", "basescape");
+	add(_txtRegion, "text2", "basescape");
+	add(_txtFunds, "text3", "basescape");
 
-	add(_btnBaseInfo);
-	add(_btnSoldiers);
-	add(_btnCrafts);
-	add(_btnAliens);
-	add(_btnResearch);
-	add(_btnManufacture);
-	add(_btnPurchase);
-	add(_btnSell);
-	add(_btnTransfer);
-	add(_btnIncTrans);
-	add(_btnFacilities);
-	add(_btnGeoscape);
-//	add(_btnNewBase);
+	add(_btnBaseInfo, "button", "basescape");
+	add(_btnSoldiers, "button", "basescape");
+	add(_btnCrafts, "button", "basescape");
+	add(_btnAliens, "button", "basescape");
+	add(_btnResearch, "button", "basescape");
+	add(_btnManufacture, "button", "basescape");
+	add(_btnPurchase, "button", "basescape");
+	add(_btnSell, "button", "basescape");
+	add(_btnTransfer, "button", "basescape");
+	add(_btnIncTrans, "button", "basescape");
+	add(_btnFacilities, "button", "basescape");
+	add(_btnGeoscape, "button", "basescape");
+//	add(_btnNewBase, "button", "basescape");
 
 	centerAllSurfaces();
 
@@ -160,62 +160,62 @@ BasescapeState::BasescapeState(
 	_mini->onMouseOver((ActionHandler)& BasescapeState::viewMouseOver);
 	_mini->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
 
-	_txtFacility->setColor(Palette::blockOffset(13)+10);
+//	_txtFacility->setColor(Palette::blockOffset(13)+10);
 
-	_edtBase->setColor(Palette::blockOffset(15)+1);
+//	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)& BasescapeState::edtBaseChange);
 
-	_txtRegion->setColor(Palette::blockOffset(15)+6);
+//	_txtRegion->setColor(Palette::blockOffset(15)+6);
 	_txtRegion->setAlign(ALIGN_RIGHT);
 
-	_txtFunds->setColor(Palette::blockOffset(13)+10);
+//	_txtFunds->setColor(Palette::blockOffset(13)+10);
 
-	_btnBaseInfo->setColor(Palette::blockOffset(13)+5);
+//	_btnBaseInfo->setColor(Palette::blockOffset(13)+5);
 	_btnBaseInfo->setText(tr("STR_BASE_INFORMATION"));
 	_btnBaseInfo->onMouseClick((ActionHandler)& BasescapeState::btnBaseInfoClick);
 
-	_btnSoldiers->setColor(Palette::blockOffset(13)+5);
+//	_btnSoldiers->setColor(Palette::blockOffset(13)+5);
 	_btnSoldiers->setText(tr("STR_SOLDIERS_UC"));
 	_btnSoldiers->onMouseClick((ActionHandler)& BasescapeState::btnSoldiersClick);
 
-	_btnCrafts->setColor(Palette::blockOffset(13)+5);
+//	_btnCrafts->setColor(Palette::blockOffset(13)+5);
 	_btnCrafts->setText(tr("STR_EQUIP_CRAFT"));
 	_btnCrafts->onMouseClick((ActionHandler)& BasescapeState::btnCraftsClick);
 
-	_btnAliens->setColor(Palette::blockOffset(13)+5);
+//	_btnAliens->setColor(Palette::blockOffset(13)+5);
 	_btnAliens->setText(tr("STR_ALIENS"));
 	_btnAliens->onMouseClick((ActionHandler)& BasescapeState::btnAliens);
 
-	_btnResearch->setColor(Palette::blockOffset(13)+5);
+//	_btnResearch->setColor(Palette::blockOffset(13)+5);
 	_btnResearch->setText(tr("STR_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)& BasescapeState::btnResearchClick);
 
-	_btnManufacture->setColor(Palette::blockOffset(13)+5);
+//	_btnManufacture->setColor(Palette::blockOffset(13)+5);
 	_btnManufacture->setText(tr("STR_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)& BasescapeState::btnManufactureClick);
 
-	_btnPurchase->setColor(Palette::blockOffset(13)+5);
+//	_btnPurchase->setColor(Palette::blockOffset(13)+5);
 	_btnPurchase->setText(tr("STR_PURCHASE_RECRUIT"));
 	_btnPurchase->onMouseClick((ActionHandler)& BasescapeState::btnPurchaseClick);
 
-	_btnSell->setColor(Palette::blockOffset(13)+5);
+//	_btnSell->setColor(Palette::blockOffset(13)+5);
 	_btnSell->setText(tr("STR_SELL_SACK_UC"));
 	_btnSell->onMouseClick((ActionHandler)& BasescapeState::btnSellClick);
 
-	_btnTransfer->setColor(Palette::blockOffset(13)+5);
+//	_btnTransfer->setColor(Palette::blockOffset(13)+5);
 	_btnTransfer->setText(tr("STR_TRANSFER_UC"));
 	_btnTransfer->onMouseClick((ActionHandler)& BasescapeState::btnTransferClick);
 
-	_btnIncTrans->setColor(Palette::blockOffset(13)+5);
+//	_btnIncTrans->setColor(Palette::blockOffset(13)+5);
 	_btnIncTrans->setText(tr("STR_TRANSIT_LC"));
 	_btnIncTrans->onMouseClick((ActionHandler)& BasescapeState::btnIncTransClick);
 
-	_btnFacilities->setColor(Palette::blockOffset(13)+5);
+//	_btnFacilities->setColor(Palette::blockOffset(13)+5);
 	_btnFacilities->setText(tr("STR_BUILD_FACILITIES"));
 	_btnFacilities->onMouseClick((ActionHandler)& BasescapeState::btnFacilitiesClick);
 
-	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
+//	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMouseClick((ActionHandler)& BasescapeState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress(
@@ -680,16 +680,16 @@ void BasescapeState::viewRightClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												tr("STR_FACILITY_IN_USE"),
 												_palette,
-												Palette::blockOffset(15)+1,
+												_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1
 												"BACK13.SCR",
-												6));
+												_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
 		else if (_base->getDisconnectedFacilities(fac).empty() == false) // would base become disconnected...
 			_game->pushState(new ErrorMessageState(
 												tr("STR_CANNOT_DISMANTLE_FACILITY"),
 												_palette,
-												Palette::blockOffset(15)+1,
+												_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1
 												"BACK13.SCR",
-												6));
+												_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
 		else
 			_game->pushState(new DismantleFacilityState(
 													_base,

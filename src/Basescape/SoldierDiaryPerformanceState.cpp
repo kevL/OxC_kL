@@ -288,22 +288,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstLocation->setColor(Palette::blockOffset(13));
 	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
 	_lstLocation->setColumns(2, 80, 12);
-	_lstLocation->setBackground(_window);
+//	_lstLocation->setBackground(_window);
 
 	_lstType->setColor(Palette::blockOffset(13));
 	_lstType->setArrowColor(Palette::blockOffset(15)+1);
 	_lstType->setColumns(2, 100, 14);
-	_lstType->setBackground(_window);
+//	_lstType->setBackground(_window);
 
 	_lstUFO->setColor(Palette::blockOffset(13));
 	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
 	_lstUFO->setColumns(2, 80, 12);
-	_lstUFO->setBackground(_window);
+//	_lstUFO->setBackground(_window);
 
 	_lstMissionTotals->setColor(Palette::blockOffset(13)+5);
 	_lstMissionTotals->setSecondaryColor(Palette::blockOffset(13));
 	_lstMissionTotals->setColumns(4, 70, 70, 70, 78);
-	_lstMissionTotals->setBackground(_window);
+//	_lstMissionTotals->setBackground(_window);
 
 
 	// Kill stats ->
@@ -315,27 +315,26 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_KILLS_BY_WEAPON"));
-	_txtWeapon->setWordWrap();
 
 	_lstRace->setColor(Palette::blockOffset(13));
 	_lstRace->setArrowColor(Palette::blockOffset(15)+1);
 	_lstRace->setColumns(2, 80, 18);
-	_lstRace->setBackground(_window);
+//	_lstRace->setBackground(_window);
 
 	_lstRank->setColor(Palette::blockOffset(13));
 	_lstRank->setArrowColor(Palette::blockOffset(15)+1);
 	_lstRank->setColumns(2, 80, 18);
-	_lstRank->setBackground(_window);
+//	_lstRank->setBackground(_window);
 
 	_lstWeapon->setColor(Palette::blockOffset(13));
 	_lstWeapon->setArrowColor(Palette::blockOffset(15)+1);
 	_lstWeapon->setColumns(2, 80, 18);
-	_lstWeapon->setBackground(_window);
+//	_lstWeapon->setBackground(_window);
 
 	_lstKillTotals->setColor(Palette::blockOffset(13)+5);
 	_lstKillTotals->setSecondaryColor(Palette::blockOffset(13));
 	_lstKillTotals->setColumns(3, 70, 70, 70);
-	_lstKillTotals->setBackground(_window);
+//	_lstKillTotals->setBackground(_window);
 
 
 	// Award stats ->

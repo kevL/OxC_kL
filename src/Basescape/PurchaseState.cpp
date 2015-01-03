@@ -30,9 +30,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -47,7 +46,6 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -73,7 +71,7 @@ PurchaseState::PurchaseState(Base* base)
 		_totalCost(0),
 		_persQty(0),
 		_craftQty(0),
-		_storeSize(0.0)
+		_storeSize(0.)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
@@ -100,28 +98,32 @@ PurchaseState::PurchaseState(Base* base)
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	setPalette("PAL_BASESCAPE", 0);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("buyMenu")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_txtBaseLabel);
-	add(_txtFunds);
-	add(_txtPurchases);
-	add(_txtItem);
-	add(_txtSpaceUsed);
-	add(_txtCost);
-	add(_txtQuantity);
-	add(_lstItems);
-	add(_btnCancel);
-	add(_btnOk);
+	_ammoColor = _game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color;
+
+	add(_window, "window", "buyMenu");
+	add(_txtTitle, "text", "buyMenu");
+	add(_txtBaseLabel, "text", "buyMenu");
+	add(_txtFunds, "text", "buyMenu");
+	add(_txtPurchases, "text", "buyMenu");
+	add(_txtItem, "text", "buyMenu");
+	add(_txtSpaceUsed, "text", "buyMenu");
+	add(_txtCost, "text", "buyMenu");
+	add(_txtQuantity, "text", "buyMenu");
+	add(_lstItems, "list", "buyMenu");
+	add(_btnCancel, "button", "buyMenu");
+	add(_btnOk, "button", "buyMenu");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(13)+10);
+//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PurchaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -129,35 +131,35 @@ PurchaseState::PurchaseState(Base* base)
 					Options::keyOk);
 	_btnOk->setVisible(false);
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
+//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& PurchaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& PurchaseState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PURCHASE_HIRE_PERSONNEL"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtFunds->setColor(Palette::blockOffset(13)+10);
+//	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_txtPurchases->setColor(Palette::blockOffset(13)+10);
-	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
+//	_txtPurchases->setColor(Palette::blockOffset(13)+10);
+//	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
 						.arg(Text::formatFunding(_totalCost)));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
+//	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
+//	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
 //	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
@@ -166,13 +168,13 @@ PurchaseState::PurchaseState(Base* base)
 	_txtSpaceUsed->setText(ss.str());
 //	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss.str()));
 
-	_txtCost->setColor(Palette::blockOffset(13)+10);
+//	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+10);
+//	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_lstItems->setColor(Palette::blockOffset(13)+10);
+//	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 55, 46, 32);
 	_lstItems->setSelectable();
@@ -367,7 +369,9 @@ PurchaseState::PurchaseState(Base* base)
 							Text::formatFunding(clipRule->getBuyCost()).c_str(),
 							ss6.str().c_str(),
 							L"0");
-			_lstItems->setRowColor(_quantities.size() - 1, Palette::blockOffset(15)+6);
+			_lstItems->setRowColor(
+								_quantities.size() - 1,
+								_ammoColor); //Palette::blockOffset(15)+6);
 
 			for (std::vector<std::string>::const_iterator
 					j = items.begin();
@@ -795,50 +799,26 @@ void PurchaseState::increaseByValue(int change)
 	if (change < 1)
 		return;
 
+	std::wstring errorMessage;
 	if (_totalCost + getPrice() > _game->getSavedGame()->getFunds())
-	{
-		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(
-											tr("STR_NOT_ENOUGH_MONEY"),
-											_palette,
-											Palette::blockOffset(15)+1,
-											"BACK13.SCR",
-											0));
-	}
+		errorMessage = tr("STR_NOT_ENOUGH_MONEY");
+
 	else if (_sel < 3
 		&& _persQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 	{
-		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(
-											tr("STR_NOT_ENOUGH_LIVING_SPACE"),
-											_palette,
-											Palette::blockOffset(15)+1,
-											"BACK13.SCR",
-											0));
+		errorMessage = tr("STR_NOT_ENOUGH_LIVING_SPACE");
 	}
 	else if (_sel > 2
 		&& _sel < 3 + _crafts.size()
 		&& _craftQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
 	{
-		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(
-											tr("STR_NO_FREE_HANGARS_FOR_PURCHASE"),
-											_palette,
-											Palette::blockOffset(15)+1,
-											"BACK13.SCR",
-											0));
+		errorMessage = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
 	}
 	else if (_sel >= 3 + _crafts.size()
 		&& _storeSize + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
 			> static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() + 0.05)
 	{
-		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(
-											tr("STR_NOT_ENOUGH_STORE_SPACE"),
-											_palette,
-											Palette::blockOffset(15)+1,
-											"BACK13.SCR",
-											0));
+		errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 	}
 	else
 	{
@@ -886,7 +866,18 @@ void PurchaseState::increaseByValue(int change)
 		_totalCost += getPrice() * change;
 
 		updateItemStrings();
+		return;
 	}
+
+	_timerInc->stop();
+
+	RuleInterface* menuInterface = _game->getRuleset()->getInterface("buyMenu");
+	_game->pushState(new ErrorMessageState(
+										errorMessage,
+										_palette,
+										menuInterface->getElement("errorMessage")->color,
+										"BACK13.SCR",
+										menuInterface->getElement("errorPalette")->color));
 }
 
 /**
@@ -952,10 +943,10 @@ void PurchaseState::updateItemStrings()
 						ss1.str());
 
 	if (_quantities[_sel] > 0)
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor()); //Palette::blockOffset(13));
 	else
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13)+10);
+		_lstItems->setRowColor(_sel, _lstItems->getColor()); //Palette::blockOffset(13)+10);
 
 		if (_sel > _itemOffset)
 		{
@@ -964,7 +955,7 @@ void PurchaseState::updateItemStrings()
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, Palette::blockOffset(15)+6);
+				_lstItems->setRowColor(_sel, _ammoColor); //Palette::blockOffset(15)+6);
 			}
 		}
 	}

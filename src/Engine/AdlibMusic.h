@@ -72,6 +72,9 @@ private:
 				void* udata,
 				Uint8* stream,
 				int len);
+
+		///
+		bool isPlaying();
 };
 
 }

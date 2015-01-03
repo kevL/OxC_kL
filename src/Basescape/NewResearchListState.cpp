@@ -37,7 +37,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -66,33 +65,35 @@ NewResearchListState::NewResearchListState(
 	_lstResearch	= new TextList(190, 105, 61, 44);
 	_btnCancel		= new TextButton(214, 16, 53, 152);
 
-	setPalette("PAL_BASESCAPE", 1);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
 
-	add(_window);
-	add(_txtTitle);
-	add(_lstResearch);
-	add(_btnCancel);
+	add(_window, "window", "selectNewResearch");
+	add(_txtTitle, "text", "selectNewResearch");
+	add(_lstResearch, "list", "selectNewResearch");
+	add(_btnCancel, "button", "selectNewResearch");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(13)+10);
+//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_NEW_RESEARCH_PROJECTS"));
 
-	_lstResearch->setColor(Palette::blockOffset(13));
-	_lstResearch->setColumns(1, 180);
-	_lstResearch->setSelectable();
+//	_lstResearch->setColor(Palette::blockOffset(13));
+//	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->setBackground(_window);
+	_lstResearch->setSelectable();
 	_lstResearch->setMargin();
+	_lstResearch->setColumns(1, 180);
 	_lstResearch->setAlign(ALIGN_CENTER);
-	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);
 
-	_btnCancel->setColor(Palette::blockOffset(15)+6);
+//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewResearchListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(

@@ -21,8 +21,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -43,18 +43,20 @@ NoContainmentState::NoContainmentState()
 	_txtTitle	= new Text(300, 160, 10, 8);
 	_btnOk		= new TextButton(120, 16, 100, 177);
 
-	setPalette("PAL_GEOSCAPE", 0);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("noContainment")->getElement("palette")->color); //0
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnOk);
+	add(_window, "window", "noContainment");
+	add(_txtTitle, "text", "noContainment");
+	add(_btnOk, "button", "noContainment");
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(15)-1);
+//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& NoContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -64,7 +66,7 @@ NoContainmentState::NoContainmentState()
 					(ActionHandler)& NoContainmentState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
@@ -76,8 +78,7 @@ NoContainmentState::NoContainmentState()
  * dTor.
  */
 NoContainmentState::~NoContainmentState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.
