@@ -99,7 +99,7 @@ SoldierInfoState::SoldierInfoState(
 	_txtKills		= new Text(80, 9, 112, 57);
 
 	_txtRecovery	= new Text(45, 9, 192, 57);
-	_txtRecovDay	= new Text(30, 9, 237, 57);
+	_txtDay			= new Text(30, 9, 237, 57);
 
 
 	const int step = 11;
@@ -174,9 +174,9 @@ SoldierInfoState::SoldierInfoState(
 	add(_txtMissions, "text1", "soldierInfo");
 	add(_txtKills, "text1", "soldierInfo");
 	add(_txtCraft, "text1", "soldierInfo");
-	add(_txtRecovery, "text2", "soldierInfo");
-	add(_txtRecovDay);
-	add(_txtPsionic, "text2", "soldierInfo");
+	add(_txtRecovery);
+	add(_txtDay);
+	add(_txtPsionic);
 
 	add(_txtArmor, "text1", "soldierInfo");
 	add(_btnArmor, "button", "soldierInfo");
@@ -189,43 +189,43 @@ SoldierInfoState::SoldierInfoState(
 
 	add(_txtStamina, "text2", "soldierInfo");
 	add(_numStamina, "numbers", "soldierInfo");
-	add(_barStamina, "barTUs", "soldierInfo");
+	add(_barStamina, "barEnergy", "soldierInfo");
 
 	add(_txtHealth, "text2", "soldierInfo");
 	add(_numHealth, "numbers", "soldierInfo");
-	add(_barHealth, "barTUs", "soldierInfo");
+	add(_barHealth, "barHealth", "soldierInfo");
 
 	add(_txtBravery, "text2", "soldierInfo");
 	add(_numBravery, "numbers", "soldierInfo");
-	add(_barBravery, "barTUs", "soldierInfo");
+	add(_barBravery, "barBravery", "soldierInfo");
 
 	add(_txtReactions, "text2", "soldierInfo");
 	add(_numReactions, "numbers", "soldierInfo");
-	add(_barReactions, "barTUs", "soldierInfo");
+	add(_barReactions, "barReactions", "soldierInfo");
 
 	add(_txtFiring, "text2", "soldierInfo");
 	add(_numFiring, "numbers", "soldierInfo");
-	add(_barFiring, "barTUs", "soldierInfo");
+	add(_barFiring, "barFiring", "soldierInfo");
 
 	add(_txtThrowing, "text2", "soldierInfo");
 	add(_numThrowing, "numbers", "soldierInfo");
-	add(_barThrowing, "barTUs", "soldierInfo");
+	add(_barThrowing, "barThrowing", "soldierInfo");
 
 	add(_txtMelee, "text2", "soldierInfo");
 	add(_numMelee, "numbers", "soldierInfo");
-	add(_barMelee, "barTUs", "soldierInfo");
+	add(_barMelee, "barMelee", "soldierInfo");
 
 	add(_txtStrength, "text2", "soldierInfo");
 	add(_numStrength, "numbers", "soldierInfo");
-	add(_barStrength, "barTUs", "soldierInfo");
+	add(_barStrength, "barStrength", "soldierInfo");
 
 	add(_txtPsiStrength, "text2", "soldierInfo");
 	add(_numPsiStrength, "numbers", "soldierInfo");
-	add(_barPsiStrength, "barTUs", "soldierInfo");
+	add(_barPsiStrength, "barPsiStrength", "soldierInfo");
 
 	add(_txtPsiSkill, "text2", "soldierInfo");
 	add(_numPsiSkill, "numbers", "soldierInfo");
-	add(_barPsiSkill, "barTUs", "soldierInfo");
+	add(_barPsiSkill, "barPsiSkill", "soldierInfo");
 
 	centerAllSurfaces();
 
@@ -293,13 +293,13 @@ SoldierInfoState::SoldierInfoState(
 //	_txtCraft->setColor(Palette::blockOffset(13)+10);
 //	_txtCraft->setSecondaryColor(Palette::blockOffset(13));
 
-//	_txtRecovery->setColor(Palette::blockOffset(13)+10);
-//	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
-	_txtRecovery->setText(tr("STR_WOUND_RECOVERY"));
+	_txtRecovery->setColor(Palette::blockOffset(13)+10);
+	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
+//	_txtRecovery->setText(tr("STR_WOUND_RECOVERY"));
 
-	_txtRecovDay->setHighContrast();
+	_txtDay->setHighContrast();
 
-//	_txtPsionic->setColor(Palette::blockOffset(10));
+	_txtPsionic->setColor(Palette::blockOffset(10));
 	_txtPsionic->setHighContrast();
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
 
@@ -663,32 +663,33 @@ void SoldierInfoState::init()
 	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
 
 
-	const int woundRec = _soldier->getWoundRecovery();
-	if (woundRec > 0)
+	const int healTime = _soldier->getWoundRecovery();
+	if (healTime > 0)
 	{
 		Uint8 color;
 		const int woundPct = _soldier->getWoundPercent();
 		if (woundPct > 50)
-			color = Palette::blockOffset(6);	// orange
+			color = Palette::blockOffset(6); // orange
 		else if (woundPct > 10)
-			color = Palette::blockOffset(9);	// yellow
+			color = Palette::blockOffset(9); // yellow
 		else
-			color = Palette::blockOffset(3);	// green
+			color = Palette::blockOffset(3); // green
 
-//		_txtRecovery->setSecondaryColor(color);
-//		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", woundRec)));
-		_txtRecovDay->setColor(color);
-		_txtRecovDay->setText(tr("STR_DAY", woundRec));
-
+		_txtRecovery->setSecondaryColor(color);
+		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", healTime)));
 		_txtRecovery->setVisible();
-		_txtRecovDay->setVisible();
+
+		_txtDay->setColor(color);
+		_txtDay->setText(tr("STR_DAY", healTime));
+		_txtDay->setVisible();
 	}
 	else
 	{
-//		_txtRecovery->setText(L"");
-//		_txtRecovDay->setText(L"");
+		_txtRecovery->setText(L"");
 		_txtRecovery->setVisible(false);
-		_txtRecovDay->setVisible(false);
+
+		_txtDay->setText(L"");
+		_txtDay->setVisible(false);
 	}
 
 	_txtRank->setText(tr("STR_RANK_").arg(tr(_soldier->getRankString())));
@@ -722,13 +723,11 @@ void SoldierInfoState::init()
 				_barPsiStrength->setValue2(armored.psiStrength);
 		}
 
-//		_txtPsiStrength->setVisible();
 		_numPsiStrength->setVisible();
 		_barPsiStrength->setVisible();
 	}
 	else
 	{
-//		_txtPsiStrength->setVisible(false);
 		_numPsiStrength->setVisible(false);
 		_barPsiStrength->setVisible(false);
 	}
@@ -754,13 +753,11 @@ void SoldierInfoState::init()
 				_barPsiSkill->setValue2(armored.psiSkill);
 		}
 
-//		_txtPsiSkill->setVisible();
 		_numPsiSkill->setVisible();
 		_barPsiSkill->setVisible();
 	}
 	else
 	{
-//		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}
@@ -769,16 +766,6 @@ void SoldierInfoState::init()
 							(_soldier->getCraft() != NULL
 								&& _soldier->getCraft()->getStatus() == "STR_OUT")
 						&& _game->getSavedGame()->getMonthsPassed() != -1);
-
-/*kL
-	if (_base == 0) // dead don't talk
-	{
-		_btnArmor->setVisible(false);
-		_btnSack->setVisible(false);
-		_txtCraft->setVisible(false);
-	}
-	else
-		_btnSack->setVisible(_game->getSavedGame()->getMonthsPassed() > -1); */
 }
 
 /**

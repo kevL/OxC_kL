@@ -22,14 +22,12 @@
 #include "GeoscapeState.h"
 
 //#include <assert.h>
-
 //#include <algorithm>
 //#include <cmath>
 //#include <ctime>
 //#include <functional>
 //#include <iomanip>
 //#include <sstream>
-
 //#include "../fmath.h"
 
 #include "AlienBaseState.h"
@@ -444,11 +442,11 @@ GeoscapeState::GeoscapeState()
 //	if (Options::showFundsOnGeoscape)
 	add(_txtFunds, "text", "geoscape");
 
-	add(_txtHour, "text", "geoscape");
-	add(_txtHourSep, "text", "geoscape");
-	add(_txtMin, "text", "geoscape");
+	add(_txtHour); //, "text", "geoscape");
+	add(_txtHourSep); //, "text", "geoscape");
+	add(_txtMin); //, "text", "geoscape");
 //	add(_txtMinSep, "text", "geoscape");
-	add(_txtSec, "text", "geoscape");
+	add(_txtSec); //, "text", "geoscape");
 //	add(_txtDate, "text", "geoscape");
 	add(_srfDay1);
 	add(_srfDay2);
@@ -758,15 +756,15 @@ GeoscapeState::GeoscapeState()
 
 //kL	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
 
-//	_txtHour->setColor(Palette::blockOffset(15)+2);
+	_txtHour->setColor(Palette::blockOffset(15)+2);
 	_txtHour->setAlign(ALIGN_RIGHT);
 
 //kL	if (Options::showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
-//	_txtHourSep->setColor(Palette::blockOffset(15)+2);
+	_txtHourSep->setColor(Palette::blockOffset(15)+2);
 	_txtHourSep->setText(L":");
 
 //kL	if (Options::showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
-//	_txtMin->setColor(Palette::blockOffset(15)+2);
+	_txtMin->setColor(Palette::blockOffset(15)+2);
 
 //kL	if (Options::showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
 //	_txtMinSep->setColor(Palette::blockOffset(15)+2);
@@ -774,8 +772,8 @@ GeoscapeState::GeoscapeState()
 
 //	_txtSec->setSmall();
 //kL	_txtSec->setBig();
+	_txtSec->setColor(Palette::blockOffset(15)+2);
 	_txtSec->setText(L".");
-//	_txtSec->setColor(Palette::blockOffset(15)+2);
 
 //	_txtDate->setColor(Palette::blockOffset(15)+2);
 //	_txtDate->setAlign(ALIGN_CENTER);

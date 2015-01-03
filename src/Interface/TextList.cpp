@@ -1109,11 +1109,11 @@ void TextList::updateVisible()
 			y < getHeight();
 			y += delta_Y)
 	{
-		_visibleRows++;
+		++_visibleRows;
 	}
 
 	if (getHeight() > static_cast<int>(_visibleRows - 1) * delta_Y)
-		_visibleRows--;
+		--_visibleRows;
 
 	updateArrows();
 }
@@ -1428,7 +1428,7 @@ void TextList::mouseOver(Action* action, State* state)
  */
 void TextList::mouseOut(Action* action, State* state)
 {
-	if (_selectable)
+	if (_selectable == true)
 		_selector->setVisible(false);
 
 	InteractiveSurface::mouseOut(action, state);
@@ -1459,7 +1459,6 @@ void TextList::scrollTo(size_t scroll)
 												static_cast<int>(scroll))));
 
 	draw(); // can't just set _redraw here because reasons
-
 	updateArrows();
 }
 
@@ -1483,7 +1482,8 @@ ComboBox* TextList::getComboBox() const
 }
 
 /**
- *
+ * Sets the border color.
+ * @param color - border color
  */
 void TextList::setBorderColor(Uint8 color)
 {
@@ -1493,9 +1493,10 @@ void TextList::setBorderColor(Uint8 color)
 }
 
 /**
- *
+ * Gets the scrollbar color.
+ * @return, scrollbar color
  */
-int TextList::getScrollbarColor()
+int TextList::getScrollbarColor() const
 {
 	return _scrollbar->getColor();
 }

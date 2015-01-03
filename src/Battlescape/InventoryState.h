@@ -78,7 +78,7 @@ private:
 		* _txtItem,
 		* _txtAmmo,
 		* _txtWeight,
-		* _txtTus,
+		* _txtTUs,
 		* _txtFAcc,
 		* _txtReact,
 		* _txtThrow,

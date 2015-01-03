@@ -107,7 +107,7 @@ InventoryState::InventoryState(
 	_gender		= new Surface(7, 7, 28, 1);
 
 	_txtWeight	= new Text(70, 9, 237, 24); // 237 -> was, 245
-	_txtTus		= new Text(40, 9, 237, 24);
+	_txtTUs		= new Text(40, 9, 237, 24);
 	_txtFAcc	= new Text(40, 9, 237, 32);
 	_txtReact	= new Text(40, 9, 237, 40);
 	_txtThrow	= new Text(40, 9, 237, 48);
@@ -174,11 +174,11 @@ InventoryState::InventoryState(
 	add(_txtName, "textName", "inventory", _bg);
 
 	add(_txtWeight, "textWeight", "inventory", _bg);
-	add(_txtTus, "textTUs", "inventory", _bg);
+	add(_txtTUs, "textTUs", "inventory", _bg);
 	add(_txtFAcc, "textFiring", "inventory", _bg);
 	add(_txtReact, "textReaction", "inventory", _bg);
-	add(_txtThrow);
-	add(_txtMelee);
+	add(_txtThrow, "textThrowing", "inventory", _bg);
+	add(_txtMelee, "textMelee", "inventory", _bg);
 	add(_txtPStr, "textPsiStrength", "inventory", _bg);
 	add(_txtPSkill, "textPsiSkill", "inventory", _bg);
 
@@ -197,13 +197,13 @@ InventoryState::InventoryState(
 //	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
-	add(_txtUseTU);
-	add(_txtThrowTU);
-	add(_txtPsiTU);
+	add(_txtUseTU, "textTUs", "inventory", _bg);
+	add(_txtThrowTU, "textTUs", "inventory", _bg);
+	add(_txtPsiTU, "textTUs", "inventory", _bg);
 
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView == true)
-		_txtTus->setY(_txtTus->getY() + 8);
+		_txtTUs->setY(_txtTUs->getY() + 8);
 
 	centerAllSurfaces();
 
@@ -216,9 +216,9 @@ InventoryState::InventoryState(
 //	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	_txtWeight->setHighContrast();
 
-//	_txtTus->setColor(Palette::blockOffset(4));
-//	_txtTus->setSecondaryColor(Palette::blockOffset(1));
-	_txtTus->setHighContrast();
+//	_txtTUs->setColor(Palette::blockOffset(4));
+//	_txtTUs->setSecondaryColor(Palette::blockOffset(1));
+	_txtTUs->setHighContrast();
 
 //	_txtFAcc->setColor(Palette::blockOffset(4));
 //	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
@@ -228,32 +228,32 @@ InventoryState::InventoryState(
 //	_txtReact->setSecondaryColor(Palette::blockOffset(1));
 	_txtReact->setHighContrast();
 
-	_txtThrow->setColor(Palette::blockOffset(4));
-	_txtThrow->setSecondaryColor(Palette::blockOffset(1));
+//	_txtThrow->setColor(Palette::blockOffset(4));
+//	_txtThrow->setSecondaryColor(Palette::blockOffset(1));
 	_txtThrow->setHighContrast();
 
-	_txtMelee->setColor(Palette::blockOffset(4));
-	_txtMelee->setSecondaryColor(Palette::blockOffset(1));
+//	_txtMelee->setColor(Palette::blockOffset(4));
+//	_txtMelee->setSecondaryColor(Palette::blockOffset(1));
 	_txtMelee->setHighContrast();
 
 //	_txtPStr->setColor(Palette::blockOffset(4));
 //	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
 	_txtPStr->setHighContrast();
 
-	_txtPSkill->setColor(Palette::blockOffset(4));
-	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
+//	_txtPSkill->setColor(Palette::blockOffset(4));
+//	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast();
 
-	_txtUseTU->setColor(Palette::blockOffset(4));
-	_txtUseTU->setSecondaryColor(Palette::blockOffset(1));
+//	_txtUseTU->setColor(Palette::blockOffset(4));
+//	_txtUseTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtUseTU->setHighContrast();
 
-	_txtThrowTU->setColor(Palette::blockOffset(4));
-	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
+//	_txtThrowTU->setColor(Palette::blockOffset(4));
+//	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtThrowTU->setHighContrast();
 
-	_txtPsiTU->setColor(Palette::blockOffset(4));
-	_txtPsiTU->setSecondaryColor(Palette::blockOffset(1));
+//	_txtPsiTU->setColor(Palette::blockOffset(4));
+//	_txtPsiTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtPsiTU->setHighContrast();
 
 	_numOrder->setColor(1);
@@ -363,7 +363,7 @@ InventoryState::InventoryState(
 	_inv->onMouseOut((ActionHandler)& InventoryState::invMouseOut);
 
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
-	_txtTus->setVisible(_tuMode);
+	_txtTUs->setVisible(_tuMode);
 	_txtUseTU->setVisible(_tuMode);
 
 	const bool vis = _tuMode == false
@@ -553,7 +553,7 @@ void InventoryState::updateStats()
 	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
 
 	if (_tuMode == true)
-		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
+		_txtTUs->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
 	if (Options::showMoreStatsInInventoryView == true)
 	{
@@ -926,12 +926,10 @@ void InventoryState::invClick(Action*)
 			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 		else if (itemRule->getBattleType() == BT_MEDIKIT)
-		{
 			wstr = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
 						.arg(item->getHealQuantity());
-		}
 
 		_txtAmmo->setText(wstr);
 	}
@@ -972,9 +970,9 @@ void InventoryState::invMouseOver(Action* action)
 		const BattleItem* const ammo = item->getAmmoItem();
 
 		setExtraInfo(
-					item,
-					itemRule,
-					ammo);
+				item,
+				itemRule,
+				ammo);
 
 		std::wstring wstr;
 

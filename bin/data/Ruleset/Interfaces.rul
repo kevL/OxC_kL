@@ -1100,34 +1100,40 @@ interfaces:
       - id: textName
         color: 64
       - id: textTUs
-        color: 64
-        color2: 16
+        color: 64   # lt.green
+        color2: 160 # brown
       - id: textWeight
         color: 64
-        color2: 16
+        color2: 160
       - id: textFiring
         color: 64
-        color2: 16
+        color2: 160
       - id: textReaction
         color: 64
-        color2: 16
+        color2: 160
+      - id: textThrowing
+        color: 64
+        color2: 160
+      - id: textMelee
+        color: 64
+        color2: 160
       - id: textPsiSkill
         color: 64
-        color2: 16
+        color2: 160
       - id: textPsiStrength
         color: 64
-        color2: 16
+        color2: 160
       - id: textItem
         color: 48
       - id: textAmmo
         color: 64
-        color2: 16
+        color2: 160
       # required
       - id: textSlots
         color: 64
       - id: weight
-        color: 16     # gold (acceptable)
-        color2: 32    # red (overweight)
+        color: 80   # lt.brown (acceptable)
+        color2: 208 # blue (overweight)
       - id: grid
         color: 8
       - id: numStack

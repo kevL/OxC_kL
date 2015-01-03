@@ -21,7 +21,6 @@
 #define OPENXCOM_SURFACE_H
 
 //#include <string>
-
 //#include <SDL.h>
 //#include <SDL_image.h>
 
@@ -112,8 +111,7 @@ protected:
 				Font*,
 				Font*,
 				Language*)
-		{
-		};
+		{};
 
 		/// Draws a filled rectangle on the surface.
 		void drawRect(
@@ -214,7 +212,7 @@ protected:
 		 * @param y		- Y position of the pixel
 		 * @param pixel	- color for the pixel
 		 */
-		void setPixelColor( // setPixelColor
+		void setPixelColor(
 				int x,
 				int y,
 				Uint8 pixel)
@@ -336,19 +334,13 @@ protected:
 
 		/// Sets the color of the surface.
 		virtual void setColor(Uint8 color)
-		{
-			/* empty by design */
-		};
+		{};
 		/// Sets the secondary color of the surface.
 		virtual void setSecondaryColor(Uint8 color)
-		{
-			/* empty by design */
-		};
+		{};
 		/// Sets the border colour of the surface.
 		virtual void setBorderColor(Uint8 color)
-		{
-			/* empty by design */
-		};
+		{};
 };
 
 }

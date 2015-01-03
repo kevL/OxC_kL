@@ -298,7 +298,7 @@ void Surface::loadScr(const std::string& filename)
 		x = 0,
 		y = 0;
 
-	for (std::vector<char>::iterator
+	for (std::vector<char>::const_iterator
 			i = buffer.begin();
 			i != buffer.end();
 			++i)

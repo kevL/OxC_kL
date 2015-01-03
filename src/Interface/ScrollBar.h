@@ -83,7 +83,7 @@ private:
 		void setHighContrast(bool contrast = true);
 
 		/// Sets the scrollbar's list.
-		void setTextList(TextList* list);
+		void setTextList(TextList* textList);
 
 		/// Sets the background for the track.
 		void setBackground(Surface* bg);

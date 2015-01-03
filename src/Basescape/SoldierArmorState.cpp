@@ -84,6 +84,7 @@ SoldierArmorState::SoldierArmorState(
 
 	centerAllSurfaces();
 
+
 //	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
@@ -129,7 +130,7 @@ SoldierArmorState::SoldierArmorState(
 			_armors.push_back(armor);
 
 			std::wostringstream ss;
-			if (_game->getSavedGame()->getMonthsPassed() > -1)
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
 				ss << _base->getItems()->getItem(armor->getStoreItem());
 			else
 				ss << "-";
@@ -140,10 +141,12 @@ SoldierArmorState::SoldierArmorState(
 							ss.str().c_str());
 		}
 		else if (armor->getStoreItem() == "STR_NONE")
+		{
 			_armors.push_back(armor);
 			_lstArmor->addRow(
 							1,
 							tr(armor->getType()).c_str());
+		}
 	}
 
 	_lstArmor->onMouseClick((ActionHandler)& SoldierArmorState::lstArmorClick);

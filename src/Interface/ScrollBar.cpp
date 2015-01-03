@@ -143,11 +143,11 @@ void ScrollBar::setHighContrast(bool contrast)
 
 /**
  * Changes the list associated with the scrollbar. This makes the button scroll that list.
- * @param list - pointer to TextList
+ * @param textList - pointer to TextList
  */
-void ScrollBar::setTextList(TextList* list)
+void ScrollBar::setTextList(TextList* textList)
 {
-	_list = list;
+	_list = textList;
 }
 
 /**
