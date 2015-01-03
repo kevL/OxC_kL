@@ -423,7 +423,7 @@ void AlienBAIState::think(BattleAction* action)
 			_unit->setHiding(true);			// spin 180 at the end of your route.
 
 			// forget about reserving TUs, we need to get out of here.
-//			_save->getBattleGame()->setTUReserved(BA_NONE, false); // kL
+//			_save->getBattleGame()->setReservedAction(BA_NONE, false); // kL
 		break;
 
 		case AI_PATROL:
@@ -475,7 +475,7 @@ void AlienBAIState::think(BattleAction* action)
 													_attackAction->type,
 													_attackAction->weapon);
 
-//			_save->getBattleGame()->setTUReserved(BA_NONE, false);				// don't worry about reserving TUs, we've factored that in already.
+//			_save->getBattleGame()->setReservedAction(BA_NONE, false);				// don't worry about reserving TUs, we've factored that in already.
 
 			if (action->type == BA_WALK											// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle == true
@@ -2548,8 +2548,8 @@ void AlienBAIState::meleeAttack()
 
 	//if (_traceAI) Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId();
 
-	_attackAction->target	= _aggroTarget->getPosition();
-	_attackAction->type		= BA_HIT;
+	_attackAction->target = _aggroTarget->getPosition();
+	_attackAction->type = BA_HIT;
 }
 
 /**
@@ -2581,9 +2581,9 @@ bool AlienBAIState::validTarget(
 
 /**
  * Checks the alien's reservation setting.
- * @return the reserve setting.
+ * @return, the reserve setting
  */
-BattleActionType AlienBAIState::getReserveMode()
+BattleActionType AlienBAIState::getReservedAIAction() const
 {
 	return _reserve;
 }

@@ -76,7 +76,7 @@ private:
 		_objectivesNeeded,
 		_turn;
 
-	BattleActionType _tuReserved;
+	BattleActionType _batReserved;
 	UnitFaction _side;
 
 	BattlescapeState* _battleState;
@@ -333,9 +333,9 @@ private:
 		bool isCheating();
 
 		/// Gets the reserved fire mode.
-		BattleActionType getTUReserved() const;
+		BattleActionType getBATReserved() const;
 		/// Sets the reserved fire mode.
-		void setTUReserved(BattleActionType reserved);
+		void setBATReserved(BattleActionType reserved);
 		/// Gets whether we are reserving TUs to kneel.
 		bool getKneelReserved() const;
 		/// Sets whether we are reserving TUs to kneel.

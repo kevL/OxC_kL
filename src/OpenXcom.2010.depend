@@ -4662,7 +4662,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1420130443 f:\git\openxcom\src\savegame\savedbattlegame.h
+1420321658 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1420130442 f:\git\openxcom\src\savegame\battleunit.h
@@ -4673,7 +4673,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1420130440 f:\git\openxcom\src\battlescape\battlescapegame.h
+1420321872 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1420130446 f:\git\openxcom\src\battlescape\position.h
@@ -5464,7 +5464,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1420130442 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1420307363 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5484,7 +5484,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1420130455 f:\git\openxcom\src\battlescape\alienbaistate.h
+1420321658 f:\git\openxcom\src\battlescape\alienbaistate.h
 	"BattleAIState.h"
 	"Position.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5528,7 +5528,7 @@
 1420130458 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1420130448 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1420310465 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5714,7 +5714,7 @@
 1420130457 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1420185161 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1420309359 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6201,7 +6201,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1420130448 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1420309723 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -7023,7 +7023,7 @@
 1420130450 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1420202089 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1420300238 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -8759,7 +8759,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1420130448 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1420308642 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8861,7 +8861,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1420130440 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1420321658 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

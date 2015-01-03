@@ -2097,7 +2097,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
-		_save->getBattleGame()->setTUReserved(
+		_save->getBattleGame()->setReservedAction(
 											BA_SNAPSHOT);
 	}
 
@@ -2140,7 +2140,7 @@ bool Pathfinding::previewPath(bool bRemove)
 				energy	-= 5;
 			}
 
-			if (dash)
+			if (dash == true)
 			{
 				tu -= _openDoor;
 				energy -= tu * 3 / 2;
@@ -2152,11 +2152,11 @@ bool Pathfinding::previewPath(bool bRemove)
 			else
 				energy -= tu;
 
-			if (bodySuit)
+			if (bodySuit == true)
 				energy -= 1;
-			else if (powerSuit)
+			else if (powerSuit == true)
 				energy += 1;
-			else if (flightSuit)
+			else if (flightSuit == true)
 				energy += 2;
 			//Log(LOG_INFO) << ". . energy left = " << energy;
 
@@ -2227,7 +2227,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					if (curTU > -1
 						&& energy > -1)
 					{
-						if (reserveOk)
+						if (reserveOk == true)
 							color = Pathfinding::green;
 						else
 							color = Pathfinding::yellow;
@@ -2241,8 +2241,8 @@ bool Pathfinding::previewPath(bool bRemove)
 		}
 	}
 
-	if (switchBack)
-		_save->getBattleGame()->setTUReserved(
+	if (switchBack == true)
+		_save->getBattleGame()->setReservedAction(
 											BA_NONE);
 
 	//Log(LOG_INFO) << ". . tu @ return = " << tu;

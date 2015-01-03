@@ -233,7 +233,7 @@ void CivilianBAIState::think(BattleAction* action)
 			action->desperate	= true;
 
 			_unit->dontReselect();
-//			_save->getBattleGame()->setTUReserved(BA_NONE, false);
+//			_save->getBattleGame()->setReservedAction(BA_NONE, false);
 		break;
 		case AI_PATROL:
 			action->type	= _patrolAction->type;

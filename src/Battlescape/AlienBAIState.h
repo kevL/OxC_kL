@@ -173,7 +173,7 @@ protected:
 				bool includeCivs = false) const;
 
 		/// Checks the alien's TU reservation setting.
-		BattleActionType getReserveMode();
+		BattleActionType getReservedAIAction() const;
 		/// Assuming the aLien has both a ranged and a melee weapon, select one.
 		void selectMeleeOrRanged();
 };

@@ -1716,7 +1716,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * Checks against reserved time units.
  * @param bu	- pointer to a unit
  * @param tu	- # of time units to check against
- * @param test	- true to suppress error messages
+ * @param test	- true to suppress error messages (default false)
  * @return, true if unit has enough time units ( go! )
  */
 bool BattlescapeGame::checkReservedTU(
@@ -1724,106 +1724,122 @@ bool BattlescapeGame::checkReservedTU(
 		int tu,
 		bool test)
 {
-	BattleActionType actionReserved = _save->getTUReserved(); // avoid changing _batReserved here.
-
-	if (_save->getSide() != bu->getFaction()
+	if (bu->getFaction() != _save->getSide()
 		|| _save->getSide() == FACTION_NEUTRAL)
 	{
 		return tu <= bu->getTimeUnits();
 	}
 
-	// aLiens reserve TUs as a percentage rather than just enough for a single action.
+
+	BattleActionType actReserved = _save->getBATReserved(); // avoid changing _batReserved here.
+
 	if (_save->getSide() == FACTION_HOSTILE
 		&& _debugPlay == false)
 	{
-		AlienBAIState* ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
+		const AlienBAIState* const ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
 		if (ai != NULL)
-			actionReserved = ai->getReserveMode();
+			actReserved = ai->getReservedAIAction();
 
-		int rand = RNG::generate(0, 10); // kL, added in below ->
+		const int extraReserve = RNG::generate(0, 10); // kL, added in below ->
 
 		// kL_note: This could use some tweaking, for the poor aLiens:
-		switch (actionReserved)
+		switch (actReserved) // aLiens reserve TUs as a percentage rather than just enough for a single action.
 		{
 			case BA_SNAPSHOT:
-				return (tu + rand + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits());		// 33%
-			break;
+				return (tu + extraReserve + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits());		// 33%
+
 			case BA_AUTOSHOT:
-				return (tu + rand + (bu->getBaseStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
-			break;
+				return (tu + extraReserve + (bu->getBaseStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
+
 			case BA_AIMEDSHOT:
-				return (tu + rand + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits());		// 50%
-			break;
+				return (tu + extraReserve + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits());		// 50%
 
 			default:
-				return (tu + rand <= bu->getTimeUnits());
-			break;
+				return (tu <= bu->getTimeUnits()); // + extraReserve
 		}
 	}
 
 	// ** Below here is for xCom soldiers exclusively ***
-	// ( which i don't care about )
+	// ( which i don't care about - except that this is also used for pathPreviews in Pathfinding object )
 
 	// check TUs against slowest weapon if we have two weapons
-	const BattleItem* const slowWeapon = bu->getMainHandWeapon(false);
-	// kL_note: Use getActiveHand() instead, if xCom wants to reserve TU.
-	// kL_note: make sure this doesn't work on aLiens, because getMainHandWeapon()
-	// returns grenades and that can easily cause problems. Probably could cause
-	// problems for xCom too, if xCom wants to reserve TU's in this manner.
-	// note: won't return grenades anymore.
-	// note note: did more work on getMainHandWeapon()
+//	const BattleItem* const weapon = bu->getMainHandWeapon(false);
+	// kL: Use getActiveHand() instead, if xCom wants to reserve TU & for pathPreview.
+	const BattleItem* const weapon = bu->getItem(bu->getActiveHand());
 
-	// if the weapon has no autoshot, reserve TUs for snapshot
-	if (bu->getActionTUs(
-					actionReserved,
-					slowWeapon) == 0
-		&& actionReserved == BA_AUTOSHOT)
+	// if reserved for Aimed shot drop to Auto shot
+	if (actReserved == BA_AIMEDSHOT
+		&& bu->getActionTUs(
+						BA_AIMEDSHOT,
+						weapon) == 0)
 	{
-		actionReserved = BA_SNAPSHOT;
+		actReserved = BA_AUTOSHOT;
 	}
 
-	// likewise, if we don't have a snap shot available, try aimed.
-	if (bu->getActionTUs(
-					actionReserved,
-					slowWeapon) == 0
-		&& actionReserved == BA_SNAPSHOT)
+	// if reserved for Auto shot drop to Snap shot
+	if (actReserved == BA_AUTOSHOT
+		&& bu->getActionTUs(
+						BA_AUTOSHOT,
+						weapon) == 0)
 	{
-		actionReserved = BA_AIMEDSHOT;
+		actReserved = BA_SNAPSHOT;
 	}
 
-	const int tuKneel = (_save->getKneelReserved()
-							&& bu->isKneeled() == false
-							&& bu->getGeoscapeSoldier() != NULL)? 4
-						: 0;
-
-	// if no aimed shot is available, revert to none.
-	if (bu->getActionTUs(actionReserved, slowWeapon) == 0
-		&& actionReserved == BA_AIMEDSHOT)
+	// if reserved for Snap shot try Auto shot
+	if (actReserved == BA_SNAPSHOT
+		&& bu->getActionTUs(
+						BA_SNAPSHOT,
+						weapon) == 0)
 	{
-		if (tuKneel > 0)
-			actionReserved = BA_NONE;
+		actReserved = BA_AUTOSHOT;
+	}
+
+	// if reserved for Auto shot try Aimed shot
+	if (actReserved == BA_AUTOSHOT
+		&& bu->getActionTUs(
+						BA_AUTOSHOT,
+						weapon) == 0)
+	{
+		actReserved = BA_AIMEDSHOT;
+	}
+
+	int tuKneel;
+	if (_save->getKneelReserved() == true
+		&& bu->getGeoscapeSoldier() != NULL
+		&& bu->isKneeled() == false)
+	{
+		tuKneel = 3;
+	}
+	else
+		tuKneel = 0;
+
+	// if no Aimed shot is available revert to bat_NONE
+	if (actReserved == BA_AIMEDSHOT
+		&& bu->getActionTUs(
+						BA_AIMEDSHOT,
+						weapon) == 0)
+	{
+		if (tuKneel != 0)
+			actReserved = BA_NONE;
 		else
 			return true;
 	}
 
-	if ((actionReserved != BA_NONE
-			|| _save->getKneelReserved())
-		&& tu
-			+ tuKneel
-			+ bu->getActionTUs(
-							actionReserved,
-							slowWeapon) > bu->getTimeUnits()
-		&& (tuKneel
-				+ bu->getActionTUs(
-								actionReserved,
-								slowWeapon) <= bu->getTimeUnits()
-			|| test))
+	if ((actReserved != BA_NONE
+			|| _save->getKneelReserved() == true)
+		&& tu + tuKneel + bu->getActionTUs(
+										actReserved,
+										weapon) > bu->getTimeUnits()
+		&& (tuKneel + bu->getActionTUs(
+									actReserved,
+									weapon) <= bu->getTimeUnits()
+			|| test == true))
 	{
 		if (test == false)
 		{
 			if (tuKneel != 0)
 			{
-				switch (actionReserved)
+				switch (actReserved)
 				{
 					case BA_NONE:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING");
@@ -1831,12 +1847,11 @@ bool BattlescapeGame::checkReservedTU(
 
 					default:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING");
-					break;
 				}
 			}
 			else
 			{
-				switch (_save->getTUReserved())
+				switch (_save->getBATReserved())
 				{
 					case BA_SNAPSHOT:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT");
@@ -1846,10 +1861,6 @@ bool BattlescapeGame::checkReservedTU(
 					break;
 					case BA_AIMEDSHOT:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT");
-					break;
-
-					default:
-					break;
 				}
 			}
 		}
@@ -2622,15 +2633,6 @@ void BattlescapeGame::requestEndTurn()
 }
 
 /**
- * Sets the TU reserved type as a BattleAction.
- * @param bat		- a battleactiontype (BattlescapeGame.h)
- */
-void BattlescapeGame::setTUReserved(BattleActionType bat)
-{
-	_save->setTUReserved(bat);
-}
-
-/**
  * Drops an item to the floor and affects it with gravity.
  * @param position		- reference position to spawn the item
  * @param item			- pointer to the item
@@ -3217,12 +3219,21 @@ bool BattlescapeGame::takeItem(
 }
 
 /**
+ * Sets the TU reserved type as a BattleAction.
+ * @param bat - a battleactiontype (BattlescapeGame.h)
+ */
+void BattlescapeGame::setReservedAction(BattleActionType bat)
+{
+	_save->setBATReserved(bat);
+}
+
+/**
  * Returns the action type that is reserved.
  * @return, the BattleActionType that is reserved
  */
-BattleActionType BattlescapeGame::getReservedAction()
+BattleActionType BattlescapeGame::getReservedAction() const
 {
-	return _save->getTUReserved();
+	return _save->getBATReserved();
 }
 
 /**

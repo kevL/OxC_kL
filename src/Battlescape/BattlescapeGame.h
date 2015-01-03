@@ -277,9 +277,6 @@ private:
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 
-		/// Sets the TU reserved type.
-		void setTUReserved(BattleActionType bat);
-
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 
@@ -319,8 +316,10 @@ private:
 				BattleItem* item,
 				BattleAction* action);
 
+		/// Sets the TU reserved type.
+		void setReservedAction(BattleActionType bat);
 		/// Returns the type of action that is reserved.
-		BattleActionType getReservedAction();
+		BattleActionType getReservedAction() const;
 
 		/// Tallies the living units, converting them if necessary.
 		void tallyUnits(

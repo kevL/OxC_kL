@@ -899,7 +899,7 @@ void BattlescapeState::init()
 
 	updateSoldierInfo();
 
-/*	switch (_savedBattle->getTUReserved())
+/*	switch (_savedBattle->getBATReserved())
 	{
 		case BA_SNAPSHOT:
 			_reserve = _btnReserveSnap;
@@ -2202,10 +2202,10 @@ void BattlescapeState::btnPsiClick(Action* action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
-		if		(_reserve == _btnReserveNone)	_battleGame->setTUReserved(BA_NONE);
-		else if (_reserve == _btnReserveSnap)	_battleGame->setTUReserved(BA_SNAPSHOT);
-		else if (_reserve == _btnReserveAimed)	_battleGame->setTUReserved(BA_AIMEDSHOT);
-		else if (_reserve == _btnReserveAuto)	_battleGame->setTUReserved(BA_AUTOSHOT);
+		if		(_reserve == _btnReserveNone)	_battleGame->setReservedAction(BA_NONE);
+		else if (_reserve == _btnReserveSnap)	_battleGame->setReservedAction(BA_SNAPSHOT);
+		else if (_reserve == _btnReserveAimed)	_battleGame->setReservedAction(BA_AIMEDSHOT);
+		else if (_reserve == _btnReserveAuto)	_battleGame->setReservedAction(BA_AUTOSHOT);
 
 		// update any path preview
 		if (_battleGame->getPathfinding()->isPathPreviewed())

@@ -2429,8 +2429,8 @@ Tile* BattleUnit::getTile() const
 /**
  * Checks if there's an inventory item in the specified inventory position.
  * @param slot	- pointer to RuleInventory slot
- * @param x		- X position in slot
- * @param y		- Y position in slot
+ * @param x		- X position in slot (default 0)
+ * @param y		- Y position in slot (default 0)
  * @return, pointer to BattleItem in slot or NULL if none
  */
 BattleItem* BattleUnit::getItem(
@@ -2472,8 +2472,8 @@ BattleItem* BattleUnit::getItem(
 /**
  * Checks if there's an inventory item in the specified inventory position.
  * @param slot	- reference an inventory slot
- * @param x		- X position in slot
- * @param y		- Y position in slot
+ * @param x		- X position in slot (default 0)
+ * @param y		- Y position in slot (default 0)
  * @return, pointer to BattleItem in slot or NULL if none
  */
 BattleItem* BattleUnit::getItem(

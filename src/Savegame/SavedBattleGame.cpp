@@ -79,7 +79,7 @@ SavedBattleGame::SavedBattleGame()
 		_objectivesNeeded(0),
 		_unitsFalling(false),
 		_cheating(false),
-		_tuReserved(BA_NONE),
+		_batReserved(BA_NONE),
 		_depth(0),
 		_kneelReserved(false),
 		_invBattle(NULL),
@@ -435,7 +435,7 @@ void SavedBattleGame::load(
 
 	_objectivesDestroyed	= node["objectivesDestroyed"]			.as<int>(_objectivesDestroyed);
 	_objectivesNeeded		= node["objectivesNeeded"]				.as<int>(_objectivesNeeded);
-	_tuReserved				= (BattleActionType)node["tuReserved"]	.as<int>(_tuReserved);
+	_batReserved			= (BattleActionType)node["batReserved"]	.as<int>(_batReserved);
 	_kneelReserved			= node["kneelReserved"]					.as<bool>(_kneelReserved);
 	_ambience				= node["ambience"]						.as<int>(_ambience);
 	_alienRace				= node["alienRace"]						.as<std::string>(_alienRace);
@@ -602,7 +602,7 @@ YAML::Node SavedBattleGame::save() const
 		node["items"].push_back((*i)->save());
 	}
 
-	node["tuReserved"]		= static_cast<int>(_tuReserved);
+	node["batReserved"]		= static_cast<int>(_batReserved);
 	node["kneelReserved"]	= _kneelReserved;
 	node["depth"]			= _depth;
 	node["ambience"]		= _ambience;
@@ -2432,7 +2432,8 @@ void SavedBattleGame::resetTiles()
 }
 
 /**
- * @return the tilesearch vector for use in AI functions.
+ *
+ * @return, the tilesearch vector for use in AI functions
  */
 const std::vector<Position> SavedBattleGame::getTileSearch()
 {
@@ -2440,8 +2441,8 @@ const std::vector<Position> SavedBattleGame::getTileSearch()
 }
 
 /**
- * is the AI allowed to cheat?
- * @return true if cheating.
+ * Gets if the AI has started to cheat.
+ * @return, true if AI is cheating
  */
 bool SavedBattleGame::isCheating()
 {
@@ -2450,25 +2451,25 @@ bool SavedBattleGame::isCheating()
 
 /**
  * Gets the TU reserved type.
- * @return A battleactiontype.
+ * @return, a BattleActionType
  */
-BattleActionType SavedBattleGame::getTUReserved() const
+BattleActionType SavedBattleGame::getBATReserved() const
 {
-	return _tuReserved;
+	return _batReserved;
 }
 
 /**
  * Sets the TU reserved type.
- * @param reserved A battleactiontype.
+ * @param reserved - a BattleActionType
  */
-void SavedBattleGame::setTUReserved(BattleActionType reserved)
+void SavedBattleGame::setBATReserved(BattleActionType reserved)
 {
-	_tuReserved = reserved;
+	_batReserved = reserved;
 }
 
 /**
  * Gets the kneel reservation setting.
- * @return Should we reserve an extra 4 TUs to kneel?
+ * @return, true if an extra 4 TUs should be reserved to kneel
  */
 bool SavedBattleGame::getKneelReserved() const
 {
@@ -2477,7 +2478,7 @@ bool SavedBattleGame::getKneelReserved() const
 
 /**
  * Sets the kneel reservation setting.
- * @param reserved Should we reserve an extra 4 TUs to kneel?
+ * @param reserved - true if an extra 4 TUs should be reserved to kneel
  */
 void SavedBattleGame::setKneelReserved(bool reserved)
 {
@@ -2506,8 +2507,8 @@ void SavedBattleGame::calculateModuleMap()
 	_baseModules.resize(
 					_mapsize_x / 10,
 					std::vector<std::pair<int, int> >(
-													_mapsize_y / 10,
-													std::make_pair(-1,-1)));
+												_mapsize_y / 10,
+												std::make_pair(-1,-1)));
 
 	for (int
 			x = 0;
@@ -2519,14 +2520,14 @@ void SavedBattleGame::calculateModuleMap()
 				y != _mapsize_y;
 				++y)
 		{
-			Tile* tile = getTile(Position(
-										x,
-										y,
-										_mapsize_z - 1));
+			const Tile* const tile = getTile(Position(
+													x,
+													y,
+													_mapsize_z - 1));
 
-			if (tile
-				&& tile->getMapData(MapData::O_OBJECT)
-				&& tile->getMapData(MapData::O_OBJECT)->isBaseModule())
+			if (tile != NULL
+				&& tile->getMapData(MapData::O_OBJECT) != NULL
+				&& tile->getMapData(MapData::O_OBJECT)->isBaseModule() == true)
 			{
 				_baseModules[x / 10][y / 10].first += _baseModules[x / 10][y / 10].first > 0? 1: 2;
 				_baseModules[x / 10][y / 10].second = _baseModules[x / 10][y / 10].first;
