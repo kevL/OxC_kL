@@ -61,18 +61,21 @@ IntroState::IntroState(const bool wasLetterBoxed)
 				Options::musicVolume, // kL
 				-1);
 
-	const Ruleset* rules = _game->getRuleset();
-	const std::map<std::string, RuleVideo*>* videoRulesets = rules->getVideos();
+	const Ruleset* const rules = _game->getRuleset();
+	const std::map<std::string, RuleVideo*>* const videoRulesets = rules->getVideos();
 
-	const RuleVideo* videoRule = videoRulesets->find("intro")->second;
-	const std::vector<std::string>* videos = videoRule->getVideos();
-
-	for (std::vector<std::string>::const_iterator
-			i = videos->begin();
-			i != videos->end();
-			++i)
+	const std::map<std::string, RuleVideo*>::const_iterator videoRuleIt = videoRulesets->find("intro");
+	if (videoRuleIt != videoRulesets->end())
 	{
-		_introFiles.push_back(CrossPlatform::getDataFile(*i));
+		const RuleVideo* const videoRule = videoRuleIt->second;
+		const std::vector<std::string>* const videos = videoRule->getVideos();
+		for (std::vector<std::string>::const_iterator
+				i = videos->begin();
+				i != videos->end();
+				++i)
+		{
+			_introFiles.push_back(CrossPlatform::getDataFile(*i));
+		}
 	}
 
 	_introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
@@ -577,6 +580,7 @@ void IntroState::endVideo()
 		if (SDL_PollEvent(&event)
 			&& event.type == SDL_KEYDOWN)
 		{
+//			if (event.key.keysym.sym == SDLK_ESCAPE) // kL_add: cf. FlcPlayer::SDLPolling()
 			break;
 		}
 

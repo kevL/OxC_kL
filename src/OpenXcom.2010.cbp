@@ -1205,18 +1205,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Engine/Flc.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Engine/Flc.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
+		<Unit filename="Engine/FlcPlayer.cpp" />
+		<Unit filename="Engine/FlcPlayer.h" />
 		<Unit filename="Engine/Font.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2725,6 +2715,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleVideo.cpp" />
+		<Unit filename="Ruleset/RuleVideo.h" />
 		<Unit filename="Ruleset/Ruleset.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
