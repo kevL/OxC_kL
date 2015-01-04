@@ -35,6 +35,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <deque>
 #include <errno.h>
 #include <exception>
 #include <fstream>

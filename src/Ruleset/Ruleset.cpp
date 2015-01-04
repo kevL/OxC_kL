@@ -1135,9 +1135,7 @@ void Ruleset::loadFile(const std::string& filename)
 	{
 		RuleVideo* rule = loadRule(
 								*i,
-								&_videos,
-								0,
-								"id");
+								&_videos);
 		if (rule != NULL)
 			rule->load(*i);
 	}

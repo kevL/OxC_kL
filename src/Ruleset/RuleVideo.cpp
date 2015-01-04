@@ -43,7 +43,7 @@ RuleVideo::~RuleVideo()
  */
 void RuleVideo::load(const YAML::Node& node)
 {
-	if (const YAML::Node& videos = node["video"])
+	if (const YAML::Node& videos = node["videos"])
 	{
 		for (YAML::const_iterator
 				i = videos.begin();

@@ -64,7 +64,7 @@ IntroState::IntroState(const bool wasLetterBoxed)
 	const Ruleset* rules = _game->getRuleset();
 	const std::map<std::string, RuleVideo*>* videoRulesets = rules->getVideos();
 
-	const RuleVideo* videoRule = videoRulesets->find("RES_INTRO")->second;
+	const RuleVideo* videoRule = videoRulesets->find("intro")->second;
 	const std::vector<std::string>* videos = videoRule->getVideos();
 
 	for (std::vector<std::string>::const_iterator
