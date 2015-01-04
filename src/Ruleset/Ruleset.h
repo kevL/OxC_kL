@@ -64,6 +64,7 @@ class RuleResearch;
 class RuleSoldier;
 class RuleTerrain;
 class RuleUfo;
+class RuleVideo;
 class SavedGame;
 class Soldier;
 class SoldierNamePool;
@@ -163,6 +164,7 @@ protected:
 	std::map<std::string, RuleSoldier*>			_soldiers;
 	std::map<std::string, RuleTerrain*>			_terrains;
 	std::map<std::string, RuleUfo*>				_ufos;
+	std::map<std::string, RuleVideo*>			_videos;
 	std::map<std::string, SoundDefinition*>		_soundDefs;
 	std::map<std::string, UfoTrajectory*>		_ufoTrajectories;
 	std::map<std::string, Unit*> _units;
@@ -370,6 +372,9 @@ protected:
 
 		/// Gets the list of MapScripts.
 		const std::vector<MapScript*>* getMapScript(const std::string& id) const;
+
+		/// Gets the list of videos for intro/outro etc.
+		const std::map<std::string, RuleVideo*>* getVideos() const;
 };
 
 }

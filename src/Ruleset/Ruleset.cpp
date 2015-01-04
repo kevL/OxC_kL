@@ -52,6 +52,7 @@
 #include "RuleSoldier.h"
 #include "RuleTerrain.h"
 #include "RuleUfo.h"
+#include "RuleVideo.h"
 #include "SoldierNamePool.h"
 #include "SoundDefinition.h"
 #include "StatString.h"
@@ -368,10 +369,34 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+
+	for (std::map<std::string, std::vector<MapScript*> >::iterator
+			i = _mapScripts.begin();
+			i != _mapScripts.end();
+			++i)
+	{
+		for (std::vector<MapScript*>::iterator
+				j = (*i).second.begin();
+				j != (*i).second.end();
+				)
+		{
+			delete *j;
+			j = (*i).second.erase(j);
+		}
+	}
+
+	for (std::map<std::string, RuleVideo*>::const_iterator
+			i = _videos.begin();
+			i != _videos.end();
+			++i)
+	{
+		delete i->second;
+	}
 }
 
 /**
  * kL. Reloads the country lines from Geography rulefile.
+ * @note Used in Geoscape's debugmode.
  */
 void Ruleset::reloadCountryLines()
 {
@@ -397,7 +422,7 @@ void Ruleset::reloadCountryLines()
 		const std::string type = (*i)["type"].as<std::string>();
 		RuleCountry* const j = getCountry(type);
 
-		std::vector<std::vector<double> > areas = (*i)["areas"].as<std::vector<std::vector<double> > >(areas);
+		const std::vector<std::vector<double> > areas = (*i)["areas"].as<std::vector<std::vector<double> > >(areas);
 		for (size_t
 				k = 0;
 				k != areas.size();
@@ -1099,9 +1124,22 @@ void Ruleset::loadFile(const std::string& filename)
 		if (rule->getPsiLaboratories() > 0)
 		{
 			_psiRequirements = rule->getRequirements();
-
 			break;
 		}
+	}
+
+	for (YAML::const_iterator
+			i = doc["cutscenes"].begin();
+			i != doc["cutscenes"].end();
+			++i)
+	{
+		RuleVideo* rule = loadRule(
+								*i,
+								&_videos,
+								0,
+								"id");
+		if (rule != NULL)
+			rule->load(*i);
 	}
 
 //kL	_modIndex += 1000;	// Question: how is this value subtracted later,
@@ -2339,6 +2377,15 @@ const std::vector<MapScript*>* Ruleset::getMapScript(const std::string& id) cons
 		return &i->second;
 	else
 		return NULL;
+}
+
+/**
+ * Gets the list of videos.
+ * return, pointer to a map of strings & pointers to RuleVideos
+ */
+const std::map<std::string, RuleVideo*>* Ruleset::getVideos() const
+{
+	return &_videos;
 }
 
 }

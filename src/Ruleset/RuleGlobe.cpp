@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "RuleGlobe.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <fstream>
 //#include <SDL_endian.h>
@@ -136,7 +135,7 @@ void RuleGlobe::load(const YAML::Node& node)
 	Globe::LINE_COLOR			= node["lineColor"]		.as<Uint8>(Globe::LINE_COLOR);
 	
 	if (node["oceanPalette"])
-		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanColor"].as<Uint8>(12));
+		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<Uint8>(12));
 }
 
 /**

@@ -17,19 +17,16 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "SaveConverter.h"
 #include "SaveConverterXcom1.h"
 
 //#include <bitset>
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <fstream>
 //#include <iomanip>
 //#include <sstream>
-
 //#include <SDL_endian.h>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "AlienBase.h"

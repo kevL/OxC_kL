@@ -17,49 +17,35 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_INTROSTATE_H
-#define OPENXCOM_INTROSTATE_H
+#ifndef OPENXCOM_RULEVIDEO_H
+#define OPENXCOM_RULEVIDEO_H
 
-#include "../Engine/State.h"
-
+//#include <map>
+//#include <string>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
-class FlcPlayer;
-
-
-/**
- * Shows the intro cinematic.
- */
-class IntroState
-	:
-		public State
+class RuleVideo
 {
 
 private:
-	bool _wasLetterBoxed;
-//	int _oldMusic, _oldSound;
-
-	std::string
-		_introSoundFileDOS,
-		_introSoundFileWin;
-
-	std::vector<std::string> _introFiles;
-
-	FlcPlayer* _flcPlayer;
-
+	std::string _id;
+	std::vector<std::string> _videos;
+//	std::vector<std::string> _slides;
 
 	public:
-		/// Creates the Intro state.
-		IntroState(const bool wasLetterBoxed);
-		/// Cleans up the Intro state.
-		~IntroState();
+		///
+		RuleVideo(const std::string& type);
+		///
+		~RuleVideo();
 
-		/// Starts the intro.
-		void init();
-		/// The ends.
-		void endVideo();
+		///
+		void load(const YAML::Node& node);
+		///
+		const std::vector<std::string>* getVideos() const;
 };
 
 }

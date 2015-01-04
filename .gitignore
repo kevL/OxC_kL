@@ -24,6 +24,7 @@
 *.cscope_file_list
 *.nsh
 *.bat
+*.*.user
 
 # -OpenXcom root
 *.ac
