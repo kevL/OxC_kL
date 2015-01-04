@@ -261,8 +261,7 @@ void ResourcePack::fadeMusic(
 		func_fade();
 
 		while (Mix_PlayingMusic() == 1)
-		{
-		}
+		{}
 	}
 	else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 		Mix_HaltMusic();

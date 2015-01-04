@@ -57,8 +57,7 @@ IntroState::IntroState(const bool wasLetterBoxed)
 
 	_game->setVolume(
 				Options::soundVolume,
-//				Options::musicVolume / 2,
-				Options::musicVolume, // kL
+				Options::musicVolume,
 				-1);
 
 	const Ruleset* const rules = _game->getRuleset();
@@ -352,7 +351,9 @@ static introSoundEffect introSoundTrack[] =
 	{65535, 0x0FFFF}
 };
 
-
+/**
+ * The AudioSequence struct.
+ */
 static struct AudioSequence
 {
 
@@ -364,6 +365,9 @@ Sound* s;
 FlcPlayer* _flcPlayer;
 
 
+/**
+ *
+ */
 AudioSequence(
 		ResourcePack* resources,
 		FlcPlayer* flcPlayer)
@@ -375,6 +379,9 @@ AudioSequence(
 		_flcPlayer(flcPlayer)
 {}
 
+/**
+ * Overloads operator()
+ */
 void operator()()
 {
 	while (_flcPlayer->getFrameCount() >= introSoundTrack[trackPosition].frameNumber)
@@ -444,6 +451,9 @@ void operator()()
 } *audioSequence;
 
 
+/**
+ *
+ */
 static void audioHandler()
 {
 	(*audioSequence)();
@@ -477,7 +487,7 @@ void IntroState::init()
 
 		if (oldVideoFile == true)
 		{
-			const std::string videoFileName = _introFiles[0];
+			const std::string& videoFileName = _introFiles[0];
 			if (CrossPlatform::fileExists(videoFileName) == true)
 			{
 				_flcPlayer = new FlcPlayer();
@@ -507,7 +517,7 @@ void IntroState::init()
 					i != _introFiles.end();
 					++i)
 			{
-				const std::string videoFileName = *i;
+				const std::string& videoFileName = *i;
 				if (CrossPlatform::fileExists(videoFileName) == true)
 				{
 					_flcPlayer->init(
@@ -550,26 +560,18 @@ void IntroState::init()
 void IntroState::endVideo()
 {
 #ifndef __NO_MUSIC
-	// fade out!
 	Mix_FadeOutChannel(-1, 900); // note: This ain't music, technically.
-	if (Mix_GetMusicType(0) != MUS_MID)
-	{
-		_game->getResourcePack()->fadeMusic(_game, 900); // kL
-//		Mix_FadeOutMusic(45 * 20);
-//		func_fade();
-	}
-	else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
-		Mix_HaltMusic();
 #endif
+	_game->getResourcePack()->fadeMusic(_game, 900);
 
 	SDL_Color
 		pal[256],
 		pal2[256];
 
 	std::memcpy(
-		pal,
-		_game->getScreen()->getPalette(),
-		sizeof(SDL_Color) * 256);
+			pal,
+			_game->getScreen()->getPalette(),
+			sizeof(SDL_Color) * 256);
 
 	for (Uint8
 			i = 20;
@@ -584,7 +586,7 @@ void IntroState::endVideo()
 			break;
 		}
 
-		for (Uint8
+		for (int
 				color = 0;
 				color < 256;
 				++color)

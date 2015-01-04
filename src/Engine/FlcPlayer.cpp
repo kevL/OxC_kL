@@ -187,7 +187,8 @@ bool FlcPlayer::init(
  */
 void FlcPlayer::deInit()
 {
-	if (_mainScreen != 0 && _realScreen != 0)
+	if (_mainScreen != 0
+		&& _realScreen != 0)
 	{
 		if (_mainScreen != _realScreen->getSurface()->getSurface())
 			SDL_FreeSurface(_mainScreen);
@@ -283,6 +284,7 @@ void FlcPlayer::SDLPolling()
 
 			case SDL_QUIT:
 				exit(0);
+			break;
 		}
 	}
 }
@@ -529,31 +531,31 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 void FlcPlayer::color256()
 {
 /*	Uint8 *pSrc;
-	Uint16 numColorPackets;
-	Uint16 numColors;
-	Uint8 numColorsSkip; */
+	Uint16 qtyColorPackets;
+	Uint16 qtyColors;
+	Uint8 qtyColorsSkip; */
 	Uint8
-		numColorsSkip,
+		qtyColorsSkip,
 		* pSrc;
 	Uint16
-		numColorPackets,
-		numColors = 0; // kL
-//		numColors;
+		qtyColorPackets,
+		qtyColors = 0; // kL
+//		qtyColors;
 
 	pSrc = _chunkData + 6;
-	readU16(numColorPackets, pSrc);
+	readU16(qtyColorPackets, pSrc);
 	pSrc += 2;
 
-	while (numColorPackets--)
+	while (qtyColorPackets--)
 	{
-		numColorsSkip = *(pSrc++) + numColors; // kL_note <- uninitialized var, 'numColors'
-		numColors = *(pSrc++);
-		if (numColors == 0)
-			numColors = 256;
+		qtyColorsSkip = *(pSrc++) + qtyColors; // kL_note <- uninitialized var, 'qtyColors'
+		qtyColors = *(pSrc++);
+		if (qtyColors == 0)
+			qtyColors = 256;
 
 		for (int
 				i = 0;
-				i < numColors;
+				i < qtyColors;
 				++i)
 		{
 			_colors[i].r = *(pSrc++);
@@ -563,12 +565,12 @@ void FlcPlayer::color256()
 
 		_realScreen->setPalette(
 							_colors,
-							numColorsSkip,
-							numColors,
+							qtyColorsSkip,
+							qtyColors,
 							true);
 
-		if (numColorPackets >= 1)
-			++numColors;
+		if (qtyColorPackets >= 1)
+			++qtyColors;
 	}
 }
 
@@ -612,7 +614,7 @@ void FlcPlayer::fliSS2()
 		{
 			setLastByte = true;
 			lastByte = (counter & 0x00FF);
-			readS16(counter, (Sint8 *)pSrc);
+			readS16(counter, (Sint8*)pSrc);
 			pSrc += 2;
 		}
 
@@ -627,10 +629,12 @@ void FlcPlayer::fliSS2()
 
 				if (countData > 0)
 				{
-					std::copy(pSrc, pSrc + (2 * countData), pTmpDst);
+					std::copy(
+							pSrc,
+							pSrc + (2 * countData),
+							pTmpDst);
 					pTmpDst += (2 * countData);
 					pSrc += (2 * countData);
-
 				}
 				else
 				{
@@ -649,11 +653,12 @@ void FlcPlayer::fliSS2()
 				}
 			}
 
-			if (setLastByte)
+			if (setLastByte == true)
 			{
 				setLastByte = false;
 				*(pDst + _mainScreen->pitch - 1) = lastByte;
 			}
+
 			pDst += _mainScreen->pitch;
 		}
 	}
@@ -732,14 +737,14 @@ void FlcPlayer::fliLC()
 		filler;
 	Uint16
 		lines,
-		tmp;
+		temp;
 
 	pSrc = _chunkData + 6;
 	pDst = (Uint8*)_mainScreen->pixels + _offset;
 
-	readU16(tmp, pSrc);
+	readU16(temp, pSrc);
 	pSrc += 2;
-	pDst += tmp*_mainScreen->pitch;
+	pDst += temp * _mainScreen->pitch;
 	readU16(lines, pSrc);
 	pSrc += 2;
 
@@ -774,6 +779,7 @@ void FlcPlayer::fliLC()
 				}
 			}
 		}
+
 		pDst += _mainScreen->pitch;
 	}
 }
@@ -784,34 +790,39 @@ void FlcPlayer::fliLC()
 void FlcPlayer::color64()
 {
 	Uint8
-		NumColorsSkip,
+		qtyColorsSkip,
 		* pSrc;
 	Uint16
-		NumColors,
-		NumColorPackets;
+		qtyColors,
+		qtyColorPackets;
 
 	pSrc = _chunkData + 6;
-	readU16(NumColorPackets, pSrc);
+	readU16(qtyColorPackets, pSrc);
 	pSrc += 2;
 
-	while (NumColorPackets--)
+	while (qtyColorPackets--)
 	{
-		NumColorsSkip = *(pSrc++);
-		NumColors = *(pSrc++);
+		qtyColorsSkip = *(pSrc++);
+		qtyColors = *(pSrc++);
 
-		if (NumColors == 0)
-		{
-			NumColors = 256;
-		}
+		if (qtyColors == 0)
+			qtyColors = 256;
 
-		for (int i = 0; i < NumColors; ++i)
+		for (int
+				i = 0;
+				i < qtyColors;
+				++i)
 		{
 			_colors[i].r = *(pSrc++) << 2;
 			_colors[i].g = *(pSrc++) << 2;
 			_colors[i].b = *(pSrc++) << 2;
 		}
 
-		_realScreen->setPalette(_colors, NumColorsSkip, NumColors, true);
+		_realScreen->setPalette(
+							_colors,
+							qtyColorsSkip,
+							qtyColors,
+							true);
 	}
 }
 
@@ -823,13 +834,16 @@ void FlcPlayer::fliCopy()
 	Uint8
 		* pSrc,
 		* pDst;
-	int Lines = _screenHeight;
+	int lines = _screenHeight;
 	pSrc = _chunkData + 6;
 	pDst = (Uint8*)_mainScreen->pixels + _offset;
 
-	while (Lines--)
+	while (lines--)
 	{
-		std::memcpy(pDst, pSrc, _screenWidth);
+		std::memcpy(
+				pDst,
+				pSrc,
+				_screenWidth);
 		pSrc += _screenWidth;
 		pDst += _mainScreen->pitch;
 	}
@@ -841,12 +855,15 @@ void FlcPlayer::fliCopy()
 void FlcPlayer::black()
 {
 	Uint8* pDst;
-	int Lines = _screenHeight;
+	int lines = _screenHeight;
 	pDst = (Uint8*)_mainScreen->pixels + _offset;
 
-	while (Lines-- > 0)
+	while (lines-- > 0)
 	{
-		std::memset(pDst, 0, _screenHeight);
+		std::memset(
+				pDst,
+				0,
+				_screenHeight);
 		pDst += _mainScreen->pitch;
 	}
 }
