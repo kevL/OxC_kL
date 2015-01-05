@@ -691,9 +691,9 @@ void Map::drawTerrain(Surface* surface)
 
 		Uint8 wpColor;
 		if (_save->getTerrain() == "DESERT")
-			wpColor = Palette::blockOffset(0)+2; // light gray
+			wpColor = Palette::blockOffset(7)+4; // blue //(0)+2; // white
 		else
-			wpColor = Palette::blockOffset(1)+2; // yellow
+			wpColor = Palette::blockOffset(1)+4; // orange
 
 		wpID->setColor(wpColor);
 	}
@@ -1813,8 +1813,8 @@ void Map::drawTerrain(Surface* surface)
 
 					// Draw Path Preview
 					if (tile->getPreview() != -1
-						&& tile->isDiscovered(0) == true
-						&& (_previewSetting & PATH_ARROWS))
+						&& (_previewSetting & PATH_ARROWS)
+						&& tile->isDiscovered(0) == true)
 					{
 						if (itZ > 0
 							&& tile->hasNoFloor(tileBelow) == true)
