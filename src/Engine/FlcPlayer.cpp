@@ -58,7 +58,7 @@ enum ChunkTypes
 	FLI_BRUN	= 0x0F, // or BYTE_RUN
 	FLI_COPY	= 0x10,
 
-	AUDIO_CHUNK		= 0xAAAA, // This is the only exception, it's from TFTD
+	AUDIO_CHUNK		= 0xAAAA, // This is the only exception, it's from TFTD.
 	PREFIX_CHUNK	= 0xF100,
 	FRAME_TYPE		= 0xF1FA
 };
@@ -81,7 +81,7 @@ enum PlayingState
 
 
 /**
- * cTor.
+ * Creates and initializes FlcPlayer.
  */
 FlcPlayer::FlcPlayer()
 	:
@@ -100,12 +100,12 @@ FlcPlayer::~FlcPlayer()
 }
 
 /**
-* Initialize data structures needed buy the player and read the whole file into memory
-* @param filename Video file name
-* @param frameCallback Function to call each video frame
-* @param game Pointer to the Game instance
-* @param dx An offset on the x axis for the video to be rendered
-* @param dy An offset on the y axis for the video to be rendered
+* Initializes data structures needed buy the player and read the whole file into memory.
+* @param filename		- video file name
+* @param frameCallback	- function to call each video frame
+* @param game			- pointer to the Game instance
+* @param dx				- an offset on the x axis for the video to be rendered
+* @param dy				- an offset on the y axis for the video to be rendered
 */
 bool FlcPlayer::init(
 		const char* filename,
@@ -116,7 +116,7 @@ bool FlcPlayer::init(
 {
 	if (_fileBuf != 0)
 	{
-		Log(LOG_ERROR) << "Trying to init a video player that is already initialized";
+		Log(LOG_ERROR) << "Tried to init a video player that is already initialized - EXIT FlcPlayer::init()";
 		return false;
 	}
 
@@ -392,7 +392,7 @@ void FlcPlayer::decodeVideo(bool skipLastFrame)
 
 				Uint32 delay;
 				if (_headerType == FLI_TYPE)
-					delay = _delayOverride > 0 ? static_cast<Uint32>(_delayOverride) : static_cast<Uint32>(_headerSpeed * (1000. / 70.));
+					delay = _delayOverride > 0? static_cast<Uint32>(_delayOverride): static_cast<Uint32>(_headerSpeed * (1000. / 70.));
 				else
 					delay = static_cast<Uint32>(_videoDelay);
 
@@ -505,7 +505,7 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	AudioBuffer* loadingBuff = _audioData.loadingBuffer;
 	assert(loadingBuff->currSamplePos == 0);
 
-	int newSize = (_audioFrameSize + loadingBuff->sampleCount);
+	const int newSize = (_audioFrameSize + loadingBuff->sampleCount);
 	if (newSize > loadingBuff->sampleBufSize)
 	{
 		/* If the sample count has changed, we need to reallocate (Handles initial state
@@ -530,17 +530,12 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
  */
 void FlcPlayer::color256()
 {
-/*	Uint8 *pSrc;
-	Uint16 qtyColorPackets;
-	Uint16 qtyColors;
-	Uint8 qtyColorsSkip; */
 	Uint8
 		qtyColorsSkip,
 		* pSrc;
 	Uint16
 		qtyColorPackets,
-		qtyColors = 0; // kL
-//		qtyColors;
+		qtyColors = 0;
 
 	pSrc = _chunkData + 6;
 	readU16(qtyColorPackets, pSrc);
@@ -548,7 +543,7 @@ void FlcPlayer::color256()
 
 	while (qtyColorPackets--)
 	{
-		qtyColorsSkip = *(pSrc++) + qtyColors; // kL_note <- uninitialized var, 'qtyColors'
+		qtyColorsSkip = *(pSrc++) + qtyColors;
 		qtyColors = *(pSrc++);
 		if (qtyColors == 0)
 			qtyColors = 256;
@@ -919,12 +914,14 @@ void FlcPlayer::initAudio(
 		Uint16 format,
 		Uint8 channels)
 {
-	int err;
-
-	err = Mix_OpenAudio(_audioData.sampleRate, format, channels, _audioFrameSize);
+	const int err = Mix_OpenAudio(
+							_audioData.sampleRate,
+							format,
+							channels,
+							_audioFrameSize);
 	_videoDelay = 1000 / (_audioData.sampleRate / _audioFrameSize);
 
-	if (err)
+	if (err != 0)
 	{
 		printf("Failed to open audio (%d)\n", err);
 		return;
@@ -945,7 +942,9 @@ void FlcPlayer::initAudio(
 	_audioData.playingBuffer->samples = (char*)malloc(_audioFrameSize);
 	_audioData.playingBuffer->sampleBufSize = _audioFrameSize;
 
-	Mix_HookMusic(FlcPlayer::audioCallback, &_audioData);
+	Mix_HookMusic(
+				FlcPlayer::audioCallback,
+				&_audioData);
 }
 
 /**
@@ -1033,7 +1032,7 @@ void FlcPlayer::waitForNextFrame(Uint32 delay)
 		while (currentTick < newTick)
 		{
 			while (
-				(newTick - currentTick) > 10
+					(newTick - currentTick) > 10
 					&& isEndOfFile(_audioFrameData) == false)
 			{
 				decodeAudio(1);
