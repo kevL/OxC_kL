@@ -700,17 +700,17 @@ void Map::drawTerrain(Surface* surface)
 
 	surface->lock();
 	for (int
-			itZ = beginZ;
+			itZ = beginZ; // 3. finally lap the levels bottom to top
 			itZ <= endZ;
 			++itZ)
 	{
 		for (int
-				itX = beginX;
+				itX = beginX; // 2. next draw those columns eastward
 				itX <= endX;
 				++itX)
 		{
 			for (int
-					itY = beginY;
+					itY = beginY; // 1. first draw terrain in columns north to south
 					itY <= endY;
 					++itY)
 			{
@@ -723,7 +723,7 @@ void Map::drawTerrain(Surface* surface)
 										&screenPosition);
 				screenPosition += _camera->getMapOffset();
 
-				if (   screenPosition.x > -_spriteWidth // only render cells that are inside the surface
+				if (   screenPosition.x > -_spriteWidth // only render cells that are inside the surface (ie viewport ala player's monitor)
 					&& screenPosition.x < surface->getWidth() + _spriteWidth
 					&& screenPosition.y > -_spriteHeight
 					&& screenPosition.y < surface->getHeight() + _spriteHeight)
@@ -765,7 +765,6 @@ void Map::drawTerrain(Surface* surface)
 							const Tile* const tileEastDown = _save->getTile(mapPosition + Position(1, 0,-1));
 							if (tileEastDown != NULL)
 							{
-								// from below_ 'Draw soldier'.
 								// This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
 								// also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								// ... should probably be a subfunction
@@ -891,19 +890,13 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 
-// START ADVANCED DRAWING CYCLE:
+//* _START_ADVANCED_DRAWING_CYCLE_ *//
 					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
-						const Tile* const tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
+						const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1, 0));
 						BattleUnit* buNorth = NULL;
 
-						int
-							tileNorthShade,
-							tileTwoNorthShade,
-//							tileWestShade,
-							tileNorthWestShade,
-							tileSouthWestShade;
-
+						int tileNorthShade;
 						if (tileNorth->isDiscovered(2) == true)
 						{
 							buNorth = tileNorth->getUnit();
@@ -912,7 +905,7 @@ void Map::drawTerrain(Surface* surface)
 						else
 							tileNorthShade = 16;
 
-						// Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
+						// Phase I: rerender the unit to make sure it don't get drawn over any walls or under any tiles.
 						if (buNorth != NULL
 							&& buNorth->getUnitVisible() == true
 							&& buNorth->getStatus() == STATUS_WALKING
@@ -948,13 +941,15 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase II: rerender any east wall type objects in the tile to the north of the unit
+							// Phase II: re-render any east wall type objects in the tile to the north of the unit;
 							// only applies to movement in the north/south direction.
 							if ((buNorth->getDirection() == 0
 									|| buNorth->getDirection() == 4)
-								&& mapPosition.y >= 2)
+								&& mapPosition.y > 1)
 							{
-								const Tile* const tileTwoNorth = _save->getTile(mapPosition - Position(0, 2, 0));
+								const Tile* const tileTwoNorth = _save->getTile(mapPosition + Position(0,-2, 0));
+
+								int tileTwoNorthShade;
 								if (tileTwoNorth->isDiscovered(2) == true)
 									tileTwoNorthShade = tileTwoNorth->getShade();
 								else
@@ -972,10 +967,12 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase III: render any south wall type objects in the tile to the northWest
+							// Phase III: render any south wall type objects in the tile to the northWest.
 							if (mapPosition.x > 0)
 							{
-								const Tile* const tileNorthWest = _save->getTile(mapPosition - Position(1, 1, 0));
+								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1, 0));
+
+								int tileNorthWestShade;
 								if (tileNorthWest->isDiscovered(2) == true)
 									tileNorthWestShade = tileNorthWest->getShade();
 								else
@@ -993,7 +990,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase IV: render any south or east wall type objects in the tile to the north
+							// Phase IV: render any south or east wall type objects in the tile to the north.
 							if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > 5
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
@@ -1009,14 +1006,18 @@ void Map::drawTerrain(Surface* surface)
 
 							if (mapPosition.x > 0)
 							{
-								// Phase V: re-render objects in the tile to the south west
+								// Phase V: re-render objects in the tile to the south west;
 								// only render half so it won't overlap other areas that are already drawn
 								// and only apply this to movement in a north easterly or south westerly direction.
+/*kL: This would (and does) overwrite the lower-right bit of a unit-sprite in the current tile.
+And it seems to serve no appreciable function vis-a-vis the moving unit (*buNorth), whose sprite never quite touches that 'bit'.
 								if ((buNorth->getDirection() == 1
 										|| buNorth->getDirection() == 5)
 									&& mapPosition.y < endY - 1)
 								{
 									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
+
+									int tileSouthWestShade;
 									if (tileSouthWest->isDiscovered(2) == true)
 										tileSouthWestShade = tileSouthWest->getShade();
 									else
@@ -1030,10 +1031,10 @@ void Map::drawTerrain(Surface* surface)
 															screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 															tileSouthWestShade,
 															true);
-								}
+								} */
 
 								// Phase VI: we need to re-render everything in the tile to the west.
-								const Tile* const tileWest = _save->getTile(mapPosition - Position(1, 0, 0));
+								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1, 0, 0));
 								const BattleUnit* buWest = NULL;
 
 								int tileWestShade;
@@ -1235,7 +1236,7 @@ void Map::drawTerrain(Surface* surface)
 														0,
 														true);
 								} */
-// END ADVANCED DRAWING CYCLE
+//* _END_ADVANCED_DRAWING_CYCLE_ *//
 
 
 					// Draw walls
@@ -2215,7 +2216,7 @@ void Map::drawTerrain(Surface* surface)
 //						int offset_y = 0; // kL
 						if (_previewSetting & PATH_ARROWS)
 						{
-							const Tile* const tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));
+							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
 
 							if (itZ > 0
 								&& tile->hasNoFloor(tileBelow) == true)
