@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "CivilianBAIState.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 
 #include "BattlescapeState.h"
@@ -62,11 +61,10 @@ CivilianBAIState::CivilianBAIState(
 		_visibleEnemies(0),
 		_spottingEnemies(0),
 		_fromNode(node),
-		_toNode(NULL)
+		_toNode(NULL),
+		_traceAI(false)
 {
-	//Log(LOG_INFO) << "Create CivilianBAIState";
-
-	_traceAI = Options::traceAI;
+//	_traceAI = Options::traceAI;
 
 	_escapeAction = new BattleAction();
 	_patrolAction = new BattleAction();
@@ -77,32 +75,30 @@ CivilianBAIState::CivilianBAIState(
  */
 CivilianBAIState::~CivilianBAIState()
 {
-	//Log(LOG_INFO) << "Delete CivilianBAIState";
-
 	delete _escapeAction;
 	delete _patrolAction;
 }
 
 /**
  * Loads the AI state from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void CivilianBAIState::load(const YAML::Node& node)
 {
 	_AIMode = node["AIMode"].as<int>(0);
 
-	int fromNodeID = node["fromNode"].as<int>(-1);
+	const int fromNodeID = node["fromNode"].as<int>(-1);
 	if (fromNodeID != -1)
 		_fromNode = _save->getNodes()->at(fromNodeID);
 
-	int toNodeID = node["toNode"].as<int>(-1);
+	const int toNodeID = node["toNode"].as<int>(-1);
 	if (toNodeID != -1)
 		_toNode = _save->getNodes()->at(toNodeID);
 }
 
 /**
  * Saves the AI state to a YAML file.
- * @return, YAML node.
+ * @return, YAML node
  */
 YAML::Node CivilianBAIState::save() const
 {
@@ -110,9 +106,9 @@ YAML::Node CivilianBAIState::save() const
 		fromNodeID = -1,
 		toNodeID = -1;
 
-	if (_fromNode)
+	if (_fromNode != NULL)
 		fromNodeID	= _fromNode->getID();
-	if (_toNode)
+	if (_toNode != NULL)
 		toNodeID	= _toNode->getID();
 
 	YAML::Node node;
@@ -128,19 +124,13 @@ YAML::Node CivilianBAIState::save() const
  * Enters the current AI state.
  */
 void CivilianBAIState::enter()
-{
-	//Log(LOG_INFO) << "CivilianBAIState::enter()";
-}
+{}
 
 /**
  * Exits the current AI state.
  */
 void CivilianBAIState::exit()
-{
-//kL	if (_toNode) _toNode->freeNode(); // kL_note: This class never allocates nodes....
-
-	//Log(LOG_INFO) << "CivilianBAIState::exit()";
-}
+{}
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.
@@ -157,26 +147,19 @@ void CivilianBAIState::think(BattleAction* action)
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
 
-	if (_traceAI)
-	{
-		Log(LOG_INFO) << "Civilian Unit has " << _visibleEnemies << " enemies visible, "
-				<< _spottingEnemies << " of whom are spotting him. ";
+//	if (_traceAI)
+//	{
+//		Log(LOG_INFO) << "Civilian Unit has " << _visibleEnemies << " enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+//		std::string AIMode;
+//		switch (_AIMode)
+//		{
+//			case 0: AIMode = "Patrol"; break;
+//			case 3: AIMode = "Escape";
+//		}
+//		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
+//	}
 
-		std::string AIMode;
-		switch (_AIMode)
-		{
-			case 0:
-				AIMode = "Patrol";
-			break;
-			case 3:
-				AIMode = "Escape";
-			break;
-		}
-
-		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
-	}
-
-	if (_spottingEnemies
+	if (_spottingEnemies != 0
 		&& _escapeTUs == 0)
 	{
 		setupEscape();
@@ -192,9 +175,9 @@ void CivilianBAIState::think(BattleAction* action)
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies
-			|| _visibleEnemies
-			|| RNG::percent(10))
+		if (_spottingEnemies != 0
+			|| _visibleEnemies != 0
+			|| RNG::percent(10) == true)
 		{
 			evaluate = true;
 		}
@@ -206,22 +189,19 @@ void CivilianBAIState::think(BattleAction* action)
 		evaluate = true;
 	}
 
-	if (evaluate)
+	if (evaluate == true)
 	{
 		evaluateAIMode();
-		if (_traceAI)
-		{
-			std::string AIMode;
-			switch (_AIMode)
-			{
-				case 0: AIMode = "Patrol";
-				break;
-				case 3: AIMode = "Escape";
-				break;
-			}
-
-			if (_traceAI) Log(LOG_INFO) << "Re-Evaluated, now using " << AIMode << " behaviour";
-		}
+//		if (_traceAI)
+//		{
+//			std::string AIMode;
+//			switch (_AIMode)
+//			{
+//				case 0: AIMode = "Patrol"; break;
+//				case 3: AIMode = "Escape";
+//			}
+//			Log(LOG_INFO) << "Re-Evaluated, now using " << AIMode << " behaviour";
+//		}
 	}
 
 	switch (_AIMode)
@@ -238,10 +218,6 @@ void CivilianBAIState::think(BattleAction* action)
 		case AI_PATROL:
 			action->type	= _patrolAction->type;
 			action->target	= _patrolAction->target;
-		break;
-
-		default:
-		break;
 	}
 
 	if (action->type == BA_WALK
@@ -249,7 +225,6 @@ void CivilianBAIState::think(BattleAction* action)
 	{
 		_escapeTUs = 0;
 	}
-	//Log(LOG_INFO) << "CivilianBAIState::think() EXIT";
 }
 
 /**
@@ -257,13 +232,14 @@ void CivilianBAIState::think(BattleAction* action)
  */
 int CivilianBAIState::selectNearestTarget()
 {
-	int tally = 0;
-	int closest = 100;
+	int
+		tally = 0,
+		closest = 100;
 
 	_aggroTarget = NULL;
 
-	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
-	origin.z -= 4;
+	const Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit)
+						  + Position(0, 0,-4);
 
 	Position target;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -274,21 +250,21 @@ int CivilianBAIState::selectNearestTarget()
 		if ((*i)->isOut() == false
 			&& (*i)->getFaction() == FACTION_HOSTILE)
 		{
-			if (_save->getTileEngine()->visible(_unit, (*i)->getTile()))
+			if (_save->getTileEngine()->visible(_unit, (*i)->getTile()) == true)
 			{
-				tally++;
+				++tally;
 
-				int dist = _save->getTileEngine()->distance(
-														_unit->getPosition(),
-														(*i)->getPosition());
+				const int dist = _save->getTileEngine()->distance(
+															_unit->getPosition(),
+															(*i)->getPosition());
 				if (dist < closest)
 				{
-					bool valid = _save->getTileEngine()->canTargetUnit(
-																	&origin,
-																	(*i)->getTile(),
-																	&target,
-																	_unit);
-					if (valid)
+					const bool valid = _save->getTileEngine()->canTargetUnit(
+																		&origin,
+																		(*i)->getTile(),
+																		&target,
+																		_unit);
+					if (valid == true)
 					{
 						closest = dist;
 						_aggroTarget = *i;
@@ -298,7 +274,7 @@ int CivilianBAIState::selectNearestTarget()
 		}
 	}
 
-	if (_aggroTarget)
+	if (_aggroTarget != NULL)
 		return tally;
 
 	return 0;
@@ -320,9 +296,9 @@ int CivilianBAIState::getSpottingUnits(Position pos) const
 		if ((*i)->isOut() == false
 			&& (*i)->getFaction() == FACTION_HOSTILE)
 		{
-			int dist = _save->getTileEngine()->distance(
-													pos,
-													(*i)->getPosition());
+			const int dist = _save->getTileEngine()->distance(
+															pos,
+															(*i)->getPosition());
 			if (dist > 20)
 				continue;
 
@@ -330,16 +306,16 @@ int CivilianBAIState::getSpottingUnits(Position pos) const
 			originVoxel.z -= 4;
 
 			Position targetVoxel;
-			if (checking)
+			if (checking == true)
 			{
 				if (_save->getTileEngine()->canTargetUnit(
 													&originVoxel,
 													_save->getTile(pos),
 													&targetVoxel,
 													*i,
-													_unit))
+													_unit) == true)
 				{
-					tally++;
+					++tally;
 				}
 			}
 			else
@@ -348,9 +324,9 @@ int CivilianBAIState::getSpottingUnits(Position pos) const
 													&originVoxel,
 													_save->getTile(pos),
 													&targetVoxel,
-													*i))
+													*i) == true)
 				{
-					tally++;
+					++tally;
 				}
 			}
 		}
@@ -371,8 +347,7 @@ void CivilianBAIState::setupEscape()
 		FIRE_PENALTY			= 40,
 		BASE_SYSTEMATIC_SUCCESS	= 100,
 		BASE_DESPERATE_SUCCESS	= 110,
-	// a score that's good enough to quit the while loop early;
-		FAST_PASS_THRESHOLD		= 100;
+		FAST_PASS_THRESHOLD		= 100; // a score that's good enough to quit the while-loop early
 
 	int
 		bestTileScore = -100000,
@@ -383,7 +358,7 @@ void CivilianBAIState::setupEscape()
 		dist = 0;
 
 	selectNearestTarget(); // gets an _aggroTarget
-	if (_aggroTarget)
+	if (_aggroTarget != NULL)
 		dist = _save->getTileEngine()->distance(
 											_unit->getPosition(),
 											_aggroTarget->getPosition());
@@ -427,7 +402,7 @@ void CivilianBAIState::setupEscape()
 		}
 		else
 		{
-			if (_traceAI && tries == 121) Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
+			//if (_traceAI && tries == 121) Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 
 			score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
 
@@ -471,13 +446,13 @@ void CivilianBAIState::setupEscape()
 			if (std::find(
 						reachable.begin(),
 						reachable.end(),
-						_save->getTileIndex(tile->getPosition()))
-					== reachable.end())
+						_save->getTileIndex(tile->getPosition())) == reachable.end())
 			{
 				continue;
 			}
 
-			if (_spottingEnemies || spotters)
+			if (_spottingEnemies != 0
+				|| spotters != 0)
 			{
 				if (_spottingEnemies <= spotters) // that's for giving away our position
 					score -= (1 + spotters - _spottingEnemies) * EXPOSURE_PENALTY;
@@ -485,23 +460,27 @@ void CivilianBAIState::setupEscape()
 					score += (_spottingEnemies - spotters) * EXPOSURE_PENALTY;
 			}
 
-			if (tile->getFire())
+			if (tile->getFire() != 0)
 				score -= FIRE_PENALTY;
 
-			if (_traceAI)
-			{
-				tile->setMarkerColor(score < 0 ? 3 : (score < FAST_PASS_THRESHOLD/2 ? 8 : (score < FAST_PASS_THRESHOLD ? 9 : 5)));
-				tile->setPreview(10);
-				tile->setTUMarker(score);
-			}
+//			if (_traceAI)
+//			{
+//				tile->setMarkerColor(score < 0? 3: (score < FAST_PASS_THRESHOLD/2? 8: (score < FAST_PASS_THRESHOLD ?9: 5)));
+//				tile->setPreview(10);
+//				tile->setTUMarker(score);
+//			}
 		}
 
-		if (tile
+		if (tile != NULL
 			&& score > bestTileScore)
 		{
 			// calculate TUs to tile;
 			// we could be getting this from findReachable() somehow but that would break something for sure...
-			_save->getPathfinding()->calculate(_unit, _escapeAction->target, 0, tu);
+			_save->getPathfinding()->calculate(
+											_unit,
+											_escapeAction->target,
+											0,
+											tu);
 
 			if (_escapeAction->target == _unit->getPosition()
 				|| _save->getPathfinding()->getStartDirection() != -1)
@@ -513,12 +492,12 @@ void CivilianBAIState::setupEscape()
 				if (_escapeAction->target == _unit->getPosition())
 					_escapeTUs = 1;
 
-				if (_traceAI)
-				{
-					tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD / 2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5)));
-					tile->setPreview(10);
-					tile->setTUMarker(score);
-				}
+//				if (_traceAI)
+//				{
+//					tile->setMarkerColor(score < 0? 7: (score < FAST_PASS_THRESHOLD / 2? 10: (score < FAST_PASS_THRESHOLD ?4: 5)));
+//					tile->setPreview(10);
+//					tile->setTUMarker(score);
+//				}
 			}
 
 			_save->getPathfinding()->abortPath();
@@ -530,21 +509,18 @@ void CivilianBAIState::setupEscape()
 
 	_escapeAction->target = bestTile;
 
-	if (_traceAI) _save->getTile(_escapeAction->target)->setMarkerColor(13);
+	//if (_traceAI) _save->getTile(_escapeAction->target)->setMarkerColor(13);
 
 	if (bestTileScore <= -100000)
 	{
-		if (_traceAI) Log(LOG_INFO) << "Escape estimation failed.";
-
+		//if (_traceAI) Log(LOG_INFO) << "Escape estimation failed.";
 		// do something, just don't look dumbstruck :P
 		_escapeAction->type = BA_RETHINK;
 		return;
 	}
 	else
 	{
-		if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, "
-				<< _save->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away.";
-
+		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << _save->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away.";
 		_escapeAction->type = BA_WALK;
 	}
 }
@@ -559,8 +535,7 @@ void CivilianBAIState::setupPatrol()
 	if (_toNode != NULL
 		&& _unit->getPosition() == _toNode->getPosition())
 	{
-		if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
-
+		//if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
 		// destination reached
 		// head off to next patrol node
 		_fromNode = _toNode;
@@ -572,16 +547,16 @@ void CivilianBAIState::setupPatrol()
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
 		int closest = 1000000;
-		for (std::vector<Node*>::iterator
+		for (std::vector<Node*>::const_iterator
 				i = _save->getNodes()->begin();
 				i != _save->getNodes()->end();
 				++i)
 		{
 			node = *i;
 
-			int dist = _save->getTileEngine()->distanceSq(
-													_unit->getPosition(),
-													node->getPosition());
+			const int dist = _save->getTileEngine()->distanceSq(
+															_unit->getPosition(),
+															node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z
 				&& dist < closest
 				&& (node->getType() & Node::TYPE_SMALL))
@@ -597,7 +572,7 @@ void CivilianBAIState::setupPatrol()
 	while (_toNode == NULL
 		&& triesLeft)
 	{
-		triesLeft--;
+		--triesLeft;
 
 		_toNode = _save->getPatrolNode(
 									true,
@@ -639,17 +614,17 @@ void CivilianBAIState::evaluateAIMode()
 {
 	double
 		escapeOdds = 0.0,
-		patrolOdds = 30.0;
+		patrolOdds = 30.;
 
 	if (_visibleEnemies > 0)
 	{
-		escapeOdds = 15.0;
-		patrolOdds = 15.0;
+		escapeOdds = 15.;
+		patrolOdds = 15.;
 	}
 
 	if (_spottingEnemies)
 	{
-		patrolOdds = 0.0;
+		patrolOdds = 0.;
 
 		if (_escapeTUs == 0)
 			setupEscape();
@@ -683,11 +658,11 @@ void CivilianBAIState::evaluateAIMode()
 	}
 
 	if (_spottingEnemies)
-		escapeOdds = 10.0 * escapeOdds * static_cast<double>((_spottingEnemies + 10)) / 100.0;
+		escapeOdds = 10. * escapeOdds * static_cast<double>((_spottingEnemies + 10)) / 100.;
 	else
-		escapeOdds /= 2.0;
+		escapeOdds /= 2.;
 
-	double decision = 1.0 + RNG::generate(0.0, patrolOdds + escapeOdds);
+	const double decision = 1. + RNG::generate(0., patrolOdds + escapeOdds);
 	if (decision > escapeOdds)
 		_AIMode = AI_PATROL;
 	else
@@ -695,7 +670,7 @@ void CivilianBAIState::evaluateAIMode()
 
 	if (_AIMode == AI_PATROL)
 	{
-		if (_toNode)
+		if (_toNode != NULL)
 			return;
 	}
 

@@ -17,15 +17,13 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "TileEngine.h"
 
+//#define _USE_MATH_DEFINES
 //#include <climits>
 //#include <cmath>
 //#include <functional>
 //#include <set>
-
 //#include <assert.h>
 //#include <SDL.h>
 
@@ -390,7 +388,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	}
 
 	for (int
-			x = 0; // kL_note: does the unit itself really need checking...
+			x = 0; // does the unit itself really need checking ...
 			x <= MAX_VIEW_DISTANCE;
 			++x)
 	{
@@ -412,8 +410,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 			{
 				testPos.z = z;
 
-				const int distSqr = x * x + y * y + z * z;
-				if (distSqr <= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)
+				if (x * x + y * y <= MAX_VIEW_DISTANCE_SQR)
 				{
 					const int
 						deltaPos_x = (sign_x[dir] * (swapXY? y: x)),
@@ -667,16 +664,18 @@ void TileEngine::calculateFOV(const Position& position)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		const int dist = distance(
-								position,
-								(*i)->getPosition());
-		if (dist <= MAX_VIEW_DISTANCE)
+		if (distanceSq(
+					position,
+					(*i)->getPosition(),
+					false) <= MAX_VIEW_DISTANCE_SQR)
+		{
 			calculateFOV(*i);
+		}
 	}
 }
 
 /**
- * Recalculates FOV of all units in-game.
+ * Recalculates FOV of all conscious units on the battlefield.
  */
 void TileEngine::recalculateFOV()
 {
@@ -717,7 +716,7 @@ bool TileEngine::visible(
 	const int dist = distance(
 							unit->getPosition(),
 							targetUnit->getPosition());
-	if (dist > MAX_VIEW_DISTANCE)
+	if (dist * dist > MAX_VIEW_DISTANCE_SQR)
 		return false;
 
 	if (unit->getFaction() == FACTION_PLAYER
@@ -1400,7 +1399,7 @@ bool TileEngine::checkReactionFire(
 				if (reactor->getGeoscapeSoldier() != NULL
 					&& reactor->getFaction() == reactor->getOriginalFaction())
 				{
-					Log(LOG_INFO) << ". . reactionXP to " << reactor->getId();
+					//Log(LOG_INFO) << ". . reactionXP to " << reactor->getId();
 					reactor->addReactionExp();
 				}
 
@@ -1422,9 +1421,9 @@ bool TileEngine::checkReactionFire(
 }
 
 /**
- * Creates a vector of units that can spot this unit.
- * @param unit - pointer to a unit to check for spotters of
- * @return, vector of pointers to units that can see the trigger unit
+ * Creates a vector of BattleUnits that can spot 'unit'.
+ * @param unit - pointer to a BattleUnit to spot
+ * @return, vector of pointers to BattleUnits that can see the triggering unit
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {

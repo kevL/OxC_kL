@@ -102,7 +102,7 @@ UnitDieBState::UnitDieBState(
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
 		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
-		std::vector<Node*>* const nodes = _parent->getSave()->getNodes();
+		const std::vector<Node*>* const nodes = _parent->getSave()->getNodes();
 		if (nodes == NULL)
 			return; // this better not happen.
 
@@ -113,8 +113,9 @@ UnitDieBState::UnitDieBState(
 		{
 			if (_parent->getSave()->getTileEngine()->distanceSq(
 															(*node)->getPosition(),
-															_unit->getPosition())
-														< 4)
+															_unit->getPosition(),
+															false)
+														< 5)
 			{
 				(*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
 			}
@@ -292,8 +293,7 @@ void UnitDieBState::think()
  * Unit dying cannot be cancelled.
  */
 void UnitDieBState::cancel()
-{
-}
+{}
 
 /**
  * Converts unit to a corpse-item.
