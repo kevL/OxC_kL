@@ -658,7 +658,7 @@ void CivilianBAIState::evaluateAIMode()
 	}
 
 	if (_spottingEnemies)
-		escapeOdds = 10. * escapeOdds * static_cast<double>((_spottingEnemies + 10)) / 100.;
+		escapeOdds = 10. * escapeOdds * static_cast<double>(_spottingEnemies + 10) / 100.;
 	else
 		escapeOdds /= 2.;
 

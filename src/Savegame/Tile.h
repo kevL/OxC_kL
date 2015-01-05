@@ -22,8 +22,7 @@
 
 //#include <string>
 //#include <vector>
-
-//#include <SDL_types.h> // for Uint8
+//#include <SDL_types.h>
 
 #include "BattleUnit.h"
 

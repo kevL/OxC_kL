@@ -21,7 +21,6 @@
 
 //#include <fstream>
 //#include <sstream>
-
 //#include <SDL_endian.h>
 
 #include "MapData.h"
@@ -125,12 +124,10 @@ SurfaceSet* MapDataSet::getSurfaceset() const
  */
 void MapDataSet::loadData()
 {
-	//Log(LOG_INFO) << "MapDataSet::loadData()";
 	if (_loaded == true) // prevents loading twice
 		return;
 
 	_loaded = true;
-
 	int objNumber = 0;
 
 #pragma pack(push, 1)

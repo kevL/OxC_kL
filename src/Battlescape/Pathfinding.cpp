@@ -89,9 +89,7 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
  * @internal This is required to be here because it requires the PathfindingNode class definition.
  */
 Pathfinding::~Pathfinding()
-{
-	// Nothing more to do here.
-}
+{}
 
 /**
  * Gets the Node on a given position on the map.

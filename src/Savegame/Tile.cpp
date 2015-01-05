@@ -45,13 +45,13 @@ namespace OpenXcom
 /// How many bytes various fields use in a serialized tile. See header.
 Tile::SerializationKey Tile::serializationKey =
 {
-	4,	// index
-	2,	// _mapDataSetID, four of these
-	2,	// _mapDataID, four of these
-	1,	// _fire
-	1,	// _smoke
-	1,	// _animOffset
-	1,	// one 8-bit bool field
+	4, // index
+	2, // _mapDataSetID, four of these
+	2, // _mapDataID, four of these
+	1, // _fire
+	1, // _smoke
+	1, // _animOffset
+	1, // one 8-bit bool field
 	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1 // total bytes to save one tile
 };
 
@@ -216,13 +216,13 @@ YAML::Node Tile::save() const
 		node["mapDataSetID"].push_back(_mapDataSetID[i]);
 	}
 
-	if (_smoke) node["smoke"]			= _smoke;
-	if (_fire) node["fire"]				= _fire;
-	if (_animOffset) node["animOffset"]	= _animOffset;
+	if (_smoke != 0) node["smoke"]				= _smoke;
+	if (_fire != 0) node["fire"]				= _fire;
+	if (_animOffset != 0) node["animOffset"]	= _animOffset;
 
-	if (_discovered[0]
-		|| _discovered[1]
-		|| _discovered[2])
+	if (_discovered[0] == true
+		|| _discovered[1] == true
+		|| _discovered[2] == true)
 	{
 		for (int
 				i = 0;
@@ -233,9 +233,9 @@ YAML::Node Tile::save() const
 		}
 	}
 
-	if (isUfoDoorOpen(1))
+	if (isUfoDoorOpen(1) == true)
 		node["openDoorWest"] = true;
-	if (isUfoDoorOpen(2))
+	if (isUfoDoorOpen(2) == true)
 		node["openDoorNorth"] = true;
 
 	return node;

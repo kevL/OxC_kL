@@ -20,12 +20,10 @@
 #ifndef OPENXCOM_MAPDATASET_H
 #define OPENXCOM_MAPDATASET_H
 
-#include <string>
-#include <vector>
-
-#include <SDL.h>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <vector>
+//#include <SDL.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "Map.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <fstream>
 
@@ -508,7 +507,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 	if (_projectile != NULL // if we got bullet, get the highest x and y tiles to draw it on
-		&& _explosions.empty())
+		&& _explosions.empty() == true)
 	{
 		int part = BULLET_SPRITES - 1;
 		if (_projectile->getItem() != NULL)
@@ -774,8 +773,8 @@ void Map::drawTerrain(Surface* surface)
 									&& bu->getGeoscapeSoldier() != NULL
 									&& bu->getFaction() == bu->getOriginalFaction())
 								{
-									Position offset;
-									calculateWalkingOffset(bu, &offset);
+//									Position offset;
+//									calculateWalkingOffset(bu, &offset);
 
 									if (bu->getFatalWounds() > 0)
 									{
@@ -784,16 +783,24 @@ void Map::drawTerrain(Surface* surface)
 										{
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 2 + 16,
-													screenPosition.y + offset.y + 3 + 32,
+//													screenPosition.x + offset.x + 2 + 16,
+//													screenPosition.y + offset.y + 3 + 32,
+													screenPosition.x + 2 + 16,
+													screenPosition.y + 3 + 32 + getTerrainLevel(
+																							bu->getPosition(),
+																							bu->getArmor()->getSize()),
 													0);
 										}
 
 										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										tmpSurface->blitNShade(
 												surface,
-												screenPosition.x + offset.x + 4 + 16,
-												screenPosition.y + offset.y + 4 + 32,
+//												screenPosition.x + offset.x + 4 + 16,
+//												screenPosition.y + offset.y + 4 + 32,
+												screenPosition.x + 4 + 16,
+												screenPosition.y + 4 + 32 + getTerrainLevel(
+																						bu->getPosition(),
+																						bu->getArmor()->getSize()),
 												_animFrame * 2,
 												false,
 												3); // 1=white, 3=red
@@ -808,8 +815,12 @@ void Map::drawTerrain(Surface* surface)
 										{
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 2 + 16,
-													screenPosition.y + offset.y + 3 + 32,
+//													screenPosition.x + offset.x + 2 + 16,
+//													screenPosition.y + offset.y + 3 + 32,
+													screenPosition.x + 2 + 16,
+													screenPosition.y + 3 + 32 + getTerrainLevel(
+																							bu->getPosition(),
+																							bu->getArmor()->getSize()),
 													0);
 										}
 
@@ -833,6 +844,145 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					unit = tile->getUnit();
+
+					// kL_begin: Draw soldier to WEST. first render ...
+					if (mapPosition.x > 0) // special handling for a moving unit.
+					{
+						const Tile* const tileWest1 = _save->getTile(mapPosition + Position(-1, 0, 0));
+						BattleUnit* buWest1 = NULL;
+
+						int tileWestShade1;
+						if (tileWest1->isDiscovered(2) == true)
+						{
+							buWest1 = tileWest1->getUnit();
+							tileWestShade1 = tileWest1->getShade();
+						}
+						else
+							tileWestShade1 = 16;
+
+						if (buWest1 != NULL
+							&& buWest1 != unit // NOT for large units
+							&& buWest1->getStatus() == STATUS_WALKING
+	//						&& (tileWest1->getMapData(MapData::O_OBJECT) == NULL
+	//							|| tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() < 6
+	//							|| tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
+							&& (buWest1->getUnitVisible() == true
+								|| _save->getDebugMode() == true))
+						{
+							// the part is 0 for small units; large units have parts 1,2 & 3 depending
+							// on the relative x/y position of this tile vs the actual unit position
+							int part = 0;
+							part += tileWest1->getPosition().x - buWest1->getPosition().x;
+							part += (tileWest1->getPosition().y - buWest1->getPosition().y) * 2;
+
+							tmpSurface = buWest1->getCache(&invalid, part);
+							if (tmpSurface)
+							{
+								Position offset;
+								calculateWalkingOffset(
+													buWest1,
+													&offset);
+								const Position tileOffset = Position(-16,-8, 0);
+
+								tmpSurface->blitNShade(
+													surface,
+	//												screenPosition.x - tileOffset.x,
+	//												screenPosition.y + tileOffset.y + getTerrainLevel(
+	//																							buWest1->getPosition(),
+	//																							buWest1->getArmor()->getSize()),
+													screenPosition.x + tileOffset.x + offset.x,
+													screenPosition.y + tileOffset.y + offset.y,
+													tileWestShade1,
+													true);
+
+								if (buWest1->getFire() > 0)
+								{
+									frame = 4 + (_animFrame / 2);
+									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									tmpSurface->blitNShade(
+														surface,
+	//													screenPosition.x - tileOffset.x,
+	//													screenPosition.y + tileOffset.y + getTerrainLevel(
+	//																								buWest1->getPosition(),
+	//																								buWest1->getArmor()->getSize()),
+														screenPosition.x + tileOffset.x + offset.x,
+														screenPosition.y + tileOffset.y + offset.y,
+														0,
+														true);
+								}
+							}
+						}
+					} // kL_end.
+
+					// kL_begin: Draw soldier to NORTHWEST ....
+					if (mapPosition.x > 0 // special handling for a moving unit.
+						&& mapPosition.y > 0)
+					{
+						const Tile* const tileNorthWest1 = _save->getTile(mapPosition + Position(-1, 0, 0));
+						BattleUnit* buNorthWest1 = NULL;
+
+						int tileWestShade1;
+						if (tileNorthWest1->isDiscovered(2) == true)
+						{
+							buNorthWest1 = tileNorthWest1->getUnit();
+							tileWestShade1 = tileNorthWest1->getShade();
+						}
+						else
+							tileWestShade1 = 16;
+
+						if (buNorthWest1 != NULL
+							&& buNorthWest1 != unit // NOT for large units
+							&& buNorthWest1->getStatus() == STATUS_WALKING
+	//						&& (tileNorthWest1->getMapData(MapData::O_OBJECT) == NULL
+	//							|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() < 6
+	//							|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
+							&& (buNorthWest1->getUnitVisible() == true
+								|| _save->getDebugMode() == true))
+						{
+							// the part is 0 for small units; large units have parts 1,2 & 3 depending
+							// on the relative x/y position of this tile vs the actual unit position
+							int part = 0;
+							part += tileNorthWest1->getPosition().x - buNorthWest1->getPosition().x;
+							part += (tileNorthWest1->getPosition().y - buNorthWest1->getPosition().y) * 2;
+
+							tmpSurface = buNorthWest1->getCache(&invalid, part);
+							if (tmpSurface)
+							{
+								Position offset;
+								calculateWalkingOffset(
+													buNorthWest1,
+													&offset);
+								const Position tileOffset = Position(-16,-8, 0);
+
+								tmpSurface->blitNShade(
+													surface,
+	//												screenPosition.x - tileOffset.x,
+	//												screenPosition.y + tileOffset.y + getTerrainLevel(
+	//																							buNorthWest1->getPosition(),
+	//																							buNorthWest1->getArmor()->getSize()),
+													screenPosition.x + tileOffset.x + offset.x,
+													screenPosition.y + tileOffset.y + offset.y,
+													tileWestShade1);
+//													true);
+
+								if (buNorthWest1->getFire() > 0)
+								{
+									frame = 4 + (_animFrame / 2);
+									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									tmpSurface->blitNShade(
+														surface,
+	//													screenPosition.x - tileOffset.x,
+	//													screenPosition.y + tileOffset.y + getTerrainLevel(
+	//																								buNorthWest1->getPosition(),
+	//																								buNorthWest1->getArmor()->getSize()),
+														screenPosition.x + tileOffset.x + offset.x,
+														screenPosition.y + tileOffset.y + offset.y,
+														0);
+//														true);
+								}
+							}
+						}
+					} // kL_end.
 
 					// Draw cursor back
 					if (_cursorType != CT_NONE
@@ -905,7 +1055,10 @@ void Map::drawTerrain(Surface* surface)
 						else
 							tileNorthShade = 16;
 
-						// Phase I: rerender the unit to make sure it don't get drawn over any walls or under any tiles.
+//						const Position tileOffset = Position(16,-8, 0); // moved here from inside (buNorth!=NULL), so tileWest stuff can use it further down.
+
+						// Phase I: re-render the unit to NORTH to make sure it
+						// don't get drawn over any walls or under any tiles.
 						if (buNorth != NULL
 							&& buNorth->getUnitVisible() == true
 							&& buNorth->getStatus() == STATUS_WALKING
@@ -922,7 +1075,10 @@ void Map::drawTerrain(Surface* surface)
 							if (tmpSurface)
 							{
 								Position offset; // draw unit
-								calculateWalkingOffset(buNorth, &offset);
+								calculateWalkingOffset(
+													buNorth,
+													&offset);
+
 								tmpSurface->blitNShade(
 													surface,
 													screenPosition.x + offset.x + tileOffset.x,
@@ -948,45 +1104,45 @@ void Map::drawTerrain(Surface* surface)
 								&& mapPosition.y > 1)
 							{
 								const Tile* const tileTwoNorth = _save->getTile(mapPosition + Position(0,-2, 0));
-
-								int tileTwoNorthShade;
-								if (tileTwoNorth->isDiscovered(2) == true)
-									tileTwoNorthShade = tileTwoNorth->getShade();
-								else
-									tileTwoNorthShade = 16;
-
-								tmpSurface = tileTwoNorth->getSprite(MapData::O_OBJECT);
-								if (tmpSurface
+								if (tileTwoNorth->getMapData(MapData::O_OBJECT) != NULL
 									&& tileTwoNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 6)
 								{
-									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + tileOffset.x * 2,
-														screenPosition.y - tileTwoNorth->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y * 2,
-														tileTwoNorthShade);
+									int tileTwoNorthShade;
+									if (tileTwoNorth->isDiscovered(2) == true)
+										tileTwoNorthShade = tileTwoNorth->getShade();
+									else
+										tileTwoNorthShade = 16;
+
+									tmpSurface = tileTwoNorth->getSprite(MapData::O_OBJECT);
+									if (tmpSurface)
+										tmpSurface->blitNShade(
+															surface,
+															screenPosition.x + tileOffset.x * 2,
+															screenPosition.y - tileTwoNorth->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y * 2,
+															tileTwoNorthShade);
 								}
 							}
 
-							// Phase III: render any south wall type objects in the tile to the northWest.
+							// Phase III: re-render any south wall type objects in the tile to the northWest.
 							if (mapPosition.x > 0)
 							{
 								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1, 0));
-
-								int tileNorthWestShade;
-								if (tileNorthWest->isDiscovered(2) == true)
-									tileNorthWestShade = tileNorthWest->getShade();
-								else
-									tileNorthWestShade = 16;
-
-								tmpSurface = tileNorthWest->getSprite(MapData::O_OBJECT);
-								if (tmpSurface
+								if (tileNorthWest->getMapData(MapData::O_OBJECT) != NULL
 									&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() == 7)
 								{
-									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x,
-														screenPosition.y - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y * 2,
-														tileNorthWestShade);
+									int tileNorthWestShade;
+									if (tileNorthWest->isDiscovered(2) == true)
+										tileNorthWestShade = tileNorthWest->getShade();
+									else
+										tileNorthWestShade = 16;
+
+									tmpSurface = tileNorthWest->getSprite(MapData::O_OBJECT);
+									if (tmpSurface)
+										tmpSurface->blitNShade(
+															surface,
+															screenPosition.x,
+															screenPosition.y - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y * 2,
+															tileNorthWestShade);
 								}
 							}
 
@@ -1009,31 +1165,31 @@ void Map::drawTerrain(Surface* surface)
 								// Phase V: re-render objects in the tile to the south west;
 								// only render half so it won't overlap other areas that are already drawn
 								// and only apply this to movement in a north easterly or south westerly direction.
-/*kL: This would (and does) overwrite the lower-right bit of a unit-sprite in the current tile.
-And it seems to serve no appreciable function vis-a-vis the moving unit (*buNorth), whose sprite never quite touches that 'bit'.
-								if ((buNorth->getDirection() == 1
-										|| buNorth->getDirection() == 5)
-									&& mapPosition.y < endY - 1)
-								{
-									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
+//	kL: This would (and does) overwrite the lower-right bit of a unit-sprite in the current tile.
+//	And it seems to serve no appreciable function vis-a-vis the moving unit (*buNorth), whose sprite never quite touches that 'bit'.
+//								if ((buNorth->getDirection() == 1
+//										|| buNorth->getDirection() == 5)
+//									&& mapPosition.y < endY - 1)
+//								{
+//									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
 
-									int tileSouthWestShade;
-									if (tileSouthWest->isDiscovered(2) == true)
-										tileSouthWestShade = tileSouthWest->getShade();
-									else
-										tileSouthWestShade = 16;
+//									int tileSouthWestShade;
+//									if (tileSouthWest->isDiscovered(2) == true)
+//										tileSouthWestShade = tileSouthWest->getShade();
+//									else
+//										tileSouthWestShade = 16;
 
-									tmpSurface = tileSouthWest->getSprite(MapData::O_OBJECT);
-									if (tmpSurface)
-										tmpSurface->blitNShade(
-															surface,
-															screenPosition.x - tileOffset.x * 2,
-															screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
-															tileSouthWestShade,
-															true);
-								} */
+//									tmpSurface = tileSouthWest->getSprite(MapData::O_OBJECT);
+//									if (tmpSurface)
+//										tmpSurface->blitNShade(
+//															surface,
+//															screenPosition.x - tileOffset.x * 2,
+//															screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
+//															tileSouthWestShade,
+//															true);
+//								}
 
-								// Phase VI: we need to re-render everything in the tile to the west.
+								// Phase VI: we need to re-render everything in the tile to the west. <- Why. because you re-rendered a bigWall-south in the tileNorthWest ?
 								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1, 0, 0));
 								const BattleUnit* buWest = NULL;
 
@@ -1046,25 +1202,27 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 								else
 									tileWestShade = 16;
 
-								tmpSurface = tileWest->getSprite(MapData::O_WESTWALL);
-								if (tmpSurface
-									&& buNorth != unit)
+								if (buNorth != unit) // NOT for large units
 								{
-									if ((tileWest->getMapData(MapData::O_WESTWALL)->isDoor() == true
-											|| tileWest->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
-										&& tileWest->isDiscovered(0) == true)
+									tmpSurface = tileWest->getSprite(MapData::O_WESTWALL);
+									if (tmpSurface)
 									{
-										wallShade = tileWest->getShade();
-									}
-									else
-										wallShade = tileWestShade;
+										if ((tileWest->getMapData(MapData::O_WESTWALL)->isDoor() == true
+												|| tileWest->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
+											&& tileWest->isDiscovered(0) == true)
+										{
+											wallShade = tileWest->getShade();
+										}
+										else
+											wallShade = tileWestShade;
 
-									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x - tileOffset.x,
-														screenPosition.y - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset() + tileOffset.y,
-														wallShade,
-														true);
+										tmpSurface->blitNShade(
+															surface,
+															screenPosition.x - tileOffset.x,
+															screenPosition.y - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset() + tileOffset.y,
+															wallShade,
+															true);
+									}
 								}
 
 								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
@@ -1100,8 +1258,9 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 														tileWestShade,
 														true);
 
-									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
-									if (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 2)
+									// if the object in the tile to the west is a diagonal big wall
+									// it needs to have the black triangle at the bottom covered up
+									if (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 2) // NESW
 									{
 										tmpSurface = tile->getSprite(MapData::O_FLOOR);
 										if (tmpSurface)
@@ -1126,16 +1285,17 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 														true);
 								}
 
-								// Draw soldier
+								// Draw soldier to WEST. 2nd render
 								if (buWest != NULL
-									&& buWest->getStatus() != STATUS_WALKING
+//									&& buWest->getStatus() != STATUS_WALKING // uh, if buNorth is walking buWest won't be.
 									&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
 									&& (buWest->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
-									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
+									// the part is 0 for small units; large units have parts 1,2 & 3 depending
+									// on the relative x/y position of this tile vs the actual unit position
 									int part = 0;
 									part += tileWest->getPosition().x - buWest->getPosition().x;
 									part += (tileWest->getPosition().y - buWest->getPosition().y) * 2;
@@ -1214,8 +1374,8 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 											true);
 								}
 							}
-						}
-					}
+						} // <- moved up here from below tileWest stuff. NOT.
+					} // -> see above tileWest stuff.
 /*kL - their tileWest SMOKE:
 								{
 									frame = 0;
@@ -1333,8 +1493,8 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 									&& buBelow->getGeoscapeSoldier() != NULL
 									&& buBelow->getFaction() == buBelow->getOriginalFaction())
 								{
-									Position offset;
-									calculateWalkingOffset(buBelow, &offset);
+//									Position offset;
+//									calculateWalkingOffset(buBelow, &offset);
 
 									if (buBelow->getFatalWounds() > 0)
 									{
@@ -1343,16 +1503,24 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 										{
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 2,
-													screenPosition.y + offset.y + 3 + 24,
+//													screenPosition.x + offset.x + 2,
+//													screenPosition.y + offset.y + 3 + 24,
+													screenPosition.x + 2,
+													screenPosition.y + 3 + 24 + getTerrainLevel(
+																							buBelow->getPosition(),
+																							buBelow->getArmor()->getSize()),
 													0);
 										}
 
 										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										tmpSurface->blitNShade(
 												surface,
-												screenPosition.x + offset.x + 4,
-												screenPosition.y + offset.y + 4 + 24,
+//												screenPosition.x + offset.x + 4,
+//												screenPosition.y + offset.y + 4 + 24,
+												screenPosition.x + 4,
+												screenPosition.y + 4 + 24 + getTerrainLevel(
+																						buBelow->getPosition(),
+																						buBelow->getArmor()->getSize()),
 												_animFrame * 2,
 												false,
 												3); // 1=white, 3=red
@@ -1367,8 +1535,12 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 										{
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 2,
-													screenPosition.y + offset.y + 3 + 24,
+//													screenPosition.x + offset.x + 2,
+//													screenPosition.y + offset.y + 3 + 24,
+													screenPosition.x + 2,
+													screenPosition.y + 3 + 24 + getTerrainLevel(
+																							buBelow->getPosition(),
+																							buBelow->getArmor()->getSize()),
 													0);
 										}
 
@@ -1519,13 +1691,10 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 					}
 
 					// Draw BattleUnit ->
-					unit = tile->getUnit();
 					if (unit != NULL
 						&& (unit->getUnitVisible() == true
 							|| _save->getDebugMode() == true))
 					{
-						//Log(LOG_INFO) << "draw Soldier ID = " << unit->getId();
-
 						// the part is 0 for small units, large units have parts 1,2 & 3 depending
 						// on the relative x/y position of this tile vs the actual unit position.
 						int part = 0;
@@ -1536,7 +1705,10 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 						if (tmpSurface)
 						{
 							Position offset;
-							calculateWalkingOffset(unit, &offset);
+							calculateWalkingOffset(
+												unit,
+												&offset);
+
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x + offset.x,
@@ -1655,7 +1827,7 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 						}
 					}
 
-					// kL_begin:
+					// kL_begin: Might well want to redundant this, like rankIcons.
 					if (unit == NULL)
 					{
 						const int status = tile->getHasUnconsciousSoldier();
@@ -1709,7 +1881,9 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 							if (tmpSurface)
 							{
 								Position offset;
-								calculateWalkingOffset(tunit, &offset);
+								calculateWalkingOffset(
+													tunit,
+													&offset);
 
 								offset.y += 24;
 								tmpSurface->blitNShade(
@@ -2109,49 +2283,37 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 	// end Tiles_z looping.
 
 
-//	unit = (BattleUnit*)_save->getSelectedUnit();
-//	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
-	unit = _save->getSelectedUnit();
-	if (unit != NULL
+	if (getCursorType() != CT_NONE
 		&& (_save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode() == true)
-		&& unit->getPosition().z <= _camera->getViewLevel())
+			|| _save->getDebugMode() == true))
 	{
-		_camera->convertMapToScreen(
-								unit->getPosition(),
-								&screenPosition);
-		screenPosition += _camera->getMapOffset();
-
-		Position offset;
-		calculateWalkingOffset(
-							unit,
-							&offset);
-
-		offset.y += 21 - unit->getHeight();
-
-		if (unit->getArmor()->getSize() > 1)
-			offset.y += 6;
-
-		if (unit->isKneeled() == true
-			&& getCursorType() != CT_NONE) // DarkDefender
+		unit = _save->getSelectedUnit();
+		if (unit != NULL
+			&& unit->getStatus() != STATUS_WALKING
+			&& unit->getPosition().z <= _camera->getViewLevel())
 		{
-			offset.y -= 5;
-			_arrow_kneel->blitNShade( // DarkDefender
-								surface,
-								screenPosition.x
-									+ offset.x
-									+ (_spriteWidth / 2)
-									- (_arrow->getWidth() / 2),
-								screenPosition.y
-									+ offset.y
-									- _arrow->getHeight()
-//kL								+ arrowBob[_cursorFrame],
-									+ static_cast<int>( // kL
-										-4. * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
-								0);
-		}
-		else // DarkDefender
-		if (getCursorType() != CT_NONE)
+			_camera->convertMapToScreen(
+									unit->getPosition(),
+									&screenPosition);
+			screenPosition += _camera->getMapOffset();
+
+			Position offset;
+			calculateWalkingOffset( // this calculates terrainLevel, but is otherwise bloat here.
+								unit,
+								&offset);
+
+			offset.y += 21 - unit->getHeight();
+
+			if (unit->getArmor()->getSize() > 1)
+				offset.y += 6;
+
+			double fact = 4.;
+			if (unit->isKneeled() == true)
+			{
+				offset.y -= 5;
+				fact = -fact;
+			}
+
 			_arrow->blitNShade(
 							surface,
 							screenPosition.x
@@ -2161,17 +2323,15 @@ And it seems to serve no appreciable function vis-a-vis the moving unit (*buNort
 							screenPosition.y
 								+ offset.y
 								- _arrow->getHeight()
-//kL							+ arrowBob[_animFrame],
-//kL							+ arrowBob[_cursorFrame], // DarkDefender
-								+ static_cast<int>( // kL
-									4. * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
+								+ static_cast<int>(
+									fact * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
 							0);
+		}
 	}
 
 	if (pathPreview == true)
 	{
-		// make a border for the pathfinding display
-//		if (wpID) wpID->setBordered(true);
+//		if (wpID) wpID->setBordered(true); // make a border for the pathfinding display
 
 		for (int
 				itZ = beginZ;
