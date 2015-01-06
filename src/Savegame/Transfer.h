@@ -54,12 +54,13 @@ class Transfer
 {
 
 private:
-	bool _delivered;
+	bool
+		_delivered,
+		_newRecruit;
 	int
 		_engineers,
 		_hours,
 		_itemQty,
-		_newRecruit,
 		_scientists;
 
 	std::string _itemId;

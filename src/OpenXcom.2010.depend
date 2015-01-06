@@ -5047,9 +5047,8 @@
 1420130459 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1420259209 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1420583381 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
-	"../fmath.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5075,7 +5074,7 @@
 	<limits>
 	<cmath>
 
-1420583428 f:\git\openxcom\src\savegame\transfer.h
+1420584010 f:\git\openxcom\src\savegame\transfer.h
 
 1420175641 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
@@ -8554,7 +8553,7 @@
 	"../Battlescape/Position.h"
 	"../Engine/Exception.h"
 
-1420537156 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1420583694 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
 1420487222 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
@@ -8880,7 +8879,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1420130459 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1420583305 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -8942,7 +8941,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1420536621 source:f:\git\openxcom\src\savegame\tile.cpp
+1420582900 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"
@@ -8955,7 +8954,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1420130456 source:f:\git\openxcom\src\savegame\transfer.cpp
+1420583493 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"
