@@ -6063,7 +6063,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420508610 source:f:\git\openxcom\src\battlescape\map.cpp
+1420550486 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8554,9 +8554,8 @@
 	"../Battlescape/Position.h"
 	"../Engine/Exception.h"
 
-1420487321 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1420537156 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
-	"../Engine/Logger.h"
 
 1420487222 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
@@ -8943,7 +8942,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1420487031 source:f:\git\openxcom\src\savegame\tile.cpp
+1420536621 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"

@@ -19,7 +19,7 @@
 
 #include "MapData.h"
 
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 
 
 namespace OpenXcom
