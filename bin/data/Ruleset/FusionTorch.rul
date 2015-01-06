@@ -14,7 +14,7 @@ items:
     tuAimed: 87
     maxRange: 1
     invWidth: 2
-    invHeight: 3
+    invHeight: 2
     twoHanded: true
     noReaction: true
     listOrder: 3710
@@ -85,7 +85,7 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      59: Resources/FusionTorch/BigFusionTorch.gif
+      59: Resources/FusionTorch/BigFusionTorch.png
       60: Resources/FusionTorch/BigFusionTorchPower.gif
   - type: FLOOROB.PCK
     files:
