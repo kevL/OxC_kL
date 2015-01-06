@@ -676,7 +676,8 @@ void Map::drawTerrain(Surface* surface)
 		pathPreview = _save->getPathfinding()->isPathPreviewed();
 	bool
 		hasFloor,
-		hasObject;
+		hasObject,
+		phaseIII_west;
 
 	if (_waypoints.empty() == false
 		|| (pathPreview == true
@@ -686,7 +687,6 @@ void Map::drawTerrain(Surface* surface)
 		// kL_note: Leave them the same color.
 		wpID = new NumberText(15, 15, 20, 30);
 		wpID->setPalette(getPalette());
-//		wpID->setColor(pathPreview? _messageColor + 1: Palette::blockOffset(1));
 
 		Uint8 wpColor;
 		if (_save->getTerrain() == "DESERT")
@@ -743,6 +743,7 @@ void Map::drawTerrain(Surface* surface)
 					tileColor = tile->getMarkerColor();
 					hasFloor = false;
 					hasObject = false;
+					phaseIII_west = false;
 
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
@@ -773,9 +774,6 @@ void Map::drawTerrain(Surface* surface)
 									&& bu->getGeoscapeSoldier() != NULL
 									&& bu->getFaction() == bu->getOriginalFaction())
 								{
-//									Position offset;
-//									calculateWalkingOffset(bu, &offset);
-
 									if (bu->getFatalWounds() > 0)
 									{
 										tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
@@ -783,8 +781,6 @@ void Map::drawTerrain(Surface* surface)
 										{
 											tmpSurface->blitNShade(
 													surface,
-//													screenPosition.x + offset.x + 2 + 16,
-//													screenPosition.y + offset.y + 3 + 32,
 													screenPosition.x + 2 + 16,
 													screenPosition.y + 3 + 32 + getTerrainLevel(
 																							bu->getPosition(),
@@ -795,8 +791,6 @@ void Map::drawTerrain(Surface* surface)
 										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										tmpSurface->blitNShade(
 												surface,
-//												screenPosition.x + offset.x + 4 + 16,
-//												screenPosition.y + offset.y + 4 + 32,
 												screenPosition.x + 4 + 16,
 												screenPosition.y + 4 + 32 + getTerrainLevel(
 																						bu->getPosition(),
@@ -815,8 +809,6 @@ void Map::drawTerrain(Surface* surface)
 										{
 											tmpSurface->blitNShade(
 													surface,
-//													screenPosition.x + offset.x + 2 + 16,
-//													screenPosition.y + offset.y + 3 + 32,
 													screenPosition.x + 2 + 16,
 													screenPosition.y + 3 + 32 + getTerrainLevel(
 																							bu->getPosition(),
@@ -845,7 +837,7 @@ void Map::drawTerrain(Surface* surface)
 
 					unit = tile->getUnit();
 
-					// kL_begin: Draw soldier to WEST. first render ...
+					// kL_begin: Draw soldier to WEST. first render ... cf. Phases III & VI in advanced cycle.
 					if (mapPosition.x > 0) // special handling for a moving unit.
 					{
 						const Tile* const tileWest1 = _save->getTile(mapPosition + Position(-1, 0, 0));
@@ -861,11 +853,8 @@ void Map::drawTerrain(Surface* surface)
 							tileWestShade1 = 16;
 
 						if (buWest1 != NULL
-							&& buWest1 != unit // NOT for large units
+//							&& buWest1 != unit // NOT for large units
 							&& buWest1->getStatus() == STATUS_WALKING
-	//						&& (tileWest1->getMapData(MapData::O_OBJECT) == NULL
-	//							|| tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() < 6
-	//							|| tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
 							&& (buWest1->getUnitVisible() == true
 								|| _save->getDebugMode() == true))
 						{
@@ -886,99 +875,19 @@ void Map::drawTerrain(Surface* surface)
 
 								tmpSurface->blitNShade(
 													surface,
-	//												screenPosition.x - tileOffset.x,
-	//												screenPosition.y + tileOffset.y + getTerrainLevel(
-	//																							buWest1->getPosition(),
-	//																							buWest1->getArmor()->getSize()),
-													screenPosition.x + tileOffset.x + offset.x,
-													screenPosition.y + tileOffset.y + offset.y,
-													tileWestShade1,
-													true);
-
-								if (buWest1->getFire() > 0)
-								{
-									frame = 4 + (_animFrame / 2);
-									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-									tmpSurface->blitNShade(
-														surface,
-	//													screenPosition.x - tileOffset.x,
-	//													screenPosition.y + tileOffset.y + getTerrainLevel(
-	//																								buWest1->getPosition(),
-	//																								buWest1->getArmor()->getSize()),
-														screenPosition.x + tileOffset.x + offset.x,
-														screenPosition.y + tileOffset.y + offset.y,
-														0,
-														true);
-								}
-							}
-						}
-					} // kL_end.
-
-					// kL_begin: Draw soldier to NORTHWEST ....
-					if (mapPosition.x > 0 // special handling for a moving unit.
-						&& mapPosition.y > 0)
-					{
-						const Tile* const tileNorthWest1 = _save->getTile(mapPosition + Position(-1, 0, 0));
-						BattleUnit* buNorthWest1 = NULL;
-
-						int tileWestShade1;
-						if (tileNorthWest1->isDiscovered(2) == true)
-						{
-							buNorthWest1 = tileNorthWest1->getUnit();
-							tileWestShade1 = tileNorthWest1->getShade();
-						}
-						else
-							tileWestShade1 = 16;
-
-						if (buNorthWest1 != NULL
-							&& buNorthWest1 != unit // NOT for large units
-							&& buNorthWest1->getStatus() == STATUS_WALKING
-	//						&& (tileNorthWest1->getMapData(MapData::O_OBJECT) == NULL
-	//							|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() < 6
-	//							|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
-							&& (buNorthWest1->getUnitVisible() == true
-								|| _save->getDebugMode() == true))
-						{
-							// the part is 0 for small units; large units have parts 1,2 & 3 depending
-							// on the relative x/y position of this tile vs the actual unit position
-							int part = 0;
-							part += tileNorthWest1->getPosition().x - buNorthWest1->getPosition().x;
-							part += (tileNorthWest1->getPosition().y - buNorthWest1->getPosition().y) * 2;
-
-							tmpSurface = buNorthWest1->getCache(&invalid, part);
-							if (tmpSurface)
-							{
-								Position offset;
-								calculateWalkingOffset(
-													buNorthWest1,
-													&offset);
-								const Position tileOffset = Position(-16,-8, 0);
-
-								tmpSurface->blitNShade(
-													surface,
-	//												screenPosition.x - tileOffset.x,
-	//												screenPosition.y + tileOffset.y + getTerrainLevel(
-	//																							buNorthWest1->getPosition(),
-	//																							buNorthWest1->getArmor()->getSize()),
 													screenPosition.x + tileOffset.x + offset.x,
 													screenPosition.y + tileOffset.y + offset.y,
 													tileWestShade1);
-//													true);
 
-								if (buNorthWest1->getFire() > 0)
+								if (buWest1->getFire() != 0)
 								{
 									frame = 4 + (_animFrame / 2);
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 									tmpSurface->blitNShade(
 														surface,
-	//													screenPosition.x - tileOffset.x,
-	//													screenPosition.y + tileOffset.y + getTerrainLevel(
-	//																								buNorthWest1->getPosition(),
-	//																								buNorthWest1->getArmor()->getSize()),
 														screenPosition.x + tileOffset.x + offset.x,
 														screenPosition.y + tileOffset.y + offset.y,
 														0);
-//														true);
 								}
 							}
 						}
@@ -1085,7 +994,7 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y + offset.y  + tileOffset.y,
 													tileNorthShade);
 
-								if (buNorth->getFire() > 0) // draw fire
+								if (buNorth->getFire() != 0) // draw fire
 								{
 									frame = 4 + (_animFrame / 2);
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1138,11 +1047,14 @@ void Map::drawTerrain(Surface* surface)
 
 									tmpSurface = tileNorthWest->getSprite(MapData::O_OBJECT);
 									if (tmpSurface)
+									{
+										phaseIII_west = true;
 										tmpSurface->blitNShade(
 															surface,
 															screenPosition.x,
 															screenPosition.y - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y * 2,
 															tileNorthWestShade);
+									}
 								}
 							}
 
@@ -1160,7 +1072,8 @@ void Map::drawTerrain(Surface* surface)
 														tileNorthShade);
 							}
 
-							if (mapPosition.x > 0)
+							if (phaseIII_west == true
+								&& mapPosition.x > 0)
 							{
 								// Phase V: re-render objects in the tile to the south west;
 								// only render half so it won't overlap other areas that are already drawn
@@ -1287,7 +1200,7 @@ void Map::drawTerrain(Surface* surface)
 
 								// Draw soldier to WEST. 2nd render
 								if (buWest != NULL
-//									&& buWest->getStatus() != STATUS_WALKING // uh, if buNorth is walking buWest won't be.
+									&& buWest->getStatus() != STATUS_WALKING
 									&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
@@ -1312,7 +1225,7 @@ void Map::drawTerrain(Surface* surface)
 															tileWestShade,
 															true);
 
-										if (buWest->getFire() > 0)
+										if (buWest->getFire() != 0)
 										{
 											frame = 4 + (_animFrame / 2);
 											tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1340,7 +1253,6 @@ void Map::drawTerrain(Surface* surface)
 											frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 										else
 											frame = ResourcePack::SMOKE_OFFSET;
-//										frame += int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 
 										frame += (tileWest->getSmoke() + 1) / 2;
 										shade = tileWestShade;
@@ -1374,28 +1286,8 @@ void Map::drawTerrain(Surface* surface)
 											true);
 								}
 							}
-						} // <- moved up here from below tileWest stuff. NOT.
-					} // -> see above tileWest stuff.
-/*kL - their tileWest SMOKE:
-								{
-									frame = 0;
-
-									if (!tileWest->getFire())
-										frame = 8 + int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-
-									if ((_animFrame / 2) + tileWest->getAnimationOffset() > 3)
-										frame += ((_animFrame / 2) + tileWest->getAnimationOffset() - 4);
-									else
-										frame += (_animFrame / 2) + tileWest->getAnimationOffset();
-
-									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x - tileOffset.x,
-														screenPosition.y + tileOffset.y,
-														0,
-														true);
-								} */
+						}
+					}
 //* _END_ADVANCED_DRAWING_CYCLE_ *//
 
 
@@ -1493,9 +1385,6 @@ void Map::drawTerrain(Surface* surface)
 									&& buBelow->getGeoscapeSoldier() != NULL
 									&& buBelow->getFaction() == buBelow->getOriginalFaction())
 								{
-//									Position offset;
-//									calculateWalkingOffset(buBelow, &offset);
-
 									if (buBelow->getFatalWounds() > 0)
 									{
 										tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
@@ -1503,8 +1392,6 @@ void Map::drawTerrain(Surface* surface)
 										{
 											tmpSurface->blitNShade(
 													surface,
-//													screenPosition.x + offset.x + 2,
-//													screenPosition.y + offset.y + 3 + 24,
 													screenPosition.x + 2,
 													screenPosition.y + 3 + 24 + getTerrainLevel(
 																							buBelow->getPosition(),
@@ -1515,8 +1402,6 @@ void Map::drawTerrain(Surface* surface)
 										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										tmpSurface->blitNShade(
 												surface,
-//												screenPosition.x + offset.x + 4,
-//												screenPosition.y + offset.y + 4 + 24,
 												screenPosition.x + 4,
 												screenPosition.y + 4 + 24 + getTerrainLevel(
 																						buBelow->getPosition(),
@@ -1535,8 +1420,6 @@ void Map::drawTerrain(Surface* surface)
 										{
 											tmpSurface->blitNShade(
 													surface,
-//													screenPosition.x + offset.x + 2,
-//													screenPosition.y + offset.y + 3 + 24,
 													screenPosition.x + 2,
 													screenPosition.y + 3 + 24 + getTerrainLevel(
 																							buBelow->getPosition(),
@@ -1573,8 +1456,7 @@ void Map::drawTerrain(Surface* surface)
 						{
 							tmpSurface = _projectile->getSprite();
 
-							Position voxelPos = _projectile->getPosition();
-							// draw shadow on the floor
+							Position voxelPos = _projectile->getPosition(); // draw shadow on the floor
 							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
 							if (   voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
@@ -1593,8 +1475,7 @@ void Map::drawTerrain(Surface* surface)
 										16);
 							}
 
-							voxelPos = _projectile->getPosition();
-							// draw thrown object
+							voxelPos = _projectile->getPosition(); // draw thrown object
 							if (   voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
@@ -1614,8 +1495,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 						else // fired projectile ( a bullet-sprite, not a thrown item )
 						{
-							// draw bullet on the correct tile
-							if (   itX >= bulletLowX
+							if (   itX >= bulletLowX // draw bullet on the correct tile
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
@@ -1644,8 +1524,7 @@ void Map::drawTerrain(Surface* surface)
 									tmpSurface = _projectileSet->getFrame(_projectile->getParticle(i));
 									if (tmpSurface)
 									{
-										Position voxelPos = _projectile->getPosition(1 - i);
-										// draw shadow on the floor
+										Position voxelPos = _projectile->getPosition(1 - i); // draw shadow on the floor
 										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
 										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
@@ -1665,8 +1544,7 @@ void Map::drawTerrain(Surface* surface)
 													16);
 										}
 
-										// draw bullet itself
-										voxelPos = _projectile->getPosition(1 - i);
+										voxelPos = _projectile->getPosition(1 - i); // draw bullet itself
 										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
@@ -1715,7 +1593,7 @@ void Map::drawTerrain(Surface* surface)
 									screenPosition.y + offset.y,
 									tileShade);
 
-							if (unit->getFire() > 0)
+							if (unit->getFire() != 0)
 							{
 								frame = 4 + (_animFrame / 2);
 								tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1895,7 +1773,7 @@ void Map::drawTerrain(Surface* surface)
 								if (tunit->getArmor()->getSize() > 1)
 									offset.y += 4;
 
-								if (tunit->getFire() > 0)
+								if (tunit->getFire() != 0)
 								{
 									frame = 4 + (_animFrame / 2);
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1921,7 +1799,6 @@ void Map::drawTerrain(Surface* surface)
 								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 							else
 								frame = ResourcePack::SMOKE_OFFSET;
-//							frame += int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 
 							frame += (tile->getSmoke() + 1) / 2;
 							shade = tileShade;
@@ -1940,8 +1817,7 @@ void Map::drawTerrain(Surface* surface)
 								shade);
 					}
 
-					// draw particle clouds
-					for (std::list<Particle*>::const_iterator
+					for (std::list<Particle*>::const_iterator // draw particle clouds
 							i = tile->getParticleCloud()->begin();
 							i != tile->getParticleCloud()->end();
 							++i)
@@ -2500,7 +2376,6 @@ void Map::drawTerrain(Surface* surface)
 		}
 	}
 	surface->unlock();
-	//Log(LOG_INFO) << "Map::drawTerrain() EXIT";
 }
 
 /**

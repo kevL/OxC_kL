@@ -767,9 +767,10 @@ bool UnitWalkBState::doStatusWalk()
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
 //				posSized = pos + Position(x, y, 0);
-				_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->setUnit(
-														_unit,
-														_parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1)));
+				_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))
+										->setUnit(
+												_unit,
+												_parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1)));
 			}
 		}
 
