@@ -416,7 +416,7 @@ DebriefingState::DebriefingState()
 			// NOTE: This can still be exploited by MC'ing and
 			// executing a bunch of aLiens with a single Soldier.
 			if (_aliensControlled == 0
-				&& _aliensKilled + _aliensStunned > 4 + static_cast<int>(_savedGame->getDifficulty())
+				&& _aliensKilled + _aliensStunned > 3 + static_cast<int>(_savedGame->getDifficulty())
 				&& _aliensKilled + _aliensStunned == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{
@@ -1019,7 +1019,7 @@ void DebriefingState::prepareDebriefing()
 				// if only one soldier survived AND none have died, means only one soldier went on the mission...
 				if (soldierDead == 0
 					&& _aliensControlled == 0
-					&& _aliensKilled + _aliensStunned > 2 + static_cast<int>(_savedGame->getDifficulty())
+					&& _aliensKilled + _aliensStunned > 1 + static_cast<int>(_savedGame->getDifficulty())
 					&& aborted == false)
 				{
 					(*i)->getStatistics()->ironMan = true;

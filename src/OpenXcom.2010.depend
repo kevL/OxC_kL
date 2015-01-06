@@ -5888,7 +5888,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1420185651 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1420553682 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6063,7 +6063,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420550486 source:f:\git\openxcom\src\battlescape\map.cpp
+1420567112 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
