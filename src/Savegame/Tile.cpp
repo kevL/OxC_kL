@@ -143,12 +143,15 @@ void Tile::load(const YAML::Node& node)
 	_smoke		= node["smoke"].as<int>(_smoke);
 	_animOffset	= node["animOffset"].as<int>(_animOffset);
 
-	for (int
-			i = 0;
-			i < 3;
-			++i)
+	if (node["discovered"])
 	{
-		_discovered[i] = node["discovered"][i].as<bool>();
+		for (int
+				i = 0;
+				i < 3;
+				++i)
+		{
+			_discovered[i] = node["discovered"][i].as<bool>();
+		}
 	}
 
 	if (node["openDoorWest"])

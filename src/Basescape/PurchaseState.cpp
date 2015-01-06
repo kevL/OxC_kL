@@ -24,8 +24,7 @@
 //#include <cmath>
 //#include <iomanip>
 //#include <sstream>
-
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -574,6 +573,7 @@ void PurchaseState::btnOkClick(Action*)
 				{
 					Transfer* const transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
 					transfer->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
+					transfer->setNewRecruit();
 
 					_base->getTransfers()->push_back(transfer);
 				}

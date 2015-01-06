@@ -23,7 +23,6 @@
 //#include <fstream>
 //#include <iomanip>
 //#include <sstream>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "AlienBase.h"
@@ -1818,6 +1817,18 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 			++i)
 	{
 		soldiersTotal += (*i)->getSoldiers()->size();
+
+		for (std::vector<Transfer*>::iterator
+				j = (*i)->getTransfers()->begin();
+				j != (*i)->getTransfers()->end();
+				++j)
+		{
+			if ((*j)->getType() == TRANSFER_SOLDIER
+				&& (*j)->isNewRecruit() == false)
+			{
+				++soldiersTotal;
+			}
+		}
 	}
 
 	Soldier* highestRanked = NULL;
@@ -1849,11 +1860,11 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 
 	if (filledPositions < 1
 		&& filledPositions2 > 0
+		&& soldiersTotal > 29
 		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
 	{
-		// only promote one colonel to commander
-		highestRanked->promoteRank();
+		highestRanked->promoteRank(); // only promote one colonel to commander
 		++soldiersPromoted;
 	}
 
@@ -1870,7 +1881,8 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 					participants.end(),
 					highestRanked);
 
-	if (filledPositions < soldiersTotal / 23
+	if (filledPositions < 10
+		&& filledPositions < soldiersTotal / 23
 		&& filledPositions2 > 0
 		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
@@ -1892,13 +1904,14 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 					participants.end(),
 					highestRanked);
 
-	if (filledPositions < soldiersTotal / 11
+	if (filledPositions < 22
+		&& filledPositions < soldiersTotal / 11
 		&& filledPositions2 > 0
 		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
-		soldiersPromoted++;
+		++soldiersPromoted;
 	}
 
 	inspectSoldiers(
@@ -1914,7 +1927,8 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 					participants.end(),
 					highestRanked);
 
-	if (filledPositions < soldiersTotal / 5
+	if (filledPositions < 50
+		&& filledPositions < soldiersTotal / 5
 		&& filledPositions2 > 0
 		&& (Options::fieldPromotions == false
 			|| soldier != stayedHome))
@@ -1923,7 +1937,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 		++soldiersPromoted;
 	}
 
-	return soldiersPromoted > 0;
+	return (soldiersPromoted > 0);
 }
 
 /**

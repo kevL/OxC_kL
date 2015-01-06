@@ -3279,8 +3279,8 @@ soldiers:
       psiSkill: 25
       melee: 55
     statCaps:
-      tu: 88
-      stamina: 112
+      tu: 86
+      stamina: 113
       health: 83
       bravery: 100
       reactions: 103
@@ -3288,8 +3288,8 @@ soldiers:
       throwing: 126
       strength: 72
       psiStrength: 100
-      psiSkill: 160
-      melee: 128
+      psiSkill: 120
+      melee: 123
     armor: STR_ARMOR_NONE_UC
     standHeight: 22
     kneelHeight: 14

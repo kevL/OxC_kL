@@ -19,15 +19,13 @@
 
 #include "MapData.h"
 
-//#include "../Engine/Logger.h"
-
 
 namespace OpenXcom
 {
 
 /**
  * Creates a new Map Data Object.
- * @param dataset - the dataset this object belongs to
+ * @param dataset - pointer to the MapDataSet this object belongs to
  */
 MapData::MapData(MapDataSet* dataset)
 	:
@@ -68,11 +66,10 @@ MapData::MapData(MapDataSet* dataset)
  * Destroys the object.
  */
 MapData::~MapData()
-{
-}
+{}
 
 // Explicit storage for MapData constants.
-// Pathfinding::O_BIGWALL		= -1
+// Pathfinding::O_BIGWALL = -1
 
 const int
 	MapData::O_FLOOR		= 0,
@@ -373,9 +370,6 @@ int MapData::getTUCost(MovementType movementType) const
 		case MT_WALK:	return _TUWalk;
 		case MT_FLY:	return _TUFly;
 		case MT_SLIDE:	return _TUSlide;
-
-		default:
-		break;
 	}
 
 	return 0;

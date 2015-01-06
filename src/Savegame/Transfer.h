@@ -21,7 +21,6 @@
 #define OPENXCOM_TRANSFER_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -60,6 +59,7 @@ private:
 		_engineers,
 		_hours,
 		_itemQty,
+		_newRecruit,
 		_scientists;
 
 	std::string _itemId;
@@ -117,6 +117,11 @@ private:
 
 		/// Get a pointer to the soldier being transferred.
 		Soldier* getSoldier() const;
+
+		/// Sets this transfer as a new acquisition.
+		void setNewRecruit();
+		/// Checks if this soldier has his paperwork filed with HQ.
+		bool isNewRecruit() const;
 };
 
 }
