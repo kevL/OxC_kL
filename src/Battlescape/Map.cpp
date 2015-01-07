@@ -970,8 +970,8 @@ void Map::drawTerrain(Surface* surface)
 
 									tmpSurface->blitNShade(
 											surface,
-											screenPosition.x + pixelOffset.x * 2,
-											screenPosition.y - tileTwoNorth->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y * 2,
+											screenPosition.x + (pixelOffset.x * 2),
+											screenPosition.y + (pixelOffset.y * 2) - tileTwoNorth->getMapData(MapData::O_OBJECT)->getYOffset(),
 											tileTwoNorthShade);
 								}
 							}
@@ -994,7 +994,7 @@ void Map::drawTerrain(Surface* surface)
 									tmpSurface->blitNShade(
 											surface,
 											screenPosition.x,
-											screenPosition.y - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y * 2,
+											screenPosition.y + (pixelOffset.y * 2) - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 											tileNorthWestShade);
 								}
 							}
@@ -1008,7 +1008,7 @@ void Map::drawTerrain(Surface* surface)
 								tmpSurface->blitNShade(
 										surface,
 										screenPosition.x + pixelOffset.x,
-										screenPosition.y - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y,
+										screenPosition.y + pixelOffset.y - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset(),
 										tileNorthShade);
 							}
 
@@ -1233,7 +1233,7 @@ void Map::drawTerrain(Surface* surface)
 									tmpSurface->blitNShade(
 											surface,
 											screenPosition.x - pixelOffset.x,
-											screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y,
+											screenPosition.y + pixelOffset.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 											tileWestShade,
 											true); // only render half so it won't overlap other areas that are already drawn
 								}
@@ -1283,19 +1283,18 @@ void Map::drawTerrain(Surface* surface)
 							else
 								wallShade = tileShade;
 
-							if (tile->getMapData(MapData::O_WESTWALL))
-								tmpSurface->blitNShade(
-										surface,
-										screenPosition.x,
-										screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(),
-										wallShade,
-										true); // only render half so it won't overlap other areas that are already drawn
+							bool half;
+							if (tile->getMapData(MapData::O_WESTWALL) != NULL)
+								half = true; // only render half so it won't overlap other areas that are already drawn
 							else
-								tmpSurface->blitNShade(
-										surface,
-										screenPosition.x,
-										screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(),
-										wallShade);
+								half = false;
+
+							tmpSurface->blitNShade(
+									surface,
+									screenPosition.x,
+									screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(),
+									wallShade,
+									half);
 						}
 
 						// Draw rear object
@@ -1362,7 +1361,7 @@ void Map::drawTerrain(Surface* surface)
 											&& tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
 											&& tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE) // trouble - should redraw this NWSE_Object ...
 										{
-											half = true;
+											half = true; // only render half so it won't overlap other areas that are already drawn
 										}
 										else
 											half = false;
@@ -1403,7 +1402,7 @@ void Map::drawTerrain(Surface* surface)
 																	screenPosition.x + pixelOffset.x + walkOffset.x,
 																	screenPosition.y + pixelOffset.y + walkOffset.y,
 																	tileWestShade1,
-																	half); // trouble
+																	half); // trouble // only render half so it won't overlap other areas that are already drawn
 
 												if (buWest1->getFire() != 0)
 												{
@@ -1415,6 +1414,24 @@ void Map::drawTerrain(Surface* surface)
 																		screenPosition.y + pixelOffset.y + walkOffset.y,
 																		0);
 												}
+											}
+
+											int tileSouthWestShade;
+											if (tileSouthWest->isDiscovered(2) == true)
+												tileSouthWestShade = tileSouthWest->getShade();
+											else
+												tileSouthWestShade = 16;
+
+											if (half == true) // redraw NWSE bigWall in tileSouthWest (might be tileSouth)
+											{
+												tmpSurface = tileSouthWest->getSprite(MapData::O_OBJECT);
+												if (tmpSurface)
+													tmpSurface->blitNShade(
+															surface,
+															screenPosition.x - 32,
+															screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
+															tileSouthWestShade,
+															true); // only render half so it won't overlap other areas that are already drawn
 											}
 										}
 									}
