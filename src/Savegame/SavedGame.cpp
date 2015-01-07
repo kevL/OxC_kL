@@ -1948,33 +1948,33 @@ void SavedGame::processSoldier(
 Soldier* SavedGame::inspectSoldiers(
 		std::vector<Soldier*>& soldiers,
 		std::vector<Soldier*>& participants,
-		int rank)
+		int soldierRank)
 {
-	int highestScore = 0;
-	Soldier* highestRanked = NULL;
+	int high = 0;
+	Soldier* fragBait = NULL;
 
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = soldiers.begin();
 			i != soldiers.end();
 			++i)
 	{
-		if ((*i)->getRank() == rank)  // cast
+		if ((*i)->getRank() == static_cast<SoldierRank>(soldierRank))
 		{
 			const int score = getSoldierScore(*i);
-			if (score > highestScore
+			if (score > high
 				&& (Options::fieldPromotions == false
 					|| std::find(
 							participants.begin(),
 							participants.end(),
 							*i) != participants.end()))
 			{
-				highestScore = score;
-				highestRanked = *i;
+				high = score;
+				fragBait = *i;
 			}
 		}
 	}
 
-	return highestRanked;
+	return fragBait;
 }
 
 /**

@@ -462,7 +462,7 @@ private:
 		Soldier* inspectSoldiers(
 				std::vector<Soldier*>& soldiers,
 				std::vector<Soldier*>& participants,
-				int rank);
+				int soldierRank);
 
 		///  Returns the list of alien bases.
 		std::vector<AlienBase*>* getAlienBases();

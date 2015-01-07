@@ -1028,14 +1028,14 @@ void Surface::blitNShade(
 {
 	ShaderMove<Uint8> src(this, x, y);
 
-	if (half)
+	if (half == true)
 	{
 		GraphSubset g = src.getDomain();
 		g.beg_x = g.end_x / 2;
 		src.setDomain(g);
 	}
 
-	if (newBaseColor)
+	if (newBaseColor != 0)
 	{
 		--newBaseColor;
 		newBaseColor <<= 4;
@@ -1054,7 +1054,7 @@ void Surface::blitNShade(
 
 /**
  * Set the surface to be redrawn.
- * @param valid - true means redraw
+ * @param valid - true means redraw (default true)
  */
 void Surface::invalidate(bool valid)
 {

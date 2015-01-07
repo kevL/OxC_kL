@@ -54,7 +54,7 @@ protected:
 	bool
 		_danger,
 		_discovered[3],
-		_visible; // kL
+		_visible;
 	int
 		_animOffset,
 		_curFrame[4],
@@ -70,7 +70,6 @@ protected:
 		_preview,
 		_smoke,
 		_tuMarker;
-//kL	_visible;
 
 	BattleUnit* _unit;
 	MapData* _objects[4];
@@ -91,7 +90,7 @@ protected:
 			Uint8 _mapDataID;
 			Uint8 _smoke;
 			Uint8 _fire;
-			Uint8 _animOffset; // kL
+			Uint8 _animOffset;
 			Uint8 boolFields;
 			Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 		} serializationKey;
@@ -232,10 +231,9 @@ protected:
 		void setUnit(
 				BattleUnit* unit,
 				Tile* tileBelow = NULL);
-
 		/**
 		 * Gets the (alive) unit on this tile.
-		 * @return, BattleUnit.
+		 * @return, BattleUnit
 		 */
 		BattleUnit* getUnit() const
 		{

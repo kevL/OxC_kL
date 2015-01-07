@@ -674,7 +674,7 @@ void Map::drawTerrain(Surface* surface)
 	const bool
 		pathPreview = _save->getPathfinding()->isPathPreviewed();
 	bool
-		hasFloor,
+		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
 		hasWestWall,
 		hasObject,
 		buNorthValid;
@@ -690,7 +690,7 @@ void Map::drawTerrain(Surface* surface)
 
 		Uint8 wpColor;
 		if (_save->getTerrain() == "DESERT")
-			wpColor = Palette::blockOffset(7)+5; // blue //(0)+2; // white
+			wpColor = Palette::blockOffset(7)+4; // blue //(0)+2; // white
 		else
 			wpColor = Palette::blockOffset(1)+4; // orange
 
@@ -894,7 +894,7 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 //* _START_ADVANCED_DRAWING_CYCLE_ *//
-					if (mapPosition.y > 0) // special handling for a moving unit.
+					if (mapPosition.y > 0) // special handling for a unit moving along the north or west side of a content-object.
 					{
 						const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1, 0));
 						BattleUnit* buNorth = NULL;
@@ -916,48 +916,51 @@ void Map::drawTerrain(Surface* surface)
 							&& tileNorth->getTerrainLevel() <= tile->getTerrainLevel())
 						{
 							buNorthValid = true;
+
 							const Position pixelOffset = Position(16,-8, 0);
 
-							// The quadrant# is 0 for small units; large units have quadrants 1,2 & 3 -
-							// the relative x/y Position of the unit's primary Position vs the redrawn Tile's Position.
+							// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+							// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 							const int quad = tileNorth->getPosition().x - buNorth->getPosition().x
 										  + (tileNorth->getPosition().y - buNorth->getPosition().y) * 2;
 
 							tmpSurface = buNorth->getCache(&invalid, quad);
 							if (tmpSurface)
 							{
-								Position walkOffset; // draw unit
+								Position walkOffset;
 								calculateWalkingOffset(
 													buNorth,
 													&walkOffset);
 
 								tmpSurface->blitNShade(
-													surface,
-													screenPosition.x + walkOffset.x + pixelOffset.x,
-													screenPosition.y + walkOffset.y + pixelOffset.y,
-													tileNorthShade);
+										surface,
+										screenPosition.x + walkOffset.x + pixelOffset.x,
+										screenPosition.y + walkOffset.y + pixelOffset.y,
+										tileNorthShade);
 
-								if (buNorth->getFire() != 0) // draw fire
+								if (buNorth->getFire() != 0)
 								{
 									frame = 4 + (_animFrame / 2);
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + walkOffset.x + pixelOffset.x,
-														screenPosition.y + walkOffset.y + pixelOffset.y,
-														0);
+											surface,
+											screenPosition.x + walkOffset.x + pixelOffset.x,
+											screenPosition.y + walkOffset.y + pixelOffset.y,
+											0);
 								}
 							}
 
 							// Phase II: re-render any east wall type objects in the tile to the NORTH of the unit;
 							// only applies to movement in the north/south direction.
-							if ((buNorth->getDirection() == 0
-									|| buNorth->getDirection() == 4)
-								&& mapPosition.y > 1)
+							if (mapPosition.y > 1
+								&& (buNorth->getDirection() == 0
+									|| buNorth->getDirection() == 4))
 							{
 								const Tile* const tileTwoNorth = _save->getTile(mapPosition + Position(0,-2, 0));
-								if (tileTwoNorth->getMapData(MapData::O_OBJECT) != NULL
-									&& tileTwoNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST) // 6
+
+								tmpSurface = tileTwoNorth->getSprite(MapData::O_OBJECT);
+								if (tmpSurface
+									&& tileTwoNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST)
 								{
 									int tileTwoNorthShade;
 									if (tileTwoNorth->isDiscovered(2) == true)
@@ -965,13 +968,11 @@ void Map::drawTerrain(Surface* surface)
 									else
 										tileTwoNorthShade = 16;
 
-									tmpSurface = tileTwoNorth->getSprite(MapData::O_OBJECT);
-									if (tmpSurface)
-										tmpSurface->blitNShade(
-															surface,
-															screenPosition.x + pixelOffset.x * 2,
-															screenPosition.y - tileTwoNorth->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y * 2,
-															tileTwoNorthShade);
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x + pixelOffset.x * 2,
+											screenPosition.y - tileTwoNorth->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y * 2,
+											tileTwoNorthShade);
 								}
 							}
 
@@ -979,8 +980,10 @@ void Map::drawTerrain(Surface* surface)
 							if (mapPosition.x > 0)
 							{
 								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1, 0));
-								if (tileNorthWest->getMapData(MapData::O_OBJECT) != NULL
-									&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH) // 7
+
+								tmpSurface = tileNorthWest->getSprite(MapData::O_OBJECT);
+								if (tmpSurface
+									&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH)
 								{
 									int tileNorthWestShade;
 									if (tileNorthWest->isDiscovered(2) == true)
@@ -988,30 +991,25 @@ void Map::drawTerrain(Surface* surface)
 									else
 										tileNorthWestShade = 16;
 
-									tmpSurface = tileNorthWest->getSprite(MapData::O_OBJECT);
-									if (tmpSurface)
-									{
-										tmpSurface->blitNShade(
-															surface,
-															screenPosition.x,
-															screenPosition.y - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y * 2,
-															tileNorthWestShade);
-									}
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x,
+											screenPosition.y - tileNorthWest->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y * 2,
+											tileNorthWestShade);
 								}
 							}
 
 							// Phase IV: render any south or east wall type objects in the tile to the NORTH.
-							if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
-								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NORTH // 5; do East,South, East_South
-								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N) // 9
+							tmpSurface = tileNorth->getSprite(MapData::O_OBJECT);
+							if (tmpSurface
+								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NORTH // do East,South,East_South
+								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N)
 							{
-								tmpSurface = tileNorth->getSprite(MapData::O_OBJECT);
-								if (tmpSurface)
-									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x + pixelOffset.x,
-														screenPosition.y - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y,
-														tileNorthShade);
+								tmpSurface->blitNShade(
+										surface,
+										screenPosition.x + pixelOffset.x,
+										screenPosition.y - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset() + pixelOffset.y,
+										tileNorthShade);
 							}
 
 							if (mapPosition.x > 0)
@@ -1043,7 +1041,7 @@ void Map::drawTerrain(Surface* surface)
 //															true);
 //								}
 
-								// Phase VI: re-render everything in the tile to the WEST.
+								// Phase VI: re-render everything in the tile to the WEST (half-tile).
 								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1, 0, 0));
 								BattleUnit* buWest = NULL;
 
@@ -1071,20 +1069,20 @@ void Map::drawTerrain(Surface* surface)
 											wallShade = tileWestShade;
 
 										tmpSurface->blitNShade(
-															surface,
-															screenPosition.x - pixelOffset.x,
-															screenPosition.y - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset() + pixelOffset.y,
-															wallShade,
-															true);
+												surface,
+												screenPosition.x - pixelOffset.x,
+												screenPosition.y - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset() + pixelOffset.y,
+												wallShade,
+												true);
 									}
 								}
 
 								tmpSurface = tileWest->getSprite(MapData::O_NORTHWALL);
 								if (tmpSurface)
 								{
-									if ((tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() == true
-											|| tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
-										&& tileWest->isDiscovered(1) == true)
+									if (tileWest->isDiscovered(1) == true
+										&& (tileWest->getMapData(MapData::O_NORTHWALL)->isDoor() == true
+											|| tileWest->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true))
 									{
 										wallShade = tileWest->getShade();
 									}
@@ -1092,18 +1090,18 @@ void Map::drawTerrain(Surface* surface)
 										wallShade = tileWestShade;
 
 									tmpSurface->blitNShade(
-														surface,
-														screenPosition.x - pixelOffset.x,
-														screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + pixelOffset.y,
-														wallShade,
-														true);
+											surface,
+											screenPosition.x - pixelOffset.x,
+											screenPosition.y - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset() + pixelOffset.y,
+											wallShade,
+											true);
 								}
 
 								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 								if (tmpSurface
-									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NWSE		// 3
-									&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST		// 6; do none,Block,diagonals,West,North
-										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))	// 9
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NWSE // do none,Block,NESW,West,North,West&North
+									&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 								{
 									tmpSurface->blitNShade(
 														surface,
@@ -1114,7 +1112,7 @@ void Map::drawTerrain(Surface* surface)
 
 									// if the object in the tile to the west is a diagonal big wall
 									// it needs to have the black triangle at the bottom covered up
-									if (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW) // 2
+									if (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW)
 									{
 										tmpSurface = tile->getSprite(MapData::O_FLOOR);
 										if (tmpSurface)
@@ -1143,11 +1141,11 @@ void Map::drawTerrain(Surface* surface)
 									&& (buWest->getUnitVisible() == true
 										|| _save->getDebugMode() == true)
 									&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
-										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST	// 6; do none,Block,diagonals,West,North
-										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))	// 9
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block,diagonals],West,North,West&North
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 								{
-									// The quadrant# is 0 for small units; large units have quadrants 1,2 & 3 -
-									// the relative x/y Position of the unit's primary Position vs the redrawn Tile's Position.
+									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 									const int quad = tileWest->getPosition().x - buWest->getPosition().x
 												  + (tileWest->getPosition().y - buWest->getPosition().y) * 2;
 
@@ -1173,12 +1171,12 @@ void Map::drawTerrain(Surface* surface)
 																&walkOffset);
 										}
 
-										tmpSurface->blitNShade(
+/*										tmpSurface->blitNShade(
 															surface,
 															screenPosition.x - pixelOffset.x + walkOffset.x,
 															screenPosition.y + pixelOffset.y + walkOffset.y,
 															tileWestShade,
-															half);
+															half); */
 
 										if (buWest->getFire() != 0)
 										{
@@ -1195,7 +1193,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 								// end buWest TRUE w/ buNorth valid
 
-								// Draw smoke/fire
+								// Draw smoke & fire
 								if (tileWest->getSmoke() != 0
 									&& tileWest->isDiscovered(2) == true)
 								{
@@ -1226,12 +1224,12 @@ void Map::drawTerrain(Surface* surface)
 											true);
 								}
 
-								// Draw bigWall object
-								if (tileWest->getMapData(MapData::O_OBJECT) != NULL
-									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NORTH // 5; do East,South,East&South
-									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N) // 9
+								// Draw front bigWall object
+								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+								if (tmpSurface
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NORTH // do East,South,East&South
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N)
 								{
-									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 									tmpSurface->blitNShade(
 											surface,
 											screenPosition.x - pixelOffset.x,
@@ -1301,19 +1299,18 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 						// Draw rear object
-						if (tile->getMapData(MapData::O_OBJECT) != NULL
-							&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST		// 6; do none,Block,diagonals,West,North
-								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))	// 9
+						tmpSurface = tile->getSprite(MapData::O_OBJECT);
+						if (tmpSurface
+							&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,Block,diagonals,West,North,West&North
+								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 						{
 							hasObject = true;
 
-							tmpSurface = tile->getSprite(MapData::O_OBJECT);
-							if (tmpSurface)
-								tmpSurface->blitNShade(
-										surface,
-										screenPosition.x,
-										screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
-										tileShade);
+							tmpSurface->blitNShade(
+									surface,
+									screenPosition.x,
+									screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
+									tileShade);
 						}
 
 						// Draw item on the floor (if any)
@@ -1329,7 +1326,7 @@ void Map::drawTerrain(Surface* surface)
 										tileShade);
 						}
 
-						// kL_begin: reDraw unit to WEST. ... unit Walking but no unitNorth exists.
+						// kL_begin: reDraw unit to WEST. ... unit Walking and no unitNorth exists.
 						// TODO: smoke/fire render from advanced cycle below this, use check to draw or not
 						// cf. Phase VI in advanced cycle.
 						if (mapPosition.x > 0 // special handling for a moving unit.
@@ -1337,31 +1334,39 @@ void Map::drawTerrain(Surface* surface)
 							&& hasWestWall == false
 							&& buNorthValid == false
 							&& (tile->getMapData(MapData::O_OBJECT) == NULL
-								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH		// 5
-								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST))		// 6, should be ok ...
-
-//								|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH		// 7
-//									&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S)))	// 8
+								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH))
 						{
 							const Tile* const tileSouth = _save->getTile(mapPosition + Position(0, 1, 0));
 							if (tileSouth == NULL
-								|| tileSouth->getMapData(MapData::O_NORTHWALL) == NULL)
-//									&& tileSouth->getMapData(MapData::O_OBJECT) == NULL))
+								|| (tileSouth->getMapData(MapData::O_NORTHWALL) == NULL
+									&& tileSouth->getMapData(MapData::O_OBJECT) == NULL))
 							{
 								const Tile* const tileWest1 = _save->getTile(mapPosition + Position(-1, 0, 0));
 								BattleUnit* buWest1 = NULL;
 
 								if (tileWest1->getMapData(MapData::O_OBJECT) == NULL
-									|| (tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_EAST		// 6
-										&& tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH	// 7
-										&& tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))	// 8
+									|| tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block,diagonals],West,North,West&North
+									|| tileWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)
 								{
 									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
 									if (tileSouthWest == NULL
-//										|| tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL)
-										|| tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE) // 3
+										|| (tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
+											&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
+												|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+												|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE // trouble
+												|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST)))
+//												|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH)))
 									{
+										bool half;
+										if (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
+											&& tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE) // trouble
+										{
+											half = true;
+										}
+										else
+											half = false;
+
+
 										int tileWestShade1;
 										if (tileWest1->isDiscovered(2) == true)
 										{
@@ -1372,13 +1377,13 @@ void Map::drawTerrain(Surface* surface)
 											tileWestShade1 = 16;
 
 										if (buWest1 != NULL
-//											&& buWest1 != unit // NOT for large units
+											&& buWest1 != unit // large units don't need to redraw their westerly parts
 											&& buWest1->getStatus() == STATUS_WALKING
 											&& (buWest1->getUnitVisible() == true
 												|| _save->getDebugMode() == true))
 										{
-											// The quadrant# is 0 for small units; large units have quadrants 1,2 & 3 -
-											// the relative x/y Position of the unit's primary Position vs the redrawn Tile's Position.
+											// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+											// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 											const int quad = tileWest1->getPosition().x - buWest1->getPosition().x
 														  + (tileWest1->getPosition().y - buWest1->getPosition().y) * 2;
 
@@ -1396,7 +1401,8 @@ void Map::drawTerrain(Surface* surface)
 																	surface,
 																	screenPosition.x + pixelOffset.x + walkOffset.x,
 																	screenPosition.y + pixelOffset.y + walkOffset.y,
-																	tileWestShade1);
+																	tileWestShade1,
+																	half); // trouble
 
 												if (buWest1->getFire() != 0)
 												{
@@ -1418,21 +1424,18 @@ void Map::drawTerrain(Surface* surface)
 						// kL_begin: reDraw unit to NORTH-WEST. ... unit Walking.
 						// TODO: smoke/fire render from advanced cycle below this, use check to draw or not
 						// cf. Phase III in advanced cycle.
-						if (buNorthValid == false
-							&& mapPosition.x > 0 // special handling for a moving unit.
-							&& mapPosition.y > 0
+						if (   mapPosition.x > 0
+							&& mapPosition.y > 0 // special handling for a moving unit.
+							&& buNorthValid == false
 							&& tile->getMapData(MapData::O_OBJECT) != NULL
-							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE) // content-object is NOT a bigWall
+							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE) // content-object is NOT a bigWall; prob. needs regular Walls here also.
 						{
 							const Tile* const tileNorthWest1 = _save->getTile(mapPosition + Position(-1,-1, 0));
 							BattleUnit* buNorthWest1 = NULL;
 
-							if (//tileNorthWest1->getTerrainLevel() >= tile->getTerrainLevel() &&
-								tileNorthWest1->getMapData(MapData::O_OBJECT) == NULL
-									|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE		// 0
-									|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST		// 4
-									|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH	// 5
-									|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)		// 9
+							if (tileNorthWest1->getMapData(MapData::O_OBJECT) == NULL
+								|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block, diagonals],West,North,West&North
+								|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)
 							{
 								int tileWestShade1;
 								if (tileNorthWest1->isDiscovered(2) == true)
@@ -1444,15 +1447,15 @@ void Map::drawTerrain(Surface* surface)
 									tileWestShade1 = 16;
 
 								if (buNorthWest1 != NULL
-//									&& buNorthWest1 != unit // NOT for large units
+									&& buNorthWest1 != unit // large units don't need to redraw their westerly parts
 									&& buNorthWest1->getStatus() == STATUS_WALKING
 									&& (buNorthWest1->getDirection() == 3
 										|| buNorthWest1->getDirection() == 7)
 									&& (buNorthWest1->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
-									// The quadrant# is 0 for small units; large units have quadrants 1,2 & 3 -
-									// the relative x/y Position of the unit's primary Position vs the redrawn Tile's Position.
+									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 									const int quad = tileNorthWest1->getPosition().x - buNorthWest1->getPosition().x
 												  + (tileNorthWest1->getPosition().y - buNorthWest1->getPosition().y) * 2;
 
@@ -1688,8 +1691,8 @@ void Map::drawTerrain(Surface* surface)
 						&& (unit->getUnitVisible() == true
 							|| _save->getDebugMode() == true))
 					{
-						// The quadrant# is 0 for small units; large units have quadrants 1,2 & 3 -
-						// the relative x/y Position of the unit's primary Position vs the redrawn Tile's Position.
+						// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+						// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 						const int quad = tile->getPosition().x - unit->getPosition().x
 									  + (tile->getPosition().y - unit->getPosition().y) * 2;
 
@@ -1868,8 +1871,8 @@ void Map::drawTerrain(Surface* surface)
 							&& ttile->getTerrainLevel() < 0
 							&& ttile->isDiscovered(2) == true)
 						{
-							// The quadrant# is 0 for small units; large units have quadrants 1,2 & 3 -
-							// the relative x/y Position of the unit's primary Position vs the redrawn Tile's Position.
+							// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+							// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 							const int quad = ttile->getPosition().x - tunit->getPosition().x
 										  + (ttile->getPosition().y - tunit->getPosition().y) * 2;
 
@@ -2299,7 +2302,7 @@ void Map::drawTerrain(Surface* surface)
 			walkOffset.y += 21 - unit->getHeight();
 
 			if (unit->getArmor()->getSize() > 1)
-				walkOffset.y += 6;
+				walkOffset.y += 9;
 
 			double fact = 4.;
 			if (unit->isKneeled() == true)
@@ -2312,8 +2315,8 @@ void Map::drawTerrain(Surface* surface)
 							surface,
 							screenPosition.x
 								+ walkOffset.x
-								+ (_spriteWidth / 2)
-								- (_arrow->getWidth() / 2),
+								+ _spriteWidth / 2
+								- _arrow->getWidth() / 2,
 							screenPosition.y
 								+ walkOffset.y
 								- _arrow->getHeight()
@@ -2563,27 +2566,9 @@ void Map::mouseOver(Action* action, State* state)
  */
 void Map::animate(bool redraw)
 {
-	_animFrame++;
+	++_animFrame;
  	if (_animFrame == 8)
 		_animFrame = 0;
-
-//kL	_cursorFrame++;			// DarkDefender
-//kL	if (_cursorFrame == 10)	// DarkDefender
-//kL		_cursorFrame = 0;	// DarkDefender
-
-	// kL_begin:
-/*	if (_animUp)
-	{
-		_animFrame++;
-		if (_animFrame == 7)
-			_animUp = false;
-	}
-	else
-	{
-		_animFrame--;
-		if (_animFrame == 0)
-			_animUp = true;
-	} */ // kL_end.
 
 	// animate tiles
 	for (int
@@ -2757,15 +2742,10 @@ void Map::calculateWalkingOffset(
 								unit->getPosition(),
 								unitSize);
 
-/*		if (unit->getArmor()->getDrawingRoutine() == 0
-			|| unit->getArmor()->getDrawingRoutine() == 1
-			|| unit->getArmor()->getDrawingRoutine() == 4
-			|| unit->getArmor()->getDrawingRoutine() == 6
-			|| unit->getArmor()->getDrawingRoutine() == 10) */
-		if (unit->getArmor()->getCanHoldWeapon() == true)
+		if (unit->getStatus() == STATUS_AIMING
+			&& unit->getArmor()->getCanHoldWeapon() == true)
 		{
-			if (unit->getStatus() == STATUS_AIMING)
-				offset->x = -16;
+			offset->x = -16;
 		}
 
 		if (_save->getDepth() > 0)
