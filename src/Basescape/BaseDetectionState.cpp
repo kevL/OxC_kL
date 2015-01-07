@@ -127,7 +127,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
 		facQty = 0,
 		shields = 0;
 
-	std::vector<BaseFacility*>* facs = _base->getFacilities();
+	const std::vector<BaseFacility*>* const facs = _base->getFacilities();
 	for (std::vector<BaseFacility*>::const_iterator
 			i = facs->begin();
 			i != facs->end();

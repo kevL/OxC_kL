@@ -6062,7 +6062,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420641707 source:f:\git\openxcom\src\battlescape\map.cpp
+1420658757 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -11258,7 +11258,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
 
-1420233027 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
+1420659171 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
 	"BaseDetectionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
