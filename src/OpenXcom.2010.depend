@@ -6062,7 +6062,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420569816 source:f:\git\openxcom\src\battlescape\map.cpp
+1420620455 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6423,7 +6423,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1420130459 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1420617867 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -6794,14 +6794,9 @@
 1420130454 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1420263290 source:f:\git\openxcom\src\engine\surface.cpp
+1420585286 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
-	"Exception.h"
 	"Language.h"
-	"Palette.h"
-	"Screen.h"
-	"ShaderDraw.h"
-	"ShaderMove.h"
 	<malloc.h>
 	<ppcinline/exec.h>
 
@@ -8754,7 +8749,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1420308642 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1420615157 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

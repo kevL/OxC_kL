@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "UnitSprite.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 
 #include "../Battlescape/Position.h"
@@ -1086,12 +1085,12 @@ void UnitSprite::drawRoutine1()
  */
 void UnitSprite::drawRoutine2()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
 	const int
-		offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0 }, // hovertank offsets
-		offY[8] = {-1,-3,-4,-5,-4,-3,-1,-1 },
+		offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0}, // hovertank offsets
+		offY[8] = {-1,-3,-4,-5,-4,-3,-1,-1},
 		hoverTank	= _unit->getMovementType() == MT_FLY? 32: 0,
 		turret		= _unit->getTurretType();
 
@@ -1127,7 +1126,7 @@ void UnitSprite::drawRoutine2()
 			turretOffsetX = 0,
 			turretOffsetY = -4;
 
-		if (hoverTank)
+		if (hoverTank != 0)
 		{
 			turretOffsetX += offX[dirFace];
 			turretOffsetY += offY[dirFace];

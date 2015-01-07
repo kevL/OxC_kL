@@ -1118,7 +1118,7 @@ void BattleUnit::setCache(
 
 /**
  * Check if the unit is still cached in the Map cache.
- * When the unit needs to animate, it needs to be re-cached.
+ * When the unit needs to animate it needs to be re-cached.
  * @param invalid	- pointer to true if the cache is invalid
  * @param part		- unit part to check (default 0)
  * @return, pointer to the cache surface used
