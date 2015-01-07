@@ -573,7 +573,6 @@ void PurchaseState::btnOkClick(Action*)
 				{
 					Transfer* const transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
 					transfer->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
-					transfer->setNewRecruit();
 
 					_base->getTransfers()->push_back(transfer);
 				}

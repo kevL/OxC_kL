@@ -4400,7 +4400,7 @@
 
 1420130442 f:\git\openxcom\src\savegame\target.h
 
-1420130452 f:\git\openxcom\src\savegame\savedgame.h
+1420626762 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -5074,7 +5074,7 @@
 	<limits>
 	<cmath>
 
-1420584010 f:\git\openxcom\src\savegame\transfer.h
+1420624426 f:\git\openxcom\src\savegame\transfer.h
 
 1420175641 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
@@ -6062,7 +6062,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420620455 source:f:\git\openxcom\src\battlescape\map.cpp
+1420623611 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8874,7 +8874,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1420583305 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1420626933 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

@@ -23,7 +23,6 @@
 //#include <map>
 //#include <string>
 //#include <vector>
-
 //#include <time.h>
 //#include <stdint.h>
 
@@ -220,6 +219,17 @@ struct SaveInfo
 		isoDate,
 		isoTime;
 	std::vector<std::string> rulesets;
+};
+
+/**
+ * Container for Promotion info.
+ */
+struct PromotionInfo
+{
+	int totalCommanders;
+	int totalColonels;
+	int totalCaptains;
+	int totalSergeants;
 };
 
 
@@ -444,11 +454,15 @@ private:
 		Soldier* getSoldier(int id) const;
 		/// Handles the higher promotions.
 		bool handlePromotions(std::vector<Soldier*>& participants);
+		/// Processes soldiers for promotions.
+		void processSoldier(
+				Soldier* soldier,
+				PromotionInfo& promoData);
 		/// Checks how many soldiers of a rank exist and which one has the highest score.
-		void inspectSoldiers(
-				Soldier** highestRanked,
-				size_t* total,
-				int soldierRank);
+		Soldier* inspectSoldiers(
+				std::vector<Soldier*>& soldiers,
+				std::vector<Soldier*>& participants,
+				int rank);
 
 		///  Returns the list of alien bases.
 		std::vector<AlienBase*>* getAlienBases();

@@ -1801,158 +1801,14 @@ Soldier* SavedGame::getSoldier(int id) const
 }
 
 /**
- * Handles the higher promotions (not the rookie-squaddie ones).
+ * Handles the higher promotions - not the rookie-squaddie ones.
  * @param participants - a list of soldiers that were actually present at the battle
  * @return, true if some promotions happened - to show the promotions screen
  */
 bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 {
-	size_t
-		soldiersPromoted = 0,
-		soldiersTotal = 0;
-
-	for (std::vector<Base*>::const_iterator
-			i = _bases.begin();
-			i != _bases.end();
-			++i)
-	{
-		soldiersTotal += (*i)->getSoldiers()->size();
-
-		for (std::vector<Transfer*>::iterator
-				j = (*i)->getTransfers()->begin();
-				j != (*i)->getTransfers()->end();
-				++j)
-		{
-			if ((*j)->getType() == TRANSFER_SOLDIER
-				&& (*j)->isNewRecruit() == false)
-			{
-				++soldiersTotal;
-			}
-		}
-	}
-
-	Soldier* highestRanked = NULL;
-
-	// now determine the number of positions we have of each rank,
-	// and the soldier with the heighest promotion score of the rank below it
-
-	size_t
-		filledPositions = 0,
-		filledPositions2 = 0;
-	std::vector<Soldier*>::const_iterator
-		soldier,
-		stayedHome;
-
-	stayedHome = participants.end();
-
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions,
-				RANK_COMMANDER);
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions2,
-				RANK_COLONEL);
-	soldier = std::find(
-					participants.begin(),
-					participants.end(),
-					highestRanked);
-
-	if (filledPositions < 1
-		&& filledPositions2 > 0
-		&& soldiersTotal > 29
-		&& (Options::fieldPromotions == false
-			|| soldier != stayedHome))
-	{
-		highestRanked->promoteRank(); // only promote one colonel to commander
-		++soldiersPromoted;
-	}
-
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions,
-				RANK_COLONEL);
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions2,
-				RANK_CAPTAIN);
-	soldier = std::find(
-					participants.begin(),
-					participants.end(),
-					highestRanked);
-
-	if (filledPositions < 10
-		&& filledPositions < soldiersTotal / 23
-		&& filledPositions2 > 0
-		&& (Options::fieldPromotions == false
-			|| soldier != stayedHome))
-	{
-		highestRanked->promoteRank();
-		++soldiersPromoted;
-	}
-
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions,
-				RANK_CAPTAIN);
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions2,
-				RANK_SERGEANT);
-	soldier = std::find(
-					participants.begin(),
-					participants.end(),
-					highestRanked);
-
-	if (filledPositions < 22
-		&& filledPositions < soldiersTotal / 11
-		&& filledPositions2 > 0
-		&& (Options::fieldPromotions == false
-			|| soldier != stayedHome))
-	{
-		highestRanked->promoteRank();
-		++soldiersPromoted;
-	}
-
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions,
-				RANK_SERGEANT);
-	inspectSoldiers(
-				&highestRanked,
-				&filledPositions2,
-				RANK_SQUADDIE);
-	soldier = std::find(
-					participants.begin(),
-					participants.end(),
-					highestRanked);
-
-	if (filledPositions < 50
-		&& filledPositions < soldiersTotal / 5
-		&& filledPositions2 > 0
-		&& (Options::fieldPromotions == false
-			|| soldier != stayedHome))
-	{
-		highestRanked->promoteRank();
-		++soldiersPromoted;
-	}
-
-	return (soldiersPromoted > 0);
-}
-
-/**
- * Checks how many soldiers of a rank exist and which one has the highest score.
- * @param highestRanked - pointer to a pointer to store the highest-scoring soldier of that rank in
- * @param total			- pointer to store the total in
- * @param soldierRank	- rank to inspect
- */
-void SavedGame::inspectSoldiers(
-		Soldier** highestRanked,
-		size_t* total,
-		int soldierRank)
-{
-	int highestScore = 0;
-	*total = 0;
+	PromotionInfo data;
+	std::vector<Soldier*> soldiers;
 
 	for (std::vector<Base*>::const_iterator
 			i = _bases.begin();
@@ -1964,17 +1820,10 @@ void SavedGame::inspectSoldiers(
 				j != (*i)->getSoldiers()->end();
 				++j)
 		{
-			if ((*j)->getRank() == (SoldierRank)soldierRank)
-			{
-				++(*total);
-
-				const int score = getSoldierScore(*j);
-				if (score > highestScore)
-				{
-					highestScore = score;
-					*highestRanked = *j;
-				}
-			}
+			soldiers.push_back(*j);
+			processSoldier(
+						*j,
+						data);
 		}
 
 		for (std::vector<Transfer*>::const_iterator
@@ -1982,20 +1831,150 @@ void SavedGame::inspectSoldiers(
 				j != (*i)->getTransfers()->end();
 				++j)
 		{
-			if ((*j)->getType() == TRANSFER_SOLDIER
-				&& (*j)->getSoldier()->getRank() == (SoldierRank)soldierRank)
+			if ((*j)->getType() == TRANSFER_SOLDIER)
 			{
-				++(*total);
-
-				const int score = getSoldierScore((*j)->getSoldier());
-				if (score > highestScore)
-				{
-					highestScore = score;
-					*highestRanked = (*j)->getSoldier();
-				}
+				soldiers.push_back((*j)->getSoldier());
+				processSoldier(
+							(*j)->getSoldier(),
+							data);
 			}
 		}
 	}
+
+
+	int pro = 0;
+
+	Soldier* fragBait = NULL;
+	const int totalSoldiers = static_cast<int>(soldiers.size());
+
+	if (data.totalCommanders == 0 // There can be only one.
+		&& totalSoldiers > 29)
+	{
+		fragBait = inspectSoldiers(
+								soldiers,
+								participants,
+								RANK_COLONEL);
+		if (fragBait != NULL)
+		{
+			fragBait->promoteRank();
+			++pro;
+			++data.totalCommanders;
+			--data.totalColonels;
+		}
+	}
+
+	while (data.totalColonels < totalSoldiers / 23)
+	{
+		fragBait = inspectSoldiers(
+								soldiers,
+								participants,
+								RANK_CAPTAIN);
+		if (fragBait == NULL)
+			break;
+
+		fragBait->promoteRank();
+		++pro;
+		++data.totalColonels;
+		--data.totalCaptains;
+	}
+
+	while (data.totalCaptains < totalSoldiers / 11)
+	{
+		fragBait = inspectSoldiers(
+								soldiers,
+								participants,
+								RANK_SERGEANT);
+		if (fragBait == NULL)
+			break;
+
+		fragBait->promoteRank();
+		++pro;
+		++data.totalCaptains;
+		--data.totalSergeants;
+	}
+
+	while (data.totalSergeants < totalSoldiers / 5)
+	{
+		fragBait = inspectSoldiers(
+								soldiers,
+								participants,
+								RANK_SQUADDIE);
+		if (fragBait == NULL)
+			break;
+
+		fragBait->promoteRank();
+		++pro;
+		++data.totalSergeants;
+	}
+
+	return (pro != 0);
+}
+
+/**
+ * Processes a soldier and adds their rank to the promotions data struct.
+ * @param soldier	- pointer to the Soldier to process
+ * @param promoData	- reference the PromotionInfo data struct to put the info into
+ */
+void SavedGame::processSoldier(
+		Soldier* soldier,
+		PromotionInfo& promoData)
+{
+	switch (soldier->getRank())
+	{
+		case RANK_COMMANDER:
+			++promoData.totalCommanders;
+		break;
+
+		case RANK_COLONEL:
+			++promoData.totalColonels;
+		break;
+
+		case RANK_CAPTAIN:
+			++promoData.totalCaptains;
+		break;
+
+		case RANK_SERGEANT:
+			++promoData.totalSergeants;
+	}
+}
+
+/**
+ * Checks how many soldiers of a rank exist and which one has the highest score.
+ * @param soldiers		- reference a vector of pointers to Soldiers for full list of live soldiers
+ * @param participants	- reference a vector of pointers to Soldiers for list of participants on a mission
+ * @param soldierRank	- rank to inspect
+ * @return, pointer to the highest ranked soldier
+ */
+Soldier* SavedGame::inspectSoldiers(
+		std::vector<Soldier*>& soldiers,
+		std::vector<Soldier*>& participants,
+		int rank)
+{
+	int highestScore = 0;
+	Soldier* highestRanked = NULL;
+
+	for (std::vector<Soldier*>::iterator
+			i = soldiers.begin();
+			i != soldiers.end();
+			++i)
+	{
+		if ((*i)->getRank() == rank)  // cast
+		{
+			const int score = getSoldierScore(*i);
+			if (score > highestScore
+				&& (Options::fieldPromotions == false
+					|| std::find(
+							participants.begin(),
+							participants.end(),
+							*i) != participants.end()))
+			{
+				highestScore = score;
+				highestRanked = *i;
+			}
+		}
+	}
+
+	return highestRanked;
 }
 
 /**

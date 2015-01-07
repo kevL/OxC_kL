@@ -54,9 +54,7 @@ class Transfer
 {
 
 private:
-	bool
-		_delivered,
-		_newRecruit;
+	bool _delivered;
 	int
 		_engineers,
 		_hours,
@@ -118,11 +116,6 @@ private:
 
 		/// Get a pointer to the soldier being transferred.
 		Soldier* getSoldier() const;
-
-		/// Sets this transfer as a new acquisition.
-		void setNewRecruit();
-		/// Checks if this soldier has his paperwork filed with HQ.
-		bool isNewRecruit() const;
 };
 
 }

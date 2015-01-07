@@ -44,8 +44,7 @@ Transfer::Transfer(int hours)
 		_itemQty(0),
 		_scientists(0),
 		_engineers(0),
-		_delivered(false),
-		_newRecruit(false)
+		_delivered(false)
 {}
 
 /**
@@ -121,7 +120,6 @@ bool Transfer::load(
 	_scientists	= node["scientists"].as<int>(_scientists);
 	_engineers	= node["engineers"]	.as<int>(_engineers);
 	_delivered	= node["delivered"]	.as<bool>(_delivered);
-	_newRecruit	= node["newRecruit"].as<bool>(_newRecruit);
 
 	return true;
 }
@@ -152,9 +150,6 @@ YAML::Node Transfer::save() const
 
 	if (_delivered == true)
 		node["delivered"] = _delivered;
-
-	if (_newRecruit == true)
-		node["newRecruit"] = _newRecruit;
 
 	return node;
 }
@@ -324,23 +319,6 @@ void Transfer::advance(Base* base)
 Soldier* Transfer::getSoldier() const
 {
 	return _soldier;
-}
-
-/**
- * Set this transfer as a new purchase.
- */
-void Transfer::setNewRecruit()
-{
-	_newRecruit = true;
-}
-
-/**
- * Check if this transfer is a new purchase.
- * @return, true if this soldier is a new recruit
- */
-bool Transfer::isNewRecruit() const
-{
-	return _newRecruit;
 }
 
 }
