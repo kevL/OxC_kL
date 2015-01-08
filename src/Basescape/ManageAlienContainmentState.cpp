@@ -58,23 +58,19 @@ namespace OpenXcom
  * Initializes all the elements in the Manage Alien Containment screen.
  * @param base		- pointer to the base to get info from
  * @param origin	- game section that originated this state
- * @param allowHelp	- true to get researchHelp from executed aLiens (default true)
  */
 ManageAlienContainmentState::ManageAlienContainmentState(
 		Base* base,
-		OptionsOrigin origin,
-		bool allowHelp)
+		OptionsOrigin origin)
 	:
 		_base(base),
 		_origin(origin),
-		_allowHelp(allowHelp),
 		_sel(0),
-		_aliensSold(0)
+		_fishFood(0)
 //		_researchAliens(0)
 {
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
-
 /*kL
 	for (std::vector<ResearchProject*>::const_iterator
 			i = _base->getResearch().begin();
@@ -138,13 +134,20 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 
 //	_window->setColor(_color);
+	std::string st;
 	if (origin == OPT_BATTLESCAPE)
+	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+		st = "STR_EXECUTE";
+	}
 	else
+	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+		st = "STR_REMOVE_SELECTED";
+	}
 
 //	_btnOk->setColor(_color);
-	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
+	_btnOk->setText(tr(st));
 	_btnOk->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ManageAlienContainmentState::btnOkClick,
@@ -210,6 +213,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_lstAliens->onRightArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowClick);
 	_lstAliens->onMousePress((ActionHandler)& ManageAlienContainmentState::lstItemsMousePress);
 
+	size_t row = 0;
+	Uint8 color = _lstAliens->getColor();
+
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
@@ -230,14 +236,23 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 							tr(*i).c_str(),
 							ss.str().c_str(),
 							L"0");
+
+			if (_game->getSavedGame()->isResearched(_game->getRuleset()->getItem(*i)->getType()) == false
+				&& _game->getRuleset()->getItem(*i)->isResearchExempt() == false)
+			{
+				color = Palette::blockOffset(13)+5; // yellow
+			}
+
+			_lstAliens->setRowColor(row, color);
+			++row;
 		}
 	}
 
 	_timerInc = new Timer(250);
-	_timerInc->onTimer((StateHandler)&ManageAlienContainmentState::increase);
+	_timerInc->onTimer((StateHandler)& ManageAlienContainmentState::increase);
 
 	_timerDec = new Timer(250);
-	_timerDec->onTimer((StateHandler)&ManageAlienContainmentState::decrease);
+	_timerDec->onTimer((StateHandler)& ManageAlienContainmentState::decrease);
 }
 
 /**
@@ -273,7 +288,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 	{
 		if (_qtys[i] > 0)
 		{
-			if (_allowHelp == true)
+			if (_origin == OPT_GEOSCAPE)
 			{
 				for (int
 						j = 0;
@@ -285,8 +300,8 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 			}
 
 			_base->getItems()->removeItem(
-										_aliens[i],
-										_qtys[i]);
+									_aliens[i],
+									_qtys[i]);
 
 /*			if (Options::canSellLiveAliens)
 				_game->getSavedGame()->setFunds(
@@ -491,7 +506,7 @@ void ManageAlienContainmentState::increaseByValue(int change)
 					change,
 					qty);
 	_qtys[_sel] += change;
-	_aliensSold += change;
+	_fishFood += change;
 
 	updateStrings();
 }
@@ -518,13 +533,14 @@ void ManageAlienContainmentState::decreaseByValue(int change)
 
 	change = std::min(_qtys[_sel], change);
 	_qtys[_sel] -= change;
-	_aliensSold -= change;
+	_fishFood -= change;
 
 	updateStrings();
 }
 
 /**
- * Updates the quantity-strings of the selected alien.
+ * Updates the row (quantity & color) of the selected aLien species.
+ * Also determines if the OK button should be in/visible.
  */
 void ManageAlienContainmentState::updateStrings()
 {
@@ -537,26 +553,35 @@ void ManageAlienContainmentState::updateStrings()
 	ss2 << _qtys[_sel];
 
 	Uint8 color;
-	if (qty == 0)
-		color = _lstAliens->getColor();
-	else
+	if (_qtys[_sel] != 0)
 		color = _lstAliens->getSecondaryColor();
+	else
+	{
+		const RuleItem* const itRule = _game->getRuleset()->getItem(_aliens[_sel]);
+		if (_game->getSavedGame()->isResearched(itRule->getType()) == false
+			&& itRule->isResearchExempt() == false)
+		{
+			color = Palette::blockOffset(13)+5; // yellow
+		}
+		else
+			color = _lstAliens->getColor();
+	}
 
 	_lstAliens->setRowColor(_sel, color);
-	_lstAliens->setCellText(_sel, 1, ss.str());		// # in Containment
-	_lstAliens->setCellText(_sel, 2, ss2.str());	// # to torture
+	_lstAliens->setCellText(_sel, 1, ss.str());  // # still in Containment
+	_lstAliens->setCellText(_sel, 2, ss2.str()); // # to torture
 
 
 	const int
-		aliens = _base->getUsedContainment() - _aliensSold, //kL - _researchAliens,
-		spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
+		aliens = _base->getUsedContainment() - _fishFood, //kL - _researchAliens,
+		freeSpace = _base->getAvailableContainment() - _base->getUsedContainment() + _fishFood;
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(freeSpace));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 
 	_btnCancel->setVisible(_overCrowded == false);
-	_btnOk->setVisible(_aliensSold > 0
-					&& spaces > -1);
+	_btnOk->setVisible(_fishFood > 0
+					   && freeSpace > -1);
 }
 
 }

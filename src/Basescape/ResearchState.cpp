@@ -77,6 +77,7 @@ ResearchState::ResearchState(
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
+
 	setPalette(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
@@ -183,8 +184,8 @@ void ResearchState::btnNewClick(Action*)
 void ResearchState::btnAliens(Action*)
 {
 	_game->pushState(new ManageAlienContainmentState(
-													_base,
-													OPT_GEOSCAPE));
+												_base,
+												OPT_GEOSCAPE));
 }
 
 /**
@@ -210,7 +211,7 @@ void ResearchState::onSelectProject(Action*)
 		if (*i == false)
 		{
 			//Log(LOG_INFO) << ". . offline[" << entry << "] " << (*rps[entry]).getRules()->getName();
-			sel2++;
+			++sel2;
 		}
 		//else Log(LOG_INFO) << ". . online[" << entry << "] " << (*rps[entry]).getRules()->getName();
 
@@ -220,7 +221,7 @@ void ResearchState::onSelectProject(Action*)
 			break;
 		}
 
-		entry++;
+		++entry;
 	}
 
 	_game->pushState(new ResearchInfoState(
@@ -263,9 +264,9 @@ void ResearchState::init()
 
 		if ((*rp)->getAssigned() > 0)
 		{
-			int daysLeft = static_cast<int>(ceil(
-								(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
-								/ static_cast<double>((*rp)->getAssigned())));
+			const int daysLeft = static_cast<int>(std::ceil(
+									(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
+									/ static_cast<double>((*rp)->getAssigned())));
 			wsDaysLeft = Text::formatNumber(daysLeft, L"", false);
 		}
 

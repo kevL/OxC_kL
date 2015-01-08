@@ -2062,6 +2062,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 		{
 			(*i)->addActivityAlien(aLienPts);
 			(*i)->recentActivity();
+
 			break;
 		}
 	}
@@ -2103,14 +2104,12 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
  */
 void GeoscapeState::time30Minutes()
 {
-	//Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
 	std::for_each( // decrease mission countdowns
 			_savedGame->getAlienMissions().begin(),
 			_savedGame->getAlienMissions().end(),
 			callThink(
 					*_game,
 					*_globe));
-	//Log(LOG_INFO) << ". . decreased mission countdowns";
 
 	for (std::vector<AlienMission*>::const_iterator // remove finished missions
 			am = _savedGame->getAlienMissions().begin();
@@ -2119,20 +2118,17 @@ void GeoscapeState::time30Minutes()
 	{
 		if ((*am)->isOver() == true)
 		{
-			//Log(LOG_INFO) << ". aLienMission isOver() : " << (*am)->getType();
 			delete *am;
 			am = _savedGame->getAlienMissions().erase(am);
 		}
 		else
 			++am;
 	}
-	//Log(LOG_INFO) << ". . removed finished missions";
 
 	std::for_each( // handle crashed UFOs expiration
 			_savedGame->getUfos()->begin(),
 			_savedGame->getUfos()->end(),
 			expireCrashedUfo());
-	//Log(LOG_INFO) << ". . handled crashed UFO expirations";
 
 	for (std::vector<Base*>::const_iterator // handle craft maintenance & refueling.
 			i = _savedGame->getBases()->begin();
@@ -2196,91 +2192,59 @@ void GeoscapeState::time30Minutes()
 			}
 		}
 	}
-	//Log(LOG_INFO) << ". . handled craft maintenance & alien base detection";
 
-	const int pts = _savedGame->getMonthsPassed() / 3 + static_cast<int>(_savedGame->getDifficulty());
-	int aLienPts = 0;
-//	pts = pts * _game->getRuleset()->getAlienMission("STR_ALIEN_*")->getPoints() / 100; // kL_stuff
 
-	for (std::vector<Ufo*>::const_iterator // handle UFO detection and give aliens points
+	int ufoVP;
+	const int vp = _savedGame->getMonthsPassed() / 4 + static_cast<int>(_savedGame->getDifficulty()); // basic Victory Points
+	// TODO: vp = vp * _game->getRuleset()->getAlienMission("STR_ALIEN_*")->getPoints() / 100;
+
+	for (std::vector<Ufo*>::const_iterator // handle UFO detection and give aLiens points
 			ufo = _savedGame->getUfos()->begin();
 			ufo != _savedGame->getUfos()->end();
 			++ufo)
 	{
-		//Log(LOG_INFO) << ". . . . for " << *ufo;
-		aLienPts = pts;
-
-		switch ((*ufo)->getStatus())
+		ufoVP = (*ufo)->getVictoryPoints() + vp; // reset for each UFO
+		if (ufoVP > 0)
 		{
-			case Ufo::LANDED:
-				aLienPts += 5;
-				//Log(LOG_INFO) << ". . . . . . ufo has Landed";
-			break;
-			case Ufo::CRASHED:
-				aLienPts += 3;
-				//Log(LOG_INFO) << ". . . . . . ufo is Crashed";
-			break;
-			case Ufo::FLYING:
-				aLienPts += 1;
-				//Log(LOG_INFO) << ". . . . . . ufo is Flying";
-			break;
-			case Ufo::DESTROYED:
-				//Log(LOG_INFO) << ". . . . . . ufo is Destroyed";
-			break;
+			const double
+				lon = (*ufo)->getLongitude(),
+				lat = (*ufo)->getLatitude();
 
-			default:
-			break;
-		}
-
-		aLienPts = std::max(
-						1,
-						aLienPts / 2);
-//		if (aLienPts)
-//		{
-		const double
-			lon = (*ufo)->getLongitude(),
-			lat = (*ufo)->getLatitude();
-
-		// Get area
-		for (std::vector<Region*>::const_iterator
-				k = _savedGame->getRegions()->begin();
-				k != _savedGame->getRegions()->end();
-				++k)
-		{
-			if ((*k)->getRules()->insideRegion(
-											lon,
-											lat) == true)
+			for (std::vector<Region*>::const_iterator
+					k = _savedGame->getRegions()->begin();
+					k != _savedGame->getRegions()->end();
+					++k)
 			{
-				(*k)->addActivityAlien(aLienPts); // one point per UFO in-Region per half hour
-				(*k)->recentActivity();
+				if ((*k)->getRules()->insideRegion(
+												lon,
+												lat) == true)
+				{
+					(*k)->addActivityAlien(ufoVP); // points per UFO in-Region per half hour
+					(*k)->recentActivity();
 
-				break;
+					break;
+				}
+			}
+
+			for (std::vector<Country*>::const_iterator
+					k = _savedGame->getCountries()->begin();
+					k != _savedGame->getCountries()->end();
+					++k)
+			{
+				if ((*k)->getRules()->insideCountry(
+												lon,
+												lat) == true)
+				{
+					(*k)->addActivityAlien(ufoVP); // points per UFO in-Country per half hour
+					(*k)->recentActivity();
+
+					break;
+				}
 			}
 		}
-		//Log(LOG_INFO) << ". . . . . . get Area done";
-
-		// Get country
-		for (std::vector<Country*>::const_iterator
-				k = _savedGame->getCountries()->begin();
-				k != _savedGame->getCountries()->end();
-				++k)
-		{
-			if ((*k)->getRules()->insideCountry(
-											lon,
-											lat) == true)
-			{
-				(*k)->addActivityAlien(aLienPts); // two points per UFO in-Country per half hour <- no, KEEP IT CONSISTENT, pending investigation.
-				(*k)->recentActivity();
-
-				break;
-			}
-		}
-		//Log(LOG_INFO) << ". . . . . . get Country done";
-//		}
 	}
-	//Log(LOG_INFO) << ". . handled alien points";
 
-	// Processes TerrorSites
+
 	for (std::vector<TerrorSite*>::const_iterator
 			ts = _savedGame->getTerrorSites()->begin();
 			ts != _savedGame->getTerrorSites()->end();
@@ -2291,7 +2255,6 @@ void GeoscapeState::time30Minutes()
 		else
 			++ts;
 	}
-	//Log(LOG_INFO) << ". . processed terror sites";
 }
 
 /**

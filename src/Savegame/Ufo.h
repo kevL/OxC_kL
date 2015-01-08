@@ -178,6 +178,9 @@ private:
 		/// Gets the ID of the Craft that shot down the UFO.
 		CraftId getShotDownByCraftId() const;
 
+		/// Gets the scare-factor of UFOs for activity on the Graphs.
+		int getVictoryPoints() const;
+
 		/// Gets the UFO's visibility.
 		int getVisibility() const;
 		/// Gets a UFO's detect-xCom-base ability.

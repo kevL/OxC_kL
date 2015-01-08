@@ -17,13 +17,12 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "Ufo.h"
 
 //#include <sstream>
 //#include <algorithm>
 //#include <assert.h>
+//#define _USE_MATH_DEFINES
 //#include <math.h>
 //#include "../fmath.h"
 
@@ -223,7 +222,7 @@ YAML::Node Ufo::save(bool newBattle) const
 	node["type"]		= _rules->getType();
 	node["id"]			= _id;
 
-	if (_terrain != "")
+	if (_terrain.empty() == false)
 		node["terrain"]	= _terrain; // kL
 
 	if (_crashId != 0)
@@ -519,7 +518,7 @@ void Ufo::calculateSpeed()
 		return;
 	}
 
-	double theta = atan2(y, x); // theta is radians.
+	double theta = std::atan2(y, x); // theta is radians.
 	//Log(LOG_INFO) << ". . theta(rad) = " << theta;
 
 	// Convert radians to degrees so i don't go bonkers;
@@ -625,8 +624,58 @@ CraftId Ufo::getShotDownByCraftId() const
 }
 
 /**
- * Gets this Ufo's visibility to radar detection. The UFO's size and
- * altitude affect the chances of it being detected by radars.
+ * Gets the scare-factor of UFOs for activity on the Graphs.
+ * @return, activity points
+ */
+int Ufo::getVictoryPoints() const
+{
+	int ret;
+
+	switch (_status)
+	{
+		case Ufo::LANDED:
+			ret = 5;
+		break;
+
+		case Ufo::CRASHED:
+			ret = 3;
+		break;
+
+		case Ufo::DESTROYED:
+			ret = 0;
+		break;
+
+		case Ufo::FLYING:
+		default:
+			ret = 1;
+	}
+
+//	if (_rules->getSize() == "STR_VERY_SMALL")
+	if (_rules->getSize() == "STR_SMALL")
+		ret += 1;
+	else if (_rules->getSize() == "STR_MEDIUM_UC")
+		ret += 2;
+	else if (_rules->getSize() == "STR_LARGE")
+		ret += 3;
+	else if (_rules->getSize() == "STR_VERY_LARGE")
+		ret += 5;
+
+//	if (_altitude == "STR_GROUND") // status_LANDED above.
+	if (_altitude == "STR_VERY_LOW")
+		ret += 3;
+	else if (_altitude == "STR_LOW_UC")
+		ret += 2;
+	else if (_altitude == "STR_HIGH_UC")
+		ret += 1;
+//	else if (_altitude == "STR_VERY_HIGH")
+
+
+	return ret;
+}
+
+/**
+ * Gets this Ufo's visibility to radar detection.
+ * The UFO's size and altitude affect its chances of being detected on radar.
  * @return, detection modifier
  */
 int Ufo::getVisibility() const
@@ -634,14 +683,14 @@ int Ufo::getVisibility() const
 	int ret = 0;
 
 	if (_rules->getSize() == "STR_VERY_SMALL")
-		ret -= 30;
+		ret = -30;
 	else if (_rules->getSize() == "STR_SMALL")
-		ret -= 15;
+		ret = -15;
 //	else if (_rules->getSize() == "STR_MEDIUM_UC")
 	else if (_rules->getSize() == "STR_LARGE")
-		ret -= 15;
+		ret = 15;
 	else if (_rules->getSize() == "STR_VERY_LARGE")
-		ret -= 30;
+		ret = 30;
 
 	if (_altitude == "STR_GROUND")
 		ret -= 50;

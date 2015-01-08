@@ -8759,6 +8759,7 @@ extraStrings:
       STR_DATE_DEATH: "Date o' Death"
       STR_DATE_MISSION: "Date o' Mission"
       STR_DATE_RECRUIT: "Recruited"
+      STR_EXECUTE: "execute"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

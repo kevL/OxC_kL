@@ -105,7 +105,6 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	:
 		ResourcePack()
 {
-	//Log(LOG_INFO) << "Create XcomResourcePack";
 	_ruleset = rules;
 
 	/* PALETTES */
@@ -225,7 +224,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					i->begin(),
 					i->end(),
 					i->begin(),
-					toupper);
+					std::toupper);
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadScr(path);
 	}
@@ -241,7 +240,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					i->begin(),
 					i->end(),
 					i->begin(),
-					toupper);
+					std::toupper);
 //		*i = (*i).substr(0, (*i).length() - 3);
 //		*i = *i + "PCK";
 		_surfaces[*i] = new Surface(320, 200);
@@ -358,7 +357,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					i->begin(),
 					i->end(),
 					i->begin(),
-					toupper);
+					std::toupper);
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadSpk(path);
 	}
@@ -377,7 +376,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						i->begin(),
 						i->end(),
 						i->begin(),
-						toupper);
+						std::toupper);
 			_surfaces[*i] = new Surface(320, 200);
 			_surfaces[*i]->loadImage(path);
 		}
@@ -1413,8 +1412,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
  * dTor.
  */
 XcomResourcePack::~XcomResourcePack()
-{
-}
+{}
 
 /**
  * Loads the resources required by the Battlescape.
@@ -1522,7 +1520,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					i->begin(),
 					i->end(),
 					i->begin(),
-					toupper);
+					std::toupper);
 
 		if (*i != "BIGOBS.PCK")
 			_sets[*i] = new SurfaceSet(32, 40);
@@ -1657,7 +1655,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					i->begin(),
 					i->end(),
 					i->begin(),
-					toupper);
+					std::toupper);
 		*i = (*i).substr(0, (*i).length() - 3);
 		if ((*i).substr(0, 3) == "MAN")
 			*i = *i + "SPK";
@@ -1682,7 +1680,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					i->begin(),
 					i->end(),
 					i->begin(),
-					toupper);
+					std::toupper);
 
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadSpk(path);
@@ -1746,7 +1744,7 @@ bool XcomResourcePack::isImageFile(std::string extension)
 				extension.begin(),
 				extension.end(),
 				extension.begin(),
-				toupper);
+				std::toupper);
 
 	return extension == ".BMP"
 		|| extension == ".LBM"

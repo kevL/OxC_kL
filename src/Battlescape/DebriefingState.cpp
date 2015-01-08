@@ -583,8 +583,7 @@ void DebriefingState::btnOkClick(Action*)
 //				playAwardMusic = true;
 				_game->pushState(new ManageAlienContainmentState(
 															_base,
-															OPT_BATTLESCAPE,
-															false)); // Do not allow researchHelp!
+															OPT_BATTLESCAPE)); // Do not allow researchHelp!
 				_game->pushState(new ErrorMessageState(
 													tr("STR_CONTAINMENT_EXCEEDED")
 														.arg(_base->getName()).c_str(),

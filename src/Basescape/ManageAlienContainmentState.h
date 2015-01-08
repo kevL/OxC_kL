@@ -49,11 +49,8 @@ class ManageAlienContainmentState
 {
 
 private:
-	bool
-		_allowHelp,
-		_overCrowded;
-	int
-		_aliensSold;
+	bool _overCrowded;
+	int _fishFood;
 //		_researchAliens;
 	size_t _sel;
 
@@ -88,8 +85,7 @@ private:
 		/// Creates the ManageAlienContainment state.
 		ManageAlienContainmentState(
 				Base* base,
-				OptionsOrigin origin,
-				bool allowHelp = true);
+				OptionsOrigin origin);
 		/// Cleans up the ManageAlienContainment state.
 		~ManageAlienContainmentState();
 

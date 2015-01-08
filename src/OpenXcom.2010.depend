@@ -4461,7 +4461,7 @@
 1420130446 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
 	"../Engine/State.h"
 
-1420170119 f:\git\openxcom\src\basescape\managealiencontainmentstate.h
+1420714603 f:\git\openxcom\src\basescape\managealiencontainmentstate.h
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
@@ -4772,7 +4772,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1420130456 f:\git\openxcom\src\savegame\ufo.h
+1420715757 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4807,7 +4807,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1420676551 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
+1420715102 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
 	"ManageAlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"
@@ -5096,7 +5096,7 @@
 	<algorithm>
 	<cstdint>
 
-1420259219 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1420714875 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"ManageAlienContainmentState.h"
 	"NewResearchListState.h"
@@ -5709,7 +5709,7 @@
 1420130457 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1420321872 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1420704794 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6423,7 +6423,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1420617867 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1420707171 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -7619,7 +7619,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1420234167 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1420706023 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8487,7 +8487,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1420227143 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1420708301 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Basescape/BasescapeState.h"
 	"../Battlescape/Position.h"
@@ -8956,7 +8956,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1420130460 source:f:\git\openxcom\src\savegame\ufo.cpp
+1420717286 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
