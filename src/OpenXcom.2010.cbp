@@ -106,6 +106,18 @@
 			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/lib" />
 		</Linker>
 		<Unit filename="../res/windows/openxcom.ico" />
+		<Unit filename="Basescape/AlienContainmentState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/AlienContainmentState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
 		<Unit filename="Basescape/BaseDetectionState.cpp" />
 		<Unit filename="Basescape/BaseDetectionState.h" />
 		<Unit filename="Basescape/BaseInfoState.cpp">
@@ -235,18 +247,6 @@
 			<Option target="Release x64" />
 		</Unit>
 		<Unit filename="Basescape/DismantleFacilityState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Basescape/ManageAlienContainmentState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Basescape/ManageAlienContainmentState.h">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
 			<Option target="Release Win32" />

@@ -225,6 +225,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Basescape\AlienContainmentState.cpp" />
     <ClCompile Include="Basescape\BaseDetectionState.cpp" />
     <ClCompile Include="Basescape\BaseInfoState.cpp" />
     <ClCompile Include="Basescape\BasescapeState.cpp" />
@@ -237,7 +238,6 @@
     <ClCompile Include="Basescape\CraftsState.cpp" />
     <ClCompile Include="Basescape\CraftWeaponsState.cpp" />
     <ClCompile Include="Basescape\DismantleFacilityState.cpp" />
-    <ClCompile Include="Basescape\ManageAlienContainmentState.cpp" />
     <ClCompile Include="Basescape\ManufactureState.cpp" />
     <ClCompile Include="Basescape\NewManufactureListState.cpp" />
     <ClCompile Include="Basescape\ManufactureInfoState.cpp" />
@@ -549,6 +549,7 @@
     <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Basescape\AlienContainmentState.h" />
     <ClInclude Include="Basescape\BaseDetectionState.h" />
     <ClInclude Include="Basescape\BaseInfoState.h" />
     <ClInclude Include="Basescape\BasescapeState.h" />
@@ -562,7 +563,6 @@
     <ClInclude Include="Basescape\CraftWeaponsState.h" />
     <ClInclude Include="Basescape\DismantleFacilityState.h" />
     <ClInclude Include="Basescape\NewManufactureListState.h" />
-    <ClInclude Include="Basescape\ManageAlienContainmentState.h" />
     <ClInclude Include="Basescape\ManufactureInfoState.h" />
     <ClInclude Include="Basescape\ManufactureState.h" />
     <ClInclude Include="Basescape\MiniBaseView.h" />

@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ManageAlienContainmentState.h"
+#include "AlienContainmentState.h"
 
 //#include <sstream>
 //#include <climits>
@@ -59,7 +59,7 @@ namespace OpenXcom
  * @param base		- pointer to the base to get info from
  * @param origin	- game section that originated this state
  */
-ManageAlienContainmentState::ManageAlienContainmentState(
+AlienContainmentState::AlienContainmentState(
 		Base* base,
 		OptionsOrigin origin)
 	:
@@ -148,16 +148,16 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 //	_btnOk->setColor(_color);
 	_btnOk->setText(tr(st));
-	_btnOk->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& AlienContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& ManageAlienContainmentState::btnOkClick,
+					(ActionHandler)& AlienContainmentState::btnOkClick,
 					Options::keyOk);
 
 //	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)& AlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
-					(ActionHandler)& ManageAlienContainmentState::btnCancelClick,
+					(ActionHandler)& AlienContainmentState::btnCancelClick,
 					Options::keyCancel);
 
 	_btnOk->setVisible(false);
@@ -205,13 +205,13 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_lstAliens->setBackground(_window);
 	_lstAliens->setMargin();
 //	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
-	_lstAliens->onLeftArrowPress((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowPress);
-	_lstAliens->onLeftArrowRelease((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowRelease);
-	_lstAliens->onLeftArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowClick);
-	_lstAliens->onRightArrowPress((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowPress);
-	_lstAliens->onRightArrowRelease((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowRelease);
-	_lstAliens->onRightArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowClick);
-	_lstAliens->onMousePress((ActionHandler)& ManageAlienContainmentState::lstItemsMousePress);
+	_lstAliens->onLeftArrowPress((ActionHandler)& AlienContainmentState::lstItemsLeftArrowPress);
+	_lstAliens->onLeftArrowRelease((ActionHandler)& AlienContainmentState::lstItemsLeftArrowRelease);
+	_lstAliens->onLeftArrowClick((ActionHandler)& AlienContainmentState::lstItemsLeftArrowClick);
+	_lstAliens->onRightArrowPress((ActionHandler)& AlienContainmentState::lstItemsRightArrowPress);
+	_lstAliens->onRightArrowRelease((ActionHandler)& AlienContainmentState::lstItemsRightArrowRelease);
+	_lstAliens->onRightArrowClick((ActionHandler)& AlienContainmentState::lstItemsRightArrowClick);
+	_lstAliens->onMousePress((ActionHandler)& AlienContainmentState::lstItemsMousePress);
 
 
 	int qty;
@@ -255,16 +255,16 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	}
 
 	_timerInc = new Timer(250);
-	_timerInc->onTimer((StateHandler)& ManageAlienContainmentState::increase);
+	_timerInc->onTimer((StateHandler)& AlienContainmentState::increase);
 
 	_timerDec = new Timer(250);
-	_timerDec->onTimer((StateHandler)& ManageAlienContainmentState::decrease);
+	_timerDec->onTimer((StateHandler)& AlienContainmentState::decrease);
 }
 
 /**
  * dTor.
  */
-ManageAlienContainmentState::~ManageAlienContainmentState()
+AlienContainmentState::~AlienContainmentState()
 {
 	delete _timerInc;
 	delete _timerDec;
@@ -273,7 +273,7 @@ ManageAlienContainmentState::~ManageAlienContainmentState()
 /**
  * Runs the arrow timers.
  */
-void ManageAlienContainmentState::think()
+void AlienContainmentState::think()
 {
 	State::think();
 
@@ -285,7 +285,7 @@ void ManageAlienContainmentState::think()
  * Deals with the selected aliens.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::btnOkClick(Action*)
+void AlienContainmentState::btnOkClick(Action*)
 {
 	for (size_t
 			i = 0;
@@ -353,7 +353,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::btnCancelClick(Action*)
+void AlienContainmentState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -362,7 +362,7 @@ void ManageAlienContainmentState::btnCancelClick(Action*)
  * Starts increasing the alien count.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
+void AlienContainmentState::lstItemsRightArrowPress(Action* action)
 {
 	_sel = _lstAliens->getSelectedRow();
 
@@ -377,7 +377,7 @@ void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
  * Stops increasing the alien count.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
+void AlienContainmentState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		_timerInc->stop();
@@ -388,7 +388,7 @@ void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
  * by one on left-click, to max on right-click.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
+void AlienContainmentState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		increaseByValue(std::numeric_limits<int>::max());
@@ -406,7 +406,7 @@ void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
  * Starts decreasing the alien count.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsLeftArrowPress(Action* action)
+void AlienContainmentState::lstItemsLeftArrowPress(Action* action)
 {
 	_sel = _lstAliens->getSelectedRow();
 
@@ -421,7 +421,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowPress(Action* action)
  * Stops decreasing the alien count.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
+void AlienContainmentState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		_timerDec->stop();
@@ -432,7 +432,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
  * by one on left-click, to 0 on right-click.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
+void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		decreaseByValue(std::numeric_limits<int>::max());
@@ -450,7 +450,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action - pointer to an Action
  */
-void ManageAlienContainmentState::lstItemsMousePress(Action* action)
+void AlienContainmentState::lstItemsMousePress(Action* action)
 {
 	_sel = _lstAliens->getSelectedRow();
 
@@ -482,7 +482,7 @@ void ManageAlienContainmentState::lstItemsMousePress(Action* action)
  * Gets the quantity of the currently selected alien on the base.
  * @return, quantity of selected alien on the base
  */
-int ManageAlienContainmentState::getQuantity()
+int AlienContainmentState::getQuantity()
 {
 	return _base->getItems()->getItem(_aliens[_sel]);
 }
@@ -490,7 +490,7 @@ int ManageAlienContainmentState::getQuantity()
 /**
  * Increases the quantity of the selected alien to exterminate by one.
  */
-void ManageAlienContainmentState::increase()
+void AlienContainmentState::increase()
 {
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
@@ -502,7 +502,7 @@ void ManageAlienContainmentState::increase()
  * Increases the quantity of the selected alien to exterminate by "change".
  * @param change - how much to add
  */
-void ManageAlienContainmentState::increaseByValue(int change)
+void AlienContainmentState::increaseByValue(int change)
 {
 	const int qty = getQuantity() - _qtys[_sel];
 	if (change <= 0 || qty <= 0)
@@ -520,7 +520,7 @@ void ManageAlienContainmentState::increaseByValue(int change)
 /**
  * Decreases the quantity of the selected alien to exterminate by one.
  */
-void ManageAlienContainmentState::decrease()
+void AlienContainmentState::decrease()
 {
 	_timerInc->setInterval(80);
 	_timerDec->setInterval(80);
@@ -532,7 +532,7 @@ void ManageAlienContainmentState::decrease()
  * Decreases the quantity of the selected alien to exterminate by "change".
  * @param change - how much to remove
  */
-void ManageAlienContainmentState::decreaseByValue(int change)
+void AlienContainmentState::decreaseByValue(int change)
 {
 	if (change <= 0 || _qtys[_sel] <= 0)
 		return;
@@ -548,7 +548,7 @@ void ManageAlienContainmentState::decreaseByValue(int change)
  * Updates the row (quantity & color) of the selected aLien species.
  * Also determines if the OK button should be in/visible.
  */
-void ManageAlienContainmentState::updateStrings()
+void AlienContainmentState::updateStrings()
 {
 	std::wostringstream
 		ss,

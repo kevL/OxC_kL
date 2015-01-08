@@ -4404,7 +4404,7 @@
 	"CraftId.h"
 	"GameTime.h"
 
-1420164069 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1420753832 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4413,7 +4413,7 @@
 	"CraftInfoState.h"
 	"CraftsState.h"
 	"DismantleFacilityState.h"
-	"ManageAlienContainmentState.h"
+	"AlienContainmentState.h"
 	"ManufactureState.h"
 	"MiniBaseView.h"
 	"MonthlyCostsState.h"
@@ -5096,9 +5096,9 @@
 	<algorithm>
 	<cstdint>
 
-1420714875 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1420754952 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
-	"ManageAlienContainmentState.h"
+	"AlienContainmentState.h"
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -5887,14 +5887,14 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1420717679 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1420754794 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
 	"CommendationDeadState.h"
 	"NoContainmentState.h"
 	"PromotionsState.h"
-	"../Basescape/ManageAlienContainmentState.h"
+	"../Basescape/AlienContainmentState.h"
 	"../Basescape/SellState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -10965,7 +10965,7 @@
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1420743641 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1420748413 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
@@ -11493,4 +11493,29 @@
 	"RuleVideo.h"
 
 1420327784 f:\git\openxcom\src\ruleset\rulevideo.h
+
+1420749036 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
+	"AlienContainmentState.h"
+	"SellState.h"
+	"../Engine/Action.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Engine/Timer.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Menu/ErrorMessageState.h"
+	"../Resource/ResourcePack.h"
+	"../Ruleset/Armor.h"
+	"../Ruleset/RuleItem.h"
+	"../Ruleset/RuleResearch.h"
+	"../Savegame/Base.h"
+	"../Savegame/ItemContainer.h"
+	"../Savegame/ResearchProject.h"
+	"../Savegame/SavedGame.h"
+
+1420749074 f:\git\openxcom\src\basescape\aliencontainmentstate.h
+	"../Engine/State.h"
+	"../Menu/OptionsBaseState.h"
 

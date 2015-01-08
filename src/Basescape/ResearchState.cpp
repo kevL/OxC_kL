@@ -21,7 +21,7 @@
 
 //#include <sstream>
 
-#include "ManageAlienContainmentState.h"
+#include "AlienContainmentState.h"
 #include "NewResearchListState.h"
 #include "ResearchInfoState.h"
 
@@ -183,9 +183,9 @@ void ResearchState::btnNewClick(Action*)
  */
 void ResearchState::btnAliens(Action*)
 {
-	_game->pushState(new ManageAlienContainmentState(
-												_base,
-												OPT_GEOSCAPE));
+	_game->pushState(new AlienContainmentState(
+											_base,
+											OPT_GEOSCAPE));
 }
 
 /**
@@ -194,12 +194,10 @@ void ResearchState::btnAliens(Action*)
  */
 void ResearchState::onSelectProject(Action*)
 {
-	//Log(LOG_INFO) << "ResearchState::onSelectProject()";
 	size_t
 		sel = _lstResearch->getSelectedRow(),	// original listclick
 		sel2 = sel,								// entry of RP vector
 		entry = 0;								// to break when vector.at[entry] meets sel
-	//Log(LOG_INFO) << ". sel = " << sel;
 
 	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
 
@@ -209,17 +207,10 @@ void ResearchState::onSelectProject(Action*)
 			++i)
 	{
 		if (*i == false)
-		{
-			//Log(LOG_INFO) << ". . offline[" << entry << "] " << (*rps[entry]).getRules()->getName();
 			++sel2;
-		}
-		//else Log(LOG_INFO) << ". . online[" << entry << "] " << (*rps[entry]).getRules()->getName();
 
 		if (entry == sel2)
-		{
-			//Log(LOG_INFO) << ". . break";
 			break;
-		}
 
 		++entry;
 	}
@@ -235,7 +226,6 @@ void ResearchState::onSelectProject(Action*)
  */
 void ResearchState::init()
 {
-	//Log(LOG_INFO) << "ResearchState::init()";
 	State::init();
 
 	_online.clear();
@@ -247,20 +237,19 @@ void ResearchState::init()
 			rp != rps.end();
 			++rp)
 	{
-		if ((*rp)->getOffline())
+		if ((*rp)->getOffline() == true)
 		{
 			_online.push_back(false);
 			continue;
 		}
-
 		_online.push_back(true);
 
 
 		std::wostringstream assigned;
 		assigned << (*rp)->getAssigned();
 
-		std::wstring project = tr((*rp)->getRules()->getName());
-		std::wstring wsDaysLeft = L"-";
+		const std::wstring project = tr((*rp)->getRules()->getName());
+		std::wstring wsDaysLeft;
 
 		if ((*rp)->getAssigned() > 0)
 		{
@@ -269,6 +258,8 @@ void ResearchState::init()
 									/ static_cast<double>((*rp)->getAssigned())));
 			wsDaysLeft = Text::formatNumber(daysLeft, L"", false);
 		}
+		else
+			 wsDaysLeft = L"-";
 
 		_lstResearch->addRow(
 							4,

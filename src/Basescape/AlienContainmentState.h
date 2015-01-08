@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
-#define OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
+#ifndef OPENXCOM_ALIENCONTAINMENTSTATE_H
+#define OPENXCOM_ALIENCONTAINMENTSTATE_H
 
 //#include <string>
 //#include <vector>
@@ -43,7 +43,7 @@ class Window;
  * ManageAlienContainment screen that lets the player manage
  * alien numbers in a particular base.
  */
-class ManageAlienContainmentState
+class AlienContainmentState
 	:
 		public State
 {
@@ -83,11 +83,11 @@ private:
 
 	public:
 		/// Creates the ManageAlienContainment state.
-		ManageAlienContainmentState(
+		AlienContainmentState(
 				Base* base,
 				OptionsOrigin origin);
 		/// Cleans up the ManageAlienContainment state.
-		~ManageAlienContainmentState();
+		~AlienContainmentState();
 
 		/// Runs the timers.
 		void think();

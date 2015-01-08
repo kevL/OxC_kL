@@ -27,7 +27,7 @@
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
 
-#include "../Basescape/ManageAlienContainmentState.h"
+#include "../Basescape/AlienContainmentState.h"
 #include "../Basescape/SellState.h"
 
 #include "../Engine/Game.h"
@@ -101,7 +101,6 @@ DebriefingState::DebriefingState()
 		_aliensKilled(0),
 		_aliensStunned(0)
 {
-	//Log(LOG_INFO) << "Create DebriefingState";
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
 	_game->getScreen()->resetDisplay(false);
@@ -115,7 +114,6 @@ DebriefingState::DebriefingState()
 	// when BattlescapeGame is really dTor'd, and not reLoaded ...... ) uh, i guess.
 //	if (_savedGame->getSavedBattle()->getBattleGame())
 //	{
-		//Log(LOG_INFO) << "DebriefingState : Saved Battle Game EXISTS";
 	_savedGame->getSavedBattle()->getBattleGame()->cleanupDeleted();
 //	}
 
@@ -227,16 +225,13 @@ DebriefingState::DebriefingState()
 		civiliansSaved = 0,
 		civiliansDead = 0;
 
-	//Log(LOG_INFO) << ". iterate _stats";
 	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
 			i != _stats.end();
 			++i)
 	{
-		//Log(LOG_INFO) << ". . item: " << (*i)->item;
 		if ((*i)->qty == 0)
 			continue;
-		//Log(LOG_INFO) << ". . add item";
 
 
 		std::wostringstream
@@ -278,7 +273,6 @@ DebriefingState::DebriefingState()
 		if ((*i)->item == "STR_ALIENS_KILLED")
 			_aliensKilled += (*i)->qty;
 	}
-	//Log(LOG_INFO) << ". iterate _stats DONE";
 
 	if (civiliansSaved > 0
 		&& civiliansDead == 0
@@ -306,10 +300,9 @@ DebriefingState::DebriefingState()
 		_lstTotal->setY(_lstStats->getY() + stats_offY + 5);
 	}
 
-	// add the points to activity scores
-	if (_region != NULL)
+
+	if (_region != NULL) // add the points to activity scores
 	{
-		//Log(LOG_INFO) << ". aLien act.ScoreREGION = " << _region->getActivityAlien().back();
 		if (_destroyXCOMBase == true)
 		{
 			const int diff = static_cast<int>(_savedGame->getDifficulty()) + 1;
@@ -325,7 +318,6 @@ DebriefingState::DebriefingState()
 
 	if (_country != NULL)
 	{
-		//Log(LOG_INFO) << ". aLien act.ScoreCOUNTRY = " << _country->getActivityAlien().back();
 		if (_destroyXCOMBase == true)
 		{
 			const int diff = static_cast<int>(_savedGame->getDifficulty()) + 1;
@@ -338,6 +330,7 @@ DebriefingState::DebriefingState()
 			_country->recentActivityXCOM();
 		}
 	}
+
 
 	std::wstring rating; // Calculate rating
 	if (total < -99)
@@ -381,21 +374,16 @@ DebriefingState::DebriefingState()
 	_missionStatistics->id = _savedGame->getMissionStatistics()->size();
 	_missionStatistics->shade = battle->getGlobalShade();
 
-//	BattleUnitStatistics* statistics = NULL; // BattleUnit::getStatistics()
-//	Soldier* soldier = NULL; // BattleUnit::getGeoscapeSoldier() const
-
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
 			++i)
 	{
-		//Log(LOG_INFO) << "UNIT id " << (*i)->getId();
 		Soldier* soldier = (*i)->getGeoscapeSoldier();
 		// NOTE: In the case of a dead soldier, this pointer is Valid but points to garbage.
 		// Use that.
 		if (soldier != NULL)
 		{
-			//Log(LOG_INFO) << ". soldier VALID";
 			BattleUnitStatistics* const statistics = (*i)->getStatistics();
 
 			int soldierAlienKills = 0;
@@ -446,17 +434,13 @@ DebriefingState::DebriefingState()
 				}
 
 				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
-
 				statistics->daysWounded = 0;
 				statistics->KIA = true;
 
-				//Log(LOG_INFO) << ". . DEAD updateDiary()";
 				deadSoldier->getDiary()->updateDiary(
 												statistics,
 												_missionStatistics,
 												_rules);
-				//Log(LOG_INFO) << ". . DEAD updateDiary() DONE";
-
 				deadSoldier->getDiary()->manageAwards(_rules);
 
 				_soldiersKIA.push_back(deadSoldier);
@@ -464,15 +448,12 @@ DebriefingState::DebriefingState()
 			else
 			{
 				_missionStatistics->injuryList[soldier->getId()] = soldier->getWoundRecovery();
-
 				statistics->daysWounded = soldier->getWoundRecovery();
 
-				//Log(LOG_INFO) << ". . updateDiary()";
 				soldier->getDiary()->updateDiary(
 											statistics,
 											_missionStatistics,
 											_rules);
-				//Log(LOG_INFO) << ". . updateDiary() DONE";
 
 				if (soldier->getDiary()->manageAwards(_rules) == true)
 					_soldiersCommended.push_back(soldier);
@@ -484,10 +465,6 @@ DebriefingState::DebriefingState()
 
 
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_DEBRIEFING);
-
-//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-	//Log(LOG_INFO) << "Create DebriefingState DONE";
 }
 
 /**
@@ -495,7 +472,6 @@ DebriefingState::DebriefingState()
  */
 DebriefingState::~DebriefingState()
 {
-	//Log(LOG_INFO) << "Delete DebriefingState";
 	if (_game->isQuitting() == true)
 		_savedGame->setBattleGame(NULL);
 
@@ -517,7 +493,6 @@ DebriefingState::~DebriefingState()
 	_specialTypes.clear();
 
 	_rounds.clear();
-	//Log(LOG_INFO) << "Delete DebriefingState EXIT";
 }
 
 /**
@@ -581,9 +556,9 @@ void DebriefingState::btnOkClick(Action*)
 			else if (_manageContainment == true)
 			{
 //				playAwardMusic = true;
-				_game->pushState(new ManageAlienContainmentState(
-															_base,
-															OPT_BATTLESCAPE)); // Do not allow researchHelp!
+				_game->pushState(new AlienContainmentState(
+														_base,
+														OPT_BATTLESCAPE)); // Do not allow researchHelp!
 				_game->pushState(new ErrorMessageState(
 													tr("STR_CONTAINMENT_EXCEEDED")
 														.arg(_base->getName()).c_str(),
@@ -640,7 +615,6 @@ void DebriefingState::addStat(
 		int score,
 		int quantity)
 {
-	//Log(LOG_INFO) << "DebriefingState::addStat()";
 	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
 			i != _stats.end();
@@ -654,7 +628,6 @@ void DebriefingState::addStat(
 			break;
 		}
 	}
-	//Log(LOG_INFO) << "DebriefingState::addStat() EXIT";
 }
 
 
@@ -674,10 +647,7 @@ private:
 		ClearAlienBase(const AlienBase* base)
 			:
 				_base(base)
-		{
-			//Log(LOG_INFO) << "DebriefingState, ClearAlienBase() cTor";
-			/* Empty by design. */
-		}
+		{}
 
 		/// Clears the base if required.
 		void operator()(AlienMission* am) const;
@@ -689,7 +659,6 @@ private:
  */
 void ClearAlienBase::operator()(AlienMission* am) const
 {
-	//Log(LOG_INFO) << "DebriefingState, ClearAlienBase()";
 	if (am->getAlienBase() == _base)
 		am->setAlienBase(NULL);
 }
@@ -703,7 +672,6 @@ void ClearAlienBase::operator()(AlienMission* am) const
  */
 void DebriefingState::prepareDebriefing()
 {
-	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
 	for (std::vector<std::string>::const_iterator
 			i = _rules->getItemsList().begin();
 			i != _rules->getItemsList().end();
@@ -917,8 +885,7 @@ void DebriefingState::prepareDebriefing()
 	} // kL_end.
 
 
-	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::const_iterator
+	for (std::vector<Ufo*>::const_iterator // UFO crash/landing site disappears
 			i = _savedGame->getUfos()->begin();
 			i != _savedGame->getUfos()->end();
 			++i)
@@ -935,7 +902,7 @@ void DebriefingState::prepareDebriefing()
 				(*i)->setSecondsRemaining(15); // UFO lifts off ...
 			}
 			else if (aborted == false) // successful mission ( kL: failed mission leaves UFO still crashed! )
-//kL			|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
+//				|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
 			{
 				delete *i;
 				_savedGame->getUfos()->erase(i); // UFO disappears.
@@ -945,8 +912,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// terror site disappears (even when you abort)
-	for (std::vector<TerrorSite*>::const_iterator
+	for (std::vector<TerrorSite*>::const_iterator // terror site disappears (even when aborted)
 			i = _savedGame->getTerrorSites()->begin();
 			i != _savedGame->getTerrorSites()->end();
 			++i)
@@ -1037,7 +1003,7 @@ void DebriefingState::prepareDebriefing()
 
 	const std::string mission = battle->getMissionType();
 
-	// alien base disappears (if you didn't abort)
+	// alien base disappears (if not aborted)
 	if (mission == "STR_ALIEN_BASE_ASSAULT")
 	{
 		_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
@@ -1101,23 +1067,24 @@ void DebriefingState::prepareDebriefing()
 			i != battle->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getTile() == NULL) // handle unconscious units; This unit is not on a tile...
+		// handle unconscious units
+		if ((*i)->getTile() == NULL)								// This unit is not on a tile...
 		{
 			Position pos = (*i)->getPosition();
-			if (pos == Position(-1,-1,-1)) // in fact, this Unit is in limbo...
+			if (pos == Position(-1,-1,-1))							// in fact, this Unit is in limbo...
 			{
-				for (std::vector<BattleItem*>::const_iterator // so look for its body or corpse...
+				for (std::vector<BattleItem*>::const_iterator		// so look for its body or corpse...
 						j = battle->getItems()->begin();
 						j != battle->getItems()->end();
 						++j)
 				{
 					if ((*j)->getUnit() != NULL
-						&& (*j)->getUnit() == *i) // found it: corpse is a dead BattleUnit!!
+						&& (*j)->getUnit() == *i)					// found it: corpse is a dead BattleUnit!!
 					{
-						if ((*j)->getOwner() != NULL) // corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
-							pos = (*j)->getOwner()->getPosition(); // Put the corpse down.. slowly.
-						else if ((*j)->getTile() != NULL) // corpse of BattleUnit is laying around somewhere
-							pos = (*j)->getTile()->getPosition(); // you're not dead yet, Get up.
+						if ((*j)->getOwner() != NULL)				// corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
+							pos = (*j)->getOwner()->getPosition();	// Put the corpse down.. slowly.
+						else if ((*j)->getTile() != NULL)			// corpse of BattleUnit is laying around somewhere
+							pos = (*j)->getTile()->getPosition();	// you're not dead yet, Get up.
 					}
 				}
 			}
@@ -1178,8 +1145,7 @@ void DebriefingState::prepareDebriefing()
 					addStat(
 						"STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES",
 						-(value * 2));
-				else
-					// if civilians happen to kill themselves XCOM shouldn't get penalty for it
+				else // if civilians happen to kill themselves XCOM shouldn't get penalty for it
 					addStat(
 						"STR_CIVILIANS_KILLED_BY_ALIENS",
 						-value);
@@ -1188,10 +1154,12 @@ void DebriefingState::prepareDebriefing()
 		else // so this unit is NOT dead...
 		{
 			const UnitFaction faction = (*i)->getFaction();
-			std::string type = (*i)->getType();
 
+			std::string type;
 			if ((*i)->getSpawnUnit().empty() == false)
 				type = (*i)->getSpawnUnit();
+			else
+				type = (*i)->getType();
 
 			if (origFact == FACTION_PLAYER)
 			{
@@ -1396,7 +1364,6 @@ void DebriefingState::prepareDebriefing()
 		&& mission == "STR_BASE_DEFENSE"
 		&& base->getCrafts()->empty() == false)
 	{
-		//Log(LOG_INFO) << ". aborted BASE_DEFENSE";
 		for (std::vector<Craft*>::const_iterator
 				i = base->getCrafts()->begin();
 				i != base->getCrafts()->end();
@@ -1475,7 +1442,6 @@ void DebriefingState::prepareDebriefing()
 	{
 		if (mission == "STR_BASE_DEFENSE")
 		{
-			//Log(LOG_INFO) << ". failed BASE_DEFENSE";
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyXCOMBase = true;
 		}
@@ -1643,7 +1609,6 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	_missionStatistics->success = missionAccomplished;
-	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing() EXIT";
 }
 
 /**
@@ -1657,7 +1622,6 @@ void DebriefingState::reequipCraft(
 		Craft* craft,
 		bool vehicleDestruction)
 {
-	//Log(LOG_INFO) << "DebriefingState::reequipCraft()";
 	int
 		qty,
 		lost;
@@ -1863,7 +1827,6 @@ void DebriefingState::reequipCraft(
 		_missingItems.push_back(stat); */
 		// kL_end.
 	}
-	//Log(LOG_INFO) << "DebriefingState::reequipCraft() EXIT";
 }
 
 /**
@@ -1876,7 +1839,6 @@ void DebriefingState::recoverItems(
 		std::vector<BattleItem*>* battleItems,
 		Base* base)
 {
-	//Log(LOG_INFO) << "DebriefingState::recoverItems()";
 	for (std::vector<BattleItem*>::const_iterator
 			i = battleItems->begin();
 			i != battleItems->end();
@@ -1987,7 +1949,6 @@ void DebriefingState::recoverItems(
 			}
 		}
 	}
-	//Log(LOG_INFO) << "DebriefingState::recoverItems() EXIT";
 }
 
 }

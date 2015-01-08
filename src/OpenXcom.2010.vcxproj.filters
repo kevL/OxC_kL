@@ -569,9 +569,6 @@
     <ClCompile Include="Basescape\ManufactureStartState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\ManageAlienContainmentState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
     <ClCompile Include="Basescape\ManufactureInfoState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -934,13 +931,11 @@
       <Filter>Ruleset</Filter>
     </ClCompile>
     <ClCompile Include="Battlescape\CommendationDeadState.cpp" />
+    <ClCompile Include="Basescape\AlienContainmentState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Basescape\ManufactureState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Basescape\ManageAlienContainmentState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\MiniBaseView.h">
@@ -1896,6 +1891,7 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\CommendationDeadState.h" />
+    <ClInclude Include="Basescape\AlienContainmentState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

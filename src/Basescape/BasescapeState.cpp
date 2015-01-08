@@ -26,7 +26,7 @@
 #include "CraftInfoState.h"
 #include "CraftsState.h"
 #include "DismantleFacilityState.h"
-#include "ManageAlienContainmentState.h"
+#include "AlienContainmentState.h"
 #include "ManufactureState.h"
 #include "MiniBaseView.h"
 #include "MonthlyCostsState.h"
@@ -462,9 +462,9 @@ void BasescapeState::btnCraftsClick(Action*)
  */
 void BasescapeState::btnAliens(Action*)
 {
-	_game->pushState(new ManageAlienContainmentState(
-												_base,
-												OPT_GEOSCAPE));
+	_game->pushState(new AlienContainmentState(
+											_base,
+											OPT_GEOSCAPE));
 }
 
 /**
@@ -638,9 +638,9 @@ void BasescapeState::viewLeftClick(Action*)
 	else if (fac->getRules()->getAliens() > 0)
 	{
 		bPop = true;
-		_game->pushState(new ManageAlienContainmentState(
-														_base,
-														OPT_GEOSCAPE));
+		_game->pushState(new AlienContainmentState(
+												_base,
+												OPT_GEOSCAPE));
 	}
 	else if (fac->getRules()->isLift() == true) // my Lift has a radar range ... (see next)
 	{
