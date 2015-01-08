@@ -17,12 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "GeoscapeState.h"
 
 //#include <assert.h>
 //#include <algorithm>
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <ctime>
 //#include <functional>
@@ -158,8 +157,7 @@ struct ProductionCompleteInfo
 			item(a_item),
 			showGotoBaseButton(a_showGotoBaseButton),
 			endType(a_endType)
-	{
-	}
+	{}
 };
 
 struct NewPossibleResearchInfo
@@ -174,8 +172,7 @@ struct NewPossibleResearchInfo
 		:
 			newPossibleResearch(a_newPossibleResearch),
 			showResearchButton(a_showResearchButton)
-	{
-	}
+	{}
 };
 
 struct NewPossibleManufactureInfo
@@ -190,8 +187,7 @@ struct NewPossibleManufactureInfo
 		:
 			newPossibleManufacture(a_newPossibleManufacture),
 			showManufactureButton(a_showManufactureButton)
-	{
-	}
+	{}
 }; // myk002_end.
 
 
@@ -200,6 +196,7 @@ struct NewPossibleManufactureInfo
  */
 GeoscapeState::GeoscapeState()
 	:
+		_savedGame(_game->getSavedGame()),
 		_pause(false),
 		_dfZoomInDone(false),
 		_dfZoomOutDone(false),
@@ -212,8 +209,6 @@ GeoscapeState::GeoscapeState()
 		_dogfightEnded(false),
 		_startMusic(false)
 {
-	_savedGame = _game->getSavedGame();
-
 	const int
 		screenWidth		= Options::baseXGeoscape,
 		screenHeight	= Options::baseYGeoscape;
@@ -247,7 +242,10 @@ GeoscapeState::GeoscapeState()
 							200,
 							32,
 							12); */
-	_srfSpace	= new Surface(480, 270, 0, 0); // kL
+//	_srfSpace	= new Surface(480, 270, 0, 0); // kL
+	_srfSpace	= new Surface(
+						screenWidth,
+						screenHeight);
 	_globe		= new Globe(
 						_game,					// GLOBE:
 						(screenWidth - 64) / 2,	// center_x	= 160 pixels
@@ -477,8 +475,8 @@ GeoscapeState::GeoscapeState()
 	_sideLine->drawRect(
 					0,
 					0,
-					_sideLine->getWidth(),
-					_sideLine->getHeight(),
+					static_cast<Sint16>(_sideLine->getWidth()),
+					static_cast<Sint16>(_sideLine->getHeight()),
 					15);
 /*kL
 	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());

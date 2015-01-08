@@ -50,7 +50,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 		_selectedRow(-1)
 {
 	_edtSave		= new TextEdit(this, 168, 9, 0, 0);
-	_btnSaveGame	= new TextButton(134, 16, 170, 177); // kL
+	_btnSaveGame	= new TextButton(134, 16, 170, 177);
 //	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman()? 200: 80, 16, 60, 172);
 
 	add(_edtSave);
@@ -66,13 +66,11 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 //	_btnSaveGame->setColor(Palette::blockOffset(8)+5); 133
 	_btnSaveGame->setText(tr("STR_OK"));
 	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveGameClick);
-	_btnSaveGame->setVisible(false); // kL
+	_btnSaveGame->setVisible(false);
 
 	// note: selected SaveSlot for Battlescape is grayscaled.
-//	_edtSave->setColor(_lstSaves->getSecondaryColor());	// cyan		//Palette::blockOffset(8)+10); 138
-//	_edtSave->setColor(_lstSaves->getColor());			// yellow	//Palette::blockOffset(8)+5); 133
-	_edtSave->setColor(Palette::blockOffset(10));		// kL		// 7=green, 9=brown, 10=slategray, 11=purple
-	_edtSave->setHighContrast();						// kL
+	_edtSave->setColor(Palette::blockOffset(10));
+	_edtSave->setHighContrast();
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::edtSaveKeyPress);
 

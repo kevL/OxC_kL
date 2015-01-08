@@ -8467,11 +8467,16 @@ extraSprites:
     files:
       0: Resources/Sprites/ufograph/statusbar/statusbar.png
   - type: Cygnus_BG
-    width: 480
-    height: 270
     singleImage: true
+    width: 640
+    height: 360
     files:
-      0: Resources/Sprites/ig271_cygnus_02.png
+      0: Resources/Sprites/ig271_cygnus_02_640px.png
+#    width: 480
+#    height: 270
+#    files:
+#      0: Resources/Sprites/ig271_cygnus_02_480px.png
+#
 #  - type: Antares_BG
 #    width: 480
 #    height: 270

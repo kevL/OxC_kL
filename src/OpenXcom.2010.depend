@@ -7188,7 +7188,7 @@
 1420130448 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1420717654 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1420745918 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -10965,7 +10965,7 @@
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1420725026 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1420743641 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
