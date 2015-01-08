@@ -1329,6 +1329,7 @@ void Map::drawTerrain(Surface* surface)
 						// TODO: smoke/fire render from advanced cycle below this, use check to draw or not
 						// cf. Phase VI in advanced cycle.
 						if (mapPosition.x > 0 // special handling for a moving unit.
+							&& unit == NULL // don't draw over unit in front
 							&& hasObject == false
 							&& hasWestWall == false
 							&& buNorthValid == false
@@ -1338,7 +1339,8 @@ void Map::drawTerrain(Surface* surface)
 							const Tile* const tileSouth = _save->getTile(mapPosition + Position(0, 1, 0));
 							if (tileSouth == NULL
 								|| (tileSouth->getMapData(MapData::O_NORTHWALL) == NULL
-									&& tileSouth->getMapData(MapData::O_OBJECT) == NULL))
+									&& tileSouth->getMapData(MapData::O_OBJECT) == NULL
+									&& tileSouth->getUnit() == NULL))
 							{
 								const Tile* const tileWest1 = _save->getTile(mapPosition + Position(-1, 0, 0));
 								BattleUnit* buWest1 = NULL;
@@ -1349,7 +1351,8 @@ void Map::drawTerrain(Surface* surface)
 								{
 									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
 									if (tileSouthWest == NULL
-										|| (tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
+										|| (tileSouthWest->getUnit() == NULL
+											&& tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
 											&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 												|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 												|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE // trouble
@@ -2317,25 +2320,35 @@ void Map::drawTerrain(Surface* surface)
 			if (unit->getArmor()->getSize() > 1)
 				walkOffset.y += 9;
 
-			double fact = 4.;
 			if (unit->isKneeled() == true)
 			{
 				walkOffset.y -= 5;
-				fact = -fact;
+				_arrow_kneel->blitNShade(
+								surface,
+								screenPosition.x
+									+ walkOffset.x
+									+ _spriteWidth / 2
+									- _arrow->getWidth() / 2,
+								screenPosition.y
+									+ walkOffset.y
+									- _arrow->getHeight()
+									+ static_cast<int>(
+										-4. * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
+								0);
 			}
-
-			_arrow->blitNShade(
-							surface,
-							screenPosition.x
-								+ walkOffset.x
-								+ _spriteWidth / 2
-								- _arrow->getWidth() / 2,
-							screenPosition.y
-								+ walkOffset.y
-								- _arrow->getHeight()
-								+ static_cast<int>(
-									fact * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
-							0);
+			else
+				_arrow->blitNShade(
+								surface,
+								screenPosition.x
+									+ walkOffset.x
+									+ _spriteWidth / 2
+									- _arrow->getWidth() / 2,
+								screenPosition.y
+									+ walkOffset.y
+									- _arrow->getHeight()
+									+ static_cast<int>(
+										4. * std::sin(22.5 / static_cast<double>(_animFrame + 1))),
+								0);
 		}
 	}
 

@@ -1185,7 +1185,7 @@ en-US:
   STR_REMOVE_SELECTED: "torture"
   STR_LIVE_ALIENS: "aLiens"
   STR_DEAD_ALIENS: "Fertilizer"
-  STR_CONTAINMENT_EXCEEDED: "aLien{NEWLINE}CONTAINMENT LIMITS{NEWLINE}EXCEEDED{SMALLLINE}{NEWLINE}Insufficient containment at {0}{SMALLLINE}{SMALLLINE}You must torture excess{SMALLLINE}aliens until they are fishfood."
+  STR_CONTAINMENT_EXCEEDED: "aLien{NEWLINE}CONTAINMENT LIMITS{NEWLINE}EXCEEDED{SMALLLINE}{NEWLINE}Insufficient containment at {0}{SMALLLINE}{SMALLLINE}You must torture excess{SMALLLINE}aLiens until they are fishfood."
   STR_MANAGE_CONTAINMENT: "aLien Containment"
   STR_STORAGE_EXCEEDED: "STORAGE SPACE EXCEEDED!{NEWLINE}{SMALLLINE}Insufficient storage space at {0}.{NEWLINE}{NEWLINE}Excess items must be sold."
   STR_DETAILS: "{ALT}{0}"

@@ -67,10 +67,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	:
 		_base(base),
 		_origin(origin),
+		_allowHelp(allowHelp),
 		_sel(0),
-		_aliensSold(0),
+		_aliensSold(0)
 //		_researchAliens(0)
-		_allowHelp(allowHelp)
 {
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
@@ -112,14 +112,12 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 /*	if (origin == OPT_BATTLESCAPE)
 	{
 		setPalette("PAL_GEOSCAPE", 0);
-
 		_color  = Palette::blockOffset(15)-1;
 		_color2 = Palette::blockOffset(8)+10;
 	}
 	else
 	{
 		setPalette("PAL_BASESCAPE", 1);
-
 		_color  = Palette::blockOffset(13)+10;
 		_color2 = Palette::blockOffset(13);
 	} */
@@ -268,14 +266,14 @@ void ManageAlienContainmentState::think()
  */
 void ManageAlienContainmentState::btnOkClick(Action*)
 {
-	for (size_t // iterate as many times as there are aliens queued.
+	for (size_t
 			i = 0;
 			i < _qtys.size();
 			++i)
 	{
-		if (_qtys[i] > 0) // if _qtys<vector>(int) at position[i]
+		if (_qtys[i] > 0)
 		{
-			if (_allowHelp)
+			if (_allowHelp == true)
 			{
 				for (int
 						j = 0;
@@ -286,7 +284,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 				}
 			}
 
-			_base->getItems()->removeItem( // remove the aliens
+			_base->getItems()->removeItem(
 										_aliens[i],
 										_qtys[i]);
 
@@ -295,19 +293,18 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 											_game->getSavedGame()->getFunds()
 											+ _game->getRuleset()->getItem(_aliens[i])->getSellCost()
 											* _qtys[i]);
-			else // add the corpses // kL: Don't sell from this state.
- */
+			else // add the corpses */ // kL: Don't sell from this state.
 			_base->getItems()->addItem(
 									_game->getRuleset()->getArmor(
-															_game->getRuleset()->getUnit(_aliens[i])->getArmor()
-														)->getCorpseGeoscape(),
+															_game->getRuleset()->getUnit(_aliens[i])->getArmor())
+														->getCorpseGeoscape(),
 									_qtys[i]);
 		}
 	}
 
 	_game->popState();
 
-	if (Options::storageLimitsEnforced
+	if (Options::storageLimitsEnforced == true
 		&& _base->storesOverfull() == true)
 	{
 		_game->pushState(new SellState(
