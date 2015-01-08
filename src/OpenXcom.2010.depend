@@ -4807,7 +4807,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1420235021 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
+1420676551 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
 	"ManageAlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"
@@ -7307,7 +7307,7 @@
 1420130458 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1420130448 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1420705954 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1420130459 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7912,9 +7912,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1420130445 f:\git\openxcom\src\menu\optionsadvancedstate.h
-	<vector>
-	<string>
+1420706066 f:\git\openxcom\src\menu\optionsadvancedstate.h
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 

@@ -364,20 +364,23 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	}
 
 	const std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/"); // Load intro
-	std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
-	for (std::vector<std::string>::iterator
-			i = lbms.begin();
-			i != lbms.end();
-			++i)
+	if (CrossPlatform::folderExists(ufointro) == true)
 	{
-		const std::string path = ufointro + *i;
-		std::transform(
-					i->begin(),
-					i->end(),
-					i->begin(),
-					toupper);
-		_surfaces[*i] = new Surface(320, 200);
-		_surfaces[*i]->loadImage(path);
+		std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
+		for (std::vector<std::string>::iterator
+				i = lbms.begin();
+				i != lbms.end();
+				++i)
+		{
+			const std::string path = ufointro + *i;
+			std::transform(
+						i->begin(),
+						i->end(),
+						i->begin(),
+						toupper);
+			_surfaces[*i] = new Surface(320, 200);
+			_surfaces[*i]->loadImage(path);
+		}
 	}
 
 	const std::string sets[] = // Load surface sets
@@ -811,6 +814,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 									 "GMGEO7",
 									 "GMGEO8",
 									 "GMGEO9",
+									 "GMTACTIC1",
 									 "GMTACTIC2",
 									 "GMTACTIC3",
 									 "GMTACTIC4",

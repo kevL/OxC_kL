@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_OPTIONSADVANCEDSTATE_H
 #define OPENXCOM_OPTIONSADVANCEDSTATE_H
 
-#include <vector>
-#include <string>
+//#include <vector>
+//#include <string>
 
 #include "OptionsBaseState.h"
 
@@ -43,7 +43,6 @@ class OptionsAdvancedState
 {
 
 private:
-	size_t _boolQuantity;
 	Uint8 _colorGroup;
 
 	TextList* _lstOptions;

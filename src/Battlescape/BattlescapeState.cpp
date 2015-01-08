@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "BattlescapeState.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <sstream>
 //#include <iomanip>
@@ -1489,6 +1488,12 @@ void BattlescapeState::stopScrolling(Action* action)
 				_map->getY());
 
 		_battleGame->setupCursor();
+		if (_battleGame->getCurrentAction()->actor == NULL
+			&& (_save->getSide() == FACTION_PLAYER
+				|| _save->getDebugMode() == true))
+		{
+			getMap()->setCursorType(CT_NORMAL);
+		}
 	}
 	else
 	{

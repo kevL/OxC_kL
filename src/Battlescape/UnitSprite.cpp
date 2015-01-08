@@ -76,16 +76,13 @@ UnitSprite::UnitSprite(
 		_animationFrame(0),
 		_drawingRoutine(0),
 		_helmet(helmet)
-{
-}
+{}
 
 /**
  * Deletes the UnitSprite.
  */
 UnitSprite::~UnitSprite()
-{
-	//Log(LOG_INFO) << "Delete UnitSprite";
-}
+{}
 
 /**
  * Changes the surface sets for the UnitSprite to get resources for rendering.
@@ -189,8 +186,7 @@ void UnitSprite::draw()
 	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawingRoutine;
 	Surface::draw();
 
-	// Array of drawing routines
-	void (UnitSprite::*routines[])() =
+	void (UnitSprite::*routines[])() = // Array of drawing routines.
 	{
 		&UnitSprite::drawRoutine0,
 		&UnitSprite::drawRoutine1,
@@ -216,8 +212,7 @@ void UnitSprite::draw()
 		&UnitSprite::drawRoutine20,
 		&UnitSprite::drawRoutine21}; */
 
-	// Call the matching routine
-	(this->*(routines[_drawingRoutine]))();
+	(this->*(routines[_drawingRoutine]))(); // Call the matching routine.
 }
 
 /**
@@ -230,7 +225,7 @@ void UnitSprite::draw()
 void UnitSprite::drawRoutine0()
 {
 	//Log(LOG_INFO) << "** UnitSprite::drawRoutine0()";
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
 	Surface
@@ -242,8 +237,9 @@ void UnitSprite::drawRoutine0()
 			* itemB		= NULL;
 
 	// magic numbers
+	int torsoHandsWeaponY = 0; // kL
 /*	const int legsStand = 16, legsKneel = 24;
-	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat;
+	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat, torsoHandsWeaponY = 0;
 	if (_drawingRoutine <= 10)
 	{
 		die = 264; // ufo:eu death frame
@@ -323,9 +319,11 @@ void UnitSprite::drawRoutine0()
 // #firstFrame:        48     72     96      120      144      168      192      216
 		rarmWalk[8] = {48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7};
 
+	const int aquatoidYoffWalk[8] = {1, 0, 0, 1, 2, 1, 0, 0}; // bobbing up and down (aquatoid)
+
 	const int yoffWalk[8]		= { 1,  0, -1,  0,  1,  0, -1,  0}; // bobbing up and down
-	const int yoffWalk_alt[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}; // bobbing up and down (muton)
-//	const int yoffWalk_alt[8]	= { 0,  0,  0,  0,  0,  0,  0,  0}; // kL_TEST.
+	const int yoffWalk_mut[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}; // bobbing up and down (muton)
+//	const int yoffWalk_mut[8]	= { 0,  0,  0,  0,  0,  0,  0,  0}; // kL_TEST.
 	const int offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3}; // for the weapons
 	const int offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9}; // for the weapons
 	const int offX2[8]			= {-8,  3,  5, 12,  6, -1, -5,-13}; // for the left handed weapons
@@ -423,11 +421,19 @@ void UnitSprite::drawRoutine0()
 	if (isWalking) // when walking, torso(fixed sprite) has to be animated up/down
 	{
 //		//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
+		if (_drawingRoutine == 10)								// muton
+			torsoHandsWeaponY = yoffWalk_mut[walkPhase];
+		else if (_drawingRoutine == 13
+			|| _drawingRoutine == 14)
+		{
+			torsoHandsWeaponY = yoffWalk[walkPhase] + 1;
+		}
+		else if (_drawingRoutine == 15)							// aquatoid
+			torsoHandsWeaponY = aquatoidYoffWalk[walkPhase];
+		else													// xCom agents etc
+			torsoHandsWeaponY = yoffWalk[walkPhase];
 
-		if (_drawingRoutine == 10) // muton
-			torso->setY(yoffWalk_alt[walkPhase]);
-		else
-			torso->setY(yoffWalk[walkPhase]);
+		torso->setY(torsoHandsWeaponY);
 
 		legs = _unitSurface->getFrame(legsWalk[unitDir] + walkPhase);
 		leftArm = _unitSurface->getFrame(larmWalk[unitDir] + walkPhase);
@@ -525,25 +531,12 @@ void UnitSprite::drawRoutine0()
 
 		if (isWalking) // the fixed arm(s) have to be animated up/down when walking
 		{
-			if (_drawingRoutine == 10)
-			{
-				rightArm->setY(yoffWalk_alt[walkPhase]);
+			rightArm->setY(torsoHandsWeaponY);
 
-				itemA->setY(itemA->getY() + yoffWalk_alt[walkPhase]);
-				if (_itemA->getRules()->isTwoHanded())
-				{
-					leftArm->setY(yoffWalk_alt[walkPhase]);
-				}
-			}
-			else
+			itemA->setY(itemA->getY() + torsoHandsWeaponY);
+			if (_itemA->getRules()->isTwoHanded())
 			{
-				rightArm->setY(yoffWalk[walkPhase]);
-
-				itemA->setY(itemA->getY() + yoffWalk[walkPhase]);
-				if (_itemA->getRules()->isTwoHanded())
-				{
-					leftArm->setY(yoffWalk[walkPhase]);
-				}
+				leftArm->setY(torsoHandsWeaponY);
 			}
 		}
 	}
@@ -596,20 +589,11 @@ void UnitSprite::drawRoutine0()
 
 		if (isWalking)
 		{
-			if (_drawingRoutine == 10)
-			{
-				leftArm->setY(yoffWalk_alt[walkPhase]);
-				itemB->setY(itemB->getY() + yoffWalk_alt[walkPhase]);
-				if (_itemB->getRules()->isTwoHanded())
-					rightArm->setY(yoffWalk_alt[walkPhase]);
-			}
-			else
-			{
-				leftArm->setY(yoffWalk[walkPhase]);
-				itemB->setY(itemB->getY() + yoffWalk[walkPhase]);
-				if (_itemB->getRules()->isTwoHanded())
-					rightArm->setY(yoffWalk[walkPhase]);
-			}
+			leftArm->setY(torsoHandsWeaponY);
+
+			itemB->setY(itemB->getY() + torsoHandsWeaponY);
+			if (_itemB->getRules()->isTwoHanded())
+				rightArm->setY(torsoHandsWeaponY);
 		}
 	}
 
