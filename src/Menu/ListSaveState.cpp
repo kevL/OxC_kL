@@ -63,12 +63,16 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 	else
 		_btnCancel->setX(180); */
 
-//	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
+//	_btnSaveGame->setColor(Palette::blockOffset(8)+5); 133
 	_btnSaveGame->setText(tr("STR_OK"));
 	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveGameClick);
 	_btnSaveGame->setVisible(false); // kL
 
-	_edtSave->setColor(_lstSaves->getSecondaryColor()); //Palette::blockOffset(8)+10);
+	// note: selected SaveSlot for Battlescape is grayscaled.
+//	_edtSave->setColor(_lstSaves->getSecondaryColor());	// cyan		//Palette::blockOffset(8)+10); 138
+//	_edtSave->setColor(_lstSaves->getColor());			// yellow	//Palette::blockOffset(8)+5); 133
+	_edtSave->setColor(Palette::blockOffset(10));		// kL		// 7=green, 9=brown, 10=slategray, 11=purple
+	_edtSave->setHighContrast();						// kL
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::edtSaveKeyPress);
 
@@ -194,35 +198,36 @@ void ListSaveState::saveGame()
 	_lstSaves->setSelectable();
 	// kL_end.
 
-
 	_game->getSavedGame()->setName(_edtSave->getText());
-	std::string
-		oldFilename,
-		newFilename;
 
-	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()));
+	std::string oldFilename;
+	std::string newFilename (CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()))); // init.
+//	std::string newFilename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()));
 
 	if (_selectedRow > 0)
 	{
 		oldFilename = _saves[_selectedRow - 1].fileName;
-
 		if (oldFilename != newFilename + ".sav")
 		{
 			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			{
 				newFilename += "_";
+			}
 
-			std::string oldPath = Options::getUserFolder() + oldFilename;
-			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
+			const std::string
+				oldPath = Options::getUserFolder() + oldFilename,
+				newPath = Options::getUserFolder() + newFilename + ".sav";
 			CrossPlatform::moveFile(
 								oldPath,
 								newPath);
 		}
 	}
-
 	else
 	{
 		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+		{
 			newFilename += "_";
+		}
 	}
 
 	newFilename += ".sav";

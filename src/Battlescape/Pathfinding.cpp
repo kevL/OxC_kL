@@ -1141,8 +1141,10 @@ int Pathfinding::getTUCost(
 			}
 
 
-			if (_unit->getFaction() != FACTION_PLAYER
-				&& destTile->getFire() > 0)
+			if (destTile->getFire() > 0
+				&& (_unit->getUnitRules() == NULL
+					|| _unit->getUnitRules()->getType() != "STR_SILACOID_TERRORIST")
+				&& _unit->getFaction() != FACTION_PLAYER)
 			{
 				cost += 32;	// try to find a better path, but don't exclude this path entirely.
 							// See UnitWalkBState::doStatusStand(), where this is subtracted again.

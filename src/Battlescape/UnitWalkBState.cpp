@@ -408,9 +408,11 @@ bool UnitWalkBState::doStatusStand()
 
 		const Tile* const tileDest = _parent->getSave()->getTile(destination);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
-		if (_unit->getFaction() != FACTION_PLAYER
-			&& tileDest != NULL
-			&& tileDest->getFire() > 0)
+		if (tileDest != NULL
+			&& tileDest->getFire() > 0
+			&& (_unit->getUnitRules() == NULL
+				|| _unit->getUnitRules()->getType() != "STR_SILACOID_TERRORIST")
+			&& _unit->getFaction() != FACTION_PLAYER)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
 			// The TU cost was artificially inflated by 32 points in getTUCost,

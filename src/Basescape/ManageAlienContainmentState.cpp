@@ -213,16 +213,19 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_lstAliens->onRightArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowClick);
 	_lstAliens->onMousePress((ActionHandler)& ManageAlienContainmentState::lstItemsMousePress);
 
-	size_t row = 0;
-	Uint8 color = _lstAliens->getColor();
 
-	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+	int qty;
+	const RuleItem* itRule;
+	Uint8 color;
+	size_t row = 0;
+
+	const std::vector<std::string>& itemList = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
-			i = items.begin();
-			i != items.end();
+			i = itemList.begin();
+			i != itemList.end();
 			++i)
 	{
-		const int qty = _base->getItems()->getItem(*i);			// get Qty of each item at this base
+		qty = _base->getItems()->getItem(*i);					// get Qty of each item at this base
 		if (qty > 0												// if item exists at this base
 			&& _game->getRuleset()->getItem(*i)->getAlien())	// and it's a live alien...
 		{
@@ -237,11 +240,14 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 							ss.str().c_str(),
 							L"0");
 
-			if (_game->getSavedGame()->isResearched(_game->getRuleset()->getItem(*i)->getType()) == false
-				&& _game->getRuleset()->getItem(*i)->isResearchExempt() == false)
+			itRule = _game->getRuleset()->getItem(*i);
+			if (_game->getSavedGame()->isResearched(itRule->getType()) == false
+				&& itRule->isResearchExempt() == false)
 			{
 				color = Palette::blockOffset(13)+5; // yellow
 			}
+			else
+				color = _lstAliens->getColor();
 
 			_lstAliens->setRowColor(row, color);
 			++row;

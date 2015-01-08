@@ -633,21 +633,11 @@ int Ufo::getVictoryPoints() const
 
 	switch (_status)
 	{
-		case Ufo::LANDED:
-			ret = 5;
-		break;
-
-		case Ufo::CRASHED:
-			ret = 3;
-		break;
-
-		case Ufo::DESTROYED:
-			ret = 0;
-		break;
-
+		case Ufo::LANDED:		ret = 6; break;
+		case Ufo::CRASHED:		ret = 3; break;
+		case Ufo::DESTROYED:	ret = 0; break;
 		case Ufo::FLYING:
-		default:
-			ret = 1;
+		default:				ret = 1;
 	}
 
 //	if (_rules->getSize() == "STR_VERY_SMALL")
@@ -660,7 +650,7 @@ int Ufo::getVictoryPoints() const
 	else if (_rules->getSize() == "STR_VERY_LARGE")
 		ret += 5;
 
-//	if (_altitude == "STR_GROUND") // status_LANDED above.
+//	if (_altitude == "STR_GROUND") // Status _LANDED or _CRASHED above.
 	if (_altitude == "STR_VERY_LOW")
 		ret += 3;
 	else if (_altitude == "STR_LOW_UC")
