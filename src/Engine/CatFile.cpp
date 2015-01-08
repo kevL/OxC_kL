@@ -40,9 +40,6 @@ CatFile::CatFile(const char* path)
 		_offset(0),
 		_size(0)
 {
-	if (!this)
-		return;
-
 	// Get amount of files
 	read(
 		(char*)&_amount,
