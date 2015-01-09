@@ -288,15 +288,15 @@ int Armor::getSize() const
  * @param dt - the damageType
  * @return, damage modifier ( 0.f to 1.f+ )
  */
-float Armor::getDamageModifier(ItemDamageType dType)
+float Armor::getDamageModifier(ItemDamageType dType) const
 {
 	return _damageModifier[static_cast<int>(dType)];
 }
 
 /** Gets the Line Of Fire Template set.
- * @return, loftempsSet as a vector of ints
+ * @return, address of loftempsSet as a vector of ints
  */
-std::vector<int> Armor::getLoftempsSet() const
+const std::vector<int>& Armor::getLoftempsSet() const
 {
 	return _loftempsSet;
 }
@@ -305,7 +305,7 @@ std::vector<int> Armor::getLoftempsSet() const
   * Gets pointer to the armor's stats.
   * @return, pointer to the armor's UnitStats
   */
-UnitStats* Armor::getStats()
+const UnitStats* Armor::getStats() const
 {
 	return &_stats;
 }

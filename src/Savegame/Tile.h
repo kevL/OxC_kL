@@ -209,7 +209,7 @@ protected:
 				int part,
 				int power);
 
-		/// Sets a "virtual" explosive on this tile, to detonate later.
+		/// Sets a "virtual" explosive on this tile to detonate later.
 		void setExplosive(
 				int power,
 				int damageType,
@@ -240,13 +240,13 @@ protected:
 			return _unit;
 		}
 
-		/// Sets fire, does not increment overlaps.
+		/// Sets fire - does not increment overlaps.
 		void setFire(int fire);
 		/// Gets fire.
 		int getFire() const;
-		/// Adds smoke, increments overlap.
+		/// Adds smoke - increments overlaps.
 		void addSmoke(int smoke);
-		/// Sets smoke, does not increment overlaps.
+		/// Sets smoke - does not increment overlaps.
 		void setSmoke(int smoke);
 		/// Gets smoke.
 		int getSmoke() const;
@@ -271,7 +271,7 @@ protected:
 
 		/// Gets top-most item-sprite
 		int getTopItemSprite() const;
-		/// kL. Gets if the tile has an unconscious xCom unit in its inventory.
+		/// Gets if the tile has an unconscious xCom unit in its inventory.
 		int getHasUnconsciousSoldier() const;
 
 		/// New turn preparations.
@@ -301,12 +301,12 @@ protected:
 		/// Gets the number to be displayed for pathfinding preview.
 		int getTUMarker() const;
 
-		/// how many times has this tile been overlapped with smoke/fire (runtime only)
+		/// Gets how many times has this tile been overlapped with smoke/fire (runtime only).
 		int getOverlaps() const;
-		/// increments the overlap value on this tile.
+		/// Increments the overlap value on this tile.
 		void addOverlap();
 
-		/// Sets the danger flag on this tile (so the AI will avoid it).
+		/// Sets the danger flag on this tile so the AI will avoid it.
 		void setDangerous();
 		/// Checks the danger flag on this tile.
 		bool getDangerous() const;

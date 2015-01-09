@@ -1714,8 +1714,8 @@ void SavedBattleGame::prepareBattleTurn()
 {
 	//Log(LOG_INFO) << "SBG::prepareBattleTurn()";
 	std::vector<Tile*>
-		tilesOnFire,
-		tilesOnSmoke;
+		tilesFired,
+		tilesSmoked;
 
 	for (int // prepare a list of tiles on fire
 			i = 0;
@@ -1723,37 +1723,40 @@ void SavedBattleGame::prepareBattleTurn()
 			++i)
 	{
 		if (getTiles()[i]->getFire() > 0)
-			tilesOnFire.push_back(getTiles()[i]);
+			tilesFired.push_back(getTiles()[i]);
 	}
 
 	for (std::vector<Tile*>::const_iterator // first: fires spread
-			i = tilesOnFire.begin();
-			i != tilesOnFire.end();
+			i = tilesFired.begin();
+			i != tilesFired.end();
 			++i)
 	{
-		if ((*i)->getOverlaps() == 0) // if we haven't added fire here this turn
+		if ((*i)->getOverlaps() == 0) // if fire hasn't been added here this turn
 		{
 			(*i)->setFire((*i)->getFire() - 1); // reduce the fire timer
 
-			if ((*i)->getFire() > 0) // if we're still burning
+			if ((*i)->getFire() > 0) // if it's still burning
 			{
 				for (int
 						dir = 0;
 						dir < 7;
 						dir += 2) // propagate in four cardinal directions (0, 2, 4, 6)
 				{
-					Position pos;
-					Pathfinding::directionToVector(dir, &pos);
-					Tile* const tile = getTile((*i)->getPosition() + pos);
+					Position spreadPos;
+					Pathfinding::directionToVector(
+												dir,
+												&spreadPos);
+					Tile* const tile = getTile((*i)->getPosition() + spreadPos);
 
-					if (tile != NULL // if there's no wall blocking the path of the flames...
-						&& _tileEngine->horizontalBlockage(
-															*i,
-															tile,
-															DT_IN) == 0)
+					if (tile != NULL
+						&& _tileEngine->horizontalBlockage( // if there's no wall blocking the path of the flames...
+														*i,
+														tile,
+														DT_IN) == 0)
 					{
 						//Log(LOG_INFO) << ". fire " << (*i)->getPosition() << " to " << tile->getPosition();
-						tile->ignite((*i)->getSmoke()); // attempt to set this tile on fire
+						tile->ignite((*i)->getFire()); // attempt to ignite this tile
+//						tile->ignite((*i)->getSmoke());
 					}
 				}
 			}
@@ -1788,41 +1791,44 @@ void SavedBattleGame::prepareBattleTurn()
 		}
 	}
 
-	for (int // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
+	for (int // prepare a list of tiles with smoke in them (smoke acts as fire intensity)
 			i = 0;
 			i < _mapsize_x * _mapsize_y * _mapsize_z;
 			++i)
 	{
 		if (getTiles()[i]->getSmoke() > 0)
-			tilesOnSmoke.push_back(getTiles()[i]);
+			tilesSmoked.push_back(getTiles()[i]);
 	}
 
-	for (std::vector<Tile*>::const_iterator // now make the smoke spread.
-			i = tilesOnSmoke.begin();
-			i != tilesOnSmoke.end();
+	for (std::vector<Tile*>::const_iterator // make the smoke spread
+			i = tilesSmoked.begin();
+			i != tilesSmoked.end();
 			++i)
 	{
-		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules.
+		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules
 		{
 			(*i)->setSmoke(std::max(
 								0,
 								(*i)->getSmoke() - RNG::generate(0, 3))); // reduce the smoke counter
 
-			if ((*i)->getSmoke() > 0) // if we're still smoking
+			if ((*i)->getSmoke() > 0) // if it's still smoking
 			{
 				for (int // spread in four cardinal directions
 						dir = 0;
 						dir < 7;
 						dir += 2)
 				{
-					Position pos;
-					Pathfinding::directionToVector(dir, &pos);
-					Tile* const tile = getTile((*i)->getPosition() + pos);
+					Position spreadPos;
+					Pathfinding::directionToVector(
+												dir,
+												&spreadPos);
+					Tile* const tile = getTile((*i)->getPosition() + spreadPos);
+
 					if (tile != NULL
 						&& _tileEngine->horizontalBlockage( // as long as there are no blocking walls
-															*i,
-															tile,
-															DT_SMOKE) == 0)
+														*i,
+														tile,
+														DT_SMOKE) == 0)
 					{
 						if (tile->getSmoke() == 0				// add smoke only to smokeless tiles,
 							|| (tile->getFire() == 0			// or tiles with no fire
@@ -1834,14 +1840,14 @@ void SavedBattleGame::prepareBattleTurn()
 				}
 			}
 		}
-		else
+		else  // fire
 		{
-			Position pos = Position(0, 0, 1); // smoke from fire spreads upwards one level if there's no floor blocking it.
-			Tile* tile = getTile((*i)->getPosition() + pos);
+			Tile* tile = getTile((*i)->getPosition() + Position(0, 0, 1)); // smoke from fire spreads upwards one level if there's no floor blocking it.
 			if (tile != NULL
 				&& tile->hasNoFloor(*i) == true)
 			{
-				tile->addSmoke((*i)->getSmoke() / 2); // only add smoke equal to half the intensity of the fire
+				tile->addSmoke((*i)->getFire() / 2); // only add smoke equal to half the intensity of the fire
+//				tile->addSmoke((*i)->getSmoke() / 2);
 			}
 
 			for (int
@@ -1849,22 +1855,27 @@ void SavedBattleGame::prepareBattleTurn()
 					dir < 7;
 					dir += 2) // then it spreads in the four cardinal directions.
 			{
-				Pathfinding::directionToVector(dir, &pos);
-				tile = getTile((*i)->getPosition() + pos);
+				Position spreadPos;
+				Pathfinding::directionToVector(
+											dir,
+											&spreadPos);
+				tile = getTile((*i)->getPosition() + spreadPos);
+
 				if (tile != NULL
 					&& _tileEngine->horizontalBlockage(
-														*i,
-														tile,
-														DT_SMOKE) == 0)
+													*i,
+													tile,
+													DT_SMOKE) == 0)
 				{
-					tile->addSmoke((*i)->getSmoke() / 2);
+					tile->addSmoke((*i)->getFire() / 2);
+//					tile->addSmoke((*i)->getSmoke() / 2);
 				}
 			}
 		}
 	}
 
-	if (tilesOnFire.empty() == false
-		|| tilesOnSmoke.empty() == false)
+	if (tilesFired.empty() == false
+		|| tilesSmoked.empty() == false)
 	{
 		for (int // do damage to units, average out the smoke, etc.
 				i = 0;

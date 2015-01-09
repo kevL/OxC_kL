@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "MapData.h"
@@ -138,13 +137,13 @@ private:
 		int getSize() const;
 
 		/// Gets damage modifier.
-		float getDamageModifier(ItemDamageType dType);
+		float getDamageModifier(ItemDamageType dType) const;
 
 		/// Gets loftempSet
-		std::vector<int> getLoftempsSet() const;
+		const std::vector<int>& getLoftempsSet() const;
 
 		/// Gets the armor's stats.
-		UnitStats* getStats();
+		const UnitStats* getStats() const;
 
 		/// Gets the armor's weight.
 		int getWeight() const;

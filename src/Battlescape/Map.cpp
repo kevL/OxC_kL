@@ -1328,8 +1328,10 @@ void Map::drawTerrain(Surface* surface)
 						// kL_begin: reDraw unit to WEST. ... unit Walking and no unitNorth exists.
 						// TODO: smoke/fire render from advanced cycle below this, use check to draw or not
 						// cf. Phase VI in advanced cycle.
-						if (mapPosition.x > 0 // special handling for a moving unit.
-							&& unit == NULL // don't draw over unit in front
+						if (//tile->isVoid() == false
+							tile->getMapData(MapData::O_FLOOR) != NULL
+							&& mapPosition.x > 0	// special handling for a moving unit.
+							&& unit == NULL			// don't draw over unit in front
 							&& hasObject == false
 							&& hasWestWall == false
 							&& buNorthValid == false
@@ -1714,6 +1716,24 @@ void Map::drawTerrain(Surface* surface)
 						&& (unit->getUnitVisible() == true
 							|| _save->getDebugMode() == true))
 					{
+						bool half; // don't overwrite walls in tile SOUTH-WEST
+						const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
+						if (tileSouthWest != NULL
+							&& (tileSouthWest->getMapData(MapData::O_NORTHWALL) != NULL
+								|| (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
+									&& (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
+										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
+										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
+										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))))
+						{
+							half = true;
+						}
+						else
+							half = false;
+
 						// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 						// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 						const int quad = tile->getPosition().x - unit->getPosition().x
@@ -1731,7 +1751,8 @@ void Map::drawTerrain(Surface* surface)
 									surface,
 									screenPosition.x + walkOffset.x,
 									screenPosition.y + walkOffset.y,
-									tileShade);
+									tileShade,
+									half);
 
 							if (unit->getFire() != 0)
 							{

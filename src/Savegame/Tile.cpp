@@ -355,7 +355,7 @@ int Tile::getTUCost(
 }
 
 /**
- * Gets whether this tile has a floor or not. If no object defined as floor, it has no floor.
+ * Gets whether this tile has a floor or not. If no object defined as floor it has no floor.
  * @param tileBelow - the tile below this tile
  * @return, true if tile has no floor
  */
@@ -808,7 +808,7 @@ int Tile::getFuel(int part) const
  * Ignite starts fire on a tile, it will burn <fuel> rounds.
  * Fuel of a tile is the highest fuel of its objects
  * NOT the sum of the fuel of the objects!
- * @param power - power to get things going
+ * @param power - chance to get things going
  */
 void Tile::ignite(int power)
 {
@@ -820,14 +820,14 @@ void Tile::ignite(int power)
 			const int burn = getFlammability(); // <- lower is better :)
 			if (burn < 255)
 			{
-				power -= (burn / 10) - 15;
-				if (RNG::percent(power))
+				power -= burn / 10; //- 15;
+				if (RNG::percent(power) == true)
 				{
 					_smoke = std::max(
 									1,
 									std::min(
-											15 - (burn / 10),
-											12));
+											12,
+											15 - burn / 10));
 
 					_fire = fuel + 1;
 					_overlaps = 1;
@@ -934,7 +934,7 @@ void Tile::setUnit(
 
 /**
  * Sets the number of turns this tile will be on fire.
- * @param fire - number of turns for this tile to burn (0 = no fire)
+ * @param fire - number of turns for this tile to burn
  */
 void Tile::setFire(int fire)
 {
@@ -944,7 +944,7 @@ void Tile::setFire(int fire)
 
 /**
  * Gets the number of turns left for this tile to be on fire.
- * @return, number of turns left for this tile to burn (0 = no fire)
+ * @return, number of turns left for this tile to burn
  */
 int Tile::getFire() const
 {
@@ -953,7 +953,7 @@ int Tile::getFire() const
 
 /**
  * Sets the number of turns this tile will smoke for; adds to any smoke already on a tile.
- * @param smoke - number of turns for this tile to smoke (0 = no smoke)
+ * @param smoke - number of turns for this tile to smoke
  */
 void Tile::addSmoke(int smoke)
 {
@@ -976,7 +976,7 @@ void Tile::addSmoke(int smoke)
 
 /**
  * Sets the number of turns this tile will smoke for. (May include fire?)
- * @param smoke - number of turns for this tile to smoke (0 = no smoke)
+ * @param smoke - number of turns for this tile to smoke
  */
 void Tile::setSmoke(int smoke)
 {
@@ -1114,9 +1114,7 @@ int Tile::getHasUnconsciousSoldier() const
  */
 void Tile::prepareTileTurn()
 {
-	//Log(LOG_INFO) << "Tile::prepareTileTurn()";
-
-	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
+	// Received new smoke in this turn, but not on fire, average out the smoke.
 	if (_overlaps != 0
 		&& _smoke != 0
 		&& _fire == 0)
@@ -1125,7 +1123,7 @@ void Tile::prepareTileTurn()
 						0,
 						std::min(
 								(_smoke / _overlaps) - 1,
-								15));
+								17));
 	}
 
 /*
@@ -1171,7 +1169,6 @@ void Tile::prepareTileTurn()
 
 	_overlaps = 0;
 	_danger = false;
-	//Log(LOG_INFO) << "Tile::prepareTileTurn() EXIT";
 }
 
 /**
@@ -1188,7 +1185,7 @@ void Tile::endTilePhase()
 	{
 		if (_fire > 0)
 		{
-			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set _unit on fire. Do damage from fire here, too.
+			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability))) == true) // try to set _unit on fire. Do damage from fire here, too.
 			{
 				const int dur = RNG::generate(
 											0,
@@ -1312,12 +1309,11 @@ int Tile::getOverlaps() const
  */
 void Tile::addOverlap()
 {
-	_overlaps++;
+	++_overlaps;
 }
 
 /**
  * Sets the danger flag true on this tile.
- * kL_note: Is this removed anywhere .....
  */
 void Tile::setDangerous()
 {
