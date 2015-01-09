@@ -114,7 +114,7 @@ BasescapeState::BasescapeState(
 	add(_view, "baseView", "basescape");
 	add(_mini, "miniBase", "basescape");
 
-	add(_txtFacility, "text3", "basescape");
+	add(_txtFacility, "textTooltip", "basescape");
 
 	add(_edtBase, "text1", "basescape");
 	add(_txtRegion, "text2", "basescape");

@@ -122,6 +122,7 @@ bool FlcPlayer::init(
 
 	_frameCallBack = frameCallBack;
 	_realScreen = game->getScreen();
+	_realScreen->clear();
 	_game = game;
 	_dx = dx;
 	_dy = dy;
