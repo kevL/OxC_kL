@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "BattlescapeGame.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <sstream>
 //#include <typeinfo>
@@ -1088,8 +1087,7 @@ void BattlescapeGame::checkForCasualties(
 				statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!
 											this,
 											*i,
-											weapon->getRules()->getDamageType(),
-											false));
+											weapon->getRules()->getDamageType()));
 			else // hidden or terrain explosion, or death by fatal wounds
 			{
 				if (hidden == true) // this is instant death from UFO powersources, without screaming sounds
@@ -1106,14 +1104,12 @@ void BattlescapeGame::checkForCasualties(
 						statePushNext(new UnitDieBState(
 													this,
 													*i,
-													DT_HE,
-													false));
+													DT_HE));
 					else // no slayer, and no terrain explosion, must be fatal wounds
 						statePushNext(new UnitDieBState(
 													this,
 													*i,
-													DT_NONE,
-													false)); // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+													DT_NONE)); // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 				}
 			}
 		}
@@ -3247,7 +3243,6 @@ void BattlescapeGame::tallyUnits(
 		int& liveSoldiers,
 		bool convert)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits()";
 	liveSoldiers = 0;
 	liveAliens = 0;
 
@@ -3285,19 +3280,18 @@ void BattlescapeGame::tallyUnits(
 				if (!Options::allowPsionicCapture
 					|| (*j)->getFaction() != FACTION_PLAYER)
 				{
-					liveAliens++;
+					++liveAliens;
 				}
 			}
 			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 			{
 				if ((*j)->getFaction() == FACTION_PLAYER)
-					liveSoldiers++;
+					++liveSoldiers;
 				else
-					liveAliens++;
+					++liveAliens;
 			}
 		}
 	}
-	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() EXIT";
 }
 
 /**

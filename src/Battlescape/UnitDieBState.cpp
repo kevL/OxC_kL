@@ -54,7 +54,7 @@ namespace OpenXcom
  * @param parent		- pointer to BattlescapeGame
  * @param unit			- pointer to a dying BattleUnit
  * @param damageType	- type of damage that caused the death (RuleItem.h)
- * @param noSound		- true to disable the death sound (for pre-battle powersource explosions)
+ * @param noSound		- true to disable the death sound for pre-battle powersource explosions as well as stun (default false)
  */
 UnitDieBState::UnitDieBState(
 		BattlescapeGame* parent,
@@ -72,7 +72,8 @@ UnitDieBState::UnitDieBState(
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-	_unit->setUnitVisible(); // TEST.
+	if (noSound == false) // pre-battle hidden explosion death; needed here to stop Camera CTD.
+		_unit->setUnitVisible(); // TEST. has side-effect of keeping stunned victims non-revealed if not already visible.
 
 	if (_unit->getUnitVisible() == true)
 	{
@@ -128,18 +129,13 @@ UnitDieBState::UnitDieBState(
  * Deletes the UnitDieBState.
  */
 UnitDieBState::~UnitDieBState()
-{
-	//Log(LOG_INFO) << "Delete UnitDieBState";
-}
+{}
 
 /**
  * Initializes this state.
  */
 void UnitDieBState::init()
-{
-	//Log(LOG_INFO) << "UnitDieBState::init()";
-	//Log(LOG_INFO) << "UnitDieBState::init() EXIT";
-}
+{}
 
 /**
  * Runs state functionality every cycle.

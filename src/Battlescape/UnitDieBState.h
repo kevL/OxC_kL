@@ -56,7 +56,7 @@ private:
 				BattlescapeGame* parent,
 				BattleUnit* unit,
 				ItemDamageType damageType,
-				bool noSound);
+				bool noSound = false);
 		/// Cleans up the UnitDieBState.
 		~UnitDieBState();
 

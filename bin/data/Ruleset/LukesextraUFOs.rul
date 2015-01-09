@@ -288,7 +288,7 @@ ufos:
     damageMax: 3261
     speedMax: 5555
     accel: 6
-    power: 147
+    power: 142
     range: 66
     score: 350
     reload: 10

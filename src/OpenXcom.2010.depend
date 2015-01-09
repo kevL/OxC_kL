@@ -4404,7 +4404,7 @@
 	"CraftId.h"
 	"GameTime.h"
 
-1420753832 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1420765894 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -5582,7 +5582,7 @@
 1420130441 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1420130438 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1420823944 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -6420,7 +6420,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1420707171 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1420765985 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -10962,7 +10962,7 @@
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1420764336 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1420820484 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
@@ -11475,7 +11475,7 @@
 1420130458 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
-1420422839 source:f:\git\openxcom\src\engine\flcplayer.cpp
+1420765757 source:f:\git\openxcom\src\engine\flcplayer.cpp
 	"FlcPlayer.h"
 	"Game.h"
 	"Surface.h"
