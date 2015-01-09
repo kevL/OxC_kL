@@ -1015,7 +1015,8 @@ void Map::drawTerrain(Surface* surface)
 							if (mapPosition.x > 0)
 							{
 								// Phase V: re-render objects in the tile to the SOUTH-WEST (half-tile).
-								if (mapPosition.y < endY - 1
+//								if (mapPosition.y < endY - 1
+								if (mapPosition.y < endY
 									&& (buNorth->getDirection() == 1 // only apply this to movement in a north-easterly or south-westerly direction.
 										|| buNorth->getDirection() == 5))
 								{
@@ -1219,7 +1220,7 @@ void Map::drawTerrain(Surface* surface)
 									tmpSurface->blitNShade(
 											surface,
 											screenPosition.x - pixelOffset.x,
-											screenPosition.y + pixelOffset.y,
+											screenPosition.y + pixelOffset.y + tileWest->getTerrainLevel(),
 											shade,
 											true); // only render half so it won't overlap other areas that are already drawn
 								}
@@ -1421,14 +1422,14 @@ void Map::drawTerrain(Surface* surface)
 												}
 											}
 
-											int tileSouthWestShade;
-											if (tileSouthWest->isDiscovered(2) == true)
-												tileSouthWestShade = tileSouthWest->getShade();
-											else
-												tileSouthWestShade = 16;
-
 											if (half == true) // redraw NWSE bigWall in tileSouthWest (might be tileSouth)
 											{
+												int tileSouthWestShade;
+												if (tileSouthWest->isDiscovered(2) == true)
+													tileSouthWestShade = tileSouthWest->getShade();
+												else
+													tileSouthWestShade = 16;
+
 												tmpSurface = tileSouthWest->getSprite(MapData::O_OBJECT);
 												if (tmpSurface)
 													tmpSurface->blitNShade(
@@ -1716,23 +1717,29 @@ void Map::drawTerrain(Surface* surface)
 						&& (unit->getUnitVisible() == true
 							|| _save->getDebugMode() == true))
 					{
-						bool half; // don't overwrite walls in tile SOUTH-WEST
-						const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
-						if (tileSouthWest != NULL
-							&& (tileSouthWest->getMapData(MapData::O_NORTHWALL) != NULL
-								|| (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
-									&& (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))))
+						bool half = false; // don't overwrite walls in tile SOUTH-WEST
+						if (   mapPosition.x > 0
+//							&& mapPosition.y < endY - 1
+							&& mapPosition.y < endY
+							&& unit->getStatus() == STATUS_WALKING
+							&& unit->getDirection() == 2
+								|| unit->getDirection() == 6)
 						{
-							half = true;
+							const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
+							if (tileSouthWest != NULL
+								&& (tileSouthWest->getMapData(MapData::O_NORTHWALL) != NULL
+									|| (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
+										&& (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+											|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+											|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
+											|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
+											|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+											|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
+											|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))))
+							{
+								half = true;
+							}
 						}
-						else
-							half = false;
 
 						// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 						// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
@@ -1972,7 +1979,7 @@ void Map::drawTerrain(Surface* surface)
 						tmpSurface->blitNShade(
 								surface,
 								screenPosition.x,
-								screenPosition.y,
+								screenPosition.y + tile->getTerrainLevel(),
 								shade);
 					}
 

@@ -5706,7 +5706,7 @@
 1420130457 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1420704794 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1420843799 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6059,7 +6059,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420838309 source:f:\git\openxcom\src\battlescape\map.cpp
+1420841369 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6193,7 +6193,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1420725859 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1420843565 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"

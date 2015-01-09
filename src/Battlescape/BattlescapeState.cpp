@@ -23,9 +23,7 @@
 //#include <cmath>
 //#include <sstream>
 //#include <iomanip>
-
 //#include <SDL_gfxPrimitives.h>
-
 //#include "../fmath.h"
 //#include "../lodepng.h"
 
@@ -146,7 +144,7 @@ BattlescapeState::BattlescapeState()
 		y					= screenHeight - iconsHeight;
 
 	_txtBaseLabel	= new Text(80, 9, screenWidth - 81, 0);
-	_lstTileInfo	= new TextList(18, 25, screenWidth - 19, 60);
+	_lstTileInfo	= new TextList(18, 33, screenWidth - 19, 60);
 
 	// Create buttonbar - this should appear at the centerbottom of the screen
 	_icons			= new InteractiveSurface(
@@ -3958,28 +3956,46 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 		return;
 	}
 
+	const BattleUnit* const unit = _savedBattle->getSelectedUnit();
+	int tuCost = tile->getTUCost(
+							MapData::O_FLOOR,
+							unit->getMovementType())
+			   + tile->getTUCost(
+							MapData::O_OBJECT,
+							unit->getMovementType());
+	if (tuCost == 0) tuCost = 4;
+
+	if (unit == NULL
+		|| unit->getFaction() != FACTION_PLAYER)
+//		|| unit->getGeoscapeSoldier() == NULL)
+	{
+		return;
+	}
+
 
 	const int info[] =
 	{
 		static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0, 0,-1)))),
 		tile->getSmoke(),
-		tile->getFire()
+		tile->getFire(),
+		tuCost
 	};
 
 	std::vector<std::wstring> infoType;
 	infoType.push_back(L"F "); // Floor
 	infoType.push_back(L"s "); // smoke
 	infoType.push_back(L"f "); // fire
+	infoType.push_back(L"T "); // tuCost
 
 
 	for (int
 			i = 0;
-			i < 3;
+			i < 4;
 			++i)
 	{
 		Uint8 color;
 
-		if (i == 0)
+		if (i == 0) // Floor
 		{
 			std::wstring hasFloor;
 			if (info[i] == 0)
@@ -3998,7 +4014,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 							hasFloor.c_str(),
 							infoType.at(i).c_str());
 		}
-		else
+		else if (i < 3) // smoke & fire
 		{
 			if (i == 1)
 				color = Palette::blockOffset(0); // white, smoke
@@ -4014,6 +4030,24 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 			_lstTileInfo->addRow(
 							2,
 							value.c_str(),
+							infoType.at(i).c_str());
+		}
+		else // tuCost
+		{
+			color = Palette::blockOffset(8); // blue
+
+			std::wstring stCost;
+//			if (info[i] == 0)
+//				stCost = L"0";
+//			else
+			if (info[i] < 255)
+				stCost = Text::formatNumber(info[i]).c_str();
+			else
+				stCost = L"-";
+
+			_lstTileInfo->addRow(
+							2,
+							stCost.c_str(),
 							infoType.at(i).c_str());
 		}
 

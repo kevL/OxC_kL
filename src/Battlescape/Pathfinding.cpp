@@ -969,8 +969,8 @@ int Pathfinding::getTUCost(
 				{
 					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCost( // ( 'walkover' bigWalls not incl. -- none exists )
-												MapData::O_NORTHWALL,
-												_movementType);
+											MapData::O_NORTHWALL,
+											_movementType);
 					if (wallTU > 0)
 					{
 //						if (dir &1) // would use this to increase diagonal wall-crossing by +50%
@@ -1001,8 +1001,8 @@ int Pathfinding::getTUCost(
 					if (startTile->getPosition().z <= destTile->getPosition().z) // don't count wallCost if it's on the floor below.
 					{
 						wallTU = destTile->getTUCost(
-													MapData::O_WESTWALL,
-													_movementType);
+												MapData::O_WESTWALL,
+												_movementType);
 						//Log(LOG_INFO) << ". . eastish, wallTU = " << wallTU;
 						if (wallTU > 0)
 						{
