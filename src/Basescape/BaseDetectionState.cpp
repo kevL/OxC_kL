@@ -45,7 +45,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the BaseDetection window.
- * @param base - pointer to the base to get info from
+ * @param base - pointer to the Base to get info from
  */
 BaseDetectionState::BaseDetectionState(Base* base)
 	:
@@ -60,12 +60,12 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	_txtFacilitiesVal	= new Text(15, 9, 136, 83);
 	_txtShields			= new Text(60, 9, 76, 93);
 	_txtShieldsVal		= new Text(15, 9, 136, 93);
-	_txtDifficulty		= new Text(60, 9, 76, 103);
-	_txtDifficultyVal	= new Text(15, 9, 136, 103);
+//	_txtDifficulty		= new Text(60, 9, 76, 103);
+//	_txtDifficultyVal	= new Text(15, 9, 136, 103);
 
 	_txtExposure	= new Text(102, 9, 152, 79);
 	_txtExposureVal	= new Text(102, 16, 152, 90);
-	_txtTimePeriod	= new Text(102, 9, 152, 107);
+//	_txtTimePeriod	= new Text(102, 9, 152, 107);
 
 	_btnOk			= new TextButton(168, 16, 76, 125);
 
@@ -75,13 +75,13 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	add(_txtTitle);
 	add(_txtFacilities);
 	add(_txtShields);
-	add(_txtDifficulty);
+//	add(_txtDifficulty);
 	add(_txtFacilitiesVal);
 	add(_txtShieldsVal);
-	add(_txtDifficultyVal);
+//	add(_txtDifficultyVal);
 	add(_txtExposure);
 	add(_txtExposureVal);
-	add(_txtTimePeriod);
+//	add(_txtTimePeriod);
 	add(_btnOk);
 
 	centerAllSurfaces();
@@ -111,65 +111,68 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	_txtShields->setColor(Palette::blockOffset(15)+6);
 	_txtShields->setText(tr("STR_MINDSHIELDS"));
 
-	_txtDifficulty->setColor(Palette::blockOffset(15)+6);
-	_txtDifficulty->setText(tr("STR_DIFFICULTY"));
+//	_txtDifficulty->setColor(Palette::blockOffset(15)+6);
+//	_txtDifficulty->setText(tr("STR_DIFFICULTY"));
 
 	_txtExposure->setColor(Palette::blockOffset(15)+6);
 	_txtExposure->setAlign(ALIGN_CENTER);
 	_txtExposure->setText(tr("STR_EXPOSURE"));
 
-	_txtTimePeriod->setColor(Palette::blockOffset(15)+6);
-	_txtTimePeriod->setAlign(ALIGN_CENTER);
-	_txtTimePeriod->setText(tr("STR_PER10MIN"));
+//	_txtTimePeriod->setColor(Palette::blockOffset(15)+6);
+//	_txtTimePeriod->setAlign(ALIGN_CENTER);
+//	_txtTimePeriod->setText(tr("STR_PER10MIN"));
 
-	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
+	// TODO: Add gravShield info. And baseDefense power.
 	int
 		facQty = 0,
 		shields = 0;
-
-	const std::vector<BaseFacility*>* const facs = _base->getFacilities();
 	for (std::vector<BaseFacility*>::const_iterator
-			i = facs->begin();
-			i != facs->end();
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
 			++facQty;
 
-			if ((*i)->getRules()->isMindShield())
+			if ((*i)->getRules()->isMindShield() == true)
 				++shields;
 		}
 	}
 
-	facQty	= facQty / 6 + 9;
-	shields	= shields * 2 + 1;
-	const int detchance = facQty / shields + diff;
-
-
 	std::wostringstream
 		val1,
 		val2,
-		val3,
+//		val3,
 		val4;
 
 	_txtFacilitiesVal->setColor(Palette::blockOffset(15)+6);
 	val1 << facQty;
 	_txtFacilitiesVal->setText(val1.str());
 
-	_txtShieldsVal->setColor(Palette::blockOffset(15)+6);
-	val2 << shields;
-	_txtShieldsVal->setText(val2.str());
+	if (_game->getSavedGame()->isResearched("STR_MIND_SHIELD") == true)
+	{
+		_txtShieldsVal->setColor(Palette::blockOffset(15)+6);
+		if (shields == 0)
+			val2 << L"-";
+		else
+			val2 << shields;
+		_txtShieldsVal->setText(val2.str());
+	}
 
-	_txtDifficultyVal->setColor(Palette::blockOffset(15)+6);
-	val3 << diff;
-	_txtDifficultyVal->setText(val3.str());
+	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
+
+//	_txtDifficultyVal->setColor(Palette::blockOffset(15)+6);
+//	val3 << diff;
+//	_txtDifficultyVal->setText(val3.str());
 
 	_txtExposureVal->setColor(Palette::blockOffset(9));
 	_txtExposureVal->setHighContrast();
 	_txtExposureVal->setBig();
 	_txtExposureVal->setAlign(ALIGN_CENTER);
-	val4 << detchance;
+	facQty = facQty / 6 + 9;
+	shields = shields * 2 + 1;
+	val4 << (facQty / shields + diff);
 	_txtExposureVal->setText(val4.str());
 }
 

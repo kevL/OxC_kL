@@ -4502,10 +4502,7 @@
 	<string>
 	"../Engine/State.h"
 
-1420130439 f:\git\openxcom\src\ruleset\rulebasefacility.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1420761693 f:\git\openxcom\src\ruleset\rulebasefacility.h
 
 1420130457 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
@@ -6499,7 +6496,7 @@
 1420130454 source:f:\git\openxcom\src\engine\action.cpp
 	"Action.h"
 
-1420130439 source:f:\git\openxcom\src\engine\catfile.cpp
+1420755606 source:f:\git\openxcom\src\engine\catfile.cpp
 	"CatFile.h"
 	<SDL.h>
 
@@ -8565,7 +8562,7 @@
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
-1420130446 source:f:\git\openxcom\src\ruleset\rulebasefacility.cpp
+1420761532 source:f:\git\openxcom\src\ruleset\rulebasefacility.cpp
 	"RuleBaseFacility.h"
 
 1420296430 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
@@ -10981,21 +10978,17 @@
 
 1420130447 f:\git\openxcom\src\ruleset\statstringcondition.h
 
-1420130442 f:\git\openxcom\src\menu\loadgamestate.h
-	<string>
-	<SDL.h>
+1420759055 f:\git\openxcom\src\menu\loadgamestate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1420130449 f:\git\openxcom\src\menu\savegamestate.h
-	<string>
-	<SDL.h>
+1420756398 f:\git\openxcom\src\menu\savegamestate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1420218241 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1420759700 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	"ErrorMessageState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -11006,7 +10999,7 @@
 	"../Interface/Text.h"
 	"../Savegame/SavedBattleGame.h"
 
-1420234268 source:f:\git\openxcom\src\menu\savegamestate.cpp
+1420759746 source:f:\git\openxcom\src\menu\savegamestate.cpp
 	"SaveGameState.h"
 	"ErrorMessageState.h"
 	"MainMenuState.h"
@@ -11256,7 +11249,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
 
-1420659171 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
+1420762320 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
 	"BaseDetectionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11270,7 +11263,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1420130442 f:\git\openxcom\src\basescape\basedetectionstate.h
+1420761309 f:\git\openxcom\src\basescape\basedetectionstate.h
 	"../Engine/State.h"
 
 1420130461 source:f:\git\openxcom\src\ruleset\sounddefinition.cpp

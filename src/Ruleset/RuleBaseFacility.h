@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_RULEBASEFACILITY_H
 #define OPENXCOM_RULEBASEFACILITY_H
 
-#include <string>
-#include <vector>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -31,8 +30,7 @@ namespace OpenXcom
 
 /**
  * Represents a specific type of base facility.
- * Contains constant info about a facility like
- * costs, capacities, size, etc.
+ * Contains constant info about a facility like costs, capacities, size, etc.
  * @sa BaseFacility
  */
 class RuleBaseFacility

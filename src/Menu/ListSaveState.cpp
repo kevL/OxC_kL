@@ -69,7 +69,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 	_btnSaveGame->setVisible(false);
 
 	// note: selected SaveSlot for Battlescape is grayscaled.
-	_edtSave->setColor(Palette::blockOffset(10));
+	_edtSave->setColor(Palette::blockOffset(6));
 	_edtSave->setHighContrast();
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::edtSaveKeyPress);

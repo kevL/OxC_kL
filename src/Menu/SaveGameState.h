@@ -20,10 +20,8 @@
 #ifndef OPENXCOM__SAVEGAMESTATE
 #define OPENXCOM__SAVEGAMESTATE
 
-
-#include <string>
-
-#include <SDL.h>
+//#include <string>
+//#include <SDL.h>
 
 #include "OptionsBaseState.h"
 
@@ -38,7 +36,7 @@ namespace OpenXcom
 class Text;
 
 /**
- * Saves the current game, with an optional message.
+ * Saves the current game with an optional message.
  */
 class SaveGameState
 	:
@@ -71,6 +69,7 @@ private:
 
 		/// Creates the interface.
 		void buildUi(SDL_Color* palette);
+
 		/// Saves the game.
 		void think();
 };

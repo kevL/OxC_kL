@@ -20,9 +20,8 @@
 #ifndef OPENXCOM__LOADGAMESTATE
 #define OPENXCOM__LOADGAMESTATE
 
-#include <string>
-
-#include <SDL.h>
+//#include <string>
+//#include <SDL.h>
 
 #include "OptionsBaseState.h"
 
@@ -69,8 +68,10 @@ private:
 
 		/// Creates the interface.
 		void buildUi(SDL_Color* palette);
+
 		/// Validates the game.
 		void init();
+
 		/// Loads the game.
 		void think();
 };

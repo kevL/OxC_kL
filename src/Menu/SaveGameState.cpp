@@ -45,9 +45,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Save Game screen.
- * @param origin Game section that originated this state.
- * @param filename Name of the save file without extension.
- * @param palette Parent state palette.
+ * @param origin	- game section that originated this state
+ * @param filename	- reference to name of the save file without extension
+ * @param palette	- pointer to parent state palette
  */
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
@@ -64,9 +64,9 @@ SaveGameState::SaveGameState(
 
 /**
  * Initializes all the elements in the Save Game screen.
- * @param origin Game section that originated this state.
- * @param type Type of auto-save being used.
- * @param palette Parent state palette.
+ * @param origin	- game section that originated this state
+ * @param type		- type of auto-save being used
+ * @param palette	- pointer to parent state palette
  */
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
@@ -82,19 +82,18 @@ SaveGameState::SaveGameState(
 		case SAVE_QUICK:
 			_filename = SavedGame::QUICKSAVE;
 		break;
+
 		case SAVE_AUTO_GEOSCAPE:
 			_filename = SavedGame::AUTOSAVE_GEOSCAPE;
 		break;
+
 		case SAVE_AUTO_BATTLESCAPE:
 			_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
 		break;
+
 		case SAVE_IRONMAN:
 		case SAVE_IRONMAN_END:
 			_filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-		break;
-
-		default:
-		break;
 	}
 
 	buildUi(palette);
@@ -108,7 +107,7 @@ SaveGameState::~SaveGameState()
 
 /**
  * Builds the interface.
- * @param palette Parent state palette.
+ * @param palette - pointer to parent state palette
  */
 void SaveGameState::buildUi(SDL_Color* palette)
 {
@@ -121,7 +120,6 @@ void SaveGameState::buildUi(SDL_Color* palette)
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		add(_txtStatus, "textLoad", "battlescape");
-//		_txtStatus->setColor(Palette::blockOffset(1)-1);
 		_txtStatus->setHighContrast();
 	}
 	else
@@ -130,7 +128,6 @@ void SaveGameState::buildUi(SDL_Color* palette)
 	centerAllSurfaces();
 
 
-//	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_SAVING_GAME"));
@@ -143,39 +140,37 @@ void SaveGameState::think()
 {
 	State::think();
 
-	// Make sure it gets drawn properly
-	if (_firstRun < 10)
-		_firstRun++;
+	if (_firstRun < 10) // Make sure it gets drawn properly
+		++_firstRun;
 	else
 	{
 		_game->popState();
 
 		switch (_type)
 		{
-			case SAVE_DEFAULT: // manual save, close the save screen
+			case SAVE_DEFAULT: // manual save - Close the save screen.
 				_game->popState();
 
-				if (!_game->getSavedGame()->isIronman()) // and pause screen too
+				if (_game->getSavedGame()->isIronman() == false) // And pause screen too.
 					_game->popState();
 			break;
 
-			case SAVE_QUICK: // automatic save, give it a default name
+			case SAVE_QUICK: // automatic save - Give it a default name.
 			case SAVE_AUTO_GEOSCAPE:
 			case SAVE_AUTO_BATTLESCAPE:
 				_game->getSavedGame()->setName(Language::fsToWstr(_filename));
-
-			default:
-			break;
 		}
 
 
 		try // Save the game
 		{
-			std::string backup = _filename + ".bak";
+			const std::string backup = _filename + ".bak";
 			_game->getSavedGame()->save(backup);
-			std::string fullPath = Options::getUserFolder() + _filename;
-			std::string bakPath = Options::getUserFolder() + backup;
-			if (!CrossPlatform::moveFile(bakPath, fullPath))
+
+			const std::string
+				fullPath = Options::getUserFolder() + _filename,
+				bakPath = Options::getUserFolder() + backup;
+			if (CrossPlatform::moveFile(bakPath, fullPath) == false)
 			{
 				throw Exception("Save backed up in " + backup);
 			}
@@ -195,10 +190,10 @@ void SaveGameState::think()
 //				_game->getScreen()->resetDisplay(false);
 
 				_game->setState(new MainMenuState());
-				_game->setSavedGame(0);
+				_game->setSavedGame(NULL);
 			}
 		}
-		catch (Exception &e)
+		catch (Exception& e)
 		{
 			Log(LOG_ERROR) << e.what();
 			std::wostringstream error;
@@ -218,7 +213,7 @@ void SaveGameState::think()
 													"TAC00.SCR",
 													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
 		}
-		catch (YAML::Exception &e)
+		catch (YAML::Exception& e)
 		{
 			Log(LOG_ERROR) << e.what();
 			std::wostringstream error;

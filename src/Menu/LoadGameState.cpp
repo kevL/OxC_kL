@@ -77,20 +77,18 @@ LoadGameState::LoadGameState(
 		_firstRun(0),
 		_origin(origin)
 {
-	switch (type)
+	switch (type) // can't auto-load ironman games
 	{
 		case SAVE_QUICK:
 			_filename = SavedGame::QUICKSAVE;
 		break;
+
 		case SAVE_AUTO_GEOSCAPE:
 			_filename = SavedGame::AUTOSAVE_GEOSCAPE;
 		break;
+
 		case SAVE_AUTO_BATTLESCAPE:
 			_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
-		break;
-
-		default: // can't auto-load ironman games
-		break;
 	}
 
 	buildUi(palette);
@@ -100,8 +98,7 @@ LoadGameState::LoadGameState(
  * dTor.
  */
 LoadGameState::~LoadGameState()
-{
-}
+{}
 
 /**
  * Builds the interface.
@@ -118,7 +115,6 @@ void LoadGameState::buildUi(SDL_Color* palette)
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		add(_txtStatus, "textLoad", "battlescape");
-//		_txtStatus->setColor(Palette::blockOffset(1)-1);
 		_txtStatus->setHighContrast();
 	}
 	else
@@ -127,7 +123,6 @@ void LoadGameState::buildUi(SDL_Color* palette)
 	centerAllSurfaces();
 
 
-	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
@@ -141,7 +136,7 @@ void LoadGameState::init()
 	State::init();
 
 	if (_filename == SavedGame::QUICKSAVE
-		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
+		&& CrossPlatform::fileExists(Options::getUserFolder() + _filename) == false)
 	{
 		_game->popState();
 		return;
@@ -155,15 +150,13 @@ void LoadGameState::think()
 {
 	State::think();
 
-	// Make sure it gets drawn properly
-	if (_firstRun < 10)
-		_firstRun++;
+	if (_firstRun < 10) // Make sure it gets drawn properly
+		++_firstRun;
 	else
 	{
 		_game->popState();
 
-		// Load the game
-		SavedGame* save = new SavedGame();
+		SavedGame* save = new SavedGame(); // Load the game
 		try
 		{
 			save->load(_filename, _game->getRuleset());
@@ -189,7 +182,7 @@ void LoadGameState::think()
 				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 			}
 		}
-		catch (Exception &e)
+		catch (Exception& e)
 		{
 			Log(LOG_ERROR) << e.what();
 			std::wostringstream error;
@@ -214,7 +207,7 @@ void LoadGameState::think()
 			else
 				delete save;
 		}
-		catch (YAML::Exception &e)
+		catch (YAML::Exception& e)
 		{
 			Log(LOG_ERROR) << e.what();
 			std::wostringstream error;

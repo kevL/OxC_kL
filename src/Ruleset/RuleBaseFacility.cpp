@@ -149,7 +149,7 @@ std::string RuleBaseFacility::getType() const
 
 /**
  * Gets the list of research required to build this base facility.
- * @return A list of research IDs.
+ * @return, reference to a vector of research ID strings
  */
 const std::vector<std::string>& RuleBaseFacility::getRequirements() const
 {

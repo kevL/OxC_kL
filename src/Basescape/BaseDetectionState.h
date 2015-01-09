@@ -44,15 +44,15 @@ class BaseDetectionState
 private:
 	Base* _base;
 	Text // TODO: add base defenses
-		* _txtDifficulty,
-		* _txtDifficultyVal,
+//		* _txtDifficulty,
+//		* _txtDifficultyVal,
 		* _txtExposure,
 		* _txtExposureVal,
 		* _txtFacilities,
 		* _txtFacilitiesVal,
 		* _txtShields,
 		* _txtShieldsVal,
-		* _txtTimePeriod,
+//		* _txtTimePeriod,
 		* _txtTitle;
 	TextButton* _btnOk;
 	TextList* _lstDetection;

@@ -478,7 +478,8 @@ interfaces:
       - id: loadPalette
         color: 6
       - id: textLoad
-        color: 133   # minty green
+        color: 86    # blue w/ yellow trim
+#        color: 133   # minty green /aka cyan
       - id: button
         color: 246   # light blue
         color2: 245  # slightly lighter blue
