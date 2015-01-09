@@ -3963,7 +3963,16 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 			   + tile->getTUCost(
 							MapData::O_OBJECT,
 							unit->getMovementType());
-	if (tuCost == 0) tuCost = 4;
+	if (tuCost == 0)
+	{
+		if (unit->getMovementType() == MT_FLY
+			|| unit->getMovementType() == MT_FLOAT)
+		{
+			tuCost = 4;
+		}
+		else
+			tuCost = 255;
+	}
 
 	if (unit == NULL
 		|| unit->getFaction() != FACTION_PLAYER)
