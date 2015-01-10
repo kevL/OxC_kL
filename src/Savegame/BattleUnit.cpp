@@ -720,8 +720,10 @@ void BattleUnit::startWalking(
 			_floating = false;
 		}
 		else
+		{
 			//Log(LOG_INFO) << ". STATUS_FLYING, up.down";
 			_floating = true;
+		}
 	}
 	else if (_tile->hasNoFloor(tileBelow) == true)
 	{
@@ -751,7 +753,7 @@ void BattleUnit::keepWalking(
 		const Tile* const tileBelow,
 		bool cache)
 {
-	_walkPhase++;
+	++_walkPhase;
 
 	//Log(LOG_INFO) << "BattleUnit::keepWalking() ID = " << getId() << " _walkPhase = " << _walkPhase;
 	int
@@ -787,10 +789,9 @@ void BattleUnit::keepWalking(
 		endPhase = 2;
 	}
 
-	if (_walkPhase == midPhase)
-		// we assume we reached our destination tile
-		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
-		// kL_note: which they (large units) are half the time anyway...
+	if (_walkPhase == midPhase) // we assume we reached our destination tile
+		// This is actually a drawing hack, so soldiers are not overlapped by floortiles
+		// kL_note: which they (large units) are half the time anyway... fixed.
 		_pos = _destination;
 
 	if (_walkPhase >= endPhase) // officially reached the destination tile

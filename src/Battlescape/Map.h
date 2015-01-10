@@ -96,22 +96,22 @@ private:
 		_spriteHeight,
 		_visibleMapHeight;
 
-	PathPreview			_previewSetting;
+	PathPreview _previewSetting;
 
-	BattlescapeMessage	* _hidden;
-	Camera				* _camera;
-	Game				* _game;
-	NumberText			* _txtAccuracy;
-	Projectile			* _projectile;
-	ResourcePack		* _res;
-	SavedBattleGame		* _save;
+	BattlescapeMessage* _hidden;
+	Camera* _camera;
+	Game* _game;
+	NumberText* _txtAccuracy;
+	Projectile* _projectile;
+	ResourcePack* _res;
+	SavedBattleGame* _save;
 	Surface
-						* _arrow,
-						* _arrow_kneel;
-	SurfaceSet			* _projectileSet;
+		* _arrow,
+		* _arrow_kneel;
+	SurfaceSet* _projectileSet;
 	Timer
-						* _scrollMouseTimer,
-						* _scrollKeyTimer;
+		* _scrollMouseTimer,
+		* _scrollKeyTimer;
 
 	std::list<Explosion*> _explosions;
 	std::vector<Position> _waypoints;

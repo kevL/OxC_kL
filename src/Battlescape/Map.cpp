@@ -976,7 +976,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase III: re-render any south wall type objects in the tile to the NORTH-WEST.
+							// Phase III: re-render any south bigWall objects in the tile to the NORTH-WEST.
 							if (mapPosition.x > 0)
 							{
 								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1, 0));
@@ -999,7 +999,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase IV: render any south or east wall type objects in the tile to the NORTH.
+							// Phase IV: render any south or east bigWall objects in the tile to the NORTH.
 							tmpSurface = tileNorth->getSprite(MapData::O_OBJECT);
 							if (tmpSurface
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NORTH // do East,South,East_South
@@ -1719,11 +1719,12 @@ void Map::drawTerrain(Surface* surface)
 					{
 						bool half = false; // don't overwrite walls in tile SOUTH-WEST
 						if (   mapPosition.x > 0
-//							&& mapPosition.y < endY - 1
 							&& mapPosition.y < endY
+//							&& mapPosition.y < endY - 1
 							&& unit->getStatus() == STATUS_WALKING
-							&& unit->getDirection() == 2
-								|| unit->getDirection() == 6)
+//							&& _save->getPathfinding()->getStartDirection() < Pathfinding::DIR_UP
+							&& (unit->getDirection() == 2
+								|| unit->getDirection() == 6)) // duh.
 						{
 							const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
 							if (tileSouthWest != NULL
