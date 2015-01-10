@@ -370,13 +370,11 @@ struct BattleUnitStatistics
 			nikeCross(false),
 			medikitApplications(0)
 //			kills()
-	{
-	}
+	{}
 
 	/// dTor.
 	~BattleUnitStatistics()
-	{
-	}
+	{}
 };
 
 

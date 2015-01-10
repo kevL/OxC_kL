@@ -47,7 +47,7 @@
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleInventory.h"
-//#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Unit.h"
 
@@ -1121,7 +1121,7 @@ void BattleUnit::setCache(
  * When the unit needs to animate it needs to be re-cached.
  * @param invalid	- pointer to true if the cache is invalid
  * @param part		- unit part to check (default 0)
- * @return, pointer to the cache surface used
+ * @return, pointer to the cache Surface used
  */
 Surface* BattleUnit::getCache(
 		bool* invalid,
@@ -1725,6 +1725,16 @@ int BattleUnit::getActionTUs(
 	switch (actionType)
 	{
 		// note: Should put "tuPrime", "tuDefuse", & "tuThrow" yaml-entry in Xcom1Ruleset, under various grenade-types etc.
+		case BA_DROP:
+		{
+			const RuleInventory
+				* const handRule = _battleGame->getRuleset()->getInventory("STR_RIGHT_HAND"), // might be leftHand Lol ...
+				* const groundRule = _battleGame->getRuleset()->getInventory("STR_GROUND");
+			cost = handRule->getCost(groundRule);
+//			cost = 2;
+		}
+		break;
+
 		case BA_DEFUSE:
 			cost = 15;
 		break;
@@ -1791,7 +1801,8 @@ int BattleUnit::getActionTUs(
 				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
 			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
-		&& actionType != BA_DEFUSE)
+		&& actionType != BA_DEFUSE
+		&& actionType != BA_DROP)
 	{
 		cost = std::max(
 					1,

@@ -516,17 +516,17 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 		loadingBuff->sampleBufSize = newSize;
 	}
 
-	const float volume = static_cast<float>(Game::volumeExponent(Options::musicVolume));
+	const float tempVol = static_cast<float>(Game::volumeExponent(Options::musicVolume));
 	for (Uint32
 		i = 0;
 		i < _audioFrameSize;
-		i++)
+		++i)
 	{
 		float tempVal = std::min(
 							256.f,
 							std::max(
 								0.f,
-								static_cast<float>(_chunkData[i]) * volume));
+								static_cast<float>(_chunkData[i]) * tempVol));
 		_chunkData[i] = static_cast<Uint8>(tempVal);
 	}
 

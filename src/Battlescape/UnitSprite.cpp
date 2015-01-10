@@ -391,20 +391,16 @@ void UnitSprite::drawRoutine0()
 	}
 
 	if (_drawingRoutine == 0
-		|| _helmet)
+		|| _helmet == true)
 	{
-		if ((_unit->getGender() == GENDER_FEMALE
-				&& _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE)
-			|| _unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE)
-//		if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC") // the mod Colored Armors might muck w/ these.
+		if (_unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE // STR_FLYING_SUIT_UC, the mod Colored Armors might muck w/ these.
+			|| (_unit->getGender() == GENDER_FEMALE
+				&& _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE))
 		{
 			torso = _unitSurface->getFrame(femaleTorso + unitDir);
 		}
-		else
-//		if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
-		{
+		else // STR_POWER_SUIT_UC
 			torso = _unitSurface->getFrame(maleTorso + unitDir);
-		}
 	}
 	else
 	{

@@ -81,6 +81,7 @@ private:
 			RuleInventory* const slot,
 			int x = 0,
 			int y = 0);
+
 	/// Gets the slot in the specified position.
 	RuleInventory* getSlotInPosition(
 			int* x,

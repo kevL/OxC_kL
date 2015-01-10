@@ -47,22 +47,23 @@ class TileEngine;
 
 enum BattleActionType
 {
-	BA_NONE,		// 0
-	BA_TURN,		// 1
-	BA_WALK,		// 2
-	BA_PRIME,		// 3
-	BA_THROW,		// 4
-	BA_AUTOSHOT,	// 5
-	BA_SNAPSHOT,	// 6
-	BA_AIMEDSHOT,	// 7
-	BA_STUN,		// 8
-	BA_HIT,			// 9
+	BA_NONE,		//  0
+	BA_TURN,		//  1
+	BA_WALK,		//  2
+	BA_PRIME,		//  3
+	BA_THROW,		//  4
+	BA_AUTOSHOT,	//  5
+	BA_SNAPSHOT,	//  6
+	BA_AIMEDSHOT,	//  7
+	BA_STUN,		//  8
+	BA_HIT,			//  9
 	BA_USE,			// 10
 	BA_LAUNCH,		// 11
 	BA_MINDCONTROL,	// 12
 	BA_PANIC,		// 13
 	BA_RETHINK,		// 14
-	BA_DEFUSE		// 15, kL_add.
+	BA_DEFUSE,		// 15, kL_add.
+	BA_DROP			// 16, kL_add.
 };
 
 
@@ -259,7 +260,7 @@ private:
 		BattleAction* getCurrentAction();
 
 		/// Determines whether there is an action currently going on.
-		bool isBusy();
+		bool isBusy() const;
 
 		/// Activates primary action (left click).
 		void primaryAction(const Position& posTarget);

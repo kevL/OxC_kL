@@ -2584,7 +2584,6 @@ armors:
     spriteInv: MAN_2
     corpseBattle:
       - STR_CORPSE_SUIT
-    isSpacesuit: true
     storeItem: STR_POWER_SUIT
     frontArmor: 96
     sideArmor: 82
@@ -2602,13 +2601,13 @@ armors:
       - 0.95 #acid
       - 0.0 #smoke
     loftempsSet: [ 3 ]
+    isSpacesuit: true
     forcedTorso: 1
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
     corpseBattle:
       - STR_CORPSE_SUIT
-    isSpacesuit: true
     storeItem: STR_FLYING_SUIT
     frontArmor: 116
     sideArmor: 96
@@ -2627,6 +2626,7 @@ armors:
       - 0.95 #acid
       - 0.0 #smoke
     loftempsSet: [ 3 ]
+    isSpacesuit: true
     forcedTorso: 2
   - type: SECTOID_ARMOR0 #soldier, navigator, medic, engineer
     spriteSheet: SECTOID.PCK
@@ -8765,6 +8765,7 @@ extraStrings:
       STR_DATE_MISSION: "Date o' Mission"
       STR_DATE_RECRUIT: "Recruited"
       STR_EXECUTE: "execute"
+      STR_DROP: "drop"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

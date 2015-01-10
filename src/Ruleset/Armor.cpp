@@ -71,8 +71,7 @@ Armor::Armor(const std::string& type)
  * dTor.
  */
 Armor::~Armor()
-{
-}
+{}
 
 /**
  * Loads the armor from a YAML file.

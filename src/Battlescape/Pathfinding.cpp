@@ -1895,7 +1895,6 @@ int Pathfinding::validateUpDown(
 		Position startPos,
 		int const dir)
 {
-	//Log(LOG_INFO) << "validateUpDown()";
 	Position destPos;
 	directionToVector(
 					dir,

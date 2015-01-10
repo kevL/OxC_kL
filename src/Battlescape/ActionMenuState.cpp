@@ -31,18 +31,18 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 
-#include "../Resource/ResourcePack.h"
+//#include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/RuleItem.h"
+//#include "../Ruleset/RuleItem.h"
 
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/BattleUnit.h"
+//#include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
@@ -53,7 +53,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Action Menu window.
- * @param action	- pointer to BattleAction (BattlescapeGame.h)
+ * @param action	- pointer to a BattleAction (BattlescapeGame.h)
  * @param x			- position on the x-axis
  * @param y			- position on the y-axis
  */
@@ -70,7 +70,7 @@ ActionMenuState::ActionMenuState(
 
 	for (int
 			i = 0;
-			i < 6;
+			i < 8;
 			++i)
 	{
 		_menuItem[i] = new ActionMenuItem(
@@ -85,25 +85,32 @@ ActionMenuState::ActionMenuState(
 	}
 
 	// Build the popup menu
-	const RuleItem* const weapon = _action->weapon->getRules();
+	const RuleItem* const itRule = _action->weapon->getRules();
 	int id = 0;
 
-	if (weapon->isFixed() == false) // throwing (if not a fixed weapon)
+	if (itRule->isFixed() == false) // Throw & Drop (if not a fixed weapon)
+	{
+		addItem(
+				BA_DROP,
+				"STR_DROP",
+				&id);
+
 		addItem(
 				BA_THROW,
 				"STR_THROW",
 				&id);
+	}
 
-	// kL_begin:
 	SavedGame* const save = _game->getSavedGame();
 	if (save->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
-		&& save->isResearched(_action->weapon->getRules()->getRequirements()) == false)
+		&& save->isResearched(itRule->getRequirements()) == false
+		&& itRule->isResearchExempt() == false)
 	{
 		return;
-	} // kL_end.
+	}
 
-	if (weapon->getBattleType() == BT_GRENADE
-		|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
+	if (itRule->getBattleType() == BT_GRENADE
+		|| itRule->getBattleType() == BT_PROXIMITYGRENADE)
 	{
 		if (_action->weapon->getFuseTimer() == -1) // canPrime
 			addItem(
@@ -117,10 +124,10 @@ ActionMenuState::ActionMenuState(
 					&id);
 	}
 
-	if (weapon->getTUMelee() > 0)
+	if (itRule->getTUMelee() > 0)
 	{
-		if (weapon->getBattleType() == BT_MELEE
-			&& weapon->getDamageType() == DT_STUN)
+		if (itRule->getBattleType() == BT_MELEE
+			&& itRule->getDamageType() == DT_STUN)
 		{
 			addItem( // stun rod
 					BA_HIT,
@@ -133,17 +140,17 @@ ActionMenuState::ActionMenuState(
 					"STR_HIT_MELEE",
 					&id);
 	}
-	else if (weapon->getBattleType() == BT_MEDIKIT) // special items
+	else if (itRule->getBattleType() == BT_MEDIKIT) // special items
 		addItem(
 				BA_USE,
 				"STR_USE_MEDI_KIT",
 				&id);
-	else if (weapon->getBattleType() == BT_SCANNER)
+	else if (itRule->getBattleType() == BT_SCANNER)
 		addItem(
 				BA_USE,
 				"STR_USE_SCANNER",
 				&id);
-	else if (weapon->getBattleType() == BT_PSIAMP
+	else if (itRule->getBattleType() == BT_PSIAMP
 		&& _action->actor->getBaseStats()->psiSkill > 0)
 	{
 		addItem(
@@ -155,15 +162,15 @@ ActionMenuState::ActionMenuState(
 				"STR_PANIC_UNIT",
 				&id);
 	}
-	else if (weapon->getBattleType() == BT_MINDPROBE)
+	else if (itRule->getBattleType() == BT_MINDPROBE)
 		addItem(
 				BA_USE,
 				"STR_USE_MIND_PROBE",
 				&id);
 
-	if (weapon->getBattleType() == BT_FIREARM)
+	if (itRule->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->isWaypoint() == true
+		if (itRule->isWaypoint() == true
 			|| (_action->weapon->getAmmoItem() != NULL
 				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint() == true))
 		{
@@ -173,21 +180,21 @@ ActionMenuState::ActionMenuState(
 					&id);
 		}
 
-		if (_action->weapon->getAmmoItem() != NULL) // kL
+		if (_action->weapon->getAmmoItem() != NULL)
 		{
-			if (weapon->getAccuracySnap() != 0)
+			if (itRule->getAccuracySnap() != 0)
 				addItem(
 						BA_SNAPSHOT,
 						"STR_SNAP_SHOT",
 						&id);
 
-			if (weapon->getAccuracyAuto() != 0)
+			if (itRule->getAccuracyAuto() != 0)
 				addItem(
 						BA_AUTOSHOT,
 						"STR_AUTO_SHOT",
 						&id);
 
-			if (weapon->getAccuracyAimed() != 0)
+			if (itRule->getAccuracyAimed() != 0)
 				addItem(
 						BA_AIMEDSHOT,
 						"STR_AIMED_SHOT",
@@ -200,8 +207,7 @@ ActionMenuState::ActionMenuState(
  * Deletes the ActionMenuState.
  */
 ActionMenuState::~ActionMenuState()
-{
-}
+{}
 
 /**
  * Adds a new menu item for an action.
@@ -222,7 +228,7 @@ void ActionMenuState::addItem(
 		|| baType == BA_AIMEDSHOT
 		|| baType == BA_SNAPSHOT
 		|| baType == BA_AUTOSHOT
-//kL	|| baType == BA_LAUNCH
+//		|| baType == BA_LAUNCH
 		|| baType == BA_HIT)
 	{
 		int acu;
@@ -231,18 +237,16 @@ void ActionMenuState::addItem(
 		else
 			acu = static_cast<int>(Round(_action->actor->getFiringAccuracy(
 																		baType,
-																		_action->weapon)
-																	* 100.));
+																		_action->weapon) * 100.));
 
-//kL	s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
-		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acu); // kL
+//		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
+		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acu);
 	}
 
 	const int tu = _action->actor->getActionTUs(
 											baType,
 											_action->weapon);
 	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
-
 
 
 	_menuItem[*id]->setAction(
@@ -282,7 +286,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
-	const RuleItem* const weapon = _action->weapon->getRules();
+	const RuleItem* const itRule = _action->weapon->getRules();
 	int btnID = -1;
 
 	for (size_t // find out which button was pressed
@@ -302,14 +306,14 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 
 		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
-			&& weapon->isWaterOnly() == true)
+			&& itRule->isWaterOnly() == true)
 		{
 			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
 			_game->popState();
 		}
 		else if (_action->type == BA_PRIME)
 		{
-			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
+			if (itRule->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
 				_game->popState();
@@ -320,13 +324,34 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 													false,
 													NULL));
 		}
-		else if (_action->type == BA_DEFUSE) // kL_add.
+		else if (_action->type == BA_DEFUSE)
 		{
 			_action->value = -1;
 			_game->popState();
 		}
+		else if (_action->type == BA_DROP)
+		{
+			if (_action->actor->spendTimeUnits(_action->TU) == true)
+			{
+				_action->weapon->moveToOwner(NULL);
+				_action->actor->getTile()->addItem(
+												_action->weapon,
+												_game->getRuleset()->getInventory("STR_GROUND"));
+
+				if (_action->actor->getItem("STR_LEFT_HAND") == NULL)
+					_action->actor->setActiveHand("STR_RIGHT_HAND");
+				else
+					_action->actor->setActiveHand("STR_LEFT_HAND");
+
+				_action->actor->invalidateCache();
+			}
+			else
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+
+			_game->popState();
+		}
 		else if (_action->type == BA_USE
-			&& weapon->getBattleType() == BT_MEDIKIT)
+			&& itRule->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit* targetUnit = NULL;
 
@@ -378,7 +403,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			}
 		}
 		else if (_action->type == BA_USE
-			&& weapon->getBattleType() == BT_SCANNER)
+			&& itRule->getBattleType() == BT_SCANNER)
 		{
 			if (_action->actor->spendTimeUnits(_action->TU) == true)
 			{
@@ -396,8 +421,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			if (_action->TU > _action->actor->getTimeUnits())
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			else if (_action->weapon->getAmmoItem() == NULL
-				|| (_action->weapon->getAmmoItem()
-					&& _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
+				|| _action->weapon->getAmmoItem()->getAmmoQuantity() == 0)
 			{
 				_action->result = "STR_NO_AMMUNITION_LOADED";
 			}

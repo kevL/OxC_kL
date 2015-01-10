@@ -1895,7 +1895,7 @@ bool BattlescapeGame::handlePanickingPlayer()
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
-	UnitStatus status = unit->getStatus();
+	const UnitStatus status = unit->getStatus();
 
 	if (status != STATUS_PANICKING
 		&& status != STATUS_BERSERK)
@@ -1911,7 +1911,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	if (unit->getUnitVisible() == true
-		|| !Options::noAlienPanicMessages)
+		|| Options::noAlienPanicMessages == false)
 	{
 		getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
@@ -1924,7 +1924,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 																			.arg(unit->getName(game->getLanguage()))));
 	}
 
-//kL	unit->abortTurn(); // makes the unit go to status STANDING :p
+//	unit->abortTurn(); // makes the unit go to status STANDING :p
 	unit->setStatus(STATUS_STANDING); // kL :P
 
 	BattleAction ba;
@@ -2070,10 +2070,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 			unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting
 			ba.type = BA_NONE;
-		break;
-
-		default:
-		break;
 	}
 
 	statePushBack(new UnitPanicBState( // Time units can only be reset after everything else occurs
@@ -2093,10 +2089,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::cancelCurrentAction()";
 	const bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
-	if (_save->getPathfinding()->removePreview()
+	if (_save->getPathfinding()->removePreview() == true
 		&& bPreviewed == true)
 	{
 		return true;
@@ -2169,7 +2164,7 @@ BattleAction* BattlescapeGame::getCurrentAction()
  * Determines whether an action is currently going on.
  * @return, true or false
  */
-bool BattlescapeGame::isBusy()
+bool BattlescapeGame::isBusy() const
 {
 	return (_states.empty() == false);
 }
