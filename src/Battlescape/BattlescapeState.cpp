@@ -3957,28 +3957,30 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 	}
 
 	const BattleUnit* const unit = _savedBattle->getSelectedUnit();
-	int tuCost = tile->getTUCost(
+	int tuCost = 0;
+	size_t rows = 3;
+
+	if (unit != NULL
+		&& unit->getFaction() == FACTION_PLAYER)
+	{
+		++rows;
+
+		tuCost = tile->getTUCost(
 							MapData::O_FLOOR,
 							unit->getMovementType())
 			   + tile->getTUCost(
 							MapData::O_OBJECT,
 							unit->getMovementType());
-	if (tuCost == 0)
-	{
-		if (unit->getMovementType() == MT_FLY
-			|| unit->getMovementType() == MT_FLOAT)
+		if (tuCost == 0)
 		{
-			tuCost = 4;
+			if (unit->getMovementType() == MT_FLY
+				|| unit->getMovementType() == MT_FLOAT)
+			{
+				tuCost = 4;
+			}
+			else
+				tuCost = 255;
 		}
-		else
-			tuCost = 255;
-	}
-
-	if (unit == NULL
-		|| unit->getFaction() != FACTION_PLAYER)
-//		|| unit->getGeoscapeSoldier() == NULL)
-	{
-		return;
 	}
 
 
@@ -3997,9 +3999,9 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 	infoType.push_back(L"T "); // tuCost
 
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 4;
+			i < rows;
 			++i)
 	{
 		Uint8 color;
@@ -4041,14 +4043,11 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 							value.c_str(),
 							infoType.at(i).c_str());
 		}
-		else // tuCost
+		else if (unit != NULL) // tuCost
 		{
 			color = Palette::blockOffset(8); // blue
 
 			std::wstring stCost;
-//			if (info[i] == 0)
-//				stCost = L"0";
-//			else
 			if (info[i] < 255)
 				stCost = Text::formatNumber(info[i]).c_str();
 			else
