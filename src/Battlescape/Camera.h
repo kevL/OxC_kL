@@ -168,7 +168,7 @@ private:
 		/// Checks if map coordinates X,Y,Z are on screen.
 		bool isOnScreen(
 				const Position& mapPos) const;
-//kL			const bool unitWalking) const;
+//kL			const bool unitWalking, const int unitSize, const bool boundary) const;
 
 		/// Resizes the viewable area.
 		void resize();

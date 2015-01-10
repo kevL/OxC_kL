@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "ProjectileFlyBState.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 
 #include "AlienBAIState.h"
@@ -1071,6 +1070,7 @@ void ProjectileFlyBState::cancel()
 
 		Camera* const camera = _parent->getMap()->getCamera();
 		const Position projPos = projectile->getPosition() / Position(16, 16, 24);
+//		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false, 0, false))
 		if (camera->isOnScreen(projPos) == false)
 			camera->centerOnPosition(projPos);
 	}

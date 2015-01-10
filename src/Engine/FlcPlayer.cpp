@@ -522,11 +522,12 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 		i < _audioFrameSize;
 		++i)
 	{
-		float tempVal = std::min(
-							256.f,
-							std::max(
-								0.f,
-								static_cast<float>(_chunkData[i]) * tempVol));
+//		float tempVal = std::min(
+//							256.f,
+//							std::max(
+//								0.f,
+//								static_cast<float>(_chunkData[i]) * tempVol));
+		float tempVal = static_cast<float>(_chunkData[i]) * tempVol;
 		_chunkData[i] = static_cast<Uint8>(tempVal);
 	}
 
@@ -1002,7 +1003,7 @@ void FlcPlayer::stop()
 /**
  *
  */
-bool FlcPlayer::isEndOfFile(Uint8* pos)
+bool FlcPlayer::isEndOfFile(Uint8* pos) const
 {
 	return (pos - _fileBuf) == static_cast<int>(_fileSize); // should be Sint64 lol
 }
@@ -1010,7 +1011,7 @@ bool FlcPlayer::isEndOfFile(Uint8* pos)
 /**
  *
  */
-int FlcPlayer::getFrameCount()
+int FlcPlayer::getFrameCount() const
 {
 	return _frameCount;
 }
@@ -1021,6 +1022,14 @@ int FlcPlayer::getFrameCount()
 void FlcPlayer::setHeaderSpeed(int speed)
 {
 	_headerSpeed = speed;
+}
+
+/**
+ *
+ */
+bool FlcPlayer::wasSkipped() const
+{
+	return (_playingState == SKIPPED);
 }
 
 /**

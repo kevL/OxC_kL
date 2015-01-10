@@ -128,7 +128,7 @@ private:
 	void initAudio(Uint16 format, Uint8 channels);
 	void deInitAudio();
 
-	bool isEndOfFile(Uint8 *pos);
+	bool isEndOfFile(Uint8 *pos) const;
 
 	static void audioCallback(void *userData, Uint8 *stream, int len);
 	static void wakeAudioWaiter(SDL_sem *audioWaiter);
@@ -159,7 +159,9 @@ private:
 		///
 		void setHeaderSpeed(int speed);
 		///
-		int getFrameCount();
+		int getFrameCount() const;
+		///
+		bool wasSkipped() const;
 };
 
 }

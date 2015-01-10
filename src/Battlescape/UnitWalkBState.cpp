@@ -140,9 +140,11 @@ void UnitWalkBState::think()
 		return;
 	}
 
+//	int size = _unit->getArmor()->getSize() - 1;
+//	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false));
 	_onScreen = _unit->getUnitVisible();
-//				&& (_walkCam->isOnScreen(_unit->getPosition(), true)
-//					|| _walkCam->isOnScreen(_unit->getDestination(), true));
+//				&& (_walkCam->isOnScreen(_unit->getPosition())
+//					|| _walkCam->isOnScreen(_unit->getDestination()));
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
@@ -699,6 +701,8 @@ bool UnitWalkBState::doStatusWalk()
 		if (_unit->getMoveSound() == -1)
 			playMovementSound();
 
+//		bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
+//		_unit->keepWalking(tileBelow, onScreenBoundary); // advances the phase
 		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 		_unit->keepWalking( // advances _walkPhase
 						tileBelow,
@@ -724,6 +728,8 @@ bool UnitWalkBState::doStatusWalk()
 		// when _pos sets equal to _destination.
 		// So. How does _falling ever equate TRUE, if it has to be flagged on _walkPhase == 0 only?
 	{
+//		if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
+
 		//Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
 		// BattleUnit::startWalking() sets _lastpos = _pos, then
 		// BattleUnit::keepWalking (_walkPhase == middle) sets _pos = _destination
@@ -1201,6 +1207,9 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
  */
 void UnitWalkBState::playMovementSound()
 {
+//	int size = _unit->getArmor()->getSize() - 1;
+//	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false)) return;
+
 	if (_unit->getUnitVisible() == false
 		&& _parent->getSave()->getDebugMode() == false)
 //		|| (!_walkCam->isOnScreen(_unit->getPosition(), true)

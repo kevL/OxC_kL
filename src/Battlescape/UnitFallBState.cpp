@@ -109,7 +109,8 @@ void UnitFallBState::think()
 			fallCheck = true,
 			falling = true,
 			onScreen = (*unit)->getUnitVisible()
-					&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition()); // ,true);
+					&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition());
+//		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition(), true, size, false));
 		const int unitSize = (*unit)->getArmor()->getSize() - 1;
 		Tile* tBelow = NULL;
 
