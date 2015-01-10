@@ -111,15 +111,13 @@ RuleItem::RuleItem(const std::string& type)
 		_vaporColor(-1),
 		_vaporDensity(0),
 		_vaporProbability(15)
-{
-}
+{}
 
 /**
  * dTor.
  */
 RuleItem::~RuleItem()
-{
-}
+{}
 
 /**
  * Loads the item from a YAML file.

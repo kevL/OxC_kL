@@ -1195,13 +1195,14 @@ void Tile::endTilePhase()
 		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock _unit out.
 			_unit->damage(
 						Position(0, 0, 0),
-						_smoke / 4 + 1,
+						(_smoke + 3) / 4 + 1, // round up.
 						DT_SMOKE, // -> DT_STUN
 						true);
 	}
 
-	if (_unit->getFire() > 0
-		&& armorVulnerability > 0.f)
+	if (armorVulnerability > 0.f
+		&& (_unit->getFire() > 0
+			|| _fire > 0))
 	{
 		_unit->damage(
 					Position(0, 0, 0),

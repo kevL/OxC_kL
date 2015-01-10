@@ -71,15 +71,13 @@ RuleInventory::RuleInventory(const std::string& id)
 		_y(0),
 		_type(INV_SLOT),
 		_listOrder(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 RuleInventory::~RuleInventory()
-{
-}
+{}
 
 /**
  * Loads the inventory from a YAML file.

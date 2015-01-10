@@ -2637,16 +2637,16 @@ armors:
     rearArmor: 4
     underArmor: 3
     damageModifier:
-      - 1.0
-      - 1.13
-      - 1.07
-      - 1.1
-      - 1.11
-      - 1.17
-      - 1.19
-      - 1.2
-      - 1.5
-      - 0.0
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 1.0 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
     loftempsSet: [ 2 ]
   - type: SECTOID_ARMOR1 #leader
     spriteSheet: SECTOID.PCK
@@ -2657,16 +2657,16 @@ armors:
     rearArmor: 5
     underArmor: 3
     damageModifier:
-      - 1.0
-      - 1.13
-      - 1.07
-      - 1.1
-      - 1.11
-      - 1.17
-      - 1.19
-      - 1.2
-      - 1.5
-      - 0.0
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 1.0 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
     loftempsSet: [ 2 ]
   - type: SECTOID_ARMOR2 #commander
     spriteSheet: SECTOID.PCK
@@ -2677,16 +2677,16 @@ armors:
     rearArmor: 6
     underArmor: 4
     damageModifier:
-      - 1.0
-      - 1.13
-      - 1.07
-      - 1.1
-      - 1.11
-      - 1.17
-      - 1.19
-      - 1.2
-      - 1.5
-      - 0.0
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 1.0 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
     loftempsSet: [ 2 ]
   - type: FLOATER_ARMOR0 #soldier, navigator, medic, engineer
     spriteSheet: FLOATER.PCK
