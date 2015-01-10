@@ -131,8 +131,8 @@ bool FlcPlayer::init(
 	_frameCount = 0;
 	_audioFrameData = 0;
 	_hasAudio = false;
-	_audioData.loadingBuffer = 0;
-	_audioData.playingBuffer = 0;
+	_audioData.loadingBuffer = NULL;
+	_audioData.playingBuffer = NULL;
 
 	std::ifstream file;
 	file.open(filename, std::ifstream::in | std::ifstream::binary | std::ifstream::ate);
@@ -240,6 +240,7 @@ void FlcPlayer::play(bool skipLastFrame)
 void FlcPlayer::delay(Uint32 milliseconds)
 {
 	Uint32 pauseStart = SDL_GetTicks();
+
 	while (_playingState != SKIPPED
 		&& SDL_GetTicks() < (pauseStart + milliseconds))
 	{
@@ -510,10 +511,23 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	if (newSize > loadingBuff->sampleBufSize)
 	{
 		/* If the sample count has changed, we need to reallocate (Handles initial state
-		 * of '0' sample count too, as realloc(NULL, size) == malloc(size)
-		 */
+		 * of '0' sample count too, as realloc(NULL, size) == malloc(size) */
 		loadingBuff->samples = (char*)realloc(loadingBuff->samples, newSize);
 		loadingBuff->sampleBufSize = newSize;
+	}
+
+	const float volume = static_cast<float>(Game::volumeExponent(Options::musicVolume));
+	for (Uint32
+		i = 0;
+		i < _audioFrameSize;
+		i++)
+	{
+		float tempVal = std::min(
+							256.f,
+							std::max(
+								0.f,
+								static_cast<float>(_chunkData[i]) * volume));
+		_chunkData[i] = static_cast<Uint8>(tempVal);
 	}
 
 	/* Copy the data.... */
