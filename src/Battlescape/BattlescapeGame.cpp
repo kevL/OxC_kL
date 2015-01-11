@@ -2411,10 +2411,15 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 		}
 		else if (playableUnitSelected() == true)
 		{
+			Pathfinding* const pf = _save->getPathfinding();
+
 			if (unit != NULL
 				&& unit == _currentAction.actor
 				&& unit->getArmor()->getSize() == 1)
 			{
+				if (bPreviewed == true)
+					pf->removePreview();
+
 				Position screenPos;
 				getMap()->getCamera()->convertMapToScreen(
 														posTarget,
@@ -2441,7 +2446,6 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			}
 			else
 			{
-				Pathfinding* const pf = _save->getPathfinding();
 				const bool
 					mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
 					mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,

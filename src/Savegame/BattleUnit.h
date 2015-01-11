@@ -605,8 +605,6 @@ private:
 				bool force = false);
 		/// Turns to the destination direction.
 		void turn(bool turret = false);
-		/// Aborts turning.
-//		void abortTurn();
 
 		/// Gets the soldier's gender.
 		SoldierGender getGender() const;

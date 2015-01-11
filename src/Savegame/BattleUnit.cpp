@@ -671,24 +671,6 @@ void BattleUnit::setStatus(const UnitStatus status)
 {
 	_status = status;
 }
-/*	switch (status)
-	{
-		case 0:		_status = STATUS_STANDING;		return;
-		case 1:		_status = STATUS_WALKING;		return;
-		case 2:		_status = STATUS_FLYING;		return;
-		case 3:		_status = STATUS_TURNING;		return;
-		case 4:		_status = STATUS_AIMING;		return;
-		case 5:		_status = STATUS_COLLAPSING;	return;
-		case 6:		_status = STATUS_DEAD;			return;
-		case 7:		_status = STATUS_UNCONSCIOUS;	return;
-		case 8:		_status = STATUS_PANICKING;		return;
-		case 9:		_status = STATUS_BERSERK;		return;
-		case 10:	_status = STATUS_TIME_OUT;		return;
-		case 11:	_status = STATUS_DISABLED;		return;
-
-		default:
-			_status = STATUS_STANDING;
-	} */
 
 /**
  * Initialises variables to start walking.
@@ -703,8 +685,6 @@ void BattleUnit::startWalking(
 		Tile* tileBelow,
 		bool cache)
 {
-	//Log(LOG_INFO) << "BattleUnit::startWalking() ID = " << getId()
-	//				<< " _walkPhase = 0";
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
@@ -718,18 +698,13 @@ void BattleUnit::startWalking(
 		if (_tile->getMapData(MapData::O_FLOOR) != NULL
 			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
 		{
-			//Log(LOG_INFO) << ". STATUS_FLYING, using GravLift";
 			_floating = false;
 		}
 		else
-		{
-			//Log(LOG_INFO) << ". STATUS_FLYING, up.down";
 			_floating = true;
-		}
 	}
 	else if (_tile->hasNoFloor(tileBelow) == true)
 	{
-		//Log(LOG_INFO) << ". STATUS_FLYING, no Floor";
 		_status = STATUS_FLYING;
 		_floating = true;
 		_kneeled = false;
@@ -737,13 +712,11 @@ void BattleUnit::startWalking(
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". STATUS_WALKING";
 		_status = STATUS_WALKING;
 		_floating = false;
 		_kneeled = false;
 		_direction = direction;
 	}
-	//Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
 
 /**
@@ -757,7 +730,6 @@ void BattleUnit::keepWalking(
 {
 	++_walkPhase;
 
-	//Log(LOG_INFO) << "BattleUnit::keepWalking() ID = " << getId() << " _walkPhase = " << _walkPhase;
 	int
 		midPhase,
 		endPhase;
@@ -798,7 +770,6 @@ void BattleUnit::keepWalking(
 
 	if (_walkPhase >= endPhase) // officially reached the destination tile
 	{
-		//Log(LOG_INFO) << ". end -> STATUS_STANDING";
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
@@ -830,7 +801,6 @@ void BattleUnit::keepWalking(
 	}
 
 	_cacheInvalid = cache;
-	//Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
 
 /**
@@ -869,40 +839,20 @@ void BattleUnit::lookAt(
 		const Position& point,
 		bool turret)
 {
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #1";
-	//Log(LOG_INFO) << ". . _direction = " << _direction;
-	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
-	//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
-
 	int dir = directionTo(point);
-	//Log(LOG_INFO) << ". . lookAt() -> dir = " << dir;
 
 	if (turret == true)
 	{
-		//Log(LOG_INFO) << ". . . . has turret.";
 		_toDirectionTurret = dir;
-		//Log(LOG_INFO) << ". . . . . . _toDirTur = " << _toDirectionTurret;
 		if (_toDirectionTurret != _directionTurret)
-		{
 			_status = STATUS_TURNING;
-			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING, turret.";
-		}
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". . . . NOT turret.";
-
 		_toDirection = dir;
-		//Log(LOG_INFO) << ". . . . . . _toDir = " << _toDirection;
 		if (_toDirection != _direction)
-		{
 			_status = STATUS_TURNING;
-			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
-			// kL_note: what about Forcing the faced direction instantly?
-		}
 	}
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #1 EXIT";
 }
 
 /**
@@ -914,7 +864,6 @@ void BattleUnit::lookAt(
 		int direction,
 		bool force)
 {
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #2";
 	if (force == true)
 	{
 		_toDirection = direction;
@@ -928,9 +877,7 @@ void BattleUnit::lookAt(
 		_toDirection = direction;
 		if (_toDirection != _direction)
 			_status = STATUS_TURNING;
-			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 	}
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";
 }
 
 /**
@@ -939,48 +886,40 @@ void BattleUnit::lookAt(
  */
 void BattleUnit::turn(bool turret)
 {
-	//Log(LOG_INFO) << "BattleUnit::turn()";
-	//Log(LOG_INFO) << ". . _direction = " << _direction;
-	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
-	//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
-
-	int delta = 0;
+	int delta;
 
 	if (turret == true)
 	{
 		if (_directionTurret == _toDirectionTurret)
 		{
-			//Log(LOG_INFO) << ". . _d = _tD, abort";
-//			abortTurn();
 			_status = STATUS_STANDING;
 			return;
 		}
 
 		delta = _toDirectionTurret - _directionTurret;
-		//Log(LOG_INFO) << ". . deltaTurret = " << delta;
 	}
 	else
 	{
 		if (_direction == _toDirection)
 		{
-			//Log(LOG_INFO) << ". . _d = _tD, abort";
-//			abortTurn();
 			_status = STATUS_STANDING;
 			return;
 		}
 
 		delta = _toDirection - _direction;
-		//Log(LOG_INFO) << ". . delta = " << delta;
 	}
 
+	Log(LOG_INFO) << "turnDir = " << _turnDir;
 	if (delta != 0) // duh
 	{
+		Log(LOG_INFO) << ". delta = " << delta;
 		if (delta > 0)
 		{
+			Log(LOG_INFO) << ". delta POS";
 			if (delta < 5
-				|| _turnDir == 1)
+				&& _turnDir != -1)
 			{
+				Log(LOG_INFO) << ". CW";
 				if (turret == false)
 				{
 					if (_turretType > -1)
@@ -993,6 +932,7 @@ void BattleUnit::turn(bool turret)
 			}
 			else // > 4
 			{
+				Log(LOG_INFO) << ". CCW";
 				if (turret == false)
 				{
 					if (_turretType > -1)
@@ -1006,9 +946,11 @@ void BattleUnit::turn(bool turret)
 		}
 		else
 		{
-			if (delta > -4
-				|| _turnDir == -1)
+			Log(LOG_INFO) << ". delta NEG";
+			if (delta > -5
+				&& _turnDir != 1)
 			{
+				Log(LOG_INFO) << ". CCW";
 				if (turret == false)
 				{
 					if (_turretType > -1)
@@ -1019,8 +961,9 @@ void BattleUnit::turn(bool turret)
 				else
 					--_directionTurret;
 			}
-			else // < -3
+			else // < -4
 			{
+				Log(LOG_INFO) << ". CW";
 				if (turret == false)
 				{
 					if (_turretType > -1)
@@ -1043,11 +986,6 @@ void BattleUnit::turn(bool turret)
 		else if (_directionTurret > 7)
 			_directionTurret = 0;
 
-		//Log(LOG_INFO) << ". . _direction = " << _direction;
-		//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-		//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
-		//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
-
 		if (_visible == true
 			|| _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
 		{
@@ -1058,10 +996,7 @@ void BattleUnit::turn(bool turret)
 	if (turret == true)
 	{
 		 if (_toDirectionTurret == _directionTurret)
-		 {
-			//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << "Turret - STATUS_STANDING (turn has ended)";
-			_status = STATUS_STANDING; // we officially reached our destination
-		}
+			_status = STATUS_STANDING;
 	}
 	else if (_toDirection == _direction
 		|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
@@ -1069,20 +1004,9 @@ void BattleUnit::turn(bool turret)
 											// It's used when reviving unconscious soldiers;
 											// they need to go to STATUS_STANDING.
 	{
-		//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
-		_status = STATUS_STANDING; // we officially reached our destination
+		_status = STATUS_STANDING;
 	}
-	//Log(LOG_INFO) << "BattleUnit::turn() EXIT";// unitID = " << getId();
 }
-
-/**
- * Stops the turning towards the target direction.
- */
-/*kL: now uses setStatus()...
-void BattleUnit::abortTurn()
-{
-	_status = STATUS_STANDING;
-} */
 
 /**
  * Gets the soldier's gender.
