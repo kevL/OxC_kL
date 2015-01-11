@@ -4281,7 +4281,7 @@ void BattleUnit::setDown() // kL
 
 /**
  * Sets this BattleUnit's turn direction when spinning 180 degrees.
- * @param turnDir - true to turn clockwise
+ * @param turnDir - 1 counterclockwise; -1 clockwise
  */
 void BattleUnit::setTurnDirection(const int turnDir)
 {

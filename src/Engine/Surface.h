@@ -210,12 +210,12 @@ protected:
 		 * relative to the top-left corner of the surface.
 		 * @param x		- X position of the pixel
 		 * @param y		- Y position of the pixel
-		 * @param pixel	- color for the pixel
+		 * @param color	- color for the pixel
 		 */
 		void setPixelColor(
 				int x,
 				int y,
-				Uint8 pixel)
+				Uint8 color)
 		{
 			if (x < 0
 				|| x >= getWidth()
@@ -228,7 +228,7 @@ protected:
 			static_cast<Uint8*>(_surface->pixels)
 						[(y * static_cast<int>(_surface->pitch))
 						+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
-					= pixel;
+					= color;
 		}
 
 		/**
@@ -236,14 +236,14 @@ protected:
 		 * Useful when changing a lot of pixels in a row, eg. loading images.
 		 * @param x		- pointer to the X position of the pixel; changed to the next X position in the sequence
 		 * @param y		- pointer to the Y position of the pixel; changed to the next Y position in the sequence
-		 * @param pixel	- color for the pixel
+		 * @param color	- color for the pixel
 		 */
 		void setPixelIterative( // setPixelColorIterative
 				int* x,
 				int* y,
-				Uint8 pixel)
+				Uint8 color)
 		{
-			setPixelColor(*x, *y, pixel);
+			setPixelColor(*x, *y, color);
 
 			(*x)++;
 			if (*x == getWidth())
@@ -320,9 +320,9 @@ protected:
 				Surface* surface,
 				int x,
 				int y,
-				int off,
+				int offset,
 				bool half = false,
-				int newBaseColor = 0);
+				int baseColor = 0);
 
 		/// Invalidate the surface: force it to be redrawn
 		void invalidate(bool valid = true);

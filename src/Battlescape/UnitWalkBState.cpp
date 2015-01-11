@@ -63,11 +63,8 @@ UnitWalkBState::UnitWalkBState(
 		BattleState(
 			parent,
 			action),
-//		_unit(NULL),
 		_unit(action.actor),
-//		_pf(NULL),
 		_pf(parent->getPathfinding()),
-//		_terrain(NULL),
 		_terrain(parent->getTileEngine()),
 		_falling(false),
 		_preStepTurn(false),
@@ -75,21 +72,16 @@ UnitWalkBState::UnitWalkBState(
 		_preStepCost(0),
 		_tileSwitchDone(false),
 		_onScreen(false),
-//		_walkCam(NULL),
 		_walkCam(parent->getMap()->getCamera()),
 		_dirStart(-1),
 		_kneelCheck(true)
-{
-	//Log(LOG_INFO) << "Create UnitWalkBState";
-}
+{}
 
 /**
  * Deletes the UnitWalkBState.
  */
 UnitWalkBState::~UnitWalkBState()
-{
-	//Log(LOG_INFO) << "Delete UnitWalkBState";
-}
+{}
 
 /**
  * Initializes the state.
@@ -98,12 +90,12 @@ void UnitWalkBState::init()
 {
 //	_unit = _action.actor;
 	//Log(LOG_INFO) << "\nUnitWalkBState::init() unitID = " << _unit->getId();
-
-//	setNormalWalkSpeed();
-
 //	_pf = _parent->getPathfinding();
 //	_terrain = _parent->getTileEngine();
 //	_walkCam = _parent->getMap()->getCamera();
+
+//	setNormalWalkSpeed();
+
 
 	// kL_note: This is used only for aLiens
 	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();

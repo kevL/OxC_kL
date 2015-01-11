@@ -690,7 +690,7 @@ void Map::drawTerrain(Surface* surface)
 
 		Uint8 wpColor;
 		if (_save->getTerrain() == "DESERT")
-			wpColor = Palette::blockOffset(11)+6; // dullpink //(7)+4; blue //(0)+2; white
+			wpColor = Palette::blockOffset(0)+1; // white
 		else
 			wpColor = Palette::blockOffset(1)+4; // orange
 
@@ -2598,7 +2598,7 @@ void Map::drawTerrain(Surface* surface)
 
 	if (pathPreview == true)
 	{
-//		if (wpID) wpID->setBordered(true); // make a border for the pathfinding display
+		if (wpID) wpID->setBordered(); // make a border for the pathfinding display
 
 		for (int
 				itZ = beginZ;
@@ -2717,7 +2717,7 @@ void Map::drawTerrain(Surface* surface)
 		}
 
 		// remove the border in case it's used for missile waypoints.
-//		if (wpID) wpID->setBordered(false);
+		if (wpID) wpID->setBordered(false);
 	}
 
 	delete wpID;

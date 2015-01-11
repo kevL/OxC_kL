@@ -2439,9 +2439,9 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				getMap()->findMousePosition(mousePixel);
 
 				if (mousePixel.x > screenPixel.x + 16)
-					targetUnit->setTurnDirection(1);
-				else
 					targetUnit->setTurnDirection(-1);
+				else
+					targetUnit->setTurnDirection(1);
 
 				Pathfinding::directionToVector(
 											(targetUnit->getDirection() + 4) %8,

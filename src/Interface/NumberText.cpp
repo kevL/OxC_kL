@@ -19,8 +19,8 @@
 
 #include "NumberText.h"
 
-#include <sstream>
-#include <string>
+//#include <sstream>
+//#include <string>
 
 
 namespace OpenXcom
@@ -30,8 +30,8 @@ namespace OpenXcom
  * Sets up a blank number text.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 NumberText::NumberText(
 		int width,
@@ -199,49 +199,46 @@ NumberText::NumberText(
 			i < 10;
 			++i)
 	{
-		_borderedChars[i] = new Surface(5, 7); // give it a border
+		_borderedChars[i] = new Surface(4,6);
 
-		for (int // this is the "darker" shade that goes in the corners
-				x = 0;
-				x <= 2;
-				x += 2)
+		for (int
+				y = 1;
+				y < 6;
+				++y)
 		{
 			for (int
-					y = 0;
-					y <= 2;
-					y += 2)
+					x = 1;
+					x < 4;
+					++x)
 			{
-				_chars[i]->blitNShade(
-								_borderedChars[i],
-								x,
-								y,
-								11);
+				_borderedChars[i]->setPixelColor(x,y,7);
 			}
 		}
 
-		for (int // this is the "slightly darker" version that goes in four cardinals
-				z = 0;
-				z <= 2;
-				z += 2)
+		_chars[i]->blitNShade(
+						_borderedChars[i],
+						0,0,0);
+	}
+/*	for (int i = 0; i < 10; ++i)
+	{
+		// give it a border
+		_borderedChars[i] = new Surface(5, 7);
+
+		// this is the "darker" shade that goes in the corners
+		for (int x = 0; x <= 2; x += 2)
+			for (int y = 0; y <= 2; y += 2)
+				_chars[i]->blitNShade(_borderedChars[i], x, y, 11);
+
+		// this is the "slightly darker" version that goes in four cardinals
+		for (int z = 0; z <= 2; z += 2)
 		{
-			_chars[i]->blitNShade(
-							_borderedChars[i],
-							z,
-							1,
-							8);
-			_chars[i]->blitNShade(
-							_borderedChars[i],
-							1,
-							z,
-							8);
+			_chars[i]->blitNShade(_borderedChars[i], z, 1, 8);
+			_chars[i]->blitNShade(_borderedChars[i], 1, z, 8);
 		}
 
-		_chars[i]->blitNShade( // and finally the number itself
-						_borderedChars[i],
-						1,
-						1,
-						0);
-	}
+		// and finally the number itself
+		_chars[i]->blitNShade(_borderedChars[i], 1, 1, 0);
+	} */
 }
 
 /**
@@ -285,7 +282,6 @@ unsigned NumberText::getValue() const
 void NumberText::setColor(Uint8 color)
 {
 	_color = color;
-
 	_redraw = true;
 }
 
@@ -301,8 +297,8 @@ Uint8 NumberText::getColor() const
 /**
  * Replaces a certain amount of colors in the number text palette.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void NumberText::setPalette(
 		SDL_Color* colors,
@@ -310,9 +306,9 @@ void NumberText::setPalette(
 		int ncolors)
 {
 	Surface::setPalette(
-			colors,
-			firstcolor,
-			ncolors);
+					colors,
+					firstcolor,
+					ncolors);
 
 	for (int
 			i = 0;
@@ -324,9 +320,9 @@ void NumberText::setPalette(
 							firstcolor,
 							ncolors);
 		_borderedChars[i]->setPalette(
-								colors,
-								firstcolor,
-								ncolors);
+									colors,
+									firstcolor,
+									ncolors);
 	}
 }
 
@@ -339,15 +335,15 @@ void NumberText::draw()
 
 	std::ostringstream oss;
 	oss << _value;
-	std::string str = oss.str();
+	std::string st = oss.str();
 
 	int x = 0;
 
 	if (_bordered == false)
 	{
-		for (std::string::iterator
-				i = str.begin();
-				i != str.end();
+		for (std::string::const_iterator
+				i = st.begin();
+				i != st.end();
 				++i)
 		{
 			_chars[*i - '0']->setX(x);
@@ -359,9 +355,9 @@ void NumberText::draw()
 	}
 	else
 	{
-		for (std::string::iterator
-				i = str.begin();
-				i != str.end();
+		for (std::string::const_iterator
+				i = st.begin();
+				i != st.end();
 				++i)
 		{
 			_borderedChars[*i - '0']->setX(x);
@@ -377,7 +373,7 @@ void NumberText::draw()
 
 /**
  * Sets whether or not to draw a border around the number.
- * @param bordered - true to border
+ * @param bordered - true to border (default true)
  */
 void NumberText::setBordered(bool bordered)
 {

@@ -1011,45 +1011,45 @@ static inline void func(
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
  * Notice there is no surface locking here - you have to make sure you lock the surface yourself
  * at the start of blitting and unlock it when done.
- * @param surface to blit to
- * @param x
- * @param y
- * @param off
- * @param half some tiles are blitted only the right half
- * @param newBaseColor Attention: the actual color + 1, because 0 is no new base color.
+ * @param surface	- Surface to blit to
+ * @param x			- X position of Surface blitted to
+ * @param y			- Y position of Surface blitted to
+ * @param offset	- color offset
+ * @param half		- some tiles are blitted only the right half
+ * @param baseColor	- Attention: the actual color + 1, because 0 is no new base color.
  */
 void Surface::blitNShade(
 		Surface* surface,
 		int x,
 		int y,
-		int off,
+		int offset,
 		bool half,
-		int newBaseColor)
+		int baseColor)
 {
 	ShaderMove<Uint8> src(this, x, y);
 
 	if (half == true)
 	{
-		GraphSubset g = src.getDomain();
+		GraphSubset g (src.getDomain()); // init.
 		g.beg_x = g.end_x / 2;
 		src.setDomain(g);
 	}
 
-	if (newBaseColor != 0)
+	if (baseColor != 0)
 	{
-		--newBaseColor;
-		newBaseColor <<= 4;
+		--baseColor;
+		baseColor <<= 4;
 		ShaderDraw<ColorReplace>(
 							ShaderSurface(surface),
 							src,
-							ShaderScalar(off),
-							ShaderScalar(newBaseColor));
+							ShaderScalar(offset),
+							ShaderScalar(baseColor));
 	}
 	else
 		ShaderDraw<StandardShade>(
 							ShaderSurface(surface),
 							src,
-							ShaderScalar(off));
+							ShaderScalar(offset));
 }
 
 /**

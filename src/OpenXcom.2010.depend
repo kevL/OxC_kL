@@ -252,7 +252,7 @@
 	"State.h"
 	"Surface.h"
 
-1420263347 f:\git\openxcom\src\engine\surface.h
+1421009424 f:\git\openxcom\src\engine\surface.h
 
 1325792434 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -5519,7 +5519,7 @@
 1420130458 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1420976094 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1420999739 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -6054,7 +6054,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1420972103 source:f:\git\openxcom\src\battlescape\map.cpp
+1421003456 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6457,7 +6457,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1420971492 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1421000802 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -6786,7 +6786,7 @@
 1420130454 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1420650009 source:f:\git\openxcom\src\engine\surface.cpp
+1421008059 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -7686,10 +7686,8 @@
 	"ImageButton.h"
 	"../Engine/Action.h"
 
-1420130457 source:f:\git\openxcom\src\interface\numbertext.cpp
+1421010255 source:f:\git\openxcom\src\interface\numbertext.cpp
 	"NumberText.h"
-	<sstream>
-	<string>
 
 1420130445 source:f:\git\openxcom\src\interface\slider.cpp
 	"Slider.h"
@@ -8739,7 +8737,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1420970628 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1420999858 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
