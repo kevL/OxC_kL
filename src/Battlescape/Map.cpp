@@ -2623,6 +2623,7 @@ void Map::findMousePosition(Position& mousePos)
 {
 	mousePos.x = _mouseX;
 	mousePos.y = _mouseY;
+	mousePos.z = 0;
 }
 
 /**
