@@ -690,7 +690,7 @@ void Map::drawTerrain(Surface* surface)
 
 		Uint8 wpColor;
 		if (_save->getTerrain() == "DESERT")
-			wpColor = Palette::blockOffset(7)+4; // blue //(0)+2; // white
+			wpColor = Palette::blockOffset(11)+6; // dullpink //(7)+4; blue //(0)+2; white
 		else
 			wpColor = Palette::blockOffset(1)+4; // orange
 

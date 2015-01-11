@@ -31,7 +31,7 @@
 #include "../Engine/Game.h"
 //#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
-#include "../Engine/Surface.h" // kL, for turning on/off visUnit indicators.
+#include "../Engine/Surface.h" // for turning on/off visUnit indicators.
 
 #include "../Interface/Bar.h"
 #include "../Interface/NumberText.h"

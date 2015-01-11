@@ -909,36 +909,29 @@ void BattleUnit::turn(bool turret)
 		delta = _toDirection - _direction;
 	}
 
-	Log(LOG_INFO) << "turnDir = " << _turnDir;
 	if (delta != 0) // duh
 	{
-		Log(LOG_INFO) << ". delta = " << delta;
 		if (delta > 0)
 		{
-			Log(LOG_INFO) << ". delta POS";
 			if (delta < 5
 				&& _turnDir != -1)
 			{
-				Log(LOG_INFO) << ". CW";
 				if (turret == false)
 				{
+					++_direction;
 					if (_turretType > -1)
 						++_directionTurret;
-
-					++_direction;
 				}
 				else
 					++_directionTurret;
 			}
 			else // > 4
 			{
-				Log(LOG_INFO) << ". CCW";
 				if (turret == false)
 				{
+					--_direction;
 					if (_turretType > -1)
 						--_directionTurret;
-
-					--_direction;
 				}
 				else
 					--_directionTurret;
@@ -946,30 +939,25 @@ void BattleUnit::turn(bool turret)
 		}
 		else
 		{
-			Log(LOG_INFO) << ". delta NEG";
 			if (delta > -5
 				&& _turnDir != 1)
 			{
-				Log(LOG_INFO) << ". CCW";
 				if (turret == false)
 				{
+					--_direction;
 					if (_turretType > -1)
 						--_directionTurret;
-
-					--_direction;
 				}
 				else
 					--_directionTurret;
 			}
 			else // < -4
 			{
-				Log(LOG_INFO) << ". CW";
 				if (turret == false)
 				{
+					++_direction;
 					if (_turretType > -1)
 						++_directionTurret;
-
-					++_direction;
 				}
 				else
 					++_directionTurret;

@@ -2171,15 +2171,18 @@ bool BattlescapeGame::isBusy() const
 
 /**
  * Activates primary action (left click).
- * @param posTarget - reference a Position on the map
+ * @param targetPos - reference a Position on the map
  */
-void BattlescapeGame::primaryAction(const Position& posTarget)
+void BattlescapeGame::primaryAction(const Position& targetPos)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
 	//if (_save->getSelectedUnit()) Log(LOG_INFO) << ". ID " << _save->getSelectedUnit()->getId();
 	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
-	if (_save->getSelectedUnit() != NULL
+	_currentAction.actor = _save->getSelectedUnit();
+	BattleUnit* const targetUnit = _save->selectUnit(targetPos);
+
+	if (_currentAction.actor != NULL
 		&& _currentAction.targeting == true)
 	{
 		//Log(LOG_INFO) << ". . _currentAction.targeting";
@@ -2190,22 +2193,22 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			//Log(LOG_INFO) << ". . . . BA_LAUNCH";
 			_parentState->showLaunchButton(true);
 
-			_currentAction.waypoints.push_back(posTarget);
-			getMap()->getWaypoints()->push_back(posTarget);
+			_currentAction.waypoints.push_back(targetPos);
+			getMap()->getWaypoints()->push_back(targetPos);
 		}
 		else if (_currentAction.type == BA_USE
 			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
 			//Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
-			if (_save->selectUnit(posTarget)
-				&& _save->selectUnit(posTarget)->getFaction() != _save->getSelectedUnit()->getFaction()
-				&& _save->selectUnit(posTarget)->getUnitVisible())
+			if (targetUnit != NULL
+				&& targetUnit->getFaction() != _currentAction.actor->getFaction()
+				&& targetUnit->getUnitVisible() == true)
 			{
 				if (_currentAction.weapon->getRules()->isLOSRequired() == false
 					|| std::find(
 							_currentAction.actor->getVisibleUnits()->begin(),
 							_currentAction.actor->getVisibleUnits()->end(),
-							_save->selectUnit(posTarget)) != _currentAction.actor->getVisibleUnits()->end())
+							targetUnit) != _currentAction.actor->getVisibleUnits()->end())
 				{
 					if (getTileEngine()->distance( // in Range
 											_currentAction.actor->getPosition(),
@@ -2218,10 +2221,10 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 																					_currentAction.weapon->getRules()->getHitSound())
 																				->play(
 																					-1,
-																					getMap()->getSoundAngle(posTarget));
+																					getMap()->getSoundAngle(targetPos));
 
 							_parentState->getGame()->pushState(new UnitInfoState(
-																			_save->selectUnit(posTarget),
+																			targetUnit,
 																			_parentState,
 																			false,
 																			true));
@@ -2238,22 +2241,22 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				else
 					_parentState->warning("STR_NO_LINE_OF_FIRE");
 
-				cancelCurrentAction(); // kL
+				cancelCurrentAction();
 			}
 		}
 		else if (_currentAction.type == BA_PANIC
 			|| _currentAction.type == BA_MINDCONTROL)
 		{
 			//Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
-			if (_save->selectUnit(posTarget)
-				&& _save->selectUnit(posTarget)->getFaction() != _save->getSelectedUnit()->getFaction()
-				&& _save->selectUnit(posTarget)->getUnitVisible())
+			if (targetUnit != NULL
+				&& targetUnit->getFaction() != _currentAction.actor->getFaction()
+				&& targetUnit->getUnitVisible() == true)
 			{
 				bool aLienPsi = (_currentAction.weapon == NULL);
-				if (aLienPsi)
-					_currentAction.weapon = _alienPsi; // kL
+				if (aLienPsi == true)
+					_currentAction.weapon = _alienPsi;
 
-				_currentAction.target = posTarget;
+				_currentAction.target = targetPos;
 				_currentAction.TU = _currentAction.actor->getActionTUs(
 																	_currentAction.type,
 																	_currentAction.weapon);
@@ -2262,16 +2265,16 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 					|| std::find(
 							_currentAction.actor->getVisibleUnits()->begin(),
 							_currentAction.actor->getVisibleUnits()->end(),
-							_save->selectUnit(posTarget)) != _currentAction.actor->getVisibleUnits()->end())
+							targetUnit) != _currentAction.actor->getVisibleUnits()->end())
 				{
 					if (getTileEngine()->distance( // in Range
 											_currentAction.actor->getPosition(),
 											_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
 					{
 						// get the sound/animation started
-//kL					getMap()->setCursorType(CT_NONE);
-//kL					_parentState->getGame()->getCursor()->setVisible(false);
-//kL					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+//						getMap()->setCursorType(CT_NONE);
+//						_parentState->getGame()->getCursor()->setVisible(false);
+//						_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 						_currentAction.cameraPosition = Position(0, 0,-1); // kL (don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states)
 
 
@@ -2282,7 +2285,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 
 						if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // kL_note: WAIT, check this *before* all the stuff above!!!
 						{
-							if (getTileEngine()->psiAttack(&_currentAction))
+							if (getTileEngine()->psiAttack(&_currentAction) == true)
 							{
 								//Log(LOG_INFO) << ". . . . . . Psi successful";
 								Game* const game = _parentState->getGame(); // show a little infobox if it's successful
@@ -2298,8 +2301,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 								}
 
 								//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
-//kL							_parentState->updateSoldierInfo();
-								_parentState->updateSoldierInfo(false); // kL
+								_parentState->updateSoldierInfo(false);
 								//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
 
 
@@ -2349,13 +2351,13 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 		}
 		else if (Options::battleConfirmFireMode == true
 			&& (_currentAction.waypoints.empty() == true
-				|| posTarget != _currentAction.waypoints.front()))
+				|| targetPos != _currentAction.waypoints.front()))
 		{
 			_currentAction.waypoints.clear();
-			_currentAction.waypoints.push_back(posTarget);
+			_currentAction.waypoints.push_back(targetPos);
 
 			getMap()->getWaypoints()->clear();
-			getMap()->getWaypoints()->push_back(posTarget);
+			getMap()->getWaypoints()->push_back(targetPos);
 		}
 		else
 		{
@@ -2370,7 +2372,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 
 			_parentState->getGame()->getCursor()->setVisible(false);
 
-			_currentAction.target = posTarget;
+			_currentAction.target = targetPos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 			//Log(LOG_INFO) << "BattlescapeGame::primaryAction() setting cameraPosition to mapOffset";
 
@@ -2390,54 +2392,61 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 	else // unit MOVE .......
 	{
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
-		_currentAction.actor = _save->getSelectedUnit();
-		BattleUnit* const unit = _save->selectUnit(posTarget);
-
-		if (unit != NULL
-			&& unit != _currentAction.actor
-			&& (unit->getUnitVisible() == true
+		if (targetUnit != NULL
+			&& targetUnit != _currentAction.actor
+			&& (targetUnit->getUnitVisible() == true
 				|| _debugPlay == true))
 		{
-			if (unit->getFaction() == _save->getSide()) // -= select unit =- //
+			if (targetUnit->getFaction() == _save->getSide())
 			{
-				_save->setSelectedUnit(unit);
+				_save->setSelectedUnit(targetUnit);
 				_parentState->updateSoldierInfo();
 
 				cancelCurrentAction();
 				setupCursor();
 
-				_currentAction.actor = unit;
+				_currentAction.actor = targetUnit; // select unit
 			}
 		}
 		else if (playableUnitSelected() == true)
 		{
 			Pathfinding* const pf = _save->getPathfinding();
+			const bool
+				mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
+				mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
+				isTank = _currentAction.actor->getUnitRules() != NULL
+					  && _currentAction.actor->getUnitRules()->isMechanical();
 
-			if (unit != NULL
-				&& unit == _currentAction.actor
-				&& unit->getArmor()->getSize() == 1)
+			_currentAction.dash = false;
+			_currentAction.actor->setDashing(false);
+
+			if (targetUnit != NULL
+				&& targetUnit == _currentAction.actor
+				&& mod_CTRL == false
+				&& mod_ALT == false
+				&& isTank == false)
 			{
 				if (bPreviewed == true)
 					pf->removePreview();
 
-				Position screenPos;
+				Position screenPixel;
 				getMap()->getCamera()->convertMapToScreen(
-														posTarget,
-														&screenPos);
-				screenPos += getMap()->getCamera()->getMapOffset();
+														targetPos,
+														&screenPixel);
+				screenPixel += getMap()->getCamera()->getMapOffset();
 
-				Position mousePos;
-				getMap()->findMousePosition(mousePos);
+				Position mousePixel;
+				getMap()->findMousePosition(mousePixel);
 
-				if (mousePos.x > screenPos.x + 16)
-					unit->setTurnDirection(1);
+				if (mousePixel.x > screenPixel.x + 16)
+					targetUnit->setTurnDirection(1);
 				else
-					unit->setTurnDirection(-1);
+					targetUnit->setTurnDirection(-1);
 
 				Pathfinding::directionToVector(
-											(unit->getDirection() + 4) %8,
+											(targetUnit->getDirection() + 4) %8,
 											&_currentAction.target);
-				_currentAction.target += posTarget;
+				_currentAction.target += targetPos;
 				_currentAction.strafe = false;
 
 				statePushBack(new UnitTurnBState(
@@ -2446,14 +2455,8 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			}
 			else
 			{
-				const bool
-					mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
-					mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
-					isTank = _currentAction.actor->getUnitRules() != NULL
-						  && _currentAction.actor->getUnitRules()->isMechanical();
-
 				if (bPreviewed == true
-					&& (_currentAction.target != posTarget
+					&& (_currentAction.target != targetPos
 						|| pf->isModCTRL() != mod_CTRL
 						|| pf->isModALT() != mod_ALT))
 				{
@@ -2461,34 +2464,31 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				}
 
 				_currentAction.strafe = (Options::strafe == true)
-									&& ((mod_CTRL
+									&& ((mod_CTRL == true		// soldier strafe
 											&& isTank == false)
-										|| (mod_ALT // tank, reverse gear 1 tile only.
+										|| (mod_ALT == true		// tank, reverse gear 1 tile only.
 											&& isTank == true));
-				_currentAction.dash = false;
-				_currentAction.actor->setDashing(false);
-
 				//Log(LOG_INFO) << ". primary action: Strafe";
 
 				const Position
-					posUnit = _currentAction.actor->getPosition(),
+					actorPos = _currentAction.actor->getPosition(),
 					pos = Position(
-								posTarget.x - posUnit.x,
-								posTarget.y - posUnit.y,
+								targetPos.x - actorPos.x,
+								targetPos.y - actorPos.y,
 								0);
 				const int
 					dist = _save->getTileEngine()->distance(
-														posUnit,
-														posTarget),
+														actorPos,
+														targetPos),
 					dirUnit = _currentAction.actor->getDirection();
 				int dir;
 				pf->vectorToDirection(pos, dir);
 
 				if (_currentAction.strafe == true
 					&& _currentAction.actor->getGeoscapeSoldier() != NULL
-					&& (posUnit.z != posTarget.z
+					&& (actorPos.z != targetPos.z
 						|| dist > 1
-						|| (posUnit.z == posTarget.z
+						|| (actorPos.z == targetPos.z
 							&& dist < 2
 							&& dirUnit == dir)))
 				{
@@ -2497,7 +2497,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 					_currentAction.actor->setDashing(true);
 				}
 
-				_currentAction.target = posTarget;
+				_currentAction.target = targetPos;
 				pf->calculate( // GET the Path.
 							_currentAction.actor,
 							_currentAction.target);
@@ -2507,14 +2507,14 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				{
 					if (bPreviewed == true
 						&& pf->previewPath() == false)
-	//kL				&& pf->getStartDirection() != -1)
+//						&& pf->getStartDirection() != -1)
 					{
 						pf->removePreview();
 						bPreviewed = false;
 					}
 
 					if (bPreviewed == false) // -= start walking =- //
-	//kL				&& pf->getStartDirection() != -1)
+//						&& pf->getStartDirection() != -1)
 					{
 						getMap()->setCursorType(CT_NONE);
 						_parentState->getGame()->getCursor()->setVisible(false);

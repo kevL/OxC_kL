@@ -583,8 +583,8 @@ void Camera::convertScreenToMap(
 
 /**
  * Converts map coordinates XYZ to screen positions XY.
- * @param mapPos	- reference the XYZ coordinates on the map
- * @param screenPos	- pointer to the screen Position
+ * @param mapPos	- reference the XYZ coordinates on the map (tilespace)
+ * @param screenPos	- pointer to the screen Position pixel (upper left corner of sprite-rectangle)
  */
 void Camera::convertMapToScreen(
 		const Position& mapPos,
