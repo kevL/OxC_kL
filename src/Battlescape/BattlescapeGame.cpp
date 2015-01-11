@@ -2179,8 +2179,8 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 	//if (_save->getSelectedUnit()) Log(LOG_INFO) << ". ID " << _save->getSelectedUnit()->getId();
 	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
-	if (_save->getSelectedUnit()
-		&& _currentAction.targeting)
+	if (_save->getSelectedUnit() != NULL
+		&& _currentAction.targeting == true)
 	{
 		//Log(LOG_INFO) << ". . _currentAction.targeting";
 		_currentAction.strafe = false;
@@ -2391,10 +2391,10 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 	{
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
 		_currentAction.actor = _save->getSelectedUnit();
-
 		BattleUnit* const unit = _save->selectUnit(posTarget);
+
 		if (unit != NULL
-			&& unit != _save->getSelectedUnit()
+			&& unit != _currentAction.actor
 			&& (unit->getUnitVisible() == true
 				|| _debugPlay == true))
 		{
@@ -2411,83 +2411,114 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 		}
 		else if (playableUnitSelected() == true)
 		{
-			Pathfinding* const pf = _save->getPathfinding();
-			const bool
-				mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
-				mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
-				isTank = _currentAction.actor->getUnitRules() != NULL
-					  && _currentAction.actor->getUnitRules()->isMechanical();
-
-			if (bPreviewed == true
-				&& (_currentAction.target != posTarget
-					|| pf->isModCTRL() != mod_CTRL
-					|| pf->isModALT() != mod_ALT))
+			if (unit != NULL
+				&& unit == _currentAction.actor
+				&& unit->getArmor()->getSize() == 1)
 			{
-				pf->removePreview();
-			}
+				Position screenPos;
+				getMap()->getCamera()->convertMapToScreen(
+														posTarget,
+														&screenPos);
+				screenPos += getMap()->getCamera()->getMapOffset();
 
-			_currentAction.strafe = (Options::strafe == true)
-								&& ((mod_CTRL
-										&& isTank == false)
-									|| (mod_ALT // tank, reverse gear 1 tile only.
-										&& isTank == true));
-			_currentAction.dash = false;
-			_currentAction.actor->setDashing(false);
+				Position mousePos;
+				getMap()->findMousePosition(mousePos);
 
-			//Log(LOG_INFO) << ". primary action: Strafe";
+				if (mousePos.x > screenPos.x + 16)
+					unit->setTurnDirection(1);
+				else
+					unit->setTurnDirection(-1);
 
-			const Position
-				posUnit = _currentAction.actor->getPosition(),
-				pos = Position(
-							posTarget.x - posUnit.x,
-							posTarget.y - posUnit.y,
-							0);
-			const int
-				dist = _save->getTileEngine()->distance(
-													posUnit,
-													posTarget),
-				dirUnit = _currentAction.actor->getDirection();
-			int dir;
-			pf->vectorToDirection(pos, dir);
-
-			if (_currentAction.strafe == true
-				&& _currentAction.actor->getGeoscapeSoldier() != NULL
-				&& (posUnit.z != posTarget.z
-					|| dist > 1
-					|| (posUnit.z == posTarget.z
-						&& dist < 2
-						&& dirUnit == dir)))
-			{
+				Pathfinding::directionToVector(
+											(unit->getDirection() + 4) %8,
+											&_currentAction.target);
+				_currentAction.target += posTarget;
 				_currentAction.strafe = false;
-				_currentAction.dash = true;
-				_currentAction.actor->setDashing(true);
+
+				statePushBack(new UnitTurnBState(
+											this,
+											_currentAction));
 			}
-
-			_currentAction.target = posTarget;
-			pf->calculate( // GET the Path.
-						_currentAction.actor,
-						_currentAction.target);
-
-			// assumes both previewPath() & removePreview() don't change StartDirection
-			if (pf->getStartDirection() != -1)
+			else
 			{
+				Pathfinding* const pf = _save->getPathfinding();
+				const bool
+					mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
+					mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
+					isTank = _currentAction.actor->getUnitRules() != NULL
+						  && _currentAction.actor->getUnitRules()->isMechanical();
+
 				if (bPreviewed == true
-					&& pf->previewPath() == false)
-//kL				&& pf->getStartDirection() != -1)
+					&& (_currentAction.target != posTarget
+						|| pf->isModCTRL() != mod_CTRL
+						|| pf->isModALT() != mod_ALT))
 				{
 					pf->removePreview();
-					bPreviewed = false;
 				}
 
-				if (bPreviewed == false) // -= start walking =- //
-//kL				&& pf->getStartDirection() != -1)
-				{
-					getMap()->setCursorType(CT_NONE);
-					_parentState->getGame()->getCursor()->setVisible(false);
+				_currentAction.strafe = (Options::strafe == true)
+									&& ((mod_CTRL
+											&& isTank == false)
+										|| (mod_ALT // tank, reverse gear 1 tile only.
+											&& isTank == true));
+				_currentAction.dash = false;
+				_currentAction.actor->setDashing(false);
 
-					statePushBack(new UnitWalkBState(
-													this,
-													_currentAction));
+				//Log(LOG_INFO) << ". primary action: Strafe";
+
+				const Position
+					posUnit = _currentAction.actor->getPosition(),
+					pos = Position(
+								posTarget.x - posUnit.x,
+								posTarget.y - posUnit.y,
+								0);
+				const int
+					dist = _save->getTileEngine()->distance(
+														posUnit,
+														posTarget),
+					dirUnit = _currentAction.actor->getDirection();
+				int dir;
+				pf->vectorToDirection(pos, dir);
+
+				if (_currentAction.strafe == true
+					&& _currentAction.actor->getGeoscapeSoldier() != NULL
+					&& (posUnit.z != posTarget.z
+						|| dist > 1
+						|| (posUnit.z == posTarget.z
+							&& dist < 2
+							&& dirUnit == dir)))
+				{
+					_currentAction.strafe = false;
+					_currentAction.dash = true;
+					_currentAction.actor->setDashing(true);
+				}
+
+				_currentAction.target = posTarget;
+				pf->calculate( // GET the Path.
+							_currentAction.actor,
+							_currentAction.target);
+
+				// assumes both previewPath() & removePreview() don't change StartDirection
+				if (pf->getStartDirection() != -1)
+				{
+					if (bPreviewed == true
+						&& pf->previewPath() == false)
+	//kL				&& pf->getStartDirection() != -1)
+					{
+						pf->removePreview();
+						bPreviewed = false;
+					}
+
+					if (bPreviewed == false) // -= start walking =- //
+	//kL				&& pf->getStartDirection() != -1)
+					{
+						getMap()->setCursorType(CT_NONE);
+						_parentState->getGame()->getCursor()->setVisible(false);
+
+						statePushBack(new UnitWalkBState(
+														this,
+														_currentAction));
+					}
 				}
 			}
 		}

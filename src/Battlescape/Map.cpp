@@ -505,7 +505,7 @@ void Map::drawTerrain(Surface* surface)
 		endZ = _save->getMapSizeZ() - 1;
 
 
-	if (_projectile != NULL // if we got bullet, get the highest x and y tiles to draw it on
+	if (_projectile != NULL // if there is a bullet get the highest x and y tiles to draw it on
 		&& _explosions.empty() == true)
 	{
 		int part = BULLET_SPRITES - 1;
@@ -2616,6 +2616,16 @@ void Map::mouseOver(Action* action, State* state)
 }
 
 /**
+ * Finds the current mouse position XY on this Map.
+ * @param mousePos - reference the mouse position
+ */
+void Map::findMousePosition(Position& mousePos)
+{
+	mousePos.x = _mouseX;
+	mousePos.y = _mouseY;
+}
+
+/**
  * Handles animating tiles - 8 Frames per animation [0..7].
  * @param redraw - true to redraw the battlescape map
  */
@@ -2671,10 +2681,10 @@ void Map::setSelectorPosition(
 		oldY = _selectorY;
 
 	_camera->convertScreenToMap(
-								mx,
-								my + _spriteHeight / 4,
-								&_selectorX,
-								&_selectorY);
+							mx,
+							my + _spriteHeight / 4,
+							&_selectorX,
+							&_selectorY);
 
 	if (oldX != _selectorX
 		|| oldY != _selectorY)

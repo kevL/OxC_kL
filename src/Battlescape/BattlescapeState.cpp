@@ -1409,7 +1409,7 @@ void BattlescapeState::mapClick(Action* action)
 
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
-		&& _battleGame->cancelCurrentAction())
+		&& _battleGame->cancelCurrentAction() == true)
 	{
 			return;
 	}
@@ -1432,8 +1432,8 @@ void BattlescapeState::mapClick(Action* action)
 	{
 		std::wostringstream ss;
 		ss << L"pos " << pos;
-		if (_savedBattle->getTile(pos)
-			&& _savedBattle->getTile(pos)->getUnit())
+		if (_savedBattle->getTile(pos) != NULL
+			&& _savedBattle->getTile(pos)->getUnit() != NULL)
 		{
 			ss << L" unit " << _savedBattle->getTile(pos)->getUnit()->getId();
 		}

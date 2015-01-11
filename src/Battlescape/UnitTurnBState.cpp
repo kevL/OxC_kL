@@ -74,7 +74,9 @@ void UnitTurnBState::init()
 	_unit = _action.actor;
 	if (_unit->isOut(true, true))
 	{
+		_unit->setTurnDirection(0);
 		_parent->popState();
+
 		return;
 	}
 
@@ -132,6 +134,7 @@ void UnitTurnBState::init()
 																_parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 
+		_unit->setTurnDirection(0);
 		_parent->popState();
 	}
 }
@@ -176,6 +179,7 @@ void UnitTurnBState::think()
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->setStatus(STATUS_STANDING);
+		_unit->setTurnDirection(0);
 		_parent->popState();
 	}
 	else if (_unit->spendTimeUnits(tu) == true)
@@ -219,6 +223,7 @@ void UnitTurnBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
+			_unit->setTurnDirection(0);
 			_parent->popState();
 		}
 		else
@@ -230,6 +235,7 @@ void UnitTurnBState::think()
 
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
 		_unit->setStatus(STATUS_STANDING);
+		_unit->setTurnDirection(0);
 		_parent->popState();
 	}
 	//Log(LOG_INFO) << "UnitTurnBState::think() EXIT";
@@ -239,7 +245,6 @@ void UnitTurnBState::think()
  * Unit turning cannot be cancelled.
  */
 void UnitTurnBState::cancel()
-{
-}
+{}
 
 }

@@ -116,8 +116,7 @@ struct BattleAction
 			finalAction(false),
 			number(0),
 			takenXP(false)
-	{
-	}
+	{}
 
 	public:
 		/// kL. heh This could cause problems.

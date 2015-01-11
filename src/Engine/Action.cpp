@@ -48,15 +48,13 @@ Action::Action(
 		_surfaceX(-1),
 		_surfaceY(-1),
 		_sender(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Action::~Action()
-{
-}
+{}
 
 /**
  * Returns the X scaling factor used by the screen when

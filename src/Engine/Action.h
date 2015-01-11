@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_ACTION_H
 #define OPENXCOM_ACTION_H
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom

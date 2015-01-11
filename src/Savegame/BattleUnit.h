@@ -395,8 +395,8 @@ private:
 		_dontReselect,
 		_floating,
 		_kneeled,
-		_stopShot, // to stop a unit from firing/throwing if it spots a new opponent during turning
-		_takenExpl, // used to stop large units from taking damage for each part.
+		_stopShot,	// to stop a unit from firing/throwing if it spots a new opponent during turning
+		_takenExpl,	// used to stop large units from taking damage for each part.
 		_visible;
 	int
 		_aimPhase,
@@ -412,7 +412,7 @@ private:
 		_expPsiStrength,
 		_expReactions,
 		_expThrowing,
-		_faceDirection, // used only during strafeing moves
+		_faceDirection, // used only during strafing moves
 		_fallPhase,
 		_fatalWounds[6],
 		_fire,
@@ -427,6 +427,7 @@ private:
 		_toDirection,
 		_toDirectionTurret,
 		_tu,
+		_turnDir,	// used for determining 180 degree turn direction
 		_turnsExposed,
 		_verticalDirection,
 		_walkPhase;
@@ -1090,6 +1091,9 @@ private:
 
 		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
 		void setDown();
+
+		/// Sets this BattleUnit's turn direction when spinning 180 degrees.
+		void setTurnDirection(const int turnDir);
 };
 
 }

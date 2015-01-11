@@ -157,6 +157,10 @@ private:
 		void mouseRelease(Action* action, State* state);
 		/// Special handling for mouse over
 		void mouseOver(Action* action, State* state);
+
+		/// Finds the current mouse position XY on this Map.
+		void findMousePosition(Position& mousePos);
+
 		/// Special handling for key presses.
 		void keyboardPress(Action* action, State* state);
 		/// Special handling for key releases.

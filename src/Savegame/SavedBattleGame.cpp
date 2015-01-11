@@ -949,7 +949,7 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 }
 
 /**
- * Selects the unit at the given position on the map.
+ * Gets the unit at Position if it's valid and conscious.
  * @param pos - reference a Position
  * @return, pointer to the BattleUnit or NULL
  */

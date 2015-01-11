@@ -1152,6 +1152,8 @@ void InventoryState::setExtraInfo(
 			_txtUseTU->setText(L"");
 }
 
+}
+
 /**
 * Shows a tooltip for the appropriate button.
 * @param action - pointer to an Action
@@ -1404,5 +1406,3 @@ void InventoryState::txtTooltipOut(Action* action)
 											ResourcePack::ITEM_DROP)
 										->play();
 } */
-
-}

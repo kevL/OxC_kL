@@ -118,6 +118,7 @@ BattleUnit::BattleUnit(
 		_dashing(false),
 		_takenExpl(false),
 		_diedByFire(false),
+		_turnDir(0),
 //		_race(""),
 
 		_deathSound(0),
@@ -278,6 +279,7 @@ BattleUnit::BattleUnit(
 		_floorAbove(false),
 //		_gender(GENDER_MALE),
 		_diedByFire(false),
+		_turnDir(0),
 
 		_statistics(NULL) // Soldier Diary
 {
@@ -532,7 +534,7 @@ void BattleUnit::setPosition(
 		const Position& pos,
 		bool updateLastPos)
 {
-	if (updateLastPos)
+	if (updateLastPos == true)
 		_lastPos = _pos;
 
 	_pos = pos;
@@ -976,56 +978,58 @@ void BattleUnit::turn(bool turret)
 	{
 		if (delta > 0)
 		{
-			if (delta <= 4)
+			if (delta < 5
+				|| _turnDir == 1)
 			{
 				if (turret == false)
 				{
 					if (_turretType > -1)
-						_directionTurret++;
+						++_directionTurret;
 
-					_direction++;
+					++_direction;
 				}
 				else
-					_directionTurret++;
+					++_directionTurret;
 			}
-			else
+			else // > 4
 			{
 				if (turret == false)
 				{
 					if (_turretType > -1)
-						_directionTurret--;
+						--_directionTurret;
 
-					_direction--;
+					--_direction;
 				}
 				else
-					_directionTurret--;
+					--_directionTurret;
 			}
 		}
 		else
 		{
-			if (delta > -4)
+			if (delta > -4
+				|| _turnDir == -1)
 			{
 				if (turret == false)
 				{
 					if (_turretType > -1)
-						_directionTurret--;
+						--_directionTurret;
 
-					_direction--;
+					--_direction;
 				}
 				else
-					_directionTurret--;
+					--_directionTurret;
 			}
-			else
+			else // < -3
 			{
 				if (turret == false)
 				{
 					if (_turretType > -1)
-						_directionTurret++;
+						++_directionTurret;
 
-					_direction++;
+					++_direction;
 				}
 				else
-					_directionTurret++;
+					++_directionTurret;
 			}
 		}
 
@@ -4361,6 +4365,15 @@ void BattleUnit::setDown() // kL
 		_floating = false;
 		_dashing = false;
 	}
+}
+
+/**
+ * Sets this BattleUnit's turn direction when spinning 180 degrees.
+ * @param turnDir - true to turn clockwise
+ */
+void BattleUnit::setTurnDirection(const int turnDir)
+{
+	_turnDir = turnDir;
 }
 
 }

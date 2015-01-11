@@ -58,8 +58,7 @@ private:
 		_spriteWidth,
 		_visibleMapHeight;
 
-	Map
-		* _map;
+	Map* _map;
 	Position
 		_mapOffset,
 		_center;
