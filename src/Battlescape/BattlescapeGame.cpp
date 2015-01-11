@@ -2466,7 +2466,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				_currentAction.strafe = (Options::strafe == true)
 									&& ((mod_CTRL == true		// soldier strafe
 											&& isTank == false)
-										|| (mod_ALT == true		// tank, reverse gear 1 tile only.
+										|| (mod_ALT == true		// tank reverse gear, 1 tile only
 											&& isTank == true));
 				//Log(LOG_INFO) << ". primary action: Strafe";
 

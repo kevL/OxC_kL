@@ -1719,8 +1719,8 @@ void Map::drawTerrain(Surface* surface)
 					{
 						bool half = false; // don't overwrite walls in tile SOUTH-WEST
 						if (   mapPosition.x > 0
-							&& mapPosition.y < endY
 //							&& mapPosition.y < endY - 1
+							&& mapPosition.y < endY
 							&& unit->getStatus() == STATUS_WALKING
 //							&& _save->getPathfinding()->getStartDirection() < Pathfinding::DIR_UP
 							&& (unit->getDirection() == 2
@@ -2080,6 +2080,221 @@ void Map::drawTerrain(Surface* surface)
 										tileShade);
 						}
 					}
+
+
+					if (mapPosition.z > 0)
+					{
+						// redraw units that are moving up from tileBelow
+						// so their heads don't get cut off just before they enter the same Z-level.
+						if (   tile->getMapData(MapData::O_WESTWALL) != NULL
+							|| tile->getMapData(MapData::O_NORTHWALL) != NULL
+							|| (tile->getMapData(MapData::O_OBJECT) != NULL
+								&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+									|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
+									|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
+									|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
+						{
+							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
+							//tileBelow != NULL
+
+							BattleUnit* unitBelow = tileBelow->getUnit();
+							if (unitBelow != NULL
+								&& (unitBelow->getUnitVisible() == true
+									|| _save->getDebugMode() == true)
+//								&& unitBelow->getStatus() == STATUS_FLYING
+								&& unitBelow->getVerticalDirection() != 0)
+							{
+								int shade;
+								if (tileBelow->isDiscovered(2) == true)
+								{
+//									unitBelow = tileBelow->getUnit();
+									shade = tileBelow->getShade();
+								}
+								else
+									shade = 16;
+
+								// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+								// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
+								const int quad = tileBelow->getPosition().x - unitBelow->getPosition().x
+											  + (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
+
+								tmpSurface = unitBelow->getCache(&invalid, quad);
+//								tmpSurface = NULL;
+								if (tmpSurface)
+								{
+									const Position pixelOffset = Position(0, 24, 0);
+
+									Position walkOffset;
+									calculateWalkingOffset(
+														unitBelow,
+														&walkOffset);
+
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x + pixelOffset.x + walkOffset.x,
+											screenPosition.y + pixelOffset.y + walkOffset.y,
+											shade);
+
+									if (unitBelow->getFire() != 0)
+									{
+										frame = 4 + (_animFrame / 2);
+										tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + pixelOffset.x + walkOffset.x,
+												screenPosition.y + pixelOffset.y + walkOffset.y,
+												0);
+									}
+								}
+							}
+						}
+
+						// redraw units that are moving up from tileBelowSouth & tileBelowSouthEast
+						// so their heads don't get cut off just before they enter the same Z-level.
+						// - both:
+						//		- floor
+						//		- bigWallBlock,bigWallSouth,bigWallSouth&East,
+						// - if UnitSouth:
+						//		- WestWall
+						//		- bigWallWest,bigWallNorth&West (maybe content-object w/ bigWallNone)
+						// - if UnitSouthEast
+						//		- bigWallEast,content-object w/ bigWallNone
+						if (mapPosition.y < endY - 1) // why. -1
+						{
+							// for both:
+							const bool redrawUnit = tile->getMapData(MapData::O_FLOOR) != NULL
+												|| (tile->getMapData(MapData::O_OBJECT) != NULL
+													&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+														|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
+														|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S));
+							// for tileBelow-South:
+							if (redrawUnit == true
+								|| tile->getMapData(MapData::O_WESTWALL) != NULL
+								|| (tile->getMapData(MapData::O_OBJECT) != NULL
+									&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
+										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
+							{
+								const Tile* const tileBelowSouth = _save->getTile(mapPosition + Position(0, 1,-1));
+								//tileBelowSouth != NULL
+
+								// Note: redrawing unit to South will overwrite any stuff to south & southeast & east. Assume nothing will be there for now ...
+								BattleUnit* unitBelowSouth = tileBelowSouth->getUnit();
+								if (unitBelowSouth != NULL
+									&& (unitBelowSouth->getUnitVisible() == true
+										|| _save->getDebugMode() == true)
+//									&& unitBelowSouth->getStatus() == STATUS_FLYING
+									&& unitBelowSouth->getVerticalDirection() != 0)
+								{
+									int shade;
+									if (tileBelowSouth->isDiscovered(2) == true)
+									{
+//										unitBelowSouth = tileBelowSouth->getUnit();
+										shade = tileBelowSouth->getShade();
+									}
+									else
+										shade = 16;
+
+									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
+									const int quad = tileBelowSouth->getPosition().x - unitBelowSouth->getPosition().x
+												  + (tileBelowSouth->getPosition().y - unitBelowSouth->getPosition().y) * 2;
+
+									tmpSurface = unitBelowSouth->getCache(&invalid, quad);
+//									tmpSurface = NULL;
+									if (tmpSurface)
+									{
+										const Position pixelOffset = Position(-16, 32, 0);
+
+										Position walkOffset;
+										calculateWalkingOffset(
+															unitBelowSouth,
+															&walkOffset);
+
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + pixelOffset.x + walkOffset.x,
+												screenPosition.y + pixelOffset.y + walkOffset.y,
+												shade);
+
+										if (unitBelowSouth->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + pixelOffset.x + walkOffset.x,
+													screenPosition.y + pixelOffset.y + walkOffset.y,
+													0);
+										}
+									}
+								}
+							}
+
+							// for tileBelow-SouthEast:
+							if (mapPosition.x < endX
+								&& (redrawUnit == true
+									|| (tile->getMapData(MapData::O_OBJECT) != NULL
+										&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+											|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST))))
+							{
+								const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1, 1,-1));
+								//tileBelowSouthEast != NULL
+
+								// Note: redrawing unit to South will overwrite any stuff to south & southeast & east. Assume nothing will be there for now ...
+								BattleUnit* unitBelowSouthEast = tileBelowSouthEast->getUnit();
+								if (unitBelowSouthEast != NULL
+									&& (unitBelowSouthEast->getUnitVisible() == true
+										|| _save->getDebugMode() == true)
+	//								&& unitBelowSouthEast->getStatus() == STATUS_FLYING
+									&& unitBelowSouthEast->getVerticalDirection() != 0)
+								{
+									int shade;
+									if (tileBelowSouthEast->isDiscovered(2) == true)
+									{
+	//									unitBelowSouthEast = tileBelowSouthEast->getUnit();
+										shade = tileBelowSouthEast->getShade();
+									}
+									else
+										shade = 16;
+
+									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
+									const int quad = tileBelowSouthEast->getPosition().x - unitBelowSouthEast->getPosition().x
+												  + (tileBelowSouthEast->getPosition().y - unitBelowSouthEast->getPosition().y) * 2;
+
+									tmpSurface = unitBelowSouthEast->getCache(&invalid, quad);
+//									tmpSurface = NULL;
+									if (tmpSurface)
+									{
+										const Position pixelOffset = Position(0, 40, 0);
+
+										Position walkOffset;
+										calculateWalkingOffset(
+															unitBelowSouthEast,
+															&walkOffset);
+
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + pixelOffset.x + walkOffset.x,
+												screenPosition.y + pixelOffset.y + walkOffset.y,
+												shade);
+
+										if (unitBelowSouthEast->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + pixelOffset.x + walkOffset.x,
+													screenPosition.y + pixelOffset.y + walkOffset.y,
+													0);
+										}
+									}
+								}
+							}
+						}
+					}
+
 
 					// Draw cursor front
 					if (_cursorType != CT_NONE
