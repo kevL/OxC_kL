@@ -2405,7 +2405,7 @@ void Map::drawTerrain(Surface* surface)
 										else
 											shade = 16;
 
-										const Position pixelOffset = Position(16, 52, 0);
+										const Position pixelOffset = Position(16, 48, 0);
 										tmpSurface->blitNShade(
 												surface,
 												screenPosition.x + pixelOffset.x,
