@@ -5442,7 +5442,7 @@
 1420130456 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1420479744 f:\git\openxcom\src\battlescape\tileengine.h
+1421077283 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5450,7 +5450,7 @@
 1420130455 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
-1420827407 f:\git\openxcom\src\savegame\tile.h
+1421081746 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -6054,7 +6054,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421024763 source:f:\git\openxcom\src\battlescape\map.cpp
+1421069009 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6330,7 +6330,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1420483915 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1421080614 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -8925,11 +8925,12 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1420895706 source:f:\git\openxcom\src\savegame\tile.cpp
+1421081746 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"
 	"SerializationHelper.h"
+	"../Battlescape/Pathfinding.h"
 	"../Battlescape/Particle.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"

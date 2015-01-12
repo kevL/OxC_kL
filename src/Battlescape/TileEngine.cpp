@@ -2273,9 +2273,9 @@ void TileEngine::explode(
 					_powerT = _powerE;
 
 					const int horiBlock = horizontalBlockage(
-															origin,
-															destTile,
-															type);
+														origin,
+														destTile,
+														type);
 					//if (horiBlock != 0) Log(LOG_INFO) << ". horiBlock = " << horiBlock;
 
 					const int vertBlock = verticalBlockage(
@@ -2759,7 +2759,7 @@ void TileEngine::explode(
 
 	_powerE = _powerT = -1;
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			++i)
@@ -2775,7 +2775,7 @@ void TileEngine::explode(
 	if (type == DT_HE) // detonate tiles affected with HE
 	{
 		//Log(LOG_INFO) << ". explode Tiles, size = " << tilesAffected.size();
-		for (std::set<Tile*>::iterator
+		for (std::set<Tile*>::const_iterator
 				i = tilesAffected.begin();
 				i != tilesAffected.end();
 				++i)
@@ -3360,7 +3360,7 @@ int TileEngine::horizontalBlockage(
 		break;
 	}
 
-	if (visLike)
+	if (visLike == true)
 	{
 		block += blockage(
 						startTile,
@@ -3619,12 +3619,12 @@ int TileEngine::verticalBlockage(
  *						 1+ variable power blocked
  */
 int TileEngine::blockage(
-		Tile* tile,
+		const Tile* const tile,
 		const int part,
-		ItemDamageType type,
-		int dir,
-		bool originTest,
-		bool trueDir)
+		const ItemDamageType type,
+		const int dir,
+		const bool originTest,
+		const bool trueDir)
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
 	const bool visLike = type == DT_NONE
@@ -3671,7 +3671,7 @@ int TileEngine::blockage(
 		}
 		else // dir > -1 -> OBJECT part. ( BigWalls & content ) *always* an OBJECT-part gets passed in through here, and *with* a direction.
 		{
-			const int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
+			const Pathfinding::bigWallTypes bigWall = static_cast<Pathfinding::bigWallTypes>(tile->getMapData(MapData::O_OBJECT)->getBigWall()); // 0..9 or, per MCD.
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
 

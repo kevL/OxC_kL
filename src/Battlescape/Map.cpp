@@ -1965,7 +1965,7 @@ void Map::drawTerrain(Surface* surface)
 							if (_save->getDepth() > 0)
 								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 							else
-								frame = ResourcePack::SMOKE_OFFSET;
+								frame = ResourcePack::SMOKE_OFFSET; // =7
 
 							frame += (tile->getSmoke() + 1) / 2;
 							shade = tileShade;
@@ -2065,7 +2065,7 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 
-					if (tile->isVoid() == false) // THIS CAME BEFORE Draw Path Preview above in Old builds.
+					if (tile->isVoid() == false) // THIS CAME BEFORE Draw pathPreview above in Old builds.
 					{
 						// Draw front object
 						tmpSurface = tile->getSprite(MapData::O_OBJECT);
@@ -2089,7 +2089,7 @@ void Map::drawTerrain(Surface* surface)
 
 						// redraw units that are moving up from tileBelow
 						// so their heads don't get cut off as they're moving up but before they enter the same Z-level.
-						if (   tile->getMapData(MapData::O_WESTWALL) != NULL
+						if (   tile->getMapData(MapData::O_WESTWALL) != NULL // TODO: draw only if there's no southern wall in tileEast that covers the unit's decapitation
 							|| tile->getMapData(MapData::O_NORTHWALL) != NULL
 							|| (tile->getMapData(MapData::O_OBJECT) != NULL
 								&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
@@ -2097,6 +2097,8 @@ void Map::drawTerrain(Surface* surface)
 									|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
 									|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
 						{
+							// TODO: insert checks for tileEast !south&tc bigWalls & tileSouthEast !north&tc Walls
+
 							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
 							//tileBelow != NULL
 
@@ -2107,7 +2109,10 @@ void Map::drawTerrain(Surface* surface)
 //								&& unitBelow->getStatus() == STATUS_FLYING
 								&& unitBelow->getVerticalDirection() != 0)
 							{
-								redrawLowForeground = true;
+								redrawLowForeground = true; // TODO:
+								// redraw tileBelow foreground (south & east bigWalls)
+								// redraw tileBelowEast foreground (south bigWall)
+								// redraw tileBelowSouthEast background (north & west Walls)
 
 								int shade;
 								if (tileBelow->isDiscovered(2) == true)
@@ -2164,8 +2169,8 @@ void Map::drawTerrain(Surface* surface)
 						//		- bigWallWest,bigWallNorth&West (maybe content-object w/ bigWallNone)
 						// - if UnitSouthEast
 						//		- bigWallEast,content-object w/ bigWallNone
-						if (mapPosition.y < endY - 1)
-							//&& tile->isVoid() == false) // why. -1
+						if (mapPosition.y < endY - 1 // why. -1
+							&& tile->isVoid() == false)
 						{
 							// for both:
 							const bool redrawUnit = tile->getMapData(MapData::O_FLOOR) != NULL
@@ -2182,6 +2187,8 @@ void Map::drawTerrain(Surface* surface)
 									&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
 										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
 							{
+								// TODO: insert checks for tileSouthEast !south&tc bigWalls & tileSouthSouthEast !north&tc Walls
+
 								const Tile* const tileBelowSouth = _save->getTile(mapPosition + Position(0, 1,-1));
 								//tileBelowSouth != NULL
 
@@ -2263,6 +2270,8 @@ void Map::drawTerrain(Surface* surface)
 											&& tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S
 											&& tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N)))
 								{
+									// TODO: insert checks for tileSouthEastEast !south&tc bigWalls & tileSouthSouthEastEast !north&tc Walls
+
 									const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1, 1,-1));
 									//tileBelowSouthEast != NULL
 
@@ -2368,6 +2377,7 @@ void Map::drawTerrain(Surface* surface)
 									}
 								}
 
+								// TODO: if unitBelow this needs to redraw walls to south & east also.
 								const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1, 1,-1));
 								if (tileBelowSouthEast != NULL) // patch ! needs more ...... much more.
 								{

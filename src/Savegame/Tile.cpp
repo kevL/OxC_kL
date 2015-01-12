@@ -25,6 +25,7 @@
 #include "BattleUnit.h"
 #include "SerializationHelper.h"
 
+#include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/Particle.h"
 
 //#include "../Engine/Exception.h"
@@ -543,8 +544,6 @@ void Tile::setDiscovered(
 		bool flag,
 		int part)
 {
-//	if (this->isVoid()) return; // kL
-
 	if (_discovered[part] != flag)
 	{
 		_discovered[part] = flag;
@@ -812,6 +811,9 @@ int Tile::getFuel(int part) const
  */
 void Tile::ignite(int power)
 {
+	if (canSmoke() == false)
+		return;
+
 	if (_fire == 0)
 	{
 		const int fuel = getFuel();
@@ -957,6 +959,9 @@ int Tile::getFire() const
  */
 void Tile::addSmoke(int smoke)
 {
+	if (canSmoke() == false)
+		return;
+
 	if (_fire == 0)
 	{
 		if (_overlaps == 0)
@@ -970,7 +975,7 @@ void Tile::addSmoke(int smoke)
 
 		_animOffset = RNG::generate(0, 3);
 
-		addOverlap();
+		++_overlaps;
 	}
 }
 
@@ -980,6 +985,9 @@ void Tile::addSmoke(int smoke)
  */
 void Tile::setSmoke(int smoke)
 {
+	if (canSmoke() == false)
+		return;
+
 	_smoke = smoke;
 	_animOffset = RNG::generate(0, 3);
 }
@@ -991,6 +999,19 @@ void Tile::setSmoke(int smoke)
 int Tile::getSmoke() const
 {
 	return _smoke;
+}
+
+/**
+ * Gets if this Tile will accept '_smoke' value.
+ * @note diag bigWalls take no smoke. 'Cause I don't want it showing on both sides.
+ * @return, true if smoke possible
+ */
+// private
+bool Tile::canSmoke() const
+{
+	return _objects[3] == NULL
+		   || (_objects[3]->getBigWall() != Pathfinding::BIGWALL_NESW
+				&& _objects[3]->getBigWall() != Pathfinding::BIGWALL_NWSE);
 }
 
 /**
@@ -1305,10 +1326,10 @@ int Tile::getOverlaps() const
 /**
  * Increments the overlap value on this tile.
  */
-void Tile::addOverlap()
+/* void Tile::addOverlap()
 {
 	++_overlaps;
-}
+} */
 
 /**
  * Sets the danger flag true on this tile.

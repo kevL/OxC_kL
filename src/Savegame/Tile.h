@@ -78,6 +78,9 @@ protected:
 	std::vector<BattleItem*> _inventory;
 	std::list<Particle*> _particles;
 
+	/// Gets if this Tile will accept '_smoke' value.
+	bool canSmoke() const;
+
 
 	public:
 		static const int NOT_CALCULATED = -1;
@@ -304,7 +307,7 @@ protected:
 		/// Gets how many times has this tile been overlapped with smoke/fire (runtime only).
 		int getOverlaps() const;
 		/// Increments the overlap value on this tile.
-		void addOverlap();
+//		void addOverlap();
 
 		/// Sets the danger flag on this tile so the AI will avoid it.
 		void setDangerous();

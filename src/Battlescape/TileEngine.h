@@ -74,12 +74,12 @@ private:
 			int layer);
 	/// Calculates blockage of various persuasions.
 	int blockage(
-			Tile* tile,
+			const Tile* const tile,
 			const int part,
-			ItemDamageType type,
-			int dir = -1,
-			bool originTest = false,
-			bool trueDir = false);
+			const ItemDamageType type,
+			const int dir = -1,
+			const bool originTest = false,
+			const bool trueDir = false);
 
 
 	public:
