@@ -252,7 +252,7 @@
 	"State.h"
 	"Surface.h"
 
-1421009424 f:\git\openxcom\src\engine\surface.h
+1421015317 f:\git\openxcom\src\engine\surface.h
 
 1325792434 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -6054,7 +6054,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421003456 source:f:\git\openxcom\src\battlescape\map.cpp
+1421024763 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -7686,7 +7686,7 @@
 	"ImageButton.h"
 	"../Engine/Action.h"
 
-1421010255 source:f:\git\openxcom\src\interface\numbertext.cpp
+1421010888 source:f:\git\openxcom\src\interface\numbertext.cpp
 	"NumberText.h"
 
 1420130445 source:f:\git\openxcom\src\interface\slider.cpp

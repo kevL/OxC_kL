@@ -259,7 +259,7 @@ protected:
 		 * @param y - Y position of the pixel
 		 * @return, color of the pixel
 		 */
-		Uint8 getPixelColor( // getPixelColor
+		Uint8 getPixelColor(
 				int x,
 				int y) const
 		{
