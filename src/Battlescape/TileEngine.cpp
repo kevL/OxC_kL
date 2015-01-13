@@ -2317,13 +2317,13 @@ void TileEngine::explode(
 								powerUnit /= 2;
 								//Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_STUN";
 								targetUnit->damage(
-												Position(0, 0, 0),
+												Position(0,0,0),
 												powerUnit,
 												DT_STUN,
 												true);
 							}
 
-							for (std::vector<BattleItem*>::iterator
+							for (std::vector<BattleItem*>::const_iterator
 									i = destTile->getInventory()->begin();
 									i != destTile->getInventory()->end();
 									++i)
@@ -2339,7 +2339,7 @@ void TileEngine::explode(
 									powerUnit /= 2;
 									//Log(LOG_INFO) << ". . . . powerUnit (corpse) = " << powerUnit << " DT_STUN";
 									bu->damage(
-											Position(0, 0, 0),
+											Position(0,0,0),
 											powerUnit,
 											DT_STUN,
 											true);
@@ -2379,7 +2379,7 @@ void TileEngine::explode(
 									}
 
 									targetUnit->damage( // Ground zero effect is in effect
-													Position(0, 0, 0),
+													Position(0,0,0),
 													powerUnit,
 													DT_HE);
 									//Log(LOG_INFO) << ". . . realDamage = " << damage << " DT_HE, GZ";
@@ -2410,7 +2410,7 @@ void TileEngine::explode(
 								//Log(LOG_INFO) << ". INVENTORY: iterate done=False";
 								done = destTile->getInventory()->empty();
 
-								for (std::vector<BattleItem*>::iterator
+								for (std::vector<BattleItem*>::const_iterator
 										i = destTile->getInventory()->begin();
 										i != destTile->getInventory()->end();
 										)
@@ -2434,7 +2434,7 @@ void TileEngine::explode(
 										powerUnit /= 2;
 										//Log(LOG_INFO) << ". . . INVENTORY: power = " << powerUnit;
 										bu->damage(
-												Position(0, 0, 0),
+												Position(0,0,0),
 												powerUnit,
 												DT_HE);
 										//Log(LOG_INFO) << ". . . INVENTORY: damage = " << damage;
@@ -2484,7 +2484,7 @@ void TileEngine::explode(
 								&& destTile->getTerrainLevel() > -24)
 							{
 								destTile->setFire(0); // smoke puts out fire, hm.
-								destTile->setSmoke(RNG::generate(8, 17));
+								destTile->setSmoke(RNG::generate(8,17));
 							}
 
 							if (targetUnit != NULL)
@@ -2493,14 +2493,14 @@ void TileEngine::explode(
 														_powerE / 10,
 														_powerE / 5);
 								targetUnit->damage(
-												Position(0, 0, 0),
+												Position(0,0,0),
 												powerUnit,
 												DT_SMOKE,
 												true);
 								//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
 							}
 
-							for (std::vector<BattleItem*>::iterator
+							for (std::vector<BattleItem*>::const_iterator
 									i = destTile->getInventory()->begin();
 									i != destTile->getInventory()->end();
 									++i)
@@ -2515,7 +2515,7 @@ void TileEngine::explode(
 															_powerE / 10,
 															_powerE / 5);
 									bu->damage(
-											Position(0, 0, 0),
+											Position(0,0,0),
 											powerUnit,
 											DT_SMOKE,
 											true);
@@ -2531,7 +2531,7 @@ void TileEngine::explode(
 														_powerE / 4,
 														_powerE * 3 / 4);
 								targetUnit->damage(
-												Position(0, 0, 0),
+												Position(0,0,0),
 												powerUnit,
 												DT_IN,
 												true);
@@ -2550,7 +2550,7 @@ void TileEngine::explode(
 
 							Tile // NOTE: Should check if tileBelow's have already had napalm drop on them from this explosion ....
 								* fireTile = destTile,
-								* tileBelow = _battleSave->getTile(fireTile->getPosition() + Position(0, 0,-1));
+								* tileBelow = _battleSave->getTile(fireTile->getPosition() + Position(0,0,-1));
 
 							while (fireTile != NULL // safety.
 								&& fireTile->getPosition().z > 0
@@ -2559,7 +2559,7 @@ void TileEngine::explode(
 								&& fireTile->hasNoFloor(tileBelow) == true)
 							{
 								fireTile = tileBelow;
-								tileBelow = _battleSave->getTile(fireTile->getPosition() + Position(0, 0,-1));
+								tileBelow = _battleSave->getTile(fireTile->getPosition() + Position(0,0,-1));
 							}
 
 //							if (fireTile->isVoid() == false)
@@ -2591,7 +2591,7 @@ void TileEngine::explode(
 														_powerE / 4,
 														_powerE * 3 / 4);
 								targetUnit->damage(
-												Position(0, 0, 0),
+												Position(0,0,0),
 												powerUnit,
 												DT_IN,
 												true);
@@ -2613,7 +2613,7 @@ void TileEngine::explode(
 							{
 								done = fireTile->getInventory()->empty();
 
-								for (std::vector<BattleItem*>::iterator
+								for (std::vector<BattleItem*>::const_iterator
 										i = fireTile->getInventory()->begin();
 										i != fireTile->getInventory()->end();
 										)
@@ -2628,7 +2628,7 @@ void TileEngine::explode(
 																_powerE / 4,
 																_powerE * 3 / 4);
 										bu->damage(
-												Position(0, 0, 0),
+												Position(0,0,0),
 												powerUnit,
 												DT_IN,
 												true);
@@ -2640,7 +2640,7 @@ void TileEngine::explode(
 											if (attacker != NULL)
 												bu->killedBy(attacker->getFaction());
 
-											if (Options::battleNotifyDeath // send Death notice.
+											if (Options::battleNotifyDeath == true // send Death notice.
 												&& bu->getGeoscapeSoldier() != NULL)
 											{
 												Game* game = _battleSave->getBattleState()->getGame();
@@ -2739,7 +2739,7 @@ void TileEngine::explode(
 
 			applyGravity(*i);
 
-			Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0, 0, 1));
+			Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0,0,1));
 			if (tileAbove != NULL)
 				applyGravity(tileAbove);
 		}

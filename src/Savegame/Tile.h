@@ -38,6 +38,7 @@ class BattleUnit;
 class MapData;
 class Particle;
 class RuleInventory;
+//class SavedBattleGame;
 class Surface;
 
 
@@ -280,7 +281,7 @@ protected:
 		/// New turn preparations.
 		void prepareTileTurn();
 		/// Ends this tile's turn. Units catch on fire.
-		void endTilePhase();
+		void endTilePhase(SavedBattleGame* const battleSave);
 
 		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();

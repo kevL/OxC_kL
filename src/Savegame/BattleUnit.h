@@ -435,7 +435,7 @@ private:
 
 	BattleAIState* _currentAIState;
 //	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
-	const BattlescapeGame* _battleGame;
+	BattlescapeGame* _battleGame;
 	BattleUnit* _charging;
 	Surface* _cache[5];
 	Tile* _tile;
@@ -1085,7 +1085,7 @@ private:
 		size_t getBattleOrder() const;
 
 		/// Sets the BattleGame for this unit.
-		void setBattleGame(BattlescapeGame* battleGame);
+		void setBattleGame(BattlescapeGame* const battleGame);
 
 		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
 		void setDown();

@@ -85,8 +85,7 @@ BattleItem::BattleItem(
  * dTor.
  */
 BattleItem::~BattleItem()
-{
-}
+{}
 
 /**
  * Loads the item from a YAML file.

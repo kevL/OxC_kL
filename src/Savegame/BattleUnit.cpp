@@ -4257,7 +4257,7 @@ size_t BattleUnit::getBattleOrder() const // kL
  * kL. Sets the BattleGame for this BattleUnit.
  * @param battleGame - pointer to BattleGame
  */
-void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
+void BattleUnit::setBattleGame(BattlescapeGame* const battleGame) // kL
 {
 	_battleGame = battleGame;
 }

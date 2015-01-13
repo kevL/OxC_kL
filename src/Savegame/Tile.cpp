@@ -39,6 +39,8 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleItem.h"
 
+#include "../Savegame/SavedBattleGame.h"
+
 
 namespace OpenXcom
 {
@@ -1196,42 +1198,129 @@ void Tile::prepareTileTurn()
  * Separated from prepareTileTurn() above so that units take
  * damage before smoke/fire spreads to them; this is so that units
  * have to end their turn on a tile for smoke/fire to affect them.
+ * @param battleSave - pointer to the current SavedBattleGame
  */
-void Tile::endTilePhase()
+void Tile::endTilePhase(SavedBattleGame* const battleSave)
 {
-	const float armorVulnerability = _unit->getArmor()->getDamageModifier(DT_IN);
+	const int
+		powerSmoke = (_smoke + 3) / 4 + 1,
+		powerFire = RNG::generate(3,9);
 
-	if (_smoke > 0)	// need to check if a unit is unconscious (ie. a body-item on this tile) and if so do damage.
+	if (_smoke > 0)
 	{
-		if (_fire > 0)
+		const float armorSmoke = _unit->getArmor()->getDamageModifier(DT_SMOKE);
+		if (armorSmoke > 0.f) // try to knock _unit out.
 		{
-			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability))) == true) // try to set _unit on fire. Do damage from fire here, too.
+			_unit->damage(
+						Position(0,0,0),
+						static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
+						DT_SMOKE, // -> DT_STUN
+						true);
+		}
+	}
+
+	if (_fire > 0)
+	{
+		const float armorFire = _unit->getArmor()->getDamageModifier(DT_IN);
+		if (armorFire > 0.f)
+		{
+			_unit->damage(
+						Position(0,0,0),
+						static_cast<int>(static_cast<float>(powerFire) * armorFire),
+						DT_IN,
+						true);
+
+			if (RNG::percent(static_cast<int>(Round(40.f * armorFire))) == true) // try to set _unit on fire. Do damage from fire here, too.
 			{
 				const int dur = RNG::generate(
 											0,
-											static_cast<int>(Round(5.f * armorVulnerability)));
+											static_cast<int>(Round(5.f * armorFire)));
 				if (dur > _unit->getFire())
 					_unit->setFire(dur);
 			}
 		}
-
-		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock _unit out.
-			_unit->damage(
-						Position(0, 0, 0),
-						(_smoke + 3) / 4 + 1, // round up.
-						DT_SMOKE, // -> DT_STUN
-						true);
 	}
 
-	if (armorVulnerability > 0.f
-		&& (_unit->getFire() > 0
-			|| _fire > 0))
+
+	for (std::vector<BattleItem*>::const_iterator // handle unconscious units on this Tile
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
 	{
-		_unit->damage(
-					Position(0, 0, 0),
-					RNG::generate(3, 9),
-					DT_IN,
-					true);
+		// DT_SMOKE
+		BattleUnit* bu = (*i)->getUnit();
+		if (bu != NULL
+			&& bu->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			const float armorSmoke = bu->getArmor()->getDamageModifier(DT_SMOKE);
+			if (armorSmoke > 0.f)
+				bu->damage(
+						Position(0,0,0),
+						static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
+						DT_SMOKE,
+						true);
+		}
+
+		// DT_IN
+		bool done = false;
+		while (done == false)
+		{
+			done = _inventory.empty();
+
+			for (std::vector<BattleItem*>::const_iterator
+					i = _inventory.begin();
+					i != _inventory.end();
+					)
+			{
+				BattleUnit* bu = (*i)->getUnit();
+				if (bu != NULL
+					&& bu->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					const float armorFire = bu->getArmor()->getDamageModifier(DT_IN);
+					if (armorFire > 0.f)
+					{
+						bu->damage(
+								Position(0,0,0),
+								static_cast<int>(static_cast<float>(powerFire) * armorFire),
+								DT_IN,
+								true);
+
+						if (bu->getHealth() == 0)
+						{
+							bu->instaKill();
+
+//							if (attacker != NULL)
+							bu->killedBy(bu->getFaction()); // killed by self ....
+
+							// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
+/*							if (Options::battleNotifyDeath == true // send Death notice.
+								&& bu->getGeoscapeSoldier() != NULL)
+							{
+								Game* game = battleSave->getBattleState()->getGame();
+								game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
+																							"STR_HAS_BEEN_KILLED",
+																							bu->getGender())
+																						.arg(bu->getName(game->getLanguage()))));
+							} */
+						}
+					}
+
+					break;
+				}
+				else if (powerFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even bodyarmor.
+					&& (bu == NULL
+						|| bu->getStatus() == STATUS_DEAD))
+				{
+					battleSave->removeItem(*i);	// this shouldn't kill and remove a unit's corpse on the same tilePhase;
+					break;						// but who knows, I haven't traced it comprehensively.
+				}
+				else
+				{
+					++i;
+					done = (i == _inventory.end());
+				}
+			}
+		}
 	}
 }
 

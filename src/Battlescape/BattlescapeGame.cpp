@@ -729,7 +729,7 @@ void BattlescapeGame::endTurnPhase()
 				&& ((*i)->getGeoscapeSoldier() != NULL
 					|| (*i)->getUnitRules()->isMechanical() == false))
 			{
-				tile->endTilePhase(); // damage tile-unit w/ Fire & Smoke.
+				tile->endTilePhase(_save); // damage tile-unit w/ Fire & Smoke.
 			}
 		}
 	} // kL_end.

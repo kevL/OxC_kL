@@ -6,6 +6,8 @@ items:
     handSprite: 208
   - type: STR_HIGH_EXPLOSIVE
     handSprite: 216
+  - type: STR_MOTION_SCANNER
+    handSprite: 224
 extraSprites:
   - type: HANDOB.PCK
     width: 256
@@ -14,10 +16,5 @@ extraSprites:
     subY: 40
     files:
       208: Resources/ID_HandOb/HandOb_MediKit.png
-  - type: HANDOB.PCK
-    width: 256
-    height: 40
-    subX: 32
-    subY: 40
-    files:
       216: Resources/ID_HandOb/HandOb_HE.png
+      224: Resources/ID_HandOb/HandOb_Scanner.png
