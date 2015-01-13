@@ -47,10 +47,11 @@ class ExplosionBState
 private:
 	bool
 		_areaOfEffect,
+		_forceCenter, // kL
 		_hit,
 		_lowerWeapon,
 		_pistolWhip,
-		_hitSuccess;
+		_hitSuccess; // kL
 	int
 		_extend, // kL
 		_power;
@@ -75,7 +76,8 @@ private:
 				BattleUnit* unit,
 				Tile* tile = NULL,
 				bool lowerWeapon = false,
-				bool success = false); // kL_add.
+				bool success = false,		// kL_add.
+				bool forceCenter = false);	// kL_add.
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();
 

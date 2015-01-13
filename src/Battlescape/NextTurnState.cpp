@@ -21,9 +21,13 @@
 
 //#include <sstream>
 
+#include "BattlescapeGame.h"			// kL, for terrain explosions
 #include "BattlescapeState.h"
 #include "DebriefingState.h"
-#include "Map.h" // kL, extern 'kL_noReveal'
+#include "ExplosionBState.h"			// kL, for terrain explosions
+#include "Map.h"						// kL, extern 'kL_noReveal'
+#include "TileEngine.h"					// kL, for terrain explosions
+#include "Position.h"					// kL, for terrain explosions
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -37,13 +41,14 @@
 
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-//#include "../Interface/TurnCounter.h" // kL, extern 'kL_TurnCount'
+//#include "../Interface/TurnCounter.h"	// kL, extern 'kL_TurnCount'
 #include "../Interface/Window.h"
 
 #include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"			// kL, for terrain explosions
 
 
 namespace OpenXcom
@@ -63,7 +68,6 @@ NextTurnState::NextTurnState(
 		_timer(NULL)
 //		_turnCounter(NULL)
 {
-	//Log(LOG_INFO) << "Create NextTurnState";
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(320, 17, 0, 68);
 	_txtTurn	= new Text(320, 17, 0, 93);
@@ -138,7 +142,6 @@ NextTurnState::NextTurnState(
 	_state->clearMouseScrollingState();
 
 	kL_noReveal = true;
-	//Log(LOG_INFO) << ". preReveal TRUE";
 
 	if (Options::skipNextTurnScreen == true)
 	{
@@ -146,7 +149,6 @@ NextTurnState::NextTurnState(
 		_timer->onTimer((StateHandler)& NextTurnState::close);
 		_timer->start();
 	}
-	//Log(LOG_INFO) << "Create NextTurnState EXIT";
 }
 
 /**
@@ -279,6 +281,25 @@ void NextTurnState::close()
 
 			if (_savedBattle->getDebugMode() == false)
 				_state->getGame()->getCursor()->setVisible(false);
+		}
+
+
+		Tile* const tile = _savedBattle->getTileEngine()->checkForTerrainExplosions();
+		if (tile != NULL)
+		{
+			const Position pos = Position(
+									tile->getPosition().x * 16 + 8,
+									tile->getPosition().y * 16 + 8,
+									tile->getPosition().z * 24 + 10);
+			_savedBattle->getBattleGame()->statePushBack(new ExplosionBState(
+																		_savedBattle->getBattleGame(),
+																		pos,
+																		NULL,
+																		NULL,
+																		tile,
+																		false,
+																		false,
+																		true));
 		}
 	}
 }

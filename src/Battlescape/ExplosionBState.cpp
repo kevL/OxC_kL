@@ -55,6 +55,7 @@ namespace OpenXcom
  * @param tile			- pointer to tile the explosion is on (default NULL)
  * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon (default false)
  * @param success		- true if the (melee) attack was succesful (default false)
+ * @param forceCenter	- forces Camera to center on the explosion (default false)
  */
 ExplosionBState::ExplosionBState(
 		BattlescapeGame* parent,
@@ -63,7 +64,8 @@ ExplosionBState::ExplosionBState(
 		BattleUnit* unit,
 		Tile* tile,
 		bool lowerWeapon,
-		bool success) // kL_add.
+		bool success,		// kL_add.
+		bool forceCenter)	// kL_add.
 	:
 		BattleState(parent),
 		_center(center),
@@ -71,12 +73,13 @@ ExplosionBState::ExplosionBState(
 		_unit(unit),
 		_tile(tile),
 		_lowerWeapon(lowerWeapon),
-		_hitSuccess(success), // kL
+		_hitSuccess(success),		// kL
+		_forceCenter(forceCenter),	// kL
 		_power(0),
 		_areaOfEffect(false),
 		_pistolWhip(false),
 		_hit(false),
-		_extend(3) // kL, extra think-cycles before this state Pops.
+		_extend(3) // kL, extra think-cycles before this state is allowed to Pop.
 {}
 
 /**
@@ -259,10 +262,13 @@ void ExplosionBState::init()
 														_parent->getMap()->getSoundAngle(targetPos));
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
-			if (exploCam->isOnScreen(targetPos) == false)
+			if (exploCam->isOnScreen(targetPos) == false
+				|| _forceCenter == true)
+			{
 				exploCam->centerOnPosition(
 										targetPos,
 										false);
+			}
 			else if (exploCam->getViewLevel() != targetPos.z)
 				exploCam->setViewLevel(targetPos.z);
 		}
@@ -323,11 +329,12 @@ void ExplosionBState::init()
 
 		_parent->setStateInterval(std::max(
 										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (_item->getRules()->getExplosionSpeed() * 10))));
 //		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera();
 		if (exploCam->isOnScreen(targetPos) == false
+			|| _forceCenter == true
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
@@ -603,13 +610,16 @@ void ExplosionBState::explode()
 		Position pVoxel = Position(
 								tile->getPosition().x * 16 + 8,
 								tile->getPosition().y * 16 + 8,
-								tile->getPosition().z * 24 + 2);
+								tile->getPosition().z * 24 + 10);
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
 												pVoxel,
 												NULL,
 												_unit,
-												tile));
+												tile,
+												false,
+												false,
+												_forceCenter));
 	}
 }
 

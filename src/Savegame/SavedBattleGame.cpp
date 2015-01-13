@@ -34,6 +34,7 @@
 #include "../Battlescape/CivilianBAIState.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/ExplosionBState.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/Position.h"
 #include "../Battlescape/TileEngine.h"
@@ -1035,7 +1036,6 @@ UnitFaction SavedBattleGame::getSide() const
  */
 int SavedBattleGame::getTurn() const
 {
-	//Log(LOG_INFO) << ". getTurn()";
 	return _turn;
 }
 
@@ -1151,7 +1151,7 @@ void SavedBattleGame::endBattlePhase()
 	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.
 	if (_side == FACTION_HOSTILE)
 	{
-		const int rand = RNG::generate(0, 5);
+		const int rand = RNG::generate(0,5);
 		if (_turn > 17 + rand
 			|| (_turn > 8
 				&& liveAliens < rand - 1))
@@ -1709,6 +1709,7 @@ Node* SavedBattleGame::getPatrolNode(
 
 /**
  * Carries out new turn preparations such as fire and smoke spreading.
+ * Also explodes any explosive tiles that get destroyed by fire.
  */
 void SavedBattleGame::prepareBattleTurn()
 {
@@ -1807,9 +1808,9 @@ void SavedBattleGame::prepareBattleTurn()
 	{
 		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules
 		{
-			(*i)->setSmoke(std::max(
+			(*i)->setSmoke(std::max( // reduce the smoke counter
 								0,
-								(*i)->getSmoke() - RNG::generate(0, 3))); // reduce the smoke counter
+								(*i)->getSmoke() - RNG::generate(0,3)));
 
 			if ((*i)->getSmoke() > 0) // if it's still smoking
 			{
@@ -1842,7 +1843,7 @@ void SavedBattleGame::prepareBattleTurn()
 		}
 		else  // fire
 		{
-			Tile* tile = getTile((*i)->getPosition() + Position(0, 0, 1)); // smoke from fire spreads upwards one level if there's no floor blocking it.
+			Tile* tile = getTile((*i)->getPosition() + Position(0,0,1)); // smoke from fire spreads upwards one level if there's no floor blocking it.
 			if (tile != NULL
 				&& tile->hasNoFloor(*i) == true)
 			{
@@ -1886,6 +1887,23 @@ void SavedBattleGame::prepareBattleTurn()
 				getTiles()[i]->prepareTileTurn(); // normalizes overlaps
 		}
 	}
+
+
+	// do this on return to BattlescapeGame::endTurnPhase() instead.
+/*	Tile* const tile = _tileEngine->checkForTerrainExplosions();
+	if (tile != NULL)
+	{
+		const Position pos = Position(
+								tile->getPosition().x * 16 + 8,
+								tile->getPosition().y * 16 + 8,
+								tile->getPosition().z * 24 + 10);
+		_battleState->getBattleGame()->statePushNext(new ExplosionBState(
+																	_battleState->getBattleGame(),
+																	pos,
+																	NULL,
+																	NULL,
+																	tile));
+	} */
 
 	reviveUnconsciousUnits();
 	//Log(LOG_INFO) << "SBG::prepareBattleTurn() EXIT";

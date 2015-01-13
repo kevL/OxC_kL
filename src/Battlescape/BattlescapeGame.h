@@ -206,11 +206,11 @@ private:
 		/// Handles states timer.
 		void handleState();
 		/// Pushes a state to the front of the list.
-		void statePushFront(BattleState* bs);
+		void statePushFront(BattleState* const battleState);
 		/// Pushes a state to second on the list.
-		void statePushNext(BattleState* bs);
+		void statePushNext(BattleState* const battleState);
 		/// Pushes a state to the back of the list.
-		void statePushBack(BattleState* bs);
+		void statePushBack(BattleState* const battleState);
 
 		/// Handles the result of non target actions, like priming a grenade.
 		void handleNonTargetAction();

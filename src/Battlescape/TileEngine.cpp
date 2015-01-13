@@ -3856,7 +3856,7 @@ bool TileEngine::detonate(Tile* const tile)
 		return false;
 
 	//Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition();
-	tile->setExplosive(0, 0, true);
+	tile->setExplosive(0,0, true);
 
 
 	static const int parts[9] =
@@ -3875,37 +3875,37 @@ bool TileEngine::detonate(Tile* const tile)
 	const Position pos = tile->getPosition();
 
 	Tile* tiles[9];
-	tiles[0] = _battleSave->getTile(Position(				// tileUp, floor
-											pos.x,
-											pos.y,
-											pos.z + 1));
-	tiles[1] = _battleSave->getTile(Position(				// tileEast, westwall
-											pos.x + 1,
-											pos.y,
-											pos.z));
-	tiles[2] = _battleSave->getTile(Position(				// tileSouth, northwall
-											pos.x,
-											pos.y + 1,
-											pos.z));
-	tiles[3]												// floor
-			= tiles[4]										// westwall
-			= tiles[5]										// northwall
-			= tiles[6]										// content
+	tiles[0] = _battleSave->getTile(Position(			// tileUp, floor
+										pos.x,
+										pos.y,
+										pos.z + 1));
+	tiles[1] = _battleSave->getTile(Position(			// tileEast, westwall
+										pos.x + 1,
+										pos.y,
+										pos.z));
+	tiles[2] = _battleSave->getTile(Position(			// tileSouth, northwall
+										pos.x,
+										pos.y + 1,
+										pos.z));
+	tiles[3]											// floor
+			= tiles[4]									// westwall
+			= tiles[5]									// northwall
+			= tiles[6]									// content
 			= tile;
-	tiles[7] = _battleSave->getTile(Position(				// tileNorth, bigwall south
-											pos.x,
-											pos.y - 1,
-											pos.z));
-	tiles[8] = _battleSave->getTile(Position(				// tileWest, bigwall east
-											pos.x - 1,
-											pos.y,
-											pos.z));
+	tiles[7] = _battleSave->getTile(Position(			// tileNorth, bigwall south
+										pos.x,
+										pos.y - 1,
+										pos.z));
+	tiles[8] = _battleSave->getTile(Position(			// tileWest, bigwall east
+										pos.x - 1,
+										pos.y,
+										pos.z));
 
 
 	tile->setSmoke(std::max( // explosions create smoke which only stays 1 or 2 turns, or 5 ...
 						1,
 						std::min(
-								tile->getSmoke() + RNG::generate(0, 5),
+								tile->getSmoke() + RNG::generate(0,5),
 								17)));
 
 	int

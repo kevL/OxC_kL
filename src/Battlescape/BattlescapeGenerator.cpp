@@ -2537,7 +2537,7 @@ void BattlescapeGenerator::explodePowerSources()
 		const Position pos = Position(
 									tile->getPosition().x * 16 + 8,
 									tile->getPosition().y * 16 + 8,
-									tile->getPosition().z * 24);
+									tile->getPosition().z * 24 + 10);
 		_battleSave->getTileEngine()->explode(
 											pos,
 											tile->getExplosive(),

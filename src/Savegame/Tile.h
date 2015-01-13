@@ -38,7 +38,7 @@ class BattleUnit;
 class MapData;
 class Particle;
 class RuleInventory;
-//class SavedBattleGame;
+class SavedBattleGame;
 class Surface;
 
 

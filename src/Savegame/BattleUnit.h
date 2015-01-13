@@ -435,7 +435,7 @@ private:
 
 	BattleAIState* _currentAIState;
 //	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
-	BattlescapeGame* _battleGame;
+	const BattlescapeGame* _battleGame;
 	BattleUnit* _charging;
 	Surface* _cache[5];
 	Tile* _tile;

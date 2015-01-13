@@ -617,6 +617,10 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 
 /**
  * Ends the turn.
+ * This starts the switchover
+ *	- popState()
+ *	- handleState()
+ *	- statePushBack()
  */
 void BattlescapeGame::endTurnPhase()
 {
@@ -664,7 +668,7 @@ void BattlescapeGame::endTurnPhase()
 		}
 	}
 
-	if (_save->getTileEngine()->closeUfoDoors()
+	if (_save->getTileEngine()->closeUfoDoors() != 0
 		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
 	{
 		getResourcePack()->getSoundByDepth( // ufo door closed
@@ -695,8 +699,14 @@ void BattlescapeGame::endTurnPhase()
 
 //		tile = _save->getTileEngine()->checkForTerrainExplosions();
 
-		statePushBack(NULL);
-		return;
+		statePushBack(NULL);	// this will repeatedly call another endTurnPhase() so there's
+		return;					// no need to continue this one till all explosions are done.
+								// The problem arises because _save->endBattlePhase() below
+								// causes destruction of explosive objects, that don't explode
+								// until some later instantiation of ExplosionBState .....
+								//
+								// As to why this doesn't simply loop like other calls to
+								// do terrainExplosions i don't know.
 	}
 
 	if (_save->getSide() != FACTION_NEUTRAL) // tick down grenade timers
@@ -736,6 +746,7 @@ void BattlescapeGame::endTurnPhase()
 	// that just might work...
 
 	// if all units from either faction are killed - the mission is over.
+	// ... should this go after checkForCasualties() below ...
 	int
 		liveAliens = 0,
 		liveSoldiers = 0;
@@ -747,7 +758,27 @@ void BattlescapeGame::endTurnPhase()
 
 
 	_save->endBattlePhase(); // <- This rolls over Faction-turns.
+	// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
+	// -> SavedBattleGame::prepareBattleTurn()
+	// Or here
+	// ... done it in NextTurnState.
 
+	// check AGAIN for terrain explosions
+/*	tile = _save->getTileEngine()->checkForTerrainExplosions();
+	if (tile != NULL)
+	{
+		pos = Position(
+					tile->getPosition().x * 16 + 8,
+					tile->getPosition().y * 16 + 8,
+					tile->getPosition().z * 24 + 10);
+//		statePushNext(new ExplosionBState(
+		statePushBack(new ExplosionBState(
+										this,
+										pos,
+										NULL,
+										NULL,
+										tile));
+	} */
 
 
 	if (_save->getDebugMode() == false)
@@ -767,6 +798,17 @@ void BattlescapeGame::endTurnPhase()
 	checkForCasualties(
 					NULL,
 					NULL);
+
+/*	// ... moved here from before endBattlePhase() above ...
+	// not sure how tallyUnits() interacts w/ checkForCasualties()
+	int
+		liveAliens = 0,
+		liveSoldiers = 0;
+	// we'll tally them NOW, so that any infected units will... change
+	tallyUnits(
+			liveAliens,
+			liveSoldiers,
+			true); */
 
 	if (_save->allObjectivesDestroyed() == true)
 	{
@@ -1306,15 +1348,15 @@ void BattlescapeGame::handleState()
 {
 	if (_states.empty() == false)
 	{
-		if (_states.front() == 0) // end turn request?
+		if (_states.front() == NULL) // possible End Turn request
 		{
 			_states.pop_front();
-
 			endTurnPhase();
+
 			return;
 		}
-		else
-			_states.front()->think();
+
+		_states.front()->think();
 
 		getMap()->draw(); // kL, old code!! Less clunky when scrolling the battlemap.
 //		getMap()->invalidate(); // redraw map
@@ -1323,51 +1365,51 @@ void BattlescapeGame::handleState()
 
 /**
  * Pushes a state to the front of the queue and starts it.
- * @param bs - pointer to BattleState
+ * @param battleState - pointer to BattleState
  */
-void BattlescapeGame::statePushFront(BattleState* bs)
+void BattlescapeGame::statePushFront(BattleState* const battleState)
 {
-	_states.push_front(bs);
-	bs->init();
+	_states.push_front(battleState);
+	battleState->init();
 }
 
 /**
  * Pushes a state as the next state after the current one.
- * @param bs - pointer to BattleState
+ * @param battleState - pointer to BattleState
  */
-void BattlescapeGame::statePushNext(BattleState* bs)
+void BattlescapeGame::statePushNext(BattleState* const battleState)
 {
 	if (_states.empty() == true)
 	{
-		_states.push_front(bs);
-		bs->init();
+		_states.push_front(battleState);
+		battleState->init();
 	}
 	else
-		_states.insert(++_states.begin(), bs);
+		_states.insert(
+					++_states.begin(),
+					battleState);
 }
 
 /**
  * Pushes a state to the back.
- * @param bs - pointer to BattleState
+ * @param battleState - pointer to BattleState
  */
-void BattlescapeGame::statePushBack(BattleState* bs)
+void BattlescapeGame::statePushBack(BattleState* const battleState)
 {
 	if (_states.empty() == true)
 	{
-		_states.push_front(bs);
+		_states.push_front(battleState);
 
-		if (_states.front() == 0) // end turn request
+		if (_states.front() == NULL) // possible End Turn request
 		{
 			_states.pop_front();
-
 			endTurnPhase();
-			return;
 		}
 		else
-			bs->init();
+			battleState->init();
 	}
 	else
-		_states.push_back(bs);
+		_states.push_back(battleState);
 }
 
 /**
@@ -1957,23 +1999,23 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 						++i)
 				{
 					ba.target = Position(
-									unit->getPosition().x + RNG::generate(-5, 5),
-									unit->getPosition().y + RNG::generate(-5, 5),
+									unit->getPosition().x + RNG::generate(-5,5),
+									unit->getPosition().y + RNG::generate(-5,5),
 									unit->getPosition().z);
 
 					if (ba.target.z > 0
 						&& i > 9)
 					{
-						ba.target.z--;
+						--ba.target.z;
 
 						if (ba.target.z > 0
 							&& i > 14)
 						{
-							ba.target.z--;
+							--ba.target.z;
 						}
 					}
 
-					if (_save->getTile(ba.target))
+					if (_save->getTile(ba.target) != NULL)
 					{
 						_save->getPathfinding()->calculate(
 														ba.actor,
@@ -1999,8 +2041,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 					++i)
 			{
 				ba.target = Position(
-								unit->getPosition().x + RNG::generate(-5, 5),
-								unit->getPosition().y + RNG::generate(-5, 5),
+								unit->getPosition().x + RNG::generate(-5,5),
+								unit->getPosition().y + RNG::generate(-5,5),
 								unit->getPosition().z);
 				statePushBack(new UnitTurnBState(
 												this,
@@ -2721,14 +2763,14 @@ BattleUnit* BattlescapeGame::convertUnit(
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;
 	const bool visible = unit->getUnitVisible();
 
-	getSave()->getBattleState()->showPsiButton(false);
-	getSave()->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
+	_save->getBattleState()->showPsiButton(false);
+	_save->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
 	unit->instaKill();
 	unit->setSpecialAbility(SPECAB_NONE); // kL
 	unit->setRespawn(false); // kL
 
-	if (Options::battleNotifyDeath
+	if (Options::battleNotifyDeath == true
 		&& unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
@@ -2754,7 +2796,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	// remove unit-tile link
 	unit->setTile(NULL);
-	getSave()->getTile(unit->getPosition())->setUnit(NULL);
+	_save->getTile(unit->getPosition())->setUnit(NULL);
 
 
 	std::ostringstream newArmor;
@@ -2778,9 +2820,9 @@ BattleUnit* BattlescapeGame::convertUnit(
 //	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
 //		convertedUnit->halveArmor();
 
-	getSave()->getTile(unit->getPosition())->setUnit(
-													convertedUnit,
-													_save->getTile(unit->getPosition() + Position(0, 0,-1)));
+	_save->getTile(unit->getPosition())->setUnit(
+											convertedUnit,
+											_save->getTile(unit->getPosition() + Position(0,0,-1)));
 	convertedUnit->setPosition(unit->getPosition());
 	convertedUnit->setTimeUnits(0);
 	if (convertType == "STR_ZOMBIE")
@@ -2789,28 +2831,26 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	convertedUnit->setCache(NULL);
 
-	getSave()->getUnits()->push_back(convertedUnit);
+	_save->getUnits()->push_back(convertedUnit);
 	getMap()->cacheUnit(convertedUnit);
 	convertedUnit->setAIState(new AlienBAIState(
-											getSave(),
+											_save,
 											convertedUnit,
 											NULL));
 
 	std::string terroristWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
-	RuleItem* itemRule = getRuleset()->getItem(terroristWeapon);
 	BattleItem* item = new BattleItem(
-								itemRule,
-								getSave()->getCurrentItemId());
+								getRuleset()->getItem(terroristWeapon),
+								_save->getCurrentItemId());
 	item->moveToOwner(convertedUnit);
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
-	getSave()->getItems()->push_back(item);
+	_save->getItems()->push_back(item);
 
 	getTileEngine()->applyGravity(convertedUnit->getTile());
 	getTileEngine()->calculateFOV(convertedUnit->getPosition());
 
 	convertedUnit->setUnitVisible(visible);
-
 //	convertedUnit->getCurrentAIState()->think();
 
 	return convertedUnit;
@@ -3077,12 +3117,10 @@ bool BattlescapeGame::worthTaking(
 	// return false for any item that we aren't standing directly
 	// on top of with an attraction value less than 6 (aka always) [NOT.. anymore]
 
-	return
-		(worth -
-			(_save->getTileEngine()->distance(
+	return (worth
+		 - (_save->getTileEngine()->distance(
 											action->actor->getPosition(),
-											item->getTile()->getPosition()) * 2))
-			> 0; // was 5
+											item->getTile()->getPosition()) * 2) > 0); // was 5
 }
 
 /**
@@ -3132,7 +3170,7 @@ int BattlescapeGame::takeItemFromGround(
 		else
 		{
 			// check that the item will fit in our inventory, and if so, take it
-			if (takeItem(item, action))
+			if (takeItem(item, action) == true)
 			{
 				action->actor->spendTimeUnits(6);
 				item->getTile()->removeItem(item);
@@ -3264,7 +3302,7 @@ BattleActionType BattlescapeGame::getReservedAction() const
  * Tallies the living units in the game and, if required, converts units into their spawn unit.
  * @param liveAliens	- reference in which to store the live alien tally
  * @param liveSoldiers	- reference in which to store the live XCom tally
- * @param convert		- true to convert infected units
+ * @param convert		- true to convert infected units (default false)
  */
 void BattlescapeGame::tallyUnits(
 		int& liveAliens,
@@ -3305,7 +3343,7 @@ void BattlescapeGame::tallyUnits(
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				if (!Options::allowPsionicCapture
+				if (Options::allowPsionicCapture == false
 					|| (*j)->getFaction() != FACTION_PLAYER)
 				{
 					++liveAliens;
