@@ -70,7 +70,6 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _action.actor->getId() << " strafe = " << _action.strafe;
 	_unit = _action.actor;
 	if (_unit->isOut(true, true))
 	{
@@ -88,7 +87,7 @@ void UnitTurnBState::init()
 	else
 		_parent->setStateInterval(Options::battleAlienSpeed);
 
-	// if the unit has a turret and we are turning during targeting, then only the turret turns
+	// if the unit has a turret and we are turning during targeting then only the turret turns
 	_turret = _unit->getTurretType() != -1
 		   && (_action.strafe
 				|| _action.targeting);
@@ -112,15 +111,9 @@ void UnitTurnBState::init()
 																_unit,
 																true);
 			if (door == 0)
-			{
-				//Log(LOG_INFO) << ". open door PlaySound";
 				sound = ResourcePack::DOOR_OPEN;
-			}
 			else if (door == 1)
-			{
-				//Log(LOG_INFO) << ". open uFo door PlaySound";
 				sound = ResourcePack::SLIDING_DOOR_OPEN;
-			}
 			else if (door == 4)
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			else if (door == 5)
@@ -144,7 +137,6 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
-	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	const bool
 		playerTurn = _unit->getFaction() == FACTION_PLAYER,
 		onSide = _unit->getFaction() == _parent->getSave()->getSide();
@@ -177,7 +169,6 @@ void UnitTurnBState::think()
 								_unit,
 								tu) == false)
 	{
-		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->setStatus(STATUS_STANDING);
 		_unit->setTurnDirection(0);
 		_parent->popState();
@@ -201,10 +192,6 @@ void UnitTurnBState::think()
 				&& _parent->getPanicHandled() == true
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))
 		{
-			//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
-			//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
-
-			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
 			_unit->setStatus(STATUS_STANDING);
 
 			// keep this for Faction_Player only, till I figure out the AI better:
@@ -212,17 +199,12 @@ void UnitTurnBState::think()
 				&& onSide == true
 				&& _action.targeting == true)
 			{
-				//Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
 				_unit->setStopShot();
 			}
-			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
-			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting
-			// elsewhere, if it was turning to do the shot when a newVis unit gets Spotted
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
-			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
 			_unit->setTurnDirection(0);
 			_parent->popState();
 		}
@@ -233,12 +215,10 @@ void UnitTurnBState::think()
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
-		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
 		_unit->setStatus(STATUS_STANDING);
 		_unit->setTurnDirection(0);
 		_parent->popState();
 	}
-	//Log(LOG_INFO) << "UnitTurnBState::think() EXIT";
 }
 
 /**

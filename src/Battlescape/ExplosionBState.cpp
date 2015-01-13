@@ -77,9 +77,7 @@ ExplosionBState::ExplosionBState(
 		_pistolWhip(false),
 		_hit(false),
 		_extend(3) // kL, extra think-cycles before this state Pops.
-{
-	//Log(LOG_INFO) << "Create ExplosionBState center = " << center;
-}
+{}
 
 /**
  * Deletes the ExplosionBState.
@@ -95,10 +93,8 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
-	//Log(LOG_INFO) << "ExplosionBState::init()";
 	if (_item != NULL)
 	{
-		//Log(LOG_INFO) << ". type = " << (int)_item->getRules()->getDamageType();
 		if (_item->getRules()->getBattleType() != BT_PSIAMP) // kL: pass by. Let cTor initialization handle it.
 		{
 			_power = _item->getRules()->getPower();
@@ -129,7 +125,6 @@ void ExplosionBState::init()
 
 				_power += extraPower;
 			}
-			//Log(LOG_INFO) << ". _power(_item) = " << _power;
 
 			// HE, incendiary, smoke or stun bombs create AOE explosions;
 			// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
@@ -142,7 +137,6 @@ void ExplosionBState::init()
 	else if (_tile != NULL)
 	{
 		_power = _tile->getExplosive();
-		//Log(LOG_INFO) << ". _power(_tile) = " << _power;
 		_areaOfEffect = true;
 	}
 	else if (_unit != NULL // cyberdiscs!!! And ... ZOMBIES.
@@ -155,18 +149,15 @@ void ExplosionBState::init()
 							_power * 3 / 2)
 				+ RNG::generate(
 							_power * 2 / 3,
-							_power * 3 / 2))
-			/ 2;
-
+							_power * 3 / 2));
+		_power /= 2;
 		_areaOfEffect = true;
 	}
 	else // unhandled cyberdisc!!!
 	{
 		_power = (RNG::generate(67, 137)
-				+ RNG::generate(67, 137))
-			/ 2;
-		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
-
+				+ RNG::generate(67, 137));
+		_power /= 2;
 		_areaOfEffect = true;
 	}
 
@@ -178,7 +169,6 @@ void ExplosionBState::init()
 
 	if (_areaOfEffect == true)
 	{
-		//Log(LOG_INFO) << ". . new Explosion(AoE)";
 		if (_power > 0)
 		{
 			Position pos = _center; // voxelspace
@@ -193,7 +183,6 @@ void ExplosionBState::init()
 			{
 				frameStart = _item->getRules()->getHitAnimation();
 				radius = _item->getRules()->getExplosionRadius();
-				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
 
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
@@ -206,7 +195,6 @@ void ExplosionBState::init()
 			}
 			else
 				radius = _power / 9; // <- for cyberdiscs & terrain expl.
-			//Log(LOG_INFO) << ". . . radius = " << radius;
 
 			if (radius < 0)
 				radius = 0;
@@ -223,8 +211,6 @@ void ExplosionBState::init()
 			if (_parent->getDepth() > 0)
 				frameStart -= Explosion::FRAMES_EXPLODE;
 
-			//Log(LOG_INFO) << ". . . offset(total) = " << offset;
-			//Log(LOG_INFO) << ". . . qty = " << qty;
 			for (int
 					i = 0;
 					i < qty;
@@ -242,7 +228,7 @@ void ExplosionBState::init()
 				}
 
 				Explosion* const explosion = new Explosion( // animation
-														pos + Position(12, 12, 0), // jogg the anim down a few pixels. Tks.
+														pos + Position(12,12,0), // jogg the anim down a few pixels. Tks.
 														frameStart,
 														frameDelay,
 														true);
@@ -274,11 +260,9 @@ void ExplosionBState::init()
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
 			if (exploCam->isOnScreen(targetPos) == false)
-			{
 				exploCam->centerOnPosition(
 										targetPos,
 										false);
-			}
 			else if (exploCam->getViewLevel() != targetPos.z)
 				exploCam->setViewLevel(targetPos.z);
 		}
@@ -287,7 +271,6 @@ void ExplosionBState::init()
 	}
 	else // create a bullet hit, or melee hit, or psi-hit, or acid spit hit
 	{
-		//Log(LOG_INFO) << ". . new Explosion(point)";
 		_hit = _pistolWhip
 			|| _item->getRules()->getBattleType() == BT_MELEE
 			|| _item->getRules()->getBattleType() == BT_PSIAMP;	// includes aLien psi-weapon.
@@ -310,16 +293,14 @@ void ExplosionBState::init()
 		if (sound != -1)
 			_parent->getResourcePack()->getSoundByDepth(
 													_parent->getDepth(),
-													sound)
-												->play(
-													-1,
-													_parent->getMap()->getSoundAngle(targetPos));
+													sound)->play(
+															-1,
+															_parent->getMap()->getSoundAngle(targetPos));
 
 //		if (_hitSuccess
 //			|| _hit == false)	// note: This would prevent map-reveal on aLien melee attacks.
 								// Because reveal depends if Explosions are queued ....
 //		{
-
 		int hitResult = 0;
 		if (_hit == true)
 		{
@@ -332,7 +313,6 @@ void ExplosionBState::init()
 				hitResult = -1;
 		}
 
-		//Log(LOG_INFO) << ". . ExplosionB::init() center = " << _center;
 		Explosion* const explosion = new Explosion( // animation. Don't turn the tile
 												_center,
 												anim,
@@ -351,7 +331,6 @@ void ExplosionBState::init()
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
-			//Log(LOG_INFO) << "ExplosionBState::init() hitExpl is NOT onScreen";
 			exploCam->centerOnPosition(
 									targetPos,
 									false);
@@ -359,7 +338,6 @@ void ExplosionBState::init()
 		else if (exploCam->getViewLevel() != targetPos.z)
 			exploCam->setViewLevel(targetPos.z);
 	}
-	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
 
 /**
@@ -384,7 +362,7 @@ void ExplosionBState::think()
 	}
 
 	if (_parent->getMap()->getExplosions()->empty() == true)
-		_extend--; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
+		--_extend; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
 
 	if (_extend < 1)
 	{
@@ -415,8 +393,7 @@ void ExplosionBState::think()
  * Explosions cannot be cancelled.
  */
 void ExplosionBState::cancel()
-{
-}
+{}
 
 /**
  * Calculates the effects of an attack.
@@ -428,14 +405,12 @@ void ExplosionBState::cancel()
  */
 void ExplosionBState::explode()
 {
-	//Log(LOG_INFO) << "ExplosionBState::explode()";
 	if (_item != NULL
 		&& _item->getRules()->getBattleType() == BT_PSIAMP)
 	{
 		_parent->popState();
 		return;
 	}
-
 
 	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
@@ -485,7 +460,6 @@ void ExplosionBState::explode()
 
 	if (_item != NULL)
 	{
-		//Log(LOG_INFO) << ". _item is VALID";
 		if (_unit == NULL
 			&& _item->getPreviousOwner() != NULL)
 		{
@@ -494,7 +468,6 @@ void ExplosionBState::explode()
 
 		if (_areaOfEffect == true)
 		{
-			//Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
 			tileEngine->explode(
 							_center,
 							_power,
@@ -508,12 +481,10 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . not AoE, -> TileEngine::hit()";
 			ItemDamageType damageType = _item->getRules()->getDamageType();
 			if (_pistolWhip == true)
 				damageType = DT_STUN;
 
-			//Log(LOG_INFO) << ". . ExplosionB::explode() center = " << _center;
 			BattleUnit* const victim = tileEngine->hit(
 													_center,
 													_power,
@@ -606,21 +577,6 @@ void ExplosionBState::explode()
 	_parent->popState();
 
 
-	Tile* const tile = tileEngine->checkForTerrainExplosions();
-	if (tile != NULL) // check for terrain explosions
-	{
-		Position pVoxel = Position(
-								tile->getPosition().x * 16 + 8,
-								tile->getPosition().y * 16 + 8,
-								tile->getPosition().z * 24 + 2);
-		_parent->statePushFront(new ExplosionBState(
-												_parent,
-												pVoxel,
-												NULL,
-												_unit,
-												tile));
-	}
-
 	if (_item != NULL
 		&& (_item->getRules()->getBattleType() == BT_GRENADE
 			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
@@ -639,7 +595,22 @@ void ExplosionBState::explode()
 			}
 		}
 	}
-	//Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
+
+
+	Tile* const tile = tileEngine->checkForTerrainExplosions(); // check for more exploding tiles
+	if (tile != NULL)
+	{
+		Position pVoxel = Position(
+								tile->getPosition().x * 16 + 8,
+								tile->getPosition().y * 16 + 8,
+								tile->getPosition().z * 24 + 2);
+		_parent->statePushFront(new ExplosionBState(
+												_parent,
+												pVoxel,
+												NULL,
+												_unit,
+												tile));
+	}
 }
 
 }

@@ -284,10 +284,10 @@ void Tile::saveBinary(Uint8** buffer) const
  * @param part		- the part number
  */
 void Tile::setMapData(
-		MapData* data,
-		int dataID,
-		int dataSetID,
-		int part)
+		MapData* const data,
+		const int dataID,
+		const int dataSetID,
+		const int part)
 {
 	_objects[part] = data;
 	_mapDataID[part] = dataID;
@@ -620,11 +620,13 @@ int Tile::getShade() const
 }
 
 /**
- * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
- * This is because the object type of the old and new one are not necessarily the same.
- * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
+ * Destroy a part on this tile.
+ * First remove the old object then replace it with the destroyed one
+ * because the object type of the old and new are not necessarily the same.
+ * If the destroyed part is an explosive
+ * set the tile's explosive value which will trigger a chained explosion.
  * @param part - this Tile's part for destruction
- * @return, true if objective was destroyed
+ * @return, true if an 'objective' was destroyed
  */
 bool Tile::destroy(int part)
 {
@@ -632,16 +634,16 @@ bool Tile::destroy(int part)
 
 	if (_objects[part])
 	{
-		if (_objects[part]->isGravLift()
-			|| _objects[part]->getArmor() == 255) // kL
+		if (_objects[part]->isGravLift() == true
+			|| _objects[part]->getArmor() == 255) // <- set MCD to 255 for Truly Indestructability.
 		{
 			return false;
 		}
 
-		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
+		_objective = (_objects[part]->getSpecialType() == MUST_DESTROY);
 
-		MapData* origPart = _objects[part];
-		int origMapDataSetID = _mapDataSetID[part];
+		const MapData* const origPart = _objects[part];
+		const int origMapDataSetID = _mapDataSetID[part];
 
 		setMapData(
 				 NULL,
@@ -649,9 +651,9 @@ bool Tile::destroy(int part)
 				-1,
 				part);
 
-		if (origPart->getDieMCD())
+		if (origPart->getDieMCD() != 0)
 		{
-			MapData* dead = origPart->getDataset()->getObjects()->at(origPart->getDieMCD());
+			MapData* const dead = origPart->getDataset()->getObjects()->at(origPart->getDieMCD());
 			setMapData(
 					dead,
 					origPart->getDieMCD(),
@@ -659,10 +661,10 @@ bool Tile::destroy(int part)
 					dead->getObjectType());
 		}
 
-		if (origPart->getExplosive())
+		if (origPart->getExplosive() != 0)
 			setExplosive(
-						origPart->getExplosive(),
-						origPart->getExplosiveType());
+					origPart->getExplosive(),
+					origPart->getExplosiveType());
 	}
 
 	if (part == MapData::O_FLOOR // check if the floor on the lowest level is gone
@@ -680,7 +682,7 @@ bool Tile::destroy(int part)
 }
 
 /**
- * Damages terrain ( check against terrain-part armor/hitpoints/constitution )
+ * Damages terrain (check against terrain-part armor/hitpoints/constitution)
  * @param part	- part of tile to check
  * @param power	- power of the damage
  * @return, true if an objective was destroyed
@@ -1322,14 +1324,6 @@ int Tile::getOverlaps() const
 {
 	return _overlaps;
 }
-
-/**
- * Increments the overlap value on this tile.
- */
-/* void Tile::addOverlap()
-{
-	++_overlaps;
-} */
 
 /**
  * Sets the danger flag true on this tile.

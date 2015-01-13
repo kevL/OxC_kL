@@ -54,15 +54,13 @@ UnitFallBState::UnitFallBState(BattlescapeGame* parent)
 		_terrain(NULL),
 		_unitsToMove(),
 		_tilesToFallInto()
-{
-}
+{}
 
 /**
  * Deletes the UnitWalkBState.
  */
 UnitFallBState::~UnitFallBState()
-{
-}
+{}
 
 /**
  * Initializes the state.

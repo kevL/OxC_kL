@@ -1151,27 +1151,22 @@ int UnitWalkBState::getFinalDirection() const
  */
 bool UnitWalkBState::visForUnits() const
 {
-	if (_falling == true)
+	if (_falling == true
+		|| _parent->getPanicHandled() == false)
+	{
 		return false;
-
-	bool newVis = false;
-
-	if (_unit->getFaction() == FACTION_PLAYER)
-	{
-		newVis = _terrain->calculateFOV(_unit);
-		//Log(LOG_INFO) << "UnitWalkBState::visForUnits() : Faction_Player, vis = " << newVis;
-	}
-	else
-	{
-		newVis = _terrain->calculateFOV(_unit)
-			  && _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
-			  && _action.desperate == false
-			  && _unit->getCharging() == NULL
-			  && _parent->getPanicHandled();
-		//Log(LOG_INFO) << "UnitWalkBState::visForUnits() : Faction_!Player, vis = " << newVis;
 	}
 
-	return newVis;
+	bool ret = _terrain->calculateFOV(_unit);
+	if (_unit->getFaction() != FACTION_PLAYER)
+	{
+		ret = ret
+		   && _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
+		   && _action.desperate == false
+		   && _unit->getCharging() == NULL;
+	}
+
+	return ret;
 }
 
 /**
@@ -1180,8 +1175,7 @@ bool UnitWalkBState::visForUnits() const
  */
 void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 {
-	int interval = 1;
-
+	int interval;
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
 		if (_action.dash == true)
@@ -1193,7 +1187,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 		interval = Options::battleAlienSpeed;
 
 	if (gravLift == true)
-		interval = interval * 3 / 2;
+		interval = interval * 2;
 
 	_parent->setStateInterval(static_cast<Uint32>(interval));
 }
@@ -1208,8 +1202,8 @@ void UnitWalkBState::playMovementSound()
 
 	if (_unit->getUnitVisible() == false
 		&& _parent->getSave()->getDebugMode() == false)
-//		|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
-//			&& !_walkCam->isOnScreen(_unit->getDestination(), true)))
+//		|| (!_walkCam->isOnScreen(_unit->getPosition())
+//			&& !_walkCam->isOnScreen(_unit->getDestination())))
 	{
 		return;
 	}
@@ -1225,7 +1219,7 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			Tile
+			const Tile
 				* const tile = _unit->getTile(),
 				* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
 
@@ -1270,10 +1264,9 @@ void UnitWalkBState::playMovementSound()
 	if (sound != -1)
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(_unit->getPosition()));
+												sound)->play(
+														-1,
+														_parent->getMap()->getSoundAngle(_unit->getPosition()));
 }
 
 /**
@@ -1303,8 +1296,9 @@ void UnitWalkBState::doFallCheck()
  */
 bool UnitWalkBState::groundCheck(int descent)
 {
-	Tile* tBelow = NULL;
-	int unitSize = _unit->getArmor()->getSize() - 1;
+	const Tile* tBelow;
+
+	const int unitSize = _unit->getArmor()->getSize() - 1;
 	for (int
 			x = unitSize;
 			x > -1;

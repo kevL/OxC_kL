@@ -130,10 +130,10 @@ protected:
 
 		/// Sets the pointer to the mapdata for a specific part of the tile
 		void setMapData(
-				MapData* data,
-				int dataID,
-				int dataSetID,
-				int part);
+				MapData* const data,
+				const int dataID,
+				const int dataSetID,
+				const int part);
 		/// Gets the IDs to the mapdata for a specific part of the tile
 		void getMapData(
 				int* dataID,
@@ -306,8 +306,6 @@ protected:
 
 		/// Gets how many times has this tile been overlapped with smoke/fire (runtime only).
 		int getOverlaps() const;
-		/// Increments the overlap value on this tile.
-//		void addOverlap();
 
 		/// Sets the danger flag on this tile so the AI will avoid it.
 		void setDangerous();

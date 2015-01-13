@@ -144,26 +144,23 @@ private:
 				int tuSpent = 0) const;
 		/// Fires off a reaction shot.
 		bool reactionShot(
-				BattleUnit* unit,
-				BattleUnit* target);
-		/// kL. Selects a fire method based on range & time units.
-		BattleActionType selectFireMethod( // kL
-				BattleAction action,
-				int& tu);
-
-		/// Checks validity of a snap shot to this position.
-/*		bool canMakeSnap(
+				BattleUnit* const unit,
+				const BattleUnit* const target);
+		/// Selects a fire method based on range & time units.
+		void selectFireMethod(BattleAction& action);
+/*		/// Checks validity of a snap shot to this position.
+		bool canMakeSnap(
 				BattleUnit* unit,
 				BattleUnit* target);
 		/// Tries to perform a reaction snap shot to this location.
 		bool tryReactionSnap(
 				BattleUnit* unit,
 				BattleUnit* target);
-		/// kL. Tests for a fire method based on range & time units.
+		/// Tests for a fire method based on range & time units.
 		int testFireMethod(
 				BattleUnit* unit,
 				BattleUnit* target,
-				BattleItem* weapon) const; */ // kL
+				BattleItem* weapon) const; */
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(

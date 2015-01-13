@@ -1533,18 +1533,13 @@ BattleUnit* TileEngine::getReactor(
  * @return, true if a shot happens
  */
 bool TileEngine::reactionShot(
-		BattleUnit* unit,
-		BattleUnit* target)
+		BattleUnit* const unit,
+		const BattleUnit* const target)
 {
-	//Log(LOG_INFO) << "TileEngine::reactionShot() reactID " << unit->getId() << " vs targetID " << target->getId();
-
-//	if (target->isOut(true, true) == true) // not gonna stop shit.
-//		return false;
+//	if (target->isOut(true, true) == true) return false; // not gonna stop shit.
 
 	BattleAction action;
 	action.actor = unit;
-	action.target = target->getPosition();
-	action.type = BA_NONE;
 
 	if (unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
@@ -1553,139 +1548,109 @@ bool TileEngine::reactionShot(
 	}
 	else
 	{
-		//Log(LOG_INFO) << "reactionShot() not XCOM";
 		action.weapon = unit->getMainHandWeapon();
-		//if (action.weapon != NULL) Log(LOG_INFO) << ". weapon[0] = " << action.weapon->getRules()->getType();
-		//else Log(LOG_INFO) << ". weapon[0] NULL";
 
 		if (action.weapon == NULL
 			&& action.actor->getUnitRules() != NULL
 			&& action.actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
 		{
 			action.weapon = _battleSave->getBattleGame()->getFist();
-			//if (action.weapon != NULL) Log(LOG_INFO) << ". weapon[1] = " << action.weapon->getRules()->getType();
-			//else Log(LOG_INFO) << ". weapon[1] NULL";
 		}
 	}
 
-	if (action.weapon == NULL)
+	if (   action.weapon == NULL
+		|| action.weapon->getRules()->canReactionFire() == false
+		|| action.weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
+		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return 255
+		|| (_battleSave->getDepth() == 0
+			&& action.weapon->getRules()->isWaterOnly() == true)
+		|| (action.actor->getOriginalFaction() != FACTION_HOSTILE	// is not an aLien and has unresearched weapon.
+			&& _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()) == false))
+	{
 		return false;
+	}
 
 
-	int tu = 0;
+	action.target = target->getPosition();
+	action.TU = 0;
+
 	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
+	{
 		action.type = BA_HIT;
+		action.TU = action.actor->getActionTUs(
+											BA_HIT,
+											action.weapon);
+		if (action.TU == 0
+			|| action.TU > action.actor->getTimeUnits())
+		{
+			return false;
+		}
+
+		bool canMelee = false;
+		for (int
+				i = 0;
+				i < 8
+					&& canMelee == false;
+				++i)
+		{
+			canMelee = validMeleeRange(		// hopefully this is blocked by walls & bigWalls ...
+									unit,	// see also, AI do_grenade_action .....
+									target,	// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
+									i);		// cf. ActionMenuState::btnActionMenuItemClick()
+		}
+
+		if (canMelee == false)
+			return false;
+	}
 	else
 	{
-		action.type = selectFireMethod(action, tu);
-		if (tu < 1)
-//			|| tu > action.actor->getTimeUnits()) // checked in selectFireMethod()
-		{
+		action.type = BA_NONE;
+		selectFireMethod(action); // choose BAT & setTU req'd.
+
+		if (action.type == BA_NONE)
 			return false;
+	}
+
+	action.targeting = true;
+
+	if (unit->getFaction() == FACTION_HOSTILE)
+	{
+		AlienBAIState* aggro_AI = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
+		if (aggro_AI == NULL)
+		{
+			aggro_AI = new AlienBAIState(
+									_battleSave,
+									unit,
+									NULL);
+			unit->setAIState(aggro_AI);
+		}
+
+		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > 0
+			&& aggro_AI->explosiveEfficacy(
+									action.target,
+									unit,
+									action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
+									-1) == false)
+		{
+			action.targeting = false;
 		}
 	}
 
-	if (action.type == BA_NONE)
-		return false;
-
-	if (action.type == BA_HIT)
+	if (action.targeting == true
+		&& action.actor->spendTimeUnits(action.TU) == true)
 	{
-		tu = action.actor->getActionTUs(
-									BA_HIT,
-									action.weapon);
+		action.TU = 0;
+		if (action.actor->getFaction() != FACTION_HOSTILE)
+			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 
-		if (tu < 1
-			|| tu > action.actor->getTimeUnits())
-		{
-			return false;
-		}
-		else
-		{
-			bool canMelee = false;
-
-			for (int
-					i = 0;
-					i < 8
-						&& canMelee == false;
-					++i)
-			{
-				canMelee = validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
-										unit, // see also, AI do_grenade_action .....
-										target, // darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
-										i); // cf. ActionMenuState::btnActionMenuItemClick()
-			}
-
-			if (canMelee == false)
-				return false;
-		}
-	}
-
-	action.TU = tu;
-	//Log(LOG_INFO) << ". TU = " << tu;
-
-	//Log(LOG_INFO) << ". canReact = " << action.weapon->getRules()->canReactionFire();
-	//Log(LOG_INFO) << ". isResearched = " << (action.actor->getOriginalFaction() == FACTION_HOSTILE
-	//		|| _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()));
-	//Log(LOG_INFO) << ". not Water = " << (_battleSave->getDepth() != 0
-	//		|| action.weapon->getRules()->isWaterOnly() == false);
-	//Log(LOG_INFO) << ". has Ammo item = " << (action.weapon->getAmmoItem() != NULL);
-	//Log(LOG_INFO) << ". ammo has Qty = " << (action.weapon->getAmmoItem()->getAmmoQuantity() > 0);
-	//Log(LOG_INFO) << ". can spend TU = " << (action.actor->getTimeUnits() >= action.TU);
-
-	if (action.weapon->getRules()->canReactionFire()
-		&& (action.actor->getOriginalFaction() == FACTION_HOSTILE	// is aLien, or has researched weapon.
-			|| _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()))
-		&& (_battleSave->getDepth() != 0
-			|| action.weapon->getRules()->isWaterOnly() == false)
-		&& action.weapon->getAmmoItem() != NULL						// lasers & melee are their own ammo-items
-		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0		// lasers & melee return 255
-//		&& action.actor->spendTimeUnits(action.TU))					// spend the TU
-		&& action.actor->getTimeUnits() >= action.TU)				// has the TU, spend below_
-	{
-		//Log(LOG_INFO) << ". . targeting TRUE";
-		action.targeting = true;
-
-		if (unit->getFaction() == FACTION_HOSTILE)
-		{
-			AlienBAIState* aggro_AI = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
-			if (aggro_AI == NULL)
-			{
-				aggro_AI = new AlienBAIState(
-										_battleSave,
-										unit,
-										NULL);
-				unit->setAIState(aggro_AI);
-			}
-
-			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1
-				&& aggro_AI->explosiveEfficacy(
-										action.target,
-										unit,
-										action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
-										-1) == false)
-			{
-				//Log(LOG_INFO) << ". . . targeting set FALSE";
-				action.targeting = false;
-			}
-		}
-
-		if (action.targeting == true
-			&& action.actor->spendTimeUnits(action.TU))
-		{
-			//Log(LOG_INFO) << ". . . targeting . . .";
-			action.TU = 0;
-			if (action.actor->getFaction() != FACTION_HOSTILE) // kL
-				action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
-
-			_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
-																	_battleSave->getBattleGame(),
-																	action,
-																	false));
-			_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
-																	_battleSave->getBattleGame(),
-																	action));
-			return true;
-		}
+		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
+																_battleSave->getBattleGame(),
+																action,
+																false));
+		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
+																_battleSave->getBattleGame(),
+																action));
+		return true;
 	}
 
 	return false;
@@ -1693,96 +1658,87 @@ bool TileEngine::reactionShot(
 
 /**
  * Selects a fire method based on range & time units.
- * @param action	- a BattleAction struct
- * @param tu		- reference TUs to be required
- * @return, the calculated BattleAction type
+ * @param action - reference a BattleAction struct
  */
-BattleActionType TileEngine::selectFireMethod(
-		BattleAction action,
-		int& tu)
+void TileEngine::selectFireMethod(BattleAction& action)
 {
-	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
-	action.type = BA_NONE;
-
 	const RuleItem* const rule = action.weapon->getRules();
-
 	const int dist = _battleSave->getTileEngine()->distance(
 														action.actor->getPosition(),
 														action.target);
 	if (dist > rule->getMaxRange()
-		|| dist < rule->getMinRange())
+		|| dist < rule->getMinRange()) // this might not be what I think it is ...
 	{
-		tu = 0;
-		return BA_NONE;
+		return;
 	}
 
-	int tuAvail = action.actor->getTimeUnits();
+	const int tu = action.actor->getTimeUnits();
 
 	if (dist <= rule->getAutoRange())
 	{
 		if (rule->getTUAuto()
-			&& tuAvail >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 		else if (rule->getTUSnap()
-			&& tuAvail >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (rule->getTUAimed()
-			&& tuAvail >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 	}
 	else if (dist <= rule->getSnapRange())
 	{
 		if (rule->getTUSnap()
-			&& tuAvail >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (rule->getTUAimed()
-			&& tuAvail >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (rule->getTUAuto()
-			&& tuAvail >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
 	else // if (dist <= rule->getAimRange())
 	{
 		if (rule->getTUAimed()
-			&& tuAvail >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (rule->getTUSnap()
-			&& tuAvail >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (rule->getTUAuto()
-			&& tuAvail >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
 
-	return action.type;
+	return;
 }
 
 /**
@@ -1857,8 +1813,8 @@ BattleUnit* TileEngine::hit(
 
 			// kL_note: This may be necessary only on aLienBase missions...
 			if (tile->damage(
-							part,
-							power) == true)
+						part,
+						power) == true)
 			{
 				_battleSave->addDestroyedObjective();
 			}
@@ -1904,15 +1860,15 @@ BattleUnit* TileEngine::hit(
 					{
 						const int
 							fire = RNG::generate( // 25% - 75% / 2
-												power / 8,
-												power * 3 / 8),
+											power / 8,
+											power * 3 / 8),
 							burn = RNG::generate(
-												0,
-												static_cast<int>(Round(vulnerable * 5.f)));
+											0,
+											static_cast<int>(Round(vulnerable * 5.f)));
 						//Log(LOG_INFO) << ". . . . DT_IN : fire = " << fire;
 
 						targetUnit->damage(
-										Position(0, 0, 0),
+										Position(0,0,0),
 										fire,
 										DT_IN,
 										true);
@@ -1925,7 +1881,7 @@ BattleUnit* TileEngine::hit(
 
 				const int unitSize = targetUnit->getArmor()->getSize() * 8;
 				const Position
-					targetPos = targetUnit->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
+					targetPos = targetUnit->getPosition() * Position(16,16,24) // convert tilespace to voxelspace
 							  + Position(
 										unitSize,
 										unitSize,
@@ -1933,8 +1889,7 @@ BattleUnit* TileEngine::hit(
 					relPos = targetPos_voxel
 						   - targetPos
 						   - Position(
-									0,
-									0,
+									0,0,
 									vertOffset);
 				//Log(LOG_INFO) << "TileEngine::hit() relPos " << relPos;
 
@@ -2002,7 +1957,6 @@ BattleUnit* TileEngine::hit(
 						&& (targetUnit->getHealth() == 0
 							|| targetUnit->getStun() >= targetUnit->getHealth()))
 //						&& !targetUnit->isOut(false, true))	// don't explode if stunned. Maybe... wrong!!!
-
 					{
 						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
 						if (type != DT_STUN		// don't explode if stunned. Maybe... see above.

@@ -682,8 +682,10 @@ void BattlescapeGame::endTurnPhase()
 					tile->getPosition().y * 16 + 8,
 					tile->getPosition().z * 24 + 10);
 
-		// kL_note: This seems to be screwing up for preBattle powersource explosions; they
-		// wait until the first turn, either endTurn or perhaps checkForCasualties or like that.
+		// kL_note: This seems to be screwing up.
+		// Further info: what happens is that an explosive part of a tile gets destroyed by fire
+		// during an endTurn sequence, has it's setExplosive() set, then is somehow triggered
+		// by the next projectile hit against whatever.
 		statePushNext(new ExplosionBState(
 										this,
 										pos,
@@ -1185,7 +1187,6 @@ void BattlescapeGame::showInfoBoxQueue()
  */
 void BattlescapeGame::handleNonTargetAction()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction()";
 	if (_currentAction.targeting == false)
 	{
 		_currentAction.cameraPosition = Position(0, 0,-1);
@@ -1193,7 +1194,6 @@ void BattlescapeGame::handleNonTargetAction()
 		if (_currentAction.type == BA_PRIME
 			|| _currentAction.type == BA_DEFUSE)
 		{
-			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_PRIME or _DEFUSE";
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_currentAction.weapon->setFuseTimer(_currentAction.value);
@@ -1214,7 +1214,6 @@ void BattlescapeGame::handleNonTargetAction()
 		else if (_currentAction.type == BA_USE
 			|| _currentAction.type == BA_LAUNCH)
 		{
-			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_USE or _LAUNCH";
 			if (_currentAction.result.length() > 0)
 			{
 				_parentState->warning(_currentAction.result);
@@ -1225,7 +1224,6 @@ void BattlescapeGame::handleNonTargetAction()
 		}
 		else if (_currentAction.type == BA_HIT)
 		{
-			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_HIT";
 			if (_currentAction.result.length() > 0)
 			{
 				_parentState->warning(_currentAction.result);
@@ -1318,8 +1316,8 @@ void BattlescapeGame::handleState()
 		else
 			_states.front()->think();
 
-//		getMap()->invalidate(); // redraw map
 		getMap()->draw(); // kL, old code!! Less clunky when scrolling the battlemap.
+//		getMap()->invalidate(); // redraw map
 	}
 }
 

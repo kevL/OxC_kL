@@ -1,0 +1,23 @@
+﻿# Alternate HandOb for the Medi-kit so it doesn't just look like a grenade in the hand.
+# Alternate HandOb for the HEPACK so it doesn't just look like a grenade in the hand.
+# By IvanDogovich
+items:
+  - type: STR_MEDI_KIT
+    handSprite: 208
+  - type: STR_HIGH_EXPLOSIVE
+    handSprite: 216
+extraSprites:
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      208: Resources/ID_HandOb/HandOb_MediKit.png
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      216: Resources/ID_HandOb/HandOb_HE.png
