@@ -88,15 +88,13 @@ TileEngine::TileEngine(
 		_powerE(-1),
 		_powerT(-1),
 		_missileDirection(-1)
-{
-}
+{}
 
 /**
  * Deletes the TileEngine.
  */
 TileEngine::~TileEngine()
-{
-}
+{}
 
 /**
  * Calculates sun shading for the whole terrain.
@@ -119,7 +117,7 @@ void TileEngine::calculateSunShading()
  * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
  * @param tile - a tile to calculate sun shading for
  */
-void TileEngine::calculateSunShading(Tile* tile)
+void TileEngine::calculateSunShading(Tile* const tile)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading()";
 	const int layer = 0; // Ambient lighting layer.
@@ -131,11 +129,11 @@ void TileEngine::calculateSunShading(Tile* tile)
 		// kL: old code
 		if (verticalBlockage(
 						_battleSave->getTile(Position(
-													tile->getPosition().x,
-													tile->getPosition().y,
-													_battleSave->getMapSizeZ() - 1)),
+												tile->getPosition().x,
+												tile->getPosition().y,
+												_battleSave->getMapSizeZ() - 1)),
 						tile,
-						DT_NONE)) // !=0
+						DT_NONE) != 0)
 		// kL_note: new code
 /*		int
 			block = 0,
@@ -2766,9 +2764,9 @@ void TileEngine::explode(
  *			 1+ variable power blocked
  */
 int TileEngine::horizontalBlockage(
-		Tile* startTile,
-		Tile* endTile,
-		ItemDamageType type)
+		const Tile* const startTile,
+		const Tile* const endTile,
+		const ItemDamageType type)
 {
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage()";
 /*	DT_NONE,	// 0
@@ -3358,9 +3356,9 @@ int TileEngine::horizontalBlockage(
  *						 1+ variable power blocked
  */
 int TileEngine::verticalBlockage(
-		Tile* startTile,
-		Tile* endTile,
-		ItemDamageType type)
+		const Tile* const startTile,
+		const Tile* const endTile,
+		const ItemDamageType type)
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
 /*	bool visLike = type == DT_NONE
@@ -5961,14 +5959,14 @@ Position TileEngine::getOriginVoxel(
 
 /**
  * Marks a region of the map as "dangerous" for a turn.
- * @param pos		- is the epicenter of the explosion
+ * @param pos		- is the epicenter of the explosion in tilespace
  * @param radius	- how far to spread out
- * @param unit		- the unit that is triggering this action
+ * @param unit		- pointer to the BattleUnit that is triggering this action
  */
 void TileEngine::setDangerZone(
-		Position pos,
-		int radius,
-		BattleUnit* unit)
+		const Position pos,
+		const int radius,
+		const BattleUnit* const unit)
 {
 	Tile* tile = _battleSave->getTile(pos);
 	if (tile == NULL)
@@ -5976,10 +5974,9 @@ void TileEngine::setDangerZone(
 
 	// set the epicenter as dangerous
 	tile->setDangerous();
-	Position originVoxel = (pos * Position(16, 16, 24))
+	Position originVoxel = (pos * Position(16,16,24))
 								+ Position(
-										8,
-										8,
+										8,8,
 										12 - tile->getTerrainLevel());
 	Position targetVoxel;
 
@@ -5999,11 +5996,13 @@ void TileEngine::setDangerZone(
 				// make sure it's within the radius
 				if ((x * x) + (y * y) <= radius * radius)
 				{
-					tile = _battleSave->getTile(pos + Position(x, y, 0));
-					if (tile)
+					tile = _battleSave->getTile(pos + Position(x,y,0));
+					if (tile != NULL)
 					{
-						targetVoxel = ((pos + Position(x, y, 0)) * Position(16, 16, 24))
-									+ Position(8, 8, 12 - tile->getTerrainLevel());
+						targetVoxel = ((pos + Position(x,y,0)) * Position(16,16,24))
+									+ Position(
+											8,8,
+											12 - tile->getTerrainLevel());
 
 						std::vector<Position> trajectory;
 						// we'll trace a line here, ignoring all units, to check if the explosion will reach this point;
@@ -6018,11 +6017,10 @@ void TileEngine::setDangerZone(
 										unit,
 										true,
 										false,
-										unit)
-									== VOXEL_EMPTY)
+										unit) == VOXEL_EMPTY)
 						{
-							if (trajectory.size()
-								&& (trajectory.back() / Position(16, 16, 24)) == pos + Position(x, y, 0))
+							if (trajectory.size() != 0
+								&& (trajectory.back() / Position(16,16,24)) == pos + Position(x,y,0))
 							{
 								tile->setDangerous();
 							}

@@ -1187,7 +1187,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 		interval = Options::battleAlienSpeed;
 
 	if (gravLift == true)
-		interval = interval * 2;
+		interval = interval * 7 / 4;
 
 	_parent->setStateInterval(static_cast<Uint32>(interval));
 }

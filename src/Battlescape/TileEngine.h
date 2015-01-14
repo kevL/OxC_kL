@@ -93,7 +93,7 @@ private:
 		/// Calculates sun shading of the whole map.
 		void calculateSunShading();
 		/// Calculates sun shading of a single tile.
-		void calculateSunShading(Tile* tile);
+		void calculateSunShading(Tile* const tile);
 		/// Recalculates lighting of the battlescape for terrain.
 		void calculateTerrainLighting();
 		/// Recalculates lighting of the battlescape for units.
@@ -179,14 +179,14 @@ private:
 				bool grenade = false);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
-				Tile* startTile,
-				Tile* endTile,
-				ItemDamageType type);
+				const Tile* const startTile,
+				const Tile* const endTile,
+				const ItemDamageType type);
 		/// Checks the vertical blockage of a tile.
 		int verticalBlockage(
-				Tile* startTile,
-				Tile* endTile,
-				ItemDamageType type);
+				const Tile* const startTile,
+				const Tile* const endTile,
+				const ItemDamageType type);
 		/// Sets the final direction from which a missile or thrown-object came.
 		void setProjectileDirection(const int dir);
 		/// Blows this tile up.
@@ -296,9 +296,9 @@ private:
 
 		/// mark a region of the map as "dangerous" for a turn.
 		void setDangerZone(
-				Position pos,
-				int radius,
-				BattleUnit* unit);
+				const Position pos,
+				const int radius,
+				const BattleUnit* const unit);
 };
 
 }
