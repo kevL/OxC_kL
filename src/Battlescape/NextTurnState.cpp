@@ -273,6 +273,25 @@ void NextTurnState::close()
 												music,
 												terrain);
 			}
+
+
+			Tile* const tile = _savedBattle->getTileEngine()->checkForTerrainExplosions();
+			if (tile != NULL)
+			{
+				const Position pos = Position(
+										tile->getPosition().x * 16 + 8,
+										tile->getPosition().y * 16 + 8,
+										tile->getPosition().z * 24 + 10);
+				_savedBattle->getBattleGame()->statePushBack(new ExplosionBState(
+																			_savedBattle->getBattleGame(),
+																			pos,
+																			NULL,
+																			NULL,
+																			tile,
+																			false,
+																			false,
+																			true));
+			}
 		}
 		else
 		{
@@ -281,25 +300,6 @@ void NextTurnState::close()
 
 			if (_savedBattle->getDebugMode() == false)
 				_state->getGame()->getCursor()->setVisible(false);
-		}
-
-
-		Tile* const tile = _savedBattle->getTileEngine()->checkForTerrainExplosions();
-		if (tile != NULL)
-		{
-			const Position pos = Position(
-									tile->getPosition().x * 16 + 8,
-									tile->getPosition().y * 16 + 8,
-									tile->getPosition().z * 24 + 10);
-			_savedBattle->getBattleGame()->statePushBack(new ExplosionBState(
-																		_savedBattle->getBattleGame(),
-																		pos,
-																		NULL,
-																		NULL,
-																		tile,
-																		false,
-																		false,
-																		true));
 		}
 	}
 }
