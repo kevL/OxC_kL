@@ -3444,7 +3444,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 
 									pos.x = tile->getPosition().x * 16 + 8;
 									pos.y = tile->getPosition().y * 16 + 8;
-									pos.z = tile->getPosition().z * 24 + tile->getTerrainLevel();
+									pos.z = tile->getPosition().z * 24 - tile->getTerrainLevel();
 
 									statePushNext(new ExplosionBState(
 																	this,

@@ -284,12 +284,12 @@ items:
     fireSound: 164
     compatibleAmmo:
       - STR_SAW_AP_AMMO
-    accuracyAuto: 35
-    accuracySnap: 50
-    accuracyAimed: 85
-    tuAuto: 35
-    tuSnap: 35
-    tuAimed: 60
+    accuracyAuto: 39
+    accuracySnap: 56
+    accuracyAimed: 88
+    tuAuto: 42
+    tuSnap: 33
+    tuAimed: 61
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -333,10 +333,10 @@ items:
     compatibleAmmo:
       - STR_SHOTGUN_SHELLS
       - STR_ALLOY_SHOTGUN_SHELLS
-    accuracySnap: 66
-    accuracyAimed: 80
-    tuSnap: 30
-    tuAimed: 45
+    accuracySnap: 72
+    accuracyAimed: 86
+    tuSnap: 32
+    tuAimed: 47
     battleType: 1
     twoHanded: true
     invWidth: 1
@@ -358,10 +358,10 @@ items:
       - STR_SHOTGUN_SHELLS
       - STR_ALLOY_SHOTGUN_SHELLS
       - STR_ELERIUM_SHOTGUN_SHELLS
-    accuracySnap: 70
-    accuracyAimed: 85
-    tuSnap: 30
-    tuAimed: 45
+    accuracySnap: 72
+    accuracyAimed: 86
+    tuSnap: 32
+    tuAimed: 47
     battleType: 1
     twoHanded: true
     invWidth: 1
@@ -383,7 +383,7 @@ items:
     bulletSprite: 2
     hitAnimation: 26
     hitSound: 22
-    power: 15
+    power: 16
     damageType: 1
     clipSize: 8
     battleType: 2
@@ -399,7 +399,7 @@ items:
     bulletSprite: 2
     hitAnimation: 26
     hitSound: 22
-    power: 25
+    power: 26
     damageType: 1
     clipSize: 8
     battleType: 2
@@ -417,7 +417,7 @@ items:
     bulletSprite: 2
     hitAnimation: 26
     hitSound: 22
-    power: 35
+    power: 36
     damageType: 1
     clipSize: 8
     battleType: 2

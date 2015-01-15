@@ -163,7 +163,10 @@ void UnitWalkBState::think()
 		}
 
 		if (doStatusWalk() == false)
+		{
+			//Log(LOG_INFO) << ". . doStatusWalk() FALSE return";
 			return;
+		}
 
 
 	// _oO **** STATUS STANDING end **** Oo_ // #3
@@ -194,7 +197,10 @@ void UnitWalkBState::think()
 			}
 
 			if (doStatusStand_end() == false)
+			{
+				//Log(LOG_INFO) << ". . doStatusStand_end() FALSE return";
 				return;
+			}
 			else
 				_parent->getBattlescapeState()->refreshVisUnits();
 		}
@@ -232,7 +238,10 @@ void UnitWalkBState::think()
 	{
 		//Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
 		if (doStatusStand() == false)
+		{
+			//Log(LOG_INFO) << ". . doStatusStand() FALSE return";
 			return;
+		}
 		else // Destination is not valid until *after* doStatusStand() runs.
 		{
 //			if (_unit->getVisible())
@@ -305,7 +314,7 @@ bool UnitWalkBState::doStatusStand()
 
 	setNormalWalkSpeed(gravLift);
 
-	if (dir > -1
+	if (dir != -1
 		&& _kneelCheck == true				// check if unit is kneeled
 		&& _unit->isKneeled() == true		// unit is kneeled
 		&& gravLift == false				// not on a gravLift
@@ -394,8 +403,8 @@ bool UnitWalkBState::doStatusStand()
 		//else Log(LOG_INFO) << ". STANDING no strafe.";
 
 		//Log(LOG_INFO) << ". getTUCost() & destination";
-		Position destination; // gets tu cost, but also gets the destination position.
-		int tu = _pf->getTUCost(
+		Position destination;
+		int tu = _pf->getTUCost( // gets tu cost, but also sets the destination position.
 							_unit->getPosition(),
 							dir,
 							&destination,
@@ -624,15 +633,15 @@ bool UnitWalkBState::doStatusStand()
 			}
 		}
 
-		//Log(LOG_INFO) << ". dequeuePath()";
 		dir = _pf->dequeuePath(); // now start moving
+		//Log(LOG_INFO) << ". dequeuePath() dir[0] = " << dir;
 
 		if (_falling == true)
 		{
 			//Log(LOG_INFO) << ". . falling, _pf->DIR_DOWN";
 			dir = _pf->DIR_DOWN;
 		}
-		//Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
+		//Log(LOG_INFO) << ". dequeuePath() dir[1] = " << dir;
 
 		if (_unit->spendTimeUnits(tu) == true		// These were checked above and don't really need to
 			&& _unit->spendEnergy(energy) == true)	// be checked again here. Only subtract required.
@@ -667,7 +676,7 @@ bool UnitWalkBState::doStatusStand()
 	else // dir == -1
 	{
 		//Log(LOG_INFO) << ". unit direction = " << _unit->getDirection();
-		//Log(LOG_INFO) << ". . postPathProcedures()";
+		//Log(LOG_INFO) << ". . CALL postPathProcedures()";
 		postPathProcedures();
 
 		return false;
@@ -715,6 +724,7 @@ bool UnitWalkBState::doStatusWalk()
 		_unit->setStatus(STATUS_STANDING);
 	}
 
+	//Log(LOG_INFO) << ". . unitPos " << _unit->getPosition();
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
 	if (_tileSwitchDone == false
 		&& _unit->getPosition() != _unit->getLastPosition())
@@ -747,7 +757,6 @@ bool UnitWalkBState::doStatusWalk()
 			{
 //				posSized = pos + Position(x, y, 0);
 				tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
-
 				if (_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
 				{
 					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
@@ -775,6 +784,7 @@ bool UnitWalkBState::doStatusWalk()
 										->setUnit(
 												_unit,
 												_parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1)));
+				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
 			}
 		}
 
@@ -799,7 +809,6 @@ bool UnitWalkBState::doStatusWalk()
 				{
 					tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
 					//if (tileBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
-
 					if (tileBelow != NULL
 						&& tileBelow->getUnit() != NULL)
 					{
@@ -859,8 +868,7 @@ bool UnitWalkBState::doStatusStand_end()
 
 		const Position pos = _unit->getPosition() * Position(16, 16, 24)
 						   + Position(
-									8,
-									8,
+									8,8,
 									-(_unit->getTile()->getTerrainLevel()));
 		_parent->getTileEngine()->hit(
 									pos,
@@ -1100,7 +1108,11 @@ void UnitWalkBState::postPathProcedures()
 	_parent->getMap()->cacheUnit(_unit);
 
 	if (_falling == false)
+	{
+		//Log(LOG_INFO) << ". postPath falling FALSE popState";
 		_parent->popState();
+	}
+	//else Log(LOG_INFO) << ". postPath falling TRUE";
 }
 
 /**
@@ -1309,9 +1321,13 @@ bool UnitWalkBState::groundCheck(int descent)
 				y > -1;
 				--y)
 		{
-			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -descent - 1));
+			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(
+																			x,y,
+																			-descent - 1));
 			if (_parent->getSave()->getTile(
-										_unit->getPosition() + Position(x, y, -descent))
+										_unit->getPosition() + Position(
+																	x,y,
+																	-descent))
 									->hasNoFloor(tBelow) == false)
 			{
 				return true;

@@ -76,10 +76,10 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 			++i)
 	{
 		_save->getTileCoords(
-							i,
-							&pos.x,
-							&pos.y,
-							&pos.z);
+						i,
+						&pos.x,
+						&pos.y,
+						&pos.z);
 		_nodes.push_back(PathfindingNode(pos));
 	}
 }
@@ -597,15 +597,15 @@ bool Pathfinding::aStarPath(
 	while (openList.empty() == false) // if the openList is empty, reached the end
 	{
 		PathfindingNode* currentNode = openList.pop();
-		Position const &currentPos = currentNode->getPosition();
+		const Position& currentPos = currentNode->getPosition();
 		currentNode->setChecked();
 
 		if (currentPos == target) // found the target.
 		{
 			_path.clear();
 
-			PathfindingNode* pf = currentNode;
-			while (pf->getPrevNode())
+			const PathfindingNode* pf = currentNode;
+			while (pf->getPrevNode() != NULL)
 			{
 				_path.push_back(pf->getPrevDir());
 				pf = pf->getPrevNode();
@@ -804,29 +804,31 @@ int Pathfinding::getTUCost(
 
 				if (partsGoingUp > unitSize)
 				{
+					triedStairs = true;
+
 					++vertOffset.z;
 					++destPos->z;
 					destTile = _save->getTile(*destPos + offsetPos);
 					belowDest = _save->getTile(*destPos + Position(x, y,-1));
-
-					triedStairs = true;
 				}
 			}
 			else if (fellDown == false // for safely walking down ramps or stairs ...
 				&& _movementType != MT_FLY
 				&& canFallDown(destTile) == true
 				&& belowDest != NULL
-				&& belowDest->getTerrainLevel() < -11)	// higher than 1-half up.
+				&& belowDest->getTerrainLevel() < -11	// higher than 1-half up.
+				&& startPos.x != destPos->x				// Don't consider this section if
+				&& startPos.y != destPos->y)			// falling via Alt+FlightSuit.
 			{
 				++partsGoingDown;
 
 				if (partsGoingDown == (unitSize + 1) * (unitSize + 1))
 				{
+					fellDown = true;
+
 					--destPos->z;
 					destTile = _save->getTile(*destPos + offsetPos);
 					belowDest = _save->getTile(*destPos + Position(x, y,-1));
-
-					fellDown = true;
 				}
 			}
 			else if (_movementType == MT_FLY
@@ -887,11 +889,12 @@ int Pathfinding::getTUCost(
 
 				if (partsFalling == (unitSize + 1) * (unitSize + 1))
 				{
+					fellDown = true;
+
 					*destPos = startPos + Position(0, 0,-1);
 					destTile = _save->getTile(*destPos + offsetPos);
 					belowDest = _save->getTile(*destPos + Position(x, y,-1));
 					dir = DIR_DOWN;
-					fellDown = true;
 				}
 			}
 

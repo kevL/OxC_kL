@@ -2717,7 +2717,7 @@ void BattlescapeGenerator::runInventory(
 	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
 	_baseEquipScreen = true;
 
-	int qtySoldiers = 0;
+	int qtySoldiers;
 	if (craft != NULL)
 	{
 		qtySoldiers = craft->getNumSoldiers();
@@ -2780,7 +2780,7 @@ void BattlescapeGenerator::runInventory(
 	//Log(LOG_INFO) << ". deployXCOM() DONE";
 
 	if (craft != NULL
-		&& equipUnit > 0
+		&& equipUnit != 0
 		&& static_cast<int>(equipUnit) <= qtySoldiers)
 	{
 		size_t j = 0;

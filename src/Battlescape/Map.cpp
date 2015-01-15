@@ -688,10 +688,19 @@ void Map::drawTerrain(Surface* surface)
 		wpID->setPalette(getPalette());
 
 		Uint8 wpColor;
-		if (_save->getTerrain() == "DESERT")
+/*		if (_save->getTerrain() == "DESERT")
+			|| _save->getTerrain() == "DESERTMOUNT")
+		{
 			wpColor = Palette::blockOffset(0)+1; // white
 		else
+			wpColor = Palette::blockOffset(1)+4; */
+		if (_save->getTerrain() == "POLAR"
+			|| _save->getTerrain() == "POLARMOUNT")
+		{
 			wpColor = Palette::blockOffset(1)+4; // orange
+		}
+		else
+			wpColor = Palette::blockOffset(0)+1; // white
 
 		wpID->setColor(wpColor);
 	}
@@ -1791,10 +1800,10 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// kL_begin #3 of 3:
-							const Tile* const tileUp = _save->getTile(mapPosition + Position(0,0,1));
+							const Tile* const tileAbove = _save->getTile(mapPosition + Position(0,0,1));
 							if (_camera->getViewLevel() == itZ
-								|| (tileUp != NULL
-									&& tileUp->getSprite(MapData::O_FLOOR) == NULL))
+								|| (tileAbove != NULL
+									&& tileAbove->getSprite(MapData::O_FLOOR) == NULL))
 							{
 								if (unit != _save->getSelectedUnit()
 									&& unit->getGeoscapeSoldier() != NULL

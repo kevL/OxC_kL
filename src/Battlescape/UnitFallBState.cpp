@@ -88,7 +88,7 @@ void UnitFallBState::think()
 			)
 	{
 		//Log(LOG_INFO) << ". falling ID = " << (*unit)->getId();
-		if ((*unit)->isOut(true, true))
+		if ((*unit)->isOut(true, true) == true)
 //		if ((*unit)->getHealth() == 0
 //			|| (*unit)->getStun() >= (*unit)->getHealth())
 		{
