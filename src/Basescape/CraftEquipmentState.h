@@ -48,6 +48,7 @@ class CraftEquipmentState
 private:
 	size_t
 		_craftID,
+		_equipUnit,
 		_sel;
 	Uint8 _ammoColor;
 

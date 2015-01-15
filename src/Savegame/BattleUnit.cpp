@@ -3529,16 +3529,18 @@ int BattleUnit::getAggroSound() const
  */
 void BattleUnit::halveArmor()
 {
-	_currentArmor[0] /= 2;
-	_currentArmor[1] /= 2;
-	_currentArmor[2] /= 2;
-	_currentArmor[3] /= 2;
-	_currentArmor[4] /= 2;
+	for (size_t
+			i = 0;
+			i != 5;
+			++i)
+	{
+		_currentArmor[i] /= 2;
+	}
 }
 
 /**
  * Gets the faction the unit was killed by.
- * @return UnitFaction
+ * @return, UnitFaction
  */
 UnitFaction BattleUnit::killedBy() const
 {

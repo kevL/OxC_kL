@@ -733,7 +733,7 @@ void BattlescapeGame::endTurnPhase()
 	{
 		if ((*i)->getFaction() == _save->getSide())
 		{
-			tile = (*i)->getTile(); // TODO: corpse_items -> unit
+			tile = (*i)->getTile();
 			if (tile != NULL
 				&& (*i)->getHealth() > 0
 				&& ((*i)->getGeoscapeSoldier() != NULL

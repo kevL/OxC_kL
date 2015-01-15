@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Select Squad screen that lets the player
- * pick the soldiers to assign to a craft.
+ * Select Squad screen that lets the player pick the soldiers to assign to a craft.
  */
 class CraftSoldiersState
 	:
@@ -58,6 +57,7 @@ private:
 		* _txtSpace,
 		* _txtLoad;
 	TextButton
+		* _btnInventory,
 		* _btnOk,
 		* _btnUnload;
 	TextList* _lstSoldiers;
@@ -102,6 +102,9 @@ private:
 		void lstSoldiersPress(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 //		void lstSoldiersMousePress(Action* action);
+
+		/// Handler for clicking the Inventory button.
+		void btnInventoryClick(Action* action);
 };
 
 }

@@ -268,7 +268,8 @@ private:
 		/// Generates a fake battlescape for Craft & Base soldier-inventory.
 		void runInventory(
 				Craft* craft,
-				Base* base = NULL);
+				Base* base = NULL,
+				size_t equipUnit = 0);
 };
 
 }

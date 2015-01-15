@@ -216,20 +216,20 @@ void CraftInfoState::init()
 
 	_craft = _base->getCrafts()->at(_craftID);
 
+	// Reset stuff when coming back from pre-battle Inventory.
+	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
+	if (battleSave != NULL)
+	{
+		_game->getSavedGame()->setBattleGame(NULL);
+		_craft->setInBattlescape(false);
+	}
+
+
 	const bool
 		hasCrew = _craft->getNumSoldiers() > 0,
 		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 	_btnInventory->setVisible(hasCrew
 							  && newBattle == false);
-
-	// Reset stuff when coming back from soldier-inventory.
-	_game->getSavedGame()->setBattleGame(NULL);
-	_craft->setInBattlescape(false);
-
-//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-	// Reset_end.
-
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	_txtStatus->setText(tr(_craft->getStatus()));
@@ -544,10 +544,6 @@ void CraftInfoState::btnInventoryClick(Action*)
 
 	Craft* const craft = _base->getCrafts()->at(_craftID);
 	bgen.runInventory(craft);
-
-	// Set system colors
-//	_game->getCursor()->setColor(Palette::blockOffset(9));
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(

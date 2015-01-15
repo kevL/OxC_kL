@@ -122,12 +122,10 @@ protected:
 		 * @return, pointer to MapData
 		 */
 		MapData* getMapData(int part) const
-		{
-			if (part < 0 || 3 < part)
+		{ if (part < 0 || 3 < part)
 				return NULL;
 
-			return _objects[part];
-		}
+			return _objects[part]; }
 
 		/// Sets the pointer to the mapdata for a specific part of the tile
 		void setMapData(
@@ -142,7 +140,7 @@ protected:
 				int part) const;
 
 		/// Gets whether this tile has no objects
-		bool isVoid() const;
+		bool isVoid(bool partsOnly = false) const;
 
 		/// Gets the TU cost to walk over a certain part of the tile.
 		int getTUCost(
@@ -163,9 +161,7 @@ protected:
 		 * @return, position
 		 */
 		const Position& getPosition() const
-		{
-			return _pos;
-		}
+		{ return _pos; }
 
 		/// Gets the floor object footstep sound.
 		int getFootstepSound(const Tile* const tileBelow) const;
@@ -182,11 +178,9 @@ protected:
 		 * @return bool
 		 */
 		bool isUfoDoorOpen(int part) const
-		{
-			return _objects[part] != NULL
+		{ return _objects[part] != NULL
 				&& _objects[part]->isUFODoor() == true
-				&& _curFrame[part] != 0;
-		}
+				&& _curFrame[part] != 0; }
 		/// Closes ufo door.
 		int closeUfoDoor();
 
@@ -240,20 +234,20 @@ protected:
 		 * @return, BattleUnit
 		 */
 		BattleUnit* getUnit() const
-		{
-			return _unit;
-		}
+		{ return _unit; }
 
 		/// Sets fire - does not increment overlaps.
 		void setFire(int fire);
 		/// Gets fire.
-		int getFire() const;
+		int getFire() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't. ie: change function names, THANKS c++
+//		{ return _fire; }
 		/// Adds smoke - increments overlaps.
 		void addSmoke(int smoke);
 		/// Sets smoke - does not increment overlaps.
 		void setSmoke(int smoke);
 		/// Gets smoke.
-		int getSmoke() const;
+		int getSmoke() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't.
+//		{ return _smoke; }
 
 		/// Gets flammability.
 		int getFlammability() const;

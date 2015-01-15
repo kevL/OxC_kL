@@ -2705,24 +2705,28 @@ void BattlescapeGenerator::setTacticalSprites()
 /**
  * Creates a mini-battle-save for managing inventory from the Geoscape's CraftEquip or BaseEquip screen.
  * Kids, don't try this at home! yer tellin' me.
- * @param craft	- pointer to Craft to handle
- * @param base	- pointer to Base to handle (default NULL)
+ * @param craft		- pointer to Craft to handle
+ * @param base		- pointer to Base to handle (default NULL)
+ * @param equipUnit	- soldier to display in battle pre-equip inventory (default 0)
  */
 void BattlescapeGenerator::runInventory(
 		Craft* craft,
-		Base* base)
+		Base* base,
+		size_t equipUnit)
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
 	_baseEquipScreen = true;
 
-	int soldiers = 0;
+	int qtySoldiers = 0;
 	if (craft != NULL)
-		soldiers = craft->getNumSoldiers();
+	{
+		qtySoldiers = craft->getNumSoldiers();
+	}
 	else
-		soldiers = base->getAvailableSoldiers(true);
+		qtySoldiers = base->getAvailableSoldiers(true);
 
 	// we need to fake a map for soldier placement
-	_mapsize_x = soldiers;
+	_mapsize_x = qtySoldiers;
 	_mapsize_y = 1;
 	_mapsize_z = 1;
 
@@ -2738,7 +2742,7 @@ void BattlescapeGenerator::runInventory(
 
 	for (int
 			i = 0;
-			i < soldiers;
+			i < qtySoldiers;
 			++i)
 	{
 		Tile* const tile = _battleSave->getTiles()[i];
@@ -2775,6 +2779,24 @@ void BattlescapeGenerator::runInventory(
 	deployXCOM();
 	//Log(LOG_INFO) << ". deployXCOM() DONE";
 
+	if (craft != NULL
+		&& equipUnit > 0
+		&& static_cast<int>(equipUnit) <= qtySoldiers)
+	{
+		size_t j = 0;
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _battleSave->getUnits()->begin();
+				i != _battleSave->getUnits()->end();
+				++i)
+		{
+			++j;
+			if (j == equipUnit)
+			{
+				_battleSave->setSelectedUnit(*i);
+				break;
+			}
+		}
+	}
 	// ok, now remove any vehicles that may have somehow ended up in our battlescape
 /*	for (std::vector<BattleUnit*>::iterator
 			i = _battleSave->getUnits()->begin();

@@ -314,17 +314,28 @@ void Tile::getMapData(
 
 /**
  * Gets whether this tile has no objects.
- * Note that we CAN have a unit (but not smoke or inventory) on this tile.
- * @return, true if there is nothing but air on this tile
+ * Note that we CAN have a unit (but no smoke or inventory) on this tile.
+ * @param partsOnly - check only for parts & item (default false)
+ * @return, true if there is nothing but air on this tile + smoke/fire if partsOnly TRUE
  */
-bool Tile::isVoid() const
+bool Tile::isVoid(bool partsOnly) const
 {
-	return _objects[0] == NULL	// floor
+	bool ret = _objects[0] == NULL	// floor
+			&& _objects[1] == NULL	// westwall
+			&& _objects[2] == NULL	// northwall
+			&& _objects[3] == NULL	// content
+			&& _inventory.empty() == true;
+
+	if (partsOnly == false)
+		return (ret && _smoke == 0);
+
+	return ret;
+/*	return _objects[0] == NULL	// floor
 		&& _objects[1] == NULL	// westwall
 		&& _objects[2] == NULL	// northwall
 		&& _objects[3] == NULL	// content
 		&& _smoke == 0
-		&& _inventory.empty() == true;
+		&& _inventory.empty() == true; */
 }
 
 /**
@@ -637,7 +648,7 @@ bool Tile::destroy(int part)
 	if (_objects[part])
 	{
 		if (_objects[part]->isGravLift() == true
-			|| _objects[part]->getArmor() == 255) // <- set MCD to 255 for Truly Indestructability.
+			|| _objects[part]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
 		{
 			return false;
 		}
@@ -945,7 +956,7 @@ void Tile::setUnit(
 void Tile::setFire(int fire)
 {
 	_fire = fire;
-	_animOffset = RNG::generate(0, 3);
+	_animOffset = RNG::generate(0,3);
 }
 
 /**
@@ -977,7 +988,7 @@ void Tile::addSmoke(int smoke)
 		else
 			_smoke += smoke;
 
-		_animOffset = RNG::generate(0, 3);
+		_animOffset = RNG::generate(0,3);
 
 		++_overlaps;
 	}
@@ -1136,7 +1147,7 @@ int Tile::getHasUnconsciousSoldier() const
  */
 void Tile::prepareTileTurn()
 {
-	// Received new smoke in this turn, but not on fire, average out the smoke.
+	// Received new smoke, but not on fire, average out the smoke.
 	if (_overlaps != 0
 		&& _smoke != 0
 		&& _fire == 0)

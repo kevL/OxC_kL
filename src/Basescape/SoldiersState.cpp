@@ -180,16 +180,16 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
-	//Log(LOG_INFO) << "SoldiersState::init()";
 	State::init();
 
-	// return from Inventory Equipment Layout screen (pre-battle equip)
-	_game->getSavedGame()->setBattleGame(NULL);
-	_base->setInBattlescape(false);
+	// Reset stuff when coming back from pre-battle Inventory.
+	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
+	if (battleSave != NULL)
+	{
+		_game->getSavedGame()->setBattleGame(NULL);
+		_base->setInBattlescape(false);
+	}
 
-//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
-	// end pre-battle Equip.
 
 	std::wostringstream ss; // in case soldier is told to GTFO.
 	ss << _base->getTotalSoldiers();
@@ -422,10 +422,6 @@ void SoldiersState::btnEquipClick(Action*)
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
 	bgen.runInventory(NULL, _base);
-
-	// Set system colors
-//	_game->getCursor()->setColor(Palette::blockOffset(9));
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(

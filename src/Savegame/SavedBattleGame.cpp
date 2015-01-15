@@ -1884,7 +1884,7 @@ void SavedBattleGame::prepareBattleTurn()
 				++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
-				getTiles()[i]->prepareTileTurn(); // normalizes overlaps
+				getTiles()[i]->prepareTileTurn(); // averages overlaps
 		}
 	}
 

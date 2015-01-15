@@ -25,6 +25,9 @@
 
 #include "SoldierInfoState.h"
 
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/InventoryState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -44,6 +47,8 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 
 
@@ -78,8 +83,9 @@ CraftSoldiersState::CraftSoldiersState(
 
 	_lstSoldiers	= new TextList(285, 129, 16, 42);
 
-	_btnUnload		= new TextButton(134, 16, 16, 177);
-	_btnOk			= new TextButton(134, 16, 170, 177);
+	_btnUnload		= new TextButton(94, 16, 16, 177);
+	_btnInventory	= new TextButton(94, 16, 113, 177);
+	_btnOk			= new TextButton(94, 16, 210, 177);
 
 	setPalette(
 			"PAL_BASESCAPE",
@@ -97,6 +103,7 @@ CraftSoldiersState::CraftSoldiersState(
 	add(_txtCraft, "text", "craftSoldiers");
 	add(_lstSoldiers, "list", "craftSoldiers");
 	add(_btnUnload, "button", "craftSoldiers");
+	add(_btnInventory, "button", "craftSoldiers");
 	add(_btnOk, "button", "craftSoldiers");
 
 	centerAllSurfaces();
@@ -117,6 +124,14 @@ CraftSoldiersState::CraftSoldiersState(
 //	_btnUnload->setColor(Palette::blockOffset(13)+10);
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
 	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);
+
+	const bool
+		hasCrew = _base->getCrafts()->at(_craftID)->getNumSoldiers() > 0,
+		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
+	_btnInventory->setText(tr("STR_LOADOUT"));
+	_btnInventory->onMouseClick((ActionHandler)& CraftSoldiersState::btnInventoryClick);
+	_btnInventory->setVisible(hasCrew
+							  && newBattle == false);
 
 //	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -252,9 +267,17 @@ void CraftSoldiersState::init()
 {
 	State::init();
 
-	_lstSoldiers->clearList();
-
 	Craft* const craft = _base->getCrafts()->at(_craftID);
+
+	// Reset stuff when coming back from pre-battle Inventory.
+	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
+	if (battleSave != NULL)
+	{
+		_game->getSavedGame()->setBattleGame(NULL);
+		craft->setInBattlescape(false);
+	}
+
+	_lstSoldiers->clearList();
 
 	size_t row = 0;
 
@@ -618,5 +641,26 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 		}
 	}
 } */
+
+/**
+* Displays the inventory screen for the soldiers inside the craft.
+* @param action - pointer to an Action
+*/
+void CraftSoldiersState::btnInventoryClick(Action*)
+{
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+
+	SavedBattleGame* const battle = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battle);
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+
+	Craft* const craft = _base->getCrafts()->at(_craftID);
+	bgen.runInventory(craft);
+
+	_game->getScreen()->clear();
+	_game->pushState(new InventoryState(
+									false,
+									NULL));
+}
 
 }

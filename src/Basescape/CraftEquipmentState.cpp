@@ -70,9 +70,10 @@ CraftEquipmentState::CraftEquipmentState(
 		Base* base,
 		size_t craftID)
 	:
-		_sel(0),
+		_base(base),
 		_craftID(craftID),
-		_base(base)
+		_sel(0),
+		_equipUnit(0)
 {
 	Craft* const craft = _base->getCrafts()->at(_craftID);
 
@@ -284,18 +285,22 @@ CraftEquipmentState::~CraftEquipmentState()
 }
 
 /**
- * Resets the stuff when coming back from soldier-inventory.
+ * Resets the stuff when coming back from soldiers' inventory state.
  */
 void CraftEquipmentState::init()
 {
 	State::init();
 
-	_game->getSavedGame()->setBattleGame(NULL);
-	_base->getCrafts()->at(_craftID)->setInBattlescape(false);
+	// Reset stuff when coming back from pre-battle Inventory.
+	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
+	if (battleSave != NULL)
+	{
+		// set selected soldier
+		_equipUnit = battleSave->getSelectedUnit()->getBattleOrder();
 
-	// restore system colors
-//	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+		_game->getSavedGame()->setBattleGame(NULL);
+		_base->getCrafts()->at(_craftID)->setInBattlescape(false);
+	}
 }
 
 /**
@@ -761,7 +766,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 }
 
 /**
- * Empties the contents of the craft, moving all of the items back to the base.
+ * Empties the contents of the Craft - moves all the items back to the Base.
 * @param action - pointer to an Action
  */
 void CraftEquipmentState::btnClearClick(Action*)
@@ -786,11 +791,10 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
 	Craft* const craft = _base->getCrafts()->at(_craftID);
-	bgen.runInventory(craft);
-
-	// Set system colors
-//	_game->getCursor()->setColor(Palette::blockOffset(9));
-//	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+	bgen.runInventory(
+					craft,
+					NULL,
+					_equipUnit);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(

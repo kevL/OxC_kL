@@ -807,7 +807,11 @@ void InventoryState::btnRankClick(Action*)
 }
 
 /**
- *
+ * Clears unit's inventory - move everything to the ground.
+ * @note Helper for btnClearInventoryClick().
+ * @param game			- pointer to the core Game to get the Ruleset
+ * @param unitInv		- pointer to a vector of pointers to BattleItems
+ * @param groundTile	- pointer to the ground Tile
  */
 static void _clearInventory(
 		Game* game,
@@ -816,7 +820,6 @@ static void _clearInventory(
 {
 	RuleInventory* const groundRuleInv = game->getRuleset()->getInventory("STR_GROUND");
 
-	// clear unit's inventory (i.e. move everything to the ground)
 	for (std::vector<BattleItem*>::const_iterator
 			i = unitInv->begin();
 			i != unitInv->end();

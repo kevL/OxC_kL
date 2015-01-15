@@ -244,7 +244,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (!
-			(soldier->getCraft()
+			(soldier->getCraft() != NULL
 				&& soldier->getCraft()->getStatus() == "STR_OUT"))
 		{
 			_game->pushState(new SoldierArmorState(
@@ -313,7 +313,7 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -362,7 +362,7 @@ void CraftArmorState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
