@@ -1075,8 +1075,6 @@ void SavedBattleGame::endBattlePhase()
 		// if there is no neutral team, we skip this section
 		// and instantly prepare the new turn for the player.
 		if (selectNextFactionUnit() == NULL) // else this will cycle through NEUTRAL units
-			// so shouldn't that really be 'selectNextFactionUnit()'???!
-			// see selectFactionUnit() -> isSelectable()
 		{
 			//Log(LOG_INFO) << ". . nextFactionUnit == 0";
 			prepareBattleTurn();
@@ -1108,7 +1106,6 @@ void SavedBattleGame::endBattlePhase()
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Neutral";
-
 		prepareBattleTurn();
 		++_turn;
 
@@ -1169,6 +1166,9 @@ void SavedBattleGame::endBattlePhase()
 	{
 		//Log(LOG_INFO) << ". . endBattlePhase() iterate units, curID = " << (*i)->getId();
 		(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
+
+		if ((*i)->getOriginalFaction() == _side)
+			(*i)->takeFire();
 
 		if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
 			(*i)->prepUnit();				// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.

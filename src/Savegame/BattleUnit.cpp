@@ -1205,7 +1205,7 @@ int BattleUnit::damage(
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
 //		return 0;
 
-	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage instead.
+	if (type == DT_SMOKE) // smoke doesn't do physical damage, but stun damage instead.
 		type = DT_STUN;
 
 	if (type == DT_STUN)
@@ -1307,9 +1307,8 @@ int BattleUnit::damage(
 	if (power > 0)
 	{
 		if (type == DT_STUN
-			&& (_geoscapeSoldier != NULL	// note that this should be obviated in the rules for Armor damage vulnerability.
-				|| (_unitRules				// Rather than here
-					&& _unitRules->isMechanical() == false
+			&& (_geoscapeSoldier != NULL
+				|| (_unitRules->isMechanical() == false
 					&& _race != "STR_ZOMBIE")))
 		{
 			_stunLevel += power;
@@ -1334,9 +1333,9 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
+				if (_geoscapeSoldier != NULL				// add some stun to xCom agents
 					|| (_unitRules->isMechanical() == false	// or to non-mechanical units
-						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
+						&& _race != "STR_ZOMBIE"))			// unless it's a freakin Zombie.
 				{
 					_stunLevel += RNG::generate(0, power / 3);
 				}
@@ -1361,8 +1360,6 @@ int BattleUnit::damage(
 
 	// TODO: give a short "ugh" if hit causes no damage or perhaps stuns ( power must be > 0 though );
 	// a longer "uuuhghghgh" if hit causes damage ... and let DieBState handle deathscreams.
-//	if (!isOut(true, true)) // no sound if Stunned; deathscream handled by uh, UnitDieBState.
-//		playHitSound(); // kL
 	if (_health > 0
 		&& _visible == true
 		&& _status != STATUS_UNCONSCIOUS
@@ -1370,7 +1367,7 @@ int BattleUnit::damage(
 		&& (_geoscapeSoldier != NULL
 			|| _unitRules->isMechanical() == false))
 	{
-		playHitSound(); // kL
+		playHitSound();
 	}
 
 	if (power < 0)
@@ -1381,9 +1378,9 @@ int BattleUnit::damage(
 }
 
 /**
- * kL. Plays a grunt sFx when this BattleUnit gets damaged or hit.
+ * Plays a grunt sFx when this BattleUnit gets damaged or hit.
  */
-void BattleUnit::playHitSound() // kL
+void BattleUnit::playHitSound()
 {
 	int sound = -1;
 
@@ -2219,7 +2216,7 @@ void BattleUnit::allowReselect()
  */
 bool BattleUnit::reselectAllowed() const
 {
-	return !_dontReselect;
+	return (_dontReselect == false);
 }
 
 /**
@@ -2228,8 +2225,6 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFire(int fire)
 {
-//	if (_specab == SPECAB_BURNFLOOR
-//		|| _specab == SPECAB_BURN_AND_EXPLODE)
 	if (_specab != SPECAB_BURNFLOOR
 		&& _specab != SPECAB_BURN_AND_EXPLODE)
 	{
@@ -2244,6 +2239,39 @@ void BattleUnit::setFire(int fire)
 int BattleUnit::getFire() const
 {
 	return _fire;
+}
+
+/**
+ * Gives this BattleUnit damage from personal fire.
+ */
+void BattleUnit::takeFire()
+{
+	if (_fire != 0)
+	{
+		const int
+			powerSmoke = 4,
+			powerFire = RNG::generate(2,6);
+
+		const float armorSmoke = _armor->getDamageModifier(DT_SMOKE);
+		if (armorSmoke > 0.f) // try to knock _unit out.
+		{
+			damage(
+				Position(0,0,0),
+				static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
+				DT_SMOKE, // -> DT_STUN
+				true);
+		}
+
+		const float armorFire = _armor->getDamageModifier(DT_IN);
+		if (armorFire > 0.f)
+		{
+			damage(
+				Position(0,0,0),
+				static_cast<int>(static_cast<float>(powerFire) * armorFire),
+				DT_IN,
+				true);
+		}
+	}
 }
 
 /**

@@ -762,6 +762,8 @@ private:
 		void setFire(int fire);
 		/// Gets this unit's fire value.
 		int getFire() const;
+		/// Gives this BattleUnit damage from personal fire.
+		void takeFire();
 
 		/// Gets the list of items in this unit's inventory.
 		std::vector<BattleItem*>* getInventory();
