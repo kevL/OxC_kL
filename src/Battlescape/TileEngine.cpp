@@ -4043,7 +4043,7 @@ bool TileEngine::detonate(Tile* const tile)
 			}
 		}
 
-		// set tile on fire
+		// set part on fire
 		if (fireProof * 2 < explTest)
 		{
 			if (tiles[i]->getMapData(MapData::O_FLOOR) != NULL

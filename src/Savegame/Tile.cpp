@@ -848,7 +848,7 @@ void Tile::ignite(int power)
 
 					_fire = fuel + 1;
 					_overlaps = 1;
-					_animOffset = RNG::generate(0, 3);
+					_animOffset = RNG::generate(0,3);
 				}
 			}
 		}

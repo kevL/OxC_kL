@@ -372,10 +372,7 @@ void ExplosionBState::think()
 		--_extend; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
 
 	if (_extend < 1)
-	{
 		explode();
-		return;
-	}
 }
 /*	for (std::list<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin();

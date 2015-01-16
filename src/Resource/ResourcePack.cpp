@@ -252,6 +252,8 @@ void ResourcePack::fadeMusic(
 		Game* const game,
 		const int fadeDur)
 {
+	_playingMusic.clear();
+
 #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID)
 	{
