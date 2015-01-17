@@ -1491,18 +1491,18 @@ RuleTerrain* Ruleset::getTerrain(const std::string& name) const
  */
 MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 {
-	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
-	if (map == _mapDataSets.end())
+	std::map<std::string, MapDataSet*>::const_iterator i = _mapDataSets.find(name);
+	if (i == _mapDataSets.end())
 	{
-		MapDataSet* set = new MapDataSet(
-										name,
-										_game); // kL_add
-		_mapDataSets[name] = set;
+		MapDataSet* const dataSet = new MapDataSet(
+												name,
+												_game); // kL_add
+		_mapDataSets[name] = dataSet;
 
-		return set;
+		return dataSet;
 	}
 	else
-		return map->second;
+		return i->second;
 }
 
 /**

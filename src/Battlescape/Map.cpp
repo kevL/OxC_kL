@@ -1452,7 +1452,7 @@ void Map::drawTerrain(Surface* surface)
 							}
 						} // kL_end.
 
-						// kL_begin: reDraw unit to NORTH-WEST. ... unit Walking.
+						// kL_begin: reDraw unit to NORTH-WEST. ... unit Walking (dir = 3,7).
 						// TODO: smoke/fire render from advanced cycle below this, use check to draw or not
 						// cf. Phase III in advanced cycle.
 						if (hasFloor == true //tile->getMapData(MapData::O_FLOOR) != NULL
@@ -1465,20 +1465,21 @@ void Map::drawTerrain(Surface* surface)
 								|| tile->getTerrainLevel() < 0))			// ... other than the pure ground, which I want to overwrite w/ Unit, here.
 						{
 							const Tile* const tileNorthWest1 = _save->getTile(mapPosition + Position(-1,-1,0));
-							BattleUnit* buNorthWest1 = NULL;
 
 							if (tileNorthWest1->getMapData(MapData::O_OBJECT) == NULL
 								|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block, diagonals],West,North,West&North
 								|| tileNorthWest1->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)
 							{
-								int tileWestShade1;
+								BattleUnit* buNorthWest1 = NULL;
+
+								int shade;
 								if (tileNorthWest1->isDiscovered(2) == true)
 								{
 									buNorthWest1 = tileNorthWest1->getUnit();
-									tileWestShade1 = tileNorthWest1->getShade();
+									shade = tileNorthWest1->getShade();
 								}
 								else
-									tileWestShade1 = 16;
+									shade = 16;
 
 								if (buNorthWest1 != NULL
 									&& buNorthWest1 != unit // large units don't need to redraw their westerly parts
@@ -1506,7 +1507,7 @@ void Map::drawTerrain(Surface* surface)
 															surface,
 															screenPosition.x + pixelOffset.x + walkOffset.x,
 															screenPosition.y + pixelOffset.y + walkOffset.y,
-															tileWestShade1);
+															shade);
 
 										if (buNorthWest1->getFire() != 0)
 										{
@@ -1518,6 +1519,31 @@ void Map::drawTerrain(Surface* surface)
 																screenPosition.y + pixelOffset.y + walkOffset.y,
 																0);
 										}
+									}
+
+									// if (tileNorth has west or southwall) redraw it.
+									const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+									if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
+										&& tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN"
+										&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42) // the ramp's top, redraw it.
+									{
+										srfSprite = tileNorth->getSprite(MapData::O_OBJECT);
+										if (srfSprite)
+										{
+											int shade;
+											if (tileNorth->isDiscovered(2) == true)
+												shade = tileNorth->getShade();
+											else
+												shade = 16;
+
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x + 16,
+													screenPosition.y - 8 - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset(),
+													shade);
+										}
+										//Log(LOG_INFO) << ". " << Position(mapPosition) << " dataSet = " << tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName();
+										//Log(LOG_INFO) << ". sprite = " << tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0);
 									}
 								}
 							}

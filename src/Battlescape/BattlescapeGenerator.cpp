@@ -2736,8 +2736,8 @@ void BattlescapeGenerator::runInventory(
 				_mapsize_z);
 
 	MapDataSet* const dataSet = new MapDataSet(
-									"dummy",
-									_game); // kL_add
+											"blank",
+											_game); // kL_add
 	MapData* const data = new MapData(dataSet);
 
 	for (int

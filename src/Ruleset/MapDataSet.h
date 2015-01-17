@@ -62,7 +62,7 @@ private:
 		/// Constructs a MapDataSet.
 		MapDataSet(
 				const std::string& name,
-				Game* game = NULL);
+				Game* game);
 		/// Destructs a MapDataSet.
 		~MapDataSet();
 

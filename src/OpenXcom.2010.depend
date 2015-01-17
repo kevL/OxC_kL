@@ -5611,7 +5611,7 @@
 
 1420130458 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1421330560 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1421513698 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5673,7 +5673,7 @@
 
 1420130459 f:\git\openxcom\src\ruleset\mapblock.h
 
-1420487206 f:\git\openxcom\src\ruleset\mapdataset.h
+1421513699 f:\git\openxcom\src\ruleset\mapdataset.h
 
 1420130449 f:\git\openxcom\src\ruleset\mcdpatch.h
 	<string>
@@ -6058,7 +6058,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421333185 source:f:\git\openxcom\src\battlescape\map.cpp
+1421515066 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8538,10 +8538,10 @@
 	"../Battlescape/Position.h"
 	"../Engine/Exception.h"
 
-1420583694 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1421512247 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
-1420487222 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1421513698 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	"MapData.h"
 	"../Engine/Game.h"
@@ -8590,7 +8590,7 @@
 1420130450 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1420330746 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1421513398 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"

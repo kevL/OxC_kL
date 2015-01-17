@@ -23,6 +23,16 @@
 namespace OpenXcom
 {
 
+// Explicit storage for MapData constants.
+// Pathfinding::O_BIGWALL = -1
+
+const int
+	MapData::O_FLOOR		= 0,
+	MapData::O_WESTWALL		= 1,
+	MapData::O_NORTHWALL	= 2,
+	MapData::O_OBJECT		= 3;
+
+
 /**
  * Creates a new Map Data Object.
  * @param dataset - pointer to the MapDataSet this object belongs to
@@ -67,16 +77,6 @@ MapData::MapData(MapDataSet* dataset)
  */
 MapData::~MapData()
 {}
-
-// Explicit storage for MapData constants.
-// Pathfinding::O_BIGWALL = -1
-
-const int
-	MapData::O_FLOOR		= 0,
-	MapData::O_WESTWALL		= 1,
-	MapData::O_NORTHWALL	= 2,
-	MapData::O_OBJECT		= 3;
-
 
 /**
  * Gets the dataset this object belongs to.

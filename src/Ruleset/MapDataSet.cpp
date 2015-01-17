@@ -45,7 +45,7 @@ MapData
 /**
  * MapDataSet construction.
  * @param name - reference the name of the data
- * @param game - pointer to Game (default NULL)
+ * @param game - pointer to Game
  */
 MapDataSet::MapDataSet(
 		const std::string& name,
@@ -55,9 +55,7 @@ MapDataSet::MapDataSet(
 		_game(game),
 		_surfaceSet(NULL),
 		_loaded(false)
-{
-	//Log(LOG_INFO) << "Create MapDataSet";
-}
+{}
 
 /**
  * MapDataSet destruction.
@@ -83,7 +81,7 @@ void MapDataSet::load(const YAML::Node& node)
 }
 
 /**
- * Gets the MapDataSet name string.
+ * Gets the MapDataSet name string - eg. "AVENGER"
  * @return, the MapDataSet name
  */
 std::string MapDataSet::getName() const
@@ -268,7 +266,7 @@ void MapDataSet::loadData()
 				MapDataSet::_scorchedTile = to;
 		}
 
-		objNumber++;
+		++objNumber;
 	}
 
 
