@@ -82,29 +82,32 @@ private:
 
 		/// Updates the soldiers list.
 		void init();
-//		/// Shows Soldiers in a list.
-//		void populateList();
+
+		/// Handler for clicking the Soldiers list.
+		void lstSoldiersPress(Action* action);
+
 		/// Handler for clicking the Soldiers reordering button.
 		void lstLeftArrowClick(Action* action);
+		/// Handler for clicking the Soldiers reordering button.
+		void lstRightArrowClick(Action* action);
+
+		/// Handler for clicking the Inventory button.
+		void btnInventoryClick(Action* action);
+
+//		/// Shows Soldiers in a list.
+//		void populateList();
 		/// Moves a soldier up.
 /*		void moveSoldierUp(
 				Action* action,
 				size_t row,
 				bool max = false); */
-		/// Handler for clicking the Soldiers reordering button.
-		void lstRightArrowClick(Action* action);
 		/// Moves a soldier down.
 /*		void moveSoldierDown(
 				Action* action,
 				size_t row,
 				bool max = false); */
-		/// Handler for clicking the Soldiers list.
-		void lstSoldiersPress(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 //		void lstSoldiersMousePress(Action* action);
-
-		/// Handler for clicking the Inventory button.
-		void btnInventoryClick(Action* action);
 };
 
 }

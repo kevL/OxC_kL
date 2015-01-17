@@ -72,8 +72,7 @@ RuleAlienMission::RuleAlienMission(const std::string& type)
 	:
 		_type(type),
 		_points(0)
-{
-}
+{}
 
 /**
  * Ensures the allocated memory is released.
@@ -173,8 +172,8 @@ const std::string RuleAlienMission::generateRace(size_t const monthsPassed) cons
  */
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
-	return rc->second->topChoice();
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator race = _raceDistribution.begin();
+	return race->second->topChoice();
 }
 
 /**

@@ -103,11 +103,12 @@ struct HairBleach
  */
 XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	:
-		ResourcePack()
+		ResourcePack(),
+		_ruleset(rules)
 {
-	_ruleset = rules;
-
 	/* PALETTES */
+	Log(LOG_INFO) << "Loading palettes ...";
+
 	const char* pal[] = // Load palettes
 	{
 		"PAL_GEOSCAPE",
@@ -183,6 +184,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 
 	/* FONTS */
+	Log(LOG_INFO) << "Loading fonts ...";
+
 	// Load fonts
 	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/Font.dat"));
 	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
@@ -199,6 +202,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 
 	/* GRAPHICS */
+	Log(LOG_INFO) << "Loading graphics ...";
+
 /*kL
 	{
 		// Load surfaces
@@ -425,6 +430,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	if (Options::mute == false)
 	{
 #ifndef __NO_MUSIC // sza_MusicRules
+		Log(LOG_INFO) << "Loading music ...";
+
 		// Load musics
 		// gather the assignments first.
 		const std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusic();
@@ -848,6 +855,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 
 		/* SOUNDS fx */
+		Log(LOG_INFO) << "Loading sound FX ...";
+
 		if (rules->getSoundDefinitions()->empty() == true) // Load sounds.
 		{
 			const std::string
@@ -976,6 +985,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 
 	/* BATTLESCAPE RESOURCES */
+	Log(LOG_INFO) << "Loading battlescape resources ...";
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
@@ -1033,10 +1043,10 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		}
 
 
-	//Log(LOG_DEBUG) << "Loading extra resources from ruleset...";
-	Log(LOG_INFO) << "Loading extra resources from ruleset...";
-
 	/* EXTRA SPRITES */
+	//Log(LOG_DEBUG) << "Loading extra resources from ruleset...";
+	Log(LOG_INFO) << "Loading extra sprites ...";
+
 	std::ostringstream s;
 
 	const std::vector<std::pair<std::string, ExtraSprites*> > extraSprites = rules->getExtraSprites();
@@ -1046,7 +1056,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			++i)
 	{
 		const std::string sheetName = i->first;
-		Log(LOG_INFO) << "\n. sheetName = " << i->first;
+		//Log(LOG_INFO) << "\n. sheetName = " << i->first;
 
 		ExtraSprites* const spritePack = i->second;
 		const bool subdivision = spritePack->getSubX() != 0
@@ -1057,7 +1067,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			if (_surfaces.find(sheetName) == _surfaces.end())
 			{
 				//Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
-				Log(LOG_INFO) << "Creating new single image: " << sheetName;
+				//Log(LOG_INFO) << "Creating new single image: " << sheetName;
 
 				_surfaces[sheetName] = new Surface(
 												spritePack->getWidth(),
@@ -1066,7 +1076,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			else
 			{
 				//Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
-				Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
+				//Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
 
 				delete _surfaces[sheetName];
 
@@ -1086,7 +1096,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			if (_sets.find(sheetName) == _sets.end())
 			{
 				//Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
-				Log(LOG_INFO) << "Creating new surface set: " << sheetName;
+				//Log(LOG_INFO) << "Creating new surface set: " << sheetName;
 
 				adding = true;
 
@@ -1102,7 +1112,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			else
 			{
 				//Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
-				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
+				//Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
 			}
 
 			if (subdivision == true)
@@ -1110,7 +1120,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 
 				//Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
-				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
+				//Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
 			}
 
 			for (std::map<int, std::string>::const_iterator
@@ -1125,7 +1135,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
 					//Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
-					Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+					//Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 
 					int offset = startFrame;
 
@@ -1148,7 +1158,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 							if (_sets[sheetName]->getFrame(offset))
 							{
 								//Log(LOG_DEBUG) << "Replacing frame: " << offset;
-								Log(LOG_INFO) << "Replacing frame: " << offset;
+								//Log(LOG_INFO) << "Replacing frame: " << offset;
 
 								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
 							}
@@ -1159,7 +1169,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 								else
 								{
 									//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
-									Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+									//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
 								}
@@ -1183,14 +1193,14 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						if (_sets[sheetName]->getFrame(startFrame))
 						{
 							//Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
-							Log(LOG_INFO) << "Replacing frame: " << startFrame;
+							//Log(LOG_INFO) << "Replacing frame: " << startFrame;
 
 							_sets[sheetName]->getFrame(startFrame)->loadImage(s.str());
 						}
 						else
 						{
 							//Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
-							Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+							//Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 
 							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(s.str());
 						}
@@ -1222,7 +1232,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 								if (_sets[sheetName]->getFrame(offset))
 								{
 									//Log(LOG_DEBUG) << "Replacing frame: " << offset;
-									Log(LOG_INFO) << "Replacing frame: " << offset;
+									//Log(LOG_INFO) << "Replacing frame: " << offset;
 
 									_sets[sheetName]->getFrame(offset)->clear();
 
@@ -1247,7 +1257,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 									else
 									{
 										//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
-										Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+										//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 										temp->blitNShade(
@@ -1333,6 +1343,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 
 	/* EXTRA SOUNDS */
+	Log(LOG_INFO) << "Loading extra sounds ...";
+
 	const std::vector<std::pair<std::string, ExtraSounds*> > extraSounds = rules->getExtraSounds();
 	for (std::vector<std::pair<std::string, ExtraSounds*> >::const_iterator
 			i = extraSounds.begin();
@@ -1512,7 +1524,7 @@ void XcomResourcePack::loadBattlescapeResources()
 			i != usets.end();
 			++i)
 	{
-		Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources() units/ " << *i;
+		//Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources() units/ " << *i;
 
 		const std::string path = units + *i;
 		const std::string tab = CrossPlatform::getDataFile("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");

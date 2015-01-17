@@ -4503,7 +4503,7 @@
 
 1420761693 f:\git\openxcom\src\ruleset\rulebasefacility.h
 
-1420130457 f:\git\openxcom\src\ruleset\ruleregion.h
+1421504128 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
 1417179335 f:\git\openxcom\src\savegame\weightedoptions.h
@@ -4705,7 +4705,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1421278203 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1421497428 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1420130443 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4721,7 +4721,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1421329639 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1421502247 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -5944,7 +5944,7 @@
 
 1420130442 f:\git\openxcom\src\ruleset\rulecountry.h
 
-1420130442 f:\git\openxcom\src\savegame\alienmission.h
+1421503563 f:\git\openxcom\src\savegame\alienmission.h
 	"SavedGame.h"
 
 1420130450 f:\git\openxcom\src\savegame\country.h
@@ -6586,7 +6586,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1420181178 source:f:\git\openxcom\src\engine\game.cpp
+1421503019 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7317,12 +7317,9 @@
 
 1420324793 f:\git\openxcom\src\ruleset\city.h
 
-1417180581 f:\git\openxcom\src\ruleset\rulealienmission.h
+1421503135 f:\git\openxcom\src\ruleset\rulealienmission.h
 
-1413136961 f:\git\openxcom\src\ruleset\ufotrajectory.h
-	<vector>
-	<string>
-	<yaml-cpp/yaml.h>
+1421503401 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
 1421467538 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
@@ -7452,7 +7449,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1420210520 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1421471706 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"Globe.h"
@@ -8069,7 +8066,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1420235113 source:f:\git\openxcom\src\menu\startstate.cpp
+1421502915 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
@@ -8482,7 +8479,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1420708301 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1421502089 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Basescape/BasescapeState.h"
 	"../Battlescape/Position.h"
@@ -8556,7 +8553,7 @@
 	"MapData.h"
 	"MapDataSet.h"
 
-1417180525 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1421503249 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -8586,7 +8583,7 @@
 1420130461 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1420130448 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1421504170 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	"City.h"
 
@@ -8666,7 +8663,7 @@
 	"../Engine/RNG.h"
 	"../Savegame/Soldier.h"
 
-1413648342 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1421503426 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1420130454 source:f:\git\openxcom\src\ruleset\unit.cpp
@@ -8677,7 +8674,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1420130448 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1421504368 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8698,11 +8695,10 @@
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
 
-1417180887 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
+1421503509 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
 	"AlienStrategy.h"
 	"SavedGame.h"
 	"WeightedOptions.h"
-	"../Engine/RNG.h"
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 

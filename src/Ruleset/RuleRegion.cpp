@@ -17,11 +17,10 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "RuleRegion.h"
 
 //#include <assert.h>
+//#define _USE_MATH_DEFINES
 //#include <math.h>
 //#include "../fmath.h"
 
@@ -42,15 +41,14 @@ RuleRegion::RuleRegion(const std::string& type)
 		_type(type),
 		_cost(0),
 		_regionWeight(0)
-{
-}
+{}
 
 /**
  * Deletes the cities from memory.
  */
 RuleRegion::~RuleRegion()
 {
-	for (std::vector<City*>::iterator
+	for (std::vector<City*>::const_iterator
 			i = _cities.begin();
 			i != _cities.end();
 			++i)
@@ -269,7 +267,7 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 	}
 
 	assert(0 && "Invalid zone number");
-	return std::make_pair(0., 0.);
+	return std::make_pair(0.,0.);
 }
 
 /**

@@ -17,16 +17,13 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "AlienMission.h"
 
 //#include <algorithm>
 //#include <functional>
-
 //#include <assert.h>
+//#define _USE_MATH_DEFINES
 //#include <math.h>
-
 //#include "../fmath.h"
 
 #include "AlienBase.h"
@@ -75,15 +72,13 @@ AlienMission::AlienMission(
 		_liveUfos(0),
 		_uniqueID(0),
 		_base(NULL)
-{
-}
+{}
 
 /**
  * dTor.
  */
 AlienMission::~AlienMission()
-{
-}
+{}
 
 
 class matchById
@@ -98,9 +93,7 @@ private:
 		matchById(int id)
 			:
 				_id(id)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		/// Match with stored ID.
 		bool operator()(const AlienBase* ab) const
@@ -181,7 +174,7 @@ bool AlienMission::isOver() const
 {
 	int diff = static_cast<int>(_savedGame.getDifficulty());
 	if (_rule.getType() == "STR_ALIEN_INFILTRATION"
-		&& RNG::percent(100 - diff * 20))
+		&& RNG::percent(100 - diff * 20) == true)
 	{
 		return false; // Infiltrations continue for ever. Almost.
 	}
@@ -212,9 +205,7 @@ private:
 		FindMarkedXCOMBase(const RuleRegion& region)
 			:
 				_region(region)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		///
 		bool operator()(const Base* base) const
@@ -508,9 +499,7 @@ private:
 			:
 				_lon(lon),
 				_lat(lat)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		/// Match with base's coordinates.
 		bool operator()(const Base* base) const
@@ -994,7 +983,8 @@ std::pair<double, double> AlienMission::getLandPoint(
 
 	if (tries == 100)
 	{
-		Log(LOG_DEBUG) << "Region: " << region.getType()
+//		Log(LOG_DEBUG) << "Region: " << region.getType()
+		Log(LOG_INFO) << "Region: " << region.getType()
 			<< " Longitude: " << pos.first
 			<< " Latitude: " << pos.second
 			<< " invalid zone: " << zone << " ufo forced to land on water!";

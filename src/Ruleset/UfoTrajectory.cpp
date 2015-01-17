@@ -81,8 +81,7 @@ UfoTrajectory::UfoTrajectory(const std::string& id)
 	:
 		_id(id),
 		_groundTimer(5)
-{
-}
+{}
 
 /**
  * Overwrites trajectory data with the data stored in @a node.

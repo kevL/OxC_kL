@@ -213,10 +213,10 @@ void StartState::init()
 	addLine(ss.str());
 */ // kL
 
-	_thread = SDL_CreateThread( // Load the game data in a separate thread
+	_thread = SDL_CreateThread( // load the game data in a separate thread
 							load,
 							(void*)_game);
-	if (_thread == NULL) // If we can't create the thread, just load it as usual
+	if (_thread == NULL) // if thread can't create just load as usual
 		load((void*)_game);
 }
 
@@ -339,7 +339,7 @@ void StartState::animate()
 	if (loading == LOADING_STARTED)
 	{
 		std::wostringstream ss;
-		ss << L"Loading " << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "..."; // kL
+		ss << L"Loading " << Language::utf8ToWstr(OPENXCOM_VERSION_GIT); // kL
 //kL	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
 		if (Options::reload == true)
 		{
@@ -545,15 +545,15 @@ int StartState::load(void* game_ptr)
 	Game* const game = (Game*)game_ptr;
 	try
 	{
-		Log(LOG_INFO) << "Loading ruleset...";
+		Log(LOG_INFO) << "Loading ruleset ...";
 		game->loadRuleset();
 		Log(LOG_INFO) << "Ruleset loaded.";
 
-		Log(LOG_INFO) << "Loading resources...";
+		Log(LOG_INFO) << "Loading resources ...";
 		game->setResourcePack(new XcomResourcePack(game->getRuleset()));
 		Log(LOG_INFO) << "Resources loaded.";
 
-		Log(LOG_INFO) << "Loading language...";
+		Log(LOG_INFO) << "Loading language ...";
 		game->defaultLanguage();
 		Log(LOG_INFO) << "Language loaded.";
 

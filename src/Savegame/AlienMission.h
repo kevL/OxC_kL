@@ -21,7 +21,6 @@
 #define OPENXCOM_ALIEN_MISSION_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "SavedGame.h"
@@ -96,29 +95,21 @@ private:
 		const std::string& getType() const;
 		/// Gets the mission's region.
 		const std::string& getRegion() const
-		{
-			return _region;
-		}
+		{ return _region; }
 		/// Sets the mission's region.
 		void setRegion(
 				const std::string& region,
 				const Ruleset& rules);
 		/// Gets the mission's race.
 		const std::string& getRace() const
-		{
-			return _race;
-		}
+		{ return _race; }
 		/// Sets the mission's race.
 		void setRace(const std::string& race)
-		{
-			_race = race;
-		}
+		{ _race = race; }
 
 		/// Gets the minutes until next wave spawns.
 		size_t getWaveCountdown() const
-		{
-			return _spawnCountdown;
-		}
+		{ return _spawnCountdown; }
 		/// Sets the minutes until next wave spawns.
 		void setWaveCountdown(size_t minutes);
 
@@ -144,14 +135,10 @@ private:
 
 		/// Increases number of live UFOs.
 		void increaseLiveUfos()
-		{
-			++_liveUfos;
-		}
+		{ ++_liveUfos; }
 		/// Decreases number of live UFOs.
 		void decreaseLiveUfos()
-		{
-			--_liveUfos;
-		}
+		{ --_liveUfos; }
 
 		/// Handles UFO reaching a waypoint.
 		void ufoReachedWaypoint(

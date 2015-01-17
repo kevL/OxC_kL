@@ -8551,6 +8551,7 @@ extraStrings:
       ALIEN_PSI_WEAPON: ""
       STR_FIST: ""
       NO_UFO: "" #end prevent WARNINGS.
+      WATER: "water"
       CULTA: "RURAL"
       DESERT: "DESERT"
       FOREST: "FOREST"

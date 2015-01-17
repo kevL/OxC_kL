@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_UFOTRAJECTORY_H
 #define OPENXCOM_UFOTRAJECTORY_H
 
-#include <vector>
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <vector>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -43,11 +42,11 @@ struct TrajectoryWaypoint
 };
 
 
-YAML::Emitter& operator << (
+YAML::Emitter& operator <<(
 		YAML::Emitter& emitter,
 		const TrajectoryWaypoint& wp);
 
-bool operator >> (
+bool operator >>(
 		const YAML::Node& node,
 		TrajectoryWaypoint& wp);
 
@@ -73,53 +72,43 @@ private:
 
 		/**
 		 * Gets the trajectory's ID.
-		 * @return The trajectory's ID.
+		 * @return, the trajectory's ID
 		 */
 		const std::string& getID() const
-		{
-			return _id;
-		}
+		{ return _id; }
 
 		/**
 		 * Gets the number of waypoints in this trajectory.
-		 * @return The number of waypoints.
+		 * @return, the number of waypoints
 		 */
 		size_t getWaypointCount() const
-		{
-			return _waypoints.size();
-		}
+		{ return _waypoints.size(); }
 
 		/**
 		 * Gets the zone index at a waypoint.
-		 * @param wp The waypoint.
-		 * @return The zone index.
+		 * @param wp - the waypoint
+		 * @return, the zone index
 		 */
 		size_t getZone(size_t wp) const
-		{
-			return _waypoints[wp].zone;
-		}
+		{ return _waypoints[wp].zone; }
 
 		/// Gets the altitude at a waypoint.
 		std::string getAltitude(size_t wp) const;
 
 		/**
 		 * Gets the speed percentage at a waypoint.
-		 * @param wp The waypoint.
-		 * @return The speed as a percentage.
+		 * @param wp - the waypoint
+		 * @return, the speed as a percentage
 		 */
 		float getSpeedPercentage(size_t wp) const
-		{
-			return _waypoints[wp].speed / 100.f;
-		}
+		{ return _waypoints[wp].speed / 100.f; }
 
 		/**
 		 * Gets the number of seconds UFOs should spend on the ground.
-		 * @return The number of seconds.
+		 * @return, the number of seconds
 		 */
 		size_t groundTimer() const
-		{
-			return _groundTimer;
-		}
+		{ return _groundTimer; }
 };
 
 }

@@ -630,7 +630,7 @@ void Game::loadLanguage(const std::string& filename)
 	{
 		if (extraStrings.find(filename) != extraStrings.end())
 			strings = extraStrings[filename];
-		else if (extraStrings.find("en-US") != extraStrings.end()) // Fallback
+		else if (extraStrings.find("en-US") != extraStrings.end()) // fallback
 			strings = extraStrings["en-US"];
 		else if (extraStrings.find("en-GB") != extraStrings.end())
 			strings = extraStrings["en-GB"];

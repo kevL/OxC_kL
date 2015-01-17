@@ -24,7 +24,7 @@
 #include "SavedGame.h"
 #include "WeightedOptions.h"
 
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
@@ -41,8 +41,7 @@ typedef std::map<std::string, WeightedOptions*> MissionsByRegion;
  * @note Running a game like this will most likely crash.
  */
 AlienStrategy::AlienStrategy()
-{
-}
+{}
 
 /**
  * Frees all resources used by this AlienStrategy.

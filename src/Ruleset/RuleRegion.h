@@ -132,38 +132,26 @@ private:
 		size_t getWeight() const;
 		/// Gets the weighted list of missions for this region.
 		const WeightedOptions& getAvailableMissions() const
-		{
-			return _missionWeights;
-		}
+		{ return _missionWeights; }
 		/// Gets the substitute mission region.
 		const std::string& getMissionRegion() const
-		{
-			return _missionRegion;
-		}
+		{ return _missionRegion; }
 
 		/// Gets a random point inside a mission site.
 		std::pair<double, double> getRandomPoint(size_t site) const;
 
 		/// Gets the maximum longitude.
 		const std::vector<double>& getLonMax() const
-		{
-			return _lonMax;
-		}
+		{ return _lonMax; }
 		/// Gets the minimum longitude.
 		const std::vector<double>& getLonMin() const
-		{
-			return _lonMin;
-		}
+		{ return _lonMin; }
 		/// Gets the maximum latitude.
 		const std::vector<double>& getLatMax() const
-		{
-			return _latMax;
-		}
+		{ return _latMax; }
 		/// Gets the minimum latitude.
 		const std::vector<double>& getLatMin() const
-		{
-			return _latMin;
-		}
+		{ return _latMin; }
 
 		///
 		const std::vector<MissionZone>& getMissionZones() const;
