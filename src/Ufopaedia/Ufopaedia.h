@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_UFOPAEDIA_H
 #define OPENXCOM_UFOPAEDIA_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 
 namespace OpenXcom
@@ -40,16 +40,17 @@ typedef std::vector<ArticleDefinition*> ArticleDefinitionList;
 
 
 /// define Ufopaedia sections, which must be consistent
-static const std::string UFOPAEDIA_XCOM_CRAFT_ARMAMENT		= "STR_XCOM_CRAFT_ARMAMENT";
-static const std::string UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS	= "STR_HEAVY_WEAPONS_PLATFORMS";
-static const std::string UFOPAEDIA_WEAPONS_AND_EQUIPMENT	= "STR_WEAPONS_AND_EQUIPMENT";
-static const std::string UFOPAEDIA_ALIEN_ARTIFACTS			= "STR_ALIEN_ARTIFACTS";
-static const std::string UFOPAEDIA_BASE_FACILITIES			= "STR_BASE_FACILITIES";
-static const std::string UFOPAEDIA_ALIEN_LIFE_FORMS			= "STR_ALIEN_LIFE_FORMS";
-static const std::string UFOPAEDIA_ALIEN_RESEARCH			= "STR_ALIEN_RESEARCH_UC";
-static const std::string UFOPAEDIA_UFO_COMPONENTS			= "STR_UFO_COMPONENTS";
-static const std::string UFOPAEDIA_UFOS						= "STR_UFOS";
-static const std::string UFOPAEDIA_NOT_AVAILABLE			= "STR_NOT_AVAILABLE";
+static const std::string
+	UFOPAEDIA_XCOM_CRAFT_ARMAMENT		= "STR_XCOM_CRAFT_ARMAMENT",
+	UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS	= "STR_HEAVY_WEAPONS_PLATFORMS",
+	UFOPAEDIA_WEAPONS_AND_EQUIPMENT		= "STR_WEAPONS_AND_EQUIPMENT",
+	UFOPAEDIA_ALIEN_ARTIFACTS			= "STR_ALIEN_ARTIFACTS",
+	UFOPAEDIA_BASE_FACILITIES			= "STR_BASE_FACILITIES",
+	UFOPAEDIA_ALIEN_LIFE_FORMS			= "STR_ALIEN_LIFE_FORMS",
+	UFOPAEDIA_ALIEN_RESEARCH			= "STR_ALIEN_RESEARCH_UC",
+	UFOPAEDIA_UFO_COMPONENTS			= "STR_UFO_COMPONENTS",
+	UFOPAEDIA_UFOS						= "STR_UFOS",
+	UFOPAEDIA_NOT_AVAILABLE				= "STR_NOT_AVAILABLE";
 
 // This last section is meant for articles, that have to be activated,
 // but have no own entry in a list. E.g. Ammunition items.
@@ -68,10 +69,11 @@ class Ufopaedia
 
 protected:
 	/// current selected article index (for prev/next navigation).
-//kL	static size_t _current_index;
+//	static size_t _current_index;
 	static int _current_index; // kL
+
 	/// get index of the given article id in the visible list.
-//kL	static size_t getArticleIndex(Game* game, std::string& article_id);
+//	static size_t getArticleIndex(Game* game, std::string& article_id);
 	static int getArticleIndex( // kL
 			SavedGame* save,
 			Ruleset* rule,

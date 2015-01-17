@@ -8,6 +8,48 @@ items:
     handSprite: 216
   - type: STR_MOTION_SCANNER
     handSprite: 224
+  - type: STR_PROXIMITY_GRENADE
+    handSprite: 232
+  - type: STR_ELECTRO_FLARE
+    handSprite: 240
+  - type: STR_MIND_PROBE
+    handSprite: 248
+  - type: STR_SMALL_ROCKET
+    handSprite: 256
+  - type: STR_LARGE_ROCKET
+    handSprite: 264
+  - type: STR_INCENDIARY_ROCKET
+    handSprite: 272
+  - type: STR_BLASTER_BOMB
+    handSprite: 280
+  - type: STR_AC_AP_AMMO
+    handSprite: 288
+  - type: STR_AC_HE_AMMO
+    handSprite: 296
+  - type: STR_AC_I_AMMO
+    handSprite: 304
+  - type: STR_HC_AP_AMMO
+    handSprite: 312
+  - type: STR_HC_HE_AMMO
+    handSprite: 320
+  - type: STR_HC_I_AMMO
+    handSprite: 328
+  - type: STR_ALIEN_GRENADE
+    handSprite: 336
+  - type: STR_SMOKE_GRENADE
+    handSprite: 344
+  - type: STR_RIFLE_CLIP
+    handSprite: 352
+  - type: STR_PISTOL_CLIP
+    handSprite: 360
+  - type: STR_PLASMA_PISTOL_CLIP
+    handSprite: 368
+  - type: STR_PLASMA_RIFLE_CLIP
+    handSprite: 376
+  - type: STR_HEAVY_PLASMA_CLIP
+    handSprite: 384
+  - type: STR_STUN_BOMB
+    handSprite: 392
 extraSprites:
   - type: HANDOB.PCK
     width: 256
@@ -18,3 +60,24 @@ extraSprites:
       208: Resources/ID_HandOb/HandOb_MediKit.png
       216: Resources/ID_HandOb/HandOb_HE.png
       224: Resources/ID_HandOb/HandOb_Scanner.png
+      232: Resources/ID_HandOb/HandOb_Proxie.png
+      240: Resources/ID_HandOb/HandOb_ElectroFlare.png
+      248: Resources/ID_HandOb/HandOb_MindProbe.png
+      256: Resources/ID_HandOb/HandOb_SMRocket.png
+      264: Resources/ID_HandOb/HandOb_LGRocket.png
+      272: Resources/ID_HandOb/HandOb_INRocket.png
+      280: Resources/ID_HandOb/HandOb_BlasterBomb.png
+      288: Resources/ID_HandOb/HandOb_APAutoCannon.png
+      296: Resources/ID_HandOb/HandOb_HEAutoCannon.png
+      304: Resources/ID_HandOb/HandOb_INAutoCannon.png
+      312: Resources/ID_HandOb/HandOb_APHeavyCannon.png
+      320: Resources/ID_HandOb/HandOb_HEHeavyCannon.png
+      328: Resources/ID_HandOb/HandOb_INHeavyCannon.png
+      336: Resources/ID_HandOb/HandOb_AlienGrenade.png
+      344: Resources/ID_HandOb/HandOb_SmokeGrenade.png
+      352: Resources/ID_HandOb/HandOb_RifleClip.png
+      360: Resources/ID_HandOb/HandOb_PistolClip.png
+      368: Resources/ID_HandOb/HandOb_PPistolClip.png
+      376: Resources/ID_HandOb/HandOb_PRifleClip.png
+      384: Resources/ID_HandOb/HandOb_PHeavyClip.png
+      392: Resources/ID_HandOb/HandOb_StunBomb.png

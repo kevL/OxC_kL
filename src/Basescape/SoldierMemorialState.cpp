@@ -167,8 +167,7 @@ SoldierMemorialState::SoldierMemorialState()
  * dTor.
  */
 SoldierMemorialState::~SoldierMemorialState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

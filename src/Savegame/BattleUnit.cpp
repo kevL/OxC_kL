@@ -1205,7 +1205,7 @@ int BattleUnit::damage(
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
 //		return 0;
 
-	if (type == DT_SMOKE) // smoke doesn't do physical damage, but stun damage instead.
+	if (type == DT_SMOKE) // smoke is really stun damage.
 		type = DT_STUN;
 
 	if (type == DT_STUN)

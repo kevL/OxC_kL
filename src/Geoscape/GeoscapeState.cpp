@@ -3201,8 +3201,15 @@ void GeoscapeState::btnGraphsClick(Action*)
  */
 void GeoscapeState::btnUfopaediaClick(Action*)
 {
+	_game->getResourcePack()->fadeMusic(_game, 276);
+
 	timerReset();
 	Ufopaedia::open(_game);
+
+	_game->getResourcePack()->playMusic(
+									OpenXcom::res_MUSIC_UFOPAEDIA,
+									"",
+									1);
 }
 
 /**

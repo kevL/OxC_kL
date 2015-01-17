@@ -68,29 +68,29 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+	_window->setColor(Palette::blockOffset(15)-1); // green
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtTitle->setColor(Palette::blockOffset(8)+5); // cyan
 	_txtTitle->setText(tr("STR_KIA"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_lstKIA->setColor(Palette::blockOffset(9)); // (8)+10
+	_lstKIA->setColor(Palette::blockOffset(8)+5); // cyan // (9) brown // (8)+10 green
 	_lstKIA->setColumns(1, 285);
 	_lstKIA->setBackground(_window);
 	_lstKIA->setSelectable();
 	_lstKIA->setMargin();
-	_lstKIA->setHighContrast();
+//	_lstKIA->setHighContrast();
 
-	_lstSoldiers->setColor(Palette::blockOffset(9)); // (8)+10
+	_lstSoldiers->setColor(Palette::blockOffset(15)-1); // green //(9) brown // (8)+10 green
 	_lstSoldiers->setColumns(2, 200, 77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
-	_lstSoldiers->setHighContrast();
+//	_lstSoldiers->setHighContrast();
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
+	_btnOk->setColor(Palette::blockOffset(15)-1); // green
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CommendationDeadState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -101,10 +101,13 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 					Options::keyCancel);
 
 
-	const size_t rowsKIA = soldiersKIA.size();
-	_lstKIA->setHeight(rowsKIA * 8 + 1);
-	_lstSoldiers->setY(_lstSoldiers->getY() + (rowsKIA - 1) * 8);
-	_lstSoldiers->setHeight(_lstSoldiers->getHeight() - (rowsKIA - 1) * 8);
+	const size_t rowsKIAList = static_cast<size_t>(std::min(	// the soldiersKIA list has maximum 8 rows
+														8,		// to leave room below for the awards List
+														static_cast<int>(soldiersKIA.size())));
+	_lstKIA->setHeight(rowsKIAList * 8 + 1);
+
+	_lstSoldiers->setY(_lstSoldiers->getY() + (rowsKIAList - 1) * 8);
+	_lstSoldiers->setHeight(_lstSoldiers->getHeight() - (rowsKIAList - 1) * 8);
 
 
 	for (std::vector<SoldierDead*>::const_iterator
@@ -224,7 +227,9 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 			_lstSoldiers->setRowColor(
 									titleRow,
-									Palette::blockOffset(15)-1);
+									Palette::blockOffset(9), // brown //(15)-1 green
+									true);
+//	_lstSoldiers->setHighContrast();
 			titleChosen = true;
 		}
 

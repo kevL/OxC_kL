@@ -35,7 +35,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 
 namespace OpenXcom
@@ -123,7 +123,10 @@ UfopaediaStartState::~UfopaediaStartState()
  */
 void UfopaediaStartState::btnOkClick(Action*)
 {
+	_game->getResourcePack()->fadeMusic(_game, 276);
+
 	_game->popState();
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 }
 
 /**

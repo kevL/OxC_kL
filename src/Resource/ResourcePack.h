@@ -128,7 +128,8 @@ private:
 			/// Plays a particular music.
 			void playMusic(
 					const std::string& name,
-					const std::string& terrain = ""); // kL, sza_MusicRules
+					const std::string& terrain = "", // kL, sza_MusicRules
+					int loops = -1);
 			/// Fades the currently playing music.
 			void fadeMusic(
 					Game* const game,

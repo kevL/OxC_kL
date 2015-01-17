@@ -50,7 +50,7 @@
 namespace OpenXcom
 {
 
-//kL size_t Ufopaedia::_current_index = 0;
+//size_t Ufopaedia::_current_index = 0;
 int Ufopaedia::_current_index = 0; // kL
 
 
@@ -75,7 +75,7 @@ bool Ufopaedia::isArticleAvailable(
  * @param article_id	- reference the article id to find
  * @return, index of the given article id in the internal list, -1 if not found
  */
-//kL size_t Ufopaedia::getArticleIndex(Game *game, std::string &article_id)
+//size_t Ufopaedia::getArticleIndex(Game *game, std::string &article_id)
 int Ufopaedia::getArticleIndex( // kL
 		SavedGame* save,
 		Ruleset* rule,
@@ -191,7 +191,7 @@ void Ufopaedia::openArticle(
 								game->getSavedGame(),
 								game->getRuleset(),
 								article->id);
-//kL	if (_current_index != (size_t)-1)
+//	if (_current_index != (size_t)-1)
 	if (_current_index != -1) // kL
 		game->pushState(createArticleState(article));
 }
@@ -209,7 +209,7 @@ void Ufopaedia::openArticle(
 								game->getSavedGame(),
 								game->getRuleset(),
 								article_id);
-//kL	if (_current_index != (size_t) -1)
+//	if (_current_index != (size_t) -1)
 	if (_current_index != -1) // kL
 	{
 		ArticleDefinition* article = game->getRuleset()->getUfopaediaArticle(article_id);
@@ -235,7 +235,7 @@ void Ufopaedia::next(Game* game)
 	ArticleDefinitionList articles = getAvailableArticles(
 														game->getSavedGame(),
 														game->getRuleset());
-//kL	if (_current_index >= articles.size() - 1)
+//	if (_current_index >= articles.size() - 1)
 	if (_current_index >= static_cast<int>(articles.size()) - 1) // kL
 		_current_index = 0; // goto first
 	else
@@ -255,7 +255,7 @@ void Ufopaedia::prev(Game* game)
 														game->getSavedGame(),
 														game->getRuleset());
 	if (_current_index == 0)
-//kL		_current_index = articles.size() - 1; // goto last
+//		_current_index = articles.size() - 1; // goto last
 		_current_index = static_cast<int>(articles.size()) - 1; // kL
 	else
 		--_current_index;

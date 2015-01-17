@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_UFOPAEDIASELECTSTATE_H
 #define OPENXCOM_UFOPAEDIASELECTSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "Ufopaedia.h"
 

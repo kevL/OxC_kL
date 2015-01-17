@@ -219,27 +219,28 @@ Music* ResourcePack::getMusic(const std::string& name) const
  * Plays the specified track if it's not already playing.
  * @param name		- reference the name of a Music
  * @param terrain	- reference the RuleTerrain type (default "")
+ * @param loops		- number of times to play the track (default -1 infinite)
  */
 void ResourcePack::playMusic(
 		const std::string& name,
-		const std::string& terrain) // kL: sza_MusicRules
+		const std::string& terrain, // kL: sza_MusicRules
+		int loops)
 {
 	if (Options::mute == true)
 		return;
 
 	if (_playingMusic != name)
 	{
-		int loop = -1;
 		_playingMusic = name;
 
 		if (Options::musicAlwaysLoop == false
 			&& (name == OpenXcom::res_MUSIC_WIN
 				|| name == OpenXcom::res_MUSIC_LOSE))
 		{
-			loop = 1;
+			loops = 1;
 		}
 
-		getRandomMusic(name, terrain)->play(loop);
+		getRandomMusic(name, terrain)->play(loops);
 	}
 }
 

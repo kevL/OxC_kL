@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_UFOPAEDIASTARTSTATE_H
 #define OPENXCOM_UFOPAEDIASTARTSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 
@@ -53,7 +53,9 @@ protected:
 	TextButton* _btnSection[NUM_SECTIONS];
 
 	// navigation callbacks
+	///
 	void btnSectionClick(Action* action);
+	///
 	void btnOkClick(Action* action);
 
 
