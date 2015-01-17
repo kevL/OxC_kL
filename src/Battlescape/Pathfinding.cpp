@@ -817,8 +817,9 @@ int Pathfinding::getTUCost(
 				&& canFallDown(destTile) == true
 				&& belowDest != NULL
 				&& belowDest->getTerrainLevel() < -11	// higher than 1-half up.
-				&& startPos.x != destPos->x				// Don't consider this section if
-				&& startPos.y != destPos->y)			// falling via Alt+FlightSuit.
+				&& dir != DIR_DOWN)						// kL
+//				&& startPos.x != destPos->x				// Don't consider this section if
+//				&& startPos.y != destPos->y)			// falling via Alt+FlightSuit.
 			{
 				++partsGoingDown;
 

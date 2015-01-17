@@ -1,4 +1,4 @@
-﻿# Terrain Pack by Hobbes # version 2.4
+﻿# Terrain Pack by Hobbes # version kL
 # kL_note: Moved all terrains here, except URBAN/2 (TerrorSites.rul) and XBASE (Xcom1Ruleset.rul)
 terrains:
   - name: ATLANTDESERT
