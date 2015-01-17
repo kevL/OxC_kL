@@ -299,7 +299,10 @@ MonthlyReportState::MonthlyReportState(
 	_txtDesc->setText(ss4.str());
 
 
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_MONTHLYREPORT);
+	_game->getResourcePack()->playMusic(
+									OpenXcom::res_MUSIC_GEO_MONTHLYREPORT,
+									"",
+									1);
 }
 
 /**

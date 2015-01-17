@@ -52,12 +52,9 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	_txtTitle		= new Text(300, 16, 10, 8);
 	_lstKIA			= new TextList(285, 9, 16, 28);
 	_lstSoldiers	= new TextList(285, 137, 16, 38);
-//	_lstSoldiers	= new TextList(285, 145, 16, 28);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
-
-//	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS); // note: Moved to DebriefingState.
 
 	add(_window);
 	add(_txtTitle);
@@ -76,21 +73,19 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_lstKIA->setColor(Palette::blockOffset(8)+5); // cyan // (9) brown // (8)+10 green
+	_lstKIA->setColor(Palette::blockOffset(8)+5);
 	_lstKIA->setColumns(1, 285);
 	_lstKIA->setBackground(_window);
 	_lstKIA->setSelectable();
 	_lstKIA->setMargin();
-//	_lstKIA->setHighContrast();
 
-	_lstSoldiers->setColor(Palette::blockOffset(15)-1); // green //(9) brown // (8)+10 green
+	_lstSoldiers->setColor(Palette::blockOffset(15)-1);
 	_lstSoldiers->setColumns(2, 200, 77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
-//	_lstSoldiers->setHighContrast();
 
-	_btnOk->setColor(Palette::blockOffset(15)-1); // green
+	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CommendationDeadState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -227,9 +222,8 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 			_lstSoldiers->setRowColor(
 									titleRow,
-									Palette::blockOffset(9), // brown //(15)-1 green
+									Palette::blockOffset(9), // brown
 									true);
-//	_lstSoldiers->setHighContrast();
 			titleChosen = true;
 		}
 
@@ -250,10 +244,9 @@ CommendationDeadState::~CommendationDeadState()
  */
 void CommendationDeadState::btnOkClick(Action*)
 {
-	//Log(LOG_INFO) << "CommendationDead, states = " << _game->getQtyStates();
 	if (_game->getQtyStates() == 2) // ie: (1) this, (2) Geoscape
 	{
-		_game->getResourcePack()->fadeMusic(_game, 900);
+		_game->getResourcePack()->fadeMusic(_game, 863);
 		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 	}
 

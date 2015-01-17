@@ -563,9 +563,9 @@ void IntroState::init()
 void IntroState::endVideo()
 {
 #ifndef __NO_MUSIC
-	Mix_FadeOutChannel(-1, 900); // note: This ain't music, technically.
+	Mix_FadeOutChannel(-1, 863); // note: This ain't music, technically.
 #endif
-	_game->getResourcePack()->fadeMusic(_game, 900);
+	_game->getResourcePack()->fadeMusic(_game, 863);
 
 	SDL_Color
 		pal[256],

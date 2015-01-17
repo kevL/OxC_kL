@@ -289,7 +289,7 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 900);
+	_game->getResourcePack()->fadeMusic(_game, 863);
 
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 	_game->pushState(new SoldierMemorialState());

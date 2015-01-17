@@ -501,7 +501,7 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 900);
+	_game->getResourcePack()->fadeMusic(_game, 863);
 
 	std::vector<Soldier*> participants;
 	for (std::vector<BattleUnit*>::const_iterator

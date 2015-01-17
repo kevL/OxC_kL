@@ -175,7 +175,7 @@ SoldierMemorialState::~SoldierMemorialState()
  */
 void SoldierMemorialState::btnOkClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 900);
+	_game->getResourcePack()->fadeMusic(_game, 863);
 
 	_game->popState();
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);

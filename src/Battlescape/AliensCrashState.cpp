@@ -90,7 +90,7 @@ AliensCrashState::~AliensCrashState()
  */
 void AliensCrashState::btnOkClick(Action*)
 {
-//	_game->getResourcePack()->fadeMusic(_game, 900);
+//	_game->getResourcePack()->fadeMusic(_game, 863);
 
 	_game->popState();
 	_game->pushState(new DebriefingState());
