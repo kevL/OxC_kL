@@ -5846,7 +5846,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1420971944 source:f:\git\openxcom\src\battlescape\camera.cpp
+1421517112 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6058,7 +6058,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421515066 source:f:\git\openxcom\src\battlescape\map.cpp
+1421531606 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

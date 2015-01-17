@@ -564,7 +564,7 @@ void Camera::convertScreenToMap(
 
 	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
-	*mapY = - screenX + _mapOffset.x + 2 * screenY - 2 * _mapOffset.y;
+	*mapY = -screenX + _mapOffset.x + 2 * screenY - 2 * _mapOffset.y;
 	*mapX = screenY - _mapOffset.y - (*mapY) / 4 - (_spriteWidth / 4);
 
 	// to get the row&col itself, divide by the size of a tile
