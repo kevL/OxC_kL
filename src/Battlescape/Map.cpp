@@ -702,10 +702,11 @@ void Map::drawTerrain(Surface* surface)
 	int
 		frame,
 		tileShade,
-		wallShade = 0,
+		wallShade,
 		shade,
 		shade2,
-		animOffset;
+		animOffset,
+		quad;
 
 	bool
 		invalid = false,
@@ -937,8 +938,8 @@ void Map::drawTerrain(Surface* surface)
 
 							// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 							// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-							const int quad = tileNorth->getPosition().x - unitNorth->getPosition().x
-										  + (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
+							quad = tileNorth->getPosition().x - unitNorth->getPosition().x
+								+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
 
 							srfSprite = unitNorth->getCache(&invalid, quad);
 							if (srfSprite)
@@ -1162,8 +1163,8 @@ void Map::drawTerrain(Surface* surface)
 								{
 									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-									const int quad = tileWest->getPosition().x - unitWest->getPosition().x
-												  + (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
+									quad = tileWest->getPosition().x - unitWest->getPosition().x
+										+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
 
 									srfSprite = unitWest->getCache(&invalid, quad);
 									if (srfSprite)
@@ -1261,7 +1262,8 @@ void Map::drawTerrain(Surface* surface)
 					// end (itY > 0)
 //* _END_ADVANCED_DRAWING_CYCLE_ *//
 
-					// Draw walls
+
+					// Draw tile's background
 					if (tile->isVoid(true) == false)
 					{
 						// Draw west wall
@@ -1312,7 +1314,7 @@ void Map::drawTerrain(Surface* surface)
 									half);
 						}
 
-						// Draw rear object
+						// Draw back or center object
 						srfSprite = tile->getSprite(MapData::O_OBJECT);
 						if (srfSprite
 							&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,Block,diagonals,West,North,West&North
@@ -1327,7 +1329,7 @@ void Map::drawTerrain(Surface* surface)
 									tileShade);
 						}
 
-						// Draw item on the floor (if any)
+						// Draw item on floor (if any)
 						const int sprite = tile->getTopItemSprite();
 						if (sprite != -1)
 						{
@@ -1400,8 +1402,8 @@ void Map::drawTerrain(Surface* surface)
 
 											// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 											// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-											const int quad = tileWest->getPosition().x - unitWest->getPosition().x
-														  + (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
+											quad = tileWest->getPosition().x - unitWest->getPosition().x
+												+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
 
 											srfSprite = unitWest->getCache(&invalid, quad);
 											if (srfSprite)
@@ -1450,7 +1452,7 @@ void Map::drawTerrain(Surface* surface)
 									}
 								}
 							}
-						} // kL_end.
+						} // end draw walking unitWest
 
 						// kL_begin: reDraw unit to NORTH-WEST. ... unit Walking (dir = 3,7).
 						// TODO: smoke/fire render from advanced cycle below this, use check to draw or not
@@ -1487,8 +1489,8 @@ void Map::drawTerrain(Surface* surface)
 
 									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-									const int quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
-												  + (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
+									quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
+										+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
 
 									srfSprite = unitNorthWest->getCache(&invalid, quad);
 									if (srfSprite)
@@ -1541,7 +1543,7 @@ void Map::drawTerrain(Surface* surface)
 									}
 								}
 							}
-						} // kL_end.
+						} // end draw walking unitNorthWest
 
 						// kL_begin #2 of 3: Make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 						if (mapPosition.z > 0
@@ -1579,7 +1581,7 @@ void Map::drawTerrain(Surface* surface)
 																						unitBelow->getArmor()->getSize()),
 												_animFrame * 2,
 												false,
-												3); // 1=white, 3=red
+												3); // red
 								}
 								else
 								{
@@ -1775,8 +1777,8 @@ void Map::drawTerrain(Surface* surface)
 
 						// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 						// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-						const int quad = tile->getPosition().x - unit->getPosition().x
-									  + (tile->getPosition().y - unit->getPosition().y) * 2;
+						quad = tile->getPosition().x - unit->getPosition().x
+							+ (tile->getPosition().y - unit->getPosition().y) * 2;
 
 						srfSprite = unit->getCache(&invalid, quad);
 						if (srfSprite)
@@ -1852,7 +1854,7 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y + walkOffset.y + 4,
 													_animFrame * 2,
 													false,
-													3); // 1=white, 3=red.
+													3); // red
 
 /*										if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
 										{
@@ -1933,17 +1935,33 @@ void Map::drawTerrain(Surface* surface)
 						}
 					} // kL_end.
 
-					// if we can see through the floor, draw the soldier below it if it is on stairs
+
+					// if there is no floor, draw the unit below that if it is on stairs
+					const Tile* tileNorth;
+					if (itY > 0)
+						tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+					else
+						tileNorth = NULL;
+
 					const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
+
 					if (itZ > 0
-						&& tile->hasNoFloor(tileBelow) == true)
+						&& tile->hasNoFloor(tileBelow) == true
+						&& (tile->getMapData(MapData::O_WESTWALL) != NULL
+							|| tile->getMapData(MapData::O_NORTHWALL) != NULL
+							|| (tileNorth != NULL
+								&& tileNorth->getMapData(MapData::O_OBJECT) != NULL
+								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK)))
+					// that also needs tileWest's northWall & bigWall east
+					// and tileNorth's westWall & bigWall south + a bit of its flooring.
+					// and tileBelow's east and south walls
+					// and tileBelowEast's west & south walls ..... fuck 3d isometric.
+					// Screw it; i'm changing the map resource!!! ( DESERTMOUNT08, eg. )
 					{
-						const Position posBelow = Position(
-														itX,
-														itY,
-														itZ - 1);
-						const Tile* const tileBelow = _save->getTile(posBelow);
-						BattleUnit* const unitBelow = _save->selectUnit(posBelow);
+//						const Position posBelow = Position(itX, itY, itZ - 1);
+//						const Tile* const tileBelow1 = _save->getTile(posBelow);
+//						BattleUnit* const unitBelow1 = _save->selectUnit(posBelow);
+						BattleUnit* const unitBelow = tileBelow->getUnit();
 
 						if (unitBelow != NULL
 							&& unitBelow->getUnitVisible() == true
@@ -1952,10 +1970,11 @@ void Map::drawTerrain(Surface* surface)
 						{
 							// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 							// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-							const int quad = tileBelow->getPosition().x - unitBelow->getPosition().x
-										  + (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
+							quad = tileBelow->getPosition().x - unitBelow->getPosition().x
+								+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
 
 							srfSprite = unitBelow->getCache(&invalid, quad);
+//							srfSprite = NULL;
 							if (srfSprite)
 							{
 								calculateWalkingOffset(
@@ -1967,7 +1986,7 @@ void Map::drawTerrain(Surface* surface)
 										surface,
 										screenPosition.x + walkOffset.x,
 										screenPosition.y + walkOffset.y,
-										tileBelow->getShade());
+										tileBelow->getShade()); // <- might want to do the undiscovered thing for shade here
 
 								if (unitBelow->getArmor()->getSize() > 1)
 									walkOffset.y += 4;
@@ -1982,6 +2001,44 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x + walkOffset.x,
 												screenPosition.y + walkOffset.y,
 												0);
+								}
+
+								// special case if tileSouthEast don't have a floor
+								// and tileBelowSouthEast does have a sprite that should conceal the redrawn unit's right leg.
+								if (itX < endX
+									&& itY < endY)
+								{
+									const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
+
+									if (tileSouthEast->getMapData(MapData::O_FLOOR) == NULL)
+									{
+										const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+
+										// kL_note: I'm only doing content-object w/out bigWall here because that's the case I ran into.
+										// This also needs to redraw northWall, as well as tileEast's west & south walls, tileBelow's east & south walls, etc.
+										// ... aaaaaaand, this gives rise to infinite regression.
+										// so try to head it off at the pass, above, by not redrawing unitBelow unless it *has* to be done.
+										if (tileBelowSouthEast->getMapData(MapData::O_OBJECT) != NULL
+											&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE)
+										{
+											srfSprite = tileBelowSouthEast->getSprite(MapData::O_OBJECT);
+//											srfSprite = NULL;
+											if (srfSprite)
+											{
+												if (tileBelowSouthEast->isDiscovered(2) == true)
+													shade = tileBelowSouthEast->getShade();
+												else
+													shade = 16;
+
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x,
+														screenPosition.y + 40 - tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getYOffset(),
+														shade,
+														true);
+											}
+										}
+									}
 								}
 							}
 						}
@@ -2139,9 +2196,7 @@ void Map::drawTerrain(Surface* surface)
 						{
 							// TODO: insert checks for tileEast !south&tc bigWalls & tileSouthEast !north&tc Walls
 
-							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
-							//tileBelow != NULL
-
+//							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1)); // def'n above still good.
 							BattleUnit* const unitBelow = tileBelow->getUnit();
 
 							if (unitBelow != NULL
@@ -2162,8 +2217,8 @@ void Map::drawTerrain(Surface* surface)
 
 								// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 								// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-								const int quad = tileBelow->getPosition().x - unitBelow->getPosition().x
-											  + (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
+								quad = tileBelow->getPosition().x - unitBelow->getPosition().x
+									+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
 
 								srfSprite = unitBelow->getCache(&invalid, quad);
 //								srfSprite = NULL;
@@ -2203,8 +2258,7 @@ void Map::drawTerrain(Surface* surface)
 						//		- bigWallWest,bigWallNorth&West (maybe content-object w/ bigWallNone)
 						// - if UnitSouthEast
 						//		- bigWallEast,content-object w/ bigWallNone
-						if (itY < endY) // - 1) // why. -1
-//							&& tile->isVoid() == false) // done above.
+						if (itY < endY)
 						{
 							// for both:
 							const bool redrawUnit = tile->getMapData(MapData::O_FLOOR) != NULL
@@ -2246,8 +2300,8 @@ void Map::drawTerrain(Surface* surface)
 
 									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-									const int quad = tileBelowSouth->getPosition().x - unitBelowSouth->getPosition().x
-												  + (tileBelowSouth->getPosition().y - unitBelowSouth->getPosition().y) * 2;
+									quad = tileBelowSouth->getPosition().x - unitBelowSouth->getPosition().x
+										+ (tileBelowSouth->getPosition().y - unitBelowSouth->getPosition().y) * 2;
 
 									srfSprite = unitBelowSouth->getCache(&invalid, quad);
 //									srfSprite = NULL;
@@ -2319,8 +2373,8 @@ void Map::drawTerrain(Surface* surface)
 
 										// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 										// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-										const int quad = tileBelowSouthEast->getPosition().x - unitBelowSouthEast->getPosition().x
-													  + (tileBelowSouthEast->getPosition().y - unitBelowSouthEast->getPosition().y) * 2;
+										quad = tileBelowSouthEast->getPosition().x - unitBelowSouthEast->getPosition().x
+											+ (tileBelowSouthEast->getPosition().y - unitBelowSouthEast->getPosition().y) * 2;
 
 										srfSprite = unitBelowSouthEast->getCache(&invalid, quad);
 //										srfSprite = NULL;
@@ -2351,13 +2405,12 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							if (redrawLowForeground == true)
+							if (redrawLowForeground == true) // The order/ structure of these following have not been optimized ....
 							{
 								if (itY < endY - 1)
 								{
 									const Tile* const tileBelowSouthSouth = _save->getTile(mapPosition + Position(0,2,-1));
-//									if (tileBelowSouthSouth != NULL) // patch ! needs more ...... much more.
-//									{
+
 									srfSprite = tileBelowSouthSouth->getSprite(MapData::O_NORTHWALL);
 //									srfSprite = NULL;
 									if (srfSprite)
@@ -2373,14 +2426,11 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.y + 40 - tileBelowSouthSouth->getMapData(MapData::O_NORTHWALL)->getYOffset(),
 												shade);
 									}
-//									}
 
 									if (itX < endX)
 									{
 										const Tile* const tileBelowSouthSouthEast = _save->getTile(mapPosition + Position(1,2,-1));
 
-//										if (tileBelowSouthSouthEast != NULL) // patch ! needs more ...... much more.
-//										{
 										srfSprite = tileBelowSouthSouthEast->getSprite(MapData::O_NORTHWALL);
 //										srfSprite = NULL;
 										if (srfSprite)
@@ -2396,17 +2446,14 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y + 48 - tileBelowSouthSouthEast->getMapData(MapData::O_NORTHWALL)->getYOffset(),
 													shade);
 										}
-//										}
 									}
 								}
 
 								if (itX < endX)
 								{
-								// TODO: if unitBelow this needs to redraw walls to south & east also.
-								const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+									// TODO: if unitBelow this needs to redraw walls to south & east also.
+									const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
 
-//								if (tileBelowSouthEast != NULL) // patch ! needs more ...... much more.
-//								{
 									srfSprite = tileBelowSouthEast->getSprite(MapData::O_OBJECT);
 //									srfSprite = NULL;
 									if (srfSprite
@@ -2423,7 +2470,6 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.y + 40 - tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getYOffset(),
 												shade);
 									}
-//								}
 								}
 
 								if (itX < endX
@@ -2431,8 +2477,6 @@ void Map::drawTerrain(Surface* surface)
 								{
 									const Tile* const tileBelowSouthEastEast = _save->getTile(mapPosition + Position(2,1,-1));
 
-//									if (tileBelowSouthEastEast != NULL) // patch ! needs more ...... much more.
-//									{
 									srfSprite = tileBelowSouthEastEast->getSprite(MapData::O_OBJECT);
 //									srfSprite = NULL;
 									if (srfSprite
@@ -2449,7 +2493,6 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.y + 48 - tileBelowSouthEastEast->getMapData(MapData::O_OBJECT)->getYOffset(),
 												shade);
 									}
-//									}
 								}
 							}
 						}
@@ -2499,106 +2542,106 @@ void Map::drawTerrain(Surface* surface)
 									0);
 
 							// UFOExtender Accuracy: display adjusted accuracy value on crosshair (and more).
-							if (Options::battleUFOExtenderAccuracy == true)
+//							if (Options::battleUFOExtenderAccuracy == true) // kL_note: one less condition to check
+//							{
+							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
-								if (_cursorType == CT_AIM) // indicator for Firing.
+								// kL_note: Use stuff from ProjectileFlyBState::init()
+								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
+								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
+								const BattleAction* const action = _save->getBattleGame()->getCurrentAction();
+
+								int accuracy = static_cast<int>(Round(
+													action->actor->getFiringAccuracy(
+																				action->type,
+																				action->weapon) * 100.));
+
+								const RuleItem* const weaponRule = action->weapon->getRules();
+								const int
+									lowerLimit = weaponRule->getMinRange(),
+									distance = _save->getTileEngine()->distance(
+																			Position(
+																					itX,
+																					itY,
+																					itZ),
+																			action->actor->getPosition());
+								int upperLimit = 200;
+								switch (action->type)
 								{
-									// kL_note: Use stuff from ProjectileFlyBState::init()
-									// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
-									// to turn accuracy to 'red 0' if target is out of LoS/LoF.
-									const BattleAction* const action = _save->getBattleGame()->getCurrentAction();
-
-									int accuracy = static_cast<int>(Round(
-														action->actor->getFiringAccuracy(
-																					action->type,
-																					action->weapon) * 100.));
-
-									const RuleItem* const weaponRule = action->weapon->getRules();
-									const int
-										lowerLimit = weaponRule->getMinRange(),
-										distance = _save->getTileEngine()->distance(
-																				Position(
-																						itX,
-																						itY,
-																						itZ),
-																				action->actor->getPosition());
-									int upperLimit = 200;
-									switch (action->type)
-									{
-										case BA_AIMEDSHOT:	upperLimit = weaponRule->getAimRange();		break;
-										case BA_SNAPSHOT:	upperLimit = weaponRule->getSnapRange();	break;
-										case BA_AUTOSHOT:	upperLimit = weaponRule->getAutoRange();
-									}
-
-									Uint8 color = Palette::blockOffset(3)+3; // green
-
-									if (distance > upperLimit)
-									{
-										accuracy -= (distance - upperLimit) * weaponRule->getDropoff();
-										color = Palette::blockOffset(1)+2; // orange
-									}
-									else if (distance < lowerLimit)
-									{
-										accuracy -= (lowerLimit - distance) * weaponRule->getDropoff();
-										color = Palette::blockOffset(1)+2; // orange
-									}
-
-									if (accuracy < 1 // zero accuracy or out of range: set it red.
-										|| distance > weaponRule->getMaxRange())
-									{
-										accuracy = 0;
-										color = Palette::blockOffset(2)+3; // red
-									}
-
-									_txtAccuracy->setValue(static_cast<unsigned int>(accuracy));
-									_txtAccuracy->setColor(color);
-									_txtAccuracy->draw();
-									_txtAccuracy->blitNShade(
-														surface,
-														screenPosition.x,
-														screenPosition.y,
-														0);
+									case BA_AIMEDSHOT:	upperLimit = weaponRule->getAimRange();		break;
+									case BA_SNAPSHOT:	upperLimit = weaponRule->getSnapRange();	break;
+									case BA_AUTOSHOT:	upperLimit = weaponRule->getAutoRange();
 								}
-								else if (_cursorType == CT_THROW) // indicator for Throwing.
+
+								Uint8 color = Palette::blockOffset(3)+3; // green
+
+								if (distance > upperLimit)
 								{
-									BattleAction* const action = _save->getBattleGame()->getCurrentAction();
-									action->target = Position(
-															itX,
-															itY,
-															itZ);
-
-									const Position
-										originVoxel = _save->getTileEngine()->getOriginVoxel(
-																						*action,
-																						NULL),
-										targetVoxel = Position(
-															itX * 16 + 8,
-															itY * 16 + 8,
-															itZ * 24 + 2 - _save->getTile(action->target)->getTerrainLevel());
-
-									unsigned int accuracy = 0;
-									Uint8 color = Palette::blockOffset(2)+3; // red
-
-									const bool canThrow = _save->getTileEngine()->validateThrow(
-																							*action,
-																							originVoxel,
-																							targetVoxel);
-									if (canThrow == true)
-									{
-										accuracy = static_cast<unsigned int>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.));
-										color = Palette::blockOffset(3)+3; // green
-									}
-
-									_txtAccuracy->setValue(accuracy);
-									_txtAccuracy->setColor(color);
-									_txtAccuracy->draw();
-									_txtAccuracy->blitNShade(
-														surface,
-														screenPosition.x,
-														screenPosition.y,
-														0);
+									accuracy -= (distance - upperLimit) * weaponRule->getDropoff();
+									color = Palette::blockOffset(1)+2; // orange
 								}
+								else if (distance < lowerLimit)
+								{
+									accuracy -= (lowerLimit - distance) * weaponRule->getDropoff();
+									color = Palette::blockOffset(1)+2; // orange
+								}
+
+								if (accuracy < 1 // zero accuracy or out of range: set it red.
+									|| distance > weaponRule->getMaxRange())
+								{
+									accuracy = 0;
+									color = Palette::blockOffset(2)+3; // red
+								}
+
+								_txtAccuracy->setValue(static_cast<unsigned int>(accuracy));
+								_txtAccuracy->setColor(color);
+								_txtAccuracy->draw();
+								_txtAccuracy->blitNShade(
+													surface,
+													screenPosition.x,
+													screenPosition.y,
+													0);
 							}
+							else if (_cursorType == CT_THROW) // indicator for Throwing.
+							{
+								BattleAction* const action = _save->getBattleGame()->getCurrentAction();
+								action->target = Position(
+														itX,
+														itY,
+														itZ);
+
+								const Position
+									originVoxel = _save->getTileEngine()->getOriginVoxel(
+																					*action,
+																					NULL),
+									targetVoxel = Position(
+														itX * 16 + 8,
+														itY * 16 + 8,
+														itZ * 24 + 2 - _save->getTile(action->target)->getTerrainLevel());
+
+								unsigned int accuracy = 0;
+								Uint8 color = Palette::blockOffset(2)+3; // red
+
+								const bool canThrow = _save->getTileEngine()->validateThrow(
+																						*action,
+																						originVoxel,
+																						targetVoxel);
+								if (canThrow == true)
+								{
+									accuracy = static_cast<unsigned int>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.));
+									color = Palette::blockOffset(3)+3; // green
+								}
+
+								_txtAccuracy->setValue(accuracy);
+								_txtAccuracy->setColor(color);
+								_txtAccuracy->draw();
+								_txtAccuracy->blitNShade(
+													surface,
+													screenPosition.x,
+													screenPosition.y,
+													0);
+							}
+//							}
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
@@ -2657,8 +2700,8 @@ void Map::drawTerrain(Surface* surface)
 										screenPosition.y + waypYOff,
 										0);
 
-								waypXOff += waypid > 9? 8: 6;
-								if (waypXOff >= 26)
+								waypXOff += (waypid > 9)? 8: 6;
+								if (waypXOff > 25)
 								{
 									waypXOff = 2;
 									waypYOff += 8;
@@ -2671,9 +2714,9 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// kL_begin:
-					if ((itZ == 0 // draw Map's border-sprite only on ground tiles
-							&& _save->getGroundLevel() == -1)
-						|| itZ == _save->getGroundLevel())
+					if (itZ == _save->getGroundLevel() // draw Map's border-sprite only on ground tiles
+						|| (itZ == 0
+							&& _save->getGroundLevel() == -1))
 					{
 						if (   itX == 0
 							|| itX == _save->getMapSizeX() - 1
@@ -2796,7 +2839,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 						int offset_y = -tile->getTerrainLevel();
-//						int offset_y = 0; // kL
+
 						if (_previewSetting & PATH_ARROWS)
 						{
 							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
@@ -2838,7 +2881,6 @@ void Map::drawTerrain(Surface* surface)
 								&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
 								offset_y += 1;
-
 								if (!(_previewSetting & PATH_ARROWS))
 									offset_y += 7;
 							}
@@ -2847,7 +2889,6 @@ void Map::drawTerrain(Surface* surface)
 							wpID->draw();
 
 							if (!(_previewSetting & PATH_ARROWS))
-							{
 								wpID->blitNShade(
 											surface,
 											screenPosition.x + 16 - offset_x,
@@ -2856,16 +2897,13 @@ void Map::drawTerrain(Surface* surface)
 											0,
 											false,
 											tile->getMarkerColor());
-							}
 							else
-							{
 								wpID->blitNShade(
 											surface,
 											screenPosition.x + 16 - offset_x,
 //											screenPosition.y + 22 - offset_y,
 											screenPosition.y + 30 - offset_y, // kL
 											0);
-							}
 						}
 					}
 				}
