@@ -446,7 +446,7 @@ BattlescapeState::BattlescapeState()
 	add(_lstTileInfo);
 	_lstTileInfo->setColor(Palette::blockOffset(8)); // blue
 	_lstTileInfo->setHighContrast();
-	_lstTileInfo->setColumns(2, 12, 6);
+	_lstTileInfo->setColumns(2, 11, 7);
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(8));

@@ -448,6 +448,8 @@ void Ruleset::load(const std::string& source)
 		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
 		loadFiles(dirname);
+
+//	_modIndex += 1000;
 }
 
 /**
@@ -1139,9 +1141,6 @@ void Ruleset::loadFile(const std::string& filename)
 		if (rule != NULL)
 			rule->load(*i);
 	}
-
-//kL	_modIndex += 1000;	// Question: how is this value subtracted later,
-							// getting a user-specified Index from a ruleset
 }
 
 /**

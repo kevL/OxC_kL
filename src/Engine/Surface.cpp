@@ -1015,8 +1015,10 @@ static inline void func(
  * @param x			- X position of Surface blitted to
  * @param y			- Y position of Surface blitted to
  * @param offset	- color offset
- * @param half		- some tiles are blitted only the right half
- * @param baseColor	- Attention: the actual color + 1, because 0 is no new base color.
+ * @param half		- some tiles blit only the right half (default false)
+ * @param baseColor	- Attention: the actual color + 1, because 0 is no new base color (default 0)
+ * @param halfLeft	- kL_add: blits only the left half NOTE This conflicts w/ 'half' (default false)
+ *						but i am too lazy to refactor a gajillion blitNShade calls!
  */
 void Surface::blitNShade(
 		Surface* surface,
@@ -1024,15 +1026,22 @@ void Surface::blitNShade(
 		int y,
 		int offset,
 		bool half,
-		int baseColor)
+		int baseColor,
+		bool halfLeft)
 {
-	ShaderMove<Uint8> src(this, x, y);
+	ShaderMove<Uint8> src (this, x, y); // init.
 
 	if (half == true)
 	{
-		GraphSubset g (src.getDomain()); // init.
-		g.beg_x = g.end_x / 2;
-		src.setDomain(g);
+		GraphSubset graph (src.getDomain()); // init.
+		graph.beg_x = graph.end_x / 2;
+		src.setDomain(graph);
+	}
+	else if (halfLeft == true) // kL_add->
+	{
+		GraphSubset graph (src.getDomain()); // init.
+		graph.end_x = graph.end_x / 2;
+		src.setDomain(graph);
 	}
 
 	if (baseColor != 0)

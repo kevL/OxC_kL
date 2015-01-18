@@ -321,7 +321,8 @@ protected:
 				int y,
 				int offset,
 				bool half = false,
-				int baseColor = 0);
+				int baseColor = 0,
+				bool halfLeft = false); // <-kL_add
 
 		/// Invalidate the surface: force it to be redrawn
 		void invalidate(bool valid = true);
