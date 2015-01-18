@@ -1943,6 +1943,12 @@ void Map::drawTerrain(Surface* surface)
 					else
 						tileNorth = NULL;
 
+					const Tile* tileNorthWest;
+					if (itX > 0 && itY > 0)
+						tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+					else
+						tileNorthWest = NULL;
+
 					const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
 
 					if (itZ > 0
@@ -1950,10 +1956,13 @@ void Map::drawTerrain(Surface* surface)
 						&& (tile->getMapData(MapData::O_WESTWALL) != NULL
 							|| tile->getMapData(MapData::O_NORTHWALL) != NULL
 							|| (tileNorth != NULL
-								&& tileNorth->getMapData(MapData::O_OBJECT) != NULL
-								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK)))
+								&& (tileNorth->getMapData(MapData::O_FLOOR) != NULL
+									|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
+										&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK)))
+							|| (tileNorthWest != NULL
+								&& tileNorthWest->isVoid() == false))) // flooring mainly, but prob. also south & east walls
 					// that also needs tileWest's northWall & bigWall east
-					// and tileNorth's westWall & bigWall south + a bit of its flooring.
+					// and tileNorth's westWall & bigWall south
 					// and tileBelow's east and south walls
 					// and tileBelowEast's west & south walls ..... fuck 3d isometric.
 					// Screw it; i'm changing the map resource!!! ( DESERTMOUNT08, eg. )
