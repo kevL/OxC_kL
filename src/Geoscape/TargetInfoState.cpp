@@ -64,7 +64,7 @@ TargetInfoState::TargetInfoState(
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_txtTitle		= new Text(182, 17, 37, 54);
 
-	_edtTarget		= new TextEdit(this, 50, 9, 38, 46); // kL
+	_edtTarget		= new TextEdit(this, 50, 9, 38, 46);
 
 	_txtTargetted	= new Text(182, 9, 37, 71);
 	_txtFollowers	= new Text(182, 40, 37, 82);
@@ -164,66 +164,16 @@ TargetInfoState::~TargetInfoState()
 {}
 
 /**
- * Changes the base name.
+ * Edits an aLienBase's name.
  * @param action - pointer to an Action
  */
-void TargetInfoState::edtTargetChange(Action* action)
+void TargetInfoState::edtTargetChange(Action*)
 {
-//	_edtTarget->setText(_editTarget->getText()); // NAH. This should be set auto via TextEdit
-
-	std::string edit = Language::wstrToUtf8(_edtTarget->getText());
-	_ab->setLabel(edit);
-
-
-/*	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
-		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		std::string s = Language::wstrToUtf8(_edtTarget->getText());
-		_ab->setEdit(s);
-	} */
+	_ab->setLabel(Language::wstrToUtf8(_edtTarget->getText()));
 }
-/*
- * Changes the soldier's name.
- * @param action - pointer to an Action
-void SoldierInfoState::edtSoldierChange(Action* action)
-{
-	_soldier->setName(_edtSoldier->getText());
-}
-
- * Changes the Craft name.
- * @param action - pointer to an Action
-void CraftInfoState::edtCraftChange(Action* action)
-{
-	_craft->setName(_edtCraft->getText());
-
-	if (_craft->getName(_game->getLanguage()) == _defaultName)
-		_craft->setName(L"");
-
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
-		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		_edtCraft->setText(_craft->getName(_game->getLanguage()));
-	}
-}
-
- * Updates the base name and disables the OK button if no name is entered.
- * @param action - pointer to an Action
-void BaseNameState::edtNameChange(Action* action)
-{
-	_base->setName(_edtName->getText());
-
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
-		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		if (!_edtName->getText().empty())
-			btnOkClick(action);
-	}
-	else
-		_btnOk->setVisible(!_edtName->getText().empty());
-} */
 
 /**
- * Pick a craft to intercept the UFO.
+ * Picks a craft to intercept the UFO.
  * @param action, Pointer to an action.
  */
 void TargetInfoState::btnInterceptClick(Action*)
@@ -240,8 +190,7 @@ void TargetInfoState::btnInterceptClick(Action*)
 	_game->pushState(new InterceptState(
 									_globe,
 									NULL,
-//									_target,
-									_state)); // kL_add.
+									_state));
 }
 
 /**

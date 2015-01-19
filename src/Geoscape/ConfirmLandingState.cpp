@@ -140,7 +140,7 @@ ConfirmLandingState::ConfirmLandingState(
 	if (ufo != NULL
 		|| ts != NULL)
 	{
-		double lat; // lon;
+		double lat;
 		std::string terrain;
 
 		if (ufo != NULL)
@@ -189,9 +189,7 @@ ConfirmLandingState::ConfirmLandingState(
 			terrain = ts->getTerrain(); // TerrorSite-object stores the terrain value.
 			if (terrain.empty() == true)
 			{
-//				lon = ts->getLongitude(),
 				lat = ts->getLatitude();
-
 				_city = true;
 			}
 			else // terrorSite's terrainType has already been set before
@@ -330,10 +328,22 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 		}
 	}
 
-	const size_t pick = static_cast<size_t>(RNG::generate(
-													0,
-													static_cast<int>(terrains.size()) - 1));
-	return terrains.at(pick);
+	if (terrains.empty() == false)
+	{
+		const size_t pick = static_cast<size_t>(RNG::generate(
+														0,
+														static_cast<int>(terrains.size()) - 1));
+		Log(LOG_INFO) << ". . selected terrain = " << terrains.at(pick)->getName();
+		return terrains.at(pick);
+	}
+
+	// else, mission is on water ... pick a city terrain
+	// This should actually never happen if AlienMission zone3 globe data is correct.
+	// But do this as a safety:
+	Log(LOG_INFO) << ". WARNING: terrain NOT Valid - selecting City terrain";
+	// note that the URBAN MapScript, spec'd for all city terrains, will not add the UFO-dropship.
+	// ... could be cool.
+	return selectCityTerrain(lat);
 }
 
 /**

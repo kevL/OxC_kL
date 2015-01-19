@@ -71,8 +71,8 @@ private:
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
 
-		/// kL. Handler for changing the text in the Name edit.
-		void edtTargetChange(Action* action); // kL
+		/// Edits an aLienBase's name.
+		void edtTargetChange(Action* action);
 
 		/// Handler for clicking the Intercept button.
 		void btnInterceptClick(Action* action);
