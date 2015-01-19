@@ -616,7 +616,6 @@ void Map::drawTerrain(Surface* surface)
 	else // if (no projectile OR explosions waiting)
 		_smoothingEngaged = false;
 
-
 	NumberText* wpID = NULL;
 	const bool pathPreview = _save->getPathfinding()->isPathPreviewed();
 
@@ -2279,7 +2278,6 @@ void Map::drawTerrain(Surface* surface)
 //					}
 
 
-
 					if (itZ > 0 // THIS IS LEADING TO A NEAR-INFINITE REGRESSION!!
 						&& tile->isVoid(true) == false)
 					{
@@ -2359,7 +2357,7 @@ void Map::drawTerrain(Surface* surface)
 						//		- bigWallWest,bigWallNorth&West (maybe content-object w/ bigWallNone)
 						// - if UnitSouthEast
 						//		- bigWallEast,content-object w/ bigWallNone
-						if (itY < endY)
+						if (itY < endY - 1) // why does this want (endY - 1) else CTD.
 						{
 							// for both:
 							const bool redrawUnit = tile->getMapData(MapData::O_FLOOR) != NULL
@@ -2384,7 +2382,12 @@ void Map::drawTerrain(Surface* surface)
 								// Note: redrawing unit to South will overwrite any stuff to south & southeast & east. Assume nothing will be there for now ... BZZZZZZZT!!!
 								// TODO: don't draw unitSouth if there is a foreground object on this Z-level above the unit (ie. it hides his head getting chopped off anyway).
 								// TODO: redraw foreground objects on lower Z-level
-								BattleUnit* const unitBelowSouth = tileBelowSouth->getUnit();
+								BattleUnit* const unitBelowSouth = tileBelowSouth->getUnit(); // else CTD here.
+/*								BattleUnit* unitBelowSouth;
+								if (tileBelowSouth != NULL)
+									unitBelowSouth = tileBelowSouth->getUnit();
+								else
+									unitBelowSouth = NULL; */
 
 								if (unitBelowSouth != NULL
 									&& unitBelowSouth->getVerticalDirection() != 0
@@ -2431,6 +2434,7 @@ void Map::drawTerrain(Surface* surface)
 									}
 								}
 							}
+
 
 							// for tileBelow-SouthEast:
 							if (itX < endX

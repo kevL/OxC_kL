@@ -343,6 +343,7 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 	Log(LOG_INFO) << ". WARNING: terrain NOT Valid - selecting City terrain";
 	// note that the URBAN MapScript, spec'd for all city terrains, will not add the UFO-dropship.
 	// ... could be cool.
+	_city = true;
 	return selectCityTerrain(lat);
 }
 

@@ -199,8 +199,7 @@ BriefingState::BriefingState(
  * dTor.
  */
 BriefingState::~BriefingState()
-{
-}
+{}
 
 /**
  * Closes the window.

@@ -725,7 +725,6 @@ void InventoryState::btnPrevClick(Action*)
 	if (_inv->getSelectedItem() != NULL)
 		return;
 
-
 	if (_parent != NULL)
 		_parent->selectPreviousFactionUnit(
 										false,
@@ -747,7 +746,6 @@ void InventoryState::btnNextClick(Action*)
 {
 	if (_inv->getSelectedItem() != NULL)
 		return;
-
 
 	if (_parent != NULL)
 		_parent->selectNextFactionUnit(
