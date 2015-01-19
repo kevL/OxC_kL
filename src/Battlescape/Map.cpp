@@ -1049,7 +1049,7 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.x - 32,
 													screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 													shade,
-													true); // only render half so it won't overlap other areas that are already drawn
+													true); // only render halfRight so it won't overlap other areas that are already drawn
 									}
 								}
 
@@ -1088,7 +1088,7 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x - 16,
 												screenPosition.y - 8 - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset(),
 												wallShade,
-												true); // only render half so it won't overlap other areas that are already drawn
+												true); // only render halfRight so it won't overlap other areas that are already drawn
 									}
 								}
 
@@ -1109,7 +1109,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset(),
 											wallShade,
-											true); // only render half so it won't overlap other areas that are already drawn
+											true); // only render halfRight so it won't overlap other areas that are already drawn
 								}
 
 								srfSprite = tileWest->getSprite(MapData::O_OBJECT);
@@ -1123,7 +1123,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 											shade,
-											true); // only render half so it won't overlap other areas that are already drawn
+											true); // only render halfRight so it won't overlap other areas that are already drawn
 
 									// if the object in the tile to the west is a diagonal NESW bigWall
 									// it needs to have the black triangle at the bottom covered up
@@ -1149,7 +1149,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 + tileWest->getTerrainLevel(),
 											shade,
-											true); // only render half so it won't overlap other areas that are already drawn
+											true); // only render halfRight so it won't overlap other areas that are already drawn
 								}
 
 								if (unitWest != NULL
@@ -1237,7 +1237,7 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x - 16,
 												screenPosition.y - 8 + tileWest->getTerrainLevel(),
 												shade,
-												true); // only render half so it won't overlap other areas that are already drawn
+												true); // only render halfRight so it won't overlap other areas that are already drawn
 								}
 
 								// Draw front bigWall object
@@ -1251,7 +1251,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 											shade,
-											true); // only render half so it won't overlap other areas that are already drawn
+											true); // only render halfRight so it won't overlap other areas that are already drawn
 								}
 							}
 							// end (mapPosition.x > 0)
@@ -1301,7 +1301,7 @@ void Map::drawTerrain(Surface* surface)
 								wallShade = tileShade;
 
 							if (tile->getMapData(MapData::O_WESTWALL) != NULL)
-								half = true; // only render half so it won't overlap other areas that are already drawn
+								half = true; // only render halfRight so it won't overlap other areas that are already drawn
 							else
 								half = false;
 
@@ -1387,16 +1387,12 @@ void Map::drawTerrain(Surface* surface)
 													|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST)))
 //													|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH)))
 										{
-											if (tileWest->isDiscovered(2) == true)
-												shade = tileWest->getShade();
-											else
-												shade = 16;
-
 											if (tileSouthWest != NULL
 												&& tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
-												&& tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE) // trouble - should redraw this NWSE_Object ...
+												&& (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+													|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE)) // trouble - should redraw this NWSE_Object ...
 											{
-												half = true; // only render half so it won't overlap other areas that are already drawn
+												half = true; // only render halfRight so it won't overlap other areas that are already drawn
 											}
 											else
 												half = false;
@@ -1410,6 +1406,11 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (tileWest->isDiscovered(2) == true)
+													shade = tileWest->getShade();
+												else
+													shade = 16;
+
 												calculateWalkingOffset(
 																	unitWest,
 																	&walkOffset);
@@ -1419,7 +1420,7 @@ void Map::drawTerrain(Surface* surface)
 																	screenPosition.x - 16 + walkOffset.x,
 																	screenPosition.y - 8 + walkOffset.y,
 																	shade,
-																	half); // trouble // only render half so it won't overlap other areas that are already drawn
+																	half); // trouble // only render halfRight so it won't overlap other areas that are already drawn
 
 												if (unitWest->getFire() != 0)
 												{
@@ -1434,7 +1435,7 @@ void Map::drawTerrain(Surface* surface)
 												}
 											}
 
-											if (half == true) // redraw NWSE bigWall in tileSouthWest (might be tileSouth)
+											if (half == true) // redraw NWSE bigWall in tileSouthWest
 											{
 												if (tileSouthWest->isDiscovered(2) == true)
 													shade = tileSouthWest->getShade();
@@ -1448,7 +1449,7 @@ void Map::drawTerrain(Surface* surface)
 															screenPosition.x - 32,
 															screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 															shade,
-															true); // only render half so it won't overlap other areas that are already drawn
+															true); // only render halfRight so it won't overlap other areas that are already drawn
 											}
 										}
 									}

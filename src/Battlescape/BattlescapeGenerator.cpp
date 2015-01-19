@@ -783,7 +783,7 @@ void BattlescapeGenerator::deployXCOM()
 
 			if (unit != NULL)
 			{
-				Log(LOG_INFO) << "bGen::deployXCOM() ID " << unit->getId() << " battleOrder = " << _battleOrder + 1;
+				//Log(LOG_INFO) << "bGen::deployXCOM() ID " << unit->getId() << " battleOrder = " << _battleOrder + 1;
 				unit->setBattleOrder(++_battleOrder);
 
 				if (_battleSave->getSelectedUnit() == NULL)
