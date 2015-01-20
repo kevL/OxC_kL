@@ -325,10 +325,9 @@ std::wstring Ufo::getName(Language* lang) const
 			return lang->getString("STR_LANDING_SITE_").arg(_landId);
 		case CRASHED:
 			return lang->getString("STR_CRASH_SITE_").arg(_crashId);
-
-		default:
-			return L"";
 	}
+
+	return L"";
 }
 
 /**
@@ -345,10 +344,9 @@ int Ufo::getMarker() const
 		case Ufo::FLYING:	return 2;
 		case Ufo::LANDED:	return 3;
 		case Ufo::CRASHED:	return 4;
-
-		default:
-			return -1;
 	}
+
+	return -1;
 }
 
 /**

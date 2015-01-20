@@ -135,7 +135,9 @@ Game::Game(const std::string& title)
 //	SDL_ShowCursor(SDL_ENABLE);
 	SDL_ShowCursor(SDL_DISABLE); // kL
 	Uint8 cursor = 0;
-	SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1, 1, 0, 0));
+	SDL_SetCursor(SDL_CreateCursor(
+								&cursor, &cursor,
+								1, 1, 0, 0));
 
 	// Create fps counter
 	_fpsCounter = new FpsCounter(15, 5, 0, 0);

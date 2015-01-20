@@ -24,9 +24,7 @@
 //#include <iostream>
 //#include <string>
 //#include <vector>
-
 //#include <SDL.h>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "BattleUnit.h"
@@ -143,24 +141,30 @@ private:
 				const int mapsize_z);
 		/// Initialises the pathfinding and tileengine.
 		void initUtilities(ResourcePack* res);
+
 		/// Gets the game's mapdatafiles.
 		std::vector<MapDataSet*>* getMapDataSets();
+
 		/// Sets the mission type.
 		void setMissionType(const std::string& missionType);
 		/// Gets the mission type.
 		std::string getMissionType() const;
+
 		/// Sets the global shade.
 		void setGlobalShade(int shade);
 		/// Gets the global shade.
 		int getGlobalShade() const;
+
 		/// Gets a pointer to the tiles, a tile is the smallest component of battlescape.
 		Tile** getTiles() const;
+
 		/// Gets a pointer to the list of nodes.
 		std::vector<Node*>* getNodes();
 		/// Gets a pointer to the list of units.
 		std::vector<BattleUnit*>* getUnits();
 		/// Gets a pointer to the list of items.
 		std::vector<BattleItem*>* getItems();
+
 		/// Gets terrain size x.
 		int getMapSizeX() const;
 		/// Gets terrain size y.
@@ -169,9 +173,10 @@ private:
 		int getMapSizeZ() const;
 		/// Gets terrain x*y*z
 		int getMapSizeXYZ() const;
-		///
-		void setTerrain(std::string terrain); // sza_MusicRules
-		///
+
+		/// Sets the type of terrain for the mission.
+		void setTerrain(const std::string& terrain); // sza_MusicRules
+		/// Gets the type of terrain for the mission.
 		std::string getTerrain() const; // sza_MusicRules
 
 		/**
@@ -183,9 +188,7 @@ private:
 		 * @return, the unique index
 		 */
 		inline int getTileIndex(const Position& pos) const
-		{
-			return (pos.z * _mapsize_y * _mapsize_x) + ((pos.y * _mapsize_x) + pos.x);
-		}
+		{ return (pos.z * _mapsize_y * _mapsize_x) + ((pos.y * _mapsize_x) + pos.x); }
 
 		/// Converts a tile index to its coordinates.
 		void getTileCoords(
@@ -203,8 +206,7 @@ private:
 		 * @return, pointer to the tile at that position
 		 */
 		inline Tile* getTile(const Position& pos) const
-		{
-			if (   pos.x < 0
+		{ if (	   pos.x < 0
 				|| pos.y < 0
 				|| pos.z < 0
 				|| pos.x >= _mapsize_x
@@ -214,8 +216,7 @@ private:
 				return NULL;
 			}
 
-			return _tiles[getTileIndex(pos)];
-		}
+			return _tiles[getTileIndex(pos)]; }
 
 		/// Gets the currently selected unit.
 		BattleUnit* getSelectedUnit() const;
@@ -233,26 +234,34 @@ private:
 				bool checkInventory = false);
 		/// Selects the unit with position on map.
 		BattleUnit* selectUnit(const Position& pos);
+
 		/// Gets the pathfinding object.
 		Pathfinding* getPathfinding() const;
 		/// Gets a pointer to the tileengine.
 		TileEngine* getTileEngine() const;
+
 		/// Gets the playing side.
 		UnitFaction getSide() const;
+
 		/// Gets the turn number.
 		int getTurn() const;
+
 		/// Ends the turn.
 		void endBattlePhase();
+
 		/// Sets debug mode.
 		void setDebugMode();
 		/// Gets debug mode.
 		bool getDebugMode() const;
+
 		/// Load map resources.
 		void loadMapResources(Game* game);
 		/// Resets tiles units are standing on
 		void resetUnitTiles();
+
 		/// Removes an item from the game.
 		void removeItem(BattleItem* item);
+
 		/// Sets whether the mission was aborted.
 		void setAborted(bool flag);
 		/// Checks if the mission was aborted.
@@ -267,6 +276,7 @@ private:
 
 		/// Gets the current item ID.
 		int* getCurrentItemId();
+
 		/// Gets a spawn node.
 		Node* getSpawnNode(
 				int unitRank,
@@ -276,8 +286,10 @@ private:
 				bool scout,
 				BattleUnit* unit,
 				Node* curNode);
+
 		/// Carries out new turn preparations.
 		void prepareBattleTurn();
+
 		/// Revives unconscious units (healthcheck).
 		void reviveUnconsciousUnits();
 		/// Removes the body item that corresponds to the unit.
@@ -319,7 +331,7 @@ private:
 				bool isXCOM = true);
 
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
-//kL	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
+//		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 
 		/// Resets the turn counter.
 		void resetTurnCounter();

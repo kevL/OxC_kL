@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_ALIENBASE_H
 #define OPENXCOM_ALIENBASE_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 #include "Target.h"
 
@@ -45,7 +44,7 @@ private:
 	int _id;
 
 	std::string
-		_edit, // kL
+		_edit,
 		_race;
 
 
@@ -77,10 +76,10 @@ private:
 		/// Sets the alien base's alien race.
 		void setAlienRace(const std::string& race);
 
-		/// kL. Returns textedit that the player has entered.
-		std::string getLabel() const; // kL
-		/// kL. Changes textedit that the player has entered.
-		void setLabel(const std::string& edit); // kL
+		/// Returns textedit that the player has entered.
+		std::string getLabel() const;
+		/// Changes textedit that the player has entered.
+		void setLabel(const std::string& edit);
 
 		/// Sets the alien base's battlescape status.
 		void setInBattlescape(bool inbattle);

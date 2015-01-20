@@ -151,14 +151,10 @@ private:
 
 		/// Gets the UFO status.
 		enum UfoStatus getStatus() const
-		{
-			return _status;
-		}
+		{ return _status; }
 		/// Set the UFO's status.
 		void setStatus(enum UfoStatus status)
-		{
-			_status = status;
-		}
+		{ _status = status; }
 
 		/// Gets if the UFO has crashed.
 		bool isCrashed() const;
@@ -200,25 +196,17 @@ private:
 
 		/// Gets the UFO's progress on the trajectory track.
 		size_t getTrajectoryPoint() const
-		{
-			return _trajectoryPoint;
-		}
+		{ return _trajectoryPoint; }
 		/// Sets the UFO's progress on the trajectory track.
 		void setTrajectoryPoint(size_t np)
-		{
-			_trajectoryPoint = np;
-		}
+		{ _trajectoryPoint = np; }
 		/// Gets the UFO's trajectory.
 		const UfoTrajectory& getTrajectory() const
-		{
-			return *_trajectory;
-		}
+		{ return *_trajectory; }
 
 		/// Gets the UFO's mission object.
 		AlienMission* getMission() const
-		{
-			return _mission;
-		}
+		{ return _mission; }
 
 		/// Sets the UFO's destination.
 		void setDestination(Target* dest);

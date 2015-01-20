@@ -19,7 +19,7 @@
 
 #include "AlienBase.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Language.h"
 
@@ -36,17 +36,13 @@ AlienBase::AlienBase()
 		_id(0),
 		_inBattlescape(false),
 		_discovered(false)
-//		_race(""),
-//		_edit("")
-{
-}
+{}
 
 /**
  * dTor.
  */
 AlienBase::~AlienBase()
-{
-}
+{}
 
 /**
  * Loads the alien base from a YAML file.
@@ -58,7 +54,7 @@ void AlienBase::load(const YAML::Node& node)
 
 	_id				= node["id"]			.as<int>(_id);
 	_race			= node["race"]			.as<std::string>(_race);
-	_edit			= node["edit"]			.as<std::string>(_edit); // kL
+	_edit			= node["edit"]			.as<std::string>(_edit);
 	_inBattlescape	= node["inBattlescape"]	.as<bool>(_inBattlescape);
 	_discovered		= node["discovered"]	.as<bool>(_discovered);
 }
@@ -73,13 +69,12 @@ YAML::Node AlienBase::save() const
 
 	node["id"]		= _id;
 	node["race"]	= _race;
-	node["edit"]	= _edit; // kL
+	node["edit"]	= _edit;
 
-	if (_inBattlescape)
-		node["inBattlescape"]	= _inBattlescape;
-
-	if (_discovered)
-		node["discovered"]		= _discovered;
+	if (_inBattlescape == true)
+		node["inBattlescape"] = _inBattlescape;
+	if (_discovered == true)
+		node["discovered"] = _discovered;
 
 	return node;
 }
@@ -157,19 +152,19 @@ void AlienBase::setAlienRace(const std::string& race)
 }
 
 /**
- * kL. Returns textedit that the player has entered.
+ * Returns textedit that the player has entered.
  * @return, user text
  */
-std::string AlienBase::getLabel() const // kL
+std::string AlienBase::getLabel() const
 {
 	return _edit;
 }
 
 /**
- * kL. Changes textedit that the player has entered.
+ * Changes textedit that the player has entered.
  * @param edit - user text
  */
-void AlienBase::setLabel(const std::string& edit) // kL
+void AlienBase::setLabel(const std::string& edit)
 {
 	_edit = edit;
 }

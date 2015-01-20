@@ -1001,7 +1001,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	const std::string mission = battle->getMissionType();
+	const std::string& mission = battle->getMissionType();
 
 	// alien base disappears (if not aborted)
 	if (mission == "STR_ALIEN_BASE_ASSAULT")

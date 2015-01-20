@@ -4266,36 +4266,36 @@ int BattleUnit::getMurdererId() const
 }
 
 /**
- * kL. Sets the unit's order in battle.
+ * Sets the unit's order in battle.
  * @param order - position on the craft or at the base
  */
-void BattleUnit::setBattleOrder(size_t order) // kL
+void BattleUnit::setBattleOrder(size_t order)
 {
 	_battleOrder = order;
 }
 
 /**
- * kL. Gets the unit's order in battle.
+ * Gets the unit's order in battle.
  * @return, position on the craft or at the base
  */
-size_t BattleUnit::getBattleOrder() const // kL
+size_t BattleUnit::getBattleOrder() const
 {
 	return _battleOrder;
 }
 
 /**
- * kL. Sets the BattleGame for this BattleUnit.
+ * Sets the BattleGame for this BattleUnit.
  * @param battleGame - pointer to BattleGame
  */
-void BattleUnit::setBattleGame(BattlescapeGame* const battleGame) // kL
+void BattleUnit::setBattleGame(BattlescapeGame* const battleGame)
 {
 	_battleGame = battleGame;
 }
 
 /**
- * kL. Sets this unit's parameters as down (collapsed / unconscious / dead).
+ * Sets this unit's parameters as down (collapsed / unconscious / dead).
  */
-void BattleUnit::setDown() // kL
+void BattleUnit::setDown()
 {
 	if (_geoscapeSoldier != NULL)
 	{

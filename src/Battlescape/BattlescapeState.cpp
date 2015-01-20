@@ -101,6 +101,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom
@@ -143,16 +144,16 @@ BattlescapeState::BattlescapeState()
 		x					= screenWidth / 2 - iconsWidth / 2,
 		y					= screenHeight - iconsHeight;
 
-	_txtBaseLabel	= new Text(80, 9, screenWidth - 81, 0);
-	_lstTileInfo	= new TextList(18, 33, screenWidth - 19, 60);
+	_txtBaseLabel		= new Text(80, 9, screenWidth - 81, 0);
+	_lstTileInfo		= new TextList(18, 33, screenWidth - 19, 60);
+	_txtMissionLabel	= new Text(iconsWidth, 9, x, y - 10);;
 
 	// Create buttonbar - this should appear at the centerbottom of the screen
-	_icons			= new InteractiveSurface(
-										iconsWidth,
-										iconsHeight,
-										x,
-										y);
-	_iconsLayer		= new Surface(32, 16, x + 208, y);
+	_icons		= new InteractiveSurface(
+									iconsWidth,
+									iconsHeight,
+									x, y);
+	_iconsLayer	= new Surface(32, 16, x + 208, y);
 
 	// Create the battlemap view
 	// The actual map height is the total height minus the height of the buttonbar
@@ -281,8 +282,10 @@ BattlescapeState::BattlescapeState()
 	_txtTerrain		= new Text(150, 9, 1, 0);
 	_txtShade		= new Text(50, 9, 1, 10);
 	_txtTurn		= new Text(50, 9, 1, 20);
-	_lstSoldierInfo	= new TextList(25, 57, 1, 37);
-	_txtHasKill		= new Text(10, 9, 1, 95);
+
+	_txtOrder		= new Text(45, 9, 1, 37);
+	_lstSoldierInfo	= new TextList(25, 57, 1, 47);
+	_txtHasKill		= new Text(10, 9, 1, 105);
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
 	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
@@ -417,7 +420,14 @@ BattlescapeState::BattlescapeState()
 	_txtBaseLabel->setHighContrast();
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
-	std::wstring baseLabel;
+	add(_txtMissionLabel);
+	_txtMissionLabel->setColor(Palette::blockOffset(9));
+	_txtMissionLabel->setHighContrast();
+	_txtMissionLabel->setAlign(ALIGN_CENTER);
+
+	std::wstring
+		baseLabel,
+		missionLabel;
 
 	for (std::vector<Base*>::const_iterator
 			i = _savedGame->getBases()->begin();
@@ -428,6 +438,7 @@ BattlescapeState::BattlescapeState()
 		if ((*i)->isInBattlescape() == true)
 		{
 			baseLabel = (*i)->getName(_game->getLanguage());
+			missionLabel = tr("STR_BASE_DEFENSE");
 			break;
 		}
 
@@ -441,7 +452,57 @@ BattlescapeState::BattlescapeState()
 				baseLabel = (*i)->getName(_game->getLanguage());
 		}
 	}
-	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+	_txtBaseLabel->setText(baseLabel.c_str()); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+
+	if (missionLabel.empty() == true)
+	{
+		std::wostringstream wost;
+
+		for (std::vector<Ufo*>::const_iterator
+				i = _savedGame->getUfos()->begin();
+				i != _savedGame->getUfos()->end()
+					&& wost.str().empty() == true;
+				++i)
+		{
+			if ((*i)->isInBattlescape() == true)
+			{
+				if ((*i)->isCrashed() == true)
+					wost << tr("STR_UFO_CRASH_RECOVERY");
+				else
+					wost << tr("STR_UFO_GROUND_ASSAULT");
+
+				wost << L"> " << (*i)->getName(_game->getLanguage());
+			}
+		}
+
+		for (std::vector<TerrorSite*>::const_iterator
+				i = _savedGame->getTerrorSites()->begin();
+				i != _savedGame->getTerrorSites()->end()
+					&& wost.str().empty() == true;
+				++i)
+		{
+			if ((*i)->isInBattlescape() == true)
+				wost << tr("STR_TERROR_MISSION") << L"> " << (*i)->getName(_game->getLanguage());
+		}
+
+		for (std::vector<AlienBase*>::const_iterator
+				i = _savedGame->getAlienBases()->begin();
+				i != _savedGame->getAlienBases()->end()
+					&& wost.str().empty() == true;
+				++i)
+		{
+			if ((*i)->isInBattlescape() == true)
+				wost << tr("STR_ALIEN_BASE_ASSAULT") << L"> " << (*i)->getName(_game->getLanguage());
+		}
+
+		missionLabel = wost.str();
+	}
+
+	if (missionLabel.empty() == true)
+		missionLabel = tr(_savedBattle->getMissionType());
+
+	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
+
 
 	add(_lstTileInfo);
 	_lstTileInfo->setColor(Palette::blockOffset(8)); // blue
@@ -472,6 +533,8 @@ BattlescapeState::BattlescapeState()
 	add(_txtTerrain);
 	add(_txtShade);
 	add(_txtTurn);
+
+	add(_txtOrder);
 	add(_lstSoldierInfo);
 	add(_txtHasKill);
 
@@ -486,6 +549,9 @@ BattlescapeState::BattlescapeState()
 	_txtTurn->setColor(Palette::blockOffset(9));
 	_txtTurn->setHighContrast();
 	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
+
+	_txtOrder->setColor(Palette::blockOffset(0)); // white
+	_txtOrder->setHighContrast();
 
 	_lstSoldierInfo->setColor(Palette::blockOffset(8)); // blue
 	_lstSoldierInfo->setHighContrast();
@@ -1312,6 +1378,8 @@ void BattlescapeState::mapOver(Action* action)
 		_txtTerrain->setVisible(showInfo);
 		_txtShade->setVisible(showInfo);
 		_txtTurn->setVisible(showInfo);
+
+		_txtOrder->setVisible(showInfo);
 		_lstSoldierInfo->setVisible(showInfo);
 		_txtHasKill->setVisible(showInfo);
 	} // kL_end.
@@ -2334,6 +2402,8 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
+
+			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
 			_txtHasKill->setVisible();
 		}
@@ -2356,6 +2426,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
+			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
 			_txtHasKill->setVisible();
 		} */
@@ -2411,7 +2482,7 @@ bool BattlescapeState::playableUnitSelected()
 
 /**
  * Updates a unit's onScreen stats & info.
- * @param calcFoV - true to run calculateFOV() for the unit
+ * @param calcFoV - true to run calculateFOV() for the unit (default true)
  */
 void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
@@ -2449,8 +2520,10 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numWounds	->setVisible(false);
 	_btnWounds	->setVisible(false);
 
+	_txtOrder->setText(L"");
 
-	if (playableUnitSelected() == false) // not xCom Soldier; ie. aLien or civilian turn
+
+	if (playableUnitSelected() == false) // not a controlled unit; ie. aLien or civilian turn
 	{
 		_txtName->setText(L"");
 
@@ -2476,7 +2549,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 		return;
 	}
-	else // not aLien or civilian; ie. xCom Soldier
+	else // not aLien or civilian; ie. a controlled unit
 	{
 		_rank			->setVisible();
 
@@ -2541,6 +2614,9 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 //			_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
 			_kneel->setVisible();
 		}
+
+		_txtOrder->setText(tr("STR_ORDER")
+							.arg(static_cast<int>(selectedUnit->getBattleOrder())));
 	}
 
 	const int strength = static_cast<int>(Round(
@@ -2570,12 +2646,12 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	if (wounds > 0)
 	{
 //		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
-		Surface* srtStatus = _game->getResourcePack()->getSurface("RANK_ROOKIE");
-		if (srtStatus != NULL)
+		Surface* srfStatus = _game->getResourcePack()->getSurface("RANK_ROOKIE");
+		if (srfStatus != NULL)
 		{
 			//Log(LOG_INFO) << ". srtStatus is VALID";
 //			srtStatus->getFrame(4)->blit(_btnWounds); // red heart icon
-			srtStatus->blit(_btnWounds); // red heart icon
+			srfStatus->blit(_btnWounds); // red heart icon
 			_btnWounds->setVisible();
 		}
 
@@ -2620,7 +2696,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		* const ltItem = selectedUnit->getItem("STR_LEFT_HAND");
 
 	const std::string activeHand = selectedUnit->getActiveHand();
-	if (activeHand != "")
+	if (activeHand.empty() == false)
 	{
 		int
 			tuLaunch = 0,
@@ -3583,6 +3659,8 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtTerrain->setVisible();
 	_txtShade->setVisible();
 	_txtTurn->setVisible();
+
+	_txtOrder->setVisible();
 	_lstSoldierInfo->setVisible();
 	_txtHasKill->setVisible();
 
@@ -3703,7 +3781,7 @@ void BattlescapeState::resize(
 }
 
 /**
- * kL. Returns the TurnCounter used by the Battlescape.
+ * Returns the TurnCounter used by the Battlescape.
  * @return, pointer to TurnCounter
  */
 /* TurnCounter* BattlescapeState::getTurnCounter() const
@@ -3712,9 +3790,9 @@ void BattlescapeState::resize(
 } */
 
 /**
- * kL. Updates the turn text.
+ * Updates the turn text.
  */
-void BattlescapeState::updateTurn() // kL
+void BattlescapeState::updateTurn()
 {
 	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
 
@@ -3725,7 +3803,7 @@ void BattlescapeState::updateTurn() // kL
 }
 
 /**
- * kL. Toggles the icons' surfaces' visibility for Hidden Movement.
+ * Toggles the icons' surfaces' visibility for Hidden Movement.
  * @param vis - true to show show icons and info
  */
 void BattlescapeState::toggleIcons(bool vis)
@@ -3749,9 +3827,11 @@ void BattlescapeState::toggleIcons(bool vis)
 	_btnEndTurn->setVisible(vis);
 	_btnAbort->setVisible(vis);
 
+	_txtOrder->setVisible(vis);
 	_lstSoldierInfo->setVisible(vis);
 	_txtHasKill->setVisible(vis);
 
+	_txtMissionLabel->setVisible(vis);
 	_lstTileInfo->setVisible(vis);
 }
 
@@ -3846,46 +3926,46 @@ void BattlescapeState::drawFuse()
 }
 
 /**
- * kL. Gets the TimeUnits field from icons.
+ * Gets the TimeUnits field from icons.
  * Note: these are for use in UnitWalkBState to update info when soldier walks.
  * @return, pointer to time units NumberText
  */
-NumberText* BattlescapeState::getTimeUnitsField() const // kL
+NumberText* BattlescapeState::getTimeUnitsField() const
 {
 	return _numTimeUnits;
 }
 
 /**
- * kL. Gets the TimeUnits bar from icons.
+ * Gets the TimeUnits bar from icons.
  * @return, pointer to time units Bar
  */
-Bar* BattlescapeState::getTimeUnitsBar() const // kL
+Bar* BattlescapeState::getTimeUnitsBar() const
 {
 	return _barTimeUnits;
 }
 
 /**
- * kL. Gets the Energy field from icons.
+ * Gets the Energy field from icons.
  * @return, pointer to stamina NumberText
  */
-NumberText* BattlescapeState::getEnergyField() const // kL
+NumberText* BattlescapeState::getEnergyField() const
 {
 	return _numEnergy;
 }
 
 /**
- * kL. Gets the Energy bar from icons.
+ * Gets the Energy bar from icons.
  * @return, pointer to stamina Bar
  */
-Bar* BattlescapeState::getEnergyBar() const // kL
+Bar* BattlescapeState::getEnergyBar() const
 {
 	return _barEnergy;
 }
 
 /**
- * kL. Updates experience data for the currently selected soldier.
+ * Updates experience data for the currently selected soldier.
  */
-void BattlescapeState::updateExperienceInfo() // kL
+void BattlescapeState::updateExperienceInfo()
 {
 	_lstSoldierInfo->clearList();
 	_txtHasKill->setText(L"");
@@ -3907,8 +3987,8 @@ void BattlescapeState::updateExperienceInfo() // kL
 	xpType.push_back(L"m "); // melee
 	xpType.push_back(L"r "); // reactions
 	xpType.push_back(L"b "); // bravery
-	xpType.push_back(L"p "); // psiSkill
-	xpType.push_back(L"p "); // psiStrength
+	xpType.push_back(L"a "); // psiSkill attack
+	xpType.push_back(L"d "); // psiStrength defense
 
 	const int xp[] =
 	{
@@ -3943,10 +4023,10 @@ void BattlescapeState::updateExperienceInfo() // kL
 }
 
 /**
- * kL. Updates tile info for the tile under mouseover.
+ * Updates tile info for the tile under mouseover.
  * @param tile - pointer to a Tile
  */
-void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
+void BattlescapeState::updateTileInfo(const Tile* const tile)
 {
 	_lstTileInfo->clearList();
 
@@ -4064,9 +4144,9 @@ void BattlescapeState::updateTileInfo(const Tile* const tile) // kL
 }
 
 /**
- * kL. Animates a red cross icon when an injured soldier is selected.
+ * Animates a red cross icon when an injured soldier is selected.
  */
-void BattlescapeState::flashMedic() // kL
+void BattlescapeState::flashMedic()
 {
 	const BattleUnit* const selectedUnit = _savedBattle->getSelectedUnit();
 	if (selectedUnit != NULL

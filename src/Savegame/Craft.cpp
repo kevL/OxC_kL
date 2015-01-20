@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "Craft.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <sstream>
 //#include "../fmath.h"

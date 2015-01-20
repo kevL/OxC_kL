@@ -48,7 +48,7 @@ class Text;
 class TextList;
 class Tile;
 class Timer;
-//class TurnCounter; // kL
+//class TurnCounter;
 class WarningMessage;
 
 
@@ -160,7 +160,9 @@ private:
 //		* _txtConsole4,
 		* _txtDebug,
 		* _txtHasKill,
+		* _txtMissionLabel,
 		* _txtName,
+		* _txtOrder,
 		* _txtShade,
 		* _txtTerrain,
 //		* _txtTooltip;
@@ -172,7 +174,7 @@ private:
 	Timer
 		* _animTimer,
 		* _gameTimer;
-//	TurnCounter* _turnCounter; // kL
+//	TurnCounter* _turnCounter;
 	WarningMessage* _warning;
 
 	std::vector<State*> _popups;
@@ -186,10 +188,10 @@ private:
 
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
-	/// kL. Draws the kneel indicator.
-//	void drawKneelIndicator(); // kL
-	/// kL. Draws the fatal wounds indicator.
-//	void drawWoundIndicator(); // kL
+	/// Draws the kneel indicator.
+//	void drawKneelIndicator();
+	/// Draws the fatal wounds indicator.
+//	void drawWoundIndicator();
 
 
 	public:
@@ -256,8 +258,8 @@ private:
 		void btnNextStopClick(Action* action);
 		/// Handler for clicking the Previous Soldier button.
 		void btnPrevSoldierClick(Action* action);
-		/// kL. Handler for clicking the Previous Stop button.
-		void btnPrevStopClick(Action* action); // kL
+		/// Handler for clicking the Previous Stop button.
+		void btnPrevStopClick(Action* action);
 		/// Handler for clicking the Show Layers button.
 		void btnShowLayersClick(Action* action);
 		/// Handler for clicking the Help button.
@@ -281,8 +283,8 @@ private:
 
 		/// Handler for clicking a visible unit button.
 		void btnVisibleUnitClick(Action* action);
-		/// kL. Handler for clicking the wounded unit button.
-		void btnWoundedClick(Action* action); // kL
+		/// Handler for clicking the wounded unit button.
+		void btnWoundedClick(Action* action);
 
 		/// Handler for clicking the launch rocket button.
 		void btnLaunchClick(Action* action);
@@ -299,8 +301,8 @@ private:
 		void btnZeroTUsClick(Action* action);
 		/// Handler for clicking the lighting button.
 		void btnPersonalLightingClick(Action* action);
-		/// kL. Handler for toggling the console.
-		void btnConsoleToggle(Action* action); // kL
+		/// Handler for toggling the console.
+		void btnConsoleToggle(Action* action);
 		/// Handler for showing tooltip.
 //		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
@@ -372,36 +374,36 @@ private:
 				int& dX,
 				int& dY);
 
-		/// kL. Gets the TurnCounter.
-//		TurnCounter* getTurnCounter() const; // kL
-		/// kL. Updates the turn text.
-		void updateTurn(); // kL
+		/// Gets the TurnCounter.
+//		TurnCounter* getTurnCounter() const;
+		/// Updates the turn text.
+		void updateTurn();
 
-		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
-		void toggleIcons(bool vis); // kL
+		/// Toggles the icons' surfaces' visibility for Hidden Movement.
+		void toggleIcons(bool vis);
 
 		/// Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
 		void refreshVisUnits();
 
-		/// kL. Shows primer warnings on all live grenades. Adapted from Inventory.
-		void drawFuse(); // kL
+		/// Shows primer warnings on all live grenades. Adapted from Inventory.
+		void drawFuse();
 
-		/// kL. Gets the TimeUnits field from icons.
-		NumberText* getTimeUnitsField() const; // kL
-		/// kL. Gets the TimeUnits bar from icons.
-		Bar* getTimeUnitsBar() const; // kL
-		/// kL. Gets the Energy field from icons.
-		NumberText* getEnergyField() const; // kL
-		/// kL. Gets the Energy bar from icons.
-		Bar* getEnergyBar() const; // kL
+		/// Gets the TimeUnits field from icons.
+		NumberText* getTimeUnitsField() const;
+		/// Gets the TimeUnits bar from icons.
+		Bar* getTimeUnitsBar() const;
+		/// Gets the Energy field from icons.
+		NumberText* getEnergyField() const;
+		/// Gets the Energy bar from icons.
+		Bar* getEnergyBar() const;
 
-		/// kL. Updates experience data for the currently selected soldier.
-		void updateExperienceInfo(); // kL
-		/// kL. Updates tile info for the tile under mouseover.
-		void updateTileInfo(const Tile* const tile); // kL
+		/// Updates experience data for the currently selected soldier.
+		void updateExperienceInfo();
+		/// Updates tile info for the tile under mouseover.
+		void updateTileInfo(const Tile* const tile);
 
-		/// kL. Animates a red cross icon when an injured soldier is selected.
-		void flashMedic(); // kL
+		/// Animates a red cross icon when an injured soldier is selected.
+		void flashMedic();
 };
 
 }

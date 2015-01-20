@@ -2406,7 +2406,9 @@ void TileEngine::explode(
 							while (done == false)
 							{
 								//Log(LOG_INFO) << ". INVENTORY: iterate done=False";
-								done = destTile->getInventory()->empty();
+//								done = destTile->getInventory()->empty();
+								if (destTile->getInventory()->empty() == true)
+									break;
 
 								for (std::vector<BattleItem*>::const_iterator
 										i = destTile->getInventory()->begin();
@@ -2609,7 +2611,9 @@ void TileEngine::explode(
 							bool done = false;
 							while (done == false)
 							{
-								done = fireTile->getInventory()->empty();
+//								done = fireTile->getInventory()->empty();
+								if (fireTile->getInventory()->empty() == true)
+									break;
 
 								for (std::vector<BattleItem*>::const_iterator
 										i = fireTile->getInventory()->begin();

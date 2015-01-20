@@ -170,16 +170,6 @@ ActionMenuState::ActionMenuState(
 
 	if (itRule->getBattleType() == BT_FIREARM)
 	{
-		if (itRule->isWaypoint() == true
-			|| (_action->weapon->getAmmoItem() != NULL
-				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint() == true))
-		{
-			addItem(
-					BA_LAUNCH,
-					"STR_LAUNCH_MISSILE",
-					&id);
-		}
-
 		if (_action->weapon->getAmmoItem() != NULL)
 		{
 			if (itRule->getAccuracySnap() != 0)
@@ -199,6 +189,16 @@ ActionMenuState::ActionMenuState(
 						BA_AIMEDSHOT,
 						"STR_AIMED_SHOT",
 						&id);
+		}
+
+		if (itRule->isWaypoint() == true
+			|| (_action->weapon->getAmmoItem() != NULL
+				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint() == true))
+		{
+			addItem(
+					BA_LAUNCH,
+					"STR_LAUNCH_MISSILE",
+					&id);
 		}
 	}
 }

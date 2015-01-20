@@ -442,8 +442,8 @@ items:
   - type: STR_SSRL
     listOrder: 3404
     size: 0.8
-    costBuy: 2750
-    costSell: 850
+    costBuy: 3750
+    costSell: 845
     weight: 12
     bigSprite: 520
     floorSprite: 520
@@ -451,11 +451,11 @@ items:
     bulletSprite: 0
     fireSound: 167
     hitSound: 5
-    power: 89
-    accuracySnap: 55
-    accuracyAimed: 100
-    tuSnap: 40
-    tuAimed: 66
+    power: 93
+    accuracySnap: 57
+    accuracyAimed: 103
+    tuSnap: 41
+    tuAimed: 69
 #    maxRange: 200
 #    aimRange: 80
 #    snapRange: 15
@@ -467,8 +467,8 @@ items:
     invWidth: 1
     invHeight: 3
     armor: 20
-    damageType: 3
-    blastRadius: 2
+    damageType: 1 #was 3
+#    blastRadius: 2
 #------------------------------------------------------------------------------
   - type: STR_APFSDS_ROCKET
     listOrder: 3401
@@ -479,7 +479,7 @@ items:
     bigSprite: 521
     floorSprite: 521
     hitSound: 5
-    power: 145
+    power: 142
     damageType: 1
     clipSize: 1
     battleType: 2

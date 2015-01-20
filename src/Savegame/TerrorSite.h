@@ -21,7 +21,6 @@
 #define OPENXCOM_TERRORSITE_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "Target.h"

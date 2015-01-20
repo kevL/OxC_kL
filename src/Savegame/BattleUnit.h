@@ -974,9 +974,7 @@ private:
 
 		/// Gets this BattleUnit's rules.
 		Unit* getUnitRules() const
-		{
-			return _unitRules;
-		}
+		{ return _unitRules; }
 
 		/// Gets the vector of BattleUnits that this unit has seen this turn.
 		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
@@ -1057,14 +1055,10 @@ private:
 
 		/// Gets if this unit is hiding or not.
 		bool isHiding() const
-		{
-			return _hidingForTurn;
-		};
+		{ return _hidingForTurn; };
 		/// Sets this unit hiding or not.
 		void setHiding(const bool hiding)
-		{
-			_hidingForTurn = hiding;
-		};
+		{ _hidingForTurn = hiding; };
 
 		/// Puts the unit in the corner to think about what he's done.
 //		void goToTimeOut();

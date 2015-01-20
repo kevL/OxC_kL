@@ -1253,83 +1253,85 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 	}
 
 
-	for (std::vector<BattleItem*>::const_iterator // handle unconscious units on this Tile
+	for (std::vector<BattleItem*>::const_iterator // handle unconscious units on this Tile vs. DT_SMOKE
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		// DT_SMOKE
-		BattleUnit* bu = (*i)->getUnit();
-		if (bu != NULL
-			&& bu->getStatus() == STATUS_UNCONSCIOUS)
+		BattleUnit* const unit = (*i)->getUnit();
+
+		if (unit != NULL
+			&& unit->getStatus() == STATUS_UNCONSCIOUS)
 		{
-			const float armorSmoke = bu->getArmor()->getDamageModifier(DT_SMOKE);
+			const float armorSmoke = unit->getArmor()->getDamageModifier(DT_SMOKE);
 			if (armorSmoke > 0.f)
-				bu->damage(
+				unit->damage(
 						Position(0,0,0),
 						static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
 						DT_SMOKE,
 						true);
 		}
+	}
 
-		// DT_IN
-		bool done = false;
-		while (done == false)
+	bool done = false;
+	while (done == false) // handle items including unconscious or dead units on this Tile vs. DT_IN
+	{
+		if (_inventory.empty() == true)
+			break;
+
+
+		for (std::vector<BattleItem*>::const_iterator
+				i = _inventory.begin();
+				i != _inventory.end();
+				)
 		{
-			done = _inventory.empty();
+			BattleUnit* unit = (*i)->getUnit();
 
-			for (std::vector<BattleItem*>::const_iterator
-					i = _inventory.begin();
-					i != _inventory.end();
-					)
+			if (unit != NULL
+				&& unit->getStatus() == STATUS_UNCONSCIOUS)
 			{
-				BattleUnit* bu = (*i)->getUnit();
-				if (bu != NULL
-					&& bu->getStatus() == STATUS_UNCONSCIOUS)
+				const float armorFire = unit->getArmor()->getDamageModifier(DT_IN);
+				if (armorFire > 0.f)
 				{
-					const float armorFire = bu->getArmor()->getDamageModifier(DT_IN);
-					if (armorFire > 0.f)
+					unit->damage(
+							Position(0,0,0),
+							static_cast<int>(static_cast<float>(powerFire) * armorFire),
+							DT_IN,
+							true);
+
+					if (unit->getHealth() == 0)
 					{
-						bu->damage(
-								Position(0,0,0),
-								static_cast<int>(static_cast<float>(powerFire) * armorFire),
-								DT_IN,
-								true);
+						unit->instaKill();
 
-						if (bu->getHealth() == 0)
+						unit->killedBy(unit->getFaction()); // killed by self ....
+
+						// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
+/*						if (Options::battleNotifyDeath == true // send Death notice.
+							&& unit->getGeoscapeSoldier() != NULL)
 						{
-							bu->instaKill();
-
-//							if (attacker != NULL)
-							bu->killedBy(bu->getFaction()); // killed by self ....
-
-							// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
-/*							if (Options::battleNotifyDeath == true // send Death notice.
-								&& bu->getGeoscapeSoldier() != NULL)
-							{
-								Game* game = battleSave->getBattleState()->getGame();
-								game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
-																							"STR_HAS_BEEN_KILLED",
-																							bu->getGender())
-																						.arg(bu->getName(game->getLanguage()))));
-							} */
-						}
+							Game* game = battleSave->getBattleState()->getGame();
+							game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
+																						"STR_HAS_BEEN_KILLED",
+																						unit->getGender())
+																					.arg(unit->getName(game->getLanguage()))));
+						} */
 					}
+				}
 
-					break;
-				}
-				else if (powerFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even bodyarmor.
-					&& (bu == NULL
-						|| bu->getStatus() == STATUS_DEAD))
-				{
-					battleSave->removeItem(*i);	// this shouldn't kill and remove a unit's corpse on the same tilePhase;
-					break;						// but who knows, I haven't traced it comprehensively.
-				}
-				else
-				{
-					++i;
-					done = (i == _inventory.end());
-				}
+				++i;
+				done = (i == _inventory.end());
+			}
+			else if (powerFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even corpse in bodyarmor.
+				&& (unit == NULL
+					|| unit->getStatus() == STATUS_DEAD))
+			{
+				battleSave->removeItem(*i);	// this shouldn't kill and remove a unit's corpse on the same tilePhase;
+				break;						// but who knows, I haven't traced it comprehensively.
+			}
+			else
+			{
+				++i;
+				done = (i == _inventory.end());
 			}
 		}
 	}
