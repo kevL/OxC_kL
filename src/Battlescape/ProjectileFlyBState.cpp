@@ -76,9 +76,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileImpact(0),
 		_initialized(false),
 		_targetFloor(false)
-{
-	//Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
-}
+{}
 
 /**
  * Sets up an ProjectileFlyBState [1].
@@ -101,16 +99,13 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileImpact(0),
 		_initialized(false),
 		_targetFloor(false)
-{
-	//Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
-}
+{}
 
 /**
  * Deletes the ProjectileFlyBState.
  */
 ProjectileFlyBState::~ProjectileFlyBState()
-{
-}
+{}
 
 /**
  * Initializes the sequence:
@@ -274,19 +269,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-/*			if (_parent->getTileEngine()->validMeleeRange(
-													_unit->getPosition(),
-													_unit->getDirection(),
-													_unit,
-													NULL,
-													&_action.target) == false)
-			{
-				_action.result = "STR_THERE_IS_NO_ONE_THERE";
-				_parent->popState();
-			}
-			else */ // was checked via ActionMenu click
 			performMeleeAttack();
-
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 			return;
 		break;

@@ -1256,20 +1256,20 @@ void BattlescapeGame::handleNonTargetAction()
 		else if (_currentAction.type == BA_USE
 			|| _currentAction.type == BA_LAUNCH)
 		{
-			if (_currentAction.result.length() > 0)
+			if (_currentAction.result.empty() == false)
 			{
 				_parentState->warning(_currentAction.result);
-				_currentAction.result = "";
+				_currentAction.result.clear();
 			}
 
 			_save->reviveUnconsciousUnits();
 		}
 		else if (_currentAction.type == BA_HIT)
 		{
-			if (_currentAction.result.length() > 0)
+			if (_currentAction.result.empty() == false)
 			{
 				_parentState->warning(_currentAction.result);
-				_currentAction.result = "";
+				_currentAction.result.clear();
 			}
 			else
 			{

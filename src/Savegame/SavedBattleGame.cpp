@@ -939,9 +939,9 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		}
 	}
 	while ((*i)->isSelectable(
-							_side,
-							checkReselect,
-							checkInventory) == false);
+						_side,
+						checkReselect,
+						checkInventory) == false);
 
 
 	_selectedUnit = *i;
@@ -1945,8 +1945,11 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				}
 			}
 
+			// note: Although health==stun is still unconscious technically
+			// revive here even if health==stun because prepareBattleTurn(), reviveUnconsciousUnits()
+			// occurs momentarily before prepUnit(), healStun() ... during each Turnover.
 			if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-				&& (*i)->getStun() < (*i)->getHealth()
+				&& (*i)->getStun() <= (*i)->getHealth()
 				&& (*i)->getHealth() > 0)
 			{
 				if (placeUnitNearPosition(
@@ -1964,7 +1967,8 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					(*i)->setTimeUnits(0);
 
 					_tileEngine->calculateUnitLighting();
-					_tileEngine->calculateFOV(*i);
+//					_tileEngine->calculateFOV(*i);
+					_tileEngine->calculateFOV((*i)->getPosition()); // kL
 
 					removeUnconsciousBodyItem(*i);
 					break;

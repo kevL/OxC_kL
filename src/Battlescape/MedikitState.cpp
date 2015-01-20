@@ -303,7 +303,8 @@ void MedikitState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		onEndClick(NULL);
+		_game->popState();
+//		onEndClick(NULL);
 	}
 }
 
@@ -313,7 +314,7 @@ void MedikitState::handle(Action* action)
  */
 void MedikitState::onEndClick(Action*)
 {
-/* 	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Screen::updateScale(
 						Options::battlescapeScale,
@@ -323,7 +324,6 @@ void MedikitState::onEndClick(Action*)
 						true);
 		_game->getScreen()->resetDisplay(false);
 	} */
-
 	_game->popState();
 }
 
@@ -356,7 +356,7 @@ void MedikitState::onHealClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onEndClick(0);
+//		onEndClick(NULL);
 	}
 }
 
@@ -386,13 +386,14 @@ void MedikitState::onStimulantClick(Action*)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _targetUnit->getStun() < _targetUnit->getHealth())
 		{
-			onEndClick(NULL);
+			_game->popState();
+//			onEndClick(NULL);
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onEndClick(0);
+//		onEndClick(NULL);
 	}
 }
 
@@ -419,7 +420,7 @@ void MedikitState::onPainKillerClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onEndClick(0);
+//		onEndClick(NULL);
 	}
 }
 
@@ -437,30 +438,30 @@ void MedikitState::update()
 	const int health = _targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStun()));
-	_barHealth->setMax(100.0);
-	_barHealth->setValue(ceil(
-							static_cast<double>(health) / stat * 100.0));
-	_barHealth->setValue2(ceil(
-							static_cast<double>(_targetUnit->getStun()) / stat * 100.0));
+	_barHealth->setMax(100.);
+	_barHealth->setValue(std::ceil(
+							static_cast<double>(health) / stat * 100.));
+	_barHealth->setValue2(std::ceil(
+							static_cast<double>(_targetUnit->getStun()) / stat * 100.));
 
 	stat = static_cast<double>(_targetUnit->getBaseStats()->stamina); // stats of the recipient
 	const int energy = _targetUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
-	_barEnergy->setMax(100.0);
-	_barEnergy->setValue(ceil(
-							static_cast<double>(energy) / stat * 100.0));
+	_barEnergy->setMax(100.);
+	_barEnergy->setValue(std::ceil(
+							static_cast<double>(energy) / stat * 100.));
 
 	const int morale = _targetUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
-	_barMorale->setMax(100.0);
+	_barMorale->setMax(100.);
 	_barMorale->setValue(morale);
 
 	stat = static_cast<double>(_unit->getBaseStats()->tu); // TU of the MedKit user
 	const int tu = _unit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
-	_barTimeUnits->setMax(100.0);
-	_barTimeUnits->setValue(ceil(
-							static_cast<double>(tu) / stat * 100.0));
+	_barTimeUnits->setMax(100.);
+	_barTimeUnits->setValue(std::ceil(
+							static_cast<double>(tu) / stat * 100.));
 	// kL_end.
 }
 

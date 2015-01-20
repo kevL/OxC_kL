@@ -1302,7 +1302,6 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 					if (unit->getHealth() == 0)
 					{
 						unit->instaKill();
-
 						unit->killedBy(unit->getFaction()); // killed by self ....
 
 						// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
