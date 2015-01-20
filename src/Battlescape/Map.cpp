@@ -1488,19 +1488,20 @@ void Map::drawTerrain(Surface* surface)
 										|| tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block, diagonals],West,North,West&North
 										|| tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)
 									{
-										if (tileNorthWest->isDiscovered(2) == true)
-											shade = tileNorthWest->getShade();
-										else
-											shade = 16;
-
 										// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
 										// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 										quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
 											+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
 
 										srfSprite = unitNorthWest->getCache(&invalid, quad);
+//										srfSprite = NULL;
 										if (srfSprite)
 										{
+											if (tileNorthWest->isDiscovered(2) == true)
+												shade = tileNorthWest->getShade();
+											else
+												shade = 16;
+
 											calculateWalkingOffset(
 																unitNorthWest,
 																&walkOffset);
@@ -1509,7 +1510,8 @@ void Map::drawTerrain(Surface* surface)
 																surface,
 																screenPosition.x + walkOffset.x,
 																screenPosition.y - 16 + walkOffset.y,
-																shade);
+																shade,
+																true);
 
 											if (unitNorthWest->getFire() != 0)
 											{
@@ -1519,7 +1521,8 @@ void Map::drawTerrain(Surface* surface)
 																	surface,
 																	screenPosition.x + walkOffset.x,
 																	screenPosition.y - 16 + walkOffset.y,
-																	0);
+																	0,
+																	true);
 											}
 										}
 

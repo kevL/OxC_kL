@@ -1973,7 +1973,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 	switch (status)
 	{
 		case STATUS_PANICKING:
-			if (RNG::percent(50)) // 50:50 freeze or flee.
+			if (RNG::percent(50) == true) // 50:50 freeze or flee.
 			{
 				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
 				if (item != NULL)
@@ -2078,9 +2078,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{
 						ba.type = BA_SNAPSHOT;
-						int tu = ba.actor->getActionTUs(
-													ba.type,
-													ba.weapon);
+						const int tu = ba.actor->getActionTUs(
+															ba.type,
+															ba.weapon);
 
 						for (int // fire shots until unit runs out of TUs
 								i = 0;

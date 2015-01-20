@@ -1249,7 +1249,7 @@ void BattlescapeState::mapOver(Action* action)
 								ws1 += item->getUnit()->getName(_game->getLanguage());
 
 								if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
-									ws1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() + 1) + L")";
+									ws1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
 							}
 							else
 								ws1 += tr(item->getRules()->getType());

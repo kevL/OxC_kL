@@ -119,7 +119,7 @@ BattleUnit::BattleUnit(
 		_takenExpl(false),
 		_diedByFire(false),
 		_turnDir(0),
-//		_race(""),
+		_revived(false),
 
 		_deathSound(0),
 		_aggroSound(-1),
@@ -270,6 +270,7 @@ BattleUnit::BattleUnit(
 		_dashing(false),
 		_takenExpl(false),
 		_battleOrder(0),
+		_revived(false),
 
 		_morale(100),
 		_stunLevel(0),
@@ -2080,19 +2081,13 @@ void BattleUnit::prepUnit()
 	_faction = _originalFaction;
 	_unitsSpottedThisTurn.clear();
 
-	if (isOut() == false)
-		initTU();
-
-	// Fire damage is in Battlescape/BattlescapeGame::endTurnPhase(), standing on fire tile;
-	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile;
-	// fire damage by hit is caused by TileEngine::explode().
 	if (_fire > 0)
 		--_fire;
 
-	_health -= getFatalWounds(); // suffer from fatal wounds
+	_health -= getFatalWounds();	// suffer from fatal wounds
 	if (_health < 0) _health = 0;
 
-	if (_health == 0 // if unit is dead, AI state disappears
+	if (_health == 0				// if unit is dead, AI state disappears
 		&& _currentAIState != NULL)
 	{
 		_currentAIState->exit();
@@ -2100,13 +2095,13 @@ void BattleUnit::prepUnit()
 		_currentAIState = NULL;
 	}
 
-	if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
+	if (_stunLevel > 0				// note ... mechanical creatures should no longer be getting stunned.
 		&& (_armor->getSize() == 1
 			|| isOut() == false)
 		&& (_geoscapeSoldier != NULL
 			|| _unitRules->isMechanical() == false))
 	{
-		healStun(1); // recover stun 1pt/turn
+		healStun(1);				// recover stun 1pt/turn
 	}
 
 	if (isOut() == false)
@@ -2114,15 +2109,23 @@ void BattleUnit::prepUnit()
 		const int panic = 100 - (2 * getMorale());
 		if (RNG::percent(panic) == true)
 		{
+			_tu = _stats.tu * RNG::generate(0, 100) / 100;
+			_energy = _stats.stamina;
+
 			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
 
 			if (RNG::percent(30) == true)
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
-		else if (panic > 0					// successfully avoided Panic
-			&& _geoscapeSoldier != NULL)
+		else								// else successfully avoided Panic
 		{
-			++_expBravery;
+			initTU();
+
+			if (panic > 0
+				&& _geoscapeSoldier != NULL)
+			{
+				++_expBravery;
+			}
 		}
 	}
 
@@ -2136,44 +2139,53 @@ void BattleUnit::prepUnit()
  */
 void BattleUnit::initTU(bool preBattle)
 {
-	int initTU = _stats.tu;
+	if (_revived == true)
+	{
+		_revived = false;
+		_tu = 0;
+		_energy = 0;
+
+		return;
+	}
+
+	int tu = _stats.tu;
 	double underLoad = static_cast<double>(_stats.strength) / static_cast<double>(getCarriedWeight());
 	underLoad *= getAccuracyModifier() / 2. + 0.5;
 	if (underLoad < 1.)
-		initTU = static_cast<int>(Round(static_cast<double>(initTU) * underLoad));
+		tu = static_cast<int>(Round(static_cast<double>(tu) * underLoad));
 
 	// Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
 	if (preBattle == false
 		&& _geoscapeSoldier != NULL)
 	{
-		initTU -= (initTU * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
+		tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
 	}
 
-	_tu = std::max(12, initTU);
+	_tu = std::max(12, tu);
 
 	if (preBattle == false)
 	{
-		int initEnergy = _stats.stamina; // advanced Energy recovery
+		int energy = _stats.stamina; // advanced Energy recovery
 		if (_geoscapeSoldier != NULL)
 		{
 			if (_kneeled == true)
-				initEnergy /= 2;
+				energy /= 2;
 			else
-				initEnergy /= 3;
+				energy /= 3;
 		}
 		else // aLiens & Tanks.
-			initEnergy = initEnergy * _unitRules->getEnergyRecovery() / 100;
+			energy = energy * _unitRules->getEnergyRecovery() / 100;
 
-		initEnergy = static_cast<int>(Round(static_cast<double>(initEnergy) * getAccuracyModifier()));
+		energy = static_cast<int>(Round(static_cast<double>(energy) * getAccuracyModifier()));
 
 		// Each fatal wound to the body reduces a Soldier's
 		// energy recovery by 10% of his/her current energy.
 		// note: only xCom Soldiers get fatal wounds, atm
 		if (_geoscapeSoldier != NULL)
-			initEnergy -= _energy * getFatalWound(BODYPART_TORSO) * 10 / 100;
+			energy -= _energy * getFatalWound(BODYPART_TORSO) * 10 / 100;
 
-		initEnergy += _energy;
-		setEnergy(std::max(12, initEnergy));
+		energy += _energy;
+		setEnergy(std::max(12, energy));
 	}
 }
 
@@ -4316,6 +4328,14 @@ void BattleUnit::setDown()
 void BattleUnit::setTurnDirection(const int turnDir)
 {
 	_turnDir = turnDir;
+}
+
+/**
+ * Sets this BattleUnit as having just revived during a Turnover.
+ */
+void BattleUnit::setRevived()
+{
+	_revived = true;
 }
 
 }

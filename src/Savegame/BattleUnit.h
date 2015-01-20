@@ -395,6 +395,7 @@ private:
 		_dontReselect,
 		_floating,
 		_kneeled,
+		_revived,
 		_stopShot,	// to stop a unit from firing/throwing if it spots a new opponent during turning
 		_takenExpl,	// used to stop large units from taking damage for each part.
 		_visible;
@@ -1088,6 +1089,9 @@ private:
 
 		/// Sets this BattleUnit's turn direction when spinning 180 degrees.
 		void setTurnDirection(const int turnDir);
+
+		/// Sets this BattleUnit as having just revived during a Turnover.
+		void setRevived();
 };
 
 }

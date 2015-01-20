@@ -1965,6 +1965,8 @@ void SavedBattleGame::reviveUnconsciousUnits()
 
 					(*i)->setDirection(RNG::generate(0, 7));
 					(*i)->setTimeUnits(0);
+					(*i)->setEnergy(0);
+					(*i)->setRevived();
 
 					_tileEngine->calculateUnitLighting();
 //					_tileEngine->calculateFOV(*i);

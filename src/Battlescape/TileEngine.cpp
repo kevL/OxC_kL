@@ -2326,7 +2326,7 @@ void TileEngine::explode(
 									i != destTile->getInventory()->end();
 									++i)
 							{
-								BattleUnit* bu = (*i)->getUnit();
+								BattleUnit* const bu = (*i)->getUnit();
 								if (bu != NULL
 									&& bu->getStatus() == STATUS_UNCONSCIOUS
 									&& bu->getTakenExpl() == false)
