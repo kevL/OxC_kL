@@ -751,15 +751,11 @@ void Map::drawTerrain(Surface* surface)
 						continue;
 
 					if (tile->isDiscovered(2) == true)
-					{
-						unit = tile->getUnit();
 						tileShade = tile->getShade();
-					}
 					else
-					{
-						unit = NULL;
 						tileShade = 16;
-					}
+
+					unit = tile->getUnit();
 
 //					tileColor = tile->getMarkerColor();
 					hasFloor = false;
@@ -2649,10 +2645,10 @@ void Map::drawTerrain(Surface* surface)
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _save->getSide()))
 								{
-									frame = 3 + (_animFrame %2); // yellow box
+									frame = 3 + (_animFrame %2); // yellow flashing box
 								}
 								else
-									frame = 3; // red box
+									frame = 3; // red standard box
 							}
 							else // CT_AIM ->
 							{

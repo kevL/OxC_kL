@@ -104,12 +104,12 @@ protected:
 		/// Cleans up a tile.
 		~Tile();
 
-		/// Loads the tile from yaml
+		/// Loads the tile from yaml.
 		void load(const YAML::Node& node);
-		/// Saves the tile to yaml
+		/// Saves the tile to yaml.
 		YAML::Node save() const;
 
-		/// Loads the tile from binary buffer in memory
+		/// Loads the tile from binary buffer in memory.
 		void loadBinary(
 				Uint8* buffer,
 				Tile::SerializationKey& serializationKey);
@@ -122,18 +122,18 @@ protected:
 		 * @return, pointer to MapData
 		 */
 		MapData* getMapData(int part) const
-		{ if (part < 0 || 3 < part)
+		{	if (part < 0 || 3 < part)
 				return NULL;
 
 			return _objects[part]; }
 
-		/// Sets the pointer to the mapdata for a specific part of the tile
+		/// Sets the pointer to the mapdata for a specific part of the tile.
 		void setMapData(
 				MapData* const data,
 				const int dataID,
 				const int dataSetID,
 				const int part);
-		/// Gets the IDs to the mapdata for a specific part of the tile
+		/// Gets the IDs to the mapdata for a specific part of the tile.
 		void getMapData(
 				int* dataID,
 				int* dataSetID,
@@ -178,7 +178,7 @@ protected:
 		 * @return bool
 		 */
 		bool isUfoDoorOpen(int part) const
-		{ return _objects[part] != NULL
+		{	return _objects[part] != NULL
 				&& _objects[part]->isUFODoor() == true
 				&& _curFrame[part] != 0; }
 		/// Closes ufo door.

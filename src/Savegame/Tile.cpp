@@ -78,7 +78,6 @@ Tile::Tile(const Position& pos)
 		_tuMarker(-1),
 		_overlaps(0),
 		_danger(false)
-//		_inventory()
 {
 	for (int
 			i = 0;
@@ -320,10 +319,10 @@ void Tile::getMapData(
  */
 bool Tile::isVoid(bool partsOnly) const
 {
-	bool ret = _objects[0] == NULL	// floor
-			&& _objects[1] == NULL	// westwall
-			&& _objects[2] == NULL	// northwall
-			&& _objects[3] == NULL	// content
+	bool ret = _objects[0] == NULL			// floor
+			&& _objects[1] == NULL			// westwall
+			&& _objects[2] == NULL			// northwall
+			&& _objects[3] == NULL			// content
 			&& _inventory.empty() == true;
 
 	if (partsOnly == false)
