@@ -34,7 +34,9 @@ namespace OpenXcom
 class BattlescapeState;
 class BattleUnit;
 class Node;
+class Pathfinding;
 class SavedBattleGame;
+class TileEngine;
 
 
 /**
@@ -79,6 +81,8 @@ protected:
 	Node
 		* _fromNode,
 		* _toNode;
+	Pathfinding* _pf;
+	TileEngine* _tileEngine;
 
 	BattleActionType _reserve;
 

@@ -460,7 +460,7 @@ GraphsState::GraphsState(int curGraph)
 	_txtScore->setAlign(ALIGN_RIGHT);
 
 
-	// Load back all the buttons' toggled states from SaveGame!
+	// Load back all the buttons' toggled states from SavedGame!
 	/* REGION TOGGLES */
 	std::string graphRegionToggles = _game->getSavedGame()->getGraphRegionToggles();
 	while (graphRegionToggles.size() < _regionToggles.size())
@@ -1429,9 +1429,8 @@ void GraphsState::drawCountryLines()
 	}
 
 	// adjust the scale to fit the upward maximum
-	double
-		range = static_cast<double>(upperLimit - lowerLimit),
-		low = static_cast<double>(lowerLimit);
+	const double low = static_cast<double>(lowerLimit);
+	double range = static_cast<double>(upperLimit - lowerLimit);
 
 //	int test = _income? 50: 100;
 	int
@@ -1481,14 +1480,14 @@ void GraphsState::drawCountryLines()
 		{
 			int
 				x = 312 - static_cast<int>(i) * 17,
-				y = 175 + static_cast<int>((static_cast<double>(lowerLimit) / units));
+				y = 175 + static_cast<int>(Round((static_cast<double>(lowerLimit) / units)));
 
 			if (_alien == true)
 			{
 				if (i < country->getActivityAlien().size())
 				{
 					int reduction = country->getActivityAlien().at(country->getActivityAlien().size() - (i + 1));
-					y -= static_cast<int>(static_cast<double>(reduction) / units);
+					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
 			}
@@ -1497,8 +1496,8 @@ void GraphsState::drawCountryLines()
 				if (i < country->getFunding().size())
 				{
 					int reduction = country->getFunding().at(country->getFunding().size() - (1 + i));
-					y -= static_cast<int>(static_cast<double>(reduction) / 1000. / units);
-					totals[i] += static_cast<int>(static_cast<double>(reduction) / 1000.);
+					y -= static_cast<int>(Round(static_cast<double>(reduction) / 1000. / units));
+					totals[i] += static_cast<int>(Round(static_cast<double>(reduction) / 1000.));
 				}
 			}
 			else
@@ -1506,7 +1505,7 @@ void GraphsState::drawCountryLines()
 				if (i < country->getActivityXcom().size())
 				{
 					int reduction = country->getActivityAlien().at(country->getActivityXcom().size() - (i + 1));
-					y -= static_cast<int>(static_cast<double>(reduction) / units);
+					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
 			}
@@ -1568,11 +1567,11 @@ void GraphsState::drawCountryLines()
 			++i)
 	{
 		int
-			x = 312 - (i * 17),
-			y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
+			x = 312 - i * 17,
+			y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
 
 		if (totals[i] > 0)
-			y -= static_cast<int>(static_cast<double>(totals[i]) / units);
+			y -= static_cast<int>(Round(static_cast<double>(totals[i]) / units));
 
 		newLineVector.push_back(y);
 
@@ -1711,9 +1710,8 @@ void GraphsState::drawRegionLines()
 	}
 
 	// adjust the scale to fit the upward maximum
-	double
-		range = static_cast<double>(upperLimit - lowerLimit),
-		low = static_cast<double>(lowerLimit);
+	const double low = static_cast<double>(lowerLimit);
+	double range = static_cast<double>(upperLimit - lowerLimit);
 
 	int
 		test = 10,
@@ -1828,7 +1826,7 @@ void GraphsState::drawRegionLines()
 			++i)
 	{
 		int
-			x = 312 - (i * 17),
+			x = 312 - i * 17,
 			y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
 
 		if (totals[i] > 0)
@@ -1982,9 +1980,8 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	}
 
 
-	double
-		range = static_cast<double>(upperLimit - lowerLimit),
-		low = static_cast<double>(lowerLimit);
+	const double low = static_cast<double>(lowerLimit);
+	double range = static_cast<double>(upperLimit - lowerLimit);
 
 	int
 		test = 100,

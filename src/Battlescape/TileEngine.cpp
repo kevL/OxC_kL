@@ -758,34 +758,34 @@ bool TileEngine::visible(
 					&_trajectory,
 					unit);
 
-		const double distVoxels = static_cast<double>(_trajectory.size());
-		double distWeighted = distVoxels;
 
 		const Tile* scanTile = _battleSave->getTile(unit->getPosition());
+		double distWeighted = static_cast<double>(_trajectory.size());
 
 		for (size_t
 				i = 0;
 				i != _trajectory.size();
 				++i)
 		{
-			// The 'origin tile' now steps along through voxel/tile-space, picking up extra
-			// weight ( subtracting distance for both distance and obscuration ) as it goes.
+			// The 'origin tile' now steps along through voxel/tile-space, picking up extra weight
+			// ( reducing effective distance for both real distance and obscuration ) as it goes.
 			scanTile = _battleSave->getTile(Position(
 												_trajectory.at(i).x / 16,
 												_trajectory.at(i).y / 16,
 												_trajectory.at(i).z / 24));
 
-			distWeighted += static_cast<double>(scanTile->getSmoke()) * distVoxels / 3.;
-			distWeighted += static_cast<double>(scanTile->getFire()) * distVoxels;
+			distWeighted += static_cast<double>(scanTile->getSmoke()) / 3.;
+			distWeighted += static_cast<double>(scanTile->getFire());
 
-			if (std::ceil(distWeighted * distWeighted) > static_cast<double>(MAX_VOXEL_VIEW_DISTANCE_SQR))
+//			if (static_cast<int>(std::ceil(distWeighted * distWeighted)) > MAX_VOXEL_VIEW_DISTANCE_SQR)
+			if (static_cast<int>(std::ceil(distWeighted)) > MAX_VOXEL_VIEW_DISTANCE)
 			{
 				isSeen = false;
 				break;
 			}
 		}
 
-		// Check if unitSeen is really targetUnit.
+		// Check if unitSeen (the object at the end of calculateLine() trajectory ) is really The targetUnit.
 		if (isSeen == true)
 		{
 			// have to check if targetUnit is poking its head up from tileBelow
