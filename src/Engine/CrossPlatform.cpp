@@ -975,7 +975,7 @@ std::pair<std::wstring, std::wstring> timeToString(time_t timeIn)
 
 /**
  * Gets a date/time in a human-readable string using the ISO 8601 standard.
- * @return, string of time
+ * @return, string of Time
  */
 std::string timeString()
 {
