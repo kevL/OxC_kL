@@ -4370,7 +4370,7 @@
 
 1420130447 f:\git\openxcom\src\ruleset\unit.h
 
-1420130459 f:\git\openxcom\src\engine\options.h
+1421828728 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -5653,7 +5653,7 @@
 1420888086 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
-1420130455 f:\git\openxcom\src\engine\crossplatform.h
+1421836543 f:\git\openxcom\src\engine\crossplatform.h
 	<SDL.h>
 	<string>
 	<utility>
@@ -6057,7 +6057,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421780368 source:f:\git\openxcom\src\battlescape\map.cpp
+1421818123 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6243,7 +6243,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1421812020 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1421813074 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6506,7 +6506,7 @@
 1420130445 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1420130439 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1421836543 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -6585,7 +6585,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1421685605 source:f:\git\openxcom\src\engine\game.cpp
+1421819750 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6677,7 +6677,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1420130450 source:f:\git\openxcom\src\engine\options.cpp
+1421832489 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
@@ -6743,7 +6743,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1420130454 source:f:\git\openxcom\src\engine\screen.cpp
+1421828758 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -10747,7 +10747,7 @@
 1420130440 f:\git\openxcom\src\ruleset\rulemusic.h
 	<yaml-cpp/yaml.h>
 
-1420130442 f:\git\openxcom\src\engine\optioninfo.h
+1421818988 f:\git\openxcom\src\engine\optioninfo.h
 	<map>
 	<string>
 	<SDL.h>

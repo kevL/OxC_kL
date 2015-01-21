@@ -84,7 +84,6 @@ Game::Game(const std::string& title)
 		_debugCycle(-1),
 		_debugCycle_b(-1)
 {
-	//Log(LOG_INFO) << "Create Game";
 	Options::reload = false;
 	Options::mute = false;
 
@@ -153,7 +152,6 @@ Game::Game(const std::string& title)
  */
 Game::~Game()
 {
-	//Log(LOG_INFO) << "Delete Game";
 	Sound::stop();
 	Music::stop();
 
@@ -416,8 +414,7 @@ void Game::run()
 			{
 				// Update our FPS delay time based on the time of the last draw.
 				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
-				if (fps < 1)
-					fps = 1;
+				if (fps < 1) fps = 1;
 				_timeUntilNextFrame = static_cast<int>(
 											(1000.f / static_cast<float>(fps))
 											- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
@@ -823,13 +820,16 @@ void Game::defaultLanguage()
  */
 void Game::initAudio()
 {
-	Uint16 format;
+	Uint16 audioFormat;
 	if (Options::audioBitDepth == 8)
-		format = AUDIO_S8;
+		audioFormat = AUDIO_S8;
 	else
-		format = AUDIO_S16SYS;
+		audioFormat = AUDIO_S16SYS;
 
-	if (Mix_OpenAudio(Options::audioSampleRate, format, 2, 1024) != 0)
+	if (Mix_OpenAudio(
+				Options::audioSampleRate,
+				audioFormat,
+				2, 1024) != 0)
 	{
 		Log(LOG_ERROR) << Mix_GetError();
 		Log(LOG_WARNING) << "No sound device detected, audio disabled.";

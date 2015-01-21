@@ -54,6 +54,7 @@ namespace Options
 std::string
 	_configFolder,
 	_dataFolder,
+	_picFolder,
 	_userFolder;
 std::vector<std::string>
 	_dataList,
@@ -368,6 +369,8 @@ void loadArgs(
 					_userFolder = CrossPlatform::endPath(argv[i + 1]);
 				else if (argname == "cfg")
 					_configFolder = CrossPlatform::endPath(argv[i + 1]);
+				else if (argname == "pic")
+					_picFolder = CrossPlatform::endPath(argv[i + 1]);
 				else
 					// save this command line option for now, we will apply it later
 					_commandLine[argname] = argv[i + 1];
@@ -461,20 +464,21 @@ bool init(
 	setFolders();
 	updateOptions();
 
-	std::string s = getUserFolder();
-	s += "openxcom.log";
-	Logger::logFile() = s;
-	FILE* const file = fopen(Logger::logFile().c_str(), "w");
-	if (!file)
+	std::string st = getUserFolder();
+	st += "openxcom.log";
+	Logger::logFile() = st;
+	FILE* const file = fopen(
+							Logger::logFile().c_str(),
+							"w");
+	if (file == NULL)
 	{
-		throw Exception(s + " not found");
+		throw Exception(st + " not found");
 	}
 
-	fflush(file);
-	fclose(file);
-	Log(LOG_INFO) << "Data folder : " << _dataFolder;
-	Log(LOG_INFO) << "Data search : ";
+	std::fflush(file);
+	std::fclose(file);
 
+	Log(LOG_INFO) << "Data search -";
 	for (std::vector<std::string>::const_iterator
 			i = _dataList.begin();
 			i != _dataList.end();
@@ -483,16 +487,19 @@ bool init(
 		Log(LOG_INFO) << "    " << *i;
 	}
 
-	Log(LOG_INFO) << "User folder : " << _userFolder;
-	Log(LOG_INFO) << "Config folder : " << _configFolder;
+	Log(LOG_INFO) << "Data folder: " << _dataFolder;
+	Log(LOG_INFO) << "User folder: " << _userFolder;
+	Log(LOG_INFO) << "Config folder: " << _configFolder;
+	Log(LOG_INFO) << "Picture folder: " << _picFolder;
 	Log(LOG_INFO) << "Options loaded.";
 
 	return true;
 }
 
 /**
- * Sets up the game's Data folder where the data files are loaded from and the
- * User folder and Config folder where settings and saves are stored in.
+ * Sets up the game's Data folder from which the data files are loaded and
+ * the User folder and Config folder where saves and settings are stored.
+ * As well as the Picture folder for screenshots.
  */
 void setFolders()
 {
@@ -519,7 +526,7 @@ void setFolders()
 			}
 		}
 
-		if (_userFolder.empty() == true) // Set up folders
+		if (_userFolder.empty() == true) // Set up user folder
 		{
 			for (std::vector<std::string>::const_iterator
 					i = user.begin();
@@ -535,6 +542,13 @@ void setFolders()
 		}
 	}
 
+	if (_picFolder.empty() == true)
+	{
+		_picFolder = _userFolder + "pic\\";
+		if (CrossPlatform::folderExists(_picFolder) == false)
+			CrossPlatform::createFolder(_picFolder);
+	}
+
 	if (_configFolder.empty() == true)
 		_configFolder = _userFolder;
 }
@@ -547,10 +561,9 @@ void updateOptions()
 {
 	if (CrossPlatform::folderExists(_configFolder)) // Load existing options
 	{
-		if (CrossPlatform::fileExists(_configFolder + "options.cfg"))
+		if (CrossPlatform::fileExists(_configFolder + "options.cfg") == true)
 			load();
 		else
-
 			save();
 	}
 	else // Create config folder and save options
@@ -576,10 +589,10 @@ void updateOptions()
  */
 void load(const std::string& filename)
 {
-	const std::string s = _configFolder + filename + ".cfg";
+	const std::string st = _configFolder + filename + ".cfg";
 	try
 	{
-		YAML::Node doc = YAML::LoadFile(s);
+		const YAML::Node doc = YAML::LoadFile(st);
 
 		if (doc["options"]["NewBattleMission"]) // Ignore old options files
 			return;
@@ -607,20 +620,18 @@ void load(const std::string& filename)
  */
 void save(const std::string& filename)
 {
-	const std::string s = _configFolder + filename + ".cfg";
-	std::ofstream sav(s.c_str());
-	if (!sav)
+	const std::string st = _configFolder + filename + ".cfg";
+	std::ofstream save(st.c_str());
+	if (save.fail() == true)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
-
 		return;
 	}
-
-	Log(LOG_INFO) << "Saving Options to " << filename << ".cfg"; // kL
+	Log(LOG_INFO) << "Saving Options to " << filename << ".cfg";
 
 	try
 	{
-		YAML::Emitter out;
+		YAML::Emitter output;
 		YAML::Node
 			doc,
 			node;
@@ -636,16 +647,16 @@ void save(const std::string& filename)
 		doc["options"]				= node;
 		doc["purchaseexclusions"]	= purchaseExclusions;
 		doc["rulesets"]				= rulesets;
-		out << doc;
+		output << doc;
 
-		sav << out.c_str();
+		save << output.c_str();
 	}
 	catch (YAML::Exception e)
 	{
 		Log(LOG_WARNING) << e.what();
 	}
 
-	sav.close();
+	save.close();
 }
 
 /**
@@ -678,7 +689,7 @@ const std::vector<std::string>& getDataList()
 }
 
 /**
- * Returns the game's User folder where saves are stored in.
+ * Returns the game's User folder where saves are stored.
  * @return, full path to User folder
  */
 std::string getUserFolder()
@@ -687,7 +698,16 @@ std::string getUserFolder()
 }
 
 /**
- * Returns the game's Config folder where settings are stored in.
+ * Returns the game's Picture folder where screenshots are stored.
+ * @return, full path to Picture folder
+ */
+std::string getPictureFolder()
+{
+	return _picFolder;
+}
+
+/**
+ * Returns the game's Config folder where settings are stored.
  * Normally the same as the User folder.
  * @return, full path to Config folder
  */

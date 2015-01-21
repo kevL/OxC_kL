@@ -30,13 +30,13 @@ namespace OpenXcom
 {
 
 /**
- * Generic purpose functions that need different
- * implementations for different platforms.
+ * Generic purpose functions that need different implementations for different platforms.
  */
 namespace CrossPlatform
 {
 	/// Displays an error message.
 	void showError(const std::string& error);
+
 	/// Finds the game's data folders in the system.
 	std::vector<std::string> findDataFolders();
 	/// Finds the game's user folders in the system.
@@ -47,10 +47,13 @@ namespace CrossPlatform
 	std::string getDataFile(const std::string& filename);
 	/// Gets the path for a data folder
 	std::string getDataFolder(const std::string& foldername);
+
 	/// Creates a folder.
 	bool createFolder(const std::string& path);
+
 	/// Terminates a path.
 	std::string endPath(const std::string& path);
+
 	/// Returns the list of files in a folder.
 	std::vector<std::string> getFolderContents(
 			const std::string& path,
@@ -59,38 +62,56 @@ namespace CrossPlatform
 	std::vector<std::string> getDataContents(
 			const std::string& path,
 			const std::string& ext = "");
+
 	/// Checks if the path is an existing folder.
 	bool folderExists(const std::string& path);
 	/// Checks if the path is an existing file.
 	bool fileExists(const std::string& path);
+
 	/// Deletes the specified file.
 	bool deleteFile(const std::string& path);
+
 	/// Gets the basename of a file.
 	std::string baseFilename(
 			const std::string& path,
 			int(*transform)(int) = 0);
+
 	/// Sanitizes the characters in a filename.
 	std::string sanitizeFilename(const std::string& filename);
+
 	/// Removes the extension from a file.
 	std::string noExt(const std::string& file);
+
 	/// Gets the system locale.
 	std::string getLocale();
+
 	/// Checks if an event is a quit shortcut.
 	bool isQuitShortcut(const SDL_Event& ev);
+
 	/// Gets the modified date of a file.
 	time_t getDateModified(const std::string& path);
-	/// Converts a timestamp to a string.
+
+	/// Converts a timestamp to a pair of widestrings.
 	std::pair<std::wstring, std::wstring> timeToString(time_t time);
+	/// Converts the time into a string.
+	std::string timeString();
+
 	/// Compares two strings by natural order.
-	bool naturalCompare(const std::wstring& a, const std::wstring& b);
+	bool naturalCompare(
+			const std::wstring& a,
+			const std::wstring& b);
+
 	/// Move/rename a file between paths.
 	bool moveFile(
 			const std::string& src,
 			const std::string& dest);
+
 	/// Flashes the game window.
 	void flashWindow();
+
 	/// Gets the DOS-style executable path.
 	std::string getDosPath();
+
 	/// Sets the window icon.
 	void setWindowIcon(
 			int winResource,

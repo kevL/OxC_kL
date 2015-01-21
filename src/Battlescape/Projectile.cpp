@@ -239,7 +239,7 @@ int Projectile::calculateTrajectory(
 			if (endTile != NULL
 				&& endTile->getUnit() == NULL)
 			{
-				endPos -= (Position(0,0,-1)); // must be poking head up from tileBelow
+				endPos += (Position(0,0,-1)); // must be poking head up from tileBelow
 //				endPos = Position(endPos.x, endPos.y, endPos.z - 1);
 			}
 		}

@@ -22,10 +22,8 @@
 //#include <cmath>
 //#include <iomanip>
 //#include <sstream>
-
 //#include <limits.h>
 //#include <SDL.h>
-
 //#include "../lodepng.h"
 
 #include "Action.h"
@@ -122,8 +120,8 @@ Screen::Screen()
 	:
 		_baseWidth(ORIGINAL_WIDTH),
 		_baseHeight(ORIGINAL_HEIGHT),
-		_scaleX(1.0),
-		_scaleY(1.0),
+		_scaleX(1.),
+		_scaleY(1.),
 		_flags(0),
 		_numColors(0),
 		_firstColor(0),
@@ -164,21 +162,21 @@ Surface* Screen::getSurface()
  */
 void Screen::handle(Action* action)
 {
-	if (Options::debug == true)
+//	if (Options::debug == true)
+//	{
+	if (action->getDetails()->type == SDL_KEYDOWN
+		&& action->getDetails()->key.keysym.sym == SDLK_F8)
 	{
-		if (action->getDetails()->type == SDL_KEYDOWN
-			&& action->getDetails()->key.keysym.sym == SDLK_F8)
+		switch (Timer::gameSlowSpeed)
 		{
-			switch (Timer::gameSlowSpeed)
-			{
-				case 1: Timer::gameSlowSpeed = 5;	break;
-				case 5: Timer::gameSlowSpeed = 15;	break;
+			case 1: Timer::gameSlowSpeed = 5;	break;
+			case 5: Timer::gameSlowSpeed = 15;	break;
 
-				default:
-					Timer::gameSlowSpeed = 1;
-			}
+			default:
+				Timer::gameSlowSpeed = 1;
 		}
 	}
+//	}
 
 	if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == SDLK_RETURN
@@ -190,24 +188,33 @@ void Screen::handle(Action* action)
 	else if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == Options::keyScreenshot)
 	{
-		std::ostringstream ss;
+		std::ostringstream osts;
+/*		int i = 0;
+		do
+		{
+			osts.str("");
+			osts << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << "_" << i << ".png";
+
+			++i;
+		}
+		while (CrossPlatform::fileExists(osts.str()) == true); */
+
+		// ... too slow to take & write more than one screenshot per second @ 1920x1080 ...
+		// Skip the do-while Loop:
+		osts << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << ".png";
+		screenshot(osts.str());
+
+/*		std::ostringstream ss;
 		int i = 0;
 		do
 		{
 			ss.str("");
 			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
-			// kL_note: Set that up to append YYMMDD ...! And put them in a subfolder 'pics'
-
-			i++;
-		}
-		while (CrossPlatform::fileExists(ss.str()));
-
-		screenshot(ss.str());
-
-//kL	return;
+			++i;
+		} while (CrossPlatform::fileExists(ss.str()) == true);
+		screenshot(ss.str()); */
 	}
 }
-
 
 /**
  * Renders the buffer's contents onto the screen, applying
@@ -381,9 +388,9 @@ int Screen::getHeight() const
 }
 
 /**
- * Resets the screen surfaces based on the current display options,
+ * Resets the screen surfaces based on the current display options
  * as they don't automatically take effect.
- * @param resetVideo - True to reset display surface.
+ * @param resetVideo - true to reset display surface (default true)
  */
 void Screen::resetDisplay(bool resetVideo)
 {
@@ -601,7 +608,7 @@ int Screen::getCursorLeftBlackBand() const
 
 /**
  * Saves a screenshot of the screen's contents.
- * @param filename Filename of the PNG file.
+ * @param filename - filename of the PNG file
  */
 void Screen::screenshot(const std::string& filename) const
 {
@@ -618,7 +625,7 @@ void Screen::screenshot(const std::string& filename) const
 	if (isOpenGLEnabled() == true)
 	{
 #ifndef __NO_OPENGL
-		GLenum format = GL_RGB;
+		GLenum screenFormat = GL_RGB;
 
 		for (int
 				y = 0;
@@ -630,7 +637,7 @@ void Screen::screenshot(const std::string& filename) const
 						getHeight() - (y + 1),
 						getWidth() - getWidth() %4,
 						1,
-						format,
+						screenFormat,
 						GL_UNSIGNED_BYTE,
 						static_cast<Uint8*>(screenshot->pixels) + y * screenshot->pitch);
 		}
@@ -675,13 +682,13 @@ bool Screen::is32bitEnabled()
 		baseH = Options::baseYResolution;
 
 	return ((Options::useHQXFilter || Options::useXBRZFilter)
-			&& ((w == baseW * 2
+			&& ((	   w == baseW * 2
 					&& h == baseH * 2)
-				|| (w == baseW * 3
+				|| (   w == baseW * 3
 					&& h == baseH * 3)
-				|| (w == baseW * 4
+				|| (   w == baseW * 4
 					&& h == baseH * 4)
-				|| (w == baseW * 5
+				|| (   w == baseW * 5
 					&& h == baseH * 5
 					&& Options::useXBRZFilter)));
 }
