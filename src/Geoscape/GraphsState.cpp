@@ -1480,7 +1480,7 @@ void GraphsState::drawCountryLines()
 		{
 			int
 				x = 312 - static_cast<int>(i) * 17,
-				y = 175 + static_cast<int>(Round((static_cast<double>(lowerLimit) / units)));
+				y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
 
 			if (_alien == true)
 			{
