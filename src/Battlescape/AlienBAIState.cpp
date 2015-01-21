@@ -17,11 +17,10 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "AlienBAIState.h"
 
 //#include <algorithm>
+//#define _USE_MATH_DEFINES
 //#include <climits>
 //#include <cmath>
 
@@ -1301,11 +1300,12 @@ int AlienBAIState::selectNearestTarget()
 				if (_rifle == true
 					|| _melee == false)
 				{
-					valid = _save->getTileEngine()->canTargetUnit(
-																&origin,
-																(*i)->getTile(),
-																&target,
-																_unit);
+					valid = true;
+//					valid = _save->getTileEngine()->canTargetUnit(
+//																&origin,
+//																(*i)->getTile(),
+//																&target,
+//																_unit);
 				}
 				else if (selectPointNearTarget(
 											*i,

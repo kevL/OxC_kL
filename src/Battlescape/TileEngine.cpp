@@ -115,6 +115,7 @@ void TileEngine::calculateSunShading()
 
 /**
  * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
+ * TODO: angle the shadow according to the time - link to Options::globeSeasons (or whatever the realistic lighting thing is)
  * @param tile - a tile to calculate sun shading for
  */
 void TileEngine::calculateSunShading(Tile* const tile)
@@ -695,7 +696,7 @@ void TileEngine::recalculateFOV()
  */
 bool TileEngine::visible(
 		const BattleUnit* const unit,
-		Tile* tile)
+		const Tile* const tile)
 {
 	if (tile == NULL
 		|| tile->getUnit() == NULL)
@@ -711,15 +712,15 @@ bool TileEngine::visible(
 		return true;
 
 
-	const int dist = distance(
-							unit->getPosition(),
-							targetUnit->getPosition());
-	if (dist * dist > MAX_VIEW_DISTANCE_SQR)
+	const int distTiles = distance(
+								unit->getPosition(),
+								targetUnit->getPosition());
+	if (distTiles * distTiles > MAX_VIEW_DISTANCE_SQR)
 		return false;
 
 	if (unit->getFaction() == FACTION_PLAYER
 		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS
-		&& dist > 23 - _battleSave->getGlobalShade())
+		&& distTiles > 23 - _battleSave->getGlobalShade())
 	{
 		return false;
 	}
@@ -757,33 +758,27 @@ bool TileEngine::visible(
 					&_trajectory,
 					unit);
 
-		double distEffective = static_cast<double>(_trajectory.size());
-		const double distReal = static_cast<double>(dist) * 16. / distEffective;
+		const double distVoxels = static_cast<double>(_trajectory.size());
+		double distWeighted = distVoxels;
 
-		const Tile* testTile = _battleSave->getTile(unit->getPosition());
+		const Tile* scanTile = _battleSave->getTile(unit->getPosition());
 
 		for (size_t
 				i = 0;
-				i < _trajectory.size();
+				i != _trajectory.size();
 				++i)
 		{
-			if (testTile != _battleSave->getTile(Position(
-													_trajectory.at(i).x / 16,
-													_trajectory.at(i).y / 16,
-													_trajectory.at(i).z / 24)))
-			{
-				testTile = _battleSave->getTile(Position(
-													_trajectory.at(i).x / 16,
-													_trajectory.at(i).y / 16,
-													_trajectory.at(i).z / 24));
-			}
+			// The 'origin tile' now steps along through voxel/tile-space, picking up extra
+			// weight ( subtracting distance for both distance and obscuration ) as it goes.
+			scanTile = _battleSave->getTile(Position(
+												_trajectory.at(i).x / 16,
+												_trajectory.at(i).y / 16,
+												_trajectory.at(i).z / 24));
 
-			// the 'origin tile' now steps along through voxel/tile-space, picking up extra
-			// weight (subtracting distance for both distance and obscuration) as it goes
-			distEffective += static_cast<double>(testTile->getSmoke()) * distReal / 3.;
-			distEffective += static_cast<double>(testTile->getFire()) * distReal / 2.;
+			distWeighted += static_cast<double>(scanTile->getSmoke()) * distVoxels / 3.;
+			distWeighted += static_cast<double>(scanTile->getFire()) * distVoxels;
 
-			if (distEffective > static_cast<double>(MAX_VOXEL_VIEW_DISTANCE))
+			if (std::ceil(distWeighted * distWeighted) > static_cast<double>(MAX_VOXEL_VIEW_DISTANCE_SQR))
 			{
 				isSeen = false;
 				break;
@@ -794,10 +789,10 @@ bool TileEngine::visible(
 		if (isSeen == true)
 		{
 			// have to check if targetUnit is poking its head up from tileBelow
-			const Tile* const belowTile = _battleSave->getTile(testTile->getPosition() + Position(0, 0,-1));
+			const Tile* const belowTile = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
 			if (!
-				(testTile->getUnit() == targetUnit
-					|| (belowTile != NULL // could add a check for && testTile->hasNoFloor() around here.
+				(scanTile->getUnit() == targetUnit
+					|| (belowTile != NULL // could add a check for && scanTile->hasNoFloor() around here.
 						&& belowTile->getUnit() != NULL
 						&& belowTile->getUnit() == targetUnit)))
 			{
@@ -5206,7 +5201,8 @@ int TileEngine::distance(
 		y = pos1.y - pos2.y,
 		z = pos1.z - pos2.z; // kL
 
-	return static_cast<int>(Round(
+//	return static_cast<int>(Round(
+	return static_cast<int>(std::ceil(
 		   std::sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
 }
 

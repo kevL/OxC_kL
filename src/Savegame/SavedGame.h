@@ -226,10 +226,20 @@ struct SaveInfo
  */
 struct PromotionInfo
 {
-	int totalCommanders;
-	int totalColonels;
-	int totalCaptains;
-	int totalSergeants;
+	int
+		totalCommanders,
+		totalColonels,
+		totalCaptains,
+		totalSergeants;
+
+	/// Builds this struct.
+	PromotionInfo()
+		:
+			totalCommanders(0),
+			totalColonels(0),
+			totalCaptains(0),
+			totalSergeants(0)
+	{}
 };
 
 

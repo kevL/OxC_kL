@@ -50,10 +50,11 @@ class TileEngine
 
 private:
 	static const int
-		MAX_VIEW_DISTANCE		= 20,
-		MAX_VIEW_DISTANCE_SQR	= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE,
-		MAX_VOXEL_VIEW_DISTANCE	= 20 * 16,
-		MAX_SHADE_TO_SEE_UNITS	= 8,
+		MAX_VIEW_DISTANCE			= 20,
+		MAX_VIEW_DISTANCE_SQR		= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE,
+		MAX_VOXEL_VIEW_DISTANCE		= 20 * 16,
+		MAX_VOXEL_VIEW_DISTANCE_SQR	= MAX_VOXEL_VIEW_DISTANCE * MAX_VOXEL_VIEW_DISTANCE,
+		MAX_SHADE_TO_SEE_UNITS		= 8,
 
 		heightFromCenter[11];
 
@@ -111,7 +112,7 @@ private:
 		/// Checks visibility of a unit on this tile.
 		bool visible(
 				const BattleUnit* const unit,
-				Tile* tile);
+				const Tile* const tile);
 		/// Gets the origin voxel of a unit's eyesight.
 		Position getSightOriginVoxel(const BattleUnit* const unit);
 		/// Checks a unit's % exposure on a tile.
@@ -148,19 +149,6 @@ private:
 				const BattleUnit* const target);
 		/// Selects a fire method based on range & time units.
 		void selectFireMethod(BattleAction& action);
-/*		/// Checks validity of a snap shot to this position.
-		bool canMakeSnap(
-				BattleUnit* unit,
-				BattleUnit* target);
-		/// Tries to perform a reaction snap shot to this location.
-		bool tryReactionSnap(
-				BattleUnit* unit,
-				BattleUnit* target);
-		/// Tests for a fire method based on range & time units.
-		int testFireMethod(
-				BattleUnit* unit,
-				BattleUnit* target,
-				BattleItem* weapon) const; */
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(
