@@ -3061,7 +3061,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					break;
 
 					case MSC_ADDUFO:
-						if (_ufo)
+						if (_ufo != NULL)
 						{
 							// as above, note that the craft and the ufo will never be allowed to overlap.
 							// TODO: make _ufopos a vector ;)

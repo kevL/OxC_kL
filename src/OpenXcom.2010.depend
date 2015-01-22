@@ -5611,7 +5611,7 @@
 
 1420130458 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1421943353 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1421955783 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6057,7 +6057,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421908680 source:f:\git\openxcom\src\battlescape\map.cpp
+1421965002 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -11471,12 +11471,12 @@
 1420130458 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
-1420897572 source:f:\git\openxcom\src\engine\flcplayer.cpp
+1421954994 source:f:\git\openxcom\src\engine\flcplayer.cpp
 	"FlcPlayer.h"
 	"Game.h"
 	"Surface.h"
 
-1420897717 f:\git\openxcom\src\engine\flcplayer.h
+1421948227 f:\git\openxcom\src\engine\flcplayer.h
 
 1420330771 source:f:\git\openxcom\src\ruleset\rulevideo.cpp
 	"RuleVideo.h"
