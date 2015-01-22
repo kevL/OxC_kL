@@ -1623,7 +1623,7 @@ void Map::drawTerrain(Surface* surface)
 										if (tile->getMapData(MapData::O_WESTWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 											|| (tileWest->getMapData(MapData::O_OBJECT) != NULL
 												&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& levelDiff < 13))
+												&& levelDiff > 12))
 										{
 											half = true;
 										}
@@ -1635,7 +1635,7 @@ void Map::drawTerrain(Surface* surface)
 										if (tile->getMapData(MapData::O_NORTHWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 											|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 												&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& levelDiff < 13))
+												&& levelDiff > 12))
 										{
 											halfLeft = true;
 										}
