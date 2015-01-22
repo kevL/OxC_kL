@@ -1828,20 +1828,31 @@ Music* XcomResourcePack::loadMusic(
 				music = new AdlibMusic(volume);
 
 				if (track < adlibcat->getAmount())
-					music->load(adlibcat->load(track, true), adlibcat->getObjectSize(track));
+					music->load(
+							adlibcat->load(track, true),
+							adlibcat->getObjectSize(track));
 				else if (aintrocat) // separate intro music
 				{
 					track -= adlibcat->getAmount();
-					music->load(
-							aintrocat->load(track, true),
-							aintrocat->getObjectSize(track));
+					if (track < aintrocat->getAmount())
+						music->load(
+								aintrocat->load(track, true),
+								aintrocat->getObjectSize(track));
+					else
+					{
+						delete music;
+						music = NULL;
+					}
 				}
 			}
 		}
 		else if (fmt == MUSIC_MIDI) // Try MIDI music
 		{
-			if (gmcat) // DOS MIDI
+			if (gmcat // DOS MIDI
+				&& track < gmcat->getAmount())
+			{
 				music = gmcat->loadMIDI(track);
+			}
 			else // Windows MIDI
 			{
 				std::ostringstream s;

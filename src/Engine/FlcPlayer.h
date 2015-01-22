@@ -1,21 +1,21 @@
 /*
-* Copyright 2010-2015 OpenXcom Developers.
-*
-* This file is part of OpenXcom.
-*
-* OpenXcom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OpenXcom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright 2010-2015 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * Based on http://www.libsdl.org/projects/flxplay/
@@ -38,11 +38,11 @@ class FlcPlayer
 {
 
 private:
-	Uint8 *_fileBuf;
+	Uint8* _fileBuf;
 	Uint32 _fileSize;
-	Uint8 *_videoFrameData;
-	Uint8 *_chunkData;
-	Uint8 *_audioFrameData;
+	Uint8* _videoFrameData;
+	Uint8* _chunkData;
+	Uint8* _audioFrameData;
 	Uint16 _frameCount;		/* Frame Counter */
 	Uint32 _headerSize;		/* Fli file size */
 	Uint16 _headerType;		/* Fli header check */
@@ -62,8 +62,8 @@ private:
 
 	void (*_frameCallBack)();
 
-	SDL_Surface *_mainScreen;
-	Screen *_realScreen;
+	SDL_Surface* _mainScreen;
+	Screen* _realScreen;
 	SDL_Color _colors[256];
 	int _screenWidth;
 	int _screenHeight;
@@ -77,18 +77,19 @@ private:
 
 	typedef struct AudioBuffer
 	{
-		char *samples;
+		Sint16* samples;
 		int sampleCount;
 		int sampleBufSize;
 		int currSamplePos;
 	} AudioBuffer;
 
+
 	typedef struct AudioData
 	{
 		int sampleRate;
-		AudioBuffer *loadingBuffer;
-		AudioBuffer *playingBuffer;
-		SDL_sem *sharedLock;
+		AudioBuffer* loadingBuffer;
+		AudioBuffer* playingBuffer;
+		SDL_sem* sharedLock;
 
 	} AudioData;
 
@@ -98,17 +99,17 @@ private:
 
 	SDL_AudioSpec _requestedAudioSpec;
 	SDL_AudioSpec _returnedAudioSpec;
-	SDL_sem *audioVideoSync;
+	SDL_sem* audioVideoSync;
 
-	Game *_game;
+	Game* _game;
 
-	void readU16(Uint16 &dst, const Uint8 *const src);
-	void readU32(Uint32 &dst, const Uint8 *const src);
-	void readS16(Sint16 &dst, const Sint8 *const src);
-	void readS32(Sint32 &dst, const Sint8 *const src);
+	void readU16(Uint16& dst, const Uint8* const src);
+	void readU32(Uint32& dst, const Uint8* const src);
+	void readS16(Sint16& dst, const Sint8* const src);
+	void readS32(Sint32& dst, const Sint8* const src);
 	void readFileHeader();
 
-	bool isValidFrame(Uint8 *frameHeader, Uint32 &frameSize, Uint16 &frameType);
+	bool isValidFrame(Uint8* frameHeader, Uint32& frameSize, Uint16& frameType);
 	void decodeVideo(bool skipLastFrame);
 	void decodeAudio(int frames);
 	void waitForNextFrame(Uint32 delay);
@@ -130,9 +131,9 @@ private:
 
 	bool isEndOfFile(Uint8 *pos) const;
 
-	static void audioCallback(void *userData, Uint8 *stream, int len);
-	static void wakeAudioWaiter(SDL_sem *audioWaiter);
-	static void waitForNextAudioFrame(SDL_sem *audioWaiter);
+	static void audioCallback(void* userData, Uint8* stream, int len);
+	static void wakeAudioWaiter(SDL_sem* audioWaiter);
+	static void waitForNextAudioFrame(SDL_sem* audioWaiter);
 
 
 	public:

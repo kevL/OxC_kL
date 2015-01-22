@@ -62,7 +62,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoscape")->getElement("confirmCydonia")->color); //5
+			_game->getRuleset()->getInterface("confirmCydonia")->getElement("palette")->color); //5
 
 	add(_window, "window", "confirmCydonia");
 	add(_txtMessage, "text", "confirmCydonia");

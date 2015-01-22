@@ -533,11 +533,22 @@ void Game::setVolume(
  */
 double Game::volumeExponent(int volume)
 {
-	return (exp(
+	return (std::exp(
 				std::log(Game::VOLUME_GRADIENT + 1.) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME))
-				- 1.)
+			- 1.)
 			/ Game::VOLUME_GRADIENT;
 }
+// VOLUME_GRADIENT   = 10.
+// SDL_MIX_MAXVOLUME = 128
+//
+// if vol=256, out = 0.70267954037450624769969098909243 <- overMax in
+// if vol=128, out = 0.18331599679059886217106240983842
+// if vol= 64, out = 0.068319932506699533244707537053418
+// if vol= 32, out = 0.029738171910467249825497157272772
+// if vol= 16, out = 0.0139026654255585231541758004438
+// if vol=  8, out = 0.0067251916960370341756990957283772
+// if vol=  4, out = 0.0033078853215169796293706980006635
+// if vol=  2, out = 0.0038177854627124397781279131961105
 
 /**
  * Returns the display screen used by the game.

@@ -28,21 +28,14 @@ namespace OpenXcom
  */
 RuleMusic::RuleMusic()
 	:
-//		_type(""),
-//		_mode(""),
 		_midiIndex(-1)
-//		_indexes(),
-//		_files(),
-//		_terrains()
-{
-}
+{}
 
 /**
  * dTor
  */
 RuleMusic::~RuleMusic()
-{
-}
+{}
 
 /**
  *

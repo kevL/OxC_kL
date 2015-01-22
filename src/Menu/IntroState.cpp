@@ -51,9 +51,10 @@ IntroState::IntroState(const bool wasLetterBoxed)
 	:
 		_wasLetterBoxed(wasLetterBoxed)
 {
-//kL	_oldMusic = Options::musicVolume;
-//kL	_oldSound = Options::soundVolume;
-//kL	Options::musicVolume = Options::soundVolume = std::max(_oldMusic, _oldSound);
+//	_oldMusic = Options::musicVolume;
+//	_oldSound = Options::soundVolume;
+	// music volume is the main, and sound volume as a fallback
+//	Options::musicVolume = Options::soundVolume = std::max(_oldMusic, _oldSound/8);
 
 	_game->setVolume(
 				Options::soundVolume,

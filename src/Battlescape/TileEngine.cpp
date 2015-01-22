@@ -5869,8 +5869,8 @@ Position TileEngine::getOriginVoxel(
 		const BattleAction& action,
 		const Tile* tile)
 {
-//kL	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
-//kL	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
+//	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
+//	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
 
 	if (tile == NULL)
 		tile = action.actor->getTile();
@@ -5881,7 +5881,6 @@ Position TileEngine::getOriginVoxel(
 							origin.x * 16,
 							origin.y * 16,
 							origin.z * 24);
-	//Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[0] = " << originVoxel;
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (action.actor->getPosition() == origin
@@ -5891,28 +5890,28 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.z += action.actor->getHeight()
 					  + action.actor->getFloatHeight()
 					  - tile->getTerrainLevel();
-//kL				  - 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
+//					  - 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
 			// Ps. don't need luck - need precision.
 
 //		if (action.type == BA_THROW)	// kL
 //			originVoxel.z -= 4;			// kL
-/*kL		if (action.type == BA_THROW)
+/*		if (action.type == BA_THROW)
 			originVoxel.z -= 3;
 		else
 			originVoxel.z -= 4; */
 
 		if (originVoxel.z >= (origin.z + 1) * 24)
 		{
-			Tile* tileAbove = _battleSave->getTile(origin + Position(0, 0, 1));
-			if (tileAbove
-				&& tileAbove->hasNoFloor(0))
+			const Tile* const tileAbove = _battleSave->getTile(origin + Position(0,0,1));
+			if (tileAbove != NULL
+				&& tileAbove->hasNoFloor(NULL) == true)
 			{
-				origin.z++;
+				++origin.z;
 			}
 			else
 			{
 				while (originVoxel.z >= (origin.z + 1) * 24)
-					originVoxel.z--;
+					--originVoxel.z;
 
 				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
 			}
@@ -5926,23 +5925,15 @@ Position TileEngine::getOriginVoxel(
 		int offset = action.actor->getArmor()->getSize() * 8;
 		originVoxel.x += offset;
 		originVoxel.y += offset;
-			// screw Warboy's obscurantist glamor-elitist campaign!!!! Have fun with that!!
+			// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
 			// MUCH more predictable results. <- I didn't write that; just iterating it.
-/*kL
-		int offset = 0;
-		if (action.actor->getArmor()->getSize() > 1)
-			offset = 16;
-		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND")
-			&& action.weapon->getRules()->isTwoHanded() == false)
-		{
-			offset = 8;
-		}
-
+			// ... better now but still waiting on it.
+/*
 		int direction = getDirectionTo(
 									origin,
 									action.target);
-		originVoxel.x += dirXshift[direction + offset] * action.actor->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction + offset] * action.actor->getArmor()->getSize(); */
+		originVoxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
 	}
 	else // action.type == BA_LAUNCH
 	{
@@ -5953,7 +5944,6 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.z += 16;
 	}
 
-	//Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[1] = " << originVoxel;
 	return originVoxel;
 }
 
@@ -5972,10 +5962,10 @@ void TileEngine::setDangerZone(
 	if (tile == NULL)
 		return;
 
-	// set the epicenter as dangerous
-	tile->setDangerous();
-	Position originVoxel = (pos * Position(16,16,24))
-								+ Position(
+	tile->setDangerous(); // set the epicenter as dangerous
+
+	const Position originVoxel = pos * Position(16,16,24)
+							   + Position(
 										8,8,
 										12 - tile->getTerrainLevel());
 	Position targetVoxel;
@@ -5990,11 +5980,9 @@ void TileEngine::setDangerZone(
 				y != radius;
 				++y)
 		{
-			// we can skip the epicenter
-			if (x != 0 || y != 0)
+			if (x != 0 || y != 0) // skip the epicenter
 			{
-				// make sure it's within the radius
-				if ((x * x) + (y * y) <= radius * radius)
+				if ((x * x) + (y * y) <= radius * radius) // make sure it's within the radius
 				{
 					tile = _battleSave->getTile(pos + Position(x,y,0));
 					if (tile != NULL)

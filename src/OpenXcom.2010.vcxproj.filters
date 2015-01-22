@@ -877,20 +877,36 @@
     <ClCompile Include="Ruleset\Polyline.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp" />
-    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp" />
-    <ClCompile Include="Battlescape\CommendationState.cpp" />
-    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
-    <ClCompile Include="Savegame\SoldierDiary.cpp" />
-    <ClCompile Include="Basescape\SoldierInfoDeadState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\CommendationState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleCommendations.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\SoldierDiary.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\SoldierInfoDeadState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
     <ClCompile Include="Ruleset\SoundDefinition.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scalers\xbrz.cpp">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\BaseDetectionState.cpp" />
+    <ClCompile Include="Basescape\BaseDetectionState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
     <ClCompile Include="Battlescape\Particle.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -930,8 +946,12 @@
     <ClCompile Include="Ruleset\RuleVideo.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\CommendationDeadState.cpp" />
-    <ClCompile Include="Basescape\AlienContainmentState.cpp" />
+    <ClCompile Include="Battlescape\CommendationDeadState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\AlienContainmentState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1831,13 +1851,27 @@
     <ClInclude Include="Ruleset\Polyline.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\SoldierDiaryMissionState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h" />
-    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h" />
-    <ClInclude Include="Battlescape\CommendationState.h" />
-    <ClInclude Include="Ruleset\RuleCommendations.h" />
-    <ClInclude Include="Savegame\SoldierDiary.h" />
-    <ClInclude Include="Basescape\SoldierInfoDeadState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryMissionState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\CommendationState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleCommendations.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SoldierDiary.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SoldierInfoDeadState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
     <ClInclude Include="Ruleset\SoundDefinition.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
@@ -1847,7 +1881,9 @@
     <ClInclude Include="Engine\Scalers\config.h">
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\BaseDetectionState.h" />
+    <ClInclude Include="Basescape\BaseDetectionState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
     <ClInclude Include="Battlescape\Particle.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1890,8 +1926,12 @@
     <ClInclude Include="Ruleset\RuleVideo.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\CommendationDeadState.h" />
-    <ClInclude Include="Basescape\AlienContainmentState.h" />
+    <ClInclude Include="Battlescape\CommendationDeadState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\AlienContainmentState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

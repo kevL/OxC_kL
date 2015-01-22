@@ -1,21 +1,21 @@
 /*
-* Copyright 2010-2015 OpenXcom Developers.
-*
-* This file is part of OpenXcom.
-*
-* OpenXcom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OpenXcom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright 2010-2015 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * Based on http://www.libsdl.org/projects/flxplay/
@@ -479,27 +479,25 @@ void FlcPlayer::playVideoFrame()
 }
 
 /**
- *
+ * TFTD audio header (10 bytes)
+ * Uint16 unknown1 - always 0
+ * Uint16 sampleRate
+ * Uint16 unknown2 - always 1 (Channels? bytes per sample?)
+ * Uint16 unknown3 - always 10 (No idea)
+ * Uint16 unknown4 - always 0
+ * Uint8[] unsigned 1-byte 1-channel PCM data of length _chunkSize_ (so the total chunk is _chunkSize_ + 6-byte flc header + 10 byte audio header
  */
 void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 {
-	/* TFTD audio header (10 bytes)
-	* Uint16 unknown1 - always 0
-	* Uint16 sampleRate
-	* Uint16 unknown2 - always 1 (Channels? bytes per sample?)
-	* Uint16 unknown3 - always 10 (No idea)
-	* Uint16 unknown4 - always 0
-	* Uint8[] unsigned 1-byte 1-channel PCM data of length _chunkSize_ (so the total chunk is _chunkSize_ + 6-byte flc header + 10 byte audio header */
-
 	if (_hasAudio == false)
 	{
 		_audioData.sampleRate = sampleRate;
 		_hasAudio = true;
-		initAudio(AUDIO_U8, 1);
+		initAudio(AUDIO_S16SYS, 1);
 	}
 	else
 	{
-		/* Cannot change sample rate mid-video */
+		// Cannot change sample rate mid-video
 		assert(sampleRate == _audioData.sampleRate);
 	}
 
@@ -507,36 +505,31 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	AudioBuffer* loadingBuff = _audioData.loadingBuffer;
 	assert(loadingBuff->currSamplePos == 0);
 
-	const int newSize = (_audioFrameSize + loadingBuff->sampleCount);
+	const int newSize = _audioFrameSize + loadingBuff->sampleCount + 2;
 	if (newSize > loadingBuff->sampleBufSize)
 	{
-		/* If the sample count has changed, we need to reallocate (Handles initial state
-		 * of '0' sample count too, as realloc(NULL, size) == malloc(size) */
-		loadingBuff->samples = (char*)realloc(loadingBuff->samples, newSize);
+		// If the sample count has changed, we need to reallocate (Handles initial state
+		// of '0' sample count too, as realloc(NULL, size) == malloc(size)
+		loadingBuff->samples = (Sint16*)realloc(loadingBuff->samples, newSize);
 		loadingBuff->sampleBufSize = newSize;
 	}
 
-	const float tempVol = static_cast<float>(Game::volumeExponent(Options::musicVolume));
+	const float vol = static_cast<float>(Game::volumeExponent(Options::musicVolume));
 	for (Uint32
 		i = 0;
 		i < _audioFrameSize;
 		++i)
 	{
-//		float tempVal = std::min(
-//							256.f,
-//							std::max(
-//								0.f,
-//								static_cast<float>(_chunkData[i]) * tempVol));
-		float tempVal = static_cast<float>(_chunkData[i]) * tempVol;
-		_chunkData[i] = static_cast<Uint8>(tempVal);
+//		_chunkData[i] = static_cast<Uint8>(static_cast<float>(_chunkData[i]) * vol); // old; replaced by:
+		loadingBuff->samples[static_cast<Uint32>(loadingBuff->sampleCount) + i] = static_cast<Sint16>(static_cast<float>(_chunkData[i] - 128) * vol * 240.f);
 	}
+	// Copy the data....
+//	std::memcpy( // old; removed.
+//			loadingBuff->samples + loadingBuff->sampleCount,
+//			_chunkData,
+//			_audioFrameSize);
 
-	/* Copy the data.... */
-	std::memcpy(
-			loadingBuff->samples + loadingBuff->sampleCount,
-			_chunkData,
-			_audioFrameSize);
-	loadingBuff->sampleCount += _audioFrameSize;
+	loadingBuff->sampleCount += _audioFrameSize; // i wish someone would learn to make sensible casts instead of merely riding this hobby-horse.
 
 	SDL_SemPost(_audioData.sharedLock);
 }
@@ -894,15 +887,17 @@ void FlcPlayer::audioCallback(
 	{
 		if (playBuff->sampleCount > 0)
 		{
-			int samplesToCopy = std::min(len, playBuff->sampleCount);
+			const int bytesToCopy = std::min(
+										len,
+										playBuff->sampleCount * 2);
 			std::memcpy(
 					stream,
 					playBuff->samples + playBuff->currSamplePos,
-					samplesToCopy);
+					bytesToCopy);
 
-			playBuff->currSamplePos += samplesToCopy;
-			playBuff->sampleCount -= samplesToCopy;
-			len -= samplesToCopy;
+			playBuff->currSamplePos += bytesToCopy / 2;
+			playBuff->sampleCount -= bytesToCopy / 2;
+			len -= bytesToCopy;
 
 			assert(playBuff->sampleCount >= 0);
 		}
@@ -934,7 +929,7 @@ void FlcPlayer::initAudio(
 							_audioData.sampleRate,
 							format,
 							channels,
-							_audioFrameSize);
+							_audioFrameSize * 2);
 	_videoDelay = 1000 / (_audioData.sampleRate / _audioFrameSize);
 
 	if (err != 0)
@@ -949,14 +944,14 @@ void FlcPlayer::initAudio(
 	_audioData.loadingBuffer = new AudioBuffer();
 	_audioData.loadingBuffer->currSamplePos = 0;
 	_audioData.loadingBuffer->sampleCount = 0;
-	_audioData.loadingBuffer->samples = (char*)malloc(_audioFrameSize);
-	_audioData.loadingBuffer->sampleBufSize = _audioFrameSize;
+	_audioData.loadingBuffer->samples = (Sint16*)malloc(_audioFrameSize * 2);
+	_audioData.loadingBuffer->sampleBufSize = _audioFrameSize * 2;
 
 	_audioData.playingBuffer = new AudioBuffer();
 	_audioData.playingBuffer->currSamplePos = 0;
 	_audioData.playingBuffer->sampleCount = 0;
-	_audioData.playingBuffer->samples = (char*)malloc(_audioFrameSize);
-	_audioData.playingBuffer->sampleBufSize = _audioFrameSize;
+	_audioData.playingBuffer->samples = (Sint16*)malloc(_audioFrameSize * 2);
+	_audioData.playingBuffer->sampleBufSize = _audioFrameSize * 2;
 
 	Mix_HookMusic(
 				FlcPlayer::audioCallback,
