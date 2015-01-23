@@ -67,16 +67,12 @@ SellState::SellState(
 		OptionsOrigin origin)
 	:
 		_base(base),
-//		_qtys(),
-//		_soldiers(),
-//		_crafts(),
-//		_items(),
 		_sel(0),
 		_itemOffset(0),
 		_total(0),
 		_hasSci(0),
 		_hasEng(0),
-		_spaceChange(0.0),
+		_spaceChange(0.),
 		_origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced == true
@@ -700,10 +696,12 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		changeByValue(std::numeric_limits<int>::max(), 1);
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		changeByValue(1, 1);
+		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+			changeByValue(10, 1);
+		else
+			changeByValue(1, 1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -743,10 +741,12 @@ void SellState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		changeByValue(std::numeric_limits<int>::max(), -1);
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		changeByValue(1, -1);
+		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+			changeByValue(10, -1);
+		else
+			changeByValue(1, -1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -759,7 +759,7 @@ void SellState::lstItemsRightArrowClick(Action* action)
  */
 void SellState::lstItemsMousePress(Action* action)
 {
-	if (Options::changeValueByMouseWheel < 1)
+/*	if (Options::changeValueByMouseWheel < 1)
 		return;
 
 	_sel = _lstItems->getSelectedRow();
@@ -785,7 +785,7 @@ void SellState::lstItemsMousePress(Action* action)
 		{
 			changeByValue(Options::changeValueByMouseWheel, -1);
 		}
-	}
+	} */
 }
 
 /**
@@ -869,7 +869,10 @@ void SellState::increase()
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
 
-	changeByValue(1, 1);
+	if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		changeByValue(10, 1);
+	else
+		changeByValue(1, 1);
 }
 
 /**
@@ -880,7 +883,10 @@ void SellState::decrease()
 	_timerInc->setInterval(80);
 	_timerDec->setInterval(80);
 
-	changeByValue(1, -1);
+	if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		changeByValue(10, -1);
+	else
+		changeByValue(1, -1);
 }
 
 /**

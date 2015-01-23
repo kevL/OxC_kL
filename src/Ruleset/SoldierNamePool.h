@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_SOLDIERNAMEPOOL_H
 #define OPENXCOM_SOLDIERNAMEPOOL_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Savegame/Soldier.h"
 
@@ -44,8 +44,8 @@ private:
 	std::vector<int> _lookWeights;
 	std::vector<std::wstring>
 		_maleFirst,
-		_femaleFirst,
 		_maleLast,
+		_femaleFirst,
 		_femaleLast;
 
 
@@ -61,7 +61,7 @@ private:
 		/// Generates a new name from the pool.
 		std::wstring genName(SoldierGender* gender) const;
 //				int femaleFrequency) const;
-		/// Generates an int representing the index of the soldier's look, when passed the maximum index value.
+		/// Generates an integer representing the index of the soldier's look when passed the maximum index value.
 		size_t genLook(size_t numLooks);
 };
 

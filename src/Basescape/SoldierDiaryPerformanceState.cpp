@@ -211,19 +211,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	if (_base != NULL)
-	{
-		_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
-		_txtBaseLabel->setAlign(ALIGN_CENTER);
-		_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
-	}
-	else
-		_txtBaseLabel->setVisible(false);
+
+	_btnNext->setColor(Palette::blockOffset(15)+6);
+	_btnNext->setText(L">");
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
+
 	if (_base == NULL)
 	{
+		_txtBaseLabel->setVisible(false);
+
+		_btnNext->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick); // list is reversed in Memorial.
+		_btnNext->onKeyboardPress(
+						(ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick,
+						Options::keyBattleNextUnit);
+
 		_btnPrev->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnNextClick);
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& SoldierDiaryPerformanceState::btnNextClick,
@@ -231,27 +234,19 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	}
 	else
 	{
-		_btnPrev->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick);
-		_btnPrev->onKeyboardPress(
-						(ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick,
-						Options::keyBattlePrevUnit);
-	}
+		_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+		_txtBaseLabel->setAlign(ALIGN_CENTER);
+		_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_btnNext->setColor(Palette::blockOffset(15)+6);
-	_btnNext->setText(L">");
-	if (_base == NULL)
-	{
-		_btnNext->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick);
-		_btnNext->onKeyboardPress(
-						(ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick,
-						Options::keyBattleNextUnit);
-	}
-	else
-	{
 		_btnNext->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnNextClick);
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& SoldierDiaryPerformanceState::btnNextClick,
 						Options::keyBattleNextUnit);
+
+		_btnPrev->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick);
+		_btnPrev->onKeyboardPress(
+						(ActionHandler)& SoldierDiaryPerformanceState::btnPrevClick,
+						Options::keyBattlePrevUnit);
 	}
 
 

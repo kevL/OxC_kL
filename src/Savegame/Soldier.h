@@ -62,8 +62,6 @@ class Language;
 class Ruleset;
 class RuleSoldier;
 class SavedGame;
-//class SoldierDead;
-//class SoldierDeath;
 class SoldierDiary;
 class SoldierNamePool;
 
@@ -98,6 +96,7 @@ private:
 	SoldierGender _gender;
 	SoldierLook _look;
 	SoldierRank _rank;
+
 	UnitStats
 		_initialStats,
 		_currentStats;

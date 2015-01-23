@@ -441,7 +441,7 @@ PurchaseState::PurchaseState(Base* base)
 							++k)
 					{
 						if ((*k)->getRules()->getType() == test)
-							totalQty++;
+							++totalQty;
 
 						if ((*k)->getAmmo() != 255)
 						{
@@ -669,10 +669,12 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		increaseByValue(std::numeric_limits<int>::max());
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		increaseByValue(1);
+		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+			increaseByValue(10);
+		else
+			increaseByValue(1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -712,10 +714,12 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		decreaseByValue(std::numeric_limits<int>::max());
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		decreaseByValue(1);
+		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+			decreaseByValue(10);
+		else
+			decreaseByValue(1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -728,7 +732,7 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
  */
 void PurchaseState::lstItemsMousePress(Action* action)
 {
-	if (Options::changeValueByMouseWheel < 1)
+/*	if (Options::changeValueByMouseWheel < 1)
 		return;
 
 	_sel = _lstItems->getSelectedRow();
@@ -754,7 +758,7 @@ void PurchaseState::lstItemsMousePress(Action* action)
 		{
 			decreaseByValue(Options::changeValueByMouseWheel);
 		}
-	}
+	} */
 }
 
 /**
@@ -786,7 +790,10 @@ void PurchaseState::increase()
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
 
-	increaseByValue(1);
+	if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		increaseByValue(10);
+	else
+		increaseByValue(1);
 }
 
 /**
@@ -887,7 +894,10 @@ void PurchaseState::decrease()
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
 
-	decreaseByValue(1);
+	if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		decreaseByValue(10);
+	else
+		decreaseByValue(1);
 }
 
 /**

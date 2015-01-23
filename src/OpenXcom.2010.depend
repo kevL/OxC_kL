@@ -4365,7 +4365,7 @@
 	<sstream>
 	<string>
 
-1420130454 f:\git\openxcom\src\savegame\soldier.h
+1422042793 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
 1420130447 f:\git\openxcom\src\ruleset\unit.h
@@ -5148,7 +5148,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1420259230 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1422046524 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5336,7 +5336,7 @@
 1420130459 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1420259991 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1422044835 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -6057,7 +6057,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1422041467 source:f:\git\openxcom\src\battlescape\map.cpp
+1422042296 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8460,9 +8460,7 @@
 1421467662 f:\git\openxcom\src\ufopaedia\ufopaediastartstate.h
 	"../Engine/State.h"
 
-1420130444 f:\git\openxcom\src\ruleset\soldiernamepool.h
-	<string>
-	<vector>
+1422042928 f:\git\openxcom\src\ruleset\soldiernamepool.h
 	"../Savegame/Soldier.h"
 
 1420130443 f:\git\openxcom\src\savegame\serializationhelper.h
@@ -8651,11 +8649,8 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
-1420130450 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1422043248 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
-	<fstream>
-	<iostream>
-	<sstream>
 	"../Engine/CrossPlatform.h"
 	"../Engine/Exception.h"
 	"../Engine/Language.h"
@@ -8894,7 +8889,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1420130438 source:f:\git\openxcom\src\savegame\soldier.cpp
+1422044204 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11154,7 +11149,7 @@
 1420130450 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1420259924 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1422044110 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"

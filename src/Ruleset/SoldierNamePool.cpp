@@ -19,9 +19,9 @@
 
 #include "SoldierNamePool.h"
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
+//#include <fstream>
+//#include <iostream>
+//#include <sstream>
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
@@ -41,15 +41,13 @@ SoldierNamePool::SoldierNamePool()
 	:
 		_totalWeight(0)
 //		_femaleFrequency(-1)
-{
-}
+{}
 
 /**
  * dTor.
  */
 SoldierNamePool::~SoldierNamePool()
-{
-}
+{}
 
 /**
  * Loads the pool from a YAML file.
@@ -57,15 +55,15 @@ SoldierNamePool::~SoldierNamePool()
  */
 void SoldierNamePool::load(const std::string& filename)
 {
-	std::string s = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
-	YAML::Node doc = YAML::LoadFile(s);
+	const std::string st = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
+	YAML::Node doc = YAML::LoadFile(st);
 
 	for (YAML::const_iterator
 			i = doc["maleFirst"].begin();
 			i != doc["maleFirst"].end();
 			++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		const std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_maleFirst.push_back(name);
 	}
 
@@ -74,7 +72,7 @@ void SoldierNamePool::load(const std::string& filename)
 			i != doc["femaleFirst"].end();
 			++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		const std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleFirst.push_back(name);
 	}
 
@@ -83,7 +81,7 @@ void SoldierNamePool::load(const std::string& filename)
 			i != doc["maleLast"].end();
 			++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		const std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_maleLast.push_back(name);
 	}
 
@@ -92,7 +90,7 @@ void SoldierNamePool::load(const std::string& filename)
 			i != doc["femaleLast"].end();
 			++i)
 	{
-		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		const std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleLast.push_back(name);
 	}
 
@@ -130,25 +128,33 @@ std::wstring SoldierNamePool::genName(SoldierGender* gender) const
 		female = RNG::percent(femaleFrequency);
 
 	if (female == false) */
-	if (RNG::percent(50))
+	if (RNG::percent(50) == true)
 	{
 		*gender = GENDER_MALE;
-		size_t first = RNG::generate(0, _maleFirst.size() - 1);
-		name << _maleFirst[first];
+		const size_t given = RNG::generate(
+										0,
+										_maleFirst.size() - 1);
+		name << _maleFirst[given];
 		if (_maleLast.empty() == false)
 		{
-			size_t last = RNG::generate(0, _maleLast.size() - 1);
+			const size_t last = RNG::generate(
+										0,
+										_maleLast.size() - 1);
 			name << " " << _maleLast[last];
 		}
 	}
 	else
 	{
 		*gender = GENDER_FEMALE;
-		size_t first = RNG::generate(0, _femaleFirst.size() - 1);
-		name << _femaleFirst[first];
+		const size_t given = RNG::generate(
+										0,
+										_femaleFirst.size() - 1);
+		name << _femaleFirst[given];
 		if (_femaleLast.empty() == false)
 		{
-			size_t last = RNG::generate(0, _femaleLast.size() - 1);
+			const size_t last = RNG::generate(
+										0,
+										_femaleLast.size() - 1);
 			name << " " << _femaleLast[last];
 		}
 	}
@@ -180,7 +186,9 @@ size_t SoldierNamePool::genLook(size_t numLooks)
 		_lookWeights.pop_back();
 	}
 
-	int random = RNG::generate(0, _totalWeight);
+	int random = RNG::generate(
+							0,
+							_totalWeight);
 	for (std::vector<int>::iterator
 			i = _lookWeights.begin();
 			i != _lookWeights.end();
@@ -193,7 +201,9 @@ size_t SoldierNamePool::genLook(size_t numLooks)
 		look++;
 	}
 
-	return RNG::generate(0, numLooks - 1);
+	return RNG::generate(
+					0,
+					static_cast<int>(numLooks) - 1);
 }
 
 }

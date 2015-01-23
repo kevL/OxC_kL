@@ -94,7 +94,7 @@ Soldier::Soldier(
 
 		_currentStats = _initialStats;
 
-		_look = static_cast<SoldierLook>(RNG::generate(0, 3));
+		_look = static_cast<SoldierLook>(RNG::generate(0,3));
 //		_gender = (SoldierGender)RNG::generate(0, 1);
 
 		// kL_begin: gender Ratios
@@ -114,8 +114,8 @@ Soldier::Soldier(
 			_gender = GENDER_FEMALE;
 			_name = L"pfc.Frita";
 		} // kL_end.
-/*kL
-		if (names->empty() == false)
+
+/*		if (names->empty() == false)
 		{
 			size_t nationality = RNG::generate(0, names->size() - 1);
 			_name = names->at(nationality)->genName(&_gender, _rules->getFemaleFrequency());

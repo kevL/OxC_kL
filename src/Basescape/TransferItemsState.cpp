@@ -229,7 +229,7 @@ void TransferItemsState::init()
 		if (std::abs(_storeSize) > 0.05)
 		{
 			ss1 << "(";
-			if (-(_storeSize) > 0.0) ss1 << "+";
+			if (-(_storeSize) > 0.) ss1 << "+";
 			ss1 << std::fixed << std::setprecision(1) << -(_storeSize) << ")";
 		}
 		_txtSpaceFrom->setText(ss1.str());
@@ -238,7 +238,7 @@ void TransferItemsState::init()
 		if (std::abs(_storeSize) > 0.05)
 		{
 			ss2 << "(";
-			if (_storeSize > 0.0) ss2 << "+";
+			if (_storeSize > 0.) ss2 << "+";
 			ss2 << std::fixed << std::setprecision(1) << _storeSize << ")";
 		}
 		_txtSpaceTo->setText(ss2.str());
@@ -293,7 +293,6 @@ void TransferItemsState::init()
 							L"1",
 							L"0",
 							L"0");
-
 			++_offset;
 		}
 	}
@@ -318,7 +317,6 @@ void TransferItemsState::init()
 							L"1",
 							L"0",
 							L"0");
-
 			++_offset;
 		}
 	}
@@ -342,7 +340,6 @@ void TransferItemsState::init()
 						ss1.str().c_str(),
 						L"0",
 						ss2.str().c_str());
-
 		++_offset;
 	}
 
@@ -365,7 +362,6 @@ void TransferItemsState::init()
 						ss1.str().c_str(),
 						L"0",
 						ss2.str().c_str());
-
 		++_offset;
 	}
 
@@ -608,7 +604,7 @@ void TransferItemsState::completeTransfer()
 {
 	_reset = true;
 
-	const int time = static_cast<int>(std::floor(6. + _distance / 10.));
+	const int transferTime = static_cast<int>(std::floor(6. + _distance / 10.));
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _totalCost);
 	_baseFrom->setCashSpent(_totalCost);
 
@@ -631,7 +627,7 @@ void TransferItemsState::completeTransfer()
 						if ((*j)->isInPsiTraining() == true)
 							(*j)->setPsiTraining();
 
-						Transfer* const transfer = new Transfer(time);
+						Transfer* const transfer = new Transfer(transferTime);
 						transfer->setSoldier(*j);
 						_baseTo->getTransfers()->push_back(transfer);
 						_baseFrom->getSoldiers()->erase(j);
@@ -659,7 +655,7 @@ void TransferItemsState::completeTransfer()
 							_baseTo->getSoldiers()->push_back(*j);
 						else
 						{
-							Transfer* const transfer = new Transfer(time);
+							Transfer* const transfer = new Transfer(transferTime);
 							transfer->setSoldier(*j);
 							_baseTo->getTransfers()->push_back(transfer);
 						}
@@ -699,7 +695,7 @@ void TransferItemsState::completeTransfer()
 						}
 						else
 						{
-							Transfer* const transfer = new Transfer(time);
+							Transfer* const transfer = new Transfer(transferTime);
 							transfer->setCraft(*j);
 							_baseTo->getTransfers()->push_back(transfer);
 						}
@@ -725,7 +721,7 @@ void TransferItemsState::completeTransfer()
 				&& i == _soldiers.size() + _crafts.size()) // transfer scientists
 			{
 				_baseFrom->setScientists(_baseFrom->getScientists() - _transferQty[i]);
-				Transfer* const transfer = new Transfer(time);
+				Transfer* const transfer = new Transfer(transferTime);
 				transfer->setScientists(_transferQty[i]);
 
 				_baseTo->getTransfers()->push_back(transfer);
@@ -734,7 +730,7 @@ void TransferItemsState::completeTransfer()
 				&& i == _soldiers.size() + _crafts.size() + _hasSci) // transfer engineers
 			{
 				_baseFrom->setEngineers(_baseFrom->getEngineers() - _transferQty[i]);
-				Transfer* const transfer = new Transfer(time);
+				Transfer* const transfer = new Transfer(transferTime);
 				transfer->setEngineers(_transferQty[i]);
 
 				_baseTo->getTransfers()->push_back(transfer);
@@ -742,7 +738,7 @@ void TransferItemsState::completeTransfer()
 			else // transfer items
 			{
 				_baseFrom->getItems()->removeItem(_items[getItemIndex(i)], _transferQty[i]);
-				Transfer* const transfer = new Transfer(time);
+				Transfer* const transfer = new Transfer(transferTime);
 				transfer->setItems(_items[getItemIndex(i)], _transferQty[i]);
 
 				_baseTo->getTransfers()->push_back(transfer);
@@ -787,7 +783,10 @@ void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		increaseByValue(1);
+		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+			increaseByValue(10);
+		else
+			increaseByValue(1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -830,7 +829,10 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		decreaseByValue(1);
+		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+			decreaseByValue(10);
+		else
+			decreaseByValue(1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -927,7 +929,10 @@ void TransferItemsState::increase()
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
 
-	increaseByValue(1);
+	if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		increaseByValue(10);
+	else
+		increaseByValue(1);
 }
 
 /**
@@ -1092,7 +1097,10 @@ void TransferItemsState::decrease()
 	_timerInc->setInterval(80);
 	_timerDec->setInterval(80);
 
-	decreaseByValue(1);
+	if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		decreaseByValue(10);
+	else
+		decreaseByValue(1);
 }
 
 /**

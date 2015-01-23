@@ -1416,12 +1416,12 @@ void Map::drawTerrain(Surface* surface)
 									{
 										const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
-										int levelDiff_nwse = std::abs(tileWest->getTerrainLevel() - tileNorth->getTerrainLevel());	// positive means tileNorth is higher
+										int levelDiff_nesw = std::abs(tileWest->getTerrainLevel() - tileNorth->getTerrainLevel());	// positive means tileNorth is higher
 										int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel();			// positive means Tile is higher
 
 										if (tileNorth->getMapData(MapData::O_OBJECT) == NULL
 											|| (tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& levelDiff_nwse < 13
+												&& levelDiff_nesw < 13
 												&& levelDiff_ns < 13))
 										{
 											redraw = true;
