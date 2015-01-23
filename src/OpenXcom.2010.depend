@@ -4392,7 +4392,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1421468992 f:\git\openxcom\src\resource\resourcepack.h
+1422042036 f:\git\openxcom\src\resource\resourcepack.h
 
 1420130461 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -6057,7 +6057,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1421990403 source:f:\git\openxcom\src\battlescape\map.cpp
+1422041467 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

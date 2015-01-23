@@ -55,6 +55,11 @@ private:
 	Music* _muteMusic;
 	Sound* _muteSound;
 
+	/// Gets a random music. This is private to prevent access, use playMusic() instead.
+	Music* getRandomMusic( // sza_MusicRules
+			const std::string& name,
+			const std::string& terrain) const;
+
 
 	protected:
 		std::map<std::string, Font*> _fonts;
@@ -134,10 +139,6 @@ private:
 			void fadeMusic(
 					Game* const game,
 					const int fadeDur);
-			/// Gets a random music.
-			Music* getRandomMusic( // sza_MusicRules
-					const std::string& name,
-					const std::string& terrain) const;
 			/// Clear a music assignment
 			void ClearMusicAssignment( // sza_MusicRules
 					const std::string& name,
