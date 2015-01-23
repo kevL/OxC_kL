@@ -1540,11 +1540,11 @@ void Map::drawTerrain(Surface* surface)
 																				&walkOffset);
 
 															srfSprite->blitNShade(
-																				surface,
-																				screenPosition.x - 16 + walkOffset.x,
-																				screenPosition.y - 8 + walkOffset.y,
-																				shade,
-																				half); // only render halfRight so it won't overlap other areas that are already drawn
+																	surface,
+																	screenPosition.x - 16 + walkOffset.x,
+																	screenPosition.y - 8 + walkOffset.y,
+																	shade,
+																	half); // only render halfRight so it won't overlap other areas that are already drawn
 
 															if (unitWest->getFire() != 0)
 															{
@@ -1552,10 +1552,10 @@ void Map::drawTerrain(Surface* surface)
 																srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 																if (srfSprite)
 																	srfSprite->blitNShade(
-																						surface,
-																						screenPosition.x - 16 + walkOffset.x,
-																						screenPosition.y - 8 + walkOffset.y,
-																						0);
+																			surface,
+																			screenPosition.x - 16 + walkOffset.x,
+																			screenPosition.y - 8 + walkOffset.y,
+																			0);
 															}
 														}
 
@@ -1635,7 +1635,7 @@ void Map::drawTerrain(Surface* surface)
 										if (tile->getMapData(MapData::O_NORTHWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 											|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 												&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& levelDiff > 12))
+												&& levelDiff > 12)) // beware: The top of the Lightning ramp is likely going to bork about here.
 										{
 											halfLeft = true;
 										}

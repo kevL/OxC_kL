@@ -295,9 +295,7 @@ private:
 
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()
-		{
-			return _playerPanicHandled;
-		}
+		{ return _playerPanicHandled; }
 
 		/// Tries to find an item and pick it up if possible.
 		void findItem(BattleAction* action);

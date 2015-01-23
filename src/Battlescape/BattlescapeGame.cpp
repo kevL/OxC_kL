@@ -1231,9 +1231,11 @@ void BattlescapeGame::handleNonTargetAction()
 {
 	if (_currentAction.targeting == false)
 	{
-		_currentAction.cameraPosition = Position(0, 0,-1);
+		_currentAction.cameraPosition = Position(0,0,-1);
 
-		if (_currentAction.type == BA_PRIME
+		// NOTE: These actions are done partly in ActionMenuState::btnActionMenuClick() and
+		// this subsequently handles a greater or lesser proportion of the resultant niceties.
+ 		if (_currentAction.type == BA_PRIME
 			|| _currentAction.type == BA_DEFUSE)
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
@@ -1282,6 +1284,26 @@ void BattlescapeGame::handleNonTargetAction()
 				}
 				else
 					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+			}
+		}
+		else if (_currentAction.type == BA_DROP)
+		{
+			if (_currentAction.result.empty() == false)
+			{
+				_parentState->warning(_currentAction.result); // "STR_NOT_ENOUGH_TIME_UNITS"
+				_currentAction.result.clear();
+			}
+			else
+			{
+				if (_currentAction.actor->getPosition().z > 0)
+					_save->getTileEngine()->applyGravity(_currentAction.actor->getTile());
+
+				getResourcePack()->getSoundByDepth(
+												getDepth(),
+												ResourcePack::ITEM_DROP)
+											->play(
+												-1,
+												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 			}
 		}
 
