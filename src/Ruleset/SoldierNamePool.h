@@ -59,10 +59,10 @@ private:
 		void load(const std::string& filename);
 
 		/// Generates a new name from the pool.
-		std::wstring genName(SoldierGender* gender) const;
+		std::wstring genName(SoldierGender* const gender) const;
 //				int femaleFrequency) const;
 		/// Generates an integer representing the index of the soldier's look when passed the maximum index value.
-		size_t genLook(size_t numLooks);
+		size_t genLook(const size_t qtyLooks);
 };
 
 }

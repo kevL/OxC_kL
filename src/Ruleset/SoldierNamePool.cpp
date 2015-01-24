@@ -100,7 +100,7 @@ void SoldierNamePool::load(const std::string& filename)
 	_lookWeights = doc["lookWeights"].as<std::vector<int> >(_lookWeights);
 	_totalWeight = 0;
 
-	for (std::vector<int>::iterator
+	for (std::vector<int>::const_iterator
 			i = _lookWeights.begin();
 			i != _lookWeights.end();
 			++i)
@@ -117,7 +117,7 @@ void SoldierNamePool::load(const std::string& filename)
  * @param femaleFrequency	- percent chance the soldier will be female
  * @return, the soldier's name
  */
-std::wstring SoldierNamePool::genName(SoldierGender* gender) const
+std::wstring SoldierNamePool::genName(SoldierGender* const gender) const
 //		int femaleFrequency) const
 {
 	std::wostringstream name;
@@ -164,23 +164,23 @@ std::wstring SoldierNamePool::genName(SoldierGender* gender) const
 
 /**
  * Generates an int representing the index of the soldier's look, when passed the maximum index value.
- * @param numLooks, The maximum index.
- * @return, The index of the soldier's look.
+ * @param qtyLooks - the maximum index
+ * @return, the index of the soldier's look
  */
-size_t SoldierNamePool::genLook(size_t numLooks)
+size_t SoldierNamePool::genLook(const size_t qtyLooks)
 {
 	int look = 0;
 	// minimum chance of a look being selected if it isn't enumerated.
 	// This ensures that looks MUST be zeroed to not appear.
-	const int minimumChance = 2;
+	const int minChance = 2;
 
-	while (_lookWeights.size() < numLooks)
+	while (_lookWeights.size() < qtyLooks)
 	{
-		_lookWeights.push_back(minimumChance);
-		_totalWeight += minimumChance;
+		_lookWeights.push_back(minChance);
+		_totalWeight += minChance;
 	}
 
-	while (_lookWeights.size() > numLooks)
+	while (_lookWeights.size() > qtyLooks)
 	{
 		_totalWeight -= _lookWeights.back();
 		_lookWeights.pop_back();
@@ -189,7 +189,7 @@ size_t SoldierNamePool::genLook(size_t numLooks)
 	int random = RNG::generate(
 							0,
 							_totalWeight);
-	for (std::vector<int>::iterator
+	for (std::vector<int>::const_iterator
 			i = _lookWeights.begin();
 			i != _lookWeights.end();
 			++i)
@@ -198,12 +198,12 @@ size_t SoldierNamePool::genLook(size_t numLooks)
 			return look;
 
 		random -= *i;
-		look++;
+		++look;
 	}
 
 	return RNG::generate(
 					0,
-					static_cast<int>(numLooks) - 1);
+					static_cast<int>(qtyLooks) - 1);
 }
 
 }

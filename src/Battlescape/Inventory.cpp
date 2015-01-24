@@ -87,17 +87,15 @@ Inventory::Inventory(
 		_fuseFrame(0),
 		_prime(-1),
 		_tuCost(-1)
-//		_grenadeFuses()
 {
 	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 
-	_grid			= new Surface(width, height, x, y);
-	_items			= new Surface(width, height, x, y);
+	_grid			= new Surface(width, height, x,y);
+	_items			= new Surface(width, height, x,y);
 	_selection		= new Surface(
 								RuleInventory::HAND_W * RuleInventory::SLOT_W,
 								RuleInventory::HAND_H * RuleInventory::SLOT_H,
-								x,
-								y);
+								x,y);
 	_warning		= new WarningMessage(224, 24, 48, 176);
 
 	_stackNumber	= new NumberText(15, 15, 0, 0);
@@ -347,8 +345,7 @@ void Inventory::drawItems()
 		Surface* const stackLayer = new Surface(
 											getWidth(),
 											getHeight(),
-											0,
-											0);
+											0,0);
 		stackLayer->setPalette(getPalette());
 
 		for (std::vector<BattleItem*>::const_iterator // Ground items
@@ -421,8 +418,7 @@ void Inventory::drawItems()
  * @param x		- X position in slot (default 0)
  * @param y		- Y position in slot (default 0)
  */
-// private:
-void Inventory::moveItem(
+void Inventory::moveItem( // private!
 		BattleItem* const item,
 		RuleInventory* const slot,
 		int x,
@@ -434,6 +430,8 @@ void Inventory::moveItem(
 			_selUnit->getTile()->removeItem(item);
 		else
 			item->moveToOwner(NULL);
+
+		item->setSlot(NULL); // kL, bugfix <-
 	}
 	else
 	{
@@ -442,7 +440,9 @@ void Inventory::moveItem(
 			if (slot->getType() == INV_GROUND)
 			{
 				item->moveToOwner(NULL);
-				_selUnit->getTile()->addItem(item, item->getSlot());
+				_selUnit->getTile()->addItem(
+											item,
+											item->getSlot());
 
 				if (item->getUnit() != NULL
 					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -450,8 +450,8 @@ void Inventory::moveItem(
 					item->getUnit()->setPosition(_selUnit->getPosition());
 				}
 			}
-			else if (item->getSlot() == NULL
-				|| item->getSlot()->getType() == INV_GROUND)
+			else if (item->getSlot() == NULL					// unload a weapon clip to left hand
+				|| item->getSlot()->getType() == INV_GROUND)	// or set to Ground
 			{
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);
@@ -594,7 +594,7 @@ void Inventory::setMouseOverItem(BattleItem* item)
  */
 void Inventory::think()
 {
-	if (_prime > -1) // kL_begin ->
+	if (_prime > -1)
 	{
 		std::wstring activated;
 
@@ -609,7 +609,7 @@ void Inventory::think()
 		_warning->showMessage(activated);
 
 		_prime = -1;
-	} // kL_end.
+	}
 
 /*	int
 		x,
@@ -714,8 +714,8 @@ void Inventory::mouseClick(Action* action, State* state)
 			int
 				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
 				y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
-			RuleInventory* const slot = getSlotInPosition(&x, &y);
 
+			RuleInventory* const slot = getSlotInPosition(&x,&y);
 			if (slot != NULL)
 			{
 				if (slot->getType() == INV_GROUND)
@@ -723,8 +723,7 @@ void Inventory::mouseClick(Action* action, State* state)
 
 				BattleItem* const item = _selUnit->getItem(
 														slot,
-														x,
-														y);
+														x,y);
 				if (item != NULL)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
@@ -734,43 +733,43 @@ void Inventory::mouseClick(Action* action, State* state)
 							toGround = true;
 						std::string warning;
 
-						RuleInventory* newSlot = NULL;
+						RuleInventory* slotRule = NULL;
 
 						if (slot->getType() == INV_HAND
 							|| (slot->getType() != INV_GROUND
 								&& (_tuMode == false
 									|| _selUnit->getOriginalFaction() != FACTION_PLAYER)))
 						{
-							newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+							slotRule = _game->getRuleset()->getInventory("STR_GROUND");
 						}
 						else
 						{
 							if (_selUnit->getItem("STR_RIGHT_HAND") == NULL)
 							{
 								toGround = false;
-								newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+								slotRule = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 							}
 							else if (_selUnit->getItem("STR_LEFT_HAND") == NULL)
 							{
 								toGround = false;
-								newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+								slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 							}
 							else if (slot->getType() != INV_GROUND)
-								newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+								slotRule = _game->getRuleset()->getInventory("STR_GROUND");
 						}
 
-						if (newSlot == NULL)
+						if (slotRule == NULL)
 							return;
 
 						if (toGround == true)
 						{
 							if (_tuMode == false
-								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)) == true)
+								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(slotRule)) == true)
 							{
 								placed = true;
 								moveItem(
 										item,
-										newSlot);
+										slotRule);
 
 								arrangeGround(false);
 
@@ -787,7 +786,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
 
 							if (fitItem(
-										newSlot,
+										slotRule,
 										item,
 										warning) == true)
 							{
@@ -826,9 +825,10 @@ void Inventory::mouseClick(Action* action, State* state)
 				}
 			}
 		}
-		else // Drop item
+		else // Drop item or Load weapon
 		{
-			int x = _selection->getX()
+			int
+				x = _selection->getX()
 						+ (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth())
 							* RuleInventory::SLOT_W / 2
 						+ RuleInventory::SLOT_W / 2,
@@ -837,7 +837,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							* RuleInventory::SLOT_H / 2
 						+ RuleInventory::SLOT_H / 2;
 
-			RuleInventory* slot = getSlotInPosition(&x, &y);
+			RuleInventory* slot = getSlotInPosition(&x,&y);
 			if (slot != NULL)
 			{
 				if (slot->getType() == INV_GROUND)
@@ -845,23 +845,25 @@ void Inventory::mouseClick(Action* action, State* state)
 
 				BattleItem* const item = _selUnit->getItem(
 														slot,
-														x,
-														y);
+														x,y);
 
-				const bool canStack = (slot->getType() == INV_GROUND
-									&& canBeStacked(
+				const bool canStack = slot->getType() == INV_GROUND
+								   && canBeStacked(
 												item,
-												_selItem) == true);
+												_selItem) == true;
 
 				if (item == NULL // Put item in empty slot, or stack it, if possible.
 					|| item == _selItem
 					|| canStack == true)
 				{
-					if (overlapItems(_selUnit, _selItem, slot, x, y) == false
+					if (overlapItems(
+								_selUnit,
+								_selItem,
+								slot,
+								x,y) == false
 						&& slot->fitItemInSlot(
 											_selItem->getRules(),
-											x,
-											y) == true)
+											x,y) == true)
 					{
 						if (_tuMode == false
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)) == true)
@@ -871,8 +873,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							moveItem(
 									_selItem,
 									slot,
-									x,
-									y);
+									x,y);
 
 							if (slot->getType() == INV_GROUND)
 								_stackLevel[x][y] += 1;
@@ -952,10 +953,8 @@ void Inventory::mouseClick(Action* action, State* state)
 							_tuCost = -1;
 
 							moveItem(
-									_selItem,
-									NULL,
-									0,
-									0);
+								_selItem,
+								NULL);
 
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(NULL);
@@ -985,13 +984,13 @@ void Inventory::mouseClick(Action* action, State* state)
 				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX();
 				y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
-				slot = getSlotInPosition(&x, &y);
+				slot = getSlotInPosition(&x,&y);
 				if (slot != NULL
 					&& slot->getType() == INV_GROUND)
 				{
 					x += _groundOffset;
 
-					BattleItem* const item = _selUnit->getItem(slot, x, y);
+					BattleItem* const item = _selUnit->getItem(slot, x,y);
 					if (canBeStacked(
 									item,
 									_selItem) == true)
@@ -1138,20 +1137,20 @@ bool Inventory::unload()
 	if (_selItem == NULL)
 		return false;
 
-
-	if (_selItem->getAmmoItem() == NULL
+	BattleItem* const ammo = _selItem->getAmmoItem();
+	if (ammo == NULL
 		&& _selItem->getRules()->getCompatibleAmmo()->empty() == false)
 	{
 		_warning->showMessage(_game->getLanguage()->getString("STR_NO_AMMUNITION_LOADED"));
 	}
 
-	if (_selItem->getAmmoItem() == NULL
+	if (ammo == NULL
 		|| _selItem->needsAmmo() == false)
 	{
 		return false;
 	}
 
-	for (std::vector<BattleItem*>::const_iterator
+/*	for (std::vector<BattleItem*>::const_iterator
 			i = _selUnit->getInventory()->begin();
 			i != _selUnit->getInventory()->end();
 			++i)
@@ -1162,25 +1161,52 @@ bool Inventory::unload()
 			_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
 			return false;
 		}
-	}
+	} */
 
 	if (_tuMode == false
 		|| _selUnit->spendTimeUnits(10) == true) // should break out to Ruleset value. Also, reload TU ....
 	{
-		moveItem(
-				_selItem->getAmmoItem(),
+		RuleInventory* slotRule = NULL;
+		BattleUnit* toOwner = NULL;
+
+		std::string warning;
+		if (fitItem(
 				_game->getRuleset()->getInventory("STR_LEFT_HAND"),
-				0,
-				0);
-		_selItem->getAmmoItem()->moveToOwner(_selUnit);
-		moveItem(
-				_selItem,
-				_game->getRuleset()->getInventory("STR_RIGHT_HAND"),
-				0,
-				0);
-		_selItem->moveToOwner(_selUnit);
-		_selItem->setAmmoItem(NULL);
-		setSelectedItem(NULL);
+				ammo,
+				warning,
+				true) == true)
+		{
+			slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+			toOwner = _selUnit;
+		}
+		else if (_tuMode == false)
+			slotRule = _game->getRuleset()->getInventory("STR_GROUND");
+
+
+		if (_tuMode == true
+			&& slotRule == NULL)
+		{
+			_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
+			return false;
+		}
+		else if (slotRule != NULL)
+		{
+			moveItem(
+					ammo,
+					slotRule);
+			ammo->moveToOwner(toOwner);
+
+			moveItem(
+					_selItem,
+					_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+			_selItem->moveToOwner(_selUnit);
+
+			_selItem->setAmmoItem(NULL);
+			setSelectedItem(NULL);
+
+			if (ammo->getSlot()->getType() == INV_GROUND)
+				arrangeGround(false);
+		}
 	}
 	else
 	{
@@ -1231,8 +1257,7 @@ void Inventory::arrangeGround(bool alterOffset)
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
 		{
-			x = 0;
-			y = 0;
+			x = y = 0;
 
 			fit = false;
 			while (fit == false)
@@ -1254,10 +1279,10 @@ void Inventory::arrangeGround(bool alterOffset)
 									&& fit;
 								++yd)
 						{
-							BattleItem* item = _selUnit->getItem(
-																ground,
-																x + xd,
-																y + yd);
+							BattleItem* const item = _selUnit->getItem(
+																	ground,
+																	x + xd,
+																	y + yd);
 							fit = (item == NULL);
 
 							if (canBeStacked(item, *i) == true)
@@ -1293,9 +1318,11 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	if (alterOffset == true)
 	{
-		int itemWidth = 0;
+		int itemWidth;
 		if (_selItem != NULL)
 			itemWidth = _selItem->getRules()->getInventoryWidth();
+		else
+			itemWidth = 0;
 
 		if (xMax > _groundOffset + slotsX - itemWidth)
 			_groundOffset += slotsX;
@@ -1309,8 +1336,8 @@ void Inventory::arrangeGround(bool alterOffset)
 /**
  * Attempts to place the item in the inventory slot.
  * @param newSlot	- pointer to where to place the item
- * @param item		- item to be placed
- * @param warning	- warning message if item could not be placed
+ * @param item		- pointer to item to be placed
+ * @param warning	- reference warning message if item could not be placed
  * @param test		- true if only doing a test (no move happens)
  * @return, true if the item was successfully placed in the inventory
  */
@@ -1325,13 +1352,13 @@ bool Inventory::fitItem(
 	for (int
 			y2 = 0;
 			y2 <= newSlot->getY() / RuleInventory::SLOT_H
-				&& !placed;
+				&& placed == false;
 			++y2)
 	{
 		for (int
 				x2 = 0;
 				x2 <= newSlot->getX() / RuleInventory::SLOT_W
-					&& !placed;
+					&& placed == false;
 				++x2)
 		{
 			if (newSlot->fitItemInSlot(
@@ -1359,8 +1386,7 @@ bool Inventory::fitItem(
 						moveItem(
 								item,
 								newSlot,
-								x2,
-								y2);
+								x2,y2);
 
 						_game->getResourcePack()->getSoundByDepth(
 																_depth,
@@ -1390,7 +1416,7 @@ bool Inventory::canBeStacked(
 {
 	return (itemA != NULL && itemB != NULL																// both items actually exist
 		&& itemA->getRules() == itemB->getRules()														// both items have the same ruleset
-		&& ((!itemA->getAmmoItem() && !itemB->getAmmoItem())											// either they both have no ammo
+		&& ((itemA->getAmmoItem() == NULL && itemB->getAmmoItem() == NULL)								// either they both have no ammo
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
@@ -1415,7 +1441,8 @@ void Inventory::showWarning(const std::wstring& msg)
  */
 void Inventory::drawPrimers()
 {
-	const int pulse[22] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3};
+	const int pulse[22] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
+						   13,12,11,10, 9, 8, 7, 6, 5, 4, 3 };
 
 	if (_fuseFrame == 22)
 		_fuseFrame = 0;

@@ -5047,7 +5047,7 @@
 1420130459 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1420625771 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1422046802 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5336,7 +5336,7 @@
 1420130459 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1422044835 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1422046144 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -8460,7 +8460,7 @@
 1421467662 f:\git\openxcom\src\ufopaedia\ufopaediastartstate.h
 	"../Engine/State.h"
 
-1422042928 f:\git\openxcom\src\ruleset\soldiernamepool.h
+1422047598 f:\git\openxcom\src\ruleset\soldiernamepool.h
 	"../Savegame/Soldier.h"
 
 1420130443 f:\git\openxcom\src\savegame\serializationhelper.h
@@ -8649,7 +8649,7 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
-1422043248 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1422047629 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Exception.h"

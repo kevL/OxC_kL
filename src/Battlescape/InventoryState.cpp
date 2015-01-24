@@ -777,8 +777,7 @@ void InventoryState::btnUnloadClick(Action*)
 		updateStats();
 		_game->getResourcePack()->getSoundByDepth(
 											0,
-											ResourcePack::ITEM_UNLOAD_HQ)
-										->play();
+											ResourcePack::ITEM_UNLOAD_HQ)->play();
 	}
 }
 
@@ -1257,8 +1256,7 @@ void InventoryState::txtTooltipOut(Action* action)
 
 	_game->getResourcePack()->getSoundByDepth(
 											_battleGame->getDepth(),
-											ResourcePack::ITEM_DROP)
-										->play();
+											ResourcePack::ITEM_DROP)->play();
 	_refreshMouse();
 } */
 
@@ -1404,6 +1402,5 @@ void InventoryState::txtTooltipOut(Action* action)
 
 	_game->getResourcePack()->getSoundByDepth(
 											_battleGame->getDepth(),
-											ResourcePack::ITEM_DROP)
-										->play();
+											ResourcePack::ITEM_DROP)->play();
 } */
