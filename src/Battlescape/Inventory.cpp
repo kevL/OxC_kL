@@ -437,7 +437,7 @@ void Inventory::moveItem( // private!
 	{
 		if (slot != item->getSlot()) // Handle dropping from/to ground.
 		{
-			if (slot->getType() == INV_GROUND)
+			if (slot->getType() == INV_GROUND) // set to Ground
 			{
 				item->moveToOwner(NULL);
 				_selUnit->getTile()->addItem(
@@ -451,7 +451,7 @@ void Inventory::moveItem( // private!
 				}
 			}
 			else if (item->getSlot() == NULL					// unload a weapon clip to left hand
-				|| item->getSlot()->getType() == INV_GROUND)	// or set to Ground
+				|| item->getSlot()->getType() == INV_GROUND)	// or pick up item.
 			{
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);

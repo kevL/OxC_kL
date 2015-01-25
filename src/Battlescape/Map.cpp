@@ -914,21 +914,30 @@ void Map::drawTerrain(Surface* surface)
 										0);
 						}
 					}
+					// end cursor bg
 
-//* _START_ADVANCED_DRAWING_CYCLE_ *//
-					if (itY > 0) // special handling for a unit moving along the north or west side of a content-object.
+
+					// Redraws when Unit moves along the NORTH, WEST, or NORTH-WEST side of a content-object.
+					if (itY > 0)
 					{
 						const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
 						BattleUnit* const unitNorth = tileNorth->getUnit();
 
+							int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel(); // positive -> Tile is higher
+
 						if (unitNorth != NULL
-							&& unitNorth->getUnitVisible() == true
-							&& unitNorth->getStatus() == STATUS_WALKING
-							&& tileNorth->getTerrainLevel() <= tile->getTerrainLevel())
+							&& (unitNorth->getUnitVisible() == true
+								|| _save->getDebugMode() == true)
+							&& (unitNorth->getStatus() == STATUS_WALKING
+								&& unitNorth->getDirection() != 3
+								&& unitNorth->getDirection() != 7
+								&& levelDiff_ns < 1))
 						{
-							// Phase I: re-render the unit to NORTH to make sure it
-							// don't get drawn over any walls or under any tiles.
+							//Log(LOG_INFO) << "ID " << unitNorth->getId();
+							//Log(LOG_INFO) << "kittyCat = " << (int)kittyCat;
+
+							// Phase I: redraw unit NORTH to make sure it doesn't get drawn over any walls or under any tiles.
 							unitNorthValid = true;
 
 							if (tileNorth->isDiscovered(2) == true)
@@ -936,8 +945,8 @@ void Map::drawTerrain(Surface* surface)
 							else
 								shade = 16;
 
-							// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-							// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
+							// The quadrant is 0 for small units; large units also have quadrants 1,2 & 3; the
+							// relative x/y Position of the unit's primary quadrant vs the current tile's Position.
 							quad = tileNorth->getPosition().x - unitNorth->getPosition().x
 								+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
 
@@ -967,7 +976,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase II: re-render any east wall type objects in the tile to the NORTH of the moving unit;
+							// Phase II: redraw any east wall object in the tile NORTH of the moving unit;
 							// only applies to movement in the north/south direction.
 							if (itY > 1
 								&& (unitNorth->getDirection() == 0
@@ -992,7 +1001,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase III: re-render any south bigWall objects in the tile to the NORTH-WEST.
+							// Phase III: redraw any south wall object in the tile NORTH-WEST.
 							if (itX > 0)
 							{
 								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
@@ -1014,7 +1023,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							// Phase IV: render any south or east bigWall objects in the tile to the NORTH.
+							// Phase IV: redraw any south or east wall object in the tile NORTH.
 							srfSprite = tileNorth->getSprite(MapData::O_OBJECT);
 							if (srfSprite
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NORTH // do East,South,East_South
@@ -1029,9 +1038,9 @@ void Map::drawTerrain(Surface* surface)
 
 							if (itX > 0)
 							{
-								// Phase V: re-render objects in the tile to the SOUTH-WEST (half-tile).
+								// Phase V: redraw object in the tile SOUTH-WEST (half-tile).
 								if (itY < endY
-									&& (unitNorth->getDirection() == 1 // only apply this to movement in a north-easterly or south-westerly direction.
+									&& (unitNorth->getDirection() == 1
 										|| unitNorth->getDirection() == 5))
 								{
 									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
@@ -1051,12 +1060,12 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.x - 32,
 													screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 													shade,
-													true); // only render halfRight so it won't overlap other areas that are already drawn
+													true); // halfRight
 										}
 									}
 								}
 
-								// Phase VI: re-render everything in the tile to the WEST (half-tile).
+								// Phase VI: redraw everything in the tile WEST (half-tile).
 								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
 
 								BattleUnit* unitWest;
@@ -1091,7 +1100,7 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x - 16,
 												screenPosition.y - 8 - tileWest->getMapData(MapData::O_WESTWALL)->getYOffset(),
 												wallShade,
-												true); // only render halfRight so it won't overlap other areas that are already drawn
+												true); // halfRight
 									}
 								}
 
@@ -1112,7 +1121,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 - tileWest->getMapData(MapData::O_NORTHWALL)->getYOffset(),
 											wallShade,
-											true); // only render halfRight so it won't overlap other areas that are already drawn
+											true); // halfRight
 								}
 
 								srfSprite = tileWest->getSprite(MapData::O_OBJECT);
@@ -1126,7 +1135,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 											shade,
-											true); // only render halfRight so it won't overlap other areas that are already drawn
+											true); // halfRight
 
 									// if the object in the tile to the west is a diagonal NESW bigWall
 									// it needs to have the black triangle at the bottom covered up
@@ -1152,7 +1161,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 + tileWest->getTerrainLevel(),
 											shade,
-											true); // only render halfRight so it won't overlap other areas that are already drawn
+											true); // halfRight
 								}
 
 								if (unitWest != NULL
@@ -1208,7 +1217,7 @@ void Map::drawTerrain(Surface* surface)
 										}
 									}
 								}
-								// end unitWest TRUE w/ unitNorth valid
+								// end Redraw unitWest w/ unitNorth valid
 
 								// Draw SMOKE & FIRE
 								if (tileWest->getSmoke() != 0
@@ -1240,7 +1249,7 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x - 16,
 												screenPosition.y - 8 + tileWest->getTerrainLevel(),
 												shade,
-												true); // only render halfRight so it won't overlap other areas that are already drawn
+												true); // halfRight
 								}
 
 								// Draw front bigWall object
@@ -1254,7 +1263,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x - 16,
 											screenPosition.y - 8 - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 											shade,
-											true); // only render halfRight so it won't overlap other areas that are already drawn
+											true); // halfRight
 								}
 							}
 							// end (itX > 0)
@@ -1306,7 +1315,7 @@ void Map::drawTerrain(Surface* surface)
 								wallShade = tileShade;
 
 							if (tile->getMapData(MapData::O_WESTWALL) != NULL)
-								half = true; // only render halfRight so it won't overlap other areas that are already drawn
+								half = true; // halfRight
 							else
 								half = false;
 
@@ -1347,7 +1356,68 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 
+						// Redraw unitNorth when it's on a reverse slope. Or level slope
+						if (itY > 0)
+						{
+							const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
+							BattleUnit* const unitNorth = tileNorth->getUnit();
+
+							if (unitNorth != NULL
+								&& (unitNorth->getUnitVisible() == true
+									|| _save->getDebugMode() == true))
+							{
+								int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel(); // positive -> Tile is higher
+
+								if (levelDiff_ns > -1
+									&& tile->getMapData(MapData::O_OBJECT) != NULL
+									&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+									&& (tileNorth->getMapData(MapData::O_OBJECT) == NULL
+										|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+										|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
+										|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
+										|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
+								{
+									quad = tileNorth->getPosition().x - unitNorth->getPosition().x
+										+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
+
+									srfSprite = unitNorth->getCache(&invalid, quad);
+									if (srfSprite)
+									{
+										if (tileNorth->isDiscovered(2) == true)
+											shade = tileNorth->getShade();
+										else
+											shade = 16;
+
+										calculateWalkingOffset(
+															unitNorth,
+															&walkOffset);
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x + 16,
+												screenPosition.y + walkOffset.y - 8,
+												shade);
+
+										if (unitNorth->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											if (srfSprite)
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x + 16,
+														screenPosition.y + walkOffset.y - 8,
+														0);
+										}
+									}
+								}
+							}
+						}
+						// end Redraw unitNorth on reverse slope.
+
+
+						// Redraw westerly units that are moving easterly-westerly.
 						if (itX > 0
 							&& (hasFloor == true									// special handling for moving units concealed by current floorTile.
 								|| tile->getMapData(MapData::O_OBJECT) != NULL))	// non-bigWall content-object might act as flooring
@@ -1375,7 +1445,7 @@ void Map::drawTerrain(Surface* surface)
 							{
 								bool redraw = false;
 
-								if (unitWest->getDirection() == 2		// EW
+								if (unitWest->getDirection() == 2
 									|| unitWest->getDirection() == 6)
 								{
 									int levelDiff_ew = std::abs(tileWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
@@ -1404,7 +1474,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 								else if (itY > 0
 									&& unit == NULL // unless unit is short and lets sight pass overtop.
-									&& (unitWest->getDirection() == 1		// NESW
+									&& (unitWest->getDirection() == 1
 										|| unitWest->getDirection() == 5))
 								{
 									int levelDiff_ew = tileWest->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
@@ -1455,7 +1525,7 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x - 16 + walkOffset.x,
 												screenPosition.y - 8 + walkOffset.y,
 												shade,
-												half); // only render halfRight so it won't overlap other areas that are already drawn
+												half); // halfRight
 
 										if (unitWest->getFire() != 0)
 										{
@@ -1516,7 +1586,7 @@ void Map::drawTerrain(Surface* surface)
 															&& (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
 														{
-															half = true; // only render halfRight so it won't overlap other areas that are already drawn
+															half = true; // halfRight
 														}
 														else
 															half = false;
@@ -1544,7 +1614,7 @@ void Map::drawTerrain(Surface* surface)
 																	screenPosition.x - 16 + walkOffset.x,
 																	screenPosition.y - 8 + walkOffset.y,
 																	shade,
-																	half); // only render halfRight so it won't overlap other areas that are already drawn
+																	half); // halfRight
 
 															if (unitWest->getFire() != 0)
 															{
@@ -1575,7 +1645,7 @@ void Map::drawTerrain(Surface* surface)
 																		screenPosition.x - 32,
 																		screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
 																		shade,
-																		true); // only render halfRight so it won't overlap other areas that are already drawn
+																		true); // halfRight
 															}
 														}
 													}
@@ -1602,11 +1672,13 @@ void Map::drawTerrain(Surface* surface)
 									&& unitNorthWest != unit // large units don't need to redraw their western parts
 									&& unitNorthWest->getStatus() == STATUS_WALKING
 									&& (unitNorthWest->getDirection() == 3
-										|| unitNorthWest->getDirection() == 7))
+										|| unitNorthWest->getDirection() == 7
+										|| unitNorthWest->getDirection() == 2 // EW only applicable if foreground curTile has bigWall_NONE and is higher
+										|| unitNorthWest->getDirection() == 6))
 								{
 									int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
 
-									if (tile->getMapData(MapData::O_OBJECT) == NULL		// exposed floor, basically.
+									if (tile->getMapData(MapData::O_OBJECT) == NULL // exposed floor, basically.
 										|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 											&& levelDiff_nwse < 13)
 										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
@@ -2222,29 +2294,32 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// if there is no floor, draw the unit below that if it is on raised ground
-					const Tile* tileNorth;
-					if (itY > 0)
-						tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
-					else
-						tileNorth = NULL;
-
-					const Tile* tileNorthWest;
-					if (itX > 0 && itY > 0)
-						tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
-					else
-						tileNorthWest = NULL;
-
-					const Tile* tileWest;
-					if (itX > 0)
-						tileWest = _save->getTile(mapPosition + Position(-1,0,0));
-					else
-						tileWest = NULL;
-
 					const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
 
 					if (itZ > 0
-						&& tile->hasNoFloor(tileBelow) == true
-						&& (tile->getMapData(MapData::O_WESTWALL) != NULL
+						&& tile->hasNoFloor(tileBelow) == true)
+					{
+						const Tile
+							* tileNorth,
+							* tileNorthWest,
+							* tileWest;
+
+						if (itY > 0)
+							tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+						else
+							tileNorth = NULL;
+
+						if (itX > 0 && itY > 0)
+							tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+						else
+							tileNorthWest = NULL;
+
+						if (itX > 0)
+							tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+						else
+							tileWest = NULL;
+
+						if (tile->getMapData(MapData::O_WESTWALL) != NULL
 							|| tile->getMapData(MapData::O_NORTHWALL) != NULL
 							|| (tileNorth != NULL
 								&& (tileNorth->getMapData(MapData::O_FLOOR) != NULL
@@ -2253,116 +2328,117 @@ void Map::drawTerrain(Surface* surface)
 							|| (tileNorthWest != NULL
 								&& tileNorthWest->isVoid() == false) // flooring mainly, but prob. also south & east walls
 							|| (tileWest != NULL
-								&& tileWest->isVoid() == false))) // flooring mainly, but prob. also north & east walls
-					// that also needs tileWest's northWall & bigWall east
-					// and tileNorth's westWall & bigWall south
-					// and tileBelow's east and south walls
-					// and tileBelowEast's west & south walls ..... fuck 3d isometric.
-					// Screw it; i'm changing the map resource!!! ( DESERTMOUNT08, eg. )
-					// ... damn, now i'm actually implementing it anyway .....
-					{
-//						const Position posBelow = Position(itX, itY, itZ - 1);
-//						const Tile* const tileBelow1 = _save->getTile(posBelow);
-//						BattleUnit* const unitBelow1 = _save->selectUnit(posBelow);
-						BattleUnit* const unitBelow = tileBelow->getUnit();
-
-						if (unitBelow != NULL
-							&& unitBelow->getUnitVisible() == true
-							&& tileBelow->getTerrainLevel() < 0
-							&& tileBelow->isDiscovered(2) == true)
+								&& tileWest->isVoid() == false)) // flooring mainly, but prob. also north & east walls
+						// that also needs tileWest's northWall & bigWall east
+						// and tileNorth's westWall & bigWall south
+						// and tileBelow's east and south walls
+						// and tileBelowEast's west & south walls ..... fuck 3d isometric.
+						// Screw it; i'm changing the map resource!!! ( DESERTMOUNT08, eg. )
+						// ... damn, now i'm actually implementing it anyway .....
 						{
-							// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-							// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-							quad = tileBelow->getPosition().x - unitBelow->getPosition().x
-								+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
+	//						const Position posBelow = Position(itX, itY, itZ - 1);
+	//						const Tile* const tileBelow1 = _save->getTile(posBelow);
+	//						BattleUnit* const unitBelow1 = _save->selectUnit(posBelow);
+							BattleUnit* const unitBelow = tileBelow->getUnit();
 
-							srfSprite = unitBelow->getCache(&invalid, quad);
-//							srfSprite = NULL;
-							if (srfSprite)
+							if (unitBelow != NULL
+								&& unitBelow->getUnitVisible() == true
+								&& tileBelow->getTerrainLevel() < 0
+								&& tileBelow->isDiscovered(2) == true)
 							{
-								calculateWalkingOffset(
-													unitBelow,
-													&walkOffset);
-								walkOffset.y += 24;
+								// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
+								// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
+								quad = tileBelow->getPosition().x - unitBelow->getPosition().x
+									+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
 
-								srfSprite->blitNShade(
-										surface,
-										screenPosition.x + walkOffset.x,
-										screenPosition.y + walkOffset.y,
-										tileBelow->getShade()); // <- might want to do the undiscovered thing for shade here
-
-								if (unitBelow->getArmor()->getSize() > 1)
-									walkOffset.y += 4;
-
-								if (unitBelow->getFire() != 0)
+								srfSprite = unitBelow->getCache(&invalid, quad);
+	//							srfSprite = NULL;
+								if (srfSprite)
 								{
-									frame = 4 + (_animFrame / 2);
-									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-									if (srfSprite)
-										srfSprite->blitNShade(
-												surface,
-												screenPosition.x + walkOffset.x,
-												screenPosition.y + walkOffset.y,
-												0);
-								}
+									calculateWalkingOffset(
+														unitBelow,
+														&walkOffset);
+									walkOffset.y += 24;
 
-								// special case if tileSouthEast don't have a floor
-								// and tileBelowSouthEast does have a sprite that should conceal the redrawn unit's right leg.
-								if (itX < endX
-									&& itY < endY)
-								{
-									const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
+									srfSprite->blitNShade(
+											surface,
+											screenPosition.x + walkOffset.x,
+											screenPosition.y + walkOffset.y,
+											tileBelow->getShade()); // <- might want to do the undiscovered thing for shade here
 
-									if (tileSouthEast->getMapData(MapData::O_FLOOR) == NULL)
+									if (unitBelow->getArmor()->getSize() > 1)
+										walkOffset.y += 4;
+
+									if (unitBelow->getFire() != 0)
 									{
-										const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+										frame = 4 + (_animFrame / 2);
+										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+										if (srfSprite)
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x + walkOffset.x,
+													screenPosition.y + walkOffset.y,
+													0);
+									}
 
-										// kL_note: I'm only doing content-object w/out bigWall here because that's the case I ran into.
-										// This also needs to redraw northWall, as well as tileEast's west & south walls, tileBelow's east & south walls, etc.
-										// ... aaaaaaand, this gives rise to infinite regression.
-										// so try to head it off at the pass, above, by not redrawing unitBelow unless it *has* to be done.
-										if (tileBelowSouthEast->getMapData(MapData::O_OBJECT) != NULL
-											&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE)
+									// special case if tileSouthEast don't have a floor
+									// and tileBelowSouthEast does have a sprite that should conceal the redrawn unit's right leg.
+									if (itX < endX
+										&& itY < endY)
+									{
+										const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
+
+										if (tileSouthEast->getMapData(MapData::O_FLOOR) == NULL)
 										{
-											srfSprite = tileBelowSouthEast->getSprite(MapData::O_OBJECT);
-//											srfSprite = NULL;
-											if (srfSprite)
+											const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+
+											// kL_note: I'm only doing content-object w/out bigWall here because that's the case I ran into.
+											// This also needs to redraw northWall, as well as tileEast's west & south walls, tileBelow's east & south walls, etc.
+											// ... aaaaaaand, this gives rise to infinite regression.
+											// so try to head it off at the pass, above, by not redrawing unitBelow unless it *has* to be done.
+											if (tileBelowSouthEast->getMapData(MapData::O_OBJECT) != NULL
+												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE)
 											{
-												if (tileBelowSouthEast->isDiscovered(2) == true)
-													shade = tileBelowSouthEast->getShade();
-												else
-													shade = 16;
-
-												srfSprite->blitNShade(
-														surface,
-														screenPosition.x,
-														screenPosition.y + 40 - tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getYOffset(),
-														shade,
-														true);
-
-												if (itX < endX - 1)
+												srfSprite = tileBelowSouthEast->getSprite(MapData::O_OBJECT);
+	//											srfSprite = NULL;
+												if (srfSprite)
 												{
-													const Tile* const tileBelowSouthEastEast = _save->getTile(mapPosition + Position(2,1,-1));
+													if (tileBelowSouthEast->isDiscovered(2) == true)
+														shade = tileBelowSouthEast->getShade();
+													else
+														shade = 16;
 
-													srfSprite = tileBelowSouthEastEast->getSprite(MapData::O_OBJECT);
-//													srfSprite = NULL;
-													if (srfSprite)
+													srfSprite->blitNShade(
+															surface,
+															screenPosition.x,
+															screenPosition.y + 40 - tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getYOffset(),
+															shade,
+															true);
+
+													if (itX < endX - 1)
 													{
-														if (tileBelowSouthEastEast->isDiscovered(2) == true)
-															shade = tileBelowSouthEastEast->getShade();
-														else
-															shade = 16;
+														const Tile* const tileBelowSouthEastEast = _save->getTile(mapPosition + Position(2,1,-1));
 
-														srfSprite->blitNShade(
-																surface,
-																screenPosition.x + 16,
-																screenPosition.y + 48 - tileBelowSouthEastEast->getMapData(MapData::O_OBJECT)->getYOffset(),
-																shade,
-																false,
-																0,
-																true);
-														// note: tileBelowSouthEastEastEast is now bugging-out on DESERTMOUNT08. but i fixed it in the resource.
-														// Note2: I may have fixed this by adding 'halfLeft' to blitNShade()
+														srfSprite = tileBelowSouthEastEast->getSprite(MapData::O_OBJECT);
+	//													srfSprite = NULL;
+														if (srfSprite)
+														{
+															if (tileBelowSouthEastEast->isDiscovered(2) == true)
+																shade = tileBelowSouthEastEast->getShade();
+															else
+																shade = 16;
+
+															srfSprite->blitNShade(
+																	surface,
+																	screenPosition.x + 16,
+																	screenPosition.y + 48 - tileBelowSouthEastEast->getMapData(MapData::O_OBJECT)->getYOffset(),
+																	shade,
+																	false,
+																	0,
+																	true);
+															// note: tileBelowSouthEastEastEast is now bugging-out on DESERTMOUNT08. but i fixed it in the resource.
+															// Note2: I may have fixed this by adding 'halfLeft' to blitNShade()
+														}
 													}
 												}
 											}

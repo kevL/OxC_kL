@@ -5996,7 +5996,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1420888089 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1422069777 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6026,7 +6026,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1421639407 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1422069013 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6057,7 +6057,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1422042296 source:f:\git\openxcom\src\battlescape\map.cpp
+1422097023 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
