@@ -210,79 +210,90 @@ int Projectile::calculateTrajectory(
 		double accuracy,
 		Position originVoxel)
 {
+	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 	const Tile* const targetTile = _save->getTile(_action.target);
 	const BattleUnit* const targetUnit = targetTile->getUnit();
 
-	const VoxelType test = static_cast<VoxelType>(_save->getTileEngine()->calculateLine(
-																					originVoxel,
-																					_targetVoxel,
-																					false,
-																					&_trajectory,
-																					_action.actor));
-	if (test != VOXEL_EMPTY
-		&& _trajectory.empty() == false
-		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
+	if (_action.actor->getFaction() == FACTION_PLAYER // kL_note: aLiens don't even get in here!
 		&& _action.autoShotCount == 1
-		&& (Options::forceFire == false
-			|| (SDL_GetModState() & KMOD_CTRL) == 0)
+		&& _action.type != BA_LAUNCH
 		&& _save->getBattleGame()->getPanicHandled() == true
-		&& _action.type != BA_LAUNCH)
+		&& (Options::forceFire == false
+			|| (SDL_GetModState() & KMOD_CTRL) == 0))
 	{
-		Position endPos = Position(
-								_trajectory.at(0).x / 16,
-								_trajectory.at(0).y / 16,
-								_trajectory.at(0).z / 24);
+		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
+		const VoxelType test = static_cast<VoxelType>(_save->getTileEngine()->calculateLine(
+																						originVoxel,
+																						_targetVoxel,
+																						false,
+																						&_trajectory,
+																						_action.actor));
+		//Log(LOG_INFO) << ". test = " << (int)test;
 
-		if (test == VOXEL_UNIT)
+		if (test != VOXEL_EMPTY
+			&& _trajectory.empty() == false)
 		{
-			const Tile* const endTile = _save->getTile(endPos);
-			if (endTile != NULL
-				&& endTile->getUnit() == NULL)
+			Position testPos = Position(
+									_trajectory.at(0).x / 16,
+									_trajectory.at(0).y / 16,
+									_trajectory.at(0).z / 24);
+
+			if (test == VOXEL_UNIT)
 			{
-				endPos += (Position(0,0,-1)); // must be poking head up from tileBelow
-//				endPos = Position(endPos.x, endPos.y, endPos.z - 1);
+				const Tile* const endTile = _save->getTile(testPos);
+				if (endTile != NULL
+					&& endTile->getUnit() == NULL)
+				{
+//					testPos += (Position(0,0,-1));
+					testPos = Position( // must be poking head up from tileBelow
+									testPos.x,
+									testPos.y,
+									testPos.z - 1);
+				}
 			}
-		}
 
 
-		if (endPos != _action.target
-			&& _action.result.empty() == true)
-		{
-			if (test == VOXEL_NORTHWALL)
+			if (testPos != _action.target
+				&& _action.result.empty() == true)
 			{
-				if (endPos.y - 1 != _action.target.y)
+				if (test == VOXEL_NORTHWALL)
+				{
+					if (testPos.y - 1 != _action.target.y)
+					{
+						_trajectory.clear();
+						return VOXEL_EMPTY;
+					}
+				}
+				else if (test == VOXEL_WESTWALL)
+				{
+					if (testPos.x - 1 != _action.target.x)
+					{
+						_trajectory.clear();
+						return VOXEL_EMPTY;
+					}
+				}
+				else if (test == VOXEL_UNIT)
+				{
+					const BattleUnit* const testUnit = _save->getTile(testPos)->getUnit();
+					if (testUnit != targetUnit
+						&& testUnit->getUnitVisible() == true)
+					{
+						_trajectory.clear();
+						return VOXEL_EMPTY;
+					}
+				}
+				else
 				{
 					_trajectory.clear();
 					return VOXEL_EMPTY;
 				}
-			}
-			else if (test == VOXEL_WESTWALL)
-			{
-				if (endPos.x - 1 != _action.target.x)
-				{
-					_trajectory.clear();
-					return VOXEL_EMPTY;
-				}
-			}
-			else if (test == VOXEL_UNIT)
-			{
-				const BattleUnit* const endUnit = _save->getTile(endPos)->getUnit();
-				if (endUnit != targetUnit
-					&& endUnit->getUnitVisible() == true)
-				{
-					_trajectory.clear();
-					return VOXEL_EMPTY;
-				}
-			}
-			else
-			{
-				_trajectory.clear();
-				return VOXEL_EMPTY;
 			}
 		}
 	}
 
 	_trajectory.clear();
+
+	//Log(LOG_INFO) << ". autoshotCount[1] = " << _action.autoShotCount;
 
 //	bool extendLine = true;
 	// even guided missiles drift, but how much is based on
@@ -301,7 +312,7 @@ int Projectile::calculateTrajectory(
 	if (targetUnit != NULL // apply some accuracy modifiers. This will result in a new target voxel:
 		&& targetUnit->getDashing() == true)
 	{
-		accuracy -= 0.17;
+		accuracy -= 0.16;
 	}
 
 	if (_action.type != BA_LAUNCH // Could base BL.. on psiSkill, or sumthin'
@@ -373,7 +384,7 @@ int Projectile::calculateThrow(double accuracy)
 //						   + 2; // kL: midriff +2 voxels
 
 			if (targetUnit->getDashing() == true)
-				accuracy -= 0.17; // acid-spit, arcing shot.
+				accuracy -= 0.16; // acid-spit, arcing shot.
 		}
 	}
 
@@ -470,22 +481,20 @@ void Projectile::applyAccuracy(
 		delta_z = origin.z - target->z; // kL_add.
 
 	const double targetDist = std::sqrt(
-									static_cast<double>(delta_x * delta_x)
-								  + static_cast<double>(delta_y * delta_y)
-								  + static_cast<double>(delta_z * delta_z)); // kL_add.
+									static_cast<double>((delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z)));
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
-	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	double maxRange = 16000.; // vSpace == 1000 tiles in tSpace.
-	// kL_note: This is that hypothetically infinite point in space to aim for;
-	// the closer it's set, the more accurate shots become. I suspect ....
-//	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
+	double range; // the maximum distance a projectile shall ever travel in voxel space
+//	double range = 16000.; // vSpace == 1000 tiles in tSpace.
+//	double range = 3200.0; // kL. vSpace == 200 tiles in tSpace.
 	if (keepRange == true)
-		maxRange = targetDist;
-	//Log(LOG_INFO) << ". maxRange = " << maxRange;
+		range = targetDist;
+	else
+		range = 3200.;
+	//Log(LOG_INFO) << ". range = " << range;
 
 //	if (_action.type == BA_HIT)
-//		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
+//		range = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
 
 
 	const RuleItem* const itRule = _action.weapon->getRules(); // <- after reading up, 'const' is basically worthless & wordy waste of effort.
@@ -578,6 +587,10 @@ void Projectile::applyAccuracy(
 				accuracy -= (_action.autoShotCount - 1) * 0.03;
 
 
+			double
+				dH,
+				dV;
+
 			const int autoHit = static_cast<int>(std::ceil(accuracy * 20.)); // chance for Bulls-eye.
 			if (RNG::percent(autoHit) == false)
 			{
@@ -597,36 +610,41 @@ void Projectile::applyAccuracy(
 
 
 				// The angle deviations are spread using a normal distribution:
-				const double
-					dH = RNG::boxMuller(0., deviation / 6.),			// horizontal miss in radians
-					dV = RNG::boxMuller(0., deviation / (6. * 1.69)),	// vertical miss in radians
-
-					te = std::atan2(
-								static_cast<double>(target->y - origin.y),
-								static_cast<double>(target->x - origin.x))
-							+ dH,
-					fi = std::atan2(
-								static_cast<double>(target->z - origin.z),
-								targetDist)
-							+ dV,
-					cos_fi = std::cos(fi);
-					//Log(LOG_INFO) << ". . dH = " << dH;
-					//Log(LOG_INFO) << ". . dV = " << dV;
-
-				if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
-				{
-					//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
-					// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
-					target->x = static_cast<int>(Round(static_cast<double>(origin.x) + maxRange * std::cos(te) * cos_fi));
-					target->y = static_cast<int>(Round(static_cast<double>(origin.y) + maxRange * std::sin(te) * cos_fi));
-					target->z = static_cast<int>(Round(static_cast<double>(origin.z) + maxRange * std::sin(fi)));
-				}
-				//Log(LOG_INFO) << "Projectile::applyAccuracy() x = " << target->x;
-				//Log(LOG_INFO) << "Projectile::applyAccuracy() y = " << target->y;
-				//Log(LOG_INFO) << "Projectile::applyAccuracy() z = " << target->z;
-
-				//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
+				dH = RNG::boxMuller(0., deviation / 6.);			// horizontal miss in radians
+				dV = RNG::boxMuller(0., deviation / (6. * 1.69));	// vertical miss in radians
 			}
+			else
+			{
+				dH = 0.,
+				dV = 0.;
+			}
+
+			const double
+				te = std::atan2(
+							static_cast<double>(target->y - origin.y),
+							static_cast<double>(target->x - origin.x))
+						+ dH,
+				fi = std::atan2(
+							static_cast<double>(target->z - origin.z),
+							targetDist)
+						+ dV,
+				cos_fi = std::cos(fi);
+				//Log(LOG_INFO) << ". . dH = " << dH;
+				//Log(LOG_INFO) << ". . dV = " << dV;
+
+			if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
+			{
+				//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
+				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
+				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + range * std::cos(te) * cos_fi));
+				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + range * std::sin(te) * cos_fi));
+				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
+			}
+			//Log(LOG_INFO) << ". x = " << target->x;
+			//Log(LOG_INFO) << ". y = " << target->y;
+			//Log(LOG_INFO) << ". z = " << target->z;
+
+			//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 		}
 
 		return;
@@ -700,9 +718,9 @@ void Projectile::applyAccuracy(
 			cos_te = std::cos(rotation * M_PI / 180.),
 			sin_te = std::sin(rotation * M_PI / 180.);
 
-		target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos_te * cos_fi);
-		target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin_te * cos_fi);
-		target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin_fi);
+		target->x = static_cast<int>(static_cast<double>(origin.x) + range * cos_te * cos_fi);
+		target->y = static_cast<int>(static_cast<double>(origin.y) + range * sin_te * cos_fi);
+		target->z = static_cast<int>(static_cast<double>(origin.z) + range * sin_fi);
 	}
 	//Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 }

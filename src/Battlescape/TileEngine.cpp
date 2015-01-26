@@ -4966,12 +4966,12 @@ bool TileEngine::validateThrow(
 int TileEngine::castedShade(const Position& voxel) const
 {
 	int start_z = voxel.z;
-	Position testCoord = voxel / Position(16, 16, 24);
+	Position testCoord = voxel / Position(16,16,24);
 
 	const Tile* tile = _battleSave->getTile(testCoord);
 	while (tile != NULL
-		&& tile->isVoid() == true
-		&& tile->getUnit() != NULL)
+		&& tile->isVoid(false, false) == true
+		&& tile->getUnit() == NULL)
 	{
 		start_z = testCoord.z * 24;
 		--testCoord.z;
@@ -5058,7 +5058,7 @@ int TileEngine::voxelCheck(
 		const BattleUnit* const excludeAllBut) const
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
-	const Tile* targetTile = _battleSave->getTile(targetPos / Position(16, 16, 24)); // converts to tilespace -> Tile
+	const Tile* targetTile = _battleSave->getTile(targetPos / Position(16,16,24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". targetTile " << targetTile->getPosition();
 	// check if we are out of the map
 	if (targetTile == NULL
@@ -5070,8 +5070,8 @@ int TileEngine::voxelCheck(
 		return VOXEL_OUTOFBOUNDS;
 	}
 
-	const Tile* const tileBelow = _battleSave->getTile(targetTile->getPosition() + Position(0, 0,-1));
-	if (targetTile->isVoid() == true
+	const Tile* const tileBelow = _battleSave->getTile(targetTile->getPosition() + Position(0,0,-1));
+	if (targetTile->isVoid(false, false) == true
 		&& targetTile->getUnit() == NULL
 		&& (tileBelow == NULL
 			|| tileBelow->getUnit() == NULL))
@@ -5081,8 +5081,7 @@ int TileEngine::voxelCheck(
 	}
 
 	// kL_note: should allow items to be thrown through a gravLift down to the floor below
-	if ((targetPos.z %24 == 0
-			|| targetPos.z %24 == 1)
+	if (targetPos.z %24 < 2
 		&& targetTile->getMapData(MapData::O_FLOOR) != NULL
 		&& targetTile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
 	{
@@ -5130,7 +5129,7 @@ int TileEngine::voxelCheck(
 		const BattleUnit* targetUnit = targetTile->getUnit();
 		// sometimes there is unit on the tile below, but sticks up into this tile with its head.
 		if (targetUnit == NULL
-			&& targetTile->hasNoFloor(0) == true)
+			&& targetTile->hasNoFloor(NULL) == true)
 		{
 			targetTile = _battleSave->getTile(Position( // tileBelow
 													targetPos.x / 16,
@@ -5876,14 +5875,14 @@ Position TileEngine::getOriginVoxel(
 		tile = action.actor->getTile();
 
 	Position
-		origin = tile->getPosition(),
+		originTile = tile->getPosition(),
 		originVoxel = Position(
-							origin.x * 16,
-							origin.y * 16,
-							origin.z * 24);
+							originTile.x * 16,
+							originTile.y * 16,
+							originTile.z * 24);
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
-	if (action.actor->getPosition() == origin
+	if (action.actor->getPosition() == originTile
 		|| action.type != BA_LAUNCH)
 	{
 		// calculate vertical offset of the starting point of the projectile
@@ -5900,18 +5899,20 @@ Position TileEngine::getOriginVoxel(
 		else
 			originVoxel.z -= 4; */
 
-		if (originVoxel.z >= (origin.z + 1) * 24)
+		if (originVoxel.z >= (originTile.z + 1) * 24)
 		{
-			const Tile* const tileAbove = _battleSave->getTile(origin + Position(0,0,1));
+			const Tile* const tileAbove = _battleSave->getTile(originTile + Position(0,0,1));
 			if (tileAbove != NULL
 				&& tileAbove->hasNoFloor(NULL) == true)
 			{
-				++origin.z;
+				++originTile.z;
 			}
 			else
 			{
-				while (originVoxel.z >= (origin.z + 1) * 24)
+				while (originVoxel.z >= (originTile.z + 1) * 24)
+				{
 					--originVoxel.z;
+				}
 
 				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
 			}
@@ -5922,7 +5923,7 @@ Position TileEngine::getOriginVoxel(
 		// Originally used the dirXShift and dirYShift as detailed above;
 		// this however results in MUCH more predictable results.
 		// center Origin in the originTile (or the center of all four tiles for large units):
-		int offset = action.actor->getArmor()->getSize() * 8;
+		const int offset = action.actor->getArmor()->getSize() * 8;
 		originVoxel.x += offset;
 		originVoxel.y += offset;
 			// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
@@ -5930,7 +5931,7 @@ Position TileEngine::getOriginVoxel(
 			// ... better now but still waiting on it.
 /*
 		int direction = getDirectionTo(
-									origin,
+									originTile,
 									action.target);
 		originVoxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
 		originVoxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */

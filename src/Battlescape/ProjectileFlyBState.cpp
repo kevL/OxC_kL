@@ -240,6 +240,7 @@ void ProjectileFlyBState::init()
 			}
 //			}
 		break;
+
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW";
@@ -268,11 +269,13 @@ void ProjectileFlyBState::init()
 			_projectileItem = _action.weapon;
 		}
 		break;
+
 		case BA_HIT:
 			performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 			return;
 		break;
+
 		case BA_PANIC:
 		case BA_MINDCONTROL:
 			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
@@ -291,7 +294,6 @@ void ProjectileFlyBState::init()
 			//Log(LOG_INFO) << ". . default, EXIT";
 			_parent->popState();
 			return;
-		break;
 	}
 
 
@@ -352,21 +354,6 @@ void ProjectileFlyBState::init()
 													&_targetVoxel,
 													_unit);
 		}
-		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
-		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
-		// So let's narrow it down some........... ie. to do this correctly I'd need some sort of 'autoShotKill' boolean
-		else if (_action.autoShotKill // note: If targetUnit is still alive after the first shot, do ABOVE^^
-			&& _action.autoShotCount > 1) // NOTE: I think autoShotKill is redundant w/ (autoShotCount > 1), when tucked in here between target->Voxel & stuff below_
-//			&& targetTile->getUnit()
-//			&& targetTile->getUnit()->isOut(true, true)) // NOT Working -> would have to cycle through tile's inventory, and find corpse item ...
-//			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
-		{
-			//Log(LOG_INFO) << ". targetTile vs. Autoshot!";
-			_targetVoxel = Position( // target nothing, targets the middle of the tile
-								_action.target.x * 16 + 8,
-								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 10); // a bit below center
-		} // kL_end.
 		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
@@ -536,9 +523,6 @@ bool ProjectileFlyBState::createNewProjectile()
 																			_action.weapon));
 		//Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
-		if (_projectileImpact == VOXEL_UNIT)
-			_action.autoShotKill = true;
-
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
@@ -579,28 +563,31 @@ bool ProjectileFlyBState::createNewProjectile()
 	else // shoot weapon
 	{
 		if (_originVoxel != Position(-1,-1,-1)) // ... BL waypoints
+		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon),
 															_originVoxel);
+			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << _projectileImpact;
+		}
 		else // this is non-BL weapon shooting
+		{
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
 																					_action.weapon));
-		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
+			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << _projectileImpact;
+		}
+		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << _projectileImpact;
 		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
 
 		projectile->storeProjectileDirection(); // kL
 
 
-		if (_projectileImpact == VOXEL_UNIT)
-			_action.autoShotKill = true;
-
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
-			//Log(LOG_INFO) << ". . _projectileImpact !";
+			//Log(LOG_INFO) << ". . _projectileImpact AIM";
 			_unit->aim();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -669,7 +656,7 @@ void ProjectileFlyBState::think()
 	{
 		Tile
 			* const tile = _parent->getSave()->getTile(_unit->getPosition()),
-			* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
+			* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 
 		const bool
 			hasFloor = tile != NULL
@@ -939,8 +926,8 @@ void ProjectileFlyBState::think()
 						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
 					{
 						BattleUnit* const victim = _parent->getSave()->getTile(
-														_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
-															->getUnit();
+															_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))
+														->getUnit();
 						if (victim != NULL)
 //kL						&& victim->isOut() == false)
 						{
@@ -1052,7 +1039,7 @@ void ProjectileFlyBState::cancel()
 		projectile->skipTrajectory();
 
 		Camera* const camera = _parent->getMap()->getCamera();
-		const Position projPos = projectile->getPosition() / Position(16, 16, 24);
+		const Position projPos = projectile->getPosition() / Position(16,16,24);
 //		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false, 0, false))
 		if (camera->isOnScreen(projPos) == false)
 			camera->centerOnPosition(projPos);

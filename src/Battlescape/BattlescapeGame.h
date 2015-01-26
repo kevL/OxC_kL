@@ -70,7 +70,6 @@ enum BattleActionType
 struct BattleAction
 {
 	bool
-		autoShotKill,
 		desperate, // ignoring newly-spotted units
 		finalAction,
 		dash,
@@ -109,7 +108,6 @@ struct BattleAction
 			dash(false),
 			diff(0),
 			autoShotCount(0),
-			autoShotKill(false),
 			cameraPosition(0, 0,-1),
 			desperate(false),
 			finalFacing(-1),
@@ -133,7 +131,6 @@ struct BattleAction
 			dash = false;
 			diff = 0;
 			autoShotCount = 0;
-			autoShotKill = false;
 			cameraPosition = Position(0, 0,-1);
 			desperate = false;
 			finalFacing = -1;

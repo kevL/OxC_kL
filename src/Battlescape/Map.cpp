@@ -1271,7 +1271,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// Draw Tile Background
-					if (tile->isVoid(true) == false)
+					if (tile->isVoid(true, false) == false)
 					{
 						// Draw west wall
 						srfSprite = tile->getSprite(MapData::O_WESTWALL);
@@ -2420,9 +2420,9 @@ void Map::drawTerrain(Surface* surface)
 									|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 										&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK)))
 							|| (tileNorthWest != NULL
-								&& tileNorthWest->isVoid() == false) // flooring mainly, but prob. also south & east walls
+								&& tileNorthWest->isVoid(false, false) == false) // flooring mainly, but prob. also south & east walls
 							|| (tileWest != NULL
-								&& tileWest->isVoid() == false)) // flooring mainly, but prob. also north & east walls
+								&& tileWest->isVoid(false, false) == false)) // flooring mainly, but prob. also north & east walls
 						// that also needs tileWest's northWall & bigWall east
 						// and tileNorth's westWall & bigWall south
 						// and tileBelow's east and south walls
@@ -2683,7 +2683,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 					if (itZ > 0 // THIS IS LEADING TO A NEAR-INFINITE REGRESSION!!
-						&& tile->isVoid(true) == false)
+						&& tile->isVoid(false, false) == false)
 					{
 						bool redrawLowForeground = false;
 

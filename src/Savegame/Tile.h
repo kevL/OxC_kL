@@ -140,7 +140,9 @@ protected:
 				int part) const;
 
 		/// Gets whether this tile has no objects
-		bool isVoid(bool partsOnly = false) const;
+		bool isVoid(
+				const bool checkInv = true,
+				const bool checkSmoke = true) const;
 
 		/// Gets the TU cost to walk over a certain part of the tile.
 		int getTUCost(

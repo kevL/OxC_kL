@@ -535,7 +535,7 @@ YAML::Node SavedBattleGame::save() const
 #if 0
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
-		if (!_tiles[i]->isVoid())
+		if (_tiles[i]->isVoid() == false)
 		{
 			node["tiles"].push_back(_tiles[i]->save());
 		}
@@ -563,7 +563,10 @@ YAML::Node SavedBattleGame::save() const
 	{
 		if (_tiles[i]->isVoid() == false)
 		{
-			serializeInt(&w, Tile::serializationKey.index, i);
+			serializeInt(
+					&w,
+					Tile::serializationKey.index,
+					i);
 			_tiles[i]->saveBinary(&w);
 		}
 		else

@@ -314,19 +314,25 @@ void Tile::getMapData(
 /**
  * Gets whether this tile has no objects.
  * Note that we CAN have a unit (but no smoke or inventory) on this tile.
+ * @param checkInv		- (default true)
+ * @param checkSmoke	- (default true)
  * @param partsOnly - check only for parts & item (default false)
  * @return, true if there is nothing but air on this tile + smoke/fire if partsOnly TRUE
  */
-bool Tile::isVoid(bool partsOnly) const
+bool Tile::isVoid(
+		const bool checkInv,
+		const bool checkSmoke) const
 {
-	bool ret = _objects[0] == NULL			// floor
-			&& _objects[1] == NULL			// westwall
-			&& _objects[2] == NULL			// northwall
-			&& _objects[3] == NULL			// content
-			&& _inventory.empty() == true;
+	bool ret = _objects[0] == NULL	// floor
+			&& _objects[1] == NULL	// westwall
+			&& _objects[2] == NULL	// northwall
+			&& _objects[3] == NULL;	// content
 
-	if (partsOnly == false)
-		return (ret && _smoke == 0);
+	if (checkInv == true)
+		ret = (ret && _inventory.empty() == true);
+
+	if (checkSmoke == true)
+		ret = (ret && _smoke == 0);
 
 	return ret;
 /*	return _objects[0] == NULL	// floor
