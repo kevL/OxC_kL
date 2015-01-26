@@ -2183,11 +2183,11 @@ void GraphsState::scrollButtons(
 
 	size_t row = 0;
 
-	std::vector<ToggleTextButton*>::const_iterator btn = buttons.begin();
-	std::vector<Text*>::const_iterator aliens = actAlien.begin();
-	std::vector<Text*>::const_iterator xcom = actXCom.begin();
-	std::vector<bool>::iterator bling = blink.begin();
-	std::vector<bool>::iterator blingXCOM = blinkXCOM.begin();
+	std::vector<ToggleTextButton*>::const_iterator	btn = buttons.begin();
+	std::vector<Text*>::const_iterator				aliens = actAlien.begin();
+	std::vector<Text*>::const_iterator				xcom = actXCom.begin();
+	std::vector<bool>::iterator						bling = blink.begin();
+	std::vector<bool>::iterator						blingXCOM = blinkXCOM.begin();
 
 	for (std::vector<GraphBtnInfo*>::const_iterator
 			info = toggles.begin();
@@ -2207,9 +2207,9 @@ void GraphsState::scrollButtons(
 
 			updateButton(
 						*info,
-						*++btn,		// Lol ...
-						*++aliens,
-						*++xcom);
+						*btn++,
+						*aliens++,
+						*xcom++);
 		}
 		else
 			return;
