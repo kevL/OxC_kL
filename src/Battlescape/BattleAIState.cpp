@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param save - pointer to SavedBattleGame
+ * @param save - pointer to the SavedBattleGame
  * @param unit - pointer to a BattleUnit
  */
 BattleAIState::BattleAIState(
@@ -34,27 +34,24 @@ BattleAIState::BattleAIState(
 	:
 		_save(save),
 		_unit(unit)
-{
-}
+{}
 
 /**
  * Deletes the BattleAIState.
  */
 BattleAIState::~BattleAIState()
-{
-}
+{}
 
 /**
  * Loads the AI state from a YAML file.
- * @param node - YAML node.
+ * @param node - reference a YAML node
  */
 void BattleAIState::load(const YAML::Node&)
-{
-}
+{}
 
 /**
  * Saves the AI state to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node BattleAIState::save() const
 {
@@ -65,22 +62,19 @@ YAML::Node BattleAIState::save() const
  * Enters the current AI state.
  */
 void BattleAIState::enter()
-{
-}
+{}
 
 /**
  * Exits the current AI state.
  */
 void BattleAIState::exit()
-{
-}
+{}
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.
  * @param action - (possible) AI BattleAction to execute after thinking is done.
  */
 void BattleAIState::think(BattleAction*)
-{
-}
+{}
 
 }

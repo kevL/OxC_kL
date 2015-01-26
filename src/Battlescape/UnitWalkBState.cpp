@@ -599,10 +599,10 @@ bool UnitWalkBState::doStatusStand()
 			{
 				//Log(LOG_INFO) << ". . check obstacle(unit)";
 				const BattleUnit
-					* const unitInMyWay = _parent->getSave()->getTile(destination + Position(x, y, 0))->getUnit(),
+					* const unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit(),
 					* unitBelowMyWay = NULL;
 
-				const Tile* const belowDest = _parent->getSave()->getTile(destination + Position(x, y,-1));
+				const Tile* const belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
 				if (belowDest != NULL)
 					unitBelowMyWay = belowDest->getUnit();
 
@@ -755,16 +755,16 @@ bool UnitWalkBState::doStatusWalk()
 					y > -1;
 					--y)
 			{
-//				posSized = pos + Position(x, y, 0);
-				tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
-				if (_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
+//				posSized = pos + Position(x,y,0);
+				tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
+				if (_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
 				{
 					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
 					fallCheck = false;
 				}
 
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
-				_parent->getSave()->getTile(_unit->getLastPosition() + Position(x, y, 0))->setUnit(NULL);
+				_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(NULL);
 			}
 		} // -> might move to doStatusStand_end()
 
@@ -779,11 +779,11 @@ bool UnitWalkBState::doStatusWalk()
 					--y)
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
-//				posSized = pos + Position(x, y, 0);
-				_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))
+//				posSized = pos + Position(x,y,0);
+				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))
 										->setUnit(
 												_unit,
-												_parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1)));
+												_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
 				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
 			}
 		}
@@ -807,7 +807,7 @@ bool UnitWalkBState::doStatusWalk()
 						y > -1;
 						--y)
 				{
-					tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
+					tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
 					//if (tileBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
 					if (tileBelow != NULL
 						&& tileBelow->getUnit() != NULL)

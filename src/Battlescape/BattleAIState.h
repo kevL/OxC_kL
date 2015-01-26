@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_BATTLEAISTATE_H
 #define OPENXCOM_BATTLEAISTATE_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

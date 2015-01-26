@@ -81,8 +81,6 @@ protected:
 	Node
 		* _fromNode,
 		* _toNode;
-	Pathfinding* _pf;
-	TileEngine* _tileEngine;
 
 	BattleActionType _reserve;
 

@@ -64,7 +64,7 @@ namespace OpenXcom
 
 const int TileEngine::heightFromCenter[11] =
 {
-	  0,
+		  0,
 	 -2,  2,
 	 -4,  4,
 	 -6,  6,
@@ -824,7 +824,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 		// kL_note: Can make this equivalent to LoF origin, perhaps.....
 		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
 
-	const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0, 0, 1));
+	const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0,0,1));
 
 	// kL_note: let's stop this. Tanks appear to make their FoV etc. Checks from all four quadrants anyway.
 /*	if (unit->getArmor()->getSize() > 1)
