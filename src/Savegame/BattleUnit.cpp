@@ -1804,10 +1804,10 @@ void BattleUnit::setUnitVisible(bool flag)
  */
 bool BattleUnit::getUnitVisible() const
 {
-	if (getFaction() == FACTION_PLAYER)
+	if (_faction == FACTION_PLAYER)
 		return true;
-	else
-		return _visible;
+
+	return _visible;
 }
 
 /**

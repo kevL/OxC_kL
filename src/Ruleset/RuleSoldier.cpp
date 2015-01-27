@@ -67,15 +67,13 @@ RuleSoldier::RuleSoldier(const std::string& type)
 		_standHeight(0),
 		_kneelHeight(0),
 		_floatHeight(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 RuleSoldier::~RuleSoldier()
-{
-}
+{}
 
 /**
  * Loads the unit from a YAML file.

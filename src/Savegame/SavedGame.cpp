@@ -1993,11 +1993,13 @@ int SavedGame::getSoldierScore(Soldier* soldier)
 			  + (stats->tu + stats->firing * 2) * 3
 			  + stats->melee
 			  + stats->throwing
-			  + stats->strength;
+			  + stats->strength
+			  + stats->psiStrength * 4	// kL_add. Include these even if not yet revealed.
+			  + stats->psiSkill * 2;	// kL_add.
 
-	if (stats->psiSkill > 0)
-		score += stats->psiStrength
-			   + stats->psiSkill * 2;
+//	if (stats->psiSkill > 0)
+//		score += stats->psiStrength
+//			   + stats->psiSkill * 2;
 
 	score += (soldier->getMissions() + soldier->getKills()) * 10;
 
@@ -2051,8 +2053,8 @@ private:
 			:
 				_region(region),
 				_type(type)
-		{
-		}
+		{}
+
 		/// Match against stored values.
 		bool operator()(const AlienMission* mis) const
 		{
@@ -2140,9 +2142,8 @@ private:
 			:
 				_lon(lon),
 				_lat(lat)
-		{
-			/* Empty by design. */
-		}
+		{}
+
 		/// Check is the region contains the stored point.
 		bool operator()(const Region* region) const
 		{

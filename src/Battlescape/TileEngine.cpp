@@ -337,6 +337,13 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	if (unit->isOut(true, true) == true)
 		return false;
 
+//	if (unit->getFaction() == FACTION_PLAYER)
+//	{
+//		unit->getTile()->setTileVisible();
+//		unit->getTile()->setDiscovered(true, 2);
+//	}
+
+
 	bool ret = false;
 
 	const size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
@@ -375,19 +382,18 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 	if (unit->getHeight()
 				+ unit->getFloatHeight()
-				- _battleSave->getTile(unitPos)->getTerrainLevel()
-			>= 28)
+				- _battleSave->getTile(unitPos)->getTerrainLevel() > 27)
 	{
-		Tile* const aboveTile = _battleSave->getTile(unitPos + Position(0, 0, 1));
-		if (aboveTile != NULL
-			&& aboveTile->hasNoFloor(NULL))
+		const Tile* const tileAbove = _battleSave->getTile(unitPos + Position(0,0,1));
+		if (tileAbove != NULL
+			&& tileAbove->hasNoFloor(NULL))
 		{
-			unitPos.z++;
+			++unitPos.z;
 		}
 	}
 
 	for (int
-			x = 0; // does the unit itself really need checking ...
+			x = 0; // does the unit itself really need checking ... Yes, marks own Tile as _visible.
 			x <= MAX_VIEW_DISTANCE;
 			++x)
 	{
@@ -1551,7 +1557,7 @@ bool TileEngine::reactionShot(
 		}
 	}
 
-	if (   action.weapon == NULL
+	if (action.weapon == NULL
 		|| action.weapon->getRules()->canReactionFire() == false
 		|| action.weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
 		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return 255

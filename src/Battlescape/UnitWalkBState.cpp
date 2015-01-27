@@ -647,7 +647,7 @@ bool UnitWalkBState::doStatusStand()
 			&& _unit->spendEnergy(energy) == true)	// be checked again here. Only subtract required.
 		{
 			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
-			Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
+			Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
 							dir,
@@ -785,6 +785,17 @@ bool UnitWalkBState::doStatusWalk()
 												_unit,
 												_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
 				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
+
+//				Tile* const nextTile = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0));
+//				nextTile->setUnit(
+//								_unit,
+//								_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
+
+//				if (_unit->getFaction() == FACTION_PLAYER)	// This ensures that a unit getting hit by RF will be in a discovered/visible Tile.
+//				{											// ... although CalcFOV should handle it, the latter has problems especially on top-level tiling.
+//					nextTile->setTileVisible();
+//					nextTile->setDiscovered(true, 2);
+//				}
 			}
 		}
 
@@ -910,7 +921,7 @@ bool UnitWalkBState::doStatusStand_end()
 	{
 		//Log(LOG_INFO) << ". . WalkBState: NOT falling, checkReactionFire()";
 
-		if (_terrain->checkReactionFire(_unit)) // unit got fired upon - stop walking
+		if (_terrain->checkReactionFire(_unit) == true) // unit got fired upon - stop walking
 		{
 			//Log(LOG_INFO) << ". . . cacheUnit";
 			_unit->setCache(NULL);

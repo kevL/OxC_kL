@@ -154,8 +154,7 @@ Map::Map(
 	_hidden = new BattlescapeMessage( // "Hidden Movement..." screen
 								320,
 								visibleMapHeight < 200? visibleMapHeight: 200,
-								0,
-								0);
+								0,0);
 	_hidden->setX(_game->getScreen()->getDX());
 	_hidden->setY(_game->getScreen()->getDY());
 //	_hidden->setY((visibleMapHeight - _hidden->getHeight()) / 2);
@@ -377,6 +376,8 @@ void Map::draw()
 										(*i)->getPosition().z / 24));
 			if (tile != NULL
 				&& (tile->getTileVisible() == true
+					|| (tile->getUnit() != NULL
+						&& tile->getUnit()->getUnitVisible() == true)
 					|| (*i)->isBig() == true
 					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
 			{
@@ -1891,6 +1892,30 @@ void Map::drawTerrain(Surface* surface)
 //																		halfRight,
 //																		0,
 //																		halfLeft);
+												}
+
+												// if (tileNorth has west or southwall) redraw it.
+												const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+
+												if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
+													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 0) // draw content-object but not bigWall
+//													&& tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN" // note: happens under SkyRanger ramp, too.
+//													&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42) // the ramp's top, redraw it.
+												{
+													srfSprite = tileNorth->getSprite(MapData::O_OBJECT);
+													if (srfSprite)
+													{
+														if (tileNorth->isDiscovered(2) == true)
+															shade = tileNorth->getShade();
+														else
+															shade = 16;
+
+														srfSprite->blitNShade(
+																surface,
+																screenPosition.x + 16,
+																screenPosition.y - 8 - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset(),
+																shade);
+													}
 												}
 											}
 										}

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_EXPLOSIONBSTATE_H
 #define OPENXCOM_EXPLOSIONBSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "BattleState.h"
 #include "Position.h"
@@ -76,7 +76,7 @@ private:
 				BattleUnit* unit,
 				Tile* tile = NULL,
 				bool lowerWeapon = false,
-				bool success = false,		// kL_add.
+				bool meleeSuccess = false,	// kL_add.
 				bool forceCenter = false);	// kL_add.
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();

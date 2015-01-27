@@ -19,8 +19,6 @@
 
 #include "Explosion.h"
 
-//#include "../Engine/Logger.h"
-
 
 namespace OpenXcom
 {
@@ -36,7 +34,7 @@ const int
  * @param position		- explosion center position in voxel x/y/z
  * @param frameStart	- used to offset different explosions to different frames on the spritesheet
  * @param frameDelay	- used to delay the start of explosion (default 0)
- * @param big			- flag to indicate it is a real explosion (true), or a bullet hit (default false)
+ * @param big			- flag to indicate it is a real explosion (true) or a bullet hit (default false)
  * @param hit			- used for melee and psi attacks (default 0)
  *						 1 - is a melee attack that SUCCEEDED or Psi-attack
  *						 0 - is not a hit-type attack
@@ -55,34 +53,31 @@ Explosion::Explosion(
 		_frameCurrent(frameStart),
 		_big(big),
 		_hit(hit)
-{
-	//Log(LOG_INFO) << "Explosion: hit = " << hit;
-}
+{}
 
 /**
  * Deletes the Explosion.
  */
 Explosion::~Explosion()
-{
-}
+{}
 
 /**
  * Animates the explosion further.
- * @return, true if the animation is queued or playing, false if finished
+ * @return, true if the animation is queued or playing
  */
 bool Explosion::animate()
 {
 	if (_frameDelay > 0)
 	{
-		_frameDelay--;
+		--_frameDelay;
 		return true;
 	}
 
-	_frameCurrent++;
+	++_frameCurrent;
 
 	if ((_hit != 0
 			&& _frameCurrent == _frameStart + FRAMES_HIT)		// melee or psiamp
-		|| (_big
+		|| (_big == true
 			&& _frameCurrent == _frameStart + FRAMES_EXPLODE)	// explosion
 		|| (_big == false
 			&& _hit == 0
@@ -116,7 +111,7 @@ int Explosion::getCurrentFrame() const
 }
 
 /**
- * Returns flag to indicate if it is a bullet hit (false), or a real explosion (true).
+ * Returns flag to indicate if it is a bullet hit (false) or a real explosion (true).
  * @return, true if this is a real explosion; false if a bullet, psi, or melee hit
  */
 bool Explosion::isBig() const

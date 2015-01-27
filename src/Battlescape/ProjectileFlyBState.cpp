@@ -128,10 +128,12 @@ void ProjectileFlyBState::init()
 	if (_action.weapon != NULL)
 		_ammo = _action.weapon->getAmmoItem(); // the weapon itself if self-powered or melee
 
-	bool popThis = false;
 
-	const bool targetTileValid = _parent->getSave()->getTile(_action.target) != NULL;
-	bool reactionValid = false;
+	const bool targetTileValid = (_parent->getSave()->getTile(_action.target) != NULL);
+	bool
+		reactionValid = false,
+		popThis = false;
+
 	if (targetTileValid == true)
 	{
 		const BattleUnit* const targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
@@ -140,6 +142,7 @@ void ProjectileFlyBState::init()
 					 && targetUnit == _parent->getSave()->getSelectedUnit()
 					 && _ammo != NULL;
 	}
+
 
 	if (_unit->isOut(true, true) == true
 		|| _action.weapon == NULL
@@ -162,6 +165,7 @@ void ProjectileFlyBState::init()
 		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
 		popThis = true;
 	}
+
 
 	if (popThis == true)
 	{
@@ -224,13 +228,6 @@ void ProjectileFlyBState::init()
 				_parent->getTileEngine()->distance(
 												_unit->getPosition(),
 												_action.target) > _action.weapon->getRules()->getMaxRange())
-/*			else // kL_begin:
-			{
-				int dist = _parent->getTileEngine()->distance(
-														_unit->getPosition(),
-														_action.target);
-				if (dist > _action.weapon->getRules()->getMaxRange()
-					|| dist < _action.weapon->getRules()->getMinRange()) */ // kL_end.
 			{
 				//Log(LOG_INFO) << ". . . out of range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -238,8 +235,6 @@ void ProjectileFlyBState::init()
 				_parent->popState();
 				return;
 			}
-//			}
-		break;
 
 		case BA_THROW:
 		{
@@ -274,7 +269,6 @@ void ProjectileFlyBState::init()
 			performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 			return;
-		break;
 
 		case BA_PANIC:
 		case BA_MINDCONTROL:
@@ -288,7 +282,6 @@ void ProjectileFlyBState::init()
 													_action.weapon,
 													_unit));
 			return;
-		break;
 
 		default:
 			//Log(LOG_INFO) << ". . default, EXIT";
@@ -737,7 +730,7 @@ void ProjectileFlyBState::think()
 			_parent->popState();
 		}
 	}
-	else // projectile in motion ... ! impact !
+	else // projectile in motion -> ! impact !
 	{
 		if (_action.type != BA_THROW
 			&& _ammo != NULL
@@ -866,6 +859,15 @@ void ProjectileFlyBState::think()
 															_action.type != BA_AUTOSHOT
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 																|| _action.weapon->getAmmoItem() == NULL));
+										/*		ExplosionBState(
+														BattlescapeGame* parent,
+														Position center,
+														BattleItem* item,
+														BattleUnit* unit,
+														Tile* tile = NULL,
+														bool lowerWeapon = false,
+														bool success = false,
+														bool forceCenter = false);	*/
 
 					// special shotgun behaviour: trace extra projectile paths,
 					// and add bullet hits at their termination points.
@@ -1165,7 +1167,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
  * Set the origin voxel, used for the blaster launcher.
  * @param pos - the origin voxel
  */
-void ProjectileFlyBState::setOriginVoxel(Position pos)
+void ProjectileFlyBState::setOriginVoxel(const Position pos)
 {
 	_originVoxel = pos;
 }

@@ -54,7 +54,7 @@ namespace OpenXcom
  * @param unit			- pointer to unit involved in the explosion (eg unit throwing the grenade, cyberdisc, etc)
  * @param tile			- pointer to tile the explosion is on (default NULL)
  * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon (default false)
- * @param success		- true if the (melee) attack was succesful (default false)
+ * @param meleeSuccess	- true if the (melee) attack was succesful (default false)
  * @param forceCenter	- forces Camera to center on the explosion (default false)
  */
 ExplosionBState::ExplosionBState(
@@ -64,7 +64,7 @@ ExplosionBState::ExplosionBState(
 		BattleUnit* unit,
 		Tile* tile,
 		bool lowerWeapon,
-		bool success,		// kL_add.
+		bool meleeSuccess,	// kL_add.
 		bool forceCenter)	// kL_add.
 	:
 		BattleState(parent),
@@ -73,7 +73,7 @@ ExplosionBState::ExplosionBState(
 		_unit(unit),
 		_tile(tile),
 		_lowerWeapon(lowerWeapon),
-		_hitSuccess(success),		// kL
+		_hitSuccess(meleeSuccess),	// kL
 		_forceCenter(forceCenter),	// kL
 		_power(0),
 		_areaOfEffect(false),
@@ -319,6 +319,12 @@ void ExplosionBState::init()
 				hitResult = -1;
 		}
 
+/*		Explosion(
+				Position _position,
+				int frameStart,
+				int frameDelay = 0,
+				bool big = false,
+				int hit = 0); */
 		Explosion* const explosion = new Explosion( // animation. Don't turn the tile
 												_center,
 												anim,
@@ -354,7 +360,7 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::list<Explosion*>::const_iterator
+/*	for (std::list<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
 			)
@@ -372,26 +378,30 @@ void ExplosionBState::think()
 		--_extend; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
 
 	if (_extend < 1)
-		explode();
-}
-/*	for (std::list<Explosion*>::const_iterator
+		explode(); */
+	for (std::list<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
 			)
 	{
-		if (!(*i)->animate())
+		if ((*i)->animate() == false)
 		{
+
 			delete *i;
 			i = _parent->getMap()->getExplosions()->erase(i);
-			if (_parent->getMap()->getExplosions()->empty())
+
+			if (_parent->getMap()->getExplosions()->empty() == true)
 			{
 				explode();
 				return;
 			}
 		}
 		else
+		{
 			++i;
-	} */
+		}
+	}
+}
 
 /**
  * Explosions cannot be cancelled.
@@ -443,7 +453,7 @@ void ExplosionBState::explode()
 
 				if (_hitSuccess == true)
 				{
-					const BattleUnit* const targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
+					const BattleUnit* const targetUnit = save->getTile(_center / Position(16,16,24))->getUnit();
 					if (targetUnit != NULL
 						&& targetUnit->getFaction() == FACTION_HOSTILE)
 					{
