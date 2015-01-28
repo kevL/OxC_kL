@@ -2482,11 +2482,12 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			_currentAction.dash = false;
 			_currentAction.actor->setDashing(false);
 
-			if (targetUnit != NULL
+			if (targetUnit != NULL // spin 180 degrees
 				&& targetUnit == _currentAction.actor
 				&& mod_CTRL == false
 				&& mod_ALT == false
-				&& isTank == false)
+				&& isTank == false
+				&& _currentAction.actor->getArmor()->getSize() == 1) // small units only
 			{
 				if (bPreviewed == true)
 					pf->removePreview();

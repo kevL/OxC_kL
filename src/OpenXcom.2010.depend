@@ -5522,7 +5522,7 @@
 1422233401 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1421986088 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1422404193 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -6055,7 +6055,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1422386987 source:f:\git\openxcom\src\battlescape\map.cpp
+1422428937 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8633,7 +8633,7 @@
 	"../Savegame/Soldier.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1420130460 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
+1422389324 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
 1420130445 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
@@ -8856,7 +8856,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1420638458 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1422389684 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

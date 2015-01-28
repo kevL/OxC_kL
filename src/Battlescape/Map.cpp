@@ -1210,8 +1210,8 @@ void Map::drawTerrain(Surface* surface)
 														surface,
 														screenPosition.x - 16 + walkOffset.x,
 														screenPosition.y - 8 + walkOffset.y,
-														0,
-														halfRight);
+														0);
+//														halfRight);
 										}
 									}
 								}
@@ -1246,8 +1246,8 @@ void Map::drawTerrain(Surface* surface)
 												surface,
 												screenPosition.x - 16,
 												screenPosition.y - 8 + tileWest->getTerrainLevel(),
-												shade,
-												true); // halfRight
+												shade);
+//												true); // halfRight
 								}
 
 								// Draw front bigWall object
@@ -1808,11 +1808,11 @@ void Map::drawTerrain(Surface* surface)
 									&& unitNorthWest->getStatus() == STATUS_WALKING
 									&& (unitNorthWest->getDirection() == 3
 										|| unitNorthWest->getDirection() == 7
-										|| ((unitNorthWest->getDirection() == 2
-												|| unitNorthWest->getDirection() == 6) // EW only applicable if curTile foreground has bigWall_NONE and is higher:
+										|| ((unitNorthWest->getDirection() == 2			// This bit is for going down (or up) slopes and not getting unit's toes truncated.
+												|| unitNorthWest->getDirection() == 6	// EW only applicable if curTile foreground has bigWall_NONE and is higher:
 											&& tile->getMapData(MapData::O_OBJECT) != NULL
 											&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-											&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel())))
+											&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel()))))
 								{
 									int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
 
@@ -1894,15 +1894,21 @@ void Map::drawTerrain(Surface* surface)
 //																		halfLeft);
 												}
 
-												// if (tileNorth has west or southwall) redraw it.
+												// Redraw top of Craft's ramp if walking NWSE beneath it.
+												// ( if (tileNorth has west or southwall) redraw it, perhaps )
 												const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
 												if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
-													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 0) // draw content-object but not bigWall
-//													&& tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN" // note: happens under SkyRanger ramp, too.
-//													&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42) // the ramp's top, redraw it.
+													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 0 // draw content-object but not bigWall
+													&& ((tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN"
+															&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42)
+														|| (tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "PLANE"
+															&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 62)
+														|| (tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "AVENGER"
+															&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 61)))
 												{
 													srfSprite = tileNorth->getSprite(MapData::O_OBJECT);
+//													srfSprite = NULL;
 													if (srfSprite)
 													{
 														if (tileNorth->isDiscovered(2) == true)
@@ -2273,8 +2279,8 @@ void Map::drawTerrain(Surface* surface)
 											surface,
 											screenPosition.x + walkOffset.x,
 											screenPosition.y + walkOffset.y,
-											0,
-											halfRight);
+											0);
+//											halfRight);
 							}
 
 							if (unit->getBreathFrame() > 0)
@@ -2617,6 +2623,54 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw SMOKE & FIRE
+					if (itX > 0 && itY > 0 // Redraw fire on south-west Tile of big units
+						&& unit != NULL)
+					{
+						const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+						const BattleUnit* const unitWest = tileWest->getUnit();
+
+						if (unitWest == unit)
+						{
+							const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+							const BattleUnit* const unitNorth = tileNorth->getUnit();
+
+							if (unitNorth == unit)
+							{
+								if (tileWest->getSmoke() != 0
+									&& tileWest->isDiscovered(2) == true)
+								{
+									if (tileWest->getFire() == 0)
+									{
+										if (_save->getDepth() > 0)
+											frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+										else
+											frame = ResourcePack::SMOKE_OFFSET;
+
+										frame += (tileWest->getSmoke() + 1) / 2;
+										shade = tileWest->getShade();
+									}
+									else
+									{
+										frame = 0;
+										shade = 0;
+									}
+
+									animOffset = _animFrame / 2 + tileWest->getAnimationOffset();
+									if (animOffset > 3) animOffset -= 4;
+									frame += animOffset;
+
+									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									if (srfSprite)
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x - 16,
+												screenPosition.y - 8 + tileWest->getTerrainLevel(),
+												shade);
+								}
+							}
+						}
+					}
+
 					if (//unit == NULL || unit->getStatus() == STATUS_STANDING))
 						tile->getSmoke() != 0
 						&& tile->isDiscovered(2) == true)
@@ -3098,6 +3152,55 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
+
+/*					// Draw SMOKE & FIRE
+					if (itX > 0 && itY > 0 // Redraw fire on south-west Tile of big units
+						&& unit != NULL)
+					{
+						const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+						const BattleUnit* const unitWest = tileWest->getUnit();
+
+						if (unitWest == unit)
+						{
+							const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+							const BattleUnit* const unitNorth = tileNorth->getUnit();
+
+							if (unitNorth == unit)
+							{
+								if (tileWest->getSmoke() != 0
+									&& tileWest->isDiscovered(2) == true)
+								{
+									if (tileWest->getFire() == 0)
+									{
+										if (_save->getDepth() > 0)
+											frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+										else
+											frame = ResourcePack::SMOKE_OFFSET; // =7
+
+										frame += (tileWest->getSmoke() + 1) / 2;
+										shade = tileWest->getShade();
+									}
+									else
+									{
+										frame = 0;
+										shade = 0;
+									}
+
+									animOffset = _animFrame / 2 + tileWest->getAnimationOffset();
+									if (animOffset > 3) animOffset -= 4;
+									frame += animOffset;
+
+									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									if (srfSprite)
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x,
+												screenPosition.y + tileWest->getTerrainLevel() - 16,
+												shade);
+								}
+							}
+						}
+					} */
 
 					// Draw cursor front
 					if (_cursorType != CT_NONE
