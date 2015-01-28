@@ -2007,9 +2007,7 @@ private:
 			:
 				_game(game),
 				_globe(globe)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		/// Call AlienMission::think() with stored parameters.
 		void operator()(AlienMission* am) const
@@ -2209,32 +2207,32 @@ void GeoscapeState::time30Minutes()
 				lat = (*ufo)->getLatitude();
 
 			for (std::vector<Region*>::const_iterator
-					k = _savedGame->getRegions()->begin();
-					k != _savedGame->getRegions()->end();
-					++k)
+					i = _savedGame->getRegions()->begin();
+					i != _savedGame->getRegions()->end();
+					++i)
 			{
-				if ((*k)->getRules()->insideRegion(
+				if ((*i)->getRules()->insideRegion(
 												lon,
 												lat) == true)
 				{
-					(*k)->addActivityAlien(ufoVP); // points per UFO in-Region per half hour
-					(*k)->recentActivity();
+					(*i)->addActivityAlien(ufoVP); // points per UFO in-Region per half hour
+					(*i)->recentActivity();
 
 					break;
 				}
 			}
 
 			for (std::vector<Country*>::const_iterator
-					k = _savedGame->getCountries()->begin();
-					k != _savedGame->getCountries()->end();
-					++k)
+					i = _savedGame->getCountries()->begin();
+					i != _savedGame->getCountries()->end();
+					++i)
 			{
-				if ((*k)->getRules()->insideCountry(
+				if ((*i)->getRules()->insideCountry(
 												lon,
 												lat) == true)
 				{
-					(*k)->addActivityAlien(ufoVP); // points per UFO in-Country per half hour
-					(*k)->recentActivity();
+					(*i)->addActivityAlien(ufoVP); // points per UFO in-Country per half hour
+					(*i)->recentActivity();
 
 					break;
 				}
@@ -2409,9 +2407,7 @@ private:
 			:
 				_ruleset(ruleset),
 				_save(save)
-		{
-			/* Empty by design */
-		}
+		{}
 
 		/// Check and spawn mission.
 		void operator()(const AlienBase* base) const;
@@ -2520,9 +2516,9 @@ void GeoscapeState::time1Day()
 			//if (research) Log(LOG_INFO) << ". research Valid";
 			//else Log(LOG_INFO) << ". research NOT valid"; // end_TEST
 
-			if (Options::spendResearchedItems // if "researched" the live alien, his body sent to the stores.
-				&& research->needItem()
-				&& _game->getRuleset()->getUnit(research->getName()))
+			if (Options::spendResearchedItems == true // if "researched" the live alien, his body sent to stores.
+				&& research->needItem() == true
+				&& _game->getRuleset()->getUnit(research->getName()) != NULL)
 			{
 				(*b)->getItems()->addItem(
 									_game->getRuleset()->getArmor(
@@ -2542,7 +2538,6 @@ void GeoscapeState::time1Day()
 						++gof)
 				{
 					bool oneFree = true;
-
 					for (std::vector<const RuleResearch*>::const_iterator
 							discovered = _savedGame->getDiscoveredResearch().begin();
 							discovered != _savedGame->getDiscoveredResearch().end();
@@ -2552,18 +2547,16 @@ void GeoscapeState::time1Day()
 							oneFree = false;
 					}
 
-					if (oneFree)
+					if (oneFree == true)
 						possibilities.push_back(*gof);
 				}
 
 				if (possibilities.empty() == false)
 				{
-					size_t randFree = static_cast<size_t>(RNG::generate(
-																	0,
-																	static_cast<int>(possibilities.size() - 1)));
-					std::string free = possibilities.at(randFree);
-					bonus = _game->getRuleset()->getResearch(free);
-
+					const size_t randFree = static_cast<size_t>(RNG::generate(
+																			0,
+																			static_cast<int>(possibilities.size() - 1)));
+					bonus = _game->getRuleset()->getResearch(possibilities.at(randFree));
 					_savedGame->addFinishedResearch(
 												bonus,
 												_game->getRuleset());
@@ -2623,18 +2616,18 @@ void GeoscapeState::time1Day()
 
 			if (newResearch != NULL) // check for possible researching weapon before clip
 			{
-				RuleItem* item = _game->getRuleset()->getItem(newResearch->getName());
-				if (item
+				RuleItem* const item = _game->getRuleset()->getItem(newResearch->getName());
+				if (item != NULL
 					&& item->getBattleType() == BT_FIREARM
 					&& item->getCompatibleAmmo()->empty() == false)
 				{
-					RuleManufacture* manufRule = _game->getRuleset()->getManufacture(item->getType());
-					if (manufRule
+					const RuleManufacture* const manufRule = _game->getRuleset()->getManufacture(item->getType());
+					if (manufRule != NULL
 						&& manufRule->getRequirements().empty() == false)
 					{
 						const std::vector<std::string>& req = manufRule->getRequirements();
-						RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-						if (ammo
+						const RuleItem* const ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+						if (ammo != NULL
 							&& std::find(
 										req.begin(),
 										req.end(),
@@ -2709,28 +2702,34 @@ void GeoscapeState::time1Day()
 				)
 		{
 			//Log(LOG_INFO) << ". Soldier = " << (*soldier)->getId() << " woundPct = " << (*soldier)->getWoundPercent();
-			if ((*soldier)->getWoundPercent() > 10
-				&& RNG::percent((*soldier)->getWoundPercent() / 5) == true)	// more than 10% wounded, %chance to die today
+			if ((*soldier)->getWoundPercent() > 10)
 			{
-				//Log(LOG_INFO) << ". . he's dead, Jim!!" << (*soldier)->getId();
-				timerReset();
+				const int chanceToDie = std::max(
+											1,
+											((*soldier)->getWoundPercent() / 5) / (((*soldier)->getWoundRecovery() + 9) / 10));
 
-				popup(new SoldierDiedState(
-										(*soldier)->getName(),
-										(*b)->getName()));
+				if (RNG::percent(chanceToDie) == true) // more than 10% wounded, %chance to die today
+				{
+					//Log(LOG_INFO) << ". . he's dead, Jim!!" << (*soldier)->getId();
+					timerReset();
 
-				(*soldier)->die(_savedGame); // holy * This copies the Diary-object
-				// so to delete Soldier-instance I need to use a CopyConstructor
-				// on either or both of SoldierDiary and SoldierCommendations.
-				// Oh, and maybe an operator= assignment overload also.
-				// Learning C++ is like standing around while 20 people constantly
-				// throw cow's dung at you. (But don't mention "const" or they'll throw
-				// twice as fast.) i miss you, Alan Turing ....
+					popup(new SoldierDiedState(
+											(*soldier)->getName(),
+											(*b)->getName()));
 
-				delete *soldier;
-				soldier = (*b)->getSoldiers()->erase(soldier);
+					(*soldier)->die(_savedGame); // holy * This copies the Diary-object
+					// so to delete Soldier-instance I need to use a CopyConstructor
+					// on either or both of SoldierDiary and SoldierCommendations.
+					// Oh, and maybe an operator= assignment overload also.
+					// Learning C++ is like standing around while 20 people constantly
+					// throw cow's dung at you. (But don't mention "const" or they'll throw
+					// twice as fast.) i miss you, Alan Turing ....
 
-				// note: Could return any armor the soldier was wearing to Stores.
+					delete *soldier;
+					soldier = (*b)->getSoldiers()->erase(soldier);
+
+					// note: Could return any armor the soldier was wearing to Stores.
+				}
 			}
 			else
 			{
@@ -2958,9 +2957,9 @@ void GeoscapeState::time1Month()
 												"STR_ALIEN_RETALIATION") == NULL)
 					{
 						const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
-						AlienMission* mission = new AlienMission(
-																rule,
-																*_savedGame);
+						AlienMission* const  mission = new AlienMission(
+																	rule,
+																	*_savedGame);
 						mission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 						mission->setRegion(
 										(*j)->getRules()->getType(),
