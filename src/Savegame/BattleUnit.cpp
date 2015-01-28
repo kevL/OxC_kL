@@ -1044,8 +1044,7 @@ Surface* BattleUnit::getCache(
 		bool* invalid,
 		int part) const
 {
-	if (part < 0)
-		part = 0;
+	if (part < 0) part = 0;
 
 	*invalid = _cacheInvalid;
 
@@ -2340,25 +2339,24 @@ BattleAIState* BattleUnit::getCurrentAIState() const
  * @param tileBelow	- pointer to the Tile below
  */
 void BattleUnit::setTile(
-		Tile* tile,
-		Tile* tileBelow)
+		Tile* const tile,
+		const Tile* const tileBelow)
 {
-	//Log(LOG_INFO) << "BattleUnit::setTile()";
 	_tile = tile;
+
 	if (_tile == NULL)
 	{
 		_floating = false;
 		return;
 	}
 
-	// unit could have changed from flying to walking or vice versa
+
 	if (_status == STATUS_WALKING
 		&& _tile->hasNoFloor(tileBelow)
 		&& _movementType == MT_FLY)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
-		//Log(LOG_INFO) << ". STATUS_WALKING, _floating = " << _floating;
 	}
 	else if (_status == STATUS_FLYING
 		&& _tile->hasNoFloor(tileBelow) == false
@@ -2366,22 +2364,12 @@ void BattleUnit::setTile(
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
-		//Log(LOG_INFO) << ". STATUS_FLYING, _floating = " << _floating;
 	}
-/*	else if (_status == STATUS_STANDING	// kL. keeping this section in tho it was taken out
-		&& _movementType == MT_FLY)		// when STATUS_UNCONSCIOUS below was inserted.
-										// Problem: when loading a save, _floating goes TRUE!
-	{
-		_floating = _tile->hasNoFloor(tileBelow);
-		//Log(LOG_INFO) << ". STATUS_STANDING, _floating = " << _floating;
-	} */
-	else if (_status == STATUS_UNCONSCIOUS) // <- kL_note: not so sure having flying unconscious soldiers is a good deal.
+	else if (_status == STATUS_UNCONSCIOUS)
 	{
 		_floating = _movementType == MT_FLY
 				 && _tile->hasNoFloor(tileBelow);
-		//Log(LOG_INFO) << ". STATUS_UNCONSCIOUS, _floating = " << _floating;
 	}
-	//Log(LOG_INFO) << "BattleUnit::setTile() EXIT";
 }
 
 /**

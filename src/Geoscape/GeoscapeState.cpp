@@ -2706,8 +2706,7 @@ void GeoscapeState::time1Day()
 			{
 				const int chanceToDie = std::max(
 											1,
-											((*soldier)->getWoundPercent() / 5) / (((*soldier)->getWoundRecovery() + 9) / 10));
-
+											((*soldier)->getWoundPercent() / 5) / (((*soldier)->getWoundRecovery() + 9) / 10)); // note potential divBy0
 				if (RNG::percent(chanceToDie) == true) // more than 10% wounded, %chance to die today
 				{
 					//Log(LOG_INFO) << ". . he's dead, Jim!!" << (*soldier)->getId();

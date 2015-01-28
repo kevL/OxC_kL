@@ -778,8 +778,8 @@ private:
 
 		/// Sets the Tile this unit is standing on.
 		void setTile(
-				Tile* tile,
-				Tile* tileBelow = NULL);
+				Tile* const tile,
+				const Tile* const tileBelow = NULL);
 		/// Gets this unit's Tile.
 		Tile* getTile() const;
 
