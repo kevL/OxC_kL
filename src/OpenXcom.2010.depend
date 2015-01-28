@@ -6055,7 +6055,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1422484335 source:f:\git\openxcom\src\battlescape\map.cpp
+1422485639 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6421,7 +6421,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1420884590 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1422487889 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"

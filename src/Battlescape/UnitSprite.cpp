@@ -1098,13 +1098,34 @@ void UnitSprite::drawRoutine2()
 	srf->blit(this);
 
 	// draw the turret, together with the last part
-	if (_part == 3
-		&& turret != -1)
+//	if (_part == 3 &&
+	if (turret != -1)
 	{
 		srf = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
 		int
+			turretOffsetX,
+			turretOffsetY;
+
+		if (_part == 0) // kL->
+		{
+			turretOffsetX = 0,
+			turretOffsetY = 12;
+		}
+		else if (_part == 1)
+		{
+			turretOffsetX = -16,
+			turretOffsetY = 4;
+		}
+		else if (_part == 2)
+		{
+			turretOffsetX = 16,
+			turretOffsetY = 4;
+		}
+		else //if (_part == 3)
+		{
 			turretOffsetX = 0,
 			turretOffsetY = -4;
+		}
 
 		if (hoverTank != 0)
 		{

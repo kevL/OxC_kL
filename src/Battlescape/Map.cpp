@@ -2308,7 +2308,6 @@ void Map::drawTerrain(Surface* surface)
 								* tileNorth = NULL,
 								* tileNorthWest = NULL,
 								* tileWest = NULL,
-
 								* tileNorthNorth = NULL,
 								* tileNorthNorthWest = NULL,
 								* tileNorthNorthWestWest = NULL,
