@@ -944,7 +944,7 @@ Surface* Tile::getSprite(int part) const
  */
 void Tile::setUnit(
 		BattleUnit* unit,
-		Tile* tileBelow)
+		const Tile* const tileBelow)
 {
 	if (unit != NULL)
 		unit->setTile(

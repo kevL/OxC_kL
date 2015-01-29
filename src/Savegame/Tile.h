@@ -230,10 +230,10 @@ protected:
 		/// Sets a unit on this tile.
 		void setUnit(
 				BattleUnit* unit,
-				Tile* tileBelow = NULL);
+				const Tile* const tileBelow = NULL);
 		/**
 		 * Gets the (alive) unit on this tile.
-		 * @return, BattleUnit
+		 * @return, pointer to a BattleUnit
 		 */
 		BattleUnit* getUnit() const
 		{ return _unit; }

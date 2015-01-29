@@ -949,6 +949,7 @@ void Map::drawTerrain(Surface* surface)
 								+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
 
 							srfSprite = unitNorth->getCache(&invalid, quad);
+//							srfSprite = NULL;
 							if (srfSprite)
 							{
 								calculateWalkingOffset(
@@ -1172,17 +1173,28 @@ void Map::drawTerrain(Surface* surface)
 									}
 
 									if (unitWest != NULL
-//										&& unitWest != unit // large units don't need to redraw their westerly parts. <- they do on level ground, for one ....
+										&& unitWest != unit // large units don't need to redraw their westerly parts. <- they do on level ground, for one ....
 										&& (unitWest->getUnitVisible() == true
 											|| _save->getDebugMode() == true)
 										&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
 											|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block,diagonals],West,North,West&North
 											|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 									{
+/*										const Tile* tileSouth;
+
+										if (itY < endY)
+											tileSouth = _save->getTile(mapPosition + Position(0,1,0));
+										else
+											tileSouth = NULL;
+
+										if (tileSouth == NULL
+											|| tileSouth->getUnit() == NULL) // also needs to check unitSouthWest==NULL and unit==NULL
+										{ */
 										quad = tileWest->getPosition().x - unitWest->getPosition().x
 											+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
 
 										srfSprite = unitWest->getCache(&invalid, quad);
+//										srfSprite = NULL;
 										if (srfSprite)
 										{
 											if (unitWest->getStatus() != STATUS_WALKING)
@@ -1222,6 +1234,7 @@ void Map::drawTerrain(Surface* surface)
 //															halfRight);
 											}
 										}
+//										}
 									}
 									// end Redraw unitWest w/ unitNorth valid
 
@@ -1526,9 +1539,14 @@ void Map::drawTerrain(Surface* surface)
 
 						// Redraw westerly units that are moving easterly-westerly.
 						if (itX > 0
+							&& unit == NULL
 							&& (hasFloor == true									// special handling for moving units concealed by current floorTile.
 								|| tile->getMapData(MapData::O_OBJECT) != NULL))	// non-bigWall content-object might act as flooring
 						{
+							// If not unitSouth, unitSouthWest, (or unit).
+
+
+
 							// TODO: Smoke & Fire render below this, use checks to draw or not.
 
 							// reDraw unit SOUTH-WEST. ... unit Walking.
@@ -1575,8 +1593,13 @@ void Map::drawTerrain(Surface* surface)
 														&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))
 												&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop.
 										{
+//											const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
+//											if (tileSouthEast == NULL
+//												|| tileSouthEast->getUnit() == NULL)
+//											{
 											redraw = true;
 											halfRight = true;
+//											}
 										}
 									}
 								}
@@ -1646,7 +1669,6 @@ void Map::drawTerrain(Surface* surface)
 									}
 								}
 
-
 								if (redraw == true)
 								{
 									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
@@ -1712,134 +1734,149 @@ void Map::drawTerrain(Surface* surface)
 
 							// TODO: Smoke & Fire render below this, use checks to draw or not.
 
-							// reDraw unit NORTH-WEST. ... unit Walking (dir = 3,7).
+							// reDraw unit NORTH-WEST. ... unit Walking (dir = 3,7 OR 2,6).
 							// note: tileWest & unitWest are in scope here; tileWest is well-defined, unitWest may be NULL ...
-							if (itY > 0)
+							if (itY > 0
+//								&& unit == NULL
+								&& unitWest == NULL)
 							{
-								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+								const Tile
+									* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0)),
+									* tileEast = NULL;
 
-								BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
+								if (itY < endY)
+									tileEast = _save->getTile(mapPosition + Position(1,0,0));
 
-								if (unitNorthWest != NULL
-									&& (unitNorthWest->getUnitVisible() == true
-										|| _save->getDebugMode() == true)
-									&& unitNorthWest != unit // large units don't need to redraw their western parts
-									&& unitNorthWest->getStatus() == STATUS_WALKING
-									&& (unitNorthWest->getDirection() == 3
-										|| unitNorthWest->getDirection() == 7
-										|| ((unitNorthWest->getDirection() == 2			// This bit is for going down (or up) slopes and not getting unit's toes truncated.
-												|| unitNorthWest->getDirection() == 6	// EW only applicable if curTile foreground has bigWall_NONE and is higher:
-											&& tile->getMapData(MapData::O_OBJECT) != NULL
-											&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-											&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel()))))
+								if (tileNorth->getUnit() == NULL
+									&& (tileEast == NULL
+										|| tileEast->getUnit() == NULL))
 								{
-									int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
+									const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
 
-									if (tile->getMapData(MapData::O_OBJECT) == NULL // exposed floor, basically.
-										|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-											&& levelDiff_nwse < 13)
-										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
-										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S)
+									BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
+
+									if (unitNorthWest != NULL
+										&& (unitNorthWest->getUnitVisible() == true
+											|| _save->getDebugMode() == true)
+										&& unitNorthWest != unit // large units don't need to redraw their western parts
+										&& unitNorthWest->getStatus() == STATUS_WALKING
+										&& (unitNorthWest->getDirection() == 3
+											|| unitNorthWest->getDirection() == 7
+											|| ((unitNorthWest->getDirection() == 2			// This bit is for going down (or up) slopes and not getting unit's toes truncated.
+													|| unitNorthWest->getDirection() == 6	// EW only applicable if curTile foreground has bigWall_NONE and is higher:
+												&& tile->getMapData(MapData::O_OBJECT) != NULL
+												&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+												&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel()))))
 									{
-										// if tileWest is blocking sight, draw unit halfRight
-										// if tileNorth is blocking sight, draw unit halfLeft
-										// else draw Full
-										halfRight = false;
-										bool halfLeft = false;
+										int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
 
-										int levelDiff_ew = tileWest->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
-
-										if (tile->getMapData(MapData::O_WESTWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
-											|| (tileWest->getMapData(MapData::O_OBJECT) != NULL
-												&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& levelDiff_ew > 12))
+										if (tile->getMapData(MapData::O_OBJECT) == NULL // exposed floor, basically.
+											|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+												&& levelDiff_nwse < 13
+												&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 25)
+											|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+											|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S)
 										{
-											halfRight = true;
-										}
+											// if tileWest is blocking sight, draw unit halfRight
+											// if tileNorth is blocking sight, draw unit halfLeft
+											// else draw Full
+											halfRight = false;
+											bool halfLeft = false;
 
-										const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+											int levelDiff_ew = tileWest->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
 
-										int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
-
-										if (tile->getMapData(MapData::O_NORTHWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
-											|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
-												&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& levelDiff_ns > 12)) // beware: The top of the Lightning ramp is likely going to bork about here.
-										{
-											halfLeft = true;
-										}
-
-										if (!
-											(halfRight == true && halfLeft == true))
-										{
-											// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-											// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
-											quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
-												+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
-
-											srfSprite = unitNorthWest->getCache(&invalid, quad);
-//											srfSprite = NULL;
-											if (srfSprite)
+											if (tile->getMapData(MapData::O_WESTWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+												|| (tileWest->getMapData(MapData::O_OBJECT) != NULL
+													&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+													&& (levelDiff_ew > 12
+														|| tileWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
 											{
-												if (tileNorthWest->isDiscovered(2) == true)
-													shade = tileNorthWest->getShade();
-												else
-													shade = 16;
+												halfRight = true;
+											}
 
-												calculateWalkingOffset(
-																	unitNorthWest,
-																	&walkOffset);
+											const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
-												srfSprite->blitNShade(
-																	surface,
-																	screenPosition.x + walkOffset.x,
-																	screenPosition.y - 16 + walkOffset.y,
-																	shade,
-																	halfRight,
-																	0,
-																	halfLeft);
+											int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
 
-												if (unitNorthWest->getFire() != 0)
+											if (tile->getMapData(MapData::O_NORTHWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+												|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
+													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+													&& (levelDiff_ns > 12 // beware: The top of the Lightning ramp is likely going to bork about here.
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
+											{
+												halfLeft = true;
+											}
+
+											if (!
+												(halfRight == true && halfLeft == true))
+											{
+												quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
+													+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
+
+												srfSprite = unitNorthWest->getCache(&invalid, quad);
+//												srfSprite = NULL;
+												if (srfSprite)
 												{
-													frame = 4 + (_animFrame / 2);
-													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+													if (tileNorthWest->isDiscovered(2) == true)
+														shade = tileNorthWest->getShade();
+													else
+														shade = 16;
+
+													calculateWalkingOffset(
+																		unitNorthWest,
+																		&walkOffset);
+
 													srfSprite->blitNShade(
 																		surface,
 																		screenPosition.x + walkOffset.x,
 																		screenPosition.y - 16 + walkOffset.y,
-																		0);
-//																		halfRight,
-//																		0,
-//																		halfLeft);
-												}
+																		shade,
+																		halfRight,
+																		0,
+																		halfLeft);
 
-												// Redraw top of Craft's ramp if walking NWSE beneath it.
-												// ( if (tileNorth has west or southwall) redraw it, perhaps )
-												const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
-
-												if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
-													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 0 // draw content-object but not bigWall
-													&& ((tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN"
-															&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42)
-														|| (tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "PLANE"
-															&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 62)
-														|| (tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "AVENGER"
-															&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 61)))
-												{
-													srfSprite = tileNorth->getSprite(MapData::O_OBJECT);
-//													srfSprite = NULL;
-													if (srfSprite)
+													if (unitNorthWest->getFire() != 0)
 													{
-														if (tileNorth->isDiscovered(2) == true)
-															shade = tileNorth->getShade();
-														else
-															shade = 16;
-
+														frame = 4 + (_animFrame / 2);
+														srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 														srfSprite->blitNShade(
-																surface,
-																screenPosition.x + 16,
-																screenPosition.y - 8 - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset(),
-																shade);
+																			surface,
+																			screenPosition.x + walkOffset.x,
+																			screenPosition.y - 16 + walkOffset.y,
+																			0);
+//																			halfRight,
+//																			0,
+//																			halfLeft);
+													}
+
+													// Redraw top of Craft's ramp if walking NWSE beneath it.
+													// ( if (tileNorth has west or southwall) redraw it, perhaps )
+													const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+
+													if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
+														&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 0 // draw content-object but not bigWall
+														&& ((tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN"
+																&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42)
+															|| (tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "PLANE"
+																&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 62)
+															|| (tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "AVENGER"
+																&& tileNorth->getMapData(MapData::O_OBJECT)->getSprite(0) == 61)))
+													{
+														srfSprite = tileNorth->getSprite(MapData::O_OBJECT);
+//														srfSprite = NULL;
+														if (srfSprite)
+														{
+															if (tileNorth->isDiscovered(2) == true)
+																shade = tileNorth->getShade();
+															else
+																shade = 16;
+
+															srfSprite->blitNShade(
+																	surface,
+																	screenPosition.x + 16,
+																	screenPosition.y - 8 - tileNorth->getMapData(MapData::O_OBJECT)->getYOffset(),
+																	shade);
+														}
 													}
 												}
 											}
