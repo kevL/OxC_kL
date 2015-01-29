@@ -1593,13 +1593,14 @@ void Map::drawTerrain(Surface* surface)
 														&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))
 												&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop.
 										{
-//											const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
-//											if (tileSouthEast == NULL
-//												|| tileSouthEast->getUnit() == NULL)
-//											{
-											redraw = true;
-											halfRight = true;
-//											}
+											const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+
+											if (tileSouthWest == NULL
+												|| tileSouthWest->getUnit() == NULL)
+											{
+												redraw = true;
+												halfRight = true;
+											}
 										}
 									}
 								}
@@ -1662,7 +1663,6 @@ void Map::drawTerrain(Surface* surface)
 														halfRight = false;
 
 													redraw = true;
-//													halfRight = false;
 												}
 											}
 										}
