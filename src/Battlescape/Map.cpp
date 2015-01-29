@@ -1173,7 +1173,11 @@ void Map::drawTerrain(Surface* surface)
 									}
 
 									if (unitWest != NULL
-										&& unitWest != unit // large units don't need to redraw their westerly parts. <- they do on level ground, for one ....
+//										&& unitWest != unit
+//										&& (unitWest != unit // large units don't need to redraw their westerly parts. <- they do on level ground (dir==1,5) for one ....
+//											|| ((unitWest->getDirection() == 1
+//													|| unitWest->getDirection() == 5)
+//												&& tileWest->getTerrainLevel() == tile->getTerrainLevel())) // ... there was another reason I want draw even if (unitWest==unit) -- perhaps for slopes/hilltops.
 										&& (unitWest->getUnitVisible() == true
 											|| _save->getDebugMode() == true)
 										&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
@@ -1768,7 +1772,7 @@ void Map::drawTerrain(Surface* surface)
 												&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 												&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel()))))
 									{
-										int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
+										const int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
 
 										if (tile->getMapData(MapData::O_OBJECT) == NULL // exposed floor, basically.
 											|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
