@@ -6194,7 +6194,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1422656055 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1422657039 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6463,7 +6463,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1422576264 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1422656781 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"

@@ -549,9 +549,11 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 	{
 		if (bu->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
-			int tu = 3;
+			int tu;
 			if (bu->isKneeled() == true)
 				tu = 10;
+			else
+				tu = 3;
 
 			if (checkReservedTU(bu, tu) == true
 				|| (tu == 3
@@ -561,7 +563,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 				{
 					if (tu == 3
 						|| (tu == 10
-							&& bu->spendEnergy(tu / 2) == true))
+							&& bu->spendEnergy(3) == true))
 					{
 						bu->spendTimeUnits(tu);
 						bu->kneel(bu->isKneeled() == false);
@@ -597,13 +599,15 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 	else if (bu->getGeoscapeSoldier() != NULL) // MC'd xCom agent, trying to stand & walk by AI.
 	{
 		if (bu->getTimeUnits() > 9
-			&& bu->getEnergy() > 4)
+			&& bu->getEnergy() > 2)
 		{
 			bu->spendTimeUnits(10);
-			bu->spendEnergy(5);
+			bu->spendEnergy(3);
 
 			bu->kneel(false);
 			getMap()->cacheUnits();
+
+			return true;
 		}
 	}
 	else // MOB has Unit-rules

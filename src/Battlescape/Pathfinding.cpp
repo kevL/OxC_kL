@@ -2191,8 +2191,8 @@ bool Pathfinding::previewPath(bool bRemove)
 					hathStood = true;
 
 					usedTU	+= 10;
-					curTU	-= 10; // 10 tu + 5 energy to stand up.
-					energy	-= 5;
+					curTU	-= 10; // 10 tu + 3 energy to stand up.
+					energy	-= 3;
 				}
 
 				if (dash == true)

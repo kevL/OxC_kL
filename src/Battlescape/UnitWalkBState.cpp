@@ -106,8 +106,8 @@ void UnitWalkBState::init()
 	//Log(LOG_INFO) << ". strafe = " << (int)_action.strafe;
 	//Log(LOG_INFO) << ". StartDirection(init) = " << _dirStart;
 	//Log(LOG_INFO) << ". getDirection(init) = " << _unit->getDirection();
-	if (_action.strafe == false				// not strafing
-		&& -1 < _dirStart && _dirStart < 8		// moving but not up or down
+	if (_action.strafe == false					// not strafing
+		&& _dirStart > -1 && _dirStart < 8		// moving but not up or down
 		&& _dirStart != _unit->getDirection())	// not facing in direction of movement
 	{
 		// kL_note: if unit is not facing in the direction that it's about to walk toward...
