@@ -687,7 +687,7 @@ int Pathfinding::getTUCost(
 		const Position& startPos,
 		int dir,
 		Position* destPos,
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		const BattleUnit* const missileTarget,
 		bool missile)
 {
@@ -1159,7 +1159,7 @@ int Pathfinding::getTUCost(
 				// kL_note: this is moved up so that objects don't cost +150% tu;
 				// instead, let them keep a flat +100% to step onto
 				// -- note that Walls also do not take +150 tu to step over diagonally....
-				if (dir &1)
+				if (dir & 1)
 				{
 					cost = static_cast<int>(static_cast<float>(cost) * 1.5f);
 
@@ -1817,7 +1817,7 @@ bool Pathfinding::canFallDown(const Tile* const tile) const // private
 	if (tile->getPosition().z == 0) // already on lowest maplevel
 		return false;
 
-	return tile->hasNoFloor(_save->getTile(tile->getPosition() - Position(0,0,1)));
+	return tile->hasNoFloor(_save->getTile(tile->getPosition() + Position(0,0,-1)));
 }
 
 /**
@@ -1938,7 +1938,7 @@ bool Pathfinding::canFallDown( // private
 			 2 flying (go unless blocked)
  */
 int Pathfinding::validateUpDown(
-		BattleUnit* bu,
+		const BattleUnit* const bu,
 		Position startPos,
 		int const dir)
 {
@@ -2104,8 +2104,8 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	bool
 		hathStood	= false,
-		dash		= Options::strafe
-				   && _modCTRL
+		dash		= Options::strafe == true
+				   && _modCTRL == true
 				   && _unit->getGeoscapeSoldier() != NULL
 				   && (_strafeMove == false
 						|| (_strafeMove == true
@@ -2117,8 +2117,9 @@ bool Pathfinding::previewPath(bool bRemove)
 						&& _movementType == MT_WALK),
 		flightSuit	= _unit->hasFlightSuit()
 				   && _movementType == MT_FLY,
-		gravLift	= false,
-		reserveOk	= false;
+		gravLift,
+		reserveOk,
+		falling;
 
 	//Log(LOG_INFO) << ". bodySuit = " << bodySuit;
 	//Log(LOG_INFO) << ". powerSuit = " << powerSuit;
@@ -2139,13 +2140,15 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	Tile* tile;
 
-	bool switchBack = false;
+	bool switchBack;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
 		_save->getBattleGame()->setReservedAction(
 											BA_SNAPSHOT);
 	}
+	else
+		switchBack = false;
 
 	for (std::vector<int>::reverse_iterator
 			i = _path.rbegin();
@@ -2160,7 +2163,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					dir,
 					&dest,
 					_unit,
-					0,
+					NULL,
 					false);
 		//Log(LOG_INFO) << ". . tu[0] = " << tu;
 /*		if (tu == 255)		// kL: Conflicts w/ the switchback for marker colors @ BA_SNAP.
@@ -2171,50 +2174,57 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		energyLimit = energy;
 
-		gravLift = dir >= DIR_UP
-				&& _save->getTile(start)->getMapData(MapData::O_FLOOR)
-				&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
-		if (gravLift == false)
+		falling = _movementType != MT_FLY
+			   && canFallDown(
+						_save->getTile(start),
+						unitSize + 1);
+		if (falling == false)
 		{
-			if (hathStood == false
-				&& _unit->isKneeled())
+			gravLift = dir >= DIR_UP
+					&& _save->getTile(start)->getMapData(MapData::O_FLOOR) != NULL
+					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift() == true;
+			if (gravLift == false)
 			{
-				hathStood = true;
+				if (hathStood == false
+					&& _unit->isKneeled() == true)
+				{
+					hathStood = true;
 
-				curTU	-= 10; // 10tu + 5energy to stand up.
-				usedTU	+= 10;
-				energy	-= 5;
+					usedTU	+= 10;
+					curTU	-= 10; // 10 tu + 5 energy to stand up.
+					energy	-= 5;
+				}
+
+				if (dash == true)
+				{
+					tu -= _openDoor;
+					energy -= tu * 3 / 2;
+
+					tu = (tu * 3 / 4) + _openDoor;
+					//Log(LOG_INFO) << ". . tu [dash] = " << tu;
+					//Log(LOG_INFO) << ". . energy [dash] = " << energy;
+				}
+				else
+					energy -= tu;
+
+				if (bodySuit == true)
+					energy -= 1;
+				else if (powerSuit == true)
+					energy += 1;
+				else if (flightSuit == true)
+					energy += 2;
+				//Log(LOG_INFO) << ". . energy left = " << energy;
+
+				if (energy > energyLimit)
+				{
+					//Log(LOG_INFO) << ". hit energyLimit of " << energyLimit;
+					energy = energyLimit;
+				}
 			}
+			//Log(LOG_INFO) << ". . tu[1] = " << tu;
 
-			if (dash == true)
-			{
-				tu -= _openDoor;
-				energy -= tu * 3 / 2;
-
-				tu = (tu * 3 / 4) + _openDoor;
-				//Log(LOG_INFO) << ". . tu [dash] = " << tu;
-				//Log(LOG_INFO) << ". . energy [dash] = " << energy;
-			}
-			else
-				energy -= tu;
-
-			if (bodySuit == true)
-				energy -= 1;
-			else if (powerSuit == true)
-				energy += 1;
-			else if (flightSuit == true)
-				energy += 2;
-			//Log(LOG_INFO) << ". . energy left = " << energy;
-
-			if (energy > energyLimit)
-			{
-				//Log(LOG_INFO) << ". hit energyLimit of " << energyLimit;
-				energy = energyLimit;
-			}
+			curTU -= tu;
 		}
-		//Log(LOG_INFO) << ". . tu[1] = " << tu;
-
-		curTU -= tu;
 		//Log(LOG_INFO) << ". . curTU = " << curTU;
 
 		usedTU += tu;
@@ -2226,16 +2236,16 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		for (int
 				x = unitSize;
-				x > -1;
+				x != -1;
 				--x)
 		{
 			for (int
 					y = unitSize;
-					y > -1;
+					y != -1;
 					--y)
 			{
-				tile = _save->getTile(start + Position(x, y, 0));
-				Tile* const tileAbove = _save->getTile(start + Position(x, y, 1));
+				tile = _save->getTile(start + Position(x,y,0));
+				Tile* const tileAbove = _save->getTile(start + Position(x,y,1));
 
 				if (bRemove == false)
 				{
@@ -2243,7 +2253,7 @@ bool Pathfinding::previewPath(bool bRemove)
 						tile->setPreview(10);
 					else
 					{
-						int nextDir = *(i + 1);
+						const int nextDir = *(i + 1);
 						tile->setPreview(nextDir);
 					}
 
@@ -2253,7 +2263,7 @@ bool Pathfinding::previewPath(bool bRemove)
 						tile->setTUMarker(curTU);
 					}
 
-					if (tileAbove // unit fell down, retroactively make the tileAbove's direction marker to DOWN
+					if (tileAbove != NULL // unit fell down, retroactively make the tileAbove's direction marker to DOWN
 						&& tileAbove->getPreview() == 0
 						&& tu == 0
 						&& _movementType != MT_FLY)
@@ -2326,7 +2336,7 @@ bool Pathfinding::isPathPreviewed() const
  * @return, an array of reachable tiles, sorted in ascending order of cost; the first tile is the start location
  */
 std::vector<int> Pathfinding::findReachable(
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		int tuMax)
 {
 	//Log(LOG_INFO) << "Pathfinding::findReachable()";
@@ -2342,15 +2352,15 @@ std::vector<int> Pathfinding::findReachable(
 	}
 
 	PathfindingNode* startNode = getNode(start);
-	startNode->connect(0, 0, 0);
+	startNode->connect(0,0,0);
 	PathfindingOpenSet unvisited;
 	unvisited.push(startNode);
 	std::vector<PathfindingNode*> reachable;
 
 	while (unvisited.empty() == false)
 	{
-		PathfindingNode* currentNode = unvisited.pop();
-		Position const &currentPos = currentNode->getPosition();
+		PathfindingNode* const currentNode = unvisited.pop();
+		const Position &currentPos = currentNode->getPosition();
 
 		for (int // Try all reachable neighbours.
 				direction = 0;
@@ -2376,8 +2386,8 @@ std::vector<int> Pathfinding::findReachable(
 				continue;
 			}
 
-			PathfindingNode* nextNode = getNode(nextPos);
-			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
+			PathfindingNode* const nextNode = getNode(nextPos);
+			if (nextNode->isChecked() == true) // Our algorithm means this node is already at minimum cost.
 				continue;
 
 			const int totalTuCost = currentNode->getTUCost(false) + tuCost;

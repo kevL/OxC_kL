@@ -53,8 +53,8 @@ private:
 		_size,
 		_totalTUCost;
 
-	BattleUnit		* _unit;
-	SavedBattleGame	* _save;
+	BattleUnit* _unit;
+	SavedBattleGame* _save;
 
 	MovementType _movementType;
 
@@ -166,7 +166,7 @@ private:
 				const Position& startPos,
 				const int dir,
 				Position* destPos,
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				const BattleUnit* const missileTarget,
 				bool missile);
 		/// Gets _totalTUCost; finds out whether we can hike somewhere in this turn or not.
@@ -175,13 +175,13 @@ private:
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
-				BattleUnit* bu,
+				const BattleUnit* const bu,
 				Position startPos,
 				int const dir);
 
 		/// Gets all reachable tiles, based on cost.
 		std::vector<int> findReachable(
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				int tuMax);
 
 		/// Previews the path.

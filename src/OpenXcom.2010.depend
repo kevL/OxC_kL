@@ -5435,7 +5435,7 @@
 1421728290 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1422618996 f:\git\openxcom\src\battlescape\pathfinding.h
+1422653024 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -6194,7 +6194,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1422624843 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1422656055 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"

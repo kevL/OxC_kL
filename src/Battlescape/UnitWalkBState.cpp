@@ -747,12 +747,12 @@ bool UnitWalkBState::doStatusWalk()
 		const int unitSize = _unit->getArmor()->getSize() - 1;
 		for (int
 				x = unitSize;
-				x > -1;
+				x != -1;
 				--x)
 		{
 			for (int
 					y = unitSize;
-					y > -1;
+					y != -1;
 					--y)
 			{
 //				posSized = pos + Position(x,y,0);
@@ -770,12 +770,12 @@ bool UnitWalkBState::doStatusWalk()
 
 		for (int
 				x = unitSize;
-				x > -1;
+				x != -1;
 				--x)
 		{
 			for (int
 					y = unitSize;
-					y > -1;
+					y != -1;
 					--y)
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
@@ -1316,7 +1316,7 @@ void UnitWalkBState::playMovementSound()
  * For determining if a flying unit turns flight off at start of movement.
  * NOTE: _falling should always be false when this is called in init().
  * NOTE: And unit must be capable of flight for this to be relevant.
- * NOTE: This could get problemmatic if/when falling onto nonFloors like water,
+ * NOTE: This could get problematic if/when falling onto nonFloors like water,
  *		 and/or if there is another unit on tileBelow.
  */
 void UnitWalkBState::doFallCheck()
@@ -1336,6 +1336,7 @@ void UnitWalkBState::doFallCheck()
  * NOTE: Pathfinding already has a function canFallDown() that could be used for
  * a couple places here in UnitWalkBState; does not have 'descent' though.
  @param descent - how many levels below current to check for ground (default 0)
+ @return, true if unit hits a Floor
  */
 bool UnitWalkBState::groundCheck(int descent)
 {
@@ -1344,12 +1345,12 @@ bool UnitWalkBState::groundCheck(int descent)
 	const int unitSize = _unit->getArmor()->getSize() - 1;
 	for (int
 			x = unitSize;
-			x > -1;
+			x != -1;
 			--x)
 	{
 		for (int
 				y = unitSize;
-				y > -1;
+				y != -1;
 				--y)
 		{
 			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(
