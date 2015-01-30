@@ -1128,33 +1128,41 @@ void Map::drawTerrain(Surface* surface)
 									}
 
 									if (unitWest == NULL		// kL_add
-										|| unitWest != unit)	// kL_add. Don't muck w/ large units
+										|| unitWest != unit)	// kL_add. Don't muck (too much) w/ large units, gawd.
 									{
-										srfSprite = tileWest->getSprite(MapData::O_OBJECT);	// kL_note: This is what creates probls if (unitWest == unit);
-//										srfSprite = NULL;									// the unitsprite gets overwritten by a slope ....
-										if (srfSprite
-											&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NWSE // do none,Block,NESW,West,North,West&North
-											&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST
-												|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
-										{
-											srfSprite->blitNShade(
-													surface,
-													screenPosition.x - 16,
-													screenPosition.y - 8 - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
-													shade,
-													true); // halfRight
+										const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
 
-											// if the object in the tile to the west is a diagonal NESW bigWall
-											// it needs to have the black triangle at the bottom covered up
-											if (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW)
+										const BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
+
+										if (unitNorthWest == NULL
+											|| unitNorthWest != unitNorth) // <- or could do something with TerrainLevels ... ie, draw Object if same level.
+										{
+											srfSprite = tileWest->getSprite(MapData::O_OBJECT);	// kL_note: This is what creates probls if (unitWest == unit);
+//											srfSprite = NULL;									// the unitsprite gets overwritten by a slope ....
+											if (srfSprite
+												&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NWSE // do none,Block,NESW,West,North,West&North
+												&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST
+													|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 											{
-												srfSprite = tile->getSprite(MapData::O_FLOOR);
-												if (srfSprite)
-													srfSprite->blitNShade(
-															surface,
-															screenPosition.x,
-															screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(),
-															tileShade);
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x - 16,
+														screenPosition.y - 8 - tileWest->getMapData(MapData::O_OBJECT)->getYOffset(),
+														shade,
+														true); // halfRight
+
+												// if the object in the tile to the west is a diagonal NESW bigWall
+												// it needs to have the black triangle at the bottom covered up
+												if (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW)
+												{
+													srfSprite = tile->getSprite(MapData::O_FLOOR);
+													if (srfSprite)
+														srfSprite->blitNShade(
+																surface,
+																screenPosition.x,
+																screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(),
+																tileShade);
+												}
 											}
 										}
 									}
@@ -2118,8 +2126,6 @@ void Map::drawTerrain(Surface* surface)
 							}
 						}
 
-						// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-						// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 						quad = tile->getPosition().x - unit->getPosition().x
 							+ (tile->getPosition().y - unit->getPosition().y) * 2;
 
@@ -2251,6 +2257,7 @@ void Map::drawTerrain(Surface* surface)
 
 							// Feet getting chopped by tilesBelow when moving vertically; redraw lowForeground walls.
 							// note: This is a quickfix - feet can also get chopped by walls in tileBelowSouth & tileBelowEast ...
+//							if (false)
 							if (unit->getVerticalDirection() != 0
 								&& itX < endX && itY < endY && itZ > 0)
 							{
@@ -2464,8 +2471,8 @@ void Map::drawTerrain(Surface* surface)
 
 									// special case if tileSouthEast doesn't have a floor
 									// and tileBelowSouthEast does have a sprite that should conceal the redrawn unit's right leg.
-									if (itX < endX
-										&& itY < endY)
+//									if (false)
+									if (itX < endX && itY < endY)
 									{
 										const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
 
@@ -2482,7 +2489,7 @@ void Map::drawTerrain(Surface* surface)
 											if (levelDiff < 1
 												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT) != NULL
 												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)	// generally only nonwalkable content-objects
+												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)	// generally only nonwalkable content-objects
 											{																						// rise high enough to cause an overblit.
 												srfSprite = tileBelowSouthEast->getSprite(MapData::O_OBJECT);
 //												srfSprite = NULL;
@@ -2748,8 +2755,6 @@ void Map::drawTerrain(Surface* surface)
 									|| _save->getDebugMode() == true))
 //								&& unitBelow->getStatus() == STATUS_FLYING
 							{
-								// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-								// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 								quad = tileBelow->getPosition().x - unitBelow->getPosition().x
 									+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
 
@@ -2827,11 +2832,6 @@ void Map::drawTerrain(Surface* surface)
 								// TODO: don't draw unitSouth if there is a foreground object on this Z-level above the unit (ie. it hides his head getting chopped off anyway).
 								// TODO: redraw foreground objects on lower Z-level
 								BattleUnit* const unitBelowSouth = tileBelowSouth->getUnit(); // else CTD here.
-/*								BattleUnit* unitBelowSouth;
-								if (tileBelowSouth != NULL)
-									unitBelowSouth = tileBelowSouth->getUnit();
-								else
-									unitBelowSouth = NULL; */
 
 								if (unitBelowSouth != NULL
 									&& unitBelowSouth->getVerticalDirection() != 0
@@ -2839,8 +2839,6 @@ void Map::drawTerrain(Surface* surface)
 									&& (unitBelowSouth->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
-									// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-									// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 									quad = tileBelowSouth->getPosition().x - unitBelowSouth->getPosition().x
 										+ (tileBelowSouth->getPosition().y - unitBelowSouth->getPosition().y) * 2;
 
@@ -2896,7 +2894,7 @@ void Map::drawTerrain(Surface* surface)
 
 								if (unitBelowSouthEast != NULL
 									&& unitBelowSouthEast->getVerticalDirection() != 0
-//										&& unitBelowSouthEast->getStatus() == STATUS_FLYING
+//									&& unitBelowSouthEast->getStatus() == STATUS_FLYING
 									&& (unitBelowSouthEast->getUnitVisible() == true
 										|| _save->getDebugMode() == true))
 								{
@@ -2913,8 +2911,6 @@ void Map::drawTerrain(Surface* surface)
 												&& tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N)))
 										// TODO: insert checks for tileSouthEastEast !south&tc bigWalls & tileSouthSouthEastEast !north&tc Walls
 									{
-										// The quadrant# is 0 for small units; large units also have quadrants 1,2 & 3 -
-										// the relative x/y Position of the unit's primary Position vs the drawn Tile's Position.
 										quad = tileBelowSouthEast->getPosition().x - unitBelowSouthEast->getPosition().x
 											+ (tileBelowSouthEast->getPosition().y - unitBelowSouthEast->getPosition().y) * 2;
 
