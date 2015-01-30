@@ -71,28 +71,28 @@ private:
 			const Tile* const tile,
 			const int part,
 			const BattleUnit* const missileTarget = NULL,
-			const int bigWallExclusion = -1);
+			const int bigWallExclusion = -1) const;
 	/// Tries to find a straight line path between two positions.
 	bool bresenhamPath(
 			const Position& origin,
 			const Position& target,
-			BattleUnit* missileTarget,
+			const BattleUnit* const missileTarget,
 			bool sneak = false,
 			int maxTUCost = 1000);
 	/// Tries to find a path between two positions.
 	bool aStarPath(
 			const Position& origin,
 			const Position& target,
-			BattleUnit* missileTarget,
+			const BattleUnit* const missileTarget,
 			bool sneak = false,
 			int maxTUCost = 1000);
 
 	/// Determines whether a unit can fall down from this tile.
-	bool canFallDown(const Tile* const tile);
+	bool canFallDown(const Tile* const tile) const;
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(
 			const Tile* const tile,
-			int unitSize);
+			int unitSize) const;
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.
 //	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
@@ -142,7 +142,7 @@ private:
 				const Tile* const startTile,
 				const Tile* endTile,
 				const int dir,
-				const BattleUnit* const missileTarget = NULL);
+				const BattleUnit* const missileTarget = NULL) const;
 
 		/// Aborts the current path.
 		void abortPath();
@@ -167,13 +167,11 @@ private:
 				const int dir,
 				Position* destPos,
 				BattleUnit* unit,
-				BattleUnit* missileTarget,
+				const BattleUnit* const missileTarget,
 				bool missile);
 		/// Gets _totalTUCost; finds out whether we can hike somewhere in this turn or not.
 		int getTotalTUCost() const
-		{
-			return _totalTUCost;
-		}
+		{ return _totalTUCost; }
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(

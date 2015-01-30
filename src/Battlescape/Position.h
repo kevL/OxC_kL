@@ -44,8 +44,7 @@ public:
 			x(0),
 			y(0),
 			z(0)
-	{
-	};
+	{};
 	/// X Y Z position constructor.
 	Position(
 			int x_,
@@ -55,16 +54,14 @@ public:
 			x(x_),
 			y(y_),
 			z(z_)
-	{
-	};
+	{};
 	/// Copy constructor.
 	Position(const Position& pos)
 		:
 			x(pos.x),
 			y(pos.y),
 			z(pos.z)
-	{
-	};
+	{};
 
 	Position& operator=(const Position& pos)
 	{
