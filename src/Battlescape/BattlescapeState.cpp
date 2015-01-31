@@ -4074,9 +4074,9 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 
 	std::vector<std::wstring> infoType;
 	infoType.push_back(L"F "); // Floor
-	infoType.push_back(L"s "); // smoke
-	infoType.push_back(L"f "); // fire
-	infoType.push_back(L"T "); // tuCost
+	infoType.push_back(L"S "); // smoke
+	infoType.push_back(L"I "); // fire
+	infoType.push_back(L"M "); // tuCost
 
 
 	for (size_t

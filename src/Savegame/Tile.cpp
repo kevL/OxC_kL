@@ -552,35 +552,34 @@ int Tile::closeUfoDoor()
 }
 
 /**
- * Sets the tile's parts' cache flag.
- * @param flag - true/false
- * @param part - 0 westwall
- *				 1 northwall
- *				 2 content+floor
+ * Sets this Tile's parts' cache flag.
+ * @param vis	- true/false
+ * @param part	- 0 westwall
+ *				  1 northwall
+ *				  2 content+floor
  */
 void Tile::setDiscovered(
-		bool flag,
+		bool vis,
 		int part)
 {
-	if (_discovered[part] != flag)
+	if (_discovered[part] != vis)
 	{
-		_discovered[part] = flag;
+		_discovered[part] = vis;
 
-		if (flag == true
-			&& part == 2)
+		if (vis == true		// if content+floor is discovered
+			&& part == 2)	// set west & north walls discovered too.
 		{
 			_discovered[0] = true;
 			_discovered[1] = true;
 		}
 
-		// if light/visibility on tile changes, units and objects on it change light too
-		if (_unit != NULL)
-			_unit->setCache(NULL);
+		if (_unit != NULL)			// if visibility of tile changes
+			_unit->setCache(NULL);	// units on it change too.
 	}
 }
 
 /**
- * Get the black fog of war state of this tile.
+ * Get the black fog of war state of this Tile.
  * @param part - 0 westwall
  *				 1 northwall
  *				 2 content+floor

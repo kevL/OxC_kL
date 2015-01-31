@@ -1775,17 +1775,17 @@ void Map::drawTerrain(Surface* surface)
 										&& (unitNorthWest->getDirection() == 3
 											|| unitNorthWest->getDirection() == 7
 											|| ((unitNorthWest->getDirection() == 2			// This bit is for going down (or up) slopes and not getting unit's toes truncated.
-													|| unitNorthWest->getDirection() == 6	// EW only applicable if curTile foreground has bigWall_NONE and is higher:
+													|| unitNorthWest->getDirection() == 6)	// EW only applicable if curTile foreground has bigWall_NONE and is higher:
 												&& tile->getMapData(MapData::O_OBJECT) != NULL
 												&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel()))))
+												&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel())))
 									{
 										const int levelDiff_nwse = std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()); // positive means Tile is higher
 
 										if (tile->getMapData(MapData::O_OBJECT) == NULL // exposed floor, basically.
 											|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 												&& levelDiff_nwse < 13
-												&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 25)
+												&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)
 											|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
 											|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S)
 										{
@@ -1813,7 +1813,7 @@ void Map::drawTerrain(Surface* surface)
 											if (tile->getMapData(MapData::O_NORTHWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 												|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-													&& (levelDiff_ns > 12 // beware: The top of the Lightning ramp is likely going to bork about here.
+													&& (levelDiff_ns > 12
 														|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
 											{
 												halfLeft = true;
@@ -2576,7 +2576,7 @@ void Map::drawTerrain(Surface* surface)
 									shade);
 					}
 
-					if (itX > 0 && itY > 0 // Redraw fire on south-west Tile of big units
+					if (itX > 0 && itY > 0 // Redraw fire on south-west & north-east Tiles of big units
 						&& unit != NULL)
 					{
 						const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
@@ -2618,6 +2618,38 @@ void Map::drawTerrain(Surface* surface)
 												surface,
 												screenPosition.x - 16,
 												screenPosition.y - 8 + tileWest->getTerrainLevel(),
+												shade);
+								}
+
+								if (tileNorth->getSmoke() != 0
+									&& tileNorth->isDiscovered(2) == true)
+								{
+									if (tileNorth->getFire() == 0)
+									{
+										if (_save->getDepth() > 0)
+											frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+										else
+											frame = ResourcePack::SMOKE_OFFSET;
+
+										frame += (tileNorth->getSmoke() + 1) / 2;
+										shade = tileNorth->getShade();
+									}
+									else
+									{
+										frame = 0;
+										shade = 0;
+									}
+
+									animOffset = _animFrame / 2 + tileNorth->getAnimationOffset();
+									if (animOffset > 3) animOffset -= 4;
+									frame += animOffset;
+
+									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									if (srfSprite)
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x - 16,
+												screenPosition.y - 8 + tileNorth->getTerrainLevel(),
 												shade);
 								}
 							}

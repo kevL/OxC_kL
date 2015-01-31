@@ -188,7 +188,7 @@ protected:
 
 		/// Sets the black fog of war status of this tile.
 		void setDiscovered(
-				bool flag,
+				bool vis,
 				int part);
 		/// Gets the black fog of war status of this tile.
 		bool isDiscovered(int part) const;
