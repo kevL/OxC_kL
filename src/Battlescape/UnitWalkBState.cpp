@@ -308,9 +308,9 @@ bool UnitWalkBState::doStatusStand()
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
 	const Tile* const tile = _parent->getSave()->getTile(_unit->getPosition());
-	bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
-				 && tile->getMapData(MapData::O_FLOOR) != NULL
-				 && tile->getMapData(MapData::O_FLOOR)->isGravLift();
+	const bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
+					   && tile->getMapData(MapData::O_FLOOR) != NULL
+					   && tile->getMapData(MapData::O_FLOOR)->isGravLift();
 
 	setNormalWalkSpeed(gravLift);
 
@@ -474,8 +474,7 @@ bool UnitWalkBState::doStatusStand()
 				energy = 0;
 			}
 
-			if (energy < 0)
-				energy = 0;
+			if (energy < 0) energy = 0;
 		}
 
 		//Log(LOG_INFO) << ". check tu + stamina, etc. TU = " << tu;
@@ -484,7 +483,7 @@ bool UnitWalkBState::doStatusStand()
 		if (tu - _pf->getOpenDoor() > _unit->getTimeUnits())
 		{
 			//Log(LOG_INFO) << ". . tu > _unit->TU()";
-			if (_parent->getPanicHandled()
+			if (_parent->getPanicHandled() == true
 				&& tuTest < 255)
 			{
 				//Log(LOG_INFO) << ". send warning: not enough TU";
@@ -540,27 +539,27 @@ bool UnitWalkBState::doStatusStand()
 		}
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
 		{
-			//Log(LOG_INFO) << ". . check for doors";
+			Log(LOG_INFO) << ". . check for doors";
 			int sound = -1;
 			const int door = _terrain->unitOpensDoor(
 												_unit,
 												false,
 												dir);
 
-			if (door == 3) // ufo door still opening ...
+			if (door == 0) // normal door
 			{
-				//Log(LOG_INFO) << ". . . door #3";
-				return false; // don't start walking yet, wait for the ufo door to open
-			}
-			else if (door == 0) // normal door
-			{
-				//Log(LOG_INFO) << ". . . door #0";
+				Log(LOG_INFO) << ". . . door #0";
 				sound = ResourcePack::DOOR_OPEN;
 			}
 			else if (door == 1) // ufo door
 			{
-				//Log(LOG_INFO) << ". . . door #1";
+				Log(LOG_INFO) << ". . . door #1";
 				sound = ResourcePack::SLIDING_DOOR_OPEN;
+			}
+			else if (door == 3) // ufo door still opening ...
+			{
+				Log(LOG_INFO) << ". . . door #3 ret FALSE";
+				return false; // don't start walking yet, wait for the ufo door to open
 			}
 
 			if (sound != -1)
@@ -572,7 +571,10 @@ bool UnitWalkBState::doStatusStand()
 																_parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 				if (sound == ResourcePack::SLIDING_DOOR_OPEN)
+				{
+					Log(LOG_INFO) << ". . . door #1 ret FALSE";
 					return false; // don't start walking yet, wait for the ufo door to open
+				}
 			}
 		}
 
