@@ -797,7 +797,7 @@ private:
 		/// Gets the item in this unit's main hand.
 		BattleItem* getMainHandWeapon(bool quickest = true) const;
 		/// Gets a grenade from this unit's belt if possible.
-		const BattleItem* const getGrenade() const;
+		BattleItem* getGrenade() const;
 		/// Gets the name of a melee weapon this unit may be carrying or that's innate.
 		std::string getMeleeWeapon() const;
 //		BattleItem* getMeleeWeapon(); // kL_note: changed.

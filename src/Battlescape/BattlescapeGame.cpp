@@ -2091,8 +2091,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			if (_save->getTile(ba.target) != NULL)
 			{
 				ba.weapon = unit->getMainHandWeapon();
-				if (ba.weapon == NULL)											// kL
-					ba.weapon = const_cast<BattleItem*>(unit->getGrenade());	// kL
+				if (ba.weapon == NULL)				// kL
+					ba.weapon = unit->getGrenade();	// kL
 
 				// TODO: run up to another unit and slug it with the Universal Fist.
 				// Or w/ an already-equipped melee weapon

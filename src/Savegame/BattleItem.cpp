@@ -591,13 +591,13 @@ bool BattleItem::getXCOMProperty() const
  * Converts an unconscious body into a dead one.
  * @param rules - pointer to rules of the corpse item to convert this item into
  */
-void BattleItem::convertToCorpse(const RuleItem* rules)
+void BattleItem::convertToCorpse(RuleItem* const rules)
 {
 	if (_unit != NULL
 		&& _rules->getBattleType() == BT_CORPSE
 		&& rules->getBattleType() == BT_CORPSE)
 	{
-		_rules = const_cast<RuleItem*>(rules);
+		_rules = rules;
 	}
 }
 

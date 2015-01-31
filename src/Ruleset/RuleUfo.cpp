@@ -17,8 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "RuleTerrain.h"
 #include "RuleUfo.h"
+
+#include "RuleTerrain.h"
 
 
 namespace OpenXcom
@@ -79,7 +80,9 @@ void RuleUfo::load(
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
 		RuleTerrain* const rule = new RuleTerrain(terrain["name"].as<std::string>());
-		rule->load(terrain, ruleset);
+		rule->load(
+				terrain,
+				ruleset);
 		_battlescapeTerrainData = rule;
 	}
 
@@ -112,13 +115,17 @@ int RuleUfo::getRadius() const
 {
 	if (_size == "STR_VERY_SMALL")
 		return 2;
-	else if (_size == "STR_SMALL")
+
+	if (_size == "STR_SMALL")
 		return 3;
-	else if (_size == "STR_MEDIUM_UC")
+
+	if (_size == "STR_MEDIUM_UC")
 		return 4;
-	else if (_size == "STR_LARGE")
+
+	if (_size == "STR_LARGE")
 		return 5;
-	else if (_size == "STR_VERY_LARGE")
+
+	if (_size == "STR_VERY_LARGE")
 		return 6;
 
 	return 0;
@@ -191,7 +198,7 @@ int RuleUfo::getScore() const
  * Gets the terrain data needed to draw the UFO in the battlescape.
  * @return, pointer to the RuleTerrain
  */
-RuleTerrain* RuleUfo::getBattlescapeTerrainData()
+RuleTerrain* RuleUfo::getBattlescapeTerrainData() const
 {
 	return _battlescapeTerrainData;
 }

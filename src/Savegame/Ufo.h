@@ -74,8 +74,7 @@ private:
 	size_t _trajectoryPoint;
 
 	AlienMission* _mission;
-	RuleUfo* _rules;
-
+	const RuleUfo* _rules;
 	const UfoTrajectory* _trajectory;
 
 	std::string
@@ -93,7 +92,7 @@ private:
 
 	public:
 		/// Creates a UFO of the specified type.
-		Ufo(RuleUfo* rules);
+		Ufo(const RuleUfo* const rules);
 		/// Cleans up the UFO.
 		~Ufo();
 
@@ -108,9 +107,9 @@ private:
 		YAML::Node saveId() const;
 
 		/// Gets the UFO's ruleset.
-		RuleUfo* getRules() const;
+		const RuleUfo* const getRules() const;
 		/// Sets the UFO's ruleset.
-		void changeRules(RuleUfo* rules);
+		void changeRules(const RuleUfo* const rules);
 
 		/// Handles UFO logic.
 		void think();

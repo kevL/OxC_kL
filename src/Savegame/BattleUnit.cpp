@@ -2623,10 +2623,10 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
  * Get a grenade from hand or belt (used for AI).
  * @return, pointer to a grenade or NULL
  */
-const BattleItem* const BattleUnit::getGrenade() const // holy crap const.
+BattleItem* BattleUnit::getGrenade() const
 {
 	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
-	const BattleItem* grenade = getItem("STR_RIGHT_HAND");
+	BattleItem* grenade = getItem("STR_RIGHT_HAND");
 	if (grenade == NULL
 		|| grenade->getRules()->getBattleType() != BT_GRENADE)
 	{

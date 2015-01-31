@@ -352,8 +352,8 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			if ((*i)->getUnit() == _unit) // unit is in an inventory, so unit must be a 1x1 unit
 			{
-				const RuleItem* const corpseRule = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
-				(*i)->convertToCorpse(corpseRule);
+				RuleItem* const corpRule = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
+				(*i)->convertToCorpse(corpRule);
 
 				break;
 			}
@@ -363,8 +363,11 @@ void UnitDieBState::convertUnitToCorpse()
 	}
 	else
 	{
+		Tile
+			* tile,
+			* explTile,
+			* explTile_b;
 		int i = 0;
-		Tile* tile = NULL;
 
 		for (int
 				y = 0;
@@ -376,25 +379,24 @@ void UnitDieBState::convertUnitToCorpse()
 					x < unitSize;
 					++x)
 			{
-				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
+				tile = _parent->getSave()->getTile(pos + Position(x,y,0));
 
 				// This block is lifted from TileEngine::explode(), switch(DT_IN).
 				if (_unit->getUnitRules() != NULL
 					&& _unit->getUnitRules()->isMechanical() == true
 					&& RNG::percent(19) == true)
 				{
-					Tile
-						* explTile = tile,
-						* explBelow = _parent->getSave()->getTile(explTile->getPosition() + Position(0, 0,-1));
+					explTile = tile;
+					explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
 
 					while (explTile != NULL // safety.
 						&& explTile->getPosition().z > 0
 						&& explTile->getMapData(MapData::O_OBJECT) == NULL // only floors & content can catch fire.
 						&& explTile->getMapData(MapData::O_FLOOR) == NULL
-						&& explTile->hasNoFloor(explBelow) == true)
+						&& explTile->hasNoFloor(explTile_b) == true)
 					{
-						explTile = explBelow;
-						explBelow = _parent->getSave()->getTile(explTile->getPosition() + Position(0, 0,-1));
+						explTile = explTile_b;
+						explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
 					}
 
 					if (explTile != NULL // safety.
@@ -423,10 +425,9 @@ void UnitDieBState::convertUnitToCorpse()
 				}
 
 				_parent->dropItem(
-								pos + Position(x, y, 0),
+								pos + Position(x,y,0),
 								corpse,
 								true);
-
 				++i;
 			}
 		}

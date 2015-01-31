@@ -172,7 +172,7 @@ const std::string& AlienMission::getType() const
  */
 bool AlienMission::isOver() const
 {
-	int diff = static_cast<int>(_savedGame.getDifficulty());
+	const int diff = static_cast<int>(_savedGame.getDifficulty());
 	if (_rule.getType() == "STR_ALIEN_INFILTRATION"
 		&& RNG::percent(100 - diff * 20) == true)
 	{
@@ -332,7 +332,7 @@ Ufo* AlienMission::spawnUfo(
 			// Spawn a battleship straight for the XCOM base.
 			const RuleUfo& battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
 			const UfoTrajectory& trajAssault = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
-			Ufo* const ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
+			Ufo* const ufo = new Ufo(&battleshipRule);
 			ufo->setMissionInfo(
 							this,
 							&trajAssault);
@@ -372,7 +372,7 @@ Ufo* AlienMission::spawnUfo(
 		}
 
 		// Our destination is always an alien base.
-		Ufo* const ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+		Ufo* const ufo = new Ufo(&ufoRule);
 		ufo->setMissionInfo(
 						this,
 						&trajectory);
@@ -422,7 +422,7 @@ Ufo* AlienMission::spawnUfo(
 	}
 
 	// Spawn according to sequence.
-	Ufo* const ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+	Ufo* const ufo = new Ufo(&ufoRule);
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion& regionRules = *ruleset.getRegion(_region);
 

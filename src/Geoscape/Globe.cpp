@@ -957,24 +957,28 @@ bool Globe::insideLand(
 	globe->_cenLon = lon;
 	globe->_cenLat = lat; */
 
-	bool ret = false;
-
+//	bool ret = false;
 	for (std::list<Polygon*>::const_iterator
 			i = _rules->getPolygons()->begin();
-			i != _rules->getPolygons()->end()
-				&& ret == false;
+			i != _rules->getPolygons()->end();
+//				&& ret == false;
 			++i)
 	{
-		ret = insidePolygon(
+		if (insidePolygon(
 						lon,
 						lat,
-						*i);
+						*i) == true)
+		{
+			return true;
+		}
+//		ret = insidePolygon(lon, lat, *i);
 	}
 
 /*	globe->_cenLon = oldLon;
 	globe->_cenLat = oldLat; */
 
-	return ret;
+//	return ret;
+	return false;
 }
 
 /**
@@ -990,10 +994,10 @@ void Globe::toggleDetail()
 /**
  * Checks if a certain target is near a certain cartesian point
  * (within a circled area around it) over the globe.
- * @param target, Pointer to target.
- * @param x, X coordinate of point.
- * @param y, Y coordinate of point.
- * @return, True if it's near, false otherwise.
+ * @param target	- pointer to Target
+ * @param x			- X coordinate of point
+ * @param y			- Y coordinate of point
+ * @return, true if it's near
  */
 bool Globe::targetNear(
 		Target* target,
@@ -3051,7 +3055,7 @@ void Globe::getPolygonTextureAndShade(
 	*texture = -1;
 	*shade = worldshades[CreateShadow::getShadowValue(
 													0,
-													Cord(0., 0., 1.),
+													Cord(0.,0.,1.),
 													getSunDirection(lon, lat),
 													0)];
 

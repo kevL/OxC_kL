@@ -4605,7 +4605,7 @@
 1420130445 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1420130444 f:\git\openxcom\src\ruleset\ruleitem.h
+1422733165 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1421329721 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -4661,7 +4661,7 @@
 1421695236 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1422475961 f:\git\openxcom\src\savegame\battleunit.h
+1422731820 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -4772,7 +4772,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1421693928 f:\git\openxcom\src\savegame\ufo.h
+1422731272 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5451,7 +5451,7 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1420130455 f:\git\openxcom\src\savegame\battleitem.h
+1422733400 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
 1422675021 f:\git\openxcom\src\savegame\tile.h
@@ -5459,7 +5459,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1422236208 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1422731959 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5522,7 +5522,7 @@
 1422233401 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1422657273 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1422731997 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5680,7 +5680,7 @@
 1420130439 f:\git\openxcom\src\ruleset\ruleterrain.h
 	"MapBlock.h"
 
-1420130448 f:\git\openxcom\src\ruleset\ruleufo.h
+1422730474 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1421694844 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -8569,7 +8569,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1420894824 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1422733165 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Surface.h"
@@ -8643,9 +8643,9 @@
 	"RuleTerrain.h"
 	"../Engine/RNG.h"
 
-1420130455 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
-	"RuleTerrain.h"
+1422730599 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
+	"RuleTerrain.h"
 
 1422047629 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
@@ -8722,14 +8722,14 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1421158757 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1422733400 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1422476100 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1422731848 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8942,7 +8942,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1421694625 source:f:\git\openxcom\src\savegame\ufo.cpp
+1422731272 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

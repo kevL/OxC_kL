@@ -212,7 +212,6 @@ void RuleItem::load(
 
 	_power					= node["power"].as<int>(_power);
 	_compatibleAmmo			= node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
-//kL	_damageType				= (ItemDamageType)node["damageType"].as<int>(_damageType);
 	_damageType				= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
 	_accuracyAuto			= node["accuracyAuto"].as<int>(_accuracyAuto);
 	_accuracySnap			= node["accuracySnap"].as<int>(_accuracySnap);
@@ -224,7 +223,6 @@ void RuleItem::load(
 	_clipSize				= node["clipSize"].as<int>(_clipSize);
 	_accuracyMelee			= node["accuracyMelee"].as<int>(_accuracyMelee);
 	_tuMelee				= node["tuMelee"].as<int>(_tuMelee);
-//kL	_battleType				= (BattleType)node["battleType"].as<int>(_battleType);
 	_battleType				= static_cast<BattleType>(node["battleType"].as<int>(_battleType));
 	_twoHanded				= node["twoHanded"].as<bool>(_twoHanded);
 	_waypoint				= node["waypoint"].as<bool>(_waypoint);
@@ -913,7 +911,7 @@ int RuleItem::getShotgunPellets() const
  * Gets the unit that the victim is morphed into when attacked.
  * @return, the weapon's zombie unit
  */
-std::string RuleItem::getZombieUnit() const
+const std::string& RuleItem::getZombieUnit() const
 {
 	return _zombieUnit;
 }
@@ -938,10 +936,10 @@ bool RuleItem::isSkillApplied() const
 }
 
 /**
- * kL. Used to determine if a weapon is capable of Reaction Fire.
+ * Used to determine if a weapon is capable of Reaction Fire.
  * @return, true if a weapon can react during opponent's turn
  */
-bool RuleItem::canReactionFire() const // kL
+bool RuleItem::canReactionFire() const
 {
 	return (_noReaction == false);
 }

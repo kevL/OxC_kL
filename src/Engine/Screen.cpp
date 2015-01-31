@@ -198,13 +198,12 @@ void Screen::handle(Action* action)
 			++i;
 		}
 		while (CrossPlatform::fileExists(osts.str()) == true); */
-
 		// ... too slow to take & write more than one screenshot per second @ 1920x1080 ...
 		// Skip the do-while Loop:
 		osts << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << ".png";
 		screenshot(osts.str());
-
-/*		std::ostringstream ss;
+/*kL
+		std::ostringstream ss;
 		int i = 0;
 		do
 		{

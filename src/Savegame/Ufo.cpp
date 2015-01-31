@@ -47,7 +47,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules - pointer to RuleUfo
  */
-Ufo::Ufo(RuleUfo* rules)
+Ufo::Ufo(const RuleUfo* const rules)
 	:
 		MovingTarget(),
 		_rules(rules),
@@ -68,7 +68,6 @@ Ufo::Ufo(RuleUfo* rules)
 		_hyperDetected(false),
 		_shootingAt(0),
 		_hitFrame(0)
-//		_terrain("")
 //		_shotDownByCraftId() // kL
 {}
 
@@ -275,7 +274,7 @@ YAML::Node Ufo::saveId() const
  * Returns the ruleset for the UFO's type.
  * @return, pointer to RuleUfo
  */
-RuleUfo* Ufo::getRules() const
+const RuleUfo* const Ufo::getRules() const
 {
 	return _rules;
 }
@@ -285,7 +284,7 @@ RuleUfo* Ufo::getRules() const
  * @param rules - pointer to RuleUfo
  * @warning ONLY FOR NEW BATTLE USE!
  */
-void Ufo::changeRules(RuleUfo* rules)
+void Ufo::changeRules(const RuleUfo* const rules)
 {
 	_rules = rules;
 }

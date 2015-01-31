@@ -2275,7 +2275,7 @@ void AlienBAIState::grenadeAction()
 	// do we have a grenade on our belt?
 	// kL_note: this is already checked in setupAttack()
 	// Could use it to determine if grenade is already inHand though! ( see _grenade var.)
-	const BattleItem* const grenade = _unit->getGrenade();
+	BattleItem* const grenade = _unit->getGrenade();
 
 	if (grenade == NULL)
 		return;
@@ -2291,33 +2291,32 @@ void AlienBAIState::grenadeAction()
 //		if (_unit->getFaction() == FACTION_HOSTILE)
 //		{
 		const RuleInventory* const rule = grenade->getSlot();
-		int costTU = rule->getCost(_save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
+		int tuCost = rule->getCost(_save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
 		if (grenade->getFuseTimer() == -1)
-			costTU += _unit->getActionTUs(
+			tuCost += _unit->getActionTUs(
 										BA_PRIME,
 										grenade);
 		// Prime is done in ProjectileFlyBState.
-		costTU += _unit->getActionTUs(
+		tuCost += _unit->getActionTUs(
 									BA_THROW,
 									grenade);
 
-		if (costTU <= _unit->getTimeUnits())
+		if (tuCost <= _unit->getTimeUnits())
 		{
 			BattleAction action;
 			action.actor = _unit;
 			action.target = _aggroTarget->getPosition();
-			action.weapon = const_cast<BattleItem*>(grenade);
+			action.weapon = grenade;
 			action.type = BA_THROW;
 
 			const Position
 				originVoxel = _save->getTileEngine()->getOriginVoxel(
 														action,
 														NULL),
-				targetVoxel = action.target * Position(16, 16, 24)
+				targetVoxel = action.target * Position(16,16,24)
 							+ Position(
-									8,
-									8,
+									8,8,
 									2 - _save->getTile(action.target)->getTerrainLevel());
 
 			if (_save->getTileEngine()->validateThrow(
@@ -2326,7 +2325,7 @@ void AlienBAIState::grenadeAction()
 										targetVoxel) == true)
 			{
 				_attackAction->target = action.target;
-				_attackAction->weapon = const_cast<BattleItem*>(grenade);
+				_attackAction->weapon = grenade;
 				_attackAction->type = BA_THROW;
 
 				_rifle = false;

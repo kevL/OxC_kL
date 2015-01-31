@@ -96,7 +96,7 @@ private:
 		int getScore() const;
 
 		/// Sets the battlescape terrain data ruleset for this UFO
-		RuleTerrain* getBattlescapeTerrainData();
+		RuleTerrain* getBattlescapeTerrainData() const;
 
 		/// Gets the reload time of the UFO's weapon.
 		int getWeaponReload() const;
