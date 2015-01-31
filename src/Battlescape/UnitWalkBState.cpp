@@ -1283,7 +1283,7 @@ void UnitWalkBState::playMovementSound()
 						sound = ResourcePack::ITEM_DROP;		// thunk. Repeated above^
 					}
 				}
-				if (_unit->isFloating() == false)
+				else if (_unit->isFloating() == false)
 					sound = 40;									// GravLift
 				else // !_falling
 				{
@@ -1340,7 +1340,10 @@ void UnitWalkBState::doFallCheck()
  */
 bool UnitWalkBState::groundCheck(int descent)
 {
-	const Tile* tBelow;
+	const Tile* tileBelow;
+	Position pos;
+
+	descent = -descent;
 
 	const int unitSize = _unit->getArmor()->getSize() - 1;
 	for (int
@@ -1353,14 +1356,14 @@ bool UnitWalkBState::groundCheck(int descent)
 				y != -1;
 				--y)
 		{
-			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(
-																			x,y,
-																			-descent - 1));
-			if (_parent->getSave()->getTile(
-										_unit->getPosition() + Position(
-																	x,y,
-																	-descent))
-									->hasNoFloor(tBelow) == false)
+			pos = _unit->getPosition() + Position(x,y,0);
+
+			tileBelow = _parent->getSave()->getTile(pos + Position(
+																0,0,
+																descent - 1));
+			if (_parent->getSave()->getTile(pos + Position(
+														0,0,
+														descent))->hasNoFloor(tileBelow) == false)
 			{
 				return true;
 			}
