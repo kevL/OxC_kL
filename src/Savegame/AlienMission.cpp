@@ -30,9 +30,9 @@
 #include "Base.h"
 #include "Country.h"
 #include "Craft.h"
+#include "MissionSite.h"
 #include "Region.h"
 #include "SavedGame.h"
-#include "TerrorSite.h"
 #include "Ufo.h"
 #include "Waypoint.h"
 
@@ -330,7 +330,7 @@ Ufo* AlienMission::spawnUfo(
 		if (found != _savedGame.getBases()->end())
 		{
 			// Spawn a battleship straight for the XCOM base.
-			const RuleUfo& battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
+			const RuleUfo& battleshipRule = *ruleset.getUfo(_rule.getSpecialUfo());
 			const UfoTrajectory& trajAssault = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
 			Ufo* const ufo = new Ufo(&battleshipRule);
 			ufo->setMissionInfo(
@@ -365,7 +365,7 @@ Ufo* AlienMission::spawnUfo(
 	}
 	else if (_rule.getType() == "STR_ALIEN_SUPPLY")
 	{
-		if (ufoRule.getType() == "STR_SUPPLY_SHIP"
+		if (ufoRule.getType() == _rule.getSpecialUfo()
 			&& _base == NULL)
 		{
 			return NULL; // No base to supply!
@@ -397,7 +397,7 @@ Ufo* AlienMission::spawnUfo(
 		Waypoint* const wp = new Waypoint();
 		if (trajectory.getAltitude(1) == "STR_GROUND")
 		{
-			if (ufoRule.getType() == "STR_SUPPLY_SHIP")
+			if (ufoRule.getType() == _rule.getSpecialUfo())
 			{
 				// Supply ships on supply missions land on bases, ignore trajectory zone.
 				pos.first = _base->getLongitude();
@@ -550,7 +550,7 @@ void AlienMission::ufoReachedWaypoint(
 
 	// screw it, we're not taking any chances, use the city's lon/lat info instead of the region's
 	// TODO: find out why there is a discrepancy between generated city mission zones and the cities that generated them.
-	if (ufo.getRules()->getType() == "STR_TERROR_SHIP"
+	if (ufo.getRules()->getType() == _rule.getSpecialUfo()
 		&& _rule.getType() == "STR_ALIEN_TERROR"
 		&& trajectory.getZone(nextWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 	{
@@ -584,7 +584,7 @@ void AlienMission::ufoReachedWaypoint(
 	}
 	else // UFO landed.
 	{
-		if (ufo.getRules()->getType() == "STR_TERROR_SHIP"
+		if (ufo.getRules()->getType() == _rule.getSpecialUfo()
 			&& _rule.getType() == "STR_ALIEN_TERROR"
 			&& trajectory.getZone(curWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 		{
@@ -596,12 +596,12 @@ void AlienMission::ufoReachedWaypoint(
 
 			ufo.setStatus(Ufo::DESTROYED);
 
-			TerrorSite* const terrorSite = new TerrorSite();
-			terrorSite->setLongitude(ufo.getLongitude());
-			terrorSite->setLatitude(ufo.getLatitude());
-			terrorSite->setId(_savedGame.getId("STR_TERROR_SITE"));
-			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4hr. + (0 to 6) hrs.
-			terrorSite->setAlienRace(_race);
+			MissionSite* const missionSite = new MissionSite(&_rule);
+			missionSite->setLongitude(ufo.getLongitude());
+			missionSite->setLatitude(ufo.getLatitude());
+			missionSite->setId(_savedGame.getId(_rule.getMarkerName()));
+			missionSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600); // 4hr. + (0 to 6) hrs.
+			missionSite->setAlienRace(_race);
 
 			if (rules.locateCity(
 							ufo.getLongitude(),
@@ -647,7 +647,7 @@ void AlienMission::ufoReachedWaypoint(
 				assert(0 && "Terror Mission failed to find a city, please check your log file for details");
 			}
 
-			_savedGame.getTerrorSites()->push_back(terrorSite);
+			_savedGame.getMissionSites()->push_back(missionSite);
 
 			for (std::vector<Target*>::const_iterator
 					i = ufo.getFollowers()->begin();
@@ -658,7 +658,7 @@ void AlienMission::ufoReachedWaypoint(
 				if (craft != NULL
 					&& craft->getNumSoldiers() != 0)
 				{
-					craft->setDestination(terrorSite);
+					craft->setDestination(missionSite);
 					i = ufo.getFollowers()->begin();
 				}
 				else

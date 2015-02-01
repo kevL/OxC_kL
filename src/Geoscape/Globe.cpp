@@ -63,10 +63,10 @@
 #include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/GameTime.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Target.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Waypoint.h"
 
@@ -1104,9 +1104,9 @@ std::vector<Target*> Globe::getTargets(
 			targets.push_back(*i);
 	}
 
-	for (std::vector<TerrorSite*>::const_iterator // get terrorSites
-			i = _game->getSavedGame()->getTerrorSites()->begin();
-			i != _game->getSavedGame()->getTerrorSites()->end();
+	for (std::vector<MissionSite*>::const_iterator // get missionSites
+			i = _game->getSavedGame()->getMissionSites()->begin();
+			i != _game->getSavedGame()->getMissionSites()->end();
 			++i)
 	{
 		if (targetNear(*i, x, y) == true)
@@ -2463,7 +2463,7 @@ void Globe::drawMarkers()
 	// code for using SurfaceSet for markers:
 	_markers->clear();
 
-	for (std::vector<Base*>::const_iterator // Draw the base markers
+	for (std::vector<Base*>::const_iterator // Draw the Base markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -2471,7 +2471,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<Waypoint*>::const_iterator // Draw the waypoint markers
+	for (std::vector<Waypoint*>::const_iterator // Draw the Waypoint markers
 			i = _game->getSavedGame()->getWaypoints()->begin();
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
@@ -2479,15 +2479,15 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<TerrorSite*>::const_iterator // Draw the terror site markers
-			i = _game->getSavedGame()->getTerrorSites()->begin();
-			i != _game->getSavedGame()->getTerrorSites()->end();
+	for (std::vector<MissionSite*>::const_iterator // Draw the MissionSite markers
+			i = _game->getSavedGame()->getMissionSites()->begin();
+			i != _game->getSavedGame()->getMissionSites()->end();
 			++i)
 	{
 		drawTarget(*i);
 	}
 
-	for (std::vector<AlienBase*>::const_iterator // Draw the Alien Base markers
+	for (std::vector<AlienBase*>::const_iterator // Draw the AlienBase markers
 			i = _game->getSavedGame()->getAlienBases()->begin();
 			i != _game->getSavedGame()->getAlienBases()->end();
 			++i)
@@ -2495,7 +2495,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<Ufo*>::const_iterator // Draw the UFO markers
+	for (std::vector<Ufo*>::const_iterator // Draw the Ufo markers
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
@@ -2503,7 +2503,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<Base*>::const_iterator // Draw the craft markers
+	for (std::vector<Base*>::const_iterator // Draw the Craft markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)

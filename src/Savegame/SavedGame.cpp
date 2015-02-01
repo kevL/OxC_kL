@@ -33,13 +33,13 @@
 #include "Craft.h"
 #include "GameTime.h"
 #include "ItemContainer.h"
+#include "MissionSite.h"
 #include "Production.h"
 #include "Region.h"
 #include "ResearchProject.h"
 #include "SavedBattleGame.h"
 #include "Soldier.h"
 #include "SoldierDead.h"
-#include "TerrorSite.h"
 #include "Transfer.h"
 #include "Ufo.h"
 #include "Waypoint.h"
@@ -194,9 +194,9 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<TerrorSite*>::const_iterator
-			i = _terrorSites.begin();
-			i != _terrorSites.end();
+	for (std::vector<MissionSite*>::const_iterator
+			i = _missionSites.begin();
+			i != _missionSites.end();
 			++i)
 	{
 		delete *i;
@@ -552,14 +552,25 @@ void SavedGame::load(
 		_waypoints.push_back(w);
 	}
 
-	for (YAML::const_iterator
+	for (YAML::const_iterator 	// Backwards compatibility->
 			i = doc["terrorSites"].begin();
 			i != doc["terrorSites"].end();
 			++i)
 	{
-		TerrorSite* t = new TerrorSite();
-		t->load(*i);
-		_terrorSites.push_back(t);
+		MissionSite* ms = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"));
+		ms->load(*i);
+		_missionSites.push_back(ms);
+	}
+
+	for (YAML::const_iterator
+			i = doc["missionSites"].begin();
+			i != doc["missionSites"].end();
+			++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		MissionSite* ms = new MissionSite(rule->getAlienMission(type));
+		ms->load(*i);
+		_missionSites.push_back(ms);
 	}
 
 	// Discovered Techs Should be loaded before Bases (e.g. for PSI evaluation)
@@ -746,12 +757,12 @@ void SavedGame::save(const std::string& filename) const
 		node["waypoints"].push_back((*i)->save());
 	}
 
-	for (std::vector<TerrorSite*>::const_iterator
-			i = _terrorSites.begin();
-			i != _terrorSites.end();
+	for (std::vector<MissionSite*>::const_iterator
+			i = _missionSites.begin();
+			i != _missionSites.end();
 			++i)
 	{
-		node["terrorSites"].push_back((*i)->save());
+		node["missionSites"].push_back((*i)->save());
 	}
 
 	// Alien bases must be saved before alien missions.
@@ -1186,12 +1197,12 @@ std::vector<Waypoint*>* SavedGame::getWaypoints()
 }
 
 /**
- * Returns the list of terror sites.
- * @return, pointer to a vector of pointers to all TerrorSites
+ * Returns the list of mission sites.
+ * @return, pointer to a vector of pointers to all MissionSites
  */
-std::vector<TerrorSite*>* SavedGame::getTerrorSites()
+std::vector<MissionSite*>* SavedGame::getMissionSites()
 {
-	return &_terrorSites;
+	return &_missionSites;
 }
 
 /**

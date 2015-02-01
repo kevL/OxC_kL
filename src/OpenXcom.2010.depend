@@ -4399,7 +4399,7 @@
 
 1420130442 f:\git\openxcom\src\savegame\target.h
 
-1421863022 f:\git\openxcom\src\savegame\savedgame.h
+1422760027 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -4494,7 +4494,7 @@
 1420130443 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1420130453 f:\git\openxcom\src\geoscape\geoscapestate.h
+1422755312 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1420130459 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4538,10 +4538,7 @@
 
 1420130438 f:\git\openxcom\src\engine\surfaceset.h
 
-1420130451 f:\git\openxcom\src\ruleset\rulecraft.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1422757729 f:\git\openxcom\src\ruleset\rulecraft.h
 
 1420228320 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
@@ -4638,7 +4635,7 @@
 1421281690 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
-1421282324 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1422761548 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
@@ -4772,7 +4769,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1422731272 f:\git\openxcom\src\savegame\ufo.h
+1422760372 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5395,7 +5392,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1420130452 f:\git\openxcom\src\ruleset\aliendeployment.h
+1422757061 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1420886134 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5609,7 +5606,7 @@
 
 1420130458 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1421955783 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1422761696 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5639,11 +5636,11 @@
 	"../Savegame/Craft.h"
 	"../Savegame/EquipmentLayoutItem.h"
 	"../Savegame/ItemContainer.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/Node.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Tile.h"
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
@@ -5680,7 +5677,7 @@
 1420130439 f:\git\openxcom\src\ruleset\ruleterrain.h
 	"MapBlock.h"
 
-1422730474 f:\git\openxcom\src\ruleset\ruleufo.h
+1422757908 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1421694844 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -5701,7 +5698,7 @@
 1420130457 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1422676043 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1422762208 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5758,10 +5755,10 @@
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
 	"../Savegame/Craft.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Soldier.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Tile.h"
 	"../Savegame/Ufo.h"
 
@@ -5880,7 +5877,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1421693482 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1422755077 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -5918,6 +5915,7 @@
 	"../Savegame/Country.h"
 	"../Savegame/Craft.h"
 	"../Savegame/ItemContainer.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/Region.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
@@ -5925,7 +5923,6 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
 	"../Savegame/SoldierDiary.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Tile.h"
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
@@ -6055,7 +6052,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1422744050 source:f:\git\openxcom\src\battlescape\map.cpp
+1422745897 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -7011,7 +7008,7 @@
 1420130450 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1421636484 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1422762372 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -7025,6 +7022,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/AlienDeployment.h"
 	"../Ruleset/City.h"
+	"../Ruleset/RuleAlienMission.h"
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
@@ -7034,8 +7032,8 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/Target.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
 
 1420130454 f:\git\openxcom\src\geoscape\confirmlandingstate.h
@@ -7186,10 +7184,9 @@
 1420130448 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1422474417 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1422762406 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
-	"AlienTerrorState.h"
 	"BaseDefenseState.h"
 	"BaseDestroyedState.h"
 	"ConfirmLandingState.h"
@@ -7204,6 +7201,7 @@
 	"InterceptState.h"
 	"ItemsArrivingState.h"
 	"LowFuelState.h"
+	"MissionDetectedState.h"
 	"MonthlyReportState.h"
 	"MultipleTargetsState.h"
 	"NewPossibleManufactureState.h"
@@ -7258,6 +7256,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/GameTime.h"
 	"../Savegame/ItemContainer.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/Production.h"
 	"../Savegame/Region.h"
 	"../Savegame/ResearchProject.h"
@@ -7266,7 +7265,6 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Transfer.h"
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
@@ -7314,13 +7312,13 @@
 
 1420324793 f:\git\openxcom\src\ruleset\city.h
 
-1421503135 f:\git\openxcom\src\ruleset\rulealienmission.h
+1422757436 f:\git\openxcom\src\ruleset\rulealienmission.h
 
 1421503401 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
 1421467538 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1422732330 source:f:\git\openxcom\src\geoscape\globe.cpp
+1422756471 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7347,10 +7345,10 @@
 	"../Savegame/Country.h"
 	"../Savegame/Craft.h"
 	"../Savegame/GameTime.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
 
@@ -7850,7 +7848,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1420218608 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1422757019 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -7876,9 +7874,9 @@
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
 	"../Savegame/ItemContainer.h"
+	"../Savegame/MissionSite.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
-	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
 
 1420218765 source:f:\git\openxcom\src\menu\newgamestate.cpp
@@ -8504,7 +8502,7 @@
 1420130444 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1420130459 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1422754359 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1420130445 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8548,7 +8546,7 @@
 	"MapData.h"
 	"MapDataSet.h"
 
-1421503249 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1422757597 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -8558,7 +8556,7 @@
 1420296430 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
 	"RuleCountry.h"
 
-1420130458 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1422757856 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -8585,7 +8583,7 @@
 1420130450 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1421946630 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1422758055 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8643,7 +8641,7 @@
 	"RuleTerrain.h"
 	"../Engine/RNG.h"
 
-1422730599 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1422757975 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
@@ -8665,15 +8663,15 @@
 	"AlienBase.h"
 	"../Engine/Language.h"
 
-1422731481 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1422758464 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
 	"Country.h"
 	"Craft.h"
+	"MissionSite.h"
 	"Region.h"
 	"SavedGame.h"
-	"TerrorSite.h"
 	"Ufo.h"
 	"Waypoint.h"
 	"../Engine/Game.h"
@@ -8752,20 +8750,21 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1421694058 source:f:\git\openxcom\src\savegame\craft.cpp
+1422762667 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
 	"CraftWeapon.h"
 	"ItemContainer.h"
+	"MissionSite.h"
 	"Soldier.h"
-	"TerrorSite.h"
 	"Ufo.h"
 	"Vehicle.h"
 	"Waypoint.h"
 	"../Engine/Language.h"
 	"../Geoscape/GeoscapeState.h"
 	"../Ruleset/Armor.h"
+	"../Ruleset/RuleAlienMission.h"
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
@@ -11417,7 +11416,7 @@
 
 1420130440 f:\git\openxcom\src\savegame\saveconverter.h
 
-1420323827 source:f:\git\openxcom\src\savegame\saveconverter.cpp
+1422762711 source:f:\git\openxcom\src\savegame\saveconverter.cpp
 	"SaveConverter.h"
 	"SaveConverterXcom1.h"
 	"AlienBase.h"
@@ -11430,11 +11429,12 @@
 	"CraftWeapon.h"
 	"GameTime.h"
 	"ItemContainer.h"
+	"MissionSite.h"
 	"Production.h"
 	"Region.h"
 	"ResearchProject.h"
 	"SavedGame.h"
-	"TerrorSite.h"
+	"MissionSite.h"
 	"Transfer.h"
 	"Ufo.h"
 	"Vehicle.h"
@@ -11500,4 +11500,29 @@
 1420749074 f:\git\openxcom\src\basescape\aliencontainmentstate.h
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
+
+1422758955 f:\git\openxcom\src\savegame\missionsite.h
+	"Target.h"
+
+1422756640 f:\git\openxcom\src\geoscape\missiondetectedstate.h
+	"../Engine/State.h"
+
+1422756938 source:f:\git\openxcom\src\geoscape\missiondetectedstate.cpp
+	"MissionDetectedState.h"
+	"GeoscapeState.h"
+	"Globe.h"
+	"InterceptState.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/Window.h"
+	"../Resource/ResourcePack.h"
+	"../Savegame/MissionSite.h"
+	"../Savegame/SavedGame.h"
+
+1422762001 source:f:\git\openxcom\src\savegame\missionsite.cpp
+	"MissionSite.h"
+	"../Engine/Language.h"
+	"../Ruleset/RuleAlienMission.h"
 

@@ -42,10 +42,10 @@ class DogfightState;
 class Globe;
 class ImageButton;
 //class InteractiveSurface;
+class MissionSite;
 class SavedGame;
 class Sound;
 class Surface;
-class TerrorSite;
 class Text;
 class TextButton;
 class Timer;
@@ -260,15 +260,15 @@ private:
 		/// Handler for clicking the timer button.
 		void btnTimerClick(Action* action);
 
-		/// Process a terror site
-		bool processTerrorSite(TerrorSite* ts) const;
+		/// Process a mission site
+		bool processMissionSite(MissionSite* site) const;
 
 		/// Handles base defense
 		void handleBaseDefense(
 				Base* base,
 				Ufo* ufo);
 
-		/// Update the resolution settings, we just resized the window.
+		/// Update the resolution settings, the window was resized.
 		void resize(
 				int& dX,
 				int& dY);

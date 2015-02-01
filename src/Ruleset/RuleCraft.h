@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_RULECRAFT_H
 #define OPENXCOM_RULECRAFT_H
 
-#include <string>
-#include <vector>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -48,6 +47,7 @@ private:
 		_costRent,
 		_costSell,
 		_listOrder,
+		_marker,
 		_maxItems,
 		_radarRange,
 		_refuelRate,
@@ -96,6 +96,8 @@ private:
 
 		/// Gets the craft's sprite.
 		int getSprite() const;
+		/// Gets the craft's globe marker.
+		int getMarker() const;
 
 		/// Gets the craft's maximum fuel.
 		int getMaxFuel() const;
@@ -149,8 +151,8 @@ private:
 		/// Gets the deployment priority for the craft.
 		std::vector<std::vector<int> >& getDeployment();
 
-		/// Gets the maximum space for items on this craft.
-		int const getMaxItems() const;
+		/// Gets the item limit for this type of craft.
+		int getMaxItems() const;
 };
 
 }

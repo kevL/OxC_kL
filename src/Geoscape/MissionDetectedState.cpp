@@ -17,9 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AlienTerrorState.h"
-
-//#include <sstream>
+#include "MissionDetectedState.h"
 
 #include "GeoscapeState.h"
 #include "Globe.h"
@@ -36,25 +34,25 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/TerrorSite.h"
 
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Aliens Terrorise window.
- * @param terror	- pointer to the respective Terror Site
- * @param city		- reference the terrorized city's name
+ * Initializes all the elements in the Mission Detected window.
+ * @param mission	- pointer to the respective Mission Site
+ * @param city		- reference the attacked city's name if any
  * @param state		- pointer to GeoscapeState
  */
-AlienTerrorState::AlienTerrorState(
-		TerrorSite* terror,
+MissionDetectedState::MissionDetectedState(
+		MissionSite* mission,
 		const std::string& city,
 		GeoscapeState* state)
 	:
-		_terror(terror),
+		_mission(mission),
 		_state(state)
 {
 	_screen = false;
@@ -65,7 +63,7 @@ AlienTerrorState::AlienTerrorState(
 	_txtCity		= new Text(246, 17, 5, 80);
 
 	_btnIntercept	= new TextButton(200, 16, 28, 130);
-	_btnCentre		= new TextButton(200, 16, 28, 150);
+	_btnCenter		= new TextButton(200, 16, 28, 150);
 	_btnCancel		= new TextButton(200, 16, 28, 170);
 
 	setPalette(
@@ -76,7 +74,7 @@ AlienTerrorState::AlienTerrorState(
 	add(_txtTitle, "text", "terrorSite");
 	add(_txtCity, "text", "terrorSite");
 	add(_btnIntercept, "button", "terrorSite");
-	add(_btnCentre, "button", "terrorSite");
+	add(_btnCenter, "button", "terrorSite");
 	add(_btnCancel, "button", "terrorSite");
 
 	centerAllSurfaces();
@@ -86,17 +84,17 @@ AlienTerrorState::AlienTerrorState(
 
 //	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
-	_btnIntercept->onMouseClick((ActionHandler)& AlienTerrorState::btnInterceptClick);
+	_btnIntercept->onMouseClick((ActionHandler)& MissionDetectedState::btnInterceptClick);
 
-//	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
-	_btnCentre->onMouseClick((ActionHandler)& AlienTerrorState::btnCentreClick);
+//	_btnCenter->setColor(Palette::blockOffset(8)+5);
+	_btnCenter->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
+	_btnCenter->onMouseClick((ActionHandler)& MissionDetectedState::btnCenterClick);
 
 //	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)& AlienTerrorState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)& MissionDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
-					(ActionHandler)& AlienTerrorState::btnCancelClick,
+					(ActionHandler)& MissionDetectedState::btnCancelClick,
 					Options::keyCancel);
 
 //	_txtTitle->setColor(Palette::blockOffset(8)+5);
@@ -114,39 +112,39 @@ AlienTerrorState::AlienTerrorState(
 /**
  * dTor.
  */
-AlienTerrorState::~AlienTerrorState()
+MissionDetectedState::~MissionDetectedState()
 {}
 
 /**
- * Picks a craft to intercept the UFO.
+ * Picks a craft to intercept the mission site.
  * @param action - pointer to an Action
  */
-void AlienTerrorState::btnInterceptClick(Action*)
+void MissionDetectedState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
 //	_state->getGlobe()->center(
-//							_terror->getLongitude(),
-//							_terror->getLatitude());
+//							_mission->getLongitude(),
+//							_mission->getLatitude());
 	_game->popState();
 
 	_game->pushState(new InterceptState(
 									_state->getGlobe(),
 									NULL,
-//									_terror,
+//									_mission,
 									_state)); // kL_add.
 }
 
 /**
- * Centers on the UFO and returns to the previous screen.
+ * Centers on the mission site and returns to the previous screen.
  * @param action - pointer to an Action
  */
-void AlienTerrorState::btnCentreClick(Action*)
+void MissionDetectedState::btnCenterClick(Action*)
 {
 	_state->timerReset();
 
 	_state->getGlobe()->center(
-							_terror->getLongitude(),
-							_terror->getLatitude());
+							_mission->getLongitude(),
+							_mission->getLatitude());
 
 	_game->popState();
 }
@@ -155,7 +153,7 @@ void AlienTerrorState::btnCentreClick(Action*)
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void AlienTerrorState::btnCancelClick(Action*)
+void MissionDetectedState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

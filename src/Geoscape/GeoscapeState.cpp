@@ -30,7 +30,6 @@
 //#include "../fmath.h"
 
 #include "AlienBaseState.h"
-#include "AlienTerrorState.h"
 #include "BaseDefenseState.h"
 #include "BaseDestroyedState.h"
 #include "ConfirmLandingState.h"
@@ -45,6 +44,7 @@
 #include "InterceptState.h"
 #include "ItemsArrivingState.h"
 #include "LowFuelState.h"
+#include "MissionDetectedState.h"
 #include "MonthlyReportState.h"
 #include "MultipleTargetsState.h"
 #include "NewPossibleManufactureState.h"
@@ -111,6 +111,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Production.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/ResearchProject.h"
@@ -119,7 +120,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Waypoint.h"
@@ -1203,7 +1203,7 @@ void GeoscapeState::time5Seconds()
 
 					if ((*i)->reachedDestination() == true)
 					{
-						const size_t tsCount = _savedGame->getTerrorSites()->size();
+						const size_t qtySites = _savedGame->getMissionSites()->size();
 						AlienMission* const mission = (*i)->getMission();
 						const bool detected = (*i)->getDetected();
 						mission->ufoReachedWaypoint(
@@ -1223,15 +1223,15 @@ void GeoscapeState::time5Seconds()
 							}
 						}
 
-						//Log(LOG_INFO) << ". tsCount size_t = " << (int)tsCount;
-						if (tsCount < _savedGame->getTerrorSites()->size()) // kL_note <- how is this possible?
+						//Log(LOG_INFO) << ". qtySites = " << (int)qtySites;
+						if (qtySites < _savedGame->getMissionSites()->size())
 						{
 							//Log(LOG_INFO) << ". create terrorSite";
 
-							TerrorSite* const ts = _savedGame->getTerrorSites()->back();
+							MissionSite* const site = _savedGame->getMissionSites()->back();
 							const City* const city = _game->getRuleset()->locateCity(
-																				ts->getLongitude(),
-																				ts->getLatitude());
+																				site->getLongitude(),
+																				site->getLatitude());
 							assert(city);
 							// kL_note: need to delete the UFO here, before attempting to target w/ Craft.
 							// see: Globe::getTargets() for the workaround...
@@ -1241,10 +1241,10 @@ void GeoscapeState::time5Seconds()
 							//i = _savedGame->getUfos()->erase(i);
 								// still need to handle minimized dogfights etc.
 
-							popup(new AlienTerrorState(
-													ts,
-													city->getName(),
-													this));
+							popup(new MissionDetectedState(
+														site,
+														city->getName(),
+														this));
 						}
 						//Log(LOG_INFO) << ". create terrorSite DONE";
 
@@ -1434,7 +1434,7 @@ void GeoscapeState::time5Seconds()
 			{
 				Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				const Waypoint* const wp = dynamic_cast<Waypoint*>((*j)->getDestination());
-				const TerrorSite* const ts = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				const MissionSite* const ms = dynamic_cast<MissionSite*>((*j)->getDestination());
 				const AlienBase* const ab = dynamic_cast<AlienBase*>((*j)->getDestination());
 
 				if (ufo != NULL)
@@ -1515,7 +1515,7 @@ void GeoscapeState::time5Seconds()
 											this));
 					(*j)->setDestination(NULL);
 				}
-				else if (ts != NULL)
+				else if (ms != NULL)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
@@ -1523,8 +1523,8 @@ void GeoscapeState::time5Seconds()
 							texture,
 							shade;
 						_globe->getPolygonTextureAndShade(
-														ts->getLongitude(),
-														ts->getLatitude(),
+														ms->getLongitude(),
+														ms->getLatitude(),
 														&texture,
 														&shade);
 
@@ -2019,28 +2019,28 @@ private:
 };
 
 /**
- * @brief Process a TerrorSite.
- * This function object will count down towards expiring a TerrorSite
- * and handle expired TerrorSites.
- * @param ts - pointer to a TerrorSite
- * @return, true if terror is finished ( w/out xCom mission success )
+ * @brief Process a MissionSite.
+ * This function object will count down towards expiring a MissionSite
+ * and handle expired MissionSites.
+ * @param site - pointer to a MissionSite
+ * @return, true if mission is finished ( w/out xCom mission success )
  */
-bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
+bool GeoscapeState::processMissionSite(MissionSite* site) const
 {
 	bool expired = true;
 
 	const int diff = static_cast<int>(_savedGame->getDifficulty());
-	int aLienPts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 250);
+	int aLienPts = (site->getRules()->getPoints() * 50) + (diff * 235);
 
-	if (ts->getSecondsRemaining() >= 30 * 60)
+	if (site->getSecondsRemaining() >= 30 * 60)
 	{
-		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
+		site->setSecondsRemaining(site->getSecondsRemaining() - 30 * 60);
 
 		aLienPts = 10 + (diff * 10);
 		expired = false;
 	}
 
-	Region* const region = _savedGame->locateRegion(*ts);
+	Region* const region = _savedGame->locateRegion(*site);
 	if (region != NULL)
 	{
 		region->addActivityAlien(aLienPts);
@@ -2053,8 +2053,8 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 			++i)
 	{
 		if ((*i)->getRules()->insideCountry(
-										ts->getLongitude(),
-										ts->getLatitude()))
+										site->getLongitude(),
+										site->getLatitude()))
 		{
 			(*i)->addActivityAlien(aLienPts);
 			(*i)->recentActivity();
@@ -2065,7 +2065,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 
 	if (expired == true)
 	{
-		delete ts;
+		delete site;
 		return true;
 	}
 
@@ -2241,15 +2241,15 @@ void GeoscapeState::time30Minutes()
 	}
 
 
-	for (std::vector<TerrorSite*>::const_iterator
-			ts = _savedGame->getTerrorSites()->begin();
-			ts != _savedGame->getTerrorSites()->end();
+	for (std::vector<MissionSite*>::const_iterator
+			ms = _savedGame->getMissionSites()->begin();
+			ms != _savedGame->getMissionSites()->end();
 			)
 	{
-		if (processTerrorSite(*ts))
-			ts = _savedGame->getTerrorSites()->erase(ts);
+		if (processMissionSite(*ms))
+			ms = _savedGame->getMissionSites()->erase(ms);
 		else
-			++ts;
+			++ms;
 	}
 }
 

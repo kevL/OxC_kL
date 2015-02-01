@@ -581,12 +581,6 @@
     <ClCompile Include="Basescape\ManufactureState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\TerrorSite.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\AlienTerrorState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -951,6 +945,12 @@
     </ClCompile>
     <ClCompile Include="Basescape\AlienContainmentState.cpp">
       <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\MissionSite.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\MissionDetectedState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1535,12 +1535,6 @@
     <ClInclude Include="Basescape\NewManufactureListState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\TerrorSite.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\AlienTerrorState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Geoscape\ResearchCompleteState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -1931,6 +1925,12 @@
     </ClInclude>
     <ClInclude Include="Basescape\AlienContainmentState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\MissionSite.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\MissionDetectedState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

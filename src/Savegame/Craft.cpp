@@ -28,8 +28,8 @@
 #include "Base.h"
 #include "CraftWeapon.h"
 #include "ItemContainer.h"
+#include "MissionSite.h"
 #include "Soldier.h"
-#include "TerrorSite.h"
 #include "Ufo.h"
 #include "Vehicle.h"
 #include "Waypoint.h"
@@ -41,6 +41,7 @@
 #include "../Geoscape/GeoscapeState.h"
 
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
@@ -151,7 +152,7 @@ void Craft::load(
 	{
 		if (_rules->getWeapons() > static_cast<int>(j))
 		{
-			std::string type = (*i)["type"].as<std::string>();
+			const std::string type = (*i)["type"].as<std::string>();
 			if (type != "0"
 				&& rules->getCraftWeapon(type) != NULL)
 			{
@@ -247,20 +248,6 @@ void Craft::load(
 				}
 			}
 		}
-		else if (type == "STR_TERROR_SITE")
-		{
-			for (std::vector<TerrorSite*>::const_iterator
-					i = save->getTerrorSites()->begin();
-					i != save->getTerrorSites()->end();
-					++i)
-			{
-				if ((*i)->getId() == id)
-				{
-					setDestination(*i);
-					break;
-				}
-			}
-		}
 		else if (type == "STR_ALIEN_BASE")
 		{
 			for (std::vector<AlienBase*>::const_iterator
@@ -275,6 +262,37 @@ void Craft::load(
 				}
 			}
 		}
+/*		else // Backwards compatibility ->
+		{
+			if (type == "STR_TERROR_SITE")
+				type = "STR_ALIEN_TERROR";
+			for (std::vector<MissionSite*>::iterator
+					i = save->getMissionSites()->begin();
+					i != save->getMissionSites()->end();
+					++i)
+			{
+				if ((*i)->getId() == id
+					&& (*i)->getRules()->getType() == type)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		} */
+/*		else if (type == "STR_TERROR_SITE")
+		{
+			for (std::vector<TerrorSite*>::const_iterator
+					i = save->getTerrorSites()->begin();
+					i != save->getTerrorSites()->end();
+					++i)
+			{
+				if ((*i)->getId() == id)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		} */
 	}
 
 	_takeoff = node["takeoff"].as<int>(_takeoff);
@@ -445,7 +463,10 @@ int Craft::getMarker() const
 	if (_status != "STR_OUT")
 		return -1;
 
-	return 1;
+	if (_rules->getMarker() == -1)
+		return 1;
+
+	return _rules->getMarker();
 }
 
 /**

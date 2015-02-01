@@ -41,6 +41,7 @@ class Country;
 class Craft;
 class GameTime;
 class Language;
+class MissionSite;
 class Region;
 class ResearchProject;
 class RuleManufacture;
@@ -50,7 +51,6 @@ class SavedBattleGame;
 class Soldier;
 class SoldierDead;
 class Target;
-class TerrorSite;
 class TextList;
 class Ufo;
 class Waypoint;
@@ -296,13 +296,13 @@ private:
 	std::vector<AlienMission*> _activeMissions;
 	std::vector<Base*> _bases;
 	std::vector<Country*> _countries;
+	std::vector<MissionSite*> _missionSites;
 	std::vector<MissionStatistics*> _missionStatistics;
 	std::vector<Region*> _regions;
 	std::vector<const RuleResearch*>
 		_discovered,
 		_poppedResearch;
 	std::vector<SoldierDead*> _deadSoldiers;
-	std::vector<TerrorSite*> _terrorSites;
 	std::vector<Ufo*> _ufos;
 	std::vector<Waypoint*> _waypoints;
 
@@ -414,8 +414,8 @@ private:
 		std::vector<Ufo*>* getUfos();
 		/// Gets the list of waypoints.
 		std::vector<Waypoint*>* getWaypoints();
-		/// Gets the list of terror sites.
-		std::vector<TerrorSite*>* getTerrorSites();
+		/// Gets the list of mission sites.
+		std::vector<MissionSite*>* getMissionSites();
 
 		/// Gets the current battle game.
 		SavedBattleGame* getSavedBattle();
@@ -464,7 +464,7 @@ private:
 		Soldier* getSoldier(int id) const;
 		/// Handles the higher promotions.
 		bool handlePromotions(std::vector<Soldier*>& participants);
-		/// Processes soldiers for promotions.
+		/// Processes a soldier for promotion.
 		void processSoldier(
 				Soldier* soldier,
 				PromotionInfo& promoData);

@@ -60,9 +60,9 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Ufo.h"
 
 
@@ -605,13 +605,13 @@ void NewBattleState::btnOkClick(Action*)
 	}
 	else //if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION")
 	{
-		TerrorSite* const ts = new TerrorSite();
-		ts->setId(1);
-		ts->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-		_craft->setDestination(ts);
-		bgen.setTerrorSite(ts);
+		MissionSite* const ms = new MissionSite(NULL);
+		ms->setId(1);
+		ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+		_craft->setDestination(ms);
+		bgen.setMissionSite(ms);
 
-		_game->getSavedGame()->getTerrorSites()->push_back(ts);
+		_game->getSavedGame()->getMissionSites()->push_back(ms);
 	}
 
 	if (_craft != NULL)

@@ -68,6 +68,7 @@
 #include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -75,7 +76,6 @@
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/SoldierDiary.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
@@ -912,15 +912,15 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	for (std::vector<TerrorSite*>::const_iterator // terror site disappears (even when aborted)
-			i = _savedGame->getTerrorSites()->begin();
-			i != _savedGame->getTerrorSites()->end();
+	for (std::vector<MissionSite*>::const_iterator // mission site disappears (even when aborted)
+			i = _savedGame->getMissionSites()->begin();
+			i != _savedGame->getMissionSites()->end();
 			++i)
 	{
 		if ((*i)->isInBattlescape() == true)
 		{
 			delete *i;
-			_savedGame->getTerrorSites()->erase(i);
+			_savedGame->getMissionSites()->erase(i);
 
 			break;
 		}

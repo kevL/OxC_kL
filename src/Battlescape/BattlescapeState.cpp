@@ -96,10 +96,10 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 
@@ -475,14 +475,14 @@ BattlescapeState::BattlescapeState()
 			}
 		}
 
-		for (std::vector<TerrorSite*>::const_iterator
-				i = _savedGame->getTerrorSites()->begin();
-				i != _savedGame->getTerrorSites()->end()
+		for (std::vector<MissionSite*>::const_iterator
+				i = _savedGame->getMissionSites()->begin();
+				i != _savedGame->getMissionSites()->end()
 					&& wost.str().empty() == true;
 				++i)
 		{
 			if ((*i)->isInBattlescape() == true)
-				wost << tr("STR_TERROR_MISSION") << L"> " << (*i)->getName(_game->getLanguage());
+				wost << tr("STR_TERROR_MISSION") << L"> " << (*i)->getName(_game->getLanguage()); // <- not necessarily a Terror Mission ...
 		}
 
 		for (std::vector<AlienBase*>::const_iterator

@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -65,14 +64,20 @@ class RuleAlienMission
 
 private:
 
-	/// The mission's type ID.
-	std::string _type;
+	std::string
+		_deployment,
+		_markerName,
+		_specialUfo,
+		_type;
+
+	int
+		_markerIcon,
+		_points;
+
+	std::vector<MissionWave> _waves;
+
 	/// The race distribution over game time.
 	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;
-	/// The mission's waves.
-	std::vector<MissionWave> _waves;
-	/// The mission's points.
-	int _points;
 
 
 	public:
@@ -101,6 +106,18 @@ private:
 
 		/// Gets the score for this mission.
 		int getPoints() const;
+
+		/// Gets special ufo type for special action like retaliation or supply.
+		const std::string& getSpecialUfo() const
+		{ return _specialUfo; }
+
+		/// Gets the alien deployment for this mission.
+		std::string getDeployment() const;
+
+		/// Gets the marker name for this mission.
+		std::string getMarkerName() const;
+		/// Gets the marker icon for this mission.
+		int getMarkerIcon() const;
 };
 
 }

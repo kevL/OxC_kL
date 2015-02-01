@@ -43,6 +43,7 @@
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/City.h"
+#include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
@@ -53,8 +54,8 @@
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Target.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Ufo.h"
 
 
@@ -135,10 +136,10 @@ ConfirmLandingState::ConfirmLandingState(
 	// *for Base assault/defense and Cydonia missions; here is concerned only with UFOs and TerrorSites
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* const ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	MissionSite* const ms = dynamic_cast<MissionSite*>(_craft->getDestination());
 
 	if (ufo != NULL
-		|| ts != NULL)
+		|| ms != NULL)
 	{
 		double lat;
 		std::string terrain;
@@ -183,13 +184,13 @@ ConfirmLandingState::ConfirmLandingState(
 				_terrain = _game->getRuleset()->getTerrain(terrain);
 			}
 		}
-		else // ts != NULL
+		else // ms != NULL
 		{
-			Log(LOG_INFO) << ". ts VALID, tex " << _texture;
-			terrain = ts->getTerrain(); // TerrorSite-object stores the terrain value.
+			Log(LOG_INFO) << ". ms VALID, tex " << _texture;
+			terrain = ms->getTerrain(); // TerrorSite-object stores the terrain value.
 			if (terrain.empty() == true)
 			{
-				lat = ts->getLatitude();
+				lat = ms->getLatitude();
 				_city = true;
 			}
 			else // terrorSite's terrainType has already been set before
@@ -215,7 +216,7 @@ ConfirmLandingState::ConfirmLandingState(
 			if (ufo != NULL)
 				ufo->setTerrain(_terrain->getName());
 			else // terrorSite
-				ts->setTerrain(_terrain->getName());
+				ms->setTerrain(_terrain->getName());
 		}
 
 		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(_terrain->getName())));
@@ -387,7 +388,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 	_game->popState();
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* const ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	MissionSite* const ms = dynamic_cast<MissionSite*>(_craft->getDestination());
 	AlienBase* const ab = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame* battle = new SavedBattleGame();
@@ -411,11 +412,11 @@ void ConfirmLandingState::btnYesClick(Action*)
 		bGen.setAlienRace(ufo->getAlienRace());
 		bGen.setIsCity(_city); // kL
 	}
-	else if (ts != NULL)
+	else if (ms != NULL)
 	{
-		battle->setMissionType("STR_TERROR_MISSION");
-		bGen.setTerrorSite(ts);
-		bGen.setAlienRace(ts->getAlienRace());
+		battle->setMissionType(ms->getRules()->getDeployment());
+		bGen.setMissionSite(ms);
+		bGen.setAlienRace(ms->getAlienRace());
 	}
 	else if (ab != NULL)
 	{

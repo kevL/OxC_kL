@@ -88,7 +88,7 @@ Ufo::~Ufo()
 			i = _followers.begin();
 		}
 		else
-			 ++i;
+			++i;
 	}
 
 	if (_mission != NULL)
@@ -345,7 +345,7 @@ int Ufo::getMarker() const
 		case Ufo::CRASHED:	return 4;
 	}
 
-	return -1;
+	return _rules->getMarker();
 }
 
 /**

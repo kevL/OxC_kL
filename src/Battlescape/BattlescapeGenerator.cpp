@@ -62,11 +62,11 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/MissionSite.h"
 #include "../Savegame/Node.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
@@ -89,7 +89,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craft(NULL),
 		_ufo(NULL),
 		_base(NULL),
-		_terror(NULL),
+		_mission(NULL),
 		_alienBase(NULL),
 		_terrain(NULL),
 		_mapsize_x(0),
@@ -190,13 +190,13 @@ void BattlescapeGenerator::setBase(Base* base)
 }
 
 /**
- * Sets the terror site involved in the battle.
- * @param terror - pointer to TerrorSite
+ * Sets the mission site involved in the battle.
+ * @param mission - pointer to MissionSite
  */
-void BattlescapeGenerator::setTerrorSite(TerrorSite* terror)
+void BattlescapeGenerator::setMissionSite(MissionSite* mission)
 {
-	_terror = terror;
-	_terror->setInBattlescape(true);
+	_mission = mission;
+	_mission->setInBattlescape(true);
 }
 
 /**
@@ -321,8 +321,8 @@ void BattlescapeGenerator::nextStage()
 
 	_battleSave->resetTurnCounter();
 
-	_mission = _battleSave->getMissionType();
-	AlienDeployment* const ruleDeploy = _rules->getDeployment(_mission);
+	_missionType = _battleSave->getMissionType();
+	AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionType);
 	ruleDeploy->getDimensions(
 							&_mapsize_x,
 							&_mapsize_y,
@@ -420,9 +420,9 @@ void BattlescapeGenerator::nextStage()
 	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
 	const size_t unitCount = _battleSave->getUnits()->size();
 
-	for (std::vector<TerrorSite*>::const_iterator
-			i = _savedGame->getTerrorSites()->begin();
-			i != _savedGame->getTerrorSites()->end()
+	for (std::vector<MissionSite*>::const_iterator
+			i = _savedGame->getMissionSites()->begin();
+			i != _savedGame->getMissionSites()->end()
 				&& _alienRace.empty() == true;
 			++i)
 	{
@@ -482,12 +482,12 @@ void BattlescapeGenerator::nextStage()
  */
 void BattlescapeGenerator::run()
 {
-	_mission = _battleSave->getMissionType();
+	_missionType = _battleSave->getMissionType();
 	AlienDeployment* ruleDeploy = NULL;
 	if (_ufo != NULL)
 		ruleDeploy = _rules->getDeployment(_ufo->getRules()->getType());
 	else
-		ruleDeploy = _rules->getDeployment(_mission);
+		ruleDeploy = _rules->getDeployment(_missionType);
 
 	ruleDeploy->getDimensions(
 						&_mapsize_x,
@@ -518,7 +518,7 @@ void BattlescapeGenerator::run()
 			_terrain = _worldTerrain; // kL
 		}
 	}
-	else if (_mission == "STR_TERROR_MISSION" // kL ->
+	else if (_missionType == "STR_TERROR_MISSION" // kL ->
 		&& _worldTerrain != NULL)
 	{
 		Log(LOG_INFO) << ". terror mission worldTerrain = " << _worldTerrain->getName();
@@ -559,7 +559,7 @@ void BattlescapeGenerator::run()
 //	deployCivilians(ruleDeploy->getCivilians());
 
 //	fuelPowerSources();
-//	if (_mission ==  "STR_UFO_CRASH_RECOVERY")
+//	if (_missionType ==  "STR_UFO_CRASH_RECOVERY")
 //		explodePowerSources(); // kL_end.
 
 	if (_craft != NULL
@@ -613,14 +613,14 @@ void BattlescapeGenerator::run()
 	if (_generateFuel == true)
 		fuelPowerSources();
 
-//	if (_mission == "STR_UFO_CRASH_RECOVERY")
+//	if (_missionType == "STR_UFO_CRASH_RECOVERY")
 	if (_ufo != NULL
 		&& _ufo->getStatus() == Ufo::CRASHED)
 	{
 		explodePowerSources();
 	}
 
-/*	if (_mission == "STR_BASE_DEFENSE")
+/*	if (_missionType == "STR_BASE_DEFENSE")
 	{
 		for (int
 				i = 0;
@@ -633,8 +633,8 @@ void BattlescapeGenerator::run()
 		_battleSave->calculateModuleMap();
 	}
 
-	if (_mission == "STR_ALIEN_BASE_ASSAULT"
-		|| _mission == "STR_MARS_THE_FINAL_ASSAULT")
+	if (_missionType == "STR_ALIEN_BASE_ASSAULT"
+		|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		for (int
 				i = 0;
@@ -1164,8 +1164,8 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			|| _craftDeployed == false)
 		&& _baseEquipScreen == false)
 /*	if ((_craft == NULL
-			|| _mission == "STR_ALIEN_BASE_ASSAULT"
-			|| _mission == "STR_MARS_THE_FINAL_ASSAULT")
+			|| _missionType == "STR_ALIEN_BASE_ASSAULT"
+			|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
 		&& _baseEquipScreen == false) */
 	{
 		const Node* const node = _battleSave->getSpawnNode(
@@ -1187,7 +1187,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 
 			return unit;
 		}
-		else if (_mission != "STR_BASE_DEFENSE")
+		else if (_missionType != "STR_BASE_DEFENSE")
 		{
 			if (placeUnitNearFriend(unit) == true)
 			{
@@ -2647,7 +2647,7 @@ void BattlescapeGenerator::setTacticalSprites()
 
 	if ((_craft == NULL // both Craft & Base are NULL for the 2nd of a 2-part mission.
 			&& _base == NULL)
-		|| _mission == "STR_BASE_DEFENSE")
+		|| _missionType == "STR_BASE_DEFENSE")
 	{
 		return;
 	}
@@ -2657,13 +2657,13 @@ void BattlescapeGenerator::setTacticalSprites()
 
 	if (_isCity == true)
 		strArmor = "STR_STREET_URBAN_UC";
-	else if (_mission == "STR_MARS_CYDONIA_LANDING"
-		|| _mission == "STR_MARS_THE_FINAL_ASSAULT")
+	else if (_missionType == "STR_MARS_CYDONIA_LANDING"
+		|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		strArmor = "STR_STREET_ARCTIC_UC";
 	}
-	else if (_mission == "STR_TERROR_MISSION"
-		|| _mission == "STR_ALIEN_BASE_ASSAULT")
+	else if (_missionType == "STR_TERROR_MISSION"
+		|| _missionType == "STR_ALIEN_BASE_ASSAULT")
 	{
 		strArmor = "STR_STREET_URBAN_UC";
 	}

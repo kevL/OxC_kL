@@ -39,13 +39,13 @@ class Craft;
 class Game;
 class MapBlock;
 class MapScript;
+class MissionSite;
 class ResourcePack;
 class RuleItem;
 class Ruleset;
 class RuleTerrain;
 class SavedBattleGame;
 class SavedGame;
-class TerrorSite;
 class Tile;
 class Ufo;
 class Unit;
@@ -93,6 +93,7 @@ private:
 	Craft* _craft;
 	Game* _game;
 	MapBlock* _testBlock;
+	MissionSite* _mission;
 	ResourcePack* _res;
 	Ruleset* _rules;
 	RuleTerrain
@@ -100,13 +101,12 @@ private:
 		* _worldTerrain;
 	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
-	TerrorSite* _terror;
 	Tile* _tileEquipt;
 	Ufo* _ufo;
 
 	std::string
 		_alienRace,
-		_mission;
+		_missionType;
 
 
 	/// Sets the map size and associated vars.
@@ -246,7 +246,7 @@ private:
 
 		/// Runs the generator.
 		void run();
-		/// Sets up the next stage (for cydonia/tftd terror missions).
+		/// Sets up the next stage (for Cydonia/TFTD missions).
 		void nextStage();
 
 		/// Sets the XCom craft.
@@ -255,8 +255,8 @@ private:
 		void setUfo(Ufo* ufo);
 		/// Sets the XCom base.
 		void setBase(Base* base);
-		/// Sets the terror site.
-		void setTerrorSite(TerrorSite* site);
+		/// Sets the mission site.
+		void setMissionSite(MissionSite* mission);
 		/// Sets the alien base
 		void setAlienBase(AlienBase* base);
 

@@ -18,6 +18,7 @@
  */
 
 #include "RuleCraft.h"
+
 #include "RuleTerrain.h"
 
 
@@ -32,6 +33,7 @@ RuleCraft::RuleCraft(const std::string& type)
 	:
 		_type(type),
 		_sprite(-1),
+		_marker(-1),
 		_fuelMax(0),
 		_damageMax(0),
 		_speedMax(0),
@@ -86,6 +88,7 @@ void RuleCraft::load(
 			_sprite += modIndex;
 	}
 
+	_marker			= node["marker"]		.as<int>(_marker);
 	_fuelMax		= node["fuelMax"]		.as<int>(_fuelMax);
 	_damageMax		= node["damageMax"]		.as<int>(_damageMax);
 	_speedMax		= node["speedMax"]		.as<int>(_speedMax);
@@ -151,6 +154,15 @@ const std::vector<std::string>& RuleCraft::getRequirements() const
 int RuleCraft::getSprite() const
 {
 	return _sprite;
+}
+
+/**
+ * Returns the globe marker for the craft type.
+ * @return, marker sprite -1 if none
+ */
+int RuleCraft::getMarker() const
+{
+	return _marker;
 }
 
 /**
@@ -343,10 +355,10 @@ std::vector<std::vector<int> >& RuleCraft::getDeployment()
 }
 
 /**
- * Gets the item limit for the craft.
- * @return, the item limit
+ * Gets the maximum amount of items this craft can store.
+ * @return, quantity of items
  */
-int const RuleCraft::getMaxItems() const
+int RuleCraft::getMaxItems() const
 {
 	return _maxItems;
 }

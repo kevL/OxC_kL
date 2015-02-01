@@ -44,6 +44,7 @@ private:
 		_accel,
 		_breakOffTime,
 		_damageMax,
+		_marker,
 		_power,
 		_range,
 		_reload,
@@ -79,6 +80,8 @@ private:
 		int getRadius() const;
 		/// Gets the UFO's sprite.
 		int getSprite() const;
+		/// Gets the UFO's globe marker.
+		int getMarker() const;
 
 		/// Gets the UFO's maximum damage.
 		int getMaxDamage() const;

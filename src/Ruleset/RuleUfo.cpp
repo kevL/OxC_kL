@@ -34,6 +34,7 @@ RuleUfo::RuleUfo(const std::string& type)
 		_type(type),
 		_size("STR_VERY_SMALL"),
 		_sprite(-1),
+		_marker(-1),
 		_damageMax(0),
 		_speedMax(0),
 		_accel(0),
@@ -66,6 +67,7 @@ void RuleUfo::load(
 	_type			= node["type"]			.as<std::string>(_type);
 	_size			= node["size"]			.as<std::string>(_size);
 	_sprite			= node["sprite"]		.as<int>(_sprite);
+	_marker			= node["marker"]		.as<int>(_marker);
 	_damageMax		= node["damageMax"]		.as<int>(_damageMax);
 	_speedMax		= node["speedMax"]		.as<int>(_speedMax);
 	_accel			= node["accel"]			.as<int>(_accel);
@@ -138,6 +140,15 @@ int RuleUfo::getRadius() const
 int RuleUfo::getSprite() const
 {
 	return _sprite;
+}
+
+/**
+ * Returns the globe marker for the UFO type.
+ * @return, marker sprite -1 if none
+ */
+int RuleUfo::getMarker() const
+{
+	return _marker;
 }
 
 /**
