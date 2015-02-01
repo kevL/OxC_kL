@@ -2029,16 +2029,21 @@ bool GeoscapeState::processMissionSite(MissionSite* site) const
 {
 	bool expired = true;
 
-	const int diff = static_cast<int>(_savedGame->getDifficulty());
-	int aLienPts = (site->getRules()->getPoints() * 50) + (diff * 235);
+	const int
+		diff = static_cast<int>(_savedGame->getDifficulty()),
+		month = _savedGame->getMonthsPassed();
+	int aLienPts;
 
-	if (site->getSecondsRemaining() >= 30 * 60)
+	if (site->getSecondsRemaining() >= 1800)
 	{
-		site->setSecondsRemaining(site->getSecondsRemaining() - 30 * 60);
+		site->setSecondsRemaining(site->getSecondsRemaining() - 1800);
 
-		aLienPts = 10 + (diff * 10);
+		aLienPts = (site->getRules()->getPoints() / 10) + (diff * 10) + month;
 		expired = false;
 	}
+	else
+		aLienPts = (site->getRules()->getPoints() * 5) + (diff * (235 + month));
+
 
 	Region* const region = _savedGame->locateRegion(*site);
 	if (region != NULL)

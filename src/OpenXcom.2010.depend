@@ -8855,7 +8855,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1422389684 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1422760312 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -8865,13 +8865,13 @@
 	"Craft.h"
 	"GameTime.h"
 	"ItemContainer.h"
+	"MissionSite.h"
 	"Production.h"
 	"Region.h"
 	"ResearchProject.h"
 	"SavedBattleGame.h"
 	"Soldier.h"
 	"SoldierDead.h"
-	"TerrorSite.h"
 	"Transfer.h"
 	"Ufo.h"
 	"Waypoint.h"
@@ -8941,7 +8941,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1422731272 source:f:\git\openxcom\src\savegame\ufo.cpp
+1422760448 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
