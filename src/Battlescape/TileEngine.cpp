@@ -4120,7 +4120,7 @@ int TileEngine::unitOpensDoor(
 		const bool rhtClick,
 		int dir)
 {
-	Log(LOG_INFO) << "unitOpensDoor()";
+	//Log(LOG_INFO) << "unitOpensDoor()";
 	int door = -1;
 
 	if (dir == -1)

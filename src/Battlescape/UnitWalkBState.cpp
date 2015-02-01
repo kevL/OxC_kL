@@ -539,7 +539,7 @@ bool UnitWalkBState::doStatusStand()
 		}
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
 		{
-			Log(LOG_INFO) << ". . check for doors";
+			//Log(LOG_INFO) << ". . check for doors";
 			int sound = -1;
 			const int door = _terrain->unitOpensDoor(
 												_unit,
@@ -548,17 +548,17 @@ bool UnitWalkBState::doStatusStand()
 
 			if (door == 0) // normal door
 			{
-				Log(LOG_INFO) << ". . . door #0";
+				//Log(LOG_INFO) << ". . . door #0";
 				sound = ResourcePack::DOOR_OPEN;
 			}
 			else if (door == 1) // ufo door
 			{
-				Log(LOG_INFO) << ". . . door #1";
+				//Log(LOG_INFO) << ". . . door #1";
 				sound = ResourcePack::SLIDING_DOOR_OPEN;
 			}
 			else if (door == 3) // ufo door still opening ...
 			{
-				Log(LOG_INFO) << ". . . door #3 ret FALSE";
+				//Log(LOG_INFO) << ". . . door #3 ret FALSE";
 				return false; // don't start walking yet, wait for the ufo door to open
 			}
 
@@ -572,7 +572,7 @@ bool UnitWalkBState::doStatusStand()
 
 				if (sound == ResourcePack::SLIDING_DOOR_OPEN)
 				{
-					Log(LOG_INFO) << ". . . door #1 ret FALSE";
+					//Log(LOG_INFO) << ". . . door #1 ret FALSE";
 					return false; // don't start walking yet, wait for the ufo door to open
 				}
 			}
