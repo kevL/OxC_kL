@@ -2027,7 +2027,7 @@ private:
  */
 bool GeoscapeState::processMissionSite(MissionSite* site) const
 {
-	bool expired = true;
+	bool expired;
 
 	const int
 		diff = static_cast<int>(_savedGame->getDifficulty()),
@@ -2036,13 +2036,15 @@ bool GeoscapeState::processMissionSite(MissionSite* site) const
 
 	if (site->getSecondsRemaining() >= 1800)
 	{
-		site->setSecondsRemaining(site->getSecondsRemaining() - 1800);
-
-		aLienPts = (site->getRules()->getPoints() / 10) + (diff * 10) + month;
 		expired = false;
+		site->setSecondsRemaining(site->getSecondsRemaining() - 1800);
+		aLienPts = (site->getRules()->getPoints() / 10) + (diff * 10) + month;
 	}
 	else
+	{
+		expired = true;
 		aLienPts = (site->getRules()->getPoints() * 5) + (diff * (235 + month));
+	}
 
 
 	Region* const region = _savedGame->locateRegion(*site);
@@ -2059,7 +2061,7 @@ bool GeoscapeState::processMissionSite(MissionSite* site) const
 	{
 		if ((*i)->getRules()->insideCountry(
 										site->getLongitude(),
-										site->getLatitude()))
+										site->getLatitude()) == true)
 		{
 			(*i)->addActivityAlien(aLienPts);
 			(*i)->recentActivity();

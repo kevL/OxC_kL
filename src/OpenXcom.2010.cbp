@@ -1573,18 +1573,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Geoscape/AlienTerrorState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Geoscape/AlienTerrorState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
 		<Unit filename="Geoscape/AllocatePsiTrainingState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1838,6 +1826,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Geoscape/MissionDetectedState.cpp" />
+		<Unit filename="Geoscape/MissionDetectedState.h" />
 		<Unit filename="Geoscape/MonthlyReportState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2940,6 +2930,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Savegame/MissionSite.cpp" />
+		<Unit filename="Savegame/MissionSite.h" />
 		<Unit filename="Savegame/MovingTarget.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -3079,18 +3071,6 @@
 			<Option target="Release x64" />
 		</Unit>
 		<Unit filename="Savegame/Target.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Savegame/TerrorSite.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Savegame/TerrorSite.h">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
 			<Option target="Release Win32" />

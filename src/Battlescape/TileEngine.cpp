@@ -742,6 +742,7 @@ bool TileEngine::visible(
 
 	// kL_note: Is an intermediary object *not* obstructing viewing
 	// or targetting, when it should be?? Like, around corners?
+	// kL_later: it might have something to do with an offset for handedness re. LoF.
 	bool isSeen = canTargetUnit(
 							&originVoxel,
 							tile,
@@ -774,7 +775,7 @@ bool TileEngine::visible(
 				++i)
 		{
 			// The 'origin tile' now steps along through voxel/tile-space, picking up extra weight
-			// ( reducing effective distance for both real distance and obscuration ) as it goes.
+			// as it goes ( effective distance is reduced by real distance * obscuration-per-voxel ).
 			scanTile = _battleSave->getTile(Position(
 												_trajectory.at(i).x / 16,
 												_trajectory.at(i).y / 16,
@@ -783,24 +784,24 @@ bool TileEngine::visible(
 			distWeighted += static_cast<double>(scanTile->getSmoke()) / 3.;
 			distWeighted += static_cast<double>(scanTile->getFire());
 
-//			if (static_cast<int>(std::ceil(distWeighted * distWeighted)) > MAX_VOXEL_VIEW_DISTANCE_SQR)
-			if (static_cast<int>(std::ceil(distWeighted)) > MAX_VOXEL_VIEW_DISTANCE)
+			if (static_cast<int>(std::ceil(distWeighted * distWeighted)) > MAX_VOXEL_VIEW_DIST_SQR)
+//			if (static_cast<int>(std::ceil(distWeighted)) > MAX_VOXEL_VIEW_DISTANCE)
 			{
 				isSeen = false;
 				break;
 			}
 		}
 
-		// Check if unitSeen (the object at the end of calculateLine() trajectory ) is really The targetUnit.
+		// Check if unitSeen (the unit at the end of calculateLine() trajectory) is really The targetUnit.
 		if (isSeen == true)
 		{
 			// have to check if targetUnit is poking its head up from tileBelow
-			const Tile* const belowTile = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
+			const Tile* const tileBelow = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
 			if (!
 				(scanTile->getUnit() == targetUnit
-					|| (belowTile != NULL // could add a check for && scanTile->hasNoFloor() around here.
-						&& belowTile->getUnit() != NULL
-						&& belowTile->getUnit() == targetUnit)))
+					|| (tileBelow != NULL // could add a check for && scanTile->hasNoFloor() around here.
+						&& tileBelow->getUnit() != NULL
+						&& tileBelow->getUnit() == targetUnit)))
 			{
 				isSeen = false;
 			}
