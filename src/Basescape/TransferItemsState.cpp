@@ -519,7 +519,7 @@ void TransferItemsState::init()
 
 			if (save->isResearched(rule->getType()) == false				// not researched
 				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien() == true					// or is an alien
+					|| rules->getItem(*i)->isAlien() == true					// or is an alien
 					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false									// and is not craft ordnance
@@ -890,7 +890,7 @@ int TransferItemsState::getCost() const
 			cost = 0.1;
 		else if (rule->getType() == "STR_ELERIUM_115")
 			cost = 1.;
-		else if (rule->getAlien())
+		else if (rule->isAlien() == true)
 			cost = 200.;
 		else
 			cost = 10.;
@@ -980,12 +980,12 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (type == TRANSFER_ITEM)
 	{
-		if (itemRule->getAlien() == false
+		if (itemRule->isAlien() == false
 			&& _baseTo->storesOverfull(itemRule->getSize() + _storeSize - 0.05))
 		{
 			errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 		}
-		else if (itemRule->getAlien() == true
+		else if (itemRule->isAlien() == true
 			&& (_baseTo->getAvailableContainment() == 0
 				|| (Options::storageLimitsEnforced == true
 					&& _alienQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment())))
@@ -1045,7 +1045,7 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (type == TRANSFER_ITEM)
 	{
-		if (itemRule->getAlien() == false) // item count
+		if (itemRule->isAlien() == false) // item count
 		{
 			const double
 				storesPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
@@ -1067,7 +1067,7 @@ void TransferItemsState::increaseByValue(int change)
 			_transferQty[_sel] += change;
 			_totalCost += getCost() * change;
 		}
-		else // if (itemRule->getAlien()) // live alien count
+		else // if (itemRule->isAlien()) // live alien count
 		{
 			int freeContainment = std::numeric_limits<int>::max();
 			if (Options::storageLimitsEnforced == true)
@@ -1140,7 +1140,7 @@ void TransferItemsState::decreaseByValue(int change)
 	else if (type == TRANSFER_ITEM) // item count
 	{
 		const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		if (itemRule->getAlien() == false)
+		if (itemRule->isAlien() == false)
 			_storeSize -= itemRule->getSize() * static_cast<double>(change);
 		else
 			_alienQty -= change;

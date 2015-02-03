@@ -59,46 +59,32 @@ private:
 	std::string
 		_saveName,
 		_savePath;
-	const char
-		** _idMarkers,
-		** _idCountries,
-		** _idRegions,
-		** _idFacilities,
-		** _idItems,
-		** _idRaces,
-		** _idCrafts,
-		** _idUfos,
-		** _idCraftWeapons,
-		** _idMissions,
-		** _idArmor,
-		** _idLiveAliens,
-		** _idLiveRanks,
-		** _idResearch,
-		** _idManufacture;
 	int
 		_year,
 		_funds;
-	size_t
-		_nMarkers,
-		_nCountries,
-		_nRegions,
-		_nFacilities,
-		_nItems,
-		_nRaces,
-		_nCrafts,
-		_nUfos,
-		_nCraftWeapons,
-		_nMissions,
-		_nArmor,
-		_nLiveAliens,
-		_nLiveRanks,
-		_nResearch,
-		_nManufacture;
 
 	SavedGame* _save;
 	Ruleset* _rule;
 
-	std::vector<std::string> _aliens;
+	std::vector<std::string>
+		_idMarkers,
+		_idCountries,
+		_idRegions,
+		_idFacilities,
+		_idItems,
+		_idCrews,
+		_idCrafts,
+		_idUfos,
+		_idCraftWeapons,
+		_idMissions,
+		_idArmor,
+		_idAlienRaces,
+		_idAlienRanks,
+		_idResearch,
+		_idManufacture,
+		_idUfopaedia,
+		_aliens;
+
 	std::vector<int> _targetDat;
 
 	std::vector<Soldier*> _soldiers;
@@ -174,8 +160,8 @@ private:
 		static void getList(
 				Language* lang,
 				SaveOriginal info[NUM_SAVES]);
-		/// Loads an X-COM 1 save.
-		SavedGame* loadXcom1();
+		/// Loads an original X-COM save.
+		SavedGame* loadOriginal();
 };
 
 }

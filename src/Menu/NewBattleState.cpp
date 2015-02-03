@@ -22,7 +22,6 @@
 //#include <algorithm>
 //#include <cmath>
 //#include <fstream>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "../Basescape/CraftInfoState.h"
@@ -51,6 +50,7 @@
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -565,13 +565,13 @@ void NewBattleState::btnOkClick(Action*)
 
 	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
 
-	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
+	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE") // base defense
 	{
 		base = _craft->getBase();
 		bgen.setBase(base);
-//		_craft = NULL;
+		_craft = NULL; // kL_note: may need to remove this for .. some reason.
 	}
-	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
+	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT") // alien base
 	{
 		AlienBase* const ab = new AlienBase();
 		ab->setId(1);
@@ -582,7 +582,7 @@ void NewBattleState::btnOkClick(Action*)
 		_game->getSavedGame()->getAlienBases()->push_back(ab);
 	}
 	else if (_craft != NULL
-		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]) != NULL)
+		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]) != NULL) // ufo assault
 	{
 		Ufo* const ufo = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]));
 		ufo->setId(1);
@@ -603,15 +603,29 @@ void NewBattleState::btnOkClick(Action*)
 
 		_game->getSavedGame()->getUfos()->push_back(ufo);
 	}
-	else //if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION")
+	else //if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION") // terror site / alien artefact
 	{
-		MissionSite* const ms = new MissionSite(NULL);
-		ms->setId(1);
-		ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-		_craft->setDestination(ms);
-		bgen.setMissionSite(ms);
+		for (std::vector<std::string>::const_iterator
+				i = _game->getRuleset()->getAlienMissionList().begin();
+				i != _game->getRuleset()->getAlienMissionList().end();
+				++i)
+		{
+			const RuleAlienMission* mission = _game->getRuleset()->getAlienMission(*i);
 
-		_game->getSavedGame()->getMissionSites()->push_back(ms);
+			if (bgame->getMissionType() == mission->getDeployment())
+			{
+				MissionSite* ms = new MissionSite(mission);
+				ms->setId(1);
+				ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+
+				_craft->setDestination(ms);
+
+				bgen.setMissionSite(ms);
+				_game->getSavedGame()->getMissionSites()->push_back(ms);
+
+				break;
+			}
+		}
 	}
 
 	if (_craft != NULL)

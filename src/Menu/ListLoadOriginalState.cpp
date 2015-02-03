@@ -196,7 +196,7 @@ void ListLoadOriginalState::btnSlotClick(Action* action)
 		else
 		{
 			SaveConverter converter(_saves[n].id, _game->getRuleset());
-			_game->setSavedGame(converter.loadXcom1());
+			_game->setSavedGame(converter.loadOriginal());
 
 			Options::baseXResolution = Options::baseXGeoscape;
 			Options::baseYResolution = Options::baseYGeoscape;

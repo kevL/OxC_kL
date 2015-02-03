@@ -35,7 +35,7 @@ class ListLoadState
 {
 
 private:
-	TextButton* _btnOld;
+//	TextButton* _btnOld;
 
 	public:
 		/// Creates the Load Game state.
@@ -44,7 +44,7 @@ private:
 		~ListLoadState();
 
 		/// Handler for clicking the Original X-Com button.
-		void btnOldClick(Action* action);
+//		void btnOldClick(Action* action);
 		/// Handler for clicking the Saves list.
 		void lstSavesPress(Action* action);
 };

@@ -215,7 +215,7 @@ StoresState::StoresState(Base* base)
 
 			if (sg->isResearched(itRule->getType()) == false				// not researched
 				&& (sg->isResearched(itRule->getRequirements()) == false	// and has requirements to use that have not been researched
-					|| rules->getItem(*i)->getAlien() == true					// or is an alien
+					|| rules->getItem(*i)->isAlien() == true					// or is an alien
 					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false									// and is not craft ordnance
@@ -228,7 +228,7 @@ StoresState::StoresState(Base* base)
 			std::wostringstream ss1;
 			ss1 << qty;
 
-			if (rules->getItem(*i)->getAlien() == true)
+			if (rules->getItem(*i)->isAlien() == true)
 			{
 				_lstStores->addRow(
 								3,

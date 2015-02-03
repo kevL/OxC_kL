@@ -20,7 +20,7 @@
 #include "ListLoadState.h"
 
 #include "ConfirmLoadState.h"
-#include "ListLoadOriginalState.h"
+//#include "ListLoadOriginalState.h"
 #include "LoadGameState.h"
 
 #include "../Engine/Action.h"
@@ -31,7 +31,7 @@
 #include "../Geoscape/GeoscapeState.h"
 
 #include "../Interface/Text.h"
-#include "../Interface/TextButton.h"
+//#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 
 #include "../Resource/ResourcePack.h"
@@ -76,10 +76,10 @@ ListLoadState::~ListLoadState()
  * Switches to Original X-Com saves.
  * @param action - pointer to an Action
  */
-void ListLoadState::btnOldClick(Action*)
+/* void ListLoadState::btnOldClick(Action*)
 {
 	_game->pushState(new ListLoadOriginalState);
-}
+} */
 
 /**
  * Loads the selected save.
@@ -120,9 +120,9 @@ void ListLoadState::lstSavesPress(Action* action)
 		}
 
 		if (confirm == true)
-				_game->pushState(new ConfirmLoadState(
-													_origin,
-													_saves[_lstSaves->getSelectedRow()].fileName));
+			_game->pushState(new ConfirmLoadState(
+												_origin,
+												_saves[_lstSaves->getSelectedRow()].fileName));
 		else
 			_game->pushState(new LoadGameState(
 											_origin,

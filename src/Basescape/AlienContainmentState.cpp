@@ -225,16 +225,16 @@ AlienContainmentState::AlienContainmentState(
 			i != itemList.end();
 			++i)
 	{
-		qty = _base->getItems()->getItem(*i);					// get Qty of each item at this base
-		if (qty > 0												// if item exists at this base
-			&& _game->getRuleset()->getItem(*i)->getAlien())	// and it's a live alien...
+		qty = _base->getItems()->getItem(*i);						// get Qty of each item at this base
+		if (qty > 0													// if item exists at this base
+			&& _game->getRuleset()->getItem(*i)->isAlien() == true)	// and it's a live alien...
 		{
-			_qtys.push_back(0);									// put it in the _qtys<vector> as (int)
-			_aliens.push_back(*i);								// put its name in the _aliens<vector> as (string)
+			_qtys.push_back(0);		// put it in the _qtys<vector> as (int)
+			_aliens.push_back(*i);	// put its name in the _aliens<vector> as (string)
 
 			std::wostringstream ss;
 			ss << qty;
-			_lstAliens->addRow(									// show its name on the list.
+			_lstAliens->addRow( // show its name on the list.
 							3,
 							tr(*i).c_str(),
 							ss.str().c_str(),

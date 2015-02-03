@@ -371,7 +371,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 			if (save->isResearched(rule->getType()) == false				// not researched
 				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien() == true					// or is an alien
+					|| rules->getItem(*i)->isAlien() == true					// or is an alien
 					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false									// and is not craft ordnance
