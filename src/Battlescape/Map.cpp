@@ -937,41 +937,52 @@ void Map::drawTerrain(Surface* surface)
 							&& unitNorth->getDirection() != 7
 							&& levelDiff_ns < 1)
 						{
-							// Phase I: redraw unit NORTH to make sure it doesn't get drawn over any walls or under any tiles.
-							unitNorthValid = true;
+							const Tile* tileSouthWest;	// Reaper sticks its righthind leg out through south wall if dir=1
 
-							if (tileNorth->isDiscovered(2) == true)
-								shade = tileNorth->getShade();
+							if (itX > 0 && itY < endY)
+								tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
 							else
-								shade = 16;
+								tileSouthWest = NULL;
 
-							quad = tileNorth->getPosition().x - unitNorth->getPosition().x
-								+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
-
-							srfSprite = unitNorth->getCache(&invalid, quad);
-//							srfSprite = NULL;
-							if (srfSprite)
+							if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
+								|| tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL) // or do this check specifically for Reapers
 							{
-								calculateWalkingOffset(
-													unitNorth,
-													&walkOffset);
+								// Phase I: redraw unit NORTH to make sure it doesn't get drawn over any walls or under any tiles.
+								unitNorthValid = true;
 
-								srfSprite->blitNShade(
-										surface,
-										screenPosition.x + walkOffset.x + 16,
-										screenPosition.y + walkOffset.y - 8,
-										shade);
+								if (tileNorth->isDiscovered(2) == true)
+									shade = tileNorth->getShade();
+								else
+									shade = 16;
 
-								if (unitNorth->getFire() != 0)
+								quad = tileNorth->getPosition().x - unitNorth->getPosition().x
+									+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
+
+								srfSprite = unitNorth->getCache(&invalid, quad);
+//								srfSprite = NULL;
+								if (srfSprite)
 								{
-									frame = 4 + (_animFrame / 2);
-									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-									if (srfSprite)
-										srfSprite->blitNShade(
-												surface,
-												screenPosition.x + walkOffset.x + 16,
-												screenPosition.y + walkOffset.y - 8,
-												0);
+									calculateWalkingOffset(
+														unitNorth,
+														&walkOffset);
+
+									srfSprite->blitNShade(
+											surface,
+											screenPosition.x + walkOffset.x + 16,
+											screenPosition.y + walkOffset.y - 8,
+											shade);
+
+									if (unitNorth->getFire() != 0)
+									{
+										frame = 4 + (_animFrame / 2);
+										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+										if (srfSprite)
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x + walkOffset.x + 16,
+													screenPosition.y + walkOffset.y - 8,
+													0);
+									}
 								}
 							}
 
@@ -2220,12 +2231,14 @@ void Map::drawTerrain(Surface* surface)
 							|| _save->getDebugMode() == true))
 					{
 						halfRight = false; // don't overwrite walls in tile SOUTH-WEST
-						if (itX > 0
-							&& itY < endY
+
+						if (itX > 0 && itY < endY
 							&& unit->getStatus() == STATUS_WALKING
 //							&& _save->getPathfinding()->getStartDirection() < Pathfinding::DIR_UP
 							&& (unit->getDirection() == 2
 								|| unit->getDirection() == 6))
+//								|| unit->getDirection() == 1 // reaper ...
+//								|| unit->getDirection() == 5))
 						{
 							const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
 
@@ -2246,7 +2259,7 @@ void Map::drawTerrain(Surface* surface)
 						quad = tile->getPosition().x - unit->getPosition().x
 							+ (tile->getPosition().y - unit->getPosition().y) * 2;
 
-						srfSprite = unit->getCache(&invalid, quad);
+						srfSprite = unit->getCache(&invalid, quad); // Reaper sticks its righthind leg out through southerly wall; redraw northWall in tileSouthWest
 //						srfSprite = NULL;
 						if (srfSprite)
 						{
@@ -2292,6 +2305,36 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x + bubbleOffset_x,
 											screenPosition.y + bubbleOffset_y - 30,
 											tileShade);
+							}
+
+							// Redraw northWall in tileSouthSouthWest
+							if (itX > 0 && itY < endY -1				// Reaper sticks its righthind leg out through southerly wall
+								&& unit->getStatus() == STATUS_WALKING	// Sectopod also, likely.
+								&& unit->getDirection() == 1
+								&& unit->getArmor()->getSize() == 2
+								&& unit->getTurretType() == -1)
+							{
+								if (unit == _save->getTile(mapPosition + Position(-1,0,0))->getUnit())
+								{
+									const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+
+									srfSprite = tileSouthSouthWest->getSprite(MapData::O_NORTHWALL);
+//									srfSprite = NULL;
+									if (srfSprite)
+									{
+										if (tileSouthSouthWest->isDiscovered(1) == true)
+											shade = tileSouthSouthWest->getShade(); // Or use tileShade
+										else
+											shade = 16;
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x - 48,
+												screenPosition.y + 8 - tileSouthSouthWest->getMapData(MapData::O_NORTHWALL)->getYOffset(),
+												shade,
+												true);
+									}
+								}
 							}
 
 							// kL_begin #3 of 3:
@@ -4096,7 +4139,7 @@ void Map::cacheUnits()
  * Check if a certain unit needs to be redrawn.
  * @param unit - pointer to a BattleUnit
  */
-void Map::cacheUnit(BattleUnit* unit)
+void Map::cacheUnit(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 	int width;
@@ -4127,7 +4170,9 @@ void Map::cacheUnit(BattleUnit* unit)
 				++unitPart)
 		{
 			//Log(LOG_INFO) << ". . unitPart = " << unitPart;
-			Surface* cache = unit->getCache(&d, unitPart);
+			Surface* cache = unit->getCache(
+										&d,
+										unitPart);
 			if (cache == NULL) // no cache created yet
 			{
 				//Log(LOG_INFO) << ". . . (!cache)";
@@ -4140,7 +4185,9 @@ void Map::cacheUnit(BattleUnit* unit)
 
 			//Log(LOG_INFO) << ". . cache Sprite & setBattleUnit()";
 			cache->setWidth(unitSprite->getWidth());
-			unitSprite->setBattleUnit(unit, unitPart);
+			unitSprite->setBattleUnit(
+									unit,
+									unitPart);
 
 			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem
@@ -4184,7 +4231,9 @@ void Map::cacheUnit(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . blit() Ok";
 
 			//Log(LOG_INFO) << ". . setCache()";
-			unit->setCache(cache, unitPart);
+			unit->setCache(
+						cache,
+						unitPart);
 		}
 		//Log(LOG_INFO) << ". end (invalid)";
 	}

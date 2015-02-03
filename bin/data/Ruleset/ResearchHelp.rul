@@ -1,4 +1,4 @@
-research:
+research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 ...
   - name: STR_MEDI_KIT
     cost: 2100
     points: 20

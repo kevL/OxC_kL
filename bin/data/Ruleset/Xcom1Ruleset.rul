@@ -174,7 +174,7 @@ facilities:
     monthlyCost: 13500
     crafts: 1
     mapName: XBASE_16
-crafts:
+crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
   - type: STR_SKYRANGER
     sprite: 0
     fuelMax: 122500
@@ -302,7 +302,7 @@ crafts:
         - name: AVENGER
           width: 10
           length: 20
-craftWeapons:
+craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasmabeam
   - type: STR_CANNON_UC
     sprite: 2
     sound: 4
@@ -1804,7 +1804,12 @@ items:
     invHeight: 3
     clipSize: -1
     recover: false
-  - type: STR_SECTOID_SOLDIER
+  - type: STR_SECTOID_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 50000
+  - type: STR_SECTOID_LEADER
     size: 0.0
     recover: true
     liveAlien: true
@@ -1824,22 +1829,17 @@ items:
     recover: true
     liveAlien: true
     costSell: 50000
-  - type: STR_SECTOID_LEADER
+  - type: STR_SECTOID_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
     costSell: 50000
-  - type: STR_SECTOID_COMMANDER
+  - type: STR_FLOATER_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
-    costSell: 50000
-  - type: STR_CYBERDISC_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 180000
-  - type: STR_FLOATER_SOLDIER
+    costSell: 60000
+  - type: STR_FLOATER_LEADER
     size: 0.0
     recover: true
     liveAlien: true
@@ -1859,22 +1859,17 @@ items:
     recover: true
     liveAlien: true
     costSell: 60000
-  - type: STR_FLOATER_LEADER
+  - type: STR_FLOATER_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
     costSell: 60000
-  - type: STR_FLOATER_COMMANDER
+  - type: STR_SNAKEMAN_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
-    costSell: 60000
-  - type: STR_REAPER_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 150000
-  - type: STR_SNAKEMAN_SOLDIER
+    costSell: 70000
+  - type: STR_SNAKEMAN_LEADER
     size: 0.0
     recover: true
     liveAlien: true
@@ -1889,22 +1884,12 @@ items:
     recover: true
     liveAlien: true
     costSell: 70000
-  - type: STR_SNAKEMAN_LEADER
+  - type: STR_SNAKEMAN_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
     costSell: 70000
-  - type: STR_SNAKEMAN_COMMANDER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 70000
-  - type: STR_CHRYSSALID_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 200000
-  - type: STR_MUTON_SOLDIER
+  - type: STR_MUTON_ENGINEER
     size: 0.0
     recover: true
     liveAlien: true
@@ -1914,11 +1899,41 @@ items:
     recover: true
     liveAlien: true
     costSell: 80000
-  - type: STR_MUTON_ENGINEER
+  - type: STR_MUTON_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
     costSell: 80000
+  - type: STR_ETHEREAL_COMMANDER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 90000
+  - type: STR_ETHEREAL_LEADER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 90000
+  - type: STR_ETHEREAL_SOLDIER
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 90000
+  - type: STR_CYBERDISC_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 180000
+  - type: STR_REAPER_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 150000
+  - type: STR_CHRYSSALID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 200000
   - type: STR_SILACOID_TERRORIST
     size: 0.0
     recover: true
@@ -1929,21 +1944,6 @@ items:
     recover: true
     liveAlien: true
     costSell: 100000
-  - type: STR_ETHEREAL_SOLDIER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 90000
-  - type: STR_ETHEREAL_LEADER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 90000
-  - type: STR_ETHEREAL_COMMANDER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 90000
   - type: STR_SECTOPOD_TERRORIST
     size: 0.0
     recover: true
@@ -4045,7 +4045,7 @@ units:
     livingWeapon: true
     isPsiImmune: true
 #    meleeWeapon: STR_FIST
-alienRaces:
+alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
   - id: STR_SECTOID
     members:
       - STR_SECTOID_COMMANDER

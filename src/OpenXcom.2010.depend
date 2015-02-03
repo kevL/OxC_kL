@@ -5491,7 +5491,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1420926107 f:\git\openxcom\src\battlescape\map.h
+1422913097 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -6052,7 +6052,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1422835902 source:f:\git\openxcom\src\battlescape\map.cpp
+1422917199 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
