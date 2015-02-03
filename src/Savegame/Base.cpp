@@ -1840,7 +1840,7 @@ int Base::getUsedContainment() const
 			i != _items->getContents()->end();
 			++i)
 	{
-		if (_rules->getItem(i->first)->isAlien() != false)
+		if (_rules->getItem(i->first)->isAlien() == true)
 			total += i->second;
 	}
 
@@ -1850,7 +1850,7 @@ int Base::getUsedContainment() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM
-			&& _rules->getItem((*i)->getItems())->isAlien() != false)
+			&& _rules->getItem((*i)->getItems())->isAlien() == true)
 		{
 			total += (*i)->getQuantity();
 		}
