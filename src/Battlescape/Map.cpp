@@ -933,7 +933,7 @@ void Map::drawTerrain(Surface* surface)
 							&& (unitNorth->getUnitVisible() == true
 								|| _save->getDebugMode() == true)
 							&& unitNorth->getStatus() == STATUS_WALKING
-							&& unitNorth->getDirection() != 3
+							&& unitNorth->getDirection() != 3 // might want to remove these
 							&& unitNorth->getDirection() != 7
 							&& levelDiff_ns < 1)
 						{
@@ -1012,7 +1012,11 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// Phase III: redraw any south wall object in the tile NORTH-WEST.
-							if (itX > 0)
+							if (itX > 0
+								&& (unitNorth->getDirection() == 2
+									|| unitNorth->getDirection() == 6))
+//								&& unitNorth->getDirection() != 0
+//								&& unitNorth->getDirection() != 4)
 							{
 								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
 
@@ -1884,10 +1888,12 @@ void Map::drawTerrain(Surface* surface)
 							{
 								const Tile
 									* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0)),
-									* tileEast = NULL;
+									* tileEast;
 
 								if (itY < endY)
 									tileEast = _save->getTile(mapPosition + Position(1,0,0));
+								else
+									tileEast = NULL;
 
 								if (tileNorth->getUnit() == NULL
 									&& (tileEast == NULL
@@ -1902,8 +1908,14 @@ void Map::drawTerrain(Surface* surface)
 											|| _save->getDebugMode() == true)
 										&& unitNorthWest != unit // large units don't need to redraw their western parts
 										&& unitNorthWest->getStatus() == STATUS_WALKING
-										&& (unitNorthWest->getDirection() == 3
-											|| unitNorthWest->getDirection() == 7
+										&& (((unitNorthWest->getDirection() == 3
+													|| unitNorthWest->getDirection() == 7)
+												&& (tileNorthWest->getMapData(MapData::O_OBJECT) == NULL
+													|| (tileNorthWest->getMapData(MapData::O_OBJECT) != NULL
+//														&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NESW
+														&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_EAST
+														&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH
+														&& tileNorthWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S)))
 											|| ((unitNorthWest->getDirection() == 2			// This bit is for going down (or up) slopes and not getting unit's toes truncated.
 													|| unitNorthWest->getDirection() == 6)	// EW only applicable if curTile foreground has bigWall_NONE and is higher:
 												&& tile->getMapData(MapData::O_OBJECT) != NULL
@@ -1925,7 +1937,7 @@ void Map::drawTerrain(Surface* surface)
 											halfRight = false;
 											bool halfLeft = false;
 
-											int levelDiff_ew = tileWest->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
+											const int levelDiff_ew = tileWest->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
 
 											if (tile->getMapData(MapData::O_WESTWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 												|| tileWest->getMapData(MapData::O_NORTHWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
@@ -1933,7 +1945,7 @@ void Map::drawTerrain(Surface* surface)
 													&& ((tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 															&& levelDiff_ew > 12)
 //														|| tileWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
-														|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK // these are untested:
+														|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
 														|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 														|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
 														|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
@@ -1945,13 +1957,20 @@ void Map::drawTerrain(Surface* surface)
 
 											const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
-											int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
+											const int levelDiff_ns = tileNorth->getTerrainLevel() - tile->getTerrainLevel(); // positive means Tile is higher
 
-											if (tile->getMapData(MapData::O_NORTHWALL) != NULL // AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+											if (tile->getMapData(MapData::O_NORTHWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+												|| tileNorth->getMapData(MapData::O_WESTWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 												|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
-													&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-													&& levelDiff_ns > 12))
+													&& ((tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+															&& levelDiff_ns > 12)
 //														|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
+														|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
 											{
 												halfLeft = true;
 											}
@@ -2000,8 +2019,6 @@ void Map::drawTerrain(Surface* surface)
 
 													// Redraw top of Craft's ramp if walking NWSE beneath it.
 													// ( if (tileNorth has west or southwall) redraw it, perhaps )
-													const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
-
 													if (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 														&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == 0 // draw content-object but not bigWall
 														&& ((tileNorth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN"
