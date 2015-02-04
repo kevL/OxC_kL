@@ -1443,8 +1443,9 @@ int BattleUnit::getStun() const
  */
 void BattleUnit::knockOut(BattlescapeGame* battle)
 {
-	if (getArmor()->getSize() > 1				// large units die
-		|| _unitRules->isMechanical() == true)	// so do scout drones
+	if (_armor->getSize() > 1	// large units die
+		|| (_unitRules != NULL	// so do scout drones
+			&& _unitRules->isMechanical() == true))
 	{
 		_health = 0;
 	}
@@ -2017,9 +2018,7 @@ void BattleUnit::setArmor(
 		int armor,
 		UnitSide side)
 {
-	if (armor < 0)
-		armor = 0;
-
+	if (armor < 0) armor = 0;
 	_currentArmor[side] = armor;
 }
 
@@ -2040,7 +2039,6 @@ int BattleUnit::getArmor(UnitSide side) const
 int BattleUnit::getFatalWounds() const
 {
 	int wounds = 0;
-
 	for (int
 			i = 0;
 			i < 6;

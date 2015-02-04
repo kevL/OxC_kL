@@ -1505,8 +1505,9 @@ void Map::drawTerrain(Surface* surface)
 										screenPosition.y + tile->getTerrainLevel(),
 										tileShade);
 
-							if (tile->getFire() == 0
-								&& tile->isDiscovered(2) == true)
+							if (//tile->getFire() == 0 &&
+								tile->isDiscovered(2) == true)
+//								&& RNG::percent(26) == true)
 							{
 								for (std::vector<BattleItem*>::const_iterator
 										i = tile->getInventory()->begin();
@@ -1517,7 +1518,15 @@ void Map::drawTerrain(Surface* surface)
 										&& (*i)->getUnit()->getFire() != NULL)
 									{
 										// Draw SMOKE & FIRE if itemUnit is on Fire
-										frame =
+										frame = 4 + (_animFrame / 2);
+										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+										if (srfSprite)
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x,
+													screenPosition.y + tile->getTerrainLevel(),
+													0);
+/*										frame =
 										shade = 0;
 
 										animOffset = _animFrame / 2 + RNG::generate(0,3); //tile->getAnimationOffset(); <- make it look weird
@@ -1531,8 +1540,7 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.x,
 													screenPosition.y + tile->getTerrainLevel(),
 													shade);
-
-										break;
+										break; */
 									}
 								}
 							}
