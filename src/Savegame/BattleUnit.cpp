@@ -116,6 +116,7 @@ BattleUnit::BattleUnit(
 		_stopShot(false),
 		_dashing(false),
 		_takenExpl(false),
+		_takenFire(false),
 		_diedByFire(false),
 		_turnDir(0),
 		_revived(false),
@@ -268,6 +269,7 @@ BattleUnit::BattleUnit(
 		_stopShot(false),
 		_dashing(false),
 		_takenExpl(false),
+		_takenFire(false),
 		_battleOrder(0),
 		_revived(false),
 
@@ -1220,7 +1222,7 @@ int BattleUnit::damage(
 	{
 		UnitSide side = SIDE_FRONT;
 
-		if (relPos == Position(0, 0, 0))
+		if (relPos == Position(0,0,0))
 			side = SIDE_UNDER;
 		else
 		{
@@ -1343,9 +1345,9 @@ int BattleUnit::damage(
 				{
 					if (isWoundable() == true) // fatal wounds
 					{
-						if (RNG::generate(0, 10) < power) // kL: refactor this.
+						if (RNG::generate(0,10) < power) // kL: refactor this.
 						{
-							const int wounds = RNG::generate(1, 3);
+							const int wounds = RNG::generate(1,3);
 							_fatalWounds[bodypart] += wounds;
 
 							moraleChange(-wounds * 3);
@@ -1369,8 +1371,7 @@ int BattleUnit::damage(
 		playHitSound();
 	}
 
-	if (power < 0)
-		power = 0;
+	if (power < 0) power = 0;
 	//Log(LOG_INFO) << "BattleUnit::damage() ret Penetrating Power " << power;
 
 	return power;
@@ -1442,17 +1443,17 @@ int BattleUnit::getStun() const
  */
 void BattleUnit::knockOut(BattlescapeGame* battle)
 {
-	if (getArmor()->getSize() > 1		// large units die
-		|| _unitRules->isMechanical())	// so do scout drones
+	if (getArmor()->getSize() > 1				// large units die
+		|| _unitRules->isMechanical() == true)	// so do scout drones
 	{
 		_health = 0;
 	}
 	else if (_spawnUnit.empty() == false)
 	{
-//kL	setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
-		BattleUnit* newUnit = battle->convertUnit(
-												this,
-												_spawnUnit);
+//		setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
+		BattleUnit* const newUnit = battle->convertUnit(
+													this,
+													_spawnUnit);
 		newUnit->knockOut(battle); // -> STATUS_UNCONSCIOUS
 	}
 	else
@@ -2107,7 +2108,7 @@ void BattleUnit::prepUnit()
 		const int panic = 100 - (2 * getMorale());
 		if (RNG::percent(panic) == true)
 		{
-			_tu = _stats.tu * RNG::generate(0, 100) / 100;
+			_tu = _stats.tu * RNG::generate(0,100) / 100;
 			_energy = _stats.stamina;
 
 			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
@@ -2259,28 +2260,24 @@ void BattleUnit::takeFire()
 	if (_fire != 0)
 	{
 		const int
-			powerSmoke = 4,
+			powerSmoke = 3,
 			powerFire = RNG::generate(2,6);
 
-		const float armorSmoke = _armor->getDamageModifier(DT_SMOKE);
-		if (armorSmoke > 0.f) // try to knock _unit out.
-		{
+		float vulnerability = _armor->getDamageModifier(DT_SMOKE);
+		if (vulnerability > 0.f) // try to knock _unit out.
 			damage(
 				Position(0,0,0),
-				static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
+				static_cast<int>(static_cast<float>(powerSmoke) * vulnerability),
 				DT_SMOKE, // -> DT_STUN
 				true);
-		}
 
-		const float armorFire = _armor->getDamageModifier(DT_IN);
-		if (armorFire > 0.f)
-		{
+		vulnerability = _armor->getDamageModifier(DT_IN);
+		if (vulnerability > 0.f)
 			damage(
 				Position(0,0,0),
-				static_cast<int>(static_cast<float>(powerFire) * armorFire),
+				static_cast<int>(static_cast<float>(powerFire) * vulnerability),
 				DT_IN,
 				true);
-		}
 	}
 }
 
@@ -4053,7 +4050,7 @@ bool BattleUnit::getDashing() const
 
 /**
  * Sets this unit as having been damaged in a single explosion.
- * @param beenhit - true to not deliver any more damage from a single explosion
+ * @param beenhit - true to not deliver any more damage from a single explosion (default true)
  */
 void BattleUnit::setTakenExpl(bool beenhit)
 {
@@ -4067,6 +4064,24 @@ void BattleUnit::setTakenExpl(bool beenhit)
 bool BattleUnit::getTakenExpl() const
 {
 	return _takenExpl;
+}
+
+/**
+ * Sets this unit as having been damaged in a single fire.
+ * @param beenhit - true to not deliver any more damage from a single fire (default true)
+ */
+void BattleUnit::setTakenFire(bool beenhit)
+{
+	_takenFire = beenhit;
+}
+
+/**
+ * Gets if this unit was aleady damaged in a single fire.
+ * @return, true if this unit has already taken fire
+ */
+bool BattleUnit::getTakenFire() const
+{
+	return _takenFire;
 }
 
 /**

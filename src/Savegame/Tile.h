@@ -176,8 +176,8 @@ protected:
 		/**
 		 * Checks if the ufo door is open or opening. Used for visibility/light blocking checks.
 		 * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
-		 * @param part
-		 * @return bool
+		 * @param part	-
+		 * @return bool	-
 		 */
 		bool isUfoDoorOpen(int part) const
 		{	return _objects[part] != NULL
@@ -277,7 +277,7 @@ protected:
 		/// New turn preparations.
 		void prepareTileTurn();
 		/// Ends this tile's turn. Units catch on fire.
-		void endTilePhase(SavedBattleGame* const battleSave);
+		void endTilePhase(SavedBattleGame* const battleSave = NULL);
 
 		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();

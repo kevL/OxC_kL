@@ -398,6 +398,7 @@ private:
 		_revived,
 		_stopShot,	// to stop a unit from firing/throwing if it spots a new opponent during turning
 		_takenExpl,	// used to stop large units from taking damage for each part.
+		_takenFire,
 		_visible;
 	int
 		_aimPhase,
@@ -1031,6 +1032,11 @@ private:
 		void setTakenExpl(bool beenhit = true);
 		/// Gets if this unit has aleady been damaged in a single explosion.
 		bool getTakenExpl() const;
+
+		/// Sets this unit as having been damaged in a single fire.
+		void setTakenFire(bool beenhit = true);
+		/// Gets if this unit has aleady been damaged in a single fire.
+		bool getTakenFire() const;
 
 		/// Returns true if this unit is selectable.
 		bool isSelectable(

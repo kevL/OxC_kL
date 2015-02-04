@@ -641,7 +641,7 @@ void BattlescapeGame::endTurnPhase()
 	Position pos;
 	for (int // check for hot grenades on the ground
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i != _save->getMapSizeXYZ();
 			++i)
 	{
 		for (std::vector<BattleItem*>::const_iterator
@@ -729,7 +729,7 @@ void BattlescapeGame::endTurnPhase()
 		}
 	}
 
-	// kL_begin: battleUnit is burning...
+	// THE NEXT 3 SECTIONS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
@@ -743,11 +743,11 @@ void BattlescapeGame::endTurnPhase()
 				&& ((*i)->getGeoscapeSoldier() != NULL
 					|| (*i)->getUnitRules()->isMechanical() == false))
 			{
-				tile->endTilePhase(_save); // damage tile-unit w/ Fire & Smoke.
+				tile->endTilePhase(); // damage tile's unit w/ Fire & Smoke at end of its faction's Turn-phase.
 			}
 		}
-	} // kL_end.
-	// that just might work...
+	}
+
 
 	// if all units from either faction are killed - the mission is over.
 	// ... should this go after checkForCasualties() below ...
@@ -761,7 +761,28 @@ void BattlescapeGame::endTurnPhase()
 			true);
 
 
-	_save->endBattlePhase(); // <- This rolls over Faction-turns.
+	if (_save->endBattlePhase() == true) // <- This rolls over Faction-turns.
+	{
+		size_t mapSize = static_cast<size_t>(_save->getMapSizeXYZ());
+		for (size_t
+				i = 0;
+				i != mapSize;
+				++i)
+		{
+			tile = _save->getTiles()[i];
+			if (tile->getInventory()->empty() == false)
+				tile->endTilePhase(_save); // damage tile's items w/ Fire at end of each full-turn.
+		}
+
+		for (std::vector<BattleUnit*>::const_iterator // reset the takenExpl(smoke) and takenFire flags on every unit.
+				i = _save->getUnits()->begin();
+				i != _save->getUnits()->end();
+				++i)
+		{
+			(*i)->setTakenExpl(false); // even if Status_Dead, just do it.
+			(*i)->setTakenFire(false);
+		}
+	}
 	// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
 	// -> SavedBattleGame::prepareBattleTurn()
 	// Or here
@@ -2727,7 +2748,7 @@ void BattlescapeGame::requestEndTurn()
 
 /**
  * Drops an item to the floor and affects it with gravity.
- * @param position		- reference position to spawn the item
+ * @param position		- reference position to place the item
  * @param item			- pointer to the item
  * @param newItem		- true if this is a new item
  * @param removeItem	- true to remove the item from the owner
@@ -2738,20 +2759,18 @@ void BattlescapeGame::dropItem(
 		bool newItem,
 		bool removeItem)
 {
-	Position pos = position;
-
-	// don't spawn anything outside of bounds
-	if (_save->getTile(pos) == NULL)
+	if (_save->getTile(position) == NULL		// don't spawn anything outside of bounds
+		|| item->getRules()->isFixed() == true)	// don't ever drop fixed items
+	{
 		return;
+	}
 
-	// don't ever drop fixed items
-	if (item->getRules()->isFixed() == true)
-		return;
-
-	_save->getTile(pos)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
+	_save->getTile(position)->addItem(
+								item,
+								getRuleset()->getInventory("STR_GROUND"));
 
 	if (item->getUnit() != NULL)
-		item->getUnit()->setPosition(pos);
+		item->getUnit()->setPosition(position);
 
 	if (newItem == true)
 		_save->getItems()->push_back(item);
@@ -2766,7 +2785,7 @@ void BattlescapeGame::dropItem(
 		item->setOwner(NULL);
 	}
 
-	getTileEngine()->applyGravity(_save->getTile(pos));
+	getTileEngine()->applyGravity(_save->getTile(position));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
@@ -2794,8 +2813,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 	_save->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
 	unit->instaKill();
-	unit->setSpecialAbility(SPECAB_NONE); // kL
-	unit->setRespawn(false); // kL
+	unit->setSpecialAbility(SPECAB_NONE);	// kL
+	unit->setRespawn(false);				// kL
 
 	if (Options::battleNotifyDeath == true
 		&& unit->getFaction() == FACTION_PLAYER
@@ -2853,7 +2872,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	convertedUnit->setPosition(unit->getPosition());
 	convertedUnit->setTimeUnits(0);
 	if (convertType == "STR_ZOMBIE")
-		dirFace = RNG::generate(0, 7);
+		dirFace = RNG::generate(0,7);
 	convertedUnit->setDirection(dirFace);
 
 	convertedUnit->setCache(NULL);
@@ -2867,9 +2886,9 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	std::string terroristWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
-	BattleItem* item = new BattleItem(
-								getRuleset()->getItem(terroristWeapon),
-								_save->getCurrentItemId());
+	BattleItem* const item = new BattleItem(
+										getRuleset()->getItem(terroristWeapon),
+										_save->getCurrentItemId());
 	item->moveToOwner(convertedUnit);
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	_save->getItems()->push_back(item);

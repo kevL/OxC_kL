@@ -1044,10 +1044,13 @@ int SavedBattleGame::getTurn() const
 
 /**
  * Ends the current faction-turn and progresses to the next one.
+ * @return, true if the turn rolls over back to faction Player
  */
-void SavedBattleGame::endBattlePhase()
+bool SavedBattleGame::endBattlePhase()
 {
 	//Log(LOG_INFO) << "SBG::endBattlePhase()";
+	bool ret = false;
+
 	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Player";
@@ -1083,6 +1086,7 @@ void SavedBattleGame::endBattlePhase()
 			prepareBattleTurn();
 			//Log(LOG_INFO) << ". . prepareBattleTurn DONE";
 			++_turn;
+			ret = true;
 
 			_side = FACTION_PLAYER;
 
@@ -1111,6 +1115,7 @@ void SavedBattleGame::endBattlePhase()
 		//Log(LOG_INFO) << ". end Faction_Neutral";
 		prepareBattleTurn();
 		++_turn;
+		ret = true;
 
 		_side = FACTION_PLAYER;
 
@@ -1211,7 +1216,8 @@ void SavedBattleGame::endBattlePhase()
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
 
-	//Log(LOG_INFO) << "SBG::endBattlePhase() EXIT";
+	//Log(LOG_INFO) << "SBG::endBattlePhase() EXIT ret = " << ret;
+	return ret;
 }
 
 /**
@@ -1367,8 +1373,9 @@ void SavedBattleGame::randomizeItemLocations(Tile* tile)
  * from the tile it is on too if it is on a tile.
  * @param item - item to remove
  */
-void SavedBattleGame::removeItem(BattleItem* item)
+void SavedBattleGame::removeItem(BattleItem* const item)
 {
+	//Log(LOG_INFO) << "SBG::removeItem() id " << item->getId();
 	Tile* const tile = item->getTile();
 	if (tile != NULL)
 	{
@@ -1385,7 +1392,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		}
 	}
 
-	BattleUnit* bu = item->getOwner();
+	BattleUnit* const bu = item->getOwner();
 	if (bu != NULL)
 	{
 		for (std::vector<BattleItem*>::const_iterator
@@ -1927,12 +1934,15 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			i != getUnits()->end();
 			++i)
 	{
-		if ((*i)->getGeoscapeSoldier() != NULL
-			|| ((*i)->getUnitRules()->isMechanical() == false
-				&& (*i)->getArmor()->getSize() == 1))
+		if ((*i)->getStatus() == STATUS_UNCONSCIOUS
+			&& (*i)->getStun() <= (*i)->getHealth() // do health=stun because unit is about to get healed in Prep Turn.
+			&& ((*i)->getGeoscapeSoldier() != NULL
+				|| ((*i)->getUnitRules()->isMechanical() == false
+					&& (*i)->getArmor()->getSize() == 1)))
 		{
-			Position originPos = (*i)->getPosition();
-			if (originPos == Position(-1,-1,-1))
+			Position pos = (*i)->getPosition();
+
+			if (pos == Position(-1,-1,-1)) // if carried
 			{
 				for (std::vector<BattleItem*>::const_iterator
 						j = _items.begin();
@@ -1943,41 +1953,34 @@ void SavedBattleGame::reviveUnconsciousUnits()
 						&& (*j)->getUnit() == *i
 						&& (*j)->getOwner() != NULL)
 					{
-						originPos = (*j)->getOwner()->getPosition();
+						pos = (*j)->getOwner()->getPosition();
+						break;
 					}
 				}
 			}
 
-			// note: Although health==stun is still unconscious technically
-			// revive here even if health==stun because prepareBattleTurn(), reviveUnconsciousUnits()
-			// occurs momentarily before prepUnit(), healStun() ... during each Turnover.
-			if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-				&& (*i)->getStun() <= (*i)->getHealth()
-				&& (*i)->getHealth() > 0)
+			if (placeUnitNearPosition(
+									*i,
+									pos) == true)
 			{
-				if (placeUnitNearPosition(
-										*i,
-										originPos) == true)
-				{
-					(*i)->setStatus(STATUS_STANDING);
+				(*i)->setStatus(STATUS_STANDING);
 
-					if ((*i)->getGeoscapeSoldier() != NULL)
-						(*i)->kneel(true);
+				if ((*i)->getGeoscapeSoldier() != NULL)
+					(*i)->kneel(true);
 
-					(*i)->setCache(NULL);
+				(*i)->setCache(NULL);
 
-					(*i)->setDirection(RNG::generate(0, 7));
-					(*i)->setTimeUnits(0);
-					(*i)->setEnergy(0);
-					(*i)->setRevived();
+				(*i)->setDirection(RNG::generate(0, 7));
+				(*i)->setTimeUnits(0);
+				(*i)->setEnergy(0);
+				(*i)->setRevived();
 
-					_tileEngine->calculateUnitLighting();
-//					_tileEngine->calculateFOV(*i);
-					_tileEngine->calculateFOV((*i)->getPosition()); // kL
+				_tileEngine->calculateUnitLighting();
+//				_tileEngine->calculateFOV(*i);
+				_tileEngine->calculateFOV((*i)->getPosition()); // kL
 
-					removeUnconsciousBodyItem(*i);
-					break;
-				}
+				removeUnconsciousBodyItem(*i);
+				break;
 			}
 		}
 	}
@@ -1987,8 +1990,10 @@ void SavedBattleGame::reviveUnconsciousUnits()
  * Removes the body item (corpse) that corresponds to a unit.
  * @param bu - pointer to a BattleUnit
  */
-void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
+void SavedBattleGame::removeUnconsciousBodyItem(const BattleUnit* const bu)
 {
+	int corp = bu->getArmor()->getSize() * bu->getArmor()->getSize();
+
 	for (std::vector<BattleItem*>::const_iterator
 			i = getItems()->begin();
 			i != getItems()->end();
@@ -1997,7 +2002,11 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 		if ((*i)->getUnit() == bu)
 		{
 			removeItem(*i);
-			return;
+			--i;
+
+			--corp;
+			if (corp == 0)
+				return;
 		}
 	}
 }

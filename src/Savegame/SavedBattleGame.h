@@ -247,7 +247,7 @@ private:
 		int getTurn() const;
 
 		/// Ends the turn.
-		void endBattlePhase();
+		bool endBattlePhase();
 
 		/// Sets debug mode.
 		void setDebugMode();
@@ -260,7 +260,7 @@ private:
 		void resetUnitTiles();
 
 		/// Removes an item from the game.
-		void removeItem(BattleItem* item);
+		void removeItem(BattleItem* const item);
 
 		/// Sets whether the mission was aborted.
 		void setAborted(bool flag);
@@ -293,7 +293,7 @@ private:
 		/// Revives unconscious units (healthcheck).
 		void reviveUnconsciousUnits();
 		/// Removes the body item that corresponds to the unit.
-		void removeUnconsciousBodyItem(BattleUnit* bu);
+		void removeUnconsciousBodyItem(const BattleUnit* const bu);
 
 		/// Sets or tries to set a unit of a certain size on a certain position of the map.
 		bool setUnitPosition(

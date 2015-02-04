@@ -72,8 +72,8 @@ UnitDieBState::UnitDieBState(
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-	if (noSound == false) // pre-battle hidden explosion death; needed here to stop Camera CTD.
-		_unit->setUnitVisible(); // TEST. has side-effect of keeping stunned victims non-revealed if not already visible.
+	if (_noSound == false)			// pre-battle hidden explosion death; needed here to stop Camera CTD.
+		_unit->setUnitVisible();	// TEST. has side-effect of keeping stunned victims non-revealed if not already visible.
 
 	if (_unit->getUnitVisible() == true)
 	{
@@ -82,7 +82,7 @@ UnitDieBState::UnitDieBState(
 			deathCam->centerOnPosition(_unit->getPosition());
 
 		if (_unit->getFaction() == FACTION_PLAYER)
-			_parent->getMap()->setUnitDying(true);
+			_parent->getMap()->setUnitDying();
 
 		if (_unit->getSpawnUnit().empty() == false)
 		{
@@ -102,7 +102,6 @@ UnitDieBState::UnitDieBState(
 
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
-		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
 		const std::vector<Node*>* const nodes = _parent->getSave()->getNodes();
 		if (nodes == NULL)
 			return; // this better not happen.
@@ -115,8 +114,7 @@ UnitDieBState::UnitDieBState(
 			if (_parent->getSave()->getTileEngine()->distanceSq(
 															(*node)->getPosition(),
 															_unit->getPosition(),
-															false)
-														< 5)
+															false) < 5)
 			{
 				(*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
 			}
@@ -144,7 +142,7 @@ void UnitDieBState::init()
 void UnitDieBState::think()
 {
 	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
-	if (_noSound == false
+	if (_noSound == false // <- should be fun without this.
 		&& _doneScream == false)
 	{
 		_doneScream = true;
@@ -181,8 +179,6 @@ void UnitDieBState::think()
 	if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-//		_parent->getMap()->setUnitDying(false);
-
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
 				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
@@ -190,7 +186,7 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 
-		_unit->setDown();
+		_unit->setDown(); // kL
 
 /*		if (_unit->getDiedByFire()) // do this in BattleUnit::damage()
 		{
@@ -244,7 +240,7 @@ void UnitDieBState::think()
 				{
 					if (_damageType == DT_NONE)
 						message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
-					else if (Options::battleNotifyDeath)
+					else if (Options::battleNotifyDeath == true)
 						message = "STR_HAS_BEEN_KILLED";
 				}
 				else
@@ -293,6 +289,7 @@ void UnitDieBState::cancel()
 
 /**
  * Converts unit to a corpse-item.
+ * Note that this is used also for units going unconscious.
  */
 void UnitDieBState::convertUnitToCorpse()
 {
@@ -301,19 +298,19 @@ void UnitDieBState::convertUnitToCorpse()
 
 	const Position pos = _unit->getPosition();
 
+	const int unitSize = _unit->getArmor()->getSize() - 1;
+	BattleItem* itemToKeep = NULL;
+
 	// remove the unconscious body item corresponding to this unit,
 	// and if it was being carried, keep track of what slot it was in
 	const bool carried = (pos == Position(-1,-1,-1));
 	if (carried == false)
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
-	BattleItem* itemToKeep = NULL;
-	const int unitSize = _unit->getArmor()->getSize();
-
 	// move inventory from unit to the ground for non-large units
-	const bool drop = (unitSize == 1)
-					&& carried == false // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
-					&& (Options::weaponSelfDestruction == false
+	const bool drop = unitSize == 0
+				   && carried == false
+				   && (Options::weaponSelfDestruction == false
 						|| _unit->getOriginalFaction() != FACTION_HOSTILE
 						|| _unit->getStatus() == STATUS_UNCONSCIOUS);
 	if (drop == true)
@@ -330,7 +327,7 @@ void UnitDieBState::convertUnitToCorpse()
 			if ((*i)->getRules()->isFixed() == false)
 				(*i)->setOwner(NULL);
 			else
-				itemToKeep = *i;
+				itemToKeep = *i; // what if there's more than one fixed item ...
 		}
 	}
 
@@ -348,17 +345,13 @@ void UnitDieBState::convertUnitToCorpse()
 		for (std::vector<BattleItem*>::const_iterator
 				i = _parent->getSave()->getItems()->begin();
 				i != _parent->getSave()->getItems()->end();
-				)
+				++i)
 		{
 			if ((*i)->getUnit() == _unit) // unit is in an inventory, so unit must be a 1x1 unit
 			{
-				RuleItem* const corpRule = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
-				(*i)->convertToCorpse(corpRule);
-
+				(*i)->convertToCorpse(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]));
 				break;
 			}
-
-			++i;
 		}
 	}
 	else
@@ -367,17 +360,18 @@ void UnitDieBState::convertUnitToCorpse()
 			* tile,
 			* explTile,
 			* explTile_b;
-		int i = 0;
+		bool soundPlayed = false;
+		size_t i = static_cast<size_t>((unitSize + 1) * (unitSize + 1));
 
-		for (int
-				y = 0;
-				y < unitSize;
-				++y)
+		for (int // count downward to original position so that dropItem() correctly positions large units @ their NW quadrant.
+				y = unitSize;
+				y != -1;
+				--y)
 		{
 			for (int
-					x = 0;
-					x < unitSize;
-					++x)
+					x = unitSize;
+					x != -1;
+					--x)
 			{
 				tile = _parent->getSave()->getTile(pos + Position(x,y,0));
 
@@ -402,24 +396,33 @@ void UnitDieBState::convertUnitToCorpse()
 					if (explTile != NULL // safety.
 						&& explTile->getFire() == 0)
 					{
-						explTile->setFire(explTile->getFuel() + RNG::generate(1, 3)); // Could use a ruleset-factor in here.
+						explTile->setFire(explTile->getFuel() + RNG::generate(1,3)); // Could use a ruleset-factor in here.
 						explTile->setSmoke(std::max(
 												1,
 												std::min(
 														6,
 														17 - (explTile->getFlammability() / 5))));
+
+						if (soundPlayed == false)
+						{
+							soundPlayed = true;
+							_parent->getResourcePack()->getSoundByDepth(
+																	_parent->getDepth(),
+																	ResourcePack::SMALL_EXPLOSION)
+																->play(
+																	-1,
+																	_parent->getMap()->getSoundAngle(_unit->getPosition()));
+						}
 					}
 				}
 
 				BattleItem* const corpse = new BattleItem(
-													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),
+													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--i]),
 													_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 
-				// check in case unit was displaced by another unit
-//				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
-				if (tile != NULL // kL, safety. ( had a CTD when ethereal dies on water )
-					&& tile->getUnit() == _unit)
+				if (tile != NULL					// kL, safety. ( had a CTD when ethereal dies on water ).
+					&& tile->getUnit() == _unit)	// <- check in case unit was displaced by another unit
 				{
 					tile->setUnit(NULL);
 				}
@@ -428,7 +431,6 @@ void UnitDieBState::convertUnitToCorpse()
 								pos + Position(x,y,0),
 								corpse,
 								true);
-				++i;
 			}
 		}
 	}
@@ -453,9 +455,9 @@ void UnitDieBState::playDeathSound()
 	else if (_unit->getUnitRules()->getRace() == "STR_CIVILIAN")
 	{
 		if (_unit->getGender() == GENDER_MALE)
-			sound = ResourcePack::MALE_SCREAM[RNG::generate(0, 2)];
+			sound = ResourcePack::MALE_SCREAM[RNG::generate(0,2)];
 		else
-			sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)];
+			sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0,2)];
 	}
 	else
 		sound = _unit->getDeathSound();

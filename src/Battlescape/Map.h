@@ -219,7 +219,7 @@ private:
 				bool pressed);
 
 		/// Sets the unitDying flag.
-		void setUnitDying(bool flag);
+		void setUnitDying(bool flag = true);
 
 		/// Special handling for updating map height.
 		void setHeight(int height);

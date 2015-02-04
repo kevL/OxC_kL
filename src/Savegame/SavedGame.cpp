@@ -121,8 +121,8 @@ SavedGame::SavedGame()
 	:
 		_difficulty(DIFF_BEGINNER),
 		_ironman(false),
-		_globeLon(0.f),
-		_globeLat(0.f),
+		_globeLon(0.),
+		_globeLat(0.),
 		_globeZoom(0),
 		_battleGame(0),
 		_debug(false),
@@ -136,7 +136,7 @@ SavedGame::SavedGame()
 //kL	_selectedBase(0),
 //kL	_lastselectedArmor("STR_ARMOR_NONE_UC")
 {
-	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_time = new GameTime(6,1,1,1999,12,0,0);
 
 	_alienStrategy = new AlienStrategy();
 

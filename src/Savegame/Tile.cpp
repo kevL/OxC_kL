@@ -1008,7 +1008,7 @@ void Tile::setSmoke(int smoke)
 		return;
 
 	_smoke = smoke;
-	_animOffset = RNG::generate(0, 3);
+	_animOffset = RNG::generate(0,3);
 }
 
 /**
@@ -1025,8 +1025,7 @@ int Tile::getSmoke() const
  * @note diag bigWalls take no smoke. 'Cause I don't want it showing on both sides.
  * @return, true if smoke possible
  */
-// private
-bool Tile::canSmoke() const
+bool Tile::canSmoke() const // private
 {
 	return _objects[3] == NULL
 		   || (_objects[3]->getBigWall() != Pathfinding::BIGWALL_NESW
@@ -1147,7 +1146,6 @@ int Tile::getHasUnconsciousSoldier() const
 /**
  * New turn preparations.
  * Average out any smoke added by the number of overlaps.
- * Apply fire/smoke damage to units as applicable.
  */
 void Tile::prepareTileTurn()
 {
@@ -1163,181 +1161,166 @@ void Tile::prepareTileTurn()
 								17));
 	}
 
-/*
-	if (_smoke > 0
-		&& _unit
-		&& _unit->isOut(true) == false
-		&& (_unit->getType() == "SOLDIER"
-			|| (_unit->getUnitRules()
-				&& _unit->getUnitRules()->isMechanical() == false)))
-//		&& _unit->getArmor()->getSize() == 1)
-	{
-		if (_fire)
-		{
-			float vuln = _unit->getArmor()->getDamageModifier(DT_IN);
-			int burn = static_cast<int>(Round(40.f * vuln));
-			//Log(LOG_INFO) << "Tile::prepareTileTurn(), ID " << _unit->getId() << " burn = " << burn;
-			if (RNG::percent(burn)) // try to set the unit on fire.
-			{
-				int dur = RNG::generate(
-										0,
-										static_cast<int>(Round(5.f * vuln)));
-				if (dur > _unit->getFire())
-				{
-					//Log(LOG_INFO) << ". dur = " << dur;
-					_unit->setFire(dur);
-				}
-			}
-		}
-//		else // no fire: must be smoke. kL: Do both
-//		{
-		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this unit out.
-		{
-			int power = (_smoke / 4) + 1;
-			//Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " power = " << power;
-			_unit->damage(
-						Position(0, 0, 0),
-						power,
-						DT_SMOKE, // -> DT_STUN
-						true);
-		}
-//		}
-	} */
-
 	_overlaps = 0;
 	_danger = false;
 }
 
 /**
  * Ends this tile's turn. Units catch on fire.
- * Separated from prepareTileTurn() above so that units take
- * damage before smoke/fire spreads to them; this is so that units
- * have to end their turn on a tile for smoke/fire to affect them.
- * @param battleSave - pointer to the current SavedBattleGame
+ * Separated from prepareTileTurn() above so that units take damage before
+ * smoke/fire spreads to them; this is so that units would have to end their
+ * turn on a tile before smoke/fire damages them.
+ * @param battleSave - pointer to the current SavedBattleGame (default NULL for units)
  */
 void Tile::endTilePhase(SavedBattleGame* const battleSave)
 {
+	//Log(LOG_INFO) << "Tile::endTilePhase() " << _pos;
+	//if (_unit) Log(LOG_INFO) << ". unitID " << _unit->getId();
+
 	const int
 		powerSmoke = (_smoke + 3) / 4 + 1,
 		powerFire = RNG::generate(3,9);
+	//Log(LOG_INFO) << ". powerSmoke = " << powerSmoke;
+	//Log(LOG_INFO) << ". powerFire " << powerFire;
 
-	if (_smoke > 0)
+
+	if (battleSave == NULL	// damage standing units (at end of faction's turn-phases). Notice this hits only the primary quadrant!
+		&& _unit != NULL)	// safety. call from BattlescapeGame::endTurnPhase() checks only Tiles w/ units, but that could change ....
 	{
-		const float armorSmoke = _unit->getArmor()->getDamageModifier(DT_SMOKE);
-		if (armorSmoke > 0.f) // try to knock _unit out.
+		//Log(LOG_INFO) << ". . hit Unit";
+		if (_smoke > 0)
 		{
-			_unit->damage(
-						Position(0,0,0),
-						static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
-						DT_SMOKE, // -> DT_STUN
-						true);
+			const float armorSmoke = _unit->getArmor()->getDamageModifier(DT_SMOKE);
+			if (armorSmoke > 0.f) // try to knock _unit out.
+				_unit->damage(
+							Position(0,0,0),
+							static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
+							DT_SMOKE, // -> DT_STUN
+							true);
 		}
-	}
 
-	if (_fire > 0)
-	{
-		const float armorFire = _unit->getArmor()->getDamageModifier(DT_IN);
-		if (armorFire > 0.f)
+		if (_fire > 0)
 		{
-			_unit->damage(
-						Position(0,0,0),
-						static_cast<int>(static_cast<float>(powerFire) * armorFire),
-						DT_IN,
-						true);
-
-			if (RNG::percent(static_cast<int>(Round(40.f * armorFire))) == true) // try to set _unit on fire. Do damage from fire here, too.
+			const float armorFire = _unit->getArmor()->getDamageModifier(DT_IN);
+			if (armorFire > 0.f)
 			{
-				const int dur = RNG::generate(
-											0,
-											static_cast<int>(Round(5.f * armorFire)));
-				if (dur > _unit->getFire())
-					_unit->setFire(dur);
-			}
-		}
-	}
-
-
-	for (std::vector<BattleItem*>::const_iterator // handle unconscious units on this Tile vs. DT_SMOKE
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
-	{
-		BattleUnit* const unit = (*i)->getUnit();
-
-		if (unit != NULL
-			&& unit->getStatus() == STATUS_UNCONSCIOUS)
-		{
-			const float armorSmoke = unit->getArmor()->getDamageModifier(DT_SMOKE);
-			if (armorSmoke > 0.f)
-				unit->damage(
-						Position(0,0,0),
-						static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
-						DT_SMOKE,
-						true);
-		}
-	}
-
-	bool done = false;
-	while (done == false) // handle items including unconscious or dead units on this Tile vs. DT_IN
-	{
-		if (_inventory.empty() == true)
-			break;
-
-
-		for (std::vector<BattleItem*>::const_iterator
-				i = _inventory.begin();
-				i != _inventory.end();
-				)
-		{
-			BattleUnit* unit = (*i)->getUnit();
-
-			if (unit != NULL
-				&& unit->getStatus() == STATUS_UNCONSCIOUS)
-			{
-				const float armorFire = unit->getArmor()->getDamageModifier(DT_IN);
-				if (armorFire > 0.f)
-				{
-					unit->damage(
+				_unit->damage(
 							Position(0,0,0),
 							static_cast<int>(static_cast<float>(powerFire) * armorFire),
 							DT_IN,
 							true);
 
-					if (unit->getHealth() == 0)
-					{
-						unit->instaKill();
-						unit->killedBy(unit->getFaction()); // killed by self ....
-
-						// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
-/*						if (Options::battleNotifyDeath == true // send Death notice.
-							&& unit->getGeoscapeSoldier() != NULL)
-						{
-							Game* game = battleSave->getBattleState()->getGame();
-							game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
-																						"STR_HAS_BEEN_KILLED",
-																						unit->getGender())
-																					.arg(unit->getName(game->getLanguage()))));
-						} */
-					}
+				if (RNG::percent(static_cast<int>(Round(40.f * armorFire))) == true) // try to set _unit on fire. Do damage from fire here, too.
+				{
+					const int dur = RNG::generate(
+												0,
+												static_cast<int>(Round(5.f * armorFire)));
+					if (dur > _unit->getFire())
+						_unit->setFire(dur);
 				}
-
-				++i;
-				done = (i == _inventory.end());
-			}
-			else if (powerFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even corpse in bodyarmor.
-				&& (unit == NULL
-					|| unit->getStatus() == STATUS_DEAD))
-			{
-				battleSave->removeItem(*i);	// this shouldn't kill and remove a unit's corpse on the same tilePhase;
-				break;						// but who knows, I haven't traced it comprehensively.
-			}
-			else
-			{
-				++i;
-				done = (i == _inventory.end());
 			}
 		}
 	}
+
+
+	if (battleSave != NULL) // try to destroy items & kill unconscious units (only for end of full-turns)
+	{
+		//Log(LOG_INFO) << ". . hit Inventory's ground-items";
+		for (std::vector<BattleItem*>::const_iterator // handle unconscious units on this Tile vs. DT_SMOKE
+				i = _inventory.begin();
+				i != _inventory.end();
+				++i)
+		{
+			BattleUnit* const unit = (*i)->getUnit();
+
+			if (unit != NULL
+				&& unit->getStatus() == STATUS_UNCONSCIOUS
+				&& unit->getTakenExpl() == false)
+			{
+				//Log(LOG_INFO) << ". . unConsc unit (smoke) " << unit->getId();
+				unit->setTakenExpl();
+
+				const float armorSmoke = unit->getArmor()->getDamageModifier(DT_SMOKE);
+				if (armorSmoke > 0.f)
+					unit->damage(
+							Position(0,0,0),
+							static_cast<int>(static_cast<float>(powerSmoke) * armorSmoke),
+							DT_SMOKE,
+							true);
+			}
+		}
+
+		bool done = false;
+		while (done == false) // handle items including unconscious or dead units on this Tile vs. DT_IN
+		{
+			if (_inventory.empty() == true)
+				break;
+
+
+			for (std::vector<BattleItem*>::const_iterator
+					i = _inventory.begin();
+					i != _inventory.end();
+					)
+			{
+				BattleUnit* unit = (*i)->getUnit();
+
+				if (unit != NULL
+					&& unit->getStatus() == STATUS_UNCONSCIOUS
+					&& unit->getTakenFire() == false)
+				{
+					//Log(LOG_INFO) << ". . unConsc unit (fire) " << unit->getId();
+					unit->setTakenFire();
+
+					const float armorFire = unit->getArmor()->getDamageModifier(DT_IN);
+					if (armorFire > 0.f)
+					{
+						unit->damage(
+								Position(0,0,0),
+								static_cast<int>(static_cast<float>(powerFire) * armorFire),
+								DT_IN,
+								true);
+
+						if (unit->getHealth() == 0)
+						{
+							//Log(LOG_INFO) << ". . . dead";
+
+							unit->instaKill();
+							unit->killedBy(unit->getFaction()); // killed by self ....
+
+							// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
+/*							if (Options::battleNotifyDeath == true // send Death notice.
+								&& unit->getGeoscapeSoldier() != NULL)
+							{
+								Game* game = battleSave->getBattleState()->getGame();
+								game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
+																							"STR_HAS_BEEN_KILLED",
+																							unit->getGender())
+																						.arg(unit->getName(game->getLanguage()))));
+							} */
+						}
+					}
+
+					++i;
+					done = (i == _inventory.end());
+				}
+				else if (powerFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even corpse in bodyarmor.
+					&& (unit == NULL
+						|| unit->getStatus() == STATUS_DEAD))
+				{
+					//Log(LOG_INFO) << ". . destroy item";
+					battleSave->removeItem(*i);	// this shouldn't kill and remove a unit's corpse on the same tilePhase;
+					break;						// but who knows, I haven't traced it comprehensively.
+				}
+				else
+				{
+					//Log(LOG_INFO) << ". . iterate";
+					++i;
+					done = (i == _inventory.end());
+				}
+			}
+		}
+	}
+	//Log(LOG_INFO) << "Tile::endTilePhase() EXIT";
 }
 
 /**

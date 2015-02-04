@@ -1504,6 +1504,38 @@ void Map::drawTerrain(Surface* surface)
 										screenPosition.x,
 										screenPosition.y + tile->getTerrainLevel(),
 										tileShade);
+
+							if (tile->getFire() == 0
+								&& tile->isDiscovered(2) == true)
+							{
+								for (std::vector<BattleItem*>::const_iterator
+										i = tile->getInventory()->begin();
+										i != tile->getInventory()->end();
+										++i)
+								{
+									if ((*i)->getUnit() != NULL
+										&& (*i)->getUnit()->getFire() != NULL)
+									{
+										// Draw SMOKE & FIRE if itemUnit is on Fire
+										frame =
+										shade = 0;
+
+										animOffset = _animFrame / 2 + RNG::generate(0,3); //tile->getAnimationOffset(); <- make it look weird
+										if (animOffset > 3) animOffset -= 4;
+										frame += animOffset;
+
+										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+										if (srfSprite)
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x,
+													screenPosition.y + tile->getTerrainLevel(),
+													shade);
+
+										break;
+									}
+								}
+							}
 						}
 
 
@@ -2044,14 +2076,19 @@ void Map::drawTerrain(Surface* surface)
 																	shade);
 														}
 													}
+
+													// Redraw BigWallNONE content object w/ TU=255 in tiles South & East when dir=3,7
+													// ( as long as they aren't butted against a further southern or eastern wall/object/unit ......
+													// .. so forget it. )
 												}
 											}
 										}
 									}
 								}
 							}
-							// end draw unitNorthWest walking
+							// end draw unitNorthWest walking.
 						}
+						// end draw westerly units moving east-west.
 
 
 						// kL_begin #2 of 3: Make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.

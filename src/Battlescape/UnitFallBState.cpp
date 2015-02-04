@@ -124,10 +124,10 @@ void UnitFallBState::think()
 			{
 				tBelow = _parent->getSave()->getTile(
 												(*unit)->getPosition()
-												+ Position(x, y,-1));
+												+ Position(x,y,-1));
 				if (_parent->getSave()->getTile(
 											(*unit)->getPosition()
-											+ Position(x, y, 0))->hasNoFloor(tBelow) == false
+											+ Position(x,y,0))->hasNoFloor(tBelow) == false
 					|| (*unit)->getMovementType() == MT_FLY)
 				{
 					//Log(LOG_INFO) << ". . fallCheck set FALSE";
@@ -138,7 +138,7 @@ void UnitFallBState::think()
 
 		tBelow = _parent->getSave()->getTile(
 										(*unit)->getPosition()
-										+ Position(0, 0,-1));
+										+ Position(0,0,-1));
 
 		falling = fallCheck
 			   && (*unit)->getPosition().z != 0
@@ -162,7 +162,7 @@ void UnitFallBState::think()
 				{
 					tBelow = _parent->getSave()->getTile(
 													(*unit)->getPosition()
-													+ Position(x, y,-1));
+													+ Position(x,y,-1));
 					_tilesToFallInto.push_back(tBelow);
 				}
 			}
@@ -221,12 +221,12 @@ void UnitFallBState::think()
 					// A falling unit might have already taken up this position so check that this unit is still here.
 					if (_parent->getSave()->getTile(
 												(*unit)->getLastPosition()
-												+ Position(x, y, 0))->getUnit() == *unit)
+												+ Position(x,y,0))->getUnit() == *unit)
 					{
 						//Log(LOG_INFO) << ". Tile is not occupied";
 						_parent->getSave()->getTile(
 												(*unit)->getLastPosition()
-												+ Position(x, y, 0))->setUnit(NULL);
+												+ Position(x,y,0))->setUnit(NULL);
 					}
 				}
 			}
@@ -245,11 +245,11 @@ void UnitFallBState::think()
 					//Log(LOG_INFO) << ". setUnit to belowTile";
 					_parent->getSave()->getTile(
 											(*unit)->getPosition()
-											+ Position(x, y, 0))->setUnit(
-																		*unit,
-																		_parent->getSave()->getTile(
-																								(*unit)->getPosition()
-																								+ Position(x, y,-1)));
+											+ Position(x,y,0))->setUnit(
+																	*unit,
+																	_parent->getSave()->getTile(
+																							(*unit)->getPosition()
+																							+ Position(x,y,-1)));
 				}
 			}
 
@@ -281,7 +281,7 @@ void UnitFallBState::think()
 								--y)
 						{
 							//Log(LOG_INFO) << ". body size + 1";
-							Position pBody = uBelow->getPosition() + Position(x, y, 0);
+							Position pBody = uBelow->getPosition() + Position(x,y,0);
 							bodySections.push_back(pBody);
 						}
 					}
@@ -289,7 +289,7 @@ void UnitFallBState::think()
 					for (int // Check in each compass direction.
 							dir = 0;
 							dir < Pathfinding::DIR_UP
-								&& !escape;
+								&& escape == false;
 							++dir)
 					{
 						//Log(LOG_INFO) << ". . checking directions to move";
@@ -306,7 +306,7 @@ void UnitFallBState::think()
 							Tile
 								* t = _parent->getSave()->getTile(originalPosition + offset),
 								* tCurrent = _parent->getSave()->getTile(originalPosition),
-								* tBelow2 = _parent->getSave()->getTile(originalPosition + offset + Position(0, 0,-1));
+								* tBelow2 = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
 
 							bool
 								aboutToBeOccupiedFromAbove = t
@@ -364,13 +364,13 @@ void UnitFallBState::think()
 												--y)
 										{
 											//Log(LOG_INFO) << ". . . . . . check for more escape units?";
-											Tile* tEscape = _parent->getSave()->getTile(t->getPosition() + Position(x, y, 0));
+											Tile* tEscape = _parent->getSave()->getTile(t->getPosition() + Position(x,y,0));
 											escapeTiles.push_back(tEscape);
 										}
 									}
 
 									//Log(LOG_INFO) << ". . . . startWalking() out of the way?";
-									Tile* tBelow3 = _parent->getSave()->getTile(originalPosition + Position(0, 0,-1));
+									Tile* tBelow3 = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
 									uBelow->startWalking(
 													dir,
 													uBelow->getPosition() + offset,
@@ -402,7 +402,7 @@ void UnitFallBState::think()
 			if (falling == true)
 			{
 				//Log(LOG_INFO) << ". . falling (again?) -> startWalking()";
-				Position destination = (*unit)->getPosition() + Position(0, 0,-1);
+				Position destination = (*unit)->getPosition() + Position(0,0,-1);
 
 				tBelow = _parent->getSave()->getTile(destination);
 				(*unit)->startWalking(
@@ -424,10 +424,9 @@ void UnitFallBState::think()
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*unit)->getTile()->ignite(1);
-					Position pos = ((*unit)->getPosition() * Position(16, 16, 24))
+					Position pos = ((*unit)->getPosition() * Position(16,16,24))
 									+ Position(
-											8,
-											8,
+											8,8,
 											-(*unit)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
 												pos,
