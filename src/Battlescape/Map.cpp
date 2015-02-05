@@ -1856,11 +1856,15 @@ void Map::drawTerrain(Surface* surface)
 													{
 														redraw = true;
 
-														if (tileSouthWest != NULL
-															&& tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
-															&& ((tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255) // or terrainLevel < 0 perhaps
-																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+														const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+
+														if ( //tileSouthWest != NULL &&
+															(tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
+																&& ((tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255) // or terrainLevel < 0 perhaps
+																	|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+															|| (tileSouthSouthWest != NULL
+																&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL)) // <- needs more ...
 														{
 															halfRight = true;
 														}
@@ -2321,6 +2325,7 @@ void Map::drawTerrain(Surface* surface)
 					{
 						halfRight = false; // don't overwrite walls in tile SOUTH-WEST
 
+/*kL_note: had to take this out ... reapers.
 						if (itX > 0 && itY < endY
 							&& unit->getStatus() == STATUS_WALKING
 //							&& _save->getPathfinding()->getStartDirection() < Pathfinding::DIR_UP
@@ -2343,7 +2348,7 @@ void Map::drawTerrain(Surface* surface)
 							{
 								halfRight = true;
 							}
-						}
+						} */
 
 						quad = tile->getPosition().x - unit->getPosition().x
 							+ (tile->getPosition().y - unit->getPosition().y) * 2;

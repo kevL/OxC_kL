@@ -6052,7 +6052,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1423119462 source:f:\git\openxcom\src\battlescape\map.cpp
+1423137755 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -11526,7 +11526,7 @@
 
 1423120635 f:\git\openxcom\src\ruleset\operationpool.h
 
-1423126605 source:f:\git\openxcom\src\ruleset\operationpool.cpp
+1423134251 source:f:\git\openxcom\src\ruleset\operationpool.cpp
 	"OperationPool.h"
 	"../Engine/Language.h"
 
