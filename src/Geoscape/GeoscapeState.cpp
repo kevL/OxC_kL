@@ -2836,7 +2836,7 @@ void GeoscapeState::time1Day()
 	}
 
 
-	const int
+	const int // add extra per Month.
 		diff = static_cast<int>(_savedGame->getDifficulty()) + 1,
 		aLienPts = _game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() * diff / 100;
 
@@ -2923,7 +2923,7 @@ void GeoscapeState::time1Month()
 	determineAlienMissions(); // determine alien mission for this month.
 
 	const int monthsPassed = _savedGame->getMonthsPassed();
-//kL	if (monthsPassed > 5)
+//	if (monthsPassed > 5)
 	if (RNG::percent(monthsPassed * 2)) // kL
 		determineAlienMissions(); // kL_note: determine another one, I guess.
 
@@ -2933,7 +2933,7 @@ void GeoscapeState::time1Month()
 	const int diff = static_cast<int>(_savedGame->getDifficulty()); // kL
 
 	bool newRetaliation = false;
-//kL	if (monthsPassed > 13 - static_cast<int>(_savedGame->getDifficulty())
+//	if (monthsPassed > 13 - static_cast<int>(_savedGame->getDifficulty())
 	if (RNG::percent(monthsPassed * diff + 3) // kL, Beginner == %0
 		|| _savedGame->isResearched("STR_THE_MARTIAN_SOLUTION") == true)
 	{
@@ -2963,7 +2963,7 @@ void GeoscapeState::time1Month()
 												"STR_ALIEN_RETALIATION") == NULL)
 					{
 						const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
-						AlienMission* const  mission = new AlienMission(
+						AlienMission* const mission = new AlienMission(
 																	rule,
 																	*_savedGame);
 						mission->setId(_savedGame->getId("ALIEN_MISSIONS"));

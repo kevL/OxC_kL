@@ -143,7 +143,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 			qty,
 			cost;
 
-		RuleCraft* craft = _game->getRuleset()->getCraft(*i);
+		const RuleCraft* const craft = _game->getRuleset()->getCraft(*i);
 		if (_game->getSavedGame()->isResearched(craft->getRequirements())
 			&& (cost = craft->getRentCost()) > 0)
 		{
@@ -218,8 +218,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
  * dTor.
  */
 MonthlyCostsState::~MonthlyCostsState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

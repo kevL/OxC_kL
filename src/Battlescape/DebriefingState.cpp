@@ -1273,10 +1273,27 @@ void DebriefingState::prepareDebriefing()
 						"STR_ALIENS_KILLED",
 						value); // duplicated in function below.
 
-				RuleResearch* const research = _rules->getResearch(type);
-				if (research != NULL
+				// kL: harvest aLiens whether researched or not
+				if (base->getAvailableContainment() == 0)
+				{
+					_noContainment = true;
+					base->getItems()->addItem(corpseItem);
+				}
+				else
+				{
+					addStat( // more points if it's not researched
+						"STR_LIVE_ALIENS_RECOVERED",
+						value, // duplicated in function below.
+						0);
+
+					base->getItems()->addItem(type);
+					_manageContainment = base->getAvailableContainment()
+									   - (base->getUsedContainment() * _limitsEnforced) < 0;
+				} // end_kL.
+/*				RuleResearch* const researchRule = _rules->getResearch(type);
+				if (researchRule != NULL
 					&& _savedGame->isResearchAvailable(
-													research,
+													researchRule,
 													_savedGame->getDiscoveredResearch(),
 													_rules) == true)
 				{
@@ -1299,13 +1316,11 @@ void DebriefingState::prepareDebriefing()
 				}
 				else
 				{
-/*					if (Options::canSellLiveAliens == true)
-						_savedGame->setFunds(
-										_savedGame->getFunds()
-										+ _rules->getItem(type)->getSellCost());
-					else */ // Don't sell unconscious aLiens post-battle. (see recoverItems() below_ also)
+//					if (Options::canSellLiveAliens == true)
+//						_savedGame->setFunds(_savedGame->getFunds() + _rules->getItem(type)->getSellCost());
+//					else // Don't sell unconscious aLiens post-battle. (see recoverItems() below_ also)
 					base->getItems()->addItem(corpseItem);
-				}
+				} */
 			}
 			else if (origFact == FACTION_NEUTRAL)
 			{
@@ -1880,10 +1895,27 @@ void DebriefingState::recoverItems(
 									"STR_ALIENS_KILLED",
 									(*i)->getUnit()->getValue()); // duplicated above.
 
-							RuleResearch* const research = _rules->getResearch((*i)->getUnit()->getType());
-							if (research != NULL
+							// kL: harvest aLiens whether researched or not
+							if (base->getAvailableContainment() == 0)
+							{
+								_noContainment = true;
+								base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
+							}
+							else
+							{
+								addStat( // more points if item's not researched
+									"STR_LIVE_ALIENS_RECOVERED",
+									(*i)->getUnit()->getValue(), // duplicated above.
+									0);
+
+								base->getItems()->addItem((*i)->getUnit()->getType());
+								_manageContainment = base->getAvailableContainment()
+												   - (base->getUsedContainment() * _limitsEnforced) < 0;
+							} // end_kL.
+/*							RuleResearch* const researchRule = _rules->getResearch((*i)->getUnit()->getType());
+							if (researchRule != NULL
 								&& _savedGame->isResearchAvailable(
-															research,
+															researchRule,
 															_savedGame->getDiscoveredResearch(),
 															_rules) == true)
 							{
@@ -1905,7 +1937,7 @@ void DebriefingState::recoverItems(
 								}
 							}
 							else // Don't sell unconscious aLiens post-battle. (see prepareDebriefing() above^ also)
-								base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
+								base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape()); */
 						}
 						else if ((*i)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
 							addStat(

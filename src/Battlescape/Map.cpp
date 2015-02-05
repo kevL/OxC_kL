@@ -1056,33 +1056,7 @@ void Map::drawTerrain(Surface* surface)
 
 							if (itX > 0)
 							{
-/*								// Phase V: redraw object in the tile SOUTH-WEST (half-tile).
-								if (itY < endY
-									&& (unitNorth->getDirection() == 1
-										|| unitNorth->getDirection() == 5))
-								{
-									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
-
-									if (tileSouthWest->getTerrainLevel() == 0) // Stop concealing lower right bit of unit to west of redrawn tile w/ raised terrain.
-									{
-										srfSprite = tileSouthWest->getSprite(MapData::O_OBJECT);
-//										srfSprite = NULL;
-										if (srfSprite)
-										{
-											if (tileSouthWest->isDiscovered(2) == true)
-												shade = tileSouthWest->getShade();
-											else
-												shade = 16;
-
-											srfSprite->blitNShade(
-													surface,
-													screenPosition.x - 32,
-													screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
-													shade,
-													true); // halfRight
-										}
-									}
-								} */
+//								// Phase V: redraw object in the tile SOUTH-WEST (half-tile). kL: moved below_
 
 								// Phase VI: redraw everything in the tile WEST (half-tile).
 								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
@@ -1523,9 +1497,7 @@ void Map::drawTerrain(Surface* surface)
 										screenPosition.y + tile->getTerrainLevel(),
 										tileShade);
 
-							if (//tile->getFire() == 0 &&
-								tile->isDiscovered(2) == true)
-//								&& RNG::percent(26) == true)
+							if (tile->isDiscovered(2) == true)
 							{
 								for (std::vector<BattleItem*>::const_iterator
 										i = tile->getInventory()->begin();
@@ -1545,20 +1517,6 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y + tile->getTerrainLevel(),
 													0);
 										break;
-/*										frame =
-										shade = 0;
-
-										animOffset = _animFrame / 2 + RNG::generate(0,3); //tile->getAnimationOffset(); <- make it look weird
-										if (animOffset > 3) animOffset -= 4;
-										frame += animOffset;
-
-										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-										if (srfSprite)
-											srfSprite->blitNShade(
-													surface,
-													screenPosition.x,
-													screenPosition.y + tile->getTerrainLevel(),
-													shade); */
 									}
 								}
 							}
@@ -1919,25 +1877,6 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 							// end draw unitWest walking
-/*										if (halfRight == true) // redraw NWSE bigWall in tileSouthWest, at least
-										{
-//											srfSprite = tileSouthWest->getSprite(MapData::O_OBJECT);
-											srfSprite = NULL;
-											if (srfSprite)
-											{
-												if (tileSouthWest->isDiscovered(2) == true)
-													shade = tileSouthWest->getShade();
-												else
-													shade = 16;
-
-												srfSprite->blitNShade(
-														surface,
-														screenPosition.x - 32,
-														screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
-														shade,
-														true); // halfRight
-											}
-										} */
 
 
 							// TODO: Smoke & Fire render below this, use checks to draw or not.
@@ -2323,33 +2262,6 @@ void Map::drawTerrain(Surface* surface)
 						&& (unit->getUnitVisible() == true
 							|| _save->getDebugMode() == true))
 					{
-						halfRight = false; // don't overwrite walls in tile SOUTH-WEST
-
-/*kL_note: had to take this out ... reapers.
-						if (itX > 0 && itY < endY
-							&& unit->getStatus() == STATUS_WALKING
-//							&& _save->getPathfinding()->getStartDirection() < Pathfinding::DIR_UP
-							&& (unit->getDirection() == 2
-								|| unit->getDirection() == 6))
-//								|| unit->getDirection() == 1 // reaper ...
-//								|| unit->getDirection() == 5))
-						{
-							const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
-
-							if (tileSouthWest->getMapData(MapData::O_NORTHWALL) != NULL
-								|| (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
-									&& (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
-										|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
-							{
-								halfRight = true;
-							}
-						} */
-
 						quad = tile->getPosition().x - unit->getPosition().x
 							+ (tile->getPosition().y - unit->getPosition().y) * 2;
 
@@ -2365,8 +2277,7 @@ void Map::drawTerrain(Surface* surface)
 									surface,
 									screenPosition.x + walkOffset.x,
 									screenPosition.y + walkOffset.y,
-									tileShade,
-									halfRight);
+									tileShade);
 
 							if (unit->getFire() != 0)
 							{
@@ -2378,7 +2289,6 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x + walkOffset.x,
 											screenPosition.y + walkOffset.y,
 											0);
-//											halfRight);
 							}
 
 							if (unit->getBreathFrame() > 0)

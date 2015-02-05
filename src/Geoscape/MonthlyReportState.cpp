@@ -17,10 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "MonthlyReportState.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <sstream>
 
@@ -247,7 +246,7 @@ MonthlyReportState::MonthlyReportState(
 	bool resetWarning = true;
 	if (_gameOver == false)
 	{
-		if (_savedGame->getFunds() <= -1000000)
+		if (_savedGame->getFunds() < -999999)
 		{
 			if (_savedGame->getWarned() == true)
 			{
@@ -322,12 +321,12 @@ void MonthlyReportState::calculateChanges()
 	_ratingLastMonth = 0;
 
 	int
-		xComSubTotal	= 0,
-		xComTotal		= 0,
-		aLienTotal		= 0,
+		xComSubTotal = 0,
+		xComTotal = 0,
+		aLienTotal = 0,
 
-		monthOffset		= _savedGame->getFundsList().size() - 2,
-		lastMonthOffset	= _savedGame->getFundsList().size() - 3;
+		monthOffset = _savedGame->getFundsList().size() - 2,
+		lastMonthOffset = _savedGame->getFundsList().size() - 3;
 
 	if (lastMonthOffset < 0)
 		lastMonthOffset += 2;
@@ -471,7 +470,7 @@ void MonthlyReportState::btnOkClick(Action*)
 			_btnBigOk->setVisible();
 
 
-			_game->getResourcePack()->fadeMusic(_game, 1200);
+			_game->getResourcePack()->fadeMusic(_game, 1157);
 			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_LOSE);
 		}
 	}

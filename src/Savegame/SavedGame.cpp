@@ -985,7 +985,7 @@ void SavedGame::monthlyFunding()
 
 
 	// MAINTENANCE
-	int baseMaintenance = getBaseMaintenance();
+	const int baseMaintenance = getBaseMaintenance();
 
 	_maintenance.back() = baseMaintenance;
 	_maintenance.push_back(0);
