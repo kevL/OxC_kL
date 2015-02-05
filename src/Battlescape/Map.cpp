@@ -933,55 +933,59 @@ void Map::drawTerrain(Surface* surface)
 							&& (unitNorth->getUnitVisible() == true
 								|| _save->getDebugMode() == true)
 							&& unitNorth->getStatus() == STATUS_WALKING
-							&& unitNorth->getDirection() != 3 // might want to remove these
-							&& unitNorth->getDirection() != 7
+//							&& unitNorth->getDirection() != 3 // might want to remove these
+//							&& unitNorth->getDirection() != 7
 							&& levelDiff_ns < 1)
 						{
-							const Tile* tileSouthWest;	// Reaper sticks its righthind leg out through south wall if dir=1
-
-							if (itX > 0 && itY < endY)
-								tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
-							else
-								tileSouthWest = NULL;
-
-							if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
-								|| tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL) // or do this check specifically for Reapers
+							// Phase I: redraw unit NORTH to make sure it doesn't get drawn [over any walls or] under any tiles.
+							if (unitNorth->getDirection() != 2
+								&& unitNorth->getDirection() != 6) // perhaps !0 && !4 also; ie. do dir=1,5,3,7
 							{
-								// Phase I: redraw unit NORTH to make sure it doesn't get drawn over any walls or under any tiles.
-								unitNorthValid = true;
+								const Tile* tileSouthWest;	// Reaper sticks its righthind leg out through south wall if dir=1
 
-								if (tileNorth->isDiscovered(2) == true)
-									shade = tileNorth->getShade();
+								if (itX > 0 && itY < endY)
+									tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
 								else
-									shade = 16;
+									tileSouthWest = NULL;
 
-								quad = tileNorth->getPosition().x - unitNorth->getPosition().x
-									+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
-
-								srfSprite = unitNorth->getCache(&invalid, quad);
-//								srfSprite = NULL;
-								if (srfSprite)
+								if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
+									|| tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL) // or do this check specifically for Reapers
 								{
-									calculateWalkingOffset(
-														unitNorth,
-														&walkOffset);
+									unitNorthValid = true;
 
-									srfSprite->blitNShade(
-											surface,
-											screenPosition.x + walkOffset.x + 16,
-											screenPosition.y + walkOffset.y - 8,
-											shade);
+									if (tileNorth->isDiscovered(2) == true)
+										shade = tileNorth->getShade();
+									else
+										shade = 16;
 
-									if (unitNorth->getFire() != 0)
+									quad = tileNorth->getPosition().x - unitNorth->getPosition().x
+										+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
+
+									srfSprite = unitNorth->getCache(&invalid, quad);
+//									srfSprite = NULL;
+									if (srfSprite)
 									{
-										frame = 4 + (_animFrame / 2);
-										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-										if (srfSprite)
-											srfSprite->blitNShade(
-													surface,
-													screenPosition.x + walkOffset.x + 16,
-													screenPosition.y + walkOffset.y - 8,
-													0);
+										calculateWalkingOffset(
+															unitNorth,
+															&walkOffset);
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x + 16,
+												screenPosition.y + walkOffset.y - 8,
+												shade);
+
+										if (unitNorth->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											if (srfSprite)
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x + 16,
+														screenPosition.y + walkOffset.y - 8,
+														0);
+										}
 									}
 								}
 							}
@@ -1196,7 +1200,9 @@ void Map::drawTerrain(Surface* surface)
 									}
 
 									if (unitWest != NULL
-//										&& unitWest != unit
+										&& (unitWest != unit
+											|| (unitWest->getDirection() != 2
+												&& unitWest->getDirection() != 6))
 //										&& (unitWest != unit // large units don't need to redraw their westerly parts. <- they do on level ground (dir==1,5) for one ....
 //											|| ((unitWest->getDirection() == 1
 //													|| unitWest->getDirection() == 5)
@@ -1207,6 +1213,8 @@ void Map::drawTerrain(Surface* surface)
 											|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block,diagonals],West,North,West&North
 											|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 									{
+										bool redraw = true;
+
 /*										const Tile* tileSouth;
 										if (itY < endY)
 											tileSouth = _save->getTile(mapPosition + Position(0,1,0));
@@ -1225,7 +1233,6 @@ void Map::drawTerrain(Surface* surface)
 											if (tileSouth == NULL
 												|| tileSouth->getUnit() == NULL) // also needs to check unitSouthWest==NULL and unit==NULL
 											{ */
-										bool redraw = true;
 
 /*										if (itY < endY)
 //											&& (unitWest->getDirection() == 1
@@ -1263,23 +1270,34 @@ void Map::drawTerrain(Surface* surface)
 											}
 										} */
 
-										if (itY < endY -1
-											&& (unitWest->getDirection() == 1
-												|| unitWest->getDirection() == 5
-												|| unitWest->getDirection() == 3
-												|| unitWest->getDirection() == 7)) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
+										if (itY < endY)
 										{
-											const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+											const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
 
-											if (tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL // might want, only if unitWest is large.
-												|| (tileSouthSouthWest->getMapData(MapData::O_OBJECT) != NULL
-													&& (tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-														|| tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
-														|| tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
+											if (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
+												&& tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH)
 											{
-												redraw = false; // ok, so this stops the nose sticking out when Reaper moves dir=5 (which is .. odd)
+												redraw = false;
 											}
 
+											if (itY < endY - 1
+												&& (unitWest->getDirection() == 1
+													|| unitWest->getDirection() == 5
+													|| unitWest->getDirection() == 3
+													|| unitWest->getDirection() == 7)) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
+											{
+												const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+
+												if (tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL // might want, only if unitWest is large.
+													|| (tileSouthSouthWest->getMapData(MapData::O_OBJECT) != NULL
+														&& (tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+															|| tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
+															|| tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
+												{
+													redraw = false; // ok, so this stops the nose sticking out when Reaper moves dir=5 (which is .. odd)
+												}
+											}
+										}
 /*											const Tile* const tileSouthSouth = _save->getTile(mapPosition + Position(0,2,0));
 
 											if (tileSouthSouth->getMapData(MapData::O_NORTHWALL) != NULL
@@ -1290,7 +1308,6 @@ void Map::drawTerrain(Surface* surface)
 											{
 												redraw = false;
 											} */
-										}
 
 										if (redraw == true)
 										{
@@ -1356,7 +1373,7 @@ void Map::drawTerrain(Surface* surface)
 										}
 										else
 										{
-											frame = 0;
+											frame =
 											shade = 0;
 										}
 
@@ -1365,13 +1382,14 @@ void Map::drawTerrain(Surface* surface)
 										frame += animOffset;
 
 										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+//										srfSprite = NULL;
 										if (srfSprite)
 											srfSprite->blitNShade(
 													surface,
 													screenPosition.x - 16,
 													screenPosition.y - 8 + tileWest->getTerrainLevel(),
-													shade);
-//													true); // halfRight
+													shade,
+													true); // halfRight
 									}
 
 									// Draw front bigWall object
@@ -1420,7 +1438,7 @@ void Map::drawTerrain(Surface* surface)
 							}
 							// end (itX > 0)
 						}
-						// end unitNorth TRUE
+						// end unitNorth walking TRUE
 					}
 					// end (itY > 0)
 
@@ -1515,7 +1533,7 @@ void Map::drawTerrain(Surface* surface)
 										++i)
 								{
 									if ((*i)->getUnit() != NULL
-										&& (*i)->getUnit()->getFire() != NULL)
+										&& (*i)->getUnit()->getFire() != 0)
 									{
 										// Draw SMOKE & FIRE if itemUnit is on Fire
 										frame = 4 + (_animFrame / 2);
@@ -1526,6 +1544,7 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.x,
 													screenPosition.y + tile->getTerrainLevel(),
 													0);
+										break;
 /*										frame =
 										shade = 0;
 
@@ -1539,8 +1558,7 @@ void Map::drawTerrain(Surface* surface)
 													surface,
 													screenPosition.x,
 													screenPosition.y + tile->getTerrainLevel(),
-													shade);
-										break; */
+													shade); */
 									}
 								}
 							}
@@ -2330,7 +2348,7 @@ void Map::drawTerrain(Surface* surface)
 						quad = tile->getPosition().x - unit->getPosition().x
 							+ (tile->getPosition().y - unit->getPosition().y) * 2;
 
-						srfSprite = unit->getCache(&invalid, quad); // Reaper sticks its righthind leg out through southerly wall; redraw northWall in tileSouthWest
+						srfSprite = unit->getCache(&invalid, quad);
 //						srfSprite = NULL;
 						if (srfSprite)
 						{
@@ -3320,6 +3338,69 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.x + 16,
 												screenPosition.y + 48 - tileBelowSouthEastEast->getMapData(MapData::O_OBJECT)->getYOffset(),
 												shade);
+									}
+								}
+							}
+						}
+
+						if (itX < endX)
+						{
+							if (tile->getMapData(MapData::O_FLOOR) != NULL
+								|| (tile->getMapData(MapData::O_OBJECT) != NULL
+									&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S)))
+							{
+								const Tile* const tileBelowEast = _save->getTile(mapPosition + Position(1,0,-1));
+
+								BattleUnit* const unitBelowEast = tileBelowEast->getUnit();
+
+								if (unitBelowEast != NULL
+									&& unitBelowEast->getVerticalDirection() != 0
+									&& (unitBelowEast->getUnitVisible() == true
+										|| _save->getDebugMode() == true))
+								{
+									const Tile* const tileEast = _save->getTile(mapPosition + Position(1,0,0));
+
+									if (tileEast->getMapData(MapData::O_OBJECT) == NULL
+										|| (tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_EAST
+											&& tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH
+											&& tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
+									{
+										quad = tileBelowEast->getPosition().x - unitBelowEast->getPosition().x
+											+ (tileBelowEast->getPosition().y - unitBelowEast->getPosition().y) * 2;
+
+										srfSprite = unitBelowEast->getCache(&invalid, quad);
+//										srfSprite = NULL;
+										if (srfSprite)
+										{
+//											redrawLowForeground = true;
+
+											if (tileBelowEast->isDiscovered(2) == true)
+												shade = tileBelowEast->getShade();
+											else
+												shade = 16;
+
+											calculateWalkingOffset(
+																unitBelowEast,
+																&walkOffset);
+
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x + 16 + walkOffset.x,
+													screenPosition.y + 32 + walkOffset.y,
+													shade);
+
+											if (unitBelowEast->getFire() != 0)
+											{
+												frame = 4 + (_animFrame / 2);
+												srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + 16 + walkOffset.x,
+														screenPosition.y + 32 + walkOffset.y,
+														0);
+											}
+										}
 									}
 								}
 							}

@@ -1187,7 +1187,7 @@ items:
     hitAnimation: 46
     power: 86
     damageType: 5
-    clipSize: 15
+    clipSize: 13
     battleType: 2
     recoveryPoints: 1
     attraction: 6

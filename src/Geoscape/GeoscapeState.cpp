@@ -2034,7 +2034,7 @@ bool GeoscapeState::processMissionSite(MissionSite* site) const
 		month = _savedGame->getMonthsPassed();
 	int aLienPts;
 
-	if (site->getSecondsRemaining() >= 1800)
+	if (site->getSecondsRemaining() > 1799)
 	{
 		expired = false;
 		site->setSecondsRemaining(site->getSecondsRemaining() - 1800);
