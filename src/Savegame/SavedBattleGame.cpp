@@ -50,6 +50,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MCDPatch.h"
+#include "../Ruleset/OperationPool.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
 
@@ -59,8 +60,9 @@ namespace OpenXcom
 
 /**
  * Initializes a brand new SavedBattleGame.
+ * @param titles - pointer to a vector of pointers to OperationPool
  */
-SavedBattleGame::SavedBattleGame()
+SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 	:
 		_battleState(NULL),
 		_mapsize_x(0),
@@ -97,6 +99,12 @@ SavedBattleGame::SavedBattleGame()
 	{
 		_tileSearch[i].x = (i %11) - 5;
 		_tileSearch[i].y = (i / 11) - 5;
+	}
+
+	if (titles != NULL)
+	{
+		const size_t pool = 0; //RNG::generate(0, titles->size()-1 // <- in case I want to expand this for different missionTypes. eg, Cydonia -> "Blow Hard"
+		_operationTitle = titles->at(pool)->genOperation();
 	}
 }
 
@@ -434,12 +442,13 @@ void SavedBattleGame::load(
 		}
 	}
 
-	_objectivesDestroyed	= node["objectivesDestroyed"]			.as<int>(_objectivesDestroyed);
-	_objectivesNeeded		= node["objectivesNeeded"]				.as<int>(_objectivesNeeded);
-	_batReserved			= (BattleActionType)node["batReserved"]	.as<int>(_batReserved);
-	_kneelReserved			= node["kneelReserved"]					.as<bool>(_kneelReserved);
-	_ambience				= node["ambience"]						.as<int>(_ambience);
-	_alienRace				= node["alienRace"]						.as<std::string>(_alienRace);
+	_objectivesDestroyed	= node["objectivesDestroyed"]					.as<int>(_objectivesDestroyed);
+	_objectivesNeeded		= node["objectivesNeeded"]						.as<int>(_objectivesNeeded);
+	_batReserved			= (BattleActionType)node["batReserved"]			.as<int>(_batReserved);
+	_kneelReserved			= node["kneelReserved"]							.as<bool>(_kneelReserved);
+	_ambience				= node["ambience"]								.as<int>(_ambience);
+	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
+	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
 }
 
 /**
@@ -611,6 +620,7 @@ YAML::Node SavedBattleGame::save() const
 	node["depth"]			= _depth;
 	node["ambience"]		= _ambience;
 	node["alienRace"]		= _alienRace;
+	node["operationTitle"]	= Language::wstrToUtf8(_operationTitle);
 
 	return node;
 }
@@ -2697,6 +2707,15 @@ void SavedBattleGame::setGroundLevel(const int level)
 int SavedBattleGame::getGroundLevel() const
 {
 	return _groundLevel;
+}
+
+/**
+ * Gets the operation title of the mission.
+ * return, reference to the title
+ */
+const std::wstring& SavedBattleGame::getOperation() const
+{
+	return _operationTitle;
 }
 
 }

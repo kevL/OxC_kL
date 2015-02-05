@@ -162,6 +162,7 @@ private:
 		* _txtHasKill,
 		* _txtMissionLabel,
 		* _txtName,
+		* _txtOperationTitle,
 		* _txtOrder,
 		* _txtShade,
 		* _txtTerrain,

@@ -23,10 +23,10 @@
 //#include <iostream>
 //#include <sstream>
 
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 #include "../Savegame/Soldier.h"
 

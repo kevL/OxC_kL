@@ -146,7 +146,8 @@ BattlescapeState::BattlescapeState()
 
 	_txtBaseLabel		= new Text(80, 9, screenWidth - 81, 0);
 	_lstTileInfo		= new TextList(18, 33, screenWidth - 19, 60);
-	_txtMissionLabel	= new Text(iconsWidth, 9, x, y - 10);;
+	_txtMissionLabel	= new Text(iconsWidth, 9, x, y - 10);
+	_txtOperationTitle	= new Text(screenWidth, 17, 0, 2);
 
 	// Create buttonbar - this should appear at the centerbottom of the screen
 	_icons		= new InteractiveSurface(
@@ -425,6 +426,12 @@ BattlescapeState::BattlescapeState()
 	_txtMissionLabel->setHighContrast();
 	_txtMissionLabel->setAlign(ALIGN_CENTER);
 
+	add(_txtOperationTitle);
+	_txtOperationTitle->setColor(Palette::blockOffset(9));
+	_txtOperationTitle->setHighContrast();
+	_txtOperationTitle->setAlign(ALIGN_CENTER);
+	_txtOperationTitle->setBig();
+
 	std::wstring
 		baseLabel,
 		missionLabel;
@@ -502,6 +509,8 @@ BattlescapeState::BattlescapeState()
 		missionLabel = tr(_savedBattle->getMissionType());
 
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
+
+	_txtOperationTitle->setText(_savedBattle->getOperation().c_str());
 
 
 	add(_lstTileInfo);
@@ -1624,6 +1633,7 @@ inline void BattlescapeState::handle(Action* action)
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					_savedBattle->setDebugMode();
+					_txtOperationTitle->setVisible(false);
 					debug(L"Debug Mode");
 				}
 				else if (_savedBattle->getDebugMode()					// "ctrl-v" - reset tile visibility
@@ -2960,7 +2970,7 @@ Map* BattlescapeState::getMap() const
  */
 void BattlescapeState::debug(const std::wstring& message)
 {
-	if (_savedBattle->getDebugMode())
+	if (_savedBattle->getDebugMode() == true)
 		_txtDebug->setText(message);
 }
 

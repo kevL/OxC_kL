@@ -391,7 +391,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 	MissionSite* const ms = dynamic_cast<MissionSite*>(_craft->getDestination());
 	AlienBase* const ab = dynamic_cast<AlienBase*>(_craft->getDestination());
 
-	SavedBattleGame* battle = new SavedBattleGame();
+	SavedBattleGame* battle = new SavedBattleGame(&_game->getRuleset()->getOperations());
 	_game->getSavedGame()->setBattleGame(battle);
 
 	BattlescapeGenerator bGen (_game); // init.

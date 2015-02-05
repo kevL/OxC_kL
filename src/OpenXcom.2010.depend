@@ -4563,7 +4563,7 @@
 1420130456 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1421946132 f:\git\openxcom\src\ruleset\ruleset.h
+1423122289 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Savegame/GameTime.h"
 
 1420130447 f:\git\openxcom\src\savegame\gametime.h
@@ -4655,7 +4655,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1423021753 f:\git\openxcom\src\savegame\savedbattlegame.h
+1423127696 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1423023433 f:\git\openxcom\src\savegame\battleunit.h
@@ -5388,7 +5388,7 @@
 1420130457 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1421696625 f:\git\openxcom\src\battlescape\battlescapestate.h
+1423127228 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5698,7 +5698,7 @@
 1420130457 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1422762208 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1423128062 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6052,7 +6052,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1423115154 source:f:\git\openxcom\src\battlescape\map.cpp
+1423119462 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6968,7 +6968,7 @@
 1420130443 f:\git\openxcom\src\geoscape\confirmnewbasestate.h
 	"../Engine/State.h"
 
-1421944526 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
+1423125511 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
 	"ConfirmCydoniaState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BattlescapeState.h"
@@ -7008,7 +7008,7 @@
 1420130450 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1422762372 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1423125565 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -7184,7 +7184,7 @@
 1420130448 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1423097587 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1423125579 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8584,7 +8584,7 @@
 1420130450 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1422758055 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1423122292 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8597,6 +8597,7 @@
 	"MapDataSet.h"
 	"MapScript.h"
 	"MCDPatch.h"
+	"OperationPool.h"
 	"RuleAlienMission.h"
 	"RuleBaseFacility.h"
 	"RuleCommendations.h"
@@ -8646,12 +8647,9 @@
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
-1422047629 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1423121241 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
-	"../Engine/CrossPlatform.h"
-	"../Engine/Exception.h"
 	"../Engine/Language.h"
-	"../Engine/RNG.h"
 	"../Savegame/Soldier.h"
 
 1421503426 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
@@ -8832,7 +8830,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1423025248 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1423127715 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8853,10 +8851,11 @@
 	"../Ruleset/Armor.h"
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/MCDPatch.h"
+	"../Ruleset/OperationPool.h"
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1423021234 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1423127063 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -11524,4 +11523,10 @@
 	"MissionSite.h"
 	"../Engine/Language.h"
 	"../Ruleset/RuleAlienMission.h"
+
+1423120635 f:\git\openxcom\src\ruleset\operationpool.h
+
+1423126605 source:f:\git\openxcom\src\ruleset\operationpool.cpp
+	"OperationPool.h"
+	"../Engine/Language.h"
 

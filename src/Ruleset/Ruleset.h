@@ -46,6 +46,7 @@ class Game; // kL
 class MapDataSet;
 class MapScript;
 class MCDPatch;
+class OperationPool;
 class ResourcePack;
 class RuleAlienMission;
 class RuleBaseFacility;
@@ -139,6 +140,7 @@ protected:
 
 	std::vector<std::vector<int> > _alienItemLevels;
 
+	std::vector<OperationPool*> _operationTitles;
 	std::vector<SoldierNamePool*> _names;
 	std::vector<StatString*> _statStrings;
 
@@ -209,6 +211,8 @@ protected:
 
 		/// Gets the pool list for soldier names.
 		const std::vector<SoldierNamePool*>& getPools() const;
+		/// Gets the pool list for operation titles.
+		const std::vector<OperationPool*>& Ruleset::getOperations() const;
 
 		/// Gets the ruleset for a country type.
 		RuleCountry* getCountry(const std::string& id) const;

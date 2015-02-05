@@ -38,6 +38,7 @@ class BattlescapeState;
 class Game;
 class MapDataSet;
 class Node;
+class OperationPool;
 class Pathfinding;
 class Position;
 class Ruleset;
@@ -90,6 +91,7 @@ private:
 		_alienRace, // kL
 		_missionType,
 		_terrain; // sza_MusicRules
+	std::wstring _operationTitle;
 
 	std::list<BattleUnit*> _fallingUnits;
 
@@ -121,8 +123,8 @@ private:
 
 
 	public:
-		/// Creates a new battle save, based on the current generic save.
-		SavedBattleGame();
+		/// Creates a new battle save based on the current generic save.
+		SavedBattleGame(const std::vector<OperationPool*>* titles = NULL);
 		/// Cleans up the saved game.
 		~SavedBattleGame();
 
@@ -206,7 +208,7 @@ private:
 		 * @return, pointer to the tile at that position
 		 */
 		inline Tile* getTile(const Position& pos) const
-		{ if (	   pos.x < 0
+		{	if (   pos.x < 0
 				|| pos.y < 0
 				|| pos.z < 0
 				|| pos.x >= _mapsize_x
@@ -392,7 +394,10 @@ private:
 		/// Sets the ground level.
 		void setGroundLevel(const int level);
 		/// Gets the ground level.
-		int SavedBattleGame::getGroundLevel() const;
+		int getGroundLevel() const;
+
+		/// Gets the operation title of the mission.
+		const std::wstring& getOperation() const;
 };
 
 }

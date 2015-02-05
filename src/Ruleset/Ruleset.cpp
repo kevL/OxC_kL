@@ -35,6 +35,7 @@
 #include "MapDataSet.h"
 #include "MapScript.h"
 #include "MCDPatch.h"
+#include "OperationPool.h"
 #include "RuleAlienMission.h"
 #include "RuleBaseFacility.h"
 #include "RuleCommendations.h"
@@ -117,10 +118,10 @@ Ruleset::Ruleset(Game* game)
 
 	const std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
-	const std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
+	const std::vector<std::string> nation = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
 	for (std::vector<std::string>::const_iterator
-			i = names.begin();
-			i != names.end();
+			i = nation.begin();
+			i != nation.end();
 			++i)
 	{
 		const std::string file = CrossPlatform::noExt(*i);
@@ -128,6 +129,19 @@ Ruleset::Ruleset(Game* game)
 		pool->load(file);
 
 		_names.push_back(pool);
+	}
+
+	const std::vector<std::string> operations = CrossPlatform::getFolderContents(path, "opr"); // load Operation Title words
+	for (std::vector<std::string>::const_iterator
+			i = operations.begin();
+			i != operations.end();
+			++i)
+	{
+		const std::string file = CrossPlatform::noExt(*i);
+		OperationPool* const pool = new OperationPool();
+		pool->load(file);
+
+		_operationTitles.push_back(pool);
 	}
 }
 
@@ -141,6 +155,14 @@ Ruleset::~Ruleset()
 	for (std::vector<SoldierNamePool*>::const_iterator
 			i = _names.begin();
 			i != _names.end();
+			++i)
+	{
+		delete *i;
+	}
+
+	for (std::vector<OperationPool*>::const_iterator
+			i = _operationTitles.begin();
+			i != _operationTitles.end();
 			++i)
 	{
 		delete *i;
@@ -1297,6 +1319,15 @@ SavedGame* Ruleset::newSave() const
 const std::vector<SoldierNamePool*>& Ruleset::getPools() const
 {
 	return _names;
+}
+
+/**
+ * Returns the list of operation title pools.
+ * @return, reference to a vector of OperationPool pointers
+ */
+const std::vector<OperationPool*>& Ruleset::getOperations() const
+{
+	return _operationTitles;
 }
 
 /**

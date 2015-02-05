@@ -3569,7 +3569,7 @@ void GeoscapeState::handleBaseDefense(
 	if (base->getAvailableSoldiers(true) > 0)
 //		|| !base->getVehicles()->empty())
 	{
-		SavedBattleGame* const battle = new SavedBattleGame();
+		SavedBattleGame* const battle = new SavedBattleGame(&_game->getRuleset()->getOperations());
 		_savedGame->setBattleGame(battle);
 		battle->setMissionType("STR_BASE_DEFENSE");
 
