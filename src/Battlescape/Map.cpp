@@ -1125,13 +1125,13 @@ void Map::drawTerrain(Surface* surface)
 									{
 										const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
 
-										const BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
-
-										if (unitNorthWest == NULL
-											|| unitNorthWest != unitNorth) // <- or could do something with TerrainLevels ... ie, draw Object if same level.
+//										const BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
+//										if (unitNorthWest == NULL
+//											|| unitNorthWest != unitNorth) // <- or could do something with TerrainLevels ... ie, draw Object if same level. yep!
+										if (tileNorthWest->getTerrainLevel() == tile->getTerrainLevel()) // this could perhaps be refined ...
 										{
 											srfSprite = tileWest->getSprite(MapData::O_OBJECT);	// kL_note: This is what creates probls if (unitWest == unit);
-//											srfSprite = NULL;									// the unitsprite gets overwritten by a slope ....
+//											srfSprite = NULL;									// the (large) unitsprite gets overwritten by a slope ....
 											if (srfSprite
 												&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NWSE // do none,Block,NESW,West,North,West&North
 												&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST
@@ -2291,6 +2291,29 @@ void Map::drawTerrain(Surface* surface)
 											0);
 							}
 
+/*							// TEST. reDraw tileSouthWest bigWall NESW
+							if (itX > 0 && itY < endY)
+							{
+								const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+
+								srfSprite = tileSouthWest->getSprite(MapData::O_OBJECT);
+//								srfSprite = NULL;
+								if (srfSprite)
+								{
+									if (tileSouthWest->isDiscovered(2) == true)
+										shade = tileSouthWest->getShade(); // Or use tileShade
+									else
+										shade = 16;
+
+									srfSprite->blitNShade(
+											surface,
+											screenPosition.x - 32,
+											screenPosition.y - tileSouthWest->getMapData(MapData::O_OBJECT)->getYOffset(),
+											shade);
+								}
+							} */
+
+
 							if (unit->getBreathFrame() > 0)
 							{
 								// kL_note: Don't throw my offsets off ...
@@ -2904,8 +2927,6 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 
-//					if (tile->isVoid() == false) // THIS CAME BEFORE Draw pathPreview above in Old builds.
-//					{
 					// Draw Front Object
 					srfSprite = tile->getSprite(MapData::O_OBJECT);
 					if (srfSprite
@@ -2918,7 +2939,6 @@ void Map::drawTerrain(Surface* surface)
 								screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
 								tileShade);
 					}
-//					}
 
 
 					// For VERTICAL DIRECTION:
