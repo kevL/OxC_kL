@@ -1252,7 +1252,10 @@ void BattlescapeState::mapOver(Action* action)
 						if (item->getUnit() != NULL)
 						{
 							if (item->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
+							{
 								ws1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
+								ws1 +=  + L" (status doubtful)";
+							}
 							else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 							{
 								ws1 += item->getUnit()->getName(_game->getLanguage());
