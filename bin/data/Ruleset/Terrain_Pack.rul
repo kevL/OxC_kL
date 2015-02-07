@@ -1,5 +1,5 @@
 ﻿# Terrain Pack by Hobbes # version kL
-# kL_note: Moved all terrains here, except URBAN/2 (TerrorSites.rul) and XBASE (Xcom1Ruleset.rul)
+# kL_note: Moved all terrains here, except URBAN/2 (TerrorSites.rul) and XBASE (Xcom1Ruleset.rul) and UBASE (FULL_Expanded_UBase)
 terrains:
   - name: ATLANTDESERT
     script: DESERT

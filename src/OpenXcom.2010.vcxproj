@@ -458,6 +458,7 @@
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
     <ClCompile Include="Ruleset\MapScript.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
+    <ClCompile Include="Ruleset\OperationPool.cpp" />
     <ClCompile Include="Ruleset\Polygon.cpp" />
     <ClCompile Include="Ruleset\Polyline.cpp" />
     <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
@@ -797,6 +798,7 @@
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\MapScript.h" />
     <ClInclude Include="Ruleset\MCDPatch.h" />
+    <ClInclude Include="Ruleset\OperationPool.h" />
     <ClInclude Include="Ruleset\Polygon.h" />
     <ClInclude Include="Ruleset\Polyline.h" />
     <ClInclude Include="Ruleset\RuleGlobe.h" />

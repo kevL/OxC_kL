@@ -4969,7 +4969,7 @@ alienDeployments:
       palette: 2
       music: GEO_BRIEF_TERRORSITE
   - type: STR_ALIEN_BASE_ASSAULT
-    script: ALIENBASE
+#    script: ALIENBASE
     data:
       - alienRank: 0 #commander
         lowQty: 1

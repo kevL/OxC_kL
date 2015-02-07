@@ -440,6 +440,7 @@ InventoryState::~InventoryState()
 
 /**
  * Updates all soldier stats when the soldier changes.
+ @note parent BattlescapeState is invalid @ BaseEquip screen
  */
 void InventoryState::init()
 {
@@ -677,7 +678,6 @@ void InventoryState::btnOkClick(Action*)
 {
 	if (_inv->getSelectedItem() != NULL)
 		return;
-
 
 	_game->popState();
 

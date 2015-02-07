@@ -1,5 +1,6 @@
 terrains:
   - name: UBASE
+    script: ALIENBASE
 #    script: ALIENBASE # note: Done
 #    in alienDeployment, type: STR_ALIEN_BASE_ASSAULT
 #    & type: STR_MARS_THE_FINAL_ASSAULT ( script: BOSSBATTLE )
@@ -44,7 +45,7 @@ terrains:
       - name: UBASE_07
         width: 10
         length: 10
-#        groups: 1
+        groups: 1
 #        type: 4
       - name: UBASE_08
         width: 10

@@ -427,7 +427,7 @@ BattlescapeState::BattlescapeState()
 	_txtMissionLabel->setAlign(ALIGN_CENTER);
 
 	add(_txtOperationTitle);
-	_txtOperationTitle->setColor(Palette::blockOffset(9));
+	_txtOperationTitle->setColor(Palette::blockOffset(0));
 	_txtOperationTitle->setHighContrast();
 	_txtOperationTitle->setAlign(ALIGN_CENTER);
 	_txtOperationTitle->setBig();
@@ -510,7 +510,10 @@ BattlescapeState::BattlescapeState()
 
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
 
-	_txtOperationTitle->setText(_savedBattle->getOperation().c_str());
+	if (_savedBattle->getOperation().empty() == false)
+		_txtOperationTitle->setText(_savedBattle->getOperation().c_str());
+	else
+		_txtOperationTitle->setVisible(false);
 
 
 	add(_lstTileInfo);
@@ -930,6 +933,7 @@ BattlescapeState::BattlescapeState()
 	_battleGame = new BattlescapeGame(
 									_savedBattle,
 									this);
+	//Log(LOG_INFO) << "Create BattlescapeState EXIT";
 }
 
 /**

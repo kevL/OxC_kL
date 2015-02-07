@@ -5698,7 +5698,7 @@
 1420130457 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1423128062 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1423290810 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5820,7 +5820,7 @@
 1420130440 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1421644705 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1423277306 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -5840,7 +5840,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1421641356 source:f:\git\openxcom\src\battlescape\camera.cpp
+1423277012 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6021,7 +6021,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1422069013 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1423277281 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6052,7 +6052,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1423181670 source:f:\git\openxcom\src\battlescape\map.cpp
+1423312322 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

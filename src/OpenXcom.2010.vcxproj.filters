@@ -952,6 +952,7 @@
     <ClCompile Include="Geoscape\MissionDetectedState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\OperationPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1932,6 +1933,7 @@
     <ClInclude Include="Geoscape\MissionDetectedState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
+    <ClInclude Include="Ruleset\OperationPool.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
