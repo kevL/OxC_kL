@@ -21,7 +21,6 @@
 
 //#include <fstream>
 //#include <vector>
-
 //#include <SDL_endian.h>
 //#include <SDL_gfxPrimitives.h>
 //#include <SDL_image.h>
@@ -63,9 +62,7 @@ namespace
 inline int GetPitch(
 		int bpp,
 		int width)
-{
-	return ((bpp / 8) * width + 15) & ~0xF;
-}
+{ return ((bpp / 8) * width + 15) & ~0xF; }
 
 /**
  * Helper function creating aligned buffer
@@ -78,8 +75,7 @@ inline void* NewAligned(
 		int bpp,
 		int width,
 		int height)
-{
-	const int pitch = GetPitch(bpp, width);
+{	const int pitch = GetPitch(bpp, width);
 	const int total = pitch * height;
 	void* buffer = 0;
 
@@ -110,24 +106,21 @@ inline void* NewAligned(
 
 	memset(buffer, 0, total);
 
-	return buffer;
-}
+	return buffer; }
 
 /**
  * Helper function release aligned memory
  * @param buffer - buffer to delete
  */
 inline void DeleteAligned(void* buffer)
-{
-	if (buffer)
+{	if (buffer)
 	{
 #ifdef _WIN32
 		_aligned_free(buffer);
 #else
 		free(buffer);
 #endif
-	}
-}
+	} }
 
 }
 
@@ -179,12 +172,12 @@ Surface::Surface(
 
 	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 
-	_crop.w = 0;
-	_crop.h = 0;
-	_crop.x = 0;
+	_crop.w =
+	_crop.h =
+	_crop.x =
 	_crop.y = 0;
 
-	_clear.x = 0;
+	_clear.x =
 	_clear.y = 0;
 	_clear.w = getWidth();
 	_clear.h = getHeight();
@@ -211,18 +204,17 @@ Surface::Surface(const Surface& other)
 										height,
 										bpp,
 										pitch,
-										0,
-										0,
-										0,
-										0);
+										0,0,0,0);
 
-		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+		SDL_SetColorKey(
+					_surface,
+					SDL_SRCCOLORKEY,
+					0);
 		// can't call 'setPalette' because it's a virtual function and don't work correctly in constructor
 		SDL_SetColors(
-				_surface,
-				other.getPalette(),
-				0,
-				255);
+					_surface,
+					other.getPalette(),
+					0,255);
 
 		std::memcpy(
 				_alignedBuffer,
@@ -415,8 +407,8 @@ void Surface::loadBdy(const std::string& filename)
 
 	lock();
 	Uint8 dataByte;
-	int pixelCnt;
 	int
+		pixelCnt,
 		x = 0,
 		y = 0,
 		currentRow = 0;
@@ -569,8 +561,7 @@ void Surface::invert(Uint8 mid)
  * game cycle, like animations and other real-time elements.
  */
 void Surface::think()
-{
-}
+{}
 
 /**
  * Draws the graphic that the surface contains before it gets blitted onto
@@ -655,7 +646,9 @@ void Surface::copy(Surface* surface)
 				&& y < getHeight();
 			)
 	{
-		Uint8 pixel = surface->getPixelColor(from_x + x, from_y + y);
+		Uint8 pixel = surface->getPixelColor(
+										from_x + x,
+										from_y + y);
 		setPixelIterative(&x, &y, pixel);
 	}
 	unlock();
@@ -869,9 +862,9 @@ bool Surface::getVisible() const
  */
 void Surface::resetCrop()
 {
-	_crop.w = 0;
-	_crop.h = 0;
-	_crop.x = 0;
+	_crop.w =
+	_crop.h =
+	_crop.x =
 	_crop.y = 0;
 }
 

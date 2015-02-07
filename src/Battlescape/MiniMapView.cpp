@@ -21,7 +21,6 @@
 
 //#include <cmath>
 //#include <sstream>
-
 //#include "../fmath.h"
 
 #include "Camera.h"
@@ -111,7 +110,11 @@ void MiniMapView::draw()
 		startY = _camera->getCenterPosition().y - (height / 2 / CELL_HEIGHT),
 		camera_Z = _camera->getCenterPosition().z;
 
-	drawRect(0, 0, width, height, 0);
+	drawRect(
+		0,0,
+		width,
+		height,
+		0);
 
 	this->lock();
 	for (int
@@ -138,7 +141,7 @@ void MiniMapView::draw()
 
 				if (tile == NULL)
 				{
-					px++;
+					++px;
 					continue;
 				}
 
@@ -160,7 +163,7 @@ void MiniMapView::draw()
 				else
 					tileShade = 16; // paint it ... black !
 
-				Surface* srf = NULL;
+				Surface* srf;
 				if (baseColor == 1					// is along the edge
 					&& lvl == 0						// is ground level
 					&& tile->getMapData(3) == NULL)	// but has no content-object
@@ -168,15 +171,14 @@ void MiniMapView::draw()
 					srf = _set->getFrame(377);
 					srf->blitNShade(
 								this,
-								x,
-								y,
+								x,y,
 								tileShade,
 								false,
 								baseColor);
 				}
 				else // draw tile parts
 				{
-					const MapData* data = NULL;
+					const MapData* data;
 					for (int
 							i = 0;
 							i < 4;
@@ -187,13 +189,14 @@ void MiniMapView::draw()
 							&& data->getMiniMapIndex() != 0)
 						{
 							srf = _set->getFrame(data->getMiniMapIndex() + 35);
-							srf->blitNShade(
-										this,
-										x,
-										y,
-										tileShade,
-										false,
-										baseColor);
+							if (srf != NULL)
+								srf->blitNShade(
+											this,
+											x,y,
+											tileShade,
+											false,
+											baseColor);
+							else Log(LOG_INFO) << "ERROR MiniMapView::draw() no data for Tile[" << i << "] pos " << tile->getPosition() << " frame = " << data->getMiniMapIndex() + 35;
 						}
 					}
 				}
@@ -209,7 +212,7 @@ void MiniMapView::draw()
 							  + (tile->getPosition().y - unit->getPosition().y) * unitSize
 							  + _frame * unitSize * unitSize;
 
-					Surface* const srf = _set->getFrame(frame);
+					srf = _set->getFrame(frame);
 
 					int baseColor = 0;
 
@@ -228,9 +231,7 @@ void MiniMapView::draw()
 
 					srf->blitNShade(
 								this,
-								x,
-								y,
-								0,
+								x,y,0,
 								false,
 								baseColor);
 				}
@@ -240,12 +241,10 @@ void MiniMapView::draw()
 				{
 					const int frame = 9 + _frame;
 
-					Surface* const srf = _set->getFrame(frame);
+					srf = _set->getFrame(frame);
 					srf->blitNShade(
 								this,
-								x,
-								y,
-								0);
+								x,y,0);
 				}
 
 				++px;
@@ -372,7 +371,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 	if (_isMouseScrolling == true)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
-			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -454,7 +453,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		// the mouse-release event is missed for any reason.
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		// (checking: is the dragScroll-mouse-button still pressed?)
-		if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		if ((SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click

@@ -20,7 +20,6 @@
 #include "SurfaceSet.h"
 
 //#include <fstream>
-
 //#include <SDL_endian.h>
 
 #include "Surface.h"
@@ -41,12 +40,11 @@ SurfaceSet::SurfaceSet(
 	:
 		_width(width),
 		_height(height)
-{
-}
+{}
 
 /**
  * Performs a deep copy of an existing SurfaceSet.
- * @param other Surface set to copy from.
+ * @param other - reference to a SurfaceSet to copy from
  */
 SurfaceSet::SurfaceSet(const SurfaceSet& other)
 {
@@ -77,12 +75,11 @@ SurfaceSet::~SurfaceSet()
 }
 
 /**
- * Loads the contents of an X-Com set of PCK/TAB image files
- * into this SurfaceSet. The PCK file contains an RLE compressed
- * image, while the TAB file contains the offsets to each
- * frame in the image.
- * @param pck Filename of the PCK image.
- * @param tab Filename of the TAB offsets.
+ * Loads the contents of an X-Com set of PCK/TAB image files into this SurfaceSet.
+ * The PCK file contains an RLE compressed image while the TAB file contains
+ * the offsets to each frame in the image.
+ * @param pck - reference to filename of the PCK image
+ * @param tab - reference to filename of the TAB offsets (default "")
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#PCK
  */
 void SurfaceSet::loadPck(
@@ -93,32 +90,32 @@ void SurfaceSet::loadPck(
 	int nframes = 0;
 
 	// Load TAB and get image offsets
-	if (!tab.empty())
+	if (tab.empty() == false)
 	{
-		std::ifstream offsetFile(tab.c_str(), std::ios::in | std::ios::binary);
-		if (!offsetFile)
+		std::ifstream offsetFile (tab.c_str(), std::ios::in | std::ios::binary); // init.
+		if (offsetFile.fail() == true)
 		{
 			throw Exception(tab + " not found");
 		}
 
 		std::streampos
-			begin,
-			end;
+			start,
+			stop;
 
-		begin = offsetFile.tellg();
+		start = offsetFile.tellg();
 
 		int off;
 		offsetFile.read((char*)&off, sizeof(off));
 		offsetFile.seekg(0, std::ios::end);
 
-		end = offsetFile.tellg();
+		stop = offsetFile.tellg();
 
-		int size = static_cast<int>(end - begin);
+		int tabSize = static_cast<int>(stop - start);
 
-		if (off != 0) // 16-bit offsets
-			nframes = size / 2;
-		else // 32-bit offsets
-			nframes = size / 4;
+		if (off != 0)
+			nframes = tabSize / 2; // 16-bit offsets
+		else
+			nframes = tabSize / 4; // 32-bit offsets
 
 		offsetFile.close();
 
@@ -142,8 +139,8 @@ void SurfaceSet::loadPck(
 	}
 
 	// Load PCK and put pixels in surfaces
-	std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
-	if (!imgFile)
+	std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary); // init.
+	if (imgFile.fail() == true)
 	{
 		throw Exception(pck + " not found");
 	}
@@ -191,9 +188,7 @@ void SurfaceSet::loadPck(
 				}
 			}
 			else
-			{
 				_frames[frame]->setPixelIterative(&x, &y, value);
-			}
 		}
 
 		// Unlock the surface
@@ -217,16 +212,16 @@ void SurfaceSet::loadDat(const std::string& filename)
 
 	// Load file and put pixels in surface
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
-	if (!imgFile)
+	if (imgFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
 
 	imgFile.seekg(0, std::ios::end);
-	std::streamoff size = imgFile.tellg();
+	std::streamoff datSize = imgFile.tellg();
 	imgFile.seekg(0, std::ios::beg);
 
-	nframes = static_cast<int>(size) / (_width * _height);
+	nframes = static_cast<int>(datSize) / (_width * _height);
 
 	for (int
 			i = 0;
@@ -258,7 +253,7 @@ void SurfaceSet::loadDat(const std::string& filename)
 			// Unlock the surface
 			_frames[frame]->unlock();
 
-			frame++;
+			++frame;
 			x = 0;
 			y = 0;
 
@@ -287,8 +282,8 @@ Surface* SurfaceSet::getFrame(const int i)
 
 /**
  * Creates and returns a particular frame in this SurfaceSet.
- * @param i Frame number in the set.
- * @return Pointer to the respective surface.
+ * @param i - frame number in the set
+ * @return, pointer to the respective surface
  */
 Surface* SurfaceSet::addFrame(const int i)
 {
@@ -301,7 +296,7 @@ Surface* SurfaceSet::addFrame(const int i)
 
 /**
  * Returns the full width of a frame in this SurfaceSet.
- * @return Width in pixels.
+ * @return, width in pixels
  */
 int SurfaceSet::getWidth() const
 {
@@ -310,7 +305,7 @@ int SurfaceSet::getWidth() const
 
 /**
  * Returns the full height of a frame in this SurfaceSet.
- * @return Height in pixels.
+ * @return, height in pixels
  */
 int SurfaceSet::getHeight() const
 {
@@ -319,7 +314,7 @@ int SurfaceSet::getHeight() const
 
 /**
  * Returns the total amount of frames currently stored in this SurfaceSet.
- * @return Number of frames.
+ * @return, number of frames
  */
 size_t SurfaceSet::getTotalFrames() const
 {
@@ -328,9 +323,9 @@ size_t SurfaceSet::getTotalFrames() const
 
 /**
  * Replaces a certain amount of colors in all of the frames.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void SurfaceSet::setPalette(
 		SDL_Color* colors,
@@ -342,7 +337,10 @@ void SurfaceSet::setPalette(
 			i != _frames.end();
 			++i)
 	{
-		(*i).second->setPalette(colors, firstcolor, ncolors);
+		(*i).second->setPalette(
+							colors,
+							firstcolor,
+							ncolors);
 	}
 }
 

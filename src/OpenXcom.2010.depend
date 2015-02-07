@@ -252,7 +252,7 @@
 	"State.h"
 	"Surface.h"
 
-1421606019 f:\git\openxcom\src\engine\surface.h
+1423316131 f:\git\openxcom\src\engine\surface.h
 
 1325792434 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -4536,7 +4536,7 @@
 	"State.h"
 	"Surface.h"
 
-1420130438 f:\git\openxcom\src\engine\surfaceset.h
+1423322199 f:\git\openxcom\src\engine\surfaceset.h
 
 1422757729 f:\git\openxcom\src\ruleset\rulecraft.h
 
@@ -6146,7 +6146,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1420130439 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1423317128 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	"Camera.h"
 	"Map.h"
@@ -6789,7 +6789,7 @@
 1420130454 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1421606044 source:f:\git\openxcom\src\engine\surface.cpp
+1423315948 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -11526,7 +11526,7 @@
 
 1423120635 f:\git\openxcom\src\ruleset\operationpool.h
 
-1423134251 source:f:\git\openxcom\src\ruleset\operationpool.cpp
+1423314249 source:f:\git\openxcom\src\ruleset\operationpool.cpp
 	"OperationPool.h"
 	"../Engine/Language.h"
 

@@ -169,9 +169,7 @@ protected:
 		 * @return, pointer to the palette's colors
 		 */
 		SDL_Color* getPalette() const
-		{
-			return _surface->format->palette->colors;
-		}
+		{ return _surface->format->palette->colors; }
 
 		/// Sets the X position of the surface.
 		virtual void setX(int x);
@@ -180,9 +178,7 @@ protected:
 		 * @return, X position in pixels
 		 */
 		int getX() const
-		{
-			return _x;
-		}
+		{ return _x; }
 
 		/// Sets the Y position of the surface.
 		virtual void setY(int y);
@@ -191,9 +187,7 @@ protected:
 		 * @return, Y position in pixels
 		 */
 		int getY() const
-		{
-			return _y;
-		}
+		{ return _y; }
 
 		/// Sets the surface's visibility.
 		void setVisible(bool visible = true);
@@ -216,8 +210,7 @@ protected:
 				int x,
 				int y,
 				Uint8 color)
-		{
-			if (x < 0
+		{	if (x < 0
 				|| x >= getWidth()
 				|| y < 0
 				|| y >= getHeight())
@@ -228,8 +221,7 @@ protected:
 			static_cast<Uint8*>(_surface->pixels)
 						[(y * static_cast<int>(_surface->pitch))
 						+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
-					= color;
-		}
+					= color; }
 
 		/**
 		 * Changes the color of a pixel in the surface and returns the next pixel position.
@@ -242,16 +234,14 @@ protected:
 				int* x,
 				int* y,
 				Uint8 color)
-		{
-			setPixelColor(*x, *y, color);
+		{	setPixelColor(*x, *y, color);
 
 			(*x)++;
 			if (*x == getWidth())
 			{
 				(*y)++;
 				*x = 0;
-			}
-		}
+			} }
 
 		/**
 		 * Returns the color of a specified pixel in the surface.
@@ -262,8 +252,7 @@ protected:
 		Uint8 getPixelColor(
 				int x,
 				int y) const
-		{
-			if (x < 0
+		{	if (x < 0
 				|| x >= getWidth()
 				|| y < 0
 				|| y >= getHeight())
@@ -272,26 +261,21 @@ protected:
 			}
 
 			return static_cast<Uint8*>(_surface->pixels)[(y * static_cast<int>(_surface->pitch))
-													   + (x * static_cast<int>(_surface->format->BytesPerPixel))];
-		}
+													   + (x * static_cast<int>(_surface->format->BytesPerPixel))]; }
 
 		/**
 		 * Returns the internal SDL_Surface for SDL calls.
 		 * @return, pointer to the surface
 		 */
 		SDL_Surface* getSurface() const
-		{
-			return _surface;
-		}
+		{ return _surface; }
 
 		/**
 		 * Returns the width of the surface.
 		 * @return, width in pixels
 		 */
 		int getWidth() const
-		{
-			return _surface->w;
-		}
+		{ return _surface->w; }
 		/// Sets the width of the surface.
 		virtual void setWidth(int width);
 
@@ -300,9 +284,7 @@ protected:
 		 * @return, height in pixels
 		 */
 		int getHeight() const
-		{
-			return _surface->h;
-		}
+		{ return _surface->h; }
 		/// Sets the height of the surface.
 		virtual void setHeight(int height);
 
