@@ -4083,7 +4083,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 
 	const int info[] =
 	{
-		static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0, 0,-1)))),
+		static_cast<int>(tile->hasNoFloor(_savedBattle->getTile(tile->getPosition() + Position(0,0,-1)))),
 		tile->getSmoke(),
 		tile->getFire(),
 		tuCost

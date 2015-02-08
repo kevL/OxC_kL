@@ -294,7 +294,7 @@ void AlienContainmentState::btnOkClick(Action*)
 	{
 		if (_qtys[i] > 0)
 		{
-			if (_origin == OPT_GEOSCAPE)
+/*			if (_origin == OPT_GEOSCAPE) // remove: Player must interrogate aLien to get researchHelp.
 			{
 				for (int
 						j = 0;
@@ -303,7 +303,7 @@ void AlienContainmentState::btnOkClick(Action*)
 				{
 					_base->researchHelp(_aliens[i]);
 				}
-			}
+			} */
 
 			_base->getItems()->removeItem(
 									_aliens[i],

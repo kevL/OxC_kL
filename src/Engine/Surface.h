@@ -210,7 +210,7 @@ protected:
 				int x,
 				int y,
 				Uint8 color)
-		{	if (x < 0
+		{	if (   x < 0
 				|| x >= getWidth()
 				|| y < 0
 				|| y >= getHeight())
@@ -252,7 +252,7 @@ protected:
 		Uint8 getPixelColor(
 				int x,
 				int y) const
-		{	if (x < 0
+		{	if (   x < 0
 				|| x >= getWidth()
 				|| y < 0
 				|| y >= getHeight())

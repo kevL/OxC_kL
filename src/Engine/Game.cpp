@@ -365,10 +365,9 @@ void Game::run()
 								_states.back()->redrawText();
 							}
 							else if (_save != NULL
-								&& _save->getDebugMode() == true
-								&& action.getDetails()->key.keysym.sym == SDLK_c	// kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState).
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)			// ctrl+c is also handled in GeoscapeState::handle()
-																					// where decisions are made about what info to show.
+								&& _save->getDebugMode() == true					// kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState).
+								&& action.getDetails()->key.keysym.sym == SDLK_c	// ctrl+c is also handled in GeoscapeState::handle()
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)			// where decisions are made about what info to show.
 							{
 								// "ctrl-c"			- increment to show next area's boundaries
 								// "ctrl-shift-c"	- decrement to show previous area's boundaries

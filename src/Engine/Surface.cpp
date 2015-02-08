@@ -273,7 +273,7 @@ void Surface::loadScr(const std::string& filename)
 	std::ifstream imgFile( // Load file and put pixels in surface
 					filename.c_str(),
 					std::ios::binary);
-	if (!imgFile)
+	if (imgFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -332,7 +332,7 @@ void Surface::loadSpk(const std::string& filename)
 	std::ifstream imgFile( // Load file and put pixels in surface
 						filename.c_str(),
 						std::ios::in | std::ios::binary);
-	if (!imgFile)
+	if (imgFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -400,7 +400,7 @@ void Surface::loadBdy(const std::string& filename)
 	std::ifstream imgFile( // Load file and put pixels in surface
 						filename.c_str(),
 						std::ios::in | std::ios::binary);
-	if (!imgFile)
+	if (imgFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -646,9 +646,9 @@ void Surface::copy(Surface* surface)
 				&& y < getHeight();
 			)
 	{
-		Uint8 pixel = surface->getPixelColor(
-										from_x + x,
-										from_y + y);
+		const Uint8 pixel = surface->getPixelColor(
+												from_x + x,
+												from_y + y);
 		setPixelIterative(&x, &y, pixel);
 	}
 	unlock();
@@ -1093,8 +1093,7 @@ void Surface::resize(
 		int width,
 		int height)
 {
-	// Set up new surface
-	Uint8 bpp = _surface->format->BitsPerPixel;
+	Uint8 bpp = _surface->format->BitsPerPixel; // Set up new surface
 	int pitch = GetPitch(bpp, width);
 	void* alignedBuffer = NewAligned(
 									bpp,
@@ -1106,18 +1105,14 @@ void Surface::resize(
 												height,
 												bpp,
 												pitch,
-												0,
-												0,
-												0,
-												0);
-
+												0,0,0,0);
 	if (surface == NULL)
 	{
 		throw Exception(SDL_GetError());
 	}
 
-	// Copy old contents
-	SDL_SetColorKey(
+
+	SDL_SetColorKey( // Copy old contents
 				surface,
 				SDL_SRCCOLORKEY,
 				0);
@@ -1132,8 +1127,8 @@ void Surface::resize(
 				surface,
 				0);
 
-	// Delete old surface
-	DeleteAligned(_alignedBuffer);
+
+	DeleteAligned(_alignedBuffer); // Delete old surface
 	SDL_FreeSurface(_surface);
 
 	_alignedBuffer = alignedBuffer;
@@ -1147,7 +1142,7 @@ void Surface::resize(
  * Changes the width of the surface.
  * @warning This is not a trivial setter!
  * It will force the surface to be recreated for the new size.
- * @param width New width in pixels.
+ * @param width - new width in pixels
  */
 void Surface::setWidth(int width)
 {
@@ -1162,7 +1157,7 @@ void Surface::setWidth(int width)
  * Changes the height of the surface.
  * @warning This is not a trivial setter!
  * It will force the surface to be recreated for the new size.
- * @param height New height in pixels.
+ * @param height - new height in pixels
  */
 void Surface::setHeight(int height)
 {

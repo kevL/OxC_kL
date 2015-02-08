@@ -1419,8 +1419,8 @@ void Base::addResearch(ResearchProject* project)
 /**
  * Remove a ResearchProject from base.
  * @param project	- a project to remove
- * @param grantHelp	- true to apply researchHelp()
- * @param goOffline	- true to hide project but not remove it from base's active ResearchProjects
+ * @param grantHelp	- true to apply researchHelp() (default true)
+ * @param goOffline	- true to hide project but not remove it from base's active ResearchProjects (default false)
  */
 void Base::removeResearch(
 		ResearchProject* project,
@@ -1465,8 +1465,8 @@ void Base::removeResearch(
  */
 void Base::researchHelp(const std::string& aLien) // kL
 {
-	double factor = 0.0;
 	std::string rp;
+	double factor = 0.;
 
 	for (std::vector<ResearchProject*>::const_iterator
 			i = _research.begin();
@@ -1750,7 +1750,7 @@ void Base::researchHelp(const std::string& aLien) // kL
 			}
 		}
 
-		if (AreSame(factor, 0.0) == false)
+		if (AreSame(factor, 0.) == false)
 		{
 			const int cost = (*i)->getCost();
 			const double spent = static_cast<double>((*i)->getSpent());

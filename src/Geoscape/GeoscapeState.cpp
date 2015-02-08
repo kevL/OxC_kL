@@ -885,7 +885,6 @@ void GeoscapeState::handle(Action* action)
 			if ((SDL_GetModState() & KMOD_CTRL) != 0)
 			{
 				if (action->getDetails()->key.keysym.sym == SDLK_d)	// "ctrl-d" - enable debug mode
-																	// ctrl+c is also handled in Game::run() where the 'cycle' is determined.
 				{
 					_savedGame->setDebugMode();
 
@@ -2693,7 +2692,6 @@ void GeoscapeState::time1Day()
 						(*b2)->removeResearch(
 											*rp2,
 											false);
-
 						break;
 					}
 				}

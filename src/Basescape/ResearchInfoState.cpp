@@ -376,13 +376,18 @@ void ResearchInfoState::moreByValue(int change)
 	if (change < 1)
 		return;
 
-//kL	int freeScientist = _base->getAvailableScientists();
-	int freeScientist = _base->getScientists(); // kL
-	int freeSpaceLab = _base->getFreeLaboratories();
+	int
+		freeScientist = _base->getScientists(),
+		freeSpaceLab = _base->getFreeLaboratories();
+
 	if (freeScientist > 0
 		&& freeSpaceLab > 0)
 	{
-		change = std::min(std::min(freeScientist, freeSpaceLab), change);
+		change = std::min(
+						change,
+						std::min(
+								freeScientist,
+								freeSpaceLab));
 		_project->setAssigned(_project->getAssigned() + change);
 		_base->setScientists(_base->getScientists() - change);
 
@@ -411,7 +416,9 @@ void ResearchInfoState::lessByValue(int change)
 	int assigned = _project->getAssigned();
 	if (assigned > 0)
 	{
-		change = std::min(assigned, change);
+		change = std::min(
+						change,
+						assigned);
 		_project->setAssigned(assigned-change);
 		_base->setScientists(_base->getScientists() + change);
 
