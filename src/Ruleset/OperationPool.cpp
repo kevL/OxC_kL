@@ -85,8 +85,10 @@ std::wstring OperationPool::genOperation() const
 		const size_t adj = RNG::generate(
 									0,
 									_operaFirst.size() - 1);
-		title << L"opera." << _operaFirst[adj];
+		title << _operaFirst[adj];
 	}
+	else
+		title << L"oper";
 
 	if (_operaLast.empty() == false)
 	{
@@ -95,6 +97,8 @@ std::wstring OperationPool::genOperation() const
 									_operaLast.size() - 1);
 		title << L"." << _operaLast[noun];
 	}
+	else
+		title << L"ation";
 
 	return title.str();
 }

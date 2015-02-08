@@ -1293,7 +1293,7 @@ void Map::drawTerrain(Surface* surface)
 											frame += animOffset;
 
 											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-	//										srfSprite = NULL;
+//											srfSprite = NULL;
 											if (srfSprite)
 												srfSprite->blitNShade(
 														surface,
