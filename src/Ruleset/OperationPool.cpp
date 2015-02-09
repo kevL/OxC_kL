@@ -98,7 +98,7 @@ std::wstring OperationPool::genOperation() const
 		title << L"." << _operaLast[noun];
 	}
 	else
-		title << L"ation";
+		title << L".ation";
 
 	return title.str();
 }

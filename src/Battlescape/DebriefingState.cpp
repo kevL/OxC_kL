@@ -1871,54 +1871,33 @@ void DebriefingState::recoverItems(
 			{
 				if ((*i)->getRules()->getBattleType() == BT_CORPSE)
 				{
-					if ((*i)->getUnit()->getStatus() == STATUS_DEAD)
+					if ((*i)->getUnit() != NULL) // kL
 					{
-						addStat(
-							"STR_ALIEN_CORPSES_RECOVERED",
-							(*i)->getUnit()->getValue() / 3);
-
-						base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
-					}
-					else if ((*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-					{
-						if ((*i)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
+						if ((*i)->getUnit()->getStatus() == STATUS_DEAD)
 						{
-							// ADD STUNNED ALIEN COUNTING HERE_kL
-							++_aliensStunned; // for Nike Cross determination.
+							addStat(
+								"STR_ALIEN_CORPSES_RECOVERED",
+								(*i)->getUnit()->getValue() / 3);
 
-							if (base->getAvailableContainment() > 0) // should this do +1 containment per loop ...
-								addStat(
-									"STR_LIVE_ALIENS_RECOVERED",
-									(*i)->getUnit()->getValue()); // duplicated above.
-							else
-								addStat(
-									"STR_ALIENS_KILLED",
-									(*i)->getUnit()->getValue()); // duplicated above.
+							base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
+						}
+						else if ((*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+						{
+							if ((*i)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
+							{
+								// ADD STUNNED ALIEN COUNTING HERE_kL
+								++_aliensStunned; // for Nike Cross determination.
 
-							// kL: harvest aLiens whether researched or not
-							if (base->getAvailableContainment() == 0)
-							{
-								_noContainment = true;
-								base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
-							}
-							else
-							{
-								addStat( // more points if item's not researched
-									"STR_LIVE_ALIENS_RECOVERED",
-									(*i)->getUnit()->getValue(), // duplicated above.
-									0);
+								if (base->getAvailableContainment() > 0) // should this do +1 containment per loop ...
+									addStat(
+										"STR_LIVE_ALIENS_RECOVERED",
+										(*i)->getUnit()->getValue()); // duplicated above.
+								else
+									addStat(
+										"STR_ALIENS_KILLED",
+										(*i)->getUnit()->getValue()); // duplicated above.
 
-								base->getItems()->addItem((*i)->getUnit()->getType());
-								_manageContainment = base->getAvailableContainment()
-												   - (base->getUsedContainment() * _limitsEnforced) < 0;
-							} // end_kL.
-/*							RuleResearch* const researchRule = _rules->getResearch((*i)->getUnit()->getType());
-							if (researchRule != NULL
-								&& _savedGame->isResearchAvailable(
-															researchRule,
-															_savedGame->getDiscoveredResearch(),
-															_rules) == true)
-							{
+								// kL: harvest aLiens whether researched or not
 								if (base->getAvailableContainment() == 0)
 								{
 									_noContainment = true;
@@ -1934,15 +1913,39 @@ void DebriefingState::recoverItems(
 									base->getItems()->addItem((*i)->getUnit()->getType());
 									_manageContainment = base->getAvailableContainment()
 													   - (base->getUsedContainment() * _limitsEnforced) < 0;
+								} // end_kL.
+	/*							RuleResearch* const researchRule = _rules->getResearch((*i)->getUnit()->getType());
+								if (researchRule != NULL
+									&& _savedGame->isResearchAvailable(
+																researchRule,
+																_savedGame->getDiscoveredResearch(),
+																_rules) == true)
+								{
+									if (base->getAvailableContainment() == 0)
+									{
+										_noContainment = true;
+										base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
+									}
+									else
+									{
+										addStat( // more points if item's not researched
+											"STR_LIVE_ALIENS_RECOVERED",
+											(*i)->getUnit()->getValue(), // duplicated above.
+											0);
+
+										base->getItems()->addItem((*i)->getUnit()->getType());
+										_manageContainment = base->getAvailableContainment()
+														   - (base->getUsedContainment() * _limitsEnforced) < 0;
+									}
 								}
+								else // Don't sell unconscious aLiens post-battle. (see prepareDebriefing() above^ also)
+									base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape()); */
 							}
-							else // Don't sell unconscious aLiens post-battle. (see prepareDebriefing() above^ also)
-								base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape()); */
+							else if ((*i)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
+								addStat(
+									"STR_CIVILIANS_SAVED",
+									(*i)->getUnit()->getValue()); // duplicated above.
 						}
-						else if ((*i)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
-							addStat(
-								"STR_CIVILIANS_SAVED",
-								(*i)->getUnit()->getValue()); // duplicated above.
 					}
 				}
 				else if (_savedGame->isResearched((*i)->getRules()->getType()) == false)
@@ -1959,9 +1962,11 @@ void DebriefingState::recoverItems(
 				{
 					case BT_CORPSE:
 					break;
+
 					case BT_AMMO: // item's a clip, count rounds left
 						_rounds[(*i)->getRules()] += (*i)->getAmmoQuantity();
 					break;
+
 					case BT_FIREARM:
 					case BT_MELEE: // item's a weapon, count rounds in clip
 					{
@@ -1976,7 +1981,6 @@ void DebriefingState::recoverItems(
 
 					default: // fall-through, recover the weapon itself
 						base->getItems()->addItem((*i)->getRules()->getType());
-					break;
 				}
 			}
 		}

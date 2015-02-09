@@ -43,11 +43,11 @@ class MonthlyCostsState
 {
 
 private:
-	Base* _base;
+//	Base* _base;
 	Text
-//		* _txtBaseLabel,
-		* _txtCost,
+		* _txtUnitCost,
 		* _txtIncome,
+		* _txtCost,
 		* _txtQuantity,
 		* _txtRental,
 		* _txtSalaries,
@@ -55,6 +55,7 @@ private:
 		* _txtTotal;
 	TextButton* _btnOk;
 	TextList
+		* _lstBaseCost,
 		* _lstCrafts,
 		* _lstMaintenance,
 		* _lstSalaries,

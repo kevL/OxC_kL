@@ -31,6 +31,8 @@ crafts:
     transferTime: 96
     score: 225
   - type: STR_DARKSTAR
+    requires:
+      - STR_UNMANNED_AIRCRAFT
     listOrder: 209
     sprite: 28
     fuelMax: 225000
