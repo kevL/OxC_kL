@@ -32,8 +32,7 @@ class Window;
 
 
 /**
- * Main Menu window displayed when first
- * starting the game.
+ * Main Menu window displayed when first starting the game.
  */
 class MainMenuState
 	:

@@ -92,7 +92,7 @@ namespace CrossPlatform
 	time_t getDateModified(const std::string& path);
 
 	/// Converts a timestamp to a pair of widestrings.
-	std::pair<std::wstring, std::wstring> timeToString(time_t time);
+	std::pair<std::wstring, std::wstring> timeToString(time_t timeIn);
 	/// Converts the time into a string.
 	std::string timeString();
 

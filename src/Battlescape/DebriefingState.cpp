@@ -1914,7 +1914,7 @@ void DebriefingState::recoverItems(
 									_manageContainment = base->getAvailableContainment()
 													   - (base->getUsedContainment() * _limitsEnforced) < 0;
 								} // end_kL.
-	/*							RuleResearch* const researchRule = _rules->getResearch((*i)->getUnit()->getType());
+/*								RuleResearch* const researchRule = _rules->getResearch((*i)->getUnit()->getType());
 								if (researchRule != NULL
 									&& _savedGame->isResearchAvailable(
 																researchRule,

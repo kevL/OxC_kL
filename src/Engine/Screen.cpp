@@ -51,7 +51,7 @@ void Screen::makeVideoFlags()
 {
 	_flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_HWPALETTE;
 
-	if (Options::asyncBlit)
+	if (Options::asyncBlit == true)
 	{
 		_flags |= SDL_ASYNCBLIT;
 	}
@@ -66,7 +66,7 @@ void Screen::makeVideoFlags()
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	}
-	if (Options::allowResize)
+	if (Options::allowResize == true)
 		_flags |= SDL_RESIZABLE;
 
 	// Handle window positioning
@@ -78,7 +78,7 @@ void Screen::makeVideoFlags()
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 	}
-	else if (Options::borderless)
+	else if (Options::borderless == true)
 	{
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_WINDOW_POS="));
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
@@ -90,20 +90,18 @@ void Screen::makeVideoFlags()
 	}
 
 	// Handle display mode
-	if (Options::fullscreen)
+	if (Options::fullscreen == true)
 	{
 		_flags |= SDL_FULLSCREEN;
 	}
 
-	if (Options::borderless)
+	if (Options::borderless == true)
 	{
 		_flags |= SDL_NOFRAME;
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED=center"));
 	}
 	else
-	{
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
-	}
 
 	_bpp = (is32bitEnabled() || isOpenGLEnabled())? 32: 8;
 
@@ -403,11 +401,6 @@ void Screen::resetDisplay(bool resetVideo)
 
 	makeVideoFlags();
 
-/*	if (_surface == NULL
-		|| (_surface != NULL // don't reallocate _surface if not necessary, it's a waste of CPU cycles
-			&& (_surface->getSurface()->format->BitsPerPixel != static_cast<Uint8>(_bpp)
-				|| _surface->getSurface()->w != _baseWidth
-				|| _surface->getSurface()->h != _baseHeight))) */
 	if (_surface == NULL // don't reallocate _surface if not necessary, it's a waste of CPU cycles
 		|| _surface->getSurface()->format->BitsPerPixel != static_cast<Uint8>(_bpp)
 		|| _surface->getSurface()->w != _baseWidth
@@ -419,8 +412,7 @@ void Screen::resetDisplay(bool resetVideo)
 		_surface = new Surface( // only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
 							_baseWidth,
 							_baseHeight,
-							0,
-							0,
+							0,0,
 							Screen::is32bitEnabled()? 32: 8);
 
 		if (_surface->getSurface()->format->BitsPerPixel == 8)
@@ -429,8 +421,7 @@ void Screen::resetDisplay(bool resetVideo)
 
 	SDL_SetColorKey( // turn off color key!
 				_surface->getSurface(),
-				0,
-				0);
+				0,0);
 
 	if (resetVideo == true
 		|| _screen->format->BitsPerPixel != _bpp)
@@ -483,34 +474,35 @@ void Screen::resetDisplay(bool resetVideo)
 	_scaleX = static_cast<double>(getWidth()) / static_cast<double>(_baseWidth);
 	_scaleY = static_cast<double>(getHeight()) / static_cast<double>(_baseHeight);
 
-	_clear.x = 0;
+	_clear.x =
 	_clear.y = 0;
 	_clear.w = static_cast<Uint16>(getWidth());
 	_clear.h = static_cast<Uint16>(getHeight());
 
-	double pixelRatioY = 1.0;
+	double pixelRatioY = 1.;
 	if (Options::nonSquarePixelRatio
-		&& !Options::allowResize)
+		&& Options::allowResize == false)
 	{
 		pixelRatioY = 1.2;
 	}
 
 	bool cursorInBlackBands;
-	if (!Options::keepAspectRatio)
+	if (Options::keepAspectRatio == false)
 		cursorInBlackBands = false;
-	else if (Options::fullscreen)
+	else if (Options::fullscreen == true)
 		cursorInBlackBands = Options::cursorInBlackBandsInFullscreen;
-	else if (!Options::borderless)
+	else if (Options::borderless == false)
 		cursorInBlackBands = Options::cursorInBlackBandsInWindow;
 	else
 		cursorInBlackBands = Options::cursorInBlackBandsInBorderlessWindow;
 
 	if (_scaleX > _scaleY
-		&& Options::keepAspectRatio)
+		&& Options::keepAspectRatio == true)
 	{
-		int targetWidth = static_cast<int>(floor(_scaleY * static_cast<double>(_baseWidth)));
+		const int targetWidth = static_cast<int>(std::floor(_scaleY * static_cast<double>(_baseWidth)));
 
-		_topBlackBand = _bottomBlackBand = 0;
+		_topBlackBand =
+		_bottomBlackBand = 0;
 		_leftBlackBand = (getWidth() - targetWidth) / 2;
 		if (_leftBlackBand < 0)
 			_leftBlackBand = 0;
@@ -518,7 +510,7 @@ void Screen::resetDisplay(bool resetVideo)
 		_rightBlackBand = getWidth() - targetWidth - _leftBlackBand;
 		_cursorTopBlackBand = 0;
 
-		if (cursorInBlackBands)
+		if (cursorInBlackBands == true)
 		{
 			_scaleX = _scaleY;
 			_cursorLeftBlackBand = _leftBlackBand;
@@ -527,9 +519,9 @@ void Screen::resetDisplay(bool resetVideo)
 			_cursorLeftBlackBand = 0;
 	}
 	else if (_scaleX < _scaleY
-		&& Options::keepAspectRatio)
+		&& Options::keepAspectRatio == true)
 	{
-		int targetHeight = static_cast<int>(floor(_scaleX * static_cast<double>(_baseHeight) * pixelRatioY));
+		const int targetHeight = static_cast<int>(std::floor(_scaleX * static_cast<double>(_baseHeight) * pixelRatioY));
 
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)
@@ -539,10 +531,11 @@ void Screen::resetDisplay(bool resetVideo)
 		if (_bottomBlackBand < 0)
 			_bottomBlackBand = 0;
 
-		_leftBlackBand = _rightBlackBand = 0;
+		_leftBlackBand =
+		_rightBlackBand =
 		_cursorLeftBlackBand = 0;
 
-		if (cursorInBlackBands)
+		if (cursorInBlackBands == true)
 		{
 			_scaleY = _scaleX;
 			_cursorTopBlackBand = _topBlackBand;
@@ -551,7 +544,12 @@ void Screen::resetDisplay(bool resetVideo)
 			_cursorTopBlackBand = 0;
 	}
 	else
-		_topBlackBand = _bottomBlackBand = _leftBlackBand = _rightBlackBand = _cursorTopBlackBand = _cursorLeftBlackBand = 0;
+		_topBlackBand =
+		_bottomBlackBand =
+		_leftBlackBand =
+		_rightBlackBand =
+		_cursorTopBlackBand =
+		_cursorLeftBlackBand = 0;
 
 	if (isOpenGLEnabled() == true)
 	{
@@ -611,15 +609,15 @@ int Screen::getCursorLeftBlackBand() const
  */
 void Screen::screenshot(const std::string& filename) const
 {
-	SDL_Surface* screenshot = SDL_AllocSurface(
-											0,
-											getWidth() - getWidth() %4,
-											getHeight(),
-											24,
-											0xff,
-											0xff00,
-											0xff0000,
-											0);
+	SDL_Surface* const screenshot = SDL_AllocSurface(
+												0,
+												getWidth() - getWidth() %4,
+												getHeight(),
+												24,
+												0xff,
+												0xff00,
+												0xff0000,
+												0);
 
 	if (isOpenGLEnabled() == true)
 	{
@@ -632,13 +630,13 @@ void Screen::screenshot(const std::string& filename) const
 				++y)
 		{
 			glReadPixels(
-						0,
-						getHeight() - (y + 1),
-						getWidth() - getWidth() %4,
-						1,
-						screenFormat,
-						GL_UNSIGNED_BYTE,
-						static_cast<Uint8*>(screenshot->pixels) + y * screenshot->pitch);
+					0,
+					getHeight() - (y + 1),
+					getWidth() - getWidth() %4,
+					1,
+					screenFormat,
+					GL_UNSIGNED_BYTE,
+					static_cast<Uint8*>(screenshot->pixels) + y * screenshot->pitch);
 		}
 
 		glErrorCheck();
@@ -680,7 +678,7 @@ bool Screen::is32bitEnabled()
 		baseW = Options::baseXResolution,
 		baseH = Options::baseYResolution;
 
-	return ((Options::useHQXFilter || Options::useXBRZFilter)
+	return ((Options::useHQXFilter == true || Options::useXBRZFilter == true)
 			&& ((	   w == baseW * 2
 					&& h == baseH * 2)
 				|| (   w == baseW * 3
@@ -689,7 +687,7 @@ bool Screen::is32bitEnabled()
 					&& h == baseH * 4)
 				|| (   w == baseW * 5
 					&& h == baseH * 5
-					&& Options::useXBRZFilter)));
+					&& Options::useXBRZFilter == true)));
 }
 
 /**
@@ -750,16 +748,16 @@ void Screen::updateScale(
 			height	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 1.5);
 		break;
 		case SCALE_2X:
-			width	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_WIDTH) * 2.0);
-			height	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 2.0);
+			width	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_WIDTH) * 2.);
+			height	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 2.);
 		break;
 		case SCALE_SCREEN_DIV_3:
-			width	= static_cast<int>(static_cast<double>(Options::displayWidth) / 3.0);
-			height	= static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / 3.0);
+			width	= static_cast<int>(static_cast<double>(Options::displayWidth) / 3.);
+			height	= static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / 3.);
 		break;
 		case SCALE_SCREEN_DIV_2:
-			width	= static_cast<int>(static_cast<double>(Options::displayWidth) / 2.0);
-			height	= static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / 2.0);
+			width	= static_cast<int>(static_cast<double>(Options::displayWidth) / 2.);
+			height	= static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / 2.);
 		break;
 		case SCALE_SCREEN:
 			width	= Options::displayWidth;

@@ -839,7 +839,7 @@ void Game::initAudio()
 	if (Mix_OpenAudio(
 				Options::audioSampleRate,
 				audioFormat,
-				2, 1024) != 0)
+				2,1024) != 0)
 	{
 		Log(LOG_ERROR) << Mix_GetError();
 		Log(LOG_WARNING) << "No sound device detected, audio disabled.";
@@ -851,7 +851,7 @@ void Game::initAudio()
 
 		// Set up UI channels
 		Mix_ReserveChannels(4); // 4th channel (#3) is for ambient sFx
-		Mix_GroupChannels(0, 2, 0);
+		Mix_GroupChannels(0,2,0);
 		Log(LOG_INFO) << "SDL_mixer initialized.";
 
 		setVolume(
