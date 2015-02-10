@@ -114,7 +114,7 @@ bool FlcPlayer::init(
 		int dx,
 		int dy)
 {
-	if (_fileBuf != 0)
+	if (_fileBuf != NULL)
 	{
 		Log(LOG_ERROR) << "Tried to init a video player that is already initialized - EXIT FlcPlayer::init()";
 		return false;
@@ -127,9 +127,9 @@ bool FlcPlayer::init(
 	_dx = dx;
 	_dy = dy;
 
-	_fileSize = 0;
+	_fileSize =
 	_frameCount = 0;
-	_audioFrameData = 0;
+	_audioFrameData = NULL;
 	_hasAudio = false;
 	_audioData.loadingBuffer = NULL;
 	_audioData.playingBuffer = NULL;
@@ -142,7 +142,7 @@ bool FlcPlayer::init(
 		return false;
 	}
 
-	std::streamoff streamSize = file.tellg();
+	const std::streamoff streamSize = file.tellg();
 	file.seekg(0, std::ifstream::beg);
 
 	// TODO: substitute with a cross-platform memory mapped file?
@@ -179,7 +179,7 @@ bool FlcPlayer::init(
 									SDL_SWSURFACE,
 									_screenWidth,
 									_screenHeight,
-									8, 0, 0, 0, 0);
+									8,0,0,0,0);
 	return true;
 }
 
@@ -188,17 +188,17 @@ bool FlcPlayer::init(
  */
 void FlcPlayer::deInit()
 {
-	if (_mainScreen != 0
-		&& _realScreen != 0)
+	if (_mainScreen != NULL
+		&& _realScreen != NULL)
 	{
 		if (_mainScreen != _realScreen->getSurface()->getSurface())
 			SDL_FreeSurface(_mainScreen);
 
-		_mainScreen = 0;
+		_mainScreen = NULL;
 	}
 
 	delete[] _fileBuf;
-	_fileBuf = 0;
+	_fileBuf = NULL;
 
 	deInitAudio();
 }
@@ -265,7 +265,7 @@ void FlcPlayer::SDLPolling()
 			break;
 
 			case SDL_VIDEORESIZE:
-				if (Options::allowResize)
+				if (Options::allowResize == true)
 				{
 					Options::newDisplayWidth = Options::displayWidth = std::max(
 																			Screen::ORIGINAL_WIDTH,
@@ -436,11 +436,9 @@ void FlcPlayer::playVideoFrame()
 	if (SDL_LockSurface(_mainScreen) < 0)
 		return;
 
-	int chunkCount = _frameChunks;
-
 	for (int
 			i = 0;
-			i < chunkCount;
+			i != _frameChunks;
 			++i)
 	{
 		readU32(_chunkSize, _chunkData);
@@ -502,7 +500,7 @@ void FlcPlayer::playAudioFrame(Uint16 sampleRate)
 	}
 
 	SDL_SemWait(_audioData.sharedLock);
-	AudioBuffer* loadingBuff = _audioData.loadingBuffer;
+	AudioBuffer* const loadingBuff = _audioData.loadingBuffer;
 	assert(loadingBuff->currSamplePos == 0);
 
 	const int newSize = _audioFrameSize + loadingBuff->sampleCount + 2;
@@ -904,10 +902,10 @@ void FlcPlayer::audioCallback(
 
 		if (len > 0)
 		{
-			/* Need to swap buffers */
+			// Need to swap buffers
 			playBuff->currSamplePos = 0;
 			SDL_SemWait(audio->sharedLock);
-			AudioBuffer *tempBuff = playBuff;
+			AudioBuffer* const tempBuff = playBuff;
 			audio->playingBuffer = playBuff = audio->loadingBuffer;
 			audio->loadingBuffer = tempBuff;
 			SDL_SemPost(audio->sharedLock);
@@ -922,12 +920,12 @@ void FlcPlayer::audioCallback(
  *
  */
 void FlcPlayer::initAudio(
-		Uint16 format,
+		Uint16 audioFormat,
 		Uint8 channels)
 {
 	const int err = Mix_OpenAudio(
 							_audioData.sampleRate,
-							format,
+							audioFormat,
 							channels,
 							_audioFrameSize * 2);
 	_videoDelay = 1000 / (_audioData.sampleRate / _audioFrameSize);
@@ -938,7 +936,7 @@ void FlcPlayer::initAudio(
 		return;
 	}
 
-	/* Start runnable */
+	// Start runnable
 	_audioData.sharedLock = SDL_CreateSemaphore(1);
 
 	_audioData.loadingBuffer = new AudioBuffer();

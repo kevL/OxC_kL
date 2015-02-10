@@ -160,10 +160,7 @@ Surface::Surface(
 									GetPitch(
 										bpp,
 										width),
-									0,
-									0,
-									0,
-									0);
+									0,0,0,0);
 
 	if (_surface == NULL)
 	{

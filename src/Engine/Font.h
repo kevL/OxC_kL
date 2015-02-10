@@ -20,12 +20,10 @@
 #ifndef OPENXCOM_FONT_H
 #define OPENXCOM_FONT_H
 
-#include <map>
-#include <string>
-
-#include <SDL.h>
-
-#include <yaml-cpp/yaml.h>
+//#include <map>
+//#include <string>
+//#include <SDL.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -33,6 +31,7 @@ namespace OpenXcom
 
 class Palette;
 class Surface;
+
 
 /**
  * Takes care of loading and storing each character in a sprite font.
@@ -67,24 +66,16 @@ private:
 
 		/// Checks if a character is a linebreak.
 		static inline bool isLinebreak(wchar_t c)
-		{
-			return (c == L'\n' || c == L'\x02');
-		}
+		{ return (c == L'\n' || c == L'\x02'); }
 		/// Checks if a character is a blank space (includes non-breaking spaces).
 		static inline bool isSpace(wchar_t c)
-		{
-			return (c == L' ' || c == L'\xA0');
-		}
+		{ return (c == L' ' || c == L'\xA0'); }
 		/// Checks if a character is a word separator.
 		static inline bool isSeparator(wchar_t c)
-		{
-			return (c == L'-' || c == '/');
-		}
+		{ return (c == L'-' || c == '/'); }
 		/// Checks if a character is a non-breaking space.
 		static inline bool isNonBreakableSpace(wchar_t c)
-		{
-			return (c == L'\xA0');
-		}
+		{ return (c == L'\xA0'); }
 
 		/// Sets the character index for every font.
 		static void setIndex(const std::wstring& index);
@@ -99,7 +90,7 @@ private:
 		void init();
 
 		/// Gets a particular character from the font, with its real size.
-		Surface* getChar(wchar_t c);
+		Surface* getChar(wchar_t fontChar);
 
 		/// Gets the font's character width.
 		int getWidth() const;
@@ -110,7 +101,7 @@ private:
 		int getSpacing() const;
 
 		/// Gets the size of a particular character;
-		SDL_Rect getCharSize(wchar_t c);
+		SDL_Rect getCharSize(wchar_t fontChar);
 
 		/// Gets the font's surface.
 		Surface* getSurface() const;

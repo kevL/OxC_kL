@@ -45,7 +45,6 @@ class Screen
 {
 
 private:
-
 	bool _pushPalette;
 	int
 		_baseHeight,

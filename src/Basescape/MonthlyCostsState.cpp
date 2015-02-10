@@ -189,20 +189,12 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	ss5 << tr("STR_INCOME") << L" " << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss5.str());
 
-	int totalCosts = 0;
-	for (std::vector<Base*>::const_iterator
-		i = _game->getSavedGame()->getBases()->begin();
-		i != _game->getSavedGame()->getBases()->end();
-		++i)
-	{
-		totalCosts += (*i)->getMonthlyMaintenace();
-	}
 	_lstTotal->setColumns(2, 45, 56);
 	_lstTotal->setDot();
 	_lstTotal->addRow(
 					2,
 					tr("STR_TOTAL").c_str(),
-					Text::formatFunding(totalCosts).c_str());
+					Text::formatFunding(_game->getSavedGame()->getBaseMaintenance()).c_str());
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& MonthlyCostsState::btnOkClick);

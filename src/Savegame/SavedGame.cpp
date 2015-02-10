@@ -44,7 +44,7 @@
 #include "Ufo.h"
 #include "Waypoint.h"
 
-#include "../version.h"
+//#include "../version.h"
 
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
@@ -370,11 +370,11 @@ SaveInfo SavedGame::getSaveInfo(
 	}
 	else
 	{
-		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-		time.load(doc["time"]);
+		GameTime gt = GameTime(6, 1, 1, 1999, 12, 0, 0);
+		gt.load(doc["time"]);
 		details << lang->getString("STR_GEOSCAPE") << L": ";
-		details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
-		details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+		details << gt.getDayString(lang) << L" " << lang->getString(gt.getMonthString()) << L" " << gt.getYear() << L" ";
+		details << gt.getHour() << L":" << std::setfill(L'0') << std::setw(2) << gt.getMinute();
 	} */
 	// kL_begin:
 	if (doc["base"])
@@ -383,10 +383,10 @@ SaveInfo SavedGame::getSaveInfo(
 		details << L" - ";
 	}
 
-	GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-	time.load(doc["time"]);
-	details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
-	details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+	GameTime gt = GameTime(6,1,1,1999,12,0,0);
+	gt.load(doc["time"]);
+	details << gt.getDayString(lang) << L" " << lang->getString(gt.getMonthString()) << L" " << gt.getYear() << L" ";
+	details << gt.getHour() << L":" << std::setfill(L'0') << std::setw(2) << gt.getMinute();
 
 	if (doc["turn"])
 	{
@@ -419,8 +419,8 @@ void SavedGame::load(
 		Ruleset* rule)
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
-	const std::string s = Options::getUserFolder() + filename;
-	const std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
+	const std::string st = Options::getUserFolder() + filename;
+	const std::vector<YAML::Node> file = YAML::LoadAllFromFile(st);
 	if (file.empty() == true)
 	{
 		throw Exception(filename + " is not a valid save file");
@@ -443,10 +443,9 @@ void SavedGame::load(
 	YAML::Node doc = file[1]; // Get full save data
 
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
-	//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << _difficulty;
 
 	if (doc["rng"]
-		&& (_ironman || !Options::newSeedOnLoad))
+		&& (_ironman == true || Options::newSeedOnLoad == false))
 	{
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
@@ -617,16 +616,7 @@ void SavedGame::load(
 			i != doc["deadSoldiers"].end();
 			++i)
 	{
-/*kL
-		Soldier* s = new Soldier(
-						rule->getSoldier("XCOM"),
-						rule->getArmor("STR_ARMOR_NONE_UC"));
-		s->load(
-				*i,
-				rule,
-				this);
-		_deadSoldiers.push_back(s); */
-		SoldierDead* const deadSoldier = new SoldierDead( // kL_begin ->
+		SoldierDead* const deadSoldier = new SoldierDead(
 													L"",
 													0,
 													RANK_ROOKIE,
@@ -638,7 +628,7 @@ void SavedGame::load(
 													UnitStats(),
 													UnitStats());
 		deadSoldier->load(*i);
-		_deadSoldiers.push_back(deadSoldier); // kL_end.
+		_deadSoldiers.push_back(deadSoldier);
 	}
 
 	for (YAML::const_iterator
@@ -664,29 +654,29 @@ void SavedGame::load(
 
 /**
  * Saves a saved game's contents to a YAML file.
- * @param filename YAML filename.
+ * @param filename - reference to a YAML filename
  */
 void SavedGame::save(const std::string& filename) const
 {
-	const std::string s = Options::getUserFolder() + filename;
-	std::ofstream sav(s.c_str());
-	if (!sav)
+	const std::string st = Options::getUserFolder() + filename;
+	std::ofstream save(st.c_str());
+	if (save.fail() == true)
 	{
 		throw Exception("Failed to save " + filename);
 	}
 
-	YAML::Emitter out;
-
-	// Saves the brief game info used in the saves list
-	YAML::Node brief;
+	YAML::Emitter emit;
+	YAML::Node brief; // Saves the brief game info used in the saves list
 
 	brief["name"]		= Language::wstrToUtf8(_name);
-	brief["version"]	= OPENXCOM_VERSION_SHORT;
-	brief["build"]		= OPENXCOM_VERSION_GIT;
+	brief["edition"]	= OPENXCOM_VERSION_GIT;
+//	brief["version"]	= OPENXCOM_VERSION_SHORT;
+	brief["build"]		= Version::getBuildDate(false);
+	brief["savedate"]	= Version::timeStamp();
 	brief["time"]		= _time->save();
 
-	Base* base			= _bases.front();							// kL
-	brief["base"]		= Language::wstrToUtf8(base->getName());	// kL
+	const Base* const base	= _bases.front();							// kL
+	brief["base"]			= Language::wstrToUtf8(base->getName());	// kL
 
 	if (_battleGame != NULL)
 	{
@@ -699,10 +689,10 @@ void SavedGame::save(const std::string& filename) const
 
 	brief["rulesets"] = Options::rulesets;
 
-	out << brief;
+	emit << brief;
 
 	// Saves the full game data to the save
-	out << YAML::BeginDoc;
+	emit << YAML::BeginDoc;
 
 	YAML::Node node;
 
@@ -829,9 +819,9 @@ void SavedGame::save(const std::string& filename) const
 	if (_battleGame != NULL)
 		node["battleGame"] = _battleGame->save();
 
-	out << node;
-	sav << out.c_str();
-	sav.close();
+	emit << node;
+	save << emit.c_str();
+	save.close();
 }
 
 /**

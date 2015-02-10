@@ -38,16 +38,18 @@ class MainMenuState
 	:
 		public State
 {
+
 private:
 	TextButton
 		* _btnNewGame,
 		* _btnNewBattle,
 		* _btnLoad,
-		* _btnOptions,
+//		* _btnOptions,
 		* _btnQuit;
 	Window
 		* _window;
 	Text
+		* _txtBuild,
 		* _txtTitle;
 
 
@@ -64,7 +66,7 @@ private:
 		/// Handler for clicking the Load Saved Game button.
 		void btnLoadClick(Action* action);
 		/// Handler for clicking the Options button.
-		void btnOptionsClick(Action* action);
+//		void btnOptionsClick(Action* action);
 		/// Handler for clicking the Quit button.
 		void btnQuitClick(Action* action);
 

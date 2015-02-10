@@ -4388,7 +4388,7 @@
 1420225962 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
-1420130459 f:\git\openxcom\src\interface\textedit.h
+1423554314 f:\git\openxcom\src\interface\textedit.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -4907,7 +4907,7 @@
 1420130445 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
-1420130443 f:\git\openxcom\src\engine\screen.h
+1423534549 f:\git\openxcom\src\engine\screen.h
 	"OpenGL.h"
 
 1413136956 f:\git\openxcom\src\engine\opengl.h
@@ -4939,7 +4939,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1423445510 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
+1423536227 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
 	"MonthlyCostsState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5648,7 +5648,7 @@
 1420888086 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
-1421836543 f:\git\openxcom\src\engine\crossplatform.h
+1423520145 f:\git\openxcom\src\engine\crossplatform.h
 	<SDL.h>
 	<string>
 	<utility>
@@ -5877,7 +5877,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1423443023 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1423447607 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -5933,7 +5933,7 @@
 1420130449 f:\git\openxcom\src\battlescape\promotionsstate.h
 	"../Engine/State.h"
 
-1420130459 f:\git\openxcom\src\menu\mainmenustate.h
+1423534499 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
 1420130442 f:\git\openxcom\src\ruleset\rulecountry.h
@@ -6501,7 +6501,7 @@
 1420130445 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1421859883 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1423520505 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -6572,15 +6572,12 @@
 	<SDL.h>
 	"OpenGL.h"
 
-1420226860 source:f:\git\openxcom\src\engine\font.cpp
-	"Font.h"
-	"CrossPlatform.h"
+1423555745 source:f:\git\openxcom\src\engine\font.cpp
 	"DosFont.h"
 	"Language.h"
-	"Logger.h"
 	"Surface.h"
 
-1423357284 source:f:\git\openxcom\src\engine\game.cpp
+1423519384 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6626,7 +6623,7 @@
 	"Action.h"
 	"Options.h"
 
-1420130459 source:f:\git\openxcom\src\engine\language.cpp
+1423535315 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -6672,12 +6669,12 @@
 	"Logger.h"
 	"Surface.h"
 
-1421948040 source:f:\git\openxcom\src\engine\options.cpp
+1423553656 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
 
-1420130450 f:\git\openxcom\src\version.h
+1423536391 f:\git\openxcom\src\version.h
 
 1420130445 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
@@ -6738,7 +6735,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1422732587 source:f:\git\openxcom\src\engine\screen.cpp
+1423519979 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -6789,7 +6786,7 @@
 1420130454 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1423355600 source:f:\git\openxcom\src\engine\surface.cpp
+1423536483 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -7708,7 +7705,7 @@
 	"../Engine/Action.h"
 	"../Engine/Sound.h"
 
-1420227002 source:f:\git\openxcom\src\interface\textedit.cpp
+1423554858 source:f:\git\openxcom\src\interface\textedit.cpp
 	"TextEdit.h"
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
@@ -7741,15 +7738,8 @@
 	<stdlib.h>
 	<fstream>
 
-1420130448 source:f:\git\openxcom\src\main.cpp
-	<exception>
-	<sstream>
-	"version.h"
-	"Engine/CrossPlatform.h"
+1423554931 source:f:\git\openxcom\src\main.cpp
 	"Engine/Game.h"
-	"Engine/Logger.h"
-	"Engine/Options.h"
-	"Engine/Screen.h"
 	"Menu/StartState.h"
 
 1420130443 f:\git\openxcom\src\menu\startstate.h
@@ -7819,7 +7809,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1420236654 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1423535440 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	"ListLoadState.h"
 	"NewBattleState.h"
@@ -7833,7 +7823,6 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 
 1420130445 f:\git\openxcom\src\menu\newbattlestate.h
@@ -8855,7 +8844,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1423148146 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1423533382 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -8875,7 +8864,6 @@
 	"Transfer.h"
 	"Ufo.h"
 	"Waypoint.h"
-	"../version.h"
 	"../Engine/Language.h"
 	"../Ruleset/RuleManufacture.h"
 	"../Ruleset/RuleRegion.h"
@@ -11064,7 +11052,7 @@
 	<cmath>
 	<limits>
 
-1401095931 f:\git\openxcom\src\engine\dosfont.h
+1423552536 f:\git\openxcom\src\engine\dosfont.h
 
 1404230314 source:f:\git\openxcom\src\battlescape\delayedsavestate.cpp
 	"DelayedSaveState.h"
@@ -11462,12 +11450,12 @@
 1420130458 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
-1421954994 source:f:\git\openxcom\src\engine\flcplayer.cpp
+1423607957 source:f:\git\openxcom\src\engine\flcplayer.cpp
 	"FlcPlayer.h"
 	"Game.h"
 	"Surface.h"
 
-1421948227 f:\git\openxcom\src\engine\flcplayer.h
+1423607912 f:\git\openxcom\src\engine\flcplayer.h
 
 1420330771 source:f:\git\openxcom\src\ruleset\rulevideo.cpp
 	"RuleVideo.h"
@@ -11529,4 +11517,7 @@
 1423439492 source:f:\git\openxcom\src\ruleset\operationpool.cpp
 	"OperationPool.h"
 	"../Engine/Language.h"
+
+1423571756 source:f:\git\openxcom\src\version.cpp
+	"version.h"
 

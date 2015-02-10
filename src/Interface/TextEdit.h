@@ -58,7 +58,7 @@ private:
 	Timer * _timer;
 
 	/// Checks if a character will exceed the maximum width.
-	bool exceedsMaxWidth(wchar_t c);
+	bool exceedsMaxWidth(wchar_t fontChar);
 
 
 	public:

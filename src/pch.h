@@ -53,18 +53,6 @@
 #include <map>
 #include <queue>
 
-#include <yaml-cpp/yaml.h>
-
-#include <SDL_endian.h>
-#include <SDL_gfxPrimitives.h>
-#include <SDL_image.h>
-#include <SDL_keysym.h>
-#include <SDL_mixer.h>
-//#include <SDL_opengl.h> // kL_seeAbove.
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <SDL_types.h>
-
 #include <set>
 #include <sstream>
 #include <stack>
@@ -98,6 +86,18 @@
 #ifdef __MORPHOS__
 	#undef Insert
 #endif
+
+#include <yaml-cpp/yaml.h>
+
+#include <SDL_endian.h>
+#include <SDL_gfxPrimitives.h>
+#include <SDL_image.h>
+#include <SDL_keysym.h>
+#include <SDL_mixer.h>
+//#include <SDL_opengl.h> // kL_seeAbove.
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <SDL_types.h>
 
 #include "./dirent.h"
 #include "./fmath.h"
@@ -148,6 +148,7 @@
 
 /*
 #include "./Engine/Action.h"
+#include "./Engine/DosFont.h"
 #include "./Engine/Game.h"
 #include "./Engine/InteractiveSurface.h"
 #include "./Engine/Music.h"

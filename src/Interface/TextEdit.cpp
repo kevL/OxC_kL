@@ -35,8 +35,8 @@ namespace OpenXcom
  * @param state		- pointer to state the text edit belongs to
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 TextEdit::TextEdit(
 		State* state,
@@ -91,10 +91,10 @@ void TextEdit::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
 
-	if (_isFocused
-		&& _modal
+	if (_isFocused == true
+		&& _modal == true
 		&& action->getDetails()->type == SDL_MOUSEBUTTONDOWN
-		&& (action->getAbsoluteXMouse() < getX()
+		&& (   action->getAbsoluteXMouse() < getX()
 			|| action->getAbsoluteXMouse() >= getX() + getWidth()
 			|| action->getAbsoluteYMouse() < getY()
 			|| action->getAbsoluteYMouse() >= getY() + getHeight()))
@@ -120,7 +120,7 @@ void TextEdit::setFocus(
 
 		InteractiveSurface::setFocus(focus);
 
-		if (_isFocused)
+		if (_isFocused == true)
 		{
 			SDL_EnableKeyRepeat(
 							SDL_DEFAULT_REPEAT_DELAY,
@@ -130,7 +130,7 @@ void TextEdit::setFocus(
 			_blink = true;
 			_timer->start();
 
-			if (_modal)
+			if (_modal == true)
 				_state->setModal(this);
 		}
 		else
@@ -216,7 +216,7 @@ std::wstring TextEdit::getText() const
  * Enables/disables text wordwrapping. When enabled, lines of
  * text are automatically split to ensure they stay within the
  * drawing area, otherwise they simply go off the edge.
- * @param wrap - wordwrapping setting
+ * @param wrap - wordwrapping setting (default true)
  */
 void TextEdit::setWordWrap(bool wrap)
 {
@@ -226,7 +226,7 @@ void TextEdit::setWordWrap(bool wrap)
 /**
  * Enables/disables color inverting. Mostly used to make
  * button text look pressed along with the button.
- * @param invert - invert setting
+ * @param invert - invert setting (default true)
  */
 void TextEdit::setInvert(bool invert)
 {
@@ -236,7 +236,7 @@ void TextEdit::setInvert(bool invert)
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape text.
- * @param contrast - high contrast setting
+ * @param contrast - high contrast setting (default true)
  */
 void TextEdit::setHighContrast(bool contrast)
 {
@@ -264,7 +264,7 @@ void TextEdit::setVerticalAlign(TextVAlign valign)
 
 /**
  * Restricts the text to only numerical input.
- * @param numerical - numerical restriction
+ * @param numerical - numerical restriction (default true)
  */
 void TextEdit::setNumerical(bool numerical)
 {
@@ -315,8 +315,8 @@ Uint8 TextEdit::getSecondaryColor() const
 /**
  * Replaces a certain amount of colors in the text edit's palette.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void TextEdit::setPalette(
 		SDL_Color* colors,
@@ -334,7 +334,7 @@ void TextEdit::setPalette(
  */
 void TextEdit::think()
 {
-	_timer->think(0, this);
+	_timer->think(NULL, this);
 }
 
 /**
@@ -360,8 +360,8 @@ void TextEdit::draw()
 	{
 		std::wstring newValue = _value;
 
-		if (_isFocused
-			&& _blink)
+		if (_isFocused == true
+			&& _blink == true)
 		{
 			newValue += _ascii;
 			_text->setText(newValue);
@@ -373,8 +373,8 @@ void TextEdit::draw()
 
 	if (Options::keyboardMode == KEYBOARD_ON)
 	{
-		if (_isFocused
-			&& _blink)
+		if (_isFocused == true
+			&& _blink == true)
 		{
 			int x = 0;
 
@@ -383,12 +383,13 @@ void TextEdit::draw()
 				case ALIGN_LEFT:
 					x = 0;
 				break;
+
 				case ALIGN_CENTER:
 					x = (_text->getWidth() - _text->getTextWidth()) / 2;
 				break;
+
 				case ALIGN_RIGHT:
 					x = _text->getWidth() - _text->getTextWidth();
-				break;
 			}
 
 			for (size_t
@@ -409,24 +410,24 @@ void TextEdit::draw()
  * Checks if adding a certain character to
  * the text edit will exceed the maximum width.
  * Used to make sure user input stays within bounds.
- * @param c - character to add
+ * @param fontChar - character to add
  * @return, true if it exceeds
  */
-bool TextEdit::exceedsMaxWidth(wchar_t c)
+bool TextEdit::exceedsMaxWidth(wchar_t fontChar)
 {
-	int w = 0;
-	std::wstring s = _value;
+	int width = 0;
+	std::wstring wst = _value;
 
-	s += c;
-	for (std::wstring::iterator
-			i = s.begin();
-			i < s.end();
+	wst += fontChar;
+	for (std::wstring::const_iterator
+			i = wst.begin();
+			i < wst.end();
 			++i)
 	{
-		w += _text->getFont()->getCharSize(*i).w;
+		width += _text->getFont()->getCharSize(*i).w;
 	}
 
-	return (w > getWidth());
+	return (width > getWidth());
 }
 
 /**
@@ -438,33 +439,33 @@ void TextEdit::mousePress(Action* action, State* state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (!_isFocused)
+		if (_isFocused == false)
 			setFocus(true);
 		else
 		{
-			double
+			const double
 				mouseX = action->getRelativeXMouse(),
-				scaleX = action->getXScale(),
-				w = 0;
-			int c = 0;
+				scaleX = action->getXScale();
+			double width = 0.;
+			int caret = 0;
 
-			for (std::wstring::iterator
+			for (std::wstring::const_iterator
 					i = _value.begin();
 					i < _value.end();
 					++i)
 			{
-				if (mouseX <= w)
+				if (mouseX <= width)
 					break;
 
-				w += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
-				if (mouseX <= w)
+				width += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
+				if (mouseX <= width)
 					break;
 
-				c++;
-				w += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
+				++caret;
+				width += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
 			}
 
-			_caretPos = c;
+			_caretPos = caret;
 		}
 	}
 
@@ -484,12 +485,12 @@ void TextEdit::keyboardPress(Action* action, State* state)
 		switch (action->getDetails()->key.keysym.sym)
 		{
 			case SDLK_UP:
-				_ascii++;
+				++_ascii;
 				if (_ascii > L'~')
 					_ascii = L' ';
 			break;
 			case SDLK_DOWN:
-				_ascii--;
+				--_ascii;
 				if (_ascii < L' ')
 					_ascii = L'~';
 			break;
@@ -498,12 +499,8 @@ void TextEdit::keyboardPress(Action* action, State* state)
 					_value.resize(_value.length() - 1);
 			break;
 			case SDLK_RIGHT:
-				if (!exceedsMaxWidth(_ascii))
+				if (exceedsMaxWidth(_ascii) == false)
 					_value += _ascii;
-			break;
-
-			default:
-			break;
 		}
 	}
 	else if (Options::keyboardMode == KEYBOARD_ON)
@@ -512,11 +509,11 @@ void TextEdit::keyboardPress(Action* action, State* state)
 		{
 			case SDLK_LEFT:
 				if (_caretPos > 0)
-					_caretPos--;
+					--_caretPos;
 			break;
 			case SDLK_RIGHT:
 				if (_caretPos < _value.length())
-					_caretPos++;
+					++_caretPos;
 			break;
 			case SDLK_HOME:
 				_caretPos = 0;
@@ -528,7 +525,7 @@ void TextEdit::keyboardPress(Action* action, State* state)
 				if (_caretPos > 0)
 				{
 					_value.erase(_caretPos - 1, 1);
-					_caretPos--;
+					--_caretPos;
 				}
 			break;
 			case SDLK_DELETE:
@@ -537,27 +534,27 @@ void TextEdit::keyboardPress(Action* action, State* state)
 			break;
 			case SDLK_RETURN:
 			case SDLK_KP_ENTER:
-				if (!_value.empty())
+				if (_value.empty() == false)
 					setFocus(false);
 			break;
 
 			default:
-				Uint16 key = action->getDetails()->key.keysym.unicode;
+				const Uint16 key = action->getDetails()->key.keysym.unicode;
 
-				if (((_numerical
+				if (((_numerical == true
 						&& key >= L'0'
 						&& key <= L'9')
-					|| (!_numerical
+					|| (_numerical == false
 						&& ((key >= L' '
 								&& key <= L'~')
 							|| key >= 160)))
-					&& !exceedsMaxWidth(static_cast<wchar_t>(key)))
+					&& exceedsMaxWidth(static_cast<wchar_t>(key)) == false)
 				{
 					_value.insert(
 								_caretPos,
 								1,
 								static_cast<wchar_t>(action->getDetails()->key.keysym.unicode));
-					_caretPos++;
+					++_caretPos;
 				}
 		}
 	}

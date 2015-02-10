@@ -393,7 +393,8 @@ bool showHelp(
 {
 	std::ostringstream help;
 
-	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
+//	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
+	help << OPENXCOM_VERSION_GIT << " " << Version::getBuildDate() << std::endl;
 	help << "Usage: openxcom [OPTION] ..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
 	help << "    use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;

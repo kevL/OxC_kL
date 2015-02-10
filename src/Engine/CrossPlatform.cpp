@@ -995,8 +995,8 @@ std::string timeString()
 
 /**
  * Compares two Unicode strings using natural human ordering.
- * @param a - string A
- * @param b - string B
+ * @param a - reference string A
+ * @param b - reference string B
  * @return, true if string A comes before String B
  */
 bool naturalCompare(
@@ -1029,8 +1029,8 @@ bool naturalCompare(
 
 /**
  * Moves a file from one path to another, replacing any existing file.
- * @param src	- source path
- * @param dest	- destination path
+ * @param src	- reference source path
+ * @param dest	- reference destination path
  * @return, true if the operation succeeded
  */
 bool moveFile(

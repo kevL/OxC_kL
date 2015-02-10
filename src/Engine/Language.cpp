@@ -421,10 +421,8 @@ std::wstring Language::cpToWstr(const std::string& src)
 std::wstring Language::fsToWstr(const std::string& src)
 {
 #ifdef _WIN32
-
 	return Language::cpToWstr(src);
 #else
-
 	return Language::utf8ToWstr(src);
 #endif
 }

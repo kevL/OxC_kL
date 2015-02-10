@@ -17,12 +17,12 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Font.h"
+//#include "Font.h"
 
-#include "CrossPlatform.h"
+//#include "CrossPlatform.h"
 #include "DosFont.h"
 #include "Language.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include "Surface.h"
 
 
@@ -41,6 +41,7 @@ SDL_Color Font::_palette[] =
 	{ 63,  63,  63, 255}
 };
 
+
 /**
  * Initializes the font with a blank surface.
  */
@@ -51,8 +52,7 @@ Font::Font()
 		_height(0),
 		_spacing(0),
 		_monospace(false)
-{
-}
+{}
 
 /**
  * Deletes the font's surface.
@@ -64,7 +64,7 @@ Font::~Font()
 
 /**
  * Loads the characters contained in each font from a UTF-8 string to use as the index.
- * @param index String of characters.
+ * @param index - reference a string of characters
  */
 void Font::setIndex(const std::wstring& index)
 {
@@ -73,26 +73,28 @@ void Font::setIndex(const std::wstring& index)
 
 /**
  * Loads the font from a YAML file.
- * @param node YAML node.
+ * @param node - refrence a YAML node
  */
 void Font::load(const YAML::Node& node)
 {
-	_width		= node["width"].as<int>(_width);
-	_height		= node["height"].as<int>(_height);
-	_spacing	= node["spacing"].as<int>(_spacing);
-	_monospace	= node["monospace"].as<bool>(_monospace);
+	_width		= node["width"]		.as<int>(_width);
+	_height		= node["height"]	.as<int>(_height);
+	_spacing	= node["spacing"]	.as<int>(_spacing);
+	_monospace	= node["monospace"]	.as<bool>(_monospace);
 
-	std::string image = "Language/" + node["image"].as<std::string>();
+	const std::string image = "Language/" + node["image"].as<std::string>();
 
-	Surface* fontTemp = new Surface(
-								_width,
-								_height);
+	Surface* const fontTemp = new Surface(
+										_width,
+										_height);
 	fontTemp->loadImage(CrossPlatform::getDataFile(image));
 
 	_surface = new Surface(
 						fontTemp->getWidth(),
 						fontTemp->getHeight());
-	_surface->setPalette(_palette, 0, 6);
+	_surface->setPalette(
+					_palette,
+					0,6);
 	fontTemp->blit(_surface);
 
 	delete fontTemp;
@@ -105,15 +107,15 @@ void Font::load(const YAML::Node& node)
  */
 void Font::loadTerminal()
 {
-	_width		= 9;
-	_height		= 16;
-	_spacing	= 0;
-	_monospace	= true;
+	_width = 9;
+	_height = 16;
+	_spacing = 0;
+	_monospace = true;
 
-	SDL_RWops* rw = SDL_RWFromConstMem(
-									dosFont,
-									DOSFONT_SIZE);
-	SDL_Surface* s = SDL_LoadBMP_RW(rw, 0);
+	SDL_RWops* const rw = SDL_RWFromConstMem(
+										dosFont,
+										DOSFONT_SIZE);
+	SDL_Surface* const s = SDL_LoadBMP_RW(rw, 0);
 	SDL_FreeRW(rw);
 
 	_surface = new Surface(s->w, s->h);
@@ -125,10 +127,14 @@ void Font::loadTerminal()
 
 	_surface->setPalette(terminal, 0, 2);
 
-	SDL_BlitSurface(s, 0, _surface->getSurface(), 0);
+	SDL_BlitSurface(
+				s,
+				0,
+				_surface->getSurface(),
+				0);
 	SDL_FreeSurface(s);
 
-	std::wstring temp = _index;
+	const std::wstring temp = _index;
 	_index = L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 	init();
@@ -137,16 +143,16 @@ void Font::loadTerminal()
 }
 
 /**
- * Calculates the real size and position of each character in the surface and
- * stores them in SDL_Rect's for future use by other classes.
+ * Calculates the real size and position of each character in the surface
+ * and stores them in SDL_Rect's for future use by other classes.
  */
 void Font::init()
 {
 	_surface->lock();
 
-	int length = (_surface->getWidth() / _width);
+	const int len = (_surface->getWidth() / _width);
 
-	if (_monospace)
+	if (_monospace == true)
 	{
 		for (size_t
 				i = 0;
@@ -155,9 +161,9 @@ void Font::init()
 		{
 			SDL_Rect rect;
 
-			int
-				startX = i %length * _width,
-				startY = i / length * _height;
+			const int
+				startX = i %len * _width,
+				startY = i / len * _height;
 
 			rect.x = startX;
 			rect.y = startY;
@@ -176,11 +182,12 @@ void Font::init()
 		{
 			SDL_Rect rect;
 
+			const int
+				startX = i %len * _width,
+				startY = i / len * _height;
 			int
 				left = -1,
-				right = -1,
-				startX = i %length * _width,
-				startY = i / length * _height;
+				right = -1;
 
 			for (int
 					x = startX;
@@ -193,8 +200,7 @@ void Font::init()
 							&& left == -1;
 						++y)
 				{
-					Uint8 pixel = _surface->getPixelColor(x, y);
-					if (pixel != 0)
+					if (_surface->getPixelColor(x, y) != 0)
 						left = x;
 				}
 			}
@@ -210,8 +216,7 @@ void Font::init()
 							&& right == -1;
 						)
 				{
-						Uint8 pixel = _surface->getPixelColor(x, y);
-					if (pixel != 0)
+					if (_surface->getPixelColor(x, y) != 0)
 						right = x;
 				}
 			}
@@ -230,24 +235,24 @@ void Font::init()
 
 /**
  * Returns a particular character from the set stored in the font.
- * @param c Character to use for size/position.
- * @return Pointer to the font's surface with the respective cropping rectangle set up.
+ * @param fontChar - character to use for size/position
+ * @return, pointer to the font's surface with the respective cropping rectangle set up
  */
-Surface* Font::getChar(wchar_t c)
+Surface* Font::getChar(wchar_t fontChar)
 {
-	if (_chars.find(c) == _chars.end())
-		return 0;
+	if (_chars.find(fontChar) == _chars.end())
+		return NULL;
 
-	_surface->getCrop()->x = _chars[c].x;
-	_surface->getCrop()->y = _chars[c].y;
-	_surface->getCrop()->w = _chars[c].w;
-	_surface->getCrop()->h = _chars[c].h;
+	_surface->getCrop()->x = _chars[fontChar].x;
+	_surface->getCrop()->y = _chars[fontChar].y;
+	_surface->getCrop()->w = _chars[fontChar].w;
+	_surface->getCrop()->h = _chars[fontChar].h;
 
 	return _surface;
 }
 /**
  * Returns the maximum width for any character in the font.
- * @return Width in pixels.
+ * @return, width in pixels
  */
 int Font::getWidth() const
 {
@@ -256,7 +261,7 @@ int Font::getWidth() const
 
 /**
  * Returns the maximum height for any character in the font.
- * @return Height in pixels.
+ * @return, height in pixels
  */
 int Font::getHeight() const
 {
@@ -265,8 +270,8 @@ int Font::getHeight() const
 
 /**
  * Returns the spacing for any character in the font.
- * @return Spacing in pixels.
- * @note This does not refer to character spacing within the surface,
+ * @return, spacing in pixels
+ * @note This does not refer to character spacing within the surface
  * but to the spacing used between multiple characters in a line.
  */
 int Font::getSpacing() const
@@ -276,42 +281,42 @@ int Font::getSpacing() const
 
 /**
  * Returns the dimensions of a particular character in the font.
- * @param c Font character.
- * @return Width and Height dimensions (X and Y are ignored).
+ * @param fontChar - font character
+ * @return, width and height dimensions (X and Y are ignored)
  */
-SDL_Rect Font::getCharSize(wchar_t c)
+SDL_Rect Font::getCharSize(wchar_t fontChar)
 {
-	SDL_Rect size = {0, 0, 0, 0};
+	SDL_Rect charSize = {0,0,0,0};
 
-	if (c != 1
-		&& !isLinebreak(c)
-		&& !isSpace(c))
+	if (fontChar != 1
+		&& isLinebreak(fontChar) == false
+		&& isSpace(fontChar) == false)
 	{
-		size.w = _chars[c].w + _spacing;
-		size.h = _chars[c].h + _spacing;
+		charSize.w = _chars[fontChar].w + _spacing;
+		charSize.h = _chars[fontChar].h + _spacing;
 	}
 	else
 	{
-		if (_monospace)
-			size.w = _width + _spacing;
-		else if (isNonBreakableSpace(c))
-			size.w = _width / 4;
+		if (_monospace == true)
+			charSize.w = _width + _spacing;
+		else if (isNonBreakableSpace(fontChar) == true)
+			charSize.w = _width / 4;
 		else
-			size.w = _width / 2;
+			charSize.w = _width / 2;
 
-		size.h = _height + _spacing;
+		charSize.h = _height + _spacing;
 	}
 
-	size.x = size.w; // in case anyone mixes them up
-	size.y = size.h;
+	charSize.x = charSize.w; // in case anyone mixes them up
+	charSize.y = charSize.h;
 
-	return size;
+	return charSize;
 }
 
 /**
- * Returns the surface stored within the font. Used for loading the
- * actual graphic into the font.
- * @return Pointer to the internal surface.
+ * Returns the surface stored within the font.
+ * Used for loading the actual graphic into the font.
+ * @return, pointer to the internal surface
  */
 Surface* Font::getSurface() const
 {
@@ -320,15 +325,21 @@ Surface* Font::getSurface() const
 
 /**
  *
+ * @param file	-
+ * @param width	-
  */
 void Font::fix(
 		const std::string& file,
 		int width)
 {
-	Surface* s = new Surface(width, 512);
+	Surface* const srf = new Surface(width, 512);
 
-	s->setPalette(_palette, 0, 6);
-	_surface->setPalette(_palette, 0, 6);
+	srf->setPalette(
+				_palette,
+				0,6);
+	_surface->setPalette(
+				_palette,
+				0,6);
 
 	int
 		x = 0,
@@ -346,7 +357,7 @@ void Font::fix(
 		_surface->getCrop()->h = rect.h;
 		_surface->setX(x);
 		_surface->setY(y);
-		_surface->blit(s);
+		_surface->blit(srf);
 
 		x += _width;
 		if (x == width)
@@ -357,7 +368,7 @@ void Font::fix(
 	}
 
 	SDL_SaveBMP(
-			s->getSurface(),
+			srf->getSurface(),
 			file.c_str());
 }
 

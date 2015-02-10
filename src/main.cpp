@@ -17,16 +17,16 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <exception>
-#include <sstream>
+//#include <exception>
+//#include <sstream>
 
-#include "version.h"
+//#include "version.h"
 
-#include "Engine/CrossPlatform.h"
+//#include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
-#include "Engine/Logger.h"
-#include "Engine/Options.h"
-#include "Engine/Screen.h" // kL
+//#include "Engine/Logger.h"
+//#include "Engine/Options.h"
+//#include "Engine/Screen.h" // kL
 
 #include "Menu/StartState.h"
 
@@ -68,20 +68,15 @@ int main(
 		if (Options::init(argc, argv) == false)
 			return EXIT_SUCCESS;
 
-//kL	Options::baseXResolution = Options::displayWidth;
-//kL	Options::baseYResolution = Options::displayHeight;
+//		Options::baseXResolution = Options::displayWidth;
+//		Options::baseYResolution = Options::displayHeight;
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;	// kL
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;	// kL
 
 		std::ostringstream title;
-		title << "0xC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+		title << OPENXCOM_VERSION_GIT << L" " << Version::getBuildDate();
 
 		game = new Game(title.str());
-
-//		game->setVolume( // kL
-//					Options::soundVolume,
-//					Options::musicVolume,
-//					Options::uiVolume);
 
 		State::setGamePtr(game);
 
@@ -103,7 +98,7 @@ int main(
 	// Comment this for faster exit.
 	delete game;
 
-	Log(LOG_INFO) << "OpenXcom is shutting down."; // kL
+	Log(LOG_INFO) << "OpenXcom is shutting down.";
 	return EXIT_SUCCESS;
 }
 

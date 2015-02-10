@@ -126,7 +126,7 @@ private:
 	void black();
 
 	void playAudioFrame(Uint16 sampleRate);
-	void initAudio(Uint16 format, Uint8 channels);
+	void initAudio(Uint16 audioFormat, Uint8 channels);
 	void deInitAudio();
 
 	bool isEndOfFile(Uint8 *pos) const;

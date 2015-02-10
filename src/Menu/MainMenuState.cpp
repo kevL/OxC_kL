@@ -69,13 +69,14 @@ MainMenuState::MainMenuState()
 	_game->getScreen()->resetDisplay(false); // kL
 
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_txtTitle		= new Text(256, 30, 32, 56);
+	_txtTitle		= new Text(256, 17, 32, 40);
+	_txtBuild		= new Text(256, 9, 32, 66);
 
 	_btnNewGame		= new TextButton(92, 20, 64, 88);
 	_btnNewBattle	= new TextButton(92, 20, 164, 88);
 
 	_btnLoad		= new TextButton(92, 20, 64, 116);
-	_btnOptions		= new TextButton(92, 20, 164, 116);
+//	_btnOptions		= new TextButton(92, 20, 164, 116);
 
 	_btnQuit		= new TextButton(192, 20, 64, 144);
 
@@ -85,10 +86,11 @@ MainMenuState::MainMenuState()
 
 	add(_window, "window", "mainMenu");
 	add(_txtTitle, "text", "mainMenu");
+	add(_txtBuild, "text", "mainMenu");
 	add(_btnNewGame, "button", "mainMenu");
 	add(_btnNewBattle, "button", "mainMenu");
 	add(_btnLoad, "button", "mainMenu");
-	add(_btnOptions, "button", "mainMenu");
+//	add(_btnOptions, "button", "mainMenu");
 	add(_btnQuit, "button", "mainMenu");
 
 	centerAllSurfaces();
@@ -105,21 +107,23 @@ MainMenuState::MainMenuState()
 	_btnLoad->setText(tr("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)& MainMenuState::btnLoadClick);
 
-	_btnOptions->setText(tr("STR_OPTIONS"));
-	_btnOptions->onMouseClick((ActionHandler)& MainMenuState::btnOptionsClick);
-	_btnOptions->setVisible(false);
+//	_btnOptions->setText(tr("STR_OPTIONS"));
+//	_btnOptions->onMouseClick((ActionHandler)& MainMenuState::btnOptionsClick);
+//	_btnOptions->setVisible(false);
 
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)& MainMenuState::btnQuitClick);
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-
 	std::wostringstream title;
 	title << tr("STR_OPENXCOM"); //kL << L"\x02";
 //	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
 //	title << Language::utf8ToWstr(OPENXCOM_VERSION_GIT); // kL
 	_txtTitle->setText(title.str());
+
+	_txtBuild->setAlign(ALIGN_CENTER);
+	_txtBuild->setText(Language::cpToWstr(Version::getBuildDate()));
 
 
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_START_MAINMENU);
@@ -164,11 +168,11 @@ void MainMenuState::btnLoadClick(Action*)
  * Opens the Options screen.
  * @param action - pointer to an Action
  */
-void MainMenuState::btnOptionsClick(Action*)
+/* void MainMenuState::btnOptionsClick(Action*)
 {
 	Options::backupDisplay();
 	_game->pushState(new OptionsVideoState(OPT_MENU));
-}
+} */
 
 /**
  * Quits the game.
