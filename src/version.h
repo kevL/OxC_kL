@@ -40,7 +40,7 @@ namespace OpenXcom
 namespace Version
 {
 
-/// UTC Time for saved file stamp.
+/// Local Time for saved file stamp.
 std::string timeStamp();
 /// Gets version as a time string.
 std::string getBuildDate(bool built = true);

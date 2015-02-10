@@ -6669,12 +6669,12 @@
 	"Logger.h"
 	"Surface.h"
 
-1423553656 source:f:\git\openxcom\src\engine\options.cpp
+1423610934 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
 
-1423536391 f:\git\openxcom\src\version.h
+1423612661 f:\git\openxcom\src\version.h
 
 1420130445 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
@@ -7738,7 +7738,7 @@
 	<stdlib.h>
 	<fstream>
 
-1423554931 source:f:\git\openxcom\src\main.cpp
+1423610950 source:f:\git\openxcom\src\main.cpp
 	"Engine/Game.h"
 	"Menu/StartState.h"
 
@@ -7809,7 +7809,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1423535440 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1423610649 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	"ListLoadState.h"
 	"NewBattleState.h"
@@ -8844,7 +8844,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1423533382 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1423611153 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
