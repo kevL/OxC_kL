@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_STARTSTATE_H
 #define OPENXCOM_STARTSTATE_H
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/State.h"
 

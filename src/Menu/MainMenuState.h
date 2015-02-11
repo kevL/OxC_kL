@@ -45,6 +45,7 @@ private:
 		* _btnNewBattle,
 		* _btnLoad,
 //		* _btnOptions,
+		* _btnPlayIntro,
 		* _btnQuit;
 	Window
 		* _window;
@@ -67,6 +68,8 @@ private:
 		void btnLoadClick(Action* action);
 		/// Handler for clicking the Options button.
 //		void btnOptionsClick(Action* action);
+		/// Plays the intro video.
+		void btnPlayIntroClick(Action*);
 		/// Handler for clicking the Quit button.
 		void btnQuitClick(Action* action);
 

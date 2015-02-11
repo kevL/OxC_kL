@@ -5933,7 +5933,7 @@
 1420130449 f:\git\openxcom\src\battlescape\promotionsstate.h
 	"../Engine/State.h"
 
-1423534499 f:\git\openxcom\src\menu\mainmenustate.h
+1423614982 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
 1420130442 f:\git\openxcom\src\ruleset\rulecountry.h
@@ -7742,8 +7742,7 @@
 	"Engine/Game.h"
 	"Menu/StartState.h"
 
-1420130443 f:\git\openxcom\src\menu\startstate.h
-	<sstream>
+1423612892 f:\git\openxcom\src\menu\startstate.h
 	"../Engine/State.h"
 
 1421471155 source:f:\git\openxcom\src\menu\abandongamestate.cpp
@@ -7809,8 +7808,9 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1423610649 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1423615151 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
+	"IntroState.h"
 	"ListLoadState.h"
 	"NewBattleState.h"
 	"NewGameState.h"
@@ -8051,7 +8051,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1421502915 source:f:\git\openxcom\src\menu\startstate.cpp
+1423613672 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
@@ -11455,7 +11455,7 @@
 	"Game.h"
 	"Surface.h"
 
-1423607912 f:\git\openxcom\src\engine\flcplayer.h
+1423615921 f:\git\openxcom\src\engine\flcplayer.h
 
 1420330771 source:f:\git\openxcom\src\ruleset\rulevideo.cpp
 	"RuleVideo.h"

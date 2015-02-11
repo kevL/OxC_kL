@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
+/**
  * Based on http://www.libsdl.org/projects/flxplay/
  */
 

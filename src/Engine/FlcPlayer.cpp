@@ -74,9 +74,9 @@ enum ChunkOpcodes
 
 enum PlayingState
 {
-	PLAYING,
-	FINISHED,
-	SKIPPED
+	PLAYING,	// 0
+	FINISHED,	// 1
+	SKIPPED		// 2
 };
 
 

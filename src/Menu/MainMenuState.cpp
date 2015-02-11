@@ -21,6 +21,7 @@
 
 //#include <sstream>
 
+#include "IntroState.h"
 #include "ListLoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"
@@ -77,6 +78,7 @@ MainMenuState::MainMenuState()
 
 	_btnLoad		= new TextButton(92, 20, 64, 116);
 //	_btnOptions		= new TextButton(92, 20, 164, 116);
+	_btnPlayIntro	= new TextButton(92, 20, 164, 116);
 
 	_btnQuit		= new TextButton(192, 20, 64, 144);
 
@@ -91,6 +93,7 @@ MainMenuState::MainMenuState()
 	add(_btnNewBattle, "button", "mainMenu");
 	add(_btnLoad, "button", "mainMenu");
 //	add(_btnOptions, "button", "mainMenu");
+	add(_btnPlayIntro, "button", "mainMenu");
 	add(_btnQuit, "button", "mainMenu");
 
 	centerAllSurfaces();
@@ -110,6 +113,9 @@ MainMenuState::MainMenuState()
 //	_btnOptions->setText(tr("STR_OPTIONS"));
 //	_btnOptions->onMouseClick((ActionHandler)& MainMenuState::btnOptionsClick);
 //	_btnOptions->setVisible(false);
+
+	_btnPlayIntro->setText(tr("STR_PLAYINTRO"));
+	_btnPlayIntro->onMouseClick((ActionHandler)& MainMenuState::btnPlayIntroClick);
 
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)& MainMenuState::btnQuitClick);
@@ -175,12 +181,30 @@ void MainMenuState::btnLoadClick(Action*)
 } */
 
 /**
+ * Plays the intro video.
+ * @param action - pointer to an Action
+ */
+void MainMenuState::btnPlayIntroClick(Action*)
+{
+	_game->getResourcePack()->fadeMusic(_game, 924);
+
+	const bool letterbox = Options::keepAspectRatio;
+	Options::keepAspectRatio = true;
+
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false);
+
+	_game->setState(new IntroState(letterbox));
+}
+
+/**
  * Quits the game.
  * @param action - pointer to an Action
  */
 void MainMenuState::btnQuitClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 800);
+	_game->getResourcePack()->fadeMusic(_game, 793);
 	_game->quit();
 }
 
