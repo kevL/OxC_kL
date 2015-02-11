@@ -664,8 +664,7 @@ bool Tile::destroy(int part)
 
 		setMapData(
 				 NULL,
-				-1,
-				-1,
+				-1,-1,
 				part);
 
 		if (origPart->getDieMCD() != 0)
@@ -690,8 +689,7 @@ bool Tile::destroy(int part)
 	{
 		setMapData( // replace with scorched earth
 				MapDataSet::getScorchedEarthTile(),
-				1,
-				0,
+				1,0,
 				MapData::O_FLOOR);
 	}
 
@@ -708,6 +706,7 @@ bool Tile::damage(
 		int part,
 		int power)
 {
+	//Log(LOG_INFO) << "Tile::damage() vs part = " << part << ", hp = " << _objects[part]->getArmor();
 	bool objective = false;
 
 	if (power >= _objects[part]->getArmor())

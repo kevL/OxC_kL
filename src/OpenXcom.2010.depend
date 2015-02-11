@@ -4464,8 +4464,7 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1420130452 f:\git\openxcom\src\menu\optionsbasestate.h
-	<string>
+1423627757 f:\git\openxcom\src\menu\optionsbasestate.h
 	"../Engine/State.h"
 
 1420130457 f:\git\openxcom\src\basescape\manufacturestate.h
@@ -6052,7 +6051,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1423361375 source:f:\git\openxcom\src\battlescape\map.cpp
+1423637383 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6333,7 +6332,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1422827839 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1423626363 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6577,7 +6576,7 @@
 	"Language.h"
 	"Surface.h"
 
-1423519384 source:f:\git\openxcom\src\engine\game.cpp
+1423628470 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7808,7 +7807,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1423615151 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1423616599 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	"IntroState.h"
 	"ListLoadState.h"
@@ -7895,7 +7894,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1420219181 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1423627875 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	"MainMenuState.h"
 	"OptionsAdvancedState.h"
@@ -8905,7 +8904,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1423025138 source:f:\git\openxcom\src\savegame\tile.cpp
+1423626589 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"
@@ -10764,8 +10763,7 @@
 1420327339 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
-1420130447 f:\git\openxcom\src\menu\optionsvideostate.h
-	<SDL.h>
+1423628228 f:\git\openxcom\src\menu\optionsvideostate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
@@ -10831,7 +10829,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1420223582 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1423628141 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -11450,7 +11448,7 @@
 1420130458 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
-1423607957 source:f:\git\openxcom\src\engine\flcplayer.cpp
+1423616532 source:f:\git\openxcom\src\engine\flcplayer.cpp
 	"FlcPlayer.h"
 	"Game.h"
 	"Surface.h"

@@ -215,8 +215,9 @@ void OptionsBaseState::setCategory(TextButton* button)
  */
 void OptionsBaseState::btnOkClick(Action*)
 {
-	int dX = Options::baseXResolution;
-	int dY = Options::baseYResolution;
+	int
+		dX = Options::baseXResolution,
+		dY = Options::baseYResolution;
 
 	Screen::updateScale(
 					Options::battlescapeScale,
@@ -256,7 +257,7 @@ void OptionsBaseState::btnOkClick(Action*)
 	else
 	{
 		// Confirm any video option changes
-		if (Options::displayWidth != Options::newDisplayWidth
+		if (   Options::displayWidth != Options::newDisplayWidth
 			|| Options::displayHeight != Options::newDisplayHeight
 			|| Options::useOpenGL != Options::newOpenGL
 			|| Options::useScaleFilter != Options::newScaleFilter
@@ -318,7 +319,7 @@ void OptionsBaseState::btnDefaultClick(Action* action)
  */
 void OptionsBaseState::btnGroupPress(Action* action)
 {
-	Surface* sender = action->getSender();
+	const Surface* const sender = action->getSender();
 //	if (sender != _group)
 //	{
 	_game->popState();
@@ -327,10 +328,8 @@ void OptionsBaseState::btnGroupPress(Action* action)
 		_game->pushState(new OptionsVideoState(_origin));
 	else if (sender == _btnAudio)
 	{
-		if (!Options::mute)
-		{
+		if (Options::mute == false)
 			_game->pushState(new OptionsAudioState(_origin));
-		}
 		else
 			_game->pushState(new OptionsNoAudioState(_origin));
 	}

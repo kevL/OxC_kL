@@ -1677,8 +1677,8 @@ void Map::drawTerrain(Surface* surface)
 															|| (tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
 																&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NESW
 																&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NORTH
-																&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))
-														&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop.
+																&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))))
+//														&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 												{
 													const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
 
@@ -1725,8 +1725,8 @@ void Map::drawTerrain(Surface* surface)
 																|| (tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NESW
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NORTH
-																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))
-															&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop.
+																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))))
+//															&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 													{
 														const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
 
@@ -2181,6 +2181,7 @@ void Map::drawTerrain(Surface* surface)
 					}
 					// end draw bullet.
 
+
 					// Main Draw BattleUnit ->
 					if (unit != NULL
 						&& (unit->getUnitVisible() == true
@@ -2193,6 +2194,16 @@ void Map::drawTerrain(Surface* surface)
 //						srfSprite = NULL;
 						if (srfSprite)
 						{
+							if (unit->getHealth() == 0
+								|| unit->getHealth() <= unit->getStun())
+							{
+								shade = std::min(
+												5,
+												tileShade);
+							}
+							else
+								shade = tileShade;
+
 							calculateWalkingOffset(
 												unit,
 												&walkOffset);
@@ -2201,7 +2212,7 @@ void Map::drawTerrain(Surface* surface)
 									surface,
 									screenPosition.x + walkOffset.x,
 									screenPosition.y + walkOffset.y,
-									tileShade);
+									shade);
 
 							if (unit->getFire() != 0)
 							{
@@ -2426,6 +2437,53 @@ void Map::drawTerrain(Surface* surface)
 					// end Main Draw BattleUnit.
 
 
+					// Draw unitBelow on a gravLift.
+					if (itZ > 0
+						&& tile->getMapData(MapData::O_FLOOR) != NULL
+						&& tile->getMapData(MapData::O_FLOOR)->isGravLift() == true
+						&& tileBelow != NULL)
+					{
+						BattleUnit* const unitBelow = tileBelow->getUnit();
+
+						if (unitBelow != NULL
+							&& unitBelow->getVerticalDirection() != 0
+							&& (unitBelow->getUnitVisible() == true
+								|| _save->getDebugMode() == true))
+						{
+							quad = tileBelow->getPosition().x - unitBelow->getPosition().x
+								+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
+
+							srfSprite = unitBelow->getCache(&invalid, quad);
+//							srfSprite = NULL;
+							if (srfSprite)
+							{
+								calculateWalkingOffset(
+													unitBelow,
+													&walkOffset);
+								walkOffset.y += 24;
+
+								srfSprite->blitNShade(
+										surface,
+										screenPosition.x + walkOffset.x,
+										screenPosition.y + walkOffset.y,
+										tileBelow->getShade());
+
+								if (unitBelow->getFire() != 0)
+								{
+									frame = 4 + (_animFrame / 2);
+									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									if (srfSprite)
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x,
+												screenPosition.y + walkOffset.y,
+												0);
+								}
+							}
+						}
+					}
+
+
 					// Draw Unconscious Soldier icon
 					// - might want to redundant this, like rankIcons.
 					if (unit == NULL)
@@ -2569,7 +2627,7 @@ void Map::drawTerrain(Surface* surface)
 									srfSprite->blitNShade(
 											surface,
 											screenPosition.x + walkOffset.x,
-											screenPosition.y + walkOffset.y, // does this need pixelOffset for unitBelow instead of unit
+											screenPosition.y + walkOffset.y,
 											shade);
 
 									if (unitSize > 1)
@@ -2583,7 +2641,7 @@ void Map::drawTerrain(Surface* surface)
 											srfSprite->blitNShade(
 													surface,
 													screenPosition.x + walkOffset.x,
-													screenPosition.y + walkOffset.y, // does this need pixelOffset for unitBelow instead of unit
+													screenPosition.y + walkOffset.y,
 													0);
 									}
 

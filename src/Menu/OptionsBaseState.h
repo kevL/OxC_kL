@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_OPTIONSBASESTATE_H
 #define OPENXCOM_OPTIONSBASESTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 

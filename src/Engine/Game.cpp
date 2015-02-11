@@ -328,7 +328,6 @@ void Game::run()
 				case SDL_MOUSEBUTTONUP:
 //kL				if (_inputActive == false) // Skip [ie. postpone] mouse events if they're disabled
 //kL					continue;
-
 					runningState = RUNNING;	// re-gain focus on mouse-over or keypress.
 											// Go on, feed the event to others
 				default:
@@ -348,7 +347,7 @@ void Game::run()
 						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
 							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							Options::captureMouse = (SDL_GrabMode)(Options::captureMouse == SDL_GRAB_QUERY);
+							Options::captureMouse = static_cast<SDL_GrabMode>(!Options::captureMouse); // == SDL_GRAB_QUERY);
 							SDL_WM_GrabInput(Options::captureMouse);
 						}
 						else if (Options::debug == true)

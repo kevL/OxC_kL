@@ -227,26 +227,25 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_filters.push_back("");
 
 #ifndef __NO_OPENGL
-	std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
-	for (std::vector<std::string>::iterator
+	const std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
+	for (std::vector<std::string>::const_iterator
 			i = filters.begin();
 			i != filters.end();
 			++i)
 	{
-		std::string file = (*i);
-		std::string path = GL_FOLDER + file;
-		std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
+		const std::string file = *i;
+		const std::string path = GL_FOLDER + file;
+		const std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
 		filterNames.push_back(Language::fsToWstr(name));
 		_filters.push_back(path);
 	}
 #endif
 
 	size_t selFilter = 0;
-
-	if (Screen::isOpenGLEnabled())
+	if (Screen::isOpenGLEnabled() == true)
 	{
 #ifndef __NO_OPENGL
-		std::string path = Options::useOpenGLShader;
+		const std::string path = Options::useOpenGLShader;
 		for (size_t
 				i = 0;
 				i < _filters.size();
@@ -279,13 +278,15 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	displayModes.push_back("STR_BORDERLESS");
 	displayModes.push_back("STR_RESIZABLE");
 
-	int displayMode = 0;
+	int displayMode;
 	if (Options::fullscreen)
 		displayMode = 1;
 	else if (Options::borderless)
 		displayMode = 2;
 	else if (Options::allowResize)
 		displayMode = 3;
+	else
+		displayMode = 0;
 
 	_cbxDisplayMode->setOptions(displayModes);
 	_cbxDisplayMode->setSelected(displayMode);
@@ -549,7 +550,7 @@ void OptionsVideoState::btnLetterboxClick(Action*)
  */
 void OptionsVideoState::btnLockMouseClick(Action*)
 {
-	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
+	Options::captureMouse = static_cast<SDL_GrabMode>(_btnLockMouse->getPressed());
 	SDL_WM_GrabInput(Options::captureMouse);
 }
 

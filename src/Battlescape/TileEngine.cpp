@@ -1776,7 +1776,7 @@ BattleUnit* TileEngine::hit(
 			return NULL;
 		}
 
-		BattleUnit* targetUnit = NULL;
+		BattleUnit* targetUnit = tile->getUnit();
 
 		int part = VOXEL_UNIT;
 		if (melee == false) // kL
@@ -1790,22 +1790,65 @@ BattleUnit* TileEngine::hit(
 			//Log(LOG_INFO) << ". voxelCheck() part = " << part;
 		}
 
-		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
+		if (part > VOXEL_EMPTY && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
 			&& type != DT_STUN						// kL, workaround for Stunrod. ( might include DT_SMOKE & DT_IN )
 			&& type != DT_SMOKE)
 		{
 			//Log(LOG_INFO) << ". . terrain hit";
-			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 			power = RNG::generate( // 25% to 75% linear.
 								power / 4,
 								power * 3 / 4);
 			//Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
+			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
+			// DT_NONE,		// 0
+			// DT_AP,		// 1
+			// DT_IN,		// 2
+			// DT_HE,		// 3
+			// DT_LASER,	// 4
+			// DT_PLASMA,	// 5
+			// DT_STUN,		// 6
+			// DT_MELEE,	// 7
+			// DT_ACID,		// 8
+			// DT_SMOKE		// 9
+			switch (type) // round up.
+			{
+				case DT_AP:
+					power = (power + 4) / 5;	// 20%
+				break;
+
+				case DT_IN:
+					power = (power + 3) / 4;	// 25%
+				break;
+
+				case DT_LASER:
+					power = (power + 2) / 3;	// 33%
+				break;
+
+				case DT_PLASMA:
+					power = (power + 1) / 2;	// 50%
+				break;
+
+				case DT_MELEE:
+					power = (power + 9) / 10;	// 10%
+				break;
+
+				case DT_HE:
+					power += power * 3 / 20;	// 115%
+//				break;
+
+//				case DT_ACID: // 100% damage
+
+//				default: // [DT_NONE],[DT_STUN,DT_SMOKE]
+//					return NULL;
+			}
+			//Log(LOG_INFO) << ". . power by Type = " << power;
 
 			if (part == VOXEL_OBJECT
 				&& tile->getMapData(VOXEL_OBJECT)->isBaseModule() == true
 				&& power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
 				&& _battleSave->getMissionType() == "STR_BASE_DEFENSE")
 			{
+				//Log(LOG_INFO) << ". . . vs Object hp  = " << tile->getMapData(MapData::O_OBJECT)->getArmor();
 				_battleSave->getModuleMap()
 									[(targetPos_voxel.x / 16) / 10]
 									[(targetPos_voxel.y / 16) / 10].second--;
@@ -1823,24 +1866,24 @@ BattleUnit* TileEngine::hit(
 		{
 			//Log(LOG_INFO) << ". . battleunit hit";
 			// power 0 - 200% -> 1 - 200%
-			if (tile->getUnit() != NULL)
-			{
+//			if (tile->getUnit() != NULL)
+//			{
 				//Log(LOG_INFO) << ". . targetUnit Valid ID = " << targetUnit->getId();
-				targetUnit = tile->getUnit();
-			}
+//			targetUnit = tile->getUnit();
+//			}
 
 			int vertOffset = 0;
 			if (targetUnit == NULL)
 			{
-				//Log(LOG_INFO) << ". . . targetUnit NOT Valid, check belowTile";
+				//Log(LOG_INFO) << ". . . targetUnit NOT Valid, check tileBelow";
 				// it's possible we have a unit below the actual tile, when he
 				// stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				const Tile* const belowTile = _battleSave->getTile(targetPos_tile + Position(0, 0,-1));
-				if (belowTile != NULL
-					&& belowTile->getUnit() != NULL)
+				const Tile* const tileBelow = _battleSave->getTile(targetPos_tile + Position(0, 0,-1));
+				if (tileBelow != NULL
+					&& tileBelow->getUnit() != NULL)
 				{
-					targetUnit = belowTile->getUnit();
+					targetUnit = tileBelow->getUnit();
 					vertOffset = 24;
 				}
 			}
