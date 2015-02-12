@@ -389,11 +389,10 @@ int Projectile::calculateThrow(double accuracy)
 	}
 
 
-	int ret = VOXEL_OUTOFBOUNDS;
-
 	const Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																	_action,
 																	NULL);
+	int ret = static_cast<int>(VOXEL_OUTOFBOUNDS);
 	double arc;
 	if (_save->getTileEngine()->validateThrow(
 										_action,
@@ -450,7 +449,7 @@ int Projectile::calculateThrow(double accuracy)
 		return ret;
 	}
 
-	return VOXEL_OUTOFBOUNDS;
+	return static_cast<int>(VOXEL_OUTOFBOUNDS);
 }
 
 /**

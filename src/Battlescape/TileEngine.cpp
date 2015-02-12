@@ -4851,8 +4851,8 @@ int TileEngine::calculateParabola(
 				- zK * (static_cast<double>(i) - ro / 2.) * (static_cast<double>(i) - ro / 2.)
 				+ zA);
 
-		if (storeTrajectory
-			&& trajectory)
+		if (storeTrajectory == true
+			&& trajectory != NULL)
 		{
 			trajectory->push_back(Position(x, y, z));
 		}
@@ -4913,7 +4913,7 @@ bool TileEngine::validateThrow(
 						int* const voxelType)
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
-	double parabolicCoefficient = 0.; // higher arc means lower arc IG.
+	double parabolicCoefficient = 0.; // higher arc means lower arc IG. eh ......
 
 	const Position targetPos = targetVoxel / Position(16, 16, 24);
 	if (targetPos != originVoxel / Position(16, 16, 24))
@@ -4971,13 +4971,12 @@ bool TileEngine::validateThrow(
 	}
 
 
+	// check for test up from the lowest trajectory
 	bool found = false;
 	while (found == false // try several different curvatures
 		&& parabolicCoefficient < 8.3)
 	{
 		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient;
-
-//		int test = VOXEL_OUTOFBOUNDS;
 		std::vector<Position> trajectory;
 		const int test = calculateParabola(
 										originVoxel,
@@ -5008,6 +5007,43 @@ bool TileEngine::validateThrow(
 		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 8.3";
 		return false;
 	}
+
+
+	// now test continues rising to find upper limit
+	double parabolicCoefficient2 = parabolicCoefficient;
+
+	found = false;
+	while (found == false // try several different curvatures
+		&& parabolicCoefficient2 < 8.3)
+	{
+		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient2;
+		std::vector<Position> trajectory;
+		const int test = calculateParabola(
+										originVoxel,
+										targetVoxel,
+										false,
+										&trajectory,
+										action.actor,
+										parabolicCoefficient2);
+		//Log(LOG_INFO) << ". . calculateParabola() = " << test;
+
+		if (test == VOXEL_OUTOFBOUNDS
+			|| test == VOXEL_WESTWALL
+			|| test == VOXEL_NORTHWALL
+			|| (trajectory.at(0) / Position(16, 16, 24)) != targetPos)
+		{
+			//Log(LOG_INFO) << ". . . found TRUE";
+			found = true;
+			parabolicCoefficient2 -= 0.3; // back off from the upper lip.
+		}
+		else
+			parabolicCoefficient2 += 0.3;
+	}
+
+	// use the average of upper & lower limits:
+	// Lessens chance of unit bouncing a thrown item back off a wall by
+	// barely skimming it overtop, after accuracy is applied.
+	parabolicCoefficient = (parabolicCoefficient + parabolicCoefficient2) / 2.;
 
 	if (arc != NULL)
 		*arc = parabolicCoefficient;
