@@ -1291,7 +1291,7 @@ int Base::getCraftCount(const std::string& craft) const
 /**
  * Returns the total amount of monthly costs for maintaining the craft in the base.
  * Used for month-end maintenance expenditure.
- * @return, Maintenance costs.
+ * @return, maintenance costs
  */
 int Base::getCraftMaintenance() const
 {
@@ -1320,7 +1320,7 @@ int Base::getCraftMaintenance() const
 /**
  * Returns the total amount of monthly costs for maintaining the personnel in the base.
  * Used for month-end maintenance expenditure.
- * @return, Maintenance costs.
+ * @return, maintenance costs
  */
 int Base::getPersonnelMaintenance() const
 {
@@ -1336,7 +1336,7 @@ int Base::getPersonnelMaintenance() const
 /**
  * Returns the total amount of monthly costs for maintaining the facilities in the base.
  * Used for month-end maintenance expenditure.
- * @return, Maintenance costs.
+ * @return, maintenance costs
  */
 int Base::getFacilityMaintenance() const
 {
@@ -1365,8 +1365,17 @@ int Base::getMonthlyMaintenace() const
 }
 
 /**
+ * Add a new Production to the Base
+ * @param prod - pointer to a Production
+ */
+void Base::addProduction(Production* prod)
+{
+	_productions.push_back(prod);
+}
+
+/**
  * Remove a Production from the Base.
- * @param p A pointer to a Production
+ * @param prod - pointer to a Production
  */
 void Base::removeProduction(Production* prod)
 {
@@ -1390,15 +1399,6 @@ const std::vector<Production*>& Base::getProductions() const
 }
 
 /**
- * Add a new Production to the Base
- * @param p A pointer to a Production
- */
-void Base::addProduction(Production* prod)
-{
-	_productions.push_back(prod);
-}
-
-/**
  * Returns the list of all base's ResearchProject
  * @return, list of base's ResearchProject
  */
@@ -1409,7 +1409,7 @@ const std::vector<ResearchProject*>& Base::getResearch() const
 
 /**
  * Add a new ResearchProject to Base
- * @param project, The project to add
+ * @param project - project to add
  */
 void Base::addResearch(ResearchProject* project)
 {
