@@ -953,6 +953,7 @@
       <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Ruleset\OperationPool.cpp" />
+    <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

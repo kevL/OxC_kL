@@ -74,7 +74,7 @@ int main(
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;	// kL
 
 		std::ostringstream title;
-		title << OPENXCOM_VERSION_GIT << L" " << Version::getBuildDate();
+		title << OPENXCOM_VERSION_GIT << " " << Version::getBuildDate();
 
 		game = new Game(title.str());
 

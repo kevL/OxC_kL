@@ -2226,6 +2226,158 @@ void Map::drawTerrain(Surface* surface)
 											0);
 							}
 
+							// redraw all quadrants of large units moving up/down on gravLift
+							if (itZ > 0
+								&& quad == 3
+								&& unit->getVerticalDirection() != 0
+								&& tile->getMapData(MapData::O_FLOOR) != NULL
+								&& tile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
+							{
+								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+
+								BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
+
+								if (unitNorthWest == unit) // large unit going up/down gravLift
+								{
+									quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
+										+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
+
+									srfSprite = unitNorthWest->getCache(&invalid, quad);
+//									srfSprite = NULL;
+									if (srfSprite)
+									{
+										calculateWalkingOffset(
+															unitNorthWest,
+															&walkOffset);
+										walkOffset.y -= 16;
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x,
+												screenPosition.y + walkOffset.y,
+												tileNorthWest->getShade());
+
+										if (unitNorthWest->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											if (srfSprite)
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														0);
+										}
+									}
+								}
+
+
+								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+
+								BattleUnit* const unitWest = tileWest->getUnit();
+
+								if (unitWest == unit) // large unit going up/down gravLift
+								{
+									quad = tileWest->getPosition().x - unitWest->getPosition().x
+										+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
+
+									srfSprite = unitWest->getCache(&invalid, quad);
+//									srfSprite = NULL;
+									if (srfSprite)
+									{
+										calculateWalkingOffset(
+															unitWest,
+															&walkOffset);
+										walkOffset.x -= 16;
+										walkOffset.y -= 8;
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x,
+												screenPosition.y + walkOffset.y,
+												tileWest->getShade());
+
+										if (unitWest->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											if (srfSprite)
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														0);
+										}
+									}
+								}
+
+
+								const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+
+								BattleUnit* const unitNorth = tileNorth->getUnit();
+
+								if (unitNorth == unit) // large unit going up/down gravLift
+								{
+									quad = tileNorth->getPosition().x - unitNorth->getPosition().x
+										+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
+
+									srfSprite = unitNorth->getCache(&invalid, quad);
+//									srfSprite = NULL;
+									if (srfSprite)
+									{
+										calculateWalkingOffset(
+															unitNorth,
+															&walkOffset);
+										walkOffset.x += 16;
+										walkOffset.y -= 8;
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x,
+												screenPosition.y + walkOffset.y,
+												tileNorth->getShade());
+
+										if (unitNorth->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											if (srfSprite)
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														0);
+										}
+									}
+								}
+
+
+								if (itY < endY) // redraw floor, was overwritten by SW quadrant of large unit moving up/down gravLift
+								{
+									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+
+									if (tileSouthWest != NULL)
+									{
+										srfSprite = tileSouthWest->getSprite(MapData::O_FLOOR);
+//										srfSprite = NULL;
+										if (srfSprite)
+										{
+											if (tileSouthWest->isDiscovered(2) == true)
+												shade = tileSouthWest->getShade(); // Or use tileShade
+											else
+												shade = 16;
+
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x - 32,
+													screenPosition.y - tileSouthWest->getMapData(MapData::O_FLOOR)->getYOffset(),
+													shade);
+										}
+									}
+								}
+							}
+
+
 /*							// TEST. reDraw tileSouthWest bigWall NESW
 							if (itX > 0 && itY < endY)
 							{
@@ -2437,7 +2589,7 @@ void Map::drawTerrain(Surface* surface)
 					// end Main Draw BattleUnit.
 
 
-					// Draw unitBelow on a gravLift.
+					// reDraw unitBelow moving up/down on a gravLift.
 					if (itZ > 0
 						&& tile->getMapData(MapData::O_FLOOR) != NULL
 						&& tile->getMapData(MapData::O_FLOOR)->isGravLift() == true
@@ -2453,35 +2605,186 @@ void Map::drawTerrain(Surface* surface)
 							quad = tileBelow->getPosition().x - unitBelow->getPosition().x
 								+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
 
-							srfSprite = unitBelow->getCache(&invalid, quad);
-//							srfSprite = NULL;
-							if (srfSprite)
+							if (quad == 3
+								|| unitBelow->getArmor()->getSize() == 1)
 							{
-								calculateWalkingOffset(
-													unitBelow,
-													&walkOffset);
-								walkOffset.y += 24;
-
-								srfSprite->blitNShade(
-										surface,
-										screenPosition.x + walkOffset.x,
-										screenPosition.y + walkOffset.y,
-										tileBelow->getShade());
-
-								if (unitBelow->getFire() != 0)
+								srfSprite = unitBelow->getCache(&invalid, quad);
+//								srfSprite = NULL;
+								if (srfSprite)
 								{
-									frame = 4 + (_animFrame / 2);
-									srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-									if (srfSprite)
-										srfSprite->blitNShade(
-												surface,
-												screenPosition.x + walkOffset.x,
-												screenPosition.y + walkOffset.y,
-												0);
+									calculateWalkingOffset(
+														unitBelow,
+														&walkOffset);
+									walkOffset.y += 24;
+
+									srfSprite->blitNShade(
+											surface,
+											screenPosition.x + walkOffset.x,
+											screenPosition.y + walkOffset.y,
+											tileBelow->getShade());
+
+									if (unitBelow->getFire() != 0)
+									{
+										frame = 4 + (_animFrame / 2);
+										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+										if (srfSprite)
+											srfSprite->blitNShade(
+													surface,
+													screenPosition.x + walkOffset.x,
+													screenPosition.y + walkOffset.y,
+													0);
+									}
+
+									if (quad == 3) //itY > 0
+									{
+										const Tile* const tileBelowNorthWest = _save->getTile(mapPosition + Position(-1,-1,-1));
+
+										BattleUnit* const unitBelowNorthWest = tileBelowNorthWest->getUnit();
+
+										if (unitBelowNorthWest == unitBelow) // large unit going up/down gravLift
+										{
+											quad = tileBelowNorthWest->getPosition().x - unitBelowNorthWest->getPosition().x
+												+ (tileBelowNorthWest->getPosition().y - unitBelowNorthWest->getPosition().y) * 2;
+
+											srfSprite = unitBelowNorthWest->getCache(&invalid, quad);
+//											srfSprite = NULL;
+											if (srfSprite)
+											{
+												calculateWalkingOffset(
+																	unitBelowNorthWest,
+																	&walkOffset);
+												walkOffset.y += 8;
+
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														tileBelowNorthWest->getShade());
+
+												if (unitBelowNorthWest->getFire() != 0)
+												{
+													frame = 4 + (_animFrame / 2);
+													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+													if (srfSprite)
+														srfSprite->blitNShade(
+																surface,
+																screenPosition.x + walkOffset.x,
+																screenPosition.y + walkOffset.y,
+																0);
+												}
+											}
+										}
+
+
+										const Tile* const tileBelowWest = _save->getTile(mapPosition + Position(-1,0,-1));
+
+										BattleUnit* const unitBelowWest = tileBelowWest->getUnit();
+
+										if (unitBelowWest == unitBelow) // large unit going up/down gravLift
+										{
+											quad = tileBelowWest->getPosition().x - unitBelowWest->getPosition().x
+												+ (tileBelowWest->getPosition().y - unitBelowWest->getPosition().y) * 2;
+
+											srfSprite = unitBelowWest->getCache(&invalid, quad);
+//											srfSprite = NULL;
+											if (srfSprite)
+											{
+												calculateWalkingOffset(
+																	unitBelowWest,
+																	&walkOffset);
+												walkOffset.x -= 16;
+												walkOffset.y += 16;
+
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														tileBelowWest->getShade());
+
+												if (unitBelowWest->getFire() != 0)
+												{
+													frame = 4 + (_animFrame / 2);
+													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+													if (srfSprite)
+														srfSprite->blitNShade(
+																surface,
+																screenPosition.x + walkOffset.x,
+																screenPosition.y + walkOffset.y,
+																0);
+												}
+											}
+										}
+
+
+										const Tile* const tileBelowNorth = _save->getTile(mapPosition + Position(0,-1,-1));
+
+										BattleUnit* const unitBelowNorth = tileBelowNorth->getUnit();
+
+										if (unitBelowNorth == unitBelow) // large unit going up/down gravLift
+										{
+											quad = tileBelowNorth->getPosition().x - unitBelowNorth->getPosition().x
+												+ (tileBelowNorth->getPosition().y - unitBelowNorth->getPosition().y) * 2;
+
+											srfSprite = unitBelowNorth->getCache(&invalid, quad);
+//											srfSprite = NULL;
+											if (srfSprite)
+											{
+												calculateWalkingOffset(
+																	unitBelowNorth,
+																	&walkOffset);
+												walkOffset.x += 16;
+												walkOffset.y += 16;
+
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														tileBelowNorth->getShade());
+
+												if (unitBelowNorth->getFire() != 0)
+												{
+													frame = 4 + (_animFrame / 2);
+													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+													if (srfSprite)
+														srfSprite->blitNShade(
+																surface,
+																screenPosition.x + walkOffset.x,
+																screenPosition.y + walkOffset.y,
+																0);
+												}
+											}
+										}
+
+
+										if (itY < endY) // redraw floor, was overwritten by SW quadrant of large unit moving up/down gravLift
+										{
+											const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+
+											if (tileSouthWest != NULL)
+											{
+												srfSprite = tileSouthWest->getSprite(MapData::O_FLOOR);
+//												srfSprite = NULL;
+												if (srfSprite)
+												{
+													if (tileSouthWest->isDiscovered(2) == true)
+														shade = tileSouthWest->getShade(); // Or use tileShade
+													else
+														shade = 16;
+
+													srfSprite->blitNShade(
+															surface,
+															screenPosition.x - 32,
+															screenPosition.y - tileSouthWest->getMapData(MapData::O_FLOOR)->getYOffset(),
+															shade);
+												}
+											}
+										}
+									}
 								}
 							}
 						}
 					}
+					// end gravLift.
 
 
 					// Draw Unconscious Soldier icon

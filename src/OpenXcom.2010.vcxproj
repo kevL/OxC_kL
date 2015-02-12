@@ -552,6 +552,7 @@
     <ClCompile Include="Ufopaedia\Ufopaedia.cpp" />
     <ClCompile Include="Ufopaedia\UfopaediaSelectState.cpp" />
     <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp" />
+    <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basescape\AlienContainmentState.h" />
