@@ -132,7 +132,8 @@ private:
 		* _gameTimer,
 		* _dfZoomInTimer,
 		* _dfZoomOutTimer,
-		* _dfStartTimer;
+		* _dfStartTimer,
+		* _dfTimer;
 
 	std::list<State*> _popups;
 	std::list<DogfightState*>

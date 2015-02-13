@@ -20,12 +20,10 @@
 #ifndef OPENXCOM_OPTIONINFO_H
 #define OPENXCOM_OPTIONINFO_H
 
-#include <map>
-#include <string>
-
-#include <SDL.h>
-
-#include <yaml-cpp/yaml.h>
+//#include <map>
+//#include <string>
+//#include <SDL.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

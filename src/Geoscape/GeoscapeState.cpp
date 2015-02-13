@@ -389,10 +389,11 @@ GeoscapeState::GeoscapeState()
 
 	_timeSpeed = _btn5Secs;
 
-	_gameTimer		= new Timer(Options::geoClockSpeed);
-	_dfZoomInTimer	= new Timer(Options::dogfightSpeed + 10);
-	_dfZoomOutTimer	= new Timer(Options::dogfightSpeed + 10);
-	_dfStartTimer	= new Timer(Options::dogfightSpeed + 10);
+	_gameTimer		= new Timer(static_cast<Uint32>(Options::geoClockSpeed));
+	_dfZoomInTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
+	_dfZoomOutTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
+	_dfStartTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
+	_dfTimer		= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
 
 	_txtDebug		= new Text(320, 18, 0, 0);
 
@@ -800,6 +801,7 @@ GeoscapeState::GeoscapeState()
 	_dfZoomInTimer->onTimer((StateHandler)& GeoscapeState::dfZoomIn);
 	_dfZoomOutTimer->onTimer((StateHandler)& GeoscapeState::dfZoomOut);
 	_dfStartTimer->onTimer((StateHandler)& GeoscapeState::startDogfight);
+	_dfTimer->onTimer((StateHandler)& GeoscapeState::handleDogfights);
 
 	timeDisplay();
 }
@@ -813,6 +815,7 @@ GeoscapeState::~GeoscapeState()
 	delete _dfZoomInTimer;
 	delete _dfZoomOutTimer;
 	delete _dfStartTimer;
+	delete _dfTimer;
 
 	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
 	for (
@@ -990,6 +993,18 @@ void GeoscapeState::init()
 	}
 
 	_globe->unsetNewBaseHover();
+
+	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	{
+		_savedGame->addMonth();
+
+		determineAlienMissions(true);
+		setupTerrorMission();
+
+		_savedGame->setFunds(_savedGame->getFunds()
+										- _savedGame->getBaseMaintenance()
+										- _savedGame->getBases()->front()->getPersonnelMaintenance());
+	}
 }
 
 /**
@@ -1010,18 +1025,6 @@ void GeoscapeState::think()
 		_txtDebug->setText(Language::cpToWstr(debugStr));
 	}
 
-	if (_savedGame->getMonthsPassed() == -1)
-	{
-		_savedGame->addMonth();
-
-		determineAlienMissions(true);
-		setupTerrorMission();
-
-		_savedGame->setFunds(_savedGame->getFunds()
-										- _savedGame->getBaseMaintenance()
-										- _savedGame->getBases()->front()->getPersonnelMaintenance());
-	}
-
 	if (_popups.empty() == true
 		&& _dogfights.empty() == true
 		&& (_dfZoomInTimer->isRunning() == false
@@ -1036,7 +1039,13 @@ void GeoscapeState::think()
 		if (_dogfights.empty() == false
 			|| _minimizedDogfights != 0)
 		{
-			handleDogfights();
+			if (_dogfights.size() == _minimizedDogfights) // if all dogfights are minimized rotate the globe, etc.
+			{
+				_pause = false;
+				_gameTimer->think(this, NULL);
+			}
+
+			_dfTimer->think(this, NULL);
 		}
 
 		if (_popups.empty() == false) // Handle popups
@@ -3422,16 +3431,18 @@ void GeoscapeState::setDogfightCoords(Craft* craft)
  */
 void GeoscapeState::handleDogfights()
 {
-	// if all dogfights are minimized rotate the globe, etc.
-	if (_dogfights.size() == _minimizedDogfights)
-	{
-		_pause = false;
-		_gameTimer->think(this, NULL);
-	}
-
-	_minimizedDogfights = 0; // handle dogfights logic.
+	_minimizedDogfights = 0;
 
 	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
+	for (
+			;
+			i != _dogfights.end();
+			++i)
+	{
+		(*i)->getUfo()->setInterceptionProcessed(false);
+	}
+
+	i = _dogfights.begin();
 	while (i != _dogfights.end())
 	{
 		if ((*i)->isMinimized() == true)
@@ -3455,6 +3466,7 @@ void GeoscapeState::handleDogfights()
 
 	if (_dogfights.empty() == true)
 	{
+		_dfTimer->stop();
 		_dogfightEnded = true;
 		_globe->setChasingUfo(false);
 		_dfZoomOutTimer->start();
@@ -3501,6 +3513,7 @@ void GeoscapeState::startDogfight()
 	{
 		_dfStartTimer->stop();
 		_dfZoomInTimer->stop();
+		_dfTimer->start();
 
 		timerReset();
 

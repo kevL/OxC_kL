@@ -87,12 +87,17 @@ private:
 		_x,
 		_y,
 		_minimizedIconX,
-		_minimizedIconY;
+		_minimizedIconY,
+
+		_w1FireCountdown,
+		_w2FireCountdown,
+		_w1FireInterval,
+		_w2FireInterval;
 	size_t _interceptQty;
 	Uint32
-		_changeTarget,
-		_optionSpeed,
-		_ufoFireInterval;
+		_changeTarget;
+//		_optionSpeed,
+//		_ufoFireInterval;
 
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
@@ -128,14 +133,7 @@ private:
 		* _txtDistance,
 		* _txtStatus,
 		* _txtInterceptionNumber;
-	Timer
-		* _animTimer,
-		* _moveTimer,
-		* _w1Timer,
-		* _w2Timer,
-		* _ufoWTimer,
-		* _ufoEscapeTimer,
-		* _craftDamageAnimTimer;
+	Timer* _craftDamageAnimTimer;
 	Ufo* _ufo;
 
 	/// Ends the dogfight.
@@ -164,19 +162,20 @@ private:
 		void think();
 		/// Animates the window.
 		void animate();
-		/// Moves the craft.
-		void moveCraft();
+		/// Updates the craft.
+		void updateDogfight();
 
-		// Fires the first weapon.
+		/// Fires the first weapon.
 		void fireWeapon1();
-		// Fires the second weapon.
+		/// Fires the second weapon.
 		void fireWeapon2();
-		// Fires UFO weapon.
+		/// Fires UFO weapon.
 		void ufoFireWeapon();
-		// Sets the craft to minimum distance.
+		/// Sets the craft to minimum distance.
 		void minimumDistance();
-		// Sets the craft to maximum distance.
+		/// Sets the craft to maximum distance.
 		void maximumDistance();
+
 		/// Changes the status text.
 		void setStatus(const std::string& status);
 
@@ -196,9 +195,6 @@ private:
 		void btnUfoClick(Action* action);
 		/// Handler for clicking the Preview graphic.
 		void previewPress(Action* action);
-
-		/// Makes the UFO break off the interception... or at least tries to.
-		void ufoBreakOff();
 
 		/// Draws UFO.
 		void drawUfo();

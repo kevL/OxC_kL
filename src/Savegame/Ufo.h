@@ -61,12 +61,15 @@ private:
 	bool
 		_detected,
 		_hyperDetected,
-		_inBattlescape;
+		_inBattlescape,
+		_processedIntercept;
 	int
 		_damage,
 		_id,
 		_crashId,
 		_crashPower,
+		_escapeCountdown,
+		_fireCountdown,
 		_hitFrame,
 		_landId,
 		_secondsRemaining,
@@ -114,39 +117,39 @@ private:
 		/// Handles UFO logic.
 		void think();
 
-		/// Gets the UFO's ID.
-		int getId() const;
 		/// Sets the UFO's ID.
 		void setId(int id);
+		/// Gets the UFO's ID.
+		int getId() const;
 		/// Gets the UFO's name.
 		std::wstring getName(Language* lang) const;
 
 		/// Gets the UFO's marker.
 		int getMarker() const;
 
-		/// Gets the UFO's amount of damage.
-		int getDamage() const;
 		/// Sets the UFO's amount of damage.
 		void setDamage(int damage);
+		/// Gets the UFO's amount of damage.
+		int getDamage() const;
 		/// Gets the UFO's percentage of damage.
 		int getDamagePercent() const;
 
-		/// Gets the UFO's detection status.
-		bool getDetected() const;
 		/// Sets the UFO's detection status.
 		void setDetected(bool detected = true);
+		/// Gets the UFO's detection status.
+		bool getDetected() const;
 
-		/// Gets the UFO's seconds left on the ground.
-		int getSecondsRemaining() const;
 		/// Sets the UFO's seconds left on the ground.
 		void setSecondsRemaining(int seconds);
+		/// Gets the UFO's seconds left on the ground.
+		int getSecondsRemaining() const;
 
-		/// Gets the UFO's direction.
-		std::string getDirection() const;
-		/// Gets the UFO's altitude.
-		std::string getAltitude() const;
 		/// Sets the UFO's altitude.
 		void setAltitude(const std::string& altitude);
+		/// Gets the UFO's altitude.
+		std::string getAltitude() const;
+		/// Gets the UFO's direction.
+		std::string getDirection() const;
 
 		/// Gets the UFO status.
 		enum UfoStatus getStatus() const
@@ -181,17 +184,17 @@ private:
 		/// Gets a UFO's detect-xCom-base ability.
 		int getDetectors() const;
 
-		/// Gets the UFO's Mission type.
-		const std::string& getMissionType() const;
 		/// Sets the UFO's mission information.
 		void setMissionInfo(
 				AlienMission* mission,
 				const UfoTrajectory* trajectory);
+		/// Gets the UFO's Mission type.
+		const std::string& getMissionType() const;
 
-		/// Gets the UFO's hyper detection status.
-		bool getHyperDetected() const;
 		/// Sets the UFO's hyper detection status.
 		void setHyperDetected(bool hyperdetected = true);
+		/// Gets the UFO's hyper detection status.
+		bool getHyperDetected() const;
 
 		/// Gets the UFO's progress on the trajectory track.
 		size_t getTrajectoryPoint() const
@@ -210,34 +213,47 @@ private:
 		/// Sets the UFO's destination.
 		void setDestination(Target* dest);
 
-		/// Gets the interceptor engaging this Ufo.
-		int getShootingAt() const;
 		/// Sets the interceptor engaging this Ufo.
 		void setShootingAt(const int target);
+		/// Gets the interceptor engaging this Ufo.
+		int getShootingAt() const;
 
-		/// Gets the UFO's landing site ID.
-		int getLandId() const;
 		/// Sets the UFO's landing site ID.
 		void setLandId(int id);
-		/// Gets the UFO's crash site ID.
-		int getCrashId() const;
+		/// Gets the UFO's landing site ID.
+		int getLandId() const;
 		/// Sets the UFO's crash site ID.
 		void setCrashId(int id);
+		/// Gets the UFO's crash site ID.
+		int getCrashId() const;
 
-		/// Gets the UFO's hit frame.
-		int getHitFrame() const;
 		/// Sets the UFO's hit frame.
 		void setHitFrame(int frame);
+		/// Gets the UFO's hit frame.
+		int getHitFrame() const;
 
-		/// Gets the UFO's powerSource explosive-power-factor.
-		int getCrashPower() const;
+		///
+		void setFireCountdown(int timeLeft);
+		///
+		int getFireCountdown() const;
+		///
+		void setEscapeCountdown(int timeLeft);
+		///
+		int getEscapeCountdown() const;
+		///
+		void setInterceptionProcessed(bool processed);
+		///
+		bool getInterceptionProcessed() const;
+
 		/// Sets the UFO's powerSource explosive-power-factor.
 		void setCrashPower(int percent);
+		/// Gets the UFO's powerSource explosive-power-factor.
+		int getCrashPower() const;
 
-		/// Gets a crashed or landed UFO's terrainType.
-		std::string getTerrain() const;
 		/// Sets a crashed or landed UFO's terrainType.
 		void setTerrain(const std::string& terrain);
+		/// Gets a crashed or landed UFO's terrainType.
+		std::string getTerrain() const;
 };
 
 }

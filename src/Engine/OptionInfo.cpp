@@ -19,7 +19,7 @@
 
 #include "OptionInfo.h"
 
-#include "Exception.h"
+//#include "Exception.h"
 
 
 namespace OpenXcom
