@@ -388,14 +388,15 @@ GeoscapeState::GeoscapeState()
 	}
 
 	_timeSpeed = _btn5Secs;
+	_gameTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
 
-	_gameTimer		= new Timer(static_cast<Uint32>(Options::geoClockSpeed));
-	_dfZoomInTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
-	_dfZoomOutTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
-	_dfStartTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
-	_dfTimer		= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
+	const Uint32 optionSpeed = static_cast<Uint32>(Options::dogfightSpeed);
+	_dfZoomInTimer	= new Timer(optionSpeed);
+	_dfZoomOutTimer	= new Timer(optionSpeed);
+	_dfStartTimer	= new Timer(optionSpeed);
+	_dfTimer		= new Timer(optionSpeed);
 
-	_txtDebug		= new Text(320, 18, 0, 0);
+	_txtDebug = new Text(320, 18, 0, 0);
 
 	setPalette("PAL_GEOSCAPE");
 

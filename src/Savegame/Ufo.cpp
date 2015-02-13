@@ -863,7 +863,7 @@ int Ufo::getHitFrame() const
 }
 
 /**
- * Sets the countdown timer for escaping a dogfight.
+ * Sets the countdown ticks for escaping a dogfight.
  * @param time - how many ticks until the ship attempts to escape
  */
 void Ufo::setEscapeCountdown(int timeLeft)
@@ -872,7 +872,7 @@ void Ufo::setEscapeCountdown(int timeLeft)
 }
 
 /**
- * Gets the escape timer for dogfights.
+ * Gets the remaining escape ticks for dogfights.
  * @return, how many ticks until the ship tries to leave
  */
 int Ufo::getEscapeCountdown() const

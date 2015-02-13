@@ -232,17 +232,17 @@ private:
 		/// Gets the UFO's hit frame.
 		int getHitFrame() const;
 
-		///
+		/// Sets the time left before this Ufo can fire in a Dogfight.
 		void setFireCountdown(int timeLeft);
-		///
+		/// Gets the time left before this Ufo can fire in a Dogfight.
 		int getFireCountdown() const;
-		///
+		/// Sets the time left before this Ufo attempts to escape a Dogfight.
 		void setEscapeCountdown(int timeLeft);
-		///
+		/// Gets the time left before this Ufo attempts to escape a Dogfight.
 		int getEscapeCountdown() const;
-		///
+		/// Sets whether or not this Ufo has had Dogfight info processed.
 		void setInterceptionProcessed(bool processed);
-		///
+		/// Gets whether or not this Ufo has had Dogfight info processed.
 		bool getInterceptionProcessed() const;
 
 		/// Sets the UFO's powerSource explosive-power-factor.

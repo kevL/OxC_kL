@@ -94,8 +94,8 @@ private:
 		_w1FireInterval,
 		_w2FireInterval;
 	size_t _interceptQty;
-	Uint32
-		_changeTarget;
+//	Uint32
+//		_changeTarget;
 //		_optionSpeed,
 //		_ufoFireInterval;
 
@@ -165,15 +165,15 @@ private:
 		/// Updates the craft.
 		void updateDogfight();
 
-		/// Fires the first weapon.
+		/// Fires the first Craft weapon.
 		void fireWeapon1();
-		/// Fires the second weapon.
+		/// Fires the second Craft weapon.
 		void fireWeapon2();
 		/// Fires UFO weapon.
 		void ufoFireWeapon();
-		/// Sets the craft to minimum distance.
+		/// Sets the Craft to minimum distance.
 		void minimumDistance();
-		/// Sets the craft to maximum distance.
+		/// Sets the Craft to maximum distance.
 		void maximumDistance();
 
 		/// Changes the status text.

@@ -1426,53 +1426,53 @@ void DogfightState::updateDogfight()
 }
 
 /**
- * Fires a shot from the first weapon equipped on the craft.
+ * Fires a shot from the first weapon equipped on the Craft.
  */
 void DogfightState::fireWeapon1()
 {
 	if (_weapon1Enabled == true)
 	{
-		CraftWeapon* const w1 = _craft->getWeapons()->at(0);
-		if (w1->setAmmo(w1->getAmmo() - 1))
+		CraftWeapon* const cw1 = _craft->getWeapons()->at(0);
+		if (cw1->setAmmo(cw1->getAmmo() - 1))
 		{
 			_w1FireCountdown = _w1FireInterval;
 
 			std::wostringstream wosts;
-			wosts << w1->getAmmo();
+			wosts << cw1->getAmmo();
 			_txtAmmo1->setText(wosts.str());
 
-			CraftWeaponProjectile* const proj = w1->fire();
+			CraftWeaponProjectile* const proj = cw1->fire();
 			proj->setDirection(D_UP);
 			proj->setHorizontalPosition(HP_LEFT);
 			_projectiles.push_back(proj);
 
-			playSoundFX(w1->getRules()->getSound(), true);
+			playSoundFX(cw1->getRules()->getSound(), true);
 		}
 	}
 }
 
 /**
- * Fires a shot from the second weapon equipped on the craft.
+ * Fires a shot from the second weapon equipped on the Craft.
  */
 void DogfightState::fireWeapon2()
 {
 	if (_weapon2Enabled == true)
 	{
-		CraftWeapon* const w2 = _craft->getWeapons()->at(1);
-		if (w2->setAmmo(w2->getAmmo() - 1))
+		CraftWeapon* const cw2 = _craft->getWeapons()->at(1);
+		if (cw2->setAmmo(cw2->getAmmo() - 1))
 		{
 			_w2FireCountdown = _w2FireInterval;
 
 			std::wostringstream wosts;
-			wosts << w2->getAmmo();
+			wosts << cw2->getAmmo();
 			_txtAmmo2->setText(wosts.str());
 
-			CraftWeaponProjectile* const proj = w2->fire();
+			CraftWeaponProjectile* const proj = cw2->fire();
 			proj->setDirection(D_UP);
 			proj->setHorizontalPosition(HP_RIGHT);
 			_projectiles.push_back(proj);
 
-			playSoundFX(w2->getRules()->getSound(), true);
+			playSoundFX(cw2->getRules()->getSound(), true);
 		}
 	}
 }

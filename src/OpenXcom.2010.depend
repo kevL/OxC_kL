@@ -4768,7 +4768,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1423785760 f:\git\openxcom\src\savegame\ufo.h
+1423792207 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -7100,7 +7100,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1423786893 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1423791744 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7132,7 +7132,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1423789096 f:\git\openxcom\src\geoscape\dogfightstate.h
+1423791684 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1417180619 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7180,7 +7180,7 @@
 1420130448 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1423787969 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1423791900 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
