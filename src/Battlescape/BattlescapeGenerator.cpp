@@ -229,7 +229,7 @@ void BattlescapeGenerator::setSiteTerrain(RuleTerrain* terrain)
 
 /**
  * Sets the world texture where a ufo crashed or landed.
- * This is used to determine the terrain if worldTerrain is ""/ NULL.
+ * This is used to determine the terrain if siteTerrain is ""/ NULL.
  * @param texture - texture id of the polygon on the globe
  */
 void BattlescapeGenerator::setSiteTexture(int texture)
@@ -501,7 +501,7 @@ void BattlescapeGenerator::run()
 		Log(LOG_INFO) << "bGen::run() deployment-terrains NOT valid";
 		if (_siteTerrain == NULL) // kL
 		{
-			Log(LOG_INFO) << ". worldTexture = " << _siteTexture;
+			Log(LOG_INFO) << ". siteTexture = " << _siteTexture;
 			double lat;
 			if (_ufo != NULL)
 				lat = _ufo->getLatitude();
@@ -514,14 +514,14 @@ void BattlescapeGenerator::run()
 		}
 		else
 		{
-			Log(LOG_INFO) << ". ufo mission worldTerrain = " << _siteTerrain->getName();
+			Log(LOG_INFO) << ". ufo mission siteTerrain = " << _siteTerrain->getName();
 			_terrain = _siteTerrain; // kL
 		}
 	}
 	else if (_siteTerrain != NULL // kL ->
 		&& _missionType == "STR_TERROR_MISSION")
 	{
-		Log(LOG_INFO) << ". terror mission worldTerrain = " << _siteTerrain->getName();
+		Log(LOG_INFO) << ". terror mission siteTerrain = " << _siteTerrain->getName();
 		_terrain = _siteTerrain; // kL_end.
 	}
 	else // set-piece battle like Cydonia or Terror site or Base assault/defense
