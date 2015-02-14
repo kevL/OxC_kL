@@ -95,9 +95,9 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_mapsize_x(0),
 		_mapsize_y(0),
 		_mapsize_z(0),
-		_worldTerrain(NULL),
-		_worldTexture(0),
-		_worldShade(0),
+		_siteTerrain(NULL),
+		_siteTexture(0),
+		_siteShade(0),
 		_unitSequence(0),
 		_tileEquipt(NULL),
 		_alienItemLevel(0),
@@ -222,9 +222,9 @@ void BattlescapeGenerator::setIsCity(const bool isCity)
  * Sets the terrain of where a ufo crashed/landed as per ConfirmLandingState.
  * @param texture - pointer to RuleTerrain
  */
-void BattlescapeGenerator::setWorldTerrain(RuleTerrain* terrain)
+void BattlescapeGenerator::setSiteTerrain(RuleTerrain* terrain)
 {
-	_worldTerrain = terrain;
+	_siteTerrain = terrain;
 }
 
 /**
@@ -232,12 +232,12 @@ void BattlescapeGenerator::setWorldTerrain(RuleTerrain* terrain)
  * This is used to determine the terrain if worldTerrain is ""/ NULL.
  * @param texture - texture id of the polygon on the globe
  */
-void BattlescapeGenerator::setWorldTexture(int texture)
+void BattlescapeGenerator::setSiteTexture(int texture)
 {
 	if (texture < 0)
 		texture = 0;
 
-	_worldTexture = texture;
+	_siteTexture = texture;
 }
 
 /**
@@ -245,7 +245,7 @@ void BattlescapeGenerator::setWorldTexture(int texture)
  * This is used to determine the battlescape light level.
  * @param shade - shade of the polygon on the globe
  */
-void BattlescapeGenerator::setWorldShade(int shade)
+void BattlescapeGenerator::setSiteShade(int shade)
 {
 	if (shade > 15)
 		shade = 15;
@@ -253,7 +253,7 @@ void BattlescapeGenerator::setWorldShade(int shade)
 	if (shade < 0)
 		shade = 0;
 
-	_worldShade = shade;
+	_siteShade = shade;
 }
 
 /**
@@ -332,7 +332,7 @@ void BattlescapeGenerator::nextStage()
 									ruleDeploy->getTerrains().size() - 1);
 	_terrain = _rules->getTerrain(ruleDeploy->getTerrains().at(pick));
 
-	_worldShade = ruleDeploy->getShade();
+	_siteShade = ruleDeploy->getShade();
 
 
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
@@ -468,7 +468,7 @@ void BattlescapeGenerator::nextStage()
 	_battleSave->setAborted(false);
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
-	_battleSave->setGlobalShade(_worldShade);
+	_battleSave->setGlobalShade(_siteShade);
 
 	_battleSave->getTileEngine()->calculateSunShading();
 	_battleSave->getTileEngine()->calculateTerrainLighting();
@@ -499,9 +499,9 @@ void BattlescapeGenerator::run()
 	if (ruleDeploy->getTerrains().empty() == true) // UFO crashed/landed
 	{
 		Log(LOG_INFO) << "bGen::run() deployment-terrains NOT valid";
-		if (_worldTerrain == NULL) // kL
+		if (_siteTerrain == NULL) // kL
 		{
-			Log(LOG_INFO) << ". worldTexture = " << _worldTexture;
+			Log(LOG_INFO) << ". worldTexture = " << _siteTexture;
 			double lat;
 			if (_ufo != NULL)
 				lat = _ufo->getLatitude();
@@ -509,20 +509,20 @@ void BattlescapeGenerator::run()
 				lat = 0.;
 
 			_terrain = getTerrain(
-								_worldTexture,
+								_siteTexture,
 								lat);
 		}
 		else
 		{
-			Log(LOG_INFO) << ". ufo mission worldTerrain = " << _worldTerrain->getName();
-			_terrain = _worldTerrain; // kL
+			Log(LOG_INFO) << ". ufo mission worldTerrain = " << _siteTerrain->getName();
+			_terrain = _siteTerrain; // kL
 		}
 	}
-	else if (_missionType == "STR_TERROR_MISSION" // kL ->
-		&& _worldTerrain != NULL)
+	else if (_siteTerrain != NULL // kL ->
+		&& _missionType == "STR_TERROR_MISSION")
 	{
-		Log(LOG_INFO) << ". terror mission worldTerrain = " << _worldTerrain->getName();
-		_terrain = _worldTerrain; // kL_end.
+		Log(LOG_INFO) << ". terror mission worldTerrain = " << _siteTerrain->getName();
+		_terrain = _siteTerrain; // kL_end.
 	}
 	else // set-piece battle like Cydonia or Terror site or Base assault/defense
 	{
@@ -543,7 +543,7 @@ void BattlescapeGenerator::run()
 	}
 
 	if (ruleDeploy->getShade() != -1)
-		_worldShade = ruleDeploy->getShade();
+		_siteShade = ruleDeploy->getShade();
 
 
 /*	// generate the map now and store it inside the tile objects
@@ -673,7 +673,7 @@ void BattlescapeGenerator::run()
 
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
-	_battleSave->setGlobalShade(_worldShade);
+	_battleSave->setGlobalShade(_siteShade);
 
 	_battleSave->getTileEngine()->calculateSunShading();
 	_battleSave->getTileEngine()->calculateTerrainLighting();
@@ -982,7 +982,7 @@ void BattlescapeGenerator::deployXCOM()
 							add = !(*j)->getRules()->isPistol()
 									&& !(*j)->getRules()->isRifle()
 									&& ((*j)->getRules()->getBattleType() != BT_FLARE
-										|| _worldShade >= 9);
+										|| _siteShade >= 9);
 						break;
 
 						default:
@@ -2669,13 +2669,13 @@ void BattlescapeGenerator::setTacticalSprites()
 	}
 	else
 	{
-		if ((-1 < _worldTexture && _worldTexture < 7)
-			|| (9 < _worldTexture && _worldTexture < 12))
+		if ((_siteTexture > -1 && _siteTexture < 7)
+			|| (_siteTexture > 9 && _siteTexture < 12))
 		{
 			strArmor = "STR_STREET_JUNGLE_UC";
 		}
-		else if (6 < _worldTexture && _worldTexture < 10
-			|| _worldTexture == 12)
+		else if (_siteTexture > 6 && _siteTexture < 10
+			|| _siteTexture == 12)
 		{
 			strArmor = "STR_STREET_ARCTIC_UC";
 		}
@@ -2714,26 +2714,22 @@ void BattlescapeGenerator::runInventory(
 		Base* base,
 		size_t equipUnit)
 {
-	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
 	_baseEquipScreen = true;
 
 	int qtySoldiers;
 	if (craft != NULL)
-	{
 		qtySoldiers = craft->getNumSoldiers();
-	}
 	else
 		qtySoldiers = base->getAvailableSoldiers(true);
 
-	// we need to fake a map for soldier placement
-	_mapsize_x = qtySoldiers;
-	_mapsize_y = 1;
+	_mapsize_x = qtySoldiers; // fake a map for soldier placement
+	_mapsize_y =
 	_mapsize_z = 1;
 
 	_battleSave->initMap(
-				_mapsize_x,
-				_mapsize_y,
-				_mapsize_z);
+					_mapsize_x,
+					_mapsize_y,
+					_mapsize_z);
 
 	MapDataSet* const dataSet = new MapDataSet(
 											"blank",
@@ -2748,8 +2744,7 @@ void BattlescapeGenerator::runInventory(
 		Tile* const tile = _battleSave->getTiles()[i];
 		tile->setMapData(
 					data,
-					0,
-					0,
+					0,0,
 					MapData::O_FLOOR);
 		tile->getMapData(MapData::O_FLOOR)->setSpecialType(
 														START_POINT,
@@ -2768,16 +2763,11 @@ void BattlescapeGenerator::runInventory(
 	}
 
 	if (craft != NULL)
-	{
-		//Log(LOG_INFO) << ". setCraft()";
 		setCraft(craft); // generate the battleitems for inventory
-	}
 	else
 		setBase(base);
 
-	//Log(LOG_INFO) << ". setCraft() DONE, deployXCOM()";
 	deployXCOM();
-	//Log(LOG_INFO) << ". deployXCOM() DONE";
 
 	if (craft != NULL
 		&& equipUnit != 0
@@ -2797,8 +2787,8 @@ void BattlescapeGenerator::runInventory(
 			}
 		}
 	}
-	// ok, now remove any vehicles that may have somehow ended up in our battlescape
-/*	for (std::vector<BattleUnit*>::iterator
+/*	// remove any vehicles that may have somehow ended up in battlescape
+	for (std::vector<BattleUnit*>::iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			)
@@ -2807,7 +2797,6 @@ void BattlescapeGenerator::runInventory(
 		{
 			if (_battleSave->getSelectedUnit() == 0)
 				_battleSave->setSelectedUnit(*i);
-
 			++i;
 		}
 		else
@@ -2822,7 +2811,6 @@ void BattlescapeGenerator::runInventory(
 
 	delete data;
 	delete dataSet;
-	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory() EXIT";
 }
 
 /**

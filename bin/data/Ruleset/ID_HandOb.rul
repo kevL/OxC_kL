@@ -50,6 +50,8 @@ items:
     handSprite: 384
   - type: STR_STUN_BOMB
     handSprite: 392
+  - type: STR_ELERIUM_115
+    handSprite: 400
 extraSprites:
   - type: HANDOB.PCK
     width: 256
@@ -81,3 +83,4 @@ extraSprites:
       376: Resources/ID_HandOb/HandOb_PRifleClip.png
       384: Resources/ID_HandOb/HandOb_PHeavyClip.png
       392: Resources/ID_HandOb/HandOb_StunBomb.png
+      400: Resources/ID_HandOb/HandOb_Elerium.png

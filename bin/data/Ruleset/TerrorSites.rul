@@ -18,7 +18,12 @@ terrains:
       - FRNITURE
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - MALE_CIVILIAN6
       - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
     mapBlocks:
       - name: URBAN00
         width: 10
@@ -82,7 +87,12 @@ terrains:
 #    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - MALE_CIVILIAN6
       - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
 #    roadTypeOdds: [50, 25]
     mapBlocks:
       - name: CF00

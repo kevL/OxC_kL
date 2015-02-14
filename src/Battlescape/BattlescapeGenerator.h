@@ -74,8 +74,8 @@ private:
 		_mapsize_y,
 		_mapsize_z,
 		_unitSequence,
-		_worldTexture,
-		_worldShade;
+		_siteTexture,
+		_siteShade;
 	size_t _battleOrder;
 
 	SDL_Rect
@@ -98,7 +98,7 @@ private:
 	Ruleset* _rules;
 	RuleTerrain
 		* _terrain,
-		* _worldTerrain;
+		* _siteTerrain;
 	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
 	Tile* _tileEquipt;
@@ -238,11 +238,11 @@ private:
 		/// Sets if Ufo has landed/crashed at a city.
 		void setIsCity(const bool isCity = true);
 		/// Sets the terrainRule of where a ufo crashed or landed.
-		void setWorldTerrain(RuleTerrain* terrain);
+		void setSiteTerrain(RuleTerrain* terrain);
 		/// Sets the polygon texture.
-		void setWorldTexture(int texture);
+		void setSiteTexture(int texture);
 		/// Sets the polygon shade.
-		void setWorldShade(int shade);
+		void setSiteShade(int shade);
 
 		/// Runs the generator.
 		void run();

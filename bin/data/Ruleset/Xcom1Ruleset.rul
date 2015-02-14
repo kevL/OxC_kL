@@ -2742,10 +2742,10 @@ armors:
     spriteSheet: CIVM.PCK
     corpseBattle:
       - CIVM_CORPSE
-    frontArmor: 0
-    sideArmor: 0
-    rearArmor: 0
-    underArmor: 0
+    frontArmor: 12
+    sideArmor: 8
+    rearArmor: 5
+    underArmor: 2
     drawingRoutine: 4
     damageModifier:
       - 1.0
@@ -2758,15 +2758,15 @@ armors:
       - 1.2
       - 1.5
       - 1.12
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseBattle:
       - CIVF_CORPSE
-    frontArmor: 0
-    sideArmor: 0
-    rearArmor: 0
-    underArmor: 0
+    frontArmor: 12
+    sideArmor: 8
+    rearArmor: 5
+    underArmor: 2
     drawingRoutine: 4
     damageModifier:
       - 1.0
@@ -2779,7 +2779,7 @@ armors:
       - 1.2
       - 1.5
       - 1.12
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
   - type: SNAKEMAN_ARMOR0 #soldier
     spriteSheet: SNAKEMAN.PCK
     corpseBattle:
@@ -4622,7 +4622,7 @@ alienDeployments:
       - alienRank: 2 #engineer
         lowQty: 1
         highQty: 3
-        dQty: 1
+        dQty: 2
         percentageOutsideUfo: 25
         itemSets:
           -
@@ -4643,7 +4643,7 @@ alienDeployments:
       - alienRank: 3 #medic
         lowQty: 1
         highQty: 2
-        dQty: 1
+        dQty: 2
         percentageOutsideUfo: 15
         itemSets:
           -
@@ -4663,7 +4663,7 @@ alienDeployments:
       - alienRank: 4 #navigator
         lowQty: 1
         highQty: 2
-        dQty: 1
+        dQty: 2
         percentageOutsideUfo: 20
         itemSets:
           -
@@ -4681,7 +4681,7 @@ alienDeployments:
             - STR_ALIEN_GRENADE
       - alienRank: 5 #soldier
         lowQty: 4
-        highQty: 11
+        highQty: 12
         dQty: 6
         percentageOutsideUfo: 60
         itemSets:
@@ -4700,8 +4700,8 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
-    width: 50
-    length: 50
+    width: 60
+    length: 60
     height: 4
   - type: STR_SUPPLY_SHIP
     data:
@@ -4961,6 +4961,7 @@ alienDeployments:
       - INDUSTRIALURBAN
       - MADURBAN
       - NATIVEURBAN
+      - PORTTFTD
       - PORTURBAN
       - RAILYARDURBAN
       - URBAN
@@ -8567,8 +8568,8 @@ extraStrings:
       MOUNT: "MOUNTAIN"
       POLAR: "POLAR"
       UBASE: "aLien BASE"
-      URBAN: "URBAN"
-      URBAN2: "Urban 2"
+      STR_URBAN: "URBAN"
+      STR_URBAN2: "Urban 2"
       XBASE: "xCom BASE"
       ATLANTDESERT: "Atlantis"
       COMRCURBAN: "Commercial"

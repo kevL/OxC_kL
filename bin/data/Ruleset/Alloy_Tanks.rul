@@ -5,7 +5,7 @@ items:
     costSell: 420000
     transferTime: 96
 #    weight: 1
-    bigSprite: 57
+    bigSprite: 72
 #    floorSprite: 0
 #    handSprite: 0
     bulletSprite: 4
@@ -27,7 +27,7 @@ items:
     costSell: 480000
     transferTime: 96
 #    weight: 1
-    bigSprite: 58
+    bigSprite: 73
 #    floorSprite: 0
 #    handSprite: 0
     bulletSprite: 0
@@ -50,7 +50,7 @@ items:
     costSell: 792000
     transferTime: 96
 #    weight: 1
-    bigSprite: 59
+    bigSprite: 74
 #    floorSprite: 0
 #    handSprite: 0
     bulletSprite: 7

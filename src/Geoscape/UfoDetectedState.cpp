@@ -125,12 +125,12 @@ UfoDetectedState::UfoDetectedState(
 
 		setPalette(
 				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color2); //2
+				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color2);
 	}
 	else
 		setPalette(
 				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color); //7
+				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
 	add(_window, "window", "UFOInfo");
 	add(_txtUfo, "text", "UFOInfo");
@@ -153,25 +153,19 @@ UfoDetectedState::UfoDetectedState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-//	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
 	if (detected == true)
-	{
-//		_txtDetected->setColor(Palette::blockOffset(8)+5);
 		_txtDetected->setText(tr("STR_DETECTED"));
-	}
 	else
 		_txtDetected->setVisible(false);
 
 
-//	_txtRegion->setColor(Palette::blockOffset(8)+10);
 	_txtRegion->setAlign(ALIGN_RIGHT);
-	std::wostringstream ss;
+	std::wostringstream wosts;
 	const double
 		lon = _ufo->getLongitude(),
 		lat = _ufo->getLatitude();
@@ -185,7 +179,7 @@ UfoDetectedState::UfoDetectedState(
 										lon,
 										lat) == true)
 		{
-			ss << tr((*i)->getRules()->getType());
+			wosts << tr((*i)->getRules()->getType());
 			break;
 		}
 	}
@@ -199,67 +193,63 @@ UfoDetectedState::UfoDetectedState(
 										lon,
 										lat) == true)
 		{
-			ss << L"> " << tr((*i)->getRules()->getType());
+			wosts << L"> " << tr((*i)->getRules()->getType());
 			break;
 		}
 	}
-	_txtRegion->setText(ss.str());
+	_txtRegion->setText(wosts.str());
 
 
-//	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 80, 112);
 	_lstInfo->setDot();
-	ss.str(L"");
-	ss << L'\x01' << tr(_ufo->getRules()->getSize());
+	wosts.str(L"");
+	wosts << L'\x01' << tr(_ufo->getRules()->getSize());
 	_lstInfo->addRow(
 					2,
 					tr("STR_SIZE_UC").c_str(),
-					ss.str().c_str());
+					wosts.str().c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
 
-	ss.str(L"");
+	wosts.str(L"");
 	std::string alt = _ufo->getAltitude();
 	if (alt == "STR_GROUND")
 		alt = "STR_GROUNDED";
-	ss << L'\x01' << tr(alt);
+	wosts << L'\x01' << tr(alt);
 	_lstInfo->addRow(
 					2,
 					tr("STR_ALTITUDE").c_str(),
-					ss.str().c_str());
+					wosts.str().c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 
-	ss.str(L"");
+	wosts.str(L"");
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 		heading = "STR_UNKNOWN";
-	ss << L'\x01' << tr(heading);
+	wosts << L'\x01' << tr(heading);
 	_lstInfo->addRow(
 					2,
 					tr("STR_HEADING").c_str(),
-					ss.str().c_str());
+					wosts.str().c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
 
-	ss.str(L"");
-	ss << L'\x01' << Text::formatNumber(_ufo->getSpeed());
+	wosts.str(L"");
+	wosts << L'\x01' << Text::formatNumber(_ufo->getSpeed());
 	_lstInfo->addRow(
 					2,
 					tr("STR_SPEED").c_str(),
-					ss.str().c_str());
+					wosts.str().c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
-//	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
 	_btnIntercept->setVisible(contact);
 
-//	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
 	_btnCentre->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCentreClick,
 					Options::keyOk);
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_OK_5_SECONDS")); // STR_CANCEL_UC
 	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -283,16 +273,16 @@ UfoDetectedState::UfoDetectedState(
 
 		switch (texture)
 		{
-			case 0:		terrain = "FOREST";	break;
-			case 1:		terrain = "CULTA";	break;
-			case 2:		terrain = "CULTA";	break;
-			case 3:		terrain = "FOREST";	break;
-			case 4:		terrain = "POLAR";	break;
-			case 5:		terrain = "MOUNT";	break;
-			case 6:		terrain = "FOREST";	break; // JUNGLE
-			case 7:		terrain = "DESERT";	break;
-			case 8:		terrain = "DESERT";	break;
-			case 9:		terrain = "POLAR";	break;
+			case  0:	terrain = "FOREST";	break;
+			case  1:	terrain = "CULTA";	break;
+			case  2:	terrain = "CULTA";	break;
+			case  3:	terrain = "FOREST";	break;
+			case  4:	terrain = "POLAR";	break;
+			case  5:	terrain = "MOUNT";	break;
+			case  6:	terrain = "FOREST";	break; // JUNGLE
+			case  7:	terrain = "DESERT";	break;
+			case  8:	terrain = "DESERT";	break;
+			case  9:	terrain = "POLAR";	break;
 			case 10:	terrain = "URBAN";	break;
 			case 11:	terrain = "POLAR";	break;
 			case 12:	terrain = "POLAR";	break;
@@ -301,61 +291,55 @@ UfoDetectedState::UfoDetectedState(
 				terrain = "WATER"; // tex = -1
 		}
 
-		ss.str(L"");
-		ss << tr(terrain);
-		ss << L"> shade " << shade;
+		wosts.str(L"");
+		wosts << tr(terrain);
+		wosts << L"> shade " << shade;
 
-//		_txtTexture->setColor(Palette::blockOffset(8)+10);
-//		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 		_txtTexture->setAlign(ALIGN_RIGHT);
-		_txtTexture->setText(ss.str());
+		_txtTexture->setText(wosts.str());
 	}
 	else
 		_txtTexture->setVisible(false);
 
 	if (hyper == true)
 	{
-//		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
 		_txtHyperwave->setAlign(ALIGN_CENTER);
 		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
 
-//		_lstInfo2->setColor(Palette::blockOffset(8)+5);
 		_lstInfo2->setColumns(2, 80, 112);
 		_lstInfo2->setDot();
-		ss.str(L"");
-		ss << L'\x01' << tr(_ufo->getRules()->getType());
+		wosts.str(L"");
+		wosts << L'\x01' << tr(_ufo->getRules()->getType());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_CRAFT_TYPE").c_str(),
-						ss.str().c_str());
+						wosts.str().c_str());
 		_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
-		ss.str(L"");
-		ss << L'\x01' << tr(_ufo->getAlienRace());
+		wosts.str(L"");
+		wosts << L'\x01' << tr(_ufo->getAlienRace());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_RACE").c_str(),
-						ss.str().c_str());
+						wosts.str().c_str());
 		_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-		ss.str(L"");
-		ss << L'\x01' << tr(_ufo->getMissionType());
+		wosts.str(L"");
+		wosts << L'\x01' << tr(_ufo->getMissionType());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_MISSION").c_str(),
-						ss.str().c_str());
+						wosts.str().c_str());
 		_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-		ss.str(L"");
-		ss << L'\x01' << tr(_ufo->getMission()->getRegion());
+		wosts.str(L"");
+		wosts << L'\x01' << tr(_ufo->getMission()->getRegion());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_ZONE").c_str(),
-						ss.str().c_str());
+						wosts.str().c_str());
 		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
 		if (contact == false
 			&& hyperBases != NULL) // safety.
 		{
-//			_txtBases->setColor(Palette::blockOffset(8)+5);
-
 			std::wostringstream bases;
 			for (std::vector<Base*>::const_iterator
 					i = hyperBases->begin();
@@ -423,7 +407,7 @@ UfoDetectedState::UfoDetectedState(
 			terrain = "WATER";
 		else if (terrain == "JUNGLE"
 			|| terrain == "FORESTMOUNT"
-			|| terrain == "MUJUNGLE")
+			|| terrain == "JUNGLETEMPLE")
 		{
 			terrain = "FOREST";
 		}
@@ -433,7 +417,7 @@ UfoDetectedState::UfoDetectedState(
 			terrain = "CULTA";
 		}
 		else if (terrain == "DESERTMOUNT"
-			|| terrain == "ATLANTDESERT")
+			|| terrain == "DESERTTEMPLE")
 		{
 			terrain = "DESERT";
 		}

@@ -232,9 +232,9 @@ NewBattleState::NewBattleState()
 	_cbxCraft->setOptions(_crafts);
 	_cbxCraft->onChange((ActionHandler)& NewBattleState::cbxCraftChange);
 
-	_slrDarkness->setRange(0, 15);
+	_slrDarkness->setRange(0,15);
 
-	_slrDepth->setRange(1, 3);
+	_slrDepth->setRange(1,3);
 
 	_cbxTerrain->setOptions(terrainStrings);
 	_cbxTerrain->onChange((ActionHandler)& NewBattleState::cbxTerrainChange);
@@ -243,7 +243,9 @@ NewBattleState::NewBattleState()
 
 	_cbxAlienRace->setOptions(_alienRaces);
 
-	_slrAlienTech->setRange(0, _game->getRuleset()->getAlienItemLevels().size() - 1);
+	_slrAlienTech->setRange(
+						0,
+						_game->getRuleset()->getAlienItemLevels().size() - 1);
 
 	_btnEquip->setText(tr("STR_EQUIP_CRAFT"));
 	_btnEquip->onMouseClick((ActionHandler)& NewBattleState::btnEquipClick);
@@ -270,8 +272,7 @@ NewBattleState::NewBattleState()
  * dTor.
  */
 NewBattleState::~NewBattleState()
-{
-}
+{}
 
 /**
  * Resets the menu music and savegame when coming back from the battlescape.
@@ -290,14 +291,14 @@ void NewBattleState::init()
  */
 void NewBattleState::load(const std::string& filename)
 {
-	const std::string s = Options::getConfigFolder() + filename + ".cfg";
-	if (CrossPlatform::fileExists(s) == false)
+	const std::string st = Options::getConfigFolder() + filename + ".cfg";
+	if (CrossPlatform::fileExists(st) == false)
 		initSave();
 	else
 	{
 		try
 		{
-			YAML::Node doc = YAML::LoadFile(s);
+			YAML::Node doc = YAML::LoadFile(st);
 
 			_cbxMission->setSelected(std::min(
 									doc["mission"].as<size_t>(0),
@@ -398,15 +399,15 @@ void NewBattleState::load(const std::string& filename)
  */
 void NewBattleState::save(const std::string& filename)
 {
-	const std::string s = Options::getConfigFolder() + filename + ".cfg";
-	std::ofstream sav(s.c_str());
-	if (!sav)
+	const std::string st = Options::getConfigFolder() + filename + ".cfg";
+	std::ofstream save (st.c_str()); // init
+	if (save.fail() == true)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
 		return;
 	}
 
-	YAML::Emitter out;
+	YAML::Emitter emit;
 
 	YAML::Node node;
 	node["mission"]		= _cbxMission->getSelected();
@@ -417,10 +418,10 @@ void NewBattleState::save(const std::string& filename)
 	node["difficulty"]	= _cbxDifficulty->getSelected();
 	node["alienTech"]	= _slrAlienTech->getValue();
 	node["base"]		= _game->getSavedGame()->getBases()->front()->save();
-	out << node;
+	emit << node;
 
-	sav << out.c_str();
-	sav.close();
+	save << emit.c_str();
+	save.close();
 }
 
 /**
@@ -563,7 +564,7 @@ void NewBattleState::btnOkClick(Action*)
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	Base* base = NULL;
 
-	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
+	bgen.setSiteTexture(_textures[_cbxTerrain->getSelected()]);
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE") // base defense
 	{
@@ -610,11 +611,11 @@ void NewBattleState::btnOkClick(Action*)
 				i != _game->getRuleset()->getAlienMissionList().end();
 				++i)
 		{
-			const RuleAlienMission* mission = _game->getRuleset()->getAlienMission(*i);
+			const RuleAlienMission* ruleMission = _game->getRuleset()->getAlienMission(*i);
 
-			if (bgame->getMissionType() == mission->getDeployment())
+			if (bgame->getMissionType() == ruleMission->getDeployment())
 			{
-				MissionSite* ms = new MissionSite(mission);
+				MissionSite* const ms = new MissionSite(ruleMission);
 				ms->setId(1);
 				ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 
@@ -634,9 +635,9 @@ void NewBattleState::btnOkClick(Action*)
 		bgen.setCraft(_craft);
 	}
 
-	_game->getSavedGame()->setDifficulty((GameDifficulty)_cbxDifficulty->getSelected());
+	_game->getSavedGame()->setDifficulty(static_cast<GameDifficulty>(_cbxDifficulty->getSelected()));
 
-	bgen.setWorldShade(_slrDarkness->getValue());
+	bgen.setSiteShade(_slrDarkness->getValue());
 	bgen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 	bgen.setAlienItemlevel(_slrAlienTech->getValue());
 	bgame->setDepth(_slrDepth->getValue());
@@ -724,7 +725,10 @@ void NewBattleState::cbxMissionChange(Action*)
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
 	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
+
 	cbxTerrainChange(NULL);
+	// TODO: allow choice of terrains if Terror-type mission is selected.
+	// Ps. Terrain-selection btn still goes *Bleep* even when not visible.
 }
 
 /**
@@ -748,7 +752,7 @@ void NewBattleState::cbxCraftChange(Action*)
 			if ((*i)->getCraft() == _craft)
 			{
 				(*i)->setCraft(NULL);
-				curSoldiers--;
+				--curSoldiers;
 			}
 		}
 	}

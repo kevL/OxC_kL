@@ -1,59 +1,8 @@
-﻿# Terrain Pack by Hobbes # version kL
+﻿# Terrain Pack by Hobbes # version kL based on 3.0.5
 # kL_note: Moved all terrains here, except URBAN/2 (TerrorSites.rul) and XBASE (Xcom1Ruleset.rul) and UBASE (FULL_Expanded_UBase)
 terrains:
-  - name: ATLANTDESERT
-    script: DESERT
-    mapDataSets:
-      - BLANKS
-      - SANDS
-      - ATLANTDESERT
-      - DESERT
-    textures: [7, 8]
-    hemisphere: 1
-    mapBlocks:
-      - name: ATLANTDESERT00
-        width: 10
-        length: 10
-        groups: 1
-      - name: ATLANTDESERT01
-        width: 10
-        length: 10
-        groups: 1
-      - name: ATLANTDESERT02
-        width: 10
-        length: 10
-      - name: ATLANTDESERT03
-        width: 10
-        length: 10
-      - name: ATLANTDESERT04
-        width: 10
-        length: 10
-      - name: ATLANTDESERT05
-        width: 10
-        length: 10
-      - name: ATLANTDESERT06
-        width: 10
-        length: 10
-      - name: ATLANTDESERT07
-        width: 10
-        length: 10
-      - name: ATLANTDESERT08
-        width: 10
-        length: 10
-      - name: ATLANTDESERT09
-        width: 10
-        length: 10
-      - name: ATLANTDESERT10
-        width: 20
-        length: 20
-      - name: ATLANTDESERT11
-        width: 20
-        length: 20
-      - name: ATLANTDESERT12
-        width: 20
-        length: 20
   - name: COMRCURBAN
-    script: URBAN
+    script: URBAN #was COMRCURBAN
     mapDataSets:
       - BLANKS
       - COMROADS
@@ -63,16 +12,21 @@ terrains:
       - COMDECOR
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN2
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
       - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
     mapBlocks:
       - name: COMRCURBAN00
         width: 10
         length: 10
-        groups: [0, 1, 2]
+        groups: [0,1,2] #was 2
       - name: COMRCURBAN01
         width: 10
         length: 10
-        groups: [0, 1, 3]
+        groups: [0,1,3] #was 3
       - name: COMRCURBAN02
         width: 10
         length: 10
@@ -143,7 +97,7 @@ terrains:
         groups: 4
   - name: CULTA
     script: FARM
-    textures: [1, 2, 6, 10]
+    textures: [1,2]
     mapDataSets:
       - BLANKS
       - CULTIVAT
@@ -211,12 +165,12 @@ terrains:
         width: 10
         length: 10
   - name: CULTAFARMA
-    script: FARM
+    script: FARM #was DEFAULT
     mapDataSets:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [1, 2, 6, 10]
+    textures: [1,2]
 #    hemisphere: -1
     mapBlocks:
       - name: CULTA00
@@ -349,12 +303,12 @@ terrains:
         width: 20
         length: 20
   - name: CULTAFARMB
-    script: FARM
+    script: FARM #was DEFAULT
     mapDataSets:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [1, 2, 6, 10]
+    textures: [1,2]
 #    hemisphere: 1
     mapBlocks:
       - name: CULTA00
@@ -439,7 +393,7 @@ terrains:
         width: 20
         length: 20
   - name: DAWNURBANA
-    script: URBAN
+    script: URBAN #was DAWNURBANA
     mapDataSets:
       - BLANKS
       - DAWNROADS
@@ -449,7 +403,12 @@ terrains:
       - DAWNDECOR
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - MALE_CIVILIAN6
       - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
     mapBlocks:
       - name: DAWNURBAN00
         width: 10
@@ -558,11 +517,11 @@ terrains:
       - name: DAWNURBAN28
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1] #was 1
       - name: DAWNURBAN29
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1] #was 1
       - name: DAWNURBAN30
         width: 10
         length: 10
@@ -594,7 +553,7 @@ terrains:
         width: 10
         length: 10
   - name: DAWNURBANB
-    script: URBAN
+    script: URBAN #was DAWNURBANB
     mapDataSets:
       - BLANKS
       - DAWNROADS
@@ -604,7 +563,12 @@ terrains:
       - DAWNDECOR
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN2
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
       - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
     mapBlocks:
       - name: DAWNURBAN40
         width: 10
@@ -714,15 +678,15 @@ terrains:
       - name: DESERT00
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: DESERT01
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: DESERT02
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: DESERT03
         width: 10
         length: 10
@@ -751,12 +715,13 @@ terrains:
         width: 20
         length: 20
   - name: DESERTMOUNT
-    script: DEFAULT
+    script: DEFAULT #was DESERT
     mapDataSets:
       - BLANKS
       - MOUNT
-      - DESERT
+      - DESERT #was POLARDESERT
     textures: [8]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERTMOUNT00
         width: 10
@@ -815,12 +780,63 @@ terrains:
       - name: DESERTMOUNT17
         width: 10
         length: 10
+  - name: DESERTTEMPLE # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - SANDS
+      - ATLANTDESERT
+      - DESERT
+    textures: [7,8]
+#    hemisphere: 1
+    mapBlocks:
+      - name: ATLANTDESERT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: ATLANTDESERT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: ATLANTDESERT02
+        width: 10
+        length: 10
+      - name: ATLANTDESERT03
+        width: 10
+        length: 10
+      - name: ATLANTDESERT04
+        width: 10
+        length: 10
+      - name: ATLANTDESERT05
+        width: 10
+        length: 10
+      - name: ATLANTDESERT06
+        width: 10
+        length: 10
+      - name: ATLANTDESERT07
+        width: 10
+        length: 10
+      - name: ATLANTDESERT08
+        width: 10
+        length: 10
+      - name: ATLANTDESERT09
+        width: 10
+        length: 10
+      - name: ATLANTDESERT10
+        width: 20
+        length: 20
+      - name: ATLANTDESERT11
+        width: 20
+        length: 20
+      - name: ATLANTDESERT12
+        width: 20
+        length: 20
   - name: FOREST
     script: DEFAULT
     mapDataSets:
       - BLANKS
       - FOREST
-    textures: [0, 3]
+    textures: [0,3]
 #    hemisphere: -1
     mapBlocks:
       - name: FOREST00
@@ -862,13 +878,14 @@ terrains:
         width: 20
         length: 20
   - name: FORESTMOUNT
-    script: DEFAULT
+    script: DEFAULT #was DESERT
     mapDataSets:
       - BLANKS
       - MOUNT
       - FOREST
       - FORESTMOUNT
-    textures: [3, 5]
+      - FORESTMOUNTBITS
+    textures: [3,5]
 #    hemisphere: -1
     mapBlocks:
       - name: FORESTMOUNT00
@@ -954,8 +971,313 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
+  - name: FORESTPOLAR # NEW ###
+    script: POLAR
+    mapDataSets:
+      - BLANKS
+      - FORESTPOLAR
+      - FOREST
+    textures: [0]
+#    hemisphere: -1
+    mapBlocks:
+      - name: FORESTPOLAR00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: FORESTPOLAR01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: FORESTPOLAR02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: FORESTPOLAR03
+        width: 10
+        length: 10
+      - name: FORESTPOLAR04
+        width: 10
+        length: 10
+      - name: FORESTPOLAR05
+        width: 10
+        length: 10
+      - name: FORESTPOLAR06
+        width: 10
+        length: 10
+      - name: FORESTPOLAR07
+        width: 10
+        length: 10
+      - name: FORESTPOLAR08
+        width: 10
+        length: 10
+      - name: FORESTPOLAR09
+        width: 10
+        length: 10
+      - name: FORESTPOLAR10
+        width: 10
+        length: 10
+      - name: FORESTPOLAR11
+        width: 10
+        length: 10
+      - name: FORESTPOLAR12
+        width: 20
+        length: 20
+      - name: FORESTPOLAR13
+        width: 20
+        length: 20
+  - name: GRASSLANDDESERT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - GRASSLANDDESERT
+    textures: [2]
+    hemisphere: -1
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
+  - name: GRASSLANDFOREST # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - GRASSLANDFOREST
+    textures: [2]
+#    hemisphere: 1
+    mapBlocks:
+      - name: FOREST00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST02
+        width: 10
+        length: 10
+      - name: FOREST03
+        width: 10
+        length: 10
+      - name: FOREST04
+        width: 10
+        length: 10
+      - name: FOREST05
+        width: 10
+        length: 10
+      - name: FOREST06
+        width: 10
+        length: 10
+      - name: FOREST07
+        width: 10
+        length: 10
+      - name: FOREST08
+        width: 10
+        length: 10
+      - name: FOREST09
+        width: 10
+        length: 10
+      - name: FOREST10
+        width: 20
+        length: 20
+      - name: FOREST11
+        width: 20
+        length: 20
+  - name: GRASSLANDFORESTMOUNT # NEW ###
+    script: DESERT
+    textures: [3]
+#    hemisphere: 1
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - GRASSLANDFOREST
+      - GRASSLANDMOUNTBITS
+    mapBlocks:
+      - name: FORESTMOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT02
+        width: 10
+        length: 10
+      - name: FORESTMOUNT03
+        width: 10
+        length: 10
+      - name: FORESTMOUNT04
+        width: 10
+        length: 10
+      - name: FORESTMOUNT05
+        width: 10
+        length: 10
+      - name: FORESTMOUNT06
+        width: 10
+        length: 10
+      - name: FORESTMOUNT07
+        width: 10
+        length: 10
+      - name: FORESTMOUNT08
+        width: 10
+        length: 10
+      - name: FORESTMOUNT09
+        width: 10
+        length: 10
+      - name: FORESTMOUNT10
+        width: 10
+        length: 10
+      - name: FORESTMOUNT11
+        width: 20
+        length: 20
+      - name: FORESTMOUNT12
+        width: 20
+        length: 20
+      - name: FORESTMOUNT13
+        width: 20
+        length: 20
+      - name: FORESTMOUNT14
+        width: 20
+        length: 20
+      - name: FORESTMOUNT15
+        width: 10
+        length: 10
+      - name: FORESTMOUNT16
+        width: 10
+        length: 10
+      - name: FORESTMOUNT17
+        width: 10
+        length: 10
+      - name: FORESTMOUNT18
+        width: 10
+        length: 10
+      - name: FORESTMOUNT19
+        width: 10
+        length: 10
+      - name: FORESTMOUNT20
+        width: 10
+        length: 10
+      - name: FORESTMOUNT21
+        width: 10
+        length: 10
+      - name: FORESTMOUNT22
+        width: 10
+        length: 10
+      - name: FORESTMOUNT23
+        width: 10
+        length: 10
+      - name: FORESTMOUNT24
+        width: 10
+        length: 10
+      - name: FORESTMOUNT25
+        width: 20
+        length: 20
+      - name: FORESTMOUNT26
+        width: 20
+        length: 20
+  - name: INDUSTRIALUFO # NEW ###
+    script: URBANUFO #was INDUSTRIALUFO
+    mapDataSets:
+      - BLANKS
+      - PORTROADS
+      - PORTURBITS
+      - ROADS
+      - URBITS
+    mapBlocks:
+      - name: INDUSTRIALURBAN00
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN01
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN02
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN03
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN04
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN05
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN06
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN07
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN08
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN09
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN10
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN11
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN12
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN13
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN14
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN15
+        width: 10
+        length: 10
+      - name: INDUSTRIALURBAN16
+        width: 10
+        length: 10
+        groups: 1
+      - name: INDUSTRIALURBAN17
+        width: 10
+        length: 10
+        groups: 1
   - name: INDUSTRIALURBAN
-    script: URBAN
+    script: URBAN #was INDUSTRIALURBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
@@ -965,6 +1287,8 @@ terrains:
 #    textures: [1]
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN2
+      - MALE_CIVILIAN4
       - FEMALE_CIVILIAN
     mapBlocks:
       - name: INDUSTRIALURBAN00
@@ -979,63 +1303,63 @@ terrains:
       - name: INDUSTRIALURBAN03
         width: 10
         length: 10
-        groups: 2
+        groups: 2 #was nogroups
       - name: INDUSTRIALURBAN04
         width: 10
         length: 10
-        groups: 3
+        groups: 3 #was nogroups
       - name: INDUSTRIALURBAN05
         width: 10
         length: 10
-        groups: 4
+        groups: 4 #was nogroups
       - name: INDUSTRIALURBAN06
         width: 10
         length: 10
-        groups: 3
+        groups: 3 #was nogroups
       - name: INDUSTRIALURBAN07
         width: 10
         length: 10
-        groups: 3
+        groups: 3 #was nogroups
       - name: INDUSTRIALURBAN08
         width: 10
         length: 10
-        groups: 4
+        groups: 4 #was nogroups
       - name: INDUSTRIALURBAN09
         width: 10
         length: 10
-        groups: 2
+        groups: 2 #was nogroups
       - name: INDUSTRIALURBAN10
         width: 10
         length: 10
-        groups: 3
+        groups: 3 #was nogroups
       - name: INDUSTRIALURBAN11
         width: 10
         length: 10
-        groups: 4
+        groups: 4 #was nogroups
       - name: INDUSTRIALURBAN12
         width: 10
         length: 10
-        groups: 2
+        groups: 2 #was nogroups
       - name: INDUSTRIALURBAN13
         width: 10
         length: 10
-        groups: 3
+        groups: 3 #was nogroups
       - name: INDUSTRIALURBAN14
         width: 10
         length: 10
-        groups: 4
+        groups: 4 #was nogroups
       - name: INDUSTRIALURBAN15
         width: 10
         length: 10
-        groups: 2
+        groups: 2 #was nogroups
       - name: INDUSTRIALURBAN16
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1] #was 1
       - name: INDUSTRIALURBAN17
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1] #was 1
   - name: JUNGLE
     script: JUNGLE
     mapDataSets:
@@ -1083,8 +1407,170 @@ terrains:
       - name: JUNGLE11
         width: 10
         length: 10
+  - name: JUNGLEMOUNT # NEW ###
+    script: JUNGLE #was DEFAULT
+    mapDataSets:
+      - BLANKS
+      - JUNGLEMOUNT
+      - JUNGLEBITS
+    textures: [10]
+    hemisphere: 1
+    mapBlocks:
+      - name: JUNGLEMOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: JUNGLEMOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: JUNGLEMOUNT02
+        width: 10
+        length: 10
+        groups: 1
+      - name: JUNGLEMOUNT03
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT04
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT05
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT06
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT07
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT08
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT09
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT10
+        width: 10
+        length: 10
+      - name: JUNGLEMOUNT11
+        width: 20
+        length: 20
+      - name: JUNGLEMOUNT12
+        width: 20
+        length: 20
+  - name: JUNGLEPOLAR # NEW ###
+    script: POLAR
+    mapDataSets:
+      - BLANKS
+      - JUNGLEPOLAR
+      - JUNGLEBITS
+    textures: [6]
+#    hemisphere: 1
+    mapBlocks:
+      - name: JUNGLEPOLAR00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: JUNGLEPOLAR01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: JUNGLEPOLAR02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: JUNGLEPOLAR03
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR04
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR05
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR06
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR07
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR08
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR09
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR10
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR11
+        width: 10
+        length: 10
+      - name: JUNGLEPOLAR12
+        width: 20
+        length: 20
+      - name: JUNGLEPOLAR13
+        width: 20
+        length: 20
+  - name: JUNGLETEMPLE # NEW ###
+    script: JUNGLE #was DESERT
+    mapDataSets:
+      - BLANKS
+      - SANDS
+      - MUJUNGLE
+      - JUNGLEBITS
+    textures: [6]
+#    hemisphere: 1
+    mapBlocks:
+      - name: MUJUNGLE00
+        width: 10
+        length: 10
+        groups: 1
+      - name: MUJUNGLE01
+        width: 10
+        length: 10
+        groups: 1
+      - name: MUJUNGLE02
+        width: 10
+        length: 10
+      - name: MUJUNGLE03
+        width: 10
+        length: 10
+      - name: MUJUNGLE04
+        width: 10
+        length: 10
+      - name: MUJUNGLE05
+        width: 10
+        length: 10
+      - name: MUJUNGLE06
+        width: 10
+        length: 10
+      - name: MUJUNGLE07
+        width: 10
+        length: 10
+      - name: MUJUNGLE08
+        width: 10
+        length: 10
+      - name: MUJUNGLE09
+        width: 20
+        length: 20
+      - name: MUJUNGLE10
+        width: 20
+        length: 20
+      - name: MUJUNGLE11
+        width: 20
+        length: 20
+      - name: MUJUNGLE12
+        width: 20
+        length: 20
+      - name: MUJUNGLE13
+        width: 20
+        length: 20
+      - name: MUJUNGLE14
+        width: 20
+        length: 20
   - name: MADURBAN
-    script: URBAN
+    script: URBAN #was MADURBAN
     mapDataSets:
       - BLANKS
       - ROADS
@@ -1096,7 +1582,12 @@ terrains:
 #    hemisphere: 1
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - MALE_CIVILIAN6
       - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
     mapBlocks:
       - name: URBAN00
         width: 10
@@ -1217,6 +1708,138 @@ terrains:
       - name: MADURBAN38
         width: 10
         length: 10
+  - name: MADURBANUFO # NEW ###
+    script: URBANUFO #was MADURBANUFO
+    mapDataSets:
+      - BLANKS
+      - ROADS
+      - URBITS
+      - URBAN
+      - FRNITURE
+      - MADDECOR
+    mapBlocks:
+      - name: URBAN00
+        width: 10
+        length: 10
+        groups: 2
+      - name: URBAN01
+        width: 10
+        length: 10
+        groups: 3
+      - name: URBAN02
+        width: 10
+        length: 10
+        groups: 4
+      - name: URBAN03
+        width: 10
+        length: 10
+        groups: 1
+      - name: URBAN04
+        width: 10
+        length: 10
+        groups: 1
+      - name: URBAN05
+        width: 20
+        length: 20
+      - name: URBAN06
+        width: 20
+        length: 20
+      - name: URBAN07
+        width: 20
+        length: 20
+      - name: URBAN08
+        width: 20
+        length: 20
+      - name: URBAN09
+        width: 20
+        length: 20
+      - name: MADURBAN10
+        width: 10
+        length: 10
+      - name: MADURBAN11
+        width: 20
+        length: 20
+      - name: MADURBAN12
+        width: 20
+        length: 20
+      - name: MADURBAN13
+        width: 20
+        length: 20
+      - name: URBAN14
+        width: 10
+        length: 10
+      - name: URBAN15
+        width: 10
+        length: 10
+      - name: URBAN16
+        width: 10
+        length: 10
+      - name: URBAN17
+        width: 10
+        length: 10
+      - name: URBAN18
+        width: 10
+        length: 10
+      - name: MADURBAN19
+        width: 10
+        length: 10
+      - name: MADURBAN20
+        width: 10
+        length: 10
+      - name: MADURBAN21
+        width: 10
+        length: 10
+      - name: MADURBAN22
+        width: 10
+        length: 10
+      - name: MADURBAN23
+        width: 10
+        length: 10
+      - name: MADURBAN24
+        width: 10
+        length: 10
+      - name: MADURBAN25
+        width: 10
+        length: 10
+      - name: MADURBAN26
+        width: 10
+        length: 10
+      - name: MADURBAN27
+        width: 20
+        length: 20
+      - name: MADURBAN28
+        width: 20
+        length: 20
+      - name: MADURBAN29
+        width: 20
+        length: 20
+      - name: MADURBAN30
+        width: 20
+        length: 20
+      - name: MADURBAN31
+        width: 20
+        length: 20
+      - name: MADURBAN32
+        width: 20
+        length: 20
+      - name: MADURBAN33
+        width: 20
+        length: 20
+      - name: MADURBAN34
+        width: 20
+        length: 20
+      - name: MADURBAN35
+        width: 20
+        length: 20
+      - name: MADURBAN36
+        width: 10
+        length: 10
+      - name: MADURBAN37
+        width: 10
+        length: 10
+      - name: MADURBAN38
+        width: 10
+        length: 10
   - name: MARS
     script: MARS
     mapDataSets:
@@ -1227,7 +1850,7 @@ terrains:
       - name: MARS00
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: MARS01
         width: 10
         length: 10
@@ -1308,65 +1931,8 @@ terrains:
       - name: MOUNT12
         width: 20
         length: 20
-  - name: MUJUNGLE
-    script: JUNGLE
-    mapDataSets:
-      - BLANKS
-      - SANDS
-      - MUJUNGLE
-      - JUNGLEBITS
-    textures: [6]
-#    hemisphere: 1
-    mapBlocks:
-      - name: MUJUNGLE00
-        width: 10
-        length: 10
-        groups: 1
-      - name: MUJUNGLE01
-        width: 10
-        length: 10
-        groups: 1
-      - name: MUJUNGLE02
-        width: 10
-        length: 10
-      - name: MUJUNGLE03
-        width: 10
-        length: 10
-      - name: MUJUNGLE04
-        width: 10
-        length: 10
-      - name: MUJUNGLE05
-        width: 10
-        length: 10
-      - name: MUJUNGLE06
-        width: 10
-        length: 10
-      - name: MUJUNGLE07
-        width: 10
-        length: 10
-      - name: MUJUNGLE08
-        width: 10
-        length: 10
-      - name: MUJUNGLE09
-        width: 20
-        length: 20
-      - name: MUJUNGLE10
-        width: 20
-        length: 20
-      - name: MUJUNGLE11
-        width: 20
-        length: 20
-      - name: MUJUNGLE12
-        width: 20
-        length: 20
-      - name: MUJUNGLE13
-        width: 20
-        length: 20
-      - name: MUJUNGLE14
-        width: 20
-        length: 20
-  - name: NATIVEURBAN
-    script: URBAN
+  - name: NATIVEUFO # NEW ###
+    script: URBANUFO #was NATIVEUFO
     mapDataSets:
       - BLANKS
       - JUNGLE
@@ -1374,96 +1940,72 @@ terrains:
       - FRNITURE
       - URBITS
       - CULTIVAT
-#    textures: [4]
+#    textures: [2]
 #    hemisphere: 1
-    civilianTypes:
-      - MALE_CIVILIAN
-      - FEMALE_CIVILIAN
     mapBlocks:
       - name: NATIVEURBAN00
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN01
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN02
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN03
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN04
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN05
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN06
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN07
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN08
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN09
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN10
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN11
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN12
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN13
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN14
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN15
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN16
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN17
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN18
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN19
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN20
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN21
         width: 20
         length: 20
@@ -1500,23 +2042,18 @@ terrains:
       - name: NATIVEURBAN32
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN33
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN34
         width: 10
         length: 10
-        groups: [0, 4]
       - name: NATIVEURBAN35
         width: 10
         length: 10
-        groups: [0, 2]
       - name: NATIVEURBAN36
         width: 10
         length: 10
-        groups: [0, 3]
       - name: NATIVEURBAN37
         width: 20
         length: 20
@@ -1547,26 +2084,213 @@ terrains:
       - name: NATIVEURBAN46
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1] #was 1
+  - name: NATIVEURBAN
+    script: URBAN #was NATIVEURBAN
+    mapDataSets:
+      - BLANKS
+      - JUNGLE
+      - BARN
+      - FRNITURE
+      - URBITS
+      - CULTIVAT
+#    textures: [4]
+#    hemisphere: 1
+    civilianTypes:
+      - MALE_CIVILIAN
+      - MALE_CIVILIAN2
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN3
+    mapBlocks:
+      - name: NATIVEURBAN00
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN01
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN02
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN03
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN04
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN05
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN06
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN07
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN08
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN09
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN10
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN11
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN12
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN13
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN14
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN15
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN16
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN17
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN18
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN19
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN20
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN21
+        width: 20
+        length: 20
+      - name: NATIVEURBAN22
+        width: 20
+        length: 20
+      - name: NATIVEURBAN23
+        width: 20
+        length: 20
+      - name: NATIVEURBAN24
+        width: 20
+        length: 20
+      - name: NATIVEURBAN25
+        width: 20
+        length: 20
+      - name: NATIVEURBAN26
+        width: 20
+        length: 20
+      - name: NATIVEURBAN27
+        width: 20
+        length: 20
+      - name: NATIVEURBAN28
+        width: 20
+        length: 20
+      - name: NATIVEURBAN29
+        width: 20
+        length: 20
+      - name: NATIVEURBAN30
+        width: 20
+        length: 20
+      - name: NATIVEURBAN31
+        width: 20
+        length: 20
+      - name: NATIVEURBAN32
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN33
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN34
+        width: 10
+        length: 10
+        groups: [0,4] #was nogroups
+      - name: NATIVEURBAN35
+        width: 10
+        length: 10
+        groups: [0,2] #was nogroups
+      - name: NATIVEURBAN36
+        width: 10
+        length: 10
+        groups: [0,3] #was nogroups
+      - name: NATIVEURBAN37
+        width: 20
+        length: 20
+      - name: NATIVEURBAN38
+        width: 20
+        length: 20
+      - name: NATIVEURBAN39
+        width: 20
+        length: 20
+      - name: NATIVEURBAN40
+        width: 20
+        length: 20
+      - name: NATIVEURBAN41
+        width: 20
+        length: 20
+      - name: NATIVEURBAN42
+        width: 20
+        length: 20
+      - name: NATIVEURBAN43
+        width: 20
+        length: 20
+      - name: NATIVEURBAN44
+        width: 20
+        length: 20
+      - name: NATIVEURBAN45
+        width: 10
+        length: 10
+      - name: NATIVEURBAN46
+        width: 10
+        length: 10
+        groups: [0,1] #was 1
   - name: POLAR
     script: POLAR
     mapDataSets:
       - BLANKS
       - POLAR
-    textures: [4, 9, 12]
+    textures: [9,12]
     mapBlocks:
       - name: POLAR00
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: POLAR01
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: POLAR02
         width: 10
         length: 10
-        groups: [0, 1]
+        groups: [0,1]
       - name: POLAR03
         width: 10
         length: 10
@@ -1600,8 +2324,55 @@ terrains:
       - name: POLAR13
         width: 20
         length: 20
+  - name: POLARDESERT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - POLARDESERT
+    textures: [9]
+    hemisphere: -1
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
   - name: POLARMOUNT
-    script: DEFAULT
+    script: DEFAULT #was DESERT
     mapDataSets:
       - BLANKS
       - MOUNT
@@ -1610,56 +2381,149 @@ terrains:
     textures: [11]
 #    hemisphere: 1
     mapBlocks:
-      - name: MOUNTPOLAR00
+      - name: POLARMOUNT00
         width: 10
         length: 10
         groups: 1
-      - name: MOUNTPOLAR01
+      - name: POLARMOUNT01
         width: 10
         length: 10
         groups: 1
-      - name: MOUNTPOLAR02
+      - name: POLARMOUNT02
         width: 10
         length: 10
         groups: 1
-      - name: MOUNTPOLAR03
+      - name: POLARMOUNT03
         width: 10
         length: 10
-      - name: MOUNTPOLAR04
+      - name: POLARMOUNT04
         width: 10
         length: 10
-      - name: MOUNTPOLAR05
+      - name: POLARMOUNT05
         width: 10
         length: 10
-      - name: MOUNTPOLAR06
+      - name: POLARMOUNT06
         width: 10
         length: 10
-      - name: MOUNTPOLAR07
+      - name: POLARMOUNT07
         width: 10
         length: 10
-      - name: MOUNTPOLAR08
+      - name: POLARMOUNT08
         width: 10
         length: 10
-      - name: MOUNTPOLAR09
+      - name: POLARMOUNT09
         width: 10
         length: 10
-      - name: MOUNTPOLAR10
+      - name: POLARMOUNT10
         width: 10
         length: 10
-      - name: MOUNTPOLAR11
+      - name: POLARMOUNT11
         width: 20
         length: 20
-      - name: MOUNTPOLAR12
+      - name: POLARMOUNT12
         width: 20
         length: 20
+  - name: PORTTFTD # NEW ###
+    script: PORTUFO
+    mapDataSets:
+      - BLANKS
+      - SEAURBAN
+      - PORTROADS
+      - PORTURBITS
+      - SEABITS
+    civilianTypes:
+      - MALE_CIVILIAN
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - MALE_CIVILIAN6
+      - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
+    mapBlocks:
+      - name: PORTUFO00
+        width: 10
+        length: 10
+        groups: 1
+      - name: PORTUFO01
+        width: 10
+        length: 10
+        groups: 1
+      - name: PORTUFO02
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO03
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO04
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO05
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO06
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO07
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO08
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO09
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO10
+        width: 10
+        length: 10
+      - name: PORTUFO11
+        width: 10
+        length: 10
+      - name: PORTUFO12
+        width: 10
+        length: 10
+      - name: PORTUFO13
+        width: 10
+        length: 10
+      - name: PORTUFO14
+        width: 10
+        length: 10
+      - name: PORTUFO15
+        width: 10
+        length: 10
+      - name: PORTUFO16
+        width: 10
+        length: 10
+      - name: PORTUFO17
+        width: 20
+        length: 20
+      - name: PORTUFO18
+        width: 20
+        length: 20
+      - name: PORTUFO19
+        width: 20
+        length: 20
+      - name: PORTUFO20
+        width: 20
+        length: 20
+        groups: 5
   - name: PORTURBAN
-    script: URBAN
+    script: URBAN #was PORTURBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
       - PORTURBITS
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN2
+      - MALE_CIVILIAN5
       - FEMALE_CIVILIAN
     mapBlocks:
       - name: PORTURBAN00
@@ -1700,9 +2564,11 @@ terrains:
       - name: PORTURBAN10
         width: 10
         length: 10
+        groups: 1
       - name: PORTURBAN11
         width: 10
         length: 10
+        groups: 1
       - name: PORTURBAN12
         width: 10
         length: 10
@@ -1743,7 +2609,7 @@ terrains:
         length: 10
         groups: 3
   - name: RAILYARDURBAN
-    script: URBAN
+    script: URBAN #was RAILYARDURBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
@@ -1753,12 +2619,14 @@ terrains:
       - FRNITURE
     civilianTypes:
       - MALE_CIVILIAN
+      - MALE_CIVILIAN2
+      - MALE_CIVILIAN4
       - FEMALE_CIVILIAN
     mapBlocks:
       - name: RAILYARDURBAN00
         width: 10
         length: 10
-        groups: [1, 3]
+        groups: [1,3] #was 1
       - name: RAILYARDURBAN01
         width: 10
         length: 10
@@ -1846,24 +2714,768 @@ terrains:
       - name: RAILYARDURBAN27
         width: 10
         length: 10
+  - name: SAVANNADESERT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - SAVANNADESERT
+    textures: [1]
+    hemisphere: 1
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
+  - name: SAVANNAFOREST # NEW ###
+    script: DEFAULT
+    mapDataSets:
+      - BLANKS
+      - SAVANNAFOREST
+    textures: [1]
+    hemisphere: 1
+    mapBlocks:
+      - name: FOREST00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST02
+        width: 10
+        length: 10
+      - name: FOREST03
+        width: 10
+        length: 10
+      - name: FOREST04
+        width: 10
+        length: 10
+      - name: FOREST05
+        width: 10
+        length: 10
+      - name: FOREST06
+        width: 10
+        length: 10
+      - name: FOREST07
+        width: 10
+        length: 10
+      - name: FOREST08
+        width: 10
+        length: 10
+      - name: FOREST09
+        width: 10
+        length: 10
+      - name: FOREST10
+        width: 20
+        length: 20
+      - name: FOREST11
+        width: 20
+        length: 20
+  - name: SAVANNAFORESTMOUNT # NEW ###
+    script: DESERT
+    textures: [3]
+    hemisphere: -1
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - SAVANNAFOREST
+      - SAVANNAMOUNTBITS
+    mapBlocks:
+      - name: FORESTMOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT02
+        width: 10
+        length: 10
+      - name: FORESTMOUNT03
+        width: 10
+        length: 10
+      - name: FORESTMOUNT04
+        width: 10
+        length: 10
+      - name: FORESTMOUNT05
+        width: 10
+        length: 10
+      - name: FORESTMOUNT06
+        width: 10
+        length: 10
+      - name: FORESTMOUNT07
+        width: 10
+        length: 10
+      - name: FORESTMOUNT08
+        width: 10
+        length: 10
+      - name: FORESTMOUNT09
+        width: 10
+        length: 10
+      - name: FORESTMOUNT10
+        width: 10
+        length: 10
+      - name: FORESTMOUNT11
+        width: 20
+        length: 20
+      - name: FORESTMOUNT12
+        width: 20
+        length: 20
+      - name: FORESTMOUNT13
+        width: 20
+        length: 20
+      - name: FORESTMOUNT14
+        width: 20
+        length: 20
+      - name: FORESTMOUNT15
+        width: 10
+        length: 10
+      - name: FORESTMOUNT16
+        width: 10
+        length: 10
+      - name: FORESTMOUNT17
+        width: 10
+        length: 10
+      - name: FORESTMOUNT18
+        width: 10
+        length: 10
+      - name: FORESTMOUNT19
+        width: 10
+        length: 10
+      - name: FORESTMOUNT20
+        width: 10
+        length: 10
+      - name: FORESTMOUNT21
+        width: 10
+        length: 10
+      - name: FORESTMOUNT22
+        width: 10
+        length: 10
+      - name: FORESTMOUNT23
+        width: 10
+        length: 10
+      - name: FORESTMOUNT24
+        width: 10
+        length: 10
+      - name: FORESTMOUNT25
+        width: 20
+        length: 20
+      - name: FORESTMOUNT26
+        width: 20
+        length: 20
+  - name: STEPPEDESERT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - STEPPEDESERT
+    textures: [1]
+    hemisphere: -1
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
+  - name: STEPPEFOREST # NEW ###
+    script: DEFAULT
+    textures: [0]
+    hemisphere: 1
+    mapDataSets:
+      - BLANKS
+      - STEPPEFOREST
+    mapBlocks:
+      - name: FOREST00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST02
+        width: 10
+        length: 10
+      - name: FOREST03
+        width: 10
+        length: 10
+      - name: FOREST04
+        width: 10
+        length: 10
+      - name: FOREST05
+        width: 10
+        length: 10
+      - name: FOREST06
+        width: 10
+        length: 10
+      - name: FOREST07
+        width: 10
+        length: 10
+      - name: FOREST08
+        width: 10
+        length: 10
+      - name: FOREST09
+        width: 10
+        length: 10
+      - name: FOREST10
+        width: 20
+        length: 20
+      - name: FOREST11
+        width: 20
+        length: 20
+  - name: STEPPEFORESTMOUNT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - STEPPEFOREST
+      - STEPPEMOUNTBITS
+    textures: [3]
+    hemisphere: 1
+    mapBlocks:
+      - name: FORESTMOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT02
+        width: 10
+        length: 10
+      - name: FORESTMOUNT03
+        width: 10
+        length: 10
+      - name: FORESTMOUNT04
+        width: 10
+        length: 10
+      - name: FORESTMOUNT05
+        width: 10
+        length: 10
+      - name: FORESTMOUNT06
+        width: 10
+        length: 10
+      - name: FORESTMOUNT07
+        width: 10
+        length: 10
+      - name: FORESTMOUNT08
+        width: 10
+        length: 10
+      - name: FORESTMOUNT09
+        width: 10
+        length: 10
+      - name: FORESTMOUNT10
+        width: 10
+        length: 10
+      - name: FORESTMOUNT11
+        width: 20
+        length: 20
+      - name: FORESTMOUNT12
+        width: 20
+        length: 20
+      - name: FORESTMOUNT13
+        width: 20
+        length: 20
+      - name: FORESTMOUNT14
+        width: 20
+        length: 20
+      - name: FORESTMOUNT15
+        width: 10
+        length: 10
+      - name: FORESTMOUNT16
+        width: 10
+        length: 10
+      - name: FORESTMOUNT17
+        width: 10
+        length: 10
+      - name: FORESTMOUNT18
+        width: 10
+        length: 10
+      - name: FORESTMOUNT19
+        width: 10
+        length: 10
+      - name: FORESTMOUNT20
+        width: 10
+        length: 10
+      - name: FORESTMOUNT21
+        width: 10
+        length: 10
+      - name: FORESTMOUNT22
+        width: 10
+        length: 10
+      - name: FORESTMOUNT23
+        width: 10
+        length: 10
+      - name: FORESTMOUNT24
+        width: 10
+        length: 10
+      - name: FORESTMOUNT25
+        width: 20
+        length: 20
+      - name: FORESTMOUNT26
+        width: 20
+        length: 20
+  - name: TAIGADESERT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - TAIGADESERT #was TUNDRADESERT
+    textures: [4]
+    hemisphere: -1
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
+  - name: TAIGAFOREST # NEW ###
+    script: DEFAULT
+    mapDataSets:
+      - BLANKS
+      - TAIGAFOREST
+    textures: [0]
+    hemisphere: -1
+    mapBlocks:
+      - name: FOREST00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FOREST02
+        width: 10
+        length: 10
+      - name: FOREST03
+        width: 10
+        length: 10
+      - name: FOREST04
+        width: 10
+        length: 10
+      - name: FOREST05
+        width: 10
+        length: 10
+      - name: FOREST06
+        width: 10
+        length: 10
+      - name: FOREST07
+        width: 10
+        length: 10
+      - name: FOREST08
+        width: 10
+        length: 10
+      - name: FOREST09
+        width: 10
+        length: 10
+      - name: FOREST10
+        width: 20
+        length: 20
+      - name: FOREST11
+        width: 20
+        length: 20
+  - name: TAIGAFORESTMOUNT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - TAIGAFOREST
+      - TAIGAMOUNTBITS
+    textures: [3]
+    hemisphere: 1
+    mapBlocks:
+      - name: FORESTMOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: FORESTMOUNT02
+        width: 10
+        length: 10
+      - name: FORESTMOUNT03
+        width: 10
+        length: 10
+      - name: FORESTMOUNT04
+        width: 10
+        length: 10
+      - name: FORESTMOUNT05
+        width: 10
+        length: 10
+      - name: FORESTMOUNT06
+        width: 10
+        length: 10
+      - name: FORESTMOUNT07
+        width: 10
+        length: 10
+      - name: FORESTMOUNT08
+        width: 10
+        length: 10
+      - name: FORESTMOUNT09
+        width: 10
+        length: 10
+      - name: FORESTMOUNT10
+        width: 10
+        length: 10
+      - name: FORESTMOUNT11
+        width: 20
+        length: 20
+      - name: FORESTMOUNT12
+        width: 20
+        length: 20
+      - name: FORESTMOUNT13
+        width: 20
+        length: 20
+      - name: FORESTMOUNT14
+        width: 20
+        length: 20
+      - name: FORESTMOUNT15
+        width: 10
+        length: 10
+      - name: FORESTMOUNT16
+        width: 10
+        length: 10
+      - name: FORESTMOUNT17
+        width: 10
+        length: 10
+      - name: FORESTMOUNT18
+        width: 10
+        length: 10
+      - name: FORESTMOUNT19
+        width: 10
+        length: 10
+      - name: FORESTMOUNT20
+        width: 10
+        length: 10
+      - name: FORESTMOUNT21
+        width: 10
+        length: 10
+      - name: FORESTMOUNT22
+        width: 10
+        length: 10
+      - name: FORESTMOUNT23
+        width: 10
+        length: 10
+      - name: FORESTMOUNT24
+        width: 10
+        length: 10
+      - name: FORESTMOUNT25
+        width: 20
+        length: 20
+      - name: FORESTMOUNT26
+        width: 20
+        length: 20
+  - name: TUNDRADESERT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - TUNDRADESERT
+    textures: [4]
+    hemisphere: -1
+    mapBlocks:
+      - name: DESERT00
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT01
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT02
+        width: 10
+        length: 10
+        groups: [0,1]
+      - name: DESERT03
+        width: 10
+        length: 10
+      - name: DESERT04
+        width: 10
+        length: 10
+      - name: DESERT05
+        width: 10
+        length: 10
+      - name: DESERT06
+        width: 10
+        length: 10
+      - name: DESERT07
+        width: 10
+        length: 10
+      - name: DESERT08
+        width: 10
+        length: 10
+      - name: DESERT09
+        width: 20
+        length: 20
+      - name: DESERT10
+        width: 20
+        length: 20
+      - name: DESERT11
+        width: 20
+        length: 20
+  - name: TUNDRAMOUNT # NEW ###
+    script: DEFAULT
+    mapDataSets:
+      - BLANKS
+      - TUNDRAMOUNT
+    textures: [5]
+    hemisphere: 1
+    mapBlocks:
+      - name: MOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: MOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: MOUNT02
+        width: 10
+        length: 10
+        groups: 1
+      - name: MOUNT03
+        width: 10
+        length: 10
+      - name: MOUNT04
+        width: 10
+        length: 10
+      - name: MOUNT05
+        width: 10
+        length: 10
+      - name: MOUNT06
+        width: 10
+        length: 10
+      - name: MOUNT07
+        width: 10
+        length: 10
+      - name: MOUNT08
+        width: 10
+        length: 10
+      - name: MOUNT09
+        width: 10
+        length: 10
+      - name: MOUNT10
+        width: 10
+        length: 10
+      - name: MOUNT11
+        width: 20
+        length: 20
+      - name: MOUNT12
+        width: 20
+        length: 20
+  - name: TUNDRADESERTMOUNT # NEW ###
+    script: DESERT
+    mapDataSets:
+      - BLANKS
+      - TUNDRAMOUNT
+      - TUNDRADESERT
+    textures: [5]
+    hemisphere: -1
+    mapBlocks:
+      - name: DESERTMOUNT00
+        width: 10
+        length: 10
+        groups: 1
+      - name: DESERTMOUNT01
+        width: 10
+        length: 10
+        groups: 1
+      - name: DESERTMOUNT02
+        width: 10
+        length: 10
+        groups: 1
+      - name: DESERTMOUNT03
+        width: 10
+        length: 10
+      - name: DESERTMOUNT04
+        width: 10
+        length: 10
+      - name: DESERTMOUNT05
+        width: 10
+        length: 10
+      - name: DESERTMOUNT06
+        width: 10
+        length: 10
+      - name: DESERTMOUNT07
+        width: 10
+        length: 10
+      - name: DESERTMOUNT08
+        width: 10
+        length: 10
+      - name: DESERTMOUNT09
+        width: 10
+        length: 10
+      - name: DESERTMOUNT10
+        width: 10
+        length: 10
+      - name: DESERTMOUNT11
+        width: 20
+        length: 20
+      - name: DESERTMOUNT12
+        width: 20
+        length: 20
+      - name: DESERTMOUNT13
+        width: 20
+        length: 20
+      - name: DESERTMOUNT14
+        width: 20
+        length: 20
+      - name: DESERTMOUNT15
+        width: 10
+        length: 10
+      - name: DESERTMOUNT16
+        width: 10
+        length: 10
+      - name: DESERTMOUNT17
+        width: 10
+        length: 10
 extraStrings:
   - type: en-US
     strings:
-      STR_ATLANTDESERT: "Atlantis + Desert"
-      STR_COMRCURBAN: "Commercial"
-      STR_CULTAFARMA: "Expanded Farm A"
-      STR_CULTAFARMB: "Expanded Farm B"
-      STR_DAWNURBANA: "Dawn City A"
-      STR_DAWNURBANB: "Dawn City B"
+      STR_COMRCURBAN: "Commercial Urban"
+      STR_CULTAFARMA: "Farm Expanded A"
+      STR_CULTAFARMB: "Farm Expanded B"
+      STR_DAWNURBANA: "Dawn City Urban A"
+      STR_DAWNURBANB: "Dawn City Urban B"
       STR_DESERTMOUNT: "Desert Mountain"
+      STR_DESERTTEMPLE: "Desert Temple"
       STR_FORESTMOUNT: "Forest Mountain"
-      STR_INDUSTRIALURBAN: "Industrial"
-      STR_MADURBAN: "Expanded Urban"
-      STR_MUJUNGLE: "Mu + Jungle"
-      STR_NATIVEURBAN: "Native (Farm + Jungle)"
+      STR_FORESTPOLAR: "Forest Marsh"
+      STR_GRASSLANDDESERT: "Grassland Desert"
+      STR_GRASSLANDFOREST: "Grassland Forest"
+      STR_GRASSLANDFORESTMOUNT: "Grassland Forest Mountain"
+      STR_INDUSTRIALUFO: "Industrial Urban w/UFO"
+      STR_INDUSTRIALURBAN: "Industrial Urban"
+      STR_JUNGLEMOUNT: "Jungle Mountain"
+      STR_JUNGLEPOLAR: "Jungle Swamp"
+      STR_JUNGLETEMPLE: "Jungle Temple"
+      STR_MADURBAN: "Urban Expanded"
+      STR_MADURBANUFO: "Urban Expanded w/UFO"
+      STR_NATIVEUFO: "Native Urban w/UFO"
+      STR_NATIVEURBAN: "Native Urban (Farm + Jungle)"
+      STR_POLARDESERT: "Polar Desert"
       STR_POLARMOUNT: "Polar Mountain"
-      STR_PORTURBAN: "Port"
-      STR_RAILYARDURBAN: "Railyard"
+      STR_PORTTFTD: "Port Urban TFTD w/UFO"
+      STR_PORTURBAN: "Port Urban"
+      STR_RAILYARDURBAN: "Railyard Urban"
+      STR_SAVANNADESERT: "Savanna Desert"
+      STR_SAVANNAFOREST: "Savanna Forest"
+      STR_SAVANNAFORESTMOUNT: "Savanna Forest Mountain"
+      STR_STEPPEDESERT: "Steppe Desert"
+      STR_STEPPEFOREST: "Steppe Forest"
+      STR_STEPPEFORESTMOUNT: "Steppe Forest Mountain"
+      STR_TAIGADESERT: "Taiga Desert"
+      STR_TAIGAFOREST: "Taiga Forest"
+      STR_TAIGAFORESTMOUNT: "Taiga Forest Mountain"
+      STR_TUNDRADESERT: "Tundra Desert"
+      STR_TUNDRAMOUNT: "Tundra Mountain"
+      STR_TUNDRADESERTMOUNT: "Tundra Desert Mountain"
   - type: en-GB
     strings:
       STR_NATIVEURBAN: Native (Farm + Jungle)

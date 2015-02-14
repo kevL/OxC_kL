@@ -81,7 +81,7 @@ ConfirmLandingState::ConfirmLandingState(
 {
 	//Log(LOG_INFO) << "Create ConfirmLandingState()";
 	// TODO: show Country & Region
-	// TODO: should do buttons: Patrol or GeoscapeCraftState or Return to base.
+	// TODO: should do buttons: Patrol (isCancel already) or GeoscapeCraftState or Return to base.
 	_screen = false;
 
 	_window			= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
@@ -100,7 +100,7 @@ ConfirmLandingState::ConfirmLandingState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color); //3
+			_game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color);
 
 	add(_window, "window", "confirmLanding");
 	add(_txtBase, "text", "confirmLanding");
@@ -115,31 +115,26 @@ ConfirmLandingState::ConfirmLandingState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-//	_txtBase->setColor(Palette::blockOffset(8)+10);
 	_txtBase->setAlign(ALIGN_LEFT);
 	_txtBase->setText(craft->getBase()->getName(_game->getLanguage()));
 
-//	_txtShade->setColor(Palette::blockOffset(8)+10);
 	_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtShade->setAlign(ALIGN_RIGHT);
 	_txtShade->setText(tr("STR_SHADE_").arg(shade));
 
-//	_txtTexture->setColor(Palette::blockOffset(8)+10);
 	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
-
 
 	// NOTE: the following terrain stuff can and may* fall through to BattlescapeGenerator.
 	// *for Base assault/defense and Cydonia missions; here is concerned only with UFOs and TerrorSites
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	MissionSite* const ms = dynamic_cast<MissionSite*>(_craft->getDestination());
+	MissionSite* const site = dynamic_cast<MissionSite*>(_craft->getDestination());
 
 	if (ufo != NULL
-		|| ms != NULL)
+		|| site != NULL)
 	{
 		double lat;
 		std::string terrain;
@@ -184,13 +179,13 @@ ConfirmLandingState::ConfirmLandingState(
 				_terrain = _game->getRuleset()->getTerrain(terrain);
 			}
 		}
-		else // ms != NULL
+		else // site != NULL
 		{
-			Log(LOG_INFO) << ". ms VALID, tex " << _texture;
-			terrain = ms->getTerrain(); // TerrorSite-object stores the terrain value.
+			Log(LOG_INFO) << ". site VALID, tex " << _texture;
+			terrain = site->getTerrain(); // TerrorSite-object stores the terrain value.
 			if (terrain.empty() == true)
 			{
-				lat = ms->getLatitude();
+				lat = site->getLatitude();
 				_city = true;
 			}
 			else // terrorSite's terrainType has already been set before
@@ -216,7 +211,7 @@ ConfirmLandingState::ConfirmLandingState(
 			if (ufo != NULL)
 				ufo->setTerrain(_terrain->getName());
 			else // terrorSite
-				ms->setTerrain(_terrain->getName());
+				site->setTerrain(_terrain->getName());
 		}
 
 		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(_terrain->getName())));
@@ -240,35 +235,32 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage2->setBig();
 	_txtMessage2->setAlign(ALIGN_CENTER);
 
-	std::wostringstream ss;
-	ss << L""; // blank if no UFO.
+	std::wostringstream wosts;
+	wosts << L""; // blank if no UFO.
 	if (ufo != NULL)
 	{
 		const RuleUfo* const ufoRule = ufo->getRules();
 		if (ufoRule != NULL)
-			ss << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
+			wosts << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
 
 		if (ufo->getHyperDetected() == true)
-			ss << L" : " << tr(ufo->getAlienRace());
+			wosts << L" : " << tr(ufo->getAlienRace());
 	}
 	_txtMessage2->setText(tr("STR_CRAFT_DESTINATION")
 						 .arg(_craft->getDestination()->getName(_game->getLanguage()))
-						 .arg(ss.str()));
+						 .arg(wosts.str()));
 
-//	_txtBegin->setColor(Palette::blockOffset(8)+5);
+
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
 	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
 
-
-//	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmLandingState::btnYesClick,
 					Options::keyOk);
 
-//	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress(
@@ -343,7 +335,7 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 	// But do this as a safety:
 	Log(LOG_INFO) << ". WARNING: terrain NOT Valid - selecting City terrain";
 	// note that the URBAN MapScript, spec'd for all city terrains, will not add the UFO-dropship.
-	// ... could be cool.
+	// ... could be cool. Postnote: yeh, was cool!!!!
 	_city = true;
 	return selectCityTerrain(lat);
 }
@@ -388,17 +380,17 @@ void ConfirmLandingState::btnYesClick(Action*)
 	_game->popState();
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	MissionSite* const ms = dynamic_cast<MissionSite*>(_craft->getDestination());
-	AlienBase* const ab = dynamic_cast<AlienBase*>(_craft->getDestination());
+	MissionSite* const site = dynamic_cast<MissionSite*>(_craft->getDestination());
+	AlienBase* const abase = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame* battle = new SavedBattleGame(&_game->getRuleset()->getOperations());
 	_game->getSavedGame()->setBattleGame(battle);
 
 	BattlescapeGenerator bGen (_game); // init.
 
-	bGen.setWorldTerrain(_terrain); // kL
-	bGen.setWorldTexture(_texture);
-	bGen.setWorldShade(_shade);
+	bGen.setSiteTerrain(_terrain); // kL
+	bGen.setSiteTexture(_texture);
+	bGen.setSiteShade(_shade);
 	bGen.setCraft(_craft);
 
 	if (ufo != NULL)
@@ -412,17 +404,17 @@ void ConfirmLandingState::btnYesClick(Action*)
 		bGen.setAlienRace(ufo->getAlienRace());
 		bGen.setIsCity(_city); // kL
 	}
-	else if (ms != NULL)
+	else if (site != NULL)
 	{
-		battle->setMissionType(ms->getRules()->getDeployment());
-		bGen.setMissionSite(ms);
-		bGen.setAlienRace(ms->getAlienRace());
+		battle->setMissionType(site->getRules()->getDeployment());
+		bGen.setMissionSite(site);
+		bGen.setAlienRace(site->getAlienRace());
 	}
-	else if (ab != NULL)
+	else if (abase != NULL)
 	{
 		battle->setMissionType("STR_ALIEN_BASE_ASSAULT");
-		bGen.setAlienBase(ab);
-		bGen.setAlienRace(ab->getAlienRace());
+		bGen.setAlienBase(abase);
+		bGen.setAlienRace(abase->getAlienRace());
 	}
 	else
 	{
