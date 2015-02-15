@@ -2199,11 +2199,9 @@ void AlienBAIState::selectFireMethod()
 {
 	_attackAction->type = BA_RETHINK;
 
-	int usableTU;
+	int usableTU = _unit->getTimeUnits();
 	if (_unit->getAggression() < RNG::generate(0,3))
 		usableTU -= _escapeTUs;
-	else
-		usableTU = _unit->getTimeUnits();
 
 	const int dist = _save->getTileEngine()->distance(
 													_unit->getPosition(),
