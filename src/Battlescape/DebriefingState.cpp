@@ -1814,6 +1814,7 @@ void DebriefingState::recoverItems(
 			{
 				if (itRule->isRecoverable() == true
 					&& itRule->getRecoveryPoints() != 0
+					&& _rules->getResearch(itRule->getType()) != NULL
 					&& _savedGame->isResearched(itRule->getType()) == false)
 				{
 					addStat( // add pts. for unresearched items only

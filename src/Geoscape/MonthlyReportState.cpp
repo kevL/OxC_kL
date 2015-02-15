@@ -92,7 +92,6 @@ MonthlyReportState::MonthlyReportState(
 //	_txtMaintenance = new Text(130, 9, 16, 40);
 //	_txtBalance = new Text(160, 9, 146, 40);
 
-
 	setPalette(
 			"PAL_GEOSCAPE",
 			_game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color); //3
@@ -407,7 +406,7 @@ void MonthlyReportState::calculateChanges()
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
 		_deltaFunds += (*i)->getFunding().back()
-					  - (*i)->getFunding().at((*i)->getFunding().size() - 2);
+					 - (*i)->getFunding().at((*i)->getFunding().size() - 2);
 
 		switch ((*i)->getSatisfaction())
 		{
