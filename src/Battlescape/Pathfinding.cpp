@@ -2446,13 +2446,12 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	if (unit != NULL)
 	{
 		_movementType = unit->getMovementType();
-
 /*		if (_movementType == MT_FLY
 			&& (SDL_GetModState() & KMOD_ALT) != 0)
 		{
 			_movementType = MT_WALK;	// kL. I put this in but not sure where it gets used (if..).
 										// SavedBattleGame::reviveUnconsciousUnits() ...
-		} */
+		}								// AlienBAIState::setupAmbush() also */
 	}
 	else
 		_movementType = MT_WALK;

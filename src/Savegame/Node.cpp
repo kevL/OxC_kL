@@ -78,8 +78,7 @@ Node::Node()
 		_priority(0),
 		_allocated(false),
 		_pos(Position(-1,-1,-1)) // kL
-{
-}
+{}
 
 /**
  * Initializes a Node on the battlescape.
@@ -111,15 +110,13 @@ Node::Node(
 		_reserved(reserved),
 		_priority(priority),
 		_allocated(false)
-{
-}
+{}
 
 /**
  * Cleans up this Node.
  */
 Node::~Node()
-{
-}
+{}
 
 /**
  * Loads the UFO from a YAML file.

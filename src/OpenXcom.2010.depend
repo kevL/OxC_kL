@@ -5451,7 +5451,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1422731959 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1423997119 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5490,8 +5490,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1420130449 f:\git\openxcom\src\savegame\node.h
-	<yaml-cpp/yaml.h>
+1423992171 f:\git\openxcom\src\savegame\node.h
 	"../Battlescape/Position.h"
 
 1421471155 source:f:\git\openxcom\src\battlescape\alienscrashstate.cpp
@@ -6186,7 +6185,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1422657039 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1423993288 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -7176,7 +7175,7 @@
 1420130448 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1423791900 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1423997326 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -11451,7 +11450,7 @@
 
 1420327784 f:\git\openxcom\src\ruleset\rulevideo.h
 
-1423982656 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
+1423984688 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
 	"AlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"

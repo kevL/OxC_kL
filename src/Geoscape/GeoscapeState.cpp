@@ -995,7 +995,9 @@ void GeoscapeState::init()
 
 	_globe->unsetNewBaseHover();
 
-	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	if (_savedGame->getMonthsPassed() == -1						// run once
+		&& _savedGame->getBases()->empty() == false				// as long as there's a base
+		&& _savedGame->getBases()->front()->getName() != L"")	// and it has a name (THIS prevents it from running prior to the base being placed.)
 	{
 		_savedGame->addMonth();
 
