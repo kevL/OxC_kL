@@ -29,7 +29,7 @@ namespace Version
 /**
  * Gets a date/time in a human-readable string using the ISO 8601 standard.
  * @note This uses current runtime and is therefore apropos only as
- * a timestamp for a saved file.
+ * a timestamp for a saved file eg.
  * @return, string of local time useful for saved files
  */
 std::string timeStamp()
@@ -68,9 +68,9 @@ std::string getBuildDate(bool built)
 	std::ostringstream build;
 
 	if (built == true)
-		build << "built ";
+		build << "ver ";
 
-	build << __DATE__ << " " << __TIME__;
+	build << __DATE__ << " " << __TIME__ << " MST";
 
 	return build.str();
 }

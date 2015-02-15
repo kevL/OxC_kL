@@ -587,9 +587,9 @@ DogfightState::DogfightState(
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
 
-	if (_ufo->getEscapeCountdown() == 0) // UFO is not already engaged in a dogfight
+	if (_ufo->getEscapeCountdown() == 0) // UFO is *not* already engaged in a different dogfight/Intercept slot.
 	{
-		_ufo->setFireCountdown(0);
+		_ufo->setFireCountdown(0); // UFO is ready to Fire.
 
 		int escape = _ufo->getRules()->getBreakOffTime();
 		escape += RNG::generate(
@@ -869,23 +869,23 @@ void DogfightState::updateDogfight()
 	{
 		animate();
 
-		int escapeCounter = _ufo->getEscapeCountdown();
+		int escapeTicks = _ufo->getEscapeCountdown();
 		if (_ufo->isCrashed() == false
 			&& _ufo->isDestroyed() == false
 			&& _craft->isDestroyed() == false)
 		{
-			if (escapeCounter > 0
+			if (escapeTicks > 0
 				&& _ufo->getInterceptionProcessed() == false)
 			{
-				--escapeCounter;
-				_ufo->setEscapeCountdown(escapeCounter);
+				--escapeTicks;
+				_ufo->setEscapeCountdown(escapeTicks);
 				_ufo->setInterceptionProcessed(true);
 
 				if (_ufo->getFireCountdown() > 0)
 					_ufo->setFireCountdown(_ufo->getFireCountdown() - 1);
 			}
 
-			if (escapeCounter == 0) // Check if UFO is breaking off.
+			if (escapeTicks == 0) // Check if UFO is breaking off.
 				_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
 		}
 	}
@@ -899,7 +899,7 @@ void DogfightState::updateDogfight()
 	else // UFO cannot break off, because it's crappier than the crappy craft.
 	{
 		_ufoBreakingOff = false;
-		_craft->setSpeed(_ufo->getSpeed()); // kL_note: check that
+		_craft->setSpeed(_ufo->getSpeed());
 	}
 
 	bool projectileInFlight = false;
@@ -1122,7 +1122,7 @@ void DogfightState::updateDogfight()
 		}
 
 		// Handle UFO firing.
-		if (_dist <= _ufo->getRules()->getWeaponRange() * 8
+/*		if (_dist <= _ufo->getRules()->getWeaponRange() * 8
 			&& _ufo->isCrashed() == false
 			&& _craft->isDestroyed() == false)
 		{
@@ -1136,78 +1136,79 @@ void DogfightState::updateDogfight()
 			}
 		}
 		else if (_ufo->getShootingAt() == _intercept)
-			_ufo->setShootingAt(0);
-	}
-/*		if (_ufoWTimer->isRunning() == true // Handle UFO firing.
-			&& (_dist > _ufo->getRules()->getWeaponRange() * 8
-				|| _ufo->isCrashed() == true
-				|| _craft->isDestroyed() == true))
-		{
-			_ufo->setShootingAt(0);
-			_ufoWTimer->stop();
-		}
-		else if (_ufo->isCrashed() == false) // Timer NOT running; or Timer is RUNNING but craft out of range and/or destroyed.
-		{
-			if (_ufo->getShootingAt() == 0
-				|| _ufo->getShootingAt() == _intercept)
-			{
-				const int weapRange = _ufo->getRules()->getWeaponRange() * 8;
-				if (_dist <= weapRange
-					 && _craft->isDestroyed() == false)
-				{
-					int dfQty = 0; // Randomize UFO's target.
-					for (std::list<DogfightState*>::const_iterator
-							i = _geo->getDogfights().begin();
-							i != _geo->getDogfights().end();
-							++i)
-					{
-						if ((*i)->isMinimized() == false
-							&& (*i)->getDistance() <= weapRange
-							&& (*i)->getCraft()->isDestroyed() == false)
-						{
-							++dfQty;
-						}
-					}
+			_ufo->setShootingAt(0); */
+		const int ufoWRange = _ufo->getRules()->getWeaponRange() * 8;
 
-					if (dfQty == 1 // this->craft.
-						&& _ufoWTimer->isRunning() == false)
+		if (_ufo->isCrashed() == true
+			|| (_ufo->getShootingAt() == _intercept // this Craft out of range and/or destroyed.
+				&& (_dist > ufoWRange
+					|| _craft->isDestroyed() == true)))
+		{
+			_ufo->setShootingAt(0);
+		}
+		else if (_ufo->isCrashed() == false  // UFO is gtg.
+			&& (_ufo->getShootingAt() == 0
+				|| _ufo->getShootingAt() == _intercept)
+			&& _ufo->getFireCountdown() == 0)
+		{
+			if (_dist <= ufoWRange
+				 && _craft->isDestroyed() == false)
+			{
+				std::vector<int> altIntercepts; // Randomize UFO's target.
+				for (std::list<DogfightState*>::const_iterator
+						i = _geo->getDogfights().begin();
+						i != _geo->getDogfights().end();
+						++i)
+				{
+					if ((*i)->isMinimized() == false
+						&& (*i)->getDistance() <= ufoWRange
+						&& (*i)->getCraft()->isDestroyed() == false
+						&& (*i)->getUfo() == _ufo)
+					{
+						altIntercepts.push_back((*i)->getInterceptSlot());
+					}
+				}
+
+				if (altIntercepts.size() == 1) // this->craft.
+				{
+					_ufo->setShootingAt(_intercept);
+					ufoFireWeapon();
+				}
+				else if (altIntercepts.size() > 1) // [ ==0 should NEVER happen.]
+				{
+					int shotCraft = static_cast<int>(Round(100. / static_cast<double>(altIntercepts.size())));
+
+					if (_ufo->getShootingAt() == _intercept)
+						shotCraft += 18;
+
+					if (RNG::percent(shotCraft) == true)
 					{
 						_ufo->setShootingAt(_intercept);
-						_ufoWTimer->start();
-
 						ufoFireWeapon();
 					}
-					else if (dfQty != 1) // [ ==0 should NEVER happen.]
+					else // This is where the magic happens, Lulzor!!
 					{
-						int prob = static_cast<int>(Round(100. / static_cast<double>(dfQty)));
-						if (_ufo->getShootingAt() == _intercept)
-							prob += 18;
-
-						if (_ufoWTimer->isRunning() == false
-							&& RNG::percent(prob) == true)
+						const int targetIntercept = RNG::generate(
+																0,
+																altIntercepts.size() - 1);
+						for (std::list<DogfightState*>::const_iterator
+								i = _geo->getDogfights().begin();
+								i != _geo->getDogfights().end();
+								++i)
 						{
-							_ufo->setShootingAt(_intercept);
-							_ufoWTimer->start();
-
-							ufoFireWeapon();
-						}
-						else if (_ufoWTimer->isRunning() == true
-							&& _changeTarget < _ufoWTimer->getTime()
-							&& RNG::percent(prob) == false)
-						{
-							_ufo->setShootingAt(0); // This is where the magic happens, Lulzor!!
-							_ufoWTimer->stop();
+							const int acquiredTarget = altIntercepts.at(targetIntercept);
+							if ((*i)->getInterceptSlot() == acquiredTarget)
+								_ufo->setShootingAt(acquiredTarget);
 						}
 					}
 				}
-				else if (_ufoWTimer->isRunning() == true)
-				{
-					_ufo->setShootingAt(0);
-					_ufoWTimer->stop();
-				}
+				else
+					_ufo->setShootingAt(0); // safety.
 			}
+			else
+				_ufo->setShootingAt(0);
 		}
-	} */
+	}
 
 	if (_end == true // Check when battle is over.
 		&& (((_dist > ENGAGE_DIST
