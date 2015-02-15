@@ -51,7 +51,7 @@ private:
 		_gameOver,
 		_psi;
 	int
-		_fundingDiff,
+		_deltaFunds,
 		_ratingLastMonth,
 		_ratingTotal;
 

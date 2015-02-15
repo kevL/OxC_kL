@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_ITEMCONTAINER_H
 #define OPENXCOM_ITEMCONTAINER_H
 
-#include <map>
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <map>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

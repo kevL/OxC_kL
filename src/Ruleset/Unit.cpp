@@ -48,15 +48,13 @@ Unit::Unit(const std::string& type)
 		_female(false),
 		_isMechanical(false), // kL: these two should perhaps go to Armor class.
 		_isPsiImmune(false)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Unit::~Unit()
-{
-}
+{}
 
 /**
  * Loads the unit from a YAML file.

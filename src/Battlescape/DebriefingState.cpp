@@ -108,14 +108,12 @@ DebriefingState::DebriefingState()
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible();
 
-	// kL_begin: Clean up the leftover states from BattlescapeGame
+	// kL: Clean up the leftover states from BattlescapeGame
 	// ( was done in ~BattlescapeGame, but that causes CTD under reLoad situation )
 	// Now done here and in NextTurnState. (not ideal: should find a safe place
 	// when BattlescapeGame is really dTor'd, and not reLoaded ...... ) uh, i guess.
 //	if (_savedGame->getSavedBattle()->getBattleGame())
-//	{
 	_savedGame->getSavedBattle()->getBattleGame()->cleanupDeleted();
-//	}
 
 
 	_missionStatistics = new MissionStatistics();
@@ -230,48 +228,47 @@ DebriefingState::DebriefingState()
 			i != _stats.end();
 			++i)
 	{
-		if ((*i)->qty == 0)
-			continue;
-
-
-		std::wostringstream
-			ss,
-			ss2;
-
-		ss << L'\x01' << (*i)->qty << L'\x01';	// quantity of recovered item-type
-		ss2 << L'\x01' << (*i)->score;			// score
-		total += (*i)->score;					// total score
-
-		if ((*i)->recover == true)
+		if ((*i)->qty != 0)
 		{
-			_lstRecovery->addRow(
+			std::wostringstream
+				wosts1,
+				wosts2;
+
+			wosts1 << L'\x01' << (*i)->qty << L'\x01';	// quantity of recovered item Type
+			wosts2 << L'\x01' << (*i)->score;			// score for items of Type
+			total += (*i)->score;						// total score
+
+			if ((*i)->recover == true)
+			{
+				_lstRecovery->addRow(
 								3,
 								tr((*i)->item).c_str(),
-								ss.str().c_str(),
-								ss2.str().c_str());
-			recov_offY += 8;
-		}
-		else
-		{
-			_lstStats->addRow(
-							3,
-							tr((*i)->item).c_str(),
-							ss.str().c_str(),
-							ss2.str().c_str());
-			stats_offY += 8;
-		}
+								wosts1.str().c_str(),
+								wosts2.str().c_str());
+				recov_offY += 8;
+			}
+			else
+			{
+				_lstStats->addRow(
+								3,
+								tr((*i)->item).c_str(),
+								wosts1.str().c_str(),
+								wosts2.str().c_str());
+				stats_offY += 8;
+			}
 
-		if ((*i)->item == "STR_CIVILIANS_SAVED")
-			civiliansSaved = (*i)->qty;
+			if ((*i)->item == "STR_CIVILIANS_SAVED")
+				civiliansSaved = (*i)->qty;
 
-		if ((*i)->item == "STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES"
-			|| (*i)->item == "STR_CIVILIANS_KILLED_BY_ALIENS")
-		{
-			civiliansDead += (*i)->qty;
+			if ((*i)->item == "STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES"
+				|| (*i)->item == "STR_CIVILIANS_KILLED_BY_ALIENS")
+			{
+				civiliansDead += (*i)->qty;
+			}
+
+			if ((*i)->item == "STR_ALIENS_KILLED")
+				_aliensKilled += (*i)->qty;
 		}
-
-		if ((*i)->item == "STR_ALIENS_KILLED")
-			_aliensKilled += (*i)->qty;
 	}
 
 	if (civiliansSaved > 0
@@ -281,12 +278,12 @@ DebriefingState::DebriefingState()
 		_missionStatistics->valiantCrux = true;
 	}
 
-	std::wostringstream ss3;
-	ss3 << total;
+	std::wostringstream wosts;
+	wosts << total;
 	_lstTotal->addRow(
 					2,
 					tr("STR_TOTAL_UC").c_str(),
-					ss3.str().c_str());
+					wosts.str().c_str());
 
 	if (recov_offY > 0)
 	{
@@ -301,7 +298,7 @@ DebriefingState::DebriefingState()
 	}
 
 
-	if (_region != NULL) // add the points to activity scores
+	if (_region != NULL)
 	{
 		if (_destroyXCOMBase == true)
 		{
@@ -580,9 +577,9 @@ void DebriefingState::btnOkClick(Action*)
 													tr("STR_STORAGE_EXCEEDED")
 														.arg(_base->getName()).c_str(),
 													_palette,
-													Palette::blockOffset(8)+5,
+													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, //Palette::blockOffset(8)+5,
 													"BACK01.SCR",
-													0));
+													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color)); //0
 			}
 
 			if (playAwardMusic == true)
@@ -912,7 +909,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	for (std::vector<MissionSite*>::const_iterator // mission site disappears (even when aborted)
+	for (std::vector<MissionSite*>::const_iterator // mission site disappears even when aborted
 			i = _savedGame->getMissionSites()->begin();
 			i != _savedGame->getMissionSites()->end();
 			++i)
@@ -929,7 +926,7 @@ void DebriefingState::prepareDebriefing()
 	// lets see what happens with units; first,
 	// we evaluate how many surviving XCom units there are,
 	// and if they are unconscious
-	// and how many have died (to use for commendations)
+	// and how many have died for commendations
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
@@ -953,7 +950,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// if all our men are unconscious, the aliens get to have their way with them.
+	// if all xCom units are unconscious the aliens get to have their way with them
 	if (soldierOut == soldierLive)
 	{
 		soldierLive = 0;
@@ -1017,8 +1014,8 @@ void DebriefingState::prepareDebriefing()
 					i < battle->getMapSizeXYZ();
 					++i)
 			{
-				if (battle->getTiles()[i]->getMapData(3) != NULL
-					&& battle->getTiles()[i]->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
+				if (battle->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
+					&& battle->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
 				{
 					destroyAlienBase = false;
 					break;
@@ -1067,11 +1064,10 @@ void DebriefingState::prepareDebriefing()
 			i != battle->getUnits()->end();
 			++i)
 	{
-		// handle unconscious units
-		if ((*i)->getTile() == NULL)								// This unit is not on a tile...
+		if ((*i)->getTile() == NULL)								// This unit is not on a tile... give it one.
 		{
 			Position pos = (*i)->getPosition();
-			if (pos == Position(-1,-1,-1))							// in fact, this Unit is in limbo...
+			if (pos == Position(-1,-1,-1))							// in fact, this Unit is in limbo... ie, is carried.
 			{
 				for (std::vector<BattleItem*>::const_iterator		// so look for its body or corpse...
 						j = battle->getItems()->begin();
@@ -1079,12 +1075,12 @@ void DebriefingState::prepareDebriefing()
 						++j)
 				{
 					if ((*j)->getUnit() != NULL
-						&& (*j)->getUnit() == *i)					// found it: corpse is a dead BattleUnit!!
+						&& (*j)->getUnit() == *i)					// found it: corpse is a dead or unconscious BattleUnit!!
 					{
 						if ((*j)->getOwner() != NULL)				// corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
 							pos = (*j)->getOwner()->getPosition();	// Put the corpse down.. slowly.
 						else if ((*j)->getTile() != NULL)			// corpse of BattleUnit is laying around somewhere
-							pos = (*j)->getTile()->getPosition();	// you're not dead yet, Get up.
+							pos = (*j)->getTile()->getPosition();	// you're not vaporized yet, Get up.
 					}
 				}
 			}
@@ -1094,19 +1090,19 @@ void DebriefingState::prepareDebriefing()
 
 
 		const int value = (*i)->getValue();
-		const UnitFaction origFact = (*i)->getOriginalFaction();
+		const UnitFaction origFaction = (*i)->getOriginalFaction();
 		const UnitStatus status = (*i)->getStatus();
 
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
-			if (origFact == FACTION_HOSTILE
+			if (origFaction == FACTION_HOSTILE
 				&& (*i)->killedBy() == FACTION_PLAYER)
 			{
 				addStat(
 					"STR_ALIENS_KILLED",
 					value);
 			}
-			else if (origFact == FACTION_PLAYER)
+			else if (origFaction == FACTION_PLAYER)
 			{
 				const Soldier* const soldier = _savedGame->getSoldier((*i)->getId());
 				if (soldier != NULL) // xCom soldier.
@@ -1139,7 +1135,7 @@ void DebriefingState::prepareDebriefing()
 						"STR_TANKS_DESTROYED",
 						-value);
 			}
-			else if (origFact == FACTION_NEUTRAL)
+			else if (origFaction == FACTION_NEUTRAL)
 			{
 				if ((*i)->killedBy() == FACTION_PLAYER)
 					addStat(
@@ -1161,16 +1157,15 @@ void DebriefingState::prepareDebriefing()
 			else
 				type = (*i)->getType();
 
-			if (origFact == FACTION_PLAYER)
+			if (origFaction == FACTION_PLAYER)
 			{
 				const Soldier* const soldier = _savedGame->getSoldier((*i)->getId());
 
-				if (((*i)->isInExitArea() == true
-						&& (mission != "STR_BASE_DEFENSE"
-							|| missionAccomplished == true))
-					|| aborted == false)
+				if (aborted == false					// so game is not aborted
+					|| ((*i)->isInExitArea() == true	// or aborted and unit is on exit area
+						&& (missionAccomplished == true
+							|| mission != "STR_BASE_DEFENSE")))
 				{
-					// so game is not aborted, or aborted and unit is on exit area
 					(*i)->postMissionProcedures(_savedGame);
 
 					++soldierExit;
@@ -1180,7 +1175,6 @@ void DebriefingState::prepareDebriefing()
 						recoverItems(
 								(*i)->getInventory(),
 								base);
-
 //						soldier->calcStatString( // calculate new statString
 //											_rules->getStatStrings(),
 //											Options::psiStrengthEval
@@ -1233,8 +1227,8 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (origFact == FACTION_HOSTILE	// This section is for units still standing.
-				&& faction == FACTION_PLAYER		// MC'd aLiens count as unconscious
+			else if (origFaction == FACTION_HOSTILE	// This section is for units still standing.
+				&& faction == FACTION_PLAYER		// ie, MC'd aLiens
 				&& (*i)->isOut() == false
 				&& (aborted == false
 					|| (*i)->isInExitArea() == true))
@@ -1257,72 +1251,11 @@ void DebriefingState::prepareDebriefing()
 											_rules->getInventory("STR_GROUND"));
 				}
 
-				std::string corpseItem = (*i)->getArmor()->getCorpseGeoscape();
-				if ((*i)->getSpawnUnit().empty() == false)
-				{
-					corpseItem = _rules->getArmor(_rules->getUnit((*i)->getSpawnUnit())->getArmor())
-								 ->getCorpseGeoscape();
-				}
-
-				if (base->getAvailableContainment() > 0) // should this do +1 containment per loop ...
-					addStat(
-						"STR_LIVE_ALIENS_RECOVERED",
-						value); // duplicated in function below.
-				else
-					addStat(
-						"STR_ALIENS_KILLED",
-						value); // duplicated in function below.
-
-				// kL: harvest aLiens whether researched or not
-				if (base->getAvailableContainment() == 0)
-				{
-					_noContainment = true;
-					base->getItems()->addItem(corpseItem);
-				}
-				else
-				{
-					addStat( // more points if it's not researched
-						"STR_LIVE_ALIENS_RECOVERED",
-						value, // duplicated in function below.
-						0);
-
-					base->getItems()->addItem(type);
-					_manageContainment = base->getAvailableContainment()
-									   - (base->getUsedContainment() * _limitsEnforced) < 0;
-				} // end_kL.
-/*				RuleResearch* const researchRule = _rules->getResearch(type);
-				if (researchRule != NULL
-					&& _savedGame->isResearchAvailable(
-													researchRule,
-													_savedGame->getDiscoveredResearch(),
-													_rules) == true)
-				{
-					if (base->getAvailableContainment() == 0)
-					{
-						_noContainment = true;
-						base->getItems()->addItem(corpseItem);
-					}
-					else
-					{
-						addStat( // more points if it's not researched
-							"STR_LIVE_ALIENS_RECOVERED",
-							value, // duplicated in function below.
-							0);
-
-						base->getItems()->addItem(type);
-						_manageContainment = base->getAvailableContainment()
-										   - (base->getUsedContainment() * _limitsEnforced) < 0;
-					}
-				}
-				else
-				{
-//					if (Options::canSellLiveAliens == true)
-//						_savedGame->setFunds(_savedGame->getFunds() + _rules->getItem(type)->getSellCost());
-//					else // Don't sell unconscious aLiens post-battle. (see recoverItems() below_ also)
-					base->getItems()->addItem(corpseItem);
-				} */
+				recoverLiveAlien(
+						*i,
+						base);
 			}
-			else if (origFact == FACTION_NEUTRAL)
+			else if (origFaction == FACTION_NEUTRAL)
 			{
 				if (soldierLive == 0
 					|| (aborted == true						// if mission fails, all civilians die
@@ -1340,10 +1273,10 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (craft != NULL
-		&& ((soldierExit == 0
-				&& aborted == true)
-			|| soldierLive == 0))
+	if (craft != NULL // Craft lost.
+		&& (soldierLive == 0
+			|| (soldierExit == 0
+				&& aborted == true)))
 	{
 		addStat(
 			"STR_XCOM_CRAFT_LOST",
@@ -1376,8 +1309,8 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	if (aborted == true
-		&& mission == "STR_BASE_DEFENSE"
-		&& base->getCrafts()->empty() == false)
+		&& base->getCrafts()->empty() == false
+		&& mission == "STR_BASE_DEFENSE")
 	{
 		for (std::vector<Craft*>::const_iterator
 				i = base->getCrafts()->begin();
@@ -1391,9 +1324,9 @@ void DebriefingState::prepareDebriefing()
 	}
 
 
-	if ((aborted == false
-			|| missionAccomplished == true)	// RECOVER UFO:
-		&& soldierLive > 0)					// Run through all tiles to recover UFO components and items.
+	if (soldierLive > 0							// RECOVER UFO:
+		&& (aborted == false
+			|| missionAccomplished == true))	// Run through all tiles to recover UFO components and items.
 	{
 		if (mission == "STR_BASE_DEFENSE")
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
@@ -1506,7 +1439,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (soldierLive > 0) // recover all our goodies
+	if (soldierLive > 0) // recover all the goodies
 	{
 		for (std::vector<DebriefingStat*>::const_iterator
 				i = _stats.begin();
@@ -1516,9 +1449,11 @@ void DebriefingState::prepareDebriefing()
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->name)
 			{
-				int alloys = 10;
+				int alloys;
 				if (mission == "STR_ALIEN_BASE_ASSAULT")
 					alloys = 150;
+				else
+					alloys = 10;
 
 				(*i)->qty = (*i)->qty / alloys;
 				(*i)->score = (*i)->score / alloys;
@@ -1731,7 +1666,7 @@ void DebriefingState::reequipCraft(
 
 	craft->getVehicles()->clear();
 
-	int canBeAdded = 0;
+	int addTanks = 0;
 
 	for (std::map<std::string, int>::const_iterator // Ok, now read those vehicles
 			i = craftVehicles.getContents()->begin();
@@ -1739,9 +1674,9 @@ void DebriefingState::reequipCraft(
 			++i)
 	{
 		qty = base->getItems()->getItem(i->first);
-		canBeAdded = std::min(
-							qty,
-							i->second);
+		addTanks = std::min(
+						qty,
+						i->second);
 
 		if (qty < i->second)
 		{
@@ -1760,18 +1695,20 @@ void DebriefingState::reequipCraft(
 		RuleItem* const tankRule = _rules->getItem(i->first);
 		const Unit* const tankUnit = _rules->getUnit(tankRule->getType());
 
-		int tankSize = 4;
+		int tankSize;
 		if (tankUnit != NULL)
 		{
 			tankSize = _rules->getArmor(tankUnit->getArmor())->getSize();
 			tankSize *= tankSize;
 		}
+		else
+			tankSize = 4; // safety.
 
 		if (tankRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
 		{
 			for (int
 					j = 0;
-					j < canBeAdded;
+					j != addTanks;
 					++j)
 			{
 				craft->getVehicles()->push_back(new Vehicle(
@@ -1781,8 +1718,8 @@ void DebriefingState::reequipCraft(
 			}
 
 			base->getItems()->removeItem(
-										i->first,
-										canBeAdded);
+									i->first,
+									addTanks);
 		}
 		else // so this tank requires ammo
 		{
@@ -1804,15 +1741,15 @@ void DebriefingState::reequipCraft(
 				_missingItems.push_back(stat);
 			}
 
-			canBeAdded = std::min(
-								canBeAdded,
-								baseQty / ammoPerVehicle);
+			addTanks = std::min(
+							addTanks,
+							baseQty / ammoPerVehicle);
 
-			if (canBeAdded > 0)
+			if (addTanks != 0)
 			{
 				for (int
 						j = 0;
-						j < canBeAdded;
+						j != addTanks;
 						++j)
 				{
 					craft->getVehicles()->push_back(new Vehicle(
@@ -1827,7 +1764,7 @@ void DebriefingState::reequipCraft(
 
 				base->getItems()->removeItem(
 										i->first,
-										canBeAdded);
+										addTanks);
 			}
 		}
 
@@ -1835,7 +1772,7 @@ void DebriefingState::reequipCraft(
 /*		ReequipStat stat =
 		{
 			i->first,
-			canBeAdded,
+			addTanks,
 			craft->getName(_game->getLanguage())
 		};
 
@@ -1854,136 +1791,151 @@ void DebriefingState::recoverItems(
 		std::vector<BattleItem*>* battleItems,
 		Base* base)
 {
+	RuleItem* itRule;
+
 	for (std::vector<BattleItem*>::const_iterator
 			i = battleItems->begin();
 			i != battleItems->end();
 			++i)
 	{
-		if ((*i)->getRules()->getName() == _rules->getAlienFuel())
-			addStat( // special case of an item counted as a stat
-				_rules->getAlienFuel(),
-				100,
-				50);
-		else
+		itRule = (*i)->getRules();
+
+		if (itRule->isFixed() == false)
 		{
-			if ((*i)->getRules()->getRecoveryPoints() != 0
-				&& (*i)->getXCOMProperty() == false)
+			if (itRule->getName() == _rules->getAlienFuel())
 			{
-				if ((*i)->getRules()->getBattleType() == BT_CORPSE)
+				if (itRule->isRecoverable() == true)
+					addStat( // special case of an item counted as a stat
+						_rules->getAlienFuel(),
+						100,
+						50);
+			}
+			else //if (*i)->getXCOMProperty() == false
+			{
+				if (itRule->isRecoverable() == true
+					&& itRule->getRecoveryPoints() != 0
+					&& _savedGame->isResearched(itRule->getType()) == false)
 				{
-					if ((*i)->getUnit() != NULL) // kL
-					{
-						if ((*i)->getUnit()->getStatus() == STATUS_DEAD)
-						{
-							addStat(
-								"STR_ALIEN_CORPSES_RECOVERED",
-								(*i)->getUnit()->getValue() / 3);
-
-							base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
-						}
-						else if ((*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-						{
-							if ((*i)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
-							{
-								// ADD STUNNED ALIEN COUNTING HERE_kL
-								++_aliensStunned; // for Nike Cross determination.
-
-								if (base->getAvailableContainment() > 0) // should this do +1 containment per loop ...
-									addStat(
-										"STR_LIVE_ALIENS_RECOVERED",
-										(*i)->getUnit()->getValue()); // duplicated above.
-								else
-									addStat(
-										"STR_ALIENS_KILLED",
-										(*i)->getUnit()->getValue()); // duplicated above.
-
-								// kL: harvest aLiens whether researched or not
-								if (base->getAvailableContainment() == 0)
-								{
-									_noContainment = true;
-									base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
-								}
-								else
-								{
-									addStat( // more points if item's not researched
-										"STR_LIVE_ALIENS_RECOVERED",
-										(*i)->getUnit()->getValue(), // duplicated above.
-										0);
-
-									base->getItems()->addItem((*i)->getUnit()->getType());
-									_manageContainment = base->getAvailableContainment()
-													   - (base->getUsedContainment() * _limitsEnforced) < 0;
-								} // end_kL.
-/*								RuleResearch* const researchRule = _rules->getResearch((*i)->getUnit()->getType());
-								if (researchRule != NULL
-									&& _savedGame->isResearchAvailable(
-																researchRule,
-																_savedGame->getDiscoveredResearch(),
-																_rules) == true)
-								{
-									if (base->getAvailableContainment() == 0)
-									{
-										_noContainment = true;
-										base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape());
-									}
-									else
-									{
-										addStat( // more points if item's not researched
-											"STR_LIVE_ALIENS_RECOVERED",
-											(*i)->getUnit()->getValue(), // duplicated above.
-											0);
-
-										base->getItems()->addItem((*i)->getUnit()->getType());
-										_manageContainment = base->getAvailableContainment()
-														   - (base->getUsedContainment() * _limitsEnforced) < 0;
-									}
-								}
-								else // Don't sell unconscious aLiens post-battle. (see prepareDebriefing() above^ also)
-									base->getItems()->addItem((*i)->getUnit()->getArmor()->getCorpseGeoscape()); */
-							}
-							else if ((*i)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
-								addStat(
-									"STR_CIVILIANS_SAVED",
-									(*i)->getUnit()->getValue()); // duplicated above.
-						}
-					}
-				}
-				else if (_savedGame->isResearched((*i)->getRules()->getType()) == false)
 					addStat( // add pts. for unresearched items only
 						"STR_ALIEN_ARTIFACTS_RECOVERED",
-						(*i)->getRules()->getRecoveryPoints());
-			}
+						itRule->getRecoveryPoints());
+				}
 
-
-			if ((*i)->getRules()->isRecoverable() == true
-				&& (*i)->getRules()->isFixed() == false)
-			{
-				switch ((*i)->getRules()->getBattleType()) // put items back in the base
+				switch (itRule->getBattleType()) // put items back in the base
 				{
 					case BT_CORPSE:
+					{
+						BattleUnit* unit = (*i)->getUnit();
+
+						if (unit != NULL)
+						{
+							if (itRule->isRecoverable() == true
+								&& unit->getStatus() == STATUS_DEAD)
+							{
+								addStat(
+									"STR_ALIEN_CORPSES_RECOVERED",
+									unit->getValue() / 3); // This should rather be the 'recoveryPoints' of the corpse item!
+
+								if (unit->getArmor()->getCorpseGeoscape().empty() == false) // safety.
+									base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
+							}
+							else if (unit->getStatus() == STATUS_UNCONSCIOUS)
+							{
+								if (itRule->isRecoverable() == true
+									&& unit->getOriginalFaction() == FACTION_HOSTILE)
+								{
+									// ADD STUNNED ALIEN COUNTING HERE_kL
+									++_aliensStunned; // for Nike Cross determination.
+
+									recoverLiveAlien(
+											unit,
+											base);
+								}
+								else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
+									addStat(
+										"STR_CIVILIANS_SAVED",
+										unit->getValue()); // duplicated above.
+							}
+						}
+					}
 					break;
 
-					case BT_AMMO: // item's a clip, count rounds left
-						_rounds[(*i)->getRules()] += (*i)->getAmmoQuantity();
+					case BT_AMMO: // item is a clip, count rounds left
+						if (itRule->isRecoverable() == true)
+							_rounds[itRule] += (*i)->getAmmoQuantity();
 					break;
 
 					case BT_FIREARM:
-					case BT_MELEE: // item's a weapon, count rounds in clip
-					{
-						const BattleItem* const clip = (*i)->getAmmoItem();
-						if (clip != NULL
-							&& clip != *i
-							&& clip->getRules()->getClipSize() > 0)
+					case BT_MELEE: // item is a weapon, count rounds in clip
+						if (itRule->isRecoverable() == true)
 						{
-							_rounds[clip->getRules()] += clip->getAmmoQuantity();
+							const BattleItem* const clip = (*i)->getAmmoItem();
+							if (clip != NULL
+								&& clip != *i
+								&& clip->getRules()->getClipSize() > 0)
+							{
+								_rounds[clip->getRules()] += clip->getAmmoQuantity();
+							}
 						}
-					}
 
-					default: // fall-through, recover the weapon itself
-						base->getItems()->addItem((*i)->getRules()->getType());
+					default: // fall-through, recover the weapon/item itself
+						if (itRule->isRecoverable() == true)
+							base->getItems()->addItem(itRule->getType());
 				}
 			}
 		}
+	}
+}
+
+/**
+ * Recovers a live alien from the battlescape.
+ * @param unit - pointer to a BattleUnit to recover
+ * @param base - pointer to the Base to add corpse item
+ */
+void DebriefingState::recoverLiveAlien(
+		BattleUnit* unit,
+		Base* base)
+{
+	if (base->getAvailableContainment() != 0)
+	{
+		const std::string type = unit->getType();
+
+		int value;
+		if (_rules->getResearch(type) != NULL
+			&& _savedGame->isResearched(type) == false)
+		{
+			value = unit->getValue() * 2;
+		}
+		else
+			value = unit->getValue();
+
+		addStat(
+			"STR_LIVE_ALIENS_RECOVERED",
+			value);
+
+		base->getItems()->addItem(type);
+
+		_manageContainment = base->getAvailableContainment()
+						   - (base->getUsedContainment() * _limitsEnforced) < 0;
+	}
+	else
+	{
+		_noContainment = true;
+		addStat(
+			"STR_ALIEN_CORPSES_RECOVERED",
+			unit->getValue() / 3);
+
+		std::string corpseItem;
+		if (unit->getSpawnUnit().empty() == false)
+			corpseItem = _game->getRuleset()->getArmor(
+												_game->getRuleset()->getUnit(
+																		unit->getSpawnUnit())
+												->getArmor())->getCorpseGeoscape();
+		else
+			corpseItem = unit->getArmor()->getCorpseGeoscape();
+
+		if (corpseItem.empty() == false) // safety.
+			base->getItems()->addItem(corpseItem);
 	}
 }
 

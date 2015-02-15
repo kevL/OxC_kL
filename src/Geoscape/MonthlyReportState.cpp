@@ -68,11 +68,8 @@ MonthlyReportState::MonthlyReportState(
 		_psi(psi),
 		_gameOver(false),
 		_ratingTotal(0),
-		_fundingDiff(0),
+		_deltaFunds(0),
 		_ratingLastMonth(0)
-//		_happyList(0),
-//		_sadList(0),
-//		_pactList(0)
 {
 	_globe = globe;
 	_savedGame = _game->getSavedGame();
@@ -91,6 +88,11 @@ MonthlyReportState::MonthlyReportState(
 	_txtFailure	= new Text(288, 160, 16, 10);
 	_btnBigOk	= new TextButton(120, 18, 100, 175);
 
+//	_txtIncome = new Text(300, 9, 16, 32);
+//	_txtMaintenance = new Text(130, 9, 16, 40);
+//	_txtBalance = new Text(160, 9, 146, 40);
+
+
 	setPalette(
 			"PAL_GEOSCAPE",
 			_game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color); //3
@@ -100,10 +102,14 @@ MonthlyReportState::MonthlyReportState(
 	add(_txtMonth, "text1", "monthlyReport");
 	add(_txtRating, "text1", "monthlyReport");
 	add(_txtChange, "text1", "monthlyReport");
-	add(_txtFailure, "text2", "monthlyReport");
 	add(_txtDesc, "text2", "monthlyReport");
 	add(_btnOk, "button", "monthlyReport");
+	add(_txtFailure, "text2", "monthlyReport");
 	add(_btnBigOk, "button", "monthlyReport");
+
+//	add(_txtIncome, "text1", "monthlyReport");
+//	add(_txtMaintenance, "text1", "monthlyReport");
+//	add(_txtBalance, "text1", "monthlyReport");
 
 	centerAllSurfaces();
 
@@ -111,39 +117,10 @@ MonthlyReportState::MonthlyReportState(
 //	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+10);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& MonthlyReportState::btnOkClick,
-					Options::keyOk);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& MonthlyReportState::btnOkClick,
-					Options::keyCancel);
-
-//	_btnBigOk->setColor(Palette::blockOffset(8)+10);
-	_btnBigOk->setText(tr("STR_OK"));
-	_btnBigOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
-	_btnBigOk->onKeyboardPress(
-					(ActionHandler)& MonthlyReportState::btnOkClick,
-					Options::keyOk);
-	_btnBigOk->onKeyboardPress(
-					(ActionHandler)& MonthlyReportState::btnOkClick,
-					Options::keyCancel);
-	_btnBigOk->setVisible(false);
-
 //	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
-
-//	_txtFailure->setColor(Palette::blockOffset(8)+10);
-	_txtFailure->setBig();
-	_txtFailure->setAlign(ALIGN_CENTER);
-	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
-	_txtFailure->setWordWrap();
-	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
-	_txtFailure->setVisible(false);
 
 
 	calculateChanges(); // <- sets Rating.
@@ -158,28 +135,27 @@ MonthlyReportState::MonthlyReportState(
 		--year;
 	}
 
-	std::string m;
+	std::string mth;
 	switch (month)
 	{
-		case  1: m = "STR_JAN"; break;
-		case  2: m = "STR_FEB"; break;
-		case  3: m = "STR_MAR"; break;
-		case  4: m = "STR_APR"; break;
-		case  5: m = "STR_MAY"; break;
-		case  6: m = "STR_JUN"; break;
-		case  7: m = "STR_JUL"; break;
-		case  8: m = "STR_AUG"; break;
-		case  9: m = "STR_SEP"; break;
-		case 10: m = "STR_OCT"; break;
-		case 11: m = "STR_NOV"; break;
-		case 12: m = "STR_DEC";	break;
+		case  1: mth = "STR_JAN"; break;
+		case  2: mth = "STR_FEB"; break;
+		case  3: mth = "STR_MAR"; break;
+		case  4: mth = "STR_APR"; break;
+		case  5: mth = "STR_MAY"; break;
+		case  6: mth = "STR_JUN"; break;
+		case  7: mth = "STR_JUL"; break;
+		case  8: mth = "STR_AUG"; break;
+		case  9: mth = "STR_SEP"; break;
+		case 10: mth = "STR_OCT"; break;
+		case 11: mth = "STR_NOV"; break;
+		case 12: mth = "STR_DEC"; break;
 
-		default: m = "";
+		default: mth = "";
 	}
-
 //	_txtMonth->setColor(Palette::blockOffset(15)-1);
 //	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
+	_txtMonth->setText(tr("STR_MONTH").arg(tr(mth)).arg(year));
 
 	const int
 		diff = static_cast<int>(_savedGame->getDifficulty()),
@@ -206,9 +182,26 @@ MonthlyReportState::MonthlyReportState(
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
+/*	std::wostringstream ss; // ADD:
+	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << L" (";
+	if (_deltaFunds > 0)
+		ss << '+';
+	ss << Text::formatFunding(_deltaFunds) << L")";
+	_txtIncome->setText(ss.str());
+
+	std::wostringstream ss2;
+	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
+	_txtMaintenance->setText(ss2.str());
+
 	std::wostringstream ss3;
-	if (_fundingDiff > 0) ss3 << '+';
-	ss3 << Text::formatFunding(_fundingDiff);
+	ss3 << tr("STR_BALANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getFunds());
+	_txtBalance->setText(ss3.str());
+// end ADD. */
+
+	std::wostringstream ss3;
+	if (_deltaFunds > 0) ss3 << '+';
+	ss3 << Text::formatFunding(_deltaFunds);
 //	_txtChange->setColor(Palette::blockOffset(15)-1);
 //	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
@@ -298,6 +291,37 @@ MonthlyReportState::MonthlyReportState(
 	_txtDesc->setText(ss4.str());
 
 
+//	_btnOk->setColor(Palette::blockOffset(8)+10);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
+					Options::keyCancel);
+
+
+//	_txtFailure->setColor(Palette::blockOffset(8)+10);
+	_txtFailure->setBig();
+	_txtFailure->setAlign(ALIGN_CENTER);
+	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
+	_txtFailure->setWordWrap();
+	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
+	_txtFailure->setVisible(false);
+
+//	_btnBigOk->setColor(Palette::blockOffset(8)+10);
+	_btnBigOk->setText(tr("STR_OK"));
+	_btnBigOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
+	_btnBigOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
+					Options::keyOk);
+	_btnBigOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
+					Options::keyCancel);
+	_btnBigOk->setVisible(false);
+
+
 	_game->getResourcePack()->playMusic(
 									OpenXcom::res_MUSIC_GEO_MONTHLYREPORT,
 									"",
@@ -375,15 +399,14 @@ void MonthlyReportState::calculateChanges()
 			_pactList.push_back((*i)->getRules()->getType());
 
 		// determine satisfaction level, sign pacts, adjust funding, and update activity meters
-		const int diff = static_cast<int>(_savedGame->getDifficulty());
 		(*i)->newMonth(
 					xComSubTotal, // There. done
 					aLienTotal,
-					diff);
+					static_cast<int>(_savedGame->getDifficulty()));
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
-		_fundingDiff += (*i)->getFunding().back()
+		_deltaFunds += (*i)->getFunding().back()
 					  - (*i)->getFunding().at((*i)->getFunding().size() - 2);
 
 		switch ((*i)->getSatisfaction())
@@ -393,10 +416,6 @@ void MonthlyReportState::calculateChanges()
 			break;
 			case 3:
 				_happyList.push_back((*i)->getRules()->getType());
-			break;
-
-			default:
-			break;
 		}
 	}
 
@@ -463,6 +482,9 @@ void MonthlyReportState::btnOkClick(Action*)
 			_txtMonth->setVisible(false);
 			_txtRating->setVisible(false);
 			_txtChange->setVisible(false);
+//			_txtIncome->setVisible(false);
+//			_txtMaintenance->setVisible(false);
+//			_txtBalance->setVisible(false);
 			_txtDesc->setVisible(false);
 			_btnOk->setVisible(false);
 
@@ -488,13 +510,13 @@ std::wstring MonthlyReportState::countryList(
 		const std::string& singular,
 		const std::string& plural)
 {
-	std::wostringstream ss;
+	std::wostringstream wosts;
 
 	if (countries.empty() == false)
 	{
-		ss << "\n\n";
+		wosts << "\n\n";
 		if (countries.size() == 1)
-			ss << tr(singular).arg(tr(countries.front()));
+			wosts << tr(singular).arg(tr(countries.front()));
 		else
 		{
 			LocalizedText countryList = tr(countries.front());
@@ -509,11 +531,11 @@ std::wstring MonthlyReportState::countryList(
 			}
 			countryList = tr("STR_COUNTRIES_AND").arg(countryList).arg(tr(*i));
 
-			ss << tr(plural).arg(countryList);
+			wosts << tr(plural).arg(countryList);
 		}
 	}
 
-	return ss.str();
+	return wosts.str();
 }
 
 }

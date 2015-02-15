@@ -452,7 +452,7 @@ private:
 				Base* base) const;
 		/// Checks whether a ResearchProject can be researched
 		bool isResearchAvailable(
-				RuleResearch* r,
+				RuleResearch* resRule,
 				const std::vector<const RuleResearch*>& unlocked,
 				const Ruleset* ruleset) const;
 		/// Gets if a research has been unlocked.

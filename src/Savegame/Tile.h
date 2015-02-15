@@ -122,7 +122,7 @@ protected:
 		 * @return, pointer to MapData
 		 */
 		MapData* getMapData(int part) const
-		{	if (part < 0 || 3 < part)
+		{	if (part < 0 || part > 3)
 				return NULL;
 
 			return _objects[part]; }

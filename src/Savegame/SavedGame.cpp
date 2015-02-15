@@ -1495,48 +1495,47 @@ void SavedGame::getAvailableProductions(
 
 /**
  * Checks whether a ResearchProject can be researched.
- * @param r			- pointer to a RuleResearch to test
+ * @param resRule	- pointer to a RuleResearch to test
  * @param unlocked	- reference to a vector of pointers to the currently unlocked RuleResearch
  * @param ruleset	- pointer to the current Ruleset
  * @return, true if the RuleResearch can be researched
  */
 bool SavedGame::isResearchAvailable(
-		RuleResearch* r,
+		RuleResearch* resRule,
 		const std::vector<const RuleResearch*>& unlocked,
 		const Ruleset* ruleset) const
 {
-	if (r == NULL)
+	if (resRule == NULL)
 		return false;
 
-	const std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch()); // init.
 
-	const bool liveAlien = (ruleset->getUnit(r->getName()) != NULL);
+	const bool liveAlien = (ruleset->getUnit(resRule->getName()) != NULL);
 
 	if (_debug == true
 		|| std::find(
 					unlocked.begin(),
 					unlocked.end(),
-					r) != unlocked.end())
+					resRule) != unlocked.end())
 	{
 		return true;
 	}
 	else if (liveAlien == true)
 	{
-		if (r->getGetOneFree().empty() == false)
+		if (resRule->getGetOneFree().empty() == false)
 		{
 			const std::vector<std::string>::const_iterator
 				leaderCheck = std::find(
-									r->getUnlocked().begin(),
-									r->getUnlocked().end(),
+									resRule->getUnlocked().begin(),
+									resRule->getUnlocked().end(),
 									"STR_LEADER_PLUS"),
 				cmnderCheck = std::find(
-									r->getUnlocked().begin(),
-									r->getUnlocked().end(),
+									resRule->getUnlocked().begin(),
+									resRule->getUnlocked().end(),
 									"STR_COMMANDER_PLUS");
 			const bool
-				leader = (leaderCheck != r->getUnlocked().end()),
-				cmnder = (cmnderCheck != r->getUnlocked().end());
+				leader = (leaderCheck != resRule->getUnlocked().end()),
+				cmnder = (cmnderCheck != resRule->getUnlocked().end());
 
 			if (leader == true)
 			{
@@ -1561,8 +1560,8 @@ bool SavedGame::isResearchAvailable(
 	}
 
 	for (std::vector<std::string>::const_iterator
-			i = r->getGetOneFree().begin();
-			i != r->getGetOneFree().end();
+			i = resRule->getGetOneFree().begin();
+			i != resRule->getGetOneFree().end();
 			++i)
 	{
 		if (std::find(
@@ -1574,6 +1573,7 @@ bool SavedGame::isResearchAvailable(
 		}
 	}
 
+	const std::vector<std::string> deps = resRule->getDependencies();
 	for (std::vector<std::string>::const_iterator
 			i = deps.begin();
 			i != deps.end();

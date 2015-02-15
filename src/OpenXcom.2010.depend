@@ -4368,7 +4368,7 @@
 1422042793 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
-1420130447 f:\git\openxcom\src\ruleset\unit.h
+1423963401 f:\git\openxcom\src\ruleset\unit.h
 
 1421828728 f:\git\openxcom\src\engine\options.h
 	<string>
@@ -4399,7 +4399,7 @@
 
 1420130442 f:\git\openxcom\src\savegame\target.h
 
-1422760027 f:\git\openxcom\src\savegame\savedgame.h
+1423972491 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -4649,10 +4649,7 @@
 	<windows.h>
 	<time.h>
 
-1420130453 f:\git\openxcom\src\savegame\itemcontainer.h
-	<map>
-	<string>
-	<yaml-cpp/yaml.h>
+1423973303 f:\git\openxcom\src\savegame\itemcontainer.h
 
 1423127696 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
@@ -5450,7 +5447,7 @@
 1422733400 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
-1423019331 f:\git\openxcom\src\savegame\tile.h
+1423959433 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -5511,7 +5508,7 @@
 1420130440 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1420130445 f:\git\openxcom\src\battlescape\debriefingstate.h
+1423972092 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -5605,7 +5602,7 @@
 
 1420130458 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1423883422 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1423955861 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -7275,7 +7272,7 @@
 1420130456 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
-1423439382 f:\git\openxcom\src\geoscape\monthlyreportstate.h
+1423974878 f:\git\openxcom\src\geoscape\monthlyreportstate.h
 	"../Engine/State.h"
 
 1420130455 f:\git\openxcom\src\geoscape\multipletargetsstate.h
@@ -7836,7 +7833,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1423883060 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1423901843 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8843,7 +8840,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1423611153 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1423972688 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

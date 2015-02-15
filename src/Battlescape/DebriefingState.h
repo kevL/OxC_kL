@@ -34,6 +34,7 @@ namespace OpenXcom
 
 class Base;
 class BattleItem;
+class BattleUnit;
 class Country;
 class Craft;
 class Region;
@@ -64,9 +65,7 @@ struct DebriefingStat
 			score(0),
 			qty(0),
 			recover(recover)
-	{
-		//Log(LOG_INFO) << "create DebriefingStat";
-	};
+	{};
 };
 
 
@@ -146,6 +145,10 @@ private:
 	/// Recovers items from the battlescape.
 	void recoverItems(
 			std::vector<BattleItem*>* from,
+			Base* base);
+	/// Recovers an alien from the battlescape.
+	void recoverLiveAlien(
+			BattleUnit* unit,
 			Base* base);
 	/// Reequips a craft after a mission.
 	void reequipCraft(

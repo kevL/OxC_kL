@@ -30,15 +30,13 @@ namespace OpenXcom
  * Initializes an ItemContainer with no contents.
  */
 ItemContainer::ItemContainer()
-{
-}
+{}
 
 /**
  * dTor.
  */
 ItemContainer::~ItemContainer()
-{
-}
+{}
 
 /**
  * Loads the ItemContainer from a YAML file.
@@ -64,13 +62,13 @@ YAML::Node ItemContainer::save() const
 /**
  * Adds an item amount to the container.
  * @param id	- reference an item ID
- * @param qty	- item quantity
+ * @param qty	- item quantity (default 1)
  */
 void ItemContainer::addItem(
 		const std::string& id,
 		int qty)
 {
-	if (id.empty())
+	if (id.empty() == true)
 		return;
 
 	if (_qty.find(id) == _qty.end())
@@ -82,7 +80,7 @@ void ItemContainer::addItem(
 /**
  * Removes an item amount from the container.
  * @param id	- reference an item ID
- * @param qty	- item quantity
+ * @param qty	- item quantity (default 1)
  */
 void ItemContainer::removeItem(
 		const std::string& id,
@@ -110,11 +108,11 @@ int ItemContainer::getItem(const std::string& id) const
 	if (id.empty() == true)
 		return 0;
 
-	std::map<std::string, int>::const_iterator it = _qty.find(id);
-	if (it == _qty.end())
+	std::map<std::string, int>::const_iterator i = _qty.find(id);
+	if (i == _qty.end())
 		return 0;
 	else
-		return it->second;
+		return i->second;
 }
 
 /**

@@ -1594,14 +1594,12 @@ items:
     battleType: 11
     recover: false
   - type: CYBERDISC_CORPSE_3
-#    name: STR_CYBERDISC_CORPSE
     floorSprite: 58
     invWidth: 0
     invHeight: 0
     battleType: 11
     recover: false
   - type: CYBERDISC_CORPSE_4
-#    name: STR_CYBERDISC_CORPSE
     floorSprite: 59
     invWidth: 0
     invHeight: 0

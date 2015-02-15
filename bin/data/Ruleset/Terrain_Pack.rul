@@ -780,7 +780,7 @@ terrains:
       - name: DESERTMOUNT17
         width: 10
         length: 10
-  - name: DESERTTEMPLE # NEW ###
+  - name: DESERTTEMPLE # NEW ## replaces ATLANTDESERT
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -971,7 +971,7 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
-  - name: FORESTPOLAR # NEW ###
+  - name: FORESTPOLAR # NEW ##
     script: POLAR
     mapDataSets:
       - BLANKS
@@ -1025,7 +1025,7 @@ terrains:
       - name: FORESTPOLAR13
         width: 20
         length: 20
-  - name: GRASSLANDDESERT # NEW ###
+  - name: GRASSLANDDESERT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -1072,7 +1072,7 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
-  - name: GRASSLANDFOREST # NEW ###
+  - name: GRASSLANDFOREST # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -1118,7 +1118,7 @@ terrains:
       - name: FOREST11
         width: 20
         length: 20
-  - name: GRASSLANDFORESTMOUNT # NEW ###
+  - name: GRASSLANDFORESTMOUNT # NEW ##
     script: DESERT
     textures: [3]
 #    hemisphere: 1
@@ -1211,7 +1211,7 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
-  - name: INDUSTRIALUFO # NEW ###
+  - name: INDUSTRIALUFO # NEW ##
     script: URBANUFO #was INDUSTRIALUFO
     mapDataSets:
       - BLANKS
@@ -1407,7 +1407,7 @@ terrains:
       - name: JUNGLE11
         width: 10
         length: 10
-  - name: JUNGLEMOUNT # NEW ###
+  - name: JUNGLEMOUNT # NEW ##
     script: JUNGLE #was DEFAULT
     mapDataSets:
       - BLANKS
@@ -1458,7 +1458,7 @@ terrains:
       - name: JUNGLEMOUNT12
         width: 20
         length: 20
-  - name: JUNGLEPOLAR # NEW ###
+  - name: JUNGLEPOLAR # NEW ##
     script: POLAR
     mapDataSets:
       - BLANKS
@@ -1512,7 +1512,7 @@ terrains:
       - name: JUNGLEPOLAR13
         width: 20
         length: 20
-  - name: JUNGLETEMPLE # NEW ###
+  - name: JUNGLETEMPLE # NEW ## replaces MUJUNGLE
     script: JUNGLE #was DESERT
     mapDataSets:
       - BLANKS
@@ -1708,7 +1708,7 @@ terrains:
       - name: MADURBAN38
         width: 10
         length: 10
-  - name: MADURBANUFO # NEW ###
+  - name: MADURBANUFO # NEW ##
     script: URBANUFO #was MADURBANUFO
     mapDataSets:
       - BLANKS
@@ -1931,7 +1931,7 @@ terrains:
       - name: MOUNT12
         width: 20
         length: 20
-  - name: NATIVEUFO # NEW ###
+  - name: NATIVEUFO # NEW ##
     script: URBANUFO #was NATIVEUFO
     mapDataSets:
       - BLANKS
@@ -2324,7 +2324,7 @@ terrains:
       - name: POLAR13
         width: 20
         length: 20
-  - name: POLARDESERT # NEW ###
+  - name: POLARDESERT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -2423,7 +2423,7 @@ terrains:
       - name: POLARMOUNT12
         width: 20
         length: 20
-  - name: PORTTFTD # NEW ###
+  - name: PORTTFTD # NEW ##
     script: PORTUFO
     mapDataSets:
       - BLANKS
@@ -2714,7 +2714,7 @@ terrains:
       - name: RAILYARDURBAN27
         width: 10
         length: 10
-  - name: SAVANNADESERT # NEW ###
+  - name: SAVANNADESERT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -2761,7 +2761,7 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
-  - name: SAVANNAFOREST # NEW ###
+  - name: SAVANNAFOREST # NEW ##
     script: DEFAULT
     mapDataSets:
       - BLANKS
@@ -2807,7 +2807,7 @@ terrains:
       - name: FOREST11
         width: 20
         length: 20
-  - name: SAVANNAFORESTMOUNT # NEW ###
+  - name: SAVANNAFORESTMOUNT # NEW ##
     script: DESERT
     textures: [3]
     hemisphere: -1
@@ -2900,7 +2900,7 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
-  - name: STEPPEDESERT # NEW ###
+  - name: STEPPEDESERT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -2947,7 +2947,7 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
-  - name: STEPPEFOREST # NEW ###
+  - name: STEPPEFOREST # NEW ##
     script: DEFAULT
     textures: [0]
     hemisphere: 1
@@ -2993,7 +2993,7 @@ terrains:
       - name: FOREST11
         width: 20
         length: 20
-  - name: STEPPEFORESTMOUNT # NEW ###
+  - name: STEPPEFORESTMOUNT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -3086,7 +3086,7 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
-  - name: TAIGADESERT # NEW ###
+  - name: TAIGADESERT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -3133,7 +3133,7 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
-  - name: TAIGAFOREST # NEW ###
+  - name: TAIGAFOREST # NEW ##
     script: DEFAULT
     mapDataSets:
       - BLANKS
@@ -3179,7 +3179,7 @@ terrains:
       - name: FOREST11
         width: 20
         length: 20
-  - name: TAIGAFORESTMOUNT # NEW ###
+  - name: TAIGAFORESTMOUNT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -3272,7 +3272,7 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
-  - name: TUNDRADESERT # NEW ###
+  - name: TUNDRADESERT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
@@ -3319,7 +3319,7 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
-  - name: TUNDRAMOUNT # NEW ###
+  - name: TUNDRAMOUNT # NEW ##
     script: DEFAULT
     mapDataSets:
       - BLANKS
@@ -3369,7 +3369,7 @@ terrains:
       - name: MOUNT12
         width: 20
         length: 20
-  - name: TUNDRADESERTMOUNT # NEW ###
+  - name: TUNDRADESERTMOUNT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS

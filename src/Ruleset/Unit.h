@@ -21,7 +21,6 @@
 #define OPENXCOM_UNIT_H
 
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -81,8 +80,7 @@ struct UnitStats
 				psiStrength(0),
 				psiSkill(0),
 				melee(0)
-		{
-		};
+		{};
 
 		UnitStats(
 				int tu_,
@@ -108,8 +106,7 @@ struct UnitStats
 				psiStrength(psiStrength_),
 				psiSkill(psiSkill_),
 				melee(melee_)
-		{
-		};
+		{};
 
 		UnitStats& operator+=(const UnitStats& stats)
 		{
