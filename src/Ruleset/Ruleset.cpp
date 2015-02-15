@@ -1236,11 +1236,11 @@ T* Ruleset::loadRule(
 
 /**
  * Generates a brand new saved game with starting data.
- * @return, a new SavedGame
+ * @return, pointer to a new SavedGame
  */
 SavedGame* Ruleset::newSave() const
 {
-	SavedGame* const save = new SavedGame();
+	SavedGame* const save = new SavedGame(this);
 
 	// Add countries
 	for (std::vector<std::string>::const_iterator

@@ -1863,9 +1863,9 @@ int Base::getUsedContainment() const
 				i != _research.end();
 				++i)
 		{
-			const RuleResearch* const rpRule = (*i)->getRules();
-			if (rpRule->needItem() == true
-				&& _rules->getUnit(rpRule->getName()) != NULL)
+			const RuleResearch* const resRule = (*i)->getRules();
+			if (resRule->needItem() == true
+				&& _rules->getUnit(resRule->getName()) != NULL)
 			{
 				++total;
 			}

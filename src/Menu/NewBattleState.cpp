@@ -321,7 +321,7 @@ void NewBattleState::load(const std::string& filename)
 			if (doc["base"])
 			{
 				const Ruleset* const rule = _game->getRuleset();
-				SavedGame* const save = new SavedGame();
+				SavedGame* const save = new SavedGame(rule);
 
 				Base* const base = new Base(rule);
 				base->load(
@@ -430,7 +430,7 @@ void NewBattleState::save(const std::string& filename)
 void NewBattleState::initSave()
 {
 	const Ruleset* const rule = _game->getRuleset();
-	SavedGame* const save = new SavedGame();
+	SavedGame* const save = new SavedGame(rule);
 	Base* const base = new Base(rule);
 	const YAML::Node& starter = _game->getRuleset()->getStartingBase();
 	base->load(

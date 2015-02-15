@@ -1814,7 +1814,6 @@ void DebriefingState::recoverItems(
 			{
 				if (itRule->isRecoverable() == true
 					&& itRule->getRecoveryPoints() != 0
-					&& _rules->getResearch(itRule->getType()) != NULL
 					&& _savedGame->isResearched(itRule->getType()) == false)
 				{
 					addStat( // add pts. for unresearched items only
@@ -1902,11 +1901,8 @@ void DebriefingState::recoverLiveAlien(
 		const std::string type = unit->getType();
 
 		int value;
-		if (_rules->getResearch(type) != NULL
-			&& _savedGame->isResearched(type) == false)
-		{
+		if (_savedGame->isResearched(type) == false)
 			value = unit->getValue() * 2;
-		}
 		else
 			value = unit->getValue();
 

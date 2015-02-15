@@ -126,8 +126,8 @@ void BuildFacilitiesState::PopulateBuildList()
 	{
 		RuleBaseFacility* rule = _game->getRuleset()->getBaseFacility(*i);
 
-		if (_game->getSavedGame()->isResearched(rule->getRequirements())
-			&& !rule->isLift())
+		if (_game->getSavedGame()->isResearched(rule->getRequirements()) == true
+			&& rule->isLift() == false)
 		{
 			_facilities.push_back(rule);
 		}

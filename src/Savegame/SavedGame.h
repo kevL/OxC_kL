@@ -273,6 +273,7 @@ private:
 
 	AlienStrategy* _alienStrategy;
 	GameTime* _time;
+	const Ruleset* const _rules;
 	SavedBattleGame* _battleGame;
 
 	std::wstring _name;
@@ -324,7 +325,7 @@ private:
 			QUICKSAVE;
 
 		/// Creates a new saved game.
-		SavedGame();
+		SavedGame(const Ruleset* const rules);
 		/// Cleans up the saved game.
 		~SavedGame();
 

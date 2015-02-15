@@ -103,8 +103,8 @@ ActionMenuState::ActionMenuState(
 
 	SavedGame* const save = _game->getSavedGame();
 	if (save->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
-		&& save->isResearched(itRule->getRequirements()) == false
-		&& itRule->isResearchExempt() == false)
+		&& save->isResearched(itRule->getRequirements()) == false)
+//		&& itRule->isResearchExempt() == false)
 	{
 		return;
 	}

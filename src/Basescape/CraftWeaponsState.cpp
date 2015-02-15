@@ -134,11 +134,9 @@ CraftWeaponsState::CraftWeaponsState(
 	{
 		RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(*i);
 		const RuleItem* const laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
-		//Log(LOG_INFO) << ". laRule = " << laRule->getType();
 
 //		if (_base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
-		if (_game->getSavedGame()->isResearched(laRule->getRequirements()) == true	// requirements have been researched
-			|| laRule->getRequirements().empty() == true)							// or, does not need to be researched
+		if (_game->getSavedGame()->isResearched(laRule->getRequirements()) == true)	// requirements have been researched or does not have requirements.
 		{
 			//Log(LOG_INFO) << ". . add craft weapon";
 			_weaponRules.push_back(cwRule);

@@ -150,13 +150,13 @@ void LoadGameState::think()
 {
 	State::think();
 
-	if (_firstRun < 10) // Make sure it gets drawn properly
+	if (_firstRun < 10) // pause to Ensure this gets drawn properly
 		++_firstRun;
 	else
 	{
 		_game->popState();
 
-		SavedGame* save = new SavedGame(); // Load the game
+		SavedGame* save = new SavedGame(_game->getRuleset());
 		try
 		{
 			save->load(_filename, _game->getRuleset());

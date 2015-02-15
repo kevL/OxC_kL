@@ -116,9 +116,11 @@ bool equalProduction::operator()(const Production* p) const
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
+ * @param rules - pointer to the Ruleset kL
  */
-SavedGame::SavedGame()
+SavedGame::SavedGame(const Ruleset* const rules)
 	:
+		_rules(rules),
 		_difficulty(DIFF_BEGINNER),
 		_ironman(false),
 		_globeLon(0.),
@@ -412,7 +414,7 @@ SaveInfo SavedGame::getSaveInfo(
  * Loads a saved game's contents from a YAML file.
  * @note Assumes the saved game is blank.
  * @param filename	- reference a YAML filename
- * @param rule		- pointer to Ruleset for the saved game
+ * @param rule		- pointer to Ruleset
  */
 void SavedGame::load(
 		const std::string& filename,
@@ -1477,19 +1479,19 @@ void SavedGame::getAvailableProductions(
 			i != items.end();
 			++i)
 	{
-		RuleManufacture* const manuRule = ruleset->getManufacture(*i);
-		if (isResearched(manuRule->getRequirements()) == false)
+		RuleManufacture* const manufRule = ruleset->getManufacture(*i);
+		if (isResearched(manufRule->getRequirements()) == false)
 			continue;
 
 		if (std::find_if(
 					baseProductions.begin(),
 					baseProductions.end(),
-					equalProduction(manuRule)) != baseProductions.end())
+					equalProduction(manufRule)) != baseProductions.end())
 		{
 			continue;
 		}
 
-		productions.push_back(manuRule);
+		productions.push_back(manufRule);
 	}
 }
 
@@ -1699,16 +1701,16 @@ void SavedGame::getDependableManufacture(
 			i != manuList.end();
 			++i)
 	{
-		RuleManufacture* const manuRule = ruleset->getManufacture(*i);
+		RuleManufacture* const manufRule = ruleset->getManufacture(*i);
 
-		const std::vector<std::string>& reqs = manuRule->getRequirements();
-		if (isResearched(manuRule->getRequirements()) == true
+		const std::vector<std::string>& reqs = manufRule->getRequirements();
+		if (isResearched(manufRule->getRequirements()) == true
 			&& std::find(
 						reqs.begin(),
 						reqs.end(),
 						research->getName()) != reqs.end())
 		{
-			dependables.push_back(manuRule);
+			dependables.push_back(manufRule);
 		}
 	}
 }
@@ -1720,8 +1722,11 @@ void SavedGame::getDependableManufacture(
  */
 bool SavedGame::isResearched(const std::string& research) const
 {
-	if (research.empty() == true
-		|| _debug == true)
+	if (_debug == true
+		|| research.empty() == true
+		|| _rules->getResearch(research) == NULL	// kL_add
+		|| (_rules->getItem(research) != NULL		// kL_add
+			&& _rules->getItem(research)->isResearchExempt() == true))
 	{
 		return true;
 	}
@@ -1745,13 +1750,14 @@ bool SavedGame::isResearched(const std::string& research) const
  */
 bool SavedGame::isResearched(const std::vector<std::string>& research) const
 {
-	if (research.empty() == true
-		|| _debug == true)
+	if (_debug == true
+		|| research.empty() == true)
 	{
 		return true;
 	}
 
 	std::vector<std::string> matches = research;
+
 	for (std::vector<const RuleResearch*>::const_iterator
 			i = _discovered.begin();
 			i != _discovered.end();

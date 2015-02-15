@@ -131,7 +131,9 @@ char *SaveConverter::binaryBuffer(const std::string &filename, std::vector<char>
  * @param save Number of the save folder GAME_#
  * @param rule Ruleset to associate with this save.
  */
-SaveConverter::SaveConverter(int save, Ruleset *rule) : _rule(rule)
+SaveConverter::SaveConverter(int save, Ruleset *rule)
+	:
+		_rule(rule)
 {
 	std::stringstream ssFolder, ssPath;
 	ssFolder << "GAME_" << save;
@@ -260,7 +262,7 @@ void SaveConverter::getList(Language *lang, SaveOriginal info[NUM_SAVES])
  */
 SavedGame* SaveConverter::loadOriginal()
 {
-	_save = new SavedGame();
+	_save = new SavedGame(_rule);
 
 	// Load globe data
 	_save->getIncomeList().clear();

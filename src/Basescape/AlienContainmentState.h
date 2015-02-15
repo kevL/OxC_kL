@@ -51,7 +51,6 @@ class AlienContainmentState
 private:
 	bool _overCrowded;
 	int _fishFood;
-//		_researchAliens;
 	size_t _sel;
 
 	OptionsOrigin _origin;

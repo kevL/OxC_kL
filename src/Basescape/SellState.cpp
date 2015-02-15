@@ -410,13 +410,13 @@ SellState::SellState(
 				color = _lstItems->getColor();
 			}
 
-			if (save->isResearched(rule->getType()) == false				// not researched
+			if (save->isResearched(rule->getType()) == false				// not researched or research exempt
 				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(*i)->isAlien() == true					// or is an alien
 					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false										// and is not craft ordnance
-				&& rule->isResearchExempt() == false)						// and is not research exempt
+				&& craftOrdnance == false)										// and is not craft ordnance
+//				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = _colorArtefact;
@@ -1014,13 +1014,13 @@ void SellState::updateItemStrings()
 			}
 
 			const SavedGame* const save = _game->getSavedGame();
-			if (save->isResearched(rule->getType()) == false				// not researched
+			if (save->isResearched(rule->getType()) == false				// not researched or is research exempt
 				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(rule->getType())->isAlien() == true		// or is an alien
 					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false										// and is not craft ordnance
-				&& rule->isResearchExempt() == false)						// and is not research exempt
+				&& craftOrdnance == false)										// and is not craft ordnance
+//				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				_lstItems->setRowColor(_sel, _colorArtefact);

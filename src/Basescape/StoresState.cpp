@@ -213,13 +213,13 @@ StoresState::StoresState(Base* base)
 				color = Palette::blockOffset(15)+6; // purple
 			}
 
-			if (sg->isResearched(itRule->getType()) == false				// not researched
+			if (sg->isResearched(itRule->getType()) == false				// not researched or is research exempt
 				&& (sg->isResearched(itRule->getRequirements()) == false	// and has requirements to use that have not been researched
 					|| rules->getItem(*i)->isAlien() == true					// or is an alien
 					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false									// and is not craft ordnance
-				&& itRule->isResearchExempt() == false)						// and is not research exempt
+				&& craftOrdnance == false)									// and is not craft ordnance
+//				&& itRule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow

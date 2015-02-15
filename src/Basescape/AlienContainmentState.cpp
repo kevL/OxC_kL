@@ -67,22 +67,9 @@ AlienContainmentState::AlienContainmentState(
 		_origin(origin),
 		_sel(0),
 		_fishFood(0)
-//		_researchAliens(0)
 {
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
-/*kL
-	for (std::vector<ResearchProject*>::const_iterator
-			i = _base->getResearch().begin();
-			i != _base->getResearch().end();
-			++i)
-	{
-		const RuleResearch* research = (*i)->getRules();
-		if (_game->getRuleset()->getUnit(research->getName()))
-		{
-			++_researchAliens;
-		}
-	} */
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 10);
@@ -195,7 +182,7 @@ AlienContainmentState::AlienContainmentState(
 //	_txtUsed->setColor(_color);
 //	_txtUsed->setSecondaryColor(_color2);
 	_txtUsed->setText(tr("STR_SPACE_USED")
-						.arg(_base->getUsedContainment())); // + _researchAliens));
+						.arg(_base->getUsedContainment()));
 
 //	_lstAliens->setColor(_color2);
 //	_lstAliens->setArrowColor(_color);
@@ -241,11 +228,8 @@ AlienContainmentState::AlienContainmentState(
 							L"0");
 
 			itRule = _game->getRuleset()->getItem(*i);
-			if (_game->getSavedGame()->isResearched(itRule->getType()) == false
-				&& itRule->isResearchExempt() == false)
-			{
+			if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
 				color = Palette::blockOffset(13)+5; // yellow
-			}
 			else
 				color = _lstAliens->getColor();
 
@@ -289,32 +273,15 @@ void AlienContainmentState::btnOkClick(Action*)
 {
 	for (size_t
 			i = 0;
-			i < _qtys.size();
+			i != _qtys.size();
 			++i)
 	{
 		if (_qtys[i] > 0)
 		{
-/*			if (_origin == OPT_GEOSCAPE) // remove: Player must interrogate aLien to get researchHelp.
-			{
-				for (int
-						j = 0;
-						j <	_qtys[i];
-						++j)
-				{
-					_base->researchHelp(_aliens[i]);
-				}
-			} */
-
 			_base->getItems()->removeItem(
 									_aliens[i],
 									_qtys[i]);
 
-/*			if (Options::canSellLiveAliens)
-				_game->getSavedGame()->setFunds(
-											_game->getSavedGame()->getFunds()
-											+ _game->getRuleset()->getItem(_aliens[i])->getSellCost()
-											* _qtys[i]);
-			else // add the corpses */ // kL: Don't sell from this state.
 			_base->getItems()->addItem(
 									_game->getRuleset()->getArmor(
 															_game->getRuleset()->getUnit(_aliens[i])->getArmor())
@@ -564,11 +531,8 @@ void AlienContainmentState::updateStrings()
 	else
 	{
 		const RuleItem* const itRule = _game->getRuleset()->getItem(_aliens[_sel]);
-		if (_game->getSavedGame()->isResearched(itRule->getType()) == false
-			&& itRule->isResearchExempt() == false)
-		{
+		if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
 			color = Palette::blockOffset(13)+5; // yellow
-		}
 		else
 			color = _lstAliens->getColor();
 	}
@@ -579,8 +543,8 @@ void AlienContainmentState::updateStrings()
 
 
 	const int
-		aliens = _base->getUsedContainment() - _fishFood, //kL - _researchAliens,
-		freeSpace = _base->getAvailableContainment() - _base->getUsedContainment() + _fishFood;
+		freeSpace = _base->getAvailableContainment() - _base->getUsedContainment() + _fishFood,
+		aliens = _base->getUsedContainment() - _fishFood;
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(freeSpace));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));

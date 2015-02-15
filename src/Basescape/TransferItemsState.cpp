@@ -517,13 +517,13 @@ void TransferItemsState::init()
 				color = _lstItems->getColor();
 			}
 
-			if (save->isResearched(rule->getType()) == false				// not researched
+			if (save->isResearched(rule->getType()) == false				// not researched or is research exempt
 				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(*i)->isAlien() == true					// or is an alien
 					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
 					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false									// and is not craft ordnance
-				&& rule->isResearchExempt() == false)						// and is not research exempt
+				&& craftOrdnance == false)									// and is not craft ordnance
+//				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow //_colorArtefact; <- needs to go in updateItemStrings() as well as here.
