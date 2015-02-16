@@ -1645,24 +1645,25 @@ void Map::drawTerrain(Surface* surface)
 							{
 								unitWest = tileWest->getUnit();
 
-								if (tileWest->getMapData(MapData::O_OBJECT) == NULL // tileWest checks were written for dir=2,6 (but scoped to affect dir=1,5 also)
-									|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == NULL
-									|| (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH
-										&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
-										&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
+								if (unitWest != NULL
+									&& (unitWest->getUnitVisible() == true
+										|| _save->getDebugMode() == true)
+									&& unitWest != unit // large units don't need to redraw their western parts
+									&& unitWest->getStatus() == STATUS_WALKING)
 								{
 									redraw = false;
 
-									if (unitWest != NULL
-										&& (unitWest->getUnitVisible() == true
-											|| _save->getDebugMode() == true)
-										&& unitWest != unit // large units don't need to redraw their western parts
-										&& unitWest->getStatus() == STATUS_WALKING)
+									if (tileWest->getMapData(MapData::O_OBJECT) == NULL // tileWest checks were written for dir=2,6 (but scoped to affect dir=1,5 also)
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == NULL
+										|| (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH
+											&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
+											&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
 									{
 										if (unitWest->getDirection() == 2
 											|| unitWest->getDirection() == 6)
 										{
-											if (tile->getMapData(MapData::O_WESTWALL) == NULL
+											if ((tile->getMapData(MapData::O_WESTWALL) == NULL
+													|| tile->isUfoDoorOpen(MapData::O_WESTWALL) == true)
 												&& (tile->getMapData(MapData::O_OBJECT) == NULL
 													|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 														&& std::abs(tileWest->getTerrainLevel() - tile->getTerrainLevel()) < 13) // positive means Tile is higher
@@ -1698,7 +1699,7 @@ void Map::drawTerrain(Surface* surface)
 											}
 										}
 										else if (itY > 0
-											&& unit == NULL // unless unit is short and lets sight pass overtop.
+//											&& unit == NULL // unless unit is short and lets sight pass overtop.
 											&& (unitWest->getDirection() == 1
 												|| unitWest->getDirection() == 5))
 										{

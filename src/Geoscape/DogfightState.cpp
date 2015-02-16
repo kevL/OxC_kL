@@ -1198,7 +1198,10 @@ void DogfightState::updateDogfight()
 						{
 							const int acquiredTarget = altIntercepts.at(targetIntercept);
 							if ((*i)->getInterceptSlot() == acquiredTarget)
+							{
 								_ufo->setShootingAt(acquiredTarget);
+								break;
+							}
 						}
 					}
 				}
@@ -1494,7 +1497,6 @@ void DogfightState::ufoFireWeapon()
 	reload -= _diff * 2;
 
 	if (reload < 10) reload = 10;
-//	_changeTarget = reload;
 
 	_ufo->setFireCountdown(reload);
 

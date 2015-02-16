@@ -94,11 +94,6 @@ private:
 		_w1FireInterval,
 		_w2FireInterval;
 	size_t _interceptQty;
-//	Uint32
-//		_changeTarget;
-//		_optionSpeed,
-//		_ufoFireInterval;
-
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
