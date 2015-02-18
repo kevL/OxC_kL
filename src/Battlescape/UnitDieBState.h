@@ -44,7 +44,6 @@ private:
 	bool
 		_noSound,
 		_doneScream;
-	int _originalDir;
 
 	BattleUnit* _unit;
 	ItemDamageType _damageType;

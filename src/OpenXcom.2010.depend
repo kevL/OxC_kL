@@ -5383,7 +5383,7 @@
 1420130457 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1423127228 f:\git\openxcom\src\battlescape\battlescapestate.h
+1424273628 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5451,7 +5451,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1424269428 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1424271560 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5471,7 +5471,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1424228707 f:\git\openxcom\src\battlescape\alienbaistate.h
+1424271564 f:\git\openxcom\src\battlescape\alienbaistate.h
 	"BattleAIState.h"
 	"Position.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5513,7 +5513,7 @@
 1422233401 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1424229836 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1424273953 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5570,7 +5570,7 @@
 1420130441 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1423003787 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1424272398 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -6351,7 +6351,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1424258445 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1424273404 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"

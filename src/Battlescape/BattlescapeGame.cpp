@@ -633,7 +633,6 @@ void BattlescapeGame::endTurnPhase()
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
 	_currentAction.waypoints.clear();
-
 	getMap()->getWaypoints()->clear();
 
 	Position pos;
@@ -2168,7 +2167,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 }
 
 /**
-  * Cancels the current action the user had selected (firing, throwing,..)
+  * Cancels the current action the user had selected (firing, throwing, etc).
   * @param bForce - force the action to be cancelled
   * @return, true if action was cancelled
   */
@@ -2202,7 +2201,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 			else
 			{
-				if (Options::battleConfirmFireMode
+				if (Options::battleConfirmFireMode == true
 					&& _currentAction.waypoints.empty() == false)
 				{
 					_currentAction.waypoints.pop_back();
@@ -2273,11 +2272,11 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		//Log(LOG_INFO) << ". . _currentAction.targeting";
 		_currentAction.strafe = false;
 
-		if (_currentAction.type == BA_LAUNCH) // click to set BL waypoints.
+		if (_currentAction.type == BA_LAUNCH // click to set BL waypoints.
+			&& static_cast<int>(_currentAction.waypoints.size()) < _currentAction.weapon->getRules()->isWaypoints())
 		{
 			//Log(LOG_INFO) << ". . . . BA_LAUNCH";
-			_parentState->showLaunchButton(true);
-
+			_parentState->showLaunchButton();
 			_currentAction.waypoints.push_back(targetPos);
 			getMap()->getWaypoints()->push_back(targetPos);
 		}

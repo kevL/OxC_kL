@@ -77,7 +77,7 @@ UnitDieBState::UnitDieBState(
 
 	if (_unit->getUnitVisible() == true)
 	{
-		Camera* const deathCam = _parent->getMap()->getCamera();
+		Camera* const deathCam = _parent->getMap()->getCamera(); // <- added to think() Status_Turning, also
 		if (deathCam->isOnScreen(_unit->getPosition()) == false)
 			deathCam->centerOnPosition(_unit->getPosition());
 
@@ -147,17 +147,10 @@ void UnitDieBState::think()
 	{
 		_doneScream = true;
 		playDeathSound();
-	}
 
-// #1
-	if (_unit->getStatus() == STATUS_TURNING)
-	{
-		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getUnitVisible() == true)
 		{
-			// This was also done in cTor, but terrain Explosions can/do change camera before the spin/turn & collapse happen.
-			// TODO: use a memberVar to prevent this happening more than once
-			// ... might have to account for a different Z-level .....
+			// This was also done in cTor, but terrain Explosions can/do change camera before the turn/spin & collapse happen.
 			Camera* const deathCam = _parent->getMap()->getCamera();
 			if (deathCam->isOnScreen(_unit->getPosition()) == false
 				|| _unit->getPosition().z != deathCam->getViewLevel())
@@ -165,7 +158,12 @@ void UnitDieBState::think()
 				deathCam->centerOnPosition(_unit->getPosition());
 			}
 		}
+	}
 
+// #1
+	if (_unit->getStatus() == STATUS_TURNING)
+	{
+		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getSpinPhase() != -1)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
@@ -188,6 +186,12 @@ void UnitDieBState::think()
 		//Log(LOG_INFO) << ". . !isOut";
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
+
+		if (_unit->getRespawn() == true)
+		{
+			while (_unit->getStatus() == STATUS_COLLAPSING)
+				_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() ) -> goto #4
+		}
 	}
 
 // #4

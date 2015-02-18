@@ -1555,9 +1555,8 @@ void AlienBAIState::evaluateAIMode()
 	// if the aliens are cheating or the unit is charging enforce combat as a priority
 	if (_save->isCheating() == true // <- hmm, do i want this - kL_note
 		|| _unit->getCharging() != NULL
-		|| _blaster == true)	// TEST:
-								// The two (_blaster==true) checks in this function ought obviate the entire re-evaluate thing!
-								// that is, there *is* a valid targetPosition & targetUnit if blaster=TRUE ....
+		|| _blaster == true)	// The two (_blaster==true) checks in this function ought obviate the entire re-evaluate thing!
+								// Note, there is a valid targetPosition but NOT targetUnit if blaster=TRUE ....
 	{
 		_AIMode = AI_COMBAT;
 	}
@@ -2148,7 +2147,7 @@ void AlienBAIState::wayPointAction()
 	if (_unit->getTimeUnits() >= _attackAction->TU)
 	{
 		std::vector<BattleUnit*> targets;
-		int explRadius;
+		const int explRadius = _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getExplosionRadius();
 
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _save->getUnits()->begin();
@@ -2162,7 +2161,6 @@ void AlienBAIState::wayPointAction()
 						true) == true)
 			{
 				Log(LOG_INFO) << ". . . unit VALID";
-				explRadius = _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getExplosionRadius();
 				if (explosiveEfficacy(
 								(*i)->getPosition(),
 								_unit,
@@ -2210,7 +2208,7 @@ void AlienBAIState::wayPointAction()
  * @note helper for wayPointAction()
  * @return, true if waypoints get positioned
  */
-bool AlienBAIState::pathWaypoints()
+bool AlienBAIState::pathWaypoints() // private.
 {
 	Log(LOG_INFO) << "AlienBAIState::pathWaypoints() vs ID " << _aggroTarget->getId() << " pos " << _aggroTarget->getPosition();
 	Log(LOG_INFO) << ". actor ID " << _unit->getId() << " pos " << _unit->getPosition();

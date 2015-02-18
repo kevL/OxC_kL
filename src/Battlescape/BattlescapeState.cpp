@@ -2113,7 +2113,6 @@ void BattlescapeState::btnStatsClick(Action* action)
 		{
 			_battleGame->getCurrentAction()->waypoints.clear();
 			_battleGame->getMap()->getWaypoints()->clear();
-
 			showLaunchButton(false);
 		}
 
@@ -3627,7 +3626,7 @@ void BattlescapeState::finishBattle(
 
 /**
  * Shows the launch button.
- * @param show - true to show launch button
+ * @param show - true to show launch button (default true)
  */
 void BattlescapeState::showLaunchButton(bool show)
 {
@@ -3636,7 +3635,7 @@ void BattlescapeState::showLaunchButton(bool show)
 
 /**
  * Shows the PSI button.
- * @param show - true to show PSI button
+ * @param show - true to show PSI button (default true)
  */
 void BattlescapeState::showPsiButton(bool show)
 {

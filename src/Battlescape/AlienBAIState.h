@@ -84,6 +84,9 @@ protected:
 
 	BattleActionType _reserve;
 
+	/// Constructs a waypoint path for weapons like Blaster Launcher.
+	bool pathWaypoints();
+
 
 	public:
 		/// Creates a new AlienBAIState linked to the game and a certain unit.
@@ -154,8 +157,6 @@ protected:
 		void meleeAction();
 		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
 		void wayPointAction();
-		/// Constructs a waypoint path for weapons like Blaster Launcher.
-		bool pathWaypoints();
 		/// Attempts to fire at an enemy we can see.
 		void projectileAction();
 

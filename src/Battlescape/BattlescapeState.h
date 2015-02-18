@@ -343,9 +343,9 @@ private:
 				const int inExitArea);
 
 		/// Shows the launch button.
-		void showLaunchButton(bool show);
+		void showLaunchButton(bool show = true);
 		/// Shows the PSI button.
-		void showPsiButton(bool show);
+		void showPsiButton(bool show = true);
 
 		/// Clears mouse-scrolling state.
 		void clearMouseScrollingState();
