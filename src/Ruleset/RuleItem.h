@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 #include "../Battlescape/BattlescapeGame.h" // kL, BattleActionType
@@ -85,8 +84,7 @@ private:
 		_recover,
 		_noResearch, // kL
 		_twoHanded,
-		_underwaterOnly,
-		_waypoint;
+		_underwaterOnly;
 	int
 		_armor,
 		_attraction,
@@ -99,6 +97,7 @@ private:
 		_transferTime,
 		_turretType,
 		_tuUse,
+		_waypoint,
 		_weight,
 
 		_heal,
@@ -214,8 +213,8 @@ private:
 
 		/// Gets if the item is two-handed.
 		bool isTwoHanded() const;
-		/// Gets if the item is a launcher.
-		bool isWaypoint() const;
+		/// Gets if the item is a launcher and if so how many waypoints can be set.
+		int isWaypoints() const;
 		/// Gets if the item is fixed.
 		bool isFixed() const;
 

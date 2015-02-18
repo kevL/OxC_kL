@@ -80,7 +80,8 @@ private:
 		_noDraw,
 		_projectileInFOV,
 		_smoothingEngaged,
-		_unitDying;
+		_unitDying,
+		_waypointAction;
 	int
 		_animFrame,
 		_cursorSize,
@@ -245,6 +246,9 @@ private:
 
 		/// Gets the SavedBattleGame.
 		SavedBattleGame* getSavedBattle() const;
+
+		/// Tells the map to reveal because there's a waypoint action going down.
+		void setWaypointAction(bool wp = true);
 };
 
 }

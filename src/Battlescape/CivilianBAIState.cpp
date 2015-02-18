@@ -145,7 +145,7 @@ void CivilianBAIState::think(BattleAction* action)
 	_escapeAction->number = action->number;
 
 	_visibleEnemies = selectNearestTarget();
-	_spottingEnemies = getSpottingUnits(_unit->getPosition());
+	_spottingEnemies = countSpottingUnits(_unit->getPosition());
 
 //	if (_traceAI)
 //	{
@@ -239,7 +239,7 @@ int CivilianBAIState::selectNearestTarget()
 	_aggroTarget = NULL;
 
 	const Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit)
-						  + Position(0, 0,-4);
+						  + Position(0,0,-4);
 
 	Position target;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -283,7 +283,7 @@ int CivilianBAIState::selectNearestTarget()
 /**
  *
  */
-int CivilianBAIState::getSpottingUnits(Position pos) const
+int CivilianBAIState::countSpottingUnits(Position pos) const
 {
 	bool checking = (pos != _unit->getPosition());
 	int tally = 0;
@@ -294,14 +294,11 @@ int CivilianBAIState::getSpottingUnits(Position pos) const
 			++i)
 	{
 		if ((*i)->isOut() == false
-			&& (*i)->getFaction() == FACTION_HOSTILE)
+			&& (*i)->getFaction() == FACTION_HOSTILE
+			&& _save->getTileEngine()->distance(
+											pos,
+											(*i)->getPosition()) < 25)
 		{
-			const int dist = _save->getTileEngine()->distance(
-															pos,
-															(*i)->getPosition());
-			if (dist > 20)
-				continue;
-
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 4;
 
@@ -353,7 +350,7 @@ void CivilianBAIState::setupEscape()
 		bestTileScore = -100000,
 		score = -100000,
 		tu = _unit->getTimeUnits() / 2,
-		unitsSpotting = getSpottingUnits(_unit->getPosition()),
+		unitsSpotting = countSpottingUnits(_unit->getPosition()),
 		currentTilePref = 15,
 		dist = 0;
 
@@ -364,7 +361,7 @@ void CivilianBAIState::setupEscape()
 											_aggroTarget->getPosition());
 
 	Tile* tile = NULL;
-	Position bestTile(0, 0, 0);
+	Position bestTile(0,0,0);
 
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 
@@ -434,13 +431,11 @@ void CivilianBAIState::setupEscape()
 		else
 			score += (distTarget - dist) * 10;
 
-		int spotters = 0;
-
 		if (tile == NULL) // no you can't quit the battlefield by running off the map.
 			score = -100001;
 		else
 		{
-			spotters = getSpottingUnits(_escapeAction->target);
+			const int spotters = countSpottingUnits(_escapeAction->target);
 
 			// just ignore unreachable tiles
 			if (std::find(

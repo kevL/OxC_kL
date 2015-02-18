@@ -71,7 +71,7 @@ RuleItem::RuleItem(const std::string& type)
 		_battleType(BT_NONE),
 		_arcingShot(false),
 		_twoHanded(false),
-		_waypoint(false),
+		_waypoint(0),
 		_fixedWeapon(false),
 		_flatRate(false),
 		_invWidth(1),
@@ -225,7 +225,7 @@ void RuleItem::load(
 	_tuMelee				= node["tuMelee"].as<int>(_tuMelee);
 	_battleType				= static_cast<BattleType>(node["battleType"].as<int>(_battleType));
 	_twoHanded				= node["twoHanded"].as<bool>(_twoHanded);
-	_waypoint				= node["waypoint"].as<bool>(_waypoint);
+	_waypoint				= node["waypoint"].as<int>(_waypoint);
 	_fixedWeapon			= node["fixedWeapon"].as<bool>(_fixedWeapon);
 	_invWidth				= node["invWidth"].as<int>(_invWidth);
 	_invHeight				= node["invHeight"].as<int>(_invHeight);
@@ -387,10 +387,10 @@ bool RuleItem::isTwoHanded() const
 }
 
 /**
- * Returns whether this item uses waypoints.
+ * Gets if the item is a launcher and if so how many waypoints can be set.
  * @return, true if item uses waypoints
  */
-bool RuleItem::isWaypoint() const
+int RuleItem::isWaypoints() const
 {
 	return _waypoint;
 }
@@ -884,7 +884,7 @@ bool RuleItem::isRifle() const
 {
 	return (_battleType == BT_FIREARM
 				|| _battleType == BT_MELEE)
-			&& _twoHanded;
+			&& _twoHanded == true;
 }
 
 /**
@@ -1049,7 +1049,7 @@ BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 
 	if (_battleType == BT_FIREARM)	// getBattleType()
 	{
-		if (_waypoint == true)		// isWaypoint()
+		if (_waypoint != 0)			// isWaypoints()
 			return BA_LAUNCH;
 
 		if (_accuracySnap != 0)		// getAccuracySnap()

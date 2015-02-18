@@ -88,7 +88,7 @@ private:
 			void think(BattleAction* action);
 
 			///
-			int getSpottingUnits(Position pos) const;
+			int countSpottingUnits(Position pos) const;
 			///
 			int selectNearestTarget();
 			///

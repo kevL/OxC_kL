@@ -617,7 +617,7 @@ DogfightState::DogfightState(
 	}
 
 	// Set UFO size - going to be moved to Ufo class to implement simultaneous dogfights.
-	std::string ufoSize = _ufo->getRules()->getSize();
+	const std::string ufoSize = _ufo->getRules()->getSize();
 	if (ufoSize.compare("STR_VERY_SMALL") == 0)
 		_ufoSize = 0;
 	else if (ufoSize.compare("STR_SMALL") == 0)
@@ -871,14 +871,13 @@ void DogfightState::updateDogfight()
 
 		int escapeTicks = _ufo->getEscapeCountdown();
 		if (_ufo->isCrashed() == false
-			&& _ufo->isDestroyed() == false
+//			&& _ufo->isDestroyed() == false
 			&& _craft->isDestroyed() == false)
 		{
 			if (escapeTicks > 0
 				&& _ufo->getInterceptionProcessed() == false)
 			{
-				--escapeTicks;
-				_ufo->setEscapeCountdown(escapeTicks);
+				_ufo->setEscapeCountdown(--escapeTicks);
 				_ufo->setInterceptionProcessed(true);
 
 				if (_ufo->getFireCountdown() > 0)
@@ -886,7 +885,10 @@ void DogfightState::updateDogfight()
 			}
 
 			if (escapeTicks == 0) // Check if UFO is breaking off.
+			{
+//				_ufo->setFireCountdown(0); // kL <- let cTor handle this
 				_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
+			}
 		}
 	}
 
@@ -1146,10 +1148,10 @@ void DogfightState::updateDogfight()
 		{
 			_ufo->setShootingAt(0);
 		}
-		else if (_ufo->isCrashed() == false  // UFO is gtg.
+		else if (_ufo->getFireCountdown() == 0 // UFO is gtg.
 			&& (_ufo->getShootingAt() == 0
 				|| _ufo->getShootingAt() == _intercept)
-			&& _ufo->getFireCountdown() == 0)
+			&& _ufo->isCrashed() == false)
 		{
 			if (_dist <= ufoWRange
 				 && _craft->isDestroyed() == false)
@@ -1486,6 +1488,20 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
+	setStatus("STR_UFO_RETURN_FIRE");
+
+	CraftWeaponProjectile* const proj = new CraftWeaponProjectile();
+	proj->setType(CWPT_PLASMA_BEAM);
+	proj->setAccuracy(60);
+	proj->setDamage(_ufo->getRules()->getWeaponPower());
+	proj->setDirection(D_DOWN);
+	proj->setHorizontalPosition(HP_CENTER);
+	proj->setPosition(_dist - (_ufo->getRules()->getRadius() / 2));
+	_projectiles.push_back(proj);
+
+	playSoundFX(ResourcePack::UFO_FIRE, true);
+
+
 	int reload = _ufo->getRules()->getWeaponReload();
 /*	reload -= _diff * 2;
 	reload += RNG::generate(
@@ -1499,20 +1515,6 @@ void DogfightState::ufoFireWeapon()
 	if (reload < 10) reload = 10;
 
 	_ufo->setFireCountdown(reload);
-
-
-	setStatus("STR_UFO_RETURN_FIRE");
-
-	CraftWeaponProjectile* const proj = new CraftWeaponProjectile();
-	proj->setType(CWPT_PLASMA_BEAM);
-	proj->setAccuracy(60);
-	proj->setDamage(_ufo->getRules()->getWeaponPower());
-	proj->setDirection(D_DOWN);
-	proj->setHorizontalPosition(HP_CENTER);
-	proj->setPosition(_dist - (_ufo->getRules()->getRadius() / 2));
-	_projectiles.push_back(proj);
-
-	playSoundFX(ResourcePack::UFO_FIRE, true);
 }
 
 /**

@@ -137,7 +137,7 @@ void UnitDieBState::init()
 
 /**
  * Runs state functionality every cycle.
- * Progresses the death, displays any messages, checks if the mission is over, ...
+ * Progresses the death, displays any messages, checks if the mission is over, etc.
  */
 void UnitDieBState::think()
 {
@@ -153,13 +153,28 @@ void UnitDieBState::think()
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
-		if (_unit->getSpinPhase() > -1)
+		if (_unit->getUnitVisible() == true)
+		{
+			// This was also done in cTor, but terrain Explosions can/do change camera before the spin/turn & collapse happen.
+			// TODO: use a memberVar to prevent this happening more than once
+			// ... might have to account for a different Z-level .....
+			Camera* const deathCam = _parent->getMap()->getCamera();
+			if (deathCam->isOnScreen(_unit->getPosition()) == false
+				|| _unit->getPosition().z != deathCam->getViewLevel())
+			{
+				deathCam->centerOnPosition(_unit->getPosition());
+			}
+		}
+
+		if (_unit->getSpinPhase() != -1)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
 			_unit->contDeathSpin(); // -> STATUS_STANDING
 		}
-		else
+		else // spawn conversion is going to happen
+		{
 			_unit->turn(); // -> STATUS_STANDING
+		}
 	}
 // #3
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
@@ -187,6 +202,7 @@ void UnitDieBState::think()
 		}
 
 		_unit->setDown(); // kL
+		_parent->getMap()->setUnitDying(false);
 
 /*		if (_unit->getDiedByFire()) // do this in BattleUnit::damage()
 		{
@@ -206,8 +222,8 @@ void UnitDieBState::think()
 //TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
 //TEST		statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 
-			convertedUnit->setCache(NULL);
-			_parent->getMap()->cacheUnit(convertedUnit);
+//			convertedUnit->setCache(NULL); // These are done in convertUnit()
+//			_parent->getMap()->cacheUnit(convertedUnit);
 
 			//Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
@@ -256,11 +272,11 @@ void UnitDieBState::think()
 
 		// if all units from either faction are killed - auto-end the mission.
 		if (_parent->getSave()->getSide() == FACTION_PLAYER
-			&& Options::battleAutoEnd)
+			&& Options::battleAutoEnd == true)
 		{
 			int
-				liveAliens = 0,
-				liveSoldiers = 0;
+				liveAliens,
+				liveSoldiers;
 			_parent->tallyUnits(
 							liveAliens,
 							liveSoldiers);
@@ -277,7 +293,6 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
-	_parent->getMap()->setUnitDying(false);
 	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 

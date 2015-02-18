@@ -530,7 +530,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			else if (_action.weapon->getRules()->getFireSound() != -1)
 				sound = _action.weapon->getRules()->getFireSound();
 
-			if (!_parent->getSave()->getDebugMode()
+			if (_parent->getSave()->getDebugMode() == false
 				&& _action.type != BA_LAUNCH
 				&& _ammo->spendBullet() == false)
 			{
@@ -581,6 +581,9 @@ bool ProjectileFlyBState::createNewProjectile()
 			|| _action.type == BA_LAUNCH)
 		{
 			//Log(LOG_INFO) << ". . _projectileImpact AIM";
+			if (_action.type == BA_LAUNCH)
+				_parent->getMap()->setWaypointAction(); // reveal the Map until waypoint action completes.
+
 			_unit->aim();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -647,22 +650,26 @@ void ProjectileFlyBState::think()
 	// TODO refactoring : store the projectile in this state, instead of getting it from the map each time.
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
-		Tile
-			* const tile = _parent->getSave()->getTile(_unit->getPosition()),
-			* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+//		Tile
+//			* const tile = _parent->getSave()->getTile(_unit->getPosition()),
+//			* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 
-		const bool
-			hasFloor = tile != NULL
-					&& tile->hasNoFloor(tileBelow) == false,
-			unitCanFly = _unit->getMovementType() == MT_FLY;
+//		const bool
+//			hasFloor = tile != NULL
+//					&& tile->hasNoFloor(tileBelow) == false,
+//			unitCanFly = _unit->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
 			&& _unit->isOut() == false
 			&& _ammo != NULL // kL
 			&& _ammo->getAmmoQuantity() != 0
-			&& (hasFloor == true
-				|| unitCanFly == true))
+//			&& (hasFloor == true
+//				|| unitCanFly == true))
+			&& ((_parent->getSave()->getTile(_unit->getPosition()) != NULL
+					&& _parent->getSave()->getTile(_unit->getPosition())
+						->hasNoFloor(_parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1))) == false)
+				|| _unit->getMovementType() == MT_FLY))
 		{
 			createNewProjectile();
 
@@ -816,7 +823,10 @@ void ProjectileFlyBState::think()
 //				_parent->getMap()->resetCameraSmoothing();
 
 				if (_action.type == BA_LAUNCH) // kL: Launches explode at final waypoint.
+				{
 					_projectileImpact = VOXEL_OBJECT;
+					_parent->getMap()->setWaypointAction(false); // reveal the Map until waypoint action completes.
+				}
 
 				BattleUnit* const shotAt = _parent->getSave()->getTile(_action.target)->getUnit();
 				if (shotAt != NULL // Only counts for guns, not throws or launches

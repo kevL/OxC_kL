@@ -53,15 +53,15 @@ protected:
 		_didPsi,
 		_grenade, // kL
 		_melee,
-		_rifle,
-		_traceAI;
+		_rifle;
+//		_traceAI;
 	int
 		_AIMode,
 		_closestDist,
 		_intelligence,
-		_knownEnemies,
-		_spottingEnemies,
-		_visibleEnemies,
+		_targetsKnown,
+		_targetsVisible,
+		_xcomSpotters,
 		_ambushTUs,
 		_escapeTUs;
 //kL	_reserveTUs;
@@ -122,9 +122,8 @@ protected:
 
 		/// count how many xcom/civilian units are known to this unit.
 		int countKnownTargets() const;
-
 		/// count how many known XCom units are able to see this unit.
-		int getSpottingUnits(Position pos) const;
+		int countSpottingUnits(Position pos) const;
 
 		/// Selects the nearest target we can see, and return the number of viable targets.
 		int selectNearestTarget();
@@ -155,6 +154,8 @@ protected:
 		void meleeAction();
 		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
 		void wayPointAction();
+		/// Constructs a waypoint path for weapons like Blaster Launcher.
+		bool pathWaypoints();
 		/// Attempts to fire at an enemy we can see.
 		void projectileAction();
 

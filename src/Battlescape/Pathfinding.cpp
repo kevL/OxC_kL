@@ -142,6 +142,7 @@ void Pathfinding::calculate(
 	{
 		maxTUCost = 10000;
 		_movementType = MT_FLY;
+		strafeRejected = true;
 	}
 	else
 	{
@@ -231,9 +232,9 @@ void Pathfinding::calculate(
 					Tile* const testTile = _save->getTile(destPos + Position(x, y, 0));
 					if (x && y
 						&& ((testTile->getMapData(MapData::O_NORTHWALL)
-								&& testTile->getMapData(MapData::O_NORTHWALL)->isDoor())
+								&& testTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true)
 							||  (testTile->getMapData(MapData::O_WESTWALL)
-								&& testTile->getMapData(MapData::O_WESTWALL)->isDoor())))
+								&& testTile->getMapData(MapData::O_WESTWALL)->isDoor() == true)))
 					{
 						return;
 					}
@@ -1309,34 +1310,32 @@ int Pathfinding::getTUCost(
  * Converts direction to a unit-vector.
  * Direction starts north = 0 and goes clockwise.
  * @param dir		- source direction
- * @param relPos	- pointer to a Position (which acts as a vector)
+ * @param unitVect	- pointer to a Position
  */
 void Pathfinding::directionToVector(
 		const int dir,
-		Position* relPos)
+		Position* unitVect)
 {
 	const int
 		x[10] = { 0, 1, 1, 1, 0,-1,-1,-1, 0, 0},
 		y[10] = {-1,-1, 0, 1, 1, 1, 0,-1, 0, 0},
 		z[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 1,-1};
 
-	relPos->x = x[dir];
-	relPos->y = y[dir];
-	relPos->z = z[dir];
+	unitVect->x = x[dir];
+	unitVect->y = y[dir];
+	unitVect->z = z[dir];
 }
 
 /**
  * Converts unit-vector to a direction.
  * Direction starts north = 0 and goes clockwise.
- * @param relPos	- reference a Position (which acts as a vector)
- * @param dir		- reference the resulting direction (up/down & same-tile sets dir -1)
+ * @param unitVect	- reference to a Position
+ * @param dir		- reference to the resulting direction (up/down & same-tile sets dir -1)
  */
 void Pathfinding::vectorToDirection(
-		const Position& relPos,
+		const Position& unitVect,
 		int& dir)
 {
-	dir = -1;
-
 	const int
 		x[8] = { 0, 1, 1, 1, 0,-1,-1,-1},
 		y[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
@@ -1346,13 +1345,15 @@ void Pathfinding::vectorToDirection(
 			i < 8;
 			++i)
 	{
-		if (x[i] == relPos.x
-			&& y[i] == relPos.y)
+		if (x[i] == unitVect.x
+			&& y[i] == unitVect.y)
 		{
 			dir = i;
 			return;
 		}
 	}
+
+	dir = -1;
 }
 
 /**
@@ -1498,10 +1499,10 @@ BIGWALL_E_S		// 8
 	if (part == MapData::O_FLOOR)
 	{
 		//Log(LOG_INFO) << ". part is Floor";
-		if (tile->getUnit() != NULL)
-		{
-			const BattleUnit* const tileUnit = tile->getUnit();
+		const BattleUnit* tileUnit = tile->getUnit();
 
+		if (tileUnit != NULL)
+		{
 			if (tileUnit == _unit
 				|| tileUnit == missileTarget
 				|| tileUnit->isOut(true, true) == true)
@@ -1539,7 +1540,7 @@ BIGWALL_E_S		// 8
 			while (pos.z >= 0)
 			{
 				const Tile* const testTile = _save->getTile(pos);
-				const BattleUnit* const tileUnit = testTile->getUnit();
+				tileUnit = testTile->getUnit();
 
 				if (tileUnit != NULL
 					&& tileUnit != _unit)

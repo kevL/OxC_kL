@@ -2479,6 +2479,8 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem
 		* const rhtWeapon = getItem("STR_RIGHT_HAND"),
 		* const lftWeapon = getItem("STR_LEFT_HAND");
+	if (rhtWeapon != NULL) Log(LOG_INFO) << "right weapon " << rhtWeapon->getRules()->getType();
+	if (lftWeapon != NULL) Log(LOG_INFO) << "left weapon " << lftWeapon->getRules()->getType();
 
 	const bool
 		isRht = rhtWeapon
@@ -2505,21 +2507,21 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 	//Log(LOG_INFO) << ". . isRht & isLft VALID";
 
-	const RuleItem* rule = rhtWeapon->getRules();
-	int rhtTU = rule->getTUSnap();
+	const RuleItem* itRule = rhtWeapon->getRules();
+	int rhtTU = itRule->getTUSnap();
 	if (rhtTU == 0)
-		if (rhtTU = rule->getTUAuto() == 0)
-			if (rhtTU = rule->getTUAimed() == 0)
-				if (rhtTU = rule->getTULaunch() == 0)
-					rhtTU = rule->getTUMelee();
+		if ((rhtTU = itRule->getTUAuto()) == 0)
+			if ((rhtTU = itRule->getTUAimed()) == 0)
+				if ((rhtTU = itRule->getTULaunch()) == 0)
+					rhtTU = itRule->getTUMelee();
 
-	rule = lftWeapon->getRules();
-	int lftTU = rule->getTUSnap();
+	itRule = lftWeapon->getRules();
+	int lftTU = itRule->getTUSnap();
 	if (lftTU == 0)
-		if (lftTU = rule->getTUAuto() == 0)
-			if (lftTU = rule->getTUAimed() == 0)
-				if (lftTU = rule->getTULaunch() == 0)
-					lftTU = rule->getTUMelee();
+		if ((lftTU = itRule->getTUAuto()) == 0)
+			if ((lftTU = itRule->getTUAimed()) == 0)
+				if ((lftTU = itRule->getTULaunch()) == 0)
+					lftTU = itRule->getTUMelee();
 	// note: Should probly account for 'noReaction' weapons ...
 
 	//Log(LOG_INFO) << ". . rhtTU = " << rhtTU;

@@ -117,6 +117,7 @@ Map::Map(
 		_projectile(NULL),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
+		_waypointAction(false),
 		_launch(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
@@ -375,7 +376,7 @@ void Map::draw()
 					|| (tile->getUnit() != NULL
 						&& tile->getUnit()->getUnitVisible() == true)
 					|| (*i)->isBig() == true
-					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
+					|| _save->getSide() != FACTION_PLAYER))	// shows hit-explosion during aLien berserk
 			{
 				_explosionInFOV = true;
 				break;
@@ -394,6 +395,7 @@ void Map::draw()
 			|| _unitDying == true
 			|| _save->getDebugMode() == true
 			|| _projectileInFOV == true
+			|| _waypointAction == true // stop flashing the Hidden Movement screen between waypoints.
 			|| _explosionInFOV == true)
 		{
 			kL_noReveal = false;
@@ -1662,8 +1664,8 @@ void Map::drawTerrain(Surface* surface)
 										if (unitWest->getDirection() == 2
 											|| unitWest->getDirection() == 6)
 										{
-											if ((tile->getMapData(MapData::O_WESTWALL) == NULL
-													|| tile->isUfoDoorOpen(MapData::O_WESTWALL) == true)
+											if ((tile->getMapData(MapData::O_WESTWALL) == NULL				// redundant, due to
+													|| tile->isUfoDoorOpen(MapData::O_WESTWALL) == true)	// this. <- checks if westWall is valid
 												&& (tile->getMapData(MapData::O_OBJECT) == NULL
 													|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 														&& std::abs(tileWest->getTerrainLevel() - tile->getTerrainLevel()) < 13) // positive means Tile is higher
@@ -4799,6 +4801,14 @@ void Map::setNoDraw(bool noDraw)
 SavedBattleGame* Map::getSavedBattle() const
 {
 	return _save;
+}
+
+/**
+ * Tells the map to reveal because there's a waypoint action going down.
+ */
+void Map::setWaypointAction(bool wp)
+{
+	_waypointAction = wp;
 }
 
 }

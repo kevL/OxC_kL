@@ -150,10 +150,10 @@ private:
 		/// Converts direction to a unit-vector.
 		static void directionToVector(
 				const int dir,
-				Position* relPos);
+				Position* unitVect);
 		/// Converts a unit-vector to a direction.
 		static void vectorToDirection(
-				const Position& relPos,
+				const Position& unitVect,
 				int& dir);
 
 		/// Checks whether a path is ready and returns the direction.

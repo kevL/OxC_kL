@@ -590,7 +590,7 @@ items:
     battleType: 1
     fixedWeapon: true
     noReaction: true # kL
-    waypoint: true
+    waypoint: 12
     invWidth: 2
     invHeight: 3
     turretType: 4
@@ -1251,7 +1251,7 @@ items:
     battleType: 1
     noReaction: true #kL
     twoHanded: true
-    waypoint: true
+    waypoint: 9
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5

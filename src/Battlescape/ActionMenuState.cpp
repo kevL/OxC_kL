@@ -191,9 +191,9 @@ ActionMenuState::ActionMenuState(
 						&id);
 		}
 
-		if (itRule->isWaypoint() == true
+		if (itRule->isWaypoints() != 0
 			|| (_action->weapon->getAmmoItem() != NULL
-				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint() == true))
+				&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
 		{
 			addItem(
 					BA_LAUNCH,

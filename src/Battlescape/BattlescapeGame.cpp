@@ -272,9 +272,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	const BattleAIState* ai = unit->getCurrentAIState();
 	if (ai == NULL)
 	{
-		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
-
 		// for some reason the unit had no AI routine assigned..
+		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
 		if (unit->getFaction() == FACTION_HOSTILE)
 			unit->setAIState(new AlienBAIState(
 											_save,
@@ -314,7 +313,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 	if (action.type == BA_RETHINK)
 	{
-		_parentState->debug(L"Rethink");
+//		_parentState->debug(L"Rethink");
 		unit->think(&action);
 	}
 	//Log(LOG_INFO) << ". BA_RETHINK DONE";
@@ -323,19 +322,16 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	_AIActionCounter = action.number;
 
 	//Log(LOG_INFO) << ". pre hunt for weapon";
-	if (unit->getMainHandWeapon() == NULL) // TODO: and, if either no innate meleeWeapon, or a visible hostile is not within say 5 tiles.
-//		|| !unit->getMainHandWeapon()->getAmmoItem() == NULL) // done in getMainHandWeapon()
+	if (unit->getOriginalFaction() == FACTION_HOSTILE
+		&& unit->getMainHandWeapon() == NULL)
+//		&& unit->getVisibleUnits()->size() == 0)
+	// TODO: and, if either no innate meleeWeapon, or a visible hostile is not within say 5 tiles.
 	{
 		//Log(LOG_INFO) << ". . no mainhand weapon or no ammo";
-		if (unit->getOriginalFaction() == FACTION_HOSTILE)
-//kL		&& unit->getVisibleUnits()->size() == 0)
-		{
-			//Log(LOG_INFO) << ". . . call findItem()";
-			findItem(&action);
-		}
+		//Log(LOG_INFO) << ". . . call findItem()";
+		findItem(&action);
 	}
 	//Log(LOG_INFO) << ". findItem DONE";
-
 
 	if (unit->getCharging() != NULL)
 	{
@@ -482,19 +478,21 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . . in action.type Psi";
 			const bool success = _save->getTileEngine()->psiAttack(&action);
 			//Log(LOG_INFO) << ". . . success = " << success;
-			if (success == true
-				&& action.type == BA_MINDCONTROL)
+			if (success == true)
 			{
-				//Log(LOG_INFO) << ". . . inside success MC";
+				std::string st;
+				if (action.type == BA_MINDCONTROL)
+					st = "STR_IS_UNDER_ALIEN_CONTROL";
+				else
+					st = "STR_MORALE_ATTACK_SUCCESSFUL";
+
 				const BattleUnit* const unit = _save->getTile(action.target)->getUnit();
 				Game* const game = _parentState->getGame();
 				game->pushState(new InfoboxState(game->getLanguage()->getString(
-																		"STR_IS_UNDER_ALIEN_CONTROL",
+																		st,
 																		unit->getGender())
 																			.arg(unit->getName(game->getLanguage()))));
 			}
-			//Log(LOG_INFO) << ". . . success MC Done";
-
 			//Log(LOG_INFO) << ". . . done Psi.";
 		}
 	}
@@ -2870,15 +2868,18 @@ BattleUnit* BattlescapeGame::convertUnit(
 											convertedUnit,
 											_save->getTile(unit->getPosition() + Position(0,0,-1)));
 	convertedUnit->setPosition(unit->getPosition());
+
 	convertedUnit->setTimeUnits(0);
+
 	if (convertType == "STR_ZOMBIE")
 		dirFace = RNG::generate(0,7);
 	convertedUnit->setDirection(dirFace);
 
-	convertedUnit->setCache(NULL);
-
 	_save->getUnits()->push_back(convertedUnit);
+
+	convertedUnit->setCache(NULL);
 	getMap()->cacheUnit(convertedUnit);
+
 	convertedUnit->setAIState(new AlienBAIState(
 											_save,
 											convertedUnit,
@@ -3071,9 +3072,9 @@ bool BattlescapeGame::worthTaking(
 		// retrieve an insignificantly low value from the ruleset.
 //kL, above,		worth = item->getRules()->getAttraction();
 
-		// it's always going to be worth while [NOT] to try and take a blaster launcher, apparently;
+		// it's always going to be worthwhile [NOT] to try and take a blaster launcher, apparently;
 		// too bad the aLiens don't know how to use them very well
-//kL		if (!item->getRules()->isWaypoint() &&
+//kL		if (!item->getRules()->isWaypoints() &&
 	if (item->getRules()->getBattleType() != BT_AMMO)
 	{
 		// we only want weapons that HAVE ammo, or weapons that we have ammo for

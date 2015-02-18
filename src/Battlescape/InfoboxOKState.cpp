@@ -80,6 +80,9 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& InfoboxOKState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& InfoboxOKState::btnOkClick,
 					Options::keyCancel);
 	_btnOk->setHighContrast();
 

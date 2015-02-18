@@ -2423,97 +2423,97 @@ terrains:
       - name: POLARMOUNT12
         width: 20
         length: 20
-#  - name: PORTTFTD # NEW ##
-#    script: PORTUFO
-#    mapDataSets:
-#      - BLANKS
-#      - SEAURBAN
-#      - PORTROADS
-#      - PORTURBITS
-#      - SEABITS
-#    civilianTypes:
-#      - MALE_CIVILIAN
-#      - MALE_CIVILIAN3
-#      - MALE_CIVILIAN4
-#      - MALE_CIVILIAN6
-#      - FEMALE_CIVILIAN
-#      - FEMALE_CIVILIAN2
-#      - FEMALE_CIVILIAN3
-#    mapBlocks:
-#      - name: PORTUFO00
-#        width: 10
-#        length: 10
-#        groups: 1
-#      - name: PORTUFO01
-#        width: 10
-#        length: 10
-#        groups: 1
-#      - name: PORTUFO02
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO03
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO04
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO05
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO06
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO07
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO08
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO09
-#        width: 10
-#        length: 10
-#        groups: 3
-#      - name: PORTUFO10
-#        width: 10
-#        length: 10
-#      - name: PORTUFO11
-#        width: 10
-#        length: 10
-#      - name: PORTUFO12
-#        width: 10
-#        length: 10
-#      - name: PORTUFO13
-#        width: 10
-#        length: 10
-#      - name: PORTUFO14
-#        width: 10
-#        length: 10
-#      - name: PORTUFO15
-#        width: 10
-#        length: 10
-#      - name: PORTUFO16
-#        width: 10
-#        length: 10
-#      - name: PORTUFO17
-#        width: 20
-#        length: 20
-#      - name: PORTUFO18
-#        width: 20
-#        length: 20
-#      - name: PORTUFO19
-#        width: 20
-#        length: 20
-#      - name: PORTUFO20
-#        width: 20
-#        length: 20
-#        groups: 5
+  - name: PORTTFTD # NEW ##
+    script: PORTUFO
+    mapDataSets:
+      - BLANKS
+      - SEAURBAN
+      - PORTROADS
+      - PORTURBITS
+      - SEABITS
+    civilianTypes:
+      - MALE_CIVILIAN
+      - MALE_CIVILIAN3
+      - MALE_CIVILIAN4
+      - MALE_CIVILIAN6
+      - FEMALE_CIVILIAN
+      - FEMALE_CIVILIAN2
+      - FEMALE_CIVILIAN3
+    mapBlocks:
+      - name: PORTUFO00
+        width: 10
+        length: 10
+        groups: 1
+      - name: PORTUFO01
+        width: 10
+        length: 10
+        groups: 1
+      - name: PORTUFO02
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO03
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO04
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO05
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO06
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO07
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO08
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO09
+        width: 10
+        length: 10
+        groups: 3
+      - name: PORTUFO10
+        width: 10
+        length: 10
+      - name: PORTUFO11
+        width: 10
+        length: 10
+      - name: PORTUFO12
+        width: 10
+        length: 10
+      - name: PORTUFO13
+        width: 10
+        length: 10
+      - name: PORTUFO14
+        width: 10
+        length: 10
+      - name: PORTUFO15
+        width: 10
+        length: 10
+      - name: PORTUFO16
+        width: 10
+        length: 10
+      - name: PORTUFO17
+        width: 20
+        length: 20
+      - name: PORTUFO18
+        width: 20
+        length: 20
+      - name: PORTUFO19
+        width: 20
+        length: 20
+      - name: PORTUFO20
+        width: 20
+        length: 20
+        groups: 5
   - name: PORTURBAN
     script: URBAN #was PORTURBAN
     mapDataSets:

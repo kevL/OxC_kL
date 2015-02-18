@@ -1428,7 +1428,7 @@ bool TileEngine::checkReactionFire(
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
-	Tile* const tile = unit->getTile();
+	const Tile* const tile = unit->getTile();
 
 	std::vector<BattleUnit*> spotters;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1436,25 +1436,23 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getTimeUnits() < 1
-			|| (*i)->getFaction() == _battleSave->getSide()
-			|| (*i)->getFaction() == FACTION_NEUTRAL
-			|| (*i)->isOut(true, true) == true)
+		if ((*i)->getTimeUnits() != 0
+			&& (*i)->getFaction() != _battleSave->getSide()
+			&& (*i)->getFaction() != FACTION_NEUTRAL
+			&& (*i)->isOut(true, true) == false)
 		{
-			continue;
-		}
+			if (((*i)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
+					|| ((*i)->getOriginalFaction() == FACTION_PLAYER	// but Mc'd aLiens won't RF on other aLiens ...
+						&& (*i)->checkViewSector(unit->getPosition()) == true))
+				&& visible(*i, tile) == true)
+			{
+				//Log(LOG_INFO) << ". check ID " << (*i)->getId();
+				if ((*i)->getFaction() == FACTION_HOSTILE)
+					unit->setTurnsExposed(0);
 
-		if (((*i)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
-				|| ((*i)->getOriginalFaction() == FACTION_PLAYER	// but Mc'd aLiens won't RF on other aLiens ...
-					&& (*i)->checkViewSector(unit->getPosition()) == true))
-			&& visible(*i, tile) == true)
-		{
-			//Log(LOG_INFO) << ". check ID " << (*i)->getId();
-			if ((*i)->getFaction() == FACTION_HOSTILE)
-				unit->setTurnsExposed(0);
-
-			//Log(LOG_INFO) << ". reactor ID " << (*i)->getId() << ": initi = " << (int)(*i)->getInitiative();
-			spotters.push_back(*i);
+				//Log(LOG_INFO) << ". reactor ID " << (*i)->getId() << ": initi = " << (int)(*i)->getInitiative();
+				spotters.push_back(*i);
+			}
 		}
 	}
 
