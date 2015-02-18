@@ -5513,7 +5513,7 @@
 1422233401 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1424273953 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1424275241 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5570,7 +5570,7 @@
 1420130441 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1424272398 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1424293616 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
