@@ -77,7 +77,7 @@ UnitDieBState::UnitDieBState(
 
 	if (_unit->getUnitVisible() == true)
 	{
-		Camera* const deathCam = _parent->getMap()->getCamera(); // <- added to think() Status_Turning, also
+		Camera* const deathCam = _parent->getMap()->getCamera(); // <- added to think() also.
 		if (deathCam->isOnScreen(_unit->getPosition()) == false)
 			deathCam->centerOnPosition(_unit->getPosition());
 

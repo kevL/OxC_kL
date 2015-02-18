@@ -2272,13 +2272,15 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		//Log(LOG_INFO) << ". . _currentAction.targeting";
 		_currentAction.strafe = false;
 
-		if (_currentAction.type == BA_LAUNCH // click to set BL waypoints.
-			&& static_cast<int>(_currentAction.waypoints.size()) < _currentAction.weapon->getRules()->isWaypoints())
+		if (_currentAction.type == BA_LAUNCH) // click to set BL waypoints.
 		{
-			//Log(LOG_INFO) << ". . . . BA_LAUNCH";
-			_parentState->showLaunchButton();
-			_currentAction.waypoints.push_back(targetPos);
-			getMap()->getWaypoints()->push_back(targetPos);
+			if (static_cast<int>(_currentAction.waypoints.size()) < _currentAction.weapon->getRules()->isWaypoints())
+			{
+				//Log(LOG_INFO) << ". . . . BA_LAUNCH";
+				_parentState->showLaunchButton();
+				_currentAction.waypoints.push_back(targetPos);
+				getMap()->getWaypoints()->push_back(targetPos);
+			}
 		}
 		else if (_currentAction.type == BA_USE
 			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)

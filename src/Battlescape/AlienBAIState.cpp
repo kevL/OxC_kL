@@ -1556,7 +1556,7 @@ void AlienBAIState::evaluateAIMode()
 	if (_save->isCheating() == true // <- hmm, do i want this - kL_note
 		|| _unit->getCharging() != NULL
 		|| _blaster == true)	// The two (_blaster==true) checks in this function ought obviate the entire re-evaluate thing!
-								// Note, there is a valid targetPosition but NOT targetUnit if blaster=TRUE ....
+								// Note, there is a valid targetPosition but targetUnit is NOT at that Pos if blaster=TRUE ....
 	{
 		_AIMode = AI_COMBAT;
 	}
