@@ -146,7 +146,7 @@ NextTurnState::NextTurnState(
 	if (Options::skipNextTurnScreen == true)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
-		_timer->onTimer((StateHandler)& NextTurnState::close);
+		_timer->onTimer((StateHandler)& NextTurnState::nextTurn);
 		_timer->start();
 	}
 }
@@ -176,7 +176,7 @@ void NextTurnState::handle(Action* action)
 //		_turnCounter->update();
 
 		_state->updateTurn();
-		close();
+		nextTurn();
 	}
 }
 
@@ -192,7 +192,7 @@ void NextTurnState::think()
 /**
  * Closes the window.
  */
-void NextTurnState::close()
+void NextTurnState::nextTurn()
 {
 	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
 	_savedBattle->getBattleGame()->cleanupDeleted();
