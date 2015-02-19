@@ -23,7 +23,7 @@
 1420130440 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1420228489 f:\git\openxcom\src\engine\state.h
+1424387341 f:\git\openxcom\src\engine\state.h
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleInterface.h"
 
@@ -246,13 +246,13 @@
 1420172653 f:\git\openxcom\src\basescape\minibaseview.h
 	"../Engine/InteractiveSurface.h"
 
-1420130441 f:\git\openxcom\src\engine\interactivesurface.h
+1424387341 f:\git\openxcom\src\engine\interactivesurface.h
 	<map>
 	<SDL.h>
 	"State.h"
 	"Surface.h"
 
-1423355201 f:\git\openxcom\src\engine\surface.h
+1424387341 f:\git\openxcom\src\engine\surface.h
 
 1325792434 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -269,11 +269,11 @@
 1420130449 f:\git\openxcom\src\basescape\transfersstate.h
 	"../Engine/State.h"
 
-1420925951 f:\git\openxcom\src\engine\action.h
+1424387342 f:\git\openxcom\src\engine\action.h
 
-1420130438 f:\git\openxcom\src\engine\game.h
+1424387342 f:\git\openxcom\src\engine\game.h
 
-1420130449 f:\git\openxcom\src\engine\language.h
+1424387341 f:\git\openxcom\src\engine\language.h
 	<map>
 	<string>
 	<vector>
@@ -4361,45 +4361,45 @@
 	<string>
 	<iosfwd>
 
-1420130449 f:\git\openxcom\src\engine\localizedtext.h
+1424387341 f:\git\openxcom\src\engine\localizedtext.h
 	<sstream>
 	<string>
 
-1422042793 f:\git\openxcom\src\savegame\soldier.h
+1424387335 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
-1424386480 f:\git\openxcom\src\ruleset\unit.h
+1424387336 f:\git\openxcom\src\ruleset\unit.h
 
-1421828728 f:\git\openxcom\src\engine\options.h
+1424387341 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
 	"OptionInfo.h"
 	"Options.inc.h"
 
-1420130454 f:\git\openxcom\src\engine\palette.h
+1424387341 f:\git\openxcom\src\engine\palette.h
 
-1420130438 f:\git\openxcom\src\interface\bar.h
+1424387339 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1420130440 f:\git\openxcom\src\interface\text.h
+1424387339 f:\git\openxcom\src\interface\text.h
 	"../Engine/Surface.h"
 
-1420225962 f:\git\openxcom\src\interface\textbutton.h
+1424387339 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
 1423554314 f:\git\openxcom\src\interface\textedit.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1422042036 f:\git\openxcom\src\resource\resourcepack.h
+1424387337 f:\git\openxcom\src\resource\resourcepack.h
 
-1423978619 f:\git\openxcom\src\savegame\base.h
+1424387336 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
-1420130442 f:\git\openxcom\src\savegame\target.h
+1424387335 f:\git\openxcom\src\savegame\target.h
 
-1423981002 f:\git\openxcom\src\savegame\savedgame.h
+1424387683 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 
@@ -4463,7 +4463,7 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1423627757 f:\git\openxcom\src\menu\optionsbasestate.h
+1424387338 f:\git\openxcom\src\menu\optionsbasestate.h
 	"../Engine/State.h"
 
 1420130457 f:\git\openxcom\src\basescape\manufacturestate.h
@@ -4475,7 +4475,7 @@
 1420130440 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1420231921 f:\git\openxcom\src\basescape\sellstate.h
+1424387345 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
@@ -4495,25 +4495,25 @@
 1423779649 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
-1420130459 f:\git\openxcom\src\menu\errormessagestate.h
+1424387338 f:\git\openxcom\src\menu\errormessagestate.h
 	<string>
 	"../Engine/State.h"
 
-1420761693 f:\git\openxcom\src\ruleset\rulebasefacility.h
+1424387337 f:\git\openxcom\src\ruleset\rulebasefacility.h
 
-1421504128 f:\git\openxcom\src\ruleset\ruleregion.h
+1424387336 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
 1417179335 f:\git\openxcom\src\savegame\weightedoptions.h
 
-1420130445 f:\git\openxcom\src\savegame\basefacility.h
+1424387336 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1421694024 f:\git\openxcom\src\savegame\craft.h
+1424387336 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
-1420130440 f:\git\openxcom\src\savegame\movingtarget.h
+1424387336 f:\git\openxcom\src\savegame\movingtarget.h
 	"Target.h"
 
 1420130444 f:\git\openxcom\src\savegame\region.h
@@ -4530,13 +4530,13 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1420130447 f:\git\openxcom\src\engine\timer.h
+1424387341 f:\git\openxcom\src\engine\timer.h
 	"State.h"
 	"Surface.h"
 
-1423322199 f:\git\openxcom\src\engine\surfaceset.h
+1424387341 f:\git\openxcom\src\engine\surfaceset.h
 
-1422757729 f:\git\openxcom\src\ruleset\rulecraft.h
+1424387337 f:\git\openxcom\src\ruleset\rulecraft.h
 
 1423983949 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
@@ -4554,17 +4554,17 @@
 1420130451 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1420263332 f:\git\openxcom\src\interface\textlist.h
+1424387338 f:\git\openxcom\src\interface\textlist.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1420130456 f:\git\openxcom\src\interface\window.h
+1424387338 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1423122289 f:\git\openxcom\src\ruleset\ruleset.h
+1424387336 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Savegame/GameTime.h"
 
-1420130447 f:\git\openxcom\src\savegame\gametime.h
+1424387336 f:\git\openxcom\src\savegame\gametime.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -4593,14 +4593,14 @@
 1420130451 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
-1420838917 f:\git\openxcom\src\ruleset\armor.h
+1424387337 f:\git\openxcom\src\ruleset\armor.h
 	"MapData.h"
 	"Unit.h"
 
-1420130445 f:\git\openxcom\src\ruleset\mapdata.h
+1424387337 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1424146789 f:\git\openxcom\src\ruleset\ruleitem.h
+1424387336 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1421329721 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -4641,19 +4641,19 @@
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
-1420130442 f:\git\openxcom\src\engine\logger.h
+1424387341 f:\git\openxcom\src\engine\logger.h
 	<sstream>
 	<string>
 	<stdio.h>
 	<windows.h>
 	<time.h>
 
-1423973303 f:\git\openxcom\src\savegame\itemcontainer.h
+1424387336 f:\git\openxcom\src\savegame\itemcontainer.h
 
 1423127696 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1423023433 f:\git\openxcom\src\savegame\battleunit.h
+1424387336 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -4661,12 +4661,12 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1422255491 f:\git\openxcom\src\battlescape\battlescapegame.h
+1424387344 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
-1422627206 f:\git\openxcom\src\battlescape\position.h
+1424387343 f:\git\openxcom\src\battlescape\position.h
 
-1420130442 f:\git\openxcom\src\savegame\vehicle.h
+1424387335 f:\git\openxcom\src\savegame\vehicle.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -4704,7 +4704,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1420130461 f:\git\openxcom\src\ruleset\rulecraftweapon.h
+1424387337 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
 1420006466 f:\git\openxcom\src\savegame\craftweaponprojectile.h
@@ -4820,12 +4820,12 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1420130443 f:\git\openxcom\src\ruleset\ruleresearch.h
+1424387336 f:\git\openxcom\src\ruleset\ruleresearch.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1420130453 f:\git\openxcom\src\savegame\researchproject.h
+1424387336 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
 1420171733 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
@@ -5066,7 +5066,7 @@
 	<limits>
 	<cmath>
 
-1420624426 f:\git\openxcom\src\savegame\transfer.h
+1424387335 f:\git\openxcom\src\savegame\transfer.h
 
 1423356380 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
@@ -5206,10 +5206,10 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1420265814 f:\git\openxcom\src\basescape\soldierinfostate.h
+1424387345 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
-1420130452 f:\git\openxcom\src\ruleset\rulesoldier.h
+1424387336 f:\git\openxcom\src\ruleset\rulesoldier.h
 	"../Ruleset/Unit.h"
 
 1421471155 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
@@ -5250,7 +5250,7 @@
 1420130452 f:\git\openxcom\src\savegame\soldierdead.h
 	"../Savegame/Soldier.h"
 
-1420130439 f:\git\openxcom\src\savegame\soldierdeath.h
+1424387335 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
 1421471155 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
@@ -5652,7 +5652,7 @@
 	<exception>
 	<string>
 
-1420130442 f:\git\openxcom\src\resource\xcomresourcepack.h
+1424387337 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 
 1420130439 f:\git\openxcom\src\ruleset\alienrace.h
@@ -5786,7 +5786,7 @@
 1420226075 f:\git\openxcom\src\interface\fpscounter.h
 	"../Engine/Surface.h"
 
-1420130450 f:\git\openxcom\src\interface\numbertext.h
+1424387339 f:\git\openxcom\src\interface\numbertext.h
 	"../Engine/Surface.h"
 
 1420130445 f:\git\openxcom\src\interface\turncounter.h
@@ -6668,7 +6668,7 @@
 	"Options.inc.h"
 	"TargetConditionals.h"
 
-1423612661 f:\git\openxcom\src\version.h
+1424387335 f:\git\openxcom\src\version.h
 
 1420130445 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
@@ -7550,7 +7550,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1420130457 f:\git\openxcom\src\ruleset\articledefinition.h
+1424387337 f:\git\openxcom\src\ruleset\articledefinition.h
 
 1420214667 source:f:\git\openxcom\src\geoscape\researchrequiredstate.cpp
 	"ResearchRequiredState.h"
@@ -8405,7 +8405,7 @@
 1420130446 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
 	"ArticleState.h"
 
-1420130446 f:\git\openxcom\src\ufopaedia\articlestate.h
+1424387335 f:\git\openxcom\src\ufopaedia\articlestate.h
 	"../Engine/State.h"
 	"../Ruleset/RuleItem.h"
 
@@ -10721,7 +10721,7 @@
 1421945996 f:\git\openxcom\src\ruleset\rulemusic.h
 	<yaml-cpp/yaml.h>
 
-1423787875 f:\git\openxcom\src\engine\optioninfo.h
+1424387341 f:\git\openxcom\src\engine\optioninfo.h
 
 1424259491 f:\git\openxcom\src\engine\options.inc.h
 
@@ -11157,10 +11157,10 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1420130453 f:\git\openxcom\src\ufopaedia\articlestatetftd.h
+1424387335 f:\git\openxcom\src\ufopaedia\articlestatetftd.h
 	"ArticleState.h"
 
-1420236721 f:\git\openxcom\src\ruleset\ruleinterface.h
+1424387337 f:\git\openxcom\src\ruleset\ruleinterface.h
 
 1420236944 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"
