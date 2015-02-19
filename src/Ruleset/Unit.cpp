@@ -37,7 +37,7 @@ Unit::Unit(const std::string& type)
 		_floatHeight(0),
 
 		_value(0),
-		_deathSound(0),
+		_deathSound(-1),
 		_aggroSound(-1),
 		_moveSound(-1),
 		_intelligence(0),
@@ -46,8 +46,8 @@ Unit::Unit(const std::string& type)
 		_specab(SPECAB_NONE),
 		_livingWeapon(false),
 		_female(false),
-		_isMechanical(false), // kL: these two should perhaps go to Armor class.
-		_isPsiImmune(false)
+		_mechanical(false), // kL: these two should perhaps go to Armor class.
+		_psiImmune(false)
 {}
 
 /**
@@ -87,8 +87,8 @@ void Unit::load(
 	_meleeWeapon	= node["meleeWeapon"]			.as<std::string>(_meleeWeapon);
 	_builtInWeapons	= node["builtInWeapons"]		.as<std::vector<std::string> >(_builtInWeapons);
 	_female			= node["female"]				.as<bool>(_female);
-	_isMechanical	= node["isMechanical"]			.as<bool>(_isMechanical);
-	_isPsiImmune	= node["isPsiImmune"]			.as<bool>(_isPsiImmune);
+	_mechanical		= node["mechanical"]			.as<bool>(_mechanical);
+	_psiImmune		= node["psiImmune"]				.as<bool>(_psiImmune);
 
 	if (node["deathSound"])
 	{
@@ -309,7 +309,7 @@ const bool Unit::isFemale() const
 
 /**
  * Gets if this Unit is a mechanical apparatus.
- * NOTE about _isMechanical:
+ * NOTE about _mechanical:
  * This var subsumes several more detailed ideas:
  * - isTrackedVehicle
  * - isPsiAttackable / isSentient <- DONE
@@ -323,7 +323,7 @@ const bool Unit::isFemale() const
  */
 const bool Unit::isMechanical() const
 {
-	return _isMechanical;
+	return _mechanical;
 }
 
 /**
@@ -332,7 +332,7 @@ const bool Unit::isMechanical() const
  */
 const bool Unit::isPsiImmune() const
 {
-	return _isPsiImmune;
+	return _psiImmune;
 }
 
 }

@@ -3890,7 +3890,7 @@ void TileEngine::setProjectileDirection(const int dir)
  * Applies the explosive power to the tile parts. This is where the actual destruction takes place.
  * Must affect 9 objects (6 box sides and the object inside plus 2 outer walls).
  * @param tile - pointer to Tile affected
- * @return, true if the objective was destroyed
+ * @return, true if an objective was destroyed
  */
 bool TileEngine::detonate(Tile* const tile)
 {
@@ -3944,12 +3944,13 @@ bool TileEngine::detonate(Tile* const tile)
 										pos.y,
 										pos.z));
 
-
-	tile->setSmoke(std::max( // explosions create smoke which only stays 1 or 2 turns, or 5 ...
-						1,
-						std::min(
-								tile->getSmoke() + RNG::generate(0,5),
-								17)));
+	// kL_note: this was removed from stock code:
+//	tile->setSmoke(std::max( // explosions create smoke which only stays 1 or 2 turns, or 5 ...
+//						1,
+//						std::min(
+//								tile->getSmoke() + RNG::generate(0,5),
+//								17)));
+	// probly because it's also done below? -> check it.
 
 	int
 		explTest,

@@ -224,9 +224,9 @@ class Unit
 private:
 	bool
 		_female,
-		_isMechanical,
-		_isPsiImmune,
-		_livingWeapon;
+		_livingWeapon,
+		_mechanical,
+		_psiImmune;
 	int
 		_floatHeight,
 		_kneelHeight,

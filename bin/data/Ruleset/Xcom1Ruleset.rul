@@ -3166,8 +3166,8 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 75
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -3189,8 +3189,8 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 75
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
@@ -3212,8 +3212,8 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 75
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
@@ -3236,8 +3236,8 @@ units:
     deathSound: 23
     moveSound: 40
     energyRecovery: 85
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -3260,8 +3260,8 @@ units:
     deathSound: 23
     moveSound: 40
     energyRecovery: 85
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -3302,6 +3302,7 @@ units:
     value: 33
     intelligence: 4
     energyRecovery: 50
+    female: true
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
@@ -3467,8 +3468,8 @@ units:
     energyRecovery: 100
     specab: 1
     livingWeapon: true
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_FLOATER_SOLDIER
     race: STR_FLOATER
     rank: STR_LIVE_SOLDIER
@@ -3787,8 +3788,8 @@ units:
     standHeight: 21
     kneelHeight: 16
     value: 22
-    deathSound: 49
-    aggroSound: 49
+    deathSound: 9
+#    aggroSound: 49
     intelligence: 2
     aggression: 2
     energyRecovery: 80
@@ -4014,8 +4015,8 @@ units:
     aggression: 2
     energyRecovery: 100
     livingWeapon: true
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
     rank: STR_LIVE_TERRORIST
@@ -4035,13 +4036,13 @@ units:
     standHeight: 18
     kneelHeight: 18
     value: 15
-    deathSound: 71 #was 48
+    deathSound: 71
     intelligence: 1
     aggression: 2
     energyRecovery: 40
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
-    isPsiImmune: true
+    psiImmune: true
 #    meleeWeapon: STR_FIST
 alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
   - id: STR_SECTOID

@@ -491,7 +491,7 @@ void Projectile::applyAccuracy(
 	const int
 		delta_x = origin.x - target->x,
 		delta_y = origin.y - target->y;
-//		delta_z = origin.z - target->z; // kL_add.
+//		delta_z = origin.z - target->z; // kL_add. <- messes up vertical shots. Do not use.
 
 	const double targetDist = std::sqrt(
 							  static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
@@ -499,8 +499,8 @@ void Projectile::applyAccuracy(
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 	double range; // the maximum distance a projectile shall ever travel in voxel space
-//	double range = 16000.; // vSpace == 1000 tiles in tSpace.
-//	double range = 3200.0; // vSpace == 200 tiles in tSpace. <-kL
+//	double range = 16000.; // vSpace == ~1000 tiles in tSpace.
+//	double range = 3200.0; // vSpace == ~200 tiles in tSpace. <-kL
 	if (keepRange == true)
 		range = targetDist;
 	else
@@ -551,31 +551,6 @@ void Projectile::applyAccuracy(
 		if (Options::battleRangeBasedAccuracy == true)
 		{
 			//Log(LOG_INFO) << ". battleRangeBasedAccuracy";
-/*			double acuPenalty = 0.;
-
-			if (targetTile != NULL)
-			{
-				const int smoke = targetTile->getSmoke();
-				if (smoke > 0)
-					acuPenalty += smoke * 0.01;
-
-				const BattleUnit* const targetUnit = targetTile->getUnit();
-				if (targetUnit != NULL)
-				{
-					if (_action.actor->getOriginalFaction() != FACTION_HOSTILE)
-						acuPenalty += 0.01 * static_cast<double>(targetTile->getShade());
-
-					// If targetUnit is kneeled, then accuracy reduced by ~6%.
-					// This is a compromise, because vertical deviation is ~2 times less.
-					if (targetUnit->isKneeled() == true)
-						acuPenalty += 0.066;
-				}
-			}
-			else if (_action.actor->getOriginalFaction() != FACTION_HOSTILE) // targeting tile-stuffs.
-				acuPenalty += 0.01 * static_cast<double>(_save->getGlobalShade());
-
-			if (_action.type == BA_AUTOSHOT)
-				acuPenalty += (_action.autoShotCount - 1) * 0.03; */
 			if (targetTile != NULL)
 			{
 				const int smoke = targetTile->getSmoke();
@@ -616,7 +591,6 @@ void Projectile::applyAccuracy(
 				else
 					deviation = 0.21;	// for Player
 
-//				deviation /= accuracy - acuPenalty + 0.13;
 				deviation /= accuracy + 0.13;
 				deviation = std::max(
 									0.01,
@@ -684,27 +658,9 @@ void Projectile::applyAccuracy(
 				if (calcVert == true)
 					target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
 			}
-/*			const double
-				fi = std::atan2(
-							static_cast<double>(target->z - origin.z),
-							targetDist)
-						+ dV,
-				cos_fi = std::cos(fi);
-				//Log(LOG_INFO) << ". . dH = " << dH;
-				//Log(LOG_INFO) << ". . dV = " << dV;
-
-			if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
-			{
-				//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
-				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
-				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + range * std::cos(te) * cos_fi));
-				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + range * std::sin(te) * cos_fi));
-				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
-			} */
 			//Log(LOG_INFO) << ". x = " << target->x;
 			//Log(LOG_INFO) << ". y = " << target->y;
 			//Log(LOG_INFO) << ". z = " << target->z;
-
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 		}
 
