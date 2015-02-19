@@ -542,12 +542,13 @@ YAML::Node SavedBattleGame::save() const
 	}
 
 #if 0
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	for (int
+			i = 0;
+			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			++i)
 	{
 		if (_tiles[i]->isVoid() == false)
-		{
 			node["tiles"].push_back(_tiles[i]->save());
-		}
 	}
 #else
 	// first, write out the field sizes we're going to use to write the tile data
@@ -585,7 +586,7 @@ YAML::Node SavedBattleGame::save() const
 	node["totalTiles"]	= tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
 	node["binTiles"]	= YAML::Binary(tileData, tileDataSize);
 
-	free(tileData);
+	std::free(tileData);
 #endif
 
 	for (std::vector<Node*>::const_iterator

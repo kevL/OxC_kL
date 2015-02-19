@@ -59,8 +59,8 @@ namespace OpenXcom
  * @param res			- pointer to ResourcePack
  * @param save			- pointer to SavedBattleGame
  * @param action		- the BattleAction (BattlescapeGame.h)
- * @param origin		- position that this projectile originates at
- * @param targetVoxel	- position that this projectile is targeted at
+ * @param origin		- position that this projectile originates at in tilespace
+ * @param targetVoxel	- position that this projectile is targeted at in voxelspace
  * @param ammo			- pointer to the ammo that produced this projectile when applicable
  */
 Projectile::Projectile(
@@ -83,8 +83,8 @@ Projectile::Projectile(
 		_vaporDensity(-1),
 		_vaporProbability(5)
 {
-	//Log(LOG_INFO) << "Create Projectile origin = " << origin;
-	//Log(LOG_INFO) << "Create Projectile target = " << targetVoxel;
+	//Log(LOG_INFO) << "\n\ncTor origin = " << origin;
+	//Log(LOG_INFO) << "cTor target = " << targetVoxel << " tSpace " << (targetVoxel / Position(16,16,24));
 
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
@@ -318,20 +318,34 @@ int Projectile::calculateTrajectory(
 	if (_action.type != BA_LAUNCH // Could base BL.. on psiSkill, or sumthin'
 		&& originVoxel / Position(16,16,24) != _targetVoxel / Position(16,16,24))
 	{
+		//Log(LOG_INFO) << ". preAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 		applyAccuracy(
 					originVoxel,
 					&_targetVoxel,
 					accuracy,
 					false,
 					targetTile);
+		//Log(LOG_INFO) << ". postAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	}
 
-	return _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
+	int ret = _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
+												originVoxel,
+												_targetVoxel,
+												true,
+												&_trajectory,
+												_action.actor);
+	//Log(LOG_INFO) << ". trajBegin = " << _trajectory.front() << " tSpace " << (_trajectory.front() / Position(16,16,24));
+	//Log(LOG_INFO) << ". trajFinal = " << _trajectory.back() << " tSpace " << (_trajectory.back() / Position(16,16,24));
+	//Log(LOG_INFO) << ". RET voxelType = " << ret;
+
+	return ret;
+
+/*	return _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
 											originVoxel,
 											_targetVoxel,
 											true,
 											&_trajectory,
-											_action.actor);
+											_action.actor); */
 }
 
 /**
@@ -476,16 +490,17 @@ void Projectile::applyAccuracy(
 
 	const int
 		delta_x = origin.x - target->x,
-		delta_y = origin.y - target->y,
-		delta_z = origin.z - target->z; // kL_add.
+		delta_y = origin.y - target->y;
+//		delta_z = origin.z - target->z; // kL_add.
 
 	const double targetDist = std::sqrt(
-									static_cast<double>((delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z)));
+							  static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+//							  static_cast<double>((delta_x * delta_x) + (delta_y * delta_y) + (delta_z * delta_z)));
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 	double range; // the maximum distance a projectile shall ever travel in voxel space
 //	double range = 16000.; // vSpace == 1000 tiles in tSpace.
-//	double range = 3200.0; // kL. vSpace == 200 tiles in tSpace.
+//	double range = 3200.0; // vSpace == 200 tiles in tSpace. <-kL
 	if (keepRange == true)
 		range = targetDist;
 	else
@@ -592,6 +607,7 @@ void Projectile::applyAccuracy(
 
 			const int autoHit = static_cast<int>(std::ceil(accuracy * 20.)); // chance for Bulls-eye.
 			if (RNG::percent(autoHit) == false)
+//			if (false)
 			{
 				double deviation;
 				if (_action.actor->getFaction() == FACTION_HOSTILE)
@@ -614,15 +630,61 @@ void Projectile::applyAccuracy(
 			}
 			else
 			{
-				dH = 0.,
+				dH =
 				dV = 0.;
 			}
 
-			const double
+
+			double
+				te,
+				fi,
+				cos_fi;
+			bool
+				calcHori,
+				calcVert;
+
+			if (target->y != origin.y
+				|| target->x != origin.x)
+			{
+				calcHori = true;
 				te = std::atan2(
 							static_cast<double>(target->y - origin.y),
 							static_cast<double>(target->x - origin.x))
-						+ dH,
+						+ dH;
+			}
+			else
+				calcHori = false;
+
+			if (target->z != origin.z
+				|| AreSame(targetDist, 0.) == false)
+			{
+				calcVert = true;
+				fi = std::atan2(
+							static_cast<double>(target->z - origin.z),
+							targetDist)
+						+ dV,
+				cos_fi = std::cos(fi);
+			}
+			else
+			{
+				calcVert = false;
+				cos_fi = 1.;
+			}
+
+			if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
+			{
+				//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
+				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
+				if (calcHori == true)
+				{
+					target->x = static_cast<int>(Round(static_cast<double>(origin.x) + range * std::cos(te) * cos_fi));
+					target->y = static_cast<int>(Round(static_cast<double>(origin.y) + range * std::sin(te) * cos_fi));
+				}
+
+				if (calcVert == true)
+					target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
+			}
+/*			const double
 				fi = std::atan2(
 							static_cast<double>(target->z - origin.z),
 							targetDist)
@@ -638,7 +700,7 @@ void Projectile::applyAccuracy(
 				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + range * std::cos(te) * cos_fi));
 				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + range * std::sin(te) * cos_fi));
 				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
-			}
+			} */
 			//Log(LOG_INFO) << ". x = " << target->x;
 			//Log(LOG_INFO) << ". y = " << target->y;
 			//Log(LOG_INFO) << ". z = " << target->z;

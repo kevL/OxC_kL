@@ -146,7 +146,7 @@ private:
 		/// Fires off a reaction shot.
 		bool reactionShot(
 				BattleUnit* const unit,
-				const BattleUnit* const target);
+				const BattleUnit* const targetUnit);
 		/// Selects a fire method based on range & time units.
 		void selectFireMethod(BattleAction& action);
 

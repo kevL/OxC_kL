@@ -965,7 +965,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
  * Checks for another unit available for targeting and what particular voxel.
  * @param originVoxel	- pointer to voxel of trace origin (eg. gun's barrel)
  * @param tile			- pointer to Tile to check for
- * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
+ * @param scanVoxel		- pointer to voxel that is returning coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
  * @param unit			- pointer to a hypothetical unit to draw a virtual Line of Fire for AI; if left NULL this function behaves normally (default NULL)
  * @return, true if a unit can be targeted
@@ -1045,10 +1045,8 @@ bool TileEngine::canTargetUnit(
 	targetMaxHeight += heightRange;
 	targetCenterHeight = (targetMaxHeight + targetMinHeight) / 2;
 	heightRange /= 2;
-	if (heightRange > 10)
-		heightRange = 10;
-	if (heightRange < 0)
-		heightRange = 0;
+	if (heightRange > 10) heightRange = 10;
+	if (heightRange < 0) heightRange = 0;
 
 	for (int // scan ray from top to bottom plus different parts of target cylinder
 			i = 0;
@@ -1407,7 +1405,7 @@ bool TileEngine::checkReactionFire(
 				ret = true;
 			}
 
-			reactor = getReactor( // nice shot, kid. don't get too cocky.
+			reactor = getReactor( // nice shot. Get cocky, kid; you're a neurotic ass. Gratz!
 								spotters,
 								unit,
 								tuSpent);
@@ -1527,14 +1525,14 @@ BattleUnit* TileEngine::getReactor(
 /**
  * Fires off a reaction shot.
  * @param unit		- pointer to the spotting unit
- * @param target	- pointer to the spotted unit
+ * @param targetUnit	- pointer to the spotted unit
  * @return, true if a shot happens
  */
 bool TileEngine::reactionShot(
 		BattleUnit* const unit,
-		const BattleUnit* const target)
+		const BattleUnit* const targetUnit)
 {
-//	if (target->isOut(true, true) == true) return false; // not gonna stop shit.
+//	if (targetUnit->isOut(true, true) == true) return false; // not gonna stop shit.
 
 	BattleAction action;
 	action.actor = unit;
@@ -1569,7 +1567,7 @@ bool TileEngine::reactionShot(
 	}
 
 
-	action.target = target->getPosition();
+	action.target = targetUnit->getPosition();
 	action.TU = 0;
 
 	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
@@ -1591,10 +1589,10 @@ bool TileEngine::reactionShot(
 					&& canMelee == false;
 				++i)
 		{
-			canMelee = validMeleeRange(		// hopefully this is blocked by walls & bigWalls ...
-									unit,	// see also, AI do_grenade_action .....
-									target,	// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
-									i);		// cf. ActionMenuState::btnActionMenuItemClick()
+			canMelee = validMeleeRange(			// hopefully this is blocked by walls & bigWalls ...
+									unit,		// see also, AI do_grenade_action .....
+									targetUnit,	// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
+									i);			// cf. ActionMenuState::btnActionMenuItemClick()
 		}
 
 		if (canMelee == false)
@@ -4567,18 +4565,16 @@ int TileEngine::calculateLine(
 		swap_xy,
 		swap_xz;
 	int
-		x, x0, x1,
-		delta_x, step_x,
-		y, y0, y1,
-		delta_y, step_y,
-		z, z0, z1,
-		delta_z, step_z,
+		x, x0, x1, delta_x, step_x,
+		y, y0, y1, delta_y, step_y,
+		z, z0, z1, delta_z, step_z,
 
 		drift_xy, drift_xz,
 
 		cx, cy, cz,
 
-		horiBlock, vertBlock, ret;
+		horiBlock, vertBlock,
+		ret;
 
 	Position lastPoint (origin);
 
@@ -4624,11 +4620,17 @@ int TileEngine::calculateLine(
 			x != x1 + step_x;
 			x += step_x)
 	{
+/*		if (x < 0 || y < 0 || z < 0 // kL->
+			|| x > _battleSave->getMapSizeX() * 16
+			|| y > _battleSave->getMapSizeY() * 16
+			|| z > _battleSave->getMapSizeZ() * 24)
+		{
+			break;
+		} */
+
 		cx = x; cy = y; cz = z; // copy position
-		if (swap_xz == true) // unswap (in reverse)
-			std::swap(cx, cz);
-		if (swap_xy == true)
-			std::swap(cx, cy);
+		if (swap_xz == true) std::swap(cx, cz); // unswap (in reverse)
+		if (swap_xy == true) std::swap(cx, cy);
 
 		if (storeTrajectory == true
 			&& trajectory != NULL)
@@ -4722,10 +4724,8 @@ int TileEngine::calculateLine(
 			if (doVoxelCheck == true) // check for xy diagonal intermediate voxel step, for Unit visibility
 			{
 				cx = x; cy = y; cz = z;
-				if (swap_xz == true)
-					std::swap(cx, cz);
-				if (swap_xy == true)
-					std::swap(cx, cy);
+				if (swap_xz == true) std::swap(cx, cz);
+				if (swap_xy == true) std::swap(cx, cy);
 
 				ret = voxelCheck(
 							Position(cx, cy, cz),
@@ -4752,10 +4752,8 @@ int TileEngine::calculateLine(
 			if (doVoxelCheck == true) // check for xz diagonal intermediate voxel step
 			{
 				cx = x; cy = y; cz = z;
-				if (swap_xz == true)
-					std::swap(cx, cz);
-				if (swap_xy == true)
-					std::swap(cx, cy);
+				if (swap_xz == true) std::swap(cx, cz);
+				if (swap_xy == true) std::swap(cx, cy);
 
 				ret = voxelCheck(
 							Position(cx, cy, cz),
@@ -5931,7 +5929,7 @@ int TileEngine::getDirectionTo(
 			m_pi_8 + d						// 0.39269908169872415480783042290994	-> 22.5 deg
 		};
 
-	int dir = 2;
+	int dir;
 	if (theta > pie[0] || theta < -pie[0])
 		dir = 6;
 	else if (theta > pie[1])
@@ -5946,6 +5944,8 @@ int TileEngine::getDirectionTo(
 		dir = 4;
 	else if (theta < -pie[3])
 		dir = 3;
+	else
+		dir = 2;
 
 	return dir;
 }

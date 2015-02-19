@@ -1967,11 +1967,11 @@ bool AlienBAIState::explosiveEfficacy(
 	}
 
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
-		effect -= 25;
+		effect -= 23;
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE"
 		|| _save->getMissionType() == "STR_TERROR_MISSION")
 	{
-		effect += 50;
+		effect += 56;
 	}
 
 	// allow difficulty to have an influence
@@ -1992,15 +1992,15 @@ bool AlienBAIState::explosiveEfficacy(
 											targetPos,
 											(*i)->getPosition()) <= radius)
 		{
-			if (((*i)->getTile()
-					&& (*i)->getTile()->getDangerous())		// don't count people who were already grenaded this turn
-				|| ((*i)->getFaction() == FACTION_PLAYER	// don't count units we don't know about
-					&& (*i)->getTurnsExposed() > _intelligence))
+			if (((*i)->getTile() != NULL
+					&& (*i)->getTile()->getDangerous() == true)		// don't count targets that were already grenaded this turn
+				|| ((*i)->getFaction() == FACTION_PLAYER
+					&& (*i)->getTurnsExposed() > _intelligence))	// don't count units that this aLien doesn't know about
 			{
 				continue;
 			}
 
-			// trace a line from the grenade origin to targetPos
+			// trace a line from the explosion origin to targetPos
 			const Position
 				voxelPosA = Position(
 								(targetPos.x * 16) + 8,
@@ -2154,7 +2154,7 @@ void AlienBAIState::wayPointAction()
 				i != _save->getUnits()->end();
 				++i)
 		{
-			Log(LOG_INFO) << ". . test Vs unit ID " << (*i)->getId();
+			Log(LOG_INFO) << ". . test Vs unit ID " << (*i)->getId() << " pos " << (*i)->getPosition();
 			if (validTarget(
 						*i,
 						true,
@@ -2722,10 +2722,17 @@ bool AlienBAIState::validTarget(
 		bool assessDanger,
 		bool includeCivs) const
 {
+	//Log(LOG_INFO) << "AlienBAIState::validTarget() ID " << unit->getId();
+	//Log(LOG_INFO) << ". isFactionHostile -> " << (unit->getFaction() == FACTION_HOSTILE);
+	//Log(LOG_INFO) << ". isOut -> " << (unit->isOut(true, true) == true);
+	//Log(LOG_INFO) << ". isExposed -> " << (_intelligence >= unit->getTurnsExposed());
+	//Log(LOG_INFO) << ". isDangerous -> " << (assessDanger == true && unit->getTile() != NULL && unit->getTile()->getDangerous() == true);
+
 	if (unit->getFaction() == FACTION_HOSTILE				// target must not be on aLien side
 		|| unit->isOut(true, true) == true					// ignore targets that are dead/unconscious
 		|| _intelligence < unit->getTurnsExposed()			// target must be a unit that this aLien 'knows about'
 		|| (assessDanger == true
+//			&& unit->getTile() != NULL						// safety. Should not be needed if isOut()=true
 			&& unit->getTile()->getDangerous() == true))	// target has not been grenaded
 	{
 		return false;
@@ -2734,6 +2741,7 @@ bool AlienBAIState::validTarget(
 	if (includeCivs == true)
 		return true;
 
+	//Log(LOG_INFO) << ". . ret = " << (unit->getFaction() == FACTION_PLAYER);
 	return (unit->getFaction() == FACTION_PLAYER);
 }
 

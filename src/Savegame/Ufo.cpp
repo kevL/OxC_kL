@@ -533,7 +533,7 @@ void Ufo::calculateSpeed()
 	theta = theta * 180. / M_PI;
 	//Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
-	if (157.5 < theta || theta < -157.5)
+	if (theta > 157.5 || theta < -157.5)
 		_direction = "STR_WEST";
 	else if (theta > 112.5)
 		_direction = "STR_NORTH_WEST";

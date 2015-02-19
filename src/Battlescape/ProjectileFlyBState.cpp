@@ -321,12 +321,11 @@ void ProjectileFlyBState::init()
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store that target voxel.
-		const Tile* const targetTile = _parent->getSave()->getTile(_action.target);
-		Position hitPos;
-
 		const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
 																		_parent->getSave()->getTile(_origin));
+		const Tile* const targetTile = _parent->getSave()->getTile(_action.target);
+
 		if (targetTile->getUnit() != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has unit";
