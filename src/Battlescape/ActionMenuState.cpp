@@ -363,7 +363,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 					++i)
 			{
 				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-					&& (*i)->isWoundable() == true
+					&& (*i)->isFearable() == true
+//					&& (*i)->isWoundable() == true
 					&& (*i)->getPosition() == _action->actor->getPosition())
 //					&& *i != _action->actor // note: if unconscious, won't be actor.
 				{
@@ -383,7 +384,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 				const Tile* const tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
 				if (tile != NULL
 					&& tile->getUnit() != NULL
-					&& tile->getUnit()->isWoundable() == true)
+					&& tile->getUnit()->isFearable() == true)
+//					&& tile->getUnit()->isWoundable() == true)
 				{
 					targetUnit = tile->getUnit();
 				}

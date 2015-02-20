@@ -3348,27 +3348,15 @@ int BattleUnit::getMoveSound() const
 
 /**
  * Gets whether the unit is affected by fatal wounds.
- * Normally only soldiers are affected by fatal wounds.
- * @return, true if unit can be affected by wounds
+ * @note Normally only soldiers are affected by fatal wounds.
+ * @return, true if unit can be affected by fatal wounds
  */
 bool BattleUnit::isWoundable() const
 {
 	return _geoscapeSoldier != NULL
-	   || (Options::alienBleeding
+		|| (Options::alienBleeding == true
 			&& _unitRules->isMechanical() == false
 			&& _race != "STR_ZOMBIE");
-
-/*	if (_geoscapeSoldier != NULL)
-		return true;
-
-	if (Options::alienBleeding
-		&& _unitRules->isMechanical() == false
-		&& _race != "STR_ZOMBIE")
-	{
-		return true;
-	}
-
-	return false; */
 }
 
 /**
