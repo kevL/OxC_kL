@@ -1756,8 +1756,8 @@ void Map::drawTerrain(Surface* surface)
 															{
 																halfRight = true;
 
-																if (unitWest->getDirection() == 5
-																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL)
+																if (unit->getArmor()->getSize() == 2
+																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL) // confusing .... re. needs more above^ (this seems to be for large units only)
 																{
 																	redraw = false;
 																}
@@ -2216,7 +2216,7 @@ void Map::drawTerrain(Surface* surface)
 							if (shade != 0 // try to even out lighting of all four quadrants of large units.
 								&& quad != 0)
 							{
-								shade -= 1;
+								shade -= 1; // TODO: trickle this throughout this function!
 							}
 
 							calculateWalkingOffset(
