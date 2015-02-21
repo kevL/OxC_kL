@@ -1755,6 +1755,12 @@ void Map::drawTerrain(Surface* surface)
 																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL)) // <- needs more ...
 															{
 																halfRight = true;
+
+																if (unitWest->getDirection() == 5
+																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL)
+																{
+																	redraw = false;
+																}
 															}
 															else
 																halfRight = false;
@@ -2206,6 +2212,12 @@ void Map::drawTerrain(Surface* surface)
 							}
 							else
 								shade = tileShade;
+
+							if (shade != 0 // try to even out lighting of all four quadrants of large units.
+								&& quad != 0)
+							{
+								shade -= 1;
+							}
 
 							calculateWalkingOffset(
 												unit,
@@ -3924,7 +3936,11 @@ void Map::drawTerrain(Surface* surface)
 			walkOffset.y += 21 - unit->getHeight();
 
 			if (unit->getArmor()->getSize() > 1)
-				walkOffset.y += 9;
+			{
+				walkOffset.y += 10;
+				if (unit->getFloatHeight() != 0)
+					walkOffset.y -= unit->getFloatHeight() + 1;
+			}
 
 			if (unit->isKneeled() == true)
 			{

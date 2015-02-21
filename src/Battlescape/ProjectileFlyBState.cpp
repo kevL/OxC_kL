@@ -1163,7 +1163,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 			break;
 		}
 
-		delta_z -= static_cast<double>(50 * weight / strength) / 100.;
+		delta_z -= static_cast<double>(weight * 50 / strength) / 100.;
 		if (delta_z <= -2.) // become falling
 			break;
 	}
@@ -1202,9 +1202,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	_parent->getSave()->getPathfinding()->directionToVector(
 														_unit->getDirection(),
 														&voxel);
-	voxel = _action.target * Position(16, 16, 24) + Position(
-														8,
-														8,
+	voxel = _action.target * Position(16,16,24) + Position(
+														8,8,
 														height - _parent->getSave()->getTile(_action.target)->getTerrainLevel())
 													- voxel;
 
