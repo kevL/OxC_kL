@@ -874,9 +874,9 @@ void SellState::increase()
 	_timerInc->setInterval(80);
 
 	if ((SDL_GetModState() & KMOD_CTRL) != 0)
-		changeByValue(10, 1);
+		changeByValue(10,1);
 	else
-		changeByValue(1, 1);
+		changeByValue(1,1);
 }
 
 /**
@@ -888,9 +888,9 @@ void SellState::decrease()
 	_timerDec->setInterval(80);
 
 	if ((SDL_GetModState() & KMOD_CTRL) != 0)
-		changeByValue(10, -1);
+		changeByValue(10,-1);
 	else
-		changeByValue(1, -1);
+		changeByValue(1,-1);
 }
 
 /**
@@ -940,6 +940,7 @@ void SellState::changeByValue(
 				_spaceChange += static_cast<double>(dir) * rule->getSize();
 			}
 		break;
+
 		case SELL_CRAFT:
 			craft = _crafts[getCraftIndex(_sel)];
 			for (std::vector<CraftWeapon*>::const_iterator
@@ -959,6 +960,7 @@ void SellState::changeByValue(
 			}
 			_spaceChange += static_cast<double>(dir) * space;
 		break;
+
 		case SELL_ITEM:
 			rule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 			_spaceChange -= static_cast<double>(dir * change) * rule->getSize();
