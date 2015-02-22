@@ -152,6 +152,7 @@ protected:
 				int radius,
 				int diff = -1) const;
 //				bool grenade = false) const;
+//		bool getNodeOfBestEfficacy(BattleAction* action);
 
 		/// Attempts to take a melee attack/charge an enemy we can see.
 		void meleeAction();

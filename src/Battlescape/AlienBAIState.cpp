@@ -2511,6 +2511,39 @@ void AlienBAIState::grenadeAction()
 //		}
 	}
 }
+/*	// do we have a grenade on our belt?
+	BattleItem *grenade = _unit->getGrenadeFromBelt();
+	int tu = 4; // 4TUs for picking up the grenade
+	tu += _unit->getActionTUs(BA_PRIME, grenade);
+	tu += _unit->getActionTUs(BA_THROW, grenade);
+	// do we have enough TUs to prime and throw the grenade?
+	if (tu <= _unit->getTimeUnits())
+	{
+		BattleAction action;
+		action.weapon = grenade;
+		action.type = BA_THROW;
+		action.actor = _unit;
+		if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff, true))
+		{
+			action.target = _aggroTarget->getPosition();
+		}
+		else if (!getNodeOfBestEfficacy(&action))
+		{
+			return;
+		}
+		Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+		Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
+		// are we within range?
+		if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel))
+		{
+			_attackAction->weapon = grenade;
+			_attackAction->target = action.target;
+			_attackAction->type = BA_THROW;
+			_attackAction->TU = tu;
+			_rifle = false;
+			_melee = false;
+		}
+	} */
 
 /**
  * Evaluates a psionic attack on an 'exposed' enemy.
@@ -2824,5 +2857,83 @@ void AlienBAIState::selectMeleeOrRanged()
 
 	_melee = false;
 }
+
+/**
+ * Checks nearby nodes to see if they'd make good grenade targets.
+ * @param action - pointer to BattleAction struct;
+ * contents details one weapon and user and sets the target
+ * @return, true if a viable node was found
+ */
+/*
+bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
+{
+	if (_save->getTurn() < 3)
+		return false;
+
+	int bestScore = 2;
+
+	Position
+		originVoxel = _save->getTileEngine()->getSightOriginVoxel(_unit),
+		targetVoxel;
+
+	for (std::vector<Node*>::const_iterator
+			i = _save->getNodes()->begin();
+			i != _save->getNodes()->end();
+			++i)
+	{
+		int dist = _save->getTileEngine()->distance(
+												(*i)->getPosition(),
+												_unit->getPosition());
+		if (dist < 21
+			&& dist > action->weapon->getRules()->getExplosionRadius()
+			&& _save->getTileEngine()->canTargetTile(
+												&originVoxel,
+												_save->getTile((*i)->getPosition()),
+												MapData::O_FLOOR,
+												&targetVoxel,
+												_unit))
+		{
+			int nodePoints = 0;
+
+			for (std::vector<BattleUnit*>::const_iterator
+					j = _save->getUnits()->begin();
+					j != _save->getUnits()->end();
+					++j)
+			{
+				dist = _save->getTileEngine()->distance(
+													(*i)->getPosition(),
+													(*j)->getPosition());
+				if ((*j)->isOut() == false
+					&& dist < action->weapon->getRules()->getExplosionRadius())
+				{
+					Position targetOriginVoxel = _save->getTileEngine()->getSightOriginVoxel(*j);
+					if (_save->getTileEngine()->canTargetTile(
+														&targetOriginVoxel,
+														_save->getTile((*i)->getPosition()),
+														MapData::O_FLOOR,
+														&targetVoxel,
+														*j))
+					{
+						if ((*j)->getFaction() != FACTION_HOSTILE)
+						{
+							if ((*j)->getTurnsExposed() <= _intelligence)
+								++nodePoints;
+						}
+						else
+							nodePoints -= 2;
+					}
+				}
+			}
+
+			if (nodePoints > bestScore)
+			{
+				bestScore = nodePoints;
+				action->target = (*i)->getPosition();
+			}
+		}
+	}
+
+	return (bestScore > 2);
+} */
 
 }
