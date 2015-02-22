@@ -2322,7 +2322,7 @@ void TileEngine::explode(
 				//Log(LOG_INFO) << ". pre insert Tile " << Position(tileX, tileY, tileZ);
 				tilePair = tilesAffected.insert(destTile); // check if this tile was hit already
 				//Log(LOG_INFO) << ". post insert Tile";
-				if (tilePair.second) // true if a new tile was inserted.
+				if (tilePair.second == true) // true if a new tile was inserted.
 				{
 					//Log(LOG_INFO) << ". > tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
 					//Log(LOG_INFO) << ". > _powerE = " << _powerE;
@@ -2386,6 +2386,7 @@ void TileEngine::explode(
 							}
 						}
 						break;
+
 						case DT_HE: // power 50 - 150%. 70% of that if kneeled, 85% if kneeled @ GZ
 						{
 							//Log(LOG_INFO) << ". . type == DT_HE";
@@ -2520,6 +2521,7 @@ void TileEngine::explode(
 							}
 						}
 						break;
+
 						case DT_SMOKE:
 							if (destTile->getSmoke() < 10
 								&& destTile->getTerrainLevel() > -24)
@@ -2563,6 +2565,7 @@ void TileEngine::explode(
 								}
 							}
 						break;
+
 						case DT_IN:
 						{
 							if (targetUnit != NULL)
@@ -2754,7 +2757,8 @@ void TileEngine::explode(
 		}
 	}
 
-	_powerE = _powerT = -1;
+	_powerE =
+	_powerT = -1;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -3643,7 +3647,7 @@ int TileEngine::blockage(
 		{
 			if (visLike == true)
 			{
-				if ((tile->getMapData(part)->stopLOS() == true
+				if ((tile->getMapData(part)->stopLOS() == true // stopLOS() should join w/ DT_NONE ...
 							|| (type == DT_SMOKE
 								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)
 							|| (type == DT_IN
@@ -3658,7 +3662,7 @@ int TileEngine::blockage(
 					return 1000;
 				}
 			}
-			else if (tile->getMapData(part)->stopLOS() == true
+			else if (tile->getMapData(part)->stopLOS() == true // stopLOS() should join w/ DT_NONE ...
 				&& _powerE > -1
 				&& _powerE < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
 			{
@@ -3678,8 +3682,8 @@ int TileEngine::blockage(
 				if (type == DT_HE
 					&& _missileDirection != -1)
 				{
-					const int delta = std::abs(8 + _missileDirection - dir) %8;
-					diagStop = (delta < 2 || delta == 7);
+					const int dirDelta = std::abs(8 + _missileDirection - dir) %8;
+					diagStop = (dirDelta < 2 || dirDelta > 6);
 				}
 
 				// this needs to check which side the *missile* is coming from,
@@ -3689,7 +3693,7 @@ int TileEngine::blockage(
 						&& (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE))
 					|| (dir == Pathfinding::DIR_DOWN
-						&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == false
+						&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == false // stopLOS() should join w/ DT_NONE ...
 						&& !(
 							type == DT_SMOKE
 							&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
@@ -3702,7 +3706,7 @@ int TileEngine::blockage(
 				else if (visLike == false // diagonal BigWall blockage ...
 					&& (bigWall == Pathfinding::BIGWALL_NESW
 						|| bigWall == Pathfinding::BIGWALL_NWSE)
-					&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == true
+					&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == true // stopLOS() should join w/ DT_NONE ...
 					&& _powerE > -1
 					&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)
 				{
@@ -3711,9 +3715,9 @@ int TileEngine::blockage(
 				}
 			}
 
-			if (visLike == true // hardblock for visLike
+			if (visLike == true // hardblock for visLike against non-bigWall content-object.
 				&& bigWall == Pathfinding::BIGWALL_NONE
-				&& (tile->getMapData(MapData::O_OBJECT)->stopLOS() == true
+				&& (tile->getMapData(MapData::O_OBJECT)->stopLOS() == true // stopLOS() should join w/ DT_NONE ...
 					|| (type == DT_SMOKE
 						&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
 					|| (type == DT_IN
@@ -3825,7 +3829,7 @@ int TileEngine::blockage(
 					if ((bigWall != Pathfinding::BIGWALL_NONE			// lets content-objects Block explosions
 							&& bigWall != Pathfinding::BIGWALL_BLOCK)	// includes stopLoS (floors handled above under non-directional condition)
 						|| (visLike == true
-							&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == false
+							&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == false // stopLOS() should join w/ DT_NONE ...
 							&& !(
 								type == DT_SMOKE
 								&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
@@ -3841,12 +3845,12 @@ int TileEngine::blockage(
 
 				default:
 					return 0; // .....
-				break;
+//				break;
 			}
 
 
 			// might be Content-part or remaining-bigWalls block here
-			if (tile->getMapData(MapData::O_OBJECT)->stopLOS() == true // use stopLOS to hinder explosions from propagating through bigWalls freely.
+			if (tile->getMapData(MapData::O_OBJECT)->stopLOS() == true // use stopLOS to hinder explosions from propagating through bigWalls freely. // stopLOS() should join w/ DT_NONE ...
 				|| (type == DT_SMOKE
 					&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
 				|| (type == DT_IN
@@ -3863,7 +3867,7 @@ int TileEngine::blockage(
 		}
 
 
-		if (visLike == false) // only non-visLike can get partly blocked; other damage-types are either completely blocked or get a pass here
+		if (visLike == false) // only non-visLike can get partly blocked; other damage-types are either completely blocked above or get a pass here
 		{
 			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << tile->getMapData(part)->getBlock(type);
 			return tile->getMapData(part)->getBlock(type);
@@ -3930,11 +3934,11 @@ bool TileEngine::detonate(Tile* const tile)
 										pos.x,
 										pos.y + 1,
 										pos.z));
-	tiles[3]											// floor
-			= tiles[4]									// westwall
-			= tiles[5]									// northwall
-			= tiles[6]									// content
-			= tile;
+	tiles[3] =											// floor
+	tiles[4] =											// westwall
+	tiles[5] =											// northwall
+	tiles[6] = tile;									// content
+
 	tiles[7] = _battleSave->getTile(Position(			// tileNorth, bigwall south
 										pos.x,
 										pos.y - 1,
@@ -3950,7 +3954,7 @@ bool TileEngine::detonate(Tile* const tile)
 //						std::min(
 //								tile->getSmoke() + RNG::generate(0,5),
 //								17)));
-	// probly because it's also done below? -> check it.
+	// probly because it's also done below -> check it.
 
 	int
 		explTest,
@@ -3963,7 +3967,7 @@ bool TileEngine::detonate(Tile* const tile)
 
 	for (int
 			i = 8;
-			i > -1;
+			i != -1;
 			--i)
 	{
 		//Log(LOG_INFO) << ". i = " << i;
@@ -3985,29 +3989,29 @@ bool TileEngine::detonate(Tile* const tile)
 */
 		const int bigWall = tiles[i]->getMapData(parts[i])->getBigWall();
 		if (i > 6
-				&& !(
-					bigWall == Pathfinding::BIGWALL_BLOCK
-						|| bigWall == Pathfinding::BIGWALL_E_S
-						|| (i == 8
-							&& bigWall == Pathfinding::BIGWALL_EAST)
-						|| (i == 7
-							&& bigWall == Pathfinding::BIGWALL_SOUTH)))
+			&& !(
+				bigWall == Pathfinding::BIGWALL_BLOCK
+					|| bigWall == Pathfinding::BIGWALL_E_S
+					|| (i == 8
+						&& bigWall == Pathfinding::BIGWALL_EAST)
+					|| (i == 7
+						&& bigWall == Pathfinding::BIGWALL_SOUTH)))
 		{
 			continue;
 		}
 
 		if (bigWallDestroyed == false
-			&& parts[i] == 0)
+			&& parts[i] == MapData::O_FLOOR)
 		{
 			continue; // when ground shouldn't be destroyed
 		}
 
 		// kL_begin:
-		if (tile->getMapData(3) != NULL														// if tile has content,
-			&& ((i == 1																		// don't hit tileEast westwall
-					&& tile->getMapData(3)->getBigWall() == Pathfinding::BIGWALL_EAST)			// if east bigwall not destroyed;
-				|| (i == 2																	// don't hit tileSouth northwall
-					&& tile->getMapData(3)->getBigWall() == Pathfinding::BIGWALL_SOUTH)))		// if south bigwall not destroyed
+		if (tile->getMapData(MapData::O_OBJECT) != NULL														// if tile has content,
+			&& ((i == 1																						// don't hit tileEast westwall
+					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST)			// if east bigwall not destroyed;
+				|| (i == 2																					// don't hit tileSouth northwall
+					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH)))		// if south bigwall not destroyed
 		{
 			//Log(LOG_INFO) << ". . bypass east/south bigwall";
 			continue;
@@ -4032,7 +4036,7 @@ bool TileEngine::detonate(Tile* const tile)
 				++j)
 		{
 			if (tiles[i]->getMapData(curPart)->getLoftID(j) != 0)
-				volume++;
+				++volume;
 		}
 
 		if (i == 6
@@ -4106,7 +4110,9 @@ bool TileEngine::detonate(Tile* const tile)
 
 		// add some smoke if tile was destroyed and not set on fire
 		if (destroyed == true
-			&& tiles[i]->getFire() == 0)
+			&& tiles[i]->getFire() == 0
+			&& (tile->getMapData(MapData::O_OBJECT) == NULL							// kL_add
+				|| tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 0))	// kL_add
 		{
 			const int smoke = RNG::generate(
 										1,

@@ -121,7 +121,7 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_revived(false),
 
-		_deathSound(0),
+		_deathSound(-1),
 		_aggroSound(-1),
 		_moveSound(-1),
 		_intelligence(2),

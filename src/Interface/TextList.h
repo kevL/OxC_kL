@@ -271,7 +271,7 @@ private:
 				bool scrollByWheel = false);
 		/// Sets the list scrollable.
 		void setScrollable(
-				bool scrollable,
+				bool scrollable = true,
 //kL			int scrollPos = 4);
 				int scrollPos = 0); // kL
 

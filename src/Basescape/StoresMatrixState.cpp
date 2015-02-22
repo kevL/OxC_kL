@@ -194,7 +194,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_lstMatrix->setBackground(_window);
 
 
-	int qty[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	int qty[8] = {0,0,0,0,0,0,0,0};
 	size_t
 		ent = 0,
 		row = 0;
@@ -210,7 +210,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss7;
 
 	const Ruleset* const rules = _game->getRuleset();
-	const RuleItem* rule = NULL;
+	const RuleItem* itRule = NULL;
 //		* launchRule,
 //		* clipRule;
 	const RuleCraftWeapon* cwRule = NULL;
@@ -221,8 +221,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			i != items.end();
 			++i)
 	{
-		rule = rules->getItem(*i);
-		const std::string test = rule->getType();
+		itRule = rules->getItem(*i);
+		const std::string test = itRule->getType();
 
 		ss0.str(L"");
 		ss1.str(L"");
@@ -317,8 +317,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 				// Special handling for treating craft weapons as items
 				cwRule = rules->getCraftWeapon(*j);
 
-				if (rule == rules->getItem(cwRule->getLauncherItem())
-					|| rule == rules->getItem(cwRule->getClipItem()))
+				if (itRule == rules->getItem(cwRule->getLauncherItem())
+					|| itRule == rules->getItem(cwRule->getClipItem()))
 				{
 					craftOrdnance = true;
 				}
@@ -326,31 +326,31 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 /*				launchRule = rules->getItem(cwRule->getLauncherItem());
 				clipRule = rules->getItem(cwRule->getClipItem());
-				if (launchRule == rule)
+				if (launchRule == itRule)
 				{
 					craftOrdnance = true;
 					int clipSize = cwRule->getAmmoMax(); // Launcher
 					if (clipSize > 0)
 						item = item + L" (" + Text::formatNumber(clipSize) + L")";
 				}
-				else if (clipRule == rule)
+				else if (clipRule == itRule)
 				{
 					craftOrdnance = true;
 					int clipSize = clipRule->getClipSize(); // launcher Ammo
 					if (clipSize > 1)
 						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
 				} */
-/*			if (rule->getBattleType() == BT_AMMO
-				&& rule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+/*			if (itRule->getBattleType() == BT_AMMO
+				&& itRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
 			{
-				int clipSize = rule->getClipSize();
+				int clipSize = itRule->getClipSize();
 				if (clipSize > 1)
 					item = item + L" (" + Text::formatNumber(clipSize) + L")";
 			} */
-/*			if (rule->isFixed() // tank w/ Ordnance.
-				&& !rule->getCompatibleAmmo()->empty())
+/*			if (itRule->isFixed() // tank w/ Ordnance.
+				&& !itRule->getCompatibleAmmo()->empty())
 			{
-				clipRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+				clipRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 				int clipSize = clipRule->getClipSize();
 				if (clipSize > 0)
 					item = item + L" (" + Text::formatNumber(clipSize) + L")";
@@ -360,22 +360,22 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 			Uint8 color = Palette::blockOffset(13)+10; // blue
 
-			if ((rule->getBattleType() == BT_AMMO
-					|| (rule->getBattleType() == BT_NONE
-						&& rule->getClipSize() > 0))
-				&& rule->getType() != "STR_ELERIUM_115")
+			if ((itRule->getBattleType() == BT_AMMO
+					|| (itRule->getBattleType() == BT_NONE
+						&& itRule->getClipSize() > 0))
+				&& itRule->getType() != "STR_ELERIUM_115")
 			{
 				item.insert(0, L"  ");
 				color = Palette::blockOffset(15)+6; // purple
 			}
 
-			if (save->isResearched(rule->getType()) == false				// not researched or is research exempt
-				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
+			if (save->isResearched(itRule->getType()) == false				// not researched or is research exempt
+				&& (save->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(*i)->isAlien() == true					// or is an alien
-					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
+					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false)									// and is not craft ordnance
-//				&& rule->isResearchExempt() == false)						// and is not research exempt
+//				&& itRule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow
@@ -415,8 +415,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
  * dTor.
  */
 StoresMatrixState::~StoresMatrixState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

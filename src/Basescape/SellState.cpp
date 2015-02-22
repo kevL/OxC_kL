@@ -60,20 +60,20 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Sell/Sack screen.
  * @param base		- pointer to the Base to get info from
- * @param origin	- game section that originated this state
+ * @param origin	- game section that originated this state (default OPT_GEOSCAPE)
  */
 SellState::SellState(
 		Base* base,
 		OptionsOrigin origin)
 	:
 		_base(base),
+		_origin(origin),
 		_sel(0),
 		_itemOffset(0),
 		_total(0),
 		_hasSci(0),
 		_hasEng(0),
-		_spaceChange(0.),
-		_origin(origin)
+		_spaceChange(0.)
 {
 	bool overfull = Options::storageLimitsEnforced == true
 				 && _base->storesOverfull() == true;
@@ -112,6 +112,9 @@ SellState::SellState(
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color);
+/*	setPalette(
 			"PAL_GEOSCAPE",
 			_game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color); //0
 	if (origin == OPT_BATTLESCAPE)
@@ -129,9 +132,10 @@ SellState::SellState(
 //		_color2		= Palette::blockOffset(13);
 		_colorArtefact = Palette::blockOffset(13)+5;
 //		_colorAmmo	= Palette::blockOffset(15)+6;
-	}
+	} */
 
 	_ammoColor = _game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color;
+	_colorArtefact = Palette::blockOffset(13)+5;
 
 	add(_window, "window", "sellMenu");
 	add(_txtTitle, "text", "sellMenu");
@@ -300,9 +304,9 @@ SellState::SellState(
 	const SavedGame* const save = _game->getSavedGame();
 	const Ruleset* const rules = _game->getRuleset();
 	const RuleItem
-		* rule,
-		* launchRule,
-		* clipRule;
+		* itRule,
+		* laRule,
+		* clRule;
 	const RuleCraftWeapon* cwRule;
 
 	const std::vector<std::string>& items = rules->getItemsList();
@@ -343,8 +347,8 @@ SellState::SellState(
 
 			std::wstring item = tr(*i);
 
-			rule = rules->getItem(*i);
-			//Log(LOG_INFO) << (*i) << " list# " << rule->getListOrder(); // Prints listOrder to LOG.
+			itRule = rules->getItem(*i);
+			//Log(LOG_INFO) << (*i) << " list# " << itRule->getListOrder(); // Prints listOrder to LOG.
 
 			bool craftOrdnance = false;
 			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
@@ -357,10 +361,10 @@ SellState::SellState(
 				// Special handling for treating craft weapons as items
 				cwRule = rules->getCraftWeapon(*j);
 
-				launchRule = rules->getItem(cwRule->getLauncherItem());
-				clipRule = rules->getItem(cwRule->getClipItem());
+				laRule = rules->getItem(cwRule->getLauncherItem());
+				clRule = rules->getItem(cwRule->getClipItem());
 
-				if (launchRule == rule)
+				if (laRule == itRule)
 				{
 					craftOrdnance = true;
 
@@ -368,11 +372,11 @@ SellState::SellState(
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
 				}
-				else if (clipRule == rule)
+				else if (clRule == itRule)
 				{
 					craftOrdnance = true;
 
-					const int clipSize = clipRule->getClipSize(); // launcher Ammo
+					const int clipSize = clRule->getClipSize(); // launcher Ammo
 					if (clipSize > 1)
 						item += (L"s (" + Text::formatNumber(clipSize) + L")");
 				}
@@ -380,15 +384,15 @@ SellState::SellState(
 
 			Uint8 color;
 
-			if ((rule->getBattleType() == BT_AMMO			// #2 - weapon clips & HWP rounds
-					|| (rule->getBattleType() == BT_NONE	// #0 - craft weapon rounds
-						&& rule->getClipSize() > 0))
-				&& rule->getType() != "STR_ELERIUM_115")
+			if ((itRule->getBattleType() == BT_AMMO			// #2 - weapon clips & HWP rounds
+					|| (itRule->getBattleType() == BT_NONE	// #0 - craft weapon rounds
+						&& itRule->getClipSize() > 0))
+				&& itRule->getType() != "STR_ELERIUM_115")
 			{
-				if (rule->getBattleType() == BT_AMMO
-					&& rule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				if (itRule->getBattleType() == BT_AMMO
+					&& itRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
 				{
-					const int clipSize = rule->getClipSize();
+					const int clipSize = itRule->getClipSize();
 					if (clipSize > 1)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
 				}
@@ -398,10 +402,10 @@ SellState::SellState(
 			}
 			else
 			{
-                if (rule->isFixed() == true // tank w/ Ordnance.
-					&& rule->getCompatibleAmmo()->empty() == false)
+                if (itRule->isFixed() == true // tank w/ Ordnance.
+					&& itRule->getCompatibleAmmo()->empty() == false)
                 {
-					const RuleItem* const ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+					const RuleItem* const ammoRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 					const int clipSize = ammoRule->getClipSize();
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
@@ -410,13 +414,13 @@ SellState::SellState(
 				color = _lstItems->getColor();
 			}
 
-			if (save->isResearched(rule->getType()) == false				// not researched or research exempt
-				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
+			if (save->isResearched(itRule->getType()) == false				// not researched or research exempt
+				&& (save->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(*i)->isAlien() == true					// or is an alien
-					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
+					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false)										// and is not craft ordnance
-//				&& rule->isResearchExempt() == false)						// and is not research exempt
+//				&& itRule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = _colorArtefact;
@@ -430,7 +434,7 @@ SellState::SellState(
 							item.c_str(),
 							ss.str().c_str(),
 							L"0",
-							Text::formatFunding(rule->getSellCost()).c_str());
+							Text::formatFunding(itRule->getSellCost()).c_str());
 			_lstItems->setRowColor(_qtys.size() - 1, color);
 		}
 	}
@@ -646,7 +650,7 @@ void SellState::btnOkClick(Action*)
 						_base->getItems()->removeItem(
 													_items[getItemIndex(i)],
 													_qtys[i]);
-				break;
+//				break;
 			}
 		}
 	}
@@ -796,10 +800,10 @@ int SellState::getPrice()
 {
 	switch (getType(_sel))
 	{
-		case SELL_SOLDIER: // Personnel/craft aren't worth anything
-		case SELL_ENGINEER:
-		case SELL_SCIENTIST:
-			return 0;
+//		case SELL_SOLDIER: // Personnel/craft aren't worth anything
+//		case SELL_ENGINEER:
+//		case SELL_SCIENTIST:
+//			return 0;
 
 		case SELL_ITEM:
 			return _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSellCost();
@@ -958,7 +962,7 @@ void SellState::changeByValue(
 		case SELL_ITEM:
 			rule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 			_spaceChange -= static_cast<double>(dir * change) * rule->getSize();
-		break;
+//		break;
 
 //		case SELL_ENGINEER:
 //		case SELL_SCIENTIST:
@@ -994,7 +998,7 @@ void SellState::updateItemStrings()
 		if (_sel > _itemOffset)
 		{
 			const Ruleset* const rules = _game->getRuleset();
-			const RuleItem* const rule = rules->getItem(_items[_sel - _itemOffset]);
+			const RuleItem* const itRule = rules->getItem(_items[_sel - _itemOffset]);
 
 			bool craftOrdnance = false;
 			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
@@ -1006,30 +1010,30 @@ void SellState::updateItemStrings()
 			{
 				// Special handling for treating craft weapons as items
 				const RuleCraftWeapon* const cwRule = rules->getCraftWeapon(*i);
-				if (rule == rules->getItem(cwRule->getLauncherItem())
-					|| rule == rules->getItem(cwRule->getClipItem()))
+				if (itRule == rules->getItem(cwRule->getLauncherItem())
+					|| itRule == rules->getItem(cwRule->getClipItem()))
 				{
 					craftOrdnance = true;
 				}
 			}
 
 			const SavedGame* const save = _game->getSavedGame();
-			if (save->isResearched(rule->getType()) == false				// not researched or is research exempt
-				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
-					|| rules->getItem(rule->getType())->isAlien() == true		// or is an alien
-					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
+			if (save->isResearched(itRule->getType()) == false				// not researched or is research exempt
+				&& (save->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
+					|| rules->getItem(itRule->getType())->isAlien() == true		// or is an alien
+					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false)										// and is not craft ordnance
-//				&& rule->isResearchExempt() == false)						// and is not research exempt
+//				&& itRule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				_lstItems->setRowColor(_sel, _colorArtefact);
 			}
 			else
 			{
-				if (rule->getBattleType() == BT_AMMO
-					|| (rule->getBattleType() == BT_NONE
-						&& rule->getClipSize() > 0))
+				if (itRule->getBattleType() == BT_AMMO
+					|| (itRule->getBattleType() == BT_NONE
+						&& itRule->getClipSize() > 0))
 				{
 					_lstItems->setRowColor(_sel, _ammoColor);
 				}

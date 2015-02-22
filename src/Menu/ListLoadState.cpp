@@ -87,8 +87,6 @@ ListLoadState::~ListLoadState()
  */
 void ListLoadState::lstSavesPress(Action* action)
 {
-	ListGamesState::lstSavesPress(action); // RMB.
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		kL_currentBase = 0;
@@ -129,6 +127,8 @@ void ListLoadState::lstSavesPress(Action* action)
 											_saves[_lstSaves->getSelectedRow()].fileName,
 											_palette));
 	}
+	else
+		ListGamesState::lstSavesPress(action); // RMB -> delete file
 }
 
 }

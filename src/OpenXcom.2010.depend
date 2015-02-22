@@ -4388,7 +4388,7 @@
 1424387339 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
-1424387339 f:\git\openxcom\src\interface\textedit.h
+1424595196 f:\git\openxcom\src\interface\textedit.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -4475,7 +4475,7 @@
 1424387345 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1424387345 f:\git\openxcom\src\basescape\sellstate.h
+1424546592 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
@@ -4554,7 +4554,7 @@
 1424387345 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1424387338 f:\git\openxcom\src\interface\textlist.h
+1424590808 f:\git\openxcom\src\interface\textlist.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5140,7 +5140,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1424387345 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1424548733 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5871,7 +5871,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1424387343 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1424553581 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6046,7 +6046,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1424498720 source:f:\git\openxcom\src\battlescape\map.cpp
+1424541112 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6327,7 +6327,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1424387479 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1424553454 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -7699,12 +7699,12 @@
 	"../Engine/Action.h"
 	"../Engine/Sound.h"
 
-1424387339 source:f:\git\openxcom\src\interface\textedit.cpp
+1424596954 source:f:\git\openxcom\src\interface\textedit.cpp
 	"TextEdit.h"
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1424387338 source:f:\git\openxcom\src\interface\textlist.cpp
+1424593897 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -8709,7 +8709,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1424458802 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1424539121 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -10684,7 +10684,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1423983886 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1424548663 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -10731,7 +10731,7 @@
 1424387339 f:\git\openxcom\src\interface\combobox.h
 	"../Engine/InteractiveSurface.h"
 
-1424387339 source:f:\git\openxcom\src\interface\combobox.cpp
+1424590808 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -10889,16 +10889,15 @@
 1424387338 f:\git\openxcom\src\menu\listloadstate.h
 	"ListGamesState.h"
 
-1424387338 f:\git\openxcom\src\menu\listgamesstate.h
+1424624515 f:\git\openxcom\src\menu\listgamesstate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1424387338 f:\git\openxcom\src\menu\listsavestate.h
-	<string>
+1424591069 f:\git\openxcom\src\menu\listsavestate.h
 	"ListGamesState.h"
 
-1424387338 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1424624534 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	"DeleteGameState.h"
 	"../Engine/Action.h"
@@ -10912,7 +10911,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1424387338 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1424593762 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
@@ -10924,7 +10923,7 @@
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1424387338 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1424594470 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"

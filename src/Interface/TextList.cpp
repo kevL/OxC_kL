@@ -1030,7 +1030,7 @@ void TextList::clearList()
 /**
  * Scrolls the text in the list up by one row or to the top.
  * @param toMax			- true scrolls to the top of the list; false => one row up
- * @param scrollByWheel	- true uses wheel scroll
+ * @param scrollByWheel	- true uses wheel scroll (default false)
  */
 void TextList::scrollUp(
 		bool toMax,
@@ -1059,7 +1059,7 @@ void TextList::scrollUp(
 /**
  * Scrolls the text in the list down by one row or to the bottom.
  * @param toMax			- true to scroll to the bottom of the list; false = one row down
- * @param scrollByWheel	- true uses wheel scroll
+ * @param scrollByWheel	- true uses wheel scroll (default false)
  */
 void TextList::scrollDown(
 		bool toMax,
@@ -1076,7 +1076,7 @@ void TextList::scrollDown(
 		else
 		{
 			if (scrollByWheel == true)
-				scrollTo(_scroll + Options::mousewheelSpeed);
+				scrollTo(_scroll + static_cast<size_t>(Options::mousewheelSpeed));
 			else
 				scrollTo(_scroll + 1);
 		}
@@ -1120,7 +1120,7 @@ void TextList::updateVisible()
 
 /**
  * Changes whether the list can be scrolled.
- * @param scrolling - true allows scrolling
+ * @param scrolling - true allows scrolling (default true)
  * @param scrollPos - custom +/- x_offset for the scroll buttons (default 0)
  */
 void TextList::setScrollable(

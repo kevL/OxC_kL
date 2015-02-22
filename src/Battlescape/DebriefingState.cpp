@@ -1095,9 +1095,13 @@ void DebriefingState::prepareDebriefing()
 
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
+			Log(LOG_INFO) << ". unitDead " << (*i)->getId() << " type = " << (*i)->getType();
+
 			if (origFaction == FACTION_HOSTILE
 				&& (*i)->killedBy() == FACTION_PLAYER)
 			{
+				Log(LOG_INFO) << ". . killed by xCom";
+
 				addStat(
 					"STR_ALIENS_KILLED",
 					value);
@@ -1149,6 +1153,8 @@ void DebriefingState::prepareDebriefing()
 		}
 		else // so this unit is NOT dead...
 		{
+			Log(LOG_INFO) << ". unitLive " << (*i)->getId() << " type = " << (*i)->getType();
+
 			const UnitFaction faction = (*i)->getFaction();
 
 			std::string type;
@@ -1814,8 +1820,11 @@ void DebriefingState::recoverItems(
 			{
 				if (itRule->isRecoverable() == true
 					&& itRule->getRecoveryPoints() != 0
+					&& itRule->getBattleType() != BT_CORPSE
 					&& _savedGame->isResearched(itRule->getType()) == false)
 				{
+					Log(LOG_INFO) << ". . artefact = " << itRule->getType();
+
 					addStat( // add pts. for unresearched items only
 						"STR_ALIEN_ARTIFACTS_RECOVERED",
 						itRule->getRecoveryPoints());
@@ -1832,6 +1841,8 @@ void DebriefingState::recoverItems(
 							if (itRule->isRecoverable() == true
 								&& unit->getStatus() == STATUS_DEAD)
 							{
+								Log(LOG_INFO) << ". . corpse = " << itRule->getType();
+
 								addStat(
 									"STR_ALIEN_CORPSES_RECOVERED",
 									unit->getValue() / 3); // This should rather be the 'recoveryPoints' of the corpse item!
@@ -1852,9 +1863,13 @@ void DebriefingState::recoverItems(
 											base);
 								}
 								else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
+								{
+									Log(LOG_INFO) << ". . unconsciousCivie = " << itRule->getType();
+
 									addStat(
 										"STR_CIVILIANS_SAVED",
 										unit->getValue()); // duplicated above.
+								}
 							}
 						}
 					}
@@ -1898,6 +1913,8 @@ void DebriefingState::recoverLiveAlien(
 {
 	if (base->getAvailableContainment() != 0)
 	{
+		Log(LOG_INFO) << ". . . alienLive = " << unit->getType();
+
 		const std::string type = unit->getType();
 
 		int value;
@@ -1917,6 +1934,8 @@ void DebriefingState::recoverLiveAlien(
 	}
 	else
 	{
+		Log(LOG_INFO) << ". . . alienDead = " << unit->getType();
+
 		_noContainment = true;
 		addStat(
 			"STR_ALIEN_CORPSES_RECOVERED",

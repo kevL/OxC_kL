@@ -48,7 +48,9 @@ private:
 	size_t _caretPos;
 	wchar_t _ascii;
 
-	std::wstring _value;
+	std::wstring
+		_value,
+		_valueStored;
 
 	ActionHandler _change;
 	State* _state;
@@ -96,6 +98,10 @@ private:
 		void setText(const std::wstring& text);
 		/// Gets the text edit's string.
 		std::wstring getText() const;
+		/// Sets the original text's string.
+		void setTextStored(const std::wstring text);
+		/// Gets the original text edit's string.
+		std::wstring getTextStored() const;
 
 		/// Sets the text edit's wordwrap setting.
 		void setWordWrap(bool wrap = true);

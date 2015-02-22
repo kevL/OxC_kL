@@ -46,7 +46,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 			origin,
 			1,
 			false),
-		_previousSelectedRow(-1),
+		_selectedRowPre(-1),
 		_selectedRow(-1)
 {
 	_edtSave		= new TextEdit(this, 168, 9, 0, 0);
@@ -63,16 +63,15 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 	else
 		_btnCancel->setX(180); */
 
-//	_btnSaveGame->setColor(Palette::blockOffset(8)+5); 133
-	_btnSaveGame->setText(tr("STR_OK"));
-	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveGameClick);
-	_btnSaveGame->setVisible(false);
-
 	// note: selected SaveSlot for Battlescape is grayscaled.
 	_edtSave->setColor(Palette::blockOffset(10));
 	_edtSave->setHighContrast();
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::edtSaveKeyPress);
+
+	_btnSaveGame->setText(tr("STR_OK"));
+	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveGameClick);
+	_btnSaveGame->setVisible(false);
 
 	centerAllSurfaces();
 }
@@ -93,7 +92,9 @@ void ListSaveState::updateList()
 					tr("STR_NEW_SAVED_GAME_SLOT").c_str());
 
 	if (_origin != OPT_BATTLESCAPE)
-		_lstSaves->setRowColor(0, _lstSaves->getSecondaryColor()); //Palette::blockOffset(8)+5);
+		_lstSaves->setRowColor(
+							0,
+							_lstSaves->getSecondaryColor());
 
 	ListGamesState::updateList();
 }
@@ -104,31 +105,42 @@ void ListSaveState::updateList()
  */
 void ListSaveState::lstSavesPress(Action* action)
 {
-	ListGamesState::lstSavesPress(action);
+/*	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _edtSave->isFocused())
+	{
+		_edtSave->setText(L"");
+		_edtSave->setVisible(false);
+		_edtSave->setFocus(false, false);
+		_lstSaves->setScrolling(true);
+	} */
+	if (_inEditMode == true)
+		return;
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_btnSaveGame->setVisible();			// kL
 		_inEditMode = true;					// kL
+		_btnSaveGame->setVisible();			// kL
 		_lstSaves->setSelectable(false);	// kL
+		_lstSaves->setScrollable(false);
 
-		_previousSelectedRow = _selectedRow;
+
+		_selectedRowPre = _selectedRow;
 		_selectedRow = _lstSaves->getSelectedRow();
 
-		switch (_previousSelectedRow)
+		switch (_selectedRowPre)
 		{
 			case -1: // first click on the savegame list
 			break;
+
 			case 0:
 				_lstSaves->setCellText(
-									_previousSelectedRow,
+									_selectedRowPre,
 									0,
 									tr("STR_NEW_SAVED_GAME_SLOT"));
 			break;
 
 			default:
 				_lstSaves->setCellText(
-									_previousSelectedRow,
+									_selectedRowPre,
 									0,
 									_selected);
 		}
@@ -141,66 +153,85 @@ void ListSaveState::lstSavesPress(Action* action)
 							0,
 							L"");
 
+		_edtSave->setTextStored(_selected); // kL
+
 		if (_lstSaves->getSelectedRow() == 0)
-		{
-			_edtSave->setText(L"");
 			_selected = L"";
-		}
-		else
-			_edtSave->setText(_selected);
+
+		_edtSave->setText(_selected);
 
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible();
 		_edtSave->setFocus(true, false);
 
-		_lstSaves->setScrollable(false);
 		ListGamesState::disableSort();
 	}
+	else
+		ListGamesState::lstSavesPress(action); // RMB -> delete file
 }
 
 /**
- * Saves the selected save.
+ * Saves the selected slot or cancels it.
  * @param action, Pointer to an action.
  */
 void ListSaveState::edtSaveKeyPress(Action* action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
-		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	if (_inEditMode == true)
+	{
+		if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+			|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+		{
+			saveGame();
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE) // note this should really be the keyCancel option
+		{
+//			_inEditMode = false; // done in ListGamesState::btnCancelKeypress()
+			_btnSaveGame->setVisible(false);
+			_lstSaves->setSelectable();
+			_lstSaves->setScrollable();
+
+			_edtSave->setVisible(false);
+			_edtSave->setFocus(false);
+
+			_lstSaves->setCellText(
+								_lstSaves->getSelectedRow(),
+								0,
+								_edtSave->getTextStored());
+		}
+	}
+}
+
+/**
+ * Saves the selected slot.
+ * @param action - pointer to an Action
+ */
+void ListSaveState::btnSaveGameClick(Action*)
+{
+	if (_inEditMode == true
+		&& _selectedRow != -1)
 	{
 		saveGame();
 	}
 }
 
 /**
- * Saves the selected save.
- * @param action - pointer to an Action
- */
-void ListSaveState::btnSaveGameClick(Action*)
-{
-	if (_selectedRow != -1)
-		saveGame();
-}
-
-/**
- * Saves the selected save.
+ * Saves the selected slot.
  */
 void ListSaveState::saveGame()
 {
 	// kL_begin:
-	if (_inEditMode == false)
-		return;
-
-	_btnSaveGame->setVisible(false);
-	_inEditMode = false;
-	_lstSaves->setSelectable();
+//	_inEditMode = false;				// safeties. Should not need these three <- ie.
+//	_btnSaveGame->setVisible(false);	// SaveGameState() below_ pops current state(s) all the way back to play.
+//	_lstSaves->setSelectable();
+//	_lstSaves->setScrollable();			// don't need this either ....
 	// kL_end.
 
 	_game->getSavedGame()->setName(_edtSave->getText());
 
-	std::string oldFilename;
-	std::string newFilename (CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()))); // init.
-//	std::string newFilename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()));
+	std::string
+		oldFilename,
+		newFilename (CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()))); // init.
 
 	if (_selectedRow > 0)
 	{
@@ -208,9 +239,7 @@ void ListSaveState::saveGame()
 		if (oldFilename != newFilename + ".sav")
 		{
 			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-			{
 				newFilename += "_";
-			}
 
 			const std::string
 				oldPath = Options::getUserFolder() + oldFilename,
@@ -223,9 +252,7 @@ void ListSaveState::saveGame()
 	else
 	{
 		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-		{
 			newFilename += "_";
-		}
 	}
 
 	newFilename += ".sav";

@@ -59,10 +59,12 @@ TextEdit::TextEdit(
 		_state(state)
 {
 	_isFocused = false;
-	_text = new Text(width, height, 0, 0);
-	_timer = new Timer(100);
+
+	_text	= new Text(width, height, 0, 0);
+	_timer	= new Timer(100);
 	_timer->onTimer((SurfaceHandler)& TextEdit::blink);
-	_caret = new Text(16, 17, 0, 0);
+
+	_caret	= new Text(17, 17, 0, 0);
 	_caret->setText(L"|");
 }
 
@@ -75,11 +77,11 @@ TextEdit::~TextEdit()
 	delete _caret;
 	delete _timer;
 
-	SDL_EnableKeyRepeat( // In case it was left focused
-				0,
-				SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableKeyRepeat( // in case it was left focused
+					0,
+					SDL_DEFAULT_REPEAT_INTERVAL);
 
-	_state->setModal(0);
+	_state->setModal(NULL);
 }
 
 /**
@@ -106,7 +108,7 @@ void TextEdit::handle(Action* action, State* state)
 /**
  * Controls the blinking animation when the text edit is focused.
  * @param focus - true if focused
- * @param modal - true to lock input to this control
+ * @param modal - true to lock input to this control (default true)
  */
 void TextEdit::setFocus(
 		bool focus,
@@ -142,8 +144,8 @@ void TextEdit::setFocus(
 							0,
 							SDL_DEFAULT_REPEAT_INTERVAL);
 
-			if (_modal)
-				_state->setModal(0);
+			if (_modal == true)
+				_state->setModal(NULL);
 		}
 	}
 }
@@ -210,6 +212,26 @@ void TextEdit::setText(const std::wstring& text)
 std::wstring TextEdit::getText() const
 {
 	return _value;
+}
+
+/**
+ * Sets the previous string value (before editing) so that it may be retrieved
+ * if/when an edit-operation is cancelled.
+ * @param text - reference the text string
+ */
+void TextEdit::setTextStored(const std::wstring text)
+{
+	_valueStored = text;
+}
+
+/**
+ * Gets the previous string value so that it may be reinstated if an editing
+ * operation is cancelled.
+ * @return, text string
+ */
+std::wstring TextEdit::getTextStored() const
+{
+	return _valueStored;
 }
 
 /**
@@ -347,8 +369,7 @@ void TextEdit::blink()
 }
 
 /**
- * Adds a flashing | caret to the text
- * to show when this is focused and editable.
+ * Adds a flashing | caret to the text to show when this is focused and editable.
  */
 void TextEdit::draw()
 {
@@ -421,7 +442,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t fontChar)
 	wst += fontChar;
 	for (std::wstring::const_iterator
 			i = wst.begin();
-			i < wst.end();
+			i != wst.end();
 			++i)
 	{
 		width += _text->getFont()->getCharSize(*i).w;
@@ -447,11 +468,11 @@ void TextEdit::mousePress(Action* action, State* state)
 				mouseX = action->getRelativeXMouse(),
 				scaleX = action->getXScale();
 			double width = 0.;
-			int caret = 0;
+			size_t caret = 0;
 
 			for (std::wstring::const_iterator
 					i = _value.begin();
-					i < _value.end();
+					i != _value.end();
 					++i)
 			{
 				if (mouseX <= width)

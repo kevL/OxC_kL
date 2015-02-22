@@ -52,7 +52,7 @@ class ListGamesState
 protected:
 	bool
 		_autoquick,
-		_inEditMode, // kL
+		_inEditMode,
 		_sortable;
 	size_t _firstValidRow;
 
@@ -97,6 +97,9 @@ protected:
 
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
+		/// Handler for pressing the Escape key.
+		void btnCancelKeypress(Action* action);
+
 		/// Handler for moving the mouse over a list item.
 		void lstSavesMouseOver(Action* action);
 		/// Handler for moving the mouse outside the list borders.

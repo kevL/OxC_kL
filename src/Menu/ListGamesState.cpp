@@ -46,18 +46,22 @@
 namespace OpenXcom
 {
 
-///
+/**
+ *
+ */
 struct compareSaveName
 	:
 		public std::binary_function<SaveInfo&, SaveInfo&, bool>
 {
 	bool _reverse;
 
+	///
 	compareSaveName(bool reverse)
 		:
 			_reverse(reverse)
 			{}
 
+	///
 	bool operator()(
 			const SaveInfo& a,
 			const SaveInfo& b) const
@@ -71,18 +75,22 @@ struct compareSaveName
 	}
 };
 
-///
+/**
+ *
+ */
 struct compareSaveTimestamp
 	:
 		public std::binary_function<SaveInfo&, SaveInfo&, bool>
 {
 	bool _reverse;
 
+	///
 	compareSaveTimestamp(bool reverse)
 		:
 			_reverse(reverse)
 			{}
 
+	///
 	bool operator()(
 			const SaveInfo& a,
 			const SaveInfo& b) const
@@ -110,7 +118,7 @@ ListGamesState::ListGamesState(
 		_firstValidRow(firstValidRow),
 		_autoquick(autoquick),
 		_sortable(true),
-		_inEditMode(false) // kL
+		_inEditMode(false)
 {
 	_screen = false;
 
@@ -133,7 +141,9 @@ ListGamesState::ListGamesState(
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("geoscape")->getElement("loadPalette")->color); //6
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("geoscape")->getElement("loadPalette")->color);
 
 	add(_window, "window", "saveMenus");
 	add(_txtTitle, "text", "saveMenus");
@@ -146,35 +156,25 @@ ListGamesState::ListGamesState(
 	add(_txtDetails, "text", "saveMenus");
 	add(_btnCancel, "button", "saveMenus");
 
-//	centerAllSurfaces();
 
-
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ListGamesState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
-					(ActionHandler)& ListGamesState::btnCancelClick,
+					(ActionHandler)& ListGamesState::btnCancelKeypress,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-//	_txtDelete->setColor(Palette::blockOffset(15)-1);
 	_txtDelete->setAlign(ALIGN_CENTER);
 	_txtDelete->setText(tr("STR_RIGHT_CLICK_TO_DELETE"));
 
-//	_txtName->setColor(Palette::blockOffset(15)-1);
 	_txtName->setText(tr("STR_NAME"));
 
-//	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-//	_lstSaves->setColor(Palette::blockOffset(8)+10);
-//	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setColumns(3, 188, 60, 29);
 	_lstSaves->setSelectable();
@@ -183,17 +183,13 @@ ListGamesState::ListGamesState(
 	_lstSaves->onMouseOut((ActionHandler)& ListGamesState::lstSavesMouseOut);
 	_lstSaves->onMousePress((ActionHandler)& ListGamesState::lstSavesPress);
 
-//	_txtDetails->setColor(Palette::blockOffset(15)-1);
-//	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtDetails->setWordWrap();
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);
-//	_sortName->setColor(Palette::blockOffset(15)-1);
 	_sortName->onMouseClick((ActionHandler)& ListGamesState::sortNameClick);
 
 	_sortDate->setX(_sortDate->getX() + _txtDate->getTextWidth() + 5);
-//	_sortDate->setColor(Palette::blockOffset(15)-1);
 	_sortDate->onMouseClick((ActionHandler)& ListGamesState::sortDateClick);
 
 	updateArrows();
@@ -296,8 +292,9 @@ void ListGamesState::sortList(SaveSort order)
  */
 void ListGamesState::updateList()
 {
-	int row = 0;
-	int color = _lstSaves->getSecondaryColor();
+	int
+		row = 0,
+		color = _lstSaves->getSecondaryColor();
 
 	for (std::vector<SaveInfo>::const_iterator
 			i = _saves.begin();
@@ -328,23 +325,35 @@ void ListGamesState::btnCancelClick(Action*)
 }
 
 /**
+ * Reverts text edit or returns to the previous screen.
+ * @param action - pointer to an Action
+ */
+void ListGamesState::btnCancelKeypress(Action*)
+{
+	if (_inEditMode == true) // revert TextEdit first onEscape, see ListSaveState::edtSaveKeyPress()
+		_inEditMode = false;
+	else
+		_game->popState(); // 2nd Escape releases state
+}
+
+/**
  * Shows the details of the currently hovered save.
  * @param action - pointer to an Action
  */
 void ListGamesState::lstSavesMouseOver(Action*)
 {
-	if (_inEditMode == false) // kL
+	if (_inEditMode == false)
 	{
-		std::wstring wstr;
+		std::wstring wst;
 
 		const int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 		if (sel > -1
 			&& sel < static_cast<int>(_saves.size()))
 		{
-			wstr = _saves[sel].details;
+			wst = _saves[sel].details;
 		}
 
-		_txtDetails->setText(tr("STR_DETAILS").arg(wstr));
+		_txtDetails->setText(tr("STR_DETAILS").arg(wst));
 	}
 }
 
@@ -353,7 +362,7 @@ void ListGamesState::lstSavesMouseOver(Action*)
  */
 void ListGamesState::lstSavesMouseOut(Action*)
 {
-	if (_inEditMode == false) // kL
+	if (_inEditMode == false)
 		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 }
 

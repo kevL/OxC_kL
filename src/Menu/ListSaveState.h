@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_LISTSAVESTATE_H
 #define OPENXCOM_LISTSAVESTATE_H
 
-#include <string>
+//#include <string>
 
 #include "ListGamesState.h"
 
@@ -42,7 +42,7 @@ class ListSaveState
 
 private:
 	int
-		_previousSelectedRow,
+		_selectedRowPre,
 		_selectedRow;
 
 	std::wstring _selected;
