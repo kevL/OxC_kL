@@ -22,8 +22,8 @@
 
 //#include <string>
 
-#include "OptionsBaseState.h"
 #include "ListLoadState.h"
+#include "OptionsBaseState.h"
 
 #include "../Engine/State.h"
 
@@ -49,7 +49,7 @@ private:
 
 	std::string _fileName;
 
-	ListLoadState* _parent; // ref
+	ListLoadState* _parent;
 	Text* _txtText;
 	TextButton
 		* _btnYes,

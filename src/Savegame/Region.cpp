@@ -43,8 +43,7 @@ Region::Region(RuleRegion* rules)
  * dTor.
  */
 Region::~Region()
-{
-}
+{}
 
 /**
  * Loads the region from a YAML file.
@@ -154,11 +153,11 @@ bool Region::recentActivity(
 		bool activity,
 		bool graphs)
 {
-	if (activity)
+	if (activity == true)
 		_activityRecent = 0;
 	else if (_activityRecent != -1)
 	{
-		if (graphs)
+		if (graphs == true)
 			return true;
 		else
 		{
@@ -185,11 +184,11 @@ bool Region::recentActivityXCOM(
 		bool activity,
 		bool graphs)
 {
-	if (activity)
+	if (activity == true)
 		_activityRecentXCOM = 0;
 	else if (_activityRecentXCOM != -1)
 	{
-		if (graphs)
+		if (graphs == true)
 			return true;
 		else
 		{
@@ -211,7 +210,7 @@ bool Region::recentActivityXCOM(
  */
 void Region::resetActivity()
 {
-	_activityRecent = -1;
+	_activityRecent =
 	_activityRecentXCOM = -1;
 }
 

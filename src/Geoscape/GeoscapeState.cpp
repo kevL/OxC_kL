@@ -1074,9 +1074,9 @@ void GeoscapeState::timeDisplay()
 
 	if (_savedGame->getMonthsPassed() != -1)
 	{
-		const size_t ent = _savedGame->getFundsList().size() - 1;
+		const size_t ent = _savedGame->getFundsList().size() - 1; // use fundsList to determine which entries in other vectors to use for the current month.
 
-		int64_t score = _savedGame->getResearchScores().at(ent);
+		int score = _savedGame->getResearchScores().at(ent);
 		for (std::vector<Region*>::const_iterator
 				i = _savedGame->getRegions()->begin();
 				i != _savedGame->getRegions()->end();

@@ -57,7 +57,7 @@ private:
 		/// Creates a new country of the specified type.
 		Country(
 				RuleCountry* rules,
-				bool gen = true);
+				bool genFunds = true);
 		/// Cleans up the country.
 		~Country();
 

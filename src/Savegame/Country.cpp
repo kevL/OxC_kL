@@ -30,12 +30,12 @@ namespace OpenXcom
 
 /**
  * Initializes a country of the specified type.
- * @param rules	- pointer to RuleCountry
- * @param gen	- true to generate new funding
+ * @param rules		- pointer to RuleCountry
+ * @param genFunds	- true to generate new funding
  */
 Country::Country(
 		RuleCountry* rules,
-		bool gen)
+		bool genFunds)
 	:
 		_rules(rules),
 		_pact(false),
@@ -45,7 +45,7 @@ Country::Country(
 		_activityRecent(-1),
 		_activityRecentXCOM(-1)
 {
-	if (gen == true)
+	if (genFunds == true)
 		_funding.push_back(_rules->generateFunding());
 
 	_activityXcom.push_back(0);
@@ -56,8 +56,7 @@ Country::Country(
  * dTor.
  */
 Country::~Country()
-{
-}
+{}
 
 /**
  * Loads the country from a YAML file.
@@ -144,7 +143,7 @@ void Country::setFunding(int funding)
  */
 int Country::getSatisfaction() const
 {
-	if (_pact)
+	if (_pact == true)
 		return 0;
 
 	return _satisfaction;
@@ -273,8 +272,10 @@ void Country::newMonth(
 
 	if (_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());
+
 	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
+
 	if (_funding.size() > 12)
 		_funding.erase(_funding.begin());
 }
@@ -380,7 +381,7 @@ bool Country::recentActivityXCOM(
  */
 void Country::resetActivity()
 {
-	_activityRecent = -1;
+	_activityRecent =
 	_activityRecentXCOM = -1;
 }
 

@@ -31,8 +31,7 @@ class RuleRegion;
 
 /**
  * Represents a region of the world.
- * Contains variable info about a region like
- * X-Com and alien activity in it.
+ * Contains variable info about a region like X-Com and alien activity in it.
  */
 class Region
 {
