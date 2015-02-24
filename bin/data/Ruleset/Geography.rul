@@ -650,9 +650,12 @@ regions:
     areas:
       - [0, 360, -90, -70]
     cities:
+      - name: STR_ALERT
+        lon: 292.778
+        lat: -81.3
       - name: STR_BARROW
-        lon: 203.25
-        lat: -69.75
+        lon: 201.948
+        lat: -70.574
       - name: STR_HAMMERFEST
         lon: 23.75
         lat: -70.625
@@ -844,8 +847,9 @@ regions:
         lon: 88.375
         lat: -22.625
       - name: STR_CHENNAI
-        lon: 80.4045
-        lat: -13.5846
+        lon: 80.056
+        lat: -13.619
+        labelTop: true
       - name: STR_DELHI
         lon: 77.25
         lat: -28.625
@@ -865,14 +869,14 @@ regions:
         lon: 72.35
         lat: -32.58
       - name: STR_ISTANBUL
-        lon: 29.0389
-        lat: -41.07
+        lon: 28.808
+        lat: -41.149
       - name: STR_KABUL
         lon: 66.60
         lat: -34.31
       - name: STR_KARACHI
-        lon: 67
-        lat: -24.875
+        lon: 67.12
+        lat: -24.989
       - name: STR_KUWAITCITY
         lon: 47.88
         lat: -29.
@@ -968,18 +972,22 @@ regions:
       - name: STR_ALEPPO
         lon: 37.13
         lat: -36.18
+        labelTop: true
+      - name: STR_ALGIERS
+        lon: 3.08
+        lat: -36.561
       - name: STR_AMSTERDAM
         lon: 4.86
         lat: -52.76
       - name: STR_ANTALYA
-        lon: 30.8
-        lat: -36.75
+        lon: 30.843
+        lat: -36.909
       - name: STR_ARCHANGEL
         lon: 40.8787
         lat: -64.4464
       - name: STR_ASTRAKHAN
-        lon: 48.5
-        lat: -45.774
+        lon: 48.273
+        lat: -46.023
       - name: STR_ATHENS
         lon: 23.5792
         lat: -38.0
@@ -993,8 +1001,8 @@ regions:
         lon: 20.5
         lat: -44.5
       - name: STR_BELFAST
-        lon: 353.5
-        lat: -55
+        lon: 353.836
+        lat: -55.14
       - name: STR_BERLIN
         lon: 13.375
         lat: -52.5
@@ -1005,8 +1013,8 @@ regions:
         lon: 359.47
         lat: -44.85
       - name: STR_BREST
-        lon: 355.728
-        lat: -47.5496
+        lon: 356.076
+        lat: -47.853
       - name: STR_BRUSSELS
         lon: 4.65
         lat: -50.74
@@ -1028,6 +1036,7 @@ regions:
       - name: STR_COPENHAGEN
         lon: 10.3
         lat: -56.23
+        labelTop: true
       - name: STR_CORK
         lon: 351.426
         lat: -51.8672
@@ -1038,8 +1047,8 @@ regions:
         lon: 353.589
         lat: -53.2906
       - name: STR_FAROE_ISLAND
-        lon: 352.47
-        lat: -61.68
+        lon: 353.03
+        lat: -61.9
       - name: STR_FLORENCE
         lon: 11.18
         lat: -43
@@ -1119,8 +1128,8 @@ regions:
         lon: 34.14
         lat: -57.88
       - name: STR_ODESSA
-        lon: 29.5606
-        lat: -45.8821
+        lon: 29.951
+        lat: -45.777
       - name: STR_OSLO
         lon: 10.1726
         lat: -59.5036
@@ -1131,8 +1140,8 @@ regions:
         lon: 13.82
         lat: -50.11
       - name: STR_REYKJAVIK
-        lon: 337.68
-        lat: -64.39
+        lon: 338.284
+        lat: -64.496
       - name: STR_RIGA
         lon: 24.19
         lat: -57.27
@@ -1140,8 +1149,8 @@ regions:
         lon: 12.5
         lat: -41.875
       - name: STR_ROSTOV
-        lon: 38.83
-        lat: -47.1
+        lon: 38.054
+        lat: -47.257
       - name: STR_SARAJEVO
         lon: 17.94
         lat: -43.93
@@ -1149,8 +1158,8 @@ regions:
         lon: 46.65
         lat: -52.23
       - name: STR_SEVASTOPOL
-        lon: 33.5
-        lat: -44.7669
+        lon: 33.632
+        lat: -44.805
       - name: STR_SEVILLE
         lon: 354.42
         lat: -37.6
@@ -1175,6 +1184,9 @@ regions:
       - name: STR_TRONDHEIM
         lon: 11.8662
         lat: -65.3174
+      - name: STR_TUNIS
+        lon: 10.21
+        lat: -36.65
       - name: STR_TURKU
         lon: 22.1694
         lat: -60.3752
@@ -1321,11 +1333,9 @@ regions:
         lon: 38.75
         lat: -9
       - name: STR_ALEXANDRIA
-        lon: 29.875
-        lat: -31
-      - name: STR_ALGIERS
-        lon: 3.105
-        lat: -36.7188
+        lon: 29.74
+        lat: -31.31
+        labelTop: true
       - name: STR_ASWAN
         lon: 32.9
         lat: -24.36
@@ -1333,8 +1343,9 @@ regions:
         lon: 352
         lat: -12.625
       - name: STR_BEIRUT
-        lon: 35.11
-        lat: -34.22
+        lon: 35.7
+        lat: -34.19
+        labelTop: true
       - name: STR_BENGHAZI
         lon: 19.9549
         lat: -31.9422
@@ -1342,11 +1353,11 @@ regions:
         lon: 19.06
         lat: -5.24
       - name: STR_BISSAU
-        lon: 343.5
-        lat: -12.258
+        lon: 343.563
+        lat: -12.371
       - name: STR_CAIRO
-        lon: 31.25
-        lat: -30
+        lon: 31.09
+        lat: -30.95
       - name: STR_CANARY_ISLANDS
         lon: 339
         lat: -26
@@ -1354,8 +1365,8 @@ regions:
         lon: 352.375
         lat: -33.5
       - name: STR_DAKAR
-        lon: 342.27
-        lat: -14.75
+        lon: 342.634
+        lat: -14.789
       - name: STR_DAMASCUS
         lon: 36.6815
         lat: -33.5637
@@ -1363,11 +1374,11 @@ regions:
         lon: 43.38
         lat: -11.2
       - name: STR_FREETOWN
-        lon: 346.31
-        lat: -9.23
+        lon: 346.424
+        lat: -9.246
       - name: STR_JERUSALEM
-        lon: 34.59
-        lat: -32.25
+        lon: 34.872
+        lat: -31.858
       - name: STR_KAMPALA
         lon: 32.625
         lat: -0.375
@@ -1390,8 +1401,8 @@ regions:
         lon: 45
         lat: -2
       - name: STR_MONROVIA
-        lon: 350.22
-        lat: -5.67
+        lon: 350.31
+        lat: -5.744
       - name: STR_NDJAMENA
         lon: 15.5
         lat: -12
@@ -1405,14 +1416,11 @@ regions:
         lon: 358.35
         lat: -12.17
       - name: STR_PORT_SAID
-        lon: 33
-        lat: -31.29
+        lon: 33.036
+        lat: -31.09
       - name: STR_TRIPOLI
-        lon: 13.19
-        lat: -33.05
-      - name: STR_TUNIS
-        lon: 10.21
-        lat: -36.65
+        lon: 13.125
+        lat: -32.917
       - name: STR_YAOUNDE
         lon: 11.13
         lat: -4.46
@@ -1511,6 +1519,9 @@ regions:
       - name: STR_FORTSEVERN
         lon: 272.56
         lat: -56
+      - name: STR_GOOSEBAY
+        lon: 298.46
+        lat: -55.34
       - name: STR_GUADALAJARA
         lon: 256.625
         lat: -20.75
@@ -1521,14 +1532,17 @@ regions:
         lon: 296
         lat: -44.63
       - name: STR_HAVANA
-        lon: 277.625
-        lat: -22.5
+        lon: 277.655
+        lat: -23.155
       - name: STR_HOUSTON
         lon: 264.625
         lat: -29.75
       - name: STR_INDIANAPOLIS
         lon: 273.272
         lat: -38.83
+      - name: STR_INUVIK
+        lon: 224.18
+        lat: -68.74
       - name: STR_JAMAICA
         lon: 281
         lat: -17
@@ -1545,8 +1559,8 @@ regions:
         lon: 241.75
         lat: -34.125
       - name: STR_MANAGUA
-        lon: 273.22
-        lat: -11.5
+        lon: 273.441
+        lat: -11.585
       - name: STR_MEMPHIS
         lon: 268.69
         lat: -36.22
@@ -1572,8 +1586,8 @@ regions:
         lon: 286.125
         lat: -40.75
       - name: STR_NORFOLK
-        lon: 283.818
-        lat: -35
+        lon: 283.585
+        lat: -35.358
       - name: STR_ORLANDO
         lon: 278.381
         lat: -28.9759
@@ -1586,6 +1600,9 @@ regions:
       - name: STR_PORTLAND
         lon: 235.21
         lat: -43.11
+      - name: STR_QUEBECCITY
+        lon: 290.217
+        lat: -48.183
       - name: STR_SALTLAKECITY
         lon: 244.36
         lat: -42
@@ -1619,6 +1636,9 @@ regions:
       - name: STR_WINNIPEG
         lon: 262.37
         lat: -50.44
+      - name: STR_YELLOWKNIFE
+        lon: 242.19
+        lat: -65.52
     regionWeight: 18
     missionZones:
       -
@@ -1937,8 +1957,8 @@ regions:
         lon: 312.125
         lat: 15.75
       - name: STR_BUENOS_AIRES
-        lon: 302.5
-        lat: 34.5
+        lon: 301.69
+        lat: 34.566
       - name: STR_CARACAS
         lon: 293.125
         lat: -10.5
@@ -2140,8 +2160,8 @@ regions:
         lon: 107.25
         lat: -30.55
       - name: STR_DAVAO
-        lon: 125.712
-        lat: -6.71346
+        lon: 125.442
+        lat: -6.962
       - name: STR_HAIKOU
         lon: 110.775
         lat: -19.92
@@ -2158,8 +2178,8 @@ regions:
         lon: 114.125
         lat: -22.25
       - name: STR_JAKARTA
-        lon: 106.75
-        lat: 6.25
+        lon: 106.624
+        lat: 6.324
       - name: STR_KAGOSHIMA
         lon: 130.86
         lat: -30.79
@@ -2184,12 +2204,13 @@ regions:
       - name: STR_OSAKA
         lon: 134.59
         lat: -34.49
+        labelTop: true
       - name: STR_RANGOON
         lon: 96.33
         lat: -16.56
       - name: STR_SAMARINDA
-        lon: 117.77
-        lat: 1.34
+        lon: 117.324
+        lat: 0.925
       - name: STR_SENDAI
         lon: 141.28
         lat: -37.94
@@ -2293,14 +2314,14 @@ regions:
         lon: 47.5
         lat: 18.875
       - name: STR_BENGUELA
-        lon: 13.93
-        lat: 12
+        lon: 14.049
+        lat: 11.984
       - name: STR_CAPE_TOWN
         lon: 18.5
         lat: 34
       - name: STR_DARESSALAAM
-        lon: 39.25
-        lat: 6.75
+        lon: 39.051
+        lat: 6.757
       - name: STR_DURBAN
         lon: 31
         lat: 29.875
@@ -2329,11 +2350,11 @@ regions:
         lon: 32.625
         lat: 26
       - name: STR_MOMBASSA
-        lon: 39.85
-        lat: 3.72
+        lon: 39.66
+        lat: 3.592
       - name: STR_NACALA
-        lon: 40.78
-        lat: 15.22
+        lon: 40.4
+        lat: 15.213
       - name: STR_NAIROBI
         lon: 36.75
         lat: 1.25
@@ -2397,7 +2418,8 @@ extraStrings:
       STR_ADDISABABA: Addis Ababa
       STR_ADELAIDE: Adelaide
       STR_ALEPPO: Aleppo
-      STR_ALEXANDRIA: Alexandia
+      STR_ALERT: Alert
+      STR_ALEXANDRIA: Alexandria
       STR_ALGERIA: algeria
       STR_ALGIERS: Algiers
       STR_ALMATY: Almaty
@@ -2529,6 +2551,7 @@ extraStrings:
       STR_GEORGETOWN: Georgetown
       STR_GERMANY: germany
       STR_GLASGOW: Glasgow
+      STR_GOOSEBAY: CFB Goose Bay
       STR_GREECE: greece
       STR_GUADALAJARA: Guadalajara
       STR_GUATEMALA: Guatemala
@@ -2549,6 +2572,7 @@ extraStrings:
       STR_INDIA: india
       STR_INDIANAPOLIS: Indianapolis
       STR_INDONESIA: indonesia
+      STR_INUVIK: Inuvik
       STR_IRAN: iran
       STR_IRAQ: iraq
       STR_IRELAND: ireland
@@ -2680,6 +2704,7 @@ extraStrings:
       STR_PRAGUE: Prague
       STR_PRETORIA: Pretoria
       STR_QATAR: qatar
+      STR_QUEBECCITY: Quebec City
       STR_RANGOON: Rangoon
       STR_REYKJAVIK: Reykjavik
       STR_RECIFE: Recife
@@ -2773,6 +2798,7 @@ extraStrings:
       STR_YAKUTSK: Yakutsk
       STR_YAOUNDE: Yaounde
       STR_YEKATERINBURG: Yekaterinburg
+      STR_YELLOWKNIFE: Yellowknife
       STR_YEREVAN: Yerevan
       STR_ZAGREB: Zagreb
 globe:

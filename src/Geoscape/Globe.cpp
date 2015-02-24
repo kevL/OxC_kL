@@ -1823,18 +1823,18 @@ void Globe::drawVHLine(
 	int
 		seg;
 
-	if (sx < 0)
-		sx += 2. * M_PI;
+	if (sx < 0.)
+		sx += M_PI * 2.;
 
 	if (std::fabs(sx) < 0.01)
 	{
-		seg = static_cast<int>(std::abs(sy / (2. * M_PI) * 48.));
+		seg = static_cast<int>(std::abs(sy / (M_PI * 2.) * 48.));
 		if (seg == 0)
 			++seg;
 	}
 	else
 	{
-		seg = static_cast<int>(std::abs(sx / (2. * M_PI) * 96.));
+		seg = static_cast<int>(std::abs(sx / (M_PI * 2.) * 96.));
 		if (seg == 0)
 			++seg;
 	}
@@ -1878,16 +1878,19 @@ void Globe::drawDetail()
 	if (Options::globeDetail == true // draw the country borders
 		&& _zoom > 0)
 	{
+		double
+			lon1,
+			lat1;
+		Sint16
+			x[2],
+			y[2];
+
 		_countries->lock();
 		for (std::list<Polyline*>::const_iterator
 				i = _rules->getPolylines()->begin();
 				i != _rules->getPolylines()->end();
 				++i)
 		{
-			Sint16
-				x[2],
-				y[2];
-
 			for (int
 					j = 0;
 					j < (*i)->getPoints() - 1;
@@ -1895,37 +1898,34 @@ void Globe::drawDetail()
 			{
 				lon = (*i)->getLongitude(j),
 				lat = (*i)->getLatitude(j);
-				const double
-					lon1 = (*i)->getLongitude(j + 1),
-					lat1 = (*i)->getLatitude(j + 1);
+				lon1 = (*i)->getLongitude(j + 1),
+				lat1 = (*i)->getLatitude(j + 1);
 
 				if (pointBack( // don't draw if polyline is facing back
 							lon,
-							lat) == true
-					|| pointBack(
+							lat) == false
+					&& pointBack(
 							lon1,
-							lat1) == true)
+							lat1) == false)
 				{
-					continue;
+					polarToCart( // convert coordinates
+							lon,
+							lat,
+							&x[0],
+							&y[0]);
+					polarToCart(
+							lon1,
+							lat1,
+							&x[1],
+							&y[1]);
+
+					_countries->drawLine(
+									x[0],
+									y[0],
+									x[1],
+									y[1],
+									LINE_COLOR);
 				}
-
-				polarToCart( // convert coordinates
-						lon,
-						lat,
-						&x[0],
-						&y[0]);
-				polarToCart(
-						lon1,
-						lat1,
-						&x[1],
-						&y[1]);
-
-				_countries->drawLine(
-								x[0],
-								y[0],
-								x[1],
-								y[1],
-								LINE_COLOR);
 			}
 		}
 		_countries->unlock();
@@ -1947,44 +1947,41 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
-				const double
-					lon = (*j)->getLongitude(),
-					lat = (*j)->getLatitude();
+				lon = (*j)->getLongitude(),
+				lat = (*j)->getLatitude();
 
 				if (pointBack( // don't draw if city is facing back
 							lon,
-							lat) == true)
+							lat) == false)
 				{
-					continue;
+					polarToCart( // convert coordinates
+							lon,
+							lat,
+							&x,
+							&y);
+
+					// code for using SurfaceSet for markers:
+					Surface* const marker = _markerSet->getFrame(CITY_MARKER);
+					if (marker != NULL)
+					{
+						marker->setX(x - 1);
+						marker->setY(y - 1);
+						marker->blit(_countries); // end.
+					}
+
+/*					_mkCity->setX(x - 1);
+					_mkCity->setY(y - 1);
+					_mkCity->setPalette(getPalette());
+					_mkCity->blit(_countries); */
 				}
-
-				polarToCart( // convert coordinates
-						lon,
-						lat,
-						&x,
-						&y);
-
-				// code for using SurfaceSet for markers:
-				Surface* const marker = _markerSet->getFrame(CITY_MARKER);
-				if (marker != NULL)
-				{
-					marker->setX(x - 1);
-					marker->setY(y - 1);
-					marker->blit(_countries); // end.
-				}
-
-/*				_mkCity->setX(x - 1);
-				_mkCity->setY(y - 1);
-				_mkCity->setPalette(getPalette());
-				_mkCity->blit(_countries); */
 			}
 		}
 	}
 
-	Text* const label = new Text(100, 9, 0, 0);
-
 	if (Options::globeDetail == true)
 	{
+		Text* const label = new Text(100, 9, 0, 0);
+
 		label->setPalette(getPalette());
 		label->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
@@ -2006,26 +2003,25 @@ void Globe::drawDetail()
 
 				if (pointBack( // don't draw if label is facing back
 							lon,
-							lat) == true)
+							lat) == false)
 				{
-					continue;
+					polarToCart( // convert coordinates
+							lon,
+							lat,
+							&x,
+							&y);
+
+					label->setX(x - 50);
+					label->setY(y);
+					label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
+
+					label->blit(_countries);
 				}
-
-				polarToCart( // convert coordinates
-						lon,
-						lat,
-						&x,
-						&y);
-
-				label->setX(x - 50);
-				label->setY(y);
-				label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
-
-				label->blit(_countries);
 			}
 		}
 
 		label->setColor(CITY_LABEL_COLOR); // draw the city labels
+		int offset_y;
 
 		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
@@ -2040,26 +2036,29 @@ void Globe::drawDetail()
 				lon = (*j)->getLongitude(),
 				lat = (*j)->getLatitude();
 
-				if (pointBack( // don't draw if label is facing back
+				if (pointBack( // label is on front of globe
 							lon,
-							lat) == true)
+							lat) == false)
 				{
-					continue;
-				}
+					if (_zoom >= (*j)->getZoomLevel())
+					{
+						polarToCart( // convert coordinates
+								lon,
+								lat,
+								&x,
+								&y);
 
-				if (_zoom >= (*j)->getZoomLevel())
-				{
-					polarToCart( // convert coordinates
-							lon,
-							lat,
-							&x,
-							&y);
+						if ((*j)->getLabelTop() == true)
+							offset_y = -10;
+						else
+							offset_y = 2;
 
-					label->setX(x - 50);
-					label->setY(y + 2);
-					label->setText(_game->getLanguage()->getString((*j)->getName()));
+						label->setX(x - 50);
+						label->setY(y + offset_y);
+						label->setText(_game->getLanguage()->getString((*j)->getName()));
 
-					label->blit(_countries);
+						label->blit(_countries);
+					}
 				}
 			}
 		}
@@ -2075,30 +2074,27 @@ void Globe::drawDetail()
 			lon = (*i)->getLongitude(),
 			lat = (*i)->getLatitude();
 
-			// cheap hack to hide a base when it hasn't been placed yet
-			if ((*i)->getMarker() == -1
-				|| pointBack( // don't draw if city is facing back
+			if ((*i)->getMarker() != -1	// cheap hack to hide a base when it hasn't been placed yet
+				&& pointBack(			// city is on front of globe
 						lon,
-						lat) == true)
+						lat) == false)
 			{
-				continue;
+				polarToCart( // convert coordinates
+						lon,
+						lat,
+						&x,
+						&y);
+
+				label->setX(x - 3);
+				label->setY(y - 10);
+				label->setText((*i)->getName());
+
+				label->blit(_countries);
 			}
-
-			polarToCart( // convert coordinates
-					lon,
-					lat,
-					&x,
-					&y);
-
-			label->setX(x - 3);
-			label->setY(y - 10);
-			label->setText((*i)->getName());
-
-			label->blit(_countries);
 		}
-	}
 
-	delete label;
+		delete label;
+	}
 
 
 	// Debug stuff follows ...
@@ -2737,7 +2733,7 @@ void Globe::mouseOver(Action* action, State* state)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
+		if ((SDL_GetMouseState(0,0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -2862,7 +2858,7 @@ void Globe::mousePress(Action* action, State* state)
 		_lonBeforeMouseScrolling = _cenLon;
 		_latBeforeMouseScrolling = _cenLat;
 
-		_totalMouseMoveX = 0;
+		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 
 		_mouseOverThreshold = false;
@@ -2931,7 +2927,7 @@ void Globe::mouseClick(Action* action, State* state)
 	if (_isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != Options::geoDragScrollButton
-			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
+			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click

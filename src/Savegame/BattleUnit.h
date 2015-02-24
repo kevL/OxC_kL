@@ -71,6 +71,7 @@ enum UnitStatus
 
 enum UnitFaction
 {
+	FACTION_NONE = -1,	//-1 kL
 	FACTION_PLAYER,		// 0
 	FACTION_HOSTILE,	// 1
 	FACTION_NEUTRAL		// 2
@@ -179,6 +180,7 @@ struct BattleUnitKills
 	{
 		switch (_faction)
 		{
+			case FACTION_NONE:		return "FACTION_NONE";
 			case FACTION_PLAYER:	return "FACTION_PLAYER";
 			case FACTION_HOSTILE:	return "FACTION_HOSTILE";
 			case FACTION_NEUTRAL:	return "FACTION_NEUTRAL";

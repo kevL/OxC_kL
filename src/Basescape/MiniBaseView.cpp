@@ -45,26 +45,34 @@ namespace OpenXcom
  * @param height	- height in pixels
  * @param x			- X position in pixels (default 0)
  * @param y			- Y position in pixels (default 0)
+ * @param prod		- true if invoked from ManufactureState
  */
 MiniBaseView::MiniBaseView(
 		int width,
 		int height,
 		int x,
-		int y)
+		int y,
+		bool prod)
 	:
 		InteractiveSurface(
 			width,
 			height,
 			x,
 			y),
+		_prod(prod),
 		_texture(NULL),
-		_base(0),
+		_baseID(0),
 		_hoverBase(0),
-		_blink(false)
+		_blink(false),
+		_green(0),
+		_red(0)
 {
-	_timer = new Timer(250);
-	_timer->onTimer((SurfaceHandler)& MiniBaseView::blink);
-	_timer->start();
+	if (_prod == false)
+	{
+		_timer = new Timer(250);
+		_timer->onTimer((SurfaceHandler)& MiniBaseView::blink);
+		_timer->start();
+	}
 }
 
 /**
@@ -72,7 +80,8 @@ MiniBaseView::MiniBaseView(
  */
 MiniBaseView::~MiniBaseView()
 {
-	delete _timer;
+	if (_prod == false)
+		delete _timer;
 }
 
 /**
@@ -109,8 +118,7 @@ size_t MiniBaseView::getHoveredBase() const
  */
 void MiniBaseView::setSelectedBase(size_t base)
 {
-	_base = base;
-
+	_baseID =
 	kL_currentBase = base;
 
 	_redraw = true;
@@ -124,23 +132,22 @@ void MiniBaseView::draw()
 	Surface::draw();
 
 	Base* base = NULL;
-	std::string stat;
 	int
 		x,
-		y,
-		color;
+		y;
+	Uint8 color;
 
 	for (size_t
 			i = 0;
 			i < MAX_BASES;
 			++i)
 	{
-		if (i == _base) // Draw base squares
+		if (i == _baseID) // Draw base squares
 		{
 			SDL_Rect rect;
 			rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2));
 			rect.y = 0;
-			rect.w = static_cast<Uint16>(MINI_SIZE + 2);
+			rect.w =
 			rect.h = static_cast<Uint16>(MINI_SIZE + 2);
 			drawRect(&rect, 1);
 		}
@@ -150,129 +157,132 @@ void MiniBaseView::draw()
 		_texture->getFrame(41)->blit(this);
 
 
-		if (i < _bases->size()) // Draw facilities
+		if (i < _bases->size() // Draw facilities
+			&& (_prod == false
+				|| _bases->at(i)->hasProduction() == true))
 		{
-			base = _bases->at(i);
-
 			lock();
 			SDL_Rect rect;
 
+			base = _bases->at(i);
 			for (std::vector<BaseFacility*>::const_iterator
 					fac = base->getFacilities()->begin();
 					fac != base->getFacilities()->end();
 					++fac)
 			{
-				Uint8 colorBlock;
 				if ((*fac)->getBuildTime() == 0)
-					colorBlock = _green;
+					color = _green;
 				else
-					colorBlock = _red;
+					color = _red;
 
 				rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
 				rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
-				rect.w = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
+				rect.w =
 				rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
-				drawRect(&rect, colorBlock+3);
+				drawRect(&rect, color+3);
 
 				++rect.x;
 				++rect.y;
 				--rect.w;
 				--rect.h;
-				drawRect(&rect, colorBlock+5);
+				drawRect(&rect, color+5);
 
 				--rect.x;
 				--rect.y;
-				drawRect(&rect, colorBlock+2);
+				drawRect(&rect, color+2);
 
 				++rect.x;
 				++rect.y;
 				--rect.w;
 				--rect.h;
-				drawRect(&rect, colorBlock+3);
+				drawRect(&rect, color+3);
 
 				--rect.x;
 				--rect.y;
 				setPixelColor(
 							rect.x,
 							rect.y,
-							colorBlock+1);
+							color+1);
 			}
 			unlock();
 
 
 			// Dot Marks for various base-status indicators.
-			x = i * (MINI_SIZE + 2);
-
-			if (base->getTransfers()->empty() == false) // incoming Transfers
-				setPixelColor(
-							x + 2,
-							21,
-							Palette::blockOffset(4)+5); // lavender
-
-			if (base->getCrafts()->empty() == false)
+			if (_prod == false)
 			{
-				const RuleCraft* craftRule = NULL;
-				y = 17;
+				x = i * (MINI_SIZE + 2);
 
-				for (std::vector<Craft*>::const_iterator
-						c = base->getCrafts()->begin();
-						c != base->getCrafts()->end();
-						++c)
-				{
-					if ((*c)->getWarning() != CW_NONE)
-					{
-						if ((*c)->getWarning() == CW_CANTREFUEL)
-							color = Palette::blockOffset(6);	// yellow
-						else if ((*c)->getWarning() == CW_CANTREARM)
-							color = Palette::blockOffset(6)+2;	// orange
-
-						setPixelColor( // Craft needs materiels
-									x + 2,
-									19,
-									color);
-					}
-
-					stat = (*c)->getStatus();
-					if (stat == "STR_READY")
-						setPixelColor(
-									x + 14,
-									y,
-									Palette::blockOffset(3)+2);
-
-
-					craftRule = (*c)->getRules();
-
-					color = Palette::blockOffset(9)+9;		// brown
-					if (craftRule->getRefuelItem().empty() == false)
-						color = Palette::blockOffset(9)+1;	// yellow
-
+				if (base->getTransfers()->empty() == false) // incoming Transfers
 					setPixelColor(
-								x + 12,
-								y,
-								color);
+								x + 2,
+								21,
+								Palette::blockOffset(4)+5); // lavender
 
-					if (craftRule->getWeapons() > 0
-						&& craftRule->getWeapons() == (*c)->getNumWeapons())
+				if (base->getCrafts()->empty() == false)
+				{
+					const RuleCraft* craftRule = NULL;
+					y = 17;
+
+					for (std::vector<Craft*>::const_iterator
+							c = base->getCrafts()->begin();
+							c != base->getCrafts()->end();
+							++c)
 					{
+						if ((*c)->getWarning() != CW_NONE)
+						{
+							if ((*c)->getWarning() == CW_CANTREFUEL)
+								color = Palette::blockOffset(6);	// yellow
+							else if ((*c)->getWarning() == CW_CANTREARM)
+								color = Palette::blockOffset(6)+2;	// orange
+
+							setPixelColor( // Craft needs materiels
+										x + 2,
+										19,
+										color);
+						}
+
+						if ((*c)->getStatus() == "STR_READY")
+							setPixelColor(
+										x + 14,
+										y,
+										Palette::blockOffset(3)+2);
+
+
+						craftRule = (*c)->getRules();
+
+						if (craftRule->getRefuelItem().empty() == false)
+							color = Palette::blockOffset(9)+1;	// yellow
+						else
+							color = Palette::blockOffset(9)+9;	// brown
+
 						setPixelColor(
-									x + 10,
+									x + 12,
 									y,
-									Palette::blockOffset(8)+2);		// blue
+									color);
+
+						if (craftRule->getWeapons() > 0
+							&& craftRule->getWeapons() == (*c)->getNumWeapons())
+						{
+							setPixelColor(
+										x + 10,
+										y,
+										Palette::blockOffset(8)+2);		// blue
+						}
+
+						if (craftRule->getSoldiers() > 0)
+							setPixelColor(
+										x + 8,
+										y,
+										Palette::blockOffset(10)+1);	// brown
+
+						if (craftRule->getVehicles() > 0)
+							setPixelColor(
+										x + 6,
+										y,
+										Palette::blockOffset(4)+8);		// lavender
+
+						y += 2;
 					}
-
-					if (craftRule->getSoldiers() > 0)
-						setPixelColor(
-									x + 8,
-									y,
-									Palette::blockOffset(10)+1);	// brown
-
-					if (craftRule->getVehicles() > 0)
-						setPixelColor(
-									x + 6,
-									y,
-									Palette::blockOffset(4)+8);		// lavender
-
-					y += 2;
 				}
 			}
 		}
@@ -316,7 +326,8 @@ void MiniBaseView::setSecondaryColor(Uint8 color)
  */
 void MiniBaseView::think()
 {
-	_timer->think(NULL, this);
+	if (_prod == false)
+		_timer->think(NULL, this);
 }
 
 /**
@@ -326,12 +337,12 @@ void MiniBaseView::blink()
 {
 	_blink = !_blink;
 
-	Base* base = NULL;
+	Base* base;
 	std::string stat;
 	int
 		x,
-		y,
-		color;
+		y;
+	Uint8 color;
 
 	for (size_t
 			i = 0;
@@ -345,9 +356,10 @@ void MiniBaseView::blink()
 		if (base->getScientists() > 0 // unused Scientists &/or Engineers
 			|| base->getEngineers() > 0)
 		{
-			color = 0;
 			if (_blink == true)
 				color = Palette::blockOffset(2)+1; // red
+			else
+				color = 0;
 
 			setPixelColor(
 						x + 2,
@@ -357,7 +369,7 @@ void MiniBaseView::blink()
 
 		if (base->getCrafts()->empty() == false)
 		{
-			const RuleCraft* craftRule = NULL;
+			const RuleCraft* craftRule;
 			y = 17;
 
 			for (std::vector<Craft*>::const_iterator
@@ -368,8 +380,6 @@ void MiniBaseView::blink()
 				stat = (*craft)->getStatus();
 				if (stat != "STR_READY")
 				{
-					color = 0;
-
 					if (_blink == true)
 					{
 						if (stat == "STR_OUT")
@@ -381,6 +391,8 @@ void MiniBaseView::blink()
 						else if (stat == "STR_REPAIRS")
 							color = Palette::blockOffset(2)+5;	// red
 					}
+					else
+						color = 0;
 
 					setPixelColor(
 								x + 14,
@@ -392,9 +404,10 @@ void MiniBaseView::blink()
 				if (craftRule->getWeapons() > 0 // craft needs Weapons mounted.
 					&& craftRule->getWeapons() != (*craft)->getNumWeapons())
 				{
-					color = 0;								// transparent
 					if (_blink == true)
 						color = Palette::blockOffset(8)+2;	// blue
+					else
+						color = 0;
 
 					setPixelColor(
 								x + 10,

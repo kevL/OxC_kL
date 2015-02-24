@@ -1778,7 +1778,28 @@ bool Base::getHyperDetection() const
 			++f)
 	{
 		if ((*f)->getBuildTime() == 0
-			&& (*f)->getRules()->isHyperwave())
+			&& (*f)->getRules()->isHyperwave() == true)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Returns whether or not a base is equipped with production facilities.
+ * @return, true if this base is capable of production
+ */
+bool Base::hasProduction() const
+{
+	for (std::vector<BaseFacility*>::const_iterator
+			f = _facilities.begin();
+			f != _facilities.end();
+			++f)
+	{
+		if ((*f)->getBuildTime() == 0
+			&& (*f)->getRules()->getWorkshops() > 0)
 		{
 			return true;
 		}

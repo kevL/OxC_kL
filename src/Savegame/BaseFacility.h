@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_BASEFACILITY_H
 #define OPENXCOM_BASEFACILITY_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -34,8 +34,7 @@ class Ruleset;
 
 /**
  * Represents a base facility placed in a base.
- * Contains variable info about a facility like
- * position and build time.
+ * Contains variable info about a facility like position and build time.
  * @sa RuleBaseFacility
  */
 class BaseFacility

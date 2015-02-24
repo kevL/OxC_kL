@@ -1966,6 +1966,7 @@ BattleUnit* TileEngine::hit(
 							|| targetUnit->getHealth() == 0)) // .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
 						targetUnit->killedBy(attacker->getFaction());
+						Log(LOG_INFO) << "TE::hit() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
 					}
 					// kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 					// I mean, shouldn't that be checking that the thing actually DIES?
@@ -2487,7 +2488,10 @@ void TileEngine::explode(
 											bu->instaKill();
 
 											if (attacker != NULL)
+											{
 												bu->killedBy(attacker->getFaction());
+												Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
+											}
 
 											if (Options::battleNotifyDeath // send Death notice.
 												&& bu->getGeoscapeSoldier() != NULL)
@@ -2684,7 +2688,10 @@ void TileEngine::explode(
 											bu->instaKill();
 
 											if (attacker != NULL)
+											{
 												bu->killedBy(attacker->getFaction());
+												Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
+											}
 
 											if (Options::battleNotifyDeath == true // send Death notice.
 												&& bu->getGeoscapeSoldier() != NULL)
@@ -2731,6 +2738,7 @@ void TileEngine::explode(
 								|| targetUnit->getHealth() == 0) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 							{
 								targetUnit->killedBy(attacker->getFaction());
+								Log(LOG_INFO) << "TE::explode() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
 							}
 
 							if (takenXP == false

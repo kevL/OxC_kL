@@ -63,7 +63,7 @@ ManufactureState::ManufactureState(
 		_state(state)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-	_mini			= new MiniBaseView(128, 16, 180, 26);
+	_mini			= new MiniBaseView(128, 16, 180, 26, true);
 
 	_txtTitle		= new Text(300, 17, 16, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
@@ -85,10 +85,12 @@ ManufactureState::ManufactureState(
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
 
 	add(_window, "window", "manufactureMenu");
-	add(_mini);
+	add(_mini, "miniBase", "basescape");
 	add(_txtTitle, "text1", "manufactureMenu");
 	add(_txtBaseLabel, "text1", "manufactureMenu");
 	add(_txtAvailable, "text1", "manufactureMenu");
@@ -114,7 +116,7 @@ ManufactureState::ManufactureState(
 	_mini->setBases(_game->getSavedGame()->getBases());
 	for (size_t
 			i = 0;
-			i < _game->getSavedGame()->getBases()->size();
+			i != _game->getSavedGame()->getBases()->size();
 			++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == base)
@@ -320,17 +322,20 @@ void ManufactureState::miniClick(Action*)
 {
 	if (_state != NULL) // cannot switch bases if coming from geoscape.
 	{
-		size_t base = _mini->getHoveredBase();
-
-		if (base < _game->getSavedGame()->getBases()->size()
-			&& _base != _game->getSavedGame()->getBases()->at(base))
+		const size_t baseID = _mini->getHoveredBase();
+		if (baseID < _game->getSavedGame()->getBases()->size())
 		{
-			_mini->setSelectedBase(base);
+			Base* const base = _game->getSavedGame()->getBases()->at(baseID);
 
-			_base = _game->getSavedGame()->getBases()->at(base);
-			_state->setBase(_base);
+			if (base != _base
+				&& base->hasProduction() == true)
+			{
+				_base = base;
+				_mini->setSelectedBase(baseID);
+				_state->setBase(_base);
 
-			init();
+				init();
+			}
 		}
 	}
 }

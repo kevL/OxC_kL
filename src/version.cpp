@@ -68,7 +68,7 @@ std::string getBuildDate(bool built)
 	std::ostringstream build;
 
 	if (built == true)
-		build << "ver ";
+		build << "built ";
 
 	build << __DATE__ << " " << __TIME__ << " MST";
 

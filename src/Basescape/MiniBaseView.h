@@ -46,10 +46,12 @@ class MiniBaseView
 private:
 	static const int MINI_SIZE = 14;
 
-	bool _blink;
+	bool
+		_blink,
+		_prod;
 
 	size_t
-		_base,
+		_baseID,
 		_hoverBase;
 	Uint8
 		_green,
@@ -69,7 +71,8 @@ private:
 				int width,
 				int height,
 				int x = 0,
-				int y = 0);
+				int y = 0,
+				bool prod = false);
 		/// Cleans up the mini base view.
 		~MiniBaseView();
 

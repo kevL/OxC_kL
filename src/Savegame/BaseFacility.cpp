@@ -42,15 +42,13 @@ BaseFacility::BaseFacility(
 		_y(-1),
 		_buildTime(0),
 		_craftForDrawing(NULL)
-{
-}
+{}
 
 /**
  * dTor.
  */
 BaseFacility::~BaseFacility()
-{
-}
+{}
 
 /**
  * Loads the base facility from a YAML file.
@@ -161,7 +159,7 @@ void BaseFacility::build()
 
 /**
  * Returns if this facility is currently being used by its base.
- * @return, True if it's under use, False otherwise.
+ * @return, true if it's in use
  */
 bool BaseFacility::inUse() const
 {

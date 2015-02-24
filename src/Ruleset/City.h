@@ -35,6 +35,7 @@ class City
 {
 
 private:
+	bool _labelTop;
 	size_t _zoomLevel;
 	double
 		_lon,
@@ -44,27 +45,30 @@ private:
 
 
 	public:
-		/// Creates a new city at a certain position.
+		/// Creates a new City at a certain position.
 		City(
 				const std::string& name,
 				double lon,
 				double lat);
-		/// Cleans up the city.
+		/// Cleans up the City.
 		~City();
 
-		/// Loads the city from YAML.
+		/// Loads the City from YAML.
 		void load(const YAML::Node& node);
 
-		/// Gets the city's name.
+		/// Gets the City's name.
 		std::string getName() const;
 
-		/// Gets the city's latitude.
+		/// Gets the City's latitude.
 		double getLatitude() const;
-		/// Gets the city's longitude.
+		/// Gets the City's longitude.
 		double getLongitude() const;
 
-		/// Gets the level of zoom that shows city name.
+		/// Gets the level of zoom that shows City name.
 		size_t getZoomLevel() const;
+
+		/// Gets if a City's label is above or below its marker.
+		bool getLabelTop() const;
 };
 
 }

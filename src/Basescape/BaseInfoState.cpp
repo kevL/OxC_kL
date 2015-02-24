@@ -177,17 +177,17 @@ BaseInfoState::BaseInfoState(
 	centerAllSurfaces();
 
 
-	std::ostringstream ss;
+	std::ostringstream osts;
 	if (Options::storageLimitsEnforced == true)
-		ss << "ALT";
-	ss << "BACK07.SCR";
-	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
+		osts << "ALT";
+	osts << "BACK07.SCR";
+	_game->getResourcePack()->getSurface(osts.str())->blit(_bg);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 	for (size_t
 			i = 0;
-			i < _game->getSavedGame()->getBases()->size();
+			i != _game->getSavedGame()->getBases()->size();
 			++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == base)
@@ -473,14 +473,14 @@ void BaseInfoState::edtBaseChange(Action* action)
  */
 void BaseInfoState::miniClick(Action*)
 {
-	size_t base = _mini->getHoveredBase();
+	const size_t baseID = _mini->getHoveredBase();
 
-	if (base < _game->getSavedGame()->getBases()->size()
-		&& _base != _game->getSavedGame()->getBases()->at(base))
+	if (baseID < _game->getSavedGame()->getBases()->size()
+		&& _base != _game->getSavedGame()->getBases()->at(baseID))
 	{
-		_mini->setSelectedBase(base);
+		_mini->setSelectedBase(baseID);
 
-		_base = _game->getSavedGame()->getBases()->at(base);
+		_base = _game->getSavedGame()->getBases()->at(baseID);
 		_state->setBase(_base);
 
 		init();
@@ -495,7 +495,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		SDLKey baseKeys[] =
+		const SDLKey baseKeys[] =
 		{
 			Options::keyBaseSelect1,
 			Options::keyBaseSelect2,
@@ -507,7 +507,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 			Options::keyBaseSelect8
 		};
 
-		int key = action->getDetails()->key.keysym.sym;
+		const SDLKey key = action->getDetails()->key.keysym.sym;
 
 		for (size_t
 				i = 0;

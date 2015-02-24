@@ -40,7 +40,8 @@ City::City(
 		_name(name),
 		_lon(lon),
 		_lat(lat),
-		_zoomLevel(4)
+		_zoomLevel(4),
+		_labelTop(false)
 {}
 
 /**
@@ -55,10 +56,11 @@ City::~City()
  */
 void City::load(const YAML::Node& node)
 {
-	_name		= node["name"]	.as<std::string>(_name);
-	_lon		= node["lon"]	.as<double>(_lon) * M_PI / 180.;
-	_lat		= node["lat"]	.as<double>(_lat) * M_PI / 180.;
-	_zoomLevel	= node["zoom"]	.as<size_t>(_zoomLevel);
+	_name		= node["name"]		.as<std::string>(_name);
+	_lon		= node["lon"]		.as<double>(_lon) * M_PI / 180.;
+	_lat		= node["lat"]		.as<double>(_lat) * M_PI / 180.;
+	_zoomLevel	= node["zoom"]		.as<size_t>(_zoomLevel);
+	_labelTop	= node["labelTop"]	.as<bool>(_labelTop);
 }
 
 /**
@@ -95,6 +97,15 @@ double City::getLongitude() const
 size_t City::getZoomLevel() const
 {
 	return _zoomLevel;
+}
+
+/**
+ * Gets if a City's label is above or below its marker.
+ * @return, true if label goes on top
+ */
+bool City::getLabelTop() const
+{
+	return _labelTop;
 }
 
 }

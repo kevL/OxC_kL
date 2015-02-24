@@ -1020,6 +1020,7 @@ void BattlescapeGame::checkForCasualties(
 			if (slayer != NULL)
 			{
 				(*i)->killedBy(slayer->getFaction()); // used in DebriefingState.
+				Log(LOG_INFO) << "BSG::checkForCasualties() " << victim->getId() << " killedBy = " << (int)slayer->getFaction();
 
 				if (slayer->isFearable() == true)
 				{

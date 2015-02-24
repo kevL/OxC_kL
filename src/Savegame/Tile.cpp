@@ -1285,6 +1285,7 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 
 							unit->instaKill();
 							unit->killedBy(unit->getFaction()); // killed by self ....
+							Log(LOG_INFO) << "Tile::endTilePhase() " << unit->getId() << " killedBy = " << (int)unit->getFaction();
 
 							// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
 /*							if (Options::battleNotifyDeath == true // send Death notice.

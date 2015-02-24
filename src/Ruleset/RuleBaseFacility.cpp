@@ -24,8 +24,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of base facility.
+ * Creates a blank ruleset for a certain type of base facility.
  * @param type String defining the type.
  */
 RuleBaseFacility::RuleBaseFacility(const std::string& type)
@@ -55,15 +54,13 @@ RuleBaseFacility::RuleBaseFacility(const std::string& type)
 		_fireSound(0),
 		_hitSound(0),
 		_listOrder(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 RuleBaseFacility::~RuleBaseFacility()
-{
-}
+{}
 
 /**
  * Loads the base facility type from a YAML file.

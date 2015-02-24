@@ -1246,7 +1246,7 @@ items:
     compatibleAmmo:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
-    tuAimed: 57
+    tuAimed: 57 #66
     tuLaunch: 82 #kL
     battleType: 1
     noReaction: true #kL
@@ -4952,7 +4952,7 @@ alienDeployments:
     width: 50
     length: 50
     height: 10
-    civilians: 13
+    civilians: 15
     terrains:
       - COMRCURBAN
       - DAWNURBANA
@@ -8625,6 +8625,13 @@ extraStrings:
       STR_EXECUTE: "execute"
       STR_DROP: "drop"
       STR_ORDER: "Ord> {0}"
+      MALE_CIVILIAN2: "Civilian"
+      MALE_CIVILIAN3: "Civilian"
+      MALE_CIVILIAN4: "Civilian"
+      MALE_CIVILIAN5: "Civilian"
+      MALE_CIVILIAN6: "Civilian"
+      FEMALE_CIVILIAN2: "Civilian"
+      FEMALE_CIVILIAN3: "Civilian"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

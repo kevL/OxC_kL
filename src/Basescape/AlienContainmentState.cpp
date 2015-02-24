@@ -88,22 +88,9 @@ AlienContainmentState::AlienContainmentState(
 	_btnOk			= new TextButton(134, 16, 170, 177);
 //	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
 
-
 	setPalette(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("manageContainment")->getElement("palette")->color);
-/*	if (origin == OPT_BATTLESCAPE)
-	{
-		setPalette("PAL_GEOSCAPE", 0);
-		_color  = Palette::blockOffset(15)-1;
-		_color2 = Palette::blockOffset(8)+10;
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE", 1);
-		_color  = Palette::blockOffset(13)+10;
-		_color2 = Palette::blockOffset(13);
-	} */
 
 	add(_window, "window", "manageContainment");
 	add(_txtTitle, "text", "manageContainment");
@@ -114,13 +101,12 @@ AlienContainmentState::AlienContainmentState(
 	add(_txtLiveAliens, "text", "manageContainment");
 	add(_txtDeadAliens, "text", "manageContainment");
 	add(_lstAliens, "list", "manageContainment");
-	add(_btnOk, "button", "manageContainment");
 	add(_btnCancel, "button", "manageContainment");
+	add(_btnOk, "button", "manageContainment");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(_color);
 	std::string st;
 	if (origin == OPT_BATTLESCAPE)
 	{
@@ -133,59 +119,39 @@ AlienContainmentState::AlienContainmentState(
 		st = "STR_REMOVE_SELECTED";
 	}
 
-//	_btnOk->setColor(_color);
-	_btnOk->setText(tr(st));
-	_btnOk->onMouseClick((ActionHandler)& AlienContainmentState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& AlienContainmentState::btnOkClick,
-					Options::keyOk);
-
-//	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& AlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& AlienContainmentState::btnCancelClick,
 					Options::keyCancel);
-
-	_btnOk->setVisible(false);
 	if (_overCrowded == true)
 		_btnCancel->setVisible(false);
 
-/*	if (origin == OPT_BATTLESCAPE)
-		_txtTitle->setColor(Palette::blockOffset(8)+5);
-	else
-		_txtTitle->setColor(_color); */
+	_btnOk->setText(tr(st));
+	_btnOk->onMouseClick((ActionHandler)& AlienContainmentState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& AlienContainmentState::btnOkClick,
+					Options::keyOk);
+	_btnOk->setVisible(false);
+
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
 
-/*	if (origin == OPT_BATTLESCAPE)
-		_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
-	else
-		_txtBaseLabel->setColor(_color); */
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ALIEN"));
 
-//	_txtLiveAliens->setColor(_color);
 	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
 
-//	_txtDeadAliens->setColor(_color);
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
 
-//	_txtAvailable->setColor(_color);
-//	_txtAvailable->setSecondaryColor(_color2);
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE")
 							.arg(_base->getAvailableContainment() - _base->getUsedContainment()));
 
-//	_txtUsed->setColor(_color);
-//	_txtUsed->setSecondaryColor(_color2);
 	_txtUsed->setText(tr("STR_SPACE_USED")
 						.arg(_base->getUsedContainment()));
 
-//	_lstAliens->setColor(_color2);
-//	_lstAliens->setArrowColor(_color);
 	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
 	_lstAliens->setColumns(3, 140, 66, 56);
 	_lstAliens->setSelectable();
@@ -303,16 +269,16 @@ void AlienContainmentState::btnOkClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color, //Palette::blockOffset(8)+5,
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
 												"BACK01.SCR",
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color)); //0
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
 		else
 			_game->pushState(new ErrorMessageState(
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
 												"BACK13.SCR",
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color)); //6
+												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
  	}
 }
 
@@ -471,17 +437,20 @@ void AlienContainmentState::increase()
  */
 void AlienContainmentState::increaseByValue(int change)
 {
-	const int qty = getQuantity() - _qtys[_sel];
-	if (change <= 0 || qty <= 0)
+	if (change < 1)
 		return;
 
-	change = std::min(
-					change,
-					qty);
-	_qtys[_sel] += change;
-	_fishFood += change;
+	const int qty = getQuantity() - _qtys[_sel];
+	if (qty > 0)
+	{
+		change = std::min(
+						change,
+						qty);
+		_qtys[_sel] += change;
+		_fishFood += change;
 
-	updateStrings();
+		updateStrings();
+	}
 }
 
 /**
@@ -501,14 +470,17 @@ void AlienContainmentState::decrease()
  */
 void AlienContainmentState::decreaseByValue(int change)
 {
-	if (change <= 0 || _qtys[_sel] <= 0)
+	if (change < 1)
 		return;
 
-	change = std::min(_qtys[_sel], change);
-	_qtys[_sel] -= change;
-	_fishFood -= change;
+	if (_qtys[_sel] > 0)
+	{
+		change = std::min(_qtys[_sel], change);
+		_qtys[_sel] -= change;
+		_fishFood -= change;
 
-	updateStrings();
+		updateStrings();
+	}
 }
 
 /**
