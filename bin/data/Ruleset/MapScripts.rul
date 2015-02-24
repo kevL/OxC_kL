@@ -8,6 +8,14 @@ mapScripts:
 #      executions: 2
     - type: fillArea
   - type: ALIENBASE
+#groups 1: tunnel, small -> for these, see hellrazor's Expanded_UBase_Nightly.rul
+#groups 2: entrance, small
+#groups 3: control, large
+#groups 4: brain, large
+#groups 5: garden, large
+#groups 6: storage, large
+#groups 7: fort, small
+#groups 8: power, small
     commands:
     - type: addBlock
       groups: 2
@@ -15,7 +23,22 @@ mapScripts:
     - type: addBlock
       size: 2
       groups: 3
-    - type: addBlock
+#    - type: addBlock #hellrazor_Add: gardens 1,1b,1c
+#      size: 2
+#      groups: 5
+#    - type: addBlock #hellrazor_Add: storage 2,2b,2c
+#      size: 2
+#      groups: 6
+#    - type: addBlock #hellrazor_Add
+#      size: 2
+#      executions: 2
+#    - type: addBlock #hellrazor_Add: fort 6,6b,16,16b
+#      executions: 3
+#      groups: 7
+#    - type: addBlock #hellrazor_Add: energy 12,12b
+#      executions: 1
+#      groups: 8
+    - type: addBlock #hellrazor_Removed
       size: 2
       executions: 3
     - type: fillArea
@@ -181,7 +204,7 @@ mapScripts:
             entry: 14
     - type: fillArea
       blocks: 20
-###------Terrainpack follows------###
+###------ Terrainpack follows ------###
   - type: COMRCURBAN
     commands:
     - type: addCraft

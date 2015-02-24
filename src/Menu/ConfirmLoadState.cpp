@@ -39,13 +39,16 @@ namespace OpenXcom
  * Initializes all the elements in the Confirm Load screen.
  * @param origin	- game section that originated this state
  * @param fileName	- reference the name of the save file without extension
+ * @param parent	- pointer to parent ListLoadState to hide its elements
  */
 ConfirmLoadState::ConfirmLoadState(
 		OptionsOrigin origin,
-		const std::string& fileName)
+		const std::string& fileName,
+		ListLoadState* parent)
 	:
 		_origin(origin),
-		_fileName(fileName)
+		_fileName(fileName),
+		_parent(parent)
 {
 	_screen = false;
 
@@ -58,7 +61,9 @@ ConfirmLoadState::ConfirmLoadState(
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
 	else
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color); //6
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("saveMenus")->getElement("palette")->color); //6
 
 	add(_window, "confirmLoad", "saveMenus");
 	add(_btnYes, "confirmLoad", "saveMenus");
@@ -107,8 +112,9 @@ ConfirmLoadState::~ConfirmLoadState()
  */
 void ConfirmLoadState::btnYesClick(Action*)
 {
-	_game->popState();
+	_parent->hideElements();
 
+	_game->popState();
 	_game->pushState(new LoadGameState(
 									_origin,
 									_fileName,

@@ -20,9 +20,10 @@
 #ifndef OPENXCOM_CONFIRMLOADSTATE_H
 #define OPENXCOM_CONFIRMLOADSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "OptionsBaseState.h"
+#include "ListLoadState.h"
 
 #include "../Engine/State.h"
 
@@ -48,6 +49,7 @@ private:
 
 	std::string _fileName;
 
+	ListLoadState* _parent; // ref
 	Text* _txtText;
 	TextButton
 		* _btnYes,
@@ -59,7 +61,8 @@ private:
 		/// Creates a new confirmation state.
 		ConfirmLoadState(
 				OptionsOrigin origin,
-				const std::string& fileName);
+				const std::string& fileName,
+				ListLoadState* parent);
 		/// Cleans up the confirmation state.
 		virtual ~ConfirmLoadState();
 

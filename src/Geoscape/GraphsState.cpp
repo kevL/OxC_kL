@@ -1454,7 +1454,7 @@ void GraphsState::drawCountryLines()
 	}
 
 	range = static_cast<double>(upperLimit - lowerLimit);
-	double units = range / 126.;
+	const double units = range / 126.;
 
 	Uint8 colorOffset = 0;
 
@@ -2015,7 +2015,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	// Figure out how many units to the pixel
 	// then plot the points for the graph and connect those dots.
 	range = static_cast<double>(upperLimit - lowerLimit);
-	double units = range / 126.;
+	const double units = range / 126.;
 
 	for (int
 			button = 0;

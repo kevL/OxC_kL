@@ -387,6 +387,8 @@ GeoscapeState::GeoscapeState()
 //kL	_txtSec->		setX(_txtSec->		getX() - 10);
 	}
 
+	_txtScore = new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102); // kL
+
 	_timeSpeed = _btn5Secs;
 	_gameTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
 
@@ -441,6 +443,7 @@ GeoscapeState::GeoscapeState()
 
 //	if (Options::showFundsOnGeoscape)
 	add(_txtFunds, "text", "geoscape");
+	add(_txtScore, "text", "geoscape");
 
 	add(_txtHour); //, "text", "geoscape");
 	add(_txtHourSep); //, "text", "geoscape");
@@ -754,6 +757,8 @@ GeoscapeState::GeoscapeState()
 //kL	_txtMinSep->setBig();	// kL
 	}
 
+	_txtScore->setAlign(ALIGN_CENTER);					// kL
+
 //kL	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
 
 	_txtHour->setColor(Palette::blockOffset(15)+2);
@@ -1066,6 +1071,24 @@ void GeoscapeState::think()
 void GeoscapeState::timeDisplay()
 {
 	_txtFunds->setText(Text::formatFunding(_savedGame->getFunds()));
+
+	if (_savedGame->getMonthsPassed() != -1)
+	{
+		const size_t ent = _savedGame->getFundsList().size() - 1;
+
+		int64_t score = _savedGame->getResearchScores().at(ent);
+		for (std::vector<Region*>::const_iterator
+				i = _savedGame->getRegions()->begin();
+				i != _savedGame->getRegions()->end();
+				++i)
+		{
+			score += (*i)->getActivityXcom().at(ent) - (*i)->getActivityAlien().at(ent);
+		}
+		_txtScore->setText(Text::formatNumber(score, L"", false));
+	}
+	else
+		_txtScore->setText(Text::formatNumber(0, L"", false));
+
 
 	std::wostringstream
 		ss2,

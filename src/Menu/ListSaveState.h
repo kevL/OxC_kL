@@ -50,6 +50,9 @@ private:
 	TextButton* _btnSaveGame;
 	TextEdit* _edtSave;
 
+	/// Hides textlike elements of this state.
+	void ListSaveState::hideElements();
+
 
 	public:
 		/// Creates the Save Game state.

@@ -47,6 +47,9 @@ private:
 //		void btnOldClick(Action* action);
 		/// Handler for clicking the Saves list.
 		void lstSavesPress(Action* action);
+
+		/// Hides textlike elements of this state.
+		void hideElements();
 };
 
 }

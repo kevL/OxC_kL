@@ -4492,7 +4492,7 @@
 1424387340 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1424387340 f:\git\openxcom\src\geoscape\geoscapestate.h
+1424745946 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1424387338 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4880,7 +4880,7 @@
 1424387345 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1424731017 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1424731695 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4921,7 +4921,7 @@
 	<windows.h>
 	<stddef.h>
 
-1424729507 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1424732482 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -7174,7 +7174,7 @@
 1424387339 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1424387340 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1424748864 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7351,7 +7351,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1424387340 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1424746291 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -10870,7 +10870,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1424387338 source:f:\git\openxcom\src\menu\confirmloadstate.cpp
+1424753569 source:f:\git\openxcom\src\menu\confirmloadstate.cpp
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
 	"../Engine/Game.h"
@@ -10880,12 +10880,12 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1424387338 f:\git\openxcom\src\menu\confirmloadstate.h
-	<string>
+1424753561 f:\git\openxcom\src\menu\confirmloadstate.h
 	"OptionsBaseState.h"
+	"ListLoadState.h"
 	"../Engine/State.h"
 
-1424387338 f:\git\openxcom\src\menu\listloadstate.h
+1424774099 f:\git\openxcom\src\menu\listloadstate.h
 	"ListGamesState.h"
 
 1424624515 f:\git\openxcom\src\menu\listgamesstate.h
@@ -10893,7 +10893,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1424591069 f:\git\openxcom\src\menu\listsavestate.h
+1424774215 f:\git\openxcom\src\menu\listsavestate.h
 	"ListGamesState.h"
 
 1424624534 source:f:\git\openxcom\src\menu\listgamesstate.cpp
@@ -10910,7 +10910,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1424593762 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1424753666 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
@@ -10918,16 +10918,19 @@
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Geoscape/GeoscapeState.h"
+	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
+	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1424626588 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1424774312 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Interface/ArrowButton.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextEdit.h"
 	"../Interface/TextList.h"

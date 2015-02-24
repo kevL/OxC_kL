@@ -28,6 +28,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
+#include "../Interface/ArrowButton.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
@@ -227,6 +228,7 @@ void ListSaveState::saveGame()
 //	_lstSaves->setScrollable();			// don't need this either ....
 	// kL_end.
 
+	hideElements();
 	_game->getSavedGame()->setName(_edtSave->getText());
 
 	std::string
@@ -260,6 +262,24 @@ void ListSaveState::saveGame()
 									_origin,
 									newFilename,
 									_palette));
+}
+
+/**
+ * Hides textlike elements of this state.
+ */
+void ListSaveState::hideElements() // private.
+{
+	_txtTitle->setVisible(false);
+	_txtDelete->setVisible(false);
+	_txtName->setVisible(false);
+	_txtDate->setVisible(false);
+	_sortName->setVisible(false);
+	_sortDate->setVisible(false);
+	_lstSaves->setVisible(false);
+	_edtSave->setVisible(false);
+	_txtDetails->setVisible(false);
+	_btnCancel->setVisible(false);
+	_btnSaveGame->setVisible(false);
 }
 
 }

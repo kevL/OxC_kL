@@ -115,6 +115,7 @@ private:
 	Text
 		* _txtDebug,
 		* _txtFunds,
+		* _txtScore,
 		* _txtHour,
 		* _txtHourSep,
 		* _txtMin,

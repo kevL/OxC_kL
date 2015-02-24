@@ -30,8 +30,9 @@
 
 #include "../Geoscape/GeoscapeState.h"
 
+#include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
-//#include "../Interface/TextButton.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 
 #include "../Resource/ResourcePack.h"
@@ -101,7 +102,7 @@ void ListLoadState::lstSavesPress(Action* action)
 		}
 
 
-		bool confirm = false;
+		bool confirmLoad = false;
 		for (std::vector<std::string>::const_iterator
 				i = _saves[_lstSaves->getSelectedRow()].rulesets.begin();
 				i != _saves[_lstSaves->getSelectedRow()].rulesets.end();
@@ -112,23 +113,43 @@ void ListLoadState::lstSavesPress(Action* action)
 						Options::rulesets.end(),
 						*i) == Options::rulesets.end())
 			{
-				confirm = true;
+				confirmLoad = true;
 				break;
 			}
 		}
 
-		if (confirm == true)
-			_game->pushState(new ConfirmLoadState(
-												_origin,
-												_saves[_lstSaves->getSelectedRow()].fileName));
-		else
+		if (confirmLoad == false)
+		{
+			hideElements();
 			_game->pushState(new LoadGameState(
 											_origin,
 											_saves[_lstSaves->getSelectedRow()].fileName,
 											_palette));
+		}
+		else
+			_game->pushState(new ConfirmLoadState(
+												_origin,
+												_saves[_lstSaves->getSelectedRow()].fileName,
+												this));
 	}
 	else
 		ListGamesState::lstSavesPress(action); // RMB -> delete file
+}
+
+/**
+ * Hides textlike elements of this state.
+ */
+void ListLoadState::hideElements()
+{
+	_txtTitle->setVisible(false);
+	_txtDelete->setVisible(false);
+	_txtName->setVisible(false);
+	_txtDate->setVisible(false);
+	_sortName->setVisible(false);
+	_sortDate->setVisible(false);
+	_lstSaves->setVisible(false);
+	_txtDetails->setVisible(false);
+	_btnCancel->setVisible(false);
 }
 
 }
