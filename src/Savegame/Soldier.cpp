@@ -535,11 +535,12 @@ void Soldier::heal()
 
 /**
  * Gets this Soldier's wounds as a percent.
+ * @note This could be set as high as 150% in BattleUnit::postMissionProcedures()
  */
 int Soldier::getWoundPercent() const
 {
 	return static_cast<int>(std::floor(
-				static_cast<double>(_recovery) / static_cast<double>(_currentStats.health) * 100.));
+		   static_cast<float>(_recovery) / static_cast<float>(_currentStats.health) * 100.f));
 }
 
 /**

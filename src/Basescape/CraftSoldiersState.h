@@ -43,17 +43,14 @@ class CraftSoldiersState
 
 private:
 	size_t _craftID;
-//	Uint8 _colorOtherCraft;
 
 	Base* _base;
 	Text
-//		* _txtAvailable,
 		* _txtBaseLabel,
 		* _txtCraft,
 		* _txtName,
 		* _txtRank,
 		* _txtTitle,
-//		* _txtUsed,
 		* _txtSpace,
 		* _txtLoad;
 	TextButton
@@ -62,9 +59,6 @@ private:
 		* _btnUnload;
 	TextList* _lstSoldiers;
 	Window* _window;
-
-	/// initializes the display list based on the craft soldier's list and the position to display
-//	void initList(size_t scrl);
 
 
 	public:
@@ -93,21 +87,6 @@ private:
 
 		/// Handler for clicking the Inventory button.
 		void btnInventoryClick(Action* action);
-
-//		/// Shows Soldiers in a list.
-//		void populateList();
-		/// Moves a soldier up.
-/*		void moveSoldierUp(
-				Action* action,
-				size_t row,
-				bool max = false); */
-		/// Moves a soldier down.
-/*		void moveSoldierDown(
-				Action* action,
-				size_t row,
-				bool max = false); */
-		/// Handler for pressing-down a mouse-button in the list.
-//		void lstSoldiersMousePress(Action* action);
 };
 
 }

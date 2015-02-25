@@ -51,7 +51,6 @@ private:
 	Text
 		* _txtQuantity,
 		* _txtSoldier,
-//		* _txtTitle,
 		* _txtType;
 	TextButton* _btnCancel;
 	TextList* _lstArmor;

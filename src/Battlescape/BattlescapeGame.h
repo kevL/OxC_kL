@@ -220,7 +220,7 @@ private:
 		/// Checks for casualties in battle.
 		void checkForCasualties(
 				const BattleItem* const weapon,
-				BattleUnit* slayer,
+				BattleUnit* attacker,
 				bool hidden = false,
 				bool terrain = false);
 		/// Checks if a unit panics.

@@ -60,7 +60,6 @@ SoldierArmorState::SoldierArmorState(
 
 	_window			= new Window(this, 192, 147, 64, 27, POPUP_BOTH);
 
-//	_txtTitle		= new Text(182, 9, 69, 48);
 	_txtSoldier		= new Text(182, 9, 69, 38);
 
 	_txtType		= new Text(102, 9, 84, 53);
@@ -72,10 +71,9 @@ SoldierArmorState::SoldierArmorState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color); //4
+			_game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color);
 
 	add(_window, "window", "soldierArmor");
-//	add(_txtTitle, "text", "soldierArmor");
 	add(_txtSoldier, "text", "soldierArmor");
 	add(_txtType, "text", "soldierArmor");
 	add(_txtQuantity, "text", "soldierArmor");
@@ -85,60 +83,49 @@ SoldierArmorState::SoldierArmorState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-//	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SoldierArmorState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SoldierArmorState::btnCancelClick,
 					Options::keyCancel);
 
-	const Soldier* const soldier = _base->getSoldiers()->at(_soldierID);
-/*
-//	_txtTitle->setColor(Palette::blockOffset(13)+5);
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(soldier->getName())); */
 
-//	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(soldier->getName());
+	_txtSoldier->setText(_base->getSoldiers()->at(_soldierID)->getName());
 
-//	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));
 
-//	_txtQuantity->setColor(Palette::blockOffset(13)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_lstArmor->setColor(Palette::blockOffset(13));
-//	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
 	_lstArmor->setBackground(_window);
 	_lstArmor->setColumns(2, 110, 35);
 	_lstArmor->setSelectable();
 	_lstArmor->setMargin();
 
+	Armor* armor;
 	const std::vector<std::string>& armors = _game->getRuleset()->getArmorsList();
 	for (std::vector<std::string>::const_iterator
 			i = armors.begin();
 			i != armors.end();
 			++i)
 	{
-		Armor* const armor = _game->getRuleset()->getArmor(*i);
+		armor = _game->getRuleset()->getArmor(*i);
 		if (_base->getItems()->getItem(armor->getStoreItem()) > 0)
 		{
 			_armors.push_back(armor);
 
-			std::wostringstream ss;
+			std::wostringstream wosts;
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				ss << _base->getItems()->getItem(armor->getStoreItem());
+				wosts << _base->getItems()->getItem(armor->getStoreItem());
 			else
-				ss << "-";
+				wosts << L"-";
 
 			_lstArmor->addRow(
 							2,
 							tr(armor->getType()).c_str(),
-							ss.str().c_str());
+							wosts.str().c_str());
 		}
 		else if (armor->getStoreItem() == "STR_NONE")
 		{

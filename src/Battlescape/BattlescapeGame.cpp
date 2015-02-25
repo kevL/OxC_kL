@@ -872,31 +872,33 @@ void BattlescapeGame::endTurnPhase()
 /**
  * Checks for casualties and adjusts morale accordingly.
  * @param weapon	- pointer to the weapon responsible
- * @param slayer	- pointer to credit the kill
+ * @param attacker	- pointer to credit the kill
  * @param hidden	- true for UFO Power Source explosions at the start of battlescape (default false)
  * @param terrain	- true for terrain explosions (default false)
  */
 void BattlescapeGame::checkForCasualties(
 		const BattleItem* const weapon,
-		BattleUnit* slayer,
+		BattleUnit* attacker,
 		bool hidden,
 		bool terrain)
 {
-	// If the victim was killed by the slayer's death explosion,
-	// fetch who killed the murderer and make THAT the murderer!
-	if (slayer != NULL
-		&& slayer->getGeoscapeSoldier() == NULL
-		&& slayer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-		&& slayer->getStatus() == STATUS_DEAD
-		&& slayer->getMurdererId() != 0)
+	// If the victim was killed by the attacker's death explosion,
+	// fetch who killed the attacker and make THAT the attacker!
+	if (attacker != NULL
+		&& attacker->getGeoscapeSoldier() == NULL
+		&& (attacker->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+			|| attacker->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+		&& (attacker->getStatus() == STATUS_DEAD
+			|| attacker->getStatus() == STATUS_DISABLED) // not sure if this is needed.
+		&& attacker->getMurdererId() != 0)
 	{
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _save->getUnits()->begin();
 				i != _save->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getId() == slayer->getMurdererId())
-				slayer = *i;
+			if ((*i)->getId() == attacker->getMurdererId())
+				attacker = *i;
 		}
 	}
 	// kL_note: what about tile explosions
@@ -912,8 +914,8 @@ void BattlescapeGame::checkForCasualties(
 		killStatPoints = 0;
 
 
-	if (slayer != NULL
-		&& slayer->getGeoscapeSoldier() != NULL)
+	if (attacker != NULL
+		&& attacker->getGeoscapeSoldier() != NULL)
 	{
 		killStatMission = _save->getGeoscapeSave()->getMissionStatistics()->size();
 
@@ -925,33 +927,36 @@ void BattlescapeGame::checkForCasualties(
 
 		if (weapon != NULL)
 		{
+			killStatWeapon =
 			killStatWeaponAmmo = weapon->getRules()->getName();
-			killStatWeapon = killStatWeaponAmmo;
 		}
 
-		const BattleItem* ammo = slayer->getItem("STR_RIGHT_HAND");
-		if (ammo != NULL)
+		const BattleItem* item = attacker->getItem("STR_RIGHT_HAND");
+		const RuleItem* itRule;
+		if (item != NULL)
 		{
+			itRule = item->getRules();
 			for (std::vector<std::string>::const_iterator
-					i = ammo->getRules()->getCompatibleAmmo()->begin();
-					i != ammo->getRules()->getCompatibleAmmo()->end();
+					i = itRule->getCompatibleAmmo()->begin();
+					i != itRule->getCompatibleAmmo()->end();
 					++i)
 			{
 				if (*i == killStatWeaponAmmo)
-					killStatWeapon = ammo->getRules()->getName();
+					killStatWeapon = itRule->getName();
 			}
 		}
 
-		ammo = slayer->getItem("STR_LEFT_HAND");
-		if (ammo != NULL)
+		item = attacker->getItem("STR_LEFT_HAND");
+		if (item != NULL)
 		{
+			itRule = item->getRules();
 			for (std::vector<std::string>::const_iterator
-					i = ammo->getRules()->getCompatibleAmmo()->begin();
-					i != ammo->getRules()->getCompatibleAmmo()->end();
+					i = itRule->getCompatibleAmmo()->begin();
+					i != itRule->getCompatibleAmmo()->end();
 					++i)
 			{
 				if (*i == killStatWeaponAmmo)
-					killStatWeapon = ammo->getRules()->getName();
+					killStatWeapon = itRule->getName();
 			}
 		}
 	}
@@ -974,8 +979,8 @@ void BattlescapeGame::checkForCasualties(
 		BattleUnit* const victim = *i; // kL
 
 		// Awards: decide victim race and rank
-		if (slayer != NULL
-			&& slayer->getGeoscapeSoldier() != NULL)
+		if (attacker != NULL
+			&& attacker->getGeoscapeSoldier() != NULL)
 		{
 			killStatPoints = victim->getValue();
 
@@ -1016,17 +1021,17 @@ void BattlescapeGame::checkForCasualties(
 		{
 			(*i)->setStatus(STATUS_DISABLED); // kL
 
-			// slayer's Morale Bonus & diary ->
-			if (slayer != NULL)
+			// attacker's Morale Bonus & diary ->
+			if (attacker != NULL)
 			{
-				(*i)->killedBy(slayer->getFaction()); // used in DebriefingState.
-				Log(LOG_INFO) << "BSG::checkForCasualties() " << victim->getId() << " killedBy = " << (int)slayer->getFaction();
+				(*i)->killedBy(attacker->getFaction()); // used in DebriefingState.
+				Log(LOG_INFO) << "BSG::checkForCasualties() " << victim->getId() << " killedBy = " << (int)attacker->getFaction();
 
-				if (slayer->isFearable() == true)
+				if (attacker->isFearable() == true)
 				{
-					if (slayer->getGeoscapeSoldier() != NULL)
+					if (attacker->getGeoscapeSoldier() != NULL)
 					{
-						slayer->getStatistics()->kills.push_back(new BattleUnitKills(
+						attacker->getStatistics()->kills.push_back(new BattleUnitKills(
 																				killStatRank,
 																				killStatRace,
 																				killStatWeapon,
@@ -1036,30 +1041,30 @@ void BattlescapeGame::checkForCasualties(
 																				killStatMission,
 																				killStatTurn,
 																				killStatPoints));
-						victim->setMurdererId(slayer->getId());
+						victim->setMurdererId(attacker->getId());
 					}
 
 					int bonus = 0;
-					if (slayer->getOriginalFaction() == FACTION_PLAYER)
+					if (attacker->getOriginalFaction() == FACTION_PLAYER)
 					{
-						slayer->addKillCount();
+						attacker->addKillCount();
 						bonus = _save->getMoraleModifier();
 					}
-					else if (slayer->getOriginalFaction() == FACTION_HOSTILE)
+					else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
 						bonus = _save->getMoraleModifier(NULL, false);
 
-					// slayer's Valor
-					if ((slayer->getOriginalFaction() == FACTION_HOSTILE
+					// attacker's Valor
+					if ((attacker->getOriginalFaction() == FACTION_HOSTILE
 							&& victim->getOriginalFaction() == FACTION_PLAYER)
-						|| (slayer->getOriginalFaction() == FACTION_PLAYER
+						|| (attacker->getOriginalFaction() == FACTION_PLAYER
 							&& victim->getOriginalFaction() == FACTION_HOSTILE))
 					{
 						const int courage = 10 * bonus / 100;
-						slayer->moraleChange(courage); // double what rest of squad gets below
+						attacker->moraleChange(courage); // double what rest of squad gets below
 					}
-					// slayer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
+					// attacker (mc'd or not) will get a penalty with friendly fire (mc'd or not)
 					// ... except aLiens, who don't care.
-					else if (slayer->getOriginalFaction() == FACTION_PLAYER
+					else if (attacker->getOriginalFaction() == FACTION_PLAYER
 						&& victim->getOriginalFaction() == FACTION_PLAYER)
 					{
 						int chagrin = 5000 / bonus; // huge chagrin!
@@ -1068,17 +1073,17 @@ void BattlescapeGame::checkForCasualties(
 						{
 							chagrin /= 2;
 						}
-						slayer->moraleChange(-chagrin);
+						attacker->moraleChange(-chagrin);
 					}
 					else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
 					{
-						if (slayer->getOriginalFaction() == FACTION_PLAYER)
+						if (attacker->getOriginalFaction() == FACTION_PLAYER)
 						{
 							const int dishonor = 2000 / bonus;
-							slayer->moraleChange(-dishonor);
+							attacker->moraleChange(-dishonor);
 						}
-						else if (slayer->getOriginalFaction() == FACTION_HOSTILE)
-							slayer->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
+						else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
+							attacker->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
 					}
 				}
 			}
@@ -1128,12 +1133,12 @@ void BattlescapeGame::checkForCasualties(
 							(*j)->moraleChange(moraleLoss);
 						}
 /*kL
-						if (slayer
-							&& slayer->getFaction() == FACTION_PLAYER
+						if (attacker
+							&& attacker->getFaction() == FACTION_PLAYER
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
-							slayer->setTurnsExposed(0); // interesting
-							//Log(LOG_INFO) << ". . . . slayer Exposed";
+							attacker->setTurnsExposed(0); // interesting
+							//Log(LOG_INFO) << ". . . . attacker Exposed";
 						} */
 					}
 					else if ((((*j)->getOriginalFaction() == FACTION_PLAYER
@@ -1172,11 +1177,11 @@ void BattlescapeGame::checkForCasualties(
 													this,
 													*i,
 													DT_HE));
-					else // no slayer, and no terrain explosion, must be fatal wounds
+					else // no attacker, and no terrain explosion, must be fatal wounds
 						statePushNext(new UnitDieBState(
 													this,
 													*i,
-													DT_NONE)); // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+													DT_NONE)); // DT_NONE -> STR_HAS_DIED_FROM_A_FATAL_WOUND
 				}
 			}
 		}
@@ -1189,10 +1194,10 @@ void BattlescapeGame::checkForCasualties(
 		{
 			(*i)->setStatus(STATUS_DISABLED); // kL
 
-			if (slayer != NULL
-				&& slayer->getGeoscapeSoldier() != NULL)
+			if (attacker != NULL
+				&& attacker->getGeoscapeSoldier() != NULL)
 			{
-				slayer->getStatistics()->kills.push_back(new BattleUnitKills(
+				attacker->getStatistics()->kills.push_back(new BattleUnitKills(
 																		killStatRank,
 																		killStatRace,
 																		killStatWeapon,

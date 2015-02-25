@@ -2488,17 +2488,17 @@ void GeoscapeState::time1Day()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Day()";
 	for (std::vector<Base*>::const_iterator
-			b = _savedGame->getBases()->begin();
-			b != _savedGame->getBases()->end();
-			++b)
+			base = _savedGame->getBases()->begin();
+			base != _savedGame->getBases()->end();
+			++base)
 	{
 		// myk002_begin: create list of pending events for this base so we can
 		// show a slightly different dialog layout for the last event of each type
 		std::vector<ProductionCompleteInfo> productionCompleteEvents; // myk002_end.
 
 		for (std::vector<BaseFacility*>::const_iterator // handle facility construction
-				f = (*b)->getFacilities()->begin();
-				f != (*b)->getFacilities()->end();
+				f = (*base)->getFacilities()->begin();
+				f != (*base)->getFacilities()->end();
 				++f)
 		{
 			if ((*f)->getBuildTime() > 0)
@@ -2516,7 +2516,7 @@ void GeoscapeState::time1Day()
 													PROGRESS_CONSTRUCTION)); // myk002_end.
 /*myk002
 					popup(new ProductionCompleteState(
-													*b,
+													*base,
 													tr((*f)->getRules()->getType()),
 													this,
 													PROGRESS_CONSTRUCTION)); */
@@ -2528,8 +2528,8 @@ void GeoscapeState::time1Day()
 		std::vector<ResearchProject*> finished; // handle science projects
 
 		for (std::vector<ResearchProject*>::const_iterator
-				rp = (*b)->getResearch().begin();
-				rp != (*b)->getResearch().end();
+				rp = (*base)->getResearch().begin();
+				rp != (*base)->getResearch().end();
 				++rp)
 		{
 			if ((*rp)->step())
@@ -2548,7 +2548,7 @@ void GeoscapeState::time1Day()
 				rp != finished.end();
 				++rp)
 		{
-			(*b)->removeResearch(
+			(*base)->removeResearch(
 							*rp,
 							_game->getRuleset()->getUnit((*rp)->getRules()->getName()) != NULL); // kL, interrogation of aLien Unit complete.
 
@@ -2561,7 +2561,7 @@ void GeoscapeState::time1Day()
 				&& research->needItem() == true
 				&& _game->getRuleset()->getUnit(research->getName()) != NULL)
 			{
-				(*b)->getItems()->addItem(
+				(*base)->getItems()->addItem(
 									_game->getRuleset()->getArmor(
 															_game->getRuleset()->getUnit(
 																					research->getName())->getArmor())
@@ -2646,14 +2646,14 @@ void GeoscapeState::time1Day()
 										newPossibleResearch,
 										(*rp)->getRules(),
 										_game->getRuleset(),
-										*b);
+										*base);
 
 			std::vector<RuleManufacture*> newPossibleManufacture;
 			_savedGame->getDependableManufacture(
 											newPossibleManufacture,
 											(*rp)->getRules(),
 											_game->getRuleset(),
-											*b);
+											*base);
 
 			if (newResearch != NULL) // check for possible researching weapon before clip
 			{
@@ -2694,7 +2694,7 @@ void GeoscapeState::time1Day()
 			} // myk002_end.
 /*myk002
 			popup(new NewPossibleResearchState(
-											*b,
+											*base,
 											newPossibleResearch)); */
 
 			if (newPossibleManufacture.empty() == false)
@@ -2707,7 +2707,7 @@ void GeoscapeState::time1Day()
 																				true)); // myk002_end.
 /*myk002
 				popup(new NewPossibleManufactureState(
-													*b,
+													*base,
 													newPossibleManufacture)); */
 			}
 
@@ -2735,28 +2735,37 @@ void GeoscapeState::time1Day()
 			delete *rp; // DONE Research.
 		}
 
-		//Log(LOG_INFO) << ". Soldiers";
+
+		bool dead;
+		int pctWounds;
 		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
-				soldier = (*b)->getSoldiers()->begin();
-				soldier != (*b)->getSoldiers()->end();
+				sol = (*base)->getSoldiers()->begin();
+				sol != (*base)->getSoldiers()->end();
 				)
 		{
-			//Log(LOG_INFO) << ". Soldier = " << (*soldier)->getId() << " woundPct = " << (*soldier)->getWoundPercent();
-			if ((*soldier)->getWoundPercent() > 10)
+			dead = false;
+
+			pctWounds = (*sol)->getWoundPercent();
+			if (pctWounds > 10)
 			{
+				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pctWounds;
 				const int chanceToDie = std::max(
 											1,
-											((*soldier)->getWoundPercent() / 5) / (((*soldier)->getWoundRecovery() + 9) / 10)); // note potential divBy0
+											(pctWounds / 3) / (((*sol)->getWoundRecovery() + 9) / 10)); // note potential divBy0
+				Log(LOG_INFO) << ". . chanceToDie = " << chanceToDie;
 				if (RNG::percent(chanceToDie) == true) // more than 10% wounded, %chance to die today
 				{
-					//Log(LOG_INFO) << ". . he's dead, Jim!!" << (*soldier)->getId();
+					dead = true;
+					Log(LOG_INFO) << ". . . he's dead, Jim!!";
 					timerReset();
+					if ((*sol)->getArmor()->getStoreItem() != "STR_NONE")
+						(*base)->getItems()->addItem((*sol)->getArmor()->getStoreItem()); // return soldier's armor to Stores
 
 					popup(new SoldierDiedState(
-											(*soldier)->getName(),
-											(*b)->getName()));
+											(*sol)->getName(),
+											(*base)->getName()));
 
-					(*soldier)->die(_savedGame); // holy * This copies the Diary-object
+					(*sol)->die(_savedGame); // holy * This copies the Diary-object
 					// so to delete Soldier-instance I need to use a CopyConstructor
 					// on either or both of SoldierDiary and SoldierCommendations.
 					// Oh, and maybe an operator= assignment overload also.
@@ -2764,36 +2773,32 @@ void GeoscapeState::time1Day()
 					// throw cow's dung at you. (But don't mention "const" or they'll throw
 					// twice as fast.) i miss you, Alan Turing ....
 
-					delete *soldier;
-					soldier = (*b)->getSoldiers()->erase(soldier);
-
-					// note: Could return any armor the soldier was wearing to Stores.
+					delete *sol;
+					sol = (*base)->getSoldiers()->erase(sol);
 				}
 			}
-			else
+
+			if (dead == false)
 			{
-				//Log(LOG_INFO) << ". . heal up.";
-				if ((*soldier)->getWoundRecovery() > 0)
-					(*soldier)->heal();
+				if ((*sol)->getWoundRecovery() > 0)
+					(*sol)->heal();
 
-				++soldier;
+				++sol;
 			}
-			//Log(LOG_INFO) << ". Soldier DONE";
 		}
-		//Log(LOG_INFO) << ". iterate Soldiers DONE";
 
-		if ((*b)->getAvailablePsiLabs() > 0 // handle psionic training
+		if ((*base)->getAvailablePsiLabs() > 0 // handle psionic training
 			&& Options::anytimePsiTraining == true)
 		{
 			for (std::vector<Soldier*>::const_iterator
-					soldier = (*b)->getSoldiers()->begin();
-					soldier != (*b)->getSoldiers()->end();
-					++soldier)
+					sol = (*base)->getSoldiers()->begin();
+					sol != (*base)->getSoldiers()->end();
+					++sol)
 			{
-				if ((*soldier)->trainPsiDay() == true)
-					(*soldier)->autoStat();
+				if ((*sol)->trainPsiDay() == true)
+					(*sol)->autoStat();
 
-//				(*soldier)->calcStatString(
+//				(*sol)->calcStatString(
 //								_game->getRuleset()->getStatStrings(),
 //								(Options::psiStrengthEval
 //									&& _savedGame->isResearched(_game->getRuleset()->getPsiRequirements())));
@@ -2819,7 +2824,7 @@ void GeoscapeState::time1Day()
 				)
 		{
 			popup(new ProductionCompleteState(
-											*b,
+											*base,
 											pcEvent->item,
 											this,
 											pcEvent->showGotoBaseButton,
@@ -2846,7 +2851,7 @@ void GeoscapeState::time1Day()
 				)
 		{
 			popup(new NewPossibleResearchState(
-											*b,
+											*base,
 											resEvent->newPossibleResearch,
 											resEvent->showResearchButton));
 
@@ -2860,7 +2865,7 @@ void GeoscapeState::time1Day()
 				)
 		{
 			popup(new NewPossibleManufactureState(
-												*b,
+												*base,
 												manEvent->newPossibleManufacture,
 												manEvent->showManufactureButton));
 
@@ -2876,41 +2881,41 @@ void GeoscapeState::time1Day()
 	if (aLienPts > 0) // handle regional and country points for alien bases
 	{
 		for (std::vector<AlienBase*>::const_iterator
-				ab = _savedGame->getAlienBases()->begin();
-				ab != _savedGame->getAlienBases()->end();
-				++ab)
+				i = _savedGame->getAlienBases()->begin();
+				i != _savedGame->getAlienBases()->end();
+				++i)
 		{
 			const double
-				lon = (*ab)->getLongitude(),
-				lat = (*ab)->getLatitude();
+				lon = (*i)->getLongitude(),
+				lat = (*i)->getLatitude();
 
 			for (std::vector<Region*>::const_iterator
-					r = _savedGame->getRegions()->begin();
-					r != _savedGame->getRegions()->end();
-					++r)
+					j = _savedGame->getRegions()->begin();
+					j != _savedGame->getRegions()->end();
+					++j)
 			{
-				if ((*r)->getRules()->insideRegion(
+				if ((*j)->getRules()->insideRegion(
 												lon,
 												lat) == true)
 				{
-					(*r)->addActivityAlien(aLienPts);
-					(*r)->recentActivity();
+					(*j)->addActivityAlien(aLienPts);
+					(*j)->recentActivity();
 
 					break;
 				}
 			}
 
 			for (std::vector<Country*>::const_iterator
-					c = _savedGame->getCountries()->begin();
-					c != _savedGame->getCountries()->end();
-					++c)
+					j = _savedGame->getCountries()->begin();
+					j != _savedGame->getCountries()->end();
+					++j)
 			{
-				if ((*c)->getRules()->insideCountry(
+				if ((*j)->getRules()->insideCountry(
 												lon,
 												lat) == true)
 				{
-					(*c)->addActivityAlien(aLienPts);
-					(*c)->recentActivity();
+					(*j)->addActivityAlien(aLienPts);
+					(*j)->recentActivity();
 
 					break;
 				}

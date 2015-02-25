@@ -72,8 +72,6 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
-//	_txtUsed		= new Text(110, 9, 16, 24);
-//	_txtAvailable	= new Text(110, 9, 160, 24);
 	_txtSpace		= new Text(110, 9, 16, 24);
 	_txtLoad		= new Text(110, 9, 171, 24);
 
@@ -89,13 +87,11 @@ CraftSoldiersState::CraftSoldiersState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("craftSoldiers")->getElement("palette")->color); //2
+			_game->getRuleset()->getInterface("craftSoldiers")->getElement("palette")->color);
 
 	add(_window, "window", "craftSoldiers");
 	add(_txtTitle, "text", "craftSoldiers");
 	add(_txtBaseLabel, "text", "craftSoldiers");
-//	add(_txtUsed, "text", "craftSoldiers");
-//	add(_txtAvailable, "text", "craftSoldiers");
 	add(_txtSpace, "text", "craftSoldiers");
 	add(_txtLoad, "text", "craftSoldiers");
 	add(_txtName, "text", "craftSoldiers");
@@ -109,61 +105,41 @@ CraftSoldiersState::CraftSoldiersState(
 	centerAllSurfaces();
 
 
-//	_colorOtherCraft = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
-
-//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT")
 						.arg(_base->getCrafts()->at(_craftID)->getName(_game->getLanguage())));
 
-
-//	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtUsed->setColor(Palette::blockOffset(15)+6);
-//	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
-//	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-//	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtSpace->setColor(Palette::blockOffset(15)+6);
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 
-//	_txtLoad->setColor(Palette::blockOffset(15)+6);
 	_txtLoad->setSecondaryColor(Palette::blockOffset(13));
 
-//	_txtName->setColor(Palette::blockOffset(15)+6);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-//	_txtRank->setColor(Palette::blockOffset(15)+6);
 	_txtRank->setText(tr("STR_RANK"));
 
-//	_txtCraft->setColor(Palette::blockOffset(15)+6);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-//	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 116, 85, 71);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
-//	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersMousePress);
 	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstRightArrowClick);
 
-//	_btnUnload->setColor(Palette::blockOffset(13)+10);
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
 	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);
 
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftSoldiersState::btnInventoryClick);
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -244,18 +220,18 @@ void CraftSoldiersState::init()
 
 		Uint8 color;
 		if ((*i)->getCraft() == NULL)
-			color = _lstSoldiers->getColor(); // white Palette::blockOffset(13)+10;
+			color = _lstSoldiers->getColor();
 		else
 		{
 			if ((*i)->getCraft() == craft)
-				color = _lstSoldiers->getSecondaryColor(); // blue Palette::blockOffset(13);
+				color = _lstSoldiers->getSecondaryColor();
 			else
-				color = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color; // purple _colorOtherCraft; //Palette::blockOffset(15)+6;
+				color = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
 		}
 
 		_lstSoldiers->setRowColor(row, color);
 
-		if ((*i)->getWoundRecovery() != 0)
+		if ((*i)->getWoundRecovery() > 0)
 		{
 			const int woundPct = (*i)->getWoundPercent();
 			if (woundPct > 50)
@@ -292,10 +268,7 @@ void CraftSoldiersState::init()
 							craft->getNumSoldiers() > 0
 							&& _game->getSavedGame()->getMonthsPassed() != -1);
 
-//	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
-//	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
-//					.arg(craft->getSpaceUsed())
 					.arg(craft->getNumSoldiers())
 					.arg(craft->getNumVehicles())
 					.arg(craft->getSpaceAvailable()));
@@ -323,7 +296,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
-		if (soldier->getWoundRecovery() != 0
+		if (soldier->getWoundRecovery() > 0
 			|| (soldier->getCraft() != NULL
 				&& soldier->getCraft()->getStatus() == "STR_OUT"))
 		{
@@ -366,7 +339,6 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 								&& _game->getSavedGame()->getMonthsPassed() != -1);
 
 		_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
-//						.arg(craft->getSpaceUsed())
 						.arg(craft->getNumSoldiers())
 						.arg(craft->getNumVehicles())
 						.arg(craft->getSpaceAvailable()));
@@ -524,147 +496,3 @@ void CraftSoldiersState::btnInventoryClick(Action*)
 }
 
 }
-
-/*
- * Shows the soldiers in a list at specified offset/scroll.
- */
-/* void CraftSoldiersState::initList(size_t scrl)
-{
-	int row = 0;
-	_lstSoldiers->clearList();
-	Craft *c = _base->getCrafts()->at(_craft);
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
-	{
-		_lstSoldiers->addRow(3, (*i)->getName(true, 19).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
-
-		Uint8 color;
-		if ((*i)->getCraft() == c)
-		{
-			color = Palette::blockOffset(13);
-		}
-		else if ((*i)->getCraft() != 0)
-		{
-			color = Palette::blockOffset(15)+6;
-		}
-		else
-		{
-			color = Palette::blockOffset(13)+10;
-		}
-		_lstSoldiers->setRowColor(row, color);
-		row++;
-	}
-	if (scrl)
-		_lstSoldiers->scrollTo(scrl);
-	_lstSoldiers->draw();
-
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
-} */
-
-/*
- * Shows the soldiers in a list.
- */
-/* void CraftSoldiersState::init()
-{
-	State::init();
-	initList(0);
-} */
-
-/*
- * Moves a soldier up on the list.
- * @param action - pointer to an Action
- * @param row Selected soldier row.
- * @param max Move the soldier to the top?
- */
-/*kL void CraftSoldiersState::moveSoldierUp(Action* action, size_t row, bool max)
-{
-	Soldier* soldier = _base->getSoldiers()->at(row);
-	if (max)
-	{
-		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), soldier);
-
-		initList(0);
-	}
-	else
-	{
-		_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
-		_base->getSoldiers()->at(row - 1) = soldier;
-		if (row != _lstSoldiers->getScroll())
-		{
-			SDL_WarpMouse(
-						action->getLeftBlackBand() + action->getXMouse(),
-						action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
-		}
-		else
-			_lstSoldiers->scrollUp(false);
-
-		initList(_lstSoldiers->getScroll());
-	}
-} */
-
-/*
- * Moves a soldier down on the list.
- * @param action	- pointer to an Action
- * @param row		- selected soldier row
- * @param max		- true to move the soldier to the bottom
- */
-/*kL void CraftSoldiersState::moveSoldierDown(Action* action, size_t row, bool max)
-{
-	Soldier* soldier = _base->getSoldiers()->at(row);
-	if (max)
-	{
-		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-		_base->getSoldiers()->insert(_base->getSoldiers()->end(), soldier);
-
-		initList(std::max(0, (int)(_lstSoldiers->getRows() - _lstSoldiers->getVisibleRows())));
-	}
-	else
-	{
-		_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
-		_base->getSoldiers()->at(row + 1) = soldier;
-		if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
-		{
-			SDL_WarpMouse(
-						action->getLeftBlackBand() + action->getXMouse(),
-						action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
-		}
-		else
-			_lstSoldiers->scrollDown(false);
-
-		initList(_lstSoldiers->getScroll());
-	}
-} */
-
-/*
- * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an Action
- */
-/*kL void CraftSoldiersState::lstSoldiersMousePress(Action* action)
-{
-	if (Options::changeValueByMouseWheel == 0)
-		return;
-
-	size_t row = _lstSoldiers->getSelectedRow();
-	size_t numSoldiers = _base->getSoldiers()->size();
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP
-		&& row > 0)
-	{
-		if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())
-		{
-			moveSoldierUp(action, row);
-		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN
-		&& 0 < numSoldiers
-		&& std::numeric_limits<int>::max() >= numSoldiers
-		&& row < (int)numSoldiers - 1)
-	{
-		if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstSoldiers->getArrowsRightEdge())
-		{
-			moveSoldierDown(action, row);
-		}
-	}
-} */

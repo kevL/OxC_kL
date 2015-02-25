@@ -77,7 +77,7 @@ CraftArmorState::CraftArmorState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("craftArmor")->getElement("palette")->color); //4
+			_game->getRuleset()->getInterface("craftArmor")->getElement("palette")->color);
 
 	add(_window, "window", "craftArmor");
 	add(_txtTitle, "text", "craftArmor");
@@ -91,17 +91,15 @@ CraftArmorState::CraftArmorState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftArmorState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftArmorState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
+
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_ARMOR"));
 
@@ -109,16 +107,12 @@ CraftArmorState::CraftArmorState(
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-//	_txtCraft->setColor(Palette::blockOffset(13)+10);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-//	_txtArmor->setColor(Palette::blockOffset(13)+10);
 	_txtArmor->setText(tr("STR_ARMOR"));
 
-//	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 90, 120, 73);
@@ -169,13 +163,13 @@ void CraftArmorState::init()
 		Uint8 color;
 
 		if ((*i)->getCraft() == NULL)
-			color = _lstSoldiers->getColor(); //Palette::blockOffset(13)+10;
+			color = _lstSoldiers->getColor();
 		else
 		{
 			if ((*i)->getCraft() == craft)
-				color = _lstSoldiers->getSecondaryColor(); //Palette::blockOffset(13);
+				color = _lstSoldiers->getSecondaryColor();
 			else if ((*i)->getCraft() != NULL)
-				color = _game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color; //Palette::blockOffset(15)+6;
+				color = _game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color;
 		}
 
 		_lstSoldiers->setRowColor(row, color);
@@ -240,16 +234,16 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	const Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+	size_t soldierID = _lstSoldiers->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (!
-			(soldier->getCraft() != NULL
-				&& soldier->getCraft()->getStatus() == "STR_OUT"))
+		const Soldier* const soldier = _base->getSoldiers()->at(soldierID);
+		if (soldier->getCraft() == NULL
+			|| soldier->getCraft()->getStatus() != "STR_OUT")
 		{
 			_game->pushState(new SoldierArmorState(
 												_base,
-												_lstSoldiers->getSelectedRow()));
+												soldierID));
 		}
 		else
 			_game->pushState(new ErrorMessageState(
@@ -260,11 +254,9 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 												6));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(
 											_base,
-											_lstSoldiers->getSelectedRow()));
+											soldierID));
 
 /*kL: sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor.
 		SavedGame* _save;
@@ -288,7 +280,6 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 			s->setArmor(a);
 			_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 		} */
-	}
 }
 
 /**
