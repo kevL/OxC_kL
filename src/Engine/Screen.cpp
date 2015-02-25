@@ -127,10 +127,10 @@ Screen::Screen()
 		_surface(NULL)
 {
 	resetDisplay();
-	memset(
-		deferredPalette,
-		0,
-		256 * sizeof(SDL_Color));
+	std::memset(
+			deferredPalette,
+			0,
+			256 * sizeof(SDL_Color));
 }
 
 /**
@@ -168,7 +168,7 @@ void Screen::handle(Action* action)
 		switch (Timer::gameSlowSpeed)
 		{
 			case 1: Timer::gameSlowSpeed = 5;	break;
-			case 5: Timer::gameSlowSpeed = 15;	break;
+			case 5: Timer::gameSlowSpeed = 13;	break;
 
 			default:
 				Timer::gameSlowSpeed = 1;

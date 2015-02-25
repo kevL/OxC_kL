@@ -214,11 +214,11 @@ std::string Language::wstrToUtf8(const std::wstring& src)
  */
 std::string Language::wstrToCp(const std::wstring& src)
 {
-	if (src.empty())
+	if (src.empty() == true)
 		return "";
 
 #ifdef _WIN32
-	int size = WideCharToMultiByte(
+	int bytes = WideCharToMultiByte(
 								CP_ACP,
 								0,
 								&src[0],
@@ -227,18 +227,18 @@ std::string Language::wstrToCp(const std::wstring& src)
 								0,
 								NULL,
 								NULL);
-	std::string str(size, 0);
+	std::string st (bytes, 0); // init.
 	WideCharToMultiByte(
 					CP_ACP,
 					0,
 					&src[0],
 					(int)src.size(),
-					&str[0],
-					size,
+					&st[0],
+					bytes,
 					NULL,
 					NULL);
 
-	return str;
+	return st;
 #else
 	const int MAX = 500;
 	char buffer[MAX];
@@ -252,9 +252,9 @@ std::string Language::wstrToCp(const std::wstring& src)
 	setlocale(
 			LC_ALL,
 			"C");
-	std::string str(buffer);
+	std::string st(buffer);
 
-	return str;
+	return st;
 #endif
 }
 

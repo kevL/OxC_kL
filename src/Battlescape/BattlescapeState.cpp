@@ -3002,7 +3002,7 @@ void BattlescapeState::warning(
  */
 void BattlescapeState::saveAIMap()
 {
-//kL	Uint32 start = SDL_GetTicks(); // kL_note: Not used.
+//	Uint32 start = SDL_GetTicks(); // kL_note: Not used.
 
 	BattleUnit* unit = _savedBattle->getSelectedUnit();
 	if (unit == NULL)
@@ -3024,10 +3024,10 @@ void BattlescapeState::saveAIMap()
 									0xff00,
 									0xff0000,
 									0);
-	memset(
-		img->pixels,
-		0,
-		img->pitch * img->h);
+	std::memset(
+			img->pixels,
+			0,
+			img->pitch * img->h);
 
 	Position tilePos(pos);
 
@@ -3246,7 +3246,7 @@ void BattlescapeState::saveVoxelView()
 		255,  64, 128	// neutral unit
 	};
 
-	BattleUnit* bu = _savedBattle->getSelectedUnit();
+	const BattleUnit* const bu = _savedBattle->getSelectedUnit();
 	if (bu == NULL) // no unit selected
 		return;
 
@@ -3255,12 +3255,10 @@ void BattlescapeState::saveVoxelView()
 		black = false;
 	int test;
 	double
-		ang_x = 0.0,
-		ang_y = 0.0,
-		dist = 0.0,
-		dir = static_cast<double>(bu->getDirection() + 4) / 4.0 * M_PI;
-
-	std::ostringstream ss;
+		ang_x,
+		ang_y,
+		dist = 0.,
+		dir = static_cast<double>(bu->getDirection() + 4) / 4. * M_PI;
 
 	std::vector<unsigned char> image;
 	std::vector<Position> _trajectory;
@@ -3269,7 +3267,8 @@ void BattlescapeState::saveVoxelView()
 		originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu),
 		targetVoxel,
 		hitPos;
-	Tile* tile = NULL;
+	const Tile* tile = NULL;
+
 
 	image.clear();
 
@@ -3278,35 +3277,38 @@ void BattlescapeState::saveVoxelView()
 			y < 256 + 32;
 			++y)
 	{
-		ang_y = (((double)y) / 640 * M_PI + M_PI / 2);
-//		ang_y = (static_cast<double>(y)) / 640. * M_PI + M_PI / 2.;	// kL
-		for (int x = -256; x < 256; ++x)
-		{
-			ang_x = ((double)x / 1024) * M_PI + dir;
-//			ang_x = (static_cast<double>(x / 1024)) * M_PI + dir;	//kL, getting way too confusing here.
+		ang_y = (static_cast<double>(y) / 640. * M_PI) + (M_PI / 2.);
 
-			targetVoxel.x = originVoxel.x + (int)(-sin(ang_x) * 1024 * sin(ang_y));
-			targetVoxel.y = originVoxel.y + (int)(cos(ang_x) * 1024 * sin(ang_y));
-			targetVoxel.z = originVoxel.z + (int)(cos(ang_y) * 1024);
+		for (int
+				x = -256;
+				x < 256;
+				++x)
+		{
+			ang_x = ((static_cast<double>(x) / 1024.) * M_PI) + dir;
+
+			targetVoxel.x = originVoxel.x + (static_cast<int>(-std::sin(ang_x) * 1024 * std::sin(ang_y)));
+			targetVoxel.y = originVoxel.y + (static_cast<int>(std::cos(ang_x) * 1024 * std::sin(ang_y)));
+			targetVoxel.z = originVoxel.z + (static_cast<int>(std::cos(ang_y) * 1024));
 
 			_trajectory.clear();
-			test = _savedBattle->getTileEngine()->calculateLine(
-													originVoxel,
-													targetVoxel,
-													false,
-													&_trajectory,
-													bu,
-													true,
-													!_debug)
-												+ 1;
+
 			black = true;
+
+			test = _savedBattle->getTileEngine()->calculateLine(
+															originVoxel,
+															targetVoxel,
+															false,
+															&_trajectory,
+															bu,
+															true,
+															_debug == false) + 1;
 			if (test != 0 && test != 6)
 			{
 				tile = _savedBattle->getTile(Position(
-											_trajectory.at(0).x / 16,
-											_trajectory.at(0).y / 16,
-											_trajectory.at(0).z / 24));
-				if (_debug
+												_trajectory.at(0).x / 16,
+												_trajectory.at(0).y / 16,
+												_trajectory.at(0).z / 24));
+				if (_debug == true
 					|| (tile->isDiscovered(0) && test == 2)
 					|| (tile->isDiscovered(1) && test == 3)
 					|| (tile->isDiscovered(2) && (test == 1 || test == 4))
@@ -3314,7 +3316,7 @@ void BattlescapeState::saveVoxelView()
 				{
 					if (test == 5)
 					{
-						if (tile->getUnit())
+						if (tile->getUnit() != NULL)
 						{
 							if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
 								test = 9;
@@ -3324,10 +3326,11 @@ void BattlescapeState::saveVoxelView()
 						else
 						{
 							tile = _savedBattle->getTile(Position(
-														_trajectory.at(0).x / 16,
-														_trajectory.at(0).y / 16,
-														_trajectory.at(0).z / 24 - 1));
-							if (tile && tile->getUnit())
+															_trajectory.at(0).x / 16,
+															_trajectory.at(0).y / 16,
+															_trajectory.at(0).z / 24 - 1));
+							if (tile != NULL
+								&& tile->getUnit() != NULL)
 							{
 								if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
 									test = 9;
@@ -3341,7 +3344,7 @@ void BattlescapeState::saveVoxelView()
 									_trajectory.at(0).x,
 									_trajectory.at(0).y,
 									_trajectory.at(0).z);
-					dist = sqrt(static_cast<double>(
+					dist = std::sqrt(static_cast<double>(
 								  (hitPos.x - originVoxel.x) * (hitPos.x - originVoxel.x)
 								+ (hitPos.y - originVoxel.y) * (hitPos.y - originVoxel.y)
 								+ (hitPos.z - originVoxel.z) * (hitPos.z - originVoxel.z)));
@@ -3350,34 +3353,28 @@ void BattlescapeState::saveVoxelView()
 				}
 			}
 
-			if (black)
-			{
-				dist = 0;
-			}
+			if (black == true)
+				dist = 0.;
 			else
 			{
-				if (dist > 1000.0) dist = 1000.0;
-				if (dist < 1.0) dist = 1.0;
-				dist = (1000.0 - (log(dist)) * 140.0) / 700.0;
+				if (dist > 1000.) dist = 1000.;
+				if (dist < 1.) dist = 1.;
 
-				if (hitPos.x % 16 == 15)
-				{
+				dist = (1000. - ((std::log(dist) * 140.)) / 700.);
+
+				if (hitPos.x %16 == 15)
 					dist *= 0.9;
-				}
 
-				if (hitPos.y % 16 == 15)
-				{
+				if (hitPos.y %16 == 15)
 					dist *= 0.9;
-				}
 
-				if (hitPos.z % 24 == 23)
-				{
+				if (hitPos.z %24 == 23)
 					dist *= 0.9;
-				}
 
-				if (dist > 1.0) dist = 1.0;
+				if (dist > 1.) dist = 1.;
 
-				if (tile) dist *= (16.0 - static_cast<double>(tile->getShade())) / 16.0;
+				if (tile != NULL)
+					dist *= (16. - static_cast<double>(tile->getShade())) / 16.;
 			}
 
 			image.push_back((int)((float)(pal[test * 3 + 0]) * dist));
@@ -3386,21 +3383,63 @@ void BattlescapeState::saveVoxelView()
 		}
 	}
 
+
+	std::ostringstream osts;
+
 	int i = 0;
 	do
 	{
-		ss.str("");
-		ss << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
+		osts.str("");
+		osts << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
 
 		i++;
 	}
-	while (CrossPlatform::fileExists(ss.str()));
+	while (CrossPlatform::fileExists(osts.str()) == true
+		&& i < 999);
 
 
-	unsigned error = lodepng::encode(ss.str(), image, 512, 512, LCT_RGB);
-	if (error)
+	unsigned int error = lodepng::encode(
+										osts.str(),
+										image,
+										512,512,
+										LCT_RGB);
+	if (error != 0)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+	}
+	else //if (std::system(NULL) != 0)
+	{
+//		std::string st = "\"C:\\Program Files\\IrfanView\\i_view32.exe\" \"" + osts.str(); // launch my picture viewer w/ pic!!!
+//		std::system(st.c_str());
+//		std::system("pause"); // yah, so. whatcha goona do bout it. This:
+		STARTUPINFO si;
+		ZeroMemory(&si, sizeof(si));
+//		std::memset(&si, 0, sizeof(si));
+		si.cb = sizeof(si);
+
+		PROCESS_INFORMATION pi;
+		ZeroMemory(&pi, sizeof(pi));
+//		std::memset(&pi, 0, sizeof(pi));
+
+		std::wstring wst = Language::cpToWstr("\"C:\\Program Files\\IrfanView\\i_view32.exe\" \"" + osts.str() + "\"");
+
+		CreateProcess(									//BOOL WINAPI CreateProcess
+					NULL,								//  _In_opt_     LPCTSTR lpApplicationName,
+					const_cast<LPWSTR>(wst.c_str()),	//  _Inout_opt_  LPTSTR lpCommandLine,
+					NULL,								//  _In_opt_     LPSECURITY_ATTRIBUTES lpProcessAttributes,
+					NULL,								//  _In_opt_     LPSECURITY_ATTRIBUTES lpThreadAttributes,
+					FALSE,								//  _In_         BOOL bInheritHandles,
+					0,									//  _In_         DWORD dwCreationFlags,
+					NULL,								//  _In_opt_     LPVOID lpEnvironment,
+					NULL,								//  _In_opt_     LPCTSTR lpCurrentDirectory,
+					&si,								//  _In_         LPSTARTUPINFO lpStartupInfo,
+					&pi);								//  _Out_        LPPROCESS_INFORMATION lpProcessInformation
+
+//		WaitForSingleObject(pi.hProcess, INFINITE);
+
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+		// holy fucking diana it compiled.
 	}
 
 	return;

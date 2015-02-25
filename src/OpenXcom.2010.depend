@@ -4403,7 +4403,7 @@
 	"CraftId.h"
 	"GameTime.h"
 
-1424387346 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1424885569 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -5694,7 +5694,7 @@
 1424387344 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1424387344 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1424902265 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6619,7 +6619,7 @@
 	"Action.h"
 	"Options.h"
 
-1424387341 source:f:\git\openxcom\src\engine\language.cpp
+1424891593 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -6731,7 +6731,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1424387341 source:f:\git\openxcom\src\engine\screen.cpp
+1424888018 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -7481,7 +7481,7 @@
 1424387339 f:\git\openxcom\src\geoscape\targetinfostate.h
 	"../Engine/State.h"
 
-1424387339 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
+1424885594 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
 	"NewPossibleManufactureState.h"
 	"../Basescape/ManufactureState.h"
 	"../Engine/Game.h"
@@ -8711,7 +8711,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1424668336 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1424884275 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

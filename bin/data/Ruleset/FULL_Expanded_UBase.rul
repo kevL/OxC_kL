@@ -125,6 +125,9 @@ terrains:
       - name: UBASE_30
         width: 10
         length: 10
+      - name: UBASE_31
+        width: 10
+        length: 10
       - name: UBASE_32
         width: 10
         length: 10
