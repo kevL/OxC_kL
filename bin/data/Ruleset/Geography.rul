@@ -1630,6 +1630,7 @@ regions:
       - name: STR_VANCOUVER
         lon: 236.75
         lat: -49.375
+        labelTop: true
       - name: STR_WASHINGTON
         lon: 282.875
         lat: -38.75
@@ -1801,8 +1802,8 @@ regions:
       - [150, 180, -50, -5]
     cities:
       - name: STR_ANADYR
-        lon: 180.13
-        lat: -63.86
+        lon: 179.439
+        lat: -63.919
       - name: STR_COLDBAY
         lon: 196.19
         lat: -54.86
@@ -1819,11 +1820,11 @@ regions:
         lon: 182
         lat: -28
       - name: STR_NOME
-        lon: 193.7
-        lat: -64.51
+        lon: 193.747
+        lat: -64.625
       - name: STR_STLAWRENCE_ISLAND
-        lon: 192.5
-        lat: -60.03
+        lon: 192.66
+        lat: -60.042
       - name: STR_TONGA
         lon: 189
         lat: 19
@@ -2781,7 +2782,7 @@ extraStrings:
       STR_ULANBATOR: Ulan Bator
       STR_URUMQI: Urumqi
       STR_USA: states
-      STR_VANCOUVER: Vancouva
+      STR_VANCOUVER: Vancouver
       STR_VENEZULA: venezuela
       STR_VENICE: Venice
       STR_VIENNA: Vienna

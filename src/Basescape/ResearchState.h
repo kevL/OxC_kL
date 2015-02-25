@@ -27,6 +27,8 @@ namespace OpenXcom
 {
 
 class Base;
+class BasescapeState;
+class MiniBaseView;
 class Text;
 class TextButton;
 class TextList;
@@ -34,8 +36,7 @@ class Window;
 
 
 /**
- * Research screen that lets the player manage
- * all the researching operations of a base.
+ * Research screen that lets the player manage the research operations of a Base.
  */
 class ResearchState
 	:
@@ -44,6 +45,8 @@ class ResearchState
 
 private:
 	Base* _base;
+	BasescapeState* _state;
+	MiniBaseView* _mini;
 	Text
 		* _txtAllocated,
 		* _txtAvailable,
@@ -60,12 +63,14 @@ private:
 	TextList* _lstResearch;
 	Window* _window;
 
-	std::vector<bool> _online; // kL
+	std::vector<bool> _online;
 
 
 	public:
 		/// Creates the Research state.
-		ResearchState(Base* base);
+		ResearchState(
+				Base* base,
+				BasescapeState* state = NULL);
 		/// Cleans up the Research state.
 		~ResearchState();
 
@@ -77,6 +82,8 @@ private:
 		void btnAliens(Action* action);
 		/// Handler for clicking the ResearchProject list.
 		void onSelectProject(Action* action);
+		/// Handler for clicking the mini base view.
+		void miniClick(Action* action);
 
 		/// Updates the research list.
 		void init();

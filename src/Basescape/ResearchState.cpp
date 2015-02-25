@@ -22,6 +22,8 @@
 //#include <sstream>
 
 #include "AlienContainmentState.h"
+#include "BasescapeState.h"
+#include "MiniBaseView.h"
 #include "NewResearchListState.h"
 #include "ResearchInfoState.h"
 
@@ -44,6 +46,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Savegame/ResearchProject.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -51,21 +54,26 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Research screen.
- * @param base - pointer to the base to get info from
+ * @param base	- pointer to the base to get info from
+ * @param state	- pointer to the BasescapeState (default NULL when geoscape-invoked)
  */
 ResearchState::ResearchState(
-		Base* base)
+		Base* base,
+		BasescapeState* state)
 	:
-		_base(base)
+		_base(base),
+		_state(state)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-	_txtTitle		= new Text(300, 17, 16, 10);
-	_txtBaseLabel	= new Text(80, 9, 16, 10);
+	_mini			= new MiniBaseView(128, 16, 180, 26, MBV_RESEARCH);
 
-	_txtAllocated	= new Text(140, 9, 16, 26);
-	_txtAvailable	= new Text(140, 9, 16, 35);
+	_txtTitle		= new Text(300, 17, 16, 9);
+	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
-	_txtSpace		= new Text(100, 9, 160, 26);
+	_txtAllocated	= new Text(60, 9, 16, 25);
+	_txtAvailable	= new Text(60, 9, 16, 34);
+
+	_txtSpace		= new Text(100, 9, 80, 25);
 
 	_txtProject		= new Text(110, 9, 16, 48);
 	_txtScientists	= new Text(55, 9, 161, 48);
@@ -80,9 +88,10 @@ ResearchState::ResearchState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
+			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
 	add(_window, "window", "researchMenu");
+	add(_mini, "miniBase", "basescape");
 	add(_txtTitle, "text", "researchMenu");
 	add(_txtBaseLabel, "text", "researchMenu");
 	add(_txtAvailable, "text", "researchMenu");
@@ -99,53 +108,50 @@ ResearchState::ResearchState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-//	_btnAliens->setColor(Palette::blockOffset(15)+6);
+	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setBases(_game->getSavedGame()->getBases());
+	for (size_t
+			i = 0;
+			i != _game->getSavedGame()->getBases()->size();
+			++i)
+	{
+		if (_game->getSavedGame()->getBases()->at(i) == base)
+		{
+			_mini->setSelectedBase(i);
+			break;
+		}
+	}
+	_mini->onMouseClick(
+					(ActionHandler)& ResearchState::miniClick,
+					SDL_BUTTON_LEFT);
+
 	_btnAliens->setText(tr("STR_ALIENS"));
 	_btnAliens->onMouseClick((ActionHandler)& ResearchState::btnAliens);
 	_btnAliens->setVisible(false);
 
-//	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)& ResearchState::btnNewClick);
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ResearchState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_RESEARCH"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtAvailable->setColor(Palette::blockOffset(13)+10);
-//	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtAllocated->setColor(Palette::blockOffset(13)+10);
-//	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtSpace->setColor(Palette::blockOffset(13)+10);
-//	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtProject->setColor(Palette::blockOffset(13)+10);
 	_txtProject->setText(tr("STR_RESEARCH_PROJECT"));
 
-//	_txtScientists->setColor(Palette::blockOffset(13)+10);
 	_txtScientists->setText(tr("STR_SCIENTISTS_ALLOCATED_UC"));
 
-//	_txtProgress->setColor(Palette::blockOffset(13)+10);
 	_txtProgress->setText(tr("STR_PROGRESS"));
 
-//	_lstResearch->setColor(Palette::blockOffset(15)+6);
-//	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setColumns(4, 137, 58, 48, 34);
 	_lstResearch->setSelectable();
@@ -199,8 +205,6 @@ void ResearchState::onSelectProject(Action*)
 		sel2 = sel,								// entry of RP vector
 		entry = 0;								// to break when vector.at[entry] meets sel
 
-	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
-
 	for (std::vector<bool>::const_iterator
 			i = _online.begin();
 			i != _online.end();
@@ -215,10 +219,37 @@ void ResearchState::onSelectProject(Action*)
 		++entry;
 	}
 
+	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
 	_game->pushState(new ResearchInfoState(
 										_base,
 										rps[sel2]));
 //										rps[_lstResearch->getSelectedRow()]));
+}
+
+/**
+ * Selects a new base to display.
+ * @param action - pointer to an Action
+ */
+void ResearchState::miniClick(Action*)
+{
+	if (_state != NULL) // cannot switch bases if coming from geoscape.
+	{
+		const size_t baseID = _mini->getHoveredBase();
+		if (baseID < _game->getSavedGame()->getBases()->size())
+		{
+			Base* const base = _game->getSavedGame()->getBases()->at(baseID);
+
+			if (base != _base
+				&& base->hasResearch() == true)
+			{
+				_base = base;
+				_mini->setSelectedBase(baseID);
+				_state->setBase(_base);
+
+				init();
+			}
+		}
+	}
 }
 
 /**
@@ -245,29 +276,30 @@ void ResearchState::init()
 		_online.push_back(true);
 
 
-		std::wostringstream assigned;
-		assigned << (*rp)->getAssigned();
+		const std::wstring wstProject = tr((*rp)->getRules()->getName());
 
-		const std::wstring project = tr((*rp)->getRules()->getName());
-		std::wstring wsDaysLeft;
+		std::wostringstream wostsAssigned;
+		wostsAssigned << (*rp)->getAssigned();
+
+		std::wstring wstDaysLeft;
 
 		if ((*rp)->getAssigned() > 0)
 		{
 			const int daysLeft = static_cast<int>(std::ceil(
-									(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
-									/ static_cast<double>((*rp)->getAssigned())));
-			wsDaysLeft = Text::formatNumber(daysLeft, L"", false);
+								(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
+							   / static_cast<double>((*rp)->getAssigned())));
+			wstDaysLeft = Text::formatNumber(daysLeft);
 		}
 		else
-			 wsDaysLeft = L"-";
+			 wstDaysLeft = L"-";
 
 		_lstResearch->addRow(
 							4,
-							project.c_str(),
-							assigned.str().c_str(),
+							wstProject.c_str(),
+							wostsAssigned.str().c_str(),
 							tr((*rp)->getResearchProgress()).c_str(),
 //							(*rp)->getCostCompleted().c_str());
-							wsDaysLeft.c_str());
+							wstDaysLeft.c_str());
 	}
 
 	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")

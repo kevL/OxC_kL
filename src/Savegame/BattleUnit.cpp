@@ -2915,7 +2915,7 @@ void BattleUnit::updateGeoscapeStats(Soldier* soldier)
 /**
  * Check if unit eligible for squaddie promotion. If yes, promote the unit.
  * Increase the mission counter. Calculate the experience increases.
- * @param geoscape - pointer to geoscape save
+ * @param geoscape - pointer to the SavedGame
  * @return, true if the soldier was eligible for squaddie promotion
  */
 bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
@@ -2931,14 +2931,14 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	const UnitStats caps = soldier->getRules()->getStatCaps();
 
 	const int healthLoss = stats->health - _health;
-	soldier->setWoundRecovery(RNG::generate(
-						static_cast<int>((static_cast<double>(healthLoss) * 0.5)),
-						static_cast<int>((static_cast<double>(healthLoss) * 1.5))));
+	soldier->setWoundRecovery(RNG::generate( // 50% to 150%
+										healthLoss / 2,
+										healthLoss * 3 / 2));
 
 	if (_expBravery != 0
 		&& stats->bravery < caps.bravery)
 	{
-		if (_expBravery > RNG::generate(0, 8))
+		if (_expBravery > RNG::generate(0,8))
 			stats->bravery += 10;
 	}
 
@@ -3038,13 +3038,13 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
  * @param exp - experience count from battle mission
  * @return, stat increase
  */
-int BattleUnit::improveStat(int exp)
+int BattleUnit::improveStat(int xp) // private.
 {
 	int teir = 1;
 
-	if		(exp > 10)	teir = 4;
-	else if (exp > 5)	teir = 3;
-	else if (exp > 2)	teir = 2;
+	if		(xp > 10)	teir = 4;
+	else if (xp > 5)	teir = 3;
+	else if (xp > 2)	teir = 2;
 
 	return (teir / 2 + RNG::generate(0, teir));
 }

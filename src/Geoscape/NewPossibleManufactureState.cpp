@@ -131,9 +131,7 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 void NewPossibleManufactureState::btnManufactureClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new ManufactureState(
-										_base,
-										NULL));
+	_game->pushState(new ManufactureState(_base));
 }
 
 }

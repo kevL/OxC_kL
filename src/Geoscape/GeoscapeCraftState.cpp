@@ -224,7 +224,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 //	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 //	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(speed, L"", false));
+	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(speed));
 	_txtSpeed->setText(ss1.str());
 
 //	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);

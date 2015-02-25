@@ -1788,6 +1788,27 @@ bool Base::getHyperDetection() const
 }
 
 /**
+ * Returns whether or not a base is equipped with research facilities.
+ * @return, true if this base is capable of research
+ */
+bool Base::hasResearch() const
+{
+	for (std::vector<BaseFacility*>::const_iterator
+			f = _facilities.begin();
+			f != _facilities.end();
+			++f)
+	{
+		if ((*f)->getBuildTime() == 0
+			&& (*f)->getRules()->getLaboratories() > 0)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Returns whether or not a base is equipped with production facilities.
  * @return, true if this base is capable of production
  */

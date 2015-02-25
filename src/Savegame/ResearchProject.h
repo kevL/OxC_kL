@@ -75,9 +75,9 @@ private:
 		int getCost() const;
 
 		/// kL. Sets the project offline.
-		void setOffline(const bool offline = true); // kL
+		void setOffline(const bool offline = true);
 		/// kL. Gets whether the project is offline or not.
-		bool getOffline() const; // kL
+		bool getOffline() const;
 
 		/// Loads the ResearchProject from YAML.
 		void load(const YAML::Node& node);
@@ -87,7 +87,7 @@ private:
 		/// Gets a string describing current progress.
 		std::string getResearchProgress() const;
 		/// Gets a string of cost completed as a per cent value.
-		std::wstring getCostCompleted() const; // kL
+		std::wstring getCostCompleted() const;
 };
 
 }

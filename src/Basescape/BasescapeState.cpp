@@ -473,7 +473,9 @@ void BasescapeState::btnAliens(Action*)
  */
 void BasescapeState::btnResearchClick(Action*)
 {
-	_game->pushState(new ResearchState(_base));
+	_game->pushState(new ResearchState(
+									_base,
+									this));
 }
 
 /**
@@ -626,7 +628,9 @@ void BasescapeState::viewLeftClick(Action*)
 	else if (fac->getRules()->getLaboratories() > 0)
 	{
 		bPop = true;
-		_game->pushState(new ResearchState(_base));
+		_game->pushState(new ResearchState(
+										_base,
+										this));
 	}
 	else if (fac->getRules()->getWorkshops() > 0)
 	{

@@ -36,8 +36,7 @@ class Window;
 
 
 /**
- * Manufacture screen that lets the player manage
- * all the manufacturing operations of a base.
+ * Manufacture screen that lets the player manage the production operations of a Base.
  */
 class ManufactureState
 	:
@@ -74,7 +73,7 @@ private:
 		/// Creates the Manufacture state.
 		ManufactureState(
 				Base* base,
-				BasescapeState* state);
+				BasescapeState* state = NULL);
 		/// Cleans up the Manufacture state.
 		~ManufactureState();
 

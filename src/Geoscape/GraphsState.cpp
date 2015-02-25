@@ -233,7 +233,7 @@ GraphsState::GraphsState(int curGraph)
 													66,
 													(static_cast<int>(offset) * 10) + 1));
 			_txtRegionActivityAlien.at(offset)->setColor(colorOffset * 8 + 16);
-			_txtRegionActivityAlien.at(offset)->setText(Text::formatNumber(alienAct, L"", false));
+			_txtRegionActivityAlien.at(offset)->setText(Text::formatNumber(alienAct));
 
 			add(_txtRegionActivityAlien.at(offset));
 
@@ -247,7 +247,7 @@ GraphsState::GraphsState(int curGraph)
 													66,
 													(static_cast<int>(offset) * 10) + 1));
 			_txtRegionActivityXCom.at(offset)->setColor(colorOffset * 8 + 16);
-			_txtRegionActivityXCom.at(offset)->setText(Text::formatNumber(xcomAct, L"", false));
+			_txtRegionActivityXCom.at(offset)->setText(Text::formatNumber(xcomAct));
 
 			add(_txtRegionActivityXCom.at(offset));
 		}
@@ -354,7 +354,7 @@ GraphsState::GraphsState(int curGraph)
 													66,
 													(static_cast<int>(offset) * 10) + 1));
 			_txtCountryActivityAlien.at(offset)->setColor(colorOffset * 8 + 16);
-			_txtCountryActivityAlien.at(offset)->setText(Text::formatNumber(alienAct, L"", false));
+			_txtCountryActivityAlien.at(offset)->setText(Text::formatNumber(alienAct));
 
 			add(_txtCountryActivityAlien.at(offset));
 
@@ -368,7 +368,7 @@ GraphsState::GraphsState(int curGraph)
 													66,
 													(static_cast<int>(offset) * 10) + 1));
 			_txtCountryActivityXCom.at(offset)->setColor(colorOffset * 8 + 16);
-			_txtCountryActivityXCom.at(offset)->setText(Text::formatNumber(xcomAct, L"", false));
+			_txtCountryActivityXCom.at(offset)->setText(Text::formatNumber(xcomAct));
 
 			add(_txtCountryActivityXCom.at(offset));
 		}
@@ -1930,7 +1930,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		}
 
 		if (itMonth == 0) // values are stored backwards. So take 1st value for last.
-			_txtScore->setText(Text::formatNumber(score[itMonth], L"", false));
+			_txtScore->setText(Text::formatNumber(score[itMonth]));
 
 
 		if (_financeToggles.at(0))					// INCOME
@@ -2229,10 +2229,10 @@ void GraphsState::updateButton(
 	btn->setInvertColor(info->_color);
 	btn->setPressed(info->_pushed);
 
-	aliens->setText(Text::formatNumber(info->_alienAct, L"", false));
+	aliens->setText(Text::formatNumber(info->_alienAct));
 	aliens->setColor(info->_colorTxt);
 
-	xcom->setText(Text::formatNumber(info->_xcomAct, L"", false));
+	xcom->setText(Text::formatNumber(info->_xcomAct));
 	xcom->setColor(info->_colorTxt);
 }
 

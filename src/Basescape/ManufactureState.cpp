@@ -53,7 +53,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Manufacture screen.
  * @param base	- pointer to the Base to get info from
- * @param state	- pointer to the BasescapeState, can be NULL if geoscape-invoked
+ * @param state	- pointer to the BasescapeState (default NULL when geoscape-invoked)
  */
 ManufactureState::ManufactureState(
 		Base* base,
@@ -63,7 +63,7 @@ ManufactureState::ManufactureState(
 		_state(state)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-	_mini			= new MiniBaseView(128, 16, 180, 26, true);
+	_mini			= new MiniBaseView(128, 16, 180, 26, MBV_PRODUCTION);
 
 	_txtTitle		= new Text(300, 17, 16, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
@@ -87,7 +87,7 @@ ManufactureState::ManufactureState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
+			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
 
 	add(_window, "window", "manufactureMenu");
 	add(_mini, "miniBase", "basescape");
@@ -109,7 +109,6 @@ ManufactureState::ManufactureState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
@@ -129,59 +128,36 @@ ManufactureState::ManufactureState(
 					(ActionHandler)& ManufactureState::miniClick,
 					SDL_BUTTON_LEFT);
 
-//	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)& ManufactureState::btnNewProductionClick);
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 						(ActionHandler)& ManufactureState::btnOkClick,
 						Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
-
-//	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-//	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtAllocated->setColor(Palette::blockOffset(15)+6);
-//	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtSpace->setColor(Palette::blockOffset(15)+6);
-//	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtFunds->setColor(Palette::blockOffset(15)+6);
-//	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-//	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtEngineers->setColor(Palette::blockOffset(15)+1);
 	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
-//	_txtProduced->setColor(Palette::blockOffset(15)+1);
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
 	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 
-//	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
 	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
-//	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
 	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
-//	_lstManufacture->setColor(Palette::blockOffset(13)+10);
-//	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
 	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
 	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);
@@ -266,17 +242,17 @@ void ManufactureState::fillProductionList()
 			}
 			else
 				hoursLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
-							- (*i)->getTimeSpent();
+						  - (*i)->getTimeSpent();
 
-			int engs = (*i)->getAssignedEngineers();
+			int engineers = (*i)->getAssignedEngineers();
 			if (Options::canManufactureMoreItemsPerHour == false)
-				engs = std::min(
-							engs,
-							(*i)->getRules()->getManufactureTime());
+				engineers = std::min(
+								engineers,
+								(*i)->getRules()->getManufactureTime());
 
 			// ensure this is rounded up
 			// since it takes an entire hour to manufacture any part of that hour's capacity
-			hoursLeft = (hoursLeft + engs - 1) / engs;
+			hoursLeft = (hoursLeft + engineers - 1) / engineers;
 
 			const int daysLeft = hoursLeft / 24;
 			hoursLeft %= 24;

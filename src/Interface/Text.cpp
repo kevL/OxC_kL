@@ -62,27 +62,25 @@ Text::Text(
 		_valign(ALIGN_TOP),
 		_color(0),
 		_color2(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Text::~Text()
-{
-}
+{}
 
 /**
  * Takes an integer value and formats it as number with separators (spacing the thousands).
  * @param value		- a value
+ * @param space		- true to insert a space every 3 digits (default false)
  * @param currency	- reference a currency symbol (default L"")
- * @param space		- true to insert a space every 3 digits (default true)
  * @return, formatted string
  */
 std::wstring Text::formatNumber(
 		int64_t value,
-		const std::wstring& currency,
-		const bool space)
+		const bool space,
+		const std::wstring& currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -92,12 +90,12 @@ std::wstring Text::formatNumber(
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	//struct lconv* lc = localeconv();
 
-	std::wostringstream ss;
+	std::wostringstream wosts;
 
 	const bool negative = (value < 0);
-	ss << (negative? -value: value);
+	wosts << (negative? -value: value);
 
-	std::wstring ret = ss.str();
+	std::wstring ret = wosts.str();
 
 	if (space == true)
 	{
@@ -136,7 +134,10 @@ std::wstring Text::formatNumber(
  */
 std::wstring Text::formatFunding(int64_t funds)
 {
-	return formatNumber(funds, L"$");
+	return formatNumber(
+					funds,
+					true,
+					L"$");
 }
 
 /**
@@ -146,10 +147,10 @@ std::wstring Text::formatFunding(int64_t funds)
  */
 std::wstring Text::formatPercentage(int value)
 {
-	std::wostringstream ss;
-	ss << value << L"%";
+	std::wostringstream wosts;
+	wosts << value << L"%";
 
-	return ss.str();
+	return wosts.str();
 }
 
 /**
@@ -373,8 +374,8 @@ int Text::getTextWidth(int line) const
 
 		return width;
 	}
-	else
-		return _lineWidth[line];
+
+	return _lineWidth[line];
 }
 
 /**
@@ -397,8 +398,8 @@ int Text::getTextHeight(int line) const
 
 		return height;
 	}
-	else
-		return _lineHeight[line];
+
+	return _lineHeight[line];
 }
 
 /**
@@ -409,7 +410,7 @@ void Text::addTextHeight(int pixels)
 {
 	if (_lineHeight.empty() == false)
 	{
-		size_t line = _lineHeight.size() - 1;
+		const size_t line = _lineHeight.size() - 1;
 		_lineHeight[line] += pixels;
 	}
 }
@@ -426,12 +427,12 @@ void Text::processText()
 		return;
 	}
 
-	std::wstring* ws = &_text;
+	std::wstring* wst = &_text;
 
-	if (_wrap) // use a separate string for wordwrapping text
+	if (_wrap == true) // use a separate string for wordwrapping text
 	{
 		_wrappedText = _text;
-		ws = &_wrappedText;
+		wst = &_wrappedText;
 	}
 
 	_lineWidth.clear();
@@ -448,11 +449,11 @@ void Text::processText()
 
 	for (size_t // go through the text character by character
 		i = 0;
-		i <= ws->size();
+		i <= wst->size();
 		++i)
 	{
-		if (i == ws->size() // end of the line
-			|| Font::isLinebreak((*ws)[i]))
+		if (i == wst->size() // end of the line
+			|| Font::isLinebreak((*wst)[i]) == true)
 		{
 			// add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -462,26 +463,26 @@ void Text::processText()
 			word = 0;
 			start = true;
 
-			if (i == ws->size())
+			if (i == wst->size())
 				break;
 
-			else if ((*ws)[i] == 2) // \x02 marks start of small text
+			else if ((*wst)[i] == 2) // \x02 marks start of small text
 				font = _small;
 		}
-		else if (Font::isSpace((*ws)[i]) // keep track of spaces for word-wrapping
-			|| Font::isSeparator((*ws)[i]))
+		else if (Font::isSpace((*wst)[i]) == true // keep track of spaces for word-wrapping
+			|| Font::isSeparator((*wst)[i]) == true)
 		{
 			space = i;
-			width += font->getCharSize((*ws)[i]).w;
+			width += font->getCharSize((*wst)[i]).w;
 			word = 0;
 			start = false;
 		}
-		else if ((*ws)[i] != 1) // keep track of the width of the last line and word
+		else if ((*wst)[i] != 1) // keep track of the width of the last line and word
 		{
-			if (font->getChar((*ws)[i]) == 0)
-				(*ws)[i] = L'?';
+			if (font->getChar((*wst)[i]) == 0)
+				(*wst)[i] = L'?';
 
-			int charWidth = font->getCharSize((*ws)[i]).w;
+			const int charWidth = font->getCharSize((*wst)[i]).w;
 			width += charWidth;
 			word += charWidth;
 
@@ -490,31 +491,31 @@ void Text::processText()
 				&& start == false)
 			{
 				if (_lang->getTextWrapping() == WRAP_WORDS
-					|| Font::isSpace((*ws)[i]))
+					|| Font::isSpace((*wst)[i]) == true)
 				{
 					width -= word; // go back to the last space and put a linebreak there
 
 					size_t indent = space;
-					if (Font::isSpace((*ws)[space]))
+					if (Font::isSpace((*wst)[space]) == true)
 					{
-						width -= font->getCharSize((*ws)[space]).w;
-						(*ws)[space] = L'\n';
+						width -= font->getCharSize((*wst)[space]).w;
+						(*wst)[space] = L'\n';
 					}
 					else
 					{
-						ws->insert(space + 1, L"\n");
-						indent++;
+						wst->insert(space + 1, L"\n");
+						++indent;
 					}
 
-					if (_indent)
+					if (_indent == true)
 					{
-						ws->insert(indent + 1, L" \xA0");
+						wst->insert(indent + 1, L" \xA0");
 						width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
 					}
 				}
 				else if (_lang->getTextWrapping() == WRAP_LETTERS) // go back to the last letter and put a linebreak there
 				{
-					ws->insert(i, L"\n");
+					wst->insert(i, L"\n");
 					width -= charWidth;
 				}
 
@@ -552,7 +553,7 @@ int Text::getLineX(int line) const
 				break;
 				case ALIGN_CENTER:
 					x = static_cast<int>(
-							ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.0));
+							std::ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.));
 				break;
 				case ALIGN_RIGHT:
 					x = getWidth() - 1 - _lineWidth[line];
@@ -567,7 +568,7 @@ int Text::getLineX(int line) const
 				break;
 				case ALIGN_CENTER:
 					x = getWidth() - static_cast<int>(
-							ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.0));
+							std::ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.));
 				break;
 				case ALIGN_RIGHT:
 					x = _lineWidth[line];
@@ -585,6 +586,7 @@ namespace
 
 struct PaletteShift
 {
+	///
 	static inline void func(
 			Uint8& dest,
 			Uint8& src,
@@ -594,7 +596,7 @@ struct PaletteShift
 	{
 		if (src)
 		{
-			int inverseOffset = mid? 2 * (mid - src): 0;
+			const int inverseOffset = mid? 2 * (mid - src): 0;
 			dest = off + (src * mult) + inverseOffset;
 		}
 	}
@@ -617,19 +619,19 @@ void Text::draw()
 		return;
 	}
 
-	if (Options::debugUi) // show text borders for debugUI
+	if (Options::debugUi == true) // show text borders for debugUI
 	{
 		SDL_Rect rect;
 		rect.w = getWidth();
 		rect.h = getHeight();
-		rect.x = 0;
+		rect.x =
 		rect.y = 0;
 		this->drawRect(&rect, 5);
 
 		rect.w -= 2;
 		rect.h -= 2;
-		rect.x++;
-		rect.y++;
+		++rect.x;
+		++rect.y;
 		this->drawRect(&rect, 0);
 	}
 
@@ -643,9 +645,9 @@ void Text::draw()
 		dir = 1,
 		mid = 0;
 
-	std::wstring* ws = &_text;
-	if (_wrap)
-		ws = &_wrappedText;
+	std::wstring* wst = &_text;
+	if (_wrap == true)
+		wst = &_wrappedText;
 
 	for (std::vector<int>::const_iterator
 			i = _lineHeight.begin();
@@ -661,15 +663,15 @@ void Text::draw()
 			y = 0;
 		break;
 		case ALIGN_MIDDLE:
-			y = static_cast<int>(ceil(
-				static_cast<double>(getHeight() - height) / 2.0));
+			y = static_cast<int>(std::ceil(
+				static_cast<double>(getHeight() - height) / 2.));
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;
 		break;
 	}
 
-	if (_contrast) // set up text color
+	if (_contrast == true) // set up text color
 		mult = 3;
 
 	if (_lang->getTextDirection() == DIRECTION_RTL) // set up text direction
@@ -682,15 +684,15 @@ void Text::draw()
 
 
 	for (std::wstring::const_iterator // draw each letter one by one
-			i = ws->begin();
-			i != ws->end();
+			i = wst->begin();
+			i != wst->end();
 			++i)
 	{
 		if (Font::isSpace(*i) == true)
 			x += dir * font->getCharSize(*i).w;
 		else if (Font::isLinebreak(*i) == true)
 		{
-			line++;
+			++line;
 
 			y += font->getCharSize(*i).h;
 			x = getLineX(line);
@@ -724,7 +726,7 @@ void Text::draw()
 			srfChar->setX(x);
 			srfChar->setY(y);
 			ShaderDraw<PaletteShift>(
-								ShaderSurface(this, 0, 0),
+								ShaderSurface(this, 0,0),
 								ShaderCrop(srfChar),
 								ShaderScalar(color),
 								ShaderScalar(mult),

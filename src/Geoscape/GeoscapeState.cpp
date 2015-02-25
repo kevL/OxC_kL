@@ -1084,10 +1084,10 @@ void GeoscapeState::timeDisplay()
 		{
 			score += (*i)->getActivityXcom().at(ent) - (*i)->getActivityAlien().at(ent);
 		}
-		_txtScore->setText(Text::formatNumber(score, L"", false));
+		_txtScore->setText(Text::formatNumber(score));
 	}
 	else
-		_txtScore->setText(Text::formatNumber(0, L"", false));
+		_txtScore->setText(Text::formatNumber(0));
 
 
 	std::wostringstream
@@ -2751,7 +2751,7 @@ void GeoscapeState::time1Day()
 				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pctWounds;
 				const int chanceToDie = std::max(
 											1,
-											(pctWounds / 3) / (((*sol)->getWoundRecovery() + 9) / 10)); // note potential divBy0
+											(pctWounds / 4) / (((*sol)->getWoundRecovery() + 9) / 10)); // note potential divBy0
 				Log(LOG_INFO) << ". . chanceToDie = " << chanceToDie;
 				if (RNG::percent(chanceToDie) == true) // more than 10% wounded, %chance to die today
 				{

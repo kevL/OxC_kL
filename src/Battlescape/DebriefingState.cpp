@@ -430,9 +430,9 @@ DebriefingState::DebriefingState()
 					}
 				}
 
-				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
-				statistics->daysWounded = 0;
 				statistics->KIA = true;
+				statistics->daysWounded = 0;
+				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
 
 				deadSoldier->getDiary()->updateDiary(
 												statistics,
@@ -445,8 +445,8 @@ DebriefingState::DebriefingState()
 			else
 			{
 				const int wounds = soldier->getWoundRecovery();
+				statistics->daysWounded =
 				_missionStatistics->injuryList[soldier->getId()] = wounds;
-				statistics->daysWounded = wounds;
 
 				soldier->getDiary()->updateDiary(
 											statistics,

@@ -437,7 +437,7 @@ DogfightState::DogfightState(
 //	_txtAmmo2->setColor(Palette::blockOffset(5)+9);
 
 //	_txtDistance->setColor(Palette::blockOffset(5)+9);
-	_txtDistance->setText(Text::formatNumber(ENGAGE_DIST, L"", false));
+	_txtDistance->setText(Text::formatNumber(ENGAGE_DIST));
 //	_txtDistance->setText(L"650");
 
 //	_txtStatus->setColor(Palette::blockOffset(5)+9);

@@ -231,6 +231,8 @@ private:
 
 		/// Checks if this base is hyper-wave equipped.
 		bool getHyperDetection() const;
+		/// Checks if this base has research facilities.
+		bool hasResearch() const;
 		/// Checks if this base has production facilities.
 		bool hasProduction() const;
 

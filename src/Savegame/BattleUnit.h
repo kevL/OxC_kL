@@ -508,7 +508,7 @@ private:
 
 
 	/// Converts an amount of experience to a stat increase.
-	int improveStat(int exp);
+	int improveStat(int xp);
 
 
 	public:

@@ -33,6 +33,14 @@ class SurfaceSet;
 class Timer;
 
 
+enum MiniBaseViewType
+{
+	MBV_STANDARD,	// 0
+	MBV_RESEARCH,	// 1
+	MBV_PRODUCTION	// 2
+};
+
+
 /**
  * Mini view of a base.
  * Takes all the bases and displays their layout
@@ -46,10 +54,7 @@ class MiniBaseView
 private:
 	static const int MINI_SIZE = 14;
 
-	bool
-		_blink,
-		_prod;
-
+	bool _blink;
 	size_t
 		_baseID,
 		_hoverBase;
@@ -62,6 +67,8 @@ private:
 
 	std::vector<Base*>* _bases;
 
+	MiniBaseViewType _mode;
+
 
 	public:
 		static const size_t MAX_BASES = 8;
@@ -72,7 +79,7 @@ private:
 				int height,
 				int x = 0,
 				int y = 0,
-				bool prod = false);
+				MiniBaseViewType mode = MBV_STANDARD);
 		/// Cleans up the mini base view.
 		~MiniBaseView();
 

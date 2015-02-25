@@ -128,20 +128,20 @@ int ResearchProject::getCost() const
 }
 
 /**
- * kL. Sets the project offline.
+ * Sets the project offline.
  * Used to remove the project from lists, while preserving its cost & spent values.
  * @param cost, New project cost(in man/day)
  */
-void ResearchProject::setOffline(const bool offline) // kL
+void ResearchProject::setOffline(const bool offline)
 {
 	_offline = offline;
 }
 
 /**
- * kL. Gets whether the project is offline or not.
+ * Gets whether the project is offline or not.
  * @return, The cost of the ResearchProject(in man/day)
  */
-bool ResearchProject::getOffline() const // kL
+bool ResearchProject::getOffline() const
 {
 	return _offline;
 }
@@ -224,9 +224,9 @@ std::string ResearchProject::getResearchProgress() const
  * kL. Returns research time completed as a wide string.
  * @return, time completed
  */
-std::wstring ResearchProject::getCostCompleted() const // kL
+std::wstring ResearchProject::getCostCompleted() const
 {
-	return Text::formatNumber(getSpent(), L"", false);
+	return Text::formatNumber(getSpent());
 }
 
 }

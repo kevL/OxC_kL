@@ -49,8 +49,6 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	:
 		ArticleState(defs->id)
 {
-	RuleUfo* ufo = _game->getRuleset()->getUfo(defs->id);
-
 	_txtTitle = new Text(155, 32, 5, 24);
 
 	setPalette("PAL_GEOSCAPE");
@@ -103,27 +101,25 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	}
 	graphic->blit(_image); */
 
-	// kL_begin:
-	int iSprite = ufo->getSprite();
-	std::ostringstream sprite;
-	sprite << "INTERWIN_" << iSprite;
-	Surface* srfPreview = _game->getResourcePack()->getSurface(sprite.str());
+	const RuleUfo* const ufo = _game->getRuleset()->getUfo(defs->id);
+	const int sprite = ufo->getSprite();
+	std::ostringstream osts;
+	osts << "INTERWIN_" << sprite;
+	Surface* const srfPreview = _game->getResourcePack()->getSurface(osts.str());
 	if (srfPreview != NULL)
 		srfPreview->blit(_image);
-	// kL_end.
 
 	_txtInfo = new Text(300, 50, 10, 140);
 	add(_txtInfo);
-
 	_txtInfo->setColor(Palette::blockOffset(8)+5);
 	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(300, 65, 10, 68);
-
 	add(_lstInfo);
 
 	centerAllSurfaces();
+
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 200, 100);
@@ -134,11 +130,11 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_lstInfo->addRow(
 					2,
 					tr("STR_DAMAGE_CAPACITY").c_str(),
-					Text::formatNumber(ufo->getMaxDamage(), L"", false).c_str());
+					Text::formatNumber(ufo->getMaxDamage()).c_str());
 	_lstInfo->addRow(
 					2,
 					tr("STR_WEAPON_POWER").c_str(),
-					Text::formatNumber(ufo->getWeaponPower(), L"", false).c_str());
+					Text::formatNumber(ufo->getWeaponPower()).c_str());
 	_lstInfo->addRow(
 					2,
 					tr("STR_WEAPON_RANGE").c_str(),
@@ -146,14 +142,13 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_lstInfo->addRow(
 					2,
 					tr("STR_MAXIMUM_SPEED").c_str(),
-					tr("STR_KNOTS").arg(Text::formatNumber(ufo->getMaxSpeed(), L"", false)).c_str());
+					tr("STR_KNOTS").arg(ufo->getMaxSpeed()).c_str());
 }
 
 /**
  * dTor.
  */
 ArticleStateUfo::~ArticleStateUfo()
-{
-}
+{}
 
 }
