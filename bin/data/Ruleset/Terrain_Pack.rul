@@ -2575,7 +2575,7 @@ terrains:
         groups: 1
       - name: PORTURBAN13
         width: 10
-        length: 20
+        length: 10
         groups: 1
       - name: PORTURBAN14
         width: 10

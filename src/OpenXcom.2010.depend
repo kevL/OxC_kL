@@ -4599,7 +4599,7 @@
 1424387337 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1424387336 f:\git\openxcom\src\ruleset\ruleitem.h
+1424935370 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1424387346 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -5694,7 +5694,7 @@
 1424387344 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1424902265 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1424903419 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"

@@ -1725,7 +1725,7 @@ bool SavedGame::isResearched(const std::string& research) const
 	if (_debug == true
 		|| research.empty() == true
 		|| _rules->getResearch(research) == NULL	// kL_add
-		|| (_rules->getItem(research) != NULL		// kL_add
+		|| (_rules->getItem(research) != NULL		// kL_add->
 			&& _rules->getItem(research)->isResearchExempt() == true))
 	{
 		return true;

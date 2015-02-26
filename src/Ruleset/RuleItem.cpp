@@ -61,11 +61,13 @@ RuleItem::RuleItem(const std::string& type)
 		_accuracySnap(0),
 		_accuracyAuto(0),
 		_accuracyMelee(0),
-		_tuLaunch(0), // kL
+		_tuLaunch(0), // these could all be -1 meaning not possible, but this would be problematic re. ReactionFire etc etc.
 		_tuAimed(0),
 		_tuSnap(0),
-		_tuAuto(0), // these could all be -1 meaning not possible, but this would be problematic re. ReactionFire etc etc.
+		_tuAuto(0),
 		_tuMelee(0),
+		_tuUse(0),
+		_tuPrime(0),
 		_clipSize(0),
 		_blastRadius(-1),
 		_battleType(BT_NONE),
@@ -83,7 +85,6 @@ RuleItem::RuleItem(const std::string& type)
 		_healthRecovery(0),
 		_stunRecovery(0),
 		_energyRecovery(0),
-		_tuUse(0),
 		_recoveryPoints(0),
 		_armor(20),
 		_turretType(-1),
@@ -220,6 +221,8 @@ void RuleItem::load(
 	_tuSnap					= node["tuSnap"].as<int>(_tuSnap);
 	_tuAimed				= node["tuAimed"].as<int>(_tuAimed);
 	_tuLaunch				= node["tuLaunch"].as<int>(_tuLaunch);
+	_tuUse					= node["tuUse"].as<int>(_tuUse);
+	_tuPrime				= node["tuPrime"].as<int>(_tuPrime);
 	_clipSize				= node["clipSize"].as<int>(_clipSize);
 	_accuracyMelee			= node["accuracyMelee"].as<int>(_accuracyMelee);
 	_tuMelee				= node["tuMelee"].as<int>(_tuMelee);
@@ -236,7 +239,6 @@ void RuleItem::load(
 	_healthRecovery			= node["healthRecovery"].as<int>(_healthRecovery);
 	_stunRecovery			= node["stunRecovery"].as<int>(_stunRecovery);
 	_energyRecovery			= node["energyRecovery"].as<int>(_energyRecovery);
-	_tuUse					= node["tuUse"].as<int>(_tuUse);
 	_recoveryPoints			= node["recoveryPoints"].as<int>(_recoveryPoints);
 	_armor					= node["armor"].as<int>(_armor);
 	_turretType				= node["turretType"].as<int>(_turretType);
@@ -532,6 +534,24 @@ int RuleItem::getTUMelee() const
 }
 
 /**
+ * Gets the number of Time Units needed to use this item.
+ * @return, the number of TU needed to use this item
+ */
+int RuleItem::getTUUse() const
+{
+	return _tuUse;
+}
+
+/**
+ * Gets the number of Time Units needed to prime this item.
+ * @return, the number of TU needed to prime this item
+ */
+int RuleItem::getTUPrime() const
+{
+	return _tuPrime;
+}
+
+/**
  * Gets a list of compatible ammo.
  * @return, pointer to a vector of compatible ammo strings
  */
@@ -672,15 +692,6 @@ int RuleItem::getEnergyRecovery() const
 int RuleItem::getStunRecovery() const
 {
 	return _stunRecovery;
-}
-
-/**
- * Gets the number of Time Units needed to use this item.
- * @return, the number of TU needed to use this item
- */
-int RuleItem::getTUUse() const
-{
-	return _tuUse;
 }
 
 /**

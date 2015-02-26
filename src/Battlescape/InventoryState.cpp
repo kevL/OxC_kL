@@ -1090,7 +1090,7 @@ void InventoryState::setExtraInfo(
 		}
 		else
 		{
-			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
+			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()) == true)
 				label << tr(itemRule->getName());
 			else
 			{

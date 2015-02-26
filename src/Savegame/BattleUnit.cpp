@@ -1644,6 +1644,7 @@ int BattleUnit::getActionTUs(
 	switch (actionType)
 	{
 		// note: Should put "tuPrime", "tuDefuse", & "tuThrow" yaml-entry in Xcom1Ruleset, under various grenade-types etc.
+		// note_note: "tuPrime" done
 		case BA_DROP:
 		{
 			const RuleInventory
@@ -1659,7 +1660,10 @@ int BattleUnit::getActionTUs(
 		break;
 
 		case BA_PRIME:
-			cost = 45;
+//			cost = 45;
+			if (rule == NULL)
+				return 0;
+			cost = rule->getTUPrime();
 		break;
 
 		case BA_THROW:
@@ -1718,7 +1722,7 @@ int BattleUnit::getActionTUs(
 	if (cost > 0
 		&& ((rule != NULL
 				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
-			|| actionType == BA_PRIME
+//			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE
 		&& actionType != BA_DROP)

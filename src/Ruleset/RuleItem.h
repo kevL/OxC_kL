@@ -80,9 +80,12 @@ private:
 		_fixedWeapon,
 		_flatRate,
 		_liveAlien,
+		_LOSRequired,
 		_noReaction,
+		_noResearch,
 		_recover,
-		_noResearch, // kL
+		_skillApplied,
+		_strengthApplied,
 		_twoHanded,
 		_underwaterOnly;
 	int
@@ -96,7 +99,6 @@ private:
 		_recoveryPoints,
 		_transferTime,
 		_turretType,
-		_tuUse,
 		_waypoint,
 		_weight,
 
@@ -126,9 +128,11 @@ private:
 		_accuracySnap,
 		_tuAimed,
 		_tuAuto,
-		_tuLaunch, // kL
+		_tuLaunch,
+		_tuPrime,
 		_tuMelee,
 		_tuSnap,
+		_tuUse,
 
 		_maxRange,
 		_aimRange,
@@ -154,8 +158,9 @@ private:
 	double _size;
 
 	std::string
+		_name, // two types of objects can have the same name
 		_type,
-		_name; // two types of objects can have the same name
+		_zombieUnit;
 
 	BattleType _battleType;
 	ItemDamageType _damageType;
@@ -164,12 +169,6 @@ private:
 		_compatibleAmmo,
 		_requires;
 
-
-	std::string _zombieUnit;
-	bool
-		_LOSRequired,
-		_skillApplied,
-		_strengthApplied;
 
 	public:
 		/// Creates a blank item ruleset.
@@ -249,6 +248,10 @@ private:
 		int getTULaunch() const;
 		/// Gets the item's melee TU cost.
 		int getTUMelee() const;
+		/// Gets the Time Unit use.
+		int getTUUse() const;
+		/// Gets the Time Units for priming.
+		int getTUPrime() const;
 
 		/// Gets list of compatible ammo.
 		const std::vector<std::string>* getCompatibleAmmo() const;
@@ -285,9 +288,6 @@ private:
 		int getEnergyRecovery() const;
 		/// Gets the medikit stun recovered per shot.
 		int getStunRecovery() const;
-
-		/// Gets the Time Unit use.
-		int getTUUse() const;
 
 		/// Gets the max explosion radius.
 		int getExplosionRadius() const;

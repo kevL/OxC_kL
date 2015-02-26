@@ -968,6 +968,7 @@ items:
     damageType: 3
     battleType: 4
     blastRadius: 3
+    tuPrime: 45
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -981,6 +982,7 @@ items:
     damageType: 9
     battleType: 4
     blastRadius: 4
+    tuPrime: 45
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -993,6 +995,7 @@ items:
     damageType: 3
     battleType: 5
     blastRadius: 4
+    tuPrime: 50
   - type: STR_HIGH_EXPLOSIVE
     size: 0.3
     costBuy: 1750
@@ -1007,6 +1010,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 7
+    tuPrime: 65
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 36300 # 121000
@@ -1332,6 +1336,7 @@ items:
     armor: 26
     blastRadius: 5
     attraction: 7
+    tuPrime: 35
   - type: STR_MIND_PROBE
     requires:
       - STR_MIND_PROBE
