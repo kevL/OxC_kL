@@ -309,9 +309,9 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     damage: 9
     range: 19
     accuracy: 22
-    reloadCautious: 5
-    reloadStandard: 4
-    reloadAggressive: 3
+    reloadCautious: 10
+    reloadStandard: 8
+    reloadAggressive: 6
     ammoMax: 100
     rearmRate: 25
     launcher: STR_CANNON
@@ -324,9 +324,9 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     damage: 66
     range: 32
     accuracy: 73
-    reloadCautious: 29
-    reloadStandard: 21
-    reloadAggressive: 13
+    reloadCautious: 58
+    reloadStandard: 42
+    reloadAggressive: 26
     ammoMax: 6
     rearmRate: 2
     launcher: STR_STINGRAY_LAUNCHER
@@ -339,9 +339,9 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     damage: 96
     range: 57
     accuracy: 82
-    reloadCautious: 51
-    reloadStandard: 40
-    reloadAggressive: 27
+    reloadCautious: 102
+    reloadStandard: 80
+    reloadAggressive: 54
     ammoMax: 3
     rearmRate: 1
     launcher: STR_AVALANCHE_LAUNCHER
@@ -354,9 +354,9 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     damage: 175
     range: 33
     accuracy: 56
-    reloadCautious: 11
-    reloadStandard: 8
-    reloadAggressive: 5
+    reloadCautious: 22
+    reloadStandard: 16
+    reloadAggressive: 10
     ammoMax: 22
     rearmRate: 11
     launcher: STR_LASER_CANNON
@@ -368,9 +368,9 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     damage: 65
     range: 46
     accuracy: 46
-    reloadCautious: 20
-    reloadStandard: 14
-    reloadAggressive: 8
+    reloadCautious: 40
+    reloadStandard: 28
+    reloadAggressive: 16
     ammoMax: 33
     rearmRate: 11
     launcher: STR_PLASMA_BEAM
@@ -382,9 +382,9 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     damage: 222
     range: 69
     accuracy: 103
-    reloadCautious: 36
-    reloadStandard: 27
-    reloadAggressive: 18
+    reloadCautious: 72
+    reloadStandard: 54
+    reloadAggressive: 36
     ammoMax: 3
     rearmRate: 1
     launcher: STR_FUSION_BALL_LAUNCHER
@@ -1975,186 +1975,6 @@ items:
     clipSize: -1
     twoHanded: false
     recover: false
-ufos:
-  - type: STR_SMALL_SCOUT
-    size: STR_VERY_SMALL
-    sprite: 0
-    damageMax: 96
-    speedMax: 2175
-    accel: 12
-    power: 0
-    range: 0
-    score: 25
-    reload: 30
-    breakOffTime: 90
-    battlescapeTerrainData:
-      name: UFO1A
-      mapDataSets:
-        - BLANKS
-        - UFO1
-      mapBlocks:
-        - name: UFO1A
-          width: 10
-          length: 10
-  - type: STR_MEDIUM_SCOUT
-    size: STR_SMALL
-    sprite: 1
-    damageMax: 287
-    speedMax: 2380
-    accel: 9
-    power: 21
-    range: 20
-    score: 40
-    reload: 25
-    breakOffTime: 115
-    battlescapeTerrainData:
-      name: UFO_110
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_BITS
-      mapBlocks:
-        - name: UFO_110
-          width: 10
-          length: 10
-  - type: STR_LARGE_SCOUT
-    size: STR_SMALL
-    sprite: 2
-    damageMax: 432
-    speedMax: 2625
-    accel: 9
-    power: 32
-    range: 38
-    score: 65
-    reload: 20
-    breakOffTime: 135
-    battlescapeTerrainData:
-      name: UFO_120
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_BITS
-      mapBlocks:
-        - name: UFO_120
-          width: 20
-          length: 20
-  - type: STR_HARVESTER
-    size: STR_MEDIUM_UC
-    sprite: 3
-    damageMax: 823
-    speedMax: 4320
-    accel: 8
-    power: 48
-    range: 25
-    score: 125
-    reload: 22
-    breakOffTime: 165
-    battlescapeTerrainData:
-      name: UFO_130
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_DISEC2
-        - U_BITS
-      mapBlocks:
-        - name: UFO_130
-          width: 20
-          length: 20
-  - type: STR_ABDUCTOR
-    size: STR_MEDIUM_UC
-    sprite: 4
-    damageMax: 706
-    speedMax: 3890
-    accel: 8
-    power: 54
-    range: 35
-    score: 125
-    reload: 16
-    breakOffTime: 180
-    battlescapeTerrainData:
-      name: UFO_140
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_OPER2
-        - U_BITS
-      mapBlocks:
-        - name: UFO_140
-          width: 20
-          length: 20
-  - type: STR_TERROR_SHIP
-    size: STR_LARGE
-    sprite: 5
-    damageMax: 1200
-    speedMax: 4765
-    accel: 6
-    power: 90
-    range: 52
-    score: 250
-    reload: 13
-    breakOffTime: 800
-    battlescapeTerrainData:
-      name: UFO_150
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_PODS
-        - U_BITS
-      mapBlocks:
-        - name: UFO_150
-          width: 30
-          length: 20
-  - type: STR_BATTLESHIP
-    size: STR_VERY_LARGE
-    sprite: 6
-    damageMax: 3261
-    speedMax: 5555
-    accel: 6
-    power: 147
-    range: 66
-    score: 350
-    reload: 10
-    breakOffTime: 1200
-    battlescapeTerrainData:
-      name: UFO_160
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_PODS
-        - U_BITS
-      mapBlocks:
-        - name: UFO_160
-          width: 30
-          length: 30
-  - type: STR_SUPPLY_SHIP
-    size: STR_LARGE
-    sprite: 7
-    damageMax: 2586
-    speedMax: 3255
-    accel: 6
-    power: 62
-    range: 38
-    score: 200
-    reload: 16
-    breakOffTime: 600
-    battlescapeTerrainData:
-      name: UFO_170
-      mapDataSets:
-        - BLANKS
-        - U_EXT02
-        - U_WALL02
-        - U_DISEC2
-        - U_BITS
-      mapBlocks:
-        - name: UFO_170
-          width: 30
-          length: 20
 invs:
   - id: STR_GROUND
     x: 0

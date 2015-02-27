@@ -34,21 +34,10 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 1
-    hitSound: 52
+    hitSound: 337
     hitAnimation: 88
     armor: 5
     listOrder: 3711
-research:
-  - name: STR_FUSION_TORCH
-    cost: 5000
-    points: 25
-    dependencies:
-      - STR_HEAVY_LASER
-  - name: STR_FUSION_TORCH_POWER_CELL
-    cost: 1000
-    points: 5
-    dependencies:
-      - STR_FUSION_TORCH
 manufacture:
   - name: STR_FUSION_TORCH
     category: STR_WEAPON
@@ -101,6 +90,10 @@ extraSprites:
     subY: 40
     files:
       88: Resources/FusionTorch/SMOKE/FusionTorch_hit.png
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      337: Resources/FusionTorch/kL_electricArc2.ogg
 extraStrings:
   - type: en-US
     strings:

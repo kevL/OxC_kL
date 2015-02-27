@@ -8,8 +8,8 @@ ufos:
     power: 0
     range: 0
     score: 25
-    reload: 30
-    breakOffTime: 90
+    reload: 0
+    breakOffTime: 180
     battlescapeTerrainData:
       name: UFO1A
       mapDataSets:
@@ -27,9 +27,9 @@ ufos:
     accel: 9
     power: 21
     range: 20
-    score: 40
-    reload: 25
-    breakOffTime: 115
+    score: 46
+    reload: 50
+    breakOffTime: 230
     battlescapeTerrainData:
       name: UFO_110
       mapDataSets:
@@ -72,8 +72,8 @@ ufos:
     power: 32
     range: 38
     score: 65
-    reload: 20
-    breakOffTime: 135
+    reload: 40
+    breakOffTime: 270
     battlescapeTerrainData:
       name: UFO_120
       mapDataSets:
@@ -131,8 +131,8 @@ ufos:
     power: 48
     range: 25
     score: 125
-    reload: 22
-    breakOffTime: 165
+    reload: 44
+    breakOffTime: 330
     battlescapeTerrainData:
       name: UFO_130
       mapDataSets:
@@ -188,8 +188,8 @@ ufos:
     power: 54
     range: 35
     score: 125
-    reload: 16
-    breakOffTime: 180
+    reload: 32
+    breakOffTime: 360
     battlescapeTerrainData:
       name: UFO_140
       mapDataSets:
@@ -233,10 +233,6 @@ ufos:
         - name: ox_ufo4j
           width: 20
           length: 20
-#^^^^^^You can change the supply ship loading door occurrence frequency here^^^^^ :p
-# For reference - ufo7a and ufo7b are vanilla ships w/o the loading door, 7c and 7d have it. :p
-# Put a hash at the beginning of any line to be ignored.
-# All three lines of any particular ship must be hashed for there not to be problems with ignoring it.
   - type: STR_TERROR_SHIP
     size: STR_LARGE
     sprite: 5
@@ -246,8 +242,8 @@ ufos:
     power: 90
     range: 52
     score: 250
-    reload: 13
-    breakOffTime: 800
+    reload: 26
+    breakOffTime: 1600
     battlescapeTerrainData:
       name: UFO_150
       mapDataSets:
@@ -288,11 +284,11 @@ ufos:
     damageMax: 3261
     speedMax: 5555
     accel: 6
-    power: 142
+    power: 143
     range: 66
     score: 350
-    reload: 10
-    breakOffTime: 1200
+    reload: 20
+    breakOffTime: 2400
     battlescapeTerrainData:
       name: UFO_160
       mapDataSets:
@@ -314,8 +310,8 @@ ufos:
     power: 62
     range: 38
     score: 200
-    reload: 16
-    breakOffTime: 600
+    reload: 32
+    breakOffTime: 1200
     battlescapeTerrainData:
       name: UFO_170
       mapDataSets:
@@ -338,6 +334,10 @@ ufos:
         - name: ox_ufo7d
           width: 20
           length: 30
+#^^^^^^You can change the supply ship loading door occurrence frequency here^^^^^ :p
+# For reference - ufo7a and ufo7b are vanilla ships w/o the loading door, 7c and 7d have it. :p
+# Put a hash at the beginning of any line to be ignored.
+# All three lines of any particular ship must be hashed for there not to be problems with ignoring it.
 MCDPatches:
   - type: UFOL83
     data:

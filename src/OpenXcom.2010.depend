@@ -6017,7 +6017,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1424387343 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1424935876 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -8553,7 +8553,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1424387337 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1424935340 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Surface.h"
@@ -8711,7 +8711,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1424884275 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1424936026 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8840,7 +8840,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1424387335 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1424935935 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

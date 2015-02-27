@@ -3405,42 +3405,41 @@ void BattlescapeState::saveVoxelView()
 										LCT_RGB);
 	if (error != 0)
 	{
-		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+		Log(LOG_ERROR) << "bs::saveVoxelView() Saving to PNG failed: " << lodepng_error_text(error);
 	}
-	else //if (std::system(NULL) != 0)
+#ifdef _WIN32
+	else
 	{
-//		std::string st = "\"C:\\Program Files\\IrfanView\\i_view32.exe\" \"" + osts.str(); // launch my picture viewer w/ pic!!!
-//		std::system(st.c_str());
-//		std::system("pause"); // yah, so. whatcha goona do bout it. This:
+		std::wstring wst = Language::cpToWstr("\"C:\\Program Files\\IrfanView\\i_view32.exe\" \"" + osts.str() + "\"");
+
 		STARTUPINFO si;
 		ZeroMemory(&si, sizeof(si));
-//		std::memset(&si, 0, sizeof(si));
 		si.cb = sizeof(si);
 
 		PROCESS_INFORMATION pi;
 		ZeroMemory(&pi, sizeof(pi));
-//		std::memset(&pi, 0, sizeof(pi));
 
-		std::wstring wst = Language::cpToWstr("\"C:\\Program Files\\IrfanView\\i_view32.exe\" \"" + osts.str() + "\"");
-
-		CreateProcess(									//BOOL WINAPI CreateProcess
-					NULL,								//  _In_opt_     LPCTSTR lpApplicationName,
-					const_cast<LPWSTR>(wst.c_str()),	//  _Inout_opt_  LPTSTR lpCommandLine,
-					NULL,								//  _In_opt_     LPSECURITY_ATTRIBUTES lpProcessAttributes,
-					NULL,								//  _In_opt_     LPSECURITY_ATTRIBUTES lpThreadAttributes,
-					FALSE,								//  _In_         BOOL bInheritHandles,
-					0,									//  _In_         DWORD dwCreationFlags,
-					NULL,								//  _In_opt_     LPVOID lpEnvironment,
-					NULL,								//  _In_opt_     LPCTSTR lpCurrentDirectory,
-					&si,								//  _In_         LPSTARTUPINFO lpStartupInfo,
-					&pi);								//  _Out_        LPPROCESS_INFORMATION lpProcessInformation
-
-//		WaitForSingleObject(pi.hProcess, INFINITE);
-
-		CloseHandle(pi.hProcess);
-		CloseHandle(pi.hThread);
-		// holy fucking diana it compiled.
+		if (CreateProcess(									//BOOL WINAPI CreateProcess
+						NULL,								//  _In_opt_     LPCTSTR lpApplicationName,
+						const_cast<LPWSTR>(wst.c_str()),	//  _Inout_opt_  LPTSTR lpCommandLine,
+						NULL,								//  _In_opt_     LPSECURITY_ATTRIBUTES lpProcessAttributes,
+						NULL,								//  _In_opt_     LPSECURITY_ATTRIBUTES lpThreadAttributes,
+						FALSE,								//  _In_         BOOL bInheritHandles,
+						0,									//  _In_         DWORD dwCreationFlags,
+						NULL,								//  _In_opt_     LPVOID lpEnvironment,
+						NULL,								//  _In_opt_     LPCTSTR lpCurrentDirectory,
+						&si,								//  _In_         LPSTARTUPINFO lpStartupInfo,
+						&pi) == false)						//  _Out_        LPPROCESS_INFORMATION lpProcessInformation
+		{
+			Log(LOG_ERROR) << "bs::saveVoxelView() CreateProcess() failed";
+		}
+		else
+		{
+			CloseHandle(pi.hProcess);
+			CloseHandle(pi.hThread);
+		}
 	}
+#endif
 
 	return;
 }

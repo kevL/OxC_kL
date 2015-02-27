@@ -33,6 +33,16 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 15
     dependencies:
       - STR_LASER_CANNON
+  - name: STR_FUSION_TORCH
+    cost: 4800
+    points: 20
+    dependencies:
+      - STR_HEAVY_LASER
+  - name: STR_FUSION_TORCH_POWER_CELL
+    cost: 1200
+    points: 10
+    dependencies:
+      - STR_FUSION_TORCH
   - name: STR_ALIEN_ALLOYS
     cost: 40000
     points: 30
