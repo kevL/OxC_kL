@@ -1320,7 +1320,7 @@ void GraphsState::drawLines()
  */
 void GraphsState::drawCountryLines()
 {
-	// calculate the totals, and set up our upward maximum
+	// calculate the totals, and set up the upward maximum
 	int
 		upperLimit = 0,
 		lowerLimit = 0,
@@ -1351,14 +1351,14 @@ void GraphsState::drawCountryLines()
 			total += act;
 
 			if (act > upperLimit
-				&& _countryToggles.at(itCountry)->_pushed)
+				&& _countryToggles.at(itCountry)->_pushed == true)
 			{
 				upperLimit = act;
 			}
 
 			if (_alien == false && _income == false // aLien & Income never go into negative values.
 				&& act < lowerLimit
-				&& _countryToggles.at(itCountry)->_pushed)
+				&& _countryToggles.at(itCountry)->_pushed == true)
 			{
 				lowerLimit = act;
 			}
@@ -1421,7 +1421,7 @@ void GraphsState::drawCountryLines()
 			}
 		} */
 
-		if (_countryToggles.back()->_pushed
+		if (_countryToggles.back()->_pushed == true
 			&& total > upperLimit)
 		{
 			upperLimit = total;
@@ -1504,7 +1504,7 @@ void GraphsState::drawCountryLines()
 			{
 				if (i < country->getActivityXcom().size())
 				{
-					int reduction = country->getActivityAlien().at(country->getActivityXcom().size() - (i + 1));
+					int reduction = country->getActivityXcom().at(country->getActivityXcom().size() - (i + 1));
 					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
@@ -1933,7 +1933,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			_txtScore->setText(Text::formatNumber(score[itMonth]));
 
 
-		if (_financeToggles.at(0))					// INCOME
+		if (_financeToggles.at(0) == true)			// INCOME
 		{
 			if (income[itMonth] > upperLimit)
 				upperLimit = income[itMonth];
@@ -1942,7 +1942,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				lowerLimit = income[itMonth];
 		}
 
-		if (_financeToggles.at(1))					// EXPENDITURE
+		if (_financeToggles.at(1) == true)			// EXPENDITURE
 		{
 			if (expenditure[itMonth] > upperLimit)
 				upperLimit = expenditure[itMonth];
@@ -1951,7 +1951,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				lowerLimit = expenditure[itMonth];
 		}
 
-		if (_financeToggles.at(2))					// MAINTENANCE
+		if (_financeToggles.at(2) == true)			// MAINTENANCE
 		{
 			if (maintenance[itMonth] > upperLimit)
 				upperLimit = maintenance[itMonth];
@@ -1960,7 +1960,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				lowerLimit = maintenance[itMonth];
 		}
 
-		if (_financeToggles.at(3))					// BALANCE
+		if (_financeToggles.at(3) == true)			// BALANCE
 		{
 			if (balance[itMonth] > upperLimit)
 				upperLimit = balance[itMonth];
@@ -1969,7 +1969,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				lowerLimit = balance[itMonth];
 		}
 
-		if (_financeToggles.at(4))					// SCORE
+		if (_financeToggles.at(4) == true)			// SCORE
 		{
 			if (score[itMonth] > upperLimit)
 				upperLimit = score[itMonth];
@@ -2004,12 +2004,12 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	}
 
 	for (int // toggle screens
-			button = 0;
-			button < 5;
-			++button)
+			btn = 0;
+			btn < 5;
+			++btn)
 	{
-		_financeLines.at(button)->setVisible(_financeToggles.at(button));
-		_financeLines.at(button)->clear();
+		_financeLines.at(btn)->setVisible(_financeToggles.at(btn));
+		_financeLines.at(btn)->clear();
 	}
 
 	// Figure out how many units to the pixel
@@ -2018,9 +2018,9 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	const double units = range / 126.;
 
 	for (int
-			button = 0;
-			button < 5;
-			++button)
+			btn = 0;
+			btn < 5;
+			++btn)
 	{
 		std::vector<Sint16> newLineVector;
 		int reduction;
@@ -2034,7 +2034,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				x = 312 - i * 17,
 				y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
 
-			switch (button)
+			switch (btn)
 			{
 				case 0:
 					reduction = static_cast<int>(Round(static_cast<double>(income[i]) / units));
@@ -2055,15 +2055,15 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			y -= reduction;
 			newLineVector.push_back(y);
 
-			const Uint8 colorOffset = button %2? 8: 0;
+			const Uint8 colorOffset = btn %2? 8: 0;
 
 			if (newLineVector.size() > 1)
-				_financeLines.at(button)->drawLine(
+				_financeLines.at(btn)->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset((button / 2) + 1) + colorOffset);
+						Palette::blockOffset((btn / 2) + 1) + colorOffset);
 		}
 	}
 
