@@ -30,6 +30,7 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -38,7 +39,7 @@
 
 #include "../Menu/ErrorMessageState.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
@@ -254,9 +255,12 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 												6));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
 		_game->pushState(new SoldierInfoState(
 											_base,
 											soldierID));
+		kL_soundPop->play(Mix_GroupAvailable(0));
+	}
 
 /*kL: sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor.
 		SavedGame* _save;

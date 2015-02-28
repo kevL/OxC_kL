@@ -35,8 +35,9 @@
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -352,6 +353,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 		_game->pushState(new SoldierInfoState(
 											_base,
 											row));
+		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
 

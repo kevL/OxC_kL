@@ -137,7 +137,7 @@ const double
 	unitToRads					= (1. / 60.) * (M_PI / 180.),	// converts a minute of arc to rads
 	greatCircleConversionFactor	= earthRadius * unitToRads;		// converts 'flat' distance to greatCircle distance.
 
-Sound* GeoscapeState::soundPop = 0;
+//Sound* GeoscapeState::soundPop = 0;
 
 
 // myk002_begin: struct definitions used when enqueuing notification events
@@ -3203,7 +3203,7 @@ void GeoscapeState::btnInterceptClick(Action*)
  */
 void GeoscapeState::btnBasesClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(0));
+	kL_soundPop->play(Mix_GroupAvailable(0));
 	timerReset();
 
 	if (_savedGame->getBases()->empty() == false)
@@ -3232,7 +3232,7 @@ void GeoscapeState::btnBasesClick(Action*)
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(0));
+	kL_soundPop->play(Mix_GroupAvailable(0));
 
 	timerReset();
 	_game->pushState(new GraphsState(_savedGame->getCurrentGraph()));

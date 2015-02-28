@@ -163,8 +163,8 @@ Font* ResourcePack::getFont(const std::string& name) const
 
 	if (i != _fonts.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -175,11 +175,10 @@ Font* ResourcePack::getFont(const std::string& name) const
 Surface* ResourcePack::getSurface(const std::string& name) const
 {
 	const std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
-
 	if (i != _surfaces.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -189,16 +188,11 @@ Surface* ResourcePack::getSurface(const std::string& name) const
  */
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
-	//Log(LOG_INFO) << "ResourcePack::getSurfaceSet()";
 	const std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
-
 	if (i != _sets.end())
-	{
-		//Log(LOG_INFO) << ". _set = " << i->second;
 		return i->second;
-	}
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -353,7 +347,7 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 
 	for (size_t
 			i = 0;
-			i < filenames.size();
+			i != filenames.size();
 			++i)
 	{
 		const std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
@@ -373,17 +367,16 @@ Sound* ResourcePack::getSound(
 		const std::string& soundSet,
 		unsigned int sound) const
 {
-	if (Options::mute)
+	if (Options::mute == true)
 		return _muteSound;
 	else
 	{
 		const std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(soundSet);
-
-		if (_sounds.end() != i)
+		if (i != _sounds.end())
 			return i->second->getSound(sound);
-		else
-			return NULL;
 	}
+
+	return NULL;
 }
 
 /**
@@ -394,11 +387,10 @@ Sound* ResourcePack::getSound(
 Palette* ResourcePack::getPalette(const std::string& name) const
 {
 	const std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
-
-	if (_palettes.end() != i)
+	if (i != _palettes.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -459,8 +451,8 @@ Sound* ResourcePack::getSoundByDepth(
 {
 	if (depth == 0)
 		return getSound("BATTLE.CAT", sound);
-	else
-		return getSound("BATTLE2.CAT", sound);
+
+	return getSound("BATTLE2.CAT", sound);
 }
 
 /**

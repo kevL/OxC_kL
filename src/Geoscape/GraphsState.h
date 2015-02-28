@@ -139,7 +139,7 @@ private:
 
 
 	public:
-		static Sound* soundPop;
+//		static Sound* soundPop;
 
 		/// Creates the Graphs state.
 		GraphsState(int curGraph = 0);

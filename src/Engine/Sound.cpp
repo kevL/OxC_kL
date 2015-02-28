@@ -19,12 +19,12 @@
 
 #include "Sound.h"
 
-#include <SDL.h>
+//#include <SDL.h>
 
-#include "Exception.h"
+//#include "Exception.h"
 #include "Language.h"
-#include "Logger.h"
-#include "Options.h"
+//#include "Logger.h"
+//#include "Options.h"
 
 
 namespace OpenXcom
@@ -36,8 +36,7 @@ namespace OpenXcom
 Sound::Sound()
 	:
 		_sound(NULL)
-{
-}
+{}
 
 /**
  * Deletes the loaded sound content.
@@ -49,32 +48,32 @@ Sound::~Sound()
 
 /**
  * Loads a sound file from a specified filename.
- * @param filename, Filename of the sound file.
+ * @param filename - reference to filename of the sound file
  */
 void Sound::load(const std::string& filename)
 {
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 	_sound = Mix_LoadWAV(utf8.c_str());
 
 	if (_sound == NULL)
 	{
-		std::string err = filename + ":" + Mix_GetError();
+		const std::string err = filename + ":" + Mix_GetError();
 		throw Exception(err);
 	}
 }
 
 /**
  * Loads a sound file from a specified memory chunk.
- * @param data, Pointer to the sound file in memory
- * @param size, Size of the sound file in bytes.
+ * @param data	- pointer to the sound file in memory
+ * @param bytes	- size of the sound file in bytes
  */
 void Sound::load(
 		const void* data,
-		unsigned int size)
+		unsigned int bytes)
 {
-	SDL_RWops* rw = SDL_RWFromConstMem(data, size);
+	SDL_RWops* const rw = SDL_RWFromConstMem(data, bytes);
 	_sound = Mix_LoadWAV_RW(rw, 1);
 
 	if (_sound == NULL)
@@ -85,29 +84,32 @@ void Sound::load(
 
 /**
  * Plays the contained sound effect.
- * @param channel	- use specified channel, -1 to use any channel
- * @param angle		- stereo
- * @param distance	- stereo
+ * @param channel	- use specified channel (default -1 to use any channel)
+ * @param angle		- stereo (default 0)
+ * @param distance	- stereo (default 0)
  */
 void Sound::play(
 		int channel,
 		int angle,
 		int distance) const
 {
-	if (!Options::mute
+	if (Options::mute == false
 		&& _sound != NULL)
 	{
-		int chan = Mix_PlayChannel(
-								channel,
-								_sound,
-								0);
+		const int chan = Mix_PlayChannel(
+									channel,
+									_sound,
+									0);
 		if (chan == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
 		}
-		else if (Options::StereoSound)
+		else if (Options::StereoSound == true)
 		{
-			if (!Mix_SetPosition(chan, angle, distance))
+			if (Mix_SetPosition(
+							chan,
+							angle,
+							distance) == 0)
 			{
 				Log(LOG_WARNING) << Mix_GetError();
 			}
@@ -120,7 +122,7 @@ void Sound::play(
  */
 void Sound::stop()
 {
-	if (!Options::mute)
+	if (Options::mute == false)
 		Mix_HaltChannel(-1);
 }
 
@@ -129,11 +131,14 @@ void Sound::stop()
  */
 void Sound::loop()
 {
-	if (!Options::mute
-		&& _sound != 0
+	if (Options::mute == false
+		&& _sound != NULL
 		&& Mix_Playing(3) == 0)
 	{
-		int chan = Mix_PlayChannel(3, _sound, -1);
+		const int chan = Mix_PlayChannel(
+									3,
+									_sound,
+									-1);
 		if (chan == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
@@ -146,7 +151,7 @@ void Sound::loop()
  */
 void Sound::stopLoop()
 {
-	if (!Options::mute)
+	if (Options::mute == false)
 		Mix_HaltChannel(3);
 }
 

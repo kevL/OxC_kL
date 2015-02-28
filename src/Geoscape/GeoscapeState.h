@@ -148,7 +148,7 @@ private:
 
 
 	public:
-		static Sound* soundPop; // kL
+//		static Sound* soundPop; // kL
 
 
 		/// Creates the Geoscape state.

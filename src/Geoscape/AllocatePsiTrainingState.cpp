@@ -32,13 +32,14 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleSoldier.h"
 
@@ -76,7 +77,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("allocatePsi")->getElement("palette")->color); //7
+			_game->getRuleset()->getInterface("allocatePsi")->getElement("palette")->color);
 
 	add(_window, "window", "allocatePsi");
 	add(_txtTitle, "text", "allocatePsi");
@@ -92,44 +93,33 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& AllocatePsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(base->getName(_game->getLanguage()));
 
-//	_txtRemaining->setColor(Palette::blockOffset(13)+10);
 	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
 	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 
-//	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME"));
 
-//	_txtPsiStrength->setColor(Palette::blockOffset(13)+10);
 	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
 
-//	_txtPsiSkill->setColor(Palette::blockOffset(13)+10);
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_IMPROVEMENT"));
 
-//	_txtTraining->setColor(Palette::blockOffset(13)+10);
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
-//	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-//	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
 	_lstSoldiers->setBackground(_window);
@@ -169,11 +159,11 @@ void AllocatePsiTrainingState::init()
 			ssStr,
 			ssSkl;
 
-		int minPsi = (*i)->getRules()->getMinStats().psiSkill;
+		const int minPsi = (*i)->getRules()->getMinStats().psiSkill;
 
 		if ((*i)->getCurrentStats()->psiSkill >= minPsi
-			|| (Options::psiStrengthEval
-				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+			|| (Options::psiStrengthEval == true
+				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 		{
 			ssStr << ((*i)->getCurrentStats()->psiStrength);
 		}
@@ -192,7 +182,7 @@ void AllocatePsiTrainingState::init()
 		if ((*i)->isInPsiTraining())
 			color = _lstSoldiers->getSecondaryColor(); //Palette::blockOffset(13)+5)
 		else
-			color = _lstSoldiers->getColor(); //Palette::blockOffset(15)+6);
+			color = _lstSoldiers->getColor();
 
 		_lstSoldiers->addRow(
 						4,
@@ -252,7 +242,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 			if (_base->getUsedPsiLabs() < _base->getAvailablePsiLabs())
 			{
 				_lstSoldiers->setCellText(_sel, 3, tr("STR_YES").c_str());
-				_lstSoldiers->setRowColor(_sel, _lstSoldiers->getSecondaryColor()); //Palette::blockOffset(13)+5);
+				_lstSoldiers->setRowColor(_sel, _lstSoldiers->getSecondaryColor());
 
 				--_labSpace;
 				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
@@ -263,8 +253,8 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 		else
 		{
 			_lstSoldiers->setCellText(_sel, 3, tr("STR_NO").c_str());
-			_lstSoldiers->setRowColor(_sel, _lstSoldiers->getColor()); //Palette::blockOffset(15)+6);
-			_labSpace++;
+			_lstSoldiers->setRowColor(_sel, _lstSoldiers->getColor());
+			++_labSpace;
 			_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 			_base->getSoldiers()->at(_sel)->setPsiTraining();
 		}
@@ -275,6 +265,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_sel));
+		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
 

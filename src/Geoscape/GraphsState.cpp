@@ -38,7 +38,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/ToggleTextButton.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
@@ -53,7 +53,7 @@
 namespace OpenXcom
 {
 
-Sound* GraphsState::soundPop = 0;
+//Sound* GraphsState::soundPop = 0;
 static int curRowCountry = 0;
 
 
@@ -819,7 +819,7 @@ void GraphsState::blink()
 void GraphsState::btnGeoscapeClick(Action*)
 {
 	_game->popState();
-	soundPop->play(Mix_GroupAvailable(0));
+	kL_soundPop->play(Mix_GroupAvailable(0));
 }
 
 /**

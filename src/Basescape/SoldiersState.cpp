@@ -38,6 +38,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
+#include "../Engine/Sound.h"
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 
@@ -48,7 +49,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -87,7 +88,7 @@ SoldiersState::SoldiersState(Base* base)
 	_btnEquip		= new TextButton(56, 16, 193, 177);
 	_btnOk			= new TextButton(56, 16, 254, 177);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierList")->getElement("palette")->color); //2
+	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
 
 	add(_window, "window", "soldierList");
 	add(_txtTitle, "text1", "soldierList");
@@ -106,59 +107,45 @@ SoldiersState::SoldiersState(Base* base)
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SOLDIER_LIST"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtSoldiers->setColor(Palette::blockOffset(13)+10);
 	_txtSoldiers->setAlign(ALIGN_RIGHT);
 
-//	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
 	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
-//	_btnPsi->setColor(Palette::blockOffset(13)+10);
 	_btnPsi->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsi->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
 	_btnPsi->setVisible(
-					Options::anytimePsiTraining
+					Options::anytimePsiTraining == true
 					&& _base->getAvailablePsiLabs() > 0);
 
-//	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick);
 
-//	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(tr("STR_INVENTORY"));
 	_btnEquip->onMouseClick((ActionHandler)& SoldiersState::btnEquipClick);
 	_btnEquip->setVisible(_base->getAvailableSoldiers(true) > 0);
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldiersState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-//	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_RANK"));
 
-//	_txtCraft->setColor(Palette::blockOffset(15)+1);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-//	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-//	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 117, 93, 71);
@@ -213,18 +200,18 @@ void SoldiersState::init()
 
 		if ((*i)->getCraft() == NULL)
 		{
-			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor()); //Palette::blockOffset(15)+6);
+			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor());
 
 			if ((*i)->getWoundRecovery() > 0)
 			{
 				Uint8 color;
 				const int woundPct = (*i)->getWoundPercent();
 				if (woundPct > 50)
-					color = Palette::blockOffset(6);	// orange
+					color = Palette::blockOffset(6); // orange
 				else if (woundPct > 10)
-					color = Palette::blockOffset(9);	// yellow
+					color = Palette::blockOffset(9); // yellow
 				else
-					color = Palette::blockOffset(3);	// green
+					color = Palette::blockOffset(3); // green
 
 				_lstSoldiers->setCellColor(
 										row,
@@ -315,6 +302,7 @@ void SoldiersState::lstSoldiersPress(Action* action)
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));
+		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
 

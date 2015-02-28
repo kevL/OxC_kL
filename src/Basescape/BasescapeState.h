@@ -71,7 +71,7 @@ private:
 
 
 	public:
-		static Sound* soundPop;
+//		static Sound* soundPop;
 
 
 		/// Creates the Basescape state.

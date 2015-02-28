@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_SOUND_H
 #define OPENXCOM_SOUND_H
 
-#include <string>
-
-#include <SDL_mixer.h>
+//#include <string>
+//#include <SDL_mixer.h>
 
 
 namespace OpenXcom
@@ -50,7 +49,7 @@ private:
 		/// Loads sound from a chunk of memory.
 		void load(
 				const void* data,
-				unsigned int size);
+				unsigned int bytes);
 
 		/// Plays the sound.
 		void play(

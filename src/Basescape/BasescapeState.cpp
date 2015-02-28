@@ -56,7 +56,7 @@
 
 #include "../Menu/ErrorMessageState.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleRegion.h"
@@ -71,7 +71,7 @@
 namespace OpenXcom
 {
 
-Sound* BasescapeState::soundPop = 0;
+//Sound* BasescapeState::soundPop = 0;
 
 
 /**
@@ -668,7 +668,7 @@ void BasescapeState::viewLeftClick(Action*)
 
 
 	if (bPop == true)
-		soundPop->play(Mix_GroupAvailable(0));
+		kL_soundPop->play(Mix_GroupAvailable(0));
 }
 
 /**
@@ -798,8 +798,7 @@ void BasescapeState::miniRightClick(Action*)
 		kL_reCenter = true;
 
 		_game->popState();
-
-		soundPop->play(Mix_GroupAvailable(0));
+		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
 

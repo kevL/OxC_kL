@@ -61,8 +61,8 @@ namespace OpenXcom
  * @param hyperBases	- pointer to a vector of pointers to Bases that hyperdetected UFO (default NULL)
  */
 UfoDetectedState::UfoDetectedState(
-		Ufo* ufo,
-		GeoscapeState* state,
+		Ufo* const ufo,
+		GeoscapeState* const state,
 		bool detected,
 		bool hyper,
 		bool contact,
@@ -86,21 +86,22 @@ UfoDetectedState::UfoDetectedState(
 
 	if (hyper == true)
 	{
-		_window			= new Window(this, 224, 170, 16, 10, POPUP_BOTH);
+		_window			= new Window(this, 224, 190, 16, 10, POPUP_BOTH);
 
 		_txtHyperwave	= new Text(216, 16, 20, 45);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
 		_txtBases		= new Text(100, 41, 32, 135);
 	}
 	else
-		_window			= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
+		_window			= new Window(this, 224, 140, 16, 48, POPUP_BOTH);
 
 	_txtUfo			= new Text(90, 16, 26, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
-	_btnCancel		= new TextButton(88, 16, 136, 144);
+	_btn5Sec		= new TextButton(88, 16, 136, 144);
+	_btnCancel		= new TextButton(192, 16, 32, 164);
 
 	_txtRegion		= new Text(114, 9, 116, 56);
 	_txtTexture		= new Text(114, 9, 116, 66);
@@ -112,7 +113,8 @@ UfoDetectedState::UfoDetectedState(
 		_lstInfo->setY(60);
 		_btnCentre->setY(135);
 		_btnIntercept->setY(155);
-		_btnCancel->setY(155);
+		_btn5Sec->setY(155);
+		_btnCancel->setY(175);
 
 		_txtRegion->setY(19);
 		_txtTexture->setY(29);
@@ -138,6 +140,7 @@ UfoDetectedState::UfoDetectedState(
 	add(_lstInfo, "text", "UFOInfo");
 	add(_btnCentre, "button", "UFOInfo");
 	add(_btnIntercept, "button", "UFOInfo");
+	add(_btn5Sec, "button", "UFOInfo");
 	add(_btnCancel, "button", "UFOInfo");
 
 	add(_txtRegion, "text", "UFOInfo");
@@ -250,7 +253,10 @@ UfoDetectedState::UfoDetectedState(
 					(ActionHandler)& UfoDetectedState::btnCentreClick,
 					Options::keyOk);
 
-	_btnCancel->setText(tr("STR_OK_5_SECONDS")); // STR_CANCEL_UC
+	_btn5Sec->setText(tr("STR_OK_5_SECONDS"));
+	_btn5Sec->onMouseClick((ActionHandler)& UfoDetectedState::btn5SecClick);
+
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCancelClick,
@@ -473,12 +479,21 @@ void UfoDetectedState::btnCentreClick(Action*)
 }
 
 /**
+ * Returns to the previous screen and sets Geoscape timer to 5 seconds.
+ * @param action - pointer to an Action
+ */
+void UfoDetectedState::btn5SecClick(Action*)
+{
+	_state->timerReset();
+	_game->popState();
+}
+
+/**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
 void UfoDetectedState::btnCancelClick(Action*)
 {
-	_state->timerReset();
 	_game->popState();
 }
 

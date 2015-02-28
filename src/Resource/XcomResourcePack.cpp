@@ -23,7 +23,7 @@
 //#include <sstream>
 //#include "../fmath.h"
 
-#include "../Basescape/BasescapeState.h" // kL: soundPop
+//#include "../Basescape/BasescapeState.h" // kL: soundPop
 
 #include "../Battlescape/Position.h"
 
@@ -45,8 +45,8 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Geoscape/GeoscapeState.h" // kL: soundPop
-#include "../Geoscape/GraphsState.h" // kL: sound Pop
+//#include "../Geoscape/GeoscapeState.h" // kL: soundPop
+//#include "../Geoscape/GraphsState.h" // kL: soundPop
 
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -66,6 +66,9 @@
 
 namespace OpenXcom
 {
+
+Sound* kL_soundPop = NULL;
+
 
 namespace
 {
@@ -979,10 +982,10 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 //	Window::soundPopup[0]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah
 	Window::soundPopup[1]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[1]);	// #2 swish1
 	Window::soundPopup[2]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);	// #3 swish2
-	GeoscapeState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Geo->Base & Geo->Graphs
-	BasescapeState::soundPop	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Basescape RMB.
-	GraphsState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for switching Graphs screens. Or just returning to Geoscape.
-
+//	GeoscapeState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Geo->Base & Geo->Graphs
+//	BasescapeState::soundPop	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Basescape RMB.
+//	GraphsState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for switching Graphs screens. Or just returning to Geoscape.
+	kL_soundPop					= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// global.
 
 	/* BATTLESCAPE RESOURCES */
 	Log(LOG_INFO) << "Loading battlescape resources ...";

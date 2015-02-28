@@ -54,6 +54,7 @@ private:
 		* _txtRegion,
 		* _txtTexture;
 	TextButton
+		* _btn5Sec,
 		* _btnCancel,
 		* _btnCentre,
 		* _btnIntercept;
@@ -68,8 +69,8 @@ private:
 
 		/// Creates the Ufo Detected state.
 		UfoDetectedState(
-				Ufo* ufo,
-				GeoscapeState* state,
+				Ufo* const ufo,
+				GeoscapeState* const state,
 				bool detected,
 				bool hyper,
 				bool contact = true,
@@ -81,6 +82,8 @@ private:
 		void btnInterceptClick(Action* action);
 		/// Handler for clicking the Centre on UFO button.
 		void btnCentreClick(Action* action);
+		/// Handler for clicking the Cancel button and sets Geoscape timer to 5 seconds.
+		void btn5SecClick(Action* action);
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 };
