@@ -699,11 +699,10 @@ void Map::drawTerrain(Surface* surface)
 		invalid = false,
 
 		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
-		hasWestWall,
-		hasNorthWall,
+//		hasWestWall,
+//		hasNorthWall,
 		hasObject,
-
-		unitNorthValid,
+//		unitNorthValid,
 
 		halfRight,
 		redraw;
@@ -754,10 +753,10 @@ void Map::drawTerrain(Surface* surface)
 
 //					tileColor = tile->getMarkerColor();
 					hasFloor = false;
-					hasWestWall = false;
-					hasNorthWall = false;
+//					hasWestWall = false;
+//					hasNorthWall = false;
 					hasObject = false;
-					unitNorthValid = false;
+//					unitNorthValid = false;
 
 					// Draw Floor
 					srfSprite = tile->getSprite(MapData::O_FLOOR);
@@ -913,8 +912,8 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// Redraws Unit when it moves along the NORTH, WEST, or NORTH-WEST side of a content-object. Et&.
-//					if (false)
 					if (itY > 0)
+//					if (false)
 					{
 						const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
@@ -944,7 +943,7 @@ void Map::drawTerrain(Surface* surface)
 										if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
 											|| tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL) // or do this check specifically for Reapers
 										{
-											unitNorthValid = true;
+//											unitNorthValid = true;
 
 											if (tileNorth->isDiscovered(2) == true)
 												shade = tileNorth->getShade();
@@ -1397,11 +1396,14 @@ void Map::drawTerrain(Surface* surface)
 					// Draw Tile Background
 					if (tile->isVoid(true, false) == false)
 					{
+						bool drawUnitNorth = false;
+
 						// Draw west wall
 						srfSprite = tile->getSprite(MapData::O_WESTWALL);
 						if (srfSprite)
 						{
-							hasWestWall = true;
+//							hasWestWall = true;
+							drawUnitNorth = true;
 
 							if (tile->isDiscovered(0) == true
 								&& (tile->getMapData(MapData::O_WESTWALL)->isDoor() == true
@@ -1423,7 +1425,7 @@ void Map::drawTerrain(Surface* surface)
 						srfSprite = tile->getSprite(MapData::O_NORTHWALL);
 						if (srfSprite)
 						{
-							hasNorthWall = true;
+//							hasNorthWall = true;
 
 							if (tile->isDiscovered(1) == true
 								&& (tile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
@@ -1454,6 +1456,8 @@ void Map::drawTerrain(Surface* surface)
 								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
 						{
 							hasObject = true;
+							if (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST)
+								drawUnitNorth = true;
 
 							srfSprite->blitNShade(
 									surface,
@@ -1598,7 +1602,7 @@ void Map::drawTerrain(Surface* surface)
 						// end hilltop Redraw.
 
 
-						// Redraw unitNorth when it's on a reverse slope. Or level slope
+						// Redraw unitNorth when it's on a reverse slope. Or level slope. Or moving NS along westerly wall
 						if (itY > 0)
 						{
 							const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
@@ -1610,16 +1614,22 @@ void Map::drawTerrain(Surface* surface)
 								if (unitNorth != NULL
 									&& (unitNorth->getUnitVisible() == true
 										|| _save->getDebugMode() == true)	// this is just for the bigfooted ScoutDrone anyway .... ht. 10
-									&& unitNorth->getHeight() < 13)			// the problem is this draws overtop of the Cursor's front box
+									&& (unitNorth->getHeight() < 13			// the problem is this draws overtop of the Cursor's front box
+										|| (drawUnitNorth == true
+											&& unitNorth->getStatus() == STATUS_WALKING
+											&& (unitNorth->getDirection() == 0
+												|| unitNorth->getDirection() == 4))))
 								{
 									if (tileNorth->getTerrainLevel() - tile->getTerrainLevel() > -1 // positive -> Tile is higher
-										&& tile->getMapData(MapData::O_OBJECT) != NULL
-										&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-										&& (tileNorth->getMapData(MapData::O_OBJECT) == NULL
-											|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-											|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
-											|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
-											|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
+											&& tile->getMapData(MapData::O_OBJECT) != NULL
+											&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+											&& (tileNorth->getMapData(MapData::O_OBJECT) == NULL
+												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
+												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
+												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)
+										|| (drawUnitNorth == true))
+//											&& )) // <+ hasNorthWall == false, tileNorth has no foreground, etc.
 									{
 										quad = tileNorth->getPosition().x - unitNorth->getPosition().x
 											+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;
@@ -1857,7 +1867,7 @@ void Map::drawTerrain(Surface* surface)
 							// TODO: Smoke & Fire render below this, use checks to draw or not.
 
 							// reDraw unit NORTH-WEST. ... unit Walking (dir = 3,7 OR 2,6).
-							// note: tileWest & unitWest are in scope here; tileWest is well-defined, unitWest may be NULL ...
+							// note: tileWest & unitWest are in scope here; tileWest is [should be] well-defined, unitWest may be NULL ...
 							if (itY > 0
 								&& unitWest == NULL)
 							{
@@ -1946,8 +1956,9 @@ void Map::drawTerrain(Surface* surface)
 
 													if (!
 														(halfRight == true && halfLeft == true)
-														&& tileWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
-														&& tileWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)
+														&& (tileWest->getMapData(MapData::O_OBJECT) == NULL // ... (if tileWest!=NULL)
+															|| (tileWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
+																&& tileWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)))
 													{
 														quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
 															+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;

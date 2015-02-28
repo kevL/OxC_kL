@@ -234,7 +234,9 @@ void ResourcePack::playMusic(
 			loops = 1;
 		}
 
-		getRandomMusic(name, terrain)->play(loops);
+		getRandomMusic(
+					name,
+					terrain)->play(loops);
 	}
 }
 
@@ -255,7 +257,7 @@ void ResourcePack::fadeMusic(
 		game->setInputActive(false);
 
 		Mix_FadeOutMusic(fadeDur); // fade out!
-		func_fade();
+//kL	func_fade();
 
 		while (Mix_PlayingMusic() == 1)
 		{}

@@ -118,8 +118,8 @@ void Music::stop()
 #ifndef __NO_MUSIC
 	if (Options::mute == false)
 	{
-		func_mute();
-		Mix_HookMusic(NULL, NULL);
+//kL	func_mute();
+//kL	Mix_HookMusic(NULL, NULL);
 		Mix_HaltMusic();
 	}
 #endif
@@ -134,8 +134,8 @@ void Music::pause()
 	if (Options::mute == false)
 	{
 		Mix_PauseMusic();
-		if (Mix_GetMusicType(NULL) == MUS_NONE)
-			Mix_HookMusic(NULL, NULL);
+//kL	if (Mix_GetMusicType(NULL) == MUS_NONE)
+//kL		Mix_HookMusic(NULL, NULL);
 	}
 #endif
 }
@@ -149,8 +149,8 @@ void Music::resume()
 	if (Options::mute == false)
 	{
 		Mix_ResumeMusic();
-		if (Mix_GetMusicType(NULL) == MUS_NONE)
-			Mix_HookMusic(AdlibMusic::player, NULL);
+//kL	if (Mix_GetMusicType(NULL) == MUS_NONE)
+//kL		Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
 }
