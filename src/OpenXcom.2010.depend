@@ -5257,7 +5257,7 @@
 1424387335 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1425105071 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1425148996 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -6049,7 +6049,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1425148044 source:f:\git\openxcom\src\battlescape\map.cpp
+1425151695 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6853,7 +6853,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1425105294 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1425148996 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
 	"PsiTrainingState.h"
