@@ -179,8 +179,8 @@ void AllocatePsiTrainingState::init()
 		}
 
 		Uint8 color;
-		if ((*i)->isInPsiTraining())
-			color = _lstSoldiers->getSecondaryColor(); //Palette::blockOffset(13)+5)
+		if ((*i)->isInPsiTraining() == true)
+			color = _lstSoldiers->getSecondaryColor();
 		else
 			color = _lstSoldiers->getColor();
 
@@ -221,7 +221,8 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
 }
 
 /**
- * LMB assigns & removes a soldier from Psi Training. RMB shows soldier info.
+ * LMB assigns & removes a soldier from Psi Training.
+ * RMB shows soldier info.
  * @param action - pointer to an Action
  */
 void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
@@ -291,7 +292,8 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+											- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -340,7 +342,8 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+											+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{

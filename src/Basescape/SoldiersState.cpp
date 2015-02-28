@@ -88,7 +88,9 @@ SoldiersState::SoldiersState(Base* base)
 	_btnEquip		= new TextButton(56, 16, 193, 177);
 	_btnOk			= new TextButton(56, 16, 254, 177);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
 
 	add(_window, "window", "soldierList");
 	add(_txtTitle, "text1", "soldierList");

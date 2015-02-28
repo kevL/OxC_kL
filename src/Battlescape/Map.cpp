@@ -1689,7 +1689,9 @@ void Map::drawTerrain(Surface* surface)
 														|| (tileSouthWest->getUnit() == NULL
 															&& tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
 															&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
-																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+																|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
+																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
+																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)
 																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
 																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
 																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH)))
@@ -1729,6 +1731,9 @@ void Map::drawTerrain(Surface* surface)
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NESW
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NORTH
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))))
+//																	&& (!
+//																		(tileSouth->getMapData(MapData::O_OBJECT)->getDataset()->getName() == "LIGHTNIN"
+//																			&& tileSouth->getMapData(MapData::O_OBJECT)->getSprite(0) == 42)))))) // this (maybe) should be just lowRamp, but #42 is highRamp also.
 //															&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 													{
 														const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
@@ -1756,8 +1761,9 @@ void Map::drawTerrain(Surface* surface)
 															{
 																halfRight = true;
 
-																if (unitWest->getArmor()->getSize() == 2
-																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL) // confusing .... re. needs more above^ (this seems to be for large units only)
+																if (tileSouthSouthWest != NULL
+																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL // confusing .... re. needs more above^ (this seems to be for large units only)
+																	&& unitWest->getArmor()->getSize() == 2)
 																{
 																	redraw = false;
 																}
@@ -1905,7 +1911,11 @@ void Map::drawTerrain(Surface* surface)
 													}
 
 													if (!
-														(halfRight == true && halfLeft == true))
+														(halfRight == true && halfLeft == true)
+														&& (unitNorthWest->getDirection() == 3
+															|| unitNorthWest->getDirection() == 7
+															|| (tileWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
+																&& tileWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)))
 													{
 														quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
 															+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
