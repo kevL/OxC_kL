@@ -60,7 +60,7 @@ private:
 		_lastScrollPos,
 		_soldierID;
 
-	std::vector<std::wstring> _commendationsListEntry;
+	std::vector<std::wstring> _awardsListEntry;
 
 	std::vector<Soldier*>* _list;
 	std::vector<SoldierDead*>* _listDead;

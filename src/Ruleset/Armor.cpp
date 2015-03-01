@@ -116,7 +116,7 @@ void Armor::load(const YAML::Node& node)
 		for (size_t
 				i = 0;
 				i < dmg.size()
-					&& i < DAMAGE_TYPES;
+					&& i < static_cast<size_t>(DAMAGE_TYPES);
 				++i)
 		{
 			_damageModifier[i] = dmg[i]					.as<float>();
@@ -133,7 +133,7 @@ void Armor::load(const YAML::Node& node)
 
 	_forcedTorso = (ForcedTorso)node["forcedTorso"]		.as<int>(_forcedTorso);
 
-	if (_drawingRoutine == 0
+	if (   _drawingRoutine == 0
 		|| _drawingRoutine == 1
 		|| _drawingRoutine == 4
 		|| _drawingRoutine == 6

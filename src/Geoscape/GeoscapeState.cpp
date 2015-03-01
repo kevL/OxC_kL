@@ -3043,7 +3043,7 @@ void GeoscapeState::time1Month()
 			}
 		}
 
-		if (Options::anytimePsiTraining == false
+/*		if (Options::anytimePsiTraining == false
 			&& (*i)->getAvailablePsiLabs() > 0)
 		{
 			psi = true;
@@ -3062,7 +3062,7 @@ void GeoscapeState::time1Month()
 //									&& _savedGame->isResearched(_game->getRuleset()->getPsiRequirements())));
 				}
 			}
-		}
+		} */
 	}
 
 	_savedGame->monthlyFunding(); // handle Funding
@@ -3111,6 +3111,15 @@ void GeoscapeState::timerReset()
 			_game->getScreen()->getCursorLeftBlackBand());
 
 	_btn5Secs->mousePress(&act, this);
+}
+
+/**
+ * Gets if time compression is set to 5 second intervals.
+ * @return, true if time compression is set to 5 seconds
+ */
+bool GeoscapeState::is5Sec() const
+{
+	return (_timeSpeed == _btn5Secs);
 }
 
 /**

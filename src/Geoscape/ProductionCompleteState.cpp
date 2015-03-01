@@ -118,23 +118,23 @@ ProductionCompleteState::ProductionCompleteState(
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
 
-	std::wstring str;
+	std::wstring wst;
 	switch (_endType)
 	{
 		case PROGRESS_CONSTRUCTION:
-			str = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE")
+			wst = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE")
 					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_COMPLETE:
-			str = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE")
+			wst = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE")
 					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_NOT_ENOUGH_MONEY:
-			str = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE")
+			wst = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE")
 					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_NOT_ENOUGH_MATERIALS:
-			str = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE")
+			wst = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE")
 					.arg(item).arg(base->getName());
 		break;
 
@@ -142,7 +142,7 @@ ProductionCompleteState::ProductionCompleteState(
 			assert(false);
 	}
 
-	_txtMessage->setText(str);
+	_txtMessage->setText(wst);
 }
 
 /**
@@ -150,6 +150,14 @@ ProductionCompleteState::ProductionCompleteState(
  */
 ProductionCompleteState::~ProductionCompleteState()
 {}
+
+/**
+ * Initializes the state.
+ */
+void ProductionCompleteState::init()
+{
+	_btnOk5Secs->setVisible(_state->is5Sec() == false);
+}
 
 /**
  * Closes the window.

@@ -448,6 +448,14 @@ UfoDetectedState::~UfoDetectedState()
 {}
 
 /**
+ * Initializes the state.
+ */
+void UfoDetectedState::init()
+{
+	_btn5Sec->setVisible(_state->is5Sec() == false);
+}
+
+/**
  * Pick a craft to intercept the UFO.
  * @param action - pointer to an Action
  */

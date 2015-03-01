@@ -59,6 +59,9 @@ private:
 		/// Cleans up the Craft Error state.
 		~CraftErrorState();
 
+		/// Initializes the state.
+		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the OK 5 Secs button.

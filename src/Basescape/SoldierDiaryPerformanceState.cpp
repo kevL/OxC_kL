@@ -429,7 +429,7 @@ void SoldierDiaryPerformanceState::init()
 		_btnAwards->setColor(Palette::blockOffset(13)+10);
 
 
-	_commendationsListEntry.clear();
+	_awardsListEntry.clear();
 	_lstKillTotals->clearList();
 	_lstMissionTotals->clearList();
 
@@ -605,7 +605,7 @@ void SoldierDiaryPerformanceState::init()
 						ss2.str().c_str(),
 						ss3.str().c_str());
 
-		_commendationsListEntry.push_back(ss4.str().c_str());
+		_awardsListEntry.push_back(ss4.str().c_str());
 
 		drawSprites();
 	}
@@ -752,13 +752,13 @@ void SoldierDiaryPerformanceState::lstInfoMouseOver(Action*)
 {
 	const size_t row = _lstAwards->getSelectedRow();
 
-	if (_commendationsListEntry.empty() == true
-		|| row > _commendationsListEntry.size() - 1)
+	if (_awardsListEntry.empty() == true
+		|| row > _awardsListEntry.size() - 1)
 	{
 		_txtMedalInfo->setText(L"");
 	}
 	else
-		_txtMedalInfo->setText(_commendationsListEntry[row]);
+		_txtMedalInfo->setText(_awardsListEntry[row]);
 }
 
 /**

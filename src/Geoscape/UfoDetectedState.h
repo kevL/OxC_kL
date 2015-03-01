@@ -78,6 +78,9 @@ private:
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 
+		/// Initializes the state.
+		void init();
+
 		/// Handler for clicking the Intercept button.
 		void btnInterceptClick(Action* action);
 		/// Handler for clicking the Centre on UFO button.

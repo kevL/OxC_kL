@@ -135,6 +135,10 @@ private:
 	void onMoreUnit();
 	/// Decreases count of number of units to make (if possible).
 	void onLessUnit();
+
+	/// Gets quantity to change by.
+	int getQty() const;
+
 	/// Handler for using the mouse wheel on the Unit-part of the screen.
 //	void handleWheelUnit(Action* action);
 

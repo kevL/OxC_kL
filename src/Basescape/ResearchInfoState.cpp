@@ -57,10 +57,10 @@ ResearchInfoState::ResearchInfoState(
 		RuleResearch* rule)
 	:
 		_base(base),
+		_rule(rule),
 		_project(new ResearchProject( // time = 65 to 130%
 								rule,
-								(rule->getCost() * RNG::generate(65, 130)) / 100)),
-		_rule(rule)
+								(rule->getCost() * RNG::generate(65,130)) / 100))
 {
 	buildUi();
 }
@@ -82,9 +82,9 @@ ResearchInfoState::ResearchInfoState(
 }
 
 /**
- * kL. Cleans up the ResearchInfo state.
+ * Cleans up the ResearchInfo state.
  */
-ResearchInfoState::~ResearchInfoState() // kL
+ResearchInfoState::~ResearchInfoState()
 {
 	delete _timerMore;
 	delete _timerLess;
@@ -187,10 +187,10 @@ void ResearchInfoState::buildUi()
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
 	_timerMore = new Timer(250);
-	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
+	_timerMore->onTimer((StateHandler)& ResearchInfoState::moreSci);
 
 	_timerLess = new Timer(250);
-	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
+	_timerLess->onTimer((StateHandler)& ResearchInfoState::lessSci);
 
 //	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	if (_rule != NULL)
@@ -229,7 +229,6 @@ void ResearchInfoState::buildUi()
 void ResearchInfoState::btnOkClick(Action*)
 {
 	_project->setOffline(false); // kL
-
 	_game->popState();
 }
 
@@ -246,9 +245,9 @@ void ResearchInfoState::btnCancelClick(Action*)
 	else
 		rule = _project->getRules();
 
-	if (rule->needItem()
-		&& (Options::spendResearchedItems
-			|| _game->getRuleset()->getUnit(rule->getName())))
+	if (rule->needItem() == true
+		&& (Options::spendResearchedItems == true
+			|| _game->getRuleset()->getUnit(rule->getName()) != NULL))
 	{
 		_base->getItems()->addItem(rule->getName());
 	}
@@ -319,7 +318,7 @@ void ResearchInfoState::moreClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		moreByValue(std::numeric_limits<int>::max());
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		moreByValue(1);
+		moreByValue(getQty());
 }
 
 /**
@@ -355,16 +354,16 @@ void ResearchInfoState::lessClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		lessByValue(std::numeric_limits<int>::max());
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		lessByValue(1);
+		lessByValue(getQty());
 }
 
 /**
  * Adds one scientist to the project if possible.
  */
-void ResearchInfoState::more()
+void ResearchInfoState::moreSci()
 {
 	_timerMore->setInterval(80);
-	moreByValue(1);
+	moreByValue(getQty());
 }
 
 /**
@@ -376,17 +375,17 @@ void ResearchInfoState::moreByValue(int change)
 	if (change < 1)
 		return;
 
-	int
-		freeScientist = _base->getScientists(),
+	const int
+		freeScientists = _base->getScientists(),
 		freeSpaceLab = _base->getFreeLaboratories();
 
-	if (freeScientist > 0
+	if (freeScientists > 0
 		&& freeSpaceLab > 0)
 	{
 		change = std::min(
 						change,
 						std::min(
-								freeScientist,
+								freeScientists,
 								freeSpaceLab));
 		_project->setAssigned(_project->getAssigned() + change);
 		_base->setScientists(_base->getScientists() - change);
@@ -398,10 +397,10 @@ void ResearchInfoState::moreByValue(int change)
 /**
  * Removes one scientist from the project if possible.
  */
-void ResearchInfoState::less()
+void ResearchInfoState::lessSci()
 {
 	_timerLess->setInterval(80);
-	lessByValue(1);
+	lessByValue(getQty());
 }
 
 /**
@@ -413,17 +412,30 @@ void ResearchInfoState::lessByValue(int change)
 	if (change < 1)
 		return;
 
-	int assigned = _project->getAssigned();
+	const int assigned = _project->getAssigned();
 	if (assigned > 0)
 	{
 		change = std::min(
 						change,
 						assigned);
-		_project->setAssigned(assigned-change);
+		_project->setAssigned(assigned - change);
 		_base->setScientists(_base->getScientists() + change);
 
 		setAssignedScientist();
 	}
+}
+
+/**
+ * Gets quantity to change by.
+ * @note what were these guys smokin'
+ * @return, 10 if CTRL is pressed else 1
+ */
+int ResearchInfoState::getQty() const
+{
+	if ((SDL_GetModState() & KMOD_CTRL) == 0)
+		return 1;
+
+	return 10;
 }
 
 /**

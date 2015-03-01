@@ -263,16 +263,17 @@ void ManufactureInfoState::buildUi()
 
 	setAssignedEngineer();
 
-	_btnSell->setPressed(_production->getSellItems());
+	_btnSell->setPressed(_production->getSellItems() == true);
 
-	_timerMoreEngineer	= new Timer(250);
-	_timerLessEngineer	= new Timer(250);
-	_timerMoreUnit		= new Timer(250);
-	_timerLessUnit		= new Timer(250);
 
+	_timerMoreEngineer = new Timer(250);
 	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
+	_timerLessEngineer = new Timer(250);
 	_timerLessEngineer->onTimer((StateHandler)& ManufactureInfoState::onLessEngineer);
+
+	_timerMoreUnit = new Timer(250);
 	_timerMoreUnit->onTimer((StateHandler)& ManufactureInfoState::onMoreUnit);
+	_timerLessUnit = new Timer(250);
 	_timerLessUnit->onTimer((StateHandler)& ManufactureInfoState::onLessUnit);
 }
 
@@ -321,19 +322,19 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
 	std::wostringstream
-		s1,
-		s2;
+		wost1,
+		wost2;
 
-	s1 << L"> \x01" << _production->getAssignedEngineers();
-	_txtAllocated->setText(s1.str());
+	wost1 << L"> \x01" << _production->getAssignedEngineers();
+	_txtAllocated->setText(wost1.str());
 
-	s2 << L"> \x01";
+	wost2 << L"> \x01";
 	if (_production->getInfiniteAmount() == true)
-		s2 << "oo";
+		wost2 << "oo";
 	else
-		s2 << _production->getAmountTotal();
+		wost2 << _production->getAmountTotal();
 
-	_txtTodo->setText(s2.str());
+	_txtTodo->setText(wost2.str());
 
 	_btnOk->setVisible(_production->getAmountTotal() > 0);
 
@@ -345,7 +346,7 @@ void ManufactureInfoState::setAssignedEngineer()
  */
 void ManufactureInfoState::updateTimeTotal()
 {
-	std::wostringstream woStr;
+	std::wostringstream wost;
 
 	if (_production->getAssignedEngineers() > 0)
 	{
@@ -370,17 +371,17 @@ void ManufactureInfoState::updateTimeTotal()
 
 //		hoursLeft = static_cast<int>(
 //						ceil(static_cast<double>(hoursLeft) / static_cast<double>(_production->getAssignedEngineers())));
-		// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
+		// ensure this rounds up since it takes an entire hour to manufacture any part of that hour's capacity
 		hoursLeft = (hoursLeft + engs - 1) / engs;
 
 		const int daysLeft = hoursLeft / 24;
 		hoursLeft %= 24;
-		woStr << daysLeft << "\n" << hoursLeft;
+		wost << daysLeft << "\n" << hoursLeft;
 	}
 	else
-		woStr << L"oo";
+		wost << L"oo";
 
-	_txtTimeTotal->setText(woStr.str());
+	_txtTimeTotal->setText(wost.str());
 }
 
 /**
@@ -392,7 +393,7 @@ void ManufactureInfoState::btnSellRelease(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_production->setSellItems(_btnSell->getPressed());
+		_production->setSellItems(_btnSell->getPressed() == true);
 
 		updateTimeTotal();
 	}
@@ -408,16 +409,16 @@ void ManufactureInfoState::moreEngineer(int change)
 		return;
 
 	const int
-		availableEngineer = _base->getEngineers(),
+		availableEngineers = _base->getEngineers(),
 		availableWorkSpace = _base->getFreeWorkshops();
 
-	if (availableEngineer > 0
+	if (availableEngineers > 0
 		&& availableWorkSpace > 0)
 	{
 		change = std::min(
 						change,
 						std::min(
-								availableEngineer,
+								availableEngineers,
 								availableWorkSpace));
 		_production->setAssignedEngineers(_production->getAssignedEngineers() + change);
 		_base->setEngineers(_base->getEngineers() - change);
@@ -458,7 +459,7 @@ void ManufactureInfoState::moreEngineerClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		moreEngineer(std::numeric_limits<int>::max());
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		moreEngineer(1);
+		moreEngineer(getQty());
 }
 
 /**
@@ -515,7 +516,7 @@ void ManufactureInfoState::lessEngineerClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		lessEngineer(std::numeric_limits<int>::max());
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		lessEngineer(1);
+		lessEngineer(getQty());
 }
 
 /**
@@ -609,7 +610,7 @@ void ManufactureInfoState::moreUnitClick(Action* action)
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		moreUnit(1);
+		moreUnit(getQty());
 }
 
 /**
@@ -659,21 +660,16 @@ void ManufactureInfoState::lessUnitRelease(Action* action)
  */
 void ManufactureInfoState::lessUnitClick(Action* action)
 {
+	_production->setInfiniteAmount(false);
+
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
-		|| action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		|| _production->getAmountTotal() <= _production->getAmountProduced())
 	{
-		_production->setInfiniteAmount(false);
-
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
-			|| _production->getAmountTotal() <= _production->getAmountProduced())
-		{
-			_production->setAmountTotal(_production->getAmountProduced() + 1);
-			setAssignedEngineer();
-		}
-
-		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-			lessUnit(1);
+		_production->setAmountTotal(_production->getAmountProduced() + 1);
+		setAssignedEngineer();
 	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		lessUnit(getQty());
 }
 
 /**
@@ -682,7 +678,7 @@ void ManufactureInfoState::lessUnitClick(Action* action)
 void ManufactureInfoState::onMoreEngineer()
 {
 	_timerMoreEngineer->setInterval(80);
-	moreEngineer(1);
+	moreEngineer(getQty());
 }
 
 /**
@@ -691,7 +687,7 @@ void ManufactureInfoState::onMoreEngineer()
 void ManufactureInfoState::onLessEngineer()
 {
 	_timerLessEngineer->setInterval(80);
-	lessEngineer(1);
+	lessEngineer(getQty());
 }
 
 /**
@@ -712,16 +708,29 @@ void ManufactureInfoState::onLessEngineer()
 void ManufactureInfoState::onMoreUnit()
 {
 	_timerMoreUnit->setInterval(80);
-	moreUnit(1);
+	moreUnit(getQty());
 }
 
 /**
- * Builds one less unit (if possible).
+ * Builds one less unit.
  */
 void ManufactureInfoState::onLessUnit()
 {
 	_timerLessUnit->setInterval(80);
-	lessUnit(1);
+	lessUnit(getQty());
+}
+
+/**
+ * Gets quantity to change by.
+ * @note what were these guys smokin'
+ * @return, 10 if CTRL is pressed else 1
+ */
+int ManufactureInfoState::getQty() const
+{
+	if ((SDL_GetModState() & KMOD_CTRL) == 0)
+		return 1;
+
+	return 10;
 }
 
 /**
@@ -745,6 +754,7 @@ void ManufactureInfoState::think()
 
 	_timerMoreEngineer->think(this, NULL);
 	_timerLessEngineer->think(this, NULL);
+
 	_timerMoreUnit->think(this, NULL);
 	_timerLessUnit->think(this, NULL);
 }

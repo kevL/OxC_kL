@@ -183,6 +183,8 @@ private:
 
 		/// Resets the timer to minimum speed.
 		void timerReset();
+		/// Gets if time compression is set to 5 second intervals.
+		bool is5Sec() const;
 
 		/// Displays a popup window.
 		void popup(State* state);

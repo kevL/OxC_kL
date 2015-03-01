@@ -98,6 +98,14 @@ CraftErrorState::~CraftErrorState()
 {}
 
 /**
+ * Initializes the state.
+ */
+void CraftErrorState::init()
+{
+	_btnOk5Secs->setVisible(_state->is5Sec() == false);
+}
+
+/**
  * Closes the window.
  * @param action - pointer to an Action
  */

@@ -80,7 +80,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_btnOk5Secs		= new TextButton(139, 16, 16, 169);
 	_btnOk			= new TextButton(139, 16, 165, 169);
 
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color); //6
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color);
 
 	add(_window, "window", "itemsArriving");
 	add(_txtTitle, "text1", "itemsArriving");
@@ -94,18 +96,15 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 	centerAllSurfaces();
 
-//	_window->setColor(Palette::blockOffset(8)+5);
+
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-/*
-//	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
-	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+/*	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
 					Options::keyOk); */
 
-//	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ItemsArrivingState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
@@ -115,29 +114,22 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
 					Options::keyOk);
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_ITEMS_ARRIVING"));
 
-//	_txtItem->setColor(Palette::blockOffset(8)+5);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_txtDestination->setColor(Palette::blockOffset(8)+5);
 	_txtDestination->setText(tr("STR_DESTINATION_UC"));
 
-//	_lstTransfers->setColor(Palette::blockOffset(8)+10);
-//	_lstTransfers->setArrowColor(Palette::blockOffset(8)+5);
 	_lstTransfers->setColumns(3, 144, 53, 80);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setSelectable();
@@ -204,21 +196,21 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 
 						for (std::vector<Vehicle*>::const_iterator // check if it's ammo to reload a vehicle
-								veh = (*c)->getVehicles()->begin();
-								veh != (*c)->getVehicles()->end();
-								++veh)
+								vhcl = (*c)->getVehicles()->begin();
+								vhcl != (*c)->getVehicles()->end();
+								++vhcl)
 						{
 							std::vector<std::string>::const_iterator ammo = std::find(
-																				(*veh)->getRules()->getCompatibleAmmo()->begin(),
-																				(*veh)->getRules()->getCompatibleAmmo()->end(),
+																				(*vhcl)->getRules()->getCompatibleAmmo()->begin(),
+																				(*vhcl)->getRules()->getCompatibleAmmo()->end(),
 																				item->getType());
-							if (ammo != (*veh)->getRules()->getCompatibleAmmo()->end()
-								&& (*veh)->getAmmo() < item->getClipSize())
+							if (ammo != (*vhcl)->getRules()->getCompatibleAmmo()->end()
+								&& (*vhcl)->getAmmo() < item->getClipSize())
 							{
 								const int used = std::min(
 														(*j)->getQuantity(),
-														item->getClipSize() - (*veh)->getAmmo());
-								(*veh)->setAmmo((*veh)->getAmmo() + used);
+														item->getClipSize() - (*vhcl)->getAmmo());
+								(*vhcl)->setAmmo((*vhcl)->getAmmo() + used);
 
 								// Note that the items have already been delivered --
 								// so they are removed from the base, not the transfer.
@@ -230,12 +222,12 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 					}
 				}
 
-				std::wostringstream ss;
-				ss << (*j)->getQuantity();
+				std::wostringstream wost;
+				wost << (*j)->getQuantity();
 				_lstTransfers->addRow(
 									3,
 									(*j)->getName(_game->getLanguage()).c_str(),
-									ss.str().c_str(),
+									wost.str().c_str(),
 									(*i)->getName().c_str());
 
 				delete *j; // remove transfer
@@ -252,6 +244,18 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
  */
 ItemsArrivingState::~ItemsArrivingState()
 {}
+
+/**
+ * Initializes the state.
+ */
+void ItemsArrivingState::init()
+{
+	setPalette( // in case Player goes to basescape
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color);
+
+	_btnOk5Secs->setVisible(_state->is5Sec() == false);
+}
 
 /**
  * Returns to the previous screen.
@@ -296,7 +300,7 @@ void ItemsArrivingState::lstGoToBasePress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		Base* base = _bases.at(_lstTransfers->getSelectedRow());
+		Base* const base = _bases.at(_lstTransfers->getSelectedRow());
 		if (base != NULL) // make sure player hasn't deconstructed a base, when jumping back & forth between bases and the list.
 			_game->pushState(new BasescapeState(
 											base,

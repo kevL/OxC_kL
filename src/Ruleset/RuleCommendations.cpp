@@ -29,18 +29,13 @@ namespace OpenXcom
 RuleCommendations::RuleCommendations()
 	:
 		_sprite(-1)
-//		_description(""),
-//		_criteria(),
-//		_killCriteria()
-{
-}
+{}
 
 /**
  * Cleans up the commendation.
  */
 RuleCommendations::~RuleCommendations()
-{
-}
+{}
 
 /**
  * Loads the commendations from YAML.

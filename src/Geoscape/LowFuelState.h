@@ -65,6 +65,8 @@ private:
 		/// Cleans up the Low Fuel state.
 		~LowFuelState();
 
+		/// Initializes the state.
+		void init();
 		/// Runs the blink timer.
 		void think();
 		/// Blinks the message text.

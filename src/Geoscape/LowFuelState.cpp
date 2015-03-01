@@ -117,6 +117,14 @@ LowFuelState::~LowFuelState()
 }
 
 /**
+ * Initializes the state.
+ */
+void LowFuelState::init()
+{
+	_btnOk5Secs->setVisible(_state->is5Sec() == false);
+}
+
+/**
  * Runs the blink timer.
  */
 void LowFuelState::think()

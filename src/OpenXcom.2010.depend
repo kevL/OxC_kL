@@ -4492,7 +4492,7 @@
 1424387340 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1425059744 f:\git\openxcom\src\geoscape\geoscapestate.h
+1425238508 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1424387338 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4829,7 +4829,7 @@
 1424881946 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1424387345 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1425245470 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4847,7 +4847,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/Production.h"
 
-1424387345 f:\git\openxcom\src\basescape\manufactureinfostate.h
+1425244898 f:\git\openxcom\src\basescape\manufactureinfostate.h
 	"../Engine/State.h"
 
 1424387339 f:\git\openxcom\src\interface\arrowbutton.h
@@ -4984,7 +4984,7 @@
 1424387345 f:\git\openxcom\src\basescape\newresearchliststate.h
 	"../Engine/State.h"
 
-1424387345 f:\git\openxcom\src\basescape\researchinfostate.h
+1425245575 f:\git\openxcom\src\basescape\researchinfostate.h
 	"../Engine/State.h"
 
 1424387345 source:f:\git\openxcom\src\basescape\placefacilitystate.cpp
@@ -5069,7 +5069,7 @@
 
 1424387335 f:\git\openxcom\src\savegame\transfer.h
 
-1424387345 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1425245577 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -6574,7 +6574,7 @@
 	"Language.h"
 	"Surface.h"
 
-1424387342 source:f:\git\openxcom\src\engine\game.cpp
+1425164656 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7048,7 +7048,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1424387340 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
+1425241746 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
 	"CraftErrorState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7058,7 +7058,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1424387340 f:\git\openxcom\src\geoscape\crafterrorstate.h
+1425241744 f:\git\openxcom\src\geoscape\crafterrorstate.h
 	<string>
 	"../Engine/State.h"
 
@@ -7175,7 +7175,7 @@
 1424387339 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1425059701 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1425238528 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7264,10 +7264,10 @@
 1425059843 f:\git\openxcom\src\geoscape\graphsstate.h
 	"../Engine/State.h"
 
-1424387339 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
+1425241842 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
 	"../Engine/State.h"
 
-1424387339 f:\git\openxcom\src\geoscape\lowfuelstate.h
+1425241696 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
 1424387339 f:\git\openxcom\src\geoscape\monthlyreportstate.h
@@ -7283,7 +7283,7 @@
 1424387339 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
 	"../Engine/State.h"
 
-1424387339 f:\git\openxcom\src\geoscape\productioncompletestate.h
+1425241265 f:\git\openxcom\src\geoscape\productioncompletestate.h
 	<string>
 	"../Engine/State.h"
 	"../Savegame/Production.h"
@@ -7294,7 +7294,7 @@
 1424387339 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1425061313 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1425241636 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1424387339 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7400,7 +7400,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1424387339 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1425241842 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -7423,7 +7423,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1424387339 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1425241698 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7511,7 +7511,7 @@
 1404096023 source:f:\git\openxcom\src\geoscape\polyline.cpp
 	"Polyline.h"
 
-1424387339 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
+1425241504 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
 	"ProductionCompleteState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7601,7 +7601,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1425061604 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1425241617 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8446,7 +8446,7 @@
 1424387335 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1425051373 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1425162696 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Music.h"
@@ -11096,10 +11096,10 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1420130453 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1425190561 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
-1420130457 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
+1425188846 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
 	"RuleCommendations.h"
 
 1420130449 f:\git\openxcom\src\ruleset\rulecommendations.h
@@ -11119,7 +11119,7 @@
 1420130450 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1422044110 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1425190561 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
@@ -11139,7 +11139,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1420130455 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1425188726 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"

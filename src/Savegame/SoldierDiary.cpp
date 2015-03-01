@@ -1392,10 +1392,10 @@ std::string SoldierCommendations::getNoun() const
  */
 std::string SoldierCommendations::getDecorationLevelName(const int skip) const
 {
-	std::ostringstream ss;
-	ss << "STR_AWARD_" << _decorationLevel - skip;
+	std::ostringstream ost;
+	ost << "STR_AWARD_" << _decorationLevel - skip;
 
-	return ss.str();
+	return ost.str();
 }
 
 /**
@@ -1404,10 +1404,10 @@ std::string SoldierCommendations::getDecorationLevelName(const int skip) const
  */
 std::string SoldierCommendations::getDecorationDescription() const
 {
-	std::ostringstream ss;
-	ss << "STR_AWARD_DECOR_" << _decorationLevel;
+	std::ostringstream ost;
+	ost << "STR_AWARD_DECOR_" << _decorationLevel;
 
-	return ss.str();
+	return ost.str();
 }
 
 /**
@@ -1416,10 +1416,10 @@ std::string SoldierCommendations::getDecorationDescription() const
  */
 std::string SoldierCommendations::getDecorationClass() const
 {
-	std::ostringstream ss;
-	ss << "STR_AWARD_CLASS_" << _decorationLevel;
+	std::ostringstream ost;
+	ost << "STR_AWARD_CLASS_" << _decorationLevel;
 
-	return ss.str();
+	return ost.str();
 }
 
 /**

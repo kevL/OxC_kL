@@ -69,9 +69,46 @@ private:
 	Window* _window;
 
 	///
-	void setAssignedScientist();
-	///
 	void buildUi();
+
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action* action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action* action);
+
+	///
+	void setAssignedScientist();
+
+	/// Handler for using the mouse wheel.
+//	void handleWheel(Action* action);
+
+	/// Handler for pressing the More button.
+	void morePress(Action* action);
+	/// Handler for releasing the More button.
+	void moreRelease(Action* action);
+	/// Handler for clicking the More button.
+	void moreClick(Action* action);
+	/// Handler for pressing the Less button.
+	void lessPress(Action* action);
+	/// Handler for releasing the Less button.
+	void lessRelease(Action* action);
+	/// Handler for clicking the Less button.
+	void lessClick(Action* action);
+
+	/// Function called every time the _timerMore timer is triggered.
+	void moreSci();
+	/// Add given number of scientists to the project if possible
+	void moreByValue(int change);
+	/// Function called every time the _timerLess timer is triggered.
+	void lessSci();
+	/// Remove the given number of scientists from the project if possible
+	void lessByValue(int change);
+
+	/// Gets quantity to change by.
+	int getQty() const;
+
+	/// Runs state functionality every cycle(used to update the timer).
+	void think();
 
 
 	public:
@@ -83,40 +120,8 @@ private:
 		ResearchInfoState(
 				Base* base,
 				ResearchProject* project);
-		/// kL. Cleans up the ResearchInfo state.
-		~ResearchInfoState(); // kL
-
-		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
-		/// Handler for clicking the Cancel button.
-		void btnCancelClick(Action* action);
-
-		/// Function called every time the _timerMore timer is triggered.
-		void more();
-		/// Add given number of scientists to the project if possible
-		void moreByValue(int change);
-		/// Function called every time the _timerLess timer is triggered.
-		void less();
-		/// Remove the given number of scientists from the project if possible
-		void lessByValue(int change);
-
-		/// Handler for using the mouse wheel.
-//		void handleWheel(Action* action);
-		/// Handler for pressing the More button.
-		void morePress(Action* action);
-		/// Handler for releasing the More button.
-		void moreRelease(Action* action);
-		/// Handler for clicking the More button.
-		void moreClick(Action* action);
-		/// Handler for pressing the Less button.
-		void lessPress(Action* action);
-		/// Handler for releasing the Less button.
-		void lessRelease(Action* action);
-		/// Handler for clicking the Less button.
-		void lessClick(Action* action);
-
-		/// Runs state functionality every cycle(used to update the timer).
-		void think();
+		/// Cleans up the ResearchInfo state.
+		~ResearchInfoState();
 };
 
 }
