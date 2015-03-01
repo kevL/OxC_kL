@@ -250,10 +250,7 @@ ItemsArrivingState::~ItemsArrivingState()
  */
 void ItemsArrivingState::init()
 {
-	setPalette( // in case Player goes to basescape
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color);
-
+	State::init();
 	_btnOk5Secs->setVisible(_state->is5Sec() == false);
 }
 

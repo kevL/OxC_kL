@@ -540,11 +540,11 @@ void State::setPalette(
 /**
  * Loads palettes from the game resources into the state.
  * @param palette	- reference the string ID of the palette to load
- * @param backpals	- BACKPALS.DAT offset to use
+ * @param backpal	- BACKPALS.DAT offset to use (default -1)
  */
 void State::setPalette(
 		const std::string& palette,
-		int backpals)
+		int backpal)
 {
 	setPalette(
 			_game->getResourcePack()->getPalette(palette)->getColors(),
@@ -563,9 +563,9 @@ void State::setPalette(
 	else
 		_cursorColor = ResourcePack::BATTLESCAPE_CURSOR;
 
-	if (backpals != -1)
+	if (backpal != -1)
 		setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)),
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(static_cast<int>(Palette::blockOffset(backpal))),
 				Palette::backPos,
 				16,
 				false);
