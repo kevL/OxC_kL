@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_RULERESEARCH_H
 #define OPENXCOM_RULERESEARCH_H
 
-#include <string>
-#include <vector>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

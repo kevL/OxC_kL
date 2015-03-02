@@ -35,6 +35,7 @@ namespace OpenXcom
 
 class Text;
 
+
 /**
  * Saves the current game with an optional message.
  */

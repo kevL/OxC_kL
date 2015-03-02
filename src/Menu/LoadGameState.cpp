@@ -37,6 +37,7 @@
 
 #include "../Geoscape/GeoscapeState.h"
 
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 
 #include "../Savegame/SavedBattleGame.h"
@@ -56,9 +57,9 @@ LoadGameState::LoadGameState(
 		const std::string& filename,
 		SDL_Color* palette)
 	:
-		_firstRun(0),
 		_origin(origin),
-		_filename(filename)
+		_filename(filename),
+		_firstRun(0)
 {
 	buildUi(palette);
 }
@@ -126,6 +127,8 @@ void LoadGameState::buildUi(SDL_Color* palette)
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
+
+	_game->getCursor()->setVisible(false);
 }
 
 /**
@@ -139,7 +142,7 @@ void LoadGameState::init()
 		&& CrossPlatform::fileExists(Options::getUserFolder() + _filename) == false)
 	{
 		_game->popState();
-		return;
+		_game->getCursor()->setVisible();
 	}
 }
 
@@ -155,11 +158,14 @@ void LoadGameState::think()
 	else
 	{
 		_game->popState();
+		_game->getCursor()->setVisible();
 
-		SavedGame* save = new SavedGame(_game->getRuleset());
+		SavedGame* const save = new SavedGame(_game->getRuleset());
 		try
 		{
-			save->load(_filename, _game->getRuleset());
+			save->load(
+					_filename,
+					_game->getRuleset());
 			_game->setSavedGame(save);
 
 			Options::baseXResolution = Options::baseXGeoscape;
@@ -177,7 +183,7 @@ void LoadGameState::think()
 
 				_game->getScreen()->resetDisplay(false);
 
-				BattlescapeState* bs = new BattlescapeState();
+				BattlescapeState* const bs = new BattlescapeState();
 				_game->pushState(bs);
 				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 			}
@@ -191,16 +197,16 @@ void LoadGameState::think()
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color,
 													"BACK01.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0)
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color,
 													"TAC00.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
 			if (_game->getSavedGame() == save)
 				_game->setSavedGame(NULL);
@@ -216,16 +222,16 @@ void LoadGameState::think()
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color,
 													"BACK01.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0)
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color,
 													"TAC00.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
 			if (_game->getSavedGame() == save)
 				_game->setSavedGame(NULL);

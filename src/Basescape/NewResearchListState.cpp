@@ -54,8 +54,6 @@ NewResearchListState::NewResearchListState(
 		Base* base)
 	:
 		_base(base),
-//		_offlines(), // kL
-//		_projects(), // kL
 		_cutoff(-1)
 {
 	_screen = false;
@@ -67,7 +65,7 @@ NewResearchListState::NewResearchListState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
+			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
 	add(_window, "window", "selectNewResearch");
 	add(_txtTitle, "text", "selectNewResearch");
@@ -77,15 +75,11 @@ NewResearchListState::NewResearchListState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_NEW_RESEARCH_PROJECTS"));
 
-//	_lstResearch->setColor(Palette::blockOffset(13));
-//	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setSelectable();
 	_lstResearch->setMargin();
@@ -93,7 +87,6 @@ NewResearchListState::NewResearchListState(
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);
 
-//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewResearchListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -143,7 +136,6 @@ void NewResearchListState::btnCancelClick(Action*)
  */
 void NewResearchListState::fillProjectList()
 {
-	//Log(LOG_INFO) << "NewResearchListState::fillProjectList()";
 	_cutoff = -1;
 	_offlines.clear();
 
@@ -158,21 +150,19 @@ void NewResearchListState::fillProjectList()
 			i != baseProjects.end();
 			++i)
 	{
-		if ((*i)->getOffline())
+		if ((*i)->getOffline() == true)
 		{
-			//Log(LOG_INFO) << ". offline: " << (*i)->getRules()->getName();
 			_lstResearch->addRow(
-								1,
-								tr((*i)->getRules()->getName()).c_str());
+							1,
+							tr((*i)->getRules()->getName()).c_str());
 
 			_lstResearch->setRowColor(row, Palette::blockOffset(11)+2);
 
 			_offlines.push_back(*i);
 
-			++row;
 			++_cutoff;
+			++row;
 		}
-		//else Log(LOG_INFO) << ". already online: " << (*i)->getRules()->getName();
 	}
 
 
@@ -181,27 +171,22 @@ void NewResearchListState::fillProjectList()
 													_game->getRuleset(),
 													_base);
 
-	std::vector<RuleResearch*>::iterator i = _projects.begin();
+	std::vector<RuleResearch*>::const_iterator i = _projects.begin();
 	while (i != _projects.end())
 	{
-		//Log(LOG_INFO) << ". rule: " << (*i)->getName();
-		if ((*i)->getRequirements().empty())
+		if ((*i)->getRequirements().empty() == true)
 		{
-			//Log(LOG_INFO) << ". rule: add";
 			_lstResearch->addRow(
-								1,
-								tr((*i)->getName()).c_str());
+							1,
+							tr((*i)->getName()).c_str());
 
 			_lstResearch->setRowColor(row, Palette::blockOffset(13));
 
-			++row;
 			++i;
+			++row;
 		}
 		else
-		{
-			//Log(LOG_INFO) << ". rule: erase";
 			i = _projects.erase(i);
-		}
 	}
 }
 

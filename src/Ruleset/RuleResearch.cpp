@@ -23,6 +23,10 @@
 namespace OpenXcom
 {
 
+/**
+ * Creates a new RuleResearch.
+ * @param name - reference to the name of this RuleResearch
+ */
 RuleResearch::RuleResearch(const std::string& name)
 	:
 		_name(name),
@@ -30,8 +34,7 @@ RuleResearch::RuleResearch(const std::string& name)
 		_points(0),
 		_needItem(false),
 		_listOrder(0)
-{
-}
+{}
 
 /**
  * Loads the research project from a YAML file.
@@ -42,18 +45,18 @@ void RuleResearch::load(
 		const YAML::Node& node,
 		int listOrder)
 {
-	_name			= node["name"].as<std::string>(_name);
-	_lookup			= node["lookup"].as<std::string>(_lookup);
-	_cost			= node["cost"].as<int>(_cost);
-	_points			= node["points"].as<int>(_points);
-	_dependencies	= node["dependencies"].as< std::vector<std::string> >(_dependencies);
-	_unlocks		= node["unlocks"].as< std::vector<std::string> >(_unlocks);
-	_getOneFree		= node["getOneFree"].as< std::vector<std::string> >(_getOneFree);
-	_requires		= node["requires"].as< std::vector<std::string> >(_requires);
-	_needItem		= node["needItem"].as<bool>(_needItem);
-	_listOrder		= node["listOrder"].as<int>(_listOrder);
+	_name			= node["name"]			.as<std::string>(_name);
+	_lookup			= node["lookup"]		.as<std::string>(_lookup);
+	_cost			= node["cost"]			.as<int>(_cost);
+	_points			= node["points"]		.as<int>(_points);
+	_dependencies	= node["dependencies"]	.as< std::vector<std::string> >(_dependencies);
+	_unlocks		= node["unlocks"]		.as< std::vector<std::string> >(_unlocks);
+	_getOneFree		= node["getOneFree"]	.as< std::vector<std::string> >(_getOneFree);
+	_requires		= node["requires"]		.as< std::vector<std::string> >(_requires);
+	_needItem		= node["needItem"]		.as<bool>(_needItem);
+	_listOrder		= node["listOrder"]		.as<int>(_listOrder);
 
-	if (!_listOrder)
+	if (_listOrder == 0)
 		_listOrder = listOrder;
 }
 

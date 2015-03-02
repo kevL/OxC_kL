@@ -1217,9 +1217,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	bool success = false;
 	const int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
 																	BA_HIT,
-//																	_ammo)			// Ammo is the weapon since (melee==true).
-																	_action.weapon)	// Not necessarily ...
-																* 100.));
+//																	_ammo) // Ammo is the weapon since (melee==true). Not necessarily ...
+																	_action.weapon) * 100.));
 	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << percent;
 	if (RNG::percent(percent) == true)
 	{

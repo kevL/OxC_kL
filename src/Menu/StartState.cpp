@@ -277,9 +277,9 @@ void StartState::think()
 					_game->pushState(new ErrorMessageState(
 														error.str(),
 														state->getPalette(),
-														_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10,
+														_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color,
 														"BACK01.SCR",
-														_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
+														_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 				}
 
 				Options::reload = false;

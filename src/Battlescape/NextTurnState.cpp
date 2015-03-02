@@ -221,7 +221,7 @@ void NextTurnState::nextTurn()
 //			if (_savedBattle->getDebugMode() == false)
 //			{
 			_state->getBattleGame()->setupCursor();
-			_state->getGame()->getCursor()->setVisible();
+			_game->getCursor()->setVisible();
 //			}
 
 			const int turn = _savedBattle->getTurn();
@@ -299,7 +299,7 @@ void NextTurnState::nextTurn()
 			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
 
 			if (_savedBattle->getDebugMode() == false)
-				_state->getGame()->getCursor()->setVisible(false);
+				_game->getCursor()->setVisible(false);
 		}
 	}
 }

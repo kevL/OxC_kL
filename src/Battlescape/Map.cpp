@@ -1506,7 +1506,7 @@ void Map::drawTerrain(Surface* surface)
 
 						// Redraw any unit moving onto or off of this Tile wrt a lower Z-level.
 						if (itZ > 0
-							&& tile->hasNoFloor(_save->getTile(mapPosition + Position(0,0,-1))) == false)
+							&& tile->hasNoFloor(tileBelow) == false)
 						{
 							for (std::vector<BattleUnit*>::const_iterator
 									i = _save->getUnits()->begin();
@@ -3197,7 +3197,7 @@ void Map::drawTerrain(Surface* surface)
 											if (srfSprite)
 												srfSprite->blitNShade(
 														surface,
-														screenPosition.x - 16,
+														screenPosition.x + 16,
 														screenPosition.y - 8 + tileNorth->getTerrainLevel(),
 														shade);
 										}

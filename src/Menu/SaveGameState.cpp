@@ -34,6 +34,7 @@
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 
 #include "../Savegame/SavedBattleGame.h"
@@ -54,10 +55,10 @@ SaveGameState::SaveGameState(
 		const std::string& filename,
 		SDL_Color* palette)
 	:
-		_firstRun(0),
 		_origin(origin),
 		_filename(filename),
-		_type(SAVE_DEFAULT)
+		_type(SAVE_DEFAULT),
+		_firstRun(0)
 {
 	buildUi(palette);
 }
@@ -73,9 +74,9 @@ SaveGameState::SaveGameState(
 		SaveType type,
 		SDL_Color* palette)
 	:
-		_firstRun(0),
 		_origin(origin),
-		_type(type)
+		_type(type),
+		_firstRun(0)
 {
 	switch (type)
 	{
@@ -131,6 +132,8 @@ void SaveGameState::buildUi(SDL_Color* palette)
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_SAVING_GAME"));
+
+	_game->getCursor()->setVisible(false);
 }
 
 /**
@@ -145,6 +148,7 @@ void SaveGameState::think()
 	else
 	{
 		_game->popState();
+		_game->getCursor()->setVisible();
 
 		switch (_type)
 		{
@@ -169,8 +173,10 @@ void SaveGameState::think()
 
 			const std::string
 				fullPath = Options::getUserFolder() + _filename,
-				bakPath = Options::getUserFolder() + backup;
-			if (CrossPlatform::moveFile(bakPath, fullPath) == false)
+				backPath = Options::getUserFolder() + backup;
+			if (CrossPlatform::moveFile(
+									backPath,
+									fullPath) == false)
 			{
 				throw Exception("Save backed up in " + backup);
 			}
@@ -202,16 +208,16 @@ void SaveGameState::think()
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10,
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color,
 													"BACK01.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0),
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color,
 													"TAC00.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 		}
 		catch (YAML::Exception& e)
 		{
@@ -222,16 +228,16 @@ void SaveGameState::think()
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color, //Palette::blockOffset(8)+10,
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapeColor")->color,
 													"BACK01.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color)); //6
+													_game->getRuleset()->getInterface("errorMessages")->getElement("geoscapePalette")->color));
 			else
 				_game->pushState(new ErrorMessageState(
 													error.str(),
 													_palette,
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color, //Palette::blockOffset(0),
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapeColor")->color,
 													"TAC00.SCR",
-													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color)); //-1
+													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 		}
 	}
 }

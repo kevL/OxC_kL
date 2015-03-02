@@ -4821,10 +4821,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1424387336 f:\git\openxcom\src\ruleset\ruleresearch.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1425308051 f:\git\openxcom\src\ruleset\ruleresearch.h
 
 1424881946 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
@@ -4965,7 +4962,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1424387345 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1425308239 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -5069,7 +5066,7 @@
 
 1424387335 f:\git\openxcom\src\savegame\transfer.h
 
-1425245577 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1425308384 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -6049,7 +6046,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1425159813 source:f:\git\openxcom\src\battlescape\map.cpp
+1425294978 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6157,7 +6154,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1424387343 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1425322397 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6258,7 +6255,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1424462956 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1425321079 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6330,7 +6327,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1424668874 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1425321290 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -8045,7 +8042,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1424387338 source:f:\git\openxcom\src\menu\startstate.cpp
+1425322284 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
@@ -8561,7 +8558,7 @@
 	"RuleRegion.h"
 	"City.h"
 
-1424387336 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
+1425308173 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
 1424387336 source:f:\git\openxcom\src\ruleset\ruleset.cpp
@@ -10939,17 +10936,17 @@
 
 1424387336 f:\git\openxcom\src\ruleset\statstringcondition.h
 
-1424387338 f:\git\openxcom\src\menu\loadgamestate.h
+1425323591 f:\git\openxcom\src\menu\loadgamestate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1424387338 f:\git\openxcom\src\menu\savegamestate.h
+1425322930 f:\git\openxcom\src\menu\savegamestate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1424387338 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1425323879 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	"ErrorMessageState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -10957,6 +10954,7 @@
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Geoscape/GeoscapeState.h"
+	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Savegame/SavedBattleGame.h"
 

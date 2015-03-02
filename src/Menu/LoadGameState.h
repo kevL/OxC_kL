@@ -35,6 +35,7 @@ namespace OpenXcom
 
 class Text;
 
+
 /**
  * Loads a saved game, with an optional message.
  */
@@ -71,7 +72,6 @@ private:
 
 		/// Validates the game.
 		void init();
-
 		/// Loads the game.
 		void think();
 };

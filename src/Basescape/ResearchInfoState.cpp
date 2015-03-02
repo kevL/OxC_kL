@@ -129,36 +129,23 @@ void ResearchInfoState::buildUi()
 	add(_btnLess, "button1", "allocateResearch");
 	add(_btnCancel, "button2", "allocateResearch");
 	add(_btnOk, "button2", "allocateResearch");
-//	add(_srfScientists);
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 	if (_rule != NULL)
 		_txtTitle->setText(tr(_rule->getName()));
 	else
 		_txtTitle->setText(tr(_project->getRules()->getName()));
 
-//	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
-//	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtAvailableSpace->setColor(Palette::blockOffset(13)+5);
-//	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtAllocatedScientist->setColor(Palette::blockOffset(13)+5);
-//	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocatedScientist->setBig();
 
-//	_txtMore->setColor(Palette::blockOffset(13)+5);
 	_txtMore->setText(tr("STR_INCREASE"));
 	_txtMore->setBig();
 
-//	_txtLess->setColor(Palette::blockOffset(13)+5);
 	_txtLess->setText(tr("STR_DECREASE"));
 	_txtLess->setBig();
 
@@ -166,9 +153,9 @@ void ResearchInfoState::buildUi()
 	{
 		_base->addResearch(_project);
 
-		if (_rule->needItem()
-			&& (Options::spendResearchedItems
-				|| _game->getRuleset()->getUnit(_rule->getName())))
+		if (_rule->needItem() == true
+			&& (Options::spendResearchedItems == true
+				|| _game->getRuleset()->getUnit(_rule->getName()) != NULL))
 		{
 			_base->getItems()->removeItem(_rule->getName());
 		}
@@ -176,12 +163,10 @@ void ResearchInfoState::buildUi()
 
 	setAssignedScientist();
 
-//	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)& ResearchInfoState::moreRelease);
 	_btnMore->onMouseClick((ActionHandler)& ResearchInfoState::moreClick, 0);
 
-//	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnLess->onMousePress((ActionHandler)& ResearchInfoState::lessPress);
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
@@ -192,7 +177,6 @@ void ResearchInfoState::buildUi()
 	_timerLess = new Timer(250);
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::lessSci);
 
-//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	if (_rule != NULL)
 	{
 		_btnOk->setText(tr("STR_START_PROJECT"));
@@ -213,13 +197,10 @@ void ResearchInfoState::buildUi()
 	}
 	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchInfoState::btnOkClick,
 					Options::keyOk);
-
-//	_srfScientists->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 }
 
 /**
@@ -228,7 +209,7 @@ void ResearchInfoState::buildUi()
  */
 void ResearchInfoState::btnOkClick(Action*)
 {
-	_project->setOffline(false); // kL
+	_project->setOffline(false);
 	_game->popState();
 }
 
@@ -254,8 +235,8 @@ void ResearchInfoState::btnCancelClick(Action*)
 
 	_base->removeResearch(
 						_project,
-						false,			// kL
-						_rule == NULL);	// kL
+						false,
+						_rule == NULL);
 
 	_game->popState();
 }
