@@ -1513,88 +1513,85 @@ void Map::drawTerrain(Surface* surface)
 									i != _save->getUnits()->end();
 									++i)
 							{
-								if ((*i)->getStatus() != STATUS_WALKING
-									|| (*i)->getArmor()->getSize() != 1)
+								if ((*i)->getStatus() == STATUS_WALKING
+									&& (*i)->getArmor()->getSize() == 1)
 								{
-									continue;
-								}
+									const Position curPos = (*i)->getPosition();
 
-
-								const Position curPos = (*i)->getPosition();
-
-								if (curPos.z + 1 == itZ
-									&& (curPos.x < itX
-										|| curPos.y < itY))
-								{
-									const Position
-										prePos = (*i)->getLastPosition(),
-										endPos = (*i)->getDestination();
-
-									if (prePos == mapPosition
-										|| endPos == mapPosition)
+									if (curPos.z + 1 == itZ
+										&& (curPos.x < itX
+											|| curPos.y < itY))
 									{
-										int
-											pixelOffset_x, // sprites: 32x40
-											pixelOffset_y,
-											dir = (*i)->getDirection();
+										const Position
+											prePos = (*i)->getLastPosition(),
+											endPos = (*i)->getDestination();
 
-										if (dir == 0 || dir == 4)
+										if (prePos == mapPosition
+											|| endPos == mapPosition)
 										{
-											pixelOffset_x = 16;
-											pixelOffset_y = 16;
-										}
-										else if (dir == 1 || dir == 5)
-										{
-											pixelOffset_x = -32;
-											pixelOffset_y = 24;
-										}
-										else if (dir == 2 || dir == 6)
-										{
-											pixelOffset_x = -16;
-											pixelOffset_y = 16;
-										}
-										else if (dir == 3 || dir == 7)
-										{
-											pixelOffset_x = 0;
-											pixelOffset_y = 8;
-										}
+											int
+												pixelOffset_x, // sprites: 32x40
+												pixelOffset_y,
+												dir = (*i)->getDirection();
 
-//										quad = tile->getPosition().x - unit->getPosition().x
-//											+ (tile->getPosition().y - unit->getPosition().y) * 2;
-										quad = 0;
-
-										srfSprite = (*i)->getCache(&invalid, quad);
-//										srfSprite = NULL;
-										if (srfSprite)
-										{
-											if (tile->isDiscovered(2) == true)
-												shade = tile->getShade();
-											else
-												shade = 16;
-
-											calculateWalkingOffset(
-																*i,
-																&walkOffset);
-
-											srfSprite->blitNShade(
-													surface,
-													screenPosition.x + walkOffset.x + pixelOffset_x,
-													screenPosition.y + walkOffset.y + pixelOffset_y,
-													shade);
-
-											if ((*i)->getFire() != 0)
+											if (dir == 0 || dir == 4)
 											{
-												frame = 4 + (_animFrame / 2);
-												srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-												if (srfSprite)
-													srfSprite->blitNShade(
-															surface,
-															screenPosition.x + walkOffset.x + pixelOffset_x,
-															screenPosition.y + walkOffset.y + pixelOffset_y,
-															0);
+												pixelOffset_x = 16;
+												pixelOffset_y = 16;
 											}
+											else if (dir == 1 || dir == 5)
+											{
+												pixelOffset_x = 32;
+												pixelOffset_y = 24;
+											}
+											else if (dir == 2 || dir == 6)
+											{
+												pixelOffset_x = -16;
+												pixelOffset_y = 16;
+											}
+											else if (dir == 3 || dir == 7)
+											{
+												pixelOffset_x = 0;
+												pixelOffset_y = 8;
+											}
+
+//											quad = tile->getPosition().x - unit->getPosition().x
+//												+ (tile->getPosition().y - unit->getPosition().y) * 2;
+											quad = 0;
+
+											srfSprite = (*i)->getCache(&invalid, quad);
+//											srfSprite = NULL;
+											if (srfSprite)
+											{
+												if (tile->isDiscovered(2) == true)
+													shade = tile->getShade();
+												else
+													shade = 16;
+
+												calculateWalkingOffset(
+																	*i,
+																	&walkOffset);
+
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x + pixelOffset_x,
+														screenPosition.y + walkOffset.y + pixelOffset_y,
+														shade);
+
+												if ((*i)->getFire() != 0)
+												{
+													frame = 4 + (_animFrame / 2);
+													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+													if (srfSprite)
+														srfSprite->blitNShade(
+																surface,
+																screenPosition.x + walkOffset.x + pixelOffset_x,
+																screenPosition.y + walkOffset.y + pixelOffset_y,
+																0);
+												}
+											}
+											break;
 										}
-										break;
 									}
 								}
 							}
