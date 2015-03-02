@@ -452,6 +452,7 @@ UfoDetectedState::~UfoDetectedState()
  */
 void UfoDetectedState::init()
 {
+	State::init();
 	_btn5Sec->setVisible(_state->is5Sec() == false);
 }
 

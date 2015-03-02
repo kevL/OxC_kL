@@ -116,8 +116,8 @@ units:
     energyRecovery: 80
     deathSound: 23
     moveSound: 14
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_TANK_ROCKET_LAUNCHER_ALLOY
     race: STR_TANK_ROCKET_LAUNCHER_ALLOY
     stats:
@@ -139,8 +139,8 @@ units:
     energyRecovery: 80
     deathSound: 23
     moveSound: 14
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
   - type: STR_TANK_LASER_CANNON_ALLOY
     race: STR_TANK_LASER_CANNON_ALLOY
     stats:
@@ -162,8 +162,8 @@ units:
     energyRecovery: 80
     deathSound: 23
     moveSound: 14
-    isMechanical: true
-    isPsiImmune: true
+    mechanical: true
+    psiImmune: true
 manufacture:
   - name: STR_TANK_CANNON_ALLOY
     category: STR_HEAVY_WEAPONS_PLATFORM

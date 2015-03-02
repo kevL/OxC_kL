@@ -344,7 +344,8 @@ units:
     aggression: 2
     specab: 1
     livingWeapon: true
-    isMechanical: true
+    mechanical: true
+    psiImmune: true
 alienRaces:
   - id: STR_WASPITE
     members:

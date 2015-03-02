@@ -121,6 +121,7 @@ LowFuelState::~LowFuelState()
  */
 void LowFuelState::init()
 {
+	State::init();
 	_btnOk5Secs->setVisible(_state->is5Sec() == false);
 }
 

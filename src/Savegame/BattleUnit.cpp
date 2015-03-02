@@ -4108,16 +4108,6 @@ bool BattleUnit::isSelectable(
  */
 bool BattleUnit::hasInventory() const
 {
-/*	if (_geoscapeSoldier != NULL)
-		return true;
-
-	if (_unitRules->isMechanical() == false
-		&& _rank != "STR_LIVE_TERRORIST")
-	{
-		return true;
-	}
-
-	return false; */
 	return _geoscapeSoldier != NULL
 		|| (_unitRules->isMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");
@@ -4129,7 +4119,7 @@ bool BattleUnit::hasInventory() const
  */
 int BattleUnit::getBreathFrame() const
 {
-	if (_floorAbove)
+	if (_floorAbove == true)
 		return 0;
 
 	return _breathFrame;
@@ -4162,7 +4152,7 @@ void BattleUnit::breathe()
 	if (_breathing == true)
 	{
 		// advance the bubble frame
-		_breathFrame++;
+		++_breathFrame;
 
 		// we've reached the end of the cycle, get rid of the bubbles
 		if (_breathFrame > 16)

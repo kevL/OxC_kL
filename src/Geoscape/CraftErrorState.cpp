@@ -102,6 +102,7 @@ CraftErrorState::~CraftErrorState()
  */
 void CraftErrorState::init()
 {
+	State::init();
 	_btnOk5Secs->setVisible(_state->is5Sec() == false);
 }
 
