@@ -142,28 +142,26 @@ DebriefingState::DebriefingState()
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("debriefing")->getElement("palette")->color); //0
+			_game->getRuleset()->getInterface("debriefing")->getElement("palette")->color);
 
-	add(_window, "window", "debriefing");
-	add(_txtTitle, "heading", "debriefing");
-	add(_txtBaseLabel, "text", "debriefing");
-	add(_txtItem, "text", "debriefing");
-	add(_txtQuantity, "text", "debriefing");
-	add(_txtScore, "text", "debriefing");
-	add(_txtRecovery, "text", "debriefing");
-	add(_lstStats, "list", "debriefing");
-	add(_lstRecovery, "list", "debriefing");
-	add(_lstTotal, "list", "debriefing");
-	add(_btnOk, "button", "debriefing");
-	add(_txtRating, "text", "debriefing");
+	add(_window,		"window",	"debriefing");
+	add(_txtTitle,		"heading",	"debriefing");
+	add(_txtBaseLabel,	"text",		"debriefing");
+	add(_txtItem,		"text",		"debriefing");
+	add(_txtQuantity,	"text",		"debriefing");
+	add(_txtScore,		"text",		"debriefing");
+	add(_txtRecovery,	"text",		"debriefing");
+	add(_lstStats,		"list",		"debriefing");
+	add(_lstRecovery,	"list",		"debriefing");
+	add(_lstTotal,		"list",		"debriefing");
+	add(_btnOk,			"button",	"debriefing");
+	add(_txtRating,		"text",		"debriefing");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& DebriefingState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -173,37 +171,21 @@ DebriefingState::DebriefingState()
 					(ActionHandler)& DebriefingState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 
-//	_txtItem->setColor(Palette::blockOffset(8)+5);
 	_txtItem->setText(tr("STR_LIST_ITEM"));
-
-//	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
-//	_txtQuantity->setAlign(ALIGN_RIGHT);
-
-//	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));
-
-//	_txtRecovery->setColor(Palette::blockOffset(8)+5);
 	_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 
-//	_txtRating->setColor(Palette::blockOffset(8)+5);
-
-//	_lstStats->setColor(Palette::blockOffset(15)-1);
-//	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstStats->setColumns(3, 176, 60, 36);
 	_lstStats->setDot();
 	_lstStats->setMargin();
 
-//	_lstRecovery->setColor(Palette::blockOffset(15)-1);
-//	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstRecovery->setColumns(3, 176, 60, 36);
 	_lstRecovery->setDot();
 	_lstRecovery->setMargin();
 
-//	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 244, 36);
 	_lstTotal->setDot();
 
@@ -211,7 +193,6 @@ DebriefingState::DebriefingState()
 	prepareDebriefing(); /*/ <- -- GATHER ALL DATA HERE <- < */
 
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_baseLabel);
 
@@ -561,9 +542,9 @@ void DebriefingState::btnOkClick(Action*)
 													tr("STR_CONTAINMENT_EXCEEDED")
 														.arg(_base->getName()).c_str(),
 													_palette,
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, //Palette::blockOffset(8)+5,
+													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
 													"BACK01.SCR",
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color)); //0
+													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
 			if (_manageContainment == false
@@ -578,9 +559,9 @@ void DebriefingState::btnOkClick(Action*)
 													tr("STR_STORAGE_EXCEEDED")
 														.arg(_base->getName()).c_str(),
 													_palette,
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color, //Palette::blockOffset(8)+5,
+													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
 													"BACK01.SCR",
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color)); //0
+													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
 			if (playAwardMusic == true)
