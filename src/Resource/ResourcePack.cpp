@@ -30,11 +30,10 @@
 //#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
-#include "../Engine/State.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Interface/Cursor.h"
+//#include "../Interface/Cursor.h"
 
 #include "../Resource/XcomResourcePack.h"
 
