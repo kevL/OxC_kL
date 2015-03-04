@@ -139,20 +139,52 @@ extraSprites:
     subY: 40
     files:
       680: Resources/LaserWeapon_FX/LaserScatter_HANDOB.PNG
-# PLASMA RIFLE - overwrites original index #
+# INITIAL ROCKET LAUNCHER and AUTO-CANNON - overwrites original indices #
   - type: BIGOBS.PCK
     files:
-      31: Resources/Matching_Plasma_Colors/BigOb_Plasma_Rifle.png
+      7: Resources/Matching_Colors/auto_cannon.png
+      15: Resources/Matching_Colors/rocket_launcher.png
   - type: FLOOROB.PCK
     files:
-      30: Resources/Matching_Plasma_Colors/FloorOb_Plasma_Rifle.png
+      7: Resources/Matching_Colors/floorob_auto_cannon.png
+      15: Resources/Matching_Colors/floorob_rocket_launcher.png
   - type: HANDOB.PCK
     width: 256
     height: 40
     subX: 32
     subY: 40
     files:
-      48: Resources/Matching_Plasma_Colors/HandOb_Plasma_Rifle.png
+      32: Resources/Matching_Colors/handob_auto_cannon.png
+      72: Resources/Matching_Colors/handob_rocket_launcher.png
+# PLASMA RIFLE and PISTOL - overwrites original indices #
+  - type: BIGOBS.PCK
+    files:
+      31: Resources/Matching_Colors/BigOb_Plasma_Rifle.png
+      32: Resources/Matching_Colors/BigOb_Plasma_Pistol.png
+  - type: FLOOROB.PCK
+    files:
+      30: Resources/Matching_Colors/FloorOb_Plasma_Rifle.png
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      48: Resources/Matching_Colors/HandOb_Plasma_Rifle.png
+# BLASTER LAUNCHER - overwrites original indices #
+  - type: BIGOBS.PCK
+    files:
+      35: Resources/Matching_Colors/alien_launcher.png
+  - type: FLOOROB.PCK
+    files:
+      34: Resources/Matching_Colors/floorob_alien_launcher.png
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      56: Resources/Matching_Colors/handob_alien_launcher.png
 # -------- EXTRASOUNDS -------- #
 extraSounds:
   - type: BATTLE.CAT
