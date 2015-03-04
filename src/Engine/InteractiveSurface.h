@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_INTERACTIVE_SURFACE_H
 #define OPENXCOM_INTERACTIVE_SURFACE_H
 
-#include <map>
-
-#include <SDL.h>
+//#include <map>
+//#include <SDL.h>
 
 #include "State.h"
 #include "Surface.h"
@@ -47,7 +46,6 @@ class InteractiveSurface
 
 private:
 	static const int NUM_BUTTONS = 7;
-
 	static const SDLKey SDLK_ANY;
 
 	Uint8 _buttonsPressed;
@@ -72,13 +70,13 @@ private:
 			_press,
 			_release;
 
-		/// Is this mouse button pressed?
-		bool isButtonPressed(Uint8 button = 0);
-		/// Is this mouse button event handled?
-		virtual bool isButtonHandled(Uint8 button = 0);
+		/// Checks if mouse button is pressed.
+		bool isButtonPressed(Uint8 btn = 0);
+		/// Checks if mouse button event handled.
+		virtual bool isButtonHandled(Uint8 btn = 0);
 		/// Set a mouse button's internal state.
 		void setButtonPressed(
-				Uint8 button,
+				Uint8 btn,
 				bool pressed);
 
 
@@ -108,24 +106,6 @@ private:
 			/// Unpresses the surface.
 			virtual void unpress(State* state);
 
-			/// Hooks an action handler to a mouse click on the surface.
-			void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
-			/// Hooks an action handler to a mouse press over the surface.
-			void onMousePress(ActionHandler handler, Uint8 button = 0);
-			/// Hooks an action handler to a mouse release over the surface.
-			void onMouseRelease(ActionHandler handler, Uint8 button = 0);
-			/// Hooks an action handler to moving the mouse into the surface.
-			void onMouseIn(ActionHandler handler);
-			/// Hooks an action handler to moving the mouse over the surface.
-			void onMouseOver(ActionHandler handler);
-			/// Hooks an action handler to moving the mouse out of the surface.
-			void onMouseOut(ActionHandler handler);
-
-			/// Hooks an action handler to pressing a key when the surface is focused.
-			void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_ANY);
-			/// Hooks an action handler to releasing a key when the surface is focused.
-			void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_ANY);
-
 			/// Processes a mouse button press event.
 			virtual void mousePress(Action* action, State* state);
 			/// Processes a mouse button release event.
@@ -143,6 +123,34 @@ private:
 			virtual void keyboardPress(Action* action, State* state);
 			/// Processes a keyboard key release event.
 			virtual void keyboardRelease(Action* action, State* state);
+
+			/// Hooks an action handler to a mouse click on the surface.
+			void onMouseClick(
+					ActionHandler handler,
+					Uint8 btn = SDL_BUTTON_LEFT);
+			/// Hooks an action handler to a mouse press over the surface.
+			void onMousePress(
+					ActionHandler handler,
+					Uint8 btn = 0);
+			/// Hooks an action handler to a mouse release over the surface.
+			void onMouseRelease(
+					ActionHandler handler,
+					Uint8 btn = 0);
+			/// Hooks an action handler to moving the mouse into the surface.
+			void onMouseIn(ActionHandler handler);
+			/// Hooks an action handler to moving the mouse over the surface.
+			void onMouseOver(ActionHandler handler);
+			/// Hooks an action handler to moving the mouse out of the surface.
+			void onMouseOut(ActionHandler handler);
+
+			/// Hooks an action handler to pressing a key when the surface is focused.
+			void onKeyboardPress(
+					ActionHandler handler,
+					SDLKey key = SDLK_ANY);
+			/// Hooks an action handler to releasing a key when the surface is focused.
+			void onKeyboardRelease(
+					ActionHandler handler,
+					SDLKey key = SDLK_ANY);
 
 			/// Check this surface to see if it's a textlist button.
 			void setListButton();

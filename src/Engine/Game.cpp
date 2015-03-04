@@ -83,6 +83,7 @@ Game::Game(const std::string& title)
 		_timeUntilNextFrame(0),
 		_debugCycle(-1),
 		_debugCycle_b(-1)
+//		_fadeMusic(false)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -127,8 +128,7 @@ Game::Game(const std::string& title)
 			Options::getInt("windowedModePositionY")); */ // kL
 
 	// Create cursor
-	_cursor = new Cursor(9, 13);
-//	_cursor->setColor(Palette::blockOffset(15)+12);
+	_cursor = new Cursor(9,13);
 
 	// Create invisible hardware cursor to workaround bug with absolute positioning pointing devices
 //	SDL_ShowCursor(SDL_ENABLE);
@@ -136,10 +136,10 @@ Game::Game(const std::string& title)
 	Uint8 cursor = 0;
 	SDL_SetCursor(SDL_CreateCursor(
 								&cursor, &cursor,
-								1, 1, 0, 0));
+								1,1,0,0));
 
 	// Create fps counter
-	_fpsCounter = new FpsCounter(15, 5, 0, 0);
+	_fpsCounter = new FpsCounter(15,5,0,0);
 
 	// Create blank language
 	_lang = new Language();
@@ -281,7 +281,7 @@ void Game::run()
 				break;
 
 				case SDL_VIDEORESIZE:
-					if (Options::allowResize)
+					if (Options::allowResize == true)
 					{
 						if (startupEvent == false)
 						{
@@ -397,8 +397,8 @@ void Game::run()
 			}
 		}
 
-		if (_inputActive == false)	// kL
-			_inputActive = true;	// kL
+		if (_inputActive == false)	// kL->
+			_inputActive = true;
 
 
 		if (runningState != PAUSED) // Process rendering
@@ -432,7 +432,7 @@ void Game::run()
 				std::list<State*>::const_iterator i = _states.end();
 				do
 				{
-					--i;
+					--i;			// find top underlying fullscreen state,
 				}
 				while (i != _states.begin()
 					&& (*i)->isScreen() == false);
@@ -442,13 +442,22 @@ void Game::run()
 						i != _states.end();
 						++i)
 				{
-					(*i)->blit();
+					(*i)->blit();	// blit top underlying fullscreen state and those on top of it.
 				}
 
 				_fpsCounter->blit(_screen->getSurface());
 				_cursor->blit(_screen->getSurface());
 
 				_screen->flip();
+
+/*				if (_fadeMusic == true)
+				{
+					while (Mix_PlayingMusic() == 1)
+					{}
+
+					_cursor->setVisible();
+					_fadeMusic = false;
+				} */
 			}
 		}
 
@@ -587,7 +596,9 @@ void Game::setState(State* state)
 		popState();
 
 	pushState(state);
+
 	_init = false;
+//	_fadeMusic = false;
 }
 
 /**
@@ -612,6 +623,7 @@ void Game::popState()
 	_states.pop_back();
 
 	_init = false;
+//	_fadeMusic = false;
 }
 
 /**
@@ -753,6 +765,18 @@ void Game::setInputActive(bool active)
 }
 
 /**
+ * kL. Gets the current (top) State.
+ * @return, current state
+ */
+/* State* Game::getState() const
+{
+	if (_states.empty() == false)
+		return _states.back();
+
+	return NULL;
+} */
+
+/**
  * Gets the quantity of currently running states.
  * @return, qty of states
  */
@@ -877,5 +901,13 @@ void Game::setDebugCycle(const int cycle)
 {
 	_debugCycle = cycle;
 }
+
+/**
+ * Sets current music as fading.
+ */
+/* void Game::setFadeMusic()
+{
+	_fadeMusic = true;
+} */
 
 }

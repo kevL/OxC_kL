@@ -54,7 +54,7 @@ private:
 		~Cursor();
 
 		/// Handles mouse events.
-		void handle(Action *action);
+		void handle(Action* action);
 
 		/// Sets the cursor's color.
 		void setColor(Uint8 color);

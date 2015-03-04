@@ -585,23 +585,23 @@ void Surface::blit(Surface* surface)
 		if (_redraw == true)
 			draw();
 
-		SDL_Rect* cropper;
+		SDL_Rect* crop;
 		SDL_Rect target;
 
 		if (_crop.w == 0
 			&& _crop.h == 0)
 		{
-			cropper = NULL;
+			crop = NULL;
 		}
 		else
-			cropper = &_crop;
+			crop = &_crop;
 
 		target.x = getX();
 		target.y = getY();
 
 		SDL_BlitSurface(
 					_surface,
-					cropper,
+					crop,
 					surface->getSurface(),
 					&target);
 	}

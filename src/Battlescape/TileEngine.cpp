@@ -5342,7 +5342,7 @@ int TileEngine::distanceSq(
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
-	//Log(LOG_INFO) << "TileEngine::psiAttack() attackerID " << action->actor->getId();
+	//Log(LOG_INFO) << "\nTileEngine::psiAttack() attackerID " << action->actor->getId();
 	const Tile* const tile = _battleSave->getTile(action->target);
 	if (tile == NULL)
 		return false;
@@ -5423,23 +5423,28 @@ bool TileEngine::psiAttack(BattleAction* action)
 					action->actor->addPsiSkillExp();
 			}
 
+			//Log(LOG_INFO) << ". . victim morale[0] = " << victim->getMorale();
 			if (action->type == BA_PANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 				const int morale = 110
 								 - statsVictim->bravery * 3 / 2
 								 + statsActor->psiStrength / 2;
+				//Log(LOG_INFO) << ". . . morale reduction = " << morale;
 				if (morale > 0)
 					victim->moraleChange(-morale);
+
+				//Log(LOG_INFO) << ". . . victim morale[1] = " << victim->getMorale();
 			}
 			else // BA_MINDCONTROL
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-//				if (action->actor->getFaction() == FACTION_PLAYER
+//				if (action->actor->getFaction() == FACTION_PLAYER &&
 				if (victim->getOriginalFaction() == FACTION_HOSTILE // aLiens should be reduced to 50- Morale before MC.
 //					&& victim->getMorale() > 50)
 					&& RNG::percent(victim->getMorale() - 50) == true)
 				{
+					//Log(LOG_INFO) << ". . . . RESIST vs " << (victim->getMorale() - 50);
 					_battleSave->getBattleState()->warning("STR_PSI_RESIST");
 					return false;
 				}
@@ -5461,6 +5466,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 						morale /= 2; // xCom Morale gain for getting Mc'd back to xCom.
 				}
 				victim->moraleChange(morale);
+				//Log(LOG_INFO) << ". . . victim morale[2] = " << victim->getMorale();
 
 				victim->convertToFaction(action->actor->getFaction());
 				victim->initTU();

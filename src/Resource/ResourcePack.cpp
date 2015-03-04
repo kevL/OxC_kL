@@ -30,8 +30,11 @@
 //#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
+#include "../Engine/State.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
+
+#include "../Interface/Cursor.h"
 
 #include "../Resource/XcomResourcePack.h"
 
@@ -254,13 +257,18 @@ void ResourcePack::fadeMusic(
 #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID)
 	{
+//		game->getCursor()->setVisible(false);
+
 		game->setInputActive(false);
 
 		Mix_FadeOutMusic(fadeDur); // fade out!
 //kL	func_fade();
 
+//		game->setFadeMusic();
 		while (Mix_PlayingMusic() == 1)
 		{}
+
+//		game->getCursor()->setVisible();
 	}
 	else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 		Mix_HaltMusic();

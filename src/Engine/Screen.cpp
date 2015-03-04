@@ -239,9 +239,9 @@ void Screen::flip()
 	{
 		SDL_BlitSurface(
 				_surface->getSurface(),
-				0,
+				NULL,
 				_screen,
-				0);
+				NULL);
 	}
 
 	// perform any requested palette update

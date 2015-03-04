@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -62,6 +62,7 @@ private:
 	std::string _id;
 	size_t _groundTimer;
 	std::vector<TrajectoryWaypoint> _waypoints;
+
 
 	public:
 		///

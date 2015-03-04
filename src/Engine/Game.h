@@ -51,6 +51,7 @@ private:
 	static const double VOLUME_GRADIENT;
 
 	bool
+//		_fadeMusic,
 		_init,
 		_inputActive,
 		_quit;
@@ -132,6 +133,8 @@ private:
 		/// Sets whether the mouse cursor is activated.
 		void setInputActive(bool active);
 
+		/// kL. Gets the current (top) state.
+//		State* getState() const;
 		/// Gets the quantity of currently running states.
 		int getQtyStates() const;
 		/// Returns whether current state is the param state
@@ -150,6 +153,9 @@ private:
 		int getDebugCycle() const;
 		/// Sets the country cycle for debugging country regions.
 		void setDebugCycle(const int cycle);
+
+		/// Sets current music as fading.
+//		void setFadeMusic();
 };
 
 }

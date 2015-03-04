@@ -104,7 +104,7 @@ private:
 
 
 /**
- * Loads an AlienMission.
+ * Loads the alien mission from a YAML file.
  * @param node - reference the YAML node containing data
  */
 void AlienMission::load(const YAML::Node& node)
@@ -135,7 +135,7 @@ void AlienMission::load(const YAML::Node& node)
 }
 
 /**
- * Saves an AlienMission.
+ * Saves the alien mission to a YAML file.
  * @return, YAML node
  */
 YAML::Node AlienMission::save() const
@@ -321,7 +321,6 @@ Ufo* AlienMission::spawnUfo(
 {
 	if (_rule.getType() == "STR_ALIEN_RETALIATION")
 	{
-		//Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 		const std::vector<Base*>::const_iterator found = std::find_if(
 																_savedGame.getBases()->begin(),
@@ -463,8 +462,8 @@ Ufo* AlienMission::spawnUfo(
  */
 void AlienMission::start(size_t initialCount)
 {
-	_nextWave = 0;
-	_nextUfoCounter = 0;
+	_nextWave =
+	_nextUfoCounter =
 	_liveUfos = 0;
 
 	if (initialCount == 0)
@@ -600,7 +599,7 @@ void AlienMission::ufoReachedWaypoint(
 			missionSite->setLongitude(ufo.getLongitude());
 			missionSite->setLatitude(ufo.getLatitude());
 			missionSite->setId(_savedGame.getId(_rule.getMarkerName()));
-			missionSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600); // 4hr. + (0 to 6) hrs.
+			missionSite->setSecondsRemaining(4 * 3600 + RNG::generate(0,6) * 3600); // 4hr. + (0 to 6) hrs.
 			missionSite->setAlienRace(_race);
 
 			if (rules.locateCity(

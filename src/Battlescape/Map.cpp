@@ -1600,7 +1600,8 @@ void Map::drawTerrain(Surface* surface)
 
 
 						// Redraw unitNorth when it's on a reverse slope. Or level slope. Or moving NS along westerly wall
-						if (itY > 0)
+						if (itY > 0
+							&& tile->getMapData(MapData::O_NORTHWALL) == NULL)
 						{
 							const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
 
@@ -1617,16 +1618,15 @@ void Map::drawTerrain(Surface* surface)
 											&& (unitNorth->getDirection() == 0
 												|| unitNorth->getDirection() == 4))))
 								{
-									if (tileNorth->getTerrainLevel() - tile->getTerrainLevel() > -1 // positive -> Tile is higher
+									if ((tileNorth->getTerrainLevel() - tile->getTerrainLevel() > -1 // positive -> Tile is higher
 											&& tile->getMapData(MapData::O_OBJECT) != NULL
 											&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 											&& (tileNorth->getMapData(MapData::O_OBJECT) == NULL
 												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
 												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
-												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)
-										|| (drawUnitNorth == true))
-//											&& )) // <+ hasNorthWall == false, tileNorth has no foreground, etc.
+												|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
+										|| drawUnitNorth == true) // && hasNorthWall == false, tileNorth has no foreground, etc.
 									{
 										quad = tileNorth->getPosition().x - unitNorth->getPosition().x
 											+ (tileNorth->getPosition().y - unitNorth->getPosition().y) * 2;

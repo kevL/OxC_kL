@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <SDL.h>
 
 #include "../Ruleset/Ruleset.h"

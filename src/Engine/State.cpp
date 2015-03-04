@@ -212,7 +212,7 @@ void State::toggleScreen()
  * of states, so they can be created once while being
  * repeatedly switched back into focus).
  */
-void State::init()
+void State::init() // virtual
 {
 	_game->getScreen()->setPalette(_palette);
 
@@ -232,7 +232,7 @@ void State::init()
  * Runs any code the state needs to keep updating every
  * game cycle, like timers and other real-time elements.
  */
-void State::think()
+void State::think() // virtual
 {
 	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
@@ -244,11 +244,26 @@ void State::think()
 }
 
 /**
+ * Blits all the visible Surface child elements onto the
+ * display screen, by order of addition.
+ */
+void State::blit() // virtual
+{
+	for (std::vector<Surface*>::const_iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
+	{
+		(*i)->blit(_game->getScreen()->getSurface());
+	}
+}
+
+/**
  * Takes care of any events from the core game engine,
  * and passes them on to its InteractiveSurface child elements.
  * @param action - pointer to an Action
  */
-void State::handle(Action* action)
+void State::handle(Action* action) // virtual
 {
 	if (_modal == NULL)
 	{
@@ -264,21 +279,6 @@ void State::handle(Action* action)
 	}
 	else
 		_modal->handle(action, this);
-}
-
-/**
- * Blits all the visible Surface child elements onto the
- * display screen, by order of addition.
- */
-void State::blit()
-{
-	for (std::vector<Surface*>::const_iterator
-			i = _surfaces.begin();
-			i != _surfaces.end();
-			++i)
-	{
-		(*i)->blit(_game->getScreen()->getSurface());
-	}
 }
 
 /**

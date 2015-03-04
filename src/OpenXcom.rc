@@ -69,7 +69,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "OpenXcom Developers"
 
-//kL            VALUE "FileDescription", "OpenXcom"
+//kL        VALUE "FileDescription", "OpenXcom"
             VALUE "FileDescription", "oXc_kL"
             VALUE "FileVersion", OPENXCOM_VERSION_LONG
 
@@ -79,7 +79,7 @@ BEGIN
 
             VALUE "OriginalFilename", "OpenXcom.exe"
 
-//kL            VALUE "ProductName", "OpenXcom"
+//kL        VALUE "ProductName", "OpenXcom"
             VALUE "ProductName", "oXc_kL"
             VALUE "ProductVersion", OPENXCOM_VERSION_LONG
 

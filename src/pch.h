@@ -115,7 +115,7 @@
 #include "./Engine/Font.h"
 #include "./Engine/GMCat.h"
 #include "./Engine/GraphSubset.h"
-//#include "./Engine/Language.h" // causes problems w/ Soldier.h editting.
+//#include "./Engine/Language.h" // causes problems w/ Soldier.h editing.
 #include "./Engine/LanguagePlurality.h"
 #include "./Engine/LocalizedText.h"
 #include "./Engine/Logger.h"

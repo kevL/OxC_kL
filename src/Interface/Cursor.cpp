@@ -19,9 +19,8 @@
 
 #include "Cursor.h"
 
-#include <cmath>
-
-#include <SDL.h>
+//#include <cmath>
+//#include <SDL.h>
 
 #include "../Engine/Action.h"
 
@@ -50,15 +49,13 @@ Cursor::Cursor(
 			x,
 			y),
 		_color(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Cursor::~Cursor()
-{
-}
+{}
 
 /**
  * Automatically updates the cursor position when the mouse moves.
@@ -69,11 +66,11 @@ void Cursor::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		setX(static_cast<int>(
-				floor(static_cast<double>(
-						static_cast<int>(action->getDetails()->motion.x) - action->getLeftBlackBand()) / action->getXScale())));
+				std::floor(static_cast<double>(
+				static_cast<int>(action->getDetails()->motion.x) - action->getLeftBlackBand()) / action->getXScale())));
 		setY(static_cast<int>(
-				floor(static_cast<double>(
-						static_cast<int>(action->getDetails()->motion.y) - action->getTopBlackBand()) / action->getYScale())));
+				std::floor(static_cast<double>(
+				static_cast<int>(action->getDetails()->motion.y) - action->getTopBlackBand()) / action->getYScale())));
 	}
 }
 
@@ -129,16 +126,16 @@ void Cursor::draw()
 				getWidth() - 1,
 				color);
 
-		x1++;
+		++x1;
 		y1 += 2;
 
-		y2--;
-		x2--;
+		--y2;
+		--x2;
 
-		color++;
+		++color;
 	}
 
-	this->setPixelColor(4, 8, --color);
+	this->setPixelColor(4,8, --color);
 	unlock();
 }
 

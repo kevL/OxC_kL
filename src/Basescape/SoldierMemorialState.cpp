@@ -56,59 +56,50 @@ SoldierMemorialState::SoldierMemorialState()
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
-
 	_txtRecruited	= new Text(110, 9, 16, 25);
 	_txtLost		= new Text(110, 9, 210, 25);
-
 	_txtName		= new Text(132, 9, 16, 36);
 	_txtRank		= new Text(70, 9, 148, 36);
 	_txtDate		= new Text(86, 9, 218, 36);
-
 	_lstSoldiers	= new TextList(285, 129, 16, 44);
-
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("soldierMemorial")->getElement("palette")->color); //7
+			_game->getRuleset()->getInterface("soldierMemorial")->getElement("palette")->color);
 
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_BASE_MEMORIAL);
 
-	add(_window, "window", "soldierMemorial");
-	add(_txtTitle, "text", "soldierMemorial");
-	add(_txtRecruited, "text", "soldierMemorial");
-	add(_txtLost, "text", "soldierMemorial");
-	add(_txtName, "text", "soldierMemorial");
-	add(_txtRank, "text", "soldierMemorial");
-	add(_txtDate, "text", "soldierMemorial");
-	add(_lstSoldiers, "list", "soldierMemorial");
-	add(_btnOk, "button", "soldierMemorial");
+	add(_window,		"window",	"soldierMemorial");
+	add(_txtTitle,		"text",		"soldierMemorial");
+	add(_txtRecruited,	"text",		"soldierMemorial");
+	add(_txtLost,		"text",		"soldierMemorial");
+	add(_txtName,		"text",		"soldierMemorial");
+	add(_txtRank,		"text",		"soldierMemorial");
+	add(_txtDate,		"text",		"soldierMemorial");
+	add(_lstSoldiers,	"list",		"soldierMemorial");
+	add(_btnOk,			"button",	"soldierMemorial");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierMemorialState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierMemorialState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldierMemorialState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MEMORIAL"));
 
-//	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME_UC"));
-
-//	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setText(tr("STR_RANK"));
-
-//	_txtDate->setColor(Palette::blockOffset(13)+10);
 	_txtDate->setText(tr("STR_DATE_DEATH"));
 
 	const size_t lost = _game->getSavedGame()->getDeadSoldiers()->size();
@@ -120,17 +111,9 @@ SoldierMemorialState::SoldierMemorialState()
 	{
 		recruited += (*i)->getTotalSoldiers();
 	}
-
-//	_txtRecruited->setColor(Palette::blockOffset(13)+10);
-//	_txtRecruited->setSecondaryColor(Palette::blockOffset(13));
 	_txtRecruited->setText(tr("STR_SOLDIERS_RECRUITED").arg(recruited));
-
-//	_txtLost->setColor(Palette::blockOffset(13)+10);
-//	_txtLost->setSecondaryColor(Palette::blockOffset(13));
 	_txtLost->setText(tr("STR_SOLDIERS_LOST").arg(lost));
 
-//	_lstSoldiers->setColor(Palette::blockOffset(15)+6);
-//	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setColumns(5, 124, 70, 26, 23, 33);
 	_lstSoldiers->setSelectable();
@@ -145,21 +128,21 @@ SoldierMemorialState::SoldierMemorialState()
 		const SoldierDeath* const death = (*i)->getDeath();
 
 		std::wostringstream
-			saveDay,
-			saveMonth,
-			saveYear;
+			day,
+			month,
+			year;
 
-		saveDay << death->getTime()->getDayString(_game->getLanguage());
-		saveMonth << tr(death->getTime()->getMonthString());
-		saveYear << death->getTime()->getYear();
+		day << death->getTime()->getDayString(_game->getLanguage());
+		month << tr(death->getTime()->getMonthString());
+		year << death->getTime()->getYear();
 
 		_lstSoldiers->addRow(
 							5,
 							(*i)->getName().c_str(),
 							tr((*i)->getRankString()).c_str(),
-							saveDay.str().c_str(),
-							saveMonth.str().c_str(),
-							saveYear.str().c_str());
+							day.str().c_str(),
+							month.str().c_str(),
+							year.str().c_str());
 	}
 }
 

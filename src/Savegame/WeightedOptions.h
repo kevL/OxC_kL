@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 OpenXcom Developers.
+ * Copyright 2010-2015 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <map>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -35,18 +34,18 @@ namespace OpenXcom
  */
 class WeightedOptions
 {
+
 private:
-	std::map<std::string, size_t> _choices; //!< Options and weights
-	size_t _totalWeight; //!< The total weight of all options.
+	std::map<std::string, size_t> _choices;	//!< Options and weights
+	size_t _totalWeight;					//!< The total weight of all options.
+
 
 	public:
 		/// Creates an empty set.
 		WeightedOptions()
 			:
 				_totalWeight(0)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		/// Selects from among the items.
 		const std::string choose() const;
@@ -60,16 +59,12 @@ private:
 
 		/// Gets if this choice is empty.
 		bool hasNoWeight() const
-		{
-			return (_totalWeight == 0);
-		}
+		{ return (_totalWeight == 0); }
 
 		/// Removes all entries and weights.
 		void clearWeights()
-		{
-			_totalWeight = 0;
-			_choices.clear();
-		}
+		{	_totalWeight = 0;
+			_choices.clear(); }
 
 		/// Updates the list with data from YAML.
 		void load(const YAML::Node& node);
