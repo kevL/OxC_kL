@@ -46,8 +46,8 @@ const int
  * @param state 	- pointer to state the combobox belongs to
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 ComboBox::ComboBox(
 		State* state,
@@ -78,15 +78,14 @@ ComboBox::ComboBox(
 	_window	= new Window(
 						state,
 						width,
-						MAX_ITEMS * 8 + VERTICAL_MARGIN * 2,
+						(MAX_ITEMS * 8 + VERTICAL_MARGIN * 2) + 1,
 						x,
 						y + height);
 	_window->setThinBorder();
 
 	_list	= new TextList(
 						width - HORIZONTAL_MARGIN * 2 - BUTTON_WIDTH + 1,
-//kL					MAX_ITEMS * TEXT_HEIGHT - 2,
-						MAX_ITEMS * TEXT_HEIGHT + 1, // kL
+						(MAX_ITEMS * TEXT_HEIGHT) + 1,
 						x + HORIZONTAL_MARGIN,
 						y + height + VERTICAL_MARGIN);
 	_list->setComboBox(this);
@@ -112,7 +111,7 @@ ComboBox::~ComboBox()
 
 /**
 * Changes the position of the surface in the X axis.
-* @param x X position in pixels.
+* @param x - X position in pixels
 */
 void ComboBox::setX(int x)
 {
@@ -125,11 +124,12 @@ void ComboBox::setX(int x)
 
 /**
 * Changes the position of the surface in the Y axis.
-* @param y Y position in pixels.
+* @param y - Y position in pixels
 */
 void ComboBox::setY(int y)
 {
 	Surface::setY(y);
+
 	_button->setY(y);
 	_arrow->setY(y + 4);
 	_window->setY(y + getHeight());
@@ -137,11 +137,10 @@ void ComboBox::setY(int y)
 }
 
 /**
- * Replaces a certain amount of colors in the palette of all
- * the text contained in the list.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * Replaces a certain amount of colors in the palette of all the text contained in the list.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void ComboBox::setPalette(
 		SDL_Color* colors,
@@ -157,9 +156,9 @@ void ComboBox::setPalette(
 
 /**
  * Changes the resources for the text in the combo box.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
- * @param lang Pointer to current language.
+ * @param big	- pointer to large-size font
+ * @param small	- pointer to small-size font
+ * @param lang	- pointer to current language
  */
 void ComboBox::initText(
 		Font* big,
@@ -173,7 +172,7 @@ void ComboBox::initText(
 
 /**
  * Changes the surface used to draw the background of the combo box.
- * @param bg New background.
+ * @param bg - new background
  */
 void ComboBox::setBackground(Surface* bg)
 {
@@ -182,7 +181,7 @@ void ComboBox::setBackground(Surface* bg)
 
 /**
  * Changes the color used to draw the combo box.
- * @param color Color value.
+ * @param color - color value
  */
 void ComboBox::setColor(Uint8 color)
 {
@@ -195,7 +194,7 @@ void ComboBox::setColor(Uint8 color)
 
 /**
  * Returns the color used to draw the combo box.
- * @return Color value.
+ * @return, color value
  */
 Uint8 ComboBox::getColor() const
 {
@@ -212,7 +211,7 @@ void ComboBox::drawArrow()
 	SDL_Rect square;
 	int color = _color + 1;
 	if (color == 256)
-		color++;
+		++color;
 
 	// Draw arrow triangle 1
 	square.x = 1;
@@ -226,8 +225,8 @@ void ComboBox::drawArrow()
 			square.w -= 2)
 	{
 		_arrow->drawRect(&square, color + 2);
-		square.x++;
-		square.y++;
+		++square.x;
+		++square.y;
 	}
 	_arrow->drawRect(&square, color + 2);
 
@@ -243,17 +242,16 @@ void ComboBox::drawArrow()
 			square.w -= 2)
 	{
 		_arrow->drawRect(&square, color);
-		square.x++;
-		square.y++;
+		++square.x;
+		++square.y;
 	}
 
 	_arrow->drawRect(&square, color);
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape UI.
- * @param contrast High contrast setting.
+ * Enables/disables high contrast color. Mostly used for Battlescape UI.
+ * @param contrast - high contrast setting (default true)
  */
 void ComboBox::setHighContrast(bool contrast)
 {
@@ -264,7 +262,7 @@ void ComboBox::setHighContrast(bool contrast)
 
 /**
  * Changes the color of the arrow buttons in the list.
- * @param color Color value.
+ * @param color - color value
  */
 void ComboBox::setArrowColor(Uint8 color)
 {
@@ -273,7 +271,7 @@ void ComboBox::setArrowColor(Uint8 color)
 
 /**
  * Returns the currently selected option.
- * @return Selected row.
+ * @return, selected row
  */
 size_t ComboBox::getSelected() const
 {
@@ -282,7 +280,7 @@ size_t ComboBox::getSelected() const
 
 /**
  * Changes the currently selected option.
- * @param sel Selected row.
+ * @param sel - selected row
  */
 void ComboBox::setSelected(size_t sel)
 {
@@ -293,28 +291,28 @@ void ComboBox::setSelected(size_t sel)
 }
 
 /**
- * Updates the size of the dropdown list based on
- * the number of options available.
- * @param options Number of options.
+ * Updates the size of the dropdown list based on the number of options available.
+ * @param options - quantity of options
  */
 void ComboBox::setDropdown(int options)
 {
-	int items = std::min(options, MAX_ITEMS);
-	int h = _button->getFont()->getHeight() + _button->getFont()->getSpacing();
-	int dy = (Options::baseYResolution - 200) / 2;
+	int
+		items = std::min(
+						options,
+						MAX_ITEMS),
+		h = _button->getFont()->getHeight() + _button->getFont()->getSpacing(),
+		dy = (Options::baseYResolution - 200) / 2;
 
 	while (_window->getY() + items * h + VERTICAL_MARGIN * 2 > 200 + dy)
-	{
-		items--;
-	}
+		--items;
 
-	_window->setHeight(items * h + VERTICAL_MARGIN * 2);
-	_list->setHeight(items * h);
+	_window->setHeight((items * h + VERTICAL_MARGIN * 2) + 1);
+	_list->setHeight((items * h) + 1);
 }
 
 /**
  * Changes the list of available options to choose from.
- * @param options List of string IDs.
+ * @param options - reference to a vector of string IDs
  */
 void ComboBox::setOptions(const std::vector<std::string>& options)
 {
@@ -326,7 +324,9 @@ void ComboBox::setOptions(const std::vector<std::string>& options)
 			i != options.end();
 			++i)
 	{
-		_list->addRow(1, _lang->getString(*i).c_str());
+		_list->addRow(
+					1,
+					_lang->getString(*i).c_str());
 	}
 
 	setSelected(_sel);
@@ -335,7 +335,7 @@ void ComboBox::setOptions(const std::vector<std::string>& options)
 
 /**
  * Changes the list of available options to choose from.
- * @param options List of localized strings.
+ * @param options - reference to a vector of localized strings
  */
 void ComboBox::setOptions(const std::vector<std::wstring>& options)
 {
@@ -355,15 +355,15 @@ void ComboBox::setOptions(const std::vector<std::wstring>& options)
 
 /**
  * Blits the combo box components.
- * @param surface Pointer to surface to blit onto.
+ * @param surface - pointer to surface to blit onto
  */
 void ComboBox::blit(Surface* surface)
 {
 	Surface::blit(surface);
 	_list->invalidate();
 
-	if (_visible
-		&& !_hidden)
+	if (_visible == true
+		&& _hidden == false)
 	{
 		_button->blit(surface);
 		_arrow->blit(surface);
@@ -374,8 +374,8 @@ void ComboBox::blit(Surface* surface)
 
 /**
  * Passes events to internal components.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- state that the action handlers belong to
  */
 void ComboBox::handle(Action* action, State* state)
 {
@@ -383,7 +383,7 @@ void ComboBox::handle(Action* action, State* state)
 	_list->handle(action, state);
 	InteractiveSurface::handle(action, state);
 
-	if (_window->getVisible()
+	if (_window->getVisible() == true
 		&& action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& (action->getAbsoluteXMouse() < getX()
 			|| action->getAbsoluteXMouse() >= getX() + getWidth()
@@ -393,7 +393,7 @@ void ComboBox::handle(Action* action, State* state)
 		toggle();
 	}
 
-	if (_toggled)
+	if (_toggled == true)
 	{
 		if (_change)
 			(state->*_change)(action);
@@ -411,26 +411,35 @@ void ComboBox::think()
 	_arrow->think();
 	_window->think();
 	_list->think();
+
 	InteractiveSurface::think();
 }
 
 /**
  * Opens/closes the combo box list.
- * @param first Is it the initialization toggle?
+ * @param init - true if it is the initialization toggle (default false)
  */
-void ComboBox::toggle(bool first)
+void ComboBox::toggle(bool init)
 {
-	_window->setVisible(!_window->getVisible());
 	_list->setVisible(!_list->getVisible());
-	_state->setModal(_window->getVisible()? this: 0);
+	_window->setVisible(!_window->getVisible());
 
-	if (!first
-		&& !_window->getVisible())
+	InteractiveSurface* modal;
+	if (_window->getVisible() == true)
+		modal = this;
+	else
+		modal = NULL;
+
+	_state->setModal(modal);
+//	_state->setModal(_window->getVisible()? this: 0);
+
+	if (init == false
+		&& _window->getVisible() == false)
 	{
 		_toggled = true;
 	}
 
-	if (_list->getVisible())
+	if (_list->getVisible() == true)
 	{
 		if (_sel < _list->getVisibleRows() / 2)
 			_list->scrollTo(0);
@@ -441,7 +450,7 @@ void ComboBox::toggle(bool first)
 
 /**
  * Sets a function to be called every time the slider's value changes.
- * @param handler Action handler.
+ * @param handler - ActionHandler
  */
 void ComboBox::onChange(ActionHandler handler)
 {

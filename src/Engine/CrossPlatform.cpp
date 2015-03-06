@@ -36,7 +36,7 @@
 #include "Logger.h"
 #include "Options.h"
 
-#ifdef _WIN32 // kL_note: see pch.h ...
+#ifdef _WIN32 // kL_note: see pch.h ... & Language.cpp
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif

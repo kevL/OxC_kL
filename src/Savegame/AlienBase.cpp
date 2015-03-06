@@ -34,7 +34,7 @@ AlienBase::AlienBase()
 	:
 		Target(),
 		_id(0),
-		_inBattlescape(false),
+		_inTactical(false),
 		_discovered(false)
 {}
 
@@ -52,11 +52,11 @@ void AlienBase::load(const YAML::Node& node)
 {
 	Target::load(node);
 
-	_id				= node["id"]			.as<int>(_id);
-	_race			= node["race"]			.as<std::string>(_race);
-	_edit			= node["edit"]			.as<std::string>(_edit);
-	_inBattlescape	= node["inBattlescape"]	.as<bool>(_inBattlescape);
-	_discovered		= node["discovered"]	.as<bool>(_discovered);
+	_id			= node["id"]		.as<int>(_id);
+	_race		= node["race"]		.as<std::string>(_race);
+	_edit		= node["edit"]		.as<std::string>(_edit);
+	_inTactical	= node["inTactical"].as<bool>(_inTactical);
+	_discovered	= node["discovered"].as<bool>(_discovered);
 }
 
 /**
@@ -71,8 +71,8 @@ YAML::Node AlienBase::save() const
 	node["race"]	= _race;
 	node["edit"]	= _edit;
 
-	if (_inBattlescape == true)
-		node["inBattlescape"] = _inBattlescape;
+	if (_inTactical == true)
+		node["inTactical"] = _inTactical;
 	if (_discovered == true)
 		node["discovered"] = _discovered;
 
@@ -175,16 +175,16 @@ void AlienBase::setLabel(const std::string& edit)
  */
 bool AlienBase::isInBattlescape() const
 {
-	return _inBattlescape;
+	return _inTactical;
 }
 
 /**
  * Sets an alien base's battlescape status.
- * @param inbattle - true if this base is in battle
+ * @param inTactical - true if this base is in battle
  */
-void AlienBase::setInBattlescape(bool inbattle)
+void AlienBase::setInBattlescape(bool inTactical)
 {
-	_inBattlescape = inbattle;
+	_inTactical = inTactical;
 }
 
 /**

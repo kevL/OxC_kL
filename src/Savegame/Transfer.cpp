@@ -88,7 +88,7 @@ bool Transfer::load(
 
 	if (const YAML::Node& craft = node["craft"])
 	{
-		std::string type = craft["type"].as<std::string>();
+		const std::string type = craft["type"].as<std::string>();
 		if (rule->getCraft(type) != NULL)
 		{
 			_craft = new Craft(

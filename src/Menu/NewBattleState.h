@@ -80,7 +80,6 @@ private:
 		* _btnRandom;
 	Window* _window;
 
-	std::vector<int> _textures;
 	std::vector<std::string>
 		_missionTypes,
 		_terrainTypes,

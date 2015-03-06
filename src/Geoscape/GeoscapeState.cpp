@@ -96,6 +96,7 @@
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/RuleResearch.h"
@@ -1007,7 +1008,7 @@ void GeoscapeState::init()
 		_savedGame->addMonth();
 
 		determineAlienMissions(true);
-		setupTerrorMission();
+		setupLandMission();
 
 		_savedGame->setFunds(_savedGame->getFunds()
 										- _savedGame->getBaseMaintenance()
@@ -1211,17 +1212,15 @@ void GeoscapeState::timeAdvance()
 void GeoscapeState::time5Seconds()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time5Seconds()";
-	// Game over if there are no more bases.
-	if (_savedGame->getBases()->empty() == true)
+	if (_savedGame->getBases()->empty() == true) // Game over if there are no more bases.
 	{
 		popup(new DefeatState());
 		return;
 	}
 
-	const Ufo* ufoExpired = NULL; // kL
+	const Ufo* ufoExpired = NULL; // kL, see below_
 
-	// Handle UFO logic
-	for (std::vector<Ufo*>::const_iterator
+	for (std::vector<Ufo*>::const_iterator // Handle UFO logic
 			i = _savedGame->getUfos()->begin();
 			i != _savedGame->getUfos()->end();
 			++i)
@@ -1238,9 +1237,11 @@ void GeoscapeState::time5Seconds()
 					if ((*i)->reachedDestination() == true)
 					{
 						const size_t qtySites = _savedGame->getMissionSites()->size();
-						AlienMission* const mission = (*i)->getMission();
 						const bool detected = (*i)->getDetected();
-						mission->ufoReachedWaypoint(
+
+						AlienMission* const mission = (*i)->getMission();
+
+						mission->ufoReachedWaypoint( // recomputes 'qtySites' & 'detected'
 												**i,
 												*_game,
 												*_globe);
@@ -1263,10 +1264,10 @@ void GeoscapeState::time5Seconds()
 							//Log(LOG_INFO) << ". create terrorSite";
 
 							MissionSite* const site = _savedGame->getMissionSites()->back();
-							const City* const city = _game->getRuleset()->locateCity(
-																				site->getLongitude(),
-																				site->getLatitude());
-							assert(city);
+//							const City* const city = _game->getRuleset()->locateCity(
+//																				site->getLongitude(),
+//																				site->getLatitude());
+//							assert(city);
 							// kL_note: need to delete the UFO here, before attempting to target w/ Craft.
 							// see: Globe::getTargets() for the workaround...
 							// or try something like this, latr:
@@ -1277,7 +1278,6 @@ void GeoscapeState::time5Seconds()
 
 							popup(new MissionDetectedState(
 														site,
-														city->getName(),
 														this));
 						}
 						//Log(LOG_INFO) << ". create terrorSite DONE";
@@ -1288,7 +1288,7 @@ void GeoscapeState::time5Seconds()
 
 						if (Base* const base = dynamic_cast<Base*>((*i)->getDestination()))
 						{
-							mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
+							mission->setWaveCountdown(30 * (RNG::generate(0,48) + 400));
 							(*i)->setDestination(NULL);
 							base->setupDefenses();
 
@@ -1311,13 +1311,12 @@ void GeoscapeState::time5Seconds()
 			case Ufo::LANDED:
 				(*i)->think();
 
-				if ((*i)->getSecondsRemaining() == 0)
+				if ((*i)->getSecondsLeft() == 0)
 				{
 					AlienMission* const mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
 					mission->ufoLifting(
 									**i,
-									*_game,
 									*_globe);
 
 					if (detected != (*i)->getDetected()
@@ -1331,7 +1330,7 @@ void GeoscapeState::time5Seconds()
 			case Ufo::CRASHED:
 				(*i)->think();
 
-				if ((*i)->getSecondsRemaining() == 0)
+				if ((*i)->getSecondsLeft() == 0)
 				{
 					ufoExpired = *i; // shot down while trying to outrun interceptor
 					(*i)->setDetected(false);
@@ -1422,8 +1421,8 @@ void GeoscapeState::time5Seconds()
 				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL)
 				{
-					if (ufo->getDetected() == false // lost radar contact
-						&& ufo != ufoExpired) // ie. not just shot down while trying to outrun interceptor but it crashed into the sea instead Lol
+					if (ufo->getDetected() == false	// lost radar contact
+						&& ufo != ufoExpired)		// <- ie. not just shot down while trying to outrun interceptor but it crashed into the sea instead Lol
 					{
 						if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" // note: this is where that targeting-terrorUfo/Site glitch should also be taken care of.
 							&& (ufo->getStatus() == Ufo::LANDED
@@ -1487,10 +1486,10 @@ void GeoscapeState::time5Seconds()
 								&& AreSame((*j)->getDistance(ufo), 0.)) // craft ran into a UFO
 							{
 								_dogfightsToStart.push_back(new DogfightState(
-																				_globe,
-																				*j,
-																				ufo,
-																				this));
+																			_globe,
+																			*j,
+																			ufo,
+																			this));
 
 								if (_dfStartTimer->isRunning() == false)
 								{
@@ -1515,8 +1514,7 @@ void GeoscapeState::time5Seconds()
 						case Ufo::CRASHED:
 							// setSpeed 1/2 (need to speed back up when setting a new destination)
 						case Ufo::DESTROYED: // Just before expiration
-							if ((*j)->getNumSoldiers() > 0)
-//								|| (*j)->getNumVehicles() > 0)
+							if ((*j)->getNumSoldiers() > 0) // || (*j)->getNumVehicles() > 0)
 							{
 								if ((*j)->isInDogfight() == false)
 								{
@@ -1531,7 +1529,7 @@ void GeoscapeState::time5Seconds()
 									timerReset();
 									popup(new ConfirmLandingState(
 																*j,
-																texture,
+																_game->getRuleset()->getGlobe()->getTexture(texture),
 																shade));
 								}
 							}
@@ -1561,16 +1559,16 @@ void GeoscapeState::time5Seconds()
 														ms->getLatitude(),
 														&texture,
 														&shade);
+						texture = ms->getTexture(); // New
 
 						timerReset();
 						popup(new ConfirmLandingState(
 													*j,
-													texture,
+													_game->getRuleset()->getGlobe()->getTexture(texture),
 													shade));
 					}
 					else
 						(*j)->setDestination(NULL);
-//						(*j)->returnToBase();
 				}
 				else if (ab != NULL)
 				{
@@ -1590,12 +1588,11 @@ void GeoscapeState::time5Seconds()
 							timerReset();
 							popup(new ConfirmLandingState(
 														*j,
-														texture,
+														_game->getRuleset()->getGlobe()->getTexture(texture),
 														shade));
 						}
 						else
 							(*j)->setDestination(NULL);
-//							(*j)->returnToBase();
 					}
 				}
 			}
@@ -2068,10 +2065,10 @@ bool GeoscapeState::processMissionSite(MissionSite* site) const
 		month = _savedGame->getMonthsPassed();
 	int aLienPts;
 
-	if (site->getSecondsRemaining() > 1799)
+	if (site->getSecondsLeft() > 1799)
 	{
 		expired = false;
-		site->setSecondsRemaining(site->getSecondsRemaining() - 1800);
+		site->setSecondsLeft(site->getSecondsLeft() - 1800);
 		aLienPts = (site->getRules()->getPoints() / 10) + (diff * 10) + month;
 	}
 	else
@@ -2124,10 +2121,10 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
 	{
 		if (ufo->getStatus() == Ufo::CRASHED)
 		{
-			const int sec = ufo->getSecondsRemaining();
+			const int sec = ufo->getSecondsLeft();
 			if (sec >= 30 * 60)
 			{
-				ufo->setSecondsRemaining(sec - 30 * 60);
+				ufo->setSecondsLeft(sec - 30 * 60);
 				return;
 			}
 
@@ -2553,7 +2550,7 @@ void GeoscapeState::time1Day()
 							_game->getRuleset()->getUnit((*rp)->getRules()->getName()) != NULL); // kL, interrogation of aLien Unit complete.
 
 			RuleResearch* bonus = NULL;
-			const RuleResearch* research = (*rp)->getRules();
+			const RuleResearch* const research = (*rp)->getRules();
 			//if (research) Log(LOG_INFO) << ". research Valid";
 			//else Log(LOG_INFO) << ". research NOT valid"; // end_TEST
 
@@ -2874,10 +2871,10 @@ void GeoscapeState::time1Day()
 	}
 
 
-	const int // add extra per Month.
-		diff = static_cast<int>(_savedGame->getDifficulty()) + 1,
-		aLienPts = _game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() * diff / 100;
-
+	const RuleAlienMission* baseMission = _game->getRuleset()->getRandomMission(
+																			OBJECTIVE_BASE,
+																			_game->getSavedGame()->getMonthsPassed());
+	const int aLienPts = baseMission->getPoints() * (static_cast<int>(_savedGame->getDifficulty()) + 1) / 100;
 	if (aLienPts > 0) // handle regional and country points for alien bases
 	{
 		for (std::vector<AlienBase*>::const_iterator
@@ -2965,7 +2962,7 @@ void GeoscapeState::time1Month()
 	if (RNG::percent(monthsPassed * 2)) // kL
 		determineAlienMissions(); // kL_note: determine another one, I guess.
 
-	setupTerrorMission();
+	setupLandMission();
 
 	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
 	const int diff = static_cast<int>(_savedGame->getDifficulty()); // kL
@@ -2996,11 +2993,13 @@ void GeoscapeState::time1Month()
 												(*i)->getLongitude(),
 												(*i)->getLatitude()) == true)
 				{
-					if (_savedGame->getAlienMission(
+					if (_savedGame->findAlienMission(
 												(*j)->getRules()->getType(),
-												"STR_ALIEN_RETALIATION") == NULL)
+												OBJECTIVE_RETALIATION) == false)
 					{
-						const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+						const RuleAlienMission& rule = *_game->getRuleset()->getRandomMission(
+																						OBJECTIVE_RETALIATION,
+																						_game->getSavedGame()->getMonthsPassed());
 						AlienMission* const mission = new AlienMission(
 																	rule,
 																	*_savedGame);
@@ -3703,46 +3702,63 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 }
 
 /**
- * Sets up a Terror mission.
+ * Sets up a land mission.
  */
-void GeoscapeState::setupTerrorMission()
+void GeoscapeState::setupLandMission()
 {
-	// Determine a random region with at least one city and no currently running terror mission.
-	RuleRegion* region = NULL;
-	int counter = 0;
+	const RuleAlienMission& missionRules = *_game->getRuleset()->getRandomMission(
+																			OBJECTIVE_SITE,
+																			_game->getSavedGame()->getMonthsPassed());
+
+	// Determine a random region with a valid mission zone and no mission already running.
+	RuleRegion* region;
+	bool picked = false;
 	const std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
 
-	do // we try 40 times to pick a valid zone for a terror mission
+	// Try 40 times to pick a valid zone for a land mission.
+	for (int
+			i = 0;
+			i != 40
+				&& picked == false;
+			++i)
 	{
-		if (counter == 40)
-			return;
-
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(
 																	0,
-																	static_cast<int>(regions.size()) - 1)]);
-
-		++counter;
+																	regions.size() - 1)]);
+		if (static_cast<int>(region->getMissionZones().size()) > missionRules.getSpawnZone()
+			&& _game->getSavedGame()->findAlienMission(
+													region->getType(),
+													OBJECTIVE_SITE) == NULL)
+		{
+			const MissionZone& zone = region->getMissionZones().at(missionRules.getSpawnZone());
+			for (std::vector<MissionArea>::const_iterator
+					j = zone.areas.begin();
+					j != zone.areas.end()
+						&& picked == false;
+					++j)
+			{
+				if (j->isPoint() == true)
+					picked = true;
+			}
+		}
 	}
-	while (region->getCities()->empty() == true
-		|| _savedGame->getAlienMission(
-									region->getType(),
-									"STR_ALIEN_TERROR") != NULL);
 
-	// Choose race for terror mission.
-	const RuleAlienMission& terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
-	const std::string& terrorRace = terrorRules.generateRace(_savedGame->getMonthsPassed());
-
-	AlienMission* const terrorMission = new AlienMission(
-													terrorRules,
-													*_savedGame);
-	terrorMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
-	terrorMission->setRegion(
+	// Choose race for land mission.
+	if (picked == true) // safety.
+	{
+		AlienMission* mission = new AlienMission(
+											missionRules,
+											*_savedGame);
+		mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+		mission->setRegion(
 						region->getType(),
 						*_game->getRuleset());
-	terrorMission->setRace(terrorRace);
-	terrorMission->start(150);
+		const std::string& race = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
+		mission->setRace(race);
+		mission->start(150);
 
-	_savedGame->getAlienMissions().push_back(terrorMission);
+		_game->getSavedGame()->getAlienMissions().push_back(mission);
+	}
 }
 
 /**

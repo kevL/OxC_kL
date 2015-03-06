@@ -194,7 +194,9 @@ private:
 			double lon2,
 			double lat2);
 	/// Draw target marker.
-	void drawTarget(Target* target);
+	void drawTarget(
+			Target* target,
+			Surface* surface);
 
 
 	public:
@@ -354,11 +356,12 @@ private:
 				int* shade) const;
 
 		/// Get the localized text.
-		const LocalizedText& tr(const std::string& id) const;
+//		const LocalizedText& tr(const std::string& id) const;
 		/// Get the localized text.
-		LocalizedText tr(
-				const std::string& id,
-				unsigned n) const;
+//		LocalizedText tr(
+//				const std::string& id,
+//				unsigned n) const;
+// huh
 
 		/// Sets hover base position.
 		void setNewBaseHoverPos(

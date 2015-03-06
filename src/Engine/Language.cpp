@@ -19,23 +19,23 @@
 
 #include "Language.h"
 
-#include <locale>
-#include <fstream>
-#include <cassert>
+//#include <locale>
+//#include <fstream>
+//#include <cassert>
 
-#include <assert.h>
+//#include <assert.h>
 
-#include "CrossPlatform.h"
-#include "Exception.h"
-#include "LanguagePlurality.h"
-#include "Logger.h"
-#include "Options.h"
+//#include "CrossPlatform.h"
+//#include "Exception.h"
+//#include "LanguagePlurality.h"
+//#include "Logger.h"
+//#include "Options.h"
 
 #include "../Interface/TextList.h"
 
 #include "../Ruleset/ExtraStrings.h"
 
-#ifdef _WIN32
+#ifdef _WIN32 // kL_note: see pch.h ... & Language.cpp
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif
@@ -64,7 +64,7 @@ Language::Language()
 		_wrap(WRAP_WORDS)
 {
 	// maps don't have initializers :(
-	if (_names.empty())
+	if (_names.empty() == true)
 	{
 		_names["en-US"]		= utf8ToWstr("English (US)");
 		_names["en-GB"]		= utf8ToWstr("English (UK)");
@@ -98,10 +98,10 @@ Language::Language()
 		_names["zh-TW"]		= utf8ToWstr("文言");
 	}
 
-	if (_rtl.empty())
+	if (_rtl.empty() == true)
 		_rtl.push_back("he");
 
-	if (_cjk.empty())
+	if (_cjk.empty() == true)
 	{
 		_cjk.push_back("ja");
 //		_cjk.push_back("ko"); // has spacing between words
@@ -111,7 +111,7 @@ Language::Language()
 }
 
 /**
- *
+ * dTor.
  */
 Language::~Language()
 {
@@ -127,31 +127,31 @@ Language::~Language()
  */
 std::string Language::wstrToUtf8(const std::wstring& src)
 {
-	if (src.empty())
+	if (src.empty() == true)
 		return "";
 
 #ifdef _WIN32
-	int size = WideCharToMultiByte(
+	int bytes = WideCharToMultiByte(
 								CP_UTF8,
 								0,
 								&src[0],
-								(int)src.size(),
+								static_cast<int>(src.size()),
 								NULL,
 								0,
 								NULL,
 								NULL);
-	std::string str(size, 0);
+	std::string st (bytes, 0); // init.
 	WideCharToMultiByte(
 					CP_UTF8,
 					0,
 					&src[0],
-					(int)src.size(),
-					&str[0],
-					size,
+					static_cast<int>(src.size()),
+					&st[0],
+					bytes,
 					NULL,
 					NULL);
 
-	return str;
+	return st;
 #else
 	std::string out;
 	unsigned int codepoint = 0;
@@ -222,7 +222,7 @@ std::string Language::wstrToCp(const std::wstring& src)
 								CP_ACP,
 								0,
 								&src[0],
-								(int)src.size(),
+								static_cast<int>(src.size()),
 								NULL,
 								0,
 								NULL,
@@ -232,7 +232,7 @@ std::string Language::wstrToCp(const std::wstring& src)
 					CP_ACP,
 					0,
 					&src[0],
-					(int)src.size(),
+					static_cast<int>(src.size()),
 					&st[0],
 					bytes,
 					NULL,
@@ -267,10 +267,8 @@ std::string Language::wstrToCp(const std::wstring& src)
 std::string Language::wstrToFs(const std::wstring& src)
 {
 #ifdef _WIN32
-
 	return Language::wstrToCp(src);
 #else
-
 	return Language::wstrToUtf8(src);
 #endif
 }
@@ -284,27 +282,27 @@ std::string Language::wstrToFs(const std::wstring& src)
  */
 std::wstring Language::utf8ToWstr(const std::string& src)
 {
-	if (src.empty())
+	if (src.empty() == true)
 		return L"";
 
 #ifdef _WIN32
-	int size = MultiByteToWideChar(
+	int bytes = MultiByteToWideChar(
 								CP_UTF8,
 								0,
 								&src[0],
-								(int)src.size(),
+								static_cast<int>(src.size()),
 								NULL,
 								0);
-	std::wstring wstr(size, 0);
+	std::wstring wst (bytes, 0); // init.
 	MultiByteToWideChar(
 					CP_UTF8,
 					0,
 					&src[0],
-					(int)src.size(),
-					&wstr[0],
-					size);
+					static_cast<int>(src.size()),
+					&wst[0],
+					bytes);
 
-	return wstr;
+	return wst;
 #else
 	std::wstring out;
 	unsigned int codepoint = 0;
@@ -370,27 +368,27 @@ std::wstring Language::utf8ToWstr(const std::string& src)
  */
 std::wstring Language::cpToWstr(const std::string& src)
 {
-	if (src.empty())
+	if (src.empty() == true)
 		return L"";
 
 #ifdef _WIN32
-	int size = MultiByteToWideChar(
+	int bytes = MultiByteToWideChar(
 								CP_ACP,
 								0,
 								&src[0],
-								(int)src.size(),
+								static_cast<int>(src.size()),
 								NULL,
 								0);
-	std::wstring wstr (size, 0);
+	std::wstring wst (bytes, 0); // init.
 	MultiByteToWideChar(
 					CP_ACP,
 					0,
 					&src[0],
-					(int)src.size(),
-					&wstr[0],
-					size);
+					static_cast<int>(src.size()),
+					&wst[0],
+					bytes);
 
-	return wstr;
+	return wst;
 #else
 	const int MAX = 500;
 	wchar_t buffer[MAX + 1];
@@ -497,7 +495,7 @@ void Language::getList(
 	{
 		*i = CrossPlatform::noExt(*i);
 		std::wstring name;
-		std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
+		std::map<std::string, std::wstring>::const_iterator lang = _names.find(*i);
 
 		if (lang != _names.end())
 			name = lang->second;
@@ -585,18 +583,18 @@ void Language::load(
 /**
 * Replaces all special string markers with the approriate characters
 * and converts the string encoding.
-* @param string Original UTF-8 string.
+* @param ist Original UTF-8 string.
 * @return New widechar string.
 */
-std::wstring Language::loadString(const std::string& string) const
+std::wstring Language::loadString(const std::string& ist) const
 {
-	std::string s = string;
+	std::string st = ist;
 
-	replace(s, "{NEWLINE}", "\n");
-	replace(s, "{SMALLLINE}", "\x02");
-	replace(s, "{ALT}", "\x01");
+	replace(st, "{NEWLINE}", "\n");
+	replace(st, "{SMALLLINE}", "\x02");
+	replace(st, "{ALT}", "\x01");
 
-	return utf8ToWstr(s);
+	return utf8ToWstr(st);
 }
 
 /**
@@ -619,27 +617,27 @@ std::wstring Language::getName() const
 
 /**
  * Returns the localized text with the specified ID.
- * If it's not found, just returns the ID.
- * @param id ID of the string.
- * @return String with the requested ID.
+ * @note If not found return the ID itself.
+ * @param id - ID of the string
+ * @return, reference to LocalizedText of the requested ID
  */
 const LocalizedText& Language::getString(const std::string& id) const
 {
-	static LocalizedText hack(L"");
+	static LocalizedText hack(L""); // init.
 
-	if (id.empty())
+	if (id.empty() == true)
 		return hack;
 
-	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
-	if (s == _strings.end())
+	const std::map<std::string, LocalizedText>::const_iterator pst = _strings.find(id);
+	if (pst == _strings.end())
 	{
 		Log(LOG_WARNING) << id << " not found in " << Options::language;
 		hack = LocalizedText(utf8ToWstr(id));
 
 		return hack;
 	}
-	else
-		return s->second;
+
+	return pst->second;
 }
 
 /**
@@ -654,32 +652,32 @@ LocalizedText Language::getString(
 		const std::string& id,
 		unsigned n) const
 {
-	assert(!id.empty());
+	assert(id.empty() == false);
 
-	std::map<std::string, LocalizedText>::const_iterator s = _strings.end();
+	std::map<std::string, LocalizedText>::const_iterator pst = _strings.end();
 	if (n == 0) // Try specialized form.
-		s = _strings.find(id + "_zero");
+		pst = _strings.find(id + "_zero");
 
-	if (s == _strings.end()) // Try proper form by language
-		s = _strings.find(id + _handler->getSuffix(n));
+	if (pst == _strings.end()) // Try proper form by language
+		pst = _strings.find(id + _handler->getSuffix(n));
 
-	if (s == _strings.end()) // Try default form
-		s = _strings.find(id + "_other");
+	if (pst == _strings.end()) // Try default form
+		pst = _strings.find(id + "_other");
 
-	if (s == _strings.end()) // Give up
+	if (pst == _strings.end()) // Give up
 	{
 		Log(LOG_WARNING) << id << " not found in " << Options::language;
 
 		return LocalizedText(utf8ToWstr(id));
 	}
 
-	std::wostringstream ss;
-	ss << n;
+	std::wostringstream wost;
+	wost << n;
 
 	std::wstring
-		txt(s->second),
+		txt(pst->second),
 		marker(L"{N}"),
-		val(ss.str());
+		val(wost.str());
 	replace(
 			txt,
 			marker,
@@ -715,7 +713,7 @@ const LocalizedText& Language::getString(
  */
 void Language::toHtml(const std::string& filename) const
 {
-	std::ofstream htmlFile (filename.c_str(), std::ios::out);
+	std::ofstream htmlFile (filename.c_str(), std::ios::out); // init.
 	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
 
@@ -726,7 +724,7 @@ void Language::toHtml(const std::string& filename) const
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
 
-		std::string s = wstrToUtf8(i->second);
+		const std::string s = wstrToUtf8(i->second);
 		for (std::string::const_iterator
 				j = s.begin();
 				j != s.end();

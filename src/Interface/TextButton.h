@@ -55,7 +55,8 @@ private:
 
 
 protected:
-	bool isButtonHandled(Uint8 button = 0);
+	bool isButtonHandled(Uint8 btn = 0);
+
 
 	public:
 		static Sound* soundPress;

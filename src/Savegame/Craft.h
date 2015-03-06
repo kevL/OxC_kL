@@ -62,7 +62,7 @@ class Craft
 
 private:
 	bool
-		_inBattlescape,
+		_inTactical,
 		_inDogfight,
 		_lowFuel,
 		_mission,

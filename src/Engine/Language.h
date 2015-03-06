@@ -20,15 +20,14 @@
 #ifndef OPENXCOM_LANGUAGE_H
 #define OPENXCOM_LANGUAGE_H
 
-#include <map>
-#include <string>
-#include <vector>
-
+//#include <map>
+//#include <string>
+//#include <vector>
 //#include <yaml-cpp/yaml.h>
 
 #include "LocalizedText.h"
 
-#include "../Savegame/Soldier.h"
+#include "../Savegame/Soldier.h" // SoldierGender enum.
 
 
 namespace OpenXcom
@@ -75,7 +74,7 @@ private:
 		_cjk;
 
 	/// Parses a text string loaded from an external file.
-	std::wstring loadString(const std::string& s) const;
+	std::wstring loadString(const std::string& ist) const;
 
 
 	public:

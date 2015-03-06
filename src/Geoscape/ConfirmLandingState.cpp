@@ -65,12 +65,14 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Confirm Landing window.
  * @param craft 	- pointer to the Craft to confirm
- * @param texture	- texture of the landing site
+// * @param texture	- texture of the landing site
+ * @param texture	- pointer to the Texture of the landing site
  * @param shade		- shade of the landing site
  */
 ConfirmLandingState::ConfirmLandingState(
 		Craft* const craft,
-		const int texture,
+//		const int texture,
+		Texture* texture,
 		const int shade)
 	:
 		_craft(craft),
@@ -200,12 +202,12 @@ ConfirmLandingState::ConfirmLandingState(
 			if (_city == true) // use TerrorSite terrains for UFOs' _city missions.
 			{
 				Log(LOG_INFO) << ". . . TS or city VALID";
-				_terrain = selectCityTerrain(lat);
+//->			_terrain = selectCityTerrain(lat);
 			}
 			else // ufo
 			{
 				Log(LOG_INFO) << ". . . UFO is NOT at a City";
-				_terrain = selectTerrain(lat);
+//->			_terrain = selectTerrain(lat);
 			}
 
 			if (ufo != NULL)
@@ -290,6 +292,7 @@ void ConfirmLandingState::init()
  * Selects a terrain type for crashed or landed UFOs.
  * @param lat - latitude of the UFO
  */
+/*
 RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 {
 	std::vector<RuleTerrain*> terrains;
@@ -338,12 +341,13 @@ RuleTerrain* ConfirmLandingState::selectTerrain(const double lat)
 	// ... could be cool. Postnote: yeh, was cool!!!!
 	_city = true;
 	return selectCityTerrain(lat);
-}
+} */
 
 /**
  * Selects a terrain type for missions at cities.
  * @param lat - latitude of the city
  */
+/*
 RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 {
 	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
@@ -353,6 +357,8 @@ RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 	RuleTerrain* const terrainRule = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 	Log(LOG_INFO) << "cityTerrain = " << ruleDeploy->getTerrains().at(pick);
 
+	return terrainRule;
+} */
 /*	if (lat < 0. // northern hemisphere
 		&& terrainRule->getName() == "NATIVEURBAN")
 	{
@@ -365,9 +371,6 @@ RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 		Log(LOG_INFO) << ". south: switching from Dawn A to Native";
 		terrainRule = _game->getRuleset()->getTerrain("NATIVEURBAN");
 	} */
-
-	return terrainRule;
-}
 
 /**
  * Enters the mission.
@@ -406,7 +409,8 @@ void ConfirmLandingState::btnYesClick(Action*)
 	}
 	else if (site != NULL)
 	{
-		battle->setMissionType(site->getRules()->getDeployment());
+//		battle->setMissionType(site->getRules()->getDeployment());
+		battle->setMissionType(site->getDeployment()->getType());
 		bGen.setMissionSite(site);
 		bGen.setAlienRace(site->getAlienRace());
 	}

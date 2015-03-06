@@ -718,7 +718,7 @@ void SaveConverter::loadDatLoc()
 			ufo->setId(id);
 			ufo->setCrashId(id);
 			ufo->setLandId(id);
-			ufo->setSecondsRemaining(timer);
+			ufo->setSecondsLeft(timer);
 			ufo->setDetected(!visibility.test(0));
 			target = ufo;
 			break;
@@ -745,26 +745,26 @@ void SaveConverter::loadDatLoc()
 			target = waypoint;
 			break;
 		case TARGET_TERROR:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_TERROR_MISSION"));
 			break;
 		case TARGET_PORT:
-			mission = new MissionSite(_rule->getAlienMission("STR_PORT_ATTACK"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_PORT_ATTACK"));
 			break;
 		case TARGET_ISLAND:
-			mission = new MissionSite(_rule->getAlienMission("STR_ISLAND_ATTACK"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ISLAND_ATTACK"));
 			break;
 		case TARGET_SHIP:
-			mission = new MissionSite(_rule->getAlienMission("STR_SHIP_RESCUE_MISSION"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_SHIP_RESCUE_MISSION"));
 			break;
 		case TARGET_ARTEFACT:
-			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_CONTACT_SITE_MISSION"));
+			mission = new MissionSite(_rule->getAlienMission("STR_ALIEN_TERROR"), _rule->getDeployment("STR_ALIEN_CONTACT_SITE_MISSION"));
 			break;
 		}
 		if (mission != 0)
 		{
 			mission->setId(id);
 			mission->setAlienRace(_idCrews[dat]);
-			mission->setSecondsRemaining(timer * 3600);
+			mission->setSecondsLeft(timer * 3600);
 			_save->getMissionSites()->push_back(mission);
 			target = mission;
 		}
@@ -1053,15 +1053,15 @@ void SaveConverter::loadDatCraft()
 				ufo->setSpeed(ufo->getSpeed());
 				if (ufo->getStatus() == Ufo::CRASHED)
 				{
-					ufo->setSecondsRemaining(ufo->getSecondsRemaining() * 3600);
+					ufo->setSecondsLeft(ufo->getSecondsLeft() * 3600);
 				}
 				else if (ufo->getStatus() == Ufo::LANDED)
 				{
-					ufo->setSecondsRemaining(ufo->getSecondsRemaining() * 5);
+					ufo->setSecondsLeft(ufo->getSecondsLeft() * 5);
 				}
 				else
 				{
-					ufo->setSecondsRemaining(0);
+					ufo->setSecondsLeft(0);
 				}
 
 				_save->getUfos()->push_back(ufo);

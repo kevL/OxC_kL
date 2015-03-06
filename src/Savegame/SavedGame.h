@@ -29,6 +29,8 @@
 #include "CraftId.h"
 #include "GameTime.h"
 
+#include "../Ruleset/RuleAlienMission.h"
+
 
 namespace OpenXcom
 {
@@ -166,7 +168,7 @@ struct MissionStatistics
 		node["shade"]		= shade;
 		node["injuryList"]	= injuryList;
 
-		if (valiantCrux)
+		if (valiantCrux == true)
 			 node["valiantCrux"] = valiantCrux;
 
 		return node;
@@ -193,9 +195,6 @@ struct MissionStatistics
 			alienRace("STR_UNKNOWN"),
 			shade(0),
 			valiantCrux(false)
-//			injuryList(),
-//			type(""),
-//			rating("")
 	{}
 
 	/// dTor.
@@ -492,30 +491,24 @@ private:
 		bool getWarned() const;
 		/// sets whether or not the player has been warned
 		void setWarned(bool warned);
+
 		/// Full access to the alien strategy data.
 		AlienStrategy& getAlienStrategy()
-		{
-			return *_alienStrategy;
-		}
+		{ return *_alienStrategy; }
 		/// Read-only access to the alien strategy data.
 		const AlienStrategy& getAlienStrategy() const
-		{
-			return *_alienStrategy;
-		}
+		{ return *_alienStrategy; }
 		/// Full access to the current alien missions.
 		std::vector<AlienMission*>& getAlienMissions()
-		{
-			return _activeMissions;
-		}
+		{ return _activeMissions; }
 		/// Read-only access to the current alien missions.
 		const std::vector<AlienMission*>& getAlienMissions() const
-		{
-			return _activeMissions;
-		}
-		/// Gets a mission matching region and type.
-		AlienMission* getAlienMission(
+		{ return _activeMissions; }
+		/// Finds a mission by region and objective.
+		AlienMission* findAlienMission(
 				const std::string& region,
-				const std::string& type) const;
+				MissionObjective objective) const;
+
 		/// Locate a region containing a position.
 		Region* locateRegion(
 				double lon,
@@ -523,10 +516,11 @@ private:
 		/// Locate a region containing a Target.
 		Region* locateRegion(
 				const Target& target) const;
+
 		/// Return the month counter.
 		int getMonthsPassed() const;
-		/// Return the GraphRegionToggles.
 
+		/// Return the GraphRegionToggles.
 		const std::string& getGraphRegionToggles() const;
 		/// Return the GraphCountryToggles.
 		const std::string& getGraphCountryToggles() const;

@@ -26,6 +26,8 @@
 //#include <SDL.h>
 //#include <yaml-cpp/yaml.h>
 
+#include "../Ruleset/RuleAlienMission.h"
+
 #include "../Savegame/GameTime.h"
 
 
@@ -37,12 +39,11 @@ class AlienRace;
 class Armor;
 class ArticleDefinition;
 class Base;
-class City;
 //class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
 class ExtraStrings;
-class Game; // kL
+class Game;
 class MapDataSet;
 class MapScript;
 class MCDPatch;
@@ -94,7 +95,7 @@ protected:
 		_costScientist,
 		_costSoldier,
 		_timePersonnel,
-		_radarCutoff, // kL
+		_radarCutoff,
 
 		_modIndex,
 
@@ -109,7 +110,7 @@ protected:
 	GameTime _startingTime;
 	YAML::Node _startingBase;
 
-	Game* _game; // kL
+	Game* _game;
 	RuleGlobe* _globe;
 
 	std::vector<std::string>
@@ -187,7 +188,8 @@ protected:
 	void loadFiles(const std::string& dirname);
 
 	/// Loads a ruleset element.
-	template <typename T> T* loadRule(
+	template<typename T>
+	T* loadRule(
 			const YAML::Node& node,
 			std::map<std::string, T*>* types,
 			std::vector<std::string>* index = 0,
@@ -196,8 +198,7 @@ protected:
 
 	public:
 		/// Creates a blank ruleset.
-//		Ruleset();
-		Ruleset(Game* game); // kL
+		Ruleset(Game* game);
 		/// Cleans up the ruleset.
 		~Ruleset();
 
@@ -313,11 +314,12 @@ protected:
 		const UfoTrajectory* getUfoTrajectory(const std::string& id) const;
 		/// Gets the ruleset for a specific alien mission.
 		const RuleAlienMission* getAlienMission(const std::string& id) const;
+		/// Gets the ruleset for a random alien mission.
+		const RuleAlienMission* getRandomMission(
+				MissionObjective objective,
+				size_t monthsPassed) const;
 		/// Gets the list of all alien missions.
 		const std::vector<std::string>& getAlienMissionList() const;
-
-		/// Gets the city at the specified coordinates.
-		const City* locateCity(double lon, double lat) const;
 
 		/// Gets the alien item level table.
 		const std::vector<std::vector<int> >& getAlienItemLevels() const;

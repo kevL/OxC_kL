@@ -23,8 +23,6 @@
 //#include <string>
 //#include <yaml-cpp/yaml.h>
 
-#include "SavedGame.h"
-
 
 namespace OpenXcom
 {
@@ -40,11 +38,13 @@ class SavedGame;
 class Ufo;
 class UfoTrajectory;
 
+struct MissionWave;
+
 
 /**
- * Represents an ongoing alien mission.
- * Contains variable info about the mission, like spawn counter,
- * target region and current wave.
+ * Represents an ongoing AlienMission.
+ * Contains variable info about the mission
+ * such as spawn counter and target region and current wave.
  * @sa RuleAlienMission
  */
 class AlienMission
@@ -70,12 +70,13 @@ private:
 	Ufo* spawnUfo(
 			const Ruleset& ruleset,
 			const Globe& globe,
-			const RuleUfo& ufoRule,
+			const MissionWave& wave,
 			const UfoTrajectory& trajectory);
 	/// Spawns an alien base
 	void spawnAlienBase(
 			const Globe& globe,
-			Game& engine);
+			const Game& engine,
+			const int zone);
 
 
 	public:
@@ -91,8 +92,10 @@ private:
 		/// Saves the mission to YAML.
 		YAML::Node save() const;
 
-		/// Gets the mission's type.
-		const std::string& getType() const;
+		/// Gets the mission's ruleset.
+		const RuleAlienMission& getRules() const
+		{ return _rule; }
+
 		/// Gets the mission's region.
 		const std::string& getRegion() const
 		{ return _region; }
@@ -100,6 +103,7 @@ private:
 		void setRegion(
 				const std::string& region,
 				const Ruleset& rules);
+
 		/// Gets the mission's race.
 		const std::string& getRace() const
 		{ return _race; }
@@ -143,17 +147,14 @@ private:
 		/// Handles UFO reaching a waypoint.
 		void ufoReachedWaypoint(
 				Ufo& ufo,
-				Game& engine,
+				const Game& engine,
 				const Globe& globe);
 		/// Handles UFO lifting from the ground.
 		void ufoLifting(
 				Ufo& ufo,
-				const Game& engine,
 				const Globe& globe);
 		/// Handles UFO shot down.
-		void ufoShotDown(
-				const Ufo& ufo,
-				const Globe& globe);
+		void ufoShotDown(const Ufo& ufo);
 
 		/// Handles Points for mission successes.
 		void addScore(
@@ -170,7 +171,7 @@ private:
 		std::pair<double, double> getLandPoint(
 				const Globe& globe,
 				const RuleRegion& region,
-				size_t zone);
+				const size_t zone);
 };
 
 }

@@ -60,7 +60,6 @@ private:
 		/// Creates the Mission Detected state.
 		MissionDetectedState(
 				MissionSite* mission,
-				const std::string& city,
 				GeoscapeState* state);
 		/// Cleans up the Mission Detected state.
 		~MissionDetectedState();

@@ -103,97 +103,66 @@ CraftInfoState::CraftInfoState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("craftInfo")->getElement("palette")->color); //3
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("craftInfo")->getElement("palette")->color);
 
-	add(_window, "window", "craftInfo");
-	add(_edtCraft, "text1", "craftInfo");
-	add(_txtBaseLabel, "text1", "craftInfo");
-	add(_txtStatus, "text2", "craftInfo");
-	add(_txtFuel, "text2", "craftInfo");
-	add(_txtRadar, "text2", "craftInfo");
-	add(_txtDamage, "text2", "craftInfo");
-	add(_btnW1, "button", "craftInfo");
-	add(_btnW2, "button", "craftInfo");
-	add(_txtW1Name, "text2", "craftInfo");
-	add(_txtW2Name, "text2", "craftInfo");
-	add(_txtW1Ammo, "text2", "craftInfo");
-	add(_txtW2Ammo, "text2", "craftInfo");
-	add(_btnCrew, "button", "craftInfo");
-	add(_btnEquip, "button", "craftInfo");
-	add(_btnArmor, "button", "craftInfo");
-	add(_btnInventory, "button", "craftInfo");
+	add(_window,		"window",	"craftInfo");
+	add(_edtCraft,		"text1",	"craftInfo");
+	add(_txtBaseLabel,	"text1",	"craftInfo");
+	add(_txtStatus,		"text2",	"craftInfo");
+	add(_txtFuel,		"text2",	"craftInfo");
+	add(_txtRadar,		"text2",	"craftInfo");
+	add(_txtDamage,		"text2",	"craftInfo");
+	add(_btnW1,			"button",	"craftInfo");
+	add(_btnW2,			"button",	"craftInfo");
+	add(_txtW1Name,		"text2",	"craftInfo");
+	add(_txtW2Name,		"text2",	"craftInfo");
+	add(_txtW1Ammo,		"text2",	"craftInfo");
+	add(_txtW2Ammo,		"text2",	"craftInfo");
+	add(_btnCrew,		"button",	"craftInfo");
+	add(_btnEquip,		"button",	"craftInfo");
+	add(_btnArmor,		"button",	"craftInfo");
+	add(_btnInventory,	"button",	"craftInfo");
 	add(_sprite);
 	add(_weapon1);
 	add(_weapon2);
 	add(_crew);
 	add(_equip);
-	add(_btnOk, "button", "craftInfo");
+	add(_btnOk,			"button",	"craftInfo");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-//	_edtCraft->setColor(Palette::blockOffset(13)+10);
 	_edtCraft->setBig();
 	_edtCraft->setAlign(ALIGN_CENTER);
 	_edtCraft->onChange((ActionHandler)& CraftInfoState::edtCraftChange);
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
-
-//	_txtStatus->setColor(Palette::blockOffset(13)+10);
 	_txtStatus->setAlign(ALIGN_RIGHT);
-
-
-//	_txtFuel->setColor(Palette::blockOffset(13)+10);
-//	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtRadar->setColor(Palette::blockOffset(13)+10);
-//	_txtRadar->setSecondaryColor(Palette::blockOffset(13));
 	_txtRadar->setAlign(ALIGN_CENTER);
-
-//	_txtDamage->setColor(Palette::blockOffset(13)+10);
-//	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
 	_txtDamage->setAlign(ALIGN_RIGHT);
 
-
-//	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
 	_btnW1->onMouseClick((ActionHandler)& CraftInfoState::btnW1Click);
 
-//	_btnW2->setColor(Palette::blockOffset(13)+10);
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
 
-//	_txtW1Name->setColor(Palette::blockOffset(13)+5);
-//	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
-//	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-//	_txtW2Name->setColor(Palette::blockOffset(13)+5);
-//	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
-//	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-
-//	_btnCrew->setColor(Palette::blockOffset(13)+10);
 	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);
 
-//	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(tr("STR_EQUIPMENT_UC"));
 	_btnEquip->onMouseClick((ActionHandler)& CraftInfoState::btnEquipClick);
 
-//	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
 
-//	_btnInventory->setColor(Palette::blockOffset(13)+10);
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftInfoState::btnInventoryClick);
 
-
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -226,13 +195,16 @@ void CraftInfoState::init()
 
 
 	const bool
-		hasCrew = _craft->getNumSoldiers() > 0,
-		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
-	_btnInventory->setVisible(hasCrew
-							  && newBattle == false);
+		crewOnboard = _craft->getNumSoldiers() > 0,
+		tacBattle = _game->getSavedGame()->getMonthsPassed() == -1;
+	_btnInventory->setVisible(crewOnboard
+							  && tacBattle == false);
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
-	_txtStatus->setText(tr(_craft->getStatus()));
+	if (tacBattle == true)
+		_txtStatus->setText(L"");
+	else
+		_txtStatus->setText(tr(_craft->getStatus()));
 
 	const RuleCraft* const craftRule = _craft->getRules();
 
@@ -247,6 +219,9 @@ void CraftInfoState::init()
 	std::wostringstream
 		ss1, // fuel
 		ss2; // hull
+
+	if (tacBattle == true)
+		_craft->setFuel(craftRule->getMaxFuel()); // top up Craft for insta-Battle mode.
 
 	ss1 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
 	if (craftRule->getMaxFuel() - _craft->getFuel() > 0)

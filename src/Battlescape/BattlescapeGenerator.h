@@ -46,6 +46,7 @@ class Ruleset;
 class RuleTerrain;
 class SavedBattleGame;
 class SavedGame;
+class Texture;
 class Tile;
 class Ufo;
 class Unit;
@@ -74,7 +75,6 @@ private:
 		_mapsize_y,
 		_mapsize_z,
 		_unitSequence,
-		_siteTexture,
 		_siteShade;
 	size_t _battleOrder;
 
@@ -101,6 +101,7 @@ private:
 		* _siteTerrain;
 	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
+	Texture* _siteTexture;
 	Tile* _tileEquipt;
 	Ufo* _ufo;
 
@@ -168,9 +169,9 @@ private:
 	void explodePowerSources();
 
 	/// Gets battlescape terrain.
-	RuleTerrain* getTerrain(
-			int tex,
-			double lat);
+//	RuleTerrain* getTerrain(
+//			int tex,
+//			double lat);
 
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit* unit);
@@ -226,7 +227,7 @@ private:
 	bool removeBlocks(MapScript* command);
 
 	/// Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
-	void setTacticalSprites();
+//	void setTacticalSprites();
 
 
 	public:
@@ -240,7 +241,7 @@ private:
 		/// Sets the terrainRule of where a ufo crashed or landed.
 		void setSiteTerrain(RuleTerrain* terrain);
 		/// Sets the polygon texture.
-		void setSiteTexture(int texture);
+		void setSiteTexture(Texture* texture);
 		/// Sets the polygon shade.
 		void setSiteShade(int shade);
 
@@ -259,6 +260,8 @@ private:
 		void setMissionSite(MissionSite* mission);
 		/// Sets the alien base
 		void setAlienBase(AlienBase* base);
+		/// Sets the terrain.
+		void setTerrain(RuleTerrain* terrain);
 
 		/// Sets the alien race.
 		void setAlienRace(const std::string& alienRace);

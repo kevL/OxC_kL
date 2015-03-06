@@ -57,15 +57,15 @@ private:
 	static const int BASE_SIZE = 6;
 
 	bool
-		_inBattlescape,
+		_inTactical,
 		_retaliationTarget;
 	int
-		_cashSpent, // kL
-		_cashIncome, // kL
+		_cashSpent,
+		_cashIncome,
 		_engineers,
 		_scientists,
 		_defenseResult;
-	size_t _curSoldier; // kL
+	size_t _curSoldier;
 
 	ItemContainer* _items;
 	const Ruleset* const _rules;
@@ -141,11 +141,11 @@ private:
 		/// Gets the base's total soldiers.
 		int getTotalSoldiers() const;
 		/// Gets the base's available scientists.
-//kL	int getAvailableScientists() const;
+//		int getAvailableScientists() const;
 		/// Gets the base's total scientists.
 		int getTotalScientists() const;
 		/// Gets the base's available engineers.
-//kL	int getAvailableEngineers() const;
+//		int getAvailableEngineers() const;
 		/// Gets the base's total engineers.
 		int getTotalEngineers() const;
 
@@ -191,13 +191,13 @@ private:
 		int getDefenseValue() const;
 
 		/// Gets the base's short range detection.
-//kL	int getShortRangeDetection() const;
+//		int getShortRangeDetection() const;
 		/// kL. Gets the base's short range detection value.
-		int getShortRangeValue() const; // kL
+		int getShortRangeValue() const;
 		/// Gets the base's long range detection.
-//kL	int getLongRangeDetection() const;
+//		int getLongRangeDetection() const;
 		/// kL. Gets the base's long range detection.
-		int getLongRangeValue() const; // kL
+		int getLongRangeValue() const;
 
 		/// Gets the base's crafts of a certain type.
 		int getCraftCount(const std::string& craft) const;
@@ -217,10 +217,10 @@ private:
 		/// Removes a ResearchProject from the Base.
 		void removeResearch(
 				ResearchProject* project,
-				bool grantHelp = true,		// kL
-				bool goOffline = false);	// kL
-		/// kL. Research Help ala XcomUtil.
-		void researchHelp(const std::string& aLien); // kL
+				bool grantHelp = true,
+				bool goOffline = false);
+		/// Research Help ala XcomUtil.
+		void researchHelp(const std::string& aLien);
 
 		/// Adds a new Production to Base.
 		void addProduction(Production* prod);
@@ -249,7 +249,7 @@ private:
 		int getUsedContainment() const;
 
 		/// Sets the craft's battlescape status.
-		void setInBattlescape(bool inBattle);
+		void setInBattlescape(bool inTactical);
 		/// Gets if the craft is in battlescape.
 		bool isInBattlescape() const;
 

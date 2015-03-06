@@ -64,7 +64,7 @@
 #include <utility>
 #include <vector>
 
-// kL_reinstate begin: see Engine::CrossPlatform.cpp
+// kL_reinstate begin: see Engine/CrossPlatform.cpp & Engine/Language.cpp
 /*
 #ifdef _WIN32
 	#ifndef NOMINMAX
@@ -328,6 +328,7 @@
 #include "./Ruleset/RuleInterface.h"
 #include "./Ruleset/RuleGlobe.h"
 #include "./Ruleset/SoundDefinition.h"
+#include "./Ruleset/Texture.h"
 
 #include "./Interface/ToggleTextButton.h"
 #include "./Interface/TextButton.h"
@@ -406,7 +407,7 @@
 #include "./Savegame/EquipmentLayoutItem.h"
 */
 // kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc. TurnCounter ...
-// + sza_Ruleset/ExtraMusic & sza_Ruleset/RuleMusic
+// + sza_Ruleset/ExtraMusic & sza_Ruleset/RuleMusic, OperationPool, BaseDetectionState
 // ... many more.
 
 #endif

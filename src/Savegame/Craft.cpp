@@ -41,7 +41,7 @@
 #include "../Geoscape/GeoscapeState.h"
 
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
@@ -59,7 +59,7 @@ namespace OpenXcom
  * Creates a Craft of the specified type and assigns it the latest craft ID available.
  * @param rules	- pointer to RuleCraft
  * @param base	- pointer to Base of origin
- * @param id	- ID to assign to the craft; NULL for no id
+ * @param id	- ID to assign to the craft; 0 for no id
  */
 Craft::Craft(
 		RuleCraft* rules,
@@ -77,7 +77,7 @@ Craft::Craft(
 		_status("STR_READY"),
 		_lowFuel(false),
 		_mission(false),
-		_inBattlescape(false),
+		_inTactical(false),
 		_inDogfight(false),
 		_loadCur(0),
 		_warning(CW_NONE),
@@ -264,15 +264,15 @@ void Craft::load(
 		}
 /*		else // Backwards compatibility ->
 		{
-			if (type == "STR_TERROR_SITE")
-				type = "STR_ALIEN_TERROR";
+			if (type == "STR_ALIEN_TERROR")
+				type = "STR_TERROR_SITE";
 			for (std::vector<MissionSite*>::iterator
 					i = save->getMissionSites()->begin();
 					i != save->getMissionSites()->end();
 					++i)
 			{
 				if ((*i)->getId() == id
-					&& (*i)->getRules()->getType() == type)
+					&& (*i)->getDeployment()->getMarkerName() == type)
 				{
 					setDestination(*i);
 					break;
@@ -295,10 +295,9 @@ void Craft::load(
 		} */
 	}
 
-	_takeoff = node["takeoff"].as<int>(_takeoff);
-
-	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
-	if (_inBattlescape == true)
+	_takeoff	= node["takeoff"]	.as<int>(_takeoff);
+	_inTactical	= node["inTactical"].as<bool>(_inTactical);
+	if (_inTactical == true)
 		setSpeed(0);
 
 	_loadCur = getNumEquipment() + (getNumSoldiers() + getNumVehicles(true) * 10); // note: 10 is the 'load' that a single 'space' uses.
@@ -351,8 +350,8 @@ YAML::Node Craft::save() const
 	if (_mission == true)
 		node["mission"] = _mission;
 
-	if (_inBattlescape == true)
-		node["inBattlescape"] = _inBattlescape;
+	if (_inTactical == true)
+		node["inTactical"] = _inTactical;
 
 	if (_interceptionOrder != 0)
 		node["interceptionOrder"] = _interceptionOrder;
@@ -1067,7 +1066,7 @@ void Craft::refuel()
  */
 bool Craft::isInBattlescape() const
 {
-	return _inBattlescape;
+	return _inTactical;
 }
 
 /**
@@ -1079,7 +1078,7 @@ void Craft::setInBattlescape(const bool battle)
 	if (battle == true)
 		setSpeed(0);
 
-	_inBattlescape = battle;
+	_inTactical = battle;
 }
 
 /**

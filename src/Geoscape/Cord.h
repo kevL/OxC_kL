@@ -30,6 +30,9 @@ namespace OpenXcom
 
 struct Cord;
 
+/**
+ *
+ */
 struct CordPolar
 {
 	double
@@ -52,14 +55,17 @@ struct CordPolar
 
 	inline CordPolar()
 	{
-		lon = 0;
-		lat = 0;
+		lon = 0.;
+		lat = 0.;
 	}
 
 	explicit inline CordPolar(const Cord&);
 };
 
 
+/**
+ *
+ */
 struct Cord
 {
 	double
@@ -67,6 +73,7 @@ struct Cord
 		y,
 		z;
 
+	///
 	inline Cord(
 			double px,
 			double py,
@@ -77,6 +84,7 @@ struct Cord
 		z = pz;
 	}
 
+	///
 	inline Cord(const Cord& c)
 	{
 		x = c.x;
@@ -84,26 +92,31 @@ struct Cord
 		z = c.z;
 	}
 
+	///
 	inline Cord()
 	{
-		x = 0.0;
-		y = 0.0;
-		z = 0.0;
+		x = 0.;
+		y = 0.;
+		z = 0.;
 	}
 
+	///
 	explicit inline Cord(const CordPolar&);
 
 
+	///
 	inline Cord operator +()
 	{
 		return *this;
 	}
 
+	///
 	inline Cord operator -()
 	{
 		return Cord(-x, -y, -z);
 	}
 
+	///
 	inline Cord& operator *=(double d)
 	{
 		x *= d;
@@ -112,6 +125,7 @@ struct Cord
 		return *this;
 	}
 
+	///
 	inline Cord& operator /=(double d)
 	{
 		double re = 1./d;
@@ -121,6 +135,7 @@ struct Cord
 		return *this;
 	}
 
+	///
 	inline Cord& operator +=(const Cord& c)
 	{
 		x += c.x;
@@ -129,6 +144,7 @@ struct Cord
 		return *this;
 	}
 
+	///
 	inline Cord& operator -=(const Cord& c)
 	{
 		x -= c.x;
@@ -137,12 +153,16 @@ struct Cord
 		return *this;
 	}
 
+	///
 	inline bool operator ==(const Cord& c)
 	{
-		return AreSame(x, c.x) && AreSame(y, c.y) && AreSame(z, c.z);
+		return AreSame(x, c.x)
+			&& AreSame(y, c.y)
+			&& AreSame(z, c.z);
 	}
 
 
+	///
 	inline double norm() const
 	{
 		return std::sqrt(x*x + y*y + z*z);
@@ -150,6 +170,9 @@ struct Cord
 };
 
 
+/**
+ *
+ */
 inline Cord::Cord(const CordPolar& pol)
 {
 	x = std::sin(pol.lon) * std::cos(pol.lat);
@@ -158,9 +181,12 @@ inline Cord::Cord(const CordPolar& pol)
 }
 
 
+/**
+ *
+ */
 inline CordPolar::CordPolar(const Cord& c)
 {
-	double inv = 1/c.norm();
+	double inv = 1 / c.norm();
 	lat = asin(c.y * inv);
 	lon = atan2(c.x, c.z);
 }

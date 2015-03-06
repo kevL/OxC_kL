@@ -132,7 +132,10 @@ MainMenuState::MainMenuState()
 	_txtBuild->setText(Language::cpToWstr(Version::getBuildDate()));
 
 
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_START_MAINMENU);
+	_game->getResourcePack()->playMusic(
+									OpenXcom::res_MUSIC_START_MAINMENU,
+									"",
+									1); // only once, Pls.
 
 	SDL_ShowCursor(SDL_ENABLE); // kL: stabilize my cursor. I disabled it in Game and show it here instead.
 }

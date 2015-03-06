@@ -44,9 +44,7 @@ public:
 const char* OneSingular::getSuffix(unsigned n) const
 {
 	if (n == 1)
-	{
 		return "_one";
-	}
 
 	return "_other";
 }
@@ -72,11 +70,8 @@ public:
 
 const char* ZeroOneSingular::getSuffix(unsigned n) const
 {
-	if (n == 0
-		|| n == 1)
-	{
+	if (n == 0 || n == 1)
 		return "_one";
-	}
 
 	return "_other";
 }
@@ -93,6 +88,7 @@ class NoSingular
 {
 public:
 	virtual const char* getSuffix(unsigned n) const;
+
 	static LanguagePlurality* create()
 	{
 		return new NoSingular;
@@ -125,9 +121,7 @@ public:
 const char* CyrillicPlurality::getSuffix(unsigned n) const
 {
 	if (n %10 == 1 && n %100 != 11)
-	{
 		return "_one";
-	}
 	else if ((n %10 >= 2 && n %10 <= 4)
 		&& !(n %100 >= 12 && n %100 <= 14))
 	{
@@ -163,13 +157,9 @@ public:
 const char* CzechPlurality::getSuffix(unsigned n) const
 {
 	if (n == 1)
-	{
 		return "_one";
-	}
 	else if (n >= 2 && n <= 4)
-	{
 		return "_few";
-	}
 
 	return "_other";
 }
@@ -195,9 +185,7 @@ public:
 const char* PolishPlurality::getSuffix(unsigned n) const
 {
 	if (n == 1)
-	{
 		return "_one";
-	}
 	else if ((n %10 >= 2 && n %10 <= 4)
 		&& !(n %100 >= 12 && n %100 <= 14))
 	{
@@ -234,9 +222,7 @@ public:
 const char* RomanianPlurality::getSuffix(unsigned n) const
 {
 	if (n == 1)
-	{
 		return "_one";
-	}
 	else if (n == 0
 		|| (n %100 >= 1 && n %100 <= 19))
 	{
@@ -266,9 +252,7 @@ public:
 const char* CroatianPlurality::getSuffix(unsigned n) const
 {
 	if (n %10 == 1 && n %100 != 11)
-	{
 		return "_one";
-	}
 	else if ((n %10 >= 2 && n %10 <= 4)
 		&& !(n %100 >= 12 && n %100 <= 14))
 	{
@@ -294,26 +278,26 @@ std::map<std::string, LanguagePlurality::PFCreate> LanguagePlurality::s_factoryF
 LanguagePlurality* LanguagePlurality::create(const std::string& language)
 {
 	// Populate factory the first time we are called.
-	if (s_factoryFunctions.empty())
+	if (s_factoryFunctions.empty() == true)
 	{
-		s_factoryFunctions.insert(std::make_pair("fr", &ZeroOneSingular::create));
-		s_factoryFunctions.insert(std::make_pair("hu", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("tr", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("cs", &CzechPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("pl", &PolishPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("ro", &RomanianPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("ru", &CyrillicPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("sk", &CzechPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("uk", &CyrillicPlurality::create));
-		s_factoryFunctions.insert(std::make_pair("ja", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("ko", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("zh-CN", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("zh-TW", &NoSingular::create));
-		s_factoryFunctions.insert(std::make_pair("hr", &CroatianPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("fr",		&ZeroOneSingular::create));
+		s_factoryFunctions.insert(std::make_pair("hu",		&NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("tr",		&NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("cs",		&CzechPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("pl",		&PolishPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ro",		&RomanianPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ru",		&CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("sk",		&CzechPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("uk",		&CyrillicPlurality::create));
+		s_factoryFunctions.insert(std::make_pair("ja",		&NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("ko",		&NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-CN",	&NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("zh-TW",	&NoSingular::create));
+		s_factoryFunctions.insert(std::make_pair("hr",		&CroatianPlurality::create));
 	}
 
 	PFCreate creator = &OneSingular::create;
-	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);
+	const std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);
 	if (found != s_factoryFunctions.end())
 	{
 		creator = found->second;

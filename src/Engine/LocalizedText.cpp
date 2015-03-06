@@ -32,9 +32,9 @@ namespace OpenXcom
  */
 LocalizedText LocalizedText::arg(const std::wstring& val) const
 {
-	std::wostringstream os;
-	os << '{' << _nextArg << '}';
-	std::wstring marker(os.str());
+	std::wostringstream ost;
+	ost << '{' << _nextArg << '}';
+	std::wstring marker(ost.str());
 	size_t pos = _text.find(marker);
 	if (std::wstring::npos == pos)
 		return *this;
@@ -65,9 +65,9 @@ LocalizedText LocalizedText::arg(const std::wstring& val) const
  */
 LocalizedText& LocalizedText::arg(const std::wstring& val)
 {
-	std::wostringstream os;
-	os << '{' << _nextArg << '}';
-	std::wstring marker(os.str());
+	std::wostringstream ost;
+	ost << '{' << _nextArg << '}';
+	std::wstring marker(ost.str());
 	size_t pos = _text.find(marker);
 	if (std::wstring::npos != pos)
 	{

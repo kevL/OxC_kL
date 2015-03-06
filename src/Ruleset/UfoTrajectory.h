@@ -33,12 +33,9 @@ namespace OpenXcom
  */
 struct TrajectoryWaypoint
 {
-	/// The mission zone.
-	size_t zone;
-	/// The altitude to reach.
-	size_t altitude;
-	/// The speed percentage ([0..100])
-	size_t speed;
+	size_t zone;		// The mission zone.
+	size_t altitude;	// The altitude to reach.
+	size_t speed;		// The speed percentage [0..100]
 };
 
 

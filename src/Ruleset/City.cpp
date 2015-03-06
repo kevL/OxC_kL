@@ -22,12 +22,28 @@
 //#define _USE_MATH_DEFINES
 //#include <math.h>
 
+#include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
 
 /**
- * Initializes a city with certain data.
+ * Instantiates a City.
+ * @note A City is a 1-pixel MissionArea within a MissionZone as defined in RuleRegion.
+ */
+City::City()
+	:
+		Target(),
+		_zoomLevel(4),
+		_labelTop(false)
+{
+	_lon =
+	_lat = 0.;
+}
+
+/**
+ * Alternate cTor for Cities. Used by TFTD-style rulesets.
  * @param name	- name of the city
  * @param lon	- longitude of the city
  * @param lat	- latitude of the city
@@ -37,12 +53,14 @@ City::City(
 		double lon,
 		double lat)
 	:
+		Target(),
 		_name(name),
-		_lon(lon),
-		_lat(lat),
 		_zoomLevel(4),
 		_labelTop(false)
-{}
+{
+	_lon = lon;
+	_lat = lat;
+}
 
 /**
  * dTor.
@@ -56,24 +74,29 @@ City::~City()
  */
 void City::load(const YAML::Node& node)
 {
-	_name		= node["name"]		.as<std::string>(_name);
-	_lon		= node["lon"]		.as<double>(_lon) * M_PI / 180.;
+	_lon		= node["lon"]		.as<double>(_lon) * M_PI / 180.; // radians
 	_lat		= node["lat"]		.as<double>(_lat) * M_PI / 180.;
-	_zoomLevel	= node["zoom"]		.as<size_t>(_zoomLevel);
+	_name		= node["name"]		.as<std::string>(_name);
+	_zoomLevel	= node["zoomLevel"]	.as<size_t>(_zoomLevel);
 	_labelTop	= node["labelTop"]	.as<bool>(_labelTop);
+
+	// iDea: _hidden, marker -1 etc.
+	// add _texture !!!
+	// add _zoneType (to specify the missionZone category 0..5+ that City is part of)
 }
 
 /**
- * Returns the name of the city.
- * @return, the city's name
+ * Returns this City's name as seen on the geoscape.
+ * @param lang - Language to get strings from
+ * @return, the city's IG name
  */
-std::string City::getName() const
+std::wstring City::getName(Language* lang) const
 {
-	return _name;
+	return lang->getString(_name);
 }
 
 /**
- * Returns the latitude coordinate of the city.
+ * Returns the latitude coordinate of this City.
  * @return, the city's latitude in radians
  */
 double City::getLatitude() const
@@ -82,12 +105,21 @@ double City::getLatitude() const
 }
 
 /**
- * Returns the longitude coordinate of the city.
+ * Returns the longitude coordinate of this City.
  * @return, the city's longitude in radians
  */
 double City::getLongitude() const
 {
 	return _lon;
+}
+
+/**
+ * Returns the globe marker for this City.
+ * @return, marker sprite
+ */
+int City::getMarker() const
+{
+	return 8;
 }
 
 /**
@@ -100,7 +132,7 @@ size_t City::getZoomLevel() const
 }
 
 /**
- * Gets if a City's label is above or below its marker.
+ * Gets if this City's label is to be positioned above or below its marker.
  * @return, true if label goes on top
  */
 bool City::getLabelTop() const

@@ -53,6 +53,7 @@ private:
 	unsigned _nextArg;	// the next argument ID.
 	std::wstring _text;	// the actual localized text.
 
+	///
 	LocalizedText(
 			const std::wstring&,
 			unsigned);
@@ -65,29 +66,30 @@ private:
 		LocalizedText()
 			:
 				_nextArg(1)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		/// Return constant wide string.
 		operator std::wstring const &() const OX_REQUIRED_RESULT;
+
 		/// Return the UTF-8 representation of this string.
 		std::string asUTF8() const OX_REQUIRED_RESULT;
+
 		/// Get a pointer to underlying wchar_t data.
 		const wchar_t* c_str() const OX_REQUIRED_RESULT
-		{
-			return _text.c_str();
-		}
+		{ return _text.c_str(); }
 
 		// Argument substitution.
 		/// Replace next argument.
 		LocalizedText arg(const std::wstring&) const OX_REQUIRED_RESULT;
 		/// Replace next argument.
 		LocalizedText& arg(const std::wstring&) OX_REQUIRED_RESULT;
+
 		/// Replace next argument.
-		template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
+		template <typename T>
+		LocalizedText arg(T) const OX_REQUIRED_RESULT;
 		/// Replace next argument.
-		template <typename T> LocalizedText& arg(T) OX_REQUIRED_RESULT;
+		template <typename T>
+		LocalizedText& arg(T) OX_REQUIRED_RESULT;
 };
 
 
@@ -98,8 +100,7 @@ inline LocalizedText::LocalizedText(const std::wstring& text)
 	:
 		_text(text),
 		_nextArg(0)
-{
-}
+{}
 
 /**
  * Create a LocalizedText with some arguments already replaced.
@@ -110,17 +111,15 @@ inline LocalizedText::LocalizedText(
 	:
 		_text(text),
 		_nextArg(replaced + 1)
-{
-}
+{}
 
 /**
  * Typecast to constant std::wstring reference.
  * This is used to avoid copying when the string will not change.
  */
-inline LocalizedText::operator std::wstring const &() const
-{
-	return _text;
-}
+inline LocalizedText::operator std::wstring const & () const
+{ return _text; }
+
 
 /**
  * Replace the next argument placeholder with @a val.
@@ -131,18 +130,18 @@ inline LocalizedText::operator std::wstring const &() const
 template <typename T>
 LocalizedText LocalizedText::arg(T val) const
 {
-	std::wostringstream os;
-	os << '{' << _nextArg << '}';
-	std::wstring marker(os.str());
+	std::wostringstream woststr;
+	woststr << '{' << _nextArg << '}';
+	std::wstring marker (woststr.str()); // init.
 
 	size_t pos = _text.find(marker);
 	if (std::string::npos == pos)
 		return *this;
 
-	std::wstring ntext(_text);
-	os.str(L"");
-	os << val;
-	std::wstring tval(os.str());
+	std::wstring ntext (_text); // init.
+	woststr.str(L"");
+	woststr << val;
+	std::wstring tval (woststr.str()); // init.
 
 	for (
 			;
@@ -172,16 +171,16 @@ LocalizedText LocalizedText::arg(T val) const
 template <typename T>
 LocalizedText& LocalizedText::arg(T val)
 {
-	std::wostringstream os;
-	os << '{' << _nextArg << '}';
-	std::wstring marker(os.str());
+	std::wostringstream woststr;
+	woststr << '{' << _nextArg << '}';
+	std::wstring marker (woststr.str()); // init.
 
 	size_t pos = _text.find(marker);
 	if (std::string::npos != pos)
 	{
-		os.str(L"");
-		os << val;
-		std::wstring tval(os.str());
+		woststr.str(L"");
+		woststr << val;
+		std::wstring tval (woststr.str()); // init.
 
 		for (
 				;
@@ -204,13 +203,12 @@ LocalizedText& LocalizedText::arg(T val)
 
 
 /// Allow streaming of LocalizedText objects.
-inline std::wostream& operator<<(
-							std::wostream &os,
-							const LocalizedText &txt)
+inline std::wostream& operator << (
+								std::wostream& wostr,
+								const LocalizedText& txt)
 {
-	os << static_cast<std::wstring const&>(txt);
-
-	return os;
+	wostr << static_cast<std::wstring const&>(txt);
+	return wostr;
 }
 
 }

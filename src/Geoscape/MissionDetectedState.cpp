@@ -34,6 +34,8 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/AlienDeployment.h"
+
 #include "../Savegame/MissionSite.h"
 #include "../Savegame/SavedGame.h"
 
@@ -44,12 +46,10 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Mission Detected window.
  * @param mission	- pointer to the respective Mission Site
- * @param city		- reference the attacked city's name if any
  * @param state		- pointer to GeoscapeState
  */
 MissionDetectedState::MissionDetectedState(
 		MissionSite* mission,
-		const std::string& city,
 		GeoscapeState* state)
 	:
 		_mission(mission),
@@ -68,45 +68,43 @@ MissionDetectedState::MissionDetectedState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("terrorSite")->getElement("palette")->color); //3
+			_game->getRuleset()->getInterface("terrorSite")->getElement("palette")->color);
 
-	add(_window, "window", "terrorSite");
-	add(_txtTitle, "text", "terrorSite");
-	add(_txtCity, "text", "terrorSite");
-	add(_btnIntercept, "button", "terrorSite");
-	add(_btnCenter, "button", "terrorSite");
-	add(_btnCancel, "button", "terrorSite");
+	add(_window,		"window",	"terrorSite");
+	add(_txtTitle,		"text",		"terrorSite");
+	add(_txtCity,		"text",		"terrorSite");
+	add(_btnIntercept,	"button",	"terrorSite");
+	add(_btnCenter,		"button",	"terrorSite");
+	add(_btnCancel,		"button",	"terrorSite");
 
 	centerAllSurfaces();
 
-//	_window->setColor(Palette::blockOffset(8)+5);
+
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
 
-//	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& MissionDetectedState::btnInterceptClick);
 
-//	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
 	_btnCenter->onMouseClick((ActionHandler)& MissionDetectedState::btnCenterClick);
+	_btnCenter->onKeyboardPress(
+					(ActionHandler)& MissionDetectedState::btnCenterClick,
+					Options::keyOk);
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& MissionDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& MissionDetectedState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr("STR_ALIENS_TERRORISE"));
+	_txtTitle->setText(tr(mission->getDeployment()->getAlertMessage()));
 
-	_txtCity->setColor(Palette::blockOffset(8)+5);
 	_txtCity->setBig();
 	_txtCity->setAlign(ALIGN_CENTER);
-	_txtCity->setText(tr(city));
+	_txtCity->setText(tr(mission->getCity()));
 }
 
 /**
@@ -122,16 +120,12 @@ MissionDetectedState::~MissionDetectedState()
 void MissionDetectedState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
-//	_state->getGlobe()->center(
-//							_mission->getLongitude(),
-//							_mission->getLatitude());
-	_game->popState();
 
+	_game->popState();
 	_game->pushState(new InterceptState(
 									_state->getGlobe(),
 									NULL,
-//									_mission,
-									_state)); // kL_add.
+									_state));
 }
 
 /**
@@ -141,7 +135,6 @@ void MissionDetectedState::btnInterceptClick(Action*)
 void MissionDetectedState::btnCenterClick(Action*)
 {
 	_state->timerReset();
-
 	_state->getGlobe()->center(
 							_mission->getLongitude(),
 							_mission->getLatitude());

@@ -52,6 +52,7 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
@@ -113,38 +114,40 @@ NewBattleState::NewBattleState()
 	_btnRandom			= new TextButton(100, 16, 110, 176);
 	_btnOk				= new TextButton(100, 16, 212, 176);
 
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("newBattleMenu")->getElement("palette")->color);
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("newBattleMenu")->getElement("palette")->color);
 
-	add(_window, "window", "newBattleMenu");
-	add(_txtTitle, "heading", "newBattleMenu");
-	add(_txtMapOptions, "heading", "newBattleMenu");
-	add(_frameLeft, "frames", "newBattleMenu");
-	add(_txtAlienOptions, "heading", "newBattleMenu");
-	add(_frameRight, "frames", "newBattleMenu");
+	add(_window,			"window",	"newBattleMenu");
+	add(_txtTitle,			"heading",	"newBattleMenu");
+	add(_txtMapOptions,		"heading",	"newBattleMenu");
+	add(_frameLeft,			"frames",	"newBattleMenu");
+	add(_txtAlienOptions,	"heading",	"newBattleMenu");
+	add(_frameRight,		"frames",	"newBattleMenu");
 
-	add(_txtMission, "text", "newBattleMenu");
-	add(_txtCraft, "text", "newBattleMenu");
-	add(_btnEquip, "button1", "newBattleMenu");
+	add(_txtMission,		"text",		"newBattleMenu");
+	add(_txtCraft,			"text",		"newBattleMenu");
+	add(_btnEquip,			"button1",	"newBattleMenu");
 
-	add(_txtDarkness, "text", "newBattleMenu");
-	add(_slrDarkness, "button1", "newBattleMenu");
-	add(_txtDepth, "text", "newBattleMenu");
-	add(_slrDepth, "button1", "newBattleMenu");
-	add(_txtTerrain, "text", "newBattleMenu");
-	add(_txtDifficulty, "text", "newBattleMenu");
-	add(_txtAlienRace, "text", "newBattleMenu");
-	add(_txtAlienTech, "text", "newBattleMenu");
-	add(_slrAlienTech, "button1", "newBattleMenu");
+	add(_txtDarkness,		"text",		"newBattleMenu");
+	add(_slrDarkness,		"button1",	"newBattleMenu");
+	add(_txtDepth,			"text",		"newBattleMenu");
+	add(_slrDepth,			"button1",	"newBattleMenu");
+	add(_txtTerrain,		"text",		"newBattleMenu");
+	add(_txtDifficulty,		"text",		"newBattleMenu");
+	add(_txtAlienRace,		"text",		"newBattleMenu");
+	add(_txtAlienTech,		"text",		"newBattleMenu");
+	add(_slrAlienTech,		"button1",	"newBattleMenu");
 
-	add(_btnOk, "button2", "newBattleMenu");
-	add(_btnCancel, "button2", "newBattleMenu");
-	add(_btnRandom, "button2", "newBattleMenu");
+	add(_btnOk,				"button2",	"newBattleMenu");
+	add(_btnCancel,			"button2",	"newBattleMenu");
+	add(_btnRandom,			"button2",	"newBattleMenu");
 
-	add(_cbxTerrain, "button1", "newBattleMenu");
-	add(_cbxAlienRace, "button1", "newBattleMenu");
-	add(_cbxDifficulty, "button1", "newBattleMenu");
-	add(_cbxCraft, "button1", "newBattleMenu");
-	add(_cbxMission, "button1", "newBattleMenu");
+	add(_cbxTerrain,		"button1",	"newBattleMenu");
+	add(_cbxAlienRace,		"button1",	"newBattleMenu");
+	add(_cbxDifficulty,		"button1",	"newBattleMenu");
+	add(_cbxCraft,			"button1",	"newBattleMenu");
+	add(_cbxMission,		"button1",	"newBattleMenu");
 
 	centerAllSurfaces();
 
@@ -180,21 +183,35 @@ NewBattleState::NewBattleState()
 	_txtAlienTech->setText(tr("STR_ALIEN_TECH_LEVEL"));
 
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
+	_cbxMission->setOptions(_missionTypes);
+	_cbxMission->onChange((ActionHandler)& NewBattleState::cbxMissionChange);
 
-	const std::vector<std::string>& terrainTypes = _game->getRuleset()->getTerrainList();
-	std::vector<std::string> terrainStrings;
+	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator
-			i = terrainTypes.begin();
-			i != terrainTypes.end();
+			i = crafts.begin();
+			i != crafts.end();
 			++i)
 	{
-		if (_game->getRuleset()->getTerrain(*i)->getTextures()->empty() == false)
-		{
-			_terrainTypes.push_back(*i);
-			terrainStrings.push_back("STR_" + *i);
-			_textures.push_back(_game->getRuleset()->getTerrain(*i)->getTextures()->at(0));
-		}
+		const RuleCraft* const rule = _game->getRuleset()->getCraft(*i);
+		if (rule->getSoldiers() > 0)
+			_crafts.push_back(*i);
 	}
+	_cbxCraft->setOptions(_crafts);
+	_cbxCraft->onChange((ActionHandler)& NewBattleState::cbxCraftChange);
+
+	_slrDarkness->setRange(0,15);
+
+	_slrDepth->setRange(1,3);
+
+	_cbxTerrain->onChange((ActionHandler)& NewBattleState::cbxTerrainChange);
+
+	std::vector<std::string> difficulty;
+	difficulty.push_back("STR_1_BEGINNER");
+	difficulty.push_back("STR_2_EXPERIENCED");
+	difficulty.push_back("STR_3_VETERAN");
+	difficulty.push_back("STR_4_GENIUS");
+	difficulty.push_back("STR_5_SUPERHUMAN");
+	_cbxDifficulty->setOptions(difficulty);
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
 	for (std::vector<std::string>::const_iterator
@@ -207,40 +224,6 @@ NewBattleState::NewBattleState()
 		else
 			++i;
 	}
-
-	std::vector<std::string> difficulty;
-	difficulty.push_back("STR_1_BEGINNER");
-	difficulty.push_back("STR_2_EXPERIENCED");
-	difficulty.push_back("STR_3_VETERAN");
-	difficulty.push_back("STR_4_GENIUS");
-	difficulty.push_back("STR_5_SUPERHUMAN");
-
-	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
-	for (std::vector<std::string>::const_iterator
-			i = crafts.begin();
-			i != crafts.end();
-			++i)
-	{
-		const RuleCraft* const rule = _game->getRuleset()->getCraft(*i);
-		if (rule->getSoldiers() > 0)
-			_crafts.push_back(*i);
-	}
-
-	_cbxMission->setOptions(_missionTypes);
-	_cbxMission->onChange((ActionHandler)& NewBattleState::cbxMissionChange);
-
-	_cbxCraft->setOptions(_crafts);
-	_cbxCraft->onChange((ActionHandler)& NewBattleState::cbxCraftChange);
-
-	_slrDarkness->setRange(0,15);
-
-	_slrDepth->setRange(1,3);
-
-	_cbxTerrain->setOptions(terrainStrings);
-	_cbxTerrain->onChange((ActionHandler)& NewBattleState::cbxTerrainChange);
-
-	_cbxDifficulty->setOptions(difficulty);
-
 	_cbxAlienRace->setOptions(_alienRaces);
 
 	_slrAlienTech->setRange(
@@ -287,7 +270,7 @@ void NewBattleState::init()
 
 /**
  * Loads new battle data from a YAML file.
- * @param filename - reference a YAML filename
+ * @param filename - reference a YAML filename (default "battle")
  */
 void NewBattleState::load(const std::string& filename)
 {
@@ -303,6 +286,8 @@ void NewBattleState::load(const std::string& filename)
 			_cbxMission->setSelected(std::min(
 									doc["mission"].as<size_t>(0),
 									_missionTypes.size() - 1));
+			cbxMissionChange(NULL);
+
 			_cbxCraft->setSelected(std::min(
 									doc["craft"].as<size_t>(0),
 									_crafts.size() - 1));
@@ -315,8 +300,6 @@ void NewBattleState::load(const std::string& filename)
 									_alienRaces.size() - 1));
 			_cbxDifficulty->setSelected(doc["difficulty"].as<size_t>(0));
 			_slrAlienTech->setValue(doc["alienTech"].as<size_t>(0));
-
-			cbxMissionChange(NULL);
 
 			if (doc["base"])
 			{
@@ -395,7 +378,7 @@ void NewBattleState::load(const std::string& filename)
 
 /**
  * Saves new battle data to a YAML file.
- * @param filename - reference a YAML filename
+ * @param filename - reference a YAML filename (default "battle")
  */
 void NewBattleState::save(const std::string& filename)
 {
@@ -541,6 +524,7 @@ void NewBattleState::initSave()
 	}
 
 	_game->setSavedGame(save);
+	cbxMissionChange(NULL);
 }
 
 /**
@@ -564,7 +548,7 @@ void NewBattleState::btnOkClick(Action*)
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	Base* base = NULL;
 
-	bgen.setSiteTexture(_textures[_cbxTerrain->getSelected()]);
+	bgen.setTerrain(_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE") // base defense
 	{
@@ -590,12 +574,6 @@ void NewBattleState::btnOkClick(Action*)
 		_craft->setDestination(ufo);
 		bgen.setUfo(ufo);
 
-		if (_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()])->getHemisphere() < 0)
-//		if (RNG::percent(50) == true)
-			ufo->setLatitude(0.5);
-		else
-			ufo->setLatitude(-0.5);
-
 		// either ground assault or ufo crash
 		if (RNG::percent(50) == true)
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
@@ -604,29 +582,20 @@ void NewBattleState::btnOkClick(Action*)
 
 		_game->getSavedGame()->getUfos()->push_back(ufo);
 	}
-	else //if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION") // terror site / alien artefact
+	else // mission site
 	{
-		for (std::vector<std::string>::const_iterator
-				i = _game->getRuleset()->getAlienMissionList().begin();
-				i != _game->getRuleset()->getAlienMissionList().end();
-				++i)
-		{
-			const RuleAlienMission* ruleMission = _game->getRuleset()->getAlienMission(*i);
+		const AlienDeployment* deployment = _game->getRuleset()->getDeployment(bgame->getMissionType());
+		const RuleAlienMission* mission = _game->getRuleset()->getAlienMission(_game->getRuleset()->getAlienMissionList().front()); // doesn't matter
+		MissionSite* ms = new MissionSite(
+										mission,
+										deployment);
+		ms->setId(1);
+		ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 
-			if (bgame->getMissionType() == ruleMission->getDeployment())
-			{
-				MissionSite* const ms = new MissionSite(ruleMission);
-				ms->setId(1);
-				ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+		_craft->setDestination(ms);
 
-				_craft->setDestination(ms);
-
-				bgen.setMissionSite(ms);
-				_game->getSavedGame()->getMissionSites()->push_back(ms);
-
-				break;
-			}
-		}
+		bgen.setMissionSite(ms);
+		_game->getSavedGame()->getMissionSites()->push_back(ms);
 	}
 
 	if (_craft != NULL)
@@ -673,33 +642,34 @@ void NewBattleState::btnCancelClick(Action*)
  */
 void NewBattleState::btnRandomClick(Action*)
 {
+	initSave();
+
 	_cbxMission->setSelected(RNG::generate(
 										0,
 										_missionTypes.size() - 1));
+	cbxMissionChange(NULL);
+
 	_cbxCraft->setSelected(RNG::generate(
 										0,
 										_crafts.size() - 1));
-	_slrDarkness->setValue(RNG::generate(
-										0,
-										15));
+	cbxCraftChange(NULL);
+
+	_slrDarkness->setValue(RNG::generate(0,15));
+
 	_cbxTerrain->setSelected(RNG::generate(
 										0,
 										_terrainTypes.size() - 1));
+	cbxTerrainChange(NULL);
+
 	_cbxAlienRace->setSelected(RNG::generate(
 										0,
 										_alienRaces.size() - 1));
-	_cbxDifficulty->setSelected(RNG::generate(
-										0,
-										4));
+
+	_cbxDifficulty->setSelected(RNG::generate(0,4));
+
 	_slrAlienTech->setValue(RNG::generate(
 										0,
 										_game->getRuleset()->getAlienItemLevels().size() - 1));
-
-	cbxMissionChange(NULL);
-	cbxCraftChange(NULL);
-	cbxTerrainChange(NULL);
-
-	initSave();
 }
 
 /**
@@ -721,14 +691,59 @@ void NewBattleState::cbxMissionChange(Action*)
 {
 	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 
-	_txtDarkness->setVisible(ruleDeploy->getShade() == -1);
-	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
-	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
-	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
+	// Get terrains associated with this mission
+	std::vector<std::string>
+		deployTerrains = ruleDeploy->getTerrains(),
+		globeTerrains;
+
+	if (deployTerrains.empty() == true)
+		globeTerrains = _game->getRuleset()->getGlobe()->getTerrains("");
+	else
+		globeTerrains = _game->getRuleset()->getGlobe()->getTerrains(ruleDeploy->getType());
+
+	std::set<std::string> terrains;
+
+	for (std::vector<std::string>::const_iterator
+			i = deployTerrains.begin();
+			i != deployTerrains.end();
+			++i)
+	{
+		terrains.insert(*i);
+	}
+
+	for (std::vector<std::string>::const_iterator
+		i = globeTerrains.begin();
+		i != globeTerrains.end();
+		++i)
+	{
+		terrains.insert(*i);
+	}
+
+	_terrainTypes.clear();
+
+	std::vector<std::string> terrainStrings;
+	for (std::set<std::string>::const_iterator
+			i = terrains.begin();
+			i != terrains.end();
+			++i)
+	{
+		_terrainTypes.push_back(*i);
+		terrainStrings.push_back("STR_" + *i);
+	}
+
+	// Hide controls that don't apply to mission
+	bool vis = ruleDeploy->getShade() == -1;
+	_txtDarkness->setVisible(vis);
+	_slrDarkness->setVisible(vis);
+
+	vis = _terrainTypes.size() > 1;
+	_txtTerrain->setVisible(vis);
+	_cbxTerrain->setVisible(vis);
+
+	_cbxTerrain->setOptions(terrainStrings);
+	_cbxTerrain->setSelected(0);
 
 	cbxTerrainChange(NULL);
-	// TODO: allow choice of terrains if Terror-type mission is selected.
-	// Ps. Terrain-selection btn still goes *Bleep* even when not visible.
 }
 
 /**

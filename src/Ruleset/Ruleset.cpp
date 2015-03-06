@@ -64,6 +64,7 @@
 //#include "../Engine/Exception.h"
 //#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
+//#include "../Engine/RNG.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -95,14 +96,7 @@ Ruleset::Ruleset(Game* game)
 		_costScientist(0),
 		_timePersonnel(0),
 		_initialFunding(0),
-		_startingTime(
-			6,
-			1,
-			1,
-			1999,
-			12,
-			0,
-			0),
+		_startingTime(6,1,1,1999,12,0,0),
 		_modIndex(0),
 		_facilityListOrder(0),
 		_craftListOrder(0),
@@ -417,7 +411,7 @@ Ruleset::~Ruleset()
 }
 
 /**
- * kL. Reloads the country lines from Geography rulefile.
+ * Reloads the country lines from Geography rulefile.
  * @note Used in Geoscape's debugmode.
  */
 void Ruleset::reloadCountryLines()
@@ -771,15 +765,15 @@ void Ruleset::loadFile(const std::string& filename)
 				const UfopaediaTypeId type = (UfopaediaTypeId)(*i)["type_id"].as<int>();
 				switch (type)
 				{
-					case UFOPAEDIA_TYPE_CRAFT:			rule = new ArticleDefinitionCraft();		break;
-					case UFOPAEDIA_TYPE_CRAFT_WEAPON:	rule = new ArticleDefinitionCraftWeapon();	break;
-					case UFOPAEDIA_TYPE_VEHICLE:		rule = new ArticleDefinitionVehicle();		break;
-					case UFOPAEDIA_TYPE_ITEM:			rule = new ArticleDefinitionItem();			break;
-					case UFOPAEDIA_TYPE_ARMOR:			rule = new ArticleDefinitionArmor();		break;
-					case UFOPAEDIA_TYPE_BASE_FACILITY:	rule = new ArticleDefinitionBaseFacility();	break;
-					case UFOPAEDIA_TYPE_TEXTIMAGE:		rule = new ArticleDefinitionTextImage();	break;
-					case UFOPAEDIA_TYPE_TEXT:			rule = new ArticleDefinitionText();			break;
-					case UFOPAEDIA_TYPE_UFO:			rule = new ArticleDefinitionUfo();			break;
+					case UFOPAEDIA_TYPE_CRAFT:				rule = new ArticleDefinitionCraft();		break;
+					case UFOPAEDIA_TYPE_CRAFT_WEAPON:		rule = new ArticleDefinitionCraftWeapon();	break;
+					case UFOPAEDIA_TYPE_VEHICLE:			rule = new ArticleDefinitionVehicle();		break;
+					case UFOPAEDIA_TYPE_ITEM:				rule = new ArticleDefinitionItem();			break;
+					case UFOPAEDIA_TYPE_ARMOR:				rule = new ArticleDefinitionArmor();		break;
+					case UFOPAEDIA_TYPE_BASE_FACILITY:		rule = new ArticleDefinitionBaseFacility();	break;
+					case UFOPAEDIA_TYPE_TEXTIMAGE:			rule = new ArticleDefinitionTextImage();	break;
+					case UFOPAEDIA_TYPE_TEXT:				rule = new ArticleDefinitionText();			break;
+					case UFOPAEDIA_TYPE_UFO:				rule = new ArticleDefinitionUfo();			break;
 					case UFOPAEDIA_TYPE_TFTD:
 					case UFOPAEDIA_TYPE_TFTD_CRAFT:
 					case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
@@ -787,11 +781,10 @@ void Ruleset::loadFile(const std::string& filename)
 					case UFOPAEDIA_TYPE_TFTD_ITEM:
 					case UFOPAEDIA_TYPE_TFTD_ARMOR:
 					case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
-					case UFOPAEDIA_TYPE_TFTD_USO:		rule = new ArticleDefinitionTFTD();			break;
+					case UFOPAEDIA_TYPE_TFTD_USO:			rule = new ArticleDefinitionTFTD();			break;
 
 					default:
 						rule = NULL;
-					break;
 				}
 
 				_ufopaediaArticles[id] = rule;
@@ -806,7 +799,7 @@ void Ruleset::loadFile(const std::string& filename)
 		else if ((*i)["delete"])
 		{
 			const std::string type = (*i)["delete"].as<std::string>();
-			const std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.find(type);
+			const std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(type);
 			if (i != _ufopaediaArticles.end())
 				_ufopaediaArticles.erase(i);
 
@@ -1157,9 +1150,9 @@ void Ruleset::loadFile(const std::string& filename)
 			i != doc["cutscenes"].end();
 			++i)
 	{
-		RuleVideo* rule = loadRule(
-								*i,
-								&_videos);
+		RuleVideo* const rule = loadRule(
+									*i,
+									&_videos);
 		if (rule != NULL)
 			rule->load(*i);
 	}
@@ -1340,8 +1333,8 @@ RuleCountry* Ruleset::getCountry(const std::string& id) const
 	std::map<std::string, RuleCountry*>::const_iterator i = _countries.find(id);
 	if (i != _countries.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1363,8 +1356,8 @@ RuleRegion* Ruleset::getRegion(const std::string& id) const
 	std::map<std::string, RuleRegion*>::const_iterator i = _regions.find(id);
 	if (i != _regions.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1386,8 +1379,8 @@ RuleBaseFacility* Ruleset::getBaseFacility(const std::string& id) const
 	std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.find(id);
 	if (i != _facilities.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1409,8 +1402,8 @@ RuleCraft* Ruleset::getCraft(const std::string& id) const
 	std::map<std::string, RuleCraft*>::const_iterator i = _crafts.find(id);
 	if (i != _crafts.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1432,8 +1425,8 @@ RuleCraftWeapon* Ruleset::getCraftWeapon(const std::string& id) const
 	std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.find(id);
 	if (i != _craftWeapons.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1454,8 +1447,8 @@ RuleItem* Ruleset::getItem(const std::string& id) const
 {
 	if (_items.find(id) != _items.end())
 		return _items.find(id)->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1477,8 +1470,8 @@ RuleUfo* Ruleset::getUfo(const std::string& id) const
 	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
 	if (i != _ufos.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1510,8 +1503,8 @@ RuleTerrain* Ruleset::getTerrain(const std::string& name) const
 
 	if (i != _terrains.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1526,13 +1519,12 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 	{
 		MapDataSet* const dataSet = new MapDataSet(
 												name,
-												_game); // kL_add
+												_game);
 		_mapDataSets[name] = dataSet;
-
 		return dataSet;
 	}
-	else
-		return i->second;
+
+	return i->second;
 }
 
 /**
@@ -1545,8 +1537,8 @@ RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
 	if (i != _soldiers.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1568,8 +1560,8 @@ Unit* Ruleset::getUnit(const std::string& name) const
 	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
 	if (i != _units.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1582,8 +1574,8 @@ AlienRace* Ruleset::getAlienRace(const std::string& name) const
 	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
 	if (i != _alienRaces.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1605,8 +1597,8 @@ AlienDeployment* Ruleset::getDeployment(const std::string& name) const
 	std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.find(name);
 	if (i != _alienDeployments.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1628,8 +1620,8 @@ Armor* Ruleset::getArmor(const std::string& name) const
 	std::map<std::string, Armor*>::const_iterator i = _armors.find(name);
 	if (i != _armors.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1687,8 +1679,8 @@ ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 	std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(name);
 	if (i != _ufopaediaArticles.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1719,8 +1711,8 @@ RuleInventory* Ruleset::getInventory(const std::string& id) const
 	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
 	if (i != _invs.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1742,8 +1734,8 @@ RuleResearch* Ruleset::getResearch(const std::string& id) const
 	std::map<std::string, RuleResearch*>::const_iterator i = _research.find(id);
 	if (i != _research.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1765,8 +1757,8 @@ RuleManufacture* Ruleset::getManufacture(const std::string& id) const
 	std::map<std::string, RuleManufacture*>::const_iterator i = _manufacture.find(id);
 	if (i != _manufacture.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1793,7 +1785,7 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 			i != _startingBase["facilities"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
+		const std::string type = (*i)["type"].as<std::string>();
 		if (type != "STR_ACCESS_LIFT")
 			PlaceList.push_back(getBaseFacility(type));
 	}
@@ -1812,8 +1804,8 @@ const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 
 	if (i != _ufoTrajectories.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -1826,8 +1818,49 @@ const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 	std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.find(id);
 	if (i != _alienMissions.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
+}
+
+/**
+ * Returns the rules for a random alien mission based on a specific objective.
+ * @param objective		- alien mission objective
+ * @param monthsPassed	- the number of months since game start
+ * @return, pointer to RuleAlienMission
+ */
+const RuleAlienMission* Ruleset::getRandomMission(
+		MissionObjective objective,
+		size_t monthsPassed) const
+{
+	int totalWeight = 0;
+
+	std::map<int, RuleAlienMission*> eligibleMissions;
+	for (std::map<std::string, RuleAlienMission*>::const_iterator
+			i = _alienMissions.begin();
+			i != _alienMissions.end();
+			++i)
+	{
+		if (i->second->getObjective() == objective
+			&& i->second->getWeight(monthsPassed) > 0)
+		{
+			totalWeight += i->second->getWeight(monthsPassed);
+			eligibleMissions[totalWeight] = i->second;
+		}
+	}
+
+	const int pick = RNG::generate(
+								1,
+								totalWeight);
+	for (std::map<int, RuleAlienMission*>::const_iterator
+			i = eligibleMissions.begin();
+			i != eligibleMissions.end();
+			++i)
+	{
+		if (pick <= i->first)
+			return i->second;
+	}
+
+	return NULL;
 }
 
 /**
@@ -1837,77 +1870,6 @@ const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 const std::vector<std::string>& Ruleset::getAlienMissionList() const
 {
 	return _alienMissionsIndex;
-}
-
-
-#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
-
-/**
- * @brief Match a city based on coordinates.
- * This function object compares a city's coordinates with the stored coordinates.
- */
-class EqualCoordinates
-	:
-		std::unary_function<const City*, bool>
-{
-private:
-	double
-		_lon,
-		_lat;
-
-	public:
-		/// Remembers the coordinates.
-		EqualCoordinates(
-				double lon,
-				double lat)
-			:
-				_lon(lon),
-				_lat(lat)
-		{
-			/* Empty by design */
-		}
-
-		/// Compares with stored coordinates.
-/*		bool operator()(const City* city) const
-		{
-			return AreSame(city->getLongitude(), _lon)
-				&& AreSame(city->getLatitude(), _lat);
-		} */
-		bool operator()(const City* city) const
-		{
-			return (std::fabs(city->getLongitude() - _lon) < CITY_EPSILON)
-				&& (std::fabs(city->getLatitude() - _lat) < CITY_EPSILON);
-		}
-};
-
-
-/**
- * Finds the city at coordinates @a lon, @a lat. The search will only match exact coordinates.
- * @param lon - the longitude
- * @param lat - the latitude
- * @return, a pointer to the City information, or NULL if no city was found
- */
-const City* Ruleset::locateCity(
-		double lon,
-		double lat) const
-{
-	for (std::map<std::string, RuleRegion*>::const_iterator
-			i = _regions.begin();
-			i != _regions.end();
-			++i)
-	{
-		const std::vector<City*>& cities = *i->second->getCities();
-		std::vector<City*>::const_iterator j = std::find_if(
-														cities.begin(),
-														cities.end(),
-														EqualCoordinates(
-																		lon,
-																		lat));
-		if (j != cities.end())
-			return *j;
-	}
-
-	return NULL;
 }
 
 /**
@@ -1947,8 +1909,8 @@ MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
 	if (i != _MCDPatches.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -2022,15 +1984,15 @@ struct compareRule
 		:
 			_ruleset(ruleset),
 			_lookup(lookup)
-	{
-	}
+	{}
 
 	bool operator()(
 			const std::string& r1,
 			const std::string& r2) const
 	{
-		T* rule1 = (_ruleset->*_lookup)(r1);
-		T* rule2 = (_ruleset->*_lookup)(r2);
+		const T
+			* const rule1 = (_ruleset->*_lookup)(r1),
+			* const rule2 = (_ruleset->*_lookup)(r2);
 
 		return (rule1->getListOrder() < rule2->getListOrder());
 	}
@@ -2049,15 +2011,15 @@ struct compareRule<RuleCraftWeapon>
 	compareRule(Ruleset* ruleset)
 		:
 			_ruleset(ruleset)
-	{
-	}
+	{}
 
 	bool operator()(
 			const std::string& r1,
 			const std::string& r2) const
 	{
-		RuleItem* rule1 = _ruleset->getItem(_ruleset->getCraftWeapon(r1)->getLauncherItem());
-		RuleItem* rule2 = _ruleset->getItem(_ruleset->getCraftWeapon(r2)->getLauncherItem());
+		const RuleItem
+			* const rule1 = _ruleset->getItem(_ruleset->getCraftWeapon(r1)->getLauncherItem()),
+			* const rule2 = _ruleset->getItem(_ruleset->getCraftWeapon(r2)->getLauncherItem());
 
 		return (rule1->getListOrder() < rule2->getListOrder());
 	}
@@ -2077,26 +2039,29 @@ struct compareRule<Armor>
 	compareRule(Ruleset* ruleset)
 		:
 			_ruleset(ruleset)
-	{
-	}
+	{}
 
 	bool operator()(
 			const std::string& r1,
 			const std::string& r2) const
 	{
-		Armor* armor1 = _ruleset->getArmor(r1);
-		Armor* armor2 = _ruleset->getArmor(r2);
-		RuleItem* rule1 = _ruleset->getItem(armor1->getStoreItem());
-		RuleItem* rule2 = _ruleset->getItem(armor2->getStoreItem());
+		const Armor
+			* const armor1 = _ruleset->getArmor(r1),
+			* const armor2 = _ruleset->getArmor(r2);
+		const RuleItem
+			* const rule1 = _ruleset->getItem(armor1->getStoreItem()),
+			* const rule2 = _ruleset->getItem(armor2->getStoreItem());
 
-		if (!rule1 && !rule2)
+		if (rule1 == NULL && rule2 == NULL)
 			return (armor1 < armor2); // tiebreaker, don't care about order, pointers are as good as any
-		else if (!rule1)
+
+		if (rule1 == NULL)
 			return true;
-		else if (!rule2)
+
+		if (rule2 == NULL)
 			return false;
-		else
-			return (rule1->getListOrder() < rule2->getListOrder());
+
+		return (rule1->getListOrder() < rule2->getListOrder());
 	}
 };
 
@@ -2131,13 +2096,14 @@ struct compareRule<ArticleDefinition>
 			const std::string& r1,
 			const std::string& r2) const
 	{
-		ArticleDefinition* rule1 = _ruleset->getUfopaediaArticle(r1);
-		ArticleDefinition* rule2 = _ruleset->getUfopaediaArticle(r2);
+		const ArticleDefinition
+			* const rule1 = _ruleset->getUfopaediaArticle(r1),
+			* const rule2 = _ruleset->getUfopaediaArticle(r2);
 
 		if (_sections[rule1->section] == _sections[rule2->section])
 			return (rule1->getListOrder() < rule2->getListOrder());
-		else
-			return (_sections[rule1->section] < _sections[rule2->section]);
+
+		return (_sections[rule1->section] < _sections[rule2->section]);
 	}
 };
 
@@ -2362,8 +2328,8 @@ RuleInterface* Ruleset::getInterface(const std::string& id) const
 	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
 	if (i != _interfaces.end())
 		return i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
@@ -2403,13 +2369,13 @@ const std::vector<MapScript*>* Ruleset::getMapScript(const std::string& id) cons
 	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
 	if (i != _mapScripts.end())
 		return &i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 /**
  * Gets the list of videos.
- * return, pointer to a map of strings & pointers to RuleVideos
+ * @return, pointer to a map of strings & pointers to RuleVideos
  */
 const std::map<std::string, RuleVideo*>* Ruleset::getVideos() const
 {

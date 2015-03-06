@@ -48,10 +48,12 @@
 #include "../Ruleset/MCDPatch.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
 //#include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
+#include "../Ruleset/Texture.h"
 #include "../Ruleset/Unit.h"
 
 #include "../Savegame/AlienBase.h"
@@ -108,7 +110,6 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_battleOrder(0),
 		_isCity(false)
 {
-	//Log(LOG_INFO) << "Run BattlescapeGenerator";
 	_allowAutoLoadout = !Options::disableAutoEquip;
 }
 
@@ -116,9 +117,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
  * Deletes the BattlescapeGenerator.
  */
 BattlescapeGenerator::~BattlescapeGenerator()
-{
-	//Log(LOG_INFO) << "Delete BattlescapeGenerator";
-}
+{}
 
 /**
  * Sets up the various arrays and whatnot according to the size of the map.
@@ -151,8 +150,7 @@ void BattlescapeGenerator::init()
 
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 
-	// creates the tile objects
-	_battleSave->initMap(
+	_battleSave->initMap( // creates the tile objects
 					_mapsize_x,
 					_mapsize_y,
 					_mapsize_z);
@@ -232,11 +230,8 @@ void BattlescapeGenerator::setSiteTerrain(RuleTerrain* terrain)
  * This is used to determine the terrain if siteTerrain is ""/ NULL.
  * @param texture - texture id of the polygon on the globe
  */
-void BattlescapeGenerator::setSiteTexture(int texture)
+void BattlescapeGenerator::setSiteTexture(Texture* texture)
 {
-	if (texture < 0)
-		texture = 0;
-
 	_siteTexture = texture;
 }
 
@@ -262,7 +257,6 @@ void BattlescapeGenerator::setSiteShade(int shade)
  */
 void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
 {
-	//Log(LOG_INFO) << "gen, race = " << alienRace;
 	_alienRace = alienRace;
 	_battleSave->setAlienRace(alienRace);
 }
@@ -496,7 +490,28 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrains().empty() == true) // UFO crashed/landed
+	if (_terrain == NULL)
+	{
+		if (_siteTexture == NULL
+			|| _siteTexture->getTerrain()->empty() == true)
+		{
+			size_t pick = RNG::generate(
+									0,
+									ruleDeploy->getTerrains().size() - 1);
+			_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+		}
+		else
+		{
+			const Target* target;
+			if (_mission != NULL)
+				target = _mission;
+			else
+				target = _ufo;
+
+			_terrain = _game->getRuleset()->getTerrain(_siteTexture->getRandomTerrain(target));
+		}
+	}
+/*	if (ruleDeploy->getTerrains().empty() == true) // UFO crashed/landed
 	{
 		Log(LOG_INFO) << "bGen::run() deployment-terrains NOT valid";
 		if (_siteTerrain == NULL) // kL
@@ -531,7 +546,7 @@ void BattlescapeGenerator::run()
 										0,
 										ruleDeploy->getTerrains().size() - 1);
 		_terrain = _rules->getTerrain(ruleDeploy->getTerrains().at(pick));
-	}
+	} */
 
 	// new battle menu will have set the depth already
 	if (_terrain->getMaxDepth() > 0
@@ -595,7 +610,7 @@ void BattlescapeGenerator::run()
 	generateMap(script); // <-- BATTLE MAP GENERATION.
 
 	_battleSave->setTerrain(_terrain->getName()); // sza_MusicRules
-	setTacticalSprites(); // kL
+//	setTacticalSprites(); // kL
 
 	deployXCOM(); // <-- XCOM DEPLOYMENT.
 
@@ -2597,6 +2612,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
  * @param lat - latitude
  * @return, pointer to RuleTerrain
  */
+/*
 RuleTerrain* BattlescapeGenerator::getTerrain(
 		int tex,
 		double lat)
@@ -2631,7 +2647,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 	assert(0 && "No matching terrain for globe texture");
 
 	return NULL;
-}
+} */
 
 /**
  * Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
@@ -2639,6 +2655,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
  * wearing pyjamas (STR_ARMOR_NONE_UC) only.
  * This is done by switching in/out equivalent Armors.
  */
+/*
 void BattlescapeGenerator::setTacticalSprites()
 {
 // base defense, craft NULL "STR_BASE_DEFENSE"
@@ -2700,7 +2717,7 @@ void BattlescapeGenerator::setTacticalSprites()
 			(*i)->setArmor(armorRule);
 		}
 	}
-}
+} */
 
 /**
  * Creates a mini-battle-save for managing inventory from the Geoscape's CraftEquip or BaseEquip screen.
@@ -4343,6 +4360,15 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 	}
 
 	return success;
+}
+
+/**
+ * Sets the terrain to be used in battle generation.
+ * @param terrain - pointer to the RuleTerrain.
+ */
+void BattlescapeGenerator::setTerrain(RuleTerrain* terrain)
+{
+	_terrain = terrain;
 }
 
 }

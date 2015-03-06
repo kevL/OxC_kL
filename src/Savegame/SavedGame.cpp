@@ -222,13 +222,6 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-/*	for (std::vector<Soldier*>::const_iterator
-			i = _soldiers.begin();
-			i != _soldiers.end();
-			++i)
-	{
-		delete *i;
-	} */
 	for (std::vector<SoldierDead*>::const_iterator
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();
@@ -553,23 +546,28 @@ void SavedGame::load(
 		_waypoints.push_back(w);
 	}
 
-	for (YAML::const_iterator 	// Backwards compatibility->
+/*	for (YAML::const_iterator 	// Backwards compatibility->
 			i = doc["terrorSites"].begin();
 			i != doc["terrorSites"].end();
 			++i)
 	{
-		MissionSite* ms = new MissionSite(rule->getAlienMission("STR_ALIEN_TERROR"));
+		MissionSite* ms = new MissionSite(
+									rule->getAlienMission("STR_ALIEN_TERROR"),
+									rule->getDeployment("STR_TERROR_MISSION"));
 		ms->load(*i);
 		_missionSites.push_back(ms);
-	}
+	} */
 
 	for (YAML::const_iterator
 			i = doc["missionSites"].begin();
 			i != doc["missionSites"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		MissionSite* ms = new MissionSite(rule->getAlienMission(type));
+		const std::string type = (*i)["type"].as<std::string>();
+		const std::string deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
+		MissionSite* ms = new MissionSite(
+									rule->getAlienMission(type),
+									rule->getDeployment(deployment));
 		ms->load(*i);
 		_missionSites.push_back(ms);
 	}
@@ -1079,12 +1077,9 @@ int SavedGame::getId(const std::string& objectType)
 	std::map<std::string, int>::iterator i = _ids.find(objectType);
 	if (i != _ids.end())
 		return i->second++;
-	else
-	{
-		_ids[objectType] = 1;
 
-		return _ids[objectType]++;
-	}
+	_ids[objectType] = 1;
+	return _ids[objectType]++;
 }
 
 /**
@@ -2048,49 +2043,51 @@ class matchRegionAndType
 	:
 		public std::unary_function<AlienMission*, bool>
 {
+
 private:
 	const std::string& _region;
-	const std::string& _type;
+	MissionObjective _objective;
+
 
 	public:
 		/// Store the region and type.
 		matchRegionAndType(
 				const std::string& region,
-				const std::string& type)
+				MissionObjective objective)
 			:
 				_region(region),
-				_type(type)
+				_objective(objective)
 		{}
 
 		/// Match against stored values.
 		bool operator()(const AlienMission* mis) const
 		{
 			return mis->getRegion() == _region
-				&& mis->getType() == _type;
+				&& mis->getRules().getObjective() == _objective;
 		}
 };
 
 /**
- * Find a mission from the active alien missions.
- * @param region	- the region ID
- * @param type		- the mission type ID
+ * Find a mission type in the active alien missions.
+ * @param region	- the region's string ID
+ * @param objective	- the active mission's objective
  * @return, pointer to the AlienMission (NULL if no mission matched)
  */
-AlienMission* SavedGame::getAlienMission(
+AlienMission* SavedGame::findAlienMission(
 		const std::string& region,
-		const std::string& type) const
+		MissionObjective objective) const
 {
 	std::vector<AlienMission*>::const_iterator
-			am = std::find_if(
-						_activeMissions.begin(),
-						_activeMissions.end(),
-						matchRegionAndType(
-										region,
-										type));
-	if (am == _activeMissions.end())
+			mission = std::find_if(
+							_activeMissions.begin(),
+							_activeMissions.end(),
+							matchRegionAndType(
+											region,
+											objective));
+	if (mission == _activeMissions.end())
 		return NULL;
 
-	return *am;
+	return *mission;
 }
 
 /**
@@ -2340,10 +2337,10 @@ bool SavedGame::wasResearchPopped(const RuleResearch* research)
  */
 void SavedGame::removePoppedResearch(const RuleResearch* research)
 {
-	std::vector<const RuleResearch*>::iterator r = std::find(
-														_poppedResearch.begin(),
-														_poppedResearch.end(),
-														research);
+	std::vector<const RuleResearch*>::const_iterator r = std::find(
+															_poppedResearch.begin(),
+															_poppedResearch.end(),
+															research);
 	if (r != _poppedResearch.end())
 		_poppedResearch.erase(r);
 }
@@ -2361,7 +2358,7 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers()
  * Returns the last selected player base.
  * @return, pointer to base
  */
-/*kL Base* SavedGame::getSelectedBase()
+/* Base* SavedGame::getSelectedBase()
 {
 	// in case a base was destroyed or something...
 	if (_selectedBase < _bases.size())
@@ -2374,7 +2371,7 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers()
  * Sets the last selected player base.
  * @param base - # of the base
  */
-/*kL void SavedGame::setSelectedBase(size_t base)
+/* void SavedGame::setSelectedBase(size_t base)
 {
 	_selectedBase = base;
 } */

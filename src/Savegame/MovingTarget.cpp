@@ -17,12 +17,10 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#define _USE_MATH_DEFINES
-
 #include "MovingTarget.h"
 
+//#define _USE_MATH_DEFINES
 //#include <cmath>
-
 //#include "../fmath.h"
 
 #include "../Geoscape/GeoscapeState.h"
@@ -42,8 +40,7 @@ MovingTarget::MovingTarget()
 		_speedLat(0.),
 		_speedRadian(0.),
 		_speed(0)
-{
-}
+{}
 
 /**
  * Make sure to cleanup the target's destination followers.
@@ -178,10 +175,10 @@ void MovingTarget::calculateSpeed()
 				 * std::sin(_dest->getLatitude()) - std::sin(_lat)
 				 * std::cos(_dest->getLatitude())
 				 * std::cos(_dest->getLongitude() - _lon),
-			length = std::sqrt((dLon * dLon) + (dLat * dLat));
+			dist = std::sqrt((dLon * dLon) + (dLat * dLat));
 
-		_speedLat = dLat / length * _speedRadian;
-		_speedLon = dLon / length * _speedRadian / std::cos(_lat + _speedLat);
+		_speedLat = dLat / dist * _speedRadian;
+		_speedLon = dLon / dist * _speedRadian / std::cos(_lat + _speedLat);
 
 		// Check for invalid speeds when a division by zero occurs due to near-zero values
 		if (_speedLon != _speedLon
@@ -207,8 +204,8 @@ bool MovingTarget::reachedDestination() const
 	if (_dest == NULL)
 		return false;
 
-	return AreSame(_dest->getLongitude(), _lon)
-		&& AreSame(_dest->getLatitude(), _lat);
+	return AreSame(_lon, _dest->getLongitude())
+		&& AreSame(_lat, _dest->getLatitude());
 }
 
 /**

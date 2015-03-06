@@ -60,8 +60,7 @@ State::State()
 		_screen(true),
 		_modal(NULL)
 {
-	// initialize palette to all black
-	std::memset(
+	std::memset( // initialize palette to all black
 			_palette,
 			0,
 			sizeof(_palette));
@@ -397,7 +396,7 @@ void State::applyBattlescapeTheme()
 		Window* const window = dynamic_cast<Window*>(*i);
 		if (window != NULL)
 		{
-			window->setColor(element->color); //Palette::blockOffset(0)-1);
+			window->setColor(element->color);
 			window->setHighContrast();
 			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -407,17 +406,17 @@ void State::applyBattlescapeTheme()
 		Text* const text = dynamic_cast<Text*>(*i);
 		if (text != NULL)
 		{
-			text->setColor(element->color); //Palette::blockOffset(0)-1);
+			text->setColor(element->color);
 			text->setHighContrast();
 
 			continue;
 		}
 
-		TextButton* const button = dynamic_cast<TextButton*>(*i);
-		if (button != NULL)
+		TextButton* const btn = dynamic_cast<TextButton*>(*i);
+		if (btn != NULL)
 		{
-			button->setColor(element->color); //Palette::blockOffset(0)-1);
-			button->setHighContrast();
+			btn->setColor(element->color);
+			btn->setHighContrast();
 
 			continue;
 		}
@@ -425,7 +424,7 @@ void State::applyBattlescapeTheme()
 		TextEdit* const edit = dynamic_cast<TextEdit*>(*i);
 		if (edit != NULL)
 		{
-			edit->setColor(element->color); //Palette::blockOffset(0)-1);
+			edit->setColor(element->color);
 			edit->setHighContrast();
 
 			continue;
@@ -434,8 +433,8 @@ void State::applyBattlescapeTheme()
 		TextList* const textList = dynamic_cast<TextList*>(*i);
 		if (textList != NULL)
 		{
-			textList->setColor(element->color); //Palette::blockOffset(0)-1);
-			textList->setArrowColor(element->border); //Palette::blockOffset(0));
+			textList->setColor(element->color);
+			textList->setArrowColor(element->border);
 			textList->setHighContrast();
 
 			continue;
@@ -444,7 +443,7 @@ void State::applyBattlescapeTheme()
 		ArrowButton* const arrow = dynamic_cast<ArrowButton*>(*i);
 		if (arrow != NULL)
 		{
-			arrow->setColor(element->border); //Palette::blockOffset(0));
+			arrow->setColor(element->border);
 
 			continue;
 		}
@@ -452,7 +451,7 @@ void State::applyBattlescapeTheme()
 		Slider* const slider = dynamic_cast<Slider*>(*i);
 		if (slider != NULL)
 		{
-			slider->setColor(element->color); //Palette::blockOffset(0)-1);
+			slider->setColor(element->color);
 			slider->setHighContrast();
 
 			continue;
@@ -461,8 +460,8 @@ void State::applyBattlescapeTheme()
 		ComboBox* const combo = dynamic_cast<ComboBox*>(*i);
 		if (combo != NULL)
 		{
-			combo->setColor(element->color); //Palette::blockOffset(0)-1);
-			combo->setArrowColor(element->border); //Palette::blockOffset(0));
+			combo->setColor(element->color);
+			combo->setArrowColor(element->border);
 			combo->setHighContrast();
 		}
 	}
@@ -479,12 +478,12 @@ void State::redrawText()
 			++i)
 	{
 		const Text* const text = dynamic_cast<Text*>(*i);
-		const TextButton* const button = dynamic_cast<TextButton*>(*i);
+		const TextButton* const btn = dynamic_cast<TextButton*>(*i);
 		const TextEdit* const edit = dynamic_cast<TextEdit*>(*i);
 		const TextList* const textList = dynamic_cast<TextList*>(*i);
 
 		if (text != NULL
-			|| button != NULL
+			|| btn != NULL
 			|| edit != NULL
 			|| textList != NULL)
 		{
@@ -494,11 +493,11 @@ void State::redrawText()
 }
 
 /**
- * Changes the current modal surface. If a surface is modal,
+ * Changes the current modal surface. If a surface is modal
  * then only that surface can receive events. This is used
- * when an element needs to take priority over everything else,
+ * when an element needs to take priority over everything else
  * eg. focus.
- * @param surface Pointer to modal surface, NULL for no modal.
+ * @param surface - pointer to modal surface; NULL for no modal
  */
 void State::setModal(InteractiveSurface* surface)
 {
@@ -519,10 +518,10 @@ void State::setPalette(
 		bool immediately)
 {
 	if (colors != NULL)
-		memcpy(
-			_palette + firstcolor,
-			colors,
-			ncolors * sizeof(SDL_Color));
+		std::memcpy(
+				_palette + firstcolor,
+				colors,
+				ncolors * sizeof(SDL_Color));
 
 	if (immediately == true)
 	{

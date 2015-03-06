@@ -18,6 +18,7 @@
  */
 
 #include "BaseDestroyedState.h"
+
 #include "Globe.h"
 
 #include "../Engine/Game.h"
@@ -62,7 +63,7 @@ BaseDestroyedState::BaseDestroyedState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color); //7
+			_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
 	add(_window, "window", "UFOInfo");
 	add(_txtMessage, "text", "UFOInfo");
@@ -72,12 +73,10 @@ BaseDestroyedState::BaseDestroyedState(
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(
 						_game->getResourcePack()->getSurface("BACK15.SCR"),
 						37); // kL: x-offset
 
-//	_txtMessage->setColor(Palette::blockOffset(8)+5);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
@@ -85,14 +84,12 @@ BaseDestroyedState::BaseDestroyedState(
 	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE")
 							.arg(_base->getName()));
 
-//	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& BaseDestroyedState::btnCenterClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDestroyedState::btnCenterClick,
 					Options::keyOk);
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -100,45 +97,45 @@ BaseDestroyedState::BaseDestroyedState(
 					Options::keyCancel);
 
 
-	std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin();
+	std::vector<Region*>::const_iterator region = _game->getSavedGame()->getRegions()->begin();
 	for (
 			;
 			region != _game->getSavedGame()->getRegions()->end();
 			++region)
 	{
 		if ((*region)->getRules()->insideRegion(
-										base->getLongitude(),
-										base->getLatitude()))
+											base->getLongitude(),
+											base->getLatitude()))
 		{
 			break;
 		}
 	}
 
-	AlienMission* am = _game->getSavedGame()->getAlienMission(
-														(*region)->getRules()->getType(),
-														"STR_ALIEN_RETALIATION");
-	for (std::vector<Ufo*>::iterator
-			ufo = _game->getSavedGame()->getUfos()->begin();
-			ufo != _game->getSavedGame()->getUfos()->end();)
+	AlienMission* alienMission = _game->getSavedGame()->findAlienMission(
+																	(*region)->getRules()->getType(),
+																	OBJECTIVE_RETALIATION);
+	for (std::vector<Ufo*>::const_iterator
+			i = _game->getSavedGame()->getUfos()->begin();
+			i != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*ufo)->getMission() == am)
+		if ((*i)->getMission() == alienMission)
 		{
-			delete *ufo;
-			ufo = _game->getSavedGame()->getUfos()->erase(ufo);
+			delete *i;
+			i = _game->getSavedGame()->getUfos()->erase(i);
 		}
 		else
-			++ufo;
+			++i;
 	}
 
-	for (std::vector<AlienMission*>::iterator
-			mission = _game->getSavedGame()->getAlienMissions().begin();
-			mission != _game->getSavedGame()->getAlienMissions().end();
-			++mission)
+	for (std::vector<AlienMission*>::const_iterator
+			i = _game->getSavedGame()->getAlienMissions().begin();
+			i != _game->getSavedGame()->getAlienMissions().end();
+			++i)
 	{
-		if (dynamic_cast<AlienMission*>(*mission) == am)
+		if (dynamic_cast<AlienMission*>(*i) == alienMission) // is that really necessary ( i doubt it! )
 		{
-			delete *mission;
-			_game->getSavedGame()->getAlienMissions().erase(mission);
+			delete *i;
+			_game->getSavedGame()->getAlienMissions().erase(i);
 
 			break;
 		}

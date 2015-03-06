@@ -24,8 +24,6 @@
 //#include <vector>
 //#include <yaml-cpp/yaml.h>
 
-#include "MapBlock.h"
-
 
 namespace OpenXcom
 {
@@ -48,8 +46,6 @@ class RuleTerrain
 private:
 	int
 		_ambience,
-		_hemisphere,
-		_largeBlockLimit,
 		_minDepth,
 		_maxDepth;
 
@@ -57,7 +53,6 @@ private:
 		_name,
 		_script;
 
-	std::vector<int> _textures;
 	std::vector<std::string> _civilianTypes;
 
 	std::vector<MapBlock*> _mapBlocks;
@@ -95,12 +90,6 @@ private:
 		MapData* getMapData(
 				unsigned int* id,
 				int* mapDataSetID) const;
-
-		/// Gets the textures used by this terrain.
-		std::vector<int>* getTextures();
-
-		/// Gets the globe's hemisphere - northern or southern - that this terrain can be found in.
-		int getHemisphere() const;
 
 		/// Gets the civilian types to use.
 		std::vector<std::string> getCivilianTypes() const;

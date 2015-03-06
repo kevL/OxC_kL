@@ -22,7 +22,6 @@
 
 //#include <list>
 //#include <string>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -31,6 +30,7 @@ namespace OpenXcom
 
 class Polygon;
 class Polyline;
+class Texture;
 
 
 /**
@@ -44,6 +44,8 @@ class RuleGlobe
 private:
 	std::list<Polygon*> _polygons;
 	std::list<Polyline*> _polylines;
+
+	std::map<int, Texture*> _textures;
 
 
 	public:
@@ -62,6 +64,11 @@ private:
 
 		/// Loads a set of polygons from a DAT file.
 		void loadDat(const std::string& filename);
+
+		/// Gets a specific world texture.
+		Texture* getTexture(int id) const;
+		/// Gets all the terrains for a specific deployment.
+		std::vector<std::string> getTerrains(const std::string& deployment) const;
 };
 
 }

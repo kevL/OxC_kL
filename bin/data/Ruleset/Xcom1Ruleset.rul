@@ -4790,9 +4790,12 @@ alienDeployments:
       - RAILYARDURBAN
       - URBAN
       - URBAN2 #Luke's Expanded Terror Sites
+    alert: STR_ALIENS_TERRORISE
     briefing:
       palette: 2
       music: GEO_BRIEF_TERRORSITE
+    markerName: STR_TERROR_SITE
+    duration: [4,10]
   - type: STR_ALIEN_BASE_ASSAULT
 #    script: ALIENBASE
     data:
@@ -5110,7 +5113,8 @@ alienDeployments:
       - XBASE
     shade: 5
     briefing:
-      palette: 2
+      palette: 0
+      background: BACK01.SCR
       music: GEO_BRIEF_BASEDEFENSE
 #      showTarget: false
 #      textOffset: -16
@@ -5202,6 +5206,7 @@ alienDeployments:
     briefing:
       palette: 6
       music: GEO_BRIEF_MARS1
+      showTarget: false
 #      textOffset: -16
   - type: STR_MARS_THE_FINAL_ASSAULT
     script: BOSSBATTLE
@@ -7749,6 +7754,8 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_INFILTRATION
     points: 100
+    objective: 1
+    specialZone: 4 #Mission zone for alien bases
     raceWeights:
       0:
         STR_FLOATER: 20
@@ -7810,6 +7817,8 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_BASE
     points: 350
+    objective: 2
+    specialZone: 4 #Mission zone for alien bases
     raceWeights:
       0:
         STR_FLOATER: 50
@@ -7859,9 +7868,11 @@ alienMissions:
         timer: 60
   - type: STR_ALIEN_TERROR
     points: 200
-    specialUfo: STR_TERROR_SHIP
-    deployment: STR_TERROR_MISSION
-    markerName: STR_TERROR_SITE
+    objective: 3
+    specialZone: 3 #Mission zone for terror missions
+#    specialUfo: STR_TERROR_SHIP
+#    deployment: STR_TERROR_MISSION
+#    markerName: STR_TERROR_SITE
     raceWeights:
       0:
         STR_SECTOID: 30
@@ -7902,9 +7913,11 @@ alienMissions:
         count: 1
         trajectory: P7
         timer: 9000
+        objective: true
   - type: STR_ALIEN_RETALIATION
     points: 0
-    specialUfo: STR_BATTLESHIP
+    objective: 4
+    specialUfo: STR_BATTLESHIP #Spawned for the final retaliation run
     raceWeights: {} #Special case, race comes from trigger UFO.
     waves:
       - ufo: STR_SMALL_SCOUT
@@ -7925,13 +7938,15 @@ alienMissions:
         timer: 3000
   - type: STR_ALIEN_SUPPLY
     points: 25
-    specialUfo: STR_SUPPLY_SHIP
+    objective: 5
+#    specialUfo: STR_SUPPLY_SHIP
     raceWeights: {} #Special case, race comes from base.
     waves:
       - ufo: STR_SUPPLY_SHIP
         count: 1
         trajectory: P9
         timer: 6000
+        objective: true
 #Alien Tech Level, http://openxcom.org/forum/index.php?topic=1356.0
 #kaiser_bill,
 #this links into the alien equipment loadouts specified under the UFO crew loadout section

@@ -40,7 +40,7 @@ class AlienBase
 private:
 	bool
 		_discovered,
-		_inBattlescape;
+		_inTactical;
 	int _id;
 
 	std::string
@@ -82,7 +82,7 @@ private:
 		void setLabel(const std::string& edit);
 
 		/// Sets the alien base's battlescape status.
-		void setInBattlescape(bool inbattle);
+		void setInBattlescape(bool inTactical);
 		/// Gets the alien base's battlescape status.
 		bool isInBattlescape() const;
 

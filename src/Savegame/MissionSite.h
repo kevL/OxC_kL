@@ -29,11 +29,12 @@
 namespace OpenXcom
 {
 
+class AlienDeployment;
 class RuleAlienMission;
 
 
 /**
- * Represents an alien mission site on the world.
+ * Represents an alien MissionSite on the world.
  */
 class MissionSite
 	:
@@ -41,20 +42,25 @@ class MissionSite
 {
 
 private:
-	bool _inBattlescape;
+	bool _inTactical;
 	int
 		_id,
-		_secondsRemaining;
+		_secondsLeft,
+		_texture;
 	std::string
+		_city,
 		_race,
 		_terrain;
 
+	const AlienDeployment* _deployment;
 	const RuleAlienMission* _rules;
 
 
 	public:
 		/// Creates a mission site.
-		MissionSite(const RuleAlienMission* rules);
+		MissionSite(
+				const RuleAlienMission* rules,
+				const AlienDeployment* deployment);
 		/// Cleans up the mission site.
 		~MissionSite();
 
@@ -67,6 +73,8 @@ private:
 
 		/// Gets the mission site's ruleset.
 		const RuleAlienMission* getRules() const;
+		/// Gets the mission site's deployment.
+		const AlienDeployment* getDeployment() const;
 
 		/// Gets the mission site's ID.
 		int getId() const;
@@ -80,12 +88,12 @@ private:
 		int getMarker() const;
 
 		/// Gets the seconds until this mission site expires.
-		int getSecondsRemaining() const;
+		int getSecondsLeft() const;
 		/// Sets the seconds until this mission site expires.
-		void setSecondsRemaining(int seconds);
+		void setSecondsLeft(int sec);
 
 		/// Sets the MissionSite's battlescape status.
-		void setInBattlescape(bool inbattle);
+		void setInBattlescape(bool inTactical);
 		/// Gets if the MissionSite is in battlescape.
 		bool isInBattlescape() const;
 
@@ -98,6 +106,15 @@ private:
 		std::string getTerrain() const;
 		/// Sets this MissionSite's terrainType.
 		void setTerrain(const std::string& terrain);
+
+		/// Gets the mission site's texture.
+		int getTexture() const;
+		/// Sets the mission site's texture.
+		void setTexture(int texture);
+		/// Gets the mission site's city.
+		std::string getCity() const;
+		/// Sets the mission site's city.
+		void setCity(const std::string& city);
 };
 
 }

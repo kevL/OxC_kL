@@ -69,7 +69,7 @@ Base::Base(const Ruleset* const rules)
 		_rules(rules),
 		_scientists(0),
 		_engineers(0),
-		_inBattlescape(false),
+		_inTactical(false),
 		_retaliationTarget(false),
 		_cashIncome(0),
 		_cashSpent(0),
@@ -179,20 +179,20 @@ void Base::load(
 	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 
 	if (newGame == false
-		|| !Options::customInitialBase
-		|| newBattleGame)
+		|| Options::customInitialBase == false
+		|| newBattleGame == true)
 	{
 		for (YAML::const_iterator
 				i = node["facilities"].begin();
 				i != node["facilities"].end();
 				++i)
 		{
-			std::string type = (*i)["type"].as<std::string>();
+			const std::string type = (*i)["type"].as<std::string>();
 			if (_rules->getBaseFacility(type))
 			{
-				BaseFacility* f = new BaseFacility(
-												_rules->getBaseFacility(type),
-												this);
+				BaseFacility* const f = new BaseFacility(
+													_rules->getBaseFacility(type),
+													this);
 				f->load(*i);
 				_facilities.push_back(f);
 			}
@@ -207,13 +207,13 @@ void Base::load(
 		std::string type = (*i)["type"].as<std::string>();
 		if (_rules->getCraft(type))
 		{
-			Craft* c = new Craft(
-							_rules->getCraft(type),
-							this);
+			Craft* const c = new Craft(
+									_rules->getCraft(type),
+									this);
 			c->load(
-					*i,
-					_rules,
-					save);
+				*i,
+				_rules,
+				save);
 			_crafts.push_back(c);
 		}
 	}
@@ -223,19 +223,18 @@ void Base::load(
 			i != node["soldiers"].end();
 			++i)
 	{
-		Soldier* s = new Soldier(
+		Soldier* const s = new Soldier(
 							_rules->getSoldier("XCOM"),
 							_rules->getArmor("STR_ARMOR_NONE_UC"));
 		s->load(
-				*i,
-				_rules,
-				save);
+			*i,
+			_rules,
+			save);
 		s->setCraft(NULL);
 
 		if (const YAML::Node& craft = (*i)["craft"])
 		{
-			CraftId craftId = Craft::loadId(craft);
-
+			const CraftId craftId = Craft::loadId(craft);
 			for (std::vector<Craft*>::const_iterator
 					j = _crafts.begin();
 					j != _crafts.end();
@@ -270,11 +269,11 @@ void Base::load(
 			++i;
 	}
 
-	_scientists		= node["scientists"]	.as<int>(_scientists);
-	_engineers		= node["engineers"]		.as<int>(_engineers);
-	_inBattlescape	= node["inBattlescape"]	.as<bool>(_inBattlescape);
-	_cashIncome		= node["cashIncome"]	.as<int>(_cashIncome);
-	_cashSpent		= node["cashSpent"]		.as<int>(_cashSpent);
+	_scientists	= node["scientists"].as<int>(_scientists);
+	_engineers	= node["engineers"]	.as<int>(_engineers);
+	_inTactical	= node["inTactical"].as<bool>(_inTactical);
+	_cashIncome	= node["cashIncome"].as<int>(_cashIncome);
+	_cashSpent	= node["cashSpent"]	.as<int>(_cashSpent);
 
 	for (YAML::const_iterator
 			i = node["transfers"].begin();
@@ -282,12 +281,12 @@ void Base::load(
 			++i)
 	{
 		int hours = (*i)["hours"].as<int>();
-		Transfer* t = new Transfer(hours);
+		Transfer* const t = new Transfer(hours);
 		if (t->load(
 				*i,
 				this,
 				_rules,
-				save))
+				save) == true)
 		{
 			_transfers.push_back(t);
 		}
@@ -298,10 +297,10 @@ void Base::load(
 			i != node["research"].end();
 			++i)
 	{
-		std::string research = (*i)["project"].as<std::string>();
+		const std::string research = (*i)["project"].as<std::string>();
 		if (_rules->getResearch(research))
 		{
-			ResearchProject* r = new ResearchProject(_rules->getResearch(research));
+			ResearchProject* const r = new ResearchProject(_rules->getResearch(research));
 			r->load(*i);
 			_research.push_back(r);
 		}
@@ -314,12 +313,12 @@ void Base::load(
 			i != node["productions"].end();
 			++i)
 	{
-		std::string item = (*i)["item"].as<std::string>();
+		const std::string item = (*i)["item"].as<std::string>();
 		if (_rules->getManufacture(item))
 		{
-			Production* p = new Production(
-										_rules->getManufacture(item),
-										0);
+			Production* const p = new Production(
+											_rules->getManufacture(item),
+											0);
 			p->load(*i);
 			_productions.push_back(p);
 		}
@@ -364,12 +363,12 @@ YAML::Node Base::save() const
 		node["crafts"].push_back((*i)->save());
 	}
 
-	node["items"]			= _items->save();
-	node["scientists"]		= _scientists;
-	node["engineers"]		= _engineers;
-	node["inBattlescape"]	= _inBattlescape;
-	node["cashIncome"]		= _cashIncome;
-	node["cashSpent"]		= _cashSpent;
+	node["items"]		= _items->save();
+	node["scientists"]	= _scientists;
+	node["engineers"]	= _engineers;
+	node["inTactical"]	= _inTactical;
+	node["cashIncome"]	= _cashIncome;
+	node["cashSpent"]	= _cashSpent;
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -1228,11 +1227,11 @@ int Base::getShortRangeValue() const // kL
 } */
 
 /**
- * kL. Returns the total value of long range detection facilities at this base.
+ * Returns the total value of long range detection facilities at this base.
  * Used for BaseInfoState graphics.
  * @return, long range detection value (%)
  */
-int Base::getLongRangeValue() const // kL
+int Base::getLongRangeValue() const
 {
 	int total = 0;
 
@@ -1424,8 +1423,8 @@ void Base::addResearch(ResearchProject* project)
  */
 void Base::removeResearch(
 		ResearchProject* project,
-		bool grantHelp, // kL
-		bool goOffline) // kL
+		bool grantHelp,
+		bool goOffline)
 {
 	//Log(LOG_INFO) << "Base::removeResearch()";
 	_scientists += project->getAssigned();
@@ -1437,7 +1436,7 @@ void Base::removeResearch(
 						project);
 	if (i != _research.end())
 	{
-		if (goOffline)
+		if (goOffline == true)
 		{
 			project->setAssigned(0);
 			project->setOffline();
@@ -1446,7 +1445,7 @@ void Base::removeResearch(
 		{
 			// kL_begin: Add Research Help here. aLien must be interrogated
 			// at the same Base that project-help applies to, for now.
-			if (grantHelp)
+			if (grantHelp == true)
 			{
 				//Log(LOG_INFO) << ". . aLien = " << project->getRules()->getName();
 				// eg. Base::removeResearch() aLien = STR_REAPER_CORPSE
@@ -1724,11 +1723,11 @@ void Base::researchHelp(const std::string& aLien) // kL
 				factor = 0.5;
 			}
 			else if (rp.compare("STR_BLASTER_BOMB") == 0
-					|| rp.compare("STR_ELERIUM_115") == 0
-					|| rp.compare("STR_ALIEN_ALLOYS") == 0
-					|| rp.compare("STR_PERSONAL_ARMOR") == 0
-					|| rp.compare("STR_POWER_SUIT") == 0
-					|| rp.compare("STR_FLYING_SUIT") == 0)
+				|| rp.compare("STR_ELERIUM_115") == 0
+				|| rp.compare("STR_ALIEN_ALLOYS") == 0
+				|| rp.compare("STR_PERSONAL_ARMOR") == 0
+				|| rp.compare("STR_POWER_SUIT") == 0
+				|| rp.compare("STR_FLYING_SUIT") == 0)
 			{
 				factor = 0.25;
 			}
@@ -1943,16 +1942,16 @@ int Base::getAvailableContainment() const
  */
 bool Base::isInBattlescape() const
 {
-	return _inBattlescape;
+	return _inTactical;
 }
 
 /**
  * Changes this Base's battlescape status.
  * @param inbattle - true if Base is the battlescape
  */
-void Base::setInBattlescape(bool inBattle)
+void Base::setInBattlescape(bool inTactical)
 {
-	_inBattlescape = inBattle;
+	_inTactical = inTactical;
 }
 
 /**

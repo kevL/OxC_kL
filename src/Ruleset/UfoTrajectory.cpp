@@ -58,8 +58,11 @@ struct convert<OpenXcom::TrajectoryWaypoint>
 			const Node& node,
 			OpenXcom::TrajectoryWaypoint& rhs)
 	{
-		if (!node.IsSequence() || node.size() != 3)
+		if (node.IsSequence() == false
+			|| node.size() != 3)
+		{
 			return false;
+		}
 
 		rhs.zone		= node[0].as<int>();
 		rhs.altitude	= node[1].as<int>();

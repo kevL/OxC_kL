@@ -23,7 +23,7 @@
 #include "Ruleset.h"
 #include "RuleTerrain.h"
 
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 
 namespace OpenXcom
@@ -31,21 +31,20 @@ namespace OpenXcom
 
 /**
  * RuleTerrain construction.
+ * @param name - reference the type of terrain
  */
 RuleTerrain::RuleTerrain(const std::string& name)
 	:
 		_name(name),
 		_script("DEFAULT"),
-		_hemisphere(0),
 		_minDepth(0),
 		_maxDepth(0),
 		_ambience(-1)
-{
-}
+{}
 
 /**
  * dTor.
- * @note Ruleterrain only holds mapblocks. Map datafiles are referenced.
+ * @note RuleTerrain only holds mapblocks. Map datafiles are referenced.
  */
 RuleTerrain::~RuleTerrain()
 {
@@ -67,26 +66,32 @@ void RuleTerrain::load(
 		const YAML::Node& node,
 		Ruleset* ruleset)
 {
-	if (const YAML::Node& map = node["mapDataSets"])
+	_name		= node["name"]		.as<std::string>(_name);
+	_script		= node["script"]	.as<std::string>(_script);
+	_minDepth	= node["minDepth"]	.as<int>(_minDepth);
+	_maxDepth	= node["maxDepth"]	.as<int>(_maxDepth);
+	_ambience	= node["ambience"]	.as<int>(_ambience);
+
+	if (const YAML::Node& mapDataSets = node["mapDataSets"])
 	{
 		_mapDataSets.clear();
 
 		for (YAML::const_iterator
-				i = map.begin();
-				i != map.end();
+				i = mapDataSets.begin();
+				i != mapDataSets.end();
 				++i)
 		{
 			_mapDataSets.push_back(ruleset->getMapDataSet(i->as<std::string>()));
 		}
 	}
 
-	if (const YAML::Node& map = node["mapBlocks"])
+	if (const YAML::Node& mapBlocks = node["mapBlocks"])
 	{
 		_mapBlocks.clear();
 
 		for (YAML::const_iterator
-				i = map.begin();
-				i != map.end();
+				i = mapBlocks.begin();
+				i != mapBlocks.end();
 				++i)
 		{
 			MapBlock* const mapBlock = new MapBlock((*i)["name"].as<std::string>());
@@ -95,10 +100,6 @@ void RuleTerrain::load(
 		}
 	}
 
-	_name				= node["name"]		.as<std::string>(_name);
-	_textures			= node["textures"]	.as<std::vector<int> >(_textures);
-	_hemisphere			= node["hemisphere"].as<int>(_hemisphere);
-
 	if (const YAML::Node& civs = node["civilianTypes"])
 		_civilianTypes = civs.as<std::vector<std::string> >(_civilianTypes);
 	else
@@ -106,11 +107,6 @@ void RuleTerrain::load(
 		_civilianTypes.push_back("MALE_CIVILIAN");
 		_civilianTypes.push_back("FEMALE_CIVILIAN");
 	}
-
-	_minDepth	= node["minDepth"]	.as<int>(_minDepth);
-	_maxDepth	= node["maxDepth"]	.as<int>(_maxDepth);
-	_ambience	= node["ambience"]	.as<int>(_ambience);
-	_script		= node["script"]	.as<std::string>(_script);
 }
 
 /**
@@ -238,27 +234,6 @@ MapData* RuleTerrain::getMapData(
 	}
 
 	return dataSet->getObjects()->at(*id);
-}
-
-/**
- * Gets the array of globe texture IDs this terrain is loaded for.
- * @return, pointer to the array of texture IDs
- */
-std::vector<int>* RuleTerrain::getTextures()
-{
-	return &_textures;
-}
-
-/**
- * Gets the hemishpere this terrain occurs in:
- *	-1 = northern
- *	 0 = either
- *	 1 = southern.
- * @return, hemisphere
- */
-int RuleTerrain::getHemisphere() const
-{
-	return _hemisphere;
 }
 
 /**

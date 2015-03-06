@@ -143,8 +143,8 @@ private:
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
-	/// Handle Terror mission generation.
-	void setupTerrorMission();
+	/// Handle land mission generation.
+	void setupLandMission();
 
 
 	public:

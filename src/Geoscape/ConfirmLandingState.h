@@ -30,12 +30,12 @@ class Craft;
 class RuleTerrain;
 class Text;
 class TextButton;
+class Texture;
 class Window;
 
 
 /**
- * Window that allows the player
- * to confirm a craft landing at its destination.
+ * Window that allows the player to confirm a Craft landing at its destination.
  */
 class ConfirmLandingState
 	:
@@ -44,9 +44,7 @@ class ConfirmLandingState
 
 private:
 	bool _city;
-	int
-		_shade,
-		_texture;
+	int _shade;
 
 	Craft* _craft;
 	RuleTerrain* _terrain;
@@ -61,6 +59,7 @@ private:
 	TextButton
 		* _btnNo,
 		* _btnYes;
+	Texture* _texture;
 	Window* _window;
 
 
@@ -68,7 +67,8 @@ private:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(
 				Craft* const craft,
-				const int texture,
+//				const int texture,
+				Texture* texture,
 				const int shade);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();
@@ -77,9 +77,9 @@ private:
 		void init();
 
 		/// Selects a terrain type for crashed or landed UFOs.
-		RuleTerrain* selectTerrain(const double lat);
+//		RuleTerrain* selectTerrain(const double lat);
 		/// Selects a terrain type for missions at cities.
-		RuleTerrain* selectCityTerrain(const double lat);
+//		RuleTerrain* selectCityTerrain(const double lat);
 
 		/// Handler for clicking the Yes button.
 		void btnYesClick(Action* action);

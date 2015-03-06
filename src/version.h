@@ -42,6 +42,7 @@ namespace Version
 
 /// Local Time for saved file stamp.
 std::string timeStamp();
+
 /// Gets version as a time string.
 std::string getBuildDate(bool built = true);
 

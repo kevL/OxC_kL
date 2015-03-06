@@ -20,6 +20,7 @@
 #ifndef OPENXCOM_RULEALIENMISSION_H
 #define OPENXCOM_RULEALIENMISSION_H
 
+//#include <map>
 //#include <string>
 //#include <vector>
 //#include <yaml-cpp/yaml.h>
@@ -51,6 +52,21 @@ struct MissionWave
 	/// Number of minutes between UFOs in the wave.
 	/// The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
 	size_t spawnTimer;
+
+	/// This wave performs the mission objective.
+	/// The UFO executes a special action based on the mission objective.
+	bool objective;
+};
+
+
+enum MissionObjective
+{
+	OBJECTIVE_SCORE,		// 0
+	OBJECTIVE_INFILTRATION,	// 1
+	OBJECTIVE_BASE,			// 2
+	OBJECTIVE_SITE,			// 3
+	OBJECTIVE_RETALIATION,	// 4
+	OBJECTIVE_SUPPLY		// 5
 };
 
 
@@ -63,21 +79,18 @@ class RuleAlienMission
 {
 
 private:
-
-	std::string
-		_deployment,
-		_markerName,
-		_specialUfo,
-		_type;
-
 	int
-		_markerIcon,
-		_points;
+		_points,		// The mission's points.
+		_specialZone;	// The mission zone to use for spawning.
+	std::string
+		_specialUfo,	// The UFO to use for spawning.
+		_type;			// The mission's type ID.
 
-	std::vector<MissionWave> _waves;
+	std::vector<MissionWave> _waves;										// The mission's waves.
+	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;	// The race distribution over game time.
+	std::map<size_t, int> _weights;											// The mission's weights.
 
-	/// The race distribution over game time.
-	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;
+	MissionObjective _objective; // The mission's objective type (enum).
 
 
 	public:
@@ -107,17 +120,19 @@ private:
 		/// Gets the score for this mission.
 		int getPoints() const;
 
-		/// Gets special ufo type for special action like retaliation or supply.
-		const std::string& getSpecialUfo() const
+		/// Gets the objective for this mission.
+		MissionObjective getObjective() const
+		{ return _objective; }
+
+		/// Gets the UFO type for special spawns.
+		const std::string& getSpawnUfo() const
 		{ return _specialUfo; }
+		/// Gets the zone for spawning an alien site or base.
+		int getSpawnZone() const
+		{ return _specialZone; }
 
-		/// Gets the alien deployment for this mission.
-		std::string getDeployment() const;
-
-		/// Gets the marker name for this mission.
-		std::string getMarkerName() const;
-		/// Gets the marker icon for this mission.
-		int getMarkerIcon() const;
+		/// Gets the chances of this mission based on the game time.
+		int getWeight(const size_t monthsPassed) const;
 };
 
 }

@@ -97,12 +97,12 @@ terrains:
         groups: 4
   - name: CULTA
     script: FARM
-    textures: [1,2]
+#    textures: [1,2]
     mapDataSets:
       - BLANKS
       - CULTIVAT
       - BARN
-#    hemisphere: -1
+##    hemisphere: -1
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -170,8 +170,8 @@ terrains:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [1,2]
-#    hemisphere: -1
+#    textures: [1,2]
+##    hemisphere: -1
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -308,8 +308,8 @@ terrains:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [1,2]
-#    hemisphere: 1
+#    textures: [1,2]
+##    hemisphere: 1
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -672,8 +672,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - DESERT
-    textures: [7]
-#    hemisphere: -1
+#    textures: [7]
+##    hemisphere: -1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -720,8 +720,8 @@ terrains:
       - BLANKS
       - MOUNT
       - DESERT
-    textures: [8]
-#    hemisphere: -1
+#    textures: [8]
+##    hemisphere: -1
     mapBlocks:
       - name: DESERTMOUNT00
         width: 10
@@ -787,8 +787,8 @@ terrains:
       - SANDS
       - ATLANTDESERT
       - DESERT
-    textures: [7,8]
-#    hemisphere: 1
+#    textures: [7,8]
+##    hemisphere: 1
     mapBlocks:
       - name: ATLANTDESERT00
         width: 10
@@ -836,8 +836,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - FOREST
-    textures: [0,3]
-#    hemisphere: -1
+#    textures: [0,3]
+##    hemisphere: -1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -885,8 +885,8 @@ terrains:
       - FOREST
       - FORESTMOUNT
       - FORESTMOUNTBITS
-    textures: [3,5]
-#    hemisphere: -1
+#    textures: [3,5]
+##    hemisphere: -1
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
@@ -977,8 +977,8 @@ terrains:
       - BLANKS
       - FORESTPOLAR
       - FOREST
-    textures: [0]
-#    hemisphere: -1
+#    textures: [0]
+##    hemisphere: -1
     mapBlocks:
       - name: FORESTPOLAR00
         width: 10
@@ -1030,8 +1030,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - GRASSLANDDESERT
-    textures: [2]
-    hemisphere: -1
+#    textures: [2]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -1077,8 +1077,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - GRASSLANDFOREST
-    textures: [2]
-#    hemisphere: 1
+#    textures: [2]
+##    hemisphere: 1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -1120,8 +1120,8 @@ terrains:
         length: 20
   - name: GRASSLANDFORESTMOUNT # NEW ##
     script: DESERT
-    textures: [3]
-#    hemisphere: 1
+#    textures: [3]
+##    hemisphere: 1
     mapDataSets:
       - BLANKS
       - MOUNT
@@ -1365,8 +1365,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - JUNGLE
-    textures: [6]
-#    hemisphere: 1
+#    textures: [6]
+##    hemisphere: 1
     mapBlocks:
       - name: JUNGLE00
         width: 10
@@ -1413,8 +1413,8 @@ terrains:
       - BLANKS
       - JUNGLEMOUNT
       - JUNGLEBITS
-    textures: [10]
-    hemisphere: 1
+#    textures: [10]
+#    hemisphere: 1
     mapBlocks:
       - name: JUNGLEMOUNT00
         width: 10
@@ -1464,8 +1464,8 @@ terrains:
       - BLANKS
       - JUNGLEPOLAR
       - JUNGLEBITS
-    textures: [6]
-#    hemisphere: 1
+#    textures: [6]
+##    hemisphere: 1
     mapBlocks:
       - name: JUNGLEPOLAR00
         width: 10
@@ -1519,8 +1519,8 @@ terrains:
       - SANDS
       - MUJUNGLE
       - JUNGLEBITS
-    textures: [6]
-#    hemisphere: 1
+#    textures: [6]
+##    hemisphere: 1
     mapBlocks:
       - name: MUJUNGLE00
         width: 10
@@ -1579,7 +1579,7 @@ terrains:
       - FRNITURE
       - MADDECOR
 #    textures: [2]
-#    hemisphere: 1
+##    hemisphere: 1
     civilianTypes:
       - MALE_CIVILIAN
       - MALE_CIVILIAN3
@@ -1887,7 +1887,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - MOUNT
-    textures: [5]
+#    textures: [5]
     mapBlocks:
       - name: MOUNT00
         width: 10
@@ -1941,7 +1941,7 @@ terrains:
       - URBITS
       - CULTIVAT
 #    textures: [2]
-#    hemisphere: 1
+##    hemisphere: 1
     mapBlocks:
       - name: NATIVEURBAN00
         width: 10
@@ -2095,7 +2095,7 @@ terrains:
       - URBITS
       - CULTIVAT
 #    textures: [4]
-#    hemisphere: 1
+##    hemisphere: 1
     civilianTypes:
       - MALE_CIVILIAN
       - MALE_CIVILIAN2
@@ -2277,7 +2277,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLAR
-    textures: [9,12]
+#    textures: [9,12]
     mapBlocks:
       - name: POLAR00
         width: 10
@@ -2329,8 +2329,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLARDESERT
-    textures: [9]
-    hemisphere: -1
+#    textures: [9]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -2378,8 +2378,8 @@ terrains:
       - MOUNT
       - POLAR
       - POLARMOUNT
-    textures: [11]
-#    hemisphere: 1
+#    textures: [11]
+##    hemisphere: 1
     mapBlocks:
       - name: POLARMOUNT00
         width: 10
@@ -2719,8 +2719,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - SAVANNADESERT
-    textures: [1]
-    hemisphere: 1
+#    textures: [1]
+#    hemisphere: 1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -2766,8 +2766,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - SAVANNAFOREST
-    textures: [1]
-    hemisphere: 1
+#    textures: [1]
+#    hemisphere: 1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -2809,8 +2809,8 @@ terrains:
         length: 20
   - name: SAVANNAFORESTMOUNT # NEW ##
     script: DESERT
-    textures: [3]
-    hemisphere: -1
+#    textures: [3]
+#    hemisphere: -1
     mapDataSets:
       - BLANKS
       - MOUNT
@@ -2905,8 +2905,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - STEPPEDESERT
-    textures: [1]
-    hemisphere: -1
+#    textures: [1]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -2949,8 +2949,8 @@ terrains:
         length: 20
   - name: STEPPEFOREST # NEW ##
     script: DEFAULT
-    textures: [0]
-    hemisphere: 1
+#    textures: [0]
+#    hemisphere: 1
     mapDataSets:
       - BLANKS
       - STEPPEFOREST
@@ -3000,8 +3000,8 @@ terrains:
       - MOUNT
       - STEPPEFOREST
       - STEPPEMOUNTBITS
-    textures: [3]
-    hemisphere: 1
+#    textures: [3]
+#    hemisphere: 1
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
@@ -3091,8 +3091,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - TAIGADESERT #was TUNDRADESERT
-    textures: [4]
-    hemisphere: -1
+#    textures: [4]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -3138,8 +3138,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - TAIGAFOREST
-    textures: [0]
-    hemisphere: -1
+#    textures: [0]
+#    hemisphere: -1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -3186,8 +3186,8 @@ terrains:
       - MOUNT
       - TAIGAFOREST
       - TAIGAMOUNTBITS
-    textures: [3]
-    hemisphere: 1
+#    textures: [3]
+#    hemisphere: 1
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
@@ -3277,8 +3277,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - TUNDRADESERT
-    textures: [4]
-    hemisphere: -1
+#    textures: [4]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -3324,8 +3324,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - TUNDRAMOUNT
-    textures: [5]
-    hemisphere: 1
+#    textures: [5]
+#    hemisphere: 1
     mapBlocks:
       - name: MOUNT00
         width: 10
@@ -3375,8 +3375,8 @@ terrains:
       - BLANKS
       - TUNDRAMOUNT
       - TUNDRADESERT
-    textures: [5]
-    hemisphere: -1
+#    textures: [5]
+#    hemisphere: -1
     mapBlocks:
       - name: DESERTMOUNT00
         width: 10
@@ -3458,10 +3458,10 @@ extraStrings:
       STR_MADURBAN: "Urban Expanded"
       STR_MADURBANUFO: "Urban Expanded w/UFO"
       STR_NATIVEUFO: "Native Urban w/UFO"
-      STR_NATIVEURBAN: "Native Urban (Farm + Jungle)"
+      STR_NATIVEURBAN: "Native Urban"
       STR_POLARDESERT: "Polar Desert"
       STR_POLARMOUNT: "Polar Mountain"
-      STR_PORTTFTD: "Port Urban TFTD w/UFO"
+      STR_PORTTFTD: "Port Urban w/UFO"
       STR_PORTURBAN: "Port Urban"
       STR_RAILYARDURBAN: "Railyard Urban"
       STR_SAVANNADESERT: "Savanna Desert"

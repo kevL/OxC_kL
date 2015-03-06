@@ -35,6 +35,7 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
 
+#include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
@@ -59,8 +60,8 @@ Ufo::Ufo(const RuleUfo* const rules)
 		_direction("STR_NORTH"),
 		_altitude("STR_HIGH_UC"),
 		_status(FLYING),
-		_secondsRemaining(0),
-		_inBattlescape(false),
+		_secondsLeft(0),
+		_inTactical(false),
 		_mission(NULL),
 		_trajectory(NULL),
 		_trajectoryPoint(0),
@@ -125,9 +126,7 @@ private:
 		matchMissionID(int id)
 			:
 				_id(id)
-		{
-			/* Empty by design. */
-		}
+		{}
 
 		/// Match with stored ID.
 		bool operator()(const AlienMission* am) const
@@ -150,18 +149,18 @@ void Ufo::load(
 {
 	MovingTarget::load(node);
 
-	_id					= node["id"]				.as<int>(_id);
-	_crashId			= node["crashId"]			.as<int>(_crashId);
-	_crashPower			= node["crashPower"]		.as<int>(_crashPower);
-	_landId				= node["landId"]			.as<int>(_landId);
-	_damage				= node["damage"]			.as<int>(_damage);
-	_altitude			= node["altitude"]			.as<std::string>(_altitude);
-	_direction			= node["direction"]			.as<std::string>(_direction);
-	_detected			= node["detected"]			.as<bool>(_detected);
-	_hyperDetected		= node["hyperDetected"]		.as<bool>(_hyperDetected);
-	_secondsRemaining	= node["secondsRemaining"]	.as<int>(_secondsRemaining);
-	_inBattlescape		= node["inBattlescape"]		.as<bool>(_inBattlescape);
-	_terrain			= node["terrain"]			.as<std::string>(_terrain); // kL
+	_id				= node["id"]			.as<int>(_id);
+	_crashId		= node["crashId"]		.as<int>(_crashId);
+	_crashPower		= node["crashPower"]	.as<int>(_crashPower);
+	_landId			= node["landId"]		.as<int>(_landId);
+	_damage			= node["damage"]		.as<int>(_damage);
+	_altitude		= node["altitude"]		.as<std::string>(_altitude);
+	_direction		= node["direction"]		.as<std::string>(_direction);
+	_detected		= node["detected"]		.as<bool>(_detected);
+	_hyperDetected	= node["hyperDetected"]	.as<bool>(_hyperDetected);
+	_secondsLeft	= node["secondsLeft"]	.as<int>(_secondsLeft);
+	_inTactical		= node["inTactical"]	.as<bool>(_inTactical);
+	_terrain		= node["terrain"]		.as<std::string>(_terrain); // kL
 
 	double
 		lon = _lon,
@@ -212,7 +211,7 @@ void Ufo::load(
 	_fireCountdown		= node["fireCountdown"]		.as<int>(_fireCountdown);
 	_escapeCountdown	= node["escapeCountdown"]	.as<int>(_escapeCountdown);
 
-	if (_inBattlescape == true)
+	if (_inTactical == true)
 		setSpeed(0);
 }
 
@@ -244,13 +243,13 @@ YAML::Node Ufo::save(bool newBattle) const
 	node["status"]		= (int)_status;
 
 	if (_detected == true)
-		node["detected"]			= _detected;
+		node["detected"]		= _detected;
 	if (_hyperDetected == true)
-		node["hyperDetected"]		= _hyperDetected;
-	if (_secondsRemaining != 0)
-		node["secondsRemaining"]	= _secondsRemaining;
-	if (_inBattlescape == true)
-		node["inBattlescape"]		= _inBattlescape;
+		node["hyperDetected"]	= _hyperDetected;
+	if (_secondsLeft != 0)
+		node["secondsLeft"]		= _secondsLeft;
+	if (_inTactical == true)
+		node["inTactical"]		= _inTactical;
 
 	if (newBattle == false)
 	{
@@ -329,8 +328,10 @@ std::wstring Ufo::getName(Language* lang) const
 		case FLYING:
 		case DESTROYED: // Destroyed also means leaving Earth.
 			return lang->getString("STR_UFO_").arg(_id);
+
 		case LANDED:
 			return lang->getString("STR_LANDING_SITE_").arg(_landId);
+
 		case CRASHED:
 			return lang->getString("STR_CRASH_SITE_").arg(_crashId);
 	}
@@ -414,22 +415,22 @@ bool Ufo::getDetected() const
 
 /**
  * Changes the amount of remaining seconds the UFO has left on the ground.
- * After this many seconds this Ufo will take off if landed, or disappear if crashed.
- * @param seconds - amount of seconds
+ * After this many seconds this Ufo will take off if landed or disappear if crashed.
+ * @param sec - time in seconds
  */
-void Ufo::setSecondsRemaining(int seconds)
+void Ufo::setSecondsLeft(int sec)
 {
-	_secondsRemaining = std::max(0, seconds);
+	_secondsLeft = std::max(0, sec);
 }
 
 /**
  * Returns the amount of remaining seconds the UFO has left on the ground.
- * After this many seconds this Ufo will take off if landed, or disappear if crashed.
+ * After this many seconds this Ufo will take off if landed or disappear if crashed.
  * @return, amount of seconds
  */
-int Ufo::getSecondsRemaining() const
+int Ufo::getSecondsLeft() const
 {
-	return _secondsRemaining;
+	return _secondsLeft;
 }
 
 /**
@@ -568,8 +569,8 @@ void Ufo::think()
 		break;
 
 		case LANDED:
-			assert(_secondsRemaining >= 5 && "Wrong time management.");
-			_secondsRemaining -= 5;
+			assert(_secondsLeft >= 5 && "Wrong time management.");
+			_secondsLeft -= 5;
 		break;
 
 		case CRASHED:
@@ -583,14 +584,14 @@ void Ufo::think()
 
 /**
  * Sets this Ufo's battlescape status.
- * @param inbattle - true if in battlescape
+ * @param inTactical - true if in battlescape
  */
-void Ufo::setInBattlescape(const bool inbattle)
+void Ufo::setInBattlescape(const bool inTactical)
 {
-	if (inbattle == true)
+	if (inTactical == true)
 		setSpeed(0);
 
-	_inBattlescape = inbattle;
+	_inTactical = inTactical;
 }
 
 /**
@@ -599,7 +600,7 @@ void Ufo::setInBattlescape(const bool inbattle)
  */
 bool Ufo::isInBattlescape() const
 {
-	return _inBattlescape;
+	return _inTactical;
 }
 
 /**
@@ -735,7 +736,7 @@ int Ufo::getDetectors() const
 /**
  * Sets the mission information of this Ufo.
  * The UFO will start at the first point of the trajectory. The actual UFO information
- * is not changed here, this only sets the information kept on behalf of the mission.
+ * is not changed here; this only sets the information kept on behalf of the mission.
  * @param mission		- pointer to the actual mission object
  * @param trajectory	- pointer to the actual mission trajectory
  */
@@ -747,6 +748,7 @@ void Ufo::setMissionInfo(
 
 	_mission = mission;
 	_mission->increaseLiveUfos();
+
 	_trajectoryPoint = 0;
 	_trajectory = trajectory;
 }
@@ -757,7 +759,7 @@ void Ufo::setMissionInfo(
  */
 const std::string& Ufo::getMissionType() const
 {
-	return _mission->getType();
+	return _mission->getRules().getType();
 }
 
 /**

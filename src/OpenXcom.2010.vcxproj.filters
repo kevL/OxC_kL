@@ -952,7 +952,12 @@
     <ClCompile Include="Geoscape\MissionDetectedState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\OperationPool.cpp" />
+    <ClCompile Include="Ruleset\OperationPool.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\Texture.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
     <ClCompile Include="version.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1934,7 +1939,12 @@
     <ClInclude Include="Geoscape\MissionDetectedState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\OperationPool.h" />
+    <ClInclude Include="Ruleset\OperationPool.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\Texture.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

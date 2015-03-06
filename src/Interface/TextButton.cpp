@@ -62,12 +62,11 @@ TextButton::TextButton(
 	_text = new Text(
 					width,
 					height,
-					0,
-					0);
+					0,0);
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	_text->setWordWrap();
+//	_text->setWordWrap();
 }
 
 /**
@@ -80,13 +79,14 @@ TextButton::~TextButton()
 
 /**
  *
+ * @param btn - (default 0)
  */
-bool TextButton::isButtonHandled(Uint8 button)
+bool TextButton::isButtonHandled(Uint8 btn)
 {
 	if (_comboBox != NULL)
-		return (button == SDL_BUTTON_LEFT);
+		return (btn == SDL_BUTTON_LEFT);
 	else
-		return InteractiveSurface::isButtonHandled(button);
+		return InteractiveSurface::isButtonHandled(btn);
 }
 
 /**
@@ -309,27 +309,32 @@ void TextButton::mousePress(Action* action, State* state)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		&& _group != NULL)
 	{
-		TextButton* old = *_group;
+		TextButton* pre = *_group;
 		*_group = this;
 
-		if (old != NULL)
-			old->draw();
+		if (pre != NULL)
+			pre->draw();
 
 		draw();
 	}
 
-	if (isButtonHandled(action->getDetails()->button.button))
+	if (isButtonHandled(action->getDetails()->button.button) == true)
 	{
 		if (soundPress != NULL
-			&& _group == NULL
+//			&& _group == NULL
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELUP
-			&& action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
+			&& action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN
+			&& (_comboBox == NULL
+				|| _comboBox->getVisible() == true))
 		{
-			soundPress->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1 & #2, see Game.cpp
+			soundPress->play(Mix_GroupAvailable(0));
 		}
 
-		if (_comboBox)
+		if (_comboBox != NULL
+			&& _comboBox->getVisible() == true)
+		{
 			_comboBox->toggle();
+		}
 
 		draw();
 	}

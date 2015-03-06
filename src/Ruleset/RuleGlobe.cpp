@@ -26,6 +26,7 @@
 
 #include "Polygon.h"
 #include "Polyline.h"
+#include "Texture.h"
 
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
@@ -62,6 +63,14 @@ RuleGlobe::~RuleGlobe()
 			++i)
 	{
 		delete *i;
+	}
+
+	for (std::map<int, Texture*>::const_iterator
+			i = _textures.begin();
+			i != _textures.end();
+			++i)
+	{
+		delete i->second;
 	}
 }
 
@@ -129,11 +138,35 @@ void RuleGlobe::load(const YAML::Node& node)
 		}
 	}
 
+	if (node["textures"])
+	{
+		for (std::map<int, Texture*>::const_iterator
+				i = _textures.begin();
+				i != _textures.end();
+				++i)
+		{
+			delete i->second;
+		}
+
+		_textures.clear();
+
+		for (YAML::const_iterator
+				i = node["textures"].begin();
+				i != node["textures"].end();
+				++i)
+		{
+			int id = (*i)["id"].as<int>();
+			Texture* texture = new Texture(id);
+			texture->load(*i);
+			_textures[id] = texture;
+		}
+	}
+
 	Globe::COUNTRY_LABEL_COLOR	= node["countryColor"]	.as<Uint8>(Globe::COUNTRY_LABEL_COLOR);
 	Globe::CITY_LABEL_COLOR		= node["cityColor"]		.as<Uint8>(Globe::CITY_LABEL_COLOR);
 	Globe::BASE_LABEL_COLOR		= node["baseColor"]		.as<Uint8>(Globe::BASE_LABEL_COLOR);
 	Globe::LINE_COLOR			= node["lineColor"]		.as<Uint8>(Globe::LINE_COLOR);
-	
+
 	if (node["oceanPalette"])
 		Globe::OCEAN_COLOR = Palette::blockOffset(node["oceanPalette"].as<Uint8>(12));
 }
@@ -166,7 +199,7 @@ void RuleGlobe::loadDat(const std::string& filename)
 {
 	// Load file
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
-	if (!mapFile)
+	if (mapFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -212,12 +245,55 @@ void RuleGlobe::loadDat(const std::string& filename)
 		_polygons.push_back(poly);
 	}
 
-	if (!mapFile.eof())
+	if (mapFile.eof() == false)
 	{
 		throw Exception("Invalid globe map");
 	}
 
 	mapFile.close();
+}
+
+/**
+ * Returns the rules for the specified texture.
+ * @param id - Texture ID
+ * @return, rules for a Texture
+ */
+Texture* RuleGlobe::getTexture(int id) const
+{
+	std::map<int, Texture*>::const_iterator i = _textures.find(id);
+	if (_textures.end() != i)
+		return i->second;
+
+	return NULL;
+}
+
+/**
+ * Returns a list of all globe terrains associated with this deployment.
+ * @param deployment - reference the deployment name
+ * @return, vector of terrain-types as strings
+ */
+std::vector<std::string> RuleGlobe::getTerrains(const std::string& deployment) const
+{
+	std::vector<std::string> terrains;
+
+	for (std::map<int, Texture*>::const_iterator
+			i = _textures.begin();
+			i != _textures.end();
+			++i)
+	{
+		if (i->second->getDeployment() == deployment)
+		{
+			for (std::vector<TerrainCriteria>::const_iterator
+					j = i->second->getTerrain()->begin();
+					j != i->second->getTerrain()->end();
+					++j)
+			{
+				terrains.push_back(j->name);
+			}
+		}
+	}
+
+	return terrains;
 }
 
 }

@@ -143,16 +143,17 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_shade(-1),
 		_noRetreat(false),
 		_finalDestination(false),
-		_finalMission(false)
-{
-}
+		_finalMission(false),
+		_markerIcon(-1),
+		_durationMin(0),
+		_durationMax(0)
+{}
 
 /**
  * dTor.
  */
 AlienDeployment::~AlienDeployment()
-{
-}
+{}
 
 /**
  * Loads the Deployment from a YAML file.
@@ -174,7 +175,15 @@ void AlienDeployment::load(const YAML::Node& node)
 	_finalDestination	= node["finalDestination"]	.as<bool>(_finalDestination);
 	_finalMission		= node["finalMission"]		.as<bool>(_finalMission);
 	_script				= node["script"]			.as<std::string>(_script);
+	_alert				= node["alert"]				.as<std::string>(_alert);
 	_briefingData		= node["briefing"]			.as<BriefingData>(_briefingData);
+	_markerName			= node["markerName"]		.as<std::string>(_markerName);
+	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
+	if (node["duration"])
+	{
+		_durationMin	= node["duration"][0]		.as<int>(_durationMin);
+		_durationMax	= node["duration"][1]		.as<int>(_durationMax);
+	}
 }
 
 /**
@@ -309,12 +318,57 @@ bool AlienDeployment::isFinalMission() const
 }
 
 /**
+ * Gets the alert message displayed when this mission spawns.
+ * @return, string ID for the message
+ */
+std::string AlienDeployment::getAlertMessage() const
+{
+	return _alert;
+}
+
+/**
  * Gets the briefing data for this mission type.
  * @return, data for the briefing window to use
  */
 BriefingData AlienDeployment::getBriefingData() const
 {
 	return _briefingData;
+}
+
+/**
+ * Returns the globe marker name for this mission.
+ * @return, string ID for marker name
+ */
+std::string AlienDeployment::getMarkerName() const
+{
+	return _markerName;
+}
+
+/**
+ * Returns the globe marker icon for this mission.
+ * @return, marker sprite; -1 if none
+ */
+int AlienDeployment::getMarkerIcon() const
+{
+	return _markerIcon;
+}
+
+/**
+ * Returns the minimum duration for this mission type.
+ * @return, minimum duration in hours
+ */
+int AlienDeployment::getDurationMin() const
+{
+	return _durationMin;
+}
+
+/**
+ * Returns the maximum duration for this mission type.
+ * @return, maximum duration in hours
+ */
+int AlienDeployment::getDurationMax() const
+{
+	return _durationMax;
 }
 
 }

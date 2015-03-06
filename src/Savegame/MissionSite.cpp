@@ -23,6 +23,7 @@
 
 #include "../Engine/Language.h"
 
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleAlienMission.h"
 
 
@@ -32,13 +33,17 @@ namespace OpenXcom
 /**
  * Initializes a mission site.
  */
-MissionSite::MissionSite(const RuleAlienMission* rules)
+MissionSite::MissionSite(
+		const RuleAlienMission* rules,
+		const AlienDeployment* deployment)
 	:
 		Target(),
 		_rules(rules),
+		_deployment(deployment),
 		_id(0),
-		_secondsRemaining(0),
-		_inBattlescape(false)
+		_texture(-1),
+		_secondsLeft(0),
+		_inTactical(false)
 {}
 
 /**
@@ -55,10 +60,11 @@ void MissionSite::load(const YAML::Node& node)
 {
 	Target::load(node);
 
-	_id					= node["id"].as<int>(_id);
-	_secondsRemaining	= node["secondsRemaining"].as<int>(_secondsRemaining);
-	_race				= node["race"].as<std::string>(_race);
-	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
+	_id				= node["id"].as<int>(_id);
+	_texture		= node["id"].as<int>(_texture);
+	_secondsLeft	= node["secondsLeft"].as<int>(_secondsLeft);
+	_race			= node["race"].as<std::string>(_race);
+	_inTactical		= node["inTactical"].as<bool>(_inTactical);
 }
 
 /**
@@ -69,13 +75,16 @@ YAML::Node MissionSite::save() const
 {
 	YAML::Node node = Target::save();
 
-	node["type"]					= _rules->getType();
-	node["id"]						= _id;
-	if (_secondsRemaining)
-		node["secondsRemaining"]	= _secondsRemaining;
-	node["race"]					= _race;
-	if (_inBattlescape)
-		node["inBattlescape"]		= _inBattlescape;
+	node["type"]			= _rules->getType();
+	node["deployment"]		= _deployment->getType();
+	node["id"]				= _id;
+	node["texture"]			= _texture;
+	node["race"]			= _race;
+
+	if (_secondsLeft != 0)
+		node["secondsLeft"]	= _secondsLeft;
+	if (_inTactical == true)
+		node["inTactical"]	= _inTactical;
 
 	return node;
 }
@@ -88,7 +97,7 @@ YAML::Node MissionSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
 
-	node["type"]	= _rules->getType();
+	node["type"]	= _deployment->getMarkerName();
 	node["id"]		= _id;
 
 	return node;
@@ -101,6 +110,15 @@ YAML::Node MissionSite::saveId() const
 const RuleAlienMission* MissionSite::getRules() const
 {
 	return _rules;
+}
+
+/**
+ * Returns the ruleset for the mission's deployment.
+ * @return, pointer to AlienDeployment rules
+ */
+const AlienDeployment* MissionSite::getDeployment() const
+{
+	return _deployment;
 }
 
 /**
@@ -128,7 +146,7 @@ void MissionSite::setId(const int id)
  */
 std::wstring MissionSite::getName(Language* lang) const
 {
-	return lang->getString(_rules->getMarkerName()).arg(_id);
+	return lang->getString(_deployment->getMarkerName()).arg(_id);
 }
 
 /**
@@ -137,28 +155,28 @@ std::wstring MissionSite::getName(Language* lang) const
  */
 int MissionSite::getMarker() const
 {
-	if (_rules->getMarkerIcon() == -1)
+	if (_deployment->getMarkerIcon() == -1)
 		return 5;
 
-	return _rules->getMarkerIcon();
+	return _deployment->getMarkerIcon();
 }
 
 /**
  * Returns the number of seconds remaining before the mission site expires.
  * @return, seconds remaining
  */
-int MissionSite::getSecondsRemaining() const
+int MissionSite::getSecondsLeft() const
 {
-	return _secondsRemaining;
+	return _secondsLeft;
 }
 
 /**
  * Changes the number of seconds before the mission site expires.
- * @param seconds - seconds remaining
+ * @param sec - time in seconds
  */
-void MissionSite::setSecondsRemaining(int seconds)
+void MissionSite::setSecondsLeft(int sec)
 {
-	_secondsRemaining = std::max(0, seconds);
+	_secondsLeft = std::max(0, sec);
 }
 
 /**
@@ -167,16 +185,16 @@ void MissionSite::setSecondsRemaining(int seconds)
  */
 bool MissionSite::isInBattlescape() const
 {
-	return _inBattlescape;
+	return _inTactical;
 }
 
 /**
  * Sets this MissionSite's battlescape status.
- * @param inbattle - true if in the battlescape
+ * @param inTactical - true if in the battlescape
  */
-void MissionSite::setInBattlescape(bool inbattle)
+void MissionSite::setInBattlescape(bool inTactical)
 {
-	_inBattlescape = inbattle;
+	_inTactical = inTactical;
 }
 
 /**
@@ -212,6 +230,42 @@ std::string MissionSite::getTerrain() const
 void MissionSite::setTerrain(const std::string& terrain)
 {
 	_terrain = terrain;
+}
+
+/**
+ * Gets the mission site's associated texture.
+ * @return, the texture ID
+ */
+int MissionSite::getTexture() const
+{
+	return _texture;
+}
+
+/**
+ * Sets the mission site's associated texture.
+ * @param texture - the texture ID
+ */
+void MissionSite::setTexture(int texture)
+{
+	_texture = texture;
+}
+
+/**
+ * Gets the mission site's associated City if any.
+ * @return, string ID for the city; "" if none
+ */
+std::string MissionSite::getCity() const
+{
+	return _city;
+}
+
+/**
+ * Sets the mission site's associated City if any.
+ * @param city - reference the string ID for a city; "" if none
+ */
+void MissionSite::setCity(const std::string& city)
+{
+	_city = city;
 }
 
 }

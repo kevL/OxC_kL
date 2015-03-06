@@ -39,12 +39,12 @@ namespace OpenXcom
 RuleRegion::RuleRegion(const std::string& type)
 	:
 		_type(type),
-		_cost(0),
+		_buildCost(0),
 		_regionWeight(0)
 {}
 
 /**
- * Deletes the cities from memory.
+ * Deletes the regions from memory.
  */
 RuleRegion::~RuleRegion()
 {
@@ -63,8 +63,8 @@ RuleRegion::~RuleRegion()
  */
 void RuleRegion::load(const YAML::Node& node)
 {
-	_type = node["type"].as<std::string>(_type);
-	_cost = node["cost"].as<int>(_cost);
+	_type		= node["type"]		.as<std::string>(_type);
+	_buildCost	= node["buildCost"]	.as<int>(_buildCost);
 
 	std::vector<std::vector<double> > areas;
 	areas = node["areas"].as<std::vector<std::vector<double> > >(areas);
@@ -81,6 +81,14 @@ void RuleRegion::load(const YAML::Node& node)
 
 	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
 
+	// kL_begin:
+	// Delete a possible placeholder in the Geography ruleset, by removing
+	// the its pointlike MissionArea at MissionZone[3] MZ_CITY; ie [0,0,0,0].
+	// Note that safeties have been removed on all below_ ...
+	MissionArea area = *_missionZones.at(MZ_CITY).areas.begin();
+	if (area.isPoint() == true)
+		_missionZones.at(MZ_CITY).areas.erase(_missionZones.at(MZ_CITY).areas.begin());
+
 	if (const YAML::Node& cities = node["cities"])
 	{
 		for (YAML::const_iterator
@@ -88,34 +96,51 @@ void RuleRegion::load(const YAML::Node& node)
 				i != cities.end();
 				++i)
 		{
-			// if a city has been added, make sure that it has a zone 3 associated with it, if not, create one for it.
-			if (_missionZones.size() >= CITY_MISSION_ZONE)
-			{
-				MissionArea area;
-				area.lonMin = area.lonMax = (*i)["lon"].as<double>(0.);
-				area.latMin = area.latMax = (*i)["lat"].as<double>(0.);
-				if (std::find(
-							_missionZones.at(CITY_MISSION_ZONE).areas.begin(),
-							_missionZones.at(CITY_MISSION_ZONE).areas.end(),
-							area) == _missionZones.at(CITY_MISSION_ZONE).areas.end())
-				{
-					_missionZones.at(CITY_MISSION_ZONE).areas.push_back(area);
-				}
-			}
-
-			City* const cityRule = new City(
-										"",
-										0.,
-										0.);
+			City* const cityRule = new City(); // Load all Cities that are in YAML-ruleset "region|type|cities"
 			cityRule->load(*i);
 			_cities.push_back(cityRule);
-		}
 
+			area.lonMin =
+			area.lonMax = cityRule->getLongitude();
+			area.latMin =
+			area.latMax = cityRule->getLatitude();
+
+			_missionZones.at(MZ_CITY).areas.push_back(area);
+		}
+/*	if (const YAML::Node& cities = node["cities"]) // kL_begin->
+	{
+		for (YAML::const_iterator
+				i = cities.begin();
+				i != cities.end();
+				++i)
+		{
+			City* const cityRule = new City(); // Load all Cities that are in YAML-ruleset "region|type|cities"
+			cityRule->load(*i);
+			_cities.push_back(cityRule);
+
+			// if a city has been added, make sure that it has a zone 3 associated with it; if not, create one for it.
+			if (_missionZones.size() > MZ_CITY) // safety: 6 zones ought be defined for each Region.
+			{
+				MissionArea area;
+				area.lonMin =
+				area.lonMax = cityRule->getLongitude(); //(*i)["lon"].as<double>(0.);
+				area.latMin =
+				area.latMax = cityRule->getLatitude(); //(*i)["lat"].as<double>(0.);
+
+				if (std::find(
+						_missionZones.at(MZ_CITY).areas.begin(),
+						_missionZones.at(MZ_CITY).areas.end(),
+						area) == _missionZones.at(MZ_CITY).areas.end())
+				{
+					_missionZones.at(MZ_CITY).areas.push_back(area);
+				}
+			}
+		} */
 		// make sure all the zone 3s line up with cities in this region
 		// only applicable if there ARE cities in this region.
-		for (std::vector<MissionArea>::const_iterator
-				i = _missionZones.at(CITY_MISSION_ZONE).areas.begin();
-				i != _missionZones.at(CITY_MISSION_ZONE).areas.end();
+/*		for (std::vector<MissionArea>::const_iterator
+				i = _missionZones.at(MZ_CITY).areas.begin();
+				i != _missionZones.at(MZ_CITY).areas.end();
 				)
 		{
 			bool matching = false;
@@ -133,11 +158,11 @@ void RuleRegion::load(const YAML::Node& node)
 			}
 
 			if (matching == false)
-				i = _missionZones.at(CITY_MISSION_ZONE).areas.erase(i);
+				i = _missionZones.at(MZ_CITY).areas.erase(i);
 			else
 				++i;
-		}
-	}
+		} */
+	} // end_kL.
 
 	if (const YAML::Node& weights = node["missionWeights"])
 		_missionWeights.load(weights);
@@ -162,7 +187,7 @@ std::string RuleRegion::getType() const
  */
 int RuleRegion::getBaseCost() const
 {
-	return _cost;
+	return _buildCost;
 }
 
 /**
@@ -208,10 +233,35 @@ bool RuleRegion::insideRegion(
 
 /**
  * Gets the list of cities contained in this region.
+ * @note Build & cache a vector of all MissionAreas that are Cities.
  * @return, pointer to a vector of pointers to Cities
  */
 std::vector<City*>* RuleRegion::getCities()
 {
+	if (_cities.empty() == true) // kL_note: unused for now. Just return the cities, thanks anyway.
+	{
+		for (std::vector<MissionZone>::const_iterator
+				i = _missionZones.begin();
+				i != _missionZones.end();
+				++i)
+		{
+			for (std::vector<MissionArea>::const_iterator
+					j = i->areas.begin();
+					j != i->areas.end();
+					++j)
+			{
+				if (j->isPoint() == true
+					&& j->name.empty() == false)
+				{
+					_cities.push_back(new City(
+											j->name,
+											j->lonMin,
+											j->latMin));
+				}
+			}
+		}
+	}
+
 	return &_cities;
 }
 
@@ -226,8 +276,7 @@ size_t RuleRegion::getWeight() const
 }
 
 /**
- * Gets a random point that is guaranteed to be inside the give zone.
- * If the region contains cities they are the sites of zone 0 and the rest of the zones get one index higher.
+ * Gets a random point that is guaranteed to be inside the given zone.
  * @param zone - the target zone
  * @return, a pair of longitude and latitude
  */
@@ -262,12 +311,42 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 			lat = RNG::generate(latMin, latMax);
 
 		return std::make_pair(
-							lon * M_PI / 180.,
-							lat * M_PI / 180.);
+							lon,
+							lat);
 	}
 
 	assert(0 && "Invalid zone number");
 	return std::make_pair(0.,0.);
+}
+
+/**
+ * Gets the area data for the mission point in the specified zone and coordinates.
+ * @param zone		- the target zone
+ * @param target	- the target coordinates
+ * @return, a pair of longitude and latitude
+ */
+MissionArea RuleRegion::getMissionPoint(
+		size_t zone,
+		Target* target) const
+{
+	if (zone < _missionZones.size())
+	{
+		for (std::vector<MissionArea>::const_iterator
+				i = _missionZones[zone].areas.begin();
+				i != _missionZones[zone].areas.end();
+				++i)
+		{
+			if (i->isPoint() == true
+				&& AreSame(target->getLongitude(), i->lonMin)
+				&& AreSame(target->getLatitude(), i->latMin))
+			{
+				return *i;
+			}
+		}
+	}
+
+	assert(0 && "Invalid zone number");
+	return MissionArea();
 }
 
 /**

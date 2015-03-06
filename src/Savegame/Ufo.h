@@ -61,7 +61,7 @@ private:
 	bool
 		_detected,
 		_hyperDetected,
-		_inBattlescape,
+		_inTactical,
 		_processedIntercept;
 	int
 		_damage,
@@ -72,7 +72,7 @@ private:
 		_fireCountdown,
 		_hitFrame,
 		_landId,
-		_secondsRemaining,
+		_secondsLeft,
 		_shootingAt;
 	size_t _trajectoryPoint;
 
@@ -140,9 +140,9 @@ private:
 		bool getDetected() const;
 
 		/// Sets the UFO's seconds left on the ground.
-		void setSecondsRemaining(int seconds);
+		void setSecondsLeft(int sec);
 		/// Gets the UFO's seconds left on the ground.
-		int getSecondsRemaining() const;
+		int getSecondsLeft() const;
 
 		/// Sets the UFO's altitude.
 		void setAltitude(const std::string& altitude);
@@ -164,7 +164,7 @@ private:
 		bool isDestroyed() const;
 
 		/// Sets the UFO's battlescape status.
-		void setInBattlescape(const bool inbattle);
+		void setInBattlescape(const bool inTactical);
 		/// Gets if the UFO is in battlescape.
 		bool isInBattlescape() const;
 

@@ -878,7 +878,7 @@ void DebriefingState::prepareDebriefing()
 			if (aborted == true
 				&& (*i)->getStatus() == Ufo::LANDED)
 			{
-				(*i)->setSecondsRemaining(15); // UFO lifts off ...
+				(*i)->setSecondsLeft(15); // UFO lifts off ...
 			}
 			else if (aborted == false) // successful mission ( kL: failed mission leaves UFO still crashed! )
 //				|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
@@ -1513,9 +1513,12 @@ void DebriefingState::prepareDebriefing()
 
 		if (_region != NULL)
 		{
-			const AlienMission* const am = _savedGame->getAlienMission(
-																_region->getRules()->getType(),
-																"STR_ALIEN_RETALIATION");
+			const AlienMission* const am = _game->getSavedGame()->findAlienMission(
+																			_region->getRules()->getType(),
+																			OBJECTIVE_RETALIATION);
+//			const AlienMission* const am = _savedGame->getAlienMission(
+//																_region->getRules()->getType(),
+//																"STR_ALIEN_RETALIATION");
 			for (std::vector<Ufo*>::const_iterator
 					i = _savedGame->getUfos()->begin();
 					i != _savedGame->getUfos()->end();

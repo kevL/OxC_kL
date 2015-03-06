@@ -37,6 +37,7 @@ struct convert<OpenXcom::MissionWave>
 		node["count"]		= rhs.ufoCount;
 		node["trajectory"]	= rhs.trajectory;
 		node["timer"]		= rhs.spawnTimer;
+		node["objective"]	= rhs.objective;
 
 		return node;
 	}
@@ -46,13 +47,14 @@ struct convert<OpenXcom::MissionWave>
 			const Node& node,
 			OpenXcom::MissionWave& rhs)
 	{
-		if (!node.IsMap())
+		if (node.IsMap() == false)
 			return false;
 
-		rhs.ufoType		= node["ufo"].as<std::string>();
-		rhs.ufoCount	= node["count"].as<size_t>();
+		rhs.ufoType		= node["ufo"]		.as<std::string>();
+		rhs.ufoCount	= node["count"]		.as<size_t>();
 		rhs.trajectory	= node["trajectory"].as<std::string>();
-		rhs.spawnTimer	= node["timer"].as<size_t>();
+		rhs.spawnTimer	= node["timer"]		.as<size_t>();
+		rhs.objective	= node["objective"]	.as<bool>(false);
 
 		return true;
 	}
@@ -72,7 +74,8 @@ RuleAlienMission::RuleAlienMission(const std::string& type)
 	:
 		_type(type),
 		_points(0),
-		_markerIcon(-1)
+		_objective(OBJECTIVE_SCORE),
+		_specialZone(-1)
 {}
 
 /**
@@ -95,13 +98,13 @@ RuleAlienMission::~RuleAlienMission()
  */
 void RuleAlienMission::load(const YAML::Node& node)
 {
-	_type		= node["type"]		.as<std::string>(_type);
-	_points		= node["points"]	.as<int>(_points);
-	_waves		= node["waves"]		.as<std::vector<MissionWave> >(_waves);
-	_specialUfo	= node["specialUfo"].as<std::string>(_specialUfo);
-	_deployment	= node["deployment"].as<std::string>(_deployment);
-	_markerName	= node["markerName"].as<std::string>(_markerName);
-	_markerIcon	= node["markerIcon"].as<int>(_markerIcon);
+	_type			= node["type"]							.as<std::string>(_type);
+	_points			= node["points"]						.as<int>(_points);
+	_waves			= node["waves"]							.as<std::vector<MissionWave> >(_waves);
+	_objective		= (MissionObjective)node["objective"]	.as<int>(_objective);
+	_specialUfo		= node["specialUfo"]					.as<std::string>(_specialUfo);
+	_specialZone	= node["specialZone"]					.as<int>(_specialZone);
+	_weights		= node["missionWeights"]				.as< std::map<size_t, int> >(_weights);
 
 	// Only allow full replacement of mission racial distribution.
 	if (const YAML::Node& weights = node["raceWeights"])
@@ -160,7 +163,7 @@ void RuleAlienMission::load(const YAML::Node& node)
  * Chooses one of the available races for this mission.
  * @note The racial distribution may vary based on the current game date.
  * @param monthsPassed - the number of months that have passed in the game world
- * @return, the string id of the race
+ * @return, the string ID of the race
  */
 const std::string RuleAlienMission::generateRace(size_t const monthsPassed) const
 {
@@ -172,8 +175,10 @@ const std::string RuleAlienMission::generateRace(size_t const monthsPassed) cons
 }
 
 /**
- * Chooses the best candidate.
+ * Chooses the most likely race for this mission.
+ * @note The racial distribution may vary based on the current game date.
  * @param monthsPassed - the number of months that have passed in the game world
+ * @return, the string ID of the race
  */
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
@@ -191,30 +196,28 @@ int RuleAlienMission::getPoints() const
 }
 
 /**
- * Returns the alien deployment for this mission.
- * @return, string ID for deployment
+ * Returns the chances of this mission being generated based on the current game date.
+ * @param monthsPassed - the number of months that have passed in the game world
+ * @return, the weight
  */
-std::string RuleAlienMission::getDeployment() const
+int RuleAlienMission::getWeight(const size_t monthsPassed) const
 {
-	return _deployment;
-}
+	if (_weights.empty() == true)
+		return 1;
 
-/**
- * Returns the globe marker name for this mission.
- * @return, string ID for marker name
- */
-std::string RuleAlienMission::getMarkerName() const
-{
-	return _markerName;
-}
+	int weight = 0;
+	for (std::map<size_t, int>::const_iterator
+			i = _weights.begin();
+			i != _weights.end();
+			++i)
+	{
+		if (i->first > monthsPassed)
+			break;
 
-/**
- * Returns the globe marker icon for this mission.
- * @return, marker sprite -1 if none
- */
-int RuleAlienMission::getMarkerIcon() const
-{
-	return _markerIcon;
+		weight = i->second;
+	}
+
+	return weight;
 }
 
 }

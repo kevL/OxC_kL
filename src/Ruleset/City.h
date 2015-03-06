@@ -23,29 +23,35 @@
 //#include <string>
 //#include <yaml-cpp/yaml.h>
 
+#include "../Savegame/Target.h"
+
 
 namespace OpenXcom
 {
+
+class Language;
+
 
 /**
  * Represents a city of the world.
  * Aliens target cities for certain missions.
  */
 class City
+	:
+		public Target
 {
 
 private:
 	bool _labelTop;
 	size_t _zoomLevel;
-	double
-		_lon,
-		_lat;
 
 	std::string _name;
 
 
 	public:
-		/// Creates a new City at a certain position.
+		/// Creates a new City.
+		City();
+		/// Creates a new City at coordinates.
 		City(
 				const std::string& name,
 				double lon,
@@ -56,18 +62,22 @@ private:
 		/// Loads the City from YAML.
 		void load(const YAML::Node& node);
 
-		/// Gets the City's name.
-		std::string getName() const;
+		/// Gets the city's name.
+		std::wstring getName(Language* lang) const;
+//		std::string getName() const;
 
 		/// Gets the City's latitude.
 		double getLatitude() const;
 		/// Gets the City's longitude.
 		double getLongitude() const;
 
-		/// Gets the level of zoom that shows City name.
+		/// Gets the city's marker.
+		int getMarker() const;
+
+		/// Gets the level of zoom that shows City's name.
 		size_t getZoomLevel() const;
 
-		/// Gets if a City's label is above or below its marker.
+		/// Gets if City's label is above or below its marker.
 		bool getLabelTop() const;
 };
 
