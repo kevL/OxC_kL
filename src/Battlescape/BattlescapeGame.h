@@ -223,7 +223,7 @@ private:
 				bool hidden = false,
 				bool terrain = false);
 		/// Checks if a unit panics.
-//kL	void checkForPanic(BattleUnit *unit);
+//		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
 		bool checkReservedTU(
 				BattleUnit* bu,
@@ -243,7 +243,7 @@ private:
 		/// Converts a unit into a unit of another type.
 		BattleUnit* convertUnit(
 				BattleUnit* unit,
-				const std::string& convertType);
+				const std::string& conType);
 
 		/// Handles kneeling action.
 		bool kneel(BattleUnit* bu);
@@ -335,12 +335,12 @@ private:
 		/// Get the depth of the saved game.
 		const int getDepth() const;
 
-		/// kL. Gets the BattlescapeState.
+		/// Gets the BattlescapeState.
 		BattlescapeState* getBattlescapeState() const;
 
-		/// kL. Gets the universal fist.
+		/// Gets the universal fist.
 		BattleItem* getFist() const;
-		/// kL. Gets the alienPsi weapon.
+		/// Gets the alienPsi weapon.
 		BattleItem* getAlienPsi() const;
 };
 

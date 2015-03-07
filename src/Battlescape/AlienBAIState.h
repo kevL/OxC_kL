@@ -183,7 +183,7 @@ protected:
 		void selectMeleeOrRanged();
 
 		/// Gets the current target-unit.
-		BattleUnit* getTarget();
+//		BattleUnit* getTarget();
 };
 
 }

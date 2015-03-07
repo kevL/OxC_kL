@@ -2939,9 +2939,9 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
  * Gets the currently targeted unit.
  * @return, pointer to a BattleUnit
  */
-BattleUnit* AlienBAIState::getTarget()
+/*BattleUnit* AlienBAIState::getTarget()
 {
 	return _aggroTarget;
-}
+}*/
 
 }

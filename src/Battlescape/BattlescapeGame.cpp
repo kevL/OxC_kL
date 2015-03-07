@@ -1145,11 +1145,11 @@ void BattlescapeGame::checkForCasualties(
 						// losing team(s) all get a morale loss
 						// based on their individual Bravery & rank of unit that was killed
 						int moraleLoss = (110 - (*j)->getBaseStats()->bravery) / 10;
-						if (moraleLoss > 0)
+						if (moraleLoss > 0) // pure safety, ain't gonna happen really.
 						{
 							moraleLoss = moraleLoss * loss * 2 / bTeam;
 							if (converted == true)
-								moraleLoss = moraleLoss * 5 / 4; // extra loss if xCom or civie turns into a Zombie.
+								moraleLoss = (moraleLoss * 5 + 3) / 4; // extra loss if xCom or civie turns into a Zombie.
 
 							(*j)->moraleChange(-moraleLoss);
 						}
@@ -2825,15 +2825,15 @@ void BattlescapeGame::dropItem(
 
 /**
  * Converts a unit into a unit of another type.
- * @param unit			- pointer to a unit to convert
- * @param convertType	- reference the type of unit to convert to
+ * @param unit		- pointer to a unit to convert
+ * @param conType	- reference the type of unit to convert to
  * @return, pointer to the new unit
  */
 BattleUnit* BattlescapeGame::convertUnit(
 		BattleUnit* unit,
-		const std::string& convertType)
+		const std::string& conType)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;
+	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << conType;
 	const bool visible = unit->getUnitVisible();
 
 	_save->getBattleState()->showPsiButton(false);
@@ -2871,63 +2871,63 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 
 	std::ostringstream newArmor;
-	newArmor << getRuleset()->getUnit(convertType)->getArmor();
+	newArmor << getRuleset()->getUnit(conType)->getArmor();
 
 	const int
 		difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty()),
 		month = _parentState->getGame()->getSavedGame()->getMonthsPassed();
 
-	BattleUnit* const convertUnit = new BattleUnit(
-												getRuleset()->getUnit(convertType),
-												FACTION_HOSTILE,
-												_save->getUnits()->back()->getId() + 1,
-												getRuleset()->getArmor(newArmor.str()),
-												difficulty,
-												getDepth(),
-												month,
-												this);
+	BattleUnit* const conUnit = new BattleUnit(
+											getRuleset()->getUnit(conType),
+											FACTION_HOSTILE,
+											_save->getUnits()->back()->getId() + 1,
+											getRuleset()->getArmor(newArmor.str()),
+											difficulty,
+											getDepth(),
+											month,
+											this);
 
 	_save->getTile(unit->getPosition())->setUnit(
-											convertUnit,
+											conUnit,
 											_save->getTile(unit->getPosition() + Position(0,0,-1)));
-	convertUnit->setPosition(unit->getPosition());
+	conUnit->setPosition(unit->getPosition());
 
-	convertUnit->setTimeUnits(0);
+	conUnit->setTimeUnits(0);
 
 	int dir;
-	if (convertType == "STR_ZOMBIE")
+	if (conType == "STR_ZOMBIE")
 		dir = RNG::generate(0,7); // or, (unit->getDirection())
 	else
 		dir = 3;
-	convertUnit->setDirection(dir);
+	conUnit->setDirection(dir);
 
-	_save->getUnits()->push_back(convertUnit);
+	_save->getUnits()->push_back(conUnit);
 
-	convertUnit->setAIState(new AlienBAIState(
+	conUnit->setAIState(new AlienBAIState(
 											_save,
-											convertUnit,
+											conUnit,
 											NULL));
 
-	std::string terrorWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
+	std::string terrorWeapon = getRuleset()->getUnit(conType)->getRace().substr(4);
 	terrorWeapon += "_WEAPON";
 	BattleItem* const item = new BattleItem(
 										getRuleset()->getItem(terrorWeapon),
 										_save->getCurrentItemId());
-	item->moveToOwner(convertUnit);
+	item->moveToOwner(conUnit);
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	_save->getItems()->push_back(item);
 
-//	convertUnit->setCache(NULL);
-	getMap()->cacheUnit(convertUnit);
+//	conUnit->setCache(NULL);
+	getMap()->cacheUnit(conUnit);
 
-	convertUnit->setUnitVisible(visible);
+	conUnit->setUnitVisible(visible);
 
-	getTileEngine()->applyGravity(convertUnit->getTile());
-	getTileEngine()->calculateFOV(convertUnit->getPosition());
+	getTileEngine()->applyGravity(conUnit->getTile());
+	getTileEngine()->calculateFOV(conUnit->getPosition());
 
-//	convertUnit->getCurrentAIState()->think();
+//	conUnit->getCurrentAIState()->think();
 
-	return convertUnit;
+	return conUnit;
 }
 
 /**
