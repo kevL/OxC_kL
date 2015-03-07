@@ -187,8 +187,8 @@ inline Cord::Cord(const CordPolar& pol)
 inline CordPolar::CordPolar(const Cord& c)
 {
 	double inv = 1 / c.norm();
-	lat = asin(c.y * inv);
-	lon = atan2(c.x, c.z);
+	lat = std::asin(c.y * inv);
+	lon = std::atan2(c.x, c.z);
 }
 
 }

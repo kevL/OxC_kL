@@ -82,10 +82,11 @@ void RuleRegion::load(const YAML::Node& node)
 	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
 
 	// kL_begin:
-	// Delete a possible placeholder in the Geography ruleset, by removing
-	// the its pointlike MissionArea at MissionZone[3] MZ_CITY; ie [0,0,0,0].
-	// Note that safeties have been removed on all below_ ...
 	MissionArea area = *_missionZones.at(MZ_CITY).areas.begin();
+
+	// Delete a possible placeholder in the Geography ruleset, by removing
+	// its pointlike MissionArea at MissionZone[3] MZ_CITY; ie [0,0,0,0].
+	// Note that safeties have been removed on all below_ ...
 	if (area.isPoint() == true)
 		_missionZones.at(MZ_CITY).areas.erase(_missionZones.at(MZ_CITY).areas.begin());
 
@@ -96,7 +97,7 @@ void RuleRegion::load(const YAML::Node& node)
 				i != cities.end();
 				++i)
 		{
-			City* const cityRule = new City(); // Load all Cities that are in YAML-ruleset "region|type|cities"
+			City* const cityRule = new City(); // Load all Cities that are in YAML-ruleset
 			cityRule->load(*i);
 			_cities.push_back(cityRule);
 
@@ -107,61 +108,6 @@ void RuleRegion::load(const YAML::Node& node)
 
 			_missionZones.at(MZ_CITY).areas.push_back(area);
 		}
-/*	if (const YAML::Node& cities = node["cities"]) // kL_begin->
-	{
-		for (YAML::const_iterator
-				i = cities.begin();
-				i != cities.end();
-				++i)
-		{
-			City* const cityRule = new City(); // Load all Cities that are in YAML-ruleset "region|type|cities"
-			cityRule->load(*i);
-			_cities.push_back(cityRule);
-
-			// if a city has been added, make sure that it has a zone 3 associated with it; if not, create one for it.
-			if (_missionZones.size() > MZ_CITY) // safety: 6 zones ought be defined for each Region.
-			{
-				MissionArea area;
-				area.lonMin =
-				area.lonMax = cityRule->getLongitude(); //(*i)["lon"].as<double>(0.);
-				area.latMin =
-				area.latMax = cityRule->getLatitude(); //(*i)["lat"].as<double>(0.);
-
-				if (std::find(
-						_missionZones.at(MZ_CITY).areas.begin(),
-						_missionZones.at(MZ_CITY).areas.end(),
-						area) == _missionZones.at(MZ_CITY).areas.end())
-				{
-					_missionZones.at(MZ_CITY).areas.push_back(area);
-				}
-			}
-		} */
-		// make sure all the zone 3s line up with cities in this region
-		// only applicable if there ARE cities in this region.
-/*		for (std::vector<MissionArea>::const_iterator
-				i = _missionZones.at(MZ_CITY).areas.begin();
-				i != _missionZones.at(MZ_CITY).areas.end();
-				)
-		{
-			bool matching = false;
-
-			for (std::vector<City*>::const_iterator
-					j = _cities.begin();
-					j != _cities.end()
-						&& matching == false;
-					++j)
-			{
-				matching = (AreSame((*j)->getLatitude(), (*i).latMin * M_PI / 180.)
-						 && AreSame((*j)->getLongitude(), (*i).lonMin * M_PI / 180.)
-						 && AreSame((*i).latMax, (*i).latMin)
-						 && AreSame((*i).lonMax, (*i).lonMin));
-			}
-
-			if (matching == false)
-				i = _missionZones.at(MZ_CITY).areas.erase(i);
-			else
-				++i;
-		} */
 	} // end_kL.
 
 	if (const YAML::Node& weights = node["missionWeights"])

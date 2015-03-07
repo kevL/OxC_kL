@@ -33,17 +33,18 @@ namespace OpenXcom
  */
 struct TrajectoryWaypoint
 {
-	size_t zone;		// The mission zone.
-	size_t altitude;	// The altitude to reach.
-	size_t speed;		// The speed percentage [0..100]
+	size_t
+		zone,		// The mission zone.
+		altitude,	// The altitude to reach.
+		speed;		// The speed percentage [0..100]
 };
 
 
-YAML::Emitter& operator <<(
+YAML::Emitter& operator << (
 		YAML::Emitter& emitter,
 		const TrajectoryWaypoint& wp);
 
-bool operator >>(
+bool operator >> (
 		const YAML::Node& node,
 		TrajectoryWaypoint& wp);
 
@@ -56,8 +57,9 @@ class UfoTrajectory
 {
 
 private:
-	std::string _id;
 	size_t _groundTimer;
+	std::string _id;
+
 	std::vector<TrajectoryWaypoint> _waypoints;
 
 

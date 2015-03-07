@@ -9,7 +9,6 @@
 terrains:
   - name: URBAN
     script: URBAN
-    textures: [10]
     mapDataSets:
       - BLANKS
       - ROADS
@@ -77,7 +76,6 @@ terrains:
         length: 10
   - name: URBAN2
     script: URBAN
-    textures: [10]
     mapDataSets:
       - BLANKS
       - ROADS

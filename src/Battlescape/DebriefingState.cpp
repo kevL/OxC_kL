@@ -1516,15 +1516,12 @@ void DebriefingState::prepareDebriefing()
 			const AlienMission* const am = _game->getSavedGame()->findAlienMission(
 																			_region->getRules()->getType(),
 																			OBJECTIVE_RETALIATION);
-//			const AlienMission* const am = _savedGame->getAlienMission(
-//																_region->getRules()->getType(),
-//																"STR_ALIEN_RETALIATION");
 			for (std::vector<Ufo*>::const_iterator
 					i = _savedGame->getUfos()->begin();
 					i != _savedGame->getUfos()->end();
 					)
 			{
-				if ((*i)->getMission() == am)
+				if ((*i)->getMission() == am) // dynamic_cast ?
 				{
 					delete *i;
 					i = _savedGame->getUfos()->erase(i);

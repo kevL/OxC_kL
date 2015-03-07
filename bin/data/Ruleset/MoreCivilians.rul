@@ -44,6 +44,15 @@ items:
     invHeight: 3
     armor: 12
     recover: false
+  - type: MALE_CIVILIAN7_CORPSE
+    name: STR_CORPSE
+    weight: 32
+    bigSprite: 207
+    floorSprite: 207
+    invWidth: 2
+    invHeight: 3
+    armor: 12
+    recover: false
   - type: FEMALE_CIVILIAN2_CORPSE
     name: STR_CORPSE
     weight: 28
@@ -183,6 +192,30 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+  - type: MALE_CIVILIAN7_ARMOR
+    spriteInv: civilianMInventoryImage
+    spriteSheet: MALE_CIVILIAN7.PCK
+    corpseBattle:
+      - MALE_CIVILIAN7_CORPSE
+#    corpseGeo:
+#      - STR_CIVM_CORPSE
+    frontArmor: 12
+    sideArmor: 8
+    rearArmor: 5
+    underArmor: 2
+    drawingRoutine: 4
+    damageModifier:
+      - 1.0
+      - 1.13
+      - 1.07
+      - 1.1
+      - 1.11
+      - 1.17
+      - 1.19
+      - 1.2
+      - 1.5
+      - 1.12
+    loftempsSet: [ 3 ]
   - type: FEMALE_CIVILIAN2_ARMOR
     spriteInv: civilianFInventoryImage
     spriteSheet: FEMALE_CIVILIAN2.PCK
@@ -332,6 +365,26 @@ units:
     value: 33
     intelligence: 4
     energyRecovery: 50
+  - type: MALE_CIVILIAN7
+    race: STR_CIVILIAN
+    stats:
+      tu: 35
+      stamina: 65
+      health: 30
+      bravery: 80
+      reactions: 30
+      firing: 30
+      throwing: 50
+      strength: 20
+      psiStrength: 5
+      psiSkill: 0
+      melee: 15
+    armor: MALE_CIVILIAN7_ARMOR
+    standHeight: 21
+    kneelHeight: 14
+    value: 33
+    intelligence: 4
+    energyRecovery: 50
   - type: FEMALE_CIVILIAN2
     race: STR_CIVILIAN
     stats:
@@ -410,6 +463,13 @@ extraSprites:
     subY: 40
     files:
       0: Resources/MoreCivilians/MALE_CIVILIAN6.png
+  - type: MALE_CIVILIAN7.PCK
+    width: 512
+    height: 200
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/MoreCivilians/MALE_CIVILIAN7.png
   - type: FEMALE_CIVILIAN2.PCK
     width: 512
     height: 720
@@ -433,6 +493,7 @@ extraSprites:
       204: Resources/MoreCivilians/BIGOB_MALE_CIVILIAN6_CORPSE.png
       205: Resources/MoreCivilians/BIGOB_FEMALE_CIVILIAN2_CORPSE.png
       206: Resources/MoreCivilians/BIGOB_FEMALE_CIVILIAN3_CORPSE.png
+      207: Resources/MoreCivilians/BIGOB_MALE_CIVILIAN7_CORPSE.png
   - type: FLOOROB.PCK
     files:
       200: Resources/MoreCivilians/FLOOROB_MALE_CIVILIAN2_CORPSE.png
@@ -442,3 +503,4 @@ extraSprites:
       204: Resources/MoreCivilians/FLOOROB_MALE_CIVILIAN6_CORPSE.png
       205: Resources/MoreCivilians/FLOOROB_FEMALE_CIVILIAN2_CORPSE.png
       206: Resources/MoreCivilians/FLOOROB_FEMALE_CIVILIAN3_CORPSE.png
+      207: Resources/MoreCivilians/FLOOROB_MALE_CIVILIAN7_CORPSE.png

@@ -36,7 +36,8 @@ City::City()
 	:
 		Target(),
 		_zoomLevel(4),
-		_labelTop(false)
+		_labelTop(false),
+		_texture(-1)
 {
 	_lon =
 	_lat = 0.;
@@ -56,7 +57,8 @@ City::City(
 		Target(),
 		_name(name),
 		_zoomLevel(4),
-		_labelTop(false)
+		_labelTop(false),
+		_texture(-1)
 {
 	_lon = lon;
 	_lat = lat;
@@ -79,9 +81,9 @@ void City::load(const YAML::Node& node)
 	_name		= node["name"]		.as<std::string>(_name);
 	_zoomLevel	= node["zoomLevel"]	.as<size_t>(_zoomLevel);
 	_labelTop	= node["labelTop"]	.as<bool>(_labelTop);
+	_texture	= node["texture"]	.as<int>(_texture);
 
 	// iDea: _hidden, marker -1 etc.
-	// add _texture !!!
 	// add _zoneType (to specify the missionZone category 0..5+ that City is part of)
 }
 
@@ -138,6 +140,15 @@ size_t City::getZoomLevel() const
 bool City::getLabelTop() const
 {
 	return _labelTop;
+}
+
+/**
+ * Gets the texture of this City for the battlescape.
+ * @return, texture ID
+ */
+int City::getTexture() const
+{
+	return _texture;
 }
 
 }

@@ -2918,13 +2918,13 @@ void BattleUnit::updateGeoscapeStats(Soldier* soldier)
 
 /**
  * Check if unit eligible for squaddie promotion. If yes, promote the unit.
- * Increase the mission counter. Calculate the experience increases.
- * @param geoscape - pointer to the SavedGame
+ * Increase the mission counter. Calculate the experience increases. Etc.
+ * @param savedGame - pointer to the SavedGame
  * @return, true if the soldier was eligible for squaddie promotion
  */
-bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
+bool BattleUnit::postMissionProcedures(const SavedGame* const savedGame)
 {
-	Soldier* const soldier = geoscape->getSoldier(_id);
+	Soldier* const soldier = savedGame->getSoldier(_id);
 	if (soldier == NULL)
 		return false;
 
@@ -2934,7 +2934,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	UnitStats* const stats = soldier->getCurrentStats();
 	const UnitStats caps = soldier->getRules()->getStatCaps();
 
-	const int healthLoss = stats->health - _health;
+	const int healthLoss = _stats.health - _health;
 	soldier->setWoundRecovery(RNG::generate( // 50% to 150%
 										healthLoss / 2,
 										healthLoss * 3 / 2));

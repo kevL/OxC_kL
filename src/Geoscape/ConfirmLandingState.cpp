@@ -379,7 +379,6 @@ RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 void ConfirmLandingState::btnYesClick(Action*)
 {
 	_game->getResourcePack()->fadeMusic(_game, 335);
-
 	_game->popState();
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
@@ -409,7 +408,6 @@ void ConfirmLandingState::btnYesClick(Action*)
 	}
 	else if (site != NULL)
 	{
-//		battle->setMissionType(site->getRules()->getDeployment());
 		battle->setMissionType(site->getDeployment()->getType());
 		bGen.setMissionSite(site);
 		bGen.setAlienRace(site->getAlienRace());
@@ -419,6 +417,8 @@ void ConfirmLandingState::btnYesClick(Action*)
 		battle->setMissionType("STR_ALIEN_BASE_ASSAULT");
 		bGen.setAlienBase(abase);
 		bGen.setAlienRace(abase->getAlienRace());
+
+		bGen.setSiteTexture(NULL);
 	}
 	else
 	{

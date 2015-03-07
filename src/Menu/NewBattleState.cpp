@@ -47,7 +47,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleAlienMission.h"
@@ -413,15 +413,15 @@ void NewBattleState::save(const std::string& filename)
 void NewBattleState::initSave()
 {
 	const Ruleset* const rule = _game->getRuleset();
-	SavedGame* const save = new SavedGame(rule);
+	SavedGame* const savedGame = new SavedGame(rule);
 	Base* const base = new Base(rule);
-	const YAML::Node& starter = _game->getRuleset()->getStartingBase();
+	const YAML::Node& startBase = _game->getRuleset()->getStartingBase();
 	base->load(
-			starter,
-			save,
+			startBase,
+			savedGame,
 			true,
 			true);
-	save->getBases()->push_back(base);
+	savedGame->getBases()->push_back(base);
 
 	// kill everything we don't want in this base
 	for (std::vector<Soldier*>::const_iterator
@@ -456,7 +456,7 @@ void NewBattleState::initSave()
 			i < 30;
 			++i)
 	{
-		Soldier* const soldier = rule->genSoldier(save);
+		Soldier* const soldier = rule->genSoldier(savedGame);
 
 		for (int
 				n = 0;
@@ -469,17 +469,17 @@ void NewBattleState::initSave()
 			soldier->promoteRank();
 
 			UnitStats* const stats = soldier->getCurrentStats();
-			stats->tu			+= RNG::generate(0, 5);
-			stats->stamina		+= RNG::generate(0, 5);
-			stats->health		+= RNG::generate(0, 5);
-			stats->bravery		+= RNG::generate(0, 5);
-			stats->reactions	+= RNG::generate(0, 5);
-			stats->firing		+= RNG::generate(0, 5);
-			stats->throwing		+= RNG::generate(0, 5);
-			stats->strength		+= RNG::generate(0, 5);
-			stats->melee		+= RNG::generate(0, 5);
-			stats->psiStrength	+= RNG::generate(0, 5);
-			stats->psiSkill		+= RNG::generate(0, 20);
+			stats->tu			+= RNG::generate(0,5);
+			stats->stamina		+= RNG::generate(0,5);
+			stats->health		+= RNG::generate(0,5);
+			stats->bravery		+= RNG::generate(0,5);
+			stats->reactions	+= RNG::generate(0,5);
+			stats->firing		+= RNG::generate(0,5);
+			stats->throwing		+= RNG::generate(0,5);
+			stats->strength		+= RNG::generate(0,5);
+			stats->melee		+= RNG::generate(0,5);
+			stats->psiStrength	+= RNG::generate(0,5);
+			stats->psiSkill		+= RNG::generate(0,20);
 		}
 
 		UnitStats* const stats = soldier->getCurrentStats();
@@ -514,16 +514,16 @@ void NewBattleState::initSave()
 	}
 
 	// Add research
-	const std::vector<std::string> &research = rule->getResearchList();
+	const std::vector<std::string>& research = rule->getResearchList();
 	for (std::vector<std::string>::const_iterator
 			i = research.begin();
 			i != research.end();
 			++i)
 	{
-		save->addFinishedResearch(rule->getResearch(*i));
+		savedGame->addFinishedResearch(rule->getResearch(*i));
 	}
 
-	_game->setSavedGame(save);
+	_game->setSavedGame(savedGame);
 	cbxMissionChange(NULL);
 }
 
@@ -622,6 +622,7 @@ void NewBattleState::btnOkClick(Action*)
 									base));
 
 	_craft = NULL;
+//	_game->getResourcePack()->fadeMusic(_game, 335); // TODO: sort out musicFade from NewBattleState to Briefing ...
 }
 
 /**

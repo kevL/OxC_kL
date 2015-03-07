@@ -3770,7 +3770,7 @@ void GeoscapeState::btnTimerClick(Action* action)
 	SDL_Event ev;
 	ev.type = SDL_MOUSEBUTTONDOWN;
 	ev.button.button = SDL_BUTTON_LEFT;
-	Action a = Action(&ev, 0., 0., 0, 0);
+	Action a = Action(&ev, 0.,0., 0,0);
 	action->getSender()->mousePress(&a, this);
 }
 
@@ -3800,9 +3800,11 @@ void GeoscapeState::resize(
 		case SCALE_SCREEN_DIV_3:
 			divisor = 3;
 		break;
+
 		case SCALE_SCREEN_DIV_2:
 			divisor = 2;
 		break;
+
 		case SCALE_SCREEN:
 		break;
 

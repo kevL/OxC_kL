@@ -848,7 +848,7 @@ private:
 		void updateGeoscapeStats(Soldier* soldier);
 
 		/// Check if this unit is eligible for squaddie promotion.
-		bool postMissionProcedures(SavedGame* geoscape);
+		bool postMissionProcedures(const SavedGame* const savedGame);
 
 		/// Gets the sprite index of this unit for the MiniMap.
 		int getMiniMapSpriteIndex() const;

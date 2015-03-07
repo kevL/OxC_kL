@@ -11,23 +11,6 @@ Tileset:UFO - Terrain
 	blankPath:${blankUFO}
 	palette:ufo
 
-	files:atlantdesert
-		${dep}:SANDS ATLANTDESERT DESERT
-		ATLANTDESERT00:${dep}
-		ATLANTDESERT01:${dep}
-		ATLANTDESERT02:${dep}
-		ATLANTDESERT03:${dep}
-		ATLANTDESERT04:${dep}
-		ATLANTDESERT05:${dep}
-		ATLANTDESERT06:${dep}
-		ATLANTDESERT07:${dep}
-		ATLANTDESERT08:${dep}
-		ATLANTDESERT09:${dep}
-		ATLANTDESERT10:${dep}
-		ATLANTDESERT11:${dep}
-		ATLANTDESERT12:${dep}
-	end
-
 	files:comrcurban
 		${dep}:COMROADS COMBITS COMMERCE COMFRN COMDECOR
 		COMRCURBAN00:${dep}
@@ -245,7 +228,7 @@ Tileset:UFO - Terrain
 	end
 
 	files:desertmount
-		${dep}:MOUNT DESERT
+		${dep}:DESERTMOUNT DESERT
 		DESERTMOUNT00:${dep}
 		DESERTMOUNT01:${dep}
 		DESERTMOUNT02:${dep}
@@ -266,6 +249,23 @@ Tileset:UFO - Terrain
 		DESERTMOUNT17:${dep}
 	end
 
+	files:deserttemple
+		${dep}:SANDS ATLANTDESERT DESERT
+		ATLANTDESERT00:${dep}
+		ATLANTDESERT01:${dep}
+		ATLANTDESERT02:${dep}
+		ATLANTDESERT03:${dep}
+		ATLANTDESERT04:${dep}
+		ATLANTDESERT05:${dep}
+		ATLANTDESERT06:${dep}
+		ATLANTDESERT07:${dep}
+		ATLANTDESERT08:${dep}
+		ATLANTDESERT09:${dep}
+		ATLANTDESERT10:${dep}
+		ATLANTDESERT11:${dep}
+		ATLANTDESERT12:${dep}
+	end
+
 	files:forest
 		${dep}:FOREST
 		FOREST00:${dep}
@@ -283,7 +283,7 @@ Tileset:UFO - Terrain
 	end
 
 	files:forestmount
-		${dep}:MOUNT FOREST FORESTMOUNT
+		${dep}:FORESTMOUNT FOREST FORESTMOUNTBITS
 		FORESTMOUNT00:${dep}
 		FORESTMOUNT01:${dep}
 		FORESTMOUNT02:${dep}
@@ -311,6 +311,131 @@ Tileset:UFO - Terrain
 		FORESTMOUNT24:${dep}
 		FORESTMOUNT25:${dep}
 		FORESTMOUNT26:${dep}
+	end
+
+	files:forestpolar
+		${dep}:FORESTPOLAR FOREST
+		FORESTPOLAR00:${dep}
+		FORESTPOLAR01:${dep}
+		FORESTPOLAR02:${dep}
+		FORESTPOLAR03:${dep}
+		FORESTPOLAR04:${dep}
+		FORESTPOLAR05:${dep}
+		FORESTPOLAR06:${dep}
+		FORESTPOLAR07:${dep}
+		FORESTPOLAR08:${dep}
+		FORESTPOLAR09:${dep}
+		FORESTPOLAR10:${dep}
+		FORESTPOLAR11:${dep}
+		FORESTPOLAR12:${dep}
+		FORESTPOLAR13:${dep}
+	end
+
+	files:grasslanddesert
+		${dep}:GRASSLANDDESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:grasslanddesertmount
+		${dep}:GRASSLANDMOUNT GRASSLANDDESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
+	files:grasslandforest
+		${dep}:GRASSLANDFOREST
+		FOREST00:${dep}
+		FOREST01:${dep}
+		FOREST02:${dep}
+		FOREST03:${dep}
+		FOREST04:${dep}
+		FOREST05:${dep}
+		FOREST06:${dep}
+		FOREST07:${dep}
+		FOREST08:${dep}
+		FOREST09:${dep}
+		FOREST10:${dep}
+		FOREST11:${dep}
+	end
+
+	files:grasslandforestmount
+		${dep}:GRASSLANDMOUNT GRASSLANDFOREST GRASSLANDMOUNTBITS
+		FORESTMOUNT00:${dep}
+		FORESTMOUNT01:${dep}
+		FORESTMOUNT02:${dep}
+		FORESTMOUNT03:${dep}
+		FORESTMOUNT04:${dep}
+		FORESTMOUNT05:${dep}
+		FORESTMOUNT06:${dep}
+		FORESTMOUNT07:${dep}
+		FORESTMOUNT08:${dep}
+		FORESTMOUNT09:${dep}
+		FORESTMOUNT10:${dep}
+		FORESTMOUNT11:${dep}
+		FORESTMOUNT12:${dep}
+		FORESTMOUNT13:${dep}
+		FORESTMOUNT14:${dep}
+		FORESTMOUNT15:${dep}
+		FORESTMOUNT16:${dep}
+		FORESTMOUNT17:${dep}
+		FORESTMOUNT18:${dep}
+		FORESTMOUNT19:${dep}
+		FORESTMOUNT20:${dep}
+		FORESTMOUNT21:${dep}
+		FORESTMOUNT22:${dep}
+		FORESTMOUNT23:${dep}
+		FORESTMOUNT24:${dep}
+		FORESTMOUNT25:${dep}
+		FORESTMOUNT26:${dep}
+	end
+
+	files:industrialufo
+		${dep}:PORTROADS PORTURBITS ROADS URBITS
+		INDUSTRIALURBAN00:${dep}
+		INDUSTRIALURBAN01:${dep}
+		INDUSTRIALURBAN02:${dep}
+		INDUSTRIALURBAN03:${dep}
+		INDUSTRIALURBAN04:${dep}
+		INDUSTRIALURBAN05:${dep}
+		INDUSTRIALURBAN06:${dep}
+		INDUSTRIALURBAN07:${dep}
+		INDUSTRIALURBAN08:${dep}
+		INDUSTRIALURBAN09:${dep}
+		INDUSTRIALURBAN10:${dep}
+		INDUSTRIALURBAN11:${dep}
+		INDUSTRIALURBAN12:${dep}
+		INDUSTRIALURBAN13:${dep}
+		INDUSTRIALURBAN14:${dep}
+		INDUSTRIALURBAN15:${dep}
+		INDUSTRIALURBAN16:${dep}
+		INDUSTRIALURBAN17:${dep}
 	end
 
 	files:industrialurban
@@ -351,7 +476,103 @@ Tileset:UFO - Terrain
 		JUNGLE11:${dep}
 	end
 
+	files:junglemount
+		${dep}:JUNGLEMOUNT JUNGLEBITS
+		JUNGLEMOUNT00:${dep}
+		JUNGLEMOUNT01:${dep}
+		JUNGLEMOUNT02:${dep}
+		JUNGLEMOUNT03:${dep}
+		JUNGLEMOUNT04:${dep}
+		JUNGLEMOUNT05:${dep}
+		JUNGLEMOUNT06:${dep}
+		JUNGLEMOUNT07:${dep}
+		JUNGLEMOUNT08:${dep}
+		JUNGLEMOUNT09:${dep}
+		JUNGLEMOUNT10:${dep}
+		JUNGLEMOUNT11:${dep}
+		JUNGLEMOUNT12:${dep}
+	end
+
+	files:junglepolar
+		${dep}:JUNGLEPOLAR JUNGLEBITS
+		JUNGLEPOLAR00:${dep}
+		JUNGLEPOLAR01:${dep}
+		JUNGLEPOLAR02:${dep}
+		JUNGLEPOLAR03:${dep}
+		JUNGLEPOLAR04:${dep}
+		JUNGLEPOLAR05:${dep}
+		JUNGLEPOLAR06:${dep}
+		JUNGLEPOLAR07:${dep}
+		JUNGLEPOLAR08:${dep}
+		JUNGLEPOLAR09:${dep}
+		JUNGLEPOLAR10:${dep}
+		JUNGLEPOLAR11:${dep}
+		JUNGLEPOLAR12:${dep}
+		JUNGLEPOLAR13:${dep}
+	end
+
+	files:jungletemple
+		${dep}:SANDS MUJUNGLE JUNGLEBITS
+		MUJUNGLE00:${dep}
+		MUJUNGLE01:${dep}
+		MUJUNGLE02:${dep}
+		MUJUNGLE03:${dep}
+		MUJUNGLE04:${dep}
+		MUJUNGLE05:${dep}
+		MUJUNGLE06:${dep}
+		MUJUNGLE07:${dep}
+		MUJUNGLE08:${dep}
+		MUJUNGLE09:${dep}
+		MUJUNGLE10:${dep}
+		MUJUNGLE11:${dep}
+		MUJUNGLE12:${dep}
+		MUJUNGLE13:${dep}
+		MUJUNGLE14:${dep}
+	end
+
 	files:madurban
+		${dep}:ROADS URBITS URBAN FRNITURE MADDECOR
+		URBAN00:${dep}
+		URBAN01:${dep}
+		URBAN02:${dep}
+		URBAN03:${dep}
+		URBAN04:${dep}
+		URBAN05:${dep}
+		URBAN06:${dep}
+		URBAN07:${dep}
+		URBAN08:${dep}
+		URBAN09:${dep}
+		MADURBAN10:${dep}
+		MADURBAN11:${dep}
+		MADURBAN12:${dep}
+		MADURBAN13:${dep}
+		URBAN14:${dep}
+		URBAN15:${dep}
+		URBAN16:${dep}
+		URBAN17:${dep}
+		URBAN18:${dep}
+		MADURBAN19:${dep}
+		MADURBAN20:${dep}
+		MADURBAN21:${dep}
+		MADURBAN22:${dep}
+		MADURBAN23:${dep}
+		MADURBAN24:${dep}
+		MADURBAN26:${dep}
+		MADURBAN27:${dep}
+		MADURBAN28:${dep}
+		MADURBAN29:${dep}
+		MADURBAN30:${dep}
+		MADURBAN31:${dep}
+		MADURBAN32:${dep}
+		MADURBAN33:${dep}
+		MADURBAN34:${dep}
+		MADURBAN35:${dep}
+		MADURBAN36:${dep}
+		MADURBAN37:${dep}
+		MADURBAN38:${dep}
+	end
+
+	files:madurbanufo
 		${dep}:ROADS URBITS URBAN FRNITURE MADDECOR
 		URBAN00:${dep}
 		URBAN01:${dep}
@@ -425,23 +646,55 @@ Tileset:UFO - Terrain
 		MOUNT12:${dep}
 	end
 
-	files:mujungle
-		${dep}:SANDS MUJUNGLE JUNGLEBITS
-		MUJUNGLE00:${dep}
-		MUJUNGLE01:${dep}
-		MUJUNGLE02:${dep}
-		MUJUNGLE03:${dep}
-		MUJUNGLE04:${dep}
-		MUJUNGLE05:${dep}
-		MUJUNGLE06:${dep}
-		MUJUNGLE07:${dep}
-		MUJUNGLE08:${dep}
-		MUJUNGLE09:${dep}
-		MUJUNGLE10:${dep}
-		MUJUNGLE11:${dep}
-		MUJUNGLE12:${dep}
-		MUJUNGLE13:${dep}
-		MUJUNGLE14:${dep}
+	files:nativeufo
+		${dep}:JUNGLE BARN FRNITURE URBITS CULTIVAT
+		NATIVEURBAN00:${dep}
+		NATIVEURBAN01:${dep}
+		NATIVEURBAN02:${dep}
+		NATIVEURBAN03:${dep}
+		NATIVEURBAN04:${dep}
+		NATIVEURBAN05:${dep}
+		NATIVEURBAN06:${dep}
+		NATIVEURBAN07:${dep}
+		NATIVEURBAN08:${dep}
+		NATIVEURBAN09:${dep}
+		NATIVEURBAN10:${dep}
+		NATIVEURBAN11:${dep}
+		NATIVEURBAN12:${dep}
+		NATIVEURBAN13:${dep}
+		NATIVEURBAN14:${dep}
+		NATIVEURBAN15:${dep}
+		NATIVEURBAN16:${dep}
+		NATIVEURBAN17:${dep}
+		NATIVEURBAN18:${dep}
+		NATIVEURBAN19:${dep}
+		NATIVEURBAN20:${dep}
+		NATIVEURBAN21:${dep}
+		NATIVEURBAN22:${dep}
+		NATIVEURBAN23:${dep}
+		NATIVEURBAN24:${dep}
+		NATIVEURBAN25:${dep}
+		NATIVEURBAN26:${dep}
+		NATIVEURBAN27:${dep}
+		NATIVEURBAN28:${dep}
+		NATIVEURBAN29:${dep}
+		NATIVEURBAN30:${dep}
+		NATIVEURBAN31:${dep}
+		NATIVEURBAN32:${dep}
+		NATIVEURBAN33:${dep}
+		NATIVEURBAN34:${dep}
+		NATIVEURBAN35:${dep}
+		NATIVEURBAN36:${dep}
+		NATIVEURBAN37:${dep}
+		NATIVEURBAN38:${dep}
+		NATIVEURBAN39:${dep}
+		NATIVEURBAN40:${dep}
+		NATIVEURBAN41:${dep}
+		NATIVEURBAN42:${dep}
+		NATIVEURBAN43:${dep}
+		NATIVEURBAN44:${dep}
+		NATIVEURBAN45:${dep}
+		NATIVEURBAN46:${dep}
 	end
 
 	files:nativeurban
@@ -513,21 +766,84 @@ Tileset:UFO - Terrain
 		POLAR13:${dep}
 	end
 
+	files:polardesert
+		${dep}:POLARDESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:polardesertmount
+		${dep}:POLARMOUNT POLARDESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
 	files:polarmount
-		${dep}:MOUNT POLAR POLARMOUNT
-		MOUNTPOLAR00:${dep}
-		MOUNTPOLAR01:${dep}
-		MOUNTPOLAR02:${dep}
-		MOUNTPOLAR03:${dep}
-		MOUNTPOLAR04:${dep}
-		MOUNTPOLAR05:${dep}
-		MOUNTPOLAR06:${dep}
-		MOUNTPOLAR07:${dep}
-		MOUNTPOLAR08:${dep}
-		MOUNTPOLAR09:${dep}
-		MOUNTPOLAR10:${dep}
-		MOUNTPOLAR11:${dep}
-		MOUNTPOLAR12:${dep}
+		${dep}:POLARMOUNT POLAR POLARMOUNTBITS
+		POLARMOUNT00:${dep}
+		POLARMOUNT01:${dep}
+		POLARMOUNT02:${dep}
+		POLARMOUNT03:${dep}
+		POLARMOUNT04:${dep}
+		POLARMOUNT05:${dep}
+		POLARMOUNT06:${dep}
+		POLARMOUNT07:${dep}
+		POLARMOUNT08:${dep}
+		POLARMOUNT09:${dep}
+		POLARMOUNT10:${dep}
+		POLARMOUNT11:${dep}
+		POLARMOUNT12:${dep}
+	end
+
+	files:porttftd
+		${dep}:SEAURBAN PORTROADS PORTURBITS SEABITS
+		PORTUFO00:${dep}
+		PORTUFO01:${dep}
+		PORTUFO02:${dep}
+		PORTUFO03:${dep}
+		PORTUFO04:${dep}
+		PORTUFO05:${dep}
+		PORTUFO06:${dep}
+		PORTUFO07:${dep}
+		PORTUFO08:${dep}
+		PORTUFO09:${dep}
+		PORTUFO10:${dep}
+		PORTUFO11:${dep}
+		PORTUFO12:${dep}
+		PORTUFO13:${dep}
+		PORTUFO14:${dep}
+		PORTUFO15:${dep}
+		PORTUFO16:${dep}
+		PORTUFO17:${dep}
+		PORTUFO18:${dep}
+		PORTUFO19:${dep}
+		PORTUFO20:${dep}
 	end
 
 	files:porturban
@@ -587,6 +903,316 @@ Tileset:UFO - Terrain
 		RAILYARDURBAN25:${dep}
 		RAILYARDURBAN26:${dep}
 		RAILYARDURBAN27:${dep}
+	end
+
+	files:savannadesert
+		${dep}:SAVANNADESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:savannadesertmount
+		${dep}:SAVANNAMOUNT SAVANNADESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
+	files:savannaforest
+		${dep}:SAVANNAFOREST
+		FOREST00:${dep}
+		FOREST01:${dep}
+		FOREST02:${dep}
+		FOREST03:${dep}
+		FOREST04:${dep}
+		FOREST05:${dep}
+		FOREST06:${dep}
+		FOREST07:${dep}
+		FOREST08:${dep}
+		FOREST09:${dep}
+		FOREST10:${dep}
+		FOREST11:${dep}
+	end
+
+	files:savannaforestmount
+		${dep}:SAVANNAMOUNT SAVANNAFOREST SAVANNAMOUNTBITS
+		FORESTMOUNT00:${dep}
+		FORESTMOUNT01:${dep}
+		FORESTMOUNT02:${dep}
+		FORESTMOUNT03:${dep}
+		FORESTMOUNT04:${dep}
+		FORESTMOUNT05:${dep}
+		FORESTMOUNT06:${dep}
+		FORESTMOUNT07:${dep}
+		FORESTMOUNT08:${dep}
+		FORESTMOUNT09:${dep}
+		FORESTMOUNT10:${dep}
+		FORESTMOUNT11:${dep}
+		FORESTMOUNT12:${dep}
+		FORESTMOUNT13:${dep}
+		FORESTMOUNT14:${dep}
+		FORESTMOUNT15:${dep}
+		FORESTMOUNT16:${dep}
+		FORESTMOUNT17:${dep}
+		FORESTMOUNT18:${dep}
+		FORESTMOUNT19:${dep}
+		FORESTMOUNT20:${dep}
+		FORESTMOUNT21:${dep}
+		FORESTMOUNT22:${dep}
+		FORESTMOUNT23:${dep}
+		FORESTMOUNT24:${dep}
+		FORESTMOUNT25:${dep}
+		FORESTMOUNT26:${dep}
+	end
+
+	files:steppedesert
+		${dep}:STEPPEDESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:steppedesertmount
+		${dep}:STEPPEMOUNT STEPPEDESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
+	files:steppeforest
+		${dep}:STEPPEFOREST
+		FOREST00:${dep}
+		FOREST01:${dep}
+		FOREST02:${dep}
+		FOREST03:${dep}
+		FOREST04:${dep}
+		FOREST05:${dep}
+		FOREST06:${dep}
+		FOREST07:${dep}
+		FOREST08:${dep}
+		FOREST09:${dep}
+		FOREST10:${dep}
+		FOREST11:${dep}
+	end
+
+	files:steppeforestmount
+		${dep}:STEPPEMOUNT STEPPEFOREST STEPPEMOUNTBITS
+		FORESTMOUNT00:${dep}
+		FORESTMOUNT01:${dep}
+		FORESTMOUNT02:${dep}
+		FORESTMOUNT03:${dep}
+		FORESTMOUNT04:${dep}
+		FORESTMOUNT05:${dep}
+		FORESTMOUNT06:${dep}
+		FORESTMOUNT07:${dep}
+		FORESTMOUNT08:${dep}
+		FORESTMOUNT09:${dep}
+		FORESTMOUNT10:${dep}
+		FORESTMOUNT11:${dep}
+		FORESTMOUNT12:${dep}
+		FORESTMOUNT13:${dep}
+		FORESTMOUNT14:${dep}
+		FORESTMOUNT15:${dep}
+		FORESTMOUNT16:${dep}
+		FORESTMOUNT17:${dep}
+		FORESTMOUNT18:${dep}
+		FORESTMOUNT19:${dep}
+		FORESTMOUNT20:${dep}
+		FORESTMOUNT21:${dep}
+		FORESTMOUNT22:${dep}
+		FORESTMOUNT23:${dep}
+		FORESTMOUNT24:${dep}
+		FORESTMOUNT25:${dep}
+		FORESTMOUNT26:${dep}
+	end
+
+	files:taigadesert
+		${dep}:TAIGADESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:taigadesertmount
+		${dep}:TAIGAMOUNT TAIGADESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
+	files:taigaforest
+		${dep}:TAIGAFOREST
+		FOREST00:${dep}
+		FOREST01:${dep}
+		FOREST02:${dep}
+		FOREST03:${dep}
+		FOREST04:${dep}
+		FOREST05:${dep}
+		FOREST06:${dep}
+		FOREST07:${dep}
+		FOREST08:${dep}
+		FOREST09:${dep}
+		FOREST10:${dep}
+		FOREST11:${dep}
+	end
+
+	files:taigaforestmount
+		${dep}:TAIGAMOUNT TAIGAFOREST TAIGAMOUNTBITS
+		FORESTMOUNT00:${dep}
+		FORESTMOUNT01:${dep}
+		FORESTMOUNT02:${dep}
+		FORESTMOUNT03:${dep}
+		FORESTMOUNT04:${dep}
+		FORESTMOUNT05:${dep}
+		FORESTMOUNT06:${dep}
+		FORESTMOUNT07:${dep}
+		FORESTMOUNT08:${dep}
+		FORESTMOUNT09:${dep}
+		FORESTMOUNT10:${dep}
+		FORESTMOUNT11:${dep}
+		FORESTMOUNT12:${dep}
+		FORESTMOUNT13:${dep}
+		FORESTMOUNT14:${dep}
+		FORESTMOUNT15:${dep}
+		FORESTMOUNT16:${dep}
+		FORESTMOUNT17:${dep}
+		FORESTMOUNT18:${dep}
+		FORESTMOUNT19:${dep}
+		FORESTMOUNT20:${dep}
+		FORESTMOUNT21:${dep}
+		FORESTMOUNT22:${dep}
+		FORESTMOUNT23:${dep}
+		FORESTMOUNT24:${dep}
+		FORESTMOUNT25:${dep}
+		FORESTMOUNT26:${dep}
+	end
+
+	files:tundradesert
+		${dep}:TUNDRADESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:tundadesertmount
+		${dep}:TUNDRAMOUNT TUNDADESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
+	files:tundramount
+		${dep}:TUNDRAMOUNT
+		MOUNT00:${dep}
+		MOUNT01:${dep}
+		MOUNT02:${dep}
+		MOUNT03:${dep}
+		MOUNT04:${dep}
+		MOUNT05:${dep}
+		MOUNT06:${dep}
+		MOUNT07:${dep}
+		MOUNT08:${dep}
+		MOUNT09:${dep}
+		MOUNT10:${dep}
+		MOUNT11:${dep}
+		MOUNT12:${dep}
 	end
 
 	files:ubase
@@ -735,79 +1361,98 @@ Tileset:UFO - Craft
 	end
 
 	files:aLien
-		ox_ufo1:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo1b:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo1c:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo1d:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo1e:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo1f:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo1g:U_EXT02 U_WALL02 U_BITS UFOL83
+		${dep}:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1:${dep}
+		ox_ufo1b:${dep}
+		ox_ufo1c:${dep}
+		ox_ufo1d:${dep}
+		ox_ufo1e:${dep}
+		ox_ufo1f:${dep}
+		ox_ufo1g:${dep}
 
-		ox_ufo2a:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2b:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2c:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2d:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2e:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2f:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2g:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2h:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2i:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2j:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2k:U_EXT02 U_WALL02 U_BITS UFOL83
-		ox_ufo2l:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2a:${dep}
+		ox_ufo2b:${dep}
+		ox_ufo2c:${dep}
+		ox_ufo2d:${dep}
+		ox_ufo2e:${dep}
+		ox_ufo2f:${dep}
+		ox_ufo2g:${dep}
+		ox_ufo2h:${dep}
+		ox_ufo2i:${dep}
+		ox_ufo2j:${dep}
+		ox_ufo2k:${dep}
+		ox_ufo2l:${dep}
 
-		ox_ufo3a:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3b:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3c:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3d:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3e:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3f:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3g:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3h:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3i:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3j:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
-		ox_ufo3k:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		${dep}:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3a:${dep}
+		ox_ufo3b:${dep}
+		ox_ufo3c:${dep}
+		ox_ufo3d:${dep}
+		ox_ufo3e:${dep}
+		ox_ufo3f:${dep}
+		ox_ufo3g:${dep}
+		ox_ufo3h:${dep}
+		ox_ufo3i:${dep}
+		ox_ufo3j:${dep}
+		ox_ufo3k:${dep}
 
-		ox_ufo4a:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4b:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4c:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4d:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4e:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4f:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4g:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4h:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4i:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
-		ox_ufo4j:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		${dep}:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4a:${dep}
+		ox_ufo4b:${dep}
+		ox_ufo4c:${dep}
+		ox_ufo4d:${dep}
+		ox_ufo4e:${dep}
+		ox_ufo4f:${dep}
+		ox_ufo4g:${dep}
+		ox_ufo4h:${dep}
+		ox_ufo4i:${dep}
+		ox_ufo4j:${dep}
 
-		ox_ufo5a:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5b:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5c:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5d:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5e:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5f:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5g:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
-		ox_ufo5h:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		${dep}:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5a:${dep}
+		ox_ufo5b:${dep}
+		ox_ufo5c:${dep}
+		ox_ufo5d:${dep}
+		ox_ufo5e:${dep}
+		ox_ufo5f:${dep}
+		ox_ufo5g:${dep}
+		ox_ufo5h:${dep}
 
-		ox_ufo7a:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
-		ox_ufo7b:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
-		ox_ufo7c:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
-		ox_ufo7d:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
+		${dep}:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
+		ox_ufo7a:${dep}
+		ox_ufo7b:${dep}
+		ox_ufo7c:${dep}
+		ox_ufo7d:${dep}
 
-		UFO_110:U_EXT02 U_WALL02 U_BITS
-		UFO_120:U_EXT02 U_WALL02 U_BITS
-		UFO_130:U_EXT02 U_WALL02 U_DISEC3 U_BITS
-		UFO_140:U_EXT02 U_WALL02 U_OPER2 U_BITS
-		UFO_150:U_EXT02 U_WALL02 U_PODS U_BITS
-		UFO_160:U_EXT02 U_WALL02 U_PODS U_BITS
-		UFO_170:U_EXT02 U_WALL02 U_DISEC2 U_BITS
-		UFO1a:UFO1
+		${dep}:U_EXT02 U_WALL02 U_BITS
+		UFO_110:${dep}
+		UFO_120:${dep}
+
+		${dep}:U_EXT02 U_WALL02 U_DISEC3 U_BITS
+		UFO_130:${dep}
+
+		${dep}:U_EXT02 U_WALL02 U_OPER2 U_BITS
+		UFO_140:${dep}
+
+		${dep}:U_EXT02 U_WALL02 U_PODS U_BITS
+		UFO_150:${dep}
+		UFO_160:${dep}
+
+		${dep}:U_EXT02 U_WALL02 U_DISEC2 U_BITS
+		UFO_170:${dep}
+
+		${dep}:UFO1
+		UFO1a:${dep}
 	end
 
 	files:extra
-		AREARAID00:AREA51P AREA51X AREA51Y AREA51Z
-		POLISURBAN02:ROADS URBITS URBAN FRNITURE
-		POLISURBAN04:ROADS URBITS URBAN FRNITURE
-		POLISURBAN05:ROADS URBITS URBAN FRNITURE
-		POLISURBAN06:ROADS URBITS URBAN FRNITURE
+		${dep}:AREA51P AREA51X AREA51Y AREA51Z
+		AREARAID00:${dep}
+
+		${dep}:ROADS URBITS URBAN FRNITURE
+		POLISURBAN02:${dep}
+		POLISURBAN04:${dep}
+		POLISURBAN05:${dep}
+		POLISURBAN06:${dep}
 	end
 end

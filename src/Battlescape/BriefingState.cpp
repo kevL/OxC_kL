@@ -105,12 +105,12 @@ BriefingState::BriefingState(
 //		_txtTarget->setVisible(dataBrief.showTarget);
 //		_txtCraft->setVisible(dataBrief.showCraft);
 	}
+	_game->getResourcePack()->playMusic(music);
 
 	setPalette(
 			"PAL_GEOSCAPE",
 			backpal);
 	_window->setBackground(_game->getResourcePack()->getSurface(background));
-	_game->getResourcePack()->playMusic(music);
 
 /*	if (mission == "STR_ALIEN_BASE_ASSAULT"
 		|| mission == "STR_MARS_CYDONIA_LANDING")
@@ -208,7 +208,6 @@ BriefingState::~BriefingState()
 void BriefingState::btnOkClick(Action*)
 {
 	_game->getResourcePack()->fadeMusic(_game, 335);
-
 	_game->popState();
 
 	Options::baseXResolution = Options::baseXBattlescape;

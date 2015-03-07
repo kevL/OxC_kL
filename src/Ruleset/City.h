@@ -43,6 +43,7 @@ class City
 
 private:
 	bool _labelTop;
+	int _texture;
 	size_t _zoomLevel;
 
 	std::string _name;
@@ -79,6 +80,9 @@ private:
 
 		/// Gets if City's label is above or below its marker.
 		bool getLabelTop() const;
+
+		/// Gets the texture of this City for the battlescape.
+		int getTexture() const;
 };
 
 }
