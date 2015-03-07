@@ -23,6 +23,7 @@
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "Map.h"
+//#include "MeleeAttackBState.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
 #include "UnitFallBState.h"
@@ -1024,6 +1025,7 @@ void UnitWalkBState::postPathProcedures()
 				action.targeting = true;
 				action.type = BA_HIT;
 				action.weapon = _unit->getMainHandWeapon();
+//				action.weapon = _unit->getMeleeWeapon();
 
 // if (action.weapon == NULL)
 				const std::string meleeWeapon = _unit->getMeleeWeapon();
@@ -1076,9 +1078,10 @@ void UnitWalkBState::postPathProcedures()
 												action.type,
 												action.weapon);
 
+//					_parent->statePushBack(new MeleeAttackBState(_parent, action));
 					_parent->statePushBack(new ProjectileFlyBState(
-																_parent,
-																action));
+															_parent,
+															action));
 
 					if (instaWeapon == true)
 						_parent->getSave()->removeItem(action.weapon);

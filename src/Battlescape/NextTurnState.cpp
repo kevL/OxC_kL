@@ -196,12 +196,11 @@ void NextTurnState::nextTurn()
 {
 	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
 	_savedBattle->getBattleGame()->cleanupDeleted();
-
 	_game->popState();
 
 	int
-		liveAliens = 0,
-		liveSoldiers = 0;
+		liveAliens,
+		liveSoldiers;
 	_state->getBattleGame()->tallyUnits(
 									liveAliens,
 									liveSoldiers);

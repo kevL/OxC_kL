@@ -470,8 +470,8 @@ private:
 	bool
 		_breathing,
 		_floorAbove,
-		_hidingForTurn,
-		_respawn;
+		_hidingForTurn;
+//		_respawn;
 	int
 		_aggression,
 		_aggroSound,
@@ -917,9 +917,9 @@ private:
 		void setSpecialAbility(const SpecialAbility specab);
 
 		/// Sets this unit's respawn flag.
-		void setRespawn(const bool respawn);
+//		void setRespawn(const bool respawn = true);
 		/// Gets this unit's respawn flag.
-		bool getRespawn() const;
+//		bool getRespawn() const;
 
 		/// Gets this unit's rank string.
 		std::string getRankString() const;

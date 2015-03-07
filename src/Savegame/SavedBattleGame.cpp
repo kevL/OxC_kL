@@ -2296,7 +2296,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(
 				if ((*i)->getOriginalFaction() == FACTION_PLAYER
 					&& (*i)->getFaction() == FACTION_PLAYER)
 				{
-					qtyAllies++;
+					++qtyAllies;
 
 					if (leader == NULL
 						|| (*i)->getRankInt() > leader->getRankInt())
@@ -2309,7 +2309,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(
 				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
-				qtyAllies++;
+				++qtyAllies;
 
 				if (leader == NULL
 					|| (*i)->getRankInt() < leader->getRankInt())

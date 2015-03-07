@@ -2071,9 +2071,8 @@ BattleUnit* BattlescapeGenerator::addAlien(
 										node));
 		unit->setRankInt(alienRank);
 
-		int dir = -1;
-
 		Position craft = _battleSave->getUnits()->at(0)->getPosition();
+		int dir;
 		if (RNG::percent(diff * 20) == true
 			&& _battleSave->getTileEngine()->distance(
 													node->getPosition(),
@@ -2085,11 +2084,8 @@ BattleUnit* BattlescapeGenerator::addAlien(
 			dir = _battleSave->getTileEngine()->faceWindow(node->getPosition());
 
 		if (dir == -1)
-			dir = RNG::generate(0, 7);
+			dir = RNG::generate(0,7);
 		unit->setDirection(dir);
-
-//		if (diff == 0) // kL_note: moved to BattleUnit::adjustStats()
-//			unit->halveArmor();
 
 		_battleSave->getUnits()->push_back(unit);
 	}

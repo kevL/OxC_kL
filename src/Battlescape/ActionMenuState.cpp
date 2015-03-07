@@ -432,15 +432,16 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 
 			_game->popState();
 		}
-		else if (_action->type == BA_STUN
-			|| _action->type == BA_HIT)
+		else if (_action->type == BA_HIT)
 		{
-			if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
-																					_action->actor->getPosition(), // cf. TileEngine::reactionShot()
-																					_action->actor->getDirection(),
-																					_action->actor,
-																					NULL,
-																					&_action->target) == false)
+			if (_action->TU > _action->actor->getTimeUnits())
+				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+			else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
+																						_action->actor->getPosition(), // cf. TileEngine::reactionShot()
+																						_action->actor->getDirection(),
+																						_action->actor,
+																						NULL,
+																						&_action->target) == false)
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}

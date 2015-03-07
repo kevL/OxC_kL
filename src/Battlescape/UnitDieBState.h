@@ -43,7 +43,8 @@ class UnitDieBState
 private:
 	bool
 		_noSound,
-		_doneScream;
+		_doneScream,
+		_extraTick;
 
 	BattleUnit* _unit;
 	ItemDamageType _damageType;

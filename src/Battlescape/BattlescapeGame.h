@@ -55,15 +55,14 @@ enum BattleActionType
 	BA_AUTOSHOT,	//  5
 	BA_SNAPSHOT,	//  6
 	BA_AIMEDSHOT,	//  7
-	BA_STUN,		//  8
-	BA_HIT,			//  9
-	BA_USE,			// 10
-	BA_LAUNCH,		// 11
-	BA_MINDCONTROL,	// 12
-	BA_PANIC,		// 13
-	BA_RETHINK,		// 14
-	BA_DEFUSE,		// 15, kL_add.
-	BA_DROP			// 16, kL_add.
+	BA_HIT,			//  8
+	BA_USE,			//  9
+	BA_LAUNCH,		// 10
+	BA_MINDCONTROL,	// 11
+	BA_PANIC,		// 12
+	BA_RETHINK,		// 13
+	BA_DEFUSE,		// 14, kL_add.
+	BA_DROP			// 15, kL_add.
 };
 
 
@@ -244,8 +243,7 @@ private:
 		/// Converts a unit into a unit of another type.
 		BattleUnit* convertUnit(
 				BattleUnit* unit,
-				const std::string& convertType,
-				int dirFace = 3); // kL_add.
+				const std::string& convertType);
 
 		/// Handles kneeling action.
 		bool kneel(BattleUnit* bu);
@@ -319,8 +317,9 @@ private:
 		/// Tallies the living units, converting them if necessary.
 		void tallyUnits(
 				int& liveAliens,
-				int& liveSoldiers,
-				bool convert = false);
+				int& liveSoldiers);
+		///
+//		void convertInfected();
 
 		/// Sets the kneel reservation setting.
 		void setKneelReserved(bool reserved);
@@ -337,12 +336,12 @@ private:
 		const int getDepth() const;
 
 		/// kL. Gets the BattlescapeState.
-		BattlescapeState* getBattlescapeState() const; // kL
+		BattlescapeState* getBattlescapeState() const;
 
 		/// kL. Gets the universal fist.
-		BattleItem* getFist() const; // kL
+		BattleItem* getFist() const;
 		/// kL. Gets the alienPsi weapon.
-		BattleItem* getAlienPsi() const; // kL
+		BattleItem* getAlienPsi() const;
 };
 
 }

@@ -1,4 +1,4 @@
-﻿# Terrain Pack by Hobbes # version kL based on 3.2
+﻿# Terrain Pack by Hobbes # version kL based on 3.3
 # kL_note: Moved all terrains here, except URBAN/2 (TerrorSites.rul) and XBASE (Xcom1Ruleset.rul) and UBASE (FULL_Expanded_UBase)
 terrains:
   - name: COMRCURBAN
@@ -1011,19 +1011,20 @@ terrains:
     mapDataSets:
       - BLANKS
       - GRASSLANDDESERT
+      - GRASSLANDBITS
     mapBlocks:
       - name: DESERT00
         width: 10
         length: 10
-        groups: [0,1]
+#        groups: [0,1]
       - name: DESERT01
         width: 10
         length: 10
-        groups: [0,1]
+#        groups: [0,1]
       - name: DESERT02
         width: 10
         length: 10
-        groups: [0,1]
+#        groups: [0,1]
       - name: DESERT03
         width: 10
         length: 10
@@ -1051,25 +1052,30 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
+      - name: SAVANNADESERT00
+        width: 10
+        length: 10
+        groups: [1]
   - name: GRASSLANDDESERTMOUNT # NEW NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
       - GRASSLANDMOUNT
       - GRASSLANDDESERT
+      - GRASSLANDBITS
     mapBlocks:
       - name: DESERTMOUNT00
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: DESERTMOUNT01
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: DESERTMOUNT02
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: DESERTMOUNT03
         width: 10
         length: 10
@@ -1115,20 +1121,25 @@ terrains:
       - name: DESERTMOUNT17
         width: 10
         length: 10
+      - name: SAVANNADESERTMOUNT00
+        width: 10
+        length: 10
+        groups: [1]
   - name: GRASSLANDFOREST # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
       - GRASSLANDFOREST
+      - GRASSLANDBITS
     mapBlocks:
       - name: FOREST00
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FOREST01
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FOREST02
         width: 10
         length: 10
@@ -1159,22 +1170,26 @@ terrains:
       - name: FOREST11
         width: 20
         length: 20
+      - name: SAVANNAFOREST00
+        width: 10
+        length: 10
+        groups: [1]
   - name: GRASSLANDFORESTMOUNT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
       - GRASSLANDMOUNT
       - GRASSLANDFOREST
-      - GRASSLANDMOUNTBITS
+      - GRASSLANDBITS
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FORESTMOUNT01
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FORESTMOUNT02
         width: 10
         length: 10
@@ -1250,6 +1265,10 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
+      - name: SAVANNAFORESTMOUNT00
+        width: 10
+        length: 10
+        groups: [1]
   - name: INDUSTRIALUFO # NEW ##
     script: URBANUFO #was INDUSTRIALUFO
     mapDataSets:
@@ -2806,19 +2825,20 @@ terrains:
     mapDataSets:
       - BLANKS
       - SAVANNADESERT
+      - SAVANNABITS
     mapBlocks:
       - name: DESERT00
         width: 10
         length: 10
-        groups: [0,1]
+#        groups: [0,1]
       - name: DESERT01
         width: 10
         length: 10
-        groups: [0,1]
+#        groups: [0,1]
       - name: DESERT02
         width: 10
         length: 10
-        groups: [0,1]
+#        groups: [0,1]
       - name: DESERT03
         width: 10
         length: 10
@@ -2846,25 +2866,30 @@ terrains:
       - name: DESERT11
         width: 20
         length: 20
+      - name: SAVANNADESERT00
+        width: 10
+        length: 10
+        groups: [1]
   - name: SAVANNADESERTMOUNT # NEW NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
       - SAVANNAMOUNT
       - SAVANNADESERT
+      - SAVANNABITS
     mapBlocks:
       - name: DESERTMOUNT00
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: DESERTMOUNT01
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: DESERTMOUNT02
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: DESERTMOUNT03
         width: 10
         length: 10
@@ -2910,20 +2935,25 @@ terrains:
       - name: DESERTMOUNT17
         width: 10
         length: 10
+      - name: SAVANNADESERTMOUNT00
+        width: 10
+        length: 10
+        groups: [1]
   - name: SAVANNAFOREST # NEW ##
     script: DEFAULT
     mapDataSets:
       - BLANKS
       - SAVANNAFOREST
+      - SAVANNABITS
     mapBlocks:
       - name: FOREST00
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FOREST01
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FOREST02
         width: 10
         length: 10
@@ -2954,22 +2984,26 @@ terrains:
       - name: FOREST11
         width: 20
         length: 20
+      - name: SAVANNAFOREST00
+        width: 10
+        length: 10
+        groups: [1]
   - name: SAVANNAFORESTMOUNT # NEW ##
     script: DESERT
     mapDataSets:
       - BLANKS
       - SAVANNAMOUNT
       - SAVANNAFOREST
-      - SAVANNAMOUNTBITS
+      - SAVANNABITS
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FORESTMOUNT01
         width: 10
         length: 10
-        groups: 1
+#        groups: 1
       - name: FORESTMOUNT02
         width: 10
         length: 10
@@ -3045,6 +3079,10 @@ terrains:
       - name: FORESTMOUNT26
         width: 20
         length: 20
+      - name: SAVANNAFORESTMOUNT00
+        width: 10
+        length: 10
+        groups: [1]
   - name: STEPPEDESERT # NEW ##
     script: DESERT
     mapDataSets:
@@ -3736,54 +3774,3 @@ extraStrings:
       STR_TUNDRADESERT: "Tundra Desert"
       STR_TUNDRADESERTMOUNT: "Tundra Desert Mountain"
       STR_TUNDRAMOUNT: "Tundra Mountain"
-  - type: en-GB
-    strings:
-      STR_NATIVEURBAN: Native (Farm + Jungle)
-      STR_CULTAFARMA: Expanded Farm A
-      STR_CULTAFARMB: Expanded Farm B
-      STR_MADURBAN: Expanded Urban
-      STR_PORTURBAN: Port
-      STR_INDUSTRIALURBAN: Industrial
-      STR_RAILYARDURBAN: Railyard
-      STR_DAWNURBANA: Dawn City A
-      STR_DAWNURBANB: Dawn City B
-      STR_POLARMOUNT: Polar Mountain
-      STR_FORESTMOUNT: Forest Mountain
-      STR_DESERTMOUNT: Desert Mountain
-      STR_ATLANTDESERT: Atlantis + Desert
-      STR_MUJUNGLE: Mu + Jungle
-      STR_COMRCURBAN: Commercial
-  - type: fr
-    strings:
-      STR_NATIVEURBAN: Indigène
-      STR_CULTAFARMA: Vaste Ferme A
-      STR_CULTAFARMB: Vaste Ferme B
-      STR_MADURBAN: Expansion Urbaine
-      STR_PORTURBAN: Port
-      STR_INDUSTRIALURBAN: Industriel
-      STR_RAILYARDURBAN: Gare de Triage
-      STR_DAWNURBANA: Ville dès l'Aube A
-      STR_DAWNURBANB: Ville dès l'Aube B
-      STR_POLARMOUNT: Montagne Polaire
-      STR_FORESTMOUNT: Forêt de Montagne
-      STR_DESERTMOUNT: Montagne Désertique
-      STR_ATLANTDESERT: Atlantis + Desert
-      STR_MUJUNGLE: Mu + Jungle
-      STR_COMRCURBAN: Commercial
-  - type: ru
-    strings:
-      STR_NATIVEURBAN: "Ферма + джунгли"
-      STR_CULTAFARMA: "Расшир. ферма А"
-      STR_CULTAFARMB: "Расшир. ферма Б"
-      STR_MADURBAN: "Расшир. город"
-      STR_PORTURBAN: "Порт"
-      STR_INDUSTRIALURBAN: "Промзона"
-      STR_RAILYARDURBAN: "Ж/Д депо"
-      STR_DAWNURBANA: "Город А"
-      STR_DAWNURBANB: "Город Б"
-      STR_POLARMOUNT: "Горы на полюсе"
-      STR_FORESTMOUNT: "Горы в лесу"
-      STR_DESERTMOUNT: "Горы в пустыне"
-      STR_ATLANTDESERT: "Руины в пустыне"
-      STR_MUJUNGLE: "Руины в джунглях"
-      STR_COMRCURBAN: "Деловой район"

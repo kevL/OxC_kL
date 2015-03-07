@@ -181,6 +181,9 @@ protected:
 		BattleActionType getReservedAIAction() const;
 		/// Assuming the aLien has both a ranged and a melee weapon, select one.
 		void selectMeleeOrRanged();
+
+		/// Gets the current target-unit.
+		BattleUnit* getTarget();
 };
 
 }

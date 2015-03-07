@@ -8498,6 +8498,7 @@ extraStrings:
       MALE_CIVILIAN4: "Civilian"
       MALE_CIVILIAN5: "Civilian"
       MALE_CIVILIAN6: "Civilian"
+      MALE_CIVILIAN7: "Civilian"
       FEMALE_CIVILIAN2: "Civilian"
       FEMALE_CIVILIAN3: "Civilian"
 #      STR_PLASMA_BEAM_H: PB

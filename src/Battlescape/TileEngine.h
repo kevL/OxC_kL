@@ -237,7 +237,7 @@ private:
 				bool considerZ = true) const;
 
 		/// Attempts a panic or mind control action.
-		bool psiAttack(BattleAction* action);
+		bool psiAttack(BattleAction* action); // removed, post-cosmetic
 
 		/// Applies gravity to anything that occupies this tile.
 		Tile* applyGravity(Tile* const tile);

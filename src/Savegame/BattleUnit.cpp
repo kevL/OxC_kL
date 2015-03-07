@@ -112,7 +112,7 @@ BattleUnit::BattleUnit(
 		_charging(NULL),
 		_turnsExposed(255),
 		_hidingForTurn(false),
-		_respawn(false),
+//		_respawn(false),
 		_battleOrder(0),
 		_stopShot(false),
 		_dashing(false),
@@ -267,7 +267,7 @@ BattleUnit::BattleUnit(
 		_charging(NULL),
 		_turnsExposed(255),
 		_hidingForTurn(false),
-		_respawn(false),
+//		_respawn(false),
 		_stopShot(false),
 		_dashing(false),
 		_takenExpl(false),
@@ -417,7 +417,7 @@ void BattleUnit::load(const YAML::Node& node)
 //	_specab				= (SpecialAbility)node["specab"]					.as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"]									.as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"]								.as<int>(0);
-	_respawn			= node["respawn"]									.as<bool>(_respawn);
+//	_respawn			= node["respawn"]									.as<bool>(_respawn);
 	_activeHand			= node["activeHand"]								.as<std::string>(_activeHand);
 
 	for (int i = 0; i < 5; i++)
@@ -475,7 +475,7 @@ YAML::Node BattleUnit::save() const
 	node["killedBy"]		= (int)_killedBy;
 //	node["specab"]			= (int)_specab;
 	node["motionPoints"]	= _motionPoints;
-	node["respawn"]			= _respawn;
+//	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand;
 
@@ -1694,7 +1694,6 @@ int BattleUnit::getActionTUs(
 			cost = rule->getTUSnap();
 		break;
 
-		case BA_STUN:
 		case BA_HIT:
 			if (rule == NULL)
 				return 0;
@@ -1933,8 +1932,7 @@ double BattleUnit::getFiringAccuracy(
 
 	double ret;
 
-	if (actionType == BA_HIT
-		|| actionType == BA_STUN) // note: BA_STUN is not used in code.
+	if (actionType == BA_HIT)
 	{
 		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.;
 		//Log(LOG_INFO) << ". weaponACU = " << item->getRules()->getAccuracyMelee() << " ret[1] = " << ret;
@@ -3425,21 +3423,21 @@ void BattleUnit::setSpecialAbility(const SpecialAbility specab)
 
 /**
  * Sets this unit to respawn or not.
- * @param respawn - true to respawn
+ * @param respawn - true to respawn (default true)
  */
-void BattleUnit::setRespawn(const bool respawn)
+/*void BattleUnit::setRespawn(const bool respawn)
 {
 	_respawn = respawn;
-}
+}*/
 
 /**
  * Gets this unit's respawn flag.
  * @return, true for respawn
  */
-bool BattleUnit::getRespawn() const
+/*bool BattleUnit::getRespawn() const
 {
 	return _respawn;
-}
+}*/
 
 /**
  * Gets unit-type that is spawned when this one dies.
@@ -3763,39 +3761,34 @@ bool BattleUnit::checkViewSector(Position pos) const
 		case 0:
 			if (dx + dy >= 0 && dy - dx >= 0)
 				return true;
-		break;
+
 		case 1:
 			if (dx >= 0 && dy >= 0)
 				return true;
-		break;
+
 		case 2:
 			if (dx + dy >= 0 && dy - dx <= 0)
 				return true;
-		break;
+
 		case 3:
 			if (dy <= 0 && dx >= 0)
 				return true;
-		break;
+
 		case 4:
 			if (dx + dy <= 0 && dy - dx <= 0)
 				return true;
-		break;
+
 		case 5:
 			if (dx <= 0 && dy <= 0)
 				return true;
-		break;
+
 		case 6:
 			if (dx + dy <= 0 && dy - dx >= 0)
 				return true;
-		break;
+
 		case 7:
 			if (dy >= 0 && dx <= 0)
 				return true;
-		break;
-
-		default:
-			return false;
-		break;
 	}
 
 	return false;

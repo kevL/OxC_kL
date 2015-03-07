@@ -66,7 +66,8 @@ UnitDieBState::UnitDieBState(
 		_unit(unit),
 		_damageType(damageType),
 		_noSound(noSound),
-		_doneScream(false)
+		_doneScream(false),
+		_extraTick(false)
 {
 	//Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
 	_unit->clearVisibleTiles();
@@ -187,65 +188,24 @@ void UnitDieBState::think()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
-		if (_unit->getRespawn() == true)
+//		if (_unit->getRespawn() == true)
+		if (_unit->getSpawnUnit().empty() == false)
 		{
 			while (_unit->getStatus() == STATUS_COLLAPSING)
 				_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() ) -> goto #4
 		}
 	}
 
-// #4
-	if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
+// #5
+	if (_extraTick == true)
 	{
-		//Log(LOG_INFO) << ". . unit isOut";
-		if (_unit->getStatus() == STATUS_UNCONSCIOUS
-			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
-		{
-			_unit->instaKill();
-		}
-
-		_unit->setDown(); // kL
 		_parent->getMap()->setUnitDying(false);
-
-/*		if (_unit->getDiedByFire()) // do this in BattleUnit::damage()
-		{
-			_unit->setSpawnUnit("");
-			_unit->setSpecialAbility(SPECAB_NONE); // SPECAB_EXPLODEONDEATH
-		} */
-
-		if (_unit->getSpawnUnit().empty() == false)
-//			&& _unit->getDiedByFire() == false) // kL <- could screw with death animations, etc.
-		{
-			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
-			BattleUnit* const convertedUnit = _parent->convertUnit(
-																_unit,
-																_unit->getSpawnUnit());
-
-//			convertedUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
-//TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
-//TEST		statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
-
-//			convertedUnit->setCache(NULL); // These are done in convertUnit()
-//			_parent->getMap()->cacheUnit(convertedUnit);
-
-			//Log(LOG_INFO) << ". . got back from lookAt() in think ...";
-		}
-		else
-			convertUnitToCorpse();
-
 
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 
-		// need to freshen visUnits in case another unit was hiding behind the one who just fell ...
-		// that is, it shows up on the Battlescape, but won't trigger the visUnits indicators
-		// until/ unless the viewer calls BattlescapeState::updateSoldierInfo()
-//		_parent->getSave()->getTileEngine()->calculateFOV(_unit->getPosition());
-		// that is actually done already at the end of TileEngine::hit() & explode()
-		// so, might have to updateSoldierInfo() here, there, or perhaps in BattlescapeGame ......
-		_parent->getSave()->getBattleState()->updateSoldierInfo(false); // kL
-
+		// need to freshen visUnit-indicators in case another unit was hiding behind the one who just fell
+		_parent->getSave()->getBattleState()->updateSoldierInfo(false);
 
 		if (_unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getSpawnUnit().empty() == true)
@@ -255,7 +215,6 @@ void UnitDieBState::think()
 			if (_unit->getGeoscapeSoldier() != NULL)
 			{
 				std::string message;
-
 				if (_unit->getStatus() == STATUS_DEAD)
 				{
 					if (_damageType == DT_NONE)
@@ -294,6 +253,31 @@ void UnitDieBState::think()
 				_parent->requestEndTurn();
 			}
 		}
+	}
+// #4
+	else if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
+	{
+		//Log(LOG_INFO) << ". . unit isOut";
+		_extraTick = true;
+
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS
+			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+		{
+			_unit->instaKill();
+		}
+
+		_unit->setDown();
+
+		if (_unit->getSpawnUnit().empty() == false)
+		{
+			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
+			BattleUnit* const convertedUnit = _parent->convertUnit(
+																_unit,
+																_unit->getSpawnUnit());
+		}
+		else
+			convertUnitToCorpse();
 	}
 
 	_parent->getMap()->cacheUnit(_unit);

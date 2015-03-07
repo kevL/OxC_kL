@@ -47,6 +47,7 @@ class ExplosionBState
 private:
 	bool
 		_areaOfEffect,
+//		_cosmetic,
 		_forceCenter, // kL
 		_hit,
 		_lowerWeapon,
@@ -78,6 +79,7 @@ private:
 				bool lowerWeapon = false,
 				bool meleeSuccess = false,	// kL_add.
 				bool forceCenter = false);	// kL_add.
+//				bool cosmetic = false);
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();
 

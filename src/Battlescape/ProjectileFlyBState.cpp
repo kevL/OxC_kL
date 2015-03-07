@@ -151,8 +151,7 @@ void ProjectileFlyBState::init()
 		popThis = true;
 	}
 	else if (_parent->getPanicHandled() == true
-		&& _action.type != BA_HIT
-		&& _action.type != BA_STUN
+//		&& _action.type != BA_HIT // done in ActionMenuState
 		&& _unit->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
@@ -176,6 +175,7 @@ void ProjectileFlyBState::init()
 	}
 
 
+	// removed post-cosmetics
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: This shouldn't happen w/ selectFireMethod() properly in place.
 	if (_action.type == BA_AUTOSHOT
@@ -184,6 +184,7 @@ void ProjectileFlyBState::init()
 		_action.type = BA_SNAPSHOT;
 	}
 
+	// removed post-cosmetics
 	// snapshot defaults to "hit" if it's a melee weapon
 	// (in case of reaction "shots" with a melee weapon),
 	// for Silacoid attack, etc.
@@ -197,6 +198,10 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
+	// reaction fire, added post-cosmetics
+//		_unit->lookAt(_action.target, _unit->getTurretType() != -1);
+//		while (_unit->getStatus() == STATUS_TURNING)
+//			_unit->turn();
 
 	const Tile* const destTile = _parent->getSave()->getTile(_action.target);
 
@@ -265,11 +270,13 @@ void ProjectileFlyBState::init()
 		}
 		break;
 
+		// removed post-cosmetics
 		case BA_HIT:
 			performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 			return;
 
+		// removed post-cosmetics
 		case BA_PANIC:
 		case BA_MINDCONTROL:
 			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
@@ -722,7 +729,7 @@ void ProjectileFlyBState::think()
 			}
 
 			if (_unit->isOut() == false
-				&& _action.type != BA_HIT) // kL_note: huh?
+				&& _action.type != BA_HIT) // kL_note: huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
 			{
 				_unit->setStatus(STATUS_STANDING);
 			}
@@ -1191,6 +1198,7 @@ void ProjectileFlyBState::targetFloor()
 
 /**
  * Peforms a melee attack.
+ * note Removed after cosmetic surgery.
  */
 void ProjectileFlyBState::performMeleeAttack()
 {

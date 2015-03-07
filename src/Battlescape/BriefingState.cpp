@@ -217,8 +217,8 @@ void BriefingState::btnOkClick(Action*)
 	BattlescapeState* const battleState = new BattlescapeState(); // <- ah there it is!
 
 	int
-		liveAliens = 0,
-		liveSoldiers = 0;
+		liveAliens,
+		liveSoldiers;
 	battleState->getBattleGame()->tallyUnits(
 										liveAliens,
 										liveSoldiers);

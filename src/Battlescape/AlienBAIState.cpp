@@ -206,6 +206,7 @@ void AlienBAIState::think(BattleAction* action)
 	_targetsKnown = countKnownTargets();
 	_targetsVisible = selectNearestTarget();
 
+//	_melee = _unit->getMeleeWeapon() != NULL;
 	_melee = (_unit->getMeleeWeapon().empty() == false); // kL_note: or STR_FIST
 	_rifle = false;
 	_blaster = false;
@@ -989,15 +990,14 @@ void AlienBAIState::setupAttack()
 		case  5: BA_AUTOSHOT,		st = "autoshot";	break;
 		case  6: BA_SNAPSHOT,		st = "snapshot";	break;
 		case  7: BA_AIMEDSHOT,		st = "aimedshot";	break;
-		case  8: BA_STUN,			st = "stun";		break;
-		case  9: BA_HIT,			st = "hit";			break;
-		case 10: BA_USE,			st = "use";			break;
-		case 11: BA_LAUNCH,			st = "launch";		break;
-		case 12: BA_MINDCONTROL,	st = "mindcontrol";	break;
-		case 13: BA_PANIC,			st = "panic";		break;
-		case 14: BA_RETHINK,		st = "rethink";		break;
-		case 15: BA_DEFUSE,			st = "defuse";		break;
-		case 16: BA_DROP,			st = "drop";
+		case  8: BA_HIT,			st = "hit";			break;
+		case  9: BA_USE,			st = "use";			break;
+		case 10: BA_LAUNCH,			st = "launch";		break;
+		case 11: BA_MINDCONTROL,	st = "mindcontrol";	break;
+		case 12: BA_PANIC,			st = "panic";		break;
+		case 13: BA_RETHINK,		st = "rethink";		break;
+		case 14: BA_DEFUSE,			st = "defuse";		break;
+		case 15: BA_DROP,			st = "drop";
 	}
 	Log(LOG_INFO) << ". bat = " << st;
 
@@ -2935,5 +2935,13 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
 
 	return (bestScore > 2);
 } */
+/**
+ * Gets the currently targeted unit.
+ * @return, pointer to a BattleUnit
+ */
+BattleUnit* AlienBAIState::getTarget()
+{
+	return _aggroTarget;
+}
 
 }

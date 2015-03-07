@@ -132,6 +132,10 @@ void AdlibMusic::load(
 		int size)
 {
 	_data = (char*)data;
+
+	if (*(unsigned char*)_data <= 56)
+		size += *(unsigned char*)_data;
+
 	_size = static_cast<size_t>(size);
 }
 

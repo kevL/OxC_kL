@@ -98,7 +98,7 @@ private:
 		void targetFloor();
 
 		/// Peforms a melee attack.
-		void performMeleeAttack();
+		void performMeleeAttack(); // removed post-cosmetic surgery.
 };
 
 }

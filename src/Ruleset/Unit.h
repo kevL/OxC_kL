@@ -29,11 +29,10 @@ namespace OpenXcom
 
 enum SpecialAbility
 {
-	SPECAB_NONE,				// 0
-	SPECAB_EXPLODEONDEATH,		// 1
-	SPECAB_BURNFLOOR,			// 2
-	SPECAB_BURN_AND_EXPLODE,	// 3
-	SPECAB_RESPAWN				// 4, obsolete
+	SPECAB_NONE,			// 0
+	SPECAB_EXPLODEONDEATH,	// 1
+	SPECAB_BURNFLOOR,		// 2
+	SPECAB_BURN_AND_EXPLODE	// 3
 };
 
 

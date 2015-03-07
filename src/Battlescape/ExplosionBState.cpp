@@ -56,6 +56,7 @@ namespace OpenXcom
  * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon (default false)
  * @param meleeSuccess	- true if the (melee) attack was succesful (default false)
  * @param forceCenter	- forces Camera to center on the explosion (default false)
+// * @param cosmetic		- new undocumented parameter
  */
 ExplosionBState::ExplosionBState(
 		BattlescapeGame* parent,
@@ -66,6 +67,7 @@ ExplosionBState::ExplosionBState(
 		bool lowerWeapon,
 		bool meleeSuccess,	// kL_add.
 		bool forceCenter)	// kL_add.
+//		bool cosmetic)
 	:
 		BattleState(parent),
 		_center(center),
@@ -75,6 +77,7 @@ ExplosionBState::ExplosionBState(
 		_lowerWeapon(lowerWeapon),
 		_hitSuccess(meleeSuccess),	// kL
 		_forceCenter(forceCenter),	// kL
+//		_cosmetic(cosmetic),
 		_power(0),
 		_areaOfEffect(false),
 		_pistolWhip(false),
@@ -135,6 +138,7 @@ void ExplosionBState::init()
 						 && _item->getRules()->getBattleType() != BT_MELEE
 //						 && _item->getRules()->getBattleType() != BT_PSIAMP
 						 && _item->getRules()->getExplosionRadius() > -1;
+//						 && _cosmetic == false // kL_note: foregoes _pistolwhip
 		}
 	}
 	else if (_tile != NULL)
@@ -286,6 +290,7 @@ void ExplosionBState::init()
 			anim = _item->getRules()->getHitAnimation(),
 			sound = _item->getRules()->getHitSound();
 
+//		if (_cosmetic == true)
 		if (_hit == true)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
@@ -330,7 +335,7 @@ void ExplosionBState::init()
 												anim,
 												0,
 												false,
-												hitResult);
+												hitResult); // --> _cosmetic effect bleh.
 		_parent->getMap()->getExplosions()->push_back(explosion);
 
 		_parent->setStateInterval(std::max(
@@ -338,7 +343,7 @@ void ExplosionBState::init()
 										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (_item->getRules()->getExplosionSpeed() * 10))));
 //		}
 
-		Camera* const exploCam = _parent->getMap()->getCamera();
+		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics
 		if (exploCam->isOnScreen(targetPos) == false
 			|| _forceCenter == true
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
@@ -493,7 +498,7 @@ void ExplosionBState::explode()
 
 			tileEngine->setProjectileDirection(-1); // kL
 		}
-		else
+		else // -> if !_cosmetics
 		{
 			ItemDamageType damageType = _item->getRules()->getDamageType();
 			if (_pistolWhip == true)
@@ -506,22 +511,17 @@ void ExplosionBState::explode()
 													_unit,
 													_hit);
 
-			if (_item->getRules()->getZombieUnit().empty() == false // check if this unit turns others into zombies
+			if (_item->getRules()->getZombieUnit().empty() == false
 				&& victim != NULL
 				&& victim->getArmor()->getSize() == 1
 				&& (victim->getGeoscapeSoldier() != NULL
-//					|| victim->getUnitRules()->getRace() == "STR_CIVILIAN"
-//					|| (victim->getUnitRules() &&
 					|| victim->getUnitRules()->isMechanical() == false)
-//				&& victim->getTurretType() == -1
 				&& victim->getSpawnUnit().empty() == true
-//				&& victim->getSpecialAbility() == SPECAB_NONE // kL
-				&& victim->getOriginalFaction() != FACTION_HOSTILE) // only xCom & civies
+				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
-				//Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
+				//Log(LOG_INFO) << victim->getId() << " murderer has zombieUnit string";
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
-				victim->setRespawn(true);
-//				victim->setSpecialAbility(SPECAB_RESPAWN);
+//				victim->setRespawn();
 			}
 		}
 	}
@@ -544,7 +544,7 @@ void ExplosionBState::explode()
 		}
 
 		if (damageType != DT_HE)
-			_tile->setExplosive(0, 0, true);
+			_tile->setExplosive(0,0, true);
 
 		tileEngine->explode(
 						_center,
@@ -555,13 +555,15 @@ void ExplosionBState::explode()
 	}
 	else if (_item == NULL) // explosion not caused by terrain or an item, must be a cyberdisc
 	{
-		int radius = 6;
+		int radius;
 		if (_unit != NULL
 			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
 				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
 		}
+		else
+			radius = 6;
 
 		tileEngine->explode(
 						_center,
@@ -572,6 +574,7 @@ void ExplosionBState::explode()
 	}
 
 
+//	if (!_cosmetic)
 	_parent->checkForCasualties(
 							_item,
 							_unit,

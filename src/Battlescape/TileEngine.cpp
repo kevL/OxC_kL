@@ -36,6 +36,7 @@
 #include "ExplosionBState.h"
 #include "InfoBoxOKState.h"
 #include "Map.h"
+//#include "MeleeAttackBState.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
 #include "UnitTurnBState.h"
@@ -1639,10 +1640,13 @@ bool TileEngine::reactionShot(
 		if (action.actor->getFaction() != FACTION_HOSTILE)
 			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 
-		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
+		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState( // moved to ProjectileFlyBState, post-cosmetics
 																_battleSave->getBattleGame(),
 																action,
 																false));
+//		if (action.type == BA_HIT)
+//			_save->getBattleGame()->statePushBack(new MeleeAttackBState(_save->getBattleGame(), action));
+
 		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
 																_battleSave->getBattleGame(),
 																action));
@@ -5483,9 +5487,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits";
 					int
-						liveAliens = 0,
-						liveSoldiers = 0;
-
+						liveAliens,
+						liveSoldiers;
 					_battleSave->getBattleGame()->tallyUnits(
 														liveAliens,
 														liveSoldiers);

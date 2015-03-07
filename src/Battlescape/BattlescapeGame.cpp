@@ -34,9 +34,11 @@
 #include "InfoboxOKState.h"
 #include "InfoboxState.h"
 #include "Map.h"
+//#include "MeleeAttackBState.h"
 #include "NextTurnState.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
+//#include "PsiAttackBState.h"
 #include "TileEngine.h"
 #include "UnitDieBState.h"
 #include "UnitFallBState.h"
@@ -219,11 +221,10 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
-	if (unit->getTimeUnits() < 4) // kL
+	if (unit->getTimeUnits() == 0) // kL, was <6
 		unit->dontReselect();
 
-	if ( //kL unit->getTimeUnits() < 6 ||
-		_AIActionCounter > 1
+	if (_AIActionCounter > 1
 		|| unit->reselectAllowed() == false)
 	{
 		if (_save->selectNextFactionUnit(
@@ -380,10 +381,17 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		|| action.type == BA_PANIC
 		|| action.type == BA_LAUNCH)
 	{
+//		ss.clear();
+//		ss << L"Attack type = " << action.type
+//				<< ", target = " << action.target
+//				<< ", weapon = " << action.weapon->getRules()->getName().c_str();
+//		_parentState->debug(ss.str());
+
 		//Log(LOG_INFO) << ". . in action.type";
 		if (action.type == BA_MINDCONTROL
 			|| action.type == BA_PANIC)
 		{
+//			statePushBack(new PsiAttackBState(this, action)); // post-cosmetic
 			//Log(LOG_INFO) << ". . do Psi";
 			action.weapon = _alienPsi; // kL
 			action.TU = unit->getActionTUs(
@@ -399,6 +407,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			if (action.type == BA_HIT)
 			{
 				const std::string meleeWeapon = unit->getMeleeWeapon();
+//				statePushBack(new MeleeAttackBState(this, action));
 				bool instaWeapon = false;
 
 				if (action.weapon != _universalFist
@@ -454,12 +463,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				return;
 			}
 		}
-
-//		ss.clear();
-//		ss << L"Attack type = " << action.type
-//				<< ", target = " << action.target
-//				<< ", weapon = " << action.weapon->getRules()->getName().c_str();
-//		_parentState->debug(ss.str());
 
 		//Log(LOG_INFO) << ". attack action.Type = " << action.type
 		//		<< ", action.Target = " << action.target
@@ -749,13 +752,11 @@ void BattlescapeGame::endTurnPhase()
 	// if all units from either faction are killed - the mission is over.
 	// ... should this go after checkForCasualties() below ...
 	int
-		liveAliens = 0,
-		liveSoldiers = 0;
-	// we'll tally them NOW, so that any infected units will... change
+		liveAliens,
+		liveSoldiers;
 	tallyUnits(
 			liveAliens,
-			liveSoldiers,
-			true);
+			liveSoldiers);
 
 
 	if (_save->endBattlePhase() == true) // <- This rolls over Faction-turns.
@@ -961,19 +962,32 @@ void BattlescapeGame::checkForCasualties(
 		}
 	}
 
+
+	bool
+		death,
+		stun,
+		converted;
+
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
 	{
-		const bool
-			death = ((*i)->getHealth() == 0),
-			stun = ((*i)->getHealth() <= (*i)->getStun());
+		death = ((*i)->getHealth() == 0),
+		stun = ((*i)->getHealth() <= (*i)->getStun());
+		converted = false;
 
-		if (death == false
-			&& stun == false)
+		if (death == false)
 		{
-			continue;
+			if ((*i)->getSpawnUnit() == "STR_ZOMBIE") // human->zombie (nobody cares about zombie->chryssalid)
+			{
+				converted = true;
+				convertUnit(
+						*i,
+						(*i)->getSpawnUnit());
+			}
+			else if (stun == false)
+				continue;
 		}
 
 		BattleUnit* const victim = *i; // kL
@@ -1013,13 +1027,15 @@ void BattlescapeGame::checkForCasualties(
 		}
 
 
-		if (death == true
-			&& victim->getStatus() != STATUS_DEAD
-			&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
-			&& victim->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
-			&& victim->getStatus() != STATUS_DISABLED)	// kL
+		if ((death == true
+				&& victim->getStatus() != STATUS_DEAD
+				&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+				&& victim->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
+				&& victim->getStatus() != STATUS_DISABLED)	// kL
+			|| converted == true)
 		{
-			(*i)->setStatus(STATUS_DISABLED); // kL
+			if (converted == false)
+				(*i)->setStatus(STATUS_DISABLED);
 
 			// attacker's Morale Bonus & diary ->
 			if (attacker != NULL)
@@ -1044,7 +1060,7 @@ void BattlescapeGame::checkForCasualties(
 						victim->setMurdererId(attacker->getId());
 					}
 
-					int bonus = 0;
+					int bonus;
 					if (attacker->getOriginalFaction() == FACTION_PLAYER)
 					{
 						attacker->addKillCount();
@@ -1052,6 +1068,8 @@ void BattlescapeGame::checkForCasualties(
 					}
 					else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
 						bonus = _save->getMoraleModifier(NULL, false);
+					else
+						bonus = 0;
 
 					// attacker's Valor
 					if ((attacker->getOriginalFaction() == FACTION_HOSTILE
@@ -1129,8 +1147,11 @@ void BattlescapeGame::checkForCasualties(
 						int moraleLoss = (110 - (*j)->getBaseStats()->bravery) / 10;
 						if (moraleLoss > 0)
 						{
-							moraleLoss = -(moraleLoss * loss * 2 / bTeam);
-							(*j)->moraleChange(moraleLoss);
+							moraleLoss = moraleLoss * loss * 2 / bTeam;
+							if (converted == true)
+								moraleLoss = moraleLoss * 5 / 4; // extra loss if xCom or civie turns into a Zombie.
+
+							(*j)->moraleChange(-moraleLoss);
 						}
 /*kL
 						if (attacker
@@ -1155,33 +1176,34 @@ void BattlescapeGame::checkForCasualties(
 			}
 //			}
 
-			if (weapon != NULL)
-				statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!
-											this,
-											*i,
-											weapon->getRules()->getDamageType()));
-			else // hidden or terrain explosion, or death by fatal wounds
+			if (converted == false)
 			{
-				if (hidden == true) // this is instant death from UFO powersources, without screaming sounds
-				{
-					statePushNext(new UnitDieBState(
+				if (weapon != NULL)
+					statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!
 												this,
 												*i,
-												DT_HE,
-												true));
-				}
-				else
+												weapon->getRules()->getDamageType()));
+				else // hidden or terrain explosion, or death by fatal wounds
 				{
-					if (terrain == true)
+					if (hidden == true) // this is instant death from UFO powersources, without screaming sounds
 						statePushNext(new UnitDieBState(
 													this,
 													*i,
-													DT_HE));
-					else // no attacker, and no terrain explosion, must be fatal wounds
-						statePushNext(new UnitDieBState(
-													this,
-													*i,
-													DT_NONE)); // DT_NONE -> STR_HAS_DIED_FROM_A_FATAL_WOUND
+													DT_HE,
+													true));
+					else
+					{
+						if (terrain == true)
+							statePushNext(new UnitDieBState(
+														this,
+														*i,
+														DT_HE));
+						else // no attacker, and no terrain explosion, must be fatal wounds
+							statePushNext(new UnitDieBState(
+														this,
+														*i,
+														DT_NONE)); // DT_NONE -> STR_HAS_DIED_FROM_A_FATAL_WOUND
+					}
 				}
 			}
 		}
@@ -1305,6 +1327,7 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
+//					statePushBack(new MeleeAttackBState(this, _currentAction));
 					statePushBack(new ProjectileFlyBState(
 														this,
 														_currentAction));
@@ -2370,6 +2393,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 						_currentAction.cameraPosition = Position(0, 0,-1); // kL (don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states)
 
 
+//						statePushBack(new PsiAttackBState(this, _currentAction));
 						//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
 						statePushBack(new ProjectileFlyBState(
 															this,
@@ -2803,13 +2827,11 @@ void BattlescapeGame::dropItem(
  * Converts a unit into a unit of another type.
  * @param unit			- pointer to a unit to convert
  * @param convertType	- reference the type of unit to convert to
- * @param dirFace		- the direction to face after converting (default 3)
  * @return, pointer to the new unit
  */
 BattleUnit* BattlescapeGame::convertUnit(
 		BattleUnit* unit,
-		const std::string& convertType,
-		int dirFace) // kL_add.
+		const std::string& convertType)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;
 	const bool visible = unit->getUnitVisible();
@@ -2818,8 +2840,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	_save->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
 	unit->instaKill();
-	unit->setSpecialAbility(SPECAB_NONE);	// kL
-	unit->setRespawn(false);				// kL
+//	unit->setRespawn(false);
 
 	if (Options::battleNotifyDeath == true
 		&& unit->getFaction() == FACTION_PLAYER
@@ -2845,7 +2866,6 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	unit->getInventory()->clear();
 
-	// remove unit-tile link
 	unit->setTile(NULL);
 	_save->getTile(unit->getPosition())->setUnit(NULL);
 
@@ -2857,7 +2877,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 		difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty()),
 		month = _parentState->getGame()->getSavedGame()->getMonthsPassed();
 
-	BattleUnit* const convertedUnit = new BattleUnit(
+	BattleUnit* const convertUnit = new BattleUnit(
 												getRuleset()->getUnit(convertType),
 												FACTION_HOSTILE,
 												_save->getUnits()->back()->getId() + 1,
@@ -2866,48 +2886,48 @@ BattleUnit* BattlescapeGame::convertUnit(
 												getDepth(),
 												month,
 												this);
-	// note: what about setting _zombieUnit=true? It's not generic but it's the only case, afaict
-
-//	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
-//		convertedUnit->halveArmor();
 
 	_save->getTile(unit->getPosition())->setUnit(
-											convertedUnit,
+											convertUnit,
 											_save->getTile(unit->getPosition() + Position(0,0,-1)));
-	convertedUnit->setPosition(unit->getPosition());
+	convertUnit->setPosition(unit->getPosition());
 
-	convertedUnit->setTimeUnits(0);
+	convertUnit->setTimeUnits(0);
 
+	int dir;
 	if (convertType == "STR_ZOMBIE")
-		dirFace = RNG::generate(0,7);
-	convertedUnit->setDirection(dirFace);
+		dir = RNG::generate(0,7); // or, (unit->getDirection())
+	else
+		dir = 3;
+	convertUnit->setDirection(dir);
 
-	_save->getUnits()->push_back(convertedUnit);
+	_save->getUnits()->push_back(convertUnit);
 
-	convertedUnit->setCache(NULL);
-	getMap()->cacheUnit(convertedUnit);
-
-	convertedUnit->setAIState(new AlienBAIState(
+	convertUnit->setAIState(new AlienBAIState(
 											_save,
-											convertedUnit,
+											convertUnit,
 											NULL));
 
-	std::string terroristWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
-	terroristWeapon += "_WEAPON";
+	std::string terrorWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
+	terrorWeapon += "_WEAPON";
 	BattleItem* const item = new BattleItem(
-										getRuleset()->getItem(terroristWeapon),
+										getRuleset()->getItem(terrorWeapon),
 										_save->getCurrentItemId());
-	item->moveToOwner(convertedUnit);
+	item->moveToOwner(convertUnit);
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	_save->getItems()->push_back(item);
 
-	getTileEngine()->applyGravity(convertedUnit->getTile());
-	getTileEngine()->calculateFOV(convertedUnit->getPosition());
+//	convertUnit->setCache(NULL);
+	getMap()->cacheUnit(convertUnit);
 
-	convertedUnit->setUnitVisible(visible);
-//	convertedUnit->getCurrentAIState()->think();
+	convertUnit->setUnitVisible(visible);
 
-	return convertedUnit;
+	getTileEngine()->applyGravity(convertUnit->getTile());
+	getTileEngine()->calculateFOV(convertUnit->getPosition());
+
+//	convertUnit->getCurrentAIState()->think();
+
+	return convertUnit;
 }
 
 /**
@@ -3356,37 +3376,13 @@ BattleActionType BattlescapeGame::getReservedAction() const
  * Tallies the living units in the game and, if required, converts units into their spawn unit.
  * @param liveAliens	- reference in which to store the live alien tally
  * @param liveSoldiers	- reference in which to store the live XCom tally
- * @param convert		- true to convert infected units (default false)
  */
 void BattlescapeGame::tallyUnits(
 		int& liveAliens,
-		int& liveSoldiers,
-		bool convert)
+		int& liveSoldiers)
 {
-	liveSoldiers = 0;
+	liveSoldiers =
 	liveAliens = 0;
-
-	if (convert == true)
-	{
-		for (std::vector<BattleUnit*>::const_iterator
-				j = _save->getUnits()->begin();
-				j != _save->getUnits()->end();
-				++j)
-		{
-			if ((*j)->getHealth() > 0							// this converts infected but still living victims at endTurn().
-//				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)	// Chryssalids inflict SPECAB_RESPAWN, in ExplosionBState (melee hits)
-				&& (*j)->getRespawn() == true)
-			{
-				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
-//kL			(*j)->setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
-				convertUnit(
-						*j,
-						(*j)->getSpawnUnit());
-
-				j = _save->getUnits()->begin();
-			}
-		}
-	}
 
 	for (std::vector<BattleUnit*>::const_iterator
 			j = _save->getUnits()->begin();
@@ -3413,6 +3409,31 @@ void BattlescapeGame::tallyUnits(
 		}
 	}
 }
+
+/**
+ * Converts all infected units.
+ */
+/*void BattlescapeGame::convertInfected()
+{
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			)
+	{
+		if ((*i)->getHealth() != 0
+			&& (*i)->getRespawn() == true)
+		{
+			//Log(LOG_INFO) << "BSG::convertInfected() " << (*i)->getId();
+			convertUnit(
+					*i,
+					(*i)->getSpawnUnit());
+
+			i = _save->getUnits()->begin();
+		}
+		else
+			++i;
+	}
+} */
 
 /**
  * Sets the kneel reservation setting.
