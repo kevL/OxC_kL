@@ -110,9 +110,9 @@ protected:
 		void think(BattleAction* action);
 
 		/// Sets the "unit was hit" flag true.
-//kL	void setWasHitBy(BattleUnit *attacker);
+//		void setWasHitBy(BattleUnit *attacker);
 		/// Gets whether the unit was hit.
-//kL	getWasHitBy(int attacker) const;
+//		getWasHitBy(int attacker) const;
 
 		/// setup a patrol objective.
 		void setupPatrol();

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_ERRORMESSAGESTATE_H
 #define OPENXCOM_ERRORMESSAGESTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 
@@ -46,8 +46,8 @@ private:
 	Text* _txtMessage;
 
 	void create(
-			const std::string& str,
-			const std::wstring& wstr,
+			const std::string& id,
+			const std::wstring& msg,
 			SDL_Color* palette,
 			Uint8 color,
 			const std::string& bg,

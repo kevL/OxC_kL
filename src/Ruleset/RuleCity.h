@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_CITY_H
-#define OPENXCOM_CITY_H
+#ifndef OPENXCOM_RULECITY_H
+#define OPENXCOM_RULECITY_H
 
 //#include <string>
 //#include <yaml-cpp/yaml.h>
@@ -36,7 +36,7 @@ class Language;
  * Represents a city of the world.
  * Aliens target cities for certain missions.
  */
-class City
+class RuleCity
 	:
 		public Target
 {
@@ -51,14 +51,14 @@ private:
 
 	public:
 		/// Creates a new City.
-		City();
+		RuleCity();
 		/// Creates a new City at coordinates.
-		City(
+		RuleCity(
 				const std::string& name,
 				double lon,
 				double lat);
 		/// Cleans up the City.
-		~City();
+		~RuleCity();
 
 		/// Loads the City from YAML.
 		void load(const YAML::Node& node);

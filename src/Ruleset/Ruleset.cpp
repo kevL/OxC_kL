@@ -27,7 +27,6 @@
 #include "AlienDeployment.h"
 #include "Armor.h"
 #include "ArticleDefinition.h"
-#include "City.h"
 //#include "ExtraMusic.h" // sza_ExtraMusic
 #include "ExtraSounds.h"
 #include "ExtraSprites.h"
@@ -38,6 +37,7 @@
 #include "OperationPool.h"
 #include "RuleAlienMission.h"
 #include "RuleBaseFacility.h"
+#include "RuleCity.h"
 #include "RuleCommendations.h"
 #include "RuleCountry.h"
 #include "RuleCraft.h"

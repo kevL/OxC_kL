@@ -24,7 +24,7 @@
 //#include <math.h>
 //#include "../fmath.h"
 
-#include "City.h"
+#include "RuleCity.h"
 
 //#include "../Engine/RNG.h"
 
@@ -48,7 +48,7 @@ RuleRegion::RuleRegion(const std::string& type)
  */
 RuleRegion::~RuleRegion()
 {
-	for (std::vector<City*>::const_iterator
+	for (std::vector<RuleCity*>::const_iterator
 			i = _cities.begin();
 			i != _cities.end();
 			++i)
@@ -97,7 +97,7 @@ void RuleRegion::load(const YAML::Node& node)
 				i != cities.end();
 				++i)
 		{
-			City* const cityRule = new City(); // Load all Cities that are in YAML-ruleset
+			RuleCity* const cityRule = new RuleCity(); // Load all Cities that are in YAML-ruleset
 			cityRule->load(*i);
 			_cities.push_back(cityRule);
 
@@ -185,7 +185,7 @@ bool RuleRegion::insideRegion(
  * @note Build & cache a vector of all MissionAreas that are Cities.
  * @return, pointer to a vector of pointers to Cities
  */
-std::vector<City*>* RuleRegion::getCities()
+std::vector<RuleCity*>* RuleRegion::getCities()
 {
 	if (_cities.empty() == true) // kL_note: unused for now. Just return the cities, thanks anyway.
 	{
@@ -202,7 +202,7 @@ std::vector<City*>* RuleRegion::getCities()
 				if (j->isPoint() == true
 					&& j->name.empty() == false)
 				{
-					_cities.push_back(new City(
+					_cities.push_back(new RuleCity(
 											j->name,
 											j->lonMin,
 											j->latMin));

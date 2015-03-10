@@ -250,7 +250,7 @@
 	"State.h"
 	"Surface.h"
 
-1424390941 f:\git\openxcom\src\engine\surface.h
+1426012830 f:\git\openxcom\src\engine\surface.h
 
 1325796034 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -4491,13 +4491,12 @@
 1425481745 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
-1424390938 f:\git\openxcom\src\menu\errormessagestate.h
-	<string>
+1426013506 f:\git\openxcom\src\menu\errormessagestate.h
 	"../Engine/State.h"
 
 1424390937 f:\git\openxcom\src\ruleset\rulebasefacility.h
 
-1425599603 f:\git\openxcom\src\ruleset\ruleregion.h
+1426028445 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
 1425473203 f:\git\openxcom\src\savegame\weightedoptions.h
@@ -4533,7 +4532,7 @@
 
 1424390937 f:\git\openxcom\src\ruleset\rulecraft.h
 
-1424390946 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
+1426013289 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
 	"PlaceFacilityState.h"
 	"../Engine/Game.h"
@@ -4630,7 +4629,7 @@
 1424390945 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
-1425959722 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1426028873 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
@@ -4650,7 +4649,7 @@
 1425842000 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1425866258 f:\git\openxcom\src\savegame\battleunit.h
+1426013670 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -4751,7 +4750,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1425571421 f:\git\openxcom\src\geoscape\globe.h
+1426002655 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -5450,7 +5449,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1425762867 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1426002203 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5470,7 +5469,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1425762867 f:\git\openxcom\src\battlescape\alienbaistate.h
+1426002298 f:\git\openxcom\src\battlescape\alienbaistate.h
 	"BattleAIState.h"
 	"Position.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -7818,7 +7817,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1425963125 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1425964731 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -10884,7 +10883,7 @@
 1424777815 f:\git\openxcom\src\menu\listsavestate.h
 	"ListGamesState.h"
 
-1424628134 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1426014195 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	"DeleteGameState.h"
 	"../Engine/Action.h"
@@ -11167,7 +11166,7 @@
 
 1424390937 f:\git\openxcom\src\ruleset\polyline.h
 
-1425947623 f:\git\openxcom\src\ruleset\ruleglobe.h
+1426028912 f:\git\openxcom\src\ruleset\ruleglobe.h
 
 1424390937 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"

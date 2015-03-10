@@ -80,14 +80,14 @@ CraftArmorState::CraftArmorState(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("craftArmor")->getElement("palette")->color);
 
-	add(_window, "window", "craftArmor");
-	add(_txtTitle, "text", "craftArmor");
+	add(_window,		"window",	"craftArmor");
+	add(_txtTitle,		"text",		"craftArmor");
 	add(_txtBaseLabel);
-	add(_txtName, "text", "craftArmor");
-	add(_txtArmor, "text", "craftArmor");
-	add(_txtCraft, "text", "craftArmor");
-	add(_lstSoldiers, "list", "craftArmor");
-	add(_btnOk, "button", "craftArmor");
+	add(_txtName,		"text",		"craftArmor");
+	add(_txtArmor,		"text",		"craftArmor");
+	add(_txtCraft,		"text",		"craftArmor");
+	add(_lstSoldiers,	"list",		"craftArmor");
+	add(_btnOk,			"button",	"craftArmor");
 
 	centerAllSurfaces();
 

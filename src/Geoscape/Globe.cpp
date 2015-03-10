@@ -46,10 +46,10 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/City.h"
 #include "../Ruleset/Polygon.h"
 #include "../Ruleset/Polyline.h"
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleGlobe.h"
@@ -1941,7 +1941,7 @@ void Globe::drawDetail()
 				i != _game->getSavedGame()->getRegions()->end();
 				++i)
 		{
-			for (std::vector<City*>::const_iterator
+			for (std::vector<RuleCity*>::const_iterator
 					j = (*i)->getRules()->getCities()->begin();
 					j != (*i)->getRules()->getCities()->end();
 					++j)
@@ -2027,7 +2027,7 @@ void Globe::drawDetail()
 				i != _game->getSavedGame()->getRegions()->end();
 				++i)
 		{
-			for (std::vector<City*>::const_iterator
+			for (std::vector<RuleCity*>::const_iterator
 					j = (*i)->getRules()->getCities()->begin();
 					j != (*i)->getRules()->getCities()->end();
 					++j)
@@ -3097,6 +3097,33 @@ void Globe::getPolygonTextureAndShade(
 
 /*	globe->_cenLon = oldLon;
 	globe->_cenLat = oldLat; */
+}
+
+/**
+ * Get the polygon's shadeLevel at a given point.
+ * @param lon	- longitude of the point
+ * @param lat 	- latitude of the point
+ * @param shade	- pointer to shade level
+ */
+void Globe::getPolygonShade(
+		double lon,
+		double lat,
+		int* shade) const
+{
+	// this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
+	const int worldshades[32] =
+	{
+		0, 1, 1, 1, 2, 2, 2, 3,
+		3, 3, 4, 4, 4, 5, 5, 5,
+		6, 6, 6, 7, 7, 7, 8, 8,
+		9, 9,10,11,12,13,14,15
+	};
+
+	*shade = worldshades[CreateShadow::getShadowValue(
+													0,
+													Cord (0.,0.,1.), // init.
+													getSunDirection(lon, lat),
+													0)];
 }
 
 /**

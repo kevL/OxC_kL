@@ -69,39 +69,34 @@ BuildFacilitiesState::BuildFacilitiesState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("selectFacility")->getElement("palette")->color); //6
+			_game->getRuleset()->getInterface("selectFacility")->getElement("palette")->color);
 
-	add(_window, "window", "selectFacility");
-	add(_txtTitle, "text", "selectFacility");
-	add(_lstFacilities, "list", "selectFacility");
-	add(_btnOk, "button", "selectFacility");
+	add(_window,		"window",	"selectFacility");
+	add(_txtTitle,		"text",		"selectFacility");
+	add(_lstFacilities,	"list",		"selectFacility");
+	add(_btnOk,			"button",	"selectFacility");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BuildFacilitiesState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BuildFacilitiesState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INSTALLATION"));
 
-//	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 99);
 	_lstFacilities->setSelectable();
-//	_lstFacilities->setScrollable(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
-	_lstFacilities->setWordWrap();
+//	_lstFacilities->setWordWrap();
 	_lstFacilities->onMouseClick((ActionHandler)& BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();
@@ -124,12 +119,12 @@ void BuildFacilitiesState::PopulateBuildList()
 			i != facilities.end();
 			++i)
 	{
-		RuleBaseFacility* rule = _game->getRuleset()->getBaseFacility(*i);
+		RuleBaseFacility* const facRule = _game->getRuleset()->getBaseFacility(*i);
 
-		if (_game->getSavedGame()->isResearched(rule->getRequirements()) == true
-			&& rule->isLift() == false)
+		if (_game->getSavedGame()->isResearched(facRule->getRequirements()) == true
+			&& facRule->isLift() == false)
 		{
-			_facilities.push_back(rule);
+			_facilities.push_back(facRule);
 		}
 	}
 

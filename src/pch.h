@@ -320,7 +320,7 @@
 #include "./Ruleset/RuleItem.h"
 #include "./Ruleset/RuleManufacture.h"
 #include "./Ruleset/AlienRace.h"
-#include "./Ruleset/City.h"
+#include "./Ruleset/RuleCity.h"
 #include "./Ruleset/AlienDeployment.h"
 #include "./Ruleset/RuleTerrain.h"
 #include "./Ruleset/Polygon.h"
@@ -328,7 +328,7 @@
 #include "./Ruleset/RuleInterface.h"
 #include "./Ruleset/RuleGlobe.h"
 #include "./Ruleset/SoundDefinition.h"
-#include "./Ruleset/Texture.h"
+#include "./Ruleset/RuleTexture.h"
 
 #include "./Interface/ToggleTextButton.h"
 #include "./Interface/TextButton.h"

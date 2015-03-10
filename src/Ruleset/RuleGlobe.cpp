@@ -26,7 +26,7 @@
 
 #include "Polygon.h"
 #include "Polyline.h"
-#include "Texture.h"
+#include "RuleTexture.h"
 
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
@@ -65,7 +65,7 @@ RuleGlobe::~RuleGlobe()
 		delete *i;
 	}
 
-	for (std::map<int, Texture*>::const_iterator
+	for (std::map<int, RuleTexture*>::const_iterator
 			i = _textures.begin();
 			i != _textures.end();
 			++i)
@@ -140,7 +140,7 @@ void RuleGlobe::load(const YAML::Node& node)
 
 	if (node["textures"])
 	{
-		for (std::map<int, Texture*>::const_iterator
+		for (std::map<int, RuleTexture*>::const_iterator
 				i = _textures.begin();
 				i != _textures.end();
 				++i)
@@ -156,7 +156,7 @@ void RuleGlobe::load(const YAML::Node& node)
 				++i)
 		{
 			int id = (*i)["id"].as<int>();
-			Texture* texture = new Texture(id);
+			RuleTexture* texture = new RuleTexture(id);
 			texture->load(*i);
 			_textures[id] = texture;
 		}
@@ -257,9 +257,9 @@ void RuleGlobe::loadDat(const std::string& filename)
  * @param id - Texture ID
  * @return, rules for a Texture
  */
-Texture* RuleGlobe::getGlobeTextureRule(int id) const
+RuleTexture* RuleGlobe::getGlobeTextureRule(int id) const
 {
-	std::map<int, Texture*>::const_iterator i = _textures.find(id);
+	std::map<int, RuleTexture*>::const_iterator i = _textures.find(id);
 	if (i != _textures.end())
 		return i->second;
 
@@ -276,7 +276,7 @@ std::vector<std::string> RuleGlobe::getGlobeTerrains(const std::string& deployTy
 {
 	std::vector<std::string> terrains;
 
-	for (std::map<int, Texture*>::const_iterator
+	for (std::map<int, RuleTexture*>::const_iterator
 			i = _textures.begin();
 			i != _textures.end();
 			++i)

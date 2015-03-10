@@ -48,7 +48,7 @@ enum TextureTypes
 
 class Polygon;
 class Polyline;
-class Texture;
+class RuleTexture;
 
 
 /**
@@ -63,7 +63,7 @@ private:
 	std::list<Polygon*> _polygons;
 	std::list<Polyline*> _polylines;
 
-	std::map<int, Texture*> _textures;
+	std::map<int, RuleTexture*> _textures;
 
 
 	public:
@@ -84,7 +84,7 @@ private:
 		void loadDat(const std::string& filename);
 
 		/// Gets a specific world texture.
-		Texture* getGlobeTextureRule(int id) const;
+		RuleTexture* getGlobeTextureRule(int id) const;
 		/// Gets the eligible terrains for an AlienDeployment rule.
 		std::vector<std::string> getGlobeTerrains(const std::string& deployType) const;
 };

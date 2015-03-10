@@ -346,11 +346,11 @@ void ListGamesState::lstSavesMouseOver(Action*)
 	{
 		std::wstring wst;
 
-		const int sel = _lstSaves->getSelectedRow() - _firstValidRow;
+		const int sel = static_cast<int>(_lstSaves->getSelectedRow()) - static_cast<int>(_firstValidRow);
 		if (sel > -1
 			&& sel < static_cast<int>(_saves.size()))
 		{
-			wst = _saves[sel].details;
+			wst = _saves[static_cast<size_t>(sel)].details;
 		}
 
 		_txtDetails->setText(tr("STR_DETAILS").arg(wst));

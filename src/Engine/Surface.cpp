@@ -170,7 +170,7 @@ Surface::Surface(
 	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 
 	_crop.w =
-	_crop.h =
+	_crop.h = 0;
 	_crop.x =
 	_crop.y = 0;
 

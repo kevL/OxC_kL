@@ -44,9 +44,9 @@ class ResourcePack;
 class RuleItem;
 class Ruleset;
 class RuleTerrain;
+class RuleTexture;
 class SavedBattleGame;
 class SavedGame;
-class Texture;
 class Tile;
 class Ufo;
 class Unit;
@@ -97,9 +97,9 @@ private:
 	ResourcePack* _res;
 	Ruleset* _rules;
 	RuleTerrain* _terrain;
+	RuleTexture* _texture;
 	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
-	Texture* _texture;
 	Tile* _tileEquipt;
 	Ufo* _ufo;
 
@@ -236,7 +236,7 @@ private:
 		/// Sets the terrain.
 		void setTacTerrain(RuleTerrain* terrain);
 		/// Sets the polygon texture.
-//		void setTacTexture(Texture* texture);
+//		void setTacTexture(RuleTexture* texture);
 		/// Sets the polygon shade.
 		void setTacShade(int shade);
 		/// Sets the alien race.

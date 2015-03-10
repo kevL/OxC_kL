@@ -52,8 +52,8 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
 //#include "../Ruleset/RuleTerrain.h"
+//#include "../Ruleset/RuleTexture.h"
 #include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/Texture.h"
 #include "../Ruleset/Unit.h"
 
 #include "../Savegame/AlienBase.h"
@@ -230,7 +230,7 @@ void BattlescapeGenerator::setTacTerrain(RuleTerrain* terrain)
  * This is used to determine the terrain if siteTerrain is ""/ NULL.
  * @param texture - texture id of the polygon on the globe
  */
-/*void BattlescapeGenerator::setTacTexture(Texture* texture)
+/*void BattlescapeGenerator::setTacTexture(RuleTexture* texture)
 {
 	_texture = texture;
 } */

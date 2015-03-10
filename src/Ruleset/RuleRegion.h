@@ -79,7 +79,7 @@ struct MissionZone
 };
 
 
-class City;
+class RuleCity;
 class Target;
 
 
@@ -100,7 +100,7 @@ private:
 		_latMin,
 		_latMax;
 
-	std::vector<City*> _cities;
+	std::vector<RuleCity*> _cities;
 
 	/// Weighted list of the different mission types for this region.
 	WeightedOptions _missionWeights;
@@ -136,7 +136,7 @@ private:
 				double lat) const;
 
 		/// Gets the cities in this region.
-		std::vector<City*>* getCities();
+		std::vector<RuleCity*>* getCities();
 
 		/// Gets the weight of this region for mission selection.
 		size_t getWeight() const;

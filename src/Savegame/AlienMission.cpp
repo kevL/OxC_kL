@@ -44,14 +44,14 @@
 #include "../Geoscape/Globe.h"
 
 #include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/City.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleTexture.h"
 #include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/Texture.h"
 #include "../Ruleset/UfoTrajectory.h"
 
 
@@ -572,7 +572,7 @@ void AlienMission::ufoReachedWaypoint(
 			const MissionArea area = regionRules.getMissionPoint(
 															trajectory.getZone(curWaypoint),
 															&ufo);
-			const Texture* const texture = rules.getGlobe()->getGlobeTextureRule(area.texture);
+			const RuleTexture* const texture = rules.getGlobe()->getGlobeTextureRule(area.texture);
 			// uses Globe-defined textures for Deployment; what happens to Deployment-defined Deployments:
 			const AlienDeployment* const deployRule = rules.getDeployment(texture->getTextureDeployment());
 

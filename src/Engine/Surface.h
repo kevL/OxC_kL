@@ -277,8 +277,7 @@ protected:
 		int getWidth() const
 		{ return _surface->w; }
 		/// Sets the width of the surface.
-		virtual void setWidth(int width);
-
+		virtual void setWidth(int width); // should be Unit16
 		/**
 		 * Returns the height of the surface.
 		 * @return, height in pixels
@@ -286,7 +285,7 @@ protected:
 		int getHeight() const
 		{ return _surface->h; }
 		/// Sets the height of the surface.
-		virtual void setHeight(int height);
+		virtual void setHeight(int height); // should be Unit16
 
 		/// Sets the surface's special hidden flag.
 		void setHidden(bool hidden);

@@ -2452,18 +2452,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Ruleset/City.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Ruleset/City.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
 		<Unit filename="Ruleset/ExtraMusic.cpp" />
 		<Unit filename="Ruleset/ExtraMusic.h" />
 		<Unit filename="Ruleset/ExtraSounds.cpp">
@@ -2582,6 +2570,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleCity.cpp" />
+		<Unit filename="Ruleset/RuleCity.h" />
 		<Unit filename="Ruleset/RuleCommendations.cpp" />
 		<Unit filename="Ruleset/RuleCommendations.h" />
 		<Unit filename="Ruleset/RuleCountry.cpp">
@@ -2710,6 +2700,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleTexture.cpp" />
+		<Unit filename="Ruleset/RuleTexture.h" />
 		<Unit filename="Ruleset/RuleUfo.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2754,8 +2746,6 @@
 		<Unit filename="Ruleset/StatString.h" />
 		<Unit filename="Ruleset/StatStringCondition.cpp" />
 		<Unit filename="Ruleset/StatStringCondition.h" />
-		<Unit filename="Ruleset/Texture.cpp" />
-		<Unit filename="Ruleset/Texture.h" />
 		<Unit filename="Ruleset/UfoTrajectory.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

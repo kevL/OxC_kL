@@ -113,9 +113,9 @@ void BaseView::initText(
 		Font* small,
 		Language* lang)
 {
-	_big	= big;
-	_small	= small;
-	_lang	= lang;
+	_big = big;
+	_small = small;
+	_lang = lang;
 }
 
 /**
@@ -232,7 +232,7 @@ void BaseView::setSelectable(int facSize)
 		r.h = _selector->getHeight();
 		r.x = 0;
 		r.y = 0;
-		_selector->drawRect(&r, _selectorColor); //Palette::blockOffset(1));
+		_selector->drawRect(&r, _selectorColor);
 
 		r.w -= 2;
 		r.h -= 2;
@@ -348,7 +348,7 @@ void BaseView::reCalcQueuedBuildings()
 	setBase(_base);
 
 	std::vector<BaseFacility*> facilities;
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::const_iterator
 			fac = _base->getFacilities()->begin();
 			fac != _base->getFacilities()->end();
 			++fac)
@@ -365,7 +365,7 @@ void BaseView::reCalcQueuedBuildings()
 
 	while (facilities.empty() == false) // applying a simple Dijkstra Algorithm
 	{
-		std::vector<BaseFacility*>::iterator facMin = facilities.begin();
+		std::vector<BaseFacility*>::const_iterator facMin = facilities.begin();
 		for (std::vector<BaseFacility*>::iterator
 				fac = facilities.begin();
 				fac != facilities.end();
@@ -634,11 +634,11 @@ void BaseView::draw()
 			text->setY((*fac)->getY() * GRID_SIZE + (GRID_SIZE * (*fac)->getRules()->getSize() - 16) / 2);
 			text->setBig();
 
-			std::wostringstream ss;
-			ss << (*fac)->getBuildTime();
+			std::wostringstream woststr;
+			woststr << (*fac)->getBuildTime();
 			text->setAlign(ALIGN_CENTER);
-			text->setColor(_cellColor); //Palette::blockOffset(13)+5);
-			text->setText(ss.str());
+			text->setColor(_cellColor);
+			text->setText(woststr.str());
 
 			text->blit(this);
 

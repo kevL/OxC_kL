@@ -354,6 +354,11 @@ private:
 				double lat,
 				int* texture,
 				int* shade) const;
+		/// Get the polygon's shade at the given point.
+		void getPolygonShade(
+				double lon,
+				double lat,
+				int* shade) const;
 
 		/// Get the localized text.
 //		const LocalizedText& tr(const std::string& id) const;

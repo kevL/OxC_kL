@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_TEXTURE_H
-#define OPENXCOM_TEXTURE_H
+#ifndef OPENXCOM_RULETEXTURE_H
+#define OPENXCOM_RULETEXTURE_H
 
 //#define _USE_MATH_DEFINES
 //#include <math.h>
@@ -57,7 +57,7 @@ class Target;
  * Represents the relations between a Geoscape texture
  * and the corresponding Battlescape mission attributes.
  */
-class Texture
+class RuleTexture
 {
 
 private:
@@ -68,9 +68,9 @@ private:
 
 	public:
 		/// Creates a new texture with mission data.
-		Texture(int id);
+		RuleTexture(int id);
 		/// Cleans up the texture.
-		~Texture();
+		~RuleTexture();
 
 		/// Loads the texture from YAML.
 		void load(const YAML::Node& node);

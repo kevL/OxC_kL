@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "City.h"
+#include "RuleCity.h"
 
 //#define _USE_MATH_DEFINES
 //#include <math.h>
@@ -32,7 +32,7 @@ namespace OpenXcom
  * Instantiates a City.
  * @note A City is a 1-pixel MissionArea within a MissionZone as defined in RuleRegion.
  */
-City::City()
+RuleCity::RuleCity()
 	:
 		Target(),
 		_zoomLevel(4),
@@ -49,7 +49,7 @@ City::City()
  * @param lon	- longitude of the city
  * @param lat	- latitude of the city
  */
-City::City(
+RuleCity::RuleCity(
 		const std::string& name,
 		double lon,
 		double lat)
@@ -67,14 +67,14 @@ City::City(
 /**
  * dTor.
  */
-City::~City()
+RuleCity::~RuleCity()
 {}
 
 /**
  * Loads the region type from a YAML file.
  * @param node - reference a YAML node
  */
-void City::load(const YAML::Node& node)
+void RuleCity::load(const YAML::Node& node)
 {
 	_lon		= node["lon"]		.as<double>(_lon) * M_PI / 180.; // radians
 	_lat		= node["lat"]		.as<double>(_lat) * M_PI / 180.;
@@ -92,7 +92,7 @@ void City::load(const YAML::Node& node)
  * @param lang - Language to get strings from
  * @return, the city's IG name
  */
-std::wstring City::getName(Language* lang) const
+std::wstring RuleCity::getName(Language* lang) const
 {
 	return lang->getString(_name);
 }
@@ -100,7 +100,7 @@ std::wstring City::getName(Language* lang) const
 /**
  * Returns this City's name as a raw string.
  */
-std::string City::getName() const
+std::string RuleCity::getName() const
 {
 	return _name;
 }
@@ -109,7 +109,7 @@ std::string City::getName() const
  * Returns the latitude coordinate of this City.
  * @return, the city's latitude in radians
  */
-double City::getLatitude() const
+double RuleCity::getLatitude() const
 {
 	return _lat;
 }
@@ -118,7 +118,7 @@ double City::getLatitude() const
  * Returns the longitude coordinate of this City.
  * @return, the city's longitude in radians
  */
-double City::getLongitude() const
+double RuleCity::getLongitude() const
 {
 	return _lon;
 }
@@ -127,7 +127,7 @@ double City::getLongitude() const
  * Returns the globe marker for this City.
  * @return, marker sprite
  */
-int City::getMarker() const
+int RuleCity::getMarker() const
 {
 	return 8;
 }
@@ -136,7 +136,7 @@ int City::getMarker() const
  * Returns the the minimal zoom level that is required to show name of this City on geoscape.
  * @return, required zoom level
  */
-size_t City::getZoomLevel() const
+size_t RuleCity::getZoomLevel() const
 {
 	return _zoomLevel;
 }
@@ -145,7 +145,7 @@ size_t City::getZoomLevel() const
  * Gets if this City's label is to be positioned above or below its marker.
  * @return, true if label goes on top
  */
-bool City::getLabelTop() const
+bool RuleCity::getLabelTop() const
 {
 	return _labelTop;
 }
@@ -154,7 +154,7 @@ bool City::getLabelTop() const
  * Gets the texture of this City for the battlescape.
  * @return, texture ID
  */
-int City::getCityTextureInt() const
+int RuleCity::getCityTextureInt() const
 {
 	return _texture;
 }

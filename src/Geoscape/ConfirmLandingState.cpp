@@ -42,13 +42,13 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/City.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/RuleTerrain.h"
+#include "../Ruleset/RuleTexture.h"
 #include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/Texture.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
@@ -67,12 +67,12 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Confirm Landing window.
  * @param craft 	- pointer to the Craft to confirm
- * @param texture	- pointer to the Texture of the landing site (default NULL)
+ * @param texture	- pointer to the RuleTexture of the landing site (default NULL)
  * @param shade		- shade of the landing site (default -1)
  */
 ConfirmLandingState::ConfirmLandingState(
 		Craft* const craft,
-		Texture* texture, // always passes in the vector of eligible Globe Terrains for the land-poly's textureInt.
+		RuleTexture* texture, // always passes in the vector of eligible Globe Terrains for the land-poly's textureInt.
 		const int shade)
 	:
 		_craft(craft),
@@ -153,7 +153,7 @@ ConfirmLandingState::ConfirmLandingState(
 											lon,
 											lat) == true)
 			{
-				for (std::vector<City*>::const_iterator
+				for (std::vector<RuleCity*>::const_iterator
 						j = (*i)->getRules()->getCities()->begin();
 						j != (*i)->getRules()->getCities()->end()
 							&& _city == NULL;
@@ -200,7 +200,7 @@ ConfirmLandingState::ConfirmLandingState(
 					// check for Terrains in Globe-Texture(INT) first
 					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
 
-					const Texture* const texture = globeRule->getGlobeTextureRule(_city->getCityTextureInt());
+					const RuleTexture* const texture = globeRule->getGlobeTextureRule(_city->getCityTextureInt());
 					eligibleTerrains = globeRule->getGlobeTerrains(texture->getTextureDeployment());
 
 					// second, check for Terrains in AlienDeployment ...
@@ -239,7 +239,7 @@ ConfirmLandingState::ConfirmLandingState(
 					// so treat them both the same -> texture(INT) #10
 					// INDUSTRIALUFO, MADURBANUFO, NATIVEUFO
 					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
-					const Texture* const texture = globeRule->getGlobeTextureRule(OpenXcom::TT_URBAN);
+					const RuleTexture* const texture = globeRule->getGlobeTextureRule(OpenXcom::TT_URBAN);
 
 					terrainType = texture->getRandomTerrain(ufo);
 					// NOTE that inputting coordinates can screw getRandomTerrain() if & when 'target'

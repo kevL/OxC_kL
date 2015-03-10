@@ -86,6 +86,10 @@ std::string getBuildDate(bool built)
 
 	std::ostringstream oststr;
 
+#ifdef _DEBUG
+	oststr << "dBug ";
+#endif
+
 	if (built == true)
 		oststr << "blt ";
 

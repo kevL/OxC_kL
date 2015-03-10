@@ -91,9 +91,9 @@
 
 #include "../Ruleset/AlienRace.h"
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleBaseFacility.h"
-#include "../Ruleset/City.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleGlobe.h"
@@ -1264,7 +1264,7 @@ void GeoscapeState::time5Seconds()
 							//Log(LOG_INFO) << ". create terrorSite";
 
 							MissionSite* const site = _savedGame->getMissionSites()->back();
-//							const City* const city = _game->getRuleset()->locateCity(
+//							const RuleCity* const city = _game->getRuleset()->locateCity(
 //																				site->getLongitude(),
 //																				site->getLatitude());
 //							assert(city);
@@ -1519,7 +1519,7 @@ void GeoscapeState::time5Seconds()
 								{
 									timerReset();
 
-									int // look up polygon's texture
+									int // look up polygon's texture + shade
 										texture,
 										shade;
 									_globe->getPolygonTextureAndShade(
@@ -1554,15 +1554,13 @@ void GeoscapeState::time5Seconds()
 					{
 						timerReset();
 
-						int // look up polygon's texture
-							texture,
+						int
+							texture = missionSite->getSiteTextureInt(),
 							shade;
-						_globe->getPolygonTextureAndShade(
-														missionSite->getLongitude(),
-														missionSite->getLatitude(),
-														&texture, // not used.
-														&shade);
-						texture = missionSite->getSiteTextureInt();
+						_globe->getPolygonShade(
+											missionSite->getLongitude(),
+											missionSite->getLatitude(),
+											&shade);
 						popup(new ConfirmLandingState(
 												*j,
 												// preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
@@ -1579,19 +1577,8 @@ void GeoscapeState::time5Seconds()
 						if ((*j)->getNumSoldiers() > 0)
 						{
 							timerReset();
-//							int // look up polygon's texture
-//								texture,
-//								shade;
-//							_globe->getPolygonTextureAndShade(
-//															alienBase->getLongitude(),
-//															alienBase->getLatitude(),
-//															&texture,
-//															&shade);
 							popup(new ConfirmLandingState(*j));
-//													*j,
-													// countryside Texture; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
-//													_game->getRuleset()->getGlobe()->getGlobeTextureRule(texture),
-//													shade));
+							// was countryside Texture & shade; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
 						}
 						else
 							(*j)->setDestination(NULL);

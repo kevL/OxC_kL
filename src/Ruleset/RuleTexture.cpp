@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Texture.h"
+#include "RuleTexture.h"
 
 //#include "../Engine/RNG.h"
 
@@ -31,7 +31,7 @@ namespace OpenXcom
  * Initializes a globe Texture.
  * @param id - Texture identifier
  */
-Texture::Texture(int id)
+RuleTexture::RuleTexture(int id)
 	:
 		_id(id)
 {}
@@ -39,14 +39,14 @@ Texture::Texture(int id)
 /**
  * dTor.
  */
-Texture::~Texture()
+RuleTexture::~RuleTexture()
 {}
 
 /**
- * Loads a Texture type from a YAML file.
+ * Loads a RuleTexture type from a YAML file.
  * @param node - reference a YAML node
  */
-void Texture::load(const YAML::Node& node)
+void RuleTexture::load(const YAML::Node& node)
 {
 	_id			= node["id"]		.as<int>(_id);
 	_deployType	= node["deployType"].as<std::string>(_deployType);
@@ -54,10 +54,10 @@ void Texture::load(const YAML::Node& node)
 }
 
 /**
- * Returns the list of TerrainCriteria associated with this Texture.
+ * Returns the list of TerrainCriteria associated with this RuleTexture.
  * @return, pointer to a vector of TerrainCriteria's
  */
-std::vector<TerrainCriteria>* Texture::getTerrainCriteria()
+std::vector<TerrainCriteria>* RuleTexture::getTerrainCriteria()
 {
 	return &_terrains;
 }
@@ -68,9 +68,9 @@ std::vector<TerrainCriteria>* Texture::getTerrainCriteria()
  * @param target - pointer to the mission Target (default NULL to exclude geographical bounds)
  * @return, terrain string
  */
-std::string Texture::getRandomTerrain(const Target* const target) const
+std::string RuleTexture::getRandomTerrain(const Target* const target) const
 {
-	Log(LOG_INFO) << "Texture::getRandomTerrain(TARGET)";
+	Log(LOG_INFO) << "RuleTexture::getRandomTerrain(TARGET)";
 	double
 		lon,
 		lat;
@@ -133,10 +133,10 @@ std::string Texture::getRandomTerrain(const Target* const target) const
 }
 
 /**
- * Gets this Texture's alien deployment.
+ * Gets this RuleTexture's alien deployment.
  * @return, deployment-type string
  */
-std::string Texture::getTextureDeployment() const
+std::string RuleTexture::getTextureDeployment() const
 {
 	return _deployType;
 }

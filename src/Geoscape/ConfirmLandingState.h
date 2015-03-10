@@ -26,12 +26,12 @@
 namespace OpenXcom
 {
 
-class City;
 class Craft;
+class RuleCity;
 class RuleTerrain;
+class RuleTexture;
 class Text;
 class TextButton;
-class Texture;
 class Window;
 
 
@@ -46,9 +46,10 @@ class ConfirmLandingState
 private:
 	int _shade;
 
-	City* _city;
+	RuleCity* _city;
 	Craft* _craft;
 	RuleTerrain* _terrainRule;
+	RuleTexture* _texture;
 	Text
 		* _txtBegin,
 		* _txtMessage,
@@ -60,7 +61,6 @@ private:
 	TextButton
 		* _btnNo,
 		* _btnYes;
-	Texture* _texture;
 	Window* _window;
 
 
@@ -68,7 +68,7 @@ private:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(
 				Craft* const craft,
-				Texture* texture = NULL,
+				RuleTexture* texture = NULL,
 				const int shade = -1);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();

@@ -21,8 +21,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -86,21 +86,20 @@ ErrorMessageState::ErrorMessageState(
  * dTor.
  */
 ErrorMessageState::~ErrorMessageState()
-{
-}
+{}
 
 /**
  * Creates the elements in an error window.
- * @param msg		- reference the language ID for the message to display
- * @param wmsg		- reference the text string for the message to display
+ * @param id		- reference the language ID for the message to display
+ * @param msg		- reference the text string for the message to display
  * @param palette	- pointer to the parent state palette
  * @param color		- color of the UI controls
  * @param bg		- background image
  * @param bgColor	- background color (-1 for Battlescape)
  */
 void ErrorMessageState::create(
-		const std::string& str,
-		const std::wstring& wstr,
+		const std::string& id,
+		const std::wstring& msg,
 		SDL_Color* palette,
 		Uint8 color,
 		const std::string& bg,
@@ -144,10 +143,10 @@ void ErrorMessageState::create(
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
 
-	if (str.empty())
-		_txtMessage->setText(wstr);
+	if (id.empty() == true)
+		_txtMessage->setText(msg);
 	else
-		_txtMessage->setText(tr(str));
+		_txtMessage->setText(tr(id));
 
 	if (bgColor == -1)
 	{
