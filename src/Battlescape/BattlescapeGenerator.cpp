@@ -93,7 +93,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_base(NULL),
 		_mission(NULL),
 		_alienBase(NULL),
-		_isCity(false),
+//		_isCity(false),
 		_terrain(NULL),
 		_texture(NULL),
 		_shade(0),

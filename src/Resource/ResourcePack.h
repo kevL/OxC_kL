@@ -154,6 +154,10 @@ private:
 			Sound* getSound(
 					const std::string& soundSet,
 					unsigned int sound) const;
+			/// Plays a sound effect in stereo.
+			void playSoundFX(
+					const int sound,
+					const bool randAngle = false) const;
 
 			/// Gets a particular palette.
 			Palette* getPalette(const std::string& name) const;

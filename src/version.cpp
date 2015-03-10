@@ -87,7 +87,7 @@ std::string getBuildDate(bool built)
 	std::ostringstream oststr;
 
 	if (built == true)
-		oststr << "built ";
+		oststr << "blt ";
 
 	oststr << __DATE__ << " " << __TIME__ << tz;
 	std::string st = oststr.str();

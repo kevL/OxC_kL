@@ -194,8 +194,7 @@ NewBattleState::NewBattleState()
 			i != crafts.end();
 			++i)
 	{
-		const RuleCraft* const rule = _rules->getCraft(*i);
-		if (rule->getSoldiers() > 0)
+		if (_rules->getCraft(*i)->getSoldiers() > 0)
 			_crafts.push_back(*i);
 	}
 	_cbxCraft->setOptions(_crafts);
@@ -230,7 +229,7 @@ NewBattleState::NewBattleState()
 
 	_slrAlienTech->setRange(
 						0,
-						_rules->getAlienItemLevels().size() - 1);
+						static_cast<int>(_rules->getAlienItemLevels().size()) - 1);
 
 	_btnEquip->setText(tr("STR_EQUIP_CRAFT"));
 	_btnEquip->onMouseClick((ActionHandler)& NewBattleState::btnEquipClick);
@@ -305,14 +304,14 @@ void NewBattleState::load(const std::string& filename)
 
 			if (doc["base"])
 			{
-				SavedGame* const save = new SavedGame(_rules);
+				SavedGame* const savedGame = new SavedGame(_rules);
 
 				Base* const base = new Base(_rules);
 				base->load(
 						doc["base"],
-						save,
+						savedGame,
 						false);
-				save->getBases()->push_back(base);
+				savedGame->getBases()->push_back(base);
 
 				// Add research
 				const std::vector<std::string> &research = _rules->getResearchList();
@@ -321,22 +320,23 @@ void NewBattleState::load(const std::string& filename)
 						i != research.end();
 						++i)
 				{
-					save->addFinishedResearch(_rules->getResearch(*i));
+					savedGame->addFinishedResearch(_rules->getResearch(*i));
 				}
 
 				// Generate items
 				base->getItems()->getContents()->clear();
+				const RuleItem* itRule;
 				const std::vector<std::string>& items = _rules->getItemsList();
 				for (std::vector<std::string>::const_iterator
 						i = items.begin();
 						i != items.end();
 						++i)
 				{
-					const RuleItem* const itRule = _rules->getItem(*i);
+					itRule = _rules->getItem(*i);
 					if (itRule->getBattleType() != BT_CORPSE
 						&& itRule->isRecoverable() == true)
 					{
-						base->getItems()->addItem(*i, 1);
+						base->getItems()->addItem(*i);
 					}
 				}
 
@@ -347,7 +347,7 @@ void NewBattleState::load(const std::string& filename)
 					_craft = new Craft(
 									_rules->getCraft(craftType),
 									base,
-									save->getId(craftType));
+									savedGame->getId(craftType));
 					base->getCrafts()->push_back(_craft);
 				}
 				else
@@ -358,13 +358,12 @@ void NewBattleState::load(const std::string& filename)
 							i != _craft->getItems()->getContents()->end();
 							++i)
 					{
-						const RuleItem* const itRule = _rules->getItem(i->first);
-						if (itRule == NULL)
+						if (_rules->getItem(i->first) == NULL)
 							i->second = 0;
 					}
 				}
 
-				_game->setSavedGame(save);
+				_game->setSavedGame(savedGame);
 			}
 			else
 				initSave();
@@ -413,9 +412,8 @@ void NewBattleState::save(const std::string& filename)
  */
 void NewBattleState::initSave()
 {
-	const Ruleset* const rule = _rules;
-	SavedGame* const savedGame = new SavedGame(rule);
-	Base* const base = new Base(rule);
+	SavedGame* const savedGame = new SavedGame(_rules);
+	Base* const base = new Base(_rules);
 	const YAML::Node& startBase = _rules->getStartingBase();
 	base->load(
 			startBase,
@@ -446,7 +444,7 @@ void NewBattleState::initSave()
 	base->getItems()->getContents()->clear();
 
 	_craft = new Craft(
-					rule->getCraft(_crafts[_cbxCraft->getSelected()]),
+					_rules->getCraft(_crafts[_cbxCraft->getSelected()]),
 					base,
 					1);
 	base->getCrafts()->push_back(_craft);
@@ -457,7 +455,7 @@ void NewBattleState::initSave()
 			i < 30;
 			++i)
 	{
-		Soldier* const soldier = rule->genSoldier(savedGame);
+		Soldier* const soldier = _rules->genSoldier(savedGame);
 
 		for (int
 				n = 0;
@@ -493,21 +491,21 @@ void NewBattleState::initSave()
 	}
 
 	// Generate items
-	const std::vector<std::string>& items = rule->getItemsList();
+	const std::vector<std::string>& items = _rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
 			i != items.end();
 			++i)
 	{
-		const RuleItem* const rule = _rules->getItem(*i);
-		if (rule->getBattleType() != BT_CORPSE
-			&& rule->isRecoverable() == true)
+		const RuleItem* const itRule = _rules->getItem(*i);
+		if (itRule->getBattleType() != BT_CORPSE
+			&& itRule->isRecoverable() == true)
 		{
 			base->getItems()->addItem(*i, 1);
 
-			if (rule->getBattleType() != BT_NONE
-				&& rule->isFixed() == false
-				&& rule->getBigSprite() > -1)
+			if (itRule->getBattleType() != BT_NONE
+				&& itRule->isFixed() == false
+				&& itRule->getBigSprite() > -1)
 			{
 				_craft->getItems()->addItem(*i, 1);
 			}
@@ -515,13 +513,13 @@ void NewBattleState::initSave()
 	}
 
 	// Add research
-	const std::vector<std::string>& research = rule->getResearchList();
+	const std::vector<std::string>& research = _rules->getResearchList();
 	for (std::vector<std::string>::const_iterator
 			i = research.begin();
 			i != research.end();
 			++i)
 	{
-		savedGame->addFinishedResearch(rule->getResearch(*i));
+		savedGame->addFinishedResearch(_rules->getResearch(*i));
 	}
 
 	_game->setSavedGame(savedGame);

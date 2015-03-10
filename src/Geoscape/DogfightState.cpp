@@ -996,9 +996,11 @@ void DogfightState::updateDogfight()
 						}
 
 						setStatus("STR_UFO_HIT");
-						playSoundFX(ResourcePack::UFO_HIT, true);
-
 						proj->removeProjectile();
+
+						_game->getResourcePack()->playSoundFX(
+														ResourcePack::UFO_HIT,
+														true);
 					}
 					else // Missed.
 					{
@@ -1034,7 +1036,9 @@ void DogfightState::updateDogfight()
 
 							drawCraftDamage();
 							setStatus("STR_INTERCEPTOR_DAMAGED");
-							playSoundFX(ResourcePack::INTERCEPTOR_HIT, true);
+							_game->getResourcePack()->playSoundFX(
+															ResourcePack::INTERCEPTOR_HIT,
+															true);
 
 							if ((_mode == _btnCautious
 									&& _craft->getDamagePercent() > 60)
@@ -1253,7 +1257,7 @@ void DogfightState::updateDogfight()
 			setStatus("STR_INTERCEPTOR_DESTROYED");
 
 			_timeout += 30;
-			playSoundFX(ResourcePack::INTERCEPTOR_EXPLODE);
+			_game->getResourcePack()->playSoundFX(ResourcePack::INTERCEPTOR_EXPLODE);
 
 			finalRun = true;
 			_destroyCraft = true;
@@ -1304,7 +1308,7 @@ void DogfightState::updateDogfight()
 				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 				{
 					setStatus("STR_UFO_DESTROYED");
-					playSoundFX(ResourcePack::UFO_EXPLODE);
+					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_EXPLODE);
 
 					for (std::vector<Region*>::const_iterator
 							i = _savedGame->getRegions()->begin();
@@ -1346,7 +1350,7 @@ void DogfightState::updateDogfight()
 				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 				{
 					setStatus("STR_UFO_CRASH_LANDS");
-					playSoundFX(ResourcePack::UFO_CRASH);
+					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
 
 					for (std::vector<Region*>::const_iterator
 							i = _savedGame->getRegions()->begin();
@@ -1448,7 +1452,9 @@ void DogfightState::fireWeapon1()
 			proj->setHorizontalPosition(HP_LEFT);
 			_projectiles.push_back(proj);
 
-			playSoundFX(cw1->getRules()->getSound(), true);
+			_game->getResourcePack()->playSoundFX(
+											cw1->getRules()->getSound(),
+											true);
 		}
 	}
 }
@@ -1474,7 +1480,9 @@ void DogfightState::fireWeapon2()
 			proj->setHorizontalPosition(HP_RIGHT);
 			_projectiles.push_back(proj);
 
-			playSoundFX(cw2->getRules()->getSound(), true);
+			_game->getResourcePack()->playSoundFX(
+											cw2->getRules()->getSound(),
+											true);
 		}
 	}
 }
@@ -1495,7 +1503,9 @@ void DogfightState::ufoFireWeapon()
 	proj->setPosition(_dist - (_ufo->getRules()->getRadius() / 2));
 	_projectiles.push_back(proj);
 
-	playSoundFX(ResourcePack::UFO_FIRE, true);
+	_game->getResourcePack()->playSoundFX(
+									ResourcePack::UFO_FIRE,
+									true);
 
 
 	int reload = _ufo->getRules()->getWeaponReload();
@@ -2304,48 +2314,22 @@ const std::string DogfightState::getTextureIcon()
 									&shade);
 	switch (texture)
 	{
-		case 0:		return "FOREST";
-		case 1:		return "CULTA";
-		case 2:		return "CULTA";
-		case 3:		return "FOREST";
-		case 4:		return "POLAR";
-		case 5:		return "MOUNT";
-		case 6:		return "FOREST"; // JUNGLE
-		case 7:		return "DESERT";
-		case 8:		return "DESERT";
-		case 9:		return "POLAR";
-		case 10:	return "URBAN";
-		case 11:	return "POLAR";
-		case 12:	return "POLAR";
-
-		default:
-			return "WATER"; // tex = -1
-	}
-}
-
-/**
- * Plays a sound effect in stereo.
- * @param sound		- sound to play
- * @param randAngle	- true to randomize the sound angle (default false to center it)
- */
-void DogfightState::playSoundFX(
-		const int sound,
-		const bool randAngle) const
-{
-	int dir = 360; // stereo center
-
-	if (randAngle == true)
-	{
-		const int var = 67; // maximum deflection left or right
-		dir += (RNG::generate(-var, var)
-			  + RNG::generate(-var, var))
-			/ 2;
+		case  0: return "FOREST";
+		case  1: return "CULTA";
+		case  2: return "CULTA";
+		case  3: return "FOREST";
+		case  4: return "POLAR";
+		case  5: return "MOUNT";
+		case  6: return "FOREST"; // JUNGLE
+		case  7: return "DESERT";
+		case  8: return "DESERT";
+		case  9: return "POLAR";
+		case 10: return "URBAN";
+		case 11: return "POLAR";
+		case 12: return "POLAR";
 	}
 
-	_game->getResourcePack()->getSound(
-									"GEO.CAT",
-									sound)
-								->play(-1, dir);
+	return "WATER"; // tex = -1
 }
 
 }

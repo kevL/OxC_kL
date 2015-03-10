@@ -172,10 +172,9 @@ void BaseDefenseState::nextStep()
 						_lstDefenses->scrollDown(true);
 				}
 
-				_game->getResourcePack()->getSound(
-												"GEO.CAT",
-												ResourcePack::UFO_EXPLODE)
-											->play();
+				_game->getResourcePack()->playSoundFX(
+												ResourcePack::UFO_EXPLODE,
+												true);
 
 				if (++_explosionCount == 3)
 					_action = BDA_END;
@@ -240,10 +239,9 @@ void BaseDefenseState::nextStep()
 										1,
 										tr("STR_FIRING").c_str());
 
-				_game->getResourcePack()->getSound(
-												"GEO.CAT",
-												def->getRules()->getFireSound())
-											->play(); // TODO: randomize stereo dir.
+				_game->getResourcePack()->playSoundFX(
+												def->getRules()->getFireSound(),
+												true);
 
 				_timer->setInterval(333);
 				_action = BDA_RESOLVE;
@@ -253,10 +251,7 @@ void BaseDefenseState::nextStep()
 			case BDA_RESOLVE:
 				if (RNG::percent(def->getRules()->getHitRatio()) == true)
 				{
-					_game->getResourcePack()->getSound(
-													"GEO.CAT",
-													def->getRules()->getHitSound())
-												->play();
+					_game->getResourcePack()->playSoundFX(def->getRules()->getHitSound());
 
 					int power = def->getRules()->getDefenseValue();
 					power = RNG::generate( // kL: vary power between 75% and 133% ( stock is 50..150% )

@@ -3792,11 +3792,10 @@ void BattleUnit::adjustStats(
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 
-	// kL_begin:
 	if (diff == 0)
 	{
 		halveArmor();
-		_stats.firing /= 2; // from above^
+		_stats.firing /= 2;
 	}
 
 	if (month > 0) // aLiens get tuffer as game progresses:
@@ -3824,8 +3823,6 @@ void BattleUnit::adjustStats(
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.melee = " << _stats.melee;
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
-
-	// kL_end.
 }
 
 /**

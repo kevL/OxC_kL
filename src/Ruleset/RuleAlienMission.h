@@ -129,7 +129,7 @@ private:
 		{ return _specialUfo; }
 		/// Gets the zone for spawning an alien site or base.
 		size_t getSpawnZone() const
-		{ return _specialZone; }
+		{ return static_cast<size_t>(_specialZone); } // note: inits to -1
 
 		/// Gets the chances of this mission based on the game time.
 		int getWeight(const size_t monthsPassed) const;

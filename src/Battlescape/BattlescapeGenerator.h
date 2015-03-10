@@ -65,8 +65,8 @@ private:
 		_allowAutoLoadout,
 		_baseEquipScreen,
 		_craftDeployed,
-		_generateFuel,
-		_isCity;
+		_generateFuel;
+//		_isCity;
 	int
 		_alienItemLevel,
 		_blocksToDo,

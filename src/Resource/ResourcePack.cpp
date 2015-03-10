@@ -389,6 +389,31 @@ Sound* ResourcePack::getSound(
 }
 
 /**
+ * Plays a sound effect in stereo.
+ * @param sound		- sound to play
+ * @param randAngle	- true to randomize the sound angle (default false to center it)
+ */
+void ResourcePack::playSoundFX(
+		const int sound,
+		const bool randAngle) const
+{
+	int dir = 360; // stereo center
+
+	if (randAngle == true)
+	{
+		const int var = 67; // maximum deflection left or right
+		dir += (RNG::generate(-var, var)
+			  + RNG::generate(-var, var))
+			/ 2;
+	}
+
+	getSound(
+			"GEO.CAT",
+			sound)
+		->play(-1, dir);
+}
+
+/**
  * Returns a specific palette from the resource set.
  * @param name - reference the name of a Palette
  * @return, pointer to the Palette
