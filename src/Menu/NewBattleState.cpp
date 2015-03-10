@@ -483,32 +483,32 @@ void NewBattleState::initSave()
 
 		UnitStats* const stats = soldier->getCurrentStats();
 		stats->bravery = static_cast<int>(std::floor(
-						(static_cast<double>(stats->bravery) / 10.) + 0.5)) * 10; // kL, lulzor
+						(static_cast<double>(stats->bravery) / 10.) + 0.5)) * 10; // lulzor
 
 		base->getSoldiers()->push_back(soldier);
-		if (i < _craft->getRules()->getSoldiers())
-			soldier->setCraft(_craft);
+//		if (i < _craft->getRules()->getSoldiers())
+//			soldier->setCraft(_craft);
 	}
 
 	// Generate items
+	const RuleItem* itRule;
 	const std::vector<std::string>& items = _rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
 			i != items.end();
 			++i)
 	{
-		const RuleItem* const itRule = _rules->getItem(*i);
+		itRule = _rules->getItem(*i);
 		if (itRule->getBattleType() != BT_CORPSE
 			&& itRule->isRecoverable() == true)
 		{
-			base->getItems()->addItem(*i, 1);
-
-			if (itRule->getBattleType() != BT_NONE
-				&& itRule->isFixed() == false
-				&& itRule->getBigSprite() > -1)
-			{
-				_craft->getItems()->addItem(*i, 1);
-			}
+			base->getItems()->addItem(*i);
+//			if (itRule->getBattleType() != BT_NONE
+//				&& itRule->isFixed() == false
+//				&& itRule->getBigSprite() > -1)
+//			{
+//				_craft->getItems()->addItem(*i);
+//			}
 		}
 	}
 
@@ -582,11 +582,11 @@ void NewBattleState::btnOkClick(Action*)
 	}
 	else // mission site
 	{
-		const AlienDeployment* deployment = _rules->getDeployment(battleSave->getMissionType());
-		const RuleAlienMission* mission = _rules->getAlienMission(_rules->getAlienMissionList().front()); // doesn't matter
-		MissionSite* missionSite = new MissionSite(
-												mission,
-												deployment);
+		const AlienDeployment* const deployment = _rules->getDeployment(battleSave->getMissionType());
+		const RuleAlienMission* const mission = _rules->getAlienMission(_rules->getAlienMissionList().front()); // doesn't matter
+		MissionSite* const missionSite = new MissionSite(
+													mission,
+													deployment);
 		missionSite->setId(1);
 		missionSite->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 
