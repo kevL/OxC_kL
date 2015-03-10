@@ -721,6 +721,12 @@ void BattleUnit::startWalking(
 		_kneeled = false;
 		_direction = direction;
 	}
+
+	if (_breathFrame > -1)
+	{
+		_breathing = false;
+		_breathFrame = 0;
+	}
 }
 
 /**
