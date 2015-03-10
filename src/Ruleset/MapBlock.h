@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -46,7 +45,7 @@ class RuleTerrain;
 
 /**
  * Represents a Terrain Map Block.
- * It contains constant info about this mapblock, like its name, dimensions, attributes...
+ * It contains constant info about this mapblock, like its type, dimensions, attributes...
  * Map blocks are stored in RuleTerrain objects.
  * @sa http://www.ufopaedia.org/index.php?title=MAPS_Terrain
  */
@@ -54,7 +53,7 @@ class MapBlock
 {
 
 private:
-	std::string _name;
+	std::string _type;
 	int
 		_size_x,
 		_size_y,
@@ -69,15 +68,15 @@ private:
 
 	public:
 		/// Constructs a MapBlock object.
-		MapBlock(const std::string& name);
+		MapBlock(const std::string& type);
 		/// Destructs this MapBlock object.
 		~MapBlock();
 
 		/// Loads the map block from YAML.
 		void load(const YAML::Node& node);
 
-		/// Gets the mapblock's name (used for MAP generation).
-		std::string getName() const;
+		/// Gets the mapblock's type (used for MAP generation).
+		std::string getType() const;
 
 		/// Gets the mapblock's x size.
 		int getSizeX() const;

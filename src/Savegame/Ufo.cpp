@@ -942,7 +942,7 @@ int Ufo::getCrashPower() const
  * Sets this Ufo's terrain type when it crashes or lands.
  * @param terrain - the terrain type
  */
-void Ufo::setTerrain(const std::string& terrain)
+void Ufo::setUfoTerrainType(const std::string& terrain)
 {
 	_terrain = terrain;
 }
@@ -951,7 +951,7 @@ void Ufo::setTerrain(const std::string& terrain)
  * Gets this Ufo's terrain type once it's crashed or landed.
  * @return, the terrain type
  */
-std::string Ufo::getTerrain() const
+std::string Ufo::getUfoTerrainType() const
 {
 	return _terrain;
 }

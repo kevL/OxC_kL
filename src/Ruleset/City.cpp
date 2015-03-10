@@ -88,13 +88,21 @@ void City::load(const YAML::Node& node)
 }
 
 /**
- * Returns this City's name as seen on the geoscape.
+ * Returns this City's name as seen on the Globe.
  * @param lang - Language to get strings from
  * @return, the city's IG name
  */
 std::wstring City::getName(Language* lang) const
 {
 	return lang->getString(_name);
+}
+
+/**
+ * Returns this City's name as a raw string.
+ */
+std::string City::getName() const
+{
+	return _name;
 }
 
 /**
@@ -146,7 +154,7 @@ bool City::getLabelTop() const
  * Gets the texture of this City for the battlescape.
  * @return, texture ID
  */
-int City::getTexture() const
+int City::getCityTextureInt() const
 {
 	return _texture;
 }

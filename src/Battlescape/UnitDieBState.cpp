@@ -143,7 +143,7 @@ void UnitDieBState::init()
 void UnitDieBState::think()
 {
 	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
-	if (_noSound == false // <- should be fun without this.
+	if (_noSound == false
 		&& _doneScream == false)
 	{
 		_doneScream = true;
@@ -171,9 +171,7 @@ void UnitDieBState::think()
 			_unit->contDeathSpin(); // -> STATUS_STANDING
 		}
 		else // spawn conversion is going to happen
-		{
 			_unit->turn(); // -> STATUS_STANDING
-		}
 	}
 // #3
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
@@ -188,7 +186,6 @@ void UnitDieBState::think()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
-//		if (_unit->getRespawn() == true)
 		if (_unit->getSpawnUnit().empty() == false)
 		{
 			while (_unit->getStatus() == STATUS_COLLAPSING)
@@ -207,29 +204,28 @@ void UnitDieBState::think()
 		// need to freshen visUnit-indicators in case another unit was hiding behind the one who just fell
 		_parent->getSave()->getBattleState()->updateSoldierInfo(false);
 
-		if (_unit->getOriginalFaction() == FACTION_PLAYER
+		if (_unit->getGeoscapeSoldier() != NULL
+			&& _unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getSpawnUnit().empty() == true)
 		{
-			Game* const game = _parent->getSave()->getBattleState()->getGame();
-
-			if (_unit->getGeoscapeSoldier() != NULL)
+			std::string message;
+			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				std::string message;
-				if (_unit->getStatus() == STATUS_DEAD)
-				{
-					if (_damageType == DT_NONE)
-						message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
-					else if (Options::battleNotifyDeath == true)
-						message = "STR_HAS_BEEN_KILLED";
-				}
-				else
-					message = "STR_HAS_BECOME_UNCONSCIOUS";
+				if (_damageType == DT_NONE)
+					message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
+				else if (Options::battleNotifyDeath == true)
+					message = "STR_HAS_BEEN_KILLED";
+			}
+			else
+				message = "STR_HAS_BECOME_UNCONSCIOUS";
 
-				if (message.empty() == false)
-					game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																					message,
-																					_unit->getGender())
-																				.arg(_unit->getName(game->getLanguage()))));
+			if (message.empty() == false)
+			{
+				Game* const game = _parent->getSave()->getBattleState()->getGame();
+				game->pushState(new InfoboxOKState(game->getLanguage()->getString(
+																				message,
+																				_unit->getGender())
+																			.arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 
@@ -269,15 +265,15 @@ void UnitDieBState::think()
 
 		_unit->setDown();
 
-		if (_unit->getSpawnUnit().empty() == false)
+		if (_unit->getSpawnUnit().empty() == true)
+			convertToCorpse();
+		else
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
-			BattleUnit* const convertedUnit = _parent->convertUnit(
-																_unit,
-																_unit->getSpawnUnit());
+			_parent->convertUnit(
+							_unit,
+							_unit->getSpawnUnit());
 		}
-		else
-			convertUnitToCorpse();
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
@@ -294,9 +290,8 @@ void UnitDieBState::cancel()
  * Converts unit to a corpse-item.
  * Note that this is used also for units going unconscious.
  */
-void UnitDieBState::convertUnitToCorpse()
+void UnitDieBState::convertToCorpse() // private.
 {
-	//Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() ID = " << _unit->getId() << " pos " << _unit->getPosition();
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 
 	const Position pos = _unit->getPosition();
@@ -437,23 +432,22 @@ void UnitDieBState::convertUnitToCorpse()
 			}
 		}
 	}
-	//Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() EXIT";
 }
 
 /**
  * Plays the death sound.
  * kL rewrite to include NwN2 hits & screams.
  */
-void UnitDieBState::playDeathSound()
+void UnitDieBState::playDeathSound() // private.
 {
 	int sound = -1;
 
 	if (_unit->getType() == "SOLDIER")
 	{
 		if (_unit->getGender() == GENDER_MALE)
-			sound = RNG::generate(111, 116);
+			sound = RNG::generate(111,116);
 		else
-			sound = RNG::generate(101, 103);
+			sound = RNG::generate(101,103);
 	}
 	else if (_unit->getUnitRules()->getRace() == "STR_CIVILIAN")
 	{

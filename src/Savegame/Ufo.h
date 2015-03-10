@@ -251,9 +251,9 @@ private:
 		int getCrashPower() const;
 
 		/// Sets a crashed or landed UFO's terrainType.
-		void setTerrain(const std::string& terrain);
+		void setUfoTerrainType(const std::string& terrain);
 		/// Gets a crashed or landed UFO's terrainType.
-		std::string getTerrain() const;
+		std::string getUfoTerrainType() const;
 };
 
 }

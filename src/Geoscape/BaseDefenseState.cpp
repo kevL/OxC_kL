@@ -83,21 +83,19 @@ BaseDefenseState::BaseDefenseState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color); //2
+			_game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color);
 
-	add(_window, "window", "baseDefense");
-	add(_txtTitle, "text", "baseDefense");
-	add(_txtInit, "text", "baseDefense");
-	add(_lstDefenses, "text", "baseDefense"); // "list"
-	add(_btnOk, "button", "baseDefense");
+	add(_window,		"window",	"baseDefense");
+	add(_txtTitle,		"text",		"baseDefense");
+	add(_txtInit,		"text",		"baseDefense");
+	add(_lstDefenses,	"text",		"baseDefense"); // "list"
+	add(_btnOk,			"button",	"baseDefense");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseDefenseState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -108,15 +106,12 @@ BaseDefenseState::BaseDefenseState(
 					Options::keyCancel);
 	_btnOk->setVisible(false);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_BASE_UNDER_ATTACK").arg(_base->getName()));
 	_txtInit->setVisible(false);
 
-//	_txtInit->setColor(Palette::blockOffset(13)+10);
 	_txtInit->setText(tr("STR_BASE_DEFENSES_INITIATED"));
 
-//	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
 
 	_gravShields = _base->getGravShields();
@@ -248,7 +243,7 @@ void BaseDefenseState::nextStep()
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
 												def->getRules()->getFireSound())
-											->play();
+											->play(); // TODO: randomize stereo dir.
 
 				_timer->setInterval(333);
 				_action = BDA_RESOLVE;

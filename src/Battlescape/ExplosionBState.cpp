@@ -521,7 +521,6 @@ void ExplosionBState::explode()
 			{
 				//Log(LOG_INFO) << victim->getId() << " murderer has zombieUnit string";
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
-//				victim->setRespawn();
 			}
 		}
 	}

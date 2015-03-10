@@ -563,8 +563,9 @@ void SavedGame::load(
 			i != doc["missionSites"].end();
 			++i)
 	{
-		const std::string type = (*i)["type"].as<std::string>();
-		const std::string deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
+		const std::string
+			type = (*i)["type"].as<std::string>(),
+			deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
 		MissionSite* ms = new MissionSite(
 									rule->getAlienMission(type),
 									rule->getDeployment(deployment));
@@ -572,7 +573,7 @@ void SavedGame::load(
 		_missionSites.push_back(ms);
 	}
 
-	// Discovered Techs Should be loaded before Bases (e.g. for PSI evaluation)
+	// Discovered Techs should be loaded before Bases (e.g. for PSI evaluation)
 	for (YAML::const_iterator
 			it = doc["discovered"].begin();
 			it != doc["discovered"].end();

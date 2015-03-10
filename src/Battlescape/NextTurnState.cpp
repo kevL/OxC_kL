@@ -217,11 +217,8 @@ void NextTurnState::nextTurn()
 
 		if (_savedBattle->getSide() == FACTION_PLAYER)
 		{
-//			if (_savedBattle->getDebugMode() == false)
-//			{
 			_state->getBattleGame()->setupCursor();
 			_game->getCursor()->setVisible();
-//			}
 
 			const int turn = _savedBattle->getTurn();
 
@@ -242,35 +239,17 @@ void NextTurnState::nextTurn()
 
 			if (turn != 1)
 			{
-				std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
-				std::string terrain;
-
-				const std::string mission = _savedBattle->getMissionType();
-				if (mission == "STR_UFO_CRASH_RECOVERY")
-				{
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
-					terrain = _savedBattle->getTerrain();
-				}
-				else if (mission == "STR_UFO_GROUND_ASSAULT")
-				{
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
-					terrain = _savedBattle->getTerrain();
-				}
-				else if (mission == "STR_ALIEN_BASE_ASSAULT")
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
-				else if (mission == "STR_BASE_DEFENSE")
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
-				else if (mission == "STR_TERROR_MISSION")
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
-				else if (mission == "STR_MARS_CYDONIA_LANDING")
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
-				else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-					music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
-
 				_game->getResourcePack()->fadeMusic(_game, 473);
+
+				std::string
+					music,
+					terrain;
+				_savedBattle->calibrateMusic(
+											music,
+											terrain);
 				_game->getResourcePack()->playMusic(
-												music,
-												terrain);
+											music,
+											terrain);
 			}
 
 

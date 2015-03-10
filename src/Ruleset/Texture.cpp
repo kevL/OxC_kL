@@ -49,68 +49,145 @@ Texture::~Texture()
 void Texture::load(const YAML::Node& node)
 {
 	_id			= node["id"]		.as<int>(_id);
-	_deployment	= node["deployment"].as<std::string>(_deployment);
-	_terrain	= node["terrain"]	.as< std::vector<TerrainCriteria> >(_terrain);
+	_deployType	= node["deployType"].as<std::string>(_deployType);
+	_terrains	= node["terrains"]	.as<std::vector<TerrainCriteria> >(_terrains);
 }
 
 /**
  * Returns the list of TerrainCriteria associated with this Texture.
  * @return, pointer to a vector of TerrainCriteria's
  */
-std::vector<TerrainCriteria>* Texture::getTerrain()
+std::vector<TerrainCriteria>* Texture::getTerrainCriteria()
 {
-	return &_terrain;
+	return &_terrains;
 }
 
 /**
  * Calculates a random terrain for a mission-target based
  * on this texture's available TerrainCriteria.
- * @param target - pointer to the mission Target
+ * @param target - pointer to the mission Target (default NULL to exclude geographical bounds)
  * @return, terrain string
  */
 std::string Texture::getRandomTerrain(const Target* const target) const
 {
+	Log(LOG_INFO) << "Texture::getRandomTerrain(TARGET)";
+	double
+		lon,
+		lat;
+	std::map<int, std::string> eligibleTerrains;
+
 	int totalWeight = 0;
 
-	std::map<int, std::string> eligibleTerrains;
 	for (std::vector<TerrainCriteria>::const_iterator
-			i = _terrain.begin();
-			i != _terrain.end();
+			i = _terrains.begin();
+			i != _terrains.end();
 			++i)
 	{
-		if (i->weight > 0
-			&& target->getLongitude() >= i->lonMin
-			&& target->getLongitude() < i->lonMax
-			&& target->getLatitude() >= i->latMin
-			&& target->getLatitude() < i->latMax)
+		Log(LOG_INFO) << ". terrainType = " << i->type;
+
+		if (i->weight > 0)
 		{
-			totalWeight += i->weight;
-			eligibleTerrains[totalWeight] = i->name;
+			bool inBounds = false;
+
+			if (target != NULL)
+			{
+				lon = target->getLongitude();
+				lat = target->getLatitude();
+
+				if (   lon >= i->lonMin
+					&& lon <  i->lonMax
+					&& lat >= i->latMin
+					&& lat <  i->latMax)
+				{
+					inBounds = true;
+				}
+			}
+
+			if (target == NULL
+				|| inBounds == true)
+			{
+				Log(LOG_INFO) << ". . weight = " << i->weight;
+
+				totalWeight += i->weight;
+				eligibleTerrains[totalWeight] = i->type;
+			}
 		}
 	}
 
-	const int pick = RNG::generate(
-								1,
-								totalWeight);
-	for (std::map<int, std::string>::const_iterator
-			i = eligibleTerrains.begin();
-			i != eligibleTerrains.end();
-			++i)
+	if (totalWeight > 0)
 	{
-		if (pick <= i->first)
-			return i->second;
+		const int pick = RNG::generate(
+									1,
+									totalWeight);
+		for (std::map<int, std::string>::const_iterator
+				i = eligibleTerrains.begin();
+				i != eligibleTerrains.end();
+				++i)
+		{
+			if (pick <= i->first)
+				return i->second;
+		}
 	}
 
-	return "";
+	return ""; // this means nothing. Literally. That is, if the code runs here -> CTD.
 }
+
+/**
+ * Calculates a random terrain-type based on actual Globe texture.
+ * @param texture - the texture to choose a terrain-type from
+ * @return, terrain string
+ */
+/*std::string Texture::getRandomTerrain(int texture) const
+{
+	Log(LOG_INFO) << "Texture::getRandomTerrain(INT)";
+	double
+		lon,
+		lat;
+	std::map<int, std::string> eligibleTerrains;
+
+	int totalWeight = 0;
+
+	for (std::vector<TerrainCriteria>::const_iterator
+			i = _terrains.begin();
+			i != _terrains.end();
+			++i)
+	{
+		Log(LOG_INFO) << ". terrainType = " << i->type;
+
+		if (i->weight > 0)
+		{
+			Log(LOG_INFO) << ". . weight = " << i->weight;
+
+			totalWeight += i->weight;
+			eligibleTerrains[totalWeight] = i->type;
+		}
+	}
+
+	if (totalWeight > 0)
+	{
+		const int pick = RNG::generate(
+									1,
+									totalWeight);
+		for (std::map<int, std::string>::const_iterator
+				i = eligibleTerrains.begin();
+				i != eligibleTerrains.end();
+				++i)
+		{
+			if (pick <= i->first)
+				return i->second;
+		}
+	}
+
+	return ""; // this means nothing. Literally. That is, if the code runs here -> CTD.
+} */
 
 /**
  * Gets this Texture's alien deployment.
  * @return, deployment-type string
  */
-std::string Texture::getDeployment() const
+std::string Texture::getTextureDeployment() const
 {
-	return _deployment;
+	return _deployType;
 }
 
 }

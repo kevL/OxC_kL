@@ -106,6 +106,9 @@ void RuleRegion::load(const YAML::Node& node)
 			area.latMin =
 			area.latMax = cityRule->getLatitude();
 
+			area.name = cityRule->getName();
+			area.texture = cityRule->getCityTextureInt();
+
 			_missionZones.at(MZ_CITY).areas.push_back(area);
 		}
 	} // end_kL.

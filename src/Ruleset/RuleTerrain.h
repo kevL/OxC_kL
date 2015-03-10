@@ -50,7 +50,8 @@ private:
 		_maxDepth;
 
 	std::string
-		_name,
+		_pyjamaType,
+		_type,
 		_script;
 
 	std::vector<std::string> _civilianTypes;
@@ -61,7 +62,7 @@ private:
 
 	public:
 		/// Constructs a RuleTerrain object.
-		RuleTerrain(const std::string& name);
+		RuleTerrain(const std::string& type);
 		/// Destructs this RuleTerrain object.
 		~RuleTerrain();
 
@@ -70,8 +71,8 @@ private:
 				const YAML::Node& node,
 				Ruleset* ruleset);
 
-		/// Gets the terrain's name (used for MAP generation).
-		std::string getName() const;
+		/// Gets the terrain's type (used for MAP generation).
+		std::string getType() const;
 
 		/// Gets the terrain's mapblocks.
 		std::vector<MapBlock*>* getMapBlocks();
@@ -84,8 +85,8 @@ private:
 				int maxSizeY,
 				int group,
 				bool force = true);
-		/// Gets a mapblock given its name.
-		MapBlock* getMapBlock(const std::string& name);
+		/// Gets a mapblock given its type.
+		MapBlock* getMapBlock(const std::string& type);
 		/// Gets the mapdata object.
 		MapData* getMapData(
 				unsigned int* id,
@@ -102,8 +103,11 @@ private:
 		/// Gets the ambient sound effect.
 		const int getAmbience() const;
 
-		/// Gets the generation script name.
+		/// Gets the generation script.
 		const std::string& getScript() const;
+
+		/// Gets the pyjama type.
+		const std::string& getPyjamaType() const;
 };
 
 }

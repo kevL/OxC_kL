@@ -552,7 +552,7 @@ BattlescapeState::BattlescapeState()
 
 	_txtTerrain->setColor(Palette::blockOffset(9)); // yellow
 	_txtTerrain->setHighContrast();
-	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_savedBattle->getTerrain())));
+	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_savedBattle->getBattleTerrain())));
 
 	_txtShade->setColor(Palette::blockOffset(9));
 	_txtShade->setHighContrast();
@@ -895,34 +895,15 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-	std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
-	std::string terrain;
-
-	const std::string mission = _savedBattle->getMissionType();
-	if (mission == "STR_UFO_CRASH_RECOVERY")
-	{
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
-		terrain = _savedBattle->getTerrain();
-	}
-	else if (mission == "STR_UFO_GROUND_ASSAULT")
-	{
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
-		terrain = _savedBattle->getTerrain();
-	}
-	else if (mission == "STR_ALIEN_BASE_ASSAULT")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
-	else if (mission == "STR_BASE_DEFENSE")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
-	else if (mission == "STR_TERROR_MISSION")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
-	else if (mission == "STR_MARS_CYDONIA_LANDING")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
-	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
-
+	std::string
+		music,
+		terrain;
+	_savedBattle->calibrateMusic(
+								music,
+								terrain);
 	_game->getResourcePack()->playMusic(
-									music,
-									terrain);
+								music,
+								terrain);
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);

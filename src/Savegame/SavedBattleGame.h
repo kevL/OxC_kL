@@ -177,9 +177,9 @@ private:
 		int getMapSizeXYZ() const;
 
 		/// Sets the type of terrain for the mission.
-		void setTerrain(const std::string& terrain); // sza_MusicRules
+		void setBattleTerrain(const std::string& terrain);
 		/// Gets the type of terrain for the mission.
-		std::string getTerrain() const; // sza_MusicRules
+		std::string getBattleTerrain() const;
 
 		/**
 		 * Converts coordinates into a unique index.
@@ -398,6 +398,11 @@ private:
 
 		/// Gets the operation title of the mission.
 		const std::wstring& getOperation() const;
+
+		/// Sets variables for what music to play in a particular terrain.
+		void calibrateMusic(
+				std::string& music,
+				std::string& terrain);
 };
 
 }

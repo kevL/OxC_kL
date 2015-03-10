@@ -663,7 +663,7 @@ private:
 		int getStun() const;
 
 		/// Knocks this unit out instantly.
-		void knockOut(BattlescapeGame* battle);
+		void knockOut(BattlescapeGame* battleGame);
 
 		/// Starts the falling sequence. This is only for collapsing dead or unconscious units.
 		void startFalling();
@@ -915,11 +915,6 @@ private:
 		int getSpecialAbility() const;
 		/// Sets this unit's special ability.
 		void setSpecialAbility(const SpecialAbility specab);
-
-		/// Sets this unit's respawn flag.
-//		void setRespawn(const bool respawn = true);
-		/// Gets this unit's respawn flag.
-//		bool getRespawn() const;
 
 		/// Gets this unit's rank string.
 		std::string getRankString() const;

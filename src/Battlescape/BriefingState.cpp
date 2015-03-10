@@ -37,7 +37,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Ruleset.h"
@@ -77,8 +77,8 @@ BriefingState::BriefingState(
 
 	int backpal;
 	std::string
-		background, // default: "BACK16.SCR", Ruleset/AlienDeployment.h
-		music; // default: OpenXcom::res_MUSIC_GEO_BRIEFING, Ruleset/AlienDeployment.h
+		background,	// default: "BACK16.SCR", Ruleset/AlienDeployment.h
+		music;		// default: OpenXcom::res_MUSIC_GEO_BRIEFING, Ruleset/AlienDeployment.h
 
 	const AlienDeployment* const deployment = _game->getRuleset()->getDeployment(mission);
 	if (deployment == NULL) // landing site or crash site.
@@ -162,8 +162,7 @@ BriefingState::BriefingState(
 	}
 	else if (base != NULL)
 		craftLabel = tr("STR_BASE_UC_").arg(base->getName());
-	else
-		craftLabel = L"";
+//	else craftLabel = L"";
 
 	if (craftLabel.empty() == false)
 	{

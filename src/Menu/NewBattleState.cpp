@@ -77,6 +77,8 @@ NewBattleState::NewBattleState()
 	:
 		_craft(NULL)
 {
+	_rules = _game->getRuleset(); // init.
+
 	_window				= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle			= new Text(320, 17, 0, 9);
 
@@ -116,7 +118,7 @@ NewBattleState::NewBattleState()
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("newBattleMenu")->getElement("palette")->color);
+			_rules->getInterface("newBattleMenu")->getElement("palette")->color);
 
 	add(_window,			"window",	"newBattleMenu");
 	add(_txtTitle,			"heading",	"newBattleMenu");
@@ -182,17 +184,17 @@ NewBattleState::NewBattleState()
 
 	_txtAlienTech->setText(tr("STR_ALIEN_TECH_LEVEL"));
 
-	_missionTypes = _game->getRuleset()->getDeploymentsList();
+	_missionTypes = _rules->getDeploymentsList();
 	_cbxMission->setOptions(_missionTypes);
 	_cbxMission->onChange((ActionHandler)& NewBattleState::cbxMissionChange);
 
-	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
+	const std::vector<std::string>& crafts = _rules->getCraftsList();
 	for (std::vector<std::string>::const_iterator
 			i = crafts.begin();
 			i != crafts.end();
 			++i)
 	{
-		const RuleCraft* const rule = _game->getRuleset()->getCraft(*i);
+		const RuleCraft* const rule = _rules->getCraft(*i);
 		if (rule->getSoldiers() > 0)
 			_crafts.push_back(*i);
 	}
@@ -213,7 +215,7 @@ NewBattleState::NewBattleState()
 	difficulty.push_back("STR_5_SUPERHUMAN");
 	_cbxDifficulty->setOptions(difficulty);
 
-	_alienRaces = _game->getRuleset()->getAlienRacesList();
+	_alienRaces = _rules->getAlienRacesList();
 	for (std::vector<std::string>::const_iterator
 			i = _alienRaces.begin();
 			i != _alienRaces.end();
@@ -228,7 +230,7 @@ NewBattleState::NewBattleState()
 
 	_slrAlienTech->setRange(
 						0,
-						_game->getRuleset()->getAlienItemLevels().size() - 1);
+						_rules->getAlienItemLevels().size() - 1);
 
 	_btnEquip->setText(tr("STR_EQUIP_CRAFT"));
 	_btnEquip->onMouseClick((ActionHandler)& NewBattleState::btnEquipClick);
@@ -303,10 +305,9 @@ void NewBattleState::load(const std::string& filename)
 
 			if (doc["base"])
 			{
-				const Ruleset* const rule = _game->getRuleset();
-				SavedGame* const save = new SavedGame(rule);
+				SavedGame* const save = new SavedGame(_rules);
 
-				Base* const base = new Base(rule);
+				Base* const base = new Base(_rules);
 				base->load(
 						doc["base"],
 						save,
@@ -314,26 +315,26 @@ void NewBattleState::load(const std::string& filename)
 				save->getBases()->push_back(base);
 
 				// Add research
-				const std::vector<std::string> &research = rule->getResearchList();
+				const std::vector<std::string> &research = _rules->getResearchList();
 				for (std::vector<std::string>::const_iterator
 						i = research.begin();
 						i != research.end();
 						++i)
 				{
-					save->addFinishedResearch(rule->getResearch(*i));
+					save->addFinishedResearch(_rules->getResearch(*i));
 				}
 
 				// Generate items
 				base->getItems()->getContents()->clear();
-				const std::vector<std::string>& items = rule->getItemsList();
+				const std::vector<std::string>& items = _rules->getItemsList();
 				for (std::vector<std::string>::const_iterator
 						i = items.begin();
 						i != items.end();
 						++i)
 				{
-					const RuleItem* const rule = _game->getRuleset()->getItem(*i);
-					if (rule->getBattleType() != BT_CORPSE
-						&& rule->isRecoverable() == true)
+					const RuleItem* const itRule = _rules->getItem(*i);
+					if (itRule->getBattleType() != BT_CORPSE
+						&& itRule->isRecoverable() == true)
 					{
 						base->getItems()->addItem(*i, 1);
 					}
@@ -344,7 +345,7 @@ void NewBattleState::load(const std::string& filename)
 				{
 					const std::string craftType = _crafts[_cbxCraft->getSelected()];
 					_craft = new Craft(
-									_game->getRuleset()->getCraft(craftType),
+									_rules->getCraft(craftType),
 									base,
 									save->getId(craftType));
 					base->getCrafts()->push_back(_craft);
@@ -357,8 +358,8 @@ void NewBattleState::load(const std::string& filename)
 							i != _craft->getItems()->getContents()->end();
 							++i)
 					{
-						const RuleItem* const rule = _game->getRuleset()->getItem(i->first);
-						if (rule == NULL)
+						const RuleItem* const itRule = _rules->getItem(i->first);
+						if (itRule == NULL)
 							i->second = 0;
 					}
 				}
@@ -412,10 +413,10 @@ void NewBattleState::save(const std::string& filename)
  */
 void NewBattleState::initSave()
 {
-	const Ruleset* const rule = _game->getRuleset();
+	const Ruleset* const rule = _rules;
 	SavedGame* const savedGame = new SavedGame(rule);
 	Base* const base = new Base(rule);
-	const YAML::Node& startBase = _game->getRuleset()->getStartingBase();
+	const YAML::Node& startBase = _rules->getStartingBase();
 	base->load(
 			startBase,
 			savedGame,
@@ -498,7 +499,7 @@ void NewBattleState::initSave()
 			i != items.end();
 			++i)
 	{
-		const RuleItem* const rule = _game->getRuleset()->getItem(*i);
+		const RuleItem* const rule = _rules->getItem(*i);
 		if (rule->getBattleType() != BT_CORPSE
 			&& rule->isRecoverable() == true)
 		{
@@ -542,76 +543,75 @@ void NewBattleState::btnOkClick(Action*)
 		return;
 	}
 
-	SavedBattleGame* const bgame = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(bgame);
-	bgame->setMissionType(_missionTypes[_cbxMission->getSelected()]);
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	SavedBattleGame* const battleSave = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battleSave);
+	battleSave->setMissionType(_missionTypes[_cbxMission->getSelected()]);
+	BattlescapeGenerator bGen = BattlescapeGenerator(_game);
 	Base* base = NULL;
 
-	bgen.setTerrain(_game->getRuleset()->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
+	bGen.setTacTerrain(_rules->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE") // base defense
 	{
 		base = _craft->getBase();
-		bgen.setBase(base);
+		bGen.setBase(base);
 		_craft = NULL; // kL_note: may need to remove this for .. some reason.
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT") // alien base
 	{
-		AlienBase* const ab = new AlienBase();
-		ab->setId(1);
-		ab->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-		_craft->setDestination(ab);
-		bgen.setAlienBase(ab);
+		AlienBase* const alienBase = new AlienBase();
+		alienBase->setId(1);
+		alienBase->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+		_craft->setDestination(alienBase);
+		bGen.setAlienBase(alienBase);
 
-		_game->getSavedGame()->getAlienBases()->push_back(ab);
+		_game->getSavedGame()->getAlienBases()->push_back(alienBase);
 	}
 	else if (_craft != NULL
-		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]) != NULL) // ufo assault
+		&& _rules->getUfo(_missionTypes[_cbxMission->getSelected()]) != NULL) // ufo assault
 	{
-		Ufo* const ufo = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]));
+		Ufo* const ufo = new Ufo(_rules->getUfo(_missionTypes[_cbxMission->getSelected()]));
 		ufo->setId(1);
 		_craft->setDestination(ufo);
-		bgen.setUfo(ufo);
+		bGen.setUfo(ufo);
 
-		// either ground assault or ufo crash
-		if (RNG::percent(50) == true)
-			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+		if (RNG::percent(50) == true) // either ground assault or ufo crash
+			battleSave->setMissionType("STR_UFO_GROUND_ASSAULT");
 		else
-			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+			battleSave->setMissionType("STR_UFO_CRASH_RECOVERY");
 
 		_game->getSavedGame()->getUfos()->push_back(ufo);
 	}
 	else // mission site
 	{
-		const AlienDeployment* deployment = _game->getRuleset()->getDeployment(bgame->getMissionType());
-		const RuleAlienMission* mission = _game->getRuleset()->getAlienMission(_game->getRuleset()->getAlienMissionList().front()); // doesn't matter
-		MissionSite* ms = new MissionSite(
-										mission,
-										deployment);
-		ms->setId(1);
-		ms->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+		const AlienDeployment* deployment = _rules->getDeployment(battleSave->getMissionType());
+		const RuleAlienMission* mission = _rules->getAlienMission(_rules->getAlienMissionList().front()); // doesn't matter
+		MissionSite* missionSite = new MissionSite(
+												mission,
+												deployment);
+		missionSite->setId(1);
+		missionSite->setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 
-		_craft->setDestination(ms);
+		_craft->setDestination(missionSite);
 
-		bgen.setMissionSite(ms);
-		_game->getSavedGame()->getMissionSites()->push_back(ms);
+		bGen.setMissionSite(missionSite);
+		_game->getSavedGame()->getMissionSites()->push_back(missionSite);
 	}
 
 	if (_craft != NULL)
 	{
 		_craft->setSpeed(0);
-		bgen.setCraft(_craft);
+		bGen.setCraft(_craft);
 	}
 
 	_game->getSavedGame()->setDifficulty(static_cast<GameDifficulty>(_cbxDifficulty->getSelected()));
 
-	bgen.setSiteShade(_slrDarkness->getValue());
-	bgen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
-	bgen.setAlienItemlevel(_slrAlienTech->getValue());
-	bgame->setDepth(_slrDepth->getValue());
+	bGen.setTacShade(_slrDarkness->getValue());
+	bGen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
+	bGen.setAlienItemlevel(_slrAlienTech->getValue());
+	battleSave->setDepth(_slrDepth->getValue());
 
-	bgen.run();
+	bGen.run();
 
 
 	_game->popState();
@@ -670,7 +670,7 @@ void NewBattleState::btnRandomClick(Action*)
 
 	_slrAlienTech->setValue(RNG::generate(
 										0,
-										_game->getRuleset()->getAlienItemLevels().size() - 1));
+										_rules->getAlienItemLevels().size() - 1));
 }
 
 /**
@@ -690,17 +690,46 @@ void NewBattleState::btnEquipClick(Action*)
  */
 void NewBattleState::cbxMissionChange(Action*)
 {
-	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	Log(LOG_INFO) << "\nNewBattleState::cbxMissionChange()";
+	const AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	Log(LOG_INFO) << ". ruleDeploy = " << ruleDeploy->getType();
 
-	// Get terrains associated with this mission
-	std::vector<std::string>
-		deployTerrains = ruleDeploy->getTerrains(),
+	std::vector<std::string> // Get terrains associated with this mission
+		deployTerrains = ruleDeploy->getDeployTerrains(),
 		globeTerrains;
 
+	// debug:
+	for (std::vector<std::string>::const_iterator
+			i = deployTerrains.begin();
+			i != deployTerrains.end();
+			++i)
+		Log(LOG_INFO) << ". . deployTerrain = " << *i;
+
+
 	if (deployTerrains.empty() == true)
-		globeTerrains = _game->getRuleset()->getGlobe()->getTerrains("");
+	{
+		Log(LOG_INFO) << ". . deployTerrains invalid; get globeTerrains w/out Deployment rule";
+		globeTerrains = _rules->getGlobe()->getGlobeTerrains("");
+
+		// debug:
+		for (std::vector<std::string>::const_iterator
+				i = globeTerrains.begin();
+				i != globeTerrains.end();
+				++i)
+			Log(LOG_INFO) << ". . . globeTerrain = " << *i;
+	}
 	else
-		globeTerrains = _game->getRuleset()->getGlobe()->getTerrains(ruleDeploy->getType());
+	{
+		Log(LOG_INFO) << ". . deployTerrains valid; get globeTerrains w/ Deployment rule";
+		globeTerrains = _rules->getGlobe()->getGlobeTerrains(ruleDeploy->getType());
+
+		// debug:
+		for (std::vector<std::string>::const_iterator
+				i = globeTerrains.begin();
+				i != globeTerrains.end();
+				++i)
+			Log(LOG_INFO) << ". . . globeTerrain = " << *i;
+	}
 
 	std::set<std::string> terrains;
 
@@ -709,6 +738,7 @@ void NewBattleState::cbxMissionChange(Action*)
 			i != deployTerrains.end();
 			++i)
 	{
+		Log(LOG_INFO) << ". . insert deployTerrain = " << *i;
 		terrains.insert(*i);
 	}
 
@@ -717,23 +747,23 @@ void NewBattleState::cbxMissionChange(Action*)
 		i != globeTerrains.end();
 		++i)
 	{
+		Log(LOG_INFO) << ". . insert globeTerrain = " << *i;
 		terrains.insert(*i);
 	}
 
 	_terrainTypes.clear();
 
-	std::vector<std::string> terrainStrings;
+	std::vector<std::string> terrainOptions;
 	for (std::set<std::string>::const_iterator
 			i = terrains.begin();
 			i != terrains.end();
 			++i)
 	{
 		_terrainTypes.push_back(*i);
-		terrainStrings.push_back("STR_" + *i);
+		terrainOptions.push_back("STR_" + *i);
 	}
 
-	// Hide controls that don't apply to mission
-	bool vis = ruleDeploy->getShade() == -1;
+	bool vis = ruleDeploy->getShade() == -1; // Hide controls that don't apply to mission
 	_txtDarkness->setVisible(vis);
 	_slrDarkness->setVisible(vis);
 
@@ -741,7 +771,7 @@ void NewBattleState::cbxMissionChange(Action*)
 	_txtTerrain->setVisible(vis);
 	_cbxTerrain->setVisible(vis);
 
-	_cbxTerrain->setOptions(terrainStrings);
+	_cbxTerrain->setOptions(terrainOptions);
 	_cbxTerrain->setSelected(0);
 
 	cbxTerrainChange(NULL);
@@ -753,7 +783,7 @@ void NewBattleState::cbxMissionChange(Action*)
  */
 void NewBattleState::cbxCraftChange(Action*)
 {
-	_craft->changeRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
+	_craft->changeRules(_rules->getCraft(_crafts[_cbxCraft->getSelected()]));
 
 	const int maxSoldiers = _craft->getRules()->getSoldiers();
 	int curSoldiers = _craft->getNumSoldiers();
@@ -780,16 +810,16 @@ void NewBattleState::cbxCraftChange(Action*)
  */
 void NewBattleState::cbxTerrainChange(Action*)
 {
-	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	const AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 
 	int
-		minDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth(),
-		maxDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
+		minDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth(),
+		maxDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
 
-	if (ruleDeploy->getTerrains().empty() == false)
+	if (ruleDeploy->getDeployTerrains().empty() == false)
 	{
-		minDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMinDepth();
-		maxDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMaxDepth();
+		minDepth = _rules->getTerrain(ruleDeploy->getDeployTerrains().front())->getMinDepth();
+		maxDepth = _rules->getTerrain(ruleDeploy->getDeployTerrains().front())->getMaxDepth();
 	}
 
 	_txtDepth->setVisible(minDepth != maxDepth && maxDepth != 0);

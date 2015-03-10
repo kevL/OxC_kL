@@ -862,6 +862,11 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Battlescape/MeleeAttackBState.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Battlescape/MeleeAttackBState.h" />
 		<Unit filename="Battlescape/MiniMapState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1008,6 +1013,11 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Battlescape/PsiAttackBState.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="Battlescape/PsiAttackBState.h" />
 		<Unit filename="Battlescape/ScannerState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2744,6 +2754,8 @@
 		<Unit filename="Ruleset/StatString.h" />
 		<Unit filename="Ruleset/StatStringCondition.cpp" />
 		<Unit filename="Ruleset/StatStringCondition.h" />
+		<Unit filename="Ruleset/Texture.cpp" />
+		<Unit filename="Ruleset/Texture.h" />
 		<Unit filename="Ruleset/UfoTrajectory.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

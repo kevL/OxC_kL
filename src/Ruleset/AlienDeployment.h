@@ -73,9 +73,7 @@ struct BriefingData
 			background("BACK16.SCR"),
 			showCraft(true),
 			showTarget(true)
-	{
-		/* Empty by Design */
-	};
+	{};
 };
 
 
@@ -138,18 +136,14 @@ private:
 		/// Gets dimensions.
 		void getDimensions(
 				int* width,
-				int* length,
-				int* height);
+				int* lengt,
+				int* heigh);
 
 		/// Gets civilians.
 		int getCivilians() const;
 
-		/// Gets the terrain for battlescape generation.
-//		std::string getTerrain() const;	// kL_note: This may still be needed for things like
-										// sza_musicRules & alternate pathPreview colors.
-										// (but unlikely, since this is AlienDeployment)
 		/// Gets the terrains for battlescape generation.
-		std::vector<std::string> getTerrains() const;
+		std::vector<std::string> getDeployTerrains() const;
 
 		/// Gets the shade level for battlescape generation.
 		int getShade() const;

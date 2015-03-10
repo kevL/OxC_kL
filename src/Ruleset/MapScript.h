@@ -84,6 +84,7 @@ class RuleTerrain;
 
 class MapScript
 {
+
 private:
 	int
 		_sizeX,
@@ -112,7 +113,6 @@ private:
 
 	/// Randomly generate a group from within the array.
 	const int getGroupNumber();
-
 	/// Randomly generate a block number from within the array.
 	const int getBlockNumber();
 
@@ -130,82 +130,56 @@ private:
 		void init();
 
 		/// Gets what type of command this is.
-		MapScriptCommand getType()
-		{
-			return _type;
-		};
+		MapScriptCommand getType() const
+		{ return _type; };
 
 		/// Gets the rects, describing the areas this command applies to.
 		const std::vector<SDL_Rect*>* getRects() const
-		{
-			return &_rects;
-		};
+		{ return &_rects; };
 
 		/// Gets the X size for this command.
 		const int getSizeX() const
-		{
-			return _sizeX;
-		};
+		{ return _sizeX; };
 		/// Gets the Y size for this command.
 		const int getSizeY() const
-		{
-			return _sizeY;
-		};
+		{ return _sizeY; };
 		/// Gets the Z size for this command.
 		const int getSizeZ() const
-		{
-			return _sizeZ;
-		};
+		{ return _sizeZ; };
 
 		/// Get the chances of this command executing.
 		const int getChancesOfExecution() const
-		{
-			return _executionChances;
-		};
+		{ return _executionChances; };
 
 		/// Gets the label for this command.
 		const int getLabel() const
-		{
-			return _label;
-		};
+		{ return _label; };
 
 		/// Gets how many times this command repeats (1 repeat means 2 executions)
 		const int getExecutions() const
-		{
-			return _executions;
-		};
+		{ return _executions; };
 
 		/// Gets what conditions apply to this command.
 		const std::vector<int>* getConditionals() const
-		{
-			return &_conditionals;
-		};
+		{ return &_conditionals; };
 
 		/// Gets the groups vector for iteration.
 		const std::vector<int>* getGroups() const
-		{
-			return &_groups;
-		};
+		{ return &_groups; };
 		/// Gets the blocks vector for iteration.
 		const std::vector<int>* getBlocks() const
-		{
-			return &_blocks;
-		};
+		{ return &_blocks; };
 
 		/// Gets the direction this command goes (for lines and tunnels).
 		const MapDirection getDirection() const
-		{
-			return _direction;
-		};
+		{ return _direction; };
 
 		/// Gets the MCD replacement data for tunnel replacements.
-		TunnelData* getTunnelData()
-		{
-			return _tunnelData;
-		};
+		TunnelData* getTunnelData() const
+		{ return _tunnelData; };
 
 		/// Randomly generate a block from within either the array of groups or blocks.
-		MapBlock* getNextBlock(RuleTerrain* terrain);
+		MapBlock* getNextBlock(RuleTerrain* const terrain);
 };
 
 }

@@ -105,7 +105,7 @@ private:
 	NumberText* _txtAccuracy;
 	Projectile* _projectile;
 	ResourcePack* _res;
-	SavedBattleGame* _save;
+	SavedBattleGame* _battleSave;
 	Surface
 		* _arrow,
 		* _arrow_kneel;

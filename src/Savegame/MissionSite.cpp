@@ -60,8 +60,12 @@ void MissionSite::load(const YAML::Node& node)
 {
 	Target::load(node);
 
+	// NOTE: "type" & "deployment" loaded by SavedGame and passed into cTor.
 	_id				= node["id"].as<int>(_id);
-	_texture		= node["id"].as<int>(_texture);
+
+	_texture		= node["texture"].as<int>(_texture);
+//	_texture		= node["id"].as<int>(_texture); // what's with that <-
+
 	_secondsLeft	= node["secondsLeft"].as<int>(_secondsLeft);
 	_race			= node["race"].as<std::string>(_race);
 	_inTactical		= node["inTactical"].as<bool>(_inTactical);
@@ -77,6 +81,7 @@ YAML::Node MissionSite::save() const
 
 	node["type"]			= _rules->getType();
 	node["deployment"]		= _deployment->getType();
+
 	node["id"]				= _id;
 	node["texture"]			= _texture;
 	node["race"]			= _race;
@@ -150,8 +155,8 @@ std::wstring MissionSite::getName(Language* lang) const
 }
 
 /**
- * Returns the globe marker for the mission site.
- * @return, marker sprite (-1 none)
+ * Returns the globe marker for the mission site (default 5 if no marker is specified).
+ * @return, marker sprite
  */
 int MissionSite::getMarker() const
 {
@@ -217,8 +222,9 @@ void MissionSite::setAlienRace(const std::string& race)
 
 /**
  * Gets this MissionSite's terrainType.
+ * @return, terrain type string
  */
-std::string MissionSite::getTerrain() const
+std::string MissionSite::getSiteTerrainType() const
 {
 	return _terrain;
 }
@@ -227,7 +233,7 @@ std::string MissionSite::getTerrain() const
  * Sets this MissionSite's terrainType.
  * @param terrain - reference the terrain string
  */
-void MissionSite::setTerrain(const std::string& terrain)
+void MissionSite::setSiteTerrainType(const std::string& terrain)
 {
 	_terrain = terrain;
 }
@@ -236,7 +242,7 @@ void MissionSite::setTerrain(const std::string& terrain)
  * Gets the mission site's associated texture.
  * @return, the texture ID
  */
-int MissionSite::getTexture() const
+int MissionSite::getSiteTextureInt() const
 {
 	return _texture;
 }
@@ -245,7 +251,7 @@ int MissionSite::getTexture() const
  * Sets the mission site's associated texture.
  * @param texture - the texture ID
  */
-void MissionSite::setTexture(int texture)
+void MissionSite::setSiteTextureInt(int texture)
 {
 	_texture = texture;
 }

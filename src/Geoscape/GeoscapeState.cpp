@@ -1466,9 +1466,9 @@ void GeoscapeState::time5Seconds()
 			if ((*j)->reachedDestination() == true)
 			{
 				Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
-				const Waypoint* const wp = dynamic_cast<Waypoint*>((*j)->getDestination());
-				const MissionSite* const ms = dynamic_cast<MissionSite*>((*j)->getDestination());
-				const AlienBase* const ab = dynamic_cast<AlienBase*>((*j)->getDestination());
+				const Waypoint* const wayPoint = dynamic_cast<Waypoint*>((*j)->getDestination());
+				const MissionSite* const missionSite = dynamic_cast<MissionSite*>((*j)->getDestination());
+				const AlienBase* const alienBase = dynamic_cast<AlienBase*>((*j)->getDestination());
 
 				if (ufo != NULL)
 				{
@@ -1509,15 +1509,16 @@ void GeoscapeState::time5Seconds()
 								_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_INTERCEPT);
 							}
 						break;
-						case Ufo::LANDED:
-							// setSpeed 1/2 (need to speed up to full if UFO takes off)
-						case Ufo::CRASHED:
-							// setSpeed 1/2 (need to speed back up when setting a new destination)
-						case Ufo::DESTROYED: // Just before expiration
+
+						case Ufo::LANDED:		// setSpeed 1/2 (need to speed up to full if UFO takes off)
+						case Ufo::CRASHED:		// setSpeed 1/2 (need to speed back up when setting a new destination)
+						case Ufo::DESTROYED:	// just before expiration
 							if ((*j)->getNumSoldiers() > 0) // || (*j)->getNumVehicles() > 0)
 							{
 								if ((*j)->isInDogfight() == false)
 								{
+									timerReset();
+
 									int // look up polygon's texture
 										texture,
 										shade;
@@ -1526,11 +1527,11 @@ void GeoscapeState::time5Seconds()
 																	ufo->getLatitude(),
 																	&texture,
 																	&shade);
-									timerReset();
 									popup(new ConfirmLandingState(
-																*j,
-																_game->getRuleset()->getGlobe()->getTexture(texture),
-																shade));
+															*j,
+															// countryside Texture; choice of Terrain made in ConfirmLandingState
+															_game->getRuleset()->getGlobe()->getGlobeTextureRule(texture),
+															shade));
 								}
 							}
 							else if (ufo->getStatus() != Ufo::LANDED)
@@ -1538,7 +1539,7 @@ void GeoscapeState::time5Seconds()
 						break;
 					}
 				}
-				else if (wp != NULL)
+				else if (wayPoint != NULL)
 				{
 					timerReset();
 					popup(new CraftPatrolState(
@@ -1547,49 +1548,50 @@ void GeoscapeState::time5Seconds()
 											this));
 					(*j)->setDestination(NULL);
 				}
-				else if (ms != NULL)
+				else if (missionSite != NULL)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
+						timerReset();
+
 						int // look up polygon's texture
 							texture,
 							shade;
 						_globe->getPolygonTextureAndShade(
-														ms->getLongitude(),
-														ms->getLatitude(),
-														&texture,
+														missionSite->getLongitude(),
+														missionSite->getLatitude(),
+														&texture, // not used.
 														&shade);
-						texture = ms->getTexture(); // New
-
-						timerReset();
+						texture = missionSite->getSiteTextureInt();
 						popup(new ConfirmLandingState(
-													*j,
-													_game->getRuleset()->getGlobe()->getTexture(texture),
-													shade));
+												*j,
+												// preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
+												_game->getRuleset()->getGlobe()->getGlobeTextureRule(texture),
+												shade));
 					}
 					else
 						(*j)->setDestination(NULL);
 				}
-				else if (ab != NULL)
+				else if (alienBase != NULL)
 				{
-					if (ab->isDiscovered() == true)
+					if (alienBase->isDiscovered() == true)
 					{
 						if ((*j)->getNumSoldiers() > 0)
 						{
-							int // look up polygon's texture
-								texture,
-								shade;
-							_globe->getPolygonTextureAndShade(
-															ab->getLongitude(),
-															ab->getLatitude(),
-															&texture,
-															&shade);
-
 							timerReset();
-							popup(new ConfirmLandingState(
-														*j,
-														_game->getRuleset()->getGlobe()->getTexture(texture),
-														shade));
+//							int // look up polygon's texture
+//								texture,
+//								shade;
+//							_globe->getPolygonTextureAndShade(
+//															alienBase->getLongitude(),
+//															alienBase->getLatitude(),
+//															&texture,
+//															&shade);
+							popup(new ConfirmLandingState(*j));
+//													*j,
+													// countryside Texture; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
+//													_game->getRuleset()->getGlobe()->getGlobeTextureRule(texture),
+//													shade));
 						}
 						else
 							(*j)->setDestination(NULL);
@@ -3617,16 +3619,15 @@ void GeoscapeState::handleBaseDefense(
 	ufo->setStatus(Ufo::DESTROYED);
 
 	if (base->getAvailableSoldiers(true) > 0)
-//		|| !base->getVehicles()->empty())
 	{
 		SavedBattleGame* const battle = new SavedBattleGame(&_game->getRuleset()->getOperations());
 		_savedGame->setBattleGame(battle);
 		battle->setMissionType("STR_BASE_DEFENSE");
 
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setBase(base);
-		bgen.setAlienRace(ufo->getAlienRace());
-		bgen.run();
+		BattlescapeGenerator bGen = BattlescapeGenerator(_game);
+		bGen.setBase(base);
+		bGen.setAlienRace(ufo->getAlienRace());
+		bGen.run();
 
 		_pause = true;
 
@@ -3724,8 +3725,8 @@ void GeoscapeState::setupLandMission()
 	{
 		region = _game->getRuleset()->getRegion(regions[RNG::generate(
 																	0,
-																	regions.size() - 1)]);
-		if (static_cast<int>(region->getMissionZones().size()) > missionRules.getSpawnZone()
+																	static_cast<int>(regions.size()) - 1)]);
+		if (region->getMissionZones().size() > missionRules.getSpawnZone()
 			&& _game->getSavedGame()->findAlienMission(
 													region->getType(),
 													OBJECTIVE_SITE) == NULL)

@@ -23,7 +23,7 @@
 
 #include "../Battlescape/Position.h"
 
-#include "../Engine/Exception.h"
+//#include "../Engine/Exception.h"
 
 
 namespace OpenXcom
@@ -31,11 +31,11 @@ namespace OpenXcom
 
 /**
  * This is MapBlock construction.
- * @param name - reference the name of the MapBlock
+ * @param type - reference the type of the MapBlock
  */
-MapBlock::MapBlock(const std::string& name)
+MapBlock::MapBlock(const std::string& type)
 	:
-		_name(name),
+		_type(type),
 		_size_x(10),
 		_size_y(10),
 		_size_z(4)
@@ -47,8 +47,7 @@ MapBlock::MapBlock(const std::string& name)
  * MapBlock destruction.
  */
 MapBlock::~MapBlock()
-{
-}
+{}
 
 /**
  * Loads the map block from a YAML file.
@@ -56,7 +55,7 @@ MapBlock::~MapBlock()
  */
 void MapBlock::load(const YAML::Node& node)
 {
-	_name	= node["name"]	.as<std::string>(_name);
+	_type	= node["type"]	.as<std::string>(_type);
 	_size_x	= node["width"]	.as<int>(_size_x);
 	_size_y	= node["length"].as<int>(_size_y);
 	_size_z	= node["height"].as<int>(_size_z);
@@ -65,7 +64,7 @@ void MapBlock::load(const YAML::Node& node)
 		|| _size_y %10 != 0)
 	{
 		std::stringstream ss;
-		ss << "Error: MapBlock " << _name << ": Size must be divisible by ten";
+		ss << "Error: MapBlock " << _type << ": Size must be divisible by ten";
 		throw Exception(ss.str());
 	}
 
@@ -93,12 +92,12 @@ void MapBlock::load(const YAML::Node& node)
 }
 
 /**
- * Gets the MapBlock name as a string.
+ * Gets the MapBlock type.
  * @return, the type of this block
  */
-std::string MapBlock::getName() const
+std::string MapBlock::getType() const
 {
-	return _name;
+	return _type;
 }
 
 /**

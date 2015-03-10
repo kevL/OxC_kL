@@ -44,8 +44,7 @@ MapScript::MapScript()
 		_label(0),
 		_direction(MD_NONE),
 		_tunnelData(NULL)
-{
-}
+{}
 
 /**
  * dTor.
@@ -178,7 +177,7 @@ void MapScript::load(const YAML::Node& node)
 			{
 				*sizes[entry] = (*i).as<int>(1);
 
-				entry++;
+				++entry;
 				if (entry == 3)
 					break;
 			}
@@ -246,7 +245,7 @@ void MapScript::load(const YAML::Node& node)
 					break;
 
 				_frequencies.at(entry) = (*i).as<int>(1);
-				entry++;
+				++entry;
 			}
 		}
 		else
@@ -267,7 +266,7 @@ void MapScript::load(const YAML::Node& node)
 					break;
 
 				_maxUses.at(entry) = (*i).as<int>(-1);
-				entry++;
+				++entry;
 			}
 		}
 		else
@@ -435,7 +434,7 @@ const int MapScript::getBlockNumber()
  * @param terrain - pointer to the RuleTerrain to pick a block from
  * @return, pointer to a randomly chosen MapBlock given the options available in this MapScript
  */
-MapBlock* MapScript::getNextBlock(RuleTerrain* terrain)
+MapBlock* MapScript::getNextBlock(RuleTerrain* const terrain)
 {
 	if (_blocks.empty() == true)
 		return terrain->getRandomMapBlock(

@@ -232,16 +232,15 @@ void RuleGlobe::loadDat(const std::string& filename)
 				i < points;
 				++i)
 		{
-			// correct X-Com degrees and convert to radians
-			double
-				lonRad = value[j++] * 0.125 * M_PI / 180.,
-				latRad = value[j++] * 0.125 * M_PI / 180.;
+			double // correct X-Com degrees and convert to radians ( 7.25 arc-min = 1 xcomDegree ~or so~ /shrug )
+				lonRad = value[j++] * 0.125 * M_PI / 180., // should j double-increment like this
+				latRad = value[j++] * 0.125 * M_PI / 180.; // should j double-increment like this
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);
 		}
 
-		poly->setTexture(value[8]);
+		poly->setPolyTexture(value[8]);
 		_polygons.push_back(poly);
 	}
 
@@ -254,25 +253,26 @@ void RuleGlobe::loadDat(const std::string& filename)
 }
 
 /**
- * Returns the rules for the specified texture.
+ * Returns the rule for the specified texture.
  * @param id - Texture ID
  * @return, rules for a Texture
  */
-Texture* RuleGlobe::getTexture(int id) const
+Texture* RuleGlobe::getGlobeTextureRule(int id) const
 {
 	std::map<int, Texture*>::const_iterator i = _textures.find(id);
-	if (_textures.end() != i)
+	if (i != _textures.end())
 		return i->second;
 
 	return NULL;
 }
 
 /**
- * Returns a list of all globe terrains associated with this deployment.
- * @param deployment - reference the deployment name
+ * Returns a list of all globe terrains associated with a specific AlienDeployment.
+ * @note If a blank string is passed in then terrains that are not associated with any AlienDeployment are returned.
+ * @param deployType - reference the deployment name (eg. "STR_TERROR_MISSION")
  * @return, vector of terrain-types as strings
  */
-std::vector<std::string> RuleGlobe::getTerrains(const std::string& deployment) const
+std::vector<std::string> RuleGlobe::getGlobeTerrains(const std::string& deployType) const
 {
 	std::vector<std::string> terrains;
 
@@ -281,14 +281,14 @@ std::vector<std::string> RuleGlobe::getTerrains(const std::string& deployment) c
 			i != _textures.end();
 			++i)
 	{
-		if (i->second->getDeployment() == deployment)
+		if (i->second->getTextureDeployment() == deployType)
 		{
 			for (std::vector<TerrainCriteria>::const_iterator
-					j = i->second->getTerrain()->begin();
-					j != i->second->getTerrain()->end();
+					j = i->second->getTerrainCriteria()->begin();
+					j != i->second->getTerrainCriteria()->end();
 					++j)
 			{
-				terrains.push_back(j->name);
+				terrains.push_back(j->type);
 			}
 		}
 	}

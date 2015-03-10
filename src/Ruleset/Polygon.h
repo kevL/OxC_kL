@@ -86,9 +86,9 @@ private:
 				Sint16 y);
 
 		/// Gets the texture of the polygon.
-		int getTexture() const;
+		int getPolyTexture() const;
 		/// Sets the texture of the polygon.
-		void setTexture(int tex);
+		void setPolyTexture(int tex);
 
 		/// Gets the number of points of the polygon.
 		int getPoints() const;

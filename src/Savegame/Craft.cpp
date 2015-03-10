@@ -597,7 +597,7 @@ int Craft::getNumWeapons() const
 			++i)
 	{
 		if (*i != NULL)
-			ret++;
+			++ret;
 	}
 
 	return ret;
@@ -657,7 +657,7 @@ int Craft::getNumVehicles(bool tileSpace) const
 		return ret;
 	}
 
-	return _vehicles.size();
+	return static_cast<int>(_vehicles.size());
 }
 
 /**

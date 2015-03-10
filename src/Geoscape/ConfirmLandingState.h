@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class City;
 class Craft;
 class RuleTerrain;
 class Text;
@@ -35,7 +36,7 @@ class Window;
 
 
 /**
- * Window that allows the player to confirm a Craft landing at its destination.
+ * Window that asks the player to confirm a Craft landing at its destination.
  */
 class ConfirmLandingState
 	:
@@ -43,11 +44,11 @@ class ConfirmLandingState
 {
 
 private:
-	bool _city;
 	int _shade;
 
+	City* _city;
 	Craft* _craft;
-	RuleTerrain* _terrain;
+	RuleTerrain* _terrainRule;
 	Text
 		* _txtBegin,
 		* _txtMessage,
@@ -67,9 +68,8 @@ private:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(
 				Craft* const craft,
-//				const int texture,
-				Texture* texture,
-				const int shade);
+				Texture* texture = NULL,
+				const int shade = -1);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();
 

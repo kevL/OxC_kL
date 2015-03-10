@@ -90,7 +90,7 @@ int RuleMusic::getMidiIndex() const
 /**
  *
  */
-std::vector<std::string> RuleMusic::getTerrains() const
+std::vector<std::string> RuleMusic::getMusicalTerrains() const
 {
 	return _terrains;
 }

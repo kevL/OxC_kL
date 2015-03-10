@@ -128,7 +128,7 @@ private:
 		const std::string& getSpawnUfo() const
 		{ return _specialUfo; }
 		/// Gets the zone for spawning an alien site or base.
-		int getSpawnZone() const
+		size_t getSpawnZone() const
 		{ return _specialZone; }
 
 		/// Gets the chances of this mission based on the game time.

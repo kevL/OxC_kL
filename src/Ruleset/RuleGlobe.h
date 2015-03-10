@@ -28,6 +28,24 @@
 namespace OpenXcom
 {
 
+enum TextureTypes
+{
+	TT_INVALID = -1,	// -1 // note this conflicts w/ texture -1 (also -2 etc.)
+	TT_FOREST,			//  0
+	TT_PLAINS,			//  1
+	TT_CULTIVATED,		//  2
+	TT_FORESTMOUNT,		//  3
+	TT_TUNDRA,			//  4
+	TT_MOUNT,			//  5
+	TT_JUNGLE,			//  6
+	TT_DESERT,			//  7
+	TT_DESERTMOUNT,		//  8
+	TT_POLAR,			//  9
+	TT_URBAN,			// 10
+	TT_POLARMOUNT,		// 11
+	TT_POLARICE			// 12
+};
+
 class Polygon;
 class Polyline;
 class Texture;
@@ -66,9 +84,9 @@ private:
 		void loadDat(const std::string& filename);
 
 		/// Gets a specific world texture.
-		Texture* getTexture(int id) const;
-		/// Gets all the terrains for a specific deployment.
-		std::vector<std::string> getTerrains(const std::string& deployment) const;
+		Texture* getGlobeTextureRule(int id) const;
+		/// Gets the eligible terrains for an AlienDeployment rule.
+		std::vector<std::string> getGlobeTerrains(const std::string& deployType) const;
 };
 
 }

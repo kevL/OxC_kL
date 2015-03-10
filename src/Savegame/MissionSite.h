@@ -34,7 +34,7 @@ class RuleAlienMission;
 
 
 /**
- * Represents an alien MissionSite on the world.
+ * Represents an alien MissionSite in the world.
  */
 class MissionSite
 	:
@@ -57,63 +57,64 @@ private:
 
 
 	public:
-		/// Creates a mission site.
+		/// Creates this MissionSite.
 		MissionSite(
 				const RuleAlienMission* rules,
 				const AlienDeployment* deployment);
-		/// Cleans up the mission site.
+		/// Cleans up this MissionSite.
 		~MissionSite();
 
-		/// Loads the mission site from YAML.
+		/// Loads this MissionSite from YAML.
 		void load(const YAML::Node& node);
-		/// Saves the mission site to YAML.
+		/// Saves this MissionSite to YAML.
 		YAML::Node save() const;
-		/// Saves the mission site's ID to YAML.
+		/// Saves this MissionSite's ID to YAML.
 		YAML::Node saveId() const;
 
-		/// Gets the mission site's ruleset.
+		/// Gets this MissionSite's ruleset.
 		const RuleAlienMission* getRules() const;
-		/// Gets the mission site's deployment.
+		/// Gets this MissionSite's deployment.
 		const AlienDeployment* getDeployment() const;
 
-		/// Gets the mission site's ID.
+		/// Gets this MissionSite's ID.
 		int getId() const;
-		/// Sets the mission site's ID.
+		/// Sets this MissionSite's ID.
 		void setId(const int id);
 
-		/// Gets the mission site's name.
+		/// Gets this MissionSite's name.
 		std::wstring getName(Language* lang) const;
 
-		/// Gets the mission site's marker.
+		/// Gets this MissionSite site's marker.
 		int getMarker() const;
 
-		/// Gets the seconds until this mission site expires.
+		/// Gets the seconds until this MissionSite expires.
 		int getSecondsLeft() const;
-		/// Sets the seconds until this mission site expires.
+		/// Sets the seconds until this MissionSite expires.
 		void setSecondsLeft(int sec);
 
-		/// Sets the MissionSite's battlescape status.
+		/// Sets this MissionSite's battlescape status.
 		void setInBattlescape(bool inTactical);
-		/// Gets if the MissionSite is in battlescape.
+		/// Gets if this MissionSite is in battlescape.
 		bool isInBattlescape() const;
 
-		/// Gets the mission site's alien race.
+		/// Gets this MissionSite's alien race.
 		std::string getAlienRace() const;
-		/// Sets the mission site's alien race.
+		/// Sets this MissionSite's alien race.
 		void setAlienRace(const std::string& race);
 
 		/// Gets this MissionSite's terrainType.
-		std::string getTerrain() const;
+		std::string getSiteTerrainType() const;
 		/// Sets this MissionSite's terrainType.
-		void setTerrain(const std::string& terrain);
+		void setSiteTerrainType(const std::string& terrain);
 
-		/// Gets the mission site's texture.
-		int getTexture() const;
-		/// Sets the mission site's texture.
-		void setTexture(int texture);
-		/// Gets the mission site's city.
+		/// Gets this MissionSite's texture.
+		int getSiteTextureInt() const;
+		/// Sets this MissionSite's texture.
+		void setSiteTextureInt(int texture);
+
+		/// Gets this MissionSite's city.
 		std::string getCity() const;
-		/// Sets the mission site's city.
+		/// Sets this MissionSite's city.
 		void setCity(const std::string& city);
 };
 

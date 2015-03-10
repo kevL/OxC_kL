@@ -2840,7 +2840,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	_save->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
 	unit->instaKill();
-//	unit->setRespawn(false);
+	unit->setSpecialAbility(SPECAB_NONE);
 
 	if (Options::battleNotifyDeath == true
 		&& unit->getFaction() == FACTION_PLAYER
@@ -3409,31 +3409,6 @@ void BattlescapeGame::tallyUnits(
 		}
 	}
 }
-
-/**
- * Converts all infected units.
- */
-/*void BattlescapeGame::convertInfected()
-{
-	for (std::vector<BattleUnit*>::iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
-			)
-	{
-		if ((*i)->getHealth() != 0
-			&& (*i)->getRespawn() == true)
-		{
-			//Log(LOG_INFO) << "BSG::convertInfected() " << (*i)->getId();
-			convertUnit(
-					*i,
-					(*i)->getSpawnUnit());
-
-			i = _save->getUnits()->begin();
-		}
-		else
-			++i;
-	}
-} */
 
 /**
  * Sets the kneel reservation setting.

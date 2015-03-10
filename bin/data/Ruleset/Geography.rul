@@ -2929,147 +2929,147 @@ globe:
     - [301.5594, 34.3068, 302.5702, 30.1760]
   textures:
     - id: 0 #forest
-      terrain:
-        - name: FOREST
-        - name: FORESTPOLAR
-        - name: STEPPEFOREST #south
+      terrains:
+        - type: FOREST
+        - type: FORESTPOLAR
+        - type: STEPPEFOREST #south
           area: [0,360,0,90]
-        - name: TAIGAFOREST #north
+        - type: TAIGAFOREST #north
           area: [0,360,-90,0]
     - id: 1 #savannah/steppe/plains
-      terrain:
-        - name: CULTA
-        - name: CULTAFARMA
-        - name: CULTAFARMB
-        - name: SAVANNADESERT #south
+      terrains:
+        - type: CULTA
+        - type: CULTAFARMA
+        - type: CULTAFARMB
+        - type: SAVANNADESERT #south
           area: [0,360,0,90]
-        - name: SAVANNAFOREST #south
+        - type: SAVANNAFOREST #south
           area: [0,360,0,90]
-        - name: STEPPEDESERT #north
+        - type: STEPPEDESERT #north
           area: [0,360,-90,0]
     - id: 2 #farmland/cultivated/suburban
-      terrain:
-        - name: CULTA
-        - name: CULTAFARMA
-        - name: CULTAFARMB
-        - name: GRASSLANDDESERT #north
+      terrains:
+        - type: CULTA
+        - type: CULTAFARMA
+        - type: CULTAFARMB
+        - type: GRASSLANDDESERT #north
           area: [0,360,-90,0]
-        - name: GRASSLANDFOREST
-        - name: MADURBANUFO #city <---
-        - name: NATIVEUFO #south #city <---
+        - type: GRASSLANDFOREST
+        - type: MADURBANUFO #city <---
+        - type: NATIVEUFO #south #city <---
           area: [0,360,0,90]
     - id: 3 #forested mountains
-      terrain:
-        - name: FOREST
-        - name: FORESTMOUNT
-        - name: GRASSLANDFORESTMOUNT
-        - name: SAVANNAFORESTMOUNT #north
+      terrains:
+        - type: FOREST
+        - type: FORESTMOUNT
+        - type: GRASSLANDFORESTMOUNT
+        - type: SAVANNAFORESTMOUNT #north
           area: [0,360,-90,0]
-        - name: STEPPEFORESTMOUNT #south
+        - type: STEPPEFORESTMOUNT #south
           area: [0,360,0,90]
-        - name: TAIGAFORESTMOUNT #south
+        - type: TAIGAFORESTMOUNT #south
           area: [0,360,0,90]
     - id: 4 #tundra/taiga
-      terrain:
-        - name: TAIGADESERT #north
+      terrains:
+        - type: TAIGADESERT #north
           area: [0,360,-90,0]
-        - name: TUNDRADESERT #north
+        - type: TUNDRADESERT #north
           area: [0,360,-90,0]
     - id: 5 #barren mountains
-      terrain:
-        - name: FORESTMOUNT
-        - name: MOUNT
-        - name: TUNDRAMOUNT #south
+      terrains:
+        - type: FORESTMOUNT
+        - type: MOUNT
+        - type: TUNDRAMOUNT #south
           area: [0,360,0,90]
-        - name: TUNDRADESERTMOUNT #north
+        - type: TUNDRADESERTMOUNT #north
           area: [0,360,-90,0]
     - id: 6 #jungle
-      terrain:
-        - name: JUNGLE
-        - name: JUNGLEPOLAR
-        - name: JUNGLETEMPLE
+      terrains:
+        - type: JUNGLE
+        - type: JUNGLEPOLAR
+        - type: JUNGLETEMPLE
     - id: 7 #desert
-      terrain:
-        - name: DESERT
-        - name: DESERTTEMPLE
+      terrains:
+        - type: DESERT
+        - type: DESERTTEMPLE
     - id: 8 #desert mountains
-      terrain:
-        - name: DESERTMOUNT
-        - name: DESERTTEMPLE
+      terrains:
+        - type: DESERTMOUNT
+        - type: DESERTTEMPLE
     - id: 9 #polar
-      terrain:
-        - name: POLAR
-        - name: POLARDESERT #north
+      terrains:
+        - type: POLAR
+        - type: POLARDESERT #north
           area: [0,360,-90,0]
     - id: 10 #urban
-      terrain:
-        - name: INDUSTRIALUFO #north
+      terrains:
+        - type: INDUSTRIALUFO #north #city <---
           area: [0,360,-90,0]
-        - name: MADURBANUFO
-        - name: NATIVEUFO #south
+        - type: MADURBANUFO #city <---
+        - type: NATIVEUFO #south #city <---
           area: [0,360,0,90]
     - id: 11 #polar mountains
-      terrain:
-        - name: POLARMOUNT
+      terrains:
+        - type: POLARMOUNT
     - id: 12 #icepack
-      terrain:
-        - name: POLAR
-    - id: -1
-      deployment: STR_TERROR_MISSION
-    - id: -2
-      deployment: STR_PORT_ATTACK
+      terrains:
+        - type: POLAR
+    - id: -1 #inland
+      deployType: STR_TERROR_MISSION
+    - id: -2 #coastal
+      deployType: STR_TERROR_MISSION
 ###--- Original Textures ---###
 #  textures:
 #    - id: 0
-#      terrain:
-#        - name: FOREST
+#      terrains:
+#        - type: FOREST
 #          area: [0, 360, -90, 0]
-#        - name: JUNGLE
+#        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 1
-#      terrain:
-#        - name: CULTA
+#      terrains:
+#        - type: CULTA
 #    - id: 2
-#      terrain:
-#        - name: CULTA
+#      terrains:
+#        - type: CULTA
 #    - id: 3
-#      terrain:
-#        - name: CULTA
+#      terrains:
+#        - type: CULTA
 #    - id: 4
-#      terrain:
-#        - name: CULTA
+#      terrains:
+#        - type: CULTA
 #    - id: 5
-#      terrain:
-#        - name: MOUNT
+#      terrains:
+#        - type: MOUNT
 #    - id: 6
-#      terrain:
-#        - name: FOREST
+#      terrains:
+#        - type: FOREST
 #          area: [0, 360, -90, 0]
-#        - name: JUNGLE
+#        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 7
-#      terrain:
-#        - name: DESERT
+#      terrains:
+#        - type: DESERT
 #    - id: 8
-#      terrain:
-#        - name: DESERT
+#      terrains:
+#        - type: DESERT
 #    - id: 9
-#      terrain:
-#        - name: POLAR
+#      terrains:
+#        - type: POLAR
 #    - id: 10
-#      terrain:
-#        - name: FOREST
+#      terrains:
+#        - type: FOREST
 #          area: [0, 360, -90, 0]
-#        - name: JUNGLE
+#        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 11
-#      terrain:
-#        - name: FOREST
+#      terrains:
+#        - type: FOREST
 #          area: [0, 360, -90, 0]
-#        - name: JUNGLE
+#        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 12
-#      terrain:
-#        - name: POLAR
+#      terrains:
+#        - type: POLAR
 #    - id: -1
-#      deployment: STR_TERROR_MISSION
+#      deployType: STR_TERROR_MISSION

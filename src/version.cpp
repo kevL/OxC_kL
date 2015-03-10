@@ -65,14 +65,38 @@ std::string timeStamp()
  */
 std::string getBuildDate(bool built)
 {
-	std::ostringstream build;
+	std::string tz;
+
+#ifdef _WIN32
+	TIME_ZONE_INFORMATION tziTest;
+	DWORD dwRet = GetTimeZoneInformation(&tziTest);
+	if (dwRet == TIME_ZONE_ID_DAYLIGHT)
+	{
+		tz = " MDT";
+//		wprintf(L"%s\n", tziTest.DaylightName);
+	}
+	else if (dwRet == TIME_ZONE_ID_STANDARD
+		|| dwRet == TIME_ZONE_ID_UNKNOWN)
+	{
+		tz = " MST";
+//		wprintf(L"%s\n", tziTest.StandardName);
+	}
+//	else printf("GTZI failed (%d)\n", GetLastError());
+#endif
+
+	std::ostringstream oststr;
 
 	if (built == true)
-		build << "built ";
+		oststr << "built ";
 
-	build << __DATE__ << " " << __TIME__ << " MST";
+	oststr << __DATE__ << " " << __TIME__ << tz;
+	std::string st = oststr.str();
 
-	return build.str();
+	size_t pos = st.find("  "); // remove possible double-space between month & single-digit days
+	if (pos != std::string::npos)
+		st.erase(pos, 1);
+
+	return st;
 }
 
 }

@@ -63,7 +63,7 @@ private:
 		_region;
 
 	const AlienBase* _base;
-	const RuleAlienMission& _rule;
+	const RuleAlienMission& _missionRule;
 	SavedGame& _savedGame;
 
 	/// Spawns a UFO, based on mission rules.
@@ -76,13 +76,13 @@ private:
 	void spawnAlienBase(
 			const Globe& globe,
 			const Game& engine,
-			const int zone);
+			const size_t zone);
 
 
 	public:
 		/// Creates a mission of the specified type.
 		AlienMission(
-				const RuleAlienMission& rule,
+				const RuleAlienMission& missionRule,
 				SavedGame& savedGame);
 		/// Cleans up the mission info.
 		~AlienMission();
@@ -94,7 +94,7 @@ private:
 
 		/// Gets the mission's ruleset.
 		const RuleAlienMission& getRules() const
-		{ return _rule; }
+		{ return _missionRule; }
 
 		/// Gets the mission's region.
 		const std::string& getRegion() const

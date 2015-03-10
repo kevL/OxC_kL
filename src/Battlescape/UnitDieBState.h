@@ -49,6 +49,11 @@ private:
 	BattleUnit* _unit;
 	ItemDamageType _damageType;
 
+	/// Converts a unit to a corpse.
+	void convertToCorpse();
+	/// Plays the death sound.
+	void playDeathSound();
+
 
 	public:
 		/// Creates a new UnitDieBState class
@@ -66,11 +71,6 @@ private:
 		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
-
-		/// Converts a unit to a corpse.
-		void convertUnitToCorpse();
-		/// Plays the death sound.
-		void playDeathSound();
 };
 
 }

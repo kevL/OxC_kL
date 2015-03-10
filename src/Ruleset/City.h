@@ -65,7 +65,7 @@ private:
 
 		/// Gets the city's name.
 		std::wstring getName(Language* lang) const;
-//		std::string getName() const;
+		std::string getName() const;
 
 		/// Gets the City's latitude.
 		double getLatitude() const;
@@ -82,7 +82,7 @@ private:
 		bool getLabelTop() const;
 
 		/// Gets the texture of this City for the battlescape.
-		int getTexture() const;
+		int getCityTextureInt() const;
 };
 
 }

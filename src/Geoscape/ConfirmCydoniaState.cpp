@@ -62,34 +62,30 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("confirmCydonia")->getElement("palette")->color); //5
+			_game->getRuleset()->getInterface("confirmCydonia")->getElement("palette")->color);
 
-	add(_window, "window", "confirmCydonia");
-	add(_txtMessage, "text", "confirmCydonia");
-	add(_btnNo, "button", "confirmCydonia");
-	add(_btnYes, "button", "confirmCydonia");
+	add(_window,		"window",	"confirmCydonia");
+	add(_txtMessage,	"text",		"confirmCydonia");
+	add(_btnNo,			"button",	"confirmCydonia");
+	add(_btnYes,		"button",	"confirmCydonia");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-//	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& ConfirmCydoniaState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmCydoniaState::btnYesClick,
 					Options::keyOk);
 
-//	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmCydoniaState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& ConfirmCydoniaState::btnNoClick,
 					Options::keyCancel);
 
-//	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
@@ -113,27 +109,28 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 	_game->popState();
 	_game->popState();
 
-	SavedBattleGame* bgame = new SavedBattleGame(&_game->getRuleset()->getOperations());
-	_game->getSavedGame()->setBattleGame(bgame);
+	SavedBattleGame* battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
+	_game->getSavedGame()->setBattleGame(battleSave);
 
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	BattlescapeGenerator bGen = BattlescapeGenerator(_game);
+
 	for (std::vector<std::string>::const_iterator
 			i = _game->getRuleset()->getDeploymentsList().begin();
 			i != _game->getRuleset()->getDeploymentsList().end();
 			++i)
 	{
-		AlienDeployment* deployment = _game->getRuleset()->getDeployment(*i);
-		if (deployment->isFinalDestination() == true)
+		AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(*i);
+		if (ruleDeploy->isFinalDestination() == true)
 		{
-			bgame->setMissionType(*i);
-			bgen.setAlienRace(deployment->getRace());
+			battleSave->setMissionType(*i);
+			bGen.setAlienRace(ruleDeploy->getRace());
 
 			break;
 		}
 	}
 
-	bgen.setCraft(_craft);
-	bgen.run();
+	bGen.setCraft(_craft);
+	bGen.run();
 
 	_game->pushState(new BriefingState(_craft));
 }

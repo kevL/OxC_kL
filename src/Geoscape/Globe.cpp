@@ -1058,7 +1058,7 @@ std::vector<Target*> Globe::getTargets(
 				continue;
 			}
 
-			if (targetNear(*i, x, y))
+			if (targetNear(*i, x,y))
 				targets.push_back(*i);
 
 			for (std::vector<Craft*>::const_iterator
@@ -1073,7 +1073,7 @@ std::vector<Target*> Globe::getTargets(
 					continue;
 				}
 
-				if (targetNear(*j, x, y))
+				if (targetNear(*j, x,y))
 					targets.push_back(*j);
 			}
 		}
@@ -1099,7 +1099,7 @@ std::vector<Target*> Globe::getTargets(
 				continue;
 			}
 
-			if (targetNear(*i, x, y) == true)
+			if (targetNear(*i, x,y) == true)
 				targets.push_back(*i);
 		}
 	}
@@ -1109,7 +1109,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
 	{
-		if (targetNear(*i, x, y) == true)
+		if (targetNear(*i, x,y) == true)
 			targets.push_back(*i);
 	}
 
@@ -1118,7 +1118,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getMissionSites()->end();
 			++i)
 	{
-		if (targetNear(*i, x, y) == true)
+		if (targetNear(*i, x,y) == true)
 			targets.push_back(*i);
 	}
 
@@ -1128,7 +1128,7 @@ std::vector<Target*> Globe::getTargets(
 			++i)
 	{
 		if ((*i)->isDiscovered() == true
-			&& targetNear(*i, x, y) == true)
+			&& targetNear(*i, x,y) == true)
 		{
 			targets.push_back(*i);
 		}
@@ -1351,7 +1351,7 @@ void Globe::drawLand()
 		drawTexturedPolygon( // Apply textures according to zoom and shade
 						x,y,
 						(*i)->getPoints(),
-						_texture->getFrame((*i)->getTexture() + _zoomTexture),
+						_texture->getFrame((*i)->getPolyTexture() + _zoomTexture),
 						0,0);
 	}
 }
@@ -3090,7 +3090,7 @@ void Globe::getPolygonTextureAndShade(
 						lat,
 						*i) == true)
 		{
-			*texture = (*i)->getTexture();
+			*texture = (*i)->getPolyTexture();
 			break;
 		}
 	}

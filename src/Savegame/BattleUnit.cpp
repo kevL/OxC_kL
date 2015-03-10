@@ -1443,9 +1443,9 @@ int BattleUnit::getStun() const
  * Raises a unit's stun level sufficiently so that the unit is ready to become unconscious.
  * Used when another unit falls on top of this unit.
  * Zombified units first convert to their spawn unit.
- * @param battle - pointer to BattlescapeGame
+ * @param battleGame - pointer to BattlescapeGame
  */
-void BattleUnit::knockOut(BattlescapeGame* battle)
+void BattleUnit::knockOut(BattlescapeGame* battleGame)
 {
 	if (_armor->getSize() > 1	// large units die
 		|| (_unitRules != NULL	// so do scout drones
@@ -1455,11 +1455,10 @@ void BattleUnit::knockOut(BattlescapeGame* battle)
 	}
 	else if (_spawnUnit.empty() == false)
 	{
-//		setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
-		BattleUnit* const newUnit = battle->convertUnit(
-													this,
-													_spawnUnit);
-		newUnit->knockOut(battle); // -> STATUS_UNCONSCIOUS
+		BattleUnit* const newUnit = battleGame->convertUnit(
+														this,
+														_spawnUnit);
+		newUnit->knockOut(battleGame); // -> STATUS_UNCONSCIOUS
 	}
 	else
 		_stunLevel = _health;
@@ -3244,7 +3243,7 @@ bool BattleUnit::hasFlightSuit() const // kL
  * Gets a unit's name.
  * An aLien's name is the translation of its race and rank; hence the language pointer needed.
  * @param lang			- pointer to Language
- * @param debugAppendId	- append unit ID to name for debug purposes
+ * @param debugAppendId	- append unit ID to name for debug purposes (default false)
  * @return, name of the unit
  */
 std::wstring BattleUnit::getName(
@@ -3261,11 +3260,11 @@ std::wstring BattleUnit::getName(
 		else
 			ret = lang->getString(_race);
 
-		if (debugAppendId)
+		if (debugAppendId == true)
 		{
-			std::wostringstream ss;
-			ss << ret << L" " << _id;
-			ret = ss.str();
+			std::wostringstream woststr;
+			woststr << ret << L" " << _id;
+			ret = woststr.str();
 		}
 
 		return ret;
@@ -3420,24 +3419,6 @@ void BattleUnit::setSpecialAbility(const SpecialAbility specab)
 {
 	_specab = specab;
 }
-
-/**
- * Sets this unit to respawn or not.
- * @param respawn - true to respawn (default true)
- */
-/*void BattleUnit::setRespawn(const bool respawn)
-{
-	_respawn = respawn;
-}*/
-
-/**
- * Gets this unit's respawn flag.
- * @return, true for respawn
- */
-/*bool BattleUnit::getRespawn() const
-{
-	return _respawn;
-}*/
 
 /**
  * Gets unit-type that is spawned when this one dies.
@@ -3627,7 +3608,6 @@ BattleUnit* BattleUnit::getCharging()
 int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 {
 	int weight = _armor->getWeight();
-	//Log(LOG_INFO) << "wt armor = " << weight;
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
@@ -3638,7 +3618,6 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 			continue;
 
 		weight += (*i)->getRules()->getWeight();
-		//Log(LOG_INFO) << "weight = " << weight;
 
 		if ((*i)->getAmmoItem()
 			&& (*i)->getAmmoItem() != *i)
@@ -3647,7 +3626,6 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 		}
 	}
 
-	//Log(LOG_INFO) << "weight[ret] = " << weight;
 	return std::max(0, weight);
 }
 
@@ -3662,9 +3640,9 @@ void BattleUnit::setTurnsExposed(int turns)
 
 	if (_turnsExposed > 255) // kL
 		_turnsExposed = 255; // kL
-		// kL_note: should set this to -1 instead of 255.
-		// Note, that in the .Save file, aLiens are 0
-		// and notExposed xCom units are 255
+	// kL_note: should set this to -1 instead of 255.
+	// Note, that in the .Save file, aLiens are 0
+	// and notExposed xCom units are 255
 }
 
 /**
@@ -3807,9 +3785,8 @@ void BattleUnit::adjustStats(
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
-//	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0? 1: 2);
-	_stats.firing		+= 6 * diff * _stats.firing / 100; // see below_
-	_stats.throwing		+= 4 * diff * _stats.throwing / 100; // kL
+	_stats.firing		+= 6 * diff * _stats.firing / 100;
+	_stats.throwing		+= 4 * diff * _stats.throwing / 100;
 	_stats.melee		+= 4 * diff * _stats.melee / 100;
 	_stats.strength		+= 2 * diff * _stats.strength / 100;
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
@@ -3818,7 +3795,7 @@ void BattleUnit::adjustStats(
 	// kL_begin:
 	if (diff == 0)
 	{
-		halveArmor(); // moved here from BattlescapeGenerator::addAlien() & BattlescapeGame::convertUnit()
+		halveArmor();
 		_stats.firing /= 2; // from above^
 	}
 

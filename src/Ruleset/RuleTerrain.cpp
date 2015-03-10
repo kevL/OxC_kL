@@ -31,15 +31,16 @@ namespace OpenXcom
 
 /**
  * RuleTerrain construction.
- * @param name - reference the type of terrain
+ * @param type - reference the type of terrain
  */
-RuleTerrain::RuleTerrain(const std::string& name)
+RuleTerrain::RuleTerrain(const std::string& type)
 	:
-		_name(name),
+		_type(type),
 		_script("DEFAULT"),
 		_minDepth(0),
 		_maxDepth(0),
-		_ambience(-1)
+		_ambience(-1),
+		_pyjamaType("STR_ARMOR_NONE_UC")
 {}
 
 /**
@@ -66,7 +67,7 @@ void RuleTerrain::load(
 		const YAML::Node& node,
 		Ruleset* ruleset)
 {
-	_name		= node["name"]		.as<std::string>(_name);
+	_type		= node["type"]		.as<std::string>(_type);
 	_script		= node["script"]	.as<std::string>(_script);
 	_minDepth	= node["minDepth"]	.as<int>(_minDepth);
 	_maxDepth	= node["maxDepth"]	.as<int>(_maxDepth);
@@ -94,7 +95,7 @@ void RuleTerrain::load(
 				i != mapBlocks.end();
 				++i)
 		{
-			MapBlock* const mapBlock = new MapBlock((*i)["name"].as<std::string>());
+			MapBlock* const mapBlock = new MapBlock((*i)["type"].as<std::string>());
 			mapBlock->load(*i);
 			_mapBlocks.push_back(mapBlock);
 		}
@@ -107,6 +108,8 @@ void RuleTerrain::load(
 		_civilianTypes.push_back("MALE_CIVILIAN");
 		_civilianTypes.push_back("FEMALE_CIVILIAN");
 	}
+
+	_pyjamaType = node["pyjamaType"].as<std::string>(_pyjamaType);
 }
 
 /**
@@ -128,12 +131,12 @@ std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
 }
 
 /**
- * Gets the terrain name.
- * @return, the terrain name
+ * Gets the terrain type.
+ * @return, the terrain type
  */
-std::string RuleTerrain::getName() const
+std::string RuleTerrain::getType() const
 {
-	return _name;
+	return _type;
 }
 
 /**
@@ -150,7 +153,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 		int group,
 		bool force)
 {
-	std::vector<MapBlock*> compliantBlocks;
+	std::vector<MapBlock*> eligibleBlocks;
 
 	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
@@ -165,32 +168,32 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 					&& (*i)->getSizeY() < maxSizeY))
 			&& (*i)->isInGroup(group) == true)
 		{
-			compliantBlocks.push_back((*i));
+			eligibleBlocks.push_back((*i));
 		}
 	}
 
-	if (compliantBlocks.empty() == true)
+	if (eligibleBlocks.empty() == true)
 		return NULL;
 
 	const size_t mapBlock = static_cast<size_t>(RNG::generate(
-															0,
-															static_cast<int>(compliantBlocks.size()) - 1));
-	return compliantBlocks[mapBlock];
+														0,
+														static_cast<int>(eligibleBlocks.size()) - 1));
+	return eligibleBlocks[mapBlock];
 }
 
 /**
- * Gets a MapBlock with a given name.
- * @param name - reference the name of a MapBlock
+ * Gets a MapBlock with a given type.
+ * @param type - reference the type of a MapBlock
  * @return, pointer to a MapBlock or NULL if not found
  */
-MapBlock* RuleTerrain::getMapBlock(const std::string& name)
+MapBlock* RuleTerrain::getMapBlock(const std::string& type)
 {
 	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
 			i != _mapBlocks.end();
 			++i)
 	{
-		if ((*i)->getName() == name)
+		if ((*i)->getType() == type)
 			return (*i);
 	}
 
@@ -273,12 +276,23 @@ const int RuleTerrain::getAmbience() const
 }
 
 /**
- * Gets the generation script name.
- * @return, the name of the script to use
+ * Gets the generation script.
+ * @return, the script to use
  */
 const std::string& RuleTerrain::getScript() const
 {
 	return _script;
+}
+
+/**
+ * Gets the pyjama type.
+ * @note Used in BattlescapeGenerator::setTacticalSprites()
+ * to outfit soldiers in camo suitable for this Terrain.
+ * @return, the pyjama type
+ */
+const std::string& RuleTerrain::getPyjamaType() const
+{
+	return _pyjamaType;
 }
 
 }

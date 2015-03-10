@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_RULEMUSIC_H
 #define OPENXCOM_RULEMUSIC_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -56,7 +56,7 @@ private:
 		///
 		std::string getMode() const;
 		///
-		std::vector<std::string> getTerrains() const;
+		std::vector<std::string> getMusicalTerrains() const;
 		///
 		int getMidiIndex() const;
 		///

@@ -446,7 +446,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			const std::string type = i->first;
 			const RuleMusic* const musicRule = i->second;
 
-			const std::vector<std::string> terrains = musicRule->getTerrains();
+			const std::vector<std::string> terrains = musicRule->getMusicalTerrains();
 			const std::string mode = musicRule->getMode();
 			if (mode == "replace")
 			{

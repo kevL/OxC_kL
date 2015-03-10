@@ -219,7 +219,7 @@ void Polygon::setY(
  * (textures are stored in a set).
  * @return Texture sprite number.
  */
-int Polygon::getTexture() const
+int Polygon::getPolyTexture() const
 {
 	return _texture;
 }
@@ -228,7 +228,7 @@ int Polygon::getTexture() const
  * Changes the texture used to draw the polygon.
  * @param tex Texture sprite number.
  */
-void Polygon::setTexture(int tex)
+void Polygon::setPolyTexture(int tex)
 {
 	_texture = tex;
 }

@@ -45,7 +45,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapDataSet.h"
@@ -780,10 +780,10 @@ int SavedBattleGame::getMapSizeXYZ() const
 }
 
 /**
- * Sets the terrainType string.
+ * Sets the terrain-type string.
  * @param terrain - the terrain
  */
-void SavedBattleGame::setTerrain(const std::string& terrain) // sza_MusicRules
+void SavedBattleGame::setBattleTerrain(const std::string& terrain)
 {
 	_terrain = terrain;
 }
@@ -792,7 +792,7 @@ void SavedBattleGame::setTerrain(const std::string& terrain) // sza_MusicRules
  * Gets the terrainType string.
  * @return, the terrain
  */
-std::string SavedBattleGame::getTerrain() const // sza_MusicRules
+std::string SavedBattleGame::getBattleTerrain() const
 {
 	return _terrain;
 }
@@ -2717,6 +2717,37 @@ int SavedBattleGame::getGroundLevel() const
 const std::wstring& SavedBattleGame::getOperation() const
 {
 	return _operationTitle;
+}
+
+/**
+ * Sets variables for what music to play in a particular terrain or lack thereof.
+ */
+void SavedBattleGame::calibrateMusic(
+		std::string& music,
+		std::string& terrain)
+{
+	music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+
+	if (_missionType == "STR_UFO_CRASH_RECOVERY")
+	{
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
+		terrain = _terrain;
+	}
+	else if (_missionType == "STR_UFO_GROUND_ASSAULT")
+	{
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
+		terrain = _terrain;
+	}
+	else if (_missionType == "STR_ALIEN_BASE_ASSAULT")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
+	else if (_missionType == "STR_BASE_DEFENSE")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
+	else if (_missionType == "STR_TERROR_MISSION")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
+	else if (_missionType == "STR_MARS_CYDONIA_LANDING")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
+	else if (_missionType == "STR_MARS_THE_FINAL_ASSAULT")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 }
 
 }

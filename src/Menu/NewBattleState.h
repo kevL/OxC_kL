@@ -32,6 +32,7 @@ namespace OpenXcom
 class ComboBox;
 class Craft;
 class Frame;
+class Ruleset;
 class Slider;
 class Text;
 class TextButton;
@@ -57,6 +58,11 @@ private:
 	Frame
 		* _frameLeft,
 		* _frameRight;
+	Ruleset* _rules;
+	Slider
+		* _slrDarkness,
+		* _slrAlienTech,
+		* _slrDepth;
 	Text
 		* _txtTitle,
 		* _txtMapOptions,
@@ -69,10 +75,6 @@ private:
 		* _txtAlienRace,
 		* _txtAlienTech,
 		* _txtDepth;
-	Slider
-		* _slrDarkness,
-		* _slrAlienTech,
-		* _slrDepth;
 	TextButton
 		* _btnOk,
 		* _btnCancel,

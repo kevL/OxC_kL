@@ -43,7 +43,7 @@ struct convert<OpenXcom::ItemSet>
 		if (node.IsSequence() == false)
 			return false;
 
-		rhs.items = node.as< std::vector<std::string> >(rhs.items);
+		rhs.items = node.as<std::vector<std::string> >(rhs.items);
 
 		return true;
 	}
@@ -162,7 +162,7 @@ AlienDeployment::~AlienDeployment()
 void AlienDeployment::load(const YAML::Node& node)
 {
 	_type				= node["type"]				.as<std::string>(_type);
-	_data				= node["data"]				.as< std::vector<DeploymentData> >(_data);
+	_data				= node["data"]				.as<std::vector<DeploymentData> >(_data);
 	_width				= node["width"]				.as<int>(_width);
 	_length				= node["length"]			.as<int>(_length);
 	_height				= node["height"]			.as<int>(_height);
@@ -207,18 +207,18 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 
 /**
  * Gets dimensions.
- * @param width		- pointer to width
- * @param length 	- pointer to length
- * @param height	- pointer to height
+ * @param width	- pointer to width
+ * @param lengt - pointer to length
+ * @param heigh	- pointer to height
  */
 void AlienDeployment::getDimensions(
 		int* width,
-		int* length,
-		int* height)
+		int* lengt,
+		int* heigh)
 {
-	*width	= _width;
-	*length	= _length;
-	*height	= _height;
+	*width = _width;
+	*lengt = _length;
+	*heigh = _height;
 }
 
 /**
@@ -231,25 +231,10 @@ int AlienDeployment::getCivilians() const
 }
 
 /**
- * Gets the terrain for battlescape generation.
- * kL_note: See note in header file.
- * @return, the terrain
+ * Gets eligible terrains for battlescape generation.
+ * @return, vector of terrain-type strings
  */
-/* std::string AlienDeployment::getTerrain() const
-{
-	if (!_terrains.empty())
-	{
-		unsigned terrain = RNG::generate(0, _terrains.size() - 1);
-		return _terrains.at(terrain);
-	}
-	return "";
-} */
-
-/**
- * Gets the terrains for battlescape generation.
- * @return, vector of the terrain strings
- */
-std::vector<std::string> AlienDeployment::getTerrains() const
+std::vector<std::string> AlienDeployment::getDeployTerrains() const
 {
 	return _terrains;
 }

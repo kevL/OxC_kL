@@ -32,7 +32,7 @@ namespace OpenXcom
 
 struct TerrainCriteria
 {
-	std::string name;
+	std::string type;
 	int weight;
 	double
 		lonMin,
@@ -42,7 +42,7 @@ struct TerrainCriteria
 
 	TerrainCriteria()
 		:
-			weight(1),
+			weight(10),
 			lonMin(0.),
 			lonMax(360.),
 			latMin(-90.),
@@ -51,6 +51,7 @@ struct TerrainCriteria
 };
 
 class Target;
+
 
 /**
  * Represents the relations between a Geoscape texture
@@ -61,8 +62,8 @@ class Texture
 
 private:
 	int _id;
-	std::string _deployment;
-	std::vector<TerrainCriteria> _terrain;
+	std::string _deployType;
+	std::vector<TerrainCriteria> _terrains;
 
 
 	public:
@@ -75,13 +76,15 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the list of terrain criteria.
-		std::vector<TerrainCriteria>* getTerrain();
+		std::vector<TerrainCriteria>* getTerrainCriteria();
 
 		/// Gets a randomly textured terrain-type for a given target.
-		std::string getRandomTerrain(const Target* const target) const;
+		std::string getRandomTerrain(const Target* const target = NULL) const;
+		/// Gets a randomly textured terrain-type for a Globe texture.
+//		std::string getRandomTerrain(int texture) const;
 
 		/// Gets the alien deployment for this Texture.
-		std::string getDeployment() const;
+		std::string getTextureDeployment() const;
 };
 
 }
@@ -98,7 +101,7 @@ struct convert<OpenXcom::TerrainCriteria>
 	{
 		Node node;
 
-		node["name"]	= rhs.name;
+		node["type"]	= rhs.type;
 		node["weight"]	= rhs.weight;
 
 		std::vector<double> area;
@@ -120,7 +123,7 @@ struct convert<OpenXcom::TerrainCriteria>
 		if (node.IsMap() == false)
 			return false;
 
-		rhs.name	= node["name"]	.as<std::string>(rhs.name);
+		rhs.type	= node["type"]	.as<std::string>(rhs.type);
 		rhs.weight	= node["weight"].as<int>(rhs.weight);
 
 		if (node["area"])

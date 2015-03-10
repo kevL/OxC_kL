@@ -124,7 +124,7 @@ Map::Map(
 		_reveal(0),
 		_smoothingEngaged(false),
 		_noDraw(false),
-		_save(game->getSavedGame()->getSavedBattle()),
+		_battleSave(game->getSavedGame()->getSavedBattle()),
 		_res(game->getResourcePack())
 
 {
@@ -139,16 +139,16 @@ Map::Map(
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 
-	const size_t depth = static_cast<size_t>(_save->getDepth());
+	const size_t depth = static_cast<size_t>(_battleSave->getDepth());
 	if (_res->getLUTs()->size() > depth)
 		_transparencies = &_res->getLUTs()->at(depth);
 
 	_camera = new Camera(
 					_spriteWidth,
 					_spriteHeight,
-					_save->getMapSizeX(),
-					_save->getMapSizeY(),
-					_save->getMapSizeZ(),
+					_battleSave->getMapSizeX(),
+					_battleSave->getMapSizeY(),
+					_battleSave->getMapSizeZ(),
 					this,
 					visibleMapHeight);
 
@@ -273,15 +273,15 @@ void Map::init()
 
 	_projectile = NULL;
 
-	if (_save->getDepth() == 0)
+	if (_battleSave->getDepth() == 0)
 		_projectileSet = _res->getSurfaceSet("Projectiles");
 	else
 		_projectileSet = _res->getSurfaceSet("UnderwaterProjectiles");
 
 /*	int // kL_begin: reveal map's border tiles.
-		size_x = _save->getMapSizeX(),
-		size_y = _save->getMapSizeY(),
-		size_z = _save->getMapSizeZ();
+		size_x = _battleSave->getMapSizeX(),
+		size_y = _battleSave->getMapSizeY(),
+		size_z = _battleSave->getMapSizeZ();
 
 	for (int
 			x = 0;
@@ -303,7 +303,7 @@ void Map::init()
 					|| x == size_x - 1
 					|| y == size_y - 1)
 				{
-					Tile* tile = _save->getTile(Position(x,y,z));
+					Tile* tile = _battleSave->getTile(Position(x,y,z));
 					if (tile)
 						tile->setDiscovered(true, 2);
 				}
@@ -343,21 +343,21 @@ void Map::draw()
 	const Tile* tile = NULL;
 
 	if (_projectile != NULL)
-//		&& _save->getSide() == FACTION_PLAYER)
+//		&& _battleSave->getSide() == FACTION_PLAYER)
 	{
-		tile = _save->getTile(Position(
+		tile = _battleSave->getTile(Position(
 									_projectile->getPosition(0).x / 16,
 									_projectile->getPosition(0).y / 16,
 									_projectile->getPosition(0).z / 24));
 		if (tile != NULL
 			&& (tile->getTileVisible() == true
-				|| _save->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
+				|| _battleSave->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
 		{
 			_projectileInFOV = true;
 		}
 	}
 	else
-		_projectileInFOV = _save->getDebugMode();
+		_projectileInFOV = _battleSave->getDebugMode();
 
 
 	if (_explosions.empty() == false)
@@ -367,7 +367,7 @@ void Map::draw()
 				i != _explosions.end();
 				++i)
 		{
-			tile = _save->getTile(Position(
+			tile = _battleSave->getTile(Position(
 										(*i)->getPosition().x / 16,
 										(*i)->getPosition().y / 16,
 										(*i)->getPosition().z / 24));
@@ -376,7 +376,7 @@ void Map::draw()
 					|| (tile->getUnit() != NULL
 						&& tile->getUnit()->getUnitVisible() == true)
 					|| (*i)->isBig() == true
-					|| _save->getSide() != FACTION_PLAYER))	// shows hit-explosion during aLien berserk
+					|| _battleSave->getSide() != FACTION_PLAYER))	// shows hit-explosion during aLien berserk
 			{
 				_explosionInFOV = true;
 				break;
@@ -384,16 +384,16 @@ void Map::draw()
 		}
 	}
 	else
-		_explosionInFOV = _save->getDebugMode();
+		_explosionInFOV = _battleSave->getDebugMode();
 
 
 	if (_noDraw == false) // don't draw if MiniMap is open.
 	{
-		if (_save->getSelectedUnit() == NULL
-			|| (_save->getSelectedUnit() != NULL
-				&& _save->getSelectedUnit()->getUnitVisible() == true)
+		if (_battleSave->getSelectedUnit() == NULL
+			|| (_battleSave->getSelectedUnit() != NULL
+				&& _battleSave->getSelectedUnit()->getUnitVisible() == true)
 			|| _unitDying == true
-			|| _save->getDebugMode() == true
+			|| _battleSave->getDebugMode() == true
 			|| _projectileInFOV == true
 			|| _waypointAction == true // stop flashing the Hidden Movement screen between waypoints.
 			|| _explosionInFOV == true)
@@ -428,8 +428,8 @@ void Map::setPalette(
 	Surface::setPalette(colors, firstcolor, ncolors);
 
 	for (std::vector<MapDataSet*>::const_iterator
-			i = _save->getMapDataSets()->begin();
-			i != _save->getMapDataSets()->end();
+			i = _battleSave->getMapDataSets()->begin();
+			i != _battleSave->getMapDataSets()->end();
 			++i)
 	{
 		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
@@ -604,7 +604,7 @@ void Map::drawTerrain(Surface* surface)
 		_smoothingEngaged = false;
 
 
-	const bool pathPreview = _save->getPathfinding()->isPathPreviewed();
+	const bool pathPreview = _battleSave->getPathfinding()->isPathPreviewed();
 	NumberText* wpID = NULL;
 
 	if (_waypoints.empty() == false
@@ -617,14 +617,14 @@ void Map::drawTerrain(Surface* surface)
 		wpID->setPalette(getPalette());
 
 		Uint8 wpColor;
-/*		if (_save->getTerrain() == "DESERT")
-			|| _save->getTerrain() == "DESERTMOUNT")
+/*		if (_battleSave->getBattleTerrain() == "DESERT")
+			|| _battleSave->getBattleTerrain() == "DESERTMOUNT")
 		{
 			wpColor = Palette::blockOffset(0)+1; // white
 		else
 			wpColor = Palette::blockOffset(1)+4; */
-		if (_save->getTerrain() == "POLAR"
-			|| _save->getTerrain() == "POLARMOUNT")
+		if (_battleSave->getBattleTerrain() == "POLAR"
+			|| _battleSave->getBattleTerrain() == "POLARMOUNT")
 		{
 			wpColor = Palette::blockOffset(1)+4; // orange
 		}
@@ -639,13 +639,13 @@ void Map::drawTerrain(Surface* surface)
 		beginX,
 		beginY,
 		beginZ = 0,
-		endX, //= _save->getMapSizeX() - 1,
-		endY, //= _save->getMapSizeY() - 1,
+		endX, //= _battleSave->getMapSizeX() - 1,
+		endY, //= _battleSave->getMapSizeY() - 1,
 		endZ, //= _camera->getViewLevel(),
 		d;
 
 	if (_camera->getShowAllLayers() == true)
-		endZ = _save->getMapSizeZ() - 1;
+		endZ = _battleSave->getMapSizeZ() - 1;
 	else
 		endZ = _camera->getViewLevel();
 
@@ -738,8 +738,8 @@ void Map::drawTerrain(Surface* surface)
 					&& screenPosition.y > -_spriteHeight
 					&& screenPosition.y < surface->getHeight() + _spriteHeight)
 				{
-					tile = _save->getTile(mapPosition);
-					const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
+					tile = _battleSave->getTile(mapPosition);
+					const Tile* const tileBelow = _battleSave->getTile(mapPosition + Position(0,0,-1));
 
 					if (tile == NULL)
 						continue;
@@ -776,12 +776,12 @@ void Map::drawTerrain(Surface* surface)
 						// ... should probably be a subfunction
 						if (itX < endX && itZ > 0)
 						{
-							const Tile* const tileEast = _save->getTile(mapPosition + Position(1,0,0));
+							const Tile* const tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
 
 							if (tileEast != NULL
 								&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
 							{
-								const Tile* const tileEastBelow = _save->getTile(mapPosition + Position(1,0,-1));
+								const Tile* const tileEastBelow = _battleSave->getTile(mapPosition + Position(1,0,-1));
 
 								const BattleUnit* unitEastBelow;
 								if (tileEastBelow != NULL)
@@ -790,7 +790,7 @@ void Map::drawTerrain(Surface* surface)
 									unitEastBelow = NULL;
 
 								if (unitEastBelow != NULL
-									&& unitEastBelow != _save->getSelectedUnit()
+									&& unitEastBelow != _battleSave->getSelectedUnit()
 									&& unitEastBelow->getGeoscapeSoldier() != NULL
 									&& unitEastBelow->getFaction() == unitEastBelow->getOriginalFaction())
 								{
@@ -858,7 +858,7 @@ void Map::drawTerrain(Surface* surface)
 						&& _selectorY > itY - _cursorSize
 						&& _selectorX < itX + 1
 						&& _selectorY < itY + 1
-						&& _save->getBattleState()->getMouseOverIcons() == false)
+						&& _battleSave->getBattleState()->getMouseOverIcons() == false)
 					{
 						if (_camera->getViewLevel() == itZ)
 						{
@@ -866,9 +866,9 @@ void Map::drawTerrain(Surface* surface)
 							{
 								if (unit != NULL
 									&& (unit->getUnitVisible() == true
-										|| _save->getDebugMode() == true)
+										|| _battleSave->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
-										|| unit->getFaction() != _save->getSide()))
+										|| unit->getFaction() != _battleSave->getSide()))
 								{
 									frame = (_animFrame %2); // yellow box
 								}
@@ -879,7 +879,7 @@ void Map::drawTerrain(Surface* surface)
 							{
 								if (unit != NULL
 									&& (unit->getUnitVisible() == true
-										|| _save->getDebugMode() == true))
+										|| _battleSave->getDebugMode() == true))
 								{
 									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
 								}
@@ -915,7 +915,7 @@ void Map::drawTerrain(Surface* surface)
 					if (itY > 0)
 //					if (false)
 					{
-						const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+						const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 						BattleUnit* unitNorth;
 						if (tileNorth != NULL)
@@ -925,7 +925,7 @@ void Map::drawTerrain(Surface* surface)
 
 						if (unitNorth != NULL
 							&& (unitNorth->getUnitVisible() == true
-								|| _save->getDebugMode() == true)
+								|| _battleSave->getDebugMode() == true)
 							&& unitNorth->getStatus() == STATUS_WALKING)
 //							&& unitNorth->getDirection() != 3 // might want to remove these
 //							&& unitNorth->getDirection() != 7
@@ -938,7 +938,7 @@ void Map::drawTerrain(Surface* surface)
 								{
 									if (itX > 0 && itY < endY)
 									{
-										const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0)); // Reaper sticks its righthind leg out through south wall if dir=1
+										const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0)); // Reaper sticks its righthind leg out through south wall if dir=1
 
 										if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
 											|| tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL) // or do this check specifically for Reapers
@@ -990,7 +990,7 @@ void Map::drawTerrain(Surface* surface)
 									if (unitNorth->getDirection() == 0
 										|| unitNorth->getDirection() == 4)
 									{
-										const Tile* const tileNorthNorth = _save->getTile(mapPosition + Position(0,-2,0));
+										const Tile* const tileNorthNorth = _battleSave->getTile(mapPosition + Position(0,-2,0));
 
 										if (tileNorthNorth != NULL)
 										{
@@ -1019,7 +1019,7 @@ void Map::drawTerrain(Surface* surface)
 									if (unitNorth->getDirection() == 2
 										|| unitNorth->getDirection() == 6)
 									{
-										const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+										const Tile* const tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));
 
 										if (tileNorthWest != NULL)
 										{
@@ -1059,7 +1059,7 @@ void Map::drawTerrain(Surface* surface)
 								// Phase VI: redraw everything in the tile WEST (half-tile).
 								if (itX > 0)
 								{
-									const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+									const Tile* const tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
 
 									if (tileWest != NULL)
 									{
@@ -1122,7 +1122,7 @@ void Map::drawTerrain(Surface* surface)
 										if (unitWest == NULL // NOT for large units
 											|| unitWest != unit)
 										{
-											const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+											const Tile* const tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));
 
 											if (tileNorthWest != NULL)
 											{
@@ -1174,7 +1174,7 @@ void Map::drawTerrain(Surface* surface)
 
 										if (unitWest != NULL
 											&& (unitWest->getUnitVisible() == true
-												|| _save->getDebugMode() == true)
+												|| _battleSave->getDebugMode() == true)
 											&& (unitWest != unit
 												|| (unitWest->getDirection() != 2
 													&& unitWest->getDirection() != 6))
@@ -1186,7 +1186,7 @@ void Map::drawTerrain(Surface* surface)
 
 											if (itY < endY)
 											{
-												const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+												const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 												if (tileSouthWest != NULL)
 												{
@@ -1203,7 +1203,7 @@ void Map::drawTerrain(Surface* surface)
 															|| unitWest->getDirection() == 3
 															|| unitWest->getDirection() == 7) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
 														{
-															const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+															const Tile* const tileSouthSouthWest = _battleSave->getTile(mapPosition + Position(-1,2,0));
 
 															if (tileSouthSouthWest != NULL)
 															{
@@ -1276,7 +1276,7 @@ void Map::drawTerrain(Surface* surface)
 										{
 											if (tileWest->getFire() == 0)
 											{
-												if (_save->getDepth() > 0)
+												if (_battleSave->getDepth() > 0)
 													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 												else
 													frame = ResourcePack::SMOKE_OFFSET;
@@ -1326,7 +1326,7 @@ void Map::drawTerrain(Surface* surface)
 										if (unitNorth->getDirection() == 1
 											|| unitNorth->getDirection() == 5)
 										{
-											const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+											const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 											if (tileSouthWest != NULL
 												&& tileSouthWest->getTerrainLevel() == 0) // Stop concealing lower right bit of unit to west of redrawn tile w/ raised terrain.
@@ -1353,7 +1353,7 @@ void Map::drawTerrain(Surface* surface)
 													{
 														if (tileSouthWest->getFire() == 0)
 														{
-															if (_save->getDepth() > 0)
+															if (_battleSave->getDepth() > 0)
 																frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 															else
 																frame = ResourcePack::SMOKE_OFFSET;
@@ -1509,8 +1509,8 @@ void Map::drawTerrain(Surface* surface)
 							&& tile->hasNoFloor(tileBelow) == false)
 						{
 							for (std::vector<BattleUnit*>::const_iterator
-									i = _save->getUnits()->begin();
-									i != _save->getUnits()->end();
+									i = _battleSave->getUnits()->begin();
+									i != _battleSave->getUnits()->end();
 									++i)
 							{
 								if ((*i)->getStatus() == STATUS_WALKING
@@ -1603,7 +1603,7 @@ void Map::drawTerrain(Surface* surface)
 						if (itY > 0
 							&& tile->getMapData(MapData::O_NORTHWALL) == NULL)
 						{
-							const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+							const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 							if (tileNorth != NULL)
 							{
@@ -1611,7 +1611,7 @@ void Map::drawTerrain(Surface* surface)
 
 								if (unitNorth != NULL
 									&& (unitNorth->getUnitVisible() == true
-										|| _save->getDebugMode() == true)	// this is just for the bigfooted ScoutDrone anyway .... ht. 10
+										|| _battleSave->getDebugMode() == true)	// this is just for the bigfooted ScoutDrone anyway .... ht. 10
 									&& (unitNorth->getHeight() < 13			// the problem is this draws overtop of the Cursor's front box
 										|| (drawUnitNorth == true
 											&& unitNorth->getStatus() == STATUS_WALKING
@@ -1680,7 +1680,7 @@ void Map::drawTerrain(Surface* surface)
 							// TODO: Smoke & Fire render below this, use checks to draw or not.
 							// TODO: reDraw unit SOUTH-WEST. ... unit Walking.
 							// TODO: reDraw unit WEST. ... unit Walking and no unitNorth exists.
-							const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+							const Tile* const tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
 
 							BattleUnit* unitWest = NULL;
 
@@ -1690,7 +1690,7 @@ void Map::drawTerrain(Surface* surface)
 
 								if (unitWest != NULL
 									&& (unitWest->getUnitVisible() == true
-										|| _save->getDebugMode() == true)
+										|| _battleSave->getDebugMode() == true)
 									&& unitWest != unit // large units don't need to redraw their western parts
 									&& unitWest->getStatus() == STATUS_WALKING)
 								{
@@ -1713,7 +1713,7 @@ void Map::drawTerrain(Surface* surface)
 													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
 													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST))
 											{
-												const Tile* const tileSouth = _save->getTile(mapPosition + Position(0,1,0));
+												const Tile* const tileSouth = _battleSave->getTile(mapPosition + Position(0,1,0));
 
 												if (tileSouth == NULL
 													|| (tileSouth->getMapData(MapData::O_NORTHWALL) == NULL // or tu != 255, ie. isWalkable rubble that lets sight pass over it
@@ -1724,7 +1724,7 @@ void Map::drawTerrain(Surface* surface)
 																&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))))
 //														&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 												{
-													const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+													const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 													if (tileSouthWest == NULL
 														|| (tileSouthWest->getUnit() == NULL
@@ -1756,7 +1756,7 @@ void Map::drawTerrain(Surface* surface)
 														&& tileWest->getTerrainLevel() - tile->getTerrainLevel() < 13 // positive means Tile is higher
 														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)))
 											{
-												const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+												const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 												if (tileNorth == NULL
 													|| tileNorth->getMapData(MapData::O_OBJECT) == NULL
@@ -1764,7 +1764,7 @@ void Map::drawTerrain(Surface* surface)
 														&& std::abs(tileWest->getTerrainLevel() - tileNorth->getTerrainLevel()) < 13	// positive means tileNorth is higher
 														&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() < 13))				// positive means Tile is higher
 												{
-													const Tile* const tileSouth = _save->getTile(mapPosition + Position(0,1,0));
+													const Tile* const tileSouth = _battleSave->getTile(mapPosition + Position(0,1,0));
 
 													if (tileSouth == NULL
 														|| (tileSouth->getMapData(MapData::O_NORTHWALL) == NULL // or tu != 255, ie. isWalkable rubble that lets sight pass over it
@@ -1775,7 +1775,7 @@ void Map::drawTerrain(Surface* surface)
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_W_N))))
 //															&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 													{
-														const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+														const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 														if (tileSouthWest == NULL
 															|| (tileSouthWest->getUnit() == NULL
@@ -1790,7 +1790,7 @@ void Map::drawTerrain(Surface* surface)
 														{
 															redraw = true;
 
-															const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+															const Tile* const tileSouthSouthWest = _battleSave->getTile(mapPosition + Position(-1,2,0));
 
 															if ((tileSouthWest != NULL
 																	&& (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
@@ -1868,13 +1868,13 @@ void Map::drawTerrain(Surface* surface)
 							if (itY > 0
 								&& unitWest == NULL)
 							{
-								const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+								const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 								if (tileNorth != NULL)
 								{
 									const Tile* tileEast;
 									if (itY < endY)
-										tileEast = _save->getTile(mapPosition + Position(1,0,0));
+										tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
 									else
 										tileEast = NULL;
 
@@ -1882,7 +1882,7 @@ void Map::drawTerrain(Surface* surface)
 										&& (tileEast == NULL
 											|| tileEast->getUnit() == NULL))
 									{
-										const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+										const Tile* const tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));
 
 										if (tileNorthWest != NULL)
 										{
@@ -1890,7 +1890,7 @@ void Map::drawTerrain(Surface* surface)
 
 											if (unitNorthWest != NULL
 												&& (unitNorthWest->getUnitVisible() == true
-													|| _save->getDebugMode() == true)
+													|| _battleSave->getDebugMode() == true)
 												&& unitNorthWest != unit // large units don't need to redraw their western parts
 												&& unitNorthWest->getStatus() == STATUS_WALKING
 												&& (((unitNorthWest->getDirection() == 3
@@ -2045,14 +2045,14 @@ void Map::drawTerrain(Surface* surface)
 							&& hasFloor == false
 							&& hasObject == false)
 						{
-							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
+							const Tile* const tileBelow = _battleSave->getTile(mapPosition + Position(0,0,-1));
 
 							if (tileBelow != NULL)
 							{
 								BattleUnit* const unitBelow = tileBelow->getUnit();
 
 								if (unitBelow != NULL
-									&& unitBelow != _save->getSelectedUnit()
+									&& unitBelow != _battleSave->getSelectedUnit()
 									&& unitBelow->getGeoscapeSoldier() != NULL
 									&& unitBelow->getFaction() == unitBelow->getOriginalFaction())
 								{
@@ -2125,13 +2125,13 @@ void Map::drawTerrain(Surface* surface)
 							if (srfSprite)
 							{
 								Position voxelPos = _projectile->getPosition(); // draw shadow on the floor
-								voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
+								voxelPos.z = _battleSave->getTileEngine()->castedShade(voxelPos);
 								if (   voxelPos.x / 16 >= itX
 									&& voxelPos.y / 16 >= itY
 									&& voxelPos.x / 16 <= itX + 1
 									&& voxelPos.y / 16 <= itY + 1
 									&& voxelPos.z / 24 == itZ)
-//									&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//									&& _battleSave->getTileEngine()->isVoxelVisible(voxelPos))
 								{
 									_camera->convertVoxelToScreen(
 																voxelPos,
@@ -2149,7 +2149,7 @@ void Map::drawTerrain(Surface* surface)
 									&& voxelPos.x / 16 <= itX + 1
 									&& voxelPos.y / 16 <= itY + 1
 									&& voxelPos.z / 24 == itZ)
-//									&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//									&& _battleSave->getTileEngine()->isVoxelVisible(voxelPos))
 								{
 									_camera->convertVoxelToScreen(
 																voxelPos,
@@ -2196,11 +2196,11 @@ void Map::drawTerrain(Surface* surface)
 									if (srfSprite)
 									{
 										Position voxelPos = _projectile->getPosition(1 - i); // draw shadow on the floor
-										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
+										voxelPos.z = _battleSave->getTileEngine()->castedShade(voxelPos);
 										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
-//											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//											&& _battleSave->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
@@ -2219,7 +2219,7 @@ void Map::drawTerrain(Surface* surface)
 										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
-//											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//											&& _battleSave->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
@@ -2244,7 +2244,7 @@ void Map::drawTerrain(Surface* surface)
 					// Main Draw BattleUnit ->
 					if (unit != NULL
 						&& (unit->getUnitVisible() == true
-							|| _save->getDebugMode() == true))
+							|| _battleSave->getDebugMode() == true))
 					{
 						quad = tile->getPosition().x - unit->getPosition().x
 							+ (tile->getPosition().y - unit->getPosition().y) * 2;
@@ -2298,7 +2298,7 @@ void Map::drawTerrain(Surface* surface)
 								&& tile->getMapData(MapData::O_FLOOR) != NULL
 								&& tile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
 							{
-								const Tile* const tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+								const Tile* const tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));
 
 								BattleUnit* const unitNorthWest = tileNorthWest->getUnit();
 
@@ -2337,7 +2337,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 
-								const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+								const Tile* const tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
 
 								BattleUnit* const unitWest = tileWest->getUnit();
 
@@ -2377,7 +2377,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 
-								const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+								const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 								BattleUnit* const unitNorth = tileNorth->getUnit();
 
@@ -2419,7 +2419,7 @@ void Map::drawTerrain(Surface* surface)
 
 								if (itY < endY) // redraw floor, was overwritten by SW quadrant of large unit moving up/down gravLift
 								{
-									const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+									const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 									if (tileSouthWest != NULL)
 									{
@@ -2446,7 +2446,7 @@ void Map::drawTerrain(Surface* surface)
 /*							// TEST. reDraw tileSouthWest bigWall NESW
 							if (itX > 0 && itY < endY)
 							{
-								const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+								const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 								srfSprite = tileSouthWest->getSprite(MapData::O_OBJECT);
 //								srfSprite = NULL;
@@ -2493,9 +2493,9 @@ void Map::drawTerrain(Surface* surface)
 								&& unit->getArmor()->getSize() == 2
 								&& unit->getTurretType() == -1)
 							{
-								if (unit == _save->getTile(mapPosition + Position(-1,0,0))->getUnit())
+								if (unit == _battleSave->getTile(mapPosition + Position(-1,0,0))->getUnit())
 								{
-									const Tile* const tileSouthSouthWest = _save->getTile(mapPosition + Position(-1,2,0));
+									const Tile* const tileSouthSouthWest = _battleSave->getTile(mapPosition + Position(-1,2,0));
 
 									if (tileSouthSouthWest != NULL)
 									{
@@ -2520,13 +2520,13 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// kL_begin #3 of 3:
-							const Tile* const tileAbove = _save->getTile(mapPosition + Position(0,0,1));
+							const Tile* const tileAbove = _battleSave->getTile(mapPosition + Position(0,0,1));
 
 							if (_camera->getViewLevel() == itZ
 								|| (tileAbove != NULL
 									&& tileAbove->getSprite(MapData::O_FLOOR) == NULL))
 							{
-								if (unit != _save->getSelectedUnit()
+								if (unit != _battleSave->getSelectedUnit()
 									&& unit->getGeoscapeSoldier() != NULL
 									&& unit->getFaction() == unit->getOriginalFaction())
 								{
@@ -2603,7 +2603,7 @@ void Map::drawTerrain(Surface* surface)
 							if (unit->getVerticalDirection() != 0
 								&& itX < endX && itY < endY && itZ > 0)
 							{
-								const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+								const Tile* const tileBelowSouthEast = _battleSave->getTile(mapPosition + Position(1,1,-1));
 
 								if (tileBelowSouthEast != NULL)
 								{
@@ -2623,7 +2623,7 @@ void Map::drawTerrain(Surface* surface)
 
 										if (itX < endX - 1)
 										{
-											const Tile* const tileBelowSouthEastEast = _save->getTile(mapPosition + Position(2,1,-1));
+											const Tile* const tileBelowSouthEastEast = _battleSave->getTile(mapPosition + Position(2,1,-1));
 
 											if (tileBelowSouthEastEast != NULL)
 											{
@@ -2665,7 +2665,7 @@ void Map::drawTerrain(Surface* surface)
 						if (unitBelow != NULL
 							&& unitBelow->getVerticalDirection() != 0
 							&& (unitBelow->getUnitVisible() == true
-								|| _save->getDebugMode() == true))
+								|| _battleSave->getDebugMode() == true))
 						{
 							quad = tileBelow->getPosition().x - unitBelow->getPosition().x
 								+ (tileBelow->getPosition().y - unitBelow->getPosition().y) * 2;
@@ -2702,7 +2702,7 @@ void Map::drawTerrain(Surface* surface)
 
 									if (quad == 3) //itY > 0
 									{
-										const Tile* const tileBelowNorthWest = _save->getTile(mapPosition + Position(-1,-1,-1));
+										const Tile* const tileBelowNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,-1));
 
 										BattleUnit* const unitBelowNorthWest = tileBelowNorthWest->getUnit();
 
@@ -2741,7 +2741,7 @@ void Map::drawTerrain(Surface* surface)
 										}
 
 
-										const Tile* const tileBelowWest = _save->getTile(mapPosition + Position(-1,0,-1));
+										const Tile* const tileBelowWest = _battleSave->getTile(mapPosition + Position(-1,0,-1));
 
 										BattleUnit* const unitBelowWest = tileBelowWest->getUnit();
 
@@ -2781,7 +2781,7 @@ void Map::drawTerrain(Surface* surface)
 										}
 
 
-										const Tile* const tileBelowNorth = _save->getTile(mapPosition + Position(0,-1,-1));
+										const Tile* const tileBelowNorth = _battleSave->getTile(mapPosition + Position(0,-1,-1));
 
 										BattleUnit* const unitBelowNorth = tileBelowNorth->getUnit();
 
@@ -2823,7 +2823,7 @@ void Map::drawTerrain(Surface* surface)
 
 										if (itY < endY) // redraw floor, was overwritten by SW quadrant of large unit moving up/down gravLift
 										{
-											const Tile* const tileSouthWest = _save->getTile(mapPosition + Position(-1,1,0));
+											const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 											if (tileSouthWest != NULL)
 											{
@@ -2894,7 +2894,7 @@ void Map::drawTerrain(Surface* surface)
 
 						if (unitBelow != NULL
 							&& (unitBelow->getUnitVisible() == true
-								|| _save->getDebugMode() == true))
+								|| _battleSave->getDebugMode() == true))
 						{
 							const Tile
 								* tileNorth = NULL,
@@ -2909,42 +2909,42 @@ void Map::drawTerrain(Surface* surface)
 
 							if (itY > 0)
 							{
-								tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+								tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 								if (itY > 1
 									&& (unitSize > 1
 										|| (unitBelow->getStatus() == STATUS_WALKING
 											&& unitBelow->getDirection() != 2
 											&& unitBelow->getDirection() != 6)))
 								{
-									tileNorthNorth = _save->getTile(mapPosition + Position(0,-2,0));
+									tileNorthNorth = _battleSave->getTile(mapPosition + Position(0,-2,0));
 								}
 							}
 
 							if (itX > 0 && itY > 0)
 							{
-								tileNorthWest = _save->getTile(mapPosition + Position(-1,-1,0));
+								tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));
 								if (itY > 1
 									&& (unitSize > 1
 										|| (unitBelow->getStatus() == STATUS_WALKING
 											&& unitBelow->getDirection() != 1
 											&& unitBelow->getDirection() != 5)))
 								{
-									tileNorthNorthWest = _save->getTile(mapPosition + Position(-1,-2,0));
+									tileNorthNorthWest = _battleSave->getTile(mapPosition + Position(-1,-2,0));
 									if (itX > 1)
-										tileNorthNorthWestWest = _save->getTile(mapPosition + Position(-2,-2,0));
+										tileNorthNorthWestWest = _battleSave->getTile(mapPosition + Position(-2,-2,0));
 								}
 							}
 
 							if (itX > 0)
 							{
-								tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+								tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
 								if (itX > 1
 									&& (unitSize > 1
 										|| (unitBelow->getStatus() == STATUS_WALKING
 											&& unitBelow->getDirection() != 0
 											&& unitBelow->getDirection() != 4)))
 								{
-									tileWestWest = _save->getTile(mapPosition + Position(-2,0,0));
+									tileWestWest = _battleSave->getTile(mapPosition + Position(-2,0,0));
 								}
 							}
 
@@ -3018,12 +3018,12 @@ void Map::drawTerrain(Surface* surface)
 //									if (false)
 									if (itX < endX && itY < endY)
 									{
-										const Tile* const tileSouthEast = _save->getTile(mapPosition + Position(1,1,0));
+										const Tile* const tileSouthEast = _battleSave->getTile(mapPosition + Position(1,1,0));
 
 										if (tileSouthEast != NULL
 											&& tileSouthEast->getMapData(MapData::O_FLOOR) == NULL)
 										{
-											const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+											const Tile* const tileBelowSouthEast = _battleSave->getTile(mapPosition + Position(1,1,-1));
 
 											// kL_note: I'm only doing content-object w/out bigWall here because that's the case I ran into.
 											// This also needs to redraw northWall, as well as tileEast's west & south walls, tileBelow's east & south walls, etc.
@@ -3053,7 +3053,7 @@ void Map::drawTerrain(Surface* surface)
 
 													if (itX < endX - 1)
 													{
-														const Tile* const tileBelowSouthEastEast = _save->getTile(mapPosition + Position(2,1,-1));
+														const Tile* const tileBelowSouthEastEast = _battleSave->getTile(mapPosition + Position(2,1,-1));
 
 														if (tileBelowSouthEastEast != NULL)
 														{
@@ -3096,7 +3096,7 @@ void Map::drawTerrain(Surface* surface)
 					{
 						if (tile->getFire() == 0)
 						{
-							if (_save->getDepth() > 0)
+							if (_battleSave->getDepth() > 0)
 								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 							else
 								frame = ResourcePack::SMOKE_OFFSET;
@@ -3126,13 +3126,13 @@ void Map::drawTerrain(Surface* surface)
 					if (itX > 0 && itY > 0 // Redraw fire on south-west & north-east Tiles of big units
 						&& unit != NULL)
 					{
-						const Tile* const tileWest = _save->getTile(mapPosition + Position(-1,0,0));
+						const Tile* const tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
 
 						if (tileWest != NULL)
 						{
 							if (tileWest->getUnit() == unit)
 							{
-								const Tile* const tileNorth = _save->getTile(mapPosition + Position(0,-1,0));
+								const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 								if (tileNorth != NULL)
 								{
@@ -3143,7 +3143,7 @@ void Map::drawTerrain(Surface* surface)
 										{
 											if (tileWest->getFire() == 0)
 											{
-												if (_save->getDepth() > 0)
+												if (_battleSave->getDepth() > 0)
 													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 												else
 													frame = ResourcePack::SMOKE_OFFSET;
@@ -3175,7 +3175,7 @@ void Map::drawTerrain(Surface* surface)
 										{
 											if (tileNorth->getFire() == 0)
 											{
-												if (_save->getDepth() > 0)
+												if (_battleSave->getDepth() > 0)
 													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
 												else
 													frame = ResourcePack::SMOKE_OFFSET;
@@ -3320,13 +3320,13 @@ void Map::drawTerrain(Surface* surface)
 						{
 							// TODO: insert checks for tileEast !south&tc bigWalls & tileSouthEast !north&tc Walls
 
-//							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1)); // def'n above still good.
+//							const Tile* const tileBelow = _battleSave->getTile(mapPosition + Position(0,0,-1)); // def'n above still good.
 							BattleUnit* const unitBelow = tileBelow->getUnit();
 
 							if (unitBelow != NULL
 								&& unitBelow->getVerticalDirection() != 0
 								&& (unitBelow->getUnitVisible() == true
-									|| _save->getDebugMode() == true))
+									|| _battleSave->getDebugMode() == true))
 //								&& unitBelow->getStatus() == STATUS_FLYING
 							{
 								quad = tileBelow->getPosition().x - unitBelow->getPosition().x
@@ -3398,7 +3398,7 @@ void Map::drawTerrain(Surface* surface)
 										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
 							{
 								// TODO: insert checks for tileSouthEast !south&tc bigWalls & tileSouthSouthEast !north&tc Walls
-								const Tile* const tileBelowSouth = _save->getTile(mapPosition + Position(0,1,-1));
+								const Tile* const tileBelowSouth = _battleSave->getTile(mapPosition + Position(0,1,-1));
 
 								if (tileBelowSouth != NULL)
 								{
@@ -3410,7 +3410,7 @@ void Map::drawTerrain(Surface* surface)
 									if (unitBelowSouth != NULL
 										&& unitBelowSouth->getVerticalDirection() != 0
 										&& (unitBelowSouth->getUnitVisible() == true
-											|| _save->getDebugMode() == true))
+											|| _battleSave->getDebugMode() == true))
 									{
 										quad = tileBelowSouth->getPosition().x - unitBelowSouth->getPosition().x
 											+ (tileBelowSouth->getPosition().y - unitBelowSouth->getPosition().y) * 2;
@@ -3461,7 +3461,7 @@ void Map::drawTerrain(Surface* surface)
 							{
 								// checks if the unit will be drawn anyway as unitBelowSouth above
 								// so don't draw it here because it will be redrawn when X increments.
-								const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+								const Tile* const tileBelowSouthEast = _battleSave->getTile(mapPosition + Position(1,1,-1));
 
 								if (tileBelowSouthEast != NULL)
 								{
@@ -3471,9 +3471,9 @@ void Map::drawTerrain(Surface* surface)
 									if (unitBelowSouthEast != NULL
 										&& unitBelowSouthEast->getVerticalDirection() != 0
 										&& (unitBelowSouthEast->getUnitVisible() == true
-											|| _save->getDebugMode() == true))
+											|| _battleSave->getDebugMode() == true))
 									{
-										const Tile* const tileEast = _save->getTile(mapPosition + Position(1,0,0));
+										const Tile* const tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
 
 										if (tileEast != NULL)
 										{
@@ -3534,7 +3534,7 @@ void Map::drawTerrain(Surface* surface)
 								//Log(LOG_INFO) << "redraw TRUE";
 								if (itY < endY - 1)
 								{
-									const Tile* const tileBelowSouthSouth = _save->getTile(mapPosition + Position(0,2,-1));
+									const Tile* const tileBelowSouthSouth = _battleSave->getTile(mapPosition + Position(0,2,-1));
 
 									if (tileBelowSouthSouth != NULL)
 									{
@@ -3557,7 +3557,7 @@ void Map::drawTerrain(Surface* surface)
 
 									if (itX < endX)
 									{
-										const Tile* const tileBelowSouthSouthEast = _save->getTile(mapPosition + Position(1,2,-1));
+										const Tile* const tileBelowSouthSouthEast = _battleSave->getTile(mapPosition + Position(1,2,-1));
 
 										if (tileBelowSouthSouthEast)
 										{
@@ -3583,7 +3583,7 @@ void Map::drawTerrain(Surface* surface)
 								if (itX < endX)
 								{
 									// TODO: if unitBelow this needs to redraw walls to south & east also.
-									const Tile* const tileBelowSouthEast = _save->getTile(mapPosition + Position(1,1,-1));
+									const Tile* const tileBelowSouthEast = _battleSave->getTile(mapPosition + Position(1,1,-1));
 
 									if (tileBelowSouthEast)
 									{
@@ -3630,7 +3630,7 @@ void Map::drawTerrain(Surface* surface)
 
 								if (itX < endX && itY < endY -1)
 								{
-									const Tile* const tileBelowSouthEastEast = _save->getTile(mapPosition + Position(2,1,-1));
+									const Tile* const tileBelowSouthEastEast = _battleSave->getTile(mapPosition + Position(2,1,-1));
 
 									if (tileBelowSouthEastEast != NULL)
 									{
@@ -3662,7 +3662,7 @@ void Map::drawTerrain(Surface* surface)
 									&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
 										|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S)))
 							{
-								const Tile* const tileBelowEast = _save->getTile(mapPosition + Position(1,0,-1));
+								const Tile* const tileBelowEast = _battleSave->getTile(mapPosition + Position(1,0,-1));
 
 								if (tileBelowEast)
 								{
@@ -3671,9 +3671,9 @@ void Map::drawTerrain(Surface* surface)
 									if (unitBelowEast != NULL
 										&& unitBelowEast->getVerticalDirection() != 0
 										&& (unitBelowEast->getUnitVisible() == true
-											|| _save->getDebugMode() == true))
+											|| _battleSave->getDebugMode() == true))
 									{
-										const Tile* const tileEast = _save->getTile(mapPosition + Position(1,0,0));
+										const Tile* const tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
 
 										if (tileEast->getMapData(MapData::O_OBJECT) == NULL
 											|| (tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_EAST
@@ -3727,7 +3727,7 @@ void Map::drawTerrain(Surface* surface)
 						&& _selectorY > itY - _cursorSize
 						&& _selectorX < itX + 1
 						&& _selectorY < itY + 1
-						&& _save->getBattleState()->getMouseOverIcons() == false)
+						&& _battleSave->getBattleState()->getMouseOverIcons() == false)
 					{
 						if (_camera->getViewLevel() == itZ)
 						{
@@ -3735,9 +3735,9 @@ void Map::drawTerrain(Surface* surface)
 							{
 								if (unit != NULL
 									&& (unit->getUnitVisible() == true
-										|| _save->getDebugMode() == true)
+										|| _battleSave->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
-										|| unit->getFaction() != _save->getSide()))
+										|| unit->getFaction() != _battleSave->getSide()))
 								{
 									frame = 3 + (_animFrame %2); // yellow flashing box
 								}
@@ -3748,7 +3748,7 @@ void Map::drawTerrain(Surface* surface)
 							{
 								if (unit != NULL
 									&& (unit->getUnitVisible() == true
-										|| _save->getDebugMode() == true))
+										|| _battleSave->getDebugMode() == true))
 								{
 									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
 								}
@@ -3770,7 +3770,7 @@ void Map::drawTerrain(Surface* surface)
 								// kL_note: Use stuff from ProjectileFlyBState::init()
 								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
 								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
-								const BattleAction* const action = _save->getBattleGame()->getCurrentAction();
+								const BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction();
 
 								int accuracy = static_cast<int>(Round(
 													action->actor->getFiringAccuracy(
@@ -3780,7 +3780,7 @@ void Map::drawTerrain(Surface* surface)
 								const RuleItem* const weaponRule = action->weapon->getRules();
 								const int
 									lowerLimit = weaponRule->getMinRange(),
-									distance = _save->getTileEngine()->distance(
+									distance = _battleSave->getTileEngine()->distance(
 																			Position(
 																					itX,
 																					itY,
@@ -3825,31 +3825,31 @@ void Map::drawTerrain(Surface* surface)
 							}
 							else if (_cursorType == CT_THROW) // indicator for Throwing.
 							{
-								BattleAction* const action = _save->getBattleGame()->getCurrentAction();
+								BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction();
 								action->target = Position(
 														itX,
 														itY,
 														itZ);
 
 								const Position
-									originVoxel = _save->getTileEngine()->getOriginVoxel(
+									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
 																					*action,
 																					NULL),
 									targetVoxel = Position(
 														itX * 16 + 8,
 														itY * 16 + 8,
-														itZ * 24 + 2 - _save->getTile(action->target)->getTerrainLevel());
+														itZ * 24 + 2 - _battleSave->getTile(action->target)->getTerrainLevel());
 
 								unsigned int accuracy = 0;
 								Uint8 color = Palette::blockOffset(2)+3; // red
 
-								const bool canThrow = _save->getTileEngine()->validateThrow(
+								const bool canThrow = _battleSave->getTileEngine()->validateThrow(
 																						*action,
 																						originVoxel,
 																						targetVoxel);
 								if (canThrow == true)
 								{
-									accuracy = static_cast<unsigned int>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.));
+									accuracy = static_cast<unsigned int>(Round(_battleSave->getSelectedUnit()->getThrowingAccuracy() * 100.));
 									color = Palette::blockOffset(3)+3; // green
 								}
 
@@ -3912,7 +3912,7 @@ void Map::drawTerrain(Surface* surface)
 										0);
 							}
 
-							if (_save->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
+							if (_battleSave->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
 							{
 								wpID->setValue(waypid);
 								wpID->draw();
@@ -3937,14 +3937,14 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// Draw Map's border-sprite only on ground tiles
-					if (itZ == _save->getGroundLevel()
+					if (itZ == _battleSave->getGroundLevel()
 						|| (itZ == 0
-							&& _save->getGroundLevel() == -1))
+							&& _battleSave->getGroundLevel() == -1))
 					{
 						if (   itX == 0
-							|| itX == _save->getMapSizeX() - 1
+							|| itX == _battleSave->getMapSizeX() - 1
 							|| itY == 0
-							|| itY == _save->getMapSizeY() - 1)
+							|| itY == _battleSave->getMapSizeY() - 1)
 						{
 							srfSprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(330); // gray square cross
 							srfSprite->blitNShade(
@@ -3967,10 +3967,10 @@ void Map::drawTerrain(Surface* surface)
 
 	// Draw Bouncing Arrow over selected unit.
 	if (getCursorType() != CT_NONE
-		&& (_save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode() == true))
+		&& (_battleSave->getSide() == FACTION_PLAYER
+			|| _battleSave->getDebugMode() == true))
 	{
-		unit = _save->getSelectedUnit();
+		unit = _battleSave->getSelectedUnit();
 		if (unit != NULL
 			&& unit->getStatus() != STATUS_WALKING
 			&& unit->getPosition().z <= _camera->getViewLevel())
@@ -4059,7 +4059,7 @@ void Map::drawTerrain(Surface* surface)
 						&& screenPosition.y > -_spriteHeight
 						&& screenPosition.y < surface->getHeight() + _spriteHeight)
 					{
-						tile = _save->getTile(mapPosition);
+						tile = _battleSave->getTile(mapPosition);
 
 						if (tile == NULL
 							|| tile->isDiscovered(0) == false
@@ -4072,7 +4072,7 @@ void Map::drawTerrain(Surface* surface)
 
 						if (_previewSetting & PATH_ARROWS)
 						{
-							const Tile* const tileBelow = _save->getTile(mapPosition + Position(0,0,-1));
+							const Tile* const tileBelow = _battleSave->getTile(mapPosition + Position(0,0,-1));
 
 							if (itZ > 0
 								&& tile->hasNoFloor(tileBelow) == true)
@@ -4107,8 +4107,8 @@ void Map::drawTerrain(Surface* surface)
 							if (tile->getTUMarker() > 9)
 								offset_x = 4;
 
-							if (_save->getSelectedUnit() != NULL
-								&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							if (_battleSave->getSelectedUnit() != NULL
+								&& _battleSave->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
 								offset_y += 1;
 								if (!(_previewSetting & PATH_ARROWS))
@@ -4278,19 +4278,19 @@ void Map::animate(bool redraw)
 	// animate tiles
 	for (int
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		_save->getTiles()[i]->animate();
+		_battleSave->getTiles()[i]->animate();
 	}
 
 	// animate certain units (large flying units have a propulsion animation)
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if (_save->getDepth() > 0
+		if (_battleSave->getDepth() > 0
 			&& (*i)->getFloorAbove() == false)
 		{
 			(*i)->breathe();
@@ -4455,7 +4455,7 @@ void Map::calculateWalkingOffset(
 			offset->x = -16;
 		}
 
-		if (_save->getDepth() > 0)
+		if (_battleSave->getDepth() > 0)
 		{
 			unit->setFloorAbove(false);
 
@@ -4465,11 +4465,11 @@ void Map::calculateWalkingOffset(
 				for (int
 						z = std::min(
 								_camera->getViewLevel(),
-								_save->getMapSizeZ() - 1);
+								_battleSave->getMapSizeZ() - 1);
 						z != unit->getPosition().z;
 						--z)
 				{
-					if (_save->getTile(Position(
+					if (_battleSave->getTile(Position(
 											unit->getPosition().x,
 											unit->getPosition().y,
 											z))->hasNoFloor(NULL) == false)
@@ -4508,7 +4508,7 @@ int Map::getTerrainLevel(
 				y < unitSize;
 				++y)
 		{
-			lowTest = _save->getTile(pos + Position(x,y,0))->getTerrainLevel();
+			lowTest = _battleSave->getTile(pos + Position(x,y,0))->getTerrainLevel();
 			if (lowTest < lowLevel)
 				lowLevel = lowTest;
 		}
@@ -4549,8 +4549,8 @@ CursorType Map::getCursorType() const
 void Map::cacheUnits()
 {
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		cacheUnit(*i);
@@ -4574,7 +4574,7 @@ void Map::cacheUnit(BattleUnit* const unit)
 												width,
 												_spriteHeight,
 												0,0,
-												_save->getDepth() != 0);
+												_battleSave->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 
 	const int unitSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();
@@ -4866,7 +4866,7 @@ void Map::setNoDraw(bool noDraw)
  */
 SavedBattleGame* Map::getSavedBattle() const
 {
-	return _save;
+	return _battleSave;
 }
 
 /**
