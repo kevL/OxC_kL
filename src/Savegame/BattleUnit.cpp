@@ -1455,10 +1455,10 @@ void BattleUnit::knockOut(BattlescapeGame* battleGame)
 	}
 	else if (_spawnUnit.empty() == false)
 	{
-		BattleUnit* const newUnit = battleGame->convertUnit(
+		BattleUnit* const conUnit = battleGame->convertUnit(
 														this,
 														_spawnUnit);
-		newUnit->knockOut(battleGame); // -> STATUS_UNCONSCIOUS
+		conUnit->knockOut(battleGame); // -> STATUS_UNCONSCIOUS
 	}
 	else
 		_stunLevel = _health;

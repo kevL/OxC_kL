@@ -1,3 +1,4 @@
+# 'Xcom1Ruleset.rul'
 # X-COM 1 (UFO: Enemy Unknown) ruleset
 # For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
 facilities:
@@ -195,7 +196,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
         - BLANKS
         - PLANE
       mapBlocks:
-        - name: PLANE
+        - type: PLANE
           width: 10
           length: 20
   - type: STR_INTERCEPTOR
@@ -254,7 +255,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
         - BLANKS
         - LIGHTNIN
       mapBlocks:
-        - name: LIGHTNIN
+        - type: LIGHTNIN
           width: 20
           length: 10
     deployment:
@@ -297,7 +298,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
         - BLANKS
         - AVENGER
       mapBlocks:
-        - name: AVENGER
+        - type: AVENGER
           width: 10
           length: 20
 craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasmabeam

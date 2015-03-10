@@ -30,9 +30,9 @@
 //#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
 
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -109,7 +109,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 	_game->popState();
 	_game->popState();
 
-	SavedBattleGame* battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
+	SavedBattleGame* const battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
 	_game->getSavedGame()->setBattleGame(battleSave);
 
 	BattlescapeGenerator bGen = BattlescapeGenerator(_game);
@@ -119,7 +119,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 			i != _game->getRuleset()->getDeploymentsList().end();
 			++i)
 	{
-		AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(*i);
+		const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(*i);
 		if (ruleDeploy->isFinalDestination() == true)
 		{
 			battleSave->setMissionType(*i);

@@ -80,8 +80,6 @@ private:
 
 		/// Gets a randomly textured terrain-type for a given target.
 		std::string getRandomTerrain(const Target* const target = NULL) const;
-		/// Gets a randomly textured terrain-type for a Globe texture.
-//		std::string getRandomTerrain(int texture) const;
 
 		/// Gets the alien deployment for this Texture.
 		std::string getTextureDeployment() const;

@@ -3733,7 +3733,7 @@ terrains:
       - type: MOUNT12
         width: 20
         length: 20
-  - name: UBASE
+  - type: UBASE
     script: ALIENBASE
 #    script: ALIENBASE # note: Done
 #    in alienDeployment, type: STR_ALIEN_BASE_ASSAULT
@@ -3747,56 +3747,56 @@ terrains:
       - U_BASE2
 #    largeBlockLimit: 3
     mapBlocks:
-      - name: UBASE_00
+      - type: UBASE_00
         width: 20
         length: 20
         groups: 3
 #        type: 7
-      - name: UBASE_01
+      - type: UBASE_01
         width: 20
         length: 20
-      - name: UBASE_02
+      - type: UBASE_02
         width: 20
         length: 20
-      - name: UBASE_03
+      - type: UBASE_03
         width: 20
         length: 20
 #        items:
 #          STR_ELERIUM_115:
 #            - [2, 14, 1]
-      - name: UBASE_04
+      - type: UBASE_04
         width: 10
         length: 10
         groups: 2
         revealedFloors: 1
 #        type: 6
-      - name: UBASE_05
+      - type: UBASE_05
         width: 10
         length: 10
-      - name: UBASE_06
+      - type: UBASE_06
         width: 10
         length: 10
-      - name: UBASE_07
+      - type: UBASE_07
         width: 10
         length: 10
         groups: 1
 #        type: 4
-      - name: UBASE_08
+      - type: UBASE_08
         width: 10
         length: 10
-      - name: UBASE_09
+      - type: UBASE_09
         width: 10
         length: 10
-      - name: UBASE_10
+      - type: UBASE_10
         width: 10
         length: 10
-      - name: UBASE_11
+      - type: UBASE_11
         width: 10
         length: 10
 #       UBASE_12 is impassable, 13 and 14 are apparently unused.
 #       In the interest of preserving an original experience they have been
 #       disabled by being added to group 5, which is unused in the scripts.
-      - name: UBASE_12
+      - type: UBASE_12
         width: 10
         length: 10
         items:
@@ -3804,109 +3804,109 @@ terrains:
             - [4, 4, 0]
 #        groups: 5
 #        maxCount: 1
-      - name: UBASE_13
+      - type: UBASE_13
         width: 10
         length: 10
 #        groups: 5
-      - name: UBASE_14
+      - type: UBASE_14
         width: 10
         length: 10
 #        groups: 5
-      - name: UBASE_15
+      - type: UBASE_15
         width: 20
         length: 20
         groups: 4
 #        type: 8
-      - name: UBASE_19
+      - type: UBASE_19
         width: 20
         length: 20
         groups: 3
 #        type: 7
-      - name: UBASE_20
+      - type: UBASE_20
         width: 20
         length: 20
         groups: 3
 #        type: 7
-      - name: UBASE_21
+      - type: UBASE_21
         width: 20
         length: 20
-      - name: UBASE_22
+      - type: UBASE_22
         width: 20
         length: 20
-      - name: UBASE_23
+      - type: UBASE_23
         width: 20
         length: 20
-      - name: UBASE_24
+      - type: UBASE_24
         width: 10
         length: 10
         revealedFloors: 1
 #        type: 6
-      - name: UBASE_25
+      - type: UBASE_25
         width: 10
         length: 10
-      - name: UBASE_26
+      - type: UBASE_26
         width: 10
         length: 10
-      - name: UBASE_27
+      - type: UBASE_27
         width: 10
         length: 10
-      - name: UBASE_28
+      - type: UBASE_28
         width: 10
         length: 10
-      - name: UBASE_29
+      - type: UBASE_29
         width: 10
         length: 10
-      - name: UBASE_30
+      - type: UBASE_30
         width: 10
         length: 10
-      - name: UBASE_31
+      - type: UBASE_31
         width: 10
         length: 10
-      - name: UBASE_32
+      - type: UBASE_32
         width: 10
         length: 10
         items:
           STR_ELERIUM_115:
             - [4, 4, 0]
 #        maxCount: 1
-      - name: UBASE_33
+      - type: UBASE_33
         width: 10
         length: 10
-      - name: UBASE_34
+      - type: UBASE_34
         width: 20
         length: 20
-      - name: UBASE_35
+      - type: UBASE_35
         width: 20
         length: 20
-      - name: UBASE_36
+      - type: UBASE_36
         width: 10
         length: 10
-      - name: UBASE_37
+      - type: UBASE_37
         width: 10
         length: 10
-      - name: UBASE_38
+      - type: UBASE_38
         width: 10
         length: 10
-      - name: UBASE_39
+      - type: UBASE_39
         width: 10
         length: 10
-      - name: UBASE_40
+      - type: UBASE_40
         width: 20
         length: 20
         items:
           STR_ELERIUM_115:
-            - [1, 9, 1]
-            - [9, 1, 1]
-            - [9, 17, 1]
+            - [ 1, 9, 1]
+            - [ 9, 1, 1]
+            - [ 9,17, 1]
             - [17, 9, 1]
-      - name: UBASE_41
+      - type: UBASE_41
         width: 20
         length: 20
         items:
           STR_ELERIUM_115:
-            - [3, 9, 1]
+            - [ 3, 9, 1]
             - [15, 9, 1]
-  - name: URBAN
+  - type: URBAN
     script: URBAN
     mapDataSets:
       - BLANKS
@@ -3923,57 +3923,57 @@ terrains:
       - FEMALE_CIVILIAN2
       - FEMALE_CIVILIAN3
     mapBlocks:
-      - name: URBAN00
+      - type: URBAN00
         width: 10
         length: 10
         groups: 2
-      - name: URBAN01
+      - type: URBAN01
         width: 10
         length: 10
         groups: 3
-      - name: URBAN02
+      - type: URBAN02
         width: 10
         length: 10
         groups: 4
-      - name: URBAN03
+      - type: URBAN03
         width: 10
         length: 10
         groups: [0, 1]
-      - name: URBAN04
+      - type: URBAN04
         width: 10
         length: 10
         groups: [0, 1]
-      - name: URBAN05
+      - type: URBAN05
         width: 20
         length: 20
-      - name: URBAN06
+      - type: URBAN06
         width: 20
         length: 20
-      - name: URBAN07
+      - type: URBAN07
         width: 20
         length: 20
-      - name: URBAN08
+      - type: URBAN08
         width: 20
         length: 20
-      - name: URBAN09
+      - type: URBAN09
         width: 20
         length: 20
-      - name: URBAN14
+      - type: URBAN14
         width: 10
         length: 10
-      - name: URBAN15
+      - type: URBAN15
         width: 10
         length: 10
-      - name: URBAN16
+      - type: URBAN16
         width: 10
         length: 10
-      - name: URBAN17
+      - type: URBAN17
         width: 10
         length: 10
-      - name: URBAN18
+      - type: URBAN18
         width: 10
         length: 10
-  - name: URBAN2
+  - type: URBAN2
     script: URBAN
     mapDataSets:
       - BLANKS
@@ -3992,234 +3992,234 @@ terrains:
       - FEMALE_CIVILIAN3
 #    roadTypeOdds: [50, 25]
     mapBlocks:
-      - name: CF00
+      - type: CF00
         width: 10
         length: 10
         groups: 2
 #        type: 2
-      - name: CF01
+      - type: CF01
         width: 10
         length: 10
         groups: 3
 #        type: 3
-      - name: CF02
+      - type: CF02
         width: 10
         length: 10
         groups: 4
 #        type: 4
-      - name: CF03
+      - type: CF03
         width: 10
         length: 10
         groups: 1
 #        type: 1
-      - name: CF04
+      - type: CF04
         width: 10
         length: 10
-      - name: CF05
+      - type: CF05
         width: 20
         length: 20
-      - name: CF06
+      - type: CF06
         width: 20
         length: 20
-      - name: CF07
+      - type: CF07
         width: 20
         length: 20
-      - name: CF08
+      - type: CF08
         width: 20
         length: 20
-      - name: CF09
+      - type: CF09
         width: 20
         length: 20
-      - name: CF14
+      - type: CF14
         width: 20
         length: 20
-      - name: CF15
+      - type: CF15
         width: 10
         length: 10
-      - name: CF16
+      - type: CF16
         width: 10
         length: 10
-      - name: CF17
+      - type: CF17
         width: 10
         length: 10
-      - name: CF18
+      - type: CF18
         width: 20
         length: 20
-      - name: CF100
+      - type: CF100
         width: 10
         length: 10
         groups: 2
 #        type: 2
-      - name: CF101
+      - type: CF101
         width: 10
         length: 10
         groups: 3
 #        type: 3
-      - name: CF102
+      - type: CF102
         width: 10
         length: 10
         groups: 4
 #        type: 4
-      - name: CF103
+      - type: CF103
         width: 10
         length: 10
         groups: 1
 #        type: 1
-      - name: CF104
+      - type: CF104
         width: 10
         length: 10
         groups: 1
 #        type: 1
-      - name: CF105
+      - type: CF105
         width: 20
         length: 20
-      - name: CF106
+      - type: CF106
         width: 20
         length: 20
-      - name: CF107
+      - type: CF107
         width: 20
         length: 20
-      - name: CF108
+      - type: CF108
         width: 20
         length: 20
-      - name: CF109
+      - type: CF109
         width: 20
         length: 20
-      - name: CF114
+      - type: CF114
         width: 10
         length: 10
-      - name: CF115
+      - type: CF115
         width: 10
         length: 10
-      - name: CF116
+      - type: CF116
         width: 10
         length: 10
-      - name: CF117
+      - type: CF117
         width: 10
         length: 10
-      - name: CF118
+      - type: CF118
         width: 10
         length: 10
-      - name: CF20
+      - type: CF20
         width: 20
         length: 20
-      - name: CF21
+      - type: CF21
         width: 20
         length: 20
-      - name: CF23
+      - type: CF23
         width: 20
         length: 20
-      - name: CF24
+      - type: CF24
         width: 10
         length: 10
         groups: 3
 #        type: 3
-      - name: CF25
+      - type: CF25
         width: 10
         length: 10
         groups: 2
 #        type: 2
-      - name: CF26
+      - type: CF26
         width: 10
         length: 10
         groups: 3
 #        type: 3
-      - name: CF27
+      - type: CF27
         width: 10
         length: 10
         groups: 2
 #        type: 2
-  - name: XBASE
+  - type: XBASE
     script: XBASE
     mapDataSets:
       - BLANKS
       - XBASE1
       - XBASE2
     mapBlocks:
-      - name: XBASE_00
+      - type: XBASE_00
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_01
+        revealedFloors: [0,1]
+      - type: XBASE_01
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_02
+        revealedFloors: [0,1]
+      - type: XBASE_02
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_03
+        revealedFloors: [0,1]
+      - type: XBASE_03
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_04
+        revealedFloors: [0,1]
+      - type: XBASE_04
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_05
+        revealedFloors: [0,1]
+      - type: XBASE_05
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_06
+        revealedFloors: [0,1]
+      - type: XBASE_06
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_07
+        revealedFloors: [0,1]
+      - type: XBASE_07
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_08
+        revealedFloors: [0,1]
+      - type: XBASE_08
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_09
+        revealedFloors: [0,1]
+      - type: XBASE_09
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_10
+        revealedFloors: [0,1]
+      - type: XBASE_10
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_11
+        revealedFloors: [0,1]
+      - type: XBASE_11
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_12
+        revealedFloors: [0,1]
+      - type: XBASE_12
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_13
+        revealedFloors: [0,1]
+      - type: XBASE_13
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_14
+        revealedFloors: [0,1]
+      - type: XBASE_14
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_15
+        revealedFloors: [0,1]
+      - type: XBASE_15
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_16
+        revealedFloors: [0,1]
+      - type: XBASE_16
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_17
+        revealedFloors: [0,1]
+      - type: XBASE_17
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_18
+        revealedFloors: [0,1]
+      - type: XBASE_18
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_19
+        revealedFloors: [0,1]
+      - type: XBASE_19
         width: 10
         length: 10
-        revealedFloors: [0, 1]
-      - name: XBASE_20
+        revealedFloors: [0,1]
+      - type: XBASE_20
         width: 10
         length: 10
-        revealedFloors: [0, 1]
+        revealedFloors: [0,1]
 extraStrings:
   - type: en-US
     strings:

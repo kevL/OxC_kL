@@ -1,3 +1,4 @@
+# 'MapScripts.rul'
 mapScripts:
   - type: DEFAULT #forest, mountain
     commands:

@@ -1,3 +1,4 @@
+# 'Geography.rul'
 countries:
   - type: STR_ALGERIA
     fundingBase: 100

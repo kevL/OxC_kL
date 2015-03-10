@@ -1,3 +1,4 @@
+# 'UFOs.rul'
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
@@ -16,7 +17,7 @@ ufos:
         - BLANKS
         - UFO1
       mapBlocks:
-        - name: UFO1A
+        - type: UFO1A
           width: 10
           length: 10
   - type: STR_MEDIUM_SCOUT
@@ -39,28 +40,28 @@ ufos:
         - U_BITS
         - UFOL83
       mapBlocks:
-        - name: UFO_110
+        - type: UFO_110
           width: 10
           length: 10
-        - name: ox_ufo1
+        - type: ox_ufo1
           width: 10
           length: 10
-        - name: ox_ufo1b
+        - type: ox_ufo1b
           width: 10
           length: 10
-        - name: ox_ufo1c
+        - type: ox_ufo1c
           width: 10
           length: 10
-        - name: ox_ufo1d
+        - type: ox_ufo1d
           width: 10
           length: 10
-        - name: ox_ufo1e
+        - type: ox_ufo1e
           width: 10
           length: 10
-        - name: ox_ufo1f
+        - type: ox_ufo1f
           width: 10
           length: 10
-        - name: ox_ufo1g
+        - type: ox_ufo1g
           width: 10
           length: 10
   - type: STR_LARGE_SCOUT
@@ -83,43 +84,43 @@ ufos:
         - U_BITS
         - UFOL83
       mapBlocks:
-        - name: UFO_120
+        - type: UFO_120
           width: 20
           length: 20
-        - name: ox_ufo2a
+        - type: ox_ufo2a
           width: 20
           length: 20
-        - name: ox_ufo2b
+        - type: ox_ufo2b
           width: 20
           length: 20
-        - name: ox_ufo2c
+        - type: ox_ufo2c
           width: 20
           length: 20
-        - name: ox_ufo2d
+        - type: ox_ufo2d
           width: 20
           length: 20
-        - name: ox_ufo2e
+        - type: ox_ufo2e
           width: 20
           length: 20
-        - name: ox_ufo2f
+        - type: ox_ufo2f
           width: 20
           length: 20
-        - name: ox_ufo2g
+        - type: ox_ufo2g
           width: 20
           length: 20
-        - name: ox_ufo2h
+        - type: ox_ufo2h
           width: 20
           length: 20
-        - name: ox_ufo2i
+        - type: ox_ufo2i
           width: 20
           length: 20
-        - name: ox_ufo2j
+        - type: ox_ufo2j
           width: 20
           length: 20
-        - name: ox_ufo2k
+        - type: ox_ufo2k
           width: 20
           length: 20
-        - name: ox_ufo2l
+        - type: ox_ufo2l
           width: 20
           length: 20
   - type: STR_HARVESTER
@@ -143,40 +144,40 @@ ufos:
         - U_BITS
         - UFOL83
       mapBlocks:
-        - name: UFO_130
+        - type: UFO_130
           width: 20
           length: 20
-        - name: ox_ufo3a
+        - type: ox_ufo3a
           width: 20
           length: 20
-        - name: ox_ufo3b
+        - type: ox_ufo3b
           width: 20
           length: 20
-        - name: ox_ufo3c
+        - type: ox_ufo3c
           width: 20
           length: 20
-        - name: ox_ufo3d
+        - type: ox_ufo3d
           width: 20
           length: 20
-        - name: ox_ufo3e
+        - type: ox_ufo3e
           width: 20
           length: 20
-        - name: ox_ufo3f
+        - type: ox_ufo3f
           width: 20
           length: 20
-        - name: ox_ufo3g
+        - type: ox_ufo3g
           width: 20
           length: 20
-        - name: ox_ufo3h
+        - type: ox_ufo3h
           width: 20
           length: 20
-        - name: ox_ufo3i
+        - type: ox_ufo3i
           width: 20
           length: 20
-        - name: ox_ufo3j
+        - type: ox_ufo3j
           width: 20
           length: 20
-        - name: ox_ufo3k
+        - type: ox_ufo3k
           width: 20
           length: 20
   - type: STR_ABDUCTOR
@@ -200,37 +201,37 @@ ufos:
         - U_BITS
         - UFOL83
       mapBlocks:
-        - name: UFO_140
+        - type: UFO_140
           width: 20
           length: 20
-        - name: ox_ufo4a
+        - type: ox_ufo4a
           width: 20
           length: 20
-        - name: ox_ufo4b
+        - type: ox_ufo4b
           width: 20
           length: 20
-        - name: ox_ufo4c
+        - type: ox_ufo4c
           width: 20
           length: 20
-        - name: ox_ufo4d
+        - type: ox_ufo4d
           width: 20
           length: 20
-        - name: ox_ufo4e
+        - type: ox_ufo4e
           width: 20
           length: 20
-        - name: ox_ufo4f
+        - type: ox_ufo4f
           width: 20
           length: 20
-        - name: ox_ufo4g
+        - type: ox_ufo4g
           width: 20
           length: 20
-        - name: ox_ufo4h
+        - type: ox_ufo4h
           width: 20
           length: 20
-        - name: ox_ufo4i
+        - type: ox_ufo4i
           width: 20
           length: 20
-        - name: ox_ufo4j
+        - type: ox_ufo4j
           width: 20
           length: 20
   - type: STR_TERROR_SHIP
@@ -254,28 +255,28 @@ ufos:
         - U_BITS
         - UFOL83
       mapBlocks:
-        - name: ox_ufo5a
+        - type: ox_ufo5a
           width: 30
           length: 20
-        - name: ox_ufo5b
+        - type: ox_ufo5b
           width: 20
           length: 30
-        - name: ox_ufo5c
+        - type: ox_ufo5c
           width: 30
           length: 20
-        - name: ox_ufo5d
+        - type: ox_ufo5d
           width: 20
           length: 30
-        - name: ox_ufo5e
+        - type: ox_ufo5e
           width: 30
           length: 20
-        - name: ox_ufo5f
+        - type: ox_ufo5f
           width: 20
           length: 30
-        - name: ox_ufo5g
+        - type: ox_ufo5g
           width: 30
           length: 20
-        - name: ox_ufo5h
+        - type: ox_ufo5h
           width: 20
           length: 30
   - type: STR_BATTLESHIP
@@ -298,7 +299,7 @@ ufos:
         - U_PODS
         - U_BITS
       mapBlocks:
-        - name: UFO_160
+        - type: UFO_160
           width: 30
           length: 30
   - type: STR_SUPPLY_SHIP
@@ -322,16 +323,16 @@ ufos:
         - U_BITS
         - UFOL83
       mapBlocks:
-        - name: ox_ufo7a
+        - type: ox_ufo7a
           width: 30
           length: 20
-        - name: ox_ufo7b
+        - type: ox_ufo7b
           width: 20
           length: 30
-        - name: ox_ufo7c
+        - type: ox_ufo7c
           width: 30
           length: 20
-        - name: ox_ufo7d
+        - type: ox_ufo7d
           width: 20
           length: 30
 #^^^^^^You can change the supply ship loading door occurrence frequency here^^^^^ :p

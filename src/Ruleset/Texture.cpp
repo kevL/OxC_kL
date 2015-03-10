@@ -133,55 +133,6 @@ std::string Texture::getRandomTerrain(const Target* const target) const
 }
 
 /**
- * Calculates a random terrain-type based on actual Globe texture.
- * @param texture - the texture to choose a terrain-type from
- * @return, terrain string
- */
-/*std::string Texture::getRandomTerrain(int texture) const
-{
-	Log(LOG_INFO) << "Texture::getRandomTerrain(INT)";
-	double
-		lon,
-		lat;
-	std::map<int, std::string> eligibleTerrains;
-
-	int totalWeight = 0;
-
-	for (std::vector<TerrainCriteria>::const_iterator
-			i = _terrains.begin();
-			i != _terrains.end();
-			++i)
-	{
-		Log(LOG_INFO) << ". terrainType = " << i->type;
-
-		if (i->weight > 0)
-		{
-			Log(LOG_INFO) << ". . weight = " << i->weight;
-
-			totalWeight += i->weight;
-			eligibleTerrains[totalWeight] = i->type;
-		}
-	}
-
-	if (totalWeight > 0)
-	{
-		const int pick = RNG::generate(
-									1,
-									totalWeight);
-		for (std::map<int, std::string>::const_iterator
-				i = eligibleTerrains.begin();
-				i != eligibleTerrains.end();
-				++i)
-		{
-			if (pick <= i->first)
-				return i->second;
-		}
-	}
-
-	return ""; // this means nothing. Literally. That is, if the code runs here -> CTD.
-} */
-
-/**
  * Gets this Texture's alien deployment.
  * @return, deployment-type string
  */

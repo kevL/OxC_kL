@@ -6943,7 +6943,7 @@
 1424390940 f:\git\openxcom\src\geoscape\confirmnewbasestate.h
 	"../Engine/State.h"
 
-1425872617 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
+1425957063 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
 	"ConfirmCydoniaState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BattlescapeState.h"
@@ -6951,9 +6951,9 @@
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Surface.h"
-	"../Interface/Window.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
+	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/AlienDeployment.h"
 	"../Savegame/SavedBattleGame.h"
@@ -7161,7 +7161,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1425940088 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1425947623 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8604,7 +8604,7 @@
 1424390936 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1425933172 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1425946512 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
@@ -8629,7 +8629,7 @@
 	"AlienBase.h"
 	"../Engine/Language.h"
 
-1425938872 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1425947623 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -11172,7 +11172,7 @@
 1424390937 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"
 
-1425871178 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1425947623 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
 	"Polygon.h"
 	"Polyline.h"
@@ -11503,7 +11503,7 @@
 1425945619 source:f:\git\openxcom\src\version.cpp
 	"version.h"
 
-1425948192 f:\git\openxcom\src\ruleset\texture.h
+1425957215 f:\git\openxcom\src\ruleset\texture.h
 
 1425948339 source:f:\git\openxcom\src\ruleset\texture.cpp
 	"Texture.h"
