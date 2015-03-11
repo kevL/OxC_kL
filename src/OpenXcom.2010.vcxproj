@@ -467,7 +467,8 @@
     <ClCompile Include="Ruleset\ExtraSounds.cpp" />
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
-    <ClCompile Include="Ruleset\Texture.cpp" />
+    <ClCompile Include="Ruleset\RuleCity.cpp" />
+    <ClCompile Include="Ruleset\RuleTexture.cpp" />
     <ClCompile Include="Ruleset\MapScript.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
     <ClCompile Include="Ruleset\OperationPool.cpp" />
@@ -475,7 +476,6 @@
     <ClCompile Include="Ruleset\Polyline.cpp" />
     <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
-    <ClCompile Include="Ruleset\City.cpp" />
     <ClCompile Include="Ruleset\MapBlock.cpp" />
     <ClCompile Include="Ruleset\MapDataSet.cpp" />
     <ClCompile Include="Ruleset\MapData.cpp" />
@@ -715,6 +715,7 @@
     <ClInclude Include="Engine\Zoom.h" />
     <ClInclude Include="fmath.h" />
     <ClInclude Include="Geoscape\AlienBaseState.h" />
+    <ClInclude Include="Geoscape\Cord.h" />
     <ClInclude Include="Geoscape\MissionDetectedState.h" />
     <ClInclude Include="Geoscape\AllocatePsiTrainingState.h" />
     <ClInclude Include="Geoscape\BaseDefenseState.h" />
@@ -805,12 +806,12 @@
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
     <ClInclude Include="Ruleset\ArticleDefinition.h" />
-    <ClInclude Include="Ruleset\City.h" />
     <ClInclude Include="Ruleset\ExtraMusic.h" />
     <ClInclude Include="Ruleset\ExtraSounds.h" />
     <ClInclude Include="Ruleset\ExtraSprites.h" />
     <ClInclude Include="Ruleset\ExtraStrings.h" />
-    <ClInclude Include="Ruleset\Texture.h" />
+    <ClInclude Include="Ruleset\RuleCity.h" />
+    <ClInclude Include="Ruleset\RuleTexture.h" />
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
@@ -856,6 +857,7 @@
     <ClInclude Include="Savegame\BattleUnit.h" />
     <ClInclude Include="Savegame\Country.h" />
     <ClInclude Include="Savegame\Craft.h" />
+    <ClInclude Include="Savegame\CraftId.h" />
     <ClInclude Include="Savegame\CraftWeapon.h" />
     <ClInclude Include="Savegame\CraftWeaponProjectile.h" />
     <ClInclude Include="Savegame\EquipmentLayoutItem.h" />

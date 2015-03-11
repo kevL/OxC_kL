@@ -335,9 +335,6 @@
     <ClCompile Include="Ruleset\RuleCountry.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\City.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\SoldierNamePool.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -955,9 +952,6 @@
     <ClCompile Include="Ruleset\OperationPool.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\Texture.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\MeleeAttackBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -965,6 +959,12 @@
       <Filter>Battlescape</Filter>
     </ClCompile>
     <ClCompile Include="version.cpp" />
+    <ClCompile Include="Ruleset\RuleCity.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleTexture.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1302,9 +1302,6 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleCountry.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\City.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\SoldierNamePool.h">
@@ -1948,14 +1945,19 @@
     <ClInclude Include="Ruleset\OperationPool.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\Texture.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\MeleeAttackBState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\PsiAttackBState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\Cord.h" />
+    <ClInclude Include="Savegame\CraftId.h" />
+    <ClInclude Include="Ruleset\RuleCity.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleTexture.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
