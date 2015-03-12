@@ -716,9 +716,7 @@ void DogfightState::drawCraftDamage()
 		if (_craftDamageAnimTimer->isRunning() == false)
 		{
 			_craftDamageAnimTimer->start();
-
-			if (_currentCraftDamageColor != _color[4]) // red
-				_currentCraftDamageColor = _color[4];
+			_currentCraftDamageColor = _color[4]; // red
 		}
 
 		int rowsToColor = static_cast<int>(std::floor(
