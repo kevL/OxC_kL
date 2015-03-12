@@ -494,6 +494,7 @@ private:
 	std::wstring _name;
 
 	std::vector<int> _loftempsSet;
+	std::pair<Uint8, Uint8> _recolor[2];
 
 	Armor* _armor;
 	Soldier* _geoscapeSoldier;
@@ -509,6 +510,8 @@ private:
 
 	/// Converts an amount of experience to a stat increase.
 	int improveStat(int xp);
+	///
+	void setRecolor(int selectLook);
 
 
 	public:
@@ -623,6 +626,8 @@ private:
 		Surface* getCache(
 				bool* invalid,
 				int part = 0) const;
+		/// Gets unit sprite recolors values.
+		std::pair<Uint8, Uint8> getRecolor(int i) const;
 
 		/// Kneels or stands this unit.
 		void kneel(bool kneel);

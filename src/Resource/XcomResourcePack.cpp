@@ -73,12 +73,15 @@ Sound* kL_soundPop = NULL;
 namespace
 {
 
-struct HairBleach
+/**
+ * Recolor class used in UFO
+ */
+struct HairXCOM1
 {
 	static const Uint8
-		ColorShade	= 15,
-		Hair		= 9 << 4,
-		Face		= 6 << 4;
+		ColorShade = 15,
+		Hair = 9 << 4,
+		Face = 6 << 4;
 
 	///
 	static inline void func(
@@ -89,9 +92,34 @@ struct HairBleach
 			int)
 	{
 		if (src > cutoff
-			&& src <= Face + 15)
+			&& src <= Face + ColorShade)
 		{
 			src = Hair + (src & ColorShade) - 6; // make hair color like male in xcom_0.pck
+		}
+	}
+};
+
+/**
+ * Recolor class used in TFTD
+ */
+struct HairXCOM2
+{
+	static const Uint8
+		HairMan = 4 << 4,
+		HairWoman = 1 << 4;
+
+	///
+	static inline void func(
+			Uint8& src,
+			int,
+			int,
+			int,
+			int)
+	{
+		if (src >= HairMan
+			&& src <= HairMan + HairXCOM1::ColorShade)
+		{
+			src = HairWoman + (src & HairXCOM1::ColorShade);
 		}
 	}
 };
@@ -1702,27 +1730,31 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	if (Options::battleHairBleach == true) // "fix" of hair color of male personal armor
 	{
-		if (_sets.find("XCOM_1.PCK") != _sets.end())
+		std::string ent ("XCOM_1.PCK"); // init.
+
+		if (_sets.find(ent) != _sets.end())
 		{
-			SurfaceSet* const xcom_1 = _sets["XCOM_1.PCK"];
+			SurfaceSet* const xcom_1 = _sets[ent];
+			Surface* srf;
 
 			for (int // chest frame
 					i = 0;
-					i < 16;
+					i != 8;
 					++i)
 			{
-				Surface* const srf = xcom_1->getFrame(4 * 8 + i);
+				srf = xcom_1->getFrame(4 * 8 + i);
 				ShaderMove<Uint8> head = ShaderMove<Uint8>(srf);
 				GraphSubset dim = head.getBaseDomain();
+
 				srf->lock();
 				dim.beg_y = 6;
 				dim.end_y = 9;
 				head.setDomain(dim);
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 5));
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 5));
 				dim.beg_y = 9;
 				dim.end_y = 10;
 				head.setDomain(dim);
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 6));
 				srf->unlock();
 			}
 
@@ -1731,17 +1763,44 @@ void XcomResourcePack::loadBattlescapeResources()
 					i < 3;
 					++i)
 			{
-				Surface* const srf = xcom_1->getFrame(264 + i);
+				srf = xcom_1->getFrame(264 + i);
 				ShaderMove<Uint8> head = ShaderMove<Uint8>(srf);
 				GraphSubset dim = head.getBaseDomain();
+
 				dim.beg_y = 0;
 				dim.end_y = 24;
 				dim.beg_x = 11;
 				dim.end_x = 20;
 				head.setDomain(dim);
 				srf->lock();
-				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
+				ShaderDraw<HairXCOM1>(head, ShaderScalar<Uint8>(HairXCOM1::Face + 6));
 				srf->unlock();
+			}
+		}
+
+		ent = "TDXCOM_?.PCK";
+		for (int
+				j = 0;
+				j != 3;
+				++j)
+		{
+			ent[7] = '0' + static_cast<char>(j);
+			if (_sets.find(ent) != _sets.end())
+			{
+				SurfaceSet* const xcom_2 = _sets[ent];
+				Surface* srf;
+
+				for (int
+					i = 0;
+					i != 8;
+					++i)
+				{
+					srf = xcom_2->getFrame(270 + i); // male chest frame
+
+					srf->lock();
+					ShaderDraw<HairXCOM2>(ShaderSurface(srf));
+					srf->unlock();
+				}
 			}
 		}
 	}

@@ -117,6 +117,17 @@ void UnitSprite::setBattleUnit(
 	_part = part;
 
 	_redraw = true;
+
+	if (Options::battleHairBleach == true)
+	{
+		_colorA = _unit->getRecolor(0);
+		_colorB = _unit->getRecolor(1);
+	}
+	else
+	{
+		_colorA = std::pair<Uint8, Uint8> (); // init.
+		_colorB = std::pair<Uint8, Uint8> (); // init.
+	}
 }
 
 /**
@@ -141,31 +152,112 @@ void UnitSprite::setBattleItem(BattleItem* const item)
 namespace
 {
 
-struct ColorFace
+struct ColorReplace
 {
 	static const Uint8
 		ColorGroup = 15 << 4,
-		ColorShade = 15,
-
-		Hair = 9 << 4,
-		Face = 6 << 4;
+		ColorShade = 15;
 
 	///
+	static inline bool func(
+			Uint8& dest,
+			const Uint8& src,
+			const std::pair<Uint8, Uint8>& face_color)
+	{
+		if ((src & ColorGroup) == face_color.first)
+		{
+			dest = face_color.second + (src & ColorShade);
+			return true;
+		}
+
+		return false;
+	}
+};
+
+struct Color1
+{
 	static inline void func(
-			Uint8& src,
-			const Uint8& hair_color,
-			const Uint8& face_color,
+			Uint8& dest,
+			const Uint8& src,
+			const std::pair<Uint8, Uint8>& colorA,
 			int,
 			int)
 	{
-		if ((src & ColorGroup) == Hair)
-			src = hair_color + (src & ColorShade);
-		else if ((src & ColorGroup) == Face)
-			src = face_color + (src & ColorShade);
+		if (src != 0)
+		{
+			if (ColorReplace::func(
+								dest,
+								src,
+								colorA) == true)
+			{
+				return;
+			}
+
+			dest = src;
+		}
+	}
+};
+
+struct Color2
+{
+	static inline void func(
+			Uint8& dest,
+			const Uint8& src,
+			const std::pair<Uint8, Uint8>& colorA,
+			const std::pair<Uint8, Uint8>& colorB,
+			int)
+	{
+		if (src != 0)
+		{
+			if (ColorReplace::func(
+								dest,
+								src,
+								colorA))
+			{
+				return;
+			}
+
+			if (ColorReplace::func(
+								dest,
+								src,
+								colorB))
+			{
+				return;
+			}
+
+			dest = src;
+		}
 	}
 };
 
 }
+
+
+void UnitSprite::drawRecolored(Surface* src)
+{
+	if (_colorB.first != 0)
+	{
+		lock();
+		ShaderDraw<Color2>(
+					ShaderSurface(this),
+					ShaderSurface(src),
+					ShaderScalar(_colorA),
+					ShaderScalar(_colorB));
+		unlock();
+	}
+	else if (_colorA.first != 0)
+	{
+		lock();
+		ShaderDraw<Color1>(
+					ShaderSurface(this),
+					ShaderSurface(src),
+					ShaderScalar(_colorA));
+		unlock();
+	}
+	else
+		src->blit(this);
+}
+
 
 
 /**
@@ -350,42 +442,7 @@ void UnitSprite::drawRoutine0()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		torso->blit(this);
-
-		if (Options::battleHairBleach == true
-			&& _unit->getGeoscapeSoldier() != NULL)
-		{
-			const SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
-			if (look != LOOK_BLONDE)
-			{
-				Uint8
-					face_color = ColorFace::Face,
-					hair_color = ColorFace::Hair;
-
-				switch (look)
-				{
-//					case LOOK_BLONDE:
-//					break;
-					case LOOK_BROWNHAIR:
-						hair_color = (10<<4) + 4;
-					break;
-					case LOOK_ORIENTAL:
-						face_color = (10<<4);
-						hair_color = (15<<4) + 5;
-					break;
-					case LOOK_AFRICAN:
-						face_color = (10<<4) + 3;
-						hair_color = (10<<4) + 6;
-				}
-
-				lock();
-				ShaderDraw<ColorFace>(
-									ShaderSurface(this),
-									ShaderScalar(hair_color),
-									ShaderScalar(face_color));
-				unlock();
-			}
-		}
+		drawRecolored(torso);
 
 		return;
 	}
@@ -618,65 +675,6 @@ void UnitSprite::drawRoutine0()
 		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
 	}
 
-	Surface
-		* const newTorso	= new Surface(*torso),
-		* const newLegs		= new Surface(*legs),
-		* const newLeftArm	= new Surface(*leftArm),
-		* const newRightArm	= new Surface(*rightArm);
-
-	if (Options::battleHairBleach == true
-		&& _drawingRoutine == 0
-		&& _unit->getGeoscapeSoldier() != NULL)
-	{
-		const SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
-		if (look != LOOK_BLONDE)
-		{
-			Uint8
-				face_color = ColorFace::Face,
-				hair_color = ColorFace::Hair;
-
-			switch (look)
-			{
-//				case LOOK_BLONDE:
-//				break;
-				case LOOK_BROWNHAIR:
-					hair_color = (10<<4) + 4;
-				break;
-				case LOOK_ORIENTAL:
-					face_color = (10<<4);
-					hair_color = (15<<4) + 5;
-				break;
-				case LOOK_AFRICAN:
-					face_color = (10<<4) + 3;
-					hair_color = (10<<4) + 6;
-			}
-
-			lock();
-			ShaderDraw<ColorFace>(
-							ShaderSurface(newLeftArm),
-							ShaderScalar(hair_color),
-							ShaderScalar(face_color));
-			ShaderDraw<ColorFace>(
-							ShaderSurface(newRightArm),
-							ShaderScalar(hair_color),
-							ShaderScalar(face_color));
-			ShaderDraw<ColorFace>(
-							ShaderSurface(newTorso),
-							ShaderScalar(hair_color),
-							ShaderScalar(face_color));
-			ShaderDraw<ColorFace>(
-							ShaderSurface(newLegs),
-							ShaderScalar(hair_color),
-							ShaderScalar(face_color));
-			unlock();
-
-			torso		= newTorso;
-			legs		= newLegs;
-			leftArm		= newLeftArm;
-			rightArm	= newRightArm;
-		}
-	}
-
 	if (_unit->getStatus() == STATUS_AIMING)
 	{
 		if (_itemA == NULL // kL: using Universal Fist. so PUNCH!! ( this is so funny )
@@ -711,10 +709,10 @@ void UnitSprite::drawRoutine0()
 		case 0:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(rightArm);
 		break;
 		case 1:
 			leftArm->blit(this);
@@ -739,28 +737,28 @@ void UnitSprite::drawRoutine0()
 					|| (_itemB
 						&& _itemB->getRules()->isTwoHanded())))
 			{
-				legs->blit(this);
-				torso->blit(this);
-				leftArm->blit(this);
+				drawRecolored(legs);
+				drawRecolored(torso);
+				drawRecolored(leftArm);
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
-				rightArm->blit(this);
+				drawRecolored(rightArm);
 			}
 			else
 			{
-				legs->blit(this);
-				torso->blit(this);
-				leftArm->blit(this);
-				rightArm->blit(this);
+				drawRecolored(legs);
+				drawRecolored(torso);
+				drawRecolored(leftArm);
+				drawRecolored(rightArm);
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
 			}
 		break;
 		case 4:
-			legs->blit(this);
-			rightArm->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(legs);
+			drawRecolored(rightArm);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
@@ -771,30 +769,30 @@ void UnitSprite::drawRoutine0()
 					|| (_itemB
 						&& _itemB->getRules()->isTwoHanded())))
 			{
-				rightArm->blit(this);
-				legs->blit(this);
-				torso->blit(this);
-				leftArm->blit(this);
+				drawRecolored(rightArm);
+				drawRecolored(legs);
+				drawRecolored(torso);
+				drawRecolored(leftArm);
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
 			}
 			else
 			{
-				rightArm->blit(this);
-				legs->blit(this);
+				drawRecolored(rightArm);
+				drawRecolored(legs);
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
-				torso->blit(this);
-				leftArm->blit(this);
+				drawRecolored(torso);
+				drawRecolored(leftArm);
 			}
 		break;
 		case 6:
-			rightArm->blit(this);
-			itemA? itemA->blit(this): void();
-			itemB? itemB->blit(this): void();
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(rightArm);
+			itemA ? itemA->blit(this) : void();
+			itemB ? itemB->blit(this) : void();
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 		break;
 		case 7:
 			if (_unit->getStatus() != STATUS_AIMING
@@ -803,21 +801,21 @@ void UnitSprite::drawRoutine0()
 					|| (_itemB
 						&& _itemB->getRules()->isTwoHanded())))
 			{
-				rightArm->blit(this);
+				drawRecolored(rightArm);
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
-				leftArm->blit(this);
-				legs->blit(this);
-				torso->blit(this);
+				drawRecolored(leftArm);
+				drawRecolored(legs);
+				drawRecolored(torso);
 			}
 			else
 			{
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
-				leftArm->blit(this);
-				rightArm->blit(this);
-				legs->blit(this);
-				torso->blit(this);
+				drawRecolored(leftArm);
+				drawRecolored(rightArm);
+				drawRecolored(legs);
+				drawRecolored(torso);
 			}
 		break;
 	}
@@ -830,11 +828,6 @@ void UnitSprite::drawRoutine0()
 		itemA->setX(0);
 	if (itemB)
 		itemB->setX(0);
-
-	delete newTorso;
-	delete newLegs;
-	delete newLeftArm;
-	delete newRightArm;
 }
 
 /**
@@ -879,7 +872,7 @@ void UnitSprite::drawRoutine1()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		torso->blit(this);
+		drawRecolored(torso);
 
 		return;
 	}
@@ -1006,46 +999,46 @@ void UnitSprite::drawRoutine1()
 		case 0:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			leftArm->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(torso);
+			drawRecolored(rightArm);
 		break;
 		case 1:
 		case 2:
-			leftArm->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(torso);
+			drawRecolored(rightArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 3:
 		case 4:
-			torso->blit(this);
-			leftArm->blit(this);
-			rightArm->blit(this);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
+			drawRecolored(rightArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 5:
-			rightArm->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(rightArm);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 6:
-			rightArm->blit(this);
+			drawRecolored(rightArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 		break;
 		case 7:
-			rightArm->blit(this);
+			drawRecolored(rightArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			leftArm->blit(this);
-			torso->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(torso);
 		break;
 	}
 
@@ -1079,7 +1072,7 @@ void UnitSprite::drawRoutine2()
 		&& hoverTank != 0)
 	{
 		srf = _unitSurface->getFrame(104 + ((_part - 1) * 8) + _animationFrame);
-		srf->blit(this);
+		drawRecolored(srf);
 	}
 
 	// kL_note: This is a fix, more of a workaround for tank's reverse strafing move.
@@ -1093,7 +1086,7 @@ void UnitSprite::drawRoutine2()
 
 	// draw the tank itself
 	srf = _unitSurface->getFrame(hoverTank + (_part * 8) + dirFace);
-	srf->blit(this);
+	drawRecolored(srf);
 
 	// draw the turret, together with the last part
 //	if (_part == 3 &&
@@ -1133,7 +1126,7 @@ void UnitSprite::drawRoutine2()
 
 		srf->setX(turretOffsetX);
 		srf->setY(turretOffsetY);
-		srf->blit(this);
+		drawRecolored(srf);
 	}
 }
 
@@ -1142,21 +1135,20 @@ void UnitSprite::drawRoutine2()
  */
 void UnitSprite::drawRoutine3()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
-	Surface* srf = NULL;
+	Surface* srf;
 
 	// draw the animated propulsion below the hwp
 	if (_part > 0)
 	{
 		srf = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
-		srf->blit(this);
+		drawRecolored(srf);
 	}
 
 	srf = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
-
-	srf->blit(this);
+	drawRecolored(srf);
 }
 
 /**
@@ -1166,7 +1158,7 @@ void UnitSprite::drawRoutine3()
  */
 void UnitSprite::drawRoutine4()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
 	Surface
@@ -1208,7 +1200,7 @@ void UnitSprite::drawRoutine4()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		srf->blit(this);
+		drawRecolored(srf);
 
 		return;
 	}
@@ -1297,35 +1289,35 @@ void UnitSprite::drawRoutine4()
 		case 0:
 			itemB ? itemB->blit(this) : void();
 			itemA ? itemA->blit(this) : void();
-			srf->blit(this);
+			drawRecolored(srf);
 		break;
 		case 1:
 			itemB ? itemB->blit(this) : void();
-			srf->blit(this);
+			drawRecolored(srf);
 			itemA ? itemA->blit(this) : void();
 		break;
 		case 2:
-			srf->blit(this);
+			drawRecolored(srf);
 			itemB ? itemB->blit(this) : void();
 			itemA ? itemA->blit(this) : void();
 		break;
 		case 3:
 		case 4:
-			srf->blit(this);
+			drawRecolored(srf);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 5:
 //kL	case 6:
 			itemA ? itemA->blit(this) : void();
-			srf->blit(this);
+			drawRecolored(srf);
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 6: // kL
 		case 7:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			srf->blit(this);
+			drawRecolored(srf);
 		break;
 	}
 
@@ -1341,17 +1333,17 @@ void UnitSprite::drawRoutine4()
  */
 void UnitSprite::drawRoutine5()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
-	Surface* srf = NULL;
+	Surface* srf;
 
 	if (_unit->getStatus() == STATUS_WALKING)
 		srf = _unitSurface->getFrame(32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) %4));
 	else
 		srf = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 
-	srf->blit(this);
+	drawRecolored(srf);
 }
 
 /**
@@ -1403,7 +1395,7 @@ void UnitSprite::drawRoutine6()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		torso->blit(this);
+		drawRecolored(torso);
 
 		return;
 	}
@@ -1551,59 +1543,59 @@ void UnitSprite::drawRoutine6()
 		case 0:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(rightArm);
 		break;
 		case 1:
-			leftArm->blit(this);
-			legs->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
 			itemB ? itemB->blit(this) : void();
-			torso->blit(this);
+			drawRecolored(torso);
 			itemA ? itemA->blit(this) : void();
-			rightArm->blit(this);
+			drawRecolored(rightArm);
 		break;
 		case 2:
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(rightArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 3:
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
-			rightArm->blit(this);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
+			drawRecolored(rightArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 4:
 		case 5:
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(rightArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 6:
-			rightArm->blit(this);
-			legs->blit(this);
+			drawRecolored(rightArm);
+			drawRecolored(legs);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 		break;
 		case 7:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			leftArm->blit(this);
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(rightArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
 		break;
 	}
 
@@ -1649,7 +1641,7 @@ void UnitSprite::drawRoutine7()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		torso->blit(this);
+		drawRecolored(torso);
 
 		return;
 	}
@@ -1686,30 +1678,30 @@ void UnitSprite::drawRoutine7()
 		case 0:
 		case 1:
 		case 2:
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(rightArm);
 		break;
 		case 3:
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
-			rightArm->blit(this);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
+			drawRecolored(rightArm);
 		break;
 		case 4:
 		case 5:
 		case 6:
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
+			drawRecolored(rightArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
+			drawRecolored(leftArm);
 		break;
 		case 7:
-			leftArm->blit(this);
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(rightArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
 		break;
 	}
 }
@@ -1740,7 +1732,7 @@ void UnitSprite::drawRoutine8()
 	if (_unit->getStatus() == STATUS_AIMING)
 		legs = _unitSurface->getFrame(aim);
 
-	legs->blit(this);
+	drawRecolored(legs);
 }
 
 /**
@@ -1767,7 +1759,7 @@ void UnitSprite::drawRoutine9()
 	else
 		torso = _unitSurface->getFrame(body + _animationFrame);
 
-	torso->blit(this);
+	drawRecolored(torso);
 }
 
 // kL_note: TFTD down to sortRifles()
@@ -1792,7 +1784,7 @@ void UnitSprite::drawRoutine11()
 
 	Surface* s = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
 	s->setY(4);
-	s->blit(this);
+	drawRecolored(s);
 
 	int turret = _unit->getTurretType();
 	// draw the turret, overlapping all 4 parts
@@ -1803,7 +1795,7 @@ void UnitSprite::drawRoutine11()
 		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
 		s->setX(offTurretX[_unit->getDirection()]);
 		s->setY(offTurretY[_unit->getDirection()]);
-		s->blit(this);
+		drawRecolored(s);
 	}
 }
 
@@ -1812,25 +1804,24 @@ void UnitSprite::drawRoutine11()
 */
 void UnitSprite::drawRoutine12()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
 	const int die = 8;
 
-	Surface* srf = NULL;
-	srf = _unitSurface->getFrame((_part * 8) + _animationFrame);
+	Surface* srf = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
 
 	if (_unit->getStatus() == STATUS_COLLAPSING && _drawingRoutine == 16)
 	{
 		// biodrone death frames
 		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		srf->blit(this);
+		drawRecolored(srf);
 
 		return;
 	}
 
-	srf->blit(this);
+	drawRecolored(srf);
 }
 
 /**
@@ -1838,10 +1829,10 @@ void UnitSprite::drawRoutine12()
  */
 void UnitSprite::drawRoutine19()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
-	Surface* srf = NULL;
+	Surface* srf;
 	// magic numbers
 	const int
 		stand = 0,
@@ -1851,21 +1842,17 @@ void UnitSprite::drawRoutine19()
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		srf->blit(this);
+		drawRecolored(srf);
 
 		return;
 	}
 
 	if (_unit->getStatus() == STATUS_WALKING)
-	{
 		srf = _unitSurface->getFrame(move + _unit->getDirection());
-	}
 	else
-	{
 		srf = _unitSurface->getFrame(stand + _unit->getDirection());
-	}
 
-	srf->blit(this);
+	drawRecolored(srf);
 }
 
 /**
@@ -1873,21 +1860,17 @@ void UnitSprite::drawRoutine19()
  */
 void UnitSprite::drawRoutine20()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
-	Surface* srf = NULL;
+	Surface* srf;
 
 	if (_unit->getStatus() == STATUS_WALKING)
-	{
 		srf = _unitSurface->getFrame((_unit->getWalkingPhase() / 2 %4) + 5 * (_part + 4 * _unit->getDirection()));
-	}
 	else
-	{
 		srf = _unitSurface->getFrame(5 * (_part + 4 * _unit->getDirection()));
-	}
 
-	srf->blit(this);
+	drawRecolored(srf);
 }
 
 /**
@@ -1895,15 +1878,15 @@ void UnitSprite::drawRoutine20()
  */
 void UnitSprite::drawRoutine21()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
-	Surface* srf = NULL;
+	Surface* srf;
 
 	srf = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame %4));
 	_redraw = true;
 
-	srf->blit(this);
+	drawRecolored(srf);
 }
 
 /**

@@ -56,6 +56,9 @@ private:
 		* _itemSurfaceB,
 		* _unitSurface;
 
+	std::pair<Uint8, Uint8>
+		_colorA,
+		_colorB;
 
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
 	/// mutons (routine 10),
@@ -95,6 +98,8 @@ private:
 
 	/// sort two handed sprites out.
 	void sortRifles();
+	/// Draw surface with changed colors.
+	void drawRecolored(Surface* src);
 
 
 	public:

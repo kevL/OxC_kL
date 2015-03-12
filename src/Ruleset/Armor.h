@@ -77,7 +77,10 @@ private:
 		_drawingRoutine,
 
 		_size,
-		_weight;
+		_weight,
+
+		_faceColorGroup,
+		_hairColorGroup;
 
 	float _damageModifier[DAMAGE_TYPES];
 
@@ -85,7 +88,10 @@ private:
 	MovementType _movementType;
 	UnitStats _stats;
 
-	std::vector<int> _loftempsSet;
+	std::vector<int>
+		_faceColor,
+		_hairColor,
+		_loftempsSet;
 	std::vector<std::string> _corpseBattle;
 
 
@@ -161,6 +167,15 @@ private:
 
 		/// Checks if this armor ignores gender (power suit/flying suit).
 		ForcedTorso getForcedTorso() const;
+
+		/// Gets face base color.
+		int getFaceColorGroup() const;
+		/// Gets hair base color.
+		int getHairColorGroup() const;
+		/// Gets face base color.
+		const std::vector<int>& getFaceColor() const;
+		/// Gets hair base color.
+		const std::vector<int>& getHairColor() const;
 
 		/// Gets if this Armor is basic (lowest rank, standard issue wear).
 		bool isBasic() const;

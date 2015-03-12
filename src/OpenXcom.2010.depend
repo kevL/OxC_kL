@@ -4589,7 +4589,7 @@
 1424836359 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
-1424390937 f:\git\openxcom\src\ruleset\armor.h
+1426141393 f:\git\openxcom\src\ruleset\armor.h
 	"MapData.h"
 	"Unit.h"
 
@@ -4649,7 +4649,7 @@
 1425842000 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1426128211 f:\git\openxcom\src\savegame\battleunit.h
+1426141770 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -6079,7 +6079,7 @@
 	"BattlescapeGame.h"
 	"Position.h"
 
-1424390942 f:\git\openxcom\src\battlescape\unitsprite.h
+1426137734 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 
 1424390943 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
@@ -6407,7 +6407,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1426091877 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1426142520 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -7074,7 +7074,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1426130443 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1426136422 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8434,7 +8434,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1426107042 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1426144309 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Battlescape/Position.h"
 	"../Engine/Language.h"
@@ -8619,7 +8619,7 @@
 	"AlienBase.h"
 	"../Engine/Language.h"
 
-1426028808 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1426134307 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8841,7 +8841,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1426113716 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
+1426127921 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
 1426113778 source:f:\git\openxcom\src\savegame\soldier.cpp
@@ -8890,7 +8890,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1425565330 source:f:\git\openxcom\src\savegame\transfer.cpp
+1426117112 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"
@@ -8899,7 +8899,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1425846280 source:f:\git\openxcom\src\savegame\ufo.cpp
+1426100147 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
@@ -11140,7 +11140,7 @@
 1424390935 f:\git\openxcom\src\ufopaedia\articlestatetftd.h
 	"ArticleState.h"
 
-1426096909 f:\git\openxcom\src\ruleset\ruleinterface.h
+1426135066 f:\git\openxcom\src\ruleset\ruleinterface.h
 
 1426097280 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"

@@ -19,6 +19,8 @@
 
 #include "Armor.h"
 
+#include "../Savegame/Soldier.h"
+
 
 namespace OpenXcom
 {
@@ -43,6 +45,8 @@ Armor::Armor(const std::string& type)
 		_constantAnimation(false),
 		_canHoldWeapon(false),
 		_forcedTorso(TORSO_USE_GENDER),
+		_faceColorGroup(0),
+		_hairColorGroup(0),
 		_isBasic(false),
 		_isSpacesuit(false)
 {
@@ -65,6 +69,9 @@ Armor::Armor(const std::string& type)
 	{
 		_damageModifier[i] = 1.f;
 	}
+
+	_faceColor.resize((LOOK_AFRICAN + 1) * 2);
+	_hairColor.resize((LOOK_AFRICAN + 1) * 2);
 }
 
 /**
@@ -148,6 +155,29 @@ void Armor::load(const YAML::Node& node)
 	}
 	else
 		_canHoldWeapon = false;
+
+	_faceColorGroup = node["spriteFaceGroup"].as<int>(_faceColorGroup);
+	_hairColorGroup = node["spriteHairGroup"].as<int>(_hairColorGroup);
+
+	if (const YAML::Node& colors = node["spriteFaceColor"])
+	{
+		for (size_t
+				i = 0;
+				i < colors.size()
+					&& i < _faceColor.size();
+				++i)
+			_faceColor[i] = colors[i].as<int>();
+	}
+
+	if (const YAML::Node& colors = node["spriteHairColor"])
+	{
+		for (size_t
+				i = 0;
+				i < colors.size()
+					&& i < _hairColor.size();
+				++i)
+			_hairColor[i] = colors[i].as<int>();
+	}
 }
 
 /**
@@ -361,6 +391,42 @@ bool Armor::getCanHoldWeapon() const
 ForcedTorso Armor::getForcedTorso() const
 {
 	return _forcedTorso;
+}
+
+/**
+ * Gets hair base color group for replacement, if -1 then don't replace colors.
+ * @return, colorgroup or -1
+ */
+int Armor::getFaceColorGroup() const
+{
+	return _faceColorGroup;
+}
+
+/**
+ * Gets hair base color group for replacement, if -1 then don't replace colors.
+ * @return, colorgroup or -1
+ */
+int Armor::getHairColorGroup() const
+{
+	return _hairColorGroup;
+}
+
+/**
+ * Gets new face colors for replacement.
+ * @return, reference to a vector of new values based on gender and race
+ */
+const std::vector<int>& Armor::getFaceColor() const
+{
+	return _faceColor;
+}
+
+/**
+ * Gets new hair colors for replacement.
+ * @return, reference to a vector of new values based on gender and race
+ */
+const std::vector<int>& Armor::getHairColor() const
+{
+	return _hairColor;
 }
 
 /**

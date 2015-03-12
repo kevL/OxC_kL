@@ -195,6 +195,8 @@ BattleUnit::BattleUnit(
 
 	lastCover = Position(-1,-1,-1);
 
+	setRecolor(soldier->getGender() + 2 * (soldier->getLook()));
+
 	_statistics = new BattleUnitStatistics();
 	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 }
@@ -349,6 +351,8 @@ BattleUnit::BattleUnit(
 
 	lastCover = Position(-1,-1,-1);
 
+	setRecolor(std::rand() %8);
+
 //	_statistics = new BattleUnitStatistics(); // not needed by nonSoldiers, Soldier Diary.
 	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
@@ -440,6 +444,18 @@ void BattleUnit::load(const YAML::Node& node)
 		_expPsiStrength	= node["expPsiStrength"]							.as<int>(_expPsiStrength);
 		_expMelee		= node["expMelee"]									.as<int>(_expMelee);
 	}
+
+	if (const YAML::Node& p = node["recolor"])
+	{
+		for (size_t
+				i = 0;
+				i != 2;
+				++i)
+		{
+			_recolor[i].first	= p[i][0].as<Uint8>();
+			_recolor[i].second	= p[i][1].as<Uint8>();
+		}
+	}
 }
 
 /**
@@ -518,6 +534,36 @@ YAML::Node BattleUnit::save() const
 		// kL_note: This doesn't save/load such things as
 		// _visibleUnits, _unitsSpottedThisTurn, _visibleTiles;
 		// AI is saved, but loaded someplace else -> SavedBattleGame
+}
+
+/**
+ *
+ */
+void BattleUnit::setRecolor(int selectLook)
+{
+	int BaseColor = 0;
+
+	const int
+		faceColor = _armor->getFaceColor()[selectLook],
+		faceColorGroup = _armor->getFaceColorGroup(),
+		hairColor = _armor->getHairColor()[selectLook],
+		hairColorGroup = _armor->getHairColorGroup();
+
+	if (faceColorGroup > 0
+		&& faceColor > -1)
+	{
+		_recolor[BaseColor].first = faceColorGroup << 4;
+		_recolor[BaseColor].second = faceColor;
+		++BaseColor;
+	}
+
+	if (hairColorGroup > 0
+		&& hairColor > -1)
+	{
+		_recolor[BaseColor].first = hairColorGroup << 4;
+		_recolor[BaseColor].second = hairColor;
+		++BaseColor;
+	}
 }
 
 /**
@@ -1059,6 +1105,23 @@ Surface* BattleUnit::getCache(
 	*invalid = _cacheInvalid;
 
 	return _cache[part];
+}
+
+/**
+ * Gets values used for recoloring sprites.
+ * @param i - what value to choose
+ * @return, pairs of values where first is the colorgroup to
+ * replace and the second is the new colorgroup with a shade.
+ */
+std::pair<Uint8, Uint8> BattleUnit::getRecolor(int i) const
+{
+	if (i > -1
+		&& i < 2)
+	{
+		return _recolor[i];
+	}
+
+	return std::pair<Uint8, Uint8>(0,0);
 }
 
 /**
