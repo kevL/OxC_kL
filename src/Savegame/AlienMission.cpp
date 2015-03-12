@@ -423,7 +423,7 @@ Ufo* AlienMission::spawnUfo(
 	pos = getWaypoint(
 					trajectory,
 					0,
-					globe,
+//					globe,
 					regionRules);
 
 	ufo->setAltitude(trajectory.getAltitude(0));
@@ -439,7 +439,7 @@ Ufo* AlienMission::spawnUfo(
 	pos = getWaypoint(
 				trajectory,
 				1,
-				globe,
+//				globe,
 				regionRules);
 
 	wp = new Waypoint();
@@ -541,7 +541,7 @@ void AlienMission::ufoReachedWaypoint(
 	const std::pair<double, double> pos = getWaypoint(
 												trajectory,
 												nextWaypoint,
-												globe,
+//												globe,
 												regionRules);
 
 	Waypoint* const wayPoint = new Waypoint();
@@ -663,11 +663,10 @@ void AlienMission::ufoShotDown(const Ufo& ufo)
  * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
  * It must set the game data in a way that the rest of the code understands what to do.
  * @param ufo	- reference the Ufo that reached its waypoint
- * @param globe	- reference the Globe, required to get access to land checks
+// * @param globe	- reference the Globe, required to get access to land checks
  */
-void AlienMission::ufoLifting(
-		Ufo& ufo,
-		const Globe& globe)
+void AlienMission::ufoLifting(Ufo& ufo)
+//		const Globe& globe)
 {
 	//Log(LOG_INFO) << "AlienMission::ufoLifting()";
 	switch (ufo.getStatus())
@@ -863,14 +862,14 @@ void AlienMission::setRegion(
  * Selects a destination based on the criteria of our trajectory and desired waypoint.
  * @param trajectory	- reference the trajectory in question
  * @param nextWaypoint	- the next logical waypoint in sequence (0 for newly spawned UFOs)
- * @param globe			- reference the Globe, required to get access to land checks
+// * @param globe			- reference the Globe, required to get access to land checks
  * @param region		- reference the ruleset for the region of this mission
  * @return, pair of lon and lat coordinates based on the criteria of the trajectory
  */
 std::pair<double, double> AlienMission::getWaypoint(
 		const UfoTrajectory& trajectory,
 		const size_t nextWaypoint,
-		const Globe& globe,
+//		const Globe& globe,
 		const RuleRegion &region)
 {
 	return region.getRandomPoint(trajectory.getZone(nextWaypoint));

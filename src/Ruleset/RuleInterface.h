@@ -36,10 +36,9 @@ struct Element
 
 	/// basic rect info, and 3 colors.
 	int
-		x,
-		y,
-		w,
-		h,
+		x,y,
+		w,h;
+	Uint8
 		color,
 		color2,
 		border;

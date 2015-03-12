@@ -65,8 +65,9 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 	text.setText(tr("STR_NO"));
 	int no = text.getTextWidth();
 
-	int rightcol = std::max(yes, no) + 2;
-	int leftcol = _lstMods->getWidth() - rightcol;
+	int
+		rightcol = std::max(yes, no) + 2,
+		leftcol = _lstMods->getWidth() - rightcol;
 
 	_lstMods->setAlign(ALIGN_RIGHT, 1);
 	_lstMods->setColumns(2, leftcol, rightcol);
@@ -94,12 +95,11 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 			bool modEnabled = (std::find(
 										Options::rulesets.begin(),
 										Options::rulesets.end(),
-										mod)
-									!= Options::rulesets.end());
+										mod) != Options::rulesets.end());
 			_lstMods->addRow(
-							2,
-							modName.c_str(),
-							(modEnabled? tr("STR_YES").c_str(): tr("STR_NO").c_str()));
+						2,
+						modName.c_str(),
+						(modEnabled? tr("STR_YES").c_str(): tr("STR_NO").c_str()));
 
 			_mods.push_back(mod);
 		}
@@ -112,15 +112,14 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 OptionsModsState::~OptionsModsState()
 {}
 
-void OptionsModsState::lstModsClick(Action* action)
+void OptionsModsState::lstModsClick(Action*)
 {
 	std::string selectedMod = _mods[_lstMods->getSelectedRow()];
 	std::vector<std::string>::iterator i = std::find(
 													Options::rulesets.begin(),
 													Options::rulesets.end(),
 													selectedMod);
-	bool modEnabled = (i != Options::rulesets.end());
-	if (modEnabled)
+	if (i != Options::rulesets.end())
 	{
 		_lstMods->setCellText(_lstMods->getSelectedRow(), 1, tr("STR_NO").c_str());
 		Options::rulesets.erase(i);

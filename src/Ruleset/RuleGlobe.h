@@ -30,7 +30,8 @@ namespace OpenXcom
 
 enum TextureTypes
 {
-	TT_INVALID = -1,	// -1 // note this conflicts w/ texture -1 (also -2 etc.)
+	TT_PORT = -2,		// -2
+	TT_CITY = -1,		// -1
 	TT_FOREST,			//  0
 	TT_PLAINS,			//  1
 	TT_CULTIVATED,		//  2

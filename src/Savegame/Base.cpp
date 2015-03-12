@@ -223,14 +223,14 @@ void Base::load(
 			i != node["soldiers"].end();
 			++i)
 	{
-		Soldier* const s = new Soldier(
-							_rules->getSoldier("XCOM"),
-							_rules->getArmor("STR_ARMOR_NONE_UC"));
-		s->load(
+		Soldier* const sol = new Soldier(
+									_rules->getSoldier("XCOM"),
+									_rules->getArmor("STR_ARMOR_NONE_UC"));
+		sol->load(
 			*i,
-			_rules,
-			save);
-		s->setCraft(NULL);
+			_rules);
+//			save);
+		sol->setCraft(NULL);
 
 		if (const YAML::Node& craft = (*i)["craft"])
 		{
@@ -242,13 +242,13 @@ void Base::load(
 			{
 				if ((*j)->getUniqueId() == craftId)
 				{
-					s->setCraft(*j);
+					sol->setCraft(*j);
 					break;
 				}
 			}
 		}
 
-		_soldiers.push_back(s);
+		_soldiers.push_back(sol);
 	}
 
 	_items->load(node["items"]);

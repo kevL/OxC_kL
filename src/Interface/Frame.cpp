@@ -139,8 +139,8 @@ void Frame::draw()
 	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
-	square.w = getWidth();
-	square.h = getHeight();
+	square.w = static_cast<Uint16>(getWidth());
+	square.h = static_cast<Uint16>(getHeight());
 
 	int mult = 1;
 	if (_contrast)
@@ -162,14 +162,14 @@ void Frame::draw()
 			color = darkest;
 		}
 		else
-			color = _color + std::abs(i - _thickness / 2) * mult;
+			color = _color + static_cast<Uint8>(std::abs(i - _thickness / 2) * mult);
 
 		drawRect(
 				&square,
 				color);
 
-		square.x++;
-		square.y++;
+		++square.x;
+		++square.y;
 
 		if (square.w > 1)
 			square.w -= 2;

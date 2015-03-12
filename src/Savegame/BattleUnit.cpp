@@ -678,26 +678,26 @@ void BattleUnit::setStatus(const UnitStatus status)
 
 /**
  * Initialises variables to start walking.
- * @param direction		- the direction to walk
- * @param destination	- reference the Position we should end up at
- * @param tileBelow		- pointer to the Tile below destination position
- * @param cache			- true to redraw the unit's sprite ( not used. )
+ * @param dir		- the direction to walk
+ * @param dest		- reference the Position we should end up at
+ * @param tileBelow	- pointer to the Tile below destination position
+// * @param cache	- true to redraw the unit's sprite ( not used. )
  */
 void BattleUnit::startWalking(
-		int direction,
-		const Position& destination,
-		Tile* tileBelow,
-		bool cache)
+		int dir,
+		const Position& dest,
+		Tile* tileBelow)
+//		bool cache)
 {
 	_walkPhase = 0;
-	_destination = destination;
+	_destination = dest;
 	_lastPos = _pos;
 //	_cacheInvalid = cache; // there's no movement here, This not needed.
 
-	if (direction >= Pathfinding::DIR_UP)
+	if (dir >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING; // controls walking sound in UnitWalkBState, what else
-		_verticalDirection = direction;
+		_verticalDirection = dir;
 
 		if (_tile->getMapData(MapData::O_FLOOR) != NULL
 			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
@@ -712,14 +712,14 @@ void BattleUnit::startWalking(
 		_status = STATUS_FLYING;
 		_floating = true;
 		_kneeled = false;
-		_direction = direction;
+		_direction = dir;
 	}
 	else
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
 		_kneeled = false;
-		_direction = direction;
+		_direction = dir;
 	}
 
 	if (_breathFrame > -1)

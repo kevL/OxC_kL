@@ -209,7 +209,7 @@ void ComboBox::drawArrow()
 	_arrow->clear();
 
 	SDL_Rect square;
-	int color = _color + 1;
+	Uint8 color = _color + 1;
 	if (color == 256)
 		++color;
 

@@ -17,11 +17,10 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-
-#include <SDL.h>
-
 #include "WarningMessage.h"
+
+//#include <string>
+//#include <SDL.h>
 
 #include "../Engine/Timer.h"
 
@@ -33,10 +32,10 @@ namespace OpenXcom
 
 /**
  * Sets up a blank warning message with the specified size and position.
- * @param width, Width in pixels.
- * @param height, Height in pixels.
- * @param x, X position in pixels.
- * @param y, Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 WarningMessage::WarningMessage(
 		int width,
@@ -44,15 +43,17 @@ WarningMessage::WarningMessage(
 		int x,
 		int y)
 	:
-		Surface(width, height, x, y),
+		Surface(
+			width,
+			height,
+			x,y),
 		_color(0),
 		_fade(0)
 {
 	_text = new Text(
 					width,
 					height,
-					0,
-					0);
+					0,0);
 	_text->setHighContrast();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
@@ -96,9 +97,9 @@ void WarningMessage::setTextColor(Uint8 color)
  * The different fonts need to be passed in advance since the
  * text size can change mid-text, and the language affects
  * how the text is rendered.
- * @param big, Pointer to large-size font.
- * @param small, Pointer to small-size font.
- * @param lang, Pointer to current language.
+ * @param big	- pointer to large-size font
+ * @param small	- pointer to small-size font
+ * @param lang	- pointer to current language
  */
 void WarningMessage::initText(
 		Font* big,
@@ -110,9 +111,9 @@ void WarningMessage::initText(
 
 /**
  * Replaces a certain amount of colors in the surface's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor 	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void WarningMessage::setPalette(
 		SDL_Color* colors,
@@ -120,13 +121,12 @@ void WarningMessage::setPalette(
 		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-
 	_text->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
  * Displays the warning message.
- * @param msg Message string.
+ * @param msg - reference to a message string
  */
 void WarningMessage::showMessage(const std::wstring& msg)
 {
@@ -135,7 +135,6 @@ void WarningMessage::showMessage(const std::wstring& msg)
 	_redraw = true;
 
 	setVisible();
-
 	_timer->start();
 }
 
@@ -144,7 +143,7 @@ void WarningMessage::showMessage(const std::wstring& msg)
  */
 void WarningMessage::think()
 {
-	_timer->think(0, this);
+	_timer->think(NULL, this);
 }
 
 /**
@@ -154,11 +153,10 @@ void WarningMessage::fade()
 {
 	_redraw = true;
 
-	_fade++;
+	++_fade;
 	if (_fade == 15)
 	{
 		setVisible(false);
-
 		_timer->stop();
 	}
 }
@@ -170,20 +168,15 @@ void WarningMessage::draw()
 {
 	Surface::draw();
 
-/*	SDL_Rect square1;
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = getWidth();
-	square1.h = getHeight(); */
-//kL	drawRect(0, 0, getWidth(), getHeight(), _color + (_fade > 12? 12: _fade));
-
-	// kL_begin:
 	Uint8 color = _color + 1 + _fade;
 	if (_fade == 15)
 		color -= 1;
-//	drawRect(&square1, color);
-	drawRect(0, 0, getWidth(), getHeight(), color);
-	// kL_end.
+
+	drawRect(
+			0,0,
+			static_cast<Sint16>(getWidth()),
+			static_cast<Sint16>(getHeight()),
+			color);
 
 	_text->blit(this);
 }

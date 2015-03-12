@@ -3807,8 +3807,7 @@ bool BattlescapeGenerator::addLine( // private.
 					rects,
 					roadX,
 					roadY,
-					10,
-					10);
+					10,10);
 
 		for (
 				*iterValue = 0;
@@ -3835,20 +3834,17 @@ bool BattlescapeGenerator::addLine( // private.
 					roadX,
 					roadY,
 					_terrain->getRandomMapBlock(
-											10,
-											10,
+											10,10,
 											typeToAdd));
 		else if (_blocks[roadX][roadY]->isInGroup(comparator))
 		{
 			_blocks[roadX][roadY] = _terrain->getRandomMapBlock(
-															10,
-															10,
+															10,10,
 															MT_CROSSING);
 			clearModule(
 					roadX * 10,
 					roadY * 10,
-					10,
-					10);
+					10,10);
 			loadMAP(
 				_blocks[roadX][roadY],
 				roadX * 10,
@@ -3967,7 +3963,7 @@ void BattlescapeGenerator::drillModules( // private.
 
 	SDL_Rect rect;
 	rect.x =
-	rect.y =
+	rect.y = 3;
 	rect.w =
 	rect.h = 3;
 

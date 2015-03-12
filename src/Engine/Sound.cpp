@@ -108,8 +108,8 @@ void Sound::play(
 		{
 			if (Mix_SetPosition(
 							chan,
-							angle,
-							distance) == 0)
+							static_cast<Sint16>(angle),
+							static_cast<Uint8>(distance)) == 0)
 			{
 				Log(LOG_WARNING) << Mix_GetError();
 			}
@@ -140,9 +140,7 @@ void Sound::loop()
 									_sound,
 									-1);
 		if (chan == -1)
-		{
 			Log(LOG_WARNING) << Mix_GetError();
-		}
 	}
 }
 

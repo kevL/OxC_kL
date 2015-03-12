@@ -157,7 +157,6 @@ private:
 		bool fitItem(
 				RuleInventory* newSlot,
 				BattleItem* item,
-				std::string& warning,
 				bool test = false);
 		/// Checks if two items can be stacked on one another.
 		bool canBeStacked(

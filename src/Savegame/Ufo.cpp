@@ -796,7 +796,7 @@ void Ufo::setDestination(Target* dest)
  * Sets the intercept window this Ufo is shooting at in a dogfight.
  * @param target - interception number
  */
-void Ufo::setShootingAt(const int target)
+void Ufo::setShootingAt(const size_t target)
 {
 	_shootingAt = target;
 }
@@ -805,7 +805,7 @@ void Ufo::setShootingAt(const int target)
  * Gets the intercept window this Ufo is shooting at in a dogfight.
  * @return, interception number
  */
-int Ufo::getShootingAt() const
+size_t Ufo::getShootingAt() const
 {
 	return _shootingAt;
 }

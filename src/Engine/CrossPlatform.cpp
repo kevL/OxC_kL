@@ -1140,7 +1140,7 @@ std::string getDosPath()
  */
 void setWindowIcon(
 		int winResource,
-		const std::string& unixPath)
+		const std::string& unixPath) // kL_note: vc++ regards this as and "unreferenced formal parameter" ...
 {
 #ifdef _WIN32
 	const HINSTANCE handle = GetModuleHandle(NULL);

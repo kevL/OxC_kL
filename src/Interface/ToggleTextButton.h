@@ -41,22 +41,27 @@ private:
 
 
 	public:
+		///
 		ToggleTextButton(
 				int width,
 				int height,
 				int x,
 				int y);
+		///
 		~ToggleTextButton(void);
 
+		///
 		void draw();
+		///
 		void setInvertColor(Uint8 mid);
 
+		///
 		void mousePress(Action* action, State* state);
+		///
 		void setPressed(bool pressed);
+		///
 		bool getPressed() const
-		{
-			return _isPressed;
-		}
+		{ return _isPressed; }
 };
 
 }

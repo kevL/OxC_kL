@@ -552,15 +552,15 @@ void State::setPalette(
 			false);
 
 	if (palette == "PAL_GEOSCAPE")
-		_cursorColor = ResourcePack::GEOSCAPE_CURSOR;
+		_cursorColor = static_cast<Uint8>(ResourcePack::GEOSCAPE_CURSOR);
 	else if (palette == "PAL_BASESCAPE")
-		_cursorColor = ResourcePack::BASESCAPE_CURSOR;
+		_cursorColor = static_cast<Uint8>(ResourcePack::BASESCAPE_CURSOR);
 	else if (palette == "PAL_UFOPAEDIA")
-		_cursorColor = ResourcePack::UFOPAEDIA_CURSOR;
+		_cursorColor = static_cast<Uint8>(ResourcePack::UFOPAEDIA_CURSOR);
 	else if (palette == "PAL_GRAPHS")
-		_cursorColor = ResourcePack::GRAPHS_CURSOR;
+		_cursorColor = static_cast<Uint8>(ResourcePack::GRAPHS_CURSOR);
 	else
-		_cursorColor = ResourcePack::BATTLESCAPE_CURSOR;
+		_cursorColor = static_cast<Uint8>(ResourcePack::BATTLESCAPE_CURSOR);
 
 	if (backpal != -1)
 		setPalette(

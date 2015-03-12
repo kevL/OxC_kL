@@ -567,8 +567,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						++k)
 				{
 					const std::string filename = k->first;
-					const int midiIndex = k->second;
 
+//					const int midiIndex = k->second;
 //					LoadMusic(filename, midiIndex):
 
 					bool loaded = false;
@@ -1118,13 +1118,12 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				//Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
 			}
 
-			if (subdivision == true)
-			{
-				const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
-
+			//if (subdivision == true)
+			//{
+				//const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 				//Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
 				//Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
-			}
+			//}
 
 			for (std::map<int, std::string>::const_iterator
 					j = spritePack->getSprites()->begin();
@@ -1930,32 +1929,34 @@ void XcomResourcePack::createTransparencyLUT(Palette* pal)
 				// in the palette in order to determine the desired color:
 				// all this casting and clamping is required, we're dealing with Uint8s here,
 				// and there's a lot of potential for values to wrap around.
-				target.r = std::min(
+				target.r = static_cast<Uint8>(std::min(
 								255,
-								static_cast<int>(pal->getColors(color)->r) + (tint->r * opacity));
-				target.g = std::min(
+								static_cast<int>(pal->getColors(color)->r) + (static_cast<int>(tint->r) * opacity)));
+				target.g = static_cast<Uint8>(std::min(
 								255,
-								static_cast<int>(pal->getColors(color)->g) + (tint->g * opacity));
-				target.b = std::min(
+								static_cast<int>(pal->getColors(color)->g) + (static_cast<int>(tint->g) * opacity)));
+				target.b = static_cast<Uint8>(std::min(
 								255,
-								static_cast<int>(pal->getColors(color)->b) + (tint->b * opacity));
+								static_cast<int>(pal->getColors(color)->b) + (static_cast<int>(tint->b) * opacity)));
 
 				Uint8 closest = 0;
-				int low = std::numeric_limits<int>::max();
+				int
+					low = std::numeric_limits<int>::max(),
+					cur;
 
 				// compare each color in the palette to find the closest match to the desired one
 				for (int
 						comparoperator = 0;
-						comparoperator < 256;
+						comparoperator != 256;
 						++comparoperator)
 				{
-					const int cur = Sqr(target.r - pal->getColors(comparoperator)->r)
-								  + Sqr(target.g - pal->getColors(comparoperator)->g)
-								  + Sqr(target.b - pal->getColors(comparoperator)->b);
+					cur = Sqr(target.r - pal->getColors(comparoperator)->r)
+						+ Sqr(target.g - pal->getColors(comparoperator)->g)
+						+ Sqr(target.b - pal->getColors(comparoperator)->b);
 
 					if (cur < low)
 					{
-						closest = comparoperator;
+						closest = static_cast<Uint8>(comparoperator);
 						low = cur;
 					}
 				}

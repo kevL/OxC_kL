@@ -217,8 +217,8 @@ void MainMenuState::btnQuitClick(Action*)
  * @param dY - reference the delta of Y
  */
 void MainMenuState::resize(
-		int& dX,
-		int& dY)
+		/*int& dX,
+		int& dY*/)
 {
 /*	dX = Options::baseXResolution;
 	dY = Options::baseYResolution; */

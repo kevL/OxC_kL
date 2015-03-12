@@ -118,10 +118,10 @@ void MapScript::load(const YAML::Node& node)
 				++i)
 		{
 			SDL_Rect* const rect = new SDL_Rect();
-			rect->x = (*i)[0].as<int>();
-			rect->y = (*i)[1].as<int>();
-			rect->w = (*i)[2].as<int>();
-			rect->h = (*i)[3].as<int>();
+			rect->x = static_cast<Sint16>((*i)[0].as<int>()); // note: not sure if YAML can do a cast to S/Uint16's
+			rect->y = static_cast<Sint16>((*i)[1].as<int>());
+			rect->w = static_cast<Uint16>((*i)[2].as<int>());
+			rect->h = static_cast<Uint16>((*i)[3].as<int>());
 
 			_rects.push_back(rect);
 		}

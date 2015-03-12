@@ -112,8 +112,8 @@ void MiniMapView::draw()
 
 	drawRect(
 		0,0,
-		width,
-		height,
+		static_cast<Sint16>(width),
+		static_cast<Sint16>(height),
 		0);
 
 	this->lock();
@@ -383,7 +383,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 		}
 	}
 
@@ -393,7 +393,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 		if (action->getDetails()->button.button == Options::battleDragScrollButton)
 		{
 			_isMouseScrolling = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 		}
 		else
 			return;
@@ -403,7 +403,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 
 			_camera->centerOnPosition(_posBeforeDragScroll);
 			_redraw = true;
@@ -465,7 +465,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 
 			return;
 		}
@@ -634,9 +634,9 @@ void MiniMapView::mouseIn(Action* action, State* state)
 /**
  *
  */
-void MiniMapView::stopScrolling(Action* action)
+/*void MiniMapView::stopScrolling(Action* action)
 {
-/*kL
+
 	if (!Options::battleDragScrollInvert)
 	{
 		SDL_WarpMouse(
@@ -649,9 +649,9 @@ void MiniMapView::stopScrolling(Action* action)
 				_game->getScreen()->getSurface()->getY());
 	}
 
-	// reset our "mouse position stored" flag
-	_cursorPosition.z = 0; */
-}
+	// reset the "mouse position stored" flag
+	_cursorPosition.z = 0;
+} */
 
 /**
  * Updates the minimap animation.

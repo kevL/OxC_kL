@@ -177,7 +177,7 @@ struct GlobeStaticData
 			else if (j >  10) j =  10;
 			else if (j >   8) j =   9;
 
-			shade_gradient[i] = j + 16;
+			shade_gradient[static_cast<size_t>(i)] = static_cast<Sint16>(j) + 16;
 		}
 	}
 };
@@ -190,10 +190,10 @@ struct Ocean
 	///
 	static inline void func(
 			Uint8& dest,
-			const int&,
-			const int&,
-			const int&,
-			const int&)
+			const int&, // whots this
+			const int&, // whots this
+			const int&, // whots this
+			const int&) // whots this
 	{
 		dest = Globe::OCEAN_COLOR;
 	}
@@ -225,14 +225,20 @@ struct CreateShadow
 		else if (temp.x > 120.)
 			temp.x = 50.;
 		else
-			temp.x = static_data.shade_gradient[static_cast<Sint16>(temp.x) + 120];
+			temp.x = static_cast<double>(static_data.shade_gradient[static_cast<Sint16>(temp.x) + 120]);
 
-		temp.x -= noise;
+		temp.x -= static_cast<double>(noise);
 
 		if (temp.x > 0.)
 		{
-			const Sint16 val = (temp.x > 31.)? 31: static_cast<Sint16>(temp.x);
-			const int d = static_cast<int>(dest & helper::ColorGroup);
+			const Uint8 d = (dest & helper::ColorGroup);
+			Uint8 val;
+
+			if (temp.x > 31.)
+				val = 31;
+			else
+				val = static_cast<Uint8>(temp.x);
+
 			if (d == Globe::OCEAN_COLOR
 				|| d == Globe::OCEAN_COLOR + 16)
 			{
@@ -241,20 +247,18 @@ struct CreateShadow
 			else
 			{
 				if (dest == 0)
-					return static_cast<Uint8>(val); // this pixel is land
+					return val; // this pixel is land
 
-				const int
-					s = static_cast<int>(val) / 3,
-					e = static_cast<int>(dest) + s;
-				if (static_cast<Uint8>(e) > static_cast<Uint8>(d) + helper::ColorShade)
-					return static_cast<Uint8>(d) + helper::ColorShade;
+				const Uint8 e = dest + (val / 3);
+				if (e > (d + helper::ColorShade))
+					return d + helper::ColorShade;
 
 				return static_cast<Uint8>(e);
 			}
 		}
 		else
 		{
-			const int d = static_cast<int>(dest & helper::ColorGroup);
+			const Uint8 d = (dest & helper::ColorGroup);
 			if (d == Globe::OCEAN_COLOR
 				|| d == Globe::OCEAN_COLOR + 16)
 			{
@@ -271,14 +275,17 @@ struct CreateShadow
 			const Cord& earth,
 			const Cord& sun,
 			const Sint16& noise,
-			const int&)
+			const int&) // whots this
 	{
-		if (dest && earth.z)
+		if (dest != 0
+			&& AreSame(earth.z, 0.) == false)
+		{
 			dest = getShadowValue(
 								dest,
 								earth,
 								sun,
 								noise);
+		}
 		else
 			dest = 0;
 	}
@@ -2762,7 +2769,7 @@ void Globe::mouseOver(Action* action, State* state)
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 
 			return;
 		}
@@ -2904,8 +2911,8 @@ void Globe::mouseRelease(Action* action, State* state)
 			&lon,
 			&lat);
 
-	if (action->getDetails()->button.button == Options::geoDragScrollButton)
-		stopScrolling(action);
+//	if (action->getDetails()->button.button == Options::geoDragScrollButton)
+//		stopScrolling(action);
 
 	if (lat == lat // Check for errors
 		&& lon == lon)
@@ -2956,7 +2963,7 @@ void Globe::mouseClick(Action* action, State* state)
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 		}
 	}
 
@@ -2966,7 +2973,7 @@ void Globe::mouseClick(Action* action, State* state)
 		if (action->getDetails()->button.button == Options::geoDragScrollButton)
 		{
 			_isMouseScrolling = false;
-			stopScrolling(action); // newScroll
+//			stopScrolling(action); // newScroll
 		}
 		else
 			return;
@@ -3015,9 +3022,8 @@ void Globe::keyboardPress(Action* action, State* state)
  * Move the mouse back to where it started after we finish drag scrolling.
  * @param action - pointer to an Action
  */
-void Globe::stopScrolling(Action* action)
+/*void Globe::stopScrolling(Action* action)
 {
-/*kL
 	SDL_WarpMouse(
 			static_cast<Uint16>(_xBeforeMouseScrolling),
 			static_cast<Uint16>(_yBeforeMouseScrolling));
@@ -3025,8 +3031,8 @@ void Globe::stopScrolling(Action* action)
 					_xBeforeMouseScrolling,
 					_yBeforeMouseScrolling,
 					getX(),
-					getY()); */
-}
+					getY());
+} */
 
 /**
  * Get the polygon's texture & shadeLevel at a given point.
@@ -3164,8 +3170,8 @@ void Globe::resize()
 
 	_clipper->Wxrig = width;
 	_clipper->Wybot = height;
-	_cenX = width / 2;
-	_cenY = height / 2;
+	_cenX = static_cast<Sint16>(width) / 2;
+	_cenY = static_cast<Sint16>(height / 2);
 
 	setupRadii(width, height);
 

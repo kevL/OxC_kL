@@ -156,19 +156,19 @@ void Font::init()
 	{
 		for (size_t
 				i = 0;
-				i < _index.length();
+				i != _index.length();
 				++i)
 		{
 			SDL_Rect rect;
 
 			const int
-				startX = i %len * _width,
-				startY = i / len * _height;
+				startX = static_cast<int>(i) %len * _width,
+				startY = static_cast<int>(i) / len * _height;
 
-			rect.x = startX;
-			rect.y = startY;
-			rect.w = _width;
-			rect.h = _height;
+			rect.x = static_cast<Sint16>(startX);
+			rect.y = static_cast<Sint16>(startY);
+			rect.w = static_cast<Uint16>(_width);
+			rect.h = static_cast<Uint16>(_height);
 
 			_chars[_index[i]] = rect;
 		}
@@ -177,14 +177,14 @@ void Font::init()
 	{
 		for (size_t
 				i = 0;
-				i < _index.length();
+				i != _index.length();
 				++i)
 		{
 			SDL_Rect rect;
 
 			const int
-				startX = i %len * _width,
-				startY = i / len * _height;
+				startX = static_cast<int>(i) %len * _width,
+				startY = static_cast<int>(i) / len * _height;
 			int
 				left = -1,
 				right = -1;
@@ -200,7 +200,7 @@ void Font::init()
 							&& left == -1;
 						++y)
 				{
-					if (_surface->getPixelColor(x, y) != 0)
+					if (_surface->getPixelColor(x,y) != 0)
 						left = x;
 				}
 			}
@@ -216,15 +216,15 @@ void Font::init()
 							&& right == -1;
 						)
 				{
-					if (_surface->getPixelColor(x, y) != 0)
+					if (_surface->getPixelColor(x,y) != 0)
 						right = x;
 				}
 			}
 
-			rect.x = left;
-			rect.y = startY;
-			rect.w = right - left + 1;
-			rect.h = _height;
+			rect.x = static_cast<Sint16>(left);
+			rect.y = static_cast<Sint16>(startY);
+			rect.w = static_cast<Uint16>(right - left + 1);
+			rect.h = static_cast<Uint16>(_height);
 
 			_chars[_index[i]] = rect;
 		}
@@ -292,23 +292,23 @@ SDL_Rect Font::getCharSize(wchar_t fontChar)
 		&& isLinebreak(fontChar) == false
 		&& isSpace(fontChar) == false)
 	{
-		charSize.w = _chars[fontChar].w + _spacing;
-		charSize.h = _chars[fontChar].h + _spacing;
+		charSize.w = _chars[fontChar].w + static_cast<Uint16>(_spacing);
+		charSize.h = _chars[fontChar].h + static_cast<Uint16>(_spacing);
 	}
 	else
 	{
 		if (_monospace == true)
-			charSize.w = _width + _spacing;
+			charSize.w = static_cast<Uint16>(_width + _spacing);
 		else if (isNonBreakableSpace(fontChar) == true)
-			charSize.w = _width / 4;
+			charSize.w = static_cast<Uint16>(_width) / 4;
 		else
-			charSize.w = _width / 2;
+			charSize.w = static_cast<Uint16>(_width) / 2;
 
-		charSize.h = _height + _spacing;
+		charSize.h = static_cast<Uint16>(_height + _spacing);
 	}
 
-	charSize.x = charSize.w; // in case anyone mixes them up
-	charSize.y = charSize.h;
+	charSize.x = static_cast<Sint16>(charSize.w); // in case anyone mixes them up
+	charSize.y = static_cast<Sint16>(charSize.h);
 
 	return charSize;
 }

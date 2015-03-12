@@ -101,16 +101,16 @@ void Cursor::draw()
 	Surface::draw();
 
 	Uint8 color = _color;
-	int
+	Sint16
 		x1 = 0,
 		y1 = 0,
-		x2 = getWidth() - 1,
-		y2 = getHeight() - 1;
+		x2 = static_cast<Sint16>(getWidth() - 1),
+		y2 = static_cast<Sint16>(getHeight() - 1);
 
 	lock();
 	for (int
 			i = 0;
-			i < 4;
+			i != 4;
 			++i)
 	{
 		drawLine(
@@ -123,7 +123,7 @@ void Cursor::draw()
 				x1,
 				y1,
 				x2,
-				getWidth() - 1,
+				static_cast<Sint16>(getWidth() - 1),
 				color);
 
 		++x1;
@@ -135,7 +135,9 @@ void Cursor::draw()
 		++color;
 	}
 
-	this->setPixelColor(4,8, --color);
+	this->setPixelColor(
+					4,8,
+					--color);
 	unlock();
 }
 

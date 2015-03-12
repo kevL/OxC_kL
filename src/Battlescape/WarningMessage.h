@@ -49,38 +49,41 @@ private:
 	Timer* _timer;
 
 
-public:
-	/// Creates a new warning message with the specified size and position.
-	WarningMessage(
-			int width,
-			int height,
-			int x = 0,
-			int y = 0);
-	/// Cleans up the warning message.
-	~WarningMessage();
+	public:
+		/// Creates a new warning message with the specified size and position.
+		WarningMessage(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
+		/// Cleans up the warning message.
+		~WarningMessage();
 
-	/// Sets the color for the warning message.
-	void setColor(Uint8 color);
-	/// Sets the text color for the warning message.
-	void setTextColor(Uint8 color);
-	/// Initializes the warning message's resources.
-	void initText(
-			Font* big,
-			Font* small,
-			Language* lang);
-	/// Sets the warning message's palette.
-	void setPalette(
-			SDL_Color* colors,
-			int firstcolor = 0,
-			int ncolors = 256);
-	/// Shows the warning message.
-	void showMessage(const std::wstring& msg);
-	/// Handles the timers.
-	void think();
-	/// Fades the message.
-	void fade();
-	/// Draws the message.
-	void draw();
+		/// Sets the color for the warning message.
+		void setColor(Uint8 color);
+		/// Sets the text color for the warning message.
+		void setTextColor(Uint8 color);
+
+		/// Initializes the warning message's resources.
+		void initText(
+				Font* big,
+				Font* small,
+				Language* lang);
+		/// Sets the warning message's palette.
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
+
+		/// Shows the warning message.
+		void showMessage(const std::wstring& msg);
+
+		/// Handles the timers.
+		void think();
+		/// Fades the message.
+		void fade();
+		/// Draws the message.
+		void draw();
 };
 
 }

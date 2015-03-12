@@ -45,9 +45,9 @@ class ActionMenuItem
 private:
 	bool _highlighted;
 	int
-		_highlightModifier,
 		_id,
 		_tu;
+	Uint8 _highlightModifier;
 
 	BattleActionType _action;
 	Frame* _frame;

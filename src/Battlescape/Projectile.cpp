@@ -645,19 +645,20 @@ void Projectile::applyAccuracy(
 				cos_fi = 1.;
 			}
 
-			if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
+//			if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
+//			{
+			//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
+			// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
+			if (calcHori == true)
 			{
-				//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
-				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
-				if (calcHori == true)
-				{
-					target->x = static_cast<int>(Round(static_cast<double>(origin.x) + range * std::cos(te) * cos_fi));
-					target->y = static_cast<int>(Round(static_cast<double>(origin.y) + range * std::sin(te) * cos_fi));
-				}
-
-				if (calcVert == true)
-					target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
+				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + range * std::cos(te) * cos_fi));
+				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + range * std::sin(te) * cos_fi));
 			}
+
+			if (calcVert == true)
+				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + range * std::sin(fi)));
+//			}
+
 			//Log(LOG_INFO) << ". x = " << target->x;
 			//Log(LOG_INFO) << ". y = " << target->y;
 			//Log(LOG_INFO) << ". z = " << target->z;

@@ -100,11 +100,10 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 	add(_srfBG);
 	_srfBG->drawRect(
-					0,
-					0,
-					_srfBG->getWidth(),
-					_srfBG->getHeight(),
-					eleBG->color); //Palette::blockOffset(6)+9);
+					0,0,
+					static_cast<Sint16>(_srfBG->getWidth()),
+					static_cast<Sint16>(_srfBG->getHeight()),
+					eleBG->color);
 
 	add(_fraTop, "grenadeMenu", "battlescape");
 	_fraTop->setSecondaryColor(Palette::blockOffset(8)+4);
@@ -119,16 +118,14 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 	add(_isfBtn0);
 	_isfBtn0->drawRect(
-					0,
-					0,
-					_isfBtn0->getWidth(),
-					_isfBtn0->getHeight(),
+					0,0,
+					static_cast<Sint16>(_isfBtn0->getWidth()),
+					static_cast<Sint16>(_isfBtn0->getHeight()),
 					Palette::blockOffset(0)+15);
 	_isfBtn0->drawRect(
-					1,
-					1,
-					_isfBtn0->getWidth() - 2,
-					_isfBtn0->getHeight() - 2,
+					1,1,
+					static_cast<Sint16>(_isfBtn0->getWidth()) - 2,
+					static_cast<Sint16>(_isfBtn0->getHeight()) - 2,
 					Palette::blockOffset(6)+12);
 
 	if (Options::battleInstantGrenade == true)
@@ -146,7 +143,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 		_txtTurn0->setVerticalAlign(ALIGN_MIDDLE);
 	}
 
-	for (int
+	for (size_t
 			i = 0;
 			i < 16;
 			++i)
@@ -156,10 +153,10 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 		SDL_Rect square;
 
-		square.x = 0; // dark border
+		square.x = // dark border
 		square.y = 0;
-		square.w = _isfBtn[i]->getWidth();
-		square.h = _isfBtn[i]->getHeight();
+		square.w = static_cast<Uint16>(_isfBtn[i]->getWidth());
+		square.h = static_cast<Uint16>(_isfBtn[i]->getHeight());
 		_isfBtn[i]->drawRect(&square, eleBG->border); //Palette::blockOffset(0)+15);
 
 		++square.x; // inside fill
@@ -185,8 +182,7 @@ PrimeGrenadeState::PrimeGrenadeState(
  * Deletes the Prime Grenade window object.
  */
 PrimeGrenadeState::~PrimeGrenadeState()
-{
-}
+{}
 
 /**
  * Closes the window on right-click.

@@ -72,7 +72,6 @@ private:
 		_endDogfight,
 		_animatingHit;
 	int
-		_color[6], // craft min/max, radar min/max, damage min/max
 		_diff,
 		_timeout,
 		_dist,
@@ -81,8 +80,6 @@ private:
 		_ufoSize,
 		_craftHeight,
 		_craftHeight_pre,
-		_currentCraftDamageColor,
-		_intercept,
 
 		_x,
 		_y,
@@ -93,7 +90,12 @@ private:
 		_w2FireCountdown,
 		_w1FireInterval,
 		_w2FireInterval;
-	size_t _interceptQty;
+	size_t
+		_intercept,
+		_interceptQty;
+	Uint8
+		_color[6], // craft min/max, radar min/max, damage min/max
+		_currentCraftDamageColor;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
@@ -127,7 +129,7 @@ private:
 		* _txtAmmo2,
 		* _txtDistance,
 		* _txtStatus,
-		* _txtInterceptionNumber;
+		* _txtInterception;
 	Timer* _craftDamageAnimTimer;
 	Ufo* _ufo;
 
@@ -213,9 +215,9 @@ private:
 		void btnMinimizedIconClick(Action* action);
 
 		/// Gets interception number.
-		int getInterceptSlot() const;
+		size_t getInterceptSlot() const;
 		/// Sets interception number.
-		void setInterceptSlot(const int intercept);
+		void setInterceptSlot(const size_t intercept);
 		/// Sets interceptions count.
 		void setInterceptQty(const size_t intercepts);
 

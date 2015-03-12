@@ -374,8 +374,8 @@ void UnitFallBState::think()
 									uBelow->startWalking(
 													dir,
 													uBelow->getPosition() + offset,
-													tBelow3,
-													onScreen);
+													tBelow3);
+//													onScreen);
 
 									u = _unitsToMove.erase(u);
 								}
@@ -408,8 +408,8 @@ void UnitFallBState::think()
 				(*unit)->startWalking(
 									Pathfinding::DIR_DOWN,
 									destination,
-									tBelow,
-									onScreen);
+									tBelow);
+//									onScreen);
 
 				(*unit)->setCache(NULL);
 				_parent->getMap()->cacheUnit(*unit);

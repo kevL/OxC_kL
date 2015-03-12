@@ -117,8 +117,8 @@ private:
 		/// Loads the soldier from YAML.
 		void load(
 				const YAML::Node& node,
-				const Ruleset* rule,
-				SavedGame* save);
+				const Ruleset* rule);
+//				SavedGame* save);
 		/// Saves the soldier to YAML.
 		YAML::Node save() const;
 

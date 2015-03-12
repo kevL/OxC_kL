@@ -346,7 +346,7 @@ private:
 		void keyboardPress(Action* action, State* state);
 
 		/// Move the mouse back to where it started after we finish drag scrolling.
-		void stopScrolling(Action* action);
+//		void stopScrolling(Action* action);
 
 		/// Get the polygons texture and shade at the given point.
 		void getPolygonTextureAndShade(

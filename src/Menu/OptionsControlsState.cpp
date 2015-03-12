@@ -53,7 +53,7 @@ OptionsControlsState::OptionsControlsState(OptionsOrigin origin)
 	setCategory(_btnControls);
 
 	_lstControls = new TextList(200, 137, 94, 8);
-	
+
 	if (origin != OPT_BATTLESCAPE)
 		add(_lstControls, "optionLists", "controlsMenu");
 	else
@@ -130,26 +130,26 @@ void OptionsControlsState::init()
 
 /**
  * Uppercases all the words in a string.
- * @param str Source string.
- * @return Destination string.
+ * @param st - source string
+ * @return, destination string
  */
-std::string OptionsControlsState::ucWords(std::string str)
+std::string OptionsControlsState::ucWords(std::string st)
 {
-	if (!str.empty())
-		str[0] = toupper(str[0]);
+	if (st.empty() == false)
+		st[0] = static_cast<char>(std::toupper(st[0]));
 
 	for (size_t
-			i = str.find_first_of(' ');
+			i = st.find_first_of(' ');
 			i != std::string::npos;
-			i = str.find_first_of(' ', i + 1))
+			i = st.find_first_of(' ', i + 1))
 	{
-		if (str.length() > i + 1)
-			str[i + 1] = toupper(str[i + 1]);
+		if (st.length() > i + 1)
+			st[i + 1] = static_cast<char>(std::toupper(st[i + 1]));
 		else
 			break;
 	}
 
-	return str;
+	return st;
 }
 
 /**

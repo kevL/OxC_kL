@@ -814,7 +814,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					if (nextAwardLevel.count(noun) == 0)
 						criteria = (*j).second.front();
 					// Otherwise, get the criteria that reflects this SoldierCommendation level.
-					else if (nextAwardLevel[noun] != (*j).second.size())
+					else if (nextAwardLevel[noun] != static_cast<int>((*j).second.size()))
 						criteria = (*j).second.at(nextAwardLevel[noun]);
 
 					// If a criteria was set AND the stat's count exceeds the criteria.

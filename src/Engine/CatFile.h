@@ -47,22 +47,16 @@ private:
 		~CatFile();
 
 		/// Inherit operator.
-		bool operator !() const
-		{
-			return std::ifstream::operator!();
-		}
+		bool operator ! () const
+		{ return std::ifstream::operator ! (); }
 
 		/// Get amount of objects.
 		int getAmount() const
-		{
-			return _amount;
-		}
+		{ return _amount; }
 
 		/// Get object size.
 		unsigned int getObjectSize(unsigned int i) const
-		{
-			return (i < _amount)? _size[i]: 0;
-		}
+		{ return (i < _amount)? _size[i]: 0; }
 
 		/// Load an object into memory.
 		char* load(

@@ -240,49 +240,57 @@ void TextButton::draw()
 	Surface::draw();
 
 	SDL_Rect square;
-	square.x = 0;
+	square.x =
 	square.y = 0;
-	square.w = getWidth();
-	square.h = getHeight();
+	square.w = static_cast<Uint16>(getWidth());
+	square.h = static_cast<Uint16>(getHeight());
 
-	int mult = 1;
-	if (_contrast)
+	Uint8 mult = 1;
+	if (_contrast == true)
 		mult = 2;
 
-	int color = _color + 1 * mult;
+	Uint8 color = _color * mult;
 
 	for (int
 			i = 0;
-			i < 5;
+			i != 5;
 			++i)
 	{
 		drawRect(&square, color);
 
 		if (i %2 == 0)
 		{
-			square.x++;
-			square.y++;
+			++square.x;
+			++square.y;
 		}
 
-		square.w--;
-		square.h--;
+		--square.w;
+		--square.h;
 
 		switch (i)
 		{
 			case 0:
 				color = _color + 5 * mult;
-				setPixelColor(square.w, 0, color);
+				setPixelColor(
+						static_cast<int>(square.w),
+						0,
+						color);
 			break;
+
 			case 1:
 				color = _color + 2 * mult;
 			break;
+
 			case 2:
 				color = _color + 4 * mult;
-				setPixelColor(square.w + 1, 1, color);
+				setPixelColor(
+						static_cast<int>(square.w) + 1,
+						1,
+						color);
 			break;
+
 			case 3:
 				color = _color + 3 * mult;
-			break;
 		}
 	}
 
@@ -292,7 +300,7 @@ void TextButton::draw()
 	else
 		press = (*_group == this);
 
-	if (press)
+	if (press == true)
 		this->invert(_color + 3 * mult);
 
 	_text->setInvert(press);

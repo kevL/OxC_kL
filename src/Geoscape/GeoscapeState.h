@@ -252,7 +252,7 @@ private:
 		/// Multi-dogfights logic handling.
 		void handleDogfights();
 		/// Gets the number of minimized dogfights.
-		int minimizedDogfightsCount() const;
+		size_t minimizedDogfightsCount() const;
 		/// Starts a new dogfight.
 		void startDogfight();
 		/// Gets first free dogfight slot.

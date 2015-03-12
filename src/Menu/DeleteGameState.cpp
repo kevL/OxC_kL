@@ -121,7 +121,7 @@ void DeleteGameState::btnYesClick(Action*)
 {
 	_game->popState();
 
-	if (!CrossPlatform::deleteFile(_filename))
+	if (CrossPlatform::deleteFile(_filename) == false)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 

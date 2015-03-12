@@ -23,7 +23,6 @@
 //#include <map>
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -33,8 +32,7 @@ namespace OpenXcom
 struct RuleSlot
 {
 	int
-		x,
-		y;
+		x,y;
 };
 
 

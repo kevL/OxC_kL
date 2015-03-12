@@ -87,7 +87,6 @@ private:
 		_cursorSize,
 		_iconHeight,
 		_iconWidth,
-		_messageColor,
 		_mouseX,
 		_mouseY,
 		_reveal,
@@ -96,6 +95,7 @@ private:
 		_spriteWidth,
 		_spriteHeight,
 		_visibleMapHeight;
+	Uint8 _messageColor;
 
 	PathPreview _previewSetting;
 

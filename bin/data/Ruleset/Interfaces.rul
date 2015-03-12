@@ -1205,3 +1205,6 @@ interfaces:
         color: 32
       - id: numWounds
         color: 32
+      - id: body
+        color: 0
+        color2: 3

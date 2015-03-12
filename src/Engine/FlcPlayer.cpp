@@ -550,7 +550,7 @@ void FlcPlayer::color256()
 
 	while (qtyColorPackets--)
 	{
-		qtyColorsSkip = *(pSrc++) + qtyColors;
+		qtyColorsSkip = *(pSrc++) + static_cast<Uint8>(qtyColors);
 		qtyColors = *(pSrc++);
 		if (qtyColors == 0)
 			qtyColors = 256;
@@ -1014,7 +1014,7 @@ int FlcPlayer::getFrameCount() const
  */
 void FlcPlayer::setHeaderSpeed(int speed)
 {
-	_headerSpeed = speed;
+	_headerSpeed = static_cast<Uint16>(speed);
 }
 
 /**

@@ -230,12 +230,11 @@ void Game::run()
 
 			SDL_Event ev; // Refresh mouse position
 			int
-				x,
-				y;
-			SDL_GetMouseState(&x, &y);
+				x,y;
+			SDL_GetMouseState(&x,&y);
 			ev.type = SDL_MOUSEMOTION;
-			ev.motion.x = x;
-			ev.motion.y = y;
+			ev.motion.x = static_cast<Uint16>(x);
+			ev.motion.y = static_cast<Uint16>(y);
 
 			Action action = Action(
 								&ev,

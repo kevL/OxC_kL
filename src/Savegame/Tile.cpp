@@ -137,12 +137,12 @@ void Tile::load(const YAML::Node& node)
 			i < 4;
 			++i)
 	{
-		_mapDataID[i]		= node["mapDataID"][i].as<int>(_mapDataID[i]);
-		_mapDataSetID[i]	= node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
+		_mapDataID[i]		= node["mapDataID"][i]		.as<int>(_mapDataID[i]);
+		_mapDataSetID[i]	= node["mapDataSetID"][i]	.as<int>(_mapDataSetID[i]);
 	}
 
-	_fire		= node["fire"].as<int>(_fire);
-	_smoke		= node["smoke"].as<int>(_smoke);
+	_fire		= node["fire"]		.as<int>(_fire);
+	_smoke		= node["smoke"]		.as<int>(_smoke);
 	_animOffset	= node["animOffset"].as<int>(_animOffset);
 
 	if (node["discovered"])
@@ -189,13 +189,13 @@ void Tile::loadBinary(
 	_fire		= unserializeInt(&buffer, serKey._fire);
 	_animOffset	= unserializeInt(&buffer, serKey._animOffset);
 
-	const Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields));
+	const int boolFields = unserializeInt(&buffer, serKey.boolFields);
 
-	_discovered[0] = (boolFields & 1)? true: false;
-	_discovered[1] = (boolFields & 2)? true: false;
-	_discovered[2] = (boolFields & 4)? true: false;
+	_discovered[0] = (boolFields & 0x01)? true: false;
+	_discovered[1] = (boolFields & 0x02)? true: false;
+	_discovered[2] = (boolFields & 0x04)? true: false;
 
-	_curFrame[1] = (boolFields & 8)? 7: 0;
+	_curFrame[1] = (boolFields & 0x08)? 7: 0;
 	_curFrame[2] = (boolFields & 0x10)? 7: 0;
 
 //	if (_fire || _smoke)
@@ -266,10 +266,10 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._fire, _fire);
 	serializeInt(buffer, serializationKey._animOffset, _animOffset); // kL
 
-	Uint8 boolFields = (_discovered[0]? 1: 0) + (_discovered[1]? 2: 0) + (_discovered[2]? 4: 0);
+	int boolFields = (_discovered[0]? 0x01: 0) + (_discovered[1]? 0x02: 0) + (_discovered[2]? 0x04: 0);
 
-	boolFields |= isUfoDoorOpen(1)? 8: 0; // west
-	boolFields |= isUfoDoorOpen(2)? 0x10: 0; // north?
+	boolFields |= isUfoDoorOpen(1)? 0x08: 0; // west
+	boolFields |= isUfoDoorOpen(2)? 0x10: 0; // north
 
 	serializeInt(
 				buffer,

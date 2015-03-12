@@ -53,7 +53,7 @@ private:
 
 	public:
 		/// Creates a blank music track.
-		AdlibMusic(float volume = 1.0f);
+		AdlibMusic(float volume = 1.f);
 		/// Cleans up the music track.
 		~AdlibMusic();
 
@@ -62,7 +62,7 @@ private:
 		/// Loads music from a chunk of memory.
 		void load(
 				const void* data,
-				int size);
+				int bytes);
 
 		/// Plays the music.
 		void play(int loop = -1) const;

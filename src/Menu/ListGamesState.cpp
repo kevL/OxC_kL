@@ -145,16 +145,16 @@ ListGamesState::ListGamesState(
 				"PAL_GEOSCAPE",
 				_game->getRuleset()->getInterface("geoscape")->getElement("loadPalette")->color);
 
-	add(_window, "window", "saveMenus");
-	add(_txtTitle, "text", "saveMenus");
-	add(_txtDelete, "text", "saveMenus");
-	add(_txtName, "text", "saveMenus");
-	add(_txtDate, "text", "saveMenus");
-	add(_sortName, "text", "saveMenus");
-	add(_sortDate, "text", "saveMenus");
-	add(_lstSaves, "list", "saveMenus");
-	add(_txtDetails, "text", "saveMenus");
-	add(_btnCancel, "button", "saveMenus");
+	add(_window,		"window",	"saveMenus");
+	add(_txtTitle,		"text",		"saveMenus");
+	add(_txtDelete,		"text",		"saveMenus");
+	add(_txtName,		"text",		"saveMenus");
+	add(_txtDate,		"text",		"saveMenus");
+	add(_sortName,		"text",		"saveMenus");
+	add(_sortDate,		"text",		"saveMenus");
+	add(_lstSaves,		"list",		"saveMenus");
+	add(_txtDetails,	"text",		"saveMenus");
+	add(_btnCancel,		"button",	"saveMenus");
 
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -246,7 +246,6 @@ void ListGamesState::updateArrows()
 		break;
 		case SORT_DATE_DESC:
 			_sortDate->setShape(ARROW_SMALL_DOWN);
-		break;
 	}
 }
 
@@ -281,7 +280,6 @@ void ListGamesState::sortList(SaveSort order)
 					_saves.rbegin(),
 					_saves.rend(),
 					compareSaveTimestamp(true));
-		break;
 	}
 
 	updateList();
@@ -292,9 +290,8 @@ void ListGamesState::sortList(SaveSort order)
  */
 void ListGamesState::updateList()
 {
-	int
-		row = 0,
-		color = _lstSaves->getSecondaryColor();
+	size_t row = 0;
+	Uint8 color = _lstSaves->getSecondaryColor();
 
 	for (std::vector<SaveInfo>::const_iterator
 			i = _saves.begin();
@@ -307,10 +304,10 @@ void ListGamesState::updateList()
 						i->displayName.c_str(),
 						i->isoDate.c_str(),
 						i->isoTime.c_str());
-		if (i->reserved
+		if (i->reserved == true
 			&& _origin != OPT_BATTLESCAPE)
 		{
-			_lstSaves->setRowColor(row, color); //Palette::blockOffset(8)+5);
+			_lstSaves->setRowColor(row, color);
 		}
 	}
 }

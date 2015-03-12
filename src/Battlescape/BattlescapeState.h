@@ -230,7 +230,7 @@ private:
 		void mapIn(Action* action);
 
 		/// Move the mouse back to where it started after we finish drag scrolling.
-		void stopScrolling(Action* action);
+//		void stopScrolling(Action* action);
 
 		/// Handles keypresses.
 		void handle(Action* action);

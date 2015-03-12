@@ -307,7 +307,7 @@ void OptionsBaseState::btnCancelClick(Action*)
  * Restores the Options to default settings.
  * @param action - pointer to an Action
  */
-void OptionsBaseState::btnDefaultClick(Action* action)
+void OptionsBaseState::btnDefaultClick(Action*)
 {
 	_game->pushState(new OptionsDefaultsState(
 											_origin,

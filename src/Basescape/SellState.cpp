@@ -78,19 +78,6 @@ SellState::SellState(
 	bool overfull = Options::storageLimitsEnforced == true
 				 && _base->storesOverfull() == true;
 
-/*	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 17, 5, 8);
-	_txtSales = new Text(150, 9, 10, 24);
-	_txtFunds = new Text(150, 9, 160, 24);
-	_txtSpaceUsed = new Text(150, 9, 160, 34);
-	_txtItem = new Text(130, 9, 10, Options::storageLimitsEnforced? 44:33);
-	_txtQuantity = new Text(54, 9, 126, Options::storageLimitsEnforced? 44:33);
-	_txtSell = new Text(96, 9, 180, Options::storageLimitsEnforced? 44:33);
-	_txtValue = new Text(40, 9, 260, Options::storageLimitsEnforced? 44:33);
-	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
-
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(310, 17, 5, 9);
@@ -101,7 +88,6 @@ SellState::SellState(
 	_txtSales		= new Text(140, 9, 160, 24);
 
 	_txtItem		= new Text(30, 9, 16, 33);
-//	_txtSpaceUsed	= new Text(85, 9, 70, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
 	_txtSell		= new Text(20, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 248, 33);
@@ -114,50 +100,29 @@ SellState::SellState(
 	setPalette(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color);
-/*	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color); //0
-	if (origin == OPT_BATTLESCAPE)
-	{
-//		setPalette("PAL_GEOSCAPE", 0);
-//		_color		= Palette::blockOffset(15)-1;
-//		_color2		= Palette::blockOffset(8)+10;
-		_colorArtefact = Palette::blockOffset(8)+5;
-//		_colorAmmo	= Palette::blockOffset(15)+6;
-	}
-	else
-	{
-		setPalette("PAL_BASESCAPE", 0);
-//		_color		= Palette::blockOffset(13)+10;
-//		_color2		= Palette::blockOffset(13);
-		_colorArtefact = Palette::blockOffset(13)+5;
-//		_colorAmmo	= Palette::blockOffset(15)+6;
-	} */
 
 	_ammoColor = _game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color;
 	_colorArtefact = Palette::blockOffset(13)+5;
 
-	add(_window, "window", "sellMenu");
-	add(_txtTitle, "text", "sellMenu");
-	add(_txtBaseLabel, "text", "sellMenu");
-	add(_txtFunds, "text", "sellMenu");
-	add(_txtSales, "text", "sellMenu");
-	add(_txtItem, "text", "sellMenu");
-	add(_txtSpaceUsed, "text", "sellMenu");
-	add(_txtQuantity, "text", "sellMenu");
-	add(_txtSell, "text", "sellMenu");
-	add(_txtValue, "text", "sellMenu");
-	add(_lstItems, "list", "sellMenu");
-	add(_btnCancel, "button", "sellMenu");
-	add(_btnOk, "button", "sellMenu");
+	add(_window,		"window", "sellMenu");
+	add(_txtTitle,		"text", "sellMenu");
+	add(_txtBaseLabel,	"text", "sellMenu");
+	add(_txtFunds,		"text", "sellMenu");
+	add(_txtSales,		"text", "sellMenu");
+	add(_txtItem,		"text", "sellMenu");
+	add(_txtSpaceUsed,	"text", "sellMenu");
+	add(_txtQuantity,	"text", "sellMenu");
+	add(_txtSell,		"text", "sellMenu");
+	add(_txtValue,		"text", "sellMenu");
+	add(_lstItems,		"list", "sellMenu");
+	add(_btnCancel,		"button", "sellMenu");
+	add(_btnOk,			"button", "sellMenu");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(_color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)& SellState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -165,7 +130,6 @@ SellState::SellState(
 					Options::keyOk);
 	_btnOk->setVisible(false);
 
-//	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -174,59 +138,45 @@ SellState::SellState(
 	if (overfull == true)
 		_btnCancel->setVisible(false);
 
-//	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
-//	_txtBaseLabel->setColor(_color);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtSales->setColor(_color);
-//	_txtSales->setSecondaryColor(_color2);
 	_txtSales->setText(tr("STR_VALUE_OF_SALES")
 						.arg(Text::formatFunding(_total)));
 
-//	_txtFunds->setColor(_color);
-//	_txtFunds->setSecondaryColor(_color2);
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-//	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtSpaceUsed->setColor(_color);
-//	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
 	std::wostringstream ss1;
 	ss1 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
-//	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
 	_txtSpaceUsed->setText(ss1.str());
 
-//	_txtQuantity->setColor(_color);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_txtSell->setColor(_color);
 	_txtSell->setText(tr("STR_SELL_SACK"));
 
-//	_txtValue->setColor(_color);
 	_txtValue->setText(tr("STR_VALUE"));
 
-//	_lstItems->setColor(_color);
 	_lstItems->setBackground(_window);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 60, 22, 53);
 	_lstItems->setSelectable();
 	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstItems->onMousePress((ActionHandler)& SellState::lstItemsMousePress);
 	_lstItems->onLeftArrowPress((ActionHandler)& SellState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& SellState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)& SellState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)& SellState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)& SellState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)& SellState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)& SellState::lstItemsMousePress);
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
@@ -650,7 +600,6 @@ void SellState::btnOkClick(Action*)
 						_base->getItems()->removeItem(
 													_items[getItemIndex(i)],
 													_qtys[i]);
-//				break;
 			}
 		}
 	}
@@ -761,9 +710,9 @@ void SellState::lstItemsRightArrowClick(Action* action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action - pointer to an Action
  */
-void SellState::lstItemsMousePress(Action* action)
+/*void SellState::lstItemsMousePress(Action* action)
 {
-/*	if (Options::changeValueByMouseWheel < 1)
+	if (Options::changeValueByMouseWheel < 1)
 		return;
 
 	_sel = _lstItems->getSelectedRow();
@@ -789,8 +738,8 @@ void SellState::lstItemsMousePress(Action* action)
 		{
 			changeByValue(Options::changeValueByMouseWheel, -1);
 		}
-	} */
-}
+	}
+} */
 
 /**
  * Gets the price of the currently selected item.
@@ -1082,7 +1031,6 @@ void SellState::updateItemStrings()
 		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
 	_txtSpaceUsed->setText(ss3.str());
-//	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
 
 	if (Options::storageLimitsEnforced == true)
 		okBtn = okBtn

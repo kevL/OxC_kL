@@ -214,9 +214,9 @@ private:
 		void setDestination(Target* dest);
 
 		/// Sets the interceptor engaging this Ufo.
-		void setShootingAt(const int target);
+		void setShootingAt(const size_t target);
 		/// Gets the interceptor engaging this Ufo.
-		int getShootingAt() const;
+		size_t getShootingAt() const;
 
 		/// Sets the UFO's landing site ID.
 		void setLandId(int id);

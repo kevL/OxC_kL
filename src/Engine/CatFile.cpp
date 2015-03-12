@@ -29,7 +29,7 @@ namespace OpenXcom
  * Creates a CAT file stream. A CAT file starts with an index of the
  * offset and size of every file contained within. Each file consists
  * of a filename followed by its contents.
- * @param path Full path to CAT file.
+ * @param path - full path to CAT file
  */
 CatFile::CatFile(const char* path)
 	:
@@ -49,10 +49,12 @@ CatFile::CatFile(const char* path)
 	_amount /= 2 * sizeof(_amount);
 
 	// Get object offsets
-	seekg(0, std::ios::beg);
+	seekg(
+		0,
+		std::ios::beg);
 
 	_offset = new unsigned int[_amount];
-	_size   = new unsigned int[_amount];
+	_size = new unsigned int[_amount];
 
 	for (unsigned
 			i = 0;
@@ -86,7 +88,7 @@ CatFile::~CatFile()
  * Loads an object into memory.
  * @param i		- Object number to load.
  * @param name	- True to preserve internal file name.
- * @return, Pointer to the loaded object.
+ * @return, pointer to the loaded object
  */
 char* CatFile::load(
 		unsigned i,
@@ -103,7 +105,7 @@ char* CatFile::load(
 
 	if (namesize <= 56)
 	{
-		if (!name)
+		if (name == false)
 		{
 			seekg(
 				namesize + 1,

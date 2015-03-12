@@ -82,8 +82,8 @@ bool Transfer::load(
 							rule->getArmor("STR_ARMOR_NONE_UC"));
 		_soldier->load(
 					soldier,
-					rule,
-					save);
+					rule);
+//					save);
 	}
 
 	if (const YAML::Node& craft = node["craft"])

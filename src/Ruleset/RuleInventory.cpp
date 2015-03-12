@@ -44,8 +44,11 @@ struct convert<OpenXcom::RuleSlot>
 	///
 	static bool decode(const Node& node, OpenXcom::RuleSlot& rhs)
 	{
-		if (!node.IsSequence() || node.size() != 2)
+		if (node.IsSequence() == false
+			|| node.size() != 2)
+		{
 			return false;
+		}
 
 		rhs.x = node[0].as<int>();
 		rhs.y = node[1].as<int>();

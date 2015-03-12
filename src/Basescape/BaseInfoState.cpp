@@ -462,7 +462,7 @@ void BaseInfoState::init()
  * Changes the base name.
  * @param action - pointer to an Action
  */
-void BaseInfoState::edtBaseChange(Action* action)
+void BaseInfoState::edtBaseChange(Action*)
 {
 	_base->setName(_edtBase->getText());
 }

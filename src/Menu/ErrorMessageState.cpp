@@ -114,7 +114,8 @@ void ErrorMessageState::create(
 	setPalette(palette);
 	if (bgColor != -1)
 		setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)),
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
+					static_cast<int>(Palette::blockOffset(static_cast<Uint8>(bgColor)))),
 				Palette::backPos,
 				16);
 
@@ -123,6 +124,7 @@ void ErrorMessageState::create(
 	add(_txtMessage);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(color);
 	_window->setBackground(_game->getResourcePack()->getSurface(bg));

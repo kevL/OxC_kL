@@ -655,8 +655,8 @@ bool UnitWalkBState::doStatusStand()
 			_unit->startWalking(
 							dir,
 							destination,
-							tileBelow,
-							_onScreen);
+							tileBelow);
+//							_onScreen);
 
 			if (_unit->getMoveSound() != -1)
 			{

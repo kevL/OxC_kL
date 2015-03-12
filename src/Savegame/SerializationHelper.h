@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SERHELP_H
 #define OPENXCOM_SERHELP_H
 
-#include <SDL_types.h>
+//#include <SDL_types.h>
 
 
 namespace OpenXcom

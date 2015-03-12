@@ -99,30 +99,28 @@ PurchaseState::PurchaseState(Base* base)
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("buyMenu")->getElement("palette")->color); //0
+			_game->getRuleset()->getInterface("buyMenu")->getElement("palette")->color);
 
 	_ammoColor = _game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color;
 
-	add(_window, "window", "buyMenu");
-	add(_txtTitle, "text", "buyMenu");
-	add(_txtBaseLabel, "text", "buyMenu");
-	add(_txtFunds, "text", "buyMenu");
-	add(_txtPurchases, "text", "buyMenu");
-	add(_txtItem, "text", "buyMenu");
-	add(_txtSpaceUsed, "text", "buyMenu");
-	add(_txtCost, "text", "buyMenu");
-	add(_txtQuantity, "text", "buyMenu");
-	add(_lstItems, "list", "buyMenu");
-	add(_btnCancel, "button", "buyMenu");
-	add(_btnOk, "button", "buyMenu");
+	add(_window,		"window",	"buyMenu");
+	add(_txtTitle,		"text",		"buyMenu");
+	add(_txtBaseLabel,	"text",		"buyMenu");
+	add(_txtFunds,		"text",		"buyMenu");
+	add(_txtPurchases,	"text",		"buyMenu");
+	add(_txtItem,		"text",		"buyMenu");
+	add(_txtSpaceUsed,	"text",		"buyMenu");
+	add(_txtCost,		"text",		"buyMenu");
+	add(_txtQuantity,	"text",		"buyMenu");
+	add(_lstItems,		"list",		"buyMenu");
+	add(_btnCancel,		"button",	"buyMenu");
+	add(_btnOk,			"button",	"buyMenu");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PurchaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -130,63 +128,50 @@ PurchaseState::PurchaseState(Base* base)
 					Options::keyOk);
 	_btnOk->setVisible(false);
 
-//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& PurchaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& PurchaseState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PURCHASE_HIRE_PERSONNEL"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-//	_txtPurchases->setColor(Palette::blockOffset(13)+10);
-//	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
 						.arg(Text::formatFunding(_totalCost)));
 
-//	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-//	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
 	std::wostringstream ss;
 	ss << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	_txtSpaceUsed->setText(ss.str());
-//	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss.str()));
 
-//	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
 
-//	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 55, 46, 32);
 	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstItems->onMousePress((ActionHandler)& PurchaseState::lstItemsMousePress); // mousewheel
 	_lstItems->onLeftArrowPress((ActionHandler)& PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& PurchaseState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)& PurchaseState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)& PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)& PurchaseState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)& PurchaseState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)& PurchaseState::lstItemsMousePress);
 
 	std::wostringstream
 		ss1,
@@ -370,7 +355,7 @@ PurchaseState::PurchaseState(Base* base)
 							L"0");
 			_lstItems->setRowColor(
 								_quantities.size() - 1,
-								_ammoColor); //Palette::blockOffset(15)+6);
+								_ammoColor);
 
 			for (std::vector<std::string>::const_iterator
 					j = items.begin();
@@ -730,9 +715,9 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action - pointer to an Action
  */
-void PurchaseState::lstItemsMousePress(Action* action)
+/*void PurchaseState::lstItemsMousePress(Action* action)
 {
-/*	if (Options::changeValueByMouseWheel < 1)
+	if (Options::changeValueByMouseWheel < 1)
 		return;
 
 	_sel = _lstItems->getSelectedRow();
@@ -758,8 +743,8 @@ void PurchaseState::lstItemsMousePress(Action* action)
 		{
 			decreaseByValue(Options::changeValueByMouseWheel);
 		}
-	} */
-}
+	}
+} */
 
 /**
  * Gets the price of the currently selected item.
@@ -952,10 +937,10 @@ void PurchaseState::updateItemStrings()
 						ss1.str());
 
 	if (_quantities[_sel] > 0)
-		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor()); //Palette::blockOffset(13));
+		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
 	else
 	{
-		_lstItems->setRowColor(_sel, _lstItems->getColor()); //Palette::blockOffset(13)+10);
+		_lstItems->setRowColor(_sel, _lstItems->getColor());
 
 		if (_sel > _itemOffset)
 		{
@@ -964,7 +949,7 @@ void PurchaseState::updateItemStrings()
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, _ammoColor); //Palette::blockOffset(15)+6);
+				_lstItems->setRowColor(_sel, _ammoColor);
 			}
 		}
 	}

@@ -21,7 +21,7 @@
 
 //#include <fstream>
 
-#include "Exception.h"
+//#include "Exception.h"
 
 
 namespace OpenXcom
@@ -34,8 +34,7 @@ Palette::Palette()
 	:
 		_colors(0),
 		_count(0)
-{
-}
+{}
 
 /**
  * Deletes any colors contained within.
@@ -67,14 +66,14 @@ void Palette::loadDat(
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
 
-	memset(
-		_colors,
-		0,
-		sizeof(SDL_Color) * _count);
+	std::memset(
+			_colors,
+			0,
+			sizeof(SDL_Color) * _count);
 
 	// Load file and put colors in palette
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
-	if (!palFile)
+	if (palFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -131,13 +130,13 @@ Uint32 Palette::getRGBA(
 void Palette::savePal(const std::string& file) const
 {
 	std::ofstream ofstr (file.c_str(), std::ios::out | std::ios::binary);
-	short colorQty = _count;
+	short colorQty = static_cast<short>(_count);
 
 	ofstr << "RIFF"; // RIFF header
-	const int length = 4 + 4 + 4 + 4 + 2 + 2 + (colorQty * 4);
+	const int bytes = 4 + 4 + 4 + 4 + 2 + 2 + (static_cast<int>(colorQty) * 4);
 	ofstr.write(
-			(char*)& length,
-			sizeof(length));
+			(char*)& bytes,
+			sizeof(bytes));
 	ofstr << "PAL ";
 
 	ofstr << "data"; // Data chunk
@@ -173,7 +172,7 @@ void Palette::savePal(const std::string& file) const
 				&c,
 				1);
 
-		color++;
+		++color;
 	}
 
 	ofstr.close();
@@ -195,10 +194,10 @@ void Palette::setColors(
 
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
-	memset(
-		_colors,
-		0,
-		sizeof(SDL_Color) * _count);
+	std::memset(
+			_colors,
+			0,
+			sizeof(SDL_Color) * _count);
 
 	for (int // Correct X-Com colors to RGB colors
 			i = 0;
@@ -220,9 +219,9 @@ void Palette::setColors(
 			// meaning any pixels in a surface that are meant to be black will be reassigned as colour 0, rendering them transparent.
 			// avoid this eventuality by altering the "later" colours just enough to disambiguate them without causing them to look significantly different.
 			// SDL 2.0 has some functionality that should render this hack unnecessary.
-			_colors[i].r++;
-			_colors[i].g++;
-			_colors[i].b++;
+			++_colors[i].r;
+			++_colors[i].g;
+			++_colors[i].b;
 		}
 	}
 

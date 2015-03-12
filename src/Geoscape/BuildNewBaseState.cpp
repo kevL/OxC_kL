@@ -107,9 +107,9 @@ BuildNewBaseState::BuildNewBaseState(
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	add(_window, "genericWindow", "geoscape");
-	add(_txtTitle, "genericText", "geoscape");
-	add(_btnCancel, "genericButton2", "geoscape");
+	add(_window,	"genericWindow",	"geoscape");
+	add(_txtTitle,	"genericText",		"geoscape");
+	add(_btnCancel,	"genericButton2",	"geoscape");
 
 	_globe->onMouseClick((ActionHandler)& BuildNewBaseState::globeClick);
 
@@ -147,17 +147,14 @@ BuildNewBaseState::BuildNewBaseState(
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton(); */
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& BuildNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& BuildNewBaseState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 //	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
@@ -216,8 +213,8 @@ void BuildNewBaseState::handle(Action* action)
  */
 void BuildNewBaseState::globeHover(Action* action)
 {
-	_mousex = static_cast<int>(floor(action->getAbsoluteXMouse()));
-	_mousey = static_cast<int>(floor(action->getAbsoluteYMouse()));
+	_mousex = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
+	_mousey = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
 
 	if (_hoverTimer->isRunning() == false)
 		_hoverTimer->start();
@@ -232,8 +229,8 @@ void BuildNewBaseState::hoverRedraw(void)
 		lon,
 		lat;
 	_globe->cartToPolar(
-					_mousex,
-					_mousey,
+					static_cast<Sint16>(_mousex),
+					static_cast<Sint16>(_mousey),
 					&lon,
 					&lat);
 
@@ -246,7 +243,7 @@ void BuildNewBaseState::hoverRedraw(void)
 		_globe->setNewBaseHover();
 	}
 
-	if (Options::globeRadarLines
+	if (Options::globeRadarLines == true
 		&& !(
 			AreSame(_oldlat, lat) && AreSame(_oldlon, lon)))
 	{
@@ -264,23 +261,20 @@ void BuildNewBaseState::hoverRedraw(void)
  */
 void BuildNewBaseState::globeClick(Action* action)
 {
-	const int
-		mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
-		mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+	const int mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+	if (mouseY < 30) // Ignore window clicks
+		return;
+
+	const int mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
 
 	double
 		lon,
 		lat;
 	_globe->cartToPolar(
-					mouseX,
-					mouseY,
+					static_cast<Sint16>(mouseX),
+					static_cast<Sint16>(mouseY),
 					&lon,
 					&lat);
-
-	if (mouseY < 30) // Ignore window clicks
-	{
-		return;
-	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{

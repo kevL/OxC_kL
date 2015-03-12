@@ -1496,7 +1496,7 @@ void TextList::setBorderColor(Uint8 color)
  * Gets the scrollbar color.
  * @return, scrollbar color
  */
-int TextList::getScrollbarColor() const
+Uint8 TextList::getScrollbarColor() const
 {
 	return _scrollbar->getColor();
 }

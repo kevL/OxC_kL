@@ -133,8 +133,7 @@ void MiniBaseView::draw()
 
 	Base* base = NULL;
 	int
-		x,
-		y;
+		x,y;
 	Uint8 color;
 
 	for (size_t
@@ -215,7 +214,7 @@ void MiniBaseView::draw()
 				// Dot Marks for various base-status indicators.
 				if (_mode == MBV_STANDARD)
 				{
-					x = i * (MINI_SIZE + 2);
+					x = static_cast<int>(i) * (MINI_SIZE + 2);
 
 					if (base->getTransfers()->empty() == false) // incoming Transfers
 						setPixelColor(
@@ -239,6 +238,8 @@ void MiniBaseView::draw()
 									color = Palette::blockOffset(6);	// yellow
 								else if ((*craft)->getWarning() == CW_CANTREARM)
 									color = Palette::blockOffset(6)+2;	// orange
+								else if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
+									color = Palette::blockOffset(2)+5;	// red
 
 								setPixelColor( // Craft needs materiels
 											x + 2,

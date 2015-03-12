@@ -59,8 +59,10 @@ ActionMenuItem::ActionMenuItem(
 	Language* const lang = game->getLanguage();
 
 	const Element* const actionMenu = game->getRuleset()->getInterface("battlescape")->getElement("actionMenu");
-
-	_highlightModifier = actionMenu->TFTDMode? 12: 4;
+	if (actionMenu->TFTDMode == true)
+		_highlightModifier = 12;
+	else
+		_highlightModifier = 4;
 
 	_frame		= new Frame(
 						getWidth(),
@@ -71,23 +73,23 @@ ActionMenuItem::ActionMenuItem(
 	_txtAcc		= new Text(63, 20, 151, 13);
 	_txtTU		= new Text(50, 20, 214, 13);
 
-	_frame->setColor(actionMenu->border); //Palette::blockOffset(0)+7);
-	_frame->setSecondaryColor(actionMenu->color2); //Palette::blockOffset(0)+14);
+	_frame->setColor(actionMenu->border);
+	_frame->setSecondaryColor(actionMenu->color2);
 	_frame->setHighContrast();
 	_frame->setThickness(8);
 
 	_txtDesc->initText(big, small, lang);
-	_txtDesc->setColor(actionMenu->color); //Palette::blockOffset(0)-1);
+	_txtDesc->setColor(actionMenu->color);
 	_txtDesc->setHighContrast();
 	_txtDesc->setBig();
 
 	_txtAcc->initText(big, small, lang);
-	_txtAcc->setColor(actionMenu->color); //Palette::blockOffset(0)-1);
+	_txtAcc->setColor(actionMenu->color);
 	_txtAcc->setHighContrast();
 	_txtAcc->setBig();
 
 	_txtTU->initText(big, small, lang);
-	_txtTU->setColor(actionMenu->color); //Palette::blockOffset(0)-1);
+	_txtTU->setColor(actionMenu->color);
 	_txtTU->setHighContrast();
 	_txtTU->setBig();
 }
@@ -184,7 +186,7 @@ void ActionMenuItem::draw()
 void ActionMenuItem::mouseIn(Action* action, State* state)
 {
 	_highlighted = true;
-	_frame->setSecondaryColor(_frame->getSecondaryColor() - _highlightModifier); //Palette::blockOffset(0)+10);
+	_frame->setSecondaryColor(_frame->getSecondaryColor() - _highlightModifier);
 
 	draw();
 	InteractiveSurface::mouseIn(action, state);
@@ -199,7 +201,7 @@ void ActionMenuItem::mouseIn(Action* action, State* state)
 void ActionMenuItem::mouseOut(Action* action, State* state)
 {
 	_highlighted = false;
-	_frame->setSecondaryColor(_frame->getSecondaryColor() + _highlightModifier); //Palette::blockOffset(0)+14);
+	_frame->setSecondaryColor(_frame->getSecondaryColor() + _highlightModifier);
 
 	draw();
 	InteractiveSurface::mouseOut(action, state);

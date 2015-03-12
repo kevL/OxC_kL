@@ -590,14 +590,19 @@ struct PaletteShift
 	static inline void func(
 			Uint8& dest,
 			Uint8& src,
-			int off,
+			int offset,
 			int mult,
 			int mid)
 	{
-		if (src)
+		if (src != 0)
 		{
-			const int inverseOffset = mid? 2 * (mid - src): 0;
-			dest = off + (src * mult) + inverseOffset;
+			int inverseOffset;
+			if (mid != 0)
+				inverseOffset = (2 * (mid - static_cast<int>(src)));
+			else
+				inverseOffset = 0;
+
+			dest = static_cast<Uint8>(offset + (static_cast<int>(src) * mult) + inverseOffset);
 		}
 	}
 };
@@ -622,8 +627,8 @@ void Text::draw()
 	if (Options::debugUi == true) // show text borders for debugUI
 	{
 		SDL_Rect rect;
-		rect.w = getWidth();
-		rect.h = getHeight();
+		rect.w = static_cast<Uint16>(getWidth());
+		rect.h = static_cast<Uint16>(getHeight());
 		rect.x =
 		rect.y = 0;
 		this->drawRect(&rect, 5);

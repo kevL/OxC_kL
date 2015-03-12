@@ -19,12 +19,15 @@
 
 #include "SerializationHelper.h"
 
-#include <assert.h>
+//#include <assert.h>
 
 
 namespace OpenXcom
 {
 
+/**
+ *
+ */
 int unserializeInt(
 		Uint8** buffer,
 		Uint8 sizeKey)
@@ -34,7 +37,7 @@ int unserializeInt(
 	switch (sizeKey)
 	{
 		case 1:
-			ret = **buffer;
+			ret = static_cast<int>(**buffer);
 		break;
 		case 2:
 			ret = *(Sint16*)*buffer;
@@ -55,6 +58,9 @@ int unserializeInt(
 	return ret;
 }
 
+/**
+ *
+ */
 void serializeInt(
 		Uint8** buffer,
 		Uint8 sizeKey,
@@ -64,7 +70,7 @@ void serializeInt(
 	{
 		case 1:
 			assert(value < 256);
-			**buffer = value;
+			**buffer = static_cast<Uint8>(value);
 		break;
 		case 2:
 			assert(value < 65536);
@@ -74,6 +80,7 @@ void serializeInt(
 			assert(false); // no.
 		break;
 		case 4:
+//			assert(value < 4294967296);
 			*(Uint32*)*buffer = value;
 		break;
 

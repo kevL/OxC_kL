@@ -308,7 +308,7 @@ private:
 		///
 		void setBorderColor(Uint8 color);
 		///
-		int getScrollbarColor() const;
+		Uint8 getScrollbarColor() const;
 };
 
 }

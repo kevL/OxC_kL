@@ -205,27 +205,27 @@ void Map::init()
 	// load the unit-selected bobbing arrow into a surface
 	const int
 		f = Palette::blockOffset(1),	// Fill, yellow
-		b = 14,							// Border, black
-		pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-					   b, b, b, f, f, f, b, b, b,
-					   b, f, f, f, f, f, f, f, b,
-					   0, b, f, f, f, f, f, b, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-					   0, 0, 0, b, f, b, 0, 0, 0,
-					   0, 0, 0, 0, b, 0, 0, 0, 0 };
+		b = 14;							// Border, black
+	const Uint8 pixels_stand[81] = { 0, 0, b, b, b, b, b, 0, 0,
+									 0, 0, b, f, f, f, b, 0, 0,
+									 0, 0, b, f, f, f, b, 0, 0,
+									 b, b, b, f, f, f, b, b, b,
+									 b, f, f, f, f, f, f, f, b,
+									 0, b, f, f, f, f, f, b, 0,
+									 0, 0, b, f, f, f, b, 0, 0,
+									 0, 0, 0, b, f, b, 0, 0, 0,
+									 0, 0, 0, 0, b, 0, 0, 0, 0 };
 
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
 
 	_arrow->lock();
-	for (int
+	for (size_t
 			y = 0;
 			y < 9;
 			++y)
 	{
-		for (int
+		for (size_t
 				x = 0;
 				x < 9;
 				++x)
@@ -233,32 +233,32 @@ void Map::init()
 			_arrow->setPixelColor(
 								x,
 								y,
-								pixels[x + (y * 9)]);
+								pixels_stand[x + (y * 9)]);
 		}
 	}
 	_arrow->unlock();
 
 	// DarkDefender_begin:
-	const int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
-								   0, 0, 0, 0, b, 0, 0, 0, 0,
-								   0, 0, 0, b, f, b, 0, 0, 0,
-								   0, 0, b, f, f, f, b, 0, 0,
-								   0, b, f, f, f, f, f, b, 0,
-								   b, f, f, f, f, f, f, f, b,
-								   b, b, b, f, f, f, b, b, b,
-								   0, 0, b, f, f, f, b, 0, 0,
-								   0, 0, b, b, b, b, b, 0, 0 };
+	const Uint8 pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+									 0, 0, 0, 0, b, 0, 0, 0, 0,
+									 0, 0, 0, b, f, b, 0, 0, 0,
+									 0, 0, b, f, f, f, b, 0, 0,
+									 0, b, f, f, f, f, f, b, 0,
+									 b, f, f, f, f, f, f, f, b,
+									 b, b, b, f, f, f, b, b, b,
+									 0, 0, b, f, f, f, b, 0, 0,
+									 0, 0, b, b, b, b, b, 0, 0 };
 
 	_arrow_kneel = new Surface(9, 9);
 	_arrow_kneel->setPalette(this->getPalette());
 
 	_arrow_kneel->lock();
-	for (int
+	for (size_t
 			y = 0;
 			y < 9;
 			++y)
 	{
-		for (int
+		for (size_t
 				x = 0;
 				x < 9;
 				++x)
@@ -679,7 +679,7 @@ void Map::drawTerrain(Surface* surface)
 	BattleUnit* unit = NULL;
 	Surface* srfSprite;
 	Tile* tile;
-	const Tile* tileBelow = NULL;
+	const Tile* tileBelow;
 
 	Position
 		mapPosition,
@@ -739,7 +739,7 @@ void Map::drawTerrain(Surface* surface)
 					&& screenPosition.y < surface->getHeight() + _spriteHeight)
 				{
 					tile = _battleSave->getTile(mapPosition);
-					const Tile* const tileBelow = _battleSave->getTile(mapPosition + Position(0,0,-1));
+					tileBelow = _battleSave->getTile(mapPosition + Position(0,0,-1));
 
 					if (tile == NULL)
 						continue;

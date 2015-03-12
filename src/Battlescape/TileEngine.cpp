@@ -5620,8 +5620,8 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 					unit->startWalking(
 									unit->getDirection(),
 									unit->getPosition(),
-									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)),
-									true);
+									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)));
+//									true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
 					unit->setStatus(STATUS_STANDING);
 				}
@@ -5630,8 +5630,8 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 					unit->startWalking(
 									Pathfinding::DIR_DOWN,
 									unit->getPosition() + Position(0, 0,-1),
-									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)),
-									true);
+									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)));
+//									true);
 					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << unit->getId();
 					_battleSave->addFallingUnit(unit);
 				}

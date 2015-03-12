@@ -75,7 +75,7 @@ MedikitView::MedikitView(
 		Text* partTxt,
 		Text* woundTxt)
 	:
-		InteractiveSurface(w, h, x, y),
+		InteractiveSurface(w,h,x,y),
 		_game(game),
 		_selectedPart(0),
 		_unit(unit),
@@ -93,18 +93,10 @@ void MedikitView::draw()
 {
 	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 
-	int
-		wound = 0,
-		green = 0,
-		red = 3,
+	Uint8
+		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color,
+		red = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2,
 		color;
-
-	if (_game->getRuleset()->getInterface("medikit") != NULL
-		&& _game->getRuleset()->getInterface("medikit")->getElement("body"))
-	{
-		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
-		red = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2;
-	}
 
 	this->lock();
 	for (size_t
@@ -112,9 +104,10 @@ void MedikitView::draw()
 			i < srt->getTotalFrames();
 			++i)
 	{
-		color = green;
-		if (_unit->getFatalWound(i))
+		if (_unit->getFatalWound(i) != 0)
 			color = red;
+		else
+			color = green;
 
 		Surface* const surface = srt->getFrame(i);
 		surface->blitNShade(

@@ -59,7 +59,7 @@ private:
 
 
 protected:
-	bool isButtonHandled(Uint8 button = 0);
+	bool isButtonHandled(Uint8 btn = 0);
 
 
 	public:
@@ -79,7 +79,7 @@ protected:
 		void setShape(ArrowShape shape);
 
 		/// Sets the arrow button's list.
-		void setTextList(TextList* list);
+		void setTextList(TextList* textList);
 
 		/// Handles the timers.
 		void think();

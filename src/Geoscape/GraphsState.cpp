@@ -525,24 +525,24 @@ GraphsState::GraphsState(int curGraph)
 
 
 	const Uint8 gridColor = _game->getRuleset()->getInterface("graphs")->getElement("graph")->color;
-	_bg->drawRect(125, 49, 188, 127, gridColor); //Palette::blockOffset(10)); // set up the grid
+	_bg->drawRect(125, 49, 188, 127, gridColor); // set up the grid
 
-	for (int
+	for (Sint16
 			grid = 0;
 			grid < 5;
 			++grid)
 	{
-		for (int
+		for (Sint16
 				y = 50 + grid;
 				y <= 163 + grid;
 				y += 14)
 		{
-			for (int
+			for (Sint16
 					x = 126 + grid;
 					x <= 297 + grid;
 					x += 17)
 			{
-				Uint8 color = gridColor + 1 + grid; //Palette::blockOffset(14);
+				Uint8 color = gridColor + 1 + static_cast<Uint8>(grid);
 				if (grid == 4) color = 0;
 
 				_bg->drawRect(
@@ -1478,16 +1478,14 @@ void GraphsState::drawCountryLines()
 				i != 12;
 				++i)
 		{
-			int
-				x = 312 - static_cast<int>(i) * 17,
-				y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
+			Sint16 y = 175 + static_cast<Sint16>(Round(static_cast<double>(lowerLimit) / units));
 
 			if (_alien == true)
 			{
 				if (i < country->getActivityAlien().size())
 				{
 					int reduction = country->getActivityAlien().at(country->getActivityAlien().size() - (i + 1));
-					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
+					y -= static_cast<Sint16>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
 			}
@@ -1495,8 +1493,8 @@ void GraphsState::drawCountryLines()
 			{
 				if (i < country->getFunding().size())
 				{
-					int reduction = country->getFunding().at(country->getFunding().size() - (1 + i));
-					y -= static_cast<int>(Round(static_cast<double>(reduction) / 1000. / units));
+					int reduction = country->getFunding().at(country->getFunding().size() - (i + 1));
+					y -= static_cast<Sint16>(Round(static_cast<double>(reduction) / 1000. / units));
 					totals[i] += static_cast<int>(Round(static_cast<double>(reduction) / 1000.));
 				}
 			}
@@ -1505,7 +1503,7 @@ void GraphsState::drawCountryLines()
 				if (i < country->getActivityXcom().size())
 				{
 					int reduction = country->getActivityXcom().at(country->getActivityXcom().size() - (i + 1));
-					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
+					y -= static_cast<Sint16>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
 			}
@@ -1516,6 +1514,8 @@ void GraphsState::drawCountryLines()
 
 			if (newLineVector.size() > 1)
 			{
+				const Sint16 x = 312 - static_cast<Sint16>(i) * 17;
+
 				if (_alien == true)
 					_alienCountryLines.at(itCountry)->drawLine(
 							x,
@@ -1561,43 +1561,43 @@ void GraphsState::drawCountryLines()
 	const Uint8 color = _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color2;
 
 	std::vector<Sint16> newLineVector;
-	for (int
+	for (size_t
 			i = 0;
-			i < 12;
+			i != 12;
 			++i)
 	{
-		int
-			x = 312 - i * 17,
-			y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
+		Sint16 y = 175 + static_cast<Sint16>(Round(static_cast<double>(lowerLimit) / units));
 
 		if (totals[i] > 0)
-			y -= static_cast<int>(Round(static_cast<double>(totals[i]) / units));
+			y -= static_cast<Sint16>(Round(static_cast<double>(totals[i]) / units));
 
 		newLineVector.push_back(y);
 
 		if (newLineVector.size() > 1)
 		{
+			const Sint16 x = 312 - static_cast<Sint16>(i) * 17;
+
 			if (_alien == true)
 				_alienCountryLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						color); //Palette::blockOffset(9)+8);
+						color);
 			else if (_income == true)
 				_incomeLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						color); //Palette::blockOffset(9)+8);
+						color);
 			else
 				_xcomCountryLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						color); //Palette::blockOffset(9)+8);
+						color);
 		}
 	}
 
@@ -1754,19 +1754,17 @@ void GraphsState::drawRegionLines()
 
 		for (size_t
 				i = 0;
-				i < 12;
+				i != 12;
 				++i)
 		{
-			int
-				x = 312 - static_cast<int>(i) * 17,
-				y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
+			Sint16 y = 175 + static_cast<Sint16>(Round(static_cast<double>(lowerLimit) / units));
 
 			if (_alien == true)
 			{
 				if (i < region->getActivityAlien().size())
 				{
 					int reduction = region->getActivityAlien().at(region->getActivityAlien().size() - (i + 1));
-					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
+					y -= static_cast<Sint16>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
 			}
@@ -1775,7 +1773,7 @@ void GraphsState::drawRegionLines()
 				if (i < region->getActivityXcom().size())
 				{
 					int reduction = region->getActivityXcom().at(region->getActivityXcom().size() - (i + 1));
-					y -= static_cast<int>(Round(static_cast<double>(reduction) / units));
+					y -= static_cast<Sint16>(Round(static_cast<double>(reduction) / units));
 					totals[i] += reduction;
 				}
 			}
@@ -1786,6 +1784,8 @@ void GraphsState::drawRegionLines()
 
 			if (newLineVector.size() > 1)
 			{
+				const Sint16 x = 312 - static_cast<Sint16>(i) * 17;
+
 				if (_alien == true)
 					_alienRegionLines.at(itRegion)->drawLine(
 							x,
@@ -1820,36 +1820,36 @@ void GraphsState::drawRegionLines()
 	const Uint8 color = _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color2;
 
 	std::vector<Sint16> newLineVector;
-	for (int
+	for (size_t
 			i = 0;
-			i < 12;
+			i != 12;
 			++i)
 	{
-		int
-			x = 312 - i * 17,
-			y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
+		Sint16 y = 175 + static_cast<Sint16>(Round(static_cast<double>(lowerLimit) / units));
 
 		if (totals[i] > 0)
-			y -= static_cast<int>(Round(static_cast<double>(totals[i]) / units));
+			y -= static_cast<Sint16>(Round(static_cast<double>(totals[i]) / units));
 
 		newLineVector.push_back(y);
 
 		if (newLineVector.size() > 1)
 		{
+			const Sint16 x = 312 - static_cast<Sint16>(i) * 17;
+
 			if (_alien == true)
 				_alienRegionLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						color); //Palette::blockOffset(9)+8);
+						color);
 			else
 				_xcomRegionLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						color); //Palette::blockOffset(9)+8);
+						color);
 		}
 	}
 
@@ -2003,9 +2003,9 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		}
 	}
 
-	for (int // toggle screens
+	for (size_t // toggle screens
 			btn = 0;
-			btn < 5;
+			btn != 5;
 			++btn)
 	{
 		_financeLines.at(btn)->setVisible(_financeToggles.at(btn));
@@ -2017,22 +2017,20 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	range = static_cast<double>(upperLimit - lowerLimit);
 	const double units = range / 126.;
 
-	for (int
+	for (size_t
 			btn = 0;
-			btn < 5;
+			btn != 5;
 			++btn)
 	{
 		std::vector<Sint16> newLineVector;
 		int reduction;
 
-		for (int
+		for (size_t
 				i = 0;
-				i < 12;
+				i != 12;
 				++i)
 		{
-			int
-				x = 312 - i * 17,
-				y = 175 + static_cast<int>(Round(static_cast<double>(lowerLimit) / units));
+			Sint16 y = 175 + static_cast<Sint16>(Round(static_cast<double>(lowerLimit) / units));
 
 			switch (btn)
 			{
@@ -2053,17 +2051,26 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			}
 
 			y -= reduction;
+
 			newLineVector.push_back(y);
 
-			const Uint8 colorOffset = btn %2? 8: 0;
+			Uint8 colorOffset;
+			if (btn %2 != 0)
+				colorOffset = 8;
+			else
+				colorOffset = 0;
 
 			if (newLineVector.size() > 1)
+			{
+				const Sint16 x = 312 - static_cast<Sint16>(i) * 17;
+
 				_financeLines.at(btn)->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset((btn / 2) + 1) + colorOffset);
+						Palette::blockOffset((static_cast<Uint8>(btn) / 2) + 1) + colorOffset);
+			}
 		}
 	}
 

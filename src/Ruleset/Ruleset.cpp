@@ -1094,10 +1094,10 @@ void Ruleset::loadFile(const std::string& filename)
 		{
 			SDL_Color color;
 
-			color.r			= (*j)[0].as<int>(0); // Uint8 or uint8_t, really.
-			color.g			= (*j)[1].as<int>(0);
-			color.b			= (*j)[2].as<int>(0);
-			color.unused	= (*j)[3].as<int>(2);;
+			color.r			= (*j)[0].as<Uint8>(0);
+			color.g			= (*j)[1].as<Uint8>(0);
+			color.b			= (*j)[2].as<Uint8>(0);
+			color.unused	= (*j)[3].as<Uint8>(2);
 
 			_transparencies.push_back(color);
 		}

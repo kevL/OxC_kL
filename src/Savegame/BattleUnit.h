@@ -581,10 +581,10 @@ private:
 
 		/// Starts the walkingPhase.
 		void startWalking(
-				int direction,
-				const Position& destination,
-				Tile* tileBelow,
-				bool cache);
+				int dir,
+				const Position& dest,
+				Tile* tileBelow);
+//				bool cache);
 		/// Advances the walkingPhase.
 		void keepWalking(
 				const Tile* const tileBelow,

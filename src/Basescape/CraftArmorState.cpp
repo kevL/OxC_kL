@@ -169,7 +169,7 @@ void CraftArmorState::init()
 		{
 			if ((*i)->getCraft() == craft)
 				color = _lstSoldiers->getSecondaryColor();
-			else if ((*i)->getCraft() != NULL)
+			else //if ((*i)->getCraft() != NULL)
 				color = _game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color;
 		}
 

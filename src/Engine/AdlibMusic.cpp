@@ -124,29 +124,31 @@ void AdlibMusic::load(const std::string& filename)
 
 /**
  * Loads a music file from a specified memory chunk.
- * @param data Pointer to the music file in memory
- * @param size Size of the music file in bytes.
+ * @param data	- pointer to the music file in memory
+ * @param bytes	- size of the music file in bytes
  */
 void AdlibMusic::load(
 		const void* data,
-		int size)
+		int bytes)
 {
 	_data = (char*)data;
 
 	if (*(unsigned char*)_data <= 56)
-		size += *(unsigned char*)_data;
+		bytes += *(unsigned char*)_data;
 
-	_size = static_cast<size_t>(size);
+	_size = static_cast<size_t>(bytes);
 }
 
 /**
  * Plays the contained music track.
- * @param loop Amount of times to loop the track. -1 = infinite
+ * @param loop - not used. But needs to be here because of virtual function in
+ * base class Music, which has a default set meaning this won't overload the
+ * virtual function unless that default is removed. That ain't gonna happen ....
  */
 void AdlibMusic::play(int loop) const
 {
 #ifndef __NO_MUSIC
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 		stop();
 //kL		func_setup_music((unsigned char*)_data, _size);

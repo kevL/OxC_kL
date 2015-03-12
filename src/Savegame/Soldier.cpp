@@ -153,12 +153,12 @@ Soldier::~Soldier()
  * Loads the soldier from a YAML file.
  * @param node - reference a YAML node
  * @param rule - pointer to the Ruleset
- * @param save - pointer to SavedGame
+// * @param save - pointer to SavedGame
  */
 void Soldier::load(
 		const YAML::Node& node,
-		const Ruleset* rule,
-		SavedGame* save)
+		const Ruleset* rule)
+//		SavedGame* save)
 {
 	_id				= node["id"]						.as<int>(_id);
 	_name			= Language::utf8ToWstr(node["name"]	.as<std::string>());

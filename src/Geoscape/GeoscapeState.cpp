@@ -1315,9 +1315,8 @@ void GeoscapeState::time5Seconds()
 				{
 					AlienMission* const mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
-					mission->ufoLifting(
-									**i,
-									*_globe);
+					mission->ufoLifting(**i);
+//									*_globe);
 
 					if (detected != (*i)->getDetected()
 						&& (*i)->getFollowers()->empty() == false)
@@ -3162,8 +3161,8 @@ void GeoscapeState::globeClick(Action* action)
 			lonRad,
 			latRad;
 		_globe->cartToPolar(
-						mouseX,
-						mouseY,
+						static_cast<Sint16>(mouseX),
+						static_cast<Sint16>(mouseY),
 						&lonRad,
 						&latRad);
 
@@ -3505,9 +3504,9 @@ void GeoscapeState::handleDogfights()
  * Gets the number of minimized dogfights.
  * @return, number of minimized dogfights
  */
-int GeoscapeState::minimizedDogfightsCount() const
+size_t GeoscapeState::minimizedDogfightsCount() const
 {
-	int ret = 0;
+	size_t ret = 0;
 
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
@@ -3571,7 +3570,7 @@ void GeoscapeState::startDogfight()
  */
 int GeoscapeState::getNextDogfightSlot() const
 {
-	int slot = 1;
+	size_t slot = 1;
 
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();

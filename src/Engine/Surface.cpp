@@ -75,15 +75,16 @@ inline void* NewAligned(
 		int bpp,
 		int width,
 		int height)
-{	const int pitch = GetPitch(bpp, width);
-	const int total = pitch * height;
-	void* buffer = 0;
+{	const int
+		pitche = GetPitch(bpp, width),
+		total = pitche * height;
+	void* buffer = NULL;
 
 #ifndef _WIN32
 	#ifdef __MORPHOS__
 
 	buffer = calloc( total, 1 );
-	if (!buffer)
+	if (buffer == NULL)
 	{
 		throw Exception("Failed to allocate surface");
 	}
@@ -98,13 +99,16 @@ inline void* NewAligned(
 #else
 	// of course Windows has to be difficult about this!
 	buffer = _aligned_malloc(total, 16);
-	if (!buffer)
+	if (buffer == NULL)
 	{
 		throw Exception("Failed to allocate surface");
 	}
 #endif
 
-	memset(buffer, 0, total);
+	std::memset(
+			buffer,
+			0,
+			total);
 
 	return buffer; }
 
@@ -113,7 +117,7 @@ inline void* NewAligned(
  * @param buffer - buffer to delete
  */
 inline void DeleteAligned(void* buffer)
-{	if (buffer)
+{	if (buffer != NULL)
 	{
 #ifdef _WIN32
 		_aligned_free(buffer);
@@ -151,7 +155,10 @@ Surface::Surface(
 		_redraw(false),
 		_alignedBuffer(NULL)
 {
-	_alignedBuffer = NewAligned(bpp, width, height);
+	_alignedBuffer = NewAligned(
+							bpp,
+							width,
+							height);
 	_surface = SDL_CreateRGBSurfaceFrom(
 									_alignedBuffer,
 									width,
@@ -167,7 +174,10 @@ Surface::Surface(
 		throw Exception(SDL_GetError());
 	}
 
-	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+	SDL_SetColorKey(
+				_surface,
+				SDL_SRCCOLORKEY,
+				0);
 
 	_crop.w =
 	_crop.h = 0;
@@ -176,8 +186,8 @@ Surface::Surface(
 
 	_clear.x =
 	_clear.y = 0;
-	_clear.w = getWidth();
-	_clear.h = getHeight();
+	_clear.w = static_cast<Uint16>(getWidth());
+	_clear.h = static_cast<Uint16>(getHeight());
 }
 
 /**
@@ -192,7 +202,7 @@ Surface::Surface(const Surface& other)
 		const int
 			width = other.getWidth(),
 			height = other.getHeight(),
-			pitch = GetPitch(bpp, width);
+			pitche = GetPitch(bpp, width);
 
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(
@@ -200,7 +210,7 @@ Surface::Surface(const Surface& other)
 										width,
 										height,
 										bpp,
-										pitch,
+										pitche,
 										0,0,0,0);
 
 		SDL_SetColorKey(
@@ -216,7 +226,7 @@ Surface::Surface(const Surface& other)
 		std::memcpy(
 				_alignedBuffer,
 				other._alignedBuffer,
-				height * pitch);
+				height * pitche);
 	}
 	else
 	{
@@ -289,7 +299,7 @@ void Surface::loadScr(const std::string& filename)
 			i != buffer.end();
 			++i)
 	{
-		setPixelIterative(&x, &y, *i);
+		setPixelIterative(&x,&y, *i);
 	}
 	unlock();
 }
@@ -303,16 +313,16 @@ void Surface::loadImage(const std::string& filename)
 	DeleteAligned(_alignedBuffer); // Destroy current surface (will be replaced)
 
 	SDL_FreeSurface(_surface);
-	_alignedBuffer = 0;
-	_surface = 0;
+	_alignedBuffer = NULL;
+	_surface = NULL;
 
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename)); // Load file
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename)); // Load file
 	_surface = IMG_Load(utf8.c_str());
 	if (_surface == NULL)
 	{
-		std::string err = filename + ":" + IMG_GetError();
+		const std::string err = filename + ":" + IMG_GetError();
 		throw Exception(err);
 	}
 }
@@ -464,8 +474,8 @@ void Surface::clear(Uint32 color)
 	if (_surface->flags & SDL_SWSURFACE)
 		std::memset(
 				_surface->pixels,
-				color,
-				_surface->h * _surface->pitch);
+				static_cast<int>(color),
+				static_cast<size_t>(_surface->h) * static_cast<size_t>(_surface->pitch));
 	else
 		SDL_FillRect(
 				_surface,
@@ -498,8 +508,8 @@ void Surface::offset(
 				&& y < getHeight();
 			)
 	{
-		const Uint8 pixel = getPixelColor(x, y);	// getPixelColor
-		int p;										// the new color
+		const int pixel = static_cast<int>(getPixelColor(x,y));	// getPixelColor
+		int p;													// the new color
 
 		if (delta > 0)
 			p = (pixel * mult) + delta;
@@ -518,9 +528,9 @@ void Surface::offset(
 		}
 
 		if (pixel > 0)
-			setPixelIterative(&x, &y, p);
+			setPixelIterative(&x,&y, static_cast<Uint8>(p));
 		else
-			setPixelIterative(&x, &y, 0);
+			setPixelIterative(&x,&y, 0);
 	}
 	unlock();
 }
@@ -540,15 +550,13 @@ void Surface::invert(Uint8 mid)
 				&& y < getHeight();
 			)
 	{
-		const Uint8 pixel = getPixelColor(x, y);
+		const Uint8 pixel = getPixelColor(x,y);
 		if (pixel > 0)
 			setPixelIterative(
-							&x,
-							&y,
-							pixel +
-								2 * (static_cast<int>(mid) - static_cast<int>(pixel)));
+						&x,&y,
+						pixel + ((static_cast<int>(mid) - static_cast<int>(pixel)) * 2));
 		else
-			setPixelIterative(&x, &y, 0);
+			setPixelIterative(&x,&y, 0);
 	}
 	unlock();
 }
@@ -596,8 +604,8 @@ void Surface::blit(Surface* surface)
 		else
 			crop = &_crop;
 
-		target.x = getX();
-		target.y = getY();
+		target.x = static_cast<Sint16>(getX());
+		target.y = static_cast<Sint16>(getY());
 
 		SDL_BlitSurface(
 					_surface,
@@ -949,13 +957,13 @@ static inline void func(
 		const int& newColor,
 		const int&)
 {
-	if (src)
+	if (src != 0)
 	{
-		const int newShade = (src & 15) + shade;
+		const int newShade = static_cast<int>(src & 15) + shade;
 		if (newShade > 15) // so dark it would flip over to another color - make it black instead
 			dest = 15;
 		else
-			dest = newColor | newShade;
+			dest = static_cast<Uint8>(newColor | newShade);
 	}
 }
 
@@ -984,7 +992,7 @@ static inline void func(
 		const int&,
 		const int&)
 {
-	if (src)
+	if (src != 0)
 	{
 		const int newShade = (src & 15) + shade;
 		if (newShade > 15) // so dark it would flip over to another color - make it black instead
@@ -1091,17 +1099,17 @@ void Surface::resize(
 		int height)
 {
 	Uint8 bpp = _surface->format->BitsPerPixel; // Set up new surface
-	int pitch = GetPitch(bpp, width);
+	int pitche = GetPitch(bpp, width);
 	void* alignedBuffer = NewAligned(
-									bpp,
-									width,
-									height);
+								bpp,
+								width,
+								height);
 	SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
 												alignedBuffer,
 												width,
 												height,
 												bpp,
-												pitch,
+												pitche,
 												0,0,0,0);
 	if (surface == NULL)
 	{
@@ -1120,9 +1128,9 @@ void Surface::resize(
 				255);
 	SDL_BlitSurface(
 				_surface,
-				0,
+				NULL,
 				surface,
-				0);
+				NULL);
 
 
 	DeleteAligned(_alignedBuffer); // Delete old surface
@@ -1131,8 +1139,8 @@ void Surface::resize(
 	_alignedBuffer = alignedBuffer;
 	_surface = surface;
 
-	_clear.w = getWidth();
-	_clear.h = getHeight();
+	_clear.w = static_cast<Uint16>(getWidth());
+	_clear.h = static_cast<Uint16>(getHeight());
 }
 
 /**

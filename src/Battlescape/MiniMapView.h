@@ -77,7 +77,7 @@ private:
 	/// Handles moving the mouse into the MiniMap surface.
 	void mouseIn(Action* action, State* state);
 	///
-	void stopScrolling(Action* action);
+//	void stopScrolling(Action* action);
 
 
 	public:

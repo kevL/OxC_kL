@@ -75,8 +75,8 @@ private:
 
 		/// Update the resolution settings, we just resized the window.
 		void resize(
-				int& dX,
-				int& dY);
+				/*int& dX,
+				int& dY*/);
 };
 
 }

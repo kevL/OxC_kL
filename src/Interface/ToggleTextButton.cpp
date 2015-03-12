@@ -36,10 +36,9 @@ ToggleTextButton::ToggleTextButton(
 		TextButton(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_invertMid(-1),
-		_fakeGroup(0)
+		_fakeGroup(NULL)
 {
 	_isPressed = false;
 
@@ -48,8 +47,7 @@ ToggleTextButton::ToggleTextButton(
 
 
 ToggleTextButton::~ToggleTextButton(void)
-{
-}
+{}
 
 /**
  * handle mouse clicks by toggling the button state;
@@ -61,7 +59,7 @@ void ToggleTextButton::mousePress(Action* action, State* state)
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_isPressed = !_isPressed;
-		_fakeGroup = _isPressed? this: 0; // this is the trick that makes TextButton stick
+		_fakeGroup = _isPressed? this: NULL; // this is the trick that makes TextButton stick
 	}
 
 	InteractiveSurface::mousePress(action, state); // skip TextButton's code as it will try to set *_group
@@ -77,7 +75,7 @@ void ToggleTextButton::setPressed(bool pressed)
 		return;
 
 	_isPressed = pressed;
-	_fakeGroup = _isPressed? this: 0;
+	_fakeGroup = _isPressed? this: NULL;
 
 	_redraw = true;
 }
@@ -88,7 +86,7 @@ void ToggleTextButton::setPressed(bool pressed)
 void ToggleTextButton::setInvertColor(Uint8 mid)
 {
 	_invertMid = mid;
-	_fakeGroup = 0;
+	_fakeGroup = NULL;
 
 	_redraw = true;
 }
@@ -99,14 +97,14 @@ void ToggleTextButton::setInvertColor(Uint8 mid)
 void ToggleTextButton::draw()
 {
 	if (_invertMid > -1) // nevermind, TextButton. We'll invert the surface ourselves.
-		_fakeGroup = 0;
+		_fakeGroup = NULL;
 
 	TextButton::draw();
 
 	if (_invertMid > -1
-		&& _isPressed)
+		&& _isPressed == true)
 	{
-		this->invert(_invertMid);
+		this->invert(static_cast<Uint8>(_invertMid));
 	}
 }
 

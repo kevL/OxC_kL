@@ -837,19 +837,21 @@ static void _clearInventory(
 void InventoryState::_refreshMouse()
 {
 	int
-		x,
-		y;
-	SDL_GetMouseState(&x, &y);
+		x,y;
+	SDL_GetMouseState(&x,&y);
 
-	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
-	SDL_WarpMouse(x, y);		// move the mouse back to avoid cursor creep
+	SDL_WarpMouse(
+			static_cast<Uint16>(x + 1),
+			static_cast<Uint16>(y));	// send a mouse motion event to refresh any hover actions
+	SDL_WarpMouse(
+			static_cast<Uint16>(x),
+			static_cast<Uint16>(y));	// move the mouse back to avoid cursor creep
 }
 
 /**
  * Clears the current unit's inventory and moves all items to the ground.
- * @param action - pointer to an Action
  */
-void InventoryState::btnClearInventoryClick(Action* action)
+void InventoryState::btnClearInventoryClick(Action*)
 {
 	if (_inv->getSelectedItem() != NULL) // don't accept clicks when moving items
 		return;
@@ -868,8 +870,8 @@ void InventoryState::btnClearInventoryClick(Action* action)
 	_refreshMouse();
 
 	_game->getResourcePack()->getSoundByDepth(
-										_battleGame->getDepth(),
-										ResourcePack::ITEM_DROP)->play();
+										static_cast<unsigned>(_battleGame->getDepth()),
+										static_cast<unsigned>(ResourcePack::ITEM_DROP))->play();
 }
 
 /**
@@ -895,26 +897,25 @@ void InventoryState::invClick(Action*)
 					itemRule,
 					ammo);
 
-		std::wstring wstr;
+		std::wstring wst;
 
 		if (ammo != NULL
 			&& item->needsAmmo() == true)
 		{
-			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
+			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
-			SDL_Rect r;
-			r.x = 0;
-			r.y = 0;
-			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
-			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-			_selAmmo->drawRect(&r, _game->getRuleset()->getInterface("inventory")->getElement("grid")->color);
-//			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+			SDL_Rect rect;
+			rect.x =
+			rect.y = 0;
+			rect.w = static_cast<Sint16>(RuleInventory::HAND_W * RuleInventory::SLOT_W);
+			rect.h = static_cast<Sint16>(RuleInventory::HAND_H * RuleInventory::SLOT_H);
+			_selAmmo->drawRect(&rect, _game->getRuleset()->getInterface("inventory")->getElement("grid")->color);
 
-			++r.x;
-			++r.y;
-			r.w -= 2;
-			r.h -= 2;
-			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
+			++rect.x;
+			++rect.y;
+			rect.w -= 2;
+			rect.h -= 2;
+			_selAmmo->drawRect(&rect, Palette::blockOffset(0)+15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -923,15 +924,15 @@ void InventoryState::invClick(Action*)
 		else if (item->getAmmoQuantity() != 0
 			&& item->needsAmmo() == true)
 		{
-			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 		else if (itemRule->getBattleType() == BT_MEDIKIT)
-			wstr = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
+			wst = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
 						.arg(item->getHealQuantity());
 
-		_txtAmmo->setText(wstr);
+		_txtAmmo->setText(wst);
 	}
 /*	else
 	{
@@ -946,13 +947,12 @@ void InventoryState::invClick(Action*)
 
 /**
  * Shows item info.
- * @param action - pointer to an Action
  */
-void InventoryState::invMouseOver(Action* action)
+void InventoryState::invMouseOver(Action*)
 {
 	if (_inv->getSelectedItem() != NULL)
 	{
-		_tuCost->setValue(_inv->getTUCost());
+		_tuCost->setValue(static_cast<unsigned>(_inv->getTUCost()));
 		_tuCost->setVisible(_tuMode
 						 && _inv->getTUCost() > 0);
 
@@ -1035,7 +1035,6 @@ void InventoryState::invMouseOver(Action* action)
 
 /**
  * Hides item info.
- * @param action - pointer to an Action
  */
 void InventoryState::invMouseOut(Action*)
 {

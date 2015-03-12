@@ -195,9 +195,9 @@ void Inventory::drawGrid()
 				_game->getLanguage());
 
 	const RuleInterface* const rule = _game->getRuleset()->getInterface("inventory");
-	text.setColor(rule->getElement("textSlots")->color); // Palette::blockOffset(4)-1
+	text.setColor(rule->getElement("textSlots")->color);
 
-	const Uint8 color = rule->getElement("grid")->color; // Palette::blockOffset(0)+8
+	const Uint8 color = rule->getElement("grid")->color;
 	bool doLabel;
 
 	for (std::map<std::string, RuleInventory*>::const_iterator
@@ -214,36 +214,36 @@ void Inventory::drawGrid()
 					j != i->second->getSlots()->end();
 					++j)
 			{
-				SDL_Rect r;
+				SDL_Rect rect;
 
-				r.x = i->second->getX() + RuleInventory::SLOT_W * j->x;
-				r.y = i->second->getY() + RuleInventory::SLOT_H * j->y;
-				r.w = RuleInventory::SLOT_W + 1;
-				r.h = RuleInventory::SLOT_H + 1;
-				_grid->drawRect(&r, color);
+				rect.x = static_cast<Sint16>(i->second->getX() + RuleInventory::SLOT_W * j->x);
+				rect.y = static_cast<Sint16>(i->second->getY() + RuleInventory::SLOT_H * j->y);
+				rect.w = static_cast<Uint16>(RuleInventory::SLOT_W + 1);
+				rect.h = static_cast<Uint16>(RuleInventory::SLOT_H + 1);
+				_grid->drawRect(&rect, color);
 
-				++r.x;
-				++r.y;
-				r.w -= 2;
-				r.h -= 2;
-				_grid->drawRect(&r, 0);
+				++rect.x;
+				++rect.y;
+				rect.w -= 2;
+				rect.h -= 2;
+				_grid->drawRect(&rect, 0);
 			}
 		}
 		else if (i->second->getType() == INV_HAND) // draw grid
 		{
-			SDL_Rect r;
+			SDL_Rect rect;
 
-			r.x = i->second->getX();
-			r.y = i->second->getY();
-			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
-			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-			_grid->drawRect(&r, color);
+			rect.x = static_cast<Sint16>(i->second->getX());
+			rect.y = static_cast<Sint16>(i->second->getY());
+			rect.w = static_cast<Uint16>(RuleInventory::HAND_W * RuleInventory::SLOT_W);
+			rect.h = static_cast<Uint16>(RuleInventory::HAND_H * RuleInventory::SLOT_H);
+			_grid->drawRect(&rect, color);
 
-			++r.x;
-			++r.y;
-			r.w -= 2;
-			r.h -= 2;
-			_grid->drawRect(&r, 0);
+			++rect.x;
+			++rect.y;
+			rect.w -= 2;
+			rect.h -= 2;
+			_grid->drawRect(&rect, 0);
 		}
 		else if (i->second->getType() == INV_GROUND) // draw grid
 		{
@@ -259,19 +259,19 @@ void Inventory::drawGrid()
 						y <= 200;
 						y += RuleInventory::SLOT_H)
 				{
-					SDL_Rect r;
+					SDL_Rect rect;
 
-					r.x = x;
-					r.y = y;
-					r.w = RuleInventory::SLOT_W + 1;
-					r.h = RuleInventory::SLOT_H + 1;
-					_grid->drawRect(&r, color);
+					rect.x = static_cast<Sint16>(x);
+					rect.y = static_cast<Sint16>(y);
+					rect.w = static_cast<Uint16>(RuleInventory::SLOT_W + 1);
+					rect.h = static_cast<Uint16>(RuleInventory::SLOT_H + 1);
+					_grid->drawRect(&rect, color);
 
-					++r.x;
-					++r.y;
-					r.w -= 2;
-					r.h -= 2;
-					_grid->drawRect(&r, 0);
+					++rect.x;
+					++rect.y;
+					rect.w -= 2;
+					rect.h -= 2;
+					_grid->drawRect(&rect, 0);
 				}
 			}
 		}
@@ -667,7 +667,6 @@ void Inventory::mouseOver(Action* action, State* state)
 			&& fitItem(
 					slot,
 					_selItem,
-					warning,
 					true) == true)
 		{
 			_tuCost = _selItem->getSlot()->getCost(slot);
@@ -786,9 +785,8 @@ void Inventory::mouseClick(Action* action, State* state)
 							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
 
 							if (fitItem(
-										slotRule,
-										item,
-										warning) == true)
+									slotRule,
+									item) == true)
 							{
 								placed = true;
 							}
@@ -1173,7 +1171,6 @@ bool Inventory::unload()
 		if (fitItem(
 				_game->getRuleset()->getInventory("STR_LEFT_HAND"),
 				ammo,
-				warning,
 				true) == true)
 		{
 			slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
@@ -1337,14 +1334,12 @@ void Inventory::arrangeGround(bool alterOffset)
  * Attempts to place the item in the inventory slot.
  * @param newSlot	- pointer to where to place the item
  * @param item		- pointer to item to be placed
- * @param warning	- reference warning message if item could not be placed
- * @param test		- true if only doing a test (no move happens)
+ * @param test		- true if only doing a test (no move happens) (default false)
  * @return, true if the item was successfully placed in the inventory
  */
 bool Inventory::fitItem(
 		RuleInventory* newSlot,
 		BattleItem* item,
-		std::string& warning,
 		bool test)
 {
 	bool placed = false;

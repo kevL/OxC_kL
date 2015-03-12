@@ -74,9 +74,9 @@ void RuleInterface::load(const YAML::Node& node)
 			element.x =
 			element.y = std::numeric_limits<int>::max();
 
-		element.color		= (*i)["color"]		.as<int>(std::numeric_limits<int>::max());
-		element.color2		= (*i)["color2"]	.as<int>(std::numeric_limits<int>::max());
-		element.border		= (*i)["border"]	.as<int>(std::numeric_limits<int>::max());
+		element.color		= (*i)["color"]		.as<Uint8>(std::numeric_limits<Uint8>::max());
+		element.color2		= (*i)["color2"]	.as<Uint8>(std::numeric_limits<Uint8>::max());
+		element.border		= (*i)["border"]	.as<Uint8>(std::numeric_limits<Uint8>::max());
 		element.TFTDMode	= (*i)["TFTDMode"]	.as<bool>(false);
 
 		std::string id = (*i)["id"].as<std::string>("");
@@ -92,10 +92,10 @@ void RuleInterface::load(const YAML::Node& node)
 const Element* const RuleInterface::getElement(const std::string id) const // <- why i hate const. There is likely NO optimization done despite this.
 {
 	const std::map<std::string, Element>::const_iterator i = _elements.find(id);
-	if (_elements.end() != i)
+	if (i != _elements.end())
 		return &i->second;
-	else
-		return NULL;
+
+	return NULL;
 }
 
 }

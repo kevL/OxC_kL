@@ -23,7 +23,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include <config.h>
+	#include <config.h>
 #endif
 
 #include "scale2x.h"
@@ -31,15 +31,15 @@
 #include <assert.h>
 
 #if (_MSC_VER >= 1400)
-#define restrict __restrict
+	#define restrict __restrict
 #else
-#define restrict
+	#define restrict
 #endif
 
 #ifdef _WIN32
-#ifndef __GNUC__
-#pragma optimize("a", on)
-#endif
+	#ifndef __GNUC__
+		#pragma optimize("a", on) // kL_note: invalid parameter "a" according to VS2013 doc
+	#endif
 #endif
 
 

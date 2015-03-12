@@ -53,7 +53,7 @@ struct track
 
 
 /// MIDI stream.
-struct gmstream\
+struct gmstream
 {
 	int
 		tempo,
@@ -112,14 +112,15 @@ static int gmext_read_stream(
 		data += s;
 	}
 
-	return n ? -1 : 0;
+	return n? -1: 0;
 }
 
 /**
  *
  */
-static inline void gmext_write_int16 (std::vector<unsigned char>& midi,
-	unsigned int n)
+static inline void gmext_write_int16(
+		std::vector<unsigned char>& midi,
+		unsigned int n)
 {
 	midi.push_back(n >> 8);
 	midi.push_back(n);
@@ -128,8 +129,9 @@ static inline void gmext_write_int16 (std::vector<unsigned char>& midi,
 /**
  *
  */
-static inline void gmext_write_delta (std::vector<unsigned char>& midi,
-	unsigned int delta)
+static inline void gmext_write_delta(
+		std::vector<unsigned char>& midi,
+		unsigned int delta)
 {
 	unsigned char data[4];
 	unsigned int i = 0;
@@ -149,8 +151,9 @@ static inline void gmext_write_delta (std::vector<unsigned char>& midi,
 /**
  *
  */
-static inline void gmext_write_tempo_ev (std::vector<unsigned char>& midi,
-	unsigned int tempo)
+static inline void gmext_write_tempo_ev(
+		std::vector<unsigned char>& midi,
+		unsigned int tempo)
 {
 	midi.push_back(0xFF);
 	midi.push_back(0x51);
@@ -164,7 +167,8 @@ static inline void gmext_write_tempo_ev (std::vector<unsigned char>& midi,
 /**
  *
  */
-static inline void gmext_write_end_ev (std::vector<unsigned char>& midi)
+static inline void gmext_write_end_ev(
+		std::vector<unsigned char>& midi)
 {
 	midi.push_back(0xFF);
 	midi.push_back(0x2F);
@@ -203,7 +207,7 @@ static int gmext_write_sequence(
 		const struct seq* seq,
 		struct output_status* status)
 {
-	const unsigned char *data = seq->data;
+	const unsigned char* data = seq->data;
 	unsigned int left = seq->size;
 
 	unsigned char cmd = -1;
@@ -244,11 +248,15 @@ static int gmext_write_sequence(
 					if (*data >= stream->nsubs)
 						// invalid subsequence
 						return -1;
-					if (gmext_write_sequence(midi,
-						stream, channel,
-						&stream->subs[*data++], status)
-							== -1)
+					if (gmext_write_sequence(
+										midi,
+										stream,
+										channel,
+										&stream->subs[*data++],
+										status) == -1)
+					{
 						return -1;
+					}
 					cmd = 0;
 					continue;
 				default:
@@ -386,7 +394,7 @@ static int gmext_write_midi(
 		gmext_write_end_ev(midi);
 
 		// rewrite track length
-		unsigned char *p = &midi[loffset];
+		unsigned char* p = &midi[loffset];
 		size_t length = midi.size() - loffset - 4;
 		p[0] = length >> 24;
 		p[1] = length >> 16;
@@ -399,12 +407,12 @@ static int gmext_write_midi(
 
 /**
  * Loads a MIDI object into memory.
- * @param i Music number to load.
- * @return, Pointer to the loaded music.
+ * @param i - music number to load
+ * @return, pointer to the loaded Music
  */
 Music* GMCatFile::loadMIDI(unsigned int i)
 {
-	Music* music = new Music;
+	Music* const music = new Music;
 
 	unsigned char* raw = static_cast<unsigned char*>((void*)load(i));
 
@@ -416,7 +424,6 @@ Music* GMCatFile::loadMIDI(unsigned int i)
 	if (gmext_read_stream(&stream, getObjectSize(i), raw) == -1)
 	{
 		delete[] raw;
-
 		return music;
 	}
 
@@ -427,15 +434,14 @@ Music* GMCatFile::loadMIDI(unsigned int i)
 	if (gmext_write_midi(&stream, midi) == -1)
 	{
 		delete[] raw;
-
 		return music;
 	}
 
 	delete[] raw;
 
 	music->load(
-				&midi[0],
-				midi.size());
+			&midi[0],
+			midi.size());
 
 	return music;
 }

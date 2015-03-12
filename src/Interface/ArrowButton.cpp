@@ -33,8 +33,8 @@ namespace OpenXcom
  * @param shape		- shape of the arrow
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 ArrowButton::ArrowButton(
 		ArrowShape shape,
@@ -49,7 +49,7 @@ ArrowButton::ArrowButton(
 			x,
 			y),
 		_shape(shape),
-		_list(0)
+		_list(NULL)
 {
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)& ArrowButton::scroll);
@@ -66,13 +66,13 @@ ArrowButton::~ArrowButton()
 /**
  *
  */
-bool ArrowButton::isButtonHandled(Uint8 button)
+bool ArrowButton::isButtonHandled(Uint8 btn)
 {
-	if (_list != 0)
-		return button == SDL_BUTTON_LEFT
-			|| button == SDL_BUTTON_RIGHT;
+	if (_list != NULL)
+		return btn == SDL_BUTTON_LEFT
+			|| btn == SDL_BUTTON_RIGHT;
 	else
-		return ImageButton::isButtonHandled(button);
+		return ImageButton::isButtonHandled(btn);
 }
 
 /**
@@ -98,11 +98,11 @@ void ArrowButton::setShape(ArrowShape shape)
 /**
  * Changes the list associated with the arrow button.
  * This makes the button scroll that list.
- * @param list Pointer to text list.
+ * @param textList - pointer to TextList
  */
-void ArrowButton::setTextList(TextList* list)
+void ArrowButton::setTextList(TextList* textList)
 {
-	_list = list;
+	_list = textList;
 }
 
 /**
@@ -114,30 +114,38 @@ void ArrowButton::draw()
 	lock();
 
 	SDL_Rect square; // Draw button
-	int color = _color + 2;
+	Uint8 color = _color + 2;
 
-	square.x = 0;
+	square.x =
 	square.y = 0;
-	square.w = getWidth() - 1;
-	square.h = getHeight() - 1;
+	square.w = static_cast<Uint16>(getWidth() - 1);
+	square.h = static_cast<Uint16>(getHeight() - 1);
 
 	drawRect(&square, color);
 
-	square.x++;
-	square.y++;
+	++square.x;
+	++square.y;
 	color = _color + 5;
 
 	drawRect(&square, color);
 
-	square.w--;
-	square.h--;
+	--square.w;
+	--square.h;
 	color = _color + 4;
 
 	drawRect(&square, color);
 
-	setPixelColor(0, 0, _color + 1);
-	setPixelColor(0, getHeight() - 1, _color + 4);
-	setPixelColor(getWidth() - 1, 0, _color + 4);
+	setPixelColor(
+			0,0,
+			_color + 1);
+	setPixelColor(
+			0,
+			getHeight() - 1,
+			_color + 4);
+	setPixelColor(
+			getWidth() - 1,
+			0,
+			_color + 4);
 
 	color = _color + 1;
 
@@ -160,13 +168,14 @@ void ArrowButton::draw()
 			for (; square.w > 1; square.w -= 2)
 			{
 				drawRect(&square, color);
-				square.x++;
-				square.y--;
+				++square.x;
+				--square.y;
 			}
 
 			drawRect(&square, color);
 		}
 		break;
+
 		case OpenXcom::ARROW_BIG_DOWN:
 		{
 			square.x = 5; // Draw arrow square
@@ -184,13 +193,14 @@ void ArrowButton::draw()
 			for (; square.w > 1; square.w -= 2)
 			{
 				drawRect(&square, color);
-				square.x++;
-				square.y++;
+				++square.x;
+				++square.y;
 			}
 
 			drawRect(&square, color);
 		}
 		break;
+
 		case OpenXcom::ARROW_SMALL_UP:
 		{
 			square.x = 1; // Draw arrow triangle 1
@@ -201,8 +211,8 @@ void ArrowButton::draw()
 			for (; square.w > 1; square.w -= 2)
 			{
 				drawRect(&square, color + 2);
-				square.x++;
-				square.y--;
+				++square.x;
+				--square.y;
 			}
 
 			drawRect(&square, color + 2);
@@ -215,13 +225,14 @@ void ArrowButton::draw()
 			for (; square.w > 1; square.w -= 2)
 			{
 				drawRect(&square, color);
-				square.x++;
-				square.y--;
+				++square.x;
+				--square.y;
 			}
 
 			drawRect(&square, color);
 		}
 		break;
+
 		case OpenXcom::ARROW_SMALL_DOWN:
 		{
 			square.x = 1; // Draw arrow triangle 1
@@ -232,8 +243,8 @@ void ArrowButton::draw()
 			for (; square.w > 1; square.w -= 2)
 			{
 				drawRect(&square, color + 2);
-				square.x++;
-				square.y++;
+				++square.x;
+				++square.y;
 			}
 
 			drawRect(&square, color + 2);
@@ -246,13 +257,14 @@ void ArrowButton::draw()
 			for (; square.w > 1; square.w -= 2)
 			{
 				drawRect(&square, color);
-				square.x++;
-				square.y++;
+				++square.x;
+				++square.y;
 			}
 
 			drawRect(&square, color);
 		}
 		break;
+
 		case OpenXcom::ARROW_SMALL_LEFT:
 		{
 			square.x = 2; // Draw arrow triangle 1
@@ -264,7 +276,7 @@ void ArrowButton::draw()
 			{
 				drawRect(&square, color + 2);
 				square.x += 2;
-				square.y--;
+				--square.y;
 			}
 
 			square.w = 1;
@@ -279,13 +291,14 @@ void ArrowButton::draw()
 			{
 				drawRect(&square, color);
 				square.x += 2;
-				square.y--;
+				--square.y;
 			}
 
 			square.w = 1;
 			drawRect(&square, color);
 		}
 		break;
+
 		case OpenXcom::ARROW_SMALL_RIGHT:
 		{
 			square.x = 7; // Draw arrow triangle 1
@@ -297,10 +310,10 @@ void ArrowButton::draw()
 			{
 				drawRect(&square, color + 2);
 				square.x -= 2;
-				square.y--;
+				--square.y;
 			}
 
-			square.x++;
+			++square.x;
 			square.w = 1;
 			drawRect(&square, color + 2);
 
@@ -313,17 +326,13 @@ void ArrowButton::draw()
 			{
 				drawRect(&square, color);
 				square.x -= 2;
-				square.y--;
+				--square.y;
 			}
 
-			square.x++;
+			++square.x;
 			square.w = 1;
 			drawRect(&square, color);
 		}
-		break;
-
-		default:
-		break;
 	}
 	unlock();
 }
@@ -333,7 +342,7 @@ void ArrowButton::draw()
  */
 void ArrowButton::think()
 {
-	_timer->think(0, this);
+	_timer->think(NULL, this);
 }
 
 /**
@@ -356,7 +365,7 @@ void ArrowButton::mousePress(Action* action, State* state)
 {
 	ImageButton::mousePress(action, state);
 
-	if (_list != 0)
+	if (_list != NULL)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 			_timer->start();
@@ -376,7 +385,7 @@ void ArrowButton::mouseRelease(Action* action, State* state)
 {
 	ImageButton::mouseRelease(action, state);
 
-	if (_list != 0
+	if (_list != NULL
 		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->stop();
@@ -392,8 +401,8 @@ void ArrowButton::mouseClick(Action* action, State* state)
 {
 	ImageButton::mouseClick(action, state);
 
-	if (_list != 0
-		&& SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	if (_list != NULL
+		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_shape == ARROW_BIG_UP)
 			_list->scrollUp(true);

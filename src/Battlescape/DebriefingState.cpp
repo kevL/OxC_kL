@@ -411,6 +411,7 @@ DebriefingState::DebriefingState()
 					}
 				}
 
+				// note: Safety on *deadSoldier should not be needed.
 				statistics->KIA = true;
 				statistics->daysWounded = 0;
 				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
