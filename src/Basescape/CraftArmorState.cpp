@@ -170,7 +170,7 @@ void CraftArmorState::init()
 			if ((*i)->getCraft() == craft)
 				color = _lstSoldiers->getSecondaryColor();
 			else //if ((*i)->getCraft() != NULL)
-				color = _game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color;
+				color = static_cast<Uint8>(_game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color);
 		}
 
 		_lstSoldiers->setRowColor(row, color);

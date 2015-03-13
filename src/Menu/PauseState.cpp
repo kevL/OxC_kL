@@ -69,7 +69,7 @@ PauseState::PauseState(OptionsOrigin origin)
 //	_btnAbandon	= new TextButton(180, 24, x + 18, 97);
 	_btnAbandon	= new TextButton(180, 48, x + 18, 97);
 
-	_btnOptions	= new TextButton(180, 20, x + 18, 125);
+//	_btnOptions	= new TextButton(180, 20, x + 18, 125);
 	_btnCancel	= new TextButton(180, 18, x + 18, 151);
 
 	if (_origin == OPT_BATTLESCAPE)
@@ -77,40 +77,38 @@ PauseState::PauseState(OptionsOrigin origin)
 	else
 		setPalette(
 				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("pauseMenu")->getElement("palette")->color); //0
+				_game->getRuleset()->getInterface("pauseMenu")->getElement("palette")->color);
 
-	add(_window, "window", "pauseMenu");
-	add(_txtTitle, "text", "pauseMenu");
-	add(_btnLoad, "button", "pauseMenu");
-	add(_btnSave, "button", "pauseMenu");
-	add(_btnAbandon, "button", "pauseMenu");
-	add(_btnOptions, "button", "pauseMenu");
-	add(_btnCancel, "button", "pauseMenu");
+	add(_window,		"window",	"pauseMenu");
+	add(_txtTitle,		"text",		"pauseMenu");
+	add(_btnLoad,		"button",	"pauseMenu");
+	add(_btnSave,		"button",	"pauseMenu");
+	add(_btnAbandon,	"button",	"pauseMenu");
+//	add(_btnOptions,	"button",	"pauseMenu");
+	add(_btnCancel,		"button",	"pauseMenu");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnLoad->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+	_txtTitle->setText(tr("STR_OPTIONS_UC"));
+
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)& PauseState::btnLoadClick);
 
-//	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)& PauseState::btnSaveClick);
 
-//	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
 	_btnAbandon->onMouseClick((ActionHandler)& PauseState::btnAbandonClick);
 
-//	_btnOptions->setColor(Palette::blockOffset(15)-1);
-	_btnOptions->setText(tr("STR_GAME_OPTIONS"));
-	_btnOptions->onMouseClick((ActionHandler)& PauseState::btnOptionsClick);
-	_btnOptions->setVisible(false); // kL
+//	_btnOptions->setText(tr("STR_GAME_OPTIONS"));
+//	_btnOptions->onMouseClick((ActionHandler)& PauseState::btnOptionsClick);
+//	_btnOptions->setVisible(false);
 
-//	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& PauseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -124,11 +122,6 @@ PauseState::PauseState(OptionsOrigin origin)
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& PauseState::btnCancelClick,
 						Options::keyBattleOptions);
-
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
 	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();
@@ -170,7 +163,7 @@ void PauseState::btnSaveClick(Action*)
 * Opens the Game Options screen.
 * @param action Pointer to an action.
 */
-void PauseState::btnOptionsClick(Action*)
+/*void PauseState::btnOptionsClick(Action*)
 {
 	Options::backupDisplay();
 
@@ -180,7 +173,7 @@ void PauseState::btnOptionsClick(Action*)
 		_game->pushState(new OptionsBattlescapeState(_origin));
 	else
 		_game->pushState(new OptionsVideoState(_origin));
-}
+} */
 
 /**
  * Opens the Abandon Game window.

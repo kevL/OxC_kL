@@ -524,7 +524,7 @@ GraphsState::GraphsState(int curGraph)
 					SDL_BUTTON_LEFT);
 
 
-	const Uint8 gridColor = _game->getRuleset()->getInterface("graphs")->getElement("graph")->color;
+	const Uint8 gridColor = static_cast<Uint8>(_game->getRuleset()->getInterface("graphs")->getElement("graph")->color);
 	_bg->drawRect(125, 49, 188, 127, gridColor); // set up the grid
 
 	for (Sint16
@@ -1558,7 +1558,7 @@ void GraphsState::drawCountryLines()
 	else
 		_xcomCountryLines.back()->clear();
 
-	const Uint8 color = _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color2;
+	const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color2);
 
 	std::vector<Sint16> newLineVector;
 	for (size_t
@@ -1817,7 +1817,7 @@ void GraphsState::drawRegionLines()
 	else
 		_xcomRegionLines.back()->clear();
 
-	const Uint8 color = _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color2;
+	const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color2);
 
 	std::vector<Sint16> newLineVector;
 	for (size_t
@@ -2023,7 +2023,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			++btn)
 	{
 		std::vector<Sint16> newLineVector;
-		int reduction;
+		Sint16 reduction;
 
 		for (size_t
 				i = 0;
@@ -2035,19 +2035,19 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			switch (btn)
 			{
 				case 0:
-					reduction = static_cast<int>(Round(static_cast<double>(income[i]) / units));
+					reduction = static_cast<Sint16>(Round(static_cast<double>(income[i]) / units));
 				break;
 				case 1:
-					reduction = static_cast<int>(Round(static_cast<double>(expenditure[i]) / units));
+					reduction = static_cast<Sint16>(Round(static_cast<double>(expenditure[i]) / units));
 				break;
 				case 2:
-					reduction = static_cast<int>(Round(static_cast<double>(maintenance[i]) / units));
+					reduction = static_cast<Sint16>(Round(static_cast<double>(maintenance[i]) / units));
 				break;
 				case 3:
-					reduction = static_cast<int>(Round(static_cast<double>(balance[i]) / units));
+					reduction = static_cast<Sint16>(Round(static_cast<double>(balance[i]) / units));
 				break;
 				case 4:
-					reduction = static_cast<int>(Round(static_cast<double>(score[i]) / units));
+					reduction = static_cast<Sint16>(Round(static_cast<double>(score[i]) / units));
 			}
 
 			y -= reduction;

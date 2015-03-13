@@ -74,9 +74,12 @@ void RuleInterface::load(const YAML::Node& node)
 			element.x =
 			element.y = std::numeric_limits<int>::max();
 
-		element.color		= (*i)["color"]		.as<Uint8>(std::numeric_limits<Uint8>::max());
-		element.color2		= (*i)["color2"]	.as<Uint8>(std::numeric_limits<Uint8>::max());
-		element.border		= (*i)["border"]	.as<Uint8>(std::numeric_limits<Uint8>::max());
+/*		element.color		= static_cast<Uint8>((*i)["color"]	.as<int>(std::numeric_limits<int>::max()));
+		element.color2		= static_cast<Uint8>((*i)["color2"]	.as<int>(std::numeric_limits<int>::max()));
+		element.border		= static_cast<Uint8>((*i)["border"]	.as<int>(std::numeric_limits<int>::max())); */
+		element.color		= (*i)["color"]		.as<int>(std::numeric_limits<int>::max()); // yep. Too clever by half bullshit. ps Go back to scripts, kiddie.
+		element.color2		= (*i)["color2"]	.as<int>(std::numeric_limits<int>::max()); // ie: add a boolian to spec. if color has been set or not
+		element.border		= (*i)["border"]	.as<int>(std::numeric_limits<int>::max()); // instead of - surprise, surprise - yet more typecasting!
 		element.TFTDMode	= (*i)["TFTDMode"]	.as<bool>(false);
 
 		std::string id = (*i)["id"].as<std::string>("");

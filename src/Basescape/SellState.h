@@ -60,11 +60,10 @@ class SellState
 {
 
 private:
-	int
+	int _total;
+	size_t
 		_hasSci,
 		_hasEng,
-		_total;
-	size_t
 		_itemOffset,
 		_sel;
 	Uint8

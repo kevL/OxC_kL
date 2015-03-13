@@ -58,14 +58,14 @@ private:
 		ErrorMessageState(
 				const std::string& id,
 				SDL_Color* palette,
-				Uint8 color,
+				int color,
 				const std::string& bg,
 				int bgColor);
 		/// Creates the Error state.
 		ErrorMessageState(
 				const std::wstring& msg,
 				SDL_Color* palette,
-				Uint8 color,
+				int color,
 				const std::string& bg,
 				int bgColor);
 		/// Cleans up the Error state.

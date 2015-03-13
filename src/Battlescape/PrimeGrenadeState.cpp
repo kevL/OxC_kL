@@ -63,27 +63,27 @@ PrimeGrenadeState::PrimeGrenadeState(
 {
 	_screen = false;
 
-	_fraTop			= new Frame(192, 27, 65, 37);
-	_txtTitle		= new Text(192, 18, 65, 43);
+	_fraTop		= new Frame(192, 27, 65, 37);
+	_txtTitle	= new Text(192, 18, 65, 43);
 
-	_srfBG			= new Surface(192, 93, 65, 45);
+	_srfBG		= new Surface(192, 93, 65, 45);
 
-	_isfBtn0		= new InteractiveSurface(190, 22, 66, 65);
+	_isfBtn0	= new InteractiveSurface(190, 22, 66, 65);
 
 	const int
 		x = 67,
 		y = 92;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 16;
+			i != 16;
 			++i)
 	{
 		_isfBtn[i] = new InteractiveSurface(
 										22,
 										22,
-										x - 1 + ((i %8) * 24),
-										y - 4 + ((i / 8) * 24));
+										x - 1 + ((static_cast<int>(i) %8) * 24),
+										y - 4 + ((static_cast<int>(i) / 8) * 24));
 		_txtTurn[i] = new Text(
 							20,
 							20,
@@ -103,7 +103,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 					0,0,
 					static_cast<Sint16>(_srfBG->getWidth()),
 					static_cast<Sint16>(_srfBG->getHeight()),
-					eleBG->color);
+					static_cast<Uint8>(eleBG->color));
 
 	add(_fraTop, "grenadeMenu", "battlescape");
 	_fraTop->setSecondaryColor(Palette::blockOffset(8)+4);
@@ -151,24 +151,28 @@ PrimeGrenadeState::PrimeGrenadeState(
 		add(_isfBtn[i]);
 		_isfBtn[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
 
-		SDL_Rect square;
+		SDL_Rect rect;
 
-		square.x = // dark border
-		square.y = 0;
-		square.w = static_cast<Uint16>(_isfBtn[i]->getWidth());
-		square.h = static_cast<Uint16>(_isfBtn[i]->getHeight());
-		_isfBtn[i]->drawRect(&square, eleBG->border); //Palette::blockOffset(0)+15);
+		rect.x = // dark border
+		rect.y = 0;
+		rect.w = static_cast<Uint16>(_isfBtn[i]->getWidth());
+		rect.h = static_cast<Uint16>(_isfBtn[i]->getHeight());
+		_isfBtn[i]->drawRect(
+						&rect,
+						static_cast<Uint8>(eleBG->border));
 
-		++square.x; // inside fill
-		++square.y;
-		square.w -= 2;
-		square.h -= 2;
-		_isfBtn[i]->drawRect(&square, eleBG->color2); //Palette::blockOffset(6)+12);
+		++rect.x; // inside fill
+		++rect.y;
+		rect.w -= 2;
+		rect.h -= 2;
+		_isfBtn[i]->drawRect(
+						&rect,
+						static_cast<Uint8>(eleBG->color2));
 
 		add(_txtTurn[i], "grenadeMenu", "battlescape");
-		std::wostringstream ss;
-		ss << i + 1;
-		_txtTurn[i]->setText(ss.str());
+		std::wostringstream wost;
+		wost << i + 1;
+		_txtTurn[i]->setText(wost.str());
 		_txtTurn[i]->setHighContrast();
 		_txtTurn[i]->setAlign(ALIGN_CENTER);
 		_txtTurn[i]->setVerticalAlign(ALIGN_MIDDLE);
@@ -230,20 +234,20 @@ void PrimeGrenadeState::btnClick(Action* action)
 		btnID = 0;
 	else
 	{
-		for (int // got to find out which button was pressed
+		for (size_t // got to find out which button was pressed
 				i = 0;
-				i < 16
+				i != 16
 					&& btnID == -1;
 				++i)
 		{
 			if (action->getSender() == _isfBtn[i])
-				btnID = i + 1;
+				btnID = static_cast<int>(i) + 1;
 		}
 	}
 
 	if (btnID != -1)
 	{
-		if (_inInventoryView)
+		if (_inInventoryView == true)
 		{
 			_grenade->setFuseTimer(btnID);
 			_inventory->setPrimeGrenade(btnID);

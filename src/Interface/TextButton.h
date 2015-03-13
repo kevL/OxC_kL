@@ -34,11 +34,10 @@ class Text;
 
 
 /**
- * Coloured button with a text label.
- * Drawn to look like a 3D-shaped box with text on top,
- * responds to mouse clicks. Can be attached to a group of
- * buttons to turn it into a radio button (only one button
- * pushed at a time).
+ * Colored button with a text label.
+ * Drawn to look like a 3D-shaped box with text on top, responds to mouse clicks.
+ * Can be attached to a group of buttons to turn it into a radio button,
+ * with only one button pushed at a time.
  */
 class TextButton
 	:
@@ -78,6 +77,7 @@ protected:
 		void setSecondaryColor(Uint8 color);
 		/// Sets the text button's text color.
 		void setTextColor(Uint8 color);
+
 		/// Sets the text size to big.
 		void setBig();
 		/// Sets the text size to small.
@@ -89,27 +89,35 @@ protected:
 				Font* big,
 				Font* small,
 				Language* lang);
+
 		/// Sets the text button's high contrast color setting.
 		void setHighContrast(bool contrast = true);
+
 		/// Sets the text button's text.
 		void setText(const std::wstring& text);
 		/// Gets the text button's text.
 		std::wstring getText() const;
+
 		/// Sets the text button's group.
 		void setGroup(TextButton** group);
+
 		/// Sets the text button's palette.
 		void setPalette(
 				SDL_Color* colors,
 				int firstcolor = 0,
 				int ncolors = 256);
+
 		/// Draws the text button.
 		void draw();
+
 		/// Special handling for mouse presses.
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
+
 		/// Attaches this button to a combobox.
 		void setComboBox(ComboBox* comboBox);
+
 		/// Sets the width of this TextButton.
 		void setWidth(int width);
 		/// Sets the height of this TextButton.

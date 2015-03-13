@@ -105,7 +105,7 @@ private:
 		/// Handler for clicking a Move Right arrow in the list.
 		void lstEquipmentRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
-		void lstEquipmentMousePress(Action* action);
+//		void lstEquipmentMousePress(Action* action);
 
 		/// Moves an item to the base.
 		void moveLeft();

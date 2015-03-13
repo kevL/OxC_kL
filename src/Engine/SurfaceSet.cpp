@@ -110,7 +110,7 @@ void SurfaceSet::loadPck(
 
 		stop = offsetFile.tellg();
 
-		int tabSize = static_cast<int>(stop - start);
+		const int tabSize = static_cast<int>(stop - start);
 
 		if (off != 0)
 			nframes = tabSize / 2; // 16-bit offsets
@@ -132,7 +132,6 @@ void SurfaceSet::loadPck(
 	else
 	{
 		nframes = 1;
-
 		_frames[0] = new Surface(
 							_width,
 							_height);
@@ -156,13 +155,11 @@ void SurfaceSet::loadPck(
 			x = 0,
 			y = 0;
 
-		// Lock the surface
 		_frames[frame]->lock();
-
 		imgFile.read((char*)& value, 1);
 		for (int
 				i = 0;
-				i < value;
+				i != value;
 				++i)
 		{
 			for (int
@@ -170,28 +167,27 @@ void SurfaceSet::loadPck(
 					j < _width;
 					++j)
 			{
-				_frames[frame]->setPixelIterative(&x, &y, 0);
+				_frames[frame]->setPixelIterative(&x,&y, 0);
 			}
 		}
 
-		while (imgFile.read((char*)& value, 1) && value != 255)
+		while (imgFile.read((char*)& value, 1)
+			&& value != 255)
 		{
 			if (value == 254)
 			{
 				imgFile.read((char*)& value, 1);
 				for (int
 						i = 0;
-						i < value;
+						i != value;
 						++i)
 				{
-					_frames[frame]->setPixelIterative(&x, &y, 0);
+					_frames[frame]->setPixelIterative(&x,&y, 0);
 				}
 			}
 			else
-				_frames[frame]->setPixelIterative(&x, &y, value);
+				_frames[frame]->setPixelIterative(&x,&y, value);
 		}
-
-		// Unlock the surface
 		_frames[frame]->unlock();
 	}
 
@@ -241,12 +237,10 @@ void SurfaceSet::loadDat(const std::string& filename)
 		y = 0,
 		frame = 0;
 
-	// Lock the surface
 	_frames[frame]->lock();
-
-	while (imgFile.read((char*)&value, 1))
+	while (imgFile.read((char*)& value, 1))
 	{
-		_frames[frame]->setPixelIterative(&x, &y, value);
+		_frames[frame]->setPixelIterative(&x,&y, value);
 
 		if (y >= _height)
 		{
@@ -254,7 +248,7 @@ void SurfaceSet::loadDat(const std::string& filename)
 			_frames[frame]->unlock();
 
 			++frame;
-			x = 0;
+			x =
 			y = 0;
 
 			if (frame >= nframes)
@@ -324,8 +318,8 @@ size_t SurfaceSet::getTotalFrames() const
 /**
  * Replaces a certain amount of colors in all of the frames.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void SurfaceSet::setPalette(
 		SDL_Color* colors,

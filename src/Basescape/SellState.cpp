@@ -101,22 +101,22 @@ SellState::SellState(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("sellMenu")->getElement("palette")->color);
 
-	_ammoColor = _game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color;
+	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color);
 	_colorArtefact = Palette::blockOffset(13)+5;
 
-	add(_window,		"window", "sellMenu");
-	add(_txtTitle,		"text", "sellMenu");
-	add(_txtBaseLabel,	"text", "sellMenu");
-	add(_txtFunds,		"text", "sellMenu");
-	add(_txtSales,		"text", "sellMenu");
-	add(_txtItem,		"text", "sellMenu");
-	add(_txtSpaceUsed,	"text", "sellMenu");
-	add(_txtQuantity,	"text", "sellMenu");
-	add(_txtSell,		"text", "sellMenu");
-	add(_txtValue,		"text", "sellMenu");
-	add(_lstItems,		"list", "sellMenu");
-	add(_btnCancel,		"button", "sellMenu");
-	add(_btnOk,			"button", "sellMenu");
+	add(_window,		"window",	"sellMenu");
+	add(_txtTitle,		"text",		"sellMenu");
+	add(_txtBaseLabel,	"text",		"sellMenu");
+	add(_txtFunds,		"text",		"sellMenu");
+	add(_txtSales,		"text",		"sellMenu");
+	add(_txtItem,		"text",		"sellMenu");
+	add(_txtSpaceUsed,	"text",		"sellMenu");
+	add(_txtQuantity,	"text",		"sellMenu");
+	add(_txtSell,		"text",		"sellMenu");
+	add(_txtValue,		"text",		"sellMenu");
+	add(_lstItems,		"list",		"sellMenu");
+	add(_btnCancel,		"button",	"sellMenu");
+	add(_btnOk,			"button",	"sellMenu");
 
 	centerAllSurfaces();
 
@@ -652,9 +652,9 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if ((SDL_GetModState() & KMOD_CTRL) != 0)
-			changeByValue(10, 1);
+			changeByValue(10,1);
 		else
-			changeByValue(1, 1);
+			changeByValue(1,1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -697,9 +697,9 @@ void SellState::lstItemsRightArrowClick(Action* action)
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if ((SDL_GetModState() & KMOD_CTRL) != 0)
-			changeByValue(10, -1);
+			changeByValue(10,-1);
 		else
-			changeByValue(1, -1);
+			changeByValue(1,-1);
 
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
@@ -876,7 +876,7 @@ void SellState::changeByValue(
 	_qtys[_sel] += change * dir;
 	_total += getPrice() * change * dir;
 
-	const RuleItem* rule;
+	const RuleItem* itRule;
 	Craft* craft;
 	double space = 0.;
 
@@ -885,8 +885,8 @@ void SellState::changeByValue(
 		case SELL_SOLDIER:
 			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 			{
-				rule = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
-				_spaceChange += static_cast<double>(dir) * rule->getSize();
+				itRule = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
+				_spaceChange += static_cast<double>(dir) * itRule->getSize();
 			}
 		break;
 
@@ -899,20 +899,20 @@ void SellState::changeByValue(
 			{
 				if (*i != NULL) // kL, Cheers
 				{
-					rule = _game->getRuleset()->getItem((*i)->getRules()->getLauncherItem());
-					space += rule->getSize();
+					itRule = _game->getRuleset()->getItem((*i)->getRules()->getLauncherItem());
+					space += itRule->getSize();
 
-					rule = _game->getRuleset()->getItem((*i)->getRules()->getClipItem());
-					if (rule != NULL)
-						space += static_cast<double>((*i)->getClipsLoaded(_game->getRuleset())) * rule->getSize();
+					itRule = _game->getRuleset()->getItem((*i)->getRules()->getClipItem());
+					if (itRule != NULL)
+						space += static_cast<double>((*i)->getClipsLoaded(_game->getRuleset())) * itRule->getSize();
 				}
 			}
 			_spaceChange += static_cast<double>(dir) * space;
 		break;
 
 		case SELL_ITEM:
-			rule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-			_spaceChange -= static_cast<double>(dir * change) * rule->getSize();
+			itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+			_spaceChange -= static_cast<double>(dir * change) * itRule->getSize();
 //		break;
 
 //		case SELL_ENGINEER:
@@ -968,14 +968,14 @@ void SellState::updateItemStrings()
 				}
 			}
 
-			const SavedGame* const save = _game->getSavedGame();
-			if (save->isResearched(itRule->getType()) == false				// not researched or is research exempt
-				&& (save->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
-					|| rules->getItem(itRule->getType())->isAlien() == true		// or is an alien
-					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false)										// and is not craft ordnance
-//				&& itRule->isResearchExempt() == false)						// and is not research exempt
+			const SavedGame* const savedGame = _game->getSavedGame();
+			if (savedGame->isResearched(itRule->getType()) == false				// not researched or is research exempt
+				&& (savedGame->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
+					|| rules->getItem(itRule->getType())->isAlien() == true			// or is an alien
+					|| itRule->getBattleType() == BT_CORPSE							// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)							// or is not a battlefield item
+				&& craftOrdnance == false)											// and is not craft ordnance
+//				&& itRule->isResearchExempt() == false)							// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				_lstItems->setRowColor(_sel, _colorArtefact);
@@ -1011,7 +1011,7 @@ void SellState::updateItemStrings()
 		{
 			if (_qtys[i] > 0)
 			{
-				switch (getType(static_cast<size_t>(i)))
+				switch (getType(i))
 				{
 					case SELL_CRAFT:
 					case SELL_SOLDIER:
@@ -1057,7 +1057,7 @@ enum SellType SellState::getType(size_t selected) const
 	if (selected < (cutoff += _hasSci))
 		return SELL_SCIENTIST;
 
-	if (selected < (cutoff += _hasEng))
+	if (selected < (cutoff + _hasEng))
 		return SELL_ENGINEER;
 
 	return SELL_ITEM;
@@ -1073,8 +1073,8 @@ size_t SellState::getItemIndex(size_t selected) const
 	return selected
 		 - _soldiers.size()
 		 - _crafts.size()
-		 - static_cast<size_t>(_hasSci)
-		 - static_cast<size_t>(_hasEng);
+		 - _hasSci
+		 - _hasEng;
 }
 
 }

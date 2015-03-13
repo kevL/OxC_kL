@@ -50,7 +50,7 @@ private:
 		* _btnLoad,
 		* _btnSave,
 		* _btnAbandon,
-		* _btnOptions,
+//		* _btnOptions,
 		* _btnCancel;
 	Window* _window;
 
@@ -68,7 +68,7 @@ private:
 		/// Handler for clicking the Abandon Game button.
 		void btnAbandonClick(Action* action);
 		/// Handler for clicking the Game Options button.
-		void btnOptionsClick(Action* action);
+//		void btnOptionsClick(Action* action);
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 };

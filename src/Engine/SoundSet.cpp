@@ -64,7 +64,7 @@ void SoundSet::loadCat(
 		bool wav)
 {
 	// Load CAT file
-	CatFile sndFile (filename.c_str());
+	CatFile sndFile (filename.c_str()); // init.
 	if (!sndFile)
 	{
 		throw Exception(filename + " not found");
@@ -78,59 +78,67 @@ void SoundSet::loadCat(
 	{
 		// Read WAV chunk
 		unsigned char* sound = (unsigned char*)sndFile.load(i);
-		unsigned int size = sndFile.getObjectSize(i);
+		unsigned int bytes = sndFile.getObjectSize(i);
 
 		// If there's no WAV header (44 bytes), add it
 		// Assuming sounds are 8-bit 8000Hz (DOS version)
 		unsigned char* newsound = NULL;
-		if (!wav)
+		if (wav == false)
 		{
-			if (size != 0)
+			if (bytes != 0)
 			{
 				char header[] =
 				{
-					'R','I','F','F',0x00,0x00,0x00,0x00,'W','A','V','E','f','m','t',' ',
-					0x10,0x00,0x00,0x00,0x01,0x00,0x01,0x00,0x11,0x2b,0x00,0x00,0x11,0x2b,0x00,0x00,0x01,0x00,0x08,0x00,
-					'd','a','t','a',0x00,0x00,0x00,0x00
+					 'R', 'I', 'F', 'F',
+					0x00,0x00,0x00,0x00,
+					 'W', 'A', 'V', 'E',
+					 'f', 'm', 't', ' ',
+					0x10,0x00,0x00,0x00,
+					0x01,0x00,0x01,0x00,
+					0x11,0x2b,0x00,0x00,
+					0x11,0x2b,0x00,0x00,
+					0x01,0x00,0x08,0x00,
+					 'd', 'a', 't', 'a',
+					0x00,0x00,0x00,0x00
 				};
 
 				for (unsigned int
 						n = 0;
-						n < size;
+						n < bytes;
 						++n)
 				{
 					sound[n] *= 4; // scale to 8 bits
 				}
 
-				if (size > 5) // skip 5 garbage name bytes at beginning
-					size -= 5;
+				if (bytes > 5) // skip 5 garbage name bytes at beginning
+					bytes -= 5;
 
-				if (size) // omit trailing null byte
-					size--;
+				if (bytes) // omit trailing null byte
+					bytes--;
 
-				int headersize = size + 36;
+				int headersize = bytes + 36;
 				memcpy(
 					header + 4,
 					&headersize,
 					sizeof(headersize));
 
-				int soundsize = size;
+				int soundsize = bytes;
 				memcpy(
 					header + 40,
 					&soundsize,
 					sizeof(soundsize));
 
-				newsound = new unsigned char[44 + size * 2];
+				newsound = new unsigned char[44 + bytes * 2];
 				memcpy(
 					newsound,
 					header,
 					44);
 
-				if (size)
+				if (bytes)
 					memcpy(
 						newsound + 44,
 						sound + 5,
-						size);
+						bytes);
 
 				Uint32 step16 = (8000 << 16) / 11025;
 
@@ -139,7 +147,7 @@ void SoundSet::loadCat(
 				int newsize = 0;
 				for (Uint32
 						offset16 = 0;
-						(offset16 >> 16) < size;
+						(offset16 >> 16) < bytes;
 						offset16 += step16,
 							++w,
 							++newsize)
@@ -147,7 +155,7 @@ void SoundSet::loadCat(
 					*w = sound[5 + (offset16 >> 16)];
 				}
 
-				size = newsize + 44;
+				bytes = newsize + 44;
 			}
 		}
 		else if (0x40 == sound[0x18]
@@ -156,7 +164,7 @@ void SoundSet::loadCat(
 			&& 0x00 == sound[0x1B])
 		{
 			// so it's WAV, but in 8 khz, we have to convert it to 11 khz sound
-			unsigned char* sound2 = new unsigned char[size * 2];
+			unsigned char* sound2 = new unsigned char[bytes * 2];
 
 			// rewrite the samplerate in the header to 11 khz
 			sound[0x18] = 0x11;
@@ -168,7 +176,7 @@ void SoundSet::loadCat(
 			memcpy(
 				sound2,
 				sound,
-				size);
+				bytes);
 
 			Uint32 step16 = (8000 << 16) / 11025;
 
@@ -178,7 +186,7 @@ void SoundSet::loadCat(
 
 			for (Uint32
 					offset16 = 0;
-					(offset16 >> 16) < size - 44;
+					(offset16 >> 16) < bytes - 44;
 					offset16 += step16,
 						++w,
 						++newsize)
@@ -186,7 +194,7 @@ void SoundSet::loadCat(
 				*w = sound[44 + (offset16 >> 16)];
 			}
 
-			size = newsize + 44;
+			bytes = newsize + 44;
 
 			// Rewrite the number of samples in the WAV file
 			memcpy(
@@ -203,15 +211,15 @@ void SoundSet::loadCat(
 		Sound* s = new Sound();
 		try
 		{
-			if (size == 0)
+			if (bytes == 0)
 			{
 				throw Exception("Invalid sound file");
 			}
 
 			if (wav)
-				s->load(sound, size);
+				s->load(sound, bytes);
 			else
-				s->load(newsound, size);
+				s->load(newsound, bytes);
 		}
 		catch (Exception)
 		{

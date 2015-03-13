@@ -19,12 +19,11 @@
 
 #include "ScrollBar.h"
 
-#include <algorithm>
-
-#include "../fmath.h"
+//#include <algorithm>
+//#include "../fmath.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/TextList.h"
 
@@ -36,8 +35,8 @@ namespace OpenXcom
  * Sets up a scrollbar with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 ScrollBar::ScrollBar(
 		int width,
@@ -57,13 +56,13 @@ ScrollBar::ScrollBar(
 		_offset(0),
 		_bg(0)
 {
-//kL	_track = new Surface(width - 2, height + 1, x, y);
+//	_track = new Surface(width - 2, height + 1, x, y);
 	_track = new Surface(width - 2, height, x, y); // kL
 	_thumb = new Surface(width, height, x, y);
 
-	_thumbRect.x = 0;
+	_thumbRect.x =
 	_thumbRect.y = 0;
-	_thumbRect.w = 0;
+	_thumbRect.w =
 	_thumbRect.h = 0;
 }
 
@@ -189,12 +188,11 @@ void ScrollBar::handle(Action* action, State* state)
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorY = static_cast<int>(action->getAbsoluteYMouse()) - getY();
-		int y = std::min(
-					std::max(
-							cursorY + _offset,
-							0),
-					getHeight() - static_cast<int>(_thumbRect.h) + 1);
+		const int y = std::min(
+							getHeight() - static_cast<int>(_thumbRect.h) + 1,
+							std::max(
+								0,
+								static_cast<int>(action->getAbsoluteYMouse()) - getY() + _offset));
 
 		double scale = static_cast<double>(_list->getRows()) / static_cast<double>(getHeight());
 		size_t scroll = static_cast<size_t>(Round(static_cast<double>(y) * scale));
@@ -211,8 +209,8 @@ void ScrollBar::blit(Surface* surface)
 {
 	Surface::blit(surface);
 
-	if (_visible
-		&& !_hidden)
+	if (_visible == true
+		&& _hidden == false)
 	{
 		_track->blit(surface);
 		_thumb->blit(surface);
@@ -232,7 +230,7 @@ void ScrollBar::mousePress(Action* action, State* state)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		int cursorY = static_cast<int>(action->getAbsoluteYMouse()) - getY();
+		const int cursorY = static_cast<int>(action->getAbsoluteYMouse()) - getY();
 		if (cursorY >= static_cast<int>(_thumbRect.y)
 			&& cursorY < static_cast<int>(_thumbRect.y) + static_cast<int>(_thumbRect.h))
 		{
@@ -281,13 +279,13 @@ void ScrollBar::draw()
  */
 void ScrollBar::drawTrack()
 {
-	if (_bg)
+	if (_bg != NULL)
 	{
 		_track->copy(_bg);
 
-		if (_contrast)
+		if (_contrast == true)
 			_track->offset(-5, 1);
-		else if (_list->getComboBox())
+		else if (_list->getComboBox() != NULL)
 			_track->offset(1, Palette::backPos);
 		else
 			_track->offset(-5, Palette::backPos);
@@ -299,86 +297,85 @@ void ScrollBar::drawTrack()
  */
 void ScrollBar::drawThumb()
 {
-	double scale = static_cast<double>(getHeight()) / static_cast<double>(_list->getRows());
+	const double scale = static_cast<double>(getHeight()) / static_cast<double>(_list->getRows());
 
 	_thumbRect.x = 0;
-	_thumbRect.y = static_cast<Sint16>(floor(static_cast<double>(_list->getScroll()) * scale));
+	_thumbRect.y = static_cast<Sint16>(std::floor(static_cast<double>(_list->getScroll()) * scale));
 	_thumbRect.w = static_cast<Uint16>(_thumb->getWidth());
-	_thumbRect.h = static_cast<Uint16>(ceil(static_cast<double>(_list->getVisibleRows()) * scale));
+	_thumbRect.h = static_cast<Uint16>(std::ceil(static_cast<double>(_list->getVisibleRows()) * scale));
 
 	_thumb->clear();
-	_thumb->lock();
 
+	_thumb->lock();
 	SDL_Rect square = _thumbRect; // Draw filled button
 	Uint8 color = _color + 2;
 
-	square.w--;
-	square.h--;
+	--square.w;
+	--square.h;
 
 	_thumb->drawRect(&square, color);
 
-	square.x++;
-	square.y++;
+	++square.x;
+	++square.y;
 	color = _color + 5;
 
 	_thumb->drawRect(&square, color);
 
-	square.w--;
-	square.h--;
+	--square.w;
+	--square.h;
 	color = _color + 4;
 
 	_thumb->drawRect(&square, color);
 
 	_thumb->setPixelColor(
-					_thumbRect.x,
-					_thumbRect.y,
+					static_cast<int>(_thumbRect.x),
+					static_cast<int>(_thumbRect.y),
 					_color + 1);
 	_thumb->setPixelColor(
-					_thumbRect.x,
-					_thumbRect.y + _thumbRect.h - 1,
+					static_cast<int>(_thumbRect.x),
+					static_cast<int>(_thumbRect.y) + static_cast<int>(_thumbRect.h) - 1,
 					_color + 4);
 	_thumb->setPixelColor(
-					_thumbRect.x + _thumbRect.w - 1,
-					_thumbRect.y,
+					static_cast<int>(_thumbRect.x) + static_cast<int>(_thumbRect.w) - 1,
+					static_cast<int>(_thumbRect.y),
 					_color + 4);
 
 	if (static_cast<int>(square.h) - 4 > 0)
 	{
 		color = _color + 5; // Hollow it out
 
-		square.x++;
-		square.y++;
+		++square.x;
+		++square.y;
 		square.w -= 3;
 		square.h -= 3;
 
 		_thumb->drawRect(&square, color);
 
-		square.x++;
-		square.y++;
+		++square.x;
+		++square.y;
 		color = _color + 2;
 
 		_thumb->drawRect(&square, color);
 
-		square.w--;
-		square.h--;
+		--square.w;
+		--square.h;
 		color = 0;
 
 		_thumb->drawRect(&square, color);
 
 		_thumb->setPixelColor(
-						_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
-						_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
+						static_cast<int>(_thumbRect.x) + 2 + static_cast<int>(_thumbRect.w) - 1 - 4,
+						static_cast<int>(_thumbRect.y) + 2 + static_cast<int>(_thumbRect.h) - 1 - 4,
 						_color + 1);
 		_thumb->setPixelColor(
-						_thumbRect.x + 2,
-						_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
+						static_cast<int>(_thumbRect.x) + 2,
+						static_cast<int>(_thumbRect.y) + 2 + static_cast<int>(_thumbRect.h) - 1 - 4,
 						_color + 4);
 		_thumb->setPixelColor(
-						_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
-						_thumbRect.y + 2,
+						static_cast<int>(_thumbRect.x) + 2 + static_cast<int>(_thumbRect.w) - 1 - 4,
+						static_cast<int>(_thumbRect.y) + 2,
 						_color + 4);
 	}
-
 	_thumb->unlock();
 }
 

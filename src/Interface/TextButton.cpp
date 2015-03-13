@@ -239,58 +239,69 @@ void TextButton::draw()
 {
 	Surface::draw();
 
-	SDL_Rect square;
-	square.x =
-	square.y = 0;
-	square.w = static_cast<Uint16>(getWidth());
-	square.h = static_cast<Uint16>(getHeight());
+	SDL_Rect rect;
+	rect.x =
+	rect.y = 0;
+	rect.w = static_cast<Uint16>(getWidth());
+	rect.h = static_cast<Uint16>(getHeight());
 
-	Uint8 mult = 1;
+	Uint8 multer = 1;
 	if (_contrast == true)
-		mult = 2;
+		multer = 2;
 
-	Uint8 color = _color * mult;
+	Uint8 color = _color + multer;
+
+	// limit highest color to darkest hue/shade in its palette-block.
+//	const Uint8 topColor = ((_color / 16) * 16) + 15; // exploit INT
 
 	for (int
 			i = 0;
 			i != 5;
 			++i)
 	{
-		drawRect(&square, color);
+//		if (color > topColor) color = topColor;
+		if (i == 0)
+			color = _color + (multer * 5);
+
+		drawRect(&rect, color);
 
 		if (i %2 == 0)
 		{
-			++square.x;
-			++square.y;
+			++rect.x;
+			++rect.y;
 		}
 
-		--square.w;
-		--square.h;
+		--rect.w;
+		--rect.h;
 
 		switch (i)
 		{
 			case 0:
-				color = _color + 5 * mult;
+//				color = _color + (multer * 5);
+//				if (color > topColor) color = topColor;
+
 				setPixelColor(
-						static_cast<int>(square.w),
+						static_cast<int>(rect.w),
 						0,
 						color);
 			break;
 
 			case 1:
-				color = _color + 2 * mult;
+				color = _color + (multer * 2);
 			break;
 
 			case 2:
-				color = _color + 4 * mult;
+				color = _color + (multer * 4);
+//				if (color > topColor) color = topColor;
+
 				setPixelColor(
-						static_cast<int>(square.w) + 1,
+						static_cast<int>(rect.w) + 1,
 						1,
 						color);
 			break;
 
 			case 3:
-				color = _color + 3 * mult;
+				color = _color + (multer * 3);
 		}
 	}
 
@@ -301,7 +312,7 @@ void TextButton::draw()
 		press = (*_group == this);
 
 	if (press == true)
-		this->invert(_color + 3 * mult);
+		this->invert(_color + (multer * 3));
 
 	_text->setInvert(press);
 	_text->blit(this);
@@ -372,7 +383,7 @@ void TextButton::setComboBox(ComboBox* comboBox)
 {
 	_comboBox = comboBox;
 
-	if (_comboBox)
+	if (_comboBox != NULL)
 		_text->setX(-6);
 	else
 		_text->setX(0);

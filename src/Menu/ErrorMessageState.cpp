@@ -45,7 +45,7 @@ namespace OpenXcom
 ErrorMessageState::ErrorMessageState(
 		const std::string& id,
 		SDL_Color* palette,
-		Uint8 color,
+		int color,
 		const std::string& bg,
 		int bgColor)
 {
@@ -69,7 +69,7 @@ ErrorMessageState::ErrorMessageState(
 ErrorMessageState::ErrorMessageState(
 		const std::wstring& msg,
 		SDL_Color* palette,
-		Uint8 color,
+		int color,
 		const std::string& bg,
 		int bgColor)
 {
@@ -77,7 +77,7 @@ ErrorMessageState::ErrorMessageState(
 		"",
 		msg,
 		palette,
-		color,
+		static_cast<Uint8>(color),
 		bg,
 		bgColor);
 }

@@ -219,7 +219,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 			i != diary->getKills().end();
 			++i)
 	{
-		if ((*i)->_mission == missionId)
+		if ((*i)->_mission == static_cast<int>(missionId))
 		{
 			std::wostringstream
 				wossRace,
@@ -254,7 +254,10 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 							wossStatus.str().c_str(),
 							wossUnit.str().c_str(),
 							wossWeapon.str().c_str());
-			_lstKills->setCellColor(row++, 0, Palette::blockOffset(13)+5);
+			_lstKills->setCellColor(
+								row++,
+								0,
+								Palette::blockOffset(13)+5);
 		}
 	}
 

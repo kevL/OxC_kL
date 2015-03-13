@@ -2,13 +2,13 @@ interfaces:
   - type: mainMenu
     elements:
       - id: palette
-        color: 0     # brown
+        color: 1     # dark rust, olive-brown=0
       - id: window
         color: 133   # minty green
       - id: text
         color: 138   # yellow
       - id: button
-        color: 133   # minty green
+        color: 138   # minty green=133
       - id: confirmDefaults
         color: 138   # yellow
       - id: confirmVideo
@@ -136,13 +136,13 @@ interfaces:
   - type: errorMessages
     elements:
       - id: geoscapePalette
-        color: 6   # oxide
+        color: 6     # oxide
       - id: battlescapePalette
-        color: -1 # greyscale
+        color: -1    # greyscale
       - id: geoscapeColor
         color: 138   # yellow
       - id: battlescapeColor
-        color: 0    # white
+        color: 0     # white
   - type: geoCraftScreens
     elements:
       - id: palette
@@ -214,7 +214,7 @@ interfaces:
       - id: palette
         color: 4     # aqua
       - id: text
-        color: 138  # yellow
+        color: 138   # yellow
       - id: window
         color: 239   # bright green
       - id: button

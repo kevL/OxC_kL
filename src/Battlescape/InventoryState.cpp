@@ -160,8 +160,7 @@ InventoryState::InventoryState(
 							_game,
 							320,
 							200,
-							0,
-							0,
+							0,0,
 							_parent == NULL);
 
 	setPalette("PAL_BATTLESCAPE");
@@ -171,35 +170,35 @@ InventoryState::InventoryState(
 
 	add(_gender);
 	add(_soldier);
-	add(_txtName, "textName", "inventory", _bg);
+	add(_txtName,		"textName",			"inventory", _bg);
 
-	add(_txtWeight, "textWeight", "inventory", _bg);
-	add(_txtTUs, "textTUs", "inventory", _bg);
-	add(_txtFAcc, "textFiring", "inventory", _bg);
-	add(_txtReact, "textReaction", "inventory", _bg);
-	add(_txtThrow, "textThrowing", "inventory", _bg);
-	add(_txtMelee, "textMelee", "inventory", _bg);
-	add(_txtPStr, "textPsiStrength", "inventory", _bg);
-	add(_txtPSkill, "textPsiSkill", "inventory", _bg);
+	add(_txtWeight,		"textWeight",		"inventory", _bg);
+	add(_txtTUs,		"textTUs",			"inventory", _bg);
+	add(_txtFAcc,		"textFiring",		"inventory", _bg);
+	add(_txtReact,		"textReaction",		"inventory", _bg);
+	add(_txtThrow,		"textThrowing",		"inventory", _bg);
+	add(_txtMelee,		"textMelee",		"inventory", _bg);
+	add(_txtPStr,		"textPsiStrength",	"inventory", _bg);
+	add(_txtPSkill,		"textPsiSkill",		"inventory", _bg);
 
 	add(_numOrder);
 	add(_tuCost);
-	add(_txtItem, "textItem", "inventory", _bg);
-	add(_txtAmmo, "textAmmo", "inventory", _bg);
-	add(_btnOk, "buttonOK", "inventory", _bg);
-	add(_btnPrev, "buttonPrev", "inventory", _bg);
-	add(_btnNext, "buttonNext", "inventory", _bg);
-	add(_btnUnload, "buttonUnload", "inventory", _bg);
-	add(_btnGround, "buttonGround", "inventory", _bg);
-	add(_btnRank, "rank", "inventory", _bg);
-//	add(_btnCreateTemplate, "buttonCreate", "inventory", _bg);
-//	add(_btnApplyTemplate, "buttonApply", "inventory", _bg);
+	add(_txtItem,		"textItem",			"inventory", _bg);
+	add(_txtAmmo,		"textAmmo",			"inventory", _bg);
+	add(_btnOk,			"buttonOK",			"inventory", _bg);
+	add(_btnPrev,		"buttonPrev",		"inventory", _bg);
+	add(_btnNext,		"buttonNext",		"inventory", _bg);
+	add(_btnUnload,		"buttonUnload",		"inventory", _bg);
+	add(_btnGround,		"buttonGround",		"inventory", _bg);
+	add(_btnRank,		"rank",				"inventory", _bg);
+//	add(_btnCreateTemplate,	"buttonCreate",	"inventory", _bg);
+//	add(_btnApplyTemplate,	"buttonApply",	"inventory", _bg);
 //	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
-	add(_txtUseTU, "textTUs", "inventory", _bg);
-	add(_txtThrowTU, "textTUs", "inventory", _bg);
-	add(_txtPsiTU, "textTUs", "inventory", _bg);
+	add(_txtUseTU,		"textTUs",			"inventory", _bg);
+	add(_txtThrowTU,	"textTUs",			"inventory", _bg);
+	add(_txtPsiTU,		"textTUs",			"inventory", _bg);
 
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView == true)
@@ -208,52 +207,29 @@ InventoryState::InventoryState(
 	centerAllSurfaces();
 
 
-//	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setBig();
 	_txtName->setHighContrast();
 
-//	_txtWeight->setColor(Palette::blockOffset(4));
-//	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	_txtWeight->setHighContrast();
 
-//	_txtTUs->setColor(Palette::blockOffset(4));
-//	_txtTUs->setSecondaryColor(Palette::blockOffset(1));
 	_txtTUs->setHighContrast();
 
-//	_txtFAcc->setColor(Palette::blockOffset(4));
-//	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
 	_txtFAcc->setHighContrast();
 
-//	_txtReact->setColor(Palette::blockOffset(4));
-//	_txtReact->setSecondaryColor(Palette::blockOffset(1));
 	_txtReact->setHighContrast();
 
-//	_txtThrow->setColor(Palette::blockOffset(4));
-//	_txtThrow->setSecondaryColor(Palette::blockOffset(1));
 	_txtThrow->setHighContrast();
 
-//	_txtMelee->setColor(Palette::blockOffset(4));
-//	_txtMelee->setSecondaryColor(Palette::blockOffset(1));
 	_txtMelee->setHighContrast();
 
-//	_txtPStr->setColor(Palette::blockOffset(4));
-//	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
 	_txtPStr->setHighContrast();
 
-//	_txtPSkill->setColor(Palette::blockOffset(4));
-//	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast();
 
-//	_txtUseTU->setColor(Palette::blockOffset(4));
-//	_txtUseTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtUseTU->setHighContrast();
 
-//	_txtThrowTU->setColor(Palette::blockOffset(4));
-//	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtThrowTU->setHighContrast();
 
-//	_txtPsiTU->setColor(Palette::blockOffset(4));
-//	_txtPsiTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtPsiTU->setHighContrast();
 
 	_numOrder->setColor(1);
@@ -263,11 +239,8 @@ InventoryState::InventoryState(
 	_tuCost->setValue(0);
 	_tuCost->setVisible(false);
 
-//	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast();
 
-//	_txtAmmo->setColor(Palette::blockOffset(4));
-//	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
 	_txtAmmo->setAlign(ALIGN_LEFT);
 	_txtAmmo->setHighContrast();
 
@@ -401,9 +374,8 @@ InventoryState::~InventoryState()
 	if (_parent != NULL)
 	{
 		TileEngine* const tileEngine = _battleGame->getTileEngine();
-		Tile* const tile = _battleGame->getSelectedUnit()->getTile();
 
-		tileEngine->applyGravity(tile);
+		tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
 		tileEngine->calculateTerrainLighting();
 		tileEngine->recalculateFOV();
 	} // kL_end.
@@ -561,13 +533,16 @@ void InventoryState::updateStats()
 		const int
 			weight = unit->getCarriedWeight(_inv->getSelectedItem()),
 			strength = static_cast<int>(Round(
-					   static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
+					   static_cast<double>(unit->getBaseStats()->strength)
+					   * (unit->getAccuracyModifier() / 2. + 0.5)));
 
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(strength));
 		if (weight > strength)
-			_txtWeight->setSecondaryColor(_game->getRuleset()->getInterface("inventory")->getElement("weight")->color2); //Palette::blockOffset(2)); // +5 gives green border (high contrast)
+			_txtWeight->setSecondaryColor(static_cast<Uint8>(
+							_game->getRuleset()->getInterface("inventory")->getElement("weight")->color2));
 		else
-			_txtWeight->setSecondaryColor(_game->getRuleset()->getInterface("inventory")->getElement("weight")->color); //Palette::blockOffset(3));
+			_txtWeight->setSecondaryColor(static_cast<Uint8>(
+							_game->getRuleset()->getInterface("inventory")->getElement("weight")->color));
 
 
 		const int psiSkill = unit->getBaseStats()->psiSkill;
@@ -659,12 +634,12 @@ void InventoryState::saveEquipmentLayout()
 					ammo = "NONE";
 
 				layoutItems->push_back(new EquipmentLayoutItem(
-															(*j)->getRules()->getType(),
-															(*j)->getSlot()->getId(),
-															(*j)->getSlotX(),
-															(*j)->getSlotY(),
-															ammo,
-															(*j)->getFuseTimer()));
+														(*j)->getRules()->getType(),
+														(*j)->getSlot()->getId(),
+														(*j)->getSlotX(),
+														(*j)->getSlotY(),
+														ammo,
+														(*j)->getFuseTimer()));
 			}
 		}
 	}
@@ -777,7 +752,8 @@ void InventoryState::btnUnloadClick(Action*)
 		updateStats();
 		_game->getResourcePack()->getSoundByDepth(
 											0,
-											ResourcePack::ITEM_UNLOAD_HQ)->play();
+											static_cast<unsigned>(ResourcePack::ITEM_UNLOAD_HQ))
+										->play();
 	}
 }
 
@@ -815,7 +791,7 @@ static void _clearInventory(
 		std::vector<BattleItem*>* unitInv,
 		Tile* groundTile)
 {
-	RuleInventory* const groundRuleInv = game->getRuleset()->getInventory("STR_GROUND");
+	RuleInventory* const groundRule = game->getRuleset()->getInventory("STR_GROUND");
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = unitInv->begin();
@@ -825,7 +801,7 @@ static void _clearInventory(
 		(*i)->setOwner(NULL);
 		groundTile->addItem(
 						*i,
-						groundRuleInv);
+						groundRule);
 
 		i = unitInv->erase(i);
 	}
@@ -889,12 +865,12 @@ void InventoryState::invClick(Action*)
 	const BattleItem* const item = _inv->getSelectedItem();
 	if (item != NULL)
 	{
-		const RuleItem* const itemRule = item->getRules();
+		const RuleItem* const itRule = item->getRules();
 		const BattleItem* const ammo = item->getAmmoItem();
 
 		setExtraInfo(
 					item,
-					itemRule,
+					itRule,
 					ammo);
 
 		std::wstring wst;
@@ -909,7 +885,9 @@ void InventoryState::invClick(Action*)
 			rect.y = 0;
 			rect.w = static_cast<Sint16>(RuleInventory::HAND_W * RuleInventory::SLOT_W);
 			rect.h = static_cast<Sint16>(RuleInventory::HAND_H * RuleInventory::SLOT_H);
-			_selAmmo->drawRect(&rect, _game->getRuleset()->getInterface("inventory")->getElement("grid")->color);
+			_selAmmo->drawRect(
+							&rect,
+							static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
 
 			++rect.x;
 			++rect.y;
@@ -926,7 +904,7 @@ void InventoryState::invClick(Action*)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
-		else if (itemRule->getBattleType() == BT_MEDIKIT)
+		else if (itRule->getBattleType() == BT_MEDIKIT)
 			wst = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
@@ -966,12 +944,12 @@ void InventoryState::invMouseOver(Action*)
 //		_updateTemplateButtons(false);
 //		_tuCost->setVisible(false);
 
-		const RuleItem* const itemRule = item->getRules();
+		const RuleItem* const itRule = item->getRules();
 		const BattleItem* const ammo = item->getAmmoItem();
 
 		setExtraInfo(
 				item,
-				itemRule,
+				itRule,
 				ammo);
 
 		std::wstring wstr;
@@ -981,19 +959,18 @@ void InventoryState::invMouseOver(Action*)
 		{
 			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
-			SDL_Rect r;
-			r.x = 0;
-			r.y = 0;
-			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
-			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-			_selAmmo->drawRect(&r, _game->getRuleset()->getInterface("inventory")->getElement("grid")->color);
-//			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+			SDL_Rect rect;
+			rect.x =
+			rect.y = 0;
+			rect.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
+			rect.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
+			_selAmmo->drawRect(&rect, static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
 
-			++r.x;
-			++r.y;
-			r.w -= 2;
-			r.h -= 2;
-			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
+			++rect.x;
+			++rect.y;
+			rect.w -= 2;
+			rect.h -= 2;
+			_selAmmo->drawRect(&rect, Palette::blockOffset(0)+15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -1011,7 +988,7 @@ void InventoryState::invMouseOver(Action*)
 		{
 			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
-		else if (itemRule->getBattleType() == BT_MEDIKIT)
+		else if (itRule->getBattleType() == BT_MEDIKIT)
 		{
 			wstr = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 					.arg(item->getPainKillerQuantity())
@@ -1070,13 +1047,13 @@ void InventoryState::handle(Action* action)
 /**
  * Sets the extra-info fields on mouseover and mouseclicks.
  * @param item		- pointer to an item
- * @param itemRule	- pointer to item's RuleItem
+ * @param itRule	- pointer to item's RuleItem
  * @param ammo		- pointer to item's ammo
  */
 // private:
 void InventoryState::setExtraInfo(
 		const BattleItem* const item,
-		const RuleItem* const itemRule,
+		const RuleItem* const itRule,
 		const BattleItem* const ammo)
 {
 		std::wostringstream label;
@@ -1089,8 +1066,8 @@ void InventoryState::setExtraInfo(
 		}
 		else
 		{
-			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()) == true)
-				label << tr(itemRule->getName());
+			if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+				label << tr(itRule->getName());
 			else
 			{
 				label << tr("STR_ALIEN_ARTIFACT");
@@ -1098,7 +1075,7 @@ void InventoryState::setExtraInfo(
 			}
 		}
 
-		int weight = itemRule->getWeight();
+		int weight = itRule->getWeight();
 		if (ammo != NULL
 			&& ammo != item)
 		{
@@ -1110,17 +1087,17 @@ void InventoryState::setExtraInfo(
 
 
 		const BattleUnit* const unit = _battleGame->getSelectedUnit();
-		const BattleActionType bat = itemRule->getDefaultAction(item->getFuseTimer() > -1);
+		const BattleActionType bat = itRule->getDefaultAction(item->getFuseTimer() > -1);
 
 		if (unit != NULL
 			&& isArt == false
 			&& (bat != BA_NONE
-				|| itemRule->getBattleType() == BT_AMMO))
+				|| itRule->getBattleType() == BT_AMMO))
 		{
 			std::string actionType;
 			int tuUse;
 
-			if (itemRule->getBattleType() == BT_AMMO)
+			if (itRule->getBattleType() == BT_AMMO)
 			{
 				actionType = "STR_RELOAD_";
 				tuUse = 15;

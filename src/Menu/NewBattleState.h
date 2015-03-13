@@ -102,7 +102,7 @@ private:
 		/// Saves New Battle settings.
 		void save(const std::string& filename = "battle");
 		/// Initializes a blank savegame.
-		void initSave();
+		void initPlay();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

@@ -54,12 +54,12 @@ private:
 		_alienQty,
 		_craftQty,
 		_persQty,
-		_totalCost,
-		_hasEng,
-		_hasSci;
+		_totalCost;
 	size_t
 		_curRow,
 		_offset,
+		_hasEng,
+		_hasSci,
 		_sel;
 	Uint8 _ammoColor;
 	double
@@ -143,7 +143,7 @@ private:
 		/// Handler for clicking a Decrease arrow in the list.
 		void lstItemsRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
-		void lstItemsMousePress(Action* action);
+//		void lstItemsMousePress(Action* action);
 
 		/// Increases the quantity of an item by one.
 		void increase();

@@ -130,7 +130,7 @@ Map::Map(
 {
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
-	_messageColor = _game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color;
+	_messageColor = static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
 
 	_previewSetting	= Options::battleNewPreviewPath;
 	if (Options::traceAI == true) // turn everything on because we want to see the markers.
@@ -203,9 +203,9 @@ Map::~Map()
 void Map::init()
 {
 	// load the unit-selected bobbing arrow into a surface
-	const int
-		f = Palette::blockOffset(1),	// Fill, yellow
-		b = 14;							// Border, black
+	const Uint8
+		f = 16, // Fill, yellow // Palette::blockOffset(1)
+		b = 14; // Border, black
 	const Uint8 pixels_stand[81] = { 0, 0, b, b, b, b, b, 0, 0,
 									 0, 0, b, f, f, f, b, 0, 0,
 									 0, 0, b, f, f, f, b, 0, 0,
@@ -231,9 +231,9 @@ void Map::init()
 				++x)
 		{
 			_arrow->setPixelColor(
-								x,
-								y,
-								pixels_stand[x + (y * 9)]);
+							static_cast<int>(x),
+							static_cast<int>(y),
+							pixels_stand[x + (y * 9)]);
 		}
 	}
 	_arrow->unlock();
@@ -264,8 +264,8 @@ void Map::init()
 				++x)
 		{
 			_arrow_kneel->setPixelColor(
-									x,
-									y,
+									static_cast<int>(x),
+									static_cast<int>(y),
 									pixels_kneel[x + (y * 9)]);
 		}
 	}

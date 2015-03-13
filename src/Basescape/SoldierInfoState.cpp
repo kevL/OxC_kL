@@ -164,89 +164,86 @@ SoldierInfoState::SoldierInfoState(
 	add(_bg);
 	add(_rank);
 	add(_gender);
-	add(_btnOk, "button", "soldierInfo");
-	add(_btnPrev, "button", "soldierInfo");
-	add(_btnNext, "button", "soldierInfo");
-	add(_btnAutoStat, "button", "soldierInfo");
+	add(_btnOk,				"button",			"soldierInfo");
+	add(_btnPrev,			"button",			"soldierInfo");
+	add(_btnNext,			"button",			"soldierInfo");
+	add(_btnAutoStat,		"button",			"soldierInfo");
 
-	add(_edtSoldier, "text1", "soldierInfo");
-	add(_txtRank, "text1", "soldierInfo");
-	add(_txtMissions, "text1", "soldierInfo");
-	add(_txtKills, "text1", "soldierInfo");
-	add(_txtCraft, "text1", "soldierInfo");
+	add(_edtSoldier,		"text1",			"soldierInfo");
+	add(_txtRank,			"text1",			"soldierInfo");
+	add(_txtMissions,		"text1",			"soldierInfo");
+	add(_txtKills,			"text1",			"soldierInfo");
+	add(_txtCraft,			"text1",			"soldierInfo");
 	add(_txtRecovery);
 	add(_txtDay);
 	add(_txtPsionic);
 
-	add(_txtArmor, "text1", "soldierInfo");
-	add(_btnArmor, "button", "soldierInfo");
-	add(_btnSack, "button", "soldierInfo");
-	add(_btnDiary, "button", "soldierInfo");
+	add(_txtArmor,			"text1",			"soldierInfo");
+	add(_btnArmor,			"button",			"soldierInfo");
+	add(_btnSack,			"button",			"soldierInfo");
+	add(_btnDiary,			"button",			"soldierInfo");
 
-	add(_txtTimeUnits, "text2", "soldierInfo");
-	add(_numTimeUnits, "numbers", "soldierInfo");
-	add(_barTimeUnits, "barTUs", "soldierInfo");
+	add(_txtTimeUnits,		"text2",			"soldierInfo");
+	add(_numTimeUnits,		"numbers",			"soldierInfo");
+	add(_barTimeUnits,		"barTUs",			"soldierInfo");
 
-	add(_txtStamina, "text2", "soldierInfo");
-	add(_numStamina, "numbers", "soldierInfo");
-	add(_barStamina, "barEnergy", "soldierInfo");
+	add(_txtStamina,		"text2",			"soldierInfo");
+	add(_numStamina,		"numbers",			"soldierInfo");
+	add(_barStamina,		"barEnergy",		"soldierInfo");
 
-	add(_txtHealth, "text2", "soldierInfo");
-	add(_numHealth, "numbers", "soldierInfo");
-	add(_barHealth, "barHealth", "soldierInfo");
+	add(_txtHealth,			"text2",			"soldierInfo");
+	add(_numHealth,			"numbers",			"soldierInfo");
+	add(_barHealth,			"barHealth",		"soldierInfo");
 
-	add(_txtBravery, "text2", "soldierInfo");
-	add(_numBravery, "numbers", "soldierInfo");
-	add(_barBravery, "barBravery", "soldierInfo");
+	add(_txtBravery,		"text2",			"soldierInfo");
+	add(_numBravery,		"numbers",			"soldierInfo");
+	add(_barBravery,		"barBravery",		"soldierInfo");
 
-	add(_txtReactions, "text2", "soldierInfo");
-	add(_numReactions, "numbers", "soldierInfo");
-	add(_barReactions, "barReactions", "soldierInfo");
+	add(_txtReactions,		"text2",			"soldierInfo");
+	add(_numReactions,		"numbers",			"soldierInfo");
+	add(_barReactions,		"barReactions",		"soldierInfo");
 
-	add(_txtFiring, "text2", "soldierInfo");
-	add(_numFiring, "numbers", "soldierInfo");
-	add(_barFiring, "barFiring", "soldierInfo");
+	add(_txtFiring,			"text2",			"soldierInfo");
+	add(_numFiring,			"numbers",			"soldierInfo");
+	add(_barFiring,			"barFiring",		"soldierInfo");
 
-	add(_txtThrowing, "text2", "soldierInfo");
-	add(_numThrowing, "numbers", "soldierInfo");
-	add(_barThrowing, "barThrowing", "soldierInfo");
+	add(_txtThrowing,		"text2",			"soldierInfo");
+	add(_numThrowing,		"numbers",			"soldierInfo");
+	add(_barThrowing,		"barThrowing",		"soldierInfo");
 
-	add(_txtMelee, "text2", "soldierInfo");
-	add(_numMelee, "numbers", "soldierInfo");
-	add(_barMelee, "barMelee", "soldierInfo");
+	add(_txtMelee,			"text2",			"soldierInfo");
+	add(_numMelee,			"numbers",			"soldierInfo");
+	add(_barMelee,			"barMelee",			"soldierInfo");
 
-	add(_txtStrength, "text2", "soldierInfo");
-	add(_numStrength, "numbers", "soldierInfo");
-	add(_barStrength, "barStrength", "soldierInfo");
+	add(_txtStrength,		"text2",			"soldierInfo");
+	add(_numStrength,		"numbers",			"soldierInfo");
+	add(_barStrength,		"barStrength",		"soldierInfo");
 
-	add(_txtPsiStrength, "text2", "soldierInfo");
-	add(_numPsiStrength, "numbers", "soldierInfo");
-	add(_barPsiStrength, "barPsiStrength", "soldierInfo");
+	add(_txtPsiStrength,	"text2",			"soldierInfo");
+	add(_numPsiStrength,	"numbers",			"soldierInfo");
+	add(_barPsiStrength,	"barPsiStrength",	"soldierInfo");
 
-	add(_txtPsiSkill, "text2", "soldierInfo");
-	add(_numPsiSkill, "numbers", "soldierInfo");
-	add(_barPsiSkill, "barPsiSkill", "soldierInfo");
+	add(_txtPsiSkill,		"text2",			"soldierInfo");
+	add(_numPsiSkill,		"numbers",			"soldierInfo");
+	add(_barPsiSkill,		"barPsiSkill",		"soldierInfo");
 
 	centerAllSurfaces();
 
 
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierInfoState::btnOkClick,
 					Options::keyCancel);
 
-//	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
 	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
 	_btnPrev->onKeyboardPress(
 					(ActionHandler)& SoldierInfoState::btnPrevClick,
 					Options::keyBattlePrevUnit);
 
-//	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">");
 	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
 	_btnNext->onKeyboardPress(
@@ -254,22 +251,17 @@ SoldierInfoState::SoldierInfoState(
 					Options::keyBattleNextUnit);
 
 
-//	_btnArmor->setColor(Palette::blockOffset(15)+6);
 	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);
 
-//	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onChange((ActionHandler)& SoldierInfoState::edtSoldierChange);
 
-//	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)& SoldierInfoState::btnSackClick);
 
-//	_btnDiary->setColor(Palette::blockOffset(15)+6);
 	_btnDiary->setText(tr("STR_DIARY"));
 	_btnDiary->onMouseClick((ActionHandler)& SoldierInfoState::btnDiaryClick);
 
-//	_btnAutoStat->setColor(Palette::blockOffset(15)+6);
 	_btnAutoStat->setText(tr("STR_AUTOSTAT"));
 	_btnAutoStat->onMouseClick(
 					(ActionHandler)& SoldierInfoState::btnAutoStat,
@@ -278,23 +270,10 @@ SoldierInfoState::SoldierInfoState(
 					(ActionHandler)& SoldierInfoState::btnAutoStatAll,
 					SDL_BUTTON_RIGHT);
 
-//	_txtArmor->setColor(Palette::blockOffset(13));
 	_txtArmor->setText(tr("STR_ARMOR"));
 
-//	_txtRank->setColor(Palette::blockOffset(13)+10);
-//	_txtRank->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtMissions->setColor(Palette::blockOffset(13)+10);
-//	_txtMissions->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtKills->setColor(Palette::blockOffset(13)+10);
-//	_txtKills->setSecondaryColor(Palette::blockOffset(13));
-
-//	_txtCraft->setColor(Palette::blockOffset(13)+10);
-//	_txtCraft->setSecondaryColor(Palette::blockOffset(13));
-
 	_txtRecovery->setColor(Palette::blockOffset(13)+10);
-	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
+//	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
 //	_txtRecovery->setText(tr("STR_WOUND_RECOVERY"));
 
 	_txtDay->setHighContrast();
@@ -304,123 +283,68 @@ SoldierInfoState::SoldierInfoState(
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
 
 
-//	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
-//	_numTimeUnits->setColor(Palette::blockOffset(13));
-
-//	_barTimeUnits->setColor(Palette::blockOffset(3));
-//	_barTimeUnits->setSecondaryColor(Palette::blockOffset(3)+4);
 	_barTimeUnits->setScale();
 	_barTimeUnits->setInvert();
 
 
-//	_txtStamina->setColor(Palette::blockOffset(15)+1);
 	_txtStamina->setText(tr("STR_STAMINA"));
 
-//	_numStamina->setColor(Palette::blockOffset(13));
-
-//	_barStamina->setColor(Palette::blockOffset(9));
-//	_barStamina->setSecondaryColor(Palette::blockOffset(9)+4);
 	_barStamina->setScale();
 	_barStamina->setInvert();
 
 
-//	_txtHealth->setColor(Palette::blockOffset(15)+1);
 	_txtHealth->setText(tr("STR_HEALTH"));
 
-//	_numHealth->setColor(Palette::blockOffset(13));
-
-//	_barHealth->setColor(Palette::blockOffset(2));
-//	_barHealth->setSecondaryColor(Palette::blockOffset(2)+4);
 	_barHealth->setScale();
 	_barHealth->setInvert();
 
 
-//	_txtBravery->setColor(Palette::blockOffset(15)+1);
 	_txtBravery->setText(tr("STR_BRAVERY"));
 
-//	_numBravery->setColor(Palette::blockOffset(13));
-
-//	_barBravery->setColor(Palette::blockOffset(4));
-//	_barBravery->setSecondaryColor(Palette::blockOffset(4)+4);
 	_barBravery->setScale();
 	_barBravery->setInvert();
 
 
-//	_txtReactions->setColor(Palette::blockOffset(15)+1);
 	_txtReactions->setText(tr("STR_REACTIONS"));
 
-//	_numReactions->setColor(Palette::blockOffset(13));
-
-//	_barReactions->setColor(Palette::blockOffset(1));
-//	_barReactions->setSecondaryColor(Palette::blockOffset(1)+4);
 	_barReactions->setScale();
 	_barReactions->setInvert();
 
 
-//	_txtFiring->setColor(Palette::blockOffset(15)+1);
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
-//	_numFiring->setColor(Palette::blockOffset(13));
-
-//	_barFiring->setColor(Palette::blockOffset(8));
-//	_barFiring->setSecondaryColor(Palette::blockOffset(8)+4);
 	_barFiring->setScale();
 	_barFiring->setInvert();
 
 
-//	_txtThrowing->setColor(Palette::blockOffset(15)+1);
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
-//	_numThrowing->setColor(Palette::blockOffset(13));
-
-//	_barThrowing->setColor(Palette::blockOffset(10));
-//	_barThrowing->setSecondaryColor(Palette::blockOffset(10)+4);
 	_barThrowing->setScale();
 	_barThrowing->setInvert();
 
 
-//	_txtMelee->setColor(Palette::blockOffset(15)+1);
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
 
-//	_numMelee->setColor(Palette::blockOffset(13));
-
-//	_barMelee->setColor(Palette::blockOffset(4));
-//	_barMelee->setSecondaryColor(Palette::blockOffset(4)+4);
 	_barMelee->setScale();
 	_barMelee->setInvert();
 
 
-//	_txtStrength->setColor(Palette::blockOffset(15)+1);
 	_txtStrength->setText(tr("STR_STRENGTH"));
 
-//	_numStrength->setColor(Palette::blockOffset(13));
-
-//	_barStrength->setColor(Palette::blockOffset(5));
-//	_barStrength->setSecondaryColor(Palette::blockOffset(5)+4);
 	_barStrength->setScale();
 	_barStrength->setInvert();
 
 
-//	_txtPsiStrength->setColor(Palette::blockOffset(15)+1);
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
-//	_numPsiStrength->setColor(Palette::blockOffset(13));
-
-//	_barPsiStrength->setColor(Palette::blockOffset(11));
-//	_barPsiStrength->setSecondaryColor(Palette::blockOffset(11)+4);
 	_barPsiStrength->setScale();
 	_barPsiStrength->setInvert();
 
 
-//	_txtPsiSkill->setColor(Palette::blockOffset(15)+1);
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 
-//	_numPsiSkill->setColor(Palette::blockOffset(13));
-
-//	_barPsiSkill->setColor(Palette::blockOffset(11));
-//	_barPsiSkill->setSecondaryColor(Palette::blockOffset(11)+4);
 	_barPsiSkill->setScale();
 	_barPsiSkill->setInvert();
 }
@@ -769,7 +693,7 @@ void SoldierInfoState::init()
 }
 
 /**
- * kL. Handles autoStat click.
+ * Handles autoStat click.
  * Left-click on the Auto-stat button.
  */
 void SoldierInfoState::btnAutoStat(Action*)
@@ -781,7 +705,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 }
 
 /**
- * kL. Handles autoStatAll click.
+ * Handles autoStatAll click.
  * Right-click on the Auto-stat button.
  */
 void SoldierInfoState::btnAutoStatAll(Action*)
@@ -825,7 +749,7 @@ void SoldierInfoState::setSoldierID(size_t soldierID)
  * Changes the soldier's name.
  * @param action - pointer to an Action
  */
-void SoldierInfoState::edtSoldierChange(Action* action)
+void SoldierInfoState::edtSoldierChange(Action*)
 {
 	_soldier->setName(_edtSoldier->getText());
 }
@@ -851,9 +775,9 @@ void SoldierInfoState::btnOkClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,
-											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorMessage")->color,
 											"BACK01.SCR",
-											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorPalette")->color)); //0
+											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorPalette")->color));
 	}
 }
 

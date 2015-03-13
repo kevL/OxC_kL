@@ -424,9 +424,9 @@ void BattleUnit::load(const YAML::Node& node)
 //	_respawn			= node["respawn"]									.as<bool>(_respawn);
 	_activeHand			= node["activeHand"]								.as<std::string>(_activeHand);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 		_currentArmor[i]	= node["armor"][i]								.as<int>(_currentArmor[i]);
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 		_fatalWounds[i]		= node["fatalWounds"][i]						.as<int>(_fatalWounds[i]);
 
 	if (_geoscapeSoldier != NULL)
@@ -447,10 +447,7 @@ void BattleUnit::load(const YAML::Node& node)
 
 	if (const YAML::Node& p = node["recolor"])
 	{
-		for (size_t
-				i = 0;
-				i != 2;
-				++i)
+		for (size_t i = 0; i != 2; ++i)
 		{
 			_recolor[i].first	= p[i][0].as<Uint8>();
 			_recolor[i].second	= p[i][1].as<Uint8>();
@@ -495,9 +492,9 @@ YAML::Node BattleUnit::save() const
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5; ++i)
 		node["armor"].push_back(_currentArmor[i]);
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 		node["fatalWounds"].push_back(_fatalWounds[i]);
 
 	if (getCurrentAIState() != NULL)
@@ -530,6 +527,16 @@ YAML::Node BattleUnit::save() const
 		node["expMelee"]		= _expMelee;
 	}
 
+	for (size_t i = 0; i < 2; ++i)
+	{
+		YAML::Node p;
+
+		p.push_back(_recolor[i].first);
+		p.push_back(_recolor[i].second);
+
+		node["recolor"].push_back(p);
+	}
+
 	return node;
 		// kL_note: This doesn't save/load such things as
 		// _visibleUnits, _unitsSpottedThisTurn, _visibleTiles;
@@ -541,28 +548,25 @@ YAML::Node BattleUnit::save() const
  */
 void BattleUnit::setRecolor(int selectLook)
 {
-	int BaseColor = 0;
-
 	const int
-		faceColor = _armor->getFaceColor()[selectLook],
 		faceColorGroup = _armor->getFaceColorGroup(),
-		hairColor = _armor->getHairColor()[selectLook],
-		hairColorGroup = _armor->getHairColorGroup();
+		faceColor = _armor->getFaceColor()[selectLook],
+
+		hairColorGroup = _armor->getHairColorGroup(),
+		hairColor = _armor->getHairColor()[selectLook];
 
 	if (faceColorGroup > 0
 		&& faceColor > -1)
 	{
-		_recolor[BaseColor].first = faceColorGroup << 4;
-		_recolor[BaseColor].second = faceColor;
-		++BaseColor;
+		_recolor[0].first = static_cast<Uint8>(faceColorGroup << 4);
+		_recolor[0].second = static_cast<Uint8>(faceColor);
 	}
 
 	if (hairColorGroup > 0
 		&& hairColor > -1)
 	{
-		_recolor[BaseColor].first = hairColorGroup << 4;
-		_recolor[BaseColor].second = hairColor;
-		++BaseColor;
+		_recolor[1].first = static_cast<Uint8>(hairColorGroup << 4);
+		_recolor[1].second = static_cast<Uint8>(hairColor);
 	}
 }
 
@@ -2553,8 +2557,8 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem
 		* const rhtWeapon = getItem("STR_RIGHT_HAND"),
 		* const lftWeapon = getItem("STR_LEFT_HAND");
-	if (rhtWeapon != NULL) Log(LOG_INFO) << "right weapon " << rhtWeapon->getRules()->getType();
-	if (lftWeapon != NULL) Log(LOG_INFO) << "left weapon " << lftWeapon->getRules()->getType();
+	//if (rhtWeapon != NULL) Log(LOG_INFO) << "right weapon " << rhtWeapon->getRules()->getType();
+	//if (lftWeapon != NULL) Log(LOG_INFO) << "left weapon " << lftWeapon->getRules()->getType();
 
 	const bool
 		isRht = rhtWeapon

@@ -77,7 +77,7 @@ NewBattleState::NewBattleState()
 	:
 		_craft(NULL)
 {
-	_rules = _game->getRuleset(); // init.
+	_rules = _game->getRuleset();
 
 	_window				= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle			= new Text(320, 17, 0, 9);
@@ -188,10 +188,10 @@ NewBattleState::NewBattleState()
 	_cbxMission->setOptions(_missionTypes);
 	_cbxMission->onChange((ActionHandler)& NewBattleState::cbxMissionChange);
 
-	const std::vector<std::string>& crafts = _rules->getCraftsList();
+	const std::vector<std::string>& craftsList = _rules->getCraftsList();
 	for (std::vector<std::string>::const_iterator
-			i = crafts.begin();
-			i != crafts.end();
+			i = craftsList.begin();
+			i != craftsList.end();
 			++i)
 	{
 		if (_rules->getCraft(*i)->getSoldiers() > 0)
@@ -277,7 +277,7 @@ void NewBattleState::load(const std::string& filename)
 {
 	const std::string st = Options::getConfigFolder() + filename + ".cfg";
 	if (CrossPlatform::fileExists(st) == false)
-		initSave();
+		initPlay();
 	else
 	{
 		try
@@ -366,12 +366,12 @@ void NewBattleState::load(const std::string& filename)
 				_game->setSavedGame(savedGame);
 			}
 			else
-				initSave();
+				initPlay();
 		}
 		catch (YAML::Exception e)
 		{
 			Log(LOG_WARNING) << e.what();
-			initSave();
+			initPlay();
 		}
 	}
 }
@@ -410,7 +410,7 @@ void NewBattleState::save(const std::string& filename)
 /**
  * Initializes a new savegame with everything available.
  */
-void NewBattleState::initSave()
+void NewBattleState::initPlay()
 {
 	SavedGame* const savedGame = new SavedGame(_rules);
 	Base* const base = new Base(_rules);
@@ -524,6 +524,7 @@ void NewBattleState::initSave()
 
 	_game->setSavedGame(savedGame);
 	cbxMissionChange(NULL);
+	Log(LOG_INFO) << "NewBattleState::initPlay() EXIT";
 }
 
 /**
@@ -641,7 +642,7 @@ void NewBattleState::btnCancelClick(Action*)
  */
 void NewBattleState::btnRandomClick(Action*)
 {
-	initSave();
+	initPlay();
 
 	_cbxMission->setSelected(RNG::generate(
 										0,
@@ -688,7 +689,7 @@ void NewBattleState::btnEquipClick(Action*)
  */
 void NewBattleState::cbxMissionChange(Action*)
 {
-	Log(LOG_INFO) << "\nNewBattleState::cbxMissionChange()";
+	Log(LOG_INFO) << "NewBattleState::cbxMissionChange()";
 	const AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 	Log(LOG_INFO) << ". ruleDeploy = " << ruleDeploy->getType();
 
@@ -757,6 +758,7 @@ void NewBattleState::cbxMissionChange(Action*)
 			i != terrains.end();
 			++i)
 	{
+		Log(LOG_INFO) << ". . insert to _terrainTypes Option = " << *i;
 		_terrainTypes.push_back(*i);
 		terrainOptions.push_back("STR_" + *i);
 	}
@@ -773,6 +775,7 @@ void NewBattleState::cbxMissionChange(Action*)
 	_cbxTerrain->setSelected(0);
 
 	cbxTerrainChange(NULL);
+	Log(LOG_INFO) << "NewBattleState::cbxMissionChange() EXIT";
 }
 
 /**

@@ -54,8 +54,7 @@ RuleCraft::RuleCraft(const std::string& type)
 		_spacecraft(false),
 		_listOrder(0),
 		_maxItems(0)
-{
-}
+{}
 
 /**
  * dTor.

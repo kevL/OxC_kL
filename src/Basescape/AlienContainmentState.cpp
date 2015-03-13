@@ -92,17 +92,17 @@ AlienContainmentState::AlienContainmentState(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("manageContainment")->getElement("palette")->color);
 
-	add(_window, "window", "manageContainment");
-	add(_txtTitle, "text", "manageContainment");
-	add(_txtBaseLabel, "text", "manageContainment");
-	add(_txtAvailable, "text", "manageContainment");
-	add(_txtUsed, "text", "manageContainment");
-	add(_txtItem, "text", "manageContainment");
-	add(_txtLiveAliens, "text", "manageContainment");
-	add(_txtDeadAliens, "text", "manageContainment");
-	add(_lstAliens, "list", "manageContainment");
-	add(_btnCancel, "button", "manageContainment");
-	add(_btnOk, "button", "manageContainment");
+	add(_window,		"window",	"manageContainment");
+	add(_txtTitle,		"text",		"manageContainment");
+	add(_txtBaseLabel,	"text",		"manageContainment");
+	add(_txtAvailable,	"text",		"manageContainment");
+	add(_txtUsed,		"text",		"manageContainment");
+	add(_txtItem,		"text",		"manageContainment");
+	add(_txtLiveAliens,	"text",		"manageContainment");
+	add(_txtDeadAliens,	"text",		"manageContainment");
+	add(_lstAliens,		"list",		"manageContainment");
+	add(_btnCancel,		"button",	"manageContainment");
+	add(_btnOk,			"button",	"manageContainment");
 
 	centerAllSurfaces();
 
@@ -158,13 +158,13 @@ AlienContainmentState::AlienContainmentState(
 	_lstAliens->setBackground(_window);
 	_lstAliens->setMargin();
 //	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstAliens->onMousePress((ActionHandler)& AlienContainmentState::lstItemsMousePress);
 	_lstAliens->onLeftArrowPress((ActionHandler)& AlienContainmentState::lstItemsLeftArrowPress);
 	_lstAliens->onLeftArrowRelease((ActionHandler)& AlienContainmentState::lstItemsLeftArrowRelease);
 	_lstAliens->onLeftArrowClick((ActionHandler)& AlienContainmentState::lstItemsLeftArrowClick);
 	_lstAliens->onRightArrowPress((ActionHandler)& AlienContainmentState::lstItemsRightArrowPress);
 	_lstAliens->onRightArrowRelease((ActionHandler)& AlienContainmentState::lstItemsRightArrowRelease);
 	_lstAliens->onRightArrowClick((ActionHandler)& AlienContainmentState::lstItemsRightArrowClick);
-	_lstAliens->onMousePress((ActionHandler)& AlienContainmentState::lstItemsMousePress);
 
 
 	int qty;
@@ -383,7 +383,7 @@ void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action - pointer to an Action
  */
-void AlienContainmentState::lstItemsMousePress(Action* action)
+/*void AlienContainmentState::lstItemsMousePress(Action* action)
 {
 	_sel = _lstAliens->getSelectedRow();
 
@@ -409,7 +409,7 @@ void AlienContainmentState::lstItemsMousePress(Action* action)
 			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
-}
+} */
 
 /**
  * Gets the quantity of the currently selected alien on the base.

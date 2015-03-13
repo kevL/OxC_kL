@@ -110,10 +110,10 @@ void State::add(Surface* surface)
  * As above, except this adds a surface based on an interface element defined in the ruleset.
  * @note that this function REQUIRES the ruleset to have been loaded prior to use.
  * @note if no parent is defined the element will not be moved.
- * @param surface	- pointer to child surface
- * @param id		- the ID of the element defined in the ruleset, if any
+ * @param surface	- pointer to child Surface
+ * @param id		- the ID of the element defined in the ruleset if any
  * @param category	- the category of elements this interface is associated with
- * @param parent	- pointer to the surface to base the coordinates of this element off (default NULL)
+ * @param parent	- pointer to the Surface to base the coordinates of this element off (default NULL)
  */
 void State::add(
 		Surface* surface,
@@ -124,7 +124,7 @@ void State::add(
 	surface->setPalette(_palette);
 
 	// this only works when dealing with a battlescape button
-	BattlescapeButton* bsbtn = dynamic_cast<BattlescapeButton*>(surface);
+	BattlescapeButton* tacBtn = dynamic_cast<BattlescapeButton*>(surface);
 
 	if (_game->getRuleset()->getInterface(category) != NULL)
 	{
@@ -148,25 +148,25 @@ void State::add(
 				}
 			}
 
-			if (bsbtn != NULL)
-				bsbtn->setTftdMode(element->TFTDMode);
+			if (tacBtn != NULL)
+				tacBtn->setTftdMode(element->TFTDMode);
 
 			if (element->color != std::numeric_limits<int>::max())
-				surface->setColor(element->color);
+				surface->setColor(static_cast<Uint8>(element->color));
 
 			if (element->color2 != std::numeric_limits<int>::max())
-				surface->setSecondaryColor(element->color2);
+				surface->setSecondaryColor(static_cast<Uint8>(element->color2));
 
 			if (element->border != std::numeric_limits<int>::max())
-				surface->setBorderColor(element->border);
+				surface->setBorderColor(static_cast<Uint8>(element->border));
 		}
 	}
 
-	if (bsbtn != NULL)
+	if (tacBtn != NULL)
 	{
 		// this will initialize the graphics and settings of the battlescape button.
-		bsbtn->copy(parent);
-		bsbtn->initSurfaces();
+		tacBtn->copy(parent);
+		tacBtn->initSurfaces();
 	}
 
 	if (_game->getLanguage() != NULL // set default text resources
@@ -396,7 +396,7 @@ void State::applyBattlescapeTheme()
 		Window* const window = dynamic_cast<Window*>(*i);
 		if (window != NULL)
 		{
-			window->setColor(element->color);
+			window->setColor(static_cast<Uint8>(element->color));
 			window->setHighContrast();
 			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
@@ -406,7 +406,7 @@ void State::applyBattlescapeTheme()
 		Text* const text = dynamic_cast<Text*>(*i);
 		if (text != NULL)
 		{
-			text->setColor(element->color);
+			text->setColor(static_cast<Uint8>(element->color));
 			text->setHighContrast();
 
 			continue;
@@ -415,7 +415,7 @@ void State::applyBattlescapeTheme()
 		TextButton* const btn = dynamic_cast<TextButton*>(*i);
 		if (btn != NULL)
 		{
-			btn->setColor(element->color);
+			btn->setColor(static_cast<Uint8>(element->color));
 			btn->setHighContrast();
 
 			continue;
@@ -424,7 +424,7 @@ void State::applyBattlescapeTheme()
 		TextEdit* const edit = dynamic_cast<TextEdit*>(*i);
 		if (edit != NULL)
 		{
-			edit->setColor(element->color);
+			edit->setColor(static_cast<Uint8>(element->color));
 			edit->setHighContrast();
 
 			continue;
@@ -433,8 +433,8 @@ void State::applyBattlescapeTheme()
 		TextList* const textList = dynamic_cast<TextList*>(*i);
 		if (textList != NULL)
 		{
-			textList->setColor(element->color);
-			textList->setArrowColor(element->border);
+			textList->setColor(static_cast<Uint8>(element->color));
+			textList->setArrowColor(static_cast<Uint8>(element->border));
 			textList->setHighContrast();
 
 			continue;
@@ -443,7 +443,7 @@ void State::applyBattlescapeTheme()
 		ArrowButton* const arrow = dynamic_cast<ArrowButton*>(*i);
 		if (arrow != NULL)
 		{
-			arrow->setColor(element->border);
+			arrow->setColor(static_cast<Uint8>(element->border));
 
 			continue;
 		}
@@ -451,7 +451,7 @@ void State::applyBattlescapeTheme()
 		Slider* const slider = dynamic_cast<Slider*>(*i);
 		if (slider != NULL)
 		{
-			slider->setColor(element->color);
+			slider->setColor(static_cast<Uint8>(element->color));
 			slider->setHighContrast();
 
 			continue;
@@ -460,8 +460,8 @@ void State::applyBattlescapeTheme()
 		ComboBox* const combo = dynamic_cast<ComboBox*>(*i);
 		if (combo != NULL)
 		{
-			combo->setColor(element->color);
-			combo->setArrowColor(element->border);
+			combo->setColor(static_cast<Uint8>(element->color));
+			combo->setArrowColor(static_cast<Uint8>(element->border));
 			combo->setHighContrast();
 		}
 	}
@@ -564,7 +564,7 @@ void State::setPalette(
 
 	if (backpal != -1)
 		setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(static_cast<int>(Palette::blockOffset(backpal))),
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(static_cast<int>(Palette::blockOffset(static_cast<Uint8>(backpal)))),
 				Palette::backPos,
 				16,
 				false);

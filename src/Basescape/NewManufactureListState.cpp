@@ -73,42 +73,35 @@ NewManufactureListState::NewManufactureListState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
+			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
 
-	add(_window, "window", "selectNewManufacture");
-	add(_txtTitle, "text", "selectNewManufacture");
-//	add(_cbxCategory, "catBox", "selectNewManufacture");
-	add(_txtItem, "text", "selectNewManufacture");
-	add(_txtCategory, "text", "selectNewManufacture");
-	add(_lstManufacture, "list", "selectNewManufacture");
-	add(_btnCancel, "button", "selectNewManufacture");
+	add(_window,			"window",	"selectNewManufacture");
+	add(_txtTitle,			"text",		"selectNewManufacture");
+//	add(_cbxCategory,		"catBox",	"selectNewManufacture");
+	add(_txtItem,			"text",		"selectNewManufacture");
+	add(_txtCategory,		"text",		"selectNewManufacture");
+	add(_lstManufacture,	"list",		"selectNewManufacture");
+	add(_btnCancel,			"button",	"selectNewManufacture");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setText(tr("STR_PRODUCTION_ITEMS"));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-//	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtCategory->setColor(Palette::blockOffset(15)+1);
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
-//	_lstManufacture->setColor(Palette::blockOffset(13));
-//	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setSelectable();
 	_lstManufacture->setColumns(2, 148, 129);
 	_lstManufacture->setMargin(16);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
 
-//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -186,28 +179,28 @@ void NewManufactureListState::lstProdClick(Action*)
 		}
 	} */
 
-	RuleManufacture* rule = _possibleProductions[_lstManufacture->getSelectedRow()];
-	if (rule->getCategory() == "STR_CRAFT"
+	RuleManufacture* const manufRule = _possibleProductions[_lstManufacture->getSelectedRow()];
+	if (manufRule->getCategory() == "STR_CRAFT"
 		&& _base->getAvailableHangars() - _base->getUsedHangars() < 1)
 	{
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
 											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
 											"BACK17.SCR",
-											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	}
-	else if (rule->getRequiredSpace() > _base->getFreeWorkshops())
+	else if (manufRule->getRequiredSpace() > _base->getFreeWorkshops())
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NOT_ENOUGH_WORK_SPACE"),
 											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
 											"BACK17.SCR",
-											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	else
 		_game->pushState(new ManufactureStartState(
 												_base,
-												rule));
+												manufRule));
 }
 
 /**

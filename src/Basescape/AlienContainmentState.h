@@ -108,7 +108,7 @@ private:
 		/// Handler for clicking a Decrease arrow in the list.
 		void lstItemsRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
-		void lstItemsMousePress(Action* action);
+//		void lstItemsMousePress(Action* action);
 
 		/// Increases the quantity of an alien by one.
 		void increase();

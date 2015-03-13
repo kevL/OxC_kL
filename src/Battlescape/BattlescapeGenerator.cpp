@@ -3626,8 +3626,8 @@ bool BattlescapeGenerator::selectPosition( // private.
 	SDL_Rect wholeMap;
 	wholeMap.x = 0;
 	wholeMap.y = 0;
-	wholeMap.w = (_mapsize_x / 10);
-	wholeMap.h = (_mapsize_y / 10);
+	wholeMap.w = static_cast<Uint16>(_mapsize_x / 10);
+	wholeMap.h = static_cast<Uint16>(_mapsize_y / 10);
 
 	sizeX = (sizeX / 10);
 	sizeY = (sizeY / 10);
@@ -3714,8 +3714,8 @@ bool BattlescapeGenerator::addCraft( // private.
 		MapScript* command,
 		SDL_Rect& craftPos)
 {
-	craftPos.w = craftMap->getSizeX();
-	craftPos.h = craftMap->getSizeY();
+	craftPos.w = static_cast<Uint16>(craftMap->getSizeX());
+	craftPos.h = static_cast<Uint16>(craftMap->getSizeY());
 
 	int
 		x,
@@ -3729,8 +3729,8 @@ bool BattlescapeGenerator::addCraft( // private.
 
 	if (placed == true)
 	{
-		craftPos.x = x;
-		craftPos.y = y;
+		craftPos.x = static_cast<Sint16>(x);
+		craftPos.y = static_cast<Sint16>(y);
 		craftPos.w /= 10;
 		craftPos.h /= 10;
 

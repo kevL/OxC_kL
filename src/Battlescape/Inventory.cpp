@@ -76,8 +76,7 @@ Inventory::Inventory(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_game(game),
 		_selUnit(NULL),
 		_selItem(NULL),
@@ -105,8 +104,8 @@ Inventory::Inventory(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
-	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
-	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1)-1);
+	_warning->setColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2));
+	_warning->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color));
 
 	_animTimer = new Timer(80);
 	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);
@@ -195,9 +194,9 @@ void Inventory::drawGrid()
 				_game->getLanguage());
 
 	const RuleInterface* const rule = _game->getRuleset()->getInterface("inventory");
-	text.setColor(rule->getElement("textSlots")->color);
+	text.setColor(static_cast<Uint8>(rule->getElement("textSlots")->color));
 
-	const Uint8 color = rule->getElement("grid")->color;
+	const Uint8 color = static_cast<Uint8>(rule->getElement("grid")->color);
 	bool doLabel;
 
 	for (std::map<std::string, RuleInventory*>::const_iterator
@@ -297,7 +296,7 @@ void Inventory::drawItems()
 	_items->clear();
 	_grenadeFuses.clear();
 
-	const Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
+	const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("numStack")->color);
 
 	if (_selUnit != NULL)
 	{

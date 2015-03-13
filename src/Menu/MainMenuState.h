@@ -41,11 +41,11 @@ class MainMenuState
 
 private:
 	TextButton
-		* _btnNewGame,
-		* _btnNewBattle,
+		* _btnStart,
+		* _btnTactical,
 		* _btnLoad,
 //		* _btnOptions,
-		* _btnPlayIntro,
+		* _btnIntro,
 		* _btnQuit;
 	Window
 		* _window;

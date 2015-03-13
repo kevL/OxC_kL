@@ -164,7 +164,7 @@ private:
 		/// Gets the rendered text's height.
 		int getTextHeight(int line = -1) const;
 		/// Adds to the text's height.
-		void addTextHeight(int pixels = 1);
+		void addTextHeight(int pad = 1);
 
 		/// Draws the text.
 		void draw();

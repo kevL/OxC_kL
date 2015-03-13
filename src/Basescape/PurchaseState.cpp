@@ -101,7 +101,7 @@ PurchaseState::PurchaseState(Base* base)
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("buyMenu")->getElement("palette")->color);
 
-	_ammoColor = _game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color;
+	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color);
 
 	add(_window,		"window",	"buyMenu");
 	add(_txtTitle,		"text",		"buyMenu");
@@ -213,6 +213,7 @@ PurchaseState::PurchaseState(Base* base)
 
 
 	// Add craft-types to purchase list.
+	const RuleCraft* crftRule;
 	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator
 			i = crafts.begin();
@@ -221,9 +222,9 @@ PurchaseState::PurchaseState(Base* base)
 	{
 		ss4.str(L"");
 
-		const RuleCraft* const craftRule = _game->getRuleset()->getCraft(*i);
-		if (craftRule->getBuyCost() != 0
-			&& _game->getSavedGame()->isResearched(craftRule->getRequirements()) == true)
+		crftRule = _game->getRuleset()->getCraft(*i);
+		if (crftRule->getBuyCost() != 0
+			&& _game->getSavedGame()->isResearched(crftRule->getRequirements()) == true)
 		{
 			_quantities.push_back(0);
 			_crafts.push_back(*i);
@@ -244,7 +245,7 @@ PurchaseState::PurchaseState(Base* base)
 			_lstItems->addRow(
 							4,
 							tr(*i).c_str(),
-							Text::formatFunding(craftRule->getBuyCost()).c_str(),
+							Text::formatFunding(crftRule->getBuyCost()).c_str(),
 							ss4.str().c_str(),
 							L"0");
 		}
@@ -252,9 +253,18 @@ PurchaseState::PurchaseState(Base* base)
 
 
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-	std::string test;
 
 	// Add craft Weapon-types to purchase list.
+	const RuleCraftWeapon* cwRule;
+	const RuleItem
+		* itRule,
+		* laRule,
+		* clRule,
+		* amRule;
+	std::string st;
+	std::wstring wst;
+	int clipSize;
+
 	const std::vector<std::string>& cwList = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
 			i = cwList.begin();
@@ -265,40 +275,40 @@ PurchaseState::PurchaseState(Base* base)
 		ss6.str(L"");
 
 		// Special handling for treating craft weapons as items
-		const RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(*i);
-		const RuleItem* const launchRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
-		const std::string launcher = launchRule->getType();
+		cwRule = _game->getRuleset()->getCraftWeapon(*i);
+		laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
+		st = laRule->getType();
 
-		if (launchRule->getBuyCost() > 0
-			&& isExcluded(launcher) == false)
+		if (laRule->getBuyCost() > 0
+			&& isExcluded(st) == false)
 		{
 			_quantities.push_back(0);
-			_items.push_back(launcher);
+			_items.push_back(st);
 
-			int tQty = _base->getItems()->getItem(launcher);
+			int tQty = _base->getItems()->getItem(st);
 			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
 					++j)
 			{
 				if ((*j)->getType() == TRANSFER_ITEM
-					&& (*j)->getItems() == launcher)
+					&& (*j)->getItems() == st)
 				{
 					tQty += (*j)->getQuantity();
 				}
 			}
 
-			std::wstring item = tr(launcher);
+			wst = tr(st);
 
-			const int clipSize = cwRule->getAmmoMax();
+			clipSize = cwRule->getAmmoMax();
 			if (clipSize > 0)
-				item += (L" (" + Text::formatNumber(clipSize) + L")");
+				wst += (L" (" + Text::formatNumber(clipSize) + L")");
 
 			ss5 << tQty;
 			_lstItems->addRow(
 							4,
-							item.c_str(),
-							Text::formatFunding(launchRule->getBuyCost()).c_str(),
+							wst.c_str(),
+							Text::formatFunding(laRule->getBuyCost()).c_str(),
 							ss5.str().c_str(),
 							L"0");
 
@@ -307,7 +317,7 @@ PurchaseState::PurchaseState(Base* base)
 					j != items.end();
 					++j)
 			{
-				if (*j == launcher)
+				if (*j == st)
 				{
 					items.erase(j);
 					break;
@@ -316,41 +326,40 @@ PurchaseState::PurchaseState(Base* base)
 		}
 
 		// Handle craft weapon ammo.
-		const RuleItem* const clipRule = _game->getRuleset()->getItem(cwRule->getClipItem());
-		const std::string clip = clipRule->getType();
+		clRule = _game->getRuleset()->getItem(cwRule->getClipItem());
+		st = clRule->getType();
 
-		if (clipRule != NULL
-			&& clipRule->getBuyCost() > 0
-			&& isExcluded(clip) == false)
+		if (clRule->getBuyCost() > 0 // clRule != NULL &&
+			&& isExcluded(st) == false)
 		{
 			_quantities.push_back(0);
-			_items.push_back(clip);
+			_items.push_back(st);
 
-			int tQty = _base->getItems()->getItem(clip);
+			int tQty = _base->getItems()->getItem(st);
 			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
 					++j)
 			{
 				if ((*j)->getType() == TRANSFER_ITEM
-					&& (*j)->getItems() == clip)
+					&& (*j)->getItems() == st)
 				{
 					tQty += (*j)->getQuantity();
 				}
 			}
 
-			std::wstring item = tr(clip);
+			wst = tr(st);
 
-			const int clipSize = clipRule->getClipSize();
+			clipSize = clRule->getClipSize();
 			if (clipSize > 1)
-				item += (L"s (" + Text::formatNumber(clipSize) + L")");
+				wst += (L"s (" + Text::formatNumber(clipSize) + L")");
 
 			ss6 << tQty;
-			item.insert(0, L"  ");
+			wst.insert(0, L"  ");
 			_lstItems->addRow(
 							4,
-							item.c_str(),
-							Text::formatFunding(clipRule->getBuyCost()).c_str(),
+							wst.c_str(),
+							Text::formatFunding(clRule->getBuyCost()).c_str(),
 							ss6.str().c_str(),
 							L"0");
 			_lstItems->setRowColor(
@@ -362,7 +371,7 @@ PurchaseState::PurchaseState(Base* base)
 					j != items.end();
 					++j)
 			{
-				if (*j == clip)
+				if (*j == st)
 				{
 					items.erase(j);
 					break;
@@ -377,15 +386,15 @@ PurchaseState::PurchaseState(Base* base)
 			i != items.end();
 			++i)
 	{
-		const RuleItem* const rule = _game->getRuleset()->getItem(*i);
-		//Log(LOG_INFO) << (*i) << " list# " << rule->getListOrder(); // Prints listOrder to LOG.
+		itRule = _game->getRuleset()->getItem(*i);
+		//Log(LOG_INFO) << (*i) << " list# " << itRule->getListOrder(); // Prints listOrder to LOG.
 
-		if (rule->getBuyCost() != 0
-			&& _game->getSavedGame()->isResearched(rule->getRequirements()) == true
+		if (itRule->getBuyCost() != 0
+			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true
 			&& isExcluded(*i) == false)
 		{
 			ss7.str(L"");
-			const std::string test = rule->getType();
+			st = itRule->getType();
 
 			_quantities.push_back(0);
 			_items.push_back(*i);
@@ -397,7 +406,7 @@ PurchaseState::PurchaseState(Base* base)
 					j != _base->getTransfers()->end();
 					++j)
 			{
-				if ((*j)->getItems() == test)
+				if ((*j)->getItems() == st)
 					totalQty += (*j)->getQuantity();
 			}
 
@@ -413,7 +422,7 @@ PurchaseState::PurchaseState(Base* base)
 							k != (*j)->getItems()->getContents()->end();
 							++k)
 					{
-						if (k->first == test)
+						if (k->first == st)
 							totalQty += k->second;
 					}
 				}
@@ -425,16 +434,16 @@ PurchaseState::PurchaseState(Base* base)
 							k != (*j)->getVehicles()->end();
 							++k)
 					{
-						if ((*k)->getRules()->getType() == test)
+						if ((*k)->getRules()->getType() == st)
 							++totalQty;
 
 						if ((*k)->getAmmo() != 255)
 						{
-							const RuleItem* const ammoRule = _game->getRuleset()->getItem(
-																_game->getRuleset()->getItem((*k)->getRules()->getType())
-															->getCompatibleAmmo()->front());
+							amRule = _game->getRuleset()->getItem(
+									 _game->getRuleset()->getItem((*k)->getRules()->getType())
+									 ->getCompatibleAmmo()->front());
 
-							if (ammoRule->getType() == test)
+							if (amRule->getType() == st)
 								totalQty += (*k)->getAmmo();
 						}
 					}
@@ -442,44 +451,46 @@ PurchaseState::PurchaseState(Base* base)
 			}
 
 			ss7 << totalQty;
-			std::wstring item = tr(*i);
+			wst = tr(*i);
 
-			if (rule->getBattleType() == BT_AMMO			// #2, weapon clips & HWP rounds
-//					|| (rule->getBattleType() == BT_NONE	// #0, craft weapon rounds - ^HANDLED ABOVE^^
-//						&& rule->getClipSize() > 0))
-				&& rule->getType() != "STR_ELERIUM_115")
+			if (itRule->getBattleType() == BT_AMMO			// #2, weapon clips & HWP rounds
+//					|| (itRule->getBattleType() == BT_NONE	// #0, craft weapon rounds - ^HANDLED ABOVE^^
+//						&& itRule->getClipSize() > 0))
+				&& itRule->getType() != "STR_ELERIUM_115")
 			{
-				if (rule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				if (itRule->getType().substr(0,8) != "STR_HWP_") // *cuckoo** weapon clips
 				{
-					const int clipSize = rule->getClipSize();
+					clipSize = itRule->getClipSize();
 					if (clipSize > 1)
-						item += (L" (" + Text::formatNumber(clipSize) + L")");
+						wst += (L" (" + Text::formatNumber(clipSize) + L")");
 				}
-				item.insert(0, L"  ");
+				wst.insert(0, L"  ");
 
 				_lstItems->addRow(
 								4,
-								item.c_str(),
-								Text::formatFunding(rule->getBuyCost()).c_str(),
+								wst.c_str(),
+								Text::formatFunding(itRule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
-				_lstItems->setRowColor(_quantities.size() - 1, Palette::blockOffset(15)+6);
+				_lstItems->setRowColor(
+								_quantities.size() - 1,
+								Palette::blockOffset(15)+6);
 			}
 			else
 			{
-                if (rule->isFixed() == true // tank w/ Ordnance.
-					&& rule->getCompatibleAmmo()->empty() == false)
+                if (itRule->isFixed() == true // tank w/ Ordnance.
+					&& itRule->getCompatibleAmmo()->empty() == false)
                 {
-					const RuleItem* const ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
-					const int clipSize = ammoRule->getClipSize();
+					amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
+					clipSize = amRule->getClipSize();
 					if (clipSize > 0)
-						item += (L" (" + Text::formatNumber(clipSize) + L")");
+						wst += (L" (" + Text::formatNumber(clipSize) + L")");
                 }
 
 				_lstItems->addRow(
 								4,
-								item.c_str(),
-								Text::formatFunding(rule->getBuyCost()).c_str(),
+								wst.c_str(),
+								Text::formatFunding(itRule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
 			}
@@ -584,10 +595,10 @@ void PurchaseState::btnOkClick(Action*)
 						j < _quantities[i];
 						j++)
 				{
-					RuleCraft* const craftRule = _game->getRuleset()->getCraft(_crafts[i - 3]);
-					Transfer* const transfer = new Transfer(craftRule->getTransferTime());
+					RuleCraft* const crftRule = _game->getRuleset()->getCraft(_crafts[i - 3]);
+					Transfer* const transfer = new Transfer(crftRule->getTransferTime());
 					Craft* const craft = new Craft(
-											craftRule,
+											crftRule,
 											_base,
 											_game->getSavedGame()->getId(_crafts[i - 3]));
 					craft->setStatus("STR_REFUELLING");
@@ -598,8 +609,8 @@ void PurchaseState::btnOkClick(Action*)
 			}
 			else // Buy items
 			{
-				const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
-				Transfer* const transfer = new Transfer(itemRule->getTransferTime());
+				const RuleItem* const itRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
+				Transfer* const transfer = new Transfer(itRule->getTransferTime());
 				transfer->setItems(
 								_items[i - 3 - _crafts.size()],
 								_quantities[i]);

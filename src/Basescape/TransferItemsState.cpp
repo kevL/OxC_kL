@@ -108,30 +108,30 @@ TransferItemsState::TransferItemsState(
 	_btnCancel			= new TextButton(134, 16, 16, 177);
 	_btnOk				= new TextButton(134, 16, 170, 177);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferMenu")->getElement("palette")->color); //0
-	_ammoColor = _game->getRuleset()->getInterface("transferMenu")->getElement("ammoColor")->color;
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("transferMenu")->getElement("palette")->color);
+	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("transferMenu")->getElement("ammoColor")->color);
 
-	add(_window, "window", "transferMenu");
-	add(_txtTitle, "text", "transferMenu");
-	add(_txtBaseFrom, "text", "transferMenu");
-	add(_txtBaseTo, "text", "transferMenu");
-	add(_txtSpaceFrom, "text", "transferMenu");
-	add(_txtSpaceTo, "text", "transferMenu");
-	add(_txtItem, "text", "transferMenu");
-	add(_txtQuantity, "text", "transferMenu");
-//	add(_txtAmountTransfer, "text", "transferMenu");
-	add(_txtAtDestination, "text", "transferMenu");
-	add(_lstItems, "list", "transferMenu");
-	add(_btnCancel, "button", "transferMenu");
-	add(_btnOk, "button", "transferMenu");
+	add(_window,			"window",	"transferMenu");
+	add(_txtTitle,			"text",		"transferMenu");
+	add(_txtBaseFrom,		"text",		"transferMenu");
+	add(_txtBaseTo,			"text",		"transferMenu");
+	add(_txtSpaceFrom,		"text",		"transferMenu");
+	add(_txtSpaceTo,		"text",		"transferMenu");
+	add(_txtItem,			"text",		"transferMenu");
+	add(_txtQuantity,		"text",		"transferMenu");
+//	add(_txtAmountTransfer,	"text",		"transferMenu");
+	add(_txtAtDestination,	"text",		"transferMenu");
+	add(_lstItems,			"list",		"transferMenu");
+	add(_btnCancel,			"button",	"transferMenu");
+	add(_btnOk,				"button",	"transferMenu");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)& TransferItemsState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -139,58 +139,46 @@ TransferItemsState::TransferItemsState(
 					Options::keyOk);
 	_btnOk->setVisible(false);
 
-//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& TransferItemsState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& TransferItemsState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFER"));
 
-//	_txtBaseFrom->setColor(Palette::blockOffset(13)+10);
 	_txtBaseFrom->setText(_baseFrom->getName());
 
-//	_txtBaseTo->setColor(Palette::blockOffset(13)+10);
 	_txtBaseTo->setAlign(ALIGN_RIGHT);
 	_txtBaseTo->setText(_baseTo->getName());
 
-//	_txtSpaceFrom->setColor(Palette::blockOffset(13)+10);
 	_txtSpaceFrom->setAlign(ALIGN_RIGHT);
 
-//	_txtSpaceTo->setColor(Palette::blockOffset(13)+10);
 	_txtSpaceTo->setAlign(ALIGN_LEFT);
 
-//	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
 //	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
 
-//	_txtAtDestination->setColor(Palette::blockOffset(13)+10);
 	_txtAtDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
 
-//	_lstItems->setColor(Palette::blockOffset(13)+10); // (15)+1
-//	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setBackground(_window);
 	_lstItems->setArrowColumn(172, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 136, 56, 31, 20);
 	_lstItems->setSelectable();
 	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstItems->onMousePress((ActionHandler)& TransferItemsState::lstItemsMousePress);
 	_lstItems->onLeftArrowPress((ActionHandler)& TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& TransferItemsState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)& TransferItemsState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)& TransferItemsState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)& TransferItemsState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)& TransferItemsState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)& TransferItemsState::lstItemsMousePress);
 
 	_distance = getDistance();
 
@@ -256,15 +244,15 @@ void TransferItemsState::init()
 	_crafts.clear();
 	_items.clear();
 
-	_sel = 0;
-	_totalCost = 0;
-	_persQty = 0;
-	_craftQty = 0;
+	_sel =
+	_offset =
+	_hasSci =
+	_hasEng = 0;
+	_totalCost =
+	_persQty =
+	_craftQty =
 	_alienQty = 0;
 	_storeSize = 0.;
-	_hasSci = 0;
-	_hasEng = 0;
-	_offset = 0;
 
 
 	_btnOk->setVisible(false);
@@ -366,12 +354,12 @@ void TransferItemsState::init()
 	}
 
 
-	const SavedGame* const save = _game->getSavedGame();
+	const SavedGame* const savedGame = _game->getSavedGame();
 	const Ruleset* const rules = _game->getRuleset();
 	const RuleItem
-		* rule = NULL,
-		* launchRule = NULL,
-		* clipRule = NULL;
+		* itRule = NULL,
+		* laRule = NULL,
+		* clRule = NULL;
 	const RuleCraftWeapon* cwRule = NULL;
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
@@ -387,8 +375,8 @@ void TransferItemsState::init()
 			_baseQty.push_back(baseQty);
 			_transferQty.push_back(0);
 
-			rule = rules->getItem(*i);
-			std::string test = rule->getType();
+			itRule = rules->getItem(*i);
+			std::string test = itRule->getType();
 
 			int destQty = _baseTo->getItems()->getItem(*i);
 
@@ -457,10 +445,10 @@ void TransferItemsState::init()
 				// Special handling for treating craft weapons as items
 				cwRule = rules->getCraftWeapon(*j);
 
-				launchRule = rules->getItem(cwRule->getLauncherItem());
-				clipRule = rules->getItem(cwRule->getClipItem());
+				laRule = rules->getItem(cwRule->getLauncherItem());
+				clRule = rules->getItem(cwRule->getClipItem());
 
-				if (launchRule == rule)
+				if (laRule == itRule)
 				{
 					craftOrdnance = true;
 
@@ -468,18 +456,18 @@ void TransferItemsState::init()
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
 				}
-				else if (clipRule == rule)
+				else if (clRule == itRule)
 				{
 					craftOrdnance = true;
 
-					const int clipSize = clipRule->getClipSize(); // launcher Ammo
+					const int clipSize = clRule->getClipSize(); // launcher Ammo
 					if (clipSize > 1)
 						item += (L"s (" + Text::formatNumber(clipSize) + L")");
 				}
 			}
 
 
-			Uint8 color; // = Palette::blockOffset(13)+10; // blue
+			Uint8 color;
 
 			std::wostringstream
 				ss1,
@@ -487,29 +475,29 @@ void TransferItemsState::init()
 			ss1 << baseQty;
 			ss2 << destQty;
 
-			if ((rule->getBattleType() == BT_AMMO
-					|| (rule->getBattleType() == BT_NONE
-						&& rule->getClipSize() > 0))
-				&& rule->getType() != "STR_ELERIUM_115") // <- is this necessary
+			if ((itRule->getBattleType() == BT_AMMO
+					|| (itRule->getBattleType() == BT_NONE
+						&& itRule->getClipSize() > 0))
+				&& itRule->getType() != "STR_ELERIUM_115") // <- is this necessary
 			{
-				if (rule->getBattleType() == BT_AMMO
-					&& rule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				if (itRule->getBattleType() == BT_AMMO
+					&& itRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
 				{
-					const int clipSize = rule->getClipSize();
+					const int clipSize = itRule->getClipSize();
 					if (clipSize > 1)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
 				}
 				item.insert(0, L"  ");
 
-				color = _ammoColor; //Palette::blockOffset(15)+6; // purple
+				color = _ammoColor;
 			}
 			else
 			{
-                if (rule->isFixed() == true // tank w/ Ordnance.
-					&& rule->getCompatibleAmmo()->empty() == false)
+                if (itRule->isFixed() == true // tank w/ Ordnance.
+					&& itRule->getCompatibleAmmo()->empty() == false)
                 {
-					clipRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
-					const int clipSize = clipRule->getClipSize();
+					clRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
+					const int clipSize = clRule->getClipSize();
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
                 }
@@ -517,13 +505,13 @@ void TransferItemsState::init()
 				color = _lstItems->getColor();
 			}
 
-			if (save->isResearched(rule->getType()) == false				// not researched or is research exempt
-				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
+			if (savedGame->isResearched(itRule->getType()) == false				// not researched or is research exempt
+				&& (savedGame->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(*i)->isAlien() == true					// or is an alien
-					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
+					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false)									// and is not craft ordnance
-//				&& rule->isResearchExempt() == false)						// and is not research exempt
+//				&& itRule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow //_colorArtefact; <- needs to go in updateItemStrings() as well as here.
@@ -843,7 +831,7 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action - pointer to an Action
  */
-void TransferItemsState::lstItemsMousePress(Action* action)
+/*void TransferItemsState::lstItemsMousePress(Action* action)
 {
 	if (Options::changeValueByMouseWheel < 1)
 		return;
@@ -872,7 +860,7 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
-}
+} */
 
 /**
  * Gets the transfer cost of the currently selected item.
@@ -881,16 +869,16 @@ void TransferItemsState::lstItemsMousePress(Action* action)
  */
 int TransferItemsState::getCost() const
 {
-	double cost = 0.;
+	double cost;
 
 	if (TRANSFER_ITEM == getType(_sel))			// item cost
 	{
-		const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
-		if (rule->getType() == "STR_ALIEN_ALLOYS")
+		const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel - _offset]);
+		if (itRule->getType() == "STR_ALIEN_ALLOYS")
 			cost = 0.1;
-		else if (rule->getType() == "STR_ELERIUM_115")
+		else if (itRule->getType() == "STR_ELERIUM_115")
 			cost = 1.;
-		else if (rule->isAlien() == true)
+		else if (itRule->isAlien() == true)
 			cost = 200.;
 		else
 			cost = 10.;
@@ -948,11 +936,11 @@ void TransferItemsState::increaseByValue(int change)
 	}
 
 	const enum TransferType type = getType(_sel);
-	const RuleItem* itemRule;
+	const RuleItem* itRule;
 	if (type == TRANSFER_ITEM)
-		itemRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+		itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 	else
-		itemRule = NULL;
+		itRule = NULL;
 
 	// ERRORS Start:
 	std::wstring errorMessage;
@@ -980,12 +968,12 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (type == TRANSFER_ITEM)
 	{
-		if (itemRule->isAlien() == false
-			&& _baseTo->storesOverfull(itemRule->getSize() + _storeSize - 0.05))
+		if (itRule->isAlien() == false
+			&& _baseTo->storesOverfull(itRule->getSize() + _storeSize - 0.05))
 		{
 			errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
 		}
-		else if (itemRule->isAlien() == true
+		else if (itRule->isAlien() == true
 			&& (_baseTo->getAvailableContainment() == 0
 				|| (Options::storageLimitsEnforced == true
 					&& _alienQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment())))
@@ -998,7 +986,7 @@ void TransferItemsState::increaseByValue(int change)
 	{
 		_reset = false;
 
-		RuleInterface* menuInterface = _game->getRuleset()->getInterface("transferMenu");
+		RuleInterface* const menuInterface = _game->getRuleset()->getInterface("transferMenu");
 		_game->pushState(new ErrorMessageState(
 											errorMessage,
 											_palette,
@@ -1045,7 +1033,7 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (type == TRANSFER_ITEM)
 	{
-		if (itemRule->isAlien() == false) // item count
+		if (itRule->isAlien() == false) // item count
 		{
 			const double
 				storesPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
@@ -1067,7 +1055,7 @@ void TransferItemsState::increaseByValue(int change)
 			_transferQty[_sel] += change;
 			_totalCost += getCost() * change;
 		}
-		else // if (itemRule->isAlien()) // live alien count
+		else // if (itRule->isAlien()) // live alien count
 		{
 			int freeContainment = std::numeric_limits<int>::max();
 			if (Options::storageLimitsEnforced == true)
@@ -1139,9 +1127,9 @@ void TransferItemsState::decreaseByValue(int change)
 	}
 	else if (type == TRANSFER_ITEM) // item count
 	{
-		const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		if (itemRule->isAlien() == false)
-			_storeSize -= itemRule->getSize() * static_cast<double>(change);
+		const RuleItem* const itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+		if (itRule->isAlien() == false)
+			_storeSize -= itRule->getSize() * static_cast<double>(change);
 		else
 			_alienQty -= change;
 	}
@@ -1182,19 +1170,19 @@ void TransferItemsState::updateItemStrings()
 	_lstItems->setCellText(_sel, 3, ss3.str());
 
 	if (_transferQty[_sel] > 0)
-		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor()); //Palette::blockOffset(13));
+		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
 	else
 	{
-		_lstItems->setRowColor(_sel, _lstItems->getColor()); //Palette::blockOffset(13)+10);
+		_lstItems->setRowColor(_sel, _lstItems->getColor());
 
 		if (_sel > _offset)
 		{
-			const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
-			if (rule->getBattleType() == BT_AMMO
-				|| (rule->getBattleType() == BT_NONE
-					&& rule->getClipSize() > 0))
+			const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel - _offset]);
+			if (itRule->getBattleType() == BT_AMMO
+				|| (itRule->getBattleType() == BT_NONE
+					&& itRule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, _ammoColor); //Palette::blockOffset(15)+6);
+				_lstItems->setRowColor(_sel, _ammoColor);
 			}
 		}
 	}
@@ -1235,7 +1223,7 @@ int TransferItemsState::getTotalCost() const
  */
 double TransferItemsState::getDistance() const
 {
-	const double r = 51.2; // kL_note: what's this? conversion factor??? is it right??
+	const double r = 51.2; // kL_note: what's this conversion factor is it right
 	double
 		x[3],
 		y[3],
@@ -1248,8 +1236,8 @@ double TransferItemsState::getDistance() const
 			i < 2;
 			++i)
 	{
-		x[i] = r * std::cos(base->getLatitude()) * std::cos(base->getLongitude());
-		y[i] = r * std::cos(base->getLatitude()) * std::sin(base->getLongitude());
+		x[i] = r *  std::cos(base->getLatitude()) * std::cos(base->getLongitude());
+		y[i] = r *  std::cos(base->getLatitude()) * std::sin(base->getLongitude());
 		z[i] = r * -std::sin(base->getLatitude());
 
 		base = _baseTo;
@@ -1277,10 +1265,10 @@ enum TransferType TransferItemsState::getType(const size_t selected) const
 	if (selected < (row += _crafts.size()))
 		return TRANSFER_CRAFT;
 
-	if (selected < (row += static_cast<size_t>(_hasSci)))
+	if (selected < (row += _hasSci))
 		return TRANSFER_SCIENTIST;
 
-	if (selected < (row += static_cast<size_t>(_hasEng)))
+	if (selected < (row + _hasEng))
 		return TRANSFER_ENGINEER;
 
 	return TRANSFER_ITEM;
@@ -1296,8 +1284,8 @@ size_t TransferItemsState::getItemIndex(const size_t selected) const
 	return selected
 		 - _soldiers.size()
 		 - _crafts.size()
-		 - static_cast<size_t>(_hasSci)
-		 - static_cast<size_t>(_hasEng);
+		 - _hasSci
+		 - _hasEng;
 }
 
 }

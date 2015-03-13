@@ -81,63 +81,49 @@ CraftsState::CraftsState(Base* base)
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("craftSelect")->getElement("palette")->color); //3
+			_game->getRuleset()->getInterface("craftSelect")->getElement("palette")->color);
 
-	add(_window, "window", "craftSelect");
-	add(_txtTitle, "text", "craftSelect");
-	add(_txtBase, "text", "craftSelect");
-	add(_txtName, "text", "craftSelect");
-	add(_txtStatus, "text", "craftSelect");
-	add(_txtWeapons, "text", "craftSelect");
-//	add(_txtWeapon, "text", "craftSelect");
-//	add(_txtCrew, "text", "craftSelect");
-//	add(_txtHwp, "text", "craftSelect");
-	add(_lstCrafts, "list", "craftSelect");
-	add(_btnOk, "button", "craftSelect");
+	add(_window,		"window",	"craftSelect");
+	add(_txtTitle,		"text",		"craftSelect");
+	add(_txtBase,		"text",		"craftSelect");
+	add(_txtName,		"text",		"craftSelect");
+	add(_txtStatus,		"text",		"craftSelect");
+	add(_txtWeapons,	"text",		"craftSelect");
+//	add(_txtWeapon,		"text",		"craftSelect");
+//	add(_txtCrew,		"text",		"craftSelect");
+//	add(_txtHwp,		"text",		"craftSelect");
+	add(_lstCrafts,		"list",		"craftSelect");
+	add(_btnOk,			"button",	"craftSelect");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftsState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftsState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
-//	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
 	_txtBase->setText(tr("STR_BASE_").arg(_base->getName()));
 //	_txtBase->setText(_base->getName(_game->getLanguage()));
 
-//	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
 
-//	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(tr("STR_STATUS"));
 
-//	_txtWeapons->setColor(Palette::blockOffset(15)+1);
 	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
-/*	_txtWeapon->setColor(Palette::blockOffset(15)+1);
-	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
-
-	_txtCrew->setColor(Palette::blockOffset(15)+1);
+/*	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
 	_txtCrew->setText(tr("STR_CREW"));
-
-	_txtHwp->setColor(Palette::blockOffset(15)+1);
 	_txtHwp->setText(tr("STR_HWPS")); */
 
-//	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-//	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCrafts->setArrowColumn(275, ARROW_VERTICAL);
 	_lstCrafts->setColumns(5, 91, 120, 25, 15, 15);
 	_lstCrafts->setSelectable();
@@ -367,9 +353,9 @@ void CraftsState::btnOkClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,
-											_game->getRuleset()->getInterface("craftSelect")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("craftSelect")->getElement("errorMessage")->color,
 											"BACK01.SCR",
-											_game->getRuleset()->getInterface("craftSelect")->getElement("errorPalette")->color)); //0
+											_game->getRuleset()->getInterface("craftSelect")->getElement("errorPalette")->color));
 	}
 }
 
@@ -427,7 +413,7 @@ void CraftsState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
 			}
 			else
 				_lstCrafts->scrollUp(false);
@@ -469,7 +455,7 @@ void CraftsState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
 			}
 			else
 				_lstCrafts->scrollDown(false);

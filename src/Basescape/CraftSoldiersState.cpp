@@ -90,18 +90,18 @@ CraftSoldiersState::CraftSoldiersState(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("craftSoldiers")->getElement("palette")->color);
 
-	add(_window, "window", "craftSoldiers");
-	add(_txtTitle, "text", "craftSoldiers");
-	add(_txtBaseLabel, "text", "craftSoldiers");
-	add(_txtSpace, "text", "craftSoldiers");
-	add(_txtLoad, "text", "craftSoldiers");
-	add(_txtName, "text", "craftSoldiers");
-	add(_txtRank, "text", "craftSoldiers");
-	add(_txtCraft, "text", "craftSoldiers");
-	add(_lstSoldiers, "list", "craftSoldiers");
-	add(_btnUnload, "button", "craftSoldiers");
-	add(_btnInventory, "button", "craftSoldiers");
-	add(_btnOk, "button", "craftSoldiers");
+	add(_window,		"window",	"craftSoldiers");
+	add(_txtTitle,		"text",		"craftSoldiers");
+	add(_txtBaseLabel,	"text",		"craftSoldiers");
+	add(_txtSpace,		"text",		"craftSoldiers");
+	add(_txtLoad,		"text",		"craftSoldiers");
+	add(_txtName,		"text",		"craftSoldiers");
+	add(_txtRank,		"text",		"craftSoldiers");
+	add(_txtCraft,		"text",		"craftSoldiers");
+	add(_lstSoldiers,	"list",		"craftSoldiers");
+	add(_btnUnload,		"button",	"craftSoldiers");
+	add(_btnInventory,	"button",	"craftSoldiers");
+	add(_btnOk,			"button",	"craftSoldiers");
 
 	centerAllSurfaces();
 
@@ -227,7 +227,7 @@ void CraftSoldiersState::init()
 			if ((*i)->getCraft() == craft)
 				color = _lstSoldiers->getSecondaryColor();
 			else
-				color = _game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color;
+				color = static_cast<Uint8>(_game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color);
 		}
 
 		_lstSoldiers->setRowColor(row, color);

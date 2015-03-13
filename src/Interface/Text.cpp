@@ -404,14 +404,14 @@ int Text::getTextHeight(int line) const
 
 /**
  * Adds to the text's height.
- * @param pixels - pixels to add to height of a textline (default 1)
+ * @param pad - pixels to add to height of a textline (default 1)
  */
-void Text::addTextHeight(int pixels)
+void Text::addTextHeight(int pad)
 {
 	if (_lineHeight.empty() == false)
 	{
 		const size_t line = _lineHeight.size() - 1;
-		_lineHeight[line] += pixels;
+		_lineHeight[line] += pad;
 	}
 }
 

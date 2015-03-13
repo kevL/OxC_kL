@@ -281,260 +281,202 @@ UnitInfoState::UnitInfoState(
 					Options::keyBattleStats);
 
 	Uint8
-		color = _game->getRuleset()->getInterface("stats")->getElement("text")->color,
-		color2 = _game->getRuleset()->getInterface("stats")->getElement("text")->color2;
+		color = static_cast<Uint8>(_game->getRuleset()->getInterface("stats")->getElement("text")->color),
+		color2 = static_cast<Uint8>(_game->getRuleset()->getInterface("stats")->getElement("text")->color2);
 
-//	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
 	_txtName->setHighContrast();
 
 
 	_txtTimeUnits->setColor(color);
-//	_txtTimeUnits->setColor(Palette::blockOffset(3));
 	_txtTimeUnits->setHighContrast();
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
 	_numTimeUnits->setColor(color2);
-//	_numTimeUnits->setColor(Palette::blockOffset(9));
 	_numTimeUnits->setHighContrast();
 
-//	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale();
 
 
 	_txtEnergy->setColor(color);
-//	_txtEnergy->setColor(Palette::blockOffset(3));
 	_txtEnergy->setHighContrast();
 	_txtEnergy->setText(tr("STR_ENERGY"));
 
 	_numEnergy->setColor(color2);
-//	_numEnergy->setColor(Palette::blockOffset(9));
 	_numEnergy->setHighContrast();
 
-//	_barEnergy->setColor(Palette::blockOffset(9));
 	_barEnergy->setScale();
 
 
 	_txtHealth->setColor(color);
-//	_txtHealth->setColor(Palette::blockOffset(3));
 	_txtHealth->setHighContrast();
 	_txtHealth->setText(tr("STR_HEALTH"));
 
 	_numHealth->setColor(color2);
-//	_numHealth->setColor(Palette::blockOffset(9));
 	_numHealth->setHighContrast();
 
-//	_barHealth->setColor(Palette::blockOffset(2));
-//	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale();
 
 
 	_txtFatalWounds->setColor(color);
-//	_txtFatalWounds->setColor(Palette::blockOffset(3));
 	_txtFatalWounds->setHighContrast();
 	_txtFatalWounds->setText(tr("STR_FATAL_WOUNDS"));
 
 	_numFatalWounds->setColor(color2);
-//	_numFatalWounds->setColor(Palette::blockOffset(9));
 	_numFatalWounds->setHighContrast();
 
-//	_barFatalWounds->setColor(Palette::blockOffset(2));
 	_barFatalWounds->setScale();
 
 
 	_txtBravery->setColor(color);
-//	_txtBravery->setColor(Palette::blockOffset(3));
 	_txtBravery->setHighContrast();
 	_txtBravery->setText(tr("STR_BRAVERY"));
 
 	_numBravery->setColor(color2);
-//	_numBravery->setColor(Palette::blockOffset(9));
 	_numBravery->setHighContrast();
 
-//	_barBravery->setColor(Palette::blockOffset(12));
 	_barBravery->setScale();
 
 
 	_txtMorale->setColor(color);
-//	_txtMorale->setColor(Palette::blockOffset(3));
 	_txtMorale->setHighContrast();
 	_txtMorale->setText(tr("STR_MORALE"));
 
 	_numMorale->setColor(color2);
-//	_numMorale->setColor(Palette::blockOffset(9));
 	_numMorale->setHighContrast();
 
-//	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale();
 
 
 	_txtReactions->setColor(color);
-//	_txtReactions->setColor(Palette::blockOffset(3));
 	_txtReactions->setHighContrast();
 	_txtReactions->setText(tr("STR_REACTIONS"));
 
 	_numReactions->setColor(color2);
-//	_numReactions->setColor(Palette::blockOffset(9));
 	_numReactions->setHighContrast();
 
-//	_barReactions->setColor(Palette::blockOffset(9));
 	_barReactions->setScale();
 
 
 	_txtFiring->setColor(color);
-//	_txtFiring->setColor(Palette::blockOffset(3));
 	_txtFiring->setHighContrast();
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
 	_numFiring->setColor(color2);
-//	_numFiring->setColor(Palette::blockOffset(9));
 	_numFiring->setHighContrast();
 
-//	_barFiring->setColor(Palette::blockOffset(8));
 	_barFiring->setScale();
 
 
 	_txtThrowing->setColor(color);
-//	_txtThrowing->setColor(Palette::blockOffset(3));
 	_txtThrowing->setHighContrast();
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
 	_numThrowing->setColor(color2);
-//	_numThrowing->setColor(Palette::blockOffset(9));
 	_numThrowing->setHighContrast();
 
-//	_barThrowing->setColor(Palette::blockOffset(6));
 	_barThrowing->setScale();
 
 
 	_txtMelee->setColor(color);
-//	_txtMelee->setColor(Palette::blockOffset(3));
 	_txtMelee->setHighContrast();
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
 
 	_numMelee->setColor(color2);
-//	_numMelee->setColor(Palette::blockOffset(9));
 	_numMelee->setHighContrast();
 
-//	_barMelee->setColor(Palette::blockOffset(14));
 	_barMelee->setScale();
 
 
 	_txtStrength->setColor(color);
-//	_txtStrength->setColor(Palette::blockOffset(3));
 	_txtStrength->setHighContrast();
 	_txtStrength->setText(tr("STR_STRENGTH"));
 
 	_numStrength->setColor(color2);
-//	_numStrength->setColor(Palette::blockOffset(9));
 	_numStrength->setHighContrast();
 
-//	_barStrength->setColor(Palette::blockOffset(3));
 	_barStrength->setScale();
 
 
 	_txtPsiStrength->setColor(color);
-//	_txtPsiStrength->setColor(Palette::blockOffset(3));
 	_txtPsiStrength->setHighContrast();
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
 	_numPsiStrength->setColor(color2);
-//	_numPsiStrength->setColor(Palette::blockOffset(9));
 	_numPsiStrength->setHighContrast();
 
-//	_barPsiStrength->setColor(Palette::blockOffset(12));
 	_barPsiStrength->setScale();
 
 
 	_txtPsiSkill->setColor(color);
-//	_txtPsiSkill->setColor(Palette::blockOffset(3));
 	_txtPsiSkill->setHighContrast();
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 
 	_numPsiSkill->setColor(color2);
-//	_numPsiSkill->setColor(Palette::blockOffset(9));
 	_numPsiSkill->setHighContrast();
 
-//	_barPsiSkill->setColor(Palette::blockOffset(12));
 	_barPsiSkill->setScale();
 
 
 	_txtFrontArmor->setColor(color);
-//	_txtFrontArmor->setColor(Palette::blockOffset(3));
 	_txtFrontArmor->setHighContrast();
 	_txtFrontArmor->setText(tr("STR_FRONT_ARMOR_UC"));
 
 	_numFrontArmor->setColor(color2);
-//	_numFrontArmor->setColor(Palette::blockOffset(9));
 	_numFrontArmor->setHighContrast();
 
-//	_barFrontArmor->setColor(Palette::blockOffset(5));
 	_barFrontArmor->setScale();
 
 
 	_txtLeftArmor->setColor(color);
-//	_txtLeftArmor->setColor(Palette::blockOffset(3));
 	_txtLeftArmor->setHighContrast();
 	_txtLeftArmor->setText(tr("STR_LEFT_ARMOR_UC"));
 
 	_numLeftArmor->setColor(color2);
-//	_numLeftArmor->setColor(Palette::blockOffset(9));
 	_numLeftArmor->setHighContrast();
 
-//	_barLeftArmor->setColor(Palette::blockOffset(5));
 	_barLeftArmor->setScale();
 
 
 	_txtRightArmor->setColor(color);
-//	_txtRightArmor->setColor(Palette::blockOffset(3));
 	_txtRightArmor->setHighContrast();
 	_txtRightArmor->setText(tr("STR_RIGHT_ARMOR_UC"));
 
 	_numRightArmor->setColor(color2);
-//	_numRightArmor->setColor(Palette::blockOffset(9));
 	_numRightArmor->setHighContrast();
 
-//	_barRightArmor->setColor(Palette::blockOffset(5));
 	_barRightArmor->setScale();
 
 
 	_txtRearArmor->setColor(color);
-//	_txtRearArmor->setColor(Palette::blockOffset(3));
 	_txtRearArmor->setHighContrast();
 	_txtRearArmor->setText(tr("STR_REAR_ARMOR_UC"));
 
 	_numRearArmor->setColor(color2);
-//	_numRearArmor->setColor(Palette::blockOffset(9));
 	_numRearArmor->setHighContrast();
 
-//	_barRearArmor->setColor(Palette::blockOffset(5));
 	_barRearArmor->setScale();
 
 
 	_txtUnderArmor->setColor(color);
-//	_txtUnderArmor->setColor(Palette::blockOffset(3));
 	_txtUnderArmor->setHighContrast();
 	_txtUnderArmor->setText(tr("STR_UNDER_ARMOR_UC"));
 
 	_numUnderArmor->setColor(color2);
-//	_numUnderArmor->setColor(Palette::blockOffset(9));
 	_numUnderArmor->setHighContrast();
 
-//	_barUnderArmor->setColor(Palette::blockOffset(5));
 	_barUnderArmor->setScale();
 
 
 	if (_mindProbe == false)
 	{
-//		_btnPrev->setColor(Palette::blockOffset(4)+4);
 		_btnPrev->setText(L"<");
 		_btnPrev->onMouseClick((ActionHandler)& UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,
 						Options::keyBattlePrevUnit);
 
-//		_btnNext->setColor(Palette::blockOffset(4)+4);
 		_btnNext->setText(L">");
 		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress(
@@ -624,7 +566,7 @@ void UnitInfoState::init()
 	_barMorale->setMax(100);
 	_barMorale->setValue(static_cast<double>(stat));
 
-	double acuModi = _unit->getAccuracyModifier();
+	const double acuModi = _unit->getAccuracyModifier();
 
 	double arbitraryVariable = static_cast<double>(_unit->getBaseStats()->reactions);
 	_barReactions->setMax(arbitraryVariable);
@@ -664,7 +606,7 @@ void UnitInfoState::init()
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->strength);
 	_barStrength->setMax(arbitraryVariable);
-	arbitraryVariable *= acuModi / 2.0 + 0.5;
+	arbitraryVariable *= acuModi / 2. + 0.5;
 	_barStrength->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
@@ -787,12 +729,12 @@ void UnitInfoState::handle(Action* action)
 */
 void UnitInfoState::btnPrevClick(Action* action)
 {
-	if (_parent != NULL) // so we are here from a Battlescape Game
+	if (_parent != NULL) // so you are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(
 										false,
 										false);
 //										_fromInventory);
-	else // so we are here from the Craft Equipment screen
+	else // so you are here from the Craft Equipment screen
 		_battleGame->selectPreviousFactionUnit(
 											false,
 											false,

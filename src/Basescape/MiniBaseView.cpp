@@ -63,9 +63,7 @@ MiniBaseView::MiniBaseView(
 		_texture(NULL),
 		_baseID(0),
 		_hoverBase(0),
-		_blink(false),
-		_green(0),
-		_red(0)
+		_blink(false)
 {
 	if (_mode == MBV_STANDARD)
 	{
@@ -131,7 +129,7 @@ void MiniBaseView::draw()
 {
 	Surface::draw();
 
-	Base* base = NULL;
+	Base* base;
 	int
 		x,y;
 	Uint8 color;
@@ -175,9 +173,9 @@ void MiniBaseView::draw()
 						++fac)
 				{
 					if ((*fac)->getBuildTime() == 0)
-						color = _green;
+						color = GREEN;
 					else
-						color = _red;
+						color = RED_D;
 
 					rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
 					rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
@@ -220,7 +218,7 @@ void MiniBaseView::draw()
 						setPixelColor(
 									x + 2,
 									21,
-									Palette::blockOffset(4)+5); // lavender
+									LAVENDER_L);
 
 					if (base->getCrafts()->empty() == false)
 					{
@@ -235,11 +233,11 @@ void MiniBaseView::draw()
 							if ((*craft)->getWarning() != CW_NONE)
 							{
 								if ((*craft)->getWarning() == CW_CANTREFUEL)
-									color = Palette::blockOffset(6);	// yellow
+									color = ORANGE_L;
 								else if ((*craft)->getWarning() == CW_CANTREARM)
-									color = Palette::blockOffset(6)+2;	// orange
+									color = ORANGE_D;
 								else if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
-									color = Palette::blockOffset(2)+5;	// red
+									color = RED_D;
 
 								setPixelColor( // Craft needs materiels
 											x + 2,
@@ -251,15 +249,15 @@ void MiniBaseView::draw()
 								setPixelColor(
 											x + 14,
 											y,
-											Palette::blockOffset(3)+2);
+											GREEN);
 
 
 							craftRule = (*craft)->getRules();
 
 							if (craftRule->getRefuelItem().empty() == false)
-								color = Palette::blockOffset(9)+1;	// yellow
+								color = YELLOW_L;
 							else
-								color = Palette::blockOffset(9)+9;	// brown
+								color = YELLOW_D;
 
 							setPixelColor(
 										x + 12,
@@ -272,20 +270,20 @@ void MiniBaseView::draw()
 								setPixelColor(
 											x + 10,
 											y,
-											Palette::blockOffset(8)+2);		// blue
+											BLUE);
 							}
 
 							if (craftRule->getSoldiers() > 0)
 								setPixelColor(
 											x + 8,
 											y,
-											Palette::blockOffset(10)+1);	// brown
+											BROWN);
 
 							if (craftRule->getVehicles() > 0)
 								setPixelColor(
 											x + 6,
 											y,
-											Palette::blockOffset(4)+8);		// lavender
+											LAVENDER_D);
 
 							y += 2;
 						}
@@ -304,28 +302,12 @@ void MiniBaseView::draw()
 void MiniBaseView::mouseOver(Action* action, State* state)
 {
 	_hoverBase = static_cast<size_t>(std::floor(
-					action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
+				 action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
-	if (_hoverBase < 0) _hoverBase = 0;
-	if (_hoverBase > 8) _hoverBase = 8;
+	if		(_hoverBase < 0) _hoverBase = 0;
+	else if	(_hoverBase > 8) _hoverBase = 8;
 
 	InteractiveSurface::mouseOver(action, state);
-}
-
-/**
- *
- */
-void MiniBaseView::setColor(Uint8 color)
-{
-	_green = color;
-}
-
-/**
- *
- */
-void MiniBaseView::setSecondaryColor(Uint8 color)
-{
-	_red = color;
 }
 
 /**
@@ -364,7 +346,7 @@ void MiniBaseView::blink()
 			|| base->getEngineers() > 0)
 		{
 			if (_blink == true)
-				color = Palette::blockOffset(2)+1; // red
+				color = RED_L;
 			else
 				color = 0;
 
@@ -390,13 +372,13 @@ void MiniBaseView::blink()
 					if (_blink == true)
 					{
 						if (stat == "STR_OUT")
-							color = Palette::blockOffset(3)+2;	// green
+							color = GREEN;
 						else if (stat == "STR_REFUELLING")
-							color = Palette::blockOffset(6);	// yellow
+							color = ORANGE_L;
 						else if (stat == "STR_REARMING")
-							color = Palette::blockOffset(6)+2;	// orange
+							color = ORANGE_D;
 						else if (stat == "STR_REPAIRS")
-							color = Palette::blockOffset(2)+5;	// red
+							color = RED_D;
 					}
 					else
 						color = 0;
@@ -412,7 +394,7 @@ void MiniBaseView::blink()
 					&& craftRule->getWeapons() != (*craft)->getNumWeapons())
 				{
 					if (_blink == true)
-						color = Palette::blockOffset(8)+2;	// blue
+						color = BLUE;
 					else
 						color = 0;
 

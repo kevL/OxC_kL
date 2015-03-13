@@ -52,7 +52,7 @@ private:
 		_psi;
 	int
 		_deltaFunds,
-		_ratingLastMonth,
+		_ratingLast,
 		_ratingTotal;
 
 	Base* _base;

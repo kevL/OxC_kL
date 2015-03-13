@@ -38,7 +38,8 @@ struct Element
 	int
 		x,y,
 		w,h;
-	Uint8
+//	Uint8
+	int
 		color,
 		color2,
 		border;

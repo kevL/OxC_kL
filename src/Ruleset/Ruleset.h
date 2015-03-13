@@ -251,7 +251,7 @@ protected:
 		/// Gets the available terrains.
 		const std::vector<std::string>& getTerrainList() const;
 		/// Gets terrains for battlescape games.
-		RuleTerrain* getTerrain(const std::string& name) const;
+		RuleTerrain* getTerrain(const std::string& type) const;
 
 		/// Gets mapdatafile for battlescape games.
 		MapDataSet* getMapDataSet(const std::string& name);

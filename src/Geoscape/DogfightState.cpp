@@ -491,7 +491,7 @@ DogfightState::DogfightState(
 		ss << cw->getAmmo();
 		ammo->setText(ss.str());
 
-		const Uint8 color = _game->getRuleset()->getInterface("dogfight")->getElement("background")->color;
+		const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("background")->color);
 
 		range->lock();
 		const int
@@ -616,12 +616,12 @@ DogfightState::DogfightState(
 	else // very large
 		_ufoSize = 4;
 
-	_color[0] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color;
-	_color[1] = _game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2;
-	_color[2] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color;
-	_color[3] = _game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2;
-	_color[4] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color;
-	_color[5] = _game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2;
+	_color[0] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color);
+	_color[1] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2);
+	_color[2] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color);
+	_color[3] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2);
+	_color[4] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color);
+	_color[5] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2);
 
 	// Get the craft-graphic's height. Used for damage indication.
 	for (int
@@ -1853,35 +1853,39 @@ void DogfightState::drawUfo()
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
 {
-	int xPos = _battle->getWidth() / 2 + proj->getHorizontalPosition();
+	int posX = _battle->getWidth() / 2 + proj->getHorizontalPosition();
+	Uint8
+		color,
+		offset;
+
 	if (proj->getGlobalType() == CWPGT_MISSILE) // Draw missiles.
 	{
-		--xPos;
-		const int yPos = _battle->getHeight() - proj->getPosition() / 8;
+		--posX;
+		const int posY = _battle->getHeight() - proj->getPosition() / 8;
 		for (int
 				x = 0;
-				x < 3;
+				x != 3;
 				++x)
 		{
 			for (int
 					y = 0;
-					y < 6;
+					y != 6;
 					++y)
 			{
-				const int pixelOffset = _projectileBlobs[proj->getType()][y][x];
-				if (pixelOffset == 0)
-					continue;
-				else
+				offset = static_cast<Uint8>(_projectileBlobs[proj->getType()]
+															[static_cast<size_t>(y)]
+															[static_cast<size_t>(x)]);
+				if (offset != 0)
 				{
-					const Uint8 radarPixelColor = _window->getPixelColor(
-																	xPos + x + 3,
-																	yPos + y + 3); // + 3 cause of the window frame
-					Uint8 color = radarPixelColor - pixelOffset;
+					color = _window->getPixelColor(
+												posX + x + 3,
+												posY + y + 3); // + 3 cause of the window frame
+					color -= offset;
 					if (color < 108) color = 108;
 
 					_battle->setPixelColor(
-										xPos + x,
-										yPos + y,
+										posX + x,
+										posY + y,
 										color);
 				}
 			}
@@ -1890,23 +1894,23 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
 	else if (proj->getGlobalType() == CWPGT_BEAM) // Draw beams.
 	{
 		const int
-			yStart = _battle->getHeight() - 2,
-			yEnd = _battle->getHeight() - (_dist / 8);
-		const Uint8 pixelOffset = static_cast<Uint8>(proj->getState());
+			stop = _battle->getHeight() - 2,
+			start = _battle->getHeight() - (_dist / 8);
+		offset = static_cast<Uint8>(proj->getState());
 
 		for (int
-				y = yStart;
-				y > yEnd;
+				y = stop;
+				y != start;
 				--y)
 		{
-			const Uint8 radarPixelColor = _window->getPixelColor(
-															xPos + 3,
-															y + 3);
-			Uint8 color = radarPixelColor - pixelOffset;
+			color = _window->getPixelColor(
+										posX + 3,
+										y + 3);
+			color -= offset;
 			if (color < 108) color = 108;
 
 			_battle->setPixelColor(
-								xPos,
+								posX,
 								y,
 								color);
 		}

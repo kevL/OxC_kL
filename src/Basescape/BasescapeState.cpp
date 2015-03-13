@@ -664,14 +664,14 @@ void BasescapeState::viewRightClick(Action*)
 			_game->pushState(new ErrorMessageState(
 											tr("STR_FACILITY_IN_USE"),
 											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
+											static_cast<Uint8>(_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color),
 											"BACK13.SCR",
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else if (_base->getDisconnectedFacilities(fac).empty() == false)
 			_game->pushState(new ErrorMessageState(
 											tr("STR_CANNOT_DISMANTLE_FACILITY"),
 											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
+											static_cast<Uint8>(_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color),
 											"BACK13.SCR",
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else

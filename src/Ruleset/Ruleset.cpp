@@ -475,6 +475,7 @@ void Ruleset::load(const std::string& source)
  */
 void Ruleset::loadFile(const std::string& filename)
 {
+	//Log(LOG_INFO) << "Ruleset::loadFile( -> " << filename;
 	const YAML::Node doc = YAML::LoadFile(filename);
 
 	for (YAML::const_iterator
@@ -620,7 +621,7 @@ void Ruleset::loadFile(const std::string& filename)
 										*i,
 										&_terrains,
 										&_terrainIndex,
-										"name");
+										"type");
 		if (rule != NULL)
 			rule->load(
 					*i,
@@ -1494,12 +1495,12 @@ const std::vector<std::string>& Ruleset::getTerrainList() const
 
 /**
  * Returns the rules for the specified terrain.
- * @param name - reference a Terrain type
+ * @param type - reference a Terrain type
  * @return, pointer to Rule for the Terrain
  */
-RuleTerrain* Ruleset::getTerrain(const std::string& name) const
+RuleTerrain* Ruleset::getTerrain(const std::string& type) const
 {
-	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
+	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(type);
 
 	if (i != _terrains.end())
 		return i->second;

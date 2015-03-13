@@ -1875,6 +1875,537 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_CELATID_TERRORIST
       - STR_SECTOPOD_TERRORIST
       - STR_SECTOPOD_TERRORIST
+armors:
+  - type: SECTOID_ARMOR0 #soldier, navigator, medic, engineer
+    spriteSheet: SECTOID.PCK
+    corpseBattle:
+      - STR_SECTOID_CORPSE
+    frontArmor: 8
+    sideArmor: 5
+    rearArmor: 4
+    underArmor: 3
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 1.0 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
+    loftempsSet: [2]
+  - type: SECTOID_ARMOR1 #leader
+    spriteSheet: SECTOID.PCK
+    corpseBattle:
+      - STR_SECTOID_CORPSE
+    frontArmor: 10
+    sideArmor: 8
+    rearArmor: 5
+    underArmor: 3
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 1.0 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
+    loftempsSet: [2]
+  - type: SECTOID_ARMOR2 #commander
+    spriteSheet: SECTOID.PCK
+    corpseBattle:
+      - STR_SECTOID_CORPSE
+    frontArmor: 12
+    sideArmor: 9
+    rearArmor: 6
+    underArmor: 4
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 1.0 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
+    loftempsSet: [2]
+  - type: FLOATER_ARMOR0 #soldier, navigator, medic, engineer
+    spriteSheet: FLOATER.PCK
+    corpseBattle:
+      - STR_FLOATER_CORPSE
+    frontArmor: 12
+    sideArmor: 8
+    rearArmor: 4
+    underArmor: 16
+    drawingRoutine: 1
+    movementType: 1
+    damageModifier:
+      - 1.0
+      - 0.9
+      - 1.2
+      - 1.1
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.3
+      - 0.0
+    loftempsSet: [2]
+  - type: FLOATER_ARMOR1 #leader
+    spriteSheet: FLOATER.PCK
+    corpseBattle:
+      - STR_FLOATER_CORPSE
+    frontArmor: 20
+    sideArmor: 14
+    rearArmor: 8
+    underArmor: 24
+    drawingRoutine: 1
+    movementType: 1
+    damageModifier:
+      - 1.0
+      - 0.9
+      - 1.2
+      - 1.1
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.3
+      - 0.0
+    loftempsSet: [2]
+  - type: FLOATER_ARMOR2 #commander
+    spriteSheet: FLOATER.PCK
+    corpseBattle:
+      - STR_FLOATER_CORPSE
+    frontArmor: 28
+    sideArmor: 20
+    rearArmor: 12
+    underArmor: 32
+    drawingRoutine: 1
+    movementType: 1
+    damageModifier:
+      - 1.0
+      - 0.9
+      - 1.2
+      - 1.1
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.3
+      - 0.0
+    loftempsSet: [2]
+  - type: CYBERDISC_ARMOR
+    spriteSheet: CYBER.PCK
+    corpseBattle:
+      - CYBERDISC_CORPSE_1
+      - CYBERDISC_CORPSE_2
+      - CYBERDISC_CORPSE_3
+      - CYBERDISC_CORPSE_4
+    corpseGeo: STR_CYBERDISC_CORPSE
+    frontArmor: 36
+    sideArmor: 36
+    rearArmor: 36
+    underArmor: 49
+    drawingRoutine: 3
+    constantAnimation: true
+    movementType: 1
+    size: 2
+    damageModifier:
+      - 1.0 #none
+      - 1.0 #ap
+      - 0.8 #in
+      - 0.7 #he
+      - 1.2 #laser
+      - 0.9 #plasma
+      - 0.0 #stun
+      - 0.7 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [92, 89, 90, 91]
+  - type: REAPER_ARMOR
+    spriteSheet: X_REAP.PCK
+    corpseBattle:
+      - REAPER_CORPSE_1
+      - REAPER_CORPSE_2
+      - REAPER_CORPSE_3
+      - REAPER_CORPSE_4
+    corpseGeo: STR_REAPER_CORPSE
+    frontArmor: 34
+    sideArmor: 34
+    rearArmor: 34
+    underArmor: 8
+    drawingRoutine: 5
+    size: 2
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.7
+      - 1.2
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.9
+      - 1.1
+      - 1.0
+    loftempsSet: [92, 89, 90, 91]
+  - type: SECTOPOD_ARMOR
+    spriteSheet: X_ROB.PCK
+    corpseBattle:
+      - SECTOPOD_CORPSE_1
+      - SECTOPOD_CORPSE_2
+      - SECTOPOD_CORPSE_3
+      - SECTOPOD_CORPSE_4
+    corpseGeo: STR_SECTOPOD_CORPSE
+    frontArmor: 153
+    sideArmor: 137
+    rearArmor: 116
+    underArmor: 96
+    drawingRoutine: 5
+    size: 2
+    damageModifier:
+      - 1.0 #none
+      - 0.8 #ap
+      - 0.5 #in
+      - 0.6 #he
+      - 1.5 #laser
+      - 0.9 #plasma
+      - 0.0 #stun
+      - 0.7 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [92, 89, 90, 91]
+  - type: SNAKEMAN_ARMOR0 #soldier
+    spriteSheet: SNAKEMAN.PCK
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
+    frontArmor: 29
+    sideArmor: 22
+    rearArmor: 19
+    underArmor: 16
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
+    loftempsSet: [3]
+  - type: SNAKEMAN_ARMOR1 #navigator
+    spriteSheet: SNAKEMAN.PCK
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
+    frontArmor: 30
+    sideArmor: 23
+    rearArmor: 20
+    underArmor: 17
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
+    loftempsSet: [3]
+  - type: SNAKEMAN_ARMOR2 #engineer
+    spriteSheet: SNAKEMAN.PCK
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
+    frontArmor: 31
+    sideArmor: 23
+    rearArmor: 20
+    underArmor: 18
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
+    loftempsSet: [3]
+  - type: SNAKEMAN_ARMOR3 #leader
+    spriteSheet: SNAKEMAN.PCK
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
+    frontArmor: 35
+    sideArmor: 28
+    rearArmor: 24
+    underArmor: 22
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
+    loftempsSet: [3]
+  - type: SNAKEMAN_ARMOR4 #commander
+    spriteSheet: SNAKEMAN.PCK
+    corpseBattle:
+      - STR_SNAKEMAN_CORPSE
+    frontArmor: 39
+    sideArmor: 33
+    rearArmor: 28
+    underArmor: 23
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0
+      - 1.1
+      - 0.6
+      - 1.0
+      - 0.8
+      - 1.0
+      - 1.1
+      - 1.0
+      - 0.7
+      - 0.5
+    loftempsSet: [3]
+  - type: MUTON_ARMOR0 #soldier
+    spriteSheet: MUTON.PCK
+    corpseBattle:
+      - STR_MUTON_CORPSE
+    frontArmor: 33
+    sideArmor: 28
+    rearArmor: 24
+    underArmor: 16
+    drawingRoutine: 10
+    damageModifier:
+      - 1.0 #none
+      - 1.2 #ap
+      - 0.5 #in
+      - 0.8 #he
+      - 1.1 #laser
+      - 0.9 #plasma
+      - 0.7 #stun
+      - 1.0 #melee
+      - 0.6 #acid
+      - 0.3 #smoke
+    loftempsSet: [4]
+  - type: MUTON_ARMOR1 #navigator
+    spriteSheet: MUTON.PCK
+    corpseBattle:
+      - STR_MUTON_CORPSE
+    frontArmor: 36
+    sideArmor: 32
+    rearArmor: 27
+    underArmor: 17
+    drawingRoutine: 10
+    damageModifier:
+      - 1.0 #none
+      - 1.2 #ap
+      - 0.5 #in
+      - 0.8 #he
+      - 1.1 #laser
+      - 0.9 #plasma
+      - 0.7 #stun
+      - 1.0 #melee
+      - 0.6 #acid
+      - 0.3 #smoke
+    loftempsSet: [4]
+  - type: MUTON_ARMOR2 #engineer
+    spriteSheet: MUTON.PCK
+    corpseBattle:
+      - STR_MUTON_CORPSE
+    frontArmor: 39
+    sideArmor: 36
+    rearArmor: 28
+    underArmor: 21
+    drawingRoutine: 10
+    damageModifier:
+      - 1.0 #none
+      - 1.2 #ap
+      - 0.5 #in
+      - 0.8 #he
+      - 1.1 #laser
+      - 0.9 #plasma
+      - 0.7 #stun
+      - 1.0 #melee
+      - 0.6 #acid
+      - 0.3 #smoke
+    loftempsSet: [4]
+  - type: ETHEREAL_ARMOR0 #soldier
+    spriteSheet: ETHEREAL.PCK
+    corpseBattle:
+      - STR_ETHEREAL_CORPSE
+    frontArmor: 45
+    sideArmor: 45
+    rearArmor: 45
+    underArmor: 53
+    movementType: 1
+    drawingRoutine: 4
+    damageModifier:
+      - 1.0 #none
+      - 0.7 #ap
+      - 1.2 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.7 #stun
+      - 0.9 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
+  - type: ETHEREAL_ARMOR1 #leader
+    spriteSheet: ETHEREAL.PCK
+    corpseBattle:
+      - STR_ETHEREAL_CORPSE
+    frontArmor: 54
+    sideArmor: 54
+    rearArmor: 54
+    underArmor: 63
+    movementType: 1
+    drawingRoutine: 4
+    damageModifier:
+      - 1.0 #none
+      - 0.7 #ap
+      - 1.2 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.7 #stun
+      - 0.9 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
+  - type: ETHEREAL_ARMOR2 #commander
+    spriteSheet: ETHEREAL.PCK
+    corpseBattle:
+      - STR_ETHEREAL_CORPSE
+    frontArmor: 63
+    sideArmor: 63
+    rearArmor: 63
+    underArmor: 75
+    movementType: 1
+    drawingRoutine: 4
+    damageModifier:
+      - 1.0 #none
+      - 0.7 #ap
+      - 1.2 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.7 #stun
+      - 0.9 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
+  - type: CHRYSSALID_ARMOR
+    spriteSheet: CHRYS.PCK
+    corpseBattle:
+      - STR_CHRYSSALID_CORPSE
+    frontArmor: 41
+    sideArmor: 41
+    rearArmor: 41
+    underArmor: 41
+    drawingRoutine: 7
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.7 #in
+      - 0.9 #he
+      - 1.2 #laser
+      - 0.9 #plasma
+      - 0.8 #stun
+      - 0.9 #melee
+      - 0.8 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
+  - type: ZOMBIE_ARMOR
+    spriteSheet: ZOMBIE.PCK
+    corpseBattle:
+      - STR_ZOMBIE_CORPSE
+    corpseGeo: STR_ZOMBIE_CORPSE #kL_add. For explosions.
+    frontArmor: 5
+    sideArmor: 5
+    rearArmor: 5
+    underArmor: 5
+    drawingRoutine: 4
+    deathFrames: 18
+    damageModifier:
+      - 1.0 #none
+      - 0.6 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 0.7 #laser
+      - 1.0 #plasma
+      - 0.0 #stun
+      - 0.8 #melee
+      - 0.9 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
+  - type: SILACOID_ARMOR
+    spriteSheet: SILACOID.PCK
+    corpseBattle:
+      - STR_SILACOID_CORPSE
+    frontArmor: 57
+    sideArmor: 57
+    rearArmor: 57
+    underArmor: 32
+    drawingRoutine: 8
+    constantAnimation: true
+    damageModifier:
+      - 1.0 #none
+      - 0.9 #ap
+      - 0.0 #in
+      - 0.6 #he
+      - 1.1 #laser
+      - 0.8 #plasma
+      - 0.3 #stun
+      - 0.5 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [5]
+  - type: CELATID_ARMOR
+    spriteSheet: CELATID.PCK
+    corpseBattle:
+      - STR_CELATID_CORPSE
+    frontArmor: 24
+    sideArmor: 24
+    rearArmor: 24
+    underArmor: 26
+    drawingRoutine: 9
+    shootFrames: 17 #prob 16
+    constantAnimation: true
+    movementType: 1 #celatid's CAN fly
+    damageModifier:
+      - 1.0 #none
+      - 1.1 #ap
+      - 1.0 #in
+      - 1.3 #he
+      - 0.9 #laser
+      - 1.1 #plasma
+      - 1.2 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
 ufoTrajectories:
   - id: P0
     groundTimer: 3000

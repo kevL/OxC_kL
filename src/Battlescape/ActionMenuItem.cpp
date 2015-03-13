@@ -62,34 +62,33 @@ ActionMenuItem::ActionMenuItem(
 	if (actionMenu->TFTDMode == true)
 		_highlightModifier = 12;
 	else
-		_highlightModifier = 4;
+		_highlightModifier = 5;
 
 	_frame		= new Frame(
 						getWidth(),
 						getHeight(),
-						0,
-						0);
+						0,0);
 	_txtDesc	= new Text(160, 20, 10, 13);
 	_txtAcc		= new Text(63, 20, 151, 13);
 	_txtTU		= new Text(50, 20, 214, 13);
 
-	_frame->setColor(actionMenu->border);
-	_frame->setSecondaryColor(actionMenu->color2);
+	_frame->setColor(static_cast<Uint8>(actionMenu->border));
+	_frame->setSecondaryColor(static_cast<Uint8>(actionMenu->color2));
 	_frame->setHighContrast();
 	_frame->setThickness(8);
 
 	_txtDesc->initText(big, small, lang);
-	_txtDesc->setColor(actionMenu->color);
+	_txtDesc->setColor(static_cast<Uint8>(actionMenu->color));
 	_txtDesc->setHighContrast();
 	_txtDesc->setBig();
 
 	_txtAcc->initText(big, small, lang);
-	_txtAcc->setColor(actionMenu->color);
+	_txtAcc->setColor(static_cast<Uint8>(actionMenu->color));
 	_txtAcc->setHighContrast();
 	_txtAcc->setBig();
 
 	_txtTU->initText(big, small, lang);
-	_txtTU->setColor(actionMenu->color);
+	_txtTU->setColor(static_cast<Uint8>(actionMenu->color));
 	_txtTU->setHighContrast();
 	_txtTU->setBig();
 }

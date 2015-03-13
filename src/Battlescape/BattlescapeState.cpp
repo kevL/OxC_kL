@@ -211,10 +211,10 @@ BattlescapeState::BattlescapeState()
 //		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
 //		visibleUnitY = _rules->getInterface("battlescape")->getElement("visibleUnits")->y;
 
-	for (int
-			i = 0,
-				offset_x = 0;
-			i < VISIBLE_MAX;
+	int offset_x = 0;
+	for (size_t
+			i = 0;
+			i != INDICATORS;
 			++i)
 	{
 		if (i > 9)
@@ -224,17 +224,17 @@ BattlescapeState::BattlescapeState()
 												15,
 												13,
 												x + iconsWidth - 21 - offset_x,
-												y - 16 - (i * 13));
+												y - 16 - (static_cast<int>(i) * 13));
 		_numVisibleUnit[i] = new NumberText(
 										9,
 										9,
 										x + iconsWidth - 15 - offset_x,
-										y - 12 - (i * 13));
+										y - 12 - (static_cast<int>(i) * 13));
 	}
 
-	for (int // center 10+ on buttons
+	for (size_t // center 10+ on buttons
 			i = 9;
-			i < VISIBLE_MAX;
+			i != INDICATORS;
 			++i)
 	{
 		_numVisibleUnit[i]->setX(_numVisibleUnit[i]->getX() - 2);
@@ -386,9 +386,9 @@ BattlescapeState::BattlescapeState()
 
 //	_iconsLayer->setVisible(false);
 
-	for (int
+	for (size_t
 			i = 0;
-			i < VISIBLE_MAX;
+			i != INDICATORS;
 			++i)
 	{
 		add(_btnVisibleUnit[i]);
@@ -399,8 +399,8 @@ BattlescapeState::BattlescapeState()
 	add(_txtDebug);
 
 	add(_warning, "warning", "battlescape", _icons);
-	_warning->setColor(_rules->getInterface("battlescape")->getElement("warning")->color2);
-	_warning->setTextColor(_rules->getInterface("battlescape")->getElement("warning")->color);
+	_warning->setColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color2));
+	_warning->setTextColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color));
 
 	add(_btnLaunch);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
@@ -832,11 +832,10 @@ BattlescapeState::BattlescapeState()
 		Options::keyBattleCenterEnemy10
 	};
 
-	const Uint8 color = _rules->getInterface("battlescape")->getElement("visibleUnits")->color;
-
-	for (int
+	const Uint8 color = static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("visibleUnits")->color);
+	for (size_t
 			i = 0;
-			i < VISIBLE_MAX;
+			i != INDICATORS;
 			++i)
 	{
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)& BattlescapeState::btnVisibleUnitClick);
@@ -851,7 +850,7 @@ BattlescapeState::BattlescapeState()
 //		_btnVisibleUnit[i]->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
 		_numVisibleUnit[i]->setColor(color); // 16
-		_numVisibleUnit[i]->setValue(i + 1);
+		_numVisibleUnit[i]->setValue(static_cast<unsigned>(i) + 1);
 	}
 
 //	_txtName->setColor(Palette::blockOffset(8));
@@ -2201,20 +2200,17 @@ void BattlescapeState::btnRightHandRightClick(Action*)
  */
 void BattlescapeState::btnVisibleUnitClick(Action* action)
 {
-	int btnID = -1;
-
-	for (int // got to find out which button was pressed
+	for (size_t // find out which button was pressed
 			i = 0;
-			i < VISIBLE_MAX
-				&& btnID == -1;
+			i != INDICATORS;
 			++i)
 	{
-		if (action->getSender() == _btnVisibleUnit[i])
-			btnID = i;
+		if (_btnVisibleUnit[i] == action->getSender())
+		{
+			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
+			break;
+		}
 	}
-
-	if (btnID != -1)
-		_map->getCamera()->centerOnPosition(_visibleUnit[btnID]->getPosition());
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
@@ -2478,9 +2474,9 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
-	for (int // remove red target indicators
+	for (size_t // remove red target indicators
 			i = 0;
-			i < VISIBLE_MAX;
+			i != INDICATORS;
 			++i)
 	{
 		_btnVisibleUnit[i]->setVisible(false);
@@ -2572,11 +2568,11 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	if (calcFoV == true)
 		_savedBattle->getTileEngine()->calculateFOV(selectedUnit);
 
-	int j = 0;
+	size_t j = 0;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
-				&& j < VISIBLE_MAX;
+				&& j != INDICATORS;
 			++i,
 				++j)
 	{
@@ -2829,46 +2825,25 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
  */
 void BattlescapeState::blinkVisibleUnitButtons()
 {
-	static int delta = 1;
-	static Uint8 color = Palette::blockOffset(2)+2;
+	static int
+		delta = 1,
+		color = 34;
 
-/*	SDL_Rect square1; // black border
-	square1.x = 0;
-	square1.y = 0;
-	square1.w = 15;
-	square1.h = 12;
-
-	SDL_Rect square2; // inner red square
-	square2.x = 1;
-	square2.y = 1;
-	square2.w = 13;
-	square2.h = 10; */
-
-	for (int
+	for (size_t
 			i = 0;
-			i < VISIBLE_MAX;
+			i != INDICATORS;
 			++i)
 	{
-		if (_btnVisibleUnit[i]->getVisible())
+		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
-//			_btnVisibleUnit[i]->drawRect(&square1, 15);		// black border
-//			_btnVisibleUnit[i]->drawRect(&square2, color);	// inner red square
-			_btnVisibleUnit[i]->drawRect(0, 0, 15, 13, 15);		// black border
-			_btnVisibleUnit[i]->drawRect(1, 1, 13, 11, color);	// inner red square
+			_btnVisibleUnit[i]->drawRect(0, 0, 15, 13, 15);
+			_btnVisibleUnit[i]->drawRect(1, 1, 13, 11, static_cast<Uint8>(color));
 		}
 	}
 
-/*	if (_btnWounds->getVisible())
-	{
-		_btnWounds->drawRect(0, 0, 15, 13, 15);		// black border
-		_btnWounds->drawRect(1, 1, 13, 11, color);	// inner red square
-			// color + Palette::blockOffset(10));	// inner purple square
-	} */
-
-
-	if (color == Palette::blockOffset(2)+13) // reached darkish red
+	if (color == 45)
 		delta = -1;
-	else if (color == Palette::blockOffset(2)+2) // reached lightish red
+	else if (color == 34)
 		delta = 1;
 
 	color += delta;
@@ -3373,9 +3348,12 @@ void BattlescapeState::saveVoxelView()
 					dist *= (16. - static_cast<double>(tile->getShade())) / 16.;
 			}
 
-			image.push_back((int)((float)(pal[test * 3 + 0]) * dist));
-			image.push_back((int)((float)(pal[test * 3 + 1]) * dist));
-			image.push_back((int)((float)(pal[test * 3 + 2]) * dist));
+//			image.push_back((int)((float)(pal[test * 3 + 0]) * dist));
+//			image.push_back((int)((float)(pal[test * 3 + 1]) * dist));
+//			image.push_back((int)((float)(pal[test * 3 + 2]) * dist));
+			image.push_back(static_cast<unsigned char>((double)(pal[test * 3 + 0]) * dist));
+			image.push_back(static_cast<unsigned char>((double)(pal[test * 3 + 1]) * dist));
+			image.push_back(static_cast<unsigned char>((double)(pal[test * 3 + 2]) * dist));
 		}
 	}
 
@@ -3394,15 +3372,13 @@ void BattlescapeState::saveVoxelView()
 		&& i < 999);
 
 
-	unsigned int error = lodepng::encode(
-										osts.str(),
-										image,
-										512,512,
-										LCT_RGB);
+	unsigned error = lodepng::encode(
+								osts.str(),
+								image,
+								512,512,
+								LCT_RGB);
 	if (error != 0)
-	{
 		Log(LOG_ERROR) << "bs::saveVoxelView() Saving to PNG failed: " << lodepng_error_text(error);
-	}
 #ifdef _WIN32
 	else
 	{
@@ -3521,9 +3497,12 @@ void BattlescapeState::saveVoxelMap()
 					}
 				}
 
-				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 0]) * dist));
-				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 1]) * dist));
-				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 2]) * dist));
+//				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 0]) * dist));
+//				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 1]) * dist));
+//				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 2]) * dist));
+				image.push_back(static_cast<unsigned char>(static_cast<double>(pal[test * 3 + 0]) * dist));
+				image.push_back(static_cast<unsigned char>(static_cast<double>(pal[test * 3 + 1]) * dist));
+				image.push_back(static_cast<unsigned char>(static_cast<double>(pal[test * 3 + 2]) * dist));
 			}
 		}
 
@@ -3905,9 +3884,9 @@ void BattlescapeState::refreshVisUnits()
 		return;
 
 
-	for (int // remove red target indicators
+	for (size_t // remove red target indicators
 			i = 0;
-			i < VISIBLE_MAX;
+			i != INDICATORS;
 			++i)
 	{
 		_btnVisibleUnit[i]->setVisible(false);
@@ -3916,12 +3895,12 @@ void BattlescapeState::refreshVisUnits()
 		_visibleUnit[i] = NULL;
 	}
 
-	int j = 0;
+	size_t j = 0;
 	BattleUnit* const selectedUnit = _savedBattle->getSelectedUnit();
 	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
-				&& j < VISIBLE_MAX;
+				&& j != INDICATORS;
 			++i,
 				++j)
 	{
@@ -4142,7 +4121,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 
 	for (size_t
 			i = 0;
-			i < rows;
+			i != rows;
 			++i)
 	{
 		Uint8 color;
@@ -4231,7 +4210,7 @@ void BattlescapeState::flashMedic()
 						3); // red
 		_btnWounds->unlock();
 
-		_numWounds->setColor(Palette::blockOffset(9) + phase); // yellow
+		_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow
 
 
 		phase += 2;

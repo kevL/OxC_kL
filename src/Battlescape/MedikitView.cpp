@@ -92,22 +92,18 @@ MedikitView::MedikitView(
 void MedikitView::draw()
 {
 	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
-
-	Uint8
-		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color,
-		red = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2,
-		color;
+	Uint8 color;
 
 	this->lock();
-	for (size_t
+	for (int
 			i = 0;
-			i < srt->getTotalFrames();
+			i != srt->getTotalFrames();
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)
-			color = red;
+			color = static_cast<Uint8>(_game->getRuleset()->getInterface("medikit")->getElement("body")->color2); // red
 		else
-			color = green;
+			color = static_cast<Uint8>(_game->getRuleset()->getInterface("medikit")->getElement("body")->color); // green
 
 		Surface* const surface = srt->getFrame(i);
 		surface->blitNShade(

@@ -69,7 +69,7 @@ MonthlyReportState::MonthlyReportState(
 		_gameOver(false),
 		_ratingTotal(0),
 		_deltaFunds(0),
-		_ratingLastMonth(0)
+		_ratingLast(0)
 {
 	_globe = globe;
 	_savedGame = _game->getSavedGame();
@@ -94,29 +94,27 @@ MonthlyReportState::MonthlyReportState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color); //3
+			_game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color);
 
-	add(_window, "window", "monthlyReport");
-	add(_txtTitle, "text1", "monthlyReport");
-	add(_txtMonth, "text1", "monthlyReport");
-	add(_txtRating, "text1", "monthlyReport");
-	add(_txtChange, "text1", "monthlyReport");
-	add(_txtDesc, "text2", "monthlyReport");
-	add(_btnOk, "button", "monthlyReport");
-	add(_txtFailure, "text2", "monthlyReport");
-	add(_btnBigOk, "button", "monthlyReport");
+	add(_window,		"window",	"monthlyReport");
+	add(_txtTitle,		"text1",	"monthlyReport");
+	add(_txtMonth,		"text1",	"monthlyReport");
+	add(_txtRating,		"text1",	"monthlyReport");
+	add(_txtChange,		"text1",	"monthlyReport");
+	add(_txtDesc,		"text2",	"monthlyReport");
+	add(_btnOk,			"button",	"monthlyReport");
+	add(_txtFailure,	"text2",	"monthlyReport");
+	add(_btnBigOk,		"button",	"monthlyReport");
 
-//	add(_txtIncome, "text1", "monthlyReport");
-//	add(_txtMaintenance, "text1", "monthlyReport");
-//	add(_txtBalance, "text1", "monthlyReport");
+//	add(_txtIncome,			"text1", "monthlyReport");
+//	add(_txtMaintenance,	"text1", "monthlyReport");
+//	add(_txtBalance,		"text1", "monthlyReport");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
@@ -134,27 +132,25 @@ MonthlyReportState::MonthlyReportState(
 		--year;
 	}
 
-	std::string mth;
+	std::string st;
 	switch (month)
 	{
-		case  1: mth = "STR_JAN"; break;
-		case  2: mth = "STR_FEB"; break;
-		case  3: mth = "STR_MAR"; break;
-		case  4: mth = "STR_APR"; break;
-		case  5: mth = "STR_MAY"; break;
-		case  6: mth = "STR_JUN"; break;
-		case  7: mth = "STR_JUL"; break;
-		case  8: mth = "STR_AUG"; break;
-		case  9: mth = "STR_SEP"; break;
-		case 10: mth = "STR_OCT"; break;
-		case 11: mth = "STR_NOV"; break;
-		case 12: mth = "STR_DEC"; break;
+		case  1: st = "STR_JAN"; break;
+		case  2: st = "STR_FEB"; break;
+		case  3: st = "STR_MAR"; break;
+		case  4: st = "STR_APR"; break;
+		case  5: st = "STR_MAY"; break;
+		case  6: st = "STR_JUN"; break;
+		case  7: st = "STR_JUL"; break;
+		case  8: st = "STR_AUG"; break;
+		case  9: st = "STR_SEP"; break;
+		case 10: st = "STR_OCT"; break;
+		case 11: st = "STR_NOV"; break;
+		case 12: st = "STR_DEC"; break;
 
-		default: mth = "";
+		default: st = "";
 	}
-//	_txtMonth->setColor(Palette::blockOffset(15)-1);
-//	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtMonth->setText(tr("STR_MONTH").arg(tr(mth)).arg(year));
+	_txtMonth->setText(tr("STR_MONTH").arg(tr(st)).arg(year));
 
 	const int
 		diff = static_cast<int>(_savedGame->getDifficulty()),
@@ -177,8 +173,7 @@ MonthlyReportState::MonthlyReportState(
 		rating = tr("STR_RATING_OK");
 	else if (_ratingTotal > difficulty_threshold)
 		rating = tr("STR_RATING_POOR");
-	_txtRating->setColor(Palette::blockOffset(15)-1);
-	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
+
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
 /*	std::wostringstream ss; // ADD:
@@ -201,25 +196,22 @@ MonthlyReportState::MonthlyReportState(
 	std::wostringstream ss3;
 	if (_deltaFunds > 0) ss3 << '+';
 	ss3 << Text::formatFunding(_deltaFunds);
-//	_txtChange->setColor(Palette::blockOffset(15)-1);
-//	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
 
-//	_txtDesc->setColor(Palette::blockOffset(8)+10);
 	_txtDesc->setWordWrap();
 
 	// calculate satisfaction
 	std::wostringstream ss4;
-	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
-	if (_ratingTotal > 1000 + 2000 * diff) // was 1500 flat.
-		satisFactionString = tr("STR_COUNCIL_IS_VERY_PLEASED");
+	std::wstring satisFaction = tr("STR_COUNCIL_IS_DISSATISFIED");
+	if (_ratingTotal > 1000 + (diff * 2000)) // was 1500 flat.
+		satisFaction = tr("STR_COUNCIL_IS_VERY_PLEASED");
 	else if (_ratingTotal > difficulty_threshold)
-		satisFactionString = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
+		satisFaction = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 
-	if (_ratingLastMonth <= difficulty_threshold
+	if (_ratingLast <= difficulty_threshold
 		&& _ratingTotal <= difficulty_threshold)
 	{
-		satisFactionString = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+		satisFaction = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 
 		_pactList.erase(
 					_pactList.begin(),
@@ -233,7 +225,7 @@ MonthlyReportState::MonthlyReportState(
 
 		_gameOver = true; // you lose.
 	}
-	ss4 << satisFactionString;
+	ss4 << satisFaction;
 
 	bool resetWarning = true;
 	if (_gameOver == false)
@@ -290,7 +282,6 @@ MonthlyReportState::MonthlyReportState(
 	_txtDesc->setText(ss4.str());
 
 
-//	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -301,7 +292,6 @@ MonthlyReportState::MonthlyReportState(
 					Options::keyCancel);
 
 
-//	_txtFailure->setColor(Palette::blockOffset(8)+10);
 	_txtFailure->setBig();
 	_txtFailure->setAlign(ALIGN_CENTER);
 	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
@@ -309,7 +299,6 @@ MonthlyReportState::MonthlyReportState(
 	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
 	_txtFailure->setVisible(false);
 
-//	_btnBigOk->setColor(Palette::blockOffset(8)+10);
 	_btnBigOk->setText(tr("STR_OK"));
 	_btnBigOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
 	_btnBigOk->onKeyboardPress(
@@ -334,25 +323,85 @@ MonthlyReportState::~MonthlyReportState()
 {}
 
 /**
- * Update all our activity counters, gather all our scores,
- * get our countries to sign pacts, adjust their fundings,
- * assess their satisfaction, and finally calculate our overall
+ * Update all activity counters, gather all scores,
+ * get countries to sign pacts, adjust their fundings,
+ * assess their satisfaction, and finally calculate overall
  * total score, with thanks to Volutar for the formulae.
  */
 void MonthlyReportState::calculateChanges()
 {
-	_ratingLastMonth = 0;
+	_ratingLast = 0;
 
 	int
-		xComSubTotal = 0,
-		xComTotal = 0,
+		total = 0,
+		aLienTotal = 0;
+
+	size_t lastMonth = _savedGame->getFundsList().size() - 2;
+
+	for (std::vector<Region*>::const_iterator
+			i = _savedGame->getRegions()->begin();
+			i != _savedGame->getRegions()->end();
+			++i)
+	{
+		(*i)->newMonth();
+
+		if (lastMonth > 0)
+			_ratingLast += (*i)->getActivityXcom().at(lastMonth - 1)
+						 - (*i)->getActivityAlien().at(lastMonth - 1);
+
+		total += (*i)->getActivityXcom().at(lastMonth);
+		aLienTotal += (*i)->getActivityAlien().at(lastMonth);
+	}
+
+
+	int diff = static_cast<int>(_savedGame->getDifficulty());
+
+	for (std::vector<Country*>::const_iterator
+			i = _savedGame->getCountries()->begin();
+			i != _savedGame->getCountries()->end();
+			++i)
+	{
+		std::string st = (*i)->getRules()->getType();
+
+		if ((*i)->getNewPact() == true)
+			_pactList.push_back(st);
+
+		(*i)->newMonth(
+					total,
+					aLienTotal,
+					diff);
+
+		_deltaFunds += (*i)->getFunding().back()
+					 - (*i)->getFunding().at(lastMonth);
+
+		switch ((*i)->getSatisfaction())
+		{
+			case 1:
+				_sadList.push_back(st);
+			break;
+			case 3:
+				_happyList.push_back(st);
+		}
+	}
+
+	if (lastMonth > 0)
+		_ratingLast += _savedGame->getResearchScores().at(lastMonth - 1);
+
+	total += _savedGame->getResearchScores().at(lastMonth);
+	_ratingTotal = total - aLienTotal; // total RATING
+}
+/*	_ratingLast = 0;
+
+	int
+		total = 0,
+		subTotal = 0,
 		aLienTotal = 0,
 
-		monthOffset = _savedGame->getFundsList().size() - 2,
-		lastMonthOffset = _savedGame->getFundsList().size() - 3;
+		offset = static_cast<int>(_savedGame->getFundsList().size()) - 2,
+		offset_pre = offset - 1;
 
-	if (lastMonthOffset < 0)
-		lastMonthOffset += 2;
+	if (offset_pre < 0)
+		offset_pre += 2;
 
 	// update activity meters, calculate a total score based
 	// on regional activity and gather last month's score
@@ -364,25 +413,25 @@ void MonthlyReportState::calculateChanges()
 		(*i)->newMonth();
 
 		if ((*i)->getActivityXcom().size() > 2)
-			_ratingLastMonth += (*i)->getActivityXcom().at(lastMonthOffset)
-							  - (*i)->getActivityAlien().at(lastMonthOffset);
+			_ratingLast += (*i)->getActivityXcom().at(offset_pre)
+						 - (*i)->getActivityAlien().at(offset_pre);
 
-		xComSubTotal += (*i)->getActivityXcom().at(monthOffset);
-		aLienTotal += (*i)->getActivityAlien().at(monthOffset);
+		subTotal += (*i)->getActivityXcom().at(offset);
+		aLienTotal += (*i)->getActivityAlien().at(offset);
 	}
 
-	// apply research bonus AFTER calculating our total, because this bonus applies
+	// apply research bonus AFTER calculating total, because this bonus applies
 	// to the council ONLY, and shouldn't influence each country's decision.
 	// kL_note: And yet you _do_ add it in to country->newMonth() decisions...!
 	// So, hey, I'll take it out for you.. just a sec.
-	xComTotal = _savedGame->getResearchScores().at(monthOffset) + xComSubTotal;
+	total = _savedGame->getResearchScores().at(offset) + subTotal;
 
 	// the council is more lenient after the first month
 //	if (_savedGame->getMonthsPassed() > 1)
-//		_savedGame->getResearchScores().at(monthOffset) += 400;
+//		_savedGame->getResearchScores().at(offset) += 400;
 
 	if (_savedGame->getResearchScores().size() > 2)
-		_ratingLastMonth += _savedGame->getResearchScores().at(lastMonthOffset);
+		_ratingLast += _savedGame->getResearchScores().at(offset_pre);
 
 
 	// now that we have our totals we can send the relevant info to the countries
@@ -399,11 +448,11 @@ void MonthlyReportState::calculateChanges()
 
 		// determine satisfaction level, sign pacts, adjust funding, and update activity meters
 		(*i)->newMonth(
-					xComSubTotal, // There. done
+					subTotal, // There. done
 					aLienTotal,
 					static_cast<int>(_savedGame->getDifficulty()));
 
-		// and after they've made their decisions, calculate the difference,
+		// and after they've made their decisions, calculate the difference;
 		// and add them to the appropriate lists.
 		_deltaFunds += (*i)->getFunding().back()
 					 - (*i)->getFunding().at((*i)->getFunding().size() - 2);
@@ -417,9 +466,7 @@ void MonthlyReportState::calculateChanges()
 				_happyList.push_back((*i)->getRules()->getType());
 		}
 	}
-
-	_ratingTotal = xComTotal - aLienTotal; // total RATING
-}
+	_ratingTotal = total - aLienTotal; // total RATING */
 
 /**
  * Returns to the previous screen.
@@ -475,7 +522,7 @@ void MonthlyReportState::btnOkClick(Action*)
 		}
 		else
 		{
-			_window->setColor(_game->getRuleset()->getInterface("monthlyReport")->getElement("window")->color2); //Palette::blockOffset(8)+10);
+			_window->setColor(static_cast<Uint8>(_game->getRuleset()->getInterface("monthlyReport")->getElement("window")->color2));
 
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);

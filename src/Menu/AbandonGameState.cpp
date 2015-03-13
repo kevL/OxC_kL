@@ -51,13 +51,14 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin)
 {
 	_screen = false;
 
-	int x = 52;
+	int x;
 	if (_origin == OPT_GEOSCAPE)
 		x = 20;
+	else
+		x = 52;
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
 	_txtTitle	= new Text(206, 33, x + 5, 73);
-//	_txtTitle	= new Text(206, 17, x + 5, 73);
 
 	_btnNo		= new TextButton(55, 20, x + 30, 132);
 	_btnYes		= new TextButton(55, 20, x + 131, 132);
@@ -67,37 +68,33 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin)
 	else
 		setPalette(
 				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color); //0
+				_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
 
-	add(_window, "genericWindow", "geoscape");
-	add(_txtTitle, "genericText", "geoscape");
-	add(_btnNo, "genericButton2", "geoscape");
-	add(_btnYes, "genericButton2", "geoscape");
+	add(_window,	"genericWindow",	"geoscape");
+	add(_txtTitle,	"genericText",		"geoscape");
+	add(_btnNo,		"genericButton2",	"geoscape");
+	add(_btnYes,	"genericButton2",	"geoscape");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnYes->setColor(Palette::blockOffset(15)-1);
-	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)& AbandonGameState::btnYesClick);
-	_btnYes->onKeyboardPress(
-					(ActionHandler)& AbandonGameState::btnYesClick,
-					Options::keyOk);
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+	_txtTitle->setText(tr("STR_ABANDON_GAME_QUESTION"));
 
-//	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& AbandonGameState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& AbandonGameState::btnNoClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_ABANDON_GAME_QUESTION"));
+	_btnYes->setText(tr("STR_YES"));
+	_btnYes->onMouseClick((ActionHandler)& AbandonGameState::btnYesClick);
+	_btnYes->onKeyboardPress(
+					(ActionHandler)& AbandonGameState::btnYesClick,
+					Options::keyOk);
 
 	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();

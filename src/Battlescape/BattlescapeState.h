@@ -61,7 +61,7 @@ class BattlescapeState
 {
 
 private:
-	static const int VISIBLE_MAX = 20;
+	static const size_t INDICATORS = 20;
 
 	bool
 		_firstInit,
@@ -108,7 +108,7 @@ private:
 //		* _reserve;
 //		* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	BattlescapeGame* _battleGame;
-	BattleUnit* _visibleUnit[VISIBLE_MAX];
+	BattleUnit* _visibleUnit[INDICATORS];
 	InteractiveSurface
 		* _icons,
 
@@ -117,7 +117,7 @@ private:
 		* _btnLeftHandItem,
 		* _btnRightHandItem,
 
-		* _btnVisibleUnit[VISIBLE_MAX],
+		* _btnVisibleUnit[INDICATORS],
 		* _btnWounds,
 
 		* _btnZeroTUs;
@@ -125,7 +125,7 @@ private:
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	Map* _map;
 	NumberText
-		* _numVisibleUnit[VISIBLE_MAX],
+		* _numVisibleUnit[INDICATORS],
 
 		* _numTUAim,
 		* _numTUAuto,

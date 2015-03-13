@@ -73,12 +73,12 @@ MainMenuState::MainMenuState()
 	_txtTitle		= new Text(256, 17, 32, 40);
 	_txtBuild		= new Text(256, 9, 32, 66);
 
-	_btnNewGame		= new TextButton(92, 20, 64, 88);
-	_btnNewBattle	= new TextButton(92, 20, 164, 88);
+	_btnStart		= new TextButton(92, 20, 64, 88);
+	_btnTactical	= new TextButton(92, 20, 164, 88);
 
 	_btnLoad		= new TextButton(92, 20, 64, 116);
 //	_btnOptions		= new TextButton(92, 20, 164, 116);
-	_btnPlayIntro	= new TextButton(92, 20, 164, 116);
+	_btnIntro		= new TextButton(92, 20, 164, 116);
 
 	_btnQuit		= new TextButton(192, 20, 64, 144);
 
@@ -86,26 +86,26 @@ MainMenuState::MainMenuState()
 			"PAL_GEOSCAPE",
 			_game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
 
-	add(_window, "window", "mainMenu");
-	add(_txtTitle, "text", "mainMenu");
-	add(_txtBuild, "text", "mainMenu");
-	add(_btnNewGame, "button", "mainMenu");
-	add(_btnNewBattle, "button", "mainMenu");
-	add(_btnLoad, "button", "mainMenu");
-//	add(_btnOptions, "button", "mainMenu");
-	add(_btnPlayIntro, "button", "mainMenu");
-	add(_btnQuit, "button", "mainMenu");
+	add(_window,		"window",	"mainMenu");
+	add(_txtTitle,		"text",		"mainMenu");
+	add(_txtBuild,		"text",		"mainMenu");
+	add(_btnStart,		"button",	"mainMenu");
+	add(_btnTactical,	"button",	"mainMenu");
+	add(_btnLoad,		"button",	"mainMenu");
+//	add(_btnOptions,	"button",	"mainMenu");
+	add(_btnIntro,		"button",	"mainMenu");
+	add(_btnQuit,		"button",	"mainMenu");
 
 	centerAllSurfaces();
 
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnNewGame->setText(tr("STR_NEW_GAME"));
-	_btnNewGame->onMouseClick((ActionHandler)& MainMenuState::btnNewGameClick);
+	_btnStart->setText(tr("STR_NEW_GAME"));
+	_btnStart->onMouseClick((ActionHandler)& MainMenuState::btnNewGameClick);
 
-	_btnNewBattle->setText(tr("STR_NEW_BATTLE"));
-	_btnNewBattle->onMouseClick((ActionHandler)& MainMenuState::btnNewBattleClick);
+	_btnTactical->setText(tr("STR_NEW_BATTLE"));
+	_btnTactical->onMouseClick((ActionHandler)& MainMenuState::btnNewBattleClick);
 
 	_btnLoad->setText(tr("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)& MainMenuState::btnLoadClick);
@@ -114,8 +114,8 @@ MainMenuState::MainMenuState()
 //	_btnOptions->onMouseClick((ActionHandler)& MainMenuState::btnOptionsClick);
 //	_btnOptions->setVisible(false);
 
-	_btnPlayIntro->setText(tr("STR_PLAYINTRO"));
-	_btnPlayIntro->onMouseClick((ActionHandler)& MainMenuState::btnPlayIntroClick);
+	_btnIntro->setText(tr("STR_PLAYINTRO"));
+	_btnIntro->onMouseClick((ActionHandler)& MainMenuState::btnPlayIntroClick);
 
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)& MainMenuState::btnQuitClick);
