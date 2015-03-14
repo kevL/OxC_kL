@@ -29,8 +29,8 @@ namespace OpenXcom
 
 /**
  * Initializes a base facility of the specified type.
- * @param rules Pointer to ruleset.
- * @param base Pointer to base of origin.
+ * @param rules	- pointer to RuleBaseFacility
+ * @param base	- pointer to the Base of this facility
  */
 BaseFacility::BaseFacility(
 		RuleBaseFacility* rules,
@@ -41,7 +41,7 @@ BaseFacility::BaseFacility(
 		_x(-1),
 		_y(-1),
 		_buildTime(0),
-		_craftForDrawing(NULL)
+		_craft(NULL)
 {}
 
 /**
@@ -52,7 +52,7 @@ BaseFacility::~BaseFacility()
 
 /**
  * Loads the base facility from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void BaseFacility::load(const YAML::Node& node)
 {
@@ -64,7 +64,7 @@ void BaseFacility::load(const YAML::Node& node)
 
 /**
  * Saves the base facility to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node BaseFacility::save() const
 {
@@ -81,8 +81,8 @@ YAML::Node BaseFacility::save() const
 }
 
 /**
- * Returns the ruleset for the base facility's type.
- * @return Pointer to ruleset.
+ * Returns the ruleset for this BaseFacility's type.
+ * @return, pointer to RuleBaseFacility
  */
 RuleBaseFacility* BaseFacility::getRules() const
 {
@@ -90,9 +90,8 @@ RuleBaseFacility* BaseFacility::getRules() const
 }
 
 /**
- * Returns the base facility's X position on the
- * base grid that it's placed on.
- * @return X position in grid squares.
+ * Returns this BaseFacility's X position on the base grid.
+ * @return, X position in grid squares
  */
 int BaseFacility::getX() const
 {
@@ -100,9 +99,8 @@ int BaseFacility::getX() const
 }
 
 /**
- * Changes the base facility's X position on the
- * base grid that it's placed on.
- * @param x X position in grid squares.
+ * Changes this BaseFacility's X position on the base grid.
+ * @param x - X position in grid squares
  */
 void BaseFacility::setX(int x)
 {
@@ -110,9 +108,8 @@ void BaseFacility::setX(int x)
 }
 
 /**
- * Returns the base facility's Y position on the
- * base grid that it's placed on.
- * @return Y position in grid squares.
+ * Returns this BaseFacility's Y position on the base grid.
+ * @return, Y position in grid squares
  */
 int BaseFacility::getY() const
 {
@@ -120,9 +117,8 @@ int BaseFacility::getY() const
 }
 
 /**
- * Changes the base facility's Y position on the
- * base grid that it's placed on.
- * @param y Y position in grid squares.
+ * Changes this BaseFacility's Y position on the base grid.
+ * @param y - Y position in grid squares
  */
 void BaseFacility::setY(int y)
 {
@@ -130,9 +126,8 @@ void BaseFacility::setY(int y)
 }
 
 /**
- * Returns the base facility's remaining time
- * until it's finished building (0 = complete).
- * @return Time left in days.
+ * Returns this BaseFacility's remaining time until it's finished building.
+ * @return, time left in days (0 = complete)
  */
 int BaseFacility::getBuildTime() const
 {
@@ -140,17 +135,16 @@ int BaseFacility::getBuildTime() const
 }
 
 /**
- * Changes the base facility's remaining time
- * until it's finished building.
- * @param time Time left in days.
+ * Changes this BaseFacility's remaining time until it's finished building.
+ * @param buildTime - time left in days
  */
-void BaseFacility::setBuildTime(int time)
+void BaseFacility::setBuildTime(int buildTime)
 {
-	_buildTime = time;
+	_buildTime = buildTime;
 }
 
 /**
- * Handles the facility building every day.
+ * Handles the facility building each day.
  */
 void BaseFacility::build()
 {
@@ -158,15 +152,13 @@ void BaseFacility::build()
 }
 
 /**
- * Returns if this facility is currently being used by its base.
- * @return, true if it's in use
+ * Returns if this BaseFacility is currently being used by its base.
+ * @return, true if in use
  */
 bool BaseFacility::inUse() const
 {
-	if (_buildTime > 0)
-	{
+	if (_buildTime != 0)
 		return false;
-	}
 
 	return (_rules->getPersonnel() > 0
 			&& _base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters())
@@ -185,21 +177,21 @@ bool BaseFacility::inUse() const
 }
 
 /**
- * Gets craft, used for drawing facility.
- * @return, pointer to the craft
+ * Gets craft used for drawing in facility.
+ * @return, pointer to the Craft
  */
-Craft* BaseFacility::getCraft() const
+const Craft* const BaseFacility::getCraft() const
 {
-	return _craftForDrawing;
+	return _craft;
 }
 
 /**
- * Sets craft, used for drawing facility.
- * @param craft - pointer to a craft for drawing in hangar
+ * Sets craft used for drawing facility.
+ * @param craft - pointer to the craft
  */
-void BaseFacility::setCraft(Craft* craft)
+void BaseFacility::setCraft(const Craft* const craft)
 {
-	_craftForDrawing = craft;
+	_craft = craft;
 }
 
 }

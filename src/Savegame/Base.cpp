@@ -2242,10 +2242,10 @@ std::vector<Vehicle*>* Base::getVehicles()
  */
 void Base::destroyDisconnectedFacilities()
 {
-	std::list<std::vector<BaseFacility*>::const_iterator> discFacs = getDisconnectedFacilities(NULL);
+	std::list<std::vector<BaseFacility*>::const_iterator> discoFacs = getDisconnectedFacilities(NULL);
 	for (std::list<std::vector<BaseFacility*>::const_iterator>::const_reverse_iterator
-			i = discFacs.rbegin();
-			i != discFacs.rend();
+			i = discoFacs.rbegin();
+			i != discoFacs.rend();
 			++i)
 	{
 		destroyFacility(*i);
@@ -2254,164 +2254,177 @@ void Base::destroyDisconnectedFacilities()
 
 /**
  * Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
- * @param remFac - BaseFacility to ignore (in case of purposeful dismantling)
+ * @param ignoreFac - BaseFacility to ignore (in case of purposeful dismantling)
  * @return, a sorted list of iterators pointing to elements in '_facilities'
  */
-std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacilities(BaseFacility* remFac)
+std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacilities(BaseFacility* ignoreFac)
 {
 	std::list<std::vector<BaseFacility*>::const_iterator> ret;
 
-	if (remFac != NULL
-		&& remFac->getRules()->isLift() == true) // Theoretically this is impossible, but sanity check is good :)
+	if (ignoreFac != NULL
+		&& ignoreFac->getRules()->isLift() == true) // Theoretically this is impossible, but sanity check is good :)
 	{
 		for (std::vector<BaseFacility*>::const_iterator
 				i = _facilities.begin();
 				i != _facilities.end();
 				++i)
 		{
-			if (*i != remFac)
+			if (*i != ignoreFac)
 				ret.push_back(i);
 		}
 
 		return ret;
 	}
 
-	std::vector<std::pair<std::vector<BaseFacility*>::const_iterator, bool>* > facConnStates;
-	std::pair<std::vector<BaseFacility*>::const_iterator, bool>* grid[BASE_SIZE][BASE_SIZE];
-	const BaseFacility* lift = NULL;
 
-	for (int
+	std::vector<std::pair<std::vector<BaseFacility*>::const_iterator, bool>* > facConnections;
+	std::pair<std::vector<BaseFacility*>::const_iterator, bool>* gridPair[BASE_SIZE][BASE_SIZE];
+
+	for (size_t
 			x = 0;
-			x < BASE_SIZE;
+			x != BASE_SIZE;
 			++x)
 	{
-		for (int
+		for (size_t
 				y = 0;
-				y < BASE_SIZE;
+				y != BASE_SIZE;
 				++y)
 		{
-			grid[x][y] = 0;
+			gridPair[x][y] = 0;
 		}
 	}
 
-	for (std::vector<BaseFacility*>::const_iterator // fill up the grid(+facConnStates), and search the lift
+	const BaseFacility* lift = NULL;
+
+	for (std::vector<BaseFacility*>::const_iterator // fill up the gridPair(+facConnections), and search the lift
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
 	{
-		if (*i != remFac)
+		if (*i != ignoreFac)
 		{
-			if ((*i)->getRules()->isLift())
+			if ((*i)->getRules()->isLift() == true)
 				lift = *i;
 
-			for (int
+			for (size_t
 					x = 0;
 					x != (*i)->getRules()->getSize();
 					++x)
 			{
-				for (int
+				for (size_t
 						y = 0;
 						y != (*i)->getRules()->getSize();
 						++y)
 				{
-					std::pair<std::vector<BaseFacility*>::const_iterator, bool>* p =
+					std::pair<std::vector<BaseFacility*>::const_iterator, bool>* pairsOfFacsBool =
 							new std::pair<std::vector<BaseFacility*>::const_iterator, bool>(
 																						i,
 																						false);
-
-					facConnStates.push_back(p);
-					grid[(*i)->getX() + x][(*i)->getY() + y] = p;
+					facConnections.push_back(pairsOfFacsBool);
+					gridPair[static_cast<size_t>((*i)->getX()) + x]
+							[static_cast<size_t>((*i)->getY()) + y] = pairsOfFacsBool; // lol
 				}
 			}
 		}
 	}
 
-	// we're in real trouble if this happens...
 	if (lift == NULL)
 		return ret; // TODO: something clever.
 
 
-	// Now make the recursion manually using a stack
-	std::stack<std::pair<int, int> > stack;
-	stack.push(std::make_pair(
-							lift->getX(),
-							lift->getY()));
-	while (stack.empty() == false)
+	// make the recursion manually using a stack
+	size_t
+		x,y;
+	std::stack<std::pair<size_t, size_t> > stuff;
+	stuff.push(std::make_pair(
+							static_cast<size_t>(lift->getX()),
+							static_cast<size_t>(lift->getY())));
+	while (stuff.empty() == false)
 	{
-		int
-			x = stack.top().first,
-			y = stack.top().second;
+		x = stuff.top().first,
+		y = stuff.top().second;
 
-		stack.pop();
+		stuff.pop();
 
-		if (x > -1
-			&& x < BASE_SIZE
-			&& y > -1
-			&& y < BASE_SIZE
-			&& grid[x][y] != 0
-			&& !grid[x][y]->second)
+		if (//   x > -1			// -> hopefully x&y will never point outside the baseGrid
+			//&& x < BASE_SIZE
+			//&& y > -1
+			//&& y < BASE_SIZE &&
+			   gridPair[x][y] != NULL
+			&& gridPair[x][y]->second == false)
 		{
-			grid[x][y]->second = true;
+			gridPair[x][y]->second = true;
 
-			BaseFacility
-				* fac = *(grid[x][y]->first),
+			const BaseFacility
+				* const fac = *(gridPair[x][y]->first),
 
-				* neighborLeft = (x - 1 > -1 && grid[x - 1][y] != 0)? *(grid[x - 1][y]->first): 0,
-				* neighborRight = (x + 1 < BASE_SIZE && grid[x + 1][y] != 0)? *(grid[x + 1][y]->first): 0,
-
-				* neighborTop = (y - 1 > -1 && grid[x][y - 1] != 0)? *(grid[x][y - 1]->first): 0,
-				* neighborBottom = (y + 1 < BASE_SIZE && grid[x][y + 1] != 0)? *(grid[x][y + 1]->first): 0;
+				* const neighborLeft =
+						(x > 0 && gridPair[x - 1][y] != NULL) ?
+						*(gridPair[x - 1][y]->first)
+						: NULL,
+				* const neighborRight =
+						(x + 1 < BASE_SIZE && gridPair[x + 1][y] != NULL) ?
+						*(gridPair[x + 1][y]->first)
+						: NULL,
+				* const neighborTop =
+						(y > 0 && gridPair[x][y - 1] != NULL) ?
+						*(gridPair[x][y - 1]->first)
+						: NULL,
+				* const neighborBottom =
+						(y + 1 < BASE_SIZE && gridPair[x][y + 1] != NULL) ?
+						*(gridPair[x][y + 1]->first)
+						: NULL;
 
 			if (fac->getBuildTime() == 0
-				|| (neighborLeft != 0
+				|| (neighborLeft != NULL
 					&& (neighborLeft == fac
 						|| neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x - 1, y));
+				stuff.push(std::make_pair(x - 1, y));
 			}
 
 			if (fac->getBuildTime() == 0
-				|| (neighborRight != 0
+				|| (neighborRight != NULL
 					&& (neighborRight == fac
 						|| neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x + 1, y));
+				stuff.push(std::make_pair(x + 1, y));
 			}
 
 			if (fac->getBuildTime() == 0
-				|| (neighborTop != 0
+				|| (neighborTop != NULL
 					&& (neighborTop == fac
 						|| neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x, y - 1));
+				stuff.push(std::make_pair(x, y - 1));
 			}
 
 			if (fac->getBuildTime() == 0
-				|| (neighborBottom != 0
+				|| (neighborBottom != NULL
 					&& (neighborBottom == fac
 						|| neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x, y + 1));
+				stuff.push(std::make_pair(x, y + 1));
 			}
 		}
 	}
 
-	BaseFacility* lastFac = NULL;
+	const BaseFacility* preEntry = NULL;
 	for (std::vector<std::pair<std::vector<BaseFacility*>::const_iterator, bool>* >::const_iterator
-			i = facConnStates.begin();
-			i != facConnStates.end();
+			i = facConnections.begin();
+			i != facConnections.end();
 			++i)
 	{
-		// Not a connected fac? -> push its iterator into the list!
-		// Oh, and we don't want duplicates (facilities with bigger sizes like hangar)
-		if (*((*i)->first) != lastFac
+		// not a connected fac -> push its iterator onto the list!
+		// and don't take duplicates of large-sized facilities.
+		if (*((*i)->first) != preEntry
 			&& (*i)->second == false)
 		{
 			ret.push_back((*i)->first);
 		}
 
-		lastFac = *((*i)->first);
-		delete *i; // don't need the pair anymore.
+		preEntry = *((*i)->first);
+		delete *i;
 	}
 
 	return ret;
@@ -2468,7 +2481,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 		}
 		else // no craft
 		{
-			bool rem = true;
+			bool destroyCraft = true;
 
 			for (std::vector<Production*>::const_iterator // check productions
 					i = _productions.begin();
@@ -2478,7 +2491,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 				if ((*i)->getRules()->getCategory() == "STR_CRAFT"
 					&& getAvailableHangars() - getUsedHangars() - (*fac)->getRules()->getCrafts() < 0)
 				{
-					rem = false;
+					destroyCraft = false;
 					_engineers += (*i)->getAssignedEngineers();
 
 					delete *i;
@@ -2490,7 +2503,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 					++i;
 			}
 
-			if (rem == true
+			if (destroyCraft == true
 				&& _transfers.empty() == false) // check transfers
 			{
 				for (std::vector<Transfer*>::const_iterator
@@ -2513,19 +2526,18 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 	else if ((*fac)->getRules()->getPsiLaboratories() > 0)
 	{
 		// psi lab destruction: remove any soldiers over the maximum allowable from psi training.
-		int toRemove = (*fac)->getRules()->getPsiLaboratories() - getFreePsiLabs();
+		int qty = (*fac)->getRules()->getPsiLaboratories() - getFreePsiLabs();
 
 		for (std::vector<Soldier*>::const_iterator
 				i = _soldiers.begin();
 				i != _soldiers.end()
-					&& toRemove > 0;
+					&& qty > 0;
 				++i)
 		{
 			if ((*i)->isInPsiTraining())
 			{
 				(*i)->setPsiTraining();
-
-				--toRemove;
+				--qty;
 			}
 		}
 	}
@@ -2534,24 +2546,24 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 		// lab destruction: enforce lab space limits.
 		// take scientists off projects until it all evens out.
 		// research is not cancelled.
-		int toRemove = (*fac)->getRules()->getLaboratories() - getFreeLaboratories();
+		int qty = (*fac)->getRules()->getLaboratories() - getFreeLaboratories();
 
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
-					&& toRemove > 0;
+					&& qty > 0;
 				)
 		{
-			if ((*i)->getAssigned() >= toRemove)
+			if ((*i)->getAssigned() >= qty)
 			{
-				(*i)->setAssigned((*i)->getAssigned() - toRemove);
-				_scientists += toRemove;
+				(*i)->setAssigned((*i)->getAssigned() - qty);
+				_scientists += qty;
 
 				break;
 			}
 			else
 			{
-				toRemove -= (*i)->getAssigned();
+				qty -= (*i)->getAssigned();
 				_scientists += (*i)->getAssigned();
 				(*i)->setAssigned(0);
 
@@ -2566,24 +2578,24 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 	{
 		// workshop destruction: similar to lab destruction, but we'll lay off engineers instead. kL_note: huh!!!!
 		// in this case, however, production IS cancelled, as it takes up space in the workshop.
-		int toRemove = (*fac)->getRules()->getWorkshops() - getFreeWorkshops();
-//		int toRemove = getUsedWorkshops() - (getAvailableWorkshops() - (*fac)->getRules()->getWorkshops());
+		int qty = (*fac)->getRules()->getWorkshops() - getFreeWorkshops();
+//		int qty = getUsedWorkshops() - (getAvailableWorkshops() - (*fac)->getRules()->getWorkshops());
 		for (std::vector<Production*>::const_iterator
 				i = _productions.begin();
 				i != _productions.end()
-					&& toRemove > 0;
+					&& qty > 0;
 				)
 		{
-			if ((*i)->getAssignedEngineers() > toRemove)
+			if ((*i)->getAssignedEngineers() > qty)
 			{
-				(*i)->setAssignedEngineers((*i)->getAssignedEngineers() - toRemove);
-				_engineers += toRemove;
+				(*i)->setAssignedEngineers((*i)->getAssignedEngineers() - qty);
+				_engineers += qty;
 
 				break;
 			}
 			else
 			{
-				toRemove -= (*i)->getAssignedEngineers();
+				qty -= (*i)->getAssignedEngineers();
 				_engineers += (*i)->getAssignedEngineers();
 
 				delete *i;
@@ -2695,15 +2707,14 @@ void Base::cleanupDefenses(bool reclaimItems)
 	{
 		if (reclaimItems == true)
 		{
-			RuleItem* const rule = (*i)->getRules();
-			std::string type = rule->getType();
-			_items->addItem(type);
-			if (rule->getCompatibleAmmo()->empty() == false)
+			RuleItem* const itRule = (*i)->getRules();
+			_items->addItem(itRule->getType());
+			if (itRule->getCompatibleAmmo()->empty() == false)
 			{
-				const RuleItem* const ammo = _rules->getItem(rule->getCompatibleAmmo()->front());
-				const int ammoPerVehicle = ammo->getClipSize();
+				const RuleItem* const amRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
+				const int ammoPerVehicle = amRule->getClipSize();
 				_items->addItem(
-							ammo->getType(),
+							amRule->getType(),
 							ammoPerVehicle);
 			}
 		}

@@ -336,7 +336,7 @@ void MonthlyReportState::calculateChanges()
 		total = 0,
 		aLienTotal = 0;
 
-	size_t lastMonth = _savedGame->getFundsList().size() - 2;
+	const size_t lastMonth = _savedGame->getFundsList().size() - 2;
 
 	for (std::vector<Region*>::const_iterator
 			i = _savedGame->getRegions()->begin();

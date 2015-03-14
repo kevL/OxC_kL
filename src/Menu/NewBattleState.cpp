@@ -524,7 +524,6 @@ void NewBattleState::initPlay()
 
 	_game->setSavedGame(savedGame);
 	cbxMissionChange(NULL);
-	Log(LOG_INFO) << "NewBattleState::initPlay() EXIT";
 }
 
 /**

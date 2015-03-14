@@ -47,7 +47,7 @@ private:
 		_y;
 
 	Base* _base;
-	Craft* _craftForDrawing; // craft, used for drawing facility
+	const Craft* _craft;
 	RuleBaseFacility* _rules;
 
 
@@ -79,7 +79,7 @@ private:
 		/// Gets the facility's construction time.
 		int getBuildTime() const;
 		/// Sets the facility's construction time.
-		void setBuildTime(int time);
+		void setBuildTime(int buildTime);
 
 		/// Builds up the facility.
 		void build();
@@ -88,9 +88,9 @@ private:
 		bool inUse() const;
 
 		/// Gets craft, used for drawing facility.
-		Craft* getCraft() const;
+		const Craft* const getCraft() const;
 		/// Sets craft, used for drawing facility.
-		void setCraft(Craft* craft);
+		void setCraft(const Craft* const craft);
 };
 
 }

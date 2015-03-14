@@ -38,7 +38,7 @@ struct Element
 	int
 		x,y,
 		w,h;
-//	Uint8
+//	Uint8 // <- fucko-fuclo'd
 	int
 		color,
 		color2,

@@ -54,8 +54,6 @@ class Base
 {
 
 private:
-	static const int BASE_SIZE = 6;
-
 	bool
 		_inTactical,
 		_retaliationTarget;
@@ -87,6 +85,8 @@ private:
 
 
 	public:
+		static const size_t BASE_SIZE = 6;
+
 		/// Creates a new base.
 		Base(const Ruleset* rules);
 		/// Cleans up the base.
@@ -274,7 +274,7 @@ private:
 		/// Destroys all disconnected facilities in the base.
 		void destroyDisconnectedFacilities();
 		/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
-		std::list<std::vector<BaseFacility*>::const_iterator> getDisconnectedFacilities(BaseFacility* remFac);
+		std::list<std::vector<BaseFacility*>::const_iterator> getDisconnectedFacilities(BaseFacility* ignoreFac);
 		/// Destroys a facility and deals with the side effects.
 		void destroyFacility(std::vector<BaseFacility*>::const_iterator fac);
 

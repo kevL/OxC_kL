@@ -24,6 +24,7 @@
 //#include <cmath>
 
 #include "Craft.h"
+#include "SerializationHelper.h"
 
 //#include "../Engine/Language.h"
 
@@ -38,8 +39,7 @@ Target::Target()
 	:
 		_lon(0.),
 		_lat(0.)
-{
-}
+{}
 
 /**
  * Make sure no crafts are chasing this target.
@@ -48,7 +48,7 @@ Target::~Target()
 {
 	for (size_t
 			i = 0;
-			i < _followers.size();
+			i != _followers.size();
 			++i)
 	{
 		Craft* const craft = dynamic_cast<Craft*>(_followers[i]);
@@ -75,10 +75,13 @@ YAML::Node Target::save() const
 {
 	YAML::Node node;
 
-	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
-	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
 //	node["lon"] = _lon;
 //	node["lat"] = _lat;
+//c++11
+//	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
+//	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
+	node["lon"] = serializeDouble(_lon);
+	node["lat"] = serializeDouble(_lat);
 
 	return node;
 }
@@ -91,10 +94,13 @@ YAML::Node Target::saveId() const
 {
 	YAML::Node node;
 
-	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
-	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
 //	node["lon"] = _lon;
 //	node["lat"] = _lat;
+//c++11
+//	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
+//	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
+	node["lon"] = serializeDouble(_lon);
+	node["lat"] = serializeDouble(_lat);
 
 	return node;
 }
@@ -116,7 +122,7 @@ void Target::setLongitude(double lon)
 {
 	_lon = lon;
 
-	// Keep between 0 and 2xPI
+	// keep between 0 and 2PI
 	while (_lon < 0.)
 		_lon += M_PI * 2.;
 

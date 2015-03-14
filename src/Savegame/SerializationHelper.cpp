@@ -20,6 +20,7 @@
 #include "SerializationHelper.h"
 
 //#include <assert.h>
+//#include <sstream>
 
 
 namespace OpenXcom
@@ -74,7 +75,7 @@ void serializeInt(
 		break;
 		case 2:
 			assert(value < 65536);
-			*(Sint16*)*buffer = value;
+			*(Sint16*)*buffer = value; // VC++ says this is a spotty typecast (INT->SINT16).
 		break;
 		case 3:
 			assert(false); // no.
@@ -89,6 +90,18 @@ void serializeInt(
 	}
 
 	*buffer += sizeKey;
+}
+
+/**
+ *
+ */
+std::string serializeDouble(double value)
+{
+	std::ostringstream oststr;
+	oststr.precision(std::numeric_limits<double>::digits10 + 2);
+	oststr << value;
+
+	return oststr.str();
 }
 
 }

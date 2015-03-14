@@ -58,11 +58,11 @@ private:
 		_psiLabs,
 		_radarChance,
 		_radarRange,
-		_size,
 		_spriteFacility,
 		_spriteShape,
 		_storage,
 		_workshops;
+	size_t _size;
 
 	std::string
 		_mapName,
@@ -95,7 +95,7 @@ private:
 		int getSpriteFacility() const;
 
 		/// Gets the facility's size.
-		int getSize() const;
+		size_t getSize() const;
 
 		/// Gets if the facility is an access lift.
 		bool isLift() const;

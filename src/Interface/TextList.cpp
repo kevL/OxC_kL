@@ -836,7 +836,7 @@ size_t TextList::getSelectedRow() const
 	if (_rows.empty() == true
 		|| _selRow >= _rows.size())
 	{
-		return -1; // so what is this, shouldn't it throw() or something instead.
+		return -1; // TODO: so what is this, shouldn't it throw() or something instead.
 	}
 	else
 		return _rows[_selRow];

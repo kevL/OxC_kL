@@ -20,6 +20,8 @@
 #ifndef OPENXCOM_SERHELP_H
 #define OPENXCOM_SERHELP_H
 
+
+//#include <string>
 //#include <SDL_types.h>
 
 
@@ -35,6 +37,10 @@ void serializeInt(
 		Uint8** buffer,
 		Uint8 sizeKey,
 		int value);
+
+///
+std::string serializeDouble(double value);
+
 }
 
 #endif

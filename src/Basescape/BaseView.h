@@ -22,6 +22,8 @@
 
 #include "../Engine/InteractiveSurface.h"
 
+#include "../Savegame/Base.h"
+
 
 namespace OpenXcom
 {
@@ -37,8 +39,7 @@ class Timer;
 
 /**
  * Interactive view of a base.
- * Takes a certain base and displays all its facilities
- * and status, allowing players to manage them.
+ * Takes a Base and displays all its facilities and status.
  */
 class BaseView
 	:
@@ -46,22 +47,21 @@ class BaseView
 {
 
 private:
-	static const int
-		BASE_SIZE = 6,
-		GRID_SIZE = 32;
+	static const int GRID_SIZE = 32;
 
 	bool _blink;
 	int
 		_gridX,
-		_gridY,
-		_selSize;
+		_gridY;
+	size_t _selSize;
 	Uint8
 		_cellColor,
 		_selectorColor;
 
 	Base* _base;
 	BaseFacility
-		* _facilities[BASE_SIZE][BASE_SIZE],
+		* _facilities[Base::BASE_SIZE]
+					 [Base::BASE_SIZE],
 		* _selFacility;
 	Font
 		* _big,
@@ -74,8 +74,8 @@ private:
 
 	/// Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
 	void updateNeighborFacilityBuildTime(
-			BaseFacility* facility,
-			BaseFacility* neighbor);
+			const BaseFacility* const facility,
+			BaseFacility* const neighbor);
 
 
 	public:
@@ -96,22 +96,27 @@ private:
 
 		/// Sets the base to display.
 		void setBase(Base* base);
+
 		/// Sets the texture for this base view.
 		void setTexture(SurfaceSet* texture);
+
 		/// Gets the currently selected facility.
 		BaseFacility* getSelectedFacility() const;
 		/// Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base.
 		void resetSelectedFacility();
+
 		/// Gets the X position of the currently selected square.
 		int getGridX() const;
 		/// Gets the Y position of the currently selected square.
 		int getGridY() const;
+
 		/// Sets whether the base view is selectable.
-		void setSelectable(int facSize);
+		void setSelectable(size_t facSize);
+
 		/// Checks if a facility can be placed.
-		bool isPlaceable(RuleBaseFacility* rule) const;
+		bool isPlaceable(const RuleBaseFacility* const facRule) const;
 		/// Checks if the placed facility is placed in queue or not.
-		bool isQueuedBuilding(RuleBaseFacility* rule) const;
+		bool isQueuedBuilding(const RuleBaseFacility* const facRule) const;
 		/// ReCalculates the remaining build-time of all queued buildings.
 		void reCalcQueuedBuildings();
 

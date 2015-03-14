@@ -123,7 +123,6 @@ void State::add(
 {
 	surface->setPalette(_palette);
 
-	// this only works when dealing with a battlescape button
 	BattlescapeButton* const tacBtn = dynamic_cast<BattlescapeButton*>(surface);
 
 	if (_game->getRuleset()->getInterface(category) != NULL)
@@ -133,18 +132,18 @@ void State::add(
 		{
 			if (parent != NULL)
 			{
-				if (   element->w != -1
-					&& element->h != -1)
-				{
-					surface->setWidth(element->w);
-					surface->setHeight(element->h);
-				}
-
 				if (   element->x != std::numeric_limits<int>::max()
 					&& element->y != std::numeric_limits<int>::max())
 				{
 					surface->setX(parent->getX() + element->x);
 					surface->setY(parent->getY() + element->y);
+				}
+
+				if (   element->w != -1
+					&& element->h != -1)
+				{
+					surface->setWidth(element->w);
+					surface->setHeight(element->h);
 				}
 			}
 
@@ -159,45 +158,16 @@ void State::add(
 
 			if (element->border != -1)
 				surface->setBorderColor(static_cast<Uint8>(element->border));
-/*			if (parent != NULL)
-			{
-				if (   element->w != std::numeric_limits<int>::max()
-					&& element->h != std::numeric_limits<int>::max())
-				{
-					surface->setWidth(element->w);
-					surface->setHeight(element->h);
-				}
-
-				if (   element->x != std::numeric_limits<int>::max()
-					&& element->y != std::numeric_limits<int>::max())
-				{
-					surface->setX(parent->getX() + element->x);
-					surface->setY(parent->getY() + element->y);
-				}
-			}
-
-			if (tacBtn != NULL)
-				tacBtn->setTftdMode(element->TFTDMode);
-
-			if (element->color != std::numeric_limits<int>::max())
-				surface->setColor(static_cast<Uint8>(element->color));
-
-			if (element->color2 != std::numeric_limits<int>::max())
-				surface->setSecondaryColor(static_cast<Uint8>(element->color2));
-
-			if (element->border != std::numeric_limits<int>::max())
-				surface->setBorderColor(static_cast<Uint8>(element->border)); */
 		}
 	}
 
 	if (tacBtn != NULL)
 	{
-		// this will initialize the graphics and settings of the battlescape button.
 		tacBtn->copy(parent);
 		tacBtn->initSurfaces();
 	}
 
-	if (_game->getLanguage() != NULL // set default text resources
+	if (_game->getLanguage() != NULL
 		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(

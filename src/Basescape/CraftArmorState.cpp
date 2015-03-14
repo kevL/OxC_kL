@@ -179,11 +179,11 @@ void CraftArmorState::init()
 		{
 			const int woundPct = (*i)->getWoundPercent();
 			if (woundPct > 50)
-				color = Palette::blockOffset(6);	// orange
+				color = Palette::blockOffset(6); // orange
 			else if (woundPct > 10)
-				color = Palette::blockOffset(9);	// yellow
+				color = Palette::blockOffset(9); // yellow
 			else
-				color = Palette::blockOffset(3);	// green
+				color = Palette::blockOffset(3); // green
 
 			_lstSoldiers->setCellColor(
 									row,

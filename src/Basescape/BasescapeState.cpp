@@ -146,7 +146,6 @@ BasescapeState::BasescapeState(
 					SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)& BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
-//	_view->onKeyboardPress((ActionHandler)& BasescapeState::handleKeyPress);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
@@ -213,23 +212,16 @@ BasescapeState::BasescapeState(
  */
 BasescapeState::~BasescapeState()
 {
-	bool exists = false; // Clean up any temporary bases
-
 	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end()
-				&& exists == false;
+			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
 		if (*i == _base)
-		{
-			exists = true;
-			break;
-		}
+			return;
 	}
 
-	if (exists == false)
-		delete _base;
+	delete _base;
 }
 
 /**
@@ -264,7 +256,6 @@ void BasescapeState::init()
 
 //	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
 
-	// kL_begin:
 	bool
 		hasFunds		= (_game->getSavedGame()->getFunds() > 0),
 		hasQuarters		= false,
@@ -348,7 +339,7 @@ void BasescapeState::init()
 	_btnTransfer->setVisible(hasFunds && (hasStores || hasQuarters || hasCraft || hasAlienCont)); // ditto.
 	_btnFacilities->setVisible(hasFunds);
 
-	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false); // kL_end.
+	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false);
 }
 
 /**
@@ -363,32 +354,32 @@ void BasescapeState::setBase(Base* base)
 
 		for (size_t
 				i = 0;
-				i < _game->getSavedGame()->getBases()->size();
+				i != _game->getSavedGame()->getBases()->size();
 				++i)
 		{
-			if (_game->getSavedGame()->getBases()->at(i) == base)
+			if (base == _game->getSavedGame()->getBases()->at(i))
 			{
 				_base = base;
 				_mini->setSelectedBase(i);
-//kL			_game->getSavedGame()->setSelectedBase(i);
+//				_game->getSavedGame()->setSelectedBase(i);
 
 				exists = true;
 				break;
 			}
 		}
 
-		if (exists == false) // if base was removed, select first one
+		if (exists == false)
 		{
 			_base = _game->getSavedGame()->getBases()->front();
 			_mini->setSelectedBase(0);
-//kL		_game->getSavedGame()->setSelectedBase(0);
+//			_game->getSavedGame()->setSelectedBase(0);
 		}
 	}
-	else // use a blank base for special case when player has no bases
+	else
 	{
 		_base = new Base(_game->getRuleset());
 		_mini->setSelectedBase(0);
-//kL	_game->getSavedGame()->setSelectedBase(0);
+//		_game->getSavedGame()->setSelectedBase(0);
 	}
 }
 
@@ -534,63 +525,43 @@ void BasescapeState::viewLeftClick(Action*)
 	bool bPop = false; // play "wha-wha" sound
 
 	const BaseFacility* const fac = _view->getSelectedFacility();
-	if (fac == NULL)
+
+	if (fac == NULL) // dirt.
 	{
 		bPop = true;
-//		_game->pushState(new BaseInfoState(
-//										_base,
-//										this));
-		_game->pushState(new MonthlyCostsState(
-											_base));
+		_game->pushState(new MonthlyCostsState(_base));
+//		_game->pushState(new BaseInfoState(_base, this));
 	}
 	else if (fac->getBuildTime() > 0)
 		return;
 	else if (fac->getRules()->getCrafts() > 0)
 	{
-/*		if (_base->getCrafts()->size() == 0) // no Craft at base
-		{
-			bPop = true;
-			_game->pushState(new CraftsState(_base));
-		}
-		else if (_base->getCrafts()->size() > 0) // Craft at base
-		{ */
-		for (size_t // kL_begin:
+		for (size_t
 				i = 0;
-				i < _base->getCrafts()->size();
+				i != _base->getCrafts()->size();
 				++i)
 		{
-			const Craft* const craft = _base->getCrafts()->at(i);
-
-			if (fac->getCraft() == NULL							// empty hangar
-				|| fac->getCraft()->getStatus() == "STR_OUT")	// or Craft currently out
+			if (fac->getCraft() == NULL
+				|| fac->getCraft()->getStatus() == "STR_OUT")
 			{
 				bPop = true;
 				_game->pushState(new CraftsState(_base));
 				break;
-/*				if (craft->getStatus() == "STR_OUT")
-				{
-					_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
-					_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
-					kL_reCenter = true;
-					_game->popState(); // pop to Geoscape.
-					break;
-				} */
 			}
-			else if (fac->getCraft() == craft) // craft is docked here
+			else if (fac->getCraft() == _base->getCrafts()->at(i))
 			{
 				_game->pushState(new CraftInfoState(
 												_base,
 												i));
 				break;
 			}
-		} // kL_end.
-//		}
+		}
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{
-//kL	_game->pushState(new SellState(_base));
 		bPop = true;
 		_game->pushState(new StoresState(_base));
+//		_game->pushState(new SellState(_base));
 	}
 	else if (fac->getRules()->getPersonnel() > 0
 		&& _base->getSoldiers()->empty() == false)
@@ -600,7 +571,6 @@ void BasescapeState::viewLeftClick(Action*)
 	}
 	else if (fac->getRules()->getPsiLaboratories() > 0
 			&& Options::anytimePsiTraining == true)
-//			&& _base->getAvailablePsiLabs() > 0)
 	{
 		bPop = true;
 		_game->pushState(new AllocatePsiTrainingState(_base));
@@ -626,23 +596,17 @@ void BasescapeState::viewLeftClick(Action*)
 												_base,
 												OPT_GEOSCAPE));
 	}
-	else if (fac->getRules()->isLift() == true) // my Lift has a radar range ... (see next)
-	{
-//		bPop = true; // plays window-'swish' instead.
+	else if (fac->getRules()->isLift() == true) // Lift has radar range ... (cf. next)
 		_game->pushState(new BaseDetectionState(_base));
-//		_game->pushState(new MonthlyCostsState(_base));
-	}
+
 /*	else if (fac->getRules()->getRadarRange() > 0
 		|| fac->getRules()->isMindShield() == true
 		|| fac->getRules()->isHyperwave() == true)
 	{
 		bPop = true;
-
 		_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(_base->getLatitude());
-
 		kL_reCenter = true;
-
 		_game->popState();
 	} */
 
@@ -664,14 +628,14 @@ void BasescapeState::viewRightClick(Action*)
 			_game->pushState(new ErrorMessageState(
 											tr("STR_FACILITY_IN_USE"),
 											_palette,
-											static_cast<Uint8>(_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color),
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
 											"BACK13.SCR",
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else if (_base->getDisconnectedFacilities(fac).empty() == false)
 			_game->pushState(new ErrorMessageState(
 											tr("STR_CANNOT_DISMANTLE_FACILITY"),
 											_palette,
-											static_cast<Uint8>(_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color),
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
 											"BACK13.SCR",
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else

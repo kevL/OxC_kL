@@ -53,7 +53,7 @@ ErrorMessageState::ErrorMessageState(
 		id,
 		L"",
 		palette,
-		color,
+		static_cast<Uint8>(color),
 		bg,
 		bgColor);
 }

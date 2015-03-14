@@ -3258,8 +3258,8 @@ void BattlescapeState::saveVoxelView()
 			ang_x = ((static_cast<double>(x) / 1024.) * M_PI) + dir;
 
 			targetVoxel.x = originVoxel.x + (static_cast<int>(-std::sin(ang_x) * 1024 * std::sin(ang_y)));
-			targetVoxel.y = originVoxel.y + (static_cast<int>(std::cos(ang_x) * 1024 * std::sin(ang_y)));
-			targetVoxel.z = originVoxel.z + (static_cast<int>(std::cos(ang_y) * 1024));
+			targetVoxel.y = originVoxel.y + (static_cast<int>( std::cos(ang_x) * 1024 * std::sin(ang_y)));
+			targetVoxel.z = originVoxel.z + (static_cast<int>( std::cos(ang_y) * 1024));
 
 			_trajectory.clear();
 
@@ -3351,9 +3351,9 @@ void BattlescapeState::saveVoxelView()
 //			image.push_back((int)((float)(pal[test * 3 + 0]) * dist));
 //			image.push_back((int)((float)(pal[test * 3 + 1]) * dist));
 //			image.push_back((int)((float)(pal[test * 3 + 2]) * dist));
-			image.push_back(static_cast<unsigned char>((double)(pal[test * 3 + 0]) * dist));
-			image.push_back(static_cast<unsigned char>((double)(pal[test * 3 + 1]) * dist));
-			image.push_back(static_cast<unsigned char>((double)(pal[test * 3 + 2]) * dist));
+			image.push_back(static_cast<unsigned char>(static_cast<double>(pal[test * 3 + 0]) * dist));
+			image.push_back(static_cast<unsigned char>(static_cast<double>(pal[test * 3 + 1]) * dist));
+			image.push_back(static_cast<unsigned char>(static_cast<double>(pal[test * 3 + 2]) * dist));
 		}
 	}
 
@@ -3366,7 +3366,7 @@ void BattlescapeState::saveVoxelView()
 		osts.str("");
 		osts << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
 
-		i++;
+		++i;
 	}
 	while (CrossPlatform::fileExists(osts.str()) == true
 		&& i < 999);

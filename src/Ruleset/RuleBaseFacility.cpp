@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleset for a certain type of base facility.
- * @param type String defining the type.
+ * @param type - reference string defining the type
  */
 RuleBaseFacility::RuleBaseFacility(const std::string& type)
 	:
@@ -73,65 +73,61 @@ void RuleBaseFacility::load(
 		int modIndex,
 		int listOrder)
 {
-	_type				= node["type"].as<std::string>(_type);
-	_requires			= node["requires"].as< std::vector<std::string> >(_requires);
+	_type		= node["type"]		.as<std::string>(_type);
+	_requires	= node["requires"]	.as<std::vector<std::string> >(_requires);
 
 	if (node["spriteShape"])
 	{
 		_spriteShape = node["spriteShape"].as<int>(_spriteShape);
-		// BASEBITS.PCK: 34 entries
-		if (_spriteShape > 33)
+		if (_spriteShape > 33) // BASEBITS.PCK: 34 entries
 			_spriteShape += modIndex;
 	}
 
 	if (node["spriteFacility"])
 	{
 		_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
-		// BASEBITS.PCK: 34 entries
-		if (_spriteFacility > 33)
+		if (_spriteFacility > 33) // BASEBITS.PCK: 34 entries
 			_spriteFacility	+= modIndex;
 	}
 
-	_lift				= node["lift"].as<bool>(_lift);
-	_hyper				= node["hyper"].as<bool>(_hyper);
-	_mind				= node["mind"].as<bool>(_mind);
-	_grav				= node["grav"].as<bool>(_grav);
-	_size				= node["size"].as<int>(_size);
-	_buildCost			= node["buildCost"].as<int>(_buildCost);
-	_buildTime			= node["buildTime"].as<int>(_buildTime);
-	_monthlyCost		= node["monthlyCost"].as<int>(_monthlyCost);
-	_storage			= node["storage"].as<int>(_storage);
-	_personnel			= node["personnel"].as<int>(_personnel);
-	_aliens				= node["aliens"].as<int>(_aliens);
-	_crafts				= node["crafts"].as<int>(_crafts);
-	_labs				= node["labs"].as<int>(_labs);
-	_workshops			= node["workshops"].as<int>(_workshops);
-	_psiLabs			= node["psiLabs"].as<int>(_psiLabs);
-	_radarRange			= node["radarRange"].as<int>(_radarRange);
-	_radarChance		= node["radarChance"].as<int>(_radarChance);
-	_defense			= node["defense"].as<int>(_defense);
-	_hitRatio			= node["hitRatio"].as<int>(_hitRatio);
+	_lift				= node["lift"]			.as<bool>(_lift);
+	_hyper				= node["hyper"]			.as<bool>(_hyper);
+	_mind				= node["mind"]			.as<bool>(_mind);
+	_grav				= node["grav"]			.as<bool>(_grav);
+	_size				= node["size"]			.as<int>(_size);
+	_buildCost			= node["buildCost"]		.as<int>(_buildCost);
+	_buildTime			= node["buildTime"]		.as<int>(_buildTime);
+	_monthlyCost		= node["monthlyCost"]	.as<int>(_monthlyCost);
+	_storage			= node["storage"]		.as<int>(_storage);
+	_personnel			= node["personnel"]		.as<int>(_personnel);
+	_aliens				= node["aliens"]		.as<int>(_aliens);
+	_crafts				= node["crafts"]		.as<int>(_crafts);
+	_labs				= node["labs"]			.as<int>(_labs);
+	_workshops			= node["workshops"]		.as<int>(_workshops);
+	_psiLabs			= node["psiLabs"]		.as<int>(_psiLabs);
+	_radarRange			= node["radarRange"]	.as<int>(_radarRange);
+	_radarChance		= node["radarChance"]	.as<int>(_radarChance);
+	_defense			= node["defense"]		.as<int>(_defense);
+	_hitRatio			= node["hitRatio"]		.as<int>(_hitRatio);
 
 	if (node["fireSound"])
 	{
-		_fireSound			= node["fireSound"].as<int>(_fireSound);
-		// GEO.CAT: 14 entries
-		if (_fireSound > 13)
-			_fireSound		+= modIndex;
+		_fireSound = node["fireSound"].as<int>(_fireSound);
+		if (_fireSound > 13) // GEO.CAT: 14 entries
+			_fireSound += modIndex;
 	}
 
 	if (node["hitSound"])
 	{
-		_hitSound			= node["hitSound"].as<int>(_hitSound);
-		// GEO.CAT: 14 entries
-		if (_hitSound > 13)
-			_hitSound		+= modIndex;
+		_hitSound = node["hitSound"].as<int>(_hitSound);
+		if (_hitSound > 13) // GEO.CAT: 14 entries
+			_hitSound += modIndex;
 	}
 
-	_mapName			= node["mapName"].as<std::string>(_mapName);
-	_listOrder			= node["listOrder"].as<int>(_listOrder);
-	if (!_listOrder)
-		_listOrder		= listOrder;
+	_mapName		= node["mapName"]	.as<std::string>(_mapName);
+	_listOrder		= node["listOrder"]	.as<int>(_listOrder);
+	if (_listOrder == 0)
+		_listOrder	= listOrder;
 }
 
 /**
@@ -176,7 +172,7 @@ int RuleBaseFacility::getSpriteFacility() const
  * Gets the size of the facility on the base grid.
  * @return The length in grid squares.
  */
-int RuleBaseFacility::getSize() const
+size_t RuleBaseFacility::getSize() const
 {
 	return _size;
 }
