@@ -124,7 +124,7 @@ void State::add(
 	surface->setPalette(_palette);
 
 	// this only works when dealing with a battlescape button
-	BattlescapeButton* tacBtn = dynamic_cast<BattlescapeButton*>(surface);
+	BattlescapeButton* const tacBtn = dynamic_cast<BattlescapeButton*>(surface);
 
 	if (_game->getRuleset()->getInterface(category) != NULL)
 	{
@@ -132,6 +132,34 @@ void State::add(
 		if (element != NULL)
 		{
 			if (parent != NULL)
+			{
+				if (   element->w != -1
+					&& element->h != -1)
+				{
+					surface->setWidth(element->w);
+					surface->setHeight(element->h);
+				}
+
+				if (   element->x != std::numeric_limits<int>::max()
+					&& element->y != std::numeric_limits<int>::max())
+				{
+					surface->setX(parent->getX() + element->x);
+					surface->setY(parent->getY() + element->y);
+				}
+			}
+
+			if (tacBtn != NULL)
+				tacBtn->setTftdMode(element->TFTDMode);
+
+			if (element->color != -1)
+				surface->setColor(static_cast<Uint8>(element->color));
+
+			if (element->color2 != -1)
+				surface->setSecondaryColor(static_cast<Uint8>(element->color2));
+
+			if (element->border != -1)
+				surface->setBorderColor(static_cast<Uint8>(element->border));
+/*			if (parent != NULL)
 			{
 				if (   element->w != std::numeric_limits<int>::max()
 					&& element->h != std::numeric_limits<int>::max())
@@ -158,7 +186,7 @@ void State::add(
 				surface->setSecondaryColor(static_cast<Uint8>(element->color2));
 
 			if (element->border != std::numeric_limits<int>::max())
-				surface->setBorderColor(static_cast<Uint8>(element->border));
+				surface->setBorderColor(static_cast<Uint8>(element->border)); */
 		}
 	}
 
@@ -173,9 +201,9 @@ void State::add(
 		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(
-						_game->getResourcePack()->getFont("FONT_BIG"),
-						_game->getResourcePack()->getFont("FONT_SMALL"),
-						_game->getLanguage());
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
 	}
 
 	_surfaces.push_back(surface);

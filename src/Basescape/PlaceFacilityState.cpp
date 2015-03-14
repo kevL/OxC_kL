@@ -176,7 +176,7 @@ void PlaceFacilityState::viewClick(Action*)
 
 		_base->getFacilities()->push_back(fac);
 
-		if (Options::allowBuildingQueue)
+		if (Options::allowBuildingQueue == true)
 		{
 			if (_view->isQueuedBuilding(_rule) == true)
 				fac->setBuildTime(std::numeric_limits<int>::max());

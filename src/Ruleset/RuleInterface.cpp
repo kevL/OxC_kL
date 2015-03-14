@@ -62,7 +62,8 @@ void RuleInterface::load(const YAML::Node& node)
 		}
 		else
 			element.w =
-			element.h = std::numeric_limits<int>::max();
+			element.h = -1;
+//			element.h = std::numeric_limits<int>::max();
 
 		if ((*i)["pos"])
 		{
@@ -72,14 +73,17 @@ void RuleInterface::load(const YAML::Node& node)
 		}
 		else
 			element.x =
-			element.y = std::numeric_limits<int>::max();
+			element.y = std::numeric_limits<int>::max(); // note, these could conceivably be "-1"
 
 /*		element.color		= static_cast<Uint8>((*i)["color"]	.as<int>(std::numeric_limits<int>::max()));
 		element.color2		= static_cast<Uint8>((*i)["color2"]	.as<int>(std::numeric_limits<int>::max()));
 		element.border		= static_cast<Uint8>((*i)["border"]	.as<int>(std::numeric_limits<int>::max())); */
-		element.color		= (*i)["color"]		.as<int>(std::numeric_limits<int>::max()); // yep. Too clever by half bullshit. ps Go back to scripts, kiddie.
-		element.color2		= (*i)["color2"]	.as<int>(std::numeric_limits<int>::max()); // ie: add a boolian to spec. if color has been set or not
-		element.border		= (*i)["border"]	.as<int>(std::numeric_limits<int>::max()); // instead of - surprise, surprise - yet more typecasting!
+//		element.color		= (*i)["color"]		.as<int>(std::numeric_limits<int>::max()); // yep. Too clever by half bullshit. ps Go back to scripts, kiddie.
+//		element.color2		= (*i)["color2"]	.as<int>(std::numeric_limits<int>::max()); // ie: add a boolian to spec. if color has been set or not
+//		element.border		= (*i)["border"]	.as<int>(std::numeric_limits<int>::max()); // instead of - surprise, surprise - yet more typecasting!
+		element.color		= (*i)["color"]		.as<int>(-1); // for now just do this <-
+		element.color2		= (*i)["color2"]	.as<int>(-1);
+		element.border		= (*i)["border"]	.as<int>(-1);
 		element.TFTDMode	= (*i)["TFTDMode"]	.as<bool>(false);
 
 		std::string id = (*i)["id"].as<std::string>("");
