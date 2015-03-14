@@ -57,8 +57,7 @@ MiniBaseView::MiniBaseView(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_mode(mode),
 		_texture(NULL),
 		_baseID(0),

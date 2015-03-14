@@ -126,8 +126,8 @@ CraftsState::CraftsState(Base* base)
 
 	_lstCrafts->setArrowColumn(275, ARROW_VERTICAL);
 	_lstCrafts->setColumns(5, 91, 120, 25, 15, 15);
-	_lstCrafts->setSelectable();
 	_lstCrafts->setBackground(_window);
+	_lstCrafts->setSelectable();
 	_lstCrafts->setMargin();
 	_lstCrafts->onMousePress((ActionHandler)& CraftsState::lstCraftsPress);
 	_lstCrafts->onLeftArrowClick((ActionHandler)& CraftsState::lstLeftArrowClick);
@@ -211,91 +211,68 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 	{
 		if (stat == "STR_READY")
 		{
-			_cellColor = Palette::blockOffset(3); // green
+			_cellColor = GREEN;
 			return tr(stat);
 		}
-		else if (stat == "STR_REFUELLING")
-		{
+
+/*		if (stat == "STR_REFUELLING")
 			stat = "STR_REFUELLING_";
-			_cellColor = Palette::blockOffset(4); // lavender
-		}
 		else if (stat == "STR_REARMING")
-		{
 			stat = "STR_REARMING_";
-			_cellColor = Palette::blockOffset(4); // lavender
-		}
 		else if (stat == "STR_REPAIRS")
-		{
-			stat = "STR_REPAIRS_";
-			_cellColor = Palette::blockOffset(4); // lavender
-		}
+			stat = "STR_REPAIRS_"; */
+
+		_cellColor = LAVENDER;
+
+		stat.push_back('_');
 
 		bool delayed;
 		const int hours = craft->getDowntime(delayed);
-		std::wstring wstr = formatTime(
+		std::wstring wst = formatTime(
 									hours,
 									delayed);
-
-		return tr(stat).arg(wstr);
+		return tr(stat).arg(wst);
 	}
 
 	std::wstring status;
-
-/*	Waypoint* wayPt = dynamic_cast<Waypoint*>(craft->getDestination());
-	if (wayPt != NULL)
-		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
-	else */
-
 	if (craft->getLowFuel() == true)
 	{
-		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE"); // "STR_LOW_FUEL"
-		_cellColor = Palette::blockOffset(7); // brown
+		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
+		_cellColor = BROWN;
 	}
 	else if (craft->getMissionComplete() == true)
 	{
-		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE"); // "STR_MISSION_COMPLETE"
-		_cellColor = Palette::blockOffset(7); // brown
+		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
+		_cellColor = BROWN;
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
-		status = tr("STR_RETURNING_TO_BASE"); // "STR_BASE"
-		_cellColor = Palette::blockOffset(7); // brown
+		status = tr("STR_RETURNING_TO_BASE");
+		_cellColor = BROWN;
 	}
 	else if (craft->getDestination() == NULL)
 	{
 		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(8); // blue
+		_cellColor = BLUE;
 	}
 	else
 	{
 		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL)
 		{
-			if (craft->isInDogfight() == true) // chase UFO
-			{
-				status = tr("STR_TAILING_UFO").arg(ufo->getId()); // "STR_UFO_"
-				_cellColor = Palette::blockOffset(6); // yellow
-			}
-			else if (ufo->getStatus() == Ufo::FLYING) // intercept UFO
-			{
-				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId()); // "STR_UFO_"
-				_cellColor = Palette::blockOffset(6); // yellow
-			}
-			else // landed UFO
-			{
-//				status = ufo->getName(_game->getLanguage());
+			if (craft->isInDogfight() == true)
+				status = tr("STR_TAILING_UFO").arg(ufo->getId());
+			else if (ufo->getStatus() == Ufo::FLYING)
+				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
+			else
 				status = tr("STR_DESTINATION_UC_")
 							.arg(ufo->getName(_game->getLanguage()));
-				_cellColor = Palette::blockOffset(6); // yellow
-			}
 		}
-		else // crashed UFO, terrorSite, alienBase, or wayPoint
-		{
-//			status = craft->getDestination()->getName(_game->getLanguage());
+		else
 			status = tr("STR_DESTINATION_UC_")
 						.arg(craft->getDestination()->getName(_game->getLanguage()));
-			_cellColor = Palette::blockOffset(6); // yellow
-		}
+
+		_cellColor = YELLOW;
 	}
 
 	return status;
@@ -311,8 +288,8 @@ std::wstring CraftsState::formatTime(
 		const int total,
 		const bool delayed)
 {
-	std::wostringstream wss;
-	wss << L"(";
+	std::wostringstream woststr;
+	woststr << L"(";
 
 	const int
 		days = total / 24,
@@ -320,21 +297,21 @@ std::wstring CraftsState::formatTime(
 
 	if (days > 0)
 	{
-		wss << tr("STR_DAY", days);
+		woststr << tr("STR_DAY", days);
 
 		if (hours > 0)
-			wss << L" ";
+			woststr << L" ";
 	}
 
 	if (hours > 0)
-		wss << tr("STR_HOUR", hours);
+		woststr << tr("STR_HOUR", hours);
 
 	if (delayed == true)
-		wss << L" +";
+		woststr << L" +";
 
-	wss << L")";
+	woststr << L")";
 
-	return wss.str();
+	return woststr.str();
 }
 
 /**
@@ -413,7 +390,8 @@ void CraftsState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+						- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 				_lstCrafts->scrollUp(false);
@@ -455,7 +433,8 @@ void CraftsState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+						+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 				_lstCrafts->scrollDown(false);

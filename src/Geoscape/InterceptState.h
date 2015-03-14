@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_INTERCEPTSTATE_H
 #define OPENXCOM_INTERCEPTSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -48,6 +48,13 @@ class InterceptState
 {
 
 private:
+	static const Uint8
+		OLIVE	=  48, // Palette::blockOffset(3)
+		GREEN	= 112, // Palette::blockOffset(7)
+		BROWN	= 144, // Palette::blockOffset(9)
+		SLATE	= 160, // Palette::blockOffset(10)
+		PURPLE	= 176; // Palette::blockOffset(11)
+
 	Uint8 _cellColor;
 
 	Base* _base;

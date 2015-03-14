@@ -93,7 +93,7 @@ CraftInfoState::CraftInfoState(
 	_btnCrew		= new TextButton(64, 16, 16, 96);
 	_btnEquip		= new TextButton(64, 16, 16, 120);
 	_btnArmor		= new TextButton(64, 16, 16, 144);
-	_btnInventory	= new TextButton(220, 16, 84, 153);
+	_btnInventory	= new TextButton(220, 16, 84, 144);
 
 	_sprite			= new Surface(32, 38, 144, 50);
 	_weapon1		= new Surface(15, 17, 121, 63);

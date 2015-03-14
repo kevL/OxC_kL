@@ -149,21 +149,19 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
 //					.arg(craft->getSpaceUsed())
 					.arg(craft->getNumSoldiers())
 					.arg(craft->getNumVehicles())
 					.arg(craft->getSpaceAvailable()));
 
-	_txtLoad->setSecondaryColor(Palette::blockOffset(13));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(craft->getLoadCapacity())
 					.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 
-	_lstEquipment->setBackground(_window);
 	_lstEquipment->setArrowColumn(189, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 147, 85, 41);
+	_lstEquipment->setBackground(_window);
 	_lstEquipment->setSelectable();
 	_lstEquipment->setMargin();
 //	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
@@ -284,7 +282,7 @@ void CraftEquipmentState::init()
 	State::init();
 
 	// Reset stuff when coming back from pre-battle Inventory.
-	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
+	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
 	if (battleSave != NULL)
 	{
 		// set selected soldier

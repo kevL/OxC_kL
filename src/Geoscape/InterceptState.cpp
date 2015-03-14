@@ -92,29 +92,26 @@ InterceptState::InterceptState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color); //4
+			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
 
-	add(_window, "window", "geoCraftScreens");
-	add(_txtBase, "text2", "geoCraftScreens");
-	add(_txtCraft, "text2", "geoCraftScreens");
-	add(_txtStatus, "text2", "geoCraftScreens");
-	add(_txtWeapons, "text2", "geoCraftScreens");
-	add(_lstCrafts, "text1", "geoCraftScreens");
-	add(_btnGotoBase, "button", "geoCraftScreens");
-	add(_btnCancel, "button", "geoCraftScreens");
+	add(_window,		"window",	"geoCraftScreens");
+	add(_txtBase,		"text2",	"geoCraftScreens");
+	add(_txtCraft,		"text2",	"geoCraftScreens");
+	add(_txtStatus,		"text2",	"geoCraftScreens");
+	add(_txtWeapons,	"text2",	"geoCraftScreens");
+	add(_lstCrafts,		"text1",	"geoCraftScreens");
+	add(_btnGotoBase,	"button",	"geoCraftScreens");
+	add(_btnCancel,		"button",	"geoCraftScreens");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-//	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& InterceptState::btnGotoBaseClick);
 	_btnGotoBase->setVisible(_base != 0);
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& InterceptState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -124,21 +121,15 @@ InterceptState::InterceptState(
 						(ActionHandler)& InterceptState::btnCancelClick,
 						Options::keyGeoIntercept);
 
-//	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-//	_txtStatus->setColor(Palette::blockOffset(8)+5);
 	_txtStatus->setText(tr("STR_STATUS"));
 
-//	_txtBase->setColor(Palette::blockOffset(8)+5);
 	_txtBase->setBig();
 	_txtBase->setText(tr("STR_INTERCEPT"));
 
-//	_txtWeapons->setColor(Palette::blockOffset(8)+5);
 	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
-//	_lstCrafts->setColor(Palette::blockOffset(15)-1);
-//	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCrafts->setColumns(5, 91, 126, 25, 15, 15);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setSelectable();
@@ -210,7 +201,7 @@ InterceptState::InterceptState(
 									_cellColor,
 									true);
 
-			row++;
+			++row;
 		}
 	}
 
@@ -222,8 +213,7 @@ InterceptState::InterceptState(
  * dTor.
  */
 InterceptState::~InterceptState()
-{
-}
+{}
 
 /**
  * A more descriptive state of the Crafts.
@@ -237,89 +227,68 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 	{
 		if (stat == "STR_READY")
 		{
-			_cellColor = Palette::blockOffset(7); // green //_lstCrafts->getSecondaryColor()
+			_cellColor = GREEN;
 			return tr(stat);
 		}
-		else if (stat == "STR_REFUELLING")
-		{
+
+/*		if (stat == "STR_REFUELLING")
 			stat = "STR_REFUELLING_";
-			_cellColor = Palette::blockOffset(10); // slate gray
-		}
 		else if (stat == "STR_REARMING")
-		{
 			stat = "STR_REARMING_";
-			_cellColor = Palette::blockOffset(10); // slate gray
-		}
 		else if (stat == "STR_REPAIRS")
-		{
-			stat = "STR_REPAIRS_";
-			_cellColor = Palette::blockOffset(10); // slate gray
-		}
+			stat = "STR_REPAIRS_"; */
+
+		_cellColor = SLATE;
+
+		stat.push_back('_');
 
 		bool delayed;
 		const int hours = craft->getDowntime(delayed);
-		const std::wstring wstr = formatTime(
+		const std::wstring wst = formatTime(
 											hours,
 											delayed);
-
-		return tr(stat).arg(wstr);
+		return tr(stat).arg(wst);
 	}
 
 	std::wstring status;
-
-/*	Waypoint* wayPt = dynamic_cast<Waypoint*>(craft->getDestination());
-	if (wayPt != NULL)
-		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
-	else */
-
 	if (craft->getLowFuel() == true)
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9); // brown
+		_cellColor = BROWN;
 	}
 	else if (craft->getMissionComplete() == true)
 	{
 		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9); // brown
+		_cellColor = BROWN;
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
 		status = tr("STR_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9); // brown
+		_cellColor = BROWN;
 	}
 	else if (craft->getDestination() == NULL)
 	{
 		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(3); // olive green
+		_cellColor = OLIVE;
 	}
 	else
 	{
 		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL)
 		{
-			if (craft->isInDogfight() == true) // chase UFO
-			{
+			if (craft->isInDogfight() == true)
 				status = tr("STR_TAILING_UFO").arg(ufo->getId());
-				_cellColor = Palette::blockOffset(11); // purple
-			}
-			else if (ufo->getStatus() == Ufo::FLYING) // intercept UFO
-			{
+			else if (ufo->getStatus() == Ufo::FLYING)
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
-				_cellColor = Palette::blockOffset(11); // purple
-			}
-			else // landed UFO
-			{
+			else
 				status = tr("STR_DESTINATION_UC_")
 							.arg(ufo->getName(_game->getLanguage()));
-				_cellColor = Palette::blockOffset(11); // purple
-			}
 		}
-		else // crashed UFO, terrorSite, alienBase, or wayPoint
-		{
+		else
 			status = tr("STR_DESTINATION_UC_")
 						.arg(craft->getDestination()->getName(_game->getLanguage()));
-			_cellColor = Palette::blockOffset(11); // purple
-		}
+
+		_cellColor = PURPLE;
 	}
 
 	return status;
@@ -335,8 +304,8 @@ std::wstring InterceptState::formatTime(
 		const int total,
 		const bool delayed) const
 {
-	std::wostringstream wss;
-	wss << L"(";
+	std::wostringstream woststr;
+	woststr << L"(";
 
 	const int
 		days = total / 24,
@@ -344,21 +313,21 @@ std::wstring InterceptState::formatTime(
 
 	if (days > 0)
 	{
-		wss << tr("STR_DAY", days);
+		woststr << tr("STR_DAY", days);
 
 		if (hours > 0)
-			wss << L" ";
+			woststr << L" ";
 	}
 
 	if (hours > 0)
-		wss << tr("STR_HOUR", hours);
+		woststr << tr("STR_HOUR", hours);
 
 	if (delayed == true)
-		wss << L" +";
+		woststr << L" +";
 
-	wss << L")";
+	woststr << L")";
 
-	return wss.str();
+	return woststr.str();
 }
 
 /**

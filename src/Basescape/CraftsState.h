@@ -43,6 +43,13 @@ class CraftsState
 {
 
 private:
+	static const Uint8
+		GREEN		=  48, // Palette::blockOffset(3)
+		LAVENDER	=  64, // Palette::blockOffset(4)
+		YELLOW		=  96, // Palette::blockOffset(6)
+		BROWN		= 112, // Palette::blockOffset(7)
+		BLUE		= 128; // Palette::blockOffset(8)
+
 	Uint8 _cellColor;
 
 	Base* _base;
@@ -53,8 +60,8 @@ private:
 		* _txtName,
 		* _txtStatus,
 		* _txtTitle,
+//		* _txtWeapon,
 		* _txtWeapons;
-//		* _txtWeapon;
 	TextButton* _btnOk;
 	TextList* _lstCrafts;
 	Window* _window;

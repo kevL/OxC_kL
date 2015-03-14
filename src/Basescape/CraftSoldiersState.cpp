@@ -115,21 +115,16 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtLoad->setSecondaryColor(Palette::blockOffset(13));
-
 	_txtName->setText(tr("STR_NAME_UC"));
 
 	_txtRank->setText(tr("STR_RANK"));
 
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 116, 85, 71);
-	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstLeftArrowClick);

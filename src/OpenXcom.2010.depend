@@ -4450,7 +4450,7 @@
 1424390945 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
-1424390945 f:\git\openxcom\src\basescape\craftsstate.h
+1426371935 f:\git\openxcom\src\basescape\craftsstate.h
 	"../Engine/State.h"
 
 1424390945 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
@@ -4667,7 +4667,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1425610150 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1426369684 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -6829,8 +6829,7 @@
 1420130453 f:\git\openxcom\src\geoscape\alienterrorstate.h
 	"../Engine/State.h"
 
-1424390939 f:\git\openxcom\src\geoscape\interceptstate.h
-	<vector>
+1426372669 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
 1425152596 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
@@ -8652,7 +8651,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1426365068 source:f:\git\openxcom\src\savegame\base.cpp
+1426366995 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"

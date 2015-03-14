@@ -82,7 +82,7 @@ CraftArmorState::CraftArmorState(
 
 	add(_window,		"window",	"craftArmor");
 	add(_txtTitle,		"text",		"craftArmor");
-	add(_txtBaseLabel);
+	add(_txtBaseLabel,	"text",		"craftArmor");
 	add(_txtName,		"text",		"craftArmor");
 	add(_txtArmor,		"text",		"craftArmor");
 	add(_txtCraft,		"text",		"craftArmor");
@@ -104,7 +104,6 @@ CraftArmorState::CraftArmorState(
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_ARMOR"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
@@ -114,11 +113,10 @@ CraftArmorState::CraftArmorState(
 
 	_txtArmor->setText(tr("STR_ARMOR"));
 
-	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 90, 120, 73);
-	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& CraftArmorState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
@@ -169,7 +167,7 @@ void CraftArmorState::init()
 		{
 			if ((*i)->getCraft() == craft)
 				color = _lstSoldiers->getSecondaryColor();
-			else //if ((*i)->getCraft() != NULL)
+			else
 				color = static_cast<Uint8>(_game->getRuleset()->getInterface("craftArmor")->getElement("otherCraft")->color);
 		}
 
@@ -261,7 +259,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 											soldierID));
 		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
-
+}
 /*kL: sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor.
 		SavedGame* _save;
 		_save = _game->getSavedGame();
@@ -284,7 +282,6 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 			s->setArmor(a);
 			_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 		} */
-}
 
 /**
  * Reorders a soldier up.
