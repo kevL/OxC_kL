@@ -165,7 +165,7 @@ void RuleAlienMission::load(const YAML::Node& node)
  * @param monthsPassed - the number of months that have passed in the game world
  * @return, the string ID of the race
  */
-const std::string RuleAlienMission::generateRace(size_t const monthsPassed) const
+const std::string RuleAlienMission::generateRace(const size_t monthsPassed) const
 {
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator race = _raceDistribution.rbegin();
 	while (monthsPassed < race->first)

@@ -111,7 +111,7 @@ private:
 		const std::string& getType() const
 		{ return _type; }
 		/// Gets the number of waves.
-		size_t getWaveCount() const
+		size_t getWaveTotal() const
 		{ return _waves.size(); }
 		/// Gets the full wave information.
 		const MissionWave& getWave(size_t index) const

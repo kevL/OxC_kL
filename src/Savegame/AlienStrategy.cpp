@@ -74,7 +74,7 @@ void AlienStrategy::init(const Ruleset* rules)
 							*i,
 							region->getWeight());
 
-		WeightedOptions* missions = new WeightedOptions(region->getAvailableMissions());
+		WeightedOptions* const missions = new WeightedOptions(region->getAvailableMissions());
 		_regionMissions.insert(std::make_pair(
 											*i,
 											missions));
@@ -151,7 +151,7 @@ YAML::Node AlienStrategy::save() const
  * @param rules - pointer to the Ruleset
  * @return, the region id
  */
-const std::string AlienStrategy::chooseRandomRegion(const Ruleset* rules)
+const std::string AlienStrategy::chooseRandomRegion(const Ruleset* const rules)
 {
 	std::string chosen = _regionChances.choose();
 	if (chosen.empty() == true)
@@ -191,13 +191,13 @@ bool AlienStrategy::removeMission(
 	assert(found != _regionMissions.end());
 	found->second->setWeight(mission, 0);
 
-	if (found->second->hasNoWeight())
+	if (found->second->hasNoWeight() == true)
 	{
 		_regionMissions.erase(found);
 		_regionChances.setWeight(region, 0);
 	}
 
-	return _regionMissions.empty();
+	return (_regionMissions.empty() == true);
 }
 
 }

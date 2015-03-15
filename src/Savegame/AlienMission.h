@@ -75,7 +75,7 @@ private:
 	/// Spawns an alien base
 	void spawnAlienBase(
 			const Globe& globe,
-			const Game& engine,
+			const Ruleset& rules,
 			const size_t zone);
 
 
@@ -147,11 +147,9 @@ private:
 		/// Handles UFO reaching a waypoint.
 		void ufoReachedWaypoint(
 				Ufo& ufo,
-				const Game& engine,
-				const Globe& globe);
+				const Ruleset& rules);
 		/// Handles UFO lifting from the ground.
 		void ufoLifting(Ufo& ufo);
-//				const Globe& globe);
 		/// Handles UFO shot down.
 		void ufoShotDown(const Ufo& ufo);
 
@@ -164,7 +162,6 @@ private:
 		std::pair<double, double> getWaypoint(
 				const UfoTrajectory& trajectory,
 				const size_t nextWaypoint,
-//				const Globe& globe,
 				const RuleRegion& region);
 		/// Gets a random landing point inside the given region zone.
 		std::pair<double, double> getLandPoint(

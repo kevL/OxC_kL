@@ -41,9 +41,9 @@ namespace OpenXcom
 {
 
 /**
- * User interface string identifier of body parts.
+ * A string array that identifies body parts.
  */
-const std::string PARTS_STRING[6] =
+const std::string BODY_PARTS[6] =
 {
 	"STR_HEAD",
 	"STR_TORSO",
@@ -56,14 +56,14 @@ const std::string PARTS_STRING[6] =
 
 /**
  * Initializes the Medikit view.
- * @param w			- the MinikitView width
- * @param h			- the MinikitView height
- * @param x			- the MinikitView x origin
- * @param y			- the MinikitView y origin
- * @param game		- pointer to the core Game
- * @param unit		- pointer to the wounded BattleUnit
- * @param partTxt	- pointer to a Text; will be updated with the selected body part
- * @param woundTxt	- pointer to a Text; will be updated with the amount of fatal woundage
+ * @param w		- the MedikitView width
+ * @param h		- the MedikitView height
+ * @param x		- the MedikitView x origin
+ * @param y		- the MedikitView y origin
+ * @param game	- pointer to the core Game
+ * @param unit	- pointer to the wounded BattleUnit
+ * @param part	- pointer to Text of the selected body part
+ * @param wound	- pointer to Text of fatal woundage
  */
 MedikitView::MedikitView(
 		int w,
@@ -72,17 +72,19 @@ MedikitView::MedikitView(
 		int y,
 		Game* game,
 		BattleUnit* unit,
-		Text* partTxt,
-		Text* woundTxt)
+		Text* part,
+		Text* wound)
 	:
-		InteractiveSurface(w,h,x,y),
+		InteractiveSurface(
+			w,h,
+			x,y),
 		_game(game),
 		_selectedPart(0),
 		_unit(unit),
-		_partTxt(partTxt),
-		_woundTxt(woundTxt)
+		_txtPart(part),
+		_txtWound(wound)
 {
-	updateSelectedPart();
+	autoSelectPart();
 	_redraw = true;
 }
 
@@ -92,27 +94,27 @@ MedikitView::MedikitView(
 void MedikitView::draw()
 {
 	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
-	Uint8 color;
+	int color;
 
 	this->lock();
 	for (int
 			i = 0;
-			i != srt->getTotalFrames();
+			i != static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)
-			color = static_cast<Uint8>(_game->getRuleset()->getInterface("medikit")->getElement("body")->color2); // red
+			color = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2;
 		else
-			color = static_cast<Uint8>(_game->getRuleset()->getInterface("medikit")->getElement("body")->color); // green
+			color = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
 
-		Surface* const surface = srt->getFrame(i);
-		surface->blitNShade(
-						this,
-						Surface::getX(),
-						Surface::getY(),
-						0,
-						false,
-						color);
+		Surface* const srf = srt->getFrame(i);
+		srf->blitNShade(
+					this,
+					Surface::getX(),
+					Surface::getY(),
+					0,
+					false,
+					color);
 	}
 	this->unlock();
 
@@ -124,14 +126,14 @@ void MedikitView::draw()
 
 
 	std::wostringstream
-		ss1,
-		ss2;
+		woststr1,
+		woststr2;
 
-	ss1 << _game->getLanguage()->getString(PARTS_STRING[_selectedPart]);
-	_partTxt->setText(ss1.str());
+	woststr1 << _game->getLanguage()->getString(BODY_PARTS[static_cast<size_t>(_selectedPart)]);
+	_txtPart->setText(woststr1.str());
 
-	ss2 << _unit->getFatalWound(_selectedPart);
-	_woundTxt->setText(ss2.str());
+	woststr2 << _unit->getFatalWound(_selectedPart);
+	_txtWound->setText(woststr2.str());
 }
 
 /**
@@ -147,13 +149,13 @@ void MedikitView::mouseClick(Action* action, State*)
 		x = static_cast<int>(action->getRelativeXMouse() / action->getXScale()),
 		y = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
 
-	for (size_t
+	for (int
 			i = 0;
-			i < srt->getTotalFrames();
+			i < static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
-		const Surface* const surface = srt->getFrame(i);
-		if (surface->getPixelColor(x, y))
+		const Surface* const srf = srt->getFrame(i);
+		if (srf->getPixelColor(x,y))
 		{
 			_selectedPart = i;
 			_redraw = true;
@@ -165,7 +167,7 @@ void MedikitView::mouseClick(Action* action, State*)
 
 /**
  * Gets the selected body part.
- * @return The selected body part.
+ * @return, the selected body part
  */
 int MedikitView::getSelectedPart() const
 {
@@ -173,15 +175,13 @@ int MedikitView::getSelectedPart() const
 }
 
 /**
- * Updates the selected body part.
- * If there is a wounded body part, selects that.
- * Otherwise does not change the selected part.
+ * Automatically selects a wounded body part.
  */
-void MedikitView::updateSelectedPart()
+void MedikitView::autoSelectPart()
 {
 	for (int
 			i = 0;
-			i < 6;
+			i != 6;
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)

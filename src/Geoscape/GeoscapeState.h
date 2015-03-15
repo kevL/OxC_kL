@@ -43,6 +43,7 @@ class Globe;
 class ImageButton;
 //class InteractiveSurface;
 class MissionSite;
+class Ruleset;
 class SavedGame;
 class Sound;
 class Surface;
@@ -99,6 +100,7 @@ private:
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+	Ruleset* _rules;
 	SavedGame* _savedGame;
 	Surface
 //		* _sidebar,

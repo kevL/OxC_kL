@@ -44,8 +44,8 @@ private:
 	BattleUnit* _unit;
 	Game* _game;
 	Text
-		* _partTxt,
-		* _woundTxt;
+		* _txtPart,
+		* _txtWound;
 
 	/// Handles clicking on the body view.
 	void mouseClick(Action* action, State* state);
@@ -60,16 +60,16 @@ private:
 				int y,
 				Game* game,
 				BattleUnit* unit,
-				Text* partTxt,
-				Text* woundTxt);
+				Text* part,
+				Text* wound);
 
 		/// Draws the body view.
 		void draw();
 
 		/// Gets the selected body part.
 		int getSelectedPart() const;
-		/// Updates the seleted body part.
-		void updateSelectedPart();
+		/// Automatically selects a wounded body part.
+		void autoSelectPart();
 };
 
 }

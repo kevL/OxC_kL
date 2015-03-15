@@ -116,7 +116,7 @@ MedikitTxt::MedikitTxt(int y)
 	:
 		Text(33, 17, 220, y)
 {
-	// Note: we can't set setBig here. The needed font is only set when added to State
+	// Note: can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
 	this->setHighContrast();
 	this->setAlign(ALIGN_CENTER);
@@ -176,25 +176,24 @@ MedikitState::MedikitState(
 		_bg->drawRect(67, 44, 190, 100, Palette::blockOffset(15)+15);
 	}
 
-	_partTxt	= new Text(16, 9, 89, 120);
-	_woundTxt	= new Text(16, 9, 145, 120);
+	_txtPart	= new Text(16, 9, 89, 120);
+	_txtWound	= new Text(16, 9, 145, 120);
 	_mediView	= new MedikitView(
 								52, 58, 95, 60,
 								_game,
 								_targetUnit,
-								_partTxt,
-								_woundTxt);
+								_txtPart,
+								_txtWound);
 
-	_stimButton	= new MedikitButton(84);
-	_painButton	= new MedikitButton(48);
-	_healButton	= new MedikitButton(120);
-	_endButton	= new InteractiveSurface(7, 7, 222, 148);
+	_btnPain	= new MedikitButton(48);
+	_btnStim	= new MedikitButton(84);
+	_btnHeal	= new MedikitButton(120);
+	_btnClose	= new InteractiveSurface(7, 7, 222, 148);
 
-	_painText	= new MedikitTxt(51);
-	_stimTxt	= new MedikitTxt(87);
-	_healTxt	= new MedikitTxt(123);
+	_txtPain	= new MedikitTxt(51);
+	_txtStim	= new MedikitTxt(87);
+	_txtHeal	= new MedikitTxt(123);
 
-	// kL_begin:
 /*	_numTimeUnits	= new NumberText(15, 5, 60, 12); // add x+32 to center these.
 	_barTimeUnits	= new Bar(102, 3, 94, 12);
 
@@ -220,74 +219,64 @@ MedikitState::MedikitState(
 	_numTimeUnits	= new NumberText(15, 5, 90, 164); // add x+32 to center these.
 	_barTimeUnits	= new Bar(102, 3, 120, 165);
 
-
 	add(_numHealth);
 	add(_numStun);
-	add(_numEnergy);
-	add(_numMorale);
-	add(_numTimeUnits);
+	add(_numEnergy,		"numEnergy",	"battlescape");
+	add(_numMorale,		"numMorale",	"battlescape");
+	add(_numTimeUnits,	"numTUs",		"battlescape");
+	add(_barHealth,		"barHealth",	"battlescape");
+	add(_barEnergy,		"barEnergy",	"battlescape");
+	add(_barMorale,		"barMorale",	"battlescape");
+	add(_barTimeUnits,	"barTUs",		"battlescape");
 
-	add(_barHealth);
-	add(_barEnergy);
-	add(_barMorale);
-	add(_barTimeUnits);
+	_numHealth->setColor(Palette::blockOffset(2)+2);	// 10-pips lighter than Battlescape icons value
+	_numStun->setColor(Palette::blockOffset(0)+1);		// not in Interfaces.rul
 
-	_numHealth->setColor(Palette::blockOffset(2)+2);
-	_numStun->setColor(Palette::blockOffset(0)+1);
-	_numEnergy->setColor(Palette::blockOffset(1));
-	_numMorale->setColor(Palette::blockOffset(12));
-	_numTimeUnits->setColor(Palette::blockOffset(4));
-
-	_barHealth->setColor(Palette::blockOffset(2)+2);
-	_barHealth->setSecondaryColor(Palette::blockOffset(5)+2);
 	_barHealth->setScale();
-	_barEnergy->setColor(Palette::blockOffset(1));
 	_barEnergy->setScale();
-	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale();
-	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale();
-	// kL_end.
+
 
 	add(_bg);
-	add(_mediView, "body", "medikit", _bg);
-	add(_endButton);
 
-	add(new MedikitTitle(36, tr("STR_PAIN_KILLER")), "textPK", "medikit", _bg);
-	add(new MedikitTitle(72, tr("STR_STIMULANT")), "textStim", "medikit", _bg);
-	add(new MedikitTitle(108, tr("STR_HEAL")), "textHeal", "medikit", _bg);
+	add(new MedikitTitle( 36, tr("STR_PAIN_KILLER")),	"textPK",	"medikit", _bg);
+	add(new MedikitTitle( 72, tr("STR_STIMULANT")),		"textStim",	"medikit", _bg);
+	add(new MedikitTitle(108, tr("STR_HEAL")),			"textHeal",	"medikit", _bg);
+	// kL_note: Just because you can do it doesn't make it right.
 
-	add(_healButton, "buttonHeal", "medikit", _bg);
-	add(_stimButton, "buttonStim", "medikit", _bg);
-	add(_painButton, "buttonPK", "medikit", _bg);
-	add(_painText, "numPK", "medikit", _bg);
-	add(_stimTxt, "numStim", "medikit", _bg);
-	add(_healTxt, "numHeal", "medikit", _bg);
-	add(_partTxt, "textPart", "medikit", _bg);
-	add(_woundTxt, "numWounds", "medikit", _bg);
+	add(_mediView,	"body",			"medikit", _bg);
+
+	add(_btnHeal,	"buttonHeal",	"medikit", _bg); // not in Interfaces.rul
+	add(_btnStim,	"buttonStim",	"medikit", _bg); // not in Interfaces.rul
+	add(_btnPain,	"buttonPK",		"medikit", _bg); // not in Interfaces.rul
+	add(_txtPain,	"numPain",		"medikit", _bg);
+	add(_txtStim,	"numStim",		"medikit", _bg);
+	add(_txtHeal,	"numHeal",		"medikit", _bg);
+	add(_txtPart,	"textPart",		"medikit", _bg);
+	add(_txtWound,	"numWounds",	"medikit", _bg);
+	add(_btnClose);
 
 	centerAllSurfaces();
 
 
 	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_bg);
 
-	_painText->setBig();
-	_stimTxt->setBig();
-	_healTxt->setBig();
+	_txtPain->setBig();
+	_txtStim->setBig();
+	_txtHeal->setBig();
 
-//	_partTxt->setColor(Palette::blockOffset(2));
-	_partTxt->setHighContrast();
+	_txtPart->setHighContrast();
 
-//	_woundTxt->setColor(Palette::blockOffset(2));
-	_woundTxt->setHighContrast();
+	_txtWound->setHighContrast();
 
-	_endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);
-	_endButton->onKeyboardPress(
-					(ActionHandler)& MedikitState::onEndClick,
+	_btnClose->onMouseClick((ActionHandler)& MedikitState::onCloseClick);
+	_btnClose->onKeyboardPress(
+					(ActionHandler)& MedikitState::onCloseClick,
 					Options::keyCancel);
-	_healButton->onMouseClick((ActionHandler)& MedikitState::onHealClick);
-	_stimButton->onMouseClick((ActionHandler)& MedikitState::onStimulantClick);
-	_painButton->onMouseClick((ActionHandler)& MedikitState::onPainKillerClick);
+	_btnHeal->onMouseClick((ActionHandler)& MedikitState::onHealClick);
+	_btnStim->onMouseClick((ActionHandler)& MedikitState::onStimClick);
+	_btnPain->onMouseClick((ActionHandler)& MedikitState::onPainClick);
 
 	update();
 }
@@ -304,7 +293,7 @@ void MedikitState::handle(Action* action)
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
-//		onEndClick(NULL);
+//		onCloseClick(NULL);
 	}
 }
 
@@ -312,7 +301,7 @@ void MedikitState::handle(Action* action)
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void MedikitState::onEndClick(Action*)
+void MedikitState::onCloseClick(Action*)
 {
 /*	if (Options::maximizeInfoScreens)
 	{
@@ -337,18 +326,18 @@ void MedikitState::onHealClick(Action*)
 	if (heal == 0)
 		return;
 
-	const RuleItem* const rule = _item->getRules();
-	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
+	const RuleItem* const itRule = _item->getRules();
+	if (_unit->spendTimeUnits(itRule->getTUUse()) == true)
 	{
 		++_unit->getStatistics()->medikitApplications;
 
 		_targetUnit->heal(
 					_mediView->getSelectedPart(),
-					rule->getWoundRecovery(),
-					rule->getHealthRecovery());
+					itRule->getWoundRecovery(),
+					itRule->getHealthRecovery());
 
 		_item->setHealQuantity(--heal);
-		_mediView->updateSelectedPart();
+//		_mediView->autoSelectPart();
 		_mediView->invalidate();
 
 		update();
@@ -356,7 +345,7 @@ void MedikitState::onHealClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onEndClick(NULL);
+//		onCloseClick(NULL);
 	}
 }
 
@@ -364,20 +353,20 @@ void MedikitState::onHealClick(Action*)
  * Handler for clicking on the stimulant button.
  * @param action - pointer to an Action
  */
-void MedikitState::onStimulantClick(Action*)
+void MedikitState::onStimClick(Action*)
 {
 	int stimulant = _item->getStimulantQuantity();
 	if (stimulant == 0)
 		return;
 
-	const RuleItem* const rule = _item->getRules();
-	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
+	const RuleItem* const itRule = _item->getRules();
+	if (_unit->spendTimeUnits(itRule->getTUUse()) == true)
 	{
 		++_unit->getStatistics()->medikitApplications;
 
 		_targetUnit->stimulant(
-							rule->getEnergyRecovery(),
-							rule->getStunRecovery());
+							itRule->getEnergyRecovery(),
+							itRule->getStunRecovery());
 		_item->setStimulantQuantity(--stimulant);
 
 		update();
@@ -387,13 +376,13 @@ void MedikitState::onStimulantClick(Action*)
 			&& _targetUnit->getStun() < _targetUnit->getHealth())
 		{
 			_game->popState();
-//			onEndClick(NULL);
+//			onCloseClick(NULL);
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onEndClick(NULL);
+//		onCloseClick(NULL);
 	}
 }
 
@@ -401,14 +390,13 @@ void MedikitState::onStimulantClick(Action*)
  * Handler for clicking on the pain killer button.
  * @param action - pointer to an Action
  */
-void MedikitState::onPainKillerClick(Action*)
+void MedikitState::onPainClick(Action*)
 {
 	int pain = _item->getPainKillerQuantity();
 	if (pain == 0)
 		return;
 
-	const RuleItem* const rule = _item->getRules();
-	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
+	if (_unit->spendTimeUnits(_item->getRules()->getTUUse()) == true)
 	{
 		++_unit->getStatistics()->medikitApplications;
 
@@ -420,7 +408,7 @@ void MedikitState::onPainKillerClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onEndClick(NULL);
+//		onCloseClick(NULL);
 	}
 }
 
@@ -429,11 +417,10 @@ void MedikitState::onPainKillerClick(Action*)
  */
 void MedikitState::update()
 {
-	_painText->setText(toString(_item->getPainKillerQuantity()));
-	_stimTxt->setText(toString(_item->getStimulantQuantity()));
-	_healTxt->setText(toString(_item->getHealQuantity()));
+	_txtPain->setText(toString(_item->getPainKillerQuantity()));
+	_txtStim->setText(toString(_item->getStimulantQuantity()));
+	_txtHeal->setText(toString(_item->getHealQuantity()));
 
-	// kL_begin:
 	double stat = static_cast<double>(_targetUnit->getBaseStats()->health);
 	const int health = _targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
@@ -462,7 +449,6 @@ void MedikitState::update()
 	_barTimeUnits->setMax(100.);
 	_barTimeUnits->setValue(std::ceil(
 							static_cast<double>(tu) / stat * 100.));
-	// kL_end.
 }
 
 }

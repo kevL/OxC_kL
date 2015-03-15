@@ -500,7 +500,7 @@ interfaces:
       - id: errorPalette
         color: 6     # brown
       - id: errorMessage
-        color: 241   # pink
+        color: 100   # lavender 241=pinkmaybe blueprobably whothefuckknowsorevencaresanymore
   - type: gameOver
     elements:
       - id: defeatText
@@ -1023,7 +1023,7 @@ interfaces:
       - id: numEnergy
         color: 16
       - id: numHealth
-        color: 28
+        color: 44 #stock 28
       - id: numMorale
         color: 192
       - id: barTUs
@@ -1031,7 +1031,7 @@ interfaces:
       - id: barEnergy
         color: 16
       - id: barHealth
-        color: 32
+        color: 34 #stock 32
         color2: 82
       - id: barMorale
         color: 192
@@ -1082,7 +1082,7 @@ interfaces:
       - id: icons
         size: [320, 56]
       - id: numLayers
-        color: 92 #was 15
+        color: 92 #stock 15
       - id: warning
         color: 16
         color2: 32
@@ -1195,7 +1195,7 @@ interfaces:
         color: 64
   - type: medikit
     elements:
-      - id: numPK
+      - id: numPain
         color: 16
       - id: numStim
         color: 16

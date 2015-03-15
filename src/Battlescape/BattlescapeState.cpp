@@ -336,7 +336,7 @@ BattlescapeState::BattlescapeState()
 //	if (_rules->getInterface("battlescape")->getElement("icons")->TFTDMode)
 //		_icons->setPixelColor(46, 44, 8);
 
-	add(_rank,				"rank", "battlescape", _icons);
+	add(_rank,				"rank",					"battlescape", _icons);
 	add(_btnWounds);
 	add(_numWounds);
 	add(_btnUnitUp,			"buttonUnitUp",			"battlescape", _icons);
@@ -861,21 +861,15 @@ BattlescapeState::BattlescapeState()
 	_numTUAuto->setColor(Palette::blockOffset(0)+7);
 	_numTUSnap->setColor(Palette::blockOffset(0)+7);
 
-//	_numTimeUnits->setColor(Palette::blockOffset(4));
-//	_numEnergy->setColor(Palette::blockOffset(1));
-//	_numHealth->setColor(Palette::blockOffset(2)+12);
-//	_numMorale->setColor(Palette::blockOffset(12));
-//	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale();
 	_barTimeUnits->setMax(100.);
-//	_barEnergy->setColor(Palette::blockOffset(1));
+
 	_barEnergy->setScale();
 	_barEnergy->setMax(100.);
-//	_barHealth->setColor(Palette::blockOffset(2));
-//	_barHealth->setColor2(Palette::blockOffset(5)+2);
+
 	_barHealth->setScale();
 	_barHealth->setMax(100.);
-//	_barMorale->setColor(Palette::blockOffset(12));
+
 	_barMorale->setScale();
 	_barMorale->setMax(100.);
 

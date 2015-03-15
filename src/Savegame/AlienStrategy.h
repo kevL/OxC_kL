@@ -45,7 +45,8 @@ private:
 
 	/// Disable copy and assignments.
 	AlienStrategy(const AlienStrategy&);
-	AlienStrategy& operator=(const AlienStrategy&);
+	///
+	AlienStrategy& operator = (const AlienStrategy&);
 
 
 	public:
@@ -65,7 +66,7 @@ private:
 				const YAML::Node& node);
 
 		/// Chooses a random region for a regular mission.
-		const std::string chooseRandomRegion(const Ruleset* rules);
+		const std::string chooseRandomRegion(const Ruleset* const rules);
 		/// Chooses a random mission for a region.
 		const std::string chooseRandomMission(const std::string& region) const;
 

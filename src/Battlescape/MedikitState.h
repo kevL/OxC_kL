@@ -57,10 +57,10 @@ private:
 		* _targetUnit,
 		* _unit;
 	InteractiveSurface
-		* _endButton,
-		* _healButton,
-		* _painButton,
-		* _stimButton;
+		* _btnClose,
+		* _btnHeal,
+		* _btnPain,
+		* _btnStim;
 	MedikitView* _mediView;
 	NumberText
 		* _numTimeUnits,
@@ -70,20 +70,20 @@ private:
 		* _numStun;
 	Surface* _bg;
 	Text
-		* _healTxt,
-		* _partTxt,
-		* _painText,
-		* _stimTxt,
-		* _woundTxt;
+		* _txtHeal,
+		* _txtPart,
+		* _txtPain,
+		* _txtStim,
+		* _txtWound;
 
 	/// Handler for the end button.
-	void onEndClick(Action* action);
+	void onCloseClick(Action* action);
 	/// Handler for the heal button.
 	void onHealClick(Action* action);
 	/// Handler for the stimulant button.
-	void onStimulantClick(Action* action);
+	void onStimClick(Action* action);
 	/// Handler for the pain killer button.
-	void onPainKillerClick(Action* action);
+	void onPainClick(Action* action);
 
 	/// Updates the medikit interface.
 	void update();
