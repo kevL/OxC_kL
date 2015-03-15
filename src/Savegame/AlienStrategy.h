@@ -59,7 +59,7 @@ private:
 		YAML::Node save() const;
 
 		/// Initializes values according to the rules.
-		void init(const Ruleset* rules);
+		void init(const Ruleset* const rules);
 		/// Loads the data from YAML.
 		void load(
 				const Ruleset* rules,

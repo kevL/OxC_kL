@@ -61,7 +61,7 @@ AlienStrategy::~AlienStrategy()
  * Gets starting values from the rules.
  * @param rules - pointer to the game Ruleset
  */
-void AlienStrategy::init(const Ruleset* rules)
+void AlienStrategy::init(const Ruleset* const rules)
 {
 	const std::vector<std::string> regions = rules->getRegionsList();
 	for (std::vector<std::string>::const_iterator
@@ -83,8 +83,8 @@ void AlienStrategy::init(const Ruleset* rules)
 
 /**
  * Loads the data from a YAML file.
- * @param rules Pointer to the game ruleset.
- * @param node YAML node.
+ * @param rules	- pointer to the Ruleset (not used)
+ * @param node	- reference a YAML node
  */
 void AlienStrategy::load(
 		const Ruleset*,
@@ -109,8 +109,8 @@ void AlienStrategy::load(
 			i != strat.end();
 			++i)
 	{
-		const std::string region = (*i)["region"].as<std::string>();
-		const YAML::Node& missions = (*i)["missions"];
+		const std::string region	= (*i)["region"].as<std::string>();
+		const YAML::Node& missions	= (*i)["missions"];
 
 		std::auto_ptr<WeightedOptions> options(new WeightedOptions());
 		options->load(missions);
@@ -122,7 +122,7 @@ void AlienStrategy::load(
 
 /**
  * Saves the alien data to a YAML file.
- * @return YAML node.
+ * @return, YAML node.
  */
 YAML::Node AlienStrategy::save() const
 {

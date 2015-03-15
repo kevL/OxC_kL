@@ -47,10 +47,10 @@ class MedikitState
 
 private:
 	Bar
-		* _barTimeUnits,
 		* _barEnergy,
 		* _barHealth,
-		* _barMorale;
+		* _barMorale,
+		* _barTimeUnits;
 	BattleAction* _action;
 	BattleItem* _item;
 	BattleUnit
@@ -63,16 +63,16 @@ private:
 		* _btnStim;
 	MedikitView* _mediView;
 	NumberText
-		* _numTimeUnits,
 		* _numEnergy,
 		* _numHealth,
 		* _numMorale,
-		* _numStun;
+		* _numStun,
+		* _numTimeUnits;
 	Surface* _bg;
 	Text
 		* _txtHeal,
-		* _txtPart,
 		* _txtPain,
+		* _txtPart,
 		* _txtStim,
 		* _txtWound;
 

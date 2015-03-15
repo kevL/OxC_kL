@@ -56,34 +56,30 @@ CraftErrorState::CraftErrorState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color); //4
+			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
 
-	add(_window, "window", "geoCraftScreens");
-	add(_txtMessage, "text1", "geoCraftScreens");
-	add(_btnOk5Secs, "button", "geoCraftScreens");
-	add(_btnOk, "button", "geoCraftScreens");
+	add(_window,		"window",	"geoCraftScreens");
+	add(_txtMessage,	"text1",	"geoCraftScreens");
+	add(_btnOk5Secs,	"button",	"geoCraftScreens");
+	add(_btnOk,			"button",	"geoCraftScreens");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftErrorState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftErrorState::btnOkClick,
 					Options::keyCancel);
 
-//	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& CraftErrorState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& CraftErrorState::btnOk5SecsClick,
 					Options::keyOk);
 
-//	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();

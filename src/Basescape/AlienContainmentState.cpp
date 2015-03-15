@@ -265,20 +265,20 @@ void AlienContainmentState::btnOkClick(Action*)
 									_base,
 									_origin));
 
+		std::string st;
 		if (_origin == OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(
-												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-												_palette,
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
-												"BACK01.SCR",
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
+			st = "BACK01.SCR";
 		else
-			_game->pushState(new ErrorMessageState(
-												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-												_palette,
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
-												"BACK13.SCR",
-												_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
+			st = "BACK13.SCR";
+
+		const int color = _game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color;
+
+		_game->pushState(new ErrorMessageState(
+											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+											_palette,
+											color,
+											st,
+											color));
  	}
 }
 

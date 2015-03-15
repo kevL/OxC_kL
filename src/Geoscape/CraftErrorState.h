@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_CRAFTERRORSTATE_H
 #define OPENXCOM_CRAFTERRORSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 
@@ -35,8 +35,7 @@ class Window;
 
 
 /**
- * Window used to notify the player when
- * an error occurs with a craft procedure.
+ * Window used to notify the player when an error occurs with a craft procedure.
  */
 class CraftErrorState
 	:

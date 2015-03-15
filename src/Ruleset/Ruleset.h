@@ -192,7 +192,7 @@ protected:
 	T* loadRule(
 			const YAML::Node& node,
 			std::map<std::string, T*>* types,
-			std::vector<std::string>* index = 0,
+			std::vector<std::string>* index = NULL,
 			const std::string& key = "type");
 
 

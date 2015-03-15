@@ -4556,7 +4556,7 @@
 1424390938 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1426269276 f:\git\openxcom\src\ruleset\ruleset.h
+1426444882 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4731,7 +4731,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1426373509 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1426442454 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
@@ -5423,7 +5423,7 @@
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
-1426402686 f:\git\openxcom\src\battlescape\medikitstate.h
+1426408399 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
 1424390943 f:\git\openxcom\src\battlescape\pathfinding.h
@@ -5689,7 +5689,7 @@
 1424390944 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1426299494 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1426405079 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5929,7 +5929,7 @@
 
 1424390937 f:\git\openxcom\src\ruleset\rulecountry.h
 
-1426399867 f:\git\openxcom\src\savegame\alienmission.h
+1426445361 f:\git\openxcom\src\savegame\alienmission.h
 
 1424780119 f:\git\openxcom\src\savegame\country.h
 
@@ -7027,7 +7027,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1425254983 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
+1426441683 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
 	"CraftErrorState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7037,8 +7037,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1425245344 f:\git\openxcom\src\geoscape\crafterrorstate.h
-	<string>
+1426441622 f:\git\openxcom\src\geoscape\crafterrorstate.h
 	"../Engine/State.h"
 
 1424390940 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
@@ -7109,7 +7108,7 @@
 1426130385 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
-1426374914 f:\git\openxcom\src\savegame\alienstrategy.h
+1426445097 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
 1424390940 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
@@ -8621,7 +8620,7 @@
 	"AlienBase.h"
 	"../Engine/Language.h"
 
-1426399893 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1426445694 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -11433,7 +11432,7 @@
 
 1424390936 f:\git\openxcom\src\ruleset\rulevideo.h
 
-1426220897 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
+1426442768 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
 	"AlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"

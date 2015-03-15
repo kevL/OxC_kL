@@ -151,7 +151,7 @@ void RuleAlienMission::load(const YAML::Node& node)
 				i != assoc.end();
 				++i)
 		{
-			if (i->second->hasNoWeight()) // Don't keep empty lists.
+			if (i->second->hasNoWeight() == true) // Don't keep empty lists.
 				delete i->second;
 			else
 				_raceDistribution.push_back(*i); // Place it

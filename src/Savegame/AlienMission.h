@@ -68,7 +68,7 @@ private:
 
 	/// Spawns a UFO, based on mission rules.
 	Ufo* spawnUfo(
-			const Ruleset& ruleset,
+			const Ruleset& rules,
 			const Globe& globe,
 			const MissionWave& wave,
 			const UfoTrajectory& trajectory);

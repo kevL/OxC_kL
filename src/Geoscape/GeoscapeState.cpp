@@ -2213,9 +2213,9 @@ void GeoscapeState::time30Minutes()
 	}
 
 
-	const int vp = ((_savedGame->getMonthsPassed() + 3) / 4)
+	const int vp = ((_savedGame->getMonthsPassed() + 2) / 4)
 				 + static_cast<int>(_savedGame->getDifficulty());	// basic Victory Points
-	int ufoVP;														// Beginner @ 1st month ought add 0pts. here
+	int ufoVP;														// Beginner @ 1st/2nd month ought add 0pts. here
 
 	// TODO: vp = vp * _rules->getAlienMission("STR_ALIEN_*")->getPoints() / 100;
 
@@ -2360,7 +2360,7 @@ void GeoscapeState::time1Hour()
 			{
 				(*base)->removeProduction(product->first);
 
-				if (!events.empty()) // myk002_begin: only show the action button for the last completion notification
+				if (events.empty() == false) // myk002_begin: only show the action button for the last completion notification
 					events.back().showGotoBaseButton = false;
 
 				events.push_back(ProductionCompleteInfo(
@@ -2947,7 +2947,7 @@ void GeoscapeState::time1Month()
 	if (RNG::percent(monthsPassed * 2)) // kL
 		determineAlienMissions(); // kL_note: determine another one, I guess.
 
-	setupLandMission();
+	setupLandMission(); // always add a Mission, eg. TerrorMission, to the regular mission <-
 
 	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
 	const int diff = static_cast<int>(_savedGame->getDifficulty()); // kL
@@ -3625,9 +3625,9 @@ void GeoscapeState::handleBaseDefense(
 }
 
 /**
- * Determine the alien missions to start this month.
- * In the vanilla game each month a terror mission
- * and one other are started in random regions.
+ * Determine the alien missions to start each month.
+ * In the vanilla game a terror mission and one other are started in random regions.
+ * @note The very first mission is Sectoid Research in the region of player's first Base.
  * @param atGameStart - true if called at start
  */
 void GeoscapeState::determineAlienMissions(bool atGameStart)
@@ -3638,29 +3638,29 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// One randomly selected mission.
 		//
 		AlienStrategy& strategy = _savedGame->getAlienStrategy();
-		const std::string& targetRegion = strategy.chooseRandomRegion(_rules);
-		const std::string& targetMission = strategy.chooseRandomMission(targetRegion);
+		const std::string& region = strategy.chooseRandomRegion(_rules);
+		const std::string& mission = strategy.chooseRandomMission(region);
 
 		// Choose race for this mission.
-		const RuleAlienMission& missionRules = *_rules->getAlienMission(targetMission);
-		const std::string& alienRace = missionRules.generateRace(_savedGame->getMonthsPassed());
+		const RuleAlienMission& missionRule = *_rules->getAlienMission(mission);
+		const std::string& race = missionRule.generateRace(_savedGame->getMonthsPassed());
 
 		AlienMission* const alienMission = new AlienMission(
-														missionRules,
+														missionRule,
 														*_savedGame);
 		alienMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 		alienMission->setRegion(
-							targetRegion,
+							region,
 							*_rules);
-		alienMission->setRace(alienRace);
+		alienMission->setRace(race);
 		alienMission->start();
 
 		_savedGame->getAlienMissions().push_back(alienMission);
 
 		// Make sure this combination never comes up again.
 		strategy.removeMission(
-							targetRegion,
-							targetMission);
+							region,
+							mission);
 	}
 	else
 	{
@@ -3668,20 +3668,20 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// Sectoid Research at base's region. haha
 		//
 		AlienStrategy& strategy = _savedGame->getAlienStrategy();
-		const std::string targetRegion = _savedGame->locateRegion(*_savedGame->getBases()->front())->getRules()->getType();
+		const std::string region = _savedGame->locateRegion(*_savedGame->getBases()->front())->getRules()->getType();
 
 		// Choose race for this mission.
-		const std::string researchMission = _rules->getAlienMissionList().front();
-		const RuleAlienMission& missionRules = *_rules->getAlienMission(researchMission);
+		const std::string mission = _rules->getAlienMissionList().front();
+		const RuleAlienMission& missionRule = *_rules->getAlienMission(mission);
 
 		AlienMission* const alienMission = new AlienMission(
-														missionRules,
+														missionRule,
 														*_savedGame);
 		alienMission->setId(_savedGame->getId("ALIEN_MISSIONS"));
 		alienMission->setRegion(
-							targetRegion,
+							region,
 							*_rules);
-		const std::string sectoid = missionRules.getTopRace(_savedGame->getMonthsPassed());
+		const std::string sectoid = missionRule.getTopRace(_savedGame->getMonthsPassed());
 		alienMission->setRace(sectoid);
 		alienMission->start(150);
 
@@ -3689,22 +3689,22 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 
 		// Make sure this combination never comes up again.
 		strategy.removeMission(
-							targetRegion,
-							researchMission);
+							region,
+							mission);
 	}
 }
 
 /**
- * Sets up a land mission.
+ * Sets up a land mission. Eg TERROR!!!
  */
 void GeoscapeState::setupLandMission()
 {
-	const RuleAlienMission& missionRules = *_rules->getRandomMission(
+	const RuleAlienMission& missionRule = *_rules->getRandomMission(
 																OBJECTIVE_SITE,
 																_game->getSavedGame()->getMonthsPassed());
 
 	// Determine a random region with a valid mission zone and no mission already running.
-	RuleRegion* regRule;
+	const RuleRegion* regRule;
 	bool picked = false;
 	const std::vector<std::string> regionsList = _rules->getRegionsList();
 
@@ -3718,12 +3718,12 @@ void GeoscapeState::setupLandMission()
 		regRule = _rules->getRegion(regionsList[RNG::generate(
 														0,
 														static_cast<int>(regionsList.size()) - 1)]);
-		if (regRule->getMissionZones().size() > missionRules.getSpawnZone()
+		if (regRule->getMissionZones().size() > missionRule.getSpawnZone()
 			&& _game->getSavedGame()->findAlienMission(
 													regRule->getType(),
 													OBJECTIVE_SITE) == NULL)
 		{
-			const MissionZone& zone = regRule->getMissionZones().at(missionRules.getSpawnZone());
+			const MissionZone& zone = regRule->getMissionZones().at(missionRule.getSpawnZone());
 			for (std::vector<MissionArea>::const_iterator
 					j = zone.areas.begin();
 					j != zone.areas.end()
@@ -3739,14 +3739,14 @@ void GeoscapeState::setupLandMission()
 	// Choose race for land mission.
 	if (picked == true) // safety.
 	{
-		AlienMission* mission = new AlienMission(
-											missionRules,
-											*_savedGame);
+		AlienMission* const mission = new AlienMission(
+													missionRule,
+													*_savedGame);
 		mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		mission->setRegion(
 						regRule->getType(),
 						*_rules);
-		const std::string& race = missionRules.generateRace(static_cast<size_t>(_game->getSavedGame()->getMonthsPassed()));
+		const std::string& race = missionRule.generateRace(static_cast<size_t>(_game->getSavedGame()->getMonthsPassed()));
 		mission->setRace(race);
 		mission->start(150);
 
