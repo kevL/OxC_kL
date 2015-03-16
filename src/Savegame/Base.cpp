@@ -45,6 +45,7 @@
 //#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
+#include "../Geoscape/Globe.h" // Globe::GM_BASE
 
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
@@ -285,8 +286,7 @@ void Base::load(
 		if (t->load(
 				*i,
 				this,
-				_rules,
-				save) == true)
+				_rules) == true)
 		{
 			_transfers.push_back(t);
 		}
@@ -434,7 +434,7 @@ void Base::setName(const std::wstring& name)
 
 /**
  * Returns the globe marker for this Base.
- * @return, the corresponding marker sprite (-1 if none)
+ * @return, marker sprite #0 (-1 if none)
  */
 int Base::getMarker() const
 {
@@ -442,7 +442,7 @@ int Base::getMarker() const
 	if (AreSame(_lon, 0.) && AreSame(_lat, 0.))
 		return -1;
 
-	return 0;
+	return Globe::GM_BASE;
 }
 
 /**

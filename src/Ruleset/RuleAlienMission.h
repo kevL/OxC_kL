@@ -38,24 +38,15 @@ class WeightedOptions;
  */
 struct MissionWave
 {
-	/// The type of the spawned UFOs.
-	std::string ufoType;
-
-	/// The number of UFOs that will be generated.
-	/// The UFOs are generated sequentially, one every @a spawnTimer minutes.
-	size_t ufoCount;
-
-	/// The trajectory ID for this wave's UFOs.
-	/// Trajectories control the way UFOs fly around the Geoscape.
-	std::string trajectory;
-
-	/// Number of minutes between UFOs in the wave.
-	/// The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
-	size_t spawnTimer;
-
-	/// This wave performs the mission objective.
-	/// The UFO executes a special action based on the mission objective.
-	bool objective;
+	std::string ufoType;	// The type of the spawned UFOs.
+	size_t ufoCount;		// The number of UFOs that will be generated.
+							// The UFOs are generated sequentially, one every spawnTimer minutes.
+	std::string trajectory;	// The trajectory ID for this wave's UFOs.
+							// Trajectories control the way UFOs fly around the Geoscape.
+	size_t spawnTimer;		// Number of minutes between UFOs in the wave.
+							// The actual value used is (spawnTimer*1/4) or (spawnTimer*3/4.)
+	bool objective;			// This wave performs the mission objective.
+							// The UFO executes a special action based on the mission objective.
 };
 
 

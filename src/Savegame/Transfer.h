@@ -77,8 +77,7 @@ private:
 		bool load(
 				const YAML::Node& node,
 				Base* base,
-				const Ruleset* rule,
-				SavedGame* save);
+				const Ruleset* rule);
 		/// Saves the transfer to YAML.
 		YAML::Node save() const;
 

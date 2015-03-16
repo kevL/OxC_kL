@@ -1550,56 +1550,12 @@ Node* SavedBattleGame::getSpawnNode(
 	if (legitNodes.empty() == true)
 		return NULL;
 
-	const size_t legit = static_cast<size_t>(RNG::generate(
-														0,
-														static_cast<int>(legitNodes.size()) - 1));
+	const size_t pick = static_cast<size_t>(RNG::generate(
+													0,
+													static_cast<int>(legitNodes.size()) - 1));
 
-	return legitNodes[legit];
+	return legitNodes[pick];
 }
-/*
-Node* SavedBattleGame::getSpawnNode(
-		int unitRank,
-		BattleUnit* unit)
-{
-	std::vector<Node*> legitNodes;
-	int priority = 0;
-
-	for (std::vector<Node*>::const_iterator
-			i = getNodes()->begin();
-			i != getNodes()->end();
-			++i)
-	{
-		if ((*i)->getPriority() > 0						// spawn-priority 0 is not spawnplace
-			&& (*i)->getRank() == unitRank				// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
-				|| unit->getArmor()->getSize() == 1)		// or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
-				|| unit->getMovementType() == MT_FLY)		// or the unit can fly
-			&& setUnitPosition(							// check if unit can be set at this node
-							unit,							// ie. it's big enough
-							(*i)->getPosition(),			// and there's not already a unit there.
-							true))							// testOnly, runs w/ false on return to bgen::addAlien()
-		{
-			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht -> BECAUSE!!!!
-			{
-				priority = (*i)->getPriority();
-				legitNodes.clear(); // drop the last nodes, as we found a higher priority now
-			}
-
-			if ((*i)->getPriority() == priority)
-				legitNodes.push_back((*i));
-		}
-	}
-
-	if (legitNodes.empty())
-		return NULL;
-
-	size_t legit = static_cast<size_t>(RNG::generate(
-												0,
-												static_cast<int>(legitNodes.size()) - 1));
-
-	return legitNodes[legit];
-} */
 
 /**
  * Finds a fitting node where a given unit can patrol to.
@@ -1622,9 +1578,7 @@ Node* SavedBattleGame::getPatrolNode(
 	std::vector<Node*>
 		legitNodes,
 		rankedNodes;
-	Node
-		* node = NULL,
-		* bestNode = NULL;
+	Node* node = NULL;
 
 	size_t eligibleQty;
 	if (scout == true)
@@ -1667,10 +1621,8 @@ Node* SavedBattleGame::getPatrolNode(
 				|| unit->getFaction() != FACTION_HOSTILE)					// but civies do!
 			&& (node != curNode											// scouts push forward
 				|| scout == false)											// others can mill around.. ie, stand there
-//			&& node->getPosition().x > 0								// x-pos valid
-//			&& node->getPosition().y > 0)								// y-pos valid
-			&& node->getPosition().x > -1								// kL: x-pos valid
-			&& node->getPosition().y > -1)								// kL: y-pos valid
+			&& node->getPosition().x > -1								// x-pos valid
+			&& node->getPosition().y > -1)								// y-pos valid
 		{
 			for (int
 					j = node->getFlags();
@@ -1681,7 +1633,8 @@ Node* SavedBattleGame::getPatrolNode(
 			}
 
 			if (scout == false
-				&& node->getRank() == Node::nodeRank[unit->getRankInt()][0]) // high-class node here.
+				&& node->getRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
+													[0])				// high-class node here.
 			{
 				rankedNodes.push_back(node);
 			}

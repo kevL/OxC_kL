@@ -83,52 +83,52 @@ void UnitFallBState::think()
 {
 	//Log(LOG_INFO) << "UnitFallBState::think()";
 	for (std::list<BattleUnit*>::const_iterator
-			unit = _parent->getSave()->getFallingUnits()->begin();
-			unit != _parent->getSave()->getFallingUnits()->end();
+			unitFalling = _parent->getSave()->getFallingUnits()->begin();
+			unitFalling != _parent->getSave()->getFallingUnits()->end();
 			)
 	{
-		//Log(LOG_INFO) << ". falling ID = " << (*unit)->getId();
-		if ((*unit)->isOut(true, true) == true)
-//		if ((*unit)->getHealth() == 0
-//			|| (*unit)->getStun() >= (*unit)->getHealth())
+		//Log(LOG_INFO) << ". falling ID = " << (*unitFalling)->getId();
+		if ((*unitFalling)->isOut(true, true) == true)
+//		if ((*unitFalling)->getHealth() == 0
+//			|| (*unitFalling)->getStun() >= (*unitFalling)->getHealth())
 		{
 			//Log(LOG_INFO) << ". dead OR stunned, Erase & cont";
-			unit = _parent->getSave()->getFallingUnits()->erase(unit);
+			unitFalling = _parent->getSave()->getFallingUnits()->erase(unitFalling);
 			continue;
 		}
 
-		if ((*unit)->getStatus() == STATUS_TURNING)
+		if ((*unitFalling)->getStatus() == STATUS_TURNING)
 		{
 			//Log(LOG_INFO) << ". STATUS_TURNING, abortTurn()";
-			(*unit)->setStatus(STATUS_STANDING);
+			(*unitFalling)->setStatus(STATUS_STANDING);
 		}
 
 		bool
 			fallCheck = true,
-			falling = true,
-			onScreen = (*unit)->getUnitVisible()
-					&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition());
-//		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition(), true, size, false));
-		const int unitSize = (*unit)->getArmor()->getSize() - 1;
-		Tile* tBelow = NULL;
+			falling = true;
+//			onScreen = (*unitFalling)->getUnitVisible()
+//					&& _parent->getMap()->getCamera()->isOnScreen((*unitFalling)->getPosition());
+//		bool onScreen = ((*unitFalling)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unitFalling)->getPosition(), true, size, false));
+
+		BattleUnit* unitBelow;
+		Tile* tileBelow;
+
+		const int unitSize = (*unitFalling)->getArmor()->getSize() - 1;
 
 		for (int
 				x = unitSize; // units = 0; large = 1
-				x > -1;
+				x != -1;
 				--x)
 		{
 			for (int
 					y = unitSize; // units = 0; large = 1
-					y > -1;
+					y != -1;
 					--y)
 			{
-				tBelow = _parent->getSave()->getTile(
-												(*unit)->getPosition()
-												+ Position(x,y,-1));
-				if (_parent->getSave()->getTile(
-											(*unit)->getPosition()
-											+ Position(x,y,0))->hasNoFloor(tBelow) == false
-					|| (*unit)->getMovementType() == MT_FLY)
+				tileBelow = _parent->getSave()->getTile((*unitFalling)->getPosition() + Position(x,y,-1));
+				if (_parent->getSave()->getTile((*unitFalling)->getPosition() + Position(x,y,0))
+												->hasNoFloor(tileBelow) == false
+					|| (*unitFalling)->getMovementType() == MT_FLY)
 				{
 					//Log(LOG_INFO) << ". . fallCheck set FALSE";
 					fallCheck = false;
@@ -136,120 +136,105 @@ void UnitFallBState::think()
 			}
 		}
 
-		tBelow = _parent->getSave()->getTile(
-										(*unit)->getPosition()
-										+ Position(0,0,-1));
+		tileBelow = _parent->getSave()->getTile((*unitFalling)->getPosition() + Position(0,0,-1));
 
 		falling = fallCheck
-			   && (*unit)->getPosition().z != 0
-			   && (*unit)->getTile()->hasNoFloor(tBelow)
-//			   && (*unit)->getMovementType() != MT_FLY // done above in fallCheck
-			   && (*unit)->getWalkingPhase() == 0;
+			   && (*unitFalling)->getPosition().z != 0
+			   && (*unitFalling)->getTile()->hasNoFloor(tileBelow)
+//			   && (*unitFalling)->getMovementType() != MT_FLY // done above in fallCheck
+			   && (*unitFalling)->getWalkingPhase() == 0;
 
-		BattleUnit* uBelow = NULL;
-
-		if (falling)
+		if (falling == true)
 		{
 			for (int // tile(s) that unit is falling into:
 					x = unitSize;
-					x > -1;
+					x != -1;
 					--x)
 			{
 				for (int
 						y = unitSize;
-						y > -1;
+						y != -1;
 						--y)
 				{
-					tBelow = _parent->getSave()->getTile(
-													(*unit)->getPosition()
-													+ Position(x,y,-1));
-					_tilesToFallInto.push_back(tBelow);
+					tileBelow = _parent->getSave()->getTile((*unitFalling)->getPosition() + Position(x,y,-1));
+					_tilesToFallInto.push_back(tileBelow);
 				}
 			}
 
 			// Check each tile for units that need moving out of the way.
 			for (std::vector<Tile*>::const_iterator
 					i = _tilesToFallInto.begin();
-					i < _tilesToFallInto.end();
+					i != _tilesToFallInto.end();
 					++i)
 			{
-				uBelow = (*i)->getUnit();
-				if (uBelow != NULL
-					&& *unit != uBelow	// falling units do not fall on themselves
-					&& std::find(		// already added
-								_unitsToMove.begin(),
-								_unitsToMove.end(),
-								uBelow) == _unitsToMove.end())
+				unitBelow = (*i)->getUnit();
+				if (unitBelow != NULL
+					&& *unitFalling != unitBelow	// falling units do not fall on themselves
+					&& std::find(					// already added
+							_unitsToMove.begin(),
+							_unitsToMove.end(),
+							unitBelow) == _unitsToMove.end())
 				{
-					//Log(LOG_INFO) << ". . . Move, ID " << uBelow->getId();
-					_unitsToMove.push_back(uBelow);
+					//Log(LOG_INFO) << ". . . Move, ID " << unitBelow->getId();
+					_unitsToMove.push_back(unitBelow);
 				}
 			}
 		}
 
-		if ((*unit)->getStatus() == STATUS_WALKING
-			|| (*unit)->getStatus() == STATUS_FLYING)
+		if ((*unitFalling)->getStatus() == STATUS_WALKING
+			|| (*unitFalling)->getStatus() == STATUS_FLYING)
 		{
 			//Log(LOG_INFO) << ". . call keepWalking()";
-			(*unit)->keepWalking(tBelow, true);		// advances the phase
-			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
-		}											// kL_note: might need set cache invalid...
+			(*unitFalling)->keepWalking(tileBelow, true);	// advances the phase
+			_parent->getMap()->cacheUnit(*unitFalling);		// make sure the unitFalling sprites are up to date
+		}													// kL_note: might need set cache invalid...
 
 		falling = fallCheck
-					&& (*unit)->getPosition().z != 0
-					&& (*unit)->getTile()->hasNoFloor(tBelow)
-//					&& (*unit)->getMovementType() != MT_FLY // done above in fallCheck
-					&& (*unit)->getWalkingPhase() == 0;
+					&& (*unitFalling)->getPosition().z != 0
+					&& (*unitFalling)->getTile()->hasNoFloor(tileBelow)
+//					&& (*unitFalling)->getMovementType() != MT_FLY // done above in fallCheck
+					&& (*unitFalling)->getWalkingPhase() == 0;
 
 		//Log(LOG_INFO) << ". new fallCheck = " << fallCheck;
 
 		// The unit has moved from one tile to the other.
 		// kL_note: Can prob. use _tileSwitchDone around here...
-		if ((*unit)->getPosition() != (*unit)->getLastPosition())
+		if ((*unitFalling)->getPosition() != (*unitFalling)->getLastPosition())
 		{
-			// Reset tiles moved from
-			for (int
+			for (int // reset tiles moved from
 					x = unitSize;
-					x > -1;
+					x != -1;
 					--x)
 			{
 				for (int
 						y = unitSize;
-						y > -1;
+						y != -1;
 						--y)
 				{
-					// A falling unit might have already taken up this position so check that this unit is still here.
-					if (_parent->getSave()->getTile(
-												(*unit)->getLastPosition()
-												+ Position(x,y,0))->getUnit() == *unit)
+					// Another falling unit might have already taken up this position so check that that unit is still there.
+					if (_parent->getSave()->getTile((*unitFalling)->getLastPosition() + Position(x,y,0))->getUnit() == *unitFalling)
 					{
 						//Log(LOG_INFO) << ". Tile is not occupied";
-						_parent->getSave()->getTile(
-												(*unit)->getLastPosition()
-												+ Position(x,y,0))->setUnit(NULL);
+						_parent->getSave()->getTile((*unitFalling)->getLastPosition() + Position(x,y,0))->setUnit(NULL);
 					}
 				}
 			}
 
-			// Update tiles moved to.
-			for (int
+			for (int // update tiles moved to.
 					x = unitSize;
-					x > -1;
+					x != -1;
 					--x)
 			{
 				for (int
 						y = unitSize;
-						y > -1;
+						y != -1;
 						--y)
 				{
 					//Log(LOG_INFO) << ". setUnit to belowTile";
-					_parent->getSave()->getTile(
-											(*unit)->getPosition()
-											+ Position(x,y,0))->setUnit(
-																	*unit,
-																	_parent->getSave()->getTile(
-																							(*unit)->getPosition()
-																							+ Position(x,y,-1)));
+					_parent->getSave()->getTile((*unitFalling)->getPosition() + Position(x,y,0))
+										->setUnit(
+												*unitFalling,
+												_parent->getSave()->getTile((*unitFalling)->getPosition() + Position(x,y,-1)));
 				}
 			}
 
@@ -258,79 +243,80 @@ void UnitFallBState::think()
 			{
 				//Log(LOG_INFO) << ". unitsToMove not empty";
 				std::vector<Tile*> escapeTiles;
+
 				for (std::vector<BattleUnit*>::const_iterator
-						u = _unitsToMove.begin();
-						u < _unitsToMove.end();
+						unitToMove = _unitsToMove.begin();
+						unitToMove != _unitsToMove.end();
 						)
 				{
-					//Log(LOG_INFO) << ". moving unit ID " << (*u)->getId();
-					uBelow = *u;
+					//Log(LOG_INFO) << ". moving unit ID " << (*unitToMove)->getId();
+					unitBelow = *unitToMove;
 					bool escape = false;
 
-					// We need to move all sections of the unit out of the way.
-					const int uSize = uBelow->getArmor()->getSize() - 1;
-					std::vector<Position> bodySections;
+					// need to move all sections of unitBelow out of the way.
+					const int belowSize = unitBelow->getArmor()->getSize() - 1;
+					std::vector<Position> bodyPositions;
 					for (int
-							x = uSize;
-							x > -1;
+							x = belowSize;
+							x != -1;
 							--x)
 					{
 						for (int
-								y = uSize;
-								y > -1;
+								y = belowSize;
+								y != -1;
 								--y)
 						{
 							//Log(LOG_INFO) << ". body size + 1";
-							Position pBody = uBelow->getPosition() + Position(x,y,0);
-							bodySections.push_back(pBody);
+							bodyPositions.push_back(unitBelow->getPosition() + Position(x,y,0));
 						}
 					}
 
 					for (int // Check in each compass direction.
 							dir = 0;
-							dir < Pathfinding::DIR_UP
+							dir != Pathfinding::DIR_UP
 								&& escape == false;
 							++dir)
 					{
 						//Log(LOG_INFO) << ". . checking directions to move";
 						Position offset;
-						Pathfinding::directionToVector(dir, &offset);
+						Pathfinding::directionToVector(
+													dir,
+													&offset);
 
 						for (std::vector<Position>::const_iterator
-								body = bodySections.begin();
-								body < bodySections.end();
+								posBody = bodyPositions.begin();
+								posBody != bodyPositions.end();
 								)
 						{
 							//Log(LOG_INFO) << ". . . checking bodysections";
-							Position originalPosition = *body;
+							const Position posOrigin = *posBody;
 							Tile
-								* t = _parent->getSave()->getTile(originalPosition + offset),
-								* tCurrent = _parent->getSave()->getTile(originalPosition),
-								* tBelow2 = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+								* const tile = _parent->getSave()->getTile(posOrigin + offset),
+								* const tileBelow2 = _parent->getSave()->getTile(posOrigin + offset + Position(0,0,-1));
 
 							bool
-								aboutToBeOccupiedFromAbove = t
+								aboutToBeOccupiedFromAbove = tile
 														  && std::find(
 																	_tilesToFallInto.begin(),
 																	_tilesToFallInto.end(),
-																	t) != _tilesToFallInto.end(),
-								alreadyTaken = t
+																	tile) != _tilesToFallInto.end(),
+								alreadyTaken = tile
 											&& std::find(
 													escapeTiles.begin(),
 													escapeTiles.end(),
-													t) != escapeTiles.end(),
-								alreadyOccupied = t
-											   && t->getUnit()
-											   && t->getUnit() != uBelow,
-								hasFloor = t
-										&& t->hasNoFloor(tBelow2) == false,
+													tile) != escapeTiles.end(),
+								alreadyOccupied = tile
+											   && tile->getUnit()
+											   && tile->getUnit() != unitBelow,
+								hasFloor = tile
+										&& tile->hasNoFloor(tileBelow2) == false,
 								movementBlocked = _parent->getSave()->getPathfinding()->isBlocked(
-																								tCurrent,
-																								t,
+																								_parent->getSave()->getTile(posOrigin),
+																								tile,
 																								dir,
-																								uBelow),
-								unitCanFly = uBelow->getMovementType() == MT_FLY,
-								canMoveToTile = t
+																								unitBelow),
+								unitCanFly = unitBelow->getMovementType() == MT_FLY,
+								canMoveToTile = tile
 											 && alreadyOccupied == false
 											 && alreadyTaken == false
 											 && aboutToBeOccupiedFromAbove == false
@@ -339,45 +325,43 @@ void UnitFallBState::think()
 												|| unitCanFly == true);
 
 							if (canMoveToTile == true)
-								++body; // Check next section of the unit.
+								++posBody; // Check next section of the unit.
 							else
 								break; // Try next direction.
 
 							// If all sections of the unit-fallen-onto can be moved, then move it.
-							if (body == bodySections.end())
+							if (posBody == bodyPositions.end())
 							{
 								//Log(LOG_INFO) << ". . . . move unit";
-								if (_parent->getSave()->addFallingUnit(uBelow))
+								if (_parent->getSave()->addFallingUnit(unitBelow))
 								{
 									//Log(LOG_INFO) << ". . . . . add Falling Unit";
 									escape = true;
 
 									// Now ensure no other unit escapes to here too.
 									for (int
-											x = uSize;
-											x > -1;
+											x = belowSize;
+											x != -1;
 											--x)
 									{
 										for (int
-												y = uSize;
-												y > -1;
+												y = belowSize;
+												y != -1;
 												--y)
 										{
 											//Log(LOG_INFO) << ". . . . . . check for more escape units?";
-											Tile* tEscape = _parent->getSave()->getTile(t->getPosition() + Position(x,y,0));
-											escapeTiles.push_back(tEscape);
+											escapeTiles.push_back(_parent->getSave()->getTile(tile->getPosition() + Position(x,y,0)));
 										}
 									}
 
 									//Log(LOG_INFO) << ". . . . startWalking() out of the way?";
-									Tile* tBelow3 = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
-									uBelow->startWalking(
+									unitBelow->startWalking(
 													dir,
-													uBelow->getPosition() + offset,
-													tBelow3);
+													unitBelow->getPosition() + offset,
+													_parent->getSave()->getTile(posOrigin + Position(0,0,-1)));
 //													onScreen);
 
-									u = _unitsToMove.erase(u);
+									unitToMove = _unitsToMove.erase(unitToMove);
 								}
 							}
 						}
@@ -386,75 +370,75 @@ void UnitFallBState::think()
 					if (escape == false)
 					{
 						//Log(LOG_INFO) << ". . . NOT escape";
-						uBelow->knockOut(_parent);
-						u = _unitsToMove.erase(u);
+						unitBelow->knockOut(_parent);
+						unitToMove = _unitsToMove.erase(unitToMove);
 					}
 				}
 
 				//Log(LOG_INFO) << ". . checkForCasualties()";
-				_parent->checkForCasualties(NULL, *unit);
+				_parent->checkForCasualties(NULL, *unitFalling);
 			}
 		}
 
-		if ((*unit)->getStatus() == STATUS_STANDING) // just standing around, done falling.
+		if ((*unitFalling)->getStatus() == STATUS_STANDING) // done falling, just standing around.
 		{
 			//Log(LOG_INFO) << ". STATUS_STANDING";
 			if (falling == true)
 			{
 				//Log(LOG_INFO) << ". . falling (again?) -> startWalking()";
-				Position destination = (*unit)->getPosition() + Position(0,0,-1);
+				Position destination = (*unitFalling)->getPosition() + Position(0,0,-1);
 
-				tBelow = _parent->getSave()->getTile(destination);
-				(*unit)->startWalking(
+				tileBelow = _parent->getSave()->getTile(destination);
+				(*unitFalling)->startWalking(
 									Pathfinding::DIR_DOWN,
 									destination,
-									tBelow);
+									tileBelow);
 //									onScreen);
 
-				(*unit)->setCache(NULL);
-				_parent->getMap()->cacheUnit(*unit);
+				(*unitFalling)->setCache(NULL);
+				_parent->getMap()->cacheUnit(*unitFalling);
 
-				++unit;
+				++unitFalling;
 			}
 			else
 			{
-				//Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.unit";
-				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR // if the unit burns floortiles, burn floortiles
-					|| (*unit)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+				//Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.unitFalling";
+				if ((*unitFalling)->getSpecialAbility() == SPECAB_BURNFLOOR // if the unit burns floortiles, burn floortiles
+					|| (*unitFalling)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
-					(*unit)->getTile()->ignite(1);
-					Position pos = ((*unit)->getPosition() * Position(16,16,24))
+					(*unitFalling)->getTile()->ignite(1);
+					Position pos = ((*unitFalling)->getPosition() * Position(16,16,24))
 									+ Position(
 											8,8,
-											-(*unit)->getTile()->getTerrainLevel());
+											-(*unitFalling)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
 												pos,
-												(*unit)->getBaseStats()->strength, // * (*unit)->getAccuracyModifier(),
+												(*unitFalling)->getBaseStats()->strength, // * (*unitFalling)->getAccuracyModifier(),
 												DT_IN,
-												*unit);
+												*unitFalling);
 				}
 
 				_terrain->calculateUnitLighting(); // move personal lighting
 
-				_parent->getMap()->cacheUnit(*unit);
-				(*unit)->setCache(NULL);
+				_parent->getMap()->cacheUnit(*unitFalling);
+				(*unitFalling)->setCache(NULL);
 
-				_terrain->calculateFOV(*unit);
+				_terrain->calculateFOV(*unitFalling);
 
-				_parent->checkForProximityGrenades(*unit);
+				_parent->checkForProximityGrenades(*unitFalling);
 				// kL_add: Put checkForSilacoid() here!
 
-				if (_parent->getTileEngine()->checkReactionFire(*unit))
+				if (_parent->getTileEngine()->checkReactionFire(*unitFalling))
 					_parent->getPathfinding()->abortPath();
 
-				unit = _parent->getSave()->getFallingUnits()->erase(unit);
+				unitFalling = _parent->getSave()->getFallingUnits()->erase(unitFalling);
 			}
 		}
 		else
 		{
 			//Log(LOG_INFO) << ". not STATUS_STANDING, next unit";
-			++unit;
+			++unitFalling;
 		}
 	}
 
@@ -468,7 +452,6 @@ void UnitFallBState::think()
 		_unitsToMove.clear();
 
 		_parent->popState();
-
 		return;
 	}
 	//Log(LOG_INFO) << "UnitFallBState::think() EXIT";

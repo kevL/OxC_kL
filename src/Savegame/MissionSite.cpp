@@ -23,6 +23,8 @@
 
 #include "../Engine/Language.h"
 
+#include "../Geoscape/Globe.h" // Globe::GM_MISSIONSITE
+
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleAlienMission.h"
 
@@ -156,12 +158,12 @@ std::wstring MissionSite::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the mission site (default 5 if no marker is specified).
- * @return, marker sprite
+ * @return, marker sprite #5 (or special Deployment icon)
  */
 int MissionSite::getMarker() const
 {
 	if (_deployment->getMarkerIcon() == -1)
-		return 5;
+		return Globe::GM_MISSIONSITE;
 
 	return _deployment->getMarkerIcon();
 }

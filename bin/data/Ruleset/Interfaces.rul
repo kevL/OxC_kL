@@ -734,6 +734,7 @@ interfaces:
         color: 218   # blue
       - id: list
         color: 208   # white
+        color2: 144  # yellow (offline)
         border: 218  # blue
       - id: button
         color: 246   # purple

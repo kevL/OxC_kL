@@ -60,18 +60,18 @@ private:
 	///
 	void onSelectProject(Action* action);
 
+	/// Fills the ResearchProject list with possible ResearchProjects.
+	void fillProjectList();
+
 
 	public:
-		/// Creates the New research list state.
+		/// Creates the NewResearchListState.
 		NewResearchListState(Base* base);
 		///
 		// kL_note: no dTor ...
 
 		/// Initializes the state.
 		void init();
-
-		/// Fills the ResearchProject list with possible ResearchProjects.
-		void fillProjectList();
 
 		/// Handler for clicking the OK button.
 		void btnCancelClick(Action* action);

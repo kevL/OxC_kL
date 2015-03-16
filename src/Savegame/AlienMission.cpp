@@ -250,7 +250,7 @@ void AlienMission::think(
 		&& _nextWave == _missionRule.getWaveTotal())
 	{
 		// kL_note: well that's fucked:
-		std::vector<Country*>* eligibleCountries;
+		std::vector<Country*> eligibleCountries;
 
 		for (std::vector<Country*>::const_iterator
 				i = _savedGame.getCountries()->begin();
@@ -263,18 +263,18 @@ void AlienMission::think(
 													(*i)->getRules()->getLabelLongitude(),
 													(*i)->getRules()->getLabelLatitude()) == true)
 			{
-				eligibleCountries->push_back(*i);
+				eligibleCountries.push_back(*i);
 			}
 		}
 
-		if (eligibleCountries->empty() == false)
+		if (eligibleCountries.empty() == false)
 		{
 			//Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
 
 			const size_t pick = RNG::generate(
 										0,
-										eligibleCountries->size() - 1);
-			Country* const infiltratedCountry = eligibleCountries->at(pick);
+										eligibleCountries.size() - 1);
+			Country* const infiltratedCountry = eligibleCountries.at(pick);
 			// kL_note: Ironically, this likely allows multiple alien
 			// bases in Russia solely because of infiltrations ...!!
 			if (infiltratedCountry->getType() != "STR_RUSSIA") // heh.

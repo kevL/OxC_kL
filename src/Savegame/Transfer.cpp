@@ -64,14 +64,12 @@ Transfer::~Transfer()
  * @param node - reference a YAML node
  * @param base - pointer to a destination Base
  * @param rule - pointer to the game's Ruleset
- * @param save - pointer to the SavedGame
  * @return, true if the transfer content is valid
  */
 bool Transfer::load(
 		const YAML::Node& node,
 		Base* base,
-		const Ruleset* rule,
-		SavedGame* save)
+		const Ruleset* rule)
 {
 	_hours = node["hours"].as<int>(_hours);
 
@@ -83,7 +81,6 @@ bool Transfer::load(
 		_soldier->load(
 					soldier,
 					rule);
-//					save);
 	}
 
 	if (const YAML::Node& craft = node["craft"])

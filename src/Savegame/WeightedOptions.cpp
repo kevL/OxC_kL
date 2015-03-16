@@ -30,7 +30,8 @@ namespace OpenXcom
 /**
  * Selects a random choice from among the contents.
  * @note This MUST be called on non-empty objects.
- * @note Each time this is called, the returned value can be different.
+ * @note Each time this is called the returned value can be different.
+ * @note kL rewrite
  * @return, the key of the selected choice
  */
 const std::string WeightedOptions::choose() const
@@ -38,29 +39,30 @@ const std::string WeightedOptions::choose() const
 	if (_totalWeight == 0)
 		return "";
 
-	size_t var = RNG::generate(
-							0,
+	size_t pick = RNG::generate(
+							1,
 							_totalWeight);
 
+	size_t tally = 0;
 	std::map<std::string, size_t>::const_iterator i = _choices.begin();
-	for (
-			;
-			i != _choices.end();
-			++i)
+	while (i != _choices.end())
 	{
-		if (var <= i->second)
-			break;
+		tally += i->second;
+		if (i->second >= pick)
+			return i->first;
 
-		var -= i->second;
+		++i;
 	}
 
-	// This is always a valid iterator here.
-	return i->first;
+	return "";
 }
 
 /**
  * Selects the most likely option.
  * @note This MUST be called on non-empty objects.
+ * @note Currently used only to determine race of initial alien mission;
+ *		 -> GeoscapeState::determineAlienMissions(atGameStart=true)
+ * @note kL rewrite
  * @return, the key of the selected choice
  */
 const std::string WeightedOptions::topChoice() const
@@ -68,26 +70,36 @@ const std::string WeightedOptions::topChoice() const
 	if (_totalWeight == 0)
 		return "";
 
-	size_t choice = 0;
+	size_t topWeight = 0;
+	std::vector<std::string> rets;
 
-	std::map<std::string, size_t>::const_iterator i = _choices.begin();
 	for (std::map<std::string, size_t>::const_iterator
-			j = _choices.begin();
-			j != _choices.end();
-			++j)
+			i = _choices.begin();
+			i != _choices.end();
+			++i)
 	{
-		if (j->second >= choice)
+		if (i->second > topWeight)
 		{
-			choice = j->second;
-			i = j;
+			rets.clear();
+			rets.push_back(i->first);
+
+			topWeight = i->second;
+		}
+		else if (i->second != 0
+			&& i->second == topWeight)
+		{
+			rets.push_back(i->first);
 		}
 	}
 
-	return i->first; // This is always a valid iterator here.
+	const size_t pick = RNG::generate(
+								0,
+								rets.size() - 1);
+	return rets.at(pick);
 }
 
 /**
- * Sets an option's weight.
+ * Sets this WeightedOptions' weight.
  * @note If @a weight is set to 0, the option is removed from the list of choices.
  * @note If @a id already exists, the new weight replaces the old one, otherwise
  *		@a id is added to the list of choices, with @a weight as the weight.
@@ -119,9 +131,9 @@ void WeightedOptions::setWeight(
 }
 
 /**
- * Adds the weighted options from a YAML::Node to a WeightedOptions.
- * @note The weight option list is not replaced; only values in @a node will be added / changed.
- * @param node - a YAML node (containing a map) with the new values
+ * Adds the weighted options from a YAML::Node to this WeightedOptions.
+ * @note The WeightedOptions list is not replaced; only values in @a node will be added/changed.
+ * @param node - reference the YAML node of a map with the new values
  */
 void WeightedOptions::load(const YAML::Node& node)
 {
@@ -138,7 +150,7 @@ void WeightedOptions::load(const YAML::Node& node)
 }
 
 /**
- * Sends the WeightedOption contents to a YAML::Emitter.
+ * Sends this WeightedOptions content to a YAML::Emitter.
  * @return, YAML node
  */
 YAML::Node WeightedOptions::save() const

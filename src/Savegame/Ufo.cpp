@@ -35,6 +35,8 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
 
+#include "../Geoscape/Globe.h" // Globe::GM_UFO_*
+
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
@@ -341,7 +343,7 @@ std::wstring Ufo::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the UFO.
- * @return, marker sprite (-1 if none or not detected)
+ * @return, marker sprite #2,3,4 (-1 if not detected)
  */
 int Ufo::getMarker() const
 {
@@ -350,9 +352,9 @@ int Ufo::getMarker() const
 
 	switch (_status)
 	{
-		case Ufo::FLYING:	return 2;
-		case Ufo::LANDED:	return 3;
-		case Ufo::CRASHED:	return 4;
+		case Ufo::FLYING:	return Globe::GM_UFO_FLYING;
+		case Ufo::LANDED:	return Globe::GM_UFO_LANDED;
+		case Ufo::CRASHED:	return Globe::GM_UFO_CRASHED;
 	}
 
 	return _rules->getMarker();

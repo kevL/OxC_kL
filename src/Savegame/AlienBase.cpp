@@ -23,6 +23,8 @@
 
 #include "../Engine/Language.h"
 
+#include "../Geoscape/Globe.h" // Globe::GM_ALIENBASE
+
 
 namespace OpenXcom
 {
@@ -123,14 +125,14 @@ std::wstring AlienBase::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the alien base.
- * @return, marker sprite (-1 if none)
+ * @return, marker sprite #7 (-1 if none)
  */
 int AlienBase::getMarker() const
 {
 	if (_discovered == false)
 		return -1;
 
-	return 7;
+	return Globe::GM_ALIENBASE;
 }
 
 /**

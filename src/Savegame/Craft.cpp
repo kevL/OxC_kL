@@ -39,6 +39,7 @@
 //#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
+#include "../Geoscape/Globe.h" // Globe::GM_CRAFT
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/AlienDeployment.h"
@@ -455,7 +456,7 @@ void Craft::setName(const std::wstring& newName)
 
 /**
  * Gets the globe marker for this Craft.
- * @return, marker sprite (-1 none)
+ * @return, marker sprite (-1 if based)
  */
 int Craft::getMarker() const
 {
@@ -463,7 +464,7 @@ int Craft::getMarker() const
 		return -1;
 
 	if (_rules->getMarker() == -1)
-		return 1;
+		return Globe::GM_CRAFT;
 
 	return _rules->getMarker();
 }

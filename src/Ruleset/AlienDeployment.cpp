@@ -331,7 +331,7 @@ std::string AlienDeployment::getMarkerName() const
 
 /**
  * Returns the globe marker icon for this mission.
- * @return, marker sprite; -1 if none
+ * @return, marker sprite (-1 if not set)
  */
 int AlienDeployment::getMarkerIcon() const
 {

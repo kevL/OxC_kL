@@ -106,15 +106,15 @@ void RuleAlienMission::load(const YAML::Node& node)
 	_specialZone	= node["specialZone"]					.as<int>(_specialZone);
 	_weights		= node["missionWeights"]				.as< std::map<size_t, int> >(_weights);
 
-	// Only allow full replacement of mission racial distribution.
-	if (const YAML::Node& weights = node["raceWeights"])
+
+	if (const YAML::Node& weights = node["raceWeights"]) // allow only full replacement of mission racial distribution.
 	{
 		typedef std::map<size_t, WeightedOptions*> Associative;
 		typedef std::vector<std::pair<size_t, WeightedOptions*> > Linear;
 
 		Associative assoc;
-		// Place in the associative container so we can index by month and keep entries sorted.
-		for (Linear::const_iterator
+
+		for (Linear::const_iterator // place in the Associative container so indices can be entered and sorted by month.
 				i = _raceDistribution.begin();
 				i != _raceDistribution.end();
 				++i)
@@ -122,8 +122,7 @@ void RuleAlienMission::load(const YAML::Node& node)
 			assoc.insert(*i);
 		}
 
-		// Now go through the node contents and merge with existing data.
-		for (YAML::const_iterator
+		for (YAML::const_iterator // go through node contents and merge with existing data.
 				i = weights.begin();
 				i != weights.end();
 				++i)
@@ -131,19 +130,20 @@ void RuleAlienMission::load(const YAML::Node& node)
 			const size_t month = i->first.as<size_t>();
 
 			Associative::const_iterator existing = assoc.find(month);
-			if (assoc.end() == existing) // New entry, load and add it.
+			if (assoc.end() == existing) // new entry, load and add it.
 			{
-				std::auto_ptr<WeightedOptions> weight (new WeightedOptions);
+				std::auto_ptr<WeightedOptions> weight (new WeightedOptions); // init.
 				weight->load(i->second);
 
-				assoc.insert(std::make_pair(month, weight.release()));
+				assoc.insert(std::make_pair(
+										month,
+										weight.release()));
 			}
 			else
-				existing->second->load(i->second); // Existing entry, update it.
+				existing->second->load(i->second); // existing entry, update it.
 		}
 
-		// Now replace values in our actual member variable!
-		_raceDistribution.clear();
+		_raceDistribution.clear(); // replace values in the actual member variable!
 		_raceDistribution.reserve(assoc.size());
 
 		for (Associative::const_iterator
@@ -151,10 +151,10 @@ void RuleAlienMission::load(const YAML::Node& node)
 				i != assoc.end();
 				++i)
 		{
-			if (i->second->hasNoWeight() == true) // Don't keep empty lists.
+			if (i->second->hasNoWeight() == true) // don't keep empty lists.
 				delete i->second;
 			else
-				_raceDistribution.push_back(*i); // Place it
+				_raceDistribution.push_back(*i); // place it
 		}
 	}
 }
@@ -182,8 +182,13 @@ const std::string RuleAlienMission::generateRace(const size_t monthsPassed) cons
  */
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator race = _raceDistribution.begin();
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator race = _raceDistribution.rbegin();
+	while (monthsPassed < race->first)
+		++race;
+
 	return race->second->topChoice();
+//	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator race = _raceDistribution.begin();
+//	return race->second->topChoice();
 }
 
 /**

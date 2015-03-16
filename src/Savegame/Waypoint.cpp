@@ -23,6 +23,8 @@
 
 #include "../Engine/Language.h"
 
+#include "../Geoscape/Globe.h" // Globe::GM_WAYPOINT
+
 
 namespace OpenXcom
 {
@@ -34,15 +36,13 @@ Waypoint::Waypoint()
 	:
 		Target(),
 		_id(0)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Waypoint::~Waypoint()
-{
-}
+{}
 
 /**
  * Loads the waypoint from a YAML file.
@@ -114,7 +114,7 @@ std::wstring Waypoint::getName(Language* lang) const
  */
 int Waypoint::getMarker() const
 {
-	return 6;
+	return Globe::GM_WAYPOINT;
 }
 
 }

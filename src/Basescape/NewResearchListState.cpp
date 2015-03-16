@@ -47,8 +47,8 @@
 namespace OpenXcom
 {
 /**
- * Initializes all the elements in the Research list screen.
- * @param base - pointer to the base to get info from
+ * Initializes all the elements in the research list screen.
+ * @param base - pointer to the Base to get info from
  */
 NewResearchListState::NewResearchListState(
 		Base* base)
@@ -67,10 +67,10 @@ NewResearchListState::NewResearchListState(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
-	add(_window, "window", "selectNewResearch");
-	add(_txtTitle, "text", "selectNewResearch");
-	add(_lstResearch, "list", "selectNewResearch");
-	add(_btnCancel, "button", "selectNewResearch");
+	add(_window,		"window",	"selectNewResearch");
+	add(_txtTitle,		"text",		"selectNewResearch");
+	add(_lstResearch,	"list",		"selectNewResearch");
+	add(_btnCancel,		"button",	"selectNewResearch");
 
 	centerAllSurfaces();
 
@@ -95,31 +95,12 @@ NewResearchListState::NewResearchListState(
 }
 
 /**
- * Initializes the screen (fills the list).
+ * Initializes the screen and fills the list with ResearchProjects.
  */
 void NewResearchListState::init()
 {
 	State::init();
 	fillProjectList();
-}
-
-/**
- * Selects the RuleResearch to work on.
- * kL: Or restarts an old ResearchProject; spent & cost values are preserved.
- * @param action - pointer to an Action
- */
-void NewResearchListState::onSelectProject(Action*)
-{
-	if (static_cast<int>(_lstResearch->getSelectedRow()) > _cutoff)
-		_game->pushState(new ResearchInfoState( // brand new project
-											_base,
-											_projects[static_cast<size_t>(static_cast<int>(_lstResearch->getSelectedRow()) - (_cutoff + 1))]));
-	else
-		_game->pushState(new ResearchInfoState( // kL, offline project reactivation.
-											_base,
-											_offlines[_lstResearch->getSelectedRow()]));
-
-//	_game->popState();
 }
 
 /**
@@ -132,9 +113,27 @@ void NewResearchListState::btnCancelClick(Action*)
 }
 
 /**
- * Fills the list with possible ResearchProjects.
+ * Selects the RuleResearch to work on or restarts an old ResearchProject
+ * in which case the spent & cost values are preserved.
+ * @param action - pointer to an Action
  */
-void NewResearchListState::fillProjectList()
+void NewResearchListState::onSelectProject(Action*) // private.
+{
+	if (static_cast<int>(_lstResearch->getSelectedRow()) > _cutoff)
+		_game->pushState(new ResearchInfoState( // brand new project
+											_base,
+											_projects[static_cast<size_t>(static_cast<int>(_lstResearch->getSelectedRow()) - (_cutoff + 1))]));
+	else
+		_game->pushState(new ResearchInfoState( // offline project reactivation.
+											_base,
+											_offlines[_lstResearch->getSelectedRow()]));
+//	_game->popState();
+}
+
+/**
+ * Fills the list with ResearchProjects.
+ */
+void NewResearchListState::fillProjectList() // private.
 {
 	_cutoff = -1;
 	_offlines.clear();
@@ -142,9 +141,10 @@ void NewResearchListState::fillProjectList()
 	_projects.clear();
 	_lstResearch->clearList();
 
+	const Uint8 color = _lstResearch->getSecondaryColor();
 	size_t row = 0;
 
-	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
+	const std::vector<ResearchProject*>& baseProjects (_base->getResearch()); // init.
 	for (std::vector<ResearchProject*>::const_iterator
 			i = baseProjects.begin();
 			i != baseProjects.end();
@@ -156,12 +156,20 @@ void NewResearchListState::fillProjectList()
 							1,
 							tr((*i)->getRules()->getName()).c_str());
 
-			_lstResearch->setRowColor(row, Palette::blockOffset(11)+2);
+			// If cancelled projects are not marked 'offline' they'd lose spent
+			// research time; if they are not marked 'offline' even though no
+			// spent time has accumulated, they still need to be tracked so player
+			// can't exploit the system by forcing a recalculation of totalCost ....
+			//
+			// Try to blend these in but doesn't really work due to ordering:
+			if ((*i)->getSpent() > 0)
+				_lstResearch->setRowColor(
+										row++,
+										color,
+										true);
 
 			_offlines.push_back(*i);
-
 			++_cutoff;
-			++row;
 		}
 	}
 
@@ -179,11 +187,7 @@ void NewResearchListState::fillProjectList()
 			_lstResearch->addRow(
 							1,
 							tr((*i)->getName()).c_str());
-
-			_lstResearch->setRowColor(row, Palette::blockOffset(13));
-
 			++i;
-			++row;
 		}
 		else
 			i = _projects.erase(i);

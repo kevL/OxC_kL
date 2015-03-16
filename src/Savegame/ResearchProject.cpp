@@ -19,7 +19,7 @@
 
 #include "ResearchProject.h"
 
-#include <algorithm>
+//#include <algorithm>
 
 #include "../Interface/Text.h"
 
@@ -37,6 +37,11 @@ const double
 	PROGRESS_LIMIT_GOOD		= 0.86;
 
 
+/**
+ * Constructs a ResearchProject at a Base.
+ * @param project	- pointer to RuleResearch
+ * @param cost		- the cost to complete the project in man-days (default 0)
+ */
 ResearchProject::ResearchProject(
 		RuleResearch* project,
 		int cost)
@@ -46,27 +51,27 @@ ResearchProject::ResearchProject(
 		_spent(0),
 		_cost(cost),
 		_offline(false)
-{
-}
+{}
 
 // kL_note: DESTRUCTOR?
 
 /**
- * Called every day to compute time spent on this ResearchProject
- * @return, True if the ResearchProject is finished
+ * Called every day to compute time spent on this ResearchProject.
+ * @return, true if project finishes on the step
  */
 bool ResearchProject::step()
 {
 	_spent += _assigned;
 
-	if (_spent >= getCost())
+	if (_spent >= _cost)
 		return true;
 
 	return false;
 }
 
 /**
- *
+ * Gets this ResearchProject's rule.
+ * @return, pointer to RuleResearch
  */
 const RuleResearch* ResearchProject::getRules() const
 {
@@ -74,8 +79,8 @@ const RuleResearch* ResearchProject::getRules() const
 }
 
 /**
- * Changes the number of scientists to the ResearchProject
- * @param qty - quantity of scientists assigned to this ResearchProject
+ * Changes the number of scientists to this ResearchProject.
+ * @param qty - quantity of scientists assigned
  */
 void ResearchProject::setAssigned(const int qty)
 {
@@ -83,8 +88,8 @@ void ResearchProject::setAssigned(const int qty)
 }
 
 /**
- * Returns the number of scientists assigned to this project
- * @return, Number of assigned scientists.
+ * Returns the number of scientists assigned to this ResearchProject.
+ * @return, quantity of scientists assigned
  */
 int ResearchProject::getAssigned() const
 {
@@ -92,8 +97,8 @@ int ResearchProject::getAssigned() const
 }
 
 /**
- * Changes the cost of the ResearchProject
- * @param spent, New project cost(in man/day)
+ * Changes the cost of this ResearchProject.
+ * @param spent - new project cost in man-days
  */
 void ResearchProject::setSpent(const int spent)
 {
@@ -101,8 +106,8 @@ void ResearchProject::setSpent(const int spent)
 }
 
 /**
- * Returns the time already spent on this project
- * @return, The time already spent on this ResearchProject(in man/day)
+ * Returns the time already spent on this ResearchProject.
+ * @return, the time already spent in man-days
  */
 int ResearchProject::getSpent() const
 {
@@ -110,8 +115,8 @@ int ResearchProject::getSpent() const
 }
 
 /**
- * Changes the cost of the ResearchProject
- * @param cost, New project cost(in man/day)
+ * Changes the cost of this ResearchProject.
+ * @param cost - new project cost in man-days
  */
 void ResearchProject::setCost(const int cost)
 {
@@ -119,8 +124,8 @@ void ResearchProject::setCost(const int cost)
 }
 
 /**
- * Returns the cost of the ResearchProject
- * @return, The cost of the ResearchProject(in man/day)
+ * Returns the cost of this ResearchProject.
+ * @return, the cost in man-days
  */
 int ResearchProject::getCost() const
 {
@@ -128,9 +133,9 @@ int ResearchProject::getCost() const
 }
 
 /**
- * Sets the project offline.
- * Used to remove the project from lists, while preserving its cost & spent values.
- * @param cost, New project cost(in man/day)
+ * Sets this ResearchProject offline.
+ * Used to remove the project from lists while preserving the cost & spent values.
+ * @param offline - true to set project offline
  */
 void ResearchProject::setOffline(const bool offline)
 {
@@ -138,8 +143,8 @@ void ResearchProject::setOffline(const bool offline)
 }
 
 /**
- * Gets whether the project is offline or not.
- * @return, The cost of the ResearchProject(in man/day)
+ * Gets whether this ResearchProject is offline or not.
+ * @return, true if project is offline
  */
 bool ResearchProject::getOffline() const
 {
@@ -147,58 +152,61 @@ bool ResearchProject::getOffline() const
 }
 
 /**
- * Loads the research project from a YAML file.
- * @param node, YAML node.
+ * Loads the ResearchProject from a YAML file.
+ * @param node - reference a YAML node
  */
 void ResearchProject::load(const YAML::Node& node)
 {
-	setAssigned(node["assigned"].as<int>(getAssigned()));
-	setSpent(node["spent"].as<int>(getSpent()));
-	setCost(node["cost"].as<int>(getCost()));
+	_assigned	= node["assigned"].as<int>(_assigned);
+	_spent		= node["spent"]	.as<int>(_spent);
+	_cost		= node["cost"]	.as<int>(_cost);
+	_offline	= node["offline"].as<bool>(_offline);
 
-	setOffline(node["offline"].as<bool>(getOffline()));
 }
 
 /**
- * Saves the research project to a YAML file.
- * @return, YAML node.
+ * Saves this ResearchProject to a YAML file.
+ * @return, YAML node
  */
 YAML::Node ResearchProject::save() const
 {
 	YAML::Node node;
 
-	node["project"]		= getRules()->getName();
-	node["assigned"]	= getAssigned();
-	node["spent"]		= getSpent();
-	node["cost"]		= getCost();
-
-	node["offline"]		= getOffline();
+	node["project"]		= _project->getName();
+	node["assigned"]	= _assigned;
+	node["spent"]		= _spent;
+	node["cost"]		= _cost;
+	node["offline"]		= _offline;
 
 	return node;
 }
 
 /**
- * kL. Returns a string describing Research progress.
+ * Returns a string describing Research progress.
  * @return, description of research progress
 */
 std::string ResearchProject::getResearchProgress() const
 {
-	double progress = static_cast<double>(getSpent()) / static_cast<double>(getCost());
-
-	if (getAssigned() == 0)
+	if (_assigned == 0)
 		return "STR_NONE";
-	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// < 0.1
+
+	const double progress = static_cast<double>(_spent) / static_cast<double>(_cost);
+
+	if (progress < PROGRESS_LIMIT_UNKNOWN)	// < 0.1
 		return "STR_UNKNOWN";
-	else if (progress < PROGRESS_LIMIT_POOR)		// < 0.2
+
+	if (progress < PROGRESS_LIMIT_POOR)		// < 0.2
 		return "STR_POOR";
-	else if (progress < PROGRESS_LIMIT_AVERAGE)		// < 0.5
+
+	if (progress < PROGRESS_LIMIT_AVERAGE)	// < 0.5
 		return "STR_AVERAGE";
-	else if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8
+
+	if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8
 		return "STR_GOOD";
-	else											// > 0.8
-		return "STR_EXCELLENT";
-/*kL
-	float progress = (float)getSpent() / getRules()->getCost();
+
+	return "STR_EXCELLENT";
+}
+/*	float progress = (float)getSpent() / getRules()->getCost();
 
 	if (getAssigned() == 0)
 		return "STR_NONE";
@@ -218,15 +226,14 @@ std::string ResearchProject::getResearchProgress() const
 
 		return "STR_EXCELLENT";
 	} */
-}
 
 /**
- * kL. Returns research time completed as a wide string.
+ * Returns research time completed as a wide string.
  * @return, time completed
  */
 std::wstring ResearchProject::getCostCompleted() const
 {
-	return Text::formatNumber(getSpent());
+	return Text::formatNumber(_spent);
 }
 
 }

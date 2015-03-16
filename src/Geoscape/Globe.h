@@ -59,8 +59,8 @@ private:
 	static const int
 		NUM_LANDSHADES	= 48,
 		NUM_SEASHADES	= 72,
-		NEAR_RADIUS		= 25,
-		CITY_MARKER		= 8;
+		NEAR_RADIUS		= 25;
+//		CITY_MARKER		= 8;
 //		NUM_TEXTURES	= 13;
 //		static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
 
@@ -110,7 +110,7 @@ private:
 		* _countries,
 		* _markers,
 		* _radars;
-/*		* _mkAlienBase,		// kL_begin:
+/*		* _mkAlienBase,	// kL_begin:
 		* _mkAlienSite,
 		* _mkCity,
 		* _mkCraft,
@@ -118,7 +118,7 @@ private:
 		* _mkFlyingUfo,
 		* _mkLandedUfo,
 		* _mkWaypoint,
-		* _mkXcomBase; */	// kL_end.
+		* _mkXcomBase;	// kL_end. */
 	SurfaceSet
 		* _markerSet,
 		* _texture;
@@ -200,6 +200,17 @@ private:
 
 
 	public:
+		static const int // GlobeMarkers
+			GM_BASE			= 0,
+			GM_CRAFT		= 1,
+			GM_UFO_FLYING	= 2,
+			GM_UFO_LANDED	= 3,
+			GM_UFO_CRASHED	= 4,
+			GM_MISSIONSITE	= 5,
+			GM_WAYPOINT		= 6,
+			GM_ALIENBASE	= 7,
+			GM_CITY			= 8;
+
 		static Uint8
 			COUNTRY_LABEL_COLOR,
 			LINE_COLOR,

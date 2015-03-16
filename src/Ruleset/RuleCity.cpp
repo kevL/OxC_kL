@@ -24,6 +24,8 @@
 
 #include "../Engine/Language.h"
 
+#include "../Geoscape/Globe.h" // Globe::GM_CITY
+
 
 namespace OpenXcom
 {
@@ -125,11 +127,11 @@ double RuleCity::getLongitude() const
 
 /**
  * Returns the globe marker for this City.
- * @return, marker sprite
+ * @return, marker sprite #8
  */
 int RuleCity::getMarker() const
 {
-	return 8;
+	return Globe::GM_CITY;
 }
 
 /**

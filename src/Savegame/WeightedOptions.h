@@ -36,8 +36,8 @@ class WeightedOptions
 {
 
 private:
-	std::map<std::string, size_t> _choices;	//!< Options and weights
-	size_t _totalWeight;					//!< The total weight of all options.
+	std::map<std::string, size_t> _choices;	// Options and weights
+	size_t _totalWeight;					// The total weight of all options.
 
 
 	public:
@@ -47,9 +47,9 @@ private:
 				_totalWeight(0)
 		{}
 
-		/// Selects from among the items.
+		/// Selects from the items by probability.
 		const std::string choose() const;
-		/// Selects the top item.
+		/// Selects the most likely item.
 		const std::string topChoice() const;
 
 		/// Sets an option's weight.
@@ -57,11 +57,11 @@ private:
 				const std::string& id,
 				size_t weight);
 
-		/// Gets if this choice is empty.
+		/// Gets if this set of options has no weight at all.
 		bool hasNoWeight() const
 		{ return (_totalWeight == 0); }
 
-		/// Removes all entries and weights.
+		/// Removes all weights and entries.
 		void clearWeights()
 		{	_totalWeight = 0;
 			_choices.clear(); }

@@ -85,7 +85,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 		y_offset,
 		x_pos,
 		y_pos,
-		num = 0;
+		i = 0;
 
 	if (facility->getSize() == 1)
 		x_offset = y_offset = tile_size / 2;
@@ -93,25 +93,25 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 		x_offset = y_offset = 0;
 
 	y_pos = y_offset;
-	for (int
+	for (size_t
 			y = 0;
 			y < facility->getSize();
 			++y)
 	{
 		x_pos = x_offset;
-		for (int
+		for (size_t
 				x = 0;
 				x < facility->getSize();
 				++x)
 		{
-			frame = graphic->getFrame(facility->getSpriteShape() + num);
+			frame = graphic->getFrame(facility->getSpriteShape() + i);
 			frame->setX(x_pos);
 			frame->setY(y_pos);
 			frame->blit(_image);
 
 			if (facility->getSize() == 1)
 			{
-				frame = graphic->getFrame(facility->getSpriteFacility() + num);
+				frame = graphic->getFrame(facility->getSpriteFacility() + i);
 				frame->setX(x_pos);
 				frame->setY(y_pos);
 				frame->blit(_image);
@@ -119,7 +119,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 
 			x_pos += tile_size;
 
-			num++;
+			++i;
 		}
 
 		y_pos += tile_size;
@@ -187,7 +187,6 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
  * dTor.
  */
 ArticleStateBaseFacility::~ArticleStateBaseFacility()
-{
-}
+{}
 
 }

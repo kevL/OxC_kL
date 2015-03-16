@@ -315,29 +315,18 @@ GeoscapeState::GeoscapeState()
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
-/*kL
-	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+
+	const int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 - 12;
 	_sideTop	= new TextButton(
-							63,
+							64,
 							height,
-							screenWidth - 63,
-							_sidebar->getY() - height - 1);
+							screenWidth - 64,
+							(screenHeight / 2) - (Screen::ORIGINAL_HEIGHT / 2) - (height + 12));
 	_sideBottom	= new TextButton(
-							63,
+							64,
 							height,
-							screenWidth - 63,
-							_sidebar->getY() + _sidebar->getHeight() + 1); */
-/*	int height = ((screenHeight - Screen::ORIGINAL_HEIGHT) / 2) - 1;
-	_btnTop		= new TextButton(
-							63,
-							height,
-							screenWidth - 63,
-							0);
-	_btnBottom	= new TextButton(
-							63,
-							height,
-							screenWidth - 63,
-							screenHeight - height + 1); */ // kL
+							screenWidth - 64,
+							(screenHeight / 2) + (Screen::ORIGINAL_HEIGHT / 2) + 12);
 
 /*kL
 	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
@@ -436,33 +425,33 @@ GeoscapeState::GeoscapeState()
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-//	add(_sideTop, "button", "geoscape");
-//	add(_sideBottom, "button", "geoscape");
+	add(_sideTop,		"button",	"geoscape");
+	add(_sideBottom,	"button",	"geoscape");
 
 	add(_srfTime); // kL
 
 //	if (Options::showFundsOnGeoscape)
-	add(_txtFunds, "text", "geoscape");
-	add(_txtScore, "text", "geoscape");
+	add(_txtFunds,		"text",		"geoscape");
+	add(_txtScore,		"text",		"geoscape");
 
-	add(_txtHour); //, "text", "geoscape");
-	add(_txtHourSep); //, "text", "geoscape");
-	add(_txtMin); //, "text", "geoscape");
-//	add(_txtMinSep, "text", "geoscape");
-	add(_txtSec); //, "text", "geoscape");
-//	add(_txtDate, "text", "geoscape");
+	add(_txtHour);		//, "text", "geoscape");
+	add(_txtHourSep);	//, "text", "geoscape");
+	add(_txtMin);		//, "text", "geoscape");
+//	add(_txtMinSep,		"text",		"geoscape");
+	add(_txtSec);		//, "text", "geoscape");
+//	add(_txtDate,		"text",		"geoscape");
 	add(_srfDay1);
 	add(_srfDay2);
 	add(_srfMonth1);
 	add(_srfMonth2);
 	add(_srfYear1);
 	add(_srfYear2);
-//	add(_txtWeekday, "text", "geoscape");
-//	add(_txtDay, "text", "geoscape");
-//	add(_txtMonth, "text", "geoscape");
-//	add(_txtYear, "text", "geoscape");
+//	add(_txtWeekday,	"text",		"geoscape");
+//	add(_txtDay,		"text",		"geoscape");
+//	add(_txtMonth,		"text",		"geoscape");
+//	add(_txtYear,		"text",		"geoscape");
 
-	add(_txtDebug, "text", "geoscape");
+	add(_txtDebug,		"text",		"geoscape");
 
 	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);			// kL
 //	_game->getResourcePack()->getSurface("Antares_BG")->blit(_srfSpace);		// kL
@@ -481,7 +470,7 @@ GeoscapeState::GeoscapeState()
 					0,0,
 					static_cast<Sint16>(_sideLine->getWidth()),
 					static_cast<Sint16>(_sideLine->getHeight()),
-					15);
+					15); // black
 /*kL
 	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 //	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -669,7 +658,6 @@ GeoscapeState::GeoscapeState()
 	_btnDetail->copy(geobord);
 	_btnDetail->setColor(Palette::blockOffset(15)+9);
 	_btnDetail->onMousePress((ActionHandler)& GeoscapeState::btnDetailPress);
-//	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailPress, keyGeoToggleDetail);
 
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnRotateLeftPress,
@@ -2947,7 +2935,7 @@ void GeoscapeState::time1Month()
 	if (RNG::percent(monthsPassed * 2)) // kL
 		determineAlienMissions(); // kL_note: determine another one, I guess.
 
-	setupLandMission(); // always add a Mission, eg. TerrorMission, to the regular mission <-
+	setupLandMission(); // always add a Mission, eg. TerrorMission, to the regular mission(s) <-
 
 	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
 	const int diff = static_cast<int>(_savedGame->getDifficulty()); // kL

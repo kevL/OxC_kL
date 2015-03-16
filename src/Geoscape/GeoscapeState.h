@@ -128,9 +128,9 @@ private:
 //		* _txtDay,
 //		* _txtMonth,
 //		* _txtYear;
-//	TextButton
-//		* _sideTop,
-//		* _sideBottom;
+	TextButton
+		* _sideTop,
+		* _sideBottom;
 	Timer
 		* _gameTimer,
 		* _dfZoomInTimer,

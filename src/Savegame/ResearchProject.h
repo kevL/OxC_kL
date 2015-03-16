@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_RESEARCHPROJECT_H
 #define OPENXCOM_RESEARCHPROJECT_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -48,6 +48,7 @@ private:
 
 
 	public:
+		/// Constructor.
 		ResearchProject(
 				RuleResearch* project,
 				int cost = 0);
@@ -74,9 +75,9 @@ private:
 		/// Gets time cost of this ResearchProject.
 		int getCost() const;
 
-		/// kL. Sets the project offline.
+		/// Sets the project offline.
 		void setOffline(const bool offline = true);
-		/// kL. Gets whether the project is offline or not.
+		/// Gets whether the project is offline or not.
 		bool getOffline() const;
 
 		/// Loads the ResearchProject from YAML.

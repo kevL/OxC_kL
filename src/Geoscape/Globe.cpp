@@ -1253,7 +1253,6 @@ void Globe::think()
 	if (kL_reCenter == true)
 	{
 		kL_reCenter = false;
-
 		center(
 			_game->getSavedGame()->getGlobeLongitude(),
 			_game->getSavedGame()->getGlobeLatitude());
@@ -1272,11 +1271,11 @@ void Globe::blink()
 
 	for (size_t
 			i = 0;
-			i < _markerSet->getTotalFrames();
+			i != _markerSet->getTotalFrames();
 			++i)
 	{
-		if (i != CITY_MARKER)
-			_markerSet->getFrame(i)->offset(_blink);
+		if (i != GM_CITY)
+			_markerSet->getFrame(static_cast<int>(i))->offset(_blink);
 	}
 
 	drawMarkers();
@@ -1498,10 +1497,8 @@ void Globe::XuLine(
 		delta_x = x2 - x1,
 		delta_y = y2 - y1,
 		len,
-		x0,
-		y0,
-		SX,
-		SY;
+		x0,y0,
+		SX,SY;
 
 	if (std::abs(static_cast<int>(y2) - static_cast<int>(y1)) > std::abs(static_cast<int>(x2) - static_cast<int>(x1)))
 	{
@@ -1712,8 +1709,7 @@ void Globe::drawGlobeCircle(
 		Uint8 color)
 {
 	double
-		x,
-		y,
+		x,y,
 		x2 = 0.,
 		y2 = 0.,
 		lat1,
@@ -1817,15 +1813,11 @@ void Globe::drawVHLine(
 	double
 		sx = lon2 - lon1,
 		sy = lat2 - lat1,
-		ln1,
-		lt1,
-		ln2,
-		lt2;
+		ln1,lt1,
+		ln2,lt2;
 	Sint16
-		x1,
-		y1,
-		x2,
-		y2;
+		x1,y1,
+		x2,y2;
 	int
 		seg;
 
@@ -1938,8 +1930,7 @@ void Globe::drawDetail()
 	}
 
 	Sint16
-		x,
-		y;
+		x,y;
 
 	if (_zoom > 1) // draw the city markers
 	{
@@ -1953,33 +1944,9 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
-				lon = (*j)->getLongitude(),
-				lat = (*j)->getLatitude();
-
-				if (pointBack( // don't draw if city is facing back
-							lon,
-							lat) == false)
-				{
-					polarToCart( // convert coordinates
-							lon,
-							lat,
-							&x,
-							&y);
-
-					// code for using SurfaceSet for markers:
-					Surface* const marker = _markerSet->getFrame(CITY_MARKER);
-					if (marker != NULL)
-					{
-						marker->setX(x - 1);
-						marker->setY(y - 1);
-						marker->blit(_countries); // end.
-					}
-
-/*					_mkCity->setX(x - 1);
-					_mkCity->setY(y - 1);
-					_mkCity->setPalette(getPalette());
-					_mkCity->blit(_countries); */
-				}
+				drawTarget(
+						*j,
+						_countries);
 			}
 		}
 	}
@@ -2014,8 +1981,7 @@ void Globe::drawDetail()
 					polarToCart( // convert coordinates
 							lon,
 							lat,
-							&x,
-							&y);
+							&x,&y);
 
 					label->setX(x - 50);
 					label->setY(y);
@@ -2039,10 +2005,6 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
-				drawTarget(
-						*j,
-						_countries);
-
 				lon = (*j)->getLongitude(),
 				lat = (*j)->getLatitude();
 
@@ -2055,8 +2017,7 @@ void Globe::drawDetail()
 						polarToCart( // convert coordinates
 								lon,
 								lat,
-								&x,
-								&y);
+								&x,&y);
 
 						if ((*j)->getLabelTop() == true)
 							offset_y = -10;
@@ -2092,8 +2053,7 @@ void Globe::drawDetail()
 				polarToCart( // convert coordinates
 						lon,
 						lat,
-						&x,
-						&y);
+						&x,&y);
 
 				label->setX(x - 3);
 				label->setY(y - 10);
@@ -2325,10 +2285,8 @@ void Globe::drawPath(
 {
 	double
 		dist,
-		x1,
-		y1,
-		x2,
-		y2;
+		x1,y1,
+		x2,y2;
 	Sint16 qty;
 	CordPolar
 		p1,
@@ -2374,10 +2332,8 @@ void Globe::drawPath(
 			XuLine(
 				surface,
 				this,
-				x1,
-				y1,
-				x2,
-				y2,
+				x1,y1,
+				x2,y2,
 				8,
 				Palette::blockOffset(10)+6); // steel gray
 		}
@@ -2389,7 +2345,7 @@ void Globe::drawPath(
 }
 
 /**
- * Draws the flight paths of player craft flying on the globe.
+ * Draws the flight paths of player Craft flying on the globe.
  */
 void Globe::drawFlights()
 {
@@ -2398,7 +2354,7 @@ void Globe::drawFlights()
 		return;
 
 	_radars->lock();
-	for (std::vector<Base*>::const_iterator // Draw the craft flight paths
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -2408,25 +2364,22 @@ void Globe::drawFlights()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			if ((*j)->getStatus() != "STR_OUT" // Hide crafts docked at base
-				|| (*j)->getDestination() == 0)
-//				|| pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+			if ((*j)->getStatus() == "STR_OUT"
+				&& (*j)->getDestination() != NULL)
 			{
-				continue;
+				const double
+					lon1 = (*j)->getLongitude(),
+					lon2 = (*j)->getDestination()->getLongitude(),
+					lat1 = (*j)->getLatitude(),
+					lat2 = (*j)->getDestination()->getLatitude();
+
+				drawPath(
+						_radars,
+						lon1,
+						lat1,
+						lon2,
+						lat2);
 			}
-
-			const double
-				lon1 = (*j)->getLongitude(),
-				lon2 = (*j)->getDestination()->getLongitude(),
-				lat1 = (*j)->getLatitude(),
-				lat2 = (*j)->getDestination()->getLatitude();
-
-			drawPath(
-					_radars,
-					lon1,
-					lat1,
-					lon2,
-					lat2);
 		}
 	}
 	_radars->unlock();
@@ -2434,25 +2387,28 @@ void Globe::drawFlights()
 
 /**
  * Draws the marker for a specified target on the globe.
- * @param target Pointer to globe target.
+ * @param target	- pointer to globe Target
+ * @param surface	- pointer to globe Surface
  */
 void Globe::drawTarget(
 		Target* target,
 		Surface* surface)
 {
+	const double
+		lon = target->getLongitude(),
+		lat = target->getLatitude();
+
 	if (target->getMarker() != -1
 		&& pointBack(
-					target->getLongitude(),
-					target->getLatitude()) == false)
+					lon,
+					lat) == false)
 	{
 		Sint16
-			x,
-			y;
+			x,y;
 		polarToCart(
-				target->getLongitude(),
-				target->getLatitude(),
-				&x,
-				&y);
+				lon,
+				lat,
+				&x,&y);
 
 		Surface* const marker = _markerSet->getFrame(target->getMarker());
 		marker->setX(x - 1);
@@ -2463,7 +2419,8 @@ void Globe::drawTarget(
 }
 
 /**
- * Draws the markers of all the various things going on around the world.
+ * Draws the markers of all the various things going on around the world
+ * except Cities.
  */
 void Globe::drawMarkers()
 {

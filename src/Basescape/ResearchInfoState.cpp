@@ -116,19 +116,19 @@ void ResearchInfoState::buildUi()
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color); //1
+			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
 
-	add(_window, "window", "allocateResearch");
-	add(_txtTitle, "text", "allocateResearch");
-	add(_txtAvailableScientist, "text", "allocateResearch");
-	add(_txtAvailableSpace, "text", "allocateResearch");
-	add(_txtAllocatedScientist, "text", "allocateResearch");
-	add(_txtMore, "text", "allocateResearch");
-	add(_txtLess, "text", "allocateResearch");
-	add(_btnMore, "button1", "allocateResearch");
-	add(_btnLess, "button1", "allocateResearch");
-	add(_btnCancel, "button2", "allocateResearch");
-	add(_btnOk, "button2", "allocateResearch");
+	add(_window,				"window",	"allocateResearch");
+	add(_txtTitle,				"text",		"allocateResearch");
+	add(_txtAvailableScientist,	"text",		"allocateResearch");
+	add(_txtAvailableSpace,		"text",		"allocateResearch");
+	add(_txtAllocatedScientist,	"text",		"allocateResearch");
+	add(_txtMore,				"text",		"allocateResearch");
+	add(_txtLess,				"text",		"allocateResearch");
+	add(_btnMore,				"button1",	"allocateResearch");
+	add(_btnLess,				"button1",	"allocateResearch");
+	add(_btnCancel,				"button2",	"allocateResearch");
+	add(_btnOk,					"button2",	"allocateResearch");
 
 	centerAllSurfaces();
 

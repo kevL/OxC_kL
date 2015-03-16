@@ -649,6 +649,8 @@ void AlienBAIState::setupPatrol()
 		{											// target nodes -- or once there shoot objects thereabouts, so
 			if (_fromNode->isTarget() == true		// scan this room for objects to destroy
 				&& _unit->getMainHandWeapon() != NULL
+				&& _unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0
+				&& _unit->getMainHandWeapon()->getAmmoItem() != NULL
 				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE
 				&& _save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
@@ -658,22 +660,22 @@ void AlienBAIState::setupPatrol()
 
 				for (int
 						i = x;
-						i < x + 9;
+						i != x + 9;
 						++i)
 				{
 					for (int
 							j = y;
-							j < y + 9;
+							j != y + 9;
 							++j)
 					{
-						const MapData* const data = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
+						const MapData* const data = _save->getTile(Position(i,j,1))->getMapData(MapData::O_OBJECT);
 						if (data != NULL
 							&& data->isBaseModule() == true)
 //							&& data->getDieMCD()
 //							&& data->getArmor() < 60)
 						{
 							_patrolAction->actor = _unit;
-							_patrolAction->target = Position(i, j, 1);
+							_patrolAction->target = Position(i,j,1);
 							_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
 							_patrolAction->type = BA_SNAPSHOT;
 							_patrolAction->TU = _patrolAction->actor->getActionTUs(
