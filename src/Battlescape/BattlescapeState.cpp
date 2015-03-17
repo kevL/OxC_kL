@@ -4118,7 +4118,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 			i != rows;
 			++i)
 	{
-		Uint8 color;
+		Uint8 color = 0;
 
 		if (i == 0) // Floor
 		{
@@ -4173,11 +4173,12 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 							infoType.at(i).c_str());
 		}
 
-		_lstTileInfo->setCellColor(
-								i,
-								0,
-								color,
-								true);
+		if (color != 0) // safety.
+			_lstTileInfo->setCellColor(
+									i,
+									0,
+									color,
+									true);
 	}
 }
 

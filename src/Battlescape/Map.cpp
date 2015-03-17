@@ -1522,6 +1522,7 @@ void Map::drawTerrain(Surface* surface)
 									++i)
 							{
 								if ((*i)->getStatus() == STATUS_WALKING
+									&& (*i)->getVerticalDirection() == 0 // not sure if this is needed ...
 									&& (*i)->getArmor()->getSize() == 1)
 								{
 									const Position curPos = (*i)->getPosition();
@@ -1538,9 +1539,9 @@ void Map::drawTerrain(Surface* surface)
 											|| endPos == mapPosition)
 										{
 											int
+												dir = (*i)->getDirection(),
 												pixelOffset_x, // sprites: 32x40
-												pixelOffset_y,
-												dir = (*i)->getDirection();
+												pixelOffset_y;
 
 											if (dir == 0 || dir == 4)
 											{
@@ -1557,7 +1558,7 @@ void Map::drawTerrain(Surface* surface)
 												pixelOffset_x = -16;
 												pixelOffset_y = 16;
 											}
-											else if (dir == 3 || dir == 7)
+											else //if (dir == 3 || dir == 7)
 											{
 												pixelOffset_x = 0;
 												pixelOffset_y = 8;
@@ -1766,7 +1767,8 @@ void Map::drawTerrain(Surface* surface)
 												&& (tile->getMapData(MapData::O_OBJECT) == NULL
 													|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 														&& tileWest->getTerrainLevel() - tile->getTerrainLevel() < 13 // positive means Tile is higher
-														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)))
+//														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)))
+														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
 											{
 												const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
@@ -1794,7 +1796,8 @@ void Map::drawTerrain(Surface* surface)
 																&& tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
 																&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255
+//																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255
+																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) < 6
 																		// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)
@@ -2271,7 +2274,7 @@ void Map::drawTerrain(Surface* surface)
 						{
 							if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [70]";
 							if (unit->getHealth() == 0
-								|| unit->getHealth() <= unit->getStun())
+								|| unit->getHealth() <= unit->getStun()) // -> && unit is Player
 							{
 								shade = std::min(
 												5,

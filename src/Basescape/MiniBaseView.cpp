@@ -186,24 +186,24 @@ void MiniBaseView::draw()
 					++rect.y;
 					--rect.w;
 					--rect.h;
-					drawRect(&rect, color+5);
+					drawRect(&rect, color + 5);
 
 					--rect.x;
 					--rect.y;
-					drawRect(&rect, color+2);
+					drawRect(&rect, color + 2);
 
 					++rect.x;
 					++rect.y;
 					--rect.w;
 					--rect.h;
-					drawRect(&rect, color+3);
+					drawRect(&rect, color + 3);
 
 					--rect.x;
 					--rect.y;
 					setPixelColor(
 								rect.x,
 								rect.y,
-								color+1);
+								color + 1);
 				}
 				unlock();
 
@@ -235,7 +235,7 @@ void MiniBaseView::draw()
 									color = ORANGE_L;
 								else if ((*craft)->getWarning() == CW_CANTREARM)
 									color = ORANGE_D;
-								else if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
+								else //if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
 									color = RED_D;
 
 								setPixelColor( // Craft needs materiels
@@ -376,7 +376,7 @@ void MiniBaseView::blink()
 							color = ORANGE_L;
 						else if (stat == "STR_REARMING")
 							color = ORANGE_D;
-						else if (stat == "STR_REPAIRS")
+						else //if (stat == "STR_REPAIRS")
 							color = RED_D;
 					}
 					else

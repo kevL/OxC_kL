@@ -2,7 +2,7 @@ ${ufoPath}:${ufo}
 
 ${rootPathUFO}:${ufoPath}\MAPS\
 ${rmpPathUFO}:${ufoPath}\ROUTES\
-${blankUFO}:F:\openXcom\oXc_Edit\MapView\BLANKS\UFO\
+${blankUFO}:F:\openXcom\oXc_Edit\MapView2\BLANKS\UFO\
 
 Tileset:UFO - Terrain
 	type:1

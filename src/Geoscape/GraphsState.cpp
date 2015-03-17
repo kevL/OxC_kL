@@ -2063,13 +2063,11 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			if (newLineVector.size() > 1)
 			{
 				const Sint16 x = 312 - static_cast<Sint16>(i) * 17;
-
 				_financeLines.at(btn)->drawLine(
-						x,
-						y,
-						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset((static_cast<Uint8>(btn) / 2) + 1) + colorOffset);
+											x,y,
+											x + 17,
+											newLineVector.at(static_cast<Sint16>(newLineVector.size()) - 2),
+											Palette::blockOffset((static_cast<Uint8>(btn) / 2) + 1) + colorOffset);
 			}
 		}
 	}
