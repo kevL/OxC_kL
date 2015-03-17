@@ -1529,8 +1529,8 @@ regions:
         lon: 255.23
         lat: -29.0404
       - name: STR_CORPUSCHRISTI
-        lon: 263.552
-        lat: -28.1696
+        lon: 263.422
+        lat: -28.379
       - name: STR_DALLAS
         lon: 263.375
         lat: -32.75
@@ -1608,8 +1608,8 @@ regions:
         lon: 265.90
         lat: -44.43
       - name: STR_MONTERREY
-        lon: 262.49
-        lat: -25.72
+        lon: 262.282
+        lat: -25.786
       - name: STR_MONTREAL
         lon: 284.25
         lat: -45.5
@@ -1662,8 +1662,8 @@ regions:
         lat: -48.124
         texture: -2
       - name: STR_TIJUANA
-        lon: 242.763
-        lat: -32.616
+        lon: 242.873
+        lat: -32.415
         texture: -2
       - name: STR_TORONTO
         lon: 279.454

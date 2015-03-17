@@ -5484,7 +5484,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1426125083 f:\git\openxcom\src\battlescape\map.h
+1426634812 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5596,7 +5596,7 @@
 
 1426124164 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1426576233 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1426623599 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6041,7 +6041,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1426570675 source:f:\git\openxcom\src\battlescape\map.cpp
+1426633770 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -7289,7 +7289,7 @@
 
 1424390935 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1426544984 source:f:\git\openxcom\src\geoscape\globe.cpp
+1426633687 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8845,10 +8845,10 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1426358028 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
+1426632674 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1426113778 source:f:\git\openxcom\src\savegame\soldier.cpp
+1426625181 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

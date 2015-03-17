@@ -447,9 +447,9 @@ void Map::setPalette(
 /**
  * Draw the terrain.
  * Keep this function as optimised as possible. It's big so minimise overhead of function calls.
- * @param surface - the surface to draw on
+ * @param surface - the Surface to draw on
  */
-void Map::drawTerrain(Surface* surface)
+void Map::drawTerrain(Surface* surface) // private.
 {
 //	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 //	static const int arrowBob[10] = {0,2,3,3,2,0,-2,-3,-3,-2}; // DarkDefender
@@ -4523,12 +4523,12 @@ void Map::calculateWalkingOffset(
 
 /**
   * Terrainlevel goes from 0 to -24 (bottom to top).
-  * For a large sized unit, pick the highest terrain level, which is the lowest number...
+  * For a large sized unit pick the highest terrain level which is the lowest number.
   * @param pos		- Position
-  * @param unitSize	- size of the unit to get the level from
+  * @param unitSize	- size of the unit at pos
   * @return, terrain height
   */
-int Map::getTerrainLevel(
+int Map::getTerrainLevel( // private.
 		Position pos,
 		int unitSize)
 {
@@ -4538,12 +4538,12 @@ int Map::getTerrainLevel(
 
 	for (int
 			x = 0;
-			x < unitSize;
+			x != unitSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y < unitSize;
+				y != unitSize;
 				++y)
 		{
 			lowTest = _battleSave->getTile(pos + Position(x,y,0))->getTerrainLevel();
@@ -4557,8 +4557,8 @@ int Map::getTerrainLevel(
 
 /**
  * Sets the 3D cursor to selection/aim mode.
- * @param type - CursorType
- * @param cursorSize - size of cursor
+ * @param type			- CursorType
+ * @param cursorSize	- size of the cursor
  */
 void Map::setCursorType(
 		CursorType type,

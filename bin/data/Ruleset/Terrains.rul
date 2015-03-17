@@ -2715,9 +2715,6 @@ terrains:
         width: 10
         length: 10
         groups: 3
-#      - type: PORTURBAN23 #kL_add
-#        width: 10
-#        length: 10
   - type: RAILYARDURBAN
     script: URBAN #was RAILYARDURBAN
     mapDataSets:

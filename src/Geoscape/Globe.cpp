@@ -1953,7 +1953,7 @@ void Globe::drawDetail()
 
 	if (Options::globeDetail == true)
 	{
-		Text* const label = new Text(100, 9, 0, 0);
+		Text* const label = new Text(100,9);
 
 		label->setPalette(getPalette());
 		label->initText(

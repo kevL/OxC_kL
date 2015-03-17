@@ -802,7 +802,7 @@ en-US:
   STR_PSIONIC_SKILL: "psionic skill"
   STR_NEW_RANK: "Rank"
   STR_PROMOTIONS: "PROMOTIONS"
-  STR_SOLDIERS_UC: "pfc.Fritz"
+  STR_SOLDIERS_UC: "pfc"
   STR_TANK_CANNON_UFOPEDIA: "Automated Heavy Weapons Platforms are designed to complement an xCom squad. The combination of high fire power and strong armor makes these units valuable for open terrain fire fights. Make sure that there are sufficient cannon shells in your stores to re-arm tanks. They are armed automatically when you assign them to a squad."
   STR_TANK_ROCKET_LAUNCHER_UFOPEDIA: "This automated Heavy Weapons Platform is armed with powerful rockets. This will be devastating for any aLien foe. Make sure your stores are kept supplied with HWP rockets."
   STR_TANK_LASER_CANNON_UFOPEDIA: "Laser weapons are a useful addition for HWPs. It combines heavy firepower with no ammunition restrictions."

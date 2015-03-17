@@ -3478,7 +3478,7 @@ void BattlescapeGenerator::clearModule( // private.
 					dy != y + sizeY;
 					++dy)
 			{
-				Tile* const tile = _battleSave->getTile(Position(dx, dy, z));
+				Tile* const tile = _battleSave->getTile(Position(dx,dy,z));
 				for (int
 						i = 0;
 						i < 4;
@@ -3543,8 +3543,8 @@ void BattlescapeGenerator::attachNodeLinks() // private.
 		const int
 			segmentX = node->getPosition().x / 10,
 			segmentY = node->getPosition().y / 10,
-			neighbourDirections[4]			= {-2, -3, -4, -5},
-			neighbourDirectionsInverted[4]	= {-4, -5, -2, -3};
+			neighbourDirections[4]			= {-2,-3,-4,-5},
+			neighbourDirectionsInverted[4]	= {-4,-5,-2,-3};
 		int neighbourSegments[4];
 
 		if (segmentX == (_mapsize_x / 10) - 1)
@@ -3624,7 +3624,7 @@ bool BattlescapeGenerator::selectPosition( // private.
 	std::vector<SDL_Rect*> available;
 
 	SDL_Rect wholeMap;
-	wholeMap.x = 0;
+	wholeMap.x =
 	wholeMap.y = 0;
 	wholeMap.w = static_cast<Uint16>(_mapsize_x / 10);
 	wholeMap.h = static_cast<Uint16>(_mapsize_y / 10);
@@ -3718,12 +3718,10 @@ bool BattlescapeGenerator::addCraft( // private.
 	craftPos.h = static_cast<Uint16>(craftMap->getSizeY());
 
 	int
-		x,
-		y;
+		x,y;
 	bool placed = selectPosition(
 							command->getRects(),
-							x,
-							y,
+							x,y,
 							craftPos.w,
 							craftPos.h);
 
@@ -3785,7 +3783,7 @@ bool BattlescapeGenerator::addLine( // private.
 	int tries = 0,
 		roadX,
 		roadY,
-		* iterValue = &roadX,
+		* i = &roadX,
 		limit = _mapsize_x / 10;
 	MapBlockType
 		comparator = MT_NSROAD,
@@ -3793,7 +3791,7 @@ bool BattlescapeGenerator::addLine( // private.
 
 	if (direction == MD_VERTICAL)
 	{
-		iterValue = &roadY;
+		i = &roadY;
 		comparator = MT_EWROAD;
 		typeToAdd = MT_NSROAD;
 		limit = _mapsize_y / 10;
@@ -3810,9 +3808,9 @@ bool BattlescapeGenerator::addLine( // private.
 					10,10);
 
 		for (
-				*iterValue = 0;
-				*iterValue < limit;
-				*iterValue += 1)
+				*i = 0;
+				*i < limit;
+				*i += 1)
 		{
 			if (_blocks[roadX][roadY] != NULL
 				&& _blocks[roadX][roadY]->isInGroup(comparator) == false)
@@ -3826,10 +3824,10 @@ bool BattlescapeGenerator::addLine( // private.
 			return false;
 	}
 
-	*iterValue = 0;
-	while (*iterValue < limit)
+	*i = 0;
+	while (*i < limit)
 	{
-		if (_blocks[roadX][roadY] == 0)
+		if (_blocks[roadX][roadY] == NULL)
 			addBlock(
 					roadX,
 					roadY,
@@ -3853,7 +3851,7 @@ bool BattlescapeGenerator::addLine( // private.
 				0);
 		}
 
-		*iterValue += 1;
+		*i += 1;
 	}
 
 	return true;
@@ -3986,15 +3984,13 @@ void BattlescapeGenerator::drillModules( // private.
 			Tile* tile = NULL;
 			MapData* data = NULL;
 
-			if (dir != MD_VERTICAL)
+			if (dir != MD_VERTICAL) // drill east
 			{
-				// drill east
 				if (i < (_mapsize_x / 10) - 1
 					&& (_drillMap[i][j] == MD_HORIZONTAL
 						|| _drillMap[i][j] == MD_BOTH)
 					&& _blocks[i + 1][j] != NULL)
 				{
-					// remove stuff
 					for (int
 							k = rect.y;
 							k != rect.y + rect.h;
@@ -4075,15 +4071,13 @@ void BattlescapeGenerator::drillModules( // private.
 				}
 			}
 
-			if (dir != MD_HORIZONTAL)
+			if (dir != MD_HORIZONTAL) // drill south
 			{
-				// drill south
 				if (j < (_mapsize_y / 10) - 1
 					&& (_drillMap[i][j] == MD_VERTICAL
 						|| _drillMap[i][j] == MD_BOTH)
 					&& _blocks[i][j + 1] != NULL)
 				{
-					// remove stuff
 					for (int
 							k = rect.x;
 							k != rect.x + rect.w;
