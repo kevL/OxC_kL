@@ -30,11 +30,11 @@
 namespace OpenXcom
 {
 
-const double
-	PROGRESS_LIMIT_UNKNOWN	= 0.09,
-	PROGRESS_LIMIT_POOR		= 0.23,
-	PROGRESS_LIMIT_AVERAGE	= 0.55,
-	PROGRESS_LIMIT_GOOD		= 0.86;
+const float
+	PROGRESS_LIMIT_UNKNOWN	= 0.09f,
+	PROGRESS_LIMIT_POOR		= 0.23f,
+	PROGRESS_LIMIT_AVERAGE	= 0.55f,
+	PROGRESS_LIMIT_GOOD		= 0.86f;
 
 
 /**
@@ -190,7 +190,7 @@ std::string ResearchProject::getResearchProgress() const
 	if (_assigned == 0)
 		return "STR_NONE";
 
-	const double progress = static_cast<double>(_spent) / static_cast<double>(_cost);
+	const float progress = static_cast<float>(_spent) / static_cast<float>(_cost);
 
 	if (progress < PROGRESS_LIMIT_UNKNOWN)	// < 0.1
 		return "STR_UNKNOWN";

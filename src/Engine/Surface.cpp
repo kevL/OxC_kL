@@ -914,9 +914,8 @@ void Surface::setHidden(bool hidden)
 }
 
 /**
- * Locks the surface from outside access
- * for pixel-level access. Must be unlocked
- * afterwards.
+ * Locks the surface from outside access for pixel-level access.
+ * Must be unlocked afterwards.
  * @sa unlock()
  */
 void Surface::lock()
@@ -925,8 +924,7 @@ void Surface::lock()
 }
 
 /**
- * Unlocks the surface after it's been locked
- * to resume blitting operations.
+ * Unlocks the surface after it's been locked to resume blitting operations.
  * @sa lock()
  */
 void Surface::unlock()
@@ -944,11 +942,11 @@ struct ColorReplace
 /**
 * Function used by ShaderDraw in Surface::blitNShade
 * set shade and replace color in that surface
-* @param dest destination pixel
-* @param src source pixel
-* @param shade value of shade of this surface
-* @param newColor new color to set (it should be offseted by 4)
-* @param notused
+* @param dest		- destination pixel
+* @param src		- source pixel
+* @param shade		- value of shade of this surface
+* @param newColor	- new color to set (it should be offseted by 4)
+* @param - notused
 */
 static inline void func(
 		Uint8& dest,
@@ -979,11 +977,11 @@ struct StandardShade
 /**
 * Function used by ShaderDraw in Surface::blitNShade
 * set shade
-* @param dest destination pixel
-* @param src source pixel
-* @param shade value of shade of this surface
-* @param notused
-* @param notused
+* @param dest	- destination pixel
+* @param src	- source pixel
+* @param shade	- value of shade of this surface
+* @param - notused
+* @param - notused
 */
 static inline void func(
 		Uint8& dest,
@@ -994,11 +992,11 @@ static inline void func(
 {
 	if (src != 0)
 	{
-		const int newShade = (src & 15) + shade;
+		const int newShade = static_cast<int>(src & 15) + shade;
 		if (newShade > 15) // so dark it would flip over to another color - make it black instead
 			dest = 15;
 		else
-			dest = (src & (15 << 4)) | newShade;
+			dest = static_cast<Uint8>((static_cast<int>(src) & (15 << 4)) | newShade);
 	}
 }
 

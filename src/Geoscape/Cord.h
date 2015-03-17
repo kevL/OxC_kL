@@ -55,7 +55,7 @@ struct CordPolar
 
 	inline CordPolar()
 	{
-		lon = 0.;
+		lon =
 		lat = 0.;
 	}
 
@@ -69,9 +69,7 @@ struct CordPolar
 struct Cord
 {
 	double
-		x,
-		y,
-		z;
+		x,y,z;
 
 	///
 	inline Cord(
@@ -95,8 +93,8 @@ struct Cord
 	///
 	inline Cord()
 	{
-		x = 0.;
-		y = 0.;
+		x =
+		y =
 		z = 0.;
 	}
 
@@ -113,11 +111,11 @@ struct Cord
 	///
 	inline Cord operator -()
 	{
-		return Cord(-x, -y, -z);
+		return Cord(-x,-y,-z);
 	}
 
 	///
-	inline Cord& operator *=(double d)
+	inline Cord& operator*= (double d)
 	{
 		x *= d;
 		y *= d;
@@ -126,7 +124,7 @@ struct Cord
 	}
 
 	///
-	inline Cord& operator /=(double d)
+	inline Cord& operator/= (double d)
 	{
 		double re = 1./d;
 		x *= re;
@@ -136,7 +134,7 @@ struct Cord
 	}
 
 	///
-	inline Cord& operator +=(const Cord& c)
+	inline Cord& operator+= (const Cord& c)
 	{
 		x += c.x;
 		y += c.y;
@@ -145,7 +143,7 @@ struct Cord
 	}
 
 	///
-	inline Cord& operator -=(const Cord& c)
+	inline Cord& operator-= (const Cord& c)
 	{
 		x -= c.x;
 		y -= c.y;
@@ -154,7 +152,7 @@ struct Cord
 	}
 
 	///
-	inline bool operator ==(const Cord& c)
+	inline bool operator== (const Cord& c)
 	{
 		return AreSame(x, c.x)
 			&& AreSame(y, c.y)
@@ -186,7 +184,7 @@ inline Cord::Cord(const CordPolar& pol)
  */
 inline CordPolar::CordPolar(const Cord& c)
 {
-	double inv = 1 / c.norm();
+	double inv = 1. / c.norm();
 	lat = std::asin(c.y * inv);
 	lon = std::atan2(c.x, c.z);
 }

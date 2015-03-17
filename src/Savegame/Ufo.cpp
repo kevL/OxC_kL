@@ -908,7 +908,7 @@ int Ufo::getFireCountdown() const
  * This flag is reset in advance each time the geoscape processes the dogfights.
  * @param processed - true if the timers have been processed
  */
-void Ufo::setInterceptionProcessed(bool processed)
+void Ufo::setEngaged(bool processed)
 {
 	_processedIntercept = processed;
 }
@@ -917,7 +917,7 @@ void Ufo::setInterceptionProcessed(bool processed)
  * Gets if the ufo has had its timers decremented on this cycle of interception updates.
  * @return, true if this ufo has already been processed
  */
-bool Ufo::getInterceptionProcessed() const
+bool Ufo::getEngaged() const
 {
 	return _processedIntercept;
 }

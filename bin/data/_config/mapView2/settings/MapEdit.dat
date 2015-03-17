@@ -2,7 +2,7 @@ ${ufoPath}:${ufo}
 
 ${rootPathUFO}:${ufoPath}\MAPS\
 ${rmpPathUFO}:${ufoPath}\ROUTES\
-${blankUFO}:F:\openXcom\oXc_MapView\BLANKS\UFO\
+${blankUFO}:F:\openXcom\oXc_Edit\MapView\BLANKS\UFO\
 
 Tileset:UFO - Terrain
 	type:1
@@ -875,7 +875,6 @@ Tileset:UFO - Terrain
 		PORTURBAN20:${dep}
 		PORTURBAN21:${dep}
 		PORTURBAN22:${dep}
-		PORTURBAN23:${dep}
 	end
 
 	files:railyardurban
@@ -1184,8 +1183,8 @@ Tileset:UFO - Terrain
 		DESERT11:${dep}
 	end
 
-	files:tundadesertmount
-		${dep}:TUNDRAMOUNT TUNDADESERT
+	files:tundradesertmount
+		${dep}:TUNDRAMOUNT TUNDRADESERT
 		DESERTMOUNT00:${dep}
 		DESERTMOUNT01:${dep}
 		DESERTMOUNT02:${dep}
@@ -1241,7 +1240,6 @@ Tileset:UFO - Terrain
 		UBASE_13:${dep}
 		UBASE_14:${dep}
 		UBASE_15:${dep}
-		UBASE_16:${dep}
 		UBASE_19:${dep}
 		UBASE_20:${dep}
 		UBASE_21:${dep}

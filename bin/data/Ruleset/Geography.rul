@@ -1589,8 +1589,9 @@ regions:
         lon: 243.11
         lat: -37.05
       - name: STR_LOS_ANGELES
-        lon: 241.75
-        lat: -34.125
+        lon: 241.294
+        lat: -33.816
+        labelTop: true
       - name: STR_MANAGUA
         lon: 273.441
         lat: -11.585
@@ -1633,8 +1634,8 @@ regions:
         lon: 248
         lat: -33.5
       - name: STR_PORTLAND
-        lon: 235.21
-        lat: -43.11
+        lon: 235.608
+        lat: -43.128
       - name: STR_QUEBECCITY
         lon: 290.217
         lat: -48.183
@@ -1642,11 +1643,12 @@ regions:
         lon: 244.36
         lat: -42
       - name: STR_SANDIEGO
-        lon: 242.625
-        lat: -32.75
+        lon: 242.657
+        lat: -32.804
+        labelTop: true
       - name: STR_SANFRANCISCO
-        lon: 236.705
-        lat: -38.7191
+        lon: 236.819
+        lat: -38.744
         texture: -2
       - name: STR_SANTODOMINGO
         lon: 290.0
@@ -1656,19 +1658,19 @@ regions:
         lon: 253.46
         lat: -52.23
       - name: STR_SEATTLE
-        lon: 236.948
-        lat: -47
+        lon: 236.876
+        lat: -48.124
         texture: -2
       - name: STR_TIJUANA
-        lon: 243.02
-        lat: -31.83
+        lon: 242.763
+        lat: -32.616
         texture: -2
       - name: STR_TORONTO
         lon: 279.454
         lat: -43.1442
       - name: STR_VANCOUVER
-        lon: 236.75
-        lat: -49.375
+        lon: 236.936
+        lat: -49.388
         labelTop: true
         texture: -2
       - name: STR_WASHINGTON

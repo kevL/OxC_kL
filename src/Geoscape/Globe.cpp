@@ -2240,9 +2240,9 @@ void Globe::drawDetail()
 					{
 						if (_game->getSavedGame()->getDebugArg().compare("COORD") != 0) // ie. don't display area-info if co-ordinates are currently displayed.
 						{
-							std::ostringstream ostr;
-							ostr << (*i)->getType() << " [" << zoneType << "]";
-							_game->getSavedGame()->setDebugArg(ostr.str());
+							std::ostringstream oststr;
+							oststr << (*i)->getType() << " [" << zoneType << "]";
+							_game->getSavedGame()->setDebugArg(oststr.str());
 						}
 						break;
 					}
@@ -2311,8 +2311,7 @@ void Globe::drawPath(
 	polarToCart(
 				p1.lon,
 				p1.lat,
-				&x1,
-				&y1);
+				&x1,&y1);
 	for (int
 			i = 0;
 			i < qty;
@@ -2323,10 +2322,9 @@ void Globe::drawPath(
 		polarToCart(
 					p2.lon,
 					p2.lat,
-					&x2,
-					&y2);
+					&x2,&y2);
 
-		if (pointBack(p1.lon, p1.lat) == false
+		if (   pointBack(p1.lon, p1.lat) == false
 			&& pointBack(p2.lon, p2.lat) == false)
 		{
 			XuLine(
@@ -2394,27 +2392,29 @@ void Globe::drawTarget(
 		Target* target,
 		Surface* surface)
 {
-	const double
-		lon = target->getLongitude(),
-		lat = target->getLatitude();
+	if (target->getMarker() != -1)
+	{
+		const double
+			lon = target->getLongitude(),
+			lat = target->getLatitude();
 
-	if (target->getMarker() != -1
-		&& pointBack(
+		if (pointBack(
 					lon,
 					lat) == false)
-	{
-		Sint16
-			x,y;
-		polarToCart(
-				lon,
-				lat,
-				&x,&y);
+		{
+			Sint16
+				x,y;
+			polarToCart(
+					lon,
+					lat,
+					&x,&y);
 
-		Surface* const marker = _markerSet->getFrame(target->getMarker());
-		marker->setX(x - 1);
-		marker->setY(y - 1);
+			Surface* const marker = _markerSet->getFrame(target->getMarker());
+			marker->setX(x - 1);
+			marker->setY(y - 1);
 
-		marker->blit(surface);
+			marker->blit(surface);
+		}
 	}
 }
 

@@ -63,7 +63,6 @@ class GeoscapeState
 {
 
 private:
-
 	bool
 		_dogfightEnded,
 		_pause,

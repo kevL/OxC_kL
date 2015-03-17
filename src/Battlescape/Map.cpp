@@ -222,12 +222,12 @@ void Map::init()
 	_arrow->lock();
 	for (size_t
 			y = 0;
-			y < 9;
+			y != 9;
 			++y)
 	{
 		for (size_t
 				x = 0;
-				x < 9;
+				x != 9;
 				++x)
 		{
 			_arrow->setPixelColor(
@@ -255,12 +255,12 @@ void Map::init()
 	_arrow_kneel->lock();
 	for (size_t
 			y = 0;
-			y < 9;
+			y != 9;
 			++y)
 	{
 		for (size_t
 				x = 0;
-				x < 9;
+				x != 9;
 				++x)
 		{
 			_arrow_kneel->setPixelColor(
@@ -338,7 +338,7 @@ void Map::draw()
 	// (aka black) -- you use color 15 because that actually corresponds to the
 	// colour you DO want in all variations of the xcom and tftd palettes.
 //	Surface::draw();
-	clear(Palette::blockOffset(0)+15);
+	clear(15); // black
 
 	const Tile* tile = NULL;
 
@@ -705,7 +705,11 @@ void Map::drawTerrain(Surface* surface)
 //		unitNorthValid,
 
 		halfRight,
-		redraw;
+		redraw,
+
+		kL_Debug_stand = false, // for debugging.
+		kL_Debug_walk = false,
+		kL_Debug_vert = false;
 
 
 	surface->lock();
@@ -824,6 +828,7 @@ void Map::drawTerrain(Surface* surface)
 										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
 
 										srfSprite = _res->getSurface(soldierRank);
+//										srfSprite = NULL;
 										if (srfSprite != NULL)
 											srfSprite->blitNShade(
 													surface,
@@ -957,6 +962,7 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [10]";
 												calculateWalkingOffset(
 																	unitNorth,
 																	&walkOffset);
@@ -1176,7 +1182,7 @@ void Map::drawTerrain(Surface* surface)
 											&& (unitWest->getUnitVisible() == true
 												|| _battleSave->getDebugMode() == true)
 											&& (unitWest != unit
-												|| (unitWest->getDirection() != 2
+												|| (unitWest->getDirection() != 2 // Should these tie into STATUS_WALKING; they do, see below_
 													&& unitWest->getDirection() != 6))
 											&& (tileWest->getMapData(MapData::O_OBJECT) == NULL
 												|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_EAST // do none,[Block,diagonals],West,North,West&North
@@ -1198,7 +1204,7 @@ void Map::drawTerrain(Surface* surface)
 
 													if (itY < endY - 1)
 													{
-														if (unitWest->getDirection() == 1
+														if (   unitWest->getDirection() == 1 // Should these tie into STATUS_WALKING; they do, see below_
 															|| unitWest->getDirection() == 5
 															|| unitWest->getDirection() == 3
 															|| unitWest->getDirection() == 7) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
@@ -1232,6 +1238,7 @@ void Map::drawTerrain(Surface* surface)
 												{
 													if (unitWest->getStatus() != STATUS_WALKING)
 													{
+														if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [20]";
 														halfRight = true;
 														walkOffset.x = 0;
 														walkOffset.y = getTerrainLevel(
@@ -1240,6 +1247,7 @@ void Map::drawTerrain(Surface* surface)
 													}
 													else // isWalking
 													{
+														if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [25]";
 														halfRight = false;
 														calculateWalkingOffset(
 																			unitWest,
@@ -1563,6 +1571,7 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [30]";
 												if (tile->isDiscovered(2) == true)
 													shade = tile->getShade();
 												else
@@ -1612,7 +1621,8 @@ void Map::drawTerrain(Surface* surface)
 								if (unitNorth != NULL
 									&& (unitNorth->getUnitVisible() == true
 										|| _battleSave->getDebugMode() == true)	// this is just for the bigfooted ScoutDrone anyway .... ht. 10
-									&& (unitNorth->getHeight() < 13			// the problem is this draws overtop of the Cursor's front box
+									&& ((unitNorth->getHeight() < 13			// the problem is this draws overtop of the Cursor's front box
+											&& unitNorth->getStatus() == STATUS_STANDING)
 										|| (drawUnitNorth == true
 											&& unitNorth->getStatus() == STATUS_WALKING
 											&& (unitNorth->getDirection() == 0
@@ -1635,6 +1645,8 @@ void Map::drawTerrain(Surface* surface)
 //										srfSprite = NULL;
 										if (srfSprite)
 										{
+											if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [40]";
+											if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [45]";
 											if (tileNorth->isDiscovered(2) == true)
 												shade = tileNorth->getShade();
 											else
@@ -1783,6 +1795,7 @@ void Map::drawTerrain(Surface* surface)
 																&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255
+																		// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)
 																	|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
@@ -1827,6 +1840,7 @@ void Map::drawTerrain(Surface* surface)
 //										srfSprite = NULL;
 										if (srfSprite)
 										{
+											if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [50]";
 											if (tileWest->isDiscovered(2) == true)
 												shade = tileWest->getShade();
 											else
@@ -1964,6 +1978,7 @@ void Map::drawTerrain(Surface* surface)
 //														srfSprite = NULL;
 														if (srfSprite)
 														{
+															if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [60]";
 															if (tileNorthWest->isDiscovered(2) == true)
 																shade = tileNorthWest->getShade();
 															else
@@ -2086,6 +2101,7 @@ void Map::drawTerrain(Surface* surface)
 										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
 
 										srfSprite = _res->getSurface(soldierRank);
+//										srfSprite = NULL;
 										if (srfSprite)
 											srfSprite->blitNShade(
 													surface,
@@ -2095,7 +2111,7 @@ void Map::drawTerrain(Surface* surface)
 																							unitBelow->getArmor()->getSize()),
 													0);
 
-	/*									const int strength = static_cast<int>(Round(
+/*										const int strength = static_cast<int>(Round(
 															 static_cast<double>(unitBelow->getBaseStats()->strength) * (unitBelow->getAccuracyModifier() / 2. + 0.5)));
 										if (unitBelow->getCarriedWeight() > strength)
 										{
@@ -2253,6 +2269,7 @@ void Map::drawTerrain(Surface* surface)
 //						srfSprite = NULL;
 						if (srfSprite)
 						{
+							if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [70]";
 							if (unit->getHealth() == 0
 								|| unit->getHealth() <= unit->getStun())
 							{
@@ -2292,6 +2309,7 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// redraw all quadrants of large units moving up/down on gravLift
+							// Should this be STATUS_WALKING (up/down gravLift); uses verDir instead
 							if (itZ > 0
 								&& quad == 3
 								&& unit->getVerticalDirection() != 0
@@ -2311,6 +2329,7 @@ void Map::drawTerrain(Surface* surface)
 //									srfSprite = NULL;
 									if (srfSprite)
 									{
+										if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [80]";
 										calculateWalkingOffset(
 															unitNorthWest,
 															&walkOffset);
@@ -2350,6 +2369,7 @@ void Map::drawTerrain(Surface* surface)
 //									srfSprite = NULL;
 									if (srfSprite)
 									{
+										if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [90]";
 										calculateWalkingOffset(
 															unitWest,
 															&walkOffset);
@@ -2390,6 +2410,7 @@ void Map::drawTerrain(Surface* surface)
 //									srfSprite = NULL;
 									if (srfSprite)
 									{
+										if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [100]";
 										calculateWalkingOffset(
 															unitNorth,
 															&walkOffset);
@@ -2522,7 +2543,9 @@ void Map::drawTerrain(Surface* surface)
 							// kL_begin #3 of 3:
 							const Tile* const tileAbove = _battleSave->getTile(mapPosition + Position(0,0,1));
 
-							if (_camera->getViewLevel() == itZ
+							if ((_camera->getViewLevel() == itZ
+									&& (_camera->getShowAllLayers() == false
+										|| itZ == endZ))
 								|| (tileAbove != NULL
 									&& tileAbove->getSprite(MapData::O_FLOOR) == NULL))
 							{
@@ -2572,6 +2595,7 @@ void Map::drawTerrain(Surface* surface)
 										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
 
 										srfSprite = _res->getSurface(soldierRank);
+//										srfSprite = NULL;
 										if (srfSprite)
 											srfSprite->blitNShade(
 													surface,
@@ -2655,6 +2679,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// reDraw unitBelow moving up/down on a gravLift.
+					// Should this be STATUS_WALKING (up/down gravLift #2); uses verDir instead
 					if (itZ > 0
 						&& tile->getMapData(MapData::O_FLOOR) != NULL
 						&& tile->getMapData(MapData::O_FLOOR)->isGravLift() == true
@@ -2677,6 +2702,7 @@ void Map::drawTerrain(Surface* surface)
 //								srfSprite = NULL;
 								if (srfSprite)
 								{
+									if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [110]";
 									calculateWalkingOffset(
 														unitBelow,
 														&walkOffset);
@@ -2715,6 +2741,7 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [120]";
 												calculateWalkingOffset(
 																	unitBelowNorthWest,
 																	&walkOffset);
@@ -2754,6 +2781,7 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [130]";
 												calculateWalkingOffset(
 																	unitBelowWest,
 																	&walkOffset);
@@ -2794,6 +2822,7 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [140]";
 												calculateWalkingOffset(
 																	unitBelowNorth,
 																	&walkOffset);
@@ -2982,6 +3011,8 @@ void Map::drawTerrain(Surface* surface)
 //								srfSprite = NULL;
 								if (srfSprite)
 								{
+									if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [150]";
+									if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [155]";
 									if (tileBelow->isDiscovered(2) == true)
 										shade = tileBelow->getShade();
 									else
@@ -3336,6 +3367,7 @@ void Map::drawTerrain(Surface* surface)
 //								srfSprite = NULL;
 								if (srfSprite)
 								{
+									if (kL_Debug_vert) Log(LOG_INFO) << ". drawUnit [160]";
 									redraw = true; // TODO:
 									// redraw tileBelow foreground (south & east bigWalls)
 									// redraw tileBelowEast foreground (south bigWall)
@@ -3419,6 +3451,7 @@ void Map::drawTerrain(Surface* surface)
 //										srfSprite = NULL;
 										if (srfSprite)
 										{
+											if (kL_Debug_vert) Log(LOG_INFO) << ". drawUnit [170]";
 											redraw = true;
 
 											if (tileBelowSouth->isDiscovered(2) == true)
@@ -3494,6 +3527,7 @@ void Map::drawTerrain(Surface* surface)
 //												srfSprite = NULL;
 												if (srfSprite)
 												{
+													if (kL_Debug_vert) Log(LOG_INFO) << ". drawUnit [180]";
 													redraw = true;
 
 													if (tileBelowSouthEast->isDiscovered(2) == true)
@@ -3687,6 +3721,7 @@ void Map::drawTerrain(Surface* surface)
 //											srfSprite = NULL;
 											if (srfSprite)
 											{
+												if (kL_Debug_vert) Log(LOG_INFO) << ". drawUnit [190]";
 												if (tileBelowEast->isDiscovered(2) == true)
 													shade = tileBelowEast->getShade();
 												else

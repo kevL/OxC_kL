@@ -60,6 +60,7 @@ MADDECOR:${ufoImg}
 MUJUNGLE:${ufoImg}
 POLARDESERT:${ufoImg}
 POLARMOUNT:${ufoImg}
+POLARMOUNTBITS:${ufoImg}
 PORTROADS:${ufoImg}
 PORTURBITS:${ufoImg}
 SANDS:${ufoImg}

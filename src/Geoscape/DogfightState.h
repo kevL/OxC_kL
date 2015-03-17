@@ -30,8 +30,8 @@ namespace OpenXcom
 {
 
 const int
-	ENGAGE_DIST		= 650,
-	STANDOFF_DIST	= 580,
+	DIST_ENGAGE		= 650,
+	DIST_STANDOFF	= 580,
 	TIMEOUT			= 38;
 
 

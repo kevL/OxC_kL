@@ -241,9 +241,9 @@ private:
 		/// Gets the time left before this Ufo attempts to escape a Dogfight.
 		int getEscapeCountdown() const;
 		/// Sets whether or not this Ufo has had Dogfight info processed.
-		void setInterceptionProcessed(bool processed);
+		void setEngaged(bool processed);
 		/// Gets whether or not this Ufo has had Dogfight info processed.
-		bool getInterceptionProcessed() const;
+		bool getEngaged() const;
 
 		/// Sets the UFO's powerSource explosive-power-factor.
 		void setCrashPower(int percent);

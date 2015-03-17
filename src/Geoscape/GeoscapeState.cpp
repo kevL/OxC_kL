@@ -3451,7 +3451,7 @@ void GeoscapeState::handleDogfights()
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->getUfo()->setInterceptionProcessed(false);
+		(*i)->getUfo()->setEngaged(false);
 	}
 
 	i = _dogfights.begin();

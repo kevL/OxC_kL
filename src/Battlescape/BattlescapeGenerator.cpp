@@ -488,9 +488,9 @@ void BattlescapeGenerator::run()
 
 	if (_terrain == NULL)	// ie. if not NewBattleState ...... & not UFO, & not missionSite -> is Set for those.
 	{						// '_terrain' NOT set for Cydonia, Base assault/defense.
-		size_t pick = RNG::generate(
-								0,
-								ruleDeploy->getDeployTerrains().size() - 1);
+		const size_t pick = RNG::generate(
+									0,
+									ruleDeploy->getDeployTerrains().size() - 1);
 		_terrain = _rules->getTerrain(ruleDeploy->getDeployTerrains().at(pick));
 	}
 /* Theirs:
