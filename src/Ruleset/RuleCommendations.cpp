@@ -44,6 +44,7 @@ RuleCommendations::~RuleCommendations()
 void RuleCommendations::load(const YAML::Node& node)
 {
 	_description	= node["description"]	.as<std::string>(_description);
+	_descGeneral	= node["descGeneral"]	.as<std::string>(_descGeneral);
 	_sprite			= node["sprite"]		.as<int>(_sprite);
 	_criteria		= node["criteria"]		.as<std::map<std::string, std::vector<int> > >(_criteria);
 	_killCriteria	= node["killCriteria"]	.as<std::vector<std::map<int, std::vector<std::string> > > >(_killCriteria);
@@ -56,6 +57,15 @@ void RuleCommendations::load(const YAML::Node& node)
 std::string RuleCommendations::getDescription() const
 {
 	return _description;
+}
+
+/**
+ * Get the commendation's non-specific description.
+ * @return, commendation generic description
+ */
+std::string RuleCommendations::getDescriptionGeneral() const
+{
+	return _descGeneral;
 }
 
 /**

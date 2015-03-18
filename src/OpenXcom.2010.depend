@@ -5484,7 +5484,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1426634812 f:\git\openxcom\src\battlescape\map.h
+1426646257 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -6758,7 +6758,7 @@
 1424390939 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1426544531 source:f:\git\openxcom\src\engine\surface.cpp
+1426656014 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -7683,12 +7683,13 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1426302556 source:f:\git\openxcom\src\interface\textlist.cpp
+1426701704 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
 	"ScrollBar.h"
 	"../Engine/Action.h"
+	"../Engine/Language.h"
 
 1426105551 source:f:\git\openxcom\src\interface\toggletextbutton.cpp
 	"ToggleTextButton.h"
@@ -11081,15 +11082,15 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1425194161 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1426649242 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
-1425192446 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
+1426653248 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
 	"RuleCommendations.h"
 
-1420134049 f:\git\openxcom\src\ruleset\rulecommendations.h
+1426653237 f:\git\openxcom\src\ruleset\rulecommendations.h
 
-1421474755 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1426704013 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11101,10 +11102,10 @@
 	"../Ruleset/RuleCommendations.h"
 	"../Savegame/SoldierDiary.h"
 
-1420134050 f:\git\openxcom\src\battlescape\commendationstate.h
+1426704013 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1425194161 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1426648601 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
@@ -11407,7 +11408,7 @@
 
 1420130450 f:\git\openxcom\src\savegame\saveconverterxcom1.h
 
-1421474755 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
+1426704013 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
 	"CommendationDeadState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11420,7 +11421,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1420134058 f:\git\openxcom\src\battlescape\commendationdeadstate.h
+1426704013 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
 1426132519 source:f:\git\openxcom\src\engine\flcplayer.cpp

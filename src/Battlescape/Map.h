@@ -167,7 +167,7 @@ private:
 		/// Special handling for key releases.
 		void keyboardRelease(Action* action, State* state);
 
-		/// Rotates the tileframes 0-7
+		/// Cycles the frames for all tiles.
 		void animate(bool redraw);
 
 		/// Sets the battlescape selector position relative to mouseposition.

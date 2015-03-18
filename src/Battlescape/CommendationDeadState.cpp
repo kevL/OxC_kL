@@ -48,10 +48,11 @@ namespace OpenXcom
  */
 CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersKIA)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstKIA			= new TextList(285, 9, 16, 28);
-	_lstSoldiers	= new TextList(285, 137, 16, 38);
+	_lstKIA			= new TextList(285, 9, 16, 26);
+	_lstSoldiers	= new TextList(285, 113, 16, 36);
+	_txtMedalInfo	= new Text(280, 25, 20, 150);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
@@ -60,6 +61,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	add(_txtTitle);
 	add(_lstKIA);
 	add(_lstSoldiers);
+	add(_txtMedalInfo);
 	add(_btnOk);
 
 	centerAllSurfaces();
@@ -84,6 +86,12 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
+	_lstSoldiers->onMouseOver((ActionHandler)& CommendationDeadState::lstInfoMouseOver);
+	_lstSoldiers->onMouseOut((ActionHandler)& CommendationDeadState::lstInfoMouseOut);
+
+	_txtMedalInfo->setColor(Palette::blockOffset(10)); // slate
+	_txtMedalInfo->setHighContrast();
+	_txtMedalInfo->setWordWrap();
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
@@ -96,9 +104,9 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 					Options::keyCancel);
 
 
-	const size_t rowsKIAList = static_cast<size_t>(std::min(	// the soldiersKIA list has maximum 8 rows
-														8,		// to leave room below for the awards List
-														static_cast<int>(soldiersKIA.size())));
+	const int rowsKIAList = std::min(	// the soldiersKIA list has maximum 8 rows
+								8,		// to leave room below for the awards List
+								static_cast<int>(soldiersKIA.size()));
 	_lstKIA->setHeight(rowsKIAList * 8 + 1);
 
 	_lstSoldiers->setY(_lstSoldiers->getY() + (rowsKIAList - 1) * 8);
@@ -136,8 +144,10 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 		if (titleChosen == true)
 		{
-			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later
-			++row;
+			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later -> unless it's the last row ......
+			_titleRows.insert(std::pair<size_t, std::string>(
+														row++,
+														""));
 		}
 
 		titleChosen = false;
@@ -221,9 +231,18 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 										tr((*award).first).c_str());
 
 			_lstSoldiers->setRowColor(
-									titleRow,
-									Palette::blockOffset(9), // brown
-									true);
+								titleRow,
+								Palette::blockOffset(9), // brown
+								true);
+
+
+			std::string info = (*award).second->getDescriptionGeneral(); // look for Generic Desc first.
+			if (info != "")
+				_titleRows[titleRow] = info;
+			else
+				_titleRows[titleRow] = (*award).second->getDescription();
+
+
 			titleChosen = true;
 		}
 
@@ -251,6 +270,26 @@ void CommendationDeadState::btnOkClick(Action*)
 	}
 
 	_game->popState();
+}
+
+/**
+ * Shows the Medal description.
+ */
+void CommendationDeadState::lstInfoMouseOver(Action*)
+{
+	const size_t row = _lstSoldiers->getSelectedRow();
+	if (_titleRows.find(row) != _titleRows.end())
+		_txtMedalInfo->setText(tr(_titleRows[row].c_str()));
+	else
+		_txtMedalInfo->setText(L"");
+}
+
+/**
+ * Clears the Medal description.
+ */
+void CommendationDeadState::lstInfoMouseOut(Action*)
+{
+	_txtMedalInfo->setText(L"");
 }
 
 }

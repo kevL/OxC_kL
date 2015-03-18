@@ -47,27 +47,27 @@ namespace OpenXcom
  */
 CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstSoldiers	= new TextList(285, 145, 16, 28);
+	_lstSoldiers	= new TextList(285, 121, 16, 28);
+	_txtMedalInfo	= new Text(280, 25, 20, 150);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
 
-//	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS); // note: Moved to DebriefingState.
-
 	add(_window);
 	add(_txtTitle);
 	add(_lstSoldiers);
+	add(_txtMedalInfo);
 	add(_btnOk);
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
+	_window->setColor(Palette::blockOffset(15)-1); // green
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtTitle->setColor(Palette::blockOffset(8)+5); // cyan
 	_txtTitle->setText(tr("STR_MEDALS"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
@@ -77,6 +77,12 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
+	_lstSoldiers->onMouseOver((ActionHandler)& CommendationState::lstInfoMouseOver);
+	_lstSoldiers->onMouseOut((ActionHandler)& CommendationState::lstInfoMouseOut);
+
+	_txtMedalInfo->setColor(Palette::blockOffset(10)); // slate
+	_txtMedalInfo->setHighContrast();
+	_txtMedalInfo->setWordWrap();
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
@@ -108,8 +114,10 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 		if (titleChosen == true)
 		{
-			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later
-			++row;
+			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later -> unless it's the last row ......
+			_titleRows.insert(std::pair<size_t, std::string>(
+														row++,
+														""));
 		}
 
 		titleChosen = false;
@@ -174,7 +182,6 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 									2,
 									wss.str().c_str(),
 									tr((*soldierAward)->getDecorationLevelName(skipCounter)).c_str());
-
 					break;
 				}
 			}
@@ -193,7 +200,17 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 										0,
 										tr((*award).first).c_str());
 
-			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
+			_lstSoldiers->setRowColor(
+								titleRow,
+								Palette::blockOffset(15)-1);
+
+
+			std::string info = (*award).second->getDescriptionGeneral(); // look for Generic Desc first.
+			if (info != "")
+				_titleRows[titleRow] = info;
+			else
+				_titleRows[titleRow] = (*award).second->getDescription();
+
 
 			titleChosen = true;
 		}
@@ -223,6 +240,26 @@ void CommendationState::btnOkClick(Action*)
 	}
 
 	_game->popState();
+}
+
+/**
+ * Shows the Medal description.
+ */
+void CommendationState::lstInfoMouseOver(Action*)
+{
+	const size_t row = _lstSoldiers->getSelectedRow();
+	if (_titleRows.find(row) != _titleRows.end())
+		_txtMedalInfo->setText(tr(_titleRows[row].c_str()));
+	else
+		_txtMedalInfo->setText(L"");
+}
+
+/**
+ * Clears the Medal description.
+ */
+void CommendationState::lstInfoMouseOut(Action*)
+{
+	_txtMedalInfo->setText(L"");
 }
 
 }

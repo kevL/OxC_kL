@@ -43,6 +43,7 @@ class CommendationDeadState
 
 private:
 	Text
+		* _txtMedalInfo,
 		* _txtName,
 		* _txtTitle;
 	TextButton* _btnOk;
@@ -50,6 +51,8 @@ private:
 		* _lstKIA,
 		* _lstSoldiers;
 	Window* _window;
+
+	std::map<size_t, std::string> _titleRows; // for mouseOver info.
 
 
 	public:
@@ -60,6 +63,11 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+
+		/// Handler for moving the mouse over a medal title.
+		void lstInfoMouseOver(Action* action);
+		/// Handler for moving the mouse outside the medals list.
+		void lstInfoMouseOut(Action* action);
 };
 
 }

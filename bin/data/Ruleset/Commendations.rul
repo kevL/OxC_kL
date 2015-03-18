@@ -25,6 +25,7 @@ extraStrings:
       STR_MEDAL_MERIT_STAR_DESCRIPTION: "Given to a soldier who has killed many aliens."
       STR_MEDAL_XENOCIDE_MEDAL_NAME: "{0} Genocide Medal"
       STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION: "Given to a soldier who has been successful in combating the {0} menace."
+      STR_MEDAL_XENOCIDE_MEDAL_DESC_GENERAL: "Given to a soldier who has been successful in combating the aLien menace."
       STR_MEDAL_DEFENDER_MEDAL_NAME: "Defender Medal"
       STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defense mission."
       STR_MEDAL_MILITARY_CROSS_NAME: "Military Cross"
@@ -39,8 +40,10 @@ extraStrings:
       STR_MEDAL_SPECIALISTS_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully used non-lethal force to crowd-control many aliens."
       STR_MEDAL_WEAPON_PROFICIENCY_NAME: "{0} Expert"
       STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION: "Given to a soldier who has shown distinction using a {0}."
+      STR_MEDAL_WEAPON_PROFICIENCY_DESC_GENERAL: "Given to a soldier who has shown distinction using a weapon."
       STR_MEDAL_CAMPAIGN_RIBBON_NAME: "{0} Campaign"
       STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION: "Given to a soldier who has been instrumental in protecting {0}."
+      STR_MEDAL_CAMPAIGN_RIBBON_DESC_GENERAL: "Given to a soldier who has been instrumental in protecting a continent."
       STR_MEDAL_ORDER_OF_RESTRAINT_NAME: "Order of Restraint"
       STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down many aliens."
       STR_MEDAL_LONGEST_NIGHT_NAME: "Long Night Ribbon"
@@ -265,16 +268,19 @@ commendations:
       totalMonthlyService: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
   - type: STR_MEDAL_WEAPON_PROFICIENCY_NAME
     description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
+    descGeneral: STR_MEDAL_WEAPON_PROFICIENCY_DESC_GENERAL
     sprite: 7
     criteria:
       totalKillsWithAWeapon: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
   - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME
     description: STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION
+    descGeneral: STR_MEDAL_CAMPAIGN_RIBBON_DESC_GENERAL
     sprite: 8
     criteria:
       totalMissionsInARegion: [5, 10, 10, 10, 20, 20, 20, 30, 40, 50]
   - type: STR_MEDAL_XENOCIDE_MEDAL_NAME
     description: STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION
+    descGeneral: STR_MEDAL_XENOCIDE_MEDAL_DESC_GENERAL
     sprite: 9
     criteria:
       totalKillsByRace: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]

@@ -101,7 +101,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		_displayAwards = true;
 	}
 
-	_window				= new Window(this, 320, 200, 0, 0);
+	_window				= new Window(this, 320, 200);
 	_txtTitle			= new Text(310, 16, 5, 8);
 	_txtBaseLabel		= new Text(310, 9, 5, 25);
 
@@ -144,11 +144,11 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_sstDecor = _game->getResourcePack()->getSurfaceSet("CommendationDecorations");
 	for (int
 			i = 0;
-			i != LIST_ROWS;
+			i != static_cast<int>(LIST_ROWS);
 			++i)
 	{
-		_srfSprite.push_back(new Surface(31, 7, 16, LIST_SPRITES_y + 8 * i));
-		_srfDecor.push_back(new Surface(31, 7, 16, LIST_SPRITES_y + 8 * i));
+		_srfSprite.push_back(new Surface(31, 7, 16, LIST_SPRITES_y + (i * 8)));
+		_srfDecor.push_back(new Surface(31, 7, 16, LIST_SPRITES_y + (i * 8)));
 	}
 
 	setPalette("PAL_BASESCAPE");
@@ -192,7 +192,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	add(_txtMedalInfo);
 
 	// Award sprites
-	for (int
+	for (size_t
 			i = 0;
 			i != LIST_ROWS;
 			++i)
@@ -368,7 +368,7 @@ void SoldierDiaryPerformanceState::init()
 {
 	State::init();
 
-	for (int // clear sprites
+	for (size_t // clear sprites
 			i = 0;
 			i != LIST_ROWS;
 			++i)
@@ -538,7 +538,7 @@ void SoldierDiaryPerformanceState::init()
 		_diary->getUFOTotal()
 	};
 
-	for (int
+	for (size_t
 			i = 0;
 			i != 6;
 			++i)
@@ -564,7 +564,10 @@ void SoldierDiaryPerformanceState::init()
 							2,
 							ss1.str().c_str(),
 							ss2.str().c_str());
-			lstArray[i]->setCellColor(row++, 0, Palette::blockOffset(13)+5);
+			lstArray[i]->setCellColor(
+									row++,
+									0,
+									Palette::blockOffset(13)+5);
 		}
 	}
 
@@ -577,8 +580,7 @@ void SoldierDiaryPerformanceState::init()
 		if (_game->getRuleset()->getCommendations().empty() == true)
 			break;
 
-		const RuleCommendations* const rule = _game->getRuleset()->getCommendations()[(*i)->getType()];
-
+		const RuleCommendations* const awardsRule = _game->getRuleset()->getCommendations()[(*i)->getType()];
 		std::wstringstream
 			ss1,
 			ss2,
@@ -588,12 +590,12 @@ void SoldierDiaryPerformanceState::init()
 		if ((*i)->getNoun() != "noNoun")
 		{
 			ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-			ss4 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+			ss4 << tr(awardsRule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
 		}
 		else
 		{
 			ss1 << tr((*i)->getType().c_str());
-			ss4 << tr(rule->getDescription().c_str());
+			ss4 << tr(awardsRule->getDescription().c_str());
 		}
 
 		ss2 << tr((*i)->getDecorationDescription().c_str());
@@ -619,7 +621,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 	if (_displayAwards == false)
 		return;
 
-	for (int
+	for (size_t
 			i = 0;
 			i != LIST_ROWS;
 			++i)
@@ -628,8 +630,10 @@ void SoldierDiaryPerformanceState::drawSprites()
 		_srfDecor[i]->clear();
 	}
 
-	const int scroll = _lstAwards->getScroll();
-	int j = 0;
+	const RuleCommendations* awardsRule;
+	int sprite;
+	const size_t scroll = _lstAwards->getScroll();
+	size_t j = 0;
 
 	for (std::vector<SoldierCommendations*>::const_iterator
 			i = _diary->getSoldierCommendations()->begin();
@@ -637,25 +641,22 @@ void SoldierDiaryPerformanceState::drawSprites()
 			++i,
 				++j)
 	{
-		const RuleCommendations* const rule = _game->getRuleset()->getCommendations()[(*i)->getType()];
-
-		if (j < scroll
-			|| j - scroll >= static_cast<int>(_srfSprite.size()))
+		if (j >= scroll // show awards that are visible on the list
+			&& j - scroll < _srfSprite.size())
 		{
-			continue; // skip awards that are not visible on the list
-		}
+			awardsRule = _game->getRuleset()->getCommendations()[(*i)->getType()];
+			sprite = awardsRule->getSprite(); // handle award sprites
+//			_sstSprite->getFrame(sprite)->setX(0);
+//			_sstSprite->getFrame(sprite)->setY(0);
+			_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
 
-		const int sprite = rule->getSprite(); // handle award sprites
-		_sstSprite->getFrame(sprite)->setX(0);
-		_sstSprite->getFrame(sprite)->setY(0);
-		_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
-
-		const int decor = (*i)->getDecorationLevelInt(); // handle award decoration sprites
-		if (decor != 0)
-		{
-			_sstDecor->getFrame(decor)->setX(0);
-			_sstDecor->getFrame(decor)->setY(0);
-			_sstDecor->getFrame(decor)->blit(_srfDecor[j - scroll]);
+			sprite = (*i)->getDecorationLevelInt(); // handle award decoration sprites
+			if (sprite != 0)
+			{
+//				_sstDecor->getFrame(sprite)->setX(0);
+//				_sstDecor->getFrame(sprite)->setY(0);
+				_sstDecor->getFrame(sprite)->blit(_srfDecor[j - scroll]);
+			}
 		}
 	}
 }

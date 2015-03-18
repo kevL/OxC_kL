@@ -29,6 +29,7 @@
 
 #include "../Engine/Action.h"
 //#include "../Engine/Font.h"
+//#include "../Engine/Language.h" // TEST
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
@@ -571,12 +572,10 @@ void TextList::setPalette(
 	}
 
 	if (_selector != NULL)
-	{
 		_selector->setPalette(
 							colors,
 							firstcolor,
 							ncolors);
-	}
 
 	_up->setPalette(
 				colors,
@@ -759,7 +758,7 @@ void TextList::setAlign(
 
 /**
  * If enabled, the text in different columns will be separated by dots.
- * Otherwise, it will only be separated by blank space.
+ * Otherwise it will only be separated by blank space.
  * @param dot - true for dots (default true)
  */
 void TextList::setDot(bool dot)
@@ -768,7 +767,7 @@ void TextList::setDot(bool dot)
 }
 
 /**
- * If enabled, the list will respond to player input,
+ * If enabled the list will respond to player input
  * highlighting selected rows and receiving clicks.
  * @param selectable - selectable setting (default true)
  */
@@ -1375,8 +1374,13 @@ void TextList::mouseOver(Action* action, State* state)
 						+ static_cast<int>(std::floor(action->getRelativeYMouse() / (static_cast<double>(h) * action->getYScale()))));
 
 		if (_selRow < _texts.size()
-			&& _selRow < _scroll + _visibleRows)
-		{
+			&& _selRow < _scroll + _visibleRows
+			&& _texts[_selRow][0]->getText().empty() == false)	// kL_add. Don't highlight rows w/out text in first column.
+		{														// This is currently only a special case in Battlescape/CommendationState(cTor)
+																// due to the quirky way it adds titleRows, then lists solderNames & Awards
+																// and finally fills the titleRow w/ the relevant awardName; the last titleRow
+																// is added, but there are no soldiers nor awards for it.
+			//Log(LOG_INFO) << ". text at [" << _selRow << "] = " << Language::wstrToCp(_texts[_selRow][0]->getText());
 			const Text* const selText = _texts[_rows[_selRow]].front();
 			int
 				y = getY() + selText->getY(),
@@ -1393,7 +1397,7 @@ void TextList::mouseOver(Action* action, State* state)
 
 			if (_selector->getHeight() != h)
 			{
-				delete _selector; // resizing doesn't work, but recreating does, so do that!
+				delete _selector; // resizing doesn't work, but recreating does. Make it so!
 				_selector = new Surface(
 									getWidth(),
 									h,

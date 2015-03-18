@@ -37,7 +37,9 @@ class RuleCommendations
 
 private:
 	int _sprite;
-	std::string _description;
+	std::string
+		_description,
+		_descGeneral;
 
 	std::map<std::string, std::vector<int> > _criteria;
 	std::vector<std::map<int, std::vector<std::string> > > _killCriteria;
@@ -54,6 +56,8 @@ private:
 
 		/// Get the commendation's description.
 		std::string getDescription() const;
+		/// Get the commendation's generic description.
+		std::string getDescriptionGeneral() const;
 
 		/// Get the commendation's sprite.
 		int getSprite() const;

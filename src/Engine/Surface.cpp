@@ -624,7 +624,7 @@ void Surface::blit(Surface* surface)
  */
 void Surface::copy(Surface* surface)
 {
-/*	SDL_BlitSurface uses colour matching, and is therefore unreliable
+/*	SDL_BlitSurface uses color matching, and is therefore unreliable
 	as a means to copy the contents of one surface to another instead
 	we have to do this manually.
 
