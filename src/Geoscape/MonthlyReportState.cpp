@@ -66,15 +66,15 @@ MonthlyReportState::MonthlyReportState(
 		Globe* globe)
 	:
 		_psi(psi),
+		_globe(globe),
 		_gameOver(false),
 		_ratingTotal(0),
 		_deltaFunds(0),
 		_ratingLast(0)
 {
-	_globe = globe;
 	_savedGame = _game->getSavedGame();
 
-	_window		= new Window(this, 320, 200, 0, 0);
+	_window		= new Window(this, 320, 200);
 	_txtTitle	= new Text(300, 17, 10, 8);
 
 	_txtMonth	= new Text(110, 9, 16, 24);
@@ -162,19 +162,19 @@ MonthlyReportState::MonthlyReportState(
 		// 4 -> 0
 
 	// do rating:
-	std::wstring rating = tr("STR_RATING_TERRIBLE");
+	std::wstring wst = tr("STR_RATING_TERRIBLE");
 	if (_ratingTotal > 10000)
-		rating = tr("STR_RATING_STUPENDOUS");
+		wst = tr("STR_RATING_STUPENDOUS");
 	else if (_ratingTotal > 5000)
-		rating = tr("STR_RATING_EXCELLENT");
+		wst = tr("STR_RATING_EXCELLENT");
 	else if (_ratingTotal > 2500)
-		rating = tr("STR_RATING_GOOD");
+		wst = tr("STR_RATING_GOOD");
 	else if (_ratingTotal > 1000)
-		rating = tr("STR_RATING_OK");
+		wst = tr("STR_RATING_OK");
 	else if (_ratingTotal > difficulty_threshold)
-		rating = tr("STR_RATING_POOR");
+		wst = tr("STR_RATING_POOR");
 
-	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
+	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(wst));
 
 /*	std::wostringstream ss; // ADD:
 	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
@@ -193,25 +193,17 @@ MonthlyReportState::MonthlyReportState(
 	_txtBalance->setText(ss3.str());
 // end ADD. */
 
-	std::wostringstream ss3;
-	if (_deltaFunds > 0) ss3 << '+';
-	ss3 << Text::formatFunding(_deltaFunds);
-	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
+	std::wostringstream woststr;
+	if (_deltaFunds > 0) woststr << '+';
+	woststr << Text::formatFunding(_deltaFunds);
+	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(woststr.str()));
 
-	_txtDesc->setWordWrap();
 
 	// calculate satisfaction
-	std::wostringstream ss4;
-	std::wstring satisFaction = tr("STR_COUNCIL_IS_DISSATISFIED");
-	if (_ratingTotal > 1000 + (diff * 2000)) // was 1500 flat.
-		satisFaction = tr("STR_COUNCIL_IS_VERY_PLEASED");
-	else if (_ratingTotal > difficulty_threshold)
-		satisFaction = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
-
 	if (_ratingLast <= difficulty_threshold
 		&& _ratingTotal <= difficulty_threshold)
 	{
-		satisFaction = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+		wst = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 
 		_pactList.erase(
 					_pactList.begin(),
@@ -225,7 +217,15 @@ MonthlyReportState::MonthlyReportState(
 
 		_gameOver = true; // you lose.
 	}
-	ss4 << satisFaction;
+	else if (_ratingTotal > 1000 + (diff * 2000)) // was 1500 flat.
+		wst = tr("STR_COUNCIL_IS_VERY_PLEASED");
+	else if (_ratingTotal > difficulty_threshold)
+		wst = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
+	else
+		wst = tr("STR_COUNCIL_IS_DISSATISFIED");
+
+	woststr.str(L"");
+	woststr << wst;
 
 	bool resetWarning = true;
 	if (_gameOver == false)
@@ -234,9 +234,8 @@ MonthlyReportState::MonthlyReportState(
 		{
 			if (_savedGame->getWarned() == true)
 			{
-				ss4.str(L"");
-				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
-//				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+				woststr.str(L"");
+				woststr << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 
 				_pactList.erase(
 							_pactList.begin(),
@@ -252,7 +251,7 @@ MonthlyReportState::MonthlyReportState(
 			}
 			else
 			{
-				ss4 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
+				woststr << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 
 				_savedGame->setWarned(true);
 				resetWarning = false;
@@ -266,20 +265,21 @@ MonthlyReportState::MonthlyReportState(
 		_savedGame->setWarned(false);
 	}
 
-	ss4 << countryList(
+	woststr << countryList(
 					_happyList,
 					"STR_COUNTRY_IS_PARTICULARLY_PLEASED",
 					"STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
-	ss4 << countryList(
+	woststr << countryList(
 					_sadList,
 					"STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY",
 					"STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
-	ss4 << countryList(
+	woststr << countryList(
 					_pactList,
 					"STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT",
 					"STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
 
-	_txtDesc->setText(ss4.str());
+	_txtDesc->setText(woststr.str());
+	_txtDesc->setWordWrap();
 
 
 	_btnOk->setText(tr("STR_OK"));
@@ -354,7 +354,7 @@ void MonthlyReportState::calculateChanges()
 	}
 
 
-	int diff = static_cast<int>(_savedGame->getDifficulty());
+	const int diff = static_cast<int>(_savedGame->getDifficulty());
 
 	for (std::vector<Country*>::const_iterator
 			i = _savedGame->getCountries()->begin();
@@ -556,13 +556,13 @@ std::wstring MonthlyReportState::countryList(
 		const std::string& singular,
 		const std::string& plural)
 {
-	std::wostringstream wosts;
+	std::wostringstream woststr;
 
 	if (countries.empty() == false)
 	{
-		wosts << "\n\n";
+		woststr << "\n\n";
 		if (countries.size() == 1)
-			wosts << tr(singular).arg(tr(countries.front()));
+			woststr << tr(singular).arg(tr(countries.front()));
 		else
 		{
 			LocalizedText countryList = tr(countries.front());
@@ -577,11 +577,11 @@ std::wstring MonthlyReportState::countryList(
 			}
 			countryList = tr("STR_COUNTRIES_AND").arg(countryList).arg(tr(*i));
 
-			wosts << tr(plural).arg(countryList);
+			woststr << tr(plural).arg(countryList);
 		}
 	}
 
-	return wosts.str();
+	return woststr.str();
 }
 
 }

@@ -1327,7 +1327,7 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-//					statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below.
+//					statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
 					statePushBack(new ProjectileFlyBState(
 														this,
 														_currentAction));

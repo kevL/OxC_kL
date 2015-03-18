@@ -391,6 +391,9 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 				}
 			}
 
+			if (targetUnit == NULL) // kL: if no target TargetSelf.
+				targetUnit = _action->actor;
+
 			if (targetUnit != NULL)
 			{
 				_game->popState();
@@ -398,7 +401,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 												targetUnit,
 												_action));
 			}
-			else
+			else // note This will never run due to TargetSelf.
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				_game->popState();

@@ -61,7 +61,7 @@ std::string RuleCommendations::getDescription() const
 
 /**
  * Get the commendation's non-specific description.
- * @return, commendation generic description
+ * @return, generic description
  */
 std::string RuleCommendations::getDescriptionGeneral() const
 {

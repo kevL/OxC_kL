@@ -94,7 +94,7 @@ Craft::Craft(
 			i < _rules->getWeapons();
 			++i)
 	{
-		_weapons.push_back(0);
+		_weapons.push_back(NULL);
 	}
 
 	if (base != NULL)
@@ -415,10 +415,10 @@ void Craft::changeRules(RuleCraft* rules)
 
 	for (int
 			i = 0;
-			i < _rules->getWeapons();
+			i != _rules->getWeapons();
 			++i)
 	{
-		_weapons.push_back(0);
+		_weapons.push_back(NULL);
 	}
 }
 

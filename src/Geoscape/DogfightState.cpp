@@ -281,36 +281,33 @@ DogfightState::DogfightState(
 	_craft->setInDogfight(true);
 
 	_window					= new Surface(160, 96, _x, _y);
-	_battle					= new Surface(77, 74, _x + 3, _y + 3);
-	_weapon1				= new InteractiveSurface(15, 17, _x + 4, _y + 52);
-	_range1					= new Surface(21, 74, _x + 19, _y + 3);
-	_weapon2				= new InteractiveSurface(15, 17, _x + 64, _y + 52);
-	_range2					= new Surface(21, 74, _x + 43, _y + 3);
-	_damage					= new Surface(22, 25, _x + 93, _y + 40);
 
-	_btnMinimize			= new InteractiveSurface(12, 12, _x, _y);
+	_battle					= new Surface(77, 74, _x + 3,  _y + 3);
+	_damage					= new Surface(22, 25, _x + 93, _y + 40);
+	_range1					= new Surface(21, 74, _x + 19, _y + 3);
+	_range2					= new Surface(21, 74, _x + 43, _y + 3);
+	_weapon1				= new InteractiveSurface(15, 17, _x + 4,  _y + 52);
+	_weapon2				= new InteractiveSurface(15, 17, _x + 64, _y + 52);
+
+	_btnMinimize			= new InteractiveSurface( 12, 12, _x, _y);
 	_preview				= new InteractiveSurface(160, 96, _x, _y);
 
-//	_btnUfo					= new ImageButton(36, 17, _x + 120, _y + 52);
-	_btnUfo					= new ImageButton(36, 15, _x + 83, _y + 4);
-	_btnDisengage			= new ImageButton(36, 15, _x + 83, _y + 20);
-/*	_btnStandoff			= new ImageButton(36, 15, _x + 83, _y + 4);
-	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 4);
-	_btnStandard			= new ImageButton(36, 15, _x + 83, _y + 20);
-	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 20);
-	_btnDisengage			= new ImageButton(36, 15, _x + 120, _y + 36); */
-	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 4);
+	_btnDisengage			= new ImageButton(36, 15, _x + 83,  _y + 4);
+	_btnUfo					= new ImageButton(36, 15, _x + 83,  _y + 20);
+
+	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 4);
 	_btnStandard			= new ImageButton(36, 15, _x + 120, _y + 20);
-	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 36);
+	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 36);
 	_btnStandoff			= new ImageButton(36, 17, _x + 120, _y + 52);
 	_mode = _btnStandoff;
 
 	_texture				= new Surface(9, 9, _x + 147, _y + 72);
 
-	_txtAmmo1				= new Text(16, 9, _x + 4, _y + 70);
-	_txtAmmo2				= new Text(16, 9, _x + 64, _y + 70);
-	_txtDistance			= new Text(40, 9, _x + 116, _y + 72);
-	_txtStatus				= new Text(150, 9, _x + 4, _y + 85);
+	_txtAmmo1				= new Text(16,  9, _x + 4,   _y + 70);
+	_txtAmmo2				= new Text(16,  9, _x + 64,  _y + 70);
+	_txtDistance			= new Text(40,  9, _x + 116, _y + 72);
+	_txtStatus				= new Text(150, 9, _x + 4,   _y + 85);
+
 	_btnMinimizedIcon		= new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterception		= new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
@@ -326,11 +323,11 @@ DogfightState::DogfightState(
 	add(_range2);
 	add(_damage);
 	add(_btnMinimize);
-	add(_btnUfo,			"button",			"dogfight");
 	add(_btnDisengage,		"button",			"dogfight");
-	add(_btnCautious,		"button",			"dogfight");
-	add(_btnStandard,		"button",			"dogfight");
+	add(_btnUfo,			"button",			"dogfight");
 	add(_btnAggressive,		"button",			"dogfight");
+	add(_btnStandard,		"button",			"dogfight");
+	add(_btnCautious,		"button",			"dogfight");
 	add(_btnStandoff,		"button",			"dogfight");
 	add(_texture);
 	add(_txtAmmo1,			"text",				"dogfight");
@@ -435,10 +432,10 @@ DogfightState::DogfightState(
 	SurfaceSet* const sstInticon = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 
 	// Create the minimized dogfight icon.
-	Surface* frame = sstInticon->getFrame(_craft->getRules()->getSprite());
-//	frame->setX(0);
-//	frame->setY(0);
-	frame->blit(_btnMinimizedIcon);
+	Surface* srfFrame = sstInticon->getFrame(_craft->getRules()->getSprite());
+//	srfFrame->setX(0);
+//	srfFrame->setY(0);
+	srfFrame->blit(_btnMinimizedIcon);
 	_btnMinimizedIcon->onMouseClick((ActionHandler)& DogfightState::btnMinimizedIconClick);
 	_btnMinimizedIcon->setVisible(false);
 
@@ -448,104 +445,106 @@ DogfightState::DogfightState(
 	_txtInterception->setText(woststr.str());
 	_txtInterception->setVisible(false);
 
+
+	const CraftWeapon* cw;
+	Surface
+		* weapon,
+		* range;
+	Text* ammo;
+	int
+		x1,x2,
+		rangeY, // 1 km = 1 pixel
+		connectY = 57,
+		minY,
+		maxY;
+
+	const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("background")->color);
+
 	for (size_t
 			i = 0;
 			i != static_cast<size_t>(_craft->getRules()->getWeapons());
 			++i)
 	{
-		const CraftWeapon* const cw = _craft->getWeapons()->at(i);
-		if (cw == NULL)
-			continue;
-
-		Surface
-			* weapon = NULL,
-			* range = NULL;
-		Text* ammo = NULL;
-		int
-			x1,
-			x2;
-
-		if (i == 0)
+		cw = _craft->getWeapons()->at(i);
+		if (cw != NULL)
 		{
-			weapon = _weapon1;
-			range = _range1;
-			ammo = _txtAmmo1;
-			x1 = 2;
-			x2 = 0;
-		}
-		else
-		{
-			weapon = _weapon2;
-			range = _range2;
-			ammo = _txtAmmo2;
-			x1 = 0;
-			x2 = 18;
-		}
+			if (i == 0)
+			{
+				weapon = _weapon1;
+				range = _range1;
+				ammo = _txtAmmo1;
+				x1 = 2;
+				x2 = 0;
+			}
+			else
+			{
+				weapon = _weapon2;
+				range = _range2;
+				ammo = _txtAmmo2;
+				x1 = 0;
+				x2 = 18;
+			}
 
-		frame = sstInticon->getFrame(cw->getRules()->getSprite() + 5);
-//		frame->setX(0);
-//		frame->setY(0);
-		frame->blit(weapon);
+			srfFrame = sstInticon->getFrame(cw->getRules()->getSprite() + 5);
+//			srfFrame->setX(0);
+//			srfFrame->setY(0);
+			srfFrame->blit(weapon);
 
-		std::wostringstream woststr;
-		woststr << cw->getAmmo();
-		ammo->setText(woststr.str());
+			woststr.str(L"");
+			woststr << cw->getAmmo();
+			ammo->setText(woststr.str());
 
-		const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("background")->color);
+			range->lock();
+			rangeY = range->getHeight() - cw->getRules()->getRange();
 
-		range->lock();
-		const int
-			rangeY = range->getHeight() - cw->getRules()->getRange(), // 1 km = 1 pixel
-			connectY = 57;
+			for (int
+					x = x1;
+					x < x1 + 19;
+					x += 2)
+			{
+				range->setPixelColor(
+									x,
+									rangeY,
+									color);
+			}
 
-		for (int
-				x = x1;
-				x <= x1 + 18;
-				x += 2)
-		{
-			range->setPixelColor(
-								x,
-								rangeY,
-								color);
-		}
-
-		int
-			minY = 0,
+			minY =
 			maxY = 0;
 
-		if (rangeY < connectY)
-		{
-			minY = rangeY;
-			maxY = connectY;
-		}
-		else if (rangeY > connectY)
-		{
-			minY = connectY;
-			maxY = rangeY;
-		}
+			if (rangeY < connectY)
+			{
+				minY = rangeY;
+				maxY = connectY;
+			}
+			else if (rangeY > connectY)
+			{
+				minY = connectY;
+				maxY = rangeY;
+			}
 
-		for (int
-				y = minY;
-				y != maxY + 1;
-				++y)
-		{
-			range->setPixelColor(
-								x1 + x2,
-								y,
-								color);
-		}
+			for (int
+					y = minY;
+					y != maxY + 1;
+					++y)
+			{
+				range->setPixelColor(
+									x1 + x2,
+									y,
+									color);
+			}
 
-		for (int
-				x = x2;
-				x != x2 + 3;
-				++x)
-		{
-			range->setPixelColor(
-								x,
-								connectY,
-								color);
+			for (int
+					x = x2;
+					x != x2 + 3;
+					++x)
+			{
+				range->setPixelColor(
+									x,
+									connectY,
+									color);
+			}
+			range->unlock();
 		}
-		range->unlock();
 	}
 
 	if (!
@@ -567,10 +566,10 @@ DogfightState::DogfightState(
 	}
 
 	// Draw damage indicator.
-	frame = sstInticon->getFrame(_craft->getRules()->getSprite() + 11);
-	frame->setX(0);
-	frame->setY(0);
-	frame->blit(_damage);
+	srfFrame = sstInticon->getFrame(_craft->getRules()->getSprite() + 11);
+//	srfFrame->setX(0);
+//	srfFrame->setY(0);
+	srfFrame->blit(_damage);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
 
@@ -613,7 +612,7 @@ DogfightState::DogfightState(
 		_ufoSize = 2;
 	else if (ufoSize.compare("STR_LARGE") == 0)
 		_ufoSize = 3;
-	else // very large
+	else // "STR_VERY_LARGE"
 		_ufoSize = 4;
 
 	_color[0] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color);

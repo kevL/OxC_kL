@@ -5511,7 +5511,7 @@
 1424390944 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1426604064 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1426705295 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -7072,7 +7072,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1426548435 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1426708598 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7152,7 +7152,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1426547812 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1426711696 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7249,7 +7249,7 @@
 1425245296 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
-1426213344 f:\git\openxcom\src\geoscape\monthlyreportstate.h
+1426711036 f:\git\openxcom\src\geoscape\monthlyreportstate.h
 	"../Engine/State.h"
 
 1424390939 f:\git\openxcom\src\geoscape\multipletargetsstate.h
@@ -7416,7 +7416,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1426300131 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1426712437 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"Globe.h"
@@ -7683,13 +7683,12 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1426701704 source:f:\git\openxcom\src\interface\textlist.cpp
+1426704680 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
 	"ScrollBar.h"
 	"../Engine/Action.h"
-	"../Engine/Language.h"
 
 1426105551 source:f:\git\openxcom\src\interface\toggletextbutton.cpp
 	"ToggleTextButton.h"
@@ -8712,7 +8711,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1426539438 source:f:\git\openxcom\src\savegame\craft.cpp
+1426707231 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -11085,7 +11084,7 @@
 1426649242 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
-1426653248 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
+1426704790 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
 	"RuleCommendations.h"
 
 1426653237 f:\git\openxcom\src\ruleset\rulecommendations.h

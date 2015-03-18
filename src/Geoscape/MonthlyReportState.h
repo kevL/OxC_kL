@@ -38,8 +38,7 @@ class Window;
 
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Report screen shown monthly to display the player's performance and funding.
  */
 class MonthlyReportState
 	:

@@ -3038,6 +3038,7 @@ void GeoscapeState::time1Month()
 	}
 
 	_savedGame->monthlyFunding(); // handle Funding
+	_game->getResourcePack()->fadeMusic(_game, 1232);
 	popup(new MonthlyReportState(
 								psi,
 								_globe));

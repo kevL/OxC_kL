@@ -1377,7 +1377,7 @@ void TextList::mouseOver(Action* action, State* state)
 			&& _selRow < _scroll + _visibleRows
 			&& _texts[_selRow][0]->getText().empty() == false)	// kL_add. Don't highlight rows w/out text in first column.
 		{														// This is currently only a special case in Battlescape/CommendationState(cTor)
-																// due to the quirky way it adds titleRows, then lists solderNames & Awards
+																// due to the quirky way it adds titleRows, then lists soldierNames & Awards
 																// and finally fills the titleRow w/ the relevant awardName; the last titleRow
 																// is added, but there are no soldiers nor awards for it.
 			//Log(LOG_INFO) << ". text at [" << _selRow << "] = " << Language::wstrToCp(_texts[_selRow][0]->getText());
