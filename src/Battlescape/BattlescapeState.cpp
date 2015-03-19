@@ -162,8 +162,7 @@ BattlescapeState::BattlescapeState()
 				_game,
 				screenWidth,
 				screenHeight,
-				0,
-				0,
+				0,0,
 				visibleMapHeight);
 
 	_numLayers	= new NumberText(3, 5, x + 232, y + 6);
@@ -395,38 +394,46 @@ BattlescapeState::BattlescapeState()
 		add(_numVisibleUnit[i]);
 	}
 
-//	add(_txtTooltip, "textTooltip", "battlescape", _icons);
-	add(_txtDebug);
-
-	add(_warning, "warning", "battlescape", _icons);
-	_warning->setColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color2));
-	_warning->setTextColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color));
 
 	add(_btnLaunch);
+	add(_btnPsi);
+
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 	_btnLaunch->onMouseClick((ActionHandler)& BattlescapeState::btnLaunchClick);
 	_btnLaunch->setVisible(false);
 
-	add(_btnPsi);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
 	_btnPsi->setVisible(false);
 
-	add(_txtBaseLabel);
-	_txtBaseLabel->setColor(Palette::blockOffset(9));
-	_txtBaseLabel->setHighContrast();
-	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+//	add(_txtTooltip, "textTooltip", "battlescape", _icons);
+//	_txtTooltip->setHighContrast();
 
-	add(_txtMissionLabel);
-	_txtMissionLabel->setColor(Palette::blockOffset(9));
-	_txtMissionLabel->setHighContrast();
-	_txtMissionLabel->setAlign(ALIGN_CENTER);
+	add(_txtDebug,			"textName",			"battlescape");
+	add(_warning,			"warning",			"battlescape", _icons);
+	add(_txtOperationTitle,	"operationTitle",	"battlescape");
+	add(_txtBaseLabel,		"infoText",			"battlescape");
+	add(_txtMissionLabel,	"infoText",			"battlescape");
 
-	add(_txtOperationTitle);
-	_txtOperationTitle->setColor(Palette::blockOffset(0));
+	_txtDebug->setHighContrast();
+
+	_warning->setColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color2));
+	_warning->setTextColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color));
+
 	_txtOperationTitle->setHighContrast();
 	_txtOperationTitle->setAlign(ALIGN_CENTER);
 	_txtOperationTitle->setBig();
+	if (_savedBattle->getOperation().empty() == false)
+		_txtOperationTitle->setText(_savedBattle->getOperation().c_str());
+	else
+		_txtOperationTitle->setVisible(false);
+
+
+	_txtBaseLabel->setHighContrast();
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+
+	_txtMissionLabel->setHighContrast();
+	_txtMissionLabel->setAlign(ALIGN_CENTER);
 
 	std::wstring
 		baseLabel,
@@ -506,11 +513,6 @@ BattlescapeState::BattlescapeState()
 
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
 
-	if (_savedBattle->getOperation().empty() == false)
-		_txtOperationTitle->setText(_savedBattle->getOperation().c_str());
-	else
-		_txtOperationTitle->setVisible(false);
-
 
 	add(_lstTileInfo);
 	_lstTileInfo->setColor(Palette::blockOffset(8)); // blue
@@ -519,18 +521,15 @@ BattlescapeState::BattlescapeState()
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(8));
-	add(_txtConsole1);
-	add(_txtConsole2);
-//	add(_txtConsole3);
-//	add(_txtConsole4);
 
-	_txtConsole1->setColor(Palette::blockOffset(8)); // blue
+	add(_txtConsole1,	"textName",	"battlescape"); // blue
+	add(_txtConsole2,	"textName",	"battlescape");
+//	add(_txtConsole3,	"textName",	"battlescape");
+//	add(_txtConsole4,	"textName",	"battlescape");
+
 	_txtConsole1->setHighContrast();
-	_txtConsole2->setColor(Palette::blockOffset(8));
 	_txtConsole2->setHighContrast();
-//	_txtConsole3->setColor(Palette::blockOffset(8));
 //	_txtConsole3->setHighContrast();
-//	_txtConsole4->setColor(Palette::blockOffset(8));
 //	_txtConsole4->setHighContrast();
 
 	_txtConsole1->setVisible(_showConsole > 0);
@@ -538,34 +537,27 @@ BattlescapeState::BattlescapeState()
 //	_txtConsole3->setVisible(_showConsole > 2);
 //	_txtConsole4->setVisible(_showConsole > 3);
 
-	add(_txtTerrain);
-	add(_txtShade);
-	add(_txtTurn);
+	add(_txtTerrain,		"infoText",			"battlescape"); // yellow
+	add(_txtShade,			"infoText",			"battlescape");
+	add(_txtTurn,			"infoText",			"battlescape");
+	add(_txtOrder,			"operationTitle",	"battlescape"); // white
+	add(_lstSoldierInfo,	"textName",			"battlescape"); // blue
+	add(_txtHasKill,		"infoText",			"battlescape");
 
-	add(_txtOrder);
-	add(_lstSoldierInfo);
-	add(_txtHasKill);
-
-	_txtTerrain->setColor(Palette::blockOffset(9)); // yellow
 	_txtTerrain->setHighContrast();
 	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_savedBattle->getBattleTerrain())));
 
-	_txtShade->setColor(Palette::blockOffset(9));
 	_txtShade->setHighContrast();
 	_txtShade->setText(tr("STR_SHADE_").arg(_savedBattle->getGlobalShade()));
 
-	_txtTurn->setColor(Palette::blockOffset(9));
 	_txtTurn->setHighContrast();
 	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
 
-	_txtOrder->setColor(Palette::blockOffset(0)); // white
 	_txtOrder->setHighContrast();
 
-	_lstSoldierInfo->setColor(Palette::blockOffset(8)); // blue
 	_lstSoldierInfo->setHighContrast();
 	_lstSoldierInfo->setColumns(2, 10, 15);
 
-	_txtHasKill->setColor(Palette::blockOffset(9)); // yellow
 	_txtHasKill->setHighContrast();
 
 //	_numLayers->setColor(Palette::blockOffset(5)+12);
@@ -849,11 +841,10 @@ BattlescapeState::BattlescapeState()
 //		_btnVisibleUnit[i]->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //		_btnVisibleUnit[i]->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-		_numVisibleUnit[i]->setColor(color); // 16
+		_numVisibleUnit[i]->setColor(color);
 		_numVisibleUnit[i]->setValue(static_cast<unsigned>(i) + 1);
 	}
 
-//	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast();
 
 	_numTULaunch->setColor(Palette::blockOffset(0)+7);
@@ -872,12 +863,6 @@ BattlescapeState::BattlescapeState()
 
 	_barMorale->setScale();
 	_barMorale->setMax(100.);
-
-	_txtDebug->setColor(Palette::blockOffset(8));
-	_txtDebug->setHighContrast();
-
-//	_txtTooltip->setColor(Palette::blockOffset(0)-1);
-//	_txtTooltip->setHighContrast();
 
 /*	_btnReserveNone->setGroup(&_reserve);
 	_btnReserveSnap->setGroup(&_reserve);
