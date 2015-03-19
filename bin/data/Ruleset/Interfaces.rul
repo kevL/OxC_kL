@@ -1101,6 +1101,10 @@ interfaces:
         color: 24
         color2: 28
         border: 15
+      - id: infoText
+        color: 144
+      - id: operationTitle
+        color: 0
   - type: inventory
     elements:
       - id: textName
