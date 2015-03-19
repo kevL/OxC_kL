@@ -67,16 +67,16 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Confirm Landing window.
  * @param craft 	- pointer to the Craft to confirm
- * @param texture	- pointer to the RuleTexture of the landing site (default NULL)
+ * @param texRule	- pointer to the RuleTexture of the landing site (default NULL)
  * @param shade		- shade of the landing site (default -1)
  */
 ConfirmLandingState::ConfirmLandingState(
 		Craft* const craft,
-		RuleTexture* texture, // always passes in the vector of eligible Globe Terrains for the land-poly's textureInt.
+		RuleTexture* texRule, // always passes in the vector of eligible Globe Terrains for the land-poly's textureInt.
 		const int shade)
 	:
 		_craft(craft),
-		_texture(texture),
+		_texRule(texRule),
 		_shade(shade),
 		_terrainRule(NULL),
 		_city(NULL)
@@ -197,11 +197,11 @@ ConfirmLandingState::ConfirmLandingState(
 					// if none found, choose among Deployment def'd terrains ....
 					// Note: cf. NewBattleState::cbxMissionChange()
 
+					// TODO: tie all this into WeightedOptions
 					// check for Terrains in Globe-Texture(INT) first
 					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
-
-					const RuleTexture* const texture = globeRule->getGlobeTextureRule(_city->getCityTextureInt());
-					eligibleTerrains = globeRule->getGlobeTerrains(texture->getTextureDeployment());
+					const RuleTexture* const texRule = globeRule->getGlobeTextureRule(_city->getCityTextureInt());
+					eligibleTerrains = globeRule->getGlobeTerrains(texRule->getTextureDeployment());
 
 					// second, check for Terrains in AlienDeployment ...
 					if (eligibleTerrains.empty() == true)
@@ -213,9 +213,9 @@ ConfirmLandingState::ConfirmLandingState(
 
 					if (eligibleTerrains.empty() == false) // SAFETY.
 					{
-						size_t pick = RNG::generate(
-												0,
-												eligibleTerrains.size() - 1);
+						const size_t pick = RNG::generate(
+													0,
+													eligibleTerrains.size() - 1);
 						_terrainRule = _game->getRuleset()->getTerrain(eligibleTerrains.at(pick));
 					}
 //					else fuck off. Thanks!
@@ -223,7 +223,7 @@ ConfirmLandingState::ConfirmLandingState(
 					terrainType = _terrainRule->getType();
 				}
 				else // SAFETY: for missionSite that's not at a City.
-					terrainType = _texture->getRandomTerrain(_craft->getDestination());
+					terrainType = _texRule->getRandomTerrain(_craft->getDestination());
 					// note: that should crash if on Water tex
 
 				site->setSiteTerrainType(terrainType);
@@ -239,9 +239,9 @@ ConfirmLandingState::ConfirmLandingState(
 					// so treat them both the same -> texture(INT) #10
 					// INDUSTRIALUFO, MADURBANUFO, NATIVEUFO
 					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
-					const RuleTexture* const texture = globeRule->getGlobeTextureRule(OpenXcom::TT_URBAN);
+					const RuleTexture* const texRule = globeRule->getGlobeTextureRule(OpenXcom::TT_URBAN);
 
-					terrainType = texture->getRandomTerrain(ufo);
+					terrainType = texRule->getRandomTerrain(ufo);
 					// NOTE that inputting coordinates can screw getRandomTerrain() if & when 'target'
 					// is not contained within any of the Texture's Terrain's TerrainCriteria coordinates.
 					// I don't believe the function has a viable fallback mechanism
@@ -256,7 +256,7 @@ ConfirmLandingState::ConfirmLandingState(
 				else // UFO not at City
 				{
 					Log(LOG_INFO) << ". . UFO not at City";
-					terrainType = _texture->getRandomTerrain(_craft->getDestination());
+					terrainType = _texRule->getRandomTerrain(_craft->getDestination());
 //->				_terrainRule = selectTerrain(lat);
 				}
 
@@ -449,7 +449,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 		bGen.setAlienRace(ufo->getAlienRace());
 		bGen.setTacTerrain(_terrainRule); // kL
 		bGen.setTacShade(_shade);
-//		bGen.setTacTexture(_texture); // was an INT <- !!!
+//		bGen.setTacTexture(_texRule); // was an INT <- !!!
 //		bGen.setIsCity(_city != NULL); // kL
 	}
 	else if (missionSite != NULL)
@@ -460,7 +460,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 		bGen.setAlienRace(missionSite->getAlienRace());
 		bGen.setTacTerrain(_terrainRule); // kL
 		bGen.setTacShade(_shade);
-//		bGen.setTacTexture(_texture); // was an INT <- !!!
+//		bGen.setTacTexture(_texRule); // was an INT <- !!!
 	}
 	else if (alienBase != NULL)
 	{

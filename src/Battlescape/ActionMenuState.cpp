@@ -394,7 +394,11 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			if (targetUnit == NULL) // kL: if no target TargetSelf.
 				targetUnit = _action->actor;
 
-			if (targetUnit != NULL)
+			_game->popState();
+			_game->pushState(new MedikitState(
+											targetUnit,
+											_action));
+/*			if (targetUnit != NULL)
 			{
 				_game->popState();
 				_game->pushState(new MedikitState(
@@ -405,7 +409,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				_game->popState();
-			}
+			} */
 		}
 		else if (_action->type == BA_USE
 			&& itRule->getBattleType() == BT_SCANNER)

@@ -3020,7 +3020,7 @@ globe:
     - id: -1 #inland
       deployType: STR_TERROR_MISSION
     - id: -2 #coastal
-      deployType: STR_TERROR_MISSION
+      deployType: STR_PORT_ATTACK
 ###--- Original Textures ---###
 #  textures:
 #    - id: 0

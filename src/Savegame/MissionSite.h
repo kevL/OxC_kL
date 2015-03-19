@@ -53,7 +53,7 @@ private:
 		_terrain;
 
 	const AlienDeployment* _deployment;
-	const RuleAlienMission* _rules;
+	const RuleAlienMission* _missionRule;
 
 
 	public:

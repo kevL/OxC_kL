@@ -68,10 +68,13 @@ private:
 		_bgY;
 	double _popupStep;
 
+	Uint8 _color;
+	Uint32 _delay;
+
 	State* _state;
 	Surface* _bg;
 	Timer* _timer;
-	Uint8 _color;
+
 	WindowPopup _popup;
 
 
@@ -84,7 +87,8 @@ private:
 				int height,
 				int x = 0,
 				int y = 0,
-				WindowPopup popup = POPUP_NONE);
+				WindowPopup popup = POPUP_NONE,
+				Uint32 delay = 0);
 		/// Cleans up the window.
 		~Window();
 

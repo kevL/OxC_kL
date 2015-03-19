@@ -83,7 +83,6 @@ Game::Game(const std::string& title)
 		_timeUntilNextFrame(0),
 		_debugCycle(-1),
 		_debugCycle_b(-1)
-//		_fadeMusic(false)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -212,7 +211,6 @@ void Game::run()
 	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
 	bool startupEvent = Options::allowResize;
 
-
 	while (_quit == false)
 	{
 		while (_deleted.empty() == false) // Clean up states
@@ -220,6 +218,7 @@ void Game::run()
 			delete _deleted.back();
 			_deleted.pop_back();
 		}
+
 
 		if (_init == false) // Initialize active state
 		{
@@ -269,12 +268,12 @@ void Game::run()
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
 						case SDL_APPACTIVE:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain? RUNNING: stateRun[Options::pauseMode];
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[Options::pauseMode];
 						break;
 						case SDL_APPMOUSEFOCUS: // Consciously ignore it.
 						break;
 						case SDL_APPINPUTFOCUS:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain? RUNNING: kbFocusRun[Options::pauseMode];
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[Options::pauseMode];
 						break;
 					}
 				break;
@@ -325,8 +324,8 @@ void Game::run()
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
-//kL				if (_inputActive == false) // Skip [ie. postpone] mouse events if they're disabled
-//kL					continue;
+//					if (_inputActive == false) // Skip [ie. postpone] mouse events if they're disabled. Moved below_
+//						continue;
 					runningState = RUNNING;	// re-gain focus on mouse-over or keypress.
 											// Go on, feed the event to others
 				default:
@@ -346,7 +345,7 @@ void Game::run()
 						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
 							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
-							Options::captureMouse = static_cast<SDL_GrabMode>(!Options::captureMouse); // == SDL_GRAB_QUERY);
+							Options::captureMouse = static_cast<SDL_GrabMode>(!Options::captureMouse);
 							SDL_WM_GrabInput(Options::captureMouse);
 						}
 						else if (Options::debug == true)
@@ -409,12 +408,12 @@ void Game::run()
 				&& !(
 					Options::useOpenGL && Options::vSyncForOpenGL))
 			{
-				// Update our FPS delay time based on the time of the last draw.
-				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
+				// Update FPS delay time based on the time of the last draw.
+				int fps = (SDL_GetAppState() & SDL_APPINPUTFOCUS) ? Options::FPS : Options::FPSInactive;
 				if (fps < 1) fps = 1;
 				_timeUntilNextFrame = static_cast<int>(
-											(1000.f / static_cast<float>(fps))
-											- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
+									 (1000.f / static_cast<float>(fps))
+									 - static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
 			}
 			else
 				_timeUntilNextFrame = 0;
@@ -431,7 +430,7 @@ void Game::run()
 				std::list<State*>::const_iterator i = _states.end();
 				do
 				{
-					--i;			// find top underlying fullscreen state,
+					--i; // find top underlying fullscreen state,
 				}
 				while (i != _states.begin()
 					&& (*i)->isScreen() == false);
@@ -441,24 +440,16 @@ void Game::run()
 						i != _states.end();
 						++i)
 				{
-					(*i)->blit();	// blit top underlying fullscreen state and those on top of it.
+					(*i)->blit(); // blit top underlying fullscreen state and those on top of it.
 				}
 
 				_fpsCounter->blit(_screen->getSurface());
 				_cursor->blit(_screen->getSurface());
 
 				_screen->flip();
-
-/*				if (_fadeMusic == true)
-				{
-					while (Mix_PlayingMusic() == 1)
-					{}
-
-					_cursor->setVisible();
-					_fadeMusic = false;
-				} */
 			}
 		}
+
 
 		switch (runningState)	// Save on CPU
 		{
@@ -468,7 +459,6 @@ void Game::run()
 			case SLOWED:
 			case PAUSED:
 				SDL_Delay(100);	// More slowing down.
-			break;
 		}
 	}
 
@@ -597,7 +587,6 @@ void Game::setState(State* state)
 	pushState(state);
 
 	_init = false;
-//	_fadeMusic = false;
 }
 
 /**
@@ -622,7 +611,6 @@ void Game::popState()
 	_states.pop_back();
 
 	_init = false;
-//	_fadeMusic = false;
 }
 
 /**
@@ -640,10 +628,11 @@ Language* Game::getLanguage() const
 */
 void Game::loadLanguage(const std::string& filename)
 {
-	std::ostringstream ss;
-	ss << "Language/" << filename << ".yml";
+	std::ostringstream oststr;
+	oststr << "Language/" << filename << ".yml";
 
 	ExtraStrings* strings = NULL;
+
 	std::map<std::string, ExtraStrings*> extraStrings = _rules->getExtraStrings();
 	if (extraStrings.empty() == false)
 	{
@@ -658,7 +647,7 @@ void Game::loadLanguage(const std::string& filename)
 	}
 
 	_lang->load(
-			CrossPlatform::getDataFile(ss.str()),
+			CrossPlatform::getDataFile(oststr.str()),
 			strings);
 
 	Options::language = filename;
@@ -760,7 +749,6 @@ void Game::loadRuleset()
 void Game::setInputActive(bool active)
 {
 	_inputActive = active;
-//	_cursor->setVisible(active);
 }
 
 /**
@@ -813,10 +801,11 @@ void Game::defaultLanguage()
 
 	if (Options::language.empty() == true) // No language set, detect based on system
 	{
-		const std::string local = CrossPlatform::getLocale();
-		const std::string lang = local.substr(
-											0,
-											local.find_first_of('-'));
+		const std::string
+			local = CrossPlatform::getLocale(),
+			lang = local.substr(
+							0,
+							local.find_first_of('-'));
 
 		try // Try to load full locale
 		{
@@ -900,13 +889,5 @@ void Game::setDebugCycle(const int cycle)
 {
 	_debugCycle = cycle;
 }
-
-/**
- * Sets current music as fading.
- */
-/* void Game::setFadeMusic()
-{
-	_fadeMusic = true;
-} */
 
 }

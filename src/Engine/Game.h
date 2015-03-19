@@ -51,7 +51,6 @@ private:
 	static const double VOLUME_GRADIENT;
 
 	bool
-//		_fadeMusic,
 		_init,
 		_inputActive,
 		_quit;
@@ -153,9 +152,6 @@ private:
 		int getDebugCycle() const;
 		/// Sets the country cycle for debugging country regions.
 		void setDebugCycle(const int cycle);
-
-		/// Sets current music as fading.
-//		void setFadeMusic();
 };
 
 }

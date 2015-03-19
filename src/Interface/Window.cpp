@@ -45,6 +45,7 @@ Sound* Window::soundPopup[3] = {0, 0, 0};
  * @param x			- X position in pixels (default 0)
  * @param y			- Y position in pixels (default 0)
  * @param popup		- popup animation (default POPUP_NONE)
+ * @param delay		- ticks to delay popup for (default 0)
  */
 Window::Window(
 		State* state,
@@ -52,15 +53,16 @@ Window::Window(
 		int height,
 		int x,
 		int y,
-		WindowPopup popup)
+		WindowPopup popup,
+		Uint32 delay)
 	:
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_state(state),
 		_popup(popup),
+		_delay(delay),
 		_bg(NULL),
 		_dx(-x),
 		_dy(-y),
@@ -72,7 +74,7 @@ Window::Window(
 		_bgX(0),
 		_bgY(0)
 {
-	_timer = new Timer(12);
+	_timer = new Timer(13);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
 
 	if (_popup == POPUP_NONE)
@@ -167,6 +169,11 @@ void Window::think()
  */
 void Window::popup()
 {
+	if (_delay != 0)
+	{
+		--_delay;
+		return;
+	}
 
 	if (AreSame(_popupStep, 0.) == true)
 		soundPopup[(SDL_GetTicks() %2) + 1]->play(Mix_GroupAvailable(0));
@@ -206,78 +213,88 @@ void Window::draw()
 	Surface::draw();
 
 
-	SDL_Rect square;
+	SDL_Rect rect;
 
 	if (_popup == POPUP_HORIZONTAL
 		|| _popup == POPUP_BOTH)
 	{
-		square.x = static_cast<Sint16>(
-					(static_cast<double>(getWidth()) - (static_cast<double>(getWidth()) * _popupStep)) / 2);
-		square.w = static_cast<Uint16>(
-					static_cast<double>(getWidth()) * _popupStep);
+		rect.x = static_cast<Sint16>(
+				(static_cast<double>(getWidth()) - (static_cast<double>(getWidth()) * _popupStep))) / 2;
+		rect.w = static_cast<Uint16>(
+				 static_cast<double>(getWidth()) * _popupStep);
 	}
 	else
 	{
-		square.x = 0;
-		square.w = static_cast<Uint16>(getWidth());
+		rect.x = 0;
+		rect.w = static_cast<Uint16>(getWidth());
 	}
 
 	if (_popup == POPUP_VERTICAL
 		|| _popup == POPUP_BOTH)
 	{
-		square.y = static_cast<Sint16>(
-					(static_cast<double>(getHeight()) - (static_cast<double>(getHeight()) * _popupStep)) / 2);
-		square.h = static_cast<Uint16>(
-					static_cast<double>(getHeight()) * _popupStep);
+		rect.y = static_cast<Sint16>(
+				(static_cast<double>(getHeight()) - (static_cast<double>(getHeight()) * _popupStep))) / 2;
+		rect.h = static_cast<Uint16>(
+				 static_cast<double>(getHeight()) * _popupStep);
 	}
 	else
 	{
-		square.y = 0;
-		square.h = static_cast<Uint16>(getHeight());
+		rect.y = 0;
+		rect.h = static_cast<Uint16>(getHeight());
 	}
 
-	Uint8 gradient = 1;
+	Uint8
+		color,
+		gradient;
+
 	if (_contrast == true)
 		gradient = 2;
+	else
+		gradient = 1;
 
-	Uint8 color = _color + (gradient * 3);
+	color = _color + (gradient * 3);
 
 	if (_thinBorder == true)
 	{
 		color = _color + gradient;
 		for (int
 				i = 0;
-				i < 5;
+				i != 5;
 				++i)
 		{
 			drawRect(
-					&square,
+					&rect,
 					color);
 
 			if (i %2 == 0)
 			{
-				square.x++;
-				square.y++;
+				++rect.x;
+				++rect.y;
 			}
-			square.w--;
-			square.h--;
+			--rect.w;
+			--rect.h;
 
 			switch (i)
 			{
 				case 0:
 					color = _color + (gradient * 5);
-					setPixelColor(square.w, 0, color);
+					setPixelColor(
+								rect.w,
+								0,
+								color);
 				break;
 				case 1:
 					color = _color + (gradient * 2);
 				break;
 				case 2:
 					color = _color + (gradient * 4);
-					setPixelColor(square.w + 1, 1, color);
+					setPixelColor(
+								rect.w + 1,
+								1,
+								color);
 				break;
 				case 3:
 					color = _color + (gradient * 3);
-				break;
 			}
 		}
 	}
@@ -285,11 +302,11 @@ void Window::draw()
 	{
 		for (int
 				i = 0;
-				i < 5;
+				i != 5;
 				++i)
 		{
 			drawRect(
-					&square,
+					&rect,
 					color);
 
 			if (i < 2)
@@ -297,30 +314,30 @@ void Window::draw()
 			else
 				color += gradient;
 
-			square.x++;
-			square.y++;
+			++rect.x;
+			++rect.y;
 
-			if (square.w >= 2)
-				square.w -= 2;
+			if (rect.w >= 2)
+				rect.w -= 2;
 			else
-				square.w = 1;
+				rect.w = 1;
 
-			if (square.h >= 2)
-				square.h -= 2;
+			if (rect.h >= 2)
+				rect.h -= 2;
 			else
-				square.h = 1;
+				rect.h = 1;
 		}
 	}
 
 	if (_bg != NULL)
 	{
-		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx - _bgX);
-		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy - _bgY);
-		_bg->getCrop()->w = square.w;
-		_bg->getCrop()->h = square.h;
+		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(rect.x) - _dx - _bgX);
+		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(rect.y) - _dy - _bgY);
+		_bg->getCrop()->w = rect.w;
+		_bg->getCrop()->h = rect.h;
 
-		_bg->setX(static_cast<int>(square.x));
-		_bg->setY(static_cast<int>(square.y));
+		_bg->setX(static_cast<int>(rect.x));
+		_bg->setY(static_cast<int>(rect.y));
 
 		_bg->blit(this);
 	}

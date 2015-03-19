@@ -215,6 +215,8 @@ interfaces:
         color: 4     # aqua
       - id: text
         color: 138   # yellow
+      - id: text2
+        color: 52    # kL_add
       - id: window
         color: 239   # bright green
       - id: button

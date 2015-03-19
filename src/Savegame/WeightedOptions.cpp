@@ -36,22 +36,22 @@ namespace OpenXcom
  */
 const std::string WeightedOptions::choose() const
 {
-	if (_totalWeight == 0)
-		return "";
-
-	size_t pick = RNG::generate(
-							1,
-							_totalWeight);
-
-	size_t tally = 0;
-	std::map<std::string, size_t>::const_iterator i = _choices.begin();
-	while (i != _choices.end())
+	if (_totalWeight != 0)
 	{
-		tally += i->second;
-		if (i->second >= pick)
-			return i->first;
+		const size_t pick = RNG::generate(
+									1,
+									_totalWeight);
 
-		++i;
+		size_t tally = 0;
+		std::map<std::string, size_t>::const_iterator i = _choices.begin();
+		while (i != _choices.end())
+		{
+			tally += i->second;
+			if (pick <= tally)
+				return i->first;
+
+			++i;
+		}
 	}
 
 	return "";
@@ -67,35 +67,37 @@ const std::string WeightedOptions::choose() const
  */
 const std::string WeightedOptions::topChoice() const
 {
-	if (_totalWeight == 0)
-		return "";
-
-	size_t topWeight = 0;
-	std::vector<std::string> rets;
-
-	for (std::map<std::string, size_t>::const_iterator
-			i = _choices.begin();
-			i != _choices.end();
-			++i)
+	if (_totalWeight != 0)
 	{
-		if (i->second > topWeight)
-		{
-			rets.clear();
-			rets.push_back(i->first);
+		size_t topWeight = 0;
+		std::vector<std::string> rets;
 
-			topWeight = i->second;
-		}
-		else if (i->second != 0
-			&& i->second == topWeight)
+		for (std::map<std::string, size_t>::const_iterator
+				i = _choices.begin();
+				i != _choices.end();
+				++i)
 		{
-			rets.push_back(i->first);
+			if (i->second > topWeight)
+			{
+				rets.clear();
+				rets.push_back(i->first);
+
+				topWeight = i->second;
+			}
+			else if (i->second != 0
+				&& i->second == topWeight)
+			{
+				rets.push_back(i->first);
+			}
 		}
+
+		const size_t pick = RNG::generate(
+									0,
+									rets.size() - 1);
+		return rets.at(pick);
 	}
 
-	const size_t pick = RNG::generate(
-								0,
-								rets.size() - 1);
-	return rets.at(pick);
+	return "";
 }
 
 /**

@@ -40,7 +40,7 @@ MissionSite::MissionSite(
 		const AlienDeployment* deployment)
 	:
 		Target(),
-		_rules(rules),
+		_missionRule(rules),
 		_deployment(deployment),
 		_id(0),
 		_texture(-1),
@@ -81,7 +81,7 @@ YAML::Node MissionSite::save() const
 {
 	YAML::Node node = Target::save();
 
-	node["type"]			= _rules->getType();
+	node["type"]			= _missionRule->getType();
 	node["deployment"]		= _deployment->getType();
 
 	node["id"]				= _id;
@@ -116,7 +116,7 @@ YAML::Node MissionSite::saveId() const
  */
 const RuleAlienMission* MissionSite::getRules() const
 {
-	return _rules;
+	return _missionRule;
 }
 
 /**

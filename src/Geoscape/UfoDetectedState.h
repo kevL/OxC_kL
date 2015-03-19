@@ -74,7 +74,8 @@ private:
 				bool detected,
 				bool hyper,
 				bool contact = true,
-				std::vector<Base*>* hyperBases = NULL);
+				std::vector<Base*>* hyperBases = NULL,
+				bool delay = false);
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 

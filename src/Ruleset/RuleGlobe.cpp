@@ -253,9 +253,9 @@ void RuleGlobe::loadDat(const std::string& filename)
 }
 
 /**
- * Returns the rule for the specified texture.
- * @param id - Texture ID
- * @return, rules for a Texture
+ * Returns the rule for a Texture.
+ * @param id - texture ID
+ * @return, rule for a Texture
  */
 RuleTexture* RuleGlobe::getGlobeTextureRule(int id) const
 {

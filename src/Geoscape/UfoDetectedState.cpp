@@ -59,6 +59,7 @@ namespace OpenXcom
  * @param hyper			- true if the UFO has been hyperdetected
  * @param contact		- true if radar contact is established (default true)
  * @param hyperBases	- pointer to a vector of pointers to Bases that hyperdetected UFO (default NULL)
+ * @param delay			- true to delay popup window
  */
 UfoDetectedState::UfoDetectedState(
 		Ufo* const ufo,
@@ -66,7 +67,8 @@ UfoDetectedState::UfoDetectedState(
 		bool detected,
 		bool hyper,
 		bool contact,
-		std::vector<Base*>* hyperBases)
+		std::vector<Base*>* hyperBases,
+		bool delay)
 	:
 		_ufo(ufo),
 		_state(state)
@@ -84,16 +86,22 @@ UfoDetectedState::UfoDetectedState(
 
 	_screen = false;
 
+	Uint32 popDelay;
+	if (delay == true)
+		popDelay = 355;
+	else
+		popDelay = 0;
+
 	if (hyper == true)
 	{
-		_window			= new Window(this, 224, 190, 16, 10, POPUP_BOTH);
+		_window			= new Window(this, 224, 190, 16, 10, POPUP_BOTH, popDelay);
 
 		_txtHyperwave	= new Text(216, 16, 20, 45);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
 		_txtBases		= new Text(100, 41, 32, 135);
 	}
 	else
-		_window			= new Window(this, 224, 140, 16, 48, POPUP_BOTH);
+		_window			= new Window(this, 224, 140, 16, 48, POPUP_BOTH, popDelay);
 
 	_txtUfo			= new Text(90, 16, 26, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);

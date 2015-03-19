@@ -1851,6 +1851,8 @@ void GeoscapeState::time10Minutes()
 	}
 
 
+	size_t windowPops = 0;
+
 	for (std::vector<Ufo*>::const_iterator // handle UFO detection
 			u = _savedGame->getUfos()->begin();
 			u != _savedGame->getUfos()->end();
@@ -1909,13 +1911,15 @@ void GeoscapeState::time10Minutes()
 					|| (hyperDet == true
 						&& hyperDet_pre == false))
 				{
+					++windowPops;
 					popup(new UfoDetectedState(
 											*u,
 											this,
 											true,
 											hyperDet,
 											contact,
-											&hyperBases));
+											&hyperBases,
+											windowPops > 1));
 				}
 			}
 			else // ufo is already detected
@@ -1966,13 +1970,15 @@ void GeoscapeState::time10Minutes()
 				if (hyperDet == true
 					&& hyperDet_pre == false)
 				{
+					++windowPops;
 					popup(new UfoDetectedState(
 											*u,
 											this,
 											false,
 											hyperDet,
 											contact,
-											&hyperBases));
+											&hyperBases,
+											windowPops > 1));
 				}
 
 				if (contact == false

@@ -596,7 +596,7 @@ void AlienMission::ufoReachedWaypoint(
 												deployRule->getDurationMax()) * 3600);
 			missionSite->setAlienRace(_race);
 			missionSite->setSiteTextureInt(area.texture);
-			missionSite->setCity(area.name);
+			missionSite->setCity(area.site);
 
 			_savedGame.getMissionSites()->push_back(missionSite);
 

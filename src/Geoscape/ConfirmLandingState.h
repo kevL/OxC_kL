@@ -49,7 +49,7 @@ private:
 	RuleCity* _city;
 	Craft* _craft;
 	RuleTerrain* _terrainRule;
-	RuleTexture* _texture;
+	RuleTexture* _texRule;
 	Text
 		* _txtBegin,
 		* _txtMessage,
@@ -68,7 +68,7 @@ private:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(
 				Craft* const craft,
-				RuleTexture* texture = NULL,
+				RuleTexture* texRule = NULL,
 				const int shade = -1);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();

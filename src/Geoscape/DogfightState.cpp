@@ -2133,7 +2133,7 @@ void DogfightState::calculateWindowPosition()
 	{
 		if (_intercept == 1)
 		{
-			_x = 0;
+			_x =
 			_y = 0;
 		}
 		else if (_intercept == 2)

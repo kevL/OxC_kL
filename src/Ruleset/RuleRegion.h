@@ -44,7 +44,7 @@ struct MissionArea
 		lonMax,
 		latMin,
 		latMax;
-	std::string name;
+	std::string site;
 
 	///
 	bool operator == (const MissionArea& area) const
@@ -215,7 +215,7 @@ struct convert<OpenXcom::MissionArea>
 		if (node.size() > 4)
 			rhs.texture	= node[4].as<int>();
 		if (node.size() > 5)
-			rhs.name	= node[5].as<std::string>();
+			rhs.site	= node[5].as<std::string>();
 
 		// TODO: needs entries #7, #8; labelTop & showNameAtZoomLevel
 
