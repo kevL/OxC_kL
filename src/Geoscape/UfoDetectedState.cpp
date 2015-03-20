@@ -142,23 +142,23 @@ UfoDetectedState::UfoDetectedState(
 				"PAL_GEOSCAPE",
 				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
-	add(_window, "window", "UFOInfo");
-	add(_txtUfo, "text", "UFOInfo");
-	add(_txtDetected, "text", "UFOInfo");
-	add(_lstInfo, "text", "UFOInfo");
-	add(_btnCentre, "button", "UFOInfo");
-	add(_btnIntercept, "button", "UFOInfo");
-	add(_btn5Sec, "button", "UFOInfo");
-	add(_btnCancel, "button", "UFOInfo");
+	add(_window,		"window",	"UFOInfo");
+	add(_txtUfo,		"text",		"UFOInfo");
+	add(_txtDetected,	"text",		"UFOInfo");
+	add(_lstInfo,		"text",		"UFOInfo");
+	add(_btnCentre,		"button",	"UFOInfo");
+	add(_btnIntercept,	"button",	"UFOInfo");
+	add(_btn5Sec,		"button",	"UFOInfo");
+	add(_btnCancel,		"button",	"UFOInfo");
 
-	add(_txtRegion, "text", "UFOInfo");
-	add(_txtTexture, "text", "UFOInfo");
+	add(_txtRegion,		"text",		"UFOInfo");
+	add(_txtTexture,	"text",		"UFOInfo");
 
 	if (hyper == true)
 	{
-		add(_txtHyperwave, "text", "UFOInfo");
-		add(_lstInfo2, "text", "UFOInfo");
-		add(_txtBases, "text", "UFOInfo");
+		add(_txtHyperwave,	"text", "UFOInfo");
+		add(_lstInfo2,		"text", "UFOInfo");
+		add(_txtBases,		"text", "UFOInfo");
 	}
 
 	centerAllSurfaces();

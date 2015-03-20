@@ -73,7 +73,8 @@ Ufo::Ufo(const RuleUfo* const rules)
 		_hitFrame(0),
 		_processedIntercept(false),
 		_fireCountdown(0),
-		_escapeCountdown(0)
+		_escapeCountdown(0),
+		_radius(rules->getRadius())
 //		_shotDownByCraftId() // kL
 {}
 
@@ -131,7 +132,7 @@ private:
 		{}
 
 		/// Match with stored ID.
-		bool operator()(const AlienMission* am) const
+		bool operator() (const AlienMission* am) const
 		{
 			return am->getId() == _id;
 		}
@@ -956,6 +957,15 @@ void Ufo::setUfoTerrainType(const std::string& terrain)
 std::string Ufo::getUfoTerrainType() const
 {
 	return _terrain;
+}
+
+/**
+ * Gets the size of this Ufo.
+ * @return, the size (call it radius if you want)
+ */
+size_t Ufo::getRadius() const
+{
+	return _radius;
 }
 
 }

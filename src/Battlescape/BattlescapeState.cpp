@@ -132,7 +132,7 @@ BattlescapeState::BattlescapeState()
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
 			_visibleUnit,
-			20,
+			INDICATORS,
 			(BattleUnit*)(NULL));
 
 	const int
@@ -153,7 +153,7 @@ BattlescapeState::BattlescapeState()
 	_icons		= new InteractiveSurface(
 									iconsWidth,
 									iconsHeight,
-									x, y);
+									x,y);
 	_iconsLayer	= new Surface(32, 16, x + 208, y);
 
 	// Create the battlemap view
@@ -338,7 +338,7 @@ BattlescapeState::BattlescapeState()
 	add(_rank,				"rank",					"battlescape", _icons);
 	add(_btnWounds);
 	add(_numWounds);
-	add(_btnUnitUp,			"buttonUnitUp",			"battlescape", _icons);
+	add(_btnUnitUp,			"buttonUnitUp",			"battlescape", _icons); // note: these are not registered in Interfaces.rul
 	add(_btnUnitDown,		"buttonUnitDown",		"battlescape", _icons);
 	add(_btnMapUp,			"buttonMapUp",			"battlescape", _icons);
 	add(_btnMapDown,		"buttonMapDown",		"battlescape", _icons);
@@ -514,27 +514,25 @@ BattlescapeState::BattlescapeState()
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
 
 
-	add(_lstTileInfo);
-	_lstTileInfo->setColor(Palette::blockOffset(8)); // blue
-	_lstTileInfo->setHighContrast();
-	_lstTileInfo->setColumns(2, 11, 7);
-
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(8));
 
-	add(_txtConsole1,	"textName",	"battlescape"); // blue
+	add(_lstTileInfo,	"textName",	"battlescape"); // blue
+	add(_txtConsole1,	"textName",	"battlescape");
 	add(_txtConsole2,	"textName",	"battlescape");
 //	add(_txtConsole3,	"textName",	"battlescape");
 //	add(_txtConsole4,	"textName",	"battlescape");
 
-	_txtConsole1->setHighContrast();
-	_txtConsole2->setHighContrast();
-//	_txtConsole3->setHighContrast();
-//	_txtConsole4->setHighContrast();
+	_lstTileInfo->setColumns(2, 11, 7);
+	_lstTileInfo->setHighContrast();
 
+	_txtConsole1->setHighContrast();
 	_txtConsole1->setVisible(_showConsole > 0);
+	_txtConsole2->setHighContrast();
 	_txtConsole2->setVisible(_showConsole > 1);
+//	_txtConsole3->setHighContrast();
 //	_txtConsole3->setVisible(_showConsole > 2);
+//	_txtConsole4->setHighContrast();
 //	_txtConsole4->setVisible(_showConsole > 3);
 
 	add(_txtTerrain,		"infoText",			"battlescape"); // yellow
@@ -2547,18 +2545,18 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	if (calcFoV == true)
 		_savedBattle->getTileEngine()->calculateFOV(selectedUnit);
 
-	size_t j = 0;
+	size_t ind = 0;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
-				&& j != INDICATORS;
+				&& ind != INDICATORS;
 			++i,
-				++j)
+				++ind)
 	{
-		_btnVisibleUnit[j]->setVisible();
-		_numVisibleUnit[j]->setVisible();
+		_btnVisibleUnit[ind]->setVisible();
+		_numVisibleUnit[ind]->setVisible();
 
-		_visibleUnit[j] = *i;
+		_visibleUnit[ind] = *i;
 	}
 
 

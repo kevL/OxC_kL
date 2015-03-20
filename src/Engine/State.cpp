@@ -75,7 +75,7 @@ State::~State()
 {
 	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
-			i < _surfaces.end();
+			i != _surfaces.end();
 			++i)
 	{
 		delete *i;
@@ -94,7 +94,7 @@ void State::add(Surface* surface)
 {
 	surface->setPalette(_palette);
 
-	if (_game->getLanguage() != NULL
+	if (   _game->getLanguage() != NULL
 		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(
@@ -167,7 +167,7 @@ void State::add(
 		tacBtn->initSurfaces();
 	}
 
-	if (_game->getLanguage() != NULL
+	if (   _game->getLanguage() != NULL
 		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(

@@ -142,6 +142,132 @@ const double
 //Sound* GeoscapeState::soundPop = 0;
 
 
+// UFO blobs graphics ...
+const int GeoscapeState::_ufoBlobs[8][13][13] =
+{
+	{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0 - STR_VERY_SMALL
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 3, 5, 3, 1, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 2, 3, 2, 1, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 1 - STR_SMALL
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0},
+		{0, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 0},
+		{0, 0, 0, 1, 2, 4, 5, 4, 2, 1, 0, 0, 0},
+		{0, 0, 0, 1, 2, 3, 4, 3, 2, 1, 0, 0, 0},
+		{0, 0, 0, 0, 1, 2, 2, 2, 1, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 2 - STR_MEDIUM_UC
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 0, 1, 2, 3, 3, 3, 2, 1, 0, 0, 0},
+		{0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 0},
+		{0, 0, 1, 2, 3, 5, 5, 5, 3, 2, 1, 0, 0},
+		{0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 1, 0, 0},
+		{0, 0, 0, 1, 2, 3, 3, 3, 2, 1, 0, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 3 - STR_LARGE
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
+		{0, 0, 1, 2, 3, 4, 4, 4, 3, 2, 1, 0, 0},
+		{0, 1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1, 0},
+		{0, 1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1, 0},
+		{0, 1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1, 0},
+		{0, 0, 1, 2, 3, 4, 4, 4, 3, 2, 1, 0, 0},
+		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0}, // 4 - STR_VERY_LARGE
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
+		{0, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 0},
+		{0, 1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1, 0},
+		{1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1},
+		{1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1},
+		{1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1},
+		{0, 1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1, 0},
+		{0, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 0},
+		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0}, // 5 - STR_HUGE
+		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
+		{0, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 0},
+		{1, 2, 3, 4, 4, 5, 5, 5, 4, 4, 3, 2, 1},
+		{1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{1, 2, 3, 4, 5, 5, 5, 5, 5, 4, 3, 2, 1},
+		{1, 2, 3, 4, 4, 5, 5, 5, 4, 4, 3, 2, 1},
+		{0, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 0},
+		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0}, // 6 - STR_VERY_HUGE :p
+		{0, 0, 2, 3, 3, 4, 4, 4, 3, 3, 2, 0, 0},
+		{0, 2, 3, 4, 4, 5, 5, 5, 4, 4, 3, 2, 0},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
+		{0, 2, 3, 4, 4, 5, 5, 5, 4, 4, 3, 2, 0},
+		{0, 0, 2, 3, 3, 4, 4, 4, 3, 3, 2, 0, 0},
+		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0}
+	},
+	{
+		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0}, // 7 - STR_ENOURMOUS
+		{0, 0, 3, 4, 4, 5, 5, 5, 4, 4, 3, 0, 0},
+		{0, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 0},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4},
+		{4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4},
+		{4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
+		{0, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 0},
+		{0, 0, 3, 4, 4, 5, 5, 5, 4, 4, 3, 0, 0},
+		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0}
+	}
+};
+
+
 // myk002_begin: struct definitions used when enqueuing notification events
 struct ProductionCompleteInfo
 {
@@ -227,42 +353,40 @@ GeoscapeState::GeoscapeState()
 						hd->getHeight(),
 						0,
 						0); */
-	_sideLine	= new Surface(
-						64,
-						screenHeight,
-						screenWidth - 64,
-						0);
 /*	_sidebar	= new Surface(
 						64,
 						200,
 						screenWidth - 64,
 						screenHeight / 2 - 100); */
-
-/*	_srfSpace	= new Surface( // kL
+/*	_srfSpace	= new Surface(
 //							screenWidth - 64,
 //							screenHeight,
 							256,
 							200,
 							32,
 							12); */
-//	_srfSpace	= new Surface(480, 270, 0, 0); // kL
-	_srfSpace	= new Surface(
-						screenWidth,
-						screenHeight);
-	_globe		= new Globe(
-						_game,					// GLOBE:
-						(screenWidth - 64) / 2,	// center_x	= 160 pixels
-						screenHeight / 2,		// center_y	= 120
-						screenWidth - 64,		// x_width	= 320
-						screenHeight,			// y_height	= 120
-						0,0);					// start_x, start_y
+//	_srfSpace	= new Surface(480, 270, 0, 0);
+	_srfSpace		= new Surface(
+							screenWidth,
+							screenHeight);
+	_globe			= new Globe(
+							_game,					// GLOBE:
+							(screenWidth - 64) / 2,	// center_x	= 160 pixels
+							screenHeight / 2,		// center_y	= 120
+							screenWidth - 64,		// x_width	= 320
+							screenHeight,			// y_height	= 120
+							0,0);					// start_x, start_y
+	_sideBarBlack	= new Surface(
+							64,
+							screenHeight,
+							screenWidth - 64,
+							0);
 
-																	// BACKGROUND:
-//kL	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
-//kL	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
+																// BACKGROUND:
+//	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
+//	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
 
-/*kL
-	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
+/*	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
 	_btnGraphs		= new TextButton(63, 11, screenWidth-63, screenHeight/2-76);
 	_btnUfopaedia	= new TextButton(63, 11, screenWidth-63, screenHeight/2-64);
@@ -276,7 +400,7 @@ GeoscapeState::GeoscapeState()
 	_btn1Hour		= new TextButton(31, 13, screenWidth-63, screenHeight/2+40);
 	_btn1Day		= new TextButton(31, 13, screenWidth-31, screenHeight/2+40); */
 
-	// kL_begin: revert to ImageButtons.
+	// revert to ImageButtons.
 	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100);
 	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 88);
 	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 76);
@@ -305,10 +429,8 @@ GeoscapeState::GeoscapeState()
 
 	// The old rotate buttons have now become the Detail & Radar toggles.
 	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
-	// kL_end.
 
-/*kL
-	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
+/*	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
 	_btnRotateRight	= new InteractiveSurface(12, 10, screenWidth-37, screenHeight/2+76);
 	_btnRotateUp	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+62);
 	_btnRotateDown	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+87);
@@ -328,8 +450,38 @@ GeoscapeState::GeoscapeState()
 							screenWidth - 64,
 							(screenHeight / 2) + (Screen::ORIGINAL_HEIGHT / 2) + 12);
 
-/*kL
-	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
+	std::fill_n(
+			_visibleUfo,
+			INDICATORS,
+			(Ufo*)(NULL));
+
+	int
+		offset_x,
+		offset_y;
+	for (size_t
+			i = 0;
+			i != INDICATORS;
+			++i)
+	{
+		//Log(LOG_INFO) << ". new Indic = " << i;
+		offset_x = ((i % 4) * 13); // 4 UFOs per row only
+		offset_y = ((i / 4) * 13); // 4 rows going up
+
+		//Log(LOG_INFO) << ". . xPos = " << _sideTop->getX() + offset_x + 1;
+		//Log(LOG_INFO) << ". . yPos = " << _sideTop->getY() + height - offset_y - 1;
+		_btnVisibleUfo[i] = new InteractiveSurface(
+												13,13,
+												_sideTop->getX() + offset_x + 3,
+												_sideTop->getY() + height - offset_y - 17);
+
+//		_numVisibleUfo[i] = new NumberText(
+//										9,
+//										9,
+//										x + iconsWidth - 15 - offset_x,
+//										y - 12 - (static_cast<int>(i) * 13));
+	}
+
+/*	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
 	_txtHourSep		= new Text(4, 17, screenWidth - 41, screenHeight / 2 - 26);
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
@@ -340,9 +492,9 @@ GeoscapeState::GeoscapeState()
 /*	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
 	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
 	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26); */
-//kL	_txtHour	= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
-//kL	_txtHourSep	= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
-//kL	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
+//	_txtHour	= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
+//	_txtHourSep	= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
+//	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
 //	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
 //	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
 	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 22);
@@ -354,11 +506,11 @@ GeoscapeState::GeoscapeState()
 	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
 	_txtMonth	= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
 	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1); */
-//	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
+//	_txtWeekday	= new Text(59,  8, screenWidth - 61, screenHeight / 2 - 13);
 //	_txtDay		= new Text(12, 16, screenWidth - 61, screenHeight / 2 - 5);
 //	_txtMonth	= new Text(21, 16, screenWidth - 49, screenHeight / 2 - 5);
 //	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
-//	_txtDate	= new Text(60, 8, screenWidth - 62, screenHeight / 2 - 5);
+//	_txtDate	= new Text(60,  8, screenWidth - 62, screenHeight / 2 - 5);
 
 	_srfDay1		= new Surface(3, 8, screenWidth - 45, screenHeight / 2 - 3);
 	_srfDay2		= new Surface(3, 8, screenWidth - 41, screenHeight / 2 - 3);
@@ -367,19 +519,19 @@ GeoscapeState::GeoscapeState()
 	_srfYear1		= new Surface(3, 8, screenWidth - 23, screenHeight / 2 - 3);
 	_srfYear2		= new Surface(3, 8, screenWidth - 19, screenHeight / 2 - 3);
 
-	_txtFunds = new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110); // kL
+	_txtFunds = new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110);
 	if (Options::showFundsOnGeoscape == true)
 	{
 		_txtFunds = new Text(59, 8, screenWidth - 61, screenHeight / 2 - 27);
 		_txtHour->		setY(_txtHour->		getY() + 6);
 		_txtHourSep->	setY(_txtHourSep->	getY() + 6);
 		_txtMin->		setY(_txtMin->		getY() + 6);
-//kL	_txtMinSep->	setY(_txtMinSep->	getY() + 6);
-//kL	_txtMinSep->	setX(_txtMinSep->	getX() - 10);
-//kL	_txtSec->		setX(_txtSec->		getX() - 10);
+//		_txtMinSep->	setY(_txtMinSep->	getY() + 6);
+//		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
+//		_txtSec->		setX(_txtSec->		getX() - 10);
 	}
 
-	_txtScore = new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102); // kL
+	_txtScore = new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102);
 
 	_timeSpeed = _btn5Secs;
 	_gameTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
@@ -394,28 +546,27 @@ GeoscapeState::GeoscapeState()
 
 	setPalette("PAL_GEOSCAPE");
 
-	add(_srfSpace);	// kL
 //	add(_bg);
-	add(_sideLine);
 //	add(_sidebar);
+	add(_srfSpace);
+	add(_sideBarBlack);
 	add(_globe);
 
 	add(_btnDetail);
-//	add(_btnFake);
 
-	add(_btnIntercept);	//, "button", "geoscape"
-	add(_btnBases);		//, "button", "geoscape"
-	add(_btnGraphs);	//, "button", "geoscape"
-	add(_btnUfopaedia);	//, "button", "geoscape"
-	add(_btnOptions);	//, "button", "geoscape"
-	add(_btnFunding);	//, "button", "geoscape"
+	add(_btnIntercept,	"button", "geoscape"); // 246, mine: (15)+5= 245; change in Interfaces.rul to match, was getting yellow on topleft corner of btn, w/ 246.
+	add(_btnBases,		"button", "geoscape");
+	add(_btnGraphs,		"button", "geoscape");
+	add(_btnUfopaedia,	"button", "geoscape");
+	add(_btnOptions,	"button", "geoscape");
+	add(_btnFunding,	"button", "geoscape");
 
-	add(_btn5Secs);		//, "button", "geoscape"
-	add(_btn1Min);		//, "button", "geoscape"
-	add(_btn5Mins);		//, "button", "geoscape"
-	add(_btn30Mins);	//, "button", "geoscape"
-	add(_btn1Hour);		//, "button", "geoscape"
-	add(_btn1Day);		//, "button", "geoscape"
+	add(_btn5Secs,		"button", "geoscape");
+	add(_btn1Min,		"button", "geoscape");
+	add(_btn5Mins,		"button", "geoscape");
+	add(_btn30Mins,		"button", "geoscape");
+	add(_btn1Hour,		"button", "geoscape");
+	add(_btn1Day,		"button", "geoscape");
 
 /*kL
 	add(_btnRotateLeft);
@@ -425,8 +576,75 @@ GeoscapeState::GeoscapeState()
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	add(_sideTop,		"button",	"geoscape");
-	add(_sideBottom,	"button",	"geoscape");
+	add(_sideTop,		"button", "geoscape");
+	add(_sideBottom,	"button", "geoscape");
+
+/*	for (size_t
+			i = 0;
+			i != INDICATORS;
+			++i)
+	{
+		//Log(LOG_INFO) << ". add Indic = " << i;
+		add(_btnVisibleUfo[i]);
+//		add(_numVisibleUfo[i]);
+	} */
+
+//	const Uint8 color = static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("visibleUnits")->color);
+//	Uint8
+//		color,
+//		baseColor = 166; // slate // _sideTop->getColor();
+
+	for (size_t
+			i = 0;
+			i != INDICATORS;
+			++i)
+	{
+		//Log(LOG_INFO) << "\n";
+		//Log(LOG_INFO) << ". Indic = " << i;
+		add(_btnVisibleUfo[i]);
+
+		_btnVisibleUfo[i]->setVisible(false);
+
+/*		for (int
+				y = 0;
+				y != 13;
+				++y)
+		{
+			//Log(LOG_INFO) << ". . y = " << y;
+			for (int
+					x = 0;
+					x != 13;
+					++x)
+			{
+				//Log(LOG_INFO) << ". . . x = " << x;
+//				color = static_cast<Uint8>(_ufoBlobs[_ufoSize][y][x]);
+				color = static_cast<Uint8>(_ufoBlobs[2][static_cast<size_t>(y)][static_cast<size_t>(x)]);
+				//Log(LOG_INFO) << ". . . color [1] = " << (int)color;
+				if (color != 0)
+				{
+					color = baseColor - color;
+					//Log(LOG_INFO) << ". . . . color [2] = " << (int)color;
+					//Log(LOG_INFO) << ". . . . xPos = " << x;
+					//Log(LOG_INFO) << ". . . . yPos = " << y;
+					_btnVisibleUfo[i]->setPixelColor(
+												x,y,
+												color);
+				}
+			}
+		} */
+
+		_btnVisibleUfo[i]->onMousePress(
+						(ActionHandler)& GeoscapeState::btnVisibleUfoClick,
+						SDL_BUTTON_LEFT);
+
+//		_btnVisibleUfo[i]->onMouseClick((ActionHandler)& GeoscapeState::btnVisibleUfoClick);
+//		_btnVisibleUfo[i]->onKeyboardPress(
+//						(ActionHandler)& GeoscapeState::btnVisibleUfoClick,
+//						buttons[i]);
+
+//		_numVisibleUfo[i]->setColor(color);
+//		_numVisibleUfo[i]->setValue(static_cast<unsigned>(i) + 1);
+	}
 
 	add(_srfTime); // kL
 
@@ -453,12 +671,12 @@ GeoscapeState::GeoscapeState()
 
 	add(_txtDebug,		"text",		"geoscape");
 
-	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);			// kL
-//	_game->getResourcePack()->getSurface("Antares_BG")->blit(_srfSpace);		// kL
+	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);
+//	_game->getResourcePack()->getSurface("Antares_BG")->blit(_srfSpace);
 
-//	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);		// kL
-//	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);	// kL
-//	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);				// kL
+//	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);
+//	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);
+//	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
 /*	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
@@ -466,11 +684,11 @@ GeoscapeState::GeoscapeState()
 	_sidebar->copy(geobord);
 	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg); */
 
-	_sideLine->drawRect(
-					0,0,
-					static_cast<Sint16>(_sideLine->getWidth()),
-					static_cast<Sint16>(_sideLine->getHeight()),
-					15); // black
+	_sideBarBlack->drawRect(
+						0,0,
+						static_cast<Sint16>(_sideBarBlack->getWidth()),
+						static_cast<Sint16>(_sideBarBlack->getHeight()),
+						15); // black
 /*kL
 	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 //	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -562,48 +780,48 @@ GeoscapeState::GeoscapeState()
 	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed6); */
 
-	// kL_begin: GeoscapeState() revert to ImageButtons.
+	// revert to ImageButtons.
 	Surface* const geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(screenWidth - geobord->getWidth());
 	geobord->setY((screenHeight - geobord->getHeight()) / 2);
 
 	_btnIntercept->copy(geobord);
-	_btnIntercept->setColor(Palette::blockOffset(15)+5);
+//	_btnIntercept->setColor(Palette::blockOffset(15)+5);
 	_btnIntercept->onMouseClick((ActionHandler)& GeoscapeState::btnInterceptClick);
 	_btnIntercept->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnInterceptClick,
 					Options::keyGeoIntercept);
 
 	_btnBases->copy(geobord);
-	_btnBases->setColor(Palette::blockOffset(15)+5);
+//	_btnBases->setColor(Palette::blockOffset(15)+5);
 	_btnBases->onMouseClick((ActionHandler)& GeoscapeState::btnBasesClick);
 	_btnBases->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnBasesClick,
 					Options::keyGeoBases);
 
 	_btnGraphs->copy(geobord);
-	_btnGraphs->setColor(Palette::blockOffset(15)+5);
+//	_btnGraphs->setColor(Palette::blockOffset(15)+5);
 	_btnGraphs->onMouseClick((ActionHandler)& GeoscapeState::btnGraphsClick);
 	_btnGraphs->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnGraphsClick,
 					Options::keyGeoGraphs);
 
 	_btnUfopaedia->copy(geobord);
-	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
+//	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
 	_btnUfopaedia->onMouseClick((ActionHandler)& GeoscapeState::btnUfopaediaClick);
 	_btnUfopaedia->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnUfopaediaClick,
 					Options::keyGeoUfopedia);
 
 	_btnOptions->copy(geobord);
-	_btnOptions->setColor(Palette::blockOffset(15)+5);
+//	_btnOptions->setColor(Palette::blockOffset(15)+5);
 	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
 	_btnOptions->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnOptionsClick,
 					Options::keyGeoOptions);
 
 	_btnFunding->copy(geobord);
-	_btnFunding->setColor(Palette::blockOffset(15)+5);
+//	_btnFunding->setColor(Palette::blockOffset(15)+5);
 	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
 	_btnFunding->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnFundingClick,
@@ -613,42 +831,42 @@ GeoscapeState::GeoscapeState()
 	_srfTime->copy(geobord);
 
 	_btn5Secs->copy(geobord);
-	_btn5Secs->setColor(Palette::blockOffset(15)+5);
+//	_btn5Secs->setColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setGroup(&_timeSpeed);
 	_btn5Secs->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerClick,
 					Options::keyGeoSpeed1);
 
 	_btn1Min->copy(geobord);
-	_btn1Min->setColor(Palette::blockOffset(15)+5);
+//	_btn1Min->setColor(Palette::blockOffset(15)+5);
 	_btn1Min->setGroup(&_timeSpeed);
 	_btn1Min->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerClick,
 					Options::keyGeoSpeed2);
 
 	_btn5Mins->copy(geobord);
-	_btn5Mins->setColor(Palette::blockOffset(15)+5);
+//	_btn5Mins->setColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setGroup(&_timeSpeed);
 	_btn5Mins->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerClick,
 					Options::keyGeoSpeed3);
 
 	_btn30Mins->copy(geobord);
-	_btn30Mins->setColor(Palette::blockOffset(15)+5);
+//	_btn30Mins->setColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setGroup(&_timeSpeed);
 	_btn30Mins->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerClick,
 					Options::keyGeoSpeed4);
 
 	_btn1Hour->copy(geobord);
-	_btn1Hour->setColor(Palette::blockOffset(15)+5);
+//	_btn1Hour->setColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setGroup(&_timeSpeed);
 	_btn1Hour->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerClick,
 					Options::keyGeoSpeed5);
 
 	_btn1Day->copy(geobord);
-	_btn1Day->setColor(Palette::blockOffset(15)+5);
+//	_btn1Day->setColor(Palette::blockOffset(15)+5);
 	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerClick,
@@ -693,9 +911,8 @@ GeoscapeState::GeoscapeState()
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
-	// kL_end.
-/*kL
-	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
+
+/*	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
 	_btnRotateLeft->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease, Options::keyGeoLeft);
@@ -723,47 +940,45 @@ GeoscapeState::GeoscapeState()
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
-//	_txtFunds->setColor(Palette::blockOffset(15)+4);	// kL
-	_txtFunds->setAlign(ALIGN_CENTER);					// kL
+	_txtFunds->setAlign(ALIGN_CENTER);
 	if (Options::showFundsOnGeoscape == true)
 	{
 		_txtFunds->setSmall();
-//		_txtFunds->setColor(Palette::blockOffset(15)+4);
 		_txtFunds->setAlign(ALIGN_CENTER);
 
 		_txtHour->setSmall();
 		_txtHourSep->setSmall();
 		_txtMin->setSmall();
-//kL	_txtMinSep->setSmall();
+//		_txtMinSep->setSmall();
 	}
-	else						// kL
+	else
 	{
-		_txtHour->setBig();		// kL
-		_txtHourSep->setBig();	// kL
-		_txtMin->setBig();		// kL
-//kL	_txtMinSep->setBig();	// kL
+		_txtHour->setBig();
+		_txtHourSep->setBig();
+		_txtMin->setBig();
+//		_txtMinSep->setBig();
 	}
 
-	_txtScore->setAlign(ALIGN_CENTER);					// kL
+	_txtScore->setAlign(ALIGN_CENTER);
 
-//kL	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
+//	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
 
 	_txtHour->setColor(Palette::blockOffset(15)+2);
 	_txtHour->setAlign(ALIGN_RIGHT);
 
-//kL	if (Options::showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
+//	if (Options::showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+2);
 	_txtHourSep->setText(L":");
 
-//kL	if (Options::showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
+//	if (Options::showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+2);
 
-//kL	if (Options::showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
+//	if (Options::showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
 //	_txtMinSep->setColor(Palette::blockOffset(15)+2);
 //	_txtMinSep->setText(L".");
 
 //	_txtSec->setSmall();
-//kL	_txtSec->setBig();
+//	_txtSec->setBig();
 	_txtSec->setColor(Palette::blockOffset(15)+2);
 	_txtSec->setText(L".");
 
@@ -785,8 +1000,6 @@ GeoscapeState::GeoscapeState()
 //	_txtYear->setBig();
 //	_txtYear->setColor(Palette::blockOffset(15)+2);
 //	_txtYear->setAlign(ALIGN_CENTER);
-
-//	_txtDebug->setColor(Palette::blockOffset(15)+4);
 
 	_gameTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
 	_gameTimer->start();
@@ -1013,7 +1226,9 @@ void GeoscapeState::think()
 	_dfZoomOutTimer->think(this, NULL);
 	_dfStartTimer->think(this, NULL);
 
-	if (_game->getSavedGame()->getDebugArgDone() == true // ie. do not write info until Globe actually sets it.
+
+	if (Options::debug == true
+		&& _game->getSavedGame()->getDebugArgDone() == true // ie. do not write info until Globe actually sets it.
 		&& _debug.compare(0, 5, "DEBUG") == 0)
 	{
 		const std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
@@ -1051,6 +1266,80 @@ void GeoscapeState::think()
 		}
 	}
 }
+
+/**
+ * Draws the UFO indicators for known UFOs.
+ */
+void GeoscapeState::drawUfoIndicators()
+{
+	for (size_t
+			i = 0;
+			i != INDICATORS;
+			++i)
+	{
+		_btnVisibleUfo[i]->setVisible(false);
+//		_numVisibleUfo[i]->setVisible(false);
+
+		_visibleUfo[i] = NULL;
+	}
+
+	size_t
+		ind = 0,
+		ufoSize;
+	Uint8
+		color,
+		baseColor;
+
+	for (std::vector<Ufo*>::const_iterator
+			i = _savedGame->getUfos()->begin();
+			i != _savedGame->getUfos()->end();
+			++i,
+				++ind)
+	{
+		if ((*i)->getDetected() == true)
+		{
+			_btnVisibleUfo[ind]->setVisible();
+//			_numVisibleUfo[ind]->setVisible();
+
+			_visibleUfo[ind] = *i;
+
+			ufoSize = (*i)->getRadius() - 2;
+			baseColor = 166; // slate
+
+			for (int
+					y = 0;
+					y != 13;
+					++y)
+			{
+				for (int
+						x = 0;
+						x != 13;
+						++x)
+				{
+					color = static_cast<Uint8>(_ufoBlobs[ufoSize][static_cast<size_t>(y)][static_cast<size_t>(x)]);
+					if (color != 0)
+					{
+						color = baseColor - color;
+						_btnVisibleUfo[ind]->setPixelColor(
+														x,y,
+														color);
+					}
+				}
+			}
+		}
+
+		if (ind == INDICATORS - 1)
+			break;
+	}
+}
+//getId()
+//getEngaged()
+//getStatus()
+//	FLYING,		// 0
+//	LANDED,		// 1
+//	CRASHED,	// 2
+//	DESTROYED	// 3
+
 
 /**
  * Updates the Geoscape clock.
@@ -1160,13 +1449,15 @@ void GeoscapeState::timeDisplay()
  */
 void GeoscapeState::timeAdvance()
 {
-	int timeSpan = 0;
+	int timeSpan;
 	if		(_timeSpeed == _btn5Secs)	timeSpan = 1;
 	else if (_timeSpeed == _btn1Min)	timeSpan = 12;
 	else if (_timeSpeed == _btn5Mins)	timeSpan = 12 * 5;
 	else if (_timeSpeed == _btn30Mins)	timeSpan = 12 * 5 * 6;
 	else if (_timeSpeed == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
 	else if (_timeSpeed == _btn1Day)	timeSpan = 12 * 5 * 6 * 2 * 24;
+	else
+		timeSpan = 0;
 
 	for (int
 			i = 0;
@@ -1203,6 +1494,8 @@ void GeoscapeState::time5Seconds()
 		popup(new DefeatState());
 		return;
 	}
+
+	drawUfoIndicators();
 
 	const Ufo* ufoExpired = NULL; // kL, see below_
 
@@ -1728,9 +2021,9 @@ struct SetRetaliationStatus
 		public std::unary_function<std::map<const Region*, Base*>::value_type, void>
 {
 	/// Mark as a valid retaliation target.
-	void operator()(const argument_type& iter) const
+	void operator() (const argument_type& i) const
 	{
-		iter.second->setIsRetaliationTarget();
+		i.second->setIsRetaliationTarget();
 	}
 };
 
@@ -3625,7 +3918,7 @@ void GeoscapeState::handleBaseDefense(
  * @note The very first mission is Sectoid Research in the region of player's first Base.
  * @param atGameStart - true if called at start
  */
-void GeoscapeState::determineAlienMissions(bool atGameStart)
+void GeoscapeState::determineAlienMissions(bool atGameStart) // private.
 {
 	if (atGameStart == false)
 	{
@@ -3692,7 +3985,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 /**
  * Sets up a land mission. Eg TERROR!!!
  */
-void GeoscapeState::setupLandMission()
+void GeoscapeState::setupLandMission() // private.
 {
 	const RuleAlienMission& missionRule = *_rules->getRandomMission(
 																OBJECTIVE_SITE,
@@ -3758,8 +4051,32 @@ void GeoscapeState::btnTimerClick(Action* action)
 	SDL_Event ev;
 	ev.type = SDL_MOUSEBUTTONDOWN;
 	ev.button.button = SDL_BUTTON_LEFT;
-	Action a = Action(&ev, 0.,0., 0,0);
-	action->getSender()->mousePress(&a, this);
+
+	Action act = Action(&ev, 0.,0., 0,0);
+	action->getSender()->mousePress(&act, this);
+}
+
+/**
+ * Centers on the UFO corresponding to this button.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::btnVisibleUfoClick(Action* action)
+{
+	for (size_t // find out which button was pressed
+			i = 0;
+			i != INDICATORS;
+			++i)
+	{
+		if (_btnVisibleUfo[i] == action->getSender())
+		{
+			_globe->center(
+						_visibleUfo[i]->getLongitude(),
+						_visibleUfo[i]->getLatitude());
+			break;
+		}
+	}
+
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
 
 /**
@@ -3846,8 +4163,8 @@ void GeoscapeState::resize(
 	_sideBottom->setHeight(height);
 	_sideBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
 
-	_sideLine->setHeight(Options::baseYResolution);
-	_sideLine->setY(0);
-	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15); */
+	_sideBarBlack->setHeight(Options::baseYResolution);
+	_sideBarBlack->setY(0);
+	_sideBarBlack->drawRect(0,0, _sideBarBlack->getWidth(), _sideBarBlack->getHeight(), 15); */
 
 }

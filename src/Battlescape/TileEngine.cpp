@@ -1821,7 +1821,7 @@ BattleUnit* TileEngine::hit(
 				break;
 
 				case DT_LASER:
-					power = (power + 2) / 3;	// 33%
+					power = (power + 2) / 3;	// 33% // problem: Fusion Torch
 				break;
 
 				case DT_PLASMA:

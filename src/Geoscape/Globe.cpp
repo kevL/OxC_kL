@@ -732,7 +732,7 @@ void Globe::rotateDown()
  */
 void Globe::rotateStop()
 {
-	_rotLon = 0.;
+	_rotLon =
 	_rotLat = 0.;
 
 	_rotTimer->stop();
@@ -782,7 +782,7 @@ void Globe::setZoom(size_t zoom)
 	{
 		_lonBeforeMouseScrolling = _cenLon;
 		_latBeforeMouseScrolling = _cenLat;
-		_totalMouseMoveX = 0;
+		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 	}
 
@@ -1059,7 +1059,7 @@ std::vector<Target*> Globe::getTargets(
 				i != _game->getSavedGame()->getBases()->end();
 				++i)
 		{
-			if (AreSame((*i)->getLongitude(), 0.)
+			if (   AreSame((*i)->getLongitude(), 0.)
 				&& AreSame((*i)->getLatitude(), 0.))
 			{
 				continue;
@@ -1744,10 +1744,8 @@ void Globe::drawGlobeCircle(
 			XuLine(
 				_radars,
 				this,
-				x,
-				y,
-				x2,
-				y2,
+				x,y,
+				x2,y2,
 				4,
 				color);
 
@@ -2370,13 +2368,10 @@ void Globe::drawFlights()
 					lon2 = (*j)->getDestination()->getLongitude(),
 					lat1 = (*j)->getLatitude(),
 					lat2 = (*j)->getDestination()->getLatitude();
-
 				drawPath(
 						_radars,
-						lon1,
-						lat1,
-						lon2,
-						lat2);
+						lon1,lat1,
+						lon2,lat2);
 			}
 		}
 	}

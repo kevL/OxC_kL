@@ -74,7 +74,9 @@ private:
 		_landId,
 		_secondsLeft,
 		_shootingAt;
-	size_t _trajectoryPoint;
+	size_t
+		_radius,
+		_trajectoryPoint;
 
 	AlienMission* _mission;
 	const RuleUfo* _rules;
@@ -254,6 +256,9 @@ private:
 		void setUfoTerrainType(const std::string& terrain);
 		/// Gets a crashed or landed UFO's terrainType.
 		std::string getUfoTerrainType() const;
+
+		/// Gets the size of this Ufo.
+		size_t getRadius() const;
 };
 
 }

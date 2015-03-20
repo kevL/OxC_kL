@@ -41,8 +41,9 @@ class Craft;
 class DogfightState;
 class Globe;
 class ImageButton;
-//class InteractiveSurface;
+class InteractiveSurface;
 class MissionSite;
+class NumberText;
 class Ruleset;
 class SavedGame;
 class Sound;
@@ -63,6 +64,9 @@ class GeoscapeState
 {
 
 private:
+	static const size_t INDICATORS = 16;
+	static const int _ufoBlobs[8][13][13];
+
 	bool
 		_dogfightEnded,
 		_pause,
@@ -99,14 +103,16 @@ private:
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+	InteractiveSurface* _btnVisibleUfo[INDICATORS];
+	NumberText* _numVisibleUfo[INDICATORS];
 	Ruleset* _rules;
 	SavedGame* _savedGame;
 	Surface
-//		* _sidebar,
-		* _sideLine,
 //		* _bg,
-		* _srfSpace,	// kL
-		* _srfTime,		// kL
+//		* _sidebar,
+		* _sideBarBlack,
+		* _srfSpace,
+		* _srfTime,
 		* _srfDay1,
 		* _srfDay2,
 		* _srfMonth1,
@@ -120,8 +126,8 @@ private:
 		* _txtHour,
 		* _txtHourSep,
 		* _txtMin,
-//		* _txtMinSep,
 		* _txtSec;
+//		* _txtMinSep,
 //		* _txtDate;
 //		* _txtWeekday,
 //		* _txtDay,
@@ -136,6 +142,7 @@ private:
 		* _dfZoomOutTimer,
 		* _dfStartTimer,
 		* _dfTimer;
+	Ufo* _visibleUfo[INDICATORS];
 
 	std::list<State*> _popups;
 	std::list<DogfightState*>
@@ -151,7 +158,6 @@ private:
 	public:
 //		static Sound* soundPop; // kL
 
-
 		/// Creates the Geoscape state.
 		GeoscapeState();
 		/// Cleans up the Geoscape state.
@@ -164,6 +170,9 @@ private:
 		void init();
 		/// Runs the timer.
 		void think();
+
+		/// Draws the UFO indicators for known UFOs.
+		void drawUfoIndicators();
 
 		/// Displays the game time/date. (+Funds)
 		void timeDisplay();
@@ -237,7 +246,7 @@ private:
 //		void btnZoomOutRightClick(Action* action);
 
 		/// Blit method - renders the state and dogfights.
-		void blit();
+		void blit(); // OoO
 
 		/// Gets the Timer for dogfight zoom-ins.
 		Timer* getDogfightZoomInTimer() const;
@@ -251,7 +260,7 @@ private:
 		void setDogfightCoords(Craft* craft);
 
 		/// Multi-dogfights logic handling.
-		void handleDogfights();
+		void handleDogfights(); // OoO
 		/// Gets the number of minimized dogfights.
 		size_t minimizedDogfightsCount() const;
 		/// Starts a new dogfight.
@@ -262,16 +271,18 @@ private:
 		/// Gets the dogfights.
 		std::list<DogfightState*>& getDogfights();
 
-		/// Handler for clicking the timer button.
-		void btnTimerClick(Action* action);
-
-		/// Process a mission site
-		bool processMissionSite(MissionSite* site) const;
-
 		/// Handles base defense
 		void handleBaseDefense(
 				Base* base,
 				Ufo* ufo);
+
+		/// Handler for clicking the timer button.
+		void btnTimerClick(Action* action);
+		/// Handler for clicking a visible UFO button.
+		void btnVisibleUfoClick(Action* action);
+
+		/// Process a mission site
+		bool processMissionSite(MissionSite* site) const; // OoO
 
 		/// Update the resolution settings, the window was resized.
 		void resize(

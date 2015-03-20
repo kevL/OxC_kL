@@ -603,7 +603,7 @@ DogfightState::DogfightState(
 	}
 
 	// Set UFO size - going to be moved to Ufo class to implement simultaneous dogfights.
-	const std::string ufoSize = _ufo->getRules()->getSize();
+/*	const std::string ufoSize = _ufo->getRules()->getSize();
 	if (ufoSize.compare("STR_VERY_SMALL") == 0)
 		_ufoSize = 0;
 	else if (ufoSize.compare("STR_SMALL") == 0)
@@ -613,14 +613,15 @@ DogfightState::DogfightState(
 	else if (ufoSize.compare("STR_LARGE") == 0)
 		_ufoSize = 3;
 	else // "STR_VERY_LARGE"
-		_ufoSize = 4;
+		_ufoSize = 4; */
+	_ufoSize = _ufo->getRadius();
 
-	_color[0] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color);
-	_color[1] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2);
-	_color[2] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color);
-	_color[3] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2);
-	_color[4] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color);
-	_color[5] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2);
+	_color[0] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color);		// 160
+	_color[1] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2);	// 176
+	_color[2] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color);		// 112
+	_color[3] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2);	// 128
+	_color[4] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color);	//  13
+	_color[5] = static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2);	//  14
 
 	// Get the craft-graphic's height. Used for damage indication.
 	for (int
@@ -767,14 +768,14 @@ void DogfightState::animate()
 				y < _window->getHeight();
 				++y)
 		{
-			Uint8 radarPixelColor = _window->getPixelColor(x, y);
-			if (radarPixelColor >= Palette::blockOffset(7)		// _color[2]
-				&& radarPixelColor < Palette::blockOffset(8))	// _color[3]
+			Uint8 radarPixelColor = _window->getPixelColor(x,y);
+			if (radarPixelColor >= _color[2]
+				&& radarPixelColor < _color[3])
 			{
 				++radarPixelColor;
 
-				if (radarPixelColor >= Palette::blockOffset(8))	// _color[3]
-					radarPixelColor = Palette::blockOffset(7);	// _color[2]
+				if (radarPixelColor >= _color[3])
+					radarPixelColor = _color[2];
 
 				_window->setPixelColor(
 									x,
@@ -1799,47 +1800,43 @@ void DogfightState::previewPress(Action*)
  */
 void DogfightState::drawUfo()
 {
-	if (_ufoSize < 0
-		|| _ufo->isDestroyed() == true)
+	if (_ufoSize > -1
+		&& _ufo->isDestroyed() == false)
 	{
-		return;
-	}
+		const int
+			ufo_x = _battle->getWidth() / 2 - 6,
+			ufo_y = _battle->getHeight() - (_dist / 8) - 6;
+		Uint8 color;
 
-	const int
-		curUfoXpos = _battle->getWidth() / 2 - 6,
-		curUfoYpos = _battle->getHeight() - (_dist / 8) - 6;
-
-	for (int
-			y = 0;
-			y < 13;
-			++y)
-	{
 		for (int
-				x = 0;
-				x < 13;
-				++x)
+				y = 0;
+				y != 13;
+				++y)
 		{
-			Uint8 pixelOffset = static_cast<Uint8>(_ufoBlobs[_ufoSize + _ufo->getHitFrame()][y][x]);
-			if (pixelOffset == 0)
-				continue;
-			else
+			for (int
+					x = 0;
+					x != 13;
+					++x)
 			{
-				if (_ufo->isCrashed() == true
-					|| _ufo->getHitFrame() > 0)
+				color = static_cast<Uint8>(_ufoBlobs[_ufoSize + _ufo->getHitFrame()][y][x]);
+				if (color != 0)
 				{
-					pixelOffset *= 2;
+					if (_ufo->isCrashed() == true
+						|| _ufo->getHitFrame() > 0)
+					{
+						color *= 2;
+					}
+
+					color = _window->getPixelColor(
+												ufo_x + x + 3,
+												ufo_y + y + 3) - color;
+					if (color < 108) color = 108;
+
+					_battle->setPixelColor(
+										ufo_x + x,
+										ufo_y + y,
+										color);
 				}
-
-				const Uint8 radarPixelColor = _window->getPixelColor(
-																curUfoXpos + x + 3,
-																curUfoYpos + y + 3); // +3 'cause of the window frame
-				Uint8 color = radarPixelColor - pixelOffset;
-				if (color < 108) color = 108;
-
-				_battle->setPixelColor(
-									curUfoXpos + x,
-									curUfoYpos + y,
-									color);
 			}
 		}
 	}
