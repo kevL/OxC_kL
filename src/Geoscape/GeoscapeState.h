@@ -43,7 +43,7 @@ class Globe;
 class ImageButton;
 class InteractiveSurface;
 class MissionSite;
-class NumberText;
+//class NumberText;
 class Ruleset;
 class SavedGame;
 class Sound;
@@ -104,7 +104,7 @@ private:
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	InteractiveSurface* _btnVisibleUfo[INDICATORS];
-	NumberText* _numVisibleUfo[INDICATORS];
+//	NumberText* _numVisibleUfo[INDICATORS];
 	Ruleset* _rules;
 	SavedGame* _savedGame;
 	Surface
@@ -153,6 +153,11 @@ private:
 	void determineAlienMissions(bool atGameStart = false);
 	/// Handle land mission generation.
 	void setupLandMission();
+
+	/// Handler for clicking the timer button.
+	void btnTimerClick(Action* action);
+	/// Handler for clicking a visible UFO button.
+	void btnVisibleUfoClick(Action* action);
 
 
 	public:
@@ -275,11 +280,6 @@ private:
 		void handleBaseDefense(
 				Base* base,
 				Ufo* ufo);
-
-		/// Handler for clicking the timer button.
-		void btnTimerClick(Action* action);
-		/// Handler for clicking a visible UFO button.
-		void btnVisibleUfoClick(Action* action);
 
 		/// Process a mission site
 		bool processMissionSite(MissionSite* site) const; // OoO

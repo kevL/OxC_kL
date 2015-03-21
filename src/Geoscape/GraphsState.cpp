@@ -510,10 +510,10 @@ GraphsState::GraphsState(int curGraph)
 					SDL_BUTTON_LEFT);
 
 
-	Uint8
-		gridColor = static_cast<Uint8>(
-				   _game->getRuleset()->getInterface("graphs")->getElement("graph")->color),
-		color;
+	Uint8 color;
+	const Uint8 gridColor = static_cast<Uint8>(
+						   _game->getRuleset()->getInterface("graphs")->getElement("graph")->color);
+
 	_bg->drawRect( // set up the grid
 				125,49,
 				188,127,

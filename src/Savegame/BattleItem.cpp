@@ -374,13 +374,13 @@ bool BattleItem::occupiesSlot(
 		return true;
 
 	if (item == NULL)
-		return (x >= _inventoryX
+		return (   x >= _inventoryX
 				&& x < _inventoryX + _rules->getInventoryWidth()
 				&& y >= _inventoryY
 				&& y < _inventoryY + _rules->getInventoryHeight());
 	else
 		return !(
-				x >= _inventoryX + _rules->getInventoryWidth()
+				   x >= _inventoryX + _rules->getInventoryWidth()
 				|| x + item->getRules()->getInventoryWidth() <= _inventoryX
 				|| y >= _inventoryY + _rules->getInventoryHeight()
 				|| y + item->getRules()->getInventoryHeight() <= _inventoryY);

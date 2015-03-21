@@ -672,7 +672,7 @@ DogfightState::~DogfightState()
 }
 
 /**
- * Runs the higher level dogfight functionality
+ * Runs the higher level dogfight functionality.
  */
 void DogfightState::think()
 {
@@ -854,7 +854,8 @@ void DogfightState::updateDogfight()
 			if (_ufo->getEngaged() == false
 				&& escapeTicks > 0)
 			{
-				_ufo->setEngaged(true);
+				_ufo->setEngaged();
+				_geo->drawUfoIndicators(); // kL
 
 				if (_dist < DIST_STANDOFF) // kL
 					_ufo->setEscapeCountdown(--escapeTicks);

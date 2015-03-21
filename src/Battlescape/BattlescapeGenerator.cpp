@@ -1950,19 +1950,19 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		_alienRace += "_UNDERWATER";
 	}
 
-	if (_game->getRuleset()->getAlienRace(_alienRace) == NULL)
+	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
+
+	if (race == NULL)
 	{
 		throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployRule: " + deployRule->getType());
 	}
 
-	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
-
 	int month = _savedGame->getMonthsPassed();
 	if (month != -1)
 	{
-		const int aiLevel_top = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
-		if (month > aiLevel_top)
-			month = aiLevel_top;
+		const int itemLevel_top = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
+		if (month > itemLevel_top)
+			month = itemLevel_top;
 	}
 	else
 		month = _alienItemLevel;
@@ -1974,9 +1974,9 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		itemLevel,
 		qty;
 
-	BattleItem* item = NULL;
-	BattleUnit* unit = NULL;
-	Unit* unitRule = NULL;
+	BattleItem* item;
+	BattleUnit* unit;
+	Unit* unitRule;
 
 	for (std::vector<DeploymentData>::const_iterator
 			data = deployRule->getDeploymentData()->begin();
@@ -1986,17 +1986,21 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		alienName = race->getMember((*data).alienRank);
 
 		if (_savedGame->getDifficulty() < DIFF_VETERAN)
-			qty = (*data).lowQty + RNG::generate( // beginner/experienced
-											0,
-											(*data).dQty);
+			qty = (*data).lowQty
+				+ RNG::generate( // beginner/experienced
+							0,
+							(*data).dQty);
 		else if (_savedGame->getDifficulty() < DIFF_SUPERHUMAN)
-			qty = (*data).lowQty + (((*data).highQty - (*data).lowQty) / 2) + RNG::generate( // veteran/genius
-																						0,
-																						(*data).dQty);
+			qty = (*data).lowQty
+				+ (((*data).highQty - (*data).lowQty) / 2)
+				+ RNG::generate( // veteran/genius
+							0,
+							(*data).dQty);
 		else
-			qty = (*data).highQty + RNG::generate( // super (and beyond)
-												0,
-												(*data).dQty);
+			qty = (*data).highQty
+				+ RNG::generate( // super (and beyond)
+							0,
+							(*data).dQty);
 
 		qty += RNG::generate(
 						0,
@@ -2005,25 +2009,20 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		if (_base != NULL
 			&& _base->getDefenseResult() > 0)
 		{
-			Log(LOG_INFO) << "BattlescapeGenerator::deployAliens()";
-			Log(LOG_INFO) << ". defenseEffect = " << _base->getDefenseResult();
-			Log(LOG_INFO) << ". qty_init = " << qty;
 			qty = std::max(
 						qty / 2,
 						qty - (qty * _base->getDefenseResult() / 100));
-			Log(LOG_INFO) << ". qty_postDefense = " << qty;
-
-			_base->setDefenseResult(0);
 		}
 
 		for (int
 				i = 0;
-				i < qty;
+				i != qty;
 				++i)
 		{
-			outside = false;
 			if (_ufo != NULL)
 				outside = RNG::percent((*data).percentageOutsideUfo);
+			else
+				outside = false;
 
 			unitRule = _rules->getUnit(alienName);
 			unit = addAlien(
@@ -2033,7 +2032,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 
 			if (unit != NULL)
 			{
-				RuleItem* itemRule = NULL;
+				RuleItem* itRule;
 
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
 				if (unitRule->getBuiltInWeapons().empty() == false)
@@ -2043,15 +2042,15 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 							j != unitRule->getBuiltInWeapons().end();
 							++j)
 					{
-						itemRule = _rules->getItem(*j);
-						if (itemRule != NULL)
+						itRule = _rules->getItem(*j);
+						if (itRule != NULL)
 						{
-							BattleItem* const item = new BattleItem(
-																itemRule,
-																_battleSave->getCurrentItemId());
-							if (!addItem(
-										item,
-										unit))
+							item = new BattleItem(
+												itRule,
+												_battleSave->getCurrentItemId());
+							if (addItem(
+									item,
+									unit) == false)
 							{
 								delete item;
 							}
@@ -2066,15 +2065,15 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 					std::string terrorWeapon = unitRule->getRace().substr(4);
 					terrorWeapon += "_WEAPON";
 
-					itemRule = _rules->getItem(terrorWeapon);
-					if (itemRule != NULL)
+					itRule = _rules->getItem(terrorWeapon);
+					if (itRule != NULL)
 					{
 						item = new BattleItem( // terror aLiens add their weapons
-											itemRule,
+											itRule,
 											_battleSave->getCurrentItemId());
-						if (!addItem(
-									item,
-									unit))
+						if (addItem(
+								item,
+								unit) == false)
 						{
 							delete item;
 						}
@@ -2084,22 +2083,22 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 				}
 				else
 				{
-					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
+					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0,9));
 
 					for (std::vector<std::string>::const_iterator
 							setItem = (*data).itemSets.at(itemLevel).items.begin();
 							setItem != (*data).itemSets.at(itemLevel).items.end();
 							++setItem)
 					{
-						itemRule = _rules->getItem(*setItem);
-						if (itemRule != NULL)
+						itRule = _rules->getItem(*setItem);
+						if (itRule != NULL)
 						{
 							item = new BattleItem( // aLiens add items
-												itemRule,
+												itRule,
 												_battleSave->getCurrentItemId());
-							if (!addItem(
-										item,
-										unit))
+							if (addItem(
+									item,
+									unit) == false)
 							{
 								delete item;
 							}
@@ -2109,6 +2108,9 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 			}
 		}
 	}
+
+	if (_base != NULL)
+		_base->setDefenseResult(0);
 }
 
 /**

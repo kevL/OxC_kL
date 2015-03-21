@@ -2277,9 +2277,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 	}
 
 
-	std::vector<std::pair<std::vector<BaseFacility*>::const_iterator, bool>* > facConnections;
-	std::pair<std::vector<BaseFacility*>::const_iterator, bool>* gridPair[BASE_SIZE][BASE_SIZE];
-
+	std::pair<std::vector<BaseFacility*>::const_iterator, bool>* facBool_coord[BASE_SIZE][BASE_SIZE];
 	for (size_t
 			x = 0;
 			x != BASE_SIZE;
@@ -2290,13 +2288,14 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 				y != BASE_SIZE;
 				++y)
 		{
-			gridPair[x][y] = 0;
+			facBool_coord[x][y] = NULL;
 		}
 	}
 
 	const BaseFacility* lift = NULL;
 
-	for (std::vector<BaseFacility*>::const_iterator // fill up the gridPair(+facConnections), and search the lift
+	std::vector<std::pair<std::vector<BaseFacility*>::const_iterator, bool>* > facConnections;
+	for (std::vector<BaseFacility*>::const_iterator // fill up the facBool_coord (+facConnections), and search for the Lift
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
@@ -2316,13 +2315,13 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 						y != (*i)->getRules()->getSize();
 						++y)
 				{
-					std::pair<std::vector<BaseFacility*>::const_iterator, bool>* pairsOfFacsBool =
-							new std::pair<std::vector<BaseFacility*>::const_iterator, bool>(
-																						i,
-																						false);
-					facConnections.push_back(pairsOfFacsBool);
-					gridPair[static_cast<size_t>((*i)->getX()) + x]
-							[static_cast<size_t>((*i)->getY()) + y] = pairsOfFacsBool; // lol
+					std::pair<std::vector<BaseFacility*>::const_iterator, bool>* pairsOfFacBool =
+									new std::pair<std::vector<BaseFacility*>::const_iterator, bool>(
+																								i,
+																								false);
+					facConnections.push_back(pairsOfFacBool);
+					facBool_coord[static_cast<size_t>((*i)->getX()) + x]
+							[static_cast<size_t>((*i)->getY()) + y] = pairsOfFacBool; // lolli
 				}
 			}
 		}
@@ -2333,12 +2332,19 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 
 
 	// make the recursion manually using a stack
+	const BaseFacility
+		* fac,
+		* borLeft,
+		* borRight,
+		* borTop,
+		* borBottom;
 	size_t
 		x,y;
 	std::stack<std::pair<size_t, size_t> > stuff;
+
 	stuff.push(std::make_pair(
-							static_cast<size_t>(lift->getX()),
-							static_cast<size_t>(lift->getY())));
+						static_cast<size_t>(lift->getX()),
+						static_cast<size_t>(lift->getY())));
 	while (stuff.empty() == false)
 	{
 		x = stuff.top().first,
@@ -2346,65 +2352,92 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 
 		stuff.pop();
 
-		if (//   x > -1			// -> hopefully x&y will never point outside the baseGrid
+		if (//   x > -1			// -> hopefully x&y will never point outside the baseGrid ... looks atm like it does!! It does. FIX inc!!!!
 			//&& x < BASE_SIZE
 			//&& y > -1
 			//&& y < BASE_SIZE &&
-			   gridPair[x][y] != NULL
-			&& gridPair[x][y]->second == false)
+			   facBool_coord[x][y] != NULL
+			&& facBool_coord[x][y]->second == false)
 		{
-			gridPair[x][y]->second = true;
+			facBool_coord[x][y]->second = true;
 
-			const BaseFacility
-				* const fac = *(gridPair[x][y]->first),
+			fac = *(facBool_coord[x][y]->first);
 
-				* const neighborLeft =
-						(x > 0 && gridPair[x - 1][y] != NULL) ?
-						*(gridPair[x - 1][y]->first)
-						: NULL,
-				* const neighborRight =
-						(x + 1 < BASE_SIZE && gridPair[x + 1][y] != NULL) ?
-						*(gridPair[x + 1][y]->first)
-						: NULL,
-				* const neighborTop =
-						(y > 0 && gridPair[x][y - 1] != NULL) ?
-						*(gridPair[x][y - 1]->first)
-						: NULL,
-				* const neighborBottom =
-						(y + 1 < BASE_SIZE && gridPair[x][y + 1] != NULL) ?
-						*(gridPair[x][y + 1]->first)
-						: NULL;
-
-			if (fac->getBuildTime() == 0
-				|| (neighborLeft != NULL
-					&& (neighborLeft == fac
-						|| neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime())))
+			if (x > 0
+				&& facBool_coord[x - 1][y] != NULL)
 			{
-				stuff.push(std::make_pair(x - 1, y));
+				borLeft = *(facBool_coord[x - 1][y]->first);
+			}
+			else
+				borLeft = NULL;
+
+			if (x + 1 < BASE_SIZE
+				&& facBool_coord[x + 1][y] != NULL)
+			{
+				borRight = *(facBool_coord[x + 1][y]->first);
+			}
+			else
+				borRight = NULL;
+
+			if (y > 0
+				&& facBool_coord[x][y - 1] != NULL)
+			{
+				borTop = *(facBool_coord[x][y - 1]->first);
+			}
+			else
+				borTop = NULL;
+
+			if (y + 1 < BASE_SIZE
+				&& facBool_coord[x][y + 1] != NULL)
+			{
+				borBottom = *(facBool_coord[x][y + 1]->first);
+			}
+			else
+				borBottom = NULL;
+
+
+			if (x > 0
+				&& (fac->getBuildTime() == 0
+					|| (borLeft != NULL
+						&& (borLeft == fac
+							|| borLeft->getBuildTime() > borLeft->getRules()->getBuildTime()))))
+			{
+				stuff.push(std::make_pair(
+										x - 1,
+										y));
 			}
 
-			if (fac->getBuildTime() == 0
-				|| (neighborRight != NULL
-					&& (neighborRight == fac
-						|| neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime())))
+			if (x < BASE_SIZE - 1
+				&& (fac->getBuildTime() == 0
+					|| (borRight != NULL
+						&& (borRight == fac
+							|| borRight->getBuildTime() > borRight->getRules()->getBuildTime()))))
 			{
-				stuff.push(std::make_pair(x + 1, y));
+				stuff.push(std::make_pair(
+										x + 1,
+										y));
 			}
 
-			if (fac->getBuildTime() == 0
-				|| (neighborTop != NULL
-					&& (neighborTop == fac
-						|| neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime())))
+			if (y > 0
+				&& (fac->getBuildTime() == 0
+					|| (borTop != NULL
+						&& (borTop == fac
+							|| borTop->getBuildTime() > borTop->getRules()->getBuildTime()))))
 			{
-				stuff.push(std::make_pair(x, y - 1));
+				stuff.push(std::make_pair(
+										x,
+										y - 1));
 			}
 
-			if (fac->getBuildTime() == 0
-				|| (neighborBottom != NULL
-					&& (neighborBottom == fac
-						|| neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime())))
+			if (y < BASE_SIZE - 1
+				&& (fac->getBuildTime() == 0
+					|| (borBottom != NULL
+						&& (borBottom == fac
+							|| borBottom->getBuildTime() > borBottom->getRules()->getBuildTime()))))
 			{
-				stuff.push(std::make_pair(x, y + 1));
+				stuff.push(std::make_pair(
+										x,
+										y + 1));
 			}
 		}
 	}

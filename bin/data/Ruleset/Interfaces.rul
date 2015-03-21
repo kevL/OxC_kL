@@ -396,11 +396,11 @@ interfaces:
       - id: button
         color: 151   # grey
       - id: regionTotal
-        color: 18    # salmon (inverted button offset)
-        color2: 136  # also salmon (the line itself)
+        color: 154   # was 18   # salmon (inverted button offset)
+        color2: 153  # was 136  # also salmon (the line itself)
       - id: countryTotal
-        color: 22    # magenta (inverted button offset)
-        color2: 144  # also magenta (the line itself)
+        color: 154   # was 22   # magenta (inverted button offset)
+        color2: 153  # was 144  # also magenta (the line itself)
   - type: ufopaedia
     elements:
       - id: palette
@@ -483,8 +483,8 @@ interfaces:
         color: 87    # blue w/ yellow trim
 #        color: 133   # minty green /aka cyan
       - id: button
-        color: 246   # light blue
-        color2: 245  # slightly lighter blue
+        color: 245   # light blue, was 246
+        color2: 246  # slightly lighter blue; what is this used for: slightly darker blue, was 245
       - id: text
         color: 244   # even lighter blue
       - id: genericPalette

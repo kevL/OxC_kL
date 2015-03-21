@@ -472,7 +472,7 @@ GeoscapeState::GeoscapeState()
 		_btnVisibleUfo[i] = new InteractiveSurface(
 												13,13,
 												_sideTop->getX() + offset_x + 3,
-												_sideTop->getY() + height - offset_y - 17);
+												_sideTop->getY() + height - offset_y - 16);
 
 //		_numVisibleUfo[i] = new NumberText(
 //										9,
@@ -1300,11 +1300,28 @@ void GeoscapeState::drawUfoIndicators()
 		{
 			_btnVisibleUfo[ind]->setVisible();
 //			_numVisibleUfo[ind]->setVisible();
+//getId()
 
 			_visibleUfo[ind] = *i;
 
 			ufoSize = (*i)->getRadius() - 2;
-			baseColor = 166; // slate
+
+			if ((*i)->getEngaged() == true)
+				baseColor = 133;			// red (8), all red. TODO: blink
+			else
+			{
+				switch ((*i)->getStatus())
+				{
+					case Ufo::FLYING:
+						baseColor = 170;	// dark slate (10)+10
+					break;
+					case Ufo::LANDED:
+						baseColor = 112;	// green (7) goes down into (6) still green.
+					break;
+					case Ufo::CRASHED:
+						baseColor = 53;		// brownish (3)
+				}
+			}
 
 			for (int
 					y = 0;
@@ -1316,7 +1333,9 @@ void GeoscapeState::drawUfoIndicators()
 						x != 13;
 						++x)
 				{
-					color = static_cast<Uint8>(_ufoBlobs[ufoSize][static_cast<size_t>(y)][static_cast<size_t>(x)]);
+					color = static_cast<Uint8>(_ufoBlobs[ufoSize]
+														[static_cast<size_t>(y)]
+														[static_cast<size_t>(x)]);
 					if (color != 0)
 					{
 						color = baseColor - color;
@@ -1332,14 +1351,6 @@ void GeoscapeState::drawUfoIndicators()
 			break;
 	}
 }
-//getId()
-//getEngaged()
-//getStatus()
-//	FLYING,		// 0
-//	LANDED,		// 1
-//	CRASHED,	// 2
-//	DESTROYED	// 3
-
 
 /**
  * Updates the Geoscape clock.
@@ -1494,8 +1505,6 @@ void GeoscapeState::time5Seconds()
 		popup(new DefeatState());
 		return;
 	}
-
-	drawUfoIndicators();
 
 	const Ufo* ufoExpired = NULL; // kL, see below_
 
@@ -1911,6 +1920,8 @@ void GeoscapeState::time5Seconds()
 		else
 			++i;
 	}
+
+	drawUfoIndicators();
 
 
 	// This is ONLY for allowing _dogfights to fill (or not)
@@ -4046,7 +4057,7 @@ void GeoscapeState::setupLandMission() // private.
  * Handler for clicking on a timer button.
  * @param action - pointer to the mouse Action
  */
-void GeoscapeState::btnTimerClick(Action* action)
+void GeoscapeState::btnTimerClick(Action* action) // private.
 {
 	SDL_Event ev;
 	ev.type = SDL_MOUSEBUTTONDOWN;
@@ -4060,7 +4071,7 @@ void GeoscapeState::btnTimerClick(Action* action)
  * Centers on the UFO corresponding to this button.
  * @param action - pointer to an Action
  */
-void GeoscapeState::btnVisibleUfoClick(Action* action)
+void GeoscapeState::btnVisibleUfoClick(Action* action) // private.
 {
 	for (size_t // find out which button was pressed
 			i = 0;

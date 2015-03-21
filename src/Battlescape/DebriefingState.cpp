@@ -705,9 +705,9 @@ void DebriefingState::prepareDebriefing()
 									_rules->getAlienFuel(),
 									true));
 
-	SavedBattleGame* const battle = _savedGame->getSavedBattle();
+	SavedBattleGame* const battleSave = _savedGame->getSavedBattle();
 
-	const bool aborted = battle->isAborted();
+	const bool aborted = battleSave->isAborted();
 	bool missionAccomplished = !aborted;
 
 	Base* base = NULL;
@@ -717,7 +717,7 @@ void DebriefingState::prepareDebriefing()
 
 
 	_missionStatistics->time = *_savedGame->getTime();
-	_missionStatistics->type = battle->getMissionType();
+	_missionStatistics->type = battleSave->getMissionType();
 
 	int
 		soldierExit = 0, // if this stays 0 the craft is lost...
@@ -789,11 +789,9 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		if ((*i)->isInBattlescape() == true) // in case we DON'T have a craft (ie. baseDefense)
+		if ((*i)->isInBattlescape() == true) // in case this DON'T have a craft (ie. baseDefense)
 		{
 			base = *i;
-			base->setInBattlescape(false);
-			base->cleanupDefenses(false);
 
 			const double
 				baseLon = base->getLongitude(),
@@ -831,23 +829,30 @@ void DebriefingState::prepareDebriefing()
 
 			if (aborted == true)
 				_destroyXCOMBase = true;
-
-			bool facDestroyed = false;
-			for (std::vector<BaseFacility*>::const_iterator
-					k = base->getFacilities()->begin();
-					k != base->getFacilities()->end();
-					)
+			else
 			{
-				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0) // this facility was demolished
-				{
-					facDestroyed = true;
-					base->destroyFacility(k);
-				}
-				else
-					++k;
-			}
+				base->setInBattlescape(false);
+				base->cleanupDefenses(false);
 
-			base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed, destroy the disconnected parts.
+				bool facDestroyed = false; // not in stockcode
+				for (std::vector<BaseFacility*>::const_iterator
+						k = base->getFacilities()->begin();
+						k != base->getFacilities()->end();
+						)
+				{
+					if (battleSave->getModuleMap()[(*k)->getX()]
+												  [(*k)->getY()].second == 0) // this facility was demolished
+					{
+						facDestroyed = true; // not in stockcode
+						base->destroyFacility(k);
+					}
+					else
+						++k;
+				}
+
+				if (facDestroyed == true) // kL_add <-
+					base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed; destroy the disconnected parts.
+			}
 		}
 	}
 
@@ -855,14 +860,14 @@ void DebriefingState::prepareDebriefing()
 	_baseLabel = _base->getName(_game->getLanguage());
 
 
-	// kL_begin: Do all aLienRace types here for SoldierDiary stat.
+	// Do all aLienRace types here for SoldierDiary stat.
 	if (_savedGame->getMonthsPassed() != -1)
 	{
-		if (battle->getAlienRace().empty() == false) // safety.
-			_missionStatistics->alienRace = battle->getAlienRace();
+		if (battleSave->getAlienRace().empty() == false) // safety.
+			_missionStatistics->alienRace = battleSave->getAlienRace();
 		else
 			_missionStatistics->alienRace = "STR_UNKNOWN";
-	} // kL_end.
+	}
 
 
 	for (std::vector<Ufo*>::const_iterator // UFO crash/landing site disappears
@@ -911,8 +916,8 @@ void DebriefingState::prepareDebriefing()
 	// and if they are unconscious
 	// and how many have died for commendations
 	for (std::vector<BattleUnit*>::const_iterator
-			i = battle->getUnits()->begin();
-			i != battle->getUnits()->end();
+			i = battleSave->getUnits()->begin();
+			i != battleSave->getUnits()->end();
 			++i)
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
@@ -939,8 +944,8 @@ void DebriefingState::prepareDebriefing()
 		soldierLive = 0;
 
 		for (std::vector<BattleUnit*>::const_iterator
-				i = battle->getUnits()->begin();
-				i != battle->getUnits()->end();
+				i = battleSave->getUnits()->begin();
+				i != battleSave->getUnits()->end();
 				++i)
 		{
 			if ((*i)->getOriginalFaction() == FACTION_PLAYER
@@ -954,8 +959,8 @@ void DebriefingState::prepareDebriefing()
 	if (soldierLive == 1)
 	{
 		for (std::vector<BattleUnit*>::const_iterator
-				i = battle->getUnits()->begin();
-				i != battle->getUnits()->end();
+				i = battleSave->getUnits()->begin();
+				i != battleSave->getUnits()->end();
 				++i)
 		{
 			if ((*i)->getGeoscapeSoldier() != NULL
@@ -981,7 +986,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	const std::string& mission = battle->getMissionType();
+	const std::string& mission = battleSave->getMissionType();
 
 	// alien base disappears (if not aborted)
 	if (mission == "STR_ALIEN_BASE_ASSAULT")
@@ -994,11 +999,11 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int
 					i = 0;
-					i < battle->getMapSizeXYZ();
+					i < battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
-					&& battle->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+				if (battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
+					&& battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
 				{
 					destroyAlienBase = false;
 					break;
@@ -1043,8 +1048,8 @@ void DebriefingState::prepareDebriefing()
 
 	// time to care about units.
 	for (std::vector<BattleUnit*>::const_iterator
-			i = battle->getUnits()->begin();
-			i != battle->getUnits()->end();
+			i = battleSave->getUnits()->begin();
+			i != battleSave->getUnits()->end();
 			++i)
 	{
 		if ((*i)->getTile() == NULL)								// This unit is not on a tile... give it one.
@@ -1053,8 +1058,8 @@ void DebriefingState::prepareDebriefing()
 			if (pos == Position(-1,-1,-1))							// in fact, this Unit is in limbo... ie, is carried.
 			{
 				for (std::vector<BattleItem*>::const_iterator		// so look for its body or corpse...
-						j = battle->getItems()->begin();
-						j != battle->getItems()->end();
+						j = battleSave->getItems()->begin();
+						j != battleSave->getItems()->end();
 						++j)
 				{
 					if ((*j)->getUnit() != NULL
@@ -1068,7 +1073,7 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 
-			(*i)->setTile(battle->getTile(pos));
+			(*i)->setTile(battleSave->getTile(pos));
 		}
 
 
@@ -1335,7 +1340,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int // get recoverable map data objects from the battlescape map
 					i = 0;
-					i < battle->getMapSizeXYZ();
+					i < battleSave->getMapSizeXYZ();
 					++i)
 			{
 				for (int
@@ -1343,9 +1348,9 @@ void DebriefingState::prepareDebriefing()
 						part < 4;
 						++part)
 				{
-					if (battle->getTiles()[i]->getMapData(part))
+					if (battleSave->getTiles()[i]->getMapData(part))
 					{
-						const size_t specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
+						const size_t specialType = battleSave->getTiles()[i]->getMapData(part)->getSpecialType();
 						if (_specialTypes.find(specialType) != _specialTypes.end())
 							addStat(
 								_specialTypes[specialType]->name,
@@ -1354,7 +1359,7 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				recoverItems( // recover items from the floor
-						battle->getTiles()[i]->getInventory(),
+						battleSave->getTiles()[i]->getInventory(),
 						base);
 			}
 		}
@@ -1362,14 +1367,14 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int
 					i = 0;
-					i < battle->getMapSizeXYZ();
+					i < battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
-					&& (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
+					&& (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
 				{
 					recoverItems(
-							battle->getTiles()[i]->getInventory(),
+							battleSave->getTiles()[i]->getInventory(),
 							base);
 				}
 			}
@@ -1398,14 +1403,14 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (int // recover items from the ground
 					i = 0;
-					i < battle->getMapSizeXYZ();
+					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
-					&& battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
+					&& battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 				{
 					recoverItems(
-							battle->getTiles()[i]->getInventory(),
+							battleSave->getTiles()[i]->getInventory(),
 							base);
 				}
 			}

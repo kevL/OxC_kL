@@ -2501,7 +2501,7 @@ void SavedBattleGame::setKneelReserved(bool reserved)
  * This map contains information on how many destructible base modules
  * remain at any given grid reference in the basescape, using [x][y] format.
  * -1 for "no items" 0 for "destroyed" and any actual number represents how many left.
- * @return, reference to a vector of vectors containing pairs that make up base module damage maps
+ * @return, reference to a vector of vectors containing pairs of ints that make up base module damage maps
  */
 std::vector<std::vector<std::pair<int, int> > >& SavedBattleGame::getModuleMap()
 {
@@ -2540,8 +2540,10 @@ void SavedBattleGame::calculateModuleMap()
 				&& tile->getMapData(MapData::O_OBJECT) != NULL
 				&& tile->getMapData(MapData::O_OBJECT)->isBaseModule() == true)
 			{
-				_baseModules[x / 10][y / 10].first += _baseModules[x / 10][y / 10].first > 0? 1: 2;
-				_baseModules[x / 10][y / 10].second = _baseModules[x / 10][y / 10].first;
+				_baseModules[x / 10]
+							[y / 10].first += _baseModules[x / 10][y / 10].first > 0 ? 1 : 2;
+				_baseModules[x / 10]
+							[y / 10].second = _baseModules[x / 10][y / 10].first;
 			}
 		}
 	}
