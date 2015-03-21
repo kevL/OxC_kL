@@ -65,17 +65,17 @@ BaseDestroyedState::BaseDestroyedState(
 			"PAL_GEOSCAPE",
 			_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
-	add(_window, "window", "UFOInfo");
-	add(_txtMessage, "text", "UFOInfo");
-	add(_btnCenter, "button", "UFOInfo");
-	add(_btnOk, "button", "UFOInfo");
+	add(_window,		"window",	"UFOInfo");
+	add(_txtMessage,	"text",		"UFOInfo");
+	add(_btnCenter,		"button",	"UFOInfo");
+	add(_btnOk,			"button",	"UFOInfo");
 
 	centerAllSurfaces();
 
 
 	_window->setBackground(
 						_game->getResourcePack()->getSurface("BACK15.SCR"),
-						37); // kL: x-offset
+						37); // x-offset
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
@@ -111,9 +111,9 @@ BaseDestroyedState::BaseDestroyedState(
 		}
 	}
 
-	AlienMission* alienMission = _game->getSavedGame()->findAlienMission(
-																	(*region)->getRules()->getType(),
-																	OBJECTIVE_RETALIATION);
+	const AlienMission* const alienMission = _game->getSavedGame()->findAlienMission(
+																				(*region)->getRules()->getType(),
+																				OBJECTIVE_RETALIATION);
 	for (std::vector<Ufo*>::const_iterator
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();)

@@ -2321,7 +2321,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 																								false);
 					facConnections.push_back(pairsOfFacBool);
 					facBool_coord[static_cast<size_t>((*i)->getX()) + x]
-							[static_cast<size_t>((*i)->getY()) + y] = pairsOfFacBool; // lolli
+								 [static_cast<size_t>((*i)->getY()) + y] = pairsOfFacBool; // loli
 				}
 			}
 		}
@@ -2742,6 +2742,7 @@ void Base::cleanupDefenses(bool reclaimItems)
 		{
 			RuleItem* const itRule = (*i)->getRules();
 			_items->addItem(itRule->getType());
+
 			if (itRule->getCompatibleAmmo()->empty() == false)
 			{
 				const RuleItem* const amRule = _rules->getItem(itRule->getCompatibleAmmo()->front());

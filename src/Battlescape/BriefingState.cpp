@@ -53,8 +53,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Briefing screen.
- * @param craft	- pointer to the Craft in the mission (default NULL)
- * @param base	- pointer to the Base in the mission (default NULL)
+ * @param craft	- pointer to the xCom Craft in the mission (default NULL)
+ * @param base	- pointer to the xCom Base in the mission (default NULL)
  */
 BriefingState::BriefingState(
 		const Craft* const craft,
@@ -75,7 +75,7 @@ BriefingState::BriefingState(
 
 	const std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
-	int backpal;
+	int bgColor;
 	std::string
 		background,	// default: "BACK16.SCR", Ruleset/AlienDeployment.h
 		music;		// default: OpenXcom::res_MUSIC_GEO_BRIEFING, Ruleset/AlienDeployment.h
@@ -83,25 +83,24 @@ BriefingState::BriefingState(
 	const AlienDeployment* const deployment = _game->getRuleset()->getDeployment(mission);
 	if (deployment == NULL) // landing site or crash site.
 	{
-		backpal = 0;
+		bgColor = _game->getRuleset()->getInterface("briefing")->getElement("palette")->color;
 		background = "BACK16.SCR";
 
 		if (mission == "STR_UFO_CRASH_RECOVERY")
 			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
-		else if (mission == "STR_UFO_GROUND_ASSAULT")
+		else //if (mission == "STR_UFO_GROUND_ASSAULT")
 			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
 	}
 	else
 	{
 		const BriefingData dataBrief = deployment->getBriefingData();
 
-		backpal = dataBrief.palette;
+		bgColor = dataBrief.palette;
 		background = dataBrief.background;
 		music = dataBrief.music;
 
-//		_txtCraft->setY(_txtCraft->getY() + dataBrief.textOffset);
 //		_txtBriefing->setY(_txtBriefing->getY() + dataBrief.textOffset);
-
+//		_txtCraft->setY(_txtCraft->getY() + dataBrief.textOffset);
 //		_txtTarget->setVisible(dataBrief.showTarget);
 //		_txtCraft->setVisible(dataBrief.showCraft);
 	}
@@ -109,30 +108,19 @@ BriefingState::BriefingState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			backpal);
+			bgColor);
 	_window->setBackground(_game->getResourcePack()->getSurface(background));
 
-/*	if (mission == "STR_ALIEN_BASE_ASSAULT"
-		|| mission == "STR_MARS_CYDONIA_LANDING")
-	{
-		_txtBriefing->setY(56);
-		_txtCraft->setY(40);
-		_txtTarget->setVisible(false);
-	} */
-
-	add(_window);
-	add(_txtTitle);
-	add(_txtTarget);
-	add(_txtCraft);
-	add(_txtBriefing);
-	add(_btnOk);
+	add(_window,		"window",	"briefing");
+	add(_txtTitle,		"text",		"briefing");
+	add(_txtTarget,		"text",		"briefing");
+	add(_txtCraft,		"text",		"briefing");
+	add(_txtBriefing,	"text",		"briefing");
+	add(_btnOk,			"button",	"briefing");
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
-
-	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BriefingState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -142,7 +130,6 @@ BriefingState::BriefingState(
 					(ActionHandler)& BriefingState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr(mission));
 
@@ -151,9 +138,8 @@ BriefingState::BriefingState(
 	{
 		if (craft->getDestination() != NULL)
 		{
-			_txtTarget->setColor(Palette::blockOffset(8)+5);
-			_txtTarget->setBig();
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+			_txtTarget->setBig();
 		}
 		else
 			_txtTarget->setVisible(false);
@@ -161,14 +147,15 @@ BriefingState::BriefingState(
 		craftLabel = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
 	else if (base != NULL)
+	{
 		craftLabel = tr("STR_BASE_UC_").arg(base->getName());
-//	else craftLabel = L"";
+		_txtTarget->setVisible(false);
+	}
 
 	if (craftLabel.empty() == false)
 	{
-		_txtCraft->setColor(Palette::blockOffset(8)+5);
-		_txtCraft->setBig();
 		_txtCraft->setText(craftLabel);
+		_txtCraft->setBig();
 	}
 	else
 		_txtCraft->setVisible(false);
@@ -184,11 +171,11 @@ BriefingState::BriefingState(
 		_txtBriefing->setY(_txtBriefing->getY() - 16);
 
 
-	_txtBriefing->setColor(Palette::blockOffset(8)+5);
-	_txtBriefing->setWordWrap();
 	std::ostringstream brief;
 	brief << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(brief.str()));
+	_txtBriefing->setWordWrap();
+
 
 	if (mission == "STR_BASE_DEFENSE")
 		base->setIsRetaliationTarget(false);

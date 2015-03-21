@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
-class Globe; // kL
+class Globe;
 class Text;
 class TextButton;
 class Window;
@@ -43,7 +43,7 @@ class BaseDestroyedState
 
 private:
 	Base* _base;
-	Globe* _globe; // kL
+	Globe* _globe;
 	Text* _txtMessage;
 	TextButton
 		* _btnCenter,
@@ -55,7 +55,7 @@ private:
 		/// Creates the Select Destination state.
 		BaseDestroyedState(
 						Base* base,
-						Globe* globe); // kL
+						Globe* globe);
 		/// Cleans up the Select Destination state.
 		~BaseDestroyedState();
 

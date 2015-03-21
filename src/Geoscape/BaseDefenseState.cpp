@@ -68,18 +68,19 @@ BaseDefenseState::BaseDefenseState(
 		_base(base),
 		_ufo(ufo),
 		_state(state),
-		_action(BDA_NONE),
-		_row(-1),
+		_action(BD_NONE),
+		_row(0),
 		_passes(0),
 		_attacks(0),
-		_thinkcycles(0),
-		_explosionCount(0)
+		_thinkCycles(0),
+		_explosionCount(0),
+		_stLen(0)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
-	_txtTitle		= new Text(300, 17, 16, 6);
-	_txtInit		= new Text(300, 10, 16, 24);
-	_lstDefenses	= new TextList(300, 129, 16, 40);
-	_btnOk			= new TextButton(120, 16, 100, 170);
+	_window			= new Window(this, 320, 200);
+	_txtTitle		= new Text(320, 17, 16, 10);
+	_txtInit		= new Text(320, 9, 0, 30);
+	_lstDefenses	= new TextList(285, 129, 24, 43);
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette(
 			"PAL_BASESCAPE",
@@ -88,7 +89,7 @@ BaseDefenseState::BaseDefenseState(
 	add(_window,		"window",	"baseDefense");
 	add(_txtTitle,		"text",		"baseDefense");
 	add(_txtInit,		"text",		"baseDefense");
-	add(_lstDefenses,	"text",		"baseDefense"); // "list"
+	add(_lstDefenses,	"text",		"baseDefense");
 	add(_btnOk,			"button",	"baseDefense");
 
 	centerAllSurfaces();
@@ -106,20 +107,23 @@ BaseDefenseState::BaseDefenseState(
 					Options::keyCancel);
 	_btnOk->setVisible(false);
 
-	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_BASE_UNDER_ATTACK").arg(_base->getName()));
-	_txtInit->setVisible(false);
+	_txtTitle->setBig();
 
-	_txtInit->setText(tr("STR_BASE_DEFENSES_INITIATED"));
+	_txtInit->setAlign(ALIGN_CENTER);
 
-	_lstDefenses->setColumns(3, 134, 70, 50);
+	_lstDefenses->setColumns(3, 130, 80, 75);
+
 
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
 
-	_timer = new Timer(250);
+
+	_timer = new Timer(73);
 	_timer->onTimer((StateHandler)& BaseDefenseState::nextStep);
 	_timer->start();
+
+	_initiate = tr("STR_BASE_DEFENSES_INITIATED");
 }
 
 /**
@@ -143,145 +147,152 @@ void BaseDefenseState::think()
  */
 void BaseDefenseState::nextStep()
 {
-	if (_thinkcycles == -1)
-		return;
-
-	++_thinkcycles;
-
-	if (_thinkcycles == 1)
+	if (_stLen <= _initiate.size())
 	{
-		_txtInit->setVisible();
+		_txtInit->setText(_initiate.substr(0,_stLen++));
 		return;
 	}
 
-	if (_thinkcycles > 1)
+	if (_thinkCycles != -1)
 	{
-		switch (_action)
+		++_thinkCycles;
+
+		if (_thinkCycles > 3)
 		{
-			case BDA_DESTROY:
-				if (_explosionCount == 0)
+			switch (_action)
+			{
+				case BD_DESTROY:
+					if (_explosionCount == 0)
+					{
+						_lstDefenses->addRow(
+										3,
+										tr("STR_UFO_DESTROYED").c_str(),
+										L" ",
+										L" ");
+
+						++_row;
+						if (_row > 15)
+							_lstDefenses->scrollDown(true);
+					}
+
+					_game->getResourcePack()->playSoundFX(
+													ResourcePack::UFO_EXPLODE,
+													true);
+
+					if (++_explosionCount == 3)
+						_action = BD_END;
+				return;
+
+				case BD_END:
+					_thinkCycles = -1;
+					_btnOk->setVisible();
+				return;
+			} // end switch()
+
+			if (_attacks == _defenses)
+			{
+				if (_passes == _gravShields)
+				{
+					_action = BD_END;
+					return;
+				}
+				else if (_passes < _gravShields)
 				{
 					_lstDefenses->addRow(
 									3,
-									tr("STR_UFO_DESTROYED").c_str(),
+									tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
 									L" ",
 									L" ");
 
 					++_row;
-					if (_row > 14)
+					if (_row > 15)
 						_lstDefenses->scrollDown(true);
+
+					++_passes;
+					_attacks = 0;
+
+					return;
 				}
-
-				_game->getResourcePack()->playSoundFX(
-												ResourcePack::UFO_EXPLODE,
-												true);
-
-				if (++_explosionCount == 3)
-					_action = BDA_END;
-			return;
-
-			case BDA_END:
-				_thinkcycles = -1;
-				_btnOk->setVisible();
-			return;
-
-			default:
-			break;
-		}
-
-		if (_attacks == _defenses)
-		{
-			if (_passes == _gravShields)
-			{
-				_action = BDA_END;
-				return;
 			}
-			else if (_passes < _gravShields)
+
+			const BaseFacility* const defFac = _base->getDefenses()->at(_attacks);
+
+			switch (_action)
 			{
-				_lstDefenses->addRow(
-								3,
-								tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
-								L" ",
-								L" ");
+				case BD_NONE:
+					_action = BD_FIRE;
 
-				if (_row > 14)
-					_lstDefenses->scrollDown(true);
-
-				++_row;
-				++_passes;
-				_attacks = 0;
-
+					_lstDefenses->addRow(
+									3,
+									tr(defFac->getRules()->getType()).c_str(),
+									L" ",
+									L" ");
+					++_row;
+					if (_row > 15)
+						_lstDefenses->scrollDown(true);
 				return;
-			}
-		}
 
-		const BaseFacility* const def = _base->getDefenses()->at(_attacks);
-
-		switch (_action)
-		{
-			case BDA_NONE:
-				_action = BDA_FIRE;
-
-				_lstDefenses->addRow(
-								3,
-								tr(def->getRules()->getType()).c_str(),
-								L" ",
-								L" ");
-				++_row;
-				if (_row > 14)
-					_lstDefenses->scrollDown(true);
-
-			return;
-
-			case BDA_FIRE:
-				_lstDefenses->setCellText(
-										_row,
-										1,
-										tr("STR_FIRING").c_str());
-
-				_game->getResourcePack()->playSoundFX(
-												def->getRules()->getFireSound(),
-												true);
-
-				_timer->setInterval(333);
-				_action = BDA_RESOLVE;
-
-			return;
-
-			case BDA_RESOLVE:
-				if (RNG::percent(def->getRules()->getHitRatio()) == true)
-				{
-					_game->getResourcePack()->playSoundFX(def->getRules()->getHitSound());
-
-					int power = def->getRules()->getDefenseValue();
-					power = RNG::generate( // kL: vary power between 75% and 133% ( stock is 50..150% )
-										power * 3 / 4,
-										power * 4 / 3);
-					_ufo->setDamage(_ufo->getDamage() + power);
-
+				case BD_FIRE:
 					_lstDefenses->setCellText(
-										_row,
-										2,
-										tr("STR_HIT").c_str());
-				}
-				else
-					_lstDefenses->setCellText(
-										_row,
-										2,
-										tr("STR_MISSED").c_str());
+											_row - 1,
+											1,
+											tr("STR_FIRING").c_str());
+//					_lstDefenses->setCellColor(
+//											_row - 1,
+//											1,
+//											160, // slate
+//											true);
 
-				if (_ufo->getStatus() == Ufo::DESTROYED)
-					_action = BDA_DESTROY;
-				else
-					_action = BDA_NONE;
+					_game->getResourcePack()->playSoundFX(
+													defFac->getRules()->getFireSound(),
+													true);
 
-				++_attacks;
-				_timer->setInterval(250);
+					_action = BD_RESOLVE;
+					_timer->setInterval(1223);
+				return;
 
-			return;
+				case BD_RESOLVE:
+					if (RNG::percent(defFac->getRules()->getHitRatio()) == true)
+					{
+						_game->getResourcePack()->playSoundFX(defFac->getRules()->getHitSound());
 
-			default:
-			break;
+						int power = defFac->getRules()->getDefenseValue();
+						power = RNG::generate( // kL: vary power between 75% and 133% ( stock is 50..150% )
+											power * 3 / 4,
+											power * 4 / 3);
+						_ufo->setDamage(_ufo->getDamage() + power);
+
+						_lstDefenses->setCellText(
+											_row - 1,
+											2,
+											tr("STR_HIT").c_str());
+//						_lstDefenses->setCellColor(
+//												_row - 1,
+//												2,
+//												32, // green
+//												true);
+					}
+					else
+					{
+						_lstDefenses->setCellText(
+											_row - 1,
+											2,
+											tr("STR_MISSED").c_str());
+//						_lstDefenses->setCellColor(
+//												_row - 1,
+//												2,
+//												144, // brown
+//												true);
+					}
+
+					if (_ufo->getStatus() == Ufo::DESTROYED)
+						_action = BD_DESTROY;
+					else
+						_action = BD_NONE;
+
+					++_attacks;
+					_timer->setInterval(265);
+			} // end switch()
 		}
 	}
 }

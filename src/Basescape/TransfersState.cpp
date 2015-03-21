@@ -63,24 +63,24 @@ TransfersState::TransfersState(Base* base)
 
 	_btnOk			= new TextButton(288, 16, 16, 169);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color); //6
+	setPalette(
+			"PAL_BASESCAPE",
+			_game->getRuleset()->getInterface("transferInfo")->getElement("palette")->color);
 
-	add(_window, "window", "transferInfo");
-	add(_txtTitle, "text", "transferInfo");
-	add(_txtBaseLabel, "text", "transferInfo");
-	add(_txtItem, "text", "transferInfo");
-	add(_txtQuantity, "text", "transferInfo");
-	add(_txtArrivalTime, "text", "transferInfo");
-	add(_lstTransfers, "list", "transferInfo");
-	add(_btnOk, "button", "transferInfo");
+	add(_window,			"window",	"transferInfo");
+	add(_txtTitle,			"text",		"transferInfo");
+	add(_txtBaseLabel,		"text",		"transferInfo");
+	add(_txtItem,			"text",		"transferInfo");
+	add(_txtQuantity,		"text",		"transferInfo");
+	add(_txtArrivalTime,	"text",		"transferInfo");
+	add(_lstTransfers,		"list",		"transferInfo");
+	add(_btnOk,				"button",	"transferInfo");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& TransfersState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -90,27 +90,20 @@ TransfersState::TransfersState(Base* base)
 					(ActionHandler)& TransfersState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFERS_UC"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtItem->setColor(Palette::blockOffset(15)+6);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtQuantity->setColor(Palette::blockOffset(15)+6);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_txtArrivalTime->setColor(Palette::blockOffset(15)+6);
 	_txtArrivalTime->setText(tr("STR_ARRIVAL_TIME_HOURS"));
 
-//	_lstTransfers->setColor(Palette::blockOffset(13)+10);
-//	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstTransfers->setBackground(_window);
 	_lstTransfers->setColumns(3, 155, 75, 28);
+	_lstTransfers->setBackground(_window);
 	_lstTransfers->setSelectable();
 	_lstTransfers->setMargin();
 
@@ -120,16 +113,16 @@ TransfersState::TransfersState(Base* base)
 			++i)
 	{
 		std::wostringstream
-			ss,
-			ss2;
-		ss << (*i)->getQuantity();
-		ss2 << (*i)->getHours();
+			woststr1,
+			woststr2;
+		woststr1 << (*i)->getQuantity();
+		woststr2 << (*i)->getHours();
 
 		_lstTransfers->addRow(
 							3,
 							(*i)->getName(_game->getLanguage()).c_str(),
-							ss.str().c_str(),
-							ss2.str().c_str());
+							woststr1.str().c_str(),
+							woststr2.str().c_str());
 	}
 }
 

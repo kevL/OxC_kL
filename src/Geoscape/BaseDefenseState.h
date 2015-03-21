@@ -38,11 +38,11 @@ class Window;
 
 enum BaseDefenseActionType
 {
-	BDA_NONE,
-	BDA_FIRE,
-	BDA_RESOLVE,
-	BDA_DESTROY,
-	BDA_END
+	BD_NONE,
+	BD_FIRE,
+	BD_RESOLVE,
+	BD_DESTROY,
+	BD_END
 };
 
 
@@ -56,13 +56,17 @@ class BaseDefenseState
 
 private:
 	int
+		_thinkCycles;
+	size_t
 		_attacks,
 		_defenses,
 		_explosionCount,
 		_gravShields,
 		_passes,
 		_row,
-		_thinkcycles;
+		_stLen;
+
+	std::wstring _initiate;
 
 	BaseDefenseActionType _action;
 
@@ -89,7 +93,7 @@ private:
 
 		/// Handle the Timer.
 		void think();
-		/// do the next step.
+		/// Does the next step.
 		void nextStep();
 
 		/// Handler for clicking the OK button.
