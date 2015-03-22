@@ -4489,7 +4489,7 @@
 1424390940 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1427000182 f:\git\openxcom\src\geoscape\geoscapestate.h
+1427062419 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1426210349 f:\git\openxcom\src\menu\errormessagestate.h
@@ -6322,7 +6322,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1426818722 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1427061649 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -7072,7 +7072,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1426891209 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1427061182 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7104,7 +7104,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1426888459 f:\git\openxcom\src\geoscape\dogfightstate.h
+1427061137 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1426445097 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7152,7 +7152,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1427011288 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1427061043 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7195,7 +7195,6 @@
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
 	"../Interface/ImageButton.h"
-	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Menu/ErrorMessageState.h"
@@ -7274,7 +7273,7 @@
 1424390939 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1427013953 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1427063465 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1424390939 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7583,14 +7582,13 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1427014291 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1427060301 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
 	"InterceptState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -8690,7 +8688,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1426999358 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1427058770 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

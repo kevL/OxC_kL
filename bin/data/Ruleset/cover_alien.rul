@@ -99,16 +99,16 @@ armors:
     movementType: 1
     damageModifier:
       - 1.0 #none
-      - 1.0 #ap
-      - 2.0 #in
-      - 1.0 #he
+      - 0.9 #ap
+      - 1.9 #in
+      - 1.1 #he
       - 1.0 #laser
       - 1.0 #plasma
-      - 1.0 #stun
+      - 0.8 #stun
       - 1.2 #melee
-      - 1.6 #acid
-      - 1.0 #smoke
-    loftempsSet: [ 3 ]
+      - 1.5 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
   - type: WASPITE_ARMOR1
     spriteSheet: WASPITE.PCK
     spriteInv: inventory_WASPITE
@@ -121,17 +121,17 @@ armors:
     drawingRoutine: 1
     movementType: 1
     damageModifier:
-      - 1.0
-      - 1.0
-      - 2.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.2
-      - 1.6
-      - 1.0
-    loftempsSet: [ 3 ]
+      - 1.0 #none
+      - 0.9 #ap
+      - 1.9 #in
+      - 1.1 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 0.8 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
   - type: WASPITE_ARMOR2
     spriteSheet: WASPITE.PCK
     spriteInv: inventory_WASPITE
@@ -144,19 +144,20 @@ armors:
     drawingRoutine: 1
     movementType: 1
     damageModifier:
-      - 1.0
-      - 1.0
-      - 2.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.2
-      - 1.6
-      - 1.0
-    loftempsSet: [ 3 ]
+      - 1.0 #none
+      - 0.9 #ap
+      - 1.9 #in
+      - 1.1 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 0.8 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 0.0 #smoke
+    loftempsSet: [3]
   - type: CYBERMITE_ARMOR
     spriteSheet: CYBERMITE.PCK
+    allowInv: false
     corpseBattle:
       - STR_CYBERMITE_CORPSE
     frontArmor: 20
@@ -165,17 +166,17 @@ armors:
     underArmor: 20
     drawingRoutine: 4
     damageModifier:
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 1.0
-      - 0.0
-    loftempsSet: [ 2 ]
+      - 1.0 #none
+      - 1.0 #ap
+      - 0.8 #in
+      - 0.7 #he
+      - 1.2 #laser
+      - 0.9 #plasma
+      - 0.0 #stun
+      - 0.7 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
+    loftempsSet: [2]
 units:
   - type: STR_WASPITE_SOLDIER
     race: STR_WASPITE

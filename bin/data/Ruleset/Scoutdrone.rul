@@ -45,6 +45,7 @@ items:
     recover: false
 armors:
   - type: SMALL_TANK_ARMOR
+    allowInv: false
     spriteSheet: SCOUT.PCK
     corpseBattle:
       - STR_SMALL_TANK_CORPSE

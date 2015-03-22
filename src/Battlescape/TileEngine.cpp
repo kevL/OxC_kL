@@ -1813,23 +1813,23 @@ BattleUnit* TileEngine::hit(
 			switch (type) // round up.
 			{
 				case DT_AP:
-					power = (power + 4) / 5;	// 20%
+					power = (power + 9) / 10;	// 10%
 				break;
 
 				case DT_IN:
+					power = (power + 4) / 5;	// 20%
+				break;
+
+				case DT_MELEE:
 					power = (power + 3) / 4;	// 25%
 				break;
 
 				case DT_LASER:
-					power = (power + 2) / 3;	// 33% // problem: Fusion Torch
+					power = (power + 2) / 3;	// 33% // problem: Fusion Torch; fixed, heh.
 				break;
 
 				case DT_PLASMA:
 					power = (power + 1) / 2;	// 50%
-				break;
-
-				case DT_MELEE:
-					power = (power + 9) / 10;	// 10%
 				break;
 
 				case DT_HE:

@@ -23,7 +23,7 @@ items:
   - type: STR_FUSION_TORCH_POWER_CELL
     requires:
       - STR_FUSION_TORCH_POWER_CELL
-    power: 500
+    power: 1000
     size: 0.3
     costSell: 50000
     weight: 8

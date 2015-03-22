@@ -78,7 +78,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/ImageButton.h"
-#include "../Interface/NumberText.h"
+//#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -139,8 +139,6 @@ const double
 	earthRadius					= 3440., //.0647948164,			// nautical miles.
 	unitToRads					= (1. / 60.) * (M_PI / 180.),	// converts a minute of arc to rads
 	greatCircleConversionFactor	= earthRadius * unitToRads;		// converts 'flat' distance to greatCircle distance.
-
-//Sound* GeoscapeState::soundPop = 0;
 
 
 // UFO blobs graphics ...
@@ -337,7 +335,8 @@ GeoscapeState::GeoscapeState()
 		_month(-1),
 		_year(-1),
 		_dogfightEnded(false),
-		_startMusic(false)
+		_startMusic(false),
+		_windowPops(0)
 {
 	const int
 		screenWidth		= Options::baseXGeoscape,
@@ -450,7 +449,7 @@ GeoscapeState::GeoscapeState()
 							screenWidth - 64,
 							(screenHeight / 2) + (Screen::ORIGINAL_HEIGHT / 2) + 12);
 
-	_ufoDetected = new NumberText(9, 9, _sideBottom->getX() + 5, _sideBottom->getY() + 5);
+	_ufoDetected = new Text(17, 17, _sideBottom->getX() + 6, _sideBottom->getY() + 4);
 
 	std::fill_n(
 			_visibleUfo,
@@ -915,7 +914,8 @@ GeoscapeState::GeoscapeState()
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
 
-	_ufoDetected->setColor(5); // white.
+	_ufoDetected->setColor(162); // slate+2, white=5.
+	_ufoDetected->setBig();
 	_ufoDetected->setVisible(false);
 
 /*	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
@@ -2161,7 +2161,8 @@ void GeoscapeState::time10Minutes()
 	}
 
 
-	unsigned windowPops = 0;
+//	unsigned windowPops = 0;
+	_windowPops = 0;
 
 	for (std::vector<Ufo*>::const_iterator // handle UFO detection
 			u = _savedGame->getUfos()->begin();
@@ -2221,7 +2222,7 @@ void GeoscapeState::time10Minutes()
 					|| (hyperDet == true
 						&& hyperDet_pre == false))
 				{
-					++windowPops;
+					++_windowPops;
 					popup(new UfoDetectedState(
 											*u,
 											this,
@@ -2279,7 +2280,7 @@ void GeoscapeState::time10Minutes()
 				if (hyperDet == true
 					&& hyperDet_pre == false)
 				{
-					++windowPops;
+					++_windowPops;
 					popup(new UfoDetectedState(
 											*u,
 											this,
@@ -2300,9 +2301,10 @@ void GeoscapeState::time10Minutes()
 	}
 
 
-	if (windowPops > 0)
+	if (_windowPops > 0)
 	{
-		_ufoDetected->setValue(windowPops);
+//		_ufoDetected->setValue(windowPops);
+		_ufoDetected->setText(Text::formatNumber(_windowPops));
 		_ufoDetected->setVisible();
 	}
 }
@@ -4190,12 +4192,18 @@ void GeoscapeState::resize(
 	_sideBarBlack->drawRect(0,0, _sideBarBlack->getWidth(), _sideBarBlack->getHeight(), 15); */
 
 /**
- * Gets the UFO detected textfield.
- * @return, reference to the UFO detected NumberText
+ * Examines the quantity of remaining UFO-detected popups.
+ * Reduces the number by one and decides whether to show the value to player.
  */
-NumberText* GeoscapeState::getUfoDetectedField()
+void GeoscapeState::assessUfoPopups()
 {
-	return _ufoDetected;
+	if (_windowPops > 0)
+	{
+		_ufoDetected->setText(Text::formatNumber(--_windowPops));
+
+		if (_windowPops == 0)
+			_ufoDetected->setVisible(false);
+	}
 }
 
 }

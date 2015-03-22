@@ -65,8 +65,8 @@
 namespace OpenXcom
 {
 
-// UFO blobs graphics ...
-const int DogfightState::_ufoBlobs[8][13][13] =
+// UFO blobs graphics ... MOVED TO GEOSCAPESTATE.
+/* const int DogfightState::_ufoBlobs[8][13][13] =
 {
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0 - STR_VERY_SMALL
@@ -188,8 +188,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 3, 4, 4, 5, 5, 5, 4, 4, 3, 0, 0},
 		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0}
 	}
-};
-
+}; */
 
 // Projectile blobs
 const int DogfightState::_projectileBlobs[4][6][3] =
@@ -1819,7 +1818,8 @@ void DogfightState::drawUfo()
 					x != 13;
 					++x)
 			{
-				color = static_cast<Uint8>(_ufoBlobs[_ufoSize + _ufo->getHitFrame()][y][x]);
+				color = static_cast<Uint8>(GeoscapeState::_ufoBlobs[_ufoSize + _ufo->getHitFrame()]
+																   [y][x]);
 				if (color != 0)
 				{
 					if (_ufo->isCrashed() == true

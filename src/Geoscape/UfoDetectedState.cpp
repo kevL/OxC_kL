@@ -28,7 +28,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
-#include "../Interface/NumberText.h"
+//#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -471,7 +471,7 @@ void UfoDetectedState::btnInterceptClick(Action*)
 	_state->timerReset();
 //	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
 
-	assessUfoPopups();
+	_state->assessUfoPopups();
 	_game->popState();
 	_game->pushState(new InterceptState(
 									_state->getGlobe(),
@@ -498,7 +498,7 @@ void UfoDetectedState::btnCentreClick(Action*)
 		return;
 	}
 
-	assessUfoPopups();
+	_state->assessUfoPopups();
 	_game->popState();
 }
 
@@ -510,7 +510,7 @@ void UfoDetectedState::btn5SecClick(Action*)
 {
 	_state->timerReset();
 
-	assessUfoPopups();
+	_state->assessUfoPopups();
 	_game->popState();
 }
 
@@ -520,24 +520,8 @@ void UfoDetectedState::btn5SecClick(Action*)
  */
 void UfoDetectedState::btnCancelClick(Action*)
 {
-	assessUfoPopups();
+	_state->assessUfoPopups();
 	_game->popState();
-}
-
-/**
- * Alters the shown quantity of UFOs remaining to pop their detected windows.
- */
-void UfoDetectedState::assessUfoPopups() // private.
-{
-	NumberText* const ufoField = _state->getUfoDetectedField();
-	unsigned qtyUfos = ufoField->getValue();
-	if (qtyUfos > 0)
-	{
-		ufoField->setValue(--qtyUfos);
-
-		if (qtyUfos == 0)
-			ufoField->setVisible(false);
-	}
 }
 
 /**

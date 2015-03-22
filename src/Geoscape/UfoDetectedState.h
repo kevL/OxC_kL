@@ -68,8 +68,6 @@ private:
 	Window* _window;
 	Ufo* _ufo;
 
-	/// Alters the shown quantity of UFOs remaining to pop their detected windows.
-	void assessUfoPopups();
 	/// Moves the window to reveal the globe.
 	void transposeWindow();
 

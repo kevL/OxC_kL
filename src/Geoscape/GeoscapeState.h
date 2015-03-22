@@ -43,7 +43,7 @@ class Globe;
 class ImageButton;
 class InteractiveSurface;
 class MissionSite;
-class NumberText;
+//class NumberText;
 class Ruleset;
 class SavedGame;
 class Sound;
@@ -65,7 +65,6 @@ class GeoscapeState
 
 private:
 	static const size_t INDICATORS = 16;
-	static const int _ufoBlobs[8][13][13];
 
 	bool
 		_dogfightEnded,
@@ -77,6 +76,7 @@ private:
 		_day,
 		_month,
 		_year;
+	int64_t _windowPops;
 	size_t _minimizedDogfights;
 	double
 		_dfLon,
@@ -105,7 +105,6 @@ private:
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	InteractiveSurface* _btnVisibleUfo[INDICATORS];
 //	NumberText* _numVisibleUfo[INDICATORS];
-	NumberText* _ufoDetected;
 	Ruleset* _rules;
 	SavedGame* _savedGame;
 	Surface
@@ -127,7 +126,8 @@ private:
 		* _txtHour,
 		* _txtHourSep,
 		* _txtMin,
-		* _txtSec;
+		* _txtSec,
+		* _ufoDetected;
 //		* _txtMinSep,
 //		* _txtDate;
 //		* _txtWeekday,
@@ -162,7 +162,7 @@ private:
 
 
 	public:
-//		static Sound* soundPop; // kL
+		static const int _ufoBlobs[8][13][13]; // used also by DogfightState
 
 		/// Creates the Geoscape state.
 		GeoscapeState();
@@ -290,8 +290,8 @@ private:
 				int& dX,
 				int& dY);
 
-		/// Gets the UFO detected textfield.
-		NumberText* getUfoDetectedField();
+		/// Examines the quantity of remaining UFO-detected popups.
+		void assessUfoPopups();
 };
 
 }

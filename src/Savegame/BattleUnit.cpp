@@ -1414,7 +1414,7 @@ int BattleUnit::damage(
 				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
 					|| (_unitRules->isMechanical() == false		// or to non-mechanical units
 						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
-//				if (_armor->getDamageModifier(DT_STUN) > 0.f)	// <- but that defeats the point. Gratz!
+//				if (_armor->getDamageModifier(DT_STUN) > 0.f)	// <- but that defeats the point
 				{
 					_stunLevel += RNG::generate(0, power / 3);
 				}
@@ -1469,15 +1469,9 @@ void BattleUnit::playHitSound()
 	else if (_originalFaction == FACTION_PLAYER) // getType() == "SOLDIER")
 	{
 		if (_gender == GENDER_MALE)
-		{
 			sound = RNG::generate(141, 151);
-			//Log(LOG_INFO) << "death Male, sound = " << sound;
-		}
 		else // if (getGender() == GENDER_FEMALE)
-		{
 			sound = RNG::generate(121, 135);
-			//Log(LOG_INFO) << "death Female, sound = " << sound;
-		}
 	}
 
 	if (sound != -1)
@@ -1563,15 +1557,9 @@ void BattleUnit::keepFalling()
 		--_fallPhase;
 
 		if (_health == 0)
-		{
-			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
 			_status = STATUS_DEAD;
-		}
 		else
-		{
-			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
 			_status = STATUS_UNCONSCIOUS;
-		}
 	}
 
 	_cacheInvalid = true;
@@ -1641,7 +1629,6 @@ bool BattleUnit::isOut(
 		bool checkHealth,
 		bool checkStun) const
 {
-	//Log(LOG_INFO) << "BattleUnit::isOut() ID = " << getId();
 	if (checkHealth == true
 		&& getHealth() == 0)
 	{
@@ -4149,10 +4136,10 @@ bool BattleUnit::isSelectable(
  */
 bool BattleUnit::hasInventory() const
 {
-	return _geoscapeSoldier != NULL
-		|| (_unitRules->isMechanical() == false
-			&& _rank != "STR_LIVE_TERRORIST");
-//	return _armor->hasInventory();
+	return _armor->hasInventory() == true
+		&& (_geoscapeSoldier != NULL // kL_>
+			|| (_unitRules->isMechanical() == false
+				&& _rank != "STR_LIVE_TERRORIST"));
 }
 
 /**
