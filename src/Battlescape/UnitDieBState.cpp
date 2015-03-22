@@ -296,14 +296,13 @@ void UnitDieBState::convertToCorpse() // private.
 
 	const Position pos = _unit->getPosition();
 
-	const int unitSize = _unit->getArmor()->getSize() - 1;
-	BattleItem* itemToKeep = NULL;
-
 	// remove the unconscious body item corresponding to this unit,
 	// and if it was being carried, keep track of what slot it was in
 	const bool carried = (pos == Position(-1,-1,-1));
 	if (carried == false)
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
+
+	const int unitSize = _unit->getArmor()->getSize() - 1;
 
 	// move inventory from unit to the ground for non-large units
 	const bool drop = unitSize == 0
@@ -313,6 +312,8 @@ void UnitDieBState::convertToCorpse() // private.
 						|| _unit->getStatus() == STATUS_UNCONSCIOUS);
 	if (drop == true)
 	{
+		std::vector<BattleItem*> itemsToKeep;
+
 		for (std::vector<BattleItem*>::const_iterator
 				i = _unit->getInventory()->begin();
 				i != _unit->getInventory()->end();
@@ -325,14 +326,19 @@ void UnitDieBState::convertToCorpse() // private.
 			if ((*i)->getRules()->isFixed() == false)
 				(*i)->setOwner(NULL);
 			else
-				itemToKeep = *i; // what if there's more than one fixed item ...
+				itemsToKeep.push_back(*i);
+		}
+
+		_unit->getInventory()->clear();
+
+		for (std::vector<BattleItem*>::const_iterator
+				i = itemsToKeep.begin();
+				i != itemsToKeep.end();
+				++i)
+		{
+			_unit->getInventory()->push_back(*i);
 		}
 	}
-
-	_unit->getInventory()->clear();
-
-	if (itemToKeep != NULL)
-		_unit->getInventory()->push_back(itemToKeep);
 
 	_unit->setTile(NULL); // remove unit-tile link
 

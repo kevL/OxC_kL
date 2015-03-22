@@ -71,7 +71,7 @@ SoldiersState::SoldiersState(Base* base)
 	:
 		_base(base)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 17, 10, 11);
 	_txtBaseLabel	= new Text(80, 9, 16, 11);
 	_txtSoldiers	= new Text(20, 9, 284, 11);
@@ -92,19 +92,19 @@ SoldiersState::SoldiersState(Base* base)
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
 
-	add(_window, "window", "soldierList");
-	add(_txtTitle, "text1", "soldierList");
-	add(_txtBaseLabel, "text2", "soldierList");
-	add(_txtSoldiers, "text2", "soldierList");
-	add(_txtName, "text2", "soldierList");
-	add(_txtRank, "text2", "soldierList");
-	add(_txtCraft, "text2", "soldierList");
-	add(_lstSoldiers, "list", "soldierList");
-	add(_btnMemorial, "button", "soldierList");
-	add(_btnPsi, "button", "soldierList");
-	add(_btnArmor, "button", "soldierList");
-	add(_btnEquip, "button", "soldierList");
-	add(_btnOk, "button", "soldierList");
+	add(_window,		"window",	"soldierList");
+	add(_txtTitle,		"text1",	"soldierList");
+	add(_txtBaseLabel,	"text2",	"soldierList");
+	add(_txtSoldiers,	"text2",	"soldierList");
+	add(_txtName,		"text2",	"soldierList");
+	add(_txtRank,		"text2",	"soldierList");
+	add(_txtCraft,		"text2",	"soldierList");
+	add(_lstSoldiers,	"list",		"soldierList");
+	add(_btnMemorial,	"button",	"soldierList");
+	add(_btnPsi,		"button",	"soldierList");
+	add(_btnArmor,		"button",	"soldierList");
+	add(_btnEquip,		"button",	"soldierList");
+	add(_btnOk,			"button",	"soldierList");
 
 	centerAllSurfaces();
 

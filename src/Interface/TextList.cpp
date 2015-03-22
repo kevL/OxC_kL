@@ -362,31 +362,33 @@ void TextList::addRow(
 		int cols,
 		...)
 {
-	va_list args;
+//	if (cols < 1) return; // note: no one's that stupid.
+
+	va_list args; // typedef char*
 	va_start(args, cols);
 
-	std::vector<Text*> temp;
+	std::vector<Text*> txtRow;
 	int
-		rowX = 0,
-		rows = 1;
+		rowOffset_x = 0,
+		qtyRows = 1;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < cols;
+			i != static_cast<size_t>(cols);
 			++i)
 	{
 		Text* const txt = new Text( // Place text
-							_columns[i],
-							_font->getHeight(),
-							_margin + rowX,
-							getY());
+								_columns[i],
+								_font->getHeight(),
+								_margin + rowOffset_x,
+								getY());
 
 		txt->setPalette(this->getPalette());
 		txt->initText(_big, _small, _lang);
 		txt->setColor(_color);
 		txt->setSecondaryColor(_color2);
 
-		if (_align[i])
+		if (_align[i] != ALIGN_LEFT)
 			txt->setAlign(_align[i]);
 
 		txt->setHighContrast(_contrast);
@@ -403,11 +405,11 @@ void TextList::addRow(
 		{
 			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
 			txt->setWordWrap(true, true);
-			rows = 2;
+			qtyRows = 2;
 		}
 
-		if (_dot // Places dots between text
-			&& i < cols - 1)
+		if (_dot == true // Places dots between text
+			&& i < static_cast<size_t>(cols) - 1)
 		{
 			std::wstring buf = txt->getText();
 
@@ -421,22 +423,23 @@ void TextList::addRow(
 			txt->setText(buf);
 		}
 
-		temp.push_back(txt);
+		txtRow.push_back(txt);
 
 		if (_condensed == true)
-			rowX += txt->getTextWidth();
+			rowOffset_x += txt->getTextWidth();
 		else
-			rowX += _columns[i];
+			rowOffset_x += static_cast<int>(_columns[i]);
 	}
 
-	_texts.push_back(temp);
+	_texts.push_back(txtRow);
 	for (int
 			i = 0;
-			i < rows;
+			i != qtyRows;
 			++i)
 	{
 		_rows.push_back(_texts.size() - 1);
 	}
+
 
 	if (_arrowPos != -1) // Place arrow buttons
 	{
@@ -457,8 +460,7 @@ void TextList::addRow(
 
 		ArrowButton* const a1 = new ArrowButton(
 											shape1,
-											11,
-											8,
+											11,8,
 											getX() + _arrowPos,
 											getY());
 		a1->setListButton();
@@ -471,8 +473,7 @@ void TextList::addRow(
 
 		ArrowButton* const a2 = new ArrowButton(
 											shape2,
-											11,
-											8,
+											11,8,
 											getX() + _arrowPos + 12,
 											getY());
 		a2->setListButton();
@@ -506,7 +507,7 @@ void TextList::setColumns(
 
 	for (int
 			i = 0;
-			i < cols;
+			i != cols;
 			++i)
 	{
 		_columns.push_back(va_arg(args, int));

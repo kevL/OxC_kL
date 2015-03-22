@@ -2062,9 +2062,9 @@ int Base::getDetectionChance(int diff) const
  * Gets the number of gravShields at this base.
  * @return, total gravShields
  */
-int Base::getGravShields() const
+size_t Base::getGravShields() const
 {
-	int total = 0;
+	size_t total = 0;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();

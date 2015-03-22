@@ -262,7 +262,7 @@ private:
 		int getDetectionChance(int diff) const;
 
 		/// Gets how many Grav Shields the base has.
-		int getGravShields() const;
+		size_t getGravShields() const;
 		/// Sets up base defenses.
 		void setupDefenses();
 		/// Gets a list of Defensive Facilities

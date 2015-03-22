@@ -1178,16 +1178,39 @@ void DebriefingState::prepareDebriefing()
 					{
 						base->getItems()->addItem(type);
 
-						const RuleItem* const tankRule = _rules->getItem(type);
-						const BattleItem* const ammoItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+						const RuleItem* itRule;
+						const BattleItem* amItem;
 
-						if (tankRule->getCompatibleAmmo()->empty() == false
-							&& ammoItem != NULL
-							&& ammoItem->getAmmoQuantity() > 0)
+						if ((*i)->getItem("STR_RIGHT_HAND") != NULL)
 						{
-							base->getItems()->addItem(
-													tankRule->getCompatibleAmmo()->front(),
-													ammoItem->getAmmoQuantity());
+							itRule = _rules->getItem(type); // (*i)->getItem("STR_RIGHT_HAND")->getRules(), as below_
+							if (itRule->getCompatibleAmmo()->empty() == false)
+							{
+								amItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+								if (amItem != NULL
+									&& amItem->getAmmoQuantity() > 0)
+								{
+									base->getItems()->addItem(
+															itRule->getCompatibleAmmo()->front(),
+															amItem->getAmmoQuantity());
+								}
+							}
+						}
+
+						if ((*i)->getItem("STR_LEFT_HAND") != NULL)
+						{
+							itRule = (*i)->getItem("STR_LEFT_HAND")->getRules();
+							if (itRule->getCompatibleAmmo()->empty() == false)
+							{
+								amItem = (*i)->getItem("STR_LEFT_HAND")->getAmmoItem();
+								if (amItem != NULL
+									&& amItem->getAmmoQuantity() > 0)
+								{
+									base->getItems()->addItem(
+															itRule->getCompatibleAmmo()->front(),
+															amItem->getAmmoQuantity());
+								}
+							}
 						}
 					}
 				}

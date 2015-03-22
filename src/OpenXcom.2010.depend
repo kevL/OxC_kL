@@ -4389,7 +4389,7 @@
 
 1425961046 f:\git\openxcom\src\resource\resourcepack.h
 
-1426360729 f:\git\openxcom\src\savegame\base.h
+1426969223 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1424390935 f:\git\openxcom\src\savegame\target.h
@@ -5810,7 +5810,7 @@
 1424390944 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1426914551 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1426918025 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -5867,7 +5867,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1426904891 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1426980907 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6346,7 +6346,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1425866734 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1426981923 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6853,7 +6853,7 @@
 1424390939 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1426917662 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1426983049 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	"BaseDestroyedState.h"
 	"GeoscapeState.h"
@@ -6875,7 +6875,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1426915531 f:\git\openxcom\src\geoscape\basedefensestate.h
+1426977490 f:\git\openxcom\src\geoscape\basedefensestate.h
 	"../Engine/State.h"
 
 1426912627 f:\git\openxcom\src\geoscape\basedestroyedstate.h
@@ -7683,7 +7683,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1426704680 source:f:\git\openxcom\src\interface\textlist.cpp
+1426975276 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -8651,7 +8651,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1426907467 source:f:\git\openxcom\src\savegame\base.cpp
+1426969243 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"

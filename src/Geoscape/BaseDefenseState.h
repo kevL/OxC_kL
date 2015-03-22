@@ -55,6 +55,11 @@ class BaseDefenseState
 {
 
 private:
+	static const Uint32
+		TI_SLOW		= 973, // Time Intervals
+		TI_MEDIUM	= 269,
+		TI_FAST		= 76;
+
 	int
 		_thinkCycles;
 	size_t
@@ -64,15 +69,21 @@ private:
 		_gravShields,
 		_passes,
 		_row,
-		_stLen;
+		_stLen_destroyed,
+		_stLen_initiate,
+		_stLen_repulsed;
 
-	std::wstring _initiate;
+	std::wstring
+		_destroyed,
+		_initiate,
+		_repulsed;
 
 	BaseDefenseActionType _action;
 
 	Base* _base;
 	GeoscapeState* _state;
 	Text
+		* _txtDestroyed,
 		* _txtInit,
 		* _txtTitle;
 	TextButton* _btnOk;

@@ -54,6 +54,7 @@
 namespace OpenXcom
 {
 
+
 /**
  * Initializes all the elements in the Base Defense screen.
  * @param base	- pointer to a Base being attacked
@@ -74,12 +75,16 @@ BaseDefenseState::BaseDefenseState(
 		_attacks(0),
 		_thinkCycles(0),
 		_explosionCount(0),
-		_stLen(0)
+		_stLen_destroyed(0),
+		_stLen_initiate(0),
+		_stLen_repulsed(0)
 {
 	_window			= new Window(this, 320, 200);
-	_txtTitle		= new Text(320, 17, 16, 10);
+
+	_txtTitle		= new Text(288, 17, 16, 10);
 	_txtInit		= new Text(320, 9, 0, 30);
-	_lstDefenses	= new TextList(285, 129, 24, 43);
+	_lstDefenses	= new TextList(277, 121, 24, 43);
+	_txtDestroyed	= new Text(320, 9, 0, 167);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette(
@@ -90,6 +95,7 @@ BaseDefenseState::BaseDefenseState(
 	add(_txtTitle,		"text",		"baseDefense");
 	add(_txtInit,		"text",		"baseDefense");
 	add(_lstDefenses,	"text",		"baseDefense");
+	add(_txtDestroyed,	"text",		"baseDefense");
 	add(_btnOk,			"button",	"baseDefense");
 
 	centerAllSurfaces();
@@ -112,18 +118,21 @@ BaseDefenseState::BaseDefenseState(
 
 	_txtInit->setAlign(ALIGN_CENTER);
 
-	_lstDefenses->setColumns(3, 130, 80, 75);
+	_lstDefenses->setColumns(3, 130, 80, 67);
 
+	_txtDestroyed->setAlign(ALIGN_CENTER);
 
-	_gravShields = _base->getGravShields();
-	_defenses = _base->getDefenses()->size();
-
-
-	_timer = new Timer(73);
+	_timer = new Timer(TI_FAST);
 	_timer->onTimer((StateHandler)& BaseDefenseState::nextStep);
 	_timer->start();
 
+
+	_destroyed = tr("STR_UFO_DESTROYED");
 	_initiate = tr("STR_BASE_DEFENSES_INITIATED");
+	_repulsed = tr("STR_GRAV_SHIELD_REPELS_UFO");
+
+	_gravShields = _base->getGravShields();
+	_defenses = _base->getDefenses()->size();
 }
 
 /**
@@ -135,7 +144,7 @@ BaseDefenseState::~BaseDefenseState()
 }
 
 /**
- * Advance the state of the State.
+ * Advances the state of the State.
  */
 void BaseDefenseState::think()
 {
@@ -143,18 +152,20 @@ void BaseDefenseState::think()
 }
 
 /**
- * Advance the state of the State by doing this.
+ * Advances the state of the State by doing this.
  */
 void BaseDefenseState::nextStep()
 {
-	if (_stLen <= _initiate.size())
-	{
-		_txtInit->setText(_initiate.substr(0,_stLen++));
-		return;
-	}
-
 	if (_thinkCycles != -1)
 	{
+		if (_stLen_initiate <= _initiate.size())
+		{
+			_txtInit->setText(_initiate.substr(
+											0,
+											_stLen_initiate++));
+			return;
+		}
+
 		++_thinkCycles;
 
 		if (_thinkCycles > 3)
@@ -164,15 +175,34 @@ void BaseDefenseState::nextStep()
 				case BD_DESTROY:
 					if (_explosionCount == 0)
 					{
-						_lstDefenses->addRow(
-										3,
-										tr("STR_UFO_DESTROYED").c_str(),
-										L" ",
-										L" ");
+						if (_stLen_destroyed == 0)
+						{
+							_lstDefenses->addRow(
+											3,
+											L" ",L" ",L" ");
+							++_row;
 
-						++_row;
-						if (_row > 15)
+							_timer->setInterval(TI_FAST);
+//							_lstDefenses->addRow(
+//											3,
+//											tr("STR_UFO_DESTROYED").c_str(),
+//											L" ",L" ");
+//							_row += 2;
+
+						}
+
+						if (_row > 14)
 							_lstDefenses->scrollDown(true);
+
+						if (_stLen_destroyed <= _destroyed.size())
+						{
+							_txtDestroyed->setText(_destroyed.substr(
+																0,
+																_stLen_destroyed++));
+							return;
+						}
+
+						_timer->setInterval(TI_MEDIUM);
 					}
 
 					_game->getResourcePack()->playSoundFX(
@@ -198,19 +228,47 @@ void BaseDefenseState::nextStep()
 				}
 				else if (_passes < _gravShields)
 				{
-					_lstDefenses->addRow(
-									3,
-									tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
-									L" ",
-									L" ");
+					if (_stLen_repulsed == 0)
+					{
+						_lstDefenses->addRow(
+										3,
+										L" ",L" ",L" ");
+						_lstDefenses->addRow(
+										3,
+//										tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
+										L" ",L" ",L" ");
 
-					++_row;
-					if (_row > 15)
-						_lstDefenses->scrollDown(true);
+						_row += 2;
+						if (_row > 14)
+							_lstDefenses->scrollDown(true);
+
+						_timer->setInterval(TI_FAST);
+					}
+
+					if (_stLen_repulsed <= _repulsed.size())
+					{
+						_lstDefenses->setCellText(
+											_row - 1,
+											0,
+											_repulsed.substr(
+														0,
+														_stLen_repulsed++));
+
+						if (_stLen_repulsed > _repulsed.size())
+						{
+							_lstDefenses->addRow(
+											3,
+											L" ",L" ",L" ");
+							++_row;
+						}
+
+						return;
+					}
 
 					++_passes;
 					_attacks = 0;
 
+					_timer->setInterval(TI_MEDIUM);
 					return;
 				}
 			}
@@ -225,10 +283,9 @@ void BaseDefenseState::nextStep()
 					_lstDefenses->addRow(
 									3,
 									tr(defFac->getRules()->getType()).c_str(),
-									L" ",
-									L" ");
+									L" ",L" ");
 					++_row;
-					if (_row > 15)
+					if (_row > 14)
 						_lstDefenses->scrollDown(true);
 				return;
 
@@ -237,18 +294,14 @@ void BaseDefenseState::nextStep()
 											_row - 1,
 											1,
 											tr("STR_FIRING").c_str());
-//					_lstDefenses->setCellColor(
-//											_row - 1,
-//											1,
-//											160, // slate
-//											true);
+//					_lstDefenses->setCellColor(_row - 1, 1, 160, /* slate */ true);
 
 					_game->getResourcePack()->playSoundFX(
 													defFac->getRules()->getFireSound(),
 													true);
 
 					_action = BD_RESOLVE;
-					_timer->setInterval(1223);
+					_timer->setInterval(TI_SLOW);
 				return;
 
 				case BD_RESOLVE:
@@ -266,11 +319,7 @@ void BaseDefenseState::nextStep()
 											_row - 1,
 											2,
 											tr("STR_HIT").c_str());
-//						_lstDefenses->setCellColor(
-//												_row - 1,
-//												2,
-//												32, // green
-//												true);
+//						_lstDefenses->setCellColor(_row - 1, 2, 32, /* green */ true);
 					}
 					else
 					{
@@ -278,11 +327,7 @@ void BaseDefenseState::nextStep()
 											_row - 1,
 											2,
 											tr("STR_MISSED").c_str());
-//						_lstDefenses->setCellColor(
-//												_row - 1,
-//												2,
-//												144, // brown
-//												true);
+//						_lstDefenses->setCellColor(_row - 1, 2, 144, /* brown */ true);
 					}
 
 					if (_ufo->getStatus() == Ufo::DESTROYED)
@@ -291,7 +336,7 @@ void BaseDefenseState::nextStep()
 						_action = BD_NONE;
 
 					++_attacks;
-					_timer->setInterval(265);
+					_timer->setInterval(TI_MEDIUM);
 			} // end switch()
 		}
 	}
