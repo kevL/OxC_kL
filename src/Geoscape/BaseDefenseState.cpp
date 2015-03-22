@@ -183,12 +183,6 @@ void BaseDefenseState::nextStep()
 							++_row;
 
 							_timer->setInterval(TI_FAST);
-//							_lstDefenses->addRow(
-//											3,
-//											tr("STR_UFO_DESTROYED").c_str(),
-//											L" ",L" ");
-//							_row += 2;
-
 						}
 
 						if (_row > 14)
@@ -235,8 +229,7 @@ void BaseDefenseState::nextStep()
 										L" ",L" ",L" ");
 						_lstDefenses->addRow(
 										3,
-//										tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
-										L" ",L" ",L" ");
+										L" ",L" ",L" "); // <- gravShield repels UFO
 
 						_row += 2;
 						if (_row > 14)

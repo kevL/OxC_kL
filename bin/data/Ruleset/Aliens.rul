@@ -2157,6 +2157,7 @@ armors:
     loftempsSet: [2]
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
+    allowInv: false
     corpseBattle:
       - CYBERDISC_CORPSE_1
       - CYBERDISC_CORPSE_2
@@ -2185,6 +2186,7 @@ armors:
     loftempsSet: [92, 89, 90, 91]
   - type: REAPER_ARMOR
     spriteSheet: X_REAP.PCK
+    allowInv: false
     corpseBattle:
       - REAPER_CORPSE_1
       - REAPER_CORPSE_2
@@ -2211,6 +2213,7 @@ armors:
     loftempsSet: [92, 89, 90, 91]
   - type: SECTOPOD_ARMOR
     spriteSheet: X_ROB.PCK
+    allowInv: false
     corpseBattle:
       - SECTOPOD_CORPSE_1
       - SECTOPOD_CORPSE_2
@@ -2471,6 +2474,7 @@ armors:
     loftempsSet: [3]
   - type: CHRYSSALID_ARMOR
     spriteSheet: CHRYS.PCK
+    allowInv: false
     corpseBattle:
       - STR_CHRYSSALID_CORPSE
     frontArmor: 41
@@ -2492,6 +2496,7 @@ armors:
     loftempsSet: [3]
   - type: ZOMBIE_ARMOR
     spriteSheet: ZOMBIE.PCK
+    allowInv: false
     corpseBattle:
       - STR_ZOMBIE_CORPSE
     corpseGeo: STR_ZOMBIE_CORPSE #kL_add. For explosions.
@@ -2515,6 +2520,7 @@ armors:
     loftempsSet: [3]
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
+    allowInv: false
     corpseBattle:
       - STR_SILACOID_CORPSE
     frontArmor: 57
@@ -2537,6 +2543,7 @@ armors:
     loftempsSet: [5]
   - type: CELATID_ARMOR
     spriteSheet: CELATID.PCK
+    allowInv: false
     corpseBattle:
       - STR_CELATID_CORPSE
     frontArmor: 24

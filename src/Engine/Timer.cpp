@@ -142,7 +142,6 @@ void Timer::think(
 		Surface* surface)
 {
 	// must be signed to permit negative numbers
-//	Sint64 current = slowTick();
 	Sint64 current = static_cast<Sint64>(slowTick());
 
 	// this is used to make sure we stop calling *_state on *state

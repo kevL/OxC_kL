@@ -78,6 +78,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/ImageButton.h"
+#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -437,7 +438,6 @@ GeoscapeState::GeoscapeState()
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
-
 	const int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 - 12;
 	_sideTop	= new TextButton(
 							64,
@@ -449,6 +449,8 @@ GeoscapeState::GeoscapeState()
 							height,
 							screenWidth - 64,
 							(screenHeight / 2) + (Screen::ORIGINAL_HEIGHT / 2) + 12);
+
+	_ufoDetected = new NumberText(9, 9, _sideBottom->getX() + 5, _sideBottom->getY() + 5);
 
 	std::fill_n(
 			_visibleUfo,
@@ -578,6 +580,7 @@ GeoscapeState::GeoscapeState()
 
 	add(_sideTop,		"button", "geoscape");
 	add(_sideBottom,	"button", "geoscape");
+	add(_ufoDetected);
 
 /*	for (size_t
 			i = 0;
@@ -911,6 +914,9 @@ GeoscapeState::GeoscapeState()
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
+
+	_ufoDetected->setColor(5); // white.
+	_ufoDetected->setVisible(false);
 
 /*	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease);
@@ -2155,7 +2161,7 @@ void GeoscapeState::time10Minutes()
 	}
 
 
-	size_t windowPops = 0;
+	unsigned windowPops = 0;
 
 	for (std::vector<Ufo*>::const_iterator // handle UFO detection
 			u = _savedGame->getUfos()->begin();
@@ -2222,8 +2228,7 @@ void GeoscapeState::time10Minutes()
 											true,
 											hyperDet,
 											contact,
-											&hyperBases,
-											windowPops > 1));
+											&hyperBases));
 				}
 			}
 			else // ufo is already detected
@@ -2281,8 +2286,7 @@ void GeoscapeState::time10Minutes()
 											false,
 											hyperDet,
 											contact,
-											&hyperBases,
-											windowPops > 1));
+											&hyperBases));
 				}
 
 				if (contact == false
@@ -2293,6 +2297,13 @@ void GeoscapeState::time10Minutes()
 				}
 			}
 		}
+	}
+
+
+	if (windowPops > 0)
+	{
+		_ufoDetected->setValue(windowPops);
+		_ufoDetected->setVisible();
 	}
 }
 
@@ -4177,5 +4188,14 @@ void GeoscapeState::resize(
 	_sideBarBlack->setHeight(Options::baseYResolution);
 	_sideBarBlack->setY(0);
 	_sideBarBlack->drawRect(0,0, _sideBarBlack->getWidth(), _sideBarBlack->getHeight(), 15); */
+
+/**
+ * Gets the UFO detected textfield.
+ * @return, reference to the UFO detected NumberText
+ */
+NumberText* GeoscapeState::getUfoDetectedField()
+{
+	return _ufoDetected;
+}
 
 }

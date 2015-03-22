@@ -250,7 +250,7 @@
 	"State.h"
 	"Surface.h"
 
-1426012830 f:\git\openxcom\src\engine\surface.h
+1426990749 f:\git\openxcom\src\engine\surface.h
 
 1325796034 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -269,7 +269,7 @@
 
 1424390942 f:\git\openxcom\src\engine\action.h
 
-1426753025 f:\git\openxcom\src\engine\game.h
+1427010402 f:\git\openxcom\src\engine\game.h
 
 1425570903 f:\git\openxcom\src\engine\language.h
 	"LocalizedText.h"
@@ -4489,7 +4489,7 @@
 1424390940 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1426891166 f:\git\openxcom\src\geoscape\geoscapestate.h
+1427000182 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1426210349 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4553,7 +4553,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1426752107 f:\git\openxcom\src\interface\window.h
+1427010467 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1426444882 f:\git\openxcom\src\ruleset\ruleset.h
@@ -4590,7 +4590,7 @@
 1424836359 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
-1426141393 f:\git\openxcom\src\ruleset\armor.h
+1426998610 f:\git\openxcom\src\ruleset\armor.h
 	"MapData.h"
 	"Unit.h"
 
@@ -5250,7 +5250,7 @@
 1424390935 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1425152596 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1426984935 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -6564,7 +6564,7 @@
 	"Language.h"
 	"Surface.h"
 
-1426753230 source:f:\git\openxcom\src\engine\game.cpp
+1427008594 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6758,7 +6758,7 @@
 1424390939 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1426656014 source:f:\git\openxcom\src\engine\surface.cpp
+1427001352 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -6768,7 +6768,7 @@
 	"SurfaceSet.h"
 	"Surface.h"
 
-1424390941 source:f:\git\openxcom\src\engine\timer.cpp
+1427002388 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	"Game.h"
 	"Options.h"
@@ -6853,7 +6853,7 @@
 1424390939 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1426983049 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1426988699 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	"BaseDestroyedState.h"
 	"GeoscapeState.h"
@@ -6875,7 +6875,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1426977490 f:\git\openxcom\src\geoscape\basedefensestate.h
+1426997041 f:\git\openxcom\src\geoscape\basedefensestate.h
 	"../Engine/State.h"
 
 1426912627 f:\git\openxcom\src\geoscape\basedestroyedstate.h
@@ -7152,7 +7152,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1426904818 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1427011288 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7195,6 +7195,7 @@
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
 	"../Interface/ImageButton.h"
+	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Menu/ErrorMessageState.h"
@@ -7273,7 +7274,7 @@
 1424390939 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1426751473 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1427013953 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1424390939 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7582,13 +7583,14 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1426831150 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1427014291 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
 	"InterceptState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -7700,7 +7702,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1426752458 source:f:\git\openxcom\src\interface\window.cpp
+1427010488 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -8466,7 +8468,7 @@
 1424390937 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1426141678 source:f:\git\openxcom\src\ruleset\armor.cpp
+1426998598 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 	"../Savegame/Soldier.h"
 
@@ -8688,7 +8690,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1426272545 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1426999358 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

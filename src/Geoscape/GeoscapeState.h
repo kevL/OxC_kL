@@ -43,7 +43,7 @@ class Globe;
 class ImageButton;
 class InteractiveSurface;
 class MissionSite;
-//class NumberText;
+class NumberText;
 class Ruleset;
 class SavedGame;
 class Sound;
@@ -105,6 +105,7 @@ private:
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	InteractiveSurface* _btnVisibleUfo[INDICATORS];
 //	NumberText* _numVisibleUfo[INDICATORS];
+	NumberText* _ufoDetected;
 	Ruleset* _rules;
 	SavedGame* _savedGame;
 	Surface
@@ -288,6 +289,9 @@ private:
 		void resize(
 				int& dX,
 				int& dY);
+
+		/// Gets the UFO detected textfield.
+		NumberText* getUfoDetectedField();
 };
 
 }

@@ -1411,9 +1411,10 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if (_geoscapeSoldier != NULL				// add some stun to xCom agents
-					|| (_unitRules->isMechanical() == false	// or to non-mechanical units
-						&& _race != "STR_ZOMBIE"))			// unless it's a freakin Zombie.
+				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
+					|| (_unitRules->isMechanical() == false		// or to non-mechanical units
+						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
+//				if (_armor->getDamageModifier(DT_STUN) > 0.f)	// <- but that defeats the point. Gratz!
 				{
 					_stunLevel += RNG::generate(0, power / 3);
 				}
@@ -4143,7 +4144,7 @@ bool BattleUnit::isSelectable(
 
 /**
  * Checks if this unit has an inventory.
- * Large units and/or terror units don't have inventories.
+ * Large units and/or terror units don't have inventories generally.
  * @return, true if an inventory is available
  */
 bool BattleUnit::hasInventory() const
@@ -4151,10 +4152,11 @@ bool BattleUnit::hasInventory() const
 	return _geoscapeSoldier != NULL
 		|| (_unitRules->isMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");
+//	return _armor->hasInventory();
 }
 
 /**
- * If this unit is breathing, what frame should be displayed?
+ * Gets the bubble-animation frame.
  * @return, frame number
  */
 int BattleUnit::getBreathFrame() const
@@ -4166,7 +4168,7 @@ int BattleUnit::getBreathFrame() const
 }
 
 /**
- * Decides if we should start producing bubbles, and/or updates which bubble frame we are on.
+ * Decides if bubbles should be produced and/or updates which bubble frame.
  */
 void BattleUnit::breathe()
 {

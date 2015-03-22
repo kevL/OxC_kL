@@ -45,7 +45,6 @@ Sound* Window::soundPopup[3] = {0, 0, 0};
  * @param x			- X position in pixels (default 0)
  * @param y			- Y position in pixels (default 0)
  * @param popup		- popup animation (default POPUP_NONE)
- * @param delay		- ticks to delay popup for (default 0)
  */
 Window::Window(
 		State* state,
@@ -53,8 +52,7 @@ Window::Window(
 		int height,
 		int x,
 		int y,
-		WindowPopup popup,
-		Uint32 delay)
+		WindowPopup popup)
 	:
 		Surface(
 			width,
@@ -62,7 +60,6 @@ Window::Window(
 			x,y),
 		_state(state),
 		_popup(popup),
-		_delay(delay),
 		_bg(NULL),
 		_dx(-x),
 		_dy(-y),
@@ -169,12 +166,6 @@ void Window::think()
  */
 void Window::popup()
 {
-	if (_delay != 0)
-	{
-		--_delay;
-		return;
-	}
-
 	if (AreSame(_popupStep, 0.) == true)
 		soundPopup[(SDL_GetTicks() %2) + 1]->play(Mix_GroupAvailable(0));
 

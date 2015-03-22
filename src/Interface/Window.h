@@ -69,7 +69,6 @@ private:
 	double _popupStep;
 
 	Uint8 _color;
-	Uint32 _delay;
 
 	State* _state;
 	Surface* _bg;
@@ -87,8 +86,7 @@ private:
 				int height,
 				int x = 0,
 				int y = 0,
-				WindowPopup popup = POPUP_NONE,
-				Uint32 delay = 0);
+				WindowPopup popup = POPUP_NONE);
 		/// Cleans up the window.
 		~Window();
 

@@ -41,6 +41,7 @@ class Language;
  */
 class Surface
 {
+
 protected:
 	bool
 		_hidden,

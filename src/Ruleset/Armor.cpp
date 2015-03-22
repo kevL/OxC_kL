@@ -44,6 +44,7 @@ Armor::Armor(const std::string& type)
 		_shootFrames(0),
 		_constantAnimation(false),
 		_canHoldWeapon(false),
+		_hasInventory(true),
 		_forcedTorso(TORSO_USE_GENDER),
 		_faceColorGroup(0),
 		_hairColorGroup(0),
@@ -86,22 +87,23 @@ Armor::~Armor()
  */
 void Armor::load(const YAML::Node& node)
 {
-	_type			= node["type"]						.as<std::string>(_type);
-	_spriteSheet	= node["spriteSheet"]				.as<std::string>(_spriteSheet);
-	_spriteInv		= node["spriteInv"]					.as<std::string>(_spriteInv);
+	_type			= node["type"]			.as<std::string>(_type);
+	_spriteSheet	= node["spriteSheet"]	.as<std::string>(_spriteSheet);
+	_spriteInv		= node["spriteInv"]		.as<std::string>(_spriteInv);
+	_hasInventory	= node["allowInv"]		.as<bool>(_hasInventory);
 
 	if (node["corpseItem"])
 	{
 		_corpseBattle.clear();
-		_corpseBattle.push_back(node["corpseItem"]		.as<std::string>());
+		_corpseBattle.push_back(node["corpseItem"].as<std::string>());
 		_corpseGeo		= _corpseBattle[0];
 	}
 	else if (node["corpseBattle"])
 	{
-		_corpseBattle	= node["corpseBattle"]			.as<std::vector<std::string> >();
+		_corpseBattle	= node["corpseBattle"]	.as<std::vector<std::string> >();
 		_corpseGeo		= _corpseBattle[0];
 	}
-	_corpseGeo		= node["corpseGeo"]					.as<std::string>(_corpseGeo);
+	_corpseGeo		= node["corpseGeo"]			.as<std::string>(_corpseGeo);
 
 	_storeItem		= node["storeItem"]					.as<std::string>(_storeItem);
 //	_specWeapon		= node["specialWeapon"]				.as<std::string>(_specWeapon);
@@ -126,19 +128,19 @@ void Armor::load(const YAML::Node& node)
 					&& i < static_cast<size_t>(DAMAGE_TYPES);
 				++i)
 		{
-			_damageModifier[i] = dmg[i]					.as<float>();
+			_damageModifier[i] = dmg[i].as<float>();
 		}
 	}
 
-	_loftempsSet = node["loftempsSet"]					.as<std::vector<int> >(_loftempsSet);
+	_loftempsSet = node["loftempsSet"]				.as<std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
-		_loftempsSet.push_back(node["loftemps"]			.as<int>());
+		_loftempsSet.push_back(node["loftemps"]		.as<int>());
 
-	_deathFrames = node["deathFrames"]					.as<int>(_deathFrames);
-	_shootFrames = node["shootFrames"]					.as<int>(_shootFrames);
-	_constantAnimation = node["constantAnimation"]		.as<bool>(_constantAnimation);
+	_deathFrames = node["deathFrames"]				.as<int>(_deathFrames);
+	_shootFrames = node["shootFrames"]				.as<int>(_shootFrames);
+	_constantAnimation = node["constantAnimation"]	.as<bool>(_constantAnimation);
 
-	_forcedTorso = (ForcedTorso)node["forcedTorso"]		.as<int>(_forcedTorso);
+	_forcedTorso = (ForcedTorso)node["forcedTorso"]	.as<int>(_forcedTorso);
 
 	if (   _drawingRoutine == 0
 		|| _drawingRoutine == 1
@@ -430,10 +432,19 @@ const std::vector<int>& Armor::getHairColor() const
 }
 
 /**
+ * Checks if this Armor's inventory be accessed.
+ * @return, true if inventory can be opened by player
+ */
+const bool Armor::hasInventory() const
+{
+	return _hasInventory;
+}
+
+/**
  * Gets if this Armor is basic (lowest rank, standard issue wear).
  * @return, true if basic
  */
-bool Armor::isBasic() const
+const bool Armor::isBasic() const
 {
 	return _isBasic;
 }
@@ -442,7 +453,7 @@ bool Armor::isBasic() const
  * Gets if this Armor is powered and suitable for Mars.
  * @return, true if life-supporting
  */
-bool Armor::isSpacesuit() const
+const bool Armor::isSpacesuit() const
 {
 	return _isSpacesuit;
 }

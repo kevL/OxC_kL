@@ -63,6 +63,7 @@ private:
 	bool
 		_canHoldWeapon,
 		_constantAnimation,
+		_hasInventory,
 		_isBasic,
 		_isSpacesuit;
 	int
@@ -177,10 +178,13 @@ private:
 		/// Gets hair base color.
 		const std::vector<int>& getHairColor() const;
 
+		/// Checks if this Armor's inventory be accessed.
+		const bool hasInventory() const;
+
 		/// Gets if this Armor is basic (lowest rank, standard issue wear).
-		bool isBasic() const;
+		const bool isBasic() const;
 		/// Gets if this Armor is powered and suitable for Mars.
-		bool isSpacesuit() const;
+		const bool isSpacesuit() const;
 };
 
 }

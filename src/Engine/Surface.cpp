@@ -179,10 +179,10 @@ Surface::Surface(
 				SDL_SRCCOLORKEY,
 				0);
 
-	_crop.w =
-	_crop.h = 0;
 	_crop.x =
 	_crop.y = 0;
+	_crop.w =
+	_crop.h = 0;
 
 	_clear.x =
 	_clear.y = 0;
@@ -245,15 +245,15 @@ Surface::Surface(const Surface& other)
 	_x = other._x;
 	_y = other._y;
 
-	_crop.w = other._crop.w;
-	_crop.h = other._crop.h;
 	_crop.x = other._crop.x;
 	_crop.y = other._crop.y;
+	_crop.w = other._crop.w;
+	_crop.h = other._crop.h;
 
-	_clear.w = other._clear.w;
-	_clear.h = other._clear.h;
 	_clear.x = other._clear.x;
 	_clear.y = other._clear.y;
+	_clear.w = other._clear.w;
+	_clear.h = other._clear.h;
 
 	_visible = other._visible;
 	_hidden = other._hidden;
@@ -369,7 +369,7 @@ void Surface::loadSpk(const std::string& filename)
 					i < flag * 2;
 					++i)
 			{
-				setPixelIterative(&x, &y, 0);
+				setPixelIterative(&x,&y, 0);
 			}
 		}
 		else if (flag == 65534)
@@ -387,7 +387,7 @@ void Surface::loadSpk(const std::string& filename)
 				imgFile.read(
 							(char*)& value,
 							1);
-				setPixelIterative(&x, &y, value);
+				setPixelIterative(&x,&y, value);
 			}
 		}
 	}
@@ -438,7 +438,7 @@ void Surface::loadBdy(const std::string& filename)
 					++i)
 			{
 				if (currentRow == y) // avoid overscan into next row
-					setPixelIterative(&x, &y, dataByte);
+					setPixelIterative(&x,&y, dataByte);
 			}
 		}
 		else
@@ -455,7 +455,7 @@ void Surface::loadBdy(const std::string& filename)
 						(char*)& dataByte,
 						sizeof(dataByte));
 				if (currentRow == y) // avoid overscan into next row
-					setPixelIterative(&x, &y, dataByte);
+					setPixelIterative(&x,&y, dataByte);
 			}
 		}
 	}
@@ -654,7 +654,7 @@ void Surface::copy(Surface* surface)
 		const Uint8 pixel = surface->getPixelColor(
 												from_x + x,
 												from_y + y);
-		setPixelIterative(&x, &y, pixel);
+		setPixelIterative(&x,&y, pixel);
 	}
 	unlock();
 }
@@ -671,7 +671,7 @@ void Surface::drawRect(
 	SDL_FillRect(
 			_surface,
 			rect,
-			color);
+			static_cast<Uint32>(color));
 }
 
 /**
@@ -691,10 +691,10 @@ void Surface::drawRect(
 {
 	SDL_Rect rect;
 
-	rect.w = w;
-	rect.h = h;
 	rect.x = x;
 	rect.y = y;
+	rect.w = static_cast<Uint16>(w);
+	rect.h = static_cast<Uint16>(h);
 
 	SDL_FillRect(
 			_surface,
@@ -719,10 +719,8 @@ void Surface::drawLine(
 {
 	lineColor(
 			_surface,
-			x1,
-			y1,
-			x2,
-			y2,
+			x1,y1,
+			x2,y2,
 			Palette::getRGBA(
 						getPalette(),
 						color));
@@ -743,12 +741,11 @@ void Surface::drawCircle(
 {
 	filledCircleColor(
 					_surface,
-					x,
-					y,
+					x,y,
 					r,
 					Palette::getRGBA(
 								getPalette(),
-								color));
+								static_cast<Uint32>(color)));
 }
 
 /**
@@ -766,8 +763,7 @@ void Surface::drawPolygon(
 {
 	filledPolygonColor(
 					_surface,
-					x,
-					y,
+					x,y,
 					n,
 					Palette::getRGBA(
 								getPalette(),
@@ -793,12 +789,10 @@ void Surface::drawTexturedPolygon(
 {
 	texturedPolygon(
 				_surface,
-				x,
-				y,
+				x,y,
 				n,
 				texture->getSurface(),
-				dx,
-				dy);
+				dx,dy);
 }
 
 /**
@@ -816,8 +810,7 @@ void Surface::drawString(
 {
 	stringColor(
 			_surface,
-			x,
-			y,
+			x,y,
 			s,
 			Palette::getRGBA(
 						getPalette(),
@@ -867,10 +860,10 @@ bool Surface::getVisible() const
  */
 void Surface::resetCrop()
 {
-	_crop.w =
-	_crop.h =
 	_crop.x =
 	_crop.y = 0;
+	_crop.w =
+	_crop.h = 0;
 }
 
 /**

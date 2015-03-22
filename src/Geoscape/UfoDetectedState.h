@@ -44,6 +44,10 @@ class UfoDetectedState
 {
 
 private:
+	bool
+		_delay,
+		_hyper;
+
 	GeoscapeState* _state;
 	Text
 		* _txtBases,
@@ -64,6 +68,11 @@ private:
 	Window* _window;
 	Ufo* _ufo;
 
+	/// Alters the shown quantity of UFOs remaining to pop their detected windows.
+	void assessUfoPopups();
+	/// Moves the window to reveal the globe.
+	void transposeWindow();
+
 
 	public:
 
@@ -74,8 +83,7 @@ private:
 				bool detected,
 				bool hyper,
 				bool contact = true,
-				std::vector<Base*>* hyperBases = NULL,
-				bool delay = false);
+				std::vector<Base*>* hyperBases = NULL);
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 

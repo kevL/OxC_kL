@@ -83,6 +83,7 @@ Game::Game(const std::string& title)
 		_timeUntilNextFrame(0),
 		_debugCycle(-1),
 		_debugCycle_b(-1)
+//		_pauseTillClick(false)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -401,7 +402,9 @@ void Game::run()
 
 		if (runningState != PAUSED) // Process rendering
 		{
+//			if (_pauseTillClick == false) // <- kL
 			_states.back()->think(); // Process logic
+
 			_fpsCounter->think();
 
 			if (Options::FPS > 0
@@ -889,5 +892,14 @@ void Game::setDebugCycle(const int cycle)
 {
 	_debugCycle = cycle;
 }
+
+/**
+ * Sets the pause-till-click.
+ * @param pause - true to pause think until a click is handled (default true)
+ */
+/*void Game::setPauseTillClick(const bool pause)
+{
+	_pauseTillClick = pause;
+} */
 
 }
