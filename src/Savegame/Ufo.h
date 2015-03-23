@@ -140,6 +140,10 @@ private:
 		void setDetected(bool detected = true);
 		/// Gets the UFO's detection status.
 		bool getDetected() const;
+		/// Sets the UFO's hyper detection status.
+		void setHyperDetected(bool hyperdetected = true);
+		/// Gets the UFO's hyper detection status.
+		bool getHyperDetected() const;
 
 		/// Sets the UFO's seconds left on the ground.
 		void setSecondsLeft(int sec);
@@ -192,11 +196,6 @@ private:
 				const UfoTrajectory* trajectory);
 		/// Gets the UFO's Mission type.
 		const std::string& getMissionType() const;
-
-		/// Sets the UFO's hyper detection status.
-		void setHyperDetected(bool hyperdetected = true);
-		/// Gets the UFO's hyper detection status.
-		bool getHyperDetected() const;
 
 		/// Gets the UFO's progress on the trajectory track.
 		size_t getTrajectoryPoint() const

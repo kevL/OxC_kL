@@ -41,7 +41,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
 
@@ -133,6 +133,8 @@ BaseDefenseState::BaseDefenseState(
 
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
+
+	_game->getResourcePack()->fadeMusic(_game, 863);
 }
 
 /**
@@ -346,13 +348,16 @@ void BaseDefenseState::btnOkClick(Action*)
 
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		_base->setDefenseResult(_ufo->getDamagePercent());
+		_base->setDefenseResult(_ufo->getDamagePercent()); // need to handle if Defenses reduce UFO-crew to zilch but don't destroy the UFO.
 		_state->handleBaseDefense(
 								_base,
 								_ufo);
 	}
 	else
+	{
 		_base->cleanupDefenses(true);
+		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+	}
 }
 
 }

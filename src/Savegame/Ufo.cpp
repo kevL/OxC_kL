@@ -400,7 +400,7 @@ int Ufo::getDamagePercent() const
 
 /**
  * Changes whether this UFO has been detected by radars.
- * @param detected - true if detected
+ * @param detected - true if detected (default true)
  */
 void Ufo::setDetected(bool detected)
 {
@@ -414,6 +414,24 @@ void Ufo::setDetected(bool detected)
 bool Ufo::getDetected() const
 {
 	return _detected;
+}
+
+/**
+ * Changes whether this Ufo has been detected by hyper-wave.
+ * @param hyperdetected - true if hyperwave-detected (default true)
+ */
+void Ufo::setHyperDetected(bool hyperdetected)
+{
+	_hyperDetected = hyperdetected;
+}
+
+/**
+ * Returns whether this Ufo has been detected by hyper-wave.
+ * @return, true if hyperwave-detected
+ */
+bool Ufo::getHyperDetected() const
+{
+	return _hyperDetected;
 }
 
 /**
@@ -763,24 +781,6 @@ void Ufo::setMissionInfo(
 const std::string& Ufo::getMissionType() const
 {
 	return _mission->getRules().getType();
-}
-
-/**
- * Changes whether this Ufo has been detected by hyper-wave.
- * @param hyperdetected - true if hyperwave-detected
- */
-void Ufo::setHyperDetected(bool hyperdetected)
-{
-	_hyperDetected = hyperdetected;
-}
-
-/**
- * Returns whether this Ufo has been detected by hyper-wave.
- * @return, true if hyperwave-detected
- */
-bool Ufo::getHyperDetected() const
-{
-	return _hyperDetected;
 }
 
 /**

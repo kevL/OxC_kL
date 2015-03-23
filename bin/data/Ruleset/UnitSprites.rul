@@ -15,6 +15,12 @@ extraSprites:
     subY: 40
     files:
       0: Resources/Sprites/Units/floorob/floorob.png
+  - type: FLOOROB.PCK
+    width: 32
+    height: 40
+    singleImage: true
+    files:
+      90: Resources/Sprites/Units/floorob/floorob_90_stunbomb.png
 # ---- HandOb ---- #
   - type: HANDOB.PCK
     width: 512

@@ -914,7 +914,7 @@ GeoscapeState::GeoscapeState()
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
 
-	_ufoDetected->setColor(162); // slate+2, white=5.
+	_ufoDetected->setColor(163); // slate+, white=5.
 	_ufoDetected->setBig();
 	_ufoDetected->setVisible(false);
 
@@ -1299,8 +1299,7 @@ void GeoscapeState::drawUfoIndicators()
 	for (std::vector<Ufo*>::const_iterator
 			i = _savedGame->getUfos()->begin();
 			i != _savedGame->getUfos()->end();
-			++i,
-				++ind)
+			++i)
 	{
 		if ((*i)->getDetected() == true)
 		{
@@ -1351,6 +1350,8 @@ void GeoscapeState::drawUfoIndicators()
 					}
 				}
 			}
+
+			++ind;
 		}
 
 		if (ind == INDICATORS - 1)

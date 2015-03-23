@@ -1309,7 +1309,7 @@ items:
     costSell: 20830 # 208300
     weight: 4
     bigSprite: 38
-    floorSprite: 37
+    floorSprite: 90 # was 37
     hitSound: 12
     hitAnimation: 16
     power: 85

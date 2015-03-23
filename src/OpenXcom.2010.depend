@@ -4762,7 +4762,7 @@
 
 1425473205 f:\git\openxcom\src\engine\fastlineclip.h
 
-1426891050 f:\git\openxcom\src\savegame\ufo.h
+1427069440 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -6853,7 +6853,7 @@
 1424390939 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1426988699 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1427071121 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	"BaseDestroyedState.h"
 	"GeoscapeState.h"
@@ -6868,7 +6868,7 @@
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
+	"../Resource/XcomResourcePack.h"
 	"../Ruleset/RuleBaseFacility.h"
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
@@ -7582,7 +7582,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1427060301 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1427063454 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
