@@ -348,7 +348,9 @@ void BaseDefenseState::btnOkClick(Action*)
 
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		_base->setDefenseResult(_ufo->getDamagePercent()); // need to handle if Defenses reduce UFO-crew to zilch but don't destroy the UFO.
+		// need to handle if Defenses reduce UFO-crew to zilch but don't destroy the UFO.
+		// probably handled by GeoscapeState::handleBaseDefense()-> new BriefingState
+		_base->setDefenseResult(_ufo->getDamagePercent());
 		_state->handleBaseDefense(
 								_base,
 								_ufo);

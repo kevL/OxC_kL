@@ -47,9 +47,9 @@ AliensCrashState::AliensCrashState()
 
 	setPalette("PAL_BATTLESCAPE");
 
-	add(_window, "messageWindowBorder", "battlescape");
-	add(_txtTitle, "messageWindows", "battlescape");
-	add(_btnOk, "messageWindowButtons", "battlescape");
+	add(_window,	"messageWindowBorder",	"battlescape");
+	add(_txtTitle,	"messageWindows",		"battlescape");
+	add(_btnOk,		"messageWindowButtons",	"battlescape");
 
 	centerAllSurfaces();
 
@@ -73,7 +73,6 @@ AliensCrashState::AliensCrashState()
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
-
 
 //	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_DEBRIEFING);
 }

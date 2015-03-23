@@ -1082,9 +1082,11 @@ void Map::drawTerrain(Surface* surface) // private.
 											shade = 16;
 										}
 
-										if (unitNorth != unit) // NOT for large units
+										if (unitNorth != unit // NOT for large units
+											&& tileWest->getTerrainLevel() > -1) // don't draw if it overwrites foreground lower-stairs in that same tile.
 										{
 											srfSprite = tileWest->getSprite(MapData::O_WESTWALL);
+//											srfSprite = NULL;
 											if (srfSprite)
 											{
 												if (tileWest->isDiscovered(0) == true
@@ -1106,6 +1108,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										}
 
 										srfSprite = tileWest->getSprite(MapData::O_NORTHWALL);
+//										srfSprite = NULL;
 										if (srfSprite)
 										{
 											if (tileWest->isDiscovered(1) == true
