@@ -2842,17 +2842,6 @@ BattleUnit* BattlescapeGame::convertUnit(
 	unit->instaKill();
 	unit->setSpecialAbility(SPECAB_NONE);
 
-	if (Options::battleNotifyDeath == true
-		&& unit->getFaction() == FACTION_PLAYER
-		&& unit->getOriginalFaction() == FACTION_PLAYER)
-	{
-		Language* const lang = _parentState->getGame()->getLanguage();
-		_parentState->getGame()->pushState(new InfoboxState(lang->getString(
-																		"STR_HAS_BEEN_KILLED",
-																		unit->getGender())
-																	.arg(unit->getName(lang))));
-	}
-
 	for (std::vector<BattleItem*>::const_iterator
 			i = unit->getInventory()->begin();
 			i != unit->getInventory()->end();

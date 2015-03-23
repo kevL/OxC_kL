@@ -246,11 +246,6 @@ private:
 		/// Gets whether or not this Ufo has had Dogfight info processed.
 		bool getEngaged() const;
 
-		/// Sets the UFO's powerSource explosive-power-factor.
-		void setCrashPower(int percent);
-		/// Gets the UFO's powerSource explosive-power-factor.
-		int getCrashPower() const;
-
 		/// Sets a crashed or landed UFO's terrainType.
 		void setUfoTerrainType(const std::string& terrain);
 		/// Gets a crashed or landed UFO's terrainType.

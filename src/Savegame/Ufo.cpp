@@ -388,7 +388,7 @@ int Ufo::getDamage() const
 }
 
 /**
- * Returns the ratio between the amount of damage this uFo
+ * Returns the ratio between the amount of damage this UFO
  * has taken and the total it can take before it's destroyed.
  * @return, damage percent
  */
@@ -921,24 +921,6 @@ void Ufo::setEngaged(bool processed)
 bool Ufo::getEngaged() const
 {
 	return _processedIntercept;
-}
-
-/**
- * Sets this Ufo's powerSource explosive power factor.
- * @param percent - the power percent
- */
-void Ufo::setCrashPower(int percent)
-{
-	_crashPower = percent;
-}
-
-/**
- * Gets this Ufo's powerSource explosive power factor.
- * @return, the power percent
- */
-int Ufo::getCrashPower() const
-{
-	return _crashPower;
 }
 
 /**

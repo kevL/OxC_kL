@@ -929,10 +929,9 @@ void ProjectileFlyBState::think()
 																				_unit);
 //																				NULL);
 									}
-
-									++i;
 								}
 
+								++i;
 								delete proj;
 							}
 						}

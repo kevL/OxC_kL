@@ -75,11 +75,6 @@ YAML::Node Target::save() const
 {
 	YAML::Node node;
 
-//	node["lon"] = _lon;
-//	node["lat"] = _lat;
-//c++11
-//	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
-//	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
 	node["lon"] = serializeDouble(_lon);
 	node["lat"] = serializeDouble(_lat);
 
@@ -94,11 +89,6 @@ YAML::Node Target::saveId() const
 {
 	YAML::Node node;
 
-//	node["lon"] = _lon;
-//	node["lat"] = _lat;
-//c++11
-//	node["lon"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lon).str();
-//	node["lat"] = static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _lat).str();
 	node["lon"] = serializeDouble(_lon);
 	node["lat"] = serializeDouble(_lat);
 

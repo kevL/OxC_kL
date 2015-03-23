@@ -882,7 +882,7 @@ private:
 
 		/// Gets this unit's name.
 		std::wstring getName(
-				Language* lang,
+				const Language* const lang,
 				bool debugAppendId = false) const;
 
 		/// Gets this unit's stats.

@@ -712,11 +712,6 @@ void SavedGame::save(const std::string& filename) const
 	node["income"]				= _income;		// kL
 	node["expenditure"]			= _expenditure;	// kL
 	node["warned"]				= _warned;
-//	node["globeLon"]			= _globeLon;
-//	node["globeLat"]			= _globeLat;
-// c++11
-//	node["globeLon"]			= static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _globeLon).str();
-//	node["globeLat"]			= static_cast<std::ostringstream&>(std::ostringstream() << std::hexfloat << _globeLat).str();
 	node["globeLon"]			= serializeDouble(_globeLon);
 	node["globeLat"]			= serializeDouble(_globeLat);
 	node["globeZoom"]			= _globeZoom;

@@ -1373,13 +1373,11 @@ void DogfightState::updateDogfight()
 				}
 				else // Set up Crash site.
 				{
-					_ufo->setSecondsLeft(RNG::generate(24, 96) * 3600);
+					_ufo->setSecondsLeft(RNG::generate(24,96) * 3600);
 					_ufo->setAltitude("STR_GROUND");
 
 					if (_ufo->getCrashId() == 0)
 						_ufo->setCrashId(_savedGame->getId("STR_CRASH_SITE"));
-
-					_ufo->setCrashPower(_ufo->getDamagePercent()); // kL
 				}
 			}
 

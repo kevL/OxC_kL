@@ -815,7 +815,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 			//Log(LOG_INFO) << ". . . *i = _craft->getItems()->getContents()";
 			for (int
 					j = 0;
-					j < i->second;
+					j != i->second;
 					++j)
 			{
 				//Log(LOG_INFO) << ". . . j+";
@@ -852,7 +852,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 				{
 					for (int
 							j = 0;
-							j < i->second;
+							j != i->second;
 							++j)
 					{
 						_tileEquipt->addItem(
@@ -891,7 +891,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 			{
 				for (int
 						k = 0;
-						k < j->second;
+						k != j->second;
 						++k)
 				{
 					_tileEquipt->addItem(
@@ -2666,9 +2666,9 @@ void BattlescapeGenerator::fuelPowerSources() // private.
  */
 void BattlescapeGenerator::explodePowerSources() // private.
 {
-	for (int
+	for (size_t
 			i = 0;
-			i < _battleSave->getMapSizeXYZ();
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
@@ -2676,15 +2676,15 @@ void BattlescapeGenerator::explodePowerSources() // private.
 			&& RNG::percent(80) == true)
 		{
 			const Position pos = Position(
-									_battleSave->getTiles()[i]->getPosition().x * 16,
-									_battleSave->getTiles()[i]->getPosition().y * 16,
+									_battleSave->getTiles()[i]->getPosition().x * 16 + 8,
+									_battleSave->getTiles()[i]->getPosition().y * 16 + 8,
 									_battleSave->getTiles()[i]->getPosition().z * 24 + 12);
 
-			double power = static_cast<double>(_ufo->getCrashPower());	// range: ~50+ to ~100-
-			if (RNG::percent(static_cast<int>(power) / 2) == true)		// chance for full range Explosion (even if crash took low damage)
-				power = RNG::generate(1., 100.);
+			double power = static_cast<double>(_ufo->getDamagePercent());	// range: ~50+ to ~100-
+			if (RNG::percent(static_cast<int>(power) / 2) == true)			// chance for full range Explosion (even if crash took low damage)
+				power = RNG::generate(1.,100.);
 
-			power *= RNG::generate(0.1, 2.);
+			power *= RNG::generate(0.1,2.);
 			power += std::pow(power, 2) / 160.;
 
 			if (power > 0.5)

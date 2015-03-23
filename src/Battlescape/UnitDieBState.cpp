@@ -67,7 +67,7 @@ UnitDieBState::UnitDieBState(
 		_damageType(damageType),
 		_noSound(noSound),
 		_doneScream(false),
-		_extraTick(false)
+		_extraTicks(0)
 {
 	//Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
 	_unit->clearVisibleTiles();
@@ -193,8 +193,8 @@ void UnitDieBState::think()
 		}
 	}
 
-// #5
-	if (_extraTick == true)
+// #6
+	if (_extraTicks == 2)
 	{
 		_parent->getMap()->setUnitDying(false);
 
@@ -205,14 +205,16 @@ void UnitDieBState::think()
 		_parent->getSave()->getBattleState()->updateSoldierInfo(false);
 
 		if (_unit->getGeoscapeSoldier() != NULL
-			&& _unit->getOriginalFaction() == FACTION_PLAYER
-			&& _unit->getSpawnUnit().empty() == true)
+			&& _unit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			std::string message;
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_damageType == DT_NONE)
+				if (_damageType == DT_NONE
+					&& _unit->getSpawnUnit().empty() == true)
+				{
 					message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
+				}
 				else if (Options::battleNotifyDeath == true)
 					message = "STR_HAS_BEEN_KILLED";
 			}
@@ -222,10 +224,11 @@ void UnitDieBState::think()
 			if (message.empty() == false)
 			{
 				Game* const game = _parent->getSave()->getBattleState()->getGame();
-				game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																				message,
-																				_unit->getGender())
-																			.arg(_unit->getName(game->getLanguage()))));
+				const Language* const lang = game->getLanguage();
+				game->pushState(new InfoboxOKState(lang->getString(
+																message,
+																_unit->getGender())
+															.arg(_unit->getName(lang))));
 			}
 		}
 
@@ -250,11 +253,14 @@ void UnitDieBState::think()
 			}
 		}
 	}
+// #5
+	else if (_extraTicks == 1)
+		++_extraTicks;
 // #4
 	else if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-		_extraTick = true;
+		++_extraTicks;
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH

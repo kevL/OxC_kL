@@ -346,7 +346,7 @@ void BaseDefenseState::btnOkClick(Action*)
 	_timer->stop();
 	_game->popState();
 
-	if (_ufo->getStatus() != Ufo::DESTROYED)
+	if (_ufo->getStatus() != Ufo::DESTROYED) // TODO: if Status_Crashed, set up Battleship crash site near the xCom Base.
 	{
 		// need to handle if Defenses reduce UFO-crew to zilch but don't destroy the UFO.
 		// probably handled by GeoscapeState::handleBaseDefense()-> new BriefingState

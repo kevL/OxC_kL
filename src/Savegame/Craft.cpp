@@ -751,9 +751,8 @@ void Craft::setDamage(const int damage)
  */
 int Craft::getDamagePercent() const
 {
-	return static_cast<int>(
-			std::floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
-			* 100.));
+	return static_cast<int>(std::floor(
+		   static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100.));
 }
 
 /**

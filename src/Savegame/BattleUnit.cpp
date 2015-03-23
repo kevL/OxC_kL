@@ -2125,8 +2125,8 @@ int BattleUnit::getFatalWounds() const
 double BattleUnit::getInitiative(int tuSpent)
 {
 	double ret = static_cast<double>(
-						getBaseStats()->reactions * (getTimeUnits() - tuSpent))
-						/ static_cast<double>(getBaseStats()->tu);
+				 getBaseStats()->reactions * (getTimeUnits() - tuSpent))
+				 / static_cast<double>(getBaseStats()->tu);
 
 	ret *= getAccuracyModifier();
 
@@ -3255,10 +3255,10 @@ Armor* BattleUnit::getArmor() const
 }
 
 /**
- * kL. Checks if unit is wearing a PowerSuit.
+ * Checks if unit is wearing a PowerSuit.
  * @return, true if this unit is wearing a PowerSuit of some sort
  */
-bool BattleUnit::hasPowerSuit() const // kL
+bool BattleUnit::hasPowerSuit() const
 {
 	std::string armorType = _armor->getType();
 
@@ -3278,10 +3278,10 @@ bool BattleUnit::hasPowerSuit() const // kL
 }
 
 /**
- * kL. Checks if unit is wearing a FlightSuit.
+ * Checks if unit is wearing a FlightSuit.
  * @return, true if this unit is wearing a FlightSuit of some sort
  */
-bool BattleUnit::hasFlightSuit() const // kL
+bool BattleUnit::hasFlightSuit() const
 {
 	std::string armorType = _armor->getType();
 
@@ -3308,7 +3308,7 @@ bool BattleUnit::hasFlightSuit() const // kL
  * @return, name of the unit
  */
 std::wstring BattleUnit::getName(
-		Language* lang,
+		const Language* const lang,
 		bool debugAppendId) const
 {
 	if (_geoscapeSoldier == NULL

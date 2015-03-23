@@ -1829,7 +1829,6 @@ void GeoscapeState::time5Seconds()
 							}
 							else if (ufo->getStatus() != Ufo::LANDED)
 								(*j)->returnToBase();
-						break;
 					}
 				}
 				else if (wayPoint != NULL)

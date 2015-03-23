@@ -318,8 +318,6 @@ private:
 		void tallyUnits(
 				int& liveAliens,
 				int& liveSoldiers);
-		///
-//		void convertInfected();
 
 		/// Sets the kneel reservation setting.
 		void setKneelReserved(bool reserved);
