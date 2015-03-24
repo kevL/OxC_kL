@@ -1186,6 +1186,7 @@ bool UnitWalkBState::visForUnits() const
 	}
 
 	bool ret = _terrain->calculateFOV(_unit);
+
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		ret = ret
@@ -1198,7 +1199,7 @@ bool UnitWalkBState::visForUnits() const
 }
 
 /**
- * Sets the animation speed of soldiers or aliens.
+ * Sets the animation speed of units.
  * @param gravLift - true if moving up/down a gravLift
  */
 void UnitWalkBState::setNormalWalkSpeed(bool gravLift)

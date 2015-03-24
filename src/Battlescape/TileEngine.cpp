@@ -292,34 +292,61 @@ void TileEngine::addLight(
 		int power,
 		int layer)
 {
+	int dist;
+
 	for (int // only loop through the positive quadrant.
 			x = 0;
-			x <= power;
+			x != power + 1;
 			++x)
 	{
 		for (int
 				y = 0;
-				y <= power;
+				y != power + 1;
 				++y)
 		{
 			for (int
 					z = 0;
-					z < _battleSave->getMapSizeZ();
+					z != _battleSave->getMapSizeZ();
 					++z)
 			{
-				int distance = static_cast<int>(Round(std::sqrt(static_cast<double>(x * x + y * y))));
+				dist = power
+					 - static_cast<int>(Round(std::sqrt(static_cast<double>(x * x + y * y))));
 
-				if (_battleSave->getTile(Position(pos.x + x, pos.y + y, z)))
-					_battleSave->getTile(Position(pos.x + x, pos.y + y, z))->addLight(power - distance, layer);
+				Tile* tile = _battleSave->getTile(Position(
+														pos.x + x,
+														pos.y + y,
+														z));
+				if (tile != NULL)
+					tile->addLight(
+								dist,
+								layer);
 
-				if (_battleSave->getTile(Position(pos.x - x, pos.y - y, z)))
-					_battleSave->getTile(Position(pos.x - x, pos.y - y, z))->addLight(power - distance, layer);
+				tile = _battleSave->getTile(Position(
+												pos.x - x,
+												pos.y - y,
+												z));
+				if (tile != NULL)
+					tile->addLight(
+								dist,
+								layer);
 
-				if (_battleSave->getTile(Position(pos.x + x, pos.y - y, z)))
-					_battleSave->getTile(Position(pos.x + x, pos.y - y, z))->addLight(power - distance, layer);
+				tile = _battleSave->getTile(Position(
+												pos.x + x,
+												pos.y - y,
+												z));
+				if (tile != NULL)
+					tile->addLight(
+								dist,
+								layer);
 
-				if (_battleSave->getTile(Position(pos.x - x, pos.y + y, z)))
-					_battleSave->getTile(Position(pos.x - x, pos.y + y, z))->addLight(power - distance, layer);
+				tile = _battleSave->getTile(Position(
+												pos.x - x,
+												pos.y + y,
+												z));
+				if (tile != NULL)
+					tile->addLight(
+								dist,
+								layer);
 			}
 		}
 	}
@@ -330,7 +357,7 @@ void TileEngine::addLight(
  * @param unit - pointer to a BattleUnit to check field of view for
  * @return, true when new aliens are spotted
  */
-bool TileEngine::calculateFOV(BattleUnit* unit)
+bool TileEngine::calculateFOV(BattleUnit* const unit)
 {
 	unit->clearVisibleUnits();
 	unit->clearVisibleTiles();
@@ -347,7 +374,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 	bool ret = false;
 
-	const size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
+	const size_t visUnits_pre = unit->getUnitsSpottedThisTurn().size();
 
 	int dir;
 	if (Options::strafe == true
@@ -364,32 +391,43 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		sign_x[8] = { 1, 1, 1, 1,-1,-1,-1,-1},
 		sign_y[8] = {-1,-1, 1, 1, 1, 1,-1,-1};
 
-	bool diag = false;
 	int
 		y1 = 0,
-		y2 = 0;
+		y2 = 0,
+		unitSize,
+		block;
+	size_t trajLength;
 
+	bool diag;
 	if (dir %2)
 	{
 		diag = true;
 		y2 = MAX_VIEW_DISTANCE;
 	}
+	else
+		diag = false;
 
 	std::vector<Position> _trajectory;
 
 	Position
-		unitPos = unit->getPosition(),
-		testPos;
+		posUnit = unit->getPosition(),
+		posTest,
+		pos,
+		posTraj;
+
+	Tile
+		* tile,
+		* tileEdge;
 
 	if (unit->getHeight()
 				+ unit->getFloatHeight()
-				- _battleSave->getTile(unitPos)->getTerrainLevel() > 27)
+				- _battleSave->getTile(posUnit)->getTerrainLevel() > 27)
 	{
-		const Tile* const tileAbove = _battleSave->getTile(unitPos + Position(0,0,1));
+		const Tile* const tileAbove = _battleSave->getTile(posUnit + Position(0,0,1));
 		if (tileAbove != NULL
 			&& tileAbove->hasNoFloor(NULL))
 		{
-			++unitPos.z;
+			++posUnit.z;
 		}
 	}
 
@@ -411,35 +449,34 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		{
 			for (int
 					z = 0;
-					z < _battleSave->getMapSizeZ();
+					z != _battleSave->getMapSizeZ();
 					++z)
 			{
-				testPos.z = z;
+				posTest.z = z;
 
 				if (x * x + y * y <= MAX_VIEW_DISTANCE_SQR)
 				{
 					const int
-						deltaPos_x = (sign_x[dir] * (swapXY? y: x)),
-						deltaPos_y = (sign_y[dir] * (swapXY? x: y));
+						deltaPos_x = (sign_x[dir] * (swapXY ? y : x)),
+						deltaPos_y = (sign_y[dir] * (swapXY ? x : y));
 
-					testPos.x = unitPos.x + deltaPos_x;
-					testPos.y = unitPos.y + deltaPos_y;
+					posTest.x = posUnit.x + deltaPos_x;
+					posTest.y = posUnit.y + deltaPos_y;
 
-					if (_battleSave->getTile(testPos) != NULL)
+					if (_battleSave->getTile(posTest) != NULL)
 					{
-						BattleUnit* const spottedUnit = _battleSave->getTile(testPos)->getUnit();
+						BattleUnit* const spottedUnit = _battleSave->getTile(posTest)->getUnit();
 						if (spottedUnit != NULL
 							&& spottedUnit->isOut(true, true) == false
 							&& visible(
 									unit,
-									_battleSave->getTile(testPos)) == true)
+									_battleSave->getTile(posTest)) == true)
 						{
 							if (spottedUnit->getUnitVisible() == false)
 								ret = true;
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
-//								if (spottedUnit->getUnitVisible() == false)
 								spottedUnit->setUnitVisible();
 								spottedUnit->getTile()->setTileVisible();
 							}
@@ -458,60 +495,60 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
 									spottedUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
-																		// Only reactionFire should set them Exposed during xCom's turn.
+																		// Only potential reactionFire should set them Exposed during xCom's turn.
 								}
 							}
 						}
 
-						if (unit->getFaction() == FACTION_PLAYER) // reveal extra tiles
+						if (unit->getFaction() == FACTION_PLAYER) // reveal extra tiles ->>
 						{
-							// this sets tiles to discovered if they are in LOS -
+							// this sets tiles to discovered if they are in FoV -
 							// tile visibility is not calculated in voxelspace but in tilespace;
 							// large units have "4 pair of eyes"
-							const int unitSize = unit->getArmor()->getSize();
+							unitSize = unit->getArmor()->getSize();
 							for (int
 									size_x = 0;
-									size_x < unitSize;
+									size_x != unitSize;
 									++size_x)
 							{
 								for (int
 										size_y = 0;
-										size_y < unitSize;
+										size_y != unitSize;
 										++size_y)
 								{
 									_trajectory.clear();
 
-									const Position sizedPos = unitPos + Position(
-																			size_x,
-																			size_y,
-																			0);
-									const int test = calculateLine(
-																sizedPos,
-																testPos,
-																true,
-																&_trajectory,
-																unit,
-																false);
+									pos = posUnit + Position(
+															size_x,
+															size_y,
+															0);
+									block = calculateLine(
+														pos,
+														posTest,
+														true,
+														&_trajectory,
+														unit,
+														false);
 
-									size_t trajSize = _trajectory.size();
+									trajLength = _trajectory.size();
 
-//kL								if (test > 127) // last tile is blocked thus must be cropped
-									if (test > 0)	// kL: -1 - do NOT crop trajectory (ie. hit content-object)
+//kL								if (block > 127) // last tile is blocked thus must be cropped
+									if (block > 0)	// kL: -1 - do NOT crop trajectory (ie. hit content-object)
 													//		0 - expose Tile ( should never return this, unless out-of-bounds )
 													//		1 - crop the trajectory ( hit regular wall )
-										--trajSize;
+										--trajLength;
 
 									for (size_t
 											i = 0;
-											i < trajSize;
+											i != trajLength;
 											++i)
 									{
-										const Position trajPos = _trajectory.at(i);
+										posTraj = _trajectory.at(i);
 
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
-										Tile* const visTile = _battleSave->getTile(trajPos);
-										visTile->setTileVisible();
-										visTile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
+										tile = _battleSave->getTile(posTraj);
+										tile->setTileVisible();
+										tile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
 										// kL_note: Yeh, IF there's walls or an appropriate BigWall object!
@@ -524,112 +561,112 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											#0 - westwall
 											#1 - northwall
 											#2 - floor + content (reveals both walls also) */
-										Tile* edgeTile = _battleSave->getTile(Position(
-																					trajPos.x + 1,
-																					trajPos.y,
-																					trajPos.z));
-										if (edgeTile != NULL) // show Tile EAST
-//kL										edgeTile->setDiscovered(true, 0);
+										tileEdge = _battleSave->getTile(Position(
+																			posTraj.x + 1,
+																			posTraj.y,
+																			posTraj.z));
+										if (tileEdge != NULL) // show Tile EAST
+//kL										tileEdge->setDiscovered(true, 0);
 										{
-											if (visTile->getMapData(MapData::O_OBJECT) == NULL
-												|| (visTile->getMapData(MapData::O_OBJECT)
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_EAST
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
+											if (tile->getMapData(MapData::O_OBJECT) == NULL
+												|| (tile->getMapData(MapData::O_OBJECT)
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_EAST
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
 											{
 												for (int
 														part = 1;
 														part < 4;
 														part += 2)
 												{
-													if (edgeTile->getMapData(part))
+													if (tileEdge->getMapData(part))
 													{
-														if (edgeTile->getMapData(part)->getObjectType() == MapData::O_WESTWALL) // #1
-															edgeTile->setDiscovered(true, 0); // reveal westwall
-														else if (edgeTile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
-															&& edgeTile->getMapData(MapData::O_OBJECT)
-															&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-																|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST))
+														if (tileEdge->getMapData(part)->getObjectType() == MapData::O_WESTWALL) // #1
+															tileEdge->setDiscovered(true, 0); // reveal westwall
+														else if (tileEdge->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
+															&& tileEdge->getMapData(MapData::O_OBJECT)
+															&& (tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+																|| tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST))
 														{
-															edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
+															tileEdge->setDiscovered(true, 2); // reveal entire tileEdge
 														}
 													}
 												}
 											}
 										}
 
-										edgeTile = _battleSave->getTile(Position(
-																			trajPos.x,
-																			trajPos.y + 1,
-																			trajPos.z));
-										if (edgeTile != NULL) // show Tile SOUTH
-//kL										edgeTile->setDiscovered(true, 1);
+										tileEdge = _battleSave->getTile(Position(
+																			posTraj.x,
+																			posTraj.y + 1,
+																			posTraj.z));
+										if (tileEdge != NULL) // show Tile SOUTH
+//kL										tileEdge->setDiscovered(true, 1);
 										{
-											if (visTile->getMapData(MapData::O_OBJECT) == NULL
-												|| (visTile->getMapData(MapData::O_OBJECT)
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
+											if (tile->getMapData(MapData::O_OBJECT) == NULL
+												|| (tile->getMapData(MapData::O_OBJECT)
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_E_S))
 											{
 												for (int
 														part = 2;
 														part < 4;
 														++part)
 												{
-													if (edgeTile->getMapData(part))
+													if (tileEdge->getMapData(part))
 													{
-														if (edgeTile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL) // #2
-															edgeTile->setDiscovered(true, 1); // reveal northwall
-														else if (edgeTile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
-															&& edgeTile->getMapData(MapData::O_OBJECT)
-															&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-																|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH))
+														if (tileEdge->getMapData(part)->getObjectType() == MapData::O_NORTHWALL) // #2
+															tileEdge->setDiscovered(true, 1); // reveal northwall
+														else if (tileEdge->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
+															&& tileEdge->getMapData(MapData::O_OBJECT)
+															&& (tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+																|| tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH))
 														{
-															edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
+															tileEdge->setDiscovered(true, 2); // reveal entire tileEdge
 														}
 													}
 												}
 											}
 										}
 
-										edgeTile = _battleSave->getTile(Position(
-																			trajPos.x - 1,
-																			trajPos.y,
-																			trajPos.z));
-										if (edgeTile != NULL) // show Tile WEST
+										tileEdge = _battleSave->getTile(Position(
+																			posTraj.x - 1,
+																			posTraj.y,
+																			posTraj.z));
+										if (tileEdge != NULL) // show Tile WEST
 										{
-											if (visTile->getMapData(MapData::O_WESTWALL) == NULL
-												|| (visTile->getMapData(MapData::O_OBJECT)
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_WEST))
+											if (tile->getMapData(MapData::O_WESTWALL) == NULL
+												|| (tile->getMapData(MapData::O_OBJECT)
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_WEST))
 											{
-												if (edgeTile->getMapData(MapData::O_OBJECT) // #3
-													&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
-														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+												if (tileEdge->getMapData(MapData::O_OBJECT) // #3
+													&& (tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+														|| tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+														|| tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
 												{
-													edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
+													tileEdge->setDiscovered(true, 2); // reveal entire tileEdge
 												}
 											}
 										}
 
-										edgeTile = _battleSave->getTile(Position(
-																			trajPos.x,
-																			trajPos.y - 1,
-																			trajPos.z));
-										if (edgeTile != NULL) // show Tile NORTH
+										tileEdge = _battleSave->getTile(Position(
+																			posTraj.x,
+																			posTraj.y - 1,
+																			posTraj.z));
+										if (tileEdge != NULL) // show Tile NORTH
 										{
-											if (visTile->getMapData(MapData::O_NORTHWALL) == NULL
-												|| (visTile->getMapData(MapData::O_OBJECT)
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
-													&& visTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NORTH))
+											if (tile->getMapData(MapData::O_NORTHWALL) == NULL
+												|| (tile->getMapData(MapData::O_OBJECT)
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
+													&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NORTH))
 											{
-												if (edgeTile->getMapData(MapData::O_OBJECT) // #3
-													&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
-														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+												if (tileEdge->getMapData(MapData::O_OBJECT) // #3
+													&& (tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+														|| tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
+														|| tileEdge->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
 												{
-													edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
+													tileEdge->setDiscovered(true, 2); // reveal entire tileEdge
 												}
 											}
 										}
@@ -648,9 +685,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	{
 		return true;
 	}
-	else if (unit->getFaction() != FACTION_PLAYER
+
+	if (unit->getFaction() != FACTION_PLAYER
 		&& unit->getVisibleUnits()->empty() == false
-		&& unit->getUnitsSpottedThisTurn().size() > preVisUnits)
+		&& unit->getUnitsSpottedThisTurn().size() > visUnits_pre)
 	{
 		return true;
 	}
@@ -661,9 +699,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 /**
  * Calculates line of sight of all units within range of the Position.
  * Used when terrain has changed, which can reveal unseen units and/or parts of terrain.
- * @param position - reference the position of the changed terrain
+ * @param pos - reference the position of the changed terrain
  */
-void TileEngine::calculateFOV(const Position& position)
+void TileEngine::calculateFOV(const Position& pos)
 {
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -671,7 +709,7 @@ void TileEngine::calculateFOV(const Position& position)
 			++i)
 	{
 		if (distanceSq(
-					position,
+					pos,
 					(*i)->getPosition(),
 					false) <= MAX_VIEW_DISTANCE_SQR)
 		{

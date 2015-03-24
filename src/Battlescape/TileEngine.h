@@ -103,9 +103,9 @@ private:
 		void togglePersonalLighting();
 
 		/// Calculates the field of view from a units view point.
-		bool calculateFOV(BattleUnit* unit);
+		bool calculateFOV(BattleUnit* const unit);
 		/// Calculates Field of View, including line of sight of all units within range of the Position
-		void calculateFOV(const Position& position);
+		void calculateFOV(const Position& pos);
 		/// Recalculates FOV of all units in-game.
 		void recalculateFOV();
 

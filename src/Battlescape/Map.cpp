@@ -1905,7 +1905,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										tileEast = NULL;
 
 //									if (tileNorth->getUnit() == NULL	// TODO: looks like these 'unit' checks should be done against LoFTs!!
-//										 && (tileEast == NULL			// note, started doing that below_
+//										&& (tileEast == NULL			// note, started doing that below_
 //											|| tileEast->getUnit() == NULL))
 									{
 										const Tile* const tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));

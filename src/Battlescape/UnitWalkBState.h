@@ -77,7 +77,7 @@ private:
 	/// Checks visibility for new opponents.
 	bool visForUnits() const;
 
-	/// Handles some calculations when the walking is finished.
+	/// Sets animation speed for the unit.
 	void setNormalWalkSpeed(bool gravLift);
 
 	/// Handles the stepping sounds.

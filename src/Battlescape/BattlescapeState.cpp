@@ -276,7 +276,7 @@ BattlescapeState::BattlescapeState()
 	_barMorale		= new Bar(102, 3, x + 170, y + 53);
 
 //	_txtDebug		= new Text(300, 10, 150, 0);
-	_txtDebug		= new Text(145, 9, screenWidth - 120, screenHeight - 9);
+	_txtDebug		= new Text(145, 9, screenWidth - 145, screenHeight - 9);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);

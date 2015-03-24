@@ -2668,7 +2668,7 @@ void BattlescapeGenerator::explodePowerSources() // private.
 {
 	for (size_t
 			i = 0;
-			i != _battleSave->getMapSizeXYZ();
+			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
 			++i)
 	{
 		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL

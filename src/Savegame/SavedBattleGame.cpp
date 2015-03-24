@@ -97,8 +97,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 			i != 121;
 			++i)
 	{
-		_tileSearch[i].x = static_cast<int>((i % 11) - 5);
-		_tileSearch[i].y = static_cast<int>((i / 11) - 5);
+		_tileSearch[i].x = (static_cast<int>(i) % 11) - 5;
+		_tileSearch[i].y = (static_cast<int>(i) / 11) - 5;
 	}
 
 	if (titles != NULL)

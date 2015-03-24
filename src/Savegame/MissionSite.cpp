@@ -63,14 +63,11 @@ void MissionSite::load(const YAML::Node& node)
 	Target::load(node);
 
 	// NOTE: "type" & "deployment" loaded by SavedGame and passed into cTor.
-	_id				= node["id"].as<int>(_id);
-
-	_texture		= node["texture"].as<int>(_texture);
-//	_texture		= node["id"].as<int>(_texture); // what's with that <- Lol.
-
-	_secondsLeft	= node["secondsLeft"].as<int>(_secondsLeft);
-	_race			= node["race"].as<std::string>(_race);
-	_inTactical		= node["inTactical"].as<bool>(_inTactical);
+	_id				= node["id"]			.as<int>(_id);
+	_texture		= node["texture"]		.as<int>(_texture);
+	_secondsLeft	= node["secondsLeft"]	.as<int>(_secondsLeft);
+	_race			= node["race"]			.as<std::string>(_race);
+	_inTactical		= node["inTactical"]	.as<bool>(_inTactical);
 }
 
 /**
