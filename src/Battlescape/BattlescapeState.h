@@ -144,7 +144,7 @@ private:
 		* _numLayers,
 		* _numWounds;
 	Ruleset* _rules;
-	SavedBattleGame* _savedBattle;
+	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
 	Surface
 		* _iconsLayer,

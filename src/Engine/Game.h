@@ -67,7 +67,7 @@ private:
 	Language* _lang;
 	ResourcePack* _res;
 	Ruleset* _rules;
-	SavedGame* _save;
+	SavedGame* _gameSave;
 	Screen* _screen;
 
 	SDL_Event _event;

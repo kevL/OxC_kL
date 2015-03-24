@@ -60,7 +60,7 @@ namespace OpenXcom
 
 /**
  * Initializes a brand new SavedBattleGame.
- * @param titles - pointer to a vector of pointers to OperationPool
+ * @param titles - pointer to a vector of pointers to OperationPool (default NULL)
  */
 SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 	:
@@ -92,13 +92,13 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 121;
+			i != 121;
 			++i)
 	{
-		_tileSearch[i].x = (i %11) - 5;
-		_tileSearch[i].y = (i / 11) - 5;
+		_tileSearch[i].x = static_cast<int>((i % 11) - 5);
+		_tileSearch[i].y = static_cast<int>((i / 11) - 5);
 	}
 
 	if (titles != NULL)
@@ -114,9 +114,9 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 SavedBattleGame::~SavedBattleGame()
 {
 	//Log(LOG_INFO) << "Delete SavedBattleGame";
-	for (int
+	for (size_t
 			i = 0;
-			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 			++i)
 	{
 		delete _tiles[i];
@@ -223,10 +223,10 @@ void SavedBattleGame::load(
 		Tile::SerializationKey serKey;
 		const size_t totalTiles = node["totalTiles"].as<size_t>();
 
-		memset(
-			&serKey,
-			0,
-			sizeof(Tile::SerializationKey));
+		std::memset(
+				&serKey,
+				0,
+				sizeof(Tile::SerializationKey));
 
 		serKey.index			= node["tileIndexSize"]		.as<Uint8>(serKey.index);
 		serKey.totalBytes		= node["tileTotalBytesPer"]	.as<Uint32>(serKey.totalBytes);
@@ -249,7 +249,7 @@ void SavedBattleGame::load(
 			int index = unserializeInt(&r, serKey.index);
 			assert(index >= 0 && index < _mapsize_x * _mapsize_z * _mapsize_y);
 			_tiles[index]->loadBinary(r, serKey); // loadBinary's privileges to advance *r have been revoked
-			r += serKey.totalBytes-serKey.index; // r is now incremented strictly by totalBytes in case there are obsolete fields present in the data
+			r += serKey.totalBytes - serKey.index; // r is now incremented strictly by totalBytes in case there are obsolete fields present in the data
 		}
 	}
 
@@ -268,7 +268,7 @@ void SavedBattleGame::load(
 			i != node["nodes"].end();
 			++i)
 	{
-		Node* n = new Node();
+		Node* const n = new Node();
 		n->load(*i);
 		_nodes.push_back(n);
 	}
@@ -281,7 +281,7 @@ void SavedBattleGame::load(
 		const UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
 		const int id = (*i)["soldierId"].as<int>();
 
-		BattleUnit* unit = NULL;
+		BattleUnit* unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
 		{
 			unit = new BattleUnit(				// look up the matching soldier
@@ -325,24 +325,23 @@ void SavedBattleGame::load(
 								savedGame->getMonthsPassed()); // kL_add.
 		}
 
-		if (unit->getStatus() != STATUS_DEAD)
+		if (faction != FACTION_PLAYER
+			&& unit->getStatus() != STATUS_DEAD)
 		{
 			if (const YAML::Node& ai = (*i)["AI"])
 			{
-				BattleAIState* aiState = NULL;
+				BattleAIState* aiState;
 
-				if (faction == FACTION_NEUTRAL)
-					aiState = new CivilianBAIState(
-												this,
-												unit,
-												NULL);
-				else if (faction == FACTION_HOSTILE)
+				if (faction == FACTION_HOSTILE)
 					aiState = new AlienBAIState(
 											this,
 											unit,
 											NULL);
 				else
-					continue;
+					aiState = new CivilianBAIState(
+												this,
+												unit,
+												NULL);
 
 				aiState->load(ai);
 				unit->setAIState(aiState);
@@ -471,31 +470,31 @@ void SavedBattleGame::loadMapResources(Game* game)
 	}
 
 	int
-		mdID,
-		mdsID;
+		mapDataID,
+		mapDataSetID;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 			++i)
 	{
 		for (int
 				part = 0;
-				part < 4;
+				part != 4;
 				++part)
 		{
 			_tiles[i]->getMapData(
-								&mdID,
-								&mdsID,
+								&mapDataID,
+								&mapDataSetID,
 								part);
 
-			if (mdID != -1
-				&& mdsID != -1)
+			if (mapDataID != -1
+				&& mapDataSetID != -1)
 			{
 				_tiles[i]->setMapData(
-								_mapDataSets[mdsID]->getObjects()->at(mdID),
-								mdID,
-								mdsID,
+								_mapDataSets[static_cast<size_t>(mapDataSetID)]->getObjects()->at(static_cast<size_t>(mapDataID)),
+								mapDataID,
+								mapDataSetID,
 								part);
 			}
 		}
@@ -542,9 +541,9 @@ YAML::Node SavedBattleGame::save() const
 	}
 
 #if 0
-	for (int
+	for (size_t
 			i = 0;
-			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			i != _mapsize_z * _mapsize_y * _mapsize_x;
 			++i)
 	{
 		if (_tiles[i]->isVoid() == false)
@@ -563,12 +562,12 @@ YAML::Node SavedBattleGame::save() const
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8
-		* tileData = (Uint8*) calloc(tileDataSize, 1),
+		* const tileData = (Uint8*) calloc(tileDataSize, 1),
 		* w = tileData;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 			++i)
 	{
 		if (_tiles[i]->isVoid() == false)
@@ -648,9 +647,9 @@ void SavedBattleGame::initMap(
 {
 	if (_nodes.empty() == false)
 	{
-		for (int
+		for (size_t
 				i = 0;
-				i < _mapsize_z * _mapsize_y * _mapsize_x;
+				i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 				++i)
 		{
 			delete _tiles[i];
@@ -678,7 +677,7 @@ void SavedBattleGame::initMap(
 
 	for (int
 			i = 0;
-			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			i != _mapsize_z * _mapsize_y * _mapsize_x;
 			++i)
 	{
 		Position pos;
@@ -799,7 +798,7 @@ std::string SavedBattleGame::getBattleTerrain() const
 
 /**
  * Converts a tile index to coordinates.
- * @param index	- the (unique) tileindex
+ * @param index	- the unique tileindex
  * @param x		- pointer to the X coordinate
  * @param y		- pointer to the Y coordinate
  * @param z		- pointer to the Z coordinate
@@ -810,9 +809,9 @@ void SavedBattleGame::getTileCoords(
 		int* y,
 		int* z) const
 {
-	*z = index / (_mapsize_y * _mapsize_x);
-	*y = (index %(_mapsize_y * _mapsize_x)) / _mapsize_x;
-	*x = (index %(_mapsize_y * _mapsize_x)) %_mapsize_x;
+	*z =  index / (_mapsize_y * _mapsize_x);
+	*y = (index % (_mapsize_y * _mapsize_x)) / _mapsize_x;
+	*x = (index % (_mapsize_y * _mapsize_x)) % _mapsize_x;
 }
 
 /**
@@ -1236,15 +1235,15 @@ bool SavedBattleGame::endBattlePhase()
  */
 void SavedBattleGame::setDebugMode()
 {
-	for (int
+	_debugMode = true;
+
+	for (size_t // reveal tiles.
 			i = 0;
-			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 			++i)
 	{
 		_tiles[i]->setDiscovered(true, 2);
 	}
-
-	_debugMode = true;
 }
 
 /**

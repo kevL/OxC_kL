@@ -1732,7 +1732,8 @@ void Map::drawTerrain(Surface* surface) // private.
 												const Tile* const tileSouth = _battleSave->getTile(mapPosition + Position(0,1,0));
 
 												if (tileSouth == NULL
-													|| (tileSouth->getMapData(MapData::O_NORTHWALL) == NULL // or tu != 255, ie. isWalkable rubble that lets sight pass over it
+													|| ((tileSouth->getMapData(MapData::O_NORTHWALL) == NULL // or tu != 255, ie. isWalkable rubble that lets sight pass over it
+															|| tileSouth->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 														&& (tileSouth->getMapData(MapData::O_OBJECT) == NULL
 															|| (tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
 																&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NESW
@@ -1744,7 +1745,8 @@ void Map::drawTerrain(Surface* surface) // private.
 
 													if (tileSouthWest == NULL
 														|| (tileSouthWest->getUnit() == NULL
-															&& tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
+															&& (tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
+																|| tileSouthWest->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 															&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 //																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255 // <- maybe
@@ -1765,8 +1767,10 @@ void Map::drawTerrain(Surface* surface) // private.
 											&& (unitWest->getDirection() == 1
 												|| unitWest->getDirection() == 5))
 										{
-											if (tile->getMapData(MapData::O_WESTWALL) == NULL		// or tu != 255, ie. isWalkable rubble that lets sight pass over it
-												&& tile->getMapData(MapData::O_NORTHWALL) == NULL	// or tu != 255, ie. isWalkable rubble that lets sight pass over it
+											if ((tile->getMapData(MapData::O_WESTWALL) == NULL		// or tu != 255, ie. isWalkable rubble that lets sight pass over it
+													|| tile->isUfoDoorOpen(MapData::O_WESTWALL) == true)
+												&& (tile->getMapData(MapData::O_NORTHWALL) == NULL	// or tu != 255, ie. isWalkable rubble that lets sight pass over it
+													|| tile->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 												&& (tile->getMapData(MapData::O_OBJECT) == NULL
 													|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 														&& tileWest->getTerrainLevel() - tile->getTerrainLevel() < 13 // positive means Tile is higher
@@ -1784,7 +1788,8 @@ void Map::drawTerrain(Surface* surface) // private.
 													const Tile* const tileSouth = _battleSave->getTile(mapPosition + Position(0,1,0));
 
 													if (tileSouth == NULL
-														|| (tileSouth->getMapData(MapData::O_NORTHWALL) == NULL // or tu != 255, ie. isWalkable rubble that lets sight pass over it
+														|| ((tileSouth->getMapData(MapData::O_NORTHWALL) == NULL // or tu != 255, ie. isWalkable rubble that lets sight pass over it
+																|| tileSouth->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 															&& (tileSouth->getMapData(MapData::O_OBJECT) == NULL
 																|| (tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_BLOCK
 																	&& tileSouth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NESW
@@ -1796,7 +1801,8 @@ void Map::drawTerrain(Surface* surface) // private.
 
 														if (tileSouthWest == NULL
 															|| (tileSouthWest->getUnit() == NULL
-																&& tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
+																&& (tileSouthWest->getMapData(MapData::O_NORTHWALL) == NULL
+																	|| tileSouthWest->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 																&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 //																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255
@@ -1898,9 +1904,9 @@ void Map::drawTerrain(Surface* surface) // private.
 									else
 										tileEast = NULL;
 
-									if (tileNorth->getUnit() == NULL
-										&& (tileEast == NULL
-											|| tileEast->getUnit() == NULL))
+//									if (tileNorth->getUnit() == NULL	// TODO: looks like these 'unit' checks should be done against LoFTs!!
+//										 && (tileEast == NULL			// note, started doing that below_
+//											|| tileEast->getUnit() == NULL))
 									{
 										const Tile* const tileNorthWest = _battleSave->getTile(mapPosition + Position(-1,-1,0));
 
@@ -1939,8 +1945,10 @@ void Map::drawTerrain(Surface* surface) // private.
 													halfRight = false;
 													bool halfLeft = false;
 
-													if (tile->getMapData(MapData::O_WESTWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
-														|| tileWest->getMapData(MapData::O_NORTHWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+													if ((tile->getMapData(MapData::O_WESTWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+															&& tile->isUfoDoorOpen(MapData::O_WESTWALL) == false)
+														|| (tileWest->getMapData(MapData::O_NORTHWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+															&& tileWest->isUfoDoorOpen(MapData::O_NORTHWALL) == false)
 														|| (tileWest->getMapData(MapData::O_OBJECT) != NULL
 															&& ((tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																	&& tileWest->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
@@ -1950,13 +1958,17 @@ void Map::drawTerrain(Surface* surface) // private.
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
-																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
+																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
+														|| (tileWest->getUnit() != NULL
+															&& tileWest->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
 													{
 														halfRight = true;
 													}
 
-													if (tile->getMapData(MapData::O_NORTHWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
-														|| tileNorth->getMapData(MapData::O_WESTWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+													if ((tile->getMapData(MapData::O_NORTHWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+															&& tile->isUfoDoorOpen(MapData::O_NORTHWALL) == false)
+														|| (tileNorth->getMapData(MapData::O_WESTWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
+															&& tileNorth->isUfoDoorOpen(MapData::O_WESTWALL) == false)
 														|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 															&& ((tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																	&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
@@ -1966,7 +1978,9 @@ void Map::drawTerrain(Surface* surface) // private.
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S
-																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N)))
+																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_W_N))
+														|| (tileNorth->getUnit() != NULL
+															&& tileNorth->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
 													{
 														halfLeft = true;
 													}

@@ -75,7 +75,7 @@ Game::Game(const std::string& title)
 		_cursor(NULL),
 		_lang(NULL),
 		_res(NULL),
-		_save(NULL),
+		_gameSave(NULL),
 		_rules(NULL),
 		_quit(false),
 		_init(false),
@@ -168,7 +168,7 @@ Game::~Game()
 	delete _cursor;
 	delete _lang;
 	delete _res;
-	delete _save;
+	delete _gameSave;
 	delete _rules;
 	delete _screen;
 	delete _fpsCounter;
@@ -341,32 +341,27 @@ void Game::run()
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
 
-					if (action.getDetails()->type == SDL_KEYDOWN)
+					if (action.getDetails()->type == SDL_KEYDOWN
+						&& (SDL_GetModState() & KMOD_CTRL) != 0)
 					{
-						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
-							&& (SDL_GetModState() & KMOD_CTRL) != 0)
+						if (action.getDetails()->key.keysym.sym == SDLK_g)			// "ctrl-g" grab input
 						{
 							Options::captureMouse = static_cast<SDL_GrabMode>(!Options::captureMouse);
 							SDL_WM_GrabInput(Options::captureMouse);
 						}
 						else if (Options::debug == true)
 						{
-							if (action.getDetails()->key.keysym.sym == SDLK_t // "ctrl-t" engage TestState
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)
-							{
+							if (action.getDetails()->key.keysym.sym == SDLK_t)		// "ctrl-t" engage TestState
 								setState(new TestState());
-							}
-							else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							else if (action.getDetails()->key.keysym.sym == SDLK_u)	// "ctrl-u" debug UI
 							{
 								Options::debugUi = !Options::debugUi;
 								_states.back()->redrawText();
 							}
-							else if (_save != NULL
-								&& _save->getDebugMode() == true					// kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState).
-								&& action.getDetails()->key.keysym.sym == SDLK_c	// ctrl+c is also handled in GeoscapeState::handle()
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)			// where decisions are made about what info to show.
-							{
+							else if (_gameSave != NULL
+								&& _gameSave->getDebugMode() == true				// kL-> note: 'c' doubles as CreateInventoryTemplate (remarked @ InventoryState).
+								&& action.getDetails()->key.keysym.sym == SDLK_c)	// ctrl+c is also handled in GeoscapeState::handle()
+							{														// where decisions are made about what info to show.
 								// "ctrl-c"			- increment to show next area's boundaries
 								// "ctrl-shift-c"	- decrement to show previous area's boundaries
 								// "ctrl-alt-c"		- toggles between show all areas' boundaries & show current area's boundaries (roughly)
@@ -382,17 +377,15 @@ void Game::run()
 								else
 									++_debugCycle;
 							}
-							else if (_save != NULL
-								&& _save->getDebugMode() == true
-								&& action.getDetails()->key.keysym.sym == SDLK_l // "ctrl-l" reload country lines
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							else if (_gameSave != NULL
+								&& _gameSave->getDebugMode() == true
+								&& action.getDetails()->key.keysym.sym == SDLK_l	// "ctrl-l" reload country lines
+								&& _rules != NULL)
 							{
-								if (_rules != NULL)
-									_rules->reloadCountryLines();
+								_rules->reloadCountryLines();
 							}
 						}
 					}
-				break;
 			}
 		}
 
@@ -476,12 +469,12 @@ void Game::run()
  */
 void Game::quit()
 {
-	if (_save != NULL // Always save ironman
-		&& _save->isIronman() == true
-		&& _save->getName().empty() == false)
+	if (_gameSave != NULL // Always save ironman
+		&& _gameSave->isIronman() == true
+		&& _gameSave->getName().empty() == false)
 	{
-		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_save->getName())) + ".sav";
-		_save->save(filename);
+		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_gameSave->getName())) + ".sav";
+		_gameSave->save(filename);
 	}
 
 	_quit = true;
@@ -681,7 +674,7 @@ void Game::setResourcePack(ResourcePack* const res)
  */
 SavedGame* Game::getSavedGame() const
 {
-	return _save;
+	return _gameSave;
 }
 
 /**
@@ -690,8 +683,8 @@ SavedGame* Game::getSavedGame() const
  */
 void Game::setSavedGame(SavedGame* const save)
 {
-	delete _save;
-	_save = save;
+	delete _gameSave;
+	_gameSave = save;
 }
 
 /**

@@ -66,7 +66,7 @@ void MissionSite::load(const YAML::Node& node)
 	_id				= node["id"].as<int>(_id);
 
 	_texture		= node["texture"].as<int>(_texture);
-//	_texture		= node["id"].as<int>(_texture); // what's with that <-
+//	_texture		= node["id"].as<int>(_texture); // what's with that <- Lol.
 
 	_secondsLeft	= node["secondsLeft"].as<int>(_secondsLeft);
 	_race			= node["race"].as<std::string>(_race);
