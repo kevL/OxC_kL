@@ -1201,7 +1201,7 @@ bool SavedBattleGame::endBattlePhase()
 			|| (*i)->getOriginalFaction() == FACTION_HOSTILE
 			|| _cheating == true) // aLiens know where xCom is when cheating ~turn20
 		{
-			(*i)->setTurnsExposed(0); // aLiens always know where their buddies are, Mc'd or not.
+			(*i)->setTurnsExposed(); // aLiens always know where their buddies are, Mc'd or not.
 		}
 		else if ((*i)->getTurnsExposed() < 255
 			&& _side == FACTION_PLAYER)

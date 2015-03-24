@@ -201,7 +201,7 @@ void UnitDieBState::think()
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 
-		// need to freshen visUnit-indicators in case another unit was hiding behind the one who just fell
+		// need to freshen visUnit-indicators in case other units were hiding behind the one who just fell
 		_parent->getSave()->getBattleState()->updateSoldierInfo(false);
 
 		if (_unit->getGeoscapeSoldier() != NULL
@@ -371,7 +371,7 @@ void UnitDieBState::convertToCorpse() // private.
 			* explTile,
 			* explTile_b;
 		bool soundPlayed = false;
-		size_t i = static_cast<size_t>((unitSize + 1) * (unitSize + 1));
+		size_t part = static_cast<size_t>((unitSize + 1) * (unitSize + 1));
 
 		for (int // count downward to original position so that dropItem() correctly positions large units @ their NW quadrant.
 				y = unitSize;
@@ -427,7 +427,7 @@ void UnitDieBState::convertToCorpse() // private.
 				}
 
 				BattleItem* const corpse = new BattleItem(
-													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--i]),
+													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--part]),
 													_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 
@@ -443,6 +443,9 @@ void UnitDieBState::convertToCorpse() // private.
 								true);
 			}
 		}
+
+		// expose any units that were hiding behind dead unit
+		_parent->getTileEngine()->calculateFOV(pos);
 	}
 }
 

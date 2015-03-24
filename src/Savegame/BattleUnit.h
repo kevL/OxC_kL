@@ -969,7 +969,7 @@ private:
 		int getCarriedWeight(const BattleItem* const dragItem = NULL) const;
 
 		/// Sets how many turns this unit will be exposed for.
-		void setTurnsExposed(int turns);
+		void setTurnsExposed(int turns = 0);
 		/// Sets how many turns this unit will be exposed for.
 		int getTurnsExposed() const;
 

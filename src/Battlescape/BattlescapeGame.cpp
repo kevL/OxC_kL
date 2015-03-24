@@ -1158,7 +1158,7 @@ void BattlescapeGame::checkForCasualties(
 							&& attacker->getFaction() == FACTION_PLAYER
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
-							attacker->setTurnsExposed(0); // interesting
+							attacker->setTurnsExposed(); // interesting
 							//Log(LOG_INFO) << ". . . . attacker Exposed";
 						} */
 					}
@@ -1255,9 +1255,6 @@ void BattlescapeGame::checkForCasualties(
 									&& unit->getBaseStats()->psiSkill > 0
 									&& unit->isOut(true, true) == false);
 	}
-
-	// in case a unit fell and should expose other units to other units:
-	getTileEngine()->recalculateFOV(); // might need to redraw Map here.
 }
 
 /**
@@ -3263,7 +3260,6 @@ bool BattlescapeGame::takeItem(
 {
 	//Log(LOG_INFO) << "BattlescapeGame::takeItem()";
 	bool placed = false;
-	const Ruleset* const rules = _parentState->getGame()->getRuleset();
 
 	switch (item->getRules()->getBattleType())
 	{
@@ -3284,7 +3280,7 @@ bool BattlescapeGame::takeItem(
 					if (action->actor->getItem("STR_BELT", i) == NULL)
 					{
 						item->moveToOwner(action->actor);
-						item->setSlot(rules->getInventory("STR_BELT"));
+						item->setSlot(getRuleset()->getInventory("STR_BELT"));
 						item->setSlotX(i);
 
 						placed = true;
@@ -3293,6 +3289,7 @@ bool BattlescapeGame::takeItem(
 				}
 			}
 		break;
+
 		case BT_GRENADE:
 		case BT_PROXIMITYGRENADE:
 			for (int
@@ -3303,7 +3300,7 @@ bool BattlescapeGame::takeItem(
 				if (action->actor->getItem("STR_BELT", i) == NULL)
 				{
 					item->moveToOwner(action->actor);
-					item->setSlot(rules->getInventory("STR_BELT"));
+					item->setSlot(getRuleset()->getInventory("STR_BELT"));
 					item->setSlotX(i);
 
 					placed = true;
@@ -3311,35 +3308,37 @@ bool BattlescapeGame::takeItem(
 				}
 			}
 		break;
+
 		case BT_FIREARM:
 		case BT_MELEE:
 			if (action->actor->getItem("STR_RIGHT_HAND") == NULL)
 			{
 				item->moveToOwner(action->actor);
-				item->setSlot(rules->getInventory("STR_RIGHT_HAND"));
+				item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 
 				placed = true;
 			}
 		break;
+
 		case BT_MEDIKIT:
 		case BT_SCANNER:
 			if (action->actor->getItem("STR_BACK_PACK") == NULL)
 			{
 				item->moveToOwner(action->actor);
-				item->setSlot(rules->getInventory("STR_BACK_PACK"));
+				item->setSlot(getRuleset()->getInventory("STR_BACK_PACK"));
 
 				placed = true;
 			}
 		break;
+
 		case BT_MINDPROBE:
 			if (action->actor->getItem("STR_LEFT_HAND") == NULL)
 			{
 				item->moveToOwner(action->actor);
-				item->setSlot(rules->getInventory("STR_LEFT_HAND"));
+				item->setSlot(getRuleset()->getInventory("STR_LEFT_HAND"));
 
 				placed = true;
 			}
-		break;
 	}
 
 	return placed;

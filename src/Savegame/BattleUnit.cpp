@@ -3693,7 +3693,7 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 /**
  * Sets how long since this unit was last exposed.
  * Use "255" for NOT exposed.
- * @param turns - # turns this unit has been exposed
+ * @param turns - # turns this unit has been exposed (default 0)
  */
 void BattleUnit::setTurnsExposed(int turns)
 {

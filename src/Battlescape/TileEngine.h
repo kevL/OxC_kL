@@ -137,7 +137,7 @@ private:
 							BattleUnit* unit,
 							int tuSpent = 0);
 		/// Creates a vector of units that can spot this unit.
-		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
+		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* const unit);
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
 		BattleUnit* getReactor(
 				std::vector<BattleUnit*> spotters,

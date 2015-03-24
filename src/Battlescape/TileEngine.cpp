@@ -457,8 +457,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 				if (x * x + y * y <= MAX_VIEW_DISTANCE_SQR)
 				{
 					const int
-						deltaPos_x = (sign_x[dir] * (swapXY ? y : x)),
-						deltaPos_y = (sign_y[dir] * (swapXY ? x : y));
+						deltaPos_x = (sign_x[static_cast<size_t>(dir)] * (swapXY ? y : x)),
+						deltaPos_y = (sign_y[static_cast<size_t>(dir)] * (swapXY ? x : y));
 
 					posTest.x = posUnit.x + deltaPos_x;
 					posTest.y = posUnit.y + deltaPos_y;
@@ -494,7 +494,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 									&& unit->getFaction() == FACTION_HOSTILE
 									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
-									spottedUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
+									spottedUnit->setTurnsExposed();	// note that xCom agents can be seen by enemies but *not* become Exposed.
 																		// Only potential reactionFire should set them Exposed during xCom's turn.
 								}
 							}
@@ -1462,7 +1462,7 @@ bool TileEngine::checkReactionFire(
  * @param unit - pointer to a BattleUnit to spot
  * @return, vector of pointers to BattleUnits that can see the triggering unit
  */
-std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
+std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
 	const Tile* const tile = unit->getTile();
@@ -1485,7 +1485,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			{
 				//Log(LOG_INFO) << ". check ID " << (*i)->getId();
 				if ((*i)->getFaction() == FACTION_HOSTILE)
-					unit->setTurnsExposed(0);
+					unit->setTurnsExposed();
 
 				//Log(LOG_INFO) << ". reactor ID " << (*i)->getId() << ": initi = " << (int)(*i)->getInitiative();
 				spotters.push_back(*i);
@@ -1624,7 +1624,7 @@ bool TileEngine::reactionShot(
 		bool canMelee = false;
 		for (int
 				i = 0;
-				i < 8
+				i != 8
 					&& canMelee == false;
 				++i)
 		{

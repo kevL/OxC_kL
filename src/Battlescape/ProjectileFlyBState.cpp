@@ -1009,7 +1009,7 @@ void ProjectileFlyBState::think()
 							&& victim->getOriginalFaction() == FACTION_PLAYER
 							&& _unit->getFaction() == FACTION_HOSTILE)
 						{
-							_unit->setTurnsExposed(0);
+							_unit->setTurnsExposed();
 						} */ // kL_end. But this is entirely unnecessary, since aLien has already seen and logged the soldier.
 /*kL
 						if (victim
@@ -1019,8 +1019,8 @@ void ProjectileFlyBState::think()
 							AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
 							if (aggro != 0)
 							{
-								aggro->setWasHitBy(_unit); // kL_note: is used only for spotting on RA.
-								_unit->setTurnsExposed(0); // kL_note: might want to remark this! Ok.
+								aggro->setWasHitBy(_unit);	// kL_note: is used only for spotting on RA.
+								_unit->setTurnsExposed();	// kL_note: might want to remark this! Ok.
 								// technically, in the original as I remember it, only
 								// a BlasterLaunch (by xCom) would set an xCom soldier Exposed here!
 								// ( Those aLiens had a way of tracing a BL back to its origin ....)
