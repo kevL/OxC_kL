@@ -49,7 +49,7 @@ class Inventory
 
 private:
 	bool
-		_base,
+		_atBase,
 		_tuMode;
 	int
 		_fuseFrame,
@@ -96,7 +96,7 @@ private:
 				int height,
 				int x = 0,
 				int y = 0,
-				bool base = false);
+				bool atBase = false);
 		/// Cleans up the inventory.
 		~Inventory();
 

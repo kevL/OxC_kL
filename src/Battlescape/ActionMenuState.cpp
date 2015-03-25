@@ -85,7 +85,7 @@ ActionMenuState::ActionMenuState(
 
 	// Build the popup menu
 	const RuleItem* const itRule = _action->weapon->getRules();
-	int id = 0;
+	size_t id = 0;
 
 	if (itRule->isFixed() == false) // Throw & Drop (if not a fixed weapon)
 	{
@@ -216,11 +216,11 @@ ActionMenuState::~ActionMenuState()
 void ActionMenuState::addItem(
 		BattleActionType baType,
 		const std::string& desc,
-		int* id)
+		size_t* id)
 {
 	std::wstring
-		s1, // acu
-		s2; // tu
+		wst1, // acu
+		wst2; // tu
 
 	if (baType == BA_THROW
 		|| baType == BA_AIMEDSHOT
@@ -237,21 +237,20 @@ void ActionMenuState::addItem(
 																		baType,
 																		_action->weapon) * 100.));
 
-//		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
-		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acu);
+//		wst1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
+		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(acu);
 	}
 
 	const int tu = _action->actor->getActionTUs(
 											baType,
 											_action->weapon);
-	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
-
+	wst2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 
 	_menuSelect[*id]->setAction(
 							baType,
 							tr(desc),
-							s1,
-							s2,
+							wst1,
+							wst2,
 							tu);
 	_menuSelect[*id]->setVisible();
 
@@ -302,8 +301,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 	{
 		const RuleItem* const itRule = _action->weapon->getRules();
 
-		_action->TU = _menuSelect[static_cast<size_t>(btnID)]->getTUs();
-		_action->type = _menuSelect[static_cast<size_t>(btnID)]->getAction();
+		_action->TU = _menuSelect[btnID]->getTUs();
+		_action->type = _menuSelect[btnID]->getAction();
 
 		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
@@ -444,8 +443,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		{
 			if (_action->TU > _action->actor->getTimeUnits())
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-			else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange( // hopefully this is blocked by walls & bigWalls ...
-																						_action->actor->getPosition(), // cf. TileEngine::reactionShot()
+			else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+																						_action->actor->getPosition(),
 																						_action->actor->getDirection(),
 																						_action->actor,
 																						NULL,

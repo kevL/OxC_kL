@@ -100,8 +100,8 @@ InventoryState::InventoryState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_bg			= new Surface(320, 200, 0, 0);
-	_soldier	= new Surface(320, 200, 0, 0);
+	_bg			= new Surface(320, 200);
+	_soldier	= new Surface(320, 200);
 
 	_txtName	= new Text(200, 17, 36, 6);
 	_gender		= new Surface(7, 7, 28, 1);
@@ -810,7 +810,7 @@ static void _clearInventory(
 /**
  * Jogs the mouse cursor to refresh appearances.
  */
-void InventoryState::_refreshMouse()
+void InventoryState::_refreshMouse() // private.
 {
 	int
 		x,y;
@@ -847,7 +847,8 @@ void InventoryState::btnClearInventoryClick(Action*)
 
 	_game->getResourcePack()->getSoundByDepth(
 										static_cast<unsigned>(_battleGame->getDepth()),
-										static_cast<unsigned>(ResourcePack::ITEM_DROP))->play();
+										static_cast<unsigned>(ResourcePack::ITEM_DROP))
+									->play();
 }
 
 /**
@@ -893,7 +894,9 @@ void InventoryState::invClick(Action*)
 			++rect.y;
 			rect.w -= 2;
 			rect.h -= 2;
-			_selAmmo->drawRect(&rect, Palette::blockOffset(0)+15);
+			_selAmmo->drawRect(
+							&rect,
+							15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -970,7 +973,9 @@ void InventoryState::invMouseOver(Action*)
 			++rect.y;
 			rect.w -= 2;
 			rect.h -= 2;
-			_selAmmo->drawRect(&rect, Palette::blockOffset(0)+15);
+			_selAmmo->drawRect(
+							&rect,
+							15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -1050,8 +1055,7 @@ void InventoryState::handle(Action* action)
  * @param itRule	- pointer to item's RuleItem
  * @param ammo		- pointer to item's ammo
  */
-// private:
-void InventoryState::setExtraInfo(
+void InventoryState::setExtraInfo( // private.
 		const BattleItem* const item,
 		const RuleItem* const itRule,
 		const BattleItem* const ammo)

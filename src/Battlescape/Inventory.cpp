@@ -63,7 +63,7 @@ namespace OpenXcom
  * @param height	- height in pixels
  * @param x			- X position in pixels (default 0)
  * @param y			- Y position in pixels (default 0)
- * @param base		- true if inventory is accessed from Basescape (default false)
+ * @param atBase	- true if inventory is accessed from Basescape (default false)
  */
 Inventory::Inventory(
 		Game* game,
@@ -71,7 +71,7 @@ Inventory::Inventory(
 		int height,
 		int x,
 		int y,
-		bool base)
+		bool atBase)
 	:
 		InteractiveSurface(
 			width,
@@ -81,7 +81,7 @@ Inventory::Inventory(
 		_selUnit(NULL),
 		_selItem(NULL),
 		_tuMode(true),
-		_base(base),
+		_atBase(atBase),
 		_groundOffset(0),
 		_fuseFrame(0),
 		_prime(-1),
@@ -97,7 +97,7 @@ Inventory::Inventory(
 								x,y);
 	_warning		= new WarningMessage(224, 24, 48, 176);
 
-	_stackNumber	= new NumberText(15, 15, 0, 0);
+	_stackNumber	= new NumberText(15, 15);
 	_stackNumber->setBordered(true);
 
 	_warning->initText(
@@ -185,7 +185,7 @@ void Inventory::drawGrid()
 {
 	_grid->clear();
 
-	Text text = Text(16, 9, 0, 0);
+	Text text = Text(16,9);
 	text.setPalette(_grid->getPalette());
 	text.setHighContrast();
 	text.initText(
@@ -417,7 +417,7 @@ void Inventory::drawItems()
  * @param x		- X position in slot (default 0)
  * @param y		- Y position in slot (default 0)
  */
-void Inventory::moveItem( // private!
+void Inventory::moveItem( // private.
 		BattleItem* const item,
 		RuleInventory* const slot,
 		int x,
@@ -494,7 +494,7 @@ bool Inventory::overlapItems(
 				++i)
 		{
 			if ((*i)->getSlot() == slot
-				&& (*i)->occupiesSlot(x, y, item))
+				&& (*i)->occupiesSlot(x,y, item))
 			{
 				return true;
 			}
@@ -507,7 +507,7 @@ bool Inventory::overlapItems(
 				i != unit->getTile()->getInventory()->end();
 				++i)
 		{
-			if ((*i)->occupiesSlot(x, y, item))
+			if ((*i)->occupiesSlot(x,y, item))
 				return true;
 		}
 	}
@@ -521,8 +521,7 @@ bool Inventory::overlapItems(
  * @param y - pointer to mouse Y position; returns the slot's Y position
  * @return, pointer to slot rules, or NULL if none
  */
-// private:
-RuleInventory* Inventory::getSlotInPosition(
+RuleInventory* Inventory::getSlotInPosition( // private.
 		int* x,
 		int* y) const
 {
@@ -531,7 +530,7 @@ RuleInventory* Inventory::getSlotInPosition(
 			i != _game->getRuleset()->getInventories()->end();
 			++i)
 	{
-		if (i->second->checkSlotInPosition(x, y))
+		if (i->second->checkSlotInPosition(x,y))
 			return i->second;
 	}
 
@@ -553,18 +552,23 @@ BattleItem* Inventory::getSelectedItem() const
  */
 void Inventory::setSelectedItem(BattleItem* item)
 {
-	_selItem = (item && !item->getRules()->isFixed())? item: NULL;
-
-	if (_selItem == NULL)
-		_selection->clear();
-	else
+	if (item != NULL
+		&& item->getRules()->isFixed() == false)
 	{
+		_selItem = item;
+
 		if (_selItem->getSlot()->getType() == INV_GROUND)
-			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
+			_stackLevel[static_cast<size_t>(_selItem->getSlotX())]
+					   [static_cast<size_t>(_selItem->getSlotY())] -= 1;
 
 		_selItem->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 										_selection);
+	}
+	else
+	{
+		_selItem = NULL;
+		_selection->clear();
 	}
 
 	drawItems();
@@ -585,7 +589,13 @@ BattleItem* Inventory::getMouseOverItem() const
  */
 void Inventory::setMouseOverItem(BattleItem* item)
 {
-	_mouseOverItem = (item && !item->getRules()->isFixed())? item: NULL;
+	if (item != NULL
+		&& item->getRules()->isFixed() == false)
+	{
+		_mouseOverItem = item;
+	}
+	else
+		_mouseOverItem = NULL;
 }
 
 /**
@@ -657,7 +667,7 @@ void Inventory::mouseOver(Action* action, State* state)
 		x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
 		y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
-	RuleInventory* const slot = getSlotInPosition(&x, &y);
+	RuleInventory* const slot = getSlotInPosition(&x,&y);
 	if (slot != NULL)
 	{
 		std::string warning; // kL_begin:
@@ -677,7 +687,7 @@ void Inventory::mouseOver(Action* action, State* state)
 			if (slot->getType() == INV_GROUND)
 				x += _groundOffset;
 
-			BattleItem* const item = _selUnit->getItem(slot, x, y);
+			BattleItem* const item = _selUnit->getItem(slot, x,y);
 			setMouseOverItem(item);
 		}
 	}
@@ -736,7 +746,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (slot->getType() == INV_HAND
 							|| (slot->getType() != INV_GROUND
 								&& (_tuMode == false
-									|| _selUnit->getOriginalFaction() != FACTION_PLAYER)))
+									|| _selUnit->getOriginalFaction() != FACTION_PLAYER))) // aLien units drop-to-ground on Ctrl+LMB.
 						{
 							slotRule = _game->getRuleset()->getInventory("STR_GROUND");
 						}
@@ -781,7 +791,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						}
 						else
 						{
-							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
+							_stackLevel[static_cast<size_t>(item->getSlotX())]
+									   [static_cast<size_t>(item->getSlotY())] -= 1;
 
 							if (fitItem(
 									slotRule,
@@ -790,7 +801,8 @@ void Inventory::mouseClick(Action* action, State* state)
 								placed = true;
 							}
 							else
-								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+								_stackLevel[static_cast<size_t>(item->getSlotX())]
+										   [static_cast<size_t>(item->getSlotY())] += 1;
 						}
 
 						if (placed == true)
@@ -835,6 +847,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						+ RuleInventory::SLOT_H / 2;
 
 			RuleInventory* slot = getSlotInPosition(&x,&y);
+
 			if (slot != NULL)
 			{
 				if (slot->getType() == INV_GROUND)
@@ -873,7 +886,8 @@ void Inventory::mouseClick(Action* action, State* state)
 									x,y);
 
 							if (slot->getType() == INV_GROUND)
-								_stackLevel[x][y] += 1;
+								_stackLevel[static_cast<size_t>(x)]
+										   [static_cast<size_t>(y)] += 1;
 
 							setSelectedItem(NULL);
 							_game->getResourcePack()->getSoundByDepth(
@@ -884,8 +898,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						else
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//							mouseOver(action, state); // kL, refresh tuCost visibility.
-//							arrangeGround(false); // kL, refresh tuCost visibility.
+//							mouseOver(action, state);	// kL, refresh tuCost visibility.
+//							arrangeGround(false);		// kL, refresh tuCost visibility.
 						}
 					}
 					else if (canStack == true)
@@ -900,7 +914,8 @@ void Inventory::mouseClick(Action* action, State* state)
 									slot,
 									item->getSlotX(),
 									item->getSlotY());
-							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+							_stackLevel[static_cast<size_t>(item->getSlotX())]
+									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
 							_game->getResourcePack()->getSoundByDepth(
 																	_depth,
@@ -968,8 +983,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						else
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//							mouseOver(action, state); // kL, refresh tuCost visibility.
-//							arrangeGround(false); // kL, refresh tuCost visibility.
+//							mouseOver(action, state);	// kL, refresh tuCost visibility.
+//							arrangeGround(false);		// kL, refresh tuCost visibility.
 						}
 					}
 				}
@@ -1000,7 +1015,8 @@ void Inventory::mouseClick(Action* action, State* state)
 									slot,
 									item->getSlotX(),
 									item->getSlotY());
-							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+							_stackLevel[static_cast<size_t>(item->getSlotX())]
+									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
 
 							_game->getResourcePack()->getSoundByDepth(
@@ -1027,7 +1043,7 @@ void Inventory::mouseClick(Action* action, State* state)
 		if (_selItem == NULL)
 		{
 			//Log(LOG_INFO) << ". no selected item";
-			if (_base == false
+			if (_atBase == false
 				|| Options::includePrimeStateInSavedLayout == true)
 			{
 				//Log(LOG_INFO) << ". not at base";
@@ -1039,13 +1055,13 @@ void Inventory::mouseClick(Action* action, State* state)
 						x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
 						y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
-					RuleInventory* const slot = getSlotInPosition(&x, &y);
+					RuleInventory* const slot = getSlotInPosition(&x,&y);
 					if (slot != NULL)
 					{
 						if (slot->getType() == INV_GROUND)
 							x += _groundOffset;
 
-						BattleItem* const item = _selUnit->getItem(slot, x, y);
+						BattleItem* const item = _selUnit->getItem(slot, x,y);
 						if (item != NULL)
 						{
 							const BattleType itemType = item->getRules()->getBattleType();
@@ -1062,21 +1078,36 @@ void Inventory::mouseClick(Action* action, State* state)
 										const std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 										_warning->showMessage(activated);
 									}
-									else
-										// This is where activation warning for nonProxy preBattle grenades goes.
+									else // This is where activation warning for nonProxy preBattle grenades goes.
 										_game->pushState(new PrimeGrenadeState(
 																			NULL,
 																			true,
 																			item,
 																			this));
 								}
-								else
+								else // deFuse grenade.
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
-									item->setFuseTimer(-1); // Unprime the grenade
+									item->setFuseTimer(-1);
 //									drawItems(); // kL, de-vector the Fuse graphic.
 									arrangeGround(false);
 								}
+							}
+							else if (slot->getType() != INV_GROUND) // move item to Ground.
+							{
+								moveItem(
+										item,
+										_game->getRuleset()->getInventory("STR_GROUND"));
+
+								arrangeGround(false);
+
+								_game->getResourcePack()->getSoundByDepth(
+																		_depth,
+																		ResourcePack::ITEM_DROP)
+																	->play();
+
+								_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.
+								mouseOver(action, state);
 							}
 						}
 					}
@@ -1107,7 +1138,8 @@ void Inventory::mouseClick(Action* action, State* state)
 		else
 		{
 			if (_selItem->getSlot()->getType() == INV_GROUND)
-				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
+				_stackLevel[static_cast<size_t>(_selItem->getSlotX())]
+						   [static_cast<size_t>(_selItem->getSlotY())] += 1;
 
 			setSelectedItem(NULL); // Return item to original position
 		}
@@ -1125,8 +1157,8 @@ void Inventory::mouseClick(Action* action, State* state)
 }
 
 /**
- * Unloads the selected weapon, placing the gun
- * on the right hand and the ammo on the left hand.
+ * Unloads the selected weapon placing the gun on the right hand and the ammo
+ * on the left hand; unless tuMode is false then drop ammo on the ground.
  * @return, true if the weapon was successfully unloaded
  */
 bool Inventory::unload()
@@ -1253,7 +1285,8 @@ void Inventory::arrangeGround(bool alterOffset)
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
 		{
-			x = y = 0;
+			x =
+			y = 0;
 
 			fit = false;
 			while (fit == false)
@@ -1369,8 +1402,7 @@ bool Inventory::fitItem(
 									_selUnit,
 									item,
 									newSlot,
-									x2,
-									y2) == false)
+									x2,y2) == false)
 				{
 					if (_tuMode == false
 						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)) == true)

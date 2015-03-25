@@ -50,7 +50,7 @@ private:
 	void addItem(
 			BattleActionType baType,
 			const std::string& desc,
-			int* id);
+			size_t* id);
 
 
 	public:
