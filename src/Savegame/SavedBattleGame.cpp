@@ -47,7 +47,7 @@
 
 #include "../Resource/XcomResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MCDPatch.h"
 #include "../Ruleset/OperationPool.h"

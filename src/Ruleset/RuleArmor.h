@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_ARMOR_H
-#define OPENXCOM_ARMOR_H
+#ifndef OPENXCOM_RULEARMOR_H
+#define OPENXCOM_RULEARMOR_H
 
 //#include <string>
 //#include <vector>
@@ -45,7 +45,7 @@ enum ForcedTorso
  * races wear Soldier Armor, Leader Armor or Commander Armor
  * depending on their rank.
  */
-class Armor
+class RuleArmor
 {
 
 	public:
@@ -98,9 +98,9 @@ private:
 
 	public:
 		/// Creates a blank armor ruleset.
-		Armor(const std::string& type);
+		RuleArmor(const std::string& type);
 		/// Cleans up the armor ruleset.
-		~Armor();
+		~RuleArmor();
 
 		/// Loads the armor data from YAML.
 		void load(const YAML::Node& node);

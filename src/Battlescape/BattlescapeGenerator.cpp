@@ -41,11 +41,11 @@
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/AlienRace.h"
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/MapBlock.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MCDPatch.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleGlobe.h"
@@ -1554,7 +1554,7 @@ void BattlescapeGenerator::setTacticalSprites() // private.
 		}
 	} */
 	std::string stArmor = _terrain->getPyjamaType();
-	Armor* const armorRule = _rules->getArmor(stArmor);
+	RuleArmor* const armorRule = _rules->getArmor(stArmor);
 
 	Base* base;
 	if (_craft != NULL)

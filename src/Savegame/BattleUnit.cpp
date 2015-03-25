@@ -44,7 +44,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -216,7 +216,7 @@ BattleUnit::BattleUnit(
 		Unit* unit,
 		const UnitFaction faction,
 		const int id,
-		Armor* const armor,
+		RuleArmor* const armor,
 		const int diff,
 		const int depth,
 		const int month,
@@ -3249,7 +3249,7 @@ int BattleUnit::getMotionPoints() const
  * Gets the unit's armor.
  * @return, pointer to Armor
  */
-Armor* BattleUnit::getArmor() const
+RuleArmor* BattleUnit::getArmor() const
 {
 	return _armor;
 }

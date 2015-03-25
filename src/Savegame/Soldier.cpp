@@ -32,7 +32,7 @@
 
 #include "../Interface/Text.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 //#include "../Ruleset/SoldierNamePool.h"
@@ -51,7 +51,7 @@ namespace OpenXcom
  */
 Soldier::Soldier(
 		RuleSoldier* rules,
-		Armor* armor,
+		RuleArmor* armor,
 		const std::vector<SoldierNamePool*>* names,
 		int id)
 	:
@@ -174,7 +174,7 @@ void Soldier::load(
 	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
 	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
 
-	Armor* armor = rule->getArmor(node["armor"]			.as<std::string>());
+	RuleArmor* armor = rule->getArmor(node["armor"]		.as<std::string>());
 	if (armor == NULL)
 		armor = rule->getArmor("STR_ARMOR_NONE_UC");
 
@@ -487,7 +487,7 @@ bool Soldier::isPromoted()
  * Gets this Soldier's current armor.
  * @return, pointer to Armor rule
  */
-Armor* Soldier::getArmor() const
+RuleArmor* Soldier::getArmor() const
 {
 	return _armor;
 }
@@ -496,7 +496,7 @@ Armor* Soldier::getArmor() const
  * Sets this Soldier's current armor.
  * @param armor - pointer to Armor rule
  */
-void Soldier::setArmor(Armor* const armor)
+void Soldier::setArmor(RuleArmor* const armor)
 {
 	_armor = armor;
 }

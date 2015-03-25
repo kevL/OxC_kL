@@ -32,7 +32,7 @@
 //#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
@@ -72,7 +72,7 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 	Position pos;
 	for (int
 			i = 0;
-			i < _size;
+			i != _size;
 			++i)
 	{
 		_save->getTileCoords(

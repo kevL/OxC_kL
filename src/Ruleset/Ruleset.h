@@ -36,7 +36,6 @@ namespace OpenXcom
 
 class AlienDeployment;
 class AlienRace;
-class Armor;
 class ArticleDefinition;
 class Base;
 //class ExtraMusic; // sza_ExtraMusic
@@ -50,6 +49,7 @@ class MCDPatch;
 class OperationPool;
 class ResourcePack;
 class RuleAlienMission;
+class RuleArmor;
 class RuleBaseFacility;
 class RuleCommendations;
 class RuleCountry;
@@ -147,7 +147,7 @@ protected:
 
 	std::map<std::string, AlienDeployment*>		_alienDeployments;
 	std::map<std::string, AlienRace*>			_alienRaces;
-	std::map<std::string, Armor*>				_armors;
+	std::map<std::string, RuleArmor*>			_armors;
 	std::map<std::string, ArticleDefinition*>	_ufopaediaArticles;
 	std::map<std::string, ExtraStrings*>		_extraStrings;
 	std::map<std::string, MapDataSet*>			_mapDataSets;
@@ -275,7 +275,7 @@ protected:
 		const std::vector<std::string>& getDeploymentsList() const;
 
 		/// Gets armor rules.
-		Armor* getArmor(const std::string& name) const;
+		RuleArmor* getArmor(const std::string& name) const;
 		/// Gets the available armors.
 		const std::vector<std::string>& getArmorsList() const;
 

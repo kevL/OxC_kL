@@ -55,10 +55,10 @@ enum SoldierLook
 };
 
 
-class Armor;
 class Craft;
 class EquipmentLayoutItem;
 class Language;
+class RuleArmor;
 class Ruleset;
 class RuleSoldier;
 class SavedGame;
@@ -88,8 +88,8 @@ private:
 	std::wstring _name;
 //		_statString;
 
-	Armor* _armor;
 	Craft* _craft;
+	RuleArmor* _armor;
 	RuleSoldier* _rules;
 	SoldierDiary* _diary;
 
@@ -108,7 +108,7 @@ private:
 		/// Creates a new soldier.
 		Soldier(
 				RuleSoldier* rules,
-				Armor* armor,
+				RuleArmor* armor,
 				const std::vector<SoldierNamePool*>* names = NULL,
 				int id = 0);
 		/// Cleans up the soldier.
@@ -175,9 +175,9 @@ private:
 		bool isPromoted();
 
 		/// Gets the soldier armor.
-		Armor* getArmor() const;
+		RuleArmor* getArmor() const;
 		/// Sets the soldier armor.
-		void setArmor(Armor* const armor);
+		void setArmor(RuleArmor* const armor);
 
 		/// Gets the soldier's wound recovery time.
 		int getWoundRecovery() const;

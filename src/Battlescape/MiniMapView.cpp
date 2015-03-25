@@ -37,7 +37,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -72,10 +72,8 @@ MiniMapView::MiniMapView(
 		SavedBattleGame* battleGame)
 	:
 		InteractiveSurface(
-			w,
-			h,
-			x,
-			y),
+			w,h,
+			x,y),
 		_game(game),
 		_camera(camera),
 		_battleGame(battleGame),

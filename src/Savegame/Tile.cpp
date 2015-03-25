@@ -34,9 +34,9 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 
 #include "../Savegame/SavedBattleGame.h"

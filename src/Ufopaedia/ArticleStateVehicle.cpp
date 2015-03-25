@@ -34,8 +34,8 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Unit.h"
@@ -53,7 +53,7 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 		ArticleState(defs->id)
 {
 	Unit* const unit = _game->getRuleset()->getUnit(defs->id);
-	const Armor* const armor = _game->getRuleset()->getArmor(unit->getArmor());
+	const RuleArmor* const armor = _game->getRuleset()->getArmor(unit->getArmor());
 	RuleItem* const item = _game->getRuleset()->getItem(defs->id);
 
 	_txtTitle	= new Text(310, 17, 5, 23);
@@ -182,7 +182,6 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
  * dTor.
  */
  ArticleStateVehicle::~ArticleStateVehicle()
-{
-}
+{}
 
 }

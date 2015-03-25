@@ -26,7 +26,7 @@
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Unit.h"
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
@@ -35,7 +35,7 @@ namespace OpenXcom
 	ArticleStateTFTDVehicle::ArticleStateTFTDVehicle(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
 		Unit *unit = _game->getRuleset()->getUnit(defs->id);
-		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
+		RuleArmor *armor = _game->getRuleset()->getArmor(unit->getArmor());
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		_lstStats = new TextList(150, 89, 168, 86);

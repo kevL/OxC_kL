@@ -57,7 +57,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"

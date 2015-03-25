@@ -33,7 +33,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
-class Armor;
+class RuleArmor;
 
 
 /**
@@ -56,7 +56,7 @@ private:
 	TextList* _lstArmor;
 	Window* _window;
 
-	std::vector<Armor*> _armors;
+	std::vector<RuleArmor*> _armors;
 
 
 	public:

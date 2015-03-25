@@ -38,7 +38,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Unit.h"
 
@@ -79,7 +79,7 @@ UnitInfoState::UnitInfoState(
 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
-	_bg			= new Surface(320, 200, 0, 0);
+	_bg			= new Surface(320, 200);
 	_exit		= new InteractiveSurface(320, 180, 0, 20);
 	_txtName	= new Text(288, 17, 16, 4);
 

@@ -49,9 +49,9 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"

@@ -32,7 +32,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 

@@ -47,11 +47,11 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/Globe.h" // Globe::GM_BASE
 
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"

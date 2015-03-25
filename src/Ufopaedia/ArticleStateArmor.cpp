@@ -19,9 +19,8 @@
 
 #include "ArticleStateArmor.h"
 
-#include <sstream>
-
-#include "../fmath.h"
+//#include <sstream>
+//#include "../fmath.h"
 
 #include "Ufopaedia.h"
 
@@ -37,8 +36,8 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
 
 
@@ -53,7 +52,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 		ArticleState(defs->id),
 		_row(0)
 {
-	Armor* armor = _game->getRuleset()->getArmor(defs->id);
+	const RuleArmor* const armor = _game->getRuleset()->getArmor(defs->id);
 
 	_txtTitle = new Text(300, 17, 5, 24);
 
@@ -71,7 +70,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_txtTitle->setBig();
 	_txtTitle->setText(tr(defs->title));
 
-	_image = new Surface(320, 200, 0, 0);
+	_image = new Surface(320, 200);
 	add(_image);
 
 	std::string look = armor->getSpriteInventory();
@@ -110,17 +109,17 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 
 	for (int
 			i = 0;
-			i < Armor::DAMAGE_TYPES;
+			i != RuleArmor::DAMAGE_TYPES;
 			++i)
 	{
 		ItemDamageType dType = static_cast<ItemDamageType>(i);
-		std::string damage = getDamageTypeText(dType);
-		if (damage != "STR_UNKNOWN")
+		std::string st = getDamageTypeText(dType);
+		if (st != "STR_UNKNOWN")
 		{
-			int vulnera = static_cast<int>(Round(static_cast<double>(armor->getDamageModifier(dType)) * 100.0));
+			int vulnera = static_cast<int>(Round(static_cast<double>(armor->getDamageModifier(dType)) * 100.));
 
 			addStat(
-				damage,
+				st,
 				Text::formatPercentage(vulnera));
 		}
 	}
@@ -149,8 +148,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
  * dTor.
  */
 ArticleStateArmor::~ArticleStateArmor()
-{
-}
+{}
 
 /**
  *
@@ -170,8 +168,10 @@ void ArticleStateArmor::addStat(
 						2,
 						tr(label).c_str(),
 						ss.str().c_str());
-		_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);
-
+		_lstInfo->setCellColor(
+						_row,
+						1,
+						Palette::blockOffset(15)+4);
 		++_row;
 	}
 }
@@ -187,8 +187,10 @@ void ArticleStateArmor::addStat(
 					2,
 					tr(label).c_str(),
 					stat.c_str());
-	_lstInfo->setCellColor(_row, 1, Palette::blockOffset(15)+4);
-
+	_lstInfo->setCellColor(
+					_row,
+					1,
+					Palette::blockOffset(15)+4);
 	++_row;
 }
 

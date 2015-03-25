@@ -33,7 +33,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -73,12 +73,12 @@ SoldierArmorState::SoldierArmorState(
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color);
 
-	add(_window, "window", "soldierArmor");
-	add(_txtSoldier, "text", "soldierArmor");
-	add(_txtType, "text", "soldierArmor");
-	add(_txtQuantity, "text", "soldierArmor");
-	add(_lstArmor, "list", "soldierArmor");
-	add(_btnCancel, "button", "soldierArmor");
+	add(_window,		"window",	"soldierArmor");
+	add(_txtSoldier,	"text",		"soldierArmor");
+	add(_txtType,		"text",		"soldierArmor");
+	add(_txtQuantity,	"text",		"soldierArmor");
+	add(_lstArmor,		"list",		"soldierArmor");
+	add(_btnCancel,		"button",	"soldierArmor");
 
 	centerAllSurfaces();
 
@@ -104,7 +104,7 @@ SoldierArmorState::SoldierArmorState(
 	_lstArmor->setSelectable();
 	_lstArmor->setMargin();
 
-	Armor* armor;
+	RuleArmor* armor;
 	const std::vector<std::string>& armors = _game->getRuleset()->getArmorsList();
 	for (std::vector<std::string>::const_iterator
 			i = armors.begin();

@@ -38,13 +38,13 @@ namespace OpenXcom
 {
 
 class AlienBAIState;
-class Armor;
 class BattleAIState;
 class BattleItem;
 class BattlescapeGame;
 class CivilianBAIState;
 class Language;
 class Node;
+class RuleArmor;
 class RuleInventory;
 class SavedGame;
 class Soldier;
@@ -496,7 +496,7 @@ private:
 	std::vector<int> _loftempsSet;
 	std::pair<Uint8, Uint8> _recolor[2];
 
-	Armor* _armor;
+	RuleArmor* _armor;
 	Soldier* _geoscapeSoldier;
 	Unit* _unitRules;
 
@@ -533,7 +533,7 @@ private:
 				Unit* unit,
 				const UnitFaction faction,
 				const int id,
-				Armor* const armor,
+				RuleArmor* const armor,
 				const int diff,
 				const int depth,
 				const int month = 0, // for upping aLien stats as time progresses.
@@ -738,7 +738,7 @@ private:
 				int armor,
 				UnitSide side);
 		/// Gets this unit's Armor.
-		Armor* getArmor() const;
+		RuleArmor* getArmor() const;
 		/// Gets this unit's armor value on a particular side.
 		int getArmor(UnitSide side) const;
 		/// Checks if this unit is wearing a PowerSuit.

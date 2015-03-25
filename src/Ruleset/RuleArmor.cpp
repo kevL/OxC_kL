@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Armor.h"
+#include "RuleArmor.h"
 
 #include "../Savegame/Soldier.h"
 
@@ -29,7 +29,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of armor.
  * @param type - reference string defining the type
  */
-Armor::Armor(const std::string& type)
+RuleArmor::RuleArmor(const std::string& type)
 	:
 		_type(type),
 		_frontArmor(0),
@@ -51,22 +51,22 @@ Armor::Armor(const std::string& type)
 		_isBasic(false),
 		_isSpacesuit(false)
 {
-	_stats.tu			= 0;
-	_stats.stamina		= 0;
-	_stats.health		= 0;
-	_stats.bravery		= 0;
-	_stats.reactions	= 0;
-	_stats.firing		= 0;
-	_stats.throwing		= 0;
-	_stats.strength		= 0;
-	_stats.psiSkill		= 0;
-	_stats.psiStrength	= 0;
+	_stats.tu			=
+	_stats.stamina		=
+	_stats.health		=
+	_stats.bravery		=
+	_stats.reactions	=
+	_stats.firing		=
+	_stats.throwing		=
+	_stats.strength		=
+	_stats.psiSkill		=
+	_stats.psiStrength	=
 	_stats.melee		= 0;
 
 	for (int
 			i = 0;
-			i < DAMAGE_TYPES;
-			i++)
+			i != DAMAGE_TYPES;
+			++i)
 	{
 		_damageModifier[i] = 1.f;
 	}
@@ -78,14 +78,14 @@ Armor::Armor(const std::string& type)
 /**
  * dTor.
  */
-Armor::~Armor()
+RuleArmor::~RuleArmor()
 {}
 
 /**
  * Loads the armor from a YAML file.
  * @param node - reference a YAML node
  */
-void Armor::load(const YAML::Node& node)
+void RuleArmor::load(const YAML::Node& node)
 {
 	_type			= node["type"]			.as<std::string>(_type);
 	_spriteSheet	= node["spriteSheet"]	.as<std::string>(_spriteSheet);
@@ -142,10 +142,10 @@ void Armor::load(const YAML::Node& node)
 
 	_forcedTorso = (ForcedTorso)node["forcedTorso"]	.as<int>(_forcedTorso);
 
-	if (   _drawingRoutine == 0
-		|| _drawingRoutine == 1
-		|| _drawingRoutine == 4
-		|| _drawingRoutine == 6
+	if (   _drawingRoutine ==  0
+		|| _drawingRoutine ==  1
+		|| _drawingRoutine ==  4
+		|| _drawingRoutine ==  6
 		|| _drawingRoutine == 10
 		|| _drawingRoutine == 13
 		|| _drawingRoutine == 14
@@ -187,7 +187,7 @@ void Armor::load(const YAML::Node& node)
  * Each armor has a unique name.
  * @return, armor name
  */
-std::string Armor::getType() const
+std::string RuleArmor::getType() const
 {
 	return _type;
 }
@@ -196,7 +196,7 @@ std::string Armor::getType() const
  * Gets the unit's sprite sheet.
  * @return, sprite sheet name
  */
-std::string Armor::getSpriteSheet() const
+std::string RuleArmor::getSpriteSheet() const
 {
 	return _spriteSheet;
 }
@@ -205,7 +205,7 @@ std::string Armor::getSpriteSheet() const
  * Gets the unit's inventory sprite.
  * @return, inventory sprite name
  */
-std::string Armor::getSpriteInventory() const
+std::string RuleArmor::getSpriteInventory() const
 {
 	return _spriteInv;
 }
@@ -214,7 +214,7 @@ std::string Armor::getSpriteInventory() const
  * Gets the front armor level.
  * @return, front armor level
  */
-int Armor::getFrontArmor() const
+int RuleArmor::getFrontArmor() const
 {
 	return _frontArmor;
 }
@@ -223,7 +223,7 @@ int Armor::getFrontArmor() const
  * Gets the side armor level.
  * @return, side armor level
  */
-int Armor::getSideArmor() const
+int RuleArmor::getSideArmor() const
 {
 	return _sideArmor;
 }
@@ -232,7 +232,7 @@ int Armor::getSideArmor() const
  * Gets the rear armor level.
  * @return, rear armor level
  */
-int Armor::getRearArmor() const
+int RuleArmor::getRearArmor() const
 {
 	return _rearArmor;
 }
@@ -241,7 +241,7 @@ int Armor::getRearArmor() const
  * Gets the under armor level.
  * @return, under armor level
  */
-int Armor::getUnderArmor() const
+int RuleArmor::getUnderArmor() const
 {
 	return _underArmor;
 }
@@ -250,7 +250,7 @@ int Armor::getUnderArmor() const
  * Gets the corpse item used in the Geoscape.
  * @return, name of the corpse item
  */
-std::string Armor::getCorpseGeoscape() const
+std::string RuleArmor::getCorpseGeoscape() const
 {
 	return _corpseGeo;
 }
@@ -260,7 +260,7 @@ std::string Armor::getCorpseGeoscape() const
  * in the Battlescape (one per unit tile).
  * @return, list of corpse items
  */
-const std::vector<std::string>& Armor::getCorpseBattlescape() const
+const std::vector<std::string>& RuleArmor::getCorpseBattlescape() const
 {
 	return _corpseBattle;
 }
@@ -269,7 +269,7 @@ const std::vector<std::string>& Armor::getCorpseBattlescape() const
  * Gets the storage item needed to equip this.
  * @return, name of the store item
  */
-std::string Armor::getStoreItem() const
+std::string RuleArmor::getStoreItem() const
 {
 	return _storeItem;
 }
@@ -278,7 +278,7 @@ std::string Armor::getStoreItem() const
  * Gets the type of special weapon.
  * @return, the name of the special weapon
  */
-/* std::string Armor::getSpecialWeapon() const
+/* std::string RuleArmor::getSpecialWeapon() const
 {
 	return _specWeapon;
 } */
@@ -287,7 +287,7 @@ std::string Armor::getStoreItem() const
  * Gets the drawing routine ID.
  * @return, drawing routine ID
  */
-int Armor::getDrawingRoutine() const
+int RuleArmor::getDrawingRoutine() const
 {
 	return _drawingRoutine;
 }
@@ -300,7 +300,7 @@ int Armor::getDrawingRoutine() const
  * For more information, see the BattleUnit constructor.
  * @return, MovementType enum
  */
-MovementType Armor::getMovementType() const
+MovementType RuleArmor::getMovementType() const
 {
 	return _movementType;
 }
@@ -309,7 +309,7 @@ MovementType Armor::getMovementType() const
  * Gets the size of this armor. Normally 1 (small) or 2 (big).
  * @return, size
  */
-int Armor::getSize() const
+int RuleArmor::getSize() const
 {
 	return _size;
 }
@@ -319,7 +319,7 @@ int Armor::getSize() const
  * @param dt - the damageType
  * @return, damage modifier ( 0.f to 1.f+ )
  */
-float Armor::getDamageModifier(ItemDamageType dType) const
+float RuleArmor::getDamageModifier(ItemDamageType dType) const
 {
 	return _damageModifier[static_cast<int>(dType)];
 }
@@ -327,7 +327,7 @@ float Armor::getDamageModifier(ItemDamageType dType) const
 /** Gets the Line Of Fire Template set.
  * @return, address of loftempsSet as a vector of ints
  */
-const std::vector<int>& Armor::getLoftempsSet() const
+const std::vector<int>& RuleArmor::getLoftempsSet() const
 {
 	return _loftempsSet;
 }
@@ -336,7 +336,7 @@ const std::vector<int>& Armor::getLoftempsSet() const
   * Gets pointer to the armor's stats.
   * @return, pointer to the armor's UnitStats
   */
-const UnitStats* Armor::getStats() const
+const UnitStats* RuleArmor::getStats() const
 {
 	return &_stats;
 }
@@ -345,7 +345,7 @@ const UnitStats* Armor::getStats() const
  * Gets the armor's weight.
  * @return, the weight of the armor
  */
-int Armor::getWeight() const
+int RuleArmor::getWeight() const
 {
 	return _weight;
 }
@@ -354,7 +354,7 @@ int Armor::getWeight() const
  * Gets number of death frames.
  * @return, number of death frames
  */
-int Armor::getDeathFrames() const
+int RuleArmor::getDeathFrames() const
 {
 	return _deathFrames;
 }
@@ -363,7 +363,7 @@ int Armor::getDeathFrames() const
  * Gets number of shoot frames.
  * @return, number of shoot frames
  */
-int Armor::getShootFrames() const
+int RuleArmor::getShootFrames() const
 {
 	return _shootFrames;
 }
@@ -372,7 +372,7 @@ int Armor::getShootFrames() const
  * Gets if armor uses constant animation.
  * @return, true if it uses constant animation
  */
-bool Armor::getConstantAnimation() const
+bool RuleArmor::getConstantAnimation() const
 {
 	return _constantAnimation;
 }
@@ -381,7 +381,7 @@ bool Armor::getConstantAnimation() const
  * Gets if armor can hold weapon.
  * @return, true if it can hold weapon
  */
-bool Armor::getCanHoldWeapon() const
+bool RuleArmor::getCanHoldWeapon() const
 {
 	return _canHoldWeapon;
 }
@@ -390,7 +390,7 @@ bool Armor::getCanHoldWeapon() const
  * Checks if this armor ignores gender (power suit/flying suit).
  * @return, the torso to force on the sprite
  */
-ForcedTorso Armor::getForcedTorso() const
+ForcedTorso RuleArmor::getForcedTorso() const
 {
 	return _forcedTorso;
 }
@@ -399,7 +399,7 @@ ForcedTorso Armor::getForcedTorso() const
  * Gets hair base color group for replacement, if -1 then don't replace colors.
  * @return, colorgroup or -1
  */
-int Armor::getFaceColorGroup() const
+int RuleArmor::getFaceColorGroup() const
 {
 	return _faceColorGroup;
 }
@@ -408,7 +408,7 @@ int Armor::getFaceColorGroup() const
  * Gets hair base color group for replacement, if -1 then don't replace colors.
  * @return, colorgroup or -1
  */
-int Armor::getHairColorGroup() const
+int RuleArmor::getHairColorGroup() const
 {
 	return _hairColorGroup;
 }
@@ -417,7 +417,7 @@ int Armor::getHairColorGroup() const
  * Gets new face colors for replacement.
  * @return, reference to a vector of new values based on gender and race
  */
-const std::vector<int>& Armor::getFaceColor() const
+const std::vector<int>& RuleArmor::getFaceColor() const
 {
 	return _faceColor;
 }
@@ -426,34 +426,34 @@ const std::vector<int>& Armor::getFaceColor() const
  * Gets new hair colors for replacement.
  * @return, reference to a vector of new values based on gender and race
  */
-const std::vector<int>& Armor::getHairColor() const
+const std::vector<int>& RuleArmor::getHairColor() const
 {
 	return _hairColor;
 }
 
 /**
- * Checks if this Armor's inventory be accessed.
+ * Checks if this RuleArmor's inventory be accessed.
  * @return, true if inventory can be opened by player
  */
-const bool Armor::hasInventory() const
+const bool RuleArmor::hasInventory() const
 {
 	return _hasInventory;
 }
 
 /**
- * Gets if this Armor is basic (lowest rank, standard issue wear).
+ * Gets if this RuleArmor is basic (lowest rank, standard issue wear).
  * @return, true if basic
  */
-const bool Armor::isBasic() const
+const bool RuleArmor::isBasic() const
 {
 	return _isBasic;
 }
 
 /**
- * Gets if this Armor is powered and suitable for Mars.
+ * Gets if this RuleArmor is powered and suitable for Mars.
  * @return, true if life-supporting
  */
-const bool Armor::isSpacesuit() const
+const bool RuleArmor::isSpacesuit() const
 {
 	return _isSpacesuit;
 }

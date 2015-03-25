@@ -307,7 +307,7 @@
 #include "./Ruleset/RuleCraftWeapon.h"
 #include "./Ruleset/MapData.h"
 #include "./Ruleset/SoldierNamePool.h"
-#include "./Ruleset/Armor.h"
+#include "./Ruleset/RuleArmor.h"
 #include "./Ruleset/RuleSoldier.h"
 #include "./Ruleset/MapDataSet.h"
 #include "./Ruleset/RuleAlienMission.h"

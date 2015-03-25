@@ -91,8 +91,8 @@
 #include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/AlienRace.h"
-#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleAlienMission.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleCountry.h"

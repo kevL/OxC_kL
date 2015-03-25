@@ -55,7 +55,7 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleResearch.h"

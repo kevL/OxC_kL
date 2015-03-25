@@ -41,7 +41,7 @@
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/Globe.h" // Globe::GM_CRAFT
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -91,7 +91,7 @@ Craft::Craft(
 
 	for (int
 			i = 0;
-			i < _rules->getWeapons();
+			i != _rules->getWeapons();
 			++i)
 	{
 		_weapons.push_back(NULL);

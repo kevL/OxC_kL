@@ -30,7 +30,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Node.h"

@@ -58,7 +58,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleInterface.h"

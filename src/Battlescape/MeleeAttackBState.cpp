@@ -36,7 +36,7 @@
 #include "../Engine/Sound.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 
 namespace OpenXcom
 {
@@ -80,7 +80,7 @@ void MeleeAttackBState::init()
 	}
 
 	_unit = _action.actor;
-	
+
 	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
@@ -108,7 +108,7 @@ void MeleeAttackBState::init()
 		}
 	}
 
-	
+
 	AlienBAIState *ai = dynamic_cast<AlienBAIState*>(_unit->getCurrentAIState());
 
 	if (ai && ai->getTarget())
@@ -176,7 +176,7 @@ void MeleeAttackBState::think()
 //		{
 //			_parent->getTileEngine()->checkReactionFire(_unit);
 //		}
-		
+
 		if (_parent->getSave()->getSide() == FACTION_PLAYER || _parent->getSave()->getDebugMode())
 		{
 			_parent->setupCursor();
@@ -218,7 +218,7 @@ void MeleeAttackBState::performMeleeAttack()
 		_action.weapon->setAmmoItem(0);
 	}
 	_parent->getMap()->setCursorType(CT_NONE);
-	
+
 	// make an explosion animation
 	_parent->statePushFront(new ExplosionBState(_parent, _voxel, _action.weapon, _action.actor, 0, true, true));
 }
@@ -229,7 +229,7 @@ void MeleeAttackBState::performMeleeAttack()
 void MeleeAttackBState::resolveHit()
 {
 	if (RNG::percent(_unit->getFiringAccuracy(BA_HIT, _weapon)))
-	{	
+	{
 		// Give soldiers XP
 		if (_unit->getGeoscapeSoldier() &&
 			_target && _target->getOriginalFaction() == FACTION_HOSTILE)
@@ -268,7 +268,7 @@ void MeleeAttackBState::resolveHit()
 		{
 			_parent->getResourcePack()->getSoundByDepth(_parent->getDepth(), _action.weapon->getRules()->getMeleeHitSound())->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 		}
-		
+
 		// offset the damage voxel ever so slightly so that the target knows which side the attack came from
 		Position difference = _unit->getPosition() - _action.target;
 		Position damagePosition = _voxel + difference;

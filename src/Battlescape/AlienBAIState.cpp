@@ -37,7 +37,7 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h" // kL, grenade from Belt to Hand
 #include "../Ruleset/Ruleset.h"

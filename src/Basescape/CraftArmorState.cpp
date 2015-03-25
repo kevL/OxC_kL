@@ -41,7 +41,7 @@
 
 #include "../Resource/XcomResourcePack.h"
 
-#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleCraft.h"
 
 #include "../Savegame/Base.h"
@@ -263,7 +263,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 /*kL: sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor.
 		SavedGame* _save;
 		_save = _game->getSavedGame();
-		Armor* a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
+		RuleArmor* a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
 		if (_game->getSavedGame()->getMonthsPassed() != -1)
 		{
 			if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")

@@ -22,8 +22,8 @@
 #include "ArticleStateTFTD.h"
 #include "ArticleStateTFTDArmor.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Armor.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
@@ -34,7 +34,7 @@ namespace OpenXcom
 
 	ArticleStateTFTDArmor::ArticleStateTFTDArmor(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs), _row(0)
 	{
-		Armor *armor = _game->getRuleset()->getArmor(defs->id);
+		RuleArmor *armor = _game->getRuleset()->getArmor(defs->id);
 
 		_lstInfo = new TextList(150, 64, 168, 110);
 		add(_lstInfo);
@@ -54,7 +54,7 @@ namespace OpenXcom
 		++_row;
 
 		// Add damage modifiers
-		for (int i = 0; i < Armor::DAMAGE_TYPES; ++i)
+		for (int i = 0; i < RuleArmor::DAMAGE_TYPES; ++i)
 		{
 			ItemDamageType dt = (ItemDamageType)i;
 			int percentage = (int)Round(armor->getDamageModifier(dt) * 100.0f);

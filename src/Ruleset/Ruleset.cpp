@@ -25,7 +25,6 @@
 
 #include "AlienRace.h"
 #include "AlienDeployment.h"
-#include "Armor.h"
 #include "ArticleDefinition.h"
 //#include "ExtraMusic.h" // sza_ExtraMusic
 #include "ExtraSounds.h"
@@ -36,6 +35,7 @@
 #include "MCDPatch.h"
 #include "OperationPool.h"
 #include "RuleAlienMission.h"
+#include "RuleArmor.h"
 #include "RuleBaseFacility.h"
 #include "RuleCity.h"
 #include "RuleCommendations.h"
@@ -274,7 +274,7 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, Armor*>::const_iterator
+	for (std::map<std::string, RuleArmor*>::const_iterator
 			i = _armors.begin();
 			i != _armors.end();
 			++i)
@@ -650,7 +650,7 @@ void Ruleset::loadFile(const std::string& filename)
 			i != doc["armors"].end();
 			++i)
 	{
-		Armor* const rule = loadRule(
+		RuleArmor* const rule = loadRule(
 								*i,
 								&_armors,
 								&_armorsIndex);
@@ -1616,9 +1616,9 @@ const std::vector<std::string>& Ruleset::getDeploymentsList() const
  * @param name - reference the Armor type
  * @return, pointer to Rule for the Armor
  */
-Armor* Ruleset::getArmor(const std::string& name) const
+RuleArmor* Ruleset::getArmor(const std::string& name) const
 {
-	std::map<std::string, Armor*>::const_iterator i = _armors.find(name);
+	std::map<std::string, RuleArmor*>::const_iterator i = _armors.find(name);
 	if (i != _armors.end())
 		return i->second;
 
@@ -2031,7 +2031,7 @@ struct compareRule<RuleCraftWeapon>
  * Itemless armor comes before all else.
  */
 template <>
-struct compareRule<Armor>
+struct compareRule<RuleArmor>
 	:
 		public std::binary_function<const std::string&, const std::string&, bool>
 {
@@ -2046,7 +2046,7 @@ struct compareRule<Armor>
 			const std::string& r1,
 			const std::string& r2) const
 	{
-		const Armor
+		const RuleArmor
 			* const armor1 = _ruleset->getArmor(r1),
 			* const armor2 = _ruleset->getArmor(r2);
 		const RuleItem
@@ -2161,7 +2161,7 @@ void Ruleset::sortLists()
 	std::sort(
 			_armorsIndex.begin(),
 			_armorsIndex.end(),
-			compareRule<Armor>(this));
+			compareRule<RuleArmor>(this));
 	std::sort(
 			_ufopaediaIndex.begin(),
 			_ufopaediaIndex.end(),
