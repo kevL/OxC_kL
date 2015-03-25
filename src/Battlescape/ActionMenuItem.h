@@ -60,7 +60,7 @@ private:
 	public:
 		/// Creates a new ActionMenuItem.
 		ActionMenuItem(
-				int id,
+				size_t id,
 				Game* game,
 				int x,
 				int y);

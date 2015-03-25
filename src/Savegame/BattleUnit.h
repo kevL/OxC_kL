@@ -586,7 +586,7 @@ private:
 		void startWalking(
 				int dir,
 				const Position& dest,
-				Tile* tileBelow);
+				const Tile* const tileBelow);
 //				bool cache);
 		/// Advances the walkingPhase.
 		void keepWalking(

@@ -68,20 +68,19 @@ ActionMenuState::ActionMenuState(
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 8;
+			i != MENU_ITEMS;
 			++i)
 	{
-		_menuItem[i] = new ActionMenuItem(
+		_menuSelect[i] = new ActionMenuItem(
 										i,
 										_game,
-										x,
-										y);
-		add(_menuItem[i]);
+										x,y);
+		add(_menuSelect[i]);
 
-		_menuItem[i]->setVisible(false);
-		_menuItem[i]->onMouseClick((ActionHandler)& ActionMenuState::btnActionMenuClick);
+		_menuSelect[i]->setVisible(false);
+		_menuSelect[i]->onMouseClick((ActionHandler)& ActionMenuState::btnActionMenuClick);
 	}
 
 	// Build the popup menu
@@ -101,10 +100,9 @@ ActionMenuState::ActionMenuState(
 				&id);
 	}
 
-	SavedGame* const save = _game->getSavedGame();
-	if (save->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
-		&& save->isResearched(itRule->getRequirements()) == false)
-//		&& itRule->isResearchExempt() == false)
+	SavedGame* const gameSave = _game->getSavedGame();
+	if (gameSave->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
+		&& gameSave->isResearched(itRule->getRequirements()) == false)
 	{
 		return;
 	}
@@ -124,7 +122,7 @@ ActionMenuState::ActionMenuState(
 					&id);
 	}
 
-	if (itRule->getTUMelee() > 0)
+	if (itRule->getTUMelee() != 0)
 	{
 		if (itRule->getBattleType() == BT_MELEE
 			&& itRule->getDamageType() == DT_STUN)
@@ -151,7 +149,7 @@ ActionMenuState::ActionMenuState(
 				"STR_USE_SCANNER",
 				&id);
 	else if (itRule->getBattleType() == BT_PSIAMP
-		&& _action->actor->getBaseStats()->psiSkill > 0)
+		&& _action->actor->getBaseStats()->psiSkill != 0)
 	{
 		addItem(
 				BA_MINDCONTROL,
@@ -249,13 +247,13 @@ void ActionMenuState::addItem(
 	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 
 
-	_menuItem[*id]->setAction(
+	_menuSelect[*id]->setAction(
 							baType,
 							tr(desc),
 							s1,
 							s2,
 							tu);
-	_menuItem[*id]->setVisible();
+	_menuSelect[*id]->setVisible();
 
 	++(*id);
 }
@@ -286,23 +284,26 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
-	const RuleItem* const itRule = _action->weapon->getRules();
-	int btnID = -1;
+	size_t btnID = MENU_ITEMS;
 
 	for (size_t // find out which button was pressed
 			i = 0;
-			i < sizeof(_menuItem) / sizeof(_menuItem[0])
-				&& btnID == -1;
+			i != MENU_ITEMS; //sizeof(_menuSelect) / sizeof(_menuSelect[0])
 			++i)
 	{
-		if (action->getSender() == _menuItem[i])
+		if (action->getSender() == _menuSelect[i])
+		{
 			btnID = i;
+			break;
+		}
 	}
 
-	if (btnID != -1)
+	if (btnID != MENU_ITEMS)
 	{
-		_action->TU = _menuItem[btnID]->getTUs();
-		_action->type = _menuItem[btnID]->getAction();
+		const RuleItem* const itRule = _action->weapon->getRules();
+
+		_action->TU = _menuSelect[static_cast<size_t>(btnID)]->getTUs();
+		_action->type = _menuSelect[static_cast<size_t>(btnID)]->getAction();
 
 		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0

@@ -19,7 +19,7 @@
 
 #include "Frame.h"
 
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 
 namespace OpenXcom
@@ -29,8 +29,8 @@ namespace OpenXcom
  * Sets up a blank Frame with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 Frame::Frame(
 		int width,
@@ -41,21 +41,18 @@ Frame::Frame(
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_color(0),
 		_bg(0),
 		_thickness(5),
 		_contrast(false)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Frame::~Frame()
-{
-}
+{}
 
 /**
  * Changes the color used to draw the shaded border.
@@ -109,7 +106,7 @@ Uint8 Frame::getSecondaryColor() const
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape UI.
- * @param contrast - high contrast setting
+ * @param contrast - high contrast setting (default true)
  */
 void Frame::setHighContrast(bool contrast)
 {
@@ -119,7 +116,7 @@ void Frame::setHighContrast(bool contrast)
 
 /**
 * Changes the thickness of the border to draw.
-* @param thickness - thickness in pixels
+* @param thickness - thickness in pixels (default 5)
 */
 void Frame::setThickness(int thickness)
 {
@@ -137,22 +134,24 @@ void Frame::draw()
 	Surface::draw();
 
 	SDL_Rect square;
-	square.x = 0;
+	square.x =
 	square.y = 0;
 	square.w = static_cast<Uint16>(getWidth());
 	square.h = static_cast<Uint16>(getHeight());
 
-	int mult = 1;
-	if (_contrast)
-		mult = 2;
+	int multer;
+	if (_contrast == true)
+		multer = 2;
+	else
+		multer = 1;
 
 	Uint8
 		darkest = Palette::blockOffset(_color / 16) + 15,
-		color = _color;
+		color;
 
 	for (int
 			i = 0;
-			i < _thickness;
+			i != _thickness;
 			++i)
 	{
 		if ((_thickness > 1
@@ -162,7 +161,7 @@ void Frame::draw()
 			color = darkest;
 		}
 		else
-			color = _color + static_cast<Uint8>(std::abs(i - _thickness / 2) * mult);
+			color = _color + static_cast<Uint8>(std::abs(i - _thickness / 2) * multer);
 
 		drawRect(
 				&square,

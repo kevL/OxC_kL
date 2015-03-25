@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param y		- Position on the y-axis
  */
 ActionMenuItem::ActionMenuItem(
-		int id,
+		size_t id,
 		Game* game,
 		int x,
 		int y)
@@ -48,7 +48,7 @@ ActionMenuItem::ActionMenuItem(
 			272,
 			40,
 			x + 24,
-			y - (id * 40)),
+			y - (static_cast<int>(id) * 40)),
 		_highlighted(false),
 		_action(BA_NONE),
 		_tu(0)
@@ -66,8 +66,7 @@ ActionMenuItem::ActionMenuItem(
 
 	_frame		= new Frame(
 						getWidth(),
-						getHeight(),
-						0,0);
+						getHeight());
 	_txtDesc	= new Text(160, 20, 10, 13);
 	_txtAcc		= new Text(63, 20, 151, 13);
 	_txtTU		= new Text(50, 20, 214, 13);

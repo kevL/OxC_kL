@@ -736,7 +736,7 @@ void BattleUnit::setStatus(const UnitStatus status)
 void BattleUnit::startWalking(
 		int dir,
 		const Position& dest,
-		Tile* tileBelow)
+		const Tile* const tileBelow)
 //		bool cache)
 {
 	_walkPhase = 0;

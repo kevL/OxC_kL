@@ -405,14 +405,14 @@ bool UnitWalkBState::doStatusStand()
 
 		//Log(LOG_INFO) << ". getTUCost() & destination";
 		Position destination;
-		int tu = _pf->getTUCost( // gets tu cost, but also sets the destination position.
+		int costTU = _pf->getTUCost( // gets tu cost, but also sets the destination position.
 							_unit->getPosition(),
 							dir,
 							&destination,
 							_unit,
 							NULL,
 							false);
-		//Log(LOG_INFO) << ". tu = " << tu;
+		//Log(LOG_INFO) << ". costTU = " << costTU;
 
 		const Tile* const tileDest = _parent->getSave()->getTile(destination);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
@@ -426,18 +426,18 @@ bool UnitWalkBState::doStatusStand()
 			// The TU cost was artificially inflated by 32 points in getTUCost,
 			// under these conditions, so we have to deflate it here.
 			// See: Pathfinding::getTUCost(), where TU cost was inflated.
-			tu -= 32;
+			costTU -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
 
 		if (_falling == true)
 		{
-			//Log(LOG_INFO) << ". . falling, set tu 0";
-			tu = 0;
+			//Log(LOG_INFO) << ". . falling, set costTU 0";
+			costTU = 0;
 		}
 
-		const int tuTest = tu;
-		int energy = tu;
+		const int testTU = costTU;
+		int costEnergy = costTU;
 
 		if (_falling == false)
 		{
@@ -447,45 +447,45 @@ bool UnitWalkBState::doStatusStand()
 					|| (_action.strafe == true
 						&& dir >= _pf->DIR_UP))
 				{
-					tu -= _pf->getOpenDoor();
-					tu = (tu * 3 / 4) + _pf->getOpenDoor();
+					costTU -= _pf->getOpenDoor();
+					costTU = (costTU * 3 / 4) + _pf->getOpenDoor();
 
-					energy -= _pf->getOpenDoor();
-					energy = energy * 3 / 2;
+					costEnergy -= _pf->getOpenDoor();
+					costEnergy = costEnergy * 3 / 2;
 				}
 
 				if (_unit->hasFlightSuit() == true
 					&& _pf->getMovementType() == MT_FLY)
 				{
-					energy -= 2; // zippy.
+					costEnergy -= 2; // zippy.
 				}
 				else if (_unit->hasPowerSuit() == true
 					|| (_unit->hasFlightSuit() == true
 						&& _pf->getMovementType() == MT_WALK))
 				{
-					energy -= 1; // good stuff
+					costEnergy -= 1; // good stuff
 				}
 				// else if (coveralls){} // normal energy expenditure
 				else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
-					energy += 1; // *clunk*clunk*
+					costEnergy += 1; // *clunk*clunk*
 			}
 			else // gravLift
 			{
 				//Log(LOG_INFO) << ". . using GravLift";
-				energy = 0;
+				costEnergy = 0;
 			}
 
-			if (energy < 0) energy = 0;
+			if (costEnergy < 0) costEnergy = 0;
 		}
 
-		//Log(LOG_INFO) << ". check tu + stamina, etc. TU = " << tu;
+		//Log(LOG_INFO) << ". check costTU + stamina, etc. TU = " << costTU;
 		//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();
-//		if (tu > _unit->getTimeUnits())
-		if (tu - _pf->getOpenDoor() > _unit->getTimeUnits())
+//		if (costTU > _unit->getTimeUnits())
+		if (costTU - _pf->getOpenDoor() > _unit->getTimeUnits())
 		{
-			//Log(LOG_INFO) << ". . tu > _unit->TU()";
+			//Log(LOG_INFO) << ". . costTU > _unit->TU()";
 			if (_parent->getPanicHandled() == true
-				&& tuTest < 255)
+				&& testTU < 255)
 			{
 				//Log(LOG_INFO) << ". send warning: not enough TU";
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
@@ -499,9 +499,9 @@ bool UnitWalkBState::doStatusStand()
 
 			return false;
 		}
-		else if (energy > _unit->getEnergy())
+		else if (costEnergy > _unit->getEnergy())
 		{
-			//Log(LOG_INFO) << ". . energy > _unit->getEnergy()";
+			//Log(LOG_INFO) << ". . costEnergy > _unit->getEnergy()";
 			if (_parent->getPanicHandled())
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
 
@@ -514,9 +514,9 @@ bool UnitWalkBState::doStatusStand()
 			return false;
 		}
 		else if (_parent->getPanicHandled() == true
-			&& _parent->checkReservedTU(_unit, tu) == false)
+			&& _parent->checkReservedTU(_unit, costTU) == false)
 		{
-			//Log(LOG_INFO) << ". . checkReservedTU(_unit, tu) == false";
+			//Log(LOG_INFO) << ". . checkReservedTU(_unit, costTU) == false";
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -592,12 +592,12 @@ bool UnitWalkBState::doStatusStand()
 		const int unitSize = _unit->getArmor()->getSize() - 1;
 		for (int
 				x = unitSize;
-				x > -1;
+				x != -1;
 				--x)
 		{
 			for (int
 					y = unitSize;
-					y > -1;
+					y != -1;
 					--y)
 			{
 				//Log(LOG_INFO) << ". . check obstacle(unit)";
@@ -630,7 +630,6 @@ bool UnitWalkBState::doStatusStand()
 					_parent->getMap()->cacheUnit(_unit);
 
 					_parent->popState();
-
 					return false;
 				}
 			}
@@ -646,11 +645,11 @@ bool UnitWalkBState::doStatusStand()
 		}
 		//Log(LOG_INFO) << ". dequeuePath() dir[1] = " << dir;
 
-		if (_unit->spendTimeUnits(tu) == true		// These were checked above and don't really need to
-			&& _unit->spendEnergy(energy) == true)	// be checked again here. Only subtract required.
+		if (_unit->spendTimeUnits(costTU) == true		// These were checked above and don't really need to
+			&& _unit->spendEnergy(costEnergy) == true)	// be checked again here. Only subtract required.
 		{
 			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
-			Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+			const Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
 							dir,
@@ -666,7 +665,6 @@ bool UnitWalkBState::doStatusStand()
 				//Log(LOG_INFO) << ". pos " << _unit->getPosition();
 				playMovementSound();
 			}
-
 			_preStepTurn = false;
 		}
 
@@ -681,7 +679,6 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". unit direction = " << _unit->getDirection();
 		//Log(LOG_INFO) << ". . CALL postPathProcedures()";
 		postPathProcedures();
-
 		return false;
 	}
 

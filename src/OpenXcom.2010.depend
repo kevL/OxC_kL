@@ -4650,7 +4650,7 @@
 1425842000 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1427233946 f:\git\openxcom\src\savegame\battleunit.h
+1427242302 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5388,21 +5388,21 @@
 1425907410 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
-1426273788 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1427239372 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1426120318 f:\git\openxcom\src\battlescape\actionmenuitem.h
+1427239358 f:\git\openxcom\src\battlescape\actionmenuitem.h
 	"BattlescapeGame.h"
 	"../Engine/InteractiveSurface.h"
 
-1424390939 f:\git\openxcom\src\interface\frame.h
+1427238813 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1426713781 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1427240173 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"MedikitState.h"
@@ -5418,7 +5418,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1424390944 f:\git\openxcom\src\battlescape\actionmenustate.h
+1427239195 f:\git\openxcom\src\battlescape\actionmenustate.h
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
@@ -6322,7 +6322,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1427235170 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1427236946 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6449,7 +6449,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1427225073 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1427242351 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -7647,9 +7647,8 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1426103664 source:f:\git\openxcom\src\interface\frame.cpp
+1427238882 source:f:\git\openxcom\src\interface\frame.cpp
 	"Frame.h"
-	"../Engine/Palette.h"
 
 1424390939 source:f:\git\openxcom\src\interface\imagebutton.cpp
 	"ImageButton.h"
@@ -8688,7 +8687,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1427233950 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1427242302 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

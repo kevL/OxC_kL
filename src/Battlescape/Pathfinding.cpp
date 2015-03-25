@@ -2084,7 +2084,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		return false;
 
 	if (bRemove == false
-		&& _pathPreviewed)
+		&& _pathPreviewed == true)
 	{
 		return false;
 	}
@@ -2092,11 +2092,11 @@ bool Pathfinding::previewPath(bool bRemove)
 	_pathPreviewed = !bRemove;
 
 	int
-		curTU		= _unit->getTimeUnits(),
-		usedTU		= 0, // only for soldiers reserving TUs
-		tu			= 0, // cost per tile
-		energy		= _unit->getEnergy(),
-		energyLimit	= energy,
+		unitTU		= _unit->getTimeUnits(),
+		tileTU		= 0, // cost per tile
+		expendTU	= 0, // only for soldiers reserving TUs
+		unitEnergy	= _unit->getEnergy(),
+		energyBound	= unitEnergy,
 		unitSize	= _unit->getArmor()->getSize() - 1,
 		dir			= -1,
 		color		= 0;
@@ -2159,21 +2159,21 @@ bool Pathfinding::previewPath(bool bRemove)
 		dir = *i;
 		//Log(LOG_INFO) << "dir = " << dir;
 
-		tu = getTUCost( // gets tu cost, but also gets the destination position.
+		tileTU = getTUCost( // gets tu cost, but also gets the destination position.
 					start,
 					dir,
 					&dest,
 					_unit,
 					NULL,
 					false);
-		//Log(LOG_INFO) << ". . tu[0] = " << tu;
-/*		if (tu == 255)		// kL: Conflicts w/ the switchback for marker colors @ BA_SNAP.
+		//Log(LOG_INFO) << ". . tileTU[0] = " << tileTU;
+/*		if (tileTU == 255)		// kL: Conflicts w/ the switchback for marker colors @ BA_SNAP.
 		{
 			abortPath();	// kL
 			return false;	// kL
 		} */
 
-		energyLimit = energy;
+		energyBound = unitEnergy;
 
 		falling = _movementType != MT_FLY
 			   && canFallDown(
@@ -2191,47 +2191,47 @@ bool Pathfinding::previewPath(bool bRemove)
 				{
 					hathStood = true;
 
-					usedTU	+= 10;
-					curTU	-= 10; // 10 tu + 3 energy to stand up.
-					energy	-= 3;
+					expendTU	+= 10;
+					unitTU	-= 10; // 10 tu + 3 energy to stand up.
+					unitEnergy	-= 3;
 				}
 
 				if (dash == true)
 				{
-					tu -= _openDoor;
-					energy -= tu * 3 / 2;
+					tileTU -= _openDoor;
+					unitEnergy -= tileTU * 3 / 2;
 
-					tu = (tu * 3 / 4) + _openDoor;
-					//Log(LOG_INFO) << ". . tu [dash] = " << tu;
-					//Log(LOG_INFO) << ". . energy [dash] = " << energy;
+					tileTU = (tileTU * 3 / 4) + _openDoor;
+					//Log(LOG_INFO) << ". . tileTU [dash] = " << tileTU;
+					//Log(LOG_INFO) << ". . unitEnergy [dash] = " << unitEnergy;
 				}
 				else
-					energy -= tu;
+					unitEnergy += _openDoor - tileTU;
 
 				if (bodySuit == true)
-					energy -= 1;
+					unitEnergy -= 1;
 				else if (powerSuit == true)
-					energy += 1;
+					unitEnergy += 1;
 				else if (flightSuit == true)
-					energy += 2;
-				//Log(LOG_INFO) << ". . energy left = " << energy;
+					unitEnergy += 2;
+				//Log(LOG_INFO) << ". . energy left = " << unitEnergy;
 
-				if (energy > energyLimit)
+				if (unitEnergy > energyBound)
 				{
-					//Log(LOG_INFO) << ". hit energyLimit of " << energyLimit;
-					energy = energyLimit;
+					//Log(LOG_INFO) << ". hit energyBound of " << energyBound;
+					unitEnergy = energyBound;
 				}
 			}
-			//Log(LOG_INFO) << ". . tu[1] = " << tu;
+			//Log(LOG_INFO) << ". . tileTU[1] = " << tileTU;
 
-			curTU -= tu;
+			unitTU -= tileTU;
 		}
-		//Log(LOG_INFO) << ". . curTU = " << curTU;
+		//Log(LOG_INFO) << ". . unitTU = " << unitTU;
 
-		usedTU += tu;
+		expendTU += tileTU;
 		reserveOk = _save->getBattleGame()->checkReservedTU(
 														_unit,
-														usedTU,
+														expendTU,
 														true);
 		start = dest;
 
@@ -2261,12 +2261,12 @@ bool Pathfinding::previewPath(bool bRemove)
 					if ((x && y)
 						|| unitSize == 0)
 					{
-						tile->setTUMarker(curTU);
+						tile->setTUMarker(unitTU);
 					}
 
 					if (tileAbove != NULL // unit fell down, retroactively make the tileAbove's direction marker to DOWN
 						&& tileAbove->getPreview() == 0
-						&& tu == 0
+						&& tileTU == 0
 						&& _movementType != MT_FLY)
 					{
 						tileAbove->setPreview(DIR_DOWN);
@@ -2281,8 +2281,8 @@ bool Pathfinding::previewPath(bool bRemove)
 				color = 0;
 				if (bRemove == false)
 				{
-					if (curTU > -1
-						&& energy > -1)
+					if (unitTU > -1
+						&& unitEnergy > -1)
 					{
 						if (reserveOk == true)
 							color = Pathfinding::green;
@@ -2302,7 +2302,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		_save->getBattleGame()->setReservedAction(
 											BA_NONE);
 
-	//Log(LOG_INFO) << ". . tu @ return = " << tu;
+	//Log(LOG_INFO) << ". . tileTU @ return = " << tileTU;
 	return true;
 }
 
