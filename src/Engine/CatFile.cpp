@@ -101,7 +101,7 @@ char* CatFile::load(
 		_offset[i],
 		std::ios::beg);
 
-	unsigned char namesize = peek();
+	unsigned char namesize = static_cast<unsigned char>(peek());
 
 	if (namesize <= 56)
 	{

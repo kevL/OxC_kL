@@ -56,11 +56,14 @@ BattleItem::BattleItem(
 		_XCOMProperty(false)
 //		_droppedOnAlienTurn(false)
 {
+	(*id)++;
+
 	if (_rules != NULL)
 	{
-		if (_rules->getBattleType() == BT_AMMO)
-			setAmmoQuantity(_rules->getClipSize());
-		else if (_rules->getBattleType() == BT_MEDIKIT)
+//		if (_rules->getBattleType() == BT_AMMO)
+		setAmmoQuantity(_rules->getClipSize());
+//		else
+		if (_rules->getBattleType() == BT_MEDIKIT)
 		{
 			setHealQuantity(_rules->getHealQuantity());
 			setPainKillerQuantity(_rules->getPainKillerQuantity());
@@ -70,15 +73,13 @@ BattleItem::BattleItem(
 			&& (_rules->getBattleType() == BT_FIREARM		// These weapons do not need ammo;
 				|| _rules->getBattleType() == BT_MELEE))	// (ammo)item points to weapon itself.
 		{
-			setAmmoQuantity(_rules->getClipSize()); // melee, lasers, etc have clipsize(-1).
+//			setAmmoQuantity(_rules->getClipSize()); // melee, lasers, etc have clipsize(-1).
 //			setAmmoQuantity(-1);	// needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
 									// But it creates problems w/ TANKS returning to Base. So do it in Ruleset:
 									// melee items need "clipSize: -1" to do reactionFire.
 			_ammoItem = this;
 		}
 	}
-
-	(*id)++;
 }
 
 /**

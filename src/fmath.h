@@ -25,7 +25,7 @@
 
 
 /**
- *
+ * Returns true if two floating point values are within epsilon.
  */
 template <class _Tx>
 inline bool AreSame(
@@ -37,17 +37,18 @@ inline bool AreSame(
 
 
 /**
- *
+ * Rounds a floating point value up or down to its nearest whole value.
+ * @note The standard library functions ceil() and floor() expect doubles.
  */
 template <class _Tx>
 inline _Tx Round(const _Tx& x)
 {
-	return x < static_cast<_Tx>(0)? std::ceil(x - static_cast<_Tx>(0.5)): std::floor(x + static_cast<_Tx>(0.5));
+	return x < static_cast<_Tx>(0) ? std::ceil(x - static_cast<_Tx>(0.5)) : std::floor(x + static_cast<_Tx>(0.5));
 }
 
 
 /**
- *
+ * Returns the square of a value.
  */
 template <class _Tx>
 inline _Tx Sqr(const _Tx& x)

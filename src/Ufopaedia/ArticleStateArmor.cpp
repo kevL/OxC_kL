@@ -156,23 +156,24 @@ ArticleStateArmor::~ArticleStateArmor()
 void ArticleStateArmor::addStat(
 		const std::string& label,
 		int stat,
-		bool plus)
+		bool addPlus)
 {
 	if (stat != 0)
 	{
-		std::wostringstream ss;
-		if (plus && stat > 0)
-			ss << L"+";
-		ss << stat;
+		std::wostringstream woststr;
+
+		if (addPlus && stat > 0)
+			woststr << L"+";
+
+		woststr << stat;
 		_lstInfo->addRow(
 						2,
 						tr(label).c_str(),
-						ss.str().c_str());
+						woststr.str().c_str());
 		_lstInfo->setCellColor(
-						_row,
+						_row++,
 						1,
 						Palette::blockOffset(15)+4);
-		++_row;
 	}
 }
 
@@ -188,10 +189,9 @@ void ArticleStateArmor::addStat(
 					tr(label).c_str(),
 					stat.c_str());
 	_lstInfo->setCellColor(
-					_row,
+					_row++,
 					1,
 					Palette::blockOffset(15)+4);
-	++_row;
 }
 
 }

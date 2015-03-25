@@ -44,6 +44,7 @@ private:
 	bool _helmet;
 	int
 		_animationFrame,
+		_colorSize,
 		_drawingRoutine,
 		_part;
 
@@ -56,9 +57,7 @@ private:
 		* _itemSurfaceB,
 		* _unitSurface;
 
-	std::pair<Uint8, Uint8>
-		_colorA,
-		_colorB;
+	const std::pair<Uint8, Uint8>* _color;
 
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
 	/// mutons (routine 10),

@@ -278,8 +278,9 @@ void SavedBattleGame::load(
 			i != node["units"].end();
 			++i)
 	{
-		const UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
-		const int id = (*i)["soldierId"].as<int>();
+		const int id						= (*i)["soldierId"]						.as<int>();
+		const UnitFaction faction			= (UnitFaction)(*i)["faction"]			.as<int>();
+		const UnitFaction originalFaction	= (UnitFaction)(*i)["originalFaction"]	.as<int>(faction);
 
 		BattleUnit* unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
@@ -292,12 +293,12 @@ void SavedBattleGame::load(
 		else
 		{
 			const std::string
-				type = (*i)["genUnitType"].as<std::string>(),
-				armor = (*i)["genUnitArmor"].as<std::string>();
+				type	= (*i)["genUnitType"]	.as<std::string>(),
+				armor	= (*i)["genUnitArmor"]	.as<std::string>();
 
 			unit = new BattleUnit( // create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 								rule->getUnit(type),
-								faction,
+								originalFaction,
 								id,
 								rule->getArmor(armor),
 								static_cast<int>(savedGame->getDifficulty()),
@@ -316,13 +317,6 @@ void SavedBattleGame::load(
 			{
 				_selectedUnit = unit;
 			}
-
-			// silly hack to fix mind controlled aliens
-			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
-			if (unit->getOriginalFaction() == FACTION_HOSTILE)
-				unit->adjustStats(
-								static_cast<int>(savedGame->getDifficulty()),
-								savedGame->getMonthsPassed()); // kL_add.
 		}
 
 		if (faction != FACTION_PLAYER
@@ -372,9 +366,9 @@ void SavedBattleGame::load(
 				item->setSlot(rule->getInventory(type));
 
 			const int
-				owner = (*i)["owner"].as<int>(),
-				prevOwner = (*i)["previousOwner"].as<int>(-1),
-				unit = (*i)["unit"].as<int>();
+				owner		= (*i)["owner"]			.as<int>(),
+				prevOwner	= (*i)["previousOwner"]	.as<int>(-1),
+				unit		= (*i)["unit"]			.as<int>();
 
 			// match up items and units
 			for (std::vector<BattleUnit*>::const_iterator

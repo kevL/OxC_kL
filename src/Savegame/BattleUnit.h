@@ -494,7 +494,7 @@ private:
 	std::wstring _name;
 
 	std::vector<int> _loftempsSet;
-	std::pair<Uint8, Uint8> _recolor[2];
+	std::vector<std::pair<Uint8, Uint8> > _recolor;
 
 	RuleArmor* _armor;
 	Soldier* _geoscapeSoldier;
@@ -510,8 +510,11 @@ private:
 
 	/// Converts an amount of experience to a stat increase.
 	int improveStat(int xp);
-	///
-	void setRecolor(int selectLook);
+	/// Helper function initing recolor vector.
+	void setRecolor(
+			int basicLook,
+			int utileLook,
+			int rankLook);
 
 
 	public:
@@ -519,7 +522,7 @@ private:
 
 		// scratch value for AI's left hand to tell its right hand what's up...
 		// don't zone out and start patrolling again
-		Position lastCover;
+		Position _lastCover;
 
 
 		/// Creates a BattleUnit from a geoscape Soldier.
@@ -627,7 +630,7 @@ private:
 				bool* invalid,
 				int part = 0) const;
 		/// Gets unit sprite recolors values.
-		std::pair<Uint8, Uint8> getRecolor(int i) const;
+		const std::vector<std::pair<Uint8, Uint8> >& getRecolor() const;
 
 		/// Kneels or stands this unit.
 		void kneel(bool kneel);

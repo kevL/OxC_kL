@@ -48,6 +48,8 @@ RuleArmor::RuleArmor(const std::string& type)
 		_forcedTorso(TORSO_USE_GENDER),
 		_faceColorGroup(0),
 		_hairColorGroup(0),
+		_utileColorGroup(0),
+		_rankColorGroup(0),
 		_isBasic(false),
 		_isSpacesuit(false)
 {
@@ -158,28 +160,14 @@ void RuleArmor::load(const YAML::Node& node)
 	else
 		_canHoldWeapon = false;
 
-	_faceColorGroup = node["spriteFaceGroup"].as<int>(_faceColorGroup);
-	_hairColorGroup = node["spriteHairGroup"].as<int>(_hairColorGroup);
-
-	if (const YAML::Node& colors = node["spriteFaceColor"])
-	{
-		for (size_t
-				i = 0;
-				i < colors.size()
-					&& i < _faceColor.size();
-				++i)
-			_faceColor[i] = colors[i].as<int>();
-	}
-
-	if (const YAML::Node& colors = node["spriteHairColor"])
-	{
-		for (size_t
-				i = 0;
-				i < colors.size()
-					&& i < _hairColor.size();
-				++i)
-			_hairColor[i] = colors[i].as<int>();
-	}
+	_faceColorGroup		= node["spriteFaceGroup"]	.as<int>(_faceColorGroup);
+	_hairColorGroup		= node["spriteHairGroup"]	.as<int>(_hairColorGroup);
+	_rankColorGroup		= node["spriteRankGroup"]	.as<int>(_rankColorGroup);
+	_utileColorGroup	= node["spriteUtileGroup"]	.as<int>(_utileColorGroup);
+	_faceColor			= node["spriteFaceColor"]	.as<std::vector<int> >(_faceColor);
+	_hairColor			= node["spriteHairColor"]	.as<std::vector<int> >(_hairColor);
+	_rankColor			= node["spriteRankColor"]	.as<std::vector<int> >(_rankColor);
+	_utileColor			= node["spriteUtileColor"]	.as<std::vector<int> >(_utileColor);
 }
 
 /**
@@ -396,8 +384,8 @@ ForcedTorso RuleArmor::getForcedTorso() const
 }
 
 /**
- * Gets hair base color group for replacement, if -1 then don't replace colors.
- * @return, colorgroup or -1
+ * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * @return, colorgroup or 0
  */
 int RuleArmor::getFaceColorGroup() const
 {
@@ -405,8 +393,8 @@ int RuleArmor::getFaceColorGroup() const
 }
 
 /**
- * Gets hair base color group for replacement, if -1 then don't replace colors.
- * @return, colorgroup or -1
+ * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * @return, colorgroup or 0
  */
 int RuleArmor::getHairColorGroup() const
 {
@@ -414,21 +402,73 @@ int RuleArmor::getHairColorGroup() const
 }
 
 /**
- * Gets new face colors for replacement.
- * @return, reference to a vector of new values based on gender and race
- */
-const std::vector<int>& RuleArmor::getFaceColor() const
+* Gets utile base color group for replacement, if 0 then don't replace colors.
+ * @return, colorgroup or 0
+*/
+int RuleArmor::getUtileColorGroup() const
 {
-	return _faceColor;
+	return _utileColorGroup;
 }
 
 /**
- * Gets new hair colors for replacement.
- * @return, reference to a vector of new values based on gender and race
- */
-const std::vector<int>& RuleArmor::getHairColor() const
+* Gets rank base color group for replacement, if 0 then don't replace colors.
+ * @return, colorgroup or 0
+*/
+int RuleArmor::getRankColorGroup() const
 {
-	return _hairColor;
+	return _rankColorGroup;
+}
+
+/**
+* Gets new face colors for replacement, if 0 then don't replace colors.
+* @return, colorindex or 0
+*/
+int RuleArmor::getFaceColor(int i) const
+{
+	const size_t foff = static_cast<size_t>(i);
+	if (foff < _faceColor.size())
+		return _faceColor[foff];
+
+	return 0;
+}
+
+/**
+* Gets new hair colors for replacement, if 0 then don't replace colors.
+* @return, colorindex or 0
+*/
+int RuleArmor::getHairColor(int i) const
+{
+	const size_t foff = static_cast<size_t>(i);
+	if (foff < _hairColor.size())
+		return _hairColor[foff];
+
+	return 0;
+}
+
+/**
+* Gets new utile colors for replacement, if 0 then don't replace colors.
+* @return, colorindex or 0
+*/
+int RuleArmor::getUtileColor(int i) const
+{
+	const size_t foff = static_cast<size_t>(i);
+	if (foff < _utileColor.size())
+		return _utileColor[foff];
+
+	return 0;
+}
+
+/**
+* Gets new rank colors for replacement, if 0 then don't replace colors.
+* @return, colorindex or 0
+*/
+int RuleArmor::getRankColor(int i) const
+{
+	const size_t foff = static_cast<size_t>(i);
+	if (foff < _rankColor.size())
+		return _rankColor[foff];
+
+	return 0;
 }
 
 /**

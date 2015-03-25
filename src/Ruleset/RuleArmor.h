@@ -81,7 +81,9 @@ private:
 		_weight,
 
 		_faceColorGroup,
-		_hairColorGroup;
+		_hairColorGroup,
+		_utileColorGroup,
+		_rankColorGroup;
 
 	float _damageModifier[DAMAGE_TYPES];
 
@@ -92,6 +94,8 @@ private:
 	std::vector<int>
 		_faceColor,
 		_hairColor,
+		_utileColor,
+		_rankColor,
 		_loftempsSet;
 	std::vector<std::string> _corpseBattle;
 
@@ -173,10 +177,18 @@ private:
 		int getFaceColorGroup() const;
 		/// Gets hair base color.
 		int getHairColorGroup() const;
-		/// Gets face base color.
-		const std::vector<int>& getFaceColor() const;
-		/// Gets hair base color.
-		const std::vector<int>& getHairColor() const;
+		/// Get utile base color.
+		int getUtileColorGroup() const;
+		/// Get rank base color.
+		int getRankColorGroup() const;
+		/// Get face color.
+		int getFaceColor(int i) const;
+		/// Get hair color.
+		int getHairColor(int i) const;
+		/// Get utile color.
+		int getUtileColor(int i) const;
+		/// Get rank color.
+		int getRankColor(int i) const;
 
 		/// Checks if this Armor's inventory be accessed.
 		const bool hasInventory() const;

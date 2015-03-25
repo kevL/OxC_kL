@@ -1171,8 +1171,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
 			_battleSave->setUnitPosition(
 										unit,
 										node->getPosition());
-			unit->setDirection(RNG::generate(0, 7));
-			unit->deriveRank();
+			unit->setDirection(RNG::generate(0,7));
 //			_battleSave->getTileEngine()->calculateFOV(unit);
 
 			_tileEquipt = _battleSave->getTile(node->getPosition());
@@ -1186,8 +1185,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
 			{
 				_battleSave->getUnits()->push_back(unit);
 
-				unit->setDirection(RNG::generate(0, 7));
-				unit->deriveRank();
+				unit->setDirection(RNG::generate(0,7));
 //				_battleSave->getTileEngine()->calculateFOV(unit);
 
 				_tileEquipt = _battleSave->getTile(unit->getPosition());
@@ -1240,7 +1238,6 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
 					_battleSave->getUnits()->push_back(unit);
 
 					unit->setDirection((*i)[3]);
-					unit->deriveRank();
 
 					return unit;
 				}
@@ -1277,7 +1274,6 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
 													_battleSave->getTiles()[i]->getPosition()) == true)
 				{
 					_battleSave->getUnits()->push_back(unit);
-					unit->deriveRank();
 
 					return unit;
 				}

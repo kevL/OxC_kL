@@ -68,18 +68,18 @@ namespace OpenXcom
 {
 
 Sound* kL_soundPop = NULL;
+const Uint8 ShadeMax = 15;
 
 
 namespace
 {
 
 /**
- * Recolor class used in UFO
+ * Recolor class used in UFO.
  */
 struct HairXCOM1
 {
 	static const Uint8
-		ColorShade = 15,
 		Hair = 9 << 4,
 		Face = 6 << 4;
 
@@ -92,23 +92,46 @@ struct HairXCOM1
 			int)
 	{
 		if (src > cutoff
-			&& src <= Face + ColorShade)
+			&& src <= Face + ShadeMax)
 		{
-			src = Hair + (src & ColorShade) - 6; // make hair color like male in xcom_0.pck
+			src = Hair + (src & ShadeMax) - 6; // make hair color like male in xcom_0.pck
 		}
 	}
 };
 
 /**
- * Recolor class used in TFTD
- */
+* Recolor class used in TFTD.
+*/
 struct HairXCOM2
 {
 	static const Uint8
-		HairMan = 4 << 4,
-		HairWoman = 1 << 4;
+		ManHairColor = 4 << 4,
+		WomanHairColor = 1 << 4;
 
-	///
+	static inline void func
+			(Uint8& src,
+			int,
+			int,
+			int,
+			int)
+	{
+		if (   src >= WomanHairColor
+			&& src <= WomanHairColor + ShadeMax)
+		{
+			src = ManHairColor + (src & ShadeMax);
+		}
+	}
+};
+
+/**
+* Recolor class used in TFTD.
+*/
+struct FaceXCOM2
+{
+	static const Uint8
+		FaceColor = 10 << 4,
+		PinkColor = 14 << 4;
+
 	static inline void func(
 			Uint8& src,
 			int,
@@ -116,10 +139,66 @@ struct HairXCOM2
 			int,
 			int)
 	{
-		if (src >= HairMan
-			&& src <= HairMan + HairXCOM1::ColorShade)
+		if (   src >= FaceColor
+			&& src <= FaceColor + ShadeMax)
 		{
-			src = HairWoman + (src & HairXCOM1::ColorShade);
+			src = PinkColor + (src & ShadeMax);
+		}
+	}
+};
+
+/**
+* Recolor class used in TFTD.
+*/
+struct BodyXCOM2
+{
+	static const Uint8 IonArmorColor = 8 << 4;
+
+	static inline void func(
+			Uint8& src,
+			int,
+			int,
+			int,
+			int)
+	{
+		if (src == 153)
+			src = IonArmorColor + 12;
+		else if (src == 151)
+			src = IonArmorColor + 10;
+		else if (src == 148)
+			src = IonArmorColor + 4;
+		else if (src == 147)
+			src = IonArmorColor + 2;
+		else if (src >= HairXCOM2::WomanHairColor
+			&&   src <= HairXCOM2::WomanHairColor + ShadeMax)
+		{
+			src = IonArmorColor + (src & ShadeMax);
+		}
+	}
+};
+
+/**
+* Recolor class used in TFTD
+*/
+struct FallXCOM2
+{
+	static const Uint8
+		HairFall = 8 << 4,
+		RoguePixel = 151;
+
+	static inline void func(
+			Uint8& src,
+			int,
+			int,
+			int,
+			int)
+	{
+		if (src == RoguePixel)
+			src = FaceXCOM2::PinkColor + (src & ShadeMax) + 2;
+		else if (src >= BodyXCOM2::IonArmorColor
+			&&   src <= BodyXCOM2::IonArmorColor + ShadeMax)
+		{
+			src = FaceXCOM2::PinkColor + (src & ShadeMax);
 		}
 	}
 };
@@ -1728,9 +1807,9 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[*i]->loadSpk(path);
 	}
 
-	if (Options::battleHairBleach == true) // "fix" of hair color of male personal armor
+	if (Options::battleHairBleach == true) // "fix" of color index in original soldier sprites
 	{
-		std::string ent ("XCOM_1.PCK"); // init.
+		std::string ent ("XCOM_1.PCK"); // init. personal armor
 
 		if (_sets.find(ent) != _sets.end())
 		{
@@ -1778,7 +1857,7 @@ void XcomResourcePack::loadBattlescapeResources()
 			}
 		}
 
-		ent = "TDXCOM_?.PCK";
+		ent = "TDXCOM_?.PCK"; // all TFTD armors
 		for (int
 				j = 0;
 				j != 3;
@@ -1788,18 +1867,74 @@ void XcomResourcePack::loadBattlescapeResources()
 			if (_sets.find(ent) != _sets.end())
 			{
 				SurfaceSet* const xcom_2 = _sets[ent];
-				Surface* srf;
 
 				for (int
-					i = 0;
-					i != 8;
-					++i)
+						i = 0;
+						i != 16;
+						++i)
 				{
-					srf = xcom_2->getFrame(270 + i); // male chest frame
+					Surface* const surf = xcom_2->getFrame(262 + i); // chest frame without helm
 
-					srf->lock();
-					ShaderDraw<HairXCOM2>(ShaderSurface(srf));
-					srf->unlock();
+					surf->lock();
+					if (i < 8)
+					{
+						ShaderMove<Uint8> head = ShaderMove<Uint8>(surf); // female chest frame
+						GraphSubset dim = head.getBaseDomain();
+						dim.beg_y = 6;
+						dim.end_y = 18;
+						head.setDomain(dim);
+						ShaderDraw<HairXCOM2>(head);
+
+						if (j == 2) // fix some pixels in ION armor that was overwrite by previous function
+						{
+							if		(i == 0) surf->setPixelColor(18, 14, 16);
+							else if (i == 3) surf->setPixelColor(19, 12, 20);
+							else if (i == 6) surf->setPixelColor(13, 14, 16);
+						}
+					}
+
+					// change face to pink to prevent mixup with ION armor backpack that have same colorgroup.
+					ShaderDraw<FaceXCOM2>(ShaderMove<Uint8>(surf));
+					surf->unlock();
+				}
+
+				for (int
+						i = 0;
+						i != 2;
+						++i)
+				{
+					Surface* const surf = xcom_2->getFrame(256 + i); // fall frame (first and second)
+
+					surf->lock();
+					ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+					GraphSubset dim = head.getBaseDomain();
+					dim.beg_y = 0;
+
+					if (j == 3)
+						dim.end_y = 11 + 5 * i;
+					else
+						dim.end_y = 17;
+
+					head.setDomain(dim);
+					ShaderDraw<FallXCOM2>(head);
+					// change face to pink, to prevent mixup with ION armor backpack that have same colorgroup.
+					ShaderDraw<FaceXCOM2>(ShaderMove<Uint8>(surf));
+					surf->unlock();
+				}
+
+				if (j == 2) // Palette fix for ION armor
+				{
+					int frames = xcom_2->getTotalFrames();
+					for (int
+							i = 0;
+							i != frames;
+							++i)
+					{
+						Surface* const surf = xcom_2->getFrame(i);
+						surf->lock();
+						ShaderDraw<BodyXCOM2>(ShaderMove<Uint8>(surf));
+						surf->unlock();
+					}
 				}
 			}
 		}

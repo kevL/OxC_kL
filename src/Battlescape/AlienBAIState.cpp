@@ -1082,8 +1082,8 @@ void AlienBAIState::setupEscape()
 		{
 			// you know, maybe we should just stay where we are and not risk reaction fire...
 			// or maybe continue to wherever we were running to and not risk looking stupid
-			if (_save->getTile(_unit->lastCover) != 0)
-				_escapeAction->target = _unit->lastCover;
+			if (_save->getTile(_unit->_lastCover) != 0)
+				_escapeAction->target = _unit->_lastCover;
 		}
 		else if (tries < 121) // looking for cover
 		{

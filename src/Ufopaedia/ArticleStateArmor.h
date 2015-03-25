@@ -55,7 +55,7 @@ protected:
 	void addStat(
 			const std::string& label,
 			int stat,
-			bool plus = false);
+			bool addPlus = false);
 	///
 	void addStat(
 			const std::string& label,
@@ -63,9 +63,9 @@ protected:
 
 
 	public:
-		///
+		/// cTor.
 		ArticleStateArmor(ArticleDefinitionArmor* article_defs);
-		///
+		/// dTor.
 		virtual ~ArticleStateArmor();
 };
 

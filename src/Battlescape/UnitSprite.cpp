@@ -74,7 +74,9 @@ UnitSprite::UnitSprite(
 		_part(0),
 		_animationFrame(0),
 		_drawingRoutine(0),
-		_helmet(helmet)
+		_helmet(helmet),
+		_color(NULL),
+		_colorSize(0)
 {}
 
 /**
@@ -119,13 +121,11 @@ void UnitSprite::setBattleUnit(
 
 	if (Options::battleHairBleach == true)
 	{
-		_colorA = _unit->getRecolor(0);
-		_colorB = _unit->getRecolor(1);
-	}
-	else
-	{
-		_colorA = std::pair<Uint8, Uint8> (); // init.
-		_colorB = std::pair<Uint8, Uint8> (); // init.
+		_colorSize = static_cast<int>(_unit->getRecolor().size());
+		if (_colorSize != 0)
+			_color = &(_unit->getRecolor()[0]);
+		else
+			_color = NULL;
 	}
 }
 
@@ -158,7 +158,7 @@ struct ColorReplace
 		ColorShade = 15;
 
 	///
-	static inline bool func(
+	static inline bool loop(
 			Uint8& dest,
 			const Uint8& src,
 			const std::pair<Uint8, Uint8>& face_color)
@@ -171,59 +171,30 @@ struct ColorReplace
 
 		return false;
 	}
-};
 
-struct Color1
-{
+	///
 	static inline void func(
 			Uint8& dest,
 			const Uint8& src,
-			const std::pair<Uint8, Uint8>& colorA,
-			int,
+			const std::pair<Uint8, Uint8>* color,
+			int colors,
 			int)
 	{
 		if (src != 0)
 		{
-			if (ColorReplace::func(
-								dest,
-								src,
-								colorA) == true)
+			for (size_t
+					i = 0;
+					i != static_cast<size_t>(colors);
+					++i)
 			{
-				return;
+				if (loop(
+						dest,
+						src,
+						color[i]) == true)
+				{
+					return;
+				}
 			}
-
-			dest = src;
-		}
-	}
-};
-
-struct Color2
-{
-	static inline void func(
-			Uint8& dest,
-			const Uint8& src,
-			const std::pair<Uint8, Uint8>& colorA,
-			const std::pair<Uint8, Uint8>& colorB,
-			int)
-	{
-		if (src != 0)
-		{
-			if (ColorReplace::func(
-								dest,
-								src,
-								colorA))
-			{
-				return;
-			}
-
-			if (ColorReplace::func(
-								dest,
-								src,
-								colorB))
-			{
-				return;
-			}
-
 			dest = src;
 		}
 	}
@@ -234,30 +205,19 @@ struct Color2
 
 void UnitSprite::drawRecolored(Surface* src)
 {
-	if (_colorB.first != 0)
+	if (_colorSize != 0)
 	{
 		lock();
-		ShaderDraw<Color2>(
-					ShaderSurface(this),
-					ShaderSurface(src),
-					ShaderScalar(_colorA),
-					ShaderScalar(_colorB));
-		unlock();
-	}
-	else if (_colorA.first != 0)
-	{
-		lock();
-		ShaderDraw<Color1>(
-					ShaderSurface(this),
-					ShaderSurface(src),
-					ShaderScalar(_colorA));
+		ShaderDraw<ColorReplace>(
+							ShaderSurface(this),
+							ShaderSurface(src),
+							ShaderScalar(_color),
+							ShaderScalar(_colorSize));
 		unlock();
 	}
 	else
 		src->blit(this);
 }
-
-
 
 /**
  * Sets the animation frame for animated units.
