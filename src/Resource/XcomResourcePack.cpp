@@ -100,8 +100,8 @@ struct HairXCOM1
 };
 
 /**
-* Recolor class used in TFTD.
-*/
+ * Recolor class used in TFTD.
+ */
 struct HairXCOM2
 {
 	static const Uint8
@@ -124,8 +124,8 @@ struct HairXCOM2
 };
 
 /**
-* Recolor class used in TFTD.
-*/
+ * Recolor class used in TFTD.
+ */
 struct FaceXCOM2
 {
 	static const Uint8
@@ -148,8 +148,8 @@ struct FaceXCOM2
 };
 
 /**
-* Recolor class used in TFTD.
-*/
+ * Recolor class used in TFTD.
+ */
 struct BodyXCOM2
 {
 	static const Uint8 IonArmorColor = 8 << 4;
@@ -178,8 +178,8 @@ struct BodyXCOM2
 };
 
 /**
-* Recolor class used in TFTD
-*/
+ * Recolor class used in TFTD
+ */
 struct FallXCOM2
 {
 	static const Uint8

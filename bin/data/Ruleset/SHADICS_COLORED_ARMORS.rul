@@ -219,8 +219,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_BLUESUIT_ARMOR_UC
     spriteSheet: BLUESUIT.PCK
     spriteInv: MAN_14
@@ -243,8 +244,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_GREENSUIT_ARMOR_UC
     spriteSheet: GREENSUIT.PCK
     spriteInv: MAN_16
@@ -267,8 +269,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_ORANGESUIT_ARMOR_UC
     spriteSheet: ORANGESUIT.PCK
     spriteInv: MAN_17
@@ -291,8 +294,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_PINKSUIT_ARMOR_UC
     spriteSheet: PINKSUIT.PCK
     spriteInv: MAN_18
@@ -315,8 +319,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_PURPLESUIT_ARMOR_UC
     spriteSheet: PURPLESUIT.PCK
     spriteInv: MAN_20
@@ -339,8 +344,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_REDSUIT_ARMOR_UC
     spriteSheet: REDSUIT.PCK
     spriteInv: MAN_21
@@ -363,8 +369,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_BLACK_ARMOR_UC
     spriteSheet: BLACK.PCK
     spriteInv: MAN_13
@@ -387,8 +394,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_BLUE_ARMOR_UC
     spriteSheet: BLUE.PCK
     spriteInv: MAN_7
@@ -411,8 +419,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_GREEN_ARMOR_UC
     spriteSheet: GREEN.PCK
     spriteInv: MAN_10
@@ -435,8 +444,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_ORANGE_ARMOR_UC
     spriteSheet: ORANGE.PCK
     spriteInv: MAN_11
@@ -459,8 +469,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_PINK_ARMOR_UC
     spriteSheet: PINK.PCK
     spriteInv: MAN_19
@@ -483,8 +494,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_PURPLE_ARMOR_UC
     spriteSheet: PURPLE.PCK
     spriteInv: MAN_12
@@ -507,8 +519,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
   - type: STR_RED_ARMOR_UC
     spriteSheet: RED.PCK
     spriteInv: MAN_6
@@ -531,8 +544,9 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
     isSpacesuit: true
+    agility: 2
 manufacture:
   - name: STR_BLACKSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA

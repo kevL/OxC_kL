@@ -51,7 +51,8 @@ RuleArmor::RuleArmor(const std::string& type)
 		_utileColorGroup(0),
 		_rankColorGroup(0),
 		_isBasic(false),
-		_isSpacesuit(false)
+		_isSpacesuit(false),
+		_agility(0)
 {
 	_stats.tu			=
 	_stats.stamina		=
@@ -168,6 +169,8 @@ void RuleArmor::load(const YAML::Node& node)
 	_hairColor			= node["spriteHairColor"]	.as<std::vector<int> >(_hairColor);
 	_rankColor			= node["spriteRankColor"]	.as<std::vector<int> >(_rankColor);
 	_utileColor			= node["spriteUtileColor"]	.as<std::vector<int> >(_utileColor);
+
+	_agility			= node["agility"]			.as<int>(_agility);
 }
 
 /**
@@ -402,27 +405,27 @@ int RuleArmor::getHairColorGroup() const
 }
 
 /**
-* Gets utile base color group for replacement, if 0 then don't replace colors.
+ * Gets utile base color group for replacement, if 0 then don't replace colors.
  * @return, colorgroup or 0
-*/
+ */
 int RuleArmor::getUtileColorGroup() const
 {
 	return _utileColorGroup;
 }
 
 /**
-* Gets rank base color group for replacement, if 0 then don't replace colors.
+ * Gets rank base color group for replacement, if 0 then don't replace colors.
  * @return, colorgroup or 0
-*/
+ */
 int RuleArmor::getRankColorGroup() const
 {
 	return _rankColorGroup;
 }
 
 /**
-* Gets new face colors for replacement, if 0 then don't replace colors.
-* @return, colorindex or 0
-*/
+ * Gets new face colors for replacement, if 0 then don't replace colors.
+ * @return, colorindex or 0
+ */
 int RuleArmor::getFaceColor(int i) const
 {
 	const size_t foff = static_cast<size_t>(i);
@@ -433,9 +436,9 @@ int RuleArmor::getFaceColor(int i) const
 }
 
 /**
-* Gets new hair colors for replacement, if 0 then don't replace colors.
-* @return, colorindex or 0
-*/
+ * Gets new hair colors for replacement, if 0 then don't replace colors.
+ * @return, colorindex or 0
+ */
 int RuleArmor::getHairColor(int i) const
 {
 	const size_t foff = static_cast<size_t>(i);
@@ -446,9 +449,9 @@ int RuleArmor::getHairColor(int i) const
 }
 
 /**
-* Gets new utile colors for replacement, if 0 then don't replace colors.
-* @return, colorindex or 0
-*/
+ * Gets new utile colors for replacement, if 0 then don't replace colors.
+ * @return, colorindex or 0
+ */
 int RuleArmor::getUtileColor(int i) const
 {
 	const size_t foff = static_cast<size_t>(i);
@@ -459,9 +462,9 @@ int RuleArmor::getUtileColor(int i) const
 }
 
 /**
-* Gets new rank colors for replacement, if 0 then don't replace colors.
-* @return, colorindex or 0
-*/
+ * Gets new rank colors for replacement, if 0 then don't replace colors.
+ * @return, colorindex or 0
+ */
 int RuleArmor::getRankColor(int i) const
 {
 	const size_t foff = static_cast<size_t>(i);
@@ -475,7 +478,7 @@ int RuleArmor::getRankColor(int i) const
  * Checks if this RuleArmor's inventory be accessed.
  * @return, true if inventory can be opened by player
  */
-const bool RuleArmor::hasInventory() const
+bool RuleArmor::hasInventory() const
 {
 	return _hasInventory;
 }
@@ -484,7 +487,7 @@ const bool RuleArmor::hasInventory() const
  * Gets if this RuleArmor is basic (lowest rank, standard issue wear).
  * @return, true if basic
  */
-const bool RuleArmor::isBasic() const
+bool RuleArmor::isBasic() const
 {
 	return _isBasic;
 }
@@ -493,9 +496,23 @@ const bool RuleArmor::isBasic() const
  * Gets if this RuleArmor is powered and suitable for Mars.
  * @return, true if life-supporting
  */
-const bool RuleArmor::isSpacesuit() const
+bool RuleArmor::isSpacesuit() const
 {
 	return _isSpacesuit;
+}
+
+/**
+ * Gets this Armor's agility used to determine stamina expenditure.
+ * Higher values equate to less energy cost. Typically:
+ *		0 personal armor
+ *		1 no armor
+ *		2 powered/flight suits
+ * @note Armor cannot subtract more energy than a tile requires due to coding.
+ * @return, agility
+ */
+int RuleArmor::getAgility() const
+{
+	return _agility;
 }
 
 }

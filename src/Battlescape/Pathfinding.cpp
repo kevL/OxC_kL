@@ -2093,15 +2093,16 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	int
 		unitTU		= _unit->getTimeUnits(),
-		tileTU		= 0, // cost per tile
-		expendTU	= 0, // only for soldiers reserving TUs
+		tileTU,				// cost per tile
+		expendTU	= 0,	// only for soldiers reserving TUs
 		unitEnergy	= _unit->getEnergy(),
-		energyBound	= unitEnergy,
-		unitSize	= _unit->getArmor()->getSize() - 1,
-		dir			= -1,
-		color		= 0;
+		energyBound,
+		dir,
+		color;
 
-	const std::string armorType = _unit->getArmor()->getType();
+	const int
+		unitSize	= _unit->getArmor()->getSize() - 1,
+		agility		= _unit->getArmor()->getAgility();
 
 	bool
 		hathStood	= false,
@@ -2112,20 +2113,19 @@ bool Pathfinding::previewPath(bool bRemove)
 						|| (_strafeMove == true
 							&& _path.size() == 1
 							&& _unit->getDirection() == _path.front())),
-		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
-		powerSuit	= _unit->hasPowerSuit()
-				   || (_unit->hasFlightSuit()
-						&& _movementType == MT_WALK),
-		flightSuit	= _unit->hasFlightSuit()
-				   && _movementType == MT_FLY,
 		gravLift,
 		reserveOk,
 		falling;
-
+//		bodySuit	= _unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC",
+//		powerSuit	= _unit->hasPowerSuit()
+//				   || (_unit->hasFlightSuit()
+//						&& _movementType == MT_WALK),
+//		flightSuit	= _unit->hasFlightSuit()
+//				   && _movementType == MT_FLY,
 	//Log(LOG_INFO) << ". bodySuit = " << bodySuit;
 	//Log(LOG_INFO) << ". powerSuit = " << powerSuit;
 	//Log(LOG_INFO) << ". flightSuit = " << flightSuit;
-// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ).
+// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ). DONE! -> 'endurance'
 // Or 'enum' those, as in
 /* enum ArmorBurthen
 {
@@ -2208,12 +2208,13 @@ bool Pathfinding::previewPath(bool bRemove)
 				else
 					unitEnergy += _openDoor - tileTU;
 
-				if (bodySuit == true)
-					unitEnergy -= 1;
-				else if (powerSuit == true)
-					unitEnergy += 1;
-				else if (flightSuit == true)
-					unitEnergy += 2;
+//				if (bodySuit == true)
+//					unitEnergy -= 1;
+//				else if (powerSuit == true)
+//					unitEnergy += 1;
+//				else if (flightSuit == true)
+//					unitEnergy += 2;
+				unitEnergy += agility;
 				//Log(LOG_INFO) << ". . energy left = " << unitEnergy;
 
 				if (unitEnergy > energyBound)

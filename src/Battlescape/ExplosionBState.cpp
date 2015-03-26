@@ -598,15 +598,13 @@ void ExplosionBState::explode()
 			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
 		for (std::vector<BattleItem*>::const_iterator
-				j = _parent->getSave()->getItems()->begin();
-				j != _parent->getSave()->getItems()->end();
-				++j)
+				i = _parent->getSave()->getItems()->begin();
+				i != _parent->getSave()->getItems()->end();
+				++i)
 		{
-			if (_item->getId() == (*j)->getId())
+			if ((*i)->getId() == _item->getId())
 			{
-				delete *j;
-				_parent->getSave()->getItems()->erase(j);
-
+				_parent->getSave()->removeItem(_item);
 				break;
 			}
 		}

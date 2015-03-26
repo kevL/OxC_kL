@@ -67,6 +67,8 @@ private:
 		_isBasic,
 		_isSpacesuit;
 	int
+		_agility,
+
 		_deathFrames,
 		_shootFrames,
 
@@ -191,12 +193,15 @@ private:
 		int getRankColor(int i) const;
 
 		/// Checks if this Armor's inventory be accessed.
-		const bool hasInventory() const;
+		bool hasInventory() const;
 
 		/// Gets if this Armor is basic (lowest rank, standard issue wear).
-		const bool isBasic() const;
+		bool isBasic() const;
 		/// Gets if this Armor is powered and suitable for Mars.
-		const bool isSpacesuit() const;
+		bool isSpacesuit() const;
+
+		/// Gets this Armor's agility used to determine stamina expenditure.
+		int getAgility() const;
 };
 
 }

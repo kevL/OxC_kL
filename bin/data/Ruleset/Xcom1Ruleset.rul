@@ -2147,6 +2147,7 @@ armors:
       - 1.5 #acid
       - 1.12 #smoke
     loftempsSet: [ 3 ]
+    agility: 1
   - type: STR_PERSONAL_ARMOR_UC
     spriteSheet: XCOM_1.PCK
     spriteInv: MAN_1
@@ -2196,6 +2197,7 @@ armors:
       - 0.0 #smoke
     loftempsSet: [ 3 ]
     isSpacesuit: true
+    agility: 2
     forcedTorso: 1
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
@@ -2221,6 +2223,7 @@ armors:
       - 0.0 #smoke
     loftempsSet: [ 3 ]
     isSpacesuit: true
+    agility: 2
     forcedTorso: 2
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
@@ -2297,6 +2300,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseBattle:
@@ -2318,6 +2322,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
 soldiers:
   - type: XCOM
     minStats:

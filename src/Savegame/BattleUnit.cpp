@@ -573,7 +573,7 @@ YAML::Node BattleUnit::save() const
 
 	for (size_t
 			i = 0;
-			i < _recolor.size();
+			i != _recolor.size();
 			++i)
 	{
 		YAML::Node p;

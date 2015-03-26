@@ -5938,7 +5938,7 @@
 1424390943 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1427312467 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1427338091 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6449,7 +6449,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1427312262 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1427343364 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -8432,7 +8432,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1427321602 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1427336928 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Battlescape/Position.h"
 	"../Engine/Language.h"
@@ -8680,14 +8680,14 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1426896411 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1427325827 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1427324756 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1427337107 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11514,11 +11514,11 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1427323087 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1427339572 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1427321928 f:\git\openxcom\src\ruleset\rulearmor.h
+1427342830 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
 	"Unit.h"
 

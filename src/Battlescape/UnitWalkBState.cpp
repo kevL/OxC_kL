@@ -454,7 +454,8 @@ bool UnitWalkBState::doStatusStand()
 					costEnergy = costEnergy * 3 / 2;
 				}
 
-				if (_unit->hasFlightSuit() == true
+				costEnergy -= _unit->getArmor()->getAgility();
+/*				if (_unit->hasFlightSuit() == true
 					&& _pf->getMovementType() == MT_FLY)
 				{
 					costEnergy -= 2; // zippy.
@@ -467,15 +468,15 @@ bool UnitWalkBState::doStatusStand()
 				}
 				// else if (coveralls){} // normal energy expenditure
 				else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
-					costEnergy += 1; // *clunk*clunk*
+					costEnergy += 1; // *clunk*clunk* */
+
+				if (costEnergy < 0) costEnergy = 0;
 			}
 			else // gravLift
 			{
 				//Log(LOG_INFO) << ". . using GravLift";
 				costEnergy = 0;
 			}
-
-			if (costEnergy < 0) costEnergy = 0;
 		}
 
 		//Log(LOG_INFO) << ". check costTU + stamina, etc. TU = " << costTU;

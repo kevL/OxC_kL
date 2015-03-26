@@ -2428,18 +2428,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Ruleset/Armor.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Ruleset/Armor.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
 		<Unit filename="Ruleset/ArticleDefinition.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2558,6 +2546,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleArmor.cpp" />
+		<Unit filename="Ruleset/RuleArmor.h" />
 		<Unit filename="Ruleset/RuleBaseFacility.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
