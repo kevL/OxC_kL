@@ -97,7 +97,9 @@ private:
 
 	std::vector<BattleItem*>
 		_deleted,
-		_items;
+		_items,
+		_recoverGuaranteed,
+		_recoverConditional;
 	std::vector<BattleUnit*>
 //kL	_exposedUnits,
 		_units;
@@ -380,6 +382,11 @@ private:
 		void setAmbientSound(int sound);
 		/// Gets the ambient sound effect;
 		int getAmbientSound() const;
+
+		/// Gets the list of items guaranteed to be recovered.
+		std::vector<BattleItem*>* getGuaranteedRecoveredItems();
+		/// Gets the list of items that MIGHT get recovered.
+		std::vector<BattleItem*>* getConditionalRecoveredItems();
 
 		/// Sets the inventory tile when BattlescapeGenerator runs.
 		void setBattleInventory(Tile* invBattle);

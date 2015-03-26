@@ -282,13 +282,6 @@ void BattlescapeGenerator::nextStage()
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-/*		if ((_battleSave->isAborted()
-				&& (*i)->isInExitArea(END_POINT) == false)
-			|| (*i)->getOriginalFaction() == FACTION_HOSTILE)
-		{
-			(*i)->instaKill();
-		} */
-
 		if ((*i)->getStatus() != STATUS_DEAD
 			&& ((*i)->getOriginalFaction() != FACTION_PLAYER)
 				|| (_battleSave->isAborted() == true
@@ -309,6 +302,53 @@ void BattlescapeGenerator::nextStage()
 		_battleSave->endBattlePhase();
 
 	_battleSave->resetTurnCounter();
+
+	// remove all items not belonging to soldiers from the map.
+	// sort items into two categories:
+	// - the ones that are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
+	// - and the ones that are scattered about on the ground, that will be recovered ONLY on success.
+	// this does not include items in soldiers' hands.
+	std::vector<BattleItem*> *takeHomeGuaranteed = _battleSave->getGuaranteedRecoveredItems();
+	std::vector<BattleItem*> *takeHomeConditional = _battleSave->getConditionalRecoveredItems();
+	std::map<RuleItem*, int>
+		guaranteedRounds,
+		conditionalRounds;
+
+	for (std::vector<BattleItem*>::iterator
+			j = _battleSave->getItems()->begin();
+			j != _battleSave->getItems()->end();
+			)
+	{
+		const Tile* const tile = (*j)->getTile();
+
+		if ((*j)->getOwner() == NULL
+			|| (*j)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
+		{
+			(*j)->setTile(NULL);
+		}
+
+		if (tile != NULL)
+		{
+			std::vector<BattleItem*>* toContainer = takeHomeConditional;
+
+			if (tile->getMapData(MapData::O_FLOOR) != NULL
+				&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			{
+				toContainer = takeHomeGuaranteed;
+			}
+
+			if ((*j)->getRules()->isRecoverable() == true
+				&& (*j)->getXCOMProperty() == false) // note that <-
+			{
+				toContainer->push_back(*j);
+				j = _battleSave->getItems()->erase(j);
+
+				continue;
+			}
+		}
+
+		++j;
+	}
 
 	_missionType = _battleSave->getMissionType();
 	AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionType);
@@ -393,7 +433,7 @@ void BattlescapeGenerator::nextStage()
 		}
 	}
 
-	// remove all items not belonging to the soldiers from the map
+/*	// remove all items not belonging to the soldiers from the map
 	for (std::vector<BattleItem*>::const_iterator
 			j = _battleSave->getItems()->begin();
 			j != _battleSave->getItems()->end();
@@ -404,7 +444,7 @@ void BattlescapeGenerator::nextStage()
 		{
 			(*j)->setTile(NULL);
 		}
-	}
+	} */
 
 	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
 	const size_t unitCount = _battleSave->getUnits()->size();

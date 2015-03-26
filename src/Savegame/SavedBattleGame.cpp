@@ -155,6 +155,22 @@ SavedBattleGame::~SavedBattleGame()
 		delete *i;
 	}
 
+	for (std::vector<BattleItem*>::iterator
+			i = _recoverGuaranteed.begin();
+			i != _recoverGuaranteed.end();
+			++i)
+	{
+		delete *i;
+	}
+
+	for (std::vector<BattleItem*>::iterator
+			i = _recoverConditional.begin();
+			i != _recoverConditional.end();
+			++i)
+	{
+		delete *i;
+	}
+
 	for (std::vector<BattleItem*>::const_iterator
 			i = _deleted.begin();
 			i != _deleted.end();
@@ -442,6 +458,40 @@ void SavedBattleGame::load(
 	_ambience				= node["ambience"]								.as<int>(_ambience);
 	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
 	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
+
+	for (YAML::const_iterator
+			i = node["recoverConditional"].begin();
+			i != node["recoverConditional"].end();
+			++i)
+	{
+		std::string type	= (*i)["type"]	.as<std::string>();
+		_itemId				= (*i)["id"]	.as<int>(_itemId);
+		if (rule->getItem(type) != NULL)
+		{
+			BattleItem* item = new BattleItem(
+										rule->getItem(type),
+										&_itemId);
+			item->load(*i);
+			_recoverConditional.push_back(item);
+		}
+	}
+
+	for (YAML::const_iterator
+			i = node["recoverGuaranteed"].begin();
+			i != node["recoverGuaranteed"].end();
+			++i)
+	{
+		std::string type	= (*i)["type"]	.as<std::string>();
+		_itemId				= (*i)["id"]	.as<int>(_itemId);
+		if (rule->getItem(type) != NULL)
+		{
+			BattleItem* item = new BattleItem(
+										rule->getItem(type),
+										&_itemId);
+			item->load(*i);
+			_recoverGuaranteed.push_back(item);
+		}
+	}
 }
 
 /**
@@ -615,6 +665,22 @@ YAML::Node SavedBattleGame::save() const
 	node["ambience"]		= _ambience;
 	node["alienRace"]		= _alienRace;
 	node["operationTitle"]	= Language::wstrToUtf8(_operationTitle);
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _recoverGuaranteed.begin();
+			i != _recoverGuaranteed.end();
+			++i)
+	{
+		node["recoverGuaranteed"].push_back((*i)->save());
+	}
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _recoverConditional.begin();
+			i != _recoverConditional.end();
+			++i)
+	{
+		node["recoverConditional"].push_back((*i)->save());
+	}
 
 	return node;
 }
@@ -2604,6 +2670,24 @@ int SavedBattleGame::getAmbientSound() const
 }
 
 /**
+ * Gets the list of items that are guaranteed to be recovered (ie: items that were in the skyranger).
+ * @return, the list of items guaranteed recovered
+ */
+std::vector<BattleItem*>* SavedBattleGame::getGuaranteedRecoveredItems()
+{
+	return &_recoverGuaranteed;
+}
+
+/**
+ * Gets the list of items that are not guaranteed to be recovered (ie: items that were NOT in the skyranger).
+ * @return, the list of items conditionally recovered
+ */
+std::vector<BattleItem*>* SavedBattleGame::getConditionalRecoveredItems()
+{
+	return &_recoverConditional;
+}
+
+/**
  * Sets the battlescape inventory tile when BattlescapeGenerator runs.
  * For use in base missions to randomize item locations.
  * @param invBattle - pointer to the tile where battle inventory is created
@@ -2669,6 +2753,8 @@ const std::wstring& SavedBattleGame::getOperation() const
 
 /**
  * Sets variables for what music to play in a particular terrain or lack thereof.
+ * @param music		- address of the music category to play
+ * @param terrain	- address of the terrain to choose the music for
  */
 void SavedBattleGame::calibrateMusic(
 		std::string& music,

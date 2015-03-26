@@ -1361,14 +1361,20 @@ void DebriefingState::prepareDebriefing()
 
 		if (aborted == false)
 		{
-			for (int // get recoverable map data objects from the battlescape map
+			// if this was a 2-stage mission, and not aborted (ie: there's time to clean up)
+			// recover items from the earlier stages as well
+			recoverItems(
+					battleSave->getConditionalRecoveredItems(),
+					base);
+
+			for (size_t // get recoverable map data objects from the battlescape map
 					i = 0;
-					i < battleSave->getMapSizeXYZ();
+					i != static_cast<size_t>(battleSave->getMapSizeXYZ());
 					++i)
 			{
 				for (int
 						part = 0;
-						part < 4;
+						part != 4;
 						++part)
 				{
 					if (battleSave->getTiles()[i]->getMapData(part))
@@ -1388,9 +1394,9 @@ void DebriefingState::prepareDebriefing()
 		}
 		else
 		{
-			for (int
+			for (size_t
 					i = 0;
-					i < battleSave->getMapSizeXYZ();
+					i != static_cast<size_t>(battleSave->getMapSizeXYZ());
 					++i)
 			{
 				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
@@ -1424,9 +1430,9 @@ void DebriefingState::prepareDebriefing()
 		if (soldierLive > 0
 			&& _destroyXCOMBase == false)
 		{
-			for (int // recover items from the ground
+			for (size_t // recover items from the ground
 					i = 0;
-					i != battleSave->getMapSizeXYZ();
+					i != static_cast<size_t>(battleSave->getMapSizeXYZ());
 					++i)
 			{
 				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
@@ -1485,6 +1491,12 @@ void DebriefingState::prepareDebriefing()
 										(*i)->qty);
 			}
 		}
+
+		// assuming this was a multi-stage mission
+		// recover everything that was in the craft in the previous stage
+		recoverItems(
+				battleSave->getGuaranteedRecoveredItems(),
+				base);
 	}
 
 	// reequip craft after a non-base-defense mission;
