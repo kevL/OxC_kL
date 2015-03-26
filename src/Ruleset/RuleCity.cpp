@@ -156,7 +156,7 @@ bool RuleCity::getLabelTop() const
  * Gets the texture of this City for the battlescape.
  * @return, texture ID
  */
-int RuleCity::getCityTextureInt() const
+int RuleCity::getTextureInt() const
 {
 	return _texture;
 }

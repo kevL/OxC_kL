@@ -63,6 +63,15 @@ std::vector<TerrainCriteria>* RuleTexture::getTerrainCriteria()
 }
 
 /**
+ * Gets this RuleTexture's alien deployment.
+ * @return, deployment-type string
+ */
+std::string RuleTexture::getTextureDeployment() const
+{
+	return _deployType;
+}
+
+/**
  * Calculates a random terrain for a mission-target based
  * on this texture's available TerrainCriteria.
  * @param target - pointer to the mission Target (default NULL to exclude geographical bounds)
@@ -130,15 +139,6 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 	}
 
 	return ""; // this means nothing. Literally. That is, if the code runs here -> CTD.
-}
-
-/**
- * Gets this RuleTexture's alien deployment.
- * @return, deployment-type string
- */
-std::string RuleTexture::getTextureDeployment() const
-{
-	return _deployType;
 }
 
 }

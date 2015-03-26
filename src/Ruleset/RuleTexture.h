@@ -78,11 +78,11 @@ private:
 		/// Gets the list of terrain criteria.
 		std::vector<TerrainCriteria>* getTerrainCriteria();
 
-		/// Gets a randomly textured terrain-type for a given target.
-		std::string getRandomTerrain(const Target* const target = NULL) const;
-
 		/// Gets the alien deployment for this Texture.
 		std::string getTextureDeployment() const;
+
+		/// Gets a randomly textured terrain-type for a given target.
+		std::string getRandomTerrain(const Target* const target = NULL) const;
 };
 
 }

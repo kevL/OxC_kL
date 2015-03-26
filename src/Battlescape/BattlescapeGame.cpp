@@ -564,7 +564,9 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 				{
 					if (tu == 3
 						|| (tu == 10
-							&& bu->spendEnergy(3) == true))
+							&& bu->spendEnergy(std::max(
+													0,
+													5 - bu->getArmor()->getAgility())) == true))
 					{
 						bu->spendTimeUnits(tu);
 						bu->kneel(bu->isKneeled() == false);
@@ -599,11 +601,15 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 	}
 	else if (bu->getGeoscapeSoldier() != NULL) // MC'd xCom agent, trying to stand & walk by AI.
 	{
+		const int energyCost = std::max(
+									0,
+									5 - bu->getArmor()->getAgility());
+
 		if (bu->getTimeUnits() > 9
-			&& bu->getEnergy() > 2)
+			&& bu->getEnergy() >= energyCost)
 		{
 			bu->spendTimeUnits(10);
-			bu->spendEnergy(3);
+			bu->spendEnergy(energyCost);
 
 			bu->kneel(false);
 			getMap()->cacheUnits();

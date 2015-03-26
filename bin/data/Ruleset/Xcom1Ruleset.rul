@@ -4277,6 +4277,7 @@ manufacture:
     time: 650
     cost: 65000
     requiredItems:
+      STR_MIND_PROBE: 1
       STR_ELERIUM_115: 1
   - name: STR_HEAVY_PLASMA
     category: STR_WEAPON

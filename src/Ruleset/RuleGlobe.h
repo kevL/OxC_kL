@@ -85,7 +85,7 @@ private:
 		void loadDat(const std::string& filename);
 
 		/// Gets a specific world texture.
-		RuleTexture* getGlobeTextureRule(int id) const;
+		RuleTexture* getTextureRule(int id) const;
 		/// Gets the eligible terrains for an AlienDeployment rule.
 		std::vector<std::string> getGlobeTerrains(const std::string& deployType) const;
 };

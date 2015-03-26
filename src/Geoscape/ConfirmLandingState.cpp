@@ -183,7 +183,7 @@ ConfirmLandingState::ConfirmLandingState(
 			if (site != NULL) // missionSite
 			{
 				Log(LOG_INFO) << ". . missionSite";
-				if (_city != NULL) // missionSite is at a City.
+//				if (_city != NULL) // missionSite is at a City.
 				{
 					std::vector<std::string> eligibleTerrains;
 					// terrains for Missions can be/are defined in both AlienDeployment AND through RuleGlobe(Textures)
@@ -197,18 +197,34 @@ ConfirmLandingState::ConfirmLandingState(
 					// if none found, choose among Deployment def'd terrains ....
 					// Note: cf. NewBattleState::cbxMissionChange()
 
+					// BZZZT. Do it the opposite way; check deployTerrains first, then textureTerrains.
+
 					// TODO: tie all this into WeightedOptions
 					// check for Terrains in Globe-Texture(INT) first
-					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
-					const RuleTexture* const texRule = globeRule->getGlobeTextureRule(_city->getCityTextureInt());
+/*					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
+					const RuleTexture* const texRule = globeRule->getTextureRule(_city->getTextureInt());
 					eligibleTerrains = globeRule->getGlobeTerrains(texRule->getTextureDeployment());
 
 					// second, check for Terrains in AlienDeployment ...
 					if (eligibleTerrains.empty() == true)
 					{
 						// get a Terrain from AlienDeployment
-						const AlienDeployment* const ruleDeploy = site->getDeployment();
-						eligibleTerrains = ruleDeploy->getDeployTerrains();
+						const AlienDeployment* const deployRule = site->getDeployment();
+						eligibleTerrains = deployRule->getDeployTerrains();
+					} */
+
+					// get a Terrain from AlienDeployment first
+					Log(LOG_INFO) << ". . . finding eligibleTerrain for AlienDeployment";
+					const AlienDeployment* const deployRule = site->getDeployment();
+					eligibleTerrains = deployRule->getDeployTerrains();
+
+					// second, check for Terrains in Globe-Texture(INT) ...
+					if (eligibleTerrains.empty() == true)
+					{
+						Log(LOG_INFO) << ". . . finding eligibleTerrain for RuleGlobe";
+						const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
+						const RuleTexture* const texRule = globeRule->getTextureRule(_city->getTextureInt());
+						eligibleTerrains = globeRule->getGlobeTerrains(texRule->getTextureDeployment());
 					}
 
 					if (eligibleTerrains.empty() == false) // SAFETY.
@@ -216,14 +232,18 @@ ConfirmLandingState::ConfirmLandingState(
 						const size_t pick = RNG::generate(
 													0,
 													eligibleTerrains.size() - 1);
+						Log(LOG_INFO) << ". . . . size = " << (int)eligibleTerrains.size() << " pick = " << (int)pick;
+						Log(LOG_INFO) << ". . . . terrain = " << eligibleTerrains.at(pick) << " - NOT WEIGHTED";
 						_terrainRule = _game->getRuleset()->getTerrain(eligibleTerrains.at(pick));
 					}
 //					else fuck off. Thanks!
+					else Log(LOG_INFO) << ". . . . eligibleTerrain NOT Found";
 
 					terrainType = _terrainRule->getType();
 				}
-				else // SAFETY: for missionSite that's not at a City.
-					terrainType = _texRule->getRandomTerrain(_craft->getDestination());
+//				else	// SAFETY: for missionSite that's not at a City.
+						// This should be the same as for NOT City!!!
+//					terrainType = _texRule->getRandomTerrain(_craft->getDestination());
 					// note: that should crash if on Water tex
 
 				site->setSiteTerrainType(terrainType);
@@ -239,7 +259,7 @@ ConfirmLandingState::ConfirmLandingState(
 					// so treat them both the same -> texture(INT) #10
 					// INDUSTRIALUFO, MADURBANUFO, NATIVEUFO
 					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
-					const RuleTexture* const texRule = globeRule->getGlobeTextureRule(OpenXcom::TT_URBAN);
+					const RuleTexture* const texRule = globeRule->getTextureRule(OpenXcom::TT_URBAN);
 
 					terrainType = texRule->getRandomTerrain(ufo);
 					// NOTE that inputting coordinates can screw getRandomTerrain() if & when 'target'
@@ -247,9 +267,9 @@ ConfirmLandingState::ConfirmLandingState(
 					// I don't believe the function has a viable fallback mechanism
 					// ... instead it would merely return an empty string.
 
-//					if (_city->getCityTextureInt() == -1) // Texture ID -1
+//					if (_city->getTextureInt() == -1) // Texture ID -1
 //					{}
-//					else if (_city->getCityTextureInt() == -2) // Texture ID -2
+//					else if (_city->getTextureInt() == -2) // Texture ID -2
 //					{}
 //					else SAFETY!
 				}

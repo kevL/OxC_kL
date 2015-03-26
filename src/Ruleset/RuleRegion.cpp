@@ -97,17 +97,17 @@ void RuleRegion::load(const YAML::Node& node)
 				i != cities.end();
 				++i)
 		{
-			RuleCity* const cityRule = new RuleCity(); // Load all Cities that are in YAML-ruleset
-			cityRule->load(*i);
-			_cities.push_back(cityRule);
+			RuleCity* const city = new RuleCity(); // Load all Cities that are in YAML-ruleset
+			city->load(*i);
+			_cities.push_back(city);
 
 			area.lonMin =
-			area.lonMax = cityRule->getLongitude();
+			area.lonMax = city->getLongitude();
 			area.latMin =
-			area.latMax = cityRule->getLatitude();
+			area.latMax = city->getLatitude();
 
-			area.site = cityRule->getName();
-			area.texture = cityRule->getCityTextureInt();
+			area.site = city->getName();
+			area.texture = city->getTextureInt();
 
 			_missionZones.at(MZ_CITY).areas.push_back(area);
 		}

@@ -82,7 +82,7 @@ private:
 		bool getLabelTop() const;
 
 		/// Gets the texture of this City for the battlescape.
-		int getCityTextureInt() const;
+		int getTextureInt() const;
 };
 
 }

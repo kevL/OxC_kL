@@ -1290,7 +1290,7 @@ void GeoscapeState::drawUfoIndicators()
 	}
 
 	size_t
-		ind = 0,
+		j = 0,
 		ufoSize;
 	Uint8
 		color,
@@ -1303,11 +1303,11 @@ void GeoscapeState::drawUfoIndicators()
 	{
 		if ((*i)->getDetected() == true)
 		{
-			_btnVisibleUfo[ind]->setVisible();
-//			_numVisibleUfo[ind]->setVisible();
+			_btnVisibleUfo[j]->setVisible();
+//			_numVisibleUfo[j]->setVisible();
 //getId()
 
-			_visibleUfo[ind] = *i;
+			_visibleUfo[j] = *i;
 
 			ufoSize = (*i)->getRadius() - 2;
 
@@ -1344,17 +1344,17 @@ void GeoscapeState::drawUfoIndicators()
 					if (color != 0)
 					{
 						color = baseColor - color;
-						_btnVisibleUfo[ind]->setPixelColor(
+						_btnVisibleUfo[j]->setPixelColor(
 														x,y,
 														color);
 					}
 				}
 			}
 
-			++ind;
+			++j;
 		}
 
-		if (ind == INDICATORS - 1)
+		if (j == INDICATORS - 1)
 			break;
 	}
 }
@@ -1823,7 +1823,7 @@ void GeoscapeState::time5Seconds()
 									popup(new ConfirmLandingState(
 															*j,
 															// countryside Texture; choice of Terrain made in ConfirmLandingState
-															_rules->getGlobe()->getGlobeTextureRule(texture),
+															_rules->getGlobe()->getTextureRule(texture),
 															shade));
 								}
 							}
@@ -1856,7 +1856,7 @@ void GeoscapeState::time5Seconds()
 						popup(new ConfirmLandingState(
 												*j,
 												// preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
-												_rules->getGlobe()->getGlobeTextureRule(texture),
+												_rules->getGlobe()->getTextureRule(texture),
 												shade));
 					}
 					else

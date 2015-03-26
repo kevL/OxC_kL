@@ -581,7 +581,7 @@ void AlienMission::ufoReachedWaypoint(
 			const MissionArea area = regRule.getMissionPoint(
 															trajectory.getZone(curWaypoint),
 															&ufo);
-			const RuleTexture* const texRule = rules.getGlobe()->getGlobeTextureRule(area.texture);
+			const RuleTexture* const texRule = rules.getGlobe()->getTextureRule(area.texture);
 			// uses Globe-defined textures for Deployment; what happens to Deployment-defined Deployments:
 			const AlienDeployment* const deployRule = rules.getDeployment(texRule->getTextureDeployment());
 

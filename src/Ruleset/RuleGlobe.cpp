@@ -211,9 +211,9 @@ void RuleGlobe::loadDat(const std::string& filename)
 		Polygon* poly;
 		int points;
 
-		for (int
+		for (size_t
 				i = 0;
-				i < 10;
+				i != 10;
 				++i)
 		{
 			value[i] = SDL_SwapLE16(value[i]);
@@ -226,10 +226,10 @@ void RuleGlobe::loadDat(const std::string& filename)
 
 		poly = new Polygon(points);
 
+		size_t j = 0;
 		for (int
-				i = 0,
-					j = 0;
-				i < points;
+				i = 0;
+				i != points;
 				++i)
 		{
 			double // correct X-Com degrees and convert to radians ( 7.25 arc-min = 1 xcomDegree ~or so~ /shrug )
@@ -257,7 +257,7 @@ void RuleGlobe::loadDat(const std::string& filename)
  * @param id - texture ID
  * @return, rule for a Texture
  */
-RuleTexture* RuleGlobe::getGlobeTextureRule(int id) const
+RuleTexture* RuleGlobe::getTextureRule(int id) const
 {
 	std::map<int, RuleTexture*>::const_iterator i = _textures.find(id);
 	if (i != _textures.end())
