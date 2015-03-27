@@ -24,22 +24,21 @@ namespace OpenXcom
 
 /**
  * Creates a new exception.
- * @param msg Exception message.
+ * @param msg - exception message
  */
-Exception::Exception(const std::string &msg) throw(): _msg(msg)
-{
-}
+Exception::Exception(const std::string& msg) throw()
+	:
+		_msg(msg)
+{}
 
 Exception::~Exception() throw()
-{
-}
+{}
 
 /**
- * Returns the message describing the exception
- * that occurred.
- * @return Exception message.
+ * Returns the message describing the exception that occurred.
+ * @return, exception message
  */
-const char *Exception::what() const throw()
+const char* Exception::what() const throw()
 {
 	return _msg.c_str();
 }

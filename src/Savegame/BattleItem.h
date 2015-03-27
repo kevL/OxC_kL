@@ -68,7 +68,8 @@ private:
 		/// Creates a item of the specified type.
 		BattleItem(
 				RuleItem* const rules,
-				int* id);
+				int* pId,
+				int id = -1);
 		/// Cleans up the item.
 		~BattleItem();
 

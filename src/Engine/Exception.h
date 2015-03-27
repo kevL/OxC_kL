@@ -16,30 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_EXCEPTION_H
 #define OPENXCOM_EXCEPTION_H
 
 #include <exception>
 #include <string>
 
+
 namespace OpenXcom
 {
 
 /**
- * Basic exception class to distinguish
- * OpenXcom exceptions from the rest.
+ * Basic exception class to distinguish OpenXcom exceptions from the rest.
  */
-class Exception : public std::exception
+class Exception
+	:
+		public std::exception
 {
+
 private:
 	std::string _msg;
-public:
-	/// Creates an exception.
-	Exception(const std::string &msg) throw();
-	/// Cleans up the exception.
-	~Exception() throw();
-	/// Returns the exception message.
-	const char *what() const throw();
+
+
+	public:
+		/// Creates an exception.
+		Exception(const std::string& msg) throw();
+		/// Cleans up the exception.
+		~Exception() throw();
+
+		/// Returns the exception message.
+		const char* what() const throw();
 };
 
 }

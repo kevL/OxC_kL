@@ -428,7 +428,7 @@ void UnitDieBState::convertToCorpse() // private.
 
 				BattleItem* const corpse = new BattleItem(
 													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--part]),
-													_parent->getSave()->getCurrentItemId());
+													_parent->getSave()->getNextItemId());
 				corpse->setUnit(_unit);
 
 				if (tile != NULL					// kL, safety. ( had a CTD when ethereal dies on water ).

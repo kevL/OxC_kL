@@ -278,8 +278,10 @@ private:
 		/// Checks if all the objectives are destroyed.
 		bool allObjectivesDestroyed() const;
 
-		/// Gets the current item ID.
-		int* getCurrentItemId();
+		/// Sets the next available item ID value.
+		void setNextItemId();
+		/// Gets the next available item ID value.
+		int* getNextItemId();
 
 		/// Gets a spawn node.
 		Node* getSpawnNode(

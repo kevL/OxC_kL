@@ -127,7 +127,7 @@ SavedGame::SavedGame(const Ruleset* const rules)
 		_globeLon(0.),
 		_globeLat(0.),
 		_globeZoom(0),
-		_battleGame(0),
+		_battleGame(NULL),
 		_debug(false),
 		_warned(false),
 //		_detail(true),
@@ -414,7 +414,8 @@ void SavedGame::load(
 		const std::string& filename,
 		Ruleset* rule)
 {
-	//Log(LOG_INFO) << "SavedGame::load()";
+	Log(LOG_INFO) << "SavedGame::load()";
+
 	const std::string st = Options::getUserFolder() + filename;
 	const std::vector<YAML::Node> file = YAML::LoadAllFromFile(st);
 	if (file.empty() == true)
@@ -438,7 +439,7 @@ void SavedGame::load(
 
 	YAML::Node doc = file[1]; // Get full save data
 
-	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
+	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
 
 	if (doc["rng"]
 		&& (_ironman == true || Options::newSeedOnLoad == false))
@@ -463,47 +464,51 @@ void SavedGame::load(
 	_globeZoom				= doc["globeZoom"]			.as<int>(_globeZoom);
 	_ids					= doc["ids"]				.as<std::map<std::string, int> >(_ids);
 
+	Log(LOG_INFO) << ". load countries";
 	for (YAML::const_iterator
 			i = doc["countries"].begin();
 			i != doc["countries"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
+		const std::string type = (*i)["type"].as<std::string>();
 		if (rule->getCountry(type))
 		{
-			Country* c = new Country(
-								rule->getCountry(type),
-								false);
+			Country* const c = new Country(
+										rule->getCountry(type),
+										false);
 			c->load(*i);
 			_countries.push_back(c);
 		}
 	}
 
+	Log(LOG_INFO) << ". load regions";
 	for (YAML::const_iterator
 			i = doc["regions"].begin();
 			i != doc["regions"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
+		const std::string type = (*i)["type"].as<std::string>();
 		if (rule->getRegion(type))
 		{
-			Region* r = new Region(rule->getRegion(type));
+			Region* const r = new Region(rule->getRegion(type));
 			r->load(*i);
 			_regions.push_back(r);
 		}
 	}
 
+	Log(LOG_INFO) << ". load alien bases";
 	// Alien bases must be loaded before alien missions
 	for (YAML::const_iterator
 			i = doc["alienBases"].begin();
 			i != doc["alienBases"].end();
 			++i)
 	{
-		AlienBase* b = new AlienBase();
+		AlienBase* const b = new AlienBase();
 		b->load(*i);
 		_alienBases.push_back(b);
 	}
 
+	Log(LOG_INFO) << ". load missions";
 	// Missions must be loaded before UFOs.
 	const YAML::Node& missions = doc["alienMissions"];
 	for (YAML::const_iterator
@@ -520,15 +525,16 @@ void SavedGame::load(
 		_activeMissions.push_back(mission.release());
 	}
 
+	Log(LOG_INFO) << ". load ufos";
 	for (YAML::const_iterator
 			i = doc["ufos"].begin();
 			i != doc["ufos"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
+		const std::string type = (*i)["type"].as<std::string>();
 		if (rule->getUfo(type))
 		{
-			Ufo* u = new Ufo(rule->getUfo(type));
+			Ufo* const u = new Ufo(rule->getUfo(type));
 			u->load(
 					*i,
 					*rule,
@@ -537,12 +543,13 @@ void SavedGame::load(
 		}
 	}
 
+	Log(LOG_INFO) << ". load waypoints";
 	for (YAML::const_iterator
 			i = doc["waypoints"].begin();
 			i != doc["waypoints"].end();
 			++i)
 	{
-		Waypoint* w = new Waypoint();
+		Waypoint* const w = new Waypoint();
 		w->load(*i);
 		_waypoints.push_back(w);
 	}
@@ -559,6 +566,7 @@ void SavedGame::load(
 		_missionSites.push_back(ms);
 	} */
 
+	Log(LOG_INFO) << ". load mission sites";
 	for (YAML::const_iterator
 			i = doc["missionSites"].begin();
 			i != doc["missionSites"].end();
@@ -567,30 +575,32 @@ void SavedGame::load(
 		const std::string
 			type = (*i)["type"].as<std::string>(),
 			deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
-		MissionSite* ms = new MissionSite(
-									rule->getAlienMission(type),
-									rule->getDeployment(deployment));
+		MissionSite* const ms = new MissionSite(
+											rule->getAlienMission(type),
+											rule->getDeployment(deployment));
 		ms->load(*i);
 		_missionSites.push_back(ms);
 	}
 
+	Log(LOG_INFO) << ". load discovered research";
 	// Discovered Techs should be loaded before Bases (e.g. for PSI evaluation)
 	for (YAML::const_iterator
 			it = doc["discovered"].begin();
 			it != doc["discovered"].end();
 			++it)
 	{
-		std::string research = it->as<std::string>();
+		const std::string research = it->as<std::string>();
 		if (rule->getResearch(research))
 			_discovered.push_back(rule->getResearch(research));
 	}
 
+	Log(LOG_INFO) << ". load xcom bases";
 	for (YAML::const_iterator
 			i = doc["bases"].begin();
 			i != doc["bases"].end();
 			++i)
 	{
-		Base* b = new Base(rule);
+		Base* const b = new Base(rule);
 		b->load(
 				*i,
 				this,
@@ -598,21 +608,24 @@ void SavedGame::load(
 		_bases.push_back(b);
 	}
 
+	Log(LOG_INFO) << ". load popped research";
 	const YAML::Node& research = doc["poppedResearch"];
 	for (YAML::const_iterator
 			it = research.begin();
 			it != research.end();
 			++it)
 	{
-		std::string research = it->as<std::string>();
+		const std::string research = it->as<std::string>();
 		if (rule->getResearch(research))
 			_poppedResearch.push_back(rule->getResearch(research));
 	}
 
+	Log(LOG_INFO) << ". load alien strategy";
 	_alienStrategy->load(
 						rule,
 						doc["alienStrategy"]);
 
+	Log(LOG_INFO) << ". load dead soldiers";
 	for (YAML::const_iterator
 			i = doc["deadSoldiers"].begin();
 			i != doc["deadSoldiers"].end();
@@ -633,6 +646,7 @@ void SavedGame::load(
 		_deadSoldiers.push_back(deadSoldier);
 	}
 
+	Log(LOG_INFO) << ". load mission statistics";
 	for (YAML::const_iterator
 			i = doc["missionStatistics"].begin();
 			i != doc["missionStatistics"].end();
@@ -646,11 +660,13 @@ void SavedGame::load(
 
 	if (const YAML::Node& battle = doc["battleGame"])
 	{
+		Log(LOG_INFO) << "SavedGame: loading battlegame";
 		_battleGame = new SavedBattleGame();
 		_battleGame->load(
 						battle,
 						rule,
 						this);
+		Log(LOG_INFO) << "SavedGame: loading battlegame DONE";
 	}
 }
 

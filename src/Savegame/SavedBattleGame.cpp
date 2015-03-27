@@ -194,7 +194,8 @@ void SavedBattleGame::load(
 		Ruleset* rule,
 		SavedGame* savedGame)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::load()";
+	Log(LOG_INFO) << "SavedBattleGame::load()";
+
 	_mapsize_x			= node["width"]			.as<int>(_mapsize_x);
 	_mapsize_y			= node["length"]		.as<int>(_mapsize_y);
 	_mapsize_z			= node["height"]		.as<int>(_mapsize_z);
@@ -206,6 +207,7 @@ void SavedBattleGame::load(
 
 	const int selectedUnit = node["selectedUnit"].as<int>();
 
+	Log(LOG_INFO) << ". load mapdatasets";
 	for (YAML::const_iterator
 			i = node["mapdatasets"].begin();
 			i != node["mapdatasets"].end();
@@ -216,6 +218,7 @@ void SavedBattleGame::load(
 		_mapDataSets.push_back(mds);
 	}
 
+	Log(LOG_INFO) << ". init map";
 	initMap(
 			_mapsize_x,
 			_mapsize_y,
@@ -223,6 +226,7 @@ void SavedBattleGame::load(
 
 	if (!node["tileTotalBytesPer"])
 	{
+		Log(LOG_INFO) << ". load tiles [1]";
 		// binary tile data not found, load old-style text tiles :(
 		for (YAML::const_iterator
 				i = node["tiles"].begin();
@@ -235,6 +239,7 @@ void SavedBattleGame::load(
 	}
 	else
 	{
+		Log(LOG_INFO) << ". load tiles [2]";
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
 		const size_t totalTiles = node["totalTiles"].as<size_t>();
@@ -271,6 +276,7 @@ void SavedBattleGame::load(
 
 	if (_missionType == "STR_BASE_DEFENSE")
 	{
+		Log(LOG_INFO) << ". load xcom base";
 		if (node["moduleMap"])
 			_baseModules = node["moduleMap"].as<std::vector<std::vector<std::pair<int, int> > > >();
 		else
@@ -279,6 +285,7 @@ void SavedBattleGame::load(
 			calculateModuleMap();
 	}
 
+	Log(LOG_INFO) << ". load nodes";
 	for (YAML::const_iterator
 			i = node["nodes"].begin();
 			i != node["nodes"].end();
@@ -289,16 +296,24 @@ void SavedBattleGame::load(
 		_nodes.push_back(n);
 	}
 
+
+	int id;
+
+	BattleUnit* unit;
+	UnitFaction
+		faction,
+		originalFaction;
+
+	Log(LOG_INFO) << ". load units";
 	for (YAML::const_iterator
 			i = node["units"].begin();
 			i != node["units"].end();
 			++i)
 	{
-		const int id						= (*i)["soldierId"]						.as<int>();
-		const UnitFaction faction			= (UnitFaction)(*i)["faction"]			.as<int>();
-		const UnitFaction originalFaction	= (UnitFaction)(*i)["originalFaction"]	.as<int>(faction);
+		id				= (*i)["soldierId"]									.as<int>();
+		faction			= static_cast<UnitFaction>((*i)["faction"]			.as<int>());
+		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(faction));
 
-		BattleUnit* unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
 		{
 			unit = new BattleUnit(				// look up the matching soldier
@@ -322,8 +337,10 @@ void SavedBattleGame::load(
 								savedGame->getMonthsPassed()); // kL_add.
 		}
 
+		Log(LOG_INFO) << ". . load unit";
 		unit->load(*i);
 		_units.push_back(unit);
+		Log(LOG_INFO) << ". . load unit DONE";
 
 		if (faction == FACTION_PLAYER)
 		{
@@ -360,21 +377,23 @@ void SavedBattleGame::load(
 	}
 
 	// matches up tiles and units
+	Log(LOG_INFO) << ". reset tiles";
 	resetUnitTiles();
 
+	Log(LOG_INFO) << ". load items";
 	for (YAML::const_iterator
 			i = node["items"].begin();
 			i != node["items"].end();
 			++i)
 	{
-		_itemId = (*i)["id"].as<int>(_itemId);
-
 		std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type))
+		if (rule->getItem(type) != NULL)
 		{
+			id = (*i)["id"].as<int>(-1);
 			BattleItem* const item = new BattleItem(
 												rule->getItem(type),
-												&_itemId);
+												NULL,
+												id);
 			item->load(*i);
 			type = (*i)["inventoryslot"].as<std::string>();
 
@@ -422,6 +441,7 @@ void SavedBattleGame::load(
 		}
 	}
 
+	Log(LOG_INFO) << ". load weapons w/ ammo";
 	// tie ammo items to their weapons, running through the items again
 	std::vector<BattleItem*>::const_iterator weapon = _items.begin();
 	for (YAML::const_iterator
@@ -429,7 +449,7 @@ void SavedBattleGame::load(
 			i != node["items"].end();
 			++i)
 	{
-		if (rule->getItem((*i)["type"].as<std::string>()))
+		if (rule->getItem((*i)["type"].as<std::string>()) != NULL)
 		{
 			const int ammo = (*i)["ammoItem"].as<int>();
 			if (ammo != -1)
@@ -451,6 +471,7 @@ void SavedBattleGame::load(
 		}
 	}
 
+	Log(LOG_INFO) << ". set some vars";
 	_objectivesDestroyed	= node["objectivesDestroyed"]					.as<int>(_objectivesDestroyed);
 	_objectivesNeeded		= node["objectivesNeeded"]						.as<int>(_objectivesNeeded);
 	_batReserved			= (BattleActionType)node["batReserved"]			.as<int>(_batReserved);
@@ -459,39 +480,47 @@ void SavedBattleGame::load(
 	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
 	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
 
+	Log(LOG_INFO) << ". load conditional recovery";
 	for (YAML::const_iterator
 			i = node["recoverConditional"].begin();
 			i != node["recoverConditional"].end();
 			++i)
 	{
-		std::string type	= (*i)["type"]	.as<std::string>();
-		_itemId				= (*i)["id"]	.as<int>(_itemId);
+		const std::string type = (*i)["type"].as<std::string>();
 		if (rule->getItem(type) != NULL)
 		{
+			id = (*i)["id"].as<int>(-1);
 			BattleItem* item = new BattleItem(
 										rule->getItem(type),
-										&_itemId);
+										NULL,
+										id);
 			item->load(*i);
 			_recoverConditional.push_back(item);
 		}
 	}
 
+	Log(LOG_INFO) << ". load guaranteed recovery";
 	for (YAML::const_iterator
 			i = node["recoverGuaranteed"].begin();
 			i != node["recoverGuaranteed"].end();
 			++i)
 	{
-		std::string type	= (*i)["type"]	.as<std::string>();
-		_itemId				= (*i)["id"]	.as<int>(_itemId);
+		const std::string type = (*i)["type"].as<std::string>();
 		if (rule->getItem(type) != NULL)
 		{
+			id = (*i)["id"].as<int>(-1);
 			BattleItem* item = new BattleItem(
 										rule->getItem(type),
-										&_itemId);
+										NULL,
+										id);
 			item->load(*i);
 			_recoverGuaranteed.push_back(item);
 		}
 	}
+
+	Log(LOG_INFO) << ". set item ID";
+	setNextItemId(); // kL
+	Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
 }
 
 /**
@@ -1559,10 +1588,34 @@ bool SavedBattleGame::allObjectivesDestroyed() const
 }
 
 /**
- * Gets the current item ID.
- * @return, pointer to current item ID
+ * Sets the next available item ID value.
+ * @note Used only at the finish of loading a SavedBattleGame.
+ * @note ItemIDs start at 0.
  */
-int* SavedBattleGame::getCurrentItemId()
+void SavedBattleGame::setNextItemId()
+{
+	int
+		highValue = -1,
+		id;
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _items.begin();
+			i != _items.end();
+			++i)
+	{
+		id = (*i)->getId();
+		if (id > highValue)
+			highValue = id;
+	}
+
+	_itemId = ++highValue;
+}
+
+/**
+ * Gets the next available item ID value.
+ * @return, pointer to the highest available value
+ */
+int* SavedBattleGame::getNextItemId()
 {
 	return &_itemId;
 }
@@ -2754,7 +2807,7 @@ const std::wstring& SavedBattleGame::getOperation() const
 /**
  * Sets variables for what music to play in a particular terrain or lack thereof.
  * @param music		- address of the music category to play
- * @param terrain	- address of the terrain to choose the music for
+ * @param terrain	- address of the terrain to choose music for
  */
 void SavedBattleGame::calibrateMusic(
 		std::string& music,

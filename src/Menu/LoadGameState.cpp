@@ -75,8 +75,8 @@ LoadGameState::LoadGameState(
 		SaveType type,
 		SDL_Color* palette)
 	:
-		_firstRun(0),
-		_origin(origin)
+		_origin(origin),
+		_firstRun(0)
 {
 	switch (type) // can't auto-load ironman games
 	{
@@ -163,6 +163,7 @@ void LoadGameState::think()
 		SavedGame* const save = new SavedGame(_game->getRuleset());
 		try
 		{
+			Log(LOG_INFO) << "LoadGameState: loading";
 			save->load(
 					_filename,
 					_game->getRuleset());
@@ -176,6 +177,7 @@ void LoadGameState::think()
 
 			if (_game->getSavedGame()->getSavedBattle() != NULL)
 			{
+				Log(LOG_INFO) << "LoadGameState: loading battlescape map";
 				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
 
 				Options::baseXResolution = Options::baseXBattlescape;
@@ -190,6 +192,7 @@ void LoadGameState::think()
 		}
 		catch (Exception& e)
 		{
+			Log(LOG_INFO) << "LoadGame error";
 			Log(LOG_ERROR) << e.what();
 			std::wostringstream error;
 			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
@@ -215,6 +218,7 @@ void LoadGameState::think()
 		}
 		catch (YAML::Exception& e)
 		{
+			Log(LOG_INFO) << "LoadGame error YAML";
 			Log(LOG_ERROR) << e.what();
 			std::wostringstream error;
 			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());

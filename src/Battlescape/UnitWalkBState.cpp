@@ -1056,7 +1056,7 @@ void UnitWalkBState::postPathProcedures()
 						instaWeapon = true;
 						action.weapon = new BattleItem(
 													_parent->getRuleset()->getItem(meleeWeapon),
-													_parent->getSave()->getCurrentItemId());
+													_parent->getSave()->getNextItemId());
 						action.weapon->setOwner(_unit);
 					}
 				}

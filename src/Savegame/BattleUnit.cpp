@@ -186,9 +186,9 @@ BattleUnit::BattleUnit(
 	_currentArmor[SIDE_REAR]	= _armor->getRearArmor();
 	_currentArmor[SIDE_UNDER]	= _armor->getUnderArmor();
 
-	for (int i = 0; i < 6; ++i)
+	for (size_t i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
-	for (int i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 5; ++i)
 		_cache[i] = 0;
 //	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
 //		_specWeapon[i] = 0;
@@ -321,7 +321,7 @@ BattleUnit::BattleUnit(
 	_moveSound		= unit->getMoveSound();
 	_intelligence	= unit->getIntelligence();
 	_aggression		= unit->getAggression();
-	_specab			= (SpecialAbility)unit->getSpecialAbility();
+	_specab			= static_cast<SpecialAbility>(unit->getSpecialAbility());
 	_spawnUnit		= unit->getSpawnUnit();
 	_value			= unit->getValue();
 
@@ -348,9 +348,9 @@ BattleUnit::BattleUnit(
 	_currentArmor[SIDE_REAR]	= _armor->getRearArmor();
 	_currentArmor[SIDE_UNDER]	= _armor->getUnderArmor();
 
-	for (int i = 0; i < 6; ++i)
+	for (size_t i = 0; i < 6; ++i)
 		_fatalWounds[i] = 0;
-	for (int i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 5; ++i)
 		_cache[i] = 0;
 //	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
 //		_specWeapon[i] = 0;
@@ -401,9 +401,9 @@ BattleUnit::BattleUnit(
 BattleUnit::~BattleUnit()
 {
 	//Log(LOG_INFO) << "Delete BattleUnit";
-	for (int
+	for (size_t
 			i = 0;
-			i < 5;
+			i != 5;
 			++i)
 	{
 		if (_cache[i])
@@ -433,54 +433,60 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node& node)
 {
-	_id					= node["id"]										.as<int>(_id);
-	_faction			= _originalFaction = (UnitFaction)node["faction"]	.as<int>(_faction);
-	_status				= (UnitStatus)node["status"]						.as<int>(_status);
-	_pos				= node["position"]									.as<Position>(_pos);
-	_direction			= _toDirection = node["direction"]					.as<int>(_direction);
-	_directionTurret	= _toDirectionTurret = node["directionTurret"]		.as<int>(_directionTurret);
-	_tu					= node["tu"]										.as<int>(_tu);
-	_health				= node["health"]									.as<int>(_health);
-	_stunLevel			= node["stunLevel"]									.as<int>(_stunLevel);
-	_energy				= node["energy"]									.as<int>(_energy);
-	_morale				= node["morale"]									.as<int>(_morale);
-	_floating			= node["floating"]									.as<bool>(_floating);
-	_fire				= node["fire"]										.as<int>(_fire);
-	_turretType			= node["turretType"]								.as<int>(_turretType);
-	_visible			= node["visible"]									.as<bool>(_visible);
-	_turnsExposed		= node["turnsExposed"]								.as<int>(_turnsExposed);
-	_killedBy			= (UnitFaction)node["killedBy"]						.as<int>(_killedBy);
-	_moraleRestored		= node["moraleRestored"]							.as<int>(_moraleRestored);
-	_rankInt			= node["rankInt"]									.as<int>(_rankInt);
-	_originalFaction	= (UnitFaction)node["originalFaction"]				.as<int>(_originalFaction);
-	_kills				= node["kills"]										.as<int>(_kills);
-	_dontReselect		= node["dontReselect"]								.as<bool>(_dontReselect);
-	_charging			= NULL;
-//	_specab				= (SpecialAbility)node["specab"]					.as<int>(_specab);
-	_spawnUnit			= node["spawnUnit"]									.as<std::string>(_spawnUnit);
-	_motionPoints		= node["motionPoints"]								.as<int>(0);
-//	_respawn			= node["respawn"]									.as<bool>(_respawn);
-	_activeHand			= node["activeHand"]								.as<std::string>(_activeHand);
+	_status					= static_cast<UnitStatus>(node["status"]			.as<int>(_status));
+	_killedBy				= static_cast<UnitFaction>(node["killedBy"]			.as<int>(_killedBy));
+	_faction				= static_cast<UnitFaction>(node["faction"]			.as<int>(_faction));
+	if (node["originalFaction"])
+		_originalFaction	= static_cast<UnitFaction>(node["originalFaction"]	.as<int>());
+	else
+		_originalFaction	= _faction;
 
-	for (int i = 0; i < 5; ++i)
-		_currentArmor[i]	= node["armor"][i]								.as<int>(_currentArmor[i]);
-	for (int i = 0; i < 6; ++i)
-		_fatalWounds[i]		= node["fatalWounds"][i]						.as<int>(_fatalWounds[i]);
+	_id					= node["id"]					.as<int>(_id);
+	_pos				= node["position"]				.as<Position>(_pos);
+	_direction			=
+	_toDirection		= node["direction"]				.as<int>(_direction);
+	_directionTurret	=
+	_toDirectionTurret	= node["directionTurret"]		.as<int>(_directionTurret);
+	_tu					= node["tu"]					.as<int>(_tu);
+	_health				= node["health"]				.as<int>(_health);
+	_stunLevel			= node["stunLevel"]				.as<int>(_stunLevel);
+	_energy				= node["energy"]				.as<int>(_energy);
+	_morale				= node["morale"]				.as<int>(_morale);
+	_floating			= node["floating"]				.as<bool>(_floating);
+	_fire				= node["fire"]					.as<int>(_fire);
+	_turretType			= node["turretType"]			.as<int>(_turretType);
+	_visible			= node["visible"]				.as<bool>(_visible);
+	_turnsExposed		= node["turnsExposed"]			.as<int>(_turnsExposed);
+	_moraleRestored		= node["moraleRestored"]		.as<int>(_moraleRestored);
+	_rankInt			= node["rankInt"]				.as<int>(_rankInt);
+	_kills				= node["kills"]					.as<int>(_kills);
+	_dontReselect		= node["dontReselect"]			.as<bool>(_dontReselect);
+	_charging			= NULL;
+	_spawnUnit			= node["spawnUnit"]				.as<std::string>(_spawnUnit);
+	_motionPoints		= node["motionPoints"]			.as<int>(0);
+//	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
+//	_respawn			= node["respawn"]				.as<bool>(_respawn);
+	_activeHand			= node["activeHand"]			.as<std::string>(_activeHand);
+
+	for (size_t i = 0; i < 5; ++i)
+		_currentArmor[i]	= node["armor"][i]		.as<int>(_currentArmor[i]);
+	for (size_t i = 0; i < 6; ++i)
+		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
 
 	if (_geoscapeSoldier != NULL)
 	{
 		_statistics->load(node["diaryStatistics"]);
 
-		_battleOrder	= node["battleOrder"]								.as<size_t>(_battleOrder);
-		_kneeled		= node["kneeled"]									.as<bool>(_kneeled);
+		_battleOrder	= node["battleOrder"]	.as<size_t>(_battleOrder);
+		_kneeled		= node["kneeled"]		.as<bool>(_kneeled);
 
-		_expBravery		= node["expBravery"]								.as<int>(_expBravery);
-		_expReactions	= node["expReactions"]								.as<int>(_expReactions);
-		_expFiring		= node["expFiring"]									.as<int>(_expFiring);
-		_expThrowing	= node["expThrowing"]								.as<int>(_expThrowing);
-		_expPsiSkill	= node["expPsiSkill"]								.as<int>(_expPsiSkill);
-		_expPsiStrength	= node["expPsiStrength"]							.as<int>(_expPsiStrength);
-		_expMelee		= node["expMelee"]									.as<int>(_expMelee);
+		_expBravery		= node["expBravery"]	.as<int>(_expBravery);
+		_expReactions	= node["expReactions"]	.as<int>(_expReactions);
+		_expFiring		= node["expFiring"]		.as<int>(_expFiring);
+		_expThrowing	= node["expThrowing"]	.as<int>(_expThrowing);
+		_expPsiSkill	= node["expPsiSkill"]	.as<int>(_expPsiSkill);
+		_expPsiStrength	= node["expPsiStrength"].as<int>(_expPsiStrength);
+		_expMelee		= node["expMelee"]		.as<int>(_expMelee);
 	}
 
 	if (const YAML::Node& p = node["recolor"])
@@ -493,8 +499,8 @@ void BattleUnit::load(const YAML::Node& node)
 				++i)
 		{
 			_recolor.push_back(std::make_pair(
-										p[i][0].as<int>(),
-										p[i][1].as<int>()));
+										p[i][0].as<uint8_t>(),
+										p[i][1].as<uint8_t>()));
 		}
 	}
 }
@@ -508,12 +514,12 @@ YAML::Node BattleUnit::save() const
 	YAML::Node node;
 
 	node["id"]				= _id;
-	node["faction"]			= (int)_faction;
+	node["faction"]			= static_cast<int>(_faction);
 	node["soldierId"]		= _id;
 	node["genUnitType"]		= _type;
 	node["genUnitArmor"]	= _armor->getType();
-	node["name"]			= Language::wstrToUtf8(getName(0));
-	node["status"]			= (int)_status;
+	node["name"]			= Language::wstrToUtf8(getName(NULL));
+	node["status"]			= static_cast<int>(_status);
 	node["position"]		= _pos;
 	node["direction"]		= _direction;
 	node["directionTurret"]	= _directionTurret;
@@ -529,26 +535,26 @@ YAML::Node BattleUnit::save() const
 	node["turnsExposed"]	= _turnsExposed;
 	node["rankInt"]			= _rankInt;
 	node["moraleRestored"]	= _moraleRestored;
-	node["killedBy"]		= (int)_killedBy;
-//	node["specab"]			= (int)_specab;
+	node["killedBy"]		= static_cast<int>(_killedBy);
 	node["motionPoints"]	= _motionPoints;
+//	node["specab"]			= (int)_specab;
 //	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand;
 
-	for (int i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 5; ++i)
 		node["armor"].push_back(_currentArmor[i]);
-	for (int i = 0; i < 6; ++i)
+	for (size_t i = 0; i < 6; ++i)
 		node["fatalWounds"].push_back(_fatalWounds[i]);
 
 	if (getCurrentAIState() != NULL)
 		node["AI"]				= getCurrentAIState()->save();
 	if (_originalFaction != _faction)
-		node["originalFaction"]	= (int)_originalFaction;
-	if (_kills)
+		node["originalFaction"]	= static_cast<int>(_originalFaction);
+	if (_kills != 0)
 		node["kills"]			= _kills;
 	if (_faction == FACTION_PLAYER
-		&& _dontReselect)
+		&& _dontReselect == true)
 	{
 		node["dontReselect"]	= _dontReselect;
 	}
@@ -4295,7 +4301,7 @@ MovementType BattleUnit::getMovementType() const
  */
 /* static inline BattleItem *createItem(SavedBattleGame *save, BattleUnit *unit, RuleItem *rule)
 {
-	BattleItem *item = new BattleItem(rule, save->getCurrentItemId());
+	BattleItem *item = new BattleItem(rule, save->getNextItemId());
 	item->setOwner(unit);
 	save->removeItem(item); //item outside inventory, deleted when game is shutdown.
 	return item;

@@ -32,14 +32,16 @@ namespace OpenXcom
 /**
  * Initializes a item of the specified type.
  * @param rules	- pointer to RuleItem
- * @param id	- the IG id of this item
+ * @param pId	- pointer to an integer ID for this item
+ * @param id	- value for ID when loading a saved game
  */
 BattleItem::BattleItem(
 		RuleItem* const rules,
-		int* id)
+		int* pId,
+		int id)
 	:
 		_rules(rules),
-		_id(*id),
+//		_id(*id),
 		_owner(NULL),
 		_previousOwner(NULL),
 		_unit(NULL),
@@ -56,7 +58,15 @@ BattleItem::BattleItem(
 		_XCOMProperty(false)
 //		_droppedOnAlienTurn(false)
 {
-	(*id)++;
+//	++(*id); // <- this is for SavedBattleGame only to keep track of
+	if (pId != NULL) // brand new item on the battlefield
+	{
+		_id = *pId;
+		++(*pId);
+	}
+	else // loading item from saved game
+		_id = id;
+
 
 	if (_rules != NULL)
 	{

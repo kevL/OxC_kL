@@ -863,7 +863,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 				_tileEquipt->addItem(
 								new BattleItem(
 											_rules->getItem(i->first),
-											_battleSave->getCurrentItemId()),
+											_battleSave->getNextItemId()),
 								ground);
 				//Log(LOG_INFO) << ". . . j cycle";
 			}
@@ -899,7 +899,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 						_tileEquipt->addItem(
 										new BattleItem(
 													_rules->getItem(i->first),
-													_battleSave->getCurrentItemId()),
+													_battleSave->getNextItemId()),
 										ground);
 					}
 
@@ -938,7 +938,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 					_tileEquipt->addItem(
 									new BattleItem(
 												_rules->getItem(j->first),
-												_battleSave->getCurrentItemId()),
+												_battleSave->getNextItemId()),
 									ground);
 				}
 			}
@@ -1122,7 +1122,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 
 		BattleItem* const item = new BattleItem( // add Vehicle as an item and assign the unit as its owner.
 											_rules->getItem(vehicle),
-											_battleSave->getCurrentItemId());
+											_battleSave->getNextItemId());
 		if (addItem(
 				item,
 				tankUnit) == false)
@@ -1138,7 +1138,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 			const std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
 			BattleItem* const ammoItem = new BattleItem( // add item(ammo) and assign the Vehicle-ITEM as its owner.
 											_rules->getItem(ammo),
-											_battleSave->getCurrentItemId());
+											_battleSave->getNextItemId());
 			if (addItem(
 					ammoItem,
 					tankUnit) == false)
@@ -1166,7 +1166,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 				{
 					BattleItem* const item = new BattleItem(
 														itemRule,
-														_battleSave->getCurrentItemId());
+														_battleSave->getNextItemId());
 
 					if (addItem(
 							item,
@@ -2084,7 +2084,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 						{
 							item = new BattleItem(
 												itRule,
-												_battleSave->getCurrentItemId());
+												_battleSave->getNextItemId());
 							if (addItem(
 									item,
 									unit) == false)
@@ -2107,7 +2107,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 					{
 						item = new BattleItem( // terror aLiens add their weapons
 											itRule,
-											_battleSave->getCurrentItemId());
+											_battleSave->getNextItemId());
 						if (addItem(
 								item,
 								unit) == false)
@@ -2132,7 +2132,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 						{
 							item = new BattleItem( // aLiens add items
 												itRule,
-												_battleSave->getCurrentItemId());
+												_battleSave->getNextItemId());
 							if (addItem(
 									item,
 									unit) == false)
@@ -2559,7 +2559,7 @@ int BattlescapeGenerator::loadMAP( // private.
 		{
 			BattleItem* const item = new BattleItem(
 												rule,
-												_battleSave->getCurrentItemId());
+												_battleSave->getNextItemId());
 			_battleSave->getItems()->push_back(item);
 			_battleSave->getTile((*j) + Position(
 												offset_x,
@@ -2688,7 +2688,7 @@ void BattlescapeGenerator::fuelPowerSources() // private.
 		{
 			BattleItem* const alienFuel = new BattleItem(
 													_rules->getItem(_rules->getAlienFuel()),
-													_battleSave->getCurrentItemId());
+													_battleSave->getNextItemId());
 
 			_battleSave->getItems()->push_back(alienFuel);
 			_battleSave->getTiles()[i]->addItem(
