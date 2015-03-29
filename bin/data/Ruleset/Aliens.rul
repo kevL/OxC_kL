@@ -847,16 +847,17 @@ alienDeployments:
     height: 10
     civilians: 15
     terrains:
-      - COMRCURBAN
-      - DAWNURBANA
-      - DAWNURBANB
-      - INDUSTRIALURBAN
-      - MADURBAN
-      - NATIVEURBAN
+      - AREA51URBAN #hobbes uses this
+      - COMRCURBAN #hobbes uses this
+      - DAWNURBANA #hobbes uses this
+      - DAWNURBANB #hobbes uses this
+      - INDUSTRIALURBAN #hobbes uses this
+      - MADURBAN #hobbes uses this
+      - NATIVEURBAN #hobbes uses this
       - PORTTFTD
       - PORTURBAN
-      - RAILYARDURBAN
-      - URBAN
+      - RAILYARDURBAN #hobbes uses this
+      - URBAN #hobbes uses this
       - URBAN2 #Luke's Expanded Terror Sites
     alert: STR_ALIENS_TERRORISE
     briefing:
@@ -1006,12 +1007,12 @@ alienDeployments:
       - INDUSTRIALURBAN
       - MADURBAN
       - NATIVEURBAN
-      - PORTTFTD
-      - PORTURBAN
+      - PORTTFTD #hobbes uses this
+      - PORTURBAN #hobbes uses this
       - RAILYARDURBAN
       - URBAN
       - URBAN2 #Luke's Expanded Terror Sites
-    alert: STR_ALIENS_TERRORISE
+    alert: STR_PORT_ATTACK
     briefing:
       palette: 2
       music: GEO_BRIEF_TERRORSITE

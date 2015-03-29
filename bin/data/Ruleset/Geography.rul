@@ -1834,10 +1834,6 @@ regions:
       - [180, 275, 0, 60]
       - [150, 180, -50, -5]
     cities:
-      - name: STR_ANADYR
-        lon: 179.439
-        lat: -63.919
-        texture: -2
       - name: STR_COLDBAY
         lon: 196.19
         lat: -54.86
@@ -1915,6 +1911,10 @@ regions:
     areas:
       - [60, 180, -70, -50]
     cities:
+      - name: STR_ANADYR
+        lon: 179.439
+        lat: -63.919
+        texture: -2
       - name: STR_CHELYABINSK
         lon: 61.845
         lat: -57.48
