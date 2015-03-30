@@ -111,9 +111,9 @@ SoldiersState::SoldiersState(Base* base)
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SOLDIER_LIST"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
@@ -148,9 +148,9 @@ SoldiersState::SoldiersState(Base* base)
 
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 117, 93, 71);
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
+	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
@@ -180,9 +180,9 @@ void SoldiersState::init()
 	}
 
 
-	std::wostringstream ss; // in case soldier is told to GTFO.
-	ss << _base->getTotalSoldiers();
-	_txtSoldiers->setText(ss.str());
+	std::wostringstream woststr; // in case soldier is told to GTFO.
+	woststr << _base->getTotalSoldiers();
+	_txtSoldiers->setText(woststr.str());
 
 
 	_lstSoldiers->clearList();
@@ -202,7 +202,9 @@ void SoldiersState::init()
 
 		if ((*i)->getCraft() == NULL)
 		{
-			_lstSoldiers->setRowColor(row, _lstSoldiers->getSecondaryColor());
+			_lstSoldiers->setRowColor(
+									row,
+									_lstSoldiers->getSecondaryColor());
 
 			if ((*i)->getWoundRecovery() > 0)
 			{

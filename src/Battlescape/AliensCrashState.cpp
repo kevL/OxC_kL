@@ -54,11 +54,11 @@ AliensCrashState::AliensCrashState()
 	centerAllSurfaces();
 
 
-	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setHighContrast();
 
-	_btnOk->setHighContrast();
 	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setHighContrast();
 	_btnOk->onMouseClick((ActionHandler)& AliensCrashState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& AliensCrashState::btnOkClick,
@@ -67,8 +67,8 @@ AliensCrashState::AliensCrashState()
 					(ActionHandler)& AliensCrashState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setHighContrast();
 	_txtTitle->setText(tr("STR_ALL_ALIENS_KILLED_IN_CRASH"));
+	_txtTitle->setHighContrast();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setBig();

@@ -23,7 +23,6 @@
 //#include <list>
 //#include <string>
 //#include <vector>
-
 //#include <SDL.h>
 
 #include "Position.h"
@@ -117,6 +116,7 @@ struct BattleAction
 
 	public:
 		/// kL. heh This could cause problems.
+		/// NOTE: not used
 		void clearAction() // kL
 		{
 			type = BA_NONE;

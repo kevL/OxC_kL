@@ -3980,7 +3980,6 @@ Bar* BattlescapeState::getEnergyBar() const
 void BattlescapeState::updateExperienceInfo()
 {
 	_lstSoldierInfo->clearList();
-	_txtHasKill->setText(L"");
 
 	const BattleUnit* const unit = _battleSave->getSelectedUnit();
 	if (unit == NULL
@@ -3991,6 +3990,8 @@ void BattlescapeState::updateExperienceInfo()
 
 	if (unit->hasFirstKill() == true)
 		_txtHasKill->setText(L"+");
+	else
+		_txtHasKill->setText(L"");
 
 
 	std::vector<std::wstring> xpType;
@@ -4013,9 +4014,9 @@ void BattlescapeState::updateExperienceInfo()
 		unit->getExpPsiStrength()
 	};
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 7;
+			i != 7;
 			++i)
 	{
 		_lstSoldierInfo->addRow(

@@ -68,37 +68,37 @@ MultipleTargetsState::MultipleTargetsState(
 	if (_targets.size() > 1)
 	{
 		int
-//kL		height	= BUTTON_HEIGHT * _targets.size() + SPACING * (_targets.size() - 1) + MARGIN * 2,
-			height	= (BUTTON_HEIGHT * (_targets.size() + 1)) + (SPACING * (_targets.size())) + (MARGIN * 2), // kL
-			winY	= (200 - height) / 2,
-			btnY	= winY + MARGIN;
+			height = (BUTTON_HEIGHT * (_targets.size() + 1)) + (SPACING * (_targets.size())) + (MARGIN * 2),
+			window_y = (200 - height) / 2,
+			btn_y = window_y + MARGIN;
 
 		_window = new Window(
 							this,
 							136,
 							height,
 							60,
-							winY,
+							window_y,
 							POPUP_VERTICAL);
 
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color); //7
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
-		add(_window, "window", "UFOInfo");
+		add(_window,	"window", "UFOInfo");
+		add(_btnCancel,	"button", "UFOInfo");
 
-//		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 		for (size_t
 				i = 0;
-				i < _targets.size();
+				i != _targets.size();
 				++i)
 		{
 			TextButton* btn = new TextButton(
 										116,
 										BUTTON_HEIGHT,
 										70,
-										btnY);
-//			btn->setColor(Palette::blockOffset(8)+5);
+										btn_y);
 			btn->setText(_targets[i]->getName(_game->getLanguage()));
 			btn->onMouseClick((ActionHandler)& MultipleTargetsState::btnTargetClick);
 
@@ -106,28 +106,19 @@ MultipleTargetsState::MultipleTargetsState(
 
 			_btnTargets.push_back(btn);
 
-			btnY += BUTTON_HEIGHT + SPACING;
+			btn_y += BUTTON_HEIGHT + SPACING;
 		}
 
-		// kL_begin:
 		TextButton* _btnCancel = new TextButton(
 											116,
 											BUTTON_HEIGHT,
 											70,
-											btnY);
-//		_btnCancel->setColor(Palette::blockOffset(8)+5);
+											btn_y);
 		_btnCancel->setText(tr("STR_CANCEL"));
 		_btnCancel->onMouseClick((ActionHandler)& MultipleTargetsState::btnCancelClick);
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& MultipleTargetsState::btnCancelClick,
 						Options::keyCancel);
-
-		add(_btnCancel, "button", "UFOInfo");
-		// kL_end.
-/*kL
-		_btnTargets[0]->onKeyboardPress(
-						(ActionHandler)& MultipleTargetsState::btnCancelClick,
-						Options::keyCancel); */
 
 		centerAllSurfaces();
 	}
@@ -156,62 +147,42 @@ void MultipleTargetsState::init()
  */
 void MultipleTargetsState::popupTarget(Target* target)
 {
-	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget()";
 	_game->popState();
 
 	if (_craft == NULL)
 	{
-		//Log(LOG_INFO) << ". _craft == 0";
-		Craft* const c = dynamic_cast<Craft*>(target);
-		Ufo* const u = dynamic_cast<Ufo*>(target);
-		Base* const b = dynamic_cast<Base*>(target);
-		//Log(LOG_INFO) << ". dynamic_cast's examined";
+		Base* const base = dynamic_cast<Base*>(target);
+		Craft* const craft = dynamic_cast<Craft*>(target);
+		Ufo* const ufo = dynamic_cast<Ufo*>(target);
 
-		if (b != NULL)
-		{
-			//Log(LOG_INFO) << ". . base";
+		if (base != NULL)
 			_game->pushState(new InterceptState(
 											_state->getGlobe(),
-											b,
-//											NULL,
-											_state)); // kL_add.
-		}
-		else if (c != NULL)
-		{
-			//Log(LOG_INFO) << ". . craft";
+											base,
+											_state));
+		else if (craft != NULL)
 			_game->pushState(new GeoscapeCraftState(
-												c,
-												_state->getGlobe(),
-												NULL,
-												_state,
-												false)); // kL_add.
-		}
-		else if (u != NULL)
-		{
-			//Log(LOG_INFO) << ". . ufo";
+											craft,
+											_state->getGlobe(),
+											NULL,
+											_state,
+											false));
+		else if (ufo != NULL)
 			_game->pushState(new UfoDetectedState(
-												u,
-												_state,
-												false,
-												u->getHyperDetected()));
-		}
+											ufo,
+											_state,
+											false,
+											ufo->getHyperDetected()));
 		else
-		{
-			//Log(LOG_INFO) << ". . else...";
 			_game->pushState(new TargetInfoState(
-												target,
-												_state->getGlobe(),
-												_state)); // kL_add.
-		}
+											target,
+											_state->getGlobe(),
+											_state));
 	}
 	else
-	{
-		//Log(LOG_INFO) << ". _craft != 0";
 		_game->pushState(new ConfirmDestinationState(
-													_craft,
-													target));
-	}
-	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget() EXIT";
+											_craft,
+											target));
 }
 
 /**
@@ -229,20 +200,17 @@ void MultipleTargetsState::btnCancelClick(Action*)
  */
 void MultipleTargetsState::btnTargetClick(Action* action)
 {
-	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick()";
 	for (size_t
 			i = 0;
-			i < _btnTargets.size();
+			i != _btnTargets.size();
 			++i)
 	{
 		if (action->getSender() == _btnTargets[i])
 		{
 			popupTarget(_targets[i]);
-
 			break;
 		}
 	}
-	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick() EXIT";
 }
 
 }

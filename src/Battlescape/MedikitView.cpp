@@ -41,7 +41,7 @@ namespace OpenXcom
 {
 
 /**
- * A string array that identifies body parts.
+ * A array of strings that define body parts.
  */
 const std::string BODY_PARTS[6] =
 {
@@ -151,11 +151,11 @@ void MedikitView::mouseClick(Action* action, State*)
 
 	for (int
 			i = 0;
-			i < static_cast<int>(srt->getTotalFrames());
+			i != static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
 		const Surface* const srf = srt->getFrame(i);
-		if (srf->getPixelColor(x,y))
+		if (srf->getPixelColor(x,y) != 0)
 		{
 			_selectedPart = i;
 			_redraw = true;

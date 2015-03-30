@@ -80,15 +80,13 @@ PrimeGrenadeState::PrimeGrenadeState(
 			++i)
 	{
 		_isfBtn[i] = new InteractiveSurface(
-										22,
-										22,
-										x - 1 + ((static_cast<int>(i) %8) * 24),
+										22,22,
+										x - 1 + ((static_cast<int>(i) % 8) * 24),
 										y - 4 + ((static_cast<int>(i) / 8) * 24));
 		_txtTurn[i] = new Text(
-							20,
-							20,
-							x + ((i %8) * 24),
-							y + ((i / 8) * 24) - 3);
+							20,20,
+							x + ((static_cast<int>(i) % 8) * 24),
+							y + ((static_cast<int>(i) / 8) * 24) - 3);
 	}
 
 	if (inInventoryView == true)
@@ -96,14 +94,14 @@ PrimeGrenadeState::PrimeGrenadeState(
 	else
 		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	const Element* const eleBG = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
+	const Element* const bgElem = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
 
 	add(_srfBG);
 	_srfBG->drawRect(
 					0,0,
 					static_cast<Sint16>(_srfBG->getWidth()),
 					static_cast<Sint16>(_srfBG->getHeight()),
-					static_cast<Uint8>(eleBG->color));
+					static_cast<Uint8>(bgElem->color));
 
 	add(_fraTop, "grenadeMenu", "battlescape");
 	_fraTop->setSecondaryColor(Palette::blockOffset(8)+4);
@@ -145,7 +143,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 	for (size_t
 			i = 0;
-			i < 16;
+			i != 16;
 			++i)
 	{
 		add(_isfBtn[i]);
@@ -159,7 +157,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 		rect.h = static_cast<Uint16>(_isfBtn[i]->getHeight());
 		_isfBtn[i]->drawRect(
 						&rect,
-						static_cast<Uint8>(eleBG->border));
+						static_cast<Uint8>(bgElem->border));
 
 		++rect.x; // inside fill
 		++rect.y;
@@ -167,7 +165,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 		rect.h -= 2;
 		_isfBtn[i]->drawRect(
 						&rect,
-						static_cast<Uint8>(eleBG->color2));
+						static_cast<Uint8>(bgElem->color2));
 
 		add(_txtTurn[i], "grenadeMenu", "battlescape");
 		std::wostringstream wost;

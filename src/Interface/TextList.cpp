@@ -53,8 +53,7 @@ TextList::TextList(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_big(NULL),
 		_small(NULL),
 		_font(NULL),
@@ -86,8 +85,7 @@ TextList::TextList(
 {
 	_up = new ArrowButton(
 						ARROW_BIG_UP,
-						13,
-						13,
+						13,13,
 						getX() + getWidth() + _scrollPos,
 						getY());
 	_up->setVisible(false);
@@ -95,8 +93,7 @@ TextList::TextList(
 
 	_down = new ArrowButton(
 						ARROW_BIG_DOWN,
-						13,
-						13,
+						13,13,
 						getX() + getWidth() + _scrollPos,
 						getY() + getHeight() - 12);
 	_down->setVisible(false);

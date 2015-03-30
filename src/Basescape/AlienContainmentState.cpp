@@ -185,12 +185,12 @@ AlienContainmentState::AlienContainmentState(
 			_qtys.push_back(0);		// put it in the _qtys<vector> as (int)
 			_aliens.push_back(*i);	// put its name in the _aliens<vector> as (string)
 
-			std::wostringstream ss;
-			ss << qty;
+			std::wostringstream woststr;
+			woststr << qty;
 			_lstAliens->addRow( // show its name on the list.
 							3,
 							tr(*i).c_str(),
-							ss.str().c_str(),
+							woststr.str().c_str(),
 							L"0");
 
 			itRule = _game->getRuleset()->getItem(*i);
@@ -199,8 +199,9 @@ AlienContainmentState::AlienContainmentState(
 			else
 				color = _lstAliens->getColor();
 
-			_lstAliens->setRowColor(row, color);
-			++row;
+			_lstAliens->setRowColor(
+								row++,
+								color);
 		}
 	}
 

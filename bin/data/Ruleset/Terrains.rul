@@ -78,7 +78,7 @@ terrains:
         width: 10
         length: 10
         groups: 4
-#      - name: AREA51BASE16
+#      - name: AREA51BASE16 # no MAPS for these:
 #        width: 10
 #        length: 10
 #      - name: AREA51BASE17

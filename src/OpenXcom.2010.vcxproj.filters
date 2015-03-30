@@ -548,9 +548,6 @@
     <ClCompile Include="Ruleset\AlienRace.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\Armor.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\CraftWeaponProjectile.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -965,6 +962,8 @@
     <ClCompile Include="Ruleset\RuleTexture.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\RuleArmor.cpp" />
+    <ClCompile Include="Battlescape\MediTargetState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1518,9 +1517,6 @@
     <ClInclude Include="Ruleset\AlienRace.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\Armor.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\CraftWeaponProjectile.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1959,6 +1955,8 @@
     <ClInclude Include="Ruleset\RuleTexture.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
+    <ClInclude Include="Ruleset\RuleArmor.h" />
+    <ClInclude Include="Battlescape\MediTargetState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

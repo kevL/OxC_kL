@@ -26,13 +26,13 @@
 namespace OpenXcom
 {
 
-class AlienBase; // kL
+class AlienBase;
 class GeoscapeState;
 class Globe;
 class Target;
 class Text;
 class TextButton;
-class TextEdit; // kL
+class TextEdit;
 class Window;
 
 
@@ -45,8 +45,7 @@ class TargetInfoState
 {
 
 private:
-
-	AlienBase* _ab; // kL
+	AlienBase* _ab;
 	GeoscapeState* _state;
 	Globe* _globe;
 	Target* _target;
@@ -57,12 +56,11 @@ private:
 	TextButton
 		* _btnIntercept,
 		* _btnOk;
-	TextEdit* _edtTarget; // kL
+	TextEdit* _edtTarget;
 	Window* _window;
 
 
 	public:
-
 		/// Creates the Target Info state.
 		TargetInfoState(
 				Target* target,

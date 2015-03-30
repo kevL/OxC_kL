@@ -24,6 +24,7 @@
 
 #include "ActionMenuItem.h"
 #include "MedikitState.h"
+#include "MediTargetState.h"
 #include "Pathfinding.h"
 #include "PrimeGrenadeState.h"
 #include "ScannerState.h"
@@ -353,6 +354,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		else if (_action->type == BA_USE
 			&& itRule->getBattleType() == BT_MEDIKIT)
 		{
+/* note: Target determination is moved to MediTargetState.
 			BattleUnit* targetUnit = NULL;
 
 			const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
@@ -379,7 +381,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 																						_action->actor,
 																						NULL,
 																						&_action->target,
-																						false))
+																						false) == true)
 			{
 				const Tile* const tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
 				if (tile != NULL
@@ -392,12 +394,13 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			}
 
 			if (targetUnit == NULL) // kL: if no target TargetSelf.
-				targetUnit = _action->actor;
+				targetUnit = _action->actor; */
 
 			_game->popState();
-			_game->pushState(new MedikitState(
-											targetUnit,
-											_action));
+			_game->pushState(new MediTargetState(_action));
+//			_game->pushState(new MedikitState(
+//											targetUnit,
+//											_action));
 /*			if (targetUnit != NULL)
 			{
 				_game->popState();

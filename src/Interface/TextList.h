@@ -272,8 +272,7 @@ private:
 		/// Sets the list scrollable.
 		void setScrollable(
 				bool scrollable = true,
-//kL			int scrollPos = 4);
-				int scrollPos = 0); // kL
+				int scrollPos = 0);
 
 		/// Draws the text onto the text list.
 		void draw();

@@ -59,10 +59,10 @@ namespace OpenXcom
 template<typename type>
 std::wstring toString(type t)
 {
-	std::wostringstream ss;
-	ss << t;
+	std::wostringstream woststr;
+	woststr << t;
 
-	return ss.str();
+	return woststr.str();
 }
 
 
@@ -421,6 +421,7 @@ void MedikitState::update()
 	_txtStim->setText(toString(_item->getStimulantQuantity()));
 	_txtHeal->setText(toString(_item->getHealQuantity()));
 
+	// Health/ Stamina/ Morale of the recipient
 	double stat = static_cast<double>(_targetUnit->getBaseStats()->health);
 	const int health = _targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
@@ -431,7 +432,7 @@ void MedikitState::update()
 	_barHealth->setValue2(std::ceil(
 							static_cast<double>(_targetUnit->getStun()) / stat * 100.));
 
-	stat = static_cast<double>(_targetUnit->getBaseStats()->stamina); // stats of the recipient
+	stat = static_cast<double>(_targetUnit->getBaseStats()->stamina);
 	const int energy = _targetUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setMax(100.);
@@ -443,7 +444,8 @@ void MedikitState::update()
 	_barMorale->setMax(100.);
 	_barMorale->setValue(morale);
 
-	stat = static_cast<double>(_unit->getBaseStats()->tu); // TU of the MedKit user
+	// TU of the MedKit user
+	stat = static_cast<double>(_unit->getBaseStats()->tu);
 	const int tu = _unit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setMax(100.);

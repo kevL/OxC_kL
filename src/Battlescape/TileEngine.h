@@ -252,7 +252,7 @@ private:
 				const Position origin,
 				const int dir,
 				const BattleUnit* const attacker,
-				const BattleUnit* const target,
+				const BattleUnit* const targetUnit,
 				Position* const dest,
 				const bool preferEnemy = true);
 

@@ -462,8 +462,8 @@ void BattleUnit::load(const YAML::Node& node)
 	_kills				= node["kills"]					.as<int>(_kills);
 	_dontReselect		= node["dontReselect"]			.as<bool>(_dontReselect);
 	_charging			= NULL;
-	_spawnUnit			= node["spawnUnit"]				.as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"]			.as<int>(0);
+	_spawnUnit			= node["spawnUnit"]				.as<std::string>(_spawnUnit);
 //	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
 //	_respawn			= node["respawn"]				.as<bool>(_respawn);
 	_activeHand			= node["activeHand"]			.as<std::string>(_activeHand);

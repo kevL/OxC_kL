@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_MULTIPLETARGETSSTATE_H
 #define OPENXCOM_MULTIPLETARGETSSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -44,14 +44,15 @@ class MultipleTargetsState
 {
 
 private:
-	static const int BUTTON_HEIGHT	= 16;
-	static const int MARGIN			= 10;
-	static const int SPACING		= 4;
+	static const int
+		BUTTON_HEIGHT	= 16,
+		MARGIN			= 10,
+		SPACING			= 4;
 
 	Craft* _craft;
 	GeoscapeState* _state;
 
-	TextButton* _btnCancel; // kL
+	TextButton* _btnCancel;
 	Window* _window;
 
 	std::vector<Target*> _targets;

@@ -72,56 +72,53 @@ TargetInfoState::TargetInfoState(
 	_btnIntercept	= new TextButton(160, 16, 48, 119);
 	_btnOk			= new TextButton(160, 16, 48, 137);
 
-	setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("targetInfo")->getElement("palette")->color); //0
+	setPalette(
+			"PAL_GEOSCAPE",
+			_game->getRuleset()->getInterface("targetInfo")->getElement("palette")->color);
 
-	add(_window, "window", "targetInfo");
-	add(_txtTitle, "text", "targetInfo");
-	add(_edtTarget, "text", "targetInfo");
-	add(_txtTargetted, "text", "targetInfo");
-	add(_txtFollowers, "text", "targetInfo");
-	add(_btnIntercept, "button", "targetInfo");
-	add(_btnOk, "button", "targetInfo");
+	add(_window,		"window",	"targetInfo");
+	add(_txtTitle,		"text",		"targetInfo");
+	add(_edtTarget,		"text",		"targetInfo");
+	add(_txtTargetted,	"text",		"targetInfo");
+	add(_txtFollowers,	"text",		"targetInfo");
+	add(_btnIntercept,	"button",	"targetInfo");
+	add(_btnOk,			"button",	"targetInfo");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& TargetInfoState::btnInterceptClick);
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TargetInfoState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	std::wostringstream ss;
-	ss << L'\x01' << _target->getName(_game->getLanguage());
-	_txtTitle->setText(ss.str().c_str());
+	std::wostringstream woststr;
+	woststr << L'\x01' << _target->getName(_game->getLanguage());
+	_txtTitle->setText(woststr.str().c_str());
 
 	_edtTarget->setVisible(false);
 	for (std::vector<AlienBase*>::const_iterator
-			ab = _game->getSavedGame()->getAlienBases()->begin();
-			ab != _game->getSavedGame()->getAlienBases()->end();
-			++ab)
+			aBase = _game->getSavedGame()->getAlienBases()->begin();
+			aBase != _game->getSavedGame()->getAlienBases()->end();
+			++aBase)
 	{
-		if (_target->getName(_game->getLanguage()) == (*ab)->getName(_game->getLanguage())) // should use dynamic_cast on Pointers, w/out name needed
+//		if (_target->getName(_game->getLanguage()) == (*aBase)->getName(_game->getLanguage()))
+		if (_target == dynamic_cast<Target*>(*aBase))
 		{
-			_ab = *ab;
+			_ab = *aBase;
 
-			const std::wstring edit = Language::utf8ToWstr((*ab)->getLabel());
+			const std::wstring edit = Language::utf8ToWstr((*aBase)->getLabel());
 			_edtTarget->setText(edit);
-
-//			_edtTarget->setColor(Palette::blockOffset(15)+1);
 			_edtTarget->onChange((ActionHandler)& TargetInfoState::edtTargetChange);
-
 			_edtTarget->setVisible();
 
 			break;
@@ -130,31 +127,27 @@ TargetInfoState::TargetInfoState(
 
 	bool targeted = false;
 
-//	_txtFollowers->setColor(Palette::blockOffset(15)+5);
 	_txtFollowers->setAlign(ALIGN_CENTER);
-	ss.str(L"");
+	woststr.str(L"");
 	for (std::vector<Target*>::const_iterator
 			i = _target->getFollowers()->begin();
 			i != _target->getFollowers()->end();
 			++i)
 	{
-		ss << (*i)->getName(_game->getLanguage()) << L'\n';
+		woststr << (*i)->getName(_game->getLanguage()) << L'\n';
 
 		if (targeted == false)
 		{
 			targeted = true;
 
-//			_txtTargetted->setColor(Palette::blockOffset(15)-1);
 			_txtTargetted->setAlign(ALIGN_CENTER);
 			_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 		}
 	}
-	_txtFollowers->setText(ss.str());
+	_txtFollowers->setText(woststr.str());
 
 	if (targeted == false)
 		_txtTargetted->setVisible(false);
-
-	//Log(LOG_INFO) << "Create TargetInfoState EXIT";
 }
 
 /**

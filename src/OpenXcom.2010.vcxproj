@@ -299,6 +299,7 @@
     <ClCompile Include="Battlescape\Map.cpp" />
     <ClCompile Include="Battlescape\MedikitState.cpp" />
     <ClCompile Include="Battlescape\MedikitView.cpp" />
+    <ClCompile Include="Battlescape\MediTargetState.cpp" />
     <ClCompile Include="Battlescape\MeleeAttackBState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -467,6 +468,7 @@
     <ClCompile Include="Ruleset\ExtraSounds.cpp" />
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
+    <ClCompile Include="Ruleset\RuleArmor.cpp" />
     <ClCompile Include="Ruleset\RuleCity.cpp" />
     <ClCompile Include="Ruleset\RuleTexture.cpp" />
     <ClCompile Include="Ruleset\MapScript.cpp" />
@@ -490,7 +492,6 @@
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleInterface.cpp" />
     <ClCompile Include="Ruleset\Unit.cpp" />
-    <ClCompile Include="Ruleset\Armor.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
     <ClCompile Include="Ruleset\RuleCountry.cpp" />
     <ClCompile Include="Ruleset\RuleCraft.cpp" />
@@ -636,6 +637,7 @@
     <ClInclude Include="Battlescape\Map.h" />
     <ClInclude Include="Battlescape\MedikitState.h" />
     <ClInclude Include="Battlescape\MedikitView.h" />
+    <ClInclude Include="Battlescape\MediTargetState.h" />
     <ClInclude Include="Battlescape\MeleeAttackBState.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
@@ -810,6 +812,7 @@
     <ClInclude Include="Ruleset\ExtraSounds.h" />
     <ClInclude Include="Ruleset\ExtraSprites.h" />
     <ClInclude Include="Ruleset\ExtraStrings.h" />
+    <ClInclude Include="Ruleset\RuleArmor.h" />
     <ClInclude Include="Ruleset\RuleCity.h" />
     <ClInclude Include="Ruleset\RuleTexture.h" />
     <ClInclude Include="Ruleset\MapBlock.h" />
@@ -831,7 +834,6 @@
     <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\RuleInterface.h" />
     <ClInclude Include="Ruleset\Unit.h" />
-    <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />
     <ClInclude Include="Ruleset\RuleCountry.h" />

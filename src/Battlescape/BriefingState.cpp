@@ -60,7 +60,7 @@ BriefingState::BriefingState(
 		const Craft* const craft,
 		Base* const base)
 {
-	_screen = true;
+//	_screen = true;
 
 	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(288, 17, 16, 22);
