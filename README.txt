@@ -1,32 +1,36 @@
 ################
-# OpenXcom 1.0 #
+#    0xC_kL    #
 ################
 
-OpenXcom is an open-source clone of the popular
-UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
-Microprose, licensed under the GPL and written in C++ / SDL.
+0xC_kL is an open-source clone of an open-source clone of the popular
+UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by Microprose,
+licensed under the GPL and written in C++ / SDL.
 
 See more info at the website: http://openxcom.org
 And the wiki: http://ufopaedia.org/index.php?title=OpenXcom
 
-Uses modified code from SDL_gfx (LGPL) with permission from author.
+Uses modified code from SDL_gfx (LGPL) with indirect permission from author.
+
 
 1. Installation
 ================
 
 OpenXcom requires a vanilla copy of the original X-Com resources.
-If you have the Steam version, you can find the X-Com game
-folder in "Steam\steamapps\common\xcom ufo defense\XCOM".
-Do not use modded versions (eg. XcomUtil) as they may cause bugs
-and crashes.
 
-When installing manually, copy the X-Com subfolders (GEODATA,
-GEOGRAPH, MAPS, ROUTES, SOUND, TERRAIN, UFOGRAPH, UFOINTRO,
-UNITS) to OpenXcom's Data folder: <game directory>\data\
+If you have the Steam version, you can find the X-Com game folder in
+"Steam\steamapps\common\xcom ufo defense\XCOM".
+
+Do not use modded versions (eg. XcomUtil) as they may cause bugs and crashes.
+
+When installing manually, copy the X-Com subfolders (GEODATA, GEOGRAPH, MAPS,
+ROUTES, SOUND, TERRAIN, UFOGRAPH, UFOINTRO, UNITS) to OpenXcom's Data folder:
+<game directory>\data\
 
 The resources can be in a different folder as the OpenXcom data.
-You can also specify your own path by passing the command-line
-argument "-data <data path>" when running OpenXcom.
+
+You can also specify your own path by passing the command-line argument
+"-data <data path>"
+when running OpenXcom.
 
 1.1. Windows
 -------------
@@ -37,8 +41,9 @@ OpenXcom will also check the following folders:
 - C:\Users\<user>\Documents\OpenXcom\data (Windows Vista/7)
 
 It's recommended you copy the resources to the "data" subfolder.
-The installer will automatically detect a Steam installation
-and copy the resources as necessary.
+
+The installer will automatically detect a Steam installation and copy the
+resources as necessary.
 
 1.2. Mac OS X
 --------------
@@ -48,9 +53,9 @@ OpenXcom will also check the following folders:
 - <application resources>\data
 - ~/Library/Application Support/OpenXcom/data
 
-It's recommended you copy the resources to the application's "data"
-resource (right click the application > Show Package Contents >
-Contents > Resources > data).
+It's recommended you copy the resources to the application's "data" resource:
+right click the application
+> Show Package Contents > Contents > Resources > data
 
 1.3. Linux
 -----------
@@ -68,11 +73,10 @@ http://www.libsdl.org/projects/SDL_image/
 - yaml-cpp, version 0.5.1 or later:
 http://code.google.com/p/yaml-cpp/
 
-Check your distribution's package manager or the library
-website on how to install them.
+Check your distribution's package manager or the library website on how to
+install them.
 
-According to the XDG standard, OpenXcom will also check the
-following folders:
+According to the XDG standard, OpenXcom will also check the following folders:
 
 - $XDG_DATA_HOME/openxcom/data
 - $XDG_DATA_DIRS/openxcom/data
@@ -89,9 +93,9 @@ Choose whichever you prefer.
 2. Configuration
 =================
 
-OpenXcom has a variety of game settings and extras that can be
-customized, both in-game and out-game. These options are global
-and affect any old or new savegame.
+OpenXcom has a variety of game settings and extras that can be customized, both
+in-game and out-game. These options are global and affect any old or new
+savegame.
 
 For more details please check the wiki:
 http://ufopaedia.org/index.php?title=Options_(OpenXcom)
@@ -99,8 +103,8 @@ http://ufopaedia.org/index.php?title=Options_(OpenXcom)
 2.1. User Folder
 -----------------
 
-OpenXcom creates a User folder with all the user screenshots,
-savegames and options in one of the following paths:
+OpenXcom creates a User folder with all the user screenshots, savegames and
+options in one of the following paths:
 
 - <game directory>\user\
 - C:\Documents and Settings\<user>\My Documents\OpenXcom (Windows 2000/XP)
@@ -109,8 +113,9 @@ savegames and options in one of the following paths:
 - $XDG_DATA_HOME/openxcom (Linux)
 - $XDG_CONFIG_HOME/openxcom (Linux)
 
-You can also specify your own path by passing the command-line
-argument "-user <user path>" when running OpenXcom.
+You can also specify your own path by passing the command-line argument
+"-user <user path>"
+when running OpenXcom.
 
 
 3. Development
@@ -137,7 +142,9 @@ The source code includes files for the following tools:
 - CMake.
 - Autotools.
 
-It's also been tested on a variety of other tools on
-Windows/Mac/Linux. More detailed compiling instructions
-and pre-compiled dependencies are available at:
+Note that those have been removed from 0xC_kL. I use Code::Blocks with the VC++
+compiler/linker, and that's all what gets maintained.
+
+It's also been tested on a variety of other tools on Windows/Mac/Linux. More
+detailed compiling instructions and pre-compiled dependencies are available at:
 http://ufopaedia.org/index.php?title=Compiling_(OpenXcom)
