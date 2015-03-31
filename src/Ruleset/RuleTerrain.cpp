@@ -109,6 +109,14 @@ void RuleTerrain::load(
 		_civilianTypes.push_back("FEMALE_CIVILIAN");
 	}
 
+	for (YAML::const_iterator
+			i = node["music"].begin();
+			i != node["music"].end();
+			++i)
+	{
+		_musics.push_back((*i).as<std::string>(""));
+	}
+
 	_pyjamaType = node["pyjamaType"].as<std::string>(_pyjamaType);
 }
 
@@ -282,6 +290,15 @@ const int RuleTerrain::getAmbience() const
 const std::string& RuleTerrain::getScript() const
 {
 	return _script;
+}
+
+/**
+ * Gets the list of musics this terrain has to choose from.
+ * @return, list of track names
+ */
+const std::vector<std::string>& RuleTerrain::getMusic()
+{
+	return _musics;
 }
 
 /**

@@ -75,7 +75,8 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileItem(NULL),
 		_projectileImpact(0),
 		_initialized(false),
-		_targetFloor(false)
+		_targetFloor(false),
+		_initUnitAnim(0)
 {}
 
 /**
@@ -98,7 +99,8 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileItem(NULL),
 		_projectileImpact(0),
 		_initialized(false),
-		_targetFloor(false)
+		_targetFloor(false),
+		_initUnitAnim(0)
 {}
 
 /**
@@ -126,7 +128,7 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 
 	if (_action.weapon != NULL)
-		_ammo = _action.weapon->getAmmoItem(); // the weapon itself if self-powered or melee
+		_ammo = _action.weapon->getAmmoItem(); // the weapon itself if not-req'd. eg, lasers/melee
 
 
 	const bool targetTileValid = (_parent->getSave()->getTile(_action.target) != NULL);
@@ -191,8 +193,8 @@ void ProjectileFlyBState::init()
 	// kL_note: not sure that melee reactionFire is properly implemented...
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& (_action.type == BA_SNAPSHOT
-			|| _action.type == BA_AUTOSHOT		// kL
-			|| _action.type == BA_AIMEDSHOT))	// kL
+			|| _action.type == BA_AUTOSHOT
+			|| _action.type == BA_AIMEDSHOT))
 	{
 		//Log(LOG_INFO) << ". convert shotType to BA_HIT";
 		_action.type = BA_HIT;
@@ -244,9 +246,9 @@ void ProjectileFlyBState::init()
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW";
-			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
-																		_action,
-																		NULL);
+			const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
+																			_action,
+																			NULL);
 			if (validThrowRange(
 							&_action,
 							originVoxel,
@@ -446,7 +448,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
 	++_action.autoShotCount;
 
-	if (_unit->getGeoscapeSoldier() != NULL // kL_add.
+	if (_unit->getGeoscapeSoldier() != NULL
 		&& (_action.type != BA_THROW
 			|| _action.type != BA_LAUNCH))
 	{
@@ -461,12 +463,13 @@ bool ProjectileFlyBState::createNewProjectile()
 											_targetVoxel,
 											_ammo);
 
-	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
+	_parent->getMap()->setProjectile(projectile); // else, add the projectile on the map
 
-	// set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
-//	_parent->setStateInterval(1000/60);
-	_parent->setStateInterval(16); // kL
+	if (_unit->getArmor()->getShootFrames() != 0)
+		_parent->getMap()->setShowProjectile(false); // postpone showing the Celatid spit-blob till later
 
+
+	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 	int sound = -1;
 
 	_projectileImpact = VOXEL_EMPTY; // let it calculate a trajectory
@@ -525,7 +528,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
-//			_unit->aim(); // set the celatid in an aiming position <- yeah right. not yet.
 			_unit->startAiming();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -639,39 +641,37 @@ bool ProjectileFlyBState::createNewProjectile()
 /**
  * Animates the projectile (moves to the next point in its trajectory).
  * If the animation is finished the projectile sprite
- * is removed from the map, and this state is finished.
+ * is removed from the map and this state is finished.
  */
 void ProjectileFlyBState::think()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
 	if (_unit->getStatus() == STATUS_AIMING
-		&& _unit->getArmor()->getShootFrames() > 0)
+		&& _unit->getArmor()->getShootFrames() != 0)
 	{
+		if (_initUnitAnim == 0)
+			_initUnitAnim = 1;
+
 		_unit->keepAiming();
 		return;
 	}
 
+	if (_initUnitAnim == 1)
+	{
+		_initUnitAnim = 2;
+		_parent->getMap()->setShowProjectile();
+	}
+
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 
-	// TODO refactoring : store the projectile in this state, instead of getting it from the map each time.
+	// TODO refactoring: Store the projectile in this state, instead of getting it from the map each time.
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
-//		Tile
-//			* const tile = _parent->getSave()->getTile(_unit->getPosition()),
-//			* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
-
-//		const bool
-//			hasFloor = tile != NULL
-//					&& tile->hasNoFloor(tileBelow) == false,
-//			unitCanFly = _unit->getMovementType() == MT_FLY;
-
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
 			&& _unit->isOut() == false
 			&& _ammo != NULL // kL
 			&& _ammo->getAmmoQuantity() != 0
-//			&& (hasFloor == true
-//				|| unitCanFly == true))
 			&& ((_parent->getSave()->getTile(_unit->getPosition()) != NULL
 					&& _parent->getSave()->getTile(_unit->getPosition())
 						->hasNoFloor(_parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1))) == false)
@@ -682,7 +682,7 @@ void ProjectileFlyBState::think()
 			if (_action.cameraPosition.z != -1)
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-//kL			_parent->getMap()->invalidate();
+//				_parent->getMap()->invalidate();
 				_parent->getMap()->draw(); // kL
 			}
 		}
@@ -709,12 +709,12 @@ void ProjectileFlyBState::think()
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
 					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-//kL				_parent->getMap()->invalidate();
+//					_parent->getMap()->invalidate();
 					_parent->getMap()->draw(); // kL
 				}
 			}
 
-			if (_unit->getFaction() == _parent->getSave()->getSide() // kL
+			if (_unit->getFaction() == _parent->getSave()->getSide()
 				&& _action.type != BA_PANIC
 				&& _action.type != BA_MINDCONTROL
 				&& _parent->getSave()->getUnitsFalling() == false)
@@ -725,7 +725,7 @@ void ProjectileFlyBState::think()
 				//	<< " action.TU = " << _action.TU;
 				_parent->getTileEngine()->checkReactionFire(
 														_unit,
-														_action.TU); // kL
+														_action.TU);
 			}
 
 			if (_unit->isOut() == false
@@ -758,7 +758,6 @@ void ProjectileFlyBState::think()
 			if (_action.type == BA_THROW)
 			{
 //				_parent->getMap()->resetCameraSmoothing();
-
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
 				pos.y /= 16;
@@ -827,7 +826,6 @@ void ProjectileFlyBState::think()
 			else // shoot.
 			{
 //				_parent->getMap()->resetCameraSmoothing();
-
 				if (_action.type == BA_LAUNCH) // kL: Launches explode at final waypoint.
 				{
 					_projectileImpact = VOXEL_OBJECT;
@@ -835,8 +833,8 @@ void ProjectileFlyBState::think()
 				}
 
 				BattleUnit* const shotAt = _parent->getSave()->getTile(_action.target)->getUnit();
-				if (shotAt != NULL // Only counts for guns, not throws or launches
-					&& shotAt->getGeoscapeSoldier() != NULL) // kL_add. SoldierDiary
+				if (shotAt != NULL // only counts for guns, not throws or launches
+					&& shotAt->getGeoscapeSoldier() != NULL)
 				{
 					++shotAt->getStatistics()->shotAtCounter;
 				}
@@ -856,10 +854,7 @@ void ProjectileFlyBState::think()
 					int offset = 0;
 
 					if (_ammo != NULL
-//kL					&& _ammo->getRules()->getExplosionRadius() != 0
-						&& _ammo->getRules()->getExplosionRadius() > -1		// kL
-//						&& (_ammo->getRules()->getDamageType() == DT_HE		// kL
-//							|| _ammo->getRules()->getDamageType() == DT_IN)	// kL
+						&& _ammo->getRules()->getExplosionRadius() > -1
 						&& _projectileImpact != VOXEL_UNIT)
 					{
 						offset = -2;
@@ -875,17 +870,8 @@ void ProjectileFlyBState::think()
 															_action.type != BA_AUTOSHOT
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 																|| _action.weapon->getAmmoItem() == NULL));
-										/*		ExplosionBState(
-														BattlescapeGame* parent,
-														Position center,
-														BattleItem* item,
-														BattleUnit* unit,
-														Tile* tile = NULL,
-														bool lowerWeapon = false,
-														bool success = false,
-														bool forceCenter = false);	*/
 
-					// special shotgun behaviour: trace extra projectile paths,
+					// special shotgun behaviour: trace extra projectile paths
 					// and add bullet hits at their termination points.
 					if (_ammo != NULL)
 					{
@@ -927,7 +913,6 @@ void ProjectileFlyBState::think()
 																				_ammo->getRules()->getPower(),
 																				_ammo->getRules()->getDamageType(),
 																				_unit);
-//																				NULL);
 									}
 								}
 
@@ -939,14 +924,14 @@ void ProjectileFlyBState::think()
 
 					// Silacoid floorburn was here; moved down to PerformMeleeAttack()
 
-					if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL_add. This section is only for SoldierDiary mod.
-						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
+					if (_unit->getOriginalFaction() == FACTION_PLAYER	// This section is only for SoldierDiary mod.
+						&& _projectileImpact == VOXEL_UNIT)				// see below also; was also for setting aggroState
 					{
 						BattleUnit* const victim = _parent->getSave()->getTile(
 															_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))
 														->getUnit();
 						if (victim != NULL)
-//kL						&& victim->isOut() == false)
+//							&& victim->isOut() == false)
 						{
 							BattleUnitStatistics
 								* statsVictim = NULL,

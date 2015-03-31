@@ -61,7 +61,7 @@ private:
 		_targetVoxel;
 	ResourcePack* _res;
 	SavedBattleGame* _save;
-	Surface* _sprite;
+	Surface* _throwSprite;
 
 	std::vector<Position> _trajectory;
 

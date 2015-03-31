@@ -93,21 +93,23 @@ Projectile::Projectile(
 		if (_action.type == BA_THROW)
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+			_throwSprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 			_speed = _speed * 4 / 7;
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
 			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
-			if (_action.weapon->getRules()->getArcingShot())
+			if (_action.weapon->getRules()->getArcingShot() == true)
 				_speed = _speed * 5 / 7;
 
 			if (ammo != NULL) // try to get all the required info from the ammo, if present
 			{
 				_bulletSprite = ammo->getRules()->getBulletSprite();
+
 				_vaporColor = ammo->getRules()->getVaporColor();
 				_vaporDensity = ammo->getRules()->getVaporDensity();
 				_vaporProbability = ammo->getRules()->getVaporProbability();
+
 				_speed = std::max(
 								1,
 								_speed + ammo->getRules()->getBulletSpeed());
@@ -751,7 +753,7 @@ bool Projectile::traceProjectile()
 {
 	for (int
 			i = 0;
-			i < _speed;
+			i != _speed;
 			++i)
 	{
 		++_position;
@@ -820,12 +822,12 @@ BattleItem* Projectile::getItem() const
 }
 
 /**
- * Gets the bullet sprite.
+ * Gets the thrown object's sprite.
  * @return, pointer to Surface
  */
 Surface* Projectile::getSprite() const
 {
-	return _sprite;
+	return _throwSprite;
 }
 
 /**

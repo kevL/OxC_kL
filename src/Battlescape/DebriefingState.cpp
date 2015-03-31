@@ -309,12 +309,15 @@ DebriefingState::DebriefingState()
 		}
 	}
 
+	std::string music = OpenXcom::res_MUSIC_TAC_DEBRIEFING;
 
 	std::wstring rating; // Calculate rating
 	if (total < -99)
 	{
 		rating = tr("STR_RATING_TERRIBLE");
 		_missionStatistics->rating = "STR_RATING_TERRIBLE";
+
+		music = OpenXcom::res_MUSIC_TAC_DEBRIEFING_BAD;
 	}
 	else if (total < 101)
 	{
@@ -444,7 +447,7 @@ DebriefingState::DebriefingState()
 	_savedGame->getMissionStatistics()->push_back(_missionStatistics); // Soldier Diary_end.
 
 
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_DEBRIEFING);
+	_game->getResourcePack()->playMusic(music);
 }
 
 /**

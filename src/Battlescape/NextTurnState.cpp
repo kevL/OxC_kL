@@ -56,14 +56,14 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Next Turn screen.
- * @param savedBattle	- pointer to the SavedBattleGame
+ * @param battleSave	- pointer to the SavedBattleGame
  * @param state			- pointer to the BattlescapeState
  */
 NextTurnState::NextTurnState(
-		SavedBattleGame* savedBattle,
+		SavedBattleGame* battleSave,
 		BattlescapeState* state)
 	:
-		_savedBattle(savedBattle),
+		_battleSave(battleSave),
 		_state(state),
 		_timer(NULL)
 //		_turnCounter(NULL)
@@ -79,13 +79,13 @@ NextTurnState::NextTurnState(
 //							0,
 //							0);
 
-	_savedBattle->setPaletteByDepth(this);
+	_battleSave->setPaletteByDepth(this);
 
 	add(_window);
-	add(_txtTitle, "messageWindows", "battlescape");
-	add(_txtTurn, "messageWindows", "battlescape");
-	add(_txtSide, "messageWindows", "battlescape");
-	add(_txtMessage, "messageWindows", "battlescape");
+	add(_txtTitle,		"messageWindows", "battlescape");
+	add(_txtTurn,		"messageWindows", "battlescape");
+	add(_txtSide,		"messageWindows", "battlescape");
+	add(_txtMessage,	"messageWindows", "battlescape");
 //	add(_bg);
 
 	centerAllSurfaces();
@@ -114,26 +114,22 @@ NextTurnState::NextTurnState(
 	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(0)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast();
 	_txtTitle->setText(tr("STR_OPENXCOM"));
 
-//	_txtTurn->setColor(Palette::blockOffset(0)-1);
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast();
-	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
+	_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
 
-//	_txtSide->setColor(Palette::blockOffset(0)-1);
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast();
 	_txtSide->setText(tr("STR_SIDE")
-						.arg(tr(_savedBattle->getSide() == FACTION_PLAYER? "STR_XCOM": "STR_ALIENS")));
+						.arg(tr(_battleSave->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS")));
 
-//	_txtMessage->setColor(Palette::blockOffset(0)-1);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast();
@@ -171,7 +167,7 @@ void NextTurnState::handle(Action* action)
 	if (action->getDetails()->type == SDL_KEYDOWN
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-//		kL_TurnCount = _savedBattle->getTurn();
+//		kL_TurnCount = _battleSave->getTurn();
 //		_turnCounter = _state->getTurnCounter();
 //		_turnCounter->update();
 
@@ -195,7 +191,7 @@ void NextTurnState::think()
 void NextTurnState::nextTurn()
 {
 	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
-	_savedBattle->getBattleGame()->cleanupDeleted();
+	_battleSave->getBattleGame()->cleanupDeleted();
 	_game->popState();
 
 	int
@@ -215,12 +211,12 @@ void NextTurnState::nextTurn()
 	{
 		_state->btnCenterClick(NULL);
 
-		if (_savedBattle->getSide() == FACTION_PLAYER)
+		if (_battleSave->getSide() == FACTION_PLAYER)
 		{
 			_state->getBattleGame()->setupCursor();
 			_game->getCursor()->setVisible();
 
-			const int turn = _savedBattle->getTurn();
+			const int turn = _battleSave->getTurn();
 
 			if (turn == 1
 				|| (turn %Options::autosaveFrequency) == 0)
@@ -244,7 +240,7 @@ void NextTurnState::nextTurn()
 				std::string
 					music,
 					terrain;
-				_savedBattle->calibrateMusic(
+				_battleSave->calibrateMusic(
 											music,
 											terrain);
 				_game->getResourcePack()->playMusic(
@@ -253,15 +249,15 @@ void NextTurnState::nextTurn()
 			}
 
 
-			Tile* const tile = _savedBattle->getTileEngine()->checkForTerrainExplosions();
+			Tile* const tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 			if (tile != NULL)
 			{
 				const Position pos = Position(
 										tile->getPosition().x * 16 + 8,
 										tile->getPosition().y * 16 + 8,
 										tile->getPosition().z * 24 + 10);
-				_savedBattle->getBattleGame()->statePushBack(new ExplosionBState(
-																			_savedBattle->getBattleGame(),
+				_battleSave->getBattleGame()->statePushBack(new ExplosionBState(
+																			_battleSave->getBattleGame(),
 																			pos,
 																			NULL,
 																			NULL,
@@ -276,7 +272,7 @@ void NextTurnState::nextTurn()
 			_game->getResourcePack()->fadeMusic(_game, 473);
 			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
 
-			if (_savedBattle->getDebugMode() == false)
+			if (_battleSave->getDebugMode() == false)
 				_game->getCursor()->setVisible(false);
 		}
 	}

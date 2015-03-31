@@ -334,13 +334,13 @@ void SavedBattleGame::load(
 								rule->getArmor(armor),
 								static_cast<int>(savedGame->getDifficulty()),
 								_depth,
-								savedGame->getMonthsPassed()); // kL_add.
+								savedGame->getMonthsPassed());
 		}
 
-		Log(LOG_INFO) << ". . load unit";
+		Log(LOG_INFO) << ". . load unit " << id;
 		unit->load(*i);
 		_units.push_back(unit);
-		Log(LOG_INFO) << ". . load unit DONE";
+		Log(LOG_INFO) << ". . . Done";
 
 		if (faction == FACTION_PLAYER)
 		{
@@ -517,6 +517,8 @@ void SavedBattleGame::load(
 			_recoverGuaranteed.push_back(item);
 		}
 	}
+
+	_music = node["music"].as<std::string>(_music);
 
 	Log(LOG_INFO) << ". set item ID";
 	setNextItemId(); // kL
@@ -710,6 +712,8 @@ YAML::Node SavedBattleGame::save() const
 	{
 		node["recoverConditional"].push_back((*i)->save());
 	}
+
+	node["music"] = _music;
 
 	return node;
 }
@@ -2741,6 +2745,24 @@ std::vector<BattleItem*>* SavedBattleGame::getConditionalRecoveredItems()
 }
 
 /**
+ * Gets the music track for the current battle.
+ * @return, the name of the music track
+ */
+/*std::string& SavedBattleGame::getMusic()
+{
+	return _music;
+} */
+
+/**
+ * Sets the music track for this battle.
+ * @param track - the track name
+ */
+void SavedBattleGame::setMusic(std::string track)
+{
+	_music = track;
+}
+
+/**
  * Sets the battlescape inventory tile when BattlescapeGenerator runs.
  * For use in base missions to randomize item locations.
  * @param invBattle - pointer to the tile where battle inventory is created
@@ -2813,9 +2835,14 @@ void SavedBattleGame::calibrateMusic(
 		std::string& music,
 		std::string& terrain)
 {
-	music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+/*	if (_save->getMusic() == "")
+		_game->getResourcePack()->playMusic("GMTACTIC", true);
+	else
+		_game->getResourcePack()->playMusic(_save->getMusic()); */
 
-	if (_missionType == "STR_UFO_CRASH_RECOVERY")
+	if (_music.empty() == false)
+		music = _music;
+	else if (_missionType == "STR_UFO_CRASH_RECOVERY")
 	{
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
 		terrain = _terrain;
@@ -2835,6 +2862,8 @@ void SavedBattleGame::calibrateMusic(
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
 	else if (_missionType == "STR_MARS_THE_FINAL_ASSAULT")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
+	else
+		music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
 }
 
 }

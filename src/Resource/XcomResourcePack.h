@@ -49,6 +49,7 @@ static const std::string // = 'type' in Music Rules file
 	res_MUSIC_GEO_GLOBE					= "GEO_GLOBE",
 	res_MUSIC_GEO_INTERCEPT				= "GEO_INTERCEPT", // verySmall,small,medium,large,veryLarge
 	res_MUSIC_GEO_MONTHLYREPORT			= "GEO_MONTHLYREPORT",
+	res_MUSIC_GEO_MONTHLYREPORT_BAD		= "GEO_MONTHLYREPORT_BAD",
 
 	res_MUSIC_GEO_BRIEFING				= "GEO_BRIEFING",
 	res_MUSIC_GEO_BRIEF_MARS1			= "GEO_BRIEF_MARS1",
@@ -70,6 +71,7 @@ static const std::string // = 'type' in Music Rules file
 	res_MUSIC_TAC_BATTLE_UFOLANDED		= "TAC_BATTLE_UFOLANDED",
 
 	res_MUSIC_TAC_DEBRIEFING			= "TAC_DEBRIEFING",
+	res_MUSIC_TAC_DEBRIEFING_BAD		= "TAC_DEBRIEFING",
 	res_MUSIC_TAC_AWARDS				= "TAC_AWARDS",
 
 	res_MUSIC_BASE_AWARDS				= "BASE_AWARDS",

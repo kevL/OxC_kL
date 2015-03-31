@@ -113,7 +113,9 @@ private:
 		_script,
 		_type;
 
-	std::vector<std::string> _terrains;
+	std::vector<std::string>
+		_musics,
+		_terrains;
 	std::vector<DeploymentData> _data;
 
 	BriefingData _briefingData;
@@ -178,6 +180,9 @@ private:
 		int getDurationMin() const;
 		/// Gets the maximum duration for this mission.
 		int getDurationMax() const;
+
+		/// Gets the list of music to pick from.
+		const std::vector<std::string>& getMusic();
 };
 
 }

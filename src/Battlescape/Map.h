@@ -79,6 +79,7 @@ private:
 		_explosionInFOV,
 		_noDraw,
 		_projectileInFOV,
+		_showProjectile,
 		_smoothingEngaged,
 		_unitDying,
 		_waypointAction;
@@ -249,6 +250,9 @@ private:
 
 		/// Tells the map to reveal because there's a waypoint action going down.
 		void setWaypointAction(bool wp = true);
+
+		/// Sets whether to draw the projectile on the Map.
+		void setShowProjectile(bool show = true);
 };
 
 }

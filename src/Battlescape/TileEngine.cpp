@@ -5754,7 +5754,7 @@ bool TileEngine::validMeleeRange(
  *							- NULL any unit
  *							- medikit usage requires a valid BattleUnit for MediTargetState list
  * @param dest			- pointer to destination Position; will be set according to where targetUnit actually is
- * @param preferEnemy	- true if attacking a hostile unit; false if using medi-kit (default true)
+// * @param preferEnemy	- true if attacking a hostile unit; false if using medi-kit (default true)
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
@@ -5762,8 +5762,8 @@ bool TileEngine::validMeleeRange(
 		const int dir,
 		const BattleUnit* const attacker,
 		const BattleUnit* const targetUnit,
-		Position* const dest,
-		const bool preferEnemy) // <- obsolete.
+		Position* const dest)
+//		const bool preferEnemy) // <- obsolete.
 {
 	if (dir < 0 || dir > 7)
 		return false;

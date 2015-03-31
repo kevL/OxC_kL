@@ -54,7 +54,9 @@ private:
 		_type,
 		_script;
 
-	std::vector<std::string> _civilianTypes;
+	std::vector<std::string>
+		_civilianTypes,
+		_musics;
 
 	std::vector<MapBlock*> _mapBlocks;
 	std::vector<MapDataSet*> _mapDataSets;
@@ -105,6 +107,9 @@ private:
 
 		/// Gets the generation script.
 		const std::string& getScript() const;
+
+		/// Gets the list of music to pick from.
+		const std::vector<std::string>& getMusic();
 
 		/// Gets the pyjama type.
 		const std::string& getPyjamaType() const;

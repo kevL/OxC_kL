@@ -705,6 +705,19 @@ void BattlescapeGenerator::run()
 		}
 	} */
 
+	const std::vector<std::string> deployMusic = ruleDeploy->getMusic();
+	if (deployMusic.empty() == false)
+		_battleSave->setMusic(deployMusic.at(static_cast<size_t>(RNG::generate(
+																			0,
+																			deployMusic.size() - 1))));
+	else
+	{
+		const std::vector<std::string> terrainMusic = _terrain->getMusic();
+		if (terrainMusic.empty() == false)
+			_battleSave->setMusic(terrainMusic.at(static_cast<size_t>(RNG::generate(
+																				0,
+																				terrainMusic.size() - 1))));
+	}
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	_battleSave->setGlobalShade(_shade);

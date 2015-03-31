@@ -124,6 +124,7 @@ Map::Map(
 		_reveal(0),
 		_smoothingEngaged(false),
 		_noDraw(false),
+		_showProjectile(true),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
 		_res(game->getResourcePack())
 
@@ -2152,7 +2153,8 @@ void Map::drawTerrain(Surface* surface) // private.
 
 
 					// Draw Bullet if in Field Of View
-					if (_projectile != NULL)
+					if (_showProjectile == true // <- used to hide Celatid glob while its spitting animation plays.
+						&& _projectile != NULL)
 //						&& _projectileInFOV)
 					{
 						if (_projectile->getItem() != NULL) // thrown item ( grenade, etc.)
@@ -4930,6 +4932,15 @@ SavedBattleGame* Map::getSavedBattle() const
 void Map::setWaypointAction(bool wp)
 {
 	_waypointAction = wp;
+}
+
+/**
+ * Sets whether to draw the projectile on the Map.
+ * @param show - true to show the projectile
+ */
+void Map::setShowProjectile(bool show)
+{
+	_showProjectile = show;
 }
 
 }

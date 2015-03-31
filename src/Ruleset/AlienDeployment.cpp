@@ -179,10 +179,19 @@ void AlienDeployment::load(const YAML::Node& node)
 	_briefingData		= node["briefing"]			.as<BriefingData>(_briefingData);
 	_markerName			= node["markerName"]		.as<std::string>(_markerName);
 	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
+
 	if (node["duration"])
 	{
 		_durationMin	= node["duration"][0]		.as<int>(_durationMin);
 		_durationMax	= node["duration"][1]		.as<int>(_durationMax);
+	}
+
+	for (YAML::const_iterator
+			i = node["music"].begin();
+			i != node["music"].end();
+			++i)
+	{
+		_musics.push_back((*i).as<std::string>(""));
 	}
 }
 
@@ -354,6 +363,15 @@ int AlienDeployment::getDurationMin() const
 int AlienDeployment::getDurationMax() const
 {
 	return _durationMax;
+}
+
+/**
+ * Gets the list of musics this deployment has to choose from.
+ * @return, list of track names
+ */
+const std::vector<std::string>& AlienDeployment::getMusic()
+{
+	return _musics;
 }
 
 }

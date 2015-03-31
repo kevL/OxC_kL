@@ -120,7 +120,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 
 
-	calculateChanges(); // <- sets Rating.
+	calculateChanges(); // <- sets Rating etc.
 
 	int
 		month = _savedGame->getTime()->getMonth() - 1,
@@ -161,8 +161,9 @@ MonthlyReportState::MonthlyReportState(
 		// 3 -> -250
 		// 4 -> 0
 
-	// do rating:
-	std::wstring wst = tr("STR_RATING_TERRIBLE");
+	std::string music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT;
+
+	std::wstring wst; // do rating
 	if (_ratingTotal > 10000)
 		wst = tr("STR_RATING_STUPENDOUS");
 	else if (_ratingTotal > 5000)
@@ -173,6 +174,11 @@ MonthlyReportState::MonthlyReportState(
 		wst = tr("STR_RATING_OK");
 	else if (_ratingTotal > difficulty_threshold)
 		wst = tr("STR_RATING_POOR");
+	else
+	{
+		wst = tr("STR_RATING_TERRIBLE");
+		music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT_BAD;
+	}
 
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(wst));
 
@@ -199,8 +205,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(woststr.str()));
 
 
-	// calculate satisfaction
-	if (_ratingLast <= difficulty_threshold
+	if (_ratingLast <= difficulty_threshold // calculate satisfaction
 		&& _ratingTotal <= difficulty_threshold)
 	{
 		wst = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
@@ -255,6 +260,8 @@ MonthlyReportState::MonthlyReportState(
 
 				_savedGame->setWarned(true);
 				resetWarning = false;
+
+				music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT_BAD;
 			}
 		}
 	}
@@ -311,7 +318,7 @@ MonthlyReportState::MonthlyReportState(
 
 
 	_game->getResourcePack()->playMusic(
-									OpenXcom::res_MUSIC_GEO_MONTHLYREPORT,
+									music,
 									"",
 									1);
 }
@@ -545,7 +552,7 @@ void MonthlyReportState::btnOkClick(Action*)
 }
 
 /**
- * Builds a sentence from a list of countries, adding the appropriate
+ * Builds a sentence from a list of countries adding the appropriate
  * separators and pluralization.
  * @param countries	- reference a vector of strings that is the list of countries
  * @param singular	- reference a string to append if the returned string is singular

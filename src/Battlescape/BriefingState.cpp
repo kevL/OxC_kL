@@ -41,11 +41,13 @@
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom
@@ -73,31 +75,41 @@ BriefingState::BriefingState(
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	const std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
 	int bgColor;
 	std::string
-		background,	// default: "BACK16.SCR", Ruleset/AlienDeployment.h
-		music;		// default: OpenXcom::res_MUSIC_GEO_BRIEFING, Ruleset/AlienDeployment.h
+		bg,		// default defined in Ruleset/AlienDeployment.h: "BACK16.SCR",
+		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
 
-	const AlienDeployment* const deployment = _game->getRuleset()->getDeployment(mission);
-	if (deployment == NULL) // landing site or crash site.
+	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(missionType); // check, Xcom1Ruleset->alienDeployments for a missionType
+	if (deployRule == NULL) // landing site or crash site -> define BG & Music by ufoType instead
 	{
-		bgColor = _game->getRuleset()->getInterface("briefing")->getElement("palette")->color;
-		background = "BACK16.SCR";
+		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		if (ufo != NULL)
+			deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
+	}
 
-		if (mission == "STR_UFO_CRASH_RECOVERY")
-			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
-		else //if (mission == "STR_UFO_GROUND_ASSAULT")
-			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
+	if (deployRule == NULL) // should never happen
+	{
+		bg = "BACK16.SCR";
+		bgColor = _game->getRuleset()->getInterface("briefing")->getElement("palette")->color;
+		music = OpenXcom::res_MUSIC_GEO_BRIEFING;
 	}
 	else
 	{
-		const BriefingData dataBrief = deployment->getBriefingData();
+		const BriefingData dataBrief = deployRule->getBriefingData();
 
+		bg = dataBrief.background;
 		bgColor = dataBrief.palette;
-		background = dataBrief.background;
-		music = dataBrief.music;
+
+		if (missionType == "STR_UFO_CRASH_RECOVERY")
+			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
+		else if (missionType == "STR_UFO_GROUND_ASSAULT")
+			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
+		else
+			music = dataBrief.music;	// note This currently conflicts w/ UFO Recovery/Assault.
+										// that is, the music assigned to a UFO will be overridden ...
 
 //		_txtBriefing->setY(_txtBriefing->getY() + dataBrief.textOffset);
 //		_txtCraft->setY(_txtCraft->getY() + dataBrief.textOffset);
@@ -109,7 +121,7 @@ BriefingState::BriefingState(
 	setPalette(
 			"PAL_GEOSCAPE",
 			bgColor);
-	_window->setBackground(_game->getResourcePack()->getSurface(background));
+	_window->setBackground(_game->getResourcePack()->getSurface(bg));
 
 	add(_window,		"window",	"briefing");
 	add(_txtTitle,		"text",		"briefing");
@@ -131,7 +143,7 @@ BriefingState::BriefingState(
 					Options::keyCancel);
 
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(mission));
+	_txtTitle->setText(tr(missionType));
 
 	std::wstring craftLabel;
 	if (craft != NULL)
@@ -172,12 +184,12 @@ BriefingState::BriefingState(
 
 
 	std::ostringstream brief;
-	brief << mission.c_str() << "_BRIEFING";
+	brief << missionType.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(brief.str()));
 	_txtBriefing->setWordWrap();
 
 
-	if (mission == "STR_BASE_DEFENSE")
+	if (missionType == "STR_BASE_DEFENSE")
 		base->setIsRetaliationTarget(false);
 }
 

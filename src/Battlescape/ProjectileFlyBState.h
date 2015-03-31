@@ -21,7 +21,7 @@
 #define OPENXCOM_PROJECTILEFLYBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
+//#include "Position.h"
 
 
 namespace OpenXcom
@@ -45,7 +45,9 @@ private:
 	bool
 		_initialized,
 		_targetFloor;
-	int _projectileImpact;
+	int
+		_initUnitAnim,
+		_projectileImpact;
 
 	BattleItem
 		* _ammo,

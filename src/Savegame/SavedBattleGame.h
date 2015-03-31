@@ -90,6 +90,7 @@ private:
 	std::string
 		_alienRace, // kL
 		_missionType,
+		_music,
 		_terrain; // sza_MusicRules
 	std::wstring _operationTitle;
 
@@ -389,6 +390,11 @@ private:
 		std::vector<BattleItem*>* getGuaranteedRecoveredItems();
 		/// Gets the list of items that MIGHT get recovered.
 		std::vector<BattleItem*>* getConditionalRecoveredItems();
+
+		/// Get the name of the music track.
+//		std::string& getMusic();
+		/// Set the name of the music track.
+		void setMusic(std::string track);
 
 		/// Sets the inventory tile when BattlescapeGenerator runs.
 		void setBattleInventory(Tile* invBattle);
