@@ -4387,7 +4387,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1425961046 f:\git\openxcom\src\resource\resourcepack.h
+1427831954 f:\git\openxcom\src\resource\resourcepack.h
 
 1426969223 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4647,7 +4647,7 @@
 
 1424390936 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1427829783 f:\git\openxcom\src\savegame\savedbattlegame.h
+1427832070 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1427410862 f:\git\openxcom\src\savegame\battleunit.h
@@ -5385,7 +5385,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1427827372 f:\git\openxcom\src\ruleset\aliendeployment.h
+1427831984 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1427239372 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5665,7 +5665,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1427827351 f:\git\openxcom\src\ruleset\ruleterrain.h
+1427832021 f:\git\openxcom\src\ruleset\ruleterrain.h
 
 1424390936 f:\git\openxcom\src\ruleset\ruleufo.h
 
@@ -6151,7 +6151,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1427828475 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1427829896 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
