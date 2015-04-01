@@ -19,6 +19,8 @@
 *.res
 *.*.*.*.tlog
 *.tlog
+*.*.*.*.log
+*.log
 *.ipch
 *.sdf
 *.cscope_file_list
