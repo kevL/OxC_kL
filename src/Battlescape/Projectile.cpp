@@ -555,9 +555,7 @@ void Projectile::applyAccuracy(
 			//Log(LOG_INFO) << ". battleRangeBasedAccuracy";
 			if (targetTile != NULL)
 			{
-				const int smoke = targetTile->getSmoke();
-				if (smoke > 0)
-					accuracy -= smoke * 0.01;
+				accuracy -= targetTile->getSmoke() * 0.01;
 
 				const BattleUnit* const targetUnit = targetTile->getUnit();
 				if (targetUnit != NULL)
@@ -577,10 +575,14 @@ void Projectile::applyAccuracy(
 			if (_action.type == BA_AUTOSHOT)
 				accuracy -= (_action.autoShotCount - 1) * 0.03;
 
+			accuracy -= (10 - ((_action.actor->getMorale() + 9) / 10));
+			accuracy = std::max(
+							0.,
+							accuracy);
+
 
 			double
-				dH,
-				dV;
+				dH,dV;
 
 			const int autoHit = static_cast<int>(std::ceil(accuracy * 20.)); // chance for Bulls-eye.
 			if (RNG::percent(autoHit) == false)
@@ -601,7 +603,7 @@ void Projectile::applyAccuracy(
 
 
 				// The angle deviations are spread using a normal distribution:
-				dH = RNG::boxMuller(0., deviation / 6.);			// horizontal miss in radians
+				dH = RNG::boxMuller(0., deviation /  6.);			// horizontal miss in radians
 				dV = RNG::boxMuller(0., deviation / (6. * 1.69));	// vertical miss in radians
 			}
 			else
