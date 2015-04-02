@@ -160,13 +160,14 @@ void Soldier::load(
 		const Ruleset* rule)
 //		SavedGame* save)
 {
+	_rank			= static_cast<SoldierRank>(node["rank"]		.as<int>());
+	_gender			= static_cast<SoldierGender>(node["gender"]	.as<int>());
+	_look			= static_cast<SoldierLook>(node["look"]		.as<int>());
+
 	_id				= node["id"]						.as<int>(_id);
 	_name			= Language::utf8ToWstr(node["name"]	.as<std::string>());
 	_initialStats	= node["initialStats"]				.as<UnitStats>(_initialStats);
 	_currentStats	= node["currentStats"]				.as<UnitStats>(_currentStats);
-	_rank			= (SoldierRank)node["rank"]			.as<int>();
-	_gender			= (SoldierGender)node["gender"]		.as<int>();
-	_look			= (SoldierLook)node["look"]			.as<int>();
 	_missions		= node["missions"]					.as<int>(_missions);
 	_kills			= node["kills"]						.as<int>(_kills);
 	_recovery		= node["recovery"]					.as<int>(_recovery);
@@ -215,24 +216,26 @@ YAML::Node Soldier::save() const
 {
 	YAML::Node node;
 
+	node["rank"]			= static_cast<int>(_rank);
+	node["gender"]			= static_cast<int>(_gender);
+	node["look"]			= static_cast<int>(_look);
+
 	node["id"]				= _id;
 	node["name"]			= Language::wstrToUtf8(_name);
 	node["initialStats"]	= _initialStats;
 	node["currentStats"]	= _currentStats;
-	node["rank"]			= (int)_rank;
-	if (_craft != NULL)
-		node["craft"]		= _craft->saveId();
-	node["gender"]			= (int)_gender;
-	node["look"]			= (int)_look;
 	node["missions"]		= _missions;
 	node["kills"]			= _kills;
-	if (_recovery > 0)
-		node["recovery"]	= _recovery;
 	node["armor"]			= _armor->getType();
-	if (_psiTraining)
-		node["psiTraining"]	= _psiTraining;
 	node["gainPsiSkl"]		= _gainPsiSkl;
 	node["gainPsiStr"]		= _gainPsiStr;
+
+	if (_craft != NULL)
+		node["craft"]		= _craft->saveId();
+	if (_recovery > 0)
+		node["recovery"]	= _recovery;
+	if (_psiTraining)
+		node["psiTraining"]	= _psiTraining;
 
 	if (_equipmentLayout.empty() == false)
 	{
@@ -559,34 +562,44 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
-	int psiSkillCap = _rules->getStatCaps().psiSkill;
-	int psiStrengthCap = _rules->getStatCaps().psiStrength;
+	const int
+		capPsiSkl = _rules->getStatCaps().psiSkill,
+		capPsiStr = _rules->getStatCaps().psiStrength;
 
-	_gainPsiSkl = _gainPsiStr = 0;
+	_gainPsiSkl =
+	_gainPsiStr = 0;
+
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
 	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
-	{
-		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
-		_gainPsiSkl = RNG::generate(_rules->getMaxStats().psiSkill, max);
-	}
+		_gainPsiSkl = RNG::generate(
+								_rules->getMaxStats().psiSkill,
+								_rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2);
 	else
 	{
-		if (_currentStats.psiSkill <= (psiSkillCap / 2)) _gainPsiSkl = RNG::generate(5, 12);
-		else if (_currentStats.psiSkill < psiSkillCap) _gainPsiSkl = RNG::generate(1, 3);
+		if (_currentStats.psiSkill <= (capPsiSkl / 2))
+			_gainPsiSkl = RNG::generate(5,12);
+		else if (_currentStats.psiSkill < capPsiSkl)
+			_gainPsiSkl = RNG::generate(1,3);
 
-		if (Options::allowPsiStrengthImprovement)
+		if (Options::allowPsiStrengthImprovement == true)
 		{
-			if (_currentStats.psiStrength <= (psiStrengthCap / 2)) _gainPsiStr = RNG::generate(5, 12);
-			else if (_currentStats.psiStrength < psiStrengthCap) _gainPsiStr = RNG::generate(1, 3);
+			if (_currentStats.psiStrength <= (capPsiStr / 2))
+				_gainPsiStr = RNG::generate(5,12);
+			else if (_currentStats.psiStrength < capPsiStr)
+				_gainPsiStr = RNG::generate(1,3);
 		}
 	}
+
 	_currentStats.psiSkill += _gainPsiSkl;
+	if (_currentStats.psiSkill > capPsiSkl)
+		_currentStats.psiSkill = capPsiSkl;
+
 	_currentStats.psiStrength += _gainPsiStr;
-	if (_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
-	if (_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
+	if (_currentStats.psiStrength > capPsiStr)
+		_currentStats.psiStrength = capPsiStr;
 }
 /* kL_begin:
 // http://www.ufopaedia.org/index.php?title=Psi_Skill
@@ -712,7 +725,7 @@ bool Soldier::isInPsiTraining()
 /**
  * Toggles whether or not this Soldier is in psi training.
  */
-void Soldier::setPsiTraining()
+void Soldier::togglePsiTraining()
 {
 	_psiTraining = !_psiTraining;
 }

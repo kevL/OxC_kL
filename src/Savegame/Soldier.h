@@ -198,7 +198,7 @@ private:
 		/// Returns whether the unit is in psi training or not
 		bool isInPsiTraining();
 		/// Sets the psi training status
-		void setPsiTraining();
+		void togglePsiTraining();
 		/// Gets this soldier's psiSkill improvement score for this month.
 		int getImprovement();
 		/// Gets this soldier's psiStrength improvement score for this month.

@@ -21,7 +21,6 @@
 #define OPENXCOM_PALETTE_H
 
 //#include <string>
-
 //#include <SDL.h>
 
 
@@ -76,9 +75,7 @@ private:
 		 * @return, palette position in bytes
 		 */
 		static inline int palOffset(int palette)
-		{
-			return palette * (768 + 6);
-		}
+		{ return palette * (768 + 6); }
 
 		/// Gets the position of a certain color block in a palette.
 		/**
@@ -88,9 +85,7 @@ private:
 		 * @return, color position
 		 */
 		static inline Uint8 blockOffset(Uint8 block)
-		{
-			return block * 16;
-		}
+		{ return block << 4; }
 };
 
 }

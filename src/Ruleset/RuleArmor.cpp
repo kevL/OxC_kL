@@ -124,15 +124,15 @@ void RuleArmor::load(const YAML::Node& node)
 
 	_stats			.mergeStats(node["stats"]			.as<UnitStats>(_stats));
 
-	if (const YAML::Node& dmg = node["damageModifier"])
+	if (const YAML::Node& vuln = node["damageModifier"])
 	{
 		for (size_t
 				i = 0;
-				i < dmg.size()
+				i < vuln.size()
 					&& i < static_cast<size_t>(DAMAGE_TYPES);
 				++i)
 		{
-			_damageModifier[i] = dmg[i].as<float>();
+			_damageModifier[i] = vuln[i].as<float>();
 		}
 	}
 
@@ -145,7 +145,7 @@ void RuleArmor::load(const YAML::Node& node)
 	_firePhase			= node["firePhase"]			.as<int>(_firePhase);
 	_constantAnimation	= node["constantAnimation"]	.as<bool>(_constantAnimation);
 
-	_forcedTorso = (ForcedTorso)node["forcedTorso"]	.as<int>(_forcedTorso);
+	_forcedTorso = static_cast<ForcedTorso>(node["forcedTorso"].as<int>(_forcedTorso));
 
 	if (   _drawingRoutine ==  0
 		|| _drawingRoutine ==  1
@@ -398,7 +398,7 @@ ForcedTorso RuleArmor::getForcedTorso() const
 }
 
 /**
- * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * Gets hair base color group for replacement (0 dont replace).
  * @return, colorgroup or 0
  */
 int RuleArmor::getFaceColorGroup() const
@@ -407,7 +407,7 @@ int RuleArmor::getFaceColorGroup() const
 }
 
 /**
- * Gets hair base color group for replacement, if 0 then don't replace colors.
+ * Gets hair base color group for replacement (0 dont replace).
  * @return, colorgroup or 0
  */
 int RuleArmor::getHairColorGroup() const
@@ -416,7 +416,7 @@ int RuleArmor::getHairColorGroup() const
 }
 
 /**
- * Gets utile base color group for replacement, if 0 then don't replace colors.
+ * Gets utile base color group for replacement (0 dont replace).
  * @return, colorgroup or 0
  */
 int RuleArmor::getUtileColorGroup() const
@@ -425,7 +425,7 @@ int RuleArmor::getUtileColorGroup() const
 }
 
 /**
- * Gets rank base color group for replacement, if 0 then don't replace colors.
+ * Gets rank base color group for replacement (0 dont replace).
  * @return, colorgroup or 0
  */
 int RuleArmor::getRankColorGroup() const
@@ -434,7 +434,7 @@ int RuleArmor::getRankColorGroup() const
 }
 
 /**
- * Gets new face colors for replacement, if 0 then don't replace colors.
+ * Gets new face colors for replacement (0 dont replace).
  * @return, colorindex or 0
  */
 int RuleArmor::getFaceColor(int i) const
@@ -447,7 +447,7 @@ int RuleArmor::getFaceColor(int i) const
 }
 
 /**
- * Gets new hair colors for replacement, if 0 then don't replace colors.
+ * Gets new hair colors for replacement (0 dont replace).
  * @return, colorindex or 0
  */
 int RuleArmor::getHairColor(int i) const
@@ -460,7 +460,7 @@ int RuleArmor::getHairColor(int i) const
 }
 
 /**
- * Gets new utile colors for replacement, if 0 then don't replace colors.
+ * Gets new utile colors for replacement (0 dont replace).
  * @return, colorindex or 0
  */
 int RuleArmor::getUtileColor(int i) const
@@ -473,7 +473,7 @@ int RuleArmor::getUtileColor(int i) const
 }
 
 /**
- * Gets new rank colors for replacement, if 0 then don't replace colors.
+ * Gets new rank colors for replacement (0 dont replace).
  * @return, colorindex or 0
  */
 int RuleArmor::getRankColor(int i) const

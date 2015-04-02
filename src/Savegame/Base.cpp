@@ -2567,9 +2567,9 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 					&& qty > 0;
 				++i)
 		{
-			if ((*i)->isInPsiTraining())
+			if ((*i)->isInPsiTraining() == true)
 			{
-				(*i)->setPsiTraining();
+				(*i)->togglePsiTraining();
 				--qty;
 			}
 		}

@@ -79,16 +79,16 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 			"PAL_BASESCAPE",
 			_game->getRuleset()->getInterface("allocatePsi")->getElement("palette")->color);
 
-	add(_window, "window", "allocatePsi");
-	add(_txtTitle, "text", "allocatePsi");
-	add(_txtBaseLabel, "text", "allocatePsi");
-	add(_txtRemaining, "text", "allocatePsi");
-	add(_txtName, "text", "allocatePsi");
-	add(_txtPsiStrength, "text", "allocatePsi");
-	add(_txtPsiSkill, "text", "allocatePsi");
-	add(_txtTraining, "text", "allocatePsi");
-	add(_lstSoldiers, "list", "allocatePsi");
-	add(_btnOk, "button", "allocatePsi");
+	add(_window,			"window",	"allocatePsi");
+	add(_txtTitle,			"text",		"allocatePsi");
+	add(_txtBaseLabel,		"text",		"allocatePsi");
+	add(_txtRemaining,		"text",		"allocatePsi");
+	add(_txtName,			"text",		"allocatePsi");
+	add(_txtPsiStrength,	"text",		"allocatePsi");
+	add(_txtPsiSkill,		"text",		"allocatePsi");
+	add(_txtTraining,		"text",		"allocatePsi");
+	add(_lstSoldiers,		"list",		"allocatePsi");
+	add(_btnOk,				"button",	"allocatePsi");
 
 	centerAllSurfaces();
 
@@ -191,7 +191,9 @@ void AllocatePsiTrainingState::init()
 						ssSkl.str().c_str(),
 						tr("STR_YES").c_str());
 
-		_lstSoldiers->setRowColor(row, color);
+		_lstSoldiers->setRowColor(
+								row,
+								color);
 	}
 
 	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
@@ -242,22 +244,32 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 		{
 			if (_base->getUsedPsiLabs() < _base->getAvailablePsiLabs())
 			{
-				_lstSoldiers->setCellText(_sel, 3, tr("STR_YES").c_str());
-				_lstSoldiers->setRowColor(_sel, _lstSoldiers->getSecondaryColor());
+				_lstSoldiers->setCellText(
+										_sel,
+										3,
+										tr("STR_YES").c_str());
+				_lstSoldiers->setRowColor(
+										_sel,
+										_lstSoldiers->getSecondaryColor());
 
 				--_labSpace;
 				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 
-				_base->getSoldiers()->at(_sel)->setPsiTraining();
+				_base->getSoldiers()->at(_sel)->togglePsiTraining();
 			}
 		}
 		else
 		{
-			_lstSoldiers->setCellText(_sel, 3, tr("STR_NO").c_str());
-			_lstSoldiers->setRowColor(_sel, _lstSoldiers->getColor());
+			_lstSoldiers->setCellText(
+									_sel,
+									3,
+									tr("STR_NO").c_str());
+			_lstSoldiers->setRowColor(
+									_sel,
+									_lstSoldiers->getColor());
 			++_labSpace;
 			_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
-			_base->getSoldiers()->at(_sel)->setPsiTraining();
+			_base->getSoldiers()->at(_sel)->togglePsiTraining();
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)

@@ -50,7 +50,7 @@ Palette::~Palette()
  * for modern computers (0-255 scale).
  * @param filename	- reference the filename of the palette
  * @param ncolors	- number of colors in the palette
- * @param offset	- position of the palette in the file (in bytes).
+ * @param offset	- position of the palette in the file in bytes (default 0)
  * @sa http://www.ufopaedia.org/index.php?title=PALETTES.DAT
  */
 void Palette::loadDat(

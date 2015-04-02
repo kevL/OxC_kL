@@ -4360,7 +4360,7 @@
 	<sstream>
 	<string>
 
-1427314103 f:\git\openxcom\src\savegame\soldier.h
+1427952476 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
 1425749175 f:\git\openxcom\src\ruleset\unit.h
@@ -4483,7 +4483,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1424390941 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
+1427952332 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
 	"../Engine/State.h"
 
 1424390940 f:\git\openxcom\src\geoscape\buildnewbasestate.h
@@ -5326,7 +5326,7 @@
 1424390944 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1426211640 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1427952476 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -6012,7 +6012,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1427312467 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1427955128 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6043,7 +6043,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1427923436 source:f:\git\openxcom\src\battlescape\map.cpp
+1427931409 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6409,7 +6409,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1427919698 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1427962136 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -6833,7 +6833,7 @@
 1426372669 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
-1425152596 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1427952476 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
 	"PsiTrainingState.h"
@@ -8651,7 +8651,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1427313727 source:f:\git\openxcom\src\savegame\base.cpp
+1427952476 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8688,7 +8688,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1427929343 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1427931420 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8848,7 +8848,7 @@
 1427081552 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1427314008 source:f:\git\openxcom\src\savegame\soldier.cpp
+1427952476 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11515,7 +11515,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1427919331 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1427957061 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 

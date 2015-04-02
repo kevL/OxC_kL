@@ -230,7 +230,7 @@ void UnitSprite::setAnimationFrame(int frame)
 
 /**
  * Draws a unit, using the drawing rules of the unit.
- * This function is called by Map, for each unit on the screen.
+ * This function is called by Map for each unit on the screen.
  */
 void UnitSprite::draw()
 {
@@ -662,7 +662,7 @@ void UnitSprite::drawRoutine0()
 
 
 	// blit order depends on unit direction
-	// and whether we are holding a 2 handed weapon.
+	// and whether unit is holding a 2 handed weapon.
 	switch (unitDir)
 	{
 		case 0:
@@ -674,20 +674,20 @@ void UnitSprite::drawRoutine0()
 			drawRecolored(rightArm);
 		break;
 		case 1:
-			leftArm->blit(this);
-			legs->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
 			itemB ? itemB->blit(this) : void();
-			torso->blit(this);
+			drawRecolored(torso);
 			itemA ? itemA->blit(this) : void();
-			rightArm->blit(this);
+			drawRecolored(rightArm);
 		break;
 		case 2:
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
+			drawRecolored(leftArm);
+			drawRecolored(legs);
+			drawRecolored(torso);
 			itemB ? itemB->blit(this) : void();
 			itemA ? itemA->blit(this) : void();
-			rightArm->blit(this);
+			drawRecolored(rightArm);
 		break;
 		case 3:
 			if (_unit->getStatus() != STATUS_AIMING

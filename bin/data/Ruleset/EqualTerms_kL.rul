@@ -852,6 +852,10 @@ armors:
 #    spriteSheet: XCOM_0a.PCK
     spriteSheet: XCOM_1a.PCK #temp, use kevlar
     spriteInv: MAN_0a
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_STREET_ARCTIC
 #    storeItem: STR_STREET_ARCTIC
@@ -879,6 +883,10 @@ armors:
 #    spriteSheet: XCOM_0j.PCK
     spriteSheet: XCOM_1j.PCK #temp, use kevlar
     spriteInv: MAN_0j
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_STREET_JUNGLE
 #    storeItem: STR_STREET_JUNGLE
@@ -906,6 +914,10 @@ armors:
 #    spriteSheet: XCOM_0u.PCK
     spriteSheet: XCOM_1u.PCK #temp, use kevlar
     spriteInv: MAN_0u
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_STREET_URBAN
 #    storeItem: STR_STREET_URBAN
@@ -932,6 +944,10 @@ armors:
   - type: STR_KEVLAR_ARCTIC_UC
     spriteSheet: XCOM_1a.PCK
     spriteInv: MAN_1a
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_KEVLAR_ARCTIC
     storeItem: STR_KEVLAR_ARCTIC
@@ -962,6 +978,10 @@ armors:
   - type: STR_KEVLAR_JUNGLE_UC
     spriteSheet: XCOM_1j.PCK
     spriteInv: MAN_1j
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_KEVLAR_JUNGLE
     storeItem: STR_KEVLAR_JUNGLE
@@ -992,6 +1012,10 @@ armors:
   - type: STR_KEVLAR_URBAN_UC
     spriteSheet: XCOM_1u.PCK
     spriteInv: MAN_1u
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_KEVLAR_URBAN
     storeItem: STR_KEVLAR_URBAN
@@ -1022,6 +1046,10 @@ armors:
   - type: STR_TACTICAL_ARCTIC_UC
     spriteSheet: XCOM_1DSa.PCK
     spriteInv: MAN_1DSa
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_TACTICAL_ARCTIC
     storeItem: STR_TACTICAL_ARCTIC
@@ -1052,6 +1080,10 @@ armors:
   - type: STR_TACTICAL_JUNGLE_UC
     spriteSheet: XCOM_1DSj.PCK
     spriteInv: MAN_1DSj
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_TACTICAL_JUNGLE
     storeItem: STR_TACTICAL_JUNGLE
@@ -1082,6 +1114,10 @@ armors:
   - type: STR_TACTICAL_URBAN_UC
     spriteSheet: XCOM_1DSu.PCK
     spriteInv: MAN_1DSu
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_TACTICAL_URBAN
     storeItem: STR_TACTICAL_URBAN

@@ -197,7 +197,7 @@ BattleUnit::BattleUnit(
 
 	deriveRank();
 
-	const int look = soldier->getGender() + soldier->getLook() * 2;
+	const int look = soldier->getLook() * 2 + soldier->getGender();
 	setRecolor(
 			look,
 			look,
@@ -357,7 +357,7 @@ BattleUnit::BattleUnit(
 
 	_lastCover = Position(-1,-1,-1);
 
-	int rankInt = 0;
+/*	int rankInt = 0;
 	if (faction == FACTION_HOSTILE)
 	{
 		const size_t ranks = 7;
@@ -385,12 +385,14 @@ BattleUnit::BattleUnit(
 		}
 	}
 	else if (faction == FACTION_NEUTRAL)
-		rankInt = std::rand() % 8;
+		rankInt = std::rand() %8;
 
 	setRecolor(
-			std::rand() % 8,
-			std::rand() % 8,
-			rankInt);
+			std::rand() %8,
+			std::rand() %8,
+			rankInt); */
+//	setRecolor(0,0,0);	// kL, just make the vector so something naughty doesn't happen ....
+						// On 2nd thought don't even do that.
 
 	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
@@ -489,7 +491,7 @@ void BattleUnit::load(const YAML::Node& node)
 		_expMelee		= node["expMelee"]		.as<int>(_expMelee);
 	}
 
-	if (const YAML::Node& p = node["recolor"])
+/*	if (const YAML::Node& p = node["recolor"])
 	{
 		_recolor.clear();
 
@@ -502,7 +504,7 @@ void BattleUnit::load(const YAML::Node& node)
 										p[i][0].as<uint8_t>(),
 										p[i][1].as<uint8_t>()));
 		}
-	}
+	} */
 }
 
 /**
@@ -577,7 +579,7 @@ YAML::Node BattleUnit::save() const
 		node["expMelee"]		= _expMelee;
 	}
 
-	for (size_t
+/*	for (size_t
 			i = 0;
 			i != _recolor.size();
 			++i)
@@ -588,7 +590,7 @@ YAML::Node BattleUnit::save() const
 		p.push_back(static_cast<int>(_recolor[i].second));
 
 		node["recolor"].push_back(p);
-	}
+	} */
 
 	return node;
 		// kL_note: This doesn't save/load such things as
@@ -607,8 +609,8 @@ void BattleUnit::setRecolor(
 		int utileLook,
 		int rankLook)
 {
-	const size_t maxColors = 4;
-	std::pair<int, int> colors[maxColors] =
+	const size_t qtyGroups = 4;
+	std::pair<int, int> colors[qtyGroups] =
 	{
 		std::make_pair(
 					_armor->getFaceColorGroup(),
@@ -626,7 +628,7 @@ void BattleUnit::setRecolor(
 
 	for (size_t
 			i = 0;
-			i != maxColors;
+			i != qtyGroups;
 			++i)
 	{
 		if (   colors[i].first > 0

@@ -472,10 +472,10 @@ void InventoryState::init()
 		if (gender != NULL)
 			gender->blit(_gender);
 
-		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
-		texture->getFrame(20 + soldier->getRank())->setX(0);
-		texture->getFrame(20 + soldier->getRank())->setY(0);
-		texture->getFrame(20 + soldier->getRank())->blit(_btnRank);
+		SurfaceSet* const sstRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+//		sstRank->getFrame(20 + soldier->getRank())->setX(0);
+//		sstRank->getFrame(20 + soldier->getRank())->setY(0);
+		sstRank->getFrame(20 + soldier->getRank())->blit(_btnRank);
 
 		std::string look = soldier->getArmor()->getSpriteInventory();
 		if (soldier->getGender() == GENDER_MALE)
@@ -500,14 +500,14 @@ void InventoryState::init()
 	}
 	else
 	{
-		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
-		texture->getFrame(26)->setX(0);
-		texture->getFrame(26)->setY(0);
-		texture->getFrame(26)->blit(_btnRank);
+		SurfaceSet* const sstRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+//		sstRank->getFrame(26)->setX(0);
+//		sstRank->getFrame(26)->setY(0);
+		sstRank->getFrame(26)->blit(_btnRank);
 
-		Surface* const armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
-		if (armorSurface != NULL)
-			armorSurface->blit(_soldier);
+		Surface* const srfArmor = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		if (srfArmor != NULL)
+			srfArmor->blit(_soldier);
 	}
 
 	updateStats();

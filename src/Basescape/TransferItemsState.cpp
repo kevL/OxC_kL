@@ -598,7 +598,7 @@ void TransferItemsState::completeTransfer()
 
 	for (size_t
 			i = 0;
-			i < _transferQty.size();
+			i != _transferQty.size();
 			++i)
 	{
 		if (_transferQty[i] > 0)
@@ -613,7 +613,7 @@ void TransferItemsState::completeTransfer()
 					if (*j == _soldiers[i])
 					{
 						if ((*j)->isInPsiTraining() == true)
-							(*j)->setPsiTraining();
+							(*j)->togglePsiTraining();
 
 						Transfer* const transfer = new Transfer(transferTime);
 						transfer->setSoldier(*j);
@@ -637,7 +637,7 @@ void TransferItemsState::completeTransfer()
 					if ((*j)->getCraft() == craft)
 					{
 						if ((*j)->isInPsiTraining() == true)
-							(*j)->setPsiTraining();
+							(*j)->togglePsiTraining();
 
 						if (craft->getStatus() == "STR_OUT")
 							_baseTo->getSoldiers()->push_back(*j);

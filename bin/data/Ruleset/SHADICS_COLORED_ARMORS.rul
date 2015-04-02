@@ -200,6 +200,10 @@ armors:
   - type: STR_BLACKSUIT_ARMOR_UC
     spriteSheet: BLACKSUIT.PCK
     spriteInv: MAN_15
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_BLACKSUIT_ARMOR
     storeItem: STR_BLACKSUIT_ARMOR
@@ -225,6 +229,10 @@ armors:
   - type: STR_BLUESUIT_ARMOR_UC
     spriteSheet: BLUESUIT.PCK
     spriteInv: MAN_14
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_BLUESUIT_ARMOR
     storeItem: STR_BLUESUIT_ARMOR
@@ -250,6 +258,10 @@ armors:
   - type: STR_GREENSUIT_ARMOR_UC
     spriteSheet: GREENSUIT.PCK
     spriteInv: MAN_16
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_GREENSUIT_ARMOR
     storeItem: STR_GREENSUIT_ARMOR
@@ -275,6 +287,10 @@ armors:
   - type: STR_ORANGESUIT_ARMOR_UC
     spriteSheet: ORANGESUIT.PCK
     spriteInv: MAN_17
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_ORANGESUIT_ARMOR
     storeItem: STR_ORANGESUIT_ARMOR
@@ -300,6 +316,10 @@ armors:
   - type: STR_PINKSUIT_ARMOR_UC
     spriteSheet: PINKSUIT.PCK
     spriteInv: MAN_18
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_PINKSUIT_ARMOR
     storeItem: STR_PINKSUIT_ARMOR
@@ -325,6 +345,10 @@ armors:
   - type: STR_PURPLESUIT_ARMOR_UC
     spriteSheet: PURPLESUIT.PCK
     spriteInv: MAN_20
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_PURPLESUIT_ARMOR
     storeItem: STR_PURPLESUIT_ARMOR
@@ -350,6 +374,10 @@ armors:
   - type: STR_REDSUIT_ARMOR_UC
     spriteSheet: REDSUIT.PCK
     spriteInv: MAN_21
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_REDSUIT_ARMOR
     storeItem: STR_REDSUIT_ARMOR
@@ -375,6 +403,10 @@ armors:
   - type: STR_BLACK_ARMOR_UC
     spriteSheet: BLACK.PCK
     spriteInv: MAN_13
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_BLACK_ARMOR
     storeItem: STR_BLACK_ARMOR
@@ -400,6 +432,10 @@ armors:
   - type: STR_BLUE_ARMOR_UC
     spriteSheet: BLUE.PCK
     spriteInv: MAN_7
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_BLUE_ARMOR
     storeItem: STR_BLUE_ARMOR
@@ -425,6 +461,10 @@ armors:
   - type: STR_GREEN_ARMOR_UC
     spriteSheet: GREEN.PCK
     spriteInv: MAN_10
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_GREEN_ARMOR
     storeItem: STR_GREEN_ARMOR
@@ -450,6 +490,10 @@ armors:
   - type: STR_ORANGE_ARMOR_UC
     spriteSheet: ORANGE.PCK
     spriteInv: MAN_11
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_ORANGE_ARMOR
     storeItem: STR_ORANGE_ARMOR
@@ -475,6 +519,10 @@ armors:
   - type: STR_PINK_ARMOR_UC
     spriteSheet: PINK.PCK
     spriteInv: MAN_19
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_PINK_ARMOR
     storeItem: STR_PINK_ARMOR
@@ -500,6 +548,10 @@ armors:
   - type: STR_PURPLE_ARMOR_UC
     spriteSheet: PURPLE.PCK
     spriteInv: MAN_12
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_PURPLE_ARMOR
     storeItem: STR_PURPLE_ARMOR
@@ -525,6 +577,10 @@ armors:
   - type: STR_RED_ARMOR_UC
     spriteSheet: RED.PCK
     spriteInv: MAN_6
+    spriteFaceGroup: 6
+    spriteFaceColor: [ 96,  96,  96,  96, 160, 160, 163, 163] #M0 F0 M1 F1 M2 F2 M3 F3
+    spriteHairGroup: 9
+    spriteHairColor: [144, 144, 164, 164, 245, 245, 166, 166] #M0 F0 M1 F1 M2 F2 M3 F3
     corpseBattle:
       - STR_CORPSE_RED_ARMOR
     storeItem: STR_RED_ARMOR
