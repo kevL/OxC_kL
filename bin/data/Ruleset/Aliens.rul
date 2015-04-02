@@ -2552,7 +2552,8 @@ armors:
     rearArmor: 24
     underArmor: 26
     drawingRoutine: 9
-    shootFrames: 17 #prob 16
+    shootFrames: 16
+    firePhase: 13
     constantAnimation: true
     movementType: 1 #celatid's CAN fly
     damageModifier:

@@ -42,6 +42,7 @@ RuleArmor::RuleArmor(const std::string& type)
 		_weight(0),
 		_deathFrames(3),
 		_shootFrames(0),
+		_firePhase(0),
 		_constantAnimation(false),
 		_canHoldWeapon(false),
 		_hasInventory(true),
@@ -66,16 +67,16 @@ RuleArmor::RuleArmor(const std::string& type)
 	_stats.psiStrength	=
 	_stats.melee		= 0;
 
-	for (int
+	for (size_t
 			i = 0;
-			i != DAMAGE_TYPES;
+			i != static_cast<size_t>(DAMAGE_TYPES);
 			++i)
 	{
 		_damageModifier[i] = 1.f;
 	}
 
-	_faceColor.resize((LOOK_AFRICAN + 1) * 2);
-	_hairColor.resize((LOOK_AFRICAN + 1) * 2);
+	_faceColor.resize((static_cast<size_t>(LOOK_AFRICAN) + 1) * 2);
+	_hairColor.resize((static_cast<size_t>(LOOK_AFRICAN) + 1) * 2);
 }
 
 /**
@@ -139,9 +140,10 @@ void RuleArmor::load(const YAML::Node& node)
 	if (node["loftemps"])
 		_loftempsSet.push_back(node["loftemps"]		.as<int>());
 
-	_deathFrames = node["deathFrames"]				.as<int>(_deathFrames);
-	_shootFrames = node["shootFrames"]				.as<int>(_shootFrames);
-	_constantAnimation = node["constantAnimation"]	.as<bool>(_constantAnimation);
+	_deathFrames		= node["deathFrames"]		.as<int>(_deathFrames);
+	_shootFrames		= node["shootFrames"]		.as<int>(_shootFrames);
+	_firePhase			= node["firePhase"]			.as<int>(_firePhase);
+	_constantAnimation	= node["constantAnimation"]	.as<bool>(_constantAnimation);
 
 	_forcedTorso = (ForcedTorso)node["forcedTorso"]	.as<int>(_forcedTorso);
 
@@ -357,6 +359,15 @@ int RuleArmor::getDeathFrames() const
 int RuleArmor::getShootFrames() const
 {
 	return _shootFrames;
+}
+
+/**
+ * Gets the frame of the armor's aiming-animation that first shows a projectile.
+ * @return, shoot frame that reveals projectile
+ */
+int RuleArmor::getFirePhase() const
+{
+	return _firePhase;
 }
 
 /**

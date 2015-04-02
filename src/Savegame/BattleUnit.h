@@ -686,6 +686,8 @@ private:
 		void keepAiming();
 		/// Gets aiming sequence phase.
 		int getAimingPhase() const;
+		/// Sets aiming sequence phase.
+		void setAimingPhase(int phase);
 
 		/// Gets if this unit is out - either dead or unconscious.
 		bool isOut(

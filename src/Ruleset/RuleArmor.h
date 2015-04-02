@@ -71,6 +71,7 @@ private:
 
 		_deathFrames,
 		_shootFrames,
+		_firePhase,
 
 		_frontArmor,
 		_sideArmor,
@@ -165,6 +166,8 @@ private:
 		int getDeathFrames() const;
 		/// Gets number of shoot frames.
 		int getShootFrames() const;
+		/// Gets the frame of the armor's aiming-animation that first shows a projectile.
+		int getFirePhase() const;
 
 		/// Gets if armor uses constant animation.
 		bool getConstantAnimation() const;

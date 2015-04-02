@@ -653,7 +653,9 @@ void ProjectileFlyBState::think()
 			_initUnitAnim = 1;
 
 		_unit->keepAiming();
-		return;
+
+		if (_unit->getAimingPhase() < _unit->getArmor()->getFirePhase())
+			return;
 	}
 
 	if (_initUnitAnim == 1)

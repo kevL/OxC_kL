@@ -1699,13 +1699,12 @@ void UnitSprite::drawRoutine8()
  */
 void UnitSprite::drawRoutine9()
 {
-	if (_unit->isOut())
+	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
 
 	_redraw = true;
 
-	// magic numbers
-	const int
+	const int // magic numbers
 		body = 0,
 		die = 25,
 		shoot = 8;  // frames 8..23 or ..24 (24 is merely a green ball sprite)
@@ -1713,8 +1712,36 @@ void UnitSprite::drawRoutine9()
 	Surface* torso = NULL;
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-	else if (_unit->getStatus() == STATUS_AIMING)							// kL
-		torso = _unitSurface->getFrame(shoot + _unit->getAimingPhase());	// kL
+	else if (_unit->getStatus() == STATUS_AIMING)
+	{
+		const int framesTotal = _unit->getArmor()->getShootFrames();
+		int
+			phase = _unit->getAimingPhase(),
+			extra;
+		//if (_unit->getId() == 1000007) Log(LOG_INFO) << "DRAW phase = " << phase;
+
+		if (phase == framesTotal)
+		{
+			//if (_unit->getId() == 1000007) Log(LOG_INFO) << ". add Extra";
+			extra = 2; // bounce back one frame at the end.
+		}
+		else
+			extra = 0;
+
+		//if (_unit->getId() == 1000007) Log(LOG_INFO) << ". draw Frame " << (std::min(
+		//									shoot + phase - extra,
+		//									shoot + framesTotal - 1));
+		torso = _unitSurface->getFrame(std::min(
+											shoot + phase - extra,
+											shoot + framesTotal - 1));
+		// Clamp that, because slow (read, long) think()-draw intervals cause it
+		// to exceed the upper bound of total shootFrames.
+		_unit->setAimingPhase(++phase);
+		// - let BattleUnit::keepAiming() iterate the final aimPhase. nix that;
+		// super-slow animation speed doesn't even let keepAiming() to get called.
+		// ... not sure how the animation is ended in that case, but something does
+		//if (_unit->getId() == 1000007) Log(LOG_INFO) << ". set aimPhase to " << phase;
+	}
 	else
 		torso = _unitSurface->getFrame(body + _animationFrame);
 
@@ -1723,44 +1750,52 @@ void UnitSprite::drawRoutine9()
 
 // kL_note: TFTD down to sortRifles()
 /**
-* Drawing routine for tftd tanks.
-*/
+ * Drawing routine for tftd tanks.
+ */
 void UnitSprite::drawRoutine11()
 {
-	if (_unit->isOut())
-		return; // unit is drawn as an item
+	if (_unit->isOut() == true)
+		return; // unit is drawn as an item (ie. floorob)
 
-	const int offTurretX[8] = { -2,  -6,  -5,   0,   5,   6,   2,   0}; // turret offsets
-	const int offTurretY[8] = {-12, -13, -16, -16, -16, -13, -12, -12}; // turret offsets
+	const int
+		offTurretX[8] = { -2,  -6,  -5,   0,   5,   6,   2,   0},
+		offTurretY[8] = {-12, -13, -16, -16, -16, -13, -12, -12};
 
-	int body = 0;
-	int animFrame = _unit->getWalkingPhase() %4;
+	int
+		body,
+		animFrame;
 	if (_unit->getMovementType() == MT_FLY)
 	{
 		body = 128;
 		animFrame = _animationFrame %4;
 	}
-
-	Surface* s = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
-	s->setY(4);
-	drawRecolored(s);
-
-	int turret = _unit->getTurretType();
-	// draw the turret, overlapping all 4 parts
-	if (_part == 3
-		&& turret != -1
-		&& !_unit->getFloorAbove())
+	else
 	{
-		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
-		s->setX(offTurretX[_unit->getDirection()]);
-		s->setY(offTurretY[_unit->getDirection()]);
-		drawRecolored(s);
+		body = 0;
+		animFrame = _unit->getWalkingPhase() %4;
+	}
+
+	Surface* srf = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
+	srf->setY(4);
+	drawRecolored(srf);
+
+	if (_part == 3 // draw the turret, overlapping all 4 parts
+		&& _unit->getFloorAbove() == false)
+	{
+		const int turret = _unit->getTurretType();
+		if (turret != -1)
+		{
+			srf = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
+			srf->setX(offTurretX[static_cast<size_t>(_unit->getDirection())]);
+			srf->setY(offTurretY[static_cast<size_t>(_unit->getDirection())]);
+			drawRecolored(srf);
+		}
 	}
 }
 
 /**
-* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
-*/
+ * Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
+ */
 void UnitSprite::drawRoutine12()
 {
 	if (_unit->isOut() == true)

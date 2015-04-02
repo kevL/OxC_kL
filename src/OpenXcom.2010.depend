@@ -4650,7 +4650,7 @@
 1427832070 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1427410862 f:\git\openxcom\src\savegame\battleunit.h
+1427919011 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -6043,7 +6043,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1427771049 source:f:\git\openxcom\src\battlescape\map.cpp
+1427923436 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6229,7 +6229,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1427853852 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1427854352 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6252,7 +6252,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1427775364 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1427919355 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6324,7 +6324,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1427760597 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1427930137 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6409,7 +6409,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1427410045 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1427919698 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -8688,7 +8688,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1427663785 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1427929343 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11515,11 +11515,11 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1427339572 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1427919331 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1427342830 f:\git\openxcom\src\ruleset\rulearmor.h
+1427919258 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
 	"Unit.h"
 

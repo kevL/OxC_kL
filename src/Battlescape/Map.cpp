@@ -2292,6 +2292,7 @@ void Map::drawTerrain(Surface* surface) // private.
 						if (srfSprite)
 						{
 							if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [70]";
+							//if (unit->getId() == 1000007) Log(LOG_INFO) << "MAP DRAW";
 							if (unit->getHealth() == 0
 								|| unit->getHealth() <= unit->getStun()) // -> && unit is Player
 							{

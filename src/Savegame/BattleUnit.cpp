@@ -1637,9 +1637,9 @@ int BattleUnit::getFallingPhase() const
 }
 
 /**
- * kL. Intialises the aiming sequence.
+ * Intialises the aiming sequence.
  */
-void BattleUnit::startAiming() // kL
+void BattleUnit::startAiming()
 {
 	if (_armor->getShootFrames() == 0)
 		return;
@@ -1648,33 +1648,44 @@ void BattleUnit::startAiming() // kL
 	_aimPhase = 0;
 
 	if (_visible == true)
-//		|| _faction == FACTION_PLAYER) // all Faction_Player is visible ...
-	{
 		_cacheInvalid = true;
-	}
 }
 
 /**
- * kL. Advances the phase of aiming sequence.
+ * Advances the phase of the aiming sequence.
+ * @note This is not called in 1-to-1 sync with Map drawing; animation speed
+ * changes will cause the phase-sprites to either get skipped or double up.
+ * So I'm going to try doing this right in UnitSprite::drawRoutine9() - done.
  */
-void BattleUnit::keepAiming() // kL
+void BattleUnit::keepAiming()
 {
-	if (++_aimPhase == _armor->getShootFrames())
+	//if (_id == 1000007) Log(LOG_INFO) << "keepAiming() _aimPhase = " << _aimPhase;
+	if (_aimPhase == _armor->getShootFrames() + 1)
 	{
-		--_aimPhase;
+		//if (_id == 1000007) Log(LOG_INFO) << "keepAiming() END";
 		_status = STATUS_STANDING;
 	}
 
-	_cacheInvalid = true;
+	if (_visible == true)
+		_cacheInvalid = true;
 }
 
 /**
- * kL. Returns the phase of the Aiming sequence.
+ * Gets the phase of the aiming sequence.
  * @return, aiming phase
  */
-int BattleUnit::getAimingPhase() const // kL
+int BattleUnit::getAimingPhase() const
 {
 	return _aimPhase;
+}
+
+/**
+ * Sets the phase of the aiming sequence.
+ * @return, aiming phase
+ */
+void BattleUnit::setAimingPhase(int phase)
+{
+	_aimPhase = phase;
 }
 
 /**
@@ -1694,12 +1705,12 @@ bool BattleUnit::isOut(
 	if (checkHealth == true
 		&& getHealth() == 0)
 	{
-			return true;
+		return true;
 	}
 	else if (checkStun == true
 		&& getStun() >= getHealth())
 	{
-			return true;
+		return true;
 	}
 	else if (_status == STATUS_DEAD
 		|| _status == STATUS_UNCONSCIOUS
@@ -3972,7 +3983,6 @@ int BattleUnit::getCoverReserve() const
  */
 void BattleUnit::initDeathSpin()
 {
-	//Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
 	_status = STATUS_TURNING;
 	_spinPhase = 0;
 	_cacheInvalid = true;
@@ -3990,26 +4000,10 @@ void BattleUnit::initDeathSpin()
  */
 void BattleUnit::contDeathSpin()
 {
-	//Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
 	int dir = _direction;
 	if (dir == 3)	// when facing player, 1 rotation left;
 					// unless started facing player, in which case 2 rotations left
 	{
-		//Log(LOG_INFO) << ". d_init = " << dir;
-/*		if (_spinPhase == 3
-			|| _spinPhase == 4)
-		{
-			//Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
-			 _spinPhase = -1; // end.
-			_status = STATUS_STANDING;
-
-			 return;
-		}
-		else if (_spinPhase == 1)	// CW rotation
-			_spinPhase = 3;			// CW rotation 2nd
-		else if (_spinPhase == 2)	// CCW rotation
-			_spinPhase = 4;			// CCW rotation 2nd
-*/
 		if (_spinPhase == 0)		// remove this clause to use only 1 rotation when start faces player.
 			_spinPhase = 2;			// CCW 2 spins.
 		else if (_spinPhase == 1)	// CW rotation
@@ -4019,7 +4013,6 @@ void BattleUnit::contDeathSpin()
 		else if (_spinPhase == 3
 			|| _spinPhase == 4)
 		{
-			//Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
 			 _spinPhase = -1; // end.
 			_status = STATUS_STANDING;
 
@@ -4029,7 +4022,7 @@ void BattleUnit::contDeathSpin()
 
 	if (_spinPhase == 0) // start!
 	{
-		if (-1 < dir && dir < 4)
+		if (dir > -1 && dir < 4)
 		{
 			if (dir == 3)
 				_spinPhase = 3; // only 1 CW rotation to go ...
@@ -4048,18 +4041,17 @@ void BattleUnit::contDeathSpin()
 	if (_spinPhase == 1
 		|| _spinPhase == 3)
 	{
-		dir++;
+		++dir;
 		if (dir == 8)
 			dir = 0;
 	}
 	else
 	{
-		dir--;
+		--dir;
 		if (dir == -1)
 			dir = 7;
 	}
 
-	//Log(LOG_INFO) << ". d_final = " << dir;
 	setDirection(dir);
 	_cacheInvalid = true;
 }

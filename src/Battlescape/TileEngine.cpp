@@ -1817,7 +1817,7 @@ BattleUnit* TileEngine::hit(
 		BattleUnit* targetUnit = tile->getUnit();
 
 		int part = VOXEL_UNIT;
-		if (melee == false) // kL
+		if (melee == false)
 		{
 			part = voxelCheck(
 							targetPos_voxel,
@@ -1858,7 +1858,7 @@ BattleUnit* TileEngine::hit(
 					power = (power + 4) / 5;	// 20%
 				break;
 
-				case DT_MELEE:
+				case DT_MELEE:					// TODO: define 2 terrain types, Soft & Hard; so that edged weapons do good vs. Soft, blunt weapons do good vs. Hard
 					power = (power + 3) / 4;	// 25%
 				break;
 
@@ -1870,7 +1870,7 @@ BattleUnit* TileEngine::hit(
 					power = (power + 1) / 2;	// 50%
 				break;
 
-				case DT_HE:
+				case DT_HE:						// question: do HE & IN ever get in here - hit() or explode() below
 					power += power * 3 / 20;	// 115%
 //				break;
 
@@ -1974,7 +1974,7 @@ BattleUnit* TileEngine::hit(
 									vertOffset);
 				//Log(LOG_INFO) << "TileEngine::hit() relPos " << relPos;
 
-				double delta = 100.;
+				float delta = 100.;
 				if (type == DT_HE
 					|| Options::TFTDDamage == true)
 				{
@@ -1982,13 +1982,19 @@ BattleUnit* TileEngine::hit(
 				}
 
 				const int
-					low = static_cast<int>(static_cast<double>(power) * (100. - delta) / 100.) + 1,
-					high = static_cast<int>(static_cast<double>(power) * (100. + delta) / 100.);
+					low = static_cast<int>(static_cast<float>(power) * (100.f - delta) / 100.f) + 1,
+					high = static_cast<int>(static_cast<float>(power) * (100.f + delta) / 100.f);
 
 				power = RNG::generate(low, high) // bell curve
 					  + RNG::generate(low, high);
 				power /= 2;
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
+
+				if (attacker != NULL) // bonus to damage per firingAccuracy (TODO: use ranks also for xCom or aLien)
+				{
+					const float bonus = static_cast<float>(attacker->getBaseStats()->firing) / 100.f;
+					power += static_cast<int>(static_cast<float>(power) * bonus);
+				}
 
 				const bool ignoreArmor = type == DT_STUN	// kL. stun ignores armor... does now! UHM....
 									  || type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.

@@ -28,6 +28,13 @@ extraSprites:
       0: Resources/Sprites/Units/handob/handob.png
 # ------------------------ #
 # ---- Mobile Objects ---- #
+  - type: CELATID.PCK
+    width: 256
+    height: 160
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/celatid/celatid.png
   - type: CYBER.PCK
     width: 256
     height: 320
