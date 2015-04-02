@@ -297,8 +297,8 @@ private:
 		/// Carries out new turn preparations.
 		void prepareBattleTurn();
 
-		/// Revives unconscious units (healthcheck).
-		void reviveUnconsciousUnits();
+		/// Revives unconscious units.
+		void reviveUnconsciousUnits(bool atTurnStart = true);
 		/// Removes the body item that corresponds to the unit.
 		void removeUnconsciousBodyItem(const BattleUnit* const bu);
 

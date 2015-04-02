@@ -52,15 +52,15 @@ MediTargetState::MediTargetState(BattleAction* action)
 {
 	_screen = false;
 
-	_window		= new Window(this, 220, 96, 50, 50);
+	_window		= new Window(this, 270, 96, 25, 50);
 	_txtTitle	= new Text(200, 9, 60, 58);
 
-	_txtWounds	= new Text(13, 9, 151, 70);
-	_txtHealth	= new Text(42, 9, 164, 70);
-	_txtEnergy	= new Text(32, 9, 206, 70);
-	_txtMorale	= new Text(18, 9, 238, 70);
+	_txtWounds	= new Text(13, 9, 156, 70);
+	_txtHealth	= new Text(42, 9, 174, 70);
+	_txtEnergy	= new Text(32, 9, 221, 70);
+	_txtMorale	= new Text(18, 9, 258, 70);
 
-	_lstTarget	= new TextList(189, 33, 67, 80);
+	_lstTarget	= new TextList(234, 33, 42, 80);
 
 	_btnCancel	= new TextButton(120, 14, 100, 125);
 
@@ -91,7 +91,7 @@ MediTargetState::MediTargetState(BattleAction* action)
 	_txtWounds->setHighContrast();
 
 //	_txtHealth->setText(tr("STR_HEALTH"));
-	_txtHealth->setText(L"hth");
+	_txtHealth->setText(L"health");
 	_txtHealth->setHighContrast();
 
 //	_txtEnergy->setText(tr("STR_STAMINA"));
@@ -102,10 +102,10 @@ MediTargetState::MediTargetState(BattleAction* action)
 	_txtMorale->setText(L"rl");
 	_txtMorale->setHighContrast();
 
-//	_lstTarget->setColumns(5, 100, 20, 20, 20, 20);
-	_lstTarget->setColumns(5, 84, 13, 42, 32, 18);
+	_lstTarget->setColumns(5, 108, 18, 47, 37, 18);
 	_lstTarget->setBackground(_window);
 	_lstTarget->setSelectable();
+	_lstTarget->setMargin(6);
 	_lstTarget->setHighContrast();
 	_lstTarget->onMousePress((ActionHandler)& MediTargetState::lstTargetPress);
 

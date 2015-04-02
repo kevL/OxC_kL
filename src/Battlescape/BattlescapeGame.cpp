@@ -1320,7 +1320,7 @@ void BattlescapeGame::handleNonTargetAction()
 				_currentAction.result.clear();
 			}
 
-			_battleSave->reviveUnconsciousUnits();
+			_battleSave->reviveUnconsciousUnits(false);
 		}
 		else if (_currentAction.type == BA_HIT)
 		{

@@ -2006,8 +2006,9 @@ void SavedBattleGame::prepareBattleTurn()
  * Revived units need a tile to stand on. If the unit's current position is occupied, then
  * all directions around the tile are searched for a free tile to place the unit in.
  * If no free tile is found the unit stays unconscious.
+ * @param atTurnEnd - true if called from SavedBattleGame::prepareBattleTurn (default true)
  */
-void SavedBattleGame::reviveUnconsciousUnits()
+void SavedBattleGame::reviveUnconsciousUnits(bool atTurnStart)
 {
 	for (std::vector<BattleUnit*>::const_iterator
 			i = getUnits()->begin();
@@ -2015,7 +2016,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			++i)
 	{
 		if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-			&& (*i)->getStun() <= (*i)->getHealth() // do health=stun because unit is about to get healed in Prep Turn.
+			&& (*i)->getStun() < (*i)->getHealth() + static_cast<int>(atTurnStart) // do health=stun if unit is about to get healed in Prep Turn.
 			&& ((*i)->getGeoscapeSoldier() != NULL
 				|| ((*i)->getUnitRules()->isMechanical() == false
 					&& (*i)->getArmor()->getSize() == 1)))
