@@ -162,19 +162,20 @@ BattleUnit::BattleUnit(
 
 	_gender			= soldier->getGender();
 
-	int rankbonus = 0;
+	int rankValue;
 	switch (soldier->getRank())
 	{
-		case RANK_SERGEANT:		rankbonus =	5;	break; // was 1
-		case RANK_CAPTAIN:		rankbonus =	15;	break; // was 3
-		case RANK_COLONEL:		rankbonus =	30;	break; // was 6
-		case RANK_COMMANDER:	rankbonus =	50;	break; // was 10
+		case RANK_SQUADDIE:		rankValue =	 2;	break; // was 0
+		case RANK_SERGEANT:		rankValue =	 5;	break; // was 1
+		case RANK_CAPTAIN:		rankValue =	15;	break; // was 3
+		case RANK_COLONEL:		rankValue =	30;	break; // was 6
+		case RANK_COMMANDER:	rankValue =	50;	break; // was 10
 
-		default:				rankbonus =	0;	break;
+		default:				rankValue =	 0;
 	}
 
-//	_value		= 20 + soldier->getMissions() + rankbonus;
-	_value		= 20 + (soldier->getMissions() * (diff + 1)) + (rankbonus * (diff + 1)); // kL, heheheh
+//	_value		= 20 + soldier->getMissions() + rankValue;
+	_value		= 20 + (soldier->getMissions() * (diff + 1)) + (rankValue * (diff + 1)); // kL, heheheh
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
@@ -195,9 +196,10 @@ BattleUnit::BattleUnit(
 
 	_lastCover = Position(-1,-1,-1);
 
-	deriveRank();
+	deriveRank(); // -> '_rankInt'
 
-	const int look = soldier->getLook() * 2 + soldier->getGender();
+	const int look = static_cast<int>(soldier->getLook()) * 2
+				   + static_cast<int>(soldier->getGender());
 	setRecolor(
 			look,
 			look,

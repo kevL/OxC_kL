@@ -4372,7 +4372,7 @@
 	"OptionInfo.h"
 	"Options.inc.h"
 
-1424390941 f:\git\openxcom\src\engine\palette.h
+1427975570 f:\git\openxcom\src\engine\palette.h
 
 1424390939 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
@@ -6655,7 +6655,7 @@
 
 1425569497 f:\git\openxcom\src\version.h
 
-1426093439 source:f:\git\openxcom\src\engine\palette.cpp
+1427975641 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 
 1424390941 source:f:\git\openxcom\src\engine\rng.cpp
@@ -8688,7 +8688,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1427931420 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1427977298 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
