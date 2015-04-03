@@ -60,7 +60,7 @@ void MapBlock::load(const YAML::Node& node)
 	_size_y	= node["length"].as<int>(_size_y);
 	_size_z	= node["height"].as<int>(_size_z);
 
-	if (_size_x %10 != 0
+	if (   _size_x %10 != 0
 		|| _size_y %10 != 0)
 	{
 		std::stringstream ss;
@@ -150,9 +150,9 @@ bool MapBlock::isInGroup(int group) const
 }
 
 /**
- * Gets if this floor should be revealed or not.
- * @param reveal - the floor to check reveal value of
- * @return, true if floor will be revealed
+ * Gets if this floor-level should be revealed or not.
+ * @param reveal - the floor-level to check reveal value of
+ * @return, true if floor-level will be revealed
  */
 bool MapBlock::isFloorRevealed(int reveal) const
 {

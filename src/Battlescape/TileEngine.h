@@ -72,12 +72,12 @@ private:
 	void addLight(
 			const Position& pos,
 			int power,
-			int layer);
+			size_t layer);
 	/// Calculates blockage of various persuasions.
 	int blockage(
 			const Tile* const tile,
 			const int part,
-			const ItemDamageType type,
+			const ItemDamageType dType,
 			const int dir = -1,
 			const bool originTest = false,
 			const bool trueDir = false);
@@ -154,27 +154,27 @@ private:
 		BattleUnit* hit(
 				const Position& targetPos_voxel,
 				int power,
-				ItemDamageType type,
-				BattleUnit* attacker,
+				ItemDamageType dType,
+				BattleUnit* const attacker,
 				const bool melee = false);
 		/// Handles explosions.
 		void explode(
 				const Position& voxelTarget,
 				int power,
-				ItemDamageType type,
+				ItemDamageType dType,
 				int maxRadius,
-				BattleUnit* attacker = NULL,
+				BattleUnit* const attacker = NULL,
 				bool grenade = false);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
 				const Tile* const startTile,
 				const Tile* const endTile,
-				const ItemDamageType type);
+				const ItemDamageType dType);
 		/// Checks the vertical blockage of a tile.
 		int verticalBlockage(
 				const Tile* const startTile,
 				const Tile* const endTile,
-				const ItemDamageType type);
+				const ItemDamageType dType);
 		/// Sets the final direction from which a missile or thrown-object came.
 		void setProjectileDirection(const int dir);
 		/// Blows this tile up.

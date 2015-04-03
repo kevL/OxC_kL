@@ -2415,7 +2415,7 @@ int BattlescapeGenerator::loadMAP( // private.
 	}
 
 
-	if (size_x != mapblock->getSizeX()
+	if (   size_x != mapblock->getSizeX()
 		|| size_y != mapblock->getSizeY())
 	{
 		ss <<"Map block is not of the size specified " + filename.str() + " is " << size_x << "x" << size_y << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
@@ -2450,7 +2450,7 @@ int BattlescapeGenerator::loadMAP( // private.
 
 	if (z > _battleSave->getMapSizeZ() - 1)
 	{
-		throw Exception("Something is wrong in your map definitions, craft/ufo map is too tall?");
+		throw Exception("Something is wrong in the map definitions, craft/ufo map is too tall.");
 	}
 
 
@@ -2466,7 +2466,7 @@ int BattlescapeGenerator::loadMAP( // private.
 
 		for (int
 				part = 0;
-				part < 4;
+				part != 4;
 				++part)
 		{
 			objectID = static_cast<unsigned int>(value[part]);
@@ -2531,9 +2531,9 @@ int BattlescapeGenerator::loadMAP( // private.
 
 		if (discoverDone == false)
 			_battleSave->getTile(Position(x,y,z))->setDiscovered(
-																discovered == true
-																	|| mapblock->isFloorRevealed(z) == true,
-																2);
+															discovered == true
+																|| mapblock->isFloorRevealed(z) == true,
+															2);
 		++x;
 
 		if (x == size_x + offset_x)

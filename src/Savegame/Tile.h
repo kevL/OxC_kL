@@ -50,7 +50,10 @@ class Tile
 {
 
 protected:
-	static const int LIGHTLAYERS = 3;
+	static const size_t
+		LIGHTLAYERS	= 3,
+		PARTS		= 4,
+		DISCOVERS	= 3;
 
 	bool
 		_danger,
@@ -194,11 +197,11 @@ protected:
 		bool isDiscovered(int part) const;
 
 		/// Resets light to zero for this tile.
-		void resetLight(int layer);
+		void resetLight(size_t layer);
 		/// Adds light to this tile.
 		void addLight(
 				int light,
-				int layer);
+				size_t layer);
 		/// Gets the shade amount.
 		int getShade() const;
 
@@ -264,8 +267,8 @@ protected:
 
 		/// Adds item
 		void addItem(
-				BattleItem* item,
-				RuleInventory* ground);
+				BattleItem* const item,
+				RuleInventory* const ground);
 		/// Removes item
 		void removeItem(BattleItem* const item);
 

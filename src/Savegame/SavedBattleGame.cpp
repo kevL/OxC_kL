@@ -220,9 +220,9 @@ void SavedBattleGame::load(
 
 	Log(LOG_INFO) << ". init map";
 	initMap(
-			_mapsize_x,
-			_mapsize_y,
-			_mapsize_z);
+		_mapsize_x,
+		_mapsize_y,
+		_mapsize_z);
 
 	if (!node["tileTotalBytesPer"])
 	{
@@ -262,15 +262,22 @@ void SavedBattleGame::load(
 		const YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8
-			* r = (Uint8*)binTiles.data(),
-			* const dataEnd = r + totalTiles * serKey.totalBytes;
+			* readBuffer = (Uint8*)binTiles.data(),
+			* const dataEnd = readBuffer + totalTiles * serKey.totalBytes;
 
-		while (r < dataEnd)
+		while (readBuffer < dataEnd)
 		{
-			int index = unserializeInt(&r, serKey.index);
-			assert(index >= 0 && index < _mapsize_x * _mapsize_z * _mapsize_y);
-			_tiles[index]->loadBinary(r, serKey); // loadBinary's privileges to advance *r have been revoked
-			r += serKey.totalBytes - serKey.index; // r is now incremented strictly by totalBytes in case there are obsolete fields present in the data
+			int index = unserializeInt(
+									&readBuffer,
+									serKey.index);
+			assert(
+				index >= 0
+				&& index < _mapsize_x * _mapsize_z * _mapsize_y);
+
+			_tiles[static_cast<size_t>(index)]->loadBinary( // loadBinary's privileges to advance *readBuffer have been revoked
+														readBuffer,
+														serKey);
+			readBuffer += serKey.totalBytes - serKey.index;	// readBuffer is now incremented strictly by totalBytes in case there are obsolete fields present in the data
 		}
 	}
 
@@ -523,6 +530,16 @@ void SavedBattleGame::load(
 	Log(LOG_INFO) << ". set item ID";
 	setNextItemId(); // kL
 	Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
+
+	// TEST, reveal all tiles
+//	const size_t totalTiles = static_cast<size_t>(_mapsize_x * _mapsize_z * _mapsize_y);
+//	for (size_t
+//			i = 0;
+//			i != totalTiles;
+//			++i)
+//	{
+//		_tiles[i]->setDiscovered(true, 2);
+//	}
 }
 
 /**
@@ -605,7 +622,7 @@ YAML::Node SavedBattleGame::save() const
 	node["globalshade"]		= _globalShade;
 	node["turn"]			= _turn;
 	node["terrain"]			= _terrain; // kL sza_MusicRules
-	node["selectedUnit"]	= (_selectedUnit? _selectedUnit->getId(): -1);
+	node["selectedUnit"]	= (_selectedUnit ? _selectedUnit->getId() : -1);
 
 	for (std::vector<MapDataSet*>::const_iterator
 			i = _mapDataSets.begin();
@@ -635,30 +652,38 @@ YAML::Node SavedBattleGame::save() const
 	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetID;
 	node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
 
-	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
+	const size_t totalTiles = _mapsize_z * _mapsize_y * _mapsize_x;
+	size_t tileDataSize = static_cast<size_t>(Tile::serializationKey.totalBytes * static_cast<Uint32>(totalTiles));
 	Uint8
-		* const tileData = (Uint8*) calloc(tileDataSize, 1),
-		* w = tileData;
+		* const tileData = (Uint8*)calloc(tileDataSize, 1),
+		* writeBuffer = tileData;
 
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
+			i != totalTiles;
 			++i)
 	{
-		if (_tiles[i]->isVoid() == false)
+		serializeInt( // kL <- save ALL Tiles. (Stop void tiles returning undiscovered postReload.)
+				&writeBuffer,
+				Tile::serializationKey.index,
+				static_cast<int>(i));
+		_tiles[i]->saveBinary(&writeBuffer);
+/*		if (_tiles[i]->isVoid() == false)
 		{
 			serializeInt(
-					&w,
+					&writeBuffer,
 					Tile::serializationKey.index,
-					i);
-			_tiles[i]->saveBinary(&w);
+					static_cast<int>(i));
+			_tiles[i]->saveBinary(&writeBuffer);
 		}
 		else
-			tileDataSize -= Tile::serializationKey.totalBytes;
+			tileDataSize -= Tile::serializationKey.totalBytes; */
 	}
 
-	node["totalTiles"]	= tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
-	node["binTiles"]	= YAML::Binary(tileData, tileDataSize);
+	node["totalTiles"]	= tileDataSize / static_cast<size_t>(Tile::serializationKey.totalBytes); // not strictly necessary, just convenient
+	node["binTiles"]	= YAML::Binary(
+									tileData,
+									tileDataSize);
 
 	std::free(tileData);
 #endif
@@ -738,11 +763,13 @@ void SavedBattleGame::initMap(
 		const int mapsize_y,
 		const int mapsize_z)
 {
+	size_t totalTiles = _mapsize_z * _mapsize_y * _mapsize_x;
+
 	if (_nodes.empty() == false)
 	{
 		for (size_t
 				i = 0;
-				i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
+				i != totalTiles;
 				++i)
 		{
 			delete _tiles[i];
@@ -766,16 +793,18 @@ void SavedBattleGame::initMap(
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
-	_tiles = new Tile*[_mapsize_z * _mapsize_y * _mapsize_x];
 
-	for (int
+	totalTiles = _mapsize_z * _mapsize_y * _mapsize_x;
+	_tiles = new Tile*[totalTiles];
+
+	for (size_t
 			i = 0;
-			i != _mapsize_z * _mapsize_y * _mapsize_x;
+			i != totalTiles;
 			++i)
 	{
 		Position pos;
 		getTileCoords(
-					i,
+					static_cast<int>(i),
 					&pos.x,
 					&pos.y,
 					&pos.z);
