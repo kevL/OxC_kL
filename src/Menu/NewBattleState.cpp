@@ -816,7 +816,12 @@ void NewBattleState::cbxTerrainChange(Action*)
 		minDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth(),
 		maxDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
 
-	if (ruleDeploy->getDeployTerrains().empty() == false)
+	if (ruleDeploy->getMaxDepth() > 0)
+	{
+		minDepth = ruleDeploy->getMinDepth();
+		maxDepth = ruleDeploy->getMaxDepth();
+	}
+	else if (ruleDeploy->getDeployTerrains().empty() == false)
 	{
 		minDepth = _rules->getTerrain(ruleDeploy->getDeployTerrains().front())->getMinDepth();
 		maxDepth = _rules->getTerrain(ruleDeploy->getDeployTerrains().front())->getMaxDepth();

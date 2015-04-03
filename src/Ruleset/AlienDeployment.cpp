@@ -146,7 +146,9 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_finalMission(false),
 		_markerIcon(-1),
 		_durationMin(0),
-		_durationMax(0)
+		_durationMax(0),
+		_minDepth(0),
+		_maxDepth(0)
 {}
 
 /**
@@ -179,6 +181,8 @@ void AlienDeployment::load(const YAML::Node& node)
 	_briefingData		= node["briefing"]			.as<BriefingData>(_briefingData);
 	_markerName			= node["markerName"]		.as<std::string>(_markerName);
 	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
+	_minDepth			= node["minDepth"]			.as<int>(_minDepth);
+	_maxDepth			= node["maxDepth"]			.as<int>(_maxDepth);
 
 	if (node["duration"])
 	{
@@ -372,6 +376,24 @@ int AlienDeployment::getDurationMax() const
 const std::vector<std::string>& AlienDeployment::getMusic()
 {
 	return _musics;
+}
+
+/**
+ * Gets the minimum depth for this deployment.
+ * @return, the minimum depth
+ */
+int AlienDeployment::getMinDepth() const
+{
+	return _minDepth;
+}
+
+/**
+ * Gets the maximum depth for this deployment.
+ * @return, the maximum depth
+ */
+int AlienDeployment::getMaxDepth() const
+{
+	return _maxDepth;
 }
 
 }

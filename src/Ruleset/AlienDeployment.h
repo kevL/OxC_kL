@@ -102,6 +102,8 @@ private:
 		_height,
 		_length,
 		_markerIcon,
+		_maxDepth,
+		_minDepth,
 		_shade,
 		_width;
 
@@ -183,6 +185,11 @@ private:
 
 		/// Gets the list of music to pick from.
 		const std::vector<std::string>& getMusic();
+
+		/// Gets the minimum depth.
+		int getMinDepth() const;
+		/// Gets the maximum depth.
+		int getMaxDepth() const;
 };
 
 }

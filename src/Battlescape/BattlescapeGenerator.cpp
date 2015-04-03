@@ -595,12 +595,16 @@ void BattlescapeGenerator::run()
 
 
 	// new battle menu will have set the depth already
-	if (_terrain->getMaxDepth() > 0
-		&& _battleSave->getDepth() == 0)
+	if (_battleSave->getDepth() == 0)
 	{
-		_battleSave->setDepth(RNG::generate(
-										_terrain->getMinDepth(),
-										_terrain->getMaxDepth()));
+		if (ruleDeploy->getMaxDepth() > 0)
+			_battleSave->setDepth(RNG::generate(
+											ruleDeploy->getMinDepth(),
+											ruleDeploy->getMaxDepth()));
+		else if (_terrain->getMaxDepth() > 0)
+			_battleSave->setDepth(RNG::generate(
+											_terrain->getMinDepth(),
+											_terrain->getMaxDepth()));
 	}
 
 	if (ruleDeploy->getShade() != -1)

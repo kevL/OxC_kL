@@ -83,11 +83,11 @@ BriefingState::BriefingState(
 		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
 
 	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(missionType); // check, Xcom1Ruleset->alienDeployments for a missionType
-	if (deployRule == NULL) // landing site or crash site -> define BG & Music by ufoType instead
+	const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
+	if (deployRule == NULL // landing site or crash site -> define BG & Music by ufoType instead
+		&& ufo != NULL)
 	{
-		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
-		if (ufo != NULL)
-			deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
+		deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
 	}
 
 	if (deployRule == NULL) // should never happen
@@ -182,12 +182,22 @@ BriefingState::BriefingState(
 	if (_txtCraft->getVisible() == false)
 		_txtBriefing->setY(_txtBriefing->getY() - 16);
 
-
 	std::ostringstream brief;
-	brief << missionType.c_str() << "_BRIEFING";
+	if (ufo != NULL) // if this UFO has a specific briefing use it
+	{
+		brief << ufo->getRules()->getType() << "_BRIEFING";
+		// This is not a great check, if the string isn't defined
+		// for the selected language, it will revert to the default
+		// briefing text instead.
+		// This makes it harder to notice missing strings in mods.
+		if (tr(brief.str()).asUTF8() == brief.str())		// ie, if untranslated
+			brief << missionType.c_str() << "_BRIEFING";	// do rego.mission brief instead
+	}
+	else
+		brief << missionType.c_str() << "_BRIEFING";
+
 	_txtBriefing->setText(tr(brief.str()));
 	_txtBriefing->setWordWrap();
-
 
 	if (missionType == "STR_BASE_DEFENSE")
 		base->setIsRetaliationTarget(false);
