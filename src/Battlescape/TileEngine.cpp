@@ -1973,47 +1973,38 @@ BattleUnit* TileEngine::hit(
 									vertOffset);
 				//Log(LOG_INFO) << "TileEngine::hit() relPos " << relPos;
 
-				float delta = 100.;
+				double delta;
 				if (dType == DT_HE
 					|| Options::TFTDDamage == true)
 				{
 					delta = 50.;
 				}
+				else
+					delta = 100.;
 
 				const int
-					low = static_cast<int>(static_cast<float>(power) * (100.f - delta) / 100.f) + 1,
-					high = static_cast<int>(static_cast<float>(power) * (100.f + delta) / 100.f);
+					low = static_cast<int>(std::floor(static_cast<double>(power) * (100. - delta) / 100.) + 1),
+					high = static_cast<int>(std::ceil(static_cast<double>(power) * (100. + delta) / 100.));
 
-				power = RNG::generate(low, high) // bell curve
-					  + RNG::generate(low, high);
-				power /= 2;
-				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
-
-			// DT_NONE,		// 0
-			// DT_AP,		// 1
-			// DT_IN,		// 2
-			// DT_HE,		// 3
-			// DT_LASER,	// 4
-			// DT_PLASMA,	// 5
-			// DT_STUN,		// 6
-			// DT_MELEE,	// 7
-			// DT_ACID,		// 8
-			// DT_SMOKE		// 9
+				int extraPow = 0;
 				if (attacker != NULL) // bonus to damage per Accuracy (TODO: use ranks also for xCom or aLien)
 				{
-					float extraDam = 0.f;
 					if (   dType == DT_AP
 						|| dType == DT_LASER
 						|| dType == DT_PLASMA
 						|| dType == DT_ACID)
 					{
-						extraDam = static_cast<float>(attacker->getBaseStats()->firing) / 100.f;
+						extraPow = static_cast<int>(std::ceil(static_cast<double>(power * attacker->getBaseStats()->firing) / 1000.));
 					}
 					else if (dType == DT_MELEE)
-						extraDam = static_cast<float>(attacker->getBaseStats()->melee) / 100.f;
-
-					power += static_cast<int>(static_cast<float>(power) * extraDam);
+						extraPow = static_cast<int>(std::ceil(static_cast<double>(power * attacker->getBaseStats()->melee) / 1000.));
 				}
+
+				power = RNG::generate(low, high) // bell curve
+					  + RNG::generate(low, high);
+				power /= 2;
+				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
+				power += extraPow;
 
 				const bool ignoreArmor = dType == DT_STUN	// kL. stun ignores armor... does now! UHM....
 									  || dType == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
