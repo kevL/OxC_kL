@@ -92,7 +92,7 @@ Tile::Tile(const Position& pos)
 
 	for (size_t
 			i = 0;
-			i != DISCOVERS;
+			i != DISCSECTS;
 			++i)
 	{
 		_discovered[i] = false;
@@ -149,7 +149,7 @@ void Tile::load(const YAML::Node& node)
 	{
 		for (size_t
 				i = 0;
-				i != DISCOVERS;
+				i != DISCSECTS;
 				++i)
 		{
 			_discovered[i] = node["discovered"][i].as<bool>();
@@ -231,7 +231,7 @@ YAML::Node Tile::save() const
 	{
 		for (size_t
 				i = 0;
-				i != DISCOVERS;
+				i != DISCSECTS;
 				++i)
 		{
 			node["discovered"].push_back(_discovered[i]);

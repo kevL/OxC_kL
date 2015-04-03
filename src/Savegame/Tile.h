@@ -53,7 +53,7 @@ protected:
 	static const size_t
 		LIGHTLAYERS	= 3,
 		PARTS		= 4,
-		DISCOVERS	= 3;
+		DISCSECTS	= 3;
 
 	bool
 		_danger,
