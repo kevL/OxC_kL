@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Creates a new Manufacture.
- * @param name The unique manufacture name.
+ * @param name - reference the unique manufacture name
  */
 RuleManufacture::RuleManufacture(const std::string& name)
 	:
@@ -40,40 +40,41 @@ RuleManufacture::RuleManufacture(const std::string& name)
 
 /**
  * Loads the manufacture project from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this manufacture.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this manufacture
  */
-void RuleManufacture::load(const YAML::Node& node, int listOrder)
+void RuleManufacture::load(
+		const YAML::Node& node,
+		int listOrder)
 {
-	bool same = (_producedItems.size() == 1 && _name == _producedItems.begin()->first);
+	bool same = _producedItems.size() == 1
+			 && _name == _producedItems.begin()->first;
 
 	_name = node["name"].as<std::string>(_name);
 
-	if (same)
+	if (same == true)
 	{
-		int value = _producedItems.begin()->second;
+		const int qty = _producedItems.begin()->second;
 		_producedItems.clear();
-		_producedItems[_name] = value;
+		_producedItems[_name] = qty;
 	}
 
-	_category		= node["category"].as<std::string>(_category);
-	_requires		= node["requires"].as< std::vector<std::string> >(_requires);
-	_space			= node["space"].as<int>(_space);
-	_time			= node["time"].as<int>(_time);
-	_cost			= node["cost"].as<int>(_cost);
-	_requiredItems	= node["requiredItems"].as< std::map<std::string, int> >(_requiredItems);
-	_producedItems	= node["producedItems"].as< std::map<std::string, int> >(_producedItems);
+	_category		= node["category"]		.as<std::string>(_category);
+	_requires		= node["requires"]		.as< std::vector<std::string> >(_requires);
+	_space			= node["space"]			.as<int>(_space);
+	_time			= node["time"]			.as<int>(_time);
+	_cost			= node["cost"]			.as<int>(_cost);
+	_requiredItems	= node["requiredItems"]	.as<std::map<std::string, int> >(_requiredItems);
+	_producedItems	= node["producedItems"]	.as<std::map<std::string, int> >(_producedItems);
 
-	_listOrder		= node["listOrder"].as<int>(_listOrder);
-	if (!_listOrder)
-	{
+	_listOrder		= node["listOrder"]		.as<int>(_listOrder);
+	if (_listOrder == 0)
 		_listOrder = listOrder;
-	}
 }
 
 /**
  * Gets the unique name of the manufacture.
- * @return The name.
+ * @return, the name
  */
 std::string RuleManufacture::getName() const
 {
@@ -82,7 +83,7 @@ std::string RuleManufacture::getName() const
 
 /**
  * Gets the category shown in the manufacture list.
- * @return The category.
+ * @return, the category
  */
 std::string RuleManufacture::getCategory() const
 {
@@ -90,9 +91,8 @@ std::string RuleManufacture::getCategory() const
 }
 
 /**
- * Gets the list of research required to
- * manufacture this object.
- * @return A list of research IDs.
+ * Gets the list of research required to manufacture this object.
+ * @return, reference to a list of research IDs
  */
 const std::vector<std::string>& RuleManufacture::getRequirements() const
 {
@@ -101,7 +101,7 @@ const std::vector<std::string>& RuleManufacture::getRequirements() const
 
 /**
  * Gets the required workspace to start production.
- * @return The required workspace.
+ * @return, the required workspace
 */
 int RuleManufacture::getRequiredSpace() const
 {
@@ -110,7 +110,7 @@ int RuleManufacture::getRequiredSpace() const
 
 /**
  * Gets the time needed to manufacture one object.
- * @return The time needed to manufacture one object (in man/hour).
+ * @return, the time needed to manufacture one object (in man/hour)
 */
 int RuleManufacture::getManufactureTime() const
 {
@@ -119,7 +119,7 @@ int RuleManufacture::getManufactureTime() const
 
 /**
  * Gets the cost of manufacturing one object.
- * @return The cost of manufacturing one object.
+ * @return, the cost of manufacturing one object
 */
 int RuleManufacture::getManufactureCost() const
 {
@@ -128,7 +128,7 @@ int RuleManufacture::getManufactureCost() const
 
 /**
  * Gets the list of items required to manufacture one object.
- * @return The list of items required to manufacture one object.
+ * @return, reference to the list of items required to manufacture one object
 */
 const std::map<std::string, int>& RuleManufacture::getRequiredItems() const
 {
@@ -137,7 +137,7 @@ const std::map<std::string, int>& RuleManufacture::getRequiredItems() const
 
 /**
  * Gets the list of items produced by completing one object of this project.
- * @return The list of items produced by completing one object of this project.
+ * @return, reference to the list of items produced by completing one object of this project
 */
 const std::map<std::string, int>& RuleManufacture::getProducedItems() const
 {
@@ -146,7 +146,7 @@ const std::map<std::string, int>& RuleManufacture::getProducedItems() const
 
 /**
  * Gets the list weight for this manufacture item.
- * @return The list weight for this manufacture item.
+ * @return, the list weight for this manufacture item
  */
 int RuleManufacture::getListOrder() const
 {

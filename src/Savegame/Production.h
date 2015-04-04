@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_PRODUCTION_H
 #define OPENXCOM_PRODUCTION_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -57,8 +57,8 @@ private:
 		_engineers,
 		_timeSpent;
 
-	bool enoughMoney(SavedGame* g);
-	bool enoughMaterials(Base* b);
+	bool enoughMoney(SavedGame* gameSave);
+	bool enoughMaterials(Base* base);
 
 
 	public:
@@ -66,7 +66,7 @@ private:
 		Production(
 				const RuleManufacture* rules,
 				int amount);
-		// kL_note: no dTor !
+		// no dTor !
 
 		///
 		void load(const YAML::Node& node);
@@ -103,17 +103,17 @@ private:
 
 		///
 		ProductProgress step(
-				Base* b,
-				SavedGame* g,
-				const Ruleset* r);
+				Base* base,
+				SavedGame* gameSave,
+				const Ruleset* rules);
 
 		///
 		const RuleManufacture* getRules() const;
 
 		///
 		void startItem(
-				Base* b,
-				SavedGame* g);
+				Base* base,
+				SavedGame* gameSave);
 };
 
 }

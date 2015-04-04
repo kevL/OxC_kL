@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_RULEMANUFACTURE_H
 #define OPENXCOM_RULEMANUFACTURE_H
 
-#include <string>
-#include <map>
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <map>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -35,11 +35,20 @@ class RuleManufacture
 {
 
 private:
-	std::string _name, _category;
+	std::string
+		_category,
+		_name;
+	int
+		_cost,
+		_listOrder,
+		_space,
+		_time;
+
 	std::vector<std::string> _requires;
-	int _space, _time, _cost;
-	std::map<std::string, int> _requiredItems, _producedItems;
-	int _listOrder;
+
+	std::map<std::string, int>
+		_producedItems,
+		_requiredItems;
 
 
 	public:
@@ -47,22 +56,28 @@ private:
 		RuleManufacture(const std::string& name);
 
 		/// Loads the manufacture from YAML.
-		void load(const YAML::Node& node, int listOrder);
+		void load(
+				const YAML::Node& node,
+				int listOrder);
 
 		/// Gets the manufacture name.
 		std::string getName() const;
 		/// Gets the manufacture category.
 		std::string getCategory() const;
+
 		/// Gets the manufacture's requirements.
 		const std::vector<std::string>& getRequirements() const;
+
 		/// Gets the required workshop space.
 		int getRequiredSpace() const;
 		/// Gets the time required to manufacture one object.
 		int getManufactureTime() const;
 		/// Gets the cost of manufacturing one object.
 		int getManufactureCost() const;
+
 		/// Gets the list of items required to manufacture one object.
 		const std::map<std::string, int>& getRequiredItems() const;
+
 		/// Gets the list of items produced by completing "one object" of this project.
 		/// by default: it contains only the "name" item with a value of 1.
 		const std::map<std::string, int>& getProducedItems() const;
@@ -72,4 +87,5 @@ private:
 };
 
 }
+
 #endif

@@ -4822,7 +4822,7 @@
 
 1426486003 f:\git\openxcom\src\savegame\researchproject.h
 
-1426220275 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1428116292 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4836,11 +4836,15 @@
 	"../Engine/Timer.h"
 	"../Menu/ErrorMessageState.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleCraft.h"
+	"../Ruleset/RuleBaseFacility.h"
+	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/Base.h"
+	"../Savegame/BaseFacility.h"
 	"../Savegame/Production.h"
 
-1425248498 f:\git\openxcom\src\basescape\manufactureinfostate.h
+1428115485 f:\git\openxcom\src\basescape\manufactureinfostate.h
 	"../Engine/State.h"
 
 1426102895 f:\git\openxcom\src\interface\arrowbutton.h
@@ -4849,13 +4853,9 @@
 1424390939 f:\git\openxcom\src\interface\imagebutton.h
 	"../Engine/InteractiveSurface.h"
 
-1424390936 f:\git\openxcom\src\ruleset\rulemanufacture.h
-	<string>
-	<map>
-	<yaml-cpp/yaml.h>
+1428097236 f:\git\openxcom\src\ruleset\rulemanufacture.h
 
-1424390936 f:\git\openxcom\src\savegame\production.h
-	<yaml-cpp/yaml.h>
+1428043741 f:\git\openxcom\src\savegame\production.h
 
 1424390945 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
@@ -5810,7 +5810,7 @@
 1424390944 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1427831877 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1428035918 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -7041,7 +7041,7 @@
 1426441622 f:\git\openxcom\src\geoscape\crafterrorstate.h
 	"../Engine/State.h"
 
-1424390940 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1428095176 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7808,7 +7808,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1426300393 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1428035968 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8460,7 +8460,7 @@
 1424390937 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1427831972 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1428036323 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1424390937 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8532,7 +8532,7 @@
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 
-1424390936 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
+1428100073 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
 1427404663 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
@@ -8768,15 +8768,13 @@
 1424390936 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1424390936 source:f:\git\openxcom\src\savegame\production.cpp
+1428043873 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
-	<limits>
 	"Base.h"
 	"Craft.h"
 	"CraftWeapon.h"
 	"ItemContainer.h"
 	"SavedGame.h"
-	"../Engine/Options.h"
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
@@ -10790,7 +10788,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1426106514 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
+1428036155 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
 	"OptionsModsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"

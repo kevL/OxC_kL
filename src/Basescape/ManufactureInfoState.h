@@ -65,6 +65,7 @@ private:
 		* _txtAvailableSpace,
 		* _txtEngineerDown,
 		* _txtEngineerUp,
+		* _txtMonthlyProfit,
 		* _txtTimeDescr,
 		* _txtTimeTotal,
 		* _txtTitle,
@@ -82,6 +83,18 @@ private:
 		* _timerMoreUnit;
 	ToggleTextButton* _btnSell;
 	Window* _window;
+
+	int _producedItemsValue;
+
+	/// Caches static data for monthly profit calculations
+	void initProfit();
+	/// Calculates the monthly change in funds due to the job
+	int calcProfit();
+
+	/// Handler for the Sell button.
+//	void btnSellClick(Action* action);
+	/// Handler for releasing the Sell button.
+	void btnSellRelease(Action* action);
 
 	/// Handler for the Stop button.
 	void btnStopClick(Action* action);
@@ -146,9 +159,6 @@ private:
 	void setAssignedEngineer();
 	/// Updates the total time to complete the project.
 	void updateTimeTotal();
-
-	/// Handler for releasing the Sell button.
-	void btnSellRelease(Action* action);
 
 	/// Runs state functionality every cycle.
 	void think();
