@@ -87,22 +87,22 @@ BattlescapeGame::BattlescapeGame(
 		_battleSave(battleSave),
 		_parentState(parentState),
 		_playedAggroSound(false),
-		_endTurnRequested(false)
+		_endTurnRequested(false),
+//		_endTurnProcessed(false),
+		_playerPanicHandled(true),
+		_AIActionCounter(0),
+		_AISecondMove(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
 	_debugPlay = false;
-	_playerPanicHandled = true;
-	_AIActionCounter = 0;
-	_AISecondMove = false;
-	_currentAction.actor = NULL;
 
+	cancelCurrentAction();
 	checkForCasualties(
 					NULL,
 					NULL,
 					true);
 
-	cancelCurrentAction();
-
+	_currentAction.actor = NULL;
 	_currentAction.type = BA_NONE;
 	_currentAction.targeting = false;
 
@@ -164,8 +164,8 @@ void BattlescapeGame::think()
 				else
 				{
 					if (_battleSave->selectNextFactionUnit(
-												true,
-												_AISecondMove) == NULL)
+														true,
+														_AISecondMove) == NULL)
 					{
 						if (_battleSave->getDebugMode() == false)
 						{
@@ -372,7 +372,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	//Log(LOG_INFO) << ". BA_WALK DONE";
 
 
-	if (action.type == BA_SNAPSHOT
+	if (   action.type == BA_SNAPSHOT
 		|| action.type == BA_AUTOSHOT
 		|| action.type == BA_AIMEDSHOT
 		|| action.type == BA_THROW
@@ -492,9 +492,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				const BattleUnit* const unit = _battleSave->getTile(action.target)->getUnit();
 				Game* const game = _parentState->getGame();
 				game->pushState(new InfoboxState(game->getLanguage()->getString(
-																		st,
-																		unit->getGender())
-																			.arg(unit->getName(game->getLanguage()))));
+																			st,
+																			unit->getGender())
+																				.arg(unit->getName(game->getLanguage()))));
 			}
 			//Log(LOG_INFO) << ". . . done Psi.";
 		}
@@ -527,7 +527,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (_battleSave->getSelectedUnit() != NULL)
 		{
 			_parentState->updateSoldierInfo();
-
 			getMap()->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
 
 			if (_battleSave->getSelectedUnit()->getId() <= unit->getId())
@@ -645,47 +644,51 @@ void BattlescapeGame::endTurnPhase()
 	getMap()->getWaypoints()->clear();
 
 	Position pos;
-	for (int // check for hot grenades on the ground
-			i = 0;
-			i != _battleSave->getMapSizeXYZ();
-			++i)
-	{
-		for (std::vector<BattleItem*>::const_iterator
-				j = _battleSave->getTiles()[i]->getInventory()->begin();
-				j != _battleSave->getTiles()[i]->getInventory()->end();
-				)
+
+//	if (_endTurnProcessed == false)
+//	{
+		for (size_t // check for hot grenades on the ground
+				i = 0;
+				i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+				++i)
 		{
-			if ((*j)->getRules()->getBattleType() == BT_GRENADE
-				&& (*j)->getFuseTimer() != -1
-				&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
+			for (std::vector<BattleItem*>::const_iterator
+					j = _battleSave->getTiles()[i]->getInventory()->begin();
+					j != _battleSave->getTiles()[i]->getInventory()->end();
+					)
 			{
-				pos.x = _battleSave->getTiles()[i]->getPosition().x * 16 + 8;
-				pos.y = _battleSave->getTiles()[i]->getPosition().y * 16 + 8;
-				pos.z = _battleSave->getTiles()[i]->getPosition().z * 24 - _battleSave->getTiles()[i]->getTerrainLevel();
+				if ((*j)->getRules()->getBattleType() == BT_GRENADE
+					&& (*j)->getFuseTimer() != -1
+					&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
+				{
+					pos.x = _battleSave->getTiles()[i]->getPosition().x * 16 + 8;
+					pos.y = _battleSave->getTiles()[i]->getPosition().y * 16 + 8;
+					pos.z = _battleSave->getTiles()[i]->getPosition().z * 24 - _battleSave->getTiles()[i]->getTerrainLevel();
 
-				statePushNext(new ExplosionBState(
-												this,
-												pos,
-												*j,
-												(*j)->getPreviousOwner()));
-				_battleSave->removeItem(*j);
+					statePushNext(new ExplosionBState(
+													this,
+													pos,
+													*j,
+													(*j)->getPreviousOwner()));
+					_battleSave->removeItem(*j);
 
-				statePushBack(NULL);
-				return;
+					statePushBack(NULL);
+					return;
+				}
+
+				++j;
 			}
-
-			++j;
 		}
-	}
 
-	if (_battleSave->getTileEngine()->closeUfoDoors() != 0
-		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
-	{
-		getResourcePack()->getSoundByDepth( // ufo door closed
-										_battleSave->getDepth(),
-										ResourcePack::SLIDING_DOOR_CLOSE)
-									->play();
-	}
+		if (_battleSave->getTileEngine()->closeUfoDoors() != 0
+			&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
+		{
+			getResourcePack()->getSoundByDepth( // ufo door closed
+											_battleSave->getDepth(),
+											ResourcePack::SLIDING_DOOR_CLOSE)
+										->play();
+		}
+//	}
 
 	// check for terrain explosions
 	Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
@@ -698,7 +701,7 @@ void BattlescapeGame::endTurnPhase()
 
 		// kL_note: This seems to be screwing up.
 		// Further info: what happens is that an explosive part of a tile gets destroyed by fire
-		// during an endTurn sequence, has it's setExplosive() set, then is somehow triggered
+		// during an endTurn sequence, has its setExplosive() set, then is somehow triggered
 		// by the next projectile hit against whatever.
 		statePushNext(new ExplosionBState(
 										this,
@@ -712,103 +715,99 @@ void BattlescapeGame::endTurnPhase()
 		statePushBack(NULL);	// this will repeatedly call another endTurnPhase() so there's
 		return;					// no need to continue this one till all explosions are done.
 								// The problem arises because _battleSave->endBattlePhase() below
-								// causes destruction of explosive objects, that don't explode
+								// causes *more* destruction of explosive objects, that won't explode
 								// until some later instantiation of ExplosionBState .....
 								//
 								// As to why this doesn't simply loop like other calls to
-								// do terrainExplosions i don't know.
+								// do terrainExplosions, i don't know.
 	}
 
-	if (_battleSave->getSide() != FACTION_NEUTRAL) // tick down grenade timers
-	{
-		for (std::vector<BattleItem*>::const_iterator
-				i = _battleSave->getItems()->begin();
-				i != _battleSave->getItems()->end();
-				++i)
+//	if (_endTurnProcessed == false)
+//	{
+		if (_battleSave->getSide() != FACTION_NEUTRAL) // tick down grenade timers
 		{
-			if ((*i)->getOwner() == NULL
-				&& (*i)->getRules()->getBattleType() == BT_GRENADE
-				&& (*i)->getFuseTimer() > 1)
+			for (std::vector<BattleItem*>::const_iterator
+					i = _battleSave->getItems()->begin();
+					i != _battleSave->getItems()->end();
+					++i)
 			{
-				(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
+				if ((*i)->getOwner() == NULL
+					&& (*i)->getRules()->getBattleType() == BT_GRENADE
+					&& (*i)->getFuseTimer() > 1)
+				{
+					(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
+				}
 			}
 		}
-	}
 
-	// THE NEXT 3 SECTIONS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
-	for (std::vector<BattleUnit*>::const_iterator
-			i = _battleSave->getUnits()->begin();
-			i != _battleSave->getUnits()->end();
-			++i)
-	{
-		if ((*i)->getFaction() == _battleSave->getSide())
-		{
-			tile = (*i)->getTile();
-			if (tile != NULL
-				&& (*i)->getHealth() > 0
-				&& ((*i)->getGeoscapeSoldier() != NULL
-					|| (*i)->getUnitRules()->isMechanical() == false))
-			{
-				tile->endTilePhase(); // damage tile's unit w/ Fire & Smoke at end of its faction's Turn-phase.
-			}
-		}
-	}
-
-
-	// if all units from either faction are killed - the mission is over.
-	// ... should this go after checkForCasualties() below ...
-	int
-		liveAliens,
-		liveSoldiers;
-	tallyUnits(
-			liveAliens,
-			liveSoldiers);
-
-
-	if (_battleSave->endBattlePhase() == true) // <- This rolls over Faction-turns.
-	{
-		size_t mapSize = static_cast<size_t>(_battleSave->getMapSizeXYZ());
-		for (size_t
-				i = 0;
-				i != mapSize;
-				++i)
-		{
-			tile = _battleSave->getTiles()[i];
-			if (tile->getInventory()->empty() == false)
-				tile->endTilePhase(_battleSave); // damage tile's items w/ Fire at end of each full-turn.
-		}
-
-		for (std::vector<BattleUnit*>::const_iterator // reset the takenExpl(smoke) and takenFire flags on every unit.
+		// THE NEXT 3 SECTIONS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
+		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleSave->getUnits()->begin();
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
-			(*i)->setTakenExpl(false); // even if Status_Dead, just do it.
-			(*i)->setTakenFire(false);
+			if ((*i)->getFaction() == _battleSave->getSide())
+			{
+				tile = (*i)->getTile();
+				if (tile != NULL
+					&& (*i)->getHealth() > 0
+					&& ((*i)->getGeoscapeSoldier() != NULL
+						|| (*i)->getUnitRules()->isMechanical() == false))
+				{
+					tile->endTilePhase(); // Damage tile's unit w/ Fire & Smoke at end of unit's faction's Turn-phase.
+				}
+			}
 		}
-	}
-	// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
-	// -> SavedBattleGame::prepareBattleTurn()
-	// Or here
-	// ... done it in NextTurnState.
 
-	// check AGAIN for terrain explosions
-/*	tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
-	if (tile != NULL)
-	{
-		pos = Position(
-					tile->getPosition().x * 16 + 8,
-					tile->getPosition().y * 16 + 8,
-					tile->getPosition().z * 24 + 10);
-//		statePushNext(new ExplosionBState(
-		statePushBack(new ExplosionBState(
-										this,
-										pos,
-										NULL,
-										NULL,
-										tile));
-	} */
 
+		if (_battleSave->endBattlePhase() == true) // <- This rolls over Faction-turns. TRUE means FullTurn has ended.
+		{
+			for (size_t
+					i = 0;
+					i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+					++i)
+			{
+				tile = _battleSave->getTiles()[i];
+				if (tile->getInventory()->empty() == false)
+					tile->endTilePhase(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
+			}
+
+			for (std::vector<BattleUnit*>::const_iterator // reset the takenExpl(smoke) and takenFire flags on every unit.
+					i = _battleSave->getUnits()->begin();
+					i != _battleSave->getUnits()->end();
+					++i)
+			{
+				(*i)->setTakenExpl(false); // even if Status_Dead, just do it.
+				(*i)->setTakenFire(false);
+			}
+		}
+		// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
+		// -> SavedBattleGame::prepareBattleTurn()
+		// Or here
+		// ... done it in NextTurnState.
+
+		// check AGAIN for terrain explosions
+/*		tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
+		if (tile != NULL)
+		{
+			pos = Position(
+						tile->getPosition().x * 16 + 8,
+						tile->getPosition().y * 16 + 8,
+						tile->getPosition().z * 24 + 10);
+			statePushNext(new ExplosionBState(
+											this,
+											pos,
+											NULL,
+											NULL,
+											tile));
+			statePushBack(NULL);
+			_endTurnProcessed = true;
+			return;
+		} */
+		// kL_note: you know what, I'm just going to let my quirky solution run
+		// for a while. BYPASS _endTurnProcessed
+//	}
+//	_endTurnProcessed = false;
 
 	if (_battleSave->getDebugMode() == false)
 	{
@@ -824,20 +823,18 @@ void BattlescapeGame::endTurnPhase()
 		}
 	}
 
+
 	checkForCasualties(
 					NULL,
 					NULL);
 
-/*	// ... moved here from before endBattlePhase() above ...
-	// not sure how tallyUnits() interacts w/ checkForCasualties()
-	int
-		liveAliens = 0,
-		liveSoldiers = 0;
-	// we'll tally them NOW, so that any infected units will... change
+	int // if all units from either faction are killed - the mission is over.
+		liveAliens,
+		liveSoldiers;
 	tallyUnits(
 			liveAliens,
-			liveSoldiers,
-			true); */
+			liveSoldiers);
+
 
 	if (_battleSave->allObjectivesDestroyed() == true)
 	{
@@ -847,11 +844,10 @@ void BattlescapeGame::endTurnPhase()
 		return;
 	}
 
-	if (liveAliens > 0
-		&& liveSoldiers > 0)
+	if (   liveAliens != 0
+		&& liveSoldiers != 0)
 	{
 		showInfoBoxQueue();
-
 		_parentState->updateSoldierInfo();
 
 		if (playableUnitSelected() == true) // <- only Faction_Player (or Debug-mode)
@@ -2203,7 +2199,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 /**
   * Cancels the current action the user had selected (firing, throwing, etc).
-  * @param bForce - force the action to be cancelled
+  * @param bForce - force the action to be cancelled (default false)
   * @return, true if action was cancelled
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)

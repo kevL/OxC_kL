@@ -4513,7 +4513,7 @@
 
 1424780156 f:\git\openxcom\src\savegame\region.h
 
-1428145904 source:f:\git\openxcom\src\basescape\baseview.cpp
+1428145984 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
@@ -4659,7 +4659,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1427665231 f:\git\openxcom\src\battlescape\battlescapegame.h
+1428151300 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1424390943 f:\git\openxcom\src\battlescape\position.h
@@ -5595,7 +5595,7 @@
 
 1426124164 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1428036406 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1428147705 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"

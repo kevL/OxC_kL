@@ -149,6 +149,7 @@ class BattlescapeGame
 private:
 	bool
 		_AISecondMove,
+//		_endTurnProcessed,
 		_endTurnRequested,
 		_playedAggroSound,
 		_playerPanicHandled;

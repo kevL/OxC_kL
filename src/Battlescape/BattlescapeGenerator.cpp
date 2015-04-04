@@ -2008,7 +2008,8 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 
 	if (race == NULL)
 	{
-		throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployRule: " + deployRule->getType());
+		throw Exception("Map generator encountered an error: Unknown race: "
+			  + _alienRace + " defined in deployRule: " + deployRule->getType());
 	}
 
 	int month = _savedGame->getMonthsPassed();
@@ -2028,9 +2029,10 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		itemLevel,
 		qty;
 
+	RuleItem* itRule;
 	BattleItem* item;
-	BattleUnit* unit;
 	Unit* unitRule;
+	BattleUnit* unit;
 
 	for (std::vector<DeploymentData>::const_iterator
 			data = deployRule->getDeploymentData()->begin();
@@ -2061,7 +2063,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 						(*data).extraQty);
 
 		if (_base != NULL
-			&& _base->getDefenseResult() > 0)
+			&& _base->getDefenseResult() != 0)
 		{
 			qty = std::max(
 						qty / 2,
@@ -2086,8 +2088,6 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 
 			if (unit != NULL)
 			{
-				RuleItem* itRule;
-
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
 				if (unitRule->getBuiltInWeapons().empty() == false)
 				{
@@ -2138,10 +2138,17 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 				else
 				{
 					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0,9));
+					if (itemLevel >= static_cast<int>((*data).itemSets.size()))
+					{
+						std::stringstream ststr;
+						ststr	<< "Unit generator encountered an error: not enough item sets defined, expected: "
+								<< itemLevel + 1 << " found: " << (*data).itemSets.size();
+						throw Exception(ststr.str());
+					}
 
 					for (std::vector<std::string>::const_iterator
-							setItem = (*data).itemSets.at(itemLevel).items.begin();
-							setItem != (*data).itemSets.at(itemLevel).items.end();
+							setItem = (*data).itemSets.at(static_cast<size_t>(itemLevel)).items.begin();
+							setItem != (*data).itemSets.at(static_cast<size_t>(itemLevel)).items.end();
 							++setItem)
 					{
 						itRule = _rules->getItem(*setItem);
