@@ -236,3 +236,9 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/gender/gender_m.png
+  - type: BASEDOG
+    width: 16
+    height: 10
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/dogbase2.png

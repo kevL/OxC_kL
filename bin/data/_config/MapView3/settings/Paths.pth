@@ -1,0 +1,5 @@
+${ufo}:F:\openXcom\data
+mapdata:F:\openXcom\oXc_Edit\MapView3\settings\MapEdit.dat
+images:F:\openXcom\oXc_Edit\MapView3\settings\Images.dat
+useBlanks:false
+cursor:${ufo}\UFOGRAPH

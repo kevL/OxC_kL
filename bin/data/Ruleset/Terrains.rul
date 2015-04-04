@@ -1,6 +1,6 @@
 ﻿# 'Terrains.rul'
 # contains:
-# Terrain Pack by Hobbes - based on 3.4.1
+# Terrain Pack by Hobbes - based on 3.5
 # URBAN/2 Luke's extra TerrorSites
 # XBASE stock
 # UBASE FULL_Expanded_UBase by civilian
@@ -78,24 +78,24 @@ terrains:
         width: 10
         length: 10
         groups: 4
-#      - name: AREA51BASE16 # no MAPS for these:
-#        width: 10
-#        length: 10
-#      - name: AREA51BASE17
-#        width: 10
-#        length: 10
-#      - name: AREA51BASE18
-#        width: 10
-#        length: 10
-#      - name: AREA51BASE19
-#        width: 10
-#        length: 10
+      - name: AREA51BASE16
+        width: 10
+        length: 10
+      - name: AREA51BASE17
+        width: 10
+        length: 10
+      - name: AREA51BASE18
+        width: 10
+        length: 10
+      - name: AREA51BASE19
+        width: 10
+        length: 10
       - name: AREA51BASE20
         width: 10
         length: 10
-#      - name: AREA51BASE21
-#        width: 10
-#        length: 10
+      - name: AREA51BASE21
+        width: 10
+        length: 10
       - name: AREA51BASE22
         width: 10
         length: 10
@@ -204,11 +204,9 @@ terrains:
       - name: AREA51BASE57
         width: 10
         length: 10
-        groups: 1
       - name: AREA51BASE58
         width: 10
         length: 10
-        groups: 1
       - name: AREA51BASE59
         width: 10
         length: 10
@@ -282,14 +280,12 @@ terrains:
             - [4, 1, 0]
           STR_PISTOL_CLIP:
             - [4, 1, 0]
-          STR_GRENADE:
-            - [2, 14, 1]
       - name: AREA51BASE80
-        width: 10
-        length: 10
+        width: 20
+        length: 20
       - name: AREA51BASE81
-        width: 10
-        length: 10
+        width: 20
+        length: 20
       - name: AREA51BASE82
         width: 20
         length: 20
@@ -437,6 +433,30 @@ terrains:
       - name: AREA51BASE99
         width: 20
         length: 20
+      - name: AREA51BASE100
+        width: 10
+        length: 10
+      - name: AREA51BASE101
+        width: 10
+        length: 10
+      - name: AREA51BASE102
+        width: 10
+        length: 10
+      - name: AREA51BASE103
+        width: 10
+        length: 10
+      - name: AREA51BASE104
+        width: 10
+        length: 10
+      - name: AREA51BASE105
+        width: 10
+        length: 10
+      - name: AREA51BASE106
+        width: 10
+        length: 10
+      - name: AREA51BASE107
+        width: 10
+        length: 10
   - type: COMRCURBAN
     script: URBAN #was COMRCURBAN
     mapDataSets:

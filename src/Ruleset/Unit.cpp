@@ -72,23 +72,25 @@ void Unit::load(
 	_armor			= node["armor"]					.as<std::string>(_armor);
 	_standHeight	= node["standHeight"]			.as<int>(_standHeight);
 	_kneelHeight	= node["kneelHeight"]			.as<int>(_kneelHeight);
+
 	_floatHeight	= node["floatHeight"]			.as<int>(_floatHeight);
 	if (_floatHeight + _standHeight > 24)
 	{
 		throw Exception("Error with unit " + _type + ": Unit height may not exceed 25");
 	}
+
 	_value			= node["value"]					.as<int>(_value);
 	_intelligence	= node["intelligence"]			.as<int>(_intelligence);
 	_aggression		= node["aggression"]			.as<int>(_aggression);
 	_energyRecovery	= node["energyRecovery"]		.as<int>(_energyRecovery);
-	_specab			= (SpecialAbility)node["specab"].as<int>(_specab);
-	_spawnUnit		= node["spawnUnit"]				.as<std::string>(_spawnUnit);
 	_livingWeapon	= node["livingWeapon"]			.as<bool>(_livingWeapon);
 	_meleeWeapon	= node["meleeWeapon"]			.as<std::string>(_meleeWeapon);
 	_builtInWeapons	= node["builtInWeapons"]		.as<std::vector<std::string> >(_builtInWeapons);
 	_female			= node["female"]				.as<bool>(_female);
 	_mechanical		= node["mechanical"]			.as<bool>(_mechanical);
 	_psiImmune		= node["psiImmune"]				.as<bool>(_psiImmune);
+	_spawnUnit		= node["spawnUnit"]				.as<std::string>(_spawnUnit);
+	_specab			= static_cast<SpecialAbility>(node["specab"].as<int>(_specab));
 
 	if (node["deathSound"])
 	{

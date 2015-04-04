@@ -96,6 +96,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: MALE_CIVILIAN3_ARMOR
     spriteInv: civilianMInventoryImage
     spriteSheet: MALE_CIVILIAN3.PCK
@@ -120,6 +121,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: MALE_CIVILIAN4_ARMOR
     spriteInv: civilianMInventoryImage
     spriteSheet: MALE_CIVILIAN4.PCK
@@ -144,6 +146,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: MALE_CIVILIAN5_ARMOR
     spriteInv: civilianMInventoryImage
     spriteSheet: MALE_CIVILIAN5.PCK
@@ -168,6 +171,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: MALE_CIVILIAN6_ARMOR
     spriteInv: civilianMInventoryImage
     spriteSheet: MALE_CIVILIAN6.PCK
@@ -192,6 +196,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: MALE_CIVILIAN7_ARMOR
     spriteInv: civilianMInventoryImage
     spriteSheet: MALE_CIVILIAN7.PCK
@@ -215,7 +220,8 @@ armors:
       - 1.2
       - 1.5
       - 1.12
-    loftempsSet: [ 3 ]
+    loftempsSet: [3]
+    agility: 1
   - type: FEMALE_CIVILIAN2_ARMOR
     spriteInv: civilianFInventoryImage
     spriteSheet: FEMALE_CIVILIAN2.PCK
@@ -240,6 +246,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
   - type: FEMALE_CIVILIAN3_ARMOR
     spriteInv: civilianFInventoryImage
     spriteSheet: FEMALE_CIVILIAN3.PCK
@@ -264,6 +271,7 @@ armors:
       - 1.5
       - 1.12
     loftempsSet: [3]
+    agility: 1
 units:
   - type: MALE_CIVILIAN2
     race: STR_CIVILIAN

@@ -1,0 +1,109 @@
+items:
+  - type: STR_DOGE
+    size: 5
+    costBuy: 5000
+    costSell: 3500
+    transferTime: 48
+    weight: 20
+    bigSprite: 210
+#    floorSprite: 0
+#    handSprite: 0
+    power: 35
+    damageType: 7
+    meleeSound: 210
+    accuracyMelee: 95
+    tuMelee: 10
+    battleType: 3
+    fixedWeapon: true
+    clipSize: -1
+    invWidth: 2
+    invHeight: 3
+    listOrder: 1073
+  - type: STR_DOGE_CORPSE
+    weight: 25
+    bigSprite: 211
+    floorSprite: 210
+    invWidth: 2
+    invHeight: 3
+    battleType: 11
+    recover: false
+    armor: 35
+units:
+  - type: STR_DOGE
+    race: STR_DOGE
+    stats:
+      tu: 84
+      stamina: 92
+      health: 25
+      bravery: 90
+      reactions: 66
+      firing: 0
+      throwing: 0
+      strength: 5
+      psiStrength: 40
+      psiSkill: 0
+      melee: 99
+    armor: DOGE_ARMOR
+    standHeight: 10
+    kneelHeight: 10
+    value: 8
+    deathSound: 211
+    energyRecovery: 80
+    livingWeapon: true
+armors:
+  - type: DOGE_ARMOR
+    spriteSheet: DOGE.PCK
+    corpseBattle:
+      - STR_DOGE_CORPSE
+    frontArmor: 5
+    sideArmor: 4
+    rearArmor: 3
+    underArmor: 2
+    movementType: 0
+    drawingRoutine: 4
+    damageModifier:
+      - 1.0  #none
+      - 1.13 #ap
+      - 1.07 #in
+      - 1.1  #he
+      - 1.11 #laser
+      - 1.17 #plasma
+      - 1.19 #stun
+      - 1.2  #melee
+      - 1.5  #acid
+      - 1.12 #smoke
+    loftempsSet: [2]
+    agility: 2
+ufopaedia:
+  - id: STR_DOGE
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_DOGE_UFOPEDIA
+    weapon: STR_DOGE_JAWS
+extraSprites:
+  - type: DOGE.PCK
+    subX: 32
+    subY: 40
+    width: 512
+    height: 200
+    files:
+      0: Resources/MoreCivilians/DOGE.png
+  - type: BIGOBS.PCK
+    files:
+      210: Resources/MoreCivilians/Doge_Jaws.png
+      211: Resources/MoreCivilians/DOGE_bigob.png
+  - type: FLOOROB.PCK
+    files:
+      210: Resources/MoreCivilians/DOGE_floorob.gif
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      210: Resources/MoreCivilians/DogeAttack.wav
+      211: Resources/MoreCivilians/DogeDeath.wav
+extraStrings:
+  - type: en-US
+    strings:
+      STR_DOGE: "Attack Dog"
+      STR_DOGE_CORPSE: "Dead Dog"
+      STR_DOGE_JAWS: "Bite"
+      STR_DOGE_UFOPEDIA: "These highly trained dogs are fully able in battlefield conditions. They can spot aliens but won't attack unless ordered to do so. To avoid compromising their positions X-Com agents communicate with these dogs via supersonic whistles."

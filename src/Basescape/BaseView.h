@@ -33,6 +33,7 @@ class BaseFacility;
 class Font;
 class Language;
 class RuleBaseFacility;
+class Surface; // not needed, prob covered by SurfaceSet.
 class SurfaceSet;
 class Timer;
 
@@ -67,7 +68,9 @@ private:
 		* _big,
 		* _small;
 	Language* _lang;
-	Surface* _selector;
+	Surface
+		* _dog,
+		* _selector;
 	SurfaceSet* _texture;
 	Timer* _timer;
 
@@ -99,6 +102,8 @@ private:
 
 		/// Sets the texture for this base view.
 		void setTexture(SurfaceSet* texture);
+		/// Sets the dog for this base view.
+		void setDog(Surface* dog);
 
 		/// Gets the currently selected facility.
 		BaseFacility* getSelectedFacility() const;

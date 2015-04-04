@@ -4399,7 +4399,7 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1426297013 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1428122608 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4440,7 +4440,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1426360745 f:\git\openxcom\src\basescape\baseview.h
+1428122907 f:\git\openxcom\src\basescape\baseview.h
 	"../Engine/InteractiveSurface.h"
 	"../Savegame/Base.h"
 
@@ -4513,7 +4513,7 @@
 
 1424780156 f:\git\openxcom\src\savegame\region.h
 
-1426362890 source:f:\git\openxcom\src\basescape\baseview.cpp
+1428132629 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
@@ -4524,6 +4524,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
+	"../Savegame/ItemContainer.h"
 
 1424390941 f:\git\openxcom\src\engine\timer.h
 	"State.h"
@@ -4645,7 +4646,7 @@
 	<windows.h>
 	<time.h>
 
-1424390936 f:\git\openxcom\src\savegame\itemcontainer.h
+1428128244 f:\git\openxcom\src\savegame\itemcontainer.h
 
 1427999630 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
@@ -4822,7 +4823,7 @@
 
 1426486003 f:\git\openxcom\src\savegame\researchproject.h
 
-1428116292 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1428117071 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4837,11 +4838,9 @@
 	"../Menu/ErrorMessageState.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleCraft.h"
-	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/Base.h"
-	"../Savegame/BaseFacility.h"
 	"../Savegame/Production.h"
 
 1428115485 f:\git\openxcom\src\basescape\manufactureinfostate.h
@@ -8612,7 +8611,7 @@
 1425593159 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
-1424391212 source:f:\git\openxcom\src\ruleset\unit.cpp
+1428130678 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
 1426538870 source:f:\git\openxcom\src\savegame\alienbase.cpp
@@ -8755,7 +8754,7 @@
 	"GameTime.h"
 	"../Engine/Language.h"
 
-1424390936 source:f:\git\openxcom\src\savegame\itemcontainer.cpp
+1428128259 source:f:\git\openxcom\src\savegame\itemcontainer.cpp
 	"ItemContainer.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"

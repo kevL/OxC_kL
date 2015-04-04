@@ -89,7 +89,7 @@ BasescapeState::BasescapeState(
 	_view			= new BaseView(192, 192, 0, 8);
 	_mini			= new MiniBaseView(128, 22, 192, 33);
 
-	_txtFacility	= new Text(192, 9, 0, 0);
+	_txtFacility	= new Text(192, 9);
 
 	_edtBase		= new TextEdit(this, 126, 17, 194, 0);
 	_txtRegion		= new Text(126, 9, 194, 15);
@@ -138,6 +138,7 @@ BasescapeState::BasescapeState(
 
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_view->setDog(_game->getResourcePack()->getSurface("BASEDOG"));
 	_view->onMouseClick(
 					(ActionHandler)& BasescapeState::viewLeftClick,
 					SDL_BUTTON_LEFT);

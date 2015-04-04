@@ -61,58 +61,58 @@ YAML::Node ItemContainer::save() const
 
 /**
  * Adds an item amount to the container.
- * @param id	- reference an item ID
+ * @param type	- reference an item type
  * @param qty	- item quantity (default 1)
  */
 void ItemContainer::addItem(
-		const std::string& id,
+		const std::string& type,
 		int qty)
 {
-	if (id.empty() == true)
+	if (type.empty() == true)
 		return;
 
-	if (_qty.find(id) == _qty.end())
-		_qty[id] = 0;
+	if (_qty.find(type) == _qty.end())
+		_qty[type] = 0;
 
-	_qty[id] += qty;
+	_qty[type] += qty;
 }
 
 /**
  * Removes an item amount from the container.
- * @param id	- reference an item ID
+ * @param type	- reference an item type
  * @param qty	- item quantity (default 1)
  */
 void ItemContainer::removeItem(
-		const std::string& id,
+		const std::string& type,
 		int qty)
 {
-	if (id.empty() == true
-		|| _qty.find(id) == _qty.end())
+	if (type.empty() == true
+		|| _qty.find(type) == _qty.end())
 	{
 		return;
 	}
 
-	if (qty < _qty[id])
-		_qty[id] -= qty;
+	if (qty < _qty[type])
+		_qty[type] -= qty;
 	else
-		_qty.erase(id);
+		_qty.erase(type);
 }
 
 /**
  * Returns the quantity of an item in the container.
- * @param id - reference an item ID
+ * @param type - reference an item type
  * @return, item quantity
  */
-int ItemContainer::getItem(const std::string& id) const
+int ItemContainer::getItem(const std::string& type) const
 {
-	if (id.empty() == true)
+	if (type.empty() == true)
 		return 0;
 
-	std::map<std::string, int>::const_iterator i = _qty.find(id);
+	std::map<std::string, int>::const_iterator i = _qty.find(type);
 	if (i == _qty.end())
 		return 0;
-	else
-		return i->second;
+
+	return i->second;
 }
 
 /**

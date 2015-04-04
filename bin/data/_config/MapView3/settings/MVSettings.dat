@@ -4,10 +4,16 @@ MainWindow
 	Doors:False
 	SaveWindowPositions:True
 	UseGrid:True
-	GridColor:35,69,100,129
+	GridColor:175,69,100,129
 	GridLineColor:255,0,0,0
 	GridLineWidth:1
 	SelectGrayscale:True
+	Window-TileView:True
+	Window--:True
+	Window-TopView:True
+	Window-RouteView:True
+	Window-Top&RouteView:False
+	Window-Console:True
 }
 TopView
 {
@@ -23,8 +29,23 @@ TopView
 	GridWidth:1
 	MouseWidth:2
 	MouseColor:Blue
-	SelectTileColor:Lavender
+	SelectTileColor:LightBlue
 	DiamondMinHeight:4
+}
+RmpView
+{
+	UnselectedLinkColor:255,255,0,0
+	UnselectedLinkWidth:2
+	SelectedLinkColor:255,0,0,255
+	SelectedLinkWidth:2
+	WallColor:255,0,0,0
+	WallWidth:4
+	GridLineColor:255,0,0,0
+	GridLineWidth:1
+	SelectedNodeColor:Blue
+	SpawnNodeColor:GreenYellow
+	UnselectedNodeColor:Green
+	ContentTiles:DarkGray
 }
 TileView
 {
@@ -43,19 +64,5 @@ TileView
 	DeadTile:LightCyan
 	EndPoint:Yellow
 	MustDestroy:Blue
-}
-RmpView
-{
-	UnselectedLinkColor:255,255,0,0
-	UnselectedLinkWidth:2
-	SelectedLinkColor:255,0,0,255
-	SelectedLinkWidth:2
-	WallColor:255,0,0,0
-	WallWidth:4
-	GridLineColor:255,0,0,0
-	GridLineWidth:1
-	SelectedNodeColor:Blue
-	SpawnNodeColor:GreenYellow
-	UnselectedNodeColor:Green
-	ContentTiles:DarkGray
+	VolutarMcdEditorPath:
 }

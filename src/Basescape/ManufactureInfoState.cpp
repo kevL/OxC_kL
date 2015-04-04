@@ -40,12 +40,10 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
 
 #include "../Savegame/Base.h"
-#include "../Savegame/BaseFacility.h"
 #include "../Savegame/Production.h"
 
 

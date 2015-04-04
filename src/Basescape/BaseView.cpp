@@ -37,6 +37,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
 
 
 namespace OpenXcom
@@ -61,6 +62,7 @@ BaseView::BaseView(
 			x,y),
 		_base(NULL),
 		_texture(NULL),
+		_dog(NULL),
 		_selFacility(NULL),
 		_big(NULL),
 		_small(NULL),
@@ -170,6 +172,15 @@ void BaseView::setBase(Base* base)
 void BaseView::setTexture(SurfaceSet* texture)
 {
 	_texture = texture;
+}
+
+/**
+ * Changes the dog to use for drawing the at the base.
+ * @param texture - pointer to Surface to use
+ */
+void BaseView::setDog(Surface* dog)
+{
+	_dog = dog;
 }
 
 /**
@@ -703,6 +714,13 @@ void BaseView::draw()
 	} */
 
 	std::vector<Craft*>::const_iterator i = _base->getCrafts()->begin();
+	BaseFacility* fac;
+	bool hasDog = (_base->getItems()->getItem("STR_DOGE") != 0);
+	std::vector<std::pair<int, int> > dogPosition;
+	int
+		posDog_x,
+		posDog_y;
+
 	for (size_t // draw crafts left to right, top row to bottom.
 			y = 0;
 			y != Base::BASE_SIZE;
@@ -713,9 +731,9 @@ void BaseView::draw()
 				x != Base::BASE_SIZE;
 				++x)
 		{
-			if (_facilities[x][y] != NULL)
+			fac = _facilities[x][y];
+			if (fac != NULL)
 			{
-				BaseFacility* const fac = _facilities[x][y];
 				if (   fac->getBuildTime() == 0
 					&& fac->getRules()->getCrafts() > 0
 					&& fac->getCraft() == NULL)
@@ -727,17 +745,36 @@ void BaseView::draw()
 							Surface* const srfCraft = _texture->getFrame((*i)->getRules()->getSprite() + 33);
 							srfCraft->setX(fac->getX() * GRID_SIZE + (static_cast<int>(fac->getRules()->getSize()) - 1) * GRID_SIZE / 2 + 2);
 							srfCraft->setY(fac->getY() * GRID_SIZE + (static_cast<int>(fac->getRules()->getSize()) - 1) * GRID_SIZE / 2 - 4);
-
 							srfCraft->blit(this);
 						}
 
 						fac->setCraft(*i);
-
 						++i;
 					}
 				}
+
+				if (hasDog == true
+					&& fac->getCraft() == NULL)
+				{
+					posDog_x = fac->getX() * GRID_SIZE + static_cast<int>(fac->getRules()->getSize()) * RNG::generate(2,11);
+					posDog_y = fac->getY() * GRID_SIZE + static_cast<int>(fac->getRules()->getSize()) * RNG::generate(2,17);
+					std::pair<int, int> posDog = std::make_pair(
+															posDog_x,
+															posDog_y);
+					dogPosition.push_back(posDog);
+				}
 			}
 		}
+	}
+
+	if (dogPosition.empty() == false)
+	{
+		const size_t i = RNG::generate(
+									0,
+									dogPosition.size() - 1);
+		_dog->setX(dogPosition[i].first);
+		_dog->setY(dogPosition[i].second);
+		_dog->blit(this);
 	}
 }
 

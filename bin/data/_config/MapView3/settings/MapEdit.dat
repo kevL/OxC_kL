@@ -2,7 +2,7 @@ ${ufoPath}:${ufo}
 
 ${rootPathUFO}:${ufoPath}\MAPS\
 ${rmpPathUFO}:${ufoPath}\ROUTES\
-${blankUFO}:F:\openXcom\oXc_Edit\MapView2\BLANKS\UFO\
+${blankUFO}:F:\openXcom\oXc_Edit\MapView3\BLANKS\UFO\
 
 Tileset:UFO - Terrain
 	type:1
@@ -1469,7 +1469,12 @@ Tileset:UFO - Craft
 		AREA51BASE13:${dep}
 		AREA51BASE14:${dep}
 		AREA51BASE15:${dep}
+		AREA51BASE16:${dep}
+		AREA51BASE17:${dep}
+		AREA51BASE18:${dep}
+		AREA51BASE19:${dep}
 		AREA51BASE20:${dep}
+		AREA51BASE21:${dep}
 		AREA51BASE22:${dep}
 		AREA51BASE23:${dep}
 		AREA51BASE24:${dep}
@@ -1548,6 +1553,14 @@ Tileset:UFO - Craft
 		AREA51BASE97:${dep}
 		AREA51BASE98:${dep}
 		AREA51BASE99:${dep}
+		AREA51BASE100:${dep}
+		AREA51BASE101:${dep}
+		AREA51BASE102:${dep}
+		AREA51BASE103:${dep}
+		AREA51BASE104:${dep}
+		AREA51BASE105:${dep}
+		AREA51BASE106:${dep}
+		AREA51BASE107:${dep}
 
 		${dep}:ROADS URBITS URBAN FRNITURE
 		POLISURBAN02:${dep}

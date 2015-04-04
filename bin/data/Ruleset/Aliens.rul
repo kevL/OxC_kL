@@ -848,7 +848,7 @@ alienDeployments:
     civilians: 15
     terrains:
       - AREA51URBAN     #hobbes uses this
-      - COMRCURBAN      #hobbes uses this
+      - COMRCURBAN      #hobbes uses this; but removed it due to bugs
       - DAWNURBANA      #hobbes uses this
       - DAWNURBANB      #hobbes uses this
       - INDUSTRIALURBAN #hobbes uses this
@@ -856,7 +856,7 @@ alienDeployments:
       - NATIVEURBAN     #hobbes uses this
       - PORTTFTD
       - PORTURBAN
-      - RAILYARDURBAN   #hobbes uses this
+      - RAILYARDURBAN   #hobbes uses this; but removed it due to bugs
       - URBAN           #hobbes uses this
       - URBAN2          #Luke's Expanded Terror Sites
     alert: STR_ALIENS_TERRORISE

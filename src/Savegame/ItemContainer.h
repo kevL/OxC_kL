@@ -58,15 +58,15 @@ private:
 
 		/// Adds an item to the container.
 		void addItem(
-				const std::string& id,
+				const std::string& type,
 				int qty = 1);
 		/// Removes an item from the container.
 		void removeItem(
-				const std::string& id,
+				const std::string& type,
 				int qty = 1);
 
 		/// Gets an item in the container.
-		int getItem(const std::string& id) const;
+		int getItem(const std::string& type) const;
 
 		/// Gets the total quantity of items in the container.
 		int getTotalQuantity() const;
