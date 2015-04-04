@@ -705,14 +705,6 @@ void BaseView::draw()
 		}
 	}
 
-/*	for (std::vector<BaseFacility*>::iterator // remove crafts from Facilities
-			i = _base->getFacilities()->begin();
-			i != _base->getFacilities()->end();
-			++i)
-	{
-		(*i)->setCraft(NULL); // done above^
-	} */
-
 	std::vector<Craft*>::const_iterator i = _base->getCrafts()->begin();
 	BaseFacility* fac;
 	bool hasDog = (_base->getItems()->getItem("STR_DOGE") != 0);
@@ -734,27 +726,26 @@ void BaseView::draw()
 			fac = _facilities[x][y];
 			if (fac != NULL)
 			{
-				if (   fac->getBuildTime() == 0
-					&& fac->getRules()->getCrafts() > 0
+				if (i != _base->getCrafts()->end()
+					&& fac->getBuildTime() == 0
+					&& fac->getRules()->getCrafts() != 0
 					&& fac->getCraft() == NULL)
 				{
-					if (i != _base->getCrafts()->end())
+					if ((*i)->getStatus() != "STR_OUT")
 					{
-						if ((*i)->getStatus() != "STR_OUT")
-						{
-							Surface* const srfCraft = _texture->getFrame((*i)->getRules()->getSprite() + 33);
-							srfCraft->setX(fac->getX() * GRID_SIZE + (static_cast<int>(fac->getRules()->getSize()) - 1) * GRID_SIZE / 2 + 2);
-							srfCraft->setY(fac->getY() * GRID_SIZE + (static_cast<int>(fac->getRules()->getSize()) - 1) * GRID_SIZE / 2 - 4);
-							srfCraft->blit(this);
-						}
-
-						fac->setCraft(*i);
-						++i;
+						Surface* const srfCraft = _texture->getFrame((*i)->getRules()->getSprite() + 33);
+						srfCraft->setX(fac->getX() * GRID_SIZE + (static_cast<int>(fac->getRules()->getSize()) - 1) * GRID_SIZE / 2 + 2);
+						srfCraft->setY(fac->getY() * GRID_SIZE + (static_cast<int>(fac->getRules()->getSize()) - 1) * GRID_SIZE / 2 - 4);
+						srfCraft->blit(this);
 					}
+
+					fac->setCraft(*i);
+					++i;
 				}
 
 				if (hasDog == true
-					&& fac->getCraft() == NULL)
+					&& (fac->getCraft() == NULL
+						|| fac->getCraft()->getStatus() == "STR_OUT"))
 				{
 					posDog_x = fac->getX() * GRID_SIZE + static_cast<int>(fac->getRules()->getSize()) * RNG::generate(2,11);
 					posDog_y = fac->getY() * GRID_SIZE + static_cast<int>(fac->getRules()->getSize()) * RNG::generate(2,17);
