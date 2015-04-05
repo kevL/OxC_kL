@@ -84,15 +84,15 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 			"PAL_GEOSCAPE",
 			_game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color);
 
-	add(_window, "window", "itemsArriving");
-	add(_txtTitle, "text1", "itemsArriving");
-	add(_txtItem, "text1", "itemsArriving");
-	add(_txtQuantity, "text1", "itemsArriving");
-	add(_txtDestination, "text1", "itemsArriving");
-	add(_lstTransfers, "text2", "itemsArriving");
-//	add(_btnGotoBase, "button", "itemsArriving");
-	add(_btnOk5Secs, "button", "itemsArriving");
-	add(_btnOk, "button", "itemsArriving");
+	add(_window,			"window",	"itemsArriving");
+	add(_txtTitle,			"text1",	"itemsArriving");
+	add(_txtItem,			"text1",	"itemsArriving");
+	add(_txtQuantity,		"text1",	"itemsArriving");
+	add(_txtDestination,	"text1",	"itemsArriving");
+	add(_lstTransfers,		"text2",	"itemsArriving");
+//	add(_btnGotoBase,		"button",	"itemsArriving");
+	add(_btnOk5Secs,		"button",	"itemsArriving");
+	add(_btnOk,				"button",	"itemsArriving");
 
 	centerAllSurfaces();
 
@@ -120,9 +120,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 					(ActionHandler)& ItemsArrivingState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_ITEMS_ARRIVING"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
 	_txtItem->setText(tr("STR_ITEM"));
 
@@ -136,7 +136,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_lstTransfers->setMargin();
 	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress);
 
-	Base* base = NULL;
+
 	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -151,44 +151,43 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 			{
 				_bases.push_back(*i);	// kL, sequential vector of bases w/ transfers-completed to;
 										// will be matched w/ selectedRow on list-clicks for gotoBase.
-				base = *i;
 
 				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
 				{
-					const RuleItem* const item = _game->getRuleset()->getItem((*j)->getItems());
+					const RuleItem* const itRule = _game->getRuleset()->getItem((*j)->getItems());
 
 					for (std::vector<Craft*>::const_iterator
-							c = (*i)->getCrafts()->begin();
-							c != (*i)->getCrafts()->end();
-							++c)
+							k = (*i)->getCrafts()->begin();
+							k != (*i)->getCrafts()->end();
+							++k)
 					{
-						if ((*c)->getStatus() == "STR_OUT")
+						if ((*k)->getStatus() == "STR_OUT")
 							continue;
 
-						if ((*c)->getWarned() == true)
+						if ((*k)->getWarned() == true)
 						{
-							if ((*c)->getStatus() == "STR_REFUELING")
+							if ((*k)->getStatus() == "STR_REFUELING")
 							{
-								if ((*c)->getRules()->getRefuelItem() == item->getType())
+								if ((*k)->getRules()->getRefuelItem() == itRule->getType())
 								{
-									(*c)->setWarned(false);
-									(*c)->setWarning(CW_NONE);
+									(*k)->setWarned(false);
+									(*k)->setWarning(CW_NONE);
 								}
 							}
-							else if ((*c)->getStatus() == "STR_REARMING")
+							else if ((*k)->getStatus() == "STR_REARMING")
 							{
 								for (std::vector<CraftWeapon*>::const_iterator
-										cw = (*c)->getWeapons()->begin();
-										cw != (*c)->getWeapons()->end();
-										++cw)
+										l = (*k)->getWeapons()->begin();
+										l != (*k)->getWeapons()->end();
+										++l)
 								{
-									if (*cw != NULL
-										&& (*cw)->getRules()->getClipItem() == item->getType())
+									if (*l != NULL
+										&& (*l)->getRules()->getClipItem() == itRule->getType())
 									{
-										(*cw)->setCantLoad(false);
+										(*l)->setCantLoad(false);
 
-										(*c)->setWarned(false);
-										(*c)->setWarning(CW_NONE);
+										(*k)->setWarned(false);
+										(*k)->setWarning(CW_NONE);
 									}
 								}
 							}
@@ -196,38 +195,38 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 
 						for (std::vector<Vehicle*>::const_iterator // check if it's ammo to reload a vehicle
-								vhcl = (*c)->getVehicles()->begin();
-								vhcl != (*c)->getVehicles()->end();
-								++vhcl)
+								l = (*k)->getVehicles()->begin();
+								l != (*k)->getVehicles()->end();
+								++l)
 						{
 							std::vector<std::string>::const_iterator ammo = std::find(
-																				(*vhcl)->getRules()->getCompatibleAmmo()->begin(),
-																				(*vhcl)->getRules()->getCompatibleAmmo()->end(),
-																				item->getType());
-							if (ammo != (*vhcl)->getRules()->getCompatibleAmmo()->end()
-								&& (*vhcl)->getAmmo() < item->getClipSize())
+																				(*l)->getRules()->getCompatibleAmmo()->begin(),
+																				(*l)->getRules()->getCompatibleAmmo()->end(),
+																				itRule->getType());
+							if (ammo != (*l)->getRules()->getCompatibleAmmo()->end()
+								&& (*l)->getAmmo() < itRule->getClipSize())
 							{
 								const int used = std::min(
 														(*j)->getQuantity(),
-														item->getClipSize() - (*vhcl)->getAmmo());
-								(*vhcl)->setAmmo((*vhcl)->getAmmo() + used);
+														itRule->getClipSize() - (*l)->getAmmo());
+								(*l)->setAmmo((*l)->getAmmo() + used);
 
 								// Note that the items have already been delivered --
 								// so they are removed from the base, not the transfer.
-								base->getItems()->removeItem(
-															item->getType(),
-															used);
+								(*i)->getItems()->removeItem(
+														itRule->getType(),
+														used);
 							}
 						}
 					}
 				}
 
-				std::wostringstream wost;
-				wost << (*j)->getQuantity();
+				std::wostringstream woststr;
+				woststr << (*j)->getQuantity();
 				_lstTransfers->addRow(
 									3,
 									(*j)->getName(_game->getLanguage()).c_str(),
-									wost.str().c_str(),
+									woststr.str().c_str(),
 									(*i)->getName().c_str());
 
 				delete *j; // remove transfer

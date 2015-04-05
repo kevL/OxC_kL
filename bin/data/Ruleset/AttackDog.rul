@@ -94,7 +94,7 @@ extraSprites:
       211: Resources/MoreCivilians/DOGE_bigob.png
   - type: FLOOROB.PCK
     files:
-      210: Resources/MoreCivilians/DOGE_floorob.gif
+      210: Resources/MoreCivilians/DOGE_floorob.png
 extraSounds:
   - type: BATTLE.CAT
     files:

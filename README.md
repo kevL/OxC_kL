@@ -2,7 +2,7 @@
 #    0xC_kL    #
 ################
 
-0xC_kL is an open-source clone of an open-source clone of the popular
+0xC_kL is an independent fork of an open-source clone of the popular
 UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by Microprose,
 licensed under the GPL and written in C++ / SDL.
 

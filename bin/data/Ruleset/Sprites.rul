@@ -156,6 +156,9 @@ extraSprites:
   - type: CURSOR.PCK
     files:
       0: Resources/Sprites/ufograph/cursor/
+  - type: TARGET.PCK
+    files:
+      0: Resources/Sprites/ufograph/target/
   - type: HIT.PCK
     files:
       0: Resources/Sprites/ufograph/hit/

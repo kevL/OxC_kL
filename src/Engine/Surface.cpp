@@ -596,7 +596,7 @@ void Surface::blit(Surface* surface)
 		SDL_Rect* crop;
 		SDL_Rect target;
 
-		if (_crop.w == 0
+		if (   _crop.w == 0
 			&& _crop.h == 0)
 		{
 			crop = NULL;
@@ -654,15 +654,17 @@ void Surface::copy(Surface* surface)
 		const Uint8 pixel = surface->getPixelColor(
 												from_x + x,
 												from_y + y);
-		setPixelIterative(&x,&y, pixel);
+		setPixelIterative(
+						&x,&y,
+						pixel);
 	}
 	unlock();
 }
 
 /**
  * Draws a filled rectangle on the surface.
- * @param rect Pointer to Rect.
- * @param color Color of the rectangle.
+ * @param rect	- pointer to SDL_Rect
+ * @param color	- color of the rectangle
  */
 void Surface::drawRect(
 		SDL_Rect* rect,
@@ -676,11 +678,11 @@ void Surface::drawRect(
 
 /**
  * Draws a filled rectangle on the surface.
- * @param x X position in pixels.
- * @param y Y position in pixels.
- * @param w Width in pixels.
- * @param h Height in pixels.
- * @param color Color of the rectangle.
+ * @param x		- X position in pixels
+ * @param y		- Y position in pixels
+ * @param w		- width in pixels
+ * @param h		- height in pixels
+ * @param color	- color of the rectangle
  */
 void Surface::drawRect(
 		Sint16 x,
@@ -699,16 +701,16 @@ void Surface::drawRect(
 	SDL_FillRect(
 			_surface,
 			&rect,
-			color);
+			static_cast<Uint32>(color));
 }
 
 /**
  * Draws a line on the surface.
- * @param x1 Start x coordinate in pixels.
- * @param y1 Start y coordinate in pixels.
- * @param x2 End x coordinate in pixels.
- * @param y2 End y coordinate in pixels.
- * @param color Color of the line.
+ * @param x1	- start x coordinate in pixels
+ * @param y1	- start y coordinate in pixels
+ * @param x2	- end x coordinate in pixels
+ * @param y2	- end y coordinate in pixels
+ * @param color	- color of the line
  */
 void Surface::drawLine(
 		Sint16 x1,
@@ -728,10 +730,10 @@ void Surface::drawLine(
 
 /**
  * Draws a filled circle on the surface.
- * @param x X coordinate in pixels.
- * @param y Y coordinate in pixels.
- * @param r Radius in pixels.
- * @param color Color of the circle.
+ * @param x		- X coordinate in pixels
+ * @param y		- Y coordinate in pixels
+ * @param r		- radius in pixels
+ * @param color	- color of the circle
  */
 void Surface::drawCircle(
 		Sint16 x,
@@ -745,15 +747,15 @@ void Surface::drawCircle(
 					r,
 					Palette::getRGBA(
 								getPalette(),
-								static_cast<Uint32>(color)));
+								color));
 }
 
 /**
  * Draws a filled polygon on the surface.
- * @param x Array of x coordinates.
- * @param y Array of y coordinates.
- * @param n Number of points.
- * @param color Color of the polygon.
+ * @param x		- pointer to (an array of) x coordinate(s)
+ * @param y		- pointer to (an array of) y coordinate(s)
+ * @param n		- number of points
+ * @param color	- color of the polygon
  */
 void Surface::drawPolygon(
 		Sint16* x,
@@ -772,12 +774,12 @@ void Surface::drawPolygon(
 
 /**
  * Draws a textured polygon on the surface.
- * @param x Array of x coordinates.
- * @param y Array of y coordinates.
- * @param n Number of points.
- * @param texture Texture for polygon.
- * @param dx X offset of texture relative to the screen.
- * @param dy Y offset of texture relative to the screen.
+ * @param x			- pointer to (an array of) x coordinate(s)
+ * @param y			- pointer to (an array of) y coordinate(s)
+ * @param n			- number of points
+ * @param texture	- pointer to texture for polygon
+ * @param dx		- X offset of texture relative to the screen
+ * @param dy		- Y offset of texture relative to the screen
  */
 void Surface::drawTexturedPolygon(
 		Sint16* x,
@@ -797,10 +799,10 @@ void Surface::drawTexturedPolygon(
 
 /**
  * Draws a text string on the surface.
- * @param x X coordinate in pixels.
- * @param y Y coordinate in pixels.
- * @param s Character string to draw.
- * @param color Color of string.
+ * @param x		- X coordinate in pixels
+ * @param y		- Y coordinate in pixels
+ * @param s		- pointer to string of char's to draw
+ * @param color	- color of string
  */
 void Surface::drawString(
 		Sint16 x,
@@ -1007,7 +1009,7 @@ static inline void func(
  * @param half		- some tiles blit only the right half (default false)
  * @param baseColor	- Attention: the actual color + 1, because 0 is no new base color (default 0)
  * @param halfLeft	- kL_add: blits only the left half NOTE This conflicts w/ 'half' (default false)
- *						but i am too lazy to refactor a gajillion blitNShade calls!
+ *					  but i am far too lazy to refactor a gajillion blitNShade calls!
  */
 void Surface::blitNShade(
 		Surface* surface,

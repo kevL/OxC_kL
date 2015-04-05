@@ -2138,11 +2138,11 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 				else
 				{
 					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0,9));
-					if (itemLevel >= static_cast<int>((*data).itemSets.size()))
+					if (itemLevel > static_cast<int>((*data).itemSets.size()) - 1)
 					{
 						std::stringstream ststr;
 						ststr	<< "Unit generator encountered an error: not enough item sets defined, expected: "
-								<< itemLevel + 1 << " found: " << (*data).itemSets.size();
+								<< (itemLevel+1) << " found: " << (*data).itemSets.size();
 						throw Exception(ststr.str());
 					}
 

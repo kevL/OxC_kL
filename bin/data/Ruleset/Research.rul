@@ -189,6 +189,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_PSI_LAB
     cost: 42000
     points: 25
+    requires:
+      - STR_ALIEN_ENTERTAINMENT
     dependencies:
       - STR_ETHEREAL_COMMANDER
       - STR_ETHEREAL_LEADER

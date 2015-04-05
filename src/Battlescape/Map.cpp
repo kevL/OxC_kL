@@ -103,8 +103,7 @@ Map::Map(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_game(game),
 		_arrow(NULL),
 		_selectorX(0),
@@ -155,8 +154,7 @@ Map::Map(
 
 	_hidden = new BattlescapeMessage( // "Hidden Movement..." screen
 								320,
-								visibleMapHeight < 200? visibleMapHeight: 200,
-								0,0);
+								visibleMapHeight < 200 ? visibleMapHeight : 200);
 	_hidden->setX(_game->getScreen()->getDX());
 	_hidden->setY(_game->getScreen()->getDY());
 //	_hidden->setY((visibleMapHeight - _hidden->getHeight()) / 2);
@@ -181,7 +179,7 @@ Map::Map(
 						_res->getFont("FONT_BIG"),
 						_res->getFont("FONT_SMALL"),
 						_game->getLanguage()); */
-	_txtAccuracy = new NumberText(24, 9, 0, 0);					// kL
+	_txtAccuracy = new NumberText(24, 9);						// kL
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());	// kL
 }
 
@@ -341,15 +339,15 @@ void Map::draw()
 //	Surface::draw();
 	clear(15); // black
 
-	const Tile* tile = NULL;
+	const Tile* tile;
 
 	if (_projectile != NULL)
 //		&& _battleSave->getSide() == FACTION_PLAYER)
 	{
 		tile = _battleSave->getTile(Position(
-									_projectile->getPosition(0).x / 16,
-									_projectile->getPosition(0).y / 16,
-									_projectile->getPosition(0).z / 24));
+										_projectile->getPosition(0).x / 16,
+										_projectile->getPosition(0).y / 16,
+										_projectile->getPosition(0).z / 24));
 		if (tile != NULL
 			&& (tile->getTileVisible() == true
 				|| _battleSave->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
@@ -369,9 +367,9 @@ void Map::draw()
 				++i)
 		{
 			tile = _battleSave->getTile(Position(
-										(*i)->getPosition().x / 16,
-										(*i)->getPosition().y / 16,
-										(*i)->getPosition().z / 24));
+											(*i)->getPosition().x / 16,
+											(*i)->getPosition().y / 16,
+											(*i)->getPosition().z / 24));
 			if (tile != NULL
 				&& (tile->getTileVisible() == true
 					|| (tile->getUnit() != NULL
@@ -4334,9 +4332,9 @@ void Map::animate(bool redraw)
 		_animFrame = 0;
 
 	// animate tiles
-	for (int
+	for (size_t
 			i = 0;
-			i < _battleSave->getMapSizeXYZ();
+			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
 			++i)
 	{
 		_battleSave->getTiles()[i]->animate();

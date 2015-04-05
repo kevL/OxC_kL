@@ -70,12 +70,14 @@ private:
 		_mouseOverIcons,
 		_mouseOverThreshold;
 	int
-		_fuseFrame,
 		_showConsole,
 		_totalMouseMoveX,
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,
 		_yBeforeMouseScrolling;
+	size_t
+		_fuseFrame,
+		_visUnitTargetFrame;
 
 	Uint32 _mouseScrollingStartTime;
 
@@ -108,7 +110,9 @@ private:
 //		* _reserve;
 //		* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	BattlescapeGame* _battleGame;
-	BattleUnit* _visibleUnit[INDICATORS];
+	BattleUnit
+		* _visibleUnit[INDICATORS],
+		* _targetUnit;
 	InteractiveSurface
 		* _icons,
 
@@ -150,7 +154,8 @@ private:
 		* _iconsLayer,
 		* _kneel,
 		* _rank,
-		* _overWeight;
+		* _overWeight,
+		* _visUnitTarget;
 //		* _srfWounds;
 	Text
 		* _txtBaseLabel,
@@ -405,6 +410,8 @@ private:
 
 		/// Animates a red cross icon when an injured soldier is selected.
 		void flashMedic();
+		/// Animates targeting cursor over hostile unit when visUnit indicator is clicked.
+		void drawVisUnitTarget();
 };
 
 }

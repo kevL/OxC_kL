@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_ITEMSARRIVINGSTATE_H
 #define OPENXCOM_ITEMSARRIVINGSTATE_H
 
-//#include <vector> // kL
+//#include <vector>
 
 #include "../Engine/State.h"
 

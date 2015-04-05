@@ -64,7 +64,7 @@ Camera::Camera(
 		_mapsize_z(mapsize_z),
 		_screenWidth(battleMap->getWidth()),
 		_screenHeight(battleMap->getHeight()),
-		_mapOffset(-250, 250, 0),
+		_mapOffset(-250,250,0),
 		_scrollMouseX(0),
 		_scrollMouseY(0),
 		_scrollKeyX(0),
@@ -526,7 +526,8 @@ void Camera::centerOnPosition(
 					&screenPos);
 
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) + 16);
-	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
+//	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
+	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
 	_mapOffset.z = _center.z;
 
 	_map->getSavedBattle()->getBattleState()->setLayerValue(_mapOffset.z);

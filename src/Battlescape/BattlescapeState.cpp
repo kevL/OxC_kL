@@ -127,7 +127,9 @@ BattlescapeState::BattlescapeState()
 		_isMouseScrolling(false),
 		_mouseScrollingStartTime(0),
 		_fuseFrame(0),
-		_showConsole(2)
+		_showConsole(2),
+		_targetUnit(NULL),
+		_visUnitTargetFrame(0)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	const int
@@ -205,6 +207,8 @@ BattlescapeState::BattlescapeState()
 //		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
 //		visibleUnitY = _rules->getInterface("battlescape")->getElement("visibleUnits")->y;
 
+	_visUnitTarget = new Surface(32, 40, screenWidth / 2 - 16, visibleMapHeight / 2);
+
 	std::fill_n(
 			_visibleUnit,
 			INDICATORS,
@@ -220,13 +224,11 @@ BattlescapeState::BattlescapeState()
 			offset_x = 15;
 
 		_btnVisibleUnit[i] = new InteractiveSurface(
-												15,
-												13,
+												15,13,
 												x + iconsWidth - 21 - offset_x,
 												y - 16 - (static_cast<int>(i) * 13));
 		_numVisibleUnit[i] = new NumberText(
-										9,
-										9,
+										9,9,
 										x + iconsWidth - 15 - offset_x,
 										y - 12 - (static_cast<int>(i) * 13));
 	}
@@ -240,8 +242,7 @@ BattlescapeState::BattlescapeState()
 	}
 
 	_warning	= new WarningMessage(
-					224,
-					24,
+					224,24,
 					x + 48,
 					y + 32);
 
@@ -280,9 +281,9 @@ BattlescapeState::BattlescapeState()
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
-	_txtTerrain		= new Text(150, 9, 1, 0);
-	_txtShade		= new Text(50, 9, 1, 10);
-	_txtTurn		= new Text(50, 9, 1, 20);
+	_txtTerrain		= new Text(150, 9, 1,  0);
+	_txtShade		= new Text( 50, 9, 1, 10);
+	_txtTurn		= new Text( 50, 9, 1, 20);
 
 	_txtOrder		= new Text(45, 9, 1, 37);
 	_lstSoldierInfo	= new TextList(25, 57, 1, 47);
@@ -383,7 +384,9 @@ BattlescapeState::BattlescapeState()
 	add(_numAmmoLeft,		"numAmmoLeft",			"battlescape", _icons);
 	add(_btnRightHandItem,	"buttonRightHand",		"battlescape", _icons);
 	add(_numAmmoRight,		"numAmmoRight",			"battlescape", _icons);
+	add(_visUnitTarget);
 
+	_visUnitTarget->setVisible(false);
 //	_iconsLayer->setVisible(false);
 
 	for (size_t
@@ -1522,7 +1525,7 @@ void BattlescapeState::mapIn(Action*)
 			&& (_save->getSide() == FACTION_PLAYER
 				|| _save->getDebugMode() == true))
 		{
-			getMap()->setCursorType(CT_NORMAL);
+			_map->setCursorType(CT_NORMAL);
 		}
 	}
 	else
@@ -1830,7 +1833,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 			if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
 			{
 				_battleGame->getCurrentAction()->waypoints.clear();
-				_battleGame->getMap()->getWaypoints()->clear();
+				_map->getWaypoints()->clear();
 				showLaunchButton(false);
 			}
 
@@ -1972,7 +1975,7 @@ void BattlescapeState::btnShowLayersClick(Action*)
 {
 //	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 
-	const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2)? true: false;
+	const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2) ? true : false;
 
 	if (showLayers == false)
 		_iconsLayer->clear();
@@ -2059,7 +2062,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
 		{
 			_battleGame->getCurrentAction()->waypoints.clear();
-			_battleGame->getMap()->getWaypoints()->clear();
+			_map->getWaypoints()->clear();
 			showLaunchButton(false);
 		}
 
@@ -2180,6 +2183,11 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 		if (_btnVisibleUnit[i] == action->getSender())
 		{
 			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
+
+			_targetUnit = _visibleUnit[i];
+			_visUnitTargetFrame = 0;
+			_visUnitTarget->setVisible();
+
 			break;
 		}
 	}
@@ -2288,7 +2296,7 @@ void BattlescapeState::btnReloadClick(Action*)
 												ResourcePack::ITEM_RELOAD)
 											->play(
 												-1,
-												getMap()->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
+												_map->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
 
 		updateSoldierInfo();
 	}
@@ -2831,6 +2839,7 @@ void BattlescapeState::animate()
 	blinkVisibleUnitButtons();
 	drawFuse();
 	flashMedic();
+	drawVisUnitTarget();
 }
 
 /**
@@ -2843,9 +2852,9 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 	if (item != NULL						// make sure there is an item
 		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
 	{
-//kL	if (_savedGame->isResearched(item->getRules()->getRequirements())
-//kL		|| _battleSave->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
-//kL_note: do that in ActionMenu, to allow throwing artefacts.
+//		if (_savedGame->isResearched(item->getRules()->getRequirements())
+//			|| _battleSave->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
+		//kL_note: do that in ActionMenu, to allow throwing artefacts.
 //		{
 		_battleGame->getCurrentAction()->weapon = item;
 		popup(new ActionMenuState(
@@ -2853,7 +2862,7 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 								_icons->getX(),
 								_icons->getY() + 16));
 //		}
-//kL	else warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
+//		else warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
 	}
 }
 
@@ -3893,12 +3902,13 @@ void BattlescapeState::drawFuse()
 		return;
 
 
-	const int pulse[22] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3};
+	const int pulse[22] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
+						   13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
 
 	if (_fuseFrame == 22)
 		_fuseFrame = 0;
 
-	Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
+	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
 
 	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
 	if (item != NULL
@@ -4184,12 +4194,36 @@ void BattlescapeState::flashMedic()
 						3); // red
 		_btnWounds->unlock();
 
-		_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow
+		_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow shades
 
 
 		phase += 2;
 		if (phase == 16)
 			phase = 0;
+	}
+}
+
+/**
+ * Animates targeting cursor over hostile unit when visUnit indicator is clicked.
+ */
+void BattlescapeState::drawVisUnitTarget()
+{
+	static const size_t FRAMES = 6;
+	static const int cursorFrames[FRAMES] = {0,1,2,3,4,4};
+
+	if (_targetUnit != NULL)
+	{
+		Surface* const targetCursor = _game->getResourcePack()->getSurfaceSet("TARGET.PCK")->getFrame(cursorFrames[_visUnitTargetFrame]);
+		targetCursor->blit(_visUnitTarget);
+
+		++_visUnitTargetFrame;
+
+		if (_visUnitTargetFrame == FRAMES)
+		{
+			_targetUnit = NULL;
+			_visUnitTargetFrame = 0;
+			_visUnitTarget->setVisible(false);
+		}
 	}
 }
 

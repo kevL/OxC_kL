@@ -227,11 +227,14 @@ std::wstring Transfer::getName(Language* lang) const
 {
 	if (_soldier != NULL)
 		return _soldier->getName();
-	else if (_craft != NULL)
+
+	if (_craft != NULL)
 		return _craft->getName(lang);
-	else if (_scientists != 0)
+
+	if (_scientists != 0)
 		return lang->getString("STR_SCIENTISTS");
-	else if (_engineers != 0)
+
+	if (_engineers != 0)
 		return lang->getString("STR_ENGINEERS");
 
 	return lang->getString(_itemId);
@@ -254,9 +257,11 @@ int Transfer::getQuantity() const
 {
 	if (_itemQty != 0)
 		return _itemQty;
-	else if (_scientists != 0)
+
+	if (_scientists != 0)
 		return _scientists;
-	else if (_engineers != 0)
+
+	if (_engineers != 0)
 		return _engineers;
 
 	return 1;
@@ -270,11 +275,14 @@ TransferType Transfer::getType() const
 {
 	if (_soldier != NULL)
 		return TRANSFER_SOLDIER;
-	else if (_craft != NULL)
+
+	if (_craft != NULL)
 		return TRANSFER_CRAFT;
-	else if (_scientists != 0)
+
+	if (_scientists != 0)
 		return TRANSFER_SCIENTIST;
-	else if (_engineers != 0)
+
+	if (_engineers != 0)
 		return TRANSFER_ENGINEER;
 
 	return TRANSFER_ITEM;
@@ -299,7 +307,9 @@ void Transfer::advance(Base* base)
 			_craft->checkup();
 		}
 		else if (_itemQty != 0)
-			base->getItems()->addItem(_itemId, _itemQty);
+			base->getItems()->addItem(
+									_itemId,
+									_itemQty);
 		else if (_scientists != 0)
 			base->setScientists(base->getScientists() + _scientists);
 		else if (_engineers != 0)
