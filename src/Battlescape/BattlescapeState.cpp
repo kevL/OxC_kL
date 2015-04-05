@@ -128,7 +128,6 @@ BattlescapeState::BattlescapeState()
 		_mouseScrollingStartTime(0),
 		_fuseFrame(0),
 		_showConsole(2),
-		_targetUnit(NULL),
 		_visUnitTargetFrame(0)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
@@ -2184,9 +2183,8 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 		{
 			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
 
-			_targetUnit = _visibleUnit[i];
-			_visUnitTargetFrame = 0;
 			_visUnitTarget->setVisible();
+			_visUnitTargetFrame = 0;
 
 			break;
 		}
@@ -2336,10 +2334,10 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
 }
 
 /**
- * kL. Handler for toggling the console.
+ * Handler for toggling the console.
  * @param action - pointer to an Action
  */
-void BattlescapeState::btnConsoleToggle(Action*) // kL
+void BattlescapeState::btnConsoleToggle(Action*)
 {
 	if (allowButtons() == true)
 	{
@@ -3893,7 +3891,7 @@ void BattlescapeState::refreshVisUnits()
 }
 
 /**
- * Shows primer warnings on all live grenades.
+ * Animates primer warnings on all live grenades.
  */
 void BattlescapeState::drawFuse()
 {
@@ -3902,10 +3900,10 @@ void BattlescapeState::drawFuse()
 		return;
 
 
-	const int pulse[22] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
-						   13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
+	static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
+											13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
 
-	if (_fuseFrame == 22)
+	if (_fuseFrame == PULSE_FRAMES)
 		_fuseFrame = 0;
 
 	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
@@ -4208,22 +4206,17 @@ void BattlescapeState::flashMedic()
  */
 void BattlescapeState::drawVisUnitTarget()
 {
-	static const size_t FRAMES = 6;
-	static const int cursorFrames[FRAMES] = {0,1,2,3,4,4};
+	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,4,0}; // note: does not show the last frame.
 
-	if (_targetUnit != NULL)
+	if (_visUnitTarget->getVisible() == true)
 	{
 		Surface* const targetCursor = _game->getResourcePack()->getSurfaceSet("TARGET.PCK")->getFrame(cursorFrames[_visUnitTargetFrame]);
 		targetCursor->blit(_visUnitTarget);
 
 		++_visUnitTargetFrame;
 
-		if (_visUnitTargetFrame == FRAMES)
-		{
-			_targetUnit = NULL;
-			_visUnitTargetFrame = 0;
+		if (_visUnitTargetFrame == TARGET_FRAMES)
 			_visUnitTarget->setVisible(false);
-		}
 	}
 }
 

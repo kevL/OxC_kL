@@ -61,7 +61,10 @@ class BattlescapeState
 {
 
 private:
-	static const size_t INDICATORS = 20;
+	static const size_t
+		INDICATORS		= 20,
+		TARGET_FRAMES	= 7,
+		PULSE_FRAMES	= 22;
 
 	bool
 		_firstInit,
@@ -110,9 +113,7 @@ private:
 //		* _reserve;
 //		* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	BattlescapeGame* _battleGame;
-	BattleUnit
-		* _visibleUnit[INDICATORS],
-		* _targetUnit;
+	BattleUnit* _visibleUnit[INDICATORS];
 	InteractiveSurface
 		* _icons,
 
