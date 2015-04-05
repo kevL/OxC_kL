@@ -1553,6 +1553,8 @@ void BattlescapeState::mapIn(Action*)
  */
 inline void BattlescapeState::handle(Action* action)
 {
+	if (_firstInit == true) return;
+
 	if (_game->getCursor()->getVisible() == true
 		|| (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 			&& (action->getDetails()->type == SDL_MOUSEBUTTONDOWN

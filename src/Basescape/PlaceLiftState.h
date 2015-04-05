@@ -29,6 +29,7 @@ namespace OpenXcom
 class Base;
 class BaseView;
 class Globe;
+class RuleBaseFacility;
 class Text;
 
 
@@ -46,6 +47,7 @@ private:
 	Base* _base;
 	BaseView* _view;
 	Globe* _globe;
+	RuleBaseFacility* _lift;
 	Text* _txtTitle;
 
 

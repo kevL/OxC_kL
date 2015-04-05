@@ -66,15 +66,26 @@ PlaceLiftState::PlaceLiftState(
 
 	setPalette("PAL_BASESCAPE");
 
-	add(_view, "baseView", "basescape");
-	add(_txtTitle, "text", "placeFacility");
+	add(_view,		"baseView",	"basescape");
+	add(_txtTitle,	"text",		"placeFacility");
 
 	centerAllSurfaces();
 
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
-	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
+	for (std::vector<std::string>::const_iterator
+			i = _game->getRuleset()->getBaseFacilitiesList().begin();
+			i != _game->getRuleset()->getBaseFacilitiesList().end();
+			++i)
+	{
+		if (_game->getRuleset()->getBaseFacility(*i)->isLift() == true)
+		{
+			_lift = _game->getRuleset()->getBaseFacility(*i);
+			break;
+		}
+	}
+	_view->setSelectable(_lift->getSize());
 	_view->onMouseClick((ActionHandler)& PlaceLiftState::viewClick);
 
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
@@ -93,7 +104,7 @@ PlaceLiftState::~PlaceLiftState()
 void PlaceLiftState::viewClick(Action*)
 {
 	BaseFacility* fac = new BaseFacility(
-									_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"),
+									_lift,
 									_base);
 	fac->setX(_view->getGridX());
 	fac->setY(_view->getGridY());

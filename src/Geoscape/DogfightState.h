@@ -34,6 +34,18 @@ const int
 	DIST_STANDOFF	= 580,
 	TIMEOUT			= 38;
 
+enum ColorNames
+{
+	CRAFT_MIN,	// 0
+	CRAFT_MAX,	// 1
+	RADAR_MIN,	// 2
+	RADAR_MAX,	// 3
+	DAMAGE_MIN,	// 4
+	DAMAGE_MAX,	// 5
+	BLOB_MIN,	// 6
+	RANGE_METER	// 7
+};
+
 
 class Craft;
 class CraftWeaponProjectile;
@@ -92,7 +104,7 @@ private:
 		_intercept,
 		_interceptQty;
 	Uint8
-		_color[6], // craft min/max, radar min/max, damage min/max
+		_colors[8], // see ColorNames enum above^
 		_currentCraftDamageColor;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
