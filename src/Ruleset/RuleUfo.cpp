@@ -77,7 +77,7 @@ void RuleUfo::load(
 	_reload			= node["reload"]		.as<int>(_reload);
 	_breakOffTime	= node["breakOffTime"]	.as<int>(_breakOffTime);
 	_sightRange		= node["sightRange"]	.as<int>(_sightRange);
-	_briefingString	= node["briefingString"].as<std::string>(_briefingString);
+	_briefing		= node["briefing"]		.as<std::string>(_briefing);
 	_modSprite		= node["modSprite"]		.as<std::string>(_modSprite);
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
@@ -270,7 +270,7 @@ int RuleUfo::getSightRange() const
  */
 std::string RuleUfo::getBriefingString() const
 {
-	return _briefingString;
+	return _briefing;
 }
 
 }

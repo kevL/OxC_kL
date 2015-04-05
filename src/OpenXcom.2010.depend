@@ -5666,7 +5666,7 @@
 
 1427832021 f:\git\openxcom\src\ruleset\ruleterrain.h
 
-1428211125 f:\git\openxcom\src\ruleset\ruleufo.h
+1428212907 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1425565087 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -5809,7 +5809,7 @@
 1424390944 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1428212199 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1428212266 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"

@@ -53,7 +53,7 @@ private:
 		_speedMax,
 		_sprite;
 	std::string
-		_briefingString,
+		_briefing,
 		_modSprite,
 		_size,
 		_type;
