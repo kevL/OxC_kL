@@ -53,6 +53,7 @@ private:
 		_speedMax,
 		_sprite;
 	std::string
+		_briefingString,
 		_modSprite,
 		_size,
 		_type;
@@ -110,6 +111,9 @@ private:
 		std::string getModSprite() const;
 		/// Gets the UFO's radar range.
 		int getSightRange() const;
+
+		/// Gets the name of the briefing string.
+		std::string getBriefingString() const;
 };
 
 }

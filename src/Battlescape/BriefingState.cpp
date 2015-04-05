@@ -75,19 +75,22 @@ BriefingState::BriefingState(
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
-
 	int bgColor;
 	std::string
 		bg,		// default defined in Ruleset/AlienDeployment.h: "BACK16.SCR",
 		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
 
+	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(missionType); // check, Xcom1Ruleset->alienDeployments for a missionType
-	const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
+
+	const Ufo* ufo = NULL;
+
 	if (deployRule == NULL // landing site or crash site -> define BG & Music by ufoType instead
-		&& ufo != NULL)
+		&& craft != NULL)
 	{
-		deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
+		ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		if (ufo != NULL) // landing site or crash site.
+			deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
 	}
 
 	if (deployRule == NULL) // should never happen
@@ -183,15 +186,10 @@ BriefingState::BriefingState(
 		_txtBriefing->setY(_txtBriefing->getY() - 16);
 
 	std::ostringstream brief;
-	if (ufo != NULL) // if this UFO has a specific briefing use it
+	if (ufo != NULL // if this UFO has a specific briefing use it
+		&& ufo->getRules()->getBriefingString().empty() == false)
 	{
-		brief << ufo->getRules()->getType() << "_BRIEFING";
-		// This is not a great check, if the string isn't defined
-		// for the selected language, it will revert to the default
-		// briefing text instead.
-		// This makes it harder to notice missing strings in mods.
-		if (tr(brief.str()).asUTF8() == brief.str())		// ie, if untranslated
-			brief << missionType.c_str() << "_BRIEFING";	// do rego.mission brief instead
+		brief << ufo->getRules()->getBriefingString();
 	}
 	else
 		brief << missionType.c_str() << "_BRIEFING";

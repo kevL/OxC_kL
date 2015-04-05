@@ -5666,7 +5666,7 @@
 
 1427832021 f:\git\openxcom\src\ruleset\ruleterrain.h
 
-1424390936 f:\git\openxcom\src\ruleset\ruleufo.h
+1428211125 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1425565087 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -5687,7 +5687,7 @@
 1424390944 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1428201202 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1428210582 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5809,7 +5809,7 @@
 1424390944 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1428035918 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1428212199 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -8599,7 +8599,7 @@
 	"Ruleset.h"
 	"RuleTerrain.h"
 
-1426831922 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1428211183 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
