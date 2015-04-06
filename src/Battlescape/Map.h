@@ -96,7 +96,6 @@ private:
 		_spriteWidth,
 		_spriteHeight,
 		_visibleMapHeight;
-	Uint8 _messageColor;
 
 	PathPreview _previewSetting;
 

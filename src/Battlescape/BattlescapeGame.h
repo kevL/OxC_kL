@@ -270,6 +270,7 @@ private:
 		void moveUpDown(
 				BattleUnit* unit,
 				int dir);
+
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 
@@ -315,10 +316,10 @@ private:
 		/// Returns the type of action that is reserved.
 		BattleActionType getReservedAction() const;
 
-		/// Tallies the living units, converting them if necessary.
-		void tallyUnits(
+		/// Tallies the living units.
+		bool tallyUnits(
 				int& liveAliens,
-				int& liveSoldiers);
+				int& liveSoldiers) const;
 
 		/// Sets the kneel reservation setting.
 		void setKneelReserved(bool reserved);

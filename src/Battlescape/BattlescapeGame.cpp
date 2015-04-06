@@ -831,10 +831,9 @@ void BattlescapeGame::endTurnPhase()
 	int // if all units from either faction are killed - the mission is over.
 		liveAliens,
 		liveSoldiers;
-	tallyUnits(
-			liveAliens,
-			liveSoldiers);
-
+	const bool pacified = tallyUnits(
+								liveAliens,
+								liveSoldiers);
 
 	if (_battleSave->allObjectivesDestroyed() == true)
 	{
@@ -844,7 +843,7 @@ void BattlescapeGame::endTurnPhase()
 		return;
 	}
 
-	if (   liveAliens != 0
+	if (liveAliens != 0
 		&& liveSoldiers != 0)
 	{
 		showInfoBoxQueue();
@@ -866,7 +865,8 @@ void BattlescapeGame::endTurnPhase()
 	{
 		_parentState->getGame()->pushState(new NextTurnState(
 														_battleSave,
-														_parentState));
+														_parentState,
+														pacified));
 	}
 
 	_endTurnRequested = false;
@@ -3365,14 +3365,17 @@ BattleActionType BattlescapeGame::getReservedAction() const
 }
 
 /**
- * Tallies the living units in the game and, if required, converts units into their spawn unit.
- * @param liveAliens	- reference in which to store the live alien tally
- * @param liveSoldiers	- reference in which to store the live XCom tally
+ * Tallies the living units in the game.
+ * @param liveAliens		- reference in which to store the live alien tally
+ * @param liveSoldiers		- reference in which to store the live XCom tally
+ * @return, true if all aliens are dead or pacified independent of allowPsionicCapture option
  */
-void BattlescapeGame::tallyUnits(
+bool BattlescapeGame::tallyUnits(
 		int& liveAliens,
-		int& liveSoldiers)
+		int& liveSoldiers) const
 {
+	bool ret = true;
+
 	liveSoldiers =
 	liveAliens = 0;
 
@@ -3385,11 +3388,14 @@ void BattlescapeGame::tallyUnits(
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				if (Options::allowPsionicCapture == false
-					|| (*j)->getFaction() != FACTION_PLAYER)
+				if ((*j)->getFaction() != FACTION_PLAYER
+					|| Options::allowPsionicCapture == false)
 				{
 					++liveAliens;
 				}
+
+				if ((*j)->getFaction() == FACTION_HOSTILE)
+					ret = false;
 			}
 			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 			{
@@ -3400,6 +3406,8 @@ void BattlescapeGame::tallyUnits(
 			}
 		}
 	}
+
+	return ret;
 }
 
 /**

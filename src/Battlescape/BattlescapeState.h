@@ -63,7 +63,7 @@ class BattlescapeState
 private:
 	static const size_t
 		INDICATORS		= 20,
-		TARGET_FRAMES	= 7,
+		TARGET_FRAMES	= 6,
 		PULSE_FRAMES	= 22;
 
 	bool

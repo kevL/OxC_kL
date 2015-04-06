@@ -1104,7 +1104,7 @@ private:
 		void setTurnDirection(const int turnDir);
 
 		/// Sets this BattleUnit as having just revived during a Turnover.
-		void setRevived();
+		void setRevived(bool revived = true);
 };
 
 }

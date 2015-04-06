@@ -2211,7 +2211,7 @@ double BattleUnit::getInitiative(int tuSpent)
 }
 
 /**
- * Prepares unit for a new turn.
+ * Prepares this BattleUnit for its turn.
  */
 void BattleUnit::prepUnit()
 {
@@ -2269,6 +2269,7 @@ void BattleUnit::prepUnit()
 		}
 	}
 
+//	_revived = false;
 	_dontReselect = false;
 	_motionPoints = 0;
 }
@@ -4408,20 +4409,24 @@ void BattleUnit::setBattleGame(BattlescapeGame* const battleGame)
 }
 
 /**
- * Sets this unit's parameters as down (collapsed / unconscious / dead).
+ * Sets this BattleUnit's parameters as down - collapsed/ unconscious/ dead.
  */
 void BattleUnit::setDown()
 {
-	if (_geoscapeSoldier != NULL)
-	{
-		_turnsExposed = 255;	// don't aggro the AI
-		_kneeled = false;		// don't get hunkerdown bonus against HE detonations
+	_faction = _originalFaction;
 
-		// could add or remove more, I guess .....
-		// but These don't seem to affect anything:
-		_floating = false;
-		_dashing = false;
-	}
+	_turnsExposed = 255;	// don't aggro the AI even if Hostile faction
+	_kneeled = false;		// don't get hunkerdown bonus against HE detonations
+
+	// These don't seem to affect anything:
+	_floating = false;
+	_dashing = false;
+	// could add or remove more, I guess .....
+	_stopShot = false;
+	_takenExpl = false;
+	_takenFire = false;
+	_diedByFire = false;
+	// etc.
 }
 
 /**
@@ -4434,11 +4439,12 @@ void BattleUnit::setTurnDirection(const int turnDir)
 }
 
 /**
- * Sets this BattleUnit as having just revived during a Turnover.
+ * Sets this BattleUnit as having just revived or not.
+ * @param revived - true if unit has just revived during a Turnover (default true)
  */
-void BattleUnit::setRevived()
+void BattleUnit::setRevived(bool revived)
 {
-	_revived = true;
+	_revived = revived;
 }
 
 }

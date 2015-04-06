@@ -130,7 +130,6 @@ Map::Map(
 {
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
-	_messageColor = static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
 
 	_previewSetting	= Options::battleNewPreviewPath;
 	if (Options::traceAI == true) // turn everything on because we want to see the markers.
@@ -158,8 +157,7 @@ Map::Map(
 	_hidden->setX(_game->getScreen()->getDX());
 	_hidden->setY(_game->getScreen()->getDY());
 //	_hidden->setY((visibleMapHeight - _hidden->getHeight()) / 2);
-//	_hidden->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
-	_hidden->setTextColor(_messageColor);
+	_hidden->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color));
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);

@@ -44,15 +44,13 @@ BattlescapeMessage::BattlescapeMessage(
 		Surface(
 			width,
 			height,
-			x,
-			y)
+			x,y)
 {
 	_window = new Window(
 						NULL,
 						width,
 						height,
-						x,
-						y,
+						x,y,
 						POPUP_NONE);
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();

@@ -30,7 +30,7 @@ class BattlescapeState;
 //class Surface;
 class SavedBattleGame;
 class Text;
-class Timer;
+//class Timer;
 //class TurnCounter; // kL
 class Window;
 
@@ -44,7 +44,7 @@ class NextTurnState
 {
 
 private:
-	static const int NEXT_TURN_DELAY = 1000;
+//	static const int NEXT_TURN_DELAY = 1000;
 
 	BattlescapeState* _state;
 	SavedBattleGame* _battleSave;
@@ -54,7 +54,7 @@ private:
 		* _txtTurn,
 		* _txtSide,
 		* _txtMessage;
-	Timer* _timer;
+//	Timer* _timer;
 //	TurnCounter* _turnCounter; // kL
 	Window* _window;
 
@@ -63,7 +63,8 @@ private:
 		/// Creates the Next Turn state.
 		NextTurnState(
 				SavedBattleGame* battleSave,
-				BattlescapeState* state);
+				BattlescapeState* state,
+				bool aliensPacified = false);
 		/// Cleans up the Next Turn state.
 		~NextTurnState();
 
@@ -71,7 +72,7 @@ private:
 		void handle(Action* action);
 
 		/// Handles the timer.
-		void think();
+//		void think();
 		/// Closes the window.
 		void nextTurn();
 

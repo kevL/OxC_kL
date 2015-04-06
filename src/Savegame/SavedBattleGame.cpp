@@ -1038,12 +1038,10 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		unitLast = _units.begin();
 	}
 
-
 	std::vector<BattleUnit*>::const_iterator i = std::find(
 														_units.begin(),
 														_units.end(),
 														_selectedUnit);
-
 	do
 	{
 		if (i == _units.end()) // no unit selected
@@ -1176,14 +1174,14 @@ int SavedBattleGame::getTurn() const
 
 /**
  * Ends the current faction-turn and progresses to the next one.
- * @return, true if the turn rolls over back to faction Player
+ * @return, true if the turn rolls-over back to faction Player
  */
 bool SavedBattleGame::endBattlePhase()
 {
 	//Log(LOG_INFO) << "SBG::endBattlePhase()";
 	bool ret = false;
 
-	if (_side == FACTION_PLAYER) // end of Xcom turn.
+	if (_side == FACTION_PLAYER) // end of Player turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Player";
 		if (_selectedUnit != NULL
@@ -1196,13 +1194,17 @@ bool SavedBattleGame::endBattlePhase()
 		_selectedUnit = NULL;
 
 		// kL_begin: sbg::endBattlePhase() no Reselect xCom units at endTurn!!!
+		// and set _revived FALSE
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _units.begin();
 				i != _units.end();
 				++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
+			{
 				(*i)->dontReselect();
+				(*i)->setRevived(false);
+			}
 		} // kL_end.
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
@@ -1210,12 +1212,22 @@ bool SavedBattleGame::endBattlePhase()
 		//Log(LOG_INFO) << ". end Faction_Hostile";
 		_side = FACTION_NEUTRAL;
 
-		// if there is no neutral team, we skip this section
-		// and instantly prepare the new turn for the player.
+		// kL_begin: sbg::endBattlePhase() set _revived FALSE
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _units.begin();
+				i != _units.end();
+				++i)
+		{
+			if ((*i)->getFaction() == FACTION_HOSTILE)
+				(*i)->setRevived(false);
+		} // kL_end.
+
+		// if there is no neutral team, skip this section
+		// and instantly prepare new turn for the player.
 		if (selectNextFactionUnit() == NULL) // else this will cycle through NEUTRAL units
 		{
 			//Log(LOG_INFO) << ". . nextFactionUnit == 0";
-			prepareBattleTurn();
+			prepareBattleTurn(); // Tile stuff & revives units
 			//Log(LOG_INFO) << ". . prepareBattleTurn DONE";
 			++_turn;
 			ret = true;
@@ -1245,7 +1257,18 @@ bool SavedBattleGame::endBattlePhase()
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Neutral";
-		prepareBattleTurn();
+
+		// kL_begin: sbg::endBattlePhase() set _revived FALSE
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _units.begin();
+				i != _units.end();
+				++i)
+		{
+			if ((*i)->getFaction() == FACTION_NEUTRAL)
+				(*i)->setRevived(false);
+		} // kL_end.
+
+		prepareBattleTurn(); // Tile stuff & revives units
 		++_turn;
 		ret = true;
 
@@ -1288,10 +1311,10 @@ bool SavedBattleGame::endBattlePhase()
 	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.
 	if (_side == FACTION_HOSTILE)
 	{
-		const int rand = RNG::generate(0,5);
-		if (_turn > 17 + rand
+		const int delta = RNG::generate(0,5);
+		if (_turn > 17 + delta
 			|| (_turn > 8
-				&& liveAliens < rand - 1))
+				&& liveAliens < delta - 1))
 		{
 			_cheating = true;
 		}
@@ -1837,9 +1860,9 @@ void SavedBattleGame::prepareBattleTurn()
 		tilesFired,
 		tilesSmoked;
 
-	for (int // prepare a list of tiles on fire
+	for (size_t // prepare a list of tiles on fire
 			i = 0;
-			i < _mapsize_x * _mapsize_y * _mapsize_z;
+			i != static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 			++i)
 	{
 		if (getTiles()[i]->getFire() > 0)
@@ -1911,9 +1934,9 @@ void SavedBattleGame::prepareBattleTurn()
 		}
 	}
 
-	for (int // prepare a list of tiles with smoke in them (smoke acts as fire intensity)
+	for (size_t // prepare a list of tiles with smoke in them (smoke acts as fire intensity)
 			i = 0;
-			i < _mapsize_x * _mapsize_y * _mapsize_z;
+			i != static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 			++i)
 	{
 		if (getTiles()[i]->getSmoke() > 0)
@@ -1997,9 +2020,9 @@ void SavedBattleGame::prepareBattleTurn()
 	if (tilesFired.empty() == false
 		|| tilesSmoked.empty() == false)
 	{
-		for (int // do damage to units, average out the smoke, etc.
+		for (size_t // do damage to units, average out the smoke, etc.
 				i = 0;
-				i < _mapsize_x * _mapsize_y * _mapsize_z;
+				i != static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 				++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
@@ -2296,9 +2319,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 	for (std::vector<BattleUnit*>::const_iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() != faction) continue;
-
 		std::vector<BattleUnit*>* vis = (*i)->getVisibleUnits();
-
 		if (std::find(vis->begin(), vis->end(), unit) != vis->end())
 		{
 			return true;
@@ -2306,38 +2327,29 @@ bool SavedBattleGame::placeUnitNearPosition(
 			// aliens due to sharing locations over their space-walkie-talkies
 		}
 	}
-
 	return false;
 } */
 
 /**
- * Adds this unit to the vector of falling units, if it doesn't already exist there.
+ * Adds this unit to the vector of falling units if it doesn't already exist there.
  * @param unit - the unit to add
  * @return, true if the unit was added
  */
 bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::addFallingUnit() ID = " << unit->getId();
-	bool add = true;
-
 	for (std::list<BattleUnit*>::const_iterator
 			i = _fallingUnits.begin();
 			i != _fallingUnits.end();
 			++i)
 	{
 		if (unit == *i)
-			add = false;
-
-			break;
+			return false;
 	}
 
-	if (add == true)
-	{
-		_fallingUnits.push_front(unit);
-		_unitsFalling = true;
-	}
+	_fallingUnits.push_front(unit);
+	_unitsFalling = true;
 
-	return add;
+	return true;
 }
 
 /**

@@ -35,7 +35,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
-#include "../Engine/Timer.h"
+//#include "../Engine/Timer.h"
 
 #include "../Menu/SaveGameState.h"
 
@@ -56,36 +56,46 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Next Turn screen.
- * @param battleSave	- pointer to the SavedBattleGame
- * @param state			- pointer to the BattlescapeState
+ * @param battleSave		- pointer to the SavedBattleGame
+ * @param state				- pointer to the BattlescapeState
+ * @param aliensPacified	- true if all remaining aliens are mind-controlled (default false)
  */
 NextTurnState::NextTurnState(
 		SavedBattleGame* battleSave,
-		BattlescapeState* state)
+		BattlescapeState* state,
+		bool aliensPacified)
 	:
 		_battleSave(battleSave),
-		_state(state),
-		_timer(NULL)
+		_state(state)
+//		_timer(NULL)
 //		_turnCounter(NULL)
 {
-	_window		= new Window(this, 320, 200, 0, 0);
-	_txtTitle	= new Text(320, 17, 0, 68);
-	_txtTurn	= new Text(320, 17, 0, 93);
-	_txtSide	= new Text(320, 17, 0, 109);
-	_txtMessage	= new Text(320, 17, 0, 149);
+	_window = new Window(this, 320, 200);
+
+	if (aliensPacified == false)
+	{
+		_txtTitle	= new Text(320, 17, 0, 68);
+		_txtTurn	= new Text(320, 17, 0, 93);
+		_txtSide	= new Text(320, 17, 0, 109);
+		_txtMessage	= new Text(320, 17, 0, 149);
+	}
+	else
+		_txtMessage	= new Text(320, 200);
 //	_bg			= new Surface(
 //							_game->getScreen()->getWidth(),
 //							_game->getScreen()->getHeight(),
-//							0,
-//							0);
+//							0,0);
 
 	_battleSave->setPaletteByDepth(this);
 
 	add(_window);
-	add(_txtTitle,		"messageWindows", "battlescape");
-	add(_txtTurn,		"messageWindows", "battlescape");
-	add(_txtSide,		"messageWindows", "battlescape");
 	add(_txtMessage,	"messageWindows", "battlescape");
+	if (aliensPacified == false)
+	{
+		add(_txtTitle,	"messageWindows", "battlescape");
+		add(_txtTurn,	"messageWindows", "battlescape");
+		add(_txtSide,	"messageWindows", "battlescape");
+	}
 //	add(_bg);
 
 	centerAllSurfaces();
@@ -105,46 +115,59 @@ NextTurnState::NextTurnState(
 	const int y = state->getMap()->getMessageY();
 
 	_window->setY(y);
-	_txtTitle->setY(y + 68);
-	_txtTurn->setY(y + 93);
-	_txtSide->setY(y + 109);
-	_txtMessage->setY(y + 149);
+
+	if (aliensPacified == false)
+	{
+		_txtTitle->setY(y + 68);
+		_txtTurn->setY(y + 93);
+		_txtSide->setY(y + 109);
+		_txtMessage->setY(y + 149);
+	}
 
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setHighContrast();
-	_txtTitle->setText(tr("STR_OPENXCOM"));
+	if (aliensPacified == false)
+	{
+		_txtTitle->setBig();
+		_txtTitle->setAlign(ALIGN_CENTER);
+		_txtTitle->setHighContrast();
+		_txtTitle->setText(tr("STR_OPENXCOM"));
 
-	_txtTurn->setBig();
-	_txtTurn->setAlign(ALIGN_CENTER);
-	_txtTurn->setHighContrast();
-	_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
+		_txtTurn->setBig();
+		_txtTurn->setAlign(ALIGN_CENTER);
+		_txtTurn->setHighContrast();
+		_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
 
-	_txtSide->setBig();
-	_txtSide->setAlign(ALIGN_CENTER);
-	_txtSide->setHighContrast();
-	_txtSide->setText(tr("STR_SIDE")
-						.arg(tr(_battleSave->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS")));
+		_txtSide->setBig();
+		_txtSide->setAlign(ALIGN_CENTER);
+		_txtSide->setHighContrast();
+		_txtSide->setText(tr("STR_SIDE")
+							.arg(tr(_battleSave->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS")));
+	}
 
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast();
-	_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
+	if (aliensPacified == false)
+		_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
+	else
+	{
+		_txtMessage->setText(tr("STR_ALIENS_PACIFIED"));
+		_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
+	}
 
 	_state->clearMouseScrollingState();
 
 	kL_noReveal = true;
 
-	if (Options::skipNextTurnScreen == true)
+/*	if (Options::skipNextTurnScreen == true)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
 		_timer->onTimer((StateHandler)& NextTurnState::nextTurn);
 		_timer->start();
-	}
+	} */
 }
 
 /**
@@ -152,8 +175,8 @@ NextTurnState::NextTurnState(
  */
 NextTurnState::~NextTurnState()
 {
-	if (Options::skipNextTurnScreen == true)
-		delete _timer;
+//	if (Options::skipNextTurnScreen == true)
+//		delete _timer;
 }
 
 /**
@@ -179,11 +202,11 @@ void NextTurnState::handle(Action* action)
 /**
  * Keeps the timer running.
  */
-void NextTurnState::think()
+/* void NextTurnState::think()
 {
 	if (_timer != NULL)
 		_timer->think(this, NULL);
-}
+} */
 
 /**
  * Closes the window.
@@ -241,11 +264,11 @@ void NextTurnState::nextTurn()
 					music,
 					terrain;
 				_battleSave->calibrateMusic(
-											music,
-											terrain);
+										music,
+										terrain);
 				_game->getResourcePack()->playMusic(
-											music,
-											terrain);
+												music,
+												terrain);
 			}
 
 

@@ -4208,7 +4208,7 @@ void BattlescapeState::flashMedic()
  */
 void BattlescapeState::drawVisUnitTarget()
 {
-	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,4,0}; // note: does not show the last frame.
+	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
 
 	if (_visUnitTarget->getVisible() == true)
 	{
