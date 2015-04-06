@@ -696,8 +696,7 @@ const Position& BattleUnit::getDestination() const
 
 /**
  * Sets this BattleUnit's horizontal direction.
- * Only used for initial unit placement.
- * kL_note: and positioning soldier when revived from unconscious status: reviveUnconsciousUnits().
+ * Used for initial unit placement and positioning soldier when revived.
  * @param dir		- new horizontal direction
  * @param turret	- true to set the turret direction also
  */
@@ -705,11 +704,11 @@ void BattleUnit::setDirection(
 		int dir,
 		bool turret)
 {
-	_direction			= dir;
-	_toDirection		= dir;
+	_direction =
+	_toDirection = dir;
 
-	if (_turretType == -1
-		|| turret == true)
+	if (turret == true
+		|| _turretType == -1)
 	{
 		_directionTurret = dir;
 	}
@@ -2269,7 +2268,6 @@ void BattleUnit::prepUnit()
 		}
 	}
 
-//	_revived = false;
 	_dontReselect = false;
 	_motionPoints = 0;
 }
@@ -4415,17 +4413,20 @@ void BattleUnit::setDown()
 {
 	_faction = _originalFaction;
 
-	_turnsExposed = 255;	// don't aggro the AI even if Hostile faction
-	_kneeled = false;		// don't get hunkerdown bonus against HE detonations
+	if (_faction != FACTION_HOSTILE)
+		_turnsExposed = 255;	// don't risk aggro per the AI
+	else
+		_turnsExposed = 0;		// aLiens always exposed.
+
+	_kneeled = false;			// don't get hunkerdown bonus against HE detonations
 
 	// These don't seem to affect anything:
-	_floating = false;
-	_dashing = false;
-	// could add or remove more, I guess .....
-	_stopShot = false;
-	_takenExpl = false;
-	_takenFire = false;
-	_diedByFire = false;
+//	_floating = false;
+//	_dashing = false;
+//	_stopShot = false;
+//	_takenExpl = false;
+//	_takenFire = false;
+//	_diedByFire = false;
 	// etc.
 }
 

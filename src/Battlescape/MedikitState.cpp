@@ -143,16 +143,17 @@ MedikitButton::MedikitButton(int y)
 		InteractiveSurface(25, 21, 192, y)
 {}
 
+
 /**
  * Initializes the Medikit State.
- * @param targetUnit	- pointer to a wounded BattleUnit
+// * @param targetUnit	- pointer to a wounded BattleUnit
  * @param action		- pointer to BattleAction (BattlescapeGame.h)
  */
 MedikitState::MedikitState(
-		BattleUnit* targetUnit,
+//		BattleUnit* targetUnit,
 		BattleAction* action)
 	:
-		_targetUnit(targetUnit),
+//		_targetUnit(targetUnit),
 		_action(action)
 {
 /*kL
@@ -163,8 +164,8 @@ MedikitState::MedikitState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_unit = action->actor;
-	_item = action->weapon;
+//	_unit = action->actor;
+//	_item = action->weapon;
 
 	_bg = new Surface(320, 200);
 
@@ -181,7 +182,7 @@ MedikitState::MedikitState(
 	_mediView	= new MedikitView(
 								52, 58, 95, 60,
 								_game,
-								_targetUnit,
+								_action->targetUnit,
 								_txtPart,
 								_txtWound);
 
@@ -322,21 +323,21 @@ void MedikitState::onCloseClick(Action*)
  */
 void MedikitState::onHealClick(Action*)
 {
-	int heal = _item->getHealQuantity();
+	int heal = _action->weapon->getHealQuantity();
 	if (heal == 0)
 		return;
 
-	const RuleItem* const itRule = _item->getRules();
-	if (_unit->spendTimeUnits(itRule->getTUUse()) == true)
+	const RuleItem* const itRule = _action->weapon->getRules();
+	if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
 	{
-		++_unit->getStatistics()->medikitApplications;
+		++_action->actor->getStatistics()->medikitApplications;
 
-		_targetUnit->heal(
+		_action->targetUnit->heal(
 					_mediView->getSelectedPart(),
 					itRule->getWoundRecovery(),
 					itRule->getHealthRecovery());
 
-		_item->setHealQuantity(--heal);
+		_action->weapon->setHealQuantity(--heal);
 //		_mediView->autoSelectPart();
 		_mediView->invalidate();
 
@@ -355,25 +356,25 @@ void MedikitState::onHealClick(Action*)
  */
 void MedikitState::onStimClick(Action*)
 {
-	int stimulant = _item->getStimulantQuantity();
+	int stimulant = _action->weapon->getStimulantQuantity();
 	if (stimulant == 0)
 		return;
 
-	const RuleItem* const itRule = _item->getRules();
-	if (_unit->spendTimeUnits(itRule->getTUUse()) == true)
+	const RuleItem* const itRule = _action->weapon->getRules();
+	if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
 	{
-		++_unit->getStatistics()->medikitApplications;
+		++_action->actor->getStatistics()->medikitApplications;
 
-		_targetUnit->stimulant(
+		_action->targetUnit->stimulant(
 							itRule->getEnergyRecovery(),
 							itRule->getStunRecovery());
-		_item->setStimulantQuantity(--stimulant);
+		_action->weapon->setStimulantQuantity(--stimulant);
 
 		update();
 
 		// if the unit has revived we quit this screen automatically
-		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
-			&& _targetUnit->getStun() < _targetUnit->getHealth())
+		if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
+			&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
 		{
 			_game->popState();
 //			onCloseClick(NULL);
@@ -392,16 +393,16 @@ void MedikitState::onStimClick(Action*)
  */
 void MedikitState::onPainClick(Action*)
 {
-	int pain = _item->getPainKillerQuantity();
+	int pain = _action->weapon->getPainKillerQuantity();
 	if (pain == 0)
 		return;
 
-	if (_unit->spendTimeUnits(_item->getRules()->getTUUse()) == true)
+	if (_action->actor->spendTimeUnits(_action->weapon->getRules()->getTUUse()) == true)
 	{
-		++_unit->getStatistics()->medikitApplications;
+		++_action->actor->getStatistics()->medikitApplications;
 
-		_targetUnit->painKillers();
-		_item->setPainKillerQuantity(--pain);
+		_action->targetUnit->painKillers();
+		_action->weapon->setPainKillerQuantity(--pain);
 
 		update();
 	}
@@ -417,36 +418,36 @@ void MedikitState::onPainClick(Action*)
  */
 void MedikitState::update()
 {
-	_txtPain->setText(toString(_item->getPainKillerQuantity()));
-	_txtStim->setText(toString(_item->getStimulantQuantity()));
-	_txtHeal->setText(toString(_item->getHealQuantity()));
+	_txtPain->setText(toString(_action->weapon->getPainKillerQuantity()));
+	_txtStim->setText(toString(_action->weapon->getStimulantQuantity()));
+	_txtHeal->setText(toString(_action->weapon->getHealQuantity()));
 
 	// Health/ Stamina/ Morale of the recipient
-	double stat = static_cast<double>(_targetUnit->getBaseStats()->health);
-	const int health = _targetUnit->getHealth();
+	double stat = static_cast<double>(_action->targetUnit->getBaseStats()->health);
+	const int health = _action->targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
-	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStun()));
+	_numStun->setValue(static_cast<unsigned>(_action->targetUnit->getStun()));
 	_barHealth->setMax(100.);
 	_barHealth->setValue(std::ceil(
 							static_cast<double>(health) / stat * 100.));
 	_barHealth->setValue2(std::ceil(
-							static_cast<double>(_targetUnit->getStun()) / stat * 100.));
+							static_cast<double>(_action->targetUnit->getStun()) / stat * 100.));
 
-	stat = static_cast<double>(_targetUnit->getBaseStats()->stamina);
-	const int energy = _targetUnit->getEnergy();
+	stat = static_cast<double>(_action->targetUnit->getBaseStats()->stamina);
+	const int energy = _action->targetUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setMax(100.);
 	_barEnergy->setValue(std::ceil(
 							static_cast<double>(energy) / stat * 100.));
 
-	const int morale = _targetUnit->getMorale();
+	const int morale = _action->targetUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
 	_barMorale->setMax(100.);
 	_barMorale->setValue(morale);
 
 	// TU of the MedKit user
-	stat = static_cast<double>(_unit->getBaseStats()->tu);
-	const int tu = _unit->getTimeUnits();
+	stat = static_cast<double>(_action->actor->getBaseStats()->tu);
+	const int tu = _action->actor->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setMax(100.);
 	_barTimeUnits->setValue(std::ceil(

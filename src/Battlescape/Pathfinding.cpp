@@ -2452,7 +2452,7 @@ void Pathfinding::setUnit(BattleUnit* unit)
 			&& (SDL_GetModState() & KMOD_ALT) != 0)
 		{
 			_movementType = MT_WALK;	// kL. I put this in but not sure where it gets used (if..).
-										// SavedBattleGame::reviveUnconsciousUnits() ...
+										// SavedBattleGame::reviveUnits() ...
 		}								// AlienBAIState::setupAmbush() also */
 	}
 	else

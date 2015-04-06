@@ -306,7 +306,7 @@ void UnitDieBState::convertToCorpse() // private.
 	// and if it was being carried, keep track of what slot it was in
 	const bool carried = (pos == Position(-1,-1,-1));
 	if (carried == false)
-		_parent->getSave()->removeUnconsciousBodyItem(_unit);
+		_parent->getSave()->removeCorpse(_unit);
 
 	const int unitSize = _unit->getArmor()->getSize() - 1;
 

@@ -297,14 +297,18 @@ private:
 		/// Carries out new turn preparations.
 		void prepareBattleTurn();
 
+		/// Revives unconscious unit.
+		void reviveUnits();
 		/// Revives unconscious units.
-		void reviveUnconsciousUnits(bool atTurnStart = true);
+		void reviveUnit(
+				BattleUnit* unit,
+				bool atTurnStart = false);
 		/// Removes the body item that corresponds to the unit.
-		void removeUnconsciousBodyItem(const BattleUnit* const bu);
+		void removeCorpse(const BattleUnit* const unit);
 
 		/// Sets or tries to set a unit of a certain size on a certain position of the map.
 		bool setUnitPosition(
-				BattleUnit* bu,
+				BattleUnit* unit,
 				const Position& pos,
 				bool testOnly = false);
 		/// Attempts to place a unit on or near Position pos.

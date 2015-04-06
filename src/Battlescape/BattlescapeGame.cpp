@@ -1277,7 +1277,7 @@ void BattlescapeGame::showInfoBoxQueue()
 
 /**
  * Handles the result of non target actions
- * like priming a grenade or performing a melee attack.
+ * like priming a grenade or performing a melee attack or using a medikit.
  */
 void BattlescapeGame::handleNonTargetAction()
 {
@@ -1307,8 +1307,7 @@ void BattlescapeGame::handleNonTargetAction()
 			else
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 		}
-		else if (_currentAction.type == BA_USE
-			|| _currentAction.type == BA_LAUNCH)
+		else if (_currentAction.type == BA_USE)
 		{
 			if (_currentAction.result.empty() == false)
 			{
@@ -1316,7 +1315,16 @@ void BattlescapeGame::handleNonTargetAction()
 				_currentAction.result.clear();
 			}
 
-			_battleSave->reviveUnconsciousUnits(false);
+			_battleSave->reviveUnit(_currentAction.targetUnit);
+			_currentAction.targetUnit = NULL;
+		}
+		else if (_currentAction.type == BA_LAUNCH)
+		{
+			if (_currentAction.result.empty() == false)
+			{
+				_parentState->warning(_currentAction.result);
+				_currentAction.result.clear();
+			}
 		}
 		else if (_currentAction.type == BA_HIT)
 		{
@@ -2837,7 +2845,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	const bool visible = unit->getUnitVisible();
 
 	_battleSave->getBattleState()->showPsiButton(false);
-	_battleSave->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
+	_battleSave->removeCorpse(unit); // in case the unit was unconscious
 
 	unit->instaKill();
 	unit->setSpecialAbility(SPECAB_NONE);

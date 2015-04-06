@@ -86,7 +86,9 @@ struct BattleAction
 
 	BattleActionType type;
 	BattleItem* weapon;
-	BattleUnit* actor;
+	BattleUnit
+		* actor,
+		* targetUnit;
 	Position
 		cameraPosition,
 		target;
@@ -98,6 +100,7 @@ struct BattleAction
 		:
 			type(BA_NONE),
 			actor(NULL),
+			targetUnit(NULL),
 			weapon(NULL),
 			TU(0),
 			targeting(false),
@@ -121,6 +124,7 @@ struct BattleAction
 		{
 			type = BA_NONE;
 			actor = NULL;
+			targetUnit = NULL;
 			weapon = NULL;
 			TU = 0;
 			targeting = false;

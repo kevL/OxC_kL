@@ -27,8 +27,8 @@ namespace OpenXcom
 {
 
 class Bar;
-class BattleItem;
-class BattleUnit;
+//class BattleItem;
+//class BattleUnit;
 class InteractiveSurface;
 class MedikitView;
 class NumberText;
@@ -52,10 +52,10 @@ private:
 		* _barMorale,
 		* _barTimeUnits;
 	BattleAction* _action;
-	BattleItem* _item;
-	BattleUnit
-		* _targetUnit,
-		* _unit;
+//	BattleItem* _item;
+//	BattleUnit
+//		* _targetUnit,
+//		* _unit;
 	InteractiveSurface
 		* _btnClose,
 		* _btnHeal,
@@ -92,7 +92,7 @@ private:
 	public:
 		/// Creates the MedikitState.
 		MedikitState(
-				BattleUnit* targetUnit,
+//				BattleUnit* targetUnit,
 				BattleAction* action);
 
 		/// Handler for right-clicking anything.

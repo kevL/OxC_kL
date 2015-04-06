@@ -191,10 +191,11 @@ void MediTargetState::init()
 	if (_targetUnits.size() == 1)
 	{
 		_action->target = _targetUnits[0]->getPosition(); // jic.
+		_action->targetUnit = _targetUnits[0];
 
 		_game->popState();
 		_game->pushState(new MedikitState(
-										_targetUnits[0],
+//										_targetUnits[0],
 										_action));
 	}
 }
@@ -226,10 +227,11 @@ void MediTargetState::lstTargetPress(Action* action)
 	{
 		BattleUnit* const targetUnit = _targetUnits[_lstTarget->getSelectedRow()];
 		_action->target = targetUnit->getPosition(); // jic.
+		_action->targetUnit = targetUnit;
 
 		_game->popState();
 		_game->pushState(new MedikitState(
-										targetUnit,
+//										targetUnit,
 										_action));
 	}
 }

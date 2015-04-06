@@ -111,18 +111,18 @@ NextTurnState::NextTurnState(
 				&rect,
 				Palette::blockOffset(0)+15); */
 
-	// make this screen line up with the hidden movement screen
-	const int y = state->getMap()->getMessageY();
-
-	_window->setY(y);
-
+/*	// line this screen up with the hidden movement screen
+	const int msg_y = state->getMap()->getMessageY();
+	_window->setY(msg_y);
 	if (aliensPacified == false)
 	{
-		_txtTitle->setY(y + 68);
-		_txtTurn->setY(y + 93);
-		_txtSide->setY(y + 109);
-		_txtMessage->setY(y + 149);
+		_txtTitle->setY(msg_y + 68);
+		_txtTurn->setY(msg_y + 93);
+		_txtSide->setY(msg_y + 109);
+		_txtMessage->setY(msg_y + 149);
 	}
+	else
+		_txtMessage->setY(msg_y); */
 
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();
