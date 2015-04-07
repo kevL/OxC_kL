@@ -194,28 +194,9 @@ void MediTargetState::init()
 		_action->targetUnit = _targetUnits[0];
 
 		_game->popState();
-		_game->pushState(new MedikitState(
-//										_targetUnits[0],
-										_action));
+		_game->pushState(new MedikitState(_action));
 	}
 }
-//		else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-//																					_action->actor->getPosition(),
-//																					_action->actor->getDirection(),
-//																					_action->actor,
-//																					NULL,
-//																					&_action->target,
-//																					false) == true)
-//		{
-//			const Tile* const tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
-//			if (tile != NULL
-//				&& tile->getUnit() != NULL
-//				&& tile->getUnit()->isFearable() == true)
-//				&& tile->getUnit()->isWoundable() == true)
-//			{
-//				_targetUnit = tile->getUnit();
-//			}
-//		}
 
 /**
  * Chooses a unit to apply Medikit to.
@@ -230,9 +211,7 @@ void MediTargetState::lstTargetPress(Action* action)
 		_action->targetUnit = targetUnit;
 
 		_game->popState();
-		_game->pushState(new MedikitState(
-//										targetUnit,
-										_action));
+		_game->pushState(new MedikitState(_action));
 	}
 }
 

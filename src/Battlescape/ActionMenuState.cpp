@@ -227,7 +227,6 @@ void ActionMenuState::addItem(
 		|| baType == BA_AIMEDSHOT
 		|| baType == BA_SNAPSHOT
 		|| baType == BA_AUTOSHOT
-//		|| baType == BA_LAUNCH
 		|| baType == BA_HIT)
 	{
 		int acu;
@@ -238,7 +237,6 @@ void ActionMenuState::addItem(
 																		baType,
 																		_action->weapon) * 100.));
 
-//		wst1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
 		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(acu);
 	}
 
@@ -288,7 +286,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 
 	for (size_t // find out which button was pressed
 			i = 0;
-			i != MENU_ITEMS; //sizeof(_menuSelect) / sizeof(_menuSelect[0])
+			i != MENU_ITEMS;
 			++i)
 	{
 		if (action->getSender() == _menuSelect[i])
@@ -354,65 +352,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		else if (_action->type == BA_USE
 			&& itRule->getBattleType() == BT_MEDIKIT)
 		{
-/* note: Target determination is moved to MediTargetState.
-			BattleUnit* targetUnit = NULL;
-
-			const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
-			for (std::vector<BattleUnit*>::const_iterator
-					i = units->begin();
-					i != units->end()
-						&& targetUnit == NULL;
-					++i)
-			{
-				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-					&& (*i)->isFearable() == true
-//					&& (*i)->isWoundable() == true
-					&& (*i)->getPosition() == _action->actor->getPosition())
-//					&& *i != _action->actor // note: if unconscious, won't be actor.
-				{
-					targetUnit = *i;
-				}
-			}
-
-			if (targetUnit == NULL
-				&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																						_action->actor->getPosition(),
-																						_action->actor->getDirection(),
-																						_action->actor,
-																						NULL,
-																						&_action->target,
-																						false) == true)
-			{
-				const Tile* const tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
-				if (tile != NULL
-					&& tile->getUnit() != NULL
-					&& tile->getUnit()->isFearable() == true)
-//					&& tile->getUnit()->isWoundable() == true)
-				{
-					targetUnit = tile->getUnit();
-				}
-			}
-
-			if (targetUnit == NULL) // kL: if no target TargetSelf.
-				targetUnit = _action->actor; */
-
 			_game->popState();
 			_game->pushState(new MediTargetState(_action));
-//			_game->pushState(new MedikitState(
-//											targetUnit,
-//											_action));
-/*			if (targetUnit != NULL)
-			{
-				_game->popState();
-				_game->pushState(new MedikitState(
-												targetUnit,
-												_action));
-			}
-			else // note This will never run due to TargetSelf.
-			{
-				_action->result = "STR_THERE_IS_NO_ONE_THERE";
-				_game->popState();
-			} */
 		}
 		else if (_action->type == BA_USE
 			&& itRule->getBattleType() == BT_SCANNER)

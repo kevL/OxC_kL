@@ -146,14 +146,10 @@ MedikitButton::MedikitButton(int y)
 
 /**
  * Initializes the Medikit State.
-// * @param targetUnit	- pointer to a wounded BattleUnit
  * @param action		- pointer to BattleAction (BattlescapeGame.h)
  */
-MedikitState::MedikitState(
-//		BattleUnit* targetUnit,
-		BattleAction* action)
+MedikitState::MedikitState(BattleAction* action)
 	:
-//		_targetUnit(targetUnit),
 		_action(action)
 {
 /*kL
@@ -163,9 +159,6 @@ MedikitState::MedikitState(
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		_game->getScreen()->resetDisplay(false);
 	} */
-
-//	_unit = action->actor;
-//	_item = action->weapon;
 
 	_bg = new Surface(320, 200);
 
@@ -195,19 +188,7 @@ MedikitState::MedikitState(
 	_txtStim	= new MedikitTxt(87);
 	_txtHeal	= new MedikitTxt(123);
 
-/*	_numTimeUnits	= new NumberText(15, 5, 60, 12); // add x+32 to center these.
-	_barTimeUnits	= new Bar(102, 3, 94, 12);
-
-	_numEnergy		= new NumberText(15, 5, 78, 12);
-	_barEnergy		= new Bar(102, 3, 94, 16);
-
-	_numHealth		= new NumberText(15, 5, 60, 20);
-	_barHealth		= new Bar(102, 3, 94, 20);
-
-	_numMorale		= new NumberText(15, 5, 78, 20);
-	_barMorale		= new Bar(102, 3, 94, 24); */
-
-	_numHealth		= new NumberText(15, 5, 90, 8);
+	_numHealth		= new NumberText(15, 5, 90, 8); // add x+32 to center these.
 	_numStun		= new NumberText(15, 5, 105, 8);
 	_barHealth		= new Bar(102, 3, 120, 9);
 
@@ -217,7 +198,7 @@ MedikitState::MedikitState(
 	_numMorale		= new NumberText(15, 5, 90, 22);
 	_barMorale		= new Bar(102, 3, 120, 23);
 
-	_numTimeUnits	= new NumberText(15, 5, 90, 164); // add x+32 to center these.
+	_numTimeUnits	= new NumberText(15, 5, 90, 164);
 	_barTimeUnits	= new Bar(102, 3, 120, 165);
 
 	add(_numHealth);
@@ -338,7 +319,7 @@ void MedikitState::onHealClick(Action*)
 					itRule->getHealthRecovery());
 
 		_action->weapon->setHealQuantity(--heal);
-//		_mediView->autoSelectPart();
+		_mediView->autoSelectPart();
 		_mediView->invalidate();
 
 		update();

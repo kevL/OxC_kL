@@ -2002,7 +2002,7 @@ void SavedBattleGame::prepareBattleTurn()
 																	tile));
 	} */
 
-	reviveUnits();
+	reviveUnits(); // <- move this. So that each faction revives at the start of its round.
 	//Log(LOG_INFO) << "SBG::prepareBattleTurn() EXIT";
 }
 
@@ -2016,7 +2016,8 @@ void SavedBattleGame::reviveUnits()
 			i != _units.end();
 			++i)
 	{
-		reviveUnit(*i, true);
+		if ((*i)->getStatus() != STATUS_DEAD) // etc. See below_
+			reviveUnit(*i, true);
 	}
 }
 
@@ -2030,8 +2031,8 @@ void SavedBattleGame::reviveUnits()
  * @param atTurnEnd - true if called from SavedBattleGame::prepareBattleTurn (default false)
  */
 void SavedBattleGame::reviveUnit(
-	BattleUnit* unit,
-	bool atTurnStart)
+		BattleUnit* unit,
+		bool atTurnStart)
 {
 	if (unit->getStatus() == STATUS_UNCONSCIOUS
 		&& unit->getStun() < unit->getHealth() + static_cast<int>(atTurnStart) // do health=stun if unit is about to get healed in Prep Turn.
@@ -2069,7 +2070,7 @@ void SavedBattleGame::reviveUnit(
 
 			unit->setCache(NULL);
 
-			unit->setDirection(RNG::generate(0, 7));
+			unit->setDirection(RNG::generate(0,7));
 			unit->setTimeUnits(0);
 			unit->setEnergy(0);
 			unit->setRevived();
