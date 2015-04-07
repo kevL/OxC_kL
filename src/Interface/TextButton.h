@@ -45,7 +45,9 @@ class TextButton
 {
 
 private:
-	bool _contrast;
+	bool
+		_contrast,
+		_geoscapeButton;
 	Uint8 _color;
 
 	ComboBox* _comboBox;
@@ -122,6 +124,8 @@ protected:
 		void setWidth(int width);
 		/// Sets the height of this TextButton.
 		void setHeight(int height);
+
+		void setGeoscapeButton(bool geo);
 };
 
 }

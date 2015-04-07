@@ -57,6 +57,7 @@ TextButton::TextButton(
 		_color(0),
 		_group(NULL),
 		_contrast(false),
+		_geoscapeButton(false),
 		_comboBox(NULL)
 {
 	_text = new Text(
@@ -302,6 +303,14 @@ void TextButton::draw()
 
 			case 3:
 				color = _color + (multer * 3);
+			break;
+
+			case 4:
+				if (_geoscapeButton == true)
+				{
+					setPixelColor(0,0, _color);
+					setPixelColor(1,1, _color);
+				}
 		}
 	}
 
@@ -312,7 +321,12 @@ void TextButton::draw()
 		press = (*_group == this);
 
 	if (press == true)
-		this->invert(_color + (multer * 3));
+	{
+		if (_tftdMode == true)
+			this->invert(_color + (multer * 2));
+		else
+			this->invert(_color + (multer * 3));
+	}
 
 	_text->setInvert(press);
 	_text->blit(this);
@@ -407,6 +421,11 @@ void TextButton::setHeight(int height)
 {
 	Surface::setHeight(height);
 	_text->setHeight(height);
+}
+
+void TextButton::setGeoscapeButton(bool geo)
+{
+	_geoscapeButton = geo;
 }
 
 }

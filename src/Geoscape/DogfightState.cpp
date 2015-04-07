@@ -337,6 +337,11 @@ DogfightState::DogfightState(
 	add(_btnMinimizedIcon);
 	add(_txtInterception,	"minimizedNumber",	"dogfight");
 
+	if (_txtDistance->isTFTDMode() == true)
+	{
+		_txtDistance->setY(_txtDistance->getY() + 1);
+		_txtDistance->setX(_txtDistance->getX() + 7);
+	}
 /*	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
@@ -2216,8 +2221,16 @@ void DogfightState::moveWindow()
 	_txtAmmo2->setX(_x + 64);
 	_txtAmmo2->setY(_y + 70);
 
-	_txtDistance->setX(_x + 116);
-	_txtDistance->setY(_y + 72);
+	if (_txtDistance->isTFTDMode() == true)
+	{
+		_txtDistance->setX(_x + 123);
+		_txtDistance->setY(_y + 73);
+	}
+	else
+	{
+		_txtDistance->setX(_x + 116);
+		_txtDistance->setY(_y + 72);
+	}
 
 	_txtStatus->setX(_x + 4);
 	_txtStatus->setY(_y + 85);

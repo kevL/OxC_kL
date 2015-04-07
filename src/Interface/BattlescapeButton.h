@@ -45,9 +45,7 @@ class BattlescapeButton
 {
 
 protected:
-	bool
-		_inverted,
-		_tftdMode;
+	bool _inverted;
 	Uint8 _color;
 
 	InversionType _toggleMode;
@@ -84,9 +82,6 @@ protected:
 		void allowToggleInversion();
 		/// Allows this button to be toggled on when clicked, and off when released.
 		void allowClickInversion();
-
-		/// Sets this button to use a colour lookup table instead of inversion for its alternate form.
-		void setTftdMode(bool mode);
 
 		/// Sets up the "pressed" surface.
 		void initSurfaces();

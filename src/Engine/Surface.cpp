@@ -153,6 +153,7 @@ Surface::Surface(
 		_visible(true),
 		_hidden(false),
 		_redraw(false),
+		_tftdMode(false),
 		_alignedBuffer(NULL)
 {
 	_alignedBuffer = NewAligned(
@@ -1164,6 +1165,24 @@ void Surface::setHeight(int height)
 		height);
 
 	_redraw = true;
+}
+
+/**
+ * TFTD mode: much like click inversion, but does a color swap rather than a palette shift.
+ * @param mode - set TFTD mode to this
+ */
+void Surface::setTFTDMode(bool mode)
+{
+	_tftdMode = mode;
+}
+
+/**
+ * Checks TFTD mode.
+ * @return, true if TFTD mode
+ */
+bool Surface::isTFTDMode()
+{
+	return _tftdMode;
 }
 
 }

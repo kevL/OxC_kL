@@ -41,16 +41,13 @@ BattlescapeButton::BattlescapeButton(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_color(0),
 		_group(NULL),
 		_inverted(false),
-		_tftdMode(false),
 		_toggleMode(INVERT_NONE),
 		_altSurface(NULL)
-{
-}
+{}
 
 /**
  * dTor.
@@ -167,15 +164,6 @@ void BattlescapeButton::allowToggleInversion()
 void BattlescapeButton::allowClickInversion()
 {
 	_toggleMode = INVERT_CLICK;
-}
-
-/**
- * TFTD mode: much like click inversion, but does a color swap rather than a palette shift.
- * @param mode -
- */
-void BattlescapeButton::setTftdMode(bool mode)
-{
-	_tftdMode = mode;
 }
 
 /**

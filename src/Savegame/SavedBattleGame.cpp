@@ -242,6 +242,8 @@ void SavedBattleGame::load(
 		Log(LOG_INFO) << ". load tiles [2]";
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
+		// WARNING: Don't trust extracting integers from YAML as anything other than 'int' ...
+		// NOTE: Many load sequences use '.as<size_t>' .....
 		const size_t totalTiles = node["totalTiles"].as<size_t>();
 
 		std::memset(
@@ -249,6 +251,7 @@ void SavedBattleGame::load(
 				0,
 				sizeof(Tile::SerializationKey));
 
+		// WARNING: Don't trust extracting integers from YAML as anything other than 'int' ...
 		serKey.index			= node["tileIndexSize"]		.as<Uint8>(serKey.index);
 		serKey.totalBytes		= node["tileTotalBytesPer"]	.as<Uint32>(serKey.totalBytes);
 		serKey._fire			= node["tileFireSize"]		.as<Uint8>(serKey._fire);

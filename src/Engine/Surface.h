@@ -46,6 +46,7 @@ protected:
 	bool
 		_hidden,
 		_redraw,
+		_tftdMode,
 		_visible;
 	int
 		_x,
@@ -323,6 +324,11 @@ protected:
 		/// Sets the border colour of the surface.
 		virtual void setBorderColor(Uint8 color)
 		{};
+
+		/// Sets this button to use a color lookup table instead of inversion for its alternate form.
+		virtual void setTFTDMode(bool mode);
+		/// Checks if this is a TFTD mode surface.
+		bool isTFTDMode();
 };
 
 }

@@ -250,7 +250,7 @@
 	"State.h"
 	"Surface.h"
 
-1426990749 f:\git\openxcom\src\engine\surface.h
+1428368609 f:\git\openxcom\src\engine\surface.h
 
 1325796034 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -4380,7 +4380,7 @@
 1426185792 f:\git\openxcom\src\interface\text.h
 	"../Engine/Surface.h"
 
-1426207177 f:\git\openxcom\src\interface\textbutton.h
+1428366495 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
 1424598796 f:\git\openxcom\src\interface\textedit.h
@@ -5401,7 +5401,7 @@
 1427238813 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1427678846 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1428330655 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"MedikitState.h"
@@ -5422,7 +5422,7 @@
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
-1428325882 f:\git\openxcom\src\battlescape\medikitstate.h
+1428330264 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
 1424390943 f:\git\openxcom\src\battlescape\pathfinding.h
@@ -6083,7 +6083,7 @@
 1427410024 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 
-1428326105 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1428330540 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	"MedikitView.h"
 	"../Engine/Action.h"
@@ -6737,7 +6737,7 @@
 	<map>
 	<string>
 
-1426879454 source:f:\git\openxcom\src\engine\state.cpp
+1428367553 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Game.h"
 	"InteractiveSurface.h"
@@ -6758,7 +6758,7 @@
 1424390939 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1428191684 source:f:\git\openxcom\src\engine\surface.cpp
+1428367429 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -7072,7 +7072,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428274424 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1428367192 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8540,7 +8540,7 @@
 1425311773 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1427832060 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1428367763 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -11143,7 +11143,7 @@
 1426300869 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"
 
-1424390939 f:\git\openxcom\src\interface\battlescapebutton.h
+1428366814 f:\git\openxcom\src\interface\battlescapebutton.h
 	"../Engine/InteractiveSurface.h"
 
 1426103363 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
@@ -11159,7 +11159,7 @@
 1424390937 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"
 
-1427404472 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1428367602 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
 	"Polygon.h"
 	"Polyline.h"
@@ -11522,7 +11522,7 @@
 1427756208 f:\git\openxcom\src\battlescape\meditargetstate.h
 	"../Engine/State.h"
 
-1428326411 source:f:\git\openxcom\src\battlescape\meditargetstate.cpp
+1428330734 source:f:\git\openxcom\src\battlescape\meditargetstate.cpp
 	"MediTargetState.h"
 	"MediKitState.h"
 	"TileEngine.h"
