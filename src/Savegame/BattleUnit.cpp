@@ -2280,7 +2280,9 @@ void BattleUnit::initTU(bool preBattle)
 {
 	if (_revived == true)
 	{
-		_revived = false;
+		_revived = false;	// also done at the beginning of SavedBattleGame::endBattlePhase(), ie round rollover.
+							// Together these should account for prepping the unit
+							// at round start, or getting MC'd - both/either.
 		_tu = 0;
 		_energy = 0;
 
@@ -2399,23 +2401,23 @@ void BattleUnit::takeFire()
 {
 	if (_fire != 0)
 	{
-		const int
-			powerSmoke = 3,
-			powerFire = RNG::generate(2,6);
+		const float
+			powerSmoke = 3.f,
+			powerFire = static_cast<float>(RNG::generate(2.,6.));
 
-		float vulnerability = _armor->getDamageModifier(DT_SMOKE);
-		if (vulnerability > 0.f) // try to knock _unit out.
+		float vuln = _armor->getDamageModifier(DT_SMOKE);
+		if (vuln > 0.f) // try to knock _unit out.
 			damage(
 				Position(0,0,0),
-				static_cast<int>(static_cast<float>(powerSmoke) * vulnerability),
+				static_cast<int>(powerSmoke * vuln),
 				DT_SMOKE, // -> DT_STUN
 				true);
 
-		vulnerability = _armor->getDamageModifier(DT_IN);
-		if (vulnerability > 0.f)
+		vuln = _armor->getDamageModifier(DT_IN);
+		if (vuln > 0.f)
 			damage(
 				Position(0,0,0),
-				static_cast<int>(static_cast<float>(powerFire) * vulnerability),
+				static_cast<int>(powerFire * vuln),
 				DT_IN,
 				true);
 	}
@@ -4412,13 +4414,15 @@ void BattleUnit::setBattleGame(BattlescapeGame* const battleGame)
 void BattleUnit::setDown()
 {
 	_faction = _originalFaction;
+	_kneeled = false;		// don't get hunkerdown bonus against HE detonations
 
+	_turnsExposed = 255;	// don't risk aggro per the AI
+/*	// taken care of in SavedBattleGame::endBattlePhase()
 	if (_faction != FACTION_HOSTILE)
 		_turnsExposed = 255;	// don't risk aggro per the AI
 	else
-		_turnsExposed = 0;		// aLiens always exposed.
+		_turnsExposed = 0;		// aLiens always exposed. */
 
-	_kneeled = false;			// don't get hunkerdown bonus against HE detonations
 
 	// These don't seem to affect anything:
 //	_floating = false;

@@ -1292,7 +1292,10 @@ bool SavedBattleGame::endBattlePhase()
 		(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
 
 		if ((*i)->getOriginalFaction() == _side)
+		{
+			reviveUnit(*i, true);
 			(*i)->takeFire();
+		}
 
 		if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
 			(*i)->prepUnit();				// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
@@ -2005,24 +2008,28 @@ void SavedBattleGame::prepareBattleTurn()
 																	tile));
 	} */
 
-	reviveUnits(); // <- move this. So that each faction revives at the start of its round.
+//	reviveUnits(FACTION_ ); // <- move this. So that each faction revives at the start of its round.
 	//Log(LOG_INFO) << "SBG::prepareBattleTurn() EXIT";
 }
 
 /**
  * Checks for and revives unconscious BattleUnits.
+ * @param faction - the faction to check
  */
-void SavedBattleGame::reviveUnits()
+/* void SavedBattleGame::reviveUnits(const UnitFaction faction)
 {
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->getStatus() != STATUS_DEAD) // etc. See below_
+		if ((*i)->getOriginalFaction() == faction
+			&& (*i)->getStatus() != STATUS_DEAD) // etc. See below_
+		{
 			reviveUnit(*i, true);
+		}
 	}
-}
+} */
 
 /**
  * Checks for units that are unconscious and revives them if they shouldn't be.
@@ -2034,7 +2041,7 @@ void SavedBattleGame::reviveUnits()
  * @param atTurnEnd - true if called from SavedBattleGame::prepareBattleTurn (default false)
  */
 void SavedBattleGame::reviveUnit(
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		bool atTurnStart)
 {
 	if (unit->getStatus() == STATUS_UNCONSCIOUS

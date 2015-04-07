@@ -87,7 +87,7 @@ void SurfaceSet::loadPck(
 		const std::string& tab)
 {
 	//Log(LOG_INFO) << "SurfaceSet::loadPck() " << pck;
-	int nframes = 0;
+	size_t nframes = 0;
 
 	// Load TAB and get image offsets
 	if (tab.empty() == false)
@@ -104,24 +104,28 @@ void SurfaceSet::loadPck(
 
 		start = offsetFile.tellg();
 
-		int off;
-		offsetFile.read((char*)&off, sizeof(off));
-		offsetFile.seekg(0, std::ios::end);
+		int offset;
+		offsetFile.read(
+					(char*)&offset,
+					sizeof(offset));
+		offsetFile.seekg(
+					0,
+					std::ios::end);
 
 		stop = offsetFile.tellg();
 
-		const int tabSize = static_cast<int>(stop - start);
+		const size_t tabSize = static_cast<size_t>(stop - start);
 
-		if (off != 0)
+		if (offset != 0)
 			nframes = tabSize / 2; // 16-bit offsets
 		else
 			nframes = tabSize / 4; // 32-bit offsets
 
 		offsetFile.close();
 
-		for (int
+		for (size_t
 				frame = 0;
-				frame < nframes;
+				frame != nframes;
 				++frame)
 		{
 			_frames[frame] = new Surface(
@@ -145,39 +149,46 @@ void SurfaceSet::loadPck(
 	}
 
 	Uint8 value;
+	int
+		x,y;
 
-	for (int
+	for (size_t
 			frame = 0;
-			frame < nframes;
+			frame != nframes;
 			++frame)
 	{
-		int
-			x = 0,
-			y = 0;
+		x =
+		y = 0;
 
 		_frames[frame]->lock();
-		imgFile.read((char*)& value, 1);
-		for (int
+		imgFile.read(
+				(char*)& value,
+				1);
+		for (Uint8
 				i = 0;
 				i != value;
 				++i)
 		{
 			for (int
 					j = 0;
-					j < _width;
+					j != _width;
 					++j)
 			{
 				_frames[frame]->setPixelIterative(&x,&y, 0);
 			}
 		}
 
-		while (imgFile.read((char*)& value, 1)
+		while (imgFile.read(
+						(char*)& value,
+						1)
 			&& value != 255)
 		{
 			if (value == 254)
 			{
-				imgFile.read((char*)& value, 1);
-				for (int
+				imgFile.read(
+						(char*)& value,
+						1);
+				for (Uint8
 						i = 0;
 						i != value;
 						++i)
@@ -204,47 +215,51 @@ void SurfaceSet::loadPck(
  */
 void SurfaceSet::loadDat(const std::string& filename)
 {
-	int nframes = 0;
+	size_t nframes = 0;
 
 	// Load file and put pixels in surface
-	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary); // init.
 	if (imgFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
 
-	imgFile.seekg(0, std::ios::end);
+	imgFile.seekg(
+				0,
+				std::ios::end);
 	std::streamoff datSize = imgFile.tellg();
-	imgFile.seekg(0, std::ios::beg);
+	imgFile.seekg(
+				0,
+				std::ios::beg);
 
-	nframes = static_cast<int>(datSize) / (_width * _height);
+	nframes = static_cast<size_t>(static_cast<int>(datSize) / (_width * _height));
 
-	for (int
+	for (size_t
 			i = 0;
-			i < nframes;
+			i != nframes;
 			++i)
 	{
 		Surface* surface = new Surface(
 									_width,
 									_height);
-
 		_frames[i] = surface;
 	}
 
 	Uint8 value;
 	int
 		x = 0,
-		y = 0,
-		frame = 0;
+		y = 0;
+	size_t frame = 0;
 
 	_frames[frame]->lock();
-	while (imgFile.read((char*)& value, 1))
+	while (imgFile.read(
+					(char*)& value,
+					1))
 	{
 		_frames[frame]->setPixelIterative(&x,&y, value);
 
 		if (y >= _height)
 		{
-			// Unlock the surface
 			_frames[frame]->unlock();
 
 			++frame;

@@ -50,7 +50,7 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 	xorshift1024* (for speed and very long period) generator. */
 
 
-uint64_t x = time(0); // The state must be seeded with a nonzero value.
+uint64_t x = std::time(0); // The state must be seeded with a nonzero value.
 
 
 uint64_t next()
@@ -90,18 +90,14 @@ int generate(
 		int minRand,
 		int maxRand)
 {
-	//Log(LOG_INFO) << "generate( " << minRand << "," << maxRand << ")";
 	if (minRand == maxRand)
 		return minRand;
 
 	if (minRand > maxRand)
 		std::swap(minRand, maxRand);
 
-	uint64_t rand = next();
-	//int ret = static_cast<int>(rand %(maxRand - minRand + 1)) + minRand;
-	//Log(LOG_INFO) << ". = " << ret;
-	//return ret;
-	return (static_cast<int>(rand %(maxRand - minRand + 1)) + minRand);
+	uint64_t r = next();
+	return (static_cast<int>(r %(maxRand - minRand + 1)) + minRand);
 }
 
 /**
@@ -122,8 +118,8 @@ double generate(
 	if (AreSame(diff, 0.))
 		return minRand;
 
-	const double rand = static_cast<double>(next());
-	return ((rand / diff) + minRand);
+	const double r = static_cast<double>(next());
+	return ((r / diff) + minRand);
 }
 
 /*
@@ -159,19 +155,18 @@ double boxMuller(
 		use_last = true;
 
 		double
-			x1,
-			x2,
+			x1,x2,
 			w;
 
 		do
 		{
-			x1 = (generate(0., 1.) * 2.) - 1.;
-			x2 = (generate(0., 1.) * 2.) - 1.;
-			w = (x1 * x1) + (x2 * x2);
+			x1 = (generate(0.,1.) * 2.) - 1.;
+			x2 = (generate(0.,1.) * 2.) - 1.;
+			w  = (x1 * x1) + (x2 * x2);
 		}
 		while (w >= 1.);
 
-		w = std::sqrt((-2. * log(w)) / w);
+		w = std::sqrt((-2. * std::log(w)) / w);
 		y1 = x1 * w;
 		y2 = x2 * w;
 	}
@@ -191,7 +186,7 @@ bool percent(int value)
 	else if (value > 99)
 		return true;
 
-	return (generate(0, 99) < value);
+	return (generate(0,99) < value);
 }
 
 /**
@@ -204,8 +199,8 @@ int generateEx(int maxRand)
 	if (maxRand < 2)
 		return 0;
 
-	uint64_t rand = next();
-	return static_cast<int>(rand %maxRand);
+	uint64_t r = next();
+	return static_cast<int>(r %maxRand);
 }
 
 }

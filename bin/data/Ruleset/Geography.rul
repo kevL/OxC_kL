@@ -2007,8 +2007,8 @@ regions:
         lon: 293.125
         lat: -10.5
       - name: STR_CARTAGENA
-        lon: 285.45
-        lat: -10.46
+        lon: 284.825
+        lat: -10.692
       - name: STR_CAYENNE
         lon: 306.30
         lat: -5.66
