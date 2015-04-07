@@ -563,7 +563,7 @@ void UnitInfoState::init()
 	ss.str(L"");
 	ss << stat;
 	_numMorale->setText(ss.str());
-	_barMorale->setMax(100);
+	_barMorale->setMax(100.);
 	_barMorale->setValue(static_cast<double>(stat));
 
 	const double acuModi = _unit->getAccuracyModifier();

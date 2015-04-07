@@ -128,7 +128,8 @@ BattlescapeState::BattlescapeState()
 		_mouseScrollingStartTime(0),
 		_fuseFrame(0),
 		_showConsole(2),
-		_visUnitTargetFrame(0)
+		_visUnitTargetFrame(0),
+		_showSoldierData(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	const int
@@ -286,7 +287,8 @@ BattlescapeState::BattlescapeState()
 
 	_txtOrder		= new Text(45, 9, 1, 37);
 	_lstSoldierInfo	= new TextList(25, 57, 1, 47);
-	_txtHasKill		= new Text(10, 9, 1, 105);
+//	_txtHasKill		= new Text(10, 9, 1, 105);
+	_alienMark		= new Surface(9, 11, 1, 105);
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
 	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
@@ -544,7 +546,8 @@ BattlescapeState::BattlescapeState()
 	add(_txtTurn,			"infoText",			"battlescape");
 	add(_txtOrder,			"operationTitle",	"battlescape"); // white
 	add(_lstSoldierInfo,	"textName",			"battlescape"); // blue
-	add(_txtHasKill,		"infoText",			"battlescape");
+//	add(_txtHasKill,		"infoText",			"battlescape");
+	add(_alienMark);
 
 	_txtTerrain->setHighContrast();
 	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_battleSave->getBattleTerrain())));
@@ -560,7 +563,11 @@ BattlescapeState::BattlescapeState()
 	_lstSoldierInfo->setHighContrast();
 	_lstSoldierInfo->setColumns(2, 10, 15);
 
-	_txtHasKill->setHighContrast();
+//	_txtHasKill->setHighContrast();
+	Surface* const srfMark = _game->getResourcePack()->getSurface("ALIENINSIGNIA");
+	srfMark->blit(_alienMark);
+	_alienMark->setVisible(false);
+
 
 //	_numLayers->setColor(Palette::blockOffset(5)+12);
 //	_numLayers->setValue(1);
@@ -1166,7 +1173,7 @@ void BattlescapeState::mapOver(Action* action)
 
 		_game->getCursor()->handle(action);
 	}
-	else if (_showConsole > 0 // kL_begin:
+	else if (_showConsole > 0
 		&& _mouseOverIcons == false
 		&& allowButtons() == true)
 	{
@@ -1182,168 +1189,166 @@ void BattlescapeState::mapOver(Action* action)
 
 		Tile* const tile = _battleSave->getTile(pos);
 		if (tile != NULL
-			&& tile->isDiscovered(2) == true)
+			&& tile->isDiscovered(2) == true
+			&& tile->getInventory()->empty() == false)
 		{
-			if (tile->getInventory()->empty() == false)
+			showInfo = false;
+
+			size_t row = 0;
+			std::wostringstream
+				woss,	// test
+				woss1,	// Console #1
+				woss2;	// Console #2
+			std::wstring
+				ws1,
+				ws2,
+				ws3;
+			int qty = 1;
+
+			for (size_t
+					i = 0;
+					i != tile->getInventory()->size() + 1;
+					++i)
 			{
-				showInfo = false;
+				ws1 = L"> ";
 
-				size_t row = 0;
-				std::wostringstream
-					woss,	// test
-					woss1,	// Console #1
-					woss2;	// Console #2
-				std::wstring
-					ws1,
-					ws2,
-					ws3;
-				int qty = 1;
-
-				for (size_t
-						i = 0;
-						i != tile->getInventory()->size() + 1;
-						++i)
+				if (i < tile->getInventory()->size())
 				{
-					ws1 = L"> ";
+					const BattleItem* const item = tile->getInventory()->at(i);
 
-					if (i < tile->getInventory()->size())
+					if (item->getUnit() != NULL)
 					{
-						const BattleItem* const item = tile->getInventory()->at(i);
-
-						if (item->getUnit() != NULL)
+						if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0)
 						{
-							if (item->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
-							{
-								ws1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
-								ws1 +=  + L" (status doubtful)";
-							}
-							else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-							{
-								ws1 += item->getUnit()->getName(_game->getLanguage());
+							ws1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
+							ws1 +=  + L" (status doubtful)";
+						}
+						else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+						{
+							ws1 += item->getUnit()->getName(_game->getLanguage());
 
-								if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
-									ws1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
-							}
-							else
-								ws1 += tr(item->getRules()->getType());
+							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+								ws1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
 						}
 						else
-						{
 							ws1 += tr(item->getRules()->getType());
-
-							if (item->getRules()->getBattleType() == BT_AMMO)
-								ws1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
-							else if (item->getRules()->getBattleType() == BT_FIREARM
-								&& item->getAmmoItem() != NULL
-								&& item->getAmmoItem() != item)
-							{
-								std::wstring ws = tr(item->getAmmoItem()->getRules()->getType());
-								ws1 += L" | " + ws + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
-							}
-							else if ((item->getRules()->getBattleType() == BT_GRENADE
-									|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-								&& item->getFuseTimer() > -1)
-							{
-								ws1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
-							}
-						}
-					}
-
-					if (i == 0)
-					{
-						ws3 = ws2 = ws1;
-						continue;
-					}
-
-					if (ws1 == ws3)
-					{
-						++qty;
-						continue;
 					}
 					else
-						ws3 = ws1;
-
-					if (qty > 1)
 					{
-						ws2 += L" * " + Text::formatNumber(qty);
-						qty = 1;
-					}
+						ws1 += tr(item->getRules()->getType());
 
-					ws2 += L"\n";
-					woss << ws2;
-					ws3 = ws2 = ws1;
-
-
-					if (row < 26) // Console #1
-					{
-						if (row == 24)
+						if (item->getRules()->getBattleType() == BT_AMMO)
+							ws1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
+						else if (item->getRules()->getBattleType() == BT_FIREARM
+							&& item->getAmmoItem() != NULL
+							&& item->getAmmoItem() != item)
 						{
-							woss << L"> more >>>";
-							++row;
+							std::wstring ws = tr(item->getAmmoItem()->getRules()->getType());
+							ws1 += L" | " + ws + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 						}
-
-						woss1.str(L"");
-						woss1 << woss.str();
-
-						if (row == 25)
+						else if ((item->getRules()->getBattleType() == BT_GRENADE
+								|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+							&& item->getFuseTimer() > -1)
 						{
-							/* Log(LOG_INFO) << "row 25";
-							std::string s (ws1.begin(), ws1.end());
-							Log(LOG_INFO) << ". ws1 = " << s;
-							std::string t (ws2.begin(), ws2.end());
-							Log(LOG_INFO) << ". ws2 = " << t;
-							std::string u (ws3.begin(), ws3.end());
-							Log(LOG_INFO) << ". ws3 = " << u;
-							std::wstring wstr1 (woss1.str());
-							std::string v (wstr1.begin(), wstr1.end());
-							Log(LOG_INFO) << ". woss1 = " << v;
-							std::wstring wstr2 (woss.str());
-							std::string w (wstr2.begin(), wstr2.end());
-							Log(LOG_INFO) << ". woss = " << w; */
-
-							if (ws1 == L"> ")
-							{
-								std::wstring wstr = woss1.str();
-								wstr.erase(wstr.length() - 8);
-								woss1.str(L"");
-								woss1 << wstr;
-							}
-
-							if (_showConsole == 1)
-								break;
-
-							woss.str(L"");
+							ws1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
 						}
 					}
-
-					if (row > 26) // Console #2
-					{
-						if (row == 50)
-							woss << L"> more >>>";
-
-						woss2.str(L"");
-						woss2 << woss.str();
-
-						if (row == 51)
-						{
-							if (ws1 == L"> ")
-							{
-								std::wstring wstr = woss2.str();
-								wstr.erase(wstr.length() - 8);
-								woss2.str(L"");
-								woss2 << wstr;
-							}
-
-							break;
-						}
-					}
-
-					++row;
 				}
 
-				_txtConsole1->setText(woss1.str());
-				_txtConsole2->setText(woss2.str());
+				if (i == 0)
+				{
+					ws3 = ws2 = ws1;
+					continue;
+				}
+
+				if (ws1 == ws3)
+				{
+					++qty;
+					continue;
+				}
+				else
+					ws3 = ws1;
+
+				if (qty > 1)
+				{
+					ws2 += L" * " + Text::formatNumber(qty);
+					qty = 1;
+				}
+
+				ws2 += L"\n";
+				woss << ws2;
+				ws3 = ws2 = ws1;
+
+
+				if (row < 26) // Console #1
+				{
+					if (row == 24)
+					{
+						woss << L"> more >>>";
+						++row;
+					}
+
+					woss1.str(L"");
+					woss1 << woss.str();
+
+					if (row == 25)
+					{
+						/* Log(LOG_INFO) << "row 25";
+						std::string s (ws1.begin(), ws1.end());
+						Log(LOG_INFO) << ". ws1 = " << s;
+						std::string t (ws2.begin(), ws2.end());
+						Log(LOG_INFO) << ". ws2 = " << t;
+						std::string u (ws3.begin(), ws3.end());
+						Log(LOG_INFO) << ". ws3 = " << u;
+						std::wstring wstr1 (woss1.str());
+						std::string v (wstr1.begin(), wstr1.end());
+						Log(LOG_INFO) << ". woss1 = " << v;
+						std::wstring wstr2 (woss.str());
+						std::string w (wstr2.begin(), wstr2.end());
+						Log(LOG_INFO) << ". woss = " << w; */
+
+						if (ws1 == L"> ")
+						{
+							std::wstring wstr = woss1.str();
+							wstr.erase(wstr.length() - 8);
+							woss1.str(L"");
+							woss1 << wstr;
+						}
+
+						if (_showConsole == 1)
+							break;
+
+						woss.str(L"");
+					}
+				}
+
+				if (row > 26) // Console #2
+				{
+					if (row == 50)
+						woss << L"> more >>>";
+
+					woss2.str(L"");
+					woss2 << woss.str();
+
+					if (row == 51)
+					{
+						if (ws1 == L"> ")
+						{
+							std::wstring wstr = woss2.str();
+							wstr.erase(wstr.length() - 8);
+							woss2.str(L"");
+							woss2 << wstr;
+						}
+
+						break;
+					}
+				}
+
+				++row;
 			}
+
+			_txtConsole1->setText(woss1.str());
+			_txtConsole2->setText(woss2.str());
 		}
 
 		updateTileInfo(tile);
@@ -1354,8 +1359,10 @@ void BattlescapeState::mapOver(Action* action)
 
 		_txtOrder->setVisible(showInfo);
 		_lstSoldierInfo->setVisible(showInfo);
-		_txtHasKill->setVisible(showInfo);
-	} // kL_end.
+		_alienMark->setVisible(showInfo);
+//		_txtHasKill->setVisible(showInfo);
+		_showSoldierData = showInfo;
+	}
 }
 
 /**
@@ -2314,7 +2321,7 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
 
-		Action a = Action(&ev, 0., 0., 0, 0);
+		Action a = Action(&ev, 0.,0.,0,0);
 		action->getSender()->mousePress(&a, this);
 
 		if (_battleGame->getSave()->getSelectedUnit() != NULL)
@@ -2373,7 +2380,9 @@ void BattlescapeState::btnConsoleToggle(Action*)
 
 			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
-			_txtHasKill->setVisible();
+			_alienMark->setVisible();
+//			_txtHasKill->setVisible();
+			_showSoldierData = true;
 		}
 /*		else if (_showConsole == 3)
 		{
@@ -2396,7 +2405,8 @@ void BattlescapeState::btnConsoleToggle(Action*)
 			_txtTurn->setVisible();
 			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
-			_txtHasKill->setVisible();
+			_alienMark->setVisible();
+//			_txtHasKill->setVisible();
 		} */
 
 		_txtConsole1->setVisible(_showConsole > 0);
@@ -2961,7 +2971,7 @@ void BattlescapeState::saveAIMap()
 	Position tilePos (pos); // init.
 
 	SDL_Rect rect;
-	rect.h = 8;
+	rect.h =
 	rect.w = 8;
 
 /*	Tile* t; // kL_note: Not used ->
@@ -3665,7 +3675,7 @@ BattlescapeGame* BattlescapeState::getBattleGame()
 }
 
 /**
- * Handler for the mouse moving over the icons, disabling the tile selection cube.
+ * Handler for the mouse moving over the icons disabling the tile selection cube.
  * @param action - pointer to an Action
  */
 void BattlescapeState::mouseInIcons(Action*)
@@ -3683,13 +3693,15 @@ void BattlescapeState::mouseInIcons(Action*)
 
 	_txtOrder->setVisible();
 	_lstSoldierInfo->setVisible();
-	_txtHasKill->setVisible();
+	_alienMark->setVisible();
+//	_txtHasKill->setVisible();
+	_showSoldierData = true;
 
 	_lstTileInfo->setVisible(false);
 }
 
 /**
- * Handler for the mouse going out of the icons, enabling the tile selection cube.
+ * Handler for the mouse going out of the icons enabling the tile selection cube.
  * @param action - pointer to an Action
  */
 void BattlescapeState::mouseOutIcons(Action*)
@@ -3785,7 +3797,7 @@ void BattlescapeState::resize(
 			i != _surfaces.end();
 			++i)
 	{
-		if (*i != _map
+		if (   *i != _map
 			&& *i != _btnPsi
 			&& *i != _btnLaunch
 			&& *i != _txtDebug)
@@ -3850,7 +3862,9 @@ void BattlescapeState::toggleIcons(bool vis)
 
 	_txtOrder->setVisible(vis);
 	_lstSoldierInfo->setVisible(vis);
-	_txtHasKill->setVisible(vis);
+	_alienMark->setVisible(vis);
+//	_txtHasKill->setVisible(vis);
+	_showSoldierData = vis;
 
 	_txtMissionLabel->setVisible(vis);
 	_lstTileInfo->setVisible(vis);
@@ -3990,6 +4004,11 @@ Bar* BattlescapeState::getEnergyBar() const
 void BattlescapeState::updateExperienceInfo()
 {
 	_lstSoldierInfo->clearList();
+	_alienMark->setVisible(false);
+
+	if (_showSoldierData == false)
+		return;
+
 
 	const BattleUnit* const unit = _battleSave->getSelectedUnit();
 	if (unit == NULL
@@ -3999,9 +4018,13 @@ void BattlescapeState::updateExperienceInfo()
 	}
 
 	if (unit->hasFirstKill() == true)
-		_txtHasKill->setText(L"+");
-	else
-		_txtHasKill->setText(L"");
+	{
+		_alienMark->setVisible();
+//		_txtHasKill->setText(L"+");
+	}
+//	else
+//		_alienMark->setVisible(false);
+//		_txtHasKill->setText(L"");
 
 
 	std::vector<std::wstring> xpType;

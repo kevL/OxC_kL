@@ -156,9 +156,6 @@ extraSprites:
   - type: CURSOR.PCK
     files:
       0: Resources/Sprites/ufograph/cursor/
-  - type: TARGET.PCK
-    files:
-      0: Resources/Sprites/ufograph/target/
   - type: HIT.PCK
     files:
       0: Resources/Sprites/ufograph/hit/
@@ -212,6 +209,16 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/ufograph/smoke/ranks/rank_commander.png
+  - type: SPICONS.DAT
+    width: 64
+    height: 24
+    subX: 32
+    subY: 24
+    files:
+      0: Resources/Sprites/ufograph/spicons/spicons.png
+  - type: TARGET.PCK
+    files:
+      0: Resources/Sprites/ufograph/target/
   - type: X1.PCK
     width: 1024
     height: 256
@@ -220,6 +227,12 @@ extraSprites:
     files:
       0: Resources/Sprites/ufograph/x1/x1.png
 # -------- GENDER -------- #
+  - type: ALIENINSIGNIA
+    width: 9
+    height: 11
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/alien.png
   - type: DIGITS
     width: 30
     height: 5
@@ -227,6 +240,12 @@ extraSprites:
     subY: 5
     files:
       0: Resources/Sprites/gender/digits.png
+  - type: BASEDOG
+    width: 16
+    height: 10
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/dogbase2.png
   - type: GENDER_F
     width: 7
     height: 7
@@ -239,9 +258,3 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/gender/gender_m.png
-  - type: BASEDOG
-    width: 16
-    height: 10
-    singleImage: true
-    files:
-      0: Resources/Sprites/gender/dogbase2.png

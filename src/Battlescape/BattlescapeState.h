@@ -71,7 +71,8 @@ private:
 		_isMouseScrolled,
 		_isMouseScrolling,
 		_mouseOverIcons,
-		_mouseOverThreshold;
+		_mouseOverThreshold,
+		_showSoldierData;
 	int
 		_showConsole,
 		_totalMouseMoveX,
@@ -152,6 +153,7 @@ private:
 	SavedBattleGame* _battleSave;
 	SavedGame* _savedGame;
 	Surface
+		* _alienMark,
 		* _iconsLayer,
 		* _kneel,
 		* _rank,
@@ -165,7 +167,7 @@ private:
 //		* _txtConsole3,
 //		* _txtConsole4,
 		* _txtDebug,
-		* _txtHasKill,
+//		* _txtHasKill,
 		* _txtMissionLabel,
 		* _txtName,
 		* _txtOperationTitle,

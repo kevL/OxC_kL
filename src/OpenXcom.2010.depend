@@ -5380,7 +5380,7 @@
 1424390944 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1428275017 f:\git\openxcom\src\battlescape\battlescapestate.h
+1428385232 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5687,7 +5687,7 @@
 1424390944 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1428275033 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1428386140 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6383,7 +6383,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1427313669 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1428383113 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6656,7 +6656,7 @@
 1427975641 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 
-1424390941 source:f:\git\openxcom\src\engine\rng.cpp
+1428375327 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>
@@ -6764,7 +6764,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1428372047 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1428372085 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	"Surface.h"
 
@@ -8686,7 +8686,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1428375545 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1428376098 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8789,7 +8789,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1428367968 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1428375785 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
