@@ -150,7 +150,7 @@ protected:
 				Position targetPos,
 				BattleUnit* attacker,
 				int radius,
-				int diff = -1) const;
+				int diff) const;
 //				bool grenade = false) const;
 //		bool getNodeOfBestEfficacy(BattleAction* action);
 

@@ -90,6 +90,7 @@ protected:
 
 	int
 		_initialFunding,
+		_firstGrenade,
 
 		_costEngineer,
 		_costScientist,
@@ -363,6 +364,9 @@ protected:
 		int getMaxRadarRange() const;
 		/// Gets the cutoff between small & large radars.
 		int getRadarCutoffRange() const;
+
+		/// Gets the turn aliens are allowed to throw their first grenades.
+		int getFirstGrenade() const;
 
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string& id) const;

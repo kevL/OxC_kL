@@ -66,7 +66,8 @@ NextTurnState::NextTurnState(
 		bool aliensPacified)
 	:
 		_battleSave(battleSave),
-		_state(state)
+		_state(state),
+		_aliensPacified(aliensPacified)
 //		_timer(NULL)
 //		_turnCounter(NULL)
 {
@@ -213,6 +214,8 @@ void NextTurnState::handle(Action* action)
  */
 void NextTurnState::nextTurn()
 {
+	static bool switchMusic = true;
+
 	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
 	_battleSave->getBattleGame()->cleanupDeleted();
 	_game->popState();
@@ -226,6 +229,7 @@ void NextTurnState::nextTurn()
 	if (liveAliens == 0
 		|| liveSoldiers == 0)
 	{
+		switchMusic = true;
 		_state->finishBattle(
 						false,
 						liveSoldiers);
@@ -256,7 +260,8 @@ void NextTurnState::nextTurn()
 													_palette));
 			}
 
-			if (turn != 1)
+			if (turn != 1
+				&& switchMusic == true)
 			{
 				_game->getResourcePack()->fadeMusic(_game, 473);
 
@@ -270,6 +275,8 @@ void NextTurnState::nextTurn()
 												music,
 												terrain);
 			}
+			else
+				switchMusic = true;
 
 
 			Tile* const tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
@@ -292,8 +299,13 @@ void NextTurnState::nextTurn()
 		}
 		else
 		{
-			_game->getResourcePack()->fadeMusic(_game, 473);
-			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
+			if (_aliensPacified == false)
+			{
+				_game->getResourcePack()->fadeMusic(_game, 473);
+				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_BATTLE_ALIENTURN);
+			}
+			else
+				switchMusic = false;
 
 			if (_battleSave->getDebugMode() == false)
 				_game->getCursor()->setVisible(false);

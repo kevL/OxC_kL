@@ -105,7 +105,8 @@ Ruleset::Ruleset(Game* game)
 		_manufactureListOrder(0),
 		_ufopaediaListOrder(0),
 		_invListOrder(0),
-		_radarCutoff(1500)
+		_radarCutoff(1500),
+		_firstGrenade(-1)
 {
 	//Log(LOG_INFO) << "Create Ruleset";
 	_globe = new RuleGlobe();
@@ -836,6 +837,7 @@ void Ruleset::loadFile(const std::string& filename)
 	_initialFunding	= doc["initialFunding"]	.as<int>(_initialFunding);
 	_alienFuel		= doc["alienFuel"]		.as<std::string>(_alienFuel);
 	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);
+	_firstGrenade	= doc["firstGrenade"]	.as<int>(_firstGrenade);
 
 	for (YAML::const_iterator
 			i = doc["ufoTrajectories"].begin();
@@ -2191,7 +2193,7 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 	bool duplicate = true;
 	for (int // Check for duplicates
 			i = 0;
-			i < 10
+			i != 10
 				&& duplicate == true;
 			++i)
 	{
@@ -2317,6 +2319,14 @@ int Ruleset::getMaxRadarRange() const
 int Ruleset::getRadarCutoffRange() const
 {
 	return _radarCutoff;
+}
+
+/**
+ * Gets the turn aliens are allowed to throw their first grenades.
+ */
+int Ruleset::getFirstGrenade() const
+{
+	return _firstGrenade;
 }
 
 /**

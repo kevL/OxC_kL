@@ -325,10 +325,10 @@ private:
 		/// Checks the status of the switch that says "there are units falling".
 		bool getUnitsFalling() const;
 
-		/// Gets a pointer to the BattlescapeState.
-		BattlescapeState* getBattleState() const;
 		/// Gets a pointer to the BattlescapeGame.
 		BattlescapeGame* getBattleGame() const;
+		/// Gets a pointer to the BattlescapeState.
+		BattlescapeState* getBattleState() const;
 		/// Sets the pointer to the BattlescapeState.
 		void setBattleState(BattlescapeState* bs);
 

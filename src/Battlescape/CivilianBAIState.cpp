@@ -43,17 +43,17 @@ namespace OpenXcom
 
 /**
  * Sets up a CivilianBAIState.
- * @param save - pointer to the SavedBattleGame
- * @param unit - pointer to the BattleUnit
- * @param node - pointer to the node the unit originates from
+ * @param battleSave	- pointer to the SavedBattleGame
+ * @param unit			- pointer to the BattleUnit
+ * @param node			- pointer to the node the unit originates from
  */
 CivilianBAIState::CivilianBAIState(
-		SavedBattleGame* save,
+		SavedBattleGame* battleSave,
 		BattleUnit* unit,
 		Node* node)
 	:
 		BattleAIState(
-			save,
+			battleSave,
 			unit),
 		_aggroTarget(NULL),
 		_escapeTUs(0),
@@ -65,7 +65,6 @@ CivilianBAIState::CivilianBAIState(
 		_traceAI(false)
 {
 //	_traceAI = Options::traceAI;
-
 	_escapeAction = new BattleAction();
 	_patrolAction = new BattleAction();
 }
@@ -89,11 +88,11 @@ void CivilianBAIState::load(const YAML::Node& node)
 
 	const int fromNodeID = node["fromNode"].as<int>(-1);
 	if (fromNodeID != -1)
-		_fromNode = _save->getNodes()->at(fromNodeID);
+		_fromNode = _battleSave->getNodes()->at(fromNodeID);
 
 	const int toNodeID = node["toNode"].as<int>(-1);
 	if (toNodeID != -1)
-		_toNode = _save->getNodes()->at(toNodeID);
+		_toNode = _battleSave->getNodes()->at(toNodeID);
 }
 
 /**
@@ -213,7 +212,7 @@ void CivilianBAIState::think(BattleAction* action)
 			action->desperate	= true;
 
 			_unit->dontReselect();
-//			_save->getBattleGame()->setReservedAction(BA_NONE, false);
+//			_battleSave->getBattleGame()->setReservedAction(BA_NONE, false);
 		break;
 		case AI_PATROL:
 			action->type	= _patrolAction->type;
@@ -238,32 +237,32 @@ int CivilianBAIState::selectNearestTarget()
 
 	_aggroTarget = NULL;
 
-	const Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit)
+	const Position origin = _battleSave->getTileEngine()->getSightOriginVoxel(_unit)
 						  + Position(0,0,-4);
 
 	Position target;
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		if ((*i)->isOut() == false
 			&& (*i)->getFaction() == FACTION_HOSTILE)
 		{
-			if (_save->getTileEngine()->visible(_unit, (*i)->getTile()) == true)
+			if (_battleSave->getTileEngine()->visible(_unit, (*i)->getTile()) == true)
 			{
 				++tally;
 
-				const int dist = _save->getTileEngine()->distance(
-															_unit->getPosition(),
-															(*i)->getPosition());
+				const int dist = _battleSave->getTileEngine()->distance(
+																	_unit->getPosition(),
+																	(*i)->getPosition());
 				if (dist < closest)
 				{
-					const bool valid = _save->getTileEngine()->canTargetUnit(
-																		&origin,
-																		(*i)->getTile(),
-																		&target,
-																		_unit);
+					const bool valid = _battleSave->getTileEngine()->canTargetUnit(
+																				&origin,
+																				(*i)->getTile(),
+																				&target,
+																				_unit);
 					if (valid == true)
 					{
 						closest = dist;
@@ -289,39 +288,39 @@ int CivilianBAIState::countSpottingUnits(Position pos) const
 	int tally = 0;
 
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		if ((*i)->isOut() == false
 			&& (*i)->getFaction() == FACTION_HOSTILE
-			&& _save->getTileEngine()->distance(
-											pos,
-											(*i)->getPosition()) < 25)
+			&& _battleSave->getTileEngine()->distance(
+													pos,
+													(*i)->getPosition()) < 25)
 		{
-			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
+			Position originVoxel = _battleSave->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 4;
 
 			Position targetVoxel;
 			if (checking == true)
 			{
-				if (_save->getTileEngine()->canTargetUnit(
-													&originVoxel,
-													_save->getTile(pos),
-													&targetVoxel,
-													*i,
-													_unit) == true)
+				if (_battleSave->getTileEngine()->canTargetUnit(
+															&originVoxel,
+															_battleSave->getTile(pos),
+															&targetVoxel,
+															*i,
+															_unit) == true)
 				{
 					++tally;
 				}
 			}
 			else
 			{
-				if (_save->getTileEngine()->canTargetUnit(
-													&originVoxel,
-													_save->getTile(pos),
-													&targetVoxel,
-													*i) == true)
+				if (_battleSave->getTileEngine()->canTargetUnit(
+															&originVoxel,
+															_battleSave->getTile(pos),
+															&targetVoxel,
+															*i) == true)
 				{
 					++tally;
 				}
@@ -356,16 +355,16 @@ void CivilianBAIState::setupEscape()
 
 	selectNearestTarget(); // gets an _aggroTarget
 	if (_aggroTarget != NULL)
-		dist = _save->getTileEngine()->distance(
-											_unit->getPosition(),
-											_aggroTarget->getPosition());
+		dist = _battleSave->getTileEngine()->distance(
+												_unit->getPosition(),
+												_aggroTarget->getPosition());
 
 	Tile* tile = NULL;
 	Position bestTile(0,0,0);
 
-	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
+	std::vector<int> reachable = _battleSave->getPathfinding()->findReachable(_unit, tu);
 
-	std::vector<Position> randomTileSearch = _save->getTileSearch();
+	std::vector<Position> randomTileSearch = _battleSave->getTileSearch();
 	RNG::shuffle(randomTileSearch);
 
 	bool coverFound = false;
@@ -410,7 +409,7 @@ void CivilianBAIState::setupEscape()
 
 			if (_escapeAction->target.z < 0)
 				_escapeAction->target.z = 0;
-			else if (_escapeAction->target.z >= _save->getMapSizeZ())
+			else if (_escapeAction->target.z >= _battleSave->getMapSizeZ())
 				_escapeAction->target.z = _unit->getPosition().z;
 		}
 
@@ -418,13 +417,13 @@ void CivilianBAIState::setupEscape()
 		tries += 10;
 
 		// THINK, DAMN YOU1
-		tile = _save->getTile(_escapeAction->target);
+		tile = _battleSave->getTile(_escapeAction->target);
 
 		int distTarget = 0;
 		if (_aggroTarget != NULL)
-			distTarget = _save->getTileEngine()->distance(
-													_aggroTarget->getPosition(),
-													_escapeAction->target);
+			distTarget = _battleSave->getTileEngine()->distance(
+															_aggroTarget->getPosition(),
+															_escapeAction->target);
 
 		if (dist >= distTarget)
 			score -= (distTarget - dist) * 10;
@@ -441,7 +440,7 @@ void CivilianBAIState::setupEscape()
 			if (std::find(
 						reachable.begin(),
 						reachable.end(),
-						_save->getTileIndex(tile->getPosition())) == reachable.end())
+						_battleSave->getTileIndex(tile->getPosition())) == reachable.end())
 			{
 				continue;
 			}
@@ -471,18 +470,18 @@ void CivilianBAIState::setupEscape()
 		{
 			// calculate TUs to tile;
 			// we could be getting this from findReachable() somehow but that would break something for sure...
-			_save->getPathfinding()->calculate(
-											_unit,
-											_escapeAction->target,
-											0,
-											tu);
+			_battleSave->getPathfinding()->calculate(
+												_unit,
+												_escapeAction->target,
+												0,
+												tu);
 
 			if (_escapeAction->target == _unit->getPosition()
-				|| _save->getPathfinding()->getStartDirection() != -1)
+				|| _battleSave->getPathfinding()->getStartDirection() != -1)
 			{
 				bestTileScore = score;
 				bestTile = _escapeAction->target;
-				_escapeTUs = _save->getPathfinding()->getTotalTUCost();
+				_escapeTUs = _battleSave->getPathfinding()->getTotalTUCost();
 
 				if (_escapeAction->target == _unit->getPosition())
 					_escapeTUs = 1;
@@ -495,7 +494,7 @@ void CivilianBAIState::setupEscape()
 //				}
 			}
 
-			_save->getPathfinding()->abortPath();
+			_battleSave->getPathfinding()->abortPath();
 
 			if (bestTileScore > FAST_PASS_THRESHOLD)
 				coverFound = true; // good enough, gogogo!!
@@ -504,7 +503,7 @@ void CivilianBAIState::setupEscape()
 
 	_escapeAction->target = bestTile;
 
-	//if (_traceAI) _save->getTile(_escapeAction->target)->setMarkerColor(13);
+	//if (_traceAI) _battleSave->getTile(_escapeAction->target)->setMarkerColor(13);
 
 	if (bestTileScore <= -100000)
 	{
@@ -515,7 +514,7 @@ void CivilianBAIState::setupEscape()
 	}
 	else
 	{
-		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << _save->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away.";
+		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << _battleSave->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away.";
 		_escapeAction->type = BA_WALK;
 	}
 }
@@ -543,15 +542,15 @@ void CivilianBAIState::setupPatrol()
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
 		int closest = 1000000;
 		for (std::vector<Node*>::const_iterator
-				i = _save->getNodes()->begin();
-				i != _save->getNodes()->end();
+				i = _battleSave->getNodes()->begin();
+				i != _battleSave->getNodes()->end();
 				++i)
 		{
 			node = *i;
 
-			const int dist = _save->getTileEngine()->distanceSq(
-															_unit->getPosition(),
-															node->getPosition());
+			const int dist = _battleSave->getTileEngine()->distanceSq(
+																_unit->getPosition(),
+																node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z
 				&& dist < closest
 				&& (node->getType() & Node::TYPE_SMALL))
@@ -569,26 +568,26 @@ void CivilianBAIState::setupPatrol()
 	{
 		--triesLeft;
 
-		_toNode = _save->getPatrolNode(
-									true,
-									_unit,
-									_fromNode);
-		if (_toNode == NULL)
-			_toNode = _save->getPatrolNode(
-										false,
+		_toNode = _battleSave->getPatrolNode(
+										true,
 										_unit,
 										_fromNode);
+		if (_toNode == NULL)
+			_toNode = _battleSave->getPatrolNode(
+											false,
+											_unit,
+											_fromNode);
 
 		if (_toNode != NULL)
 		{
-			_save->getPathfinding()->calculate(
-											_unit,
-											_toNode->getPosition());
+			_battleSave->getPathfinding()->calculate(
+												_unit,
+												_toNode->getPosition());
 
-			if (_save->getPathfinding()->getStartDirection() == -1)
+			if (_battleSave->getPathfinding()->getStartDirection() == -1)
 				_toNode = NULL;
 
-			_save->getPathfinding()->abortPath();
+			_battleSave->getPathfinding()->abortPath();
 		}
 	}
 

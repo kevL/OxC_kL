@@ -151,7 +151,7 @@ private:
 		* _numWounds;
 	Ruleset* _rules;
 	SavedBattleGame* _battleSave;
-	SavedGame* _savedGame;
+	SavedGame* _gameSave;
 	Surface
 		* _alienMark,
 		* _iconsLayer,
@@ -331,6 +331,10 @@ private:
 
 		/// Gets game.
 		Game* getGame() const;
+		/// Gets pointer to the SavedGame.
+		SavedGame* getSavedGame() const;
+		/// Gets pointer to the SavedBattleGame.
+		SavedBattleGame* getSavedBattleGame() const;
 		/// Gets map.
 		Map* getMap() const;
 

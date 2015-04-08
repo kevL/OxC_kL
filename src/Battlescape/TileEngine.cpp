@@ -1664,7 +1664,7 @@ bool TileEngine::reactionShot(
 									action.target,
 									unit,
 									action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
-									-1) == false)
+									_battleSave->getBattleState()->getSavedGame()->getDifficulty()) == false)
 		{
 			action.targeting = false;
 		}

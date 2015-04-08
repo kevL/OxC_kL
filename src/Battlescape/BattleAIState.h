@@ -48,14 +48,14 @@ class BattleAIState
 {
 
 protected:
-	SavedBattleGame* _save;
+	SavedBattleGame* _battleSave;
 	BattleUnit* _unit;
 
 
 	public:
 		/// Creates a new BattleAIState linked to the SavedBattleGame and a certain BattleUnit.
 		BattleAIState(
-				SavedBattleGame* save,
+				SavedBattleGame* battleSave,
 				BattleUnit* unit);
 		/// Cleans up the BattleAIState.
 		virtual ~BattleAIState();

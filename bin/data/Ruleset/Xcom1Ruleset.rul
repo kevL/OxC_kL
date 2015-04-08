@@ -5400,9 +5400,10 @@ costSoldier: 25000
 costEngineer: 40000
 costScientist: 50000
 timePersonnel: 72
-initialFunding: 6000 #kL, not used.
+initialFunding: 6000 # not used
 alienFuel: STR_ELERIUM_115
-radarCutoffRange: 1500 #kL
+radarCutoffRange: 1500
+firstGrenade: 0
 cutscenes:
   - type: intro
     videos:

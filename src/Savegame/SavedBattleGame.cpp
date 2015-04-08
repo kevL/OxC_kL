@@ -1362,21 +1362,21 @@ bool SavedBattleGame::getDebugMode() const
 }
 
 /**
- * Gets the BattlescapeState.
- * @return, pointer to the BattlescapeState
- */
-BattlescapeState* SavedBattleGame::getBattleState() const
-{
-	return _battleState;
-}
-
-/**
  * Gets the BattlescapeGame.
  * @return, pointer to the BattlescapeGame
  */
 BattlescapeGame* SavedBattleGame::getBattleGame() const
 {
 	return _battleState->getBattleGame();
+}
+
+/**
+ * Gets the BattlescapeState.
+ * @return, pointer to the BattlescapeState
+ */
+BattlescapeState* SavedBattleGame::getBattleState() const
+{
+	return _battleState;
 }
 
 /**

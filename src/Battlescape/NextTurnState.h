@@ -45,6 +45,7 @@ class NextTurnState
 
 private:
 //	static const int NEXT_TURN_DELAY = 1000;
+	bool _aliensPacified;
 
 	BattlescapeState* _state;
 	SavedBattleGame* _battleSave;

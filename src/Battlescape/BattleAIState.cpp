@@ -25,14 +25,14 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param save - pointer to the SavedBattleGame
- * @param unit - pointer to a BattleUnit
+ * @param battleSave	- pointer to the SavedBattleGame
+ * @param unit			- pointer to a BattleUnit
  */
 BattleAIState::BattleAIState(
-		SavedBattleGame* save,
+		SavedBattleGame* battleSave,
 		BattleUnit* unit)
 	:
-		_save(save),
+		_battleSave(battleSave),
 		_unit(unit)
 {}
 

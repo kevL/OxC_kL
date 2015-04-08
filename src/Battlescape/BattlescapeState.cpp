@@ -112,7 +112,7 @@ namespace OpenXcom
  */
 BattlescapeState::BattlescapeState()
 	:
-		_savedGame(_game->getSavedGame()),
+		_gameSave(_game->getSavedGame()),
 		_battleSave(_game->getSavedGame()->getSavedBattle()),
 		_rules(_game->getRuleset()),
 //		_reserve(0),
@@ -446,8 +446,8 @@ BattlescapeState::BattlescapeState()
 		missionLabel;
 
 	for (std::vector<Base*>::const_iterator
-			i = _savedGame->getBases()->begin();
-			i != _savedGame->getBases()->end()
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end()
 				&& baseLabel.empty() == true;
 			++i)
 	{
@@ -475,8 +475,8 @@ BattlescapeState::BattlescapeState()
 		std::wostringstream wost;
 
 		for (std::vector<Ufo*>::const_iterator
-				i = _savedGame->getUfos()->begin();
-				i != _savedGame->getUfos()->end()
+				i = _gameSave->getUfos()->begin();
+				i != _gameSave->getUfos()->end()
 					&& wost.str().empty() == true;
 				++i)
 		{
@@ -492,8 +492,8 @@ BattlescapeState::BattlescapeState()
 		}
 
 		for (std::vector<MissionSite*>::const_iterator
-				i = _savedGame->getMissionSites()->begin();
-				i != _savedGame->getMissionSites()->end()
+				i = _gameSave->getMissionSites()->begin();
+				i != _gameSave->getMissionSites()->end()
 					&& wost.str().empty() == true;
 				++i)
 		{
@@ -502,8 +502,8 @@ BattlescapeState::BattlescapeState()
 		}
 
 		for (std::vector<AlienBase*>::const_iterator
-				i = _savedGame->getAlienBases()->begin();
-				i != _savedGame->getAlienBases()->end()
+				i = _gameSave->getAlienBases()->begin();
+				i != _gameSave->getAlienBases()->end()
 					&& wost.str().empty() == true;
 				++i)
 		{
@@ -878,16 +878,6 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-	std::string
-		music,
-		terrain;
-	_battleSave->calibrateMusic(
-								music,
-								terrain);
-	_game->getResourcePack()->playMusic(
-								music,
-								terrain);
-
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
@@ -960,9 +950,18 @@ void BattlescapeState::init()
 		&& playableUnitSelected() == true)
 	{
 		_firstInit = false;
-
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
+
+		std::string
+			music,
+			terrain;
+		_battleSave->calibrateMusic(
+								music,
+								terrain);
+		_game->getResourcePack()->playMusic(
+										music,
+										terrain);
 
 /*		_btnReserveNone->setGroup(&_reserve);
 		_btnReserveSnap->setGroup(&_reserve);
@@ -972,23 +971,7 @@ void BattlescapeState::init()
 
 	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel()));
 
-	// kL_begin:
-/*	_txtFloor->setVisible(false);
-
-	Position pos;
-	_map->getSelectorPosition(&pos);
-
-	Tile* const tile = _battleSave->getTile(pos);
-	if (tile != NULL
-		&& tile->isDiscovered(2)
-		&& tile->getInventory()->empty() == true)
-	{
-		if (tile->hasNoFloor(_battleSave->getTile(pos + Position(0, 0,-1))) == false)
-			_txtFloor->setVisible();
-	} */ // kL_end. Didn't work.
-
 //	_txtTooltip->setText(L"");
-
 /*	if (_battleSave->getKneelReserved())
 		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
 
@@ -1635,7 +1618,7 @@ inline void BattlescapeState::handle(Action* action)
 					saveAIMap();
 				}
 			}
-			else if (_savedGame->isIronman() == false)
+			else if (_gameSave->isIronman() == false)
 			{
 				// not works in debug mode to prevent conflict in hotkeys by default
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)		// f6 - quickSave
@@ -2577,7 +2560,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 										_game->getLanguage(),
 										false));
 
-//	Soldier* soldier = _savedGame->getSoldier(selectedUnit->getId());
+//	Soldier* soldier = _gameSave->getSoldier(selectedUnit->getId());
 	const Soldier* const soldier = selectedUnit->getGeoscapeSoldier();
 	if (soldier != NULL)
 	{
@@ -2862,7 +2845,7 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 	if (item != NULL						// make sure there is an item
 		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
 	{
-//		if (_savedGame->isResearched(item->getRules()->getRequirements())
+//		if (_gameSave->isResearched(item->getRules()->getRequirements())
 //			|| _battleSave->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 		//kL_note: do that in ActionMenu, to allow throwing artefacts.
 //		{
@@ -2900,6 +2883,24 @@ void BattlescapeState::setStateInterval(Uint32 interval)
 Game* BattlescapeState::getGame() const
 {
 	return _game;
+}
+
+/**
+ * Gets pointer to the SavedGame.
+ * @return, pointer to SavedGame
+ */
+SavedGame* BattlescapeState::getSavedGame() const
+{
+	return _gameSave;
+}
+
+/**
+ * Gets pointer to the SavedBattleGame.
+ * @return, pointer to SavedBattleGame
+ */
+SavedBattleGame* BattlescapeState::getSavedBattleGame() const
+{
+	return _battleSave;
 }
 
 /**
@@ -3562,8 +3563,8 @@ void BattlescapeState::finishBattle(
 /*		std::string nextStageRace = _rules->getDeployment(mission)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
-				ts = _savedGame->getTerrorSites()->begin();
-				ts != _savedGame->getTerrorSites()->end()
+				ts = _gameSave->getTerrorSites()->begin();
+				ts != _gameSave->getTerrorSites()->end()
 					&& nextStageRace.empty() == true;
 				++ts)
 		{
@@ -3572,8 +3573,8 @@ void BattlescapeState::finishBattle(
 		}
 
 		for (std::vector<AlienBase*>::const_iterator
-				ab = _savedGame->getAlienBases()->begin();
-				ab != _savedGame->getAlienBases()->end()
+				ab = _gameSave->getAlienBases()->begin();
+				ab != _gameSave->getAlienBases()->end()
 					&& nextStageRace.empty() == true;
 				++ab)
 		{
@@ -3613,7 +3614,7 @@ void BattlescapeState::finishBattle(
 			// this concludes to defeat when in mars or mars landing mission
 			if (_rules->getDeployment(_battleSave->getMissionType()) != NULL
 				&& _rules->getDeployment(_battleSave->getMissionType())->isNoRetreat() == true
-				&& _savedGame->getMonthsPassed() != -1)
+				&& _gameSave->getMonthsPassed() != -1)
 			{
 				_game->pushState(new DefeatState());
 			}
@@ -3626,7 +3627,7 @@ void BattlescapeState::finishBattle(
 			// this concludes to victory when in mars mission
 			if (_rules->getDeployment(_battleSave->getMissionType()) != NULL
 				&& _rules->getDeployment(_battleSave->getMissionType())->isFinalMission() == true
-				&& _savedGame->getMonthsPassed() != -1)
+				&& _gameSave->getMonthsPassed() != -1)
 			{
 				_game->pushState(new VictoryState());
 			}
