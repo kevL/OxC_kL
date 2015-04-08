@@ -206,7 +206,7 @@ std::wstring TextButton::getText() const
 
 /**
  * Gets a pointer to the Text.
- * @return, pointer to the Text
+ * @return, pointer to Text
  */
 Text* TextButton::getTextPtr() const
 {

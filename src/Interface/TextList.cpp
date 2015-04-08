@@ -118,12 +118,12 @@ TextList::~TextList()
 {
 	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
-			i < _texts.end();
+			i != _texts.end();
 			++i)
 	{
 		for (std::vector<Text*>::const_iterator
 				j = (*i).begin();
-				j < (*i).end();
+				j != (*i).end();
 				++j)
 		{
 			delete *j;
@@ -132,7 +132,7 @@ TextList::~TextList()
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		delete *i;
@@ -140,7 +140,7 @@ TextList::~TextList()
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		delete *i;
@@ -212,7 +212,7 @@ void TextList::unpress(State* state)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		(*i)->unpress(state);
@@ -220,7 +220,7 @@ void TextList::unpress(State* state)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		(*i)->unpress(state);
@@ -261,7 +261,7 @@ void TextList::setRowColor(
 {
 	for (std::vector<Text*>::const_iterator
 			i = _texts[row].begin();
-			i < _texts[row].end();
+			i != _texts[row].end();
 			++i)
 	{
 		(*i)->setColor(color);
@@ -532,12 +532,12 @@ void TextList::setPalette(
 
 	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
-			i < _texts.end();
+			i != _texts.end();
 			++i)
 	{
 		for (std::vector<Text*>::const_iterator
 				j = i->begin();
-				j < i->end();
+				j != i->end();
 				++j)
 		{
 			(*j)->setPalette(
@@ -549,7 +549,7 @@ void TextList::setPalette(
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		(*i)->setPalette(
@@ -560,7 +560,7 @@ void TextList::setPalette(
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		(*i)->setPalette(
@@ -601,10 +601,10 @@ void TextList::initText(
 		Font* small,
 		Language* lang)
 {
-	_big	= big;
-	_small	= small;
-	_font	= small;
-	_lang	= lang;
+	_big = big;
+	_small = small;
+	_font = small;
+	_lang = lang;
 
 	delete _selector;
 
@@ -652,12 +652,12 @@ void TextList::setColor(Uint8 color)
 
 	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
-			i < _texts.end();
+			i != _texts.end();
 			++i)
 	{
 		for (std::vector<Text*>::const_iterator
 				j = i->begin();
-				j < i->end();
+				j != i->end();
 				++j)
 		{
 			(*j)->setColor(color);
@@ -702,12 +702,12 @@ void TextList::setHighContrast(bool contrast)
 
 	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
-			i < _texts.end();
+			i != _texts.end();
 			++i)
 	{
 		for (std::vector<Text*>::const_iterator
 				j = i->begin();
-				j < i->end();
+				j != i->end();
 				++j)
 		{
 			(*j)->setHighContrast(contrast);
@@ -744,7 +744,7 @@ void TextList::setAlign(
 	{
 		for (size_t
 				i = 0;
-				i <= _columns.size() - 1;
+				i != _columns.size();
 				++i)
 		{
 			_align[i] = align;
@@ -831,7 +831,7 @@ void TextList::setCondensed(bool condensed)
 size_t TextList::getSelectedRow() const
 {
 	if (_rows.empty() == true
-		|| _selRow >= _rows.size())
+		|| _selRow > _rows.size() - 1)
 	{
 		return -1; // TODO: so what is this, shouldn't it throw() or something instead.
 	}
@@ -903,7 +903,7 @@ void TextList::onLeftArrowClick(ActionHandler handler)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		(*i)->onMouseClick(handler, 0);
@@ -920,7 +920,7 @@ void TextList::onLeftArrowPress(ActionHandler handler)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		(*i)->onMousePress(handler);
@@ -937,7 +937,7 @@ void TextList::onLeftArrowRelease(ActionHandler handler)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		(*i)->onMouseRelease(handler);
@@ -954,7 +954,7 @@ void TextList::onRightArrowClick(ActionHandler handler)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		(*i)->onMouseClick(handler, 0);
@@ -971,7 +971,7 @@ void TextList::onRightArrowPress(ActionHandler handler)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		(*i)->onMousePress(handler);
@@ -988,7 +988,7 @@ void TextList::onRightArrowRelease(ActionHandler handler)
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		(*i)->onMouseRelease(handler);
@@ -1002,12 +1002,12 @@ void TextList::clearList()
 {
 	for (std::vector<std::vector<Text*> >::iterator
 			i = _texts.begin();
-			i < _texts.end();
+			i != _texts.end();
 			++i)
 	{
 		for (std::vector<Text*>::const_iterator
 				j = i->begin();
-				j < i->end();
+				j != i->end();
 				++j)
 		{
 			delete *j;
@@ -1168,7 +1168,7 @@ void TextList::draw()
 
 			for (std::vector<Text*>::const_iterator
 					j = _texts[i].begin();
-					j < _texts[i].end();
+					j != _texts[i].end();
 					++j)
 			{
 				if (addPx == true)
@@ -1269,7 +1269,7 @@ void TextList::think()
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
-			i < _arrowLeft.end();
+			i != _arrowLeft.end();
 			++i)
 	{
 		(*i)->think();
@@ -1277,7 +1277,7 @@ void TextList::think()
 
 	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
-			i < _arrowRight.end();
+			i != _arrowRight.end();
 			++i)
 	{
 		(*i)->think();
@@ -1408,7 +1408,7 @@ void TextList::mouseOver(Action* action, State* state)
 			_selector->copy(_bg);
 
 			if (_contrast == true)
-				_selector->offset(-10, 1);
+				_selector->offset(-10,1);
 			else if (_comboBox != NULL)
 				_selector->offset(1, Palette::backPos);
 			else

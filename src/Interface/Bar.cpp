@@ -31,8 +31,8 @@ namespace OpenXcom
  * Sets up a blank bar with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 Bar::Bar(
 		int width,
@@ -43,26 +43,23 @@ Bar::Bar(
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_color(0),
 		_color2(0),
 		_borderColor(0),
-		_scale(0.0),
-		_max(0.0),
-		_value(0.0),
-		_value2(0.0),
+		_scale(0.),
+		_max(0.),
+		_value(0.),
+		_value2(0.),
 		_invert(false),
 		_secondOnTop(true)
-{
-}
+{}
 
 /**
  * dTor
  */
 Bar::~Bar()
-{
-}
+{}
 
 /**
  * Changes the color used to draw the border and contents.
@@ -123,11 +120,11 @@ double Bar::getScale() const
 
 /**
  * Changes the maximum value used to draw the outer border.
- * @param max - maximum value
+ * @param maxVal - maximum value
  */
-void Bar::setMax(double max)
+void Bar::setMax(double maxVal)
 {
-	_max = max;
+	_max = maxVal;
 	_redraw = true;
 }
 
@@ -146,7 +143,7 @@ double Bar::getMax() const
  */
 void Bar::setValue(double value)
 {
-	_value = (value < 0.0)? 0.0: value;
+	_value = (value < 0.) ? 0. : value;
 	_redraw = true;
 }
 
@@ -165,7 +162,7 @@ double Bar::getValue() const
  */
 void Bar::setValue2(double value)
 {
-	_value2 = (value < 0.0)? 0.0: value;
+	_value2 = (value < 0.) ? 0. : value;
 	_redraw = true;
 }
 
@@ -206,37 +203,40 @@ void Bar::draw()
 	Surface::draw();
 
 	SDL_Rect square;
-	square.x = 0;
+	square.x =
 	square.y = 0;
 	square.w = static_cast<Uint16>(Round(_scale * _max)) + 1;
 	square.h = static_cast<Uint16>(getHeight());
 
-	if (_invert)
+	if (_invert == true)
 		drawRect(&square, _color);
 	else
 	{
-		if (_borderColor)
+		if (_borderColor != 0)
 			drawRect(&square, _borderColor);
 		else
 			drawRect(&square, _color + 4);
 	}
 
-	square.y++;
-	square.w--;
+	++square.y;
+	--square.w;
 	square.h -= 2;
 
 	drawRect(&square, 0);
 
-	double width = _scale * _value;		// kL
-	if (0.0 < width && width < 1.0)		// kL
-		width = 1.0;					// kL
-	double width2 = _scale * _value2;	// kL
-	if (0.0 < width2 && width2 < 1.0)	// kL
-		width2 = 1.0;					// kL
+	double
+		width = _scale * _value,
+		width2 = _scale * _value2;
 
-	if (_invert)
+	if (width > 0. && width < 1.)
+		width = 1.;
+
+	if (width2 > 0. && width2 < 1.)
+		width2 = 1.;
+
+	if (_invert == true)
 	{
-		if (_secondOnTop)
+		if (_secondOnTop == true)
 		{
 			square.w = static_cast<Uint16>(Round(width));
 			drawRect(&square, _color + 4);
@@ -253,7 +253,7 @@ void Bar::draw()
 	}
 	else
 	{
-		if (_secondOnTop)
+		if (_secondOnTop == true)
 		{
 			square.w = static_cast<Uint16>(Round(width));
 			drawRect(&square, _color);

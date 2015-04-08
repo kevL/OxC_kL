@@ -71,12 +71,12 @@ private:
 		Uint8 getSecondaryColor() const;
 
 		/// Sets the bar's scale.
-		void setScale(double scale = 1.0);
+		void setScale(double scale = 1.);
 		/// Gets the bar's scale.
 		double getScale() const;
 
 		/// Sets the bar's maximum value.
-		void setMax(double max);
+		void setMax(double maxVal);
 		/// Gets the bar's maximum value.
 		double getMax() const;
 

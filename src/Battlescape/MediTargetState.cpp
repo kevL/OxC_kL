@@ -130,8 +130,9 @@ void MediTargetState::init()
 {
 	State::init();
 
-	_targetUnits.clear();
-	bool addToList;
+	bool
+		addToList,
+		firstPass = true;
 
 	const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator
@@ -143,19 +144,27 @@ void MediTargetState::init()
 		{
 			addToList = false;
 
-			if (*i == _action->actor)
-				addToList = true;
-			else if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-				&& (*i)->getPosition() == _action->actor->getPosition())
+			if (firstPass == true
+				&& *i == _action->actor)
 			{
-				addToList = true;;
+				addToList = true;
 			}
-			else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																							_action->actor,
-																							*i,
-																							_action->actor->getDirection()) == true)
+
+			if (firstPass == false
+				&& *i != _action->actor)
 			{
-				addToList = true;
+				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
+					&& (*i)->getPosition() == _action->actor->getPosition())
+				{
+					addToList = true;;
+				}
+				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+																								_action->actor,
+																								*i,
+																								_action->actor->getDirection()) == true)
+				{
+					addToList = true;
+				}
 			}
 
 
@@ -184,7 +193,25 @@ void MediTargetState::init()
 								woststr1.str().c_str(),
 								woststr2.str().c_str(),
 								Text::formatNumber(_targetUnits.back()->getMorale()).c_str());
+
+				if (firstPass == true)
+				{
+					firstPass = false;
+					i = units->begin();
+
+					_lstTarget->setRowColor(
+										0,
+										Palette::blockOffset(6), // orange
+										true);
+				}
 			}
+		}
+
+		if (firstPass == true // in case medikit user is not 'Fearable'
+			&& *i == units->back())
+		{
+			firstPass = false;
+			i = units->begin();
 		}
 	}
 
@@ -196,6 +223,8 @@ void MediTargetState::init()
 		_game->popState();
 		_game->pushState(new MedikitState(_action));
 	}
+	else if (_targetUnits.empty() == true)
+		_game->popState();
 }
 
 /**

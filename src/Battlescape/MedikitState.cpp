@@ -190,7 +190,8 @@ MedikitState::MedikitState(BattleAction* action)
 
 	_numHealth		= new NumberText(15, 5, 90, 8); // add x+32 to center these.
 	_numStun		= new NumberText(15, 5, 105, 8);
-	_barHealth		= new Bar(102, 3, 120, 9);
+//	_barHealth		= new Bar(102, 3, 120, 9);
+	_barHealth		= new Bar(300, 3, 120, 9);
 
 	_numEnergy		= new NumberText(15, 5, 90, 15);
 	_barEnergy		= new Bar(102, 3, 120, 16);
@@ -304,7 +305,7 @@ void MedikitState::onCloseClick(Action*)
  */
 void MedikitState::onHealClick(Action*)
 {
-	int heal = _action->weapon->getHealQuantity();
+	const int heal = _action->weapon->getHealQuantity();
 	if (heal == 0)
 		return;
 
@@ -318,7 +319,7 @@ void MedikitState::onHealClick(Action*)
 					itRule->getWoundRecovery(),
 					itRule->getHealthRecovery());
 
-		_action->weapon->setHealQuantity(--heal);
+		_action->weapon->setHealQuantity(heal - 1);
 		_mediView->autoSelectPart();
 		_mediView->invalidate();
 
@@ -337,7 +338,7 @@ void MedikitState::onHealClick(Action*)
  */
 void MedikitState::onStimClick(Action*)
 {
-	int stimulant = _action->weapon->getStimulantQuantity();
+	const int stimulant = _action->weapon->getStimulantQuantity();
 	if (stimulant == 0)
 		return;
 
@@ -349,7 +350,7 @@ void MedikitState::onStimClick(Action*)
 		_action->targetUnit->stimulant(
 							itRule->getEnergyRecovery(),
 							itRule->getStunRecovery());
-		_action->weapon->setStimulantQuantity(--stimulant);
+		_action->weapon->setStimulantQuantity(stimulant - 1);
 
 		update();
 
@@ -374,7 +375,7 @@ void MedikitState::onStimClick(Action*)
  */
 void MedikitState::onPainClick(Action*)
 {
-	int pain = _action->weapon->getPainKillerQuantity();
+	const int pain = _action->weapon->getPainKillerQuantity();
 	if (pain == 0)
 		return;
 
@@ -383,7 +384,7 @@ void MedikitState::onPainClick(Action*)
 		++_action->actor->getStatistics()->medikitApplications;
 
 		_action->targetUnit->painKillers();
-		_action->weapon->setPainKillerQuantity(--pain);
+		_action->weapon->setPainKillerQuantity(pain - 1);
 
 		update();
 	}

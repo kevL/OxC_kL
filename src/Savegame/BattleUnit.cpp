@@ -3507,9 +3507,10 @@ bool BattleUnit::isWoundable() const
  */
 bool BattleUnit::isFearable() const
 {
-	return _geoscapeSoldier != NULL
-	   || (_unitRules->isMechanical() == false
-			&& _race != "STR_ZOMBIE");
+	return _status != STATUS_DEAD
+		&& (_geoscapeSoldier != NULL
+			|| (_unitRules->isMechanical() == false
+				&& _race != "STR_ZOMBIE"));
 
 /*	if (_geoscapeSoldier != NULL)
 		return true;
