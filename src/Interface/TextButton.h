@@ -99,6 +99,8 @@ protected:
 		void setText(const std::wstring& text);
 		/// Gets the text button's text.
 		std::wstring getText() const;
+		/// Gets a pointer to the Text.
+		Text* getTextPtr() const;
 
 		/// Sets the text button's group.
 		void setGroup(TextButton** group);

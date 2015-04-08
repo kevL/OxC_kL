@@ -46,8 +46,7 @@ ArrowButton::ArrowButton(
 		ImageButton(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_shape(shape),
 		_list(NULL)
 {

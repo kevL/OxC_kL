@@ -52,8 +52,7 @@ TextButton::TextButton(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_color(0),
 		_group(NULL),
 		_contrast(false),
@@ -193,7 +192,6 @@ void TextButton::setHighContrast(bool contrast)
 void TextButton::setText(const std::wstring& text)
 {
 	_text->setText(text);
-
 	_redraw = true;
 }
 
@@ -204,6 +202,15 @@ void TextButton::setText(const std::wstring& text)
 std::wstring TextButton::getText() const
 {
 	return _text->getText();
+}
+
+/**
+ * Gets a pointer to the Text.
+ * @return, pointer to the Text
+ */
+Text* TextButton::getTextPtr() const
+{
+	return _text;
 }
 
 /**
@@ -322,7 +329,7 @@ void TextButton::draw()
 
 	if (press == true)
 	{
-		if (_tftdMode == true)
+		if (_geoscapeButton == true)
 			this->invert(_color + (multer * 2));
 		else
 			this->invert(_color + (multer * 3));
@@ -399,8 +406,8 @@ void TextButton::setComboBox(ComboBox* comboBox)
 
 	if (_comboBox != NULL)
 		_text->setX(-6);
-	else
-		_text->setX(0);
+//	else
+//		_text->setX(0);
 }
 
 /**

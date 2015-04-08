@@ -78,6 +78,7 @@ private:
 		* _small,
 		* _font;
 	Language* _lang;
+
 	TextHAlign _align;
 	TextVAlign _valign;
 

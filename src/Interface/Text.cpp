@@ -48,8 +48,7 @@ Text::Text(
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_big(NULL),
 		_small(NULL),
 		_font(NULL),
@@ -409,10 +408,7 @@ int Text::getTextHeight(int line) const
 void Text::addTextHeight(int pad)
 {
 	if (_lineHeight.empty() == false)
-	{
-		const size_t line = _lineHeight.size() - 1;
-		_lineHeight[line] += pad;
-	}
+		_lineHeight[_lineHeight.size() - 1] += pad;
 }
 
 /**
@@ -627,16 +623,16 @@ void Text::draw()
 	if (Options::debugUi == true) // show text borders for debugUI
 	{
 		SDL_Rect rect;
-		rect.w = static_cast<Uint16>(getWidth());
-		rect.h = static_cast<Uint16>(getHeight());
 		rect.x =
 		rect.y = 0;
+		rect.w = static_cast<Uint16>(getWidth());
+		rect.h = static_cast<Uint16>(getHeight());
 		this->drawRect(&rect, 5);
 
-		rect.w -= 2;
-		rect.h -= 2;
 		++rect.x;
 		++rect.y;
+		rect.w -= 2;
+		rect.h -= 2;
 		this->drawRect(&rect, 0);
 	}
 
@@ -727,7 +723,7 @@ void Text::draw()
 			if (dir < 0)
 				x += dir * font->getCharSize(*i).w;
 
-			Surface* srfChar = font->getChar(*i);
+			Surface* const srfChar = font->getChar(*i);
 			srfChar->setX(x);
 			srfChar->setY(y);
 			ShaderDraw<PaletteShift>(

@@ -472,6 +472,7 @@ UnitInfoState::UnitInfoState(
 	if (_mindProbe == false)
 	{
 		_btnPrev->setText(L"<");
+		_btnPrev->getTextPtr()->setX(-1);
 		_btnPrev->onMouseClick((ActionHandler)& UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,

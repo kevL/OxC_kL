@@ -4377,10 +4377,10 @@
 1424390939 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1426185792 f:\git\openxcom\src\interface\text.h
+1428452316 f:\git\openxcom\src\interface\text.h
 	"../Engine/Surface.h"
 
-1428366495 f:\git\openxcom\src\interface\textbutton.h
+1428453007 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
 1424598796 f:\git\openxcom\src\interface\textedit.h
@@ -5401,7 +5401,7 @@
 1427238813 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1428330655 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1428462023 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"MedikitState.h"
@@ -5510,7 +5510,7 @@
 1424390944 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1428327126 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1428462156 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5687,7 +5687,7 @@
 1424390944 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1428386140 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1428386350 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6322,7 +6322,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1428026435 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1428460071 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6383,7 +6383,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1428383113 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1428453147 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -7625,7 +7625,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1426103056 source:f:\git\openxcom\src\interface\arrowbutton.cpp
+1428451975 source:f:\git\openxcom\src\interface\arrowbutton.cpp
 	"ArrowButton.h"
 	"TextList.h"
 	"../Engine/Action.h"
@@ -7665,11 +7665,11 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1426185785 source:f:\git\openxcom\src\interface\text.cpp
+1428452572 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	"../Engine/Language.h"
 
-1428366765 source:f:\git\openxcom\src\interface\textbutton.cpp
+1428453175 source:f:\git\openxcom\src\interface\textbutton.cpp
 	"TextButton.h"
 	"ComboBox.h"
 	"Text.h"

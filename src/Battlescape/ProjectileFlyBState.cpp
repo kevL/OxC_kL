@@ -153,7 +153,7 @@ void ProjectileFlyBState::init()
 		popThis = true;
 	}
 	else if (_parent->getPanicHandled() == true
-//		&& _action.type != BA_HIT // done in ActionMenuState
+		&& _action.type != BA_HIT // done in ActionMenuState -> Exactly. So do NOT re-consider it here.
 		&& _unit->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";

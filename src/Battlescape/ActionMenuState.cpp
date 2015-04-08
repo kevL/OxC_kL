@@ -116,7 +116,7 @@ ActionMenuState::ActionMenuState(
 					BA_PRIME,
 					"STR_PRIME_GRENADE",
 					&id);
-		else // kL_add:
+		else
 			addItem(
 					BA_DEFUSE,
 					"STR_DEFUSE_GRENADE",
@@ -133,6 +133,11 @@ ActionMenuState::ActionMenuState(
 					"STR_STUN",
 					&id);
 		}
+		else if (itRule->getType() == "STR_DOGE")
+			addItem( // doggie bite
+					BA_HIT,
+					"STR_DOGE_JAWS",
+					&id);
 		else
 			addItem( // melee weapon
 					BA_HIT,

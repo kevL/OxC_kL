@@ -5781,6 +5781,7 @@ bool TileEngine::validMeleeRange(
 		Position* const dest)
 //		const bool preferEnemy) // <- obsolete.
 {
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (dir < 0 || dir > 7)
 		return false;
 
@@ -5794,7 +5795,7 @@ bool TileEngine::validMeleeRange(
 		* tileTarget_above,
 		* tileTarget_below;
 
-	std::vector<BattleUnit*> potentialTargets;
+	std::vector<BattleUnit*> targetUnits;
 
 	const int unitSize = attacker->getArmor()->getSize() - 1;
 	for (int
@@ -5807,35 +5808,43 @@ bool TileEngine::validMeleeRange(
 				y != unitSize + 1;
 				++y)
 		{
+			//Log(LOG_INFO) << ". . . iterate Size";
 			tileOrigin = _battleSave->getTile(Position(origin + Position(x,y, 0)));
 			tileTarget = _battleSave->getTile(Position(origin + Position(x,y, 0) + posTarget));
 
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
 			{
+				//Log(LOG_INFO) << ". . . . origin & target VALID";
 				if (tileTarget->getUnit() == NULL)
 				{
+					//Log(LOG_INFO) << ". . . . . tileTarget->unit NOT Valid";
 					tileTarget_above = _battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
 					tileTarget_below = _battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
 
 					if (tileTarget_above != NULL // kL_note: standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
-						&& tileOrigin->getTerrainLevel() < -7)
+//						&& tileOrigin->getTerrainLevel() < -7)
+						&& std::abs(tileTarget_above->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
 					{
 						tileTarget = tileTarget_above;
 					}
 					else if (tileTarget_below != NULL // kL_note: can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
-						&& tileTarget->hasNoFloor(tileTarget_below) == true
-						&& tileTarget_below->getTerrainLevel() < -7)
+//						&& tileTarget->hasNoFloor(tileTarget_below) == true
+//						&& tileTarget_below->getTerrainLevel() < -7)
+						&& std::abs((tileTarget_below->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
 					{
 						tileTarget = tileTarget_below;
 					}
 				}
 
+				//Log(LOG_INFO) << ". . . . recheck for tileTarget->unit";
 				if (tileTarget->getUnit() != NULL)
 				{
+					//Log(LOG_INFO) << ". . . . . tileTarget->unit VALID";
 					if (targetUnit == NULL
 						|| targetUnit == tileTarget->getUnit())
 					{
+						//Log(LOG_INFO) << ". . . . . . targetUnit NOT Valid or targetUnit==tileTarget->unit";
 						const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
 												   + Position(
 															8,8,
@@ -5851,13 +5860,20 @@ bool TileEngine::validMeleeRange(
 										&voxelTarget,
 										attacker) == true)
 						{
-							if (dest != NULL)
-								*dest = tileTarget->getPosition();
-
+							//Log(LOG_INFO) << ". . . . . . canTargetUnit TRUE";
 							if (targetUnit != NULL) // medikit check always returns here!
+							{
+								if (dest != NULL)
+									*dest = tileTarget->getPosition();
+
+								//Log(LOG_INFO) << ". . . . . . . targetUnit found, ret TRUE";
 								return true;
+							}
 							else
-								potentialTargets.push_back(tileTarget->getUnit());
+							{
+								//Log(LOG_INFO) << ". . . . . . . add targetUnit to target vector";
+								targetUnits.push_back(tileTarget->getUnit());
+							}
 						}
 					}
 				}
@@ -5865,16 +5881,31 @@ bool TileEngine::validMeleeRange(
 		}
 	}
 
+	if (targetUnits.size() == 0)
+		return false;
 
-	const BattleUnit* defender = NULL;
 
+	const size_t pick = static_cast<int>(RNG::generate(
+													0,
+													targetUnits.size() - 1));
+
+	if (dest != NULL)
+	{
+		//Log(LOG_INFO) << ". . set defender Pos " << defender->getPosition();
+		*dest = targetUnits[pick]->getPosition();
+	}
+
+	//Log(LOG_INFO) << ". ret = " << (int)(defender != NULL);
+	return true;
+}
+/*	const BattleUnit* defender = NULL;
 //	if (preferEnemy == true)
 //	{
 	std::vector<BattleUnit*> randTarget;
 
 	for (std::vector<BattleUnit*>::const_iterator
-			i = potentialTargets.begin();
-			i != potentialTargets.end();
+			i = targetUnits.begin();
+			i != targetUnits.end();
 			++i)
 	{
 		if ((*i)->getFaction() != attacker->getFaction())
@@ -5886,17 +5917,17 @@ bool TileEngine::validMeleeRange(
 		const size_t pick = RNG::generate(
 									0,
 									randTarget.size() - 1);
+		//Log(LOG_INFO) << ". . pick = " << pick;
 		defender = randTarget[pick];
-	}
+	} */
 //	}
 //	else // medikit use - allow 'defender' into MediTargetState list; see above^
 //	{}
 
-
 /* note: This is superceded by changes for MediTargetState.
 	for (std::vector<BattleUnit*>::const_iterator
-			i = potentialTargets.begin();
-			i != potentialTargets.end();
+			i = targetUnits.begin();
+			i != targetUnits.end();
 			++i)
 	{
 		if (defender == NULL
@@ -5910,14 +5941,15 @@ bool TileEngine::validMeleeRange(
 		}
 	} */
 
-	if (dest != NULL
+/*	if (dest != NULL
 		&& defender != NULL)
 	{
+		//Log(LOG_INFO) << ". . set defender Pos " << defender->getPosition();
 		*dest = defender->getPosition();
 	}
 
-	return (defender != NULL);
-}
+	//Log(LOG_INFO) << ". ret = " << (int)(defender != NULL);
+	return (defender != NULL); */
 
 /**
  * Gets the AI to look through a window.
