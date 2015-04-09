@@ -180,13 +180,13 @@ private:
 		void setArmor(RuleArmor* const armor);
 
 		/// Gets the soldier's wound recovery time.
-		int getWoundRecovery() const;
+		int getRecovery() const;
 		/// Sets the soldier's wound recovery time.
-		void setWoundRecovery(int recovery);
+		void setRecovery(int recovery);
 		/// Heals wound recoveries.
 		void heal();
 		/// Gets a soldier's wounds as a percent.
-		int getWoundPercent() const;
+		int getWoundPCT() const;
 
 		/// Gets the soldier's equipment-layout.
 		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();

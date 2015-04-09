@@ -173,9 +173,9 @@ void CraftArmorState::init()
 
 		_lstSoldiers->setRowColor(row, color);
 
-		if ((*i)->getWoundRecovery() > 0)
+		if ((*i)->getRecovery() > 0)
 		{
-			const int woundPct = (*i)->getWoundPercent();
+			const int woundPct = (*i)->getWoundPCT();
 			if (woundPct > 50)
 				color = Palette::blockOffset(6); // orange
 			else if (woundPct > 10)

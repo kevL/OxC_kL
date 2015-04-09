@@ -429,7 +429,7 @@ DebriefingState::DebriefingState()
 			}
 			else
 			{
-				const int wounds = soldier->getWoundRecovery();
+				const int wounds = soldier->getRecovery();
 				statistics->daysWounded =
 				_missionStatistics->injuryList[soldier->getId()] = wounds;
 

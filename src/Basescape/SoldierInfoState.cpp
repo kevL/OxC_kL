@@ -587,11 +587,11 @@ void SoldierInfoState::init()
 	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
 
 
-	const int healTime = _soldier->getWoundRecovery();
-	if (healTime > 0)
+	const int recovery = _soldier->getRecovery();
+	if (recovery > 0)
 	{
 		Uint8 color;
-		const int woundPct = _soldier->getWoundPercent();
+		const int woundPct = _soldier->getWoundPCT();
 		if (woundPct > 50)
 			color = Palette::blockOffset(6); // orange
 		else if (woundPct > 10)
@@ -600,11 +600,11 @@ void SoldierInfoState::init()
 			color = Palette::blockOffset(3); // green
 
 		_txtRecovery->setSecondaryColor(color);
-		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", healTime)));
+		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", recovery)));
 		_txtRecovery->setVisible();
 
 		_txtDay->setColor(color);
-		_txtDay->setText(tr("STR_DAY", healTime));
+		_txtDay->setText(tr("STR_DAY", recovery));
 		_txtDay->setVisible();
 	}
 	else

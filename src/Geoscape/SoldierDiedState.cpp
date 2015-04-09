@@ -44,7 +44,6 @@ SoldierDiedState::SoldierDiedState(
 		const std::wstring& name,
 		const std::wstring& base)
 {
-	//Log(LOG_INFO) << "create SoldierDiedState";
 	_screen = false;
 
 	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
@@ -60,6 +59,7 @@ SoldierDiedState::SoldierDiedState(
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -87,15 +87,13 @@ SoldierDiedState::SoldierDiedState(
 	_txtBase->setSmall();
 	_txtBase->setAlign(ALIGN_CENTER);
 	_txtBase->setText(base);
-	//Log(LOG_INFO) << "create SoldierDiedState EXIT";
 }
 
 /**
  * dTor.
  */
 SoldierDiedState::~SoldierDiedState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.

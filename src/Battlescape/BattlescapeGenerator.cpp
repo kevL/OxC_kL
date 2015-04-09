@@ -821,7 +821,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 		if ((_craft != NULL
 				&& (*i)->getCraft() == _craft)
 			|| (_craft == NULL
-				&& (*i)->getWoundRecovery() == 0
+				&& (*i)->getRecovery() == 0
 				&& ((*i)->getCraft() == NULL
 					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{

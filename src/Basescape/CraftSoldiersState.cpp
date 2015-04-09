@@ -227,9 +227,9 @@ void CraftSoldiersState::init()
 
 		_lstSoldiers->setRowColor(row, color);
 
-		if ((*i)->getWoundRecovery() > 0)
+		if ((*i)->getRecovery() > 0)
 		{
-			const int woundPct = (*i)->getWoundPercent();
+			const int woundPct = (*i)->getWoundPCT();
 			if (woundPct > 50)
 				color = Palette::blockOffset(6); // orange
 			else if (woundPct > 10)
@@ -292,7 +292,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
-		if (soldier->getWoundRecovery() > 0
+		if (soldier->getRecovery() > 0
 			|| (soldier->getCraft() != NULL
 				&& soldier->getCraft()->getStatus() == "STR_OUT"))
 		{

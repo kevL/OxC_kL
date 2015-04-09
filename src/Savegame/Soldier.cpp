@@ -508,7 +508,7 @@ void Soldier::setArmor(RuleArmor* const armor)
  * Gets the amount of time until this Soldier is fully healed.
  * @return, quantity of days
  */
-int Soldier::getWoundRecovery() const
+int Soldier::getRecovery() const
 {
 	return _recovery;
 }
@@ -517,7 +517,7 @@ int Soldier::getWoundRecovery() const
  * Sets the amount of time until this Soldier is fully healed.
  * @param recovery - quantity of days
  */
-void Soldier::setWoundRecovery(int recovery)
+void Soldier::setRecovery(int recovery)
 {
 	_recovery = recovery;
 
@@ -540,7 +540,7 @@ void Soldier::heal()
  * Gets this Soldier's wounds as a percent.
  * @note This could be set as high as 150% in BattleUnit::postMissionProcedures()
  */
-int Soldier::getWoundPercent() const
+int Soldier::getWoundPCT() const
 {
 	return static_cast<int>(std::floor(
 		   static_cast<float>(_recovery) / static_cast<float>(_currentStats.health) * 100.f));

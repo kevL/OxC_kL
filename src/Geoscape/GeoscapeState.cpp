@@ -3039,7 +3039,7 @@ void GeoscapeState::time1Day()
 
 
 		bool dead;
-		int pctWounds;
+		int pct;
 		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
 				sol = (*base)->getSoldiers()->begin();
 				sol != (*base)->getSoldiers()->end();
@@ -3047,15 +3047,15 @@ void GeoscapeState::time1Day()
 		{
 			dead = false;
 
-			pctWounds = (*sol)->getWoundPercent();
-			if (pctWounds > 10)
+			pct = (*sol)->getWoundPCT(); // note this can go well over 100% in postMissionProcedures()
+			if (pct > 10)
 			{
-				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pctWounds;
-				const int chanceToDie = std::max(
-											1,
-											(pctWounds / 4) / (((*sol)->getWoundRecovery() + 9) / 10)); // note potential divBy0
-				Log(LOG_INFO) << ". . chanceToDie = " << chanceToDie;
-				if (RNG::percent(chanceToDie) == true) // more than 10% wounded, %chance to die today
+				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pct;
+				pct = std::max(
+							1,
+							((pct * 10) / 4) / (*sol)->getRecovery()); // note potential divBy0
+				Log(LOG_INFO) << ". . pct = " << pct;
+				if (RNG::percent(pct) == true) // more than 10% wounded, %chance to die today
 				{
 					dead = true;
 					Log(LOG_INFO) << ". . . he's dead, Jim!!";
@@ -3082,7 +3082,7 @@ void GeoscapeState::time1Day()
 
 			if (dead == false)
 			{
-				if ((*sol)->getWoundRecovery() > 0)
+				if ((*sol)->getRecovery() > 0)
 					(*sol)->heal();
 
 				++sol;

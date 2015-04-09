@@ -272,8 +272,8 @@ void TransferItemsState::init()
 			std::wostringstream wss;
 			wss << (*i)->getName();
 
-			if ((*i)->getWoundRecovery() > 0)
-				wss << L" (" << (*i)->getWoundRecovery() << L" dy)";
+			if ((*i)->getRecovery() > 0)
+				wss << L" (" << (*i)->getRecovery() << L" dy)";
 
 			_lstItems->addRow(
 							4,

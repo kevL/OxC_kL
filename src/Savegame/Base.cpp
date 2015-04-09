@@ -642,7 +642,7 @@ int Base::getAvailableSoldiers(const bool combatReady) const
 			&& (((*i)->getCraft() != NULL
 					&& (*i)->getCraft()->getStatus() != "STR_OUT")
 				|| ((*i)->getCraft() == NULL
-					&& (*i)->getWoundRecovery() == 0)))
+					&& (*i)->getRecovery() == 0)))
 		{
 			++total;
 		}

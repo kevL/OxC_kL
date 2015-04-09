@@ -3071,9 +3071,9 @@ bool BattleUnit::postMissionProcedures(const SavedGame* const savedGame)
 	const UnitStats caps = soldier->getRules()->getStatCaps();
 
 	const int healthLoss = _stats.health - _health;
-	soldier->setWoundRecovery(RNG::generate( // 50% to 150%
-										healthLoss / 2,
-										healthLoss * 3 / 2));
+	soldier->setRecovery(RNG::generate( // 50% to 150%
+									healthLoss / 2,
+									healthLoss * 3 / 2));
 
 	if (_expBravery != 0
 		&& stats->bravery < caps.bravery)

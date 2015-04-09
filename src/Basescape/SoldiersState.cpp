@@ -206,10 +206,10 @@ void SoldiersState::init()
 									row,
 									_lstSoldiers->getSecondaryColor());
 
-			if ((*i)->getWoundRecovery() > 0)
+			if ((*i)->getRecovery() > 0)
 			{
 				Uint8 color;
-				const int woundPct = (*i)->getWoundPercent();
+				const int woundPct = (*i)->getWoundPCT();
 				if (woundPct > 50)
 					color = Palette::blockOffset(6); // orange
 				else if (woundPct > 10)
