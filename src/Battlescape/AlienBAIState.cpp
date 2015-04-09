@@ -1826,8 +1826,8 @@ void AlienBAIState::evaluateAIMode()
 }
 
 /**
- * Find a position where we can see our target, and move there.
- * Check the 11x11 grid for a position nearby where we can potentially target him.
+ * Find a position where the target can be seen and move there.
+ * Check the 11x11 grid for a position nearby from which actor can potentially target.
  * @return, true if a possible position was found
  */
 bool AlienBAIState::findFirePoint()

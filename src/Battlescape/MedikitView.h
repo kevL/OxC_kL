@@ -39,6 +39,9 @@ class MedikitView
 {
 
 private:
+	static const int BODYPARTS = 6;
+	static const std::string BODY_PARTS[];
+
 	int _selectedPart;
 
 	BattleUnit* _unit;

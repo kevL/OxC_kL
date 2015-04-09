@@ -159,6 +159,13 @@ extraSprites:
   - type: HIT.PCK
     files:
       0: Resources/Sprites/ufograph/hit/
+  - type: MEDIBITS.DAT
+    width: 312
+    height: 58
+    subX: 52
+    subY: 58
+    files:
+      0: Resources/Sprites/ufograph/medibits/medibits.png
   - type: SMOKE.PCK
     width: 256
     height: 280

@@ -40,6 +40,7 @@ private:
 	bool
 		_invert,
 		_secondOnTop;
+	int _offSecond_y;
 	Uint8
 		_color,
 		_color2,
@@ -90,7 +91,9 @@ private:
 		double getValue2() const;
 
 		/// Defines whether the second value should be drawn on top.
-		void setSecondValueOnTop(bool onTop);
+		void setSecondValueOnTop(bool onTop = true);
+		/// Offsets y-value of second bar.
+		void offsetSecond(int y);
 
 		/// Sets the bar's color invert setting.
 		void setInvert(bool invert = true);
@@ -99,7 +102,7 @@ private:
 		void draw();
 
 		/// set the outline color for the bar.
-		void setBorderColor(Uint8 bc);
+		void setBorderColor(Uint8 color);
 };
 
 }

@@ -869,6 +869,7 @@ BattlescapeState::BattlescapeState()
 
 	_barHealth->setScale();
 	_barHealth->setMax(100.);
+//	_barHealth->setBorderColor(Palette::blockOffset(2)+7);
 
 	_barMorale->setScale();
 	_barMorale->setMax(100.);

@@ -19,9 +19,8 @@
 
 #include "Bar.h"
 
-#include <cmath>
-
-#include <SDL.h>
+//#include <cmath>
+//#include <SDL.h>
 
 
 namespace OpenXcom
@@ -52,7 +51,8 @@ Bar::Bar(
 		_value(0.),
 		_value2(0.),
 		_invert(false),
-		_secondOnTop(true)
+		_secondOnTop(true),
+		_offSecond_y(0)
 {}
 
 /**
@@ -176,8 +176,8 @@ double Bar::getValue2() const
 }
 
 /**
- * Defines whether the second value should be drawn on top. Default this is true.
- * @param onTop - true if second value on top
+ * Defines whether the second value should be drawn on top.
+ * @param onTop - true if second value on top (default true)
  */
 void Bar::setSecondValueOnTop(bool onTop)
 {
@@ -185,9 +185,19 @@ void Bar::setSecondValueOnTop(bool onTop)
 }
 
 /**
- * Enables/disables color inverting. Some bars have
- * darker borders and others have lighter borders.
- * @param invert - invert setting
+ * Offsets y-value of second bar.
+ * @note Only works if second is on top.
+ * @param y - amount of y to offset by
+ */
+void Bar::offsetSecond(int y)
+{
+	_offSecond_y = y;
+}
+
+/**
+ * Enables/disables color inverting.
+ * Some bars have darker borders and others have lighter borders.
+ * @param invert - invert setting (default true)
  */
 void Bar::setInvert(bool invert)
 {
@@ -202,27 +212,27 @@ void Bar::draw()
 {
 	Surface::draw();
 
-	SDL_Rect square;
-	square.x =
-	square.y = 0;
-	square.w = static_cast<Uint16>(Round(_scale * _max)) + 1;
-	square.h = static_cast<Uint16>(getHeight());
+	SDL_Rect rect;
+	rect.x =
+	rect.y = 0;
+	rect.w = static_cast<Uint16>(Round(_scale * _max)) + 1;
+	rect.h = static_cast<Uint16>(getHeight());
 
 	if (_invert == true)
-		drawRect(&square, _color);
+		drawRect(&rect, _color);
 	else
 	{
 		if (_borderColor != 0)
-			drawRect(&square, _borderColor);
+			drawRect(&rect, _borderColor);
 		else
-			drawRect(&square, _color + 4);
+			drawRect(&rect, _color + 6); // was +4 but red is wonky.
 	}
 
-	++square.y;
-	--square.w;
-	square.h -= 2;
+	++rect.y;
+	--rect.w;
+	rect.h -= 2;
 
-	drawRect(&square, 0);
+	drawRect(&rect, 0);
 
 	double
 		width = _scale * _value,
@@ -238,46 +248,54 @@ void Bar::draw()
 	{
 		if (_secondOnTop == true)
 		{
-			square.w = static_cast<Uint16>(Round(width));
-			drawRect(&square, _color + 4);
-			square.w = static_cast<Uint16>(Round(width2));
-			drawRect(&square, _color2 + 4);
+			rect.w = static_cast<Uint16>(Round(width));
+			drawRect(&rect, _color + 4);
+
+			rect.w = static_cast<Uint16>(Round(width2));
+			rect.y += static_cast<Sint16>(_offSecond_y);
+			drawRect(&rect, _color2 + 4);
 		}
 		else
 		{
-			square.w = static_cast<Uint16>(Round(width2));
-			drawRect(&square, _color2 + 4);
-			square.w = static_cast<Uint16>(Round(width));
-			drawRect(&square, _color + 4);
+			rect.w = static_cast<Uint16>(Round(width2));
+//			rect.y += _offSecond_y;
+			drawRect(&rect, _color2 + 4);
+
+			rect.w = static_cast<Uint16>(Round(width));
+			drawRect(&rect, _color + 4);
 		}
 	}
 	else
 	{
 		if (_secondOnTop == true)
 		{
-			square.w = static_cast<Uint16>(Round(width));
-			drawRect(&square, _color);
-			square.w = static_cast<Uint16>(Round(width2));
-			drawRect(&square, _color2);
+			rect.w = static_cast<Uint16>(Round(width));
+			drawRect(&rect, _color);
+
+			rect.w = static_cast<Uint16>(Round(width2));
+			rect.y += static_cast<Sint16>(_offSecond_y);
+			drawRect(&rect, _color2);
 		}
 		else
 		{
-			square.w = static_cast<Uint16>(Round(width2));
-			drawRect(&square, _color2);
-			square.w = static_cast<Uint16>(Round(width));
-			drawRect(&square, _color);
+			rect.w = static_cast<Uint16>(Round(width2));
+//			rect.y += _offSecond_y;
+			drawRect(&rect, _color2);
+
+			rect.w = static_cast<Uint16>(Round(width));
+			drawRect(&rect, _color);
 		}
 	}
 }
 
 /**
  * Sets the border color for the bar.
- * @param bc - the color for the outline of the bar
- * @note will use base colour + 4 if none is defined here
+ * @note Will use base color+4 if none is defined here.
+ * @param color - the color for the outline of the bar
  */
-void Bar::setBorderColor(Uint8 bc)
+void Bar::setBorderColor(Uint8 color)
 {
-	_borderColor = bc;
+	_borderColor = color;
 }
 
 }

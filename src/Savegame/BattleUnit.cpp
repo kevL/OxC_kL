@@ -3244,16 +3244,16 @@ int BattleUnit::getTurretType() const
 }
 
 /**
- * Gets the amount of fatal wound for a body part.
+ * Gets the amount of fatal wounds for a body part.
  * @param part - the body part (in the range 0-5)
- * @return, the amount of fatal wound of a body part
+ * @return, the quantity of fatal wounds of a body part
  */
 int BattleUnit::getFatalWound(int part) const
 {
 	if (part < 0 || part > 5)
 		return 0;
 
-	return _fatalWounds[part];
+	return _fatalWounds[static_cast<size_t>(part)];
 }
 
 /**
@@ -3267,13 +3267,13 @@ void BattleUnit::heal(
 		int wounds,
 		int health)
 {
-	if (part < 0 || part > 5)
+	if (part < 0 || part > 5
+		|| _fatalWounds[static_cast<size_t>(part)] == false)
+	{
 		return;
+	}
 
-	if (_fatalWounds[part] == false)
-		return;
-
-	_fatalWounds[part] -= wounds;
+	_fatalWounds[static_cast<size_t>(part)] -= wounds;
 
 	_health += health;
 	if (_health > getBaseStats()->health)

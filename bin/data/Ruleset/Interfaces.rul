@@ -1029,7 +1029,9 @@ interfaces:
       - id: numEnergy
         color: 16
       - id: numHealth
-        color: 44 #stock 28
+        color: 44
+      - id: numStun
+        color: 81
       - id: numMorale
         color: 192
       - id: barTUs
@@ -1037,7 +1039,7 @@ interfaces:
       - id: barEnergy
         color: 16
       - id: barHealth
-        color: 34 #stock 32
+        color: 34
         color2: 82
       - id: barMorale
         color: 192

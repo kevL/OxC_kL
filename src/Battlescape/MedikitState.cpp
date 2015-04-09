@@ -188,10 +188,11 @@ MedikitState::MedikitState(BattleAction* action)
 	_txtStim	= new MedikitTxt(87);
 	_txtHeal	= new MedikitTxt(123);
 
-	_numHealth		= new NumberText(15, 5, 90, 8); // add x+32 to center these.
+	_numHealth		= new NumberText(15, 5, 90, 8);
+	_numTotalHP		= new NumberText(15, 5, 225, 8);
 	_numStun		= new NumberText(15, 5, 105, 8);
 //	_barHealth		= new Bar(102, 3, 120, 9);
-	_barHealth		= new Bar(300, 3, 120, 9);
+	_barHealth		= new Bar(300, 5, 120, 8);
 
 	_numEnergy		= new NumberText(15, 5, 90, 15);
 	_barEnergy		= new Bar(102, 3, 120, 16);
@@ -203,7 +204,7 @@ MedikitState::MedikitState(BattleAction* action)
 	_barTimeUnits	= new Bar(102, 3, 120, 165);
 
 	add(_numHealth);
-	add(_numStun);
+	add(_numStun,		"numStun",		"battlescape");
 	add(_numEnergy,		"numEnergy",	"battlescape");
 	add(_numMorale,		"numMorale",	"battlescape");
 	add(_numTimeUnits,	"numTUs",		"battlescape");
@@ -211,22 +212,35 @@ MedikitState::MedikitState(BattleAction* action)
 	add(_barEnergy,		"barEnergy",	"battlescape");
 	add(_barMorale,		"barMorale",	"battlescape");
 	add(_barTimeUnits,	"barTUs",		"battlescape");
+	add(_numTotalHP); // goes on top of Health (stun) bar.
 
-	_numHealth->setColor(Palette::blockOffset(2)+2);	// 10-pips lighter than Battlescape icons value
-	_numStun->setColor(Palette::blockOffset(0)+1);		// not in Interfaces.rul
+	_numHealth->setColor(Palette::blockOffset(2)+2);	// 10-pips lighter than Battlescape-icons value for its NumberText.
+	_numTotalHP->setColor(Palette::blockOffset(2)+2);	// ditto.
+
+	const int hp = _action->targetUnit->getBaseStats()->health;
+	_numTotalHP->setValue(static_cast<unsigned>(hp));
 
 	_barHealth->setScale();
 	_barEnergy->setScale();
 	_barMorale->setScale();
 	_barTimeUnits->setScale();
+	_barHealth->setMax(100.);
+	_barEnergy->setMax(100.);
+	_barMorale->setMax(100.);
+	_barTimeUnits->setMax(100.);
+
+	_barHealth->offsetSecond(-2);
+//	_barHealth->setBorderColor(Palette::blockOffset(2)+7);
 
 
 	add(_bg);
 
-	add(new MedikitTitle( 36, tr("STR_PAIN_KILLER")),	"textPK",	"medikit", _bg);
-	add(new MedikitTitle( 72, tr("STR_STIMULANT")),		"textStim",	"medikit", _bg);
-	add(new MedikitTitle(108, tr("STR_HEAL")),			"textHeal",	"medikit", _bg);
-	// kL_note: Just because you can do it doesn't make it right.
+	std::wstring wst = tr("STR_PAIN_KILLER");
+	add(new MedikitTitle( 36, wst), "textPK",	"medikit", _bg);
+	wst = tr("STR_STIMULANT");
+	add(new MedikitTitle( 72, wst), "textStim",	"medikit", _bg);
+	wst = tr("STR_HEAL");
+	add(new MedikitTitle(108, wst), "textHeal",	"medikit", _bg);
 
 	add(_mediView,	"body",			"medikit", _bg);
 
@@ -387,6 +401,16 @@ void MedikitState::onPainClick(Action*)
 		_action->weapon->setPainKillerQuantity(pain - 1);
 
 		update();
+
+		if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
+		{
+			_action->targetUnit->convertToFaction(FACTION_PLAYER);
+			_action->targetUnit->initTU();
+
+			_game->getSavedGame()->getSavedBattle()->setSelectedUnit(_action->targetUnit);
+			_game->popState();
+//			onCloseClick(NULL);
+		}
 	}
 	else
 	{
@@ -409,7 +433,6 @@ void MedikitState::update()
 	const int health = _action->targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_numStun->setValue(static_cast<unsigned>(_action->targetUnit->getStun()));
-	_barHealth->setMax(100.);
 	_barHealth->setValue(std::ceil(
 							static_cast<double>(health) / stat * 100.));
 	_barHealth->setValue2(std::ceil(
@@ -418,20 +441,17 @@ void MedikitState::update()
 	stat = static_cast<double>(_action->targetUnit->getBaseStats()->stamina);
 	const int energy = _action->targetUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
-	_barEnergy->setMax(100.);
 	_barEnergy->setValue(std::ceil(
 							static_cast<double>(energy) / stat * 100.));
 
 	const int morale = _action->targetUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
-	_barMorale->setMax(100.);
-	_barMorale->setValue(morale);
+	_barMorale->setValue(static_cast<double>(morale));
 
 	// TU of the MedKit user
 	stat = static_cast<double>(_action->actor->getBaseStats()->tu);
 	const int tu = _action->actor->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
-	_barTimeUnits->setMax(100.);
 	_barTimeUnits->setValue(std::ceil(
 							static_cast<double>(tu) / stat * 100.));
 }

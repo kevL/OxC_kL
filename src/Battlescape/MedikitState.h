@@ -61,7 +61,8 @@ private:
 		* _numHealth,
 		* _numMorale,
 		* _numStun,
-		* _numTimeUnits;
+		* _numTimeUnits,
+		* _numTotalHP;
 	Surface* _bg;
 	Text
 		* _txtHeal,

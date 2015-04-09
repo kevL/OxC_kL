@@ -43,7 +43,7 @@ namespace OpenXcom
 /**
  * A array of strings that define body parts.
  */
-const std::string BODY_PARTS[6] =
+const std::string MedikitView::BODY_PARTS[] =
 {
 	"STR_HEAD",
 	"STR_TORSO",
@@ -79,7 +79,7 @@ MedikitView::MedikitView(
 			w,h,
 			x,y),
 		_game(game),
-		_selectedPart(0),
+		_selectedPart(-1),
 		_unit(unit),
 		_txtPart(part),
 		_txtWound(wound)
@@ -99,7 +99,7 @@ void MedikitView::draw()
 	this->lock();
 	for (int
 			i = 0;
-			i != static_cast<int>(srt->getTotalFrames());
+			i != BODYPARTS; //static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)
@@ -143,18 +143,19 @@ void MedikitView::draw()
  */
 void MedikitView::mouseClick(Action* action, State*)
 {
-	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet* const sst = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 
 	const int
 		x = static_cast<int>(action->getRelativeXMouse() / action->getXScale()),
 		y = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
 
+	const Surface* srf;
 	for (int
 			i = 0;
-			i != static_cast<int>(srt->getTotalFrames());
+			i != BODYPARTS; //static_cast<int>(sst->getTotalFrames());
 			++i)
 	{
-		const Surface* const srf = srt->getFrame(i);
+		srf = sst->getFrame(i);
 		if (srf->getPixelColor(x,y) != 0)
 		{
 			_selectedPart = i;
@@ -181,7 +182,7 @@ void MedikitView::autoSelectPart()
 {
 	for (int
 			i = 0;
-			i != 6;
+			i != BODYPARTS;
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)
