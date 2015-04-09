@@ -116,8 +116,8 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		{
 			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later -> unless it's the last row ......
 			_titleRows.insert(std::pair<size_t, std::string>(
-														row++,
-														""));
+															row++,
+															""));
 		}
 
 		titleChosen = false;

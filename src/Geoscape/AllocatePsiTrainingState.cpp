@@ -173,23 +173,27 @@ void AllocatePsiTrainingState::init()
 		if ((*i)->getCurrentStats()->psiSkill >= minPsi)
 			ssSkl << (*i)->getCurrentStats()->psiSkill; // << "/+" << (*i)->getImprovement();
 		else
-		{
-//			ssSkl << "0/+0";
-			ssSkl << tr("STR_UNKNOWN").c_str();
-		}
+			ssSkl << tr("STR_UNKNOWN").c_str(); // ssSkl << "0/+0";
 
+		std::wstring wst;
 		Uint8 color;
 		if ((*i)->isInPsiTraining() == true)
+		{
+			wst = tr("STR_YES");
 			color = _lstSoldiers->getSecondaryColor();
+		}
 		else
+		{
+			wst = tr("STR_NO");
 			color = _lstSoldiers->getColor();
+		}
 
 		_lstSoldiers->addRow(
 						4,
 						(*i)->getName().c_str(),
 						ssStr.str().c_str(),
 						ssSkl.str().c_str(),
-						tr("STR_YES").c_str());
+						wst.c_str());
 
 		_lstSoldiers->setRowColor(
 								row,

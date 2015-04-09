@@ -83,7 +83,6 @@ MultipleTargetsState::MultipleTargetsState(
 		setPalette(
 				"PAL_GEOSCAPE",
 				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
-
 		add(_window, "window", "UFOInfo");
 
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -100,7 +99,6 @@ MultipleTargetsState::MultipleTargetsState(
 										btn_y);
 			btn->setText(_targets[i]->getName(_game->getLanguage()));
 			btn->onMouseClick((ActionHandler)& MultipleTargetsState::btnTargetClick);
-
 			add(btn, "button", "UFOInfo");
 
 			_btnTargets.push_back(btn);
@@ -118,7 +116,6 @@ MultipleTargetsState::MultipleTargetsState(
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& MultipleTargetsState::btnCancelClick,
 						Options::keyCancel);
-
 		add(_btnCancel, "button", "UFOInfo");
 
 		centerAllSurfaces();

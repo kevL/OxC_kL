@@ -663,8 +663,8 @@ bool Soldier::trainPsiDay()
 	if (_psiTraining == false)
 		return false;
 
-//	if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill) // hard cap. Note this auto-caps psiStrength also
-//		return false; // REMOVED: Allow psi to train past cap in the PsiLabs.
+//	if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill)	// hard cap. Note this auto-caps psiStrength also
+//		return false;												// REMOVED: Allow psi to train past cap in the PsiLabs.
 
 	bool ret = false;
 

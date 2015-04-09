@@ -700,18 +700,18 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 			if ((*i).first == (*j)->getType())
 			{
 				nextAwardLevel[(*j)->getNoun()] = (*j)->getDecorationLevelInt() + 1;
-//				break; // hm.
+				break;
 			}
 		}
 
 		// Go through each possible criteria. Assume the medal is awarded, set to false if not.
-		// As soon as we find a medal criteria that we FAIL TO achieve, then we are not awarded a medal.
+		// As soon as a medal criteria that FAILS TO BE ACHIEVED is found, then no medal is awarded.
 		for (std::map<std::string, std::vector<int> >::const_iterator
 				j = (*i).second->getCriteria()->begin();
 				j != (*i).second->getCriteria()->end();
 				++j)
 		{
-			// Skip this medal if we have reached its max award level.
+			// Skip this medal if its max award level has been reached.
 			if (nextAwardLevel["noNoun"] >= static_cast<int>((*j).second.size()))
 			{
 				doAward = false;
@@ -719,7 +719,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 			}
 			// These criteria have no nouns, so only the nextAwardLevel["noNoun"] will ever be used.
 			else if (nextAwardLevel.count("noNoun") == 1
-				&& (((*j).first == "totalKills"
+				&& (   ((*j).first == "totalKills"
 						&& static_cast<int>(_killList.size()) < (*j).second.at(nextAwardLevel["noNoun"]))
 					|| ((*j).first == "totalMissions"
 						&& static_cast<int>(_missionIdList.size()) < (*j).second.at(nextAwardLevel["noNoun"]))
@@ -770,7 +770,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| ((*j).first == "totalValientCrux"
 						&& _valiantCruxTotal < (*j).second.at(nextAwardLevel["noNoun"]))
 					|| ((*j).first == "isDead"
-						&& _KIA < (*j).second.at(nextAwardLevel["noNoun"])))
+						&& _KIA < (*j).second.at(nextAwardLevel["noNoun"]))
 					|| ((*j).first == "totalTrapKills"
 						&& _trapKillTotal < (*j).second.at(nextAwardLevel["noNoun"]))
 					|| ((*j).first == "totalAlienBaseAssaults"
@@ -778,7 +778,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| ((*j).first == "totalAllAliensKilled"
 						&& _allAliensKilledTotal < (*j).second.at(nextAwardLevel["noNoun"]))
 					|| ((*j).first == "totalMediApplications"
-						&& _mediApplicationsTotal < (*j).second.at(nextAwardLevel["noNoun"])))
+						&& _mediApplicationsTotal < (*j).second.at(nextAwardLevel["noNoun"]))))
 			{
 				doAward = false;
 				break;
