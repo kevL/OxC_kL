@@ -1042,7 +1042,7 @@ bool Globe::targetNear(
  * Returns a list of all the targets currently near a certain cartesian point over the globe.
  * @param x		- X coordinate of point
  * @param y		- Y coordinate of point
- * @param craft	- true to only get craft targets -> kL_note: should mean 'get ufo targets as well as possible xCom-craft targets'
+ * @param craft	- true to get targets for Craft only
  * @return, vector of pointers to Targets
  */
 std::vector<Target*> Globe::getTargets(

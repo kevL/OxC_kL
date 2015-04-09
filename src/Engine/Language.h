@@ -98,14 +98,14 @@ private:
 
 		/// Replaces a substring.
 		static void replace(
-				std::string& str,
-				const std::string& find,
-				const std::string& replace);
+				std::string& st,
+				const std::string& get,
+				const std::string& done);
 		/// Replaces a substring.
 		static void replace(
-				std::wstring& str,
-				const std::wstring& find,
-				const std::wstring& replace);
+				std::wstring& wst,
+				const std::wstring& get,
+				const std::wstring& done);
 
 		/// Gets list of languages in the data directory.
 		static void getList(

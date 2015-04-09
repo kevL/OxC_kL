@@ -427,51 +427,51 @@ std::wstring Language::fsToWstr(const std::string& src)
 
 /**
  * Replaces every instance of a substring.
- * @param str The string to modify.
- * @param find The substring to find.
- * @param replace The substring to replace it with.
+ * @param st	- the string to modify
+ * @param get	- the substring to find
+ * @param done	- the substring to replace it with
  */
 void Language::replace(
-		std::string& str,
-		const std::string& find,
-		const std::string& replace)
+		std::string& st,
+		const std::string& get,
+		const std::string& done)
 {
 	for (size_t
-			i = str.find(find);
+			i = st.find(get);
 			i != std::string::npos;
-			i = str.find(
-						find,
-						i + replace.length()))
+			i = st.find(
+						get,
+						i + done.length()))
 	{
-		str.replace(
+		st.replace(
 				i,
-				find.length(),
-				replace);
+				get.length(),
+				done);
 	}
 }
 
 /**
  * Replaces every instance of a substring.
- * @param str The string to modify.
- * @param find The substring to find.
- * @param replace The substring to replace it with.
+ * @param wst	- the string to modify
+ * @param get	- the substring to find
+ * @param done	- the substring to replace it with
  */
 void Language::replace(
-		std::wstring& str,
-		const std::wstring& find,
-		const std::wstring& replace)
+		std::wstring& wst,
+		const std::wstring& get,
+		const std::wstring& done)
 {
 	for (size_t
-			i = str.find(find);
+			i = wst.find(get);
 			i != std::wstring::npos;
-			i = str.find(
-						find,
-						i + replace.length()))
+			i = wst.find(
+						get,
+						i + done.length()))
 	{
-		str.replace(
+		wst.replace(
 				i,
-				find.length(),
-				replace);
+				get.length(),
+				done);
 	}
 }
 

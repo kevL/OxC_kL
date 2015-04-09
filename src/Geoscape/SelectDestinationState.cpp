@@ -81,7 +81,7 @@ SelectDestinationState::SelectDestinationState(
 	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
 
-	_window = new Window(this, 256, 30, 0, 0);
+	_window = new Window(this, 256, 30);
 	_window->setX(dx);
 	_window->setDY(0);
 
@@ -94,7 +94,7 @@ SelectDestinationState::SelectDestinationState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color); //0
+			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
 
 /*	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -103,13 +103,12 @@ SelectDestinationState::SelectDestinationState(
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	add(_window, "genericWindow", "geoscape");
-//	add(_txtTitle, "genericText", "geoscape");
-	add(_txtError, "genericText", "geoscape");
-	add(_btnCancel, "genericButton1", "geoscape");
-	add(_btnCydonia, "genericButton1", "geoscape");
+	add(_window,		"genericWindow",	"geoscape");
+//	add(_txtTitle,		"genericText",		"geoscape");
+	add(_txtError,		"genericText",		"geoscape");
+	add(_btnCancel,		"genericButton1",	"geoscape");
+	add(_btnCydonia,	"genericButton1",	"geoscape");
 
-//	_txtError->setColor(Palette::blockOffset(5)); // (8)+5);
 	_txtError->setText(tr("STR_OUTSIDE_CRAFT_RANGE"));
 	_txtError->setVisible(false);
 
@@ -149,17 +148,14 @@ SelectDestinationState::SelectDestinationState(
 	_btnRotateUp->setListButton();
 	_btnRotateDown->setListButton(); */
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SelectDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SelectDestinationState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 //	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 //	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 //	_txtTitle->setWordWrap();
@@ -189,7 +185,6 @@ SelectDestinationState::SelectDestinationState(
 
 	if (goCydonia == true)
 	{
-//		_btnCydonia->setColor(Palette::blockOffset(8)+5);
 		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
 	}
@@ -275,7 +270,7 @@ void SelectDestinationState::globeClick(Action* action)
 		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(wp) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(wp) * 3440.0);
 
 //		if (static_cast<double>(range) < (_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)
-		if (range < static_cast<int>(floor((_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
+		if (range < static_cast<int>(std::floor((_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
 		{
 			//Log(LOG_INFO) << ". . outside Range";
 			_txtError->setVisible();
@@ -297,6 +292,14 @@ void SelectDestinationState::globeClick(Action* action)
 															mouseX,
 															mouseY,
 															true);
+			std::vector<Target*>::const_iterator i = std::find( // remove Craft's current target
+															targets.begin(),
+															targets.end(),
+															dynamic_cast<Target*>(_craft->getDestination()));
+			if (i != targets.end())
+				targets.erase(i);
+
+
 			if (targets.empty() == false)
 				delete wp;
 			else
@@ -436,7 +439,7 @@ void SelectDestinationState::btnCydoniaClick(Action*)
 //	if (_error == NULL)
 //	{
 	if (_craft->getNumSoldiers() > 0)
-//kL	|| _craft->getNumVehicles() > 0)
+//		|| _craft->getNumVehicles() > 0)
 	{
 		_game->pushState(new ConfirmCydoniaState(_craft));
 	}
@@ -459,9 +462,9 @@ void SelectDestinationState::resize(
 	{
 		(*i)->setX((*i)->getX() + dX / 2);
 
-		if (*i != _window
+		if (   *i != _window
 			&& *i != _btnCancel
-//kL		&& *i != _txtTitle
+//			&& *i != _txtTitle
 			&& *i != _btnCydonia)
 		{
 			(*i)->setY((*i)->getY() + dY / 2);

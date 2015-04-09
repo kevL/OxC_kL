@@ -84,8 +84,7 @@ MultipleTargetsState::MultipleTargetsState(
 				"PAL_GEOSCAPE",
 				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
 
-		add(_window,	"window", "UFOInfo");
-		add(_btnCancel,	"button", "UFOInfo");
+		add(_window, "window", "UFOInfo");
 
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
@@ -109,16 +108,18 @@ MultipleTargetsState::MultipleTargetsState(
 			btn_y += BUTTON_HEIGHT + SPACING;
 		}
 
-		TextButton* _btnCancel = new TextButton(
-											116,
-											BUTTON_HEIGHT,
-											70,
-											btn_y);
+		_btnCancel = new TextButton(
+								116,
+								BUTTON_HEIGHT,
+								70,
+								btn_y);
 		_btnCancel->setText(tr("STR_CANCEL"));
 		_btnCancel->onMouseClick((ActionHandler)& MultipleTargetsState::btnCancelClick);
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& MultipleTargetsState::btnCancelClick,
 						Options::keyCancel);
+
+		add(_btnCancel, "button", "UFOInfo");
 
 		centerAllSurfaces();
 	}

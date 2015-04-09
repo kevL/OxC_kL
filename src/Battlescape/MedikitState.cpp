@@ -214,8 +214,8 @@ MedikitState::MedikitState(BattleAction* action)
 	add(_barTimeUnits,	"barTUs",		"battlescape");
 	add(_numTotalHP); // goes on top of Health (stun) bar.
 
-	_numHealth->setColor(Palette::blockOffset(2)+2);	// 10-pips lighter than Battlescape-icons value for its NumberText.
-	_numTotalHP->setColor(Palette::blockOffset(2)+2);	// ditto.
+	_numHealth->setColor(Palette::blockOffset(2)+3);	// 9-pips lighter than Battlescape-icons value for that NumberText.
+	_numTotalHP->setColor(Palette::blockOffset(2)+3);	// ditto.
 
 	const int hp = _action->targetUnit->getBaseStats()->health;
 	_numTotalHP->setValue(static_cast<unsigned>(hp));
@@ -236,11 +236,11 @@ MedikitState::MedikitState(BattleAction* action)
 	add(_bg);
 
 	std::wstring wst = tr("STR_PAIN_KILLER");
-	add(new MedikitTitle( 36, wst), "textPK",	"medikit", _bg);
+	add(new MedikitTitle( 36, wst), "textPK",	"medikit", _bg); // not in Interfaces.rul
 	wst = tr("STR_STIMULANT");
-	add(new MedikitTitle( 72, wst), "textStim",	"medikit", _bg);
+	add(new MedikitTitle( 72, wst), "textStim",	"medikit", _bg); // not in Interfaces.rul
 	wst = tr("STR_HEAL");
-	add(new MedikitTitle(108, wst), "textHeal",	"medikit", _bg);
+	add(new MedikitTitle(108, wst), "textHeal",	"medikit", _bg); // not in Interfaces.rul
 
 	add(_mediView,	"body",			"medikit", _bg);
 
