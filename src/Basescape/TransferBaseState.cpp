@@ -71,65 +71,53 @@ TransferBaseState::TransferBaseState(Base* base)
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("transferBaseSelect")->getElement("palette")->color); //4
+			_game->getRuleset()->getInterface("transferBaseSelect")->getElement("palette")->color);
 
-	add(_window, "window", "transferBaseSelect");
-	add(_txtTitle, "text", "transferBaseSelect");
-	add(_txtBaseLabel, "text", "transferBaseSelect");
-	add(_txtFunds, "text", "transferBaseSelect");
-	add(_txtName, "text", "transferBaseSelect");
-	add(_txtArea, "text", "transferBaseSelect");
-	add(_lstBases, "list", "transferBaseSelect");
-	add(_btnMatrix, "button", "transferBaseSelect");
-	add(_btnCancel, "button", "transferBaseSelect");
+	add(_window,		"window",	"transferBaseSelect");
+	add(_txtTitle,		"text",		"transferBaseSelect");
+	add(_txtBaseLabel,	"text",		"transferBaseSelect");
+	add(_txtFunds,		"text",		"transferBaseSelect");
+	add(_txtName,		"text",		"transferBaseSelect");
+	add(_txtArea,		"text",		"transferBaseSelect");
+	add(_lstBases,		"list",		"transferBaseSelect");
+	add(_btnMatrix,		"button",	"transferBaseSelect");
+	add(_btnCancel,		"button",	"transferBaseSelect");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& TransferBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& TransferBaseState::btnCancelClick,
 					Options::keyCancel);
 
-//	_btnMatrix->setColor(Palette::blockOffset(13)+5);
 	_btnMatrix->setText(tr("STR_MATRIX"));
 	_btnMatrix->onMouseClick((ActionHandler)& TransferBaseState::btnMatrixClick);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_RIGHT);
 	_txtTitle->setText(tr("STR_SELECT_DESTINATION_BASE"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+5);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtFunds->setColor(Palette::blockOffset(13)+5);
-//	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-//	_txtName->setColor(Palette::blockOffset(13)+5);
 	_txtName->setText(tr("STR_BASE_KL"));
 	_txtName->setBig();
 
-//	_txtArea->setColor(Palette::blockOffset(13)+5);
 	_txtArea->setText(tr("STR_AREA"));
 	_txtArea->setBig();
 
-//	_lstBases->setColor(Palette::blockOffset(15)+1);
-//	_lstBases->setArrowColor(Palette::blockOffset(13)+5);
 	_lstBases->setBackground(_window);
 	_lstBases->setColumns(2, 128, 80);
 	_lstBases->setSelectable();
 	_lstBases->setMargin();
 	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
-	int row = 0;
 	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -153,23 +141,13 @@ TransferBaseState::TransferBaseState(Base* base)
 				}
 			}
 
-			std::wostringstream ss;
-			ss << L'\x01' << area;
+			std::wostringstream woststr;
+			woststr << L'\x01' << area;
 			_lstBases->addRow(
 							2,
 							(*i)->getName().c_str(),
-							ss.str().c_str());
-/*			_lstBases->addRow(
-							2,
-							(*i)->getName().c_str(),
-							area.c_str());
-			_lstBases->setCellColor(
-								row,
-								1,
-								Palette::blockOffset(13)+5); */
+							woststr.str().c_str());
 			_bases.push_back(*i);
-
-			++row;
 		}
 	}
 }

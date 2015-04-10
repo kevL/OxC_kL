@@ -20,17 +20,16 @@
 #ifndef OPENXCOM_EQUIPMENTLAYOUTITEM_H
 #define OPENXCOM_EQUIPMENTLAYOUTITEM_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
 {
 
 /**
- * Represents a soldier-equipment layout item which is used
- * on the beginning of the Battlescape.
+ * Represents a soldier-equipment layout item which is used on the beginning
+ * of the Battlescape.
  */
 class EquipmentLayoutItem
 {
@@ -66,19 +65,19 @@ private:
 		/// Saves the soldier-equipment layout item to YAML.
 		YAML::Node save() const;
 
-		/// Gets the item's type which has to be in a slot
+		/// Gets the item's type which has to be in a slot.
 		std::string getItemType() const;
-		/// Gets the slot to be occupied
+		/// Gets the slot to be occupied.
 		std::string getSlot() const;
-		/// Gets the slotX to be occupied
+		/// Gets the slotX to be occupied.
 		int getSlotX() const;
-		/// Gets the slotY to be occupied
+		/// Gets the slotY to be occupied.
 		int getSlotY() const;
 
-		/// Gets the ammo item
+		/// Gets the ammo item.
 		std::string getAmmoItem() const;
 
-		/// Gets the turn until explosion
+		/// Gets the turn until explosion.
 		int getFuseTimer() const;
 };
 

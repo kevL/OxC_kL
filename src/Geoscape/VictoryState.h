@@ -40,9 +40,9 @@ class VictoryState
 {
 
 private:
-	static const int SCREENS = 5;
+	static const size_t SCREENS = 5;
 
-	int _screen;
+	size_t _curScreen;
 
 	InteractiveSurface* _bg[SCREENS];
 	Text* _text[SCREENS];

@@ -40,9 +40,9 @@ class DefeatState
 {
 
 private:
-	static const int SCREENS = 2;
+	static const size_t SCREENS = 2;
 
-	int _screen;
+	size_t _curScreen;
 
 
 	InteractiveSurface* _bg[SCREENS];

@@ -4479,8 +4479,7 @@
 1424390944 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
 
-1424390944 f:\git\openxcom\src\basescape\transferbasestate.h
-	<vector>
+1428623697 f:\git\openxcom\src\basescape\transferbasestate.h
 	"../Engine/State.h"
 
 1427952332 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
@@ -4752,7 +4751,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1426539149 f:\git\openxcom\src\geoscape\globe.h
+1428636479 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -5291,7 +5290,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1424390944 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
+1428623823 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
 	"TransferBaseState.h"
 	"TransferItemsState.h"
 	"../Basescape/StoresMatrixState.h"
@@ -5311,7 +5310,7 @@
 	"../Engine/State.h"
 	"../Savegame/Transfer.h"
 
-1424390944 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
+1428623678 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
 	"TransferConfirmState.h"
 	"TransferItemsState.h"
 	"../Engine/Game.h"
@@ -5325,7 +5324,7 @@
 1424390944 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1428540215 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1428624223 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5671,9 +5670,7 @@
 1425565087 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
 
-1424390936 f:\git\openxcom\src\savegame\equipmentlayoutitem.h
-	<string>
-	<yaml-cpp/yaml.h>
+1428623505 f:\git\openxcom\src\savegame\equipmentlayoutitem.h
 
 1421694989 f:\git\openxcom\src\savegame\terrorsite.h
 	"Target.h"
@@ -5772,10 +5769,10 @@
 	<iostream>
 	"lodepng.h"
 
-1424390940 f:\git\openxcom\src\geoscape\defeatstate.h
+1428630594 f:\git\openxcom\src\geoscape\defeatstate.h
 	"../Engine/State.h"
 
-1424390939 f:\git\openxcom\src\geoscape\victorystate.h
+1428630709 f:\git\openxcom\src\geoscape\victorystate.h
 	"../Engine/State.h"
 
 1424390939 f:\git\openxcom\src\interface\fpscounter.h
@@ -7060,7 +7057,7 @@
 1424390940 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
-1424390940 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
+1428630666 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
 	"DefeatState.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
@@ -7072,7 +7069,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428367192 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1428635232 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7104,7 +7101,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1428272330 f:\git\openxcom\src\geoscape\dogfightstate.h
+1428635247 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1426445097 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7288,7 +7285,7 @@
 
 1424390935 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1428559220 source:f:\git\openxcom\src\geoscape\globe.cpp
+1428636479 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7380,7 +7377,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1428198356 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1428625277 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -7437,7 +7434,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/SoldierDiary.h"
 
-1428557874 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
+1428561923 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
 	"MultipleTargetsState.h"
 	"ConfirmDestinationState.h"
 	"GeoscapeCraftState.h"
@@ -7613,7 +7610,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1424390939 source:f:\git\openxcom\src\geoscape\victorystate.cpp
+1428630839 source:f:\git\openxcom\src\geoscape\victorystate.cpp
 	"VictoryState.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
@@ -8596,7 +8593,7 @@
 	"Ruleset.h"
 	"RuleTerrain.h"
 
-1428212946 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1428639104 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
@@ -8744,7 +8741,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Ruleset/RuleCraftWeapon.h"
 
-1424390936 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp
+1428623478 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp
 	"EquipmentLayoutItem.h"
 
 1424390936 source:f:\git\openxcom\src\savegame\gametime.cpp
@@ -8842,7 +8839,7 @@
 1427081552 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1428540561 source:f:\git\openxcom\src\savegame\soldier.cpp
+1428613783 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -8889,7 +8886,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1428198757 source:f:\git\openxcom\src\savegame\transfer.cpp
+1428624731 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"
@@ -11080,7 +11077,7 @@
 
 1426653237 f:\git\openxcom\src\ruleset\rulecommendations.h
 
-1426704013 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1428616917 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11095,7 +11092,7 @@
 1426704013 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1426648601 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1428623590 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
@@ -11398,7 +11395,7 @@
 
 1420130450 f:\git\openxcom\src\savegame\saveconverterxcom1.h
 
-1426704013 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
+1428616927 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
 	"CommendationDeadState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"

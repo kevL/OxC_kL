@@ -65,45 +65,39 @@ TransferConfirmState::TransferConfirmState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("transferConfirm")->getElement("palette")->color); //6
+			_game->getRuleset()->getInterface("transferConfirm")->getElement("palette")->color);
 
-	add(_window, "window", "transferConfirm");
-	add(_txtTitle, "text", "transferConfirm");
-	add(_txtCost, "text", "transferConfirm");
-	add(_txtTotal, "text", "transferConfirm");
-	add(_btnCancel, "button", "transferConfirm");
-	add(_btnOk, "button", "transferConfirm");
+	add(_window,	"window",	"transferConfirm");
+	add(_txtTitle,	"text",		"transferConfirm");
+	add(_txtCost,	"text",		"transferConfirm");
+	add(_txtTotal,	"text",		"transferConfirm");
+	add(_btnCancel,	"button",	"transferConfirm");
+	add(_btnOk,		"button",	"transferConfirm");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& TransferConfirmState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& TransferConfirmState::btnCancelClick,
 					Options::keyCancel);
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& TransferConfirmState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TransferConfirmState::btnOkClick,
 					Options::keyOk);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFER_ITEMS_TO").arg(_base->getName()));
 
-//	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setBig();
 	_txtCost->setText(tr("STR_COST"));
 
-//	_txtTotal->setColor(Palette::blockOffset(15)+1);
 	_txtTotal->setBig();
 	std::wostringstream ss;
 	ss << L'\x01' << Text::formatFunding(_state->getTotalCost());

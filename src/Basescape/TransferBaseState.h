@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_TRANSFERBASESTATE_H
 #define OPENXCOM_TRANSFERBASESTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 

@@ -351,7 +351,8 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstAwards->onMouseOut((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOut);
 	_lstAwards->onMousePress((ActionHandler)& SoldierDiaryPerformanceState::handle);
 
-	_txtMedalInfo->setColor(Palette::blockOffset(13)+10);
+	_txtMedalInfo->setColor(Palette::blockOffset(10)); //(13)+10);
+	_txtMedalInfo->setHighContrast();
 	_txtMedalInfo->setWordWrap();
 }
 

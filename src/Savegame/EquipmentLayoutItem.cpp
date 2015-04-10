@@ -25,12 +25,12 @@ namespace OpenXcom
 
 /**
  * Initializes a new soldier-equipment layout item.
- * @param itemType, Item's type.
- * @param slot, Occupied slot's id.
- * @param slotX, Position-X in the occupied slot.
- * @param slotY, Position-Y in the occupied slot.
- * @param ammoItem, The ammo has to be loaded into the item. (its type)
- * @param fuseTimer, The turn until explosion of the item. (if it's an activated grenade-type)
+ * @param itemType	- reference to the item's type
+ * @param slot		- reference to the occupied slot's id
+ * @param slotX		- position-X in the occupied slot
+ * @param slotY		- position-Y in the occupied slot
+ * @param ammoItem	- reference to the ammo that has to be loaded into the item (its type)
+ * @param fuseTimer	- the turn until explosion of the item (if it's an activated grenade-type)
  */
 EquipmentLayoutItem::EquipmentLayoutItem(
 		const std::string& itemType,
@@ -46,8 +46,7 @@ EquipmentLayoutItem::EquipmentLayoutItem(
 		_slotY(slotY),
 		_ammoItem(ammoItem),
 		_fuseTimer(fuseTimer)
-{
-}
+{}
 
 /**
  * Initializes a new soldier-equipment layout item from YAML.
@@ -62,26 +61,25 @@ EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
  * dTor.
  */
 EquipmentLayoutItem::~EquipmentLayoutItem()
-{
-}
+{}
 
 /**
  * Loads the soldier-equipment layout item from a YAML file.
- * @param node YAML node.
+ * @param node - referene a YAML node
  */
-void EquipmentLayoutItem::load(const YAML::Node &node)
+void EquipmentLayoutItem::load(const YAML::Node& node)
 {
-	_itemType		= node["itemType"].as<std::string>(_itemType);
-	_slot			= node["slot"].as<std::string>(_slot);
-	_slotX			= node["slotX"].as<int>(0);
-	_slotY			= node["slotY"].as<int>(0);
-	_ammoItem		= node["ammoItem"].as<std::string>("NONE");
-	_fuseTimer		= node["fuseTimer"].as<int>(-1);
+	_itemType		= node["itemType"]	.as<std::string>(_itemType);
+	_slot			= node["slot"]		.as<std::string>(_slot);
+	_slotX			= node["slotX"]		.as<int>(0);
+	_slotY			= node["slotY"]		.as<int>(0);
+	_ammoItem		= node["ammoItem"]	.as<std::string>("NONE");
+	_fuseTimer		= node["fuseTimer"]	.as<int>(-1);
 }
 
 /**
  * Saves the soldier-equipment layout item to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node EquipmentLayoutItem::save() const
 {
@@ -91,21 +89,17 @@ YAML::Node EquipmentLayoutItem::save() const
 	node["slot"]		= _slot;
 
 	// only save this info if it's needed, reduce clutter in saves
-	if (_slotX != 0)
-		node["slotX"]		= _slotX;
-	if (_slotY != 0)
-		node["slotY"]		= _slotY;
-	if (_ammoItem != "NONE")
-		node["ammoItem"]	= _ammoItem;
-	if (_fuseTimer >= 0)
-		node["fuseTimer"]	= _fuseTimer;
+	if (_slotX != 0)			node["slotX"]		= _slotX;
+	if (_slotY != 0)			node["slotY"]		= _slotY;
+	if (_ammoItem != "NONE")	node["ammoItem"]	= _ammoItem;
+	if (_fuseTimer > -1)		node["fuseTimer"]	= _fuseTimer;
 
 	return node;
 }
 
 /**
  * Returns the item's type which has to be in a slot.
- * @return item type.
+ * @return, item type
  */
 std::string EquipmentLayoutItem::getItemType() const
 {
@@ -114,7 +108,7 @@ std::string EquipmentLayoutItem::getItemType() const
 
 /**
  * Returns the slot to be occupied.
- * @return slot name.
+ * @return, slot name
  */
 std::string EquipmentLayoutItem::getSlot() const
 {
@@ -123,7 +117,7 @@ std::string EquipmentLayoutItem::getSlot() const
 
 /**
  * Returns the position-X in the slot to be occupied.
- * @return slot-X.
+ * @return, slot-X
  */
 int EquipmentLayoutItem::getSlotX() const
 {
@@ -132,7 +126,7 @@ int EquipmentLayoutItem::getSlotX() const
 
 /**
  * Returns the position-Y in the slot to be occupied.
- * @return slot-Y.
+ * @return, slot-Y
  */
 int EquipmentLayoutItem::getSlotY() const
 {
@@ -141,7 +135,7 @@ int EquipmentLayoutItem::getSlotY() const
 
 /**
  * Returns the ammo that has to be loaded into the item.
- * @return string, The ammo type
+ * @return, the ammo type
  */
 std::string EquipmentLayoutItem::getAmmoItem() const
 {
@@ -149,8 +143,8 @@ std::string EquipmentLayoutItem::getAmmoItem() const
 }
 
 /**
- * Returns the turn until explosion of the item. (if it's an activated grenade-type)
- * @return turn count.
+ * Returns the turn until explosion of the item (if it's an activated grenade-type).
+ * @return, turn count
  */
 int EquipmentLayoutItem::getFuseTimer() const
 {

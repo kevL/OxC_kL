@@ -211,7 +211,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 														itRule->getClipSize() - (*l)->getAmmo());
 								(*l)->setAmmo((*l)->getAmmo() + used);
 
-								// Note that the items have already been delivered --
+								// Note that the items have already been delivered in Geoscape->Transfer::advance()
 								// so they are removed from the base, not the transfer.
 								(*i)->getItems()->removeItem(
 														itRule->getType(),

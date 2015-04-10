@@ -103,9 +103,8 @@ private:
 	size_t
 		_intercept,
 		_interceptQty;
-	Uint8
-		_colors[8], // see ColorNames enum above^
-		_currentCraftDamageColor;
+	Uint8 _colors[8]; // see ColorNames enum above^
+//		_currentCraftDamageColor;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
@@ -205,7 +204,7 @@ private:
 		/// Animates craft damage.
 		void animateCraftDamage();
 		/// Updates craft damage.
-		void drawCraftDamage();
+		void drawCraftDamage(bool init = false);
 
 		/// Toggles usage of weapon 1.
 		void weapon1Click(Action* action);

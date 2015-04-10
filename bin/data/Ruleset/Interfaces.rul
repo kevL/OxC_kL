@@ -311,7 +311,7 @@ interfaces:
       - id: minimizedNumber
         color: 80
       - id: radarDetail
-        color: 108
+        color: 107
         color2: 111
       - id: craftRange
         color: 160
@@ -320,8 +320,8 @@ interfaces:
         color: 112
         color2: 128
       - id: damageRange
-        color: 13
-        color2: 14
+        color: 12
+        color2: 13
   - type: baseNaming
     elements:
       - id: palette

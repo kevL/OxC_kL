@@ -1321,7 +1321,7 @@ void GeoscapeState::drawUfoIndicators()
 
 			_visibleUfo[j] = *i;
 
-			ufoSize = (*i)->getRadius() - 2;
+			ufoSize = (*i)->getRadius();
 
 			if ((*i)->getEngaged() == true)
 				baseColor = 133;			// red (8), all red. TODO: blink

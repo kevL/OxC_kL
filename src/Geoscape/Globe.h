@@ -356,24 +356,29 @@ private:
 		/// Special handling for key presses.
 		void keyboardPress(Action* action, State* state);
 
-		/// Move the mouse back to where it started after we finish drag scrolling.
+		/// Moves the mouse back to where it started after we finish drag scrolling.
 //		void stopScrolling(Action* action);
 
-		/// Get the polygons texture and shade at the given point.
+		/// Gets the polygons texture and shade at the given point.
 		void getPolygonTextureAndShade(
 				double lon,
 				double lat,
 				int* texture,
 				int* shade) const;
-		/// Get the polygon's shade at the given point.
+		/// Gets the polygon's texture at a given point.
+		void Globe::getPolygonTexture(
+				double lon,
+				double lat,
+				int* texture) const;
+		/// Gets the polygon's shade at the given point.
 		void getPolygonShade(
 				double lon,
 				double lat,
 				int* shade) const;
 
-		/// Get the localized text.
+		/// Gets the localized text.
 //		const LocalizedText& tr(const std::string& id) const;
-		/// Get the localized text.
+		/// Gets the localized text.
 //		LocalizedText tr(
 //				const std::string& id,
 //				unsigned n) const;

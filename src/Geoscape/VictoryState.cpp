@@ -48,7 +48,7 @@ namespace OpenXcom
  */
 VictoryState::VictoryState()
 	:
-		_screen(-1)
+		_curScreen(std::numeric_limits<size_t>::max())
 {
 /*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
@@ -71,14 +71,14 @@ VictoryState::VictoryState()
 	_text[3] = new Text(300, 200, 5, 0);
 	_text[4] = new Text(310, 42, 5, 158);
 
-	for (int
+	for (size_t
 			i = 0;
 			i < SCREENS;
 			++i)
 	{
 		Surface* const screen = _game->getResourcePack()->getSurface(files[i]);
 
-		_bg[i] = new InteractiveSurface(320, 200, 0, 0);
+		_bg[i] = new InteractiveSurface(320, 200);
 
 		setPalette(screen->getPalette());
 
@@ -90,9 +90,8 @@ VictoryState::VictoryState()
 		_bg[i]->onMouseClick((ActionHandler)& VictoryState::screenClick);
 
 		std::ostringstream ss;
-		ss << "STR_VICTORY_" << i + 1;
+		ss << "STR_VICTORY_" << static_cast<int>(i + 1);
 		_text[i]->setText(tr(ss.str()));
-//		_text[i]->setColor(Palette::blockOffset(15)+9);
 		_text[i]->setWordWrap();
 		_text[i]->setVisible(false);
 	}
@@ -107,7 +106,7 @@ VictoryState::VictoryState()
 
 	screenClick(NULL);
 
-	if (_game->getSavedGame()->isIronman() == true) // Ironman is over
+	if (_game->getSavedGame()->isIronman() == true) // Ironman is over, rambo
 	{
 		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
 		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
@@ -146,26 +145,25 @@ void VictoryState::screenClick(Action*)
 {
 //	_timer->start();
 
-	if (_screen > -1)
+	if (_curScreen != std::numeric_limits<size_t>::max())
 	{
-		_bg[_screen]->setVisible(false);
-		_text[_screen]->setVisible(false);
+		_bg[_curScreen]->setVisible(false);
+		_text[_curScreen]->setVisible(false);
 	}
 
-	++_screen;
+	++_curScreen;
 
-	if (_screen < SCREENS) // next screen
+	if (_curScreen < SCREENS) // next screen
 	{
-		setPalette(_bg[_screen]->getPalette());
-		_bg[_screen]->setVisible();
-		_text[_screen]->setVisible();
+		setPalette(_bg[_curScreen]->getPalette());
+		_bg[_curScreen]->setVisible();
+		_text[_curScreen]->setVisible();
 
 		init();
 	}
 	else // quit game
 	{
 		_game->popState();
-
 /*		Screen::updateScale(
 						Options::geoscapeScale,
 						Options::geoscapeScale,

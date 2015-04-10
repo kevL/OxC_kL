@@ -940,10 +940,10 @@ void Globe::center(
 		double lon,
 		double lat)
 {
-	_cenLon = lon;
-	_cenLat = lat;
-	_game->getSavedGame()->setGlobeLongitude(_cenLon);
-	_game->getSavedGame()->setGlobeLatitude(_cenLat);
+//	_cenLon = lon;
+//	_cenLat = lat;
+	_game->getSavedGame()->setGlobeLongitude(_cenLon = lon);
+	_game->getSavedGame()->setGlobeLatitude(_cenLat = lat);
 
 	invalidate();
 }
@@ -2987,7 +2987,7 @@ void Globe::keyboardPress(Action* action, State* state)
 } */
 
 /**
- * Get the polygon's texture & shadeLevel at a given point.
+ * Gets the polygon's texture & shadeLevel at a given point.
  * @param lon		- longitude of the point
  * @param lat 		- latitude of the point
  * @param texture	- pointer to texture ID (returns -1 if polygon not found)
@@ -3022,7 +3022,6 @@ void Globe::getPolygonTextureAndShade(
 		24,25,26,27,28,29,30,31
 	}; */ // terminator @ 25.
 
-	*texture = -1;
 	*shade = worldshades[CreateShadow::getShadowValue(
 													0,
 													Cord (0.,0.,1.), // init.
@@ -3038,6 +3037,7 @@ void Globe::getPolygonTextureAndShade(
 	globe->_cenLon = lon;
 	globe->_cenLat = lat; */
 
+	*texture = -1;
 	for (std::list<Polygon*>::const_iterator
 			i = _rules->getPolygons()->begin();
 			i != _rules->getPolygons()->end();
@@ -3058,7 +3058,35 @@ void Globe::getPolygonTextureAndShade(
 }
 
 /**
- * Get the polygon's shadeLevel at a given point.
+ * Gets the polygon's texture at a given point.
+ * @param lon		- longitude of the point
+ * @param lat 		- latitude of the point
+ * @param texture	- pointer to texture ID (returns -1 if polygon not found)
+ */
+void Globe::getPolygonTexture(
+		double lon,
+		double lat,
+		int* texture) const
+{
+	*texture = -1;
+	for (std::list<Polygon*>::const_iterator
+			i = _rules->getPolygons()->begin();
+			i != _rules->getPolygons()->end();
+			++i)
+	{
+		if (insidePolygon(
+						lon,
+						lat,
+						*i) == true)
+		{
+			*texture = (*i)->getPolyTexture();
+			break;
+		}
+	}
+}
+
+/**
+ * Gets the polygon's shade at a given point.
  * @param lon	- longitude of the point
  * @param lat 	- latitude of the point
  * @param shade	- pointer to shade level

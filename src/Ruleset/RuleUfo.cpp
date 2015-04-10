@@ -116,36 +116,21 @@ std::string RuleUfo::getSize() const
  */
 int RuleUfo::getRadius() const
 {
-	if (_size == "STR_VERY_SMALL")
-		return 2;
-
-	if (_size == "STR_SMALL")
-		return 3;
-
-	if (_size == "STR_MEDIUM_UC")
+	if (_size == "STR_VERY_LARGE")
 		return 4;
 
 	if (_size == "STR_LARGE")
-		return 5;
+		return 3;
 
-	if (_size == "STR_VERY_LARGE")
-		return 6;
+	if (_size == "STR_MEDIUM_UC")
+		return 2;
 
+	if (_size == "STR_SMALL")
+		return 1;
+
+//	if (_size == "STR_VERY_SMALL")
 	return 0;
 }
-/* NOTE: the following values are from DogfightState.
-
-	const std::string ufoSize = _ufo->getRules()->getSize();
-	if (ufoSize.compare("STR_VERY_SMALL") == 0)
-		_ufoSize = 0;
-	else if (ufoSize.compare("STR_SMALL") == 0)
-		_ufoSize = 1;
-	else if (ufoSize.compare("STR_MEDIUM_UC") == 0)
-		_ufoSize = 2;
-	else if (ufoSize.compare("STR_LARGE") == 0)
-		_ufoSize = 3;
-	else // "STR_VERY_LARGE"
-		_ufoSize = 4; */
 
 /**
  * Gets the ID of the sprite used to draw the UFO in the Dogfight window.

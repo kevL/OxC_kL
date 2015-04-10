@@ -61,39 +61,39 @@ Transfer::~Transfer()
 
 /**
  * Loads the transfer from a YAML file.
- * @param node - reference a YAML node
- * @param base - pointer to a destination Base
- * @param rule - pointer to the game's Ruleset
+ * @param node	- reference a YAML node
+ * @param base	- pointer to a destination Base
+ * @param rules	- pointer to the game's Ruleset
  * @return, true if the transfer content is valid
  */
 bool Transfer::load(
 		const YAML::Node& node,
 		Base* base,
-		const Ruleset* rule)
+		const Ruleset* rules)
 {
 	_hours = node["hours"].as<int>(_hours);
 
 	if (const YAML::Node& soldier = node["soldier"])
 	{
 		_soldier = new Soldier(
-							rule->getSoldier("XCOM"),
-							rule->getArmor("STR_ARMOR_NONE_UC"));
+							rules->getSoldier("XCOM"),
+							rules->getArmor("STR_ARMOR_NONE_UC"));
 		_soldier->load(
 					soldier,
-					rule);
+					rules);
 	}
 
 	if (const YAML::Node& craft = node["craft"])
 	{
 		const std::string type = craft["type"].as<std::string>();
-		if (rule->getCraft(type) != NULL)
+		if (rules->getCraft(type) != NULL)
 		{
 			_craft = new Craft(
-							rule->getCraft(craft["type"].as<std::string>()),
+							rules->getCraft(craft["type"].as<std::string>()),
 							base);
 			_craft->load(
 						craft,
-						rule,
+						rules,
 						NULL);
 		}
 		else
@@ -106,7 +106,7 @@ bool Transfer::load(
 	if (const YAML::Node& item = node["itemId"])
 	{
 		_itemId = item.as<std::string>(_itemId);
-		if (rule->getItem(_itemId) == NULL)
+		if (rules->getItem(_itemId) == NULL)
 		{
 			delete this;
 			return false;
@@ -131,22 +131,17 @@ YAML::Node Transfer::save() const
 
 	node["hours"] = _hours;
 
-	if (_soldier != NULL)
-		node["soldier"] = _soldier->save();
-	else if (_craft != NULL)
-		node["craft"] = _craft->save();
+	if		(_soldier != NULL)	node["soldier"]	= _soldier->save();
+	else if (_craft != NULL)	node["craft"]	= _craft->save();
 	else if (_itemQty != 0)
 	{
-		node["itemId"] = _itemId;
-		node["itemQty"] = _itemQty;
+		node["itemId"]	= _itemId;
+		node["itemQty"]	= _itemQty;
 	}
-	else if (_scientists != 0)
-		node["scientists"] = _scientists;
-	else if (_engineers != 0)
-		node["engineers"] = _engineers;
+	else if (_scientists != 0)	node["scientists"]	= _scientists;
+	else if (_engineers != 0)	node["engineers"]	= _engineers;
 
-	if (_delivered == true)
-		node["delivered"] = _delivered;
+	if (_delivered == true)		node["delivered"]	= _delivered;
 
 	return node;
 }
@@ -208,7 +203,7 @@ std::string Transfer::getItems() const
 /**
  * Changes the items being transferred.
  * @param id	- reference the item ID
- * @param qty	- item quantity
+ * @param qty	- item quantity (default 1)
  */
 void Transfer::setItems(
 		const std::string& id,

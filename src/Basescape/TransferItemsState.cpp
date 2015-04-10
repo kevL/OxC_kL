@@ -90,7 +90,7 @@ TransferItemsState::TransferItemsState(
 		_reset(true),
 		_curRow(0)
 {
-	_window				= new Window(this, 320, 200, 0, 0);
+	_window				= new Window(this, 320, 200);
 	_txtTitle			= new Text(300, 16, 10, 9);
 	_txtBaseFrom		= new Text(80, 9, 16, 9);
 	_txtBaseTo			= new Text(80, 9, 224, 9);
@@ -376,7 +376,7 @@ void TransferItemsState::init()
 			_transferQty.push_back(0);
 
 			itRule = rules->getItem(*i);
-			std::string test = itRule->getType();
+			std::string itType = itRule->getType();
 
 			int destQty = _baseTo->getItems()->getItem(*i);
 
@@ -385,7 +385,7 @@ void TransferItemsState::init()
 					j != _baseTo->getTransfers()->end();
 					++j)
 			{
-				if ((*j)->getItems() == test)
+				if ((*j)->getItems() == itType)
 					destQty += (*j)->getQuantity();
 			}
 
@@ -401,7 +401,7 @@ void TransferItemsState::init()
 							k != (*j)->getItems()->getContents()->end();
 							++k)
 					{
-						if (k->first == test)
+						if (k->first == itType)
 							destQty += k->second;
 					}
 				}
@@ -413,7 +413,7 @@ void TransferItemsState::init()
 							k != (*j)->getVehicles()->end();
 							++k)
 					{
-						if ((*k)->getRules()->getType() == test)
+						if ((*k)->getRules()->getType() == itType)
 							destQty++;
 
 						if ((*k)->getAmmo() != 255)
@@ -422,7 +422,7 @@ void TransferItemsState::init()
 								* const tankRule = _game->getRuleset()->getItem((*k)->getRules()->getType()),
 								* const ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
 
-							if (ammoRule->getType() == test)
+							if (ammoRule->getType() == itType)
 								destQty += (*k)->getAmmo();
 						}
 					}
