@@ -259,12 +259,14 @@ private:
 	int
 		_curGraph,
 		_monthsPassed;
-//		_globeZoom,
 	size_t
 		_curRowMatrix,
+		_dfZoom,
 		_globeZoom;
 //		_selectedBase;
 	double
+		_dfLat,
+		_dfLon,
 		_globeLat,
 		_globeLon;
 
@@ -363,11 +365,23 @@ private:
 		double getGlobeLatitude() const;
 		/// Sets the new globe latitude.
 		void setGlobeLatitude(double lat);
-
 		/// Gets the current globe zoom.
 		size_t getGlobeZoom() const;
 		/// Sets the new globe zoom.
 		void setGlobeZoom(size_t zoom);
+
+		/// Gets the preDogfight globe longitude.
+		double getDfLongitude() const;
+		/// Sets the preDogfight globe longitude.
+		void setDfLongitude(double lon);
+		/// Gets the preDogfight globe latitude.
+		double getDfLatitude() const;
+		/// Sets the preDogfight globe latitude.
+		void setDfLatitude(double lat);
+		/// Gets the preDogfight globe zoom.
+		size_t getDfZoom() const;
+		/// Sets the preDogfight globe zoom.
+		void setDfZoom(size_t zoom);
 
 		/// Handles monthly funding.
 		void monthlyFunding();

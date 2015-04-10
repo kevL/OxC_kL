@@ -30,8 +30,8 @@ namespace OpenXcom
 {
 
 const int
-	DIST_ENGAGE		= 650,
-	DIST_STANDOFF	= 580,
+	DIST_ENGAGE		= 600,
+	DIST_STANDOFF	= 595,
 	TIMEOUT			= 38;
 
 enum ColorNames
@@ -102,7 +102,7 @@ private:
 		_w2FireInterval;
 	size_t
 		_intercept,
-		_interceptQty;
+		_interceptCount;
 	Uint8 _colors[8]; // see ColorNames enum above^
 //		_currentCraftDamageColor;
 
@@ -125,7 +125,7 @@ private:
 		* _weapon1,
 		* _weapon2;
 	InteractiveSurface* _btnMinimizedIcon;
-	SavedGame* _savedGame;
+	SavedGame* _gameSave;
 	Surface
 		* _battle,
 		* _damage,
@@ -172,16 +172,14 @@ private:
 		void fireWeapon2();
 		/// Fires UFO weapon.
 		void ufoFireWeapon();
-		/// Sets the Craft to minimum distance.
-		void minimumDistance();
 		/// Sets the Craft to maximum distance.
 		void maximumDistance();
+		/// Sets the Craft to minimum distance.
+		void minimumDistance();
 
 		/// Changes the status text.
 		void setStatus(const std::string& status);
 
-		/// Handler for clicking the Minimize button.
-		void btnMinimizeClick(Action* action);
 		/// Handler for pressing the Standoff button.
 		void btnStandoffPress(Action* action);
 		/// Handler for pressing the Cautious Attack button.
@@ -196,6 +194,13 @@ private:
 		void btnUfoClick(Action* action);
 		/// Handler for clicking the Preview graphic.
 		void previewPress(Action* action);
+		/// Handler for clicking the Minimize button.
+		void btnMinimizeClick(Action* action);
+		/// Handler for clicking the minimized interception window icon.
+		void btnMinimizedIconClick(Action* action);
+
+		/// Returns true if state is minimized.
+		bool isMinimized() const;
 
 		/// Draws UFO.
 		void drawUfo();
@@ -215,13 +220,6 @@ private:
 		void recolor(
 				const int weaponPod,
 				const bool enabled);
-
-		/// Returns true if state is minimized.
-		bool isMinimized() const;
-		/// Sets state minimized or maximized.
-		void setMinimized(const bool minimized);
-		/// Handler for clicking the minimized interception window icon.
-		void btnMinimizedIconClick(Action* action);
 
 		/// Gets interception number.
 		size_t getInterceptSlot() const;

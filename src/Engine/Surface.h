@@ -143,13 +143,13 @@ protected:
 		void drawPolygon(
 				Sint16* x,
 				Sint16* y,
-				int n,
+				size_t n,
 				Uint8 color);
 		/// Draws a textured polygon on the surface.
 		void drawTexturedPolygon(
 				Sint16* x,
 				Sint16* y,
-				int n,
+				size_t n,
 				Surface* texture,
 				int dx,
 				int dy);

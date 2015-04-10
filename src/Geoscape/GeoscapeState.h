@@ -78,9 +78,6 @@ private:
 		_year;
 	int64_t _windowPops;
 	size_t _minimizedDogfights;
-	double
-		_dfLon,
-		_dfLat;
 
 	std::string _debug;
 
@@ -106,7 +103,7 @@ private:
 	InteractiveSurface* _btnVisibleUfo[INDICATORS];
 //	NumberText* _numVisibleUfo[INDICATORS];
 	Ruleset* _rules;
-	SavedGame* _savedGame;
+	SavedGame* _gameSave;
 	Surface
 //		* _bg,
 //		* _sidebar,
@@ -262,17 +259,17 @@ private:
 		void dfZoomIn();
 		/// Globe zoom out effect for dogfights.
 		void dfZoomOut();
-		/// Sets current dogfight's current Globe coordinates.
-		void setDogfightCoords(Craft* craft);
+		/// Stores current Globe coordinates before a dogfight.
+		void storePreDfCoords();
 
 		/// Multi-dogfights logic handling.
 		void handleDogfights(); // OoO
 		/// Gets the number of minimized dogfights.
-		size_t minimizedDogfightsCount() const;
+		size_t getMinimizedDogfightsCount() const;
 		/// Starts a new dogfight.
 		void startDogfight();
 		/// Gets first free dogfight slot.
-		int getNextDogfightSlot() const;
+		int getOpenDogfightSlot() const;
 
 		/// Gets the dogfights.
 		std::list<DogfightState*>& getDogfights();

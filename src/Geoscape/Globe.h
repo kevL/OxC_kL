@@ -99,7 +99,6 @@ private:
 		_cenY;
 	Uint32 _mouseScrollingStartTime;
 	size_t
-		_dfPreZoom,
 		_zoom,
 		_zoomTexture;
 
@@ -135,6 +134,10 @@ private:
 	std::vector<double> _zoomRadii;
 
 
+	/// Set up the radius of earth and stuff.
+	void setupRadii(
+			int width,
+			int height);
 	/// Sets the globe zoom factor.
 	void setZoom(size_t zoom);
 
@@ -168,7 +171,7 @@ private:
 			double lon,
 			double radius,
 			int segments,
-			Uint8 color = 0); // kL_add.
+			Uint8 color = 0);
 	/// Special "transparent" line.
 	void XuLine(
 			Surface* surface,
@@ -178,7 +181,7 @@ private:
 			double x2,
 			double y2,
 			int shade,
-			Uint8 color = 0); // kL_add.
+			Uint8 color = 0);
 	void drawVHLine(
 			Surface* surface,
 			double lon1,
@@ -267,6 +270,11 @@ private:
 		/// Stops latitude rotation of the globe.
 		void rotateStopLat();
 
+		/// Gets the current zoom.
+		size_t getZoom() const;
+		/// Gets the number of zoom levels available.
+		size_t getZoomLevels() const;
+
 		/// Zooms the globe in.
 		void zoomIn();
 		/// Zooms the globe out.
@@ -276,21 +284,12 @@ private:
 		/// Zooms the globe maximum.
 //		void zoomMax();
 
-		/// Sets the zoom level before a dogfight.
-		void setPreDogfightZoom();
-		/// Gets the zoom level from before a dogfight.
-		size_t getPreDogfightZoom() const;
 		/// Zooms the globe in for dogfights.
 		bool zoomDogfightIn();
 		/// Zooms the globe out for dogfights.
 		bool zoomDogfightOut();
 		/// Sets whether a craft has been minimized and is chasing a UFO.
 		void setChasingUfo(const bool chase = true);
-
-		/// Gets the current zoom.
-		size_t getZoom() const;
-		/// Gets the number of zoom levels available.
-		size_t getZoomLevels() const;
 
 		/// Centers the globe on a point.
 		void center(
@@ -356,7 +355,7 @@ private:
 		/// Special handling for key presses.
 		void keyboardPress(Action* action, State* state);
 
-		/// Moves the mouse back to where it started after we finish drag scrolling.
+		/// Moves the mouse back to where it started after drag scrolling ends.
 //		void stopScrolling(Action* action);
 
 		/// Gets the polygons texture and shade at the given point.
@@ -376,14 +375,6 @@ private:
 				double lat,
 				int* shade) const;
 
-		/// Gets the localized text.
-//		const LocalizedText& tr(const std::string& id) const;
-		/// Gets the localized text.
-//		LocalizedText tr(
-//				const std::string& id,
-//				unsigned n) const;
-// huh
-
 		/// Sets hover base position.
 		void setNewBaseHoverPos(
 				double lon,
@@ -395,17 +386,11 @@ private:
 		/// Gets state of base hover mode
 		bool getNewBaseHover(void);
 
-		/// Gets _detail variable
-//		bool getShowRadar(void);
 		/// set the _radarLines variable
 		void toggleRadarLines();
 
 		/// Update the resolution settings, we just resized the window.
 		void resize();
-		/// Set up the radius of earth and stuff.
-		void setupRadii(
-				int width,
-				int height);
 
 		/// Gets the current debugType for Geoscape message.
 		int getDebugType() const;

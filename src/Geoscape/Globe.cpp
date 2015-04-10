@@ -316,8 +316,7 @@ Globe::Globe(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_rotLon(0.),
 		_rotLat(0.),
 		_hoverLon(0.),
@@ -457,19 +456,17 @@ Globe::Globe(
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 
-	// kL_note: The order here is important.
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 	setupRadii(
 			width,
 			height);
-	_dfPreZoom = _zoomRadii.size();
 	setZoom(_zoom);
 
-	// filling random noise "texture"
+	// fill random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
 	for (size_t
 			i = 0;
-			i < _randomNoiseData.size();
+			i != _randomNoiseData.size();
 			++i)
 	{
 		_randomNoiseData[i] = rand() %4;
@@ -620,9 +617,9 @@ bool Globe::insidePolygon(
 {
 	bool backFace = true;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < poly->getPoints();
+			i != poly->getPoints();
 			++i)
 	{
 		backFace = backFace == true
@@ -637,21 +634,18 @@ bool Globe::insidePolygon(
 
 	bool odd = false;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < poly->getPoints();
+			i != poly->getPoints();
 			++i)
 	{
-		const int j = (i + 1) %poly->getPoints();
+		const size_t j = (i + 1) %poly->getPoints();
 
 //		double x = lon, y = lat, x_i = poly->getLongitude(i), y_i = poly->getLatitude(i), x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);
 		double
-			x,
-			y,
-			x_i,
-			x_j,
-			y_i,
-			y_j;
+			x,y,
+			x_i,x_j,
+			y_i,y_j;
 
 		polarToCart(
 				poly->getLongitude(i),
@@ -761,16 +755,77 @@ void Globe::rotateStopLat()
 }
 
 /**
- * Changes the current globe zoom factor.
- * @param zoom - new zoom
+ * Sets up the radius of earth at various zoom levels.
+ * @param width		- the new width of the globe
+ * @param height	- the new height of the globe
  */
-void Globe::setZoom(size_t zoom)
+void Globe::setupRadii( // private.
+		int width,
+		int height)
+{
+	_zoomRadii.clear();
+
+	// These are the globe-zoom magnifications stored as a <vector> of 6 (doubles).
+	_zoomRadii.push_back(0.47 * static_cast<double>(height)); // 0 - Zoomed all out	// no detail
+	_zoomRadii.push_back(0.60 * static_cast<double>(height)); // 1					// country borders
+	_zoomRadii.push_back(0.85 * static_cast<double>(height)); // 2					// country labels
+	_zoomRadii.push_back(1.39 * static_cast<double>(height)); // 3					// city markers
+	_zoomRadii.push_back(2.13 * static_cast<double>(height)); // 4					// city labels & all detail
+	_zoomRadii.push_back(3.42 * static_cast<double>(height)); // 5 - Zoomed all in
+
+//	_zoomRadii.push_back(0.45 * height);
+//	_zoomRadii.push_back(0.60 * height);
+//	_zoomRadii.push_back(0.90 * height);
+//	_zoomRadii.push_back(1.40 * height);
+//	_zoomRadii.push_back(2.25 * height);
+//	_zoomRadii.push_back(3.60 * height);
+
+	_radius = _zoomRadii[_zoom];
+//	_radiusStep = (_zoomRadii[DOGFIGHT_ZOOM] - _zoomRadii[0]) / 10.0;
+	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 10.; // kL
+
+	_earthData.resize(_zoomRadii.size());
+
+	for (size_t // filling normal field for each radius
+			rad = 0;
+			rad != _zoomRadii.size();
+			++rad)
+	{
+		_earthData[rad].resize(width * height);
+
+		for (size_t
+				j = 0;
+				j != static_cast<size_t>(height);
+				++j)
+		{
+			for (size_t
+					i = 0;
+					i != static_cast<size_t>(width);
+					++i)
+			{
+				_earthData[rad]
+						  [static_cast<size_t>(width) * j + i] = static_data.circle_norm(
+																					static_cast<double>(width) / 2.,
+																					static_cast<double>(height) / 2.,
+																					_zoomRadii[rad],
+																					static_cast<double>(i) + 0.5,
+																					static_cast<double>(j) + 0.5);
+			}
+		}
+	}
+}
+
+/**
+ * Changes the current globe zoom factor.
+ * @param zoom - the new zoom level
+ */
+void Globe::setZoom(size_t zoom) // private.
 {
 	_zoom = std::min(
-					_zoomRadii.size() - 1,
-					std::max(
-							zoom,
-							static_cast<size_t>(0))); // go f*cking figure.
+				_zoomRadii.size() - 1,
+				std::max(
+						static_cast<size_t>(0), // go f*cking figure.
+						zoom));
 
 	_zoomTexture = (2 - static_cast<size_t>(std::floor(static_cast<double>(_zoom) / 2.)))
 				 * (_texture->getTotalFrames() / 3);
@@ -787,6 +842,24 @@ void Globe::setZoom(size_t zoom)
 	}
 
 	invalidate();
+}
+
+/**
+ * Gets the Globe's current zoom level.
+ * @return, zoom level
+ */
+size_t Globe::getZoom() const
+{
+	return _zoom;
+}
+
+/**
+ * Gets the number of zoom levels available.
+ * @return, number of zoom levels
+ */
+size_t Globe::getZoomLevels() const
+{
+	return _zoomRadii.size();
 }
 
 /**
@@ -830,22 +903,6 @@ void Globe::zoomOut()
 } */
 
 /**
- * Sets the zoom level before a dogfight.
- */
-void Globe::setPreDogfightZoom()
-{
-	_dfPreZoom = _zoom;
-}
-
-/**
- * Gets the zoom level from before a dogfight.
- */
-size_t Globe::getPreDogfightZoom() const
-{
-	return _dfPreZoom;
-}
-
-/**
  * Zooms the globe smoothly into dogfight level.
  * @return, true if the globe has finished zooming in
  */
@@ -880,12 +937,14 @@ bool Globe::zoomDogfightIn()
  */
 bool Globe::zoomDogfightOut()
 {
-	if (_zoom > _dfPreZoom)
+	const size_t dfZoom = _game->getSavedGame()->getDfZoom();
+
+	if (_zoom > dfZoom)
 	{
 		const double radius = _radius;
 
-		if (radius - _radiusStep <= _zoomRadii[_dfPreZoom])
-			setZoom(_dfPreZoom);
+		if (radius - _radiusStep <= _zoomRadii[dfZoom])
+			setZoom(dfZoom);
 		else
 		{
 			if (radius - _radiusStep <= _zoomRadii[_zoom - 1])
@@ -898,8 +957,16 @@ bool Globe::zoomDogfightOut()
 		return false;
 	}
 
-	if (_dfChase == false)
-		_dfPreZoom = _zoomRadii.size();
+	if (_dfChase == true)
+	{
+		_game->getSavedGame()->setDfZoom(_zoom);
+//		_dfPreZoom = _zoom; // might be redundant.
+		// also set preDFCoords
+//		_game->getSavedGame()->
+	}
+	else
+		_game->getSavedGame()->setDfZoom(std::numeric_limits<size_t>::max());
+//		_dfPreZoom = _zoomRadii.size(); // status -> unset & ready.
 
 	return true;
 }
@@ -914,24 +981,6 @@ void Globe::setChasingUfo(const bool chase)
 }
 
 /**
- * Gets the Globe's current zoom level.
- * @return, zoom level
- */
-size_t Globe::getZoom() const
-{
-	return _zoom;
-}
-
-/**
- * Gets the number of zoom levels available.
- * @return, number of zoom levels
- */
-size_t Globe::getZoomLevels() const
-{
-	return _zoomRadii.size();
-}
-
-/**
  * Rotates the globe to center on a certain polar point on the world map.
  * @param lon - longitude of the point
  * @param lat - latitude of the point
@@ -940,8 +989,6 @@ void Globe::center(
 		double lon,
 		double lat)
 {
-//	_cenLon = lon;
-//	_cenLat = lat;
 	_game->getSavedGame()->setGlobeLongitude(_cenLon = lon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat = lat);
 
@@ -1185,13 +1232,14 @@ void Globe::cache(
 			furthest = 0.,
 			z;
 
-		for (int
+		for (size_t
 				j = 0;
-				j < (*i)->getPoints();
+				j != (*i)->getPoints();
 				++j)
 		{
 			z = std::cos(_cenLat) * std::cos((*i)->getLatitude(j)) * std::cos((*i)->getLongitude(j) - _cenLon)
 			  + std::sin(_cenLat) * std::sin((*i)->getLatitude(j));
+
 			if (z > closest)
 				closest = z;
 			else if (z < furthest)
@@ -1203,21 +1251,19 @@ void Globe::cache(
 
 		Polygon* const poly = new Polygon(**i);
 
-		for (int // Convert coordinates
+		for (size_t // Convert coordinates
 				j = 0;
-				j < poly->getPoints();
+				j != poly->getPoints();
 				++j)
 		{
 			Sint16
-				x,
-				y;
+				x,y;
 			polarToCart(
 					poly->getLongitude(j),
 					poly->getLatitude(j),
-					&x,
-					&y);
-			poly->setX(j, x);
-			poly->setY(j, y);
+					&x,&y);
+			poly->setX(j,x);
+			poly->setY(j,y);
 		}
 
 		cache->push_back(poly);
@@ -1331,7 +1377,7 @@ void Globe::drawOcean()
 }
 
 /**
- * Renders the land, taking all the visible world polygons
+ * Renders the land taking all the visible world polygons
  * and texturing and shading them accordingly.
  */
 void Globe::drawLand()
@@ -1345,9 +1391,9 @@ void Globe::drawLand()
 			i != _cacheLand.end();
 			++i)
 	{
-		for (int // Convert coordinates
+		for (size_t // Convert coordinates
 				j = 0;
-				j < (*i)->getPoints();
+				j != (*i)->getPoints();
 				++j)
 		{
 			x[j] = (*i)->getX(j);
@@ -1357,7 +1403,7 @@ void Globe::drawLand()
 		drawTexturedPolygon( // Apply textures according to zoom and shade
 						x,y,
 						(*i)->getPoints(),
-						_texture->getFrame((*i)->getPolyTexture() + _zoomTexture),
+						_texture->getFrame(static_cast<int>((*i)->getPolyTexture() + _zoomTexture)),
 						0,0);
 	}
 }
@@ -3138,9 +3184,9 @@ void Globe::resize()
 		width = Options::baseXGeoscape - 64,
 		height = Options::baseYGeoscape;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 4;
+			i != 4;
 			++i)
 	{
 		surfaces[i]->setWidth(width);
@@ -3156,67 +3202,6 @@ void Globe::resize()
 	setupRadii(width, height);
 
 	invalidate();
-}
-
-/**
- * Sets up the radius of earth at various zoom levels.
- * @param width		- the new width of the globe
- * @param height	- the new height of the globe
- */
-void Globe::setupRadii(
-		int width,
-		int height)
-{
-	_zoomRadii.clear();
-
-	// kL_begin: These are the globe-zoom magnifications, stored as a <vector> of 6 (doubles).
-	_zoomRadii.push_back(0.47 * static_cast<double>(height)); // 0 - Zoomed all out	// no detail
-	_zoomRadii.push_back(0.60 * static_cast<double>(height)); // 1					// country borders
-	_zoomRadii.push_back(0.85 * static_cast<double>(height)); // 2					// country labels
-	_zoomRadii.push_back(1.39 * static_cast<double>(height)); // 3					// city markers
-	_zoomRadii.push_back(2.13 * static_cast<double>(height)); // 4					// city labels & all detail
-	_zoomRadii.push_back(3.42 * static_cast<double>(height)); // 5 - Zoomed all in
-	// kL_end.
-
-//kL	_zoomRadii.push_back(0.45 * height);
-//kL	_zoomRadii.push_back(0.60 * height);
-//kL	_zoomRadii.push_back(0.90 * height);
-//kL	_zoomRadii.push_back(1.40 * height);
-//kL	_zoomRadii.push_back(2.25 * height);
-//kL	_zoomRadii.push_back(3.60 * height);
-
-	_radius = _zoomRadii[_zoom];
-//kL	_radiusStep = (_zoomRadii[DOGFIGHT_ZOOM] - _zoomRadii[0]) / 10.0;
-	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 10.; // kL
-
-	_earthData.resize(_zoomRadii.size());
-
-	for (size_t // filling normal field for each radius
-			rad = 0;
-			rad < _zoomRadii.size();
-			++rad)
-	{
-		_earthData[rad].resize(width * height);
-
-		for (int
-				j = 0;
-				j < height;
-				++j)
-		{
-			for (int
-					i = 0;
-					i < width;
-					++i)
-			{
-				_earthData[rad][width * j + i] = static_data.circle_norm(
-																static_cast<double>(width / 2),
-																static_cast<double>(height / 2),
-																_zoomRadii[rad],
-																static_cast<double>(i) + 0.5,
-																static_cast<double>(j) + 0.5);
-			}
-		}
-	}
 }
 
 /**

@@ -65,7 +65,7 @@ EquipmentLayoutItem::~EquipmentLayoutItem()
 
 /**
  * Loads the soldier-equipment layout item from a YAML file.
- * @param node - referene a YAML node
+ * @param node - reference a YAML node
  */
 void EquipmentLayoutItem::load(const YAML::Node& node)
 {

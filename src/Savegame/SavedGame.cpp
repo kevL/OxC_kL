@@ -68,6 +68,7 @@ const std::string
 	SavedGame::AUTOSAVE_BATTLESCAPE	= "_autobattle_.asav",
 	SavedGame::QUICKSAVE			= "_quick_.asav";
 
+
 ///
 struct findRuleResearch
 	:
@@ -127,17 +128,20 @@ SavedGame::SavedGame(const Ruleset* const rules)
 		_globeLon(0.),
 		_globeLat(0.),
 		_globeZoom(0),
+		_dfLon(0.),
+		_dfLat(0.),
+		_dfZoom(std::numeric_limits<size_t>::max()),
 		_battleGame(NULL),
 		_debug(false),
 		_warned(false),
 //		_detail(true),
 //		_radarLines(false),
 		_monthsPassed(-1),
-		_curRowMatrix(0), // kL
-		_curGraph(0) // kL
-//		_curGraphRowCountry(0) // kL
-//kL	_selectedBase(0),
-//kL	_lastselectedArmor("STR_ARMOR_NONE_UC")
+		_curRowMatrix(0),		// kL
+		_curGraph(0)			// kL
+//		_curGraphRowCountry(0)	// kL
+//		_selectedBase(0),
+//		_lastselectedArmor("STR_ARMOR_NONE_UC")
 {
 	_time = new GameTime(6,1,1,1999,12,0,0);
 
@@ -146,8 +150,8 @@ SavedGame::SavedGame(const Ruleset* const rules)
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 	_researchScores.push_back(0);
-	_income.push_back(0);		// kL
-	_expenditure.push_back(0);	// kL
+	_income.push_back(0);
+	_expenditure.push_back(0);
 }
 
 /**
@@ -456,13 +460,18 @@ void SavedGame::load(
 	_funds					= doc["funds"]				.as<std::vector<int64_t> >(_funds);
 	_maintenance			= doc["maintenance"]		.as<std::vector<int64_t> >(_maintenance);
 	_researchScores			= doc["researchScores"]		.as<std::vector<int> >(_researchScores);
-	_income					= doc["income"]				.as<std::vector<int64_t> >(_income);		// kL
-	_expenditure			= doc["expenditure"]		.as<std::vector<int64_t> >(_expenditure);	// kL
+	_income					= doc["income"]				.as<std::vector<int64_t> >(_income);
+	_expenditure			= doc["expenditure"]		.as<std::vector<int64_t> >(_expenditure);
 	_warned					= doc["warned"]				.as<bool>(_warned);
-	_globeLon				= doc["globeLon"]			.as<double>(_globeLon);
-	_globeLat				= doc["globeLat"]			.as<double>(_globeLat);
-	_globeZoom				= doc["globeZoom"]			.as<int>(_globeZoom);
 	_ids					= doc["ids"]				.as<std::map<std::string, int> >(_ids);
+
+	_globeLon				= static_cast<size_t>(doc["globeLon"]	.as<double>(_globeLon));
+	_globeLat				= static_cast<size_t>(doc["globeLat"]	.as<double>(_globeLat));
+	_globeZoom				= static_cast<size_t>(doc["globeZoom"]	.as<int>(_globeZoom));
+	_dfLon					= static_cast<size_t>(doc["dfLon"]		.as<double>(_dfLon));
+	_dfLat					= static_cast<size_t>(doc["dfLat"]		.as<double>(_dfLat));
+	_dfZoom					= static_cast<size_t>(doc["dfZoom"]		.as<int>(_dfZoom));
+
 
 	Log(LOG_INFO) << ". load countries";
 	for (YAML::const_iterator
@@ -950,6 +959,60 @@ size_t SavedGame::getGlobeZoom() const
 void SavedGame::setGlobeZoom(size_t zoom)
 {
 	_globeZoom = zoom;
+}
+
+/**
+ * Returns the preDogfight longitude of the Geoscape globe.
+ * @return, longitude
+ */
+double SavedGame::getDfLongitude() const
+{
+	return _dfLon;
+}
+
+/**
+ * Changes the preDogfight longitude of the Geoscape globe.
+ * @param lon - longitude
+ */
+void SavedGame::setDfLongitude(double lon)
+{
+	_dfLon = lon;
+}
+
+/**
+ * Returns the preDogfight latitude of the Geoscape globe.
+ * @return, latitude
+ */
+double SavedGame::getDfLatitude() const
+{
+	return _dfLat;
+}
+
+/**
+ * Changes the preDogfight latitude of the Geoscape globe.
+ * @param lat - latitude
+ */
+void SavedGame::setDfLatitude(double lat)
+{
+	_dfLat = lat;
+}
+
+/**
+ * Returns the preDogfight zoom level of the Geoscape globe.
+ * @return, zoom level
+ */
+size_t SavedGame::getDfZoom() const
+{
+	return _dfZoom;
+}
+
+/**
+ * Changes the preDogfight zoom level of the Geoscape globe.
+ * @param zoom - zoom level
+ */
+void SavedGame::setDfZoom(size_t zoom)
+{
+	_dfZoom = zoom;
 }
 
 /**

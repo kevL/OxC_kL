@@ -761,13 +761,13 @@ void Surface::drawCircle(
 void Surface::drawPolygon(
 		Sint16* x,
 		Sint16* y,
-		int n,
+		size_t n,
 		Uint8 color)
 {
 	filledPolygonColor(
 					_surface,
 					x,y,
-					n,
+					static_cast<int>(n),
 					Palette::getRGBA(
 								getPalette(),
 								color));
@@ -785,7 +785,7 @@ void Surface::drawPolygon(
 void Surface::drawTexturedPolygon(
 		Sint16* x,
 		Sint16* y,
-		int n,
+		size_t n,
 		Surface* texture,
 		int dx,
 		int dy)
@@ -793,7 +793,7 @@ void Surface::drawTexturedPolygon(
 	texturedPolygon(
 				_surface,
 				x,y,
-				n,
+				static_cast<int>(n),
 				texture->getSurface(),
 				dx,dy);
 }

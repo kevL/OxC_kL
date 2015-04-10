@@ -209,7 +209,7 @@ void RuleGlobe::loadDat(const std::string& filename)
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
 		Polygon* poly;
-		int points;
+		size_t points;
 
 		for (size_t
 				i = 0;
@@ -227,7 +227,7 @@ void RuleGlobe::loadDat(const std::string& filename)
 		poly = new Polygon(points);
 
 		size_t j = 0;
-		for (int
+		for (size_t
 				i = 0;
 				i != points;
 				++i)

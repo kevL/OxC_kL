@@ -21,7 +21,6 @@
 #define OPENXCOM_POLYGON_H
 
 //#include <SDL.h>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -37,7 +36,7 @@ class Polygon
 {
 
 private:
-	int
+	size_t
 		_points,
 		_texture;
 	Sint16
@@ -50,7 +49,7 @@ private:
 
 	public:
 		/// Creates a polygon with a number of points.
-		Polygon(int points);
+		Polygon(size_t points);
 		/// Creates a new polygon from an existing one.
 		Polygon(const Polygon& other);
 		/// Cleans up the polygon.
@@ -60,38 +59,38 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the latitude of a point.
-		double getLatitude(int i) const;
+		double getLatitude(size_t i) const;
 		/// Sets the latitude of a point.
 		void setLatitude(
-				int i,
+				size_t i,
 				double lat);
 		/// Gets the longitude of a point.
-		double getLongitude(int i) const;
+		double getLongitude(size_t i) const;
 		/// Sets the longitude of a point.
 		void setLongitude(
-				int i,
+				size_t i,
 				double lon);
 
 		/// Gets the X coordinate of a point.
-		Sint16 getX(int i) const;
+		Sint16 getX(size_t i) const;
 		/// Sets the X coordinate of a point.
 		void setX(
-				int i,
+				size_t i,
 				Sint16 x);
 		/// Gets the Y coordinate of a point.
-		Sint16 getY(int i) const;
+		Sint16 getY(size_t i) const;
 		/// Sets the Y coordinate of a point.
 		void setY(
-				int i,
+				size_t i,
 				Sint16 y);
 
 		/// Gets the texture of the polygon.
-		int getPolyTexture() const;
+		size_t getPolyTexture() const;
 		/// Sets the texture of the polygon.
-		void setPolyTexture(int tex);
+		void setPolyTexture(size_t tex);
 
 		/// Gets the number of points of the polygon.
-		int getPoints() const;
+		size_t getPoints() const;
 };
 
 }

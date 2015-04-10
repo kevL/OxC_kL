@@ -311,17 +311,17 @@ interfaces:
       - id: minimizedNumber
         color: 80
       - id: radarDetail
-        color: 107
-        color2: 111
+        color: 107   # green
+        color2: 111  # green
       - id: craftRange
-        color: 160
-        color2: 176
+        color: 160   # slate gray
+        color2: 176  # purple
       - id: radarRange
-        color: 112
-        color2: 128
+        color: 112   # green
+        color2: 128  # red
       - id: damageRange
-        color: 12
-        color2: 13
+        color: 13    # bright red
+        color2: 12   # dark yellow
   - type: baseNaming
     elements:
       - id: palette
