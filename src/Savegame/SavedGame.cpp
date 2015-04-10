@@ -443,17 +443,17 @@ void SavedGame::load(
 
 	YAML::Node doc = file[1]; // Get full save data
 
-	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
-
 	if (doc["rng"]
 		&& (_ironman == true || Options::newSeedOnLoad == false))
 	{
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
 
-	_monthsPassed			= doc["monthsPassed"]		.as<int>(_monthsPassed);
+	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
+
 //	_radarLines				= doc["radarLines"]			.as<bool>(_radarLines);
 //	_detail					= doc["detail"]				.as<bool>(_detail);
+	_monthsPassed			= doc["monthsPassed"]		.as<int>(_monthsPassed);
 	_graphRegionToggles		= doc["graphRegionToggles"]	.as<std::string>(_graphRegionToggles);
 	_graphCountryToggles	= doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles	= doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
@@ -465,12 +465,13 @@ void SavedGame::load(
 	_warned					= doc["warned"]				.as<bool>(_warned);
 	_ids					= doc["ids"]				.as<std::map<std::string, int> >(_ids);
 
-	_globeLon				= static_cast<size_t>(doc["globeLon"]	.as<double>(_globeLon));
-	_globeLat				= static_cast<size_t>(doc["globeLat"]	.as<double>(_globeLat));
+	_globeLon				= doc["globeLon"]	.as<double>(_globeLon);
+	_globeLat				= doc["globeLat"]	.as<double>(_globeLat);
+	_dfLon					= doc["dfLon"]		.as<double>(_globeLon);
+	_dfLat					= doc["dfLat"]		.as<double>(_globeLat);
+
 	_globeZoom				= static_cast<size_t>(doc["globeZoom"]	.as<int>(_globeZoom));
-	_dfLon					= static_cast<size_t>(doc["dfLon"]		.as<double>(_dfLon));
-	_dfLat					= static_cast<size_t>(doc["dfLat"]		.as<double>(_dfLat));
-	_dfZoom					= static_cast<size_t>(doc["dfZoom"]		.as<int>(_dfZoom));
+	_dfZoom					= static_cast<size_t>(doc["dfZoom"]		.as<int>(_globeZoom));
 
 
 	Log(LOG_INFO) << ". load countries";
@@ -562,18 +563,6 @@ void SavedGame::load(
 		w->load(*i);
 		_waypoints.push_back(w);
 	}
-
-/*	for (YAML::const_iterator 	// Backwards compatibility->
-			i = doc["terrorSites"].begin();
-			i != doc["terrorSites"].end();
-			++i)
-	{
-		MissionSite* ms = new MissionSite(
-									rule->getAlienMission("STR_ALIEN_TERROR"),
-									rule->getDeployment("STR_TERROR_MISSION"));
-		ms->load(*i);
-		_missionSites.push_back(ms);
-	} */
 
 	Log(LOG_INFO) << ". load mission sites";
 	for (YAML::const_iterator
@@ -702,45 +691,47 @@ void SavedGame::save(const std::string& filename) const
 	brief["savedate"]	= Version::timeStamp();
 	brief["time"]		= _time->save();
 
-	const Base* const base	= _bases.front();							// kL
-	brief["base"]			= Language::wstrToUtf8(base->getName());	// kL
+	const Base* const base	= _bases.front();
+	brief["base"]			= Language::wstrToUtf8(base->getName());
 
 	if (_battleGame != NULL)
 	{
 		brief["mission"]	= _battleGame->getMissionType();
 		brief["turn"]		= _battleGame->getTurn();
-		brief["mode"]		= static_cast<int>(MODE_BATTLESCAPE);	// kL
+		brief["mode"]		= static_cast<int>(MODE_BATTLESCAPE);
 	}
 	else
-		brief["mode"]		= static_cast<int>(MODE_GEOSCAPE);		// kL
+		brief["mode"]		= static_cast<int>(MODE_GEOSCAPE);
 
 	brief["rulesets"] = Options::rulesets;
 
 	emit << brief;
-
-	// Saves the full game data to the save
-	emit << YAML::BeginDoc;
+	emit << YAML::BeginDoc; // Saves the full game data to the save
 
 	YAML::Node node;
 
-	node["difficulty"]			= static_cast<int>(_difficulty);
-	node["monthsPassed"]		= _monthsPassed;
 //	node["radarLines"]			= _radarLines;
 //	node["detail"]				= _detail;
+	node["rng"]					= RNG::getSeed();
+	node["difficulty"]			= static_cast<int>(_difficulty);
+	node["monthsPassed"]		= _monthsPassed;
 	node["graphRegionToggles"]	= _graphRegionToggles;
 	node["graphCountryToggles"]	= _graphCountryToggles;
 	node["graphFinanceToggles"]	= _graphFinanceToggles;
-	node["rng"]					= RNG::getSeed();
 	node["funds"]				= _funds;
 	node["maintenance"]			= _maintenance;
 	node["researchScores"]		= _researchScores;
-	node["income"]				= _income;		// kL
-	node["expenditure"]			= _expenditure;	// kL
+	node["income"]				= _income;
+	node["expenditure"]			= _expenditure;
 	node["warned"]				= _warned;
-	node["globeLon"]			= serializeDouble(_globeLon);
-	node["globeLat"]			= serializeDouble(_globeLat);
-	node["globeZoom"]			= _globeZoom;
 	node["ids"]					= _ids;
+
+	node["globeLon"]	= serializeDouble(_globeLon);
+	node["globeLat"]	= serializeDouble(_globeLat);
+	node["globeZoom"]	= _globeZoom;
+	node["dfLon"]		= serializeDouble(_dfLon);
+	node["dfLat"]		= serializeDouble(_dfLat);
+	node["dfZoom"]		= _dfZoom;
 
 	for (std::vector<Country*>::const_iterator
 			i = _countries.begin();

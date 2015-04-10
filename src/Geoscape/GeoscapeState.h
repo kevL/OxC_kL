@@ -261,15 +261,14 @@ private:
 		void dfZoomOut();
 		/// Stores current Globe coordinates before a dogfight.
 		void storePreDfCoords();
-
-		/// Multi-dogfights logic handling.
-		void handleDogfights(); // OoO
 		/// Gets the number of minimized dogfights.
-		size_t getMinimizedDogfightsCount() const;
+		size_t getMinimizedDfCount() const;
+		/// Multi-dogfights logic handling.
+		void handleDogfights();
 		/// Starts a new dogfight.
 		void startDogfight();
 		/// Gets first free dogfight slot.
-		int getOpenDogfightSlot() const;
+		int getOpenDfSlot() const;
 
 		/// Gets the dogfights.
 		std::list<DogfightState*>& getDogfights();

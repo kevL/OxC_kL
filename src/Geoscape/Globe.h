@@ -134,7 +134,7 @@ private:
 	std::vector<double> _zoomRadii;
 
 
-	/// Set up the radius of earth and stuff.
+	/// Sets up the viewport of earth and stuff.
 	void setupRadii(
 			int width,
 			int height);

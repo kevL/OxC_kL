@@ -1639,7 +1639,7 @@ void DogfightState::btnMinimizeClick(Action*)
 			_btnMinimizedIcon->setVisible();
 			_txtInterception->setVisible();
 
-			if (_geo->getMinimizedDogfightsCount() == _interceptCount)
+			if (_geo->getMinimizedDfCount() == _interceptCount)
 			{
 				if (_geo->getDogfightZoomInTimer()->isRunning() == true)
 					_geo->getDogfightZoomInTimer()->stop();
@@ -1696,7 +1696,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	if (_geo->getDogfightZoomOutTimer()->isRunning() == true)
 		_geo->getDogfightZoomOutTimer()->stop();
 
-	if (_geo->getMinimizedDogfightsCount() == _interceptCount - 1)
+	if (_geo->getMinimizedDfCount() == _interceptCount - 1)
 	{
 		_gameSave->setDfZoom(_globe->getZoom());
 		_geo->storePreDfCoords();

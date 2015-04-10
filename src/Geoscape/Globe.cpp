@@ -886,9 +886,7 @@ void Globe::zoomOut()
 /* void Globe::zoomMin()
 {
 	if (_zoom > 0)
-	{
 		setZoom(0);
-	}
 } */
 
 /**
@@ -897,9 +895,7 @@ void Globe::zoomOut()
 /* void Globe::zoomMax()
 {
 	if (_zoom < _zoomRadii.size() - 1)
-	{
 		setZoom(_zoomRadii.size() - 1);
-	}
 } */
 
 /**
@@ -908,14 +904,14 @@ void Globe::zoomOut()
  */
 bool Globe::zoomDogfightIn()
 {
-	const size_t dfZoomLevel = _zoomRadii.size() - 1;
+	const size_t dfZoom = _zoomRadii.size() - 1;
 
-	if (_zoom < dfZoomLevel)
+	if (_zoom < dfZoom)
 	{
 		const double radius = _radius;
 
-		if (radius + _radiusStep >= _zoomRadii[dfZoomLevel])
-			setZoom(dfZoomLevel);
+		if (radius + _radiusStep >= _zoomRadii[dfZoom])
+			setZoom(dfZoom);
 		else
 		{
 			if (radius + _radiusStep >= _zoomRadii[_zoom + 1])
@@ -959,14 +955,11 @@ bool Globe::zoomDogfightOut()
 
 	if (_dfChase == true)
 	{
-		_game->getSavedGame()->setDfZoom(_zoom);
-//		_dfPreZoom = _zoom; // might be redundant.
-		// also set preDFCoords
-//		_game->getSavedGame()->
+		_game->getSavedGame()->setDfZoom(_zoom);	// probly redundant; should have beeen set before zoom-in
+													// but if not, also set preDFCoords ...
 	}
 	else
-		_game->getSavedGame()->setDfZoom(std::numeric_limits<size_t>::max());
-//		_dfPreZoom = _zoomRadii.size(); // status -> unset & ready.
+		_game->getSavedGame()->setDfZoom(std::numeric_limits<size_t>::max()); // status -> unset & ready.
 
 	return true;
 }

@@ -1113,7 +1113,7 @@ void GeoscapeState::handle(Action* action)
 			(*i)->handle(action);
 		}
 
-		_minimizedDogfights = getMinimizedDogfightsCount();
+		_minimizedDogfights = getMinimizedDfCount();
 	}
 }
 
@@ -3704,6 +3704,26 @@ void GeoscapeState::storePreDfCoords()
 }
 
 /**
+ * Gets the number of minimized dogfights.
+ * @return, number of minimized dogfights
+ */
+size_t GeoscapeState::getMinimizedDfCount() const
+{
+	size_t ret = 0;
+
+	for (std::list<DogfightState*>::const_iterator
+			i = _dogfights.begin();
+			i != _dogfights.end();
+			++i)
+	{
+		if ((*i)->isMinimized() == true)
+			++ret;
+	}
+
+	return ret;
+}
+
+/**
  * Dogfight logic.
  */
 void GeoscapeState::handleDogfights()
@@ -3750,31 +3770,11 @@ void GeoscapeState::handleDogfights()
 }
 
 /**
- * Gets the number of minimized dogfights.
- * @return, number of minimized dogfights
- */
-size_t GeoscapeState::getMinimizedDogfightsCount() const
-{
-	size_t ret = 0;
-
-	for (std::list<DogfightState*>::const_iterator
-			i = _dogfights.begin();
-			i != _dogfights.end();
-			++i)
-	{
-		if ((*i)->isMinimized() == true)
-			++ret;
-	}
-
-	return ret;
-}
-
-/**
  * Starts a new dogfight.
  */
 void GeoscapeState::startDogfight()
 {
-	if (_gameSave->getDfZoom() == std::numeric_limits<size_t>::max()) // || _geo->getMinimizedDogfightsCount() != _interceptCount
+	if (_gameSave->getDfZoom() == std::numeric_limits<size_t>::max()) // || _geo->getMinimizedDfCount() != _interceptCount
 		_gameSave->setDfZoom(_globe->getZoom());
 
 	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
@@ -3798,7 +3798,7 @@ void GeoscapeState::startDogfight()
 			_dogfights.push_back(_dogfightsToStart.back());
 			_dogfightsToStart.pop_back();
 
-			_dogfights.back()->setInterceptSlot(getOpenDogfightSlot());
+			_dogfights.back()->setInterceptSlot(getOpenDfSlot());
 //			_dogfights.back()->setInterceptQty(_dogfights.size() + _dogfightsToStart.size());
 		}
 
@@ -3817,7 +3817,7 @@ void GeoscapeState::startDogfight()
  * Gets the first free dogfight slot available.
  * @return, the next slot open
  */
-int GeoscapeState::getOpenDogfightSlot() const
+int GeoscapeState::getOpenDfSlot() const
 {
 	size_t slot = 1;
 

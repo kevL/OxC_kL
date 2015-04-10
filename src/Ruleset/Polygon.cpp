@@ -55,7 +55,7 @@ Polygon::Polygon(size_t points)
 
 /**
  * Performs a deep copy of an existing polygon.
- * @param other - reference another Polygon to copy from
+ * @param other - reference another Polygon to copy
  */
 Polygon::Polygon(const Polygon& other)
 {
