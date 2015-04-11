@@ -396,9 +396,9 @@ private:
 		/// Returns a list of maintenance costs
 		std::vector<int64_t>& getMaintenances();
 		/// kL. Returns the list of monthly income values.
-		std::vector<int64_t>& getIncomeList(); // kL
+		std::vector<int64_t>& getIncomeList();
 		/// kL. Returns the list of monthly expenditure values.
-		std::vector<int64_t>& getExpenditureList(); // kL
+		std::vector<int64_t>& getExpenditureList();
 
 		/// Gets the current game time.
 		GameTime* getTime() const;

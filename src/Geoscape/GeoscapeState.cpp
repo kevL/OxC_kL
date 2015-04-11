@@ -1736,13 +1736,13 @@ void GeoscapeState::time5Seconds()
 									_pause = true;
 									timerReset();
 
-									// store the current Globe co-ords. Globe will reset to these after dogfight ends.
+									// store current Globe coords & zoom; Globe will reset to those after dogfight ends
 									storePreDfCoords();
 									_globe->center(
 												(*j)->getLongitude(),
 												(*j)->getLatitude());
 
-									if (_dogfights.empty() == true)
+									if (_dogfights.empty() == true) // first dogfight, start music
 										_game->getResourcePack()->fadeMusic(_game, 425);
 
 									startDogfight();
@@ -3650,7 +3650,7 @@ void GeoscapeState::btnZoomOutLeftClick(Action*)
  * Gets the Timer for dogfight zoom-ins.
  * @return, pointer to the zoom-in Timer
  */
-Timer* GeoscapeState::getDogfightZoomInTimer() const
+Timer* GeoscapeState::getDfZoomInTimer() const
 {
 	return _dfZoomInTimer;
 }
@@ -3659,7 +3659,7 @@ Timer* GeoscapeState::getDogfightZoomInTimer() const
  * Gets the Timer for dogfight zoom-outs.
  * @return, pointer to the zoom-out Timer
  */
-Timer* GeoscapeState::getDogfightZoomOutTimer() const
+Timer* GeoscapeState::getDfZoomOutTimer() const
 {
 	return _dfZoomOutTimer;
 }
@@ -3695,12 +3695,14 @@ void GeoscapeState::dfZoomOut()
 }
 
 /**
- * Stores current Globe coordinates before a dogfight.
+ * Stores current Globe coordinates and zoom before a dogfight.
  */
 void GeoscapeState::storePreDfCoords()
 {
 	_gameSave->setDfLongitude(_gameSave->getGlobeLongitude());
 	_gameSave->setDfLatitude(_gameSave->getGlobeLatitude());
+
+	_gameSave->setDfZoom(_globe->getZoom());
 }
 
 /**
@@ -3764,7 +3766,6 @@ void GeoscapeState::handleDogfights()
 	{
 		_dfTimer->stop();
 		_dogfightEnded = true;
-		_globe->setChasingUfo(false);
 		_dfZoomOutTimer->start();
 	}
 }
@@ -3774,8 +3775,8 @@ void GeoscapeState::handleDogfights()
  */
 void GeoscapeState::startDogfight()
 {
-	if (_gameSave->getDfZoom() == std::numeric_limits<size_t>::max()) // || _geo->getMinimizedDfCount() != _interceptCount
-		_gameSave->setDfZoom(_globe->getZoom());
+//	if (_gameSave->getDfZoom() == std::numeric_limits<size_t>::max()) // || _geo->getMinimizedDfCount() != _interceptCount
+//		_gameSave->setDfZoom(_globe->getZoom());
 
 	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
 	{
@@ -3799,17 +3800,35 @@ void GeoscapeState::startDogfight()
 			_dogfightsToStart.pop_back();
 
 			_dogfights.back()->setInterceptSlot(getOpenDfSlot());
-//			_dogfights.back()->setInterceptQty(_dogfights.size() + _dogfightsToStart.size());
+//			_dogfights.back()->setInterceptCount(_dogfights.size() + _dogfightsToStart.size());
 		}
 
-		// Set correct number of interceptions for every [all] dogfight[s].
-		for (std::list<DogfightState*>::const_iterator
+		// Set quantity of interceptions for all dogfights.
+		resetInterceptCount();
+/*		for (std::list<DogfightState*>::const_iterator
 				i = _dogfights.begin();
 				i != _dogfights.end();
 				++i)
 		{
-			(*i)->setInterceptQty(_dogfights.size());
-		}
+			(*i)->setInterceptCount(_dogfights.size());
+		} */
+	}
+}
+
+/**
+ * Updates total interceptions quantity in all Dogfights.
+ * @param pre - true if called just before a DF ends (default false)
+ */
+void GeoscapeState::resetInterceptCount(bool pre)
+{
+	const size_t qty = _dogfights.size() - static_cast<size_t>(pre);
+
+	for (std::list<DogfightState*>::const_iterator
+			i = _dogfights.begin();
+			i != _dogfights.end();
+			++i)
+	{
+		(*i)->setInterceptCount(qty);
 	}
 }
 

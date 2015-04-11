@@ -27,10 +27,10 @@ namespace OpenXcom
 
 /**
  * Sets up an image button with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 ImageButton::ImageButton(
 		int width,
@@ -41,24 +41,21 @@ ImageButton::ImageButton(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_color(0),
 		_group(0),
 		_inverted(false)
-{
-}
+{}
 
 /**
- *
+ * dTor.
  */
 ImageButton::~ImageButton()
-{
-}
+{}
 
 /**
  * Changes the color for the image button.
- * @param color Color value.
+ * @param color - color value
  */
 void ImageButton::setColor(Uint8 color)
 {
@@ -67,7 +64,7 @@ void ImageButton::setColor(Uint8 color)
 
 /**
  * Returns the color for the image button.
- * @return Color value.
+ * @return, color value
  */
 Uint8 ImageButton::getColor() const
 {
@@ -76,14 +73,14 @@ Uint8 ImageButton::getColor() const
 
 /**
  * Changes the button group this image button belongs to.
- * @param group Pointer to the pressed button pointer in the group.
- * Null makes it a regular button.
+ * @param group - pointer to the pressed button pointer in the group;
+ *				  NULL makes it a regular button
  */
 void ImageButton::setGroup(ImageButton** group)
 {
 	_group = group;
 
-	if (_group != 0
+	if (_group != NULL
 		&& *_group == this)
 	{
 		invert(_color + 3);
@@ -91,14 +88,14 @@ void ImageButton::setGroup(ImageButton** group)
 }
 
 /**
- * Sets the button as the pressed button if it's part of a group,
+ * Sets the button as the pressed button if it's part of a group
  * and inverts the colors when pressed.
- * @param action, Pointer to an action.
- * @param state, State that the action handlers belong to.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void ImageButton::mousePress(Action* action, State* state)
 {
-	if (_group != 0)
+	if (_group != NULL)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -107,9 +104,9 @@ void ImageButton::mousePress(Action* action, State* state)
 			invert(_color + 3);
 		}
 	}
-	else if (!_inverted
-		&& isButtonPressed()
-		&& isButtonHandled(action->getDetails()->button.button))
+	else if (_inverted == false
+		&& isButtonPressed() == true
+		&& isButtonHandled(action->getDetails()->button.button) == true)
 	{
 		_inverted = true;
 		invert(_color + 3);
@@ -120,13 +117,13 @@ void ImageButton::mousePress(Action* action, State* state)
 
 /**
  * Sets the button as the released button if it's part of a group.
- * @param action, Pointer to an action.
- * @param state, State that the action handlers belong to.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void ImageButton::mouseRelease(Action* action, State* state)
 {
-	if (_inverted
-		&& isButtonHandled(action->getDetails()->button.button))
+	if (_inverted == true
+		&& isButtonHandled(action->getDetails()->button.button) == true)
 	{
 		_inverted = false;
 		invert(_color + 3);
@@ -136,8 +133,9 @@ void ImageButton::mouseRelease(Action* action, State* state)
 }
 
 /**
- * Invert a button explicitly either ON or OFF and keep track of the state using our internal variables.
- * @param press Set this button as pressed.
+ * Invert a button explicitly either ON or OFF and keep track of the state
+ * using internal variables.
+ * @param press - true to set this button as pressed
  */
 void ImageButton::toggle(bool press)
 {
@@ -151,6 +149,7 @@ void ImageButton::toggle(bool press)
 /**
  * kL. Releases the _mode buttons in Geoscape::DogfightState,
  * sets _btnStandoff as depressed (auto-disengage if damaged).
+ * @note Uhh, do I even use ImageButtons for that .......
  */
 void ImageButton::releaseDogfight()
 {

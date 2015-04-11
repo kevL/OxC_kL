@@ -340,8 +340,7 @@ Globe::Globe(
 		_latBeforeMouseScrolling(0.),
 		_radius(0.),
 		_radiusStep(0.),
-		_debugType(0),
-		_dfChase(false)
+		_debugType(0)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_markerSet	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
@@ -933,14 +932,14 @@ bool Globe::zoomDogfightIn()
  */
 bool Globe::zoomDogfightOut()
 {
-	const size_t dfZoom = _game->getSavedGame()->getDfZoom();
+	const size_t preDfZoom = _game->getSavedGame()->getDfZoom();
 
-	if (_zoom > dfZoom)
+	if (_zoom > preDfZoom)
 	{
 		const double radius = _radius;
 
-		if (radius - _radiusStep <= _zoomRadii[dfZoom])
-			setZoom(dfZoom);
+		if (radius - _radiusStep <= _zoomRadii[preDfZoom])
+			setZoom(preDfZoom);
 		else
 		{
 			if (radius - _radiusStep <= _zoomRadii[_zoom - 1])
@@ -953,24 +952,7 @@ bool Globe::zoomDogfightOut()
 		return false;
 	}
 
-	if (_dfChase == true)
-	{
-		_game->getSavedGame()->setDfZoom(_zoom);	// probly redundant; should have beeen set before zoom-in
-													// but if not, also set preDFCoords ...
-	}
-	else
-		_game->getSavedGame()->setDfZoom(std::numeric_limits<size_t>::max()); // status -> unset & ready.
-
 	return true;
-}
-
-/**
- * Sets whether a craft has been minimized and is chasing a UFO.
- * @param chase - true if chasing UFO (default true)
- */
-void Globe::setChasingUfo(const bool chase)
-{
-	_dfChase = chase;
 }
 
 /**

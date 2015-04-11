@@ -252,14 +252,14 @@ private:
 		void blit(); // OoO
 
 		/// Gets the Timer for dogfight zoom-ins.
-		Timer* getDogfightZoomInTimer() const;
+		Timer* getDfZoomInTimer() const;
 		/// Gets the Timer for dogfight zoom-outs.
-		Timer* getDogfightZoomOutTimer() const;
+		Timer* getDfZoomOutTimer() const;
 		/// Globe zoom in effect for dogfights.
 		void dfZoomIn();
 		/// Globe zoom out effect for dogfights.
 		void dfZoomOut();
-		/// Stores current Globe coordinates before a dogfight.
+		/// Stores current Globe coordinates and zoom before a dogfight.
 		void storePreDfCoords();
 		/// Gets the number of minimized dogfights.
 		size_t getMinimizedDfCount() const;
@@ -267,6 +267,8 @@ private:
 		void handleDogfights();
 		/// Starts a new dogfight.
 		void startDogfight();
+		/// Updates total interceptions quantity in all Dogfights.
+		void resetInterceptCount(bool pre = false);
 		/// Gets first free dogfight slot.
 		int getOpenDfSlot() const;
 

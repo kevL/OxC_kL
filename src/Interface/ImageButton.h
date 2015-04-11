@@ -41,6 +41,7 @@ class ImageButton
 protected:
 	bool _inverted;
 	Uint8 _color;
+
 	ImageButton** _group;
 
 

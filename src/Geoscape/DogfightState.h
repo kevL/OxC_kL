@@ -30,9 +30,9 @@ namespace OpenXcom
 {
 
 const int
-	DIST_ENGAGE		= 600,
-	DIST_STANDOFF	= 595,
-	TIMEOUT			= 38;
+	DST_ENGAGE		= 600,
+	DST_STANDOFF	= 595,
+	MSG_TIMEOUT		= 38;
 
 enum ColorNames
 {
@@ -226,7 +226,7 @@ private:
 		/// Sets interception number.
 		void setInterceptSlot(const size_t intercept);
 		/// Sets interceptions count.
-		void setInterceptQty(const size_t intercepts);
+		void setInterceptCount(const size_t intercepts);
 
 		/// Calculates window position according to opened interception windows.
 		void calculateWindowPosition();

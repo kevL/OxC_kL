@@ -124,9 +124,9 @@ DogfightState::DogfightState(
 		_geo(geo),
 		_gameSave(_game->getSavedGame()),
 		_diff(static_cast<int>(_game->getSavedGame()->getDifficulty())),
-		_timeout(TIMEOUT),
-		_dist(DIST_ENGAGE),
-		_targetDist(DIST_STANDOFF),
+		_timeout(MSG_TIMEOUT),
+		_dist(DST_ENGAGE),
+		_targetDist(DST_STANDOFF),
 //		_ufoHitFrame(0),
 		_end(false),
 		_destroyUfo(false),
@@ -300,12 +300,15 @@ DogfightState::DogfightState(
 	_btnStandoff->copy(_window);
 	_btnStandoff->setGroup(&_mode);
 	_btnStandoff->onMouseClick((ActionHandler)& DogfightState::btnStandoffPress);
+	_btnStandoff->onKeyboardPress(
+					(ActionHandler)& DogfightState::btnStandoffPress,
+					Options::keyOk);
 
 	srf = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srf != NULL)
 		srf->blit(_texture);
 
-	_txtDistance->setText(Text::formatNumber(DIST_ENGAGE));
+	_txtDistance->setText(Text::formatNumber(DST_ENGAGE));
 
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_STANDOFF"));
@@ -318,6 +321,9 @@ DogfightState::DogfightState(
 //	srfFrame->setY(0);
 	srfFrame->blit(_btnMinimizedIcon);
 	_btnMinimizedIcon->onMouseClick((ActionHandler)& DogfightState::btnMinimizedIconClick);
+	_btnMinimizedIcon->onKeyboardPress(
+					(ActionHandler)& DogfightState::btnMinimizedIconClick,
+					Options::keyCancel);
 	_btnMinimizedIcon->setVisible(false);
 
 	// Draw correct number on the minimized dogfight icon.
@@ -531,8 +537,7 @@ DogfightState::~DogfightState()
 	if (_craft != NULL)
 		_craft->setInDogfight(false);
 
-	// set the ufo as "free" for the next engagement (as applicable)
-	if (_ufo != NULL)
+	if (_ufo != NULL) // frees the ufo for the next engagement
 		_ufo->setEngaged(false);
 }
 
@@ -545,12 +550,13 @@ void DogfightState::think()
 	{
 		updateDogfight();
 		_craftDamageAnimTimer->think(this, NULL);
-	}
 
-	if (_craft->getDestination() != _ufo
-		|| _ufo->getStatus() == Ufo::LANDED)
-	{
-		endDogfight();
+		if (_endDogfight == false // value could change in updateDogfight()^
+			&& (_craft->getDestination() != _ufo
+				|| _ufo->getStatus() == Ufo::LANDED))
+		{
+			endDogfight();
+		}
 	}
 }
 
@@ -720,10 +726,11 @@ void DogfightState::updateDogfight()
 	bool outRun = false;
 
 	const Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	if (ufo != _ufo
-		|| _craft->getLowFuel() == true
-		|| (_minimized == true
-			&& _ufo->isCrashed() == true))
+	if (_endDogfight == false
+		&& (ufo != _ufo
+			|| _craft->getLowFuel() == true
+			|| (_minimized == true
+				&& _ufo->isCrashed() == true)))
 	{
 		endDogfight();	// Check if craft is not low on fuel when window minimized, and
 		return;			// that craft's destination hasn't been changed when window minimized.
@@ -743,7 +750,7 @@ void DogfightState::updateDogfight()
 				_ufo->setEngaged();
 				_geo->drawUfoIndicators(); // kL
 
-				if (_dist < DIST_STANDOFF) // kL
+				if (_dist < DST_STANDOFF) // kL
 					_ufo->setEscapeCountdown(--escapeTicks);
 
 				if (_ufo->getFireCountdown() > 0)
@@ -919,7 +926,7 @@ void DogfightState::updateDogfight()
 
 									_end = false;
 									setStatus("STR_STANDOFF");
-									_targetDist = DIST_STANDOFF;
+									_targetDist = DST_STANDOFF;
 								}
 							}
 						}
@@ -1070,7 +1077,7 @@ void DogfightState::updateDogfight()
 	}
 
 	if (_end == true // Check when battle is over.
-		&& (((_dist > DIST_ENGAGE
+		&& (((_dist > DST_ENGAGE
 					|| _minimized == true)
 				&& (_mode == _btnDisengage
 					|| _ufoBreakingOff == true))
@@ -1091,10 +1098,11 @@ void DogfightState::updateDogfight()
 			_craft->returnToBase();
 		}
 
-		endDogfight();
+		if (_endDogfight == false)
+			endDogfight();
 	}
 
-	if (_dist > DIST_ENGAGE
+	if (_dist > DST_ENGAGE
 		&& _ufoBreakingOff == true)
 	{
 		outRun = true;
@@ -1392,7 +1400,7 @@ void DogfightState::maximumDistance()
 	}
 
 	if (dist == 0)
-		_targetDist = DIST_STANDOFF;
+		_targetDist = DST_STANDOFF;
 	else
 		_targetDist = dist * 8;
 }
@@ -1418,7 +1426,7 @@ void DogfightState::minimumDistance()
 	}
 
 	if (dist == 1000)
-		_targetDist = DIST_STANDOFF;
+		_targetDist = DST_STANDOFF;
 	else
 		_targetDist = dist * 8;
 }
@@ -1430,7 +1438,7 @@ void DogfightState::minimumDistance()
 void DogfightState::setStatus(const std::string& status)
 {
 	_txtStatus->setText(tr(status));
-	_timeout = TIMEOUT;
+	_timeout = MSG_TIMEOUT;
 }
 
 /**
@@ -1445,7 +1453,7 @@ void DogfightState::btnStandoffPress(Action*)
 	{
 		_end = false;
 		setStatus("STR_STANDOFF");
-		_targetDist = DIST_STANDOFF;
+		_targetDist = DST_STANDOFF;
 	}
 }
 
@@ -1466,14 +1474,12 @@ void DogfightState::btnCautiousPress(Action*)
 			&& _craft->getWeapons()->at(0) != NULL)
 		{
 			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getCautiousReload();
-//			_w1Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(0)->getRules()->getCautiousReload()) * _optionSpeed);
 		}
 
 		if (_craft->getRules()->getWeapons() > 1
 			&& _craft->getWeapons()->at(1) != NULL)
 		{
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getCautiousReload();
-//			_w2Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(1)->getRules()->getCautiousReload()) * _optionSpeed);
 		}
 
 		minimumDistance();
@@ -1497,14 +1503,12 @@ void DogfightState::btnStandardPress(Action*)
 			&& _craft->getWeapons()->at(0) != NULL)
 		{
 			_w1FireInterval = _craft->getWeapons()->at(0)->getRules()->getStandardReload();
-//			_w1Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(0)->getRules()->getStandardReload()) * _optionSpeed);
 		}
 
 		if (_craft->getRules()->getWeapons() > 1
 			&& _craft->getWeapons()->at(1) != NULL)
 		{
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
-//			_w2Timer->setInterval(static_cast<Uint32>(_craft->getWeapons()->at(1)->getRules()->getStandardReload()) * _optionSpeed);
 		}
 
 		maximumDistance();
@@ -1553,7 +1557,7 @@ void DogfightState::btnDisengagePress(Action*)
 		_end = true;
 		setStatus("STR_DISENGAGING");
 
-		_targetDist = DIST_ENGAGE + 1;
+		_targetDist = DST_ENGAGE + 1;
 	}
 }
 
@@ -1609,9 +1613,8 @@ void DogfightState::btnMinimizeClick(Action*)
 		&& _craft->isDestroyed() == false
 		&& _ufoBreakingOff == false)
 	{
-		if (_dist > DIST_STANDOFF - 1)
+		if (_dist > DST_STANDOFF - 1)
 		{
-//			setMinimized(true);
 			_minimized = true;
 
 			_window->setVisible(false);
@@ -1641,13 +1644,11 @@ void DogfightState::btnMinimizeClick(Action*)
 
 			if (_geo->getMinimizedDfCount() == _interceptCount)
 			{
-				if (_geo->getDogfightZoomInTimer()->isRunning() == true)
-					_geo->getDogfightZoomInTimer()->stop();
+				if (_geo->getDfZoomInTimer()->isRunning() == true)
+					_geo->getDfZoomInTimer()->stop();
 
-				_globe->setChasingUfo();
-
-				if (_geo->getDogfightZoomOutTimer()->isRunning() == false)
-					_geo->getDogfightZoomOutTimer()->start();
+				if (_geo->getDfZoomOutTimer()->isRunning() == false)
+					_geo->getDfZoomOutTimer()->start();
 			}
 		}
 		else
@@ -1693,21 +1694,18 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	_txtInterception->setVisible(false);
 	_preview->setVisible(false);
 
-	if (_geo->getDogfightZoomOutTimer()->isRunning() == true)
-		_geo->getDogfightZoomOutTimer()->stop();
+	if (_geo->getDfZoomOutTimer()->isRunning() == true)
+		_geo->getDfZoomOutTimer()->stop();
 
 	if (_geo->getMinimizedDfCount() == _interceptCount - 1)
-	{
-		_gameSave->setDfZoom(_globe->getZoom());
 		_geo->storePreDfCoords();
-	}
 
 	_globe->center(
 				_craft->getLongitude(),
 				_craft->getLatitude());
 
-	if (_geo->getDogfightZoomInTimer()->isRunning() == false)
-		_geo->getDogfightZoomInTimer()->start();
+	if (_geo->getDfZoomInTimer()->isRunning() == false)
+		_geo->getDfZoomInTimer()->start();
 }
 
 /**
@@ -1930,11 +1928,11 @@ void DogfightState::setInterceptSlot(const size_t intercept)
  * Sets interceptions count. Used to properly position the window.
  * @param intercepts - amount of interception windows
  */
-void DogfightState::setInterceptQty(const size_t intercepts)
+void DogfightState::setInterceptCount(const size_t intercepts)
 {
 	_interceptCount = intercepts;
-	calculateWindowPosition();
 
+	calculateWindowPosition();
 	moveWindow();
 }
 
@@ -2130,12 +2128,14 @@ int DogfightState::getDistance() const
 /**
  * Ends the dogfight.
  */
-void DogfightState::endDogfight()
+void DogfightState::endDogfight() // private.
 {
+	_endDogfight = true;
+
 	if (_craft != NULL)
 		_craft->setInDogfight(false);
 
-	_endDogfight = true;
+	_geo->resetInterceptCount(true);
 }
 
 /**

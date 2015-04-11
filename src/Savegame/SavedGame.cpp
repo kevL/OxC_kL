@@ -130,7 +130,7 @@ SavedGame::SavedGame(const Ruleset* const rules)
 		_globeZoom(0),
 		_dfLon(0.),
 		_dfLat(0.),
-		_dfZoom(std::numeric_limits<size_t>::max()),
+		_dfZoom(0),
 		_battleGame(NULL),
 		_debug(false),
 		_warned(false),
@@ -363,20 +363,6 @@ SaveInfo SavedGame::getSaveInfo(
 	save.isoTime = strTime.second;
 
 	std::wostringstream details;
-/*kL	if (doc["turn"])
-	{
-		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L" ";
-		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
-	}
-	else
-	{
-		GameTime gt = GameTime(6, 1, 1, 1999, 12, 0, 0);
-		gt.load(doc["time"]);
-		details << lang->getString("STR_GEOSCAPE") << L": ";
-		details << gt.getDayString(lang) << L" " << lang->getString(gt.getMonthString()) << L" " << gt.getYear() << L" ";
-		details << gt.getHour() << L":" << std::setfill(L'0') << std::setw(2) << gt.getMinute();
-	} */
-	// kL_begin:
 	if (doc["base"])
 	{
 		details << Language::utf8ToWstr(doc["base"].as<std::string>());
@@ -393,7 +379,7 @@ SaveInfo SavedGame::getSaveInfo(
 		details << L" - ";
 		details << lang->getString(doc["mission"].as<std::string>()) << L" ";
 		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
-	} // kL_end.
+	}
 
 	if (doc["ironman"].as<bool>(false))
 		details << L" " << lang->getString("STR_IRONMAN");
@@ -451,8 +437,6 @@ void SavedGame::load(
 
 	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
 
-//	_radarLines				= doc["radarLines"]			.as<bool>(_radarLines);
-//	_detail					= doc["detail"]				.as<bool>(_detail);
 	_monthsPassed			= doc["monthsPassed"]		.as<int>(_monthsPassed);
 	_graphRegionToggles		= doc["graphRegionToggles"]	.as<std::string>(_graphRegionToggles);
 	_graphCountryToggles	= doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
@@ -464,14 +448,12 @@ void SavedGame::load(
 	_expenditure			= doc["expenditure"]		.as<std::vector<int64_t> >(_expenditure);
 	_warned					= doc["warned"]				.as<bool>(_warned);
 	_ids					= doc["ids"]				.as<std::map<std::string, int> >(_ids);
+//	_radarLines				= doc["radarLines"]			.as<bool>(_radarLines);
+//	_detail					= doc["detail"]				.as<bool>(_detail);
 
-	_globeLon				= doc["globeLon"]	.as<double>(_globeLon);
-	_globeLat				= doc["globeLat"]	.as<double>(_globeLat);
-	_dfLon					= doc["dfLon"]		.as<double>(_globeLon);
-	_dfLat					= doc["dfLat"]		.as<double>(_globeLat);
-
-	_globeZoom				= static_cast<size_t>(doc["globeZoom"]	.as<int>(_globeZoom));
-	_dfZoom					= static_cast<size_t>(doc["dfZoom"]		.as<int>(_globeZoom));
+	_globeLon				= doc["globeLon"].as<double>(_globeLon);
+	_globeLat				= doc["globeLat"].as<double>(_globeLat);
+	_globeZoom				= static_cast<size_t>(doc["globeZoom"].as<int>(_globeZoom));
 
 
 	Log(LOG_INFO) << ". load countries";
@@ -710,8 +692,6 @@ void SavedGame::save(const std::string& filename) const
 
 	YAML::Node node;
 
-//	node["radarLines"]			= _radarLines;
-//	node["detail"]				= _detail;
 	node["rng"]					= RNG::getSeed();
 	node["difficulty"]			= static_cast<int>(_difficulty);
 	node["monthsPassed"]		= _monthsPassed;
@@ -725,13 +705,13 @@ void SavedGame::save(const std::string& filename) const
 	node["expenditure"]			= _expenditure;
 	node["warned"]				= _warned;
 	node["ids"]					= _ids;
+//	node["radarLines"]			= _radarLines;
+//	node["detail"]				= _detail;
 
 	node["globeLon"]	= serializeDouble(_globeLon);
 	node["globeLat"]	= serializeDouble(_globeLat);
-	node["globeZoom"]	= _globeZoom;
-	node["dfLon"]		= serializeDouble(_dfLon);
-	node["dfLat"]		= serializeDouble(_dfLat);
-	node["dfZoom"]		= _dfZoom;
+	node["globeZoom"]	= static_cast<int>(_globeZoom);
+
 
 	for (std::vector<Country*>::const_iterator
 			i = _countries.begin();
