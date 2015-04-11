@@ -73,7 +73,7 @@ private:
 		_damage,
 		_fuel,
 		_id,
-		_flightOrder,
+//		_flightOrder,
 		_takeoff;
 
 	std::string _status;
@@ -237,9 +237,9 @@ private:
 		bool isInDogfight() const;
 
 		/// Sets the Craft's flight order.
-		void setFlightOrder(const int order);
+//		void setFlightOrder(const int order);
 		/// Gets the Craft's flight order.
-		int getFlightOrder() const;
+//		int getFlightOrder() const;
 
 		/// Gets the Craft's unique id.
 		CraftId getUniqueId() const;

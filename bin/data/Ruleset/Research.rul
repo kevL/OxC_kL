@@ -161,6 +161,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_ALIEN_CONTAINMENT
     cost: 1500
     points: 15
+    requires:
+      - STR_ALIEN_FOOD
     dependencies:
       - STR_ZOMBIE_CORPSE
       - STR_CELATID_CORPSE
@@ -314,8 +316,9 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     cost: 45000
     points: 30
     dependencies:
-      - STR_ALIEN_ALLOYS
-      - STR_ELERIUM_115
+#      - STR_ALIEN_ALLOYS # see Navigation
+#      - STR_ELERIUM_115 # see Power Source
+# give this an Engineer requirement, could get tricky.
       - STR_UFO_POWER_SOURCE
       - STR_UFO_NAVIGATION
   - name: STR_THUNDERSTORM_INTERCEPTOR

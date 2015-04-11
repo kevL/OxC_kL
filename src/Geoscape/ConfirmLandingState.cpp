@@ -89,7 +89,7 @@ ConfirmLandingState::ConfirmLandingState(
 	_window			= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
 
 	_txtBase		= new Text(100, 9, 23, 29);
-	_txtTexture		= new Text(130, 9, 103, 29);
+	_txtTexture		= new Text(150, 9, 83, 29); // warning: overlaps txtBase by 20px; eg, "terrain> Grassland forest mount" ...
 	_txtShade		= new Text(60, 9, 173, 39);
 
 	_txtMessage		= new Text(206, 40, 25, 47);

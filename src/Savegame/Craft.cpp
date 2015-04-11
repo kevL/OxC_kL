@@ -73,7 +73,7 @@ Craft::Craft(
 		_id(id),
 		_fuel(0),
 		_damage(0),
-		_flightOrder(0),
+//		_flightOrder(0),
 		_takeoff(0),
 		_status("STR_READY"),
 		_lowFuel(false),
@@ -205,7 +205,7 @@ void Craft::load(
 	_status			= node["status"]		.as<std::string>(_status);
 	_lowFuel		= node["lowFuel"]		.as<bool>(_lowFuel);
 	_mission		= node["mission"]		.as<bool>(_mission);
-	_flightOrder	= node["flightOrder"]	.as<int>(_flightOrder);
+//	_flightOrder	= node["flightOrder"]	.as<int>(_flightOrder);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -329,7 +329,7 @@ YAML::Node Craft::save() const
 	if (_lowFuel == true)		node["lowFuel"]		= _lowFuel;
 	if (_mission == true)		node["mission"]		= _mission;
 	if (_inTactical == true)	node["inTactical"]	= _inTactical;
-	if (_flightOrder != 0)		node["flightOrder"]	= _flightOrder;
+//	if (_flightOrder != 0)		node["flightOrder"]	= _flightOrder;
 	if (_takeoff != 0)			node["takeoff"]		= _takeoff;
 	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
 
@@ -842,7 +842,7 @@ void Craft::think()
 	if (reachedDestination() == true
 		&& _dest == dynamic_cast<Target*>(_base))
 	{
-		setFlightOrder(0);
+//		setFlightOrder(0);
 		setDestination(NULL);
 		setSpeed(0);
 
@@ -1133,19 +1133,19 @@ void Craft::setInDogfight(const bool inDogfight)
  * @note First craft airborne gets 1, second 2, etc.
  * @param order - flight order
  */
-void Craft::setFlightOrder(const int order)
+/*void Craft::setFlightOrder(const int order)
 {
 	_flightOrder = order;
-}
+} */
 
 /**
  * Gets flight order.
  * @return, flight order
  */
-int Craft::getFlightOrder() const
+/*int Craft::getFlightOrder() const
 {
 	return _flightOrder;
-}
+} */
 
 /**
  * Gets the craft's unique id.

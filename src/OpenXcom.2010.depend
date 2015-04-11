@@ -4503,7 +4503,7 @@
 
 1426363708 f:\git\openxcom\src\savegame\basefacility.h
 
-1428747541 f:\git\openxcom\src\savegame\craft.h
+1428758520 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -6953,7 +6953,7 @@
 1424390940 f:\git\openxcom\src\geoscape\confirmcydoniastate.h
 	"../Engine/State.h"
 
-1428732909 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
+1428758584 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
 	"ConfirmDestinationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -7069,7 +7069,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428757323 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1428760070 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8704,7 +8704,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1428747313 source:f:\git\openxcom\src\savegame\craft.cpp
+1428758840 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"

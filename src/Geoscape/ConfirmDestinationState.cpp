@@ -135,7 +135,7 @@ void ConfirmDestinationState::btnOkClick(Action*)
 	_craft->setDestination(_target);
 	_craft->setStatus("STR_OUT");
 
-	if (_craft->getFlightOrder() == 0)
+/*	if (_craft->getFlightOrder() == 0)
 	{
 		int
 			order = 0,
@@ -157,7 +157,7 @@ void ConfirmDestinationState::btnOkClick(Action*)
 		}
 
 		_craft->setFlightOrder(++order);
-	}
+	} */
 
 	_game->popState();
 	_game->popState();

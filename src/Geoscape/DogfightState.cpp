@@ -223,10 +223,6 @@ DogfightState::DogfightState(
 		_txtDistance->setX(_txtDistance->getX() + 7);
 	}
 
-	std::wostringstream woststr;
-	woststr << _craft->getName(_game->getLanguage()) << L" >" << _craft->getBase()->getName(_game->getLanguage());
-	_txtTitle->setText(woststr.str());
-
 /*	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
@@ -334,8 +330,11 @@ DogfightState::DogfightState(
 					Options::keyCancel);
 	_btnMinimizedIcon->setVisible(false);
 
-	// Draw correct number on the minimized dogfight icon.
-	woststr.str(L"");
+	std::wostringstream woststr;
+	woststr << _craft->getName(_game->getLanguage()) << L" >" << _craft->getBase()->getName(_game->getLanguage());
+	_txtTitle->setText(woststr.str());
+
+//	woststr.str(L"");
 /*	std::wstring
 		wst = _craft->getName(_game->getLanguage()),
 		pre = wst.substr(0,1);
@@ -346,7 +345,7 @@ DogfightState::DogfightState(
 	else
 		woststr << L"-" << _craft->getFlightOrder(); */
 //	woststr << _craft->getFlightOrder();
-	woststr << _craft->getName(_game->getLanguage()) << L" >" << _craft->getBase()->getName(_game->getLanguage());
+//	woststr << _craft->getName(_game->getLanguage()) << L" >" << _craft->getBase()->getName(_game->getLanguage());
 	_txtInterception->setText(woststr.str());
 	_txtInterception->setVisible(false);
 //	_txtInterception->setAlign(ALIGN_CENTER);
@@ -1398,7 +1397,7 @@ void DogfightState::ufoFireWeapon()
 }
 
 /**
- * Sets the craft to the minimum distance required to fire a weapon.
+ * Sets the craft to the maximum distance required to fire a weapon.
  */
 void DogfightState::maximumDistance()
 {
@@ -1424,7 +1423,7 @@ void DogfightState::maximumDistance()
 }
 
 /**
- * Sets the craft to the maximum distance required to fire a weapon.
+ * Sets the craft to the minimum distance required to fire a weapon.
  */
 void DogfightState::minimumDistance()
 {
@@ -1500,7 +1499,7 @@ void DogfightState::btnCautiousPress(Action*)
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getCautiousReload();
 		}
 
-		minimumDistance();
+		maximumDistance();
 	}
 }
 
@@ -1529,7 +1528,7 @@ void DogfightState::btnStandardPress(Action*)
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getStandardReload();
 		}
 
-		maximumDistance();
+		minimumDistance();
 	}
 }
 
