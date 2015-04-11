@@ -30,9 +30,9 @@ namespace OpenXcom
 {
 
 const int
-	DST_ENGAGE		= 620,
+	DST_ENGAGE		= 635,
 	DST_STANDOFF	= 595,
-	MSG_TIMEOUT		= 38;
+	MSG_TIMEOUT		= 45;
 
 enum ColorNames
 {
@@ -137,8 +137,9 @@ private:
 		* _txtAmmo1,
 		* _txtAmmo2,
 		* _txtDistance,
+		* _txtInterception,
 		* _txtStatus,
-		* _txtInterception;
+		* _txtTitle;
 	Timer* _craftDamageAnimTimer;
 	Ufo* _ufo;
 

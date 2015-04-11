@@ -183,9 +183,10 @@ DogfightState::DogfightState(
 	_txtAmmo2				= new Text( 16, 9, _x +  64, _y + 70);
 	_txtDistance			= new Text( 40, 9, _x + 116, _y + 72);
 	_txtStatus				= new Text(150, 9, _x +   4, _y + 85);
+	_txtTitle				= new Text(160, 9, _x,       _y - 9);
 
 	_btnMinimizedIcon		= new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
-	_txtInterception		= new Text(100, 9, _minimizedIconX + 15, _minimizedIconY + 6);
+	_txtInterception		= new Text(150, 9, _minimizedIconX + 15, _minimizedIconY + 6);
 //	_txtInterception		= new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
 	_craftDamageAnimTimer	= new Timer(500);
@@ -212,6 +213,7 @@ DogfightState::DogfightState(
 	add(_txtDistance,		"numbers",			"dogfight");
 	add(_preview);
 	add(_txtStatus,			"text",				"dogfight");
+	add(_txtTitle,			"button",			"dogfight");
 	add(_btnMinimizedIcon);
 	add(_txtInterception,	"minimizedNumber",	"dogfight");
 
@@ -220,6 +222,11 @@ DogfightState::DogfightState(
 		_txtDistance->setY(_txtDistance->getY() + 1);
 		_txtDistance->setX(_txtDistance->getX() + 7);
 	}
+
+	std::wostringstream woststr;
+	woststr << _craft->getName(_game->getLanguage()) << L" >" << _craft->getBase()->getName(_game->getLanguage());
+	_txtTitle->setText(woststr.str());
+
 /*	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
@@ -328,7 +335,7 @@ DogfightState::DogfightState(
 	_btnMinimizedIcon->setVisible(false);
 
 	// Draw correct number on the minimized dogfight icon.
-	std::wostringstream woststr;
+	woststr.str(L"");
 /*	std::wstring
 		wst = _craft->getName(_game->getLanguage()),
 		pre = wst.substr(0,1);
@@ -339,7 +346,7 @@ DogfightState::DogfightState(
 	else
 		woststr << L"-" << _craft->getFlightOrder(); */
 //	woststr << _craft->getFlightOrder();
-	woststr << _craft->getName(_game->getLanguage());
+	woststr << _craft->getName(_game->getLanguage()) << L" >" << _craft->getBase()->getName(_game->getLanguage());
 	_txtInterception->setText(woststr.str());
 	_txtInterception->setVisible(false);
 //	_txtInterception->setAlign(ALIGN_CENTER);
@@ -1649,6 +1656,7 @@ void DogfightState::btnMinimizeClick(Action*)
 			_txtDistance->setVisible(false);
 			_preview->setVisible(false);
 			_txtStatus->setVisible(false);
+			_txtTitle->setVisible(false);
 
 			_btnMinimizedIcon->setVisible();
 			_txtInterception->setVisible();
@@ -1700,6 +1708,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	_txtAmmo2->setVisible();
 	_txtDistance->setVisible();
 	_txtStatus->setVisible();
+	_txtTitle->setVisible();
 
 	_btnMinimizedIcon->setVisible(false);
 	_txtInterception->setVisible(false);
@@ -2101,6 +2110,9 @@ void DogfightState::placePort()
 
 	_txtStatus->setX(_x + 4);
 	_txtStatus->setY(_y + 85);
+
+	_txtTitle->setX(_x);
+	_txtTitle->setY(_y - 9);
 
 	_btnMinimizedIcon->setX(_minimizedIconX);
 	_btnMinimizedIcon->setY(_minimizedIconY);

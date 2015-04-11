@@ -4751,7 +4751,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1428724084 f:\git\openxcom\src\geoscape\globe.h
+1428752726 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -7069,7 +7069,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428745481 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1428757323 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7101,7 +7101,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1428743708 f:\git\openxcom\src\geoscape\dogfightstate.h
+1428753795 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1426445097 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7149,7 +7149,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1428745173 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1428747062 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7285,7 +7285,7 @@
 
 1424390935 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1428724121 source:f:\git\openxcom\src\geoscape\globe.cpp
+1428753191 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8704,7 +8704,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1428732863 source:f:\git\openxcom\src\savegame\craft.cpp
+1428747313 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -11153,7 +11153,7 @@
 1424390937 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"
 
-1428674270 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1428752713 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
 	"Polygon.h"
 	"Polyline.h"

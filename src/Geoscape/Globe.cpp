@@ -81,12 +81,15 @@ const double
 	Globe::ROTATE_LONGITUDE	= 0.176,
 	Globe::ROTATE_LATITUDE	= 0.176;
 
-Uint8
-	Globe::OCEAN_COLOR			= 192, //Palette::blockOffset(12),
-	Globe::COUNTRY_LABEL_COLOR	= 227, //Palette::blockOffset(14)+3);	//stock 239
-	Globe::LINE_COLOR			= 162, //Palette::blockOffset(10)+2);
-	Globe::CITY_LABEL_COLOR		= 167, //Palette::blockOffset(10)+7);	//stock 138
-	Globe::BASE_LABEL_COLOR		= 100; //Palette::blockOffset(6)+4);	//stock 133;
+Uint8 // these are only fallbacks for Geography.rul->globe
+	Globe::CLO_LABELBASE	= 100,	// Palette::blockOffset(6)+4;	// stock 133;
+	Globe::CLO_LABELCITY	= 167,	// Palette::blockOffset(10)+7;	// stock 138
+	Globe::CLO_LABELCOUNTRY	= 227,	// Palette::blockOffset(14)+3;	// stock 239
+	Globe::CLO_LINE			= 162,	// Palette::blockOffset(10)+2;	// light gray
+//	Globe::CLO_RADAR1		=		// let base radars do its own thing in XuLine()
+	Globe::CLO_RADAR2		= 150,	// Palette::blockOffset(9)+6;	// brown
+	Globe::CLO_FLIGHT		= 166,	// Palette::blockOffset(10)+6;	// steel gray
+	Globe::CLO_OCEAN		= 192;	// Palette::blockOffset(12),	// blue ofc.
 
 
 namespace
@@ -136,8 +139,8 @@ struct GlobeStaticData
 		}
 		else
 		{
-			ret.x = 0.;
-			ret.y = 0.;
+			ret.x =
+			ret.y =
 			ret.z = 0.;
 
 			return ret;
@@ -152,7 +155,7 @@ struct GlobeStaticData
 		// filling terminator gradient LUT
 		for (int
 				i = 0;
-				i < 240;
+				i != 240;
 				++i)
 		{
 			int j = i - 120;
@@ -195,7 +198,7 @@ struct Ocean
 			const int&, // whots this
 			const int&) // whots this
 	{
-		dest = Globe::OCEAN_COLOR;
+		dest = Globe::CLO_OCEAN;
 	}
 };
 
@@ -239,10 +242,10 @@ struct CreateShadow
 			else
 				val = static_cast<Uint8>(temp.x);
 
-			if (d == Globe::OCEAN_COLOR
-				|| d == Globe::OCEAN_COLOR + 16)
+			if (d == Globe::CLO_OCEAN
+				|| d == Globe::CLO_OCEAN + 16)
 			{
-				return Globe::OCEAN_COLOR + val; // this pixel is ocean
+				return Globe::CLO_OCEAN + val; // this pixel is ocean
 			}
 			else
 			{
@@ -259,10 +262,10 @@ struct CreateShadow
 		else
 		{
 			const Uint8 d = (dest & helper::ColorGroup);
-			if (d == Globe::OCEAN_COLOR
-				|| d == Globe::OCEAN_COLOR + 16)
+			if (d == Globe::CLO_OCEAN
+				|| d == Globe::CLO_OCEAN + 16)
 			{
-				return Globe::OCEAN_COLOR; // this pixel is ocean
+				return Globe::CLO_OCEAN; // this pixel is ocean
 			}
 
 			return dest; // this pixel is land
@@ -1346,7 +1349,7 @@ void Globe::drawOcean()
 			_cenX + 1,
 			_cenY,
 			static_cast<Sint16>(_radius) + 20,
-			OCEAN_COLOR);
+			CLO_OCEAN);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1491,7 +1494,7 @@ void Globe::drawShadow()
  * @param x2		-
  * @param y2		-
  * @param shade		-
- * @param color		-
+ * @param color		- (default 0)
  */
 void Globe::XuLine(
 		Surface* surface,
@@ -1501,13 +1504,11 @@ void Globe::XuLine(
 		double x2,
 		double y2,
 		int shade,
-		Uint8 color) // kL_add. (default 0)
+		Uint8 color)
 {
 	if (_clipper->LineClip(
-						&x1,
-						&y1,
-						&x2,
-						&y2) != 1) // empty line
+						&x1,&y1,
+						&x2,&y2) != 1) // empty line
 	{
 		return;
 	}
@@ -1568,10 +1569,10 @@ void Globe::XuLine(
 			{
 				const Uint8 colorBlock = (tcol & helper::ColorGroup);
 
-				if (colorBlock == OCEAN_COLOR
-					|| colorBlock == OCEAN_COLOR + 16)
+				if (colorBlock == CLO_OCEAN
+					|| colorBlock == CLO_OCEAN + 16)
 				{
-					tcol = OCEAN_COLOR + static_cast<Uint8>(shade) + 8; // this pixel is ocean
+					tcol = CLO_OCEAN + static_cast<Uint8>(shade) + 8; // this pixel is ocean
 				}
 				else // this pixel is land
 				{
@@ -1608,8 +1609,7 @@ void Globe::drawRadars()
 		return;
 
 	double
-		x,
-		y,
+		x,y,
 		range,
 		lat,
 		lon;
@@ -1630,8 +1630,7 @@ void Globe::drawRadars()
 				polarToCart(
 						_hoverLat,
 						_hoverLon,
-						&x,
-						&y);
+						&x,&y);
 
 				range *= unitToRads;
 				drawGlobeCircle( // placing new Base.
@@ -1639,6 +1638,7 @@ void Globe::drawRadars()
 							_hoverLon,
 							range,
 							48);
+//							CLO_RADAR1);
 			}
 		}
 	}
@@ -1657,8 +1657,7 @@ void Globe::drawRadars()
 			polarToCart(
 					lon,
 					lat,
-					&x,
-					&y);
+					&x,&y);
 
 			for (std::vector<BaseFacility*>::const_iterator
 					j = (*i)->getFacilities()->begin();
@@ -1676,6 +1675,7 @@ void Globe::drawRadars()
 									lon,
 									range,
 									48);
+//									CLO_RADAR1);
 					}
 				}
 			}
@@ -1698,8 +1698,7 @@ void Globe::drawRadars()
 				polarToCart(
 						lon,
 						lat,
-						&x,
-						&y);
+						&x,&y);
 
 				range *= unitToRads;
 				drawGlobeCircle( // Craft radars.
@@ -1707,7 +1706,7 @@ void Globe::drawRadars()
 							lon,
 							range,
 							24,
-							Palette::blockOffset(9)+6); // brown
+							CLO_RADAR2);
 			}
 		}
 	}
@@ -1720,7 +1719,7 @@ void Globe::drawRadars()
  * @param lon		-
  * @param radius	-
  * @param segments	-
- * @param color		-
+ * @param color		- (default 0)
  */
 void Globe::drawGlobeCircle(
 		double lat,
@@ -1750,8 +1749,7 @@ void Globe::drawGlobeCircle(
 		polarToCart(
 				lon1,
 				lat1,
-				&x,
-				&y);
+				&x,&y);
 
 		if (AreSame(az, 0.)) // first vertex is for initialization only
 		{
@@ -1819,7 +1817,7 @@ void Globe::setNewBaseHoverPos(
  * @param lat1		-
  * @param lon2		-
  * @param lat2		-
- * @param color		-
+ * @param color		- (default 0)
  */
 void Globe::drawVHLine(
 		Surface* surface,
@@ -1861,13 +1859,13 @@ void Globe::drawVHLine(
 
 	for (int
 			i = 0;
-			i < seg;
+			i != seg;
 			++i)
 	{
-		ln1 = lon1 + sx * i;
-		lt1 = lat1 + sy * i;
-		ln2 = lon1 + sx * (i + 1);
-		lt2 = lat1 + sy * (i + 1);
+		ln1 = lon1 + sx * static_cast<double>(i);
+		lt1 = lat1 + sy * static_cast<double>(i);
+		ln2 = lon1 + sx * static_cast<double>(i + 1);
+		lt2 = lat1 + sy * static_cast<double>(i + 1);
 
 		if (pointBack(ln2, lt2) == false
 			&& pointBack(ln1, lt1) == false)
@@ -1875,7 +1873,10 @@ void Globe::drawVHLine(
 			polarToCart(ln1, lt1, &x1, &y1);
 			polarToCart(ln2, lt2, &x2, &y2);
 
-			surface->drawLine(x1, y1, x2, y2, color);
+			surface->drawLine(
+							x1,y1,
+							x2,y2,
+							color);
 		}
 	}
 }
@@ -1910,7 +1911,7 @@ void Globe::drawDetail()
 		{
 			for (int
 					j = 0;
-					j < (*i)->getPoints() - 1;
+					j != (*i)->getPoints() - 1;
 					++j)
 			{
 				lon = (*i)->getLongitude(j),
@@ -1941,7 +1942,7 @@ void Globe::drawDetail()
 									y[0],
 									x[1],
 									y[1],
-									LINE_COLOR);
+									CLO_LINE);
 				}
 			}
 		}
@@ -1983,7 +1984,7 @@ void Globe::drawDetail()
 
 		if (_zoom > 2)
 		{
-			label->setColor(COUNTRY_LABEL_COLOR); // draw the country labels
+			label->setColor(CLO_LABELCOUNTRY); // draw the country labels
 
 			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
@@ -2011,7 +2012,7 @@ void Globe::drawDetail()
 			}
 		}
 
-		label->setColor(CITY_LABEL_COLOR); // draw the city labels
+		label->setColor(CLO_LABELCITY); // draw the city labels
 		int offset_y;
 
 		for (std::vector<Region*>::const_iterator
@@ -2053,7 +2054,7 @@ void Globe::drawDetail()
 			}
 		}
 
-		label->setColor(BASE_LABEL_COLOR); // draw xCom base labels
+		label->setColor(CLO_LABELBASE); // draw xCom base labels
 		label->setAlign(ALIGN_LEFT);
 
 		for (std::vector<Base*>::const_iterator
@@ -2331,9 +2332,9 @@ void Globe::drawPath(
 				p1.lon,
 				p1.lat,
 				&x1,&y1);
-	for (int
+	for (Sint16
 			i = 0;
-			i < qty;
+			i != qty;
 			++i)
 	{
 		a += b;
@@ -2352,7 +2353,7 @@ void Globe::drawPath(
 				x1,y1,
 				x2,y2,
 				8,
-				Palette::blockOffset(10)+6); // steel gray
+				CLO_FLIGHT);
 		}
 
 		p1 = p2;
@@ -2722,7 +2723,7 @@ void Globe::mouseOver(Action* action, State* state)
 			&lon,
 			&lat);
 
-	if (_isMouseScrolling
+	if (_isMouseScrolling == true
 		&& action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		// The following is the workaround for a rare problem where sometimes
@@ -2733,7 +2734,7 @@ void Globe::mouseOver(Action* action, State* state)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseOverThreshold
+			if (_mouseOverThreshold == false
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				center(
@@ -2741,7 +2742,8 @@ void Globe::mouseOver(Action* action, State* state)
 					_latBeforeMouseScrolling);
 			}
 
-			_isMouseScrolled = _isMouseScrolling = false;
+			_isMouseScrolled =
+			_isMouseScrolling = false;
 //			stopScrolling(action); // newScroll
 
 			return;
@@ -2768,7 +2770,7 @@ void Globe::mouseOver(Action* action, State* state)
 		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
 		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
 
-		if (!_mouseOverThreshold) // check threshold
+		if (_mouseOverThreshold == false) // check threshold
 			_mouseOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
 							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 

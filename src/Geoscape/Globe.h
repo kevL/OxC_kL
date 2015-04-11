@@ -187,7 +187,7 @@ private:
 			double lat1,
 			double lon2,
 			double lat2,
-			Uint8 color);
+			Uint8 color = 0);
 	/// Draw flight path.
 	void drawPath(
 			Surface* surface,
@@ -214,11 +214,14 @@ private:
 			GM_CITY			= 8;
 
 		static Uint8
-			COUNTRY_LABEL_COLOR,
-			LINE_COLOR,
-			CITY_LABEL_COLOR,
-			BASE_LABEL_COLOR,
-			OCEAN_COLOR;
+			CLO_LABELBASE,
+			CLO_LABELCITY,
+			CLO_LABELCOUNTRY,
+			CLO_LINE,
+//			CLO_RADAR1,
+			CLO_RADAR2,
+			CLO_FLIGHT,
+			CLO_OCEAN;
 
 		/// Creates a new globe at the specified position and size.
 		Globe(
