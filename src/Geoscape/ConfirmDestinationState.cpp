@@ -55,7 +55,7 @@ ConfirmDestinationState::ConfirmDestinationState(
 		_craft(craft),
 		_target(target)
 {
-	Waypoint* wp = dynamic_cast<Waypoint*>(_target);
+	const Waypoint* const wp = dynamic_cast<Waypoint*>(_target);
 
 	_screen = false;
 
@@ -69,23 +69,25 @@ ConfirmDestinationState::ConfirmDestinationState(
 	if (wp != NULL
 		&& wp->getId() == 0)
 	{
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color2); //6
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color2);
 	}
 	else
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color); //4
+		setPalette(
+				"PAL_GEOSCAPE",
+				_game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color);
 
-	add(_window, "window", "confirmDestination");
-	add(_txtTarget, "text", "confirmDestination");
-	add(_btnCancel, "button", "confirmDestination");
-	add(_btnOk, "button", "confirmDestination");
+	add(_window,	"window",	"confirmDestination");
+	add(_txtTarget,	"text",		"confirmDestination");
+	add(_btnCancel,	"button",	"confirmDestination");
+	add(_btnOk,		"button",	"confirmDestination");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-//	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
@@ -97,14 +99,12 @@ ConfirmDestinationState::ConfirmDestinationState(
 	else
 		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ConfirmDestinationState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmDestinationState::btnOkClick,
 					Options::keyOk);
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -124,7 +124,7 @@ ConfirmDestinationState::~ConfirmDestinationState()
  */
 void ConfirmDestinationState::btnOkClick(Action*)
 {
-	Waypoint* wp = dynamic_cast<Waypoint*>(_target);
+	Waypoint* const wp = dynamic_cast<Waypoint*>(_target);
 	if (wp != NULL
 		&& wp->getId() == 0)
 	{
@@ -135,26 +135,28 @@ void ConfirmDestinationState::btnOkClick(Action*)
 	_craft->setDestination(_target);
 	_craft->setStatus("STR_OUT");
 
-	if (_craft->getInterceptionOrder() == 0)
+	if (_craft->getFlightOrder() == 0)
 	{
-		int order = 0;
-
-		for (std::vector<Base*>::iterator
-				base = _game->getSavedGame()->getBases()->begin();
-				base != _game->getSavedGame()->getBases()->end();
-				++base)
+		int
+			order = 0,
+			testVar;
+		for (std::vector<Base*>::const_iterator
+				i = _game->getSavedGame()->getBases()->begin();
+				i != _game->getSavedGame()->getBases()->end();
+				++i)
 		{
-			for (std::vector<Craft*>::iterator
-					craft = (*base)->getCrafts()->begin();
-					craft != (*base)->getCrafts()->end();
-					++craft)
+			for (std::vector<Craft*>::const_iterator
+					j = (*i)->getCrafts()->begin();
+					j != (*i)->getCrafts()->end();
+					++j)
 			{
-				if ((*craft)->getInterceptionOrder() > order)
-					order = (*craft)->getInterceptionOrder();
+				testVar = (*j)->getFlightOrder();
+				if (testVar > order)
+					order = testVar;
 			}
 		}
 
-		_craft->setInterceptionOrder(order + 1);
+		_craft->setFlightOrder(++order);
 	}
 
 	_game->popState();
@@ -167,7 +169,7 @@ void ConfirmDestinationState::btnOkClick(Action*)
  */
 void ConfirmDestinationState::btnCancelClick(Action*)
 {
-	Waypoint* wp = dynamic_cast<Waypoint*>(_target);
+	const Waypoint* const wp = dynamic_cast<Waypoint*>(_target);
 	if (wp != NULL
 		&& wp->getId() == 0)
 	{

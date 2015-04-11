@@ -42,176 +42,175 @@ NumberText::NumberText(
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_value(0),
 		_color(0),
 		_bordered(false)
 {
-	_chars[0] = new Surface(3, 5);
+	_chars[0] = new Surface(3,5);
 	_chars[0]->lock();
-	_chars[0]->setPixelColor(0, 0, 1);
-	_chars[0]->setPixelColor(1, 0, 1);
-	_chars[0]->setPixelColor(2, 0, 1);
-	_chars[0]->setPixelColor(0, 1, 1);
-	_chars[0]->setPixelColor(0, 2, 1);
-	_chars[0]->setPixelColor(0, 3, 1);
-	_chars[0]->setPixelColor(2, 1, 1);
-	_chars[0]->setPixelColor(2, 2, 1);
-	_chars[0]->setPixelColor(2, 3, 1);
-	_chars[0]->setPixelColor(0, 4, 1);
-	_chars[0]->setPixelColor(1, 4, 1);
-	_chars[0]->setPixelColor(2, 4, 1);
+	_chars[0]->setPixelColor(0,0,1);
+	_chars[0]->setPixelColor(1,0,1);
+	_chars[0]->setPixelColor(2,0,1);
+	_chars[0]->setPixelColor(0,1,1);
+	_chars[0]->setPixelColor(0,2,1);
+	_chars[0]->setPixelColor(0,3,1);
+	_chars[0]->setPixelColor(2,1,1);
+	_chars[0]->setPixelColor(2,2,1);
+	_chars[0]->setPixelColor(2,3,1);
+	_chars[0]->setPixelColor(0,4,1);
+	_chars[0]->setPixelColor(1,4,1);
+	_chars[0]->setPixelColor(2,4,1);
 	_chars[0]->unlock();
 
-	_chars[1] = new Surface(3, 5);
+	_chars[1] = new Surface(3,5);
 	_chars[1]->lock();
-	_chars[1]->setPixelColor(1, 0, 1);
-	_chars[1]->setPixelColor(1, 1, 1);
-	_chars[1]->setPixelColor(1, 2, 1);
-	_chars[1]->setPixelColor(1, 3, 1);
-	_chars[1]->setPixelColor(0, 4, 1);
-	_chars[1]->setPixelColor(1, 4, 1);
-	_chars[1]->setPixelColor(2, 4, 1);
-	_chars[1]->setPixelColor(0, 1, 1);
+	_chars[1]->setPixelColor(1,0,1);
+	_chars[1]->setPixelColor(1,1,1);
+	_chars[1]->setPixelColor(1,2,1);
+	_chars[1]->setPixelColor(1,3,1);
+	_chars[1]->setPixelColor(0,4,1);
+	_chars[1]->setPixelColor(1,4,1);
+	_chars[1]->setPixelColor(2,4,1);
+	_chars[1]->setPixelColor(0,1,1);
 	_chars[1]->unlock();
 
-	_chars[2] = new Surface(3, 5);
+	_chars[2] = new Surface(3,5);
 	_chars[2]->lock();
-	_chars[2]->setPixelColor(0, 0, 1);
-	_chars[2]->setPixelColor(1, 0, 1);
-	_chars[2]->setPixelColor(2, 0, 1);
-	_chars[2]->setPixelColor(2, 1, 1);
-	_chars[2]->setPixelColor(0, 2, 1);
-	_chars[2]->setPixelColor(1, 2, 1);
-	_chars[2]->setPixelColor(2, 2, 1);
-	_chars[2]->setPixelColor(0, 3, 1);
-	_chars[2]->setPixelColor(0, 4, 1);
-	_chars[2]->setPixelColor(1, 4, 1);
-	_chars[2]->setPixelColor(2, 4, 1);
+	_chars[2]->setPixelColor(0,0,1);
+	_chars[2]->setPixelColor(1,0,1);
+	_chars[2]->setPixelColor(2,0,1);
+	_chars[2]->setPixelColor(2,1,1);
+	_chars[2]->setPixelColor(0,2,1);
+	_chars[2]->setPixelColor(1,2,1);
+	_chars[2]->setPixelColor(2,2,1);
+	_chars[2]->setPixelColor(0,3,1);
+	_chars[2]->setPixelColor(0,4,1);
+	_chars[2]->setPixelColor(1,4,1);
+	_chars[2]->setPixelColor(2,4,1);
 	_chars[2]->unlock();
 
-	_chars[3] = new Surface(3, 5);
+	_chars[3] = new Surface(3,5);
 	_chars[3]->lock();
-	_chars[3]->setPixelColor(0, 0, 1);
-	_chars[3]->setPixelColor(1, 0, 1);
-	_chars[3]->setPixelColor(2, 0, 1);
-	_chars[3]->setPixelColor(2, 1, 1);
-	_chars[3]->setPixelColor(2, 2, 1);
-	_chars[3]->setPixelColor(2, 3, 1);
-	_chars[3]->setPixelColor(0, 2, 1);
-	_chars[3]->setPixelColor(1, 2, 1);
-	_chars[3]->setPixelColor(0, 4, 1);
-	_chars[3]->setPixelColor(1, 4, 1);
-	_chars[3]->setPixelColor(2, 4, 1);
+	_chars[3]->setPixelColor(0,0,1);
+	_chars[3]->setPixelColor(1,0,1);
+	_chars[3]->setPixelColor(2,0,1);
+	_chars[3]->setPixelColor(2,1,1);
+	_chars[3]->setPixelColor(2,2,1);
+	_chars[3]->setPixelColor(2,3,1);
+	_chars[3]->setPixelColor(0,2,1);
+	_chars[3]->setPixelColor(1,2,1);
+	_chars[3]->setPixelColor(0,4,1);
+	_chars[3]->setPixelColor(1,4,1);
+	_chars[3]->setPixelColor(2,4,1);
 	_chars[3]->unlock();
 
-	_chars[4] = new Surface(3, 5);
+	_chars[4] = new Surface(3,5);
 	_chars[4]->lock();
-	_chars[4]->setPixelColor(0, 0, 1);
-	_chars[4]->setPixelColor(0, 1, 1);
-	_chars[4]->setPixelColor(0, 2, 1);
-	_chars[4]->setPixelColor(1, 2, 1);
-	_chars[4]->setPixelColor(2, 0, 1);
-	_chars[4]->setPixelColor(2, 1, 1);
-	_chars[4]->setPixelColor(2, 2, 1);
-	_chars[4]->setPixelColor(2, 3, 1);
-	_chars[4]->setPixelColor(2, 4, 1);
+	_chars[4]->setPixelColor(0,0,1);
+	_chars[4]->setPixelColor(0,1,1);
+	_chars[4]->setPixelColor(0,2,1);
+	_chars[4]->setPixelColor(1,2,1);
+	_chars[4]->setPixelColor(2,0,1);
+	_chars[4]->setPixelColor(2,1,1);
+	_chars[4]->setPixelColor(2,2,1);
+	_chars[4]->setPixelColor(2,3,1);
+	_chars[4]->setPixelColor(2,4,1);
 	_chars[4]->unlock();
 
-	_chars[5] = new Surface(3, 5);
+	_chars[5] = new Surface(3,5);
 	_chars[5]->lock();
-	_chars[5]->setPixelColor(0, 0, 1);
-	_chars[5]->setPixelColor(1, 0, 1);
-	_chars[5]->setPixelColor(2, 0, 1);
-	_chars[5]->setPixelColor(0, 1, 1);
-	_chars[5]->setPixelColor(0, 2, 1);
-	_chars[5]->setPixelColor(1, 2, 1);
-	_chars[5]->setPixelColor(2, 2, 1);
-	_chars[5]->setPixelColor(2, 3, 1);
-	_chars[5]->setPixelColor(0, 4, 1);
-	_chars[5]->setPixelColor(1, 4, 1);
-	_chars[5]->setPixelColor(2, 4, 1);
+	_chars[5]->setPixelColor(0,0,1);
+	_chars[5]->setPixelColor(1,0,1);
+	_chars[5]->setPixelColor(2,0,1);
+	_chars[5]->setPixelColor(0,1,1);
+	_chars[5]->setPixelColor(0,2,1);
+	_chars[5]->setPixelColor(1,2,1);
+	_chars[5]->setPixelColor(2,2,1);
+	_chars[5]->setPixelColor(2,3,1);
+	_chars[5]->setPixelColor(0,4,1);
+	_chars[5]->setPixelColor(1,4,1);
+	_chars[5]->setPixelColor(2,4,1);
 	_chars[5]->unlock();
 
-	_chars[6] = new Surface(3, 5);
+	_chars[6] = new Surface(3,5);
 	_chars[6]->lock();
-	_chars[6]->setPixelColor(0, 0, 1);
-	_chars[6]->setPixelColor(1, 0, 1);
-	_chars[6]->setPixelColor(2, 0, 1);
-	_chars[6]->setPixelColor(0, 1, 1);
-	_chars[6]->setPixelColor(0, 2, 1);
-	_chars[6]->setPixelColor(1, 2, 1);
-	_chars[6]->setPixelColor(2, 2, 1);
-	_chars[6]->setPixelColor(0, 3, 1);
-	_chars[6]->setPixelColor(2, 3, 1);
-	_chars[6]->setPixelColor(0, 4, 1);
-	_chars[6]->setPixelColor(1, 4, 1);
-	_chars[6]->setPixelColor(2, 4, 1);
+	_chars[6]->setPixelColor(0,0,1);
+	_chars[6]->setPixelColor(1,0,1);
+	_chars[6]->setPixelColor(2,0,1);
+	_chars[6]->setPixelColor(0,1,1);
+	_chars[6]->setPixelColor(0,2,1);
+	_chars[6]->setPixelColor(1,2,1);
+	_chars[6]->setPixelColor(2,2,1);
+	_chars[6]->setPixelColor(0,3,1);
+	_chars[6]->setPixelColor(2,3,1);
+	_chars[6]->setPixelColor(0,4,1);
+	_chars[6]->setPixelColor(1,4,1);
+	_chars[6]->setPixelColor(2,4,1);
 	_chars[6]->unlock();
 
-	_chars[7] = new Surface(3, 5);
+	_chars[7] = new Surface(3,5);
 	_chars[7]->lock();
-	_chars[7]->setPixelColor(0, 0, 1);
-	_chars[7]->setPixelColor(1, 0, 1);
-	_chars[7]->setPixelColor(2, 0, 1);
-	_chars[7]->setPixelColor(2, 1, 1);
-	_chars[7]->setPixelColor(2, 2, 1);
-	_chars[7]->setPixelColor(2, 3, 1);
-	_chars[7]->setPixelColor(2, 4, 1);
+	_chars[7]->setPixelColor(0,0,1);
+	_chars[7]->setPixelColor(1,0,1);
+	_chars[7]->setPixelColor(2,0,1);
+	_chars[7]->setPixelColor(2,1,1);
+	_chars[7]->setPixelColor(2,2,1);
+	_chars[7]->setPixelColor(2,3,1);
+	_chars[7]->setPixelColor(2,4,1);
 	_chars[7]->unlock();
 
-	_chars[8] = new Surface(3, 5);
+	_chars[8] = new Surface(3,5);
 	_chars[8]->lock();
-	_chars[8]->setPixelColor(0, 0, 1);
-	_chars[8]->setPixelColor(1, 0, 1);
-	_chars[8]->setPixelColor(2, 0, 1);
-	_chars[8]->setPixelColor(0, 1, 1);
-	_chars[8]->setPixelColor(0, 2, 1);
-	_chars[8]->setPixelColor(0, 3, 1);
-	_chars[8]->setPixelColor(2, 1, 1);
-	_chars[8]->setPixelColor(2, 2, 1);
-	_chars[8]->setPixelColor(2, 3, 1);
-	_chars[8]->setPixelColor(1, 2, 1);
-	_chars[8]->setPixelColor(0, 4, 1);
-	_chars[8]->setPixelColor(1, 4, 1);
-	_chars[8]->setPixelColor(2, 4, 1);
+	_chars[8]->setPixelColor(0,0,1);
+	_chars[8]->setPixelColor(1,0,1);
+	_chars[8]->setPixelColor(2,0,1);
+	_chars[8]->setPixelColor(0,1,1);
+	_chars[8]->setPixelColor(0,2,1);
+	_chars[8]->setPixelColor(0,3,1);
+	_chars[8]->setPixelColor(2,1,1);
+	_chars[8]->setPixelColor(2,2,1);
+	_chars[8]->setPixelColor(2,3,1);
+	_chars[8]->setPixelColor(1,2,1);
+	_chars[8]->setPixelColor(0,4,1);
+	_chars[8]->setPixelColor(1,4,1);
+	_chars[8]->setPixelColor(2,4,1);
 	_chars[8]->unlock();
 
-	_chars[9] = new Surface(3, 5);
+	_chars[9] = new Surface(3,5);
 	_chars[9]->lock();
-	_chars[9]->setPixelColor(0, 0, 1);
-	_chars[9]->setPixelColor(1, 0, 1);
-	_chars[9]->setPixelColor(2, 0, 1);
-	_chars[9]->setPixelColor(0, 1, 1);
-	_chars[9]->setPixelColor(0, 2, 1);
-	_chars[9]->setPixelColor(2, 1, 1);
-	_chars[9]->setPixelColor(2, 2, 1);
-	_chars[9]->setPixelColor(2, 3, 1);
-	_chars[9]->setPixelColor(1, 2, 1);
-	_chars[9]->setPixelColor(0, 4, 1);
-	_chars[9]->setPixelColor(1, 4, 1);
-	_chars[9]->setPixelColor(2, 4, 1);
+	_chars[9]->setPixelColor(0,0,1);
+	_chars[9]->setPixelColor(1,0,1);
+	_chars[9]->setPixelColor(2,0,1);
+	_chars[9]->setPixelColor(0,1,1);
+	_chars[9]->setPixelColor(0,2,1);
+	_chars[9]->setPixelColor(2,1,1);
+	_chars[9]->setPixelColor(2,2,1);
+	_chars[9]->setPixelColor(2,3,1);
+	_chars[9]->setPixelColor(1,2,1);
+	_chars[9]->setPixelColor(0,4,1);
+	_chars[9]->setPixelColor(1,4,1);
+	_chars[9]->setPixelColor(2,4,1);
 	_chars[9]->unlock();
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 10;
+			i != 10;
 			++i)
 	{
 		_borderedChars[i] = new Surface(4,6);
 
 		for (int
-				y = 1;
-				y < 6;
+				y = 0;
+				y != 6;
 				++y)
 		{
 			for (int
-					x = 1;
-					x < 4;
+					x = 0;
+					x != 4;
 					++x)
 			{
-				_borderedChars[i]->setPixelColor(x,y,7);
+				_borderedChars[i]->setPixelColor(x,y,8);
 			}
 		}
 
@@ -246,9 +245,9 @@ NumberText::NumberText(
  */
 NumberText::~NumberText()
 {
-	for (int
+	for (size_t
 			i = 0;
-			i < 10;
+			i != 10;
 			++i)
 	{
 		delete _chars[i];
@@ -310,9 +309,9 @@ void NumberText::setPalette(
 					firstcolor,
 					ncolors);
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 10;
+			i != 10;
 			++i)
 	{
 		_chars[i]->setPalette(
@@ -333,9 +332,9 @@ void NumberText::draw()
 {
 	Surface::draw();
 
-	std::ostringstream oss;
-	oss << _value;
-	std::string st = oss.str();
+	std::ostringstream oststr;
+	oststr << _value;
+	std::string st = oststr.str();
 
 	int x = 0;
 

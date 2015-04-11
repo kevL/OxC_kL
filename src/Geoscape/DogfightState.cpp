@@ -141,8 +141,8 @@ DogfightState::DogfightState(
 		_craftHeight(0),
 		_craftHeight_pre(0),
 //		_currentCraftDamageColor(14),
-		_intercept(0),
-		_interceptCount(0),
+		_slot(0),
+		_totalIntercepts(0),
 		_x(0),
 		_y(0),
 		_minimizedIconX(0),
@@ -185,7 +185,8 @@ DogfightState::DogfightState(
 	_txtStatus				= new Text(150, 9, _x +   4, _y + 85);
 
 	_btnMinimizedIcon		= new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
-	_txtInterception		= new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
+	_txtInterception		= new Text(100, 9, _minimizedIconX + 15, _minimizedIconY + 6);
+//	_txtInterception		= new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
 	_craftDamageAnimTimer	= new Timer(500);
 
@@ -328,9 +329,20 @@ DogfightState::DogfightState(
 
 	// Draw correct number on the minimized dogfight icon.
 	std::wostringstream woststr;
-	woststr << _craft->getInterceptionOrder();
+/*	std::wstring
+		wst = _craft->getName(_game->getLanguage()),
+		pre = wst.substr(0,1);
+	woststr << pre;
+	size_t pos = wst.find_last_of('-');
+	if (pos != std::string::npos)
+		woststr << wst.substr(pos);
+	else
+		woststr << L"-" << _craft->getFlightOrder(); */
+//	woststr << _craft->getFlightOrder();
+	woststr << _craft->getName(_game->getLanguage());
 	_txtInterception->setText(woststr.str());
 	_txtInterception->setVisible(false);
+//	_txtInterception->setAlign(ALIGN_CENTER);
 
 	// Define the colors to be used. Note these have been further tweaked in Interfaces.rul
 	_colors[CRAFT_MIN]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color);	// 160, (10)slate gray
@@ -444,8 +456,6 @@ DogfightState::DogfightState(
 
 	// Draw damage indicator.
 	srfFrame = sstInticon->getFrame(_craft->getRules()->getSprite() + 11);
-//	srfFrame->setX(0);
-//	srfFrame->setY(0);
 	srfFrame->blit(_damage);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
@@ -726,14 +736,15 @@ void DogfightState::updateDogfight()
 	bool outRun = false;
 
 	const Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	if (_endDogfight == false
-		&& (ufo != _ufo
-			|| _craft->getLowFuel() == true
-			|| (_minimized == true
-				&& _ufo->isCrashed() == true)))
+	if (ufo != _ufo							// check that Craft's destination hasn't been changed when window minimized
+		|| _craft->getLowFuel() == true		// check if Craft is not low on fuel when window minimized
+		|| (_minimized == true
+			&& _ufo->isCrashed() == true))	// chat if UFO hasn't been shot down when window minimized
 	{
-		endDogfight();	// Check if craft is not low on fuel when window minimized, and
-		return;			// that craft's destination hasn't been changed when window minimized.
+		if (_endDogfight == false)
+			endDogfight();
+
+		return;
 	}
 
 	if (_minimized == false)
@@ -1003,7 +1014,7 @@ void DogfightState::updateDogfight()
 		const int ufoWRange = _ufo->getRules()->getWeaponRange() * 8; // Handle UFO firing.
 
 		if (_ufo->isCrashed() == true
-			|| (_ufo->getShootingAt() == _intercept // this Craft out of range and/or destroyed.
+			|| (_ufo->getShootingAt() == _slot // this Craft out of range and/or destroyed.
 				&& (_dist > ufoWRange
 					|| _craft->isDestroyed() == true)))
 		{
@@ -1011,7 +1022,7 @@ void DogfightState::updateDogfight()
 		}
 		else if (_ufo->getFireCountdown() == 0 // UFO is gtg.
 			&& (_ufo->getShootingAt() == 0
-				|| _ufo->getShootingAt() == _intercept)
+				|| _ufo->getShootingAt() == _slot)
 			&& _ufo->isCrashed() == false)
 		{
 			if (_dist <= ufoWRange
@@ -1034,19 +1045,19 @@ void DogfightState::updateDogfight()
 
 				if (altIntercepts.size() == 1) // this->craft.
 				{
-					_ufo->setShootingAt(_intercept);
+					_ufo->setShootingAt(_slot);
 					ufoFireWeapon();
 				}
 				else if (altIntercepts.size() > 1) // [ ==0 should NEVER happen.]
 				{
 					int shotCraft = static_cast<int>(Round(100. / static_cast<double>(altIntercepts.size())));
 
-					if (_ufo->getShootingAt() == _intercept)
+					if (_ufo->getShootingAt() == _slot)
 						shotCraft += 18;
 
 					if (RNG::percent(shotCraft) == true)
 					{
-						_ufo->setShootingAt(_intercept);
+						_ufo->setShootingAt(_slot);
 						ufoFireWeapon();
 					}
 					else // This is where the magic happens, Lulzor!!
@@ -1642,7 +1653,7 @@ void DogfightState::btnMinimizeClick(Action*)
 			_btnMinimizedIcon->setVisible();
 			_txtInterception->setVisible();
 
-			if (_geo->getMinimizedDfCount() == _interceptCount)
+			if (_geo->getMinimizedDfCount() == _totalIntercepts)
 			{
 				if (_geo->getDfZoomInTimer()->isRunning() == true)
 					_geo->getDfZoomInTimer()->stop();
@@ -1697,7 +1708,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	if (_geo->getDfZoomOutTimer()->isRunning() == true)
 		_geo->getDfZoomOutTimer()->stop();
 
-	if (_geo->getMinimizedDfCount() == _interceptCount - 1)
+	if (_geo->getMinimizedDfCount() == _totalIntercepts - 1)
 		_geo->storePreDfCoords();
 
 	_globe->center(
@@ -1907,51 +1918,65 @@ void DogfightState::recolor(
 }
 
 /**
- * Gets interception number.
+ * Gets interception slot.
  * @return, interception number
  */
 size_t DogfightState::getInterceptSlot() const
 {
-	return _intercept;
+	return _slot;
 }
 
 /**
- * Sets interception number. Used to draw proper number when window minimized.
+ * Sets interception slot.
  * @param intercept - #ID
  */
 void DogfightState::setInterceptSlot(const size_t intercept)
 {
-	_intercept = intercept;
+	_slot = intercept;
 }
 
 /**
- * Sets interceptions count. Used to properly position the window.
+ * Sets total interceptions count. Used to properly position the window.
  * @param intercepts - amount of interception windows
  */
-void DogfightState::setInterceptCount(const size_t intercepts)
+void DogfightState::setTotalIntercepts(const size_t intercepts)
 {
-	_interceptCount = intercepts;
+	_totalIntercepts = intercepts;
+}
 
-	calculateWindowPosition();
-	moveWindow();
+/**
+ * Calculates and positions this interception's view window.
+ */
+void DogfightState::resetInterceptPort()
+{
+	calcPortPosition();
+	placePort();
 }
 
 /**
  * Calculates dogfight window position according to number of active interceptions.
  */
-void DogfightState::calculateWindowPosition()
+void DogfightState::calcPortPosition()
 {
-	_minimizedIconX = 5;
-	_minimizedIconY = (5 * _intercept) + (16 * (_intercept - 1));
+	if (_slot > _totalIntercepts)
+		_slot = _geo->getOpenDfSlot();
 
-	if (_interceptCount == 1)
+	Log(LOG_INFO) << "\n";
+	Log(LOG_INFO) << "df:calcPortPosition";
+	Log(LOG_INFO) << "_totalIntercepts = " << _totalIntercepts;
+	Log(LOG_INFO) << "_slot = " << _slot;
+
+	_minimizedIconX = 5;
+	_minimizedIconY = (5 * _slot) + (16 * (_slot - 1));
+
+	if (_totalIntercepts == 1)
 	{
 		_x = 80;
 		_y = 52;
 	}
-	else if (_interceptCount == 2)
+	else if (_totalIntercepts == 2)
 	{
-		if (_intercept == 1)
+		if (_slot == 1)
 		{
 			_x = 80;
 			_y = 0;
@@ -1962,14 +1987,14 @@ void DogfightState::calculateWindowPosition()
 			_y = 200 - _window->getHeight(); // 96;
 		}
 	}
-	else if (_interceptCount == 3)
+	else if (_totalIntercepts == 3)
 	{
-		if (_intercept == 1)
+		if (_slot == 1)
 		{
 			_x = 80;
 			_y = 0;
 		}
-		else if (_intercept == 2)
+		else if (_slot == 2)
 		{
 			_x = 0;
 			_y = 200 - _window->getHeight(); // 96;
@@ -1982,17 +2007,17 @@ void DogfightState::calculateWindowPosition()
 	}
 	else
 	{
-		if (_intercept == 1)
+		if (_slot == 1)
 		{
 			_x =
 			_y = 0;
 		}
-		else if (_intercept == 2)
+		else if (_slot == 2)
 		{
 			_x = 320 - _window->getWidth(); // 160;
 			_y = 0;
 		}
-		else if (_intercept == 3)
+		else if (_slot == 3)
 		{
 			_x = 0;
 			_y = 200 - _window->getHeight(); // 96;
@@ -2012,7 +2037,7 @@ void DogfightState::calculateWindowPosition()
  * Relocates all dogfight window elements to calculated position.
  * This is used when multiple interceptions are running.
  */
-void DogfightState::moveWindow()
+void DogfightState::placePort()
 {
 	_window->setX(_x);
 	_window->setY(_y);
@@ -2134,8 +2159,6 @@ void DogfightState::endDogfight() // private.
 
 	if (_craft != NULL)
 		_craft->setInDogfight(false);
-
-	_geo->resetInterceptCount(true);
 }
 
 /**

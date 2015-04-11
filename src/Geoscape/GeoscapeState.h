@@ -264,13 +264,13 @@ private:
 		/// Gets the number of minimized dogfights.
 		size_t getMinimizedDfCount() const;
 		/// Multi-dogfights logic handling.
-		void handleDogfights();
+		void thinkDogfights();
 		/// Starts a new dogfight.
 		void startDogfight();
-		/// Updates total interceptions quantity in all Dogfights.
-		void resetInterceptCount(bool pre = false);
+		/// Updates interceptions windows for all Dogfights.
+		void resetInterceptPorts();
 		/// Gets first free dogfight slot.
-		int getOpenDfSlot() const;
+		size_t getOpenDfSlot() const;
 
 		/// Gets the dogfights.
 		std::list<DogfightState*>& getDogfights();

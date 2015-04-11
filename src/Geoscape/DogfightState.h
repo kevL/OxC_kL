@@ -30,7 +30,7 @@ namespace OpenXcom
 {
 
 const int
-	DST_ENGAGE		= 600,
+	DST_ENGAGE		= 620,
 	DST_STANDOFF	= 595,
 	MSG_TIMEOUT		= 38;
 
@@ -101,8 +101,8 @@ private:
 		_w1FireInterval,
 		_w2FireInterval;
 	size_t
-		_intercept,
-		_interceptCount;
+		_slot,
+		_totalIntercepts;
 	Uint8 _colors[8]; // see ColorNames enum above^
 //		_currentCraftDamageColor;
 
@@ -221,17 +221,19 @@ private:
 				const int weaponPod,
 				const bool enabled);
 
-		/// Gets interception number.
+		/// Gets interception slot.
 		size_t getInterceptSlot() const;
-		/// Sets interception number.
+		/// Sets interception slot.
 		void setInterceptSlot(const size_t intercept);
-		/// Sets interceptions count.
-		void setInterceptCount(const size_t intercepts);
 
+		/// Sets total interceptions in progress.
+		void setTotalIntercepts(const size_t intercepts);
+		/// Calculates and positions this interception's view window.
+		void resetInterceptPort();
 		/// Calculates window position according to opened interception windows.
-		void calculateWindowPosition();
+		void calcPortPosition();
 		/// Moves window to new position.
-		void moveWindow();
+		void placePort();
 
 		/// Checks if the dogfight should be ended.
 		bool dogfightEnded() const;

@@ -60,7 +60,7 @@ namespace OpenXcom
  * Creates a Craft of the specified type and assigns it the latest craft ID available.
  * @param rules	- pointer to RuleCraft
  * @param base	- pointer to Base of origin
- * @param id	- ID to assign to the craft; 0 for no id
+ * @param id	- ID to assign to the craft; 0 for no id (default 0)
  */
 Craft::Craft(
 		RuleCraft* rules,
@@ -70,10 +70,11 @@ Craft::Craft(
 		MovingTarget(),
 		_rules(rules),
 		_base(base),
-		_id(0),
+		_id(id),
+//		_id(0),
 		_fuel(0),
 		_damage(0),
-		_interceptionOrder(0),
+		_flightOrder(0),
 		_takeoff(0),
 		_status("STR_READY"),
 		_lowFuel(false),
@@ -86,8 +87,7 @@ Craft::Craft(
 {
 	_items = new ItemContainer();
 
-	if (id != 0)
-		_id = id;
+//	if (id != 0) _id = id;
 
 	for (int
 			i = 0;
@@ -140,10 +140,10 @@ void Craft::load(
 {
 	MovingTarget::load(node);
 
-	_id			= node["id"]					.as<int>(_id);
-	_fuel		= node["fuel"]					.as<int>(_fuel);
-	_damage		= node["damage"]				.as<int>(_damage);
-	_warning	= (CraftWarning)node["warning"]	.as<int>(_warning);
+	_id			= node["id"]	.as<int>(_id);
+	_fuel		= node["fuel"]	.as<int>(_fuel);
+	_damage		= node["damage"].as<int>(_damage);
+	_warning	= static_cast<CraftWarning>(node["warning"].as<int>(_warning));
 
 	size_t j = 0;
 	for (YAML::const_iterator
@@ -205,10 +205,10 @@ void Craft::load(
 		}
 	}
 
-	_status				= node["status"]			.as<std::string>(_status);
-	_lowFuel			= node["lowFuel"]			.as<bool>(_lowFuel);
-	_mission			= node["mission"]			.as<bool>(_mission);
-	_interceptionOrder	= node["interceptionOrder"]	.as<int>(_interceptionOrder);
+	_status			= node["status"]		.as<std::string>(_status);
+	_lowFuel		= node["lowFuel"]		.as<bool>(_lowFuel);
+	_mission		= node["mission"]		.as<bool>(_mission);
+	_flightOrder	= node["flightOrder"]	.as<int>(_flightOrder);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -263,10 +263,8 @@ void Craft::load(
 				}
 			}
 		}
-/*		else // Backwards compatibility ->
+		else // type = "STR_TERROR_SITE" (was "STR_ALIEN_TERROR")
 		{
-			if (type == "STR_ALIEN_TERROR")
-				type = "STR_TERROR_SITE";
 			for (std::vector<MissionSite*>::iterator
 					i = save->getMissionSites()->begin();
 					i != save->getMissionSites()->end();
@@ -279,21 +277,7 @@ void Craft::load(
 					break;
 				}
 			}
-		} */
-/*		else if (type == "STR_TERROR_SITE")
-		{
-			for (std::vector<TerrorSite*>::const_iterator
-					i = save->getTerrorSites()->begin();
-					i != save->getTerrorSites()->end();
-					++i)
-			{
-				if ((*i)->getId() == id)
-				{
-					setDestination(*i);
-					break;
-				}
-			}
-		} */
+		}
 	}
 
 	_takeoff	= node["takeoff"]	.as<int>(_takeoff);
@@ -316,7 +300,7 @@ YAML::Node Craft::save() const
 	node["id"]		= _id;
 	node["fuel"]	= _fuel;
 	node["damage"]	= _damage;
-	node["warning"]	= (int)_warning;
+	node["warning"]	= static_cast<int>(_warning);
 
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
@@ -345,23 +329,12 @@ YAML::Node Craft::save() const
 
 	node["status"] = _status;
 
-	if (_lowFuel == true)
-		node["lowFuel"] = _lowFuel;
-
-	if (_mission == true)
-		node["mission"] = _mission;
-
-	if (_inTactical == true)
-		node["inTactical"] = _inTactical;
-
-	if (_interceptionOrder != 0)
-		node["interceptionOrder"] = _interceptionOrder;
-
-	if (_takeoff != 0)
-		node["takeoff"] = _takeoff;
-
-	if (_name.empty() == false)
-		node["name"] = Language::wstrToUtf8(_name);
+	if (_lowFuel == true)		node["lowFuel"]		= _lowFuel;
+	if (_mission == true)		node["mission"]		= _mission;
+	if (_inTactical == true)	node["inTactical"]	= _inTactical;
+	if (_flightOrder != 0)		node["flightOrder"]	= _flightOrder;
+	if (_takeoff != 0)			node["takeoff"]		= _takeoff;
+	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
 
 	return node;
 }
@@ -872,7 +845,7 @@ void Craft::think()
 	if (reachedDestination() == true
 		&& _dest == dynamic_cast<Target*>(_base))
 	{
-		setInterceptionOrder(0);
+		setFlightOrder(0);
 		setDestination(NULL);
 		setSpeed(0);
 
@@ -1142,7 +1115,7 @@ int Craft::getVehicleCount(const std::string& vehicle) const
 
 /**
  * Gets the craft's dogfight status.
- * @return, true if the craft is in a dogfight
+ * @return, true if this Craft is in a dogfight
  */
 bool Craft::isInDogfight() const
 {
@@ -1151,7 +1124,7 @@ bool Craft::isInDogfight() const
 
 /**
  * Sets the craft's dogfight status.
- * @param inDogfight - true if it's in dogfight
+ * @param inDogfight - true if this Craft is in dogfight
  */
 void Craft::setInDogfight(const bool inDogfight)
 {
@@ -1159,21 +1132,22 @@ void Craft::setInDogfight(const bool inDogfight)
 }
 
 /**
- * Sets interception order (first craft to leave the base gets 1, second 2, etc.).
- * @param order - interception order
+ * Sets flight order.
+ * @note First craft to leave the base gets 1, second 2, etc.
+ * @param order - flight order
  */
-void Craft::setInterceptionOrder(const int order)
+void Craft::setFlightOrder(const int order)
 {
-	_interceptionOrder = order;
+	_flightOrder = order;
 }
 
 /**
- * Gets interception order.
- * @return, interception order
+ * Gets flight order.
+ * @return, flight order
  */
-int Craft::getInterceptionOrder() const
+int Craft::getFlightOrder() const
 {
-	return _interceptionOrder;
+	return _flightOrder;
 }
 
 /**
@@ -1220,9 +1194,7 @@ int Craft::getLoadCapacity() const
  */
 int Craft::getLoadCurrent()
 {
-	_loadCur = getNumEquipment() + getSpaceUsed() * 10;
-
-	return _loadCur;
+	return (_loadCur = (getNumEquipment() + getSpaceUsed() * 10));
 }
 
 /**

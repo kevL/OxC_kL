@@ -73,7 +73,7 @@ private:
 		_damage,
 		_fuel,
 		_id,
-		_interceptionOrder,
+		_flightOrder,
 		_takeoff;
 
 	std::string _status;
@@ -236,10 +236,10 @@ private:
 		/// Gets if the craft is in dogfight.
 		bool isInDogfight() const;
 
-		/// Sets interception order (first craft to leave the base gets 1, second 2, etc.).
-		void setInterceptionOrder(const int order);
-		/// Gets interception number.
-		int getInterceptionOrder() const;
+		/// Sets flight order (first craft to leave the base gets 1, second 2, etc.).
+		void setFlightOrder(const int order);
+		/// Gets flight number.
+		int getFlightOrder() const;
 
 		/// Gets the craft's unique id.
 		CraftId getUniqueId() const;

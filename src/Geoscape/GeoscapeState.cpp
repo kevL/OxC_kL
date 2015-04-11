@@ -960,7 +960,7 @@ GeoscapeState::GeoscapeState()
 	_dfZoomInTimer->onTimer((StateHandler)& GeoscapeState::dfZoomIn);
 	_dfZoomOutTimer->onTimer((StateHandler)& GeoscapeState::dfZoomOut);
 	_dfStartTimer->onTimer((StateHandler)& GeoscapeState::startDogfight);
-	_dfTimer->onTimer((StateHandler)& GeoscapeState::handleDogfights);
+	_dfTimer->onTimer((StateHandler)& GeoscapeState::thinkDogfights);
 
 	timeDisplay();
 }
@@ -1715,7 +1715,7 @@ void GeoscapeState::time5Seconds()
 					switch (ufo->getStatus())
 					{
 						case Ufo::FLYING:
-							// Not more than 4 interceptions at a time. kL_note: I thought you could do 6 in orig.
+							// Not more than 4 interceptions at a time. kL_note: I thought orig could do up to 6.
 							if (_dogfights.size() + _dogfightsToStart.size() > 3)
 							{
 								++j;
@@ -1730,7 +1730,6 @@ void GeoscapeState::time5Seconds()
 																			*j,
 																			ufo,
 																			this));
-
 								if (_dfStartTimer->isRunning() == false)
 								{
 									_pause = true;
@@ -1854,6 +1853,8 @@ void GeoscapeState::time5Seconds()
 					else
 						++j;
 				}
+
+				resetInterceptPorts();
 			}
 
 			delete *i;
@@ -3728,8 +3729,10 @@ size_t GeoscapeState::getMinimizedDfCount() const
 /**
  * Dogfight logic.
  */
-void GeoscapeState::handleDogfights()
+void GeoscapeState::thinkDogfights()
 {
+	static bool resetPorts; // inits to false.
+
 	_minimizedDogfights = 0;
 
 	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
@@ -3738,7 +3741,7 @@ void GeoscapeState::handleDogfights()
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->getUfo()->setEngaged(false);
+		(*i)->getUfo()->setEngaged(false); // huh
 	}
 
 	i = _dogfights.begin();
@@ -3757,6 +3760,7 @@ void GeoscapeState::handleDogfights()
 
 			delete *i;
 			i = _dogfights.erase(i);
+			resetPorts = true;
 		}
 		else
 			++i;
@@ -3768,6 +3772,10 @@ void GeoscapeState::handleDogfights()
 		_dogfightEnded = true;
 		_dfZoomOutTimer->start();
 	}
+	else if (resetPorts == true)
+		resetInterceptPorts();
+
+	resetPorts = false;
 }
 
 /**
@@ -3775,16 +3783,11 @@ void GeoscapeState::handleDogfights()
  */
 void GeoscapeState::startDogfight()
 {
-//	if (_gameSave->getDfZoom() == std::numeric_limits<size_t>::max()) // || _geo->getMinimizedDfCount() != _interceptCount
-//		_gameSave->setDfZoom(_globe->getZoom());
-
 	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
 	{
 		if (_dfZoomInTimer->isRunning() == false)
-		{
-//			_globe->rotateStop();
 			_dfZoomInTimer->start();
-		}
+//			_globe->rotateStop();
 	}
 	else
 	{
@@ -3800,35 +3803,32 @@ void GeoscapeState::startDogfight()
 			_dogfightsToStart.pop_back();
 
 			_dogfights.back()->setInterceptSlot(getOpenDfSlot());
-//			_dogfights.back()->setInterceptCount(_dogfights.size() + _dogfightsToStart.size());
 		}
 
-		// Set quantity of interceptions for all dogfights.
-		resetInterceptCount();
-/*		for (std::list<DogfightState*>::const_iterator
-				i = _dogfights.begin();
-				i != _dogfights.end();
-				++i)
-		{
-			(*i)->setInterceptCount(_dogfights.size());
-		} */
+		resetInterceptPorts(); // set window positions for all dogfights
 	}
 }
 
 /**
- * Updates total interceptions quantity in all Dogfights.
- * @param pre - true if called just before a DF ends (default false)
+ * Updates total current interceptions quantity in all Dogfights
+ * and repositions their view windows accordingly.
  */
-void GeoscapeState::resetInterceptCount(bool pre)
+void GeoscapeState::resetInterceptPorts()
 {
-	const size_t qty = _dogfights.size() - static_cast<size_t>(pre);
+	for (std::list<DogfightState*>::const_iterator
+			i = _dogfights.begin();
+			i != _dogfights.end();
+			++i)
+	{
+		(*i)->setTotalIntercepts(_dogfights.size());
+	}
 
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->setInterceptCount(qty);
+		(*i)->resetInterceptPort(); // set window positions for each dogfight
 	}
 }
 
@@ -3836,7 +3836,7 @@ void GeoscapeState::resetInterceptCount(bool pre)
  * Gets the first free dogfight slot available.
  * @return, the next slot open
  */
-int GeoscapeState::getOpenDfSlot() const
+size_t GeoscapeState::getOpenDfSlot() const
 {
 	size_t slot = 1;
 
