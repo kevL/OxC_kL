@@ -3828,7 +3828,7 @@ void GeoscapeState::resetInterceptPorts()
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->resetInterceptPort(); // set window positions for each dogfight
+		(*i)->resetInterceptPort(); // set window position for each dogfight
 	}
 }
 

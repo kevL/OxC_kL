@@ -1121,7 +1121,7 @@ bool Craft::isInDogfight() const
 
 /**
  * Sets the craft's dogfight status.
- * @param inDogfight - true if this Craft is in dogfight
+ * @param inDogfight - true if this Craft is in a dogfight
  */
 void Craft::setInDogfight(const bool inDogfight)
 {
@@ -1130,7 +1130,7 @@ void Craft::setInDogfight(const bool inDogfight)
 
 /**
  * Sets flight order.
- * @note First craft to leave the base gets 1, second 2, etc.
+ * @note First craft airborne gets 1, second 2, etc.
  * @param order - flight order
  */
 void Craft::setFlightOrder(const int order)

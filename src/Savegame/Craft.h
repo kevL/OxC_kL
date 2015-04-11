@@ -209,48 +209,48 @@ private:
 		/// Consumes the craft's fuel.
 		void consumeFuel();
 
-		/// Repairs the craft.
+		/// Repairs the Craft.
 		void repair();
-		/// Rearms the craft.
+		/// Rearms the Craft.
 		std::string rearm(const Ruleset* rules);
-		/// Refuels the craft.
+		/// Refuels the Craft.
 		void refuel();
 
-		/// Sets the craft's battlescape status.
+		/// Sets the Craft's battlescape status.
 		void setInBattlescape(const bool battle);
-		/// Gets if the craft is in battlescape.
+		/// Gets if the Craft is in battlescape.
 		bool isInBattlescape() const;
 
-		/// Gets if craft is destroyed during dogfights.
+		/// Gets if Craft is destroyed during dogfights.
 		bool isDestroyed() const;
 
-		/// Gets the amount of space available inside a craft.
+		/// Gets the amount of space available inside Craft.
 		int getSpaceAvailable() const;
-		/// Gets the amount of space used inside a craft.
+		/// Gets the amount of space used inside Craft.
 		int getSpaceUsed() const;
-		/// Gets the craft's vehicles of a certain type.
+		/// Gets the Craft's vehicles of a certain type.
 		int getVehicleCount(const std::string& vehicle) const;
 
-		/// Sets the craft's dogfight status.
+		/// Sets the Craft's dogfight status.
 		void setInDogfight(const bool inDogfight);
-		/// Gets if the craft is in dogfight.
+		/// Gets if the Craft is in dogfight.
 		bool isInDogfight() const;
 
-		/// Sets flight order (first craft to leave the base gets 1, second 2, etc.).
+		/// Sets the Craft's flight order.
 		void setFlightOrder(const int order);
-		/// Gets flight number.
+		/// Gets the Craft's flight order.
 		int getFlightOrder() const;
 
-		/// Gets the craft's unique id.
+		/// Gets the Craft's unique id.
 		CraftId getUniqueId() const;
 
-		/// Sets capacity load.
+		/// Sets the Craft's capacity load.
 		void setLoadCapacity(const int load);
-		/// Gets capacity load.
+		/// Gets the Craft's capacity load.
 		int getLoadCapacity() const;
-		/// Sets current load.
+		/// Sets the Craft's current load.
 //		void setLoadCurrent(const int load);
-		/// Gets current load.
+		/// Gets the Craft's current load.
 		int getLoadCurrent();
 
 		/// Gets this craft's current CraftWarning status.
