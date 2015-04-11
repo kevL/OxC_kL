@@ -1961,11 +1961,6 @@ void DogfightState::calcPortPosition()
 	if (_slot > _totalIntercepts)
 		_slot = _geo->getOpenDfSlot();
 
-	Log(LOG_INFO) << "\n";
-	Log(LOG_INFO) << "df:calcPortPosition";
-	Log(LOG_INFO) << "_totalIntercepts = " << _totalIntercepts;
-	Log(LOG_INFO) << "_slot = " << _slot;
-
 	_minimizedIconX = 5;
 	_minimizedIconY = (5 * _slot) + (16 * (_slot - 1));
 

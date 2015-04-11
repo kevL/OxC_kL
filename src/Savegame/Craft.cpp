@@ -71,7 +71,6 @@ Craft::Craft(
 		_rules(rules),
 		_base(base),
 		_id(id),
-//		_id(0),
 		_fuel(0),
 		_damage(0),
 		_flightOrder(0),
@@ -86,8 +85,6 @@ Craft::Craft(
 		_warned(false) // do not save-to-file; ie, warn player after reloading
 {
 	_items = new ItemContainer();
-
-//	if (id != 0) _id = id;
 
 	for (int
 			i = 0;
