@@ -121,19 +121,14 @@ void MedikitView::draw()
 	_redraw = false;
 
 
-	if (_selectedPart == -1)
-		return;
+	if (_selectedPart != -1)
+	{
+		_txtPart->setText(_game->getLanguage()->getString(BODY_PARTS[static_cast<size_t>(_selectedPart)]));
 
-
-	std::wostringstream
-		woststr1,
-		woststr2;
-
-	woststr1 << _game->getLanguage()->getString(BODY_PARTS[static_cast<size_t>(_selectedPart)]);
-	_txtPart->setText(woststr1.str());
-
-	woststr2 << _unit->getFatalWound(_selectedPart);
-	_txtWound->setText(woststr2.str());
+		std::wostringstream woststr;
+		woststr << _unit->getFatalWound(_selectedPart);
+		_txtWound->setText(woststr.str());
+	}
 }
 
 /**
@@ -188,9 +183,12 @@ void MedikitView::autoSelectPart()
 		if (_unit->getFatalWound(i) != 0)
 		{
 			_selectedPart = i;
-			break;
+			return;
 		}
 	}
+
+	_txtPart->setVisible(false);
+	_txtWound->setVisible(false);
 }
 
 }

@@ -750,9 +750,11 @@ void BattlescapeGame::endTurnPhase()
 			{
 				tile = (*i)->getTile();
 				if (tile != NULL
-					&& (*i)->getHealth() > 0
-					&& ((*i)->getGeoscapeSoldier() != NULL
-						|| (*i)->getUnitRules()->isMechanical() == false))
+					&& (tile->getSmoke() != 0
+						|| tile->getFire() != 0))
+//					&& (*i)->getHealth() > 0
+//					&& ((*i)->getGeoscapeSoldier() != NULL
+//						|| (*i)->getUnitRules()->isMechanical() == false))
 				{
 					tile->endTilePhase(); // Damage tile's unit w/ Fire & Smoke at end of unit's faction's Turn-phase.
 				}
@@ -768,8 +770,12 @@ void BattlescapeGame::endTurnPhase()
 					++i)
 			{
 				tile = _battleSave->getTiles()[i];
-				if (tile->getInventory()->empty() == false)
+				if ((tile->getSmoke() != 0
+						|| tile->getFire() != 0)
+					&& tile->getInventory()->empty() == false)
+				{
 					tile->endTilePhase(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
+				}
 			}
 
 			for (std::vector<BattleUnit*>::const_iterator // reset the takenExpl(smoke) and takenFire flags on every unit.

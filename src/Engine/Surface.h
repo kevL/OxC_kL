@@ -308,7 +308,7 @@ protected:
 				bool halfLeft = false); // <-kL_add
 
 		/// Invalidate the surface: force it to be redrawn
-		void invalidate(bool valid = true);
+		void invalidate(bool redraw = true);
 
 		/// Gets the tooltip of the surface.
 		std::string getTooltip() const;

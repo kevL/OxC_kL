@@ -220,6 +220,13 @@ MedikitState::MedikitState(BattleAction* action)
 	const int hp = _action->targetUnit->getBaseStats()->health;
 	_numTotalHP->setValue(static_cast<unsigned>(hp));
 
+//	_numHealth->setBordered();
+//	_numStun->setBordered();
+//	_numEnergy->setBordered();
+//	_numMorale->setBordered();
+//	_numTimeUnits->setBordered();
+//	_numTotalHP->setBordered();
+
 	_barHealth->setScale();
 	_barEnergy->setScale();
 	_barMorale->setScale();
@@ -264,13 +271,13 @@ MedikitState::MedikitState(BattleAction* action)
 	_txtHeal->setBig();
 
 	_txtPart->setHighContrast();
-
 	_txtWound->setHighContrast();
 
 	_btnClose->onMouseClick((ActionHandler)& MedikitState::onCloseClick);
 	_btnClose->onKeyboardPress(
 					(ActionHandler)& MedikitState::onCloseClick,
 					Options::keyCancel);
+
 	_btnHeal->onMouseClick((ActionHandler)& MedikitState::onHealClick);
 	_btnStim->onMouseClick((ActionHandler)& MedikitState::onStimClick);
 	_btnPain->onMouseClick((ActionHandler)& MedikitState::onPainClick);
@@ -329,9 +336,9 @@ void MedikitState::onHealClick(Action*)
 		++_action->actor->getStatistics()->medikitApplications;
 
 		_action->targetUnit->heal(
-					_mediView->getSelectedPart(),
-					itRule->getWoundRecovery(),
-					itRule->getHealthRecovery());
+								_mediView->getSelectedPart(),
+								itRule->getWoundRecovery(),
+								itRule->getHealthRecovery());
 
 		_action->weapon->setHealQuantity(heal - 1);
 		_mediView->autoSelectPart();
@@ -362,8 +369,8 @@ void MedikitState::onStimClick(Action*)
 		++_action->actor->getStatistics()->medikitApplications;
 
 		_action->targetUnit->stimulant(
-							itRule->getEnergyRecovery(),
-							itRule->getStunRecovery());
+									itRule->getEnergyRecovery(),
+									itRule->getStunRecovery());
 		_action->weapon->setStimulantQuantity(stimulant - 1);
 
 		update();

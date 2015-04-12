@@ -3180,13 +3180,13 @@ bool BattleUnit::postMissionProcedures(const SavedGame* const savedGame)
  */
 int BattleUnit::improveStat(int xp) // private.
 {
-	int teir = 1;
+	int tier = 1;
 
-	if		(xp > 10)	teir = 4;
-	else if (xp > 5)	teir = 3;
-	else if (xp > 2)	teir = 2;
+	if		(xp > 10)	tier = 4;
+	else if (xp >  5)	tier = 3;
+	else if (xp >  2)	tier = 2;
 
-	return (teir / 2 + RNG::generate(0, teir));
+	return (tier / 2 + RNG::generate(0, tier));
 }
 
 /**
@@ -3287,7 +3287,7 @@ void BattleUnit::heal(
  */
 void BattleUnit::painKillers()
 {
-	int lostHealth = getBaseStats()->health - _health;
+	const int lostHealth = getBaseStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
 		_morale = std::min(
