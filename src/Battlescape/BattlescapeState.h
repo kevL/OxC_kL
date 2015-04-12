@@ -410,6 +410,8 @@ private:
 		/// Gets the Energy bar from icons.
 		Bar* getEnergyBar() const;
 
+		/// Checks if it's okay to show a rookie's kill/stun alien icon.
+		bool allowAlienMark() const;
 		/// Updates experience data for the currently selected soldier.
 		void updateExperienceInfo();
 		/// Updates tile info for the tile under mouseover.

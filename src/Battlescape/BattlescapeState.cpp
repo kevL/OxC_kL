@@ -1343,7 +1343,7 @@ void BattlescapeState::mapOver(Action* action)
 
 		_txtOrder->setVisible(showInfo);
 		_lstSoldierInfo->setVisible(showInfo);
-		_alienMark->setVisible(showInfo);
+		_alienMark->setVisible(showInfo && allowAlienMark());
 //		_txtHasKill->setVisible(showInfo);
 		_showSoldierData = showInfo;
 	}
@@ -2364,7 +2364,7 @@ void BattlescapeState::btnConsoleToggle(Action*)
 
 			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
-			_alienMark->setVisible();
+			_alienMark->setVisible(allowAlienMark());
 //			_txtHasKill->setVisible();
 			_showSoldierData = true;
 		}
@@ -2389,7 +2389,7 @@ void BattlescapeState::btnConsoleToggle(Action*)
 			_txtTurn->setVisible();
 			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
-			_alienMark->setVisible();
+			_alienMark->setVisible(allowAlienMark());
 //			_txtHasKill->setVisible();
 		} */
 
@@ -3695,7 +3695,7 @@ void BattlescapeState::mouseInIcons(Action*)
 
 	_txtOrder->setVisible();
 	_lstSoldierInfo->setVisible();
-	_alienMark->setVisible();
+	_alienMark->setVisible(allowAlienMark());
 //	_txtHasKill->setVisible();
 	_showSoldierData = true;
 
@@ -3864,7 +3864,7 @@ void BattlescapeState::toggleIcons(bool vis)
 
 	_txtOrder->setVisible(vis);
 	_lstSoldierInfo->setVisible(vis);
-	_alienMark->setVisible(vis);
+	_alienMark->setVisible(vis && allowAlienMark());
 //	_txtHasKill->setVisible(vis);
 	_showSoldierData = vis;
 
@@ -3998,6 +3998,16 @@ NumberText* BattlescapeState::getEnergyField() const
 Bar* BattlescapeState::getEnergyBar() const
 {
 	return _barEnergy;
+}
+
+/**
+ * Checks if it's okay to show a rookie's kill/stun alien icon.
+ * @return, true if okay to show icon
+ */
+bool BattlescapeState::allowAlienMark() const
+{
+	return _battleSave->getSelectedUnit() != NULL
+		&& _battleSave->getSelectedUnit()->hasFirstKill();
 }
 
 /**
