@@ -22,6 +22,7 @@
 //#include <cstdlib>
 //#include <sstream>
 
+#include "GeoscapeCraftState.h"
 #include "GeoscapeState.h"
 #include "Globe.h"
 
@@ -304,9 +305,9 @@ DogfightState::DogfightState(
 	_btnStandoff->copy(_window);
 	_btnStandoff->setGroup(&_mode);
 	_btnStandoff->onMouseClick((ActionHandler)& DogfightState::btnStandoffPress);
-	_btnStandoff->onKeyboardPress(
-					(ActionHandler)& DogfightState::btnStandoffPress,
-					Options::keyOk);
+//	_btnStandoff->onKeyboardPress(
+//					(ActionHandler)& DogfightState::btnStandoffPress,
+//					Options::keyOk); // used for Maximize all minimized interceptor icons.
 
 	srf = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srf != NULL)
@@ -324,10 +325,10 @@ DogfightState::DogfightState(
 //	srfFrame->setX(0);
 //	srfFrame->setY(0);
 	srfFrame->blit(_btnMinimizedIcon);
-	_btnMinimizedIcon->onMouseClick((ActionHandler)& DogfightState::btnMinimizedIconClick);
+	_btnMinimizedIcon->onMousePress((ActionHandler)& DogfightState::btnMinimizedIconPress);
 	_btnMinimizedIcon->onKeyboardPress(
-					(ActionHandler)& DogfightState::btnMinimizedIconClick,
-					Options::keyCancel);
+					(ActionHandler)& DogfightState::btnMinimizedIconPress,
+					Options::keyOk); // was keyCancel
 	_btnMinimizedIcon->setVisible(false);
 
 	std::wostringstream woststr;
@@ -1573,8 +1574,16 @@ void DogfightState::btnDisengagePress(Action*)
 	{
 		_end = true;
 		setStatus("STR_DISENGAGING");
-
 		_targetDist = DST_ENGAGE + 1;
+	}
+
+	if (_geo->getMinimizedDfCount() == _totalIntercepts - 1)
+	{
+		if (_geo->getDfZoomInTimer()->isRunning() == true)
+			_geo->getDfZoomInTimer()->stop();
+
+		if (_geo->getDfZoomOutTimer()->isRunning() == false)
+			_geo->getDfZoomOutTimer()->start();
 	}
 }
 
@@ -1678,53 +1687,63 @@ void DogfightState::btnMinimizeClick(Action*)
  * Maximizes the dogfight window.
  * @param action - pointer to an Action
  */
-void DogfightState::btnMinimizedIconClick(Action*)
+void DogfightState::btnMinimizedIconPress(Action* action)
 {
-	_texture->clear();
+//	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button != SDL_BUTTON_RIGHT)
+	{
+		_texture->clear();
 
-	Surface* const srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
-	if (srfTexture != NULL)
-		srfTexture->blit(_texture);
+		Surface* const srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
+		if (srfTexture != NULL)
+			srfTexture->blit(_texture);
 
-	_minimized = false;
+		_minimized = false;
 
-	_window->setVisible();
-	_btnStandoff->setVisible();
-	_btnCautious->setVisible();
-	_btnStandard->setVisible();
-	_btnAggressive->setVisible();
-	_btnDisengage->setVisible();
-	_btnUfo->setVisible();
-	_texture->setVisible();
-	_btnMinimize->setVisible();
-	_battle->setVisible();
-	_weapon1->setVisible();
-	_range1->setVisible();
-	_weapon2->setVisible();
-	_range2->setVisible();
-	_damage->setVisible();
-	_txtAmmo1->setVisible();
-	_txtAmmo2->setVisible();
-	_txtDistance->setVisible();
-	_txtStatus->setVisible();
-	_txtTitle->setVisible();
+		_window->setVisible();
+		_btnStandoff->setVisible();
+		_btnCautious->setVisible();
+		_btnStandard->setVisible();
+		_btnAggressive->setVisible();
+		_btnDisengage->setVisible();
+		_btnUfo->setVisible();
+		_texture->setVisible();
+		_btnMinimize->setVisible();
+		_battle->setVisible();
+		_weapon1->setVisible();
+		_range1->setVisible();
+		_weapon2->setVisible();
+		_range2->setVisible();
+		_damage->setVisible();
+		_txtAmmo1->setVisible();
+		_txtAmmo2->setVisible();
+		_txtDistance->setVisible();
+		_txtStatus->setVisible();
+		_txtTitle->setVisible();
 
-	_btnMinimizedIcon->setVisible(false);
-	_txtInterception->setVisible(false);
-	_preview->setVisible(false);
+		_btnMinimizedIcon->setVisible(false);
+		_txtInterception->setVisible(false);
+		_preview->setVisible(false);
 
-	if (_geo->getDfZoomOutTimer()->isRunning() == true)
-		_geo->getDfZoomOutTimer()->stop();
+		if (_geo->getDfZoomOutTimer()->isRunning() == true)
+			_geo->getDfZoomOutTimer()->stop();
 
-	if (_geo->getMinimizedDfCount() == _totalIntercepts - 1)
-		_geo->storePreDfCoords();
+		if (_geo->getMinimizedDfCount() == _totalIntercepts - 1)
+			_geo->storePreDfCoords();
 
-	_globe->center(
-				_craft->getLongitude(),
-				_craft->getLatitude());
+		_globe->center(
+					_craft->getLongitude(),
+					_craft->getLatitude());
 
-	if (_geo->getDfZoomInTimer()->isRunning() == false)
-		_geo->getDfZoomInTimer()->start();
+		if (_geo->getDfZoomInTimer()->isRunning() == false)
+			_geo->getDfZoomInTimer()->start();
+	}
+	else //if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		_game->pushState(new GeoscapeCraftState(
+											_craft,
+											_globe,
+											NULL,
+											_geo));
 }
 
 /**

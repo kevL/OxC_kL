@@ -198,7 +198,7 @@ private:
 		/// Handler for clicking the Minimize button.
 		void btnMinimizeClick(Action* action);
 		/// Handler for clicking the minimized interception window icon.
-		void btnMinimizedIconClick(Action* action);
+		void btnMinimizedIconPress(Action* action);
 
 		/// Returns true if state is minimized.
 		bool isMinimized() const;

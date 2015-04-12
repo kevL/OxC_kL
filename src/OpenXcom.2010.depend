@@ -4387,7 +4387,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1427831954 f:\git\openxcom\src\resource\resourcepack.h
+1428800040 f:\git\openxcom\src\resource\resourcepack.h
 
 1426969223 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4855,7 +4855,7 @@
 
 1428043741 f:\git\openxcom\src\savegame\production.h
 
-1428793628 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
+1428795073 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
 	"ManufactureInfoState.h"
 	"../Engine/Game.h"
@@ -4939,7 +4939,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1426220109 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1428793074 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureStartState.h"
 	"../Engine/Game.h"
@@ -6561,7 +6561,7 @@
 	"Language.h"
 	"Surface.h"
 
-1427176148 source:f:\git\openxcom\src\engine\game.cpp
+1428803453 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7069,8 +7069,9 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428760070 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1428802952 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
+	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
 	"../Engine/Action.h"
@@ -7101,7 +7102,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1428753795 f:\git\openxcom\src\geoscape\dogfightstate.h
+1428804329 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1426445097 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7149,7 +7150,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1428747062 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1428792299 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7846,7 +7847,7 @@
 	"../Geoscape/GeoscapeState.h"
 	"../Resource/ResourcePack.h"
 
-1424390938 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
+1428804614 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -8416,7 +8417,7 @@
 
 1427081525 f:\git\openxcom\src\savegame\serializationhelper.h
 
-1427831917 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1428800040 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Music.h"
