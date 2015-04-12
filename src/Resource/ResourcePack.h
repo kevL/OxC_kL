@@ -57,8 +57,8 @@ private:
 
 	/// Gets a random music. This is private to prevent access, use playMusic() instead.
 	Music* getRandomMusic( // sza_MusicRules
-			const std::string& name,
-			const std::string& terrain) const;
+			const std::string& track,
+			const std::string& terrainRule) const;
 
 
 	protected:
@@ -129,11 +129,11 @@ private:
 			SurfaceSet* getSurfaceSet(const std::string& name) const;
 
 			/// Gets a particular music.
-			Music* getMusic(const std::string& name) const;
+			Music* getMusic(const std::string& track) const;
 			/// Plays a particular music.
 			void playMusic(
-					const std::string& name,
-					const std::string& terrain = "", // kL, sza_MusicRules
+					const std::string& track,
+					const std::string& terrainRule = "", // kL, sza_MusicRules
 					int loops = -1);
 			/// Fades the currently playing music.
 			void fadeMusic(
@@ -141,12 +141,12 @@ private:
 					const int fadeDur);
 			/// Clear a music assignment
 			void ClearMusicAssignment( // sza_MusicRules
-					const std::string& name,
-					const std::string& terrain);
+					const std::string& track,
+					const std::string& terrainRule);
 			/// Make a music assignment
 			void MakeMusicAssignment( // sza_MusicRules
-					const std::string& name,
-					const std::string& terrain,
+					const std::string& track,
+					const std::string& terrainRule,
 					const std::vector<std::string>& filenames,
 					const std::vector<int>& midiIndexes);
 

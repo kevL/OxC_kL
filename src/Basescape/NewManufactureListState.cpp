@@ -179,7 +179,7 @@ void NewManufactureListState::lstProdClick(Action*)
 		}
 	} */
 
-	RuleManufacture* const manufRule = _possibleProductions[_lstManufacture->getSelectedRow()];
+	const RuleManufacture* const manufRule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (manufRule->getCategory() == "STR_CRAFT"
 		&& _base->getAvailableHangars() - _base->getUsedHangars() < 1)
 	{

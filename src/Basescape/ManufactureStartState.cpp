@@ -48,14 +48,14 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the productions start screen.
  * @param base - pointer to the Base to get info from
- * @param item - pointer to RuleManufacture to produce
+ * @param manufRule - pointer to RuleManufacture to produce
  */
 ManufactureStartState::ManufactureStartState(
 		Base* base,
-		RuleManufacture* item)
+		const RuleManufacture* const manufRule)
 	:
 		_base(base),
-		_item(item)
+		_manufRule(manufRule)
 {
 	_screen = false;
 
@@ -79,98 +79,81 @@ ManufactureStartState::ManufactureStartState(
 
 	setPalette(
 			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color); //6
+			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
 
-	add(_window, "window", "allocateManufacture");
-	add(_txtTitle, "text", "allocateManufacture");
-	add(_txtManHour, "text", "allocateManufacture");
-	add(_txtCost, "text", "allocateManufacture");
-	add(_txtWorkSpace, "text", "allocateManufacture");
+	add(_window,		"window",	"allocateManufacture");
+	add(_txtTitle,		"text",		"allocateManufacture");
+	add(_txtManHour,	"text",		"allocateManufacture");
+	add(_txtCost,		"text",		"allocateManufacture");
+	add(_txtWorkSpace,	"text",		"allocateManufacture");
 
-	add(_txtRequiredItemsTitle, "text", "allocateManufacture");
-	add(_txtItemNameColumn, "text", "allocateManufacture");
-	add(_txtUnitRequiredColumn, "text", "allocateManufacture");
-	add(_txtUnitAvailableColumn, "text", "allocateManufacture");
-	add(_lstRequiredItems, "list", "allocateManufacture");
+	add(_txtRequiredItemsTitle,		"text", "allocateManufacture");
+	add(_txtItemNameColumn,			"text", "allocateManufacture");
+	add(_txtUnitRequiredColumn,		"text", "allocateManufacture");
+	add(_txtUnitAvailableColumn,	"text", "allocateManufacture");
+	add(_lstRequiredItems,			"list", "allocateManufacture");
 
-	add(_btnCancel, "button", "allocateManufacture");
-	add(_btnStart, "button", "allocateManufacture");
+	add(_btnCancel,	"button", "allocateManufacture");
+	add(_btnStart,	"button", "allocateManufacture");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
-	_txtTitle->setText(tr(_item->getName()));
+	_txtTitle->setText(tr(_manufRule->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-//	_txtManHour->setColor(Palette::blockOffset(13)+10);
 	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT")
-							.arg(_item->getManufactureTime()));
+							.arg(_manufRule->getManufactureTime()));
 
-//	_txtCost->setColor(Palette::blockOffset(13)+10);
-//	_txtCost->setSecondaryColor(Palette::blockOffset(13));
 	_txtCost->setText(tr("STR_COST_PER_UNIT_")
-							.arg(Text::formatFunding(_item->getManufactureCost())));
+							.arg(Text::formatFunding(_manufRule->getManufactureCost())));
 
-//	_txtWorkSpace->setColor(Palette::blockOffset(13)+10);
-//	_txtWorkSpace->setSecondaryColor(Palette::blockOffset(13));
 	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED")
-							.arg(_item->getRequiredSpace()));
+							.arg(_manufRule->getRequiredSpace()));
 
-//	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ManufactureStartState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 							(ActionHandler)& ManufactureStartState::btnCancelClick,
 							Options::keyCancel);
 
-	const std::map<std::string, int>& requiredItems (_item->getRequiredItems());
+	const std::map<std::string, int>& requiredItems (_manufRule->getRequiredItems()); // init
 	const int availableWorkSpace = _base->getFreeWorkshops();
-	bool productionPossible (_game->getSavedGame()->getFunds() > _item->getManufactureCost());	// init
-	productionPossible &= (availableWorkSpace > 0);												// nifty.
+	bool productionPossible (_game->getSavedGame()->getFunds() > _manufRule->getManufactureCost());	// init
+	productionPossible &= (availableWorkSpace > 0);													// nifty.
 
-//	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
 	_txtRequiredItemsTitle->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
 
-//	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
 	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));
 
-//	_txtUnitRequiredColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitRequiredColumn->setText(tr("STR_UNITS_REQUIRED"));
 
-//	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
 
-//	_lstRequiredItems->setColor(Palette::blockOffset(13));
-//	_lstRequiredItems->setArrowColor(Palette::blockOffset(15)+1);
-//	_lstRequiredItems->setBackground(_window);
 	_lstRequiredItems->setColumns(3, 140, 60, 40);
 
 	const ItemContainer* const itemContainer (base->getItems()); // init.
-	int row = 0;
+//	int row = 0;
 	for (std::map<std::string, int>::const_iterator
-			iter = requiredItems.begin();
-			iter != requiredItems.end();
-			++iter)
+			i = requiredItems.begin();
+			i != requiredItems.end();
+			++i)
 	{
 		std::wostringstream
-			s1,
-			s2;
-		s1 << L'\x01' << iter->second;
-		s2 << L'\x01' << itemContainer->getItem(iter->first);
-		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
+			woststr1,
+			woststr2;
+		woststr1 << L'\x01' << i->second;
+		woststr2 << L'\x01' << itemContainer->getItem(i->first);
+		productionPossible &= (itemContainer->getItem(i->first) >= i->second);
 		_lstRequiredItems->addRow(
 								3,
-								tr(iter->first).c_str(),
-								s1.str().c_str(),
-								s2.str().c_str());
-//		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
-
-		++row;
+								tr(i->first).c_str(),
+								woststr1.str().c_str(),
+								woststr2.str().c_str());
+//		_lstRequiredItems->setCellColor(row++, 0, Palette::blockOffset(13)+10);
 	}
 
 	const bool vis = (requiredItems.empty() == false);
@@ -180,7 +163,6 @@ ManufactureStartState::ManufactureStartState(
 	_txtUnitAvailableColumn->setVisible(vis);
 	_lstRequiredItems->setVisible(vis);
 
-//	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(tr("STR_START_PRODUCTION"));
 	_btnStart->onMouseClick((ActionHandler)& ManufactureStartState::btnStartClick);
 	_btnStart->onKeyboardPress(
@@ -206,7 +188,7 @@ void ManufactureStartState::btnStartClick(Action*)
 {
 	_game->pushState(new ManufactureInfoState(
 											_base,
-											_item));
+											_manufRule));
 }
 
 }

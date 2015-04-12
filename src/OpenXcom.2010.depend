@@ -4822,7 +4822,7 @@
 
 1426486003 f:\git\openxcom\src\savegame\researchproject.h
 
-1428117071 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1428794865 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4842,7 +4842,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/Production.h"
 
-1428115485 f:\git\openxcom\src\basescape\manufactureinfostate.h
+1428794203 f:\git\openxcom\src\basescape\manufactureinfostate.h
 	"../Engine/State.h"
 
 1426102895 f:\git\openxcom\src\interface\arrowbutton.h
@@ -4855,7 +4855,7 @@
 
 1428043741 f:\git\openxcom\src\savegame\production.h
 
-1424390945 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
+1428793628 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
 	"ManufactureInfoState.h"
 	"../Engine/Game.h"
@@ -4870,7 +4870,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1424390945 f:\git\openxcom\src\basescape\manufacturestartstate.h
+1428793656 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
 1424889394 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
@@ -6974,7 +6974,7 @@
 1424390935 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1427406336 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1428791709 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"

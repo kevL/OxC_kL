@@ -35,7 +35,8 @@ class Window;
 
 
 /**
- * Screen which displays needed elements to start productions (items/required workshop state/cost to build a unit, ...).
+ * Screen which displays needed elements to start productions;
+ * items/ required workshop space/ cost to build a unit, etc.
  */
 class ManufactureStartState
 	:
@@ -44,7 +45,7 @@ class ManufactureStartState
 
 private:
 	Base* _base;
-	RuleManufacture* _item;
+	const RuleManufacture* _manufRule;
 	Text
 		* _txtCost,
 		* _txtItemNameColumn,
@@ -65,7 +66,7 @@ private:
 		/// Creates the State.
 		ManufactureStartState(
 				Base* base,
-				RuleManufacture* item);
+				const RuleManufacture* const manufRule);
 		/// Handler for the Cancel button.
 		void btnCancelClick(Action* action);
 

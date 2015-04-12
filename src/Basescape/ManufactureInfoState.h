@@ -57,7 +57,7 @@ private:
 //		* _surfaceEngineers,
 //		* _surfaceUnits;
 	Production* _production;
-	RuleManufacture* _item;
+	const RuleManufacture* _manufRule;
 	Text
 		* _txtAllocated,
 		* _txtAllocatedEngineer,
@@ -171,13 +171,13 @@ private:
 	public:
 		/// Creates the State (new production).
 		ManufactureInfoState(
-				Base* base,
-				RuleManufacture* _item);
+				Base* const base,
+				const RuleManufacture* const _manufRule);
 		/// Creates the State (modify production).
 		ManufactureInfoState(
-				Base* base,
-				Production* production);
-		/// kL. Cleans up the ManufactureInfo state.
+				Base* const base,
+				Production* const production);
+		/// Cleans up the ManufactureInfo state.
 		~ManufactureInfoState();
 };
 

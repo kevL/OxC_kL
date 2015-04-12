@@ -53,14 +53,14 @@ namespace OpenXcom
 /**
  * Initializes all elements in the Production settings screen (new Production).
  * @param base - pointer to the Base to get info from
- * @param item - pointer to the RuleManufacture to produce
+ * @param manufRule - pointer to the RuleManufacture to produce
  */
 ManufactureInfoState::ManufactureInfoState(
-		Base* base,
-		RuleManufacture* item)
+		Base* const base,
+		const RuleManufacture* const manufRule)
 	:
 		_base(base),
-		_item(item),
+		_manufRule(manufRule),
 		_production(NULL),
 		_producedItemsValue(0)
 {
@@ -73,11 +73,11 @@ ManufactureInfoState::ManufactureInfoState(
  * @param production	- pointer to the Production to modify
  */
 ManufactureInfoState::ManufactureInfoState(
-		Base* base,
-		Production* production)
+		Base* const base,
+		Production* const production)
 	:
 		_base(base),
-		_item(NULL),
+		_manufRule(NULL),
 		_production(production),
 		_producedItemsValue(0)
 {
@@ -174,7 +174,7 @@ void ManufactureInfoState::buildUi()
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_txtTitle->setText(tr(_item != NULL ? _item->getName() : _production->getRules()->getName()));
+	_txtTitle->setText(tr(_manufRule != NULL ? _manufRule->getName() : _production->getRules()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -234,7 +234,7 @@ void ManufactureInfoState::buildUi()
 	{
 		_btnOk->setVisible(false);
 		_production = new Production(
-									_item,
+									_manufRule,
 									0);
 		_base->addProduction(_production);
 	}
@@ -367,7 +367,7 @@ void ManufactureInfoState::btnStopClick(Action*)
  */
 void ManufactureInfoState::btnOkClick(Action*)
 {
-	if (_item != NULL)
+	if (_manufRule != NULL)
 		_production->startItem(
 							_base,
 							_game->getSavedGame());
@@ -382,7 +382,7 @@ void ManufactureInfoState::exitState()
 {
 	_game->popState();
 
-	if (_item != NULL)
+	if (_manufRule != NULL)
 		_game->popState();
 }
 
@@ -390,21 +390,22 @@ void ManufactureInfoState::exitState()
  * Helper function for setAssignedEngineer().
  * @param profit	- integer value ($$$) to format
  * @param woststr	- reference the output string
+ * @return, true if profit else cost
  */
-static void _formatProfit(
+static bool _formatProfit(
 		int profit,
 		std::wostringstream& woststr)
 {
 	float fProfit = static_cast<float>(profit);
 
-	bool neg;
+	bool ret;
 	if (fProfit < 0.f)
 	{
 		fProfit = -fProfit;
-		neg = true;
+		ret = false;
 	}
 	else
-		neg = false;
+		ret = true;
 
 	std::wstring suffix;
 	if (fProfit >= 1000000000.f)
@@ -423,7 +424,9 @@ static void _formatProfit(
 		suffix = L" k";
 	}
 
-	woststr << (neg ? L"- " : L"+ ") << L"$" << std::fixed << std::setprecision(1) << fProfit << suffix;
+//	woststr << (neg ? L"- " : L"+ ") << L"$" << std::fixed << std::setprecision(1) << fProfit << suffix;
+	woststr << L"$" << std::fixed << std::setprecision(1) << fProfit << suffix;
+	return ret;
 }
 
 /**
@@ -450,10 +453,17 @@ void ManufactureInfoState::setAssignedEngineer()
 
 	_txtTodo->setText(woststr2.str());
 
-	_formatProfit(
-				calcProfit(),
-				woststr3);
-	_txtMonthlyProfit->setText(tr("STR_NET_FUNDS_PER_MONTH_UC")
+	std::string st;
+	if (_formatProfit(
+					calcProfit(),
+					woststr3) == true)
+	{
+		st = "STR_NET_PROFIT_PER_MONTH_UC";
+	}
+	else
+		st = "STR_NET_COST_PER_MONTH_UC";
+
+	_txtMonthlyProfit->setText(tr(st)
 						.arg(woststr3.str()));
 
 	_btnOk->setVisible(_production->getAmountTotal() > 0);

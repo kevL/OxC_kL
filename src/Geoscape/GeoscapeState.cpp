@@ -861,7 +861,7 @@ GeoscapeState::GeoscapeState()
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
 
-	_ufoDetected->setColor(163); // slate+, white=5.
+	_ufoDetected->setColor(164); // slate+, white=5.
 	_ufoDetected->setBig();
 	_ufoDetected->setVisible(false);
 
