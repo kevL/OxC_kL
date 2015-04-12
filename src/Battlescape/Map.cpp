@@ -620,13 +620,13 @@ void Map::drawTerrain(Surface* surface) // private.
 			wpColor = Palette::blockOffset(0)+1; // white
 		else
 			wpColor = Palette::blockOffset(1)+4; */
-		if (_battleSave->getBattleTerrain() == "POLAR"
+/*		if (_battleSave->getBattleTerrain() == "POLAR"
 			|| _battleSave->getBattleTerrain() == "POLARMOUNT")
 		{
 			wpColor = Palette::blockOffset(1)+4; // orange
 		}
-		else
-			wpColor = Palette::blockOffset(0)+1; // white
+		else */
+		wpColor = Palette::blockOffset(0)+1; // white
 
 		wpID->setColor(wpColor);
 	}

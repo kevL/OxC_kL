@@ -1166,7 +1166,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			++i)
 	{
 		const std::string sheetName = i->first;
-		Log(LOG_INFO) << "\n. sheetName = " << i->first;
+		Log(LOG_INFO) << ". sheetName = " << i->first;
 
 		ExtraSprites* const spritePack = i->second;
 		const bool subdivision = spritePack->getSubX() != 0
@@ -1177,7 +1177,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			if (_surfaces.find(sheetName) == _surfaces.end())
 			{
 				//Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
-				Log(LOG_INFO) << "Creating new single image: " << sheetName;
+				//Log(LOG_INFO) << "Creating new single image: " << sheetName;
 
 				_surfaces[sheetName] = new Surface(
 												spritePack->getWidth(),
@@ -1186,7 +1186,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			else
 			{
 				//Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
-				Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
+				//Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
 
 				delete _surfaces[sheetName];
 
@@ -1206,7 +1206,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			if (_sets.find(sheetName) == _sets.end())
 			{
 				//Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
-				Log(LOG_INFO) << "Creating new surface set: " << sheetName;
+				//Log(LOG_INFO) << "Creating new surface set: " << sheetName;
 
 				adding = true;
 
@@ -1222,15 +1222,15 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			else
 			{
 				//Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
-				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
+				//Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
 			}
 
-			if (subdivision == true)
-			{
-				const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
+			//if (subdivision == true)
+			//{
+			//	const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 				//Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
-				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
-			}
+				//Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
+			//}
 
 			for (std::map<int, std::string>::const_iterator
 					j = spritePack->getSprites()->begin();
@@ -1244,7 +1244,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
 					//Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
-					Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+					//Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 
 					int offset = startFrame;
 
@@ -1267,18 +1267,18 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 							if (_sets[sheetName]->getFrame(offset))
 							{
 								//Log(LOG_DEBUG) << "Replacing frame: " << offset;
-								Log(LOG_INFO) << "Replacing frame: " << offset;
+								//Log(LOG_INFO) << "Replacing frame: " << offset;
 
 								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
 							}
 							else
 							{
-								if (adding)
+								if (adding == true)
 									_sets[sheetName]->addFrame(offset)->loadImage(s.str());
 								else
 								{
 									//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
-									Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+									//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
 								}
@@ -1294,7 +1294,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				}
 				else
 				{
-					if (spritePack->getSubX() == 0
+					if (   spritePack->getSubX() == 0
 						&& spritePack->getSubY() == 0)
 					{
 						s << CrossPlatform::getDataFile(fileName);
@@ -1302,14 +1302,14 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						if (_sets[sheetName]->getFrame(startFrame))
 						{
 							//Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
-							Log(LOG_INFO) << "Replacing frame: " << startFrame;
+							//Log(LOG_INFO) << "Replacing frame: " << startFrame;
 
 							_sets[sheetName]->getFrame(startFrame)->loadImage(s.str());
 						}
 						else
 						{
 							//Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
-							Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+							//Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 
 							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(s.str());
 						}
@@ -1341,7 +1341,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 								if (_sets[sheetName]->getFrame(offset))
 								{
 									//Log(LOG_DEBUG) << "Replacing frame: " << offset;
-									Log(LOG_INFO) << "Replacing frame: " << offset;
+									//Log(LOG_INFO) << "Replacing frame: " << offset;
 
 									_sets[sheetName]->getFrame(offset)->clear();
 
@@ -1366,7 +1366,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 									else
 									{
 										//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
-										Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+										//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 										temp->blitNShade(
