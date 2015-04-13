@@ -104,55 +104,49 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color); //4
+			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
 
-	add(_window, "window", "geoCraftScreens");
-	add(_txtTitle, "text1", "geoCraftScreens");
+	add(_window,		"window",	"geoCraftScreens");
+	add(_txtTitle,		"text1",	"geoCraftScreens");
 	add(_sprite);
-	add(_txtStatus, "text1", "geoCraftScreens");
-	add(_txtBase, "text3", "geoCraftScreens");
-	add(_txtRedirect, "text3", "geoCraftScreens");
-	add(_txtSpeed, "text3", "geoCraftScreens");
-	add(_txtMaxSpeed, "text3", "geoCraftScreens");
-	add(_txtSoldier, "text3", "geoCraftScreens");
-	add(_txtAltitude, "text3", "geoCraftScreens");
-	add(_txtHWP, "text3", "geoCraftScreens");
-	add(_txtFuel, "text3", "geoCraftScreens");
-	add(_txtDamage, "text3", "geoCraftScreens");
-	add(_txtW1Name, "text3", "geoCraftScreens");
-	add(_txtW1Ammo, "text3", "geoCraftScreens");
-	add(_txtW2Name, "text3", "geoCraftScreens");
-	add(_txtW2Ammo, "text3", "geoCraftScreens");
+	add(_txtStatus,		"text1",	"geoCraftScreens");
+	add(_txtBase,		"text3",	"geoCraftScreens");
+	add(_txtRedirect,	"text3",	"geoCraftScreens");
+	add(_txtSpeed,		"text3",	"geoCraftScreens");
+	add(_txtMaxSpeed,	"text3",	"geoCraftScreens");
+	add(_txtSoldier,	"text3",	"geoCraftScreens");
+	add(_txtAltitude,	"text3",	"geoCraftScreens");
+	add(_txtHWP,		"text3",	"geoCraftScreens");
+	add(_txtFuel,		"text3",	"geoCraftScreens");
+	add(_txtDamage,		"text3",	"geoCraftScreens");
+	add(_txtW1Name,		"text3",	"geoCraftScreens");
+	add(_txtW1Ammo,		"text3",	"geoCraftScreens");
+	add(_txtW2Name,		"text3",	"geoCraftScreens");
+	add(_txtW2Ammo,		"text3",	"geoCraftScreens");
 
-	add(_btnTarget, "button", "geoCraftScreens");
-	add(_btnBase, "button", "geoCraftScreens");
-	add(_btnCenter, "button", "geoCraftScreens");
-	add(_btnPatrol, "button", "geoCraftScreens");
-	add(_btnCancel, "button", "geoCraftScreens");
+	add(_btnTarget,		"button",	"geoCraftScreens");
+	add(_btnBase,		"button",	"geoCraftScreens");
+	add(_btnCenter,		"button",	"geoCraftScreens");
+	add(_btnPatrol,		"button",	"geoCraftScreens");
+	add(_btnCancel,		"button",	"geoCraftScreens");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-//	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCenterClick);
 
-//	_btnBase->setColor(Palette::blockOffset(8)+5);
 	_btnBase->setText(tr("STR_RETURN_TO_BASE"));
 	_btnBase->onMouseClick((ActionHandler)& GeoscapeCraftState::btnBaseClick);
 
-//	_btnTarget->setColor(Palette::blockOffset(8)+5);
 	_btnTarget->setText(tr("STR_SELECT_NEW_TARGET"));
 	_btnTarget->onMouseClick((ActionHandler)& GeoscapeCraftState::btnTargetClick);
 
-//	_btnPatrol->setColor(Palette::blockOffset(8)+5);
 	_btnPatrol->setText(tr("STR_PATROL"));
 	_btnPatrol->onMouseClick((ActionHandler)& GeoscapeCraftState::btnPatrolClick);
 
-//	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
@@ -162,12 +156,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 					(ActionHandler)& GeoscapeCraftState::btnCancelClick,
 					Options::keyOk);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
-//	_txtStatus->setColor(Palette::blockOffset(15)-1);
-//	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 
 	const std::string stat = _craft->getStatus();
 	std::wstring status;
@@ -210,8 +201,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	_txtStatus->setText(tr("STR_STATUS_").arg(status));
 
-//	_txtBase->setColor(Palette::blockOffset(15)-1);
-//	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtBase->setText(tr("STR_BASE_UC").arg(_craft->getBase()->getName()));
 
 
@@ -222,18 +211,12 @@ GeoscapeCraftState::GeoscapeCraftState(
 		ss4,
 		ss5;
 
-//	_txtSpeed->setColor(Palette::blockOffset(15)-1);
-//	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(speed));
 	_txtSpeed->setText(ss1.str());
 
-//	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
-//	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC")
 							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
-//	_txtAltitude->setColor(Palette::blockOffset(15)-1);
-//	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::string alt = _craft->getAltitude();
 	if (alt == "STR_GROUND"
 		|| stat == "STR_READY"
@@ -246,19 +229,13 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(alt)));
 
 
-//	_txtFuel->setColor(Palette::blockOffset(15)-1);
-//	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
 
-//	_txtDamage->setColor(Palette::blockOffset(15)-1);
-//	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())));
 
 
 	if (_craft->getRules()->getSoldiers() > 0)
 	{
-//		_txtSoldier->setColor(Palette::blockOffset(15)-1);
-//		_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
 		ss2 << tr("STR_SOLDIERS") << L" " << L'\x01' << _craft->getNumSoldiers();
 		ss2 << L" (" << _craft->getRules()->getSoldiers() << L")";
 		_txtSoldier->setText(ss2.str());
@@ -268,8 +245,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	if (_craft->getRules()->getVehicles() > 0)
 	{
-//		_txtHWP->setColor(Palette::blockOffset(15)-1);
-//		_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
 		ss3 << tr("STR_HWPS") << L" " << L'\x01' << _craft->getNumVehicles();
 		ss3 << L" (" << _craft->getRules()->getVehicles() << L")";
 		_txtHWP->setText(ss3.str());
@@ -278,19 +253,12 @@ GeoscapeCraftState::GeoscapeCraftState(
 		_txtHWP->setVisible(false);
 
 
-//	_txtW1Name->setColor(Palette::blockOffset(15)-1);
-//	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
-
-//	_txtW1Ammo->setColor(Palette::blockOffset(15)-1);
-//	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
-
 	if (_craft->getRules()->getWeapons() > 0
 		&& _craft->getWeapons()->at(0) != NULL)
 	{
 		const CraftWeapon* const w1 = _craft->getWeapons()->at(0);
 		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
 
-//		_txtW1Ammo->setText(tr("STR_ROUNDS_").arg(w1->getAmmo()));
 		ss4 << tr("STR_ROUNDS_").arg(w1->getAmmo());
 		ss4 << L" (" << w1->getRules()->getAmmoMax() << L")";
 		_txtW1Ammo->setText(ss4.str());
@@ -301,19 +269,12 @@ GeoscapeCraftState::GeoscapeCraftState(
 		_txtW1Ammo->setVisible(false);
 	}
 
-//	_txtW2Name->setColor(Palette::blockOffset(15)-1);
-//	_txtW2Name->setSecondaryColor(Palette::blockOffset(8)+5);
-
-//	_txtW2Ammo->setColor(Palette::blockOffset(15)-1);
-//	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
-
 	if (_craft->getRules()->getWeapons() > 1
 		&& _craft->getWeapons()->at(1) != NULL)
 	{
 		const CraftWeapon* const w2 = _craft->getWeapons()->at(1);
 		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
 
-//		_txtW2Ammo->setText(tr("STR_ROUNDS_").arg(w2->getAmmo()));
 		ss5 << tr("STR_ROUNDS_").arg(w2->getAmmo());
 		ss5 << L" (" << w2->getRules()->getAmmoMax() << L")";
 		_txtW2Ammo->setText(ss5.str());
@@ -329,7 +290,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 		_txtRedirect->setVisible(false);
 	else
 	{
-//		_txtRedirect->setColor(Palette::blockOffset(15)-1);
 		_txtRedirect->setBig();
 		_txtRedirect->setAlign(ALIGN_CENTER);
 		_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
