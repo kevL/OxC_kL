@@ -3203,17 +3203,16 @@ void GeoscapeState::time1Month()
 
 	const int monthsPassed = _gameSave->getMonthsPassed();
 //	if (monthsPassed > 5)
-	if (RNG::percent(monthsPassed * 2)) // kL
+	if (RNG::percent(monthsPassed * 2) == true)
 		determineAlienMissions(); // kL_note: determine another one, I guess.
 
 	setupLandMission(); // always add a Mission, eg. TerrorMission, to the regular mission(s) <-
 
-	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
-	const int diff = static_cast<int>(_gameSave->getDifficulty()); // kL
+	const int diff = static_cast<int>(_gameSave->getDifficulty());
 
 	bool newRetaliation = false;
 //	if (monthsPassed > 13 - static_cast<int>(_gameSave->getDifficulty())
-	if (RNG::percent(monthsPassed * diff + 3) // kL, Beginner == %0
+	if (RNG::percent(monthsPassed * diff + 3) == true
 		|| _gameSave->isResearched("STR_THE_MARTIAN_SOLUTION") == true)
 	{
 		newRetaliation = true;
@@ -3259,22 +3258,22 @@ void GeoscapeState::time1Month()
 												- 2); // -2 to avoid "MIXED" race
 						mission->setRace(_rules->getAlienRacesList().at(race)); */
 						// get races for retaliation missions
-						std::vector<std::string> racesList = _rules->getAlienRacesList();
+						std::vector<std::string> raceList = _rules->getAlienRacesList();
 						for (std::vector<std::string>::const_iterator
-								k = racesList.begin();
-								k != racesList.end();
+								k = raceList.begin();
+								k != raceList.end();
 								)
 						{
 							if (_rules->getAlienRace(*k)->canRetaliate() == true)
 								++k;
 							else
-								k = racesList.erase(k);
+								k = raceList.erase(k);
 						}
 
 						const size_t race = static_cast<size_t>(RNG::generate(
 																		0,
-																		static_cast<int>(racesList.size()) - 1));
-						mission->setRace(racesList[race]);
+																		static_cast<int>(raceList.size()) - 1));
+						mission->setRace(raceList[race]);
 						mission->start(150);
 						_gameSave->getAlienMissions().push_back(mission);
 

@@ -764,7 +764,7 @@ void Ruleset::loadFile(const std::string& filename)
 				rule = _ufopaediaArticles[id];
 			else
 			{
-				const UfopaediaTypeId type = (UfopaediaTypeId)(*i)["type_id"].as<int>();
+				const UfopaediaTypeId type = static_cast<UfopaediaTypeId>((*i)["type_id"].as<int>());
 				switch (type)
 				{
 					case UFOPAEDIA_TYPE_CRAFT:				rule = new ArticleDefinitionCraft();		break;
@@ -784,6 +784,7 @@ void Ruleset::loadFile(const std::string& filename)
 					case UFOPAEDIA_TYPE_TFTD_ARMOR:
 					case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
 					case UFOPAEDIA_TYPE_TFTD_USO:			rule = new ArticleDefinitionTFTD();			break;
+					case UFOPAEDIA_TYPE_AWARD:				rule = new ArticleDefinitionAward();		break;
 
 					default:
 						rule = NULL;
@@ -794,6 +795,7 @@ void Ruleset::loadFile(const std::string& filename)
 			}
 
 			_ufopaediaListOrder += 100;
+			//Log(LOG_INFO) << id << " uPed listOrder = " << _ufopaediaListOrder;
 			rule->load(
 					*i,
 					_ufopaediaListOrder);
@@ -1673,7 +1675,7 @@ int Ruleset::getPersonnelTime() const
 }
 
 /**
- * Returns the article definition for a given name.
+ * Returns the ArticleDefinition for a given name.
  * @param name - article name
  * @return, pointer to ArticleDefinition
  */
@@ -2083,16 +2085,17 @@ struct compareRule<ArticleDefinition>
 		:
 			_ruleset(ruleset)
 	{
-		_sections[UFOPAEDIA_XCOM_CRAFT_ARMAMENT]		= 0;
-		_sections[UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS]	= 1;
-		_sections[UFOPAEDIA_WEAPONS_AND_EQUIPMENT]		= 2;
-		_sections[UFOPAEDIA_ALIEN_ARTIFACTS]			= 3;
-		_sections[UFOPAEDIA_BASE_FACILITIES]			= 4;
-		_sections[UFOPAEDIA_ALIEN_LIFE_FORMS]			= 5;
-		_sections[UFOPAEDIA_ALIEN_RESEARCH]				= 6;
-		_sections[UFOPAEDIA_UFO_COMPONENTS]				= 7;
-		_sections[UFOPAEDIA_UFOS]						= 8;
-		_sections[UFOPAEDIA_NOT_AVAILABLE]				= 9;
+		_sections[UFOPAEDIA_XCOM_CRAFT_ARMAMENT]		=  0;
+		_sections[UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS]	=  1;
+		_sections[UFOPAEDIA_WEAPONS_AND_EQUIPMENT]		=  2;
+		_sections[UFOPAEDIA_ALIEN_ARTIFACTS]			=  3;
+		_sections[UFOPAEDIA_BASE_FACILITIES]			=  4;
+		_sections[UFOPAEDIA_ALIEN_LIFE_FORMS]			=  5;
+		_sections[UFOPAEDIA_ALIEN_RESEARCH]				=  6;
+		_sections[UFOPAEDIA_UFO_COMPONENTS]				=  7;
+		_sections[UFOPAEDIA_UFOS]						=  8;
+		_sections[UFOPAEDIA_AWARDS]						=  9;
+		_sections[UFOPAEDIA_NOT_AVAILABLE]				= 10;
 	}
 
 	bool operator()(

@@ -280,7 +280,7 @@ protected:
 		/// Gets the available armors.
 		const std::vector<std::string>& getArmorsList() const;
 
-		/// Gets Ufopaedia article definition.
+		/// Gets Ufopaedia ArticleDefinition.
 		ArticleDefinition* getUfopaediaArticle(const std::string& name) const;
 		/// Gets the available articles.
 		const std::vector<std::string>& getUfopaediaList() const;

@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ArticleStateTextImage.h"
+#include "ArticleStateAward.h"
 
 #include "Ufopaedia.h"
 
@@ -40,11 +40,11 @@ namespace OpenXcom
 /**
  * cTor.
  */
-ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
+ArticleStateAward::ArticleStateAward(ArticleDefinitionAward* defs)
 	:
 		ArticleState(defs->id)
 {
-	_txtTitle = new Text(defs->text_width, 48, 5, 22);
+	_txtTitle = new Text(defs->text_width, 17, 5, 22);
 
 	setPalette("PAL_UFOPAEDIA");
 
@@ -60,7 +60,7 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 
 	_txtTitle->setColor(Palette::blockOffset(15)+4);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap();
+//	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr(defs->title));
 
 	const int text_height = _txtTitle->getTextHeight();
@@ -76,7 +76,7 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 /**
  * dTor.
  */
-ArticleStateTextImage::~ArticleStateTextImage()
+ArticleStateAward::~ArticleStateAward()
 {}
 
 }

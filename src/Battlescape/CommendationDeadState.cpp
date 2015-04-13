@@ -237,7 +237,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersK
 
 
 			std::string info = (*award).second->getDescriptionGeneral(); // look for Generic Desc first.
-			if (info != "")
+			if (info.empty() == false)
 				_titleRows[titleRow] = info;
 			else
 				_titleRows[titleRow] = (*award).second->getDescription();

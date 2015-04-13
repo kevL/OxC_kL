@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -32,24 +31,25 @@ namespace OpenXcom
 /// Defines article types.
 enum UfopaediaTypeId
 {
-	UFOPAEDIA_TYPE_UNKNOWN				=  0,
-	UFOPAEDIA_TYPE_CRAFT				=  1,
-	UFOPAEDIA_TYPE_CRAFT_WEAPON			=  2,
-	UFOPAEDIA_TYPE_VEHICLE				=  3,
-	UFOPAEDIA_TYPE_ITEM					=  4,
-	UFOPAEDIA_TYPE_ARMOR				=  5,
-	UFOPAEDIA_TYPE_BASE_FACILITY		=  6,
-	UFOPAEDIA_TYPE_TEXTIMAGE			=  7,
-	UFOPAEDIA_TYPE_TEXT					=  8,
-	UFOPAEDIA_TYPE_UFO					=  9,
-	UFOPAEDIA_TYPE_TFTD					= 10,
-	UFOPAEDIA_TYPE_TFTD_CRAFT			= 11,
-	UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON	= 12,
-	UFOPAEDIA_TYPE_TFTD_VEHICLE			= 13,
-	UFOPAEDIA_TYPE_TFTD_ITEM			= 14,
-	UFOPAEDIA_TYPE_TFTD_ARMOR			= 15,
-	UFOPAEDIA_TYPE_TFTD_BASE_FACILITY	= 16,
-	UFOPAEDIA_TYPE_TFTD_USO				= 17
+	UFOPAEDIA_TYPE_UNKNOWN,				//  0
+	UFOPAEDIA_TYPE_CRAFT,				//  1
+	UFOPAEDIA_TYPE_CRAFT_WEAPON,		//  2
+	UFOPAEDIA_TYPE_VEHICLE,				//  3
+	UFOPAEDIA_TYPE_ITEM,				//  4
+	UFOPAEDIA_TYPE_ARMOR,				//  5
+	UFOPAEDIA_TYPE_BASE_FACILITY,		//  6
+	UFOPAEDIA_TYPE_TEXTIMAGE,			//  7
+	UFOPAEDIA_TYPE_TEXT,				//  8
+	UFOPAEDIA_TYPE_UFO,					//  9
+	UFOPAEDIA_TYPE_TFTD,				// 10
+	UFOPAEDIA_TYPE_TFTD_CRAFT,			// 11
+	UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON,	// 12
+	UFOPAEDIA_TYPE_TFTD_VEHICLE,		// 13
+	UFOPAEDIA_TYPE_TFTD_ITEM,			// 14
+	UFOPAEDIA_TYPE_TFTD_ARMOR,			// 15
+	UFOPAEDIA_TYPE_TFTD_BASE_FACILITY,	// 16
+	UFOPAEDIA_TYPE_TFTD_USO,			// 17
+	UFOPAEDIA_TYPE_AWARD				// 18
 };
 
 
@@ -64,11 +64,13 @@ class ArticleDefinition
 private:
 	int _listOrder;
 
+
 	protected:
 		UfopaediaTypeId _type_id;
 
 		/// Constructor (protected, so this class cannot be instantiated directly).
 		ArticleDefinition(UfopaediaTypeId type_id);
+
 
 		public:
 			std::string
@@ -100,8 +102,7 @@ class ArticleDefinitionRect
 {
 	public:
 		int
-			x,
-			y,
+			x,y,
 			width,
 			height;
 
@@ -328,6 +329,29 @@ class ArticleDefinitionVehicle
 				const YAML::Node& node,
 				int listOrder);
 };
+
+/**
+ * ArticleDefinitionAward defines articles for Shoes' Soldier Awards.
+ * They have a text description and a background.
+ */
+class ArticleDefinitionAward
+	:
+		public ArticleDefinition
+{
+	public:
+		int text_width;
+		std::string
+			image_id,
+			text;
+
+		/// Constructor.
+		ArticleDefinitionAward();
+		/// Loads the article from YAML.
+		void load(
+				const YAML::Node& node,
+				int listOrder);
+};
+
 
 }
 

@@ -17,62 +17,39 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_UFOPAEDIASELECTSTATE_H
-#define OPENXCOM_UFOPAEDIASELECTSTATE_H
+#ifndef OPENXCOM_ARTICLESTATEAWARD_H
+#define OPENXCOM_ARTICLESTATEAWARD_H
 
-//#include <string>
-
-#include "Ufopaedia.h"
-
-#include "../Engine/State.h"
+#include "ArticleState.h"
 
 
 namespace OpenXcom
 {
 
-class Action;
+class ArticleDefinitionAward;
+class Surface;
 class Text;
-class TextButton;
 class TextList;
-class Window;
-
 
 /**
- * UfopaediaSelectState is the screen that lists articles of a given type.
+ * ArticleStateAward has a text and background.
  */
-class UfopaediaSelectState
+class ArticleStateAward
 	:
-		public State
+		public ArticleState
 {
 
 protected:
-	std::string _section;
-
-	Text* _txtTitle;
-	TextButton* _btnOk;
-	TextList* _lstSelection;
-	Window* _window;
-
-	ArticleDefinitionList _article_list;
-
-
-	/// Handler for clicking the OK button
-	void btnOkClick(Action* action);
-	/// Handler for clicking the selection list.
-	void lstSelectionClick(Action* action);
-
-	/// load available articles into the selection list
-	void loadSelectionList();
+	Text
+		* _txtInfo,
+		* _txtTitle;
 
 
 	public:
 		///
-		UfopaediaSelectState(const std::string& section);
+		ArticleStateAward(ArticleDefinitionAward* article_defs);
 		///
-		virtual ~UfopaediaSelectState();
-
-		///
-		void init();
+		virtual ~ArticleStateAward();
 };
 
 }

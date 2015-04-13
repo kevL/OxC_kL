@@ -52,40 +52,35 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 {
 	_screen = false;
 
-	_window			= new Window(this, 256, 180, 32, 10, POPUP_NONE);
-	_txtTitle		= new Text(224, 17, 48, 26);
-	_btnOk			= new TextButton(224, 16, 48, 166);
-	_lstSelection	= new TextList(224, 105, 40, 50);
+	_window			= new Window(this, 256, 194, 32, 6, POPUP_NONE);
+	_txtTitle		= new Text(224, 17, 48, 15);
+	_lstSelection	= new TextList(224, 137, 40, 35);
+	_btnOk			= new TextButton(224, 16, 48, 177);
 
 	setPalette(
 			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color); //0
+			_game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color);
 
-	add(_window, "window", "ufopaedia");
-	add(_txtTitle, "text", "ufopaedia");
-	add(_btnOk, "button2", "ufopaedia");
-	add(_lstSelection, "list", "ufopaedia");
+	add(_window,		"window",	"ufopaedia");
+	add(_txtTitle,		"text",		"ufopaedia");
+	add(_btnOk,			"button2",	"ufopaedia");
+	add(_lstSelection,	"list",		"ufopaedia");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ITEM"));
 
-//	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& UfopaediaSelectState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaSelectState::btnOkClick,
 					Options::keyCancel);
 
-//	_lstSelection->setColor(Palette::blockOffset(8)+5);
-//	_lstSelection->setArrowColor(Palette::blockOffset(15)-1);
 	_lstSelection->setColumns(1, 206);
 	_lstSelection->setBackground(_window);
 	_lstSelection->setSelectable();
@@ -145,15 +140,15 @@ void UfopaediaSelectState::loadSelectionList()
 				_section,
 				_article_list);
 
-	ArticleDefinitionList::iterator it;
+	ArticleDefinitionList::const_iterator i;
 	for (
-			it = _article_list.begin();
-			it != _article_list.end();
-			++it)
+			i = _article_list.begin();
+			i != _article_list.end();
+			++i)
 	{
 		_lstSelection->addRow(
 							1,
-							tr((*it)->title).c_str());
+							tr((*i)->title).c_str());
 	}
 }
 

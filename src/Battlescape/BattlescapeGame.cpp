@@ -740,7 +740,7 @@ void BattlescapeGame::endTurnPhase()
 			}
 		}
 
-		// THE NEXT 3 SECTIONS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
+		// THE NEXT 3 BLOCKS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleSave->getUnits()->begin();
 				i != _battleSave->getUnits()->end();

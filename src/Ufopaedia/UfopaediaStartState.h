@@ -29,9 +29,9 @@ namespace OpenXcom
 {
 
 class Action;
-class Window;
 class Text;
 class TextButton;
+class Window;
 
 
 /**
@@ -44,13 +44,13 @@ class UfopaediaStartState
 {
 
 protected:
-	static const int NUM_SECTIONS = 9;
-	static const std::string SECTIONS[NUM_SECTIONS];
+	static const size_t ped_SECTIONS = 10;
+	static const std::string ped_TITLES[ped_SECTIONS];
 
 	Window* _window;
 	Text* _txtTitle;
 	TextButton* _btnOk;
-	TextButton* _btnSection[NUM_SECTIONS];
+	TextButton* _btnSection[ped_SECTIONS];
 
 	// navigation callbacks
 	///

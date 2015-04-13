@@ -43,7 +43,7 @@ struct convert<OpenXcom::ArticleDefinitionRect>
 			const Node& node,
 			OpenXcom::ArticleDefinitionRect& rhs)
 	{
-		if (!node.IsMap())
+		if (node.IsMap() == false)
 			return false;
 
 		rhs.x		= node["x"]		.as<int>(rhs.x);
@@ -69,15 +69,13 @@ ArticleDefinition::ArticleDefinition(UfopaediaTypeId type_id)
 	:
 		_type_id(type_id),
 		_listOrder(0)
-{
-}
+{}
 
 /**
  * Destructor.
  */
 ArticleDefinition::~ArticleDefinition()
-{
-}
+{}
 
 /**
  * Gets the article definition type. (Text, TextImage, Craft, ...)
@@ -97,12 +95,13 @@ void ArticleDefinition::load(
 		const YAML::Node& node,
 		int listOrder)
 {
-	id = title	= node["id"]		.as<std::string>(id);
+	id			=
+	title		= node["id"]		.as<std::string>(id);
 	section		= node["section"]	.as<std::string>(section);
 	requires	= node["requires"]	.as<std::vector<std::string> >(requires);
-	title		= node["title"]		.as<std::string>(title);
 
-//	_type_id	= (UfopaediaTypeId)node["type_id"].as<int>(_type_id);
+	title = node["title"].as<std::string>(title);
+//	_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);	// looks like unused here; still in ruleset though. Could be for TFTD stuff
 
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (_listOrder == 0)
@@ -127,8 +126,7 @@ ArticleDefinitionRect::ArticleDefinitionRect()
 		y(0),
 		width(0),
 		height(0)
-{
-}
+{}
 
 /**
  * Sets the rectangle parameters in a function.
@@ -143,10 +141,10 @@ void ArticleDefinitionRect::set(
 		int set_width,
 		int set_height)
 {
-	x		= set_x;
-	y		= set_y;
-	width	= set_width;
-	height	= set_height;
+	x = set_x;
+	y = set_y;
+	width = set_width;
+	height = set_height;
 }
 
 /**
@@ -155,8 +153,7 @@ void ArticleDefinitionRect::set(
 ArticleDefinitionCraft::ArticleDefinitionCraft()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_CRAFT)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -168,8 +165,8 @@ void ArticleDefinitionCraft::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	image_id	= node["image_id"]	.as<std::string>(image_id);
 	rect_stats	= node["rect_stats"].as<ArticleDefinitionRect>(rect_stats);
@@ -183,8 +180,7 @@ void ArticleDefinitionCraft::load(
 ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -196,8 +192,8 @@ void ArticleDefinitionCraftWeapon::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	image_id	= node["image_id"]	.as<std::string>(image_id);
 	text		= node["text"]		.as<std::string>(text);
@@ -209,8 +205,7 @@ void ArticleDefinitionCraftWeapon::load(
 ArticleDefinitionText::ArticleDefinitionText()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -222,8 +217,8 @@ void ArticleDefinitionText::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	text = node["text"].as<std::string>(text);
 }
@@ -235,8 +230,7 @@ ArticleDefinitionTextImage::ArticleDefinitionTextImage()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_TEXTIMAGE),
 		text_width(0)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -248,8 +242,8 @@ void ArticleDefinitionTextImage::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	image_id	= node["image_id"]	.as<std::string>(image_id);
 	text		= node["text"]		.as<std::string>(text);
@@ -261,11 +255,9 @@ void ArticleDefinitionTextImage::load(
  */
 ArticleDefinitionTFTD::ArticleDefinitionTFTD()
 	:
-		ArticleDefinition(
-				UFOPAEDIA_TYPE_TFTD),
-				text_width(0)
-{
-}
+		ArticleDefinition(UFOPAEDIA_TYPE_TFTD),
+		text_width(0)
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -277,14 +269,14 @@ void ArticleDefinitionTFTD::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-			node,
-			listOrder);
+						node,
+						listOrder);
 
-	_type_id	= (UfopaediaTypeId)(node["type_id"]	.as<int>(_type_id));
-	image_id	= node["image_id"]					.as<std::string>(image_id);
-	text		= node["text"]						.as<std::string>(text);
-	text_width	= node["text_width"]				.as<int>(150); // 95% of these won't need to be defined, so give it a default
-	weapon		= node["weapon"]					.as<std::string>(weapon);
+	_type_id	= static_cast<UfopaediaTypeId>((node["type_id"].as<int>(_type_id)));
+	image_id	= node["image_id"]	.as<std::string>(image_id);
+	text		= node["text"]		.as<std::string>(text);
+	text_width	= node["text_width"].as<int>(150); // 95% of these won't need to be defined, so give it a default
+	weapon		= node["weapon"]	.as<std::string>(weapon);
 }
 
 /**
@@ -293,8 +285,7 @@ void ArticleDefinitionTFTD::load(
 ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -306,8 +297,8 @@ void ArticleDefinitionBaseFacility::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	text = node["text"].as<std::string>(text);
 }
@@ -318,8 +309,7 @@ void ArticleDefinitionBaseFacility::load(
 ArticleDefinitionItem::ArticleDefinitionItem()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_ITEM)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -331,8 +321,8 @@ void ArticleDefinitionItem::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	text = node["text"].as<std::string>(text);
 }
@@ -343,8 +333,7 @@ void ArticleDefinitionItem::load(
 ArticleDefinitionUfo::ArticleDefinitionUfo()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_UFO)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -356,8 +345,8 @@ void ArticleDefinitionUfo::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	text = node["text"].as<std::string>(text);
 }
@@ -368,8 +357,7 @@ void ArticleDefinitionUfo::load(
 ArticleDefinitionArmor::ArticleDefinitionArmor()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_ARMOR)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -381,8 +369,8 @@ void ArticleDefinitionArmor::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	text = node["text"].as<std::string>(text);
 }
@@ -393,8 +381,7 @@ void ArticleDefinitionArmor::load(
 ArticleDefinitionVehicle::ArticleDefinitionVehicle()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_VEHICLE)
-{
-}
+{}
 
 /**
  * Loads the article definition from a YAML file.
@@ -406,11 +393,37 @@ void ArticleDefinitionVehicle::load(
 		int listOrder)
 {
 	ArticleDefinition::load(
-							node,
-							listOrder);
+						node,
+						listOrder);
 
 	weapon	= node["weapon"].as<std::string>(weapon);
 	text	= node["text"]	.as<std::string>(text);
+}
+
+/**
+ * Constructor (only setting type of base class)
+ */
+ArticleDefinitionAward::ArticleDefinitionAward()
+	:
+		ArticleDefinition(UFOPAEDIA_TYPE_AWARD)
+{}
+
+/**
+ * Loads the article definition from a YAML file.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
+ */
+void ArticleDefinitionAward::load(
+		const YAML::Node& node,
+		int listOrder)
+{
+	ArticleDefinition::load(
+						node,
+						listOrder);
+
+	image_id	= node["image_id"]	.as<std::string>(image_id);
+	text		= node["text"]		.as<std::string>(text);
+	text_width	= node["text_width"].as<int>(text_width);
 }
 
 }

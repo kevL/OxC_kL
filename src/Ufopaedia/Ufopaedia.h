@@ -50,9 +50,10 @@ static const std::string
 	UFOPAEDIA_ALIEN_RESEARCH			= "STR_ALIEN_RESEARCH_UC",
 	UFOPAEDIA_UFO_COMPONENTS			= "STR_UFO_COMPONENTS",
 	UFOPAEDIA_UFOS						= "STR_UFOS",
+	UFOPAEDIA_AWARDS					= "STR_AWARDS",
 	UFOPAEDIA_NOT_AVAILABLE				= "STR_NOT_AVAILABLE";
 
-// This last section is meant for articles, that have to be activated,
+// This last section is meant for articles that have to be activated
 // but have no own entry in a list. E.g. Ammunition items.
 // Maybe others as well that should just not be selectable.
 
@@ -87,7 +88,7 @@ protected:
 
 
 	public:
-		/// check, if a specific article is currently available.
+		/// check if a specific article is currently available.
 		static bool isArticleAvailable(
 				SavedGame* save,
 				ArticleDefinition* article);

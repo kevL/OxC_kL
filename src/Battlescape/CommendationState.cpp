@@ -206,7 +206,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 
 			std::string info = (*award).second->getDescriptionGeneral(); // look for Generic Desc first.
-			if (info != "")
+			if (info.empty() == false)
 				_titleRows[titleRow] = info;
 			else
 				_titleRows[titleRow] = (*award).second->getDescription();
@@ -232,7 +232,6 @@ CommendationState::~CommendationState()
  */
 void CommendationState::btnOkClick(Action*)
 {
-	//Log(LOG_INFO) << "Commendation, states = " << _game->getQtyStates();
 	if (_game->getQtyStates() == 2) // ie: (1) this, (2) Geoscape
 	{
 		_game->getResourcePack()->fadeMusic(_game, 863);

@@ -40,8 +40,9 @@ class ArticleStateTextImage
 {
 
 protected:
-	Text* _txtTitle;
-	Text* _txtInfo;
+	Text
+		* _txtInfo,
+		* _txtTitle;
 
 
 	public:

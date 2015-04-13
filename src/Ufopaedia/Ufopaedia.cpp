@@ -21,6 +21,7 @@
 
 #include "ArticleState.h"
 #include "ArticleStateArmor.h"
+#include "ArticleStateAward.h"
 #include "ArticleStateBaseFacility.h"
 #include "ArticleStateCraft.h"
 #include "ArticleStateCraftWeapon.h"
@@ -85,29 +86,29 @@ int Ufopaedia::getArticleIndex( // kL
 	const ArticleDefinitionList articles = getAvailableArticles(save, rule);
 
 	for (size_t
-			it = 0;
-			it < articles.size();
-			++it)
+			i = 0;
+			i != articles.size();
+			++i)
 	{
 		for (std::vector<std::string>::const_iterator
-				j = articles[it]->requires.begin();
-				j != articles[it]->requires.end();
+				j = articles[i]->requires.begin();
+				j != articles[i]->requires.end();
 				++j)
 		{
 			if (article_id == *j)
 			{
-				article_id = articles[it]->id;
-				return it;
+				article_id = articles[i]->id;
+				return i;
 			}
 		}
 
-		if (articles[it]->id == article_id)
-			return it;
+		if (articles[i]->id == article_id)
+			return i;
 
-		if (articles[it]->id == UC_ID)
+		if (articles[i]->id == UC_ID)
 		{
 			article_id = UC_ID;
-			return it;
+			return i;
 		}
 	}
 
@@ -115,12 +116,13 @@ int Ufopaedia::getArticleIndex( // kL
 }
 
 /**
- * Creates a new article state dependent on the given article definition.
+ * Creates a new article State dependent on the given ArticleDefinition.
  * @param article - pointer to ArticleDefinition to create from
  * @return, pointer to ArticleState object if created, NULL otherwise
  */
 ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
 {
+	//Log(LOG_INFO) << "Ufopaedia::createArticleState() " << (int)article->getType();
 	switch (article->getType())
 	{
 		case UFOPAEDIA_TYPE_CRAFT:
@@ -173,6 +175,9 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
 
 		case UFOPAEDIA_TYPE_TFTD_USO:
 			return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD*>(article));
+
+		case UFOPAEDIA_TYPE_AWARD:
+			return new ArticleStateAward(dynamic_cast<ArticleDefinitionAward*>(article));
 	}
 
 	return NULL;
@@ -279,12 +284,12 @@ void Ufopaedia::list(
 {
 	ArticleDefinitionList articles = getAvailableArticles(save, rule);
 	for (ArticleDefinitionList::const_iterator
-			it = articles.begin();
-			it != articles.end();
-			++it)
+			i = articles.begin();
+			i != articles.end();
+			++i)
 	{
-		if ((*it)->section == section)
-			data.push_back(*it);
+		if ((*i)->section == section)
+			data.push_back(*i);
 	}
 }
 
@@ -302,12 +307,12 @@ ArticleDefinitionList Ufopaedia::getAvailableArticles(
 	ArticleDefinitionList articles;
 
 	for (std::vector<std::string>::const_iterator
-			it = list.begin();
-			it != list.end();
-			++it)
+			i = list.begin();
+			i != list.end();
+			++i)
 	{
-		ArticleDefinition* const article = rule->getUfopaediaArticle(*it);
-		if (isArticleAvailable(save, article)
+		ArticleDefinition* const article = rule->getUfopaediaArticle(*i);
+		if (isArticleAvailable(save, article) == true
 			&& article->section != UFOPAEDIA_NOT_AVAILABLE)
 		{
 			articles.push_back(article);
