@@ -163,6 +163,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 15
     requires:
       - STR_ALIEN_FOOD
+#      - STR_ALIEN_HABITAT
     dependencies:
       - STR_ZOMBIE_CORPSE
       - STR_CELATID_CORPSE
