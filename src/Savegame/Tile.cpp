@@ -1213,11 +1213,12 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 
 	float vuln;
 
-	if (battleSave == NULL	// damage standing units (at end of faction's turn-phases). Notice this hits only the primary quadrant!
-		&& _unit != NULL)	// safety. call from BattlescapeGame::endTurnPhase() checks only Tiles w/ units, but that could change ....
+	if (battleSave == NULL)	// damage standing units (at end of faction's turn-phases). Notice this hits only the primary quadrant!
+//		&& _unit != NULL)	// safety. call from BattlescapeGame::endTurnPhase() checks only Tiles w/ units, but that could change ....
 	{
 		//Log(LOG_INFO) << ". . hit Unit";
-		if (pSmoke > 0)
+		if (pSmoke != 0
+			&& _unit->isFearable() == true)
 		{
 			vuln = _unit->getArmor()->getDamageModifier(DT_SMOKE);
 			if (vuln > 0.f) // try to knock _unit out.
@@ -1228,7 +1229,7 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 							true);
 		}
 
-		if (pFire > 0)
+		if (pFire != 0)
 		{
 			vuln = _unit->getArmor()->getDamageModifier(DT_IN);
 			if (vuln > 0.f)
@@ -1250,9 +1251,7 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 			}
 		}
 	}
-
-
-	if (battleSave != NULL) // try to destroy items & kill unconscious units (only for end of full-turns)
+	else //if (battleSave != NULL) // try to destroy items & kill unconscious units (only for end of full-turns)
 	{
 		//Log(LOG_INFO) << ". . hit Inventory's ground-items";
 		BattleUnit* unit;

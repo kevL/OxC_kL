@@ -746,7 +746,8 @@ void BattlescapeGame::endTurnPhase()
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getFaction() == _battleSave->getSide())
+			if ((*i)->getFaction() == _battleSave->getSide()
+				&& (*i)->isOut() == false)
 			{
 				tile = (*i)->getTile();
 				if (tile != NULL
