@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_GAMETIME_H
 #define OPENXCOM_GAMETIME_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -73,15 +72,14 @@ private:
 				int year,
 				int hour,
 				int minute,
-				int second);
+				int sec);
 		/// Cleans up the ingame time.
 		~GameTime();
 
 		/// Loads the time from YAML.
 		void load(const YAML::Node& node);
 		/// Saves the time to YAML.
-//kL		YAML::Node save() const;
-		YAML::Node save(bool memorial = false) const; // kL
+		YAML::Node save(bool memorial = false) const;
 
 		/// Advances the time by 5 seconds.
 		TimeTrigger advance();
@@ -95,17 +93,17 @@ private:
 
 		/// Gets the ingame weekday.
 		int getWeekday() const;
-		// Gets a string version of the ingame weekday.
+		/// Gets a string version of the ingame weekday.
 		std::string getWeekdayString() const;
 
 		/// Gets the ingame day.
 		int getDay() const;
-		// Gets a string version of the ingame day.
+		/// Gets a string version of the ingame day.
 		std::wstring getDayString(Language* lang) const;
 
 		/// Gets the ingame month.
 		int getMonth() const;
-		// Gets a string version of the ingame month.
+		/// Gets a string version of the ingame month.
 		std::string getMonthString() const;
 
 		/// Gets the ingame year.

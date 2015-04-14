@@ -20,6 +20,7 @@
 #ifndef OPENXCOM_STATE_H
 #define OPENXCOM_STATE_H
 
+//#include <climits>
 //#include <string>
 //#include <vector>
 //#include <SDL.h>

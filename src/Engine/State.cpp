@@ -19,8 +19,6 @@
 
 #include "State.h"
 
-//#include <climits>
-
 //#include "Font.h"
 #include "Game.h"
 #include "InteractiveSurface.h"

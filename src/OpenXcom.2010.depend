@@ -23,7 +23,7 @@
 1424390946 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1426752845 f:\git\openxcom\src\engine\state.h
+1429003815 f:\git\openxcom\src\engine\state.h
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleInterface.h"
 
@@ -4560,9 +4560,7 @@
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
-1424390936 f:\git\openxcom\src\savegame\gametime.h
-	<string>
-	<yaml-cpp/yaml.h>
+1429006843 f:\git\openxcom\src\savegame\gametime.h
 
 1428540589 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
@@ -6734,7 +6732,7 @@
 	<map>
 	<string>
 
-1428367553 source:f:\git\openxcom\src\engine\state.cpp
+1429003809 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Game.h"
 	"InteractiveSurface.h"
@@ -6755,7 +6753,7 @@
 1424390939 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1428877742 source:f:\git\openxcom\src\engine\surface.cpp
+1429009872 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -7069,7 +7067,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428806841 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1428975174 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7330,7 +7328,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1428969694 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1429007358 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -7352,7 +7350,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1428968218 f:\git\openxcom\src\interface\toggletextbutton.h
+1429006171 f:\git\openxcom\src\interface\toggletextbutton.h
 	"TextButton.h"
 	"../Engine/Action.h"
 	"../Engine/State.h"
@@ -7684,10 +7682,8 @@
 	"ScrollBar.h"
 	"../Engine/Action.h"
 
-1428968565 source:f:\git\openxcom\src\interface\toggletextbutton.cpp
+1429006343 source:f:\git\openxcom\src\interface\toggletextbutton.cpp
 	"ToggleTextButton.h"
-	"TextButton.h"
-	"../Engine/Sound.h"
 
 1420134053 source:f:\git\openxcom\src\interface\turncounter.cpp
 	"TurnCounter.h"
@@ -8464,7 +8460,7 @@
 	"Armor.h"
 	"../Savegame/Soldier.h"
 
-1428955762 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1428969957 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1425905405 source:f:\git\openxcom\src\ruleset\city.cpp
@@ -8745,7 +8741,7 @@
 1428641560 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp
 	"EquipmentLayoutItem.h"
 
-1424390936 source:f:\git\openxcom\src\savegame\gametime.cpp
+1429007337 source:f:\git\openxcom\src\savegame\gametime.cpp
 	"GameTime.h"
 	"../Engine/Language.h"
 
@@ -11093,7 +11089,7 @@
 1426704013 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1428623590 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1428975497 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"

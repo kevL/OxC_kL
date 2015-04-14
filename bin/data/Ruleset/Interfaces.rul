@@ -403,11 +403,11 @@ interfaces:
       - id: button
         color: 151   # grey
       - id: regionTotal
-        color: 154   # was 133  # salmon (inverted button offset)
-        color2: 153  # was 136  # also salmon (the line itself)
+        color: 5     # gray # was 133 # salmon (inverted button offset)
+        color2: 153  # was 136 # also salmon (the line itself)
       - id: countryTotal
-        color: 154   # was 141  # magenta (inverted button offset)
-        color2: 153  # was 144  # also magenta (the line itself)
+        color: 5     # gray # was 141 # magenta (inverted button offset)
+        color2: 153  # was 144 # also magenta (the line itself)
   - type: ufopaedia
     elements:
       - id: palette

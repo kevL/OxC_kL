@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __OXC_TOGGLETEXTBUTTON_H
-#define __OXC_TOGGLETEXTBUTTON_H
+#ifndef OPENXCOM_TOGGLETEXTBUTTON_H
+#define OPENXCOM_TOGGLETEXTBUTTON_H
 
 #include "TextButton.h"
 
@@ -36,9 +36,10 @@ class ToggleTextButton
 
 private:
 	bool _isPressed;
-	int
+	Uint8
 		_invertedColor,
 		_originalColor;
+
 	TextButton* _fakeGroup;
 
 

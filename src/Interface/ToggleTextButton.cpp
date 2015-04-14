@@ -19,14 +19,17 @@
 
 #include "ToggleTextButton.h"
 
-#include "TextButton.h"
-
-#include "../Engine/Sound.h"
-
 
 namespace OpenXcom
 {
 
+/**
+ * Constructs a ToggleTextButton.
+ * @param width		- the width
+ * @param height	- the height
+ * @param x			- the X position
+ * @param y			- the Y position
+ */
 ToggleTextButton::ToggleTextButton(
 		int width,
 		int height,
@@ -37,22 +40,25 @@ ToggleTextButton::ToggleTextButton(
 			width,
 			height,
 			x,y),
-		_invertedColor(-1),
-		_originalColor(-1),
+		_invertedColor(std::numeric_limits<uint8_t>::max()),
+		_originalColor(std::numeric_limits<uint8_t>::max()),
 		_fakeGroup(NULL)
 {
 	_isPressed = false;
-
 	TextButton::setGroup(&_fakeGroup);
 }
 
-
+/**
+ * dTor.
+ */
 ToggleTextButton::~ToggleTextButton(void)
 {}
 
 /**
- * handle mouse clicks by toggling the button state;
- * use _fakeGroup to trick TextButton into drawing the right thing.
+ * Handles mouse clicks by toggling the button state.
+ * @note Use '_fakeGroup' to trick TextButton into drawing the right thing.
+ * @param action	- pointer to an Action
+ * @param state		- pointer to a State
  */
 void ToggleTextButton::mousePress(Action* action, State* state)
 {
@@ -60,10 +66,10 @@ void ToggleTextButton::mousePress(Action* action, State* state)
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_isPressed = !_isPressed;
-		_fakeGroup = _isPressed? this: NULL; // this is the trick that makes TextButton stick
+		_fakeGroup = _isPressed ? this : NULL; // this is the trick that makes TextButton stick
 
 		if (_isPressed == true
-			&& _invertedColor > -1)
+			&& _invertedColor != std::numeric_limits<uint8_t>::max())
 		{
 			TextButton::setColor(_invertedColor);
 		}
@@ -76,7 +82,8 @@ void ToggleTextButton::mousePress(Action* action, State* state)
 }
 
 /**
- * set the _isPressed state of the button and force it to redraw
+ * Sets the '_isPressed' state of the button and forces it to redraw.
+ * @param pressed - true if pressed
  */
 void ToggleTextButton::setPressed(bool pressed)
 {
@@ -84,10 +91,10 @@ void ToggleTextButton::setPressed(bool pressed)
 		return;
 
 	_isPressed = pressed;
-	_fakeGroup = _isPressed? this: NULL;
+	_fakeGroup = _isPressed ? this : NULL;
 
 	if (_isPressed == true
-		&& _invertedColor > -1)
+		&& _invertedColor != std::numeric_limits<uint8_t>::max())
 	{
 		TextButton::setColor(_invertedColor);
 	}
@@ -98,7 +105,8 @@ void ToggleTextButton::setPressed(bool pressed)
 }
 
 /**
- *
+ * Sets the color of this button.
+ * @param color - color
  */
 void ToggleTextButton::setColor(Uint8 color)
 {
@@ -107,7 +115,8 @@ void ToggleTextButton::setColor(Uint8 color)
 }
 
 /**
- * When this is set, Surface::invert() is called with the value from mid when it's time to invert the button
+ * Surface::invert() is called when this value is set and the button is depressed.
+ * @param color - the invert color
  */
 void ToggleTextButton::setInvertColor(Uint8 color)
 {
@@ -118,17 +127,17 @@ void ToggleTextButton::setInvertColor(Uint8 color)
 }
 
 /**
- * handle draw() in case we need to paint the button a garish color
+ * Handles draw() in case the button needs to be painted with a garish color.
  */
 void ToggleTextButton::draw()
 {
-	if (_invertedColor > -1) // nevermind, TextButton. We'll invert the surface ourselves.
-		_fakeGroup = NULL;
+	if (_invertedColor != std::numeric_limits<uint8_t>::max())
+		_fakeGroup = NULL; // nevermind, TextButton. We'll invert the surface ourselves.
 
 	TextButton::draw();
 
 	if (_isPressed == true
-		&& _invertedColor > -1)
+		&& _invertedColor != std::numeric_limits<uint8_t>::max())
 	{
 		this->invert(static_cast<Uint8>(_invertedColor + 4));
 	}

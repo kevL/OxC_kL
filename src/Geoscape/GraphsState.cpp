@@ -53,7 +53,6 @@
 namespace OpenXcom
 {
 
-//Sound* GraphsState::soundPop = 0;
 static int curRowCountry = 0;
 
 
@@ -108,7 +107,7 @@ GraphsState::GraphsState(int curGraph)
 		_vis(true),
 		_reset(false)
 {
-	_bg				= new InteractiveSurface(320,200);
+	_bg = new InteractiveSurface(320,200);
 	_bg->onMousePress(
 				(ActionHandler)& GraphsState::shiftButtons,
 				SDL_BUTTON_WHEELUP);
@@ -168,12 +167,6 @@ GraphsState::GraphsState(int curGraph)
 		add(_txtScale.at(scaleText), "scale", "graphs");
 	}
 
-	Uint8
-		regionTotalColor = static_cast<Uint8>(
-						 _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color),
-		countryTotalColor = static_cast<Uint8>(
-						 _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color);
-
 	size_t offset = 0;
 	Uint8 colorOffset = 0;
 	int
@@ -199,7 +192,7 @@ GraphsState::GraphsState(int curGraph)
 		// always save all the regions in toggles
 		_regionToggles.push_back(new GraphBtnInfo(
 												tr((*region)->getRules()->getType()), // name of Region
-												colorOffset * 4 - 42, //13 + (8*offset)
+												colorOffset * 8 + 13,
 												alienAct,
 												xcomAct,
 												colorOffset * 8 + 16,
@@ -214,7 +207,7 @@ GraphsState::GraphsState(int curGraph)
 													0,
 													static_cast<int>(offset) * 10));
 			_btnRegions.at(offset)->setText(tr((*region)->getRules()->getType())); // name of Region
-			_btnRegions.at(offset)->setInvertColor(colorOffset * 4 - 42); //13 + (8*offset)
+			_btnRegions.at(offset)->setInvertColor(colorOffset * 8 + 13);
 			_btnRegions.at(offset)->onMousePress(
 							(ActionHandler)& GraphsState::btnRegionListClick,
 							SDL_BUTTON_LEFT);
@@ -262,24 +255,27 @@ GraphsState::GraphsState(int curGraph)
 		++colorOffset;
 	}
 
-	if (_regionToggles.size() < GRAPH_MAX_BUTTONS) // TOTAL btn.
-		_btnRegionTotal = new ToggleTextButton(
-											65,10,
-											0,
-											static_cast<int>(_regionToggles.size()) * 10);
+
+	int btnTotal_y;
+	if (_regionToggles.size() < GRAPH_MAX_BUTTONS)
+		btnTotal_y = static_cast<int>(_regionToggles.size());
 	else
-		_btnRegionTotal = new ToggleTextButton(
-											65,10,
-											0,
-											static_cast<int>(GRAPH_MAX_BUTTONS) * 10);
+		btnTotal_y = static_cast<int>(GRAPH_MAX_BUTTONS) * 10;
+
+	_btnRegionTotal = new ToggleTextButton( // TOTAL btn.
+										65,10,
+										0,
+										btnTotal_y * 10);
+
+	Uint8 totalColor = static_cast<Uint8>(
+					   _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color);
 
 	_regionToggles.push_back(new GraphBtnInfo( // TOTAL btn is the last button in the vector.
 											tr("STR_TOTAL_UC"),
-											regionTotalColor,
+											totalColor,
 											0,0,0,
 											false,false));
-
-	_btnRegionTotal->setInvertColor(regionTotalColor);
+	_btnRegionTotal->setInvertColor(totalColor);
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
 	_btnRegionTotal->onMousePress(
 					(ActionHandler)& GraphsState::btnRegionListClick,
@@ -313,7 +309,7 @@ GraphsState::GraphsState(int curGraph)
 		// always save all the countries in toggles
 		_countryToggles.push_back(new GraphBtnInfo(
 												tr((*country)->getRules()->getType()), // name of Country
-												colorOffset * 4 - 42, //13 + (8*offset)
+												colorOffset * 8 + 13,
 												alienAct,
 												xcomAct,
 												colorOffset * 8 + 16,
@@ -328,7 +324,7 @@ GraphsState::GraphsState(int curGraph)
 													0,
 													static_cast<int>(offset) * 10));
 			_btnCountries.at(offset)->setText(tr((*country)->getRules()->getType())); // name of Country
-			_btnCountries.at(offset)->setInvertColor(colorOffset * 4 - 42); //13 + (8*offset)
+			_btnCountries.at(offset)->setInvertColor(colorOffset * 8 + 13);
 			_btnCountries.at(offset)->onMousePress(
 							(ActionHandler)& GraphsState::btnCountryListClick,
 							SDL_BUTTON_LEFT);
@@ -379,24 +375,27 @@ GraphsState::GraphsState(int curGraph)
 		++colorOffset;
 	}
 
-	if (_countryToggles.size() < GRAPH_MAX_BUTTONS) // TOTAL btn.
-		_btnCountryTotal = new ToggleTextButton(
-											65,10,
-											0,
-											static_cast<int>(_countryToggles.size()) * 10);
+
+	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
+		btnTotal_y = static_cast<int>(_countryToggles.size());
 	else
-		_btnCountryTotal = new ToggleTextButton(
-											65,10,
-											0,
-											static_cast<int>(GRAPH_MAX_BUTTONS) * 10);
+		btnTotal_y = static_cast<int>(GRAPH_MAX_BUTTONS);
+
+	_btnCountryTotal = new ToggleTextButton( // TOTAL btn.
+										65,10,
+										0,
+										btnTotal_y * 10);
+
+	totalColor = static_cast<Uint8>(
+				 _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color);
 
 	_countryToggles.push_back(new GraphBtnInfo( // TOTAL btn is the last button in the vector.
 											tr("STR_TOTAL_UC"),
-											countryTotalColor,
+											totalColor,
 											0,0,0,
 											false,false));
 
-	_btnCountryTotal->setInvertColor(countryTotalColor);
+	_btnCountryTotal->setInvertColor(totalColor);
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
 	_btnCountryTotal->onMousePress(
 					(ActionHandler)& GraphsState::btnCountryListClick,
@@ -426,7 +425,7 @@ GraphsState::GraphsState(int curGraph)
 												static_cast<int>(i) * 16));
 		_financeToggles.push_back(false);
 
-		_btnFinances.at(i)->setInvertColor((static_cast<Uint8>(i) * 4) - 42); //13 + (8*offset)
+		_btnFinances.at(i)->setInvertColor(static_cast<Uint8>(i) * 8 + 13);
 		_btnFinances.at(i)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
 		add(_btnFinances.at(i), "button", "graphs");
@@ -573,7 +572,7 @@ GraphsState::GraphsState(int curGraph)
 
 	const GameTime* const gt = _game->getSavedGame()->getTime();
 	const int yr = gt->getYear();
-	size_t mth = gt->getMonth();
+	size_t mth = static_cast<size_t>(gt->getMonth());
 
 	std::wostringstream woststr;
 	for (size_t

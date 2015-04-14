@@ -446,7 +446,7 @@ commendations:
     description: STR_MEDAL_MELEE_KILL_MEDAL_DESCRIPTION
     sprite: 34
     criteria:
-      killsWithCriteriaCareer: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      killsWithCriteriaCareer: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
     killCriteria:
       -
         1: ["DT_MELEE", "FACTION_HOSTILE", "STATUS_DEAD"]
