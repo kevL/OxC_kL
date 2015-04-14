@@ -645,19 +645,13 @@ void SoldierDiaryPerformanceState::drawSprites()
 		if (j >= scroll // show awards that are visible on the list
 			&& j - scroll < _srfSprite.size())
 		{
-			awardsRule = _game->getRuleset()->getCommendations()[(*i)->getType()];
-			sprite = awardsRule->getSprite(); // handle award sprites
-//			_sstSprite->getFrame(sprite)->setX(0);
-//			_sstSprite->getFrame(sprite)->setY(0);
+			awardsRule = _game->getRuleset()->getCommendations()[(*i)->getType()]; // handle award sprites
+			sprite = awardsRule->getSprite();
 			_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
 
 			sprite = (*i)->getDecorationLevelInt(); // handle award decoration sprites
 			if (sprite != 0)
-			{
-//				_sstDecor->getFrame(sprite)->setX(0);
-//				_sstDecor->getFrame(sprite)->setY(0);
 				_sstDecor->getFrame(sprite)->blit(_srfDecor[j - scroll]);
-			}
 		}
 	}
 }
