@@ -38,21 +38,21 @@ ufopaedia:
   - id: STR_MEDAL_HONOR_CROSS_NAME
     type_id: 18
     section: STR_AWARDS
-    image_id: HONOR_CROSS
+    image_id: WEAPON_PROFICIENCY #was HONOR_CROSS
     text: STR_MEDAL_HONOR_CROSS_UFOPEDIA
     text_width: 200
 #    listOrder: 6006
   - id: STR_MEDAL_SERVICE_MEDAL_NAME
     type_id: 18
     section: STR_AWARDS
-    image_id: SERVICE
+    image_id: HONOR_CROSS #was SERVICE
     text: STR_MEDAL_SERVICE_MEDAL_UFOPEDIA
     text_width: 200
 #    listOrder: 6007
   - id: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME
     type_id: 18
     section: STR_AWARDS
-    image_id: WEAPON_PROFICIENCY
+    image_id: SERVICE #was WEAPON_PROFICIENCY
     text: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA
     text_width: 200
 #    listOrder: 6008
