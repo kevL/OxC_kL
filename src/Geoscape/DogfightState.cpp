@@ -2061,7 +2061,7 @@ void DogfightState::calcPortPosition()
  */
 void DogfightState::placePort()
 {
-	_window->setX(_x);
+/*	_window->setX(_x);
 	_window->setY(_y);
 
 	_battle->setX(_x + 3);
@@ -2130,20 +2130,24 @@ void DogfightState::placePort()
 	_txtStatus->setY(_y + 85);
 
 	_txtTitle->setX(_x);
-	_txtTitle->setY(_y - 9);
+	_txtTitle->setY(_y - 9); */
 
-	// new:
-	int x = _window->getX() - _x;
-	int y = _window->getY() - _y;
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	const int
+		x = _window->getX() - _x,
+		y = _window->getY() - _y;
+
+	for (std::vector<Surface*>::const_iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
 	{
 		(*i)->setX((*i)->getX() - x);
 		(*i)->setY((*i)->getY() - y);
-	} // end_New.
+	}
+
 	_btnMinimizedIcon->setX(_minimizedIconX);
 	_btnMinimizedIcon->setY(_minimizedIconY);
 
-	// -> _txtInterceptor
 	_txtInterception->setX(_minimizedIconX + 18);
 	_txtInterception->setY(_minimizedIconY + 6);
 }
