@@ -30,7 +30,6 @@ class Base;
 class BaseView;
 class Globe;
 class MiniBaseView;
-class Sound;
 class Text;
 class TextButton;
 class TextEdit;
@@ -71,9 +70,6 @@ private:
 
 
 	public:
-//		static Sound* soundPop;
-
-
 		/// Creates the Basescape state.
 		BasescapeState(
 				Base* base,

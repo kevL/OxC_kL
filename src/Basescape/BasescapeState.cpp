@@ -47,8 +47,8 @@
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Geoscape/BuildNewBaseState.h"
-#include "../Geoscape/GeoscapeState.h"
-#include "../Geoscape/Globe.h" // kL_reCenter
+#include "../Geoscape/GeoscapeState.h"	// kL_geoMusic
+#include "../Geoscape/Globe.h"			// kL_reCenter
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -519,6 +519,7 @@ void BasescapeState::btnFacilitiesClick(Action*)
  */
 void BasescapeState::btnGeoscapeClick(Action*)
 {
+	kL_geoMusic = false;
 	_game->popState();
 }
 
@@ -718,6 +719,8 @@ void BasescapeState::miniLeftClick(Action*)
 	}
 	else if (base == _game->getSavedGame()->getBases()->size())
 	{
+		kL_geoMusic = false;
+
 		// aka: btnNewBaseClick();
 		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
 		Base* const base = new Base(_game->getRuleset());
@@ -745,6 +748,7 @@ void BasescapeState::miniRightClick(Action*)
 		_game->getSavedGame()->setGlobeLatitude(centBase->getLatitude());
 
 		kL_reCenter = true;
+		kL_geoMusic = false;
 
 		_game->popState();
 		kL_soundPop->play(Mix_GroupAvailable(0));
@@ -772,10 +776,9 @@ void BasescapeState::handleKeyPress(Action* action)
 		};
 
 		const int key = action->getDetails()->key.keysym.sym;
-
 		for (size_t
 				i = 0;
-				i < _game->getSavedGame()->getBases()->size();
+				i != _game->getSavedGame()->getBases()->size();
 				++i)
 		{
 			if (key == baseKeys[i])

@@ -240,7 +240,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1425063344 f:\git\openxcom\src\basescape\basescapestate.h
+1429026978 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1426183800 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4387,7 +4387,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1429015353 f:\git\openxcom\src\resource\resourcepack.h
+1429017810 f:\git\openxcom\src\resource\resourcepack.h
 
 1426969223 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4399,7 +4399,7 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1428122608 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1429024644 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4488,7 +4488,7 @@
 1424390940 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1429014277 f:\git\openxcom\src\geoscape\geoscapestate.h
+1429027049 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1426210349 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4912,7 +4912,7 @@
 	<windows.h>
 	<stddef.h>
 
-1426605989 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1429024525 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -7148,7 +7148,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1428897404 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1429026082 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8413,7 +8413,7 @@
 
 1427081525 f:\git\openxcom\src\savegame\serializationhelper.h
 
-1429015579 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1429017824 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Music.h"
@@ -9108,19 +9108,20 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1428953460 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
+1429025542 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
 	"UfopaediaStartState.h"
 	"Ufopaedia.h"
 	"UfopaediaSelectState.h"
-	"../Ruleset/ArticleDefinition.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"
 	"../Engine/Language.h"
+	"../Geoscape/GeoscapeState.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/XcomResourcePack.h"
+	"../Ruleset/ArticleDefinition.h"
 
 1418961960 f:\git\openxcom\deps\include\boost\exception
 
@@ -10879,7 +10880,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1424777912 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1429024525 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"

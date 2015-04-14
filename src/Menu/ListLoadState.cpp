@@ -90,7 +90,7 @@ void ListLoadState::lstSavesPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		kL_currentBase = 0;
+		kL_curBase = 0;
 
 		if (_origin == OPT_MENU
 			|| (_origin == OPT_GEOSCAPE

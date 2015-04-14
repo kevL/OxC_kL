@@ -22,8 +22,6 @@
 #include "Ufopaedia.h"
 #include "UfopaediaSelectState.h"
 
-#include "../Ruleset/ArticleDefinition.h"
-
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 //#include "../Engine/Options.h"
@@ -31,11 +29,15 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 
+#include "../Geoscape/GeoscapeState.h"	// kL_geoMusic
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
 #include "../Resource/XcomResourcePack.h"
+
+#include "../Ruleset/ArticleDefinition.h"
 
 
 namespace OpenXcom
@@ -121,10 +123,8 @@ UfopaediaStartState::~UfopaediaStartState()
  */
 void UfopaediaStartState::btnOkClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 276);
-
+	kL_geoMusic = false;
 	_game->popState();
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 }
 
 /**

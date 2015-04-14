@@ -116,7 +116,7 @@ size_t MiniBaseView::getHoveredBase() const
 void MiniBaseView::setSelectedBase(size_t base)
 {
 	_baseID =
-	kL_currentBase = base;
+	kL_curBase = base;
 
 	_redraw = true;
 }

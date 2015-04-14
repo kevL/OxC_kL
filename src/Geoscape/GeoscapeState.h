@@ -28,7 +28,8 @@
 namespace OpenXcom
 {
 
-extern size_t kL_currentBase;
+extern size_t kL_curBase;
+extern bool kL_geoMusic;
 
 extern const double
 	earthRadius,
@@ -69,8 +70,6 @@ private:
 	bool
 		_dfZoomInDone,
 		_dfZoomOutDone,
-		_dogfightEnded,
-		_musicStarted,
 		_pause;
 	int
 		_day,

@@ -133,7 +133,8 @@
 namespace OpenXcom
 {
 
-size_t kL_currentBase = 0;
+size_t kL_curBase = 0;
+bool kL_geoMusic = false;
 
 const double
 	earthRadius					= 3440., //.0647948164,			// nautical miles.
@@ -332,8 +333,6 @@ GeoscapeState::GeoscapeState()
 		_day(-1),
 		_month(-1),
 		_year(-1),
-		_dogfightEnded(false),
-		_musicStarted(false),
 		_windowPops(0)
 {
 	const int
@@ -1139,14 +1138,12 @@ void GeoscapeState::init()
 		popup(new ListSaveState(OPT_GEOSCAPE));
 	}
 
-	if (_musicStarted == true)
+	if (kL_geoMusic == true)
 	{
 		std::string track;
-		if (_dogfights.empty() == true				// double-checked w/ _dogfightEnded
-			&& _dfStartTimer->isRunning() == false	// but this isn't .... huh.
-			&& _dogfightEnded == true)
+		if (_dogfights.empty() == true
+			&& _dfStartTimer->isRunning() == false)
 		{
-			_dogfightEnded = false;
 			track = OpenXcom::res_MUSIC_GEO_GLOBE;
 		}
 		else
@@ -1892,10 +1889,10 @@ void GeoscapeState::time5Seconds()
 	// This is ONLY for allowing _dogfights to fill (or not)
 	// before deciding whether to startMusic in init() --
 	// and ONLY for Loading with a dogfight in progress:
-	if (_musicStarted == false)
+	if (kL_geoMusic == false)
 	{
-		_musicStarted = true;	// note, if there's a dogfight then dogfight
-								// music will play when a SavedGame is loaded
+		kL_geoMusic = true;	// note, if there's a dogfight then dogfight
+							// music will play when a SavedGame is loaded
 		if (_dogfights.empty() == true
 			&& _dfStartTimer->isRunning() == false)
 		{
@@ -3470,8 +3467,8 @@ void GeoscapeState::btnBasesClick(Action*)
 
 	if (_gameSave->getBases()->empty() == false)
 	{
-		if (kL_currentBase == 0
-			|| kL_currentBase >= _gameSave->getBases()->size())
+		if (kL_curBase == 0
+			|| kL_curBase >= _gameSave->getBases()->size())
 		{
 			_game->pushState(new BasescapeState(
 											_gameSave->getBases()->front(),
@@ -3479,7 +3476,7 @@ void GeoscapeState::btnBasesClick(Action*)
 		}
 		else
 			_game->pushState(new BasescapeState(
-											_gameSave->getBases()->at(kL_currentBase),
+											_gameSave->getBases()->at(kL_curBase),
 											_globe));
 	}
 	else
@@ -3779,7 +3776,6 @@ void GeoscapeState::thinkDogfights()
 	if (_dogfights.empty() == true)
 	{
 		_dfTimer->stop();
-		_dogfightEnded = true;
 		_dfZoomOutTimer->start();
 	}
 	else if (resetPorts == true)
