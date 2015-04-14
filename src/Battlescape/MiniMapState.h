@@ -61,7 +61,7 @@ private:
 		/// Creates the MiniMapState.
 		MiniMapState(
 				Camera* camera,
-				SavedBattleGame* battleGame);
+				SavedBattleGame* battleSave);
 		/// Cleans up the MiniMapState.
 		~MiniMapState();
 

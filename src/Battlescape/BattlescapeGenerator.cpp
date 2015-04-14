@@ -308,46 +308,58 @@ void BattlescapeGenerator::nextStage()
 	// - the ones that are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
 	// - and the ones that are scattered about on the ground, that will be recovered ONLY on success.
 	// this does not include items in soldiers' hands.
-	std::vector<BattleItem*> *takeHomeGuaranteed = _battleSave->getGuaranteedRecoveredItems();
-	std::vector<BattleItem*> *takeHomeConditional = _battleSave->getConditionalRecoveredItems();
+	std::vector<BattleItem*>
+		* takeHomeGuaranteed = _battleSave->getGuaranteedRecoveredItems(),
+		* takeHomeConditional = _battleSave->getConditionalRecoveredItems(),
+		* toContainer,
+		takeToNextStage;
 	std::map<RuleItem*, int>
 		guaranteedRounds,
 		conditionalRounds;
 
+	Tile* tile;
 	for (std::vector<BattleItem*>::iterator
-			j = _battleSave->getItems()->begin();
-			j != _battleSave->getItems()->end();
+			i = _battleSave->getItems()->begin();
+			i != _battleSave->getItems()->end();
 			)
 	{
-		const Tile* const tile = (*j)->getTile();
-
-		if ((*j)->getOwner() == NULL
-			|| (*j)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
+		if ((*i)->getOwner() == NULL
+			|| (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
 		{
-			(*j)->setTile(NULL);
-		}
+			tile = (*i)->getTile();
+			toContainer = takeHomeConditional;
 
-		if (tile != NULL)
-		{
-			std::vector<BattleItem*>* toContainer = takeHomeConditional;
-
-			if (tile->getMapData(MapData::O_FLOOR) != NULL
-				&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			if (tile != NULL)
 			{
-				toContainer = takeHomeGuaranteed;
+				tile->removeItem(*i);
+
+				if (tile->getMapData(MapData::O_FLOOR) != NULL)
+				{
+					if (tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+						toContainer = takeHomeGuaranteed;
+					else if (tile->getMapData(MapData::O_FLOOR)->getSpecialType() == END_POINT
+						&& (*i)->getRules()->isRecoverable() == true
+						&& (*i)->getUnit() == NULL)
+					{
+						takeToNextStage.push_back(*i);
+
+						++i;
+						continue;
+					}
+				}
 			}
 
-			if ((*j)->getRules()->isRecoverable() == true
-				&& (*j)->getXCOMProperty() == false) // note that <-
+			if ((*i)->getRules()->isRecoverable() == true
+				&& (*i)->getXCOMProperty() == false) // note that <-
 			{
-				toContainer->push_back(*j);
-				j = _battleSave->getItems()->erase(j);
+				toContainer->push_back(*i);
+				i = _battleSave->getItems()->erase(i);
 
 				continue;
 			}
 		}
 
-		++j;
+		++i;
 	}
 
 	_missionType = _battleSave->getMissionType();
@@ -385,49 +397,49 @@ void BattlescapeGenerator::nextStage()
 	int highestSoldierID = 0;
 
 	for (std::vector<BattleUnit*>::const_iterator
-			j = _battleSave->getUnits()->begin();
-			j != _battleSave->getUnits()->end();
-			++j)
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
 	{
-		if ((*j)->getOriginalFaction() == FACTION_PLAYER)
+		if ((*i)->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if ((*j)->isOut() == false)
+			if ((*i)->isOut() == false)
 			{
-				(*j)->convertToFaction(FACTION_PLAYER);
-				(*j)->setTurnsExposed(255);
-				(*j)->getVisibleTiles()->clear();
+				(*i)->convertToFaction(FACTION_PLAYER);
+				(*i)->setTurnsExposed(255);
+				(*i)->getVisibleTiles()->clear();
 
 				if (selectedFirstSoldier == false
-					&& (*j)->getGeoscapeSoldier())
+					&& (*i)->getGeoscapeSoldier())
 				{
-					_battleSave->setSelectedUnit(*j);
+					_battleSave->setSelectedUnit(*i);
 					selectedFirstSoldier = true;
 				}
 
 				const Node* const node = _battleSave->getSpawnNode(
 																NR_XCOM,
-																*j);
+																*i);
 				if (node != NULL
-					|| placeUnitNearFriend(*j) == true)
+					|| placeUnitNearFriend(*i) == true)
 				{
 					if (node != NULL)
 						_battleSave->setUnitPosition(
-													*j,
+													*i,
 													node->getPosition());
 
 					if (_tileEquipt == NULL)
 					{
-						_tileEquipt = (*j)->getTile();
+						_tileEquipt = (*i)->getTile();
 						_battleSave->setBattleInventory(_tileEquipt);
 					}
 
-					_tileEquipt->setUnit(*j);
-					(*j)->setUnitVisible(false);
+					_tileEquipt->setUnit(*i);
+					(*i)->setUnitVisible(false);
 
-					if ((*j)->getId() > highestSoldierID)
-						highestSoldierID = (*j)->getId();
+					if ((*i)->getId() > highestSoldierID)
+						highestSoldierID = (*i)->getId();
 
-					(*j)->prepUnit();
+					(*i)->prepUnit();
 				}
 			}
 		}
@@ -445,6 +457,18 @@ void BattlescapeGenerator::nextStage()
 			(*j)->setTile(NULL);
 		}
 	} */
+
+	RuleInventory* const ground = _game->getRuleset()->getInventory("STR_GROUND");
+	for (std::vector<BattleItem*>::iterator
+		i = takeToNextStage.begin();
+		i != takeToNextStage.end();
+		++i)
+	{
+		_tileEquipt->addItem(
+						*i,
+						ground);
+	}
+
 
 	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
 	const size_t unitCount = _battleSave->getUnits()->size();

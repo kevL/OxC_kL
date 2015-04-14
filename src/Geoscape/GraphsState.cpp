@@ -162,8 +162,7 @@ GraphsState::GraphsState(int curGraph)
 			++scaleText)
 	{
 		_txtScale.push_back(new Text(
-									32,
-									10,
+									32,10,
 									91,
 									171 - (static_cast<int>(scaleText) * 14)));
 		add(_txtScale.at(scaleText), "scale", "graphs");
@@ -200,7 +199,7 @@ GraphsState::GraphsState(int curGraph)
 		// always save all the regions in toggles
 		_regionToggles.push_back(new GraphBtnInfo(
 												tr((*region)->getRules()->getType()), // name of Region
-												colorOffset * 4 - 42,
+												colorOffset * 4 - 42, //13 + (8*offset)
 												alienAct,
 												xcomAct,
 												colorOffset * 8 + 16,
@@ -214,8 +213,8 @@ GraphsState::GraphsState(int curGraph)
 													65,10,
 													0,
 													static_cast<int>(offset) * 10));
-			_btnRegions.at(offset)->setInvertColor(colorOffset * 4 - 42);
 			_btnRegions.at(offset)->setText(tr((*region)->getRules()->getType())); // name of Region
+			_btnRegions.at(offset)->setInvertColor(colorOffset * 4 - 42); //13 + (8*offset)
 			_btnRegions.at(offset)->onMousePress(
 							(ActionHandler)& GraphsState::btnRegionListClick,
 							SDL_BUTTON_LEFT);
@@ -314,7 +313,7 @@ GraphsState::GraphsState(int curGraph)
 		// always save all the countries in toggles
 		_countryToggles.push_back(new GraphBtnInfo(
 												tr((*country)->getRules()->getType()), // name of Country
-												colorOffset * 4 - 42,
+												colorOffset * 4 - 42, //13 + (8*offset)
 												alienAct,
 												xcomAct,
 												colorOffset * 8 + 16,
@@ -328,8 +327,8 @@ GraphsState::GraphsState(int curGraph)
 													65,10,
 													0,
 													static_cast<int>(offset) * 10));
-			_btnCountries.at(offset)->setInvertColor(colorOffset * 4 - 42);
 			_btnCountries.at(offset)->setText(tr((*country)->getRules()->getType())); // name of Country
+			_btnCountries.at(offset)->setInvertColor(colorOffset * 4 - 42); //13 + (8*offset)
 			_btnCountries.at(offset)->onMousePress(
 							(ActionHandler)& GraphsState::btnCountryListClick,
 							SDL_BUTTON_LEFT);
@@ -427,7 +426,7 @@ GraphsState::GraphsState(int curGraph)
 												static_cast<int>(i) * 16));
 		_financeToggles.push_back(false);
 
-		_btnFinances.at(i)->setInvertColor((static_cast<Uint8>(i) * 4) - 42);
+		_btnFinances.at(i)->setInvertColor((static_cast<Uint8>(i) * 4) - 42); //13 + (8*offset)
 		_btnFinances.at(i)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
 		add(_btnFinances.at(i), "button", "graphs");
@@ -572,7 +571,7 @@ GraphsState::GraphsState(int curGraph)
 	_txtYears->addRow(6,L" ",L" ",L" ",L" ",L" ",L" ");
 
 
-	GameTime* gt = _game->getSavedGame()->getTime();
+	const GameTime* const gt = _game->getSavedGame()->getTime();
 	const int yr = gt->getYear();
 	size_t mth = gt->getMonth();
 
@@ -633,7 +632,10 @@ GraphsState::GraphsState(int curGraph)
 	}
 
 
-	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
+	Surface* srf = _game->getResourcePack()->getSurface("GRAPH.BDY");
+	if (srf == NULL)
+		srf = _game->getResourcePack()->getSurface("GRAPHS.SPK");
+	srf->blit(_bg);
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();

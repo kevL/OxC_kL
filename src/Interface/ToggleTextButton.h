@@ -36,7 +36,9 @@ class ToggleTextButton
 
 private:
 	bool _isPressed;
-	int _invertMid;
+	int
+		_invertedColor,
+		_originalColor;
 	TextButton* _fakeGroup;
 
 
@@ -52,8 +54,11 @@ private:
 
 		///
 		void draw();
+
 		///
-		void setInvertColor(Uint8 mid);
+		void setColor(Uint8 color);
+		///
+		void setInvertColor(Uint8 color);
 
 		///
 		void mousePress(Action* action, State* state);

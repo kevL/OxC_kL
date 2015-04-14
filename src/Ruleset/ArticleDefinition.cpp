@@ -101,7 +101,8 @@ void ArticleDefinition::load(
 	requires	= node["requires"]	.as<std::vector<std::string> >(requires);
 
 	title = node["title"].as<std::string>(title);
-//	_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);	// looks like unused here; still in ruleset though. Could be for TFTD stuff
+//	_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);	// looks like unused here; still in ruleset though.
+																	// Could be for TFTD stuff. ps, commented by them
 
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (_listOrder == 0)

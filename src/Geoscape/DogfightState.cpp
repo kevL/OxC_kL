@@ -2132,9 +2132,18 @@ void DogfightState::placePort()
 	_txtTitle->setX(_x);
 	_txtTitle->setY(_y - 9);
 
+	// new:
+	int x = _window->getX() - _x;
+	int y = _window->getY() - _y;
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		(*i)->setX((*i)->getX() - x);
+		(*i)->setY((*i)->getY() - y);
+	} // end_New.
 	_btnMinimizedIcon->setX(_minimizedIconX);
 	_btnMinimizedIcon->setY(_minimizedIconY);
 
+	// -> _txtInterceptor
 	_txtInterception->setX(_minimizedIconX + 18);
 	_txtInterception->setY(_minimizedIconY + 6);
 }

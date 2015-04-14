@@ -99,7 +99,7 @@ InterceptState::InterceptState(
 	add(_txtCraft,		"text2",	"geoCraftScreens");
 	add(_txtStatus,		"text2",	"geoCraftScreens");
 	add(_txtWeapons,	"text2",	"geoCraftScreens");
-	add(_lstCrafts,		"text1",	"geoCraftScreens");
+	add(_lstCrafts,		"list",		"geoCraftScreens");
 	add(_btnGotoBase,	"button",	"geoCraftScreens");
 	add(_btnCancel,		"button",	"geoCraftScreens");
 

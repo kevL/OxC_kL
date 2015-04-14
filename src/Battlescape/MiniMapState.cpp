@@ -51,11 +51,11 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the MiniMapState screen.
  * @param camera		- pointer to the battlescape Camera
- * @param battleGame	- pointer to the SavedBattleGame
+ * @param battleSave	- pointer to the SavedBattleGame
  */
 MiniMapState::MiniMapState(
 		Camera* camera,
-		SavedBattleGame* battleGame)
+		SavedBattleGame* battleSave)
 {
 /*kL
 	if (Options::maximizeInfoScreens)
@@ -67,11 +67,10 @@ MiniMapState::MiniMapState(
 
 	_bg			= new InteractiveSurface(320, 200);
 	_miniView	= new MiniMapView(
-//								221, 148, 48, 16,
 								223, 150, 47, 15,
 								_game,
 								camera,
-								battleGame);
+								battleSave);
 
 	_btnLvlUp	= new BattlescapeButton(18, 20, 24, 62);
 	_btnLvlDwn	= new BattlescapeButton(18, 20, 24, 88);
@@ -79,17 +78,16 @@ MiniMapState::MiniMapState(
 
 	_txtLevel	= new Text(28, 16, 281, 73);
 
-	battleGame->setPaletteByDepth(this);
+	battleSave->setPaletteByDepth(this);
 
 	add(_miniView); // put miniView *under* the background.
 	add(_bg);
-//	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
-	_game->getResourcePack()->getSurface("SCANBORD")->blit(_bg);
+	_game->getResourcePack()->getSurface("SCANBORD")->blit(_bg); //"SCANBORD.PCK"
 
-	add(_btnLvlUp, "buttonUp", "minimap", _bg);
-	add(_btnLvlDwn, "buttonDown", "minimap", _bg);
-	add(_btnOk, "buttonOK", "minimap", _bg);
-	add(_txtLevel, "textLevel", "minimap", _bg);
+	add(_btnLvlUp,	"buttonUp",		"minimap", _bg);
+	add(_btnLvlDwn,	"buttonDown",	"minimap", _bg);
+	add(_btnOk,		"buttonOK",		"minimap", _bg);
+	add(_txtLevel,	"textLevel",	"minimap", _bg);
 
 	centerAllSurfaces();
 
@@ -130,10 +128,9 @@ MiniMapState::MiniMapState(
 					Options::keyBattleMap);
 
 	_txtLevel->setBig();
-//	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast();
 	std::wostringstream level;
-	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+	if (_txtLevel->isTFTDMode() == true)
 		level << tr("STR_LEVEL_SHORT");
 	level << camera->getViewLevel();
 	_txtLevel->setText(level.str());
@@ -205,7 +202,7 @@ void MiniMapState::btnOkClick(Action*)
 void MiniMapState::btnLevelUpClick(Action*)
 {
 	std::wostringstream level;
-	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+	if (_miniView->isTFTDMode() == true)
 		level << tr("STR_LEVEL_SHORT");
 	level << _miniView->up();
 	_txtLevel->setText(level.str());
@@ -218,7 +215,7 @@ void MiniMapState::btnLevelUpClick(Action*)
 void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wostringstream level;
-	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+	if (_miniView->isTFTDMode() == true)
 		level << tr("STR_LEVEL_SHORT");
 	level << _miniView->down();
 	_txtLevel->setText(level.str());
