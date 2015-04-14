@@ -67,11 +67,11 @@ private:
 	static const size_t INDICATORS = 16;
 
 	bool
-		_dogfightEnded,
-		_pause,
-		_startMusic,
 		_dfZoomInDone,
-		_dfZoomOutDone;
+		_dfZoomOutDone,
+		_dogfightEnded,
+		_musicStarted,
+		_pause;
 	int
 		_day,
 		_month,

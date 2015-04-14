@@ -71,9 +71,6 @@
 namespace OpenXcom
 {
 
-//Sound* BasescapeState::soundPop = 0;
-
-
 /**
  * Initializes all the elements in the Basescape screen.
  * @param base	- pointer to the Base to get info from
@@ -341,6 +338,14 @@ void BasescapeState::init()
 	_btnFacilities->setVisible(hasFunds);
 
 	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false);
+
+
+	std::string track = OpenXcom::res_MUSIC_GEO_GLOBE;
+	if (_game->getResourcePack()->isMusicPlaying(track) == false) // stop Dogfight music, Pls.
+	{
+		_game->getResourcePack()->fadeMusic(_game, 345);
+		_game->getResourcePack()->playMusic(track);
+	}
 }
 
 /**

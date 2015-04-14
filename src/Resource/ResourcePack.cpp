@@ -212,6 +212,17 @@ Music* ResourcePack::getMusic(const std::string& track) const
 }
 
 /**
+ * Checks if music is playing.
+ * @param track - the music to check for
+ * @return, true if there is music playing
+ */
+bool ResourcePack::isMusicPlaying(std::string& track)
+{
+	return (_playingMusic == track);
+//	return _musics[_playingMusic]->isPlaying();
+}
+
+/**
  * Plays the specified track if it's not already playing.
  * @param track			- reference the track of a Music
  * @param terrainRule	- reference the RuleTerrain type (default "")
@@ -496,15 +507,6 @@ Sound* ResourcePack::getSoundByDepth(
 const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
 {
 	return &_transparencyLUTs;
-}
-
-/**
- * Gets if playing music is playing.
- * @return, true if playing
- */
-bool ResourcePack::isMusicPlaying()
-{
-	return _musics[_playingMusic]->isPlaying();
 }
 
 }

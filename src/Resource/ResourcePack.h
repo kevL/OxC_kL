@@ -130,6 +130,8 @@ private:
 
 			/// Gets a particular music.
 			Music* getMusic(const std::string& track) const;
+			/// Checks if music is playing.
+			bool isMusicPlaying(std::string& track);
 			/// Plays a particular music.
 			void playMusic(
 					const std::string& track,
@@ -177,9 +179,6 @@ private:
 
 			///
 			const std::vector<std::vector<Uint8> >* getLUTs() const;
-
-			///
-			bool isMusicPlaying();
 };
 
 }

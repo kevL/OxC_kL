@@ -333,7 +333,7 @@ GeoscapeState::GeoscapeState()
 		_month(-1),
 		_year(-1),
 		_dogfightEnded(false),
-		_startMusic(false),
+		_musicStarted(false),
 		_windowPops(0)
 {
 	const int
@@ -1118,7 +1118,8 @@ void GeoscapeState::handle(Action* action)
 }
 
 /**
- * Updates the timer display and resets the palette since it's bound to change on other screens.
+ * Updates the timer display and resets the palette since it's bound to change
+ * on other screens.
  */
 void GeoscapeState::init()
 {
@@ -1138,17 +1139,24 @@ void GeoscapeState::init()
 		popup(new ListSaveState(OPT_GEOSCAPE));
 	}
 
-	if (_startMusic == true
-		&& _dogfights.empty() == true
-		&& _dfStartTimer->isRunning() == false)
+	if (_musicStarted == true)
 	{
-		if (_dogfightEnded == true)
+		std::string track;
+		if (_dogfights.empty() == true				// double-checked w/ _dogfightEnded
+			&& _dfStartTimer->isRunning() == false	// but this isn't .... huh.
+			&& _dogfightEnded == true)
 		{
 			_dogfightEnded = false;
-			_game->getResourcePack()->fadeMusic(_game, 425);
+			track = OpenXcom::res_MUSIC_GEO_GLOBE;
 		}
+		else
+			track = OpenXcom::res_MUSIC_GEO_INTERCEPT;
 
-		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+		if (_game->getResourcePack()->isMusicPlaying(track) == false)
+		{
+			_game->getResourcePack()->fadeMusic(_game, 425);
+			_game->getResourcePack()->playMusic(track);
+		}
 	}
 
 	_globe->unsetNewBaseHover();
@@ -1884,13 +1892,16 @@ void GeoscapeState::time5Seconds()
 	// This is ONLY for allowing _dogfights to fill (or not)
 	// before deciding whether to startMusic in init() --
 	// and ONLY for Loading with a dogfight in progress:
-	if (_startMusic == false
-		&& _dogfights.empty() == true
-		&& _dfStartTimer->isRunning() == false)
+	if (_musicStarted == false)
 	{
-		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+		_musicStarted = true;	// note, if there's a dogfight then dogfight
+								// music will play when a SavedGame is loaded
+		if (_dogfights.empty() == true
+			&& _dfStartTimer->isRunning() == false)
+		{
+			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+		}
 	}
-	_startMusic = true;
 }
 
 /**
