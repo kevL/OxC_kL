@@ -71,9 +71,18 @@ NewManufactureListState::NewManufactureListState(
 
 	_btnCancel		= new TextButton(288, 16, 16, 154);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
+
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
 
 	add(_window,			"window",	"selectNewManufacture");
 	add(_txtTitle,			"text",		"selectNewManufacture");

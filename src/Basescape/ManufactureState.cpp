@@ -62,7 +62,7 @@ ManufactureState::ManufactureState(
 		_base(base),
 		_state(state)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_mini			= new MiniBaseView(128, 16, 180, 26, MBV_PRODUCTION);
 
 	_txtTitle		= new Text(300, 17, 16, 9);
@@ -85,26 +85,35 @@ ManufactureState::ManufactureState(
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("manufactureMenu")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
 
-	add(_window, "window", "manufactureMenu");
-	add(_mini, "miniBase", "basescape");
-	add(_txtTitle, "text1", "manufactureMenu");
-	add(_txtBaseLabel, "text1", "manufactureMenu");
-	add(_txtAvailable, "text1", "manufactureMenu");
-	add(_txtAllocated, "text1", "manufactureMenu");
-	add(_txtSpace, "text1", "manufactureMenu");
-	add(_txtFunds, "text1", "manufactureMenu");
-	add(_txtItem, "text2", "manufactureMenu");
-	add(_txtEngineers, "text2", "manufactureMenu");
-	add(_txtProduced, "text2", "manufactureMenu");
-	add(_txtCost, "text2", "manufactureMenu");
-	add(_txtTimeLeft, "text2", "manufactureMenu");
-	add(_lstManufacture, "list", "manufactureMenu");
-	add(_btnNew, "button", "manufactureMenu");
-	add(_btnOk, "button", "manufactureMenu");
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
+
+	add(_window,			"window",	"manufactureMenu");
+	add(_mini,				"miniBase",	"basescape"); // <-
+	add(_txtTitle,			"text1",	"manufactureMenu");
+	add(_txtBaseLabel,		"text1",	"manufactureMenu");
+	add(_txtAvailable,		"text1",	"manufactureMenu");
+	add(_txtAllocated,		"text1",	"manufactureMenu");
+	add(_txtSpace,			"text1",	"manufactureMenu");
+	add(_txtFunds,			"text1",	"manufactureMenu");
+	add(_txtItem,			"text2",	"manufactureMenu");
+	add(_txtEngineers,		"text2",	"manufactureMenu");
+	add(_txtProduced,		"text2",	"manufactureMenu");
+	add(_txtCost,			"text2",	"manufactureMenu");
+	add(_txtTimeLeft,		"text2",	"manufactureMenu");
+	add(_lstManufacture,	"list",		"manufactureMenu");
+	add(_btnNew,			"button",	"manufactureMenu");
+	add(_btnOk,				"button",	"manufactureMenu");
 
 	centerAllSurfaces();
 

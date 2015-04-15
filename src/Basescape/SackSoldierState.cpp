@@ -61,41 +61,45 @@ SackSoldierState::SackSoldierState(
 	_btnCancel	= new TextButton(44, 16, 100, 115);
 	_btnOk		= new TextButton(44, 16, 176, 115);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("sackSoldier")->getElement("palette")->color); //6
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("sackSoldier")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
 
-	add(_window, "window", "sackSoldier");
-	add(_txtTitle, "text", "sackSoldier");
-	add(_txtSoldier, "text", "sackSoldier");
-	add(_btnCancel, "button", "sackSoldier");
-	add(_btnOk, "button", "sackSoldier");
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
+
+	add(_window,		"window",	"sackSoldier");
+	add(_txtTitle,		"text",		"sackSoldier");
+	add(_txtSoldier,	"text",		"sackSoldier");
+	add(_btnCancel,		"button",	"sackSoldier");
+	add(_btnOk,			"button",	"sackSoldier");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SackSoldierState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SackSoldierState::btnOkClick,
 					Options::keyOk);
 
-//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SackSoldierState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SackSoldierState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SACK"));
 
-//	_txtSoldier->setColor(Palette::blockOffset(13)+10);
 	_txtSoldier->setAlign(ALIGN_CENTER);
 	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName());
 }

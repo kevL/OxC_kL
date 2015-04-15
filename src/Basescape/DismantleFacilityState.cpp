@@ -65,41 +65,45 @@ DismantleFacilityState::DismantleFacilityState(
 	_btnCancel		= new TextButton(44, 16, 36, 115);
 	_btnOk			= new TextButton(44, 16, 112, 115);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("dismantleFacility")->getElement("palette")->color); //6
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("dismantleFacility")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
 
-	add(_window, "window", "dismantleFacility");
-	add(_txtTitle, "text", "dismantleFacility");
-	add(_txtFacility, "text", "dismantleFacility");
-	add(_btnCancel, "button", "dismantleFacility");
-	add(_btnOk, "button", "dismantleFacility");
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
+
+	add(_window,		"window",	"dismantleFacility");
+	add(_txtTitle,		"text",		"dismantleFacility");
+	add(_txtFacility,	"text",		"dismantleFacility");
+	add(_btnCancel,		"button",	"dismantleFacility");
+	add(_btnOk,			"button",	"dismantleFacility");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& DismantleFacilityState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DismantleFacilityState::btnOkClick,
 					Options::keyOk);
 
-//	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& DismantleFacilityState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& DismantleFacilityState::btnCancelClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_DISMANTLE"));
 
-//	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setAlign(ALIGN_CENTER);
 	_txtFacility->setText(tr(_fac->getRules()->getType()));
 }

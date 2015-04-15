@@ -99,9 +99,18 @@ CraftEquipmentState::CraftEquipmentState(
 //	_btnOk			= new TextButton((hasCrew || newBattle) ? 148 : 288, 16, (hasCrew || newBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("craftEquipment")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 2; // orange by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("craftEquipment")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
+
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
 
 	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("craftEquipment")->getElement("ammoColor")->color);
 
@@ -182,7 +191,6 @@ CraftEquipmentState::CraftEquipmentState(
 	int
 		craftQty,
 		clipSize;
-	Uint8 color;
 
 	const std::vector<std::string>& itemsList = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator

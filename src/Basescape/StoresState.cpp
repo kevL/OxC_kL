@@ -69,64 +69,65 @@ StoresState::StoresState(Base* base)
 	_btnTransfers	= new TextButton(142, 16, 16, 177);
 	_btnOk			= new TextButton(142, 16, 162, 177);
 
-	setPalette("PAL_BASESCAPE", _game->getRuleset()->getInterface("storesInfo")->getElement("palette")->color); //0
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 0; // brown by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("storesInfo")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
 
-	add(_window, "window", "storesInfo");
-	add(_txtTitle, "text", "storesInfo");
-	add(_txtBaseLabel, "text", "storesInfo");
-	add(_txtTotal, "text", "storesInfo");
-	add(_txtItem, "text", "storesInfo");
-	add(_txtQuantity, "text", "storesInfo");
-	add(_txtSpaceUsed, "text", "storesInfo");
-	add(_lstStores, "list", "storesInfo");
-	add(_btnTransfers, "button", "storesInfo");
-	add(_btnOk, "button", "storesInfo");
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
+
+	add(_window,		"window",	"storesInfo");
+	add(_txtTitle,		"text",		"storesInfo");
+	add(_txtBaseLabel,	"text",		"storesInfo");
+	add(_txtTotal,		"text",		"storesInfo");
+	add(_txtItem,		"text",		"storesInfo");
+	add(_txtQuantity,	"text",		"storesInfo");
+	add(_txtSpaceUsed,	"text",		"storesInfo");
+	add(_lstStores,		"list",		"storesInfo");
+	add(_btnTransfers,	"button",	"storesInfo");
+	add(_btnOk,			"button",	"storesInfo");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& StoresState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresState::btnOkClick,
 					Options::keyCancel);
 
-//	_btnTransfers->setColor(Palette::blockOffset(13)+10);
 	_btnTransfers->setText(tr("STR_TRANSIT_LC"));
 	_btnTransfers->onMouseClick((ActionHandler)& StoresState::btnIncTransClick);
 	_btnTransfers->onKeyboardPress(
 					(ActionHandler)& StoresState::btnIncTransClick,
 					Options::keyOk);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_STORES"));
 
-//	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-//	_txtTotal->setColor(Palette::blockOffset(13)+10);
 	_txtTotal->setText(tr("STR_QUANTITY_UC"));
 	_txtTotal->setAlign(ALIGN_RIGHT);
 
-//	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-//	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-//	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
 //	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));
 
-//	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setBackground(_window);
 	_lstStores->setColumns(3, 154, 84, 26);
+	_lstStores->setBackground(_window);
 	_lstStores->setSelectable();
 	_lstStores->setMargin();
 

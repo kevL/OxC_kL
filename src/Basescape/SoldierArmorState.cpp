@@ -69,9 +69,18 @@ SoldierArmorState::SoldierArmorState(
 
 	_btnCancel		= new TextButton(152, 16, 84, 150);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("soldierArmor")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 4; // green by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("soldierArmor")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
+
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
 
 	add(_window,		"window",	"soldierArmor");
 	add(_txtSoldier,	"text",		"soldierArmor");

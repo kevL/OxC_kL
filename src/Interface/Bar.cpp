@@ -238,9 +238,8 @@ void Bar::draw()
 		width = _scale * _value,
 		width2 = _scale * _value2;
 
-	if (width > 0. && width < 1.)
+	if (width > 0. && width < 1.) // these ensure that miniscule amounts still show up.
 		width = 1.;
-
 	if (width2 > 0. && width2 < 1.)
 		width2 = 1.;
 
@@ -258,7 +257,6 @@ void Bar::draw()
 		else
 		{
 			rect.w = static_cast<Uint16>(Round(width2));
-//			rect.y += _offSecond_y;
 			drawRect(&rect, _color2 + 4);
 
 			rect.w = static_cast<Uint16>(Round(width));
@@ -279,7 +277,6 @@ void Bar::draw()
 		else
 		{
 			rect.w = static_cast<Uint16>(Round(width2));
-//			rect.y += _offSecond_y;
 			drawRect(&rect, _color2);
 
 			rect.w = static_cast<Uint16>(Round(width));

@@ -73,7 +73,7 @@ SoldierInfoState::SoldierInfoState(
 {
 	_list = _base->getSoldiers();
 
-	_bg				= new Surface(320, 200, 0, 0);
+	_bg				= new Surface(320, 200);
 
 	_rank			= new Surface(26, 23, 4, 4);
 	_gender			= new Surface(7, 7, 240, 8);
@@ -159,7 +159,14 @@ SoldierInfoState::SoldierInfoState(
 	_numPsiSkill	= new Text(18, 9, 131, yPos);
 	_barPsiSkill	= new Bar(234, 7, 150, yPos + 1);
 
-	setPalette("PAL_BASESCAPE");
+	const Element* const element = _game->getRuleset()->getInterface("soldierInfo")->getElement("palette");
+	if (element != NULL
+		&& element->TFTDMode == true)
+	{
+		setPalette("PAL_GEOSCAPE");
+	}
+	else
+		setPalette("PAL_BASESCAPE");
 
 	add(_bg);
 	add(_rank);
@@ -273,9 +280,6 @@ SoldierInfoState::SoldierInfoState(
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_txtRecovery->setColor(Palette::blockOffset(13)+10);
-//	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
-//	_txtRecovery->setText(tr("STR_WOUND_RECOVERY"));
-
 	_txtDay->setHighContrast();
 
 	_txtPsionic->setColor(Palette::blockOffset(10));
@@ -284,69 +288,37 @@ SoldierInfoState::SoldierInfoState(
 
 
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
-
 	_barTimeUnits->setScale();
-	_barTimeUnits->setInvert();
-
 
 	_txtStamina->setText(tr("STR_STAMINA"));
-
 	_barStamina->setScale();
-	_barStamina->setInvert();
-
 
 	_txtHealth->setText(tr("STR_HEALTH"));
-
 	_barHealth->setScale();
-	_barHealth->setInvert();
-
 
 	_txtBravery->setText(tr("STR_BRAVERY"));
-
 	_barBravery->setScale();
-	_barBravery->setInvert();
-
 
 	_txtReactions->setText(tr("STR_REACTIONS"));
-
 	_barReactions->setScale();
-	_barReactions->setInvert();
-
 
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
-
 	_barFiring->setScale();
-	_barFiring->setInvert();
-
 
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
-
 	_barThrowing->setScale();
-	_barThrowing->setInvert();
-
 
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
-
 	_barMelee->setScale();
-	_barMelee->setInvert();
-
 
 	_txtStrength->setText(tr("STR_STRENGTH"));
-
 	_barStrength->setScale();
-	_barStrength->setInvert();
-
 
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
-
 	_barPsiStrength->setScale();
-	_barPsiStrength->setInvert();
-
 
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
-
 	_barPsiSkill->setScale();
-	_barPsiSkill->setInvert();
 }
 
 /**

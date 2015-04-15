@@ -73,24 +73,33 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("costsInfo")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 6; // oxide by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("costsInfo")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
 
-	add(_window, "window", "costsInfo");
-	add(_txtTitle, "text1", "costsInfo");
-	add(_txtUnitCost, "text1", "costsInfo");
-	add(_txtQuantity, "text1", "costsInfo");
-	add(_txtCost, "text1", "costsInfo");
-	add(_txtRental, "text1", "costsInfo");
-	add(_lstCrafts, "list", "costsInfo");
-	add(_txtSalaries, "text1", "costsInfo");
-	add(_lstSalaries, "list", "costsInfo");
-	add(_lstMaintenance, "text1", "costsInfo");
-	add(_lstBaseCost, "text2", "costsInfo");
-	add(_txtIncome, "text2", "costsInfo");
-	add(_lstTotal, "text2", "costsInfo");
-	add(_btnOk, "button", "costsInfo");
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
+
+	add(_window,			"window",	"costsInfo");
+	add(_txtTitle,			"text1",	"costsInfo");
+	add(_txtUnitCost,		"text1",	"costsInfo");
+	add(_txtQuantity,		"text1",	"costsInfo");
+	add(_txtCost,			"text1",	"costsInfo");
+	add(_txtRental,			"text1",	"costsInfo");
+	add(_lstCrafts,			"list",		"costsInfo");
+	add(_txtSalaries,		"text1",	"costsInfo");
+	add(_lstSalaries,		"list",		"costsInfo");
+	add(_lstMaintenance,	"text1",	"costsInfo");
+	add(_lstBaseCost,		"text2",	"costsInfo");
+	add(_txtIncome,			"text2",	"costsInfo");
+	add(_lstTotal,			"text2",	"costsInfo");
+	add(_btnOk,				"button",	"costsInfo");
 
 	centerAllSurfaces();
 

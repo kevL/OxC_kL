@@ -80,16 +80,15 @@ void PlaceStartFacilityState::viewClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											tr("STR_CANNOT_BUILD_HERE"),
 											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color, //Palette::blockOffset(15)+1,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
 											"BACK01.SCR",
-											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color)); //6
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	}
 	else
 	{
-		BaseFacility* fac = new BaseFacility(
-										_rule,
-										_base);
-
+		BaseFacility* const fac = new BaseFacility(
+												_rule,
+												_base);
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());
 

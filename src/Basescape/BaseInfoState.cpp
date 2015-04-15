@@ -63,7 +63,7 @@ BaseInfoState::BaseInfoState(
 		_base(base),
 		_state(state)
 {
-	_bg					= new Surface(320, 200, 0, 0);
+	_bg					= new Surface(320, 200);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
 
 	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
@@ -117,62 +117,69 @@ BaseInfoState::BaseInfoState(
 	_numDefense			= new Text(40, 9, 126, 168);
 	_barDefense			= new Bar(218, 5, 166, 169);
 
-	setPalette("PAL_BASESCAPE");
+	const Element* const element = _game->getRuleset()->getInterface("baseInfo")->getElement("palette");
+	if (element != NULL
+		&& element->TFTDMode == true)
+	{
+		setPalette("PAL_GEOSCAPE");
+	}
+	else
+		setPalette("PAL_BASESCAPE");
 
 	add(_bg);
-	add(_mini, "miniBase", "basescape");
-	add(_btnOk, "button", "baseInfo");
-	add(_btnTransfers, "button", "baseInfo");
-	add(_btnStores, "button", "baseInfo");
-	add(_btnMonthlyCosts, "button", "baseInfo");
-	add(_edtBase, "text1", "baseInfo");
+	add(_mini,				"miniBase",			"basescape");
+	add(_btnOk,				"button",			"baseInfo");
+	add(_btnTransfers,		"button",			"baseInfo");
+	add(_btnStores,			"button",			"baseInfo");
+	add(_btnMonthlyCosts,	"button",			"baseInfo");
+	add(_edtBase,			"text1",			"baseInfo");
 
-	add(_txtPersonnel, "text1", "baseInfo");
-	add(_txtRegion, "text1", "baseInfo");
-	add(_txtSoldiers, "text2", "baseInfo");
-	add(_numSoldiers, "numbers", "baseInfo");
-	add(_barSoldiers, "personnelBars", "baseInfo");
-	add(_txtEngineers, "text2", "baseInfo");
-	add(_numEngineers, "numbers", "baseInfo");
-	add(_barEngineers, "personnelBars", "baseInfo");
-	add(_txtScientists, "text2", "baseInfo");
-	add(_numScientists, "numbers", "baseInfo");
-	add(_barScientists, "personnelBars", "baseInfo");
+	add(_txtPersonnel,		"text1",			"baseInfo");
+	add(_txtRegion,			"text1",			"baseInfo");
+	add(_txtSoldiers,		"text2",			"baseInfo");
+	add(_numSoldiers,		"numbers",			"baseInfo");
+	add(_barSoldiers,		"personnelBars",	"baseInfo");
+	add(_txtEngineers,		"text2",			"baseInfo");
+	add(_numEngineers,		"numbers",			"baseInfo");
+	add(_barEngineers,		"personnelBars",	"baseInfo");
+	add(_txtScientists,		"text2",			"baseInfo");
+	add(_numScientists,		"numbers",			"baseInfo");
+	add(_barScientists,		"personnelBars",	"baseInfo");
 
-	add(_txtSpace, "text1", "baseInfo");
-	add(_txtQuarters, "text2", "baseInfo");
-	add(_numQuarters, "numbers", "baseInfo");
-	add(_barQuarters, "facilityBars", "baseInfo");
-	add(_txtStores, "text2", "baseInfo");
-	add(_numStores, "numbers", "baseInfo");
-	add(_barStores, "facilityBars", "baseInfo");
-	add(_txtLaboratories, "text2", "baseInfo");
-	add(_numLaboratories, "numbers", "baseInfo");
-	add(_barLaboratories, "facilityBars", "baseInfo");
-	add(_txtWorkshops, "text2", "baseInfo");
-	add(_numWorkshops, "numbers", "baseInfo");
-	add(_barWorkshops, "facilityBars", "baseInfo");
+	add(_txtSpace,			"text1",			"baseInfo");
+	add(_txtQuarters,		"text2",			"baseInfo");
+	add(_numQuarters,		"numbers",			"baseInfo");
+	add(_barQuarters,		"facilityBars",		"baseInfo");
+	add(_txtStores,			"text2",			"baseInfo");
+	add(_numStores,			"numbers",			"baseInfo");
+	add(_barStores,			"facilityBars",		"baseInfo");
+	add(_txtLaboratories,	"text2",			"baseInfo");
+	add(_numLaboratories,	"numbers",			"baseInfo");
+	add(_barLaboratories,	"facilityBars",		"baseInfo");
+	add(_txtWorkshops,		"text2",			"baseInfo");
+	add(_numWorkshops,		"numbers",			"baseInfo");
+	add(_barWorkshops,		"facilityBars",		"baseInfo");
 
 	if (Options::storageLimitsEnforced == true)
 	{
-		add(_txtContainment, "text2", "baseInfo");
-		add(_numContainment, "numbers", "baseInfo");
-		add(_barContainment, "facilityBars", "baseInfo");
+		add(_txtContainment, "text2",			"baseInfo");
+		add(_numContainment, "numbers",			"baseInfo");
+		add(_barContainment, "facilityBars",	"baseInfo");
 	}
 
-	add(_txtHangars, "text2", "baseInfo");
-	add(_numHangars, "numbers", "baseInfo");
-	add(_barHangars, "facilityBars", "baseInfo");
+	add(_txtHangars,	"text2",				"baseInfo");
+	add(_numHangars,	"numbers",				"baseInfo");
+	add(_barHangars,	"facilityBars",			"baseInfo");
 
-	add(_txtDefense, "text2", "baseInfo");
-	add(_numDefense, "numbers", "baseInfo");
-	add(_barDefense, "defenceBar", "baseInfo");
-	add(_txtShortRange, "text2", "baseInfo");
-	add(_numShortRange, "numbers", "baseInfo");
-	add(_barShortRange, "detectionBars", "baseInfo");
-	add(_txtLongRange, "text2", "baseInfo");
-	add(_numLongRange, "numbers", "baseInfo");
-	add(_barLongRange, "detectionBars", "baseInfo");
+	add(_txtDefense,	"text2",				"baseInfo");
+	add(_numDefense,	"numbers",				"baseInfo");
+	add(_barDefense,	"defenceBar",			"baseInfo");
+	add(_txtShortRange,	"text2",				"baseInfo");
+	add(_numShortRange,	"numbers",				"baseInfo");
+	add(_barShortRange,	"detectionBars",		"baseInfo");
+	add(_txtLongRange,	"text2",				"baseInfo");
+	add(_numLongRange,	"numbers",				"baseInfo");
+	add(_barLongRange,	"detectionBars",		"baseInfo");
 
 	centerAllSurfaces();
 
@@ -199,116 +206,69 @@ BaseInfoState::BaseInfoState(
 	_mini->onMouseClick((ActionHandler)& BaseInfoState::miniClick);
 	_mini->onKeyboardPress((ActionHandler)& BaseInfoState::handleKeyPress);
 
-//	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)& BaseInfoState::edtBaseChange);
 
-//	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseInfoState::btnOkClick,
 					Options::keyCancel);
 
-//	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(tr("STR_TRANSFERS"));
 	_btnTransfers->onMouseClick((ActionHandler)& BaseInfoState::btnTransfersClick);
 
-//	_btnStores->setColor(Palette::blockOffset(15)+6);
 	_btnStores->setText(tr("STR_STORES_UC"));
 	_btnStores->onMouseClick((ActionHandler)& BaseInfoState::btnStoresClick);
 
-//	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+6);
 	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)& BaseInfoState::btnMonthlyCostsClick);
 
-//	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
-//	_txtRegion->setColor(Palette::blockOffset(15)+1);
 	_txtRegion->setAlign(ALIGN_RIGHT);
 
-//	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
-//	_numSoldiers->setColor(Palette::blockOffset(13));
-//	_barSoldiers->setColor(Palette::blockOffset(1));
 	_barSoldiers->setScale();
 
-//	_txtEngineers->setColor(Palette::blockOffset(13)+5);
 	_txtEngineers->setText(tr("STR_ENGINEERS"));
-//	_numEngineers->setColor(Palette::blockOffset(13));
-//	_barEngineers->setColor(Palette::blockOffset(1));
 	_barEngineers->setScale();
 
-//	_txtScientists->setColor(Palette::blockOffset(13)+5);
 	_txtScientists->setText(tr("STR_SCIENTISTS"));
-//	_numScientists->setColor(Palette::blockOffset(13));
-//	_barScientists->setColor(Palette::blockOffset(1));
 	_barScientists->setScale();
 
 
-//	_txtSpace->setColor(Palette::blockOffset(15)+1);
 	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_AVAILABLE"));
 
-//	_txtQuarters->setColor(Palette::blockOffset(13)+5);
 	_txtQuarters->setText(tr("STR_LIVING_QUARTERS_PLURAL"));
-//	_numQuarters->setColor(Palette::blockOffset(13));
-//	_barQuarters->setColor(Palette::blockOffset(3));
 	_barQuarters->setScale(0.5);
 
-//	_txtStores->setColor(Palette::blockOffset(13)+5);
 	_txtStores->setText(tr("STR_STORES"));
-//	_numStores->setColor(Palette::blockOffset(13));
-//	_barStores->setColor(Palette::blockOffset(3));
 	_barStores->setScale(0.25); //0.5
 
-//	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
 	_txtLaboratories->setText(tr("STR_LABORATORIES"));
-//	_numLaboratories->setColor(Palette::blockOffset(13));
-//	_barLaboratories->setColor(Palette::blockOffset(3));
 	_barLaboratories->setScale(0.5);
 
-//	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
 	_txtWorkshops->setText(tr("STR_WORK_SHOPS"));
-//	_numWorkshops->setColor(Palette::blockOffset(13));
-//	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
 	if (Options::storageLimitsEnforced == true)
 	{
-//		_txtContainment->setColor(Palette::blockOffset(13)+5);
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
-//		_numContainment->setColor(Palette::blockOffset(13));
-//		_barContainment->setColor(Palette::blockOffset(3));
 		_barContainment->setScale(); //0.5
 	}
 
-//	_txtHangars->setColor(Palette::blockOffset(13)+5);
 	_txtHangars->setText(tr("STR_HANGARS"));
-//	_numHangars->setColor(Palette::blockOffset(13));
-//	_barHangars->setColor(Palette::blockOffset(3));
 	_barHangars->setScale(18.);
 
-//	_txtDefense->setColor(Palette::blockOffset(13)+5);
 	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));
-//	_numDefense->setColor(Palette::blockOffset(13));
-//	_barDefense->setColor(Palette::blockOffset(2));
-//	_barDefense->setScale(0.125);
-	_barDefense->setScale(0.018); // kL
+	_barDefense->setScale(0.018); // 0.125
 
-//	_txtShortRange->setColor(Palette::blockOffset(13)+5);
 	_txtShortRange->setText(tr("STR_SHORT_RANGE_DETECTION"));
-//	_numShortRange->setColor(Palette::blockOffset(13));
-//	_barShortRange->setColor(Palette::blockOffset(8));
-//	_barShortRange->setScale(25.);
-	_barShortRange->setScale(1.25); // kL
+	_barShortRange->setScale(1.25); // 25.0
 
-//	_txtLongRange->setColor(Palette::blockOffset(13)+5);
 	_txtLongRange->setText(tr("STR_LONG_RANGE_DETECTION"));
-//	_numLongRange->setColor(Palette::blockOffset(13));
-//	_barLongRange->setColor(Palette::blockOffset(8));
-//	_barLongRange->setScale(25.);
-	_barLongRange->setScale(1.25); // kL
+	_barLongRange->setScale(1.25); // 25.0
 }
 
 /**

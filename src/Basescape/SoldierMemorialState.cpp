@@ -54,7 +54,7 @@ namespace OpenXcom
  */
 SoldierMemorialState::SoldierMemorialState()
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtRecruited	= new Text(110, 9, 16, 25);
 	_txtLost		= new Text(110, 9, 210, 25);
@@ -64,9 +64,18 @@ SoldierMemorialState::SoldierMemorialState()
 	_lstSoldiers	= new TextList(285, 129, 16, 44);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("soldierMemorial")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 7; // violet by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("soldierMemorial")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
+
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
 
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_BASE_MEMORIAL);
 

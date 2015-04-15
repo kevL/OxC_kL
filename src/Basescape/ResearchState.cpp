@@ -86,24 +86,33 @@ ResearchState::ResearchState(
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("researchMenu")->getElement("palette")->color);
+	std::string pal = "PAL_BASESCAPE";
+	Uint8 color = 1; // burgundy by default in ufo palette
+	const Element* const element = _game->getRuleset()->getInterface("researchMenu")->getElement("palette");
+	if (element != NULL)
+	{
+		if (element->TFTDMode == true)
+			pal = "PAL_GEOSCAPE";
 
-	add(_window, "window", "researchMenu");
-	add(_mini, "miniBase", "basescape");
-	add(_txtTitle, "text", "researchMenu");
-	add(_txtBaseLabel, "text", "researchMenu");
-	add(_txtAvailable, "text", "researchMenu");
-	add(_txtAllocated, "text", "researchMenu");
-	add(_txtSpace, "text", "researchMenu");
-	add(_txtProject, "text", "researchMenu");
-	add(_txtScientists, "text", "researchMenu");
-	add(_txtProgress, "text", "researchMenu");
-	add(_lstResearch, "list", "researchMenu");
-	add(_btnAliens, "button", "researchMenu");
-	add(_btnNew, "button", "researchMenu");
-	add(_btnOk, "button", "researchMenu");
+		if (element->color != std::numeric_limits<int>::max())
+			color = static_cast<Uint8>(element->color);
+	}
+	setPalette(pal, color);
+
+	add(_window,		"window",	"researchMenu");
+	add(_mini,			"miniBase",	"basescape"); // <-
+	add(_txtTitle,		"text",		"researchMenu");
+	add(_txtBaseLabel,	"text",		"researchMenu");
+	add(_txtAvailable,	"text",		"researchMenu");
+	add(_txtAllocated,	"text",		"researchMenu");
+	add(_txtSpace,		"text",		"researchMenu");
+	add(_txtProject,	"text",		"researchMenu");
+	add(_txtScientists,	"text",		"researchMenu");
+	add(_txtProgress,	"text",		"researchMenu");
+	add(_lstResearch,	"list",		"researchMenu");
+	add(_btnAliens,		"button",	"researchMenu");
+	add(_btnNew,		"button",	"researchMenu");
+	add(_btnOk,			"button",	"researchMenu");
 
 	centerAllSurfaces();
 
