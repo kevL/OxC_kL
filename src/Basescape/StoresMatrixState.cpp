@@ -95,11 +95,12 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	centerAllSurfaces();
 
+	Uint8 color = Palette::blockOffset(13)+10; // blue
 
-	_window->setColor(Palette::blockOffset(13)+10);
+	_window->setColor(color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setColor(color);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& StoresMatrixState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -109,105 +110,113 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					(ActionHandler)& StoresMatrixState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setColor(color);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MATRIX"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setColor(color);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
+	_txtItem->setColor(color);
 	_txtItem->setText(tr("STR_ITEM"));
 
-
-	const SavedGame* const save = _game->getSavedGame();
-	std::wstring wstr;
-
-	if (save->getBases()->at(0)) // always true, but hey.
-	{
-		_txtBase_0->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(0)->getName().substr(0, 4);
-		_txtBase_0->setText(wstr);
-	}
-
-	if (save->getBases()->at(1))
-	{
-		_txtBase_1->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(1)->getName().substr(0, 4);
-		_txtBase_1->setText(wstr);
-	}
-
-	if (save->getBases()->at(2))
-	{
-		_txtBase_2->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(2)->getName().substr(0, 4);
-		_txtBase_2->setText(wstr);
-	}
-
-	if (save->getBases()->at(3))
-	{
-		_txtBase_3->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(3)->getName().substr(0, 4);
-		_txtBase_3->setText(wstr);
-	}
-
-	if (save->getBases()->at(4))
-	{
-		_txtBase_4->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(4)->getName().substr(0, 4);
-		_txtBase_4->setText(wstr);
-	}
-
-	if (save->getBases()->at(5))
-	{
-		_txtBase_5->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(5)->getName().substr(0, 4);
-		_txtBase_5->setText(wstr);
-	}
-
-	if (save->getBases()->at(6))
-	{
-		_txtBase_6->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(6)->getName().substr(0, 4);
-		_txtBase_6->setText(wstr);
-	}
-
-	if (save->getBases()->at(7))
-	{
-		_txtBase_7->setColor(Palette::blockOffset(13)+10);
-
-		wstr = save->getBases()->at(7)->getName().substr(0, 4);
-		_txtBase_7->setText(wstr);
-	}
-
-	_lstMatrix->setColor(Palette::blockOffset(13)+10);
+	_lstMatrix->setColor(color);
 	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
 	_lstMatrix->setBackground(_window);
 	_lstMatrix->setSelectable();
 
-
-	int qty[8] = {0,0,0,0,0,0,0,0};
+	const SavedGame* const gameSave = _game->getSavedGame();
+	std::wstring wst;
+	std::wostringstream
+		woststr0,
+		woststr1,
+		woststr2,
+		woststr3,
+		woststr4,
+		woststr5,
+		woststr6,
+		woststr7;
+	int qty[MTX_BASES] = {0,0,0,0,0,0,0,0};
 	size_t
 		ent = 0,
 		row = 0;
 
-	std::wostringstream
-		ss0,
-		ss1,
-		ss2,
-		ss3,
-		ss4,
-		ss5,
-		ss6,
-		ss7;
+	for (size_t
+		i = 0;
+		i != MTX_BASES;
+		++i)
+	{
+		base = gameSave->getBases()->at(i);
+		if (base != NULL)
+		{
+			qty[i] = base->getTotalSoldiers();
+
+			wst = base->getName().substr(0,4);
+			switch (i)
+			{
+				case 0:
+					_txtBase_0->setColor(color);
+					_txtBase_0->setText(wst);
+				break;
+				case 1:
+					_txtBase_1->setColor(color);
+					_txtBase_1->setText(wst);
+				break;
+				case 2:
+					_txtBase_2->setColor(color);
+					_txtBase_2->setText(wst);
+				break;
+				case 3:
+					_txtBase_3->setColor(color);
+					_txtBase_3->setText(wst);
+				break;
+				case 4:
+					_txtBase_4->setColor(color);
+					_txtBase_4->setText(wst);
+				break;
+				case 5:
+					_txtBase_5->setColor(color);
+					_txtBase_5->setText(wst);
+				break;
+				case 6:
+					_txtBase_6->setColor(color);
+					_txtBase_6->setText(wst);
+				break;
+				case 7:
+					_txtBase_7->setColor(color);
+					_txtBase_7->setText(wst);
+			}
+		}
+		else
+			break;
+	}
+
+	if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
+	{
+		if (qty[0] > 0) woststr0 << qty[0];
+		if (qty[1] > 0) woststr1 << qty[1];
+		if (qty[2] > 0) woststr2 << qty[2];
+		if (qty[3] > 0) woststr3 << qty[3];
+		if (qty[4] > 0) woststr4 << qty[4];
+		if (qty[5] > 0) woststr5 << qty[5];
+		if (qty[6] > 0) woststr6 << qty[6];
+		if (qty[7] > 0) woststr7 << qty[7];
+
+		_lstMatrix->addRow(
+						9,
+						tr("STR_SOLDIERS").c_str(),
+						woststr0.str().c_str(),
+						woststr1.str().c_str(),
+						woststr2.str().c_str(),
+						woststr3.str().c_str(),
+						woststr4.str().c_str(),
+						woststr5.str().c_str(),
+						woststr6.str().c_str(),
+						woststr7.str().c_str());
+
+		_lstMatrix->setRowColor(row++, color);
+	}
 
 	const Ruleset* const rules = _game->getRuleset();
 	const RuleItem* itRule;
@@ -224,20 +233,20 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		itRule = rules->getItem(*i);
 		const std::string test = itRule->getType();
 
-		ss0.str(L"");
-		ss1.str(L"");
-		ss2.str(L"");
-		ss3.str(L"");
-		ss4.str(L"");
-		ss5.str(L"");
-		ss6.str(L"");
-		ss7.str(L"");
+		woststr0.str(L"");
+		woststr1.str(L"");
+		woststr2.str(L"");
+		woststr3.str(L"");
+		woststr4.str(L"");
+		woststr5.str(L"");
+		woststr6.str(L"");
+		woststr7.str(L"");
 
 		ent = 0;
 
 		for (std::vector<Base*>::const_iterator
-				j = save->getBases()->begin();
-				j != save->getBases()->end();
+				j = gameSave->getBases()->begin();
+				j != gameSave->getBases()->end();
 				++j)
 		{
 			qty[ent] = (*j)->getItems()->getItem(*i);
@@ -276,7 +285,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 							++l)
 					{
 						if ((*l)->getRules()->getType() == test)
-							qty[ent]++;
+							++qty[ent];
 
 						if ((*l)->getAmmo() != 255)
 						{
@@ -296,14 +305,14 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
 		{
-			if (qty[0] > 0) ss0 << qty[0];
-			if (qty[1] > 0) ss1 << qty[1];
-			if (qty[2] > 0) ss2 << qty[2];
-			if (qty[3] > 0) ss3 << qty[3];
-			if (qty[4] > 0) ss4 << qty[4];
-			if (qty[5] > 0) ss5 << qty[5];
-			if (qty[6] > 0) ss6 << qty[6];
-			if (qty[7] > 0) ss7 << qty[7];
+			if (qty[0] > 0) woststr0 << qty[0];
+			if (qty[1] > 0) woststr1 << qty[1];
+			if (qty[2] > 0) woststr2 << qty[2];
+			if (qty[3] > 0) woststr3 << qty[3];
+			if (qty[4] > 0) woststr4 << qty[4];
+			if (qty[5] > 0) woststr5 << qty[5];
+			if (qty[6] > 0) woststr6 << qty[6];
+			if (qty[7] > 0) woststr7 << qty[7];
 
 
 			bool craftOrdnance = false;
@@ -357,8 +366,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			} */
 
 			std::wstring item = tr(*i);
-
-			Uint8 color = Palette::blockOffset(13)+10; // blue
+			color = Palette::blockOffset(13)+10; // blue
 
 			if ((itRule->getBattleType() == BT_AMMO
 					|| (itRule->getBattleType() == BT_NONE
@@ -369,13 +377,13 @@ StoresMatrixState::StoresMatrixState(Base* base)
 				color = Palette::blockOffset(15)+6; // purple
 			}
 
-			if (save->isResearched(itRule->getType()) == false				// not researched or is research exempt
-				&& (save->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->isAlien() == true					// or is an alien
-					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false)									// and is not craft ordnance
-//				&& itRule->isResearchExempt() == false)						// and is not research exempt
+			if (gameSave->isResearched(itRule->getType()) == false				// not researched or is research exempt
+				&& (gameSave->isResearched(itRule->getRequirements()) == false	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->isAlien() == true						// or is an alien
+					|| itRule->getBattleType() == BT_CORPSE							// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)							// or is not a battlefield item
+				&& craftOrdnance == false)										// and is not craft ordnance
+//				&& itRule->isResearchExempt() == false)							// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow
@@ -384,29 +392,27 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			_lstMatrix->addRow(
 							9,
 							item.c_str(),
-							ss0.str().c_str(),
-							ss1.str().c_str(),
-							ss2.str().c_str(),
-							ss3.str().c_str(),
-							ss4.str().c_str(),
-							ss5.str().c_str(),
-							ss6.str().c_str(),
-							ss7.str().c_str());
+							woststr0.str().c_str(),
+							woststr1.str().c_str(),
+							woststr2.str().c_str(),
+							woststr3.str().c_str(),
+							woststr4.str().c_str(),
+							woststr5.str().c_str(),
+							woststr6.str().c_str(),
+							woststr7.str().c_str());
 
-			_lstMatrix->setRowColor(row, color);
-
-			++row;
+			_lstMatrix->setRowColor(row++, color);
 		}
 	}
 
-	_lstMatrix->scrollTo(save->getCurrentRowMatrix());
+	_lstMatrix->scrollTo(gameSave->getCurrentRowMatrix());
 /*	if (row > 0 // all taken care of in TextList
-		&& save->getCurrentRowMatrix() >= row)
+		&& gameSave->getCurrentRowMatrix() >= row)
 	{
 		_lstMatrix->scrollTo(0);
 	}
-	else if (save->getCurrentRowMatrix() > 0)
-		_lstMatrix->scrollTo(save->getCurrentRowMatrix()); */
+	else if (gameSave->getCurrentRowMatrix() > 0)
+		_lstMatrix->scrollTo(gameSave->getCurrentRowMatrix()); */
 
 //	_lstMatrix->draw(); // only needed when list changes while state is active. Eg, on re-inits
 }

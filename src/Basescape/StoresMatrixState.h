@@ -42,6 +42,8 @@ class StoresMatrixState
 {
 
 private:
+	static const size_t MTX_BASES = 8;
+
 	Base* _base;
 	Text
 		* _txtBaseLabel,

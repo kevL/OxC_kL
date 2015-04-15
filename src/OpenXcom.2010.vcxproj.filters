@@ -964,6 +964,7 @@
     </ClCompile>
     <ClCompile Include="Ruleset\RuleArmor.cpp" />
     <ClCompile Include="Battlescape\MediTargetState.cpp" />
+    <ClCompile Include="Ufopaedia\ArticleStateAward.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1957,6 +1958,7 @@
     </ClInclude>
     <ClInclude Include="Ruleset\RuleArmor.h" />
     <ClInclude Include="Battlescape\MediTargetState.h" />
+    <ClInclude Include="Ufopaedia\ArticleStateAward.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
