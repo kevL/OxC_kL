@@ -86,7 +86,7 @@ ManufactureState::ManufactureState(
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
+	int bgHue = 6; // oxide by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
 	if (element != NULL)
 	{
@@ -94,9 +94,9 @@ ManufactureState::ManufactureState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,			"window",	"manufactureMenu");
 	add(_mini,				"miniBase",	"basescape"); // <-

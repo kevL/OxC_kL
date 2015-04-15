@@ -57,7 +57,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	:
 		_base(base)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
@@ -190,8 +190,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	_lstMatrix->setColor(Palette::blockOffset(13)+10);
 	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
-	_lstMatrix->setSelectable();
 	_lstMatrix->setBackground(_window);
+	_lstMatrix->setSelectable();
 
 
 	int qty[8] = {0,0,0,0,0,0,0,0};
@@ -210,10 +210,10 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss7;
 
 	const Ruleset* const rules = _game->getRuleset();
-	const RuleItem* itRule = NULL;
+	const RuleItem* itRule;
 //		* launchRule,
 //		* clipRule;
-	const RuleCraftWeapon* cwRule = NULL;
+	const RuleCraftWeapon* cwRule;
 
 	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator

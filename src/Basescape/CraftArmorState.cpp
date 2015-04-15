@@ -64,7 +64,7 @@ CraftArmorState::CraftArmorState(
 		_base(base),
 		_craftID(craftID)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 17, 11, 10);
 	_txtBaseLabel	= new Text(80, 9, 224, 10);
 
@@ -77,7 +77,7 @@ CraftArmorState::CraftArmorState(
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 4; // aqua by default in ufo palette
+	int bgHue = 4; // aqua by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("craftArmor")->getElement("palette");
 	if (element != NULL)
 	{
@@ -85,9 +85,9 @@ CraftArmorState::CraftArmorState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"craftArmor");
 	add(_txtTitle,		"text",		"craftArmor");

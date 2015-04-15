@@ -81,7 +81,7 @@ CraftEquipmentState::CraftEquipmentState(
 		hasCrew = craft->getNumSoldiers() > 0,
 		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
@@ -100,7 +100,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 2; // orange by default in ufo palette
+	int bgHue = 2; // orange by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("craftEquipment")->getElement("palette");
 	if (element != NULL)
 	{
@@ -108,9 +108,9 @@ CraftEquipmentState::CraftEquipmentState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("craftEquipment")->getElement("ammoColor")->color);
 
@@ -191,6 +191,7 @@ CraftEquipmentState::CraftEquipmentState(
 	int
 		craftQty,
 		clipSize;
+	Uint8 color;
 
 	const std::vector<std::string>& itemsList = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator

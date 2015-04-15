@@ -87,7 +87,7 @@ ResearchState::ResearchState(
 
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 1; // burgundy by default in ufo palette
+	int bgHue = 1; // burgundy by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("researchMenu")->getElement("palette");
 	if (element != NULL)
 	{
@@ -95,9 +95,9 @@ ResearchState::ResearchState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"researchMenu");
 	add(_mini,			"miniBase",	"basescape"); // <-

@@ -90,7 +90,9 @@ void SelectStartFacilityState::populateBuildList()
 			i != _facilities.end();
 			++i)
 	{
-		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
+		_lstFacilities->addRow(
+							1,
+							tr((*i)->getType()).c_str());
 	}
 }
 

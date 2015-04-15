@@ -89,7 +89,7 @@ SoldiersState::SoldiersState(Base* base)
 	_btnOk			= new TextButton(56, 16, 254, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 2; // orange by default in ufo palette
+	int bgHue = 2; // orange by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("soldierList")->getElement("palette");
 	if (element != NULL)
 	{
@@ -97,9 +97,9 @@ SoldiersState::SoldiersState(Base* base)
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"soldierList");
 	add(_txtTitle,		"text1",	"soldierList");

@@ -87,7 +87,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 2; // orange by default in ufo palette
+	int bgHue = 2; // orange by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("craftSoldiers")->getElement("palette");
 	if (element != NULL)
 	{
@@ -95,9 +95,9 @@ CraftSoldiersState::CraftSoldiersState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"craftSoldiers");
 	add(_txtTitle,		"text",		"craftSoldiers");
@@ -210,6 +210,7 @@ void CraftSoldiersState::init()
 	_lstSoldiers->clearList();
 
 	size_t row = 0;
+	Uint8 color;
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
@@ -223,7 +224,6 @@ void CraftSoldiersState::init()
 						tr((*i)->getRankString()).c_str(),
 						(*i)->getCraftString(_game->getLanguage()).c_str());
 
-		Uint8 color;
 		if ((*i)->getCraft() == NULL)
 			color = _lstSoldiers->getColor();
 		else

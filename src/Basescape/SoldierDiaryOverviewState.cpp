@@ -78,7 +78,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 		_listDead = NULL;
 	}
 
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(310, 16, 5, 8);
 	_txtBaseLabel	= new Text(310, 9, 5, 25);
 
@@ -219,8 +219,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
  * dTor.
  */
 SoldierDiaryOverviewState::~SoldierDiaryOverviewState()
-{
-}
+{}
 
 /**
  *  Clears all the variables and reinitializes the list of medals for the soldier.

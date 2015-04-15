@@ -70,7 +70,7 @@ StoresState::StoresState(Base* base)
 	_btnOk			= new TextButton(142, 16, 162, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 0; // brown by default in ufo palette
+	int bgHue = 0; // brown by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("storesInfo")->getElement("palette");
 	if (element != NULL)
 	{
@@ -78,9 +78,9 @@ StoresState::StoresState(Base* base)
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"storesInfo");
 	add(_txtTitle,		"text",		"storesInfo");

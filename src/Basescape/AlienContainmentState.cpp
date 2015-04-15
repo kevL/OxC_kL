@@ -89,7 +89,7 @@ AlienContainmentState::AlienContainmentState(
 //	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 1; // burgundy by default in ufo palette
+	int bgHue = 1; // burgundy by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("manageContainment")->getElement("palette");
 	if (element != NULL)
 	{
@@ -97,9 +97,9 @@ AlienContainmentState::AlienContainmentState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"manageContainment");
 	add(_txtTitle,		"text",		"manageContainment");
@@ -179,6 +179,7 @@ AlienContainmentState::AlienContainmentState(
 	int qty;
 	const RuleItem* itRule;
 	size_t row = 0;
+	Uint8 color;
 
 	const std::vector<std::string>& itemList = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator

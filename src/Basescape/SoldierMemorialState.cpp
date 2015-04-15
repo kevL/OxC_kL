@@ -65,7 +65,7 @@ SoldierMemorialState::SoldierMemorialState()
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 7; // violet by default in ufo palette
+	int bgHue = 7; // violet by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("soldierMemorial")->getElement("palette");
 	if (element != NULL)
 	{
@@ -73,9 +73,9 @@ SoldierMemorialState::SoldierMemorialState()
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_BASE_MEMORIAL);
 

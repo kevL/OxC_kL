@@ -70,7 +70,7 @@ TransferBaseState::TransferBaseState(Base* base)
 	_btnCancel		= new TextButton(112, 16, 162, 146);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 4; // dark green by default in ufo palette
+	int bgHue = 4; // green by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("transferBaseSelect")->getElement("palette");
 	if (element != NULL)
 	{
@@ -78,9 +78,9 @@ TransferBaseState::TransferBaseState(Base* base)
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"transferBaseSelect");
 	add(_txtTitle,		"text",		"transferBaseSelect");

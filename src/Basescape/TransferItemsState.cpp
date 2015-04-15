@@ -109,7 +109,7 @@ TransferItemsState::TransferItemsState(
 	_btnOk				= new TextButton(134, 16, 170, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 0; // brown by default in ufo palette
+	int bgHue = 0; // brown by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("transferMenu")->getElement("palette");
 	if (element != NULL)
 	{
@@ -117,9 +117,9 @@ TransferItemsState::TransferItemsState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("transferMenu")->getElement("ammoColor")->color);
 

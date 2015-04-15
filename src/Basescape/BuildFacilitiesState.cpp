@@ -66,7 +66,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
+	int bgHue = 6; // oxide by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("selectFacility")->getElement("palette");
 	if (element != NULL)
 	{
@@ -74,9 +74,9 @@ BuildFacilitiesState::BuildFacilitiesState(
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,		"window",	"selectFacility");
 	add(_txtTitle,		"text",		"selectFacility");
@@ -100,8 +100,8 @@ BuildFacilitiesState::BuildFacilitiesState(
 
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 99);
-	_lstFacilities->setSelectable();
 	_lstFacilities->setBackground(_window);
+	_lstFacilities->setSelectable();
 	_lstFacilities->setMargin(2);
 //	_lstFacilities->setWordWrap();
 	_lstFacilities->onMouseClick((ActionHandler)& BuildFacilitiesState::lstFacilitiesClick);

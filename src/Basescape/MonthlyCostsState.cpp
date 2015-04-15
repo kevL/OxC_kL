@@ -74,7 +74,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
+	int bgHue = 6; // oxide by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("costsInfo")->getElement("palette");
 	if (element != NULL)
 	{
@@ -82,9 +82,9 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,			"window",	"costsInfo");
 	add(_txtTitle,			"text1",	"costsInfo");

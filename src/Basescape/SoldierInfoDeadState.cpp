@@ -60,7 +60,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 {
 	_list = _game->getSavedGame()->getDeadSoldiers();
 
-	_bg				= new Surface(320, 200, 0, 0);
+	_bg				= new Surface(320, 200);
 
 	_rank			= new Surface(26, 23, 4, 4);
 	_gender			= new Surface(7, 7, 240, 8);

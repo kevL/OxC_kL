@@ -140,7 +140,7 @@ void ManufactureInfoState::buildUi()
 //	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
 	std::string pal = "PAL_BASESCAPE";
-	Uint8 color = 6; // oxide by default in ufo palette
+	int bgHue = 6; // oxide by default in ufo palette
 	const Element* const element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
 	if (element != NULL)
 	{
@@ -148,9 +148,9 @@ void ManufactureInfoState::buildUi()
 			pal = "PAL_GEOSCAPE";
 
 		if (element->color != std::numeric_limits<int>::max())
-			color = static_cast<Uint8>(element->color);
+			bgHue = element->color;
 	}
-	setPalette(pal, color);
+	setPalette(pal, bgHue);
 
 	add(_window,				"window",	"manufactureInfo");
 	add(_txtTitle,				"text",		"manufactureInfo");
