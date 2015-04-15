@@ -201,8 +201,8 @@ private:
 		size_t getTrajectoryPoint() const
 		{ return _trajectoryPoint; }
 		/// Sets the UFO's progress on the trajectory track.
-		void setTrajectoryPoint(size_t np)
-		{ _trajectoryPoint = np; }
+		void setTrajectoryPoint(size_t pt)
+		{ _trajectoryPoint = pt; }
 		/// Gets the UFO's trajectory.
 		const UfoTrajectory& getTrajectory() const
 		{ return *_trajectory; }

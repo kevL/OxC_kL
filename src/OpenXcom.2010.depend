@@ -4488,7 +4488,7 @@
 1424390940 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1429027049 f:\git\openxcom\src\geoscape\geoscapestate.h
+1429115078 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1426210349 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4760,7 +4760,7 @@
 
 1425473205 f:\git\openxcom\src\engine\fastlineclip.h
 
-1427140650 f:\git\openxcom\src\savegame\ufo.h
+1429115721 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -6559,7 +6559,7 @@
 	"Language.h"
 	"Surface.h"
 
-1428803453 source:f:\git\openxcom\src\engine\game.cpp
+1429109213 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7067,7 +7067,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1428975174 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1429110983 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7148,7 +7148,7 @@
 1424390939 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1429027061 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1429116239 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8610,7 +8610,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1427404130 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1429115944 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -10654,7 +10654,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1429075308 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1429108596 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"

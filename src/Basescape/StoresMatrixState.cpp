@@ -95,6 +95,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	centerAllSurfaces();
 
+
 	Uint8 color = Palette::blockOffset(13)+10; // blue
 
 	_window->setColor(color);

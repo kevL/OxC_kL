@@ -846,7 +846,7 @@ void Game::initAudio()
 	if (Mix_OpenAudio(
 				Options::audioSampleRate,
 				audioFormat,
-				2,2048) != 0) // TODO: Options::audioBufferSize
+				2,4096) != 0) // TODO: Options::audioBufferSize
 	{
 		Log(LOG_ERROR) << Mix_GetError();
 		Log(LOG_WARNING) << "No sound device detected, audio disabled.";

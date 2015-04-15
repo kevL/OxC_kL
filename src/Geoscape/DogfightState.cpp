@@ -2134,7 +2134,7 @@ void DogfightState::endDogfight() // private.
  * in ConfirmLandingState. This is merely an indicator .... cf. UfoDetectedState.
  * @return, string for the icon of the texture of the globe's surface under the dogfight ha!
  */
-const std::string DogfightState::getTextureIcon()
+const std::string DogfightState::getTextureIcon() // private.
 {
 	int texture;
 	_globe->getPolygonTexture(

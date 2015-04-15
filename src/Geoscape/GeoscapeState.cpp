@@ -329,6 +329,7 @@ GeoscapeState::GeoscapeState()
 		_pause(false),
 		_dfZoomInDone(false),
 		_dfZoomOutDone(false),
+		_dfZoomOut(true),
 		_minimizedDogfights(0),
 		_day(-1),
 		_month(-1),
@@ -1488,16 +1489,33 @@ void GeoscapeState::time5Seconds()
 
 						AlienMission* const mission = (*i)->getMission();
 
-						mission->ufoReachedWaypoint( // recomputes 'qtySites' & 'detected'
+						mission->ufoReachedWaypoint( // recomputes 'qtySites' & 'detected'; also sets ufo Status
 												**i,
 												*_rules);
+
+						if ((*i)->getAltitude() == "STR_GROUND")
+						{
+							_dfZoomOut = false;
+							for (std::list<DogfightState*>::const_iterator
+									j = _dogfights.begin();
+									j != _dogfights.end();
+									++j)
+							{
+								if ((*j)->getUfo() != *i)
+								{
+									_dfZoomOut = true;
+									break;
+								}
+							}
+						}
+
 
 						if (detected != (*i)->getDetected()
 							&& (*i)->getFollowers()->empty() == false)
 						{
 							if (!
 								((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
-									&& (*i)->getStatus() ==  Ufo::LANDED))
+									&& (*i)->getStatus() == Ufo::LANDED))
 							{
 								timerReset();
 								popup(new UfoLostState((*i)->getName(_game->getLanguage())));
@@ -1560,7 +1578,7 @@ void GeoscapeState::time5Seconds()
 				if ((*i)->getSecondsLeft() == 0)
 				{
 					AlienMission* const mission = (*i)->getMission();
-					bool detected = (*i)->getDetected();
+					const bool detected = (*i)->getDetected();
 					mission->ufoLifting(**i);
 //									*_globe);
 
@@ -3742,46 +3760,54 @@ void GeoscapeState::thinkDogfights()
 
 	_minimizedDogfights = 0;
 
-	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
+	std::list<DogfightState*>::const_iterator df = _dogfights.begin();
 	for (
 			;
-			i != _dogfights.end();
-			++i)
+			df != _dogfights.end();
+			++df)
 	{
-		(*i)->getUfo()->setEngaged(false); // huh
+		(*df)->getUfo()->setEngaged(false); // huh
 	}
 
-	i = _dogfights.begin();
-	while (i != _dogfights.end())
+	df = _dogfights.begin();
+	while (df != _dogfights.end())
 	{
-		if ((*i)->isMinimized() == true)
+		if ((*df)->isMinimized() == true)
 			++_minimizedDogfights;
 //		else _globe->rotateStop();
 
-		(*i)->think();
+		(*df)->think();
 
-		if ((*i)->dogfightEnded() == true)
+		if ((*df)->dogfightEnded() == true)
 		{
-			if ((*i)->isMinimized() == true)
+			if ((*df)->isMinimized() == true)
 				--_minimizedDogfights;
 
-			delete *i;
-			i = _dogfights.erase(i);
+			delete *df;
+			df = _dogfights.erase(df);
 			resetPorts = true;
 		}
 		else
-			++i;
+			++df;
 	}
 
 	if (_dogfights.empty() == true)
 	{
 		_dfTimer->stop();
-		_dfZoomOutTimer->start();
+
+		if (_dfZoomOut == true) // or if UFO just landed, reset dfCoords to current globe position: DO NOT ZOOM OUT
+			_dfZoomOutTimer->start();
+		else // STOP INTERCEPTION MUSIC. Start Geo music ...
+		{
+			_game->getResourcePack()->fadeMusic(_game, 425);
+			_game->getResourcePack()->playMusic(res_MUSIC_GEO_GLOBE);
+		}
 	}
 	else if (resetPorts == true)
 		resetInterceptPorts();
 
 	resetPorts = false;
+	_dfZoomOut = true;
 }
 
 /**

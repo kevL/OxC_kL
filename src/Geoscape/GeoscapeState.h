@@ -70,6 +70,7 @@ private:
 	bool
 		_dfZoomInDone,
 		_dfZoomOutDone,
+		_dfZoomOut,
 		_pause;
 	int
 		_day,

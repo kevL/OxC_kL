@@ -534,9 +534,8 @@ void AlienMission::ufoReachedWaypoint(
 		curWaypoint = ufo.getTrajectoryPoint(),
 		nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory& trajectory = ufo.getTrajectory();
-	const MissionWave& wave = _missionRule.getWave(_nextWave - 1);
 
-	if (nextWaypoint >= trajectory.getWaypointCount())
+	if (nextWaypoint >= trajectory.getWaypointCount()) // UFO leaves Earth's atmosphere
 	{
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
@@ -569,6 +568,8 @@ void AlienMission::ufoReachedWaypoint(
 	}
 	else // UFO landed.
 	{
+		const MissionWave& wave = _missionRule.getWave(_nextWave - 1);
+
 		if (wave.objective == true // remove UFO, replace with MissionSite.
 			&& trajectory.getZone(curWaypoint) == _missionRule.getSpawnZone())
 		{
