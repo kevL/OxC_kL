@@ -354,7 +354,7 @@ void TileEngine::addLight(
 /**
  * Calculates line of sight of a BattleUnit.
  * @param unit - pointer to a BattleUnit to check field of view for
- * @return, true when new aliens are spotted
+ * @return, true when previously concealed units are spotted
  */
 bool TileEngine::calculateFOV(BattleUnit* const unit)
 {
@@ -494,7 +494,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
 									spottedUnit->setTurnsExposed();	// note that xCom agents can be seen by enemies but *not* become Exposed.
-																		// Only potential reactionFire should set them Exposed during xCom's turn.
+																	// Only potential reactionFire should set them Exposed during xCom's turn.
 								}
 							}
 						}
@@ -1465,8 +1465,8 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
 	const Tile* const tile = unit->getTile();
-
 	std::vector<BattleUnit*> spotters;
+
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -1482,11 +1482,6 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
 						&& (*i)->checkViewSector(unit->getPosition()) == true))
 				&& visible(*i, tile) == true)
 			{
-				//Log(LOG_INFO) << ". check ID " << (*i)->getId();
-				if ((*i)->getFaction() == FACTION_HOSTILE)
-					unit->setTurnsExposed();
-
-				//Log(LOG_INFO) << ". reactor ID " << (*i)->getId() << ": initi = " << (int)(*i)->getInitiative();
 				spotters.push_back(*i);
 			}
 		}
@@ -1512,57 +1507,52 @@ BattleUnit* TileEngine::getReactor(
 	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
 	BattleUnit* nextReactor = NULL;
-	int highestInit = -1;
+	int
+		initHigh = -1,
+		initTest;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = spotters.begin();
 			i != spotters.end();
 			++i)
 	{
-		//Log(LOG_INFO) << ". . nextReactor ID " << (*i)->getId();
-		if ((*i)->isOut(true, true) == true)
-			continue;
-
-		if ((*i)->getInitiative() > highestInit)
+		//Log(LOG_INFO) << ". . check nextReactor ID " << (*i)->getId();
+		if ((*i)->isOut() == false)
 		{
-			highestInit = static_cast<int>((*i)->getInitiative());
-			nextReactor = *i;
+			initTest = static_cast<int>((*i)->getInitiative());
+			if (initTest > initHigh)
+			{
+				initHigh = initTest;
+				nextReactor = *i;
+			}
 		}
 	}
 
 	//Log(LOG_INFO) << ". ID " << defender->getId() << " initi = " << static_cast<int>(defender->getInitiative(tuSpent));
 
-	// nextReactor has to *best* defender.Initi to get initiative
+	// nextReactor has to *best* defender.Init to get initiative
 	// Analysis: It appears that defender's tu for firing/throwing
 	// are not subtracted before getInitiative() is called.
-/* kL: Apply xp only *after* the shot -> moved up into checkReactionFire()
-	if (nextReactor != NULL
-		&& highestInit > static_cast<int>(defender->getInitiative(tuSpent)))
-	{
-		if (nextReactor->getGeoscapeSoldier() != NULL
-			&& nextReactor->getFaction() == nextReactor->getOriginalFaction())
-		{
-			nextReactor->addReactionExp();
-		}
-	}
-	else
-	{
-		//Log(LOG_INFO) << ". . initi returns to ID " << defender->getId();
-		nextReactor = defender;
-	} */
+
 	if (nextReactor == NULL
-		|| highestInit <= static_cast<int>(defender->getInitiative(tuSpent)))
+		|| initHigh <= static_cast<int>(defender->getInitiative(tuSpent)))
 	{
 		nextReactor = defender;
 	}
 
-	//Log(LOG_INFO) << ". highestInit = " << highestInit;
+	if (nextReactor != defender
+		&& nextReactor->getFaction() == FACTION_HOSTILE)
+	{
+		defender->setTurnsExposed(); // defender has been spotted on Player turn.
+	}
+
+	//Log(LOG_INFO) << ". initHigh = " << initHigh;
 	return nextReactor;
 }
 
 /**
  * Fires off a reaction shot.
- * @param unit		- pointer to the spotting unit
+ * @param unit			- pointer to the spotting unit
  * @param targetUnit	- pointer to the spotted unit
  * @return, true if a shot happens
  */
@@ -5485,12 +5475,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 			if (action->type == BA_PANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
-				const int morale = 110
+				const int moraleLoss = 110
 								 - statsVictim->bravery * 3 / 2
-								 + statsActor->psiStrength / 2;
-				//Log(LOG_INFO) << ". . . morale reduction = " << morale;
-				if (morale > 0)
-					victim->moraleChange(-morale);
+								 + statsActor->psiStrength * 2 / 3;
+				//Log(LOG_INFO) << ". . . moraleLoss reduction = " << moraleLoss;
+				if (moraleLoss > 0)
+					victim->moraleChange(-moraleLoss);
 
 				//Log(LOG_INFO) << ". . . victim morale[1] = " << victim->getMorale();
 			}
@@ -5512,14 +5502,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 				{
 					morale = std::min( // xCom Morale loss for getting Mc'd.
 									0,
-									_battleSave->getMoraleModifier(NULL, true) / 10 + morale / 2 - 110);
+									(_battleSave->getMoraleModifier(NULL, true) / 10) + (morale / 2) - 110);
 				}
 				else //if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
 						morale = std::min( // aLien Morale loss for getting Mc'd.
 										0,
-										_battleSave->getMoraleModifier(NULL, false) / 10 + morale - 110);
+										(_battleSave->getMoraleModifier(NULL, false) / 10) + morale - 110);
 					else
 						morale /= 2; // xCom Morale gain for getting Mc'd back to xCom.
 				}

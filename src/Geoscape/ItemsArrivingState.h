@@ -73,7 +73,7 @@ private:
 		void init();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+		void btnCancelClick(Action* action);
 		/// Handler for clicking the Ok 5sec button.
 		void btnOk5SecsClick(Action* action);
 		/// Handler for clicking the Go To Base button.

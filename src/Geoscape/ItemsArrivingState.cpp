@@ -114,10 +114,10 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
 					Options::keyOk);
 
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
+	_btnOk->setText(tr("STR_CANCEL"));
+	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnCancelClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& ItemsArrivingState::btnOkClick,
+					(ActionHandler)& ItemsArrivingState::btnCancelClick,
 					Options::keyCancel);
 
 	_txtTitle->setText(tr("STR_ITEMS_ARRIVING"));
@@ -257,7 +257,7 @@ void ItemsArrivingState::init()
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void ItemsArrivingState::btnOkClick(Action*)
+void ItemsArrivingState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
