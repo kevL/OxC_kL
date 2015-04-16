@@ -40,8 +40,8 @@ ToggleTextButton::ToggleTextButton(
 			width,
 			height,
 			x,y),
-		_invertedColor(std::numeric_limits<uint8_t>::max()),
 		_originalColor(std::numeric_limits<uint8_t>::max()),
+		_invertedColor(std::numeric_limits<uint8_t>::max()),
 		_fakeGroup(NULL)
 {
 	_isPressed = false;

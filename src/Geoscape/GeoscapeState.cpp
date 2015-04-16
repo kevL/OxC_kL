@@ -741,6 +741,9 @@ GeoscapeState::GeoscapeState()
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true); */
 
+//	_sideBottom->setGeoscapeButton(true);
+//	_sideTop->setGeoscapeButton(true);
+
 	// revert to ImageButtons.
 	Surface* const geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(screenWidth - geobord->getWidth());

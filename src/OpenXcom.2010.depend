@@ -4377,7 +4377,7 @@
 1429066342 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1428452316 f:\git\openxcom\src\interface\text.h
+1429148337 f:\git\openxcom\src\interface\text.h
 	"../Engine/Surface.h"
 
 1428453007 f:\git\openxcom\src\interface\textbutton.h
@@ -4556,7 +4556,7 @@
 1427010467 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1428962378 f:\git\openxcom\src\ruleset\ruleset.h
+1429149040 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4656,7 +4656,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1428325674 f:\git\openxcom\src\battlescape\battlescapegame.h
+1429147019 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1424390943 f:\git\openxcom\src\battlescape\position.h
@@ -5446,7 +5446,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1428550595 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1429146877 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5592,7 +5592,7 @@
 
 1426124164 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1428969034 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1429150064 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -7278,7 +7278,7 @@
 1425905399 f:\git\openxcom\src\ruleset\city.h
 	"../Savegame/Target.h"
 
-1426473132 f:\git\openxcom\src\ruleset\rulealienmission.h
+1429148880 f:\git\openxcom\src\ruleset\rulealienmission.h
 
 1425622391 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
@@ -7659,7 +7659,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1428452572 source:f:\git\openxcom\src\interface\text.cpp
+1429150526 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	"../Engine/Language.h"
 
@@ -7675,7 +7675,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1428470793 source:f:\git\openxcom\src\interface\textlist.cpp
+1429149496 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"

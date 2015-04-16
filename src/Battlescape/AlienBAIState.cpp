@@ -2869,7 +2869,7 @@ void AlienBAIState::selectMeleeOrRanged()
 /*
 bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
 {
-	if (_battleSave->getTurn() < 3)
+	if (_battleSave->getTurn() < 3) // <- note.
 		return false;
 
 	int bestScore = 2;

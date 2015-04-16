@@ -86,12 +86,12 @@ BattlescapeGame::BattlescapeGame(
 	:
 		_battleSave(battleSave),
 		_parentState(parentState),
-		_playedAggroSound(false),
-		_endTurnRequested(false),
-//		_endTurnProcessed(false),
 		_playerPanicHandled(true),
 		_AIActionCounter(0),
-		_AISecondMove(false)
+		_AISecondMove(false),
+		_playedAggroSound(false),
+		_endTurnRequested(false)
+//		_endTurnProcessed(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
 	_debugPlay = false;

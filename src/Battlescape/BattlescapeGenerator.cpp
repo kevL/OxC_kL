@@ -1161,9 +1161,9 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 	{
 		tankUnit->setTurretType(tank->getRules()->getTurretType());
 
-		BattleItem* const item = new BattleItem( // add Vehicle as an item and assign the unit as its owner.
-											_rules->getItem(vehicle),
-											_battleSave->getNextItemId());
+		BattleItem* item = new BattleItem( // add Vehicle as an item and assign the unit as its owner.
+									_rules->getItem(vehicle),
+									_battleSave->getNextItemId());
 		if (addItem(
 				item,
 				tankUnit) == false)
@@ -1178,8 +1178,8 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 		{
 			const std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
 			BattleItem* const ammoItem = new BattleItem( // add item(ammo) and assign the Vehicle-ITEM as its owner.
-											_rules->getItem(ammo),
-											_battleSave->getNextItemId());
+													_rules->getItem(ammo),
+													_battleSave->getNextItemId());
 			if (addItem(
 					ammoItem,
 					tankUnit) == false)
@@ -1202,12 +1202,12 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 					i != unitRule->getBuiltInWeapons().end();
 					++i)
 			{
-				RuleItem* const itemRule = _rules->getItem(*i);
-				if (itemRule != NULL)
+				RuleItem* const itRule = _rules->getItem(*i);
+				if (itRule != NULL)
 				{
-					BattleItem* const item = new BattleItem(
-														itemRule,
-														_battleSave->getNextItemId());
+					item = new BattleItem(
+										itRule,
+										_battleSave->getNextItemId());
 
 					if (addItem(
 							item,
@@ -2049,9 +2049,8 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 
 	std::string alienName;
 	bool outside;
-	int
-		itemLevel,
-		qty;
+	int qty;
+	size_t itemLevel;
 
 	RuleItem* itRule;
 	BattleItem* item;
@@ -2161,8 +2160,8 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 				}
 				else
 				{
-					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0,9));
-					if (itemLevel > static_cast<int>((*data).itemSets.size()) - 1)
+					itemLevel = static_cast<size_t>(_rules->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+					if (itemLevel > (*data).itemSets.size() - 1)
 					{
 						std::stringstream ststr;
 						ststr	<< "Unit generator encountered an error: not enough item sets defined, expected: "
@@ -2171,8 +2170,8 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 					}
 
 					for (std::vector<std::string>::const_iterator
-							setItem = (*data).itemSets.at(static_cast<size_t>(itemLevel)).items.begin();
-							setItem != (*data).itemSets.at(static_cast<size_t>(itemLevel)).items.end();
+							setItem = (*data).itemSets.at(itemLevel).items.begin();
+							setItem != (*data).itemSets.at(itemLevel).items.end();
 							++setItem)
 					{
 						itRule = _rules->getItem(*setItem);

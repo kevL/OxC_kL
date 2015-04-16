@@ -353,6 +353,18 @@ Uint8 Text::getSecondaryColor() const
 }
 
 /**
+ * Gets the number of lines in this Text including wrapping.
+ * @return, number of lines
+ */
+int Text::getNumLines() const
+{
+	if (_wrap == true)
+		return static_cast<int>(_lineHeight.size());
+
+	return 1;
+}
+
+/**
  * Returns the rendered text's width.
  * @param line - line to get the width of or -1 to get whole text width (default -1)
  * @return, width in pixels
@@ -415,7 +427,7 @@ void Text::addTextHeight(int pad)
  * Takes care of any text post-processing like calculating
  * line metrics for alignment and wordwrapping if necessary.
  */
-void Text::processText()
+void Text::processText() // private.
 {
 	if (_font == NULL
 		|| _lang == NULL)
@@ -536,7 +548,7 @@ void Text::processText()
  * @param line - the line number (0 = first, etc)
  * @return, the X position in pixels
  */
-int Text::getLineX(int line) const
+int Text::getLineX(int line) const // private.
 {
 	int x = 0;
 

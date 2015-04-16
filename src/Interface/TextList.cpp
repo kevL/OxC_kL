@@ -367,7 +367,8 @@ void TextList::addRow(
 	std::vector<Text*> txtRow;
 	int
 		rowOffset_x = 0,
-		qtyRows = 1;
+		qtyRows = 1,
+		rowHeight = 0;
 
 	for (size_t
 			i = 0;
@@ -397,15 +398,25 @@ void TextList::addRow(
 
 		txt->setText(va_arg(args, wchar_t*));
 
-		if (_wrap == true // Wordwrap text if necessary
+		// grab this before enabling word wrap so it can be used
+		// to calculate the total row height below
+		int vertPad = _font->getHeight() - txt->getTextHeight();
+
+		if (_wrap == true // wordwrap text if necessary
 			&& txt->getTextWidth() > txt->getWidth())
 		{
-			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
+//			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
 			txt->setWordWrap(true, true);
-			qtyRows = 2;
+			qtyRows = std::max(
+							qtyRows,
+							txt->getNumLines());
 		}
 
-		if (_dot == true // Places dots between text
+		rowHeight = std::max(
+						rowHeight,
+						txt->getTextHeight() + vertPad);
+
+		if (_dot == true // place dots between text
 			&& i < static_cast<size_t>(cols) - 1)
 		{
 			std::wstring buf = txt->getText();
@@ -426,6 +437,14 @@ void TextList::addRow(
 			rowOffset_x += txt->getTextWidth();
 		else
 			rowOffset_x += static_cast<int>(_columns[i]);
+	}
+
+	for (size_t // ensure all elements in this row are the same height
+			i = 0;
+			i != static_cast<size_t>(cols);
+			++i)
+	{
+		txtRow[i]->setHeight(rowHeight);
 	}
 
 	_texts.push_back(txtRow);
@@ -725,8 +744,7 @@ void TextList::setHighContrast(bool contrast)
  */
 void TextList::setWordWrap(bool wrap)
 {
-	if (wrap != _wrap)
-		_wrap = wrap;
+	_wrap = wrap;
 }
 
 /**
@@ -1148,8 +1166,13 @@ void TextList::draw()
 
 	if (_rows.empty() == false)
 	{
-		if (_scroll > 0
-			&& _rows[_scroll] == _rows[_scroll - 1])
+		// for wrapped items offset the draw height above the visible surface
+		// so that the correct row appears at the top
+		for (int
+				row = _scroll;
+				row > 0
+					&& _rows[row] == _rows[row - 1];
+				--row)
 		{
 			y -= _font->getHeight() + _font->getSpacing();
 		}
