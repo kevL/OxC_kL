@@ -1168,7 +1168,7 @@ void TextList::draw()
 	{
 		// for wrapped items offset the draw height above the visible surface
 		// so that the correct row appears at the top
-		for (int
+		for (size_t
 				row = _scroll;
 				row > 0
 					&& _rows[row] == _rows[row - 1];
