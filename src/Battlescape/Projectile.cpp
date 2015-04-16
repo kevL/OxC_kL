@@ -83,7 +83,8 @@ Projectile::Projectile(
 		_vaporDensity(-1),
 		_vaporProbability(5)
 {
-	//Log(LOG_INFO) << "\n\ncTor origin = " << origin;
+	//Log(LOG_INFO) << "\n";
+	//Log(LOG_INFO) << "cTor origin = " << origin;
 	//Log(LOG_INFO) << "cTor target = " << targetVoxel << " tSpace " << (targetVoxel / Position(16,16,24));
 
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
@@ -195,7 +196,8 @@ int Projectile::calculateTrajectory(double accuracy)
 /**
  * Calculates the trajectory for a straight path.
  * First determines if there is LoF, then calculates & stores a modified trajectory that is actually pathed.
- * @param accuracy - accuracy of the projectile's trajectory (a BattleUnit's accuracy)
+ * @param accuracy		- accuracy of the projectile's trajectory (a BattleUnit's accuracy)
+ * @param originVoxel	-
  * @return,  -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit
@@ -224,15 +226,16 @@ int Projectile::calculateTrajectory(
 			|| (SDL_GetModState() & KMOD_CTRL) == 0))
 	{
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
-		const VoxelType test = static_cast<VoxelType>(_save->getTileEngine()->calculateLine(
-																						originVoxel,
-																						_targetVoxel,
-																						false,
-																						&_trajectory,
-																						_action.actor));
-		//Log(LOG_INFO) << ". test = " << (int)test;
+		const VoxelType testVox = static_cast<VoxelType>(
+								  _save->getTileEngine()->calculateLine(
+																	originVoxel,
+																	_targetVoxel,
+																	false,
+																	&_trajectory,
+																	_action.actor));
+		//Log(LOG_INFO) << ". testVox = " << (int)testVox;
 
-		if (test != VOXEL_EMPTY
+		if (testVox != VOXEL_EMPTY
 			&& _trajectory.empty() == false)
 		{
 			Position testPos = Position(
@@ -240,7 +243,7 @@ int Projectile::calculateTrajectory(
 									_trajectory.at(0).y / 16,
 									_trajectory.at(0).z / 24);
 
-			if (test == VOXEL_UNIT)
+			if (testVox == VOXEL_UNIT)
 			{
 				const Tile* const endTile = _save->getTile(testPos);
 				if (endTile != NULL
@@ -258,7 +261,7 @@ int Projectile::calculateTrajectory(
 			if (testPos != _action.target
 				&& _action.result.empty() == true)
 			{
-				if (test == VOXEL_NORTHWALL)
+				if (testVox == VOXEL_NORTHWALL)
 				{
 					if (testPos.y - 1 != _action.target.y)
 					{
@@ -266,7 +269,7 @@ int Projectile::calculateTrajectory(
 						return VOXEL_EMPTY;
 					}
 				}
-				else if (test == VOXEL_WESTWALL)
+				else if (testVox == VOXEL_WESTWALL)
 				{
 					if (testPos.x - 1 != _action.target.x)
 					{
@@ -274,7 +277,7 @@ int Projectile::calculateTrajectory(
 						return VOXEL_EMPTY;
 					}
 				}
-				else if (test == VOXEL_UNIT)
+				else if (testVox == VOXEL_UNIT)
 				{
 					const BattleUnit* const testUnit = _save->getTile(testPos)->getUnit();
 					if (testUnit != targetUnit
@@ -311,7 +314,7 @@ int Projectile::calculateTrajectory(
 	} */
 
 
-	if (targetUnit != NULL // apply some accuracy modifiers. This will result in a new target voxel:
+	if (targetUnit != NULL
 		&& targetUnit->getDashing() == true)
 	{
 		accuracy -= 0.16;
@@ -321,7 +324,7 @@ int Projectile::calculateTrajectory(
 		&& originVoxel / Position(16,16,24) != _targetVoxel / Position(16,16,24))
 	{
 		//Log(LOG_INFO) << ". preAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
-		applyAccuracy(
+		applyAccuracy( // apply some accuracy modifiers. This will result in a new target voxel:
 					originVoxel,
 					&_targetVoxel,
 					accuracy,
@@ -330,12 +333,12 @@ int Projectile::calculateTrajectory(
 		//Log(LOG_INFO) << ". postAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	}
 
-	int ret = _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
-												originVoxel,
-												_targetVoxel,
-												true,
-												&_trajectory,
-												_action.actor);
+	const int ret = _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
+													originVoxel,
+													_targetVoxel,
+													true,
+													&_trajectory,
+													_action.actor);
 	//Log(LOG_INFO) << ". trajBegin = " << _trajectory.front() << " tSpace " << (_trajectory.front() / Position(16,16,24));
 	//Log(LOG_INFO) << ". trajFinal = " << _trajectory.back() << " tSpace " << (_trajectory.back() / Position(16,16,24));
 	//Log(LOG_INFO) << ". RET voxelType = " << ret;
@@ -517,9 +520,8 @@ void Projectile::applyAccuracy(
 	if (_action.type != BA_THROW
 		&& itRule->getArcingShot() == false)
 	{
-		if (Options::battleUFOExtenderAccuracy == true
-			&& _action.actor->getFaction() == FACTION_PLAYER)
-//			&& _save->getSide() == FACTION_PLAYER) // kL: only for xCom heheh
+		if (Options::battleUFOExtenderAccuracy == true			// kL: only for xCom heheh ->
+			&& _action.actor->getFaction() == FACTION_PLAYER)	// not so sure that this should be Player only
 		{
 			//Log(LOG_INFO) << ". battleUFOExtenderAccuracy";
 
@@ -539,9 +541,9 @@ void Projectile::applyAccuracy(
 			double rangeModifier;
 			const int targetDist_tSpace = static_cast<int>(targetDist / 16.);
 			if (targetDist_tSpace < shortLimit)
-				rangeModifier = static_cast<double>((itRule->getDropoff() * (shortLimit - targetDist_tSpace)) / 100);
+				rangeModifier = static_cast<double>(((shortLimit - targetDist_tSpace) * itRule->getDropoff())) / 100.;
 			else if (longLimit < targetDist_tSpace)
-				rangeModifier = static_cast<double>((itRule->getDropoff() * (targetDist_tSpace - longLimit)) / 100);
+				rangeModifier = static_cast<double>(((targetDist_tSpace - longLimit) * itRule->getDropoff())) / 100.;
 			else
 				rangeModifier = 0.;
 
@@ -561,7 +563,7 @@ void Projectile::applyAccuracy(
 				if (targetUnit != NULL)
 				{
 					if (_action.actor->getOriginalFaction() != FACTION_HOSTILE)
-						accuracy -= 0.01 * static_cast<double>(targetTile->getShade());
+						accuracy -= static_cast<double>(targetTile->getShade()) * 0.01;
 
 					// If targetUnit is kneeled, then accuracy reduced by ~6%.
 					// This is a compromise, because vertical deviation is ~2 times less.
@@ -573,11 +575,13 @@ void Projectile::applyAccuracy(
 				accuracy -= 0.01 * static_cast<double>(_save->getGlobalShade());
 
 			if (_action.type == BA_AUTOSHOT)
-				accuracy -= (_action.autoShotCount - 1) * 0.03;
+				accuracy -= static_cast<double>(_action.autoShotCount - 1) * 0.03;
 
-			accuracy -= (10 - ((_action.actor->getMorale() + 9) / 10));
+			if (_action.actor->getFaction() == _action.actor->getOriginalFaction()) // if not MC'd take a morale hit to accuracy
+				accuracy -= static_cast<double>(10 - ((_action.actor->getMorale() + 9) / 10)) / 100.;
+
 			accuracy = std::max(
-							0.,
+							0.01,
 							accuracy);
 
 
