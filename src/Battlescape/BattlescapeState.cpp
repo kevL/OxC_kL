@@ -1481,10 +1481,12 @@ void BattlescapeState::mapClick(Action* action)
 //		if (_battleSave->getDebugMode() == true)
 		{
 			std::wostringstream woststr;
-			woststr << L"pos " << pos;
 			if (_battleSave->getTile(pos)->getUnit() != NULL)
-				woststr << L" unit " << _battleSave->getTile(pos)->getUnit()->getId();
+				woststr	<< L"unit "
+						<< _battleSave->getTile(pos)->getUnit()->getId()
+						<< L" ";
 
+			woststr << L"pos " << pos;
 			debug(woststr.str());
 		}
 	}
@@ -4115,10 +4117,11 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 		return;
 	}
 
-	const BattleUnit* const unit = _battleSave->getSelectedUnit();
-	int tuCost = 0;
-	size_t rows = 3;
 
+	size_t rows = 3;
+	int tuCost = 0;
+
+	const BattleUnit* const unit = _battleSave->getSelectedUnit();
 	if (unit != NULL
 		&& unit->getFaction() == FACTION_PLAYER)
 	{
@@ -4152,19 +4155,19 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 	};
 
 	std::vector<std::wstring> infoType;
-	infoType.push_back(L"F "); // Floor
-	infoType.push_back(L"S "); // smoke
-	infoType.push_back(L"I "); // fire
-	infoType.push_back(L"M "); // tuCost
+	infoType.push_back(L"F"); // Floor
+	infoType.push_back(L"S"); // smoke
+	infoType.push_back(L"I"); // fire
+	infoType.push_back(L"M"); // tuCost
 
+
+	Uint8 color;
 
 	for (size_t
 			i = 0;
 			i != rows;
 			++i)
 	{
-		Uint8 color = 0;
-
 		if (i == 0) // Floor
 		{
 			std::wstring hasFloor;
@@ -4218,12 +4221,11 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 							infoType.at(i).c_str());
 		}
 
-		if (color != 0) // safety.
-			_lstTileInfo->setCellColor(
-									i,
-									0,
-									color,
-									true);
+		_lstTileInfo->setCellColor(
+								i,
+								0,
+								color,
+								true);
 	}
 }
 
