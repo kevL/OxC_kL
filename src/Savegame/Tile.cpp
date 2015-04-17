@@ -735,20 +735,20 @@ bool Tile::damage(
  * detonate it later, because the same tile can be visited multiple times
  * by "explosion rays". The explosive power that gets set on a tile is
  * that of the most powerful ray that passes through it -- see TileEngine::explode().
- * @param power			- how big the BOOM will be / how much tile-destruction
- * @param damageType	- the damage type of the explosion (not the same as item damage types)
- * @param force			- forces value even if lower (default false)
+ * @param power		- how big the BOOM will be / how much tile-destruction
+ * @param explType	- the type of this Tile's explosion (set in MCD; not the same as item damage types)
+ * @param force		- forces value even if lower (default false)
  */
 void Tile::setExplosive(
 		int power,
-		int damageType,
+		int explType,
 		bool force)
 {
 	if (force == true
 		|| _explosive < power)
 	{
 		_explosive = power;
-		_explosiveType = damageType;
+		_explosiveType = explType;
 	}
 }
 

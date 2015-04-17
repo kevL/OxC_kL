@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Monthly Costs screen that displays all
- * the maintenance costs of a particular base.
+ * Monthly Costs screen that displays all the maintenance costs of a particular base.
  */
 class MonthlyCostsState
 	:
@@ -43,7 +42,6 @@ class MonthlyCostsState
 {
 
 private:
-//	Base* _base;
 	Text
 		* _txtUnitCost,
 		* _txtIncome,

@@ -212,10 +212,10 @@ protected:
 				int part,
 				int power);
 
-		/// Sets a "virtual" explosive on this tile to detonate later.
+		/// Sets a virtual explosive on this tile to detonate later.
 		void setExplosive(
 				int power,
-				int damageType,
+				int explType,
 				bool force = false);
 		/// Gets explosive power of this tile.
 		int getExplosive() const;

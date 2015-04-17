@@ -159,6 +159,11 @@ BaseDetectionState::BaseDetectionState(Base* base)
 			val2 << shields;
 		_txtShieldsVal->setText(val2.str());
 	}
+	else
+	{
+		_txtShields->setVisible(false);
+		_txtShieldsVal->setVisible(false);
+	}
 
 	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 

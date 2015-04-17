@@ -4876,7 +4876,7 @@ const int Map::getIconWidth()
  */
 const int Map::getSoundAngle(Position pos)
 {
-	int midPoint = getWidth() / 2;
+	const int midPoint = getWidth() / 2;
 
 	Position screenPos;
 	_camera->convertMapToScreen(

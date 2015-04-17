@@ -2147,7 +2147,7 @@ void TileEngine::explode(
 		//Log(LOG_INFO) << ". DT_IN power = " << power;
 	}
 
-	if (power < 1) // kL, quick out.
+	if (power < 1) // quick out.
 		return;
 
 	BattleUnit* targetUnit = NULL;
@@ -2212,7 +2212,7 @@ void TileEngine::explode(
 //	for (int fi = 90; fi == 90; ++fi) // vertical: UP
 	for (int
 			fi = -90;
-			fi <= 90;
+			fi < 91;
 			fi += 5)
 	{
 //		for (int te = 180; te == 180; ++te) // kL_note: Looks like a TEST ray. ( 0 == south, 180 == north, goes CounterClock-wise )
@@ -2221,7 +2221,7 @@ void TileEngine::explode(
 //		for (int te = 225; te < 420; te += 180) // NW & SE
 		for (int // ray-tracing every 3 degrees makes sure we cover all tiles in a circle.
 				te = 0;
-				te <= 360;
+				te < 361;
 				te += 3)
 		{
 			sin_te = std::sin(static_cast<double>(te) * M_PI / 180.);
@@ -2234,8 +2234,9 @@ void TileEngine::explode(
 												centerY,
 												centerZ));
 
-			_powerE = _powerT = power;	// initialize _powerE & _powerT for each ray.
-			r = 0.;						// initialize radial length, also.
+			_powerE =
+			_powerT = power;	// initialize _powerE & _powerT for each ray.
+			r = 0.;				// initialize radial length, also.
 
 			while (_powerE > 0
 				&& r - 0.5 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
@@ -2269,7 +2270,7 @@ void TileEngine::explode(
 
 
 				if (r > 0.5					// don't block epicentrum.
-					&& origin != destTile)	// don't double blockage from the same tiles (when diagonal this happens).
+					&& origin != destTile)	// don't double blockage from the same tiles (when diagonal that happens).
 				{
 					if (dType == DT_IN)
 					{
@@ -2280,7 +2281,7 @@ void TileEngine::explode(
 						if (dir != -1
 							&& dir %2 != 0)
 						{
-							_powerE -= 5; // diagonal movement costs an extra 50% for fire.
+							_powerE -= 5; // diagonal costs an extra 50% for fire.
 						}
 					}
 
@@ -2290,7 +2291,10 @@ void TileEngine::explode(
 //						if (power / maxRadius < 1) // do min -1 per tile. Nah ...
 //							_powerE -= 1;
 //						else
-						_powerE -= power / maxRadius + 1; // per RSSwizard, http://openxcom.org/forum/index.php?topic=2927.msg32061#msg32061
+
+//						_powerE -= (power / maxRadius) + 1; // per RSSwizard, http://openxcom.org/forum/index.php?topic=2927.msg32061#msg32061
+
+						_powerE -= ((power + maxRadius - 1) / maxRadius); // round up.
 						//Log(LOG_INFO) << "maxRadius > 0, " << power << "/" << maxRadius << "=" << _powerE;
 					}
 					//else Log(LOG_INFO) << "maxRadius <= 0";
@@ -2360,7 +2364,9 @@ void TileEngine::explode(
 				if (dType == DT_HE) // explosions do 50% damage to terrain and 50% to 150% damage to units
 				{
 					//Log(LOG_INFO) << ". setExplosive() _powerE = " << _powerE;
-					destTile->setExplosive(_powerE, 0);
+					destTile->setExplosive(
+										_powerE,
+										0);
 				}
 
 				_powerE = _powerT; // note: These two are becoming increasingly redundant !!!
@@ -2452,44 +2458,48 @@ void TileEngine::explode(
 								powerUnit /= 2;
 								//Log(LOG_INFO) << ". . DT_HE = " << powerUnit; // << ", vs ID " << targetUnit->getId();
 
-								// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
-								if (distance(
-											destTile->getPosition(),
-											Position(
-													centerX,
-													centerY,
-													centerZ)) < 2)
+								if (powerUnit > 0)
 								{
-									//Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_HE, GZ";
-									if (targetUnit->isKneeled() == true)
+									Position pos;
+
+									// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
+									if (distance(
+												destTile->getPosition(),
+												Position(
+														centerX,
+														centerY,
+														centerZ)) < 2)
 									{
-										powerUnit = powerUnit * 17 / 20; // 85% damage
-										//Log(LOG_INFO) << ". . . powerUnit(kneeled) = " << powerUnit << " DT_HE, GZ";
+										//Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_HE, GZ";
+										pos = Position(0,0,0); // Ground zero effect is in effect
+										if (targetUnit->isKneeled() == true)
+										{
+											powerUnit = powerUnit * 17 / 20; // 85% damage
+											//Log(LOG_INFO) << ". . . powerUnit(kneeled) = " << powerUnit << " DT_HE, GZ";
+										}
+									}
+									else
+									{
+										//Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_HE, not GZ";
+										pos = Position( // Directional damage relative to explosion position.
+													centerX * 16 - destTile->getPosition().x * 16,
+													centerY * 16 - destTile->getPosition().y * 16,
+													centerZ * 24 - destTile->getPosition().z * 24);
+										if (targetUnit->isKneeled() == true)
+										{
+											powerUnit = powerUnit * 7 / 10; // 70% damage
+											//Log(LOG_INFO) << ". . . powerUnit(kneeled) = " << powerUnit << " DT_HE, not GZ";
+										}
 									}
 
-									targetUnit->damage( // Ground zero effect is in effect
-													Position(0,0,0),
-													powerUnit,
-													DT_HE);
-									//Log(LOG_INFO) << ". . . realDamage = " << damage << " DT_HE, GZ";
-								}
-								else
-								{
-									//Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_HE, not GZ";
-									if (targetUnit->isKneeled() == true)
+									if (powerUnit > 0)
 									{
-										powerUnit = powerUnit * 7 / 10; // 70% damage
-										//Log(LOG_INFO) << ". . . powerUnit(kneeled) = " << powerUnit << " DT_HE, not GZ";
+										targetUnit->damage( // Ground zero effect is in effect
+														pos,
+														powerUnit,
+														DT_HE);
+										//Log(LOG_INFO) << ". . . realDamage = " << damage << " DT_HE";
 									}
-
-									targetUnit->damage( // Directional damage relative to explosion position.
-													Position(
-															centerX * 16 - destTile->getPosition().x * 16,
-															centerY * 16 - destTile->getPosition().y * 16,
-															centerZ * 24 - destTile->getPosition().z * 24),
-													powerUnit,
-													DT_HE);
-									//Log(LOG_INFO) << ". . . realDamage = " << damage << " DT_HE, not GZ";
 								}
 							}
 
@@ -2507,7 +2517,6 @@ void TileEngine::explode(
 										)
 								{
 									//Log(LOG_INFO) << ". . INVENTORY: Item = " << (*i)->getRules()->getType();
-
 									BattleUnit* bu = (*i)->getUnit();
 									if (bu != NULL
 										&& bu->getStatus() == STATUS_UNCONSCIOUS
@@ -2551,7 +2560,6 @@ void TileEngine::explode(
 																										.arg(bu->getName(game->getLanguage()))));
 											}
 										}
-
 										break;
 									}
 									else if (_powerE > (*i)->getRules()->getArmor()
@@ -2575,11 +2583,15 @@ void TileEngine::explode(
 						break;
 
 						case DT_SMOKE:
-							if (destTile->getSmoke() < 10
-								&& destTile->getTerrainLevel() > -24)
+							if (destTile->getTerrainLevel() > -24)
+//								&& destTile->getSmoke() < 10)
 							{
-								destTile->setFire(0); // smoke puts out fire, hm.
-								destTile->setSmoke(RNG::generate(8,17));
+//								destTile->setFire(0); // smoke puts out fire, hm.
+//								destTile->setSmoke(RNG::generate(8,17));
+
+								const int smokePow = static_cast<int>(std::ceil(
+													(static_cast<double>(_powerE) / static_cast<double>(power)) * 10.));
+								destTile->addSmoke(smokePow + RNG::generate(0,7));
 							}
 
 							if (targetUnit != NULL)
