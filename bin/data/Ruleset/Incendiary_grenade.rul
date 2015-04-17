@@ -14,6 +14,7 @@ items:
     damageType: 2
     battleType: 4
     blastRadius: 4
+    tuPrime: 50
 ufopaedia:
   - id: STR_INC_GRENADE
     type_id: 4

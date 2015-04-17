@@ -202,6 +202,8 @@ BattlescapeState::BattlescapeState()
 	_btnRightHandItem	= new InteractiveSurface(32, 48, x + 280, y + 5);
 	_numAmmoLeft		= new NumberText(30, 5, x +   8, y + 4);
 	_numAmmoRight		= new NumberText(30, 5, x + 280, y + 4);
+//	_numFuseLeft		= new NumberText(15, 5, x +  16, y + 4);
+//	_numFuseRight		= new NumberText(15, 5, x + 288, y + 4);
 
 //	const int
 //		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
@@ -382,9 +384,11 @@ BattlescapeState::BattlescapeState()
 	add(_btnReserveKneel,	"buttonReserveKneel",	"battlescape", _icons); */
 	add(_btnZeroTUs,		"buttonZeroTUs",		"battlescape", _icons);
 	add(_btnLeftHandItem,	"buttonLeftHand",		"battlescape", _icons);
-	add(_numAmmoLeft,		"numAmmoLeft",			"battlescape", _icons);
 	add(_btnRightHandItem,	"buttonRightHand",		"battlescape", _icons);
+	add(_numAmmoLeft,		"numAmmoLeft",			"battlescape", _icons);
 	add(_numAmmoRight,		"numAmmoRight",			"battlescape", _icons);
+//	add(_numFuseLeft,		"numAmmoLeft",			"battlescape", _icons);
+//	add(_numFuseRight,		"numAmmoRight",			"battlescape", _icons);
 	add(_visUnitTarget);
 
 	_visUnitTarget->setVisible(false);
@@ -599,6 +603,9 @@ BattlescapeState::BattlescapeState()
 
 	_numAmmoLeft->setValue(0);
 	_numAmmoRight->setValue(0);
+
+//	_numFuseLeft->setValue(0);
+//	_numFuseRight->setValue(0);
 
 	_icons->onMouseIn((ActionHandler)& BattlescapeState::mouseInIcons);
 	_icons->onMouseOut((ActionHandler)& BattlescapeState::mouseOutIcons);
@@ -2468,6 +2475,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_btnLeftHandItem	->setVisible(false);
 	_numAmmoRight		->setVisible(false);
 	_numAmmoLeft		->setVisible(false);
+//	_numFuseRight		->setVisible(false);
+//	_numFuseLeft		->setVisible(false);
 
 	_kneel		->setVisible(false);
 	_overWeight	->setVisible(false);
@@ -2542,18 +2551,18 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	if (calcFoV == true)
 		_battleSave->getTileEngine()->calculateFOV(selectedUnit);
 
-	size_t ind = 0;
+	size_t j = 0;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
-				&& ind != INDICATORS;
+				&& j != INDICATORS;
 			++i,
-				++ind)
+				++j)
 	{
-		_btnVisibleUnit[ind]->setVisible();
-		_numVisibleUnit[ind]->setVisible();
+		_btnVisibleUnit[j]->setVisible();
+		_numVisibleUnit[j]->setVisible();
 
-		_visibleUnit[ind] = *i;
+		_visibleUnit[j] = *i;
 	}
 
 
@@ -2737,9 +2746,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		{
 			_numAmmoRight->setVisible();
 			if (rtItem->getAmmoItem() != NULL)
-				_numAmmoRight->setValue(rtItem->getAmmoItem()->getAmmoQuantity());
+				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoItem()->getAmmoQuantity()));
 			else
 				_numAmmoRight->setValue(0);
+		}
+		else if (rtItem->getRules()->getBattleType() == BT_GRENADE
+			&& rtItem->getFuseTimer() != -1)
+		{
+			_numAmmoRight->setVisible();
+			_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuseTimer()));
 		}
 	}
 
@@ -2756,9 +2771,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		{
 			_numAmmoLeft->setVisible();
 			if (ltItem->getAmmoItem() != NULL)
-				_numAmmoLeft->setValue(ltItem->getAmmoItem()->getAmmoQuantity());
+				_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoItem()->getAmmoQuantity()));
 			else
 				_numAmmoLeft->setValue(0);
+		}
+		else if (ltItem->getRules()->getBattleType() == BT_GRENADE
+			&& ltItem->getFuseTimer() != -1)
+		{
+			_numAmmoLeft->setVisible();
+			_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuseTimer()));
 		}
 	}
 
@@ -3924,19 +3945,19 @@ void BattlescapeState::drawFuse()
 	if (_fuseFrame == PULSE_FRAMES)
 		_fuseFrame = 0;
 
-	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
+	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
 
 	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
 	if (item != NULL
 		&& ((item->getRules()->getBattleType() == BT_GRENADE
 				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-			&& item->getFuseTimer() > -1))
+			&& item->getFuseTimer() != -1))
 	{
 		_btnLeftHandItem->lock();
 		srf->blitNShade(
 					_btnLeftHandItem,
-					_btnLeftHandItem->getX(),
-					_btnLeftHandItem->getY(),
+					_btnLeftHandItem->getX() + 27,
+					_btnLeftHandItem->getY() - 1,
 					pulse[_fuseFrame],
 					false,
 					3); // red
@@ -3947,13 +3968,13 @@ void BattlescapeState::drawFuse()
 	if (item != NULL
 		&& ((item->getRules()->getBattleType() == BT_GRENADE
 				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-			&& item->getFuseTimer() > -1))
+			&& item->getFuseTimer() != -1))
 	{
 		_btnRightHandItem->lock();
 		srf->blitNShade(
 					_btnRightHandItem,
-					_btnRightHandItem->getX(),
-					_btnRightHandItem->getY(),
+					_btnRightHandItem->getX() + 27,
+					_btnRightHandItem->getY() - 1,
 					pulse[_fuseFrame],
 					false,
 					3); // red

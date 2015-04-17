@@ -144,6 +144,8 @@ private:
 		* _numMorale,
 		* _numAmmoLeft,
 		* _numAmmoRight,
+//		* _numFuseLeft,
+//		* _numFuseRight,
 
 		* _numDir,
 		* _numDirTur,

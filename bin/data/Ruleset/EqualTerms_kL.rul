@@ -438,6 +438,7 @@ items:
     damageType: 2
     battleType: 4
     blastRadius: 2
+    tuPrime: 45
 #------------------------------------------------------------------------------
   - type: STR_SSRL
     listOrder: 3404

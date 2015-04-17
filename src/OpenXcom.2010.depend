@@ -5377,7 +5377,7 @@
 1424390944 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1428811182 f:\git\openxcom\src\battlescape\battlescapestate.h
+1429232511 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5682,7 +5682,7 @@
 1424390944 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1428811329 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1429232571 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6222,7 +6222,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1427854352 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1429190903 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
