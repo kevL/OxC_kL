@@ -2692,10 +2692,11 @@ void TileEngine::explode(
 								fireTile->setFire(
 											firePow + fireTile->getFuel(),
 											true);
-								fireTile->addSmoke(std::max(
-														firePow + fireTile->getFuel(),
-														firePow + ((fireTile->getFlammability() + 9) / 10)),
-														true);
+								fireTile->addSmoke(
+												std::max(
+													firePow + fireTile->getFuel(),
+													firePow + ((fireTile->getFlammability() + 9) / 10)),
+												true);
 							}
 //							}
 

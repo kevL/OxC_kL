@@ -2167,7 +2167,7 @@ void AlienBAIState::wayPointAction()
 					if (pathWaypoints() == true)
 						targets.push_back(*i);
 				}
-				else Log(LOG_INFO) << ". . . . explEff invalid";
+				//else Log(LOG_INFO) << ". . . . explEff invalid";
 
 				_battleSave->getPathfinding()->abortPath();
 			}
