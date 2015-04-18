@@ -44,7 +44,7 @@ namespace OpenXcom
  * Sets up an UnitTurnBState.
  * @param parent	- pointer to BattlescapeGame
  * @param action	- the current BattleAction
- * @param chargeTUs	- true if there is TU cost, false for reaction fire
+ * @param chargeTUs	- true if there is TU cost, false for reaction fire (default true)
  */
 UnitTurnBState::UnitTurnBState(
 		BattlescapeGame* parent,

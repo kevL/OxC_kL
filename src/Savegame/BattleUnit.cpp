@@ -304,9 +304,12 @@ BattleUnit::BattleUnit(
 	_stats	= *unit->getStats();
 
 	if (faction == FACTION_HOSTILE)
+	{
+		_turnsExposed = 0;
 		adjustStats(
 				diff,
 				month);
+	}
 
 	_stats		+= *_armor->getStats();	// armors may modify effective stats (but not further modified by game difficulty or monthly progress)
 
@@ -1399,13 +1402,13 @@ int BattleUnit::damage(
 			switch ((relDir - _direction) %8)
 			{
 				case 0:	side = SIDE_FRONT;									break;
-				case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
+				case 1:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_RIGHT;	break;
 				case 2:	side = SIDE_RIGHT;									break;
-				case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
+				case 3:	side = RNG::percent(50) ? SIDE_REAR : SIDE_RIGHT;	break;
 				case 4:	side = SIDE_REAR;									break;
-				case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
+				case 5:	side = RNG::percent(50) ? SIDE_REAR : SIDE_LEFT; 	break;
 				case 6:	side = SIDE_LEFT;									break;
-				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
+				case 7:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_LEFT;	break;
 			}
 			//Log(LOG_INFO) << ". side = " << (int)side;
 
@@ -2911,19 +2914,18 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
 
 /**
  * Gets this unit's height whether standing or kneeling.
+ * @param floating - true to include floating value (default false)
  * @return, unit's height
  */
-int BattleUnit::getHeight() const
+int BattleUnit::getHeight(bool floating) const
 {
-	int ret;
-
 	if (isKneeled() == true)
-		ret = _kneelHeight; //getKneelHeight();
-	else
-		ret = _standHeight; // getStandHeight();
+		return _kneelHeight;
 
-//	if (ret > 24)
-//		ret = 24;
+	int ret = _standHeight;
+
+	if (floating == true)
+		ret += _floatHeight;
 
 	return ret;
 }
@@ -3774,7 +3776,7 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
  * Use "255" for NOT exposed.
  * @param turns - # turns this unit has been exposed (default 0)
  */
-void BattleUnit::setTurnsExposed(int turns)
+void BattleUnit::setExposed(int turns)
 {
 	_turnsExposed = turns;
 
@@ -3789,7 +3791,7 @@ void BattleUnit::setTurnsExposed(int turns)
  * Gets how long since this unit was exposed.
  * @return, turns this unit has been exposed
  */
-int BattleUnit::getTurnsExposed() const
+int BattleUnit::getExposed() const
 {
 	return _turnsExposed;
 }

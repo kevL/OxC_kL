@@ -76,7 +76,8 @@ Tile::Tile(const Position& pos)
 		_visible(false),
 		_preview(-1),
 		_tuMarker(-1),
-		_overlaps(0),
+		_overlapsSMK(0),
+		_overlapsINC(0),
 		_danger(false)
 {
 	for (size_t
@@ -774,11 +775,11 @@ int Tile::getExplosiveType() const
 
 /**
  * Flammability of a tile is the flammability of its most flammable part.
- * @return, the lower the value the higher the chance the tile catches fire
+ * @return, the lower the value the higher the chance the tile catches fire - BSZAAST!!!
  */
 int Tile::getFlammability() const
 {
-	int burn = 255; // not burnable.
+	int burn = 255; // not burnable. <- lower is better :)
 
 	for (size_t
 			i = 0;
@@ -792,11 +793,45 @@ int Tile::getFlammability() const
 		}
 	}
 
+	return convertBurnToPCT(burn);
+}
+
+/**
+ * Gets the flammability of a tile-part.
+ * @note I now decree that this returns the inverse of 0..255 as a percentage!
+ * @return, the lower the value the higher the chance the tile-part catches fire - BSZAAST!!!
+ */
+int Tile::getFlammability(int part) const
+{
+	return convertBurnToPCT(_objects[static_cast<size_t>(part)]->getFlammable());
+//	return _objects[static_cast<size_t>(part)]->getFlammable();
+}
+
+/**
+ * Converts obscure inverse MCD notation to understandable percentages.
+ * @note Chance can be increased by the power of the spark.
+ * @param burn - flammability from an MCD file (see MapData)
+ * @return, basic percent chance that this stuff burns
+ */
+int Tile::convertBurnToPCT(int burn) const // private.
+{
+	if (burn == 255)
+		return 0;
+
+	burn = 255 - burn;
+	burn = std::max(
+				1,
+				std::min(
+					100,
+					static_cast<int>(std::ceil(
+					static_cast<double>(burn) / 255. * 100.))));
+
 	return burn;
 }
 
 /**
  * Fuel of a tile is the highest fuel of its parts/objects.
+ * @note This is NOT the sum of the fuel of the objects!
  * @return, how many turns to burn
  */
 int Tile::getFuel() const
@@ -819,15 +854,6 @@ int Tile::getFuel() const
 }
 
 /**
- * Gets the flammability of a tile-part.
- * @return, the lower the value, the higher the chance the tile-part catches fire
- */
-int Tile::getFlammability(int part) const
-{
-	return _objects[static_cast<size_t>(part)]->getFlammable();
-}
-
-/**
  * Gets the fuel of a tile-part.
  * @return, how many turns to burn
  */
@@ -838,146 +864,61 @@ int Tile::getFuel(int part) const
 
 /**
  * Ignite starts fire on a tile, it will burn <fuel> rounds.
- * Fuel of a tile is the highest fuel of its objects
- * NOT the sum of the fuel of the objects!
- * @param power - chance to get things going
+ * @note Called only by floor-burning Silacoids and fire spreading @ turnovers.
+ * @param power		- chance to get things going; think of it as the turns-to-burn
+ *					  that whatever is trying to light this Tile up with has
+ * @param resolve	- true to resolve overlaps immediately (default false)
  */
-void Tile::ignite(int power)
+void Tile::ignite(
+		int power,
+		bool resolve)
 {
-	if (canSmoke() == false)
-		return;
-
-	if (_fire == 0)
+	if (canSmoke() == true)
 	{
 		const int fuel = getFuel();
-		if (fuel > 0)
+		int pct = getFlammability();
+		if (fuel != 0
+			&& pct != 0)
 		{
-			const int burn = getFlammability(); // <- lower is better :)
-			if (burn < 255)
+			power = pct + (power * 7);
+			if (RNG::percent(power) == true)
 			{
-				power -= burn / 10; //- 15;
-				if (RNG::percent(power) == true)
-				{
-					_smoke = std::max(
-									1,
-									std::min(
-											12,
-											15 - burn / 10));
+				_animOffset = RNG::generate(0,3);
 
-					_fire = fuel + 1;
-					_overlaps = 1;
-					_animOffset = RNG::generate(0,3);
-				}
+				_fire += fuel + 1; // yeh this can get carried away so what.
+				++_overlapsINC;
+
+				_smoke += std::max(
+								1,
+								std::min(
+									12,
+									(pct + 9) / 10));
+				++_overlapsSMK;
 			}
 		}
+
+		if (resolve == true)
+			resolveOverlaps();
 	}
-}
-
-/**
- * Animate the tile - this means to advance the current frame for every part.
- * Ufo doors are a bit special; they animate only when triggered.
- * When ufo doors are on frame 0(closed) or frame 7(open) they are not animated further.
- */
-void Tile::animate()
-{
-	int nextFrame;
-
-	for (size_t
-			i = 0;
-			i != PARTS;
-			++i)
-	{
-		if (_objects[i] != NULL)
-		{
-			if (_objects[i]->isUFODoor() == true // ufo door is static
-				&& (   _curFrame[i] == 0
-					|| _curFrame[i] == 7))
-			{
-				continue;
-			}
-
-			nextFrame = _curFrame[i] + 1;
-
-			if (   _objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
-				&& _objects[i]->getSpecialType() == START_POINT
-				&& nextFrame == 3)
-			{
-				nextFrame = 7;
-			}
-
-			if (nextFrame == 8)
-				nextFrame = 0;
-
-			_curFrame[i] = nextFrame;
-		}
-	}
-
-	for (std::list<Particle*>::const_iterator
-			i = _particles.begin();
-			i != _particles.end();
-			)
-	{
-		if ((*i)->animate() == false)
-		{
-			delete *i;
-			i = _particles.erase(i);
-		}
-		else
-			++i;
-	}
-}
-
-/**
- * Get the number of frames the fire or smoke animation is off-sync.
- * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
- * @return, offset
- */
-int Tile::getAnimationOffset() const
-{
-	return _animOffset;
-}
-
-/**
- * Get the sprite of a certain part of the tile.
- * @param part - this Tile's part to get a sprite for
- * @return, pointer to the sprite
- */
-Surface* Tile::getSprite(int part) const
-{
-	const size_t i = static_cast<size_t>(part);
-	MapData* data = _objects[i];
-
-	if (data == NULL)
-		return NULL;
-
-	return data->getDataset()->getSurfaceset()->getFrame(data->getSprite(_curFrame[i]));
-}
-
-/**
- * Sets a unit on this tile.
- * @param unit		- pointer to a unit
- * @param tileBelow	- pointer to the tile below this tile (default NULL)
- */
-void Tile::setUnit(
-		BattleUnit* unit,
-		const Tile* const tileBelow)
-{
-	if (unit != NULL)
-		unit->setTile(
-					this,
-					tileBelow);
-
-	_unit = unit;
 }
 
 /**
  * Sets the number of turns this tile will be on fire.
- * @param fire - number of turns for this tile to burn
+ * @param turns		- number of turns for this tile to burn
+ * @param resolve	- true to resolve overlaps immediately (default false)
  */
-void Tile::setFire(int fire)
+void Tile::setFire(
+		int turns,
+		bool resolve)
 {
-	_fire = fire;
-	_animOffset = RNG::generate(0,3);
+	if (canSmoke() == true)
+	{
+		_animOffset = RNG::generate(0,3);
+		_fire = turns;
+
+		if (resolve == true)
+			resolveOverlaps();
+	}
 }
 
 /**
@@ -991,46 +932,51 @@ int Tile::getFire() const
 
 /**
  * Sets the number of turns this tile will smoke for; adds to any smoke already on a tile.
- * @param smoke - number of turns for this tile to smoke
+ * @param turns		- add number of turns for this tile to smoke
+ * @param resolve	- true to resolve any overlaps immediately (default false)
  */
-void Tile::addSmoke(int smoke)
+void Tile::addSmoke(
+		int turns,
+		bool resolve)
 {
-	if (canSmoke() == false)
-		return;
-
-	if (_fire == 0)
+	if (canSmoke() == true)
 	{
-		if (_overlaps == 0)
-			_smoke = std::max(
-							1,
-							std::min(
-									_smoke + smoke,
-									17));
+		if (_smoke == 0)
+		{
+			_animOffset = RNG::generate(0,3);
+			_smoke = std::min(
+							17,
+							turns);
+		}
 		else
-			_smoke += smoke;
+		{
+			_smoke += turns;
+			++_overlapsSMK;
 
-		_animOffset = RNG::generate(0,3);
-
-		++_overlaps;
+			if (resolve == true)
+				resolveOverlaps();
+		}
 	}
 }
 
 /**
- * Sets the number of turns this tile will smoke for. (May include fire?)
- * @param smoke - number of turns for this tile to smoke
+ * Sets the number of turns this tile will smoke for.
+ * @param turns - turns to go
  */
-void Tile::setSmoke(int smoke)
+void Tile::setSmoke(int turns)
 {
-	if (canSmoke() == false)
-		return;
-
-	_smoke = smoke;
-	_animOffset = RNG::generate(0,3);
+	if (canSmoke() == true)
+	{
+		_animOffset = RNG::generate(0,3);
+		_smoke = std::min(
+						17,
+						turns);
+	}
 }
 
 /**
- * Gets the number of turns left for this tile to smoke (includes fire).
- * @return, number of turns left for this tile to smoke
+ * Gets the number of turns left for this tile to smoke.
+ * @return, turns left
  */
 int Tile::getSmoke() const
 {
@@ -1038,8 +984,57 @@ int Tile::getSmoke() const
 }
 
 /**
- * Gets if this Tile will accept '_smoke' value.
- * @note diag bigWalls take no smoke. 'Cause I don't want it showing on both sides.
+ * Gets the smoke overlap value of this Tile.
+ * @return, smoke overlaps
+ */
+/*int Tile::getOverlapsSK() const
+{
+	return _overlapsSMK;
+} */
+
+/**
+ * Gets the fire overlap value of this Tile.
+ * @return, fire overlaps
+ */
+/*int Tile::getOverlapsIN() const
+{
+	return _overlapsINC;
+} */
+
+/**
+ * New turn preparations. Average out any smoke added by the number of overlaps.
+ */
+void Tile::resolveOverlaps()
+{
+	if (_smoke != 0
+		&& _overlapsSMK != 0)
+	{
+		_smoke = std::max(
+						0,
+						std::min(
+							17,
+							(_smoke + _overlapsSMK - 1) / _overlapsSMK));
+	}
+
+	if (_fire != 0
+		&& _overlapsINC != 0)
+	{
+		_fire = std::max(
+						0,
+						std::min(
+							12,
+							(_fire + _overlapsINC - 1) / _overlapsINC));
+	}
+
+	_overlapsSMK =
+	_overlapsINC = 0;
+	_danger = false;
+}
+
+/**
+ * Gets if this Tile will accept '_smoke' or '_fire' value.
+ * @note diag bigWalls take no smoke/fire. 'Cause I don't want it showing on both sides.
+ * And I don't want it to creep through diagonal UFO hulls ....
  * @return, true if smoke possible
  */
 bool Tile::canSmoke() const // private
@@ -1050,151 +1045,17 @@ bool Tile::canSmoke() const // private
 }
 
 /**
- * Add an item on the tile.
- * @param item		- pointer to a BattleItem
- * @param ground	- pointer to RuleInventory ground-slot
- */
-void Tile::addItem(
-		BattleItem* const item,
-		RuleInventory* const ground)
-{
-	item->setSlot(ground);
-	_inventory.push_back(item);
-
-	item->setTile(this);
-}
-
-/**
- * Remove an item from the tile.
- * @param item - pointer to a BattleItem
- */
-void Tile::removeItem(BattleItem* const item)
-{
-	//Log(LOG_INFO) << "Tile::removeItem() id " << item->getId();
-	for (std::vector<BattleItem*>::const_iterator
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
-	{
-		if (*i == item)
-		{
-			_inventory.erase(i);
-			break;
-		}
-	}
-
-	item->setTile(NULL);
-}
-
-/**
- * Get the topmost item sprite to draw on the battlescape.
- * @return, sprite ID in floorob (-1 none)
- */
-int Tile::getTopItemSprite() const
-{
-	if (_inventory.empty() == true)
-		return -1;
-
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
-	{
-		if ((*i)->getUnit() != NULL
-			&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)
-		{
-			return (*i)->getRules()->getFloorSprite();
-		}
-	}
-
-	int
-		weight = -1,
-		sprite = -1;
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
-	{
-		if ((*i)->getRules()->getBattleType() == BT_CORPSE)
-			return (*i)->getRules()->getFloorSprite();
-
-		if ((*i)->getRules()->getWeight() > weight)
-		{
-			weight = (*i)->getRules()->getWeight();
-			sprite = (*i)->getRules()->getFloorSprite();
-		}
-	}
-
-	return sprite;
-}
-
-/**
- * Gets if this Tile has an unconscious xCom unit in its inventory.
- * @return,	0 - no living Soldier
- *			1 - stunned Soldier
- *			2 - stunned and wounded Soldier
- */
-int Tile::getHasUnconsciousSoldier() const
-{
-	int ret = 0;
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
-	{
-		const BattleUnit* const bu = (*i)->getUnit();
-
-		if (   bu != NULL
-			&& bu->getOriginalFaction() == FACTION_PLAYER
-			&& bu->getStatus() == STATUS_UNCONSCIOUS)
-		{
-			if (bu->getFatalWounds() == 0)
-				ret = 1;
-			else
-				return 2;
-		}
-	}
-
-	return ret;
-}
-
-/**
- * New turn preparations.
- * Average out any smoke added by the number of overlaps.
- */
-void Tile::prepareTileTurn()
-{
-	// Received new smoke, but not on fire, average out the smoke.
-	if (_overlaps != 0
-		&& _smoke != 0
-		&& _fire == 0)
-	{
-		_smoke = std::max(
-						0,
-						std::min(
-							(_smoke / _overlaps) - 1,
-							17));
-	}
-
-	_overlaps = 0;
-	_danger = false;
-}
-
-/**
  * Ends this tile's turn. Units catch on fire.
- * Separated from prepareTileTurn() above so that units take damage before
+ * Separated from resolveOverlaps() above so that units take damage before
  * smoke/fire spreads to them; this is so that units would have to end their
- * turn on a tile before smoke/fire damages them.
+ * turn on a tile before smoke/fire damages them. That is they get a chance
+ * to get off the tile during their turn.
  * @param battleSave - pointer to the current SavedBattleGame (default NULL Vs. units)
  */
-void Tile::endTilePhase(SavedBattleGame* const battleSave)
+void Tile::hitStuff(SavedBattleGame* const battleSave)
 {
-	//Log(LOG_INFO) << "Tile::endTilePhase() " << _pos;
+	//Log(LOG_INFO) << "Tile::hitStuff() " << _pos;
 	//if (_unit) Log(LOG_INFO) << ". unitID " << _unit->getId();
-
 	int
 		pSmoke,
 		pFire;
@@ -1320,7 +1181,7 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 								//Log(LOG_INFO) << ". . . dead";
 								unit->instaKill();
 								unit->killedBy(unit->getFaction()); // killed by self ....
-								Log(LOG_INFO) << "Tile::endTilePhase() " << unit->getId() << " killedBy = " << (int)unit->getFaction();
+								Log(LOG_INFO) << "Tile::hitStuff() " << unit->getId() << " killedBy = " << (int)unit->getFaction();
 
 								// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
 /*								if (Options::battleNotifyDeath == true // send Death notice.
@@ -1356,7 +1217,216 @@ void Tile::endTilePhase(SavedBattleGame* const battleSave)
 			}
 		}
 	}
-	//Log(LOG_INFO) << "Tile::endTilePhase() EXIT";
+	//Log(LOG_INFO) << "Tile::hitStuff() EXIT";
+}
+
+/**
+ * Animate the tile - this means to advance the current frame for every part.
+ * Ufo doors are a bit special; they animate only when triggered.
+ * When ufo doors are on frame 0(closed) or frame 7(open) they are not animated further.
+ */
+void Tile::animate()
+{
+	int nextFrame;
+
+	for (size_t
+			i = 0;
+			i != PARTS;
+			++i)
+	{
+		if (_objects[i] != NULL)
+		{
+			if (_objects[i]->isUFODoor() == true // ufo door is static
+				&& (   _curFrame[i] == 0
+					|| _curFrame[i] == 7))
+			{
+				continue;
+			}
+
+			nextFrame = _curFrame[i] + 1;
+
+			if (   _objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
+				&& _objects[i]->getSpecialType() == START_POINT
+				&& nextFrame == 3)
+			{
+				nextFrame = 7;
+			}
+
+			if (nextFrame == 8)
+				nextFrame = 0;
+
+			_curFrame[i] = nextFrame;
+		}
+	}
+
+	for (std::list<Particle*>::const_iterator
+			i = _particles.begin();
+			i != _particles.end();
+			)
+	{
+		if ((*i)->animate() == false)
+		{
+			delete *i;
+			i = _particles.erase(i);
+		}
+		else
+			++i;
+	}
+}
+
+/**
+ * Get the number of frames the fire or smoke animation is off-sync.
+ * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
+ * @return, offset
+ */
+int Tile::getAnimationOffset() const
+{
+	return _animOffset;
+}
+
+/**
+ * Get the sprite of a certain part of the tile.
+ * @param part - this Tile's part to get a sprite for
+ * @return, pointer to the sprite
+ */
+Surface* Tile::getSprite(int part) const
+{
+	const size_t i = static_cast<size_t>(part);
+	MapData* data = _objects[i];
+
+	if (data == NULL)
+		return NULL;
+
+	return data->getDataset()->getSurfaceset()->getFrame(data->getSprite(_curFrame[i]));
+}
+
+/**
+ * Sets a unit on this tile.
+ * @param unit		- pointer to a unit
+ * @param tileBelow	- pointer to the tile below this tile (default NULL)
+ */
+void Tile::setUnit(
+		BattleUnit* unit,
+		const Tile* const tileBelow)
+{
+	if (unit != NULL)
+		unit->setTile(
+					this,
+					tileBelow);
+
+	_unit = unit;
+}
+
+/**
+ * Add an item on the tile.
+ * @param item		- pointer to a BattleItem
+ * @param ground	- pointer to RuleInventory ground-slot
+ */
+void Tile::addItem(
+		BattleItem* const item,
+		RuleInventory* const ground)
+{
+	item->setSlot(ground);
+	_inventory.push_back(item);
+
+	item->setTile(this);
+}
+
+/**
+ * Remove an item from the tile.
+ * @param item - pointer to a BattleItem
+ */
+void Tile::removeItem(BattleItem* const item)
+{
+	//Log(LOG_INFO) << "Tile::removeItem() id " << item->getId();
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		if (*i == item)
+		{
+			_inventory.erase(i);
+			break;
+		}
+	}
+
+	item->setTile(NULL);
+}
+
+/**
+ * Get the topmost item sprite to draw on the battlescape.
+ * @return, sprite ID in floorob (-1 none)
+ */
+int Tile::getTopItemSprite() const
+{
+	if (_inventory.empty() == true)
+		return -1;
+
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		if ((*i)->getUnit() != NULL
+			&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)
+		{
+			return (*i)->getRules()->getFloorSprite();
+		}
+	}
+
+	int
+		weight = -1,
+		sprite = -1;
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		if ((*i)->getRules()->getBattleType() == BT_CORPSE)
+			return (*i)->getRules()->getFloorSprite();
+
+		if ((*i)->getRules()->getWeight() > weight)
+		{
+			weight = (*i)->getRules()->getWeight();
+			sprite = (*i)->getRules()->getFloorSprite();
+		}
+	}
+
+	return sprite;
+}
+
+/**
+ * Gets if this Tile has an unconscious xCom unit in its inventory.
+ * @return,	0 - no living Soldier
+ *			1 - stunned Soldier
+ *			2 - stunned and wounded Soldier
+ */
+int Tile::getHasUnconsciousSoldier() const
+{
+	int ret = 0;
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		const BattleUnit* const bu = (*i)->getUnit();
+
+		if (   bu != NULL
+			&& bu->getOriginalFaction() == FACTION_PLAYER
+			&& bu->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			if (bu->getFatalWounds() == 0)
+				ret = 1;
+			else
+				return 2;
+		}
+	}
+
+	return ret;
 }
 
 /**
@@ -1438,15 +1508,6 @@ void Tile::setTUMarker(int tu)
 int Tile::getTUMarker() const
 {
 	return _tuMarker;
-}
-
-/**
- * Gets the overlap value of this tile.
- * @return, overlap
- */
-int Tile::getOverlaps() const
-{
-	return _overlaps;
 }
 
 /**

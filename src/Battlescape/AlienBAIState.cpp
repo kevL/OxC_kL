@@ -387,7 +387,7 @@ void AlienBAIState::think(BattleAction* action)
 	if (_xcomSpotters > 2
 		|| _unit->getHealth() < _unit->getBaseStats()->health * 2 / 3
 		|| (_aggroTarget != NULL
-			&& _aggroTarget->getTurnsExposed() > _intelligence))
+			&& _aggroTarget->getExposed() > _intelligence))
 	{
 		evaluate = true;
 	}
@@ -1928,21 +1928,20 @@ bool AlienBAIState::findFirePoint()
  * Decides if it's worthwhile to create an explosion.
  * @param targetPos	- target's position
  * @param attacker	- pointer to the attacking unit
- * @param radius	- radius of explosion in tile space
+ * @param explRadius	- radius of explosion in tile space
  * @param diff		- game difficulty
 // * @param grenade	- true if explosion will be from a grenade
  * @return, true if it's worthwile creating an explosion at the target position
  */
 bool AlienBAIState::explosiveEfficacy(
-		Position targetPos,
-		BattleUnit* attacker,
-		int radius,
-		int diff) const
+		const Position targetPos,
+		const BattleUnit* const attacker,
+		const int explRadius,
+		const int diff) const
 //		bool grenade) const
 {
-	//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
-	// i hate the player and i want him dead, but i don't want to piss him off
-	// ... unless he likes the death-defying attitude that makes the original game so great.
+	int pct = 0;
+
 	const int firstGrenade = _battleSave->getBattleState()->getGame()->getRuleset()->getFirstGrenade();
 	if (firstGrenade == -1
 		|| (firstGrenade == 0
@@ -1950,38 +1949,32 @@ bool AlienBAIState::explosiveEfficacy(
 		|| (firstGrenade > 0
 			&& _battleSave->getTurn() > firstGrenade - 1))
 	{
-		// if attacker is hurt, assume things are dire and increase desperation
-		const int
-			desperation = (100 - attacker->getMorale()) / 10,
-			hurt = 10 - static_cast<int>(
-						static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getBaseStats()->health) * 10.f),
-			// but don't go kamikaze unless already doomed
-			distance = _battleSave->getTileEngine()->distance(
-														attacker->getPosition(),
-														targetPos);
-		int effect = (desperation + hurt) * 3;
+		pct = (100 - attacker->getMorale()) / 3;
+		pct += 2 * (10 - static_cast<int>(
+					static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getBaseStats()->health) * 10.f));
+		pct += attacker->getAggression() * 10;
 
-		if (distance <= radius) // attacker inside blast zone
+		const int dist = _battleSave->getTileEngine()->distance(
+															attacker->getPosition(),
+															targetPos);
+		if (dist < explRadius + 1)
 		{
-//			effect -= 35;
-			effect -= (radius - distance + 1) * 5;
+			pct -= (explRadius - dist + 1) * 5;
 
-			if (std::abs(attacker->getPosition().z - targetPos.z) <= Options::battleExplosionHeight)
-				effect -= 15;
+			if (std::abs(attacker->getPosition().z - targetPos.z) < Options::battleExplosionHeight + 1)
+				pct -= 15;
 		}
 
 		if (_battleSave->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
-			effect -= 23;
+			pct -= 23;
 		else if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
 			|| _battleSave->getMissionType() == "STR_TERROR_MISSION")
 		{
-			effect += 56;
+			pct += 56;
 		}
 
-		// allow difficulty to have an influence
-		effect += diff;
+		pct += diff * 2;
 
-		// account for the targeted unit -> excludeUnit when calculatingLine below.
 		const BattleUnit* const target = _battleSave->getTile(targetPos)->getUnit();
 
 		for (std::vector<BattleUnit*>::const_iterator
@@ -1991,62 +1984,58 @@ bool AlienBAIState::explosiveEfficacy(
 		{
 			if ((*i)->isOut(true) == false
 				&& *i != attacker
-				&& std::abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
+				&& std::abs((*i)->getPosition().z - targetPos.z) < Options::battleExplosionHeight + 1
 				&& _battleSave->getTileEngine()->distance(
 													targetPos,
-													(*i)->getPosition()) <= radius)
+													(*i)->getPosition()) < explRadius + 1)
 			{
-				if (((*i)->getTile() != NULL
-						&& (*i)->getTile()->getDangerous() == true)		// don't count targets that were already grenaded this turn
-					|| ((*i)->getFaction() == FACTION_PLAYER
-						&& (*i)->getTurnsExposed() > _intelligence))	// don't count units that this aLien doesn't know about
+				if (   (*i)->getTile() != NULL
+					&& (*i)->getTile()->getDangerous() == false
+					&& ((*i)->getFaction() == FACTION_HOSTILE
+						|| (*i)->getExposed() < _intelligence + 1))
 				{
-					continue;
-				}
+					const Position
+						voxelPosA = Position(
+										(targetPos.x * 16) + 8,
+										(targetPos.y * 16) + 8,
+										(targetPos.z * 24) + 12),
+						voxelPosB = Position(
+										((*i)->getPosition().x * 16) + 8,
+										((*i)->getPosition().y * 16) + 8,
+										((*i)->getPosition().z * 24) + 12);
 
-				// trace a line from the explosion origin to targetPos
-				const Position
-					voxelPosA = Position(
-									(targetPos.x * 16) + 8,
-									(targetPos.y * 16) + 8,
-									(targetPos.z * 24) + 12),
-					voxelPosB = Position(
-									((*i)->getPosition().x * 16) + 8,
-									((*i)->getPosition().y * 16) + 8,
-									((*i)->getPosition().z * 24) + 12);
+					std::vector<Position> traj;
+					const int impact = _battleSave->getTileEngine()->calculateLine(
+																				voxelPosA,
+																				voxelPosB,
+																				false,
+																				&traj,
+																				target,
+																				true,
+																				false,
+																				*i);
+					Log(LOG_INFO) << "trajFront " << (traj.front() / Position(16,16,24));
+					Log(LOG_INFO) << "trajBack  " << (traj.back() / Position(16,16,24));
+					if (impact == VOXEL_UNIT
+						&& (*i)->getPosition() == traj.front() / Position(16,16,24))
+					{
+						if ((*i)->getFaction() != FACTION_HOSTILE)
+							pct += 12;
 
-				std::vector<Position> traj;
-				const int collision = _battleSave->getTileEngine()->calculateLine(
-																			voxelPosA,
-																			voxelPosB,
-																			false,
-																			&traj,
-																			target,
-																			true,
-																			false,
-																			*i);
-				if (collision == VOXEL_UNIT
-					&& traj.front() / Position(16,16,24) == (*i)->getPosition())
-				{
-//					if ((*i)->getFaction() == FACTION_PLAYER)
-					if ((*i)->getFaction() != attacker->getFaction()) // do xCom, Mc'd aLiens, & civies.
-						effect += 10;
+						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+						{
+							pct -= 6;
 
-					if ((*i)->getOriginalFaction() == attacker->getFaction()) // but true friendlies count negative-half
-						effect -= 5;
+							if ((*i)->getFaction() == FACTION_HOSTILE)
+								pct -= 12;
+						}
+					}
 				}
 			}
 		}
-
-		if (RNG::percent(effect) == true)
-		{
-			//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT true, effect = " << effect;
-			return true;
-		}
 	}
 
-	//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT false, effect = " << effect;
-	return false;
+	return (RNG::percent(pct) == true);
 }
 
 /**
@@ -2178,7 +2167,7 @@ void AlienBAIState::wayPointAction()
 					if (pathWaypoints() == true)
 						targets.push_back(*i);
 				}
-				//else Log(LOG_INFO) << ". . . . explEff invalid";
+				else Log(LOG_INFO) << ". . . . explEff invalid";
 
 				_battleSave->getPathfinding()->abortPath();
 			}
@@ -2761,12 +2750,12 @@ bool AlienBAIState::validTarget(
 	//Log(LOG_INFO) << "AlienBAIState::validTarget() ID " << unit->getId();
 	//Log(LOG_INFO) << ". isFactionHostile -> " << (unit->getFaction() == FACTION_HOSTILE);
 	//Log(LOG_INFO) << ". isOut -> " << (unit->isOut(true, true) == true);
-	//Log(LOG_INFO) << ". isExposed -> " << (_intelligence >= unit->getTurnsExposed());
+	//Log(LOG_INFO) << ". isExposed -> " << (_intelligence >= unit->getExposed());
 	//Log(LOG_INFO) << ". isDangerous -> " << (assessDanger == true && unit->getTile() != NULL && unit->getTile()->getDangerous() == true);
 
 	if (unit->getFaction() == FACTION_HOSTILE				// target must not be on aLien side
 		|| unit->isOut(true, true) == true					// ignore targets that are dead/unconscious
-		|| _intelligence < unit->getTurnsExposed()			// target must be a unit that this aLien 'knows about'
+		|| _intelligence < unit->getExposed()			// target must be a unit that this aLien 'knows about'
 		|| (assessDanger == true
 //			&& unit->getTile() != NULL						// safety. Should not be needed if isOut()=true
 			&& unit->getTile()->getDangerous() == true))	// target has not been grenaded
@@ -2918,7 +2907,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
 					{
 						if ((*j)->getFaction() != FACTION_HOSTILE)
 						{
-							if ((*j)->getTurnsExposed() <= _intelligence)
+							if ((*j)->getExposed() <= _intelligence)
 								++nodePoints;
 						}
 						else

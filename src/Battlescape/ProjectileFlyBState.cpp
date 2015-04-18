@@ -84,7 +84,7 @@ ProjectileFlyBState::ProjectileFlyBState(
  * @param parent - pointer to the BattlescapeGame
  * @param action - the current BattleAction struct (BattlescapeGame.h)
  */
-ProjectileFlyBState::ProjectileFlyBState(
+ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::launchAction()
 		BattlescapeGame* parent,
 		BattleAction action)
 	:
@@ -192,7 +192,7 @@ void ProjectileFlyBState::init()
 	// for Silacoid attack, etc.
 	// kL_note: not sure that melee reactionFire is properly implemented...
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
-		&& (_action.type == BA_SNAPSHOT
+		&& (   _action.type == BA_SNAPSHOT
 			|| _action.type == BA_AUTOSHOT
 			|| _action.type == BA_AIMEDSHOT))
 	{
@@ -242,6 +242,7 @@ void ProjectileFlyBState::init()
 				_parent->popState();
 				return;
 			}
+		break;
 
 		case BA_THROW:
 		{
@@ -276,7 +277,7 @@ void ProjectileFlyBState::init()
 		case BA_HIT:
 			performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
-			return;
+		return;
 
 		// removed post-cosmetics
 		case BA_PANIC:
@@ -290,12 +291,12 @@ void ProjectileFlyBState::init()
 															(_action.target.z * 24) + 10),
 													_action.weapon,
 													_unit));
-			return;
+		return;
 
 		default:
 			//Log(LOG_INFO) << ". . default, EXIT";
 			_parent->popState();
-			return;
+		return;
 	}
 
 
@@ -305,7 +306,7 @@ void ProjectileFlyBState::init()
 			&& _parent->getSave()->getSide() == FACTION_PLAYER)
 		|| _parent->getPanicHandled() == false)
 	{
-		//Log(LOG_INFO) << "projFlyB targetPos[0] = " << _action.target;
+		//Log(LOG_INFO) << "projFlyB init() targetPosTile[0] = " << _action.target;
 		_targetVoxel = Position( // target nothing, targets the middle of the tile
 							_action.target.x * 16 + 8,
 							_action.target.y * 16 + 8,
@@ -317,6 +318,10 @@ void ProjectileFlyBState::init()
 				_targetVoxel.z -= 10; // launched missiles with two waypoints placed on the same tile: target the floor.
 			else
 				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
+
+			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].x = " << static_cast<float>(_targetVoxel.x) / 16.f;
+			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].y = " << static_cast<float>(_targetVoxel.y) / 16.f;
+			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].z = " << static_cast<float>(_targetVoxel.z) / 24.f;
 		}
 		else if ((SDL_GetModState() & KMOD_ALT) != 0) // note: CTRL+ALT !
 		{
@@ -438,8 +443,8 @@ void ProjectileFlyBState::init()
 }
 
 /**
- * Tries to create a projectile sprite and add it to the map
- * - calculate its trajectory.
+ * Tries to create a projectile sprite and add it to the map.
+ * Calculate its trajectory.
  * @return, true if the projectile was successfully created
  */
 bool ProjectileFlyBState::createNewProjectile()
@@ -454,6 +459,12 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		++_unit->getStatistics()->shotsFiredCounter;
 	}
+
+	//Log(LOG_INFO) << "projFlyB create() originTile = " << _origin;
+	//Log(LOG_INFO) << "projFlyB create() targetVoxel = " << _targetVoxel;
+	//Log(LOG_INFO) << "projFlyB create() targetVoxel.x = " << static_cast<float>(_targetVoxel.x) / 16.f;
+	//Log(LOG_INFO) << "projFlyB create() targetVoxel.y = " << static_cast<float>(_targetVoxel.y) / 16.f;
+	//Log(LOG_INFO) << "projFlyB create() targetVoxel.z = " << static_cast<float>(_targetVoxel.z) / 24.f;
 
 	Projectile* const projectile = new Projectile(
 											_parent->getResourcePack(),
@@ -563,7 +574,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else // shoot weapon
 	{
-		if (_originVoxel != Position(-1,-1,-1)) // ... BL waypoints
+		if (_originVoxel != Position(-1,-1,-1)) // here, origin is a BL waypoint
 		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
@@ -694,7 +705,7 @@ void ProjectileFlyBState::think()
 //				&& _action.waypoints.size() < 2)
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: cameraPosition was Set";
-/*				if (_action.type == BA_STUN // kL, don't jump screen after these.
+/*				if (   _action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
 					|| _action.type == BA_USE
 					|| _action.type == BA_LAUNCH
@@ -704,7 +715,7 @@ void ProjectileFlyBState::think()
 //					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset());
 				}
 				else */
-				if (_action.type == BA_THROW // jump screen back to pre-shot position
+				if (   _action.type == BA_THROW // jump screen back to pre-shot position
 					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)
@@ -818,7 +829,7 @@ void ProjectileFlyBState::think()
 																			_parent,
 																			_action,
 																			_origin);
-				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition(-1));
+				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // no (-1) -> tada, fixed.
 
 				if (_origin == _action.target)
 					nextWaypoint->targetFloor();
@@ -859,10 +870,15 @@ void ProjectileFlyBState::think()
 						&& _ammo->getRules()->getExplosionRadius() > -1
 						&& _projectileImpact != VOXEL_UNIT)
 					{
-						offset = -2;
+						offset = -1; // do -1, was -2 -> tada, fixed.
 					}
 
-					//Log(LOG_INFO) << ". . . . new ExplosionBState()";
+					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explCenter " << _parent->getMap()->getProjectile()->getPosition(offset);
+					//Log(LOG_INFO) << "projFlyB think() offset " << offset;
+					//Log(LOG_INFO) << "projFlyB think() projImpact voxelType " << _projectileImpact;
+					//Log(LOG_INFO) << "projFlyB think() explCenter.x = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).x) / 16.f;
+					//Log(LOG_INFO) << "projFlyB think() explCenter.y = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).y) / 16.f;
+					//Log(LOG_INFO) << "projFlyB think() explCenter.z = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).z) / 24.f;
 					_parent->statePushFront(new ExplosionBState(
 															_parent,
 															_parent->getMap()->getProjectile()->getPosition(offset),
@@ -996,7 +1012,7 @@ void ProjectileFlyBState::think()
 							&& victim->getOriginalFaction() == FACTION_PLAYER
 							&& _unit->getFaction() == FACTION_HOSTILE)
 						{
-							_unit->setTurnsExposed();
+							_unit->setExposed();
 						} */ // kL_end. But this is entirely unnecessary, since aLien has already seen and logged the soldier.
 /*kL
 						if (victim
@@ -1007,7 +1023,7 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHitBy(_unit);	// kL_note: is used only for spotting on RA.
-								_unit->setTurnsExposed();	// kL_note: might want to remark this! Ok.
+								_unit->setExposed();		// kL_note: might want to remark this! Ok.
 								// technically, in the original as I remember it, only
 								// a BlasterLaunch (by xCom) would set an xCom soldier Exposed here!
 								// ( Those aLiens had a way of tracing a BL back to its origin ....)
@@ -1166,7 +1182,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 }
 
 /**
- * Set the origin voxel, used for the blaster launcher.
+ * Set the origin voxel. Used for the blaster launcher.
  * @param pos - the origin voxel
  */
 void ProjectileFlyBState::setOriginVoxel(const Position pos)
@@ -1270,7 +1286,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR
 		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
-		_parent->getSave()->getTile(_action.target)->ignite(15);
+		_parent->getSave()->getTile(_action.target)->ignite(15, true);
 	}
 
 	_parent->getMap()->setCursorType(CT_NONE);

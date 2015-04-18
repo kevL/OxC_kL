@@ -4190,7 +4190,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 		else if (i < 3) // smoke & fire
 		{
 			if (i == 1)
-				color = Palette::blockOffset(0); // white, smoke
+				color = Palette::blockOffset(5); // brown, smoke
 			else
 				color = Palette::blockOffset(2); // red, fire
 

@@ -1216,7 +1216,7 @@ bool SavedBattleGame::endBattlePhase()
 		// and instantly prepare new turn for the player.
 		if (selectNextFactionUnit() == NULL) // else this will cycle through NEUTRAL units
 		{
-			prepareBattleTurn(); // do Tile stuff & revive units
+			spreadFireSmoke(); // do Tile stuff
 			++_turn;
 			ret = true;
 
@@ -1239,7 +1239,7 @@ bool SavedBattleGame::endBattlePhase()
 	}
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
-		prepareBattleTurn(); // do Tile stuff & revive units
+		spreadFireSmoke(); // do Tile stuff
 		++_turn;
 		ret = true;
 
@@ -1305,17 +1305,17 @@ bool SavedBattleGame::endBattlePhase()
 
 
 		if ((*i)->isOut(true, true) == true)
-			(*i)->setTurnsExposed(255);
+			(*i)->setExposed(255);
 		else if ((*i)->getFaction() == FACTION_HOSTILE
 			|| (*i)->getOriginalFaction() == FACTION_HOSTILE
 			|| _cheating == true) // aLiens know where xCom is when cheating ~turn20
 		{
-			(*i)->setTurnsExposed(); // aLiens always know where their buddies are, Mc'd or not.
+			(*i)->setExposed(); // aLiens always know where their buddies are, Mc'd or not.
 		}
-		else if ((*i)->getTurnsExposed() < 255
+		else if ((*i)->getExposed() < 255
 			&& _side == FACTION_PLAYER)
 		{
-			(*i)->setTurnsExposed((*i)->getTurnsExposed() + 1);
+			(*i)->setExposed((*i)->getExposed() + 1);
 		}
 
 		if ((*i)->getFaction() != FACTION_PLAYER)
@@ -1814,202 +1814,138 @@ Node* SavedBattleGame::getPatrolNode(
  * Carries out new turn preparations such as fire and smoke spreading.
  * Also explodes any explosive tiles that get destroyed by fire.
  */
-void SavedBattleGame::prepareBattleTurn()
+void SavedBattleGame::spreadFireSmoke()
 {
-	//Log(LOG_INFO) << "SBG::prepareBattleTurn()";
 	std::vector<Tile*>
 		tilesFired,
 		tilesSmoked;
+	const size_t mapSize = static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 
-	for (size_t // prepare a list of tiles on fire
+	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
+			i != mapSize;
 			++i)
 	{
-		if (getTiles()[i]->getFire() > 0)
+		if (getTiles()[i]->getFire() != 0)
 			tilesFired.push_back(getTiles()[i]);
 	}
 
-	for (std::vector<Tile*>::const_iterator // first: fires spread
+	for (std::vector<Tile*>::const_iterator
 			i = tilesFired.begin();
 			i != tilesFired.end();
 			++i)
 	{
-		if ((*i)->getOverlaps() == 0) // if fire hasn't been added here this turn
+		(*i)->setFire((*i)->getFire() - 1);
+
+		if ((*i)->getFire() != 0)
 		{
-			(*i)->setFire((*i)->getFire() - 1); // reduce the fire timer
-
-			if ((*i)->getFire() > 0) // if it's still burning
+			for (int
+					dir = 0;
+					dir < 7;
+					dir += 2)
 			{
-				for (int
-						dir = 0;
-						dir < 7;
-						dir += 2) // propagate in four cardinal directions (0, 2, 4, 6)
-				{
-					Position spreadPos;
-					Pathfinding::directionToVector(
-												dir,
-												&spreadPos);
-					Tile* const tile = getTile((*i)->getPosition() + spreadPos);
+				Position spreadPos;
+				Pathfinding::directionToVector(
+											dir,
+											&spreadPos);
+				Tile* const tile = getTile((*i)->getPosition() + spreadPos);
 
-					if (tile != NULL
-						&& _tileEngine->horizontalBlockage( // if there's no wall blocking the path of the flames...
-														*i,
-														tile,
-														DT_IN) == 0)
-					{
-						//Log(LOG_INFO) << ". fire " << (*i)->getPosition() << " to " << tile->getPosition();
-						tile->ignite((*i)->getFire()); // attempt to ignite this tile
-//						tile->ignite((*i)->getSmoke());
-					}
+				if (tile != NULL
+					&& _tileEngine->horizontalBlockage(
+													*i,
+													tile,
+													DT_IN) == 0)
+				{
+					tile->ignite((*i)->getFire());
 				}
 			}
-			else // fire has burnt out
+		}
+		else
+		{
+			if ((*i)->getMapData(MapData::O_OBJECT) != NULL)
 			{
-				(*i)->setSmoke(0);
-
-				if ((*i)->getMapData(MapData::O_OBJECT) != NULL) // burn this tile, and any object in it, if it's not fireproof/indestructible.
+				if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255
+					&& (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255
-						&& (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
-					{
-						if ((*i)->destroy(MapData::O_OBJECT) == true)
-							addDestroyedObjective();
+					if ((*i)->destroy(MapData::O_OBJECT) == true)
+						addDestroyedObjective();
 
-						if ((*i)->destroy(MapData::O_FLOOR) == true)
-							addDestroyedObjective();
-					}
+					if ((*i)->destroy(MapData::O_FLOOR) == true)
+						addDestroyedObjective();
 				}
-				else if ((*i)->getMapData(MapData::O_FLOOR) != NULL)
-				{
-					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255
-						&& (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
-					{
-						if ((*i)->destroy(MapData::O_FLOOR) == true)
-							addDestroyedObjective();
-					}
-				}
-
-				_tileEngine->applyGravity(*i);
 			}
+			else if ((*i)->getMapData(MapData::O_FLOOR) != NULL)
+			{
+				if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255
+					&& (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+				{
+					if ((*i)->destroy(MapData::O_FLOOR) == true)
+						addDestroyedObjective();
+				}
+			}
+
+			_tileEngine->applyGravity(*i);
 		}
 	}
 
-	for (size_t // prepare a list of tiles with smoke in them (smoke acts as fire intensity)
+
+	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
+			i != mapSize;
 			++i)
 	{
-		if (getTiles()[i]->getSmoke() > 0)
+		if (getTiles()[i]->getSmoke() != 0)
 			tilesSmoked.push_back(getTiles()[i]);
 	}
 
-	for (std::vector<Tile*>::const_iterator // make the smoke spread
+	for (std::vector<Tile*>::const_iterator
 			i = tilesSmoked.begin();
 			i != tilesSmoked.end();
 			++i)
 	{
-		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules
-		{
-			(*i)->setSmoke(std::max( // reduce the smoke counter
-								0,
-								(*i)->getSmoke() - RNG::generate(0,3)));
+		(*i)->setSmoke(std::max(
+							0,
+							(*i)->getSmoke() - RNG::generate(0,3)));
 
-			if ((*i)->getSmoke() > 0) // if it's still smoking
-			{
-				for (int // spread in four cardinal directions
-						dir = 0;
-						dir < 7;
-						dir += 2)
-				{
-					Position spreadPos;
-					Pathfinding::directionToVector(
-												dir,
-												&spreadPos);
-					Tile* const tile = getTile((*i)->getPosition() + spreadPos);
-
-					if (tile != NULL
-						&& _tileEngine->horizontalBlockage( // as long as there are no blocking walls
-														*i,
-														tile,
-														DT_SMOKE) == 0)
-					{
-						if (tile->getSmoke() == 0				// add smoke only to smokeless tiles,
-							|| (tile->getFire() == 0			// or tiles with no fire
-								&& tile->getOverlaps() != 0))	// and no smoke that was added this turn
-						{
-							tile->addSmoke((*i)->getSmoke());
-						}
-					}
-				}
-			}
-		}
-		else  // fire
+		if ((*i)->getSmoke() != 0)
 		{
-			Tile* tile = getTile((*i)->getPosition() + Position(0,0,1)); // smoke from fire spreads upwards one level if there's no floor blocking it.
+			Tile* tile = getTile((*i)->getPosition() + Position(0,0,1));
 			if (tile != NULL
 				&& tile->hasNoFloor(*i) == true)
 			{
-				tile->addSmoke((*i)->getFire() / 2); // only add smoke equal to half the intensity of the fire
-//				tile->addSmoke((*i)->getSmoke() / 2);
+				tile->addSmoke((*i)->getSmoke() / 2);
 			}
 
 			for (int
 					dir = 0;
 					dir < 7;
-					dir += 2) // then it spreads in the four cardinal directions.
+					dir += 2)
 			{
 				Position spreadPos;
 				Pathfinding::directionToVector(
 											dir,
 											&spreadPos);
 				tile = getTile((*i)->getPosition() + spreadPos);
-
 				if (tile != NULL
 					&& _tileEngine->horizontalBlockage(
 													*i,
 													tile,
 													DT_SMOKE) == 0)
 				{
-					tile->addSmoke((*i)->getFire() / 2);
-//					tile->addSmoke((*i)->getSmoke() / 2);
+					tile->addSmoke((*i)->getSmoke());
 				}
 			}
 		}
 	}
 
-	if (tilesFired.empty() == false
-		|| tilesSmoked.empty() == false)
+
+	for (size_t
+			i = 0;
+			i != mapSize;
+			++i)
 	{
-		for (size_t // do damage to units, average out the smoke, etc.
-				i = 0;
-				i != static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
-				++i)
-		{
-			if (getTiles()[i]->getSmoke() != 0)
-				getTiles()[i]->prepareTileTurn(); // averages overlaps
-		}
+		getTiles()[i]->resolveOverlaps(); // also reset the '_danger' flag for the AI.
 	}
-
-
-	// do this on return to BattlescapeGame::endTurnPhase() instead.
-/*	Tile* const tile = _tileEngine->checkForTerrainExplosions();
-	if (tile != NULL)
-	{
-		const Position pos = Position(
-								tile->getPosition().x * 16 + 8,
-								tile->getPosition().y * 16 + 8,
-								tile->getPosition().z * 24 + 10);
-		_battleState->getBattleGame()->statePushNext(new ExplosionBState(
-																	_battleState->getBattleGame(),
-																	pos,
-																	NULL,
-																	NULL,
-																	tile));
-	} */
-
-//	reviveUnits(FACTION_ ); // <- move this. So that each faction revives at the start of its round.
-	//Log(LOG_INFO) << "SBG::prepareBattleTurn() EXIT";
 }
 
 /**
@@ -2038,14 +1974,14 @@ void SavedBattleGame::prepareBattleTurn()
  * Revived units need a tile to stand on. If the unit's current position is occupied, then
  * all directions around the tile are searched for a free tile to place the unit in.
  * If no free tile is found the unit stays unconscious.
- * @param atTurnEnd - true if called from SavedBattleGame::prepareBattleTurn (default false)
+ * @param atTurnOver - true if called from SavedBattleGame::endBattlePhase (default false)
  */
 void SavedBattleGame::reviveUnit(
 		BattleUnit* const unit,
-		bool atTurnStart)
+		bool atTurnOver)
 {
 	if (unit->getStatus() == STATUS_UNCONSCIOUS
-		&& unit->getStun() < unit->getHealth() + static_cast<int>(atTurnStart) // do health=stun if unit is about to get healed in Prep Turn.
+		&& unit->getStun() < unit->getHealth() + static_cast<int>(atTurnOver) // do health=stun if unit is about to get healed in Prep Turn.
 		&& (unit->getGeoscapeSoldier() != NULL
 			|| (unit->getUnitRules()->isMechanical() == false
 				&& unit->getArmor()->getSize() == 1)))

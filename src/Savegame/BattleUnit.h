@@ -822,7 +822,7 @@ private:
 		bool isInExitArea(SpecialTileType stt = START_POINT) const;
 
 		/// Gets this unit's height taking into account kneeling/standing.
-		int getHeight() const;
+		int getHeight(bool floating = false) const;
 		/// Gets this unit's floating elevation.
 		int getFloatHeight() const;
 
@@ -974,9 +974,9 @@ private:
 		int getCarriedWeight(const BattleItem* const dragItem = NULL) const;
 
 		/// Sets how many turns this unit will be exposed for.
-		void setTurnsExposed(int turns = 0);
+		void setExposed(int turns = 0);
 		/// Sets how many turns this unit will be exposed for.
-		int getTurnsExposed() const;
+		int getExposed() const;
 
 		/// This call this after the default copy constructor deletes this unit's sprite-cache.
 		void invalidateCache();

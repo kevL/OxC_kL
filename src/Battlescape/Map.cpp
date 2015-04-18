@@ -1622,7 +1622,7 @@ void Map::drawTerrain(Surface* surface) // private.
 								if (unitNorth != NULL
 									&& (unitNorth->getUnitVisible() == true
 										|| _battleSave->getDebugMode() == true)	// this is just for the bigfooted ScoutDrone anyway .... ht. 10
-									&& ((unitNorth->getHeight() < 13			// the problem is this draws overtop of the Cursor's front box
+									&& ((unitNorth->getHeight(true) < 13		// the problem is this draws overtop of the Cursor's front box
 											&& unitNorth->getStatus() == STATUS_STANDING)
 										|| (drawUnitNorth == true
 											&& unitNorth->getStatus() == STATUS_WALKING
@@ -2073,6 +2073,7 @@ void Map::drawTerrain(Surface* surface) // private.
 
 
 						// kL_begin #2 of 3: Make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
+						// note: Or a westwall (ie, bulging UFO hull) in tile above & south of the soldier <- not done
 						if (itZ > 0
 							&& hasFloor == false
 							&& hasObject == false)
@@ -3793,10 +3794,10 @@ void Map::drawTerrain(Surface* surface) // private.
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _battleSave->getSide()))
 								{
-									frame = 3 + (_animFrame %2); // yellow flashing box
+									frame = 3 + (_animFrame %2);	// yellow flashing box
 								}
 								else
-									frame = 3; // red standard box
+									frame = 3;						// red standard box
 							}
 							else // CT_AIM ->
 							{
@@ -3804,10 +3805,10 @@ void Map::drawTerrain(Surface* surface) // private.
 									&& (unit->getUnitVisible() == true
 										|| _battleSave->getDebugMode() == true))
 								{
-									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
+									frame = 7 + (_animFrame / 2);	// yellow animated crosshairs
 								}
 								else
-									frame = 6; // red static crosshairs
+									frame = 6;						// red static crosshairs
 							}
 
 							srfSprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
@@ -3821,6 +3822,61 @@ void Map::drawTerrain(Surface* surface) // private.
 //							if (Options::battleUFOExtenderAccuracy == true) // kL_note: one less condition to check
 							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
+								// begin_TEST: superimpose targetUnit *over* cursor's front
+								if (unit != NULL
+									&& (unit->getUnitVisible() == true
+										|| _battleSave->getDebugMode() == true))
+								{
+									quad = tile->getPosition().x - unit->getPosition().x
+										+ (tile->getPosition().y - unit->getPosition().y) * 2;
+
+									srfSprite = unit->getCache(&invalid, quad);
+//									srfSprite = NULL;
+									if (srfSprite)
+									{
+										//if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit []";
+/*										if (unit->getHealth() == 0
+											|| unit->getHealth() <= unit->getStun()) // -> && unit is Player
+										{
+											shade = std::min(
+															5,
+															tileShade);
+										}
+										else
+											shade = tileShade;
+
+										if (shade != 0 // try to even out lighting of all four quadrants of large units.
+											&& quad != 0)
+										{
+											shade -= 1; // TODO: trickle this throughout this function!
+										} */
+
+										shade = tileShade;
+
+										calculateWalkingOffset(
+															unit,
+															&walkOffset);
+
+										srfSprite->blitNShade(
+												surface,
+												screenPosition.x + walkOffset.x,
+												screenPosition.y + walkOffset.y,
+												shade);
+
+/*										if (unit->getFire() != 0)
+										{
+											frame = 4 + (_animFrame / 2);
+											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+											if (srfSprite)
+												srfSprite->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x,
+														screenPosition.y + walkOffset.y,
+														0);
+										} */
+									}
+								} // end_TEST.
+
 								// kL_note: Use stuff from ProjectileFlyBState::init()
 								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
 								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
@@ -3928,10 +3984,10 @@ void Map::drawTerrain(Surface* surface) // private.
 									0);
 						}
 
-						if (_cursorType > CT_AIM
+						if (_cursorType > CT_AIM // Psi, Waypoint, Throw
 							&& _camera->getViewLevel() == itZ)
 						{
-							const int arrowFrame[6] = {0, 0, 0, 11, 13, 15};
+							const int arrowFrame[6] = {0,0,0,11,13,15};
 							srfSprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(arrowFrame[_cursorType] + (_animFrame / 4));
 							srfSprite->blitNShade(
 									surface,

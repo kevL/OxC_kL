@@ -789,14 +789,11 @@ bool Projectile::traceProjectile()
  */
 Position Projectile::getPosition(int offset) const
 {
-	Position ret;
-
-	const int posOffset = static_cast<int>(_position) + offset;
-
-	if (posOffset > -1
-		&& posOffset < static_cast<int>(_trajectory.size()))
+	offset += static_cast<int>(_position);
+	if (offset > -1
+		&& offset < static_cast<int>(_trajectory.size()))
 	{
-		return _trajectory.at(static_cast<size_t>(posOffset));
+		return _trajectory.at(static_cast<size_t>(offset));
 	}
 
 	return _trajectory.at(_position);

@@ -406,7 +406,7 @@ void BattlescapeGenerator::nextStage()
 			if ((*i)->isOut() == false)
 			{
 				(*i)->convertToFaction(FACTION_PLAYER);
-				(*i)->setTurnsExposed(255);
+				(*i)->setExposed(255);
 				(*i)->getVisibleTiles()->clear();
 
 				if (selectedFirstSoldier == false

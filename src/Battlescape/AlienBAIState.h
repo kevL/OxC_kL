@@ -147,10 +147,10 @@ protected:
 
 		/// Decides if we should throw a grenade/launch a missile to this position.
 		bool explosiveEfficacy(
-				Position targetPos,
-				BattleUnit* attacker,
-				int radius,
-				int diff) const;
+				const Position targetPos,
+				const BattleUnit* const attacker,
+				const int explRadius,
+				const int diff) const;
 //				bool grenade = false) const;
 //		bool getNodeOfBestEfficacy(BattleAction* action);
 

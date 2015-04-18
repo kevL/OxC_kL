@@ -295,14 +295,14 @@ private:
 				Node* curNode);
 
 		/// Carries out new turn preparations.
-		void prepareBattleTurn();
+		void spreadFireSmoke();
 
 		/// Revives unconscious units of @a faction.
 //		void reviveUnits(const UnitFaction faction);
 		/// Revives unconscious units.
 		void reviveUnit(
 				BattleUnit* const unit,
-				bool atTurnStart = false);
+				bool atTurnOver = false);
 		/// Removes the body item that corresponds to the unit.
 		void removeCorpse(const BattleUnit* const unit);
 

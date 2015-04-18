@@ -757,7 +757,7 @@ void BattlescapeGame::endTurnPhase()
 //					&& ((*i)->getGeoscapeSoldier() != NULL
 //						|| (*i)->getUnitRules()->isMechanical() == false))
 				{
-					tile->endTilePhase(); // Damage tile's unit w/ Fire & Smoke at end of unit's faction's Turn-phase.
+					tile->hitStuff(); // Damage tile's unit w/ Smoke & Fire at end of unit's faction's Turn-phase.
 				}
 			}
 		}
@@ -775,7 +775,7 @@ void BattlescapeGame::endTurnPhase()
 						|| tile->getFire() != 0)
 					&& tile->getInventory()->empty() == false)
 				{
-					tile->endTilePhase(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
+					tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
 				}
 			}
 
@@ -789,7 +789,7 @@ void BattlescapeGame::endTurnPhase()
 			}
 		}
 		// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
-		// -> SavedBattleGame::prepareBattleTurn()
+		// -> SavedBattleGame::spreadFireSmoke()
 		// Or here
 		// ... done it in NextTurnState.
 
@@ -1167,7 +1167,7 @@ void BattlescapeGame::checkForCasualties(
 							&& attacker->getFaction() == FACTION_PLAYER
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
-							attacker->setTurnsExposed(); // interesting
+							attacker->setExposed(); // interesting
 							//Log(LOG_INFO) << ". . . . attacker Exposed";
 						} */
 					}
@@ -1539,14 +1539,18 @@ void BattlescapeGame::popState()
 		_parentState->warning(action.result);
 
 		// kL_begin: BattlescapeGame::popState(), remove action.Cursor if not enough tu's (ie, error.Message)
-		if (action.result.compare("STR_NOT_ENOUGH_TIME_UNITS") == 0
+		if (   action.result.compare("STR_NOT_ENOUGH_TIME_UNITS") == 0
 			|| action.result.compare("STR_NO_AMMUNITION_LOADED") == 0
 			|| action.result.compare("STR_NO_ROUNDS_LEFT") == 0)
 		{
 			switch (action.type)
 			{
-//				case BA_LAUNCH:
-//					_currentAction.waypoints.clear();
+				case BA_LAUNCH: // see also, cancelCurrentAction()
+					_currentAction.waypoints.clear();
+//					_parentState->showLaunchButton(false);
+//					_parentState->getMap()->getWaypoints()->clear(); // might be done already.
+//				break;
+
 				case BA_THROW:
 				case BA_SNAPSHOT:
 				case BA_AIMEDSHOT:
@@ -1555,6 +1559,7 @@ void BattlescapeGame::popState()
 				case BA_MINDCONTROL:
 					cancelCurrentAction(true);
 				break;
+
 				case BA_USE:
 					if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 						cancelCurrentAction(true);
@@ -2708,7 +2713,6 @@ void BattlescapeGame::launchAction()
 	_states.push_back(new ProjectileFlyBState(
 											this,
 											_currentAction));
-
 	statePushFront(new UnitTurnBState(
 									this,
 									_currentAction)); // first of all turn towards the target

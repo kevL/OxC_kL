@@ -345,6 +345,14 @@ void MedikitState::onHealClick(Action*)
 		_mediView->invalidate();
 
 		update();
+
+		// if the unit has revived quit this screen automatically
+		if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
+			&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
+		{
+			_game->popState();
+//			onCloseClick(NULL);
+		}
 	}
 	else
 	{
@@ -375,7 +383,7 @@ void MedikitState::onStimClick(Action*)
 
 		update();
 
-		// if the unit has revived we quit this screen automatically
+		// if the unit has revived quit this screen automatically
 		if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
 		{

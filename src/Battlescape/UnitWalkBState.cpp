@@ -876,7 +876,7 @@ bool UnitWalkBState::doStatusStand_end()
 		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		// kL_add: Put burnedBySilacoid() here! etc
-		_unit->getTile()->ignite(1);
+		_unit->getTile()->ignite(1, true);
 
 		const Position pos = _unit->getPosition() * Position(16, 16, 24)
 						   + Position(
@@ -1152,7 +1152,7 @@ int UnitWalkBState::getFinalDirection() const
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER
 			&& (*i)->isOut(true, true) == false
-			&& (*i)->getTurnsExposed() <= _unit->getIntelligence())
+			&& (*i)->getExposed() <= _unit->getIntelligence())
 		{
 			const int dist = _parent->getSave()->getTileEngine()->distance(
 																	(*i)->getPosition(),

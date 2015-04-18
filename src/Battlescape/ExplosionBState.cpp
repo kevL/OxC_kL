@@ -500,14 +500,14 @@ void ExplosionBState::explode()
 		}
 		else // -> if !_cosmetics
 		{
-			ItemDamageType damageType = _item->getRules()->getDamageType();
+			ItemDamageType dType = _item->getRules()->getDamageType();
 			if (_pistolWhip == true)
-				damageType = DT_STUN;
+				dType = DT_STUN;
 
 			BattleUnit* const victim = tileEngine->hit(
 													_center,
 													_power,
-													damageType,
+													dType,
 													_unit,
 													_hit);
 
@@ -530,25 +530,25 @@ void ExplosionBState::explode()
 
 	if (_tile != NULL)
 	{
-		ItemDamageType damageType;
+		ItemDamageType dType;
 
 		switch (_tile->getExplosiveType())
 		{
-			case 0: damageType = DT_HE;		break;
-			case 5: damageType = DT_IN;		break;
-			case 6: damageType = DT_STUN;	break;
+			case 0: dType = DT_HE;		break;
+			case 5: dType = DT_IN;		break;
+			case 6: dType = DT_STUN;	break;
 
 			default:
-				damageType = DT_SMOKE;
+				dType = DT_SMOKE;
 		}
 
-		if (damageType != DT_HE)
+		if (dType != DT_HE)
 			_tile->setExplosive(0,0, true);
 
 		tileEngine->explode(
 						_center,
 						_power,
-						damageType,
+						dType,
 						_power / 10);
 		terrain = true;
 	}

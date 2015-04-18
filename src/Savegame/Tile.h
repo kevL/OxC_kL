@@ -70,7 +70,8 @@ protected:
 		_mapDataID[4],
 		_mapDataSetID[4],
 		_markerColor,
-		_overlaps,
+		_overlapsINC,
+		_overlapsSMK,
 		_preview,
 		_smoke,
 		_tuMarker;
@@ -84,6 +85,9 @@ protected:
 
 	/// Gets if this Tile will accept '_smoke' value.
 	bool canSmoke() const;
+
+	/// Converts obscure inverse MCD notation to understandable percentages.
+	int convertBurnToPCT(int burn) const;
 
 
 	public:
@@ -109,13 +113,12 @@ protected:
 
 		/// Loads the tile from yaml.
 		void load(const YAML::Node& node);
-		/// Saves the tile to yaml.
-		YAML::Node save() const;
-
 		/// Loads the tile from binary buffer in memory.
 		void loadBinary(
 				Uint8* buffer,
 				Tile::SerializationKey& serializationKey);
+		/// Saves the tile to yaml.
+		YAML::Node save() const;
 		/// Saves the tile to binary
 		void saveBinary(Uint8** buffer) const;
 
@@ -127,7 +130,6 @@ protected:
 		MapData* getMapData(int part) const
 		{	if (part < 0 || part > 3)
 				return NULL;
-
 			return _objects[part]; }
 
 		/// Sets the pointer to the mapdata for a specific part of the tile.
@@ -222,6 +224,47 @@ protected:
 		/// Gets explosive type of this tile.
 		int getExplosiveType() const;
 
+		/// Gets flammability.
+		int getFlammability() const;
+		/// Get flammability of part.
+		int getFlammability(int part) const;
+		/// Gets turns to burn
+		int getFuel() const;
+		/// Get turns to burn of part
+		int getFuel(int part) const;
+		/// Attempts to set the tile on fire.
+		void ignite(
+				int power,
+				bool resolve = false);
+
+		/// Sets fire - does not increment overlaps.
+		void setFire(
+				int turns,
+				bool resolve = false);
+		/// Gets fire.
+		int getFire() const;	// kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts.
+//		{ return _fire; }		// So ... don't. ie: change function names, THANKS c++
+
+		/// Adds smoke - increments overlaps.
+		void addSmoke(
+				int turns,
+				bool resolve = false);
+		/// Sets smoke - does not increment overlaps.
+		void setSmoke(int turns);
+		/// Gets smoke.
+		int getSmoke() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't.
+//		{ return _smoke; }
+
+		/// Gets how many times has this tile been overlapped with smoke (runtime only).
+//		int getOverlapsSK() const;
+		/// Gets how many times has this tile been overlapped with fire (runtime only).
+//		int getOverlapsIN() const;
+		/// New turn preparations.
+		void resolveOverlaps();
+
+		/// Ends this tile's turn. Units catch on fire.
+		void hitStuff(SavedBattleGame* const battleSave = NULL);
+
 		/// Animates the tile parts.
 		void animate();
 		/// Gets fire and smoke animation offset.
@@ -241,30 +284,6 @@ protected:
 		BattleUnit* getUnit() const
 		{ return _unit; }
 
-		/// Sets fire - does not increment overlaps.
-		void setFire(int fire);
-		/// Gets fire.
-		int getFire() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't. ie: change function names, THANKS c++
-//		{ return _fire; }
-		/// Adds smoke - increments overlaps.
-		void addSmoke(int smoke);
-		/// Sets smoke - does not increment overlaps.
-		void setSmoke(int smoke);
-		/// Gets smoke.
-		int getSmoke() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't.
-//		{ return _smoke; }
-
-		/// Gets flammability.
-		int getFlammability() const;
-		/// Gets turns to burn
-		int getFuel() const;
-		/// Get flammability of part.
-		int getFlammability(int part) const;
-		/// Get turns to burn of part
-		int getFuel(int part) const;
-		/// attempt to set the tile on fire, sets overlaps to one if successful.
-		void ignite(int power);
-
 		/// Adds item
 		void addItem(
 				BattleItem* const item,
@@ -276,11 +295,6 @@ protected:
 		int getTopItemSprite() const;
 		/// Gets if the tile has an unconscious xCom unit in its inventory.
 		int getHasUnconsciousSoldier() const;
-
-		/// New turn preparations.
-		void prepareTileTurn();
-		/// Ends this tile's turn. Units catch on fire.
-		void endTilePhase(SavedBattleGame* const battleSave = NULL);
 
 		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();
@@ -303,9 +317,6 @@ protected:
 		void setTUMarker(int tu);
 		/// Gets the number to be displayed for pathfinding preview.
 		int getTUMarker() const;
-
-		/// Gets how many times has this tile been overlapped with smoke/fire (runtime only).
-		int getOverlaps() const;
 
 		/// Sets the danger flag on this tile so the AI will avoid it.
 		void setDangerous();
