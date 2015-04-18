@@ -1951,7 +1951,8 @@ bool AlienBAIState::explosiveEfficacy(
 	{
 		pct = (100 - attacker->getMorale()) / 3;
 		pct += 2 * (10 - static_cast<int>(
-					static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getBaseStats()->health) * 10.f));
+						 static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getBaseStats()->health)
+				  * 10.f));
 		pct += attacker->getAggression() * 10;
 
 		const int dist = _battleSave->getTileEngine()->distance(

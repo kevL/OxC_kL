@@ -338,6 +338,11 @@ interfaces:
       - id: damageRange
         color: 13    # bright red
         color2: 12   # dark yellow
+      - id: disabledWeapon
+        color: 25
+        color2: 8
+      - id: disabledAmmo
+        color: 25
   - type: baseNaming
     elements:
       - id: palette

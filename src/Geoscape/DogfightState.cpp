@@ -360,14 +360,18 @@ DogfightState::DogfightState(
 //	_txtInterception->setAlign(ALIGN_CENTER);
 
 	// Define the colors to be used. Note these have been further tweaked in Interfaces.rul
-	_colors[CRAFT_MIN]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color);	// 160, (10)slate gray
-	_colors[CRAFT_MAX]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("craftRange")->color2);	// 176, (11)purple
-	_colors[RADAR_MIN]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color);	// 112, (7)green
-	_colors[RADAR_MAX]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarRange")->color2);	// 128, (8)red
-	_colors[DAMAGE_MIN]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color);	//  12, (0+)yellow
-	_colors[DAMAGE_MAX]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("damageRange")->color2);	//  14, (0+)red
-	_colors[BLOB_MIN]		= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarDetail")->color);	// 108, (6)+12 green
-	_colors[RANGE_METER]	= static_cast<Uint8>(_game->getRuleset()->getInterface("dogfight")->getElement("radarDetail")->color2);	// 111, (6)+15 green
+	RuleInterface* dfInterface = _game->getRuleset()->getInterface("dogfight");
+	_colors[CRAFT_MIN]			= static_cast<Uint8>(dfInterface->getElement("craftRange")->color);			// 160 (10)slate gray
+	_colors[CRAFT_MAX]			= static_cast<Uint8>(dfInterface->getElement("craftRange")->color2);		// 176 (11)purple
+	_colors[RADAR_MIN]			= static_cast<Uint8>(dfInterface->getElement("radarRange")->color);			// 112 (7)green
+	_colors[RADAR_MAX]			= static_cast<Uint8>(dfInterface->getElement("radarRange")->color2);		// 128 (8)red
+	_colors[DAMAGE_MIN]			= static_cast<Uint8>(dfInterface->getElement("damageRange")->color);		//  12 (0+)yellow
+	_colors[DAMAGE_MAX]			= static_cast<Uint8>(dfInterface->getElement("damageRange")->color2);		//  14 (0+)red
+	_colors[BLOB_MIN]			= static_cast<Uint8>(dfInterface->getElement("radarDetail")->color);		// 108 (6)+12 green
+	_colors[RANGE_METER]		= static_cast<Uint8>(dfInterface->getElement("radarDetail")->color2);		// 111 (6)+15 green
+	_colors[DISABLED_WEAPON]	= static_cast<Uint8>(dfInterface->getElement("disabledWeapon")->color);		//  24
+	_colors[DISABLED_RANGE]		= static_cast<Uint8>(dfInterface->getElement("disabledWeapon")->color2);	//   7
+	_colors[DISABLED_AMMO]		= static_cast<Uint8>(dfInterface->getElement("disabledAmmo")->color);		//  24
 
 
 	const CraftWeapon* cw;
@@ -1916,9 +1920,6 @@ void DogfightState::recolor(
 		const int weaponPod,
 		const bool enabled)
 {
-	const int
-		offset1 = 25,	// 24
-		offset2 = 8;	// 7
 	InteractiveSurface* weapon = NULL;
 	Text* ammo = NULL;
 	Surface* range = NULL;
@@ -1940,15 +1941,15 @@ void DogfightState::recolor(
 
 	if (enabled == true)
 	{
-		weapon->offset(-offset1);
-		ammo->offset(-offset1);
-		range->offset(-offset2);
+		weapon->offset(-_colors[DISABLED_WEAPON]);
+		ammo->offset(-_colors[DISABLED_AMMO]);
+		range->offset(-_colors[DISABLED_RANGE]);
 	}
 	else
 	{
-		weapon->offset(offset1);
-		ammo->offset(offset1);
-		range->offset(offset2);
+		weapon->offset(_colors[DISABLED_WEAPON]);
+		ammo->offset(_colors[DISABLED_AMMO]);
+		range->offset(_colors[DISABLED_RANGE]);
 	}
 }
 

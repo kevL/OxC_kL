@@ -5446,7 +5446,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1429336748 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1429338975 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -7100,7 +7100,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1428804329 f:\git\openxcom\src\geoscape\dogfightstate.h
+1429397523 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1426445097 f:\git\openxcom\src\savegame\alienstrategy.h
