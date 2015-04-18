@@ -202,21 +202,29 @@ DogfightState::DogfightState(
 	add(_range2);
 	add(_damage);
 	add(_btnMinimize);
-	add(_btnDisengage,		"button",			"dogfight");
-	add(_btnUfo,			"button",			"dogfight");
-	add(_btnAggressive,		"button",			"dogfight");
-	add(_btnStandard,		"button",			"dogfight");
-	add(_btnCautious,		"button",			"dogfight");
-	add(_btnStandoff,		"button",			"dogfight");
+	add(_btnDisengage,		"disengageButton",	"dogfight", _window);
+	add(_btnUfo,			"ufoButton",		"dogfight", _window);
+	add(_btnAggressive,		"aggressiveButton",	"dogfight", _window);
+	add(_btnStandard,		"standardButton",	"dogfight", _window);
+	add(_btnCautious,		"cautiousButton",	"dogfight", _window);
+	add(_btnStandoff,		"standoffButton",	"dogfight", _window);
 	add(_texture);
-	add(_txtAmmo1,			"numbers",			"dogfight");
-	add(_txtAmmo2,			"numbers",			"dogfight");
-	add(_txtDistance,		"numbers",			"dogfight");
+	add(_txtAmmo1,			"numbers",			"dogfight", _window);
+	add(_txtAmmo2,			"numbers",			"dogfight", _window);
+	add(_txtDistance,		"distance",			"dogfight", _window);
 	add(_preview);
-	add(_txtStatus,			"text",				"dogfight");
-	add(_txtTitle,			"button",			"dogfight");
+	add(_txtStatus,			"text",				"dogfight", _window);
+	add(_txtTitle,			"ufoButton",		"dogfight", _window);
+
 	add(_btnMinimizedIcon);
 	add(_txtInterception,	"minimizedNumber",	"dogfight");
+
+	_btnStandoff->invalidate(false);
+	_btnCautious->invalidate(false);
+	_btnStandard->invalidate(false);
+	_btnAggressive->invalidate(false);
+	_btnDisengage->invalidate(false);
+	_btnUfo->invalidate(false);
 
 	if (_txtDistance->isTFTDMode() == true)
 	{
