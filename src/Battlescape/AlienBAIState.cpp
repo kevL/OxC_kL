@@ -2014,8 +2014,9 @@ bool AlienBAIState::explosiveEfficacy(
 																				true,
 																				false,
 																				*i);
-					Log(LOG_INFO) << "trajFront " << (traj.front() / Position(16,16,24));
-					Log(LOG_INFO) << "trajBack  " << (traj.back() / Position(16,16,24));
+					Log(LOG_INFO) << "trajSize = " << (int)traj.size();
+//					Log(LOG_INFO) << "trajFront " << (traj.front() / Position(16,16,24));
+//					Log(LOG_INFO) << "trajBack  " << (traj.back() / Position(16,16,24));
 					if (impact == VOXEL_UNIT
 						&& (*i)->getPosition() == traj.front() / Position(16,16,24))
 					{
