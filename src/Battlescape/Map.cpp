@@ -122,7 +122,7 @@ Map::Map(
 		_unitDying(false),
 		_reveal(0),
 		_smoothingEngaged(false),
-		_flashScreen(false),
+//		_flashScreen(false),
 		_noDraw(false),
 		_showProjectile(true),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
@@ -4262,7 +4262,7 @@ void Map::drawTerrain(Surface* surface) // private.
 	{
 		// big explosions cause the screen to flash as bright as possible before any explosions are actually drawn.
 		// this causes everything to look like EGA for a single frame.
-		if (_flashScreen == true)
+/*		if (_flashScreen == true)
 		{
 			Uint8 color;
 			for (int
@@ -4279,48 +4279,48 @@ void Map::drawTerrain(Surface* surface) // private.
 			}
 		}
 		else
+		{ */
+		for (std::list<Explosion*>::const_iterator
+				i = _explosions.begin();
+				i != _explosions.end();
+				++i)
 		{
-			for (std::list<Explosion*>::const_iterator
-					i = _explosions.begin();
-					i != _explosions.end();
-					++i)
-			{
-				_camera->convertVoxelToScreen(
-										(*i)->getPosition(),
-										&bullet);
+			_camera->convertVoxelToScreen(
+									(*i)->getPosition(),
+									&bullet);
 
-				if ((*i)->getCurrentFrame() > -1)
+			if ((*i)->getCurrentFrame() > -1)
+			{
+				if ((*i)->isBig() == true) // explosion, http://ufopaedia.org/index.php?title=X1.PCK
 				{
-					if ((*i)->isBig() == true) // explosion, http://ufopaedia.org/index.php?title=X1.PCK
-					{
-						srfSprite = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-						srfSprite->blitNShade(
-								surface,
-								bullet.x - 64,
-								bullet.y - 64,
-								0);
-					}
-					else if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
-					{
-						srfSprite = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
-						srfSprite->blitNShade(
-								surface,
-								bullet.x - 15,
-								bullet.y - 25,
-								0);
-					}
-					else if ((*i)->isHit() == 0) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
-					{
-						srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-						srfSprite->blitNShade(
-								surface,
-								bullet.x - 15,
-								bullet.y - 15,
-								0);
-					}
+					srfSprite = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+					srfSprite->blitNShade(
+							surface,
+							bullet.x - 64,
+							bullet.y - 64,
+							0);
+				}
+				else if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
+				{
+					srfSprite = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
+					srfSprite->blitNShade(
+							surface,
+							bullet.x - 15,
+							bullet.y - 25,
+							0);
+				}
+				else if ((*i)->isHit() == 0) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
+				{
+					srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+					srfSprite->blitNShade(
+							surface,
+							bullet.x - 15,
+							bullet.y - 15,
+							0);
 				}
 			}
 		}
+//		}
 	}
 	surface->unlock();
 }
@@ -4987,19 +4987,19 @@ const int Map::getSoundAngle(Position pos)
  * Sets the "explosion flash" bool.
  * @param flash - true to render the screen in EGA this frame
  */
-void Map::setBlastFlash(bool flash)
+/*void Map::setBlastFlash(bool flash)
 {
 	_flashScreen = flash;
-}
+} */
 
 /**
  * Checks if the screen is still being rendered in EGA.
  * @return, true if still in EGA mode
  */
-bool Map::getBlastFlash() const
+/*bool Map::getBlastFlash() const
 {
 	return _flashScreen;
-}
+} */
 
 /**
  * Sets whether to draw or not.

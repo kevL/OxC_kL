@@ -5480,7 +5480,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1429411987 f:\git\openxcom\src\battlescape\map.h
+1429413880 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5934,7 +5934,7 @@
 1424390943 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1429261067 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1429411742 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6037,7 +6037,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1429279857 source:f:\git\openxcom\src\battlescape\map.cpp
+1429412008 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

@@ -244,7 +244,7 @@ void ExplosionBState::init()
 			}
 
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // * 10 / 7);
-			_parent->getMap()->setBlastFlash(true);
+//			_parent->getMap()->setBlastFlash(true);
 
 
 			int sound = -1;
@@ -385,31 +385,32 @@ void ExplosionBState::think()
 
 	if (_extend < 1)
 		explode(); */
-	if (_parent->getMap()->getBlastFlash() == false)
+
+
+//	if (_parent->getMap()->getBlastFlash() == false)
+//	{
+	for (std::list<Explosion*>::const_iterator
+			i = _parent->getMap()->getExplosions()->begin();
+			i != _parent->getMap()->getExplosions()->end();
+			)
 	{
-		for (std::list<Explosion*>::const_iterator
-				i = _parent->getMap()->getExplosions()->begin();
-				i != _parent->getMap()->getExplosions()->end();
-				)
+		if ((*i)->animate() == false)
 		{
-			if ((*i)->animate() == false)
+
+			delete *i;
+			i = _parent->getMap()->getExplosions()->erase(i);
+
+			if (_parent->getMap()->getExplosions()->empty() == true)
 			{
-
-				delete *i;
-				i = _parent->getMap()->getExplosions()->erase(i);
-
-				if (_parent->getMap()->getExplosions()->empty() == true)
-				{
-					explode();
-					return;
-				}
+				explode();
+				return;
 			}
-			else
-				++i;
 		}
+		else
+			++i;
 	}
-	else
-		_parent->getMap()->setBlastFlash(false);
+//	}
+//	else _parent->getMap()->setBlastFlash(false);
 }
 
 /**

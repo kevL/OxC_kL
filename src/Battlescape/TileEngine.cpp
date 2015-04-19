@@ -4173,7 +4173,7 @@ bool TileEngine::detonate(Tile* const tile)
 		//Log(LOG_INFO) << "TE:detonate() burn % = " << (((burn + 1) / 2) + ((explTest + 9) / 10));
 		//Log(LOG_INFO) << "\n";
 		if (burn != 0
-			&& RNG::percent(((burn + 1) / 2) + ((explTest + 9) / 10)) == true
+			&& RNG::percent(((burn + 3) / 4) + ((explTest + 23) / 24)) == true
 			&& (tiles[i]->getMapData(MapData::O_OBJECT) == NULL
 				|| tiles[i]->getMapData(MapData::O_OBJECT)->getBlock(DT_IN) == 0))
 		{
@@ -4182,10 +4182,10 @@ bool TileEngine::detonate(Tile* const tile)
 			{
 				//Log(LOG_INFO) << ". base value = " << (explTest / 20) + fuel;
 				tiles[i]->setFire(
-							(explTest / 20) + fuel,
+							(explTest / 36) + fuel,
 							true);
 				tiles[i]->addSmoke(
-							(explTest / 20) + fuel + RNG::generate(1,3),
+							(explTest / 36) + fuel + RNG::generate(1,3),
 							true);
 			}
 		}
@@ -4194,7 +4194,7 @@ bool TileEngine::detonate(Tile* const tile)
 		else if (tiles[i]->getMapData(MapData::O_OBJECT) == NULL
 			|| tiles[i]->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 0)
 		{
-			int smoke = (explTest / 35) + RNG::generate(1,3);
+			int smoke = (explTest / 73) + RNG::generate(1,3);
 			if (destroyed == true)
 				smoke += RNG::generate(
 									1,

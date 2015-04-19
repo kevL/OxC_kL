@@ -77,7 +77,7 @@ private:
 	bool
 		_launch,
 		_explosionInFOV,
-		_flashScreen,
+//		_flashScreen,
 		_noDraw,
 		_projectileInFOV,
 		_showProjectile,
@@ -243,9 +243,9 @@ private:
 //		void resetCameraSmoothing();
 
 		/// Sets whether the screen should "flash" or not.
-		void setBlastFlash(bool flash);
+//		void setBlastFlash(bool flash);
 		/// Check if the screen is flashing this.
-		bool getBlastFlash() const;
+//		bool getBlastFlash() const;
 
 		/// Sets whether to draw or not.
 		void setNoDraw(bool noDraw);
