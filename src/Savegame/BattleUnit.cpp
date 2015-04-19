@@ -110,7 +110,7 @@ BattleUnit::BattleUnit(
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
-		_turnsExposed(255),
+		_turnsExposed(-1),
 		_hidingForTurn(false),
 //		_respawn(false),
 		_battleOrder(0),
@@ -275,7 +275,7 @@ BattleUnit::BattleUnit(
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
-		_turnsExposed(255),
+		_turnsExposed(-1),
 		_hidingForTurn(false),
 //		_respawn(false),
 		_stopShot(false),
@@ -2379,7 +2379,7 @@ bool BattleUnit::reselectAllowed() const
  * Sets the amount of turns this unit is on fire.
  * @param fire - amount of turns this unit will be on fire (no fire 0)
  */
-void BattleUnit::setFire(int fire)
+void BattleUnit::setFireOnUnit(int fire)
 {
 	if (_specab != SPECAB_BURNFLOOR
 		&& _specab != SPECAB_BURN_AND_EXPLODE)
@@ -2392,7 +2392,7 @@ void BattleUnit::setFire(int fire)
  * Gets the amount of turns this unit is on fire.
  * @return, amount of turns this unit will be on fire (0 - no fire)
  */
-int BattleUnit::getFire() const
+int BattleUnit::getFireOnUnit() const
 {
 	return _fire;
 }
@@ -3773,18 +3773,12 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 
 /**
  * Sets how long since this unit was last exposed.
- * Use "255" for NOT exposed.
+ * @note Use -1 for NOT exposed.
  * @param turns - # turns this unit has been exposed (default 0)
  */
 void BattleUnit::setExposed(int turns)
 {
 	_turnsExposed = turns;
-
-	if (_turnsExposed > 255) // kL
-		_turnsExposed = 255; // kL
-	// kL_note: should set this to -1 instead of 255.
-	// Note, that in the .Save file, aLiens are 0
-	// and notExposed xCom units are 255
 }
 
 /**
@@ -4417,15 +4411,14 @@ void BattleUnit::setBattleGame(BattlescapeGame* const battleGame)
 void BattleUnit::setDown()
 {
 	_faction = _originalFaction;
-	_kneeled = false;		// don't get hunkerdown bonus against HE detonations
+	_kneeled = false;	// don't get hunkerdown bonus against HE detonations
 
-	_turnsExposed = 255;	// don't risk aggro per the AI
+	_turnsExposed = -1;	// don't risk aggro per the AI
 /*	// taken care of in SavedBattleGame::endBattlePhase()
 	if (_faction != FACTION_HOSTILE)
 		_turnsExposed = 255;	// don't risk aggro per the AI
 	else
 		_turnsExposed = 0;		// aLiens always exposed. */
-
 
 	// These don't seem to affect anything:
 //	_floating = false;

@@ -773,9 +773,9 @@ private:
 		bool reselectAllowed() const;
 
 		/// Sets this unit's fire value.
-		void setFire(int fire);
+		void setFireOnUnit(int fire);
 		/// Gets this unit's fire value.
-		int getFire() const;
+		int getFireOnUnit() const;
 		/// Gives this BattleUnit damage from personal fire.
 		void takeFire();
 

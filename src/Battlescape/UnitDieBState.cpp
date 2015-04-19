@@ -406,16 +406,12 @@ void UnitDieBState::convertToCorpse() // private.
 					if (explTile != NULL // safety.
 						&& explTile->getFire() == 0)
 					{
-						explTile->setFire(
-										explTile->getFuel() + RNG::generate(1,3),
-										true); // Could use a ruleset-factor in here.
-						explTile->addSmoke(
-										std::max(
-											1,
-											std::min(
-												6,
-												explTile->getFlammability() / 10)),
-										true);
+						explTile->addFire(explTile->getFuel() + RNG::generate(1,3)); // Could use a ruleset-factor in here.
+						explTile->addSmoke(std::max(
+												1,
+												std::min(
+													6,
+													explTile->getFlammability() / 10)));
 
 						if (soundPlayed == false)
 						{

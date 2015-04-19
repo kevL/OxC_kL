@@ -103,7 +103,9 @@ private:
 	BattlescapeMessage* _hidden;
 	Camera* _camera;
 	Game* _game;
-	NumberText* _txtAccuracy;
+	NumberText
+		* _numExposed,
+		* _numAccuracy;
 	Projectile* _projectile;
 	ResourcePack* _res;
 	SavedBattleGame* _battleSave;

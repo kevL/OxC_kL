@@ -85,7 +85,6 @@ protected:
 
 	/// Gets if this Tile will accept '_smoke' value.
 	bool canSmoke() const;
-
 	/// Converts obscure inverse MCD notation to understandable percentages.
 	int convertBurnToPCT(int burn) const;
 
@@ -228,29 +227,27 @@ protected:
 		int getFlammability() const;
 		/// Get flammability of part.
 		int getFlammability(int part) const;
+
 		/// Gets turns to burn
 		int getFuel() const;
 		/// Get turns to burn of part
 		int getFuel(int part) const;
-		/// Attempts to set the tile on fire.
-		void ignite(
-				int power,
-				bool resolve = false);
 
-		/// Sets fire - does not increment overlaps.
-		void setFire(
-				int turns,
-				bool resolve = false);
+		/// Tries to start fire on this Tile.
+		void ignite(int power);
+		/// Adds fire to this Tile.
+		void addFire(int turns);
+		/// Reduces the number of turns this Tile will burn.
+		void decreaseFire();
 		/// Gets fire.
 		int getFire() const;	// kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts.
 //		{ return _fire; }		// So ... don't. ie: change function names, THANKS c++
+								// ps. I changed the BattleUnit class function identifier to "getFireOnUnit" .....
 
-		/// Adds smoke - increments overlaps.
-		void addSmoke(
-				int turns,
-				bool resolve = false);
-		/// Sets smoke - does not increment overlaps.
-		void setSmoke(int turns);
+		/// Adds smoke to this Tile.
+		void addSmoke(int turns);
+		/// Reduces the number of turns this Tile will smoke.
+		void decreaseSmoke();
 		/// Gets smoke.
 		int getSmoke() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't.
 //		{ return _smoke; }
@@ -260,7 +257,7 @@ protected:
 		/// Gets how many times has this tile been overlapped with fire (runtime only).
 //		int getOverlapsIN() const;
 		/// New turn preparations.
-		void resolveOverlaps();
+//		void resolveOverlaps();
 
 		/// Ends this tile's turn. Units catch on fire.
 		void hitStuff(SavedBattleGame* const battleSave = NULL);
@@ -318,8 +315,8 @@ protected:
 		/// Gets the number to be displayed for pathfinding preview.
 		int getTUMarker() const;
 
-		/// Sets the danger flag on this tile so the AI will avoid it.
-		void setDangerous();
+		/// Sets the danger flag on this tile so the AI may avoid it.
+		void setDangerous(bool danger = true);
 		/// Checks the danger flag on this tile.
 		bool getDangerous() const;
 

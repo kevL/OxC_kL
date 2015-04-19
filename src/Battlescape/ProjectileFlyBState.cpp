@@ -1286,7 +1286,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR
 		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
-		_parent->getSave()->getTile(_action.target)->ignite(15, true);
+		_parent->getSave()->getTile(_action.target)->ignite(15);
 	}
 
 	_parent->getMap()->setCursorType(CT_NONE);

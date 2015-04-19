@@ -876,7 +876,7 @@ bool UnitWalkBState::doStatusStand_end()
 		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		// kL_add: Put burnedBySilacoid() here! etc
-		_unit->getTile()->ignite(1, true);
+		_unit->getTile()->ignite(1);
 
 		const Position pos = _unit->getPosition() * Position(16, 16, 24)
 						   + Position(

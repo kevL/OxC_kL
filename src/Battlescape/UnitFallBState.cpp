@@ -407,7 +407,7 @@ void UnitFallBState::think()
 					|| (*unitFalling)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
-					(*unitFalling)->getTile()->ignite(1, true);
+					(*unitFalling)->getTile()->ignite(1);
 					Position pos = ((*unitFalling)->getPosition() * Position(16,16,24))
 									+ Position(
 											8,8,

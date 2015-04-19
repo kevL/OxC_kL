@@ -263,7 +263,7 @@ void TileEngine::calculateUnitLighting()
 				layer);
 		}
 
-		if ((*i)->getFire() != 0) // add lighting of units on fire
+		if ((*i)->getFireOnUnit() != 0) // add lighting of units on fire
 			addLight(
 				(*i)->getPosition(),
 				fireLight,
@@ -1944,8 +1944,8 @@ BattleUnit* TileEngine::hit(
 										true);
 						//Log(LOG_INFO) << ". . . . DT_IN : " << targetUnit->getId() << " takes " << check;
 
-						if (targetUnit->getFire() < burn)
-							targetUnit->setFire(burn); // catch fire and burn
+						if (targetUnit->getFireOnUnit() < burn)
+							targetUnit->setFireOnUnit(burn); // catch fire and burn
 					}
 				} // kL_end.
 
@@ -2588,16 +2588,10 @@ void TileEngine::explode(
 
 						case DT_SMOKE:
 							if (destTile->getTerrainLevel() > -24)
-//								&& destTile->getSmoke() < 10)
 							{
-//								destTile->setFire(0); // smoke puts out fire, hm.
-//								destTile->setSmoke(RNG::generate(8,17));
-
 								const int smokePow = static_cast<int>(std::ceil(
 													(static_cast<double>(_powerE) / static_cast<double>(power)) * 10.));
-								destTile->addSmoke(
-												smokePow + RNG::generate(0,7),
-												true);
+								destTile->addSmoke(smokePow + RNG::generate(0,7));
 							}
 
 							if (targetUnit != NULL)
@@ -2658,8 +2652,8 @@ void TileEngine::explode(
 									const int burn = RNG::generate(
 																0,
 																static_cast<int>(Round(5.f * vuln)));
-									if (targetUnit->getFire() < burn)
-										targetUnit->setFire(burn); // catch fire and burn!!
+									if (targetUnit->getFireOnUnit() < burn)
+										targetUnit->setFireOnUnit(burn); // catch fire and burn!!
 								}
 							}
 
@@ -2689,14 +2683,10 @@ void TileEngine::explode(
 							{
 								const int firePow = static_cast<int>(std::ceil(
 												   (static_cast<double>(_powerE) / static_cast<double>(power)) * 10.));
-								fireTile->setFire(
-											firePow + fireTile->getFuel(),
-											true);
-								fireTile->addSmoke(
-												std::max(
-													firePow + fireTile->getFuel(),
-													firePow + ((fireTile->getFlammability() + 9) / 10)),
-												true);
+								fireTile->addFire(firePow + fireTile->getFuel());
+								fireTile->addSmoke(std::max(
+														firePow + fireTile->getFuel(),
+														firePow + ((fireTile->getFlammability() + 9) / 10)));
 							}
 //							}
 
@@ -2721,8 +2711,8 @@ void TileEngine::explode(
 									const int burn = RNG::generate(
 																0,
 																static_cast<int>(Round(5.f * vulnerable)));
-									if (targetUnit->getFire() < burn)
-										targetUnit->setFire(burn); // catch fire and burn!!
+									if (targetUnit->getFireOnUnit() < burn)
+										targetUnit->setFireOnUnit(burn); // catch fire and burn!!
 								}
 							}
 
@@ -4035,7 +4025,7 @@ bool TileEngine::detonate(Tile* const tile)
 	bool
 		destroyed,
 		bigWallDestroyed = true,
-		objective = false;
+		objectiveDestroyed = false;
 
 	for (size_t
 			i = 8;
@@ -4154,8 +4144,8 @@ bool TileEngine::detonate(Tile* const tile)
 
 			if (tiles[i]->destroy(part) == true) // DESTROY HERE <-|
 			{
-				//Log(LOG_INFO) << ". . objective TRUE";
-				objective = true;
+				//Log(LOG_INFO) << ". . objectiveDestroyed TRUE";
+				objectiveDestroyed = true;
 			}
 
 
@@ -4181,12 +4171,16 @@ bool TileEngine::detonate(Tile* const tile)
 				|| tiles[i]->getMapData(MapData::O_OBJECT) != NULL)
 			{
 				//Log(LOG_INFO) << ". base value = " << (explTest / 20) + fuel;
-				tiles[i]->setFire(
-							(explTest / 36) + fuel,
-							true);
-				tiles[i]->addSmoke(
-							(explTest / 36) + fuel + RNG::generate(1,3),
-							true);
+				tiles[i]->addFire((explTest / 36) + fuel);
+				tiles[i]->addSmoke((explTest / 36) + fuel + RNG::generate(1,3));
+
+				Tile* const tile = _battleSave->getTile(tiles[i]->getPosition() + Position(0,0,1));
+				if (tile != NULL
+					&& tile->hasNoFloor(tiles[i]) == true
+					&& RNG::percent(tiles[i]->getSmoke() * 5) == true)
+				{
+					tile->addSmoke((tiles[i]->getSmoke() + 2) / 3);
+				}
 			}
 		}
 		// add some smoke if tile was destroyed and not set on fire
@@ -4202,9 +4196,15 @@ bool TileEngine::detonate(Tile* const tile)
 					   + (volume / 2);
 
 			//Log(LOG_INFO) << ". smoke value = " << smoke;
-			tiles[i]->addSmoke(
-							smoke,
-							true);
+			tiles[i]->addSmoke(smoke);
+
+			Tile* const tile = _battleSave->getTile(tiles[i]->getPosition() + Position(0,0,1));
+			if (tile != NULL
+				&& tile->hasNoFloor(tiles[i]) == true
+				&& RNG::percent(tiles[i]->getSmoke() * 5) == true)
+			{
+				tile->addSmoke((tiles[i]->getSmoke() + 2) / 3);
+			}
 		}
 	}
 	//Log(LOG_INFO) << "\n";
@@ -4215,7 +4215,7 @@ bool TileEngine::detonate(Tile* const tile)
 //								17)));
 
 
-	return objective;
+	return objectiveDestroyed;
 }
 
 /**

@@ -169,8 +169,8 @@ Map::Map(
 	_camera->setScrollTimer(
 						_scrollMouseTimer,
 						_scrollKeyTimer);
-/*kL
-	_txtAccuracy = new Text(24, 9, 0, 0);
+
+/*	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
 	_txtAccuracy->setHighContrast();
@@ -178,8 +178,11 @@ Map::Map(
 						_res->getFont("FONT_BIG"),
 						_res->getFont("FONT_SMALL"),
 						_game->getLanguage()); */
-	_txtAccuracy = new NumberText(24, 9);						// kL
-	_txtAccuracy->setPalette(_game->getScreen()->getPalette());	// kL
+	_numAccuracy = new NumberText(24, 9);
+	_numAccuracy->setPalette(_game->getScreen()->getPalette());
+
+	_numExposed = new NumberText(24, 9);
+	_numExposed->setPalette(_game->getScreen()->getPalette());
 }
 
 /**
@@ -192,7 +195,7 @@ Map::~Map()
 	delete _arrow;
 	delete _hidden;
 	delete _camera;
-	delete _txtAccuracy;
+	delete _numAccuracy;
 }
 
 /**
@@ -971,7 +974,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														screenPosition.y + walkOffset.y - 8,
 														shade);
 
-												if (unitNorth->getFire() != 0)
+												if (unitNorth->getFireOnUnit() != 0)
 												{
 													frame = 4 + (_animFrame / 2);
 													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1262,7 +1265,7 @@ void Map::drawTerrain(Surface* surface) // private.
 															shade,
 															halfRight);
 
-													if (unitWest->getFire() != 0)
+													if (unitWest->getFireOnUnit() != 0)
 													{
 														frame = 4 + (_animFrame / 2);
 														srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1495,7 +1498,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										++i)
 								{
 									if ((*i)->getUnit() != NULL
-										&& (*i)->getUnit()->getFire() != 0)
+										&& (*i)->getUnit()->getFireOnUnit() != 0)
 									{
 										// Draw SMOKE & FIRE if itemUnit is on Fire
 										frame = 4 + (_animFrame / 2);
@@ -1589,7 +1592,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														screenPosition.y + walkOffset.y + pixelOffset_y,
 														shade);
 
-												if ((*i)->getFire() != 0)
+												if ((*i)->getFireOnUnit() != 0)
 												{
 													frame = 4 + (_animFrame / 2);
 													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1664,7 +1667,7 @@ void Map::drawTerrain(Surface* surface) // private.
 													screenPosition.y + walkOffset.y - 8,
 													shade);
 
-											if (unitNorth->getFire() != 0)
+											if (unitNorth->getFireOnUnit() != 0)
 											{
 												frame = 4 + (_animFrame / 2);
 												srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1867,7 +1870,7 @@ void Map::drawTerrain(Surface* surface) // private.
 													shade,
 													halfRight);
 
-											if (unitWest->getFire() != 0)
+											if (unitWest->getFireOnUnit() != 0)
 											{
 												frame = 4 + (_animFrame / 2);
 												srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2015,7 +2018,7 @@ void Map::drawTerrain(Surface* surface) // private.
 																				0,
 																				halfLeft);
 
-															if (unitNorthWest->getFire() != 0)
+															if (unitNorthWest->getFireOnUnit() != 0)
 															{
 																frame = 4 + (_animFrame / 2);
 																srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2317,7 +2320,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									screenPosition.y + walkOffset.y,
 									shade);
 
-							if (unit->getFire() != 0)
+							if (unit->getFireOnUnit() != 0)
 							{
 								frame = 4 + (_animFrame / 2);
 								srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2362,7 +2365,7 @@ void Map::drawTerrain(Surface* surface) // private.
 												screenPosition.y + walkOffset.y,
 												tileNorthWest->getShade());
 
-										if (unitNorthWest->getFire() != 0)
+										if (unitNorthWest->getFireOnUnit() != 0)
 										{
 											frame = 4 + (_animFrame / 2);
 											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2403,7 +2406,7 @@ void Map::drawTerrain(Surface* surface) // private.
 												screenPosition.y + walkOffset.y,
 												tileWest->getShade());
 
-										if (unitWest->getFire() != 0)
+										if (unitWest->getFireOnUnit() != 0)
 										{
 											frame = 4 + (_animFrame / 2);
 											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2444,7 +2447,7 @@ void Map::drawTerrain(Surface* surface) // private.
 												screenPosition.y + walkOffset.y,
 												tileNorth->getShade());
 
-										if (unitNorth->getFire() != 0)
+										if (unitNorth->getFireOnUnit() != 0)
 										{
 											frame = 4 + (_animFrame / 2);
 											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2639,6 +2642,19 @@ void Map::drawTerrain(Surface* surface) // private.
 										} */
 									}
 								}
+
+								if (unit->getArmor()->getSize() == 1
+									|| quad == 1)
+								{
+									_numExposed->setValue(static_cast<unsigned int>(unit->getExposed()));
+									_numExposed->setColor(Palette::blockOffset(5));
+									_numExposed->draw();
+									_numExposed->blitNShade(
+														surface,
+														screenPosition.x + walkOffset.x + 20,
+														screenPosition.y + walkOffset.y + 2,
+														0);
+								}
 							} // kL_end.
 
 
@@ -2735,7 +2751,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											screenPosition.y + walkOffset.y,
 											tileBelow->getShade());
 
-									if (unitBelow->getFire() != 0)
+									if (unitBelow->getFireOnUnit() != 0)
 									{
 										frame = 4 + (_animFrame / 2);
 										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2774,7 +2790,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														screenPosition.y + walkOffset.y,
 														tileBelowNorthWest->getShade());
 
-												if (unitBelowNorthWest->getFire() != 0)
+												if (unitBelowNorthWest->getFireOnUnit() != 0)
 												{
 													frame = 4 + (_animFrame / 2);
 													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2815,7 +2831,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														screenPosition.y + walkOffset.y,
 														tileBelowWest->getShade());
 
-												if (unitBelowWest->getFire() != 0)
+												if (unitBelowWest->getFireOnUnit() != 0)
 												{
 													frame = 4 + (_animFrame / 2);
 													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -2856,7 +2872,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														screenPosition.y + walkOffset.y,
 														tileBelowNorth->getShade());
 
-												if (unitBelowNorth->getFire() != 0)
+												if (unitBelowNorth->getFireOnUnit() != 0)
 												{
 													frame = 4 + (_animFrame / 2);
 													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3053,7 +3069,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									if (unitSize > 1)
 										walkOffset.y += 4;
 
-									if (unitBelow->getFire() != 0)
+									if (unitBelow->getFireOnUnit() != 0)
 									{
 										frame = 4 + (_animFrame / 2);
 										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3409,7 +3425,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											screenPosition.y + 24 + walkOffset.y,
 											shade);
 
-									if (unitBelow->getFire() != 0)
+									if (unitBelow->getFireOnUnit() != 0)
 									{
 										frame = 4 + (_animFrame / 2);
 										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3490,7 +3506,7 @@ void Map::drawTerrain(Surface* surface) // private.
 													screenPosition.y + 32 + walkOffset.y,
 													shade);
 
-											if (unitBelowSouth->getFire() != 0)
+											if (unitBelowSouth->getFireOnUnit() != 0)
 											{
 												frame = 4 + (_animFrame / 2);
 												srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3566,7 +3582,7 @@ void Map::drawTerrain(Surface* surface) // private.
 															screenPosition.y + 40 + walkOffset.y,
 															shade);
 
-													if (unitBelowSouthEast->getFire() != 0)
+													if (unitBelowSouthEast->getFireOnUnit() != 0)
 													{
 														frame = 4 + (_animFrame / 2);
 														srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3758,7 +3774,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														screenPosition.y + 32 + walkOffset.y,
 														shade);
 
-												if (unitBelowEast->getFire() != 0)
+												if (unitBelowEast->getFireOnUnit() != 0)
 												{
 													frame = 4 + (_animFrame / 2);
 													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3864,7 +3880,7 @@ void Map::drawTerrain(Surface* surface) // private.
 												screenPosition.y + walkOffset.y,
 												shade);
 
-/*										if (unit->getFire() != 0)
+/*										if (unit->getFireOnUnit() != 0)
 										{
 											frame = 4 + (_animFrame / 2);
 											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -3925,10 +3941,10 @@ void Map::drawTerrain(Surface* surface) // private.
 									color = Palette::blockOffset(2)+3; // red
 								}
 
-								_txtAccuracy->setValue(static_cast<unsigned int>(accuracy));
-								_txtAccuracy->setColor(color);
-								_txtAccuracy->draw();
-								_txtAccuracy->blitNShade(
+								_numAccuracy->setValue(static_cast<unsigned int>(accuracy));
+								_numAccuracy->setColor(color);
+								_numAccuracy->draw();
+								_numAccuracy->blitNShade(
 													surface,
 													screenPosition.x,
 													screenPosition.y,
@@ -3964,10 +3980,10 @@ void Map::drawTerrain(Surface* surface) // private.
 									color = Palette::blockOffset(3)+3; // green
 								}
 
-								_txtAccuracy->setValue(accuracy);
-								_txtAccuracy->setColor(color);
-								_txtAccuracy->draw();
-								_txtAccuracy->blitNShade(
+								_numAccuracy->setValue(accuracy);
+								_numAccuracy->setColor(color);
+								_numAccuracy->draw();
+								_numAccuracy->blitNShade(
 													surface,
 													screenPosition.x,
 													screenPosition.y,

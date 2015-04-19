@@ -723,12 +723,12 @@ bool Tile::damage(
 		int power)
 {
 	//Log(LOG_INFO) << "Tile::damage() vs part = " << part << ", hp = " << _objects[part]->getArmor();
-	bool objective = false;
+	bool objectiveDestroyed = false;
 
 	if (power >= _objects[static_cast<size_t>(part)]->getArmor())
-		objective = destroy(part);
+		objectiveDestroyed = destroy(part);
 
-	return objective;
+	return objectiveDestroyed;
 }
 
 /**
@@ -863,61 +863,69 @@ int Tile::getFuel(int part) const
 }
 
 /**
- * Ignite starts fire on a tile, it will burn <fuel> rounds.
+ * Tries to start fire on this Tile.
+ * @note If true it will add its fuel as turns to burn.
  * @note Called only by floor-burning Silacoids and fire spreading @ turnovers.
- * @param power		- chance to get things going; think of it as the turns-to-burn
- *					  that whatever is trying to light this Tile up with has
- * @param resolve	- true to resolve overlaps immediately (default false)
+ * @param power - rough chance to get things going
  */
-void Tile::ignite(
-		int power,
-		bool resolve)
+void Tile::ignite(int power)
 {
-	if (canSmoke() == true)
+	if (power != 0
+		&& canSmoke() == true)
 	{
 		const int fuel = getFuel();
-		int pct = getFlammability();
-		if (fuel != 0
-			&& pct != 0)
+		if (fuel != 0)
 		{
-			power = pct + (power * 7);
-			if (RNG::percent(power) == true)
+			const int burn = getFlammability();
+			if (burn != 0)
 			{
-				_animOffset = RNG::generate(0,3);
-
-				_fire += fuel + 1; // yeh this can get carried away so what.
-				++_overlapsINC;
-
-				_smoke += std::max(
-								1,
-								std::min(
-									12,
-									(pct + 9) / 10));
-				++_overlapsSMK;
+				power = (power * 7) + burn;
+				if (RNG::percent(power) == true)
+				{
+					addFire(fuel + 1);
+					addSmoke((burn + 9) / 10);
+				}
 			}
 		}
-
-		if (resolve == true)
-			resolveOverlaps();
 	}
 }
 
 /**
- * Sets the number of turns this tile will be on fire.
- * @param turns		- number of turns for this tile to burn
- * @param resolve	- true to resolve overlaps immediately (default false)
+ * Adds fire to this Tile.
+ * @param turns		- turns to burn
+ * @param autoBurn	- true if the tile should catch fire automatically
  */
-void Tile::setFire(
-		int turns,
-		bool resolve)
+void Tile::addFire(int turns)
 {
-	if (canSmoke() == true)
+	if (turns != 0
+		&& canSmoke() == true)
 	{
-		_animOffset = RNG::generate(0,3);
-		_fire = turns;
+		if (_smoke == 0
+			&& _fire == 0)
+		{
+			_animOffset = RNG::generate(0,3);
+		}
 
-		if (resolve == true)
-			resolveOverlaps();
+		_fire += turns;
+
+		if (_fire > 12)
+			_fire = 12;
+	}
+}
+
+/**
+ * Reduces the number of turns this Tile will burn.
+ */
+void Tile::decreaseFire()
+{
+	--_fire;
+
+	if (_fire < 1)
+	{
+		_fire = 0;
+
+		if (_smoke == 0)
+			_animOffset = 0;
 	}
 }
 
@@ -931,46 +939,40 @@ int Tile::getFire() const
 }
 
 /**
- * Sets the number of turns this tile will smoke for; adds to any smoke already on a tile.
- * @param turns		- add number of turns for this tile to smoke
- * @param resolve	- true to resolve any overlaps immediately (default false)
+ * Adds smoke to this Tile.
+ * @param turns - turns to smoke
  */
-void Tile::addSmoke(
-		int turns,
-		bool resolve)
+void Tile::addSmoke(int turns)
 {
-	if (canSmoke() == true)
+	if (turns != 0
+		&& canSmoke() == true)
 	{
-		if (_smoke == 0)
+		if (_smoke == 0
+			&& _fire == 0)
 		{
 			_animOffset = RNG::generate(0,3);
-			_smoke = std::min(
-							17,
-							turns);
 		}
-		else
-		{
-			_smoke += turns;
-			++_overlapsSMK;
 
-			if (resolve == true)
-				resolveOverlaps();
-		}
+		_smoke += turns;
+
+		if (_smoke > 17)
+			_smoke = 17;
 	}
 }
 
 /**
- * Sets the number of turns this tile will smoke for.
- * @param turns - turns to go
+ * Reduces the number of turns this Tile will smoke for.
  */
-void Tile::setSmoke(int turns)
+void Tile::decreaseSmoke()
 {
-	if (canSmoke() == true)
+	_smoke -= (RNG::generate(1, _smoke) + 2) / 2;
+
+	if (_smoke < 1)
 	{
-		_animOffset = RNG::generate(0,3);
-		_smoke = std::min(
-						17,
-						turns);
+		_smoke = 0;
+
+		if (_fire == 0)
+			_animOffset = 0;
 	}
 }
 
@@ -1004,8 +1006,9 @@ int Tile::getSmoke() const
 /**
  * New turn preparations. Average out any smoke added by the number of overlaps.
  */
-void Tile::resolveOverlaps()
+/* void Tile::resolveOverlaps()
 {
+	Log(LOG_INFO) << "pos " << _pos << " s = " << _smoke << " | " << _overlapsSMK;
 	if (_smoke != 0
 		&& _overlapsSMK != 0)
 	{
@@ -1015,7 +1018,9 @@ void Tile::resolveOverlaps()
 							17,
 							(_smoke + _overlapsSMK - 1) / _overlapsSMK));
 	}
+	Log(LOG_INFO) << ". s = " << _smoke;
 
+	Log(LOG_INFO) << "pos " << _pos << " f = " << _smoke << " | " << _overlapsINC;
 	if (_fire != 0
 		&& _overlapsINC != 0)
 	{
@@ -1025,11 +1030,12 @@ void Tile::resolveOverlaps()
 							12,
 							(_fire + _overlapsINC - 1) / _overlapsINC));
 	}
+	Log(LOG_INFO) << ". f = " << _fire;
 
 	_overlapsSMK =
 	_overlapsINC = 0;
 	_danger = false;
-}
+} */
 
 /**
  * Gets if this Tile will accept '_smoke' or '_fire' value.
@@ -1106,8 +1112,8 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 					const int dur = RNG::generate(
 												1,
 												static_cast<int>(Round(5.f * vuln)));
-					if (dur > _unit->getFire())
-						_unit->setFire(dur);
+					if (dur > _unit->getFireOnUnit())
+						_unit->setFireOnUnit(dur);
 				}
 			}
 		}
@@ -1511,11 +1517,12 @@ int Tile::getTUMarker() const
 }
 
 /**
- * Sets the danger flag true on this tile.
+ * Sets the danger flag on this Tile.
+ * @param danger - true if the AI regards the tile as dangerous (default true)
  */
-void Tile::setDangerous()
+void Tile::setDangerous(bool danger)
 {
-	_danger = true;
+	_danger = danger;
 }
 
 /**

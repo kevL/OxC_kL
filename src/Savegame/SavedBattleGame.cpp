@@ -1304,15 +1304,15 @@ bool SavedBattleGame::endBattlePhase()
 		// if newSide=Alien, xCom agents revert to xCom; MC'd aLiens DO NOT revert to aLien.
 
 
-		if ((*i)->isOut(true, true) == true)
-			(*i)->setExposed(255);
+		if ((*i)->isOut(true, true) == true)	// safety.
+			(*i)->setExposed(-1);				// That got done when unit went down.
 		else if ((*i)->getFaction() == FACTION_HOSTILE
 			|| (*i)->getOriginalFaction() == FACTION_HOSTILE
 			|| _cheating == true) // aLiens know where xCom is when cheating ~turn20
 		{
 			(*i)->setExposed(); // aLiens always know where their buddies are, Mc'd or not.
 		}
-		else if ((*i)->getExposed() < 255
+		else if ((*i)->getExposed() != -1
 			&& _side == FACTION_PLAYER)
 		{
 			(*i)->setExposed((*i)->getExposed() + 1);
@@ -1816,10 +1816,13 @@ Node* SavedBattleGame::getPatrolNode(
  */
 void SavedBattleGame::spreadFireSmoke()
 {
+	const size_t mapSize = static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 	std::vector<Tile*>
 		tilesFired,
 		tilesSmoked;
-	const size_t mapSize = static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
+
+	Tile* tile;
+	int var;
 
 	for (size_t
 			i = 0;
@@ -1828,6 +1831,11 @@ void SavedBattleGame::spreadFireSmoke()
 	{
 		if (getTiles()[i]->getFire() != 0)
 			tilesFired.push_back(getTiles()[i]);
+
+		if (getTiles()[i]->getSmoke() != 0)
+			tilesSmoked.push_back(getTiles()[i]);
+
+		getTiles()[i]->setDangerous(false);
 	}
 
 	for (std::vector<Tile*>::const_iterator
@@ -1835,9 +1843,11 @@ void SavedBattleGame::spreadFireSmoke()
 			i != tilesFired.end();
 			++i)
 	{
-		(*i)->setFire((*i)->getFire() - 1);
+		(*i)->decreaseFire();
 
-		if ((*i)->getFire() != 0)
+		var = (*i)->getFire() / 2;
+
+		if (var != 0)
 		{
 			for (int
 					dir = 0;
@@ -1848,7 +1858,7 @@ void SavedBattleGame::spreadFireSmoke()
 				Pathfinding::directionToVector(
 											dir,
 											&spreadPos);
-				Tile* const tile = getTile((*i)->getPosition() + spreadPos);
+				tile = getTile((*i)->getPosition() + spreadPos);
 
 				if (tile != NULL
 					&& _tileEngine->horizontalBlockage(
@@ -1856,7 +1866,7 @@ void SavedBattleGame::spreadFireSmoke()
 													tile,
 													DT_IN) == 0)
 				{
-					tile->ignite((*i)->getFire());
+					tile->ignite(var);
 				}
 			}
 		}
@@ -1888,32 +1898,22 @@ void SavedBattleGame::spreadFireSmoke()
 		}
 	}
 
-
-	for (size_t
-			i = 0;
-			i != mapSize;
-			++i)
-	{
-		if (getTiles()[i]->getSmoke() != 0)
-			tilesSmoked.push_back(getTiles()[i]);
-	}
-
 	for (std::vector<Tile*>::const_iterator
 			i = tilesSmoked.begin();
 			i != tilesSmoked.end();
 			++i)
 	{
-		(*i)->setSmoke(std::max(
-							0,
-							(*i)->getSmoke() - RNG::generate(0,3)));
+		(*i)->decreaseSmoke();
 
-		if ((*i)->getSmoke() != 0)
+		var = (*i)->getSmoke() / 2;
+
+		if (var != 0)
 		{
-			Tile* tile = getTile((*i)->getPosition() + Position(0,0,1));
+			tile = getTile((*i)->getPosition() + Position(0,0,1));
 			if (tile != NULL
 				&& tile->hasNoFloor(*i) == true)
 			{
-				tile->addSmoke((*i)->getSmoke() / 2);
+				tile->addSmoke(var / 3);
 			}
 
 			for (int
@@ -1921,30 +1921,24 @@ void SavedBattleGame::spreadFireSmoke()
 					dir < 7;
 					dir += 2)
 			{
-				Position spreadPos;
-				Pathfinding::directionToVector(
-											dir,
-											&spreadPos);
-				tile = getTile((*i)->getPosition() + spreadPos);
-				if (tile != NULL
-					&& _tileEngine->horizontalBlockage(
-													*i,
-													tile,
-													DT_SMOKE) == 0)
+				if (RNG::percent(37) == true)
 				{
-					tile->addSmoke((*i)->getSmoke());
+					Position spreadPos;
+					Pathfinding::directionToVector(
+												dir,
+												&spreadPos);
+					tile = getTile((*i)->getPosition() + spreadPos);
+					if (tile != NULL
+						&& _tileEngine->horizontalBlockage(
+														*i,
+														tile,
+														DT_SMOKE) == 0)
+					{
+						tile->addSmoke(var / 2);
+					}
 				}
 			}
 		}
-	}
-
-
-	for (size_t
-			i = 0;
-			i != mapSize;
-			++i)
-	{
-		getTiles()[i]->resolveOverlaps(); // also reset the '_danger' flag for the AI.
 	}
 }
 
@@ -1986,6 +1980,12 @@ void SavedBattleGame::reviveUnit(
 			|| (unit->getUnitRules()->isMechanical() == false
 				&& unit->getArmor()->getSize() == 1)))
 	{
+		if (unit->getFaction() == FACTION_HOSTILE)	// faction will be Original here
+			unit->setExposed();						// due to death/stun sequence.
+		else
+			unit->setExposed(-1);
+
+
 		Position pos = unit->getPosition();
 
 		if (pos == Position(-1,-1,-1)) // if carried
