@@ -220,7 +220,7 @@ void ExplosionBState::init()
 
 			for (int
 					i = 0;
-					i < qty;
+					i != qty;
 					++i)
 			{
 				if (i > 0) // bypass 1st explosion: it's always centered w/out any delay.
@@ -244,6 +244,7 @@ void ExplosionBState::init()
 			}
 
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // * 10 / 7);
+			_parent->getMap()->setBlastFlash(true);
 
 
 			int sound = -1;
@@ -384,28 +385,31 @@ void ExplosionBState::think()
 
 	if (_extend < 1)
 		explode(); */
-	for (std::list<Explosion*>::const_iterator
-			i = _parent->getMap()->getExplosions()->begin();
-			i != _parent->getMap()->getExplosions()->end();
-			)
+	if (_parent->getMap()->getBlastFlash() == false)
 	{
-		if ((*i)->animate() == false)
+		for (std::list<Explosion*>::const_iterator
+				i = _parent->getMap()->getExplosions()->begin();
+				i != _parent->getMap()->getExplosions()->end();
+				)
 		{
-
-			delete *i;
-			i = _parent->getMap()->getExplosions()->erase(i);
-
-			if (_parent->getMap()->getExplosions()->empty() == true)
+			if ((*i)->animate() == false)
 			{
-				explode();
-				return;
+
+				delete *i;
+				i = _parent->getMap()->getExplosions()->erase(i);
+
+				if (_parent->getMap()->getExplosions()->empty() == true)
+				{
+					explode();
+					return;
+				}
 			}
-		}
-		else
-		{
-			++i;
+			else
+				++i;
 		}
 	}
+	else
+		_parent->getMap()->setBlastFlash(false);
 }
 
 /**
