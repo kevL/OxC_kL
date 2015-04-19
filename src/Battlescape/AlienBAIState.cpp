@@ -1940,6 +1940,10 @@ bool AlienBAIState::explosiveEfficacy(
 		const int diff) const
 //		bool grenade) const
 {
+	//Log(LOG_INFO) << "\n";
+	//Log(LOG_INFO) << "explosiveEfficacy() rad = " << explRadius;
+
+
 	int pct = 0;
 
 	const int firstGrenade = _battleSave->getBattleState()->getGame()->getRuleset()->getFirstGrenade();
@@ -1976,20 +1980,33 @@ bool AlienBAIState::explosiveEfficacy(
 
 		pct += diff * 2;
 
-		const BattleUnit* const target = _battleSave->getTile(targetPos)->getUnit();
+		const BattleUnit* const targetUnit = _battleSave->getTile(targetPos)->getUnit();
 
+		//Log(LOG_INFO) << "attacker = " << attacker->getId();
+		//Log(LOG_INFO) << "targetPos = " << targetPos;
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleSave->getUnits()->begin();
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
+			//Log(LOG_INFO) << "\n";
+			//Log(LOG_INFO) << ". id = " << (*i)->getId();
+			//Log(LOG_INFO) << ". isNOTOut = " << ((*i)->isOut(true) == false);
+			//Log(LOG_INFO) << ". isNOTAttacker = " << (*i != attacker);
+			//Log(LOG_INFO) << ". isNOTtargetUnit = " << (*i != targetUnit);
+			//Log(LOG_INFO) << ". vertCheck = " << (std::abs((*i)->getPosition().z - targetPos.z) < Options::battleExplosionHeight + 1);
+			//Log(LOG_INFO) << ". inDist = " << (_battleSave->getTileEngine()->distance(targetPos, (*i)->getPosition()) < explRadius + 1);
 			if ((*i)->isOut(true) == false
 				&& *i != attacker
+				&& *i != targetUnit
 				&& std::abs((*i)->getPosition().z - targetPos.z) < Options::battleExplosionHeight + 1
 				&& _battleSave->getTileEngine()->distance(
 													targetPos,
 													(*i)->getPosition()) < explRadius + 1)
 			{
+				//Log(LOG_INFO) << ". . dangerousFALSE = " << ((*i)->getTile() != NULL && (*i)->getTile()->getDangerous() == false);
+				//Log(LOG_INFO) << ". . exposed = " << ((*i)->getFaction() == FACTION_HOSTILE || (*i)->getExposed() < _intelligence + 1);
+
 				if (   (*i)->getTile() != NULL
 					&& (*i)->getTile()->getDangerous() == false
 					&& ((*i)->getFaction() == FACTION_HOSTILE
@@ -2005,22 +2022,21 @@ bool AlienBAIState::explosiveEfficacy(
 										((*i)->getPosition().y * 16) + 8,
 										((*i)->getPosition().z * 24) + 12);
 
-					std::vector<Position> traj;
+					std::vector<Position> trajectory;
 					const int impact = _battleSave->getTileEngine()->calculateLine(
 																				voxelPosA,
 																				voxelPosB,
 																				false,
-																				&traj,
-																				target,
+																				&trajectory,
+																				targetUnit,
 																				true,
 																				false,
 																				*i);
-					Log(LOG_INFO) << "trajSize = " << (int)traj.size();
-//					Log(LOG_INFO) << "trajFront " << (traj.front() / Position(16,16,24));
-//					Log(LOG_INFO) << "trajBack  " << (traj.back() / Position(16,16,24));
+					//Log(LOG_INFO) << "trajSize = " << (int)trajectory.size() << "; impact = " << impact;
 					if (impact == VOXEL_UNIT
-						&& (*i)->getPosition() == traj.front() / Position(16,16,24))
+						&& (*i)->getPosition() == trajectory.front() / Position(16,16,24))
 					{
+						//Log(LOG_INFO) << "trajFront " << (trajectory.front() / Position(16,16,24));
 						if ((*i)->getFaction() != FACTION_HOSTILE)
 							pct += 12;
 
@@ -2143,7 +2159,8 @@ void AlienBAIState::wayPointAction()
 	if (_unit->getTimeUnits() >= _attackAction->TU)
 	{
 		std::vector<BattleUnit*> targets;
-		const int explRadius = _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getExplosionRadius();
+//		const int explRadius = _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getExplosionRadius();
+		const int explRadius = _attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius();
 
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleSave->getUnits()->begin();

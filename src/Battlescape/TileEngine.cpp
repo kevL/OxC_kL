@@ -4627,7 +4627,7 @@ int TileEngine::closeUfoDoors()
  * Calculates a line trajectory, using bresenham algorithm in 3D.
  * @param origin			- reference the origin (voxelspace for 'doVoxelCheck'; tilespace otherwise)
  * @param target			- reference the target (voxelspace for 'doVoxelCheck'; tilespace otherwise)
- * @param storeTrajectory	- true will store the whole trajectory - otherwise it just stores the last position
+ * @param storeTrajectory	- true will store the whole trajectory; otherwise only the last position gets stored
  * @param trajectory		- pointer to a vector of Positions in which the trajectory will be stored
  * @param excludeUnit		- pointer to a BattleUnit to be excluded from collision detection
  * @param doVoxelCheck		- true to check against a voxel; false to check tile blocking for FoV (true for unit visibility and line of fire, false for terrain visibility) (default true)
@@ -4671,7 +4671,7 @@ int TileEngine::calculateLine(
 		horiBlock, vertBlock,
 		ret;
 
-	Position lastPoint (origin);
+	Position lastPoint (origin); // init.
 
 	x0 = origin.x; // start & end points
 	x1 = target.x;
@@ -4711,7 +4711,7 @@ int TileEngine::calculateLine(
 	y = y0; // starting point
 	z = z0;
 	for (
-			x = x0; // step through longest delta (which we have swapped to x)
+			x = x0; // step through longest delta (which has been swapped to x)
 			x != x1 + step_x;
 			x += step_x)
 	{
@@ -4724,19 +4724,19 @@ int TileEngine::calculateLine(
 		} */
 
 		cx = x; cy = y; cz = z; // copy position
-		if (swap_xz == true) std::swap(cx, cz); // unswap (in reverse)
-		if (swap_xy == true) std::swap(cx, cy);
+		if (swap_xz == true) std::swap(cx,cz); // unswap (in reverse)
+		if (swap_xy == true) std::swap(cx,cy);
 
 		if (storeTrajectory == true
 			&& trajectory != NULL)
 		{
-			trajectory->push_back(Position(cx, cy, cz));
+			trajectory->push_back(Position(cx,cy,cz));
 		}
 
 		if (doVoxelCheck == true) // passes through this voxel, for Unit visibility & LoS/LoF
 		{
 			ret = voxelCheck(
-						Position(cx, cy, cz),
+						Position(cx,cy,cz),
 						excludeUnit,
 						false,
 						onlyVisible,
@@ -4745,7 +4745,7 @@ int TileEngine::calculateLine(
 			if (ret != VOXEL_EMPTY) // hit.
 			{
 				if (trajectory != NULL) // store the position of impact
-					trajectory->push_back(Position(cx, cy, cz));
+					trajectory->push_back(Position(cx,cy,cz));
 
 				return ret;
 			}
@@ -4754,7 +4754,7 @@ int TileEngine::calculateLine(
 		{
 			Tile
 				* const startTile = _battleSave->getTile(lastPoint),
-				* const endTile = _battleSave->getTile(Position(cx, cy, cz));
+				* const endTile = _battleSave->getTile(Position(cx,cy,cz));
 
 //			if (_battleSave->getSelectedUnit()->getId() == 389)
 //			{
@@ -4788,7 +4788,7 @@ int TileEngine::calculateLine(
 					//kL_debug = true;
 
 					Log(LOG_INFO) << ". start " << lastPoint << " hori = " << horiBlock;
-					Log(LOG_INFO) << ". . end " << Position(cx, cy, cz) << " vert = " << vertBlock;
+					Log(LOG_INFO) << ". . end " << Position(cx,cy,cz) << " vert = " << vertBlock;
 				}
 			} */ // kL_TEST_end.
 
@@ -4805,7 +4805,7 @@ int TileEngine::calculateLine(
 			if (horiBlock != 0)
 				return horiBlock;
 
-			lastPoint = Position(cx, cy, cz);
+			lastPoint = Position(cx,cy,cz);
 		}
 
 		drift_xy = drift_xy - delta_y; // update progress in other planes
@@ -4819,11 +4819,11 @@ int TileEngine::calculateLine(
 			if (doVoxelCheck == true) // check for xy diagonal intermediate voxel step, for Unit visibility
 			{
 				cx = x; cy = y; cz = z;
-				if (swap_xz == true) std::swap(cx, cz);
-				if (swap_xy == true) std::swap(cx, cy);
+				if (swap_xz == true) std::swap(cx,cz);
+				if (swap_xy == true) std::swap(cx,cy);
 
 				ret = voxelCheck(
-							Position(cx, cy, cz),
+							Position(cx,cy,cz),
 							excludeUnit,
 							false,
 							onlyVisible,
@@ -4832,7 +4832,7 @@ int TileEngine::calculateLine(
 				if (ret != VOXEL_EMPTY)
 				{
 					if (trajectory != NULL)
-						trajectory->push_back(Position(cx, cy, cz)); // store the position of impact
+						trajectory->push_back(Position(cx,cy,cz)); // store the position of impact
 
 					return ret;
 				}
@@ -4847,11 +4847,11 @@ int TileEngine::calculateLine(
 			if (doVoxelCheck == true) // check for xz diagonal intermediate voxel step
 			{
 				cx = x; cy = y; cz = z;
-				if (swap_xz == true) std::swap(cx, cz);
-				if (swap_xy == true) std::swap(cx, cy);
+				if (swap_xz == true) std::swap(cx,cz);
+				if (swap_xy == true) std::swap(cx,cy);
 
 				ret = voxelCheck(
-							Position(cx, cy, cz),
+							Position(cx,cy,cz),
 							excludeUnit,
 							false,
 							onlyVisible,
@@ -4860,7 +4860,7 @@ int TileEngine::calculateLine(
 				if (ret != VOXEL_EMPTY)
 				{
 					if (trajectory != NULL) // store the position of impact
-						trajectory->push_back(Position(cx, cy, cz));
+						trajectory->push_back(Position(cx,cy,cz));
 
 					return ret;
 				}

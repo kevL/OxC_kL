@@ -703,24 +703,19 @@ int RuleItem::getStunRecovery() const
  */
 int RuleItem::getExplosionRadius() const
 {
-	if (_blastRadius > -1)
-		return _blastRadius;
-
-	if (_blastRadius == -1)
-	{
-		if (_damageType == DT_HE
+	if (_blastRadius == -1
+		&& (   _damageType == DT_HE
 			|| _damageType == DT_STUN
 			|| _damageType == DT_SMOKE
-			|| _damageType == DT_IN)
-		{
-			return _power / 20;
-		}
+			|| _damageType == DT_IN))
+	{
+		return _power / 20;
 	}
 
 //	if (_damageType == DT_IN)
 //		return _power / 30;
 
-	return -1;
+	return _blastRadius;
 }
 
 /**
