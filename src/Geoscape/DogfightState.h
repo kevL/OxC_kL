@@ -36,14 +36,14 @@ const int
 
 enum ColorNames
 {
-	CRAFT_MIN,			// 0
-	CRAFT_MAX,			// 1
-	RADAR_MIN,			// 2
-	RADAR_MAX,			// 3
-	DAMAGE_MIN,			// 4
-	DAMAGE_MAX,			// 5
-	BLOB_MIN,			// 6
-	RANGE_METER,		// 7
+	CRAFT_MIN,			//  0
+	CRAFT_MAX,			//  1
+	RADAR_MIN,			//  2
+	RADAR_MAX,			//  3
+	DAMAGE_MIN,			//  4
+	DAMAGE_MAX,			//  5
+	BLOB_MIN,			//  6
+	RANGE_METER,		//  7
 	DISABLED_WEAPON,	//  8
 	DISABLED_AMMO,		//  9
 	DISABLED_RANGE		// 10

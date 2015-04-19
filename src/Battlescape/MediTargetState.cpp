@@ -73,7 +73,7 @@ MediTargetState::MediTargetState(BattleAction* action)
 	add(_txtHealth,	"messageWindows",		"battlescape");
 	add(_txtEnergy,	"messageWindows",		"battlescape");
 	add(_txtMorale,	"messageWindows",		"battlescape");
-	add(_lstTarget,	"messageWindows",		"battlescape");
+	add(_lstTarget);//,	"messageWindows",		"battlescape");
 	add(_btnCancel,	"messageWindowButtons",	"battlescape");
 
 	centerAllSurfaces();
@@ -103,6 +103,7 @@ MediTargetState::MediTargetState(BattleAction* action)
 	_txtMorale->setHighContrast();
 
 	_lstTarget->setColumns(5, 108, 18, 47, 37, 18);
+	_lstTarget->setColor(Palette::blockOffset(11));
 	_lstTarget->setBackground(_window);
 	_lstTarget->setSelectable();
 	_lstTarget->setMargin(6);

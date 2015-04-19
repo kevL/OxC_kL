@@ -1322,8 +1322,11 @@ void BattlescapeGame::handleNonTargetAction()
 				_currentAction.result.clear();
 			}
 
-			_battleSave->reviveUnit(_currentAction.targetUnit);
-			_currentAction.targetUnit = NULL;
+			if (_currentAction.targetUnit != NULL)
+			{
+				_battleSave->reviveUnit(_currentAction.targetUnit);
+				_currentAction.targetUnit = NULL;
+			}
 		}
 		else if (_currentAction.type == BA_LAUNCH)
 		{

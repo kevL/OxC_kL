@@ -1942,8 +1942,6 @@ bool AlienBAIState::explosiveEfficacy(
 {
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << "explosiveEfficacy() rad = " << explRadius;
-
-
 	int pct = 0;
 
 	const int firstGrenade = _battleSave->getBattleState()->getGame()->getRuleset()->getFirstGrenade();
@@ -2006,7 +2004,6 @@ bool AlienBAIState::explosiveEfficacy(
 			{
 				//Log(LOG_INFO) << ". . dangerousFALSE = " << ((*i)->getTile() != NULL && (*i)->getTile()->getDangerous() == false);
 				//Log(LOG_INFO) << ". . exposed = " << ((*i)->getFaction() == FACTION_HOSTILE || (*i)->getExposed() < _intelligence + 1);
-
 				if (   (*i)->getTile() != NULL
 					&& (*i)->getTile()->getDangerous() == false
 					&& ((*i)->getFaction() == FACTION_HOSTILE

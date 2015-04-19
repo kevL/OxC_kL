@@ -61,6 +61,7 @@ TextList::TextList(
 		_visibleRows(0),
 		_selRow(0),
 		_color(0),
+		_color2(0),
 		_dot(false),
 		_selectable(false),
 		_condensed(false),
