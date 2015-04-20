@@ -263,7 +263,7 @@ private:
 		int castedShade(const Position& voxel) const;
 
 		/// Checks the visibility of a given voxel.
-		bool isVoxelVisible(const Position& voxel) const;
+//		bool isVoxelVisible(const Position& voxel) const;
 		/// Checks what type of voxel occupies posTarget in voxel space.
 		int voxelCheck(
 				const Position& targetPos,

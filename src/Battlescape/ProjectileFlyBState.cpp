@@ -870,7 +870,7 @@ void ProjectileFlyBState::think()
 						&& _ammo->getRules()->getExplosionRadius() > -1
 						&& _projectileImpact != VOXEL_UNIT)
 					{
-						offset = -1; // do -1, was -2 -> tada, fixed.
+						offset = -2; // step back a bit so tileExpl isn't behind a close wall.
 					}
 
 					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explCenter " << _parent->getMap()->getProjectile()->getPosition(offset);
