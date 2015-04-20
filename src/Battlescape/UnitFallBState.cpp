@@ -88,7 +88,7 @@ void UnitFallBState::think()
 			fallUnit != _parent->getSave()->getFallingUnits()->end();
 			)
 	{
-		Log(LOG_INFO) << ". falling ID " << (*fallUnit)->getId();
+		//Log(LOG_INFO) << ". falling ID " << (*fallUnit)->getId();
 		if ((*fallUnit)->isOut(true, true) == true)
 //		if ((*fallUnit)->getHealth() == 0
 //			|| (*fallUnit)->getStun() >= (*fallUnit)->getHealth())
@@ -385,10 +385,10 @@ void UnitFallBState::think()
 
 		if ((*fallUnit)->getStatus() == STATUS_STANDING) // done falling, just standing around.
 		{
-			Log(LOG_INFO) << ". STATUS_STANDING";
+			//Log(LOG_INFO) << ". STATUS_STANDING";
 			if (falling == true)
 			{
-				Log(LOG_INFO) << ". . still falling -> startWalking()";
+				//Log(LOG_INFO) << ". . still falling -> startWalking()";
 				Position destination = (*fallUnit)->getPosition() + Position(0,0,-1);
 
 				tileBelow = _parent->getSave()->getTile(destination);
@@ -405,7 +405,7 @@ void UnitFallBState::think()
 			}
 			else // done falling, just standing around ...
 			{
-				Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.fallUnit";
+				//Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.fallUnit";
 				if ((*fallUnit)->getSpecialAbility() == SPECAB_BURNFLOOR // if the unit burns floortiles, burn floortiles
 					|| (*fallUnit)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
@@ -441,7 +441,7 @@ void UnitFallBState::think()
 		}
 		else
 		{
-			Log(LOG_INFO) << ". not STATUS_STANDING, next unit";
+			//Log(LOG_INFO) << ". not STATUS_STANDING, next unit";
 			++fallUnit;
 		}
 	}

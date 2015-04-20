@@ -659,7 +659,7 @@ private:
 		int damage(
 				const Position& relPos,
 				int power,
-				ItemDamageType type,
+				ItemDamageType dType,
 				const bool ignoreArmor = false);
 
 		/// Plays a grunt sFx when hit/damaged.

@@ -1333,28 +1333,28 @@ int BattleUnit::getMorale() const
  * Do an amount of damage.
  * @param relPos		- reference a position in voxelspace that defines which part of armor and/or body gets hit
  * @param power			- the amount of damage to inflict
- * @param type			- the ItemDamageType being inflicted (RuleItem.h)
+ * @param dType			- the ItemDamageType being inflicted (RuleItem.h)
  * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored in
  * @return, damage done to this BattleUnit after adjustments
  */
 int BattleUnit::damage(
 		const Position& relPos,
 		int power,
-		ItemDamageType type,
+		ItemDamageType dType,
 		const bool ignoreArmor)
 {
 	//Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
 	power = static_cast<int>(Round(
-			static_cast<float>(power) * _armor->getDamageModifier(type)));
-	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
+			static_cast<float>(power) * _armor->getDamageModifier(dType)));
+	//Log(LOG_INFO) << "BattleUnit::damage(), dType = " << (int)dType << " ModifiedPower " << power;
 
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
 //		return 0;
 
-	if (type == DT_SMOKE) // smoke is really stun damage.
-		type = DT_STUN;
+	if (dType == DT_SMOKE) // smoke is really stun damage.
+		dType = DT_STUN;
 
-	if (type == DT_STUN)
+	if (dType == DT_STUN)
 	{
 		if (power < 1)
 			return 0;
@@ -1452,7 +1452,7 @@ int BattleUnit::damage(
 
 	if (power > 0)
 	{
-		if (type == DT_STUN
+		if (dType == DT_STUN
 			&& (_geoscapeSoldier != NULL
 				|| (_unitRules->isMechanical() == false
 					&& _race != "STR_ZOMBIE")))
@@ -1466,7 +1466,7 @@ int BattleUnit::damage(
 			{
 				_health = 0;
 
-				if (type == DT_IN)
+				if (dType == DT_IN)
 				{
 					_diedByFire = true;
 					_spawnUnit.clear();
@@ -1487,19 +1487,27 @@ int BattleUnit::damage(
 					_stunLevel += RNG::generate(0, power / 3);
 				}
 
+				int wounds = RNG::generate(1,3);
+
 				if (ignoreArmor == false)// Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
 				{
 					if (isWoundable() == true) // fatal wounds
 					{
 						if (RNG::generate(0,10) < power) // kL: refactor this.
 						{
-							const int wounds = RNG::generate(1,3);
 							_fatalWounds[bodypart] += wounds;
-
-							moraleChange(-wounds * 3);
+//							moraleChange(-wounds * 3);
 						}
 					}
 //					setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
+				}
+
+				if (dType != DT_STUN)
+				{
+					if (dType == DT_IN)
+						wounds *= 2;
+
+					moraleChange(-wounds * 3);
 				}
 			}
 		}
@@ -1510,7 +1518,7 @@ int BattleUnit::damage(
 	if (_health > 0
 		&& _visible == true
 		&& _status != STATUS_UNCONSCIOUS
-		&& type != DT_STUN
+		&& dType != DT_STUN
 		&& (_geoscapeSoldier != NULL
 			|| _unitRules->isMechanical() == false))
 	{

@@ -736,9 +736,9 @@ void ProjectileFlyBState::think()
 				//	<< " ID " << _unit->getId()
 				//	<< " action.type = " << _action.type
 				//	<< " action.TU = " << _action.TU;
-				_parent->getTileEngine()->checkReactionFire(
-														_unit,
-														_action.TU);
+				_parent->getTileEngine()->checkReactionFire(			// note: I don't believe that smoke obscuration gets accounted
+														_unit,			// for by this call, if the current projectile caused cloud.
+														_action.TU);	// But that's kinda ok.
 			}
 
 			if (_unit->isOut() == false
@@ -830,6 +830,9 @@ void ProjectileFlyBState::think()
 																			_action,
 																			_origin);
 				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // no (-1) -> tada, fixed.
+
+				// this follows BL as it hits through waypoints; screen flashes black at each though:
+				_parent->getMap()->getCamera()->centerOnPosition(_parent->getMap()->getProjectile()->getPosition());
 
 				if (_origin == _action.target)
 					nextWaypoint->targetFloor();

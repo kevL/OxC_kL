@@ -1283,8 +1283,9 @@ void Map::drawTerrain(Surface* surface) // private.
 										// end Redraw unitWest w/ unitNorth walking
 
 										// Draw SMOKE & FIRE
-										if (tileWest->getSmoke() != 0
-											&& tileWest->isDiscovered(2) == true)
+										if (tileWest->isDiscovered(2) == true
+											&& (tileWest->getSmoke() != 0
+												|| tileWest->getFire() != 0))
 										{
 											if (tileWest->getFire() == 0)
 											{
@@ -1360,8 +1361,9 @@ void Map::drawTerrain(Surface* surface) // private.
 															true); // halfRight
 
 													// Draw SMOKE & FIRE -> note will muck w/ foreground parts
-													if (tileSouthWest->getSmoke() != 0
-														&& tileSouthWest->isDiscovered(2) == true)
+													if (tileSouthWest->isDiscovered(2) == true
+														&& (tileSouthWest->getSmoke() != 0
+															|| tileSouthWest->getFire() != 0))
 													{
 														if (tileSouthWest->getFire() == 0)
 														{
@@ -2333,7 +2335,7 @@ void Map::drawTerrain(Surface* surface) // private.
 							}
 
 							// redraw all quadrants of large units moving up/down on gravLift
-							// Should this be STATUS_WALKING (up/down gravLift); uses verDir instead
+							// Should this be STATUS_WALKING (up/down gravLift); uses vertDir instead
 							if (itZ > 0
 								&& quad == 3
 								&& unit->getVerticalDirection() != 0
@@ -3159,8 +3161,9 @@ void Map::drawTerrain(Surface* surface) // private.
 
 
 					// Draw SMOKE & FIRE
-					if (tile->getSmoke() != 0
-						&& tile->isDiscovered(2) == true)
+					if (tile->isDiscovered(2) == true
+						&& (tile->getSmoke() != 0
+							|| tile->getFire() != 0))
 					{
 						if (tile->getFire() == 0)
 						{
@@ -3189,7 +3192,8 @@ void Map::drawTerrain(Surface* surface) // private.
 									screenPosition.x,
 									screenPosition.y + tile->getTerrainLevel(),
 									shade);
-					}
+					} // end Smoke & Fire
+
 
 					if (itX > 0 && itY > 0 // Redraw fire on south-west & north-east Tiles of big units
 						&& unit != NULL)
@@ -3206,8 +3210,9 @@ void Map::drawTerrain(Surface* surface) // private.
 								{
 									if (tileNorth->getUnit() == unit)
 									{
-										if (tileWest->getSmoke() != 0
-											&& tileWest->isDiscovered(2) == true)
+										if (tileWest->isDiscovered(2) == true
+											&& (tileWest->getSmoke() != 0
+												|| tileWest->getFire() != 0))
 										{
 											if (tileWest->getFire() == 0)
 											{
@@ -3238,8 +3243,9 @@ void Map::drawTerrain(Surface* surface) // private.
 														shade);
 										}
 
-										if (tileNorth->getSmoke() != 0
-											&& tileNorth->isDiscovered(2) == true)
+										if (tileNorth->isDiscovered(2) == true
+											&& (tileNorth->getSmoke() != 0
+												|| tileNorth->getFire() != 0))
 										{
 											if (tileNorth->getFire() == 0)
 											{
@@ -4288,6 +4294,7 @@ void Map::drawTerrain(Surface* surface) // private.
 						&& y < surface->getHeight();
 					)
 			{
+//				surface->setPixelIterative(&x,&y, surface->getPixel(x,y) & 0xF0); // <- Volutar's
 				color = (surface->getPixelColor(x,y) / 16) * 16; // get the brightest color in each colorgroup.
 				surface->setPixelIterative(
 										&x,&y,
