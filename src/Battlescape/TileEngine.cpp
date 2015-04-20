@@ -710,7 +710,7 @@ void TileEngine::calculateFOV(const Position& pos)
 		if (distanceSq(
 					pos,
 					(*i)->getPosition(),
-					false) <= MAX_VIEW_DISTANCE_SQR)
+					false) < MAX_VIEW_DISTANCE_SQR + 1)
 		{
 			calculateFOV(*i);
 		}
@@ -5637,13 +5637,13 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 
 			for (int
 					y = 0;
-					y < unitSize
+					y != unitSize
 						&& canFall == true;
 					++y)
 			{
 				for (int
 						x = 0;
-						x < unitSize
+						x != unitSize
 							&& canFall == true;
 						++x)
 				{
@@ -5706,6 +5706,7 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 									unit->getPosition() + Position(0,0,-1),
 									_battleSave->getTile(unit->getPosition() + Position(0,0,-1)));
 //									true);
+
 					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << unit->getId();
 					_battleSave->addFallingUnit(unit);
 				}

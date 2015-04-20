@@ -317,7 +317,7 @@ private:
 				Position pos);
 
 		/// Adds this unit to the vector of falling units.
-		bool addFallingUnit(BattleUnit* unit);
+		bool addFallingUnit(BattleUnit* const unit);
 		/// Gets the vector of falling units.
 		std::list<BattleUnit*>* getFallingUnits();
 		/// Toggles the switch that says "there are units falling, start the fall state".

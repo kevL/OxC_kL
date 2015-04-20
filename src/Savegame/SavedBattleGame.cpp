@@ -2247,7 +2247,7 @@ bool SavedBattleGame::placeUnitNearPosition(
  * @param unit - the unit to add
  * @return, true if the unit was added
  */
-bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
+bool SavedBattleGame::addFallingUnit(BattleUnit* const unit)
 {
 	for (std::list<BattleUnit*>::const_iterator
 			i = _fallingUnits.begin();

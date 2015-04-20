@@ -2639,8 +2639,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 
 				_currentAction.target = targetPos;
 				pf->calculate( // GET the Path.
-							_currentAction.actor,
-							_currentAction.target);
+						_currentAction.actor,
+						_currentAction.target);
 
 				// assumes both previewPath() & removePreview() don't change StartDirection
 				if (pf->getStartDirection() != -1)
