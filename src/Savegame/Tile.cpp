@@ -866,9 +866,11 @@ int Tile::getFuel(int part) const
  * Tries to start fire on this Tile.
  * @note If true it will add its fuel as turns to burn.
  * @note Called only by floor-burning Silacoids and fire spreading @ turnovers.
+ * @note Also used by TileEngine::detonate() after HE explosions.
  * @param power - rough chance to get things going
+ * @return, true if tile catches fire
  */
-void Tile::ignite(int power)
+bool Tile::ignite(int power)
 {
 	if (power != 0
 		&& canSmoke() == true)
@@ -879,21 +881,24 @@ void Tile::ignite(int power)
 			const int burn = getFlammability();
 			if (burn != 0)
 			{
-				power = (power * 7) + burn;
+				power = (power * 2) + (burn + 1) / 2;
 				if (RNG::percent(power) == true)
 				{
 					addFire(fuel + 1);
-					addSmoke((burn + 9) / 10);
+					addSmoke((burn + 15) / 16);
+
+					return true;
 				}
 			}
 		}
 	}
+
+	return false;
 }
 
 /**
  * Adds fire to this Tile.
- * @param turns		- turns to burn
- * @param autoBurn	- true if the tile should catch fire automatically
+ * @param turns - turns to burn
  */
 void Tile::addFire(int turns)
 {

@@ -234,7 +234,7 @@ protected:
 		int getFuel(int part) const;
 
 		/// Tries to start fire on this Tile.
-		void ignite(int power);
+		bool ignite(int power);
 		/// Adds fire to this Tile.
 		void addFire(int turns);
 		/// Reduces the number of turns this Tile will burn.

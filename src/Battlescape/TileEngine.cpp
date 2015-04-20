@@ -3970,11 +3970,11 @@ void TileEngine::setProjectileDirection(const int dir)
  */
 bool TileEngine::detonate(Tile* const tile)
 {
-	const int expl = tile->getExplosive();
+	int expl = tile->getExplosive();
 	if (expl == 0) // no explosive applied to the Tile
 		return false;
 
-	Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition();
+	//Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition();
 	tile->setExplosive(0,0, true); // reset Tile's '_explosive' value to 0
 
 
@@ -4021,16 +4021,16 @@ bool TileEngine::detonate(Tile* const tile)
 
 	int
 		explTest,
-		burn,
-		fuel,
-		volume,
+//		burn,
+//		fuel,
+		vol = 0,
 		part,
 		partTemp,
 		dieMCD;
 	bool
 		objectiveDestroyed = false,
-		diagWallDestroyed = true,
-		partDestroyed;
+		diagWallDestroyed = true;
+//		partDestroyed;
 
 	for (size_t
 			i = 8;
@@ -4076,21 +4076,21 @@ bool TileEngine::detonate(Tile* const tile)
 
 		explTest = expl;
 
-		partDestroyed = false;
-		volume = 0;
+//		partDestroyed = false;
+//		vol = 0;
 		part = parts[i];
 
-		burn = tiles[i]->getFlammability(part);
-		fuel = tiles[i]->getFuel(part) + 1;
+//		burn = tiles[i]->getFlammability(part);
+//		fuel = tiles[i]->getFuel(part) + 1;
 
-		for (int // get a yes/no volume for the object by checking its loftemps objects.
+/*		for (int // get a yes/no volume for the object by checking its loftemps objects.
 				j = 0;
 				j != 12;
 				++j)
 		{
 			if (tiles[i]->getMapData(part)->getLoftID(j) != 0)
-				++volume;
-		}
+				++vol;
+		} */ // moved below_
 
 		if (i == 6
 			&& (bigWall == Pathfinding::BIGWALL_NESW
@@ -4105,8 +4105,20 @@ bool TileEngine::detonate(Tile* const tile)
 			&& tiles[i]->getMapData(part)->getArmor() != 255
 			&& tiles[i]->getMapData(part)->getArmor() * 2 < explTest + 1)
 		{
+			if (explTest == expl) // only once per initial part destroyed.
+			{
+				for (int // get a yes/no volume for the object by checking its loftemps objects.
+						j = 0;
+						j != 12;
+						++j)
+				{
+					if (tiles[i]->getMapData(part)->getLoftID(j) != 0)
+						++vol;
+				}
+			}
+
 			explTest -= tiles[i]->getMapData(part)->getArmor() * 2;
-			partDestroyed = true;
+//			partDestroyed = true;
 
 			if (i == 6
 				&& (bigWall == Pathfinding::BIGWALL_NESW // diagonals for the current tile
@@ -4135,18 +4147,14 @@ bool TileEngine::detonate(Tile* const tile)
 			part = partTemp;
 			if (tiles[i]->getMapData(part) != NULL) // update values
 			{
-				burn = tiles[i]->getFlammability(part);
-				fuel = tiles[i]->getFuel(part) + 1;
+//				burn = tiles[i]->getFlammability(part);
+//				fuel = tiles[i]->getFuel(part) + 1;
 			}
 		}
 
 
-		if (i > 2 && i < 7) // hit only tile itself w/ Smoke & Fire
+/*		if (i > 2 && i < 7) // hit only tile itself w/ Smoke & Fire
 		{
-			//Log(LOG_INFO) << "\n";
-			//Log(LOG_INFO) << "TE:detonate() explTest = " << explTest << "; burn = " << burn;
-			//Log(LOG_INFO) << "TE:detonate() burn % = " << (((burn + 1) / 2) + ((explTest + 9) / 10));
-			//Log(LOG_INFO) << "\n";
 			if (burn != 0
 				&& RNG::percent(((burn + 3) / 4) + ((explTest + 23) / 24)) == true
 				&& (tile->getMapData(MapData::O_OBJECT) == NULL
@@ -4174,8 +4182,8 @@ bool TileEngine::detonate(Tile* const tile)
 				if (partDestroyed == true)
 					smoke += RNG::generate(
 									1,
-									(volume / 2) + 3)
-						   + (volume / 2);
+									(vol / 2) + 3)
+						   + (vol / 2);
 
 				tile->addSmoke(smoke);
 
@@ -4187,6 +4195,23 @@ bool TileEngine::detonate(Tile* const tile)
 					tileAbove->addSmoke((tile->getSmoke() + 2) / 3);
 				}
 			}
+		} */
+	}
+
+
+	expl = ((expl + 29) / 30);
+
+	if (tile->ignite((expl + 1) / 2) == false)
+		tile->addSmoke(expl + vol);
+
+	if (tile->getSmoke() != 0)
+	{
+		Tile* const tileAbove = _battleSave->getTile(tile->getPosition() + Position(0,0,1));
+		if (tileAbove != NULL
+			&& tileAbove->hasNoFloor(tile) == true
+			&& RNG::percent(tile->getSmoke() * 8) == true)
+		{
+			tileAbove->addSmoke((tile->getSmoke()) / 3);
 		}
 	}
 
