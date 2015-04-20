@@ -4030,6 +4030,7 @@ Bar* BattlescapeState::getEnergyBar() const
 bool BattlescapeState::allowAlienMark() const
 {
 	return _battleSave->getSelectedUnit() != NULL
+		&& _battleSave->getSelectedUnit()->getGeoscapeSoldier() != NULL
 		&& _battleSave->getSelectedUnit()->hasFirstKill();
 }
 

@@ -3617,12 +3617,12 @@ void BattleUnit::addKillCount()
 
 /**
  * Gets if this is a Rookie and has made his/her first kill.
+ * @return, true if rookie has at least one kill or stun vs. Hostile
  */
 bool BattleUnit::hasFirstKill() const
 {
 	return _rankInt == 0
-		&& (_kills > 0 // redundant, but faster
-			|| _statistics->hasKillOrStun() == true);
+		&& _statistics->hasKillOrStun() == true; // || _kills > 0 // redundant, but faster
 }
 
 /**

@@ -2834,11 +2834,8 @@ void TileEngine::explode(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-//		if ((*i)->getTakenExpl() == true)
-//		{
 		//Log(LOG_INFO) << ". . unitTaken ID " << (*i)->getId() << ", reset Taken";
 		(*i)->setTakenExpl(false);
-//		}
 	}
 
 
@@ -5632,7 +5629,7 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 
 	if (unit != NULL)
 	{
-		int unitSize = unit->getArmor()->getSize();
+		const int unitSize = unit->getArmor()->getSize();
 
 		while (posBelow.z > 0)
 		{
@@ -5675,15 +5672,15 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 			{
 				for (int
 						y = unitSize - 1;
-						y > -1;
+						y != -1;
 						--y)
 				{
 					for (int
 							x = unitSize - 1;
-							x > -1;
+							x != -1;
 							--x)
 					{
-						_battleSave->getTile(pos + Position(x, y, 0))->setUnit(NULL);
+						_battleSave->getTile(pos + Position(x,y,0))->setUnit(NULL);
 					}
 				}
 
@@ -5697,7 +5694,7 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 					unit->startWalking(
 									unit->getDirection(),
 									unit->getPosition(),
-									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)));
+									_battleSave->getTile(unit->getPosition() + Position(0,0,-1)));
 //									true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
 					unit->setStatus(STATUS_STANDING);
@@ -5706,8 +5703,8 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 				{
 					unit->startWalking(
 									Pathfinding::DIR_DOWN,
-									unit->getPosition() + Position(0, 0,-1),
-									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)));
+									unit->getPosition() + Position(0,0,-1),
+									_battleSave->getTile(unit->getPosition() + Position(0,0,-1)));
 //									true);
 					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << unit->getId();
 					_battleSave->addFallingUnit(unit);

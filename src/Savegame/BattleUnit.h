@@ -138,11 +138,11 @@ struct BattleUnitKills
 		_race		= node["race"]					.as<std::string>(_race);
 		_weapon		= node["weapon"]				.as<std::string>(_weapon);
 		_weaponAmmo	= node["weaponAmmo"]			.as<std::string>(_weaponAmmo);
-		_status		= (UnitStatus)node["status"]	.as<int>();
-		_faction	= (UnitFaction)node["faction"]	.as<int>();
 		_mission	= node["mission"]				.as<int>(_mission);
 		_turn		= node["turn"]					.as<int>(_turn);
 		_points		= node["points"]				.as<int>(_points);
+		_status		= static_cast<UnitStatus>(node["status"]	.as<int>());
+		_faction	= static_cast<UnitFaction>(node["faction"]	.as<int>());
 	}
 
 	///
@@ -154,11 +154,11 @@ struct BattleUnitKills
 		node["race"]		= _race;
 		node["weapon"]		= _weapon;
 		node["weaponAmmo"]	= _weaponAmmo;
-		node["status"]		= (int)_status;
-		node["faction"]		= (int)_faction;
 		node["mission"]		= _mission;
 		node["turn"]		= _turn;
 		node["points"]		= _points;
+		node["status"]		= static_cast<int>(_status);
+		node["faction"]		= static_cast<int>(_faction);
 
 		return node;
 	}
