@@ -43,7 +43,7 @@ namespace OpenXcom
 
 int
 	ResourcePack::BUTTON_PRESS				= 0,
-	ResourcePack::WINDOW_POPUP[3]			= {1, 2, 3},
+	ResourcePack::WINDOW_POPUP[3]			= {1,2,3},
 
 	ResourcePack::EXPLOSION_OFFSET			= 0,
 	ResourcePack::UNDERWATER_SMOKE_OFFSET	= 0,
@@ -61,8 +61,8 @@ int
 	ResourcePack::WALK_OFFSET				= 22,
 	ResourcePack::ITEM_DROP					= 38,
 	ResourcePack::ITEM_THROW				= 39,
-	ResourcePack::MALE_SCREAM[3]			= {41, 42, 43},
-	ResourcePack::FEMALE_SCREAM[3]			= {44, 45, 46},
+	ResourcePack::MALE_SCREAM[3]			= {41,42,43},
+	ResourcePack::FEMALE_SCREAM[3]			= {44,45,46},
 
 	ResourcePack::UFO_FIRE					= 9,	// was 8
 	ResourcePack::UFO_HIT					= 12,
@@ -316,16 +316,15 @@ Music* ResourcePack::getRandomMusic( // private.
 		return _muteMusic;
 	}
 
-	const std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrainRule);
-	const int musicRand = SDL_GetTicks() %musicCodes.size();
-	const std::pair<std::string, int> randMusic = musicCodes[musicRand];
+	const std::vector<std::pair<std::string, int> > codeList = assignment.at(terrainRule);
+	const size_t code = static_cast<size_t>(SDL_GetTicks() % codeList.size());
+	const std::pair<std::string, int> music = codeList[code];
 
-	//Log(LOG_DEBUG) << "MUSIC: " << randMusic.first;
-	Log(LOG_INFO) << "MUSIC: " << randMusic.first;
+	//Log(LOG_DEBUG) << "MUSIC: " << music.first;
+	Log(LOG_INFO) << "MUSIC: " << music.first;
+//	Music* const ret = _musicFile.at(music.first);
 
-	Music* const music = _musicFile.at(randMusic.first);
-
-	return music;
+	return _musicFile.at(music.first);
 }
 
 /**

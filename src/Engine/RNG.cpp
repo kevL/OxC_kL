@@ -50,7 +50,8 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 	xorshift1024* (for speed and very long period) generator. */
 
 
-uint64_t x = std::time(0); // The state must be seeded with a nonzero value.
+//uint64_t x = std::time(0); // The state must be seeded with a nonzero value.
+uint64_t x;
 
 
 uint64_t next()
@@ -59,25 +60,38 @@ uint64_t next()
 	x ^= x << 25; // b
 	x ^= x >> 27; // c
 
+	Log(LOG_INFO) << "rng:next(x) " << x;
+	//Log(LOG_INFO) << "rng:next(ret) " << (x * 2685821657736338717ULL);
 	return x * 2685821657736338717ULL;
 }
 
 /**
-* Returns the current seed in use by the generator.
-* @return, current seed
-*/
+ * Returns the current seed in use by the generator.
+ * @return, the SAVE seed
+ */
 uint64_t getSeed()
 {
+	Log(LOG_INFO) << "rng:getSeed() " << x;
 	return x;
 }
 
 /**
-* Changes the current seed in use by the generator.
-* @param seed - new seed
-*/
+ * Changes the current seed in use by the generator.
+ * @param seed - the LOAD seed (default 0 reset)
+ */
 void setSeed(uint64_t seed)
 {
-	x = seed;
+	Log(LOG_INFO) << "rng:setSeed()";
+	if (seed == 0)
+	{
+		x = std::time(NULL);
+		Log(LOG_INFO) << ". reseed = " << x;
+	}
+	else
+	{
+		x = seed;
+		Log(LOG_INFO) << ". seed = " << x;
+	}
 }
 
 /**
@@ -90,6 +104,7 @@ int generate(
 		int minRand,
 		int maxRand)
 {
+	Log(LOG_INFO) << "rng:generate(int)";
 	if (minRand == maxRand)
 		return minRand;
 
@@ -110,6 +125,7 @@ double generate(
 		double minRand,
 		double maxRand)
 {
+	Log(LOG_INFO) << "rng:generate(double)";
 	double diff = maxRand - minRand;
 	if (AreSame(diff, 0.))
 		return minRand;
@@ -140,6 +156,7 @@ double boxMuller(
 		double mean,
 		double deviation)
 {
+	Log(LOG_INFO) << "rng:boxMuller()";
 	static bool use_last = false;
 
 	static double y2;
@@ -181,6 +198,7 @@ double boxMuller(
  */
 bool percent(int value)
 {
+	Log(LOG_INFO) << "rng:percent()";
 	if (value < 1)
 		return false;
 	else if (value > 99)
@@ -196,11 +214,12 @@ bool percent(int value)
  */
 int generateEx(int maxRand)
 {
+	Log(LOG_INFO) << "rng:generateEx()";
 	if (maxRand < 2)
 		return 0;
 
 	uint64_t r = next();
-	return static_cast<int>(r %maxRand);
+	return static_cast<int>(r % maxRand);
 }
 
 }

@@ -34,7 +34,7 @@ struct convert<OpenXcom::MissionWave>
 		Node node;
 
 		node["ufo"]			= rhs.ufoType;
-		node["count"]		= rhs.ufoCount;
+		node["count"]		= rhs.ufoTotal;
 		node["trajectory"]	= rhs.trajectory;
 		node["timer"]		= rhs.spawnTimer;
 		node["objective"]	= rhs.objective;
@@ -51,7 +51,7 @@ struct convert<OpenXcom::MissionWave>
 			return false;
 
 		rhs.ufoType		= node["ufo"]		.as<std::string>();
-		rhs.ufoCount	= node["count"]		.as<size_t>();
+		rhs.ufoTotal	= node["count"]		.as<size_t>();
 		rhs.trajectory	= node["trajectory"].as<std::string>();
 		rhs.spawnTimer	= node["timer"]		.as<size_t>();
 		rhs.objective	= node["objective"]	.as<bool>(false);
@@ -98,13 +98,13 @@ RuleAlienMission::~RuleAlienMission()
  */
 void RuleAlienMission::load(const YAML::Node& node)
 {
-	_type			= node["type"]							.as<std::string>(_type);
-	_points			= node["points"]						.as<int>(_points);
-	_waves			= node["waves"]							.as<std::vector<MissionWave> >(_waves);
-	_objective		= (MissionObjective)node["objective"]	.as<int>(_objective);
-	_specialUfo		= node["specialUfo"]					.as<std::string>(_specialUfo);
-	_specialZone	= node["specialZone"]					.as<int>(_specialZone);
-	_weights		= node["missionWeights"]				.as< std::map<size_t, int> >(_weights);
+	_type			= node["type"]			.as<std::string>(_type);
+	_points			= node["points"]		.as<int>(_points);
+	_waves			= node["waves"]			.as<std::vector<MissionWave> >(_waves);
+	_specialUfo		= node["specialUfo"]	.as<std::string>(_specialUfo);
+	_specialZone	= node["specialZone"]	.as<int>(_specialZone);
+	_weights		= node["missionWeights"].as<std::map<size_t, int> >(_weights);
+	_objective		= static_cast<MissionObjective>(node["objective"].as<int>(_objective));
 
 
 	if (const YAML::Node& weights = node["raceWeights"]) // allow only full replacement of mission racial distribution.

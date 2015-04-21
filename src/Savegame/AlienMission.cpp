@@ -70,8 +70,8 @@ AlienMission::AlienMission(
 		_missionRule(missionRule),
 		_savedGame(savedGame),
 		_nextWave(0),
-		_nextUfoCounter(0),
-		_spawnCountdown(0),
+		_ufoCount(0),
+		_spawnTime(0),
 		_liveUfos(0),
 		_uniqueID(0),
 		_base(NULL)
@@ -113,13 +113,13 @@ private:
  */
 void AlienMission::load(const YAML::Node& node)
 {
-	_region			= node["region"]		.as<std::string>(_region);
-	_race			= node["race"]			.as<std::string>(_race);
-	_nextWave		= node["nextWave"]		.as<size_t>(_nextWave);
-	_nextUfoCounter	= node["nextUfoCounter"].as<size_t>(_nextUfoCounter);
-	_spawnCountdown	= node["spawnCountdown"].as<size_t>(_spawnCountdown);
-	_liveUfos		= node["liveUfos"]		.as<size_t>(_liveUfos);
-	_uniqueID		= node["uniqueID"]		.as<int>(_uniqueID);
+	_region		= node["region"]	.as<std::string>(_region);
+	_race		= node["race"]		.as<std::string>(_race);
+	_nextWave	= node["nextWave"]	.as<size_t>(_nextWave);
+	_ufoCount	= node["ufoCount"]	.as<size_t>(_ufoCount);
+	_spawnTime	= node["spawnTime"]	.as<size_t>(_spawnTime);
+	_liveUfos	= node["liveUfos"]	.as<size_t>(_liveUfos);
+	_uniqueID	= node["uniqueID"]	.as<int>(_uniqueID);
 
 	if (const YAML::Node& base = node["alienBase"])
 	{
@@ -146,16 +146,17 @@ YAML::Node AlienMission::save() const
 {
 	YAML::Node node;
 
-	node["type"]			= _missionRule.getType();
-	node["region"]			= _region;
-	node["race"]			= _race;
-	node["nextWave"]		= _nextWave;
-	node["nextUfoCounter"]	= _nextUfoCounter;
-	node["spawnCountdown"]	= _spawnCountdown;
-	node["liveUfos"]		= _liveUfos;
-	node["uniqueID"]		= _uniqueID;
+	node["type"]		= _missionRule.getType();
+	node["region"]		= _region;
+	node["race"]		= _race;
+	node["nextWave"]	= _nextWave;
+	node["ufoCount"]	= _ufoCount;
+	node["spawnTime"]	= _spawnTime;
+	node["liveUfos"]	= _liveUfos;
+	node["uniqueID"]	= _uniqueID;
+
 	if (_base != NULL)
-		node["alienBase"]	= _base->getId();
+		node["alienBase"] = _base->getId();
 
 	return node;
 }
@@ -169,8 +170,8 @@ bool AlienMission::isOver() const
 {
 	if (_liveUfos == 0
 		&& _nextWave == _missionRule.getWaveTotal()
-		&& (_missionRule.getObjective() != OBJECTIVE_INFILTRATION // Infiltrations continue for ever. Almost.
-			|| RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false))
+		&& _missionRule.getObjective() != OBJECTIVE_INFILTRATION) // Infiltrations continue for ever. Almost.
+//			|| RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false))
 	{
 		return true;
 	}
@@ -222,9 +223,9 @@ void AlienMission::think(
 	if (_nextWave >= _missionRule.getWaveTotal())
 		return;
 
-	if (_spawnCountdown > 30)
+	if (_spawnTime > 30)
 	{
-		_spawnCountdown -= 30;
+		_spawnTime -= 30;
 		return;
 	}
 
@@ -236,13 +237,14 @@ void AlienMission::think(
 							globe,
 							wave,
 							trajectory);
-	if (ufo != NULL)
-		_savedGame.getUfos()->push_back(ufo); // Some missions may not spawn a UFO!
 
-	++_nextUfoCounter;
-	if (_nextUfoCounter == wave.ufoCount)
+	if (ufo != NULL) // Some missions may not spawn a UFO!
+		_savedGame.getUfos()->push_back(ufo);
+
+	++_ufoCount;
+	if (_ufoCount == wave.ufoTotal)
 	{
-		_nextUfoCounter = 0;
+		_ufoCount = 0;
 		++_nextWave;
 	}
 
@@ -270,7 +272,6 @@ void AlienMission::think(
 		if (eligibleCountries.empty() == false)
 		{
 			//Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
-
 			const size_t pick = RNG::generate(
 										0,
 										eligibleCountries.size() - 1);
@@ -301,10 +302,10 @@ void AlienMission::think(
 
 	if (_nextWave != _missionRule.getWaveTotal())
 	{
-		const int spawnTimer = static_cast<int>(_missionRule.getWave(_nextWave).spawnTimer) / 30;
-		_spawnCountdown = static_cast<size_t>((spawnTimer / 2) + RNG::generate(
+		const int spawnTime = static_cast<int>(_missionRule.getWave(_nextWave).spawnTimer) / 30;
+		_spawnTime = static_cast<size_t>((spawnTime / 2) + RNG::generate(
 																		0,
-																		spawnTimer)) * 30;
+																		spawnTime)) * 30;
 	}
 }
 
@@ -465,23 +466,23 @@ Ufo* AlienMission::spawnUfo(
 
 /**
  * Starts this AlienMission.
- * @param initialCount - countdown till next UFO (default 0)
+ * @param countdown - countdown till next UFO (default 0)
  */
-void AlienMission::start(size_t initialCount)
+void AlienMission::start(size_t countdown)
 {
 	_nextWave =
-	_nextUfoCounter =
+	_ufoCount =
 	_liveUfos = 0;
 
-	if (initialCount == 0)
+	if (countdown == 0)
 	{
-		const int spawnTimer = static_cast<int>(_missionRule.getWave(0).spawnTimer) / 30;
-		_spawnCountdown = static_cast<size_t>((spawnTimer / 2) + RNG::generate(
-																		0,
-																		spawnTimer)) * 30;
+		const int spawnTime = static_cast<int>(_missionRule.getWave(0).spawnTimer) / 30;
+		_spawnTime = static_cast<size_t>((spawnTime / 2) + RNG::generate(
+																	0,
+																	spawnTime)) * 30;
 	}
 	else
-		_spawnCountdown = initialCount;
+		_spawnTime = countdown;
 }
 
 
@@ -519,10 +520,10 @@ private:
 
 
 /**
- * This function is called when one of the mission's UFOs arrives at its current destination.
- * It takes care of sending the UFO to the next waypoint, landing UFOs and
- * marking them for removal as required. It must set the game data
- * in a way that the rest of the code understands what to do.
+ * This function is called when one of the mission's UFOs arrives at its current
+ * destination. It takes care of sending the UFO to the next waypoint, landing
+ * UFOs and marking them for removal as required. It must set the game data in a
+ * way that the rest of the code understands what to do.
  * @param ufo	- reference the Ufo that reached its waypoint
  * @param rules	- reference the Ruleset
  */
@@ -535,7 +536,7 @@ void AlienMission::ufoReachedWaypoint(
 		nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory& trajectory = ufo.getTrajectory();
 
-	if (nextWaypoint >= trajectory.getWaypointCount()) // UFO leaves Earth's atmosphere
+	if (nextWaypoint >= trajectory.getWaypointTotal()) // UFO leaves Earth's atmosphere
 	{
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
@@ -559,16 +560,21 @@ void AlienMission::ufoReachedWaypoint(
 
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
-//		if (ufo.getLandId() != 0)
 		ufo.setLandId(0);
-
 		ufo.setSpeed(static_cast<int>(std::ceil(
 					 static_cast<double>(trajectory.getSpeedPercentage(nextWaypoint))
 				   * static_cast<double>(ufo.getRules()->getMaxSpeed()))));
 	}
 	else // UFO landed.
 	{
-		const MissionWave& wave = _missionRule.getWave(_nextWave - 1);
+		size_t waveCount;
+		if (_nextWave != 0) // ie. not Retaliation
+			waveCount = _nextWave - 1;
+		else
+//			if (RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false)
+			waveCount = _missionRule.getWaveTotal() - 1; // Retaliation starts over!!!
+
+		const MissionWave& wave = _missionRule.getWave(waveCount);
 
 		if (wave.objective == true // remove UFO, replace with MissionSite.
 			&& trajectory.getZone(curWaypoint) == _missionRule.getSpawnZone())
@@ -664,7 +670,7 @@ void AlienMission::ufoShotDown(const Ufo& ufo)
 		case Ufo::CRASHED:
 		case Ufo::DESTROYED:
 			if (_nextWave != _missionRule.getWaveTotal())
-				_spawnCountdown += 30 * (static_cast<size_t>(RNG::generate(0,48)) + 400); // delay next wave
+				_spawnTime += 30 * (static_cast<size_t>(RNG::generate(0,48)) + 400); // delay next wave
 	}
 }
 
@@ -718,7 +724,7 @@ void AlienMission::ufoLifting(Ufo& ufo)
 }
 
 /**
- * The new time must be a multiple of 30 minutes, and more than 0.
+ * The new time must be a multiple of 30 minutes and more than 0.
  * Calling this on a finished mission has no effect.
  * @param minutes - the minutes until the next UFO wave will spawn
  */
@@ -726,10 +732,8 @@ void AlienMission::setWaveCountdown(size_t minutes)
 {
 	assert(minutes != 0 && minutes %30 == 0);
 
-	if (isOver() == true)
-		return;
-
-	_spawnCountdown = minutes;
+	if (isOver() == false)
+		_spawnTime = minutes;
 }
 
 /**

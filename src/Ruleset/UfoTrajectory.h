@@ -40,11 +40,11 @@ struct TrajectoryWaypoint
 };
 
 
-YAML::Emitter& operator << (
+YAML::Emitter& operator<< (
 		YAML::Emitter& emitter,
 		const TrajectoryWaypoint& wp);
 
-bool operator >> (
+bool operator>> (
 		const YAML::Node& node,
 		TrajectoryWaypoint& wp);
 
@@ -81,7 +81,7 @@ private:
 		 * Gets the number of waypoints in this trajectory.
 		 * @return, the number of waypoints
 		 */
-		size_t getWaypointCount() const
+		size_t getWaypointTotal() const
 		{ return _waypoints.size(); }
 
 		/**

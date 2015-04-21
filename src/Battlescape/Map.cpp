@@ -2645,17 +2645,23 @@ void Map::drawTerrain(Surface* surface) // private.
 									}
 								}
 
-								if (unit->getArmor()->getSize() == 1
-									|| quad == 1)
+								if (unit->getFaction() == FACTION_PLAYER
+									&& unit->getFaction() == unit->getOriginalFaction()
+									&& (unit->getArmor()->getSize() == 1
+										|| quad == 1))
 								{
-									_numExposed->setValue(static_cast<unsigned int>(unit->getExposed()));
-									_numExposed->setColor(Palette::blockOffset(5));
-									_numExposed->draw();
-									_numExposed->blitNShade(
-														surface,
-														screenPosition.x + walkOffset.x + 20,
-														screenPosition.y + walkOffset.y + 2,
-														0);
+									const int exposed = unit->getExposed();
+									if (exposed != -1)
+									{
+										_numExposed->setValue(static_cast<unsigned int>(exposed));
+										_numExposed->setColor(Palette::blockOffset(6));
+										_numExposed->draw();
+										_numExposed->blitNShade(
+															surface,
+															screenPosition.x + walkOffset.x + 21,
+															screenPosition.y + walkOffset.y + 2,
+															0);
+									}
 								}
 							} // kL_end.
 

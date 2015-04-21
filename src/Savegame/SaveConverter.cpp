@@ -666,7 +666,7 @@ void SaveConverter::loadDatMissions()
 			node["region"] = _idRegions[region];
 			node["race"] = _idCrews[race];
 			node["nextWave"] = wave * 30;
-			node["nextUfoCounter"] = ufoCounter;
+			node["ufoCount"] = ufoCounter;
 			node["spawnCountdown"] = spawn;
 			node["uniqueID"] = _save->getId("ALIEN_MISSIONS");
 			m->load(node);
@@ -1027,7 +1027,7 @@ void SaveConverter::loadDatCraft()
 					subnode["region"] = _idRegions[region];
 					subnode["race"] = _idCrews[load<Uint16>(cdata + 0x24)];
 					subnode["nextWave"] = 1;
-					subnode["nextUfoCounter"] = 0;
+					subnode["ufoCount"] = 0;
 					subnode["spawnCountdown"] = 1000;
 					subnode["uniqueID"] = _save->getId("ALIEN_MISSIONS");
 					m->load(subnode, *_save);

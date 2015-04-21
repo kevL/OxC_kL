@@ -1331,10 +1331,12 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param relPos		- reference a position in voxelspace that defines which part of armor and/or body gets hit
+ * @param relPos		- reference a position in voxelspace that defines which
+ *						  part of armor and/or body gets hit
  * @param power			- the amount of damage to inflict
  * @param dType			- the ItemDamageType being inflicted (RuleItem.h)
- * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored in
+ * @param ignoreArmor	- true for stun & smoke & inc damage; no armor reduction
+ *						  although vulnerability is still factored in
  * @return, damage done to this BattleUnit after adjustments
  */
 int BattleUnit::damage(
@@ -1343,10 +1345,10 @@ int BattleUnit::damage(
 		ItemDamageType dType,
 		const bool ignoreArmor)
 {
-	//Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
+	//Log(LOG_INFO) << "BattleUnit::damage() " << getId() << " power[0] = " << power;
 	power = static_cast<int>(Round(
 			static_cast<float>(power) * _armor->getDamageModifier(dType)));
-	//Log(LOG_INFO) << "BattleUnit::damage(), dType = " << (int)dType << " ModifiedPower " << power;
+	//Log(LOG_INFO) << ". dType = " << (int)dType << "; power[1] = " << power;
 
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
 //		return 0;
@@ -1448,6 +1450,7 @@ int BattleUnit::damage(
 				side);
 
 		power -= armor; // subtract armor-before-damage from power.
+		//Log(LOG_INFO) << ". power[2] = " << power;
 	}
 
 	if (power > 0)
@@ -1505,8 +1508,9 @@ int BattleUnit::damage(
 				if (dType != DT_STUN)
 				{
 					if (dType == DT_IN)
-						wounds *= 2;
+						wounds = power;
 
+					//Log(LOG_INFO) << ". wounds = " << wounds;
 					moraleChange(-wounds * 3);
 				}
 			}
@@ -3764,15 +3768,15 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 			i != _inventory.end();
 			++i)
 	{
-		if (*i == dragItem)
-			continue;
-
-		weight += (*i)->getRules()->getWeight();
-
-		if ((*i)->getAmmoItem()
-			&& (*i)->getAmmoItem() != *i)
+		if (*i != dragItem)
 		{
-			weight += (*i)->getAmmoItem()->getRules()->getWeight();
+			weight += (*i)->getRules()->getWeight();
+
+			if ((*i)->getAmmoItem()
+				&& (*i)->getAmmoItem() != *i)
+			{
+				weight += (*i)->getAmmoItem()->getRules()->getWeight();
+			}
 		}
 	}
 
@@ -3780,13 +3784,14 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 }
 
 /**
- * Sets how long since this unit was last exposed.
- * @note Use -1 for NOT exposed.
+ * Sets how long since this unit was last exposed to a Hostile unit.
+ * @note Use -1 for NOT exposed. Aliens are always exposed.
  * @param turns - # turns this unit has been exposed (default 0)
  */
 void BattleUnit::setExposed(int turns)
 {
 	_turnsExposed = turns;
+	//Log(LOG_INFO) << "bu:setExposed() id " << _id << " -> " << _turnsExposed;
 }
 
 /**
@@ -3812,12 +3817,12 @@ UnitFaction BattleUnit::getOriginalFaction() const
  */
 void BattleUnit::invalidateCache()
 {
-	for (int
+	for (size_t
 			i = 0;
-			i < 5;
+			i != 5;
 			++i)
 	{
-		_cache[i] = 0;
+		_cache[i] = NULL;
 	}
 
 	_cacheInvalid = true;

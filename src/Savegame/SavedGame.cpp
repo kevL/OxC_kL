@@ -430,10 +430,13 @@ void SavedGame::load(
 	YAML::Node doc = file[1]; // Get full save data
 
 	if (doc["rng"]
-		&& (_ironman == true || Options::newSeedOnLoad == false))
+		&& (_ironman == true
+			|| Options::newSeedOnLoad == false))
 	{
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
+	else
+		RNG::setSeed(0);
 
 	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
 

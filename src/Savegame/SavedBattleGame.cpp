@@ -1177,10 +1177,12 @@ int SavedBattleGame::getTurn() const
 
 /**
  * Ends the current faction-turn and progresses to the next one.
+ * @note Called from BattlescapeGame::endTurnPhase()
  * @return, true if the turn rolls-over back to faction Player
  */
 bool SavedBattleGame::endBattlePhase()
 {
+	//Log(LOG_INFO) << "sbg:endBattlePhase()";
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
@@ -1284,6 +1286,7 @@ bool SavedBattleGame::endBattlePhase()
 		}
 	}
 
+	//Log(LOG_INFO) << ". side = " << (int)_side;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();

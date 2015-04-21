@@ -22,8 +22,7 @@
 
 #include <algorithm>
 
-#define __STDC_LIMIT_MACROS
-
+//#define __STDC_LIMIT_MACROS
 //#include <stdint.h>
 #include <cstdint>
 
@@ -39,45 +38,46 @@ namespace OpenXcom
 namespace RNG
 {
 
-	/// Gets the seed in use.
-	uint64_t getSeed();
-	/// Sets the seed in use.
-	void setSeed(uint64_t seed);
+/// Gets the seed in use.
+uint64_t getSeed();
+/// Sets the seed in use.
+void setSeed(uint64_t seed = 0);
 
-	/// Generates a random integer number, inclusive.
-	int generate(
-			int minRand,
-			int maxRand);
-	/// Generates a random floating-point number.
-	double generate(
-			double minRand,
-			double maxRand);
+/// Generates a random integer number, inclusive.
+int generate(
+		int minRand,
+		int maxRand);
+/// Generates a random floating-point number.
+double generate(
+		double minRand,
+		double maxRand);
 
-	/// Get normally distributed value.
-	double boxMuller(
-			double mean = 0,
-			double deviation = 1);
+/// Get normally distributed value.
+double boxMuller(
+		double mean = 0.,
+		double deviation = 1.);
 
-	/// Generates a percentage chance.
-	bool percent(int value);
+/// Generates a percentage chance.
+bool percent(int value);
 
-	/// Generates a random integer number, exclusive.
-	int generateEx(int maxRand);
+/// Generates a random integer number, exclusive.
+int generateEx(int maxRand);
 
 
-	/// Shuffles a list randomly.
-	/**
-	 * Randomly changes the orders of the elements in a list.
-	 * @param container - the container to randomize
-	 */
-	template <typename T>
-	void shuffle(T& container)
-	{
-		std::random_shuffle(
-						container.begin(),
-						container.end(),
-						generateEx);
-	}
+/// Shuffles a list randomly.
+/**
+ * Randomly changes the orders of the elements in a list.
+ * @param container - the container to randomize
+ */
+template <typename T>
+void shuffle(T& container)
+{
+	std::random_shuffle(
+					container.begin(),
+					container.end(),
+					generateEx);
+}
+
 }
 
 }

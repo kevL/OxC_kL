@@ -493,6 +493,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 									&& unit->getFaction() == FACTION_HOSTILE
 									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
+									//Log(LOG_INFO) << "id " << unit->getId() << " spots " << spottedUnit->getId();
 									spottedUnit->setExposed();	// note that xCom agents can be seen by enemies but *not* become Exposed.
 																// Only potential reactionFire should set them Exposed during xCom's turn.
 								}

@@ -39,7 +39,7 @@ class WeightedOptions;
 struct MissionWave
 {
 	std::string ufoType;	// The type of the spawned UFOs.
-	size_t ufoCount;		// The number of UFOs that will be generated.
+	size_t ufoTotal;		// The number of UFOs that will be generated.
 							// The UFOs are generated sequentially, one every spawnTimer minutes.
 	std::string trajectory;	// The trajectory ID for this wave's UFOs.
 							// Trajectories control the way UFOs fly around the Geoscape.

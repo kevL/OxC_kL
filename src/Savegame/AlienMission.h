@@ -54,9 +54,9 @@ private:
 	int _uniqueID;
 	size_t
 		_liveUfos,
-		_nextUfoCounter,
+		_ufoCount,
 		_nextWave,
-		_spawnCountdown;
+		_spawnTime;
 
 	std::string
 		_race,
@@ -113,7 +113,7 @@ private:
 
 		/// Gets the minutes until next wave spawns.
 		size_t getWaveCountdown() const
-		{ return _spawnCountdown; }
+		{ return _spawnTime; }
 		/// Sets the minutes until next wave spawns.
 		void setWaveCountdown(size_t minutes);
 
@@ -135,7 +135,7 @@ private:
 				Game& engine,
 				const Globe& globe);
 		/// Initializes with values from rules.
-		void start(size_t initialCount = 0);
+		void start(size_t countdown = 0);
 
 		/// Increases number of live UFOs.
 		void increaseLiveUfos()
