@@ -60,23 +60,14 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_screen = false;
 
 	_window		= new Window(this, 224, 72, 16, 64);
-
 	_txtTarget	= new Text(192, 32, 32, 75);
-
 	_btnCancel	= new TextButton(75, 16, 51, 111);
 	_btnOk		= new TextButton(75, 16, 130, 111);
 
-	if (wp != NULL
-		&& wp->getId() == 0)
-	{
-		setPalette(
-				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color2);
-	}
-	else
-		setPalette(
-				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("confirmDestination")->getElement("palette")->color);
+	setInterface(
+			"confirmDestination",
+			wp != NULL
+				&& wp->getId() == 0);
 
 	add(_window,	"window",	"confirmDestination");
 	add(_txtTarget,	"text",		"confirmDestination");

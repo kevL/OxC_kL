@@ -99,18 +99,7 @@ CraftEquipmentState::CraftEquipmentState(
 //	_btnOk			= new TextButton((hasCrew || newBattle) ? 148 : 288, 16, (hasCrew || newBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 2; // orange by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("craftEquipment")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("craftEquipment");
 
 	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("craftEquipment")->getElement("ammoColor")->color);
 

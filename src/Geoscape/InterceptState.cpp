@@ -74,10 +74,8 @@ InterceptState::InterceptState(
 
 	_window			= new Window(
 								this,
-								320,
-								176,
-								0,
-								14,
+								320,176,
+								0,14,
 								POPUP_HORIZONTAL);
 	_txtBase		= new Text(288, 17, 16, 24); // might do getRegion in here also.
 
@@ -90,9 +88,7 @@ InterceptState::InterceptState(
 	_btnGotoBase	= new TextButton(142, 16, 16, 167);
 	_btnCancel		= new TextButton(142, 16, 162, 167);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window,		"window",	"geoCraftScreens");
 	add(_txtBase,		"text2",	"geoCraftScreens");

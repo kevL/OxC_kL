@@ -56,7 +56,9 @@ Game* State::_game = NULL;
 State::State()
 	:
 		_screen(true),
-		_modal(NULL)
+		_modal(NULL),
+		_ruleInterface(NULL),
+		_ruleInterfaceParent(NULL)
 {
 	std::memset( // initialize palette to all black
 			_palette,
@@ -78,6 +80,57 @@ State::~State()
 	{
 		delete *i;
 	}
+}
+
+/**
+ * Sets interface data from the ruleset, also sets the palette for the state.
+ * @param category		- reference the name of the interface from the Interfaces ruleset
+ * @param alterPal		- true to swap out the backpal colors (default false)
+ * @param battlescape	- true to use battlescape palette (applies only to options screens) (default false)
+ */
+void State::setInterface(
+		const std::string& category,
+		bool alterPal,
+		bool battlescape)
+{
+	int backPal = -1;
+	std::string pal = "PAL_GEOSCAPE";
+
+	_ruleInterface = _game->getRuleset()->getInterface(category);
+	if (_ruleInterface != NULL)
+	{
+		pal = _ruleInterface->getPalette();
+		const Element* element = _ruleInterface->getElement("palette");
+
+		_ruleInterfaceParent = _game->getRuleset()->getInterface(_ruleInterface->getParent());
+		if (_ruleInterfaceParent != NULL)
+		{
+			if (element == NULL)
+				element = _ruleInterfaceParent->getElement("palette");
+
+			if (pal.empty() == true)
+				pal = _ruleInterfaceParent->getPalette();
+		}
+
+		if (element != NULL)
+		{
+			const int color = alterPal ? element->color2 : element->color;
+			if (color != std::numeric_limits<int>::max())
+				backPal = color;
+		}
+	}
+
+	if (battlescape == true)
+	{
+		pal = "PAL_BATTLESCAPE";
+		backPal = -1;
+	}
+	else if (pal.empty() == true)
+		pal = "PAL_GEOSCAPE";
+
+	setPalette(
+			pal,
+			backPal);
 }
 
 /**
@@ -109,14 +162,14 @@ void State::add(Surface* surface)
  * @note that this function REQUIRES the ruleset to have been loaded prior to use.
  * @note if no parent is defined the element will not be moved.
  * @param surface	- pointer to child Surface
- * @param id		- the ID of the element defined in the ruleset if any
- * @param category	- the category of elements this interface is associated with
+ * @param id		- reference the ID of the element defined in the ruleset if any
+ * @param category	- reference the category of elements this interface is associated with
  * @param parent	- pointer to the Surface to base the coordinates of this element off (default NULL)
  */
 void State::add(
 		Surface* surface,
-		const std::string id,
-		const std::string category,
+		const std::string& id,
+		const std::string& category,
 		Surface* parent)
 {
 	surface->setPalette(_palette);

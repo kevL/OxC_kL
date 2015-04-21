@@ -65,18 +65,7 @@ DismantleFacilityState::DismantleFacilityState(
 	_btnCancel		= new TextButton(44, 16, 36, 115);
 	_btnOk			= new TextButton(44, 16, 112, 115);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 6; // oxide by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("dismantleFacility")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("dismantleFacility");
 
 	add(_window,		"window",	"dismantleFacility");
 	add(_txtTitle,		"text",		"dismantleFacility");

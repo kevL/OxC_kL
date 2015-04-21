@@ -139,18 +139,7 @@ void ManufactureInfoState::buildUi()
 //	_surfaceUnits = new InteractiveSurface(160, 150, 160, 25);
 //	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 6; // oxide by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("manufactureInfo");
 
 	add(_window,				"window",	"manufactureInfo");
 	add(_txtTitle,				"text",		"manufactureInfo");

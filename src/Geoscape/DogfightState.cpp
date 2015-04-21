@@ -192,7 +192,7 @@ DogfightState::DogfightState(
 
 	_craftDamageAnimTimer	= new Timer(500);
 
-	setPalette("PAL_GEOSCAPE");
+	setInterface("dogfight");
 
 	add(_window);
 	add(_battle);

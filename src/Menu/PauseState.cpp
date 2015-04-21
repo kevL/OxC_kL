@@ -72,12 +72,10 @@ PauseState::PauseState(OptionsOrigin origin)
 //	_btnOptions	= new TextButton(180, 20, x + 18, 125);
 	_btnCancel	= new TextButton(180, 18, x + 18, 151);
 
-	if (_origin == OPT_BATTLESCAPE)
-		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
-	else
-		setPalette(
-				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("pauseMenu")->getElement("palette")->color);
+	setInterface(
+			"pauseMenu",
+			false,
+			_origin == OPT_BATTLESCAPE);
 
 	add(_window,		"window",	"pauseMenu");
 	add(_txtTitle,		"text",		"pauseMenu");

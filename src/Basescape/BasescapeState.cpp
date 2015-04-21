@@ -106,7 +106,7 @@ BasescapeState::BasescapeState(
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);
 //	_btnNewBase		= new TextButton(128, 12, 192, 176);
 
-	setPalette("PAL_BASESCAPE");
+	setInterface("basescape");
 
 	add(_view,				"baseView",		"basescape");
 	add(_mini,				"miniBase",		"basescape");

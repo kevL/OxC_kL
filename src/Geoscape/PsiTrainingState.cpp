@@ -49,30 +49,25 @@ namespace OpenXcom
  */
 PsiTrainingState::PsiTrainingState()
 {
-	_window		= new Window(this, 320, 200, 0, 0);
+	_window		= new Window(this, 320, 200);
 	_txtTitle	= new Text(300, 17, 10, 16);
 	_btnOk		= new TextButton(160, 14, 80, 174);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("psiTraining")->getElement("palette")->color); //7
+	setInterface("psiTraining");
 
-	add(_window, "window", "psiTraining");
-	add(_txtTitle, "text", "psiTraining");
-	add(_btnOk, "button2", "psiTraining");
+	add(_window,	"window",	"psiTraining");
+	add(_txtTitle,	"text",		"psiTraining");
+	add(_btnOk,		"button2",	"psiTraining");
 
 
-//	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PsiTrainingState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
@@ -88,11 +83,9 @@ PsiTrainingState::PsiTrainingState()
 		if ((*b)->getAvailablePsiLabs())
 		{
 			TextButton* btnBase = new TextButton(
-											160,
-											14,
+											160,14,
 											80,
 											40 + 16 * buttons);
-//			btnBase->setColor(Palette::blockOffset(15)+6);
 			btnBase->onMouseClick((ActionHandler)& PsiTrainingState::btnBaseXClick);
 			btnBase->setText((*b)->getName());
 			add(btnBase, "button1", "psiTraining");
@@ -100,9 +93,7 @@ PsiTrainingState::PsiTrainingState()
 			_bases.push_back(*b);
 			_btnBases.push_back(btnBase);
 
-			++buttons;
-
-			if (buttons > 7)
+			if (++buttons > 7)
 				break;
 		}
 	}
@@ -134,13 +125,12 @@ void PsiTrainingState::btnBaseXClick(Action* action)
 {
 	for (size_t
 			i = 0;
-			i < _btnBases.size();
+			i != _btnBases.size();
 			++i)
 	{
 		if (action->getSender() == _btnBases[i])
 		{
 			_game->pushState(new AllocatePsiTrainingState(_bases.at(i)));
-
 			break;
 		}
 	}

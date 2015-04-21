@@ -100,9 +100,7 @@ ConfirmLandingState::ConfirmLandingState(
 	_btnNo			= new TextButton(80, 18, 40, 152);
 	_btnYes			= new TextButton(80, 18, 136, 152);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("confirmLanding")->getElement("palette")->color);
+	setInterface("confirmLanding");
 
 	add(_window,		"window",	"confirmLanding");
 	add(_txtBase,		"text",		"confirmLanding");

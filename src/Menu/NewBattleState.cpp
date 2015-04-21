@@ -116,9 +116,7 @@ NewBattleState::NewBattleState()
 	_btnRandom			= new TextButton(100, 16, 110, 176);
 	_btnOk				= new TextButton(100, 16, 212, 176);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_rules->getInterface("newBattleMenu")->getElement("palette")->color);
+	setInterface("newBattleMenu");
 
 	add(_window,			"window",	"newBattleMenu");
 	add(_txtTitle,			"heading",	"newBattleMenu");

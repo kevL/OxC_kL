@@ -76,7 +76,7 @@ BuildNewBaseState::BuildNewBaseState(
 		Options::globeRadarLines = true;
 
 	const int dx = _game->getScreen()->getDX();
-//kL	int dy = _game->getScreen()->getDY();
+//	int dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
@@ -93,12 +93,10 @@ BuildNewBaseState::BuildNewBaseState(
 	_btnCancel		= new TextButton(54, 14, 194 + dx, 8);
 
 	_hoverTimer		= new Timer(60);
-	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
+	_hoverTimer->onTimer((StateHandler)& BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
+	setInterface("geoscape");
 
 /*	add(_btnRotateLeft);
 	add(_btnRotateRight);

@@ -66,9 +66,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	_btnCancel	= new TextButton(54, 14, 68, 106);
 	_btnOk		= new TextButton(54, 14, 138, 106);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
+	setInterface("geoscape");
 
 	add(_window,	"genericWindow",	"geoscape");
 	add(_txtCost,	"genericText",		"geoscape"); // color=239, was color2=138
@@ -143,7 +141,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 											_palette,
 											_game->getRuleset()->getInterface("geoscape")->getElement("genericWindow")->color,
 											"BACK01.SCR",
-											_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color));
+											_game->getRuleset()->getInterface("geoscape")->getElement("palette")->color));
 }
 
 /**

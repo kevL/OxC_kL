@@ -53,15 +53,15 @@ OptionsDefaultsState::OptionsDefaultsState(
 	_btnNo		= new TextButton(60, 18, 200, 122);
 	_txtTitle	= new Text(246, 32, 37, 70);
 
-	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
-	else
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
+	setInterface(
+			"mainMenu",
+			false,
+			_origin == OPT_BATTLESCAPE);
 
-	add(_window, "confirmDefaults", "mainMenu");
-	add(_btnYes, "confirmDefaults", "mainMenu");
-	add(_btnNo, "confirmDefaults", "mainMenu");
-	add(_txtTitle, "confirmDefaults", "mainMenu");
+	add(_window,	"confirmDefaults", "mainMenu");
+	add(_btnYes,	"confirmDefaults", "mainMenu");
+	add(_btnNo,		"confirmDefaults", "mainMenu");
+	add(_txtTitle,	"confirmDefaults", "mainMenu");
 
 	centerAllSurfaces();
 

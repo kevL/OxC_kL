@@ -57,7 +57,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 200, 0, 0);
+	_window = new Window(this, 320, 200);
 	_btnNew = new TextButton(80, 16, 60, 172);
 	_btnCancel = new TextButton(80, 16, 180, 172);
 	_txtTitle = new Text(310, 17, 5, 8);
@@ -65,15 +65,15 @@ ListLoadOriginalState::ListLoadOriginalState()
 	_txtTime = new Text(30, 9, 195, 24);
 	_txtDate = new Text(90, 9, 225, 24);
 
-	setPalette("PAL_GEOSCAPE", 6);
+	setInterface("saveMenus");
 
-	add(_window, "window", "saveMenus");
-	add(_btnNew, "button", "saveMenus");
-	add(_btnCancel, "button", "saveMenus");
-	add(_txtTitle, "text", "saveMenus");
-	add(_txtName, "text", "saveMenus");
-	add(_txtTime, "text", "saveMenus");
-	add(_txtDate, "text", "saveMenus");
+	add(_window,	"window",	"saveMenus");
+	add(_btnNew,	"button",	"saveMenus");
+	add(_btnCancel,	"button",	"saveMenus");
+	add(_txtTitle,	"text",		"saveMenus");
+	add(_txtName,	"text",		"saveMenus");
+	add(_txtTime,	"text",		"saveMenus");
+	add(_txtDate,	"text",		"saveMenus");
 
 	int y = 34;
 	for (int

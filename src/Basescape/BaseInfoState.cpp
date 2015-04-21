@@ -117,14 +117,7 @@ BaseInfoState::BaseInfoState(
 	_numDefense			= new Text(40, 9, 126, 168);
 	_barDefense			= new Bar(218, 5, 166, 169);
 
-	const Element* const element = _game->getRuleset()->getInterface("baseInfo")->getElement("palette");
-	if (element != NULL
-		&& element->TFTDMode == true)
-	{
-		setPalette("PAL_GEOSCAPE");
-	}
-	else
-		setPalette("PAL_BASESCAPE");
+	setInterface("baseInfo");
 
 	add(_bg);
 	add(_mini,				"miniBase",			"basescape");

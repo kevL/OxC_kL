@@ -80,9 +80,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_btnOk5Secs		= new TextButton(139, 16, 16, 169);
 	_btnOk			= new TextButton(139, 16, 165, 169);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("itemsArriving")->getElement("palette")->color);
+	setInterface("itemsArriving");
 
 	add(_window,			"window",	"itemsArriving");
 	add(_txtTitle,			"text1",	"itemsArriving");

@@ -103,18 +103,7 @@ CraftInfoState::CraftInfoState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 3; // pink by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("craftInfo")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("craftInfo");
 
 	add(_window,		"window",	"craftInfo");
 	add(_edtCraft,		"text1",	"craftInfo");

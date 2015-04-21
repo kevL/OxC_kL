@@ -88,18 +88,7 @@ AlienContainmentState::AlienContainmentState(
 	_btnOk			= new TextButton(134, 16, 170, 177);
 //	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 1; // burgundy by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("manageContainment")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("manageContainment");
 
 	add(_window,		"window",	"manageContainment");
 	add(_txtTitle,		"text",		"manageContainment");

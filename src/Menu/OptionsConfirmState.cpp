@@ -57,16 +57,16 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin)
 	_txtTimer	= new Text(206, 20, 57, 100);
 	_timer		= new Timer(1000);
 
-	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
-	else
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
+	setInterface(
+			"mainMenu",
+			false,
+			_origin == OPT_BATTLESCAPE);
 
-	add(_window, "confirmVideo", "mainMenu");
-	add(_btnYes, "confirmVideo", "mainMenu");
-	add(_btnNo, "confirmVideo", "mainMenu");
-	add(_txtTitle, "confirmVideo", "mainMenu");
-	add(_txtTimer, "confirmVideo", "mainMenu");
+	add(_window,	"confirmVideo", "mainMenu");
+	add(_btnYes,	"confirmVideo", "mainMenu");
+	add(_btnNo,		"confirmVideo", "mainMenu");
+	add(_txtTitle,	"confirmVideo", "mainMenu");
+	add(_txtTimer,	"confirmVideo", "mainMenu");
 
 	centerAllSurfaces();
 

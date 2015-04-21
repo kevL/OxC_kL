@@ -4306,6 +4306,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										&x,&y,
 										color);
 			}
+			_flashScreen = false;
 		}
 		else
 		{ */

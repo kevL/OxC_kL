@@ -64,7 +64,7 @@ PlaceLiftState::PlaceLiftState(
 	_view		= new BaseView(192, 192, 0, 8);
 	_txtTitle	= new Text(320, 9, 0, 0);
 
-	setPalette("PAL_BASESCAPE");
+	setInterface("placeFacility");
 
 	add(_view,		"baseView",	"basescape");
 	add(_txtTitle,	"text",		"placeFacility");

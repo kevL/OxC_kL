@@ -64,7 +64,7 @@ ResearchState::ResearchState(
 		_base(base),
 		_state(state)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_mini			= new MiniBaseView(128, 16, 180, 26, MBV_RESEARCH);
 
 	_txtTitle		= new Text(300, 17, 16, 9);
@@ -85,19 +85,7 @@ ResearchState::ResearchState(
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
-
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 1; // burgundy by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("researchMenu")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("researchMenu");
 
 	add(_window,		"window",	"researchMenu");
 	add(_mini,			"miniBase",	"basescape"); // <-

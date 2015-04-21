@@ -72,9 +72,7 @@ TargetInfoState::TargetInfoState(
 	_btnIntercept	= new TextButton(160, 16, 48, 119);
 	_btnOk			= new TextButton(160, 16, 48, 137);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("targetInfo")->getElement("palette")->color);
+	setInterface("targetInfo");
 
 	add(_window,		"window",	"targetInfo");
 	add(_txtTitle,		"text",		"targetInfo");

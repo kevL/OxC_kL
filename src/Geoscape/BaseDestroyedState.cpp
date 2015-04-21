@@ -61,9 +61,7 @@ BaseDestroyedState::BaseDestroyedState(
 	_btnCenter	= new TextButton(140, 16, 88, 133);
 	_btnOk		= new TextButton(140, 16, 88, 153);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
+	setInterface("UFOInfo");
 
 	add(_window,		"window",	"UFOInfo");
 	add(_txtMessage,	"text",		"UFOInfo");

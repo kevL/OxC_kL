@@ -87,9 +87,7 @@ BaseDefenseState::BaseDefenseState(
 	_txtDestroyed	= new Text(320, 9, 0, 167);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("baseDefense")->getElement("palette")->color);
+	setInterface("baseDefense");
 
 	add(_window,		"window",	"baseDefense");
 	add(_txtTitle,		"text",		"baseDefense");

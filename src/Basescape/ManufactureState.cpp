@@ -85,18 +85,7 @@ ManufactureState::ManufactureState(
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 6; // oxide by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("manufactureMenu")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("manufactureMenu");
 
 	add(_window,			"window",	"manufactureMenu");
 	add(_mini,				"miniBase",	"basescape"); // <-

@@ -114,18 +114,7 @@ void ResearchInfoState::buildUi()
 
 //	_srfScientists			= new InteractiveSurface(230, 140, 45, 30);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 1; // burgundy by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("researchMenu")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("allocateResearch");
 
 	add(_window,				"window",	"allocateResearch");
 	add(_txtTitle,				"text",		"allocateResearch");

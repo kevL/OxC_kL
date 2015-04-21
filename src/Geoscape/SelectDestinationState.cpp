@@ -92,9 +92,7 @@ SelectDestinationState::SelectDestinationState(
 
 	_txtError	= new Text(100, 9, 12 + dx, 11);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoscape")->getElement("genericPalette")->color);
+	setInterface("geoscape");
 
 /*	add(_btnRotateLeft);
 	add(_btnRotateRight);

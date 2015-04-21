@@ -68,9 +68,7 @@ UfopaediaStartState::UfopaediaStartState()
 	_window		= new Window(this, 256, 194, 32, 6, POPUP_BOTH); // this is almost too tall for 320x200, note.
 	_txtTitle	= new Text(224, 17, 48, 16);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color);
+	setInterface("ufopaedia");
 
 	add(_window,	"window",	"ufopaedia");
 	add(_txtTitle,	"text",		"ufopaedia");

@@ -410,7 +410,6 @@ void ExplosionBState::think()
 			++i;
 	}
 //	}
-//	else _parent->getMap()->setBlastFlash(false);
 }
 
 /**

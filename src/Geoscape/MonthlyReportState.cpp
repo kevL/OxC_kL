@@ -92,9 +92,7 @@ MonthlyReportState::MonthlyReportState(
 //	_txtMaintenance = new Text(130, 9, 16, 40);
 //	_txtBalance = new Text(160, 9, 146, 40);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("monthlyReport")->getElement("palette")->color);
+	setInterface("monthlyReport");
 
 	add(_window,		"window",	"monthlyReport");
 	add(_txtTitle,		"text1",	"monthlyReport");

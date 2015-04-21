@@ -59,24 +59,22 @@ AlienBaseState::AlienBaseState(
 		_state(state),
 		_base(base)
 {
-	_window		= new Window(this, 320, 200, 0, 0);
+	_window		= new Window(this, 320, 200);
 	_txtTitle	= new Text(308, 60, 6, 60);
 	_btnOk		= new TextButton(50, 12, 135, 180);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("alienBase")->getElement("palette")->color); //3
+	setInterface("alienBase");
 
-	add(_window, "window", "alienBase");
-	add(_txtTitle, "text", "alienBase");
-	add(_btnOk, "button", "alienBase");
+	add(_window,	"window",	"alienBase");
+	add(_txtTitle,	"text",		"alienBase");
+	add(_btnOk,		"button",	"alienBase");
 
 	centerAllSurfaces();
 
-//	_window->setColor(Palette::blockOffset(15)-1);
+
+
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& AlienBaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -86,7 +84,6 @@ AlienBaseState::AlienBaseState(
 					(ActionHandler)& AlienBaseState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();

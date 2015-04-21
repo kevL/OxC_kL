@@ -140,9 +140,7 @@ DebriefingState::DebriefingState()
 	_btnOk			= new TextButton(176, 16, 16, 177);
 	_txtRating		= new Text(100, 9, 212, 180);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("debriefing")->getElement("palette")->color);
+	setInterface("debriefing");
 
 	add(_window,		"window",	"debriefing");
 	add(_txtTitle,		"heading",	"debriefing");

@@ -129,15 +129,11 @@ UfoDetectedState::UfoDetectedState(
 			_btnCentre->setX(136);
 			_btnCentre->setWidth(88);
 		}
-
-		bgColor = _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color2;
 	}
-	else
-		bgColor = _game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color;
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			bgColor);
+	setInterface(
+			"UFOInfo",
+			_hyper);
 
 	add(_window,		"window",	"UFOInfo");
 	add(_txtUfo,		"text",		"UFOInfo");

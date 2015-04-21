@@ -66,9 +66,7 @@ MissionDetectedState::MissionDetectedState(
 	_btnCenter		= new TextButton(200, 16, 28, 150);
 	_btnCancel		= new TextButton(200, 16, 28, 170);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("terrorSite")->getElement("palette")->color);
+	setInterface("terrorSite");
 
 	add(_window,		"window",	"terrorSite");
 	add(_txtTitle,		"text",		"terrorSite");

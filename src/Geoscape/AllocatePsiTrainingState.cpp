@@ -75,9 +75,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	setPalette(
-			"PAL_BASESCAPE",
-			_game->getRuleset()->getInterface("allocatePsi")->getElement("palette")->color);
+	setInterface("allocatePsi");
 
 	add(_window,			"window",	"allocatePsi");
 	add(_txtTitle,			"text",		"allocatePsi");

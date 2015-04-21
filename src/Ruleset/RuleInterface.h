@@ -50,7 +50,10 @@ class RuleInterface
 {
 
 private:
-	std::string _type;
+	std::string
+		_palette,
+		_parent,
+		_type;
 	std::map <std::string, Element> _elements;
 
 
@@ -65,6 +68,11 @@ private:
 
 		/// Gets an element.
 		const Element* const getElement(const std::string id) const;
+
+		/// Gets palette.
+		const std::string& getPalette() const;
+		/// Gets parent interface rule.
+		const std::string& getParent() const;
 };
 
 }

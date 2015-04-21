@@ -64,22 +64,18 @@ BaseNameState::BaseNameState(
 	_edtName	= new TextEdit(this, 127, 16, 59, 94);
 	_btnOk		= new TextButton(162, 16, 47, 118);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("baseNaming")->getElement("palette")->color); //0
+	setInterface("baseNaming");
 
-	add(_window, "window", "baseNaming");
-	add(_txtTitle, "text", "baseNaming");
-	add(_edtName, "text", "baseNaming");
-	add(_btnOk, "button", "baseNaming");
+	add(_window,	"window",	"baseNaming");
+	add(_txtTitle,	"text",		"baseNaming");
+	add(_edtName,	"text",		"baseNaming");
+	add(_btnOk,		"button",	"baseNaming");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseNameState::btnOkClick);
 //	_btnOk->onKeyboardPress((ActionHandler)& BaseNameState::btnOkClick, Options::keyOk);
@@ -89,12 +85,10 @@ BaseNameState::BaseNameState(
 
 	_btnOk->setVisible(false); // something must be in the name before it is acceptable
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_BASE_NAME"));
 
-//	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
 	_edtName->setFocus(true, false);
 	_edtName->onChange((ActionHandler)& BaseNameState::edtNameChange);

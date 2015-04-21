@@ -138,7 +138,7 @@ GraphsState::GraphsState(int curGraph)
 	_blinkTimer->onTimer((StateHandler)& GraphsState::blink);
 	_blinkTimer->start();
 
-	setPalette("PAL_GRAPHS");
+	setInterface("graphs");
 
 	add(_bg);
 	add(_btnUfoRegion);

@@ -61,18 +61,7 @@ SackSoldierState::SackSoldierState(
 	_btnCancel	= new TextButton(44, 16, 100, 115);
 	_btnOk		= new TextButton(44, 16, 176, 115);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 6; // oxide by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("sackSoldier")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("sackSoldier");
 
 	add(_window,		"window",	"sackSoldier");
 	add(_txtTitle,		"text",		"sackSoldier");

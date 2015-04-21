@@ -97,18 +97,7 @@ SellState::SellState(
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 0; // brown by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("sellMenu")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("sellMenu");
 
 	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color);
 	_colorArtefact = Palette::blockOffset(13)+5;

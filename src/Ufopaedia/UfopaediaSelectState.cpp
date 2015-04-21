@@ -57,9 +57,7 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 	_lstSelection	= new TextList(224, 137, 40, 35);
 	_btnOk			= new TextButton(224, 16, 48, 177);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("ufopaedia")->getElement("palette")->color);
+	setInterface("ufopaedia");
 
 	add(_window,		"window",	"ufopaedia");
 	add(_txtTitle,		"text",		"ufopaedia");

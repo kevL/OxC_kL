@@ -82,9 +82,7 @@ MainMenuState::MainMenuState()
 
 	_btnQuit		= new TextButton(192, 20, 64, 144);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("mainMenu")->getElement("palette")->color);
+	setInterface("mainMenu");
 
 	add(_window,		"window",	"mainMenu");
 	add(_txtTitle,		"text",		"mainMenu");

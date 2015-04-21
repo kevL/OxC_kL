@@ -74,18 +74,7 @@ PlaceFacilityState::PlaceFacilityState(
 	_numMaintenance	= new Text(110, 17, 202, 126);
 	_btnCancel		= new TextButton(112, 16, 200, 176);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 6; // oxide by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("placeFacility")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("placeFacility");
 
 	add(_window,			"window",	"placeFacility");
 	add(_view,				"baseView",	"basescape");

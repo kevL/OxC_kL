@@ -73,9 +73,7 @@ CraftPatrolState::CraftPatrolState(
 	_btnCenter		= new TextButton(62, 16, 97, 159);
 	_btnRedirect	= new TextButton(62, 16, 162, 159);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window,			"window",	"geoCraftScreens");
 	add(_txtDestination,	"text1",	"geoCraftScreens");

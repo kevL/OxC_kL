@@ -540,7 +540,7 @@ GeoscapeState::GeoscapeState()
 
 	_txtDebug = new Text(320, 18, 0, 0);
 
-	setPalette("PAL_GEOSCAPE");
+	setInterface("geoscape");
 
 //	add(_bg);
 //	add(_sidebar);

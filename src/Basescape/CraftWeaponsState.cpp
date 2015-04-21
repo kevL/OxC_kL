@@ -77,18 +77,7 @@ CraftWeaponsState::CraftWeaponsState(
 
 	_btnCancel		= new TextButton(140, 16, 90, 156);
 
-	std::string pal = "PAL_BASESCAPE";
-	int bgHue = 4; // aqua by default in ufo palette
-	const Element* const element = _game->getRuleset()->getInterface("craftWeapons")->getElement("palette");
-	if (element != NULL)
-	{
-		if (element->TFTDMode == true)
-			pal = "PAL_GEOSCAPE";
-
-		if (element->color != std::numeric_limits<int>::max())
-			bgHue = element->color;
-	}
-	setPalette(pal, bgHue);
+	setInterface("craftWeapons");
 
 	add(_window,		"window",	"craftWeapons");
 	add(_txtTitle,		"text",		"craftWeapons");

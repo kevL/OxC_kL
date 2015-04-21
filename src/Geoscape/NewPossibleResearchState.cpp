@@ -65,23 +65,19 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_btnOk				= new TextButton(160, 14, 80, 149);
 	_btnResearch		= new TextButton(160, 14, 80, 165);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoResearch")->getElement("palette")->color); //1
+	setInterface("geoResearch");
 
-	add(_window, "window", "geoResearch");
-	add(_txtTitle, "text1", "geoResearch");
-	add(_lstPossibilities, "text2", "geoResearch");
-	add(_btnOk, "button", "geoResearch");
-	add(_btnResearch, "button", "geoResearch");
+	add(_window,			"window",	"geoResearch");
+	add(_txtTitle,			"text1",	"geoResearch");
+	add(_lstPossibilities,	"text2",	"geoResearch");
+	add(_btnOk,				"button",	"geoResearch");
+	add(_btnResearch,		"button",	"geoResearch");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 //myk002	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setText(tr(showResearchButton? "STR_OK": "STR_MORE")); // myk002
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleResearchState::btnOkClick);
@@ -89,7 +85,6 @@ NewPossibleResearchState::NewPossibleResearchState(
 					(ActionHandler)& NewPossibleResearchState::btnOkClick,
 					Options::keyCancel);
 
-//	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->setVisible(showResearchButton); // myk002
 	_btnResearch->onMouseClick((ActionHandler)& NewPossibleResearchState::btnResearchClick);
@@ -97,11 +92,9 @@ NewPossibleResearchState::NewPossibleResearchState(
 					(ActionHandler)& NewPossibleResearchState::btnResearchClick,
 					Options::keyOk);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-//	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);

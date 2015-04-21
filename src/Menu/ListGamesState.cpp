@@ -137,13 +137,7 @@ ListGamesState::ListGamesState(
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);
 
-
-	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
-	else
-		setPalette(
-				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("geoscape")->getElement("loadPalette")->color);
+	setInterface("geoscape", true, _origin == OPT_BATTLESCAPE);
 
 	add(_window,		"window",	"saveMenus");
 	add(_txtTitle,		"text",		"saveMenus");

@@ -82,26 +82,26 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin)
 
 	_txtTooltip		= new Text(305, 25, 8, 148);
 
-	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
-	else
-		setPalette("PAL_GEOSCAPE", _game->getRuleset()->getInterface("optionsMenu")->getElement("palette")->color);
+	setInterface(
+			"optionsMenu",
+			false,
+			_origin == OPT_BATTLESCAPE);
 
-	add(_window, "window", "optionsMenu");
+	add(_window,			"window",	"optionsMenu");
 
-	add(_btnVideo, "button", "optionsMenu");
-	add(_btnAudio, "button", "optionsMenu");
-	add(_btnControls, "button", "optionsMenu");
-	add(_btnGeoscape, "button", "optionsMenu");
-	add(_btnBattlescape, "button", "optionsMenu");
-	add(_btnAdvanced, "button", "optionsMenu");
-	add(_btnMods, "button", "optionsMenu");
+	add(_btnVideo,			"button",	"optionsMenu");
+	add(_btnAudio,			"button",	"optionsMenu");
+	add(_btnControls,		"button",	"optionsMenu");
+	add(_btnGeoscape,		"button",	"optionsMenu");
+	add(_btnBattlescape,	"button",	"optionsMenu");
+	add(_btnAdvanced,		"button",	"optionsMenu");
+	add(_btnMods,			"button",	"optionsMenu");
 
-	add(_btnOk, "button", "optionsMenu");
-	add(_btnCancel, "button", "optionsMenu");
-	add(_btnDefault, "button", "optionsMenu");
+	add(_btnOk,				"button",	"optionsMenu");
+	add(_btnCancel,			"button",	"optionsMenu");
+	add(_btnDefault,		"button",	"optionsMenu");
 
-	add(_txtTooltip, "tooltip", "optionsMenu");
+	add(_txtTooltip,		"tooltip",	"optionsMenu");
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 

@@ -49,21 +49,17 @@ UfoLostState::UfoLostState(const std::wstring& id)
 	_txtTitle	= new Text(160, 32, 48, 72);
 	_btnOk		= new TextButton(80, 14, 88, 114);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color); //7
+	setInterface("UFOInfo");
 
-	add(_window, "window", "UFOInfo");
-	add(_txtTitle, "text", "UFOInfo");
-	add(_btnOk, "button", "UFOInfo");
+	add(_window,	"window",	"UFOInfo");
+	add(_txtTitle,	"text",		"UFOInfo");
+	add(_btnOk,		"button",	"UFOInfo");
 
 	centerAllSurfaces();
 
 
-//	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-//	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& UfoLostState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -73,7 +69,6 @@ UfoLostState::UfoLostState(const std::wstring& id)
 					(ActionHandler)& UfoLostState::btnOkClick,
 					Options::keyCancel);
 
-//	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	std::wstring s = _id;

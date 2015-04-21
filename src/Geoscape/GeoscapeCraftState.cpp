@@ -102,9 +102,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_btnBase		= new TextButton(90, 16, 32, 158);
 	_btnCancel		= new TextButton(90, 16, 134, 158);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window,		"window",	"geoCraftScreens");
 	add(_txtTitle,		"text1",	"geoCraftScreens");

@@ -60,9 +60,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 	_btnNo		= new TextButton(80, 20, 70, 142);
 	_btnYes		= new TextButton(80, 20, 170, 142);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("confirmCydonia")->getElement("palette")->color);
+	setInterface("confirmCydonia");
 
 	add(_window,		"window",	"confirmCydonia");
 	add(_txtMessage,	"text",		"confirmCydonia");

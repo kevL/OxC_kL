@@ -54,9 +54,7 @@ CraftErrorState::CraftErrorState(
 	_btnOk5Secs	= new TextButton(100, 18, 48, 150);
 	_btnOk		= new TextButton(100, 18, 172, 150);
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("geoCraftScreens")->getElement("palette")->color);
+	setInterface("geoCraftScreens");
 
 	add(_window,		"window",	"geoCraftScreens");
 	add(_txtMessage,	"text1",	"geoCraftScreens");

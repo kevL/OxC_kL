@@ -80,9 +80,8 @@ MultipleTargetsState::MultipleTargetsState(
 							window_y,
 							POPUP_VERTICAL);
 
-		setPalette(
-				"PAL_GEOSCAPE",
-				_game->getRuleset()->getInterface("UFOInfo")->getElement("palette")->color);
+		setInterface("UFOInfo");
+
 		add(_window, "window", "UFOInfo");
 
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));

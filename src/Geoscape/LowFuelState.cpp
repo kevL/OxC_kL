@@ -67,9 +67,7 @@ LowFuelState::LowFuelState(
 	_blinkTimer->start();
 
 
-	setPalette(
-			"PAL_GEOSCAPE",
-			_game->getRuleset()->getInterface("lowFuel")->getElement("palette")->color);
+	setInterface("lowFuel");
 
 	add(_window,		"window",	"lowFuel");
 	add(_txtTitle,		"text",		"lowFuel");
