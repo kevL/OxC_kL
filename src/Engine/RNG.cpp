@@ -60,7 +60,7 @@ uint64_t next()
 	x ^= x << 25; // b
 	x ^= x >> 27; // c
 
-	Log(LOG_INFO) << "rng:next(x) " << x;
+	//Log(LOG_INFO) << "rng:next(x) " << x;
 	//Log(LOG_INFO) << "rng:next(ret) " << (x * 2685821657736338717ULL);
 	return x * 2685821657736338717ULL;
 }
@@ -81,7 +81,7 @@ uint64_t getSeed()
  */
 void setSeed(uint64_t seed)
 {
-	Log(LOG_INFO) << "rng:setSeed()";
+	//Log(LOG_INFO) << "rng:setSeed()";
 	if (seed == 0)
 	{
 		x = std::time(NULL);
@@ -104,7 +104,7 @@ int generate(
 		int minRand,
 		int maxRand)
 {
-	Log(LOG_INFO) << "rng:generate(int)";
+	//Log(LOG_INFO) << "rng:generate(int)";
 	if (minRand == maxRand)
 		return minRand;
 
@@ -125,7 +125,7 @@ double generate(
 		double minRand,
 		double maxRand)
 {
-	Log(LOG_INFO) << "rng:generate(double)";
+	//Log(LOG_INFO) << "rng:generate(double)";
 	double diff = maxRand - minRand;
 	if (AreSame(diff, 0.))
 		return minRand;
@@ -156,7 +156,7 @@ double boxMuller(
 		double mean,
 		double deviation)
 {
-	Log(LOG_INFO) << "rng:boxMuller()";
+	//Log(LOG_INFO) << "rng:boxMuller()";
 	static bool use_last = false;
 
 	static double y2;
@@ -198,7 +198,7 @@ double boxMuller(
  */
 bool percent(int value)
 {
-	Log(LOG_INFO) << "rng:percent()";
+	//Log(LOG_INFO) << "rng:percent()";
 	if (value < 1)
 		return false;
 	else if (value > 99)
@@ -214,7 +214,7 @@ bool percent(int value)
  */
 int generateEx(int maxRand)
 {
-	Log(LOG_INFO) << "rng:generateEx()";
+	//Log(LOG_INFO) << "rng:generateEx()";
 	if (maxRand < 2)
 		return 0;
 

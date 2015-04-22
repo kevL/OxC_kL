@@ -78,6 +78,7 @@ protected:
 
 	BattleUnit* _unit;
 	MapData* _objects[4];
+
 	Position _pos;
 
 	std::vector<BattleItem*> _inventory;
@@ -90,7 +91,7 @@ protected:
 
 
 	public:
-		static const int NOT_CALCULATED = -1;
+//		static const int NOT_CALCULATED = -1;
 
 		static struct SerializationKey
 		{

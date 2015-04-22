@@ -81,7 +81,7 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_objectivesDestroyed(0),
 		_objectivesNeeded(0),
 		_unitsFalling(false),
-		_cheating(false),
+		_cheatAI(false),
 		_batReserved(BA_NONE),
 		_depth(0),
 		_kneelReserved(false),
@@ -766,7 +766,7 @@ void SavedBattleGame::initMap(
 		const int mapsize_y,
 		const int mapsize_z)
 {
-	size_t totalTiles = _mapsize_z * _mapsize_y * _mapsize_x;
+	size_t totalTiles = static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 
 	if (_nodes.empty() == false)
 	{
@@ -797,7 +797,7 @@ void SavedBattleGame::initMap(
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
 
-	totalTiles = _mapsize_z * _mapsize_y * _mapsize_x;
+	totalTiles = static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
 	_tiles = new Tile*[totalTiles];
 
 	for (size_t
@@ -1275,14 +1275,15 @@ bool SavedBattleGame::endBattlePhase()
 											liveSoldiers);
 
 	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.
-	if (_side == FACTION_HOSTILE)
+	if (_side == FACTION_HOSTILE
+		&& _cheatAI == false)
 	{
 		const int delta = RNG::generate(0,5);
 		if (_turn > 17 + delta
-			|| (_turn > 8
+			|| (_turn > 5
 				&& liveAliens < delta - 1))
 		{
-			_cheating = true;
+			_cheatAI = true;
 		}
 	}
 
@@ -1311,7 +1312,7 @@ bool SavedBattleGame::endBattlePhase()
 			(*i)->setExposed(-1);				// That got done when unit went down.
 		else if ((*i)->getFaction() == FACTION_HOSTILE
 			|| (*i)->getOriginalFaction() == FACTION_HOSTILE
-			|| _cheating == true) // aLiens know where xCom is when cheating ~turn20
+			|| _cheatAI == true) // aLiens know where xCom is when cheating ~turn20
 		{
 			(*i)->setExposed(); // aLiens always know where their buddies are, Mc'd or not.
 		}
@@ -1410,33 +1411,33 @@ void SavedBattleGame::resetUnitTiles()
 			{
 				for (int
 						x = unitSize;
-						x > -1;
+						x != -1;
 						--x)
 				{
 					for (int
 							y = unitSize;
-							y > -1;
+							y != -1;
 							--y)
 					{
-						getTile((*i)->getTile()->getPosition() + Position(x, y, 0))->setUnit(NULL);
+						getTile((*i)->getTile()->getPosition() + Position(x,y,0))->setUnit(NULL);
 					}
 				}
 			}
 
 			for (int // set unit onto its proper tile
 					x = unitSize;
-					x > -1;
+					x != -1;
 					--x)
 			{
 				for (int
 						y = unitSize;
-						y > -1;
+						y != -1;
 						--y)
 				{
-					Tile* const tile = getTile((*i)->getPosition() + Position(x, y, 0));
+					Tile* const tile = getTile((*i)->getPosition() + Position(x,y,0));
 					tile->setUnit(
 								*i,
-								getTile(tile->getPosition() + Position(0, 0,-1)));
+								getTile(tile->getPosition() + Position(0,0,-1)));
 				}
 			}
 		}
@@ -2059,15 +2060,15 @@ void SavedBattleGame::removeCorpse(const BattleUnit* const unit)
 
 /**
  * Places units on the map. Handles large units that are placed on multiple tiles.
- * @param unit		- pointer to a unit to be placed
- * @param pos		- reference the position to place the unit
- * @param testOnly	- true just checks if unit can be placed at the position (default false)
+ * @param unit	- pointer to a unit to be placed
+ * @param pos	- reference the position to place the unit
+ * @param test	- true only checks if unit can be placed at the position (default false)
  * @return, true if unit was placed successfully
  */
 bool SavedBattleGame::setUnitPosition(
 		BattleUnit* unit,
 		const Position& pos,
-		bool testOnly)
+		bool test)
 {
 	if (unit == NULL)
 		return false;
@@ -2092,15 +2093,15 @@ bool SavedBattleGame::setUnitPosition(
 				|| (tile->getUnit() != NULL
 					&& tile->getUnit() != unit)
 				|| tile->getTUCost(MapData::O_OBJECT, unit->getMovementType()) == 255
-				|| (tile->hasNoFloor(tileBelow)
+				|| (tile->hasNoFloor(tileBelow) == true
 					&& unit->getMovementType() != MT_FLY)
-				|| (tile->getMapData(MapData::O_OBJECT)
-					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > 0
-					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < 4)
-				|| (tileAbove
+				|| (tile->getMapData(MapData::O_OBJECT) != NULL
+					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
+					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
+				|| (tileAbove != NULL
 					&& tileAbove->getUnit() != NULL
 					&& tileAbove->getUnit() != unit
-					&& unit->getHeight() - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.
+					&& unit->getHeight(true) - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.
 				// note: no check for ceilings yet ....
 			{
 				return false;
@@ -2127,7 +2128,7 @@ bool SavedBattleGame::setUnitPosition(
 		}
 	}
 
-	if (testOnly == true)
+	if (test == true)
 		return true;
 
 
@@ -2144,7 +2145,7 @@ bool SavedBattleGame::setUnitPosition(
 			if (x == 0 && y == 0)
 			{
 				unit->setPosition(pos);
-//				unit->setTile(getTile(pos), getTile(pos - Position(0, 0, 1)));
+//				unit->setTile(getTile(pos), getTile(pos - Position(0,0,1)));
 			}
 
 			getTile(pos + Position(x,y,0))->setUnit(
@@ -2178,15 +2179,15 @@ bool SavedBattleGame::placeUnitNearPosition(
 
 
 	const Tile* tile;
-	const int dirRand = RNG::generate(0, 7);
+	const int dir = RNG::generate(0,7);
 	for (int
-			dir = dirRand;
-			dir != dirRand + 8;
-			++dir)
+			i = dir;
+			i != dir + 8;
+			++i)
 	{
 		Position posOffset;
 		getPathfinding()->directionToVector(
-										dir %8,
+										i % 8,
 										&posOffset);
 
 		tile = getTile(pos + posOffset);
@@ -2194,7 +2195,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 			&& getPathfinding()->isBlocked(
 										getTile(pos),
 										tile,
-										dir) == false
+										i) == false
 			&& setUnitPosition(
 							unit,
 							pos + posOffset) == true)
@@ -2504,9 +2505,9 @@ void SavedBattleGame::resetTurnCounter()
  */
 void SavedBattleGame::resetTiles()
 {
-	for (int
+	for (size_t
 			i = 0;
-			i != getMapSizeXYZ();
+			i != static_cast<size_t>(getMapSizeXYZ());
 			++i)
 	{
 		_tiles[i]->setDiscovered(false, 0);
@@ -2530,7 +2531,7 @@ const std::vector<Position> SavedBattleGame::getTileSearch()
  */
 bool SavedBattleGame::isCheating()
 {
-	return _cheating;
+	return _cheatAI;
 }
 
 /**

@@ -412,9 +412,10 @@ bool Tile::isBigWall() const
 }
 
 /**
- * Gets the terrain level of this tile. For graphical Y offsets, etc.
- * Notice that terrain level starts and 0 and goes upwards to -24.
- * @return, the level in pixels (so negative values are higher)
+ * Gets the terrain level of this tile.
+ * @note For graphical Y offsets etc. Terrain level starts and 0 and goes
+ * upwards to -24; negative values are higher.
+ * @return, the level in pixels
  */
 int Tile::getTerrainLevel() const
 {
@@ -1313,8 +1314,8 @@ Surface* Tile::getSprite(int part) const
 
 /**
  * Sets a unit on this tile.
- * @param unit		- pointer to a unit
- * @param tileBelow	- pointer to the tile below this tile (default NULL)
+ * @param unit		- pointer to a BattleUnit
+ * @param tileBelow	- pointer to the Tile below this Tile (default NULL)
  */
 void Tile::setUnit(
 		BattleUnit* unit,

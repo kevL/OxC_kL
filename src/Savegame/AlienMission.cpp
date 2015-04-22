@@ -171,7 +171,7 @@ bool AlienMission::isOver() const
 	if (_liveUfos == 0
 		&& _nextWave == _missionRule.getWaveTotal()
 		&& _missionRule.getObjective() != OBJECTIVE_INFILTRATION) // Infiltrations continue for ever. Almost.
-//			|| RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false))
+// ->		|| RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false))
 	{
 		return true;
 	}
@@ -570,8 +570,7 @@ void AlienMission::ufoReachedWaypoint(
 		size_t waveCount;
 		if (_nextWave != 0) // ie. not Retaliation
 			waveCount = _nextWave - 1;
-		else
-//			if (RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false)
+		else // -> if (RNG::percent(static_cast<int>(_savedGame.getDifficulty()) * 20) == false)
 			waveCount = _missionRule.getWaveTotal() - 1; // Retaliation starts over!!!
 
 		const MissionWave& wave = _missionRule.getWave(waveCount);

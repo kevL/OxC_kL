@@ -59,7 +59,7 @@ private:
 	bool
 		_aborted,
 		_debugMode,
-		_cheating,
+		_cheatAI,
 		_kneelReserved,
 		_unitsFalling;
 	int
@@ -310,7 +310,7 @@ private:
 		bool setUnitPosition(
 				BattleUnit* unit,
 				const Position& pos,
-				bool testOnly = false);
+				bool test = false);
 		/// Attempts to place a unit on or near Position pos.
 		bool placeUnitNearPosition(
 				BattleUnit* unit,

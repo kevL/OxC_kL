@@ -2584,7 +2584,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 					targetUnit->setTurnDirection(1);
 
 				Pathfinding::directionToVector(
-											(targetUnit->getDirection() + 4) %8,
+											(targetUnit->getDirection() + 4) % 8,
 											&_currentAction.target);
 				_currentAction.target += targetPos;
 				_currentAction.strafe = false;
@@ -3388,8 +3388,8 @@ BattleActionType BattlescapeGame::getReservedAction() const
 
 /**
  * Tallies the living units in the game.
- * @param liveAliens		- reference in which to store the live alien tally
- * @param liveSoldiers		- reference in which to store the live XCom tally
+ * @param liveAliens	- reference in which to store the live alien tally
+ * @param liveSoldiers	- reference in which to store the live XCom tally
  * @return, true if all aliens are dead or pacified independent of allowPsionicCapture option
  */
 bool BattlescapeGame::tallyUnits(
@@ -3429,6 +3429,7 @@ bool BattlescapeGame::tallyUnits(
 		}
 	}
 
+	//Log(LOG_INFO) << "bg:tallyUnits() ret = " << ret << "; Sol = " << liveSoldiers << "; aLi = " << liveAliens;
 	return ret;
 }
 

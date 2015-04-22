@@ -716,17 +716,17 @@ void Map::drawTerrain(Surface* surface) // private.
 	surface->lock();
 	for (int
 			itZ = beginZ; // 3. finally lap the levels bottom to top
-			itZ <= endZ;
+			itZ < endZ + 1;
 			++itZ)
 	{
 		for (int
 				itX = beginX; // 2. next draw those columns eastward
-				itX <= endX;
+				itX < endX + 1;
 				++itX)
 		{
 			for (int
 					itY = beginY; // 1. first draw terrain in columns north to south
-					itY <= endY;
+					itY < endY + 1;
 					++itY)
 			{
 				mapPosition = Position(
@@ -856,7 +856,8 @@ void Map::drawTerrain(Surface* surface) // private.
 								}
 							}
 						} // kL_end.
-					}
+					} // end draw floor
+
 
 					// Draw Cursor Background
 					if (_cursorType != CT_NONE
@@ -932,15 +933,15 @@ void Map::drawTerrain(Surface* surface) // private.
 						if (unitNorth != NULL
 							&& (unitNorth->getUnitVisible() == true
 								|| _battleSave->getDebugMode() == true)
-							&& unitNorth->getStatus() == STATUS_WALKING)
-//							&& unitNorth->getDirection() != 3 // might want to remove these
-//							&& unitNorth->getDirection() != 7
+							&& (unitNorth->getStatus() == STATUS_WALKING
+								|| unitNorth->getStatus() == STATUS_FLYING))
 						{
 							if (tileNorth->getTerrainLevel() - tile->getTerrainLevel() < 1) // positive -> Tile is higher
 							{
 								// Phase I: redraw unit NORTH to make sure it doesn't get drawn [over any walls or] under any tiles.
 								if (unitNorth->getDirection() != 2
-									&& unitNorth->getDirection() != 6) // perhaps !0 && !4 also; ie. do dir=1,5,3,7
+									&& unitNorth->getDirection() != 6 // perhaps !0 && !4 also; ie. do dir=1,5,3,7
+									&& unitNorth->getStatus() != STATUS_FLYING)
 								{
 									if (itX > 0 && itY < endY)
 									{
@@ -1183,6 +1184,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										}
 
 										if (unitWest != NULL
+											&& unitNorth->getStatus() != STATUS_FLYING
 											&& (unitWest->getUnitVisible() == true
 												|| _battleSave->getDebugMode() == true)
 											&& (unitWest != unit
@@ -1398,13 +1400,10 @@ void Map::drawTerrain(Surface* surface) // private.
 											}
 										}
 									}
-								}
-								// end (itX > 0)
+								} // end (itX > 0)
 							}
-						}
-						// end unitNorth walking TRUE
-					}
-					// end (itY > 0)
+						} // end unitNorth walking TRUE
+					} // end (itY > 0)
 
 
 					// Draw Tile Background
@@ -2295,6 +2294,7 @@ void Map::drawTerrain(Surface* surface) // private.
 						if (srfSprite)
 						{
 							if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [70]";
+							if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [75]";
 							//if (unit->getId() == 1000007) Log(LOG_INFO) << "MAP DRAW";
 							if (unit->getHealth() == 0
 								|| unit->getHealth() <= unit->getStun()) // -> && unit is Player
@@ -2534,7 +2534,7 @@ void Map::drawTerrain(Surface* surface) // private.
 							}
 
 							// Redraw northWall in tileSouthSouthWest
-							if (itX > 0 && itY < endY -1				// Reaper sticks its righthind leg out through southerly wall
+							if (itX > 0 && itY < endY - 1				// Reaper sticks its righthind leg out through southerly wall
 								&& unit->getStatus() == STATUS_WALKING	// Sectopod also, likely.
 								&& unit->getDirection() == 1
 								&& unit->getArmor()->getSize() == 2
@@ -2654,7 +2654,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									if (exposed != -1)
 									{
 										_numExposed->setValue(static_cast<unsigned int>(exposed));
-										_numExposed->setColor(Palette::blockOffset(6));
+										_numExposed->setColor(Palette::blockOffset(1));
 										_numExposed->draw();
 										_numExposed->blitNShade(
 															surface,
@@ -2666,7 +2666,7 @@ void Map::drawTerrain(Surface* surface) // private.
 							} // kL_end.
 
 
-							// Feet getting chopped by tilesBelow when moving vertically; redraw lowForeground walls.
+							// Feet getting chopped by tilesBelow when moving vertically; redraw lowerForeground walls.
 							// note: This is a quickfix - feet can also get chopped by walls in tileBelowSouth & tileBelowEast ...
 //							if (false)
 							if (unit->getVerticalDirection() != 0
@@ -2941,9 +2941,11 @@ void Map::drawTerrain(Surface* surface) // private.
 										screenPosition.y,
 										0);
 
-							Uint8 color = 1;	// white, unconscious soldier here
+							Uint8 color;
 							if (status == 2)
-								color = 3;		// red, wounded unconscious soldier
+								color = 3; // red, wounded unconscious soldier
+							else
+								color = 1; // white, unconscious soldier here
 
 							srfSprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 							if (srfSprite)
@@ -3232,7 +3234,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											}
 											else
 											{
-												frame = 0;
+												frame =
 												shade = 0;
 											}
 
@@ -3265,7 +3267,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											}
 											else
 											{
-												frame = 0;
+												frame =
 												shade = 0;
 											}
 
@@ -3642,7 +3644,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									{
 										const Tile* const tileBelowSouthSouthEast = _battleSave->getTile(mapPosition + Position(1,2,-1));
 
-										if (tileBelowSouthSouthEast)
+										if (tileBelowSouthSouthEast != NULL)
 										{
 											srfSprite = tileBelowSouthSouthEast->getSprite(MapData::O_NORTHWALL);
 //											srfSprite = NULL;
@@ -3668,7 +3670,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									// TODO: if unitBelow this needs to redraw walls to south & east also.
 									const Tile* const tileBelowSouthEast = _battleSave->getTile(mapPosition + Position(1,1,-1));
 
-									if (tileBelowSouthEast)
+									if (tileBelowSouthEast != NULL)
 									{
 										srfSprite = tileBelowSouthEast->getSprite(MapData::O_NORTHWALL);
 //										srfSprite = NULL;
@@ -3747,7 +3749,7 @@ void Map::drawTerrain(Surface* surface) // private.
 							{
 								const Tile* const tileBelowEast = _battleSave->getTile(mapPosition + Position(1,0,-1));
 
-								if (tileBelowEast)
+								if (tileBelowEast != NULL)
 								{
 									BattleUnit* const unitBelowEast = tileBelowEast->getUnit();
 
@@ -3851,7 +3853,7 @@ void Map::drawTerrain(Surface* surface) // private.
 //							if (Options::battleUFOExtenderAccuracy == true) // kL_note: one less condition to check
 							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
-								// begin_TEST: superimpose targetUnit *over* cursor's front
+/*								// begin_TEST: superimpose targetUnit *over* cursor's front
 								if (unit != NULL
 									&& (unit->getUnitVisible() == true
 										|| _battleSave->getDebugMode() == true))
@@ -3860,26 +3862,8 @@ void Map::drawTerrain(Surface* surface) // private.
 										+ (tile->getPosition().y - unit->getPosition().y) * 2;
 
 									srfSprite = unit->getCache(&invalid, quad);
-//									srfSprite = NULL;
 									if (srfSprite)
 									{
-										//if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit []";
-/*										if (unit->getHealth() == 0
-											|| unit->getHealth() <= unit->getStun()) // -> && unit is Player
-										{
-											shade = std::min(
-															5,
-															tileShade);
-										}
-										else
-											shade = tileShade;
-
-										if (shade != 0 // try to even out lighting of all four quadrants of large units.
-											&& quad != 0)
-										{
-											shade -= 1; // TODO: trickle this throughout this function!
-										} */
-
 										shade = tileShade;
 
 										calculateWalkingOffset(
@@ -3892,19 +3876,19 @@ void Map::drawTerrain(Surface* surface) // private.
 												screenPosition.y + walkOffset.y,
 												shade);
 
-/*										if (unit->getFireOnUnit() != 0)
-										{
-											frame = 4 + (_animFrame / 2);
-											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-											if (srfSprite)
-												srfSprite->blitNShade(
-														surface,
-														screenPosition.x + walkOffset.x,
-														screenPosition.y + walkOffset.y,
-														0);
-										} */
+//										if (unit->getFireOnUnit() != 0)
+//										{
+//											frame = 4 + (_animFrame / 2);
+//											srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+//											if (srfSprite)
+//												srfSprite->blitNShade(
+//														surface,
+//														screenPosition.x + walkOffset.x,
+//														screenPosition.y + walkOffset.y,
+//														0);
+//										}
 									}
-								} // end_TEST.
+								} // end_TEST. */
 
 								// kL_note: Use stuff from ProjectileFlyBState::init()
 								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
@@ -4061,7 +4045,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										screenPosition.y + waypYOff,
 										0);
 
-								waypXOff += (waypid > 9)? 8: 6;
+								waypXOff += (waypid > 9) ? 8 : 6;
 								if (waypXOff > 25)
 								{
 									waypXOff = 2;

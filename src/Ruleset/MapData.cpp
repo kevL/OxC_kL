@@ -67,9 +67,9 @@ MapData::MapData(MapDataSet* dataset)
 		_bigWall(0),
 		_miniMapIndex(0)
 {
-	std::fill_n(_sprite, 8, 0);
-	std::fill_n(_block, 6, 0);
-	std::fill_n(_loftID, 12, 0);
+	std::fill_n(_sprite, 8,0);
+	std::fill_n(_block, 6,0);
+	std::fill_n(_loftID, 12,0);
 }
 
 /**
@@ -106,7 +106,7 @@ void MapData::setSprite(
 		int frameID,
 		int value)
 {
-	_sprite[frameID] = value;
+	_sprite[static_cast<size_t>(frameID)] = value;
 }
 
 /**
@@ -192,7 +192,7 @@ bool MapData::blockFire() const // kL
 void MapData::setStopLOS(bool stopLOS) // kL
 {
 	_stopLOS = stopLOS;
-	_block[1] = stopLOS? 100: 0;
+	_block[1] = stopLOS ? 100 : 0;
 }
 
 /**
@@ -249,9 +249,6 @@ int MapData::getBlock(ItemDamageType type) const
 		case DT_IN:
 		case DT_STUN:	return _block[2];	// HE block [int]
 		case DT_SMOKE:	return _block[3];	// block smoke: try (bool), was [0 or 256]
-
-		default:
-		break;
 	}
 
 	return 0;
@@ -284,7 +281,7 @@ void MapData::setBlock(
 	_block[0] = lightBlock; // not used
 //	_block[1] = visionBlock; // kL
 //kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note. haha
-	_block[1] = visionBlock == 1? 100: 0; // kL
+	_block[1] = visionBlock == 1 ? 100 : 0; // kL
 		// stopLoS==true needs to be a significantly large integer (only about 10+ really)
 		// so that if a directionally opposite Field of View check includes a "-1",
 		// meaning block by bigWall or other content-object, the result is not reduced
@@ -386,9 +383,9 @@ void MapData::setTUCosts(
 		int fly,
 		int slide)
 {
-	_TUWalk		= walk;
-	_TUFly		= fly;
-	_TUSlide	= slide;
+	_TUWalk = walk;
+	_TUFly = fly;
+	_TUSlide = slide;
 }
 
 /**
@@ -471,8 +468,8 @@ int MapData::getLightSource() const
 {
 	if (_lightSource == 1)	// lamp posts have 1,
 		return 15;			// but they should emit more light
-	else
-		return _lightSource - 1;
+
+	return _lightSource - 1;
 }
 
 /**

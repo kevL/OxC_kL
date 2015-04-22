@@ -694,7 +694,7 @@ bool UnitWalkBState::doStatusStand()
 bool UnitWalkBState::doStatusWalk()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusWalk() : " << _unit->getId();
-	const Tile* tileBelow = NULL;
+	const Tile* tileBelow;
 //	Position pos = _unit->getPosition();
 
 	if (_parent->getSave()->getTile(_unit->getDestination())->getUnit() == NULL  // next tile must be not occupied
@@ -709,7 +709,7 @@ bool UnitWalkBState::doStatusWalk()
 
 //		bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
 //		_unit->keepWalking(tileBelow, onScreenBoundary); // advances the phase
-		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
+		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 		_unit->keepWalking( // advances _walkPhase
 						tileBelow,
 						_onScreen);
@@ -794,7 +794,7 @@ bool UnitWalkBState::doStatusWalk()
 
 //				if (_unit->getFaction() == FACTION_PLAYER)	// This ensures that a unit getting hit by RF will be in a discovered/visible Tile.
 //				{											// ... although CalcFOV should handle it, the latter has problems especially on top-level tiling.
-//					nextTile->setTileVisible();
+//					nextTile->setTileVisible();				// ->fixed. 'void' tiles were not being saved to file as 'discovered'
 //					nextTile->setDiscovered(true, 2);
 //				}
 			}
@@ -811,12 +811,12 @@ bool UnitWalkBState::doStatusWalk()
 
 			for (int
 					x = unitSize;
-					x > -1;
+					x != -1;
 					--x)
 			{
 				for (int
 						y = unitSize;
-						y > -1;
+						y != -1;
 						--y)
 				{
 					tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));

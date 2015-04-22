@@ -109,8 +109,6 @@ UfoDetectedState::UfoDetectedState(
 	_txtRegion		= new Text(114, 9, 116, 56);
 	_txtTexture		= new Text(114, 9, 116, 66);
 
-	int bgColor;
-
 	if (_hyper == true)
 	{
 		_txtUfo->setY(19);
