@@ -481,45 +481,47 @@ void SoldierDiaryPerformanceState::init()
 
 
 	std::wstring
-		ws1,
-		ws2,
-		ws3,
-		ws4;
+		wst1,
+		wst2,
+		wst3,
+		wst4;
 
 	if (_diary->getMissionTotal() != 0) // Mission stats ->
-		ws1 = tr("STR_MISSIONS").arg(_diary->getMissionTotal());
+		wst1 = tr("STR_MISSIONS").arg(_diary->getMissionTotal());
 	if (_diary->getWinTotal() != 0)
-		ws2 = tr("STR_WINS").arg(_diary->getWinTotal());
+		wst2 = tr("STR_WINS").arg(_diary->getWinTotal());
 	if (_diary->getScoreTotal() != 0)
-		ws3 = tr("STR_SCORE_VALUE").arg(_diary->getScoreTotal());
+		wst3 = tr("STR_SCORE_VALUE").arg(_diary->getScoreTotal());
 	if (_diary->getDaysWoundedTotal() != 0)
-		ws4 = tr("STR_DAYS_WOUNDED").arg(_diary->getDaysWoundedTotal()).arg(L" dy");
+		wst4 = tr("STR_DAYS_WOUNDED").arg(_diary->getDaysWoundedTotal()).arg(L" dy");
 
 	_lstMissionTotals->addRow(
 						4,
-						ws1.c_str(),
-						ws2.c_str(),
-						ws3.c_str(),
-						ws4.c_str());
+						wst1.c_str(),
+						wst2.c_str(),
+						wst3.c_str(),
+						wst4.c_str());
 
-	ws1 =
-	ws2 =
-	ws3 = L"";
+	wst1 =
+	wst2 =
+	wst3 = L"";
 
 	if (_diary->getKillTotal() != 0) // Kill stats ->
-		ws1 = tr("STR_KILLS").arg(_diary->getKillTotal());
+		wst1 = tr("STR_KILLS").arg(_diary->getKillTotal());
 	if (_diary->getStunTotal() != 0)
-		ws2 = tr("STR_STUNS").arg(_diary->getStunTotal());
+		wst2 = tr("STR_STUNS").arg(_diary->getStunTotal());
 	if (_diary->getScorePoints() != 0)
-		ws3 = tr("STR_SCORE_VALUE").arg(_diary->getScorePoints());
+		wst3 = tr("STR_SCORE_VALUE").arg(_diary->getScorePoints());
 
 	_lstKillTotals->addRow(
 						3,
-						ws1.c_str(),
-						ws2.c_str(),
-						ws3.c_str());
+						wst1.c_str(),
+						wst2.c_str(),
+						wst3.c_str());
 
-	TextList* const lstArray[6] = // Kill & Mission stats ->
+
+	const size_t lstRows = 6;
+	TextList* const lstArray[lstRows] = // Kill & Mission stats ->
 	{
 		_lstRace,
 		_lstRank,
@@ -529,7 +531,7 @@ void SoldierDiaryPerformanceState::init()
 		_lstUFO
 	};
 
-	const std::map<std::string, int> mapArray[6] =
+	const std::map<std::string, int> mapArray[lstRows] =
 	{
 		_diary->getAlienRaceTotal(),
 		_diary->getAlienRankTotal(),
@@ -541,7 +543,7 @@ void SoldierDiaryPerformanceState::init()
 
 	for (size_t
 			i = 0;
-			i != 6;
+			i != lstRows;
 			++i)
 	{
 		size_t row = 0;
@@ -555,16 +557,16 @@ void SoldierDiaryPerformanceState::init()
 				continue;
 
 			std::wstringstream
-				ss1,
-				ss2;
+				woststr1,
+				woststr2;
 
-			ss1 << tr((*j).first.c_str());
-			ss2 << (*j).second;
+			woststr1 << tr((*j).first.c_str());
+			woststr2 << (*j).second;
 
 			lstArray[i]->addRow(
 							2,
-							ss1.str().c_str(),
-							ss2.str().c_str());
+							woststr1.str().c_str(),
+							woststr2.str().c_str());
 			lstArray[i]->setCellColor(
 									row++,
 									0,
@@ -583,32 +585,32 @@ void SoldierDiaryPerformanceState::init()
 
 		const RuleCommendations* const awardsRule = _game->getRuleset()->getCommendations()[(*i)->getType()];
 		std::wstringstream
-			ss1,
-			ss2,
-			ss3,
-			ss4;
+			woststr1,
+			woststr2,
+			woststr3,
+			woststr4;
 
 		if ((*i)->getNoun() != "noNoun")
 		{
-			ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-			ss4 << tr(awardsRule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+			woststr1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
+			woststr4 << tr(awardsRule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
 		}
 		else
 		{
-			ss1 << tr((*i)->getType().c_str());
-			ss4 << tr(awardsRule->getDescription().c_str());
+			woststr1 << tr((*i)->getType().c_str());
+			woststr4 << tr(awardsRule->getDescription().c_str());
 		}
 
-		ss2 << tr((*i)->getDecorationDescription().c_str());
-		ss3 << tr((*i)->getDecorationClass().c_str());
+		woststr2 << tr((*i)->getDecorDesc().c_str());
+		woststr3 << tr((*i)->getDecorClass().c_str());
 
 		_lstAwards->addRow(
 						3,
-						ss1.str().c_str(),
-						ss2.str().c_str(),
-						ss3.str().c_str());
+						woststr1.str().c_str(),
+						woststr2.str().c_str(),
+						woststr3.str().c_str());
 
-		_awardsListEntry.push_back(ss4.str().c_str());
+		_awardsListEntry.push_back(woststr4.str().c_str());
 
 		drawSprites();
 	}
@@ -649,7 +651,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 			sprite = awardsRule->getSprite();
 			_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
 
-			sprite = (*i)->getDecorationLevelInt(); // handle award decoration sprites
+			sprite = static_cast<int>((*i)->getDecorLevelInt()); // handle award decoration sprites
 			if (sprite != 0)
 				_sstDecor->getFrame(sprite)->blit(_srfDecor[j - scroll]);
 		}

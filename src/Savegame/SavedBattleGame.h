@@ -335,11 +335,11 @@ private:
 		/// Gets the highest ranked, living unit of faction.
 		BattleUnit* getHighestRanked(
 				int& qtyAllies,
-				bool isXCOM = true);
+				bool isXCOM = true) const;
 		/// Gets the morale modifier based on the highest ranked, living xcom/alien unit, or for a unit passed into this function.
 		int getMoraleModifier(
-				BattleUnit* unit = NULL,
-				bool isXCOM = true);
+				const BattleUnit* const unit = NULL,
+				bool isXCOM = true) const;
 
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 //		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);

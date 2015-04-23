@@ -1184,7 +1184,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										}
 
 										if (unitWest != NULL
-											&& unitNorth->getStatus() != STATUS_FLYING
+											&& unitWest->getStatus() != STATUS_FLYING // <- unitNorth maybe.
 											&& (unitWest->getUnitVisible() == true
 												|| _battleSave->getDebugMode() == true)
 											&& (unitWest != unit
@@ -2645,6 +2645,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									}
 								}
 
+								// Draw Exposed mark
 								if (unit->getFaction() == FACTION_PLAYER
 									&& unit->getFaction() == unit->getOriginalFaction()
 									&& (unit->getArmor()->getSize() == 1
@@ -2654,7 +2655,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									if (exposed != -1)
 									{
 										_numExposed->setValue(static_cast<unsigned int>(exposed));
-										_numExposed->setColor(Palette::blockOffset(1));
+										_numExposed->setColor(Palette::blockOffset(10));
 										_numExposed->draw();
 										_numExposed->blitNShade(
 															surface,

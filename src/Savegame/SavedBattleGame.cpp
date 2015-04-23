@@ -2303,7 +2303,7 @@ bool SavedBattleGame::getUnitsFalling() const
  */
 BattleUnit* SavedBattleGame::getHighestRanked(
 		int& qtyAllies,
-		bool isXCOM)
+		bool isXCOM) const
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
 	BattleUnit* leader = NULL;
@@ -2314,8 +2314,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(
 			i != _units.end();
 			++i)
 	{
-		if (*i != NULL
-			&& (*i)->isOut(true, true) == false)
+		if ((*i)->isOut(true, true) == false)
 		{
 			if (isXCOM == true)
 			{
@@ -2361,8 +2360,8 @@ BattleUnit* SavedBattleGame::getHighestRanked(
  * @return, morale modifier
  */
 int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia & Final Assault.
-		BattleUnit* unit,
-		bool isXCOM)
+		const BattleUnit* const unit,
+		bool isXCOM) const
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
 	if (unit != NULL
@@ -2420,7 +2419,7 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 	else // leadership Bonus
 	{
 		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
-		BattleUnit* leader = NULL;
+		const BattleUnit* leader;
 		int qtyAllies;
 
 		if (isXCOM == true)

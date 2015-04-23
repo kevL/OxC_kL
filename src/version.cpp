@@ -35,7 +35,7 @@ namespace Version
 std::string timeStamp()
 {
 	time_t timeOut = std::time(NULL);
-	struct tm* timeInfo = std::localtime(&timeOut);
+	const struct tm* const timeInfo = std::localtime(&timeOut);
 
 	char verDate[7];
 	std::strftime(
@@ -52,7 +52,7 @@ std::string timeStamp()
 				timeInfo);
 
 	std::ostringstream stamp;
-	stamp << verDate << "." << verTime;
+	stamp << verDate << ":" << verTime;
 
 	return stamp.str();
 }
@@ -61,7 +61,7 @@ std::string timeStamp()
  * Gets version as a time string.
  * @note This is the (local) compile-time date & time.
  * @param built - true to add "built" preface (default true)
- * @return, current version of executable
+ * @return, current build date of executable
  */
 std::string getBuildDate(bool built)
 {
@@ -72,13 +72,13 @@ std::string getBuildDate(bool built)
 #endif
 
 	if (built == true)
-		oststr << "blt ";
+		oststr << "b> ";
 
 	std::string tz;
 
 #ifdef _WIN32
 	TIME_ZONE_INFORMATION tziTest;
-	DWORD dwRet = GetTimeZoneInformation(&tziTest);
+	const DWORD dwRet = GetTimeZoneInformation(&tziTest);
 	if (dwRet == TIME_ZONE_ID_DAYLIGHT)
 		tz = " MDT"; // wprintf(L"%s\n", tziTest.DaylightName);
 	else if (dwRet == TIME_ZONE_ID_STANDARD
@@ -90,7 +90,7 @@ std::string getBuildDate(bool built)
 	oststr << __DATE__ << " " << __TIME__ << tz;
 	std::string st = oststr.str();
 
-	size_t pos = st.find("  "); // remove possible double-space between month & single-digit days
+	const size_t pos = st.find("  "); // remove possible double-space between month & single-digit days
 	if (pos != std::string::npos)
 		st.erase(pos, 1);
 

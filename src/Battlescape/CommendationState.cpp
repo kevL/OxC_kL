@@ -151,17 +151,17 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					wss << (*soldier)->getName().c_str();
 
 					int
-						skipCounter = 0,
+						skip = 0,
 						lastInt = -2,
-						thisInt = -1,
-						j = 0;
+						thisInt = -1;
+					size_t j = 0;
 
 					for (std::vector<int>::const_iterator
 							i = (*award).second->getCriteria()->begin()->second.begin();
 							i != (*award).second->getCriteria()->begin()->second.end();
 							++i)
 					{
-						if (j == (*soldierAward)->getDecorationLevelInt() + 1)
+						if (j == (*soldierAward)->getDecorLevelInt() + 1)
 							break;
 
 						thisInt = *i;
@@ -173,7 +173,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 						}
 
 						if (thisInt == lastInt)
-							++skipCounter;
+							++skip;
 
 						++j;
 					}
@@ -181,7 +181,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					_lstSoldiers->addRow(
 									2,
 									wss.str().c_str(),
-									tr((*soldierAward)->getDecorationLevelName(skipCounter)).c_str());
+									tr((*soldierAward)->getDecorLevelType(skip)).c_str());
 					break;
 				}
 			}

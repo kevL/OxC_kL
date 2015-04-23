@@ -166,6 +166,25 @@ extraSprites:
     subY: 58
     files:
       0: Resources/Sprites/ufograph/medibits/medibits.png
+  - type: DETBORD.PCK
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/scanner/detbord.png
+  - type: DETBORD2.PCK
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/scanner/detbord2.png
+  - type: DETBLOB.DAT
+    width: 320
+    height: 200
+    subX: 16
+    subY: 16
+    files:
+      0: Resources/Sprites/ufograph/scanner/detblob.png
   - type: SMOKE.PCK
     width: 256
     height: 280

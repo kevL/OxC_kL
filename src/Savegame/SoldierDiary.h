@@ -42,19 +42,19 @@ class SoldierCommendations
 
 private:
 	bool _isNew;
-	int  _decorationLevel;
+	size_t _decorLevel;
 	std::string
 		_type,
 		_noun;
 
 
 	public:
-		/// Creates a new commendation and loads its contents from YAML.
-		SoldierCommendations(const YAML::Node& node);
 		/// Creates a commendation of the specified type.
 		SoldierCommendations(
-				std::string commendationName,
+				std::string type,
 				std::string noun = "noNoun");
+		/// Creates a new commendation and loads its contents from YAML.
+		SoldierCommendations(const YAML::Node& node);
 		/// Cleans up the commendation.
 		~SoldierCommendations();
 
@@ -68,17 +68,19 @@ private:
 		/// Gets commendation noun.
 		std::string getNoun() const;
 		/// Gets the commendation's decoration level's name.
-		std::string getDecorationLevelName(const int skip) const;
+		std::string getDecorLevelType(const int skip) const;
 		/// Gets the commendation's decoration description.
-		std::string getDecorationDescription() const;
+		std::string getDecorDesc() const;
 		/// Gets the commendation's decoration class.
-		std::string getDecorationClass() const;
+		std::string getDecorClass() const;
 		/// Gets the commendation's decoration level's int.
-		int getDecorationLevelInt() const;
+		size_t getDecorLevelInt() const;
+
 		/// Gets the newness of the commendation.
 		bool isNew() const;
 		/// Sets the commendation newness to false.
 		void makeOld();
+
 		/// Increment decoration level. Sets _isNew to true.
 		void addDecoration();
 };
@@ -125,7 +127,7 @@ private:
 		_mediApplicationsTotal;
 
 	std::vector<int> _missionIdList;
-	std::vector<SoldierCommendations*> _commendations;
+	std::vector<SoldierCommendations*> _awards;
 	std::vector<BattleUnitKills*> _killList;
 
 	std::map<std::string, int>

@@ -5533,14 +5533,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 				{
 					morale = std::min( // xCom Morale loss for getting Mc'd.
 									0,
-									(_battleSave->getMoraleModifier(NULL, true) / 10) + (morale / 2) - 110);
+									(_battleSave->getMoraleModifier() / 10) + (morale / 2) - 110);
 				}
 				else //if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
 						morale = std::min( // aLien Morale loss for getting Mc'd.
 										0,
-										(_battleSave->getMoraleModifier(NULL, false) / 10) + morale - 110);
+										(_battleSave->getMoraleModifier(NULL, false) / 10) + (morale * 2 / 3) - 110);
 					else
 						morale /= 2; // xCom Morale gain for getting Mc'd back to xCom.
 				}

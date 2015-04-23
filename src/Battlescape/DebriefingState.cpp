@@ -121,7 +121,7 @@ DebriefingState::DebriefingState()
 	if (Options::storageLimitsEnforced == true)
 		_limitsEnforced = 1;
 
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(280, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 216, 8);
@@ -210,11 +210,11 @@ DebriefingState::DebriefingState()
 		if ((*i)->qty != 0)
 		{
 			std::wostringstream
-				wosts1,
-				wosts2;
+				woststr1,
+				woststr2;
 
-			wosts1 << L'\x01' << (*i)->qty << L'\x01';	// quantity of recovered item Type
-			wosts2 << L'\x01' << (*i)->score;			// score for items of Type
+			woststr1 << L'\x01' << (*i)->qty << L'\x01';	// quantity of recovered item Type
+			woststr2 << L'\x01' << (*i)->score;			// score for items of Type
 			total += (*i)->score;						// total score
 
 			if ((*i)->recover == true)
@@ -222,8 +222,8 @@ DebriefingState::DebriefingState()
 				_lstRecovery->addRow(
 								3,
 								tr((*i)->item).c_str(),
-								wosts1.str().c_str(),
-								wosts2.str().c_str());
+								woststr1.str().c_str(),
+								woststr2.str().c_str());
 				recov_offY += 8;
 			}
 			else
@@ -231,8 +231,8 @@ DebriefingState::DebriefingState()
 				_lstStats->addRow(
 								3,
 								tr((*i)->item).c_str(),
-								wosts1.str().c_str(),
-								wosts2.str().c_str());
+								woststr1.str().c_str(),
+								woststr2.str().c_str());
 				stats_offY += 8;
 			}
 
@@ -257,12 +257,12 @@ DebriefingState::DebriefingState()
 		_missionStatistics->valiantCrux = true;
 	}
 
-	std::wostringstream wosts;
-	wosts << total;
+	std::wostringstream woststr;
+	woststr << total;
 	_lstTotal->addRow(
 					2,
 					tr("STR_TOTAL_UC").c_str(),
-					wosts.str().c_str());
+					woststr.str().c_str());
 
 	if (recov_offY > 0)
 	{
@@ -353,16 +353,19 @@ DebriefingState::DebriefingState()
 	_missionStatistics->id = _savedGame->getMissionStatistics()->size();
 	_missionStatistics->shade = battle->getGlobalShade();
 
+	//Log(LOG_INFO) << "DebriefingState::cTor";
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
 			++i)
 	{
+		//Log(LOG_INFO) << ". iter BattleUnits";
 		Soldier* soldier = (*i)->getGeoscapeSoldier();
 		// NOTE: In the case of a dead soldier, this pointer is Valid but points to garbage.
 		// Use that.
 		if (soldier != NULL)
 		{
+			//Log(LOG_INFO) << ". . id = " << (*i)->getId();
 			BattleUnitStatistics* const statistics = (*i)->getStatistics();
 
 			int soldierAlienKills = 0;
@@ -393,6 +396,7 @@ DebriefingState::DebriefingState()
 
 			if ((*i)->getStatus() == STATUS_DEAD)
 			{
+				//Log(LOG_INFO) << ". . . dead";
 				soldier = NULL;	// Zero out the BattleUnit from the geoscape Soldiers list
 								// in this State; it's already gone from his/her former Base.
 								// This makes them ineligible for promotion.
@@ -422,11 +426,11 @@ DebriefingState::DebriefingState()
 												_missionStatistics,
 												_rules);
 				deadSoldier->getDiary()->manageAwards(_rules);
-
 				_soldiersKIA.push_back(deadSoldier);
 			}
 			else
 			{
+				//Log(LOG_INFO) << ". . . alive";
 				const int wounds = soldier->getRecovery();
 				statistics->daysWounded =
 				_missionStatistics->injuryList[soldier->getId()] = wounds;
@@ -435,14 +439,14 @@ DebriefingState::DebriefingState()
 											statistics,
 											_missionStatistics,
 											_rules);
-
 				if (soldier->getDiary()->manageAwards(_rules) == true)
 					_soldiersCommended.push_back(soldier);
 			}
 		}
 	}
 
-	_savedGame->getMissionStatistics()->push_back(_missionStatistics); // Soldier Diary_end.
+	_savedGame->getMissionStatistics()->push_back(_missionStatistics);
+	// Soldier Diary_end.
 
 
 	_game->getResourcePack()->playMusic(music);
