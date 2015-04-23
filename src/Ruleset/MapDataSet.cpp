@@ -38,8 +38,8 @@ namespace OpenXcom
 {
 
 MapData
-	* MapDataSet::_blankTile	= NULL,
-	* MapDataSet::_scorchedTile	= NULL;
+	* MapDataSet::_blankTile = NULL,
+	* MapDataSet::_scorchedTile = NULL;
 
 
 /**
@@ -126,7 +126,6 @@ void MapDataSet::loadData()
 		return;
 
 	_loaded = true;
-	int objNumber = 0;
 
 #pragma pack(push, 1)
 	struct MCD // this struct helps to read the .MCD file format
@@ -152,9 +151,8 @@ void MapDataSet::loadData()
 		unsigned char	Block_Smoke;
 		unsigned char	u39;
 		unsigned char	TU_Walk;
-//kL	unsigned char	TU_Slide;
-		unsigned char	TU_Fly;
-		unsigned char	TU_Slide; // kL
+		unsigned char	TU_Fly; // kL_note: switched order of Fly w/ Slide
+		unsigned char	TU_Slide;
 		unsigned char	Armor;
 		unsigned char	HE_Block;
 		unsigned char	Die_MCD;
@@ -181,27 +179,31 @@ void MapDataSet::loadData()
 	MCD mcd;
 
 	// Load Terrain Data from MCD file
-	std::ostringstream s;
-	s << "TERRAIN/" << _name << ".MCD";
+	std::ostringstream oststr;
+	oststr << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
 	std::ifstream mapFile ( // init.
-						CrossPlatform::getDataFile(s.str()).c_str(),
+						CrossPlatform::getDataFile(oststr.str()).c_str(),
 						std::ios::in | std::ios::binary);
-	if (!mapFile)
+	if (mapFile.fail() == true)
 	{
-		throw Exception(s.str() + " not found");
+		throw Exception(oststr.str() + " not found");
 	}
 
-	while (mapFile.read((char*)& mcd, sizeof(MCD)))
+
+	int objNumber = 0;
+	while (mapFile.read(
+					(char*)&mcd,
+					sizeof(MCD)))
 	{
 		MapData* to = new MapData(this);
 		_objects.push_back(to);
 
 		// set all the terrain-object properties:
-		for (int
+		for (size_t
 				frame = 0;
-				frame < 8;
+				frame != 8;
 				++frame)
 		{
 			to->setSprite(
@@ -248,13 +250,14 @@ void MapDataSet::loadData()
 		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
 		to->setMiniMapIndex(mcd.ScanG);
 
-		for (int
-				layer = 0;
-				layer < 12;
-				++layer)
+		for (size_t
+				loft = 0;
+				loft != 12;
+				++loft)
 		{
-			int loft = (int)mcd.LOFT[layer];
-			to->setLoftID(loft, layer);
+			to->setLoftID(
+						(int)mcd.LOFT[loft],
+						static_cast<int>(loft));
 		}
 
 		// store the 2 tiles of blanks in a static - so they are accessible everywhere
@@ -265,7 +268,6 @@ void MapDataSet::loadData()
 			else if (objNumber == 1)
 				MapDataSet::_scorchedTile = to;
 		}
-
 		++objNumber;
 	}
 
@@ -296,11 +298,12 @@ void MapDataSet::loadData()
 						1);		// gas, kL
 //kL					armor);	// gas
 
-			if ((*i)->getDieMCD())
-				_objects.at((*i)->getDieMCD())->setBlock(
+			if ((*i)->getDieMCD() != 0)
+				_objects.at(static_cast<size_t>((*i)->getDieMCD()))
+												->setBlock(
 														1,
 														1,
-														armor,
+														armor, // hm, sets Death HE-block value same as orig part ...
 														1,
 														1,
 														1); // kL
@@ -326,15 +329,15 @@ void MapDataSet::loadData()
 	{
 		//Log(LOG_INFO) << ". . Creating new terrain SurfaceSet:" << _name << ".PCK";
 		std::ostringstream
-			s1,
-			s2;
-		s1 << "TERRAIN/" << _name << ".PCK";
-		s2 << "TERRAIN/" << _name << ".TAB";
+			oststr1,
+			oststr2;
+		oststr1 << "TERRAIN/" << _name << ".PCK";
+		oststr2 << "TERRAIN/" << _name << ".TAB";
 
-		_surfaceSet = new SurfaceSet(32, 40);
+		_surfaceSet = new SurfaceSet(32,40);
 		_surfaceSet->loadPck(
-						CrossPlatform::getDataFile(s1.str()),
-						CrossPlatform::getDataFile(s2.str()));
+						CrossPlatform::getDataFile(oststr1.str()),
+						CrossPlatform::getDataFile(oststr2.str()));
 	}
 }
 
@@ -392,7 +395,7 @@ void MapDataSet::loadLOFTEMPS(
 	std::ifstream mapFile( // Load file
 						filename.c_str(),
 						std::ios::in | std::ios::binary);
-	if (!mapFile)
+	if (mapFile.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -400,14 +403,14 @@ void MapDataSet::loadLOFTEMPS(
 	Uint16 value;
 
 	while (mapFile.read(
-						(char*)& value,
-						sizeof(value)))
+					(char*)&value,
+					sizeof(value)))
 	{
 		value = SDL_SwapLE16(value);
 		voxelData->push_back(value);
 	}
 
-	if (!mapFile.eof())
+	if (mapFile.eof() == false)
 	{
 		throw Exception("Invalid LOFTEMPS");
 	}

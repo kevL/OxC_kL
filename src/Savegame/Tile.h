@@ -53,7 +53,7 @@ protected:
 	static const size_t
 		LIGHTLAYERS	= 3,
 		PARTS		= 4,
-		DISCSECTS	= 3;
+		SECTS		= 3;
 
 	bool
 		_danger,
@@ -65,7 +65,7 @@ protected:
 		_explosive,
 		_explosiveType,
 		_fire,
-		_lastLight[LIGHTLAYERS],
+//		_lastLight[LIGHTLAYERS],
 		_light[LIGHTLAYERS],
 		_mapDataID[4],
 		_mapDataSetID[4],

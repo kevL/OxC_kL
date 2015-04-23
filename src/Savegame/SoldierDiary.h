@@ -51,8 +51,8 @@ private:
 	public:
 		/// Creates a commendation of the specified type.
 		SoldierCommendations(
-				std::string type,
-				std::string noun = "noNoun");
+				const std::string type,
+				const std::string noun = "noNoun");
 		/// Creates a new commendation and loads its contents from YAML.
 		SoldierCommendations(const YAML::Node& node);
 		/// Cleans up the commendation.
@@ -64,15 +64,15 @@ private:
 		YAML::Node save() const;
 
 		/// Gets commendation name.
-		std::string getType() const;
+		const std::string getType() const;
 		/// Gets commendation noun.
-		std::string getNoun() const;
+		const std::string getNoun() const;
 		/// Gets the commendation's decoration level's name.
-		std::string getDecorLevelType(const int skip) const;
+		const std::string getDecorLevelType(const int skip) const;
 		/// Gets the commendation's decoration description.
-		std::string getDecorDesc() const;
+		const std::string getDecorDesc() const;
 		/// Gets the commendation's decoration class.
-		std::string getDecorClass() const;
+		const std::string getDecorClass() const;
 		/// Gets the commendation's decoration level's int.
 		size_t getDecorLevelInt() const;
 

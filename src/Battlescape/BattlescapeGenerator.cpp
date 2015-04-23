@@ -2831,9 +2831,9 @@ void BattlescapeGenerator::runInventory(
 											_game); // kL_add
 	MapData* const data = new MapData(dataSet);
 
-	for (int
+	for (size_t
 			i = 0;
-			i < qtySoldiers;
+			i != static_cast<size_t>(qtySoldiers);
 			++i)
 	{
 		Tile* const tile = _battleSave->getTiles()[i];
@@ -2843,7 +2843,7 @@ void BattlescapeGenerator::runInventory(
 					MapData::O_FLOOR);
 		tile->getMapData(MapData::O_FLOOR)->setSpecialType(
 														START_POINT,
-														0);
+														MapData::O_FLOOR);
 		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);
 		tile->getMapData(MapData::O_FLOOR)->setFlags(
 													false,

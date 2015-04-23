@@ -49,8 +49,8 @@ private:
 	std::string _name;
 
 	static MapData
-		* _blankTile,
-		* _scorchedTile;
+		* MapDataSet::_blankTile,
+		* MapDataSet::_scorchedTile;
 
 	Game* _game;
 	SurfaceSet* _surfaceSet;
@@ -69,11 +69,6 @@ private:
 		/// Loads the map data set from YAML.
 		void load(const YAML::Node& node);
 
-		/// Loads voxeldata from a DAT file.
-		static void loadLOFTEMPS(
-				const std::string& filename,
-				std::vector<Uint16>* voxelData);
-
 		/// Gets the dataset name (used for MAP generation).
 		std::string getName() const;
 
@@ -90,6 +85,11 @@ private:
 		void loadData();
 		///	Unloads to free memory.
 		void unloadData();
+
+		/// Loads voxeldata from a DAT file.
+		static void loadLOFTEMPS(
+				const std::string& filename,
+				std::vector<Uint16>* voxelData);
 
 		/// Gets a blank floor tile.
 		static MapData* getBlankFloorTile();

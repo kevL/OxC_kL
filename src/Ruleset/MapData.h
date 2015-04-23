@@ -87,6 +87,7 @@ private:
 		_isGravLift,
 		_isNoFloor,
 		_isUfoDoor,
+		_isPsychedelic,
 		_stopLOS;
 	int
 		_armor,
@@ -111,6 +112,7 @@ private:
 	unsigned short _miniMapIndex;
 
 	MapDataSet* _dataset;
+
 	SpecialTileType _specialType;
 
 
@@ -122,7 +124,7 @@ private:
 			O_OBJECT;
 
 		/// cTor.
-		MapData(MapDataSet* dataset);
+		MapData(MapDataSet* dataSet);
 		/// dTor.
 		~MapData();
 
@@ -131,10 +133,10 @@ private:
 		MapDataSet* getDataset() const;
 
 		/// Gets the sprite index for a certain frame.
-		int getSprite(int frameID) const;
+		int getSprite(int frame) const;
 		/// Sets the sprite index for a certain frame.
 		void setSprite(
-				int frameID,
+				int frame,
 				int value);
 
 		/// Gets whether this is an animated ufo door.
@@ -277,6 +279,9 @@ private:
 
 		/// Check if this is an xcom base object.
 		bool isBaseModule() const;
+
+		/// Gets if this tilepart is psychedelic.
+		bool isPsychedelic() const;
 
 		/// Sets this tile as not stopping LOS. // kL_note: "not" drop more LSD.
 //		void setStopLOS(bool stopLOS);

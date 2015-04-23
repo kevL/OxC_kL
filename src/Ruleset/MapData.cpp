@@ -19,6 +19,8 @@
 
 #include "MapData.h"
 
+#include "MapDataSet.h"
+
 
 namespace OpenXcom
 {
@@ -35,11 +37,11 @@ const int
 
 /**
  * Creates a new Map Data Object.
- * @param dataset - pointer to the MapDataSet this object belongs to
+ * @param dataSet - pointer to the MapDataSet this object belongs to
  */
-MapData::MapData(MapDataSet* dataset)
+MapData::MapData(MapDataSet* dataSet)
 	:
-		_dataset(dataset),
+		_dataset(dataSet),
 		_specialType(TILE),
 		_isUfoDoor(false),
 		_stopLOS(false),
@@ -65,7 +67,8 @@ MapData::MapData(MapDataSet* dataset)
 		_explosive(0),
 		_explosiveType(0),
 		_bigWall(0),
-		_miniMapIndex(0)
+		_miniMapIndex(0),
+		_isPsychedelic(false)
 {
 	std::fill_n(_sprite, 8,0);
 	std::fill_n(_block, 6,0);
@@ -89,24 +92,24 @@ MapDataSet* MapData::getDataset() const
 
 /**
  * Gets the sprite index.
- * @param frameID - animation frame 0-7
+ * @param frame - animation frame 0-7
  * @return, the original sprite index
  */
-int MapData::getSprite(int frameID) const
+int MapData::getSprite(int frame) const
 {
-	return _sprite[frameID];
+	return _sprite[static_cast<size_t>(frame)];
 }
 
 /**
  * Sets the sprite index for a certain frame.
- * @param frameID	- animation frame
- * @param value		- the sprite index in the surfaceset of the mapdataset
+ * @param frame - animation frame
+ * @param value - the sprite index in the surfaceset of the mapdataset
  */
 void MapData::setSprite(
-		int frameID,
+		int frame,
 		int value)
 {
-	_sprite[static_cast<size_t>(frameID)] = value;
+	_sprite[static_cast<size_t>(frame)] = value;
 }
 
 /**
@@ -353,6 +356,17 @@ void MapData::setSpecialType(
 {
 	_specialType = static_cast<SpecialTileType>(value);
 	_objectType = type;
+
+	if (_dataset->getName() == "U_PODS") // kL-> should put this in MCDPatch
+	{
+		_isPsychedelic = _sprite[0] == 7	// disco walls, yellow northWall
+					  || _sprite[0] == 8	//  "     "       "    westWall
+					  || _sprite[0] == 17	// disco walls, blue northWall
+					  || _sprite[0] == 18	//  "     "       "  westWall
+					  || _sprite[0] == 4	// disco ball
+					  || _sprite[0] == 0	// red round energy supply
+					  || _sprite[0] == 18;	// red oblong energy supply
+	}
 }
 
 /**
@@ -663,6 +677,15 @@ void MapData::setNoFloor(bool isNoFloor)
 bool MapData::isBaseModule() const
 {
 	return _baseModule;
+}
+
+/**
+ * Gets if this tilepart is psychedelic.
+ * @return, true if psycho
+ */
+bool MapData::isPsychedelic() const
+{
+	return _isPsychedelic;
 }
 
 /**

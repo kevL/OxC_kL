@@ -93,7 +93,7 @@ Tile::Tile(const Position& pos)
 
 	for (size_t
 			i = 0;
-			i != DISCSECTS;
+			i != SECTS;
 			++i)
 	{
 		_discovered[i] = false;
@@ -105,7 +105,7 @@ Tile::Tile(const Position& pos)
 			++layer)
 	{
 		_light[layer] = 0;
-		_lastLight[layer] = -1;
+//		_lastLight[layer] = -1;
 	}
 }
 
@@ -150,7 +150,7 @@ void Tile::load(const YAML::Node& node)
 	{
 		for (size_t
 				i = 0;
-				i != DISCSECTS;
+				i != SECTS;
 				++i)
 		{
 			_discovered[i] = node["discovered"][i].as<bool>();
@@ -232,7 +232,7 @@ YAML::Node Tile::save() const
 	{
 		for (size_t
 				i = 0;
-				i != DISCSECTS;
+				i != SECTS;
 				++i)
 		{
 			node["discovered"].push_back(_discovered[i]);
@@ -292,7 +292,6 @@ void Tile::setMapData(
 		const int part)
 {
 	const size_t i = static_cast<size_t>(part);
-
 	_objects[i] = data;
 	_mapDataID[i] = dataID;
 	_mapDataSetID[i] = dataSetID;
@@ -311,7 +310,6 @@ void Tile::getMapData(
 		int part) const
 {
 	const size_t i = static_cast<size_t>(part);
-
 	*dataID = _mapDataID[i];
 	*dataSetID = _mapDataSetID[i];
 }
@@ -612,7 +610,7 @@ bool Tile::isDiscovered(int part) const
 void Tile::resetLight(size_t layer)
 {
 	_light[layer] = 0;
-	_lastLight[layer] = _light[layer];
+//	_lastLight[layer] = _light[layer];
 }
 
 /**
@@ -1248,28 +1246,37 @@ void Tile::animate()
 	{
 		if (_objects[i] != NULL)
 		{
-			if (_objects[i]->isUFODoor() == true // ufo door is static
-				&& (   _curFrame[i] == 0
-					|| _curFrame[i] == 7))
+			if (_objects[i]->isPsychedelic() == false)
 			{
-				continue;
+				if (_objects[i]->isUFODoor() == true // ufo door is static
+					&& (   _curFrame[i] == 0
+						|| _curFrame[i] == 7))
+				{
+					continue;
+				}
+
+				nextFrame = _curFrame[i] + 1;
+
+				if (   _objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
+					&& _objects[i]->getSpecialType() == START_POINT
+					&& nextFrame == 3)
+				{
+					nextFrame = 7;
+				}
+
+				if (nextFrame == 8)
+					nextFrame = 0;
+
+				_curFrame[i] = nextFrame;
 			}
-
-			nextFrame = _curFrame[i] + 1;
-
-			if (   _objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
-				&& _objects[i]->getSpecialType() == START_POINT
-				&& nextFrame == 3)
-			{
-				nextFrame = 7;
-			}
-
-			if (nextFrame == 8)
-				nextFrame = 0;
-
-			_curFrame[i] = nextFrame;
+			else if (SDL_GetTicks() % 3 == 0)
+//				_curFrame[i] = SDL_GetTicks() % 8;
+				_curFrame[i] = std::rand() % 8;
 		}
 	}
+//	getMapData(MapData::O_WESTWALL)->getDataset()->getName() == "U_PODS"
+//	getMapData(MapData::O_WESTWALL)->getSprite(0) == 61
+
 
 	for (std::list<Particle*>::const_iterator
 			i = _particles.begin();
@@ -1304,8 +1311,8 @@ int Tile::getAnimationOffset() const
 Surface* Tile::getSprite(int part) const
 {
 	const size_t i = static_cast<size_t>(part);
-	MapData* data = _objects[i];
 
+	const MapData* const data = _objects[i];
 	if (data == NULL)
 		return NULL;
 
