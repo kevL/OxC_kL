@@ -87,7 +87,6 @@ private:
 		_isGravLift,
 		_isNoFloor,
 		_isUfoDoor,
-		_isPsychedelic,
 		_stopLOS;
 	int
 		_armor,
@@ -100,6 +99,7 @@ private:
 		_flammable,
 		_footstepSound,
 		_fuel,
+		_isPsychedelic,
 		_lightSource,
 		_loftID[12],
 		_objectType,
@@ -281,7 +281,7 @@ private:
 		bool isBaseModule() const;
 
 		/// Gets if this tilepart is psychedelic.
-		bool isPsychedelic() const;
+		int isPsychedelic() const;
 
 		/// Sets this tile as not stopping LOS. // kL_note: "not" drop more LSD.
 //		void setStopLOS(bool stopLOS);

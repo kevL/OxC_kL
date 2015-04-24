@@ -662,8 +662,6 @@ void BasescapeState::viewMouseOver(Action*)
 	std::wostringstream woststr;
 
 	const BaseFacility* const fac = _view->getSelectedFacility();
-	const size_t base = _mini->getHoveredBase();
-
 	if (fac != NULL)
 	{
 		_txtFacility->setAlign(ALIGN_LEFT);
@@ -682,11 +680,15 @@ void BasescapeState::viewMouseOver(Action*)
 									.arg(fac->getCraft()->getName(_game->getLanguage()));
 		}
 	}
-	else if (base < _game->getSavedGame()->getBases()->size()
-		&& _base != _game->getSavedGame()->getBases()->at(base))
+	else
 	{
-		_txtFacility->setAlign(ALIGN_RIGHT);
-		woststr << _game->getSavedGame()->getBases()->at(base)->getName(_game->getLanguage()).c_str();
+		const size_t base = _mini->getHoveredBase();
+		if (base < _game->getSavedGame()->getBases()->size()
+			&& _base != _game->getSavedGame()->getBases()->at(base))
+		{
+			_txtFacility->setAlign(ALIGN_RIGHT);
+			woststr << _game->getSavedGame()->getBases()->at(base)->getName(_game->getLanguage()).c_str();
+		}
 	}
 
 	_txtFacility->setText(woststr.str());

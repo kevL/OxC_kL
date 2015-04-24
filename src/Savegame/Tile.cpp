@@ -1246,7 +1246,8 @@ void Tile::animate()
 	{
 		if (_objects[i] != NULL)
 		{
-			if (_objects[i]->isPsychedelic() == false)
+			const int isPsycho = _objects[i]->isPsychedelic();
+			if (isPsycho == 0)
 			{
 				if (_objects[i]->isUFODoor() == true // ufo door is static
 					&& (   _curFrame[i] == 0
@@ -1269,9 +1270,18 @@ void Tile::animate()
 
 				_curFrame[i] = nextFrame;
 			}
-			else if (SDL_GetTicks() % 3 == 0)
-//				_curFrame[i] = SDL_GetTicks() % 8;
-				_curFrame[i] = std::rand() % 8;
+			else
+			{
+				if (isPsycho == 2)
+				{
+					if (SDL_GetTicks() % 3 == 0)
+						_curFrame[i] = std::rand() % 8;
+				}
+				else if (isPsycho == 1)
+				{
+					_curFrame[i] = SDL_GetTicks() % 8;
+				}
+			}
 		}
 	}
 //	getMapData(MapData::O_WESTWALL)->getDataset()->getName() == "U_PODS"

@@ -307,7 +307,7 @@ DebriefingState::DebriefingState()
 		}
 	}
 
-	std::string music = OpenXcom::res_MUSIC_TAC_DEBRIEFING;
+	std::string music;
 
 	std::wstring rating; // Calculate rating
 	if (total < -99)
@@ -345,6 +345,9 @@ DebriefingState::DebriefingState()
 
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 	_missionStatistics->score = total;
+
+	if (music.empty() == true)
+		music = OpenXcom::res_MUSIC_TAC_DEBRIEFING;
 
 
 	// Soldier Diary ->
@@ -449,7 +452,10 @@ DebriefingState::DebriefingState()
 	// Soldier Diary_end.
 
 
-	_game->getResourcePack()->playMusic(music);
+	_game->getResourcePack()->playMusic(
+									music,
+									"",
+									1);
 }
 
 /**
@@ -571,7 +577,10 @@ void DebriefingState::btnOkClick(Action*)
 			}
 
 			if (playAwardMusic == true)
-				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS);
+				_game->getResourcePack()->playMusic(
+												OpenXcom::res_MUSIC_TAC_AWARDS,
+												"",
+												1);
 			else
 				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 		}

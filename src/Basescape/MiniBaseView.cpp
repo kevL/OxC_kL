@@ -135,7 +135,7 @@ void MiniBaseView::draw()
 
 	for (size_t
 			i = 0;
-			i < MAX_BASES;
+			i != MAX_BASES;
 			++i)
 	{
 		if (i == _baseID) // Draw base squares
@@ -294,19 +294,31 @@ void MiniBaseView::draw()
 }
 
 /**
- * Selects the base the mouse is over.
+ * Selects the base the mouse is hovered over.
  * @param action	- pointer to an Action
- * @param state		- state that the action handlers belong to
+ * @param state		- State that the action handlers belong to
  */
 void MiniBaseView::mouseOver(Action* action, State* state)
 {
 	_hoverBase = static_cast<size_t>(std::floor(
 				 action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
-	if		(_hoverBase < 0) _hoverBase = 0;
-	else if	(_hoverBase > 8) _hoverBase = 8;
+//	if		(_hoverBase < 0) _hoverBase = 0;
+//	else if	(_hoverBase > 8) _hoverBase = 8;
+	if		(_hoverBase > 7) _hoverBase = 7;
 
 	InteractiveSurface::mouseOver(action, state);
+}
+
+/**
+ * Deselects the base the mouse was hovered over.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
+ */
+void MiniBaseView::mouseOut(Action* action, State* state)
+{
+	_hoverBase = MAX_BASES;
+	InteractiveSurface::mouseOut(action, state);
 }
 
 /**
@@ -328,13 +340,12 @@ void MiniBaseView::blink()
 	Base* base;
 	std::string stat;
 	int
-		x,
-		y;
+		x,y;
 	Uint8 color;
 
 	for (size_t
 			i = 0;
-			i != _bases->size(); // < MAX_BASES;
+			i != _bases->size();
 			++i)
 	{
 		base = _bases->at(i);

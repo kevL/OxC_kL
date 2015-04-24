@@ -49,8 +49,8 @@ private:
 	std::string _name;
 
 	static MapData
-		* MapDataSet::_blankTile,
-		* MapDataSet::_scorchedTile;
+		* _blankTile,
+		* _scorchedTile;
 
 	Game* _game;
 	SurfaceSet* _surfaceSet;

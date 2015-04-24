@@ -710,7 +710,8 @@ void Map::drawTerrain(Surface* surface) // private.
 
 		kL_Debug_stand = false, // for debugging.
 		kL_Debug_walk = false,
-		kL_Debug_vert = false;
+		kL_Debug_vert = false,
+		kL_Debug_main = false;
 
 
 	surface->lock();
@@ -1954,7 +1955,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														|| (tileWest->getMapData(MapData::O_OBJECT) != NULL
 															&& ((tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																	&& tileWest->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-//																|| tileWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
+																|| tileWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
@@ -1974,7 +1975,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 															&& ((tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																	&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-//																|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)))
+																|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
@@ -1996,8 +1997,8 @@ void Map::drawTerrain(Surface* surface) // private.
 														quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
 															+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
 
-														srfSprite = unitNorthWest->getCache(&invalid, quad);
-//														srfSprite = NULL;
+//														srfSprite = unitNorthWest->getCache(&invalid, quad);
+														srfSprite = NULL;
 														if (srfSprite)
 														{
 															if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [60]";
@@ -2293,8 +2294,7 @@ void Map::drawTerrain(Surface* surface) // private.
 //						srfSprite = NULL;
 						if (srfSprite)
 						{
-							if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [70]";
-							if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [75]";
+							if (kL_Debug_main) Log(LOG_INFO) << ". drawUnit [70]";
 							//if (unit->getId() == 1000007) Log(LOG_INFO) << "MAP DRAW";
 							if (unit->getHealth() == 0
 								|| unit->getHealth() <= unit->getStun()) // -> && unit is Player

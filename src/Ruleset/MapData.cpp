@@ -68,7 +68,7 @@ MapData::MapData(MapDataSet* dataSet)
 		_explosiveType(0),
 		_bigWall(0),
 		_miniMapIndex(0),
-		_isPsychedelic(false)
+		_isPsychedelic(0)
 {
 	std::fill_n(_sprite, 8,0);
 	std::fill_n(_block, 6,0);
@@ -359,13 +359,19 @@ void MapData::setSpecialType(
 
 	if (_dataset->getName() == "U_PODS") // kL-> should put this in MCDPatch
 	{
-		_isPsychedelic = _sprite[0] == 7	// disco walls, yellow northWall
-					  || _sprite[0] == 8	//  "     "       "    westWall
-					  || _sprite[0] == 17	// disco walls, blue northWall
-					  || _sprite[0] == 18	//  "     "       "  westWall
-					  || _sprite[0] == 4	// disco ball
-					  || _sprite[0] == 0	// red round energy supply
-					  || _sprite[0] == 18;	// red oblong energy supply
+		if (   _sprite[0] == 7		// disco walls, yellow northWall
+			|| _sprite[0] == 8		//  "     "       "    westWall
+			|| _sprite[0] == 17		// disco walls, blue northWall
+			|| _sprite[0] == 18)	//  "     "       "  westWall
+//			|| _sprite[0] == 4)		// disco ball
+		{
+			_isPsychedelic = 1;
+		}
+		else if (_sprite[0] == 0)	// red round energy supply
+//			||   _sprite[0] == 2)	// red oblong energy supply
+		{
+			_isPsychedelic = 2;
+		}
 	}
 }
 
@@ -683,7 +689,7 @@ bool MapData::isBaseModule() const
  * Gets if this tilepart is psychedelic.
  * @return, true if psycho
  */
-bool MapData::isPsychedelic() const
+int MapData::isPsychedelic() const
 {
 	return _isPsychedelic;
 }
