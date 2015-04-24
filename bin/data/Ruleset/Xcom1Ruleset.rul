@@ -4507,7 +4507,7 @@ manufacture:
       STR_ALIEN_ALLOYS: 240
       STR_UFO_POWER_SOURCE: 2
       STR_UFO_NAVIGATION: 5
-ufopaedia:
+ufopaedia: # types 1,3,7,8 use Research palette; types 2,4,5,6 use Battlescape (Tactical) palette minus last 16 colors
   - id: STR_SKYRANGER
     type_id: 1
     section: STR_XCOM_CRAFT_ARMAMENT

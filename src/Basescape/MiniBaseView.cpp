@@ -180,7 +180,7 @@ void MiniBaseView::draw()
 					rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
 					rect.w =
 					rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
-					drawRect(&rect, color+3);
+					drawRect(&rect, color + 3);
 
 					++rect.x;
 					++rect.y;
@@ -303,9 +303,8 @@ void MiniBaseView::mouseOver(Action* action, State* state)
 	_hoverBase = static_cast<size_t>(std::floor(
 				 action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
-//	if		(_hoverBase < 0) _hoverBase = 0;
-//	else if	(_hoverBase > 8) _hoverBase = 8;
-	if		(_hoverBase > 7) _hoverBase = 7;
+	if (_hoverBase > 7)
+		_hoverBase = 7;
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -352,8 +351,10 @@ void MiniBaseView::blink()
 
 		x = i * (MINI_SIZE + 2);
 
-		if (base->getScientists() > 0 // unused Scientists &/or Engineers
-			|| base->getEngineers() > 0)
+		if (   base->getScientists() > 0 // unused Scientists &/or Engineers &/or PsiLab space
+			|| base->getEngineers() > 0
+			|| (static_cast<int>(base->getSoldiers()->size()) < base->getAvailablePsiLabs()
+				&& static_cast<int>(base->getSoldiers()->size()) > base->getUsedPsiLabs()))
 		{
 			if (_blink == true)
 				color = RED_L;

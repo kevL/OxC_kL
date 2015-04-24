@@ -312,30 +312,24 @@ void BaseInfoState::init()
 
 	var = _base->getTotalSoldiers();
 	var2 = _base->getAvailableSoldiers(true);
-//kL	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
-	ss1 << var2 << ":" << var; // kL
+	ss1 << var2 << ":" << var;
 	_numSoldiers->setText(ss1.str());
 	_barSoldiers->setMax(var);
-//kL	_barSoldiers->setValue(_base->getAvailableSoldiers());
-	_barSoldiers->setValue(var2); // kL
+	_barSoldiers->setValue(var2);
 
 	var = _base->getTotalEngineers();
 	var2 = _base->getEngineers();
-//kL	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
-	ss2 << var2 << ":" << var; // kL
+	ss2 << var2 << ":" << var;
 	_numEngineers->setText(ss2.str());
 	_barEngineers->setMax(var);
-//kL	_barEngineers->setValue(_base->getAvailableEngineers());
-	_barEngineers->setValue(var2); // kL
+	_barEngineers->setValue(var2);
 
 	var = _base->getTotalScientists();
 	var2 = _base->getScientists();
-//kL	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
-	ss3 << var2 << ":" << var; // kL
+	ss3 << var2 << ":" << var;
 	_numScientists->setText(ss3.str());
 	_barScientists->setMax(var);
-//kL	_barScientists->setValue(_base->getAvailableScientists());
-	_barScientists->setValue(var2); // kL
+	_barScientists->setValue(var2);
 
 	var = _base->getAvailableQuarters();
 	var2 = _base->getUsedQuarters();
@@ -345,7 +339,7 @@ void BaseInfoState::init()
 	_barQuarters->setValue(var2);
 
 	var = _base->getAvailableStores();
-	var2 = static_cast<int>(floor(_base->getUsedStores() + 0.05));
+	var2 = static_cast<int>(std::floor(_base->getUsedStores() + 0.05));
 	ss5 << var2 << ":" << var;
 	_numStores->setText(ss5.str());
 	_barStores->setMax(var);
@@ -389,10 +383,7 @@ void BaseInfoState::init()
 	_barDefense->setValue(var);
 
 	var = _base->getShortRangeValue();
-//kL	var = _base->getShortRangeDetection();
-//kL	ss11 << _base->getShortRangeDetection();
-//	ss11 << _base->getShortRangeValue(); // kL
-	ss11 << var; // kL
+	ss11 << var;
 	_numShortRange->setText(ss11.str());
 	_barShortRange->setMax(var);
 	_barShortRange->setValue(var);
@@ -402,10 +393,7 @@ void BaseInfoState::init()
 		_barLongRange->setColor(Palette::blockOffset(4)+4);
 
 	var = _base->getLongRangeValue();
-//kL	var = _base->getLongRangeDetection();
-//kL	ss12 << _base->getLongRangeDetection();
-//	ss12 << _base->getLongRangeValue(); // kL
-	ss12 << var; // kL
+	ss12 << var;
 	_numLongRange->setText(ss12.str());
 	_barLongRange->setMax(var);
 	_barLongRange->setValue(var);
@@ -427,13 +415,14 @@ void BaseInfoState::edtBaseChange(Action*)
 void BaseInfoState::miniClick(Action*)
 {
 	const size_t baseID = _mini->getHoveredBase();
+	const std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
 
-	if (baseID < _game->getSavedGame()->getBases()->size()
-		&& _base != _game->getSavedGame()->getBases()->at(baseID))
+	if (baseID < baseList->size()
+		&& _base != baseList->at(baseID))
 	{
 		_mini->setSelectedBase(baseID);
 
-		_base = _game->getSavedGame()->getBases()->at(baseID);
+		_base = baseList->at(baseID);
 		_state->setBase(_base);
 
 		init();

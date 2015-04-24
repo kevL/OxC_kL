@@ -1272,15 +1272,10 @@ void Tile::animate()
 			}
 			else
 			{
-				if (isPsycho == 2)
-				{
-					if (SDL_GetTicks() % 3 == 0)
-						_curFrame[i] = std::rand() % 8;
-				}
-				else if (isPsycho == 1)
-				{
+				if (isPsycho == 1)
 					_curFrame[i] = SDL_GetTicks() % 8;
-				}
+				else if (SDL_GetTicks() % 3 == 0) // isPsycho==2
+					_curFrame[i] = std::rand() % 8;
 			}
 		}
 	}

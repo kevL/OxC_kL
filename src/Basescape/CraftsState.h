@@ -44,23 +44,20 @@ class CraftsState
 
 private:
 	static const Uint8
-		GREEN		=  48, // Palette::blockOffset(3)
-		LAVENDER	=  64, // Palette::blockOffset(4)
-		YELLOW		=  96, // Palette::blockOffset(6)
-		BROWN		= 112, // Palette::blockOffset(7)
-		BLUE		= 128; // Palette::blockOffset(8)
+		GREEN		=  48,
+		LAVENDER	=  64,
+		YELLOW		=  96,
+		BROWN		= 112,
+		BLUE		= 128;
 
 	Uint8 _cellColor;
 
 	Base* _base;
 	Text
 		* _txtBase,
-//		* _txtCrew,
-//		* _txtHwp,
 		* _txtName,
 		* _txtStatus,
 		* _txtTitle,
-//		* _txtWeapon,
 		* _txtWeapons;
 	TextButton* _btnOk;
 	TextList* _lstCrafts;
@@ -89,10 +86,10 @@ private:
 		/// Handler for clicking the Crafts list.
 		void lstCraftsPress(Action* action);
 
-		/// kL. Handler for clicking the Crafts reordering button.
-		void lstLeftArrowClick(Action* action); // kL
-		/// kL. Handler for clicking the Crafts reordering button.
-		void lstRightArrowClick(Action* action); // kL
+		/// Handler for clicking the Crafts reordering button.
+		void lstLeftArrowClick(Action* action);
+		/// Handler for clicking the Crafts reordering button.
+		void lstRightArrowClick(Action* action);
 };
 
 }

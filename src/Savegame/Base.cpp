@@ -1772,12 +1772,12 @@ void Base::researchHelp(const std::string& aLien) // kL
 bool Base::getHyperDetection() const
 {
 	for (std::vector<BaseFacility*>::const_iterator
-			f = _facilities.begin();
-			f != _facilities.end();
-			++f)
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
-		if ((*f)->getBuildTime() == 0
-			&& (*f)->getRules()->isHyperwave() == true)
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->isHyperwave() == true)
 		{
 			return true;
 		}
@@ -1793,12 +1793,12 @@ bool Base::getHyperDetection() const
 bool Base::hasResearch() const
 {
 	for (std::vector<BaseFacility*>::const_iterator
-			f = _facilities.begin();
-			f != _facilities.end();
-			++f)
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
-		if ((*f)->getBuildTime() == 0
-			&& (*f)->getRules()->getLaboratories() > 0)
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getLaboratories() > 0)
 		{
 			return true;
 		}
@@ -1814,12 +1814,12 @@ bool Base::hasResearch() const
 bool Base::hasProduction() const
 {
 	for (std::vector<BaseFacility*>::const_iterator
-			f = _facilities.begin();
-			f != _facilities.end();
-			++f)
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
-		if ((*f)->getBuildTime() == 0
-			&& (*f)->getRules()->getWorkshops() > 0)
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getWorkshops() > 0)
 		{
 			return true;
 		}
@@ -1837,12 +1837,12 @@ int Base::getAvailablePsiLabs() const
 	int total = 0;
 
 	for (std::vector<BaseFacility*>::const_iterator
-			f = _facilities.begin();
-			f != _facilities.end();
-			++f)
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
-		if ((*f)->getBuildTime() == 0)
-			total += (*f)->getRules()->getPsiLaboratories();
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getPsiLaboratories();
 	}
 
 	return total;
@@ -1857,11 +1857,11 @@ int Base::getUsedPsiLabs() const
 	int total = 0;
 
 	for (std::vector<Soldier*>::const_iterator
-			s = _soldiers.begin();
-			s != _soldiers.end();
-			++s)
+			i = _soldiers.begin();
+			i != _soldiers.end();
+			++i)
 	{
-		if ((*s)->isInPsiTraining())
+		if ((*i)->isInPsiTraining() == true)
 			++total;
 	}
 

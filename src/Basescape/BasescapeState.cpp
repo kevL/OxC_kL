@@ -710,16 +710,17 @@ void BasescapeState::viewMouseOut(Action*)
 void BasescapeState::miniLeftClick(Action*)
 {
 	const size_t base = _mini->getHoveredBase();
+	const std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
 
-	if (base < _game->getSavedGame()->getBases()->size()
-		&& _base != _game->getSavedGame()->getBases()->at(base))
+	if (base < baseList->size()
+		&& _base != baseList->at(base))
 	{
-		_base = _game->getSavedGame()->getBases()->at(base);
+		_base = baseList->at(base);
 		_txtFacility->setText(L"");
 
 		init();
 	}
-	else if (base == _game->getSavedGame()->getBases()->size())
+	else if (base == baseList->size())
 	{
 		kL_geoMusic = false;
 
@@ -742,12 +743,13 @@ void BasescapeState::miniLeftClick(Action*)
 void BasescapeState::miniRightClick(Action*)
 {
 	const size_t base = _mini->getHoveredBase();
+	const std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
 
-	if (base < _game->getSavedGame()->getBases()->size())
+	if (base < baseList->size())
 	{
-		const Base* const centBase = _game->getSavedGame()->getBases()->at(base);
-		_game->getSavedGame()->setGlobeLongitude(centBase->getLongitude());
-		_game->getSavedGame()->setGlobeLatitude(centBase->getLatitude());
+		const Base* const centerBase = baseList->at(base);
+		_game->getSavedGame()->setGlobeLongitude(centerBase->getLongitude());
+		_game->getSavedGame()->setGlobeLatitude(centerBase->getLatitude());
 
 		kL_reCenter = true;
 		kL_geoMusic = false;

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1429615931 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1429887864 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -243,7 +243,7 @@
 1429027160 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1429853592 f:\git\openxcom\src\basescape\minibaseview.h
+1429886556 f:\git\openxcom\src\basescape\minibaseview.h
 	"../Engine/InteractiveSurface.h"
 
 1425340471 f:\git\openxcom\src\engine\interactivesurface.h
@@ -4399,7 +4399,7 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1429615955 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1429888028 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4450,7 +4450,7 @@
 1424390945 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
-1426371935 f:\git\openxcom\src\basescape\craftsstate.h
+1429885581 f:\git\openxcom\src\basescape\craftsstate.h
 	"../Engine/State.h"
 
 1424390945 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
@@ -4912,7 +4912,7 @@
 	<windows.h>
 	<stddef.h>
 
-1429024525 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1429888920 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -8642,7 +8642,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1428540283 source:f:\git\openxcom\src\savegame\base.cpp
+1429887141 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8869,7 +8869,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1429824813 source:f:\git\openxcom\src\savegame\tile.cpp
+1429857590 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"

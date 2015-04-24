@@ -54,17 +54,17 @@ class MiniBaseView
 private:
 	static const int MINI_SIZE = 14;
 	static const Uint8
-		RED_L		=  33, // Palette::blockOffset(2)+1
-		RED_D		=  37, // Palette::blockOffset(2)+5
-		GREEN		=  50, // Palette::blockOffset(3)+2
-		LAVENDER_L	=  69, // Palette::blockOffset(4)+5
-		LAVENDER_D	=  72, // Palette::blockOffset(4)+8
-		ORANGE_L	=  96, // Palette::blockOffset(6)	// yellow
-		ORANGE_D	=  98, // Palette::blockOffset(6)+2
-		BLUE		= 130, // Palette::blockOffset(8)+2
-		YELLOW_L	= 145, // Palette::blockOffset(9)+1
-		YELLOW_D	= 153, // Palette::blockOffset(9)+9	// brown
-		BROWN		= 161; // Palette::blockOffset(10)+1
+		RED_L		=  33,
+		RED_D		=  37,
+		GREEN		=  50,
+		LAVENDER_L	=  69,
+		LAVENDER_D	=  72,
+		ORANGE_L	=  96,
+		ORANGE_D	=  98,
+		BLUE		= 130,
+		YELLOW_L	= 145,
+		YELLOW_D	= 153,
+		BROWN		= 161;
 
 	bool _blink;
 	size_t
@@ -115,7 +115,7 @@ private:
 		/// Handles timer.
 		void think();
 		/// Blinks the craft status indicators.
-		void MiniBaseView::blink();
+		void blink();
 };
 
 }

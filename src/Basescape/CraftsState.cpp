@@ -27,7 +27,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
@@ -70,12 +69,8 @@ CraftsState::CraftsState(Base* base)
 	_txtStatus	= new Text(76, 9, 118, 49);
 
 	_txtWeapons	= new Text(50, 27, 235, 33);
-//	_txtWeapon	= new Text(44, 17, 194, 49);
-//	_txtCrew	= new Text(27, 9, 230, 49);
-//	_txtHwp		= new Text(24, 9, 257, 49);
 
-	_lstCrafts	= new TextList(298, 113, 16, 59);
-//	_lstCrafts	= new TextList(285, 81, 16, 66);
+	_lstCrafts	= new TextList(297, 113, 16, 59);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
@@ -87,9 +82,6 @@ CraftsState::CraftsState(Base* base)
 	add(_txtName,		"text",		"craftSelect");
 	add(_txtStatus,		"text",		"craftSelect");
 	add(_txtWeapons,	"text",		"craftSelect");
-//	add(_txtWeapon,		"text",		"craftSelect");
-//	add(_txtCrew,		"text",		"craftSelect");
-//	add(_txtHwp,		"text",		"craftSelect");
 	add(_lstCrafts,		"list",		"craftSelect");
 	add(_btnOk,			"button",	"craftSelect");
 
