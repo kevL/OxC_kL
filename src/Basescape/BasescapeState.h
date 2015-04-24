@@ -55,6 +55,7 @@ private:
 		* _btnAliens,
 		* _btnBaseInfo,
 		* _btnCrafts,
+		* _btnDaMatrix,
 		* _btnFacilities,
 		* _btnGeoscape,
 		* _btnIncTrans,
@@ -67,6 +68,8 @@ private:
 //		* _btnNewBase,
 	Base* _base;
 	Globe* _globe;
+
+	std::vector<Base*>* _baseList;
 
 
 	public:
@@ -98,6 +101,8 @@ private:
 		void btnPurchaseClick(Action* action);
 		/// Handler for clicking the Sell/Sack button.
 		void btnSellClick(Action* action);
+		/// Handler for clicking the Matrix button.
+		void btnMatrixClick(Action* action);
 		/// Handler for clicking the Transfer button.
 		void btnTransferClick(Action* action);
 		/// Handler for clicking the in-Transit button.

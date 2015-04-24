@@ -50,6 +50,7 @@ private:
 	MiniBaseView* _mini;
 	Surface* _bg;
 	Text
+		* _txtHoverBase,
 		* _txtPersonnel,
 		* _txtRegion,
 		* _txtSpace;
@@ -105,6 +106,8 @@ private:
 		* _barShortRange,
 		* _barLongRange;
 
+	std::vector<Base*>* _baseList;
+
 
 	public:
 		/// Creates the Base Info state.
@@ -131,6 +134,10 @@ private:
 		void btnStoresClick(Action* action);
 		/// Handler for clicking the Monthly Costs button.
 		void btnMonthlyCostsClick(Action* action);
+		/// Handler for hovering the MiniBase view.
+		void viewMouseOver(Action* action);
+		/// Handler for hovering out of the MiniBase view.
+		void viewMouseOut(Action* action);
 };
 
 }

@@ -353,7 +353,7 @@ void MiniBaseView::blink()
 
 		if (   base->getScientists() > 0 // unused Scientists &/or Engineers &/or PsiLab space
 			|| base->getEngineers() > 0
-			|| (static_cast<int>(base->getSoldiers()->size()) < base->getAvailablePsiLabs()
+			|| (   static_cast<int>(base->getSoldiers()->size()) < base->getAvailablePsiLabs()
 				&& static_cast<int>(base->getSoldiers()->size()) > base->getUsedPsiLabs()))
 		{
 			if (_blink == true)

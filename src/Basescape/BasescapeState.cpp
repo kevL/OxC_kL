@@ -33,6 +33,7 @@
 #include "PurchaseState.h"
 #include "ResearchState.h"
 #include "SellState.h"
+#include "StoresMatrixState.h"
 #include "StoresState.h"
 #include "SoldiersState.h"
 #include "TransferBaseState.h"
@@ -81,7 +82,8 @@ BasescapeState::BasescapeState(
 		Globe* globe)
 	:
 		_base(base),
-		_globe(globe)
+		_globe(globe),
+		_baseList(_game->getSavedGame()->getBases())
 {
 	_view			= new BaseView(192, 192, 0, 8);
 	_mini			= new MiniBaseView(128, 22, 192, 33);
@@ -98,8 +100,9 @@ BasescapeState::BasescapeState(
 	_btnAliens		= new TextButton(128, 12, 192, 92);
 	_btnResearch	= new TextButton(128, 12, 192, 104);
 	_btnManufacture	= new TextButton(128, 12, 192, 116);
-	_btnPurchase	= new TextButton(128, 12, 192, 128);
-	_btnSell		= new TextButton(128, 12, 192, 140);
+	_btnPurchase	= new TextButton(64, 12, 192, 128);
+	_btnSell		= new TextButton(64, 12, 256, 128);
+	_btnDaMatrix	= new TextButton(128, 12, 192, 140);
 	_btnTransfer	= new TextButton(128, 12, 192, 152);
 	_btnIncTrans	= new TextButton(128, 12, 192, 164);
 	_btnFacilities	= new TextButton(128, 12, 192, 176);
@@ -125,6 +128,7 @@ BasescapeState::BasescapeState(
 	add(_btnManufacture,	"button",		"basescape");
 	add(_btnPurchase,		"button",		"basescape");
 	add(_btnSell,			"button",		"basescape");
+	add(_btnDaMatrix,		"button",		"basescape");
 	add(_btnTransfer,		"button",		"basescape");
 	add(_btnIncTrans,		"button",		"basescape");
 	add(_btnFacilities,		"button",		"basescape");
@@ -146,7 +150,7 @@ BasescapeState::BasescapeState(
 	_view->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
+	_mini->setBases(_baseList);
 	_mini->onMouseClick(
 					(ActionHandler)& BasescapeState::miniLeftClick,
 					SDL_BUTTON_LEFT);
@@ -186,6 +190,9 @@ BasescapeState::BasescapeState(
 	_btnSell->setText(tr("STR_SELL_SACK_UC"));
 	_btnSell->onMouseClick((ActionHandler)& BasescapeState::btnSellClick);
 
+	_btnDaMatrix->setText(tr("STR_MATRIX"));
+	_btnDaMatrix->onMouseClick((ActionHandler)& BasescapeState::btnMatrixClick);
+
 	_btnTransfer->setText(tr("STR_TRANSFER_UC"));
 	_btnTransfer->onMouseClick((ActionHandler)& BasescapeState::btnTransferClick);
 
@@ -211,8 +218,8 @@ BasescapeState::BasescapeState(
 BasescapeState::~BasescapeState()
 {
 	for (std::vector<Base*>::const_iterator
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
+			i = _baseList->begin();
+			i != _baseList->end();
 			++i)
 	{
 		if (*i == _base)
@@ -252,7 +259,7 @@ void BasescapeState::init()
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-//	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
+//	_btnNewBase->setVisible(_baseList->size() < MiniBaseView::MAX_BASES);
 
 	bool
 		hasFunds		= (_game->getSavedGame()->getFunds() > 0),
@@ -354,16 +361,16 @@ void BasescapeState::init()
  */
 void BasescapeState::setBase(Base* base)
 {
-	if (_game->getSavedGame()->getBases()->empty() == false)
+	if (_baseList->empty() == false)
 	{
 		bool exists = false; // check if base still exists
 
 		for (size_t
 				i = 0;
-				i != _game->getSavedGame()->getBases()->size();
+				i != _baseList->size();
 				++i)
 		{
-			if (base == _game->getSavedGame()->getBases()->at(i))
+			if (base == _baseList->at(i))
 			{
 				_base = base;
 				_mini->setSelectedBase(i);
@@ -376,7 +383,7 @@ void BasescapeState::setBase(Base* base)
 
 		if (exists == false)
 		{
-			_base = _game->getSavedGame()->getBases()->front();
+			_base = _baseList->front();
 			_mini->setSelectedBase(0);
 //			_game->getSavedGame()->setSelectedBase(0);
 		}
@@ -482,6 +489,15 @@ void BasescapeState::btnPurchaseClick(Action*)
 void BasescapeState::btnSellClick(Action*)
 {
 	_game->pushState(new SellState(_base));
+}
+
+/**
+ * Shows da Matrix.
+ * @param action - pointer to an Action
+ */
+void BasescapeState::btnMatrixClick(Action*)
+{
+	_game->pushState(new StoresMatrixState(_base));
 }
 
 /**
@@ -683,11 +699,11 @@ void BasescapeState::viewMouseOver(Action*)
 	else
 	{
 		const size_t base = _mini->getHoveredBase();
-		if (base < _game->getSavedGame()->getBases()->size()
-			&& _base != _game->getSavedGame()->getBases()->at(base))
+		if (base < _baseList->size()
+			&& _base != _baseList->at(base))
 		{
 			_txtFacility->setAlign(ALIGN_RIGHT);
-			woststr << _game->getSavedGame()->getBases()->at(base)->getName(_game->getLanguage()).c_str();
+			woststr << _baseList->at(base)->getName(_game->getLanguage()).c_str();
 		}
 	}
 
@@ -710,17 +726,16 @@ void BasescapeState::viewMouseOut(Action*)
 void BasescapeState::miniLeftClick(Action*)
 {
 	const size_t base = _mini->getHoveredBase();
-	const std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
 
-	if (base < baseList->size()
-		&& _base != baseList->at(base))
+	if (base < _baseList->size()
+		&& _base != _baseList->at(base))
 	{
-		_base = baseList->at(base);
+		_base = _baseList->at(base);
 		_txtFacility->setText(L"");
 
 		init();
 	}
-	else if (base == baseList->size())
+	else if (base == _baseList->size())
 	{
 		kL_geoMusic = false;
 
@@ -743,11 +758,10 @@ void BasescapeState::miniLeftClick(Action*)
 void BasescapeState::miniRightClick(Action*)
 {
 	const size_t base = _mini->getHoveredBase();
-	const std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
 
-	if (base < baseList->size())
+	if (base < _baseList->size())
 	{
-		const Base* const centerBase = baseList->at(base);
+		const Base* const centerBase = _baseList->at(base);
 		_game->getSavedGame()->setGlobeLongitude(centerBase->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(centerBase->getLatitude());
 
@@ -782,12 +796,12 @@ void BasescapeState::handleKeyPress(Action* action)
 		const int key = action->getDetails()->key.keysym.sym;
 		for (size_t
 				i = 0;
-				i != _game->getSavedGame()->getBases()->size();
+				i != _baseList->size();
 				++i)
 		{
 			if (key == baseKeys[i])
 			{
-				_base = _game->getSavedGame()->getBases()->at(i);
+				_base = _baseList->at(i);
 				init();
 
 				break;

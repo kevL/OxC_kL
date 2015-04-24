@@ -61,7 +61,8 @@ BaseInfoState::BaseInfoState(
 		BasescapeState* state)
 	:
 		_base(base),
-		_state(state)
+		_state(state),
+		_baseList(_game->getSavedGame()->getBases())
 {
 	_bg					= new Surface(320, 200);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
@@ -73,8 +74,9 @@ BaseInfoState::BaseInfoState(
 
 	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
-	_txtPersonnel		= new Text(204, 9, 8, 31);
-	_txtRegion			= new Text(100, 9, 212, 31);
+	_txtPersonnel		= new Text(171, 9, 8, 31);
+	_txtHoverBase		= new Text(73, 9, 179, 31);
+	_txtRegion			= new Text(60, 9, 252, 31);
 
 	_txtSoldiers		= new Text(114, 9, 8, 41);
 	_numSoldiers		= new Text(40, 9, 126, 42);
@@ -128,7 +130,9 @@ BaseInfoState::BaseInfoState(
 	add(_edtBase,			"text1",			"baseInfo");
 
 	add(_txtPersonnel,		"text1",			"baseInfo");
+	add(_txtHoverBase,		"numbers",			"baseInfo");
 	add(_txtRegion,			"text1",			"baseInfo");
+
 	add(_txtSoldiers,		"text2",			"baseInfo");
 	add(_numSoldiers,		"numbers",			"baseInfo");
 	add(_barSoldiers,		"personnelBars",	"baseInfo");
@@ -177,20 +181,20 @@ BaseInfoState::BaseInfoState(
 	centerAllSurfaces();
 
 
-	std::ostringstream osts;
+	std::ostringstream oststr;
 	if (Options::storageLimitsEnforced == true)
-		osts << "ALT";
-	osts << "BACK07.SCR";
-	_game->getResourcePack()->getSurface(osts.str())->blit(_bg);
+		oststr << "ALT";
+	oststr << "BACK07.SCR";
+	_game->getResourcePack()->getSurface(oststr.str())->blit(_bg);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
+	_mini->setBases(_baseList);
 	for (size_t
 			i = 0;
-			i != _game->getSavedGame()->getBases()->size();
+			i != _baseList->size();
 			++i)
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == base)
+		if (_baseList->at(i) == base)
 		{
 			_mini->setSelectedBase(i);
 			break;
@@ -198,6 +202,8 @@ BaseInfoState::BaseInfoState(
 	}
 	_mini->onMouseClick((ActionHandler)& BaseInfoState::miniClick);
 	_mini->onKeyboardPress((ActionHandler)& BaseInfoState::handleKeyPress);
+	_mini->onMouseOver((ActionHandler)& BaseInfoState::viewMouseOver);
+	_mini->onMouseOut((ActionHandler)& BaseInfoState::viewMouseOut);
 
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)& BaseInfoState::edtBaseChange);
@@ -414,15 +420,15 @@ void BaseInfoState::edtBaseChange(Action*)
  */
 void BaseInfoState::miniClick(Action*)
 {
-	const size_t baseID = _mini->getHoveredBase();
-	const std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
+	const size_t base = _mini->getHoveredBase();
 
-	if (baseID < baseList->size()
-		&& _base != baseList->at(baseID))
+	if (base < _baseList->size()
+		&& _base != _baseList->at(base))
 	{
-		_mini->setSelectedBase(baseID);
+		_txtHoverBase->setText(L"");
 
-		_base = baseList->at(baseID);
+		_mini->setSelectedBase(base);
+		_base = _baseList->at(base);
 		_state->setBase(_base);
 
 		init();
@@ -453,16 +459,18 @@ void BaseInfoState::handleKeyPress(Action* action)
 
 		for (size_t
 				i = 0;
-				i != _game->getSavedGame()->getBases()->size();
+				i != _baseList->size();
 				++i)
 		{
 			if (key == baseKeys[i])
 			{
-				_mini->setSelectedBase(i);
-				_base = _game->getSavedGame()->getBases()->at(i);
-				_state->setBase(_base);
-				init();
+				_txtHoverBase->setText(L"");
 
+				_mini->setSelectedBase(i);
+				_base = _baseList->at(i);
+				_state->setBase(_base);
+
+				init();
 				break;
 			}
 		}
@@ -503,6 +511,34 @@ void BaseInfoState::btnStoresClick(Action*)
 void BaseInfoState::btnMonthlyCostsClick(Action*)
 {
 	_game->pushState(new MonthlyCostsState(_base));
+}
+
+/**
+ * Displays the name of the Base the mouse is over.
+ * @param action - pointer to an Action
+ */
+void BaseInfoState::viewMouseOver(Action*)
+{
+	const size_t base = _mini->getHoveredBase();
+	std::vector<Base*>* baseList = _baseList;
+	std::wostringstream woststr;
+
+	if (base < baseList->size()
+		&& _base != baseList->at(base))
+	{
+		_txtHoverBase->setText(baseList->at(base)->getName(_game->getLanguage()).c_str());
+	}
+	else
+		_txtHoverBase->setText(L"");
+}
+
+/**
+ * Clears the hovered Base name.
+ * @param action - pointer to an Action
+ */
+void BaseInfoState::viewMouseOut(Action*)
+{
+	_txtHoverBase->setText(L"");
 }
 
 }

@@ -21,9 +21,8 @@
 
 //#include <sstream>
 
+#include "StoresMatrixState.h"
 #include "TransferItemsState.h"
-
-#include "../Basescape/StoresMatrixState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -166,7 +165,7 @@ void TransferBaseState::btnCancelClick(Action*)
 }
 
 /**
- * Returns to the previous screen.
+ * Shows da Matrix.
  * @param action - pointer to an Action
  */
 void TransferBaseState::btnMatrixClick(Action*)

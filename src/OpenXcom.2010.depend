@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1429887864 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1429904316 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -20,7 +20,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1424390946 f:\git\openxcom\src\basescape\baseinfostate.h
+1429902402 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
 1429620433 f:\git\openxcom\src\engine\state.h
@@ -240,7 +240,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1429027160 f:\git\openxcom\src\basescape\basescapestate.h
+1429904604 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1429886556 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4399,7 +4399,7 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1429888028 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1429904722 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4415,6 +4415,7 @@
 	"PurchaseState.h"
 	"ResearchState.h"
 	"SellState.h"
+	"StoresMatrixState.h"
 	"StoresState.h"
 	"SoldiersState.h"
 	"TransferBaseState.h"
@@ -4729,7 +4730,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1429616180 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1429885827 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
@@ -4912,7 +4913,7 @@
 	<windows.h>
 	<stddef.h>
 
-1429888920 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1429901980 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
