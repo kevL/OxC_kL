@@ -2026,7 +2026,7 @@ struct SetRetaliationStatus
 
 
 /**
- * Takes care of any game logic that has to run every game ten minutes.
+ * Takes care of any game logic that runs every ten game minutes.
  */
 void GeoscapeState::time10Minutes()
 {
@@ -2141,7 +2141,6 @@ void GeoscapeState::time10Minutes()
 	}
 
 
-//	unsigned windowPops = 0;
 	_windowPops = 0;
 
 	for (std::vector<Ufo*>::const_iterator // handle UFO detection
@@ -2149,7 +2148,8 @@ void GeoscapeState::time10Minutes()
 			u != _gameSave->getUfos()->end();
 			++u)
 	{
-		if ((*u)->getStatus() == Ufo::FLYING)
+		if (   (*u)->getStatus() == Ufo::FLYING
+			|| (*u)->getStatus() == Ufo::LANDED)
 		{
 			std::vector<Base*> hyperBases; // = std::vector<Base*>();
 
@@ -2178,7 +2178,6 @@ void GeoscapeState::time10Minutes()
 
 						case 2:
 							contact = true;
-						break;
 					}
 
 					for (std::vector<Craft*>::const_iterator
@@ -2237,7 +2236,6 @@ void GeoscapeState::time10Minutes()
 
 						case 2:
 							contact = true;
-						break;
 					}
 
 					for (std::vector<Craft*>::const_iterator
@@ -2283,7 +2281,6 @@ void GeoscapeState::time10Minutes()
 
 	if (_windowPops > 0)
 	{
-//		_ufoDetected->setValue(windowPops);
 		_ufoDetected->setText(Text::formatNumber(_windowPops));
 		_ufoDetected->setVisible();
 	}

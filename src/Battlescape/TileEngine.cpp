@@ -1841,15 +1841,15 @@ BattleUnit* TileEngine::hit(
 			switch (dType) // round up.
 			{
 				case DT_AP:
-					power = (power + 9) / 10;	// 10%
+					power = (power + 9) / 10;		// 10%
 				break;
 
 				case DT_IN:
-					power = (power + 4) / 5;	// 20%
+					power = (power + 4) / 5;		// 20%
 				break;
 
-				case DT_MELEE:					// TODO: define 2 terrain types, Soft & Hard; so that edged weapons do good vs. Soft, blunt weapons do good vs. Hard
-					power = (power + 3) / 4;	// 25%
+				case DT_MELEE:						// TODO: define 2 terrain types, Soft & Hard; so that edged weapons do good vs. Soft, blunt weapons do good vs. Hard
+					power = (power + 3) / 4;		// 25%
 				break;
 
 				case DT_LASER:
@@ -1858,11 +1858,11 @@ BattleUnit* TileEngine::hit(
 				break;
 
 				case DT_PLASMA:
-					power = (power + 1) / 2;	// 50%
+					power = (power + 1) / 2;		// 50%
 				break;
 
-				case DT_HE:						// question: do HE & IN ever get in here - hit() or explode() below
-					power += power * 3 / 20;	// 115%
+				case DT_HE:							// question: do HE & IN ever get in here - hit() or explode() below
+					power += power * 3 / 20;		// 115%
 //				break;
 
 //				case DT_ACID: // 100% damage
