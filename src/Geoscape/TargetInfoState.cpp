@@ -57,7 +57,7 @@ TargetInfoState::TargetInfoState(
 		_target(target),
 		_globe(globe),
 		_state(state),
-		_ab(NULL)
+		_aBase(NULL)
 {
 	_screen = false;
 
@@ -91,7 +91,7 @@ TargetInfoState::TargetInfoState(
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& TargetInfoState::btnInterceptClick);
 
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr("STR_CANCEL"));
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TargetInfoState::btnOkClick,
@@ -109,10 +109,9 @@ TargetInfoState::TargetInfoState(
 			aBase != _game->getSavedGame()->getAlienBases()->end();
 			++aBase)
 	{
-//		if (_target->getName(_game->getLanguage()) == (*aBase)->getName(_game->getLanguage()))
 		if (_target == dynamic_cast<Target*>(*aBase))
 		{
-			_ab = *aBase;
+			_aBase = *aBase;
 
 			const std::wstring edit = Language::utf8ToWstr((*aBase)->getLabel());
 			_edtTarget->setText(edit);
@@ -137,7 +136,6 @@ TargetInfoState::TargetInfoState(
 		if (targeted == false)
 		{
 			targeted = true;
-
 			_txtTargetted->setAlign(ALIGN_CENTER);
 			_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 		}
@@ -160,7 +158,7 @@ TargetInfoState::~TargetInfoState()
  */
 void TargetInfoState::edtTargetChange(Action*)
 {
-	_ab->setLabel(Language::wstrToUtf8(_edtTarget->getText()));
+	_aBase->setLabel(Language::wstrToUtf8(_edtTarget->getText()));
 }
 
 /**
@@ -169,14 +167,7 @@ void TargetInfoState::edtTargetChange(Action*)
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
-/*	if (_ab)
-	{
-		std::string s = Language::wstrToUtf8(_edtTarget->getText());
-		_ab->setEdit(s);
-	} */ // kL
-
 	_state->timerReset();
-
 	_game->popState();
 	_game->pushState(new InterceptState(
 									_globe,
@@ -190,12 +181,6 @@ void TargetInfoState::btnInterceptClick(Action*)
  */
 void TargetInfoState::btnOkClick(Action*)
 {
-/*	if (_ab)
-	{
-		std::string s = Language::wstrToUtf8(_edtTarget->getText());
-		_ab->setEdit(s);
-	} */ // kL
-
 	_game->popState();
 }
 

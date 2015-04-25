@@ -72,7 +72,6 @@ AlienBaseState::AlienBaseState(
 	centerAllSurfaces();
 
 
-
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
@@ -147,7 +146,6 @@ AlienBaseState::~AlienBaseState()
 void AlienBaseState::btnOkClick(Action*)
 {
 	_state->timerReset();
-
 	_state->getGlobe()->center(
 							_base->getLongitude(),
 							_base->getLatitude());

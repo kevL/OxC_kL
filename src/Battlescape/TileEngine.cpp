@@ -1853,7 +1853,8 @@ BattleUnit* TileEngine::hit(
 				break;
 
 				case DT_LASER:
-					power = (power + 2) / 3;	// 33% // problem: Fusion Torch; fixed, heh.
+					if (tile->getMapData(part)->getSpecialType() != ALIEN_ALLOYS)
+						power = (power + 2) / 3;	// 33% // problem: Fusion Torch; fixed, heh.
 				break;
 
 				case DT_PLASMA:
@@ -1882,7 +1883,6 @@ BattleUnit* TileEngine::hit(
 									[(targetPos_voxel.y / 16) / 10].second--;
 			}
 
-			// kL_note: This may be necessary only on aLienBase missions...
 			if (tile->damage(
 						part,
 						power) == true)

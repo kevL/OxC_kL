@@ -45,7 +45,7 @@ class TargetInfoState
 {
 
 private:
-	AlienBase* _ab;
+	AlienBase* _aBase;
 	GeoscapeState* _state;
 	Globe* _globe;
 	Target* _target;
