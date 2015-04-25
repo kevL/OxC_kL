@@ -49,25 +49,21 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	add(_frame, "infoBox", "battlescape");
-	add(_text, "infoBox", "battlescape");
+	add(_frame,	"infoBox", "battlescape");
+	add(_text,	"infoBox", "battlescape");
 
 	centerAllSurfaces();
 
 
-//	_frame->setColor(Palette::blockOffset(0)+7);
-//	_frame->setBackground(Palette::blockOffset(0)+14);
 	_frame->setHighContrast();
 	_frame->setThickness(8);
 
+	_text->setText(msg);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	_text->setBig();
-	_text->setWordWrap();
-	_text->setText(msg);
 	_text->setHighContrast();
-//	_text->setColor(Palette::blockOffset(0)-1);
-//	_text->setPalette(_frame->getPalette());
+	_text->setWordWrap();
+	_text->setBig();
 
 	_timer = new Timer(INFOBOX_DELAY);
 	_timer->onTimer((StateHandler)& InfoboxState::close);

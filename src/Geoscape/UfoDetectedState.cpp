@@ -89,16 +89,16 @@ UfoDetectedState::UfoDetectedState(
 
 	if (_hyper == true)
 	{
-		_window			= new Window(this, 224, 190, 16, 10, POPUP_BOTH);
+		_window			= new Window(this, 228, 190, 14, 10, POPUP_BOTH);
 
 		_txtHyperwave	= new Text(216, 16, 20, 45);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
 		_txtBases		= new Text(100, 41, 32, 135);
 	}
 	else
-		_window			= new Window(this, 224, 140, 16, 48, POPUP_BOTH);
+		_window			= new Window(this, 228, 140, 14, 48, POPUP_BOTH);
 
-	_txtUfo			= new Text(90, 16, 26, 56);
+	_txtUfo			= new Text(94, 16, 24, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
@@ -106,8 +106,8 @@ UfoDetectedState::UfoDetectedState(
 	_btn5Sec		= new TextButton(88, 16, 136, 144);
 	_btnCancel		= new TextButton(192, 16, 32, 164);
 
-	_txtRegion		= new Text(114, 9, 116, 56);
-	_txtTexture		= new Text(114, 9, 116, 66);
+	_txtRegion		= new Text(114, 9, 118, 56);
+	_txtTexture		= new Text(114, 9, 118, 66);
 
 	if (_hyper == true)
 	{
@@ -157,8 +157,8 @@ UfoDetectedState::UfoDetectedState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
+	_txtUfo->setBig();
 
 	if (detected == true)
 		_txtDetected->setText(tr("STR_DETECTED"));
@@ -452,7 +452,6 @@ UfoDetectedState::~UfoDetectedState()
 void UfoDetectedState::init()
 {
 	State::init();
-
 	_btn5Sec->setVisible(_state->is5Sec() == false);
 }
 
@@ -524,7 +523,8 @@ void UfoDetectedState::btnCancelClick(Action*)
  */
 void UfoDetectedState::transposeWindow() // private.
 {
-	_window->setVisible(false);
+	_window->setBackground(NULL);
+//	_window->setVisible(false);
 
 //	_txtUfo->setVisible(false);
 	_txtDetected->setVisible(false);

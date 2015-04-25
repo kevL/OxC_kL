@@ -45,7 +45,7 @@ Frame::Frame(
 		_color(0),
 		_bg(0),
 		_thickness(5),
-		_contrast(false)
+		_contrast(1)
 {}
 
 /**
@@ -110,7 +110,7 @@ Uint8 Frame::getSecondaryColor() const
  */
 void Frame::setHighContrast(bool contrast)
 {
-	_contrast = contrast;
+	_contrast = contrast ? 2 : 1;
 	_redraw = true;
 }
 
@@ -139,12 +139,6 @@ void Frame::draw()
 	square.w = static_cast<Uint16>(getWidth());
 	square.h = static_cast<Uint16>(getHeight());
 
-	int multer;
-	if (_contrast == true)
-		multer = 2;
-	else
-		multer = 1;
-
 	Uint8
 		darkest = Palette::blockOffset(_color / 16) + 15,
 		color = _color;
@@ -161,7 +155,7 @@ void Frame::draw()
 			color = darkest;
 		}
 		else
-			color = _color + static_cast<Uint8>(std::abs(i - _thickness / 2) * multer);
+			color = _color + static_cast<Uint8>(std::abs(i - _thickness / 2) * _contrast);
 
 		drawRect(
 				&square,

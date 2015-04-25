@@ -35,8 +35,9 @@ class Frame
 {
 
 private:
-	bool _contrast;
-	int _thickness;
+	int
+		_contrast,
+		_thickness;
 	Uint8
 		_bg,
 		_color;

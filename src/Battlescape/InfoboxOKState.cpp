@@ -52,27 +52,22 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
-	add(_frame, "infoBoxOK", "battlescape");
-	add(_txtTitle, "infoBoxOK", "battlescape");
-	add(_btnOk, "infoBoxOKButton", "battlescape");
+	add(_frame,		"infoBoxOK",		"battlescape");
+	add(_txtTitle,	"infoBoxOK",		"battlescape");
+	add(_btnOk,		"infoBoxOKButton",	"battlescape");
 
 	centerAllSurfaces();
 
 
-//	_frame->setColor(Palette::blockOffset(6)+3);
-//	_frame->setBackground(Palette::blockOffset(6)+12);
-	_frame->setThickness();
 	_frame->setHighContrast();
 
-//	_txtTitle->setColor(Palette::blockOffset(1)-1);
-	_txtTitle->setBig();
+	_txtTitle->setText(msg);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setHighContrast();
-//	_txtTitle->setWordWrap();
-	_txtTitle->setText(msg);
+	_txtTitle->setWordWrap();
+	_txtTitle->setBig();
 
-//	_btnOk->setColor(Palette::blockOffset(1)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& InfoboxOKState::btnOkClick);
 	_btnOk->onKeyboardPress(

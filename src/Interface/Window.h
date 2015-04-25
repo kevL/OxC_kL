@@ -62,10 +62,8 @@ private:
 		_screen,
 		_thinBorder;
 	int
-		_dx,
-		_dy,
-		_bgX,
-		_bgY;
+		_dx,_dy,
+		_bgX,_bgY;
 	double _popupStep;
 
 	Uint8 _color;

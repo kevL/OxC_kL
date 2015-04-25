@@ -21,7 +21,6 @@
 
 //#include <SDL.h>
 //#include <SDL_mixer.h>
-
 //#include "../fmath.h"
 
 #include "../Engine/Sound.h"
@@ -34,7 +33,7 @@ namespace OpenXcom
 //const double Window::POPUP_SPEED = 0.076; // higher is faster
 const double Window::POPUP_SPEED = 0.135; // for high-quality filters & shaders, like 4xHQX
 
-Sound* Window::soundPopup[3] = {0, 0, 0};
+Sound* Window::soundPopup[3] = {0,0,0};
 
 
 /**
@@ -167,7 +166,7 @@ void Window::think()
 void Window::popup()
 {
 	if (AreSame(_popupStep, 0.) == true)
-		soundPopup[(SDL_GetTicks() %2) + 1]->play(Mix_GroupAvailable(0));
+		soundPopup[(SDL_GetTicks() % 2) + 1]->play(Mix_GroupAvailable(0));
 
 	if (_popupStep < 1.)
 		_popupStep += POPUP_SPEED;
@@ -197,13 +196,11 @@ bool Window::isPopupDone() const
 /**
  * Draws the bordered window with a graphic background.
  * The background never moves with the window, it's always aligned to the
- * top-left corner of the screen and cropped to fit the inside area.
+ * top-left corner of the screen and cropped to fit inside the area.
  */
 void Window::draw()
 {
 	Surface::draw();
-
-
 	SDL_Rect rect;
 
 	if (_popup == POPUP_HORIZONTAL
@@ -257,7 +254,7 @@ void Window::draw()
 					&rect,
 					color);
 
-			if (i %2 == 0)
+			if (i % 2 == 0)
 			{
 				++rect.x;
 				++rect.y;
@@ -332,6 +329,10 @@ void Window::draw()
 
 		_bg->blit(this);
 	}
+	else // surface inside frame -> transparent
+		drawRect(
+				&rect,
+				0);
 }
 
 /**
