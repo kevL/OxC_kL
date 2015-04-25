@@ -25,7 +25,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -43,6 +43,7 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionCraft (ArticleDefinition.h)
  */
 ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	:
@@ -52,19 +53,20 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 
 	setPalette("PAL_UFOPAEDIA");
 
-	ArticleState::initLayout();
+	ArticleState::initLayout(false);
 
 	add(_txtTitle);
 
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnPrev->setColor(Palette::blockOffset(15)-1);
 	_btnNext->setColor(Palette::blockOffset(15)-1);
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr(defs->title));
 
 	_txtInfo = new Text(
 					defs->rect_text.width,
@@ -73,9 +75,9 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 					defs->rect_text.y);
 	add(_txtInfo);
 
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
 	_txtStats = new Text(
 						defs->rect_stats.width,
@@ -91,27 +93,26 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	int range = craftRule->getMaxFuel();
 	if (craftRule->getRefuelItem().empty() == false)
 		range *= craftRule->getMaxSpeed();
-//	else
-//		range *= 100;
+//	else range *= 100;
 
 	range /= 6; // six doses per hour on Geoscape.
 
-	std::wostringstream wosts;
-	wosts << tr("STR_MAXIMUM_SPEED_UC")
-			.arg(Text::formatNumber(craftRule->getMaxSpeed())) << L'\n';
-	wosts << tr("STR_ACCELERATION")
-			.arg(craftRule->getAcceleration()) << L'\n';
-	wosts << tr("STR_FUEL_CAPACITY")
-			.arg(Text::formatNumber(range)) << L'\n';
-	wosts << tr("STR_WEAPON_PODS")
-			.arg(craftRule->getWeapons()) << L'\n';
-	wosts << tr("STR_DAMAGE_CAPACITY_UC")
-			.arg(Text::formatNumber(craftRule->getMaxDamage())) << L'\n';
-	wosts << tr("STR_CARGO_SPACE")
-			.arg(craftRule->getSoldiers()) << L'\n';
-	wosts << tr("STR_HWP_CAPACITY")
-			.arg(craftRule->getVehicles());
-	_txtStats->setText(wosts.str());
+	std::wostringstream woststr;
+	woststr << tr("STR_MAXIMUM_SPEED_UC")
+				.arg(Text::formatNumber(craftRule->getMaxSpeed())) << L'\n';
+	woststr << tr("STR_ACCELERATION")
+				.arg(craftRule->getAcceleration()) << L'\n';
+	woststr << tr("STR_FUEL_CAPACITY")
+				.arg(Text::formatNumber(range)) << L'\n';
+	woststr << tr("STR_WEAPON_PODS")
+				.arg(craftRule->getWeapons()) << L'\n';
+	woststr << tr("STR_DAMAGE_CAPACITY_UC")
+				.arg(Text::formatNumber(craftRule->getMaxDamage())) << L'\n';
+	woststr << tr("STR_CARGO_SPACE")
+				.arg(craftRule->getSoldiers()) << L'\n';
+	woststr << tr("STR_HWP_CAPACITY")
+				.arg(craftRule->getVehicles());
+	_txtStats->setText(woststr.str());
 
 	centerAllSurfaces();
 }

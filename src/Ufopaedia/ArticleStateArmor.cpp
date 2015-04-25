@@ -27,7 +27,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -46,6 +46,7 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionArmor (ArticleDefinition.h)
  */
 ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	:
@@ -66,17 +67,17 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_btnPrev->setColor(Palette::blockOffset(0)+15);
 	_btnNext->setColor(Palette::blockOffset(0)+15);
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(defs->title));
 
 	_image = new Surface(320, 200);
 	add(_image);
 
 	std::string look = armor->getSpriteInventory();
 	look += "M0.SPK";
-	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look))
-		&& !_game->getResourcePack()->getSurface(look))
+	if (CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) == false
+		&& _game->getResourcePack()->getSurface(look) == NULL)
 	{
 		look = armor->getSpriteInventory() + ".SPK";
 	}
@@ -85,15 +86,15 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 
 	_lstInfo = new TextList(150, 129, 150, 12);
 	add(_lstInfo);
-	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setColumns(2, 125, 25);
+	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setDot();
 
 	_txtInfo = new Text(300, 56, 8, 150);
 	add(_txtInfo);
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
 
 	addStat("STR_FRONT_ARMOR", armor->getFrontArmor());
@@ -117,7 +118,6 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 		if (st != "STR_UNKNOWN")
 		{
 			int vulnera = static_cast<int>(Round(static_cast<double>(armor->getDamageModifier(dType)) * 100.));
-
 			addStat(
 				st,
 				Text::formatPercentage(vulnera));
@@ -162,8 +162,11 @@ void ArticleStateArmor::addStat(
 	{
 		std::wostringstream woststr;
 
-		if (addPlus && stat > 0)
+		if (addPlus == true
+			&& stat > 0)
+		{
 			woststr << L"+";
+		}
 
 		woststr << stat;
 		_lstInfo->addRow(

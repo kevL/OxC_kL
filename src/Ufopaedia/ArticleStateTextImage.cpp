@@ -39,6 +39,7 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionTextImage (ArticleDefinition.h)
  */
 ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	:
@@ -58,17 +59,17 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	_btnPrev->setColor(Palette::blockOffset(5)+3);
 	_btnNext->setColor(Palette::blockOffset(5)+3);
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(15)+4);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr(defs->title));
 
 	const int text_height = _txtTitle->getTextHeight();
 	_txtInfo = new Text(defs->text_width, 162, 5, 23 + text_height);
 	add(_txtInfo);
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(15)-1);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
 	centerAllSurfaces();
 }

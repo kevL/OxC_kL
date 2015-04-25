@@ -19,14 +19,14 @@
 
 #include "ArticleStateItem.h"
 
-#include <algorithm>
-#include <sstream>
+//#include <algorithm>
+//#include <sstream>
 
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -46,12 +46,13 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionItem (ArticleDefinition.h)
  */
 ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	:
 		ArticleState(defs->id)
 {
-	RuleItem* item = _game->getRuleset()->getItem(defs->id);
+	const RuleItem* const itRule = _game->getRuleset()->getItem(defs->id);
 
 	_txtTitle = new Text(148, 32, 5, 24);
 
@@ -62,43 +63,46 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	add(_txtTitle);
 
 	_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
+
 	_btnOk->setColor(Palette::blockOffset(9));
 	_btnPrev->setColor(Palette::blockOffset(9));
 	_btnNext->setColor(Palette::blockOffset(9));
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr(defs->title));
 
 
 	_image = new Surface(32, 48, 157, 5);
 	add(_image);
 
-	item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
+	itRule->drawHandSprite(
+					_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+					_image);
 
-	const std::vector<std::string>* const ammo_data = item->getCompatibleAmmo();
+	const std::vector<std::string>* const ammo_data = itRule->getCompatibleAmmo();
 
 	// SHOT STATS TABLE (for firearms only)
-	if (item->getBattleType() == BT_FIREARM)
+	if (itRule->getBattleType() == BT_FIREARM)
 	{
 		_txtShotType = new Text(100, 17, 8, 66);
 		add(_txtShotType);
+		_txtShotType->setText(tr("STR_SHOT_TYPE"));
 		_txtShotType->setColor(Palette::blockOffset(14)+15);
 		_txtShotType->setWordWrap();
-		_txtShotType->setText(tr("STR_SHOT_TYPE"));
 
 		_txtAccuracy = new Text(50, 17, 108, 66);
 		add(_txtAccuracy);
+		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 		_txtAccuracy->setColor(Palette::blockOffset(14)+15);
 		_txtAccuracy->setWordWrap();
-		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 
 		_txtTuCost = new Text(60, 17, 160, 66);
 		add(_txtTuCost);
+		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
 		_txtTuCost->setWordWrap();
-		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 
 		_lstInfo = new TextList(204, 57, 8, 82);
 		add(_lstInfo);
@@ -106,184 +110,167 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_lstInfo->setColumns(3, 100, 52, 52);
 		_lstInfo->setBig();
 
-		int current_row = 0;
-		if (item->getTUAuto() > 0)
-		{
-			std::wstring tu = Text::formatPercentage(item->getTUAuto());
-			if (item->getFlatRate())
-				tu.erase(tu.end() - 1);
 
-			std::wstring shotauto = Text::formatPercentage(item->getAccuracyAuto());	// kL
-			shotauto.erase(shotauto.end() - 1);											// kL
+		std::wstring tu;
+
+		int current_row = 0;
+		if (itRule->getTUAuto() != 0)
+		{
+			if (itRule->getFlatRate() == true)
+				tu = Text::formatNumber(itRule->getTUAuto());
+			else
+				tu = Text::formatPercentage(itRule->getTUAuto());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_AUTO").c_str(),
-//kL							Text::formatPercentage(item->getAccuracyAuto()).c_str(),
-							shotauto.c_str(),		// kL
+							Text::formatNumber(itRule->getAccuracyAuto()).c_str(),
 							tu.c_str());
-			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
-
-			current_row++;
+			_lstInfo->setCellColor(current_row++, 0, Palette::blockOffset(14)+15);
 		}
 
-		if (item->getTUSnap() > 0)
+		if (itRule->getTUSnap() != 0)
 		{
-			std::wstring tu = Text::formatPercentage(item->getTUSnap());
-			if (item->getFlatRate())
-				tu.erase(tu.end() - 1);
-
-			std::wstring shotsnap = Text::formatPercentage(item->getAccuracySnap());	// kL
-			shotsnap.erase(shotsnap.end() - 1);											// kL
+			if (itRule->getFlatRate() == true)
+				tu = Text::formatNumber(itRule->getTUSnap());
+			else
+				tu = Text::formatPercentage(itRule->getTUSnap());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_SNAP").c_str(),
-//kL						Text::formatPercentage(item->getAccuracySnap()).c_str(),
-							shotsnap.c_str(), // kL
+							Text::formatNumber(itRule->getAccuracySnap()).c_str(),
 							tu.c_str());
-			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
-
-			current_row++;
+			_lstInfo->setCellColor(current_row++, 0, Palette::blockOffset(14)+15);
 		}
 
-		if (item->getTUAimed() > 0)
+		if (itRule->getTUAimed() != 0)
 		{
-			std::wstring tu = Text::formatPercentage(item->getTUAimed());
-			if (item->getFlatRate())
-				tu.erase(tu.end() - 1);
-
-			std::wstring shotaimed = Text::formatPercentage(item->getAccuracyAimed());	// kL
-			shotaimed.erase(shotaimed.end() - 1);										// kL
+			if (itRule->getFlatRate() == true)
+				tu = Text::formatNumber(itRule->getTUAimed());
+			else
+				tu = Text::formatPercentage(itRule->getTUAimed());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_AIMED").c_str(),
-//kL						Text::formatPercentage(item->getAccuracyAimed()).c_str(),
-							shotaimed.c_str(), // kL
+							Text::formatNumber(itRule->getAccuracyAimed()).c_str(),
 							tu.c_str());
-			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
-
-			current_row++;
+			_lstInfo->setCellColor(current_row++, 0, Palette::blockOffset(14)+15);
 		}
 
-		if (item->getTULaunch() > 0) // kL ->
+		if (itRule->getTULaunch() != 0)
 		{
-			std::wstring tu = Text::formatPercentage(item->getTULaunch());
-			if (item->getFlatRate())
-				tu.erase(tu.end() - 1);
-
-//			std::wstring shotlaunch = Text::formatPercentage(item->getAccuracyAimed());	// kL
-//			shotlaunch.erase(shotlaunch.end() - 1);										// kL
+			if (itRule->getFlatRate() == true)
+				tu = Text::formatNumber(itRule->getTULaunch());
+			else
+				tu = Text::formatPercentage(itRule->getTULaunch());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_LAUNCH").c_str(),
-//kL						Text::formatPercentage(item->getAccuracyAimed()).c_str(),
-							L"", // kL
+							L"",
 							tu.c_str());
 			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
-
-			current_row++;
 		}
 
 		// text_info is BELOW the info table
-		_txtInfo = new Text((ammo_data->size() < 3? 300: 180), 56, 8, 138);
+		_txtInfo = new Text((ammo_data->size() < 3 ? 300 : 180), 56, 8, 138);
 	}
 	else // text_info is larger and starts on top
 		_txtInfo = new Text(300, 125, 8, 67);
 
 	add(_txtInfo);
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
 
-	// AMMO column
-	std::wostringstream ss;
-
-	for (int
+	for (size_t // AMMO column
 			i = 0;
-			i < 3;
+			i != 3;
 			++i)
 	{
-//kL	_txtAmmoType[i] = new Text(82, 16, 194, 20 + (i * 49));
-		_txtAmmoType[i] = new Text(90, 9, 189, 24 + (i * 49));
+		_txtAmmoType[i] = new Text(90, 9, 189, 24 + (static_cast<int>(i) * 49));
 		add(_txtAmmoType[i]);
 		_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 		_txtAmmoType[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoType[i]->setVerticalAlign(ALIGN_MIDDLE);
 		_txtAmmoType[i]->setWordWrap();
 
-//kL	_txtAmmoDamage[i] = new Text(82, 17, 194, 40 + (i * 49));
-		_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + (i * 49));
+		_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + (static_cast<int>(i) * 49));
 		add(_txtAmmoDamage[i]);
-//kL	_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
-		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2)+5); // kL
+		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2)+5);
 		_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoDamage[i]->setBig();
 
-		_imageAmmo[i] = new Surface(32, 48, 280, 16 + i * 49);
+		_imageAmmo[i] = new Surface(32, 48, 280, 16 + static_cast<int>(i) * 49);
 		add(_imageAmmo[i]);
 	}
 
-	switch (item->getBattleType())
+	std::wostringstream woststr;
+
+	switch (itRule->getBattleType())
 	{
 		case BT_FIREARM:
 			_txtDamage = new Text(80, 10, 199, 7);
 			add(_txtDamage);
+			_txtDamage->setText(tr("STR_DAMAGE_UC"));
 			_txtDamage->setColor(Palette::blockOffset(14)+15);
 			_txtDamage->setAlign(ALIGN_CENTER);
-			_txtDamage->setText(tr("STR_DAMAGE_UC"));
 
 			_txtAmmo = new Text(45, 10, 271, 7);
 			add(_txtAmmo);
+			_txtAmmo->setText(tr("STR_AMMO"));
 			_txtAmmo->setColor(Palette::blockOffset(14)+15);
 			_txtAmmo->setAlign(ALIGN_CENTER);
-			_txtAmmo->setText(tr("STR_AMMO"));
 
 			if (ammo_data->empty() == true)
 			{
-				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
+				_txtAmmoType[0]->setText(tr(getDamageTypeText(itRule->getDamageType())));
 
-				ss.str(L"");
-				ss.clear();
-				ss << item->getPower();
-				if (item->getShotgunPellets())
-					ss << L"x" << item->getShotgunPellets();
+				woststr.str(L"");
+				woststr.clear();
+				woststr << itRule->getPower();
+				if (itRule->getShotgunPellets() != 0)
+					woststr << L"x" << itRule->getShotgunPellets();
 
-				_txtAmmoDamage[0]->setText(ss.str());
+				_txtAmmoDamage[0]->setText(woststr.str());
 			}
 			else
 			{
+				size_t ammoSize = std::min(
+										ammo_data->size(),
+										static_cast<size_t>(3)); // yeh right.
 				for (size_t
 						i = 0;
-						i < std::min(
-									ammo_data->size(),
-									static_cast<size_t>(3));
+						i != ammoSize;
 						++i)
 				{
-					ArticleDefinition* ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+					ArticleDefinition* const ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
 					if (Ufopaedia::isArticleAvailable(
 												_game->getSavedGame(),
-												ammo_article))
+												ammo_article) == true)
 					{
-						RuleItem* ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
+						const RuleItem* const ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
 						_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
 
-						ss.str(L"");
-						ss.clear();
-						ss << ammo_rule->getPower();
-						if (ammo_rule->getShotgunPellets())
-							ss << L"x" << ammo_rule->getShotgunPellets();
+						woststr.str(L"");
+						woststr.clear();
+						woststr << ammo_rule->getPower();
+						if (ammo_rule->getShotgunPellets() != 0)
+							woststr << L"x" << ammo_rule->getShotgunPellets();
 
-						_txtAmmoDamage[i]->setText(ss.str());
+						_txtAmmoDamage[i]->setText(woststr.str());
 
-						ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
+						ammo_rule->drawHandSprite(
+											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+											_imageAmmo[i]);
 					}
 				}
 			}
 		break;
+
 		case BT_AMMO:
 		case BT_GRENADE:
 		case BT_PROXIMITYGRENADE:
@@ -295,16 +282,12 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			_txtDamage->setAlign(ALIGN_CENTER);
 			_txtDamage->setText(tr("STR_DAMAGE_UC")); */
 
-			_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
+			_txtAmmoType[0]->setText(tr(getDamageTypeText(itRule->getDamageType())));
 
-			ss.str(L"");
-			ss.clear();
-			ss << item->getPower();
-			_txtAmmoDamage[0]->setText(ss.str());
-		break;
-
-		default:
-		break;
+			woststr.str(L"");
+			woststr.clear();
+			woststr << itRule->getPower();
+			_txtAmmoDamage[0]->setText(woststr.str());
 	}
 
 	centerAllSurfaces();
@@ -314,7 +297,6 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
  * dTor.
  */
 ArticleStateItem::~ArticleStateItem()
-{
-}
+{}
 
 }

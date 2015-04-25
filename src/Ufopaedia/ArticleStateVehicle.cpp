@@ -25,7 +25,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Resource/ResourcePack.h"
@@ -46,7 +46,7 @@ namespace OpenXcom
 
 /**
  * ArticleStateVehicle has a caption, text, and a stats block.
- * @param defs - pointer to ArticleDefinitionVehicle
+ * @param defs - pointer to ArticleDefinitionVehicle (ArticleDefinition.h)
  */
 ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	:
@@ -54,7 +54,7 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 {
 	Unit* const unit = _game->getRuleset()->getUnit(defs->id);
 	const RuleArmor* const armor = _game->getRuleset()->getArmor(unit->getArmor());
-	RuleItem* const item = _game->getRuleset()->getItem(defs->id);
+	const RuleItem* const itRule = _game->getRuleset()->getItem(defs->id);
 
 	_txtTitle	= new Text(310, 17, 5, 23);
 	_txtInfo	= new Text(300, 150, 10, 122);
@@ -69,110 +69,110 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	add(_lstStats);
 
 	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
+
 	_btnOk->setColor(Palette::blockOffset(5));
 	_btnPrev->setColor(Palette::blockOffset(5));
 	_btnNext->setColor(Palette::blockOffset(5));
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(15)+4);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(defs->title));
 
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(15)-1);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
-	_lstStats->setColor(Palette::blockOffset(15)+4);
 	_lstStats->setColumns(2, 175, 145);
+	_lstStats->setColor(Palette::blockOffset(15)+4);
 	_lstStats->setDot();
 
-	std::wostringstream
-		ss,
-		ss2,
-		ss3,
-		ss4,
-		ss5,
-		ss6,
-		ss7,
-		ss8;
+	std::wostringstream woststr;
 
-	ss << unit->getStats()->tu;
+	woststr << unit->getStats()->tu;
 	_lstStats->addRow(
-					2,
-					tr("STR_TIME_UNITS").c_str(),
-					ss.str().c_str());
+				2,
+				tr("STR_TIME_UNITS").c_str(),
+				woststr.str().c_str());
 
-	ss2 << unit->getStats()->health;
+	woststr.str(L"");
+	woststr << unit->getStats()->health;
 	_lstStats->addRow(
-					2,
-					tr("STR_HEALTH").c_str(),
-					ss2.str().c_str());
+				2,
+				tr("STR_HEALTH").c_str(),
+				woststr.str().c_str());
 
-	ss3 << armor->getFrontArmor();
+	woststr.str(L"");
+	woststr << armor->getFrontArmor();
 	_lstStats->addRow(
-					2,
-					tr("STR_FRONT_ARMOR").c_str(),
-					ss3.str().c_str());
+				2,
+				tr("STR_FRONT_ARMOR").c_str(),
+				woststr.str().c_str());
 
-	ss4 << armor->getSideArmor();
+	woststr.str(L"");
+	woststr << armor->getSideArmor();
 	_lstStats->addRow(
-					2,
-					tr("STR_LEFT_ARMOR").c_str(),
-					ss4.str().c_str());
+				2,
+				tr("STR_LEFT_ARMOR").c_str(),
+				woststr.str().c_str());
 
-	ss5 << armor->getSideArmor();
+	woststr.str(L"");
+	woststr << armor->getSideArmor();
 	_lstStats->addRow(
-					2,
-					tr("STR_RIGHT_ARMOR").c_str(),
-					ss5.str().c_str());
+				2,
+				tr("STR_RIGHT_ARMOR").c_str(),
+				woststr.str().c_str());
 
-	ss6 << armor->getRearArmor();
+	woststr.str(L"");
+	woststr << armor->getRearArmor();
 	_lstStats->addRow(
-					2,
-					tr("STR_REAR_ARMOR").c_str(),
-					ss6.str().c_str());
+				2,
+				tr("STR_REAR_ARMOR").c_str(),
+				woststr.str().c_str());
 
-	ss7 << armor->getUnderArmor();
+	woststr.str(L"");
+	woststr << armor->getUnderArmor();
 	_lstStats->addRow(
-					2,
-					tr("STR_UNDER_ARMOR").c_str(),
-					ss7.str().c_str());
+				2,
+				tr("STR_UNDER_ARMOR").c_str(),
+				woststr.str().c_str());
 
 	_lstStats->addRow(
-					2,
-					tr("STR_WEAPON_LC").c_str(), // was "STR_WEAPON"
-					tr(defs->weapon).c_str());
+				2,
+				tr("STR_WEAPON_LC").c_str(),
+				tr(defs->weapon).c_str());
 
-	if (item->getCompatibleAmmo()->empty() == false)
+	woststr.str(L"");
+	if (itRule->getCompatibleAmmo()->empty() == false)
 	{
-		const RuleItem* const ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+		const RuleItem* const amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 
-		ss8 << ammo->getPower();
+		woststr << amRule->getPower();
 		_lstStats->addRow(
-						2,
-						tr("STR_WEAPON_POWER").c_str(),
-						ss8.str().c_str());
+					2,
+					tr("STR_WEAPON_POWER").c_str(),
+					woststr.str().c_str());
 
 		_lstStats->addRow(
-						2,
-						tr("STR_ORDNANCE_LC").c_str(), // was "STR_AMMUNITION"
-						tr(ammo->getName()).c_str());
+					2,
+					tr("STR_ORDNANCE_LC").c_str(),
+					tr(amRule->getName()).c_str());
 
-		std::wostringstream ss9;
-		ss9 << ammo->getClipSize();
+		woststr.str(L"");
+		woststr << amRule->getClipSize();
 		_lstStats->addRow(
-						2,
-						tr("STR_ROUNDS").c_str(),
-						ss9.str().c_str());
+					2,
+					tr("STR_ROUNDS").c_str(),
+					woststr.str().c_str());
 
 		_txtInfo->setY(138);
 	}
 	else
 	{
-		ss8 << item->getPower();
+		woststr << itRule->getPower();
 		_lstStats->addRow(
-						2,
-						tr("STR_WEAPON_POWER").c_str(),
-						ss8.str().c_str());
+					2,
+					tr("STR_WEAPON_POWER").c_str(),
+					woststr.str().c_str());
 	}
 
 	centerAllSurfaces();

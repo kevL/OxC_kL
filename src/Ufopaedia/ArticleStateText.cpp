@@ -23,7 +23,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -39,6 +39,7 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionText (ArticleDefinition.h)
  */
 ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
 	:
@@ -57,24 +58,24 @@ ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
 	centerAllSurfaces();
 
 	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
+
 	_btnOk->setColor(Palette::blockOffset(5));
 	_btnPrev->setColor(Palette::blockOffset(5));
 	_btnNext->setColor(Palette::blockOffset(5));
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(15)+4);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(defs->title));
 
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(15)-1);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 }
 
 /**
  * dTor.
  */
 ArticleStateText::~ArticleStateText()
-{
-}
+{}
 
 }

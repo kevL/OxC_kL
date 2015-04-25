@@ -31,6 +31,7 @@ class Surface;
 class Text;
 class TextList;
 
+
 /**
  * ArticleStateUfo has a caption, text, preview image and a stats block.
  * The UFO image is found using the RuleUfo class.
@@ -49,9 +50,9 @@ protected:
 
 
 	public:
-		///
+		/// cTor.
 		ArticleStateUfo(ArticleDefinitionUfo* article_defs);
-		///
+		/// dTor.
 		virtual ~ArticleStateUfo();
 };
 

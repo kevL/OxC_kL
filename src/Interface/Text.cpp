@@ -89,12 +89,12 @@ std::wstring Text::formatNumber(
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	//struct lconv* lc = localeconv();
 
-	std::wostringstream wosts;
+	std::wostringstream woststr;
 
-	const bool negative = (value < 0);
-	wosts << (negative? -value: value);
+	const bool neg = (value < 0);
+	woststr << (neg ? -value : value);
 
-	std::wstring ret = wosts.str();
+	std::wstring ret = woststr.str();
 
 	if (space == true)
 	{
@@ -117,7 +117,7 @@ std::wstring Text::formatNumber(
 				0,
 				currency);
 
-	if (negative == true)
+	if (neg == true)
 		ret.insert(
 				0,
 				L"-");

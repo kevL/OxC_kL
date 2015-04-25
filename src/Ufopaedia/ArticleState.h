@@ -63,7 +63,7 @@ protected:
 	std::string getDamageTypeText(ItemDamageType dType) const;
 
 	/// screen layout helpers
-	void initLayout();
+	void initLayout(bool contrast = true);
 
 	/// callback for OK button
 	void btnOkClick(Action* action);
@@ -76,9 +76,7 @@ protected:
 	public:
 		/// return the article id
 		std::string getId() const
-		{
-			return _id;
-		}
+		{	return _id; }
 };
 
 }

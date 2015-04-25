@@ -19,13 +19,13 @@
 
 #include "ArticleStateCraftWeapon.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -44,12 +44,13 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionCraftWeapon (ArticleDefinition.h)
  */
 ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* defs)
 	:
 		ArticleState(defs->id)
 {
-	RuleCraftWeapon* weapon = _game->getRuleset()->getCraftWeapon(defs->id);
+	const RuleCraftWeapon* const weapon = _game->getRuleset()->getCraftWeapon(defs->id);
 
 	_txtTitle = new Text(200, 32, 5, 24);
 
@@ -65,56 +66,55 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 	_btnPrev->setColor(Palette::blockOffset(1));
 	_btnNext->setColor(Palette::blockOffset(1));
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr(defs->title));
 
 	_txtInfo = new Text(310, 32, 5, 160);
 	add(_txtInfo);
 
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(250, 113, 5, 80);
 	add(_lstInfo);
 
-	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setColumns(2, 180, 70);
+	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setDot();
 	_lstInfo->setBig();
 
 	_lstInfo->addRow(
-					2,
-					tr("STR_DAMAGE").c_str(),
-					Text::formatNumber(weapon->getDamage()).c_str());
+				2,
+				tr("STR_DAMAGE").c_str(),
+				Text::formatNumber(weapon->getDamage()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
 	_lstInfo->addRow(
-					2,
-					tr("STR_RANGE").c_str(),
-					tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());
+				2,
+				tr("STR_RANGE").c_str(),
+				tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
 	_lstInfo->addRow(
-					2,
-					tr("STR_ACCURACY").c_str(),
-					Text::formatNumber(weapon->getAccuracy()).c_str());
+				2,
+				tr("STR_ACCURACY").c_str(),
+				Text::formatNumber(weapon->getAccuracy()).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
 	_lstInfo->addRow(
-					2,
-					tr("STR_RE_LOAD_TIME").c_str(),
-					tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
+				2,
+				tr("STR_RE_LOAD_TIME").c_str(),
+				tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
 	_lstInfo->addRow(
-					2,
-					tr("STR_ROUNDS").c_str(),
-					Text::formatNumber(weapon->getAmmoMax()).c_str());
+				2,
+				tr("STR_ROUNDS").c_str(),
+				Text::formatNumber(weapon->getAmmoMax()).c_str());
 	_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
-
 
 	centerAllSurfaces();
 }
@@ -123,7 +123,6 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
  * dTor.
  */
 ArticleStateCraftWeapon::~ArticleStateCraftWeapon()
-{
-}
+{}
 
 }

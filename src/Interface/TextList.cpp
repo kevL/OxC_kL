@@ -360,8 +360,6 @@ void TextList::addRow(
 		int cols,
 		...)
 {
-//	if (cols < 1) return; // note: no one's that stupid.
-
 	va_list args; // typedef char*
 	va_start(args, cols);
 

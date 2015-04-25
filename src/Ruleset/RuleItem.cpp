@@ -21,7 +21,6 @@
 
 #include "RuleInventory.h"
 
-//#include "../Engine/Logger.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -131,14 +130,14 @@ void RuleItem::load(
 		int modIndex,
 		int listOrder)
 {
-	_type					= node["type"].as<std::string>(_type);
-	_name					= node["name"].as<std::string>(_name);
-	_requires				= node["requires"].as<std::vector<std::string> >(_requires);
-	_size					= node["size"].as<double>(_size);
-	_costBuy				= node["costBuy"].as<int>(_costBuy);
-	_costSell				= node["costSell"].as<int>(_costSell);
-	_transferTime			= node["transferTime"].as<int>(_transferTime);
-	_weight					= node["weight"].as<int>(_weight);
+	_type					= node["type"]			.as<std::string>(_type);
+	_name					= node["name"]			.as<std::string>(_name);
+	_requires				= node["requires"]		.as<std::vector<std::string> >(_requires);
+	_size					= node["size"]			.as<double>(_size);
+	_costBuy				= node["costBuy"]		.as<int>(_costBuy);
+	_costSell				= node["costSell"]		.as<int>(_costSell);
+	_transferTime			= node["transferTime"]	.as<int>(_transferTime);
+	_weight					= node["weight"]		.as<int>(_weight);
 
 	if (node["bigSprite"])
 	{
@@ -211,69 +210,69 @@ void RuleItem::load(
 			_meleeHitSound	+= modIndex;
 	}
 
-	_power					= node["power"].as<int>(_power);
-	_compatibleAmmo			= node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
+	_power					= node["power"]				.as<int>(_power);
+	_compatibleAmmo			= node["compatibleAmmo"]	.as< std::vector<std::string> >(_compatibleAmmo);
 	_damageType				= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
-	_accuracyAuto			= node["accuracyAuto"].as<int>(_accuracyAuto);
-	_accuracySnap			= node["accuracySnap"].as<int>(_accuracySnap);
-	_accuracyAimed			= node["accuracyAimed"].as<int>(_accuracyAimed);
-	_tuAuto					= node["tuAuto"].as<int>(_tuAuto);
-	_tuSnap					= node["tuSnap"].as<int>(_tuSnap);
-	_tuAimed				= node["tuAimed"].as<int>(_tuAimed);
-	_tuLaunch				= node["tuLaunch"].as<int>(_tuLaunch);
-	_tuUse					= node["tuUse"].as<int>(_tuUse);
-	_tuPrime				= node["tuPrime"].as<int>(_tuPrime);
-	_clipSize				= node["clipSize"].as<int>(_clipSize);
-	_accuracyMelee			= node["accuracyMelee"].as<int>(_accuracyMelee);
-	_tuMelee				= node["tuMelee"].as<int>(_tuMelee);
+	_accuracyAuto			= node["accuracyAuto"]		.as<int>(_accuracyAuto);
+	_accuracySnap			= node["accuracySnap"]		.as<int>(_accuracySnap);
+	_accuracyAimed			= node["accuracyAimed"]		.as<int>(_accuracyAimed);
+	_tuAuto					= node["tuAuto"]			.as<int>(_tuAuto);
+	_tuSnap					= node["tuSnap"]			.as<int>(_tuSnap);
+	_tuAimed				= node["tuAimed"]			.as<int>(_tuAimed);
+	_tuLaunch				= node["tuLaunch"]			.as<int>(_tuLaunch);
+	_tuUse					= node["tuUse"]				.as<int>(_tuUse);
+	_tuPrime				= node["tuPrime"]			.as<int>(_tuPrime);
+	_clipSize				= node["clipSize"]			.as<int>(_clipSize);
+	_accuracyMelee			= node["accuracyMelee"]		.as<int>(_accuracyMelee);
+	_tuMelee				= node["tuMelee"]			.as<int>(_tuMelee);
 	_battleType				= static_cast<BattleType>(node["battleType"].as<int>(_battleType));
-	_twoHanded				= node["twoHanded"].as<bool>(_twoHanded);
-	_waypoint				= node["waypoint"].as<int>(_waypoint);
-	_fixedWeapon			= node["fixedWeapon"].as<bool>(_fixedWeapon);
-	_invWidth				= node["invWidth"].as<int>(_invWidth);
-	_invHeight				= node["invHeight"].as<int>(_invHeight);
-	_painKiller				= node["painKiller"].as<int>(_painKiller);
-	_heal					= node["heal"].as<int>(_heal);
-	_stimulant				= node["stimulant"].as<int>(_stimulant);
-	_woundRecovery			= node["woundRecovery"].as<int>(_woundRecovery);
-	_healthRecovery			= node["healthRecovery"].as<int>(_healthRecovery);
-	_stunRecovery			= node["stunRecovery"].as<int>(_stunRecovery);
-	_energyRecovery			= node["energyRecovery"].as<int>(_energyRecovery);
-	_recoveryPoints			= node["recoveryPoints"].as<int>(_recoveryPoints);
-	_armor					= node["armor"].as<int>(_armor);
-	_turretType				= node["turretType"].as<int>(_turretType);
-	_recover				= node["recover"].as<bool>(_recover);
-	_liveAlien				= node["liveAlien"].as<bool>(_liveAlien);
+	_twoHanded				= node["twoHanded"]			.as<bool>(_twoHanded);
+	_waypoint				= node["waypoint"]			.as<int>(_waypoint);
+	_fixedWeapon			= node["fixedWeapon"]		.as<bool>(_fixedWeapon);
+	_invWidth				= node["invWidth"]			.as<int>(_invWidth);
+	_invHeight				= node["invHeight"]			.as<int>(_invHeight);
+	_painKiller				= node["painKiller"]		.as<int>(_painKiller);
+	_heal					= node["heal"]				.as<int>(_heal);
+	_stimulant				= node["stimulant"]			.as<int>(_stimulant);
+	_woundRecovery			= node["woundRecovery"]		.as<int>(_woundRecovery);
+	_healthRecovery			= node["healthRecovery"]	.as<int>(_healthRecovery);
+	_stunRecovery			= node["stunRecovery"]		.as<int>(_stunRecovery);
+	_energyRecovery			= node["energyRecovery"]	.as<int>(_energyRecovery);
+	_recoveryPoints			= node["recoveryPoints"]	.as<int>(_recoveryPoints);
+	_armor					= node["armor"]				.as<int>(_armor);
+	_turretType				= node["turretType"]		.as<int>(_turretType);
+	_recover				= node["recover"]			.as<bool>(_recover);
+	_liveAlien				= node["liveAlien"]			.as<bool>(_liveAlien);
 
-	if (node["blastRadius"])
-		_blastRadius		= node["blastRadius"].as<int>(_blastRadius);
+//	if (node["blastRadius"])
+	_blastRadius			= node["blastRadius"]		.as<int>(_blastRadius);
 
-	_attraction				= node["attraction"].as<int>(_attraction);
-	_flatRate				= node["flatRate"].as<bool>(_flatRate);
-	_arcingShot				= node["arcingShot"].as<bool>(_arcingShot);
-	_listOrder				= node["listOrder"].as<int>(_listOrder);
-	_maxRange				= node["maxRange"].as<int>(_maxRange);
-	_aimRange				= node["aimRange"].as<int>(_aimRange);
-	_snapRange				= node["snapRange"].as<int>(_snapRange);
-	_autoRange				= node["autoRange"].as<int>(_autoRange);
-	_minRange				= node["minRange"].as<int>(_minRange);
-	_dropoff				= node["dropoff"].as<int>(_dropoff);
-	_bulletSpeed			= node["bulletSpeed"].as<int>(_bulletSpeed);
-	_explosionSpeed			= node["explosionSpeed"].as<int>(_explosionSpeed);
-	_autoShots				= node["autoShots"].as<int>(_autoShots);
-	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
-	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
-	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied);
-	_skillApplied			= node["skillApplied"].as<bool>(_skillApplied);
-	_LOSRequired			= node["LOSRequired"].as<bool>(_LOSRequired);
-	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
-	_noResearch				= node["noResearch"].as<bool>(_noResearch); // kL
-	_meleePower				= node["meleePower"].as<int>(_meleePower);
-	_underwaterOnly			= node["underwaterOnly"].as<bool>(_underwaterOnly);
-	_specialType			= node["specialType"].as<int>(_specialType);
-	_vaporColor				= node["vaporColor"].as<int>(_vaporColor);
-	_vaporDensity			= node["vaporDensity"].as<int>(_vaporDensity);
-	_vaporProbability		= node["vaporProbability"].as<int>(_vaporProbability);
+	_attraction				= node["attraction"]		.as<int>(_attraction);
+	_flatRate				= node["flatRate"]			.as<bool>(_flatRate);
+	_arcingShot				= node["arcingShot"]		.as<bool>(_arcingShot);
+	_listOrder				= node["listOrder"]			.as<int>(_listOrder);
+	_maxRange				= node["maxRange"]			.as<int>(_maxRange);
+	_aimRange				= node["aimRange"]			.as<int>(_aimRange);
+	_snapRange				= node["snapRange"]			.as<int>(_snapRange);
+	_autoRange				= node["autoRange"]			.as<int>(_autoRange);
+	_minRange				= node["minRange"]			.as<int>(_minRange);
+	_dropoff				= node["dropoff"]			.as<int>(_dropoff);
+	_bulletSpeed			= node["bulletSpeed"]		.as<int>(_bulletSpeed);
+	_explosionSpeed			= node["explosionSpeed"]	.as<int>(_explosionSpeed);
+	_autoShots				= node["autoShots"]			.as<int>(_autoShots);
+	_shotgunPellets			= node["shotgunPellets"]	.as<int>(_shotgunPellets);
+	_zombieUnit				= node["zombieUnit"]		.as<std::string>(_zombieUnit);
+	_strengthApplied		= node["strengthApplied"]	.as<bool>(_strengthApplied);
+	_skillApplied			= node["skillApplied"]		.as<bool>(_skillApplied);
+	_LOSRequired			= node["LOSRequired"]		.as<bool>(_LOSRequired);
+	_noReaction				= node["noReaction"]		.as<bool>(_noReaction);
+	_noResearch				= node["noResearch"]		.as<bool>(_noResearch);
+	_meleePower				= node["meleePower"]		.as<int>(_meleePower);
+	_underwaterOnly			= node["underwaterOnly"]	.as<bool>(_underwaterOnly);
+	_specialType			= node["specialType"]		.as<int>(_specialType);
+	_vaporColor				= node["vaporColor"]		.as<int>(_vaporColor);
+	_vaporDensity			= node["vaporDensity"]		.as<int>(_vaporDensity);
+	_vaporProbability		= node["vaporProbability"]	.as<int>(_vaporProbability);
 
 	if (_listOrder == 0)
 		_listOrder = listOrder;

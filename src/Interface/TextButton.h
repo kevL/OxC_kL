@@ -45,10 +45,10 @@ class TextButton
 {
 
 private:
-	bool
-		_contrast,
-		_geoscapeButton;
-	Uint8 _color;
+	bool _geoscapeButton;
+	Uint8
+		_color,
+		_contrast;
 
 	ComboBox* _comboBox;
 	Text* _text;

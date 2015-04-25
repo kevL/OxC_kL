@@ -55,7 +55,7 @@ TextButton::TextButton(
 			x,y),
 		_color(0),
 		_group(NULL),
-		_contrast(false),
+		_contrast(1),
 		_geoscapeButton(false),
 		_comboBox(NULL)
 {
@@ -180,7 +180,7 @@ void TextButton::initText(
  */
 void TextButton::setHighContrast(bool contrast)
 {
-	_contrast = contrast;
+	_contrast = contrast ? 2 : 1;
 	_text->setHighContrast(contrast);
 	_redraw = true;
 }
@@ -253,11 +253,7 @@ void TextButton::draw()
 	rect.w = static_cast<Uint16>(getWidth());
 	rect.h = static_cast<Uint16>(getHeight());
 
-	Uint8 multer = 1;
-	if (_contrast == true)
-		multer = 2;
-
-	Uint8 color = _color + multer;
+	Uint8 color = _color + _contrast;
 
 	// limit highest color to darkest hue/shade in its palette-block.
 //	const Uint8 topColor = ((_color / 16) * 16) + 15; // exploit INT
@@ -269,7 +265,7 @@ void TextButton::draw()
 	{
 //		if (color > topColor) color = topColor;
 		if (i == 0)
-			color = _color + (multer * 5);
+			color = _color + (_contrast * 5);
 
 		drawRect(&rect, color);
 
@@ -285,7 +281,7 @@ void TextButton::draw()
 		switch (i)
 		{
 			case 0:
-//				color = _color + (multer * 5);
+//				color = _color + (_contrast * 5);
 //				if (color > topColor) color = topColor;
 
 				setPixelColor(
@@ -295,11 +291,11 @@ void TextButton::draw()
 			break;
 
 			case 1:
-				color = _color + (multer * 2);
+				color = _color + (_contrast * 2);
 			break;
 
 			case 2:
-				color = _color + (multer * 4);
+				color = _color + (_contrast * 4);
 //				if (color > topColor) color = topColor;
 
 				setPixelColor(
@@ -309,7 +305,7 @@ void TextButton::draw()
 			break;
 
 			case 3:
-				color = _color + (multer * 3);
+				color = _color + (_contrast * 3);
 			break;
 
 			case 4:
@@ -330,9 +326,9 @@ void TextButton::draw()
 	if (press == true)
 	{
 		if (_geoscapeButton == true)
-			this->invert(_color + (multer * 2));
+			this->invert(_color + (_contrast * 2));
 		else
-			this->invert(_color + (multer * 3));
+			this->invert(_color + (_contrast * 3));
 	}
 
 	_text->setInvert(press);

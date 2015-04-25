@@ -42,8 +42,9 @@ class ArticleStateItem
 {
 
 protected:
-	Surface *_image;
-	Surface *_imageAmmo[3];
+	Surface
+		*_image,
+		*_imageAmmo[3];
 	Text
 		* _txtTitle,
 		* _txtInfo,
@@ -58,9 +59,9 @@ protected:
 
 
 	public:
-		///
+		/// cTor.
 		ArticleStateItem(ArticleDefinitionItem* article_defs);
-		///
+		/// dTor.
 		virtual ~ArticleStateItem();
 };
 

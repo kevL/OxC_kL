@@ -31,6 +31,7 @@ class Surface;
 class Text;
 class TextList;
 
+
 /**
  * ArticleStateAward has a text and background.
  */
@@ -46,9 +47,9 @@ protected:
 
 
 	public:
-		///
+		/// cTor.
 		ArticleStateAward(ArticleDefinitionAward* article_defs);
-		///
+		/// dTor.
 		virtual ~ArticleStateAward();
 };
 

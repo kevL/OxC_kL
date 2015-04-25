@@ -19,13 +19,13 @@
 
 #include "ArticleStateUfo.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"
@@ -44,6 +44,7 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param defs - pointer to ArticleDefinitionUfo (ArticleDefinition.h)
  */
 ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	:
@@ -53,19 +54,20 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 
 	setPalette("PAL_GEOSCAPE");
 
-	ArticleState::initLayout();
+	ArticleState::initLayout(false);
 
 	add(_txtTitle);
 
 	_game->getResourcePack()->getSurface("BACK11.SCR")->blit(_bg);
+
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnPrev->setColor(Palette::blockOffset(8)+5);
 	_btnNext->setColor(Palette::blockOffset(8)+5);
 
+	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr(defs->title));
 
 	_image = new Surface(160, 52, 160, 6);
 	add(_image);
@@ -103,17 +105,17 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 
 	const RuleUfo* const ufo = _game->getRuleset()->getUfo(defs->id);
 	const int sprite = ufo->getSprite();
-	std::ostringstream osts;
-	osts << "INTERWIN_" << sprite;
-	Surface* const srfPreview = _game->getResourcePack()->getSurface(osts.str());
+	std::ostringstream oststr;
+	oststr << "INTERWIN_" << sprite;
+	Surface* const srfPreview = _game->getResourcePack()->getSurface(oststr.str());
 	if (srfPreview != NULL)
 		srfPreview->blit(_image);
 
 	_txtInfo = new Text(300, 50, 10, 140);
 	add(_txtInfo);
+	_txtInfo->setText(tr(defs->text));
 	_txtInfo->setColor(Palette::blockOffset(8)+5);
 	_txtInfo->setWordWrap();
-	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(300, 65, 10, 68);
 	add(_lstInfo);
@@ -128,21 +130,21 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_lstInfo->setDot();
 
 	_lstInfo->addRow(
-					2,
-					tr("STR_DAMAGE_CAPACITY").c_str(),
-					Text::formatNumber(ufo->getMaxDamage()).c_str());
+				2,
+				tr("STR_DAMAGE_CAPACITY").c_str(),
+				Text::formatNumber(ufo->getMaxDamage()).c_str());
 	_lstInfo->addRow(
-					2,
-					tr("STR_WEAPON_POWER").c_str(),
-					Text::formatNumber(ufo->getWeaponPower()).c_str());
+				2,
+				tr("STR_WEAPON_POWER").c_str(),
+				Text::formatNumber(ufo->getWeaponPower()).c_str());
 	_lstInfo->addRow(
-					2,
-					tr("STR_WEAPON_RANGE").c_str(),
-					tr("STR_KILOMETERS").arg(ufo->getWeaponRange()).c_str());
+				2,
+				tr("STR_WEAPON_RANGE").c_str(),
+				tr("STR_KILOMETERS").arg(ufo->getWeaponRange()).c_str());
 	_lstInfo->addRow(
-					2,
-					tr("STR_MAXIMUM_SPEED").c_str(),
-					tr("STR_KNOTS").arg(ufo->getMaxSpeed()).c_str());
+				2,
+				tr("STR_MAXIMUM_SPEED").c_str(),
+				tr("STR_KNOTS").arg(ufo->getMaxSpeed()).c_str());
 }
 
 /**
