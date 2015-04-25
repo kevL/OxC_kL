@@ -203,14 +203,14 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 
 	std::wostringstream
-		ss1,
-		ss2,
-		ss3,
-		ss4,
-		ss5;
+		woststr1,
+		woststr2,
+		woststr3,
+		woststr4,
+		woststr5;
 
-	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(speed));
-	_txtSpeed->setText(ss1.str());
+	woststr1 << tr("STR_SPEED_").arg(Text::formatNumber(speed));
+	_txtSpeed->setText(woststr1.str());
 
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC")
 							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
@@ -234,18 +234,18 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	if (_craft->getRules()->getSoldiers() > 0)
 	{
-		ss2 << tr("STR_SOLDIERS") << L" " << L'\x01' << _craft->getNumSoldiers();
-		ss2 << L" (" << _craft->getRules()->getSoldiers() << L")";
-		_txtSoldier->setText(ss2.str());
+		woststr2 << tr("STR_SOLDIERS") << L" " << L'\x01' << _craft->getNumSoldiers();
+		woststr2 << L" (" << _craft->getRules()->getSoldiers() << L")";
+		_txtSoldier->setText(woststr2.str());
 	}
 	else
 		_txtSoldier->setVisible(false);
 
 	if (_craft->getRules()->getVehicles() > 0)
 	{
-		ss3 << tr("STR_HWPS") << L" " << L'\x01' << _craft->getNumVehicles();
-		ss3 << L" (" << _craft->getRules()->getVehicles() << L")";
-		_txtHWP->setText(ss3.str());
+		woststr3 << tr("STR_HWPS") << L" " << L'\x01' << _craft->getNumVehicles();
+		woststr3 << L" (" << _craft->getRules()->getVehicles() << L")";
+		_txtHWP->setText(woststr3.str());
 	}
 	else
 		_txtHWP->setVisible(false);
@@ -257,9 +257,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 		const CraftWeapon* const w1 = _craft->getWeapons()->at(0);
 		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
 
-		ss4 << tr("STR_ROUNDS_").arg(w1->getAmmo());
-		ss4 << L" (" << w1->getRules()->getAmmoMax() << L")";
-		_txtW1Ammo->setText(ss4.str());
+		woststr4 << tr("STR_ROUNDS_").arg(w1->getAmmo());
+		woststr4 << L" (" << w1->getRules()->getAmmoMax() << L")";
+		_txtW1Ammo->setText(woststr4.str());
 	}
 	else
 	{
@@ -273,9 +273,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 		const CraftWeapon* const w2 = _craft->getWeapons()->at(1);
 		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
 
-		ss5 << tr("STR_ROUNDS_").arg(w2->getAmmo());
-		ss5 << L" (" << w2->getRules()->getAmmoMax() << L")";
-		_txtW2Ammo->setText(ss5.str());
+		woststr5 << tr("STR_ROUNDS_").arg(w2->getAmmo());
+		woststr5 << L" (" << w2->getRules()->getAmmoMax() << L")";
+		_txtW2Ammo->setText(woststr5.str());
 	}
 	else
 	{
@@ -325,8 +325,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 
 
-	const int craftSprite = _craft->getRules()->getSprite();
 	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
+	const int craftSprite = _craft->getRules()->getSprite();
 	texture->getFrame(craftSprite + 11)->blit(_sprite);
 }
 

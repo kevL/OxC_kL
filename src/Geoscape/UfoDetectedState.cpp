@@ -109,6 +109,8 @@ UfoDetectedState::UfoDetectedState(
 	_txtRegion		= new Text(114, 9, 118, 56);
 	_txtTexture		= new Text(114, 9, 118, 66);
 
+	_srfTarget		= new Surface(29, 29, 114, 70); // <- y-value needs adj.!
+
 	if (_hyper == true)
 	{
 		_txtUfo->setY(19);
@@ -121,6 +123,8 @@ UfoDetectedState::UfoDetectedState(
 
 		_txtRegion->setY(19);
 		_txtTexture->setY(29);
+
+		_srfTarget->setY(86);
 
 		if (contact == false)
 		{
@@ -144,6 +148,8 @@ UfoDetectedState::UfoDetectedState(
 
 	add(_txtRegion,		"text",		"UFOInfo");
 	add(_txtTexture,	"text",		"UFOInfo");
+
+	add(_srfTarget);
 
 	if (_hyper == true)
 	{
@@ -518,8 +524,7 @@ void UfoDetectedState::btnCancelClick(Action*)
 }
 
 /**
- * Moves the window to reveal the globe.
- * Or just hides most of its elements.
+ * Hides various screen-elements to reveal the globe & UFO.
  */
 void UfoDetectedState::transposeWindow() // private.
 {
@@ -543,6 +548,9 @@ void UfoDetectedState::transposeWindow() // private.
 		_lstInfo2->setVisible(false);
 		_txtBases->setVisible(false);
 	}
+
+	Surface* const srfTarget = _game->getResourcePack()->getSurface("TARGET_UFO");
+	srfTarget->blit(_srfTarget);
 }
 
 }

@@ -7124,7 +7124,7 @@
 1424390940 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1429618295 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1429981977 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7269,7 +7269,7 @@
 1424390939 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1427063465 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1429981815 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1424390939 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7578,7 +7578,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1429946712 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1429982366 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7691,7 +7691,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1429947932 source:f:\git\openxcom\src\interface\window.cpp
+1429947982 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"

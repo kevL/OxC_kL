@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class Base;
 class GeoscapeState;
+class Surface;
 class Text;
 class TextButton;
 class TextList;
@@ -49,6 +50,7 @@ private:
 		_hyper;
 
 	GeoscapeState* _state;
+	Surface* _srfTarget;
 	Text
 		* _txtBases,
 		* _txtDetected,
@@ -68,7 +70,7 @@ private:
 	Window* _window;
 	Ufo* _ufo;
 
-	/// Moves the window to reveal the globe.
+	/// Hides various screen-elements to reveal the globe & UFO.
 	void transposeWindow();
 
 
