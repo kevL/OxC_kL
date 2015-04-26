@@ -76,7 +76,7 @@ protected:
 	public:
 		/// return the article id
 		std::string getId() const
-		{	return _id; }
+		{ return _id; }
 };
 
 }

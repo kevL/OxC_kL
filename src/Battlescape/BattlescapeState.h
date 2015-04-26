@@ -117,15 +117,11 @@ private:
 	BattleUnit* _visibleUnit[INDICATORS];
 	InteractiveSurface
 		* _icons,
-
-		* _btnStats,
-
 		* _btnLeftHandItem,
 		* _btnRightHandItem,
-
+		* _btnStats,
 		* _btnVisibleUnit[INDICATORS],
 		* _btnWounds,
-
 		* _btnZeroTUs;
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
@@ -174,6 +170,7 @@ private:
 		* _txtName,
 		* _txtOperationTitle,
 		* _txtOrder,
+		* _txtRegion,
 		* _txtShade,
 		* _txtTerrain,
 //		* _txtTooltip;

@@ -677,7 +677,7 @@ void AlienMission::ufoShotDown(const Ufo& ufo)
  * This function is called when one of the mission's UFOs has finished its time on the ground.
  * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
  * It must set the game data in a way that the rest of the code understands what to do.
- * @param ufo	- reference the Ufo that reached its waypoint
+ * @param ufo - reference the Ufo that reached its waypoint
  */
 void AlienMission::ufoLifting(Ufo& ufo)
 {
@@ -780,7 +780,7 @@ const AlienBase* AlienMission::getAlienBase() const
  * @param lon - longitudinal coordinates to check
  * @param lat - latitudinal coordinates to check
  */
-void AlienMission::addScore(
+void AlienMission::addScore( // private.
 		const double lon,
 		const double lat)
 {
@@ -823,15 +823,15 @@ void AlienMission::addScore(
  * @param rules	- reference the Ruleset
  * @param zone	- the mission zone required for determining the base coordinates
  */
-void AlienMission::spawnAlienBase(
+void AlienMission::spawnAlienBase( // private.
 		const Globe& globe,
 		const Ruleset& rules,
 		const size_t zone)
 {
-	if (_savedGame.getAlienBases()->size() > (8 + static_cast<size_t>(_savedGame.getDifficulty()) * 2))
+	if (_savedGame.getAlienBases()->size() > 8 + static_cast<size_t>(_savedGame.getDifficulty()) * 2)
 		return;
 
-	// Once the last UFO is spawned, the aliens build their base.
+	// Once the last UFO is spawned the aliens build their base.
 	const RuleRegion& regionRules = *rules.getRegion(_region);
 	const std::pair<double, double> pos = getLandPoint(
 													globe,

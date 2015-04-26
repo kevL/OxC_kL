@@ -1575,6 +1575,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			break;
+
 			case Ufo::LANDED:
 				(*i)->think();
 
@@ -1583,7 +1584,6 @@ void GeoscapeState::time5Seconds()
 					AlienMission* const mission = (*i)->getMission();
 					const bool detected = (*i)->getDetected();
 					mission->ufoLifting(**i);
-//									*_globe);
 
 					if (detected != (*i)->getDetected()
 						&& (*i)->getFollowers()->empty() == false)
@@ -1593,6 +1593,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			break;
+
 			case Ufo::CRASHED:
 				(*i)->think();
 
@@ -1602,10 +1603,10 @@ void GeoscapeState::time5Seconds()
 					(*i)->setDetected(false);
 					(*i)->setStatus(Ufo::DESTROYED);
 				}
-			break;
-			case Ufo::DESTROYED:
-				// Nothing to do
-			break;
+/*			break;
+
+			case Ufo::DESTROYED: // Nothing to do
+			break; */
 		}
 	}
 

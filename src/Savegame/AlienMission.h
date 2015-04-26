@@ -77,6 +77,10 @@ private:
 			const Globe& globe,
 			const Ruleset& rules,
 			const size_t zone);
+	/// Handles Points for mission successes.
+	void addScore(
+			const double lon,
+			const double lat);
 
 
 	public:
@@ -152,11 +156,6 @@ private:
 		void ufoLifting(Ufo& ufo);
 		/// Handles UFO shot down.
 		void ufoShotDown(const Ufo& ufo);
-
-		/// Handles Points for mission successes.
-		void addScore(
-				const double lon,
-				const double lat);
 
 		/// Selects a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
 		std::pair<double, double> getWaypoint(

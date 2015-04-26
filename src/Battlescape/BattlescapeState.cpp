@@ -89,14 +89,18 @@
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleRegion.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/MissionSite.h"
+#include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Soldier.h"
@@ -141,8 +145,9 @@ BattlescapeState::BattlescapeState()
 		x					= screenWidth / 2 - iconsWidth / 2,
 		y					= screenHeight - iconsHeight;
 
-	_txtBaseLabel		= new Text(80, 9, screenWidth - 81, 0);
-	_lstTileInfo		= new TextList(18, 33, screenWidth - 19, 60);
+	_txtBaseLabel		= new Text(120, 9, screenWidth - 121, 0);
+	_txtRegion			= new Text(120, 9, screenWidth - 121, 10);
+	_lstTileInfo		= new TextList(18, 33, screenWidth - 19, 70);
 	_txtMissionLabel	= new Text(iconsWidth, 9, x, y - 10);
 	_txtOperationTitle	= new Text(screenWidth, 17, 0, 2);
 
@@ -249,15 +254,13 @@ BattlescapeState::BattlescapeState()
 					y + 32);
 
 	_btnLaunch	= new BattlescapeButton(
-					32,
-					24,
+					32,24,
 					screenWidth - 32,
-					10);
+					20);
 	_btnPsi		= new BattlescapeButton(
-					32,
-					24,
+					32,24,
 					screenWidth - 32,
-					35);
+					45);
 
 	_txtName		= new Text(136, 9, x + 135, y + 32);
 
@@ -422,6 +425,7 @@ BattlescapeState::BattlescapeState()
 	add(_warning,			"warning",			"battlescape", _icons);
 	add(_txtOperationTitle,	"operationTitle",	"battlescape");
 	add(_txtBaseLabel,		"infoText",			"battlescape");
+	add(_txtRegion,			"infoText",			"battlescape");
 	add(_txtMissionLabel,	"infoText",			"battlescape");
 
 	_txtDebug->setHighContrast();
@@ -445,6 +449,8 @@ BattlescapeState::BattlescapeState()
 	_txtMissionLabel->setHighContrast();
 	_txtMissionLabel->setAlign(ALIGN_CENTER);
 
+	Target* target = NULL;
+
 	std::wstring
 		baseLabel,
 		missionLabel;
@@ -457,8 +463,11 @@ BattlescapeState::BattlescapeState()
 	{
 		if ((*i)->isInBattlescape() == true)
 		{
+			target = dynamic_cast<Target*>(*i);
+
 			baseLabel = (*i)->getName(_game->getLanguage());
 			missionLabel = tr("STR_BASE_DEFENSE");
+
 			break;
 		}
 
@@ -469,59 +478,116 @@ BattlescapeState::BattlescapeState()
 				++j)
 		{
 			if ((*j)->isInBattlescape() == true)
+			{
+				target = dynamic_cast<Target*>(*j);
+
 				baseLabel = (*i)->getName(_game->getLanguage());
+			}
 		}
 	}
-	_txtBaseLabel->setText(baseLabel.c_str()); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+	_txtBaseLabel->setText(tr("STR_SQUAD_").arg(baseLabel.c_str()));
+//	_txtBaseLabel->setText(baseLabel.c_str()); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+
 
 	if (missionLabel.empty() == true)
 	{
-		std::wostringstream wost;
+		std::wostringstream woststr;
 
 		for (std::vector<Ufo*>::const_iterator
 				i = _gameSave->getUfos()->begin();
 				i != _gameSave->getUfos()->end()
-					&& wost.str().empty() == true;
+					&& woststr.str().empty() == true;
 				++i)
 		{
 			if ((*i)->isInBattlescape() == true)
 			{
-				if ((*i)->isCrashed() == true)
-					wost << tr("STR_UFO_CRASH_RECOVERY");
-				else
-					wost << tr("STR_UFO_GROUND_ASSAULT");
+				target = dynamic_cast<Target*>(*i);
 
-				wost << L"> " << (*i)->getName(_game->getLanguage());
+				if ((*i)->isCrashed() == true)
+					woststr << tr("STR_UFO_CRASH_RECOVERY");
+				else
+					woststr << tr("STR_UFO_GROUND_ASSAULT");
+
+				woststr << L"> " << (*i)->getName(_game->getLanguage());
 			}
 		}
 
 		for (std::vector<MissionSite*>::const_iterator
 				i = _gameSave->getMissionSites()->begin();
 				i != _gameSave->getMissionSites()->end()
-					&& wost.str().empty() == true;
+					&& woststr.str().empty() == true;
 				++i)
 		{
 			if ((*i)->isInBattlescape() == true)
-				wost << tr("STR_TERROR_MISSION") << L"> " << (*i)->getName(_game->getLanguage()); // <- not necessarily a Terror Mission ...
+			{
+				target = dynamic_cast<Target*>(*i);
+
+				woststr << tr("STR_TERROR_MISSION") << L"> " << (*i)->getName(_game->getLanguage()); // <- not necessarily a Terror Mission ...
+			}
 		}
 
 		for (std::vector<AlienBase*>::const_iterator
 				i = _gameSave->getAlienBases()->begin();
 				i != _gameSave->getAlienBases()->end()
-					&& wost.str().empty() == true;
+					&& woststr.str().empty() == true;
 				++i)
 		{
 			if ((*i)->isInBattlescape() == true)
-				wost << tr("STR_ALIEN_BASE_ASSAULT") << L"> " << (*i)->getName(_game->getLanguage());
+			{
+				target = dynamic_cast<Target*>(*i);
+
+				woststr << tr("STR_ALIEN_BASE_ASSAULT") << L"> " << (*i)->getName(_game->getLanguage());
+			}
 		}
 
-		missionLabel = wost.str();
+		missionLabel = woststr.str();
 	}
 
 	if (missionLabel.empty() == true)
 		missionLabel = tr(_battleSave->getMissionType());
 
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
+
+
+	if (target != NULL)
+	{
+		std::wostringstream woststr;
+		const double
+			lon = target->getLongitude(),
+			lat = target->getLatitude();
+
+		for (std::vector<Region*>::const_iterator
+				i = _game->getSavedGame()->getRegions()->begin();
+				i != _game->getSavedGame()->getRegions()->end();
+				++i)
+		{
+			if ((*i)->getRules()->insideRegion(
+											lon,
+											lat) == true)
+			{
+				woststr << tr((*i)->getRules()->getType());
+				break;
+			}
+		}
+
+		for (std::vector<Country*>::const_iterator
+				i = _game->getSavedGame()->getCountries()->begin();
+				i != _game->getSavedGame()->getCountries()->end();
+				++i)
+		{
+			if ((*i)->getRules()->insideCountry(
+											lon,
+											lat) == true)
+			{
+				woststr << L"> " << tr((*i)->getRules()->getType());
+				break;
+			}
+		}
+
+		_txtRegion->setText(woststr.str()); // there'd better be a region ... or else. Pow! To the moon!!!
+		_txtRegion->setHighContrast();
+		_txtRegion->setAlign(ALIGN_RIGHT);
+	}
 
 
 //	add(_turnCounter);

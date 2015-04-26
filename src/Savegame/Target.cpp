@@ -112,8 +112,7 @@ void Target::setLongitude(double lon)
 {
 	_lon = lon;
 
-	// keep between 0 and 2PI
-	while (_lon < 0.)
+	while (_lon < 0.) // keep it between 0 and 2PI
 		_lon += M_PI * 2.;
 
 	while (_lon >= M_PI * 2.)
@@ -139,12 +138,12 @@ void Target::setLatitude(double lat)
 
 	if (_lat < -(M_PI_2)) // keep it between -pi/2 and pi/2
 	{
-		_lat = -M_PI - _lat; // kL
+		_lat = -M_PI - _lat;
 		setLongitude(_lon + M_PI);
 	}
 	else if (_lat > (M_PI_2))
 	{
-		_lat = M_PI - _lat; // Doug. right!
+		_lat = M_PI - _lat;
 		setLongitude(_lon - M_PI);
 	}
 }

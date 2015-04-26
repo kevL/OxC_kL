@@ -89,16 +89,16 @@ UfoDetectedState::UfoDetectedState(
 
 	if (_hyper == true)
 	{
-		_window			= new Window(this, 228, 190, 14, 10, POPUP_BOTH);
+		_window			= new Window(this, 236, 190, 10, 10, POPUP_BOTH);
 
 		_txtHyperwave	= new Text(216, 16, 20, 45);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
 		_txtBases		= new Text(100, 41, 32, 135);
 	}
 	else
-		_window			= new Window(this, 228, 140, 14, 48, POPUP_BOTH);
+		_window			= new Window(this, 236, 140, 10, 48, POPUP_BOTH);
 
-	_txtUfo			= new Text(94, 16, 24, 56);
+	_txtUfo			= new Text(102, 16, 20, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
@@ -106,8 +106,8 @@ UfoDetectedState::UfoDetectedState(
 	_btn5Sec		= new TextButton(88, 16, 136, 144);
 	_btnCancel		= new TextButton(192, 16, 32, 164);
 
-	_txtRegion		= new Text(114, 9, 118, 56);
-	_txtTexture		= new Text(114, 9, 118, 66);
+	_txtRegion		= new Text(114, 9, 122, 56);
+	_txtTexture		= new Text(114, 9, 122, 66);
 
 	_srfTarget		= new Surface(29, 29, 114, 70); // <- y-value needs adj.!
 
@@ -549,8 +549,7 @@ void UfoDetectedState::transposeWindow() // private.
 		_txtBases->setVisible(false);
 	}
 
-	Surface* const srfTarget = _game->getResourcePack()->getSurface("TARGET_UFO");
-	srfTarget->blit(_srfTarget);
+	_game->getResourcePack()->getSurface("TARGET_UFO")->blit(_srfTarget);
 }
 
 }
