@@ -23,6 +23,7 @@
 //#include <SDL_mixer.h>
 //#include "../fmath.h"
 
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
 
@@ -166,7 +167,8 @@ void Window::think()
 void Window::popup()
 {
 	if (AreSame(_popupStep, 0.) == true)
-		soundPopup[(SDL_GetTicks() % 2) + 1]->play(Mix_GroupAvailable(0));
+		soundPopup[static_cast<size_t>(RNG::seedless(1,2))]->play(Mix_GroupAvailable(0));
+//		soundPopup[(SDL_GetTicks() % 2) + 1]->play(Mix_GroupAvailable(0));
 
 	if (_popupStep < 1.)
 		_popupStep += POPUP_SPEED;

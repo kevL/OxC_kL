@@ -48,9 +48,10 @@ RuleTexture::~RuleTexture()
  */
 void RuleTexture::load(const YAML::Node& node)
 {
-	_id			= node["id"]		.as<int>(_id);
-	_deployType	= node["deployType"].as<std::string>(_deployType);
-	_terrains	= node["terrains"]	.as<std::vector<TerrainCriteria> >(_terrains);
+	_id				= node["id"]			.as<int>(_id);
+	_deployTypes	= node["deployTypes"]	.as<std::map<std::string, int> >(_deployTypes);
+//	_deployType		= node["deployType"]	.as<std::string>(_deployType);
+	_terrains		= node["terrains"]		.as<std::vector<TerrainCriteria> >(_terrains);
 }
 
 /**
@@ -63,17 +64,65 @@ std::vector<TerrainCriteria>* RuleTexture::getTerrainCriteria()
 }
 
 /**
- * Gets this RuleTexture's alien deployment.
- * @return, deployment-type string
+ * Returns the list of deployments associated with this Texture.
+ * @return, reference to a map of deployments
  */
-std::string RuleTexture::getTextureDeployment() const
+const std::map<std::string, int>& RuleTexture::getTextureDeployments()
 {
-	return _deployType;
+	return _deployTypes;
+}
+
+
+/**
+ * Calculates a random deployment for a mission target based on the texture's
+ * available deployments.
+ * @return, the name of a deployment
+ */
+std::string RuleTexture::getRandomDeployment() const
+{
+	if (_deployTypes.empty() == true)
+		return "";
+
+
+	std::map<std::string, int>::const_iterator i = _deployTypes.begin();
+
+	if (_deployTypes.size() == 1)
+		return i->first;
+
+
+	int totalWeight = 0;
+	for (
+			;
+			i != _deployTypes.end();
+			++i)
+	{
+		totalWeight += i->second;
+	}
+
+	if (totalWeight > 0)
+	{
+		int pick = RNG::generate(
+							1,
+							totalWeight);
+
+		for (
+				i = _deployTypes.begin();
+				i != _deployTypes.end();
+				++i)
+		{
+			if (pick <= i->second)
+				return i->first;
+			else
+				pick -= i->second;
+		}
+	}
+
+	return "";
 }
 
 /**
- * Calculates a random terrain for a mission-target based
- * on this texture's available TerrainCriteria.
+ * Calculates a random terrain for a mission-target based on this texture's
+ * available TerrainCriteria.
  * @param target - pointer to the mission Target (default NULL to exclude geographical bounds)
  * @return, terrain string
  */

@@ -151,7 +151,7 @@ bool RuleRegion::insideRegion(
 {
 	for (size_t
 			i = 0;
-			i < _lonMin.size();
+			i != _lonMin.size();
 			++i)
 	{
 		bool
@@ -215,13 +215,22 @@ std::vector<RuleCity*>* RuleRegion::getCities()
 }
 
 /**
- * Gets the weight of this region for mission selection.
- * This is only used when creating a new game since these weights change in the course of the game.
+ * Gets the weight of the Region for mission selection.
+ * @note This is only used when creating a new game since these weights change in the course of the game.
  * @return, the initial weight of this Region
  */
 size_t RuleRegion::getWeight() const
 {
 	return _regionWeight;
+}
+
+/**
+ * Gets a list of all MissionZones in the Region.
+ * @return, reference to a vector of MissionZones
+ */
+const std::vector<MissionZone>& RuleRegion::getMissionZones() const
+{
+	return _missionZones;
 }
 
 /**
@@ -272,7 +281,7 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
  * Gets the area data for the mission point in the specified zone and coordinates.
  * @param zone		- the target zone
  * @param target	- the target coordinates
- * @return, a pair of longitude and latitude
+ * @return, a MissionArea from which to extract coordinates, textures, or any other pertinent information
  */
 MissionArea RuleRegion::getMissionPoint(
 		size_t zone,
@@ -299,12 +308,34 @@ MissionArea RuleRegion::getMissionPoint(
 }
 
 /**
- * Gets the mission zones.
- * @return, reference to a vector of MissionZones
+ * Gets the area data for the random mission point in the Region.
+ * @return, a MissionArea from which to extract coordinates, textures, or any other pertinent information
  */
-const std::vector<MissionZone>& RuleRegion::getMissionZones() const
+MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
 {
-	return _missionZones;
+	if (zone < _missionZones.size())
+	{
+		std::vector<MissionArea> randArea = _missionZones[zone].areas;
+		for (std::vector<MissionArea>::const_iterator
+				i = randArea.begin();
+				i != randArea.end();
+				)
+		{
+			if (i->isPoint() == false)
+				i = randArea.erase(i);
+			else
+				++i;
+		}
+
+		if (randArea.empty() == false)
+			return randArea.at(static_cast<size_t>(RNG::generate(
+															0,
+															randArea.size() - 1)));
+
+	}
+
+	assert(0 && "Invalid zone number");
+	return MissionArea();
 }
 
 }

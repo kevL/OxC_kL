@@ -47,7 +47,7 @@ struct MissionArea
 	std::string site;
 
 	///
-	bool operator == (const MissionArea& area) const
+	bool operator== (const MissionArea& area) const
 	{
 		return AreSame(lonMax, area.lonMax)
 			&& AreSame(lonMin, area.lonMin)
@@ -102,14 +102,10 @@ private:
 
 	std::vector<RuleCity*> _cities;
 
-	/// Weighted list of the different mission types for this region.
-	WeightedOptions _missionWeights;
-	/// Weight of this region when selecting regions for alien missions.
-	size_t _regionWeight;
-	/// All the mission zones in this region.
-	std::vector<MissionZone> _missionZones;
-	/// Do missions in the region defined by this string instead.
-	std::string _missionRegion;
+	WeightedOptions _missionWeights;		// Weighted list of the different mission types for this region.
+	size_t _regionWeight;					// Weight of this region when selecting regions for alien missions.
+	std::vector<MissionZone> _missionZones;	// All the mission zones in this region.
+	std::string _missionRegion;				// Do missions in the region defined by this string instead.
 
 
 	public:
@@ -148,12 +144,17 @@ private:
 		const std::string& getMissionRegion() const
 		{ return _missionRegion; }
 
+		/// Gets a list of MissionZones.
+		const std::vector<MissionZone>& getMissionZones() const;
+
 		/// Gets a random point inside a mission zone.
 		std::pair<double, double> getRandomPoint(size_t zone) const;
 		/// Gets the mission area for the corresponding target.
 		MissionArea getMissionPoint(
 				size_t zone,
 				Target* target) const;
+		/// Gets a random mission area.
+		MissionArea getRandomMissionPoint(size_t zone) const;
 
 		/// Gets the maximum longitude.
 		const std::vector<double>& getLonMax() const
@@ -167,9 +168,6 @@ private:
 		/// Gets the minimum latitude.
 		const std::vector<double>& getLatMin() const
 		{ return _latMin; }
-
-		///
-		const std::vector<MissionZone>& getMissionZones() const;
 };
 
 }

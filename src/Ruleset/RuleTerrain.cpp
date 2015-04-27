@@ -69,9 +69,13 @@ void RuleTerrain::load(
 {
 	_type		= node["type"]		.as<std::string>(_type);
 	_script		= node["script"]	.as<std::string>(_script);
-	_minDepth	= node["minDepth"]	.as<int>(_minDepth);
-	_maxDepth	= node["maxDepth"]	.as<int>(_maxDepth);
 	_ambience	= node["ambience"]	.as<int>(_ambience);
+
+	if (node["depth"])
+	{
+		_minDepth = node["depth"][0].as<int>(_minDepth);
+		_maxDepth = node["depth"][1].as<int>(_maxDepth);
+	}
 
 	if (const YAML::Node& mapDataSets = node["mapDataSets"])
 	{

@@ -28,6 +28,7 @@
 #include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Surface.h"
@@ -320,7 +321,8 @@ Music* ResourcePack::getRandomMusic( // private.
 	}
 
 	const std::vector<std::pair<std::string, int> > codeList = assignment.at(terrainRule);
-	const size_t code = static_cast<size_t>(SDL_GetTicks() % codeList.size());
+	const size_t code = static_cast<size_t>(RNG::seedless(0, codeList.size() - 1));
+//	const size_t code = static_cast<size_t>(SDL_GetTicks() % codeList.size());
 	const std::pair<std::string, int> music = codeList[code];
 
 	//Log(LOG_DEBUG) << "MUSIC: " << music.first;

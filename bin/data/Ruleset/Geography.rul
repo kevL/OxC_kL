@@ -3022,9 +3022,11 @@ globe:
       terrains:
         - type: POLAR
     - id: -1 #inland
-      deployType: STR_TERROR_MISSION
+      deployTypes:
+        STR_TERROR_MISSION: 100
     - id: -2 #coastal
-      deployType: STR_PORT_ATTACK
+      deployTypes:
+        STR_PORT_ATTACK: 100
 ###--- Original Textures ---###
 #  textures:
 #    - id: 0

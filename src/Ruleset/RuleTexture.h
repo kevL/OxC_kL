@@ -62,9 +62,9 @@ class RuleTexture
 
 private:
 	int _id;
-	std::string _deployType;
+//	std::string _deployType;
+	std::map<std::string, int> _deployTypes;
 	std::vector<TerrainCriteria> _terrains;
-
 
 	public:
 		/// Creates a new texture with mission data.
@@ -78,8 +78,12 @@ private:
 		/// Gets the list of terrain criteria.
 		std::vector<TerrainCriteria>* getTerrainCriteria();
 
-		/// Gets the alien deployment for this Texture.
-		std::string getTextureDeployment() const;
+		/// Gets the alien deployments for this Texture.
+		const std::map<std::string, int>& getTextureDeployments();
+//		std::string getTextureDeployment() const;
+
+		/// Gets a random deployment.
+		std::string getRandomDeployment() const;
 
 		/// Gets a randomly textured terrain-type for a given target.
 		std::string getRandomTerrain(const Target* const target = NULL) const;

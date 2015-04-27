@@ -52,6 +52,11 @@ double generate(
 		double minRand,
 		double maxRand);
 
+/// Generates a random integer number inclusive (non-seed version).
+int seedless(
+		int min,
+		int max);
+
 /// Get normally distributed value.
 double boxMuller(
 		double mean = 0.,

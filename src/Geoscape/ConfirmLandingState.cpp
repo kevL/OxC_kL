@@ -180,7 +180,7 @@ ConfirmLandingState::ConfirmLandingState(
 				Log(LOG_INFO) << ". . missionSite";
 //				if (_city != NULL) // missionSite is at a City.
 				{
-					std::vector<std::string> eligibleTerrains;
+					std::vector<std::string> terrainList;
 					// terrains for Missions can be/are defined in both AlienDeployment AND through RuleGlobe(Textures)
 					// Options:
 					// 1. choose from both aspects
@@ -198,38 +198,38 @@ ConfirmLandingState::ConfirmLandingState(
 					// check for Terrains in Globe-Texture(INT) first
 /*					const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
 					const RuleTexture* const texRule = globeRule->getTextureRule(_city->getTextureInt());
-					eligibleTerrains = globeRule->getGlobeTerrains(texRule->getTextureDeployment());
+					terrainList = globeRule->getGlobeTerrains(texRule->getTextureDeployment());
 
 					// second, check for Terrains in AlienDeployment ...
-					if (eligibleTerrains.empty() == true)
+					if (terrainList.empty() == true)
 					{
 						// get a Terrain from AlienDeployment
 						const AlienDeployment* const deployRule = site->getDeployment();
-						eligibleTerrains = deployRule->getDeployTerrains();
+						terrainList = deployRule->getDeployTerrains();
 					} */
 
 					// get a Terrain from AlienDeployment first
 					Log(LOG_INFO) << ". . . finding eligibleTerrain for AlienDeployment";
 					const AlienDeployment* const deployRule = site->getDeployment();
-					eligibleTerrains = deployRule->getDeployTerrains();
+					terrainList = deployRule->getDeployTerrains();
 
 					// second, check for Terrains in Globe-Texture(INT) ...
-					if (eligibleTerrains.empty() == true)
+					if (terrainList.empty() == true)
 					{
 						Log(LOG_INFO) << ". . . finding eligibleTerrain for RuleGlobe";
 						const RuleGlobe* const globeRule = _game->getRuleset()->getGlobe();
-						const RuleTexture* const texRule = globeRule->getTextureRule(_city->getTextureInt());
-						eligibleTerrains = globeRule->getGlobeTerrains(texRule->getTextureDeployment());
+//						const RuleTexture* const texRule = globeRule->getTextureRule(_city->getTextureInt());
+						terrainList = globeRule->getGlobeTerrains(); //texRule->getTextureDeployments() -> now uses a weighted system ....
 					}
 
-					if (eligibleTerrains.empty() == false) // SAFETY.
+					if (terrainList.empty() == false) // SAFETY.
 					{
 						const size_t pick = RNG::generate(
 													0,
-													eligibleTerrains.size() - 1);
-						Log(LOG_INFO) << ". . . . size = " << (int)eligibleTerrains.size() << " pick = " << (int)pick;
-						Log(LOG_INFO) << ". . . . terrain = " << eligibleTerrains.at(pick) << " - NOT WEIGHTED";
-						_terrainRule = _game->getRuleset()->getTerrain(eligibleTerrains.at(pick));
+													terrainList.size() - 1);
+						Log(LOG_INFO) << ". . . . size = " << (int)terrainList.size() << " pick = " << (int)pick;
+						Log(LOG_INFO) << ". . . . terrain = " << terrainList.at(pick) << " - NOT WEIGHTED";
+						_terrainRule = _game->getRuleset()->getTerrain(terrainList.at(pick));
 					}
 //					else fuck off. Thanks!
 					else Log(LOG_INFO) << ". . . . eligibleTerrain NOT Found";

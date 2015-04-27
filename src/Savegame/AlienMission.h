@@ -30,6 +30,7 @@ namespace OpenXcom
 class AlienBase;
 class Game;
 class Globe;
+class MissionSite;
 class RuleAlienMission;
 class RuleRegion;
 class Ruleset;
@@ -38,6 +39,7 @@ class SavedGame;
 class Ufo;
 class UfoTrajectory;
 
+struct MissionArea;
 struct MissionWave;
 
 
@@ -81,6 +83,10 @@ private:
 	void addScore(
 			const double lon,
 			const double lat);
+	/// Spawns a MissionSite at a specific location.
+	MissionSite* spawnMissionSite(
+			const Ruleset& rules,
+			const MissionArea& area);
 
 
 	public:

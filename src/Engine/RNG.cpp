@@ -138,6 +138,20 @@ double generate(
 	return ((r / diff) + minRand);
 }
 
+/**
+ * Generates a random integer number within a certain range.
+ * Distinct from "generate" in that it doesn't touch the seed.
+ * @param min - minimum number inclusive
+ * @param max - maximum number inclusive
+ * @return, generated number
+ */
+int seedless(
+		int min,
+		int max)
+{
+	return (std::rand() % (max - min + 1) + min);
+}
+
 /*
 ftp://ftp.taygeta.com/pub/c/boxmuller.c
 

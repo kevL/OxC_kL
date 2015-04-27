@@ -21,12 +21,14 @@
 
 #include "Position.h"
 
+//#include "../Engine/RNG.h"
+
 
 namespace OpenXcom
 {
 
 /**
- * Creates a particle.
+ * Creates the particle.
  * @param xOffset	- the horizontal offset for this particle (relative to the tile in screen space)
  * @param yOffset	- the vertical offset for this particle (relative to the tile in screen space)
  * @param density	- the density of the particle dictates the speed at which it moves upwards, and is inversely proportionate to its size
@@ -56,21 +58,23 @@ Particle::Particle(
 }
 
 /**
- * Cleans up a particle.
+ * Cleans up this Particle.
  */
 Particle::~Particle()
-{
-}
+{}
 
 /**
- * Animates the particle.
+ * Animates this Particle.
  * @return, true if this particle is done animating
  */
 bool Particle::animate()
 {
-	_yOffset -= 2.f * _density / 128.f;
+	_yOffset -= ((320.f - _density) / 256.f);
 
-	_opacity--;
+	--_opacity;
+	_xOffset += static_cast<float>(RNG::seedless(0,1) * 2 - 1)
+			  * (0.25f + static_cast<float>(RNG::seedless(0,9)) / 30.f);
+
 	if (_opacity == 0)
 		return false;
 

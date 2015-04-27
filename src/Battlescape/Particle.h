@@ -20,6 +20,7 @@
 #ifndef OPENXCOM_PARTICLE_H
 #define OPENXCOM_PARTICLE_H
 
+//#include <algorithm>
 //#include <SDL_types.h>
 
 
@@ -41,45 +42,39 @@ private:
 
 
 	public:
-		/// Create a particle.
+		/// Creates a particle.
 		Particle(
 				float xOffset,
 				float yOffset,
 				float density,
 				Uint8 color,
 				Uint8 opacity);
-		/// Destroy a particle.
+		/// Destroys a particle.
 		~Particle();
 
-		/// Animate a particle.
+		/// Animates a particle.
 		bool animate();
 
-		/// Get the size value.
+		/// Gets the size value.
 		int getSize()
-		{
-			return _size;
-		}
-		/// Get the color.
-		Uint8 getColor()
-		{
-			return _color;
-		}
-		/// Get the opacity.
-		Uint8 getOpacity()
-		{
-			return _opacity / 5;
-		}
+		{ return _size; }
 
-		/// Get the horizontal shift.
+		/// Gets the color.
+		Uint8 getColor()
+		{ return _color; }
+
+		/// Gets the opacity.
+		Uint8 getOpacity()
+		{ return std::min(
+					(_opacity + 7) / 10,
+					3); }
+
+		/// Gets the horizontal shift.
 		float getX()
-		{
-			return _xOffset;
-		}
-		/// Get the vertical shift.
+		{ return _xOffset; }
+		/// Gets the vertical shift.
 		float getY()
-		{
-			return _yOffset;
-		}
+		{ return _yOffset; }
 };
 
 }
