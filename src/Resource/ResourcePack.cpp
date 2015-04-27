@@ -265,6 +265,9 @@ void ResourcePack::fadeMusic(
 	_playingMusic.clear();
 
 #ifndef __NO_MUSIC
+	if (Mix_PlayingMusic() == 0)
+		return;
+
 	if (Mix_GetMusicType(NULL) != MUS_MID)
 	{
 //		game->getCursor()->setVisible(false);

@@ -170,6 +170,7 @@ countries:
     labelLat: -26.0
     areas:
       - [25, 34, -31.9, -22]
+      - [34, 35.2, -26.61, -22.296]
   - type: STR_ETHIOPIA
     fundingBase: 100
     fundingCap: 1000

@@ -692,6 +692,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		modularAwards.clear();
 
 		reqdLevel["noNoun"] = 0;
+
 		// loop over all of soldier's SoldierCommendations, see if he/she
 		// already has the award; get the level and noun if so
 		for (std::vector<SoldierCommendations*>::const_iterator
@@ -735,7 +736,8 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 			// NOTE: All these class variables ought be 'size_t'!!!!
 			val = (*j).second.at(reqdLevel["noNoun"]);
 
-			if (//reqdLevel.count("noNoun") == 1 &&
+			if (//reqdLevel.count("noNoun") == 1 && // <- this is relevant only if entry "noNoun" is removed from the map in the sections following this one.
+				reqdLevel["noNoun"] != 0 && // kL_add
 				(   (   criterion == "totalKills"
 						&& static_cast<int>(_killList.size()) < val)
 					|| (criterion == "totalMissions"
@@ -800,7 +802,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				doAward = false;
 				break;
 			}
-
+else
 			// awards with the following criteria are unique because they need a noun
 			// and they loop over a map<> (this allows for "maximum" mod-ability)
 			if (   criterion == "totalKillsWithAWeapon"
@@ -848,12 +850,12 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					doAward = false;
 					break;
 				}
-				else
-					doAward = true;
+//				else doAward = true;
 			}
-			else if (criterion == "killsWithCriteriaCareer"
-				||   criterion == "killsWithCriteriaMission"
-				||   criterion == "killsWithCriteriaTurn")
+else
+			if (   criterion == "killsWithCriteriaCareer"
+				|| criterion == "killsWithCriteriaMission"
+				|| criterion == "killsWithCriteriaTurn")
 			{
 				const std::vector<std::map<int, std::vector<std::string> > >* killCriteriaList = (*i).second->getKillCriteria();
 

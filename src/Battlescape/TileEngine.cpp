@@ -5454,12 +5454,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 											action->actor->getPosition(),
 											action->target));
 
-		int bonusSkill = 0; // add to psiSkill when using aLien to Panic another aLien ....
+		int bonusSkill; // add to psiSkill when using aLien to Panic another aLien ....
 		if (action->actor->getFaction() == FACTION_PLAYER
 			&& action->actor->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			bonusSkill = 21; // ... arbitrary kL
 		}
+		else
+			bonusSkill = 0;
 
 		double attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.;
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
@@ -5506,7 +5508,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			if (action->type == BA_PANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
-				const int moraleLoss = 110
+				const int moraleLoss = 105
 								 - statsVictim->bravery * 3 / 2
 								 + statsActor->psiStrength * 2 / 3;
 				//Log(LOG_INFO) << ". . . moraleLoss reduction = " << moraleLoss;
@@ -5528,23 +5530,23 @@ bool TileEngine::psiAttack(BattleAction* action)
 					return false;
 				}
 
-				int morale = statsVictim->bravery;
+				int courage = statsVictim->bravery;
 				if (action->actor->getFaction() == FACTION_HOSTILE)
 				{
-					morale = std::min( // xCom Morale loss for getting Mc'd.
+					courage = std::min( // xCom Morale loss for getting Mc'd.
 									0,
-									(_battleSave->getMoraleModifier() / 10) + (morale / 2) - 110);
+									(_battleSave->getMoraleModifier() / 10) + (courage / 2) - 110);
 				}
 				else //if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
-						morale = std::min( // aLien Morale loss for getting Mc'd.
+						courage = std::min( // aLien Morale loss for getting Mc'd.
 										0,
-										(_battleSave->getMoraleModifier(NULL, false) / 10) + (morale * 2 / 3) - 110);
+										(_battleSave->getMoraleModifier(NULL, false) / 10) + (courage * 3 / 4) - 110);
 					else
-						morale /= 2; // xCom Morale gain for getting Mc'd back to xCom.
+						courage /= 2; // xCom Morale gain for getting Mc'd back to xCom.
 				}
-				victim->moraleChange(morale);
+				victim->moraleChange(courage);
 				//Log(LOG_INFO) << ". . . victim morale[2] = " << victim->getMorale();
 
 				victim->convertToFaction(action->actor->getFaction());

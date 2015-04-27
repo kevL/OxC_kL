@@ -1136,7 +1136,7 @@ void UnitWalkBState::postPathProcedures()
 int UnitWalkBState::getFinalDirection() const
 {
 	const int
-		diff = static_cast<int>(_parent->getBattlescapeState()->getGame()->getSavedGame()->getDifficulty()),
+		diff = static_cast<int>(_parent->getBattlescapeState()->getSavedGame()->getDifficulty()),
 		alienRank = _unit->getRankInt();
 
 	if (RNG::percent((diff + 1) * 20 - alienRank * 5) == false)
@@ -1152,6 +1152,7 @@ int UnitWalkBState::getFinalDirection() const
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER
 			&& (*i)->isOut(true, true) == false
+			&& (*i)->getExposed() != -1
 			&& (*i)->getExposed() <= _unit->getIntelligence())
 		{
 			const int dist = _parent->getSave()->getTileEngine()->distance(

@@ -119,11 +119,9 @@ ConfirmLandingState::ConfirmLandingState(
 
 	_txtBase->setText(craft->getBase()->getName(_game->getLanguage()));
 
-//	_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtShade->setAlign(ALIGN_RIGHT);
 	_txtShade->setText(tr("STR_SHADE_").arg(shade));
 
-//	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
 
 

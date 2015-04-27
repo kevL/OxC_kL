@@ -89,92 +89,92 @@ UnitInfoState::UnitInfoState(
 
 	_txtTimeUnits	= new Text(140, 9, 8, yPos);
 	_numTimeUnits	= new Text(18, 9, 151, yPos);
-	_barTimeUnits	= new Bar(180, 5, 170, yPos + 1);
+	_barTimeUnits	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtEnergy		= new Text(140, 9, 8, yPos);
 	_numEnergy		= new Text(18, 9, 151, yPos);
-	_barEnergy		= new Bar(180, 5, 170, yPos + 1);
+	_barEnergy		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtHealth		= new Text(140, 9, 8, yPos);
 	_numHealth		= new Text(18, 9, 151, yPos);
-	_barHealth		= new Bar(180, 5, 170, yPos + 1);
+	_barHealth		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtFatalWounds	= new Text(140, 9, 8, yPos);
 	_numFatalWounds	= new Text(18, 9, 151, yPos);
-	_barFatalWounds	= new Bar(180, 5, 170, yPos + 1);
+	_barFatalWounds	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtBravery		= new Text(140, 9, 8, yPos);
 	_numBravery		= new Text(18, 9, 151, yPos);
-	_barBravery		= new Bar(180, 5, 170, yPos + 1);
+	_barBravery		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtMorale		= new Text(140, 9, 8, yPos);
 	_numMorale		= new Text(18, 9, 151, yPos);
-	_barMorale		= new Bar(180, 5, 170, yPos + 1);
+	_barMorale		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtReactions	= new Text(140, 9, 8, yPos);
 	_numReactions	= new Text(18, 9, 151, yPos);
-	_barReactions	= new Bar(180, 5, 170, yPos + 1);
+	_barReactions	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtFiring		= new Text(140, 9, 8, yPos);
 	_numFiring		= new Text(18, 9, 151, yPos);
-	_barFiring		= new Bar(180, 5, 170, yPos + 1);
+	_barFiring		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtThrowing	= new Text(140, 9, 8, yPos);
 	_numThrowing	= new Text(18, 9, 151, yPos);
-	_barThrowing	= new Bar(180, 5, 170, yPos + 1);
+	_barThrowing	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtMelee		= new Text(140, 9, 8, yPos);
 	_numMelee		= new Text(18, 9, 151, yPos);
-	_barMelee		= new Bar(180, 5, 170, yPos + 1);
+	_barMelee		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtStrength	= new Text(140, 9, 8, yPos);
 	_numStrength	= new Text(18, 9, 151, yPos);
-	_barStrength	= new Bar(180, 5, 170, yPos + 1);
+	_barStrength	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtPsiStrength	= new Text(140, 9, 8, yPos);
 	_numPsiStrength	= new Text(18, 9, 151, yPos);
-	_barPsiStrength	= new Bar(180, 5, 170, yPos + 1);
+	_barPsiStrength	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtPsiSkill	= new Text(140, 9, 8, yPos);
 	_numPsiSkill	= new Text(18, 9, 151, yPos);
-	_barPsiSkill	= new Bar(180, 5, 170, yPos + 1);
+	_barPsiSkill	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtFrontArmor	= new Text(140, 9, 8, yPos);
 	_numFrontArmor	= new Text(18, 9, 151, yPos);
-	_barFrontArmor	= new Bar(180, 5, 170, yPos + 1);
+	_barFrontArmor	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtLeftArmor	= new Text(140, 9, 8, yPos);
 	_numLeftArmor	= new Text(18, 9, 151, yPos);
-	_barLeftArmor	= new Bar(180, 5, 170, yPos + 1);
+	_barLeftArmor	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtRightArmor	= new Text(140, 9, 8, yPos);
 	_numRightArmor	= new Text(18, 9, 151, yPos);
-	_barRightArmor	= new Bar(180, 5, 170, yPos + 1);
+	_barRightArmor	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtRearArmor	= new Text(140, 9, 8, yPos);
 	_numRearArmor	= new Text(18, 9, 151, yPos);
-	_barRearArmor	= new Bar(180, 5, 170, yPos + 1);
+	_barRearArmor	= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
 	_txtUnderArmor	= new Text(140, 9, 8, yPos);
 	_numUnderArmor	= new Text(18, 9, 151, yPos);
-	_barUnderArmor	= new Bar(180, 5, 170, yPos + 1);
+	_barUnderArmor	= new Bar(280, 5, 170, yPos + 1);
 
 	if (_mindProbe == false)
 	{
@@ -186,79 +186,79 @@ UnitInfoState::UnitInfoState(
 
 	add(_bg);
 	add(_exit);
-	add(_txtName, "textName", "stats", 0);
+	add(_txtName, "textName", "stats");
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
-	add(_barTimeUnits, "barTUs", "stats", 0);
+	add(_barTimeUnits, "barTUs", "stats");
 
 	add(_txtEnergy);
 	add(_numEnergy);
-	add(_barEnergy, "barEnergy", "stats", 0);
+	add(_barEnergy, "barEnergy", "stats");
 
 	add(_txtHealth);
 	add(_numHealth);
-	add(_barHealth, "barHealth", "stats", 0);
+	add(_barHealth, "barHealth", "stats");
 
 	add(_txtFatalWounds);
 	add(_numFatalWounds);
-	add(_barFatalWounds, "barWounds", "stats", 0);
+	add(_barFatalWounds, "barWounds", "stats");
 
 	add(_txtBravery);
 	add(_numBravery);
-	add(_barBravery, "barBravery", "stats", 0);
+	add(_barBravery, "barBravery", "stats");
 
 	add(_txtMorale);
 	add(_numMorale);
-	add(_barMorale, "barMorale", "stats", 0);
+	add(_barMorale, "barMorale", "stats");
 
 	add(_txtReactions);
 	add(_numReactions);
-	add(_barReactions, "barReactions", "stats", 0);
+	add(_barReactions, "barReactions", "stats");
 
 	add(_txtFiring);
 	add(_numFiring);
-	add(_barFiring, "barFiring", "stats", 0);
+	add(_barFiring, "barFiring", "stats");
 
 	add(_txtThrowing);
 	add(_numThrowing);
-	add(_barThrowing, "barThrowing", "stats", 0);
+	add(_barThrowing, "barThrowing", "stats");
 
 	add(_txtMelee);
 	add(_numMelee);
-	add(_barMelee, "barMelee", "stats", 0);
+	add(_barMelee, "barMelee", "stats");
 
 	add(_txtStrength);
 	add(_numStrength);
-	add(_barStrength, "barStrength", "stats", 0);
+	add(_barStrength, "barStrength", "stats");
 
 	add(_txtPsiStrength);
 	add(_numPsiStrength);
-	add(_barPsiStrength, "barPsiStrength", "stats", 0);
+	add(_barPsiStrength, "barPsiStrength", "stats");
 
 	add(_txtPsiSkill);
 	add(_numPsiSkill);
-	add(_barPsiSkill, "barPsiSkill", "stats", 0);
+	add(_barPsiSkill, "barPsiSkill", "stats");
 
 	add(_txtFrontArmor);
 	add(_numFrontArmor);
-	add(_barFrontArmor, "barFrontArmor", "stats", 0);
+	add(_barFrontArmor, "barFrontArmor", "stats");
 
 	add(_txtLeftArmor);
 	add(_numLeftArmor);
-	add(_barLeftArmor, "barLeftArmor", "stats", 0);
+	add(_barLeftArmor, "barLeftArmor", "stats");
 
 	add(_txtRightArmor);
 	add(_numRightArmor);
-	add(_barRightArmor, "barRightArmor", "stats", 0);
+	add(_barRightArmor, "barRightArmor", "stats");
 
 	add(_txtRearArmor);
 	add(_numRearArmor);
-	add(_barRearArmor, "barRearArmor", "stats", 0);
+	add(_barRearArmor, "barRearArmor", "stats");
 
 	add(_txtUnderArmor);
 	add(_numUnderArmor);
-	add(_barUnderArmor, "barUnderArmor", "stats", 0);
+	add(_barUnderArmor, "barUnderArmor", "stats");
 
 	if (_mindProbe == false)
 	{

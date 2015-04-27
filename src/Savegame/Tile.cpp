@@ -1249,7 +1249,7 @@ void Tile::animate()
 			const int isPsycho = _objects[i]->isPsychedelic();
 			if (isPsycho == 0)
 			{
-				if (_objects[i]->isUFODoor() == true // ufo door is static
+				if (_objects[i]->isUFODoor() == true // ufo door is currently static
 					&& (   _curFrame[i] == 0
 						|| _curFrame[i] == 7))
 				{
@@ -1273,7 +1273,10 @@ void Tile::animate()
 			else
 			{
 				if (isPsycho == 1)
-					_curFrame[i] = SDL_GetTicks() % 8;
+				{
+					if (std::rand() % 3 != 0)
+						_curFrame[i] = SDL_GetTicks() % 8;
+				}
 				else if (SDL_GetTicks() % 3 == 0) // isPsycho==2
 					_curFrame[i] = std::rand() % 8;
 			}

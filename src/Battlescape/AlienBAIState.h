@@ -87,6 +87,12 @@ protected:
 	/// Constructs a waypoint path for weapons like Blaster Launcher.
 	bool pathWaypoints();
 
+	/// Checks to make sure a target is valid given the parameters.
+	bool validTarget(
+			const BattleUnit* const unit,
+			bool assessDanger = false,
+			bool includeCivs = false) const;
+
 
 	public:
 		/// Creates a new AlienBAIState linked to the game and a certain unit.
@@ -170,12 +176,6 @@ protected:
 		bool psiAction();
 		/// Performs a melee attack action.
 		void meleeAttack();
-
-		/// Checks to make sure a target is valid, given the parameters.
-		bool validTarget(
-				const BattleUnit* const unit,
-				bool assessDanger = false,
-				bool includeCivs = false) const;
 
 		/// Checks the alien's TU reservation setting.
 		BattleActionType getReservedAIAction() const;

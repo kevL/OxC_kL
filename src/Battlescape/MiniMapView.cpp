@@ -162,9 +162,9 @@ void MiniMapView::draw()
 					tileShade = 16; // paint it ... black !
 
 				Surface* srf;
-				if (baseColor == 1					// is along the edge
-					&& lvl == 0						// is ground level
-					&& tile->getMapData(3) == NULL)	// but has no content-object
+				if (baseColor == 1									// is along the edge
+					&& lvl == 0										// is ground level
+					&& tile->getMapData(MapData::O_OBJECT) == NULL)	// but has no content-object
 				{
 					srf = _set->getFrame(377);
 					srf->blitNShade(
@@ -179,7 +179,7 @@ void MiniMapView::draw()
 					const MapData* data;
 					for (int
 							i = 0;
-							i < 4;
+							i != 4;
 							++i)
 					{
 						data = tile->getMapData(i);
@@ -343,9 +343,9 @@ void MiniMapView::mousePress(Action* action, State* state)
 			_cursorPosition.z = 1;
 		} */
 
-		_mouseScrollX = 0;
-		_mouseScrollY = 0;
-		_totalMouseMoveX = 0;
+		_mouseScrollX =
+		_mouseScrollY =
+		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 
 		_mouseOverThreshold = false;

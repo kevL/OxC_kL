@@ -449,7 +449,7 @@ BattlescapeState::BattlescapeState()
 	_txtMissionLabel->setHighContrast();
 	_txtMissionLabel->setAlign(ALIGN_CENTER);
 
-	Target* target = NULL;
+	const Target* target = NULL;
 
 	std::wstring
 		baseLabel,
@@ -485,8 +485,8 @@ BattlescapeState::BattlescapeState()
 			}
 		}
 	}
-	_txtBaseLabel->setText(tr("STR_SQUAD_").arg(baseLabel.c_str()));
-//	_txtBaseLabel->setText(baseLabel.c_str()); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+	_txtBaseLabel->setText(tr("STR_SQUAD_").arg(baseLabel.c_str())); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+//	_txtBaseLabel->setText(baseLabel.c_str());
 
 
 	if (missionLabel.empty() == true)

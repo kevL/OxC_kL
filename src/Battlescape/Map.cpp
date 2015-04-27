@@ -178,11 +178,13 @@ Map::Map(
 						_res->getFont("FONT_BIG"),
 						_res->getFont("FONT_SMALL"),
 						_game->getLanguage()); */
-	_numAccuracy = new NumberText(24, 9);
+	_numAccuracy = new NumberText(24,9);
 	_numAccuracy->setPalette(_game->getScreen()->getPalette());
 
-	_numExposed = new NumberText(24, 9);
+	_numExposed = new NumberText(24,9);
 	_numExposed->setPalette(_game->getScreen()->getPalette());
+	_numExposed->setColor(Palette::blockOffset(13)+2); // blue
+//	_numExposed->setBordered();
 }
 
 /**
@@ -1997,8 +1999,8 @@ void Map::drawTerrain(Surface* surface) // private.
 														quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
 															+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
 
-//														srfSprite = unitNorthWest->getCache(&invalid, quad);
-														srfSprite = NULL;
+														srfSprite = unitNorthWest->getCache(&invalid, quad);
+//														srfSprite = NULL;
 														if (srfSprite)
 														{
 															if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [60]";
@@ -2655,7 +2657,6 @@ void Map::drawTerrain(Surface* surface) // private.
 									if (exposed != -1)
 									{
 										_numExposed->setValue(static_cast<unsigned int>(exposed));
-										_numExposed->setColor(Palette::blockOffset(10));
 										_numExposed->draw();
 										_numExposed->blitNShade(
 															surface,

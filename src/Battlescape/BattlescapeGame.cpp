@@ -908,7 +908,10 @@ void BattlescapeGame::checkForCasualties(
 				++i)
 		{
 			if ((*i)->getId() == attacker->getMurdererId())
+			{
 				attacker = *i;
+				break;
+			}
 		}
 	}
 	// kL_note: what about tile explosions
@@ -1159,6 +1162,11 @@ void BattlescapeGame::checkForCasualties(
 							moraleLoss = moraleLoss * loss * 2 / bTeam;
 							if (converted == true)
 								moraleLoss = (moraleLoss * 5 + 3) / 4; // extra loss if xCom or civie turns into a Zombie.
+							else if (victim->getUnitRules() != NULL
+								&& victim->getUnitRules()->isMechanical() == true)
+							{
+								moraleLoss /= 2;
+							}
 
 							(*j)->moraleChange(-moraleLoss);
 						}

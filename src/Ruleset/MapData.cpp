@@ -368,7 +368,7 @@ void MapData::setSpecialType(
 			_isPsychedelic = 1;
 		}
 		else if (_sprite[0] == 0)	// red round energy supply
-//			||   _sprite[0] == 2)	// red oblong energy supply
+//			||   _sprite[0] == 2)	// red oblong  "      "
 		{
 			_isPsychedelic = 2;
 		}

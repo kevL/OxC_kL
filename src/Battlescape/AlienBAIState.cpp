@@ -387,6 +387,7 @@ void AlienBAIState::think(BattleAction* action)
 	if (_xcomSpotters > 2
 		|| _unit->getHealth() < _unit->getBaseStats()->health * 2 / 3
 		|| (_aggroTarget != NULL
+			&& _aggroTarget->getExposed() != -1
 			&& _aggroTarget->getExposed() > _intelligence))
 	{
 		evaluate = true;
@@ -2007,7 +2008,8 @@ bool AlienBAIState::explosiveEfficacy(
 				if (   (*i)->getTile() != NULL
 					&& (*i)->getTile()->getDangerous() == false
 					&& ((*i)->getFaction() == FACTION_HOSTILE
-						|| (*i)->getExposed() < _intelligence + 1))
+						|| ((*i)->getExposed() != -1
+							&& (*i)->getExposed() <= _intelligence)))
 				{
 					const Position
 						voxelPosA = Position(
@@ -2758,7 +2760,7 @@ void AlienBAIState::meleeAttack()
  * @param includeCivs	- true to include civilians in the threat assessment (default false)
  * @return, true if the target is something to be killed
  */
-bool AlienBAIState::validTarget(
+bool AlienBAIState::validTarget( // private.
 		const BattleUnit* const unit,
 		bool assessDanger,
 		bool includeCivs) const
@@ -2771,7 +2773,8 @@ bool AlienBAIState::validTarget(
 
 	if (unit->getFaction() == FACTION_HOSTILE				// target must not be on aLien side
 		|| unit->isOut(true, true) == true					// ignore targets that are dead/unconscious
-		|| _intelligence < unit->getExposed()			// target must be a unit that this aLien 'knows about'
+		|| unit->getExposed() == -1
+		|| unit->getExposed() > _intelligence				// target must be a unit that this aLien 'knows about'
 		|| (assessDanger == true
 //			&& unit->getTile() != NULL						// safety. Should not be needed if isOut()=true
 			&& unit->getTile()->getDangerous() == true))	// target has not been grenaded
