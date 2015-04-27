@@ -675,7 +675,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 {
 	//Log(LOG_INFO) << "sd:manageAwards()";
 	bool
-		doCommend = false,	// this value is returned TRUE if at least one award is given
+		doCeremony = false,	// this value is returned TRUE if at least one award is given
 		doAward;			// this value determines if an award will be given
 
 	std::map<std::string, size_t> reqdLevel;	// <noun, qtyLevels>
@@ -1003,7 +1003,7 @@ else
 
 		if (doAward == true)
 		{
-			doCommend = true;
+			doCeremony = true;
 
 			// if there are NO modular awards but *are* awarded a different
 			// award its noun will be "noNoun"
@@ -1042,7 +1042,7 @@ else
 	}
 
 	//Log(LOG_INFO) << "sd:manageAwards() EXIT";
-	return doCommend;
+	return doCeremony;
 }
 
 /**
