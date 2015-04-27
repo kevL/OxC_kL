@@ -556,26 +556,29 @@ void SoldierDiary::updateDiary(
 			i != unitKills.end();
 			++i)
 	{
-		(*i)->makeTurnUnique();
+		_killList.push_back(*i);
 
-		if ((*i)->getUnitStatusString() == "STATUS_DEAD")
-			++_killTotal;
-		else if ((*i)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
-			++_stunTotal;
+		(*i)->makeTurnUnique();
 
 		_pointTotal += (*i)->_points; // kL - if hostile unit was MC'd this should be halved
 
-		_killList.push_back(*i);
-
-		if ((*i)->hostileTurn() == true)
+		if ((*i)->getUnitFactionString() == "FACTION_HOSTILE")
 		{
-			if (rules->getItem((*i)->_weapon)->getBattleType() == BT_GRENADE
-				|| rules->getItem((*i)->_weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+			if ((*i)->getUnitStatusString() == "STATUS_DEAD")
+				++_killTotal;
+			else if ((*i)->getUnitStatusString() == "STATUS_UNCONSCIOUS")
+				++_stunTotal;
+
+			if ((*i)->hostileTurn() == true)
 			{
-				++_trapKillTotal;
+				if (rules->getItem((*i)->_weapon)->getBattleType() == BT_GRENADE
+					|| rules->getItem((*i)->_weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+				{
+					++_trapKillTotal;
+				}
+				else
+					++_reactionFireTotal;
 			}
-			else
-				++_reactionFireTotal;
 		}
 	}
 
@@ -585,7 +588,7 @@ void SoldierDiary::updateDiary(
 	++_UFOTotal[missionStatistics->ufo.c_str()];
 	_scoreTotal += missionStatistics->score;
 
-	if (missionStatistics->success)
+	if (missionStatistics->success == true)
 	{
 		++_winTotal;
 
@@ -600,10 +603,10 @@ void SoldierDiary::updateDiary(
 		if (missionStatistics->type == "STR_ALIEN_BASE_ASSAULT")
 			++_alienBaseAssaultTotal;
 
-		if (unitStatistics->loneSurvivor)
+		if (unitStatistics->loneSurvivor == true)
 			++_loneSurvivorTotal;
 
-		if (unitStatistics->ironMan)
+		if (unitStatistics->ironMan == true)
 			++_ironManTotal;
 	}
 
@@ -626,7 +629,7 @@ void SoldierDiary::updateDiary(
 	if (missionStatistics->shade > 8)
 		++_nightMissionTotal;
 
-	if (unitStatistics->wasUnconscious)
+	if (unitStatistics->wasUnconscious == true)
 		++_unconsciousTotal;
 
 	_shotAtCounterTotal += unitStatistics->shotAtCounter;
@@ -639,13 +642,13 @@ void SoldierDiary::updateDiary(
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
 	_mediApplicationsTotal += unitStatistics->medikitApplications;
 
-	if (missionStatistics->valiantCrux)
+	if (missionStatistics->valiantCrux == true)
 		++_valiantCruxTotal;
 
-	if (unitStatistics->KIA)
+	if (unitStatistics->KIA == true)
 		++_KIA;
 
-	if (unitStatistics->nikeCross)
+	if (unitStatistics->nikeCross == true)
 		++_allAliensKilledTotal;
 
 	_missionIdList.push_back(missionStatistics->id);
@@ -672,7 +675,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 {
 	//Log(LOG_INFO) << "sd:manageAwards()";
 	bool
-		wasAwarded = false,	// this value is returned if at least one award was given
+		doCommend = false,	// this value is returned TRUE if at least one award is given
 		doAward;			// this value determines if an award will be given
 
 	std::map<std::string, size_t> reqdLevel;	// <noun, qtyLevels>
@@ -683,14 +686,12 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 	for (std::map<std::string, RuleCommendations*>::const_iterator
 			i = awardList.begin();
 			i != awardList.end();
-			++i)
+			)
 	{
 		//Log(LOG_INFO) << ". iter awardList";
 		const std::string& type = (*i).first;
 
 		reqdLevel.clear();
-		modularAwards.clear();
-
 		reqdLevel["noNoun"] = 0;
 
 		// loop over all of soldier's SoldierCommendations, see if he/she
@@ -701,14 +702,13 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				++j)
 		{
 			if ((*j)->getType() == type)
-			{
 				reqdLevel[(*j)->getNoun()] = (*j)->getDecorLevelInt() + 1;
-				break;
-			}
 		}
 
 		// go through each possible criteria. Assume the award is awarded, set to false if not;
 		// as soon as an award criteria that *fails to be achieved* is found, then NO award
+		modularAwards.clear();
+
 		doAward = true;
 		int val;
 
@@ -725,7 +725,6 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 			// or if it has a noun skip it if it has 0 total levels (which ain't gonna happen);
 			// you see, Rules can't be positively examined for nouns - only awards already given to soldiers can.
 			if ((*j).second.size() <= reqdLevel["noNoun"])
-//			if ((*j).second.size() <= reqdLevel[(*j)->getNoun()])
 			{
 				doAward = false;
 				break;
@@ -733,71 +732,42 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 
 
 			// these criteria have no nouns, so only the reqdLevel["noNoun"] will ever be compared
-			// NOTE: All these class variables ought be 'size_t'!!!!
+			// kL_NOTE: All these class variables ought be 'size_t'!!!!
 			val = (*j).second.at(reqdLevel["noNoun"]);
-
-			if (//reqdLevel.count("noNoun") == 1 && // <- this is relevant only if entry "noNoun" is removed from the map in the sections following this one.
-				reqdLevel["noNoun"] != 0 && // kL_add
-				(   (   criterion == "totalKills"
-						&& static_cast<int>(_killList.size()) < val)
-					|| (criterion == "totalMissions"
-						&& static_cast<int>(_missionIdList.size()) < val)
-					|| (criterion == "totalWins"
-						&& _winTotal < val)
-					|| (criterion == "totalScore"
-						&& _scoreTotal < val)
-					|| (criterion == "totalPoints"
-						&& _pointTotal < val)
-					|| (criterion == "totalStuns"
-						&& _stunTotal < val)
-					|| (criterion == "totalDaysWounded"
-						&& _daysWoundedTotal < val)
-					|| (criterion == "totalBaseDefenseMissions"
-						&& _baseDefenseMissionTotal < val)
-					|| (criterion == "totalTerrorMissions"
-						&& _terrorMissionTotal < val)
-					|| (criterion == "totalNightMissions"
-						&& _nightMissionTotal < val)
-					|| (criterion == "totalNightTerrorMissions"
-						&& _nightTerrorMissionTotal < val)
-					|| (criterion == "totalMonthlyService"
-						&& _monthsService < val)
-					|| (criterion == "totalFellUnconscious"
-						&& _unconsciousTotal < val)
-					|| (criterion == "totalShotAt10Times"
-						&& _shotAtCounter10in1Mission < val)
-					|| (criterion == "totalHit5Times"
-						&& _hitCounter5in1Mission < val)
-					|| (criterion == "totalFriendlyFired"
-						&& _totalShotByFriendlyCounter < val)
-					|| (criterion == "total_lone_survivor"
-						&& _loneSurvivorTotal < val)
-					|| (criterion == "totalIronMan"
-						&& _ironManTotal < val)
-					|| (criterion == "totalImportantMissions"
-						&& _importantMissionTotal < val)
-					|| (criterion == "totalLongDistanceHits"
-						&& _longDistanceHitCounterTotal < val)
-					|| (criterion == "totalLowAccuracyHits"
-						&& _lowAccuracyHitCounterTotal < val)
-					|| (criterion == "totalReactionFire"
-						&& _reactionFireTotal < val)
-					|| (criterion == "totalTimesWounded"
-						&& _timesWoundedTotal < val)
-					|| (criterion == "totalDaysWounded"
-						&& _daysWoundedTotal < val)
-					|| (criterion == "totalValientCrux"
-						&& _valiantCruxTotal < val)
-					|| (criterion == "isDead"
-						&& _KIA < val)
-					|| (criterion == "totalTrapKills"
-						&& _trapKillTotal < val)
-					|| (criterion == "totalAlienBaseAssaults"
-						&& _alienBaseAssaultTotal < val)
-					|| (criterion == "totalAllAliensKilled"
-						&& _allAliensKilledTotal < val)
-					|| (criterion == "totalMediApplications"
-						&& _mediApplicationsTotal < val)))
+			if (//reqdLevel.count("noNoun") == 1 && // <- this is relevant only if entry "noNoun" were removed from the map in the sections following this one.
+//				reqdLevel["noNoun"] != 0 && // kL_add
+//				reqdLevel["noNoun"] == 0 || // kL_add
+				(   (   criterion == "totalKills"				&& static_cast<int>(_killList.size()) < val)
+					|| (criterion == "totalMissions"			&& static_cast<int>(_missionIdList.size()) < val)
+					|| (criterion == "totalWins"				&& _winTotal < val)
+					|| (criterion == "totalScore"				&& _scoreTotal < val)
+					|| (criterion == "totalPoints"				&& _pointTotal < val)
+					|| (criterion == "totalStuns"				&& _stunTotal < val)
+					|| (criterion == "totalDaysWounded"			&& _daysWoundedTotal < val)
+					|| (criterion == "totalBaseDefenseMissions"	&& _baseDefenseMissionTotal < val)
+					|| (criterion == "totalTerrorMissions"		&& _terrorMissionTotal < val)
+					|| (criterion == "totalNightMissions"		&& _nightMissionTotal < val)
+					|| (criterion == "totalNightTerrorMissions"	&& _nightTerrorMissionTotal < val)
+					|| (criterion == "totalMonthlyService"		&& _monthsService < val)
+					|| (criterion == "totalFellUnconscious"		&& _unconsciousTotal < val)
+					|| (criterion == "totalShotAt10Times"		&& _shotAtCounter10in1Mission < val)
+					|| (criterion == "totalHit5Times"			&& _hitCounter5in1Mission < val)
+					|| (criterion == "totalFriendlyFired"		&& (_totalShotByFriendlyCounter < val
+																	|| _KIA != 0)) // didn't survive ......
+					|| (criterion == "totalLoneSurvivor"		&& _loneSurvivorTotal < val)
+					|| (criterion == "totalIronMan"				&& _ironManTotal < val)
+					|| (criterion == "totalImportantMissions"	&& _importantMissionTotal < val)
+					|| (criterion == "totalLongDistanceHits"	&& _longDistanceHitCounterTotal < val)
+					|| (criterion == "totalLowAccuracyHits"		&& _lowAccuracyHitCounterTotal < val)
+					|| (criterion == "totalReactionFire"		&& _reactionFireTotal < val)
+					|| (criterion == "totalTimesWounded"		&& _timesWoundedTotal < val)
+					|| (criterion == "totalDaysWounded"			&& _daysWoundedTotal < val)
+					|| (criterion == "totalValientCrux"			&& _valiantCruxTotal < val)
+					|| (criterion == "isDead"					&& _KIA < val)
+					|| (criterion == "totalTrapKills"			&& _trapKillTotal < val)
+					|| (criterion == "totalAlienBaseAssaults"	&& _alienBaseAssaultTotal < val)
+					|| (criterion == "totalAllAliensKilled"		&& _allAliensKilledTotal < val)
+					|| (criterion == "totalMediApplications"	&& _mediApplicationsTotal < val)))
 			{
 				doAward = false;
 				break;
@@ -844,27 +814,28 @@ else
 					}
 				}
 
-				// if 'modularAwards' is still empty, soldier did not get an award
+				// if 'modularAwards' is still empty soldier did not get an award
 				if (modularAwards.empty() == true)
 				{
 					doAward = false;
 					break;
 				}
-//				else doAward = true;
+//kL			else doAward = true;
 			}
 else
 			if (   criterion == "killsWithCriteriaCareer"
 				|| criterion == "killsWithCriteriaMission"
 				|| criterion == "killsWithCriteriaTurn")
 			{
+				// fetch the kill criteria list
 				const std::vector<std::map<int, std::vector<std::string> > >* killCriteriaList = (*i).second->getKillCriteria();
 
-				for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator
+				for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator // loop over the OR vectors
 						orCriteria = killCriteriaList->begin();
 						orCriteria != killCriteriaList->end();
 						++orCriteria)
 				{
-					for (std::map<int, std::vector<std::string> >::const_iterator
+					for (std::map<int, std::vector<std::string> >::const_iterator // loop over the AND vectors
 							andCriteria = orCriteria->begin();
 							andCriteria != orCriteria->end();
 							++andCriteria)
@@ -881,8 +852,7 @@ else
 							thisTime = -1,
 							lastTime = -1;
 
-						// Loop over the KILLS.
-						for (std::vector<BattleUnitKills*>::const_iterator
+						for (std::vector<BattleUnitKills*>::const_iterator // loop over the KILLS
 								singleKill = _killList.begin();
 								singleKill != _killList.end();
 								++singleKill)
@@ -989,7 +959,7 @@ else
 								// see if there are NO matches with any criteria; break and try the next Criteria if so
 								if (   (*singleKill)->_weapon == "STR_WEAPON_UNKNOWN"
 									|| (*singleKill)->_weaponAmmo == "STR_WEAPON_UNKNOWN"
-									|| ((*singleKill)->_rank != *detail
+									|| (   (*singleKill)->_rank != *detail
 										&& (*singleKill)->_race != *detail
 										&& (*singleKill)->_weapon != *detail
 										&& (*singleKill)->_weaponAmmo != *detail
@@ -1027,18 +997,15 @@ else
 					if (doAward == true)
 						break; // stop looking because soldier is getting one regardless
 				}
-
-				if (doAward == true)
-					break; // stop looking because soldier is getting one regardless
 			}
 		}
 
 
 		if (doAward == true)
 		{
-			wasAwarded = true;
+			doCommend = true;
 
-			// if there are NO modular awards, but *are* awarded a different
+			// if there are NO modular awards but *are* awarded a different
 			// award its noun will be "noNoun"
 			if (modularAwards.empty() == true)
 				modularAwards.push_back("noNoun");
@@ -1070,16 +1037,12 @@ else
 															*j));
 			}
 		}
-//		else ++i;	// kL_note: I put this way up into primary for() loop;
-					// might result in soldiers not getting their highest
-					// awards pronto on current mission. But properly high award should get assigned later ->
-					// The problem was an infinite loop in DebriefingState,
-					// assumedly if a soldier got no award ...
-					// hence manageAwards() would never hit (doAward==false). See above^.
+		else
+			++i;
 	}
 
 	//Log(LOG_INFO) << "sd:manageAwards() EXIT";
-	return wasAwarded;
+	return doCommend;
 }
 
 /**

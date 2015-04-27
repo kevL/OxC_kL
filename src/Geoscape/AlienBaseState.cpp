@@ -91,7 +91,10 @@ AlienBaseState::AlienBaseState(
 		lon = _base->getLongitude(),
 		lat = _base->getLatitude();
 
-	std::wstring region, country;
+	std::wstring
+		region,
+		country;
+
 	for (std::vector<Country*>::iterator
 			i = _game->getSavedGame()->getCountries()->begin();
 			i != _game->getSavedGame()->getCountries()->end();

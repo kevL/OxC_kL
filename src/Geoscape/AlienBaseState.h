@@ -28,7 +28,6 @@ namespace OpenXcom
 
 class AlienBase;
 class GeoscapeState;
-class Region;
 class Text;
 class TextButton;
 class Window;

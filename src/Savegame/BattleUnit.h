@@ -98,7 +98,7 @@ enum UnitBodyPart
 
 
 /**
- * Container for battle unit kills statistics.
+ * SoldierDiary container for battle unit kills statistics.
  */
 struct BattleUnitKills
 {
@@ -117,9 +117,9 @@ struct BattleUnitKills
 
 
 	/// Makes turn unique across all kills.
-	int makeTurnUnique()
+	void makeTurnUnique()
 	{
-		return _turn += _mission * 300; // Maintains divisibility by 3 as well.
+		_turn += _mission * 300; // Maintains divisibility by 3 as well.
 	}
 
 	/// Checks to see if turn was on HOSTILE side.
