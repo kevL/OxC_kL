@@ -90,8 +90,8 @@ protected:
 	public:
 		/// check if a specific article is currently available.
 		static bool isArticleAvailable(
-				SavedGame* save,
-				ArticleDefinition* article);
+				const SavedGame* const save,
+				const ArticleDefinition* const article);
 		/// open Ufopaedia on a certain entry.
 		static void openArticle(
 				Game* game,

@@ -62,15 +62,15 @@ int Ufopaedia::_current_index = 0; // kL
  * @returns, true if the article is available
  */
 bool Ufopaedia::isArticleAvailable(
-		SavedGame* save,
-		ArticleDefinition* article)
+		const SavedGame* const save,
+		const ArticleDefinition* const article)
 {
 	return save->isResearched(article->requires);
 }
 
 /**
  * Gets the index of the selected article_id in the visible list.
- * If the id is not found, returns -1.
+ * If the id is not found returns -1.
  * @param save			- pointer to SavedGame
  * @param rule			- pointer to Ruleset
  * @param article_id	- reference the article id to find
@@ -303,12 +303,12 @@ ArticleDefinitionList Ufopaedia::getAvailableArticles(
 		SavedGame* save,
 		Ruleset* rule)
 {
-	const std::vector<std::string>& list = rule->getUfopaediaList();
+	const std::vector<std::string>& pedList = rule->getUfopaediaList();
 	ArticleDefinitionList articles;
 
 	for (std::vector<std::string>::const_iterator
-			i = list.begin();
-			i != list.end();
+			i = pedList.begin();
+			i != pedList.end();
 			++i)
 	{
 		ArticleDefinition* const article = rule->getUfopaediaArticle(*i);

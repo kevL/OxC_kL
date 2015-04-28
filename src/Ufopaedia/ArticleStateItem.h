@@ -34,7 +34,6 @@ class TextList;
 
 /**
  * ArticleStateItem has a caption, text, preview image and a stats block.
- * The facility image is found using the RuleBasefacility class.
  */
 class ArticleStateItem
 	:
@@ -47,6 +46,7 @@ protected:
 		*_imageAmmo[3];
 	Text
 		* _txtTitle,
+		* _txtTwoHand,
 		* _txtInfo,
 		* _txtShotType,
 		* _txtAccuracy,

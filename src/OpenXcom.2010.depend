@@ -5683,7 +5683,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1430246568 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1430247060 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -7288,7 +7288,7 @@
 
 1430149550 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
-1430149550 f:\git\openxcom\src\ufopaedia\ufopaedia.h
+1430252610 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
 1430149550 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
@@ -8376,20 +8376,20 @@
 	"./Savegame/EquipmentLayoutItem.h"
 	"./Menu/OptionsAdvancedState.h"
 
-1430149550 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
+1430251456 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
 	"ArticleState.h"
 
 1430149550 f:\git\openxcom\src\ufopaedia\articlestate.h
 	"../Engine/State.h"
 	"../Ruleset/RuleItem.h"
 
-1430149550 f:\git\openxcom\src\ufopaedia\articlestateitem.h
+1430252909 f:\git\openxcom\src\ufopaedia\articlestateitem.h
 	"ArticleState.h"
 
 1430149550 f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.h
 	"ArticleState.h"
 
-1430149550 f:\git\openxcom\src\ufopaedia\articlestatearmor.h
+1430251435 f:\git\openxcom\src\ufopaedia\articlestatearmor.h
 	"ArticleState.h"
 
 1430149550 f:\git\openxcom\src\ufopaedia\articlestatetext.h
@@ -8401,7 +8401,7 @@
 1430149550 f:\git\openxcom\src\ufopaedia\articlestateufo.h
 	"ArticleState.h"
 
-1430149550 f:\git\openxcom\src\ufopaedia\articlestatecraft.h
+1430251411 f:\git\openxcom\src\ufopaedia\articlestatecraft.h
 	"ArticleState.h"
 
 1430149550 f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.h
@@ -8523,7 +8523,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1430251307 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Surface.h"
@@ -8617,7 +8617,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1430176661 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1430247993 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -9057,7 +9057,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/Unit.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1430252721 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"

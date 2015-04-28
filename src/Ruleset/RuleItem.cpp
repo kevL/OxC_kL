@@ -379,8 +379,8 @@ int RuleItem::getHandSprite() const
 }
 
 /**
- * Returns whether this item is held with two hands.
- * @return, true if item is two-handed
+ * Returns whether the Item is held with two hands.
+ * @return, true if Item is two-handed
  */
 bool RuleItem::isTwoHanded() const
 {
@@ -389,7 +389,7 @@ bool RuleItem::isTwoHanded() const
 
 /**
  * Gets if the item is a launcher and if so how many waypoints can be set.
- * @return, true if item uses waypoints
+ * @return, maximum waypoints for the Item
  */
 int RuleItem::isWaypoints() const
 {
@@ -397,9 +397,9 @@ int RuleItem::isWaypoints() const
 }
 
 /**
- * Returns whether this item is a fixed weapon.
+ * Returns whether the Item is a fixed weapon.
  * You can't move/throw/drop fixed weapons - e.g. HWP turrets.
- * @return, true if item is a fixed weapon
+ * @return, true if Item is a fixed weapon
  */
 bool RuleItem::isFixed() const
 {
@@ -407,7 +407,7 @@ bool RuleItem::isFixed() const
 }
 
 /**
- * Gets the item's bullet sprite reference.
+ * Gets the Item's bullet sprite reference.
  * @return, the sprite reference
  */
 int RuleItem::getBulletSprite() const
@@ -416,7 +416,7 @@ int RuleItem::getBulletSprite() const
 }
 
 /**
- * Gets the item's fire sound.
+ * Gets the Item's fire sound.
  * @return, the fire sound ID
  */
 int RuleItem::getFireSound() const

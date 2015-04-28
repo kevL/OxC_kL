@@ -34,7 +34,7 @@ class TextList;
 
 /**
  * ArticleStateBaseFacility has a caption, text, preview image and a stats block.
- * The facility image is found using the RuleBasefacility class.
+ * The facility image is found using the RuleBaseFacility class.
  */
 class ArticleStateBaseFacility
 	:

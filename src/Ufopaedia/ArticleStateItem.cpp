@@ -52,8 +52,6 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	:
 		ArticleState(defs->id)
 {
-	const RuleItem* const itRule = _game->getRuleset()->getItem(defs->id);
-
 	_txtTitle = new Text(148, 32, 5, 24);
 
 	setPalette("PAL_BATTLEPEDIA");
@@ -77,9 +75,20 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	_image = new Surface(32, 48, 157, 5);
 	add(_image);
 
+
+	const RuleItem* const itRule = _game->getRuleset()->getItem(defs->id);
+
 	itRule->drawHandSprite(
 					_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 					_image);
+
+	if (itRule->isTwoHanded() == true)
+	{
+		_txtTwoHand = new Text(13, 9, 138, 52);
+		add(_txtTwoHand);
+		_txtTwoHand->setText(tr("STR_2HAND"));
+		_txtTwoHand->setColor(Palette::blockOffset(14)+15);
+	}
 
 	const std::vector<std::string>* const ammo_data = itRule->getCompatibleAmmo();
 
@@ -90,19 +99,19 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		add(_txtShotType);
 		_txtShotType->setText(tr("STR_SHOT_TYPE"));
 		_txtShotType->setColor(Palette::blockOffset(14)+15);
-		_txtShotType->setWordWrap();
+//		_txtShotType->setWordWrap();
 
 		_txtAccuracy = new Text(50, 17, 108, 66);
 		add(_txtAccuracy);
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 		_txtAccuracy->setColor(Palette::blockOffset(14)+15);
-		_txtAccuracy->setWordWrap();
+//		_txtAccuracy->setWordWrap();
 
 		_txtTuCost = new Text(60, 17, 160, 66);
 		add(_txtTuCost);
 		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
-		_txtTuCost->setWordWrap();
+//		_txtTuCost->setWordWrap();
 
 		_lstInfo = new TextList(204, 57, 8, 82);
 		add(_lstInfo);
@@ -239,15 +248,15 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			}
 			else
 			{
-				size_t ammoSize = std::min(
-										ammo_data->size(),
-										static_cast<size_t>(3)); // yeh right.
+				const size_t ammoSize = std::min(
+											ammo_data->size(),
+											static_cast<size_t>(3)); // yeh right.
 				for (size_t
 						i = 0;
 						i != ammoSize;
 						++i)
 				{
-					ArticleDefinition* const ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+					const ArticleDefinition* const ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
 					if (Ufopaedia::isArticleAvailable(
 												_game->getSavedGame(),
 												ammo_article) == true)
