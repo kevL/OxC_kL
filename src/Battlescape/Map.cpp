@@ -2653,15 +2653,15 @@ void Map::drawTerrain(Surface* surface) // private.
 									&& (unit->getArmor()->getSize() == 1
 										|| quad == 1))
 								{
-									const int exposed = unit->getExposed();
-									if (exposed != -1)
+									const int exposure = unit->getExposed();
+									if (exposure != -1)
 									{
-										_numExposed->setValue(static_cast<unsigned int>(exposed));
+										_numExposed->setValue(static_cast<unsigned int>(exposure));
 										_numExposed->draw();
 										_numExposed->blitNShade(
 															surface,
 															screenPosition.x + walkOffset.x + 21,
-															screenPosition.y + walkOffset.y + 2,
+															screenPosition.y + walkOffset.y + 5,
 															0);
 									}
 								}

@@ -723,7 +723,9 @@ void ProjectileFlyBState::think()
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
 					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 //					_parent->getMap()->invalidate();
-					_parent->getMap()->draw(); // kL
+					_parent->getMap()->draw();	// kL
+
+					SDL_Delay(336);				// kL
 				}
 			}
 
@@ -1062,10 +1064,10 @@ void ProjectileFlyBState::cancel()
 		projectile->skipTrajectory();
 
 		Camera* const camera = _parent->getMap()->getCamera();
-		const Position projPos = projectile->getPosition() / Position(16,16,24);
+		const Position pos = projectile->getPosition() / Position(16,16,24);
 //		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false, 0, false))
-		if (camera->isOnScreen(projPos) == false)
-			camera->centerOnPosition(projPos);
+		if (camera->isOnScreen(pos) == false)
+			camera->centerOnPosition(pos);
 	}
 }
 

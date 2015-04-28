@@ -4120,15 +4120,10 @@ void BattlescapeState::updateExperienceInfo()
 	}
 
 	if (unit->hasFirstKill() == true)
-	{
 		_alienMark->setVisible();
-//		_txtHasKill->setText(L"+");
-	}
-//	else
-//		_alienMark->setVisible(false);
-//		_txtHasKill->setText(L"");
 
 
+	// keep this consistent ...
 	std::vector<std::wstring> xpType;
 	xpType.push_back(L"f "); // firing
 	xpType.push_back(L"t "); // throwing
@@ -4138,6 +4133,7 @@ void BattlescapeState::updateExperienceInfo()
 	xpType.push_back(L"a "); // psiSkill attack
 	xpType.push_back(L"d "); // psiStrength defense
 
+	// ... consistent with this
 	const int xp[] =
 	{
 		unit->getExpFiring(),
@@ -4151,7 +4147,7 @@ void BattlescapeState::updateExperienceInfo()
 
 	for (size_t
 			i = 0;
-			i != 7;
+			i != sizeof(xp) / sizeof(xp[0]);
 			++i)
 	{
 		_lstSoldierInfo->addRow(
@@ -4160,7 +4156,7 @@ void BattlescapeState::updateExperienceInfo()
 							Text::formatNumber(xp[i]).c_str());
 
 		if (xp[i] > 10)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(0), true);		// white
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(5), true);		// lt.brown
 		else if (xp[i] > 5)
 			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true);	// brown
 		else if (xp[i] > 2)

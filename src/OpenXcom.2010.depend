@@ -4399,7 +4399,7 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1430212297 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1430239980 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4657,7 +4657,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1430149550 f:\git\openxcom\src\battlescape\battlescapegame.h
+1430243824 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1430149550 f:\git\openxcom\src\battlescape\position.h
@@ -4872,7 +4872,7 @@
 1430149549 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1430209624 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1430238124 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -5508,7 +5508,7 @@
 1430149550 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1430151879 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1430243803 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5683,7 +5683,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1430242350 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6042,7 +6042,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\map.cpp
+1430242935 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

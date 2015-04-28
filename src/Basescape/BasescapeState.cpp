@@ -734,11 +734,11 @@ void BasescapeState::miniLeftClick(Action*)
 
 		// aka: btnNewBaseClick();
 		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
-		Base* const baseId = new Base(_game->getRuleset());
+		Base* const base = new Base(_game->getRuleset());
 
 		_game->popState();
 		_game->pushState(new BuildNewBaseState(
-											baseId,
+											base,
 											_globe,
 											false));
 	}
@@ -754,9 +754,9 @@ void BasescapeState::miniRightClick(Action*)
 
 	if (baseId < _baseList->size())
 	{
-		const Base* const centerBase = _baseList->at(baseId);
-		_game->getSavedGame()->setGlobeLongitude(centerBase->getLongitude());
-		_game->getSavedGame()->setGlobeLatitude(centerBase->getLatitude());
+		const Base* const base = _baseList->at(baseId);
+		_game->getSavedGame()->setGlobeLongitude(base->getLongitude());
+		_game->getSavedGame()->setGlobeLatitude(base->getLatitude());
 
 		kL_reCenter = true;
 		kL_geoMusic = false;

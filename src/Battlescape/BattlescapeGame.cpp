@@ -2719,7 +2719,7 @@ void BattlescapeGame::launchAction()
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
 
-	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+//	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
 	_states.push_back(new ProjectileFlyBState(
 											this,

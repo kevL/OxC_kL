@@ -109,7 +109,7 @@ struct BattleAction
 			dash(false),
 			diff(0),
 			autoShotCount(0),
-			cameraPosition(0, 0,-1),
+			cameraPosition(0,0,-1),
 			desperate(false),
 			finalFacing(-1),
 			finalAction(false),
