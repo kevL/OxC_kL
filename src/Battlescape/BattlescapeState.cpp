@@ -107,6 +107,8 @@
 #include "../Savegame/Tile.h"
 #include "../Savegame/Ufo.h"
 
+#include "../Ufopaedia/Ufopaedia.h"
+
 
 namespace OpenXcom
 {
@@ -869,6 +871,9 @@ BattlescapeState::BattlescapeState()
 	_btnReserveKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 	_btnReserveKneel->allowToggleInversion(); */
 
+	_btnZeroTUs->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnUfoPaediaClick,
+					SDL_BUTTON_LEFT);
 	_btnZeroTUs->onMouseClick(
 					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
 					SDL_BUTTON_RIGHT);
@@ -2383,12 +2388,22 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 		Action a = Action(&ev, 0.,0.,0,0);
 		action->getSender()->mousePress(&a, this);
 
-		if (_battleGame->getSave()->getSelectedUnit() != NULL)
+		if (_battleSave->getSelectedUnit() != NULL)
 		{
-			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
+			_battleSave->getSelectedUnit()->setTimeUnits(0);
 			updateSoldierInfo();
 		}
 	}
+}
+
+/**
+ * Opens the UfoPaedia.
+ * @param action - pointer to an Action
+ */
+void BattlescapeState::btnUfoPaediaClick(Action*)
+{
+	if (allowButtons() == true)
+		Ufopaedia::open(_game);
 }
 
 /**

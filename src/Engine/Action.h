@@ -31,7 +31,7 @@ class InteractiveSurface;
 
 /**
  * Container for all the information associated with a
- * given user action, like mouse clicks, key presses, etc.
+ * given user action like mouse clicks, key presses, etc.
  * @note Called action because event is reserved.
  */
 class Action

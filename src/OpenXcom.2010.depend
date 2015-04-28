@@ -267,7 +267,7 @@
 1430149550 f:\git\openxcom\src\basescape\transfersstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\engine\action.h
+1430245888 f:\git\openxcom\src\engine\action.h
 
 1430149550 f:\git\openxcom\src\engine\game.h
 
@@ -5378,7 +5378,7 @@
 1430149550 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\battlescape\battlescapestate.h
+1430246120 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5683,7 +5683,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1430242350 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1430246568 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5750,6 +5750,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 	"../Savegame/Ufo.h"
+	"../Ufopaedia/Ufopaedia.h"
 
 1322982008 f:\git\openxcom\deps\include\sdl\sdl_gfxprimitives.h
 	<math.h>
@@ -6250,7 +6251,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1430151879 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1430244684 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

@@ -307,6 +307,8 @@ private:
 		void btnReloadClick(Action* action);
 		/// Handler for clicking the expend all TUs button.
 		void btnZeroTUsClick(Action* action);
+		/// Handler for clicking the UfoPaedia button.
+		void btnUfoPaediaClick(Action* action);
 		/// Handler for clicking the lighting button.
 		void btnPersonalLightingClick(Action* action);
 		/// Handler for toggling the console.
