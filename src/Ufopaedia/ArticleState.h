@@ -50,9 +50,9 @@ protected:
 
 	Surface* _bg;
 	TextButton
-		*_btnNext,
-		*_btnOk,
-		*_btnPrev;
+		* _btnNext,
+		* _btnOk,
+		* _btnPrev;
 
 	/// constructor (it can only be instantiated by derived classes)
 	ArticleState(const std::string& article_id);

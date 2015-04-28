@@ -86,7 +86,7 @@ private:
 				int x = 0,
 				int y = 0,
 				WindowPopup popup = POPUP_NONE,
-				bool noToggle = false);
+				bool toggle = true);
 		/// Cleans up the window.
 		~Window();
 

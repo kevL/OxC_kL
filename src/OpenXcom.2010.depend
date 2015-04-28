@@ -4554,7 +4554,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1430261244 f:\git\openxcom\src\interface\window.h
+1430262701 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1430151879 f:\git\openxcom\src\ruleset\ruleset.h
@@ -7696,7 +7696,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1430261255 source:f:\git\openxcom\src\interface\window.cpp
+1430262097 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
