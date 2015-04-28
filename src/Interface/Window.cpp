@@ -45,6 +45,7 @@ Sound* Window::soundPopup[3] = {0,0,0};
  * @param x			- X position in pixels (default 0)
  * @param y			- Y position in pixels (default 0)
  * @param popup		- popup animation (default POPUP_NONE)
+ * @param toggle	- true to toggle screen before & after popup (default true)
  */
 Window::Window(
 		State* state,
@@ -52,7 +53,8 @@ Window::Window(
 		int height,
 		int x,
 		int y,
-		WindowPopup popup)
+		WindowPopup popup,
+		bool toggle)
 	:
 		Surface(
 			width,
@@ -60,6 +62,7 @@ Window::Window(
 			x,y),
 		_state(state),
 		_popup(popup),
+		_toggle(toggle),
 		_bg(NULL),
 		_dx(-x),
 		_dy(-y),
@@ -84,8 +87,11 @@ Window::Window(
 		if (_state != NULL)
 		{
 			_screen = _state->isScreen();
-			if (_screen == true)
+			if (_screen == true
+				&& _toggle == true) // <- for opening UfoPaedia in battlescape w/ black BG.
+			{
 				_state->toggleScreen();
+			}
 		}
 	}
 }
@@ -174,8 +180,11 @@ void Window::popup()
 		_popupStep += POPUP_SPEED;
 	else
 	{
-		if (_screen == true)
+		if (_screen == true
+			&& _toggle == true)
+		{
 			_state->toggleScreen();
+		}
 
 		_popupStep = 1.;
 

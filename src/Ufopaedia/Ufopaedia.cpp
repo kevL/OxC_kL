@@ -224,11 +224,14 @@ void Ufopaedia::openArticle(
 
 /**
  * Open Ufopaedia start state, presenting the section selection buttons.
- * @param game - pointer to actual Game
+ * @param game		- pointer to the Game
+ * @param battle	- true if opening Ufopaedia from battlescape
  */
-void Ufopaedia::open(Game* game)
+void Ufopaedia::open(
+		Game* game,
+		bool battle)
 {
-	game->pushState(new UfopaediaStartState());
+	game->pushState(new UfopaediaStartState(battle));
 }
 
 /**

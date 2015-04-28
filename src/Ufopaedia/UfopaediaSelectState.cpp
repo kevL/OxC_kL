@@ -52,7 +52,7 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 {
 	_screen = false;
 
-	_window			= new Window(this, 256, 194, 32, 6, POPUP_NONE);
+	_window			= new Window(this, 256, 194, 32, 6);
 	_txtTitle		= new Text(224, 17, 48, 15);
 	_lstSelection	= new TextList(224, 137, 40, 35);
 	_btnOk			= new TextButton(224, 16, 48, 177);

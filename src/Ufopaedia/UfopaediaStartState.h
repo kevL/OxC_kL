@@ -36,7 +36,7 @@ class Window;
 
 /**
  * UfopaediaStartState is the screen that opens when clicking Ufopaedia button in Geoscape.
- * Presents buttons to all sections of Ufopaedia, opening a UfopaediaSelectState on click.
+ * Presents buttons to all sections of Ufopaedia and opens a UfopaediaSelectState on click.
  */
 class UfopaediaStartState
 	:
@@ -47,10 +47,11 @@ protected:
 	static const size_t ped_SECTIONS = 10;
 	static const std::string ped_TITLES[ped_SECTIONS];
 
-	Window* _window;
 	Text* _txtTitle;
-	TextButton* _btnOk;
-	TextButton* _btnSection[ped_SECTIONS];
+	TextButton
+		* _btnOk,
+		* _btnSection[ped_SECTIONS];
+	Window* _window;
 
 	// navigation callbacks
 	///
@@ -61,7 +62,7 @@ protected:
 
 	public:
 		/// cTor.
-		UfopaediaStartState();
+		UfopaediaStartState(bool battle = false);
 		/// dTor.
 		virtual ~UfopaediaStartState();
 };

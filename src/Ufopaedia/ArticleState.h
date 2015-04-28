@@ -48,7 +48,7 @@ class ArticleState
 protected:
 	std::string _id;
 
-	Surface *_bg;
+	Surface* _bg;
 	TextButton
 		*_btnNext,
 		*_btnOk,

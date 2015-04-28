@@ -56,7 +56,7 @@ countries:
     fundingBase: 180
     fundingCap: 1800
     labelLon: 3.734
-    labelLat: -51
+    labelLat: -51.0
     areas:
       - [2, 6, -51.9, -50]
   - type: STR_BRAZIL
@@ -582,7 +582,7 @@ countries:
     fundingBase: 125
     fundingCap: 1250
     labelLon: 108.246
-    labelLat: -14
+    labelLat: -14.0
     areas:
       - [103.3, 108, -22, -17.5]
       - [105.8, 107.4, -17.5, -16.2]

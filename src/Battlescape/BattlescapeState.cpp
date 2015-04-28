@@ -2403,7 +2403,9 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 void BattlescapeState::btnUfoPaediaClick(Action*)
 {
 	if (allowButtons() == true)
-		Ufopaedia::open(_game);
+		Ufopaedia::open(
+					_game,
+					true);
 }
 
 /**

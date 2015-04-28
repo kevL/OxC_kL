@@ -61,12 +61,25 @@ const std::string UfopaediaStartState::ped_TITLES[] =
 /**
  * cTor.
  */
-UfopaediaStartState::UfopaediaStartState()
+UfopaediaStartState::UfopaediaStartState(bool battle)
 {
-	_screen = false;
+	bool toggle;
+	if (battle == true)
+		toggle = false;
+	else
+	{
+		_screen = false;
+		toggle = true;
+	}
 
-	_window		= new Window(this, 256, 194, 32, 6, POPUP_BOTH); // this is almost too tall for 320x200, note.
-	_txtTitle	= new Text(224, 17, 48, 16);
+	_window = new Window( // this is almost too tall for 320x200, note.
+					this,
+					256,194,
+					32,6,
+					POPUP_BOTH,
+					toggle);
+
+	_txtTitle = new Text(224, 17, 48, 16);
 
 	setInterface("ufopaedia");
 

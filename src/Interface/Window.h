@@ -60,7 +60,8 @@ private:
 	bool
 		_contrast,
 		_screen,
-		_thinBorder;
+		_thinBorder,
+		_toggle;
 	int
 		_dx,_dy,
 		_bgX,_bgY;
@@ -84,7 +85,8 @@ private:
 				int height,
 				int x = 0,
 				int y = 0,
-				WindowPopup popup = POPUP_NONE);
+				WindowPopup popup = POPUP_NONE,
+				bool noToggle = false);
 		/// Cleans up the window.
 		~Window();
 

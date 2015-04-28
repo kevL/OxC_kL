@@ -53,8 +53,7 @@ class RuleTexture;
 
 
 /**
- * Represents the contents of the Geoscape globe,
- * such as world polygons, polylines, etc.
+ * Represents the contents of the Geoscape globe such as world polygons, polylines, etc.
  * @sa Globe
  */
 class RuleGlobe

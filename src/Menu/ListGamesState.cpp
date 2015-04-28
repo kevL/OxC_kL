@@ -137,7 +137,10 @@ ListGamesState::ListGamesState(
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);
 
-	setInterface("geoscape", true, _origin == OPT_BATTLESCAPE);
+	setInterface(
+			"geoscape",
+			true,
+			_origin == OPT_BATTLESCAPE);
 
 	add(_window,		"window",	"saveMenus");
 	add(_txtTitle,		"text",		"saveMenus");

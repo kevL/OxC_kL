@@ -100,12 +100,17 @@ protected:
 		static void openArticle(
 				Game* game,
 				ArticleDefinition* article);
+
 		/// open Ufopaedia with selection dialog.
-		static void open(Game* game);
+		static void open(
+				Game* game,
+				bool battle = false);
+
 		/// article navigation to next article.
 		static void next(Game* game);
 		/// article navigation to previous article.
 		static void prev(Game* game);
+
 		/// load a vector with article ids that are currently visible of a given section.
 		static void list(
 				SavedGame* save,
