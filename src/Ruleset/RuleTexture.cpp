@@ -50,7 +50,6 @@ void RuleTexture::load(const YAML::Node& node)
 {
 	_id				= node["id"]			.as<int>(_id);
 	_deployTypes	= node["deployTypes"]	.as<std::map<std::string, int> >(_deployTypes);
-//	_deployType		= node["deployType"]	.as<std::string>(_deployType);
 	_terrains		= node["terrains"]		.as<std::vector<TerrainCriteria> >(_terrains);
 }
 
@@ -72,11 +71,10 @@ const std::map<std::string, int>& RuleTexture::getTextureDeployments()
 	return _deployTypes;
 }
 
-
 /**
  * Calculates a random deployment for a mission target based on the texture's
  * available deployments.
- * @return, the name of a deployment
+ * @return, type of deployment
  */
 std::string RuleTexture::getRandomDeployment() const
 {

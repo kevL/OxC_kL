@@ -37,7 +37,8 @@ enum MiniBaseViewType
 {
 	MBV_STANDARD,	// 0
 	MBV_RESEARCH,	// 1
-	MBV_PRODUCTION	// 2
+	MBV_PRODUCTION,	// 2
+	MBV_INFO		// 3
 };
 
 
@@ -74,7 +75,7 @@ private:
 	SurfaceSet* _texture;
 	Timer* _timer;
 
-	std::vector<Base*>* _bases;
+	std::vector<Base*>* _baseList;
 
 	MiniBaseViewType _mode;
 

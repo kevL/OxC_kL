@@ -65,7 +65,7 @@ BaseInfoState::BaseInfoState(
 		_baseList(_game->getSavedGame()->getBases())
 {
 	_bg					= new Surface(320, 200);
-	_mini				= new MiniBaseView(128, 16, 182, 8);
+	_mini				= new MiniBaseView(128, 16, 182, 8, MBV_INFO);
 
 	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
 	_btnTransfers		= new TextButton(72, 14, 86, 179);
@@ -80,44 +80,44 @@ BaseInfoState::BaseInfoState(
 
 	_txtSoldiers		= new Text(114, 9, 8, 41);
 	_numSoldiers		= new Text(40, 9, 126, 42);
-	_barSoldiers		= new Bar(218, 5, 166, 43);
+	_barSoldiers		= new Bar(280, 5, 166, 43);
 	_txtScientists		= new Text(114, 9, 8, 51);
 	_numScientists		= new Text(40, 9, 126, 52);
-	_barScientists		= new Bar(218, 5, 166, 53);
+	_barScientists		= new Bar(280, 5, 166, 53);
 	_txtEngineers		= new Text(114, 9, 8, 61);
 	_numEngineers		= new Text(40, 9, 126, 62);
-	_barEngineers		= new Bar(218, 5, 166, 63);
+	_barEngineers		= new Bar(280, 5, 166, 63);
 
 	_txtSpace			= new Text(300, 9, 8, 72);
 
 	_txtQuarters		= new Text(114, 9, 8, 83);
 	_numQuarters		= new Text(40, 9, 126, 84);
-	_barQuarters		= new Bar(218, 5, 166, 85);
+	_barQuarters		= new Bar(280, 5, 166, 85);
 	_txtLaboratories	= new Text(114, 9, 8, 93);
 	_numLaboratories	= new Text(40, 9, 126, 94);
-	_barLaboratories	= new Bar(218, 5, 166, 95);
+	_barLaboratories	= new Bar(280, 5, 166, 95);
 	_txtWorkshops		= new Text(114, 9, 8, 103);
 	_numWorkshops		= new Text(40, 9, 126, 104);
-	_barWorkshops		= new Bar(218, 5, 166, 105);
+	_barWorkshops		= new Bar(280, 5, 166, 105);
 	_txtContainment		= new Text(114, 9, 8, 113);
 	_numContainment		= new Text(40, 9, 126, 114);
-	_barContainment		= new Bar(218, 5, 166, 115);
+	_barContainment		= new Bar(280, 5, 166, 115);
 	_txtStores			= new Text(114, 9, 8, 123);
 	_numStores			= new Text(40, 9, 126, 124);
-	_barStores			= new Bar(218, 5, 166, 125);
+	_barStores			= new Bar(280, 5, 166, 125);
 	_txtHangars			= new Text(114, 9, 8, 133);
 	_numHangars			= new Text(40, 9, 126, 134);
-	_barHangars			= new Bar(218, 5, 166, 135);
+	_barHangars			= new Bar(280, 5, 166, 135);
 
 	_txtLongRange		= new Text(114, 9, 8, 147);
 	_numLongRange		= new Text(40, 9, 126, 148);
-	_barLongRange		= new Bar(218, 5, 166, 149);
+	_barLongRange		= new Bar(280, 5, 166, 149);
 	_txtShortRange		= new Text(114, 9, 8, 157);
 	_numShortRange		= new Text(40, 9, 126, 158);
-	_barShortRange		= new Bar(218, 5, 166, 159);
+	_barShortRange		= new Bar(280, 5, 166, 159);
 	_txtDefense			= new Text(114, 9, 8, 167);
 	_numDefense			= new Text(40, 9, 126, 168);
-	_barDefense			= new Bar(218, 5, 166, 169);
+	_barDefense			= new Bar(280, 5, 166, 169);
 
 	setInterface("baseInfo");
 
@@ -285,7 +285,7 @@ void BaseInfoState::init()
 
 	_edtBase->setText(_base->getName());
 
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::const_iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
@@ -300,68 +300,68 @@ void BaseInfoState::init()
 	}
 
 	std::wostringstream
-		ss1,
-		ss2,
-		ss3,
-		ss4,
-		ss5,
-		ss6,
-		ss7,
-		ss8,
-		ss9,
-		ss10,
-		ss11,
-		ss12;
+		woststr1,
+		woststr2,
+		woststr3,
+		woststr4,
+		woststr5,
+		woststr6,
+		woststr7,
+		woststr8,
+		woststr9,
+		woststr10,
+		woststr11,
+		woststr12;
 
 	int var,
 		var2;
 
 	var = _base->getTotalSoldiers();
 	var2 = _base->getAvailableSoldiers(true);
-	ss1 << var2 << ":" << var;
-	_numSoldiers->setText(ss1.str());
+	woststr1 << var2 << ":" << var;
+	_numSoldiers->setText(woststr1.str());
 	_barSoldiers->setMax(var);
 	_barSoldiers->setValue(var2);
 
 	var = _base->getTotalEngineers();
 	var2 = _base->getEngineers();
-	ss2 << var2 << ":" << var;
-	_numEngineers->setText(ss2.str());
+	woststr2 << var2 << ":" << var;
+	_numEngineers->setText(woststr2.str());
 	_barEngineers->setMax(var);
 	_barEngineers->setValue(var2);
 
 	var = _base->getTotalScientists();
 	var2 = _base->getScientists();
-	ss3 << var2 << ":" << var;
-	_numScientists->setText(ss3.str());
+	woststr3 << var2 << ":" << var;
+	_numScientists->setText(woststr3.str());
 	_barScientists->setMax(var);
 	_barScientists->setValue(var2);
 
 	var = _base->getAvailableQuarters();
 	var2 = _base->getUsedQuarters();
-	ss4 << var2 << ":" << var;
-	_numQuarters->setText(ss4.str());
+	woststr4 << var2 << ":" << var;
+	_numQuarters->setText(woststr4.str());
 	_barQuarters->setMax(var);
 	_barQuarters->setValue(var2);
 
 	var = _base->getAvailableStores();
 	var2 = static_cast<int>(std::floor(_base->getUsedStores() + 0.05));
-	ss5 << var2 << ":" << var;
-	_numStores->setText(ss5.str());
+	woststr5 << var2 << ":" << var;
+	_numStores->setText(woststr5.str());
 	_barStores->setMax(var);
 	_barStores->setValue(var2);
 
 	var = _base->getAvailableLaboratories();
 	var2 = _base->getUsedLaboratories();
-	ss6 << var2 << ":" << var;
-	_numLaboratories->setText(ss6.str());
+	woststr6 << var2 << ":" << var;
+	_numLaboratories->setText(woststr6.str());
 	_barLaboratories->setMax(var);
 	_barLaboratories->setValue(var2);
 
 	var = _base->getAvailableWorkshops();
 	var2 = _base->getUsedWorkshops();
-	ss7 << var2 << ":" << var;
-	_numWorkshops->setText(ss7.str());
+	woststr7 << var2 << ":" << var;
+	_numWorkshops->setText(woststr7.str());
 	_barWorkshops->setMax(var);
 	_barWorkshops->setValue(var2);
 
@@ -369,38 +369,38 @@ void BaseInfoState::init()
 	{
 		var = _base->getAvailableContainment();
 		var2 = _base->getUsedContainment();
-		ss8 << var2 << ":" << var;
-		_numContainment->setText(ss8.str());
+		woststr8 << var2 << ":" << var;
+		_numContainment->setText(woststr8.str());
 		_barContainment->setMax(var);
 		_barContainment->setValue(var2);
 	}
 
 	var = _base->getAvailableHangars();
 	var2 = _base->getUsedHangars();
-	ss9 << var2 << ":" << var;
-	_numHangars->setText(ss9.str());
+	woststr9 << var2 << ":" << var;
+	_numHangars->setText(woststr9.str());
 	_barHangars->setMax(var);
 	_barHangars->setValue(var2);
 
 	var = _base->getDefenseValue();
-	ss10 << var;
-	_numDefense->setText(ss10.str());
+	woststr10 << var;
+	_numDefense->setText(woststr10.str());
 	_barDefense->setMax(var);
 	_barDefense->setValue(var);
 
 	var = _base->getShortRangeValue();
-	ss11 << var;
-	_numShortRange->setText(ss11.str());
+	woststr11 << var;
+	_numShortRange->setText(woststr11.str());
 	_barShortRange->setMax(var);
 	_barShortRange->setValue(var);
 
 
-	if (_base->getHyperDetection())
+	if (_base->getHyperDetection() == true)
 		_barLongRange->setColor(Palette::blockOffset(4)+4);
 
 	var = _base->getLongRangeValue();
-	ss12 << var;
-	_numLongRange->setText(ss12.str());
+	woststr12 << var;
+	_numLongRange->setText(woststr12.str());
 	_barLongRange->setMax(var);
 	_barLongRange->setValue(var);
 }
@@ -412,27 +412,6 @@ void BaseInfoState::init()
 void BaseInfoState::edtBaseChange(Action*)
 {
 	_base->setName(_edtBase->getText());
-}
-
-/**
- * Selects a new base to display.
- * @param action - pointer to an Action
- */
-void BaseInfoState::miniClick(Action*)
-{
-	const size_t base = _mini->getHoveredBase();
-
-	if (base < _baseList->size()
-		&& _base != _baseList->at(base))
-	{
-		_txtHoverBase->setText(L"");
-
-		_mini->setSelectedBase(base);
-		_base = _baseList->at(base);
-		_state->setBase(_base);
-
-		init();
-	}
 }
 
 /**
@@ -514,19 +493,38 @@ void BaseInfoState::btnMonthlyCostsClick(Action*)
 }
 
 /**
+ * Selects a new Base to display.
+ * @param action - pointer to an Action
+ */
+void BaseInfoState::miniClick(Action*)
+{
+	const size_t baseId = _mini->getHoveredBase();
+
+	if (baseId < _baseList->size()
+		&& _base != _baseList->at(baseId))
+	{
+		_txtHoverBase->setText(L"");
+
+		_mini->setSelectedBase(baseId);
+		_base = _baseList->at(baseId);
+		_state->setBase(_base);
+
+		init();
+	}
+}
+
+/**
  * Displays the name of the Base the mouse is over.
  * @param action - pointer to an Action
  */
 void BaseInfoState::viewMouseOver(Action*)
 {
-	const size_t base = _mini->getHoveredBase();
-	std::vector<Base*>* baseList = _baseList;
-	std::wostringstream woststr;
+	const size_t baseId = _mini->getHoveredBase();
 
-	if (base < baseList->size()
-		&& _base != baseList->at(base))
+	if (baseId < _baseList->size()
+		&& _base != _baseList->at(baseId))
 	{
-		_txtHoverBase->setText(baseList->at(base)->getName(_game->getLanguage()).c_str());
+		_txtHoverBase->setText(_baseList->at(baseId)->getName(_game->getLanguage()).c_str());
 	}
 	else
 		_txtHoverBase->setText(L"");

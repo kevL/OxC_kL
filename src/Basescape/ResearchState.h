@@ -51,6 +51,7 @@ private:
 		* _txtAllocated,
 		* _txtAvailable,
 		* _txtBaseLabel,
+		* _txtHoverBase,
 		* _txtProgress,
 		* _txtProject,
 		* _txtScientists,
@@ -65,6 +66,8 @@ private:
 
 	std::vector<bool> _online;
 
+	std::vector<Base*>* _baseList;
+
 
 	public:
 		/// Creates the Research state.
@@ -74,6 +77,9 @@ private:
 		/// Cleans up the Research state.
 		~ResearchState();
 
+		/// Updates the research list.
+		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the New Research button.
@@ -82,11 +88,13 @@ private:
 		void btnAliens(Action* action);
 		/// Handler for clicking the ResearchProject list.
 		void onSelectProject(Action* action);
+
 		/// Handler for clicking the mini base view.
 		void miniClick(Action* action);
-
-		/// Updates the research list.
-		void init();
+		/// Handler for hovering the MiniBase view.
+		void viewMouseOver(Action* action);
+		/// Handler for hovering out of the MiniBase view.
+		void viewMouseOut(Action* action);
 };
 
 }

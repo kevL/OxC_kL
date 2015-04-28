@@ -60,27 +60,29 @@ ManufactureState::ManufactureState(
 		BasescapeState* state)
 	:
 		_base(base),
-		_state(state)
+		_state(state),
+		_baseList(_game->getSavedGame()->getBases())
 {
 	_window			= new Window(this, 320, 200);
-	_mini			= new MiniBaseView(128, 16, 180, 26, MBV_PRODUCTION);
+	_mini			= new MiniBaseView(128, 16, 180, 27, MBV_PRODUCTION);
 
-	_txtTitle		= new Text(300, 17, 16, 9);
-	_txtBaseLabel	= new Text(80, 9, 16, 9);
+	_txtTitle		= new Text(320, 17, 0, 10);
+	_txtBaseLabel	= new Text(80, 9, 16, 10);
+	_txtHoverBase	= new Text(80, 9, 224, 10);
 
-	_txtAllocated	= new Text(60, 9, 16, 25);
-	_txtAvailable	= new Text(60, 9, 16, 34);
+	_txtAllocated	= new Text(60, 9, 16, 26);
+	_txtAvailable	= new Text(60, 9, 16, 35);
 
-	_txtSpace		= new Text(100, 9, 80, 25);
-	_txtFunds		= new Text(100, 9, 80, 34);
+	_txtSpace		= new Text(100, 9, 80, 26);
+	_txtFunds		= new Text(100, 9, 80, 35);
 
-	_txtItem		= new Text(120, 9, 16, 52);
-	_txtEngineers	= new Text(45, 9, 145, 52);
-	_txtProduced	= new Text(40, 9, 174, 44);
-	_txtCost		= new Text(50, 17, 215, 44);
-	_txtTimeLeft	= new Text(25, 17, 271, 44);
+	_txtItem		= new Text(120, 9, 16, 53);
+	_txtEngineers	= new Text(45, 9, 145, 53);
+	_txtProduced	= new Text(40, 9, 174, 45);
+	_txtCost		= new Text(50, 17, 215, 45);
+	_txtTimeLeft	= new Text(25, 17, 271, 45);
 
-	_lstManufacture	= new TextList(285, 97, 16, 70);
+	_lstManufacture	= new TextList(285, 97, 16, 71);
 
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -91,6 +93,7 @@ ManufactureState::ManufactureState(
 	add(_mini,				"miniBase",	"basescape"); // <-
 	add(_txtTitle,			"text1",	"manufactureMenu");
 	add(_txtBaseLabel,		"text1",	"manufactureMenu");
+	add(_txtHoverBase,		"numbers",	"baseInfo");
 	add(_txtAvailable,		"text1",	"manufactureMenu");
 	add(_txtAllocated,		"text1",	"manufactureMenu");
 	add(_txtSpace,			"text1",	"manufactureMenu");
@@ -110,13 +113,13 @@ ManufactureState::ManufactureState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
+	_mini->setBases(_baseList);
 	for (size_t
 			i = 0;
-			i != _game->getSavedGame()->getBases()->size();
+			i != _baseList->size();
 			++i)
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == base)
+		if (_baseList->at(i) == _base)
 		{
 			_mini->setSelectedBase(i);
 			break;
@@ -125,6 +128,10 @@ ManufactureState::ManufactureState(
 	_mini->onMouseClick(
 					(ActionHandler)& ManufactureState::miniClick,
 					SDL_BUTTON_LEFT);
+	_mini->onMouseOver((ActionHandler)& ManufactureState::viewMouseOver);
+	_mini->onMouseOut((ActionHandler)& ManufactureState::viewMouseOut);
+
+	_txtHoverBase->setAlign(ALIGN_RIGHT);
 
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)& ManufactureState::btnNewProductionClick);
@@ -145,16 +152,12 @@ ManufactureState::ManufactureState(
 	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
-	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
-	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
-	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
-	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
 	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
 	_lstManufacture->setSelectable();
@@ -212,22 +215,22 @@ void ManufactureState::fillProductionList()
 			++i)
 	{
 		std::wostringstream
-			s1,
-			s2,
-			s3,
-			s4;
+			woststr1,
+			woststr2,
+			woststr3,
+			woststr4;
 
-		s1 << (*i)->getAssignedEngineers();
+		woststr1 << (*i)->getAssignedEngineers();
 
 		if ((*i)->getSellItems() == true)
-			s2 << "$";
-		s2 << (*i)->getAmountProduced() << "/";
+			woststr2 << "$";
+		woststr2 << (*i)->getAmountProduced() << "/";
 		if ((*i)->getInfiniteAmount() == true)
-			s2 << "oo";
+			woststr2 << "oo";
 		else
-			s2 << (*i)->getAmountTotal();
+			woststr2 << (*i)->getAmountTotal();
 
-		s3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
+		woststr3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
 
 		if ((*i)->getAssignedEngineers() > 0)
 		{
@@ -254,18 +257,18 @@ void ManufactureState::fillProductionList()
 
 			const int daysLeft = hoursLeft / 24;
 			hoursLeft %= 24;
-			s4 << daysLeft << "/" << hoursLeft;
+			woststr4 << daysLeft << "/" << hoursLeft;
 		}
 		else
-			s4 << L"oo";
+			woststr4 << L"oo";
 
 		_lstManufacture->addRow
 							(5,
 							tr((*i)->getRules()->getName()).c_str(),
-							s1.str().c_str(),
-							s2.str().c_str(),
-							s3.str().c_str(),
-							s4.str().c_str());
+							woststr1.str().c_str(),
+							woststr2.str().c_str(),
+							woststr3.str().c_str(),
+							woststr4.str().c_str());
 	}
 
 	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE")
@@ -296,22 +299,52 @@ void ManufactureState::miniClick(Action*)
 {
 	if (_state != NULL) // cannot switch bases if coming from geoscape.
 	{
-		const size_t baseID = _mini->getHoveredBase();
-		if (baseID < _game->getSavedGame()->getBases()->size())
+		const size_t baseId = _mini->getHoveredBase();
+
+		if (baseId < _baseList->size())
 		{
-			Base* const base = _game->getSavedGame()->getBases()->at(baseID);
+			Base* const base = _baseList->at(baseId);
 
 			if (base != _base
 				&& base->hasProduction() == true)
 			{
+				_txtHoverBase->setText(L"");
+
 				_base = base;
-				_mini->setSelectedBase(baseID);
+				_mini->setSelectedBase(baseId);
 				_state->setBase(_base);
 
 				init();
 			}
 		}
 	}
+}
+
+/**
+ * Displays the name of the Base the mouse is over.
+ * @param action - pointer to an Action
+ */
+void ManufactureState::viewMouseOver(Action*)
+{
+	const size_t baseId = _mini->getHoveredBase();
+
+	if (baseId < _baseList->size()
+		&& _base != _baseList->at(baseId)
+		&& _baseList->at(baseId)->hasProduction() == true)
+	{
+		_txtHoverBase->setText(_baseList->at(baseId)->getName(_game->getLanguage()).c_str());
+	}
+	else
+		_txtHoverBase->setText(L"");
+}
+
+/**
+ * Clears the hovered Base name.
+ * @param action - pointer to an Action
+ */
+void ManufactureState::viewMouseOut(Action*)
+{
+	_txtHoverBase->setText(L"");
 }
 
 }

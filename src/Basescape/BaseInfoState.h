@@ -122,8 +122,7 @@ private:
 
 		/// Handler for changing the text on the Name edit.
 		void edtBaseChange(Action* action);
-		/// Handler for clicking the mini base view.
-		void miniClick(Action* action);
+
 		/// Handler for selecting bases.
 		void handleKeyPress(Action* action);
 		/// Handler for clicking the OK button.
@@ -134,6 +133,9 @@ private:
 		void btnStoresClick(Action* action);
 		/// Handler for clicking the Monthly Costs button.
 		void btnMonthlyCostsClick(Action* action);
+
+		/// Handler for clicking the MiniBase view.
+		void miniClick(Action* action);
 		/// Handler for hovering the MiniBase view.
 		void viewMouseOver(Action* action);
 		/// Handler for hovering out of the MiniBase view.

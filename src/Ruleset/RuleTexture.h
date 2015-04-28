@@ -62,7 +62,6 @@ class RuleTexture
 
 private:
 	int _id;
-//	std::string _deployType;
 	std::map<std::string, int> _deployTypes;
 	std::vector<TerrainCriteria> _terrains;
 
@@ -80,7 +79,6 @@ private:
 
 		/// Gets the alien deployments for this Texture.
 		const std::map<std::string, int>& getTextureDeployments();
-//		std::string getTextureDeployment() const;
 
 		/// Gets a random deployment.
 		std::string getRandomDeployment() const;

@@ -62,24 +62,26 @@ ResearchState::ResearchState(
 		BasescapeState* state)
 	:
 		_base(base),
-		_state(state)
+		_state(state),
+		_baseList(_game->getSavedGame()->getBases())
 {
 	_window			= new Window(this, 320, 200);
-	_mini			= new MiniBaseView(128, 16, 180, 26, MBV_RESEARCH);
+	_mini			= new MiniBaseView(128, 16, 180, 27, MBV_RESEARCH);
 
-	_txtTitle		= new Text(300, 17, 16, 9);
-	_txtBaseLabel	= new Text(80, 9, 16, 9);
+	_txtTitle		= new Text(320, 17, 0, 10);
+	_txtBaseLabel	= new Text(80, 9, 16, 10);
+	_txtHoverBase	= new Text(80, 9, 224, 10);
 
-	_txtAllocated	= new Text(60, 9, 16, 25);
-	_txtAvailable	= new Text(60, 9, 16, 34);
+	_txtAllocated	= new Text(60, 9, 16, 26);
+	_txtAvailable	= new Text(60, 9, 16, 35);
 
-	_txtSpace		= new Text(100, 9, 80, 25);
+	_txtSpace		= new Text(100, 9, 80, 26);
 
-	_txtProject		= new Text(110, 9, 16, 48);
-	_txtScientists	= new Text(55, 9, 161, 48);
-	_txtProgress	= new Text(55, 9, 219, 48);
+	_txtProject		= new Text(110, 9, 16, 49);
+	_txtScientists	= new Text(55, 9, 161, 49);
+	_txtProgress	= new Text(55, 9, 219, 49);
 
-	_lstResearch	= new TextList(288, 113, 16, 63);
+	_lstResearch	= new TextList(288, 105, 16, 64);
 
 	_btnAliens		= new TextButton(92, 16, 16, 177);
 	_btnNew			= new TextButton(92, 16, 114, 177);
@@ -91,6 +93,7 @@ ResearchState::ResearchState(
 	add(_mini,			"miniBase",	"basescape"); // <-
 	add(_txtTitle,		"text",		"researchMenu");
 	add(_txtBaseLabel,	"text",		"researchMenu");
+	add(_txtHoverBase,	"numbers",	"baseInfo");
 	add(_txtAvailable,	"text",		"researchMenu");
 	add(_txtAllocated,	"text",		"researchMenu");
 	add(_txtSpace,		"text",		"researchMenu");
@@ -108,13 +111,13 @@ ResearchState::ResearchState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
+	_mini->setBases(_baseList);
 	for (size_t
 			i = 0;
-			i != _game->getSavedGame()->getBases()->size();
+			i != _baseList->size();
 			++i)
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == base)
+		if (_baseList->at(i) == _base)
 		{
 			_mini->setSelectedBase(i);
 			break;
@@ -123,6 +126,10 @@ ResearchState::ResearchState(
 	_mini->onMouseClick(
 					(ActionHandler)& ResearchState::miniClick,
 					SDL_BUTTON_LEFT);
+	_mini->onMouseOver((ActionHandler)& ResearchState::viewMouseOver);
+	_mini->onMouseOut((ActionHandler)& ResearchState::viewMouseOut);
+
+	_txtHoverBase->setAlign(ALIGN_RIGHT);
 
 	_btnAliens->setText(tr("STR_ALIENS"));
 	_btnAliens->onMouseClick((ActionHandler)& ResearchState::btnAliens);
@@ -140,8 +147,6 @@ ResearchState::ResearchState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_RESEARCH"));
-
-	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtProject->setText(tr("STR_RESEARCH_PROJECT"));
 
@@ -161,6 +166,68 @@ ResearchState::ResearchState(
  */
 ResearchState::~ResearchState()
 {}
+
+/**
+ * Updates the research list after going to other screens.
+ */
+void ResearchState::init()
+{
+	State::init();
+
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
+	_lstResearch->clearList();
+	_online.clear();
+
+	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
+	for (std::vector<ResearchProject*>::const_iterator
+			rp = rps.begin();
+			rp != rps.end();
+			++rp)
+	{
+		if ((*rp)->getOffline() == true)
+		{
+			_online.push_back(false);
+			continue;
+		}
+		_online.push_back(true);
+
+
+		std::wostringstream woststr;
+		woststr << (*rp)->getAssigned();
+
+		std::wstring daysLeft;
+
+		if ((*rp)->getAssigned() > 0)
+		{
+			const int days = static_cast<int>(std::ceil(
+							(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
+						   / static_cast<double>((*rp)->getAssigned())));
+			daysLeft = Text::formatNumber(days);
+		}
+		else
+			 daysLeft = L"-";
+
+		_lstResearch->addRow(
+						4,
+						tr((*rp)->getRules()->getName()).c_str(),
+						woststr.str().c_str(),
+						tr((*rp)->getResearchProgress()).c_str(),
+//						(*rp)->getCostCompleted().c_str());
+						daysLeft.c_str());
+	}
+
+	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")
+							.arg(_base->getScientists()));
+	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED")
+							.arg(_base->getAllocatedScientists()));
+	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE")
+							.arg(_base->getFreeLaboratories()));
+
+
+	if (_base->getAvailableContainment() > 0)
+		_btnAliens->setVisible();
+}
 
 /**
  * Returns to the previous screen.
@@ -231,16 +298,19 @@ void ResearchState::miniClick(Action*)
 {
 	if (_state != NULL) // cannot switch bases if coming from geoscape.
 	{
-		const size_t baseID = _mini->getHoveredBase();
-		if (baseID < _game->getSavedGame()->getBases()->size())
+		const size_t baseId = _mini->getHoveredBase();
+
+		if (baseId < _baseList->size())
 		{
-			Base* const base = _game->getSavedGame()->getBases()->at(baseID);
+			Base* const base = _baseList->at(baseId);
 
 			if (base != _base
 				&& base->hasResearch() == true)
 			{
+				_txtHoverBase->setText(L"");
+
 				_base = base;
-				_mini->setSelectedBase(baseID);
+				_mini->setSelectedBase(baseId);
 				_state->setBase(_base);
 
 				init();
@@ -250,65 +320,30 @@ void ResearchState::miniClick(Action*)
 }
 
 /**
- * Updates the research list after going to other screens.
+ * Displays the name of the Base the mouse is over.
+ * @param action - pointer to an Action
  */
-void ResearchState::init()
+void ResearchState::viewMouseOver(Action*)
 {
-	State::init();
+	const size_t baseId = _mini->getHoveredBase();
 
-	_online.clear();
-	_lstResearch->clearList();
-
-	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
-	for (std::vector<ResearchProject*>::const_iterator
-			rp = rps.begin();
-			rp != rps.end();
-			++rp)
+	if (baseId < _baseList->size()
+		&& _base != _baseList->at(baseId)
+		&& _baseList->at(baseId)->hasResearch() == true)
 	{
-		if ((*rp)->getOffline() == true)
-		{
-			_online.push_back(false);
-			continue;
-		}
-		_online.push_back(true);
-
-
-		const std::wstring wstProject = tr((*rp)->getRules()->getName());
-
-		std::wostringstream wostsAssigned;
-		wostsAssigned << (*rp)->getAssigned();
-
-		std::wstring wstDaysLeft;
-
-		if ((*rp)->getAssigned() > 0)
-		{
-			const int daysLeft = static_cast<int>(std::ceil(
-								(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
-							   / static_cast<double>((*rp)->getAssigned())));
-			wstDaysLeft = Text::formatNumber(daysLeft);
-		}
-		else
-			 wstDaysLeft = L"-";
-
-		_lstResearch->addRow(
-							4,
-							wstProject.c_str(),
-							wostsAssigned.str().c_str(),
-							tr((*rp)->getResearchProgress()).c_str(),
-//							(*rp)->getCostCompleted().c_str());
-							wstDaysLeft.c_str());
+		_txtHoverBase->setText(_baseList->at(baseId)->getName(_game->getLanguage()).c_str());
 	}
+	else
+		_txtHoverBase->setText(L"");
+}
 
-	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")
-							.arg(_base->getScientists()));
-	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED")
-							.arg(_base->getAllocatedScientists()));
-	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE")
-							.arg(_base->getFreeLaboratories()));
-
-
-	if (_base->getAvailableContainment() > 0)
-		_btnAliens->setVisible();
+/**
+ * Clears the hovered Base name.
+ * @param action - pointer to an Action
+ */
+void ResearchState::viewMouseOut(Action*)
+{
+	_txtHoverBase->setText(L"");
 }
 
 }

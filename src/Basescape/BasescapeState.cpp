@@ -681,29 +681,21 @@ void BasescapeState::viewMouseOver(Action*)
 	if (fac != NULL)
 	{
 		_txtFacility->setAlign(ALIGN_LEFT);
+		woststr << tr(fac->getRules()->getType());
 
-		if (fac->getRules()->getCrafts() == 0
-			|| fac->getBuildTime() > 0)
-		{
-			woststr << tr(fac->getRules()->getType());
-		}
-		else
-		{
-			woststr << tr(fac->getRules()->getType());
-
-			if (fac->getCraft() != NULL)
-				woststr << L" " << tr("STR_CRAFT_")
-									.arg(fac->getCraft()->getName(_game->getLanguage()));
-		}
+		if (fac->getCraft() != NULL)
+			woststr << L" " << tr("STR_CRAFT_")
+								.arg(fac->getCraft()->getName(_game->getLanguage()));
 	}
 	else
 	{
-		const size_t base = _mini->getHoveredBase();
-		if (base < _baseList->size()
-			&& _base != _baseList->at(base))
+		const size_t baseId = _mini->getHoveredBase();
+
+		if (baseId < _baseList->size()
+			&& _base != _baseList->at(baseId))
 		{
 			_txtFacility->setAlign(ALIGN_RIGHT);
-			woststr << _baseList->at(base)->getName(_game->getLanguage()).c_str();
+			woststr << _baseList->at(baseId)->getName(_game->getLanguage()).c_str();
 		}
 	}
 
@@ -720,32 +712,33 @@ void BasescapeState::viewMouseOut(Action*)
 }
 
 /**
- * Selects a new base to display.
+ * Selects a new base to display. Also builds a new Base on the globe.
  * @param action - pointer to an Action
  */
 void BasescapeState::miniLeftClick(Action*)
 {
-	const size_t base = _mini->getHoveredBase();
+	const size_t baseId = _mini->getHoveredBase();
 
-	if (base < _baseList->size()
-		&& _base != _baseList->at(base))
+	if (baseId < _baseList->size()
+		&& _base != _baseList->at(baseId))
 	{
-		_base = _baseList->at(base);
+		_base = _baseList->at(baseId);
 		_txtFacility->setText(L"");
 
 		init();
 	}
-	else if (base == _baseList->size())
+	else if (baseId == _baseList->size()
+		&& baseId < MiniBaseView::MAX_BASES - 1)
 	{
 		kL_geoMusic = false;
 
 		// aka: btnNewBaseClick();
 		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
-		Base* const base = new Base(_game->getRuleset());
+		Base* const baseId = new Base(_game->getRuleset());
 
 		_game->popState();
 		_game->pushState(new BuildNewBaseState(
-											base,
+											baseId,
 											_globe,
 											false));
 	}
@@ -757,11 +750,11 @@ void BasescapeState::miniLeftClick(Action*)
  */
 void BasescapeState::miniRightClick(Action*)
 {
-	const size_t base = _mini->getHoveredBase();
+	const size_t baseId = _mini->getHoveredBase();
 
-	if (base < _baseList->size())
+	if (baseId < _baseList->size())
 	{
-		const Base* const centerBase = _baseList->at(base);
+		const Base* const centerBase = _baseList->at(baseId);
 		_game->getSavedGame()->setGlobeLongitude(centerBase->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(centerBase->getLatitude());
 

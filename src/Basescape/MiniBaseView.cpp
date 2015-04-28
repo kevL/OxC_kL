@@ -87,7 +87,7 @@ MiniBaseView::~MiniBaseView()
  */
 void MiniBaseView::setBases(std::vector<Base*>* bases)
 {
-	_bases = bases;
+	_baseList = bases;
 	_redraw = true;
 }
 
@@ -153,139 +153,140 @@ void MiniBaseView::draw()
 		_texture->getFrame(41)->blit(this);
 
 
-		if (i < _bases->size()) // Draw facilities
+		if (i < _baseList->size()) // Draw facilities
 		{
-			base = _bases->at(i);
+			base = _baseList->at(i);
 
-			if (_mode == MBV_STANDARD
-				|| (_mode == MBV_RESEARCH
-					&& base->hasResearch() == true)
+			if ((_mode == MBV_RESEARCH
+					&& base->hasResearch() == false)
 				|| (_mode == MBV_PRODUCTION
-					&& base->hasProduction() == true))
+					&& base->hasProduction() == false))
 			{
-				lock();
-				SDL_Rect rect;
+				continue;
+			}
 
-				for (std::vector<BaseFacility*>::const_iterator
-						fac = base->getFacilities()->begin();
-						fac != base->getFacilities()->end();
-						++fac)
-				{
-					if ((*fac)->getBuildTime() == 0)
-						color = GREEN;
-					else
-						color = RED_D;
+			lock();
+			SDL_Rect rect;
 
-					rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
-					rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
-					rect.w =
-					rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
-					drawRect(&rect, color + 3);
+			for (std::vector<BaseFacility*>::const_iterator
+					fac = base->getFacilities()->begin();
+					fac != base->getFacilities()->end();
+					++fac)
+			{
+				if ((*fac)->getBuildTime() == 0)
+					color = GREEN;
+				else
+					color = RED_D;
 
-					++rect.x;
-					++rect.y;
-					--rect.w;
-					--rect.h;
-					drawRect(&rect, color + 5);
+				rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
+				rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
+				rect.w =
+				rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
+				drawRect(&rect, color + 3);
 
-					--rect.x;
-					--rect.y;
-					drawRect(&rect, color + 2);
+				++rect.x;
+				++rect.y;
+				--rect.w;
+				--rect.h;
+				drawRect(&rect, color + 5);
 
-					++rect.x;
-					++rect.y;
-					--rect.w;
-					--rect.h;
-					drawRect(&rect, color + 3);
+				--rect.x;
+				--rect.y;
+				drawRect(&rect, color + 2);
 
-					--rect.x;
-					--rect.y;
+				++rect.x;
+				++rect.y;
+				--rect.w;
+				--rect.h;
+				drawRect(&rect, color + 3);
+
+				--rect.x;
+				--rect.y;
+				setPixelColor(
+							rect.x,
+							rect.y,
+							color + 1);
+			}
+			unlock();
+
+
+			// Dot Marks for various base-status indicators.
+			if (_mode == MBV_STANDARD)
+			{
+				x = static_cast<int>(i) * (MINI_SIZE + 2);
+
+				if (base->getTransfers()->empty() == false) // incoming Transfers
 					setPixelColor(
-								rect.x,
-								rect.y,
-								color + 1);
-				}
-				unlock();
+								x + 2,
+								21,
+								LAVENDER_L);
 
-
-				// Dot Marks for various base-status indicators.
-				if (_mode == MBV_STANDARD)
+				if (base->getCrafts()->empty() == false)
 				{
-					x = static_cast<int>(i) * (MINI_SIZE + 2);
+					const RuleCraft* craftRule;
+					y = 17;
 
-					if (base->getTransfers()->empty() == false) // incoming Transfers
-						setPixelColor(
-									x + 2,
-									21,
-									LAVENDER_L);
-
-					if (base->getCrafts()->empty() == false)
+					for (std::vector<Craft*>::const_iterator
+							craft = base->getCrafts()->begin();
+							craft != base->getCrafts()->end();
+							++craft)
 					{
-						const RuleCraft* craftRule;
-						y = 17;
-
-						for (std::vector<Craft*>::const_iterator
-								craft = base->getCrafts()->begin();
-								craft != base->getCrafts()->end();
-								++craft)
+						if ((*craft)->getWarning() != CW_NONE)
 						{
-							if ((*craft)->getWarning() != CW_NONE)
-							{
-								if ((*craft)->getWarning() == CW_CANTREFUEL)
-									color = ORANGE_L;
-								else if ((*craft)->getWarning() == CW_CANTREARM)
-									color = ORANGE_D;
-								else //if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
-									color = RED_D;
+							if ((*craft)->getWarning() == CW_CANTREFUEL)
+								color = ORANGE_L;
+							else if ((*craft)->getWarning() == CW_CANTREARM)
+								color = ORANGE_D;
+							else //if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
+								color = RED_D;
 
-								setPixelColor( // Craft needs materiels
-											x + 2,
-											19,
-											color);
-							}
-
-							if ((*craft)->getStatus() == "STR_READY")
-								setPixelColor(
-											x + 14,
-											y,
-											GREEN);
-
-
-							craftRule = (*craft)->getRules();
-
-							if (craftRule->getRefuelItem().empty() == false)
-								color = YELLOW_L;
-							else
-								color = YELLOW_D;
-
-							setPixelColor(
-										x + 12,
-										y,
+							setPixelColor( // Craft needs materiels
+										x + 2,
+										19,
 										color);
-
-							if (craftRule->getWeapons() > 0
-								&& craftRule->getWeapons() == (*craft)->getNumWeapons())
-							{
-								setPixelColor(
-											x + 10,
-											y,
-											BLUE);
-							}
-
-							if (craftRule->getSoldiers() > 0)
-								setPixelColor(
-											x + 8,
-											y,
-											BROWN);
-
-							if (craftRule->getVehicles() > 0)
-								setPixelColor(
-											x + 6,
-											y,
-											LAVENDER_D);
-
-							y += 2;
 						}
+
+						if ((*craft)->getStatus() == "STR_READY")
+							setPixelColor(
+										x + 14,
+										y,
+										GREEN);
+
+
+						craftRule = (*craft)->getRules();
+
+						if (craftRule->getRefuelItem().empty() == false)
+							color = YELLOW_L;
+						else
+							color = YELLOW_D;
+
+						setPixelColor(
+									x + 12,
+									y,
+									color);
+
+						if (craftRule->getWeapons() > 0
+							&& craftRule->getWeapons() == (*craft)->getNumWeapons())
+						{
+							setPixelColor(
+										x + 10,
+										y,
+										BLUE);
+						}
+
+						if (craftRule->getSoldiers() > 0)
+							setPixelColor(
+										x + 8,
+										y,
+										BROWN);
+
+						if (craftRule->getVehicles() > 0)
+							setPixelColor(
+										x + 6,
+										y,
+										LAVENDER_D);
+
+						y += 2;
 					}
 				}
 			}
@@ -303,8 +304,8 @@ void MiniBaseView::mouseOver(Action* action, State* state)
 	_hoverBase = static_cast<size_t>(std::floor(
 				 action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
-	if (_hoverBase > 7)
-		_hoverBase = 7;
+	if (_hoverBase > MAX_BASES - 1)
+		_hoverBase = MAX_BASES - 1;
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -344,10 +345,10 @@ void MiniBaseView::blink()
 
 	for (size_t
 			i = 0;
-			i != _bases->size();
+			i != _baseList->size();
 			++i)
 	{
-		base = _bases->at(i);
+		base = _baseList->at(i);
 
 		x = i * (MINI_SIZE + 2);
 

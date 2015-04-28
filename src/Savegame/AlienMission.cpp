@@ -585,30 +585,13 @@ void AlienMission::ufoReachedWaypoint(
 			ufo.setStatus(Ufo::DESTROYED);
 
 			const MissionArea area = regRule.getMissionPoint(
-															trajectory.getZone(curWaypoint),
-															&ufo);
+														trajectory.getZone(curWaypoint),
+														&ufo);
 			MissionSite* missionSite = spawnMissionSite(
 													rules,
 													area);
 			if (missionSite != NULL)
 			{
-/*				const RuleTexture* const texRule = rules.getGlobe()->getTextureRule(area.texture);
-				// uses Globe-defined textures for Deployment; what happens to Deployment-defined Deployments:
-				const AlienDeployment* const deployRule = rules.getDeployment(texRule->getTextureDeployment());
-
-				MissionSite* const missionSite = new MissionSite(
-															&_missionRule,
-															deployRule);
-				missionSite->setLongitude(ufo.getLongitude());
-				missionSite->setLatitude(ufo.getLatitude());
-				missionSite->setId(_savedGame.getId(deployRule->getMarkerName()));
-				missionSite->setSecondsLeft(RNG::generate(
-													deployRule->getDurationMin(),
-													deployRule->getDurationMax()) * 3600);
-				missionSite->setAlienRace(_race);
-				missionSite->setSiteTextureInt(area.texture);
-				missionSite->setCity(area.site); */
-
 				_savedGame.getMissionSites()->push_back(missionSite);
 
 				for (std::vector<Target*>::const_iterator
@@ -668,22 +651,6 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 		const Ruleset& rules,
 		const MissionArea& area)
 {
-/*	const RuleTexture* const texRule = rules.getGlobe()->getTextureRule(area.texture);
-	// uses Globe-defined textures for Deployment; what happens to Deployment-defined Deployments:
-	const AlienDeployment* const deployRule = rules.getDeployment(texRule->getTextureDeployment());
-
-		MissionSite* const missionSite = new MissionSite(
-													&_missionRule,
-													deployRule);
-		missionSite->setLongitude(ufo.getLongitude());
-		missionSite->setLatitude(ufo.getLatitude());
-		missionSite->setId(_savedGame.getId(deployRule->getMarkerName()));
-		missionSite->setSecondsLeft(RNG::generate(
-											deployRule->getDurationMin(),
-											deployRule->getDurationMax()) * 3600);
-		missionSite->setAlienRace(_race);
-		missionSite->setSiteTextureInt(area.texture);
-		missionSite->setCity(area.site); */
 	const RuleTexture* const texRule = rules.getGlobe()->getTextureRule(area.texture);
 	// uses Globe-defined textures for Deployment; what happens to Deployment-defined Deployments:
 	const AlienDeployment* const deployRule = rules.getDeployment(texRule->getRandomDeployment());

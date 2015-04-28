@@ -71,7 +71,7 @@ AlienContainmentState::AlienContainmentState(
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
 
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 17, 10, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 

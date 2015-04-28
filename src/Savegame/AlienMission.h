@@ -34,7 +34,6 @@ class MissionSite;
 class RuleAlienMission;
 class RuleRegion;
 class Ruleset;
-class RuleUfo;
 class SavedGame;
 class Ufo;
 class UfoTrajectory;

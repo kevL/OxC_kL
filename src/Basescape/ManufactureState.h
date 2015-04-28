@@ -54,6 +54,7 @@ private:
 		* _txtCost,
 		* _txtEngineers,
 		* _txtFunds,
+		* _txtHoverBase,
 		* _txtItem,
 		* _txtProduced,
 		* _txtSpace,
@@ -64,6 +65,8 @@ private:
 		* _btnOk;
 	TextList* _lstManufacture;
 	Window* _window;
+
+	std::vector<Base*>* _baseList;
 
 	///
 	void lstManufactureClick(Action* action);
@@ -87,8 +90,13 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for the New Production button.
 		void btnNewProductionClick(Action* action);
-		/// Handler for clicking the mini base view.
+
+		/// Handler for clicking the MiniBase view.
 		void miniClick(Action* action);
+		/// Handler for hovering the MiniBase view.
+		void viewMouseOver(Action* action);
+		/// Handler for hovering out of the MiniBase view.
+		void viewMouseOut(Action* action);
 };
 
 }
