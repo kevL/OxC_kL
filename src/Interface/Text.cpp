@@ -55,7 +55,7 @@ Text::Text(
 		_lang(NULL),
 		_wrap(false),
 		_invert(false),
-		_contrast(false),
+		_contrast(1),
 		_indent(false),
 		_align(ALIGN_LEFT),
 		_valign(ALIGN_TOP),
@@ -192,10 +192,10 @@ void Text::initText(
 		Font* small,
 		Language* lang)
 {
-	_big	= big;
-	_small	= small;
-	_lang	= lang;
-	_font	= _small;
+	_big = big;
+	_small = small;
+	_lang = lang;
+	_font = _small;
 
 	processText();
 }
@@ -210,7 +210,7 @@ void Text::setText(const std::wstring& text)
 
 	processText();
 
-	// If big text won't fit the space, try small text
+	// if big text won't fit the space, try small text
 	if (_font == _big
 		&& (getTextWidth() > getWidth() || getTextHeight() > getHeight())
 		&& _text[_text.size() - 1] != L'.')
@@ -267,7 +267,7 @@ void Text::setInvert(const bool invert)
  */
 void Text::setHighContrast(const bool contrast)
 {
-	_contrast = contrast;
+	_contrast = contrast ? 3 : 1;
 	_redraw = true;
 }
 
@@ -277,7 +277,7 @@ void Text::setHighContrast(const bool contrast)
  */
 bool Text::getHighContrast() const
 {
-	return _contrast;
+	return (_contrast != 1);
 }
 
 /**
@@ -654,7 +654,6 @@ void Text::draw()
 		y = 0,
 		height = 0,
 		color = _color,
-		mult = 1,
 		dir = 1,
 		mid = 0;
 
@@ -681,11 +680,7 @@ void Text::draw()
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;
-		break;
 	}
-
-	if (_contrast == true) // set up text color
-		mult = 3;
 
 	if (_lang->getTextDirection() == DIRECTION_RTL) // set up text direction
 		dir = -1;
@@ -722,14 +717,17 @@ void Text::draw()
 		}
 		else
 		{
-/*			if (_contrast)
+/*			if (_contrast == true)
 			{
-				if (color %16 < 2)
-					mult = 3;
-				else if (color %16 < 6)
-					mult = 2;
-				else
-					mult = 1;
+				if		(color %16 < 2)	mult = 3;
+				else if (color %16 < 6) mult = 2;
+				else					mult = 1;
+			} */
+/*			int multer = 1;
+			if (color == 176 // why does this go borky-borky <- PURPLE GeoscapePalette, seethrough pixels on highContrast=3
+				&& _contrast != 1)
+			{
+				mult = 2;
 			} */
 
 			if (dir < 0)
@@ -742,7 +740,7 @@ void Text::draw()
 								ShaderSurface(this, 0,0),
 								ShaderCrop(srfChar),
 								ShaderScalar(color),
-								ShaderScalar(mult),
+								ShaderScalar(_contrast), //multer),
 								ShaderScalar(mid));
 
 			if (dir > 0)

@@ -40,7 +40,7 @@ class Window;
 
 
 /**
- * Intercept window that lets the player launch crafts into missions from the Geoscape.
+ * Interception window that lets player launch crafts on the Geoscape.
  */
 class InterceptState
 	:
@@ -53,7 +53,7 @@ private:
 		GREEN	= 112, // Palette::blockOffset(7)
 		BROWN	= 144, // Palette::blockOffset(9)
 		SLATE	= 160, // Palette::blockOffset(10)
-		PURPLE	= 176; // Palette::blockOffset(11)
+		PURPLE	= 176; // Palette::blockOffset(11) // 192, blue
 
 	Uint8 _cellColor;
 

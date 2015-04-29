@@ -850,7 +850,7 @@ size_t TextList::getSelectedRow() const
 	if (_rows.empty() == true
 		|| _selRow > _rows.size() - 1)
 	{
-		return -1; // TODO: so what is this, shouldn't it throw() or something instead.
+		return std::numeric_limits<size_t>::max(); // -1;
 	}
 	else
 		return _rows[_selRow];

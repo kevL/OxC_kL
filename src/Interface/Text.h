@@ -62,10 +62,11 @@ class Text
 
 private:
 	bool
-		_contrast,
 		_indent,
 		_invert,
 		_wrap;
+	int
+		_contrast;
 	Uint8
 		_color,
 		_color2;
@@ -160,7 +161,7 @@ private:
 		/// Gets the text's secondary color.
 		Uint8 getSecondaryColor() const;
 
-		/// Gets the number of lines in the wrapped, if wrapping is enabled, text.
+		/// Gets the number of lines in the wrapped text if wrapping is enabled.
 		int getNumLines() const;
 
 		/// Gets the rendered text's width.

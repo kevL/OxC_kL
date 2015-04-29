@@ -106,7 +106,7 @@ InterceptState::InterceptState(
 
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& InterceptState::btnGotoBaseClick);
-	_btnGotoBase->setVisible(_base != 0);
+	_btnGotoBase->setVisible(_base != NULL);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& InterceptState::btnCancelClick);
@@ -138,7 +138,7 @@ InterceptState::InterceptState(
 	_lstCrafts->onMouseOut((ActionHandler)& InterceptState::lstCraftsMouseOut);
 
 
-	const RuleCraft* rule = NULL;
+	const RuleCraft* crRule;
 
 	size_t row = 0;
 	for (std::vector<Base*>::const_iterator
@@ -146,58 +146,54 @@ InterceptState::InterceptState(
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		if (_base != NULL
-			&& *i != _base)
+		if (_base == NULL
+			|| *i == _base)
 		{
-			continue;
-		}
+			for (std::vector<Craft*>::const_iterator
+					j = (*i)->getCrafts()->begin();
+					j != (*i)->getCrafts()->end();
+					++j)
+			{
+				_bases.push_back((*i)->getName().c_str());
+				_crafts.push_back(*j);
 
-		for (std::vector<Craft*>::const_iterator
-				j = (*i)->getCrafts()->begin();
-				j != (*i)->getCrafts()->end();
-				++j)
-		{
-			_bases.push_back((*i)->getName().c_str());
-			_crafts.push_back(*j);
+				std::wostringstream
+					woststr1,
+					woststr2,
+					woststr3;
 
-			std::wostringstream
-				ss1,
-				ss2,
-				ss3;
+				crRule = (*j)->getRules();
 
-			rule = (*j)->getRules();
+				if (crRule->getWeapons() > 0)
+					woststr1 << (*j)->getNumWeapons() << L"/" << crRule->getWeapons();
+				else
+					woststr1 << L"-";
 
-			if (rule->getWeapons() > 0)
-				ss1 << (*j)->getNumWeapons() << L"/" << rule->getWeapons();
-			else
-				ss1 << L"-";
+				if (crRule->getSoldiers() > 0)
+					woststr2 << (*j)->getNumSoldiers();
+				else
+					woststr2 << L"-";
 
-			if (rule->getSoldiers() > 0)
-				ss2 << (*j)->getNumSoldiers();
-			else
-				ss2 << L"-";
+				if (crRule->getVehicles() > 0)
+					woststr3 << (*j)->getNumVehicles();
+				else
+					woststr3 << L"-";
 
-			if (rule->getVehicles() > 0)
-				ss3 << (*j)->getNumVehicles();
-			else
-				ss3 << L"-";
+				const std::wstring status = getAltStatus(*j);
+				_lstCrafts->addRow(
+								5,
+								(*j)->getName(_game->getLanguage()).c_str(),
+								status.c_str(),
+								woststr1.str().c_str(),
+								woststr2.str().c_str(),
+								woststr3.str().c_str());
 
-			const std::wstring status = getAltStatus(*j);
-			_lstCrafts->addRow(
-							5,
-							(*j)->getName(_game->getLanguage()).c_str(),
-							status.c_str(),
-							ss1.str().c_str(),
-							ss2.str().c_str(),
-							ss3.str().c_str());
-
-			_lstCrafts->setCellColor(
-									row,
-									1,
-									_cellColor,
-									true);
-
-			++row;
+				_lstCrafts->setCellColor(
+										row++,
+										1,
+										_cellColor,
+										true);
+			}
 		}
 	}
 
@@ -226,7 +222,6 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 			_cellColor = GREEN;
 			return tr(stat);
 		}
-
 /*		if (stat == "STR_REFUELLING")
 			stat = "STR_REFUELLING_";
 		else if (stat == "STR_REARMING")
@@ -241,8 +236,8 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 		bool delayed;
 		const int hours = craft->getDowntime(delayed);
 		const std::wstring wst = formatTime(
-											hours,
-											delayed);
+										hours,
+										delayed);
 		return tr(stat).arg(wst);
 	}
 
@@ -305,7 +300,7 @@ std::wstring InterceptState::formatTime(
 
 	const int
 		days = total / 24,
-		hours = total %24;
+		hours = total % 24;
 
 	if (days > 0)
 	{
@@ -387,15 +382,15 @@ void InterceptState::lstCraftsMouseOver(Action*)
 	if (_base != NULL)
 		return;
 
-	std::wstring wsBase;
+	std::wstring wst;
 
-	const int sel = _lstCrafts->getSelectedRow();
-	if (static_cast<size_t>(sel) < _bases.size())
-		wsBase = _bases[sel];
+	const size_t sel = _lstCrafts->getSelectedRow();
+	if (sel < _bases.size())
+		wst = _bases[sel];
 	else
-		wsBase = tr("STR_INTERCEPT");
+		wst = tr("STR_INTERCEPT");
 
-	_txtBase->setText(wsBase);
+	_txtBase->setText(wst);
 }
 
 /**
