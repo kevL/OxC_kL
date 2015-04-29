@@ -228,68 +228,65 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		"PAL_BATTLEPEDIA"
 	};
 
+	std::string
+		st1,
+		st2;
+
 	for (size_t
 			i = 0;
 			i != sizeof(pal) / sizeof(pal[0]);
 			++i)
 	{
-		const std::string st = "GEODATA/PALETTES.DAT";
+		st1 = "GEODATA/PALETTES.DAT";
 		_palettes[pal[i]] = new Palette();
 		_palettes[pal[i]]->loadDat(
-								CrossPlatform::getDataFile(st),
+								CrossPlatform::getDataFile(st1),
 								256,
 								Palette::palOffset(i));
 	}
 
+	st1 = "GEODATA/BACKPALS.DAT";
+	st2 = "BACKPALS.DAT";
+	_palettes[st2] = new Palette();
+	_palettes[st2]->loadDat(
+						CrossPlatform::getDataFile(st1),
+						128);
+
+	st1 = "GEODATA/PALETTES.DAT"; // correct Battlescape palette
+	st2 = "PAL_BATTLESCAPE";
+	_palettes[st2] = new Palette();
+	_palettes[st2]->loadDat(
+						CrossPlatform::getDataFile(st1),
+						256,
+						Palette::palOffset(4));
+
+	SDL_Color gradient[] = // last 16 colors are a grayish gradient
 	{
-		const std::string
-			st1 = "GEODATA/BACKPALS.DAT",
-			st2 = "BACKPALS.DAT";
-		_palettes[st2] = new Palette();
-		_palettes[st2]->loadDat(
-							CrossPlatform::getDataFile(st1),
-							128);
-	}
+		{140, 152, 148, 255},
+		{132, 136, 140, 255},
+		{116, 124, 132, 255},
+		{108, 116, 124, 255},
+		{ 92, 104, 108, 255},
+		{ 84,  92, 100, 255},
+		{ 76,  80,  92, 255},
+		{ 56,  68,  84, 255},
+		{ 48,  56,  68, 255},
+		{ 40,  48,  56, 255},
+		{ 32,  36,  48, 255},
+		{ 24,  28,  32, 255},
+		{ 16,  20,  24, 255},
+		{  8,  12,  16, 255},
+		{  3,   4,   8, 255},
+		{  3,   3,   6, 255}
+	};
 
+	for (size_t
+			i = 0;
+			i != sizeof(gradient) / sizeof(gradient[0]);
+			++i)
 	{
-		// Correct Battlescape palette
-		const std::string
-			st1 = "GEODATA/PALETTES.DAT",
-			st2 = "PAL_BATTLESCAPE";
-		_palettes[st2] = new Palette();
-		_palettes[st2]->loadDat(
-							CrossPlatform::getDataFile(st1),
-							256,
-							Palette::palOffset(4));
-
-		SDL_Color gradient[] = // Last 16 colors are a greyish gradient
-		{
-			{140, 152, 148, 255},
-			{132, 136, 140, 255},
-			{116, 124, 132, 255},
-			{108, 116, 124, 255},
-			{ 92, 104, 108, 255},
-			{ 84,  92, 100, 255},
-			{ 76,  80,  92, 255},
-			{ 56,  68,  84, 255},
-			{ 48,  56,  68, 255},
-			{ 40,  48,  56, 255},
-			{ 32,  36,  48, 255},
-			{ 24,  28,  32, 255},
-			{ 16,  20,  24, 255},
-			{  8,  12,  16, 255},
-			{  3,   4,   8, 255},
-			{  3,   3,   6, 255}
-		};
-
-		for (size_t
-				i = 0;
-				i != sizeof(gradient) / sizeof(gradient[0]);
-				++i)
-		{
-			SDL_Color* const color = _palettes[st2]->getColors(Palette::backPos + 16 + i);
-			*color = gradient[i];
-		}
+		SDL_Color* const color = _palettes[st2]->getColors(Palette::backPos + 16 + i);
+		*color = gradient[i];
 	}
 
 

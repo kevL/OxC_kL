@@ -135,7 +135,9 @@ UfopaediaStartState::~UfopaediaStartState()
 void UfopaediaStartState::btnOkClick(Action*)
 {
 	kL_geoMusic = false;
+
 	_game->popState();
+	_game->getResourcePack()->fadeMusic(_game, 228);
 }
 
 /**
