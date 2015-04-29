@@ -65,9 +65,9 @@ private:
 
 		/// Gets the opacity.
 		Uint8 getOpacity()
-		{ return std::min(
-					(_opacity + 7) / 10,
-					3); }
+		{ return static_cast<Uint8>(std::min(
+										3,
+										(static_cast<int>(_opacity) + 7) / 10)); }
 
 		/// Gets the horizontal shift.
 		float getX()

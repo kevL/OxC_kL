@@ -138,9 +138,8 @@ TestState::~TestState()
 void TestState::think()
 {
 	State::think();
-
 /*	_text->setText(tr(_i));
-	_i++; */
+	++_i; */
 }
 
 /**
@@ -149,7 +148,6 @@ void TestState::think()
 void TestState::blit()
 {
 	State::blit();
-
 	_set->getFrame(0)->blit(_game->getScreen()->getSurface());
 }
 
@@ -165,13 +163,9 @@ SDL_Surface* TestState::testSurface()
 
 	surface = SDL_CreateRGBSurface(
 								SDL_HWSURFACE,
-								256,
-								25,
+								256,25,
 								8,
-								0,
-								0,
-								0,
-								0);
+								0,0,0,0);
 
 	if (surface == NULL)
 	{
@@ -188,7 +182,7 @@ SDL_Surface* TestState::testSurface()
 		for (int
 				i = 0;
 				i < 256;
-				i++,
+				++i,
 					++index)
 			*index = static_cast<Uint8>(i);
 

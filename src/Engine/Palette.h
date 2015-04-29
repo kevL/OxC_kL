@@ -36,7 +36,7 @@ class Palette
 {
 
 private:
-	int _count;
+	size_t _count;
 	SDL_Color* _colors;
 
 
@@ -51,17 +51,17 @@ private:
 
 		/// Loads the colors from an X-Com palette.
 		void loadDat(
-				const std::string& filename,
-				int ncolors,
+				const std::string& file,
+				int qColors,
 				int offset = 0);
 		/// Gets a certain color from the palette.
 		SDL_Color* getColors(int offset = 0) const;
 		///
-		void savePal(const std::string& file) const;
+//		void savePal(const std::string& file) const;
 		///
 		void setColors(
 				SDL_Color* pal,
-				int ncolors);
+				int qColors);
 		/// Converts a given color into a RGBA color value.
 		static Uint32 getRGBA(
 				SDL_Color* pal,

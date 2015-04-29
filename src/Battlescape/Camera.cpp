@@ -375,6 +375,7 @@ void Camera::scrollXY(
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
+	bool stop = false;
 	do
 	{
 		convertScreenToMap(
@@ -382,7 +383,6 @@ void Camera::scrollXY(
 					_visibleMapHeight / 2,
 					&_center.x,
 					&_center.y);
-
 		// Handling map bounds...
 		// Ok, this is a prototype, it should be optimized.
 		// Actually this should be calculated instead of slow-approximation.
@@ -390,7 +390,6 @@ void Camera::scrollXY(
 		{
 			_mapOffset.x -= 1;
 			_mapOffset.y -= 1;
-
 			continue;
 		}
 
@@ -398,7 +397,6 @@ void Camera::scrollXY(
 		{
 			_mapOffset.x += 1;
 			_mapOffset.y += 1;
-
 			continue;
 		}
 
@@ -406,7 +404,6 @@ void Camera::scrollXY(
 		{
 			_mapOffset.x += 1;
 			_mapOffset.y -= 1;
-
 			continue;
 		}
 
@@ -414,13 +411,12 @@ void Camera::scrollXY(
 		{
 			_mapOffset.x -= 1;
 			_mapOffset.y += 1;
-
 			continue;
 		}
 
-		break;
+		stop = true;
 	}
-	while (true);
+	while (stop == false);
 
 	_map->refreshSelectorPosition();
 

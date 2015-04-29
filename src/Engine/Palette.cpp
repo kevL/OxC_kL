@@ -28,7 +28,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a brand new palette.
+ * Initializes a brand new Palette.
  */
 Palette::Palette()
 	:
@@ -48,14 +48,14 @@ Palette::~Palette()
  * Loads an X-Com palette from a file. X-Com palettes are just a set
  * of RGB colors in a row, on a 0-63 scale, which have to be adjusted
  * for modern computers (0-255 scale).
- * @param filename	- reference the filename of the palette
- * @param ncolors	- number of colors in the palette
+ * @param file		- reference the filename of the palette
+ * @param qColors	- number of colors in the palette
  * @param offset	- position of the palette in the file in bytes (default 0)
  * @sa http://www.ufopaedia.org/index.php?title=PALETTES.DAT
  */
 void Palette::loadDat(
-		const std::string& filename,
-		int ncolors,
+		const std::string& file,
+		int qColors,
 		int offset)
 {
 	if (_colors != 0)
@@ -63,7 +63,7 @@ void Palette::loadDat(
 		throw Exception("loadDat can be run only once");
 	}
 
-	_count = ncolors;
+	_count = static_cast<size_t>(qColors);
 	_colors = new SDL_Color[_count];
 
 	std::memset(
@@ -72,10 +72,10 @@ void Palette::loadDat(
 			sizeof(SDL_Color) * _count);
 
 	// Load file and put colors in palette
-	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream palFile (file.c_str(), std::ios::in | std::ios::binary); // init.
 	if (palFile.fail() == true)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	// Move pointer to proper palette
@@ -83,7 +83,7 @@ void Palette::loadDat(
 
 	Uint8 value[3];
 
-	for (int // Correct X-Com colors to RGB colors
+	for (size_t // Correct X-Com colors to RGB colors
 			i = 0;
 			i < _count
 				&& palFile.read((char*)value, 3);
@@ -124,82 +124,83 @@ Uint32 Palette::getRGBA(
 }
 
 /**
- *
+ * Writes a palette file from TestState.
+ * @note Unused.
  * @param file - reference the file
  */
+/*
 void Palette::savePal(const std::string& file) const
 {
-	std::ofstream ofstr (file.c_str(), std::ios::out | std::ios::binary);
-	short colorQty = static_cast<short>(_count);
+	std::ofstream palFile (file.c_str(), std::ios::out | std::ios::binary); // init.
+	short qColors = static_cast<short>(_count);
 
-	ofstr << "RIFF"; // RIFF header
-	const int bytes = 4 + 4 + 4 + 4 + 2 + 2 + (static_cast<int>(colorQty) * 4);
-	ofstr.write(
-			(char*)& bytes,
-			sizeof(bytes));
-	ofstr << "PAL ";
+	palFile << "RIFF"; // RIFF header
+	const int bytes = 4 + 4 + 4 + 4 + 2 + 2 + (static_cast<int>(qColors) * 4);
+	palFile.write(
+				(char*)&bytes,
+				sizeof(bytes));
+	palFile << "PAL ";
 
-	ofstr << "data"; // Data chunk
-	const int data = (colorQty * 4) + 4;
-	ofstr.write(
-			(char*)& data,
-			sizeof(data));
+	palFile << "data"; // Data chunk
+	const int data = (qColors * 4) + 4;
+	palFile.write(
+				(char*)&data,
+				sizeof(data));
 	const short version = 0x0300;
-	ofstr.write(
-			(char*)& version,
-			sizeof(version));
-	ofstr.write(
-			(char*)& colorQty,
-			sizeof(colorQty));
+	palFile.write(
+				(char*)&version,
+				sizeof(version));
+	palFile.write(
+				(char*)&qColors,
+				sizeof(qColors));
 
 	SDL_Color* color = getColors(); // Colors
 	for (short
 			i = 0;
-			i < colorQty;
+			i != qColors;
 			++i)
 	{
-		char c = 0;
-		ofstr.write(
-				(char*)& color->r,
-				1);
-		ofstr.write(
-				(char*)& color->g,
-				1);
-		ofstr.write(
-				(char*)& color->b,
-				1);
-		ofstr.write(
-				&c,
-				1);
-
+		char ch = 0;
+		palFile.write(
+					(char*)&color->r,
+					1);
+		palFile.write(
+					(char*)&color->g,
+					1);
+		palFile.write(
+					(char*)&color->b,
+					1);
+		palFile.write(
+					&ch,
+					1);
 		++color;
 	}
 
-	ofstr.close();
-}
+	palFile.close();
+} */
 
 /**
  *
  * @param pal		- pointer to SDL_Color
- * @param ncolors	-
+ * @param qColors	-
  */
 void Palette::setColors(
 		SDL_Color* pal,
-		int ncolors)
+		int qColors)
 {
 	if (_colors != 0)
 	{
 		throw Exception("setColors can be run only once");
 	}
 
-	_count = ncolors;
+	_count = static_cast<size_t>(qColors);
 	_colors = new SDL_Color[_count];
 	std::memset(
 			_colors,
 			0,
 			sizeof(SDL_Color) * _count);
 
-	for (int // Correct X-Com colors to RGB colors
+	for (size_t // Correct X-Com colors to RGB colors
 			i = 0;
 			i < _count;
 			++i)

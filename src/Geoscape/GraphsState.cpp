@@ -1966,7 +1966,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 
 			newLineVector.push_back(y);
 
-			if (btn %2 != 0)
+			if (btn % 2 != 0)
 				color = 8;
 			else
 				color = 0;

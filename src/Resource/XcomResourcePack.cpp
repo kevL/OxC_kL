@@ -219,6 +219,15 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	/* PALETTES */
 	Log(LOG_INFO) << "Loading palettes ...";
 
+	std::string
+		st1 = "GEODATA/BACKPALS.DAT",
+		st2 = "BACKPALS.DAT";
+
+	_palettes[st2] = new Palette();
+	_palettes[st2]->loadDat(
+						CrossPlatform::getDataFile(st1),
+						128);
+
 	const char* pal[] = // Load palettes
 	{
 		"PAL_GEOSCAPE",
@@ -228,16 +237,12 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		"PAL_BATTLEPEDIA"
 	};
 
-	std::string
-		st1,
-		st2;
-
+	st1 = "GEODATA/PALETTES.DAT";
 	for (size_t
 			i = 0;
 			i != sizeof(pal) / sizeof(pal[0]);
 			++i)
 	{
-		st1 = "GEODATA/PALETTES.DAT";
 		_palettes[pal[i]] = new Palette();
 		_palettes[pal[i]]->loadDat(
 								CrossPlatform::getDataFile(st1),
@@ -245,15 +250,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 								Palette::palOffset(i));
 	}
 
-	st1 = "GEODATA/BACKPALS.DAT";
-	st2 = "BACKPALS.DAT";
-	_palettes[st2] = new Palette();
-	_palettes[st2]->loadDat(
-						CrossPlatform::getDataFile(st1),
-						128);
-
-	st1 = "GEODATA/PALETTES.DAT"; // correct Battlescape palette
-	st2 = "PAL_BATTLESCAPE";
+	st2 = "PAL_BATTLESCAPE"; // correct Battlescape palette
 	_palettes[st2] = new Palette();
 	_palettes[st2]->loadDat(
 						CrossPlatform::getDataFile(st1),
@@ -285,8 +282,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			i != sizeof(gradient) / sizeof(gradient[0]);
 			++i)
 	{
-		SDL_Color* const color = _palettes[st2]->getColors(Palette::backPos + 16 + i);
-		*color = gradient[i];
+		SDL_Color* const colors = _palettes[st2]->getColors(Palette::backPos + 16 + i);
+		*colors = gradient[i];
 	}
 
 

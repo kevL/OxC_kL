@@ -956,7 +956,7 @@ void Projectile::addVaporCloud()
 												static_cast<float>(voxelPos.y - tilePos.y + RNG::generate(0,4) - 2),
 												static_cast<float>(RNG::seedless(48,224)),
 												static_cast<Uint8>(_vaporColor),
-												RNG::seedless(32,44));
+												static_cast<Uint8>(RNG::seedless(32,44)));
 			tile->addParticle(particle);
 		}
 	}

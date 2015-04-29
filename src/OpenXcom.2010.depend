@@ -4372,7 +4372,7 @@
 	"OptionInfo.h"
 	"Options.inc.h"
 
-1430149550 f:\git\openxcom\src\engine\palette.h
+1430343499 f:\git\openxcom\src\engine\palette.h
 
 1430149550 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
@@ -5832,7 +5832,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\camera.cpp
+1430344790 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6654,7 +6654,7 @@
 
 1430149550 f:\git\openxcom\src\version.h
 
-1430149550 source:f:\git\openxcom\src\engine\palette.cpp
+1430343491 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 
 1430168895 source:f:\git\openxcom\src\engine\rng.cpp
@@ -8035,7 +8035,7 @@
 	"../Interface/Text.h"
 	"../Resource/XcomResourcePack.h"
 
-1430149550 source:f:\git\openxcom\src\menu\teststate.cpp
+1430343633 source:f:\git\openxcom\src\menu\teststate.cpp
 	"TestState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -8429,7 +8429,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1430331051 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1430343801 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Battlescape/Position.h"
 	"../Engine/Language.h"
@@ -9099,7 +9099,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1430261941 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
+1430337235 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
 	"UfopaediaStartState.h"
 	"Ufopaedia.h"
 	"UfopaediaSelectState.h"
@@ -11218,7 +11218,7 @@
 	"Particle.h"
 	"Position.h"
 
-1430169070 f:\git\openxcom\src\battlescape\particle.h
+1430345621 f:\git\openxcom\src\battlescape\particle.h
 
 1430149550 f:\git\openxcom\src\ruleset\mapscript.h
 	"MapBlock.h"
