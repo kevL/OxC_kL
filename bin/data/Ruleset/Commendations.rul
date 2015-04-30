@@ -105,7 +105,7 @@ extraStrings:
       STR_MEDAL_SECTOPOD_KILL_MEDAL_DESCRIPTION: "Given to a soldier that kills the most fearsome enemy construct: The Sectopod!"
 ## kL_added Awards ##
       STR_MEDAL_BADGE_OF_ASCLEPIUS_NAME: "Tokena of Asclepius"
-      STR_MEDAL_BADGE_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has given medical attention to others."
+      STR_MEDAL_BADGE_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has provided medical assistance."
       STR_AWARD_0: "1st"
       STR_AWARD_1: "2nd"
       STR_AWARD_2: "3rd"
@@ -179,6 +179,7 @@ extraStrings:
       STR_TANK: "Tank"
       STR_HEAVY_WEAPONS_PLATFORM_LC: "HWP"
       STR_KIA: "KIA"
+      STR_MIA: "MIA"
 # Ruleset for diary and commendations mod
 # When stats reach the criteria threshold, the commendation is awarded
 # Any vector greater than 10 will require more strings and more sprites decorations.

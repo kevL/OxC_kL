@@ -5934,6 +5934,7 @@ extraStrings:
       STR_ALIENS_PACIFIED: "The aLien Incursion{NEWLINE}{NEWLINE}Pacified"
       STR_SQUAD_: "base> {0}"
       STR_2HAND: "2h"
+      STR_LOST: "Lost Agents"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

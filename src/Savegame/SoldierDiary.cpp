@@ -1128,6 +1128,7 @@ std::vector<BattleUnitKills*>& SoldierDiary::getKills()
 
 /**
  * Gets list of kills by rank.
+ * @return, map of alien ranks to qty killed
  */
 std::map<std::string, int> SoldierDiary::getAlienRankTotal() const
 {
@@ -1146,6 +1147,7 @@ std::map<std::string, int> SoldierDiary::getAlienRankTotal() const
 
 /**
  * Gets list of kills by race.
+ * @return, map of alien races to qty killed
  */
 std::map<std::string, int> SoldierDiary::getAlienRaceTotal() const
 {
@@ -1163,6 +1165,7 @@ std::map<std::string, int> SoldierDiary::getAlienRaceTotal() const
 }
 /**
  * Gets list of kills by weapon.
+ * @return, map of weapons to qty killed with
  */
 std::map<std::string, int> SoldierDiary::getWeaponTotal() const
 {
@@ -1181,6 +1184,7 @@ std::map<std::string, int> SoldierDiary::getWeaponTotal() const
 
 /**
  * Gets list of kills by ammo.
+ * @return, map of ammos to qty killed with
  */
 std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal() const
 {
@@ -1199,6 +1203,7 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal() const
 
 /**
  * Gets a list of quantity of missions done in a region.
+ * @return, address of a map of regions to missions done there
  */
 std::map<std::string, int>& SoldierDiary::getRegionTotal()
 {
@@ -1207,6 +1212,7 @@ std::map<std::string, int>& SoldierDiary::getRegionTotal()
 
 /**
  * Gets a list of quantity of missions done in a country.
+ * @return, address of a map of countries to missions done there
  */
 std::map<std::string, int>& SoldierDiary::getCountryTotal()
 {
@@ -1215,6 +1221,7 @@ std::map<std::string, int>& SoldierDiary::getCountryTotal()
 
 /**
  * Gets a list of quantity of missions done of a mission-type.
+ * @return, address of a map of mission types to qty
  */
 std::map<std::string, int>& SoldierDiary::getTypeTotal()
 {
@@ -1223,6 +1230,7 @@ std::map<std::string, int>& SoldierDiary::getTypeTotal()
 
 /**
  * Gets a list of quantity of missions done of a UFO-type
+ * @return, address of a map of UFO types to qty
  */
 std::map<std::string, int>& SoldierDiary::getUFOTotal()
 {
@@ -1231,6 +1239,7 @@ std::map<std::string, int>& SoldierDiary::getUFOTotal()
 
 /**
  * Gets a total score for all missions.
+ * @return, sum score of all missions engaged
  */
 int SoldierDiary::getScoreTotal() const
 {
@@ -1239,6 +1248,7 @@ int SoldierDiary::getScoreTotal() const
 
 /**
  * Gets the total point-value of aLiens killed or stunned.
+ * @return, sum points for all aliens killed or stunned
  */
 int SoldierDiary::getScorePoints() const
 {
@@ -1247,6 +1257,7 @@ int SoldierDiary::getScorePoints() const
 
 /**
  * Gets the total quantity of kills.
+ * @return, qty of kills
  */
 int SoldierDiary::getKillTotal() const
 {
@@ -1255,6 +1266,7 @@ int SoldierDiary::getKillTotal() const
 
 /**
  * Gets the total quantity of stuns.
+ * @return, qty of stuns
  */
 int SoldierDiary::getStunTotal() const
 {
@@ -1263,6 +1275,7 @@ int SoldierDiary::getStunTotal() const
 
 /**
  * Gets the total quantity of missions.
+ * @return, qty of missions
  */
 int SoldierDiary::getMissionTotal() const
 {
@@ -1271,6 +1284,7 @@ int SoldierDiary::getMissionTotal() const
 
 /**
  * Gets the quantity of successful missions.
+ * @return, qty of successful missions
  */
 int SoldierDiary::getWinTotal() const
 {
@@ -1279,10 +1293,26 @@ int SoldierDiary::getWinTotal() const
 
 /**
  * Gets the total quantity of days wounded.
+ * @return, qty of days in sickbay
  */
 int SoldierDiary::getDaysWoundedTotal() const
 {
 	return _daysWoundedTotal;
+}
+
+/**
+ * Gets whether soldier died or went missing.
+ * @return, kia or mia - or an empty string if neither
+ */
+std::string SoldierDiary::getKiaOrMia() const
+{
+	if (_KIA != 0)
+		return "STR_KIA";
+
+	if (_MIA != 0)
+		return "STR_MIA";
+
+	return "";
 }
 
 /**

@@ -420,9 +420,12 @@ DebriefingState::DebriefingState()
 				}
 
 				// note: Safety on *deadSoldier should not be needed.
-//				statistics->KIA = true;
 				statistics->daysWounded = 0;
-				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
+
+				if (statistics->KIA == true)
+					_missionStatistics->injuryList[deadSoldier->getId()] = -1;
+				else // MIA
+					_missionStatistics->injuryList[deadSoldier->getId()] = -2;
 
 				deadSoldier->getDiary()->updateDiary(
 												statistics,

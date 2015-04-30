@@ -5869,7 +5869,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1430430410 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1430433162 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -11013,7 +11013,7 @@
 	"BattleState.h"
 	"../Savegame/SavedGame.h"
 
-1430424124 f:\git\openxcom\src\savegame\soldierdiary.h
+1430434770 f:\git\openxcom\src\savegame\soldierdiary.h
 	"BattleUnit.h"
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
@@ -11021,7 +11021,7 @@
 1430393957 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1430433367 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11101,7 +11101,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1430424804 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1430435064 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
@@ -11397,7 +11397,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1430149550 f:\git\openxcom\src\battlescape\commendationdeadstate.h
+1430432039 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
 1430149550 source:f:\git\openxcom\src\engine\flcplayer.cpp

@@ -198,6 +198,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 		if (daysWounded == -1)
 			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(tr("STR_KIA")).arg(L""));
+		else if (daysWounded == -2)
+			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(tr("STR_MIA")).arg(L""));
 		else
 			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded).arg(L" dy"));
 	}
@@ -205,8 +207,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
 	_lstKills->setColumns(3, 27, 96, 94);
-//	_lstKills->setSelectable(false);
 //	_lstKills->setBackground(_window);
+//	_lstKills->setSelectable(false);
 
 	int
 		killQty = 0,

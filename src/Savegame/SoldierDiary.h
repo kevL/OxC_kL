@@ -204,6 +204,8 @@ private:
 		int getWinTotal() const;
 		/// Gets the total number of days wounded.
 		int getDaysWoundedTotal() const;
+		/// Gets whether soldier died or went missing.
+		std::string getKiaOrMia() const;
 
 		/// Gets the solder's commendations.
 		std::vector<SoldierCommendations*>* getSoldierCommendations();

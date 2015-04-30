@@ -34,7 +34,7 @@ class Window;
 
 
 /**
- * Medals screen that displays KIA soldier medals.
+ * Medals screen that displays Lost Soldier medals.
  */
 class CommendationDeadState
 	:
@@ -48,7 +48,7 @@ private:
 		* _txtTitle;
 	TextButton* _btnOk;
 	TextList
-		* _lstKIA,
+		* _lstLost,
 		* _lstSoldiers;
 	Window* _window;
 
@@ -57,7 +57,7 @@ private:
 
 	public:
 		/// Creates the Medals state.
-		CommendationDeadState(std::vector<SoldierDead*> soldiersKIA);
+		CommendationDeadState(std::vector<SoldierDead*> soldiersLost);
 		/// Cleans up the Medals state.
 		~CommendationDeadState();
 
