@@ -233,6 +233,7 @@ struct BattleUnitStatistics
 		ironMan,		// Tracks if the soldier was the only soldier on the mission
 		KIA,			// Tracks if the soldier was killed in battle
 		loneSurvivor,	// Tracks if the soldier was the only survivor
+		MIA,			// Tracks if the soldier was left behind :(
 		nikeCross,		// Tracks if a soldier killed every alien
 		wasUnconscious;	// Tracks if the soldier fell unconscious
 
@@ -370,7 +371,8 @@ struct BattleUnitStatistics
 			shotsLandedCounter(0),
 			KIA(false),
 			nikeCross(false),
-			medikitApplications(0)
+			medikitApplications(0),
+			MIA(false)
 //			kills()
 	{}
 

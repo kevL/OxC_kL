@@ -124,7 +124,8 @@ private:
 		_trapKillTotal,
 		_alienBaseAssaultTotal,
 		_allAliensKilledTotal,
-		_mediApplicationsTotal;
+		_mediApplicationsTotal,
+		_MIA;
 
 	std::vector<int> _missionIdList;
 	std::vector<SoldierCommendations*> _awards;
@@ -159,7 +160,7 @@ private:
 		~SoldierDiary();
 
 		/// Overloads assignment operator.
-		SoldierDiary& operator=(const SoldierDiary& assignThis);
+		SoldierDiary& operator= (const SoldierDiary& assignThis);
 
 		/// Load a diary.
 		void load(const YAML::Node& node);

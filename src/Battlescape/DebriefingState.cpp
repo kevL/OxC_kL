@@ -90,7 +90,7 @@ namespace OpenXcom
 DebriefingState::DebriefingState()
 	:
 		_rules(_game->getRuleset()),
-		_savedGame(_game->getSavedGame()),
+		_gameSave(_game->getSavedGame()),
 		_region(NULL),
 		_country(NULL),
 		_noContainment(false),
@@ -112,8 +112,8 @@ DebriefingState::DebriefingState()
 	// ( was done in ~BattlescapeGame, but that causes CTD under reLoad situation )
 	// Now done here and in NextTurnState. (not ideal: should find a safe place
 	// when BattlescapeGame is really dTor'd, and not reLoaded ...... ) uh, i guess.
-//	if (_savedGame->getSavedBattle()->getBattleGame())
-	_savedGame->getSavedBattle()->getBattleGame()->cleanupDeleted();
+//	if (_gameSave->getSavedBattle()->getBattleGame())
+	_gameSave->getSavedBattle()->getBattleGame()->cleanupDeleted();
 
 
 	_missionStatistics = new MissionStatistics();
@@ -281,7 +281,7 @@ DebriefingState::DebriefingState()
 	{
 		if (_destroyXCOMBase == true)
 		{
-			const int diff = static_cast<int>(_savedGame->getDifficulty()) + 1;
+			const int diff = static_cast<int>(_gameSave->getDifficulty()) + 1;
 			_region->addActivityAlien(diff * 235);
 			_region->recentActivity();
 		}
@@ -296,7 +296,7 @@ DebriefingState::DebriefingState()
 	{
 		if (_destroyXCOMBase == true)
 		{
-			const int diff = static_cast<int>(_savedGame->getDifficulty()) + 1;
+			const int diff = static_cast<int>(_gameSave->getDifficulty()) + 1;
 			_country->addActivityAlien(diff * 235);
 			_country->recentActivity();
 		}
@@ -351,9 +351,9 @@ DebriefingState::DebriefingState()
 
 
 	// Soldier Diary ->
-	SavedBattleGame* const battle = _savedGame->getSavedBattle();
+	SavedBattleGame* const battle = _gameSave->getSavedBattle();
 
-	_missionStatistics->id = _savedGame->getMissionStatistics()->size();
+	_missionStatistics->id = _gameSave->getMissionStatistics()->size();
 	_missionStatistics->shade = battle->getGlobalShade();
 
 	//Log(LOG_INFO) << "DebriefingState::cTor";
@@ -364,7 +364,7 @@ DebriefingState::DebriefingState()
 	{
 		//Log(LOG_INFO) << ". iter BattleUnits";
 		Soldier* soldier = (*i)->getGeoscapeSoldier();
-		// NOTE: In the case of a dead soldier, this pointer is Valid but points to garbage.
+		// NOTE: In the case of a dead soldier this pointer is Valid but points to garbage.
 		// Use that.
 		if (soldier != NULL)
 		{
@@ -389,7 +389,7 @@ DebriefingState::DebriefingState()
 			// NOTE: This can still be exploited by MC'ing and
 			// executing a bunch of aLiens with a single Soldier.
 			if (_aliensControlled == 0
-				&& _aliensKilled + _aliensStunned > 3 + static_cast<int>(_savedGame->getDifficulty())
+				&& _aliensKilled + _aliensStunned > 3 + static_cast<int>(_gameSave->getDifficulty())
 				&& _aliensKilled + _aliensStunned == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{
@@ -408,8 +408,8 @@ DebriefingState::DebriefingState()
 				SoldierDead* deadSoldier;
 
 				for (std::vector<SoldierDead*>::const_iterator
-						j = _savedGame->getDeadSoldiers()->begin();
-						j != _savedGame->getDeadSoldiers()->end();
+						j = _gameSave->getDeadSoldiers()->begin();
+						j != _gameSave->getDeadSoldiers()->end();
 						++j)
 				{
 					if ((*j)->getId() == (*i)->getId())
@@ -420,7 +420,7 @@ DebriefingState::DebriefingState()
 				}
 
 				// note: Safety on *deadSoldier should not be needed.
-				statistics->KIA = true;
+//				statistics->KIA = true;
 				statistics->daysWounded = 0;
 				_missionStatistics->injuryList[deadSoldier->getId()] = -1;
 
@@ -429,7 +429,7 @@ DebriefingState::DebriefingState()
 												_missionStatistics,
 												_rules);
 				deadSoldier->getDiary()->manageAwards(_rules);
-				_soldiersKIA.push_back(deadSoldier);
+				_soldiersLost.push_back(deadSoldier);
 			}
 			else
 			{
@@ -443,12 +443,12 @@ DebriefingState::DebriefingState()
 											_missionStatistics,
 											_rules);
 				if (soldier->getDiary()->manageAwards(_rules) == true)
-					_soldiersCommended.push_back(soldier);
+					_soldiersMedalled.push_back(soldier);
 			}
 		}
 	}
 
-	_savedGame->getMissionStatistics()->push_back(_missionStatistics);
+	_gameSave->getMissionStatistics()->push_back(_missionStatistics);
 	// Soldier Diary_end.
 
 
@@ -464,7 +464,7 @@ DebriefingState::DebriefingState()
 DebriefingState::~DebriefingState()
 {
 	if (_game->isQuitting() == true)
-		_savedGame->setBattleGame(NULL);
+		_gameSave->setBattleGame(NULL);
 
 	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
@@ -496,18 +496,18 @@ void DebriefingState::btnOkClick(Action*)
 
 	std::vector<Soldier*> participants;
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _savedGame->getSavedBattle()->getUnits()->begin();
-			i != _savedGame->getSavedBattle()->getUnits()->end();
+			i = _gameSave->getSavedBattle()->getUnits()->begin();
+			i != _gameSave->getSavedBattle()->getUnits()->end();
 			++i)
 	{
 		if ((*i)->getGeoscapeSoldier() != NULL)
 			participants.push_back((*i)->getGeoscapeSoldier());
 	}
 
-	_savedGame->setBattleGame(NULL);
+	_gameSave->setBattleGame(NULL);
 	_game->popState();
 
-	if (_savedGame->getMonthsPassed() == -1)
+	if (_gameSave->getMonthsPassed() == -1)
 		_game->setState(new MainMenuState());
 	else
 	{
@@ -515,19 +515,19 @@ void DebriefingState::btnOkClick(Action*)
 		{
 			bool playAwardMusic = false;
 
-			if (_soldiersKIA.empty() == false)
+			if (_soldiersLost.empty() == false)
 			{
 				playAwardMusic = true;
-				_game->pushState(new CommendationDeadState(_soldiersKIA));
+				_game->pushState(new CommendationDeadState(_soldiersLost));
 			}
 
-			if (_soldiersCommended.empty() == false)
+			if (_soldiersMedalled.empty() == false)
 			{
 				playAwardMusic = true;
-				_game->pushState(new CommendationState(_soldiersCommended));
+				_game->pushState(new CommendationState(_soldiersMedalled));
 			}
 
-			if (_savedGame->handlePromotions(participants) == true)
+			if (_gameSave->handlePromotions(participants) == true)
 			{
 				playAwardMusic = true;
 				_game->pushState(new PromotionsState());
@@ -585,7 +585,7 @@ void DebriefingState::btnOkClick(Action*)
 				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 		}
 
-		if (_savedGame->isIronman() == true) // Autosave after mission
+		if (_gameSave->isIronman() == true) // Autosave after mission
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN,
@@ -719,7 +719,7 @@ void DebriefingState::prepareDebriefing()
 									_rules->getAlienFuel(),
 									true));
 
-	SavedBattleGame* const battleSave = _savedGame->getSavedBattle();
+	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
 
 	const bool aborted = battleSave->isAborted();
 	bool missionAccomplished = !aborted;
@@ -730,8 +730,17 @@ void DebriefingState::prepareDebriefing()
 	std::vector<Craft*>::const_iterator craftIterator;
 
 
-	_missionStatistics->time = *_savedGame->getTime();
+	_missionStatistics->time = *_gameSave->getTime();
 	_missionStatistics->type = battleSave->getMissionType();
+
+	if (_gameSave->getMonthsPassed() != -1) // Do all aLienRace types here for SoldierDiary stat.
+	{
+		if (battleSave->getAlienRace().empty() == false) // safety.
+			_missionStatistics->alienRace = battleSave->getAlienRace();
+		else
+			_missionStatistics->alienRace = "STR_UNKNOWN";
+	}
+
 
 	int
 		soldierExit = 0, // if this stays 0 the craft is lost...
@@ -740,8 +749,8 @@ void DebriefingState::prepareDebriefing()
 		soldierOut = 0;
 
 	for (std::vector<Base*>::const_iterator
-			i = _savedGame->getBases()->begin();
-			i != _savedGame->getBases()->end();
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end();
 			++i)
 	{
 		for (std::vector<Craft*>::const_iterator // in case there is a craft - check which craft it is about
@@ -756,8 +765,8 @@ void DebriefingState::prepareDebriefing()
 					craftLat = (*j)->getLatitude();
 
 				for (std::vector<Region*>::const_iterator
-						k = _savedGame->getRegions()->begin();
-						k != _savedGame->getRegions()->end();
+						k = _gameSave->getRegions()->begin();
+						k != _gameSave->getRegions()->end();
 						++k)
 				{
 					if ((*k)->getRules()->insideRegion(
@@ -771,8 +780,8 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				for (std::vector<Country*>::const_iterator
-						k = _savedGame->getCountries()->begin();
-						k != _savedGame->getCountries()->end();
+						k = _gameSave->getCountries()->begin();
+						k != _gameSave->getCountries()->end();
 						++k)
 				{
 					if ((*k)->getRules()->insideCountry(
@@ -812,8 +821,8 @@ void DebriefingState::prepareDebriefing()
 				baseLat = base->getLatitude();
 
 			for (std::vector<Region*>::const_iterator
-					k = _savedGame->getRegions()->begin();
-					k != _savedGame->getRegions()->end();
+					k = _gameSave->getRegions()->begin();
+					k != _gameSave->getRegions()->end();
 					++k)
 			{
 				if ((*k)->getRules()->insideRegion(
@@ -827,8 +836,8 @@ void DebriefingState::prepareDebriefing()
 			}
 
 			for (std::vector<Country*>::const_iterator
-					k = _savedGame->getCountries()->begin();
-					k != _savedGame->getCountries()->end();
+					k = _gameSave->getCountries()->begin();
+					k != _gameSave->getCountries()->end();
 					++k)
 			{
 				if ((*k)->getRules()->insideCountry(
@@ -874,23 +883,16 @@ void DebriefingState::prepareDebriefing()
 	_baseLabel = _base->getName(_game->getLanguage());
 
 
-	// Do all aLienRace types here for SoldierDiary stat.
-	if (_savedGame->getMonthsPassed() != -1)
-	{
-		if (battleSave->getAlienRace().empty() == false) // safety.
-			_missionStatistics->alienRace = battleSave->getAlienRace();
-		else
-			_missionStatistics->alienRace = "STR_UNKNOWN";
-	}
+	bool found = false;
 
-
-	for (std::vector<Ufo*>::const_iterator // UFO crash/landing site disappears
-			i = _savedGame->getUfos()->begin();
-			i != _savedGame->getUfos()->end();
+	for (std::vector<Ufo*>::const_iterator // First search for UFO.
+			i = _gameSave->getUfos()->begin();
+			i != _gameSave->getUfos()->end();
 			++i)
 	{
 		if ((*i)->isInBattlescape() == true)
 		{
+			found = true;
 			(*i)->setInBattlescape(false);
 
 			_missionStatistics->ufo = (*i)->getRules()->getType();
@@ -904,51 +906,61 @@ void DebriefingState::prepareDebriefing()
 //				|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
 			{
 				delete *i;
-				_savedGame->getUfos()->erase(i); // UFO disappears.
+				_gameSave->getUfos()->erase(i); // UFO crash/landing site disappears
 			}
 
 			break;
 		}
 	}
 
-	for (std::vector<MissionSite*>::const_iterator // mission site disappears even when aborted
-			i = _savedGame->getMissionSites()->begin();
-			i != _savedGame->getMissionSites()->end();
-			++i)
+	if (found == false)
 	{
-		if ((*i)->isInBattlescape() == true)
+		for (std::vector<MissionSite*>::const_iterator // Second search for MissionSite.
+				i = _gameSave->getMissionSites()->begin();
+				i != _gameSave->getMissionSites()->end();
+				++i)
 		{
-			delete *i;
-			_savedGame->getMissionSites()->erase(i);
+			if ((*i)->isInBattlescape() == true)
+			{
+				found = true;
 
-			break;
+				delete *i;
+				_gameSave->getMissionSites()->erase(i); // Mission Site disappears even if aborted
+
+				break;
+			}
 		}
 	}
 
+
 	// lets see what happens with units; first,
-	// we evaluate how many surviving XCom units there are,
+	// evaluate how many surviving XCom units there are
 	// and if they are unconscious
-	// and how many have died for commendations
+	// and how many have died, for Commendations Ceremony.
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battleSave->getUnits()->begin();
 			i != battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getOriginalFaction() == FACTION_PLAYER
-			&& (*i)->getStatus() != STATUS_DEAD)
+		if ((*i)->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-				|| (*i)->getFaction() == FACTION_HOSTILE)
+			if ((*i)->getStatus() != STATUS_DEAD)
 			{
-				++soldierOut;
-			}
+				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
+					|| (*i)->getFaction() == FACTION_HOSTILE)
+				{
+					++soldierOut;
+				}
 
-			++soldierLive;
-		}
-		else if ((*i)->getOriginalFaction() == FACTION_PLAYER
-			&& (*i)->getStatus() == STATUS_DEAD)
-		{
-			++soldierDead;
+				++soldierLive;
+			}
+			else // -> STATUS_DEAD
+			{
+				++soldierDead;
+
+				if ((*i)->getGeoscapeSoldier() != NULL)
+					(*i)->getStatistics()->KIA = true;
+			}
 		}
 	}
 
@@ -966,6 +978,9 @@ void DebriefingState::prepareDebriefing()
 				&& (*i)->getStatus() != STATUS_DEAD)
 			{
 				(*i)->instaKill();
+
+				if ((*i)->getGeoscapeSoldier() != NULL)
+					(*i)->getStatistics()->MIA = true;
 			}
 		}
 	}
@@ -983,7 +998,7 @@ void DebriefingState::prepareDebriefing()
 				// if only one soldier survived AND none have died, means only one soldier went on the mission...
 				if (soldierDead == 0
 					&& _aliensControlled == 0
-					&& _aliensKilled + _aliensStunned > 1 + static_cast<int>(_savedGame->getDifficulty())
+					&& _aliensKilled + _aliensStunned > 1 + static_cast<int>(_gameSave->getDifficulty())
 					&& aborted == false)
 				{
 					(*i)->getStatistics()->ironMan = true;
@@ -1000,65 +1015,69 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+
 	const std::string& mission = battleSave->getMissionType();
 
-	// alien base disappears (if not aborted)
-	if (mission == "STR_ALIEN_BASE_ASSAULT")
+	if (found == false)
 	{
-		_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
-		bool destroyAlienBase = true;
-
-		if (aborted == true
-			|| soldierLive == 0)
+		if (mission == "STR_ALIEN_BASE_ASSAULT") // alien base disappears (if not aborted)
 		{
-			for (int
-					i = 0;
-					i < battleSave->getMapSizeXYZ();
-					++i)
+			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
+			bool destroyAlienBase = true;
+
+			if (aborted == true
+				|| soldierLive == 0)
 			{
-				if (battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
-					&& battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+				for (size_t
+						i = 0;
+						i != static_cast<size_t>(battleSave->getMapSizeXYZ());
+						++i)
 				{
-					destroyAlienBase = false;
-					break;
+					if (   battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
+						&& battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+					{
+						destroyAlienBase = false;
+						break;
+					}
 				}
 			}
-		}
 
-		missionAccomplished = destroyAlienBase;
+			missionAccomplished = destroyAlienBase;
 
-		for (std::vector<AlienBase*>::const_iterator
-				i = _savedGame->getAlienBases()->begin();
-				i != _savedGame->getAlienBases()->end();
-				++i)
-		{
-			if ((*i)->isInBattlescape() == true)
+			for (std::vector<AlienBase*>::const_iterator // Third search for AlienBase.
+					i = _gameSave->getAlienBases()->begin();
+					i != _gameSave->getAlienBases()->end();
+					++i)
 			{
-				if (destroyAlienBase == true)
+				if ((*i)->isInBattlescape() == true)
 				{
-					addStat(
-						"STR_ALIEN_BASE_CONTROL_DESTROYED",
-						300);
+					if (destroyAlienBase == true)
+					{
+						const int pts = std::max(
+											50,
+											500 - static_cast<int>(_gameSave->getDifficulty() * 50));
+						addStat(
+							"STR_ALIEN_BASE_CONTROL_DESTROYED",
+							pts);
 
-					// Take care to remove supply missions for this base.
-					std::for_each(
-							_savedGame->getAlienMissions().begin(),
-							_savedGame->getAlienMissions().end(),
-							ClearAlienBase(*i));
+						// Take care to remove supply missions for this base.
+						std::for_each(
+								_gameSave->getAlienMissions().begin(),
+								_gameSave->getAlienMissions().end(),
+								ClearAlienBase(*i));
 
-					delete *i;
-					_savedGame->getAlienBases()->erase(i);
+						delete *i;
+						_gameSave->getAlienBases()->erase(i);
+					}
+					else
+						(*i)->setInBattlescape(false);
 
-					break;
-				}
-				else
-				{
-					(*i)->setInBattlescape(false);
 					break;
 				}
 			}
 		}
 	}
+
 
 	// time to care about units.
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1110,8 +1129,8 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (origFaction == FACTION_PLAYER)
 			{
-				const Soldier* const soldier = _savedGame->getSoldier((*i)->getId());
-				if (soldier != NULL) // xCom soldier.
+				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
+				if (sol != NULL) // xCom soldier.
 				{
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
@@ -1122,11 +1141,11 @@ void DebriefingState::prepareDebriefing()
 							j != base->getSoldiers()->end();
 							++j)
 					{
-						if (*j == soldier) // the specific soldier at Base..
+						if (*j == sol) // the specific soldier at Base..
 						{
 							(*i)->updateGeoscapeStats(*j);
 
-							(*j)->die(_savedGame);
+							(*j)->die(_gameSave);
 
 							delete *j;
 							base->getSoldiers()->erase(j);
@@ -1167,26 +1186,26 @@ void DebriefingState::prepareDebriefing()
 
 			if (origFaction == FACTION_PLAYER)
 			{
-				const Soldier* const soldier = _savedGame->getSoldier((*i)->getId());
+				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 
 				if (aborted == false					// so game is not aborted
 					|| ((*i)->isInExitArea() == true	// or aborted and unit is on exit area
 						&& (missionAccomplished == true
 							|| mission != "STR_BASE_DEFENSE")))
 				{
-					(*i)->postMissionProcedures(_savedGame);
+					(*i)->postMissionProcedures(_gameSave);
 
 					++soldierExit;
 
-					if (soldier != NULL)
+					if (sol != NULL)
 					{
 						recoverItems(
 								(*i)->getInventory(),
 								base);
-//						soldier->calcStatString( // calculate new statString
-//											_rules->getStatStrings(),
-//											Options::psiStrengthEval
-//												&& _savedGame->isResearched(_rules->getPsiRequirements()));
+//						sol->calcStatString( // calculate new statString
+//										_rules->getStatStrings(),
+//										Options::psiStrengthEval
+//											&& _gameSave->isResearched(_rules->getPsiRequirements()));
 					}
 					else // not soldier -> tank
 					{
@@ -1234,19 +1253,20 @@ void DebriefingState::prepareDebriefing()
 						"STR_XCOM_OPERATIVES_MISSING_IN_ACTION",
 						-value);
 
-					if (soldier != NULL)
+					if (sol != NULL)
 					{
 						for (std::vector<Soldier*>::const_iterator
 								j = base->getSoldiers()->begin();
 								j != base->getSoldiers()->end();
 								++j)
 						{
-							if (*j == soldier)
+							if (*j == sol)
 							{
+								(*i)->getStatistics()->MIA = true;
+								(*i)->instaKill();
 								(*i)->updateGeoscapeStats(*j);
-								(*i)->setStatus(STATUS_DEAD);
 
-								(*j)->die(_savedGame);
+								(*j)->die(_gameSave);
 
 								delete *j;
 								base->getSoldiers()->erase(j);
@@ -1283,8 +1303,8 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				recoverLiveAlien(
-						*i,
-						base);
+							*i,
+							base);
 			}
 			else if (origFaction == FACTION_NEUTRAL)
 			{
@@ -1549,17 +1569,17 @@ void DebriefingState::prepareDebriefing()
 
 			base->getVehicles()->clear();
 		}
-		else if (_savedGame->getMonthsPassed() != -1)
+		else if (_gameSave->getMonthsPassed() != -1)
 		{
 			for (std::vector<Base*>::const_iterator
-					i = _savedGame->getBases()->begin();
-					i != _savedGame->getBases()->end();
+					i = _gameSave->getBases()->begin();
+					i != _gameSave->getBases()->end();
 					++i)
 			{
 				if (*i == base)
 				{
 					delete *i;
-					_savedGame->getBases()->erase(i);
+					_gameSave->getBases()->erase(i);
 
 					break;
 				}
@@ -1572,28 +1592,28 @@ void DebriefingState::prepareDebriefing()
 																			_region->getRules()->getType(),
 																			OBJECTIVE_RETALIATION);
 			for (std::vector<Ufo*>::const_iterator
-					i = _savedGame->getUfos()->begin();
-					i != _savedGame->getUfos()->end();
+					i = _gameSave->getUfos()->begin();
+					i != _gameSave->getUfos()->end();
 					)
 			{
 				if ((*i)->getMission() == am) // dynamic_cast ?
 				{
 					delete *i;
-					i = _savedGame->getUfos()->erase(i);
+					i = _gameSave->getUfos()->erase(i);
 				}
 				else
 					++i;
 			}
 
 			for (std::vector<AlienMission*>::const_iterator
-					i = _savedGame->getAlienMissions().begin();
-					i != _savedGame->getAlienMissions().end();
+					i = _gameSave->getAlienMissions().begin();
+					i != _gameSave->getAlienMissions().end();
 					++i)
 			{
 				if (dynamic_cast<AlienMission*>(*i) == am)
 				{
 					delete *i;
-					_savedGame->getAlienMissions().erase(i);
+					_gameSave->getAlienMissions().erase(i);
 
 					break;
 				}
@@ -1858,7 +1878,7 @@ void DebriefingState::recoverItems(
 				if (itRule->isRecoverable() == true
 					&& itRule->getRecoveryPoints() != 0
 					&& itRule->getBattleType() != BT_CORPSE
-					&& _savedGame->isResearched(itRule->getType()) == false)
+					&& _gameSave->isResearched(itRule->getType()) == false)
 				{
 					Log(LOG_INFO) << ". . artefact = " << itRule->getType();
 
@@ -1955,7 +1975,7 @@ void DebriefingState::recoverLiveAlien(
 		const std::string type = unit->getType();
 
 		int value;
-		if (_savedGame->isResearched(type) == false)
+		if (_gameSave->isResearched(type) == false)
 			value = unit->getValue() * 2;
 		else
 			value = unit->getValue();

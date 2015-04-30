@@ -75,7 +75,8 @@ SoldierDiary::SoldierDiary()
 		_trapKillTotal(0),
 		_alienBaseAssaultTotal(0),
 		_allAliensKilledTotal(0),
-		_mediApplicationsTotal(0)
+		_mediApplicationsTotal(0),
+		_MIA(0)
 //		_regionTotal(),
 //		_countryTotal(),
 //		_typeTotal(),
@@ -124,7 +125,8 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 		_trapKillTotal(copyThis._trapKillTotal),
 		_alienBaseAssaultTotal(copyThis._alienBaseAssaultTotal),
 		_allAliensKilledTotal(copyThis._allAliensKilledTotal),
-		_mediApplicationsTotal(copyThis._mediApplicationsTotal)
+		_mediApplicationsTotal(copyThis._mediApplicationsTotal),
+		_MIA(copyThis._MIA)
 {
 	for (size_t
 			i = 0;
@@ -285,6 +287,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 		_alienBaseAssaultTotal = assignThis._alienBaseAssaultTotal;
 		_allAliensKilledTotal = assignThis._allAliensKilledTotal;
 		_mediApplicationsTotal = assignThis._mediApplicationsTotal;
+		_MIA = assignThis._MIA;
 
 		_missionIdList.clear();
 		for (std::vector<int>::const_iterator
@@ -648,6 +651,9 @@ void SoldierDiary::updateDiary(
 	if (unitStatistics->KIA == true)
 		++_KIA;
 
+	if (unitStatistics->MIA == true)
+		++_MIA;
+
 	if (unitStatistics->nikeCross == true)
 		++_allAliensKilledTotal;
 
@@ -753,7 +759,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| (criterion == "totalShotAt10Times"		&& _shotAtCounter10in1Mission < val)
 					|| (criterion == "totalHit5Times"			&& _hitCounter5in1Mission < val)
 					|| (criterion == "totalFriendlyFired"		&& (_totalShotByFriendlyCounter < val
-																	|| _KIA != 0)) // didn't survive ......
+																	|| _KIA != 0 || _MIA != 0)) // didn't survive ......
 					|| (criterion == "totalLoneSurvivor"		&& _loneSurvivorTotal < val)
 					|| (criterion == "totalIronMan"				&& _ironManTotal < val)
 					|| (criterion == "totalImportantMissions"	&& _importantMissionTotal < val)
@@ -767,7 +773,8 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| (criterion == "totalTrapKills"			&& _trapKillTotal < val)
 					|| (criterion == "totalAlienBaseAssaults"	&& _alienBaseAssaultTotal < val)
 					|| (criterion == "totalAllAliensKilled"		&& _allAliensKilledTotal < val)
-					|| (criterion == "totalMediApplications"	&& _mediApplicationsTotal < val)))
+					|| (criterion == "totalMediApplications"	&& _mediApplicationsTotal < val)
+					|| (criterion == "isMIA"					&& _MIA < val)))
 			{
 				doAward = false;
 				break;

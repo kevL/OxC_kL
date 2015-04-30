@@ -109,7 +109,7 @@ private:
 	Country* _country;
 	Region* _region;
 	Ruleset* _rules;
-	SavedGame* _savedGame;
+	SavedGame* _gameSave;
 	Text
 		* _txtBaseLabel,
 		* _txtItem,
@@ -132,8 +132,8 @@ private:
 
 	std::vector<ReequipStat> _missingItems;
 	std::vector<DebriefingStat*> _stats;
-	std::vector<Soldier*> _soldiersCommended;
-	std::vector<SoldierDead*> _soldiersKIA;
+	std::vector<Soldier*> _soldiersMedalled;
+	std::vector<SoldierDead*> _soldiersLost;
 
 	/// Adds to the debriefing stats.
 	void addStat(

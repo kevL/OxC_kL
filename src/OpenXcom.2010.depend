@@ -4649,7 +4649,7 @@
 1430149550 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1430156738 f:\git\openxcom\src\savegame\battleunit.h
+1430423862 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5501,7 +5501,7 @@
 1430149550 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1430151879 f:\git\openxcom\src\battlescape\debriefingstate.h
+1430425708 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -5869,7 +5869,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1430151879 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1430430410 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -8813,7 +8813,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1430151879 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1430430078 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -11013,7 +11013,7 @@
 	"BattleState.h"
 	"../Savegame/SavedGame.h"
 
-1430150486 f:\git\openxcom\src\savegame\soldierdiary.h
+1430424124 f:\git\openxcom\src\savegame\soldierdiary.h
 	"BattleUnit.h"
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
@@ -11039,7 +11039,7 @@
 1430149549 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
 	"../Engine/State.h"
 
-1430393957 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1430417640 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	"SoldierDiaryMissionState.h"
 	"SoldierDiaryPerformanceState.h"
@@ -11101,7 +11101,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1430166111 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1430424804 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
@@ -11155,7 +11155,7 @@
 1430393526 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
 	"../Engine/State.h"
 
-1430394854 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
+1430400313 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
 	"SoldierInfoDeadState.h"
 	"SoldierDiaryOverviewState.h"
 	"../Engine/Action.h"
