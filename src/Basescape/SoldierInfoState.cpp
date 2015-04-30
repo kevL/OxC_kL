@@ -174,7 +174,7 @@ SoldierInfoState::SoldierInfoState(
 	add(_txtMissions,		"text1",			"soldierInfo");
 	add(_txtKills,			"text1",			"soldierInfo");
 	add(_txtCraft,			"text1",			"soldierInfo");
-	add(_txtRecovery);
+	add(_txtRecovery,		"text1",			"soldierInfo");
 	add(_txtDay);
 	add(_txtPsionic);
 
@@ -272,7 +272,6 @@ SoldierInfoState::SoldierInfoState(
 
 	_txtArmor->setText(tr("STR_ARMOR"));
 
-	_txtRecovery->setColor(Palette::blockOffset(13)+10);
 	_txtDay->setHighContrast();
 
 	_txtPsionic->setColor(Palette::blockOffset(10));
