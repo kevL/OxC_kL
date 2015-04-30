@@ -202,8 +202,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
 //		_btnAwards->setVisible();
 //	}
-//	else
-//		_btnAwards->setVisible(false);
+//	else _btnAwards->setVisible(false);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
@@ -284,9 +283,8 @@ void SoldierDiaryOverviewState::init()
 				j != diary->getMissionIdList().end();
 				++j)
 		{
-			if (*j == missionId)
+			if (*j == missionId) // This mission is in the soldier's vector of missions.
 			{
-				// This mission is in the soldier's vector of missions.
 				std::wostringstream
 					wossSuccess,
 					wossRating,
