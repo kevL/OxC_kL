@@ -61,12 +61,12 @@ namespace OpenXcom
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		Base* const base,
-		const size_t soldierID,
+		const size_t soldierId,
 		SoldierDiaryOverviewState* const soldierDiaryOverviewState,
 		const int display)
 	:
 		_base(base),
-		_soldierID(soldierID),
+		_soldierId(soldierId),
 		_soldierDiaryOverviewState(soldierDiaryOverviewState),
 		_lastScrollPos(0),
 		_diary(NULL)
@@ -450,10 +450,10 @@ void SoldierDiaryPerformanceState::init()
 			return;
 		} */ // should never happen. Btn won't be visible if listDead is empty.
 
-		if (_soldierID >= _listDead->size())
-			_soldierID = 0;
+		if (_soldierId >= _listDead->size())
+			_soldierId = 0;
 
-		const SoldierDead* const deadSoldier = _listDead->at(_soldierID);
+		const SoldierDead* const deadSoldier = _listDead->at(_soldierId);
 		_diary = deadSoldier->getDiary();
 
 		_txtTitle->setText(deadSoldier->getName());
@@ -466,10 +466,10 @@ void SoldierDiaryPerformanceState::init()
 			return;
 		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
 
-		if (_soldierID >= _list->size())
-			_soldierID = 0;
+		if (_soldierId >= _list->size())
+			_soldierId = 0;
 
-		const Soldier* const soldier = _list->at(_soldierID);
+		const Soldier* const soldier = _list->at(_soldierId);
 		_diary = soldier->getDiary();
 
 		_txtTitle->setText(soldier->getName());
@@ -664,7 +664,7 @@ void SoldierDiaryPerformanceState::drawSprites()
  */
 void SoldierDiaryPerformanceState::btnOkClick(Action*)
 {
-	_soldierDiaryOverviewState->setSoldierID(_soldierID);
+	_soldierDiaryOverviewState->setSoldierID(_soldierId);
 	_game->popState();
 }
 
@@ -680,10 +680,10 @@ void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 	else
 		rows = _list->size();
 
-	if (_soldierID == 0)
-		_soldierID = rows - 1;
+	if (_soldierId == 0)
+		_soldierId = rows - 1;
 	else
-		--_soldierID;
+		--_soldierId;
 
 	init();
 }
@@ -700,9 +700,9 @@ void SoldierDiaryPerformanceState::btnNextClick(Action*)
 	else
 		rows = _list->size();
 
-	++_soldierID;
-	if (_soldierID >= rows)
-		_soldierID = 0;
+	++_soldierId;
+	if (_soldierId >= rows)
+		_soldierId = 0;
 
 	init();
 }

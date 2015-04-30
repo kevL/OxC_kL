@@ -51,10 +51,10 @@ namespace OpenXcom
  */
 SoldierArmorState::SoldierArmorState(
 		Base* base,
-		size_t soldierID)
+		size_t soldierId)
 	:
 		_base(base),
-		_soldierID(soldierID)
+		_soldierId(soldierId)
 {
 	_screen = false;
 
@@ -91,7 +91,7 @@ SoldierArmorState::SoldierArmorState(
 
 
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(_base->getSoldiers()->at(_soldierID)->getName());
+	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName());
 
 	_txtType->setText(tr("STR_TYPE"));
 
@@ -158,7 +158,7 @@ void SoldierArmorState::btnCancelClick(Action*)
  */
 void SoldierArmorState::lstArmorClick(Action*)
 {
-	Soldier* const soldier = _base->getSoldiers()->at(_soldierID);
+	Soldier* const soldier = _base->getSoldiers()->at(_soldierId);
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
 		if (soldier->getArmor()->getStoreItem() != "STR_NONE")

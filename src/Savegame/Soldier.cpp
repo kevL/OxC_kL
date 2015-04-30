@@ -360,16 +360,16 @@ void Soldier::setCraft(Craft* const craft)
  */
 std::wstring Soldier::getCraftString(Language* lang) const
 {
-	std::wstring sCraft;
+	std::wstring ret;
 
 	if (_recovery > 0)
-		sCraft = lang->getString("STR_WOUNDED").arg(Text::formatNumber(_recovery));
+		ret = lang->getString("STR_WOUNDED").arg(Text::formatNumber(_recovery));
 	else if (_craft == NULL)
-		sCraft = lang->getString("STR_NONE_UC");
+		ret = lang->getString("STR_NONE_UC");
 	else
-		sCraft = _craft->getName(lang);
+		ret = _craft->getName(lang);
 
-	return sCraft;
+	return ret;
 }
 
 /**
@@ -717,7 +717,7 @@ bool Soldier::trainPsiDay()
  * Gets whether or not this Soldier is in psi training.
  * @return, true if training
  */
-bool Soldier::isInPsiTraining()
+bool Soldier::isInPsiTraining() const
 {
 	return _psiTraining;
 }
@@ -759,12 +759,12 @@ int Soldier::getPsiStrImprovement()
 
 /**
  * Kills this Soldier in Debriefing or the Geoscape.
- * @param savedGame - pointer to the SavedGame
+ * @param gameSave - pointer to the SavedGame
  */
-void Soldier::die(SavedGame* const savedGame)
+void Soldier::die(SavedGame* const gameSave)
 {
 	SoldierDeath* deathTime = new SoldierDeath();
-	deathTime->setTime(*savedGame->getTime());
+	deathTime->setTime(*gameSave->getTime());
 
 	SoldierDead* deadSoldier = new SoldierDead(
 											_name,
@@ -779,7 +779,7 @@ void Soldier::die(SavedGame* const savedGame)
 											_currentStats,
 											*_diary); // base if I want to...
 
-	savedGame->getDeadSoldiers()->push_back(deadSoldier);
+	gameSave->getDeadSoldiers()->push_back(deadSoldier);
 }
 
 /**

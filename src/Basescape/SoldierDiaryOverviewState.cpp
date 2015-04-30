@@ -57,12 +57,12 @@ namespace OpenXcom
  */
 SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 		Base* const base,
-		size_t soldierID,
+		size_t soldierId,
 		SoldierInfoState* soldierInfoState,
 		SoldierInfoDeadState* soldierInfoDeadState)
 	:
 		_base(base),
-		_soldierID(soldierID),
+		_soldierId(soldierId),
 		_soldierInfoState(soldierInfoState),
 		_soldierInfoDeadState(soldierInfoDeadState),
 		_curRow(0)
@@ -239,10 +239,10 @@ void SoldierDiaryOverviewState::init()
 			return;
 		} */ // should never happen. Btn won't be visible if listDead is empty.
 
-		if (_soldierID >= _listDead->size())
-			_soldierID = 0;
+		if (_soldierId >= _listDead->size())
+			_soldierId = 0;
 
-		const SoldierDead* const deadSoldier = _listDead->at(_soldierID);
+		const SoldierDead* const deadSoldier = _listDead->at(_soldierId);
 		diary = deadSoldier->getDiary();
 
 		_txtTitle->setText(deadSoldier->getName());
@@ -255,10 +255,10 @@ void SoldierDiaryOverviewState::init()
 			return;
 		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
 
-		if (_soldierID >= _list->size())
-			_soldierID = 0;
+		if (_soldierId >= _list->size())
+			_soldierId = 0;
 
-		const Soldier* const soldier = _list->at(_soldierID);
+		const Soldier* const soldier = _list->at(_soldierId);
 		diary = soldier->getDiary();
 
 		_txtTitle->setText(soldier->getName());
@@ -352,9 +352,9 @@ void SoldierDiaryOverviewState::init()
 /**
  * Set the soldier's ID.
  */
-void SoldierDiaryOverviewState::setSoldierID(size_t soldierID)
+void SoldierDiaryOverviewState::setSoldierID(size_t soldierId)
 {
-	_soldierID = soldierID;
+	_soldierId = soldierId;
 }
 
 /**
@@ -364,9 +364,9 @@ void SoldierDiaryOverviewState::setSoldierID(size_t soldierID)
 void SoldierDiaryOverviewState::btnOkClick(Action*)
 {
 	if (_base == NULL)
-		_soldierInfoDeadState->setSoldierID(_soldierID);
+		_soldierInfoDeadState->setSoldierID(_soldierId);
 	else
-		_soldierInfoState->setSoldierID(_soldierID);
+		_soldierInfoState->setSoldierID(_soldierId);
 
 	_game->popState();
 }
@@ -382,7 +382,7 @@ void SoldierDiaryOverviewState::btnKillsClick(Action*)
 	const int display = 0;
 	_game->pushState(new SoldierDiaryPerformanceState(
 												_base,
-												_soldierID,
+												_soldierId,
 												this,
 												display));
 }
@@ -398,7 +398,7 @@ void SoldierDiaryOverviewState::btnMissionsClick(Action*)
 	const int display = 1;
 	_game->pushState(new SoldierDiaryPerformanceState(
 												_base,
-												_soldierID,
+												_soldierId,
 												this,
 												display));
 }
@@ -414,7 +414,7 @@ void SoldierDiaryOverviewState::btnCommendationsClick(Action*)
 	const int display = 2;
 	_game->pushState(new SoldierDiaryPerformanceState(
 												_base,
-												_soldierID,
+												_soldierId,
 												this,
 												display));
 }
@@ -433,10 +433,10 @@ void SoldierDiaryOverviewState::btnPrevClick(Action*)
 	else
 		rows = _list->size();
 
-	if (_soldierID == 0)
-		_soldierID = rows - 1;
+	if (_soldierId == 0)
+		_soldierId = rows - 1;
 	else
-		--_soldierID;
+		--_soldierId;
 
 	init();
 }
@@ -455,9 +455,9 @@ void SoldierDiaryOverviewState::btnNextClick(Action*)
 	else
 		rows = _list->size();
 
-	++_soldierID;
-	if (_soldierID >= rows)
-		_soldierID = 0;
+	++_soldierId;
+	if (_soldierId >= rows)
+		_soldierId = 0;
 
 	init();
 }
@@ -475,7 +475,7 @@ void SoldierDiaryOverviewState::lstDiaryInfoClick(Action*)
 	const size_t row = _lstDiary->getRows() - _lstDiary->getSelectedRow() - 1;
 	_game->pushState(new SoldierDiaryMissionState(
 												_base,
-												_soldierID,
+												_soldierId,
 												row));
 //	}
 }

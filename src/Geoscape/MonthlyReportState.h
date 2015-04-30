@@ -56,7 +56,7 @@ private:
 
 	Base* _base;
 	Globe* _globe;
-	SavedGame* _savedGame;
+	SavedGame* _gameSave;
 	Text
 		* _txtChange,
 		* _txtDesc,

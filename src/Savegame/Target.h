@@ -39,6 +39,7 @@ class Target
 {
 
 protected:
+	int _depth;
 	double
 		_lat,
 		_lon;
@@ -80,6 +81,11 @@ protected:
 
 		/// Gets the distance to another target.
 		double getDistance(const Target* target) const;
+
+		/// Gets the depth of the target.
+		int getSiteDepth() const;
+		/// Sets the depth of the target.
+		void setSiteDepth(int depth);
 };
 
 }

@@ -51,11 +51,11 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the SoldierInfoDeadState screen.
- * @param soldierID - ID of the selected soldier
+ * @param soldierId - ID of the selected soldier
  */
-SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
+SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierId)
 	:
-		_soldierID(soldierID),
+		_soldierId(soldierId),
 		_soldier(NULL)
 {
 	_list = _game->getSavedGame()->getDeadSoldiers();
@@ -387,10 +387,10 @@ void SoldierInfoDeadState::init()
 		return;
 	}
 
-	if (_soldierID >= _list->size())
-		_soldierID = 0;
+	if (_soldierId >= _list->size())
+		_soldierId = 0;
 
-	_soldier = _list->at(_soldierID);
+	_soldier = _list->at(_soldierId);
 	_txtSoldier->setText(_soldier->getName());
 
 	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -422,10 +422,10 @@ void SoldierInfoDeadState::init()
 		* const initial = _soldier->getInitStats(),
 		* const current = _soldier->getCurrentStats();
 
-	std::wostringstream ss;
+	std::wostringstream woststr;
 
-	ss << current->tu;
-	_numTimeUnits->setText(ss.str());
+	woststr << current->tu;
+	_numTimeUnits->setText(woststr.str());
 	if (current->tu > initial->tu)
 	{
 		_barTimeUnits->setMax(current->tu);
@@ -438,9 +438,9 @@ void SoldierInfoDeadState::init()
 	}
 	_barTimeUnits->setValue(current->tu);
 
-	ss.str(L"");
-	ss << current->stamina;
-	_numStamina->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->stamina;
+	_numStamina->setText(woststr.str());
 	if (current->stamina > initial->stamina)
 	{
 		_barStamina->setMax(current->stamina);
@@ -453,9 +453,9 @@ void SoldierInfoDeadState::init()
 	}
 	_barStamina->setValue(current->stamina);
 
-	ss.str(L"");
-	ss << current->health;
-	_numHealth->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->health;
+	_numHealth->setText(woststr.str());
 	if (current->health > initial->health)
 	{
 		_barHealth->setMax(current->health);
@@ -468,44 +468,44 @@ void SoldierInfoDeadState::init()
 	}
 	_barHealth->setValue(current->health);
 
-	ss.str(L"");
-	ss << current->bravery;
-	_numBravery->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->bravery;
+	_numBravery->setText(woststr.str());
 	_barBravery->setMax(current->bravery);
 	_barBravery->setValue(current->bravery);
 	_barBravery->setValue2(initial->bravery);
 
-	ss.str(L"");
-	ss << current->reactions;
-	_numReactions->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->reactions;
+	_numReactions->setText(woststr.str());
 	_barReactions->setMax(current->reactions);
 	_barReactions->setValue(current->reactions);
 	_barReactions->setValue2(initial->reactions);
 
-	ss.str(L"");
-	ss << current->firing;
-	_numFiring->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->firing;
+	_numFiring->setText(woststr.str());
 	_barFiring->setMax(current->firing);
 	_barFiring->setValue(current->firing);
 	_barFiring->setValue2(initial->firing);
 
-	ss.str(L"");
-	ss << current->throwing;
-	_numThrowing->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->throwing;
+	_numThrowing->setText(woststr.str());
 	_barThrowing->setMax(current->throwing);
 	_barThrowing->setValue(current->throwing);
 	_barThrowing->setValue2(initial->throwing);
 
-	ss.str(L"");
-	ss << current->melee;
-	_numMelee->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->melee;
+	_numMelee->setText(woststr.str());
 	_barMelee->setMax(current->melee);
 	_barMelee->setValue(current->melee);
 	_barMelee->setValue2(initial->melee);
 
-	ss.str(L"");
-	ss << current->strength;
-	_numStrength->setText(ss.str());
+	woststr.str(L"");
+	woststr << current->strength;
+	_numStrength->setText(woststr.str());
 	if (current->strength > initial->strength)
 	{
 		_barStrength->setMax(current->strength);
@@ -531,9 +531,9 @@ void SoldierInfoDeadState::init()
 		|| (Options::psiStrengthEval == true
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 	{
-		ss.str(L"");
-		ss << current->psiStrength;
-		_numPsiStrength->setText(ss.str());
+		woststr.str(L"");
+		woststr << current->psiStrength;
+		_numPsiStrength->setText(woststr.str());
 		_barPsiStrength->setMax(current->psiStrength);
 		_barPsiStrength->setValue(current->psiStrength);
 		_barPsiStrength->setValue2(initial->psiStrength);
@@ -549,9 +549,9 @@ void SoldierInfoDeadState::init()
 
 	if (current->psiSkill >= minPsi)
 	{
-		ss.str(L"");
-		ss << current->psiSkill;
-		_numPsiSkill->setText(ss.str());
+		woststr.str(L"");
+		woststr << current->psiSkill;
+		_numPsiSkill->setText(woststr.str());
 		_barPsiSkill->setMax(current->psiSkill);
 		_barPsiSkill->setValue(current->psiSkill);
 		_barPsiSkill->setValue2(initial->psiSkill);
@@ -582,10 +582,10 @@ void SoldierInfoDeadState::btnOkClick(Action*)
  */
 void SoldierInfoDeadState::btnNextClick(Action*)
 {
-	if (_soldierID == 0)
-		_soldierID = _list->size() - 1;
+	if (_soldierId == 0)
+		_soldierId = _list->size() - 1;
 	else
-		--_soldierID;
+		--_soldierId;
 
 	init();
 }
@@ -597,21 +597,21 @@ void SoldierInfoDeadState::btnNextClick(Action*)
  */
 void SoldierInfoDeadState::btnPrevClick(Action*)
 {
-	++_soldierID;
+	++_soldierId;
 
-	if (_soldierID >= _list->size())
-		_soldierID = 0;
+	if (_soldierId >= _list->size())
+		_soldierId = 0;
 
 	init();
 }
 
 /**
  * Set the soldier Id.
- * @param soldierID - the ID for the current soldier
+ * @param soldierId - the ID for the current soldier
  */
-void SoldierInfoDeadState::setSoldierID(size_t soldierID)
+void SoldierInfoDeadState::setSoldierID(size_t soldierId)
 {
-	_soldierID = soldierID;
+	_soldierId = soldierId;
 }
 
 /**
@@ -622,7 +622,7 @@ void SoldierInfoDeadState::btnDiaryClick(Action*)
 {
 	_game->pushState(new SoldierDiaryOverviewState(
 												NULL,
-												_soldierID,
+												_soldierId,
 												NULL,
 												this));
 }

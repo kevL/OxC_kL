@@ -45,7 +45,7 @@ class SoldierArmorState
 {
 
 private:
-	size_t _soldierID;
+	size_t _soldierId;
 
 	Base* _base;
 	Text
@@ -63,7 +63,7 @@ private:
 		/// Creates the Soldier Armor state.
 		SoldierArmorState(
 				Base* base,
-				size_t soldierID);
+				size_t soldierId);
 		/// Cleans up the Soldier Armor state.
 		~SoldierArmorState();
 

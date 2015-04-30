@@ -668,6 +668,9 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 		missionSite->setAlienRace(_race);
 		missionSite->setSiteTextureInt(area.texture);
 		missionSite->setCity(area.site);
+		missionSite->setSiteDepth(RNG::generate(
+											deployRule->getMinSiteDepth(),
+											deployRule->getMaxSiteDepth()));
 
 		return missionSite;
 	}
@@ -921,30 +924,30 @@ std::pair<double, double> AlienMission::getLandPoint(
 {
 	int tries = 0;
 
-	std::pair<double, double> pos;
+	std::pair<double, double> coord;
 	do
 	{
-		pos = region.getRandomPoint(zone);
+		coord = region.getRandomPoint(zone);
 		++tries;
 	}
 	while (tries < 100
 		&& (globe.insideLand(
-						pos.first,
-						pos.second) == false
+						coord.first,
+						coord.second) == false
 			|| region.insideRegion(
-						pos.first,
-						pos.second) == false));
+						coord.first,
+						coord.second) == false));
 
 	if (tries == 100)
 	{
 //		Log(LOG_DEBUG) << "Region: " << region.getType()
 		Log(LOG_INFO) << "Region: " << region.getType()
-			<< " Longitude: " << pos.first
-			<< " Latitude: " << pos.second
-			<< " invalid zone: " << zone << " ufo forced to land on water!";
+			<< " lon " << coord.first
+			<< " lat " << coord.second
+			<< " invalid zone: " << zone << " - ufo was forced to land on water.";
 	}
 
-	return pos;
+	return coord;
 }
 
 }

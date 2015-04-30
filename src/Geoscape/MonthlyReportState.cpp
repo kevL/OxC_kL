@@ -70,10 +70,9 @@ MonthlyReportState::MonthlyReportState(
 		_gameOver(false),
 		_ratingTotal(0),
 		_deltaFunds(0),
-		_ratingLast(0)
+		_ratingLast(0),
+		_gameSave(_game->getSavedGame())
 {
-	_savedGame = _game->getSavedGame();
-
 	_window		= new Window(this, 320, 200);
 	_txtTitle	= new Text(300, 17, 10, 8);
 
@@ -113,16 +112,16 @@ MonthlyReportState::MonthlyReportState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
 
 	calculateChanges(); // <- sets Rating etc.
 
 	int
-		month = _savedGame->getTime()->getMonth() - 1,
-		year = _savedGame->getTime()->getYear();
+		month = _gameSave->getTime()->getMonth() - 1,
+		year = _gameSave->getTime()->getYear();
 
 	if (month == 0)
 	{
@@ -144,14 +143,12 @@ MonthlyReportState::MonthlyReportState(
 		case  9: st = "STR_SEP"; break;
 		case 10: st = "STR_OCT"; break;
 		case 11: st = "STR_NOV"; break;
-		case 12: st = "STR_DEC"; break;
-
-		default: st = "";
+		case 12: st = "STR_DEC";
 	}
 	_txtMonth->setText(tr("STR_MONTH").arg(tr(st)).arg(year));
 
 	const int
-		diff = static_cast<int>(_savedGame->getDifficulty()),
+		diff = static_cast<int>(_gameSave->getDifficulty()),
 		difficulty_threshold = 250 * (diff - 4);
 		// 0 -> -1000
 		// 1 -> -750
@@ -233,9 +230,9 @@ MonthlyReportState::MonthlyReportState(
 	bool resetWarning = true;
 	if (_gameOver == false)
 	{
-		if (_savedGame->getFunds() < -999999)
+		if (_gameSave->getFunds() < -999999)
 		{
-			if (_savedGame->getWarned() == true)
+			if (_gameSave->getWarned() == true)
 			{
 				woststr.str(L"");
 				woststr << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
@@ -256,7 +253,7 @@ MonthlyReportState::MonthlyReportState(
 			{
 				woststr << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 
-				_savedGame->setWarned(true);
+				_gameSave->setWarned(true);
 				resetWarning = false;
 
 				music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT_BAD;
@@ -265,9 +262,9 @@ MonthlyReportState::MonthlyReportState(
 	}
 
 	if (resetWarning == true
-		&& _savedGame->getWarned() == true)
+		&& _gameSave->getWarned() == true)
 	{
-		_savedGame->setWarned(false);
+		_gameSave->setWarned(false);
 	}
 
 	woststr << countryList(
@@ -341,11 +338,11 @@ void MonthlyReportState::calculateChanges()
 		total = 0,
 		aLienTotal = 0;
 
-	const size_t lastMonth = _savedGame->getFundsList().size() - 2;
+	const size_t lastMonth = _gameSave->getFundsList().size() - 2;
 
 	for (std::vector<Region*>::const_iterator
-			i = _savedGame->getRegions()->begin();
-			i != _savedGame->getRegions()->end();
+			i = _gameSave->getRegions()->begin();
+			i != _gameSave->getRegions()->end();
 			++i)
 	{
 		(*i)->newMonth();
@@ -359,11 +356,11 @@ void MonthlyReportState::calculateChanges()
 	}
 
 
-	const int diff = static_cast<int>(_savedGame->getDifficulty());
+	const int diff = static_cast<int>(_gameSave->getDifficulty());
 
 	for (std::vector<Country*>::const_iterator
-			i = _savedGame->getCountries()->begin();
-			i != _savedGame->getCountries()->end();
+			i = _gameSave->getCountries()->begin();
+			i != _gameSave->getCountries()->end();
 			++i)
 	{
 		std::string st = (*i)->getRules()->getType();
@@ -390,9 +387,9 @@ void MonthlyReportState::calculateChanges()
 	}
 
 	if (lastMonth > 0)
-		_ratingLast += _savedGame->getResearchScores().at(lastMonth - 1);
+		_ratingLast += _gameSave->getResearchScores().at(lastMonth - 1);
 
-	total += _savedGame->getResearchScores().at(lastMonth);
+	total += _gameSave->getResearchScores().at(lastMonth);
 	_ratingTotal = total - aLienTotal; // total RATING
 }
 /*	_ratingLast = 0;
@@ -402,7 +399,7 @@ void MonthlyReportState::calculateChanges()
 		subTotal = 0,
 		aLienTotal = 0,
 
-		offset = static_cast<int>(_savedGame->getFundsList().size()) - 2,
+		offset = static_cast<int>(_gameSave->getFundsList().size()) - 2,
 		offset_pre = offset - 1;
 
 	if (offset_pre < 0)
@@ -411,8 +408,8 @@ void MonthlyReportState::calculateChanges()
 	// update activity meters, calculate a total score based
 	// on regional activity and gather last month's score
 	for (std::vector<Region*>::const_iterator
-			i = _savedGame->getRegions()->begin();
-			i != _savedGame->getRegions()->end();
+			i = _gameSave->getRegions()->begin();
+			i != _gameSave->getRegions()->end();
 			++i)
 	{
 		(*i)->newMonth();
@@ -429,21 +426,21 @@ void MonthlyReportState::calculateChanges()
 	// to the council ONLY, and shouldn't influence each country's decision.
 	// kL_note: And yet you _do_ add it in to country->newMonth() decisions...!
 	// So, hey, I'll take it out for you.. just a sec.
-	total = _savedGame->getResearchScores().at(offset) + subTotal;
+	total = _gameSave->getResearchScores().at(offset) + subTotal;
 
 	// the council is more lenient after the first month
-//	if (_savedGame->getMonthsPassed() > 1)
-//		_savedGame->getResearchScores().at(offset) += 400;
+//	if (_gameSave->getMonthsPassed() > 1)
+//		_gameSave->getResearchScores().at(offset) += 400;
 
-	if (_savedGame->getResearchScores().size() > 2)
-		_ratingLast += _savedGame->getResearchScores().at(offset_pre);
+	if (_gameSave->getResearchScores().size() > 2)
+		_ratingLast += _gameSave->getResearchScores().at(offset_pre);
 
 
 	// now that we have our totals we can send the relevant info to the countries
 	// and have them make their decisions weighted on the council's perspective.
 	for (std::vector<Country*>::const_iterator
-			i = _savedGame->getCountries()->begin();
-			i != _savedGame->getCountries()->end();
+			i = _gameSave->getCountries()->begin();
+			i != _gameSave->getCountries()->end();
 			++i)
 	{
 		// add them to the list of new pact members; this is done BEFORE initiating
@@ -455,7 +452,7 @@ void MonthlyReportState::calculateChanges()
 		(*i)->newMonth(
 					subTotal, // There. done
 					aLienTotal,
-					static_cast<int>(_savedGame->getDifficulty()));
+					static_cast<int>(_gameSave->getDifficulty()));
 
 		// and after they've made their decisions, calculate the difference;
 		// and add them to the appropriate lists.
@@ -484,8 +481,8 @@ void MonthlyReportState::btnOkClick(Action*)
 		_game->popState();
 
 		for (std::vector<Base*>::const_iterator // Award medals for service time
-				i = _savedGame->getBases()->begin();
-				i != _savedGame->getBases()->end();
+				i = _gameSave->getBases()->begin();
+				i != _gameSave->getBases()->end();
 				++i)
 		{
 			for (std::vector<Soldier*>::const_iterator
@@ -493,11 +490,10 @@ void MonthlyReportState::btnOkClick(Action*)
 					j != (*i)->getSoldiers()->end();
 					++j)
 			{
-				Soldier* const soldier = _savedGame->getSoldier((*j)->getId());
-				soldier->getDiary()->addMonthlyService();
+				(*j)->getDiary()->addMonthlyService();
 
-				if (soldier->getDiary()->manageAwards(_game->getRuleset()) == true)
-					_soldiersMedalled.push_back(soldier);
+				if ((*j)->getDiary()->manageAwards(_game->getRuleset()) == true)
+					_soldiersMedalled.push_back(*j);
 			}
 		}
 
@@ -507,7 +503,7 @@ void MonthlyReportState::btnOkClick(Action*)
 		if (_psi == true)
 			_game->pushState(new PsiTrainingState());
 
-		if (_savedGame->isIronman() == true)
+		if (_gameSave->isIronman() == true)
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN,

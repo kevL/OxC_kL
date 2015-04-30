@@ -61,14 +61,14 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Soldier Info screen.
  * @param base		- pointer to the base to get info from
- * @param soldierID	- ID of the selected soldier
+ * @param soldierId	- ID of the selected soldier
  */
 SoldierInfoState::SoldierInfoState(
 		Base* base,
-		size_t soldierID)
+		size_t soldierId)
 	:
 		_base(base),
-		_soldierID(soldierID),
+		_soldierId(soldierId),
 		_soldier(NULL)
 {
 	_list = _base->getSoldiers();
@@ -333,10 +333,10 @@ void SoldierInfoState::init()
 		return;
 	}
 
-	if (_soldierID >= _list->size())
-		_soldierID = 0;
+	if (_soldierId >= _list->size())
+		_soldierId = 0;
 
-	_soldier = _list->at(_soldierID);
+	_soldier = _list->at(_soldierId);
 	_edtSoldier->setText(_soldier->getName());
 
 	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -659,7 +659,8 @@ void SoldierInfoState::init()
 
 /**
  * Handles autoStat click.
- * Left-click on the Auto-stat button.
+ * @note Left-click on the Auto-stat button.
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnAutoStat(Action*)
 {
@@ -671,7 +672,8 @@ void SoldierInfoState::btnAutoStat(Action*)
 
 /**
  * Handles autoStatAll click.
- * Right-click on the Auto-stat button.
+ * @note Right-click on the Auto-stat button.
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnAutoStatAll(Action*)
 {
@@ -690,6 +692,21 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 		if (soldier == _soldier)
 			init();
 	}
+
+/*	// TEST: for updating Soldier Awards
+	for (std::vector<Base*>::const_iterator // Award medals for service time
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
+	{
+		for (std::vector<Soldier*>::const_iterator
+				j = (*i)->getSoldiers()->begin();
+				j != (*i)->getSoldiers()->end();
+				++j)
+		{
+			(*j)->getDiary()->manageAwards(_game->getRuleset());
+		}
+	} */
 }
 
 /**
@@ -705,9 +722,9 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 /**
  * Set the soldier Id.
  */
-void SoldierInfoState::setSoldierID(size_t soldierID)
+void SoldierInfoState::setSoldierID(size_t soldierId)
 {
-	_soldierID = soldierID;
+	_soldierId = soldierId;
 }
 
 /**
@@ -726,7 +743,7 @@ void SoldierInfoState::edtSoldierChange(Action*)
 void SoldierInfoState::btnOkClick(Action*)
 {
 //	_edtSoldier->deFocus(); // kL
-//	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
+//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
 	_game->popState();
@@ -753,14 +770,14 @@ void SoldierInfoState::btnOkClick(Action*)
 void SoldierInfoState::btnPrevClick(Action*)
 {
 //	_edtSoldier->deFocus();
-//	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
+//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
 
-	if (_soldierID == 0)
-		_soldierID = _list->size() - 1;
+	if (_soldierId == 0)
+		_soldierId = _list->size() - 1;
 	else
-		_soldierID--;
+		--_soldierId;
 
 	init();
 }
@@ -772,13 +789,13 @@ void SoldierInfoState::btnPrevClick(Action*)
 void SoldierInfoState::btnNextClick(Action*)
 {
 //	_edtSoldier->deFocus();
-//	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
+//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
-	++_soldierID;
+	++_soldierId;
 
-	if (_soldierID >= _list->size())
-		_soldierID = 0;
+	if (_soldierId >= _list->size())
+		_soldierId = 0;
 
 	init();
 }
@@ -795,7 +812,7 @@ void SoldierInfoState::btnArmorClick(Action*)
 	{
 		_game->pushState(new SoldierArmorState(
 											_base,
-											_soldierID));
+											_soldierId));
 	}
 }
 
@@ -807,7 +824,7 @@ void SoldierInfoState::btnSackClick(Action*)
 {
 	_game->pushState(new SackSoldierState(
 										_base,
-										_soldierID));
+										_soldierId));
 }
 
 /**
@@ -818,7 +835,7 @@ void SoldierInfoState::btnDiaryClick(Action*)
 {
 	_game->pushState(new SoldierDiaryOverviewState(
 												_base,
-												_soldierID,
+												_soldierId,
 												this,
 												NULL));
 }

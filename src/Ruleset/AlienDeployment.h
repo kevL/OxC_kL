@@ -104,6 +104,8 @@ private:
 		_markerIcon,
 		_maxDepth,
 		_minDepth,
+		_maxSiteDepth,
+		_minSiteDepth,
 		_shade,
 		_width;
 
@@ -190,6 +192,11 @@ private:
 		int getMinDepth() const;
 		/// Gets the maximum depth.
 		int getMaxDepth() const;
+
+		/// Gets the minimum site depth.
+		int getMinSiteDepth() const;
+		/// Gets the maximum site depth.
+		int getMaxSiteDepth() const;
 };
 
 }

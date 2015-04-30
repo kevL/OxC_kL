@@ -48,6 +48,7 @@ private:
 		_costSell,
 		_listOrder,
 		_marker,
+		_maxDepth,
 		_maxItems,
 		_radarRange,
 		_refuelRate,
@@ -153,6 +154,9 @@ private:
 
 		/// Gets the item limit for this type of craft.
 		int getMaxItems() const;
+
+		/// Gets how deep this craft can go.
+		int getMaxDepth() const;
 };
 
 }

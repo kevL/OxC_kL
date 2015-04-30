@@ -196,7 +196,7 @@ private:
 		/// Trains a soldier's psionic abilities (anytimePsiTraining option).
 		bool trainPsiDay();
 		/// Returns whether the unit is in psi training or not
-		bool isInPsiTraining();
+		bool isInPsiTraining() const;
 		/// Sets the psi training status
 		void togglePsiTraining();
 		/// Gets this soldier's psiSkill improvement score for this month.
@@ -205,7 +205,7 @@ private:
 		int getPsiStrImprovement();
 
 		/// Kills the soldier and sends it to the dead soldiers' bin.
-		void die(SavedGame* const savedGame);
+		void die(SavedGame* const gameSave);
 
 		/// Gets the soldier's diary.
 		SoldierDiary* getDiary() const;

@@ -148,7 +148,9 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_durationMin(0),
 		_durationMax(0),
 		_minDepth(0),
-		_maxDepth(0)
+		_maxDepth(0),
+		_minSiteDepth(0),
+		_maxSiteDepth(0)
 {}
 
 /**
@@ -188,10 +190,16 @@ void AlienDeployment::load(const YAML::Node& node)
 		_maxDepth = node["depth"][1].as<int>(_maxDepth);
 	}
 
+	if (node["siteDepth"])
+	{
+		_minSiteDepth = node["siteDepth"][0].as<int>(_minSiteDepth);
+		_maxSiteDepth = node["siteDepth"][1].as<int>(_maxSiteDepth);
+	}
+
 	if (node["duration"])
 	{
-		_durationMin	= node["duration"][0].as<int>(_durationMin);
-		_durationMax	= node["duration"][1].as<int>(_durationMax);
+		_durationMin = node["duration"][0].as<int>(_durationMin);
+		_durationMax = node["duration"][1].as<int>(_durationMax);
 	}
 
 	for (YAML::const_iterator
@@ -398,6 +406,24 @@ int AlienDeployment::getMinDepth() const
 int AlienDeployment::getMaxDepth() const
 {
 	return _maxDepth;
+}
+
+/**
+ * Gets the minimum depth for this deployment's mission site.
+ * @return, the minimum depth
+ */
+int AlienDeployment::getMinSiteDepth() const
+{
+	return _minSiteDepth;
+}
+
+/**
+ * Gets the maximum depth for this deployment's mission site.
+ * @return, the maximum depth
+ */
+int AlienDeployment::getMaxSiteDepth() const
+{
+	return _maxSiteDepth;
 }
 
 }

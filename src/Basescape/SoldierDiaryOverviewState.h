@@ -47,7 +47,7 @@ class SoldierDiaryOverviewState
 
 private:
 	size_t
-		_soldierID,
+		_soldierId,
 		_curRow;
 
 	std::vector<Soldier*>* _list;
@@ -78,7 +78,7 @@ private:
 		/// Creates the Soldiers state.
 		SoldierDiaryOverviewState(
 				Base* const base,
-				size_t soldierID,
+				size_t soldierId,
 				SoldierInfoState* soldierInfoState,
 				SoldierInfoDeadState* soldierInfoDeadState);
 		/// Cleans up the Soldiers state.
@@ -88,7 +88,7 @@ private:
 		void init();
 
 		/// Set the soldier's ID.
-		void setSoldierID(size_t soldierID);
+		void setSoldierID(size_t soldierId);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

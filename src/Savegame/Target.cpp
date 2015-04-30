@@ -38,7 +38,8 @@ namespace OpenXcom
 Target::Target()
 	:
 		_lon(0.),
-		_lat(0.)
+		_lat(0.),
+		_depth(0)
 {}
 
 /**
@@ -63,8 +64,9 @@ Target::~Target()
  */
 void Target::load(const YAML::Node& node)
 {
-	_lon = node["lon"].as<double>(_lon);
-	_lat = node["lat"].as<double>(_lat);
+	_lon	= node["lon"]	.as<double>(_lon);
+	_lat	= node["lat"]	.as<double>(_lat);
+	_depth	= node["depth"]	.as<int>(_depth);
 }
 
 /**
@@ -77,6 +79,8 @@ YAML::Node Target::save() const
 
 	node["lon"] = serializeDouble(_lon);
 	node["lat"] = serializeDouble(_lat);
+	if (_depth != 0)
+		node["depth"] = _depth;
 
 	return node;
 }
@@ -170,6 +174,24 @@ double Target::getDistance(const Target* target) const
 				* std::cos(target->getLongitude() - _lon)
 			+ std::sin(_lat)
 				* std::sin(target->getLatitude()));
+}
+
+/**
+ * Gets a mission site's depth.
+ * @return, the depth of the site
+ */
+int Target::getSiteDepth() const
+{
+	return _depth;
+}
+
+/**
+ * Sets a mission site's depth.
+ * @param depth - the depth to set
+ */
+void Target::setSiteDepth(int depth)
+{
+	_depth = depth;
 }
 
 }

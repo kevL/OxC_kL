@@ -44,7 +44,7 @@ class SoldierInfoDeadState
 {
 
 private:
-	size_t _soldierID;
+	size_t _soldierId;
 
 	std::vector<SoldierDead*>* _list;
 
@@ -106,7 +106,7 @@ private:
 
 	public:
 		/// Creates the Soldier Dead Info state.
-		SoldierInfoDeadState(size_t soldierID);
+		SoldierInfoDeadState(size_t soldierId);
 		/// Cleans up the Soldier Dead Info state.
 		~SoldierInfoDeadState();
 
@@ -114,7 +114,7 @@ private:
 		void init();
 
 		/// Sets the soldier Id.
-		void setSoldierID(size_t soldierID);
+		void setSoldierID(size_t soldierId);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

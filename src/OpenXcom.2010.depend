@@ -4360,7 +4360,7 @@
 	<sstream>
 	<string>
 
-1430149550 f:\git\openxcom\src\savegame\soldier.h
+1430393242 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
 1430149550 f:\git\openxcom\src\ruleset\unit.h
@@ -4392,7 +4392,7 @@
 1430212343 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
-1430149550 f:\git\openxcom\src\savegame\target.h
+1430388627 f:\git\openxcom\src\savegame\target.h
 
 1430151879 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
@@ -4532,7 +4532,7 @@
 
 1430149550 f:\git\openxcom\src\engine\surfaceset.h
 
-1430149550 f:\git\openxcom\src\ruleset\rulecraft.h
+1430389030 f:\git\openxcom\src\ruleset\rulecraft.h
 
 1430149549 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
@@ -4563,7 +4563,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\gametime.h
 
-1430149549 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1430393957 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4586,7 +4586,7 @@
 1430149549 f:\git\openxcom\src\basescape\craftarmorstate.h
 	"../Engine/State.h"
 
-1430149549 f:\git\openxcom\src\basescape\soldierarmorstate.h
+1430393957 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
 1427081721 f:\git\openxcom\src\ruleset\armor.h
@@ -5158,7 +5158,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Transfer.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1430393957 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5173,7 +5173,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1430151879 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1430395168 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	"SoldierDiaryOverviewState.h"
 	"SackSoldierState.h"
@@ -5200,7 +5200,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1430151879 f:\git\openxcom\src\basescape\soldierinfostate.h
+1430393468 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\ruleset\rulesoldier.h
@@ -5382,7 +5382,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\ruleset\aliendeployment.h
+1430389329 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1430149550 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -6228,7 +6228,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1430169614 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1430345668 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -7154,7 +7154,7 @@
 1430149550 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1430151879 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1430388957 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7251,7 +7251,7 @@
 1430149550 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\monthlyreportstate.h
+1430392496 f:\git\openxcom\src\geoscape\monthlyreportstate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\geoscape\multipletargetsstate.h
@@ -7334,7 +7334,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1430345795 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -7417,7 +7417,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1430151879 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1430392874 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"Globe.h"
@@ -8456,7 +8456,7 @@
 1430149550 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1430171383 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1430389520 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8512,7 +8512,7 @@
 1430149550 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
 	"RuleCountry.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1430389107 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -8617,7 +8617,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1430247993 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1430389896 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8843,7 +8843,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1430151879 source:f:\git\openxcom\src\savegame\soldier.cpp
+1430393246 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -8866,7 +8866,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\soldierdeath.cpp
 	"SoldierDeath.h"
 
-1430149550 source:f:\git\openxcom\src\savegame\target.cpp
+1430388758 source:f:\git\openxcom\src\savegame\target.cpp
 	"Target.h"
 	"Craft.h"
 	"SerializationHelper.h"
@@ -11018,7 +11018,7 @@
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
 
-1430149549 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
+1430393957 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
 1430149549 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
@@ -11039,7 +11039,7 @@
 1430149549 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
 	"../Engine/State.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1430393957 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	"SoldierDiaryMissionState.h"
 	"SoldierDiaryPerformanceState.h"
@@ -11058,7 +11058,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1430149549 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1430393957 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
@@ -11081,7 +11081,7 @@
 1430149550 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1430151879 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1430393957 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
@@ -11152,10 +11152,10 @@
 1430149550 source:f:\git\openxcom\src\ruleset\polygon.cpp
 	"Polygon.h"
 
-1430149549 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
+1430393526 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
 	"../Engine/State.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
+1430394854 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
 	"SoldierInfoDeadState.h"
 	"SoldierDiaryOverviewState.h"
 	"../Engine/Action.h"

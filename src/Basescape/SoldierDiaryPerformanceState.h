@@ -49,7 +49,6 @@ class SoldierDiaryPerformanceState
 
 private:
 	static const int LIST_SPRITES_y = 49;
-
 	static const size_t LIST_ROWS = 12;
 
 
@@ -59,7 +58,7 @@ private:
 		_displayAwards;
 	size_t
 		_lastScrollPos,
-		_soldierID;
+		_soldierId;
 
 	std::vector<std::wstring> _awardsListEntry;
 
@@ -119,7 +118,7 @@ private:
 		/// Creates the Soldiers state.
 		SoldierDiaryPerformanceState(
 				Base* const base,
-				const size_t soldierID,
+				const size_t soldierId,
 				SoldierDiaryOverviewState* const soldierDiaryState,
 				const int display);
 		/// Cleans up the Soldiers state.
