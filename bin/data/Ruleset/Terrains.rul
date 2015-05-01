@@ -4196,56 +4196,51 @@ terrains:
       - U_BASE2
 #    largeBlockLimit: 3
     mapBlocks:
-      - type: UBASE_00
+      - type: UBASE_00 # Control center EW
         width: 20
         length: 20
-        groups: 6
+        groups: 6 # control
 #        type: 7
-      - type: UBASE_01
+      - type: UBASE_01 # Large garden
         width: 20
         length: 20
-      - type: UBASE_02
+      - type: UBASE_02 # Large emporium
         width: 20
         length: 20
-      - type: UBASE_03
+      - type: UBASE_03 # Large garden upper floor, crossing aisles lower
         width: 20
         length: 20
-#        items:
-#          STR_ELERIUM_115:
-#            - [2, 14, 1]
-      - type: UBASE_04
+      - type: UBASE_04 # Start w/ ferns
         width: 10
         length: 10
-        groups: 5 # kL was 2 huh
+        groups: 5 # start
         revealedFloors: 1
-#        type: 6
-      - type: UBASE_05
+      - type: UBASE_05 # Small emporium S
         width: 10
         length: 10
-      - type: UBASE_06
+      - type: UBASE_06 # switcheroo
         width: 10
         length: 10
-      - type: UBASE_07
+      - type: UBASE_07 # Small crossing aisles
         width: 10
         length: 10
-        groups: 1
-#        type: 4
-      - type: UBASE_08
+#        groups: 1
+      - type: UBASE_08 # Mini emporium E
         width: 10
         length: 10
-      - type: UBASE_09
+      - type: UBASE_09 # Small garden
         width: 10
         length: 10
-      - type: UBASE_10
+      - type: UBASE_10 # Power room crossing aisles
         width: 10
         length: 10
-      - type: UBASE_11
+      - type: UBASE_11 # Disco floor
         width: 10
         length: 10
 #       UBASE_12 is impassable, 13 and 14 are apparently unused.
 #       In the interest of preserving an original experience they have been
 #       disabled by being added to group 99, which is unused in the scripts.
-      - type: UBASE_12
+      - type: UBASE_12 # Power room enclosed
         width: 10
         length: 10
         items:
@@ -4253,94 +4248,90 @@ terrains:
             - [4, 4, 0]
 #        groups: 99
 #        maxCount: 1
-      - type: UBASE_13
+      - type: UBASE_13 # Power room w/ museum
         width: 10
         length: 10
 #        groups: 99
-      - type: UBASE_14
+      - type: UBASE_14 # Small garden more plants
         width: 10
         length: 10
 #        groups: 99
-      - type: UBASE_15
+      - type: UBASE_15 # Brain center
         width: 20
         length: 20
-        groups: 4
-#        type: 8
-      - type: UBASE_19
+        groups: 4 # crossroad
+      - type: UBASE_19 # Control center NS
         width: 20
         length: 20
-        groups: 6
-#        type: 7
-      - type: UBASE_20
+        groups: 6 # control
+      - type: UBASE_20 # Alt control center
         width: 20
         length: 20
-        groups: 6
-#        type: 7
-      - type: UBASE_21
+        groups: 6 # control
+      - type: UBASE_21 # Large garden
         width: 20
         length: 20
-      - type: UBASE_22
+      - type: UBASE_22 # Large food upper floor, large power lower
         width: 20
         length: 20
-      - type: UBASE_23
+      - type: UBASE_23 # Large power + food upper, NS room lower
         width: 20
         length: 20
-      - type: UBASE_24
+      - type: UBASE_24 # Start area w/ food
         width: 10
         length: 10
-        groups: 5 # kL
+        groups: 5 # start
         revealedFloors: 1
-#        type: 6
-      - type: UBASE_25
+      - type: UBASE_25 # Alt small emporium EW
         width: 10
         length: 10
-      - type: UBASE_26
+      - type: UBASE_26 # Full switcheroo
         width: 10
         length: 10
-      - type: UBASE_27
+      - type: UBASE_27 # Crossing aisles
         width: 10
         length: 10
-      - type: UBASE_28
+      - type: UBASE_28 # Small lookout tower
         width: 10
         length: 10
-      - type: UBASE_29
+      - type: UBASE_29 # Small garden tall
         width: 10
         length: 10
-      - type: UBASE_30
+      - type: UBASE_30 # Small garden upper floor, power lower
         width: 10
         length: 10
-      - type: UBASE_31
+      - type: UBASE_31 # Disco room
         width: 10
         length: 10
-      - type: UBASE_32
+      - type: UBASE_32 # Power room enclosed
         width: 10
         length: 10
         items:
           STR_ELERIUM_115:
             - [4, 4, 0]
 #        maxCount: 1
-      - type: UBASE_33
+      - type: UBASE_33 # Disco floor w/ disco balls
         width: 10
         length: 10
-      - type: UBASE_34
+      - type: UBASE_34 # Large emporium w/ catwalk
         width: 20
         length: 20
-      - type: UBASE_35
+      - type: UBASE_35 # Large garden upper floor, crossing aisles lower
         width: 20
         length: 20
-      - type: UBASE_36
+      - type: UBASE_36 # Small emporium N
         width: 10
         length: 10
-      - type: UBASE_37
+      - type: UBASE_37 # Alt switcheroo
         width: 10
         length: 10
-      - type: UBASE_38
+      - type: UBASE_38 # Mini emporium W
         width: 10
         length: 10
-      - type: UBASE_39
+      - type: UBASE_39 # Power room w/ yellow vats upper floor, NS room lower
         width: 10
         length: 10
-      - type: UBASE_40
+      - type: UBASE_40 # Large UFO construction
         width: 20
         length: 20
         items:
@@ -4349,7 +4340,7 @@ terrains:
             - [ 9, 1, 1]
             - [ 9,17, 1]
             - [17, 9, 1]
-      - type: UBASE_41
+      - type: UBASE_41 # Large hospital room w/ power & yellow vats upper floor, EW room lower
         width: 20
         length: 20
         items:

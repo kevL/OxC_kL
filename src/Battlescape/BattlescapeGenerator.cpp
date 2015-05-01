@@ -3961,7 +3961,7 @@ bool BattlescapeGenerator::addLine( // private.
 		{
 			_blocks[roadX][roadY] = _terrain->getRandomMapBlock(
 															10,10,
-															MBT_CROSSING);
+															MBT_CROSSROAD);
 			clearModule(
 					roadX * 10,
 					roadY * 10,
