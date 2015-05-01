@@ -76,6 +76,7 @@ SoldierDiary::SoldierDiary()
 		_alienBaseAssaultTotal(0),
 		_allAliensKilledTotal(0),
 		_mediApplicationsTotal(0),
+		_revivedUnitTotal(0),
 		_MIA(0)
 //		_regionTotal(),
 //		_countryTotal(),
@@ -126,6 +127,7 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 		_alienBaseAssaultTotal(copyThis._alienBaseAssaultTotal),
 		_allAliensKilledTotal(copyThis._allAliensKilledTotal),
 		_mediApplicationsTotal(copyThis._mediApplicationsTotal),
+		_revivedUnitTotal(copyThis._revivedUnitTotal),
 		_MIA(copyThis._MIA)
 {
 	for (size_t
@@ -287,6 +289,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 		_alienBaseAssaultTotal = assignThis._alienBaseAssaultTotal;
 		_allAliensKilledTotal = assignThis._allAliensKilledTotal;
 		_mediApplicationsTotal = assignThis._mediApplicationsTotal;
+		_revivedUnitTotal = assignThis._revivedUnitTotal;
 		_MIA = assignThis._MIA;
 
 		_missionIdList.clear();
@@ -472,6 +475,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_alienBaseAssaultTotal			= node["alienBaseAssaultTotal"]			.as<int>(_alienBaseAssaultTotal);
 	_allAliensKilledTotal			= node["allAliensKilledTotal"]			.as<int>(_allAliensKilledTotal);
 	_mediApplicationsTotal			= node["mediApplicationsTotal"]			.as<int>(_mediApplicationsTotal);
+	_revivedUnitTotal				= node["revivedUnitTotal"]				.as<int>(_revivedUnitTotal);
 }
 
 /**
@@ -536,6 +540,7 @@ YAML::Node SoldierDiary::save() const
 	if (_alienBaseAssaultTotal)				node["alienBaseAssaultTotal"]		= _alienBaseAssaultTotal;
 	if (_allAliensKilledTotal)				node["allAliensKilledTotal"]		= _allAliensKilledTotal;
 	if (_mediApplicationsTotal)				node["mediApplicationsTotal"]		= _mediApplicationsTotal;
+	if (_revivedUnitTotal)					node["revivedUnitTotal"]			= _revivedUnitTotal;
 
 	return node;
 }
@@ -644,6 +649,7 @@ void SoldierDiary::updateDiary(
 	_longDistanceHitCounterTotal += unitStatistics->longDistanceHitCounter;
 	_lowAccuracyHitCounterTotal += unitStatistics->lowAccuracyHitCounter;
 	_mediApplicationsTotal += unitStatistics->medikitApplications;
+	_revivedUnitTotal += unitStatistics->revivedSoldier;
 
 	if (missionStatistics->valiantCrux == true)
 		++_valiantCruxTotal;
@@ -774,6 +780,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| (criterion == "totalAlienBaseAssaults"	&& _alienBaseAssaultTotal < val)
 					|| (criterion == "totalAllAliensKilled"		&& _allAliensKilledTotal < val)
 					|| (criterion == "totalMediApplications"	&& _mediApplicationsTotal < val)
+					|| (criterion == "totalRevives"				&& _revivedUnitTotal < val)
 					|| (criterion == "isMIA"					&& _MIA < val)))
 			{
 				doAward = false;

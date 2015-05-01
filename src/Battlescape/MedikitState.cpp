@@ -326,38 +326,38 @@ void MedikitState::onCloseClick(Action*)
  */
 void MedikitState::onHealClick(Action*)
 {
-	const int heal = _action->weapon->getHealQuantity();
-	if (heal == 0)
-		return;
-
-	const RuleItem* const itRule = _action->weapon->getRules();
-	if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
+	const int healQty = _action->weapon->getHealQuantity();
+	if (healQty != 0)
 	{
-		++_action->actor->getStatistics()->medikitApplications;
-
-		_action->targetUnit->heal(
-								_mediView->getSelectedPart(),
-								itRule->getWoundRecovery(),
-								itRule->getHealthRecovery());
-
-		_action->weapon->setHealQuantity(heal - 1);
-		_mediView->autoSelectPart();
-		_mediView->invalidate();
-
-		update();
-
-		// if the unit has revived quit this screen automatically
-		if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
-			&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
+		const RuleItem* const itRule = _action->weapon->getRules();
+		if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
 		{
-			_game->popState();
+			++_action->actor->getStatistics()->medikitApplications;
+
+			_action->weapon->setHealQuantity(healQty - 1);
+			_action->targetUnit->heal(
+									_mediView->getSelectedPart(),
+									itRule->getWoundRecovery(),
+									itRule->getHealthRecovery());
+			_mediView->autoSelectPart();
+			_mediView->invalidate();
+
+			// if the unit has revived quit this screen automatically
+			if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
+				&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
+			{
+				_action->actor->getStatistics()->revivedSoldier += 2;
+				_game->popState();
+//				onCloseClick(NULL);
+			}
+			else
+				update();
+		}
+		else
+		{
+			_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 //			onCloseClick(NULL);
 		}
-	}
-	else
-	{
-		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onCloseClick(NULL);
 	}
 }
 
@@ -367,34 +367,35 @@ void MedikitState::onHealClick(Action*)
  */
 void MedikitState::onStimClick(Action*)
 {
-	const int stimulant = _action->weapon->getStimulantQuantity();
-	if (stimulant == 0)
-		return;
-
-	const RuleItem* const itRule = _action->weapon->getRules();
-	if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
+	const int stimQty = _action->weapon->getStimulantQuantity();
+	if (stimQty != 0)
 	{
-		++_action->actor->getStatistics()->medikitApplications;
-
-		_action->targetUnit->stimulant(
-									itRule->getEnergyRecovery(),
-									itRule->getStunRecovery());
-		_action->weapon->setStimulantQuantity(stimulant - 1);
-
-		update();
-
-		// if the unit has revived quit this screen automatically
-		if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
-			&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
+		const RuleItem* const itRule = _action->weapon->getRules();
+		if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
 		{
-			_game->popState();
+			++_action->actor->getStatistics()->medikitApplications;
+
+			_action->weapon->setStimulantQuantity(stimQty - 1);
+
+			// if the unit has revived quit this screen automatically
+			if (_action->targetUnit->stimulant(
+											itRule->getEnergyRecovery(),
+											itRule->getStunRecovery()) == true)
+			{
+				if (_action->targetUnit->getFatalWounds() != 0)
+					++_action->actor->getStatistics()->revivedSoldier;
+
+				_game->popState();
+//				onCloseClick(NULL);
+			}
+			else
+				update();
+		}
+		else
+		{
+			_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 //			onCloseClick(NULL);
 		}
-	}
-	else
-	{
-		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onCloseClick(NULL);
 	}
 }
 
@@ -404,33 +405,33 @@ void MedikitState::onStimClick(Action*)
  */
 void MedikitState::onPainClick(Action*)
 {
-	const int pain = _action->weapon->getPainKillerQuantity();
-	if (pain == 0)
-		return;
-
-	if (_action->actor->spendTimeUnits(_action->weapon->getRules()->getTUUse()) == true)
+	const int painQty = _action->weapon->getPainKillerQuantity();
+	if (painQty != 0)
 	{
-		++_action->actor->getStatistics()->medikitApplications;
-
-		_action->targetUnit->painKillers();
-		_action->weapon->setPainKillerQuantity(pain - 1);
-
-		update();
-
-		if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
+		if (_action->actor->spendTimeUnits(_action->weapon->getRules()->getTUUse()) == true)
 		{
-			_action->targetUnit->convertToFaction(FACTION_PLAYER);
-			_action->targetUnit->initTU();
+			++_action->actor->getStatistics()->medikitApplications;
 
-			_game->getSavedGame()->getSavedBattle()->setSelectedUnit(_action->targetUnit);
-			_game->popState();
+			_action->weapon->setPainKillerQuantity(painQty - 1);
+			_action->targetUnit->painKillers();
+
+			if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
+			{
+				_action->targetUnit->convertToFaction(FACTION_PLAYER);
+				_action->targetUnit->initTU();
+
+				_game->getSavedGame()->getSavedBattle()->setSelectedUnit(_action->targetUnit);
+				_game->popState();
+//				onCloseClick(NULL);
+			}
+			else
+				update();
+		}
+		else
+		{
+			_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 //			onCloseClick(NULL);
 		}
-	}
-	else
-	{
-		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//		onCloseClick(NULL);
 	}
 }
 

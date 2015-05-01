@@ -91,6 +91,7 @@ DebriefingState::DebriefingState()
 	:
 		_rules(_game->getRuleset()),
 		_gameSave(_game->getSavedGame()),
+		_diff(static_cast<int>(_game->getSavedGame()->getDifficulty())),
 		_region(NULL),
 		_country(NULL),
 		_noContainment(false),
@@ -281,8 +282,7 @@ DebriefingState::DebriefingState()
 	{
 		if (_destroyXCOMBase == true)
 		{
-			const int diff = static_cast<int>(_gameSave->getDifficulty()) + 1;
-			_region->addActivityAlien(diff * 235);
+			_region->addActivityAlien((_diff + 1) * 235);
 			_region->recentActivity();
 		}
 		else
@@ -296,8 +296,7 @@ DebriefingState::DebriefingState()
 	{
 		if (_destroyXCOMBase == true)
 		{
-			const int diff = static_cast<int>(_gameSave->getDifficulty()) + 1;
-			_country->addActivityAlien(diff * 235);
+			_country->addActivityAlien((_diff + 1) * 235);
 			_country->recentActivity();
 		}
 		else
@@ -389,7 +388,7 @@ DebriefingState::DebriefingState()
 			// NOTE: This can still be exploited by MC'ing and
 			// executing a bunch of aLiens with a single Soldier.
 			if (_aliensControlled == 0
-				&& _aliensKilled + _aliensStunned > 3 + static_cast<int>(_gameSave->getDifficulty())
+				&& _aliensKilled + _aliensStunned > 3 + _diff
 				&& _aliensKilled + _aliensStunned == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{
@@ -1001,7 +1000,7 @@ void DebriefingState::prepareDebriefing()
 				// if only one soldier survived AND none have died, means only one soldier went on the mission...
 				if (soldierDead == 0
 					&& _aliensControlled == 0
-					&& _aliensKilled + _aliensStunned > 1 + static_cast<int>(_gameSave->getDifficulty())
+					&& _aliensKilled + _aliensStunned > 1 + _diff
 					&& aborted == false)
 				{
 					(*i)->getStatistics()->ironMan = true;
@@ -1058,7 +1057,7 @@ void DebriefingState::prepareDebriefing()
 					{
 						const int pts = std::max(
 											50,
-											500 - static_cast<int>(_gameSave->getDifficulty() * 50));
+											500 - (_diff * 50));
 						addStat(
 							"STR_ALIEN_BASE_CONTROL_DESTROYED",
 							pts);

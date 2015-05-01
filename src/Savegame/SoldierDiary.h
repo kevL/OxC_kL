@@ -125,6 +125,7 @@ private:
 		_alienBaseAssaultTotal,
 		_allAliensKilledTotal,
 		_mediApplicationsTotal,
+		_revivedUnitTotal,
 		_MIA;
 
 	std::vector<int> _missionIdList;

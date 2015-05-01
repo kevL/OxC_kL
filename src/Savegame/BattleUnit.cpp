@@ -1569,13 +1569,22 @@ void BattleUnit::playHitSound()
 /**
  * Do an amount of stun recovery.
  * @param power - stun to recover
+ * @return, true if unit becomes conscious
  */
-void BattleUnit::healStun(int power)
+bool BattleUnit::healStun(int power)
 {
 	_stunLevel -= power;
 
 	if (_stunLevel < 0)
 		_stunLevel = 0;
+
+	if (_status == STATUS_UNCONSCIOUS
+		&& _stunLevel < _health)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -2196,9 +2205,9 @@ int BattleUnit::getArmor(UnitSide side) const
 int BattleUnit::getFatalWounds() const
 {
 	int wounds = 0;
-	for (int
+	for (size_t
 			i = 0;
-			i < 6;
+			i != 6;
 			++i)
 	{
 		wounds += _fatalWounds[i];
@@ -3281,19 +3290,16 @@ void BattleUnit::heal(
 		int wounds,
 		int health)
 {
-	if (part < 0 || part > 5
-		|| _fatalWounds[static_cast<size_t>(part)] == false)
+	if (getFatalWound(part) != 0)
 	{
-		return;
+		_fatalWounds[static_cast<size_t>(part)] -= wounds;
+
+		_health += health;
+		if (_health > getBaseStats()->health)
+			_health = getBaseStats()->health;
+
+		moraleChange(health);
 	}
-
-	_fatalWounds[static_cast<size_t>(part)] -= wounds;
-
-	_health += health;
-	if (_health > getBaseStats()->health)
-		_health = getBaseStats()->health;
-
-	moraleChange(health);
 }
 
 /**
@@ -3315,8 +3321,9 @@ void BattleUnit::painKillers()
  * Restores soldier energy and reduce stun level.
  * @param energy	- the amount of energy to add
  * @param stun		- the amount of stun level to reduce
+ * @return, true if unit regains consciousness
  */
-void BattleUnit::stimulant(
+bool BattleUnit::stimulant(
 		int energy,
 		int stun)
 {
@@ -3324,7 +3331,7 @@ void BattleUnit::stimulant(
 	if (_energy > getBaseStats()->stamina)
 		_energy = getBaseStats()->stamina;
 
-	healStun(stun);
+	return healStun(stun);
 }
 
 /**

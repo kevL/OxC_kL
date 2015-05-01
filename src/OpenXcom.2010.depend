@@ -4649,7 +4649,7 @@
 1430149550 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1430423862 f:\git\openxcom\src\savegame\battleunit.h
+1430440083 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5501,7 +5501,7 @@
 1430149550 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1430425708 f:\git\openxcom\src\battlescape\debriefingstate.h
+1430435920 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -5869,7 +5869,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1430433162 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1430436120 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6084,7 +6084,7 @@
 1430149550 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 
-1430151879 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1430440052 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	"MedikitView.h"
 	"../Engine/Action.h"
@@ -8685,7 +8685,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1430151879 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1430440085 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11013,7 +11013,7 @@
 	"BattleState.h"
 	"../Savegame/SavedGame.h"
 
-1430434770 f:\git\openxcom\src\savegame\soldierdiary.h
+1430436894 f:\git\openxcom\src\savegame\soldierdiary.h
 	"BattleUnit.h"
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
@@ -11101,7 +11101,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1430435064 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1430437260 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
@@ -11384,7 +11384,7 @@
 
 1420130450 f:\git\openxcom\src\savegame\saveconverterxcom1.h
 
-1430149550 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
+1430435019 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
 	"CommendationDeadState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"

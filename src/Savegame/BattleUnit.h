@@ -247,7 +247,8 @@ struct BattleUnitStatistics
 		shotFriendlyCounter,	// Tracks how many times the unit was hit a friendly
 		shotsFiredCounter,		// Tracks how many times a unit has shot
 		shotsLandedCounter,		// Tracks how many times a unit has hit his target
-		medikitApplications;	// Tracks how many times a unit has used the medikit
+		medikitApplications,	// Tracks how many times a unit has used the medikit
+		revivedSoldier;			// Tracks how many times this soldier revived another unit
 
 	std::vector<BattleUnitKills*> kills; // Tracks kills
 
@@ -313,6 +314,7 @@ struct BattleUnitStatistics
 		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
 		medikitApplications		= node["medikitApplications"]	.as<int>(medikitApplications);
 		nikeCross				= node["nikeCross"]				.as<bool>(nikeCross);
+		revivedSoldier			= node["revivedSoldier"]		.as<int>(revivedSoldier);
 	}
 
 	///
@@ -343,6 +345,8 @@ struct BattleUnitStatistics
 		node["shotsFiredCounter"]		= shotsFiredCounter;
 		node["shotsLandedCounter"]		= shotsLandedCounter;
 		node["medikitApplications"]		= medikitApplications;
+		node["revivedSoldier"]			= revivedSoldier;
+
 		if (nikeCross == true)
 			node["nikeCross"]			= nikeCross;
 
@@ -372,6 +376,7 @@ struct BattleUnitStatistics
 			KIA(false),
 			nikeCross(false),
 			medikitApplications(0),
+			revivedSoldier(0),
 			MIA(false)
 //			kills()
 	{}
@@ -668,7 +673,7 @@ private:
 		void playHitSound();
 
 		/// Heals stun level of this unit.
-		void healStun(int power);
+		bool healStun(int power);
 		/// Gets this unit's stun level.
 		int getStun() const;
 
@@ -872,7 +877,7 @@ private:
 
 		/// Gets fatal wound amount of a body part.
 		int getFatalWound(int part) const;
-		/// Heals one fatal wound.
+		/// Heals fatal wounds.
 		void heal(
 				int part,
 				int wounds,
@@ -880,7 +885,7 @@ private:
 		/// Gives pain killers to this unit.
 		void painKillers();
 		/// Gives stimulants to this unit.
-		void stimulant(
+		bool stimulant(
 				int energy,
 				int stun);
 

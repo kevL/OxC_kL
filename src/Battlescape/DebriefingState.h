@@ -101,6 +101,7 @@ private:
 		_aliensControlled,
 		_aliensKilled,
 		_aliensStunned,
+		_diff,
 		_limitsEnforced;
 
 	std::wstring _baseLabel;
