@@ -1448,8 +1448,8 @@ void SavedBattleGame::resetUnitTiles()
 }
 
 /**
- * Gives access to the storageSpace vector
- * for distribution of items in base defense missions.
+ * Gives access to the storageSpace vector for distribution of items in base
+ * defense missions.
  * @return, reference a vector of storage positions
  */
 std::vector<Position>& SavedBattleGame::getStorageSpace()
@@ -1462,7 +1462,7 @@ std::vector<Position>& SavedBattleGame::getStorageSpace()
  * to random locations in the storage facilities.
  * @param tile - pointer to a tile where all the goodies are initially stored
  */
-void SavedBattleGame::randomizeItemLocations(Tile* tile)
+void SavedBattleGame::randomizeItemLocations(Tile* const tile)
 {
 	if (_storageSpace.empty() == false)
 	{
@@ -1473,11 +1473,12 @@ void SavedBattleGame::randomizeItemLocations(Tile* tile)
 		{
 			if ((*i)->getSlot()->getId() == "STR_GROUND")
 			{
-				getTile(_storageSpace.at(RNG::generate(
-													0,
-													_storageSpace.size() - 1)))->addItem(
-																					*i,
-																					(*i)->getSlot());
+				const size_t pick = static_cast<size_t>(RNG::generate(
+																0,
+																static_cast<int>(_storageSpace.size()) - 1));
+				getTile(_storageSpace.at(pick))->addItem(
+													*i,
+													(*i)->getSlot());
 
 				i = tile->getInventory()->erase(i);
 			}

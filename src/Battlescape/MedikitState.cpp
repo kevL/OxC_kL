@@ -321,7 +321,7 @@ void MedikitState::onCloseClick(Action*)
 }
 
 /**
- * Handler for clicking on the heal button.
+ * Handler for clicking the heal button.
  * @param action - pointer to an Action
  */
 void MedikitState::onHealClick(Action*)
@@ -362,7 +362,7 @@ void MedikitState::onHealClick(Action*)
 }
 
 /**
- * Handler for clicking on the stimulant button.
+ * Handler for clicking the stimulant button.
  * @param action - pointer to an Action
  */
 void MedikitState::onStimClick(Action*)
@@ -400,7 +400,7 @@ void MedikitState::onStimClick(Action*)
 }
 
 /**
- * Handler for clicking on the pain killer button.
+ * Handler for clicking the painkiller button.
  * @param action - pointer to an Action
  */
 void MedikitState::onPainClick(Action*)

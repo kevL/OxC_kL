@@ -30,15 +30,13 @@ namespace OpenXcom
  * Initializes an MCD Patch.
  */
 MCDPatch::MCDPatch()
-{
-}
+{}
 
 /**
  * dTor.
  */
 MCDPatch::~MCDPatch()
-{
-}
+{}
 
 /**
  * Loads the MCD Patch from a YAML file.
@@ -54,83 +52,83 @@ void MCDPatch::load(const YAML::Node& node)
 			i != data.end();
 			++i)
 	{
-		size_t MCDIndex = (*i)["MCDIndex"].as<size_t>();
+		const size_t MCDIndex = (*i)["MCDIndex"].as<size_t>();
 
 		if ((*i)["bigWall"])
 		{
-			int bigWall = (*i)["bigWall"].as<int>();
+			const int bigWall = (*i)["bigWall"].as<int>();
 			_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
 		}
 
 		if ((*i)["TUWalk"])
 		{
-			int TUWalk = (*i)["TUWalk"].as<int>();
+			const int TUWalk = (*i)["TUWalk"].as<int>();
 			_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
 		}
 
 		if ((*i)["TUFly"])
 		{
-			int TUFly = (*i)["TUFly"].as<int>();
+			const int TUFly = (*i)["TUFly"].as<int>();
 			_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
 		}
 
 		if ((*i)["TUSlide"])
 		{
-			int TUSlide = (*i)["TUSlide"].as<int>();
+			const int TUSlide = (*i)["TUSlide"].as<int>();
 			_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
 		}
 
 		if ((*i)["deathTile"])
 		{
-			int deathTile = (*i)["deathTile"].as<int>();
+			const int deathTile = (*i)["deathTile"].as<int>();
 			_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
 		}
 
 		if ((*i)["terrainHeight"])
 		{
-			int terrainHeight = (*i)["terrainHeight"].as<int>();
+			const int terrainHeight = (*i)["terrainHeight"].as<int>();
 			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
 		}
 
 		if ((*i)["specialType"])
 		{
-			int specialType = (*i)["specialType"].as<int>();
+			const int specialType = (*i)["specialType"].as<int>();
 			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
 		}
 
 		if ((*i)["explosive"])
 		{
-			int explosive = (*i)["explosive"].as<int>();
+			const int explosive = (*i)["explosive"].as<int>();
 			_explosives.push_back(std::make_pair(MCDIndex, explosive));
 		}
 
 		if ((*i)["armor"])
 		{
-			int armor = (*i)["armor"].as<int>();
+			const int armor = (*i)["armor"].as<int>();
 			_armors.push_back(std::make_pair(MCDIndex, armor));
 		}
 
 		if ((*i)["flammability"])
 		{
-			int flammability = (*i)["flammability"].as<int>();
+			const int flammability = (*i)["flammability"].as<int>();
 			_flammabilities.push_back(std::make_pair(MCDIndex, flammability));
 		}
 
 		if ((*i)["fuel"])
 		{
-			int fuel = (*i)["fuel"].as<int>();
+			const int fuel = (*i)["fuel"].as<int>();
 			_fuels.push_back(std::make_pair(MCDIndex, fuel));
 		}
 
 		if ((*i)["footstepSound"])
 		{
-			int footstepSound = (*i)["footstepSound"].as<int>();
+			const int footstepSound = (*i)["footstepSound"].as<int>();
 			_footstepSounds.push_back(std::make_pair(MCDIndex, footstepSound));
 		}
 
 		if ((*i)["HEBlock"])
 		{
-			int HEBlock = (*i)["HEBlock"].as<int>();
+			const int HEBlock = (*i)["HEBlock"].as<int>();
 			_HEBlocks.push_back(std::make_pair(MCDIndex, HEBlock));
 		}
 
@@ -295,9 +293,7 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 		{
 			dataSet->getObjects()->at(i->first)->setLoftID(
 														*j,
-														layer);
-
-			++layer;
+														layer++);
 		}
 	}
 }

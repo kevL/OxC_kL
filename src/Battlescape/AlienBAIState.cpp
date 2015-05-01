@@ -1969,10 +1969,11 @@ bool AlienBAIState::explosiveEfficacy(
 				pct -= 15;
 		}
 
-		if (_battleSave->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		std::string missionType = _battleSave->getMissionType();
+		if (missionType == "STR_ALIEN_BASE_ASSAULT")
 			pct -= 23;
-		else if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
-			|| _battleSave->getMissionType() == "STR_TERROR_MISSION")
+		else if (missionType == "STR_BASE_DEFENSE"
+			|| missionType == "STR_TERROR_MISSION")
 		{
 			pct += 56;
 		}

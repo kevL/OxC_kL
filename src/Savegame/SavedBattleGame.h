@@ -367,7 +367,7 @@ private:
 		/// Gives me access to the storage tiles vector.
 		std::vector<Position>& getStorageSpace();
 		/// Moves all the leftover items to random locations in the storage tiles vector.
-		void randomizeItemLocations(Tile* tile);
+		void randomizeItemLocations(Tile* const tile);
 
 		/// Gets a reference to the baseModules map.
 		std::vector<std::vector<std::pair<int, int> > >& getModuleMap();

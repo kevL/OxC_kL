@@ -22,6 +22,9 @@
 //#include <sstream>
 //#include <yaml-cpp/yaml.h>
 
+#include "MapBlock.h"
+#include "RuleTerrain.h"
+
 //#include "../Engine/Exception.h"
 //#include "../Engine/RNG.h"
 
@@ -345,10 +348,10 @@ void MapScript::init()
  * if all the max uses are used up it will return undefined.
  * @return, group number
  */
-const int MapScript::getGroupNumber()
+const int MapScript::getGroupNumber() // private.
 {
 	if (_groups.size() == 0)
-		return MT_DEFAULT;
+		return MBT_DEFAULT;
 
 	if (_cumulativeFrequency > 0)
 	{
@@ -383,7 +386,7 @@ const int MapScript::getGroupNumber()
 		}
 	}
 
-	return MT_UNDEFINED;
+	return MBT_UNDEFINED;
 }
 
 /**
@@ -391,7 +394,7 @@ const int MapScript::getGroupNumber()
  * If no blocks are defined it will use a group instead.
  * @return, block number
  */
-const int MapScript::getBlockNumber()
+const int MapScript::getBlockNumber() // private.
 {
 	if (_cumulativeFrequency > 0)
 	{
@@ -426,7 +429,7 @@ const int MapScript::getBlockNumber()
 		}
 	}
 
-	return MT_UNDEFINED;
+	return MBT_UNDEFINED;
 }
 
 /**
@@ -444,7 +447,7 @@ MapBlock* MapScript::getNextBlock(RuleTerrain* const terrain)
 
 	const int result = getBlockNumber();
 	if (result < static_cast<int>(terrain->getMapBlocks()->size())
-		&& result != static_cast<int>(MT_UNDEFINED))
+		&& result != static_cast<int>(MBT_UNDEFINED))
 	{
 		return terrain->getMapBlocks()->at(static_cast<size_t>(result));
 	}

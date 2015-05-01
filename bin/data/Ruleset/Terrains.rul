@@ -3071,7 +3071,7 @@ terrains:
       - type: PORTUFO20
         width: 20
         length: 20
-        groups: 5
+#        groups: 5
   - type: PORTURBAN
     script: URBAN #was PORTURBAN
     mapDataSets:
@@ -4199,7 +4199,7 @@ terrains:
       - type: UBASE_00
         width: 20
         length: 20
-        groups: 3
+        groups: 6
 #        type: 7
       - type: UBASE_01
         width: 20
@@ -4216,7 +4216,7 @@ terrains:
       - type: UBASE_04
         width: 10
         length: 10
-        groups: 2
+        groups: 5 # kL was 2 huh
         revealedFloors: 1
 #        type: 6
       - type: UBASE_05
@@ -4244,23 +4244,23 @@ terrains:
         length: 10
 #       UBASE_12 is impassable, 13 and 14 are apparently unused.
 #       In the interest of preserving an original experience they have been
-#       disabled by being added to group 5, which is unused in the scripts.
+#       disabled by being added to group 99, which is unused in the scripts.
       - type: UBASE_12
         width: 10
         length: 10
         items:
           STR_ELERIUM_115:
             - [4, 4, 0]
-#        groups: 5
+#        groups: 99
 #        maxCount: 1
       - type: UBASE_13
         width: 10
         length: 10
-#        groups: 5
+#        groups: 99
       - type: UBASE_14
         width: 10
         length: 10
-#        groups: 5
+#        groups: 99
       - type: UBASE_15
         width: 20
         length: 20
@@ -4269,12 +4269,12 @@ terrains:
       - type: UBASE_19
         width: 20
         length: 20
-        groups: 3
+        groups: 6
 #        type: 7
       - type: UBASE_20
         width: 20
         length: 20
-        groups: 3
+        groups: 6
 #        type: 7
       - type: UBASE_21
         width: 20
@@ -4288,6 +4288,7 @@ terrains:
       - type: UBASE_24
         width: 10
         length: 10
+        groups: 5 # kL
         revealedFloors: 1
 #        type: 6
       - type: UBASE_25

@@ -23,7 +23,6 @@
 //#include <vector>
 
 #include "../Ruleset/MapScript.h"
-#include "../Ruleset/RuleTerrain.h"
 
 
 namespace OpenXcom
@@ -44,7 +43,7 @@ class ResourcePack;
 class RuleItem;
 class Ruleset;
 class RuleTerrain;
-class RuleTexture;
+//class RuleTexture;
 class SavedBattleGame;
 class SavedGame;
 class Tile;
@@ -62,7 +61,7 @@ class BattlescapeGenerator
 
 private:
 	bool
-		_allowAutoLoadout,
+//		_allowAutoLoadout,
 		_baseEquipScreen,
 		_craftDeployed,
 		_generateFuel;
@@ -97,9 +96,9 @@ private:
 	ResourcePack* _res;
 	Ruleset* _rules;
 	RuleTerrain* _terrain;
-	RuleTexture* _texture;
+//	RuleTexture* _texture;
 	SavedBattleGame* _battleSave;
-	SavedGame* _savedGame;
+	SavedGame* _gameSave;
 	Tile* _tileEquipt;
 	Ufo* _ufo;
 
@@ -174,6 +173,9 @@ private:
 	void generateMap(const std::vector<MapScript*>* const script);
 	/// Generates a map from base modules.
 	void generateBaseMap();
+
+	/// Finds Alien Base start modules for Xcom equipment spawning.
+	void placeXcomProperty();
 
 	/// Clears a module from the map.
 	void clearModule(

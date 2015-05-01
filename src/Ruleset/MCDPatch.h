@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_MCDPATCH_H
 #define OPENXCOM_MCDPATCH_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

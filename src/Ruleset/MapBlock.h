@@ -30,17 +30,18 @@ namespace OpenXcom
 
 enum MapBlockType // These define 'groups'
 {
-	MT_UNDEFINED = -1,	// -1
-	MT_DEFAULT,			//  0
-	MT_LANDINGZONE,		//  1
-	MT_EWROAD,			//  2
-	MT_NSROAD,			//  3
-	MT_CROSSING,		//  4
+	MBT_UNDEFINED = -1,	// -1
+	MBT_DEFAULT,		//  0
+	MBT_LANDPAD,		//  1
+	MBT_EWROAD,			//  2
+	MBT_NSROAD,			//  3
+	MBT_CROSSING,		//  4
+	MBT_START,			//  5 kL_add. For AlienBase starting equipment spawn
+	MBT_CONTROL			//  6
 };
 
 
 class Position;
-class RuleTerrain;
 
 
 /**

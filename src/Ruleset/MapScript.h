@@ -26,9 +26,6 @@
 //#include <SDL_video.h>
 //#include <yaml-cpp/yaml.h>
 
-#include "MapBlock.h"
-#include "RuleTerrain.h"
-
 
 namespace OpenXcom
 {
@@ -95,11 +92,11 @@ private:
 		_cumulativeFrequency,
 		_label;
 
-	MapDirection _direction;
-	MapScriptCommand _type;
 	TunnelData* _tunnelData;
 
-	std::vector<SDL_Rect*> _rects;
+	MapDirection _direction;
+	MapScriptCommand _type;
+
 	std::vector<int>
 		_blocks,
 		_blocksTemp,
@@ -110,6 +107,7 @@ private:
 		_groupsTemp,
 		_maxUses,
 		_maxUsesTemp;
+	std::vector<SDL_Rect*> _rects;
 
 	/// Randomly generate a group from within the array.
 	const int getGroupNumber();

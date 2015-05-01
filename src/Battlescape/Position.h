@@ -63,7 +63,7 @@ public:
 			z(pos.z)
 	{};
 
-	Position& operator=(const Position& pos)
+	Position& operator= (const Position& pos)
 	{
 		if (this != &pos) // kL: cf. Unit.h
 		{
@@ -75,14 +75,14 @@ public:
 		return *this;
 	}
 
-	Position operator+(const Position& pos) const
+	Position operator+ (const Position& pos) const
 	{
 		return Position(
 						x + pos.x,
 						y + pos.y,
 						z + pos.z);
 	}
-	Position& operator+=(const Position& pos)
+	Position& operator+= (const Position& pos)
 	{
 		x += pos.x;
 		y += pos.y;
@@ -91,14 +91,14 @@ public:
 		return *this;
 	}
 
-	Position operator-(const Position& pos) const
+	Position operator- (const Position& pos) const
 	{
 		return Position(
 						x - pos.x,
 						y - pos.y,
 						z - pos.z);
 	}
-	Position& operator-=(const Position& pos)
+	Position& operator-= (const Position& pos)
 	{
 		x -= pos.x;
 		y -= pos.y;
@@ -107,14 +107,14 @@ public:
 		return *this;
 	}
 
-	Position operator*(const Position& pos) const
+	Position operator* (const Position& pos) const
 	{
 		return Position(
 						x * pos.x,
 						y * pos.y,
 						z * pos.z);
 	}
-	Position& operator*=(const Position& pos)
+	Position& operator*= (const Position& pos)
 	{
 		x *= pos.x;
 		y *= pos.y;
@@ -122,14 +122,14 @@ public:
 
 		return *this;
 	}
-	Position operator*(const int vect) const
+	Position operator* (const int vect) const
 	{
 		return Position(
 						x * vect,
 						y * vect,
 						z * vect);
 	}
-	Position& operator*=(const int vect)
+	Position& operator*= (const int vect)
 	{
 		x *= vect;
 		y *= vect;
@@ -138,14 +138,14 @@ public:
 		return *this;
 	}
 
-	Position operator/(const Position& pos) const
+	Position operator/ (const Position& pos) const
 	{
 		return Position(
 						x / pos.x,
 						y / pos.y,
 						z / pos.z);
 	}
-	Position& operator/=(const Position& pos)
+	Position& operator/= (const Position& pos)
 	{
 		x /= pos.x;
 		y /= pos.y;
@@ -153,14 +153,14 @@ public:
 
 		return *this;
 	}
-	Position operator/(const int vect) const
+	Position operator/ (const int vect) const
 	{
 		return Position(
 						x / vect,
 						y / vect,
 						z / vect);
 	}
-	Position& operator/=(const int vect)	// kL_begin:
+	Position& operator/= (const int vect)	// kL_begin:
 	{
 		x /= vect;
 		y /= vect;
@@ -170,7 +170,7 @@ public:
 	}										// kL_end.
 
 	/// == operator
-	bool operator==(const Position& pos) const
+	bool operator== (const Position& pos) const
 	{
 		return
 			   x == pos.x
@@ -179,7 +179,7 @@ public:
 	}
 
 	/// != operator
-	bool operator!=(const Position& pos) const
+	bool operator!= (const Position& pos) const
 	{
 		return
 			   x != pos.x
@@ -188,23 +188,18 @@ public:
 	}
 };
 
-inline std::ostream& operator<<(
-		std::ostream& out,
-		const Position& pos)
+inline std::ostream& operator<< (std::ostream& ostr, const Position& pos)
 {
-	out << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
-
-	return out;
+	ostr << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
+	return ostr;
 }
 
-inline std::wostream& operator<<(
-		std::wostream& wout,
-		const Position& pos)
+inline std::wostream& operator<< (std::wostream& wostr, const Position& pos)
 {
-	wout << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
-
-	return wout;
+	wostr << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
+	return wostr;
 }
+
 
 typedef Position Vector3i;
 
@@ -234,8 +229,11 @@ struct convert<OpenXcom::Position>
 			const Node& node,
 			OpenXcom::Position& rhs)
 	{
-		if (!node.IsSequence() || node.size() != 3)
+		if (node.IsSequence() == false
+			|| node.size() != 3)
+		{
 			return false;
+		}
 
 		rhs.x = node[0].as<int>();
 		rhs.y = node[1].as<int>();
