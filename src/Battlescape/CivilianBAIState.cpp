@@ -48,9 +48,9 @@ namespace OpenXcom
  * @param node			- pointer to the node the unit originates from
  */
 CivilianBAIState::CivilianBAIState(
-		SavedBattleGame* battleSave,
-		BattleUnit* unit,
-		Node* node)
+		SavedBattleGame* const battleSave,
+		BattleUnit* const unit,
+		Node* const node)
 	:
 		BattleAIState(
 			battleSave,
@@ -61,8 +61,8 @@ CivilianBAIState::CivilianBAIState(
 		_visibleEnemies(0),
 		_spottingEnemies(0),
 		_fromNode(node),
-		_toNode(NULL),
-		_traceAI(false)
+		_toNode(NULL)
+//		_traceAI(false)
 {
 //	_traceAI = Options::traceAI;
 	_escapeAction = new BattleAction();
@@ -86,13 +86,15 @@ void CivilianBAIState::load(const YAML::Node& node)
 {
 	_AIMode = node["AIMode"].as<int>(0);
 
-	const int fromNodeID = node["fromNode"].as<int>(-1);
-	if (fromNodeID != -1)
-		_fromNode = _battleSave->getNodes()->at(fromNodeID);
+	const int
+		fromNodeId	= node["fromNode"]	.as<int>(-1),
+		toNodeId	= node["toNode"]	.as<int>(-1);
 
-	const int toNodeID = node["toNode"].as<int>(-1);
-	if (toNodeID != -1)
-		_toNode = _battleSave->getNodes()->at(toNodeID);
+	if (fromNodeId != -1)
+		_fromNode = _battleSave->getNodes()->at(static_cast<size_t>(fromNodeId));
+
+	if (toNodeId != -1)
+		_toNode = _battleSave->getNodes()->at(static_cast<size_t>(toNodeId));
 }
 
 /**
@@ -102,18 +104,16 @@ void CivilianBAIState::load(const YAML::Node& node)
 YAML::Node CivilianBAIState::save() const
 {
 	int
-		fromNodeID = -1,
-		toNodeID = -1;
+		fromNodeId = -1,
+		toNodeId = -1;
 
-	if (_fromNode != NULL)
-		fromNodeID	= _fromNode->getID();
-	if (_toNode != NULL)
-		toNodeID	= _toNode->getID();
+	if (_fromNode != NULL)	fromNodeId	= _fromNode->getID();
+	if (_toNode != NULL)	toNodeId	= _toNode->getID();
 
 	YAML::Node node;
 
-	node["fromNode"]	= fromNodeID;
-	node["toNode"]		= toNodeID;
+	node["fromNode"]	= fromNodeId;
+	node["toNode"]		= toNodeId;
 	node["AIMode"]		= _AIMode;
 
 	return node;
@@ -143,7 +143,7 @@ void CivilianBAIState::think(BattleAction* action)
 
 	_escapeAction->number = action->number;
 
-	_visibleEnemies = selectNearestTarget();
+	_visibleEnemies = countHostiles();
 	_spottingEnemies = countSpottingUnits(_unit->getPosition());
 
 //	if (_traceAI)
@@ -227,13 +227,17 @@ void CivilianBAIState::think(BattleAction* action)
 }
 
 /**
- *
+ * Counts the quantity of Hostiles that the civilian sees and sets the closest
+ * one as the '_aggroTarget'.
+ * @note If none of the hostiles can target the civilian this returns 0.
+ * @return, quantity of potential perps
  */
-int CivilianBAIState::selectNearestTarget()
+int CivilianBAIState::countHostiles()
 {
 	int
 		tally = 0,
-		closest = 100;
+		dist = 1000,
+		distTest;
 
 	_aggroTarget = NULL;
 
@@ -249,25 +253,23 @@ int CivilianBAIState::selectNearestTarget()
 		if ((*i)->isOut() == false
 			&& (*i)->getFaction() == FACTION_HOSTILE)
 		{
-			if (_battleSave->getTileEngine()->visible(_unit, (*i)->getTile()) == true)
+			if (_battleSave->getTileEngine()->visible(
+													_unit,
+													(*i)->getTile()) == true)
 			{
 				++tally;
-
-				const int dist = _battleSave->getTileEngine()->distance(
-																	_unit->getPosition(),
-																	(*i)->getPosition());
-				if (dist < closest)
+				distTest = _battleSave->getTileEngine()->distance(
+																_unit->getPosition(),
+																(*i)->getPosition());
+				if (distTest < dist
+					&& _battleSave->getTileEngine()->canTargetUnit(
+																&origin,
+																(*i)->getTile(),
+																&target,
+																_unit) == true)
 				{
-					const bool valid = _battleSave->getTileEngine()->canTargetUnit(
-																				&origin,
-																				(*i)->getTile(),
-																				&target,
-																				_unit);
-					if (valid == true)
-					{
-						closest = dist;
-						_aggroTarget = *i;
-					}
+					dist = distTest;
+					_aggroTarget = *i;
 				}
 			}
 		}
@@ -287,6 +289,12 @@ int CivilianBAIState::countSpottingUnits(Position pos) const
 	bool checking = (pos != _unit->getPosition());
 	int tally = 0;
 
+	Position
+		originVoxel,
+		targetVoxel;
+
+	const BattleUnit* unit;
+
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -298,32 +306,22 @@ int CivilianBAIState::countSpottingUnits(Position pos) const
 													pos,
 													(*i)->getPosition()) < 25)
 		{
-			Position originVoxel = _battleSave->getTileEngine()->getSightOriginVoxel(*i);
+			originVoxel = _battleSave->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 4;
 
-			Position targetVoxel;
 			if (checking == true)
-			{
-				if (_battleSave->getTileEngine()->canTargetUnit(
-															&originVoxel,
-															_battleSave->getTile(pos),
-															&targetVoxel,
-															*i,
-															_unit) == true)
-				{
-					++tally;
-				}
-			}
+				unit = _unit;
 			else
+				unit = NULL;
+
+			if (_battleSave->getTileEngine()->canTargetUnit(
+														&originVoxel,
+														_battleSave->getTile(pos),
+														&targetVoxel,
+														*i,
+														unit) == true)
 			{
-				if (_battleSave->getTileEngine()->canTargetUnit(
-															&originVoxel,
-															_battleSave->getTile(pos),
-															&targetVoxel,
-															*i) == true)
-				{
-					++tally;
-				}
+				++tally;
 			}
 		}
 	}
@@ -353,7 +351,7 @@ void CivilianBAIState::setupEscape()
 		currentTilePref = 15,
 		dist = 0;
 
-	selectNearestTarget(); // gets an _aggroTarget
+	countHostiles(); // sets an _aggroTarget
 	if (_aggroTarget != NULL)
 		dist = _battleSave->getTileEngine()->distance(
 												_unit->getPosition(),
@@ -389,8 +387,8 @@ void CivilianBAIState::setupEscape()
 				if (unitsSpotting > 0)
 				{
 					// maybe don't stay in the same spot? move or something if there's any point to it?
-					_escapeAction->target.x += RNG::generate(-20, 20);
-					_escapeAction->target.y += RNG::generate(-20, 20);
+					_escapeAction->target.x += RNG::generate(-20,20);
+					_escapeAction->target.y += RNG::generate(-20,20);
 				}
 				else
 					score += currentTilePref;
@@ -403,9 +401,9 @@ void CivilianBAIState::setupEscape()
 			score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
 
 			_escapeAction->target = _unit->getPosition();
-			_escapeAction->target.x += RNG::generate(-10, 10);
-			_escapeAction->target.y += RNG::generate(-10, 10);
-			_escapeAction->target.z = _unit->getPosition().z + RNG::generate(-1, 1);
+			_escapeAction->target.x += RNG::generate(-10,10);
+			_escapeAction->target.y += RNG::generate(-10,10);
+			_escapeAction->target.z = _unit->getPosition().z + RNG::generate(-1,1);
 
 			if (_escapeAction->target.z < 0)
 				_escapeAction->target.z = 0;
@@ -524,8 +522,6 @@ void CivilianBAIState::setupEscape()
  */
 void CivilianBAIState::setupPatrol()
 {
-	Node* node;
-
 	if (_toNode != NULL
 		&& _unit->getPosition() == _toNode->getPosition())
 	{
@@ -537,29 +533,29 @@ void CivilianBAIState::setupPatrol()
 	}
 
 	if (_fromNode == NULL)
-	{
+		_fromNode = _battleSave->getNearestNode(_unit);
+/*{
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
-		int closest = 1000000;
+		int dist = 1000000;
 		for (std::vector<Node*>::const_iterator
 				i = _battleSave->getNodes()->begin();
 				i != _battleSave->getNodes()->end();
 				++i)
 		{
-			node = *i;
-
-			const int dist = _battleSave->getTileEngine()->distanceSq(
-																_unit->getPosition(),
-																node->getPosition());
+			Node* node = *i;
+			const int distTest = _battleSave->getTileEngine()->distanceSq(
+																		_unit->getPosition(),
+																		node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z
-				&& dist < closest
-				&& (node->getType() & Node::TYPE_SMALL))
+				&& distTest < dist
+				&& (node->getNodeType() & Node::TYPE_SMALL))
 			{
 				_fromNode = node;
-				closest = dist;
+				dist = distTest;
 			}
 		}
-	}
+	} */
 
 	// look for a new node to walk towards
 	int triesLeft = 5;
@@ -607,7 +603,7 @@ void CivilianBAIState::setupPatrol()
 void CivilianBAIState::evaluateAIMode()
 {
 	double
-		escapeOdds = 0.0,
+		escapeOdds = 0.,
 		patrolOdds = 30.;
 
 	if (_visibleEnemies > 0)

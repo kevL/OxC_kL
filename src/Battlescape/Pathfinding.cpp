@@ -593,14 +593,14 @@ bool Pathfinding::aStarPath(
 	PathfindingNode* const start = getNode(origin);
 	start->connect(0,0,0, target);
 	PathfindingOpenSet openList;
-	openList.push(start);
+	openList.addNode(start);
 
 	const bool missile = missileTarget != NULL
 					  && maxTUCost == -1;
 
-	while (openList.empty() == false) // if the openList is empty, reached the end
+	while (openList.isNodeSetEmpty() == false) // if the openList is empty, reached the end
 	{
-		PathfindingNode* const currentNode = openList.pop();
+		PathfindingNode* const currentNode = openList.getNode();
 		const Position& currentPos = currentNode->getPosition();
 		currentNode->setChecked();
 
@@ -664,7 +664,7 @@ bool Pathfinding::aStarPath(
 								dir,
 								target);
 
-				openList.push(nextNode);
+				openList.addNode(nextNode);
 			}
 		}
 	}
@@ -2356,12 +2356,12 @@ std::vector<int> Pathfinding::findReachable(
 	PathfindingNode* startNode = getNode(start);
 	startNode->connect(0,0,0);
 	PathfindingOpenSet unvisited;
-	unvisited.push(startNode);
+	unvisited.addNode(startNode);
 	std::vector<PathfindingNode*> reachable;
 
-	while (unvisited.empty() == false)
+	while (unvisited.isNodeSetEmpty() == false)
 	{
-		PathfindingNode* const currentNode = unvisited.pop();
+		PathfindingNode* const currentNode = unvisited.getNode();
 		const Position &currentPos = currentNode->getPosition();
 
 		for (int // Try all reachable neighbours.
@@ -2401,7 +2401,7 @@ std::vector<int> Pathfinding::findReachable(
 								currentNode,
 								direction);
 
-				unvisited.push(nextNode);
+				unvisited.addNode(nextNode);
 			}
 		}
 

@@ -2218,20 +2218,21 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 
 	// following data is the order in which certain alien ranks spawn on certain node ranks;
 	// note that they all can fall back to rank 0 nodes - which is scout (outside ufo)
-
 	Node* node;
 	if (outside == true)
 		node = _battleSave->getSpawnNode( // Civ-Scout spawnpoints <- 'outside'
-									0,
+									NR_SCOUT,
 									unit);
 	else
 		node = NULL;
 
+	const size_t ranks_2 = (sizeof(Node::nodeRank) / sizeof(Node::nodeRank[0][0]))
+						 / (sizeof(Node::nodeRank) / sizeof(Node::nodeRank[0]));
 	if (node == NULL) // ie. if not spawning on a Civ-Scout node
 	{
-		for (int
+		for (size_t
 				i = 0;
-				i < 8
+				i != ranks_2 // =8, 2nd dimension of nodeRank[][], ref Node.cpp
 					&& node == NULL;
 				++i)
 		{
@@ -2253,14 +2254,14 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 										node));
 		unit->setRankInt(alienRank);
 
-		Position craft = _battleSave->getUnits()->at(0)->getPosition();
+		Position posCraft = _battleSave->getUnits()->at(0)->getPosition(); // aLiens face Craft
 		int dir;
 		if (RNG::percent(diff * 20) == true
 			&& _battleSave->getTileEngine()->distance(
 													node->getPosition(),
-													craft) < 25)
+													posCraft) < 25)
 		{
-			dir = unit->directionTo(craft);
+			dir = unit->directionTo(posCraft);
 		}
 		else
 			dir = _battleSave->getTileEngine()->faceWindow(node->getPosition());
@@ -2367,8 +2368,8 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules) // private.
 										_battleSave->getDepth());
 
 	Node* const node = _battleSave->getSpawnNode(
-												0,
-												unit);
+													NR_SCOUT,
+													unit);
 	if ((node != NULL
 			&& _battleSave->setUnitPosition(
 										unit,
@@ -2415,14 +2416,14 @@ int BattlescapeGenerator::loadMAP( // private.
 		bool discovered,
 		bool craft)
 {
-	std::ostringstream filename;
-	filename << "MAPS/" << mapblock->getType() << ".MAP";
-	std::ifstream mapFile( // Load file
-						CrossPlatform::getDataFile(filename.str()).c_str(),
+	std::ostringstream file;
+	file << "MAPS/" << mapblock->getType() << ".MAP";
+	std::ifstream mapFile ( // init. Load file
+						CrossPlatform::getDataFile(file.str()).c_str(),
 						std::ios::in | std::ios::binary);
 	if (mapFile.fail() == true)
 	{
-		throw Exception(filename.str() + " not found");
+		throw Exception(file.str() + " not found");
 	}
 
 	char mapSize[3];
@@ -2436,19 +2437,19 @@ int BattlescapeGenerator::loadMAP( // private.
 
 	mapblock->setSizeZ(size_z);
 
-	std::stringstream ss;
+	std::stringstream ststr;
 	if (size_z > _battleSave->getMapSizeZ())
 	{
-		ss <<"Height of map " + filename.str() + " too big for this mission, block is " << size_z << ", expected: " << _battleSave->getMapSizeZ();
-		throw Exception(ss.str());
+		ststr <<"Height of map " + file.str() + " too big for this mission, block is " << size_z << ", expected: " << _battleSave->getMapSizeZ();
+		throw Exception(ststr.str());
 	}
 
 
 	if (   size_x != mapblock->getSizeX()
 		|| size_y != mapblock->getSizeY())
 	{
-		ss <<"Map block is not of the size specified " + filename.str() + " is " << size_x << "x" << size_y << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
-		throw Exception(ss.str());
+		ststr <<"Map block is not of the size specified " + file.str() + " is " << size_x << "x" << size_y << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
+		throw Exception(ststr.str());
 	}
 
 	int
@@ -2580,7 +2581,7 @@ int BattlescapeGenerator::loadMAP( // private.
 
 	if (mapFile.eof() == false)
 	{
-		throw Exception("Invalid MAP file: " + filename.str());
+		throw Exception("Invalid MAP file: " + file.str());
 	}
 
 	mapFile.close();
@@ -2632,18 +2633,17 @@ void BattlescapeGenerator::loadRMP( // private.
 {
 	char value[24];
 
-	std::ostringstream filename;
-	filename << "ROUTES/" << mapblock->getType() << ".RMP";
+	std::ostringstream file;
+	file << "ROUTES/" << mapblock->getType() << ".RMP";
 
-	std::ifstream mapFile( // Load file
-					CrossPlatform::getDataFile(filename.str()).c_str(),
+	std::ifstream mapFile ( // init. Load file
+					CrossPlatform::getDataFile(file.str()).c_str(),
 					std::ios::in | std::ios::binary);
 	if (mapFile.fail() == true)
 	{
-		throw Exception(filename.str() + " not found");
+		throw Exception(file.str() + " not found");
 	}
 
-	const int nodeOffset = static_cast<int>(_battleSave->getNodes()->size());
 	int
 		pos_x,
 		pos_y,
@@ -2652,15 +2652,17 @@ void BattlescapeGenerator::loadRMP( // private.
 		type,
 		nodeRank,
 		nodeFlags,
-		reserved,
+		destruct,
 		priority;
+
+	const int nodeOffset = static_cast<int>(_battleSave->getNodes()->size());
 
 	while (mapFile.read(
 					(char*)&value,
 					sizeof(value)) != NULL)
 	{
-		pos_x = static_cast<int>(value[1]);
-		pos_y = static_cast<int>(value[0]);
+		pos_x = static_cast<int>(value[1]); // note: Here is where x-y values get reversed
+		pos_y = static_cast<int>(value[0]); // vis-a-vis values in .RMP files vs. loaded values.
 		pos_z = static_cast<int>(value[2]);
 
 		if (   pos_x < mapblock->getSizeX()
@@ -2675,7 +2677,7 @@ void BattlescapeGenerator::loadRMP( // private.
 			type		= static_cast<int>(value[19]);
 			nodeRank	= static_cast<int>(value[20]);
 			nodeFlags	= static_cast<int>(value[21]);
-			reserved	= static_cast<int>(value[22]);
+			destruct	= static_cast<int>(value[22]);
 			priority	= static_cast<int>(value[23]);
 
 			Node* const node = new Node(
@@ -2685,7 +2687,7 @@ void BattlescapeGenerator::loadRMP( // private.
 									type,
 									nodeRank,
 									nodeFlags,
-									reserved,
+									destruct,
 									priority);
 
 			for (size_t
@@ -2693,14 +2695,14 @@ void BattlescapeGenerator::loadRMP( // private.
 					j != 5;
 					++j)
 			{
-				int connectID = static_cast<int>(value[j * 3 + 4]);
+				int connectId = static_cast<int>(value[(j * 3) + 4]);
 
-				if (connectID < 251) // don't touch special values
-					connectID += nodeOffset;
+				if (connectId < 251) // don't touch special values
+					connectId += nodeOffset;
 				else // 255/-1 = unused, 254/-2 = north, 253/-3 = east, 252/-4 = south, 251/-5 = west
-					connectID -= 256;
+					connectId -= 256;
 
-				node->getNodeLinks()->push_back(connectID);
+				node->getNodeLinks()->push_back(connectId);
 			}
 
 			_battleSave->getNodes()->push_back(node);
@@ -2725,7 +2727,7 @@ void BattlescapeGenerator::fuelPowerSources() // private.
 			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
 			++i)
 	{
-		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
+		if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem* const alienFuel = new BattleItem(
@@ -2750,7 +2752,7 @@ void BattlescapeGenerator::explodePowerSources() // private.
 			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
 			++i)
 	{
-		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
+		if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
 			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
 			&& RNG::percent(80) == true)
 		{
@@ -3280,7 +3282,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 			ufoMap,
 			_ufoPos.x * 10,
 			_ufoPos.y * 10,
-			Node::UFOSEGMENT);
+			Node::SEG_UFO);
 
 		for (int
 				i = 0;
@@ -3292,7 +3294,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					j < ufoMap->getSizeY() / 10;
 					++j)
 			{
-				_segments[_ufoPos.x + i][_ufoPos.y + j] = Node::UFOSEGMENT;
+				_segments[_ufoPos.x + i][_ufoPos.y + j] = Node::SEG_UFO;
 			}
 		}
 	}
@@ -3325,7 +3327,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 			craftMap,
 			_craftPos.x * 10,
 			_craftPos.y * 10,
-			Node::CRAFTSEGMENT);
+			Node::SEG_CRAFT);
 
 		for (int
 				i = 0;
@@ -3338,7 +3340,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					++j)
 			{
 				_segments[_craftPos.x + i]
-						 [_craftPos.y + j] = Node::CRAFTSEGMENT;
+						 [_craftPos.y + j] = Node::SEG_CRAFT;
 			}
 		}
 

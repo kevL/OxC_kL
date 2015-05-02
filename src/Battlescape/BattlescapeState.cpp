@@ -2836,7 +2836,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				_numAmmoRight->setValue(0);
 		}
 		else if (rtItem->getRules()->getBattleType() == BT_GRENADE
-			&& rtItem->getFuseTimer() != -1)
+			&& rtItem->getFuseTimer() > 0)
 		{
 			_numAmmoRight->setVisible();
 			_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuseTimer()));
@@ -2861,7 +2861,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				_numAmmoLeft->setValue(0);
 		}
 		else if (ltItem->getRules()->getBattleType() == BT_GRENADE
-			&& ltItem->getFuseTimer() != -1)
+			&& ltItem->getFuseTimer() > 0)
 		{
 			_numAmmoLeft->setVisible();
 			_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuseTimer()));

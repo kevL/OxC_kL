@@ -46,7 +46,7 @@ class CivilianBAIState
 {
 
 private:
-	bool _traceAI;
+//	bool _traceAI;
 	int
 		_AIMode,
 		_escapeTUs,
@@ -68,9 +68,9 @@ private:
 		public:
 			/// Creates a new BattleAIState linked to the game and a certain unit.
 			CivilianBAIState(
-					SavedBattleGame* battleSave,
-					BattleUnit* unit,
-					Node* node);
+					SavedBattleGame* const battleSave,
+					BattleUnit* const unit,
+					Node* const node);
 			/// Cleans up the BattleAIState.
 			~CivilianBAIState();
 
@@ -90,7 +90,7 @@ private:
 			///
 			int countSpottingUnits(Position pos) const;
 			///
-			int selectNearestTarget();
+			int countHostiles();
 			///
 			void setupEscape();
 			///

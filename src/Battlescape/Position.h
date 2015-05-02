@@ -34,9 +34,7 @@ class Position
 
 public:
 	int
-		x,
-		y,
-		z;
+		x,y,z;
 
 	/// Null position constructor.
 	Position()

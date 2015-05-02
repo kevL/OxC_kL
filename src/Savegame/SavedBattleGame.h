@@ -287,12 +287,14 @@ private:
 		/// Gets a spawn node.
 		Node* getSpawnNode(
 				int unitRank,
-				BattleUnit* unit);
+				BattleUnit* const unit);
 		/// Gets a patrol node.
 		Node* getPatrolNode(
 				bool scout,
-				BattleUnit* unit,
-				Node* curNode);
+				BattleUnit* const unit,
+				Node* fromNode);
+		/// Gets the node considered nearest to a BattleUnit.
+		Node* getNearestNode(const BattleUnit* const unit) const;
 
 		/// Carries out new turn preparations.
 		void spreadFireSmoke();

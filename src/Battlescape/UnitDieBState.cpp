@@ -103,21 +103,21 @@ UnitDieBState::UnitDieBState(
 
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
-		const std::vector<Node*>* const nodes = _parent->getSave()->getNodes();
-		if (nodes == NULL)
-			return; // this better not happen.
-
-		for (std::vector<Node*>::const_iterator
-				node = nodes->begin();
-				node != nodes->end();
-				++node)
+		const std::vector<Node*>* const nodeList = _parent->getSave()->getNodes();
+		if (nodeList != NULL) // this better not happen.
 		{
-			if (_parent->getSave()->getTileEngine()->distanceSq(
-															(*node)->getPosition(),
-															_unit->getPosition(),
-															false) < 5)
+			for (std::vector<Node*>::const_iterator
+					i = nodeList->begin();
+					i != nodeList->end();
+					++i)
 			{
-				(*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
+				if (_parent->getSave()->getTileEngine()->distanceSq(
+																(*i)->getPosition(),
+																_unit->getPosition(),
+																false) < 5)
+				{
+					(*i)->setNodeType((*i)->getNodeType() | Node::TYPE_DANGEROUS);
+				}
 			}
 		}
 	}

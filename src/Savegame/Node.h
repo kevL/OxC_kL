@@ -30,20 +30,20 @@ namespace OpenXcom
 
 enum NodeRank
 {
-	NR_SCOUT,		// #0
-	NR_XCOM,		// #1
-	NR_SOLDIER,		// #2
-	NR_NAVIGATOR,	// #3
-	NR_LEADER,		// #4
-	NR_ENGINEER,	// #5
-	NR_MISC1,		// #6
-	NR_MEDIC,		// #7
-	NR_MISC2		// #8
+	NR_SCOUT,		// 0
+	NR_XCOM,		// 1
+	NR_SOLDIER,		// 2
+	NR_NAVIGATOR,	// 3
+	NR_LEADER,		// 4
+	NR_ENGINEER,	// 5
+	NR_MISC1,		// 6
+	NR_MEDIC,		// 7
+	NR_MISC2		// 8
 };
 
 
 /**
- * Represents a node/spawnpoint in the battlescape, loaded from RMP files.
+ * Represents a node/spawnpoint in the battlescape loaded from RMP files.
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 class Node
@@ -55,8 +55,8 @@ private:
 		_flags,		// desirability of patrolling to.
 		_id,		// unique identifier
 		_priority,	// 'Spawn' in .RMP
-		_nodeRank,	// aLien rank that can spawn or path here
-		_reserved,	// something to do with shooting objectives in BaseDefense missions
+		_rank,		// aLien rank that can spawn or path here
+		_destruct,	// something to do with shooting objectives in BaseDefense missions
 		_segment,	// something to do with nodeLinks; see BattlescapeGenerator::attachNodeLinks()
 		_type;		// usable by small/large/flying units.
 
@@ -67,14 +67,15 @@ private:
 
 	public:
 		static const int
-			CRAFTSEGMENT	= 1000,
-			UFOSEGMENT		= 2000,
+			SEG_CRAFT	= 1000,
+			SEG_UFO		= 2000,
 
 			TYPE_FLYING		= 0x01,	// non-flying unit cannot spawn here when this bit is set
 			TYPE_SMALL		= 0x02,	// large unit cannot spawn here when this bit is set
 			TYPE_DANGEROUS	= 0x04,	// an alien was shot here, stop patrolling to it like an idiot with a death wish
 
-			nodeRank[8][8]; // maps node-ranks (.RMP) to aliens' ranks
+			nodeRank[8][8], // maps node-ranks (.RMP) to aliens' ranks
+			test[2][3];
 
 		/// Creates a Node.
 		Node();
@@ -85,7 +86,7 @@ private:
 				int segment,
 				int type,
 				int nodeRank,
-				int flags,
+				int nodeFlags,
 				int reserved,
 				int priority);
 		/// Cleans up the Node.
@@ -114,39 +115,34 @@ private:
 		/// Gets the node's segment.
 		int getSegment() const;
 
-		/// Gets the node's type.
-		int getType() const;
 		/// Sets the node's type. SURPRISE!! (not)
-		void setType(int type);
+		void setNodeType(int type);
+		/// Gets the node's type.
+		int getNodeType() const;
 
 		/// Gets the 'flags' variable which is really the patrol-desirability value.
 		int getFlags()
-		{
-			return _flags;
-		}
-		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
-//		bool operator<(Node& b)
-//		{
-//			return _flags < b.getFlags();
-//		};
-		// kL_note: In SavedBattleGame::getPatrolNodes() I changed less-than to greater-than ...
+		{	return _flags; }
+
+		// kL_note: in SavedBattleGame::getPatrolNodes() I changed less-than to greater-than ...
 		// wonder if that matters here. So: REVERTED.
 		// correction: REMOVED. Just use getFlags() directly. Tks, anyway
 		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
-//		bool operator>(Node& b)
-//		{
-//			return _flags > b.getFlags();
-//		};
+//		bool operator< (Node& b)
+//		{	return _flags < b.getFlags(); };
+		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
+//		bool operator> (Node& b)
+//		{	return _flags > b.getFlags(); };
 
-		///
+
+		/// Gets if this Node is allocated.
 		bool isAllocated() const;
-		///
+		/// Sets this Node as allocated.
 		void allocateNode();
-
-		///
+		/// Sets this Node as NOT allocated.
 		void freeNode();
 
-		///
+		/// Gets if this Node is suitable for an aLien to target XCOM base targets/objectives.
 		bool isTarget() const;
 };
 

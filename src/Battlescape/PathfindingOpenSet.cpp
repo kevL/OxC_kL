@@ -19,7 +19,7 @@
 
 #include "PathfindingOpenSet.h"
 
-#include <assert.h>
+//#include <assert.h>
 
 #include "PathfindingNode.h"
 
@@ -32,9 +32,9 @@ namespace OpenXcom
  */
 PathfindingOpenSet::~PathfindingOpenSet()
 {
-	while (!_queue.empty())
+	while (_queue.empty() == false)
 	{
-		OpenSetEntry* entry = _queue.top();
+		const OpenSetEntry* const entry = _queue.top();
 		_queue.pop();
 
 		delete entry;
@@ -46,9 +46,10 @@ PathfindingOpenSet::~PathfindingOpenSet()
  */
 void PathfindingOpenSet::removeDiscarded()
 {
-	while (!_queue.empty() && !_queue.top()->_node)
+	while (_queue.empty() == false
+		&& _queue.top()->_node == NULL)
 	{
-		OpenSetEntry *entry = _queue.top();
+		const OpenSetEntry* const entry = _queue.top();
 		_queue.pop();
 
 		delete entry;
@@ -57,39 +58,39 @@ void PathfindingOpenSet::removeDiscarded()
 
 /**
  * Gets the node with the least cost.
- * After this call, the node is no longer in the set. It is an error to call this when the set is empty.
- * @return, A pointer to the node which had the least cost.
+ * @note After this call the node is no longer in the set.
+ * @note It is an error to call this when the set is empty.
+ * @return, pointer to the node which had the least cost
  */
-PathfindingNode* PathfindingOpenSet::pop()
+PathfindingNode* PathfindingOpenSet::getNode()
 {
-	assert(!empty());
-	OpenSetEntry* entry = _queue.top();
-	PathfindingNode* node = entry->_node;
+	assert(isNodeSetEmpty() == false);
+	const OpenSetEntry* const entry = _queue.top();
+	PathfindingNode* const node = entry->_node;
 	_queue.pop();
 
 	delete entry;
 	node->_openentry = 0;
 
-	// Discarded entries might be visible now.
-	removeDiscarded();
+	removeDiscarded(); // Discarded entries might be visible now.
 
 	return node;
 }
 
 /**
  * Places the node in the set.
- * If the node was already in the set, the previous entry is discarded.
- * It is the caller's responsibility to never re-add a node with a worse cost.
- * @param node A pointer to the node to add.
+ * @note If the node was already in the set the previous entry is discarded.
+ * @note It is the caller's responsibility to never re-add a node with a worse cost.
+ * @param node - pointer to the node to add
  */
-void PathfindingOpenSet::push(PathfindingNode* node)
+void PathfindingOpenSet::addNode(PathfindingNode* node)
 {
-	OpenSetEntry* entry = new OpenSetEntry;
+	OpenSetEntry* const entry = new OpenSetEntry;
 	entry->_node = node;
-	entry->_cost = node->getTUCost(false) + node->getTUGuess();
+	entry->_cost = node->getTUCost() + node->getTUGuess();
 
-	if (node->_openentry)
-		node->_openentry->_node = 0;
+	if (node->_openentry != NULL)
+		node->_openentry->_node = NULL;
 
 	node->_openentry = entry;
 	_queue.push(entry);

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_PATHFINDINGOPENSET_H
 #define OPENXCOM_PATHFINDINGOPENSET_H
 
-#include <queue>
+//#include <queue>
 
 
 namespace OpenXcom
@@ -37,18 +37,18 @@ struct OpenSetEntry
 
 
 /**
- * Helper class to compare entries through pointers.
+ * Helper class to compare entries using pointers.
  */
 class EntryCompare
 {
 	public:
 		/**
 		 * Compares entries @a *a and @a *b.
-		 * @param a Pointer to first entry.
-		 * @param b Pointer to second entry.
-		 * @return True if entry @a *b must come before @a *a.
+		 * @param a - pointer to first entry
+		 * @param b - pointer to second entry
+		 * @return, true if entry @a *b must come before @a *a
 		 */
-		bool operator()(OpenSetEntry* a, OpenSetEntry* b) const
+		bool operator() (OpenSetEntry* a, OpenSetEntry* b) const
 		{
 			return b->_cost < a->_cost;
 		}
@@ -72,16 +72,14 @@ private:
 		/// Cleans up the set and frees allocated memory.
 		~PathfindingOpenSet();
 
-		/// Gets the next node to check.
-		PathfindingNode *pop();
-
 		/// Adds a node to the set.
-		void push(PathfindingNode* node);
-		/// Is the set empty?
-		bool empty() const
-		{
-			return _queue.empty();
-		}
+		void addNode(PathfindingNode* node);
+		/// Gets the next node to check.
+		PathfindingNode* getNode();
+
+		/// Gets if the set is empty.
+		bool isNodeSetEmpty() const
+		{	return (_queue.empty() == true); }
 };
 
 }

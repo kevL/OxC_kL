@@ -289,10 +289,10 @@ void SavedBattleGame::load(
 		Log(LOG_INFO) << ". load xcom base";
 		if (node["moduleMap"])
 			_baseModules = node["moduleMap"].as<std::vector<std::vector<std::pair<int, int> > > >();
-		else
+//		else
 			// backwards compatibility: imperfect solution, modules that were completely destroyed
 			// prior to saving and updating builds will be counted as indestructible.
-			calculateModuleMap();
+//			calculateModuleMap();
 	}
 
 	Log(LOG_INFO) << ". load nodes";
@@ -301,9 +301,9 @@ void SavedBattleGame::load(
 			i != node["nodes"].end();
 			++i)
 	{
-		Node* const n = new Node();
-		n->load(*i);
-		_nodes.push_back(n);
+		Node* const nod = new Node();
+		nod->load(*i);
+		_nodes.push_back(nod);
 	}
 
 
@@ -324,12 +324,14 @@ void SavedBattleGame::load(
 		faction			= static_cast<UnitFaction>((*i)["faction"]			.as<int>());
 		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(faction));
 
+		const int diff = static_cast<int>(savedGame->getDifficulty());
+
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
 		{
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
 								_depth,
-								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
+								diff); // kL_add: For VictoryPts value per death.
 		}
 		else
 		{
@@ -342,7 +344,7 @@ void SavedBattleGame::load(
 								originalFaction,
 								id,
 								rule->getArmor(armor),
-								static_cast<int>(savedGame->getDifficulty()),
+								diff,
 								_depth,
 								savedGame->getMonthsPassed());
 		}
@@ -1651,133 +1653,129 @@ int* SavedBattleGame::getNextItemId()
  */
 Node* SavedBattleGame::getSpawnNode(
 		int unitRank,
-		BattleUnit* unit)
+		BattleUnit* const unit)
 {
-	std::vector<Node*> legitNodes;
+	std::vector<Node*> spawnNodes;
 
 	for (std::vector<Node*>::const_iterator
-			i = getNodes()->begin();
-			i != getNodes()->end();
+			i = _nodes.begin();
+			i != _nodes.end();
 			++i)
 	{
-		if ((*i)->getPriority() > 0						// spawn-priority 0 is not spawnplace
-			&& (*i)->getRank() == unitRank				// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
-				|| unit->getArmor()->getSize() == 1)		// or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
-				|| unit->getMovementType() == MT_FLY)		// or the unit can fly
-			&& setUnitPosition(							// check if unit can be set at this node
-							unit,							// ie. it's big enough
-							(*i)->getPosition(),			// and there's not already a unit there.
-							true) == true)				// testOnly, runs again w/ FALSE on return to bgen::addAlien()
+		if ((*i)->getPriority() > 0							// spawn-priority 0 is not spawnplace
+			&& (*i)->getRank() == unitRank					// ranks must match
+			&& (!((*i)->getNodeType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
+				|| unit->getArmor()->getSize() == 1)			// or the unit is small
+			&& (!((*i)->getNodeType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
+				|| unit->getMovementType() == MT_FLY)			// or the unit can fly
+			&& setUnitPosition(								// check if unit can be set at this node
+							unit,								// ie. it's big enough
+							(*i)->getPosition(),				// and there's not already a unit there.
+							true) == true)					// testOnly, runs again w/ FALSE on return to bgen::addAlien()
 		{
-			for (int
+			for (int										// weight each eligible node by its Priority.
 					j = (*i)->getPriority();
 					j != 0;
 					--j)
 			{
-				legitNodes.push_back(*i); // weighted by Priority
+				spawnNodes.push_back(*i);
 			}
 		}
 	}
 
-	if (legitNodes.empty() == true)
+	if (spawnNodes.empty() == true)
 		return NULL;
 
 	const size_t pick = static_cast<size_t>(RNG::generate(
 													0,
-													static_cast<int>(legitNodes.size()) - 1));
+													static_cast<int>(spawnNodes.size()) - 1));
 
-	return legitNodes[pick];
+	return spawnNodes[pick];
 }
 
 /**
  * Finds a fitting node where a given unit can patrol to.
  * @param scout		- true if the unit is scouting
  * @param unit		- pointer to a BattleUnit
- * @param curNode	- pointer to the node that unit is currently at
+ * @param fromNode	- pointer to the node that unit is currently at
  * @return, pointer to the destination Node
  */
 Node* SavedBattleGame::getPatrolNode(
 		bool scout,
-		BattleUnit* unit,
-		Node* curNode)
+		BattleUnit* const unit,
+		Node* fromNode)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
-	if (curNode == NULL)
-		curNode = getNodes()->at(static_cast<size_t>(RNG::generate(
-																0,
-																static_cast<int>(getNodes()->size()) - 1)));
+	if (fromNode == NULL)
+		fromNode = getNearestNode(unit);
 
 	std::vector<Node*>
-		legitNodes,
-		rankedNodes;
+		scoutNodes,
+		rankNodes;
 	Node* node = NULL;
 
-	size_t eligibleQty;
+	size_t nodeQty;
 	if (scout == true)
-		eligibleQty = getNodes()->size();
+		nodeQty = getNodes()->size();
 	else
-		eligibleQty = curNode->getNodeLinks()->size();
+		nodeQty = fromNode->getNodeLinks()->size();
 
 	for (size_t
 			i = 0;
-			i < eligibleQty;
+			i != nodeQty;
 			++i)
 	{
-		if (scout == false
-			&& curNode->getNodeLinks()->at(i) < 1)
+		if (scout == true
+			|| fromNode->getNodeLinks()->at(i) > 0) // non-scouts need Links to travel along.
 		{
-			continue; // non-scouts need Links to travel along.
-		}
+			if (scout == true)
+				node = getNodes()->at(i);
+			else
+				node = getNodes()->at(fromNode->getNodeLinks()->at(i));
 
-		if (scout == true)
-			node = getNodes()->at(i);
-		else
-			node = getNodes()->at(curNode->getNodeLinks()->at(i));
-
-		if ((node->getFlags() > 0
-				|| node->getRank() > 0
-				|| scout == true)										// for non-scouts we find a node with a desirability above 0
-			&& (!(node->getType() & Node::TYPE_SMALL)					// the small unit bit is not set
-				|| unit->getArmor()->getSize() == 1)						// or the unit is small
-			&& (!(node->getType() & Node::TYPE_FLYING)					// the flying unit bit is not set
-				|| unit->getMovementType() == MT_FLY)						// or the unit can fly
-			&& node->isAllocated() == false								// check if not allocated
-			&& !(node->getType() & Node::TYPE_DANGEROUS)				// don't go there if an alien got shot there; stupid behavior like that
-			&& setUnitPosition(											// check if unit can be set at this node
-							unit,											// ie. it's big enough
-							node->getPosition(),							// and there's not already a unit there.
-							true) == true									// but don't actually set the unit...
-			&& getTile(node->getPosition()) != NULL						// the node is on a valid tile
-			&& getTile(node->getPosition())->getFire() == 0				// you are not a firefighter; do not patrol into fire
-			&& (getTile(node->getPosition())->getDangerous() == false	// aliens don't run into a grenade blast
-				|| unit->getFaction() != FACTION_HOSTILE)					// but civies do!
-			&& (node != curNode											// scouts push forward
-				|| scout == false)											// others can mill around.. ie, stand there
-			&& node->getPosition().x > -1								// x-pos valid
-			&& node->getPosition().y > -1)								// y-pos valid
-		{
-			for (int
-					j = node->getFlags();
-					j != 0;
-					--j)
+			if ((node->getFlags() > 0
+					|| node->getRank() > 0
+					|| scout == true)										// for non-scouts we find a node with a desirability above 0
+				&& (!(node->getNodeType() & Node::TYPE_SMALL)				// the small unit bit is not set
+					|| unit->getArmor()->getSize() == 1)						// or the unit is small
+				&& (!(node->getNodeType() & Node::TYPE_FLYING)				// the flying unit bit is not set
+					|| unit->getMovementType() == MT_FLY)						// or the unit can fly
+				&& node->isAllocated() == false								// check if not allocated
+				&& !(node->getNodeType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that
+				&& setUnitPosition(											// check if unit can be set at this node
+								unit,											// ie. it's big enough
+								node->getPosition(),							// and there's not already a unit there.
+								true) == true									// but don't actually set the unit...
+				&& getTile(node->getPosition()) != NULL						// the node is on a valid tile
+				&& getTile(node->getPosition())->getFire() == 0				// you are not a firefighter; do not patrol into fire
+				&& (getTile(node->getPosition())->getDangerous() == false	// aliens don't run into a grenade blast
+					|| unit->getFaction() != FACTION_HOSTILE)					// but civies do!
+				&& (node != fromNode											// scouts push forward
+					|| scout == false)											// others can mill around.. ie, stand there
+				&& node->getPosition().x > -1								// x-pos valid
+				&& node->getPosition().y > -1)								// y-pos valid
 			{
-				legitNodes.push_back(node); // weighted by Flags
-			}
+				for (int													// weight each eligible node by its Flags.
+						j = node->getFlags();
+						j != 0;
+						--j)
+				{
+					scoutNodes.push_back(node);
+				}
 
-			if (scout == false
-				&& node->getRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
-													[0])				// high-class node here.
-			{
-				rankedNodes.push_back(node);
+				if (scout == false
+					&& node->getRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
+														[0]) // high-class node here.
+				{
+					rankNodes.push_back(node);
+				}
 			}
 		}
 	}
 
-	if (legitNodes.empty() == true)
+	if (scoutNodes.empty() == true)
 	{
-		//Log(LOG_INFO) << " . legitNodes is EMPTY.";
+		//Log(LOG_INFO) << " . scoutNodes is EMPTY.";
 		if (scout == false
 			&& unit->getArmor()->getSize() > 1)
 		{
@@ -1785,34 +1783,74 @@ Node* SavedBattleGame::getPatrolNode(
 			return getPatrolNode(
 								true,
 								unit,
-								curNode);
+								fromNode);
 		}
 
 		//Log(LOG_INFO) << " . return NULL";
 		return NULL;
 	}
-	//Log(LOG_INFO) << " . legitNodes is NOT Empty.";
+	//Log(LOG_INFO) << " . scoutNodes is NOT Empty.";
 
 	size_t pick;
 
 	if (scout == true // picks a random destination
-		|| rankedNodes.empty() == true
-		|| RNG::percent(21) == true) // officers can go for a stroll ...
+		|| rankNodes.empty() == true
+		|| RNG::percent(19) == true) // officers can go for a stroll ...
 	{
 		//Log(LOG_INFO) << " . scout";
 		pick = static_cast<size_t>(RNG::generate(
 											0,
-											static_cast<int>(legitNodes.size()) - 1));
-		//Log(LOG_INFO) << " . return legitNodes @ " << pick;
-		return legitNodes[pick];
+											static_cast<int>(scoutNodes.size()) - 1));
+		//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
+		return scoutNodes[pick];
 	}
 	//Log(LOG_INFO) << " . !scout";
 
 	pick = static_cast<size_t>(RNG::generate(
 										0,
-										static_cast<int>(rankedNodes.size()) - 1));
-	//Log(LOG_INFO) << " . return legitNodes @ " << pick;
-	return rankedNodes[pick];
+										static_cast<int>(rankNodes.size()) - 1));
+	//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
+	return rankNodes[pick];
+}
+
+/**
+ * Gets the node considered nearest to a BattleUnit.
+ * @note Assume closest node is on same level to avoid strange things.
+ * @note The node has to match unit size or the AI will freeze.
+ * @param unit - pointer to a BattleUnit
+ * @return, the nearest node
+ */
+Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
+{
+	Node
+		* node = NULL,
+		* nodeTest;
+	int
+		dist = 1000000,
+		distTest;
+
+	for (std::vector<Node*>::const_iterator
+			i = _nodes.begin();
+			i != _nodes.end();
+			++i)
+	{
+		nodeTest = *i;
+		distTest = _tileEngine->distanceSq(
+										unit->getPosition(),
+										nodeTest->getPosition());
+
+		if (unit->getPosition().z == nodeTest->getPosition().z
+			&& distTest < dist
+			&& (unit->getArmor()->getSize() == 1
+				|| !(
+					nodeTest->getNodeType() & Node::TYPE_SMALL)))
+		{
+			node = nodeTest;
+			dist = distTest;
+		}
+	}
+
+	return node;
 }
 
 /**

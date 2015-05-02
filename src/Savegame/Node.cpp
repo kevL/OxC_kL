@@ -23,11 +23,12 @@
 namespace OpenXcom
 {
 
-// The following data is the order in which certain alien ranks
-// spawn on (node's Priority, or 'Spawn' in mapView) or path to (node's Flags)
-// variously Ranked nodes.
-// NOTE: they all can fall back to rank 0 nodes - which is scout (outside ufo).
-/* const int Node::nodeRank[8][7] =
+// The following table presents the order in which aLien ranks choose nodes of
+// alternate ranks to spawn on ('_priority' here, "Spawn" in mapView) or path to
+// ('_flags' here, "Flags" or "Importance" in mapView).
+// NOTE: All aLiens can fall back to rank 0 nodes - which is civ-scout (outside ufo).
+// NOTE: node rank 1 is for XCOM spawning and hence is not used by aLiens.
+/* const int Node::nodeRank[8][7] = // stock table->
 {
 	{4, 3, 5, 8, 7, 2, 0},	// commander
 	{4, 3, 5, 8, 7, 2, 0},	// leader
@@ -60,6 +61,11 @@ const int Node::nodeRank[8][8] = // kL_begin:
 	// 6:Misc1
 	// 7:Medic
 	// 8:Misc2
+const int test[2][3] =
+{
+	{1,2,3},
+	{4,5,6}
+};
 
 // see Node.h, enum NodeRank ->
 
@@ -72,12 +78,12 @@ Node::Node()
 		_id(0),
 		_segment(0),
 		_type(0),
-		_nodeRank(0),
+		_rank(0),
 		_flags(0),
-		_reserved(0),
+		_destruct(0),
 		_priority(0),
-		_allocated(false),
-		_pos(Position(-1,-1,-1)) // kL
+		_allocated(false)
+//		_pos(Position(-1,-1,-1)) // kL <- just let Position.h do (0,0,0)
 {}
 
 /**
@@ -87,9 +93,9 @@ Node::Node()
  * @param segment	- for linking nodes
  * @param type		- size and movement type of allowable units
  * @param nodeRank	- rank of allowable units
- * @param flags		- preferability of the node
- * @param reserved	- for BaseDefense objectives
- * @param priority	- preferability for spawns
+ * @param nodeFlags	- preferability of the node for patrolling
+ * @param destruct	- for BaseDefense objectives
+ * @param priority	- preferability of the node for spawning
  */
 Node::Node(
 		size_t id,
@@ -97,17 +103,17 @@ Node::Node(
 		int segment,
 		int type,
 		int nodeRank,
-		int flags,
-		int reserved,
+		int nodeFlags,
+		int destruct,
 		int priority)
 	:
 		_id(id),
 		_pos(pos),
 		_segment(segment),
 		_type(type),
-		_nodeRank(nodeRank),
-		_flags(flags),
-		_reserved(reserved),
+		_rank(nodeRank),
+		_flags(nodeFlags),
+		_destruct(destruct),
 		_priority(priority),
 		_allocated(false)
 {}
@@ -119,25 +125,25 @@ Node::~Node()
 {}
 
 /**
- * Loads the UFO from a YAML file.
+ * Loads the Nodes from a YAML file.
  * @param node - reference a YAML node
  */
 void Node::load(const YAML::Node& node)
 {
 	_id			= node["id"]		.as<int>(_id);
 	_pos		= node["position"]	.as<Position>(_pos);
-//	_segment	= node["segment"]	.as<int>(_segment);
 	_type		= node["type"]		.as<int>(_type);
-	_nodeRank	= node["nodeRank"]	.as<int>(_nodeRank);
+	_rank		= node["rank"]		.as<int>(_rank);
 	_flags		= node["flags"]		.as<int>(_flags);
-	_reserved	= node["reserved"]	.as<int>(_reserved);
+	_destruct	= node["destruct"]	.as<int>(_destruct);
 	_priority	= node["priority"]	.as<int>(_priority);
 	_allocated	= node["allocated"]	.as<bool>(_allocated);
 	_nodeLinks	= node["links"]		.as<std::vector<int> >(_nodeLinks);
+//	_segment	= node["segment"]	.as<int>(_segment);
 }
 
 /**
- * Saves the UFO to a YAML file.
+ * Saves the Nodes to a YAML file.
  * @return, YAML node
  */
 YAML::Node Node::save() const
@@ -146,14 +152,14 @@ YAML::Node Node::save() const
 
 	node["id"]			= _id;
 	node["position"]	= _pos;
-//	node["segment"]		= _segment;
 	node["type"]		= _type;
-	node["nodeRank"]	= _nodeRank;
+	node["rank"]		= _rank;
 	node["flags"]		= _flags;
-	node["reserved"]	= _reserved;
+	node["destruct"]	= _destruct;
 	node["priority"]	= _priority;
 	node["allocated"]	= _allocated;
 	node["links"]		= _nodeLinks;
+//	node["segment"]		= _segment;
 
 	return node;
 }
@@ -173,7 +179,7 @@ int Node::getID() const
  */
 NodeRank Node::getRank() const
 {
-	return static_cast<NodeRank>(_nodeRank);
+	return static_cast<NodeRank>(_rank);
 }
 
 /**
@@ -205,7 +211,7 @@ int Node::getSegment() const
 
 /**
  * Gets this Node's paths.
- * @return, pointer to a vector of node-links
+ * @return, pointer to a vector of nodeIDs
  */
 std::vector<int>* Node::getNodeLinks()
 {
@@ -213,16 +219,25 @@ std::vector<int>* Node::getNodeLinks()
 }
 
 /**
+ * Sets this Node's type.
+ */
+void Node::setNodeType(int type)
+{
+	_type = type;
+}
+
+/**
  * Gets this Node's type.
  * @return, type
  */
-int Node::getType() const
+int Node::getNodeType() const
 {
 	return _type;
 }
 
 /**
- *
+ * Gets if this Node is allocated.
+ * @return, true if allocated
  */
 bool Node::isAllocated() const
 {
@@ -230,7 +245,7 @@ bool Node::isAllocated() const
 }
 
 /**
- *
+ * Sets this Node as allocated.
  */
 void Node::allocateNode()
 {
@@ -238,7 +253,7 @@ void Node::allocateNode()
 }
 
 /**
- *
+ * Sets this Node as NOT allocated.
  */
 void Node::freeNode()
 {
@@ -246,19 +261,13 @@ void Node::freeNode()
 }
 
 /**
- *
+ * Gets if this Node is suitable for an aLien to target XCOM base targets/objectives.
+ * @return, true if this is a Destroy XCOM Base node
  */
 bool Node::isTarget() const
 {
-	return _reserved == 5;
-}
-
-/**
- *
- */
-void Node::setType(int type)
-{
-	_type = type;
+	return _destruct > 0; // kL
+//	return _destruct == 5;
 }
 
 }

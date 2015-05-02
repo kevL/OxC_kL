@@ -537,6 +537,7 @@ void AlienBAIState::think(BattleAction* action)
 
 /**
  * Sets the "was hit" flag to true.
+ * @param attacker - pointer to a BattleUnit
  */
 /* void AlienBAIState::setWasHitBy(BattleUnit* attacker)
 {
@@ -544,9 +545,9 @@ void AlienBAIState::think(BattleAction* action)
 		_wasHitBy.push_back(attacker->getId());
 } */
 
-/*
+/**
  * Gets whether the unit was hit.
- * @return if it was hit.
+ * @return, true if unit was hit
  */
 /* bool AlienBAIState::getWasHitBy(int attacker) const
 {
@@ -555,8 +556,8 @@ void AlienBAIState::think(BattleAction* action)
 
 /**
  * Sets up a patrol action.
- * This is mainly going from node to node, moving about the map.
- * Handles node selection, and fills out the _patrolAction with useful data.
+ * @note This is mainly going from node to node & moving about the map;
+ * handles node selection and fills out '_patrolAction' with data.
  */
 void AlienBAIState::setupPatrol()
 {
@@ -585,37 +586,11 @@ void AlienBAIState::setupPatrol()
 		}
 	}
 
-	Node* node;
-
 	if (_fromNode == NULL)
-	{
-		// assume closest node as "from node"
-		// on same level to avoid strange things, and the node has to match unit size or it will freeze
-		int
-			closest = 1000000,
-			dist;
+		_fromNode = _battleSave->getNearestNode(_unit);
 
-		for (std::vector<Node*>::const_iterator
-				i = _battleSave->getNodes()->begin();
-				i != _battleSave->getNodes()->end();
-				++i)
-		{
-			node = *i;
-			dist = _battleSave->getTileEngine()->distanceSq(
-														_unit->getPosition(),
-														node->getPosition());
-
-			if (_unit->getPosition().z == node->getPosition().z
-				&& dist < closest
-				&& (!
-					(node->getType() & Node::TYPE_SMALL)
-						|| _unit->getArmor()->getSize() == 1))
-			{
-				_fromNode = node;
-				closest = dist;
-			}
-		}
-	}
+	Node* node;
+	const MapData* data;
 
 	int triesLeft = 5;
 	while (_toNode == NULL
@@ -624,7 +599,7 @@ void AlienBAIState::setupPatrol()
 		--triesLeft;
 
 		// look for a new node to walk towards
-		bool scout = true;
+		bool scout = true; // note: aLiens attacking XCOM Base are always on scout.
 
 		if (_battleSave->getMissionType() != "STR_BASE_DEFENSE")
 		{
@@ -634,9 +609,9 @@ void AlienBAIState::setupPatrol()
 			// determines whether aliens come out of UFO to scout/search (attack, actually).
 
 			// also anyone standing in fire should also probably move
-			if (_fromNode == NULL
+			if (   _fromNode == NULL
 				|| _fromNode->getRank() == NR_SCOUT
-				|| (_battleSave->getTile(_unit->getPosition()) != NULL
+				|| (   _battleSave->getTile(_unit->getPosition()) != NULL
 					&& _battleSave->getTile(_unit->getPosition())->getFire() != 0)
 				|| (_battleSave->isCheating() == true
 					&& RNG::percent(_unit->getAggression() * 25) == true)) // kL
@@ -650,7 +625,7 @@ void AlienBAIState::setupPatrol()
 		{											// target nodes -- or once there shoot objects thereabouts, so
 			if (_fromNode->isTarget() == true		// scan this room for objects to destroy
 				&& _unit->getMainHandWeapon() != NULL
-				&& _unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0
+				&& _unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0 // TODO: this ought be expanded to include melee etc.
 				&& _unit->getMainHandWeapon()->getAmmoItem() != NULL
 				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE
 				&& _battleSave->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
@@ -669,7 +644,7 @@ void AlienBAIState::setupPatrol()
 							j != y + 9;
 							++j)
 					{
-						const MapData* const data = _battleSave->getTile(Position(i,j,1))->getMapData(MapData::O_OBJECT);
+						data = _battleSave->getTile(Position(i,j,1))->getMapData(MapData::O_OBJECT);
 						if (data != NULL
 							&& data->isBaseModule() == true)
 //							&& data->getDieMCD()
@@ -689,10 +664,9 @@ void AlienBAIState::setupPatrol()
 			}
 			else
 			{
-				// find closest high value target which is not already allocated
-				int
-					closest = 1000000,
-					dist;
+				int // find closest high value target which is not already allocated
+					dist = 1000000,
+					distTest;
 
 				for (std::vector<Node*>::const_iterator
 						i = _battleSave->getNodes()->begin();
@@ -703,15 +677,15 @@ void AlienBAIState::setupPatrol()
 						&& (*i)->isAllocated() == false)
 					{
 						node = *i;
-						dist = _battleSave->getTileEngine()->distanceSq(
-																	_unit->getPosition(),
-																	node->getPosition());
+						distTest = _battleSave->getTileEngine()->distanceSq(
+																		_unit->getPosition(),
+																		node->getPosition());
 						if (_toNode == NULL
-							|| (dist < closest
+							|| (distTest < dist
 								&& node != _fromNode))
 						{
 							_toNode = node;
-							closest = dist;
+							dist = distTest;
 						}
 					}
 				}
@@ -730,7 +704,7 @@ void AlienBAIState::setupPatrol()
 			{
 				//Log(LOG_INFO) << ". _toNode == 0 b -> getPatrolNode(!scout)";
 				_toNode = _battleSave->getPatrolNode(
-												scout == false,
+												!scout,
 												_unit,
 												_fromNode);
 			}
@@ -1567,10 +1541,10 @@ void AlienBAIState::evaluateAIMode()
 	else
 	{
 		float
-			patrolOdds = 28.f,	// was 30
-			ambushOdds = 13.f,	// was 12
-			combatOdds = 23.f,	// was 20
-			escapeOdds = 13.f;	// was 15
+			patrolOdds = 28.f, // was 30
+			ambushOdds = 13.f, // was 12
+			combatOdds = 23.f, // was 20
+			escapeOdds = 13.f; // was 15
 
 		if (_unit->getTimeUnits() > _unit->getBaseStats()->tu / 2
 			|| _unit->getCharging() != NULL)
@@ -1726,7 +1700,7 @@ void AlienBAIState::evaluateAIMode()
 		//Log(LOG_INFO) << "combatOdds = " << combatOdds;
 		//Log(LOG_INFO) << "escapeOdds = " << escapeOdds;
 
-		// GENERATE A RANDOM NUMBER TO PRESENT OUR SITUATION:
+		// GENERATE A RANDOM NUMBER TO REPRESENT THE SITUATION:
 		// AI_PATROL,	// 0
 		// AI_AMBUSH,	// 1
 		// AI_COMBAT,	// 2
@@ -1845,7 +1819,11 @@ bool AlienBAIState::findFirePoint()
 
 	_attackAction->type = BA_RETHINK;
 
-	Position target;
+	Position
+		origin,
+		target,
+		pos;
+	const Tile* tile;
 
 	int
 		bestTileScore = 0,
@@ -1856,10 +1834,10 @@ bool AlienBAIState::findFirePoint()
 			i != tileSearch.end();
 			++i)
 	{
-		const Position pos = _unit->getPosition() + *i;
+		pos = _unit->getPosition() + *i;
 
-		const Tile* const tile = _battleSave->getTile(pos);
-		if (tile == 0
+		tile = _battleSave->getTile(pos);
+		if (tile == NULL
 			|| std::find(
 					_reachableWithAttack.begin(),
 					_reachableWithAttack.end(),
@@ -1870,13 +1848,13 @@ bool AlienBAIState::findFirePoint()
 
 		tileScore = 0;
 		// i should really make a function for this
-		Position origin = pos * Position(16,16,24)
-						+ Position(
-								8,8,
-								_unit->getHeight()
-									+ _unit->getFloatHeight()
-									- tile->getTerrainLevel()
-									- 4);
+		origin = pos * Position(16,16,24)
+					 + Position(
+							8,8,
+							_unit->getHeight()
+								+ _unit->getFloatHeight()
+								- tile->getTerrainLevel()
+								- 4);
 			// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 
 		if (_battleSave->getTileEngine()->canTargetUnit(
@@ -1955,7 +1933,7 @@ bool AlienBAIState::explosiveEfficacy(
 		pct = (100 - attacker->getMorale()) / 3;
 		pct += 2 * (10 - static_cast<int>(
 						 static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getBaseStats()->health)
-				  * 10.f));
+						 * 10.f));
 		pct += attacker->getAggression() * 10;
 
 		const int dist = _battleSave->getTileEngine()->distance(
