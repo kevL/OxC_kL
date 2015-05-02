@@ -19,11 +19,11 @@ mapScripts:
 #groups 8: power, small
     commands:
     - type: addBlock
-      groups: 5
+      groups: 5 # start
       executions: 2
     - type: addBlock
       size: 2
-      groups: 6
+      groups: 6 # control
 #    - type: addBlock #hellrazor_Add: gardens 1,1b,1c
 #      size: 2
 #      groups: 5
@@ -43,8 +43,8 @@ mapScripts:
       size: 2
       executions: 3
     - type: fillArea
-      groups: [0,1]
-      freqs:  [3,2]
+      groups: [0,4] # default,crossroad
+      freqs:  [3,1]
     - type: digTunnel
       direction: both
       tunnelData:
@@ -65,17 +65,17 @@ mapScripts:
   - type: BOSSBATTLE
     commands:
     - type: addBlock
-      groups: 2
+      groups: 5 # start
       executions: 2
     - type: addBlock
-      groups: 4
+      groups: 7 # brain
       size: 2
     - type: addBlock
       size: 2
       executions: 3
     - type: fillArea
-      groups: [0,1]
-      freqs: [3,2]
+      groups: [0,4] # default,crossroad
+      freqs:  [3,1]
     - type: digTunnel
       direction: both
       tunnelData:

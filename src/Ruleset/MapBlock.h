@@ -37,7 +37,8 @@ enum MapBlockType // These define 'groups'
 	MBT_NSROAD,			//  3
 	MBT_CROSSROAD,		//  4
 	MBT_START,			//  5 kL_add. For AlienBase starting equipment spawn
-	MBT_CONTROL			//  6
+	MBT_CONTROL,		//  6
+	MBT_BRAIN			//  7
 };
 
 

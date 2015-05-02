@@ -1019,7 +1019,7 @@ alienDeployments:
     markerName: STR_TERROR_SITE
     duration: [4,10]
   - type: STR_ALIEN_BASE_ASSAULT
-#    script: ALIENBASE
+    script: ALIENBASE
     data:
       - alienRank: 0 #commander
         lowQty: 1

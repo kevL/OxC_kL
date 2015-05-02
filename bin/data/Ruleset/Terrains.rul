@@ -4183,10 +4183,10 @@ terrains:
         width: 20
         length: 20
   - type: UBASE
-    script: ALIENBASE
-#    script: ALIENBASE # note: Done
-#    in alienDeployment, type: STR_ALIEN_BASE_ASSAULT
-#    & type: STR_MARS_THE_FINAL_ASSAULT ( script: BOSSBATTLE )
+#    script: ALIENBASE
+# Done in alienDeployment,
+# type: STR_ALIEN_BASE_ASSAULT (script: ALIENBASE)
+# type: STR_MARS_THE_FINAL_ASSAULT (script: BOSSBATTLE)
     mapDataSets:
       - BLANKS
       - U_BASE
@@ -4200,16 +4200,19 @@ terrains:
         width: 20
         length: 20
         groups: 6 # control
-#        type: 7
       - type: UBASE_01 # Large garden
         width: 20
         length: 20
       - type: UBASE_02 # Large emporium
         width: 20
         length: 20
-      - type: UBASE_03 # Large garden upper floor, crossing aisles lower
+      - type: UBASE_03 # Large storage loft
         width: 20
         length: 20
+        items:
+          STR_ELERIUM_115:
+            - [ 2, 14, 1]
+            - [ 2, 16, 1]
       - type: UBASE_04 # Start w/ ferns
         width: 10
         length: 10
@@ -4224,7 +4227,7 @@ terrains:
       - type: UBASE_07 # Small crossing aisles
         width: 10
         length: 10
-#        groups: 1
+        groups: 4 # crossroad
       - type: UBASE_08 # Mini emporium E
         width: 10
         length: 10
@@ -4256,10 +4259,10 @@ terrains:
         width: 10
         length: 10
 #        groups: 99
-      - type: UBASE_15 # Brain center
+      - type: UBASE_15 # Brain center - END of ORIGINAL MAPS
         width: 20
         length: 20
-        groups: 4 # crossroad
+        groups: 7 # brain
       - type: UBASE_19 # Control center NS
         width: 20
         length: 20
@@ -4291,6 +4294,7 @@ terrains:
       - type: UBASE_27 # Crossing aisles
         width: 10
         length: 10
+        groups: 4 # crossroad
       - type: UBASE_28 # Small lookout tower
         width: 10
         length: 10
