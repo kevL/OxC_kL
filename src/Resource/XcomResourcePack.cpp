@@ -230,11 +230,11 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 	const char* pal[] = // Load palettes
 	{
-		"PAL_GEOSCAPE",
-		"PAL_BASESCAPE",
-		"PAL_GRAPHS",
-		"PAL_UFOPAEDIA",
-		"PAL_BATTLEPEDIA"
+		"PAL_GEOSCAPE",		// geoscape
+		"PAL_BASESCAPE",	// basescape
+		"PAL_GRAPHS",		// graphs
+		"PAL_UFOPAEDIA",	// research
+		"PAL_BATTLEPEDIA"	// tactical
 	};
 
 	st1 = "GEODATA/PALETTES.DAT";
@@ -250,7 +250,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 								Palette::palOffset(i));
 	}
 
-	st2 = "PAL_BATTLESCAPE"; // correct Battlescape palette
+	st2 = "PAL_BATTLESCAPE"; // corrected Tactical palette
 	_palettes[st2] = new Palette();
 	_palettes[st2]->loadDat(
 						CrossPlatform::getDataFile(st1),

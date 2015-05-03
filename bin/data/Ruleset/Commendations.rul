@@ -30,9 +30,9 @@ extraStrings:
       STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION: "Given to a soldier who has been part of a successful base defense mission."
       STR_MEDAL_MILITARY_CROSS_NAME: "Military Crossadarium"
       STR_MEDAL_MILITARY_CROSS_DESCRIPTION: "Given to a soldier who has participated in many missions."
-      STR_MEDAL_SERVICE_MEDAL_NAME: "Honor Crossadarium"
+      STR_MEDAL_SERVICE_MEDAL_NAME: "Medallia Servicion"
       STR_MEDAL_SERVICE_MEDAL_DESCRIPTION: "Given to a soldier who has served many months."
-      STR_MEDAL_HONOR_CROSS_NAME: "Medallia Servicion"
+      STR_MEDAL_HONOR_CROSS_NAME: "Honor Crossadarium"
       STR_MEDAL_HONOR_CROSS_DESCRIPTION: "Given to all soldiers upon arrival as recognition for fighting the aLien threat and for being part of the force to secure humanity. This medal has no additional decorations."
       STR_MEDAL_CAMPAIGN_MEDAL_NAME: "Campaignus Medallia"
       STR_MEDAL_CAMPAIGN_MEDAL_DESCRIPTION: "Given to a soldier who has succesfully defended many regions."
@@ -54,7 +54,7 @@ extraStrings:
       STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Given to a soldier who has used incendiary weapons to kill aLiens."
       STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Ordum of Thor"
       STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed aLien soldiers of all kinds."
-      STR_MEDAL_BOLTS_CROSS_NAME: "Bolt Crossadarium"
+      STR_MEDAL_BOLTS_CROSS_NAME: "Boltus Maximus"
       STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
       STR_MEDAL_GRENADIERS_MEDAL_NAME: "Grenadium Medallia"
       STR_MEDAL_GRENADIERS_MEDAL_DESCRIPTION: "Given to a soldier who has used thrown explosives to kill 3 aLiens at once."
@@ -68,11 +68,11 @@ extraStrings:
       STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Given to a soldier who was the lone survivor of a mission."
       STR_MEDAL_IRON_MAN_NAME: "Iron Meatballs"
       STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly Iron."
-      STR_MEDAL_ORDER_OF_EARTH_NAME: "Ordum of the Planetarium"
+      STR_MEDAL_ORDER_OF_EARTH_NAME: "Ordum du Planetarium"
       STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Given to a soldier who has been instrumental in Earth's defense."
       STR_MEDAL_SNIPER_NAME: "Sharp Shot Citum"
       STR_MEDAL_SNIPER_DESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."
-      STR_MEDAL_LUCKYSHOT_NAME: "Mark Shot Citum"
+      STR_MEDAL_LUCKYSHOT_NAME: "Lucky Shot Citum"
       STR_MEDAL_LUCKYSHOT_DESCRIPTION: "Given to a soldier who has defied the odds by landing an unlikely shot on an intended target."
       STR_MEDAL_DBLKILL_NAME: "Performance Citum"
       STR_MEDAL_DBLKILL_DESCRIPTION: "Given to a soldier who has performed admirably on the field by killing more than one hostile threat in quick succession."
@@ -82,7 +82,7 @@ extraStrings:
       STR_MEDAL_PURPLE_HEART_DESCRIPTION: "Given to a soldier who was wounded on the battlefield."
       STR_MEDAL_CRIMSON_HEART_NAME: "Crimson Bleed"
       STR_MEDAL_CRIMSON_HEART_DESCRIPTION: "Given to a soldier who was wounded for an extended period of time."
-      STR_MEDAL_ORDER_OF_GLORY_NAME: "Ordum of Glorious Revolt"
+      STR_MEDAL_ORDER_OF_GLORY_NAME: "Glorium Revoltus"
       STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION: "Given to a soldier who was instrumental in a mission's success."
       STR_MEDAL_VALIANT_CRUX_NAME: "Valorius Cruxus"
       STR_MEDAL_VALIANT_CRUX_DESCRIPTION: "Given to a soldier who protected all civilians during a Terror mission."
@@ -94,20 +94,18 @@ extraStrings:
       STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful aLien Base Assault mission."
       STR_MEDAL_NIKE_CROSS_NAME: "Nike Crossadarium"
       STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every aLien in a mission."
-      STR_MEDAL_MIA_NAME: "Ordum of the Forlorn"
-      STR_MEDAL_MIA_DESCRIPTION: "Given to a soldier to honor their commitment to death while defending Planet Earth."
-## ID Added Awards ##
       STR_MEDAL_SAPPER_NAME: "Sappus Medallia"
       STR_MEDAL_SAPPER_DESCRIPTION: "Given to a soldier who kills a metal foe with a high explosive pack."
       STR_MEDAL_MELEE_KILL_MEDAL_NAME: "Cold Steel Medallia"
       STR_MEDAL_MELEE_KILL_MEDAL_DESCRIPTION: "Given to soldiers for melee kills."
       STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME: "Metallia Citum"
       STR_MEDAL_SECTOPOD_KILL_MEDAL_DESCRIPTION: "Given to a soldier that kills the most fearsome enemy construct: The Sectopod!"
-# end ID
-      STR_MEDAL_BADGE_OF_ASCLEPIUS_NAME: "Citum Asclepius"
-      STR_MEDAL_BADGE_OF_ASCLEPIUS_DESCRIPTION: "Given to a soldier who has made regular use of the medikit on the battlefield."
-      STR_MEDAL_ANGEL_NAME: "Angelic Crossadarium"
-      STR_MEDAL_ANGEL_DESCRIPTION: "Given to a soldier who turned a fellow soldier from the brink of death."
+      STR_MEDAL_HEALER_NAME: "Hippocratic Starific"
+      STR_MEDAL_HEALER_DESCRIPTION: "Given to a soldier who has performed medical services in the field."
+      STR_MEDAL_REVIVE_NAME: "Angelic Crossadarium"
+      STR_MEDAL_REVIVE_DESCRIPTION: "Given to a soldier who turned a fellow soldier from the brink of death."
+      STR_MEDAL_MIA_NAME: "Ordum of the Forlorn"
+      STR_MEDAL_MIA_DESCRIPTION: "Given to a soldier to honor their commitment to go missing while defending Planet Earth."
       STR_AWARD_0: "1st"
       STR_AWARD_1: "2nd"
       STR_AWARD_2: "3rd"
@@ -272,17 +270,17 @@ commendations:
   - type: STR_MEDAL_WEAPON_PROFICIENCY_NAME
     description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
     descGeneral: STR_MEDAL_WEAPON_PROFICIENCY_DESC_GENERAL
-    sprite: 6 #was 5
+    sprite: 5
     criteria:
       totalKillsWithAWeapon: [5,10,15,20,25,30,35,40,45,50]
-  - type: STR_MEDAL_SERVICE_MEDAL_NAME # Title swapped in extraStrings w/ Honor Crossadarium
+  - type: STR_MEDAL_SERVICE_MEDAL_NAME
     description: STR_MEDAL_SERVICE_MEDAL_DESCRIPTION
-    sprite: 7 #was 6
+    sprite: 6
     criteria:
       totalMonthlyService: [3,6,9,12,15,18,21,24,27,30]
-  - type: STR_MEDAL_HONOR_CROSS_NAME # Title swapped in extraStrings w/ Service Medal
+  - type: STR_MEDAL_HONOR_CROSS_NAME
     description: STR_MEDAL_HONOR_CROSS_DESCRIPTION
-    sprite: 5 #was 7
+    sprite: 7
     criteria:
       totalMonthlyService: [0]
   - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME
@@ -439,7 +437,6 @@ commendations:
     sprite: 32
     criteria:
       totalAllAliensKilled: [1,2,3,4,5,6,7,8,9,10]
-## ID Added Awards ##
   - type: STR_MEDAL_SAPPER_NAME
     description: STR_MEDAL_SAPPER_DESCRIPTION
     sprite: 33
@@ -466,19 +463,18 @@ commendations:
     killCriteria:
       -
         1: ["STR_SECTOPOD_TERRORIST","FACTION_HOSTILE","STATUS_DEAD"]
-# end ID #
-  - type: STR_MEDAL_BADGE_OF_ASCLEPIUS_NAME
-    description: STR_MEDAL_BADGE_OF_ASCLEPIUS_DESCRIPTION
+  - type: STR_MEDAL_HEALER_NAME
+    description: STR_MEDAL_HEALER_DESCRIPTION
     sprite: 36
     criteria:
       totalMediApplications: [3,6,9,12,15,18,21,24,27,30]
-  - type: STR_MEDAL_ANGEL_NAME
-    description: STR_MEDAL_ANGEL_DESCRIPTION
+  - type: STR_MEDAL_REVIVE_NAME
+    description: STR_MEDAL_REVIVE_DESCRIPTION
     sprite: 37
     criteria:
       totalRevives: [1,3,5,7,9,11,13,15,17,19]
   - type: STR_MEDAL_MIA_NAME
     description: STR_MEDAL_MIA_DESCRIPTION
-    sprite: 29 # placeholder for 38
+    sprite: 38
     criteria:
       isMIA: [1]
