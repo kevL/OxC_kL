@@ -2650,11 +2650,11 @@ void BattlescapeGenerator::loadRMP( // private.
 		pos_y,
 		pos_z,
 
-		type,
+		unitType,
 		nodeRank,
-		patrol,
-		destruct,
-		priority,
+		ptrlImport,
+		disBase,
+		spPriority,
 
 		linkId;
 
@@ -2679,30 +2679,41 @@ void BattlescapeGenerator::loadRMP( // private.
 						yoff + pos_y,
 						mapblock->getSizeZ() - pos_z - 1);
 
-			type		= static_cast<int>(array_RMP[19]);
+			unitType	= static_cast<int>(array_RMP[19]); // -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4
 			nodeRank	= static_cast<int>(array_RMP[20]);
-			patrol		= static_cast<int>(array_RMP[21]);
-			destruct	= static_cast<int>(array_RMP[22]);
-			priority	= static_cast<int>(array_RMP[23]);
+			ptrlImport	= static_cast<int>(array_RMP[21]);
+			disBase		= static_cast<int>(array_RMP[22]);
+			spPriority	= static_cast<int>(array_RMP[23]);
+
+			// TYPE_FLYING		= 0x01 -> ref Savegame/Node.h
+			// TYPE_SMALL		= 0x02
+			// TYPE_LARGEFLYING	= 0x04
+			// TYPE_LARGE		= 0x08
+			// TYPE_DANGEROUS	= 0x10 <- not in RMP file.
+			if		(unitType == 3) unitType = 4; // kL
+			else if (unitType == 4) unitType = 8; // kL
+
+			if (_missionType != "STR_BASE_DEFENSE")
+				disBase = 0; // kL, ensure these get zero'd for nonBaseDefense battles; cf. Node::isTarget()
 
 			node = new Node(
 						_battleSave->getNodes()->size(),
 						pos,
 						segment,
-						type,
+						unitType,
 						nodeRank,
-						patrol,
-						destruct,
-						priority);
+						ptrlImport,
+						disBase,
+						spPriority);
 
 			for (size_t
 					j = 0;
 					j != 5;
 					++j)
 			{
-				linkId = static_cast<int>(array_RMP[(j * 3) + 4]);
+				linkId = static_cast<int>(array_RMP[(j * 3) + 4]); // <- 4[5,6],7[8,9],10[11,12],13[14,15],16[17,18] -> [unitType & distance of linked nodes are not used]
 
-				if (linkId < 251) // don't touch special values; ie. links to N,S,E,West
+				if (linkId < 251) // do not offset special values; ie. links to N,S,E,West, or none.
 					linkId += nodeOffset;
 				else
 					linkId -= 256;

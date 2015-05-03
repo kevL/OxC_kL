@@ -70,9 +70,13 @@ private:
 			SEG_CRAFT	= 1000,
 			SEG_UFO		= 2000,
 
-			TYPE_FLYING		= 0x01,	// non-flying unit cannot spawn here when this bit is set
-			TYPE_SMALL		= 0x02,	// large unit cannot spawn here when this bit is set
-			TYPE_DANGEROUS	= 0x04,	// an alien was shot here, stop patrolling to it like an idiot with a death wish
+		// -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4 <- loaded in BattlescapeGenerator::loadRMP()
+			TYPE_FLYING			= 0x01,	// non-flying unit cannot spawn here when this bit is set; see SavedBattleGame::getSpawnNode()
+			TYPE_SMALL			= 0x02,	// large unit cannot spawn here when this bit is set; see SavedBattleGame::getSpawnNode()
+										// NOTE: getNodeType() is also used in SavedBattleGame::getPatrolNode() <- ie, it's not about spawning only; it affects patrolling also.
+			TYPE_LARGEFLYING	= 0x04,	// kL_add
+			TYPE_LARGE			= 0x08,	// kL_add (not used... equivalent to Any)
+			TYPE_DANGEROUS		= 0x10,	// kL_changed from 0x04[ie.large] -> an alien was shot here, stop patrolling to it like an idiot with a death wish
 
 			nodeRank[8][8]; // maps node-ranks (.RMP) to aliens' ranks
 

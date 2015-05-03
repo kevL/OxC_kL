@@ -1664,10 +1664,11 @@ Node* SavedBattleGame::getSpawnNode(
 	{
 		if ((*i)->getPriority() > 0							// spawn-priority 0 is not spawnplace
 			&& (*i)->getNodeRank() == unitRank				// ranks must match
-			&& (!((*i)->getNodeType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
-				|| unit->getArmor()->getSize() == 1)			// or the unit is small
-			&& (!((*i)->getNodeType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
-				|| unit->getMovementType() == MT_FLY)			// or the unit can fly
+			&& isNodeType(*i, unit)
+//			&& (!((*i)->getNodeType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
+//				|| unit->getArmor()->getSize() == 1)			// or the unit is small
+//			&& (!((*i)->getNodeType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
+//				|| unit->getMovementType() == MT_FLY)			// or the unit can fly
 			&& setUnitPosition(								// check if unit can be set at this node
 							unit,								// ie. it's big enough
 							(*i)->getPosition(),				// and there's not already a unit there.
@@ -1736,12 +1737,13 @@ Node* SavedBattleGame::getPatrolNode(
 			if ((node->getPatrol() > 0
 					|| node->getNodeRank() > NR_SCOUT
 					|| scout == true)										// for non-scouts find a node with a desirability above 0
-				&& (!(node->getNodeType() & Node::TYPE_SMALL)				// the small unit bit is not set
-					|| unit->getArmor()->getSize() == 1)						// or the unit is small
-				&& (!(node->getNodeType() & Node::TYPE_FLYING)				// the flying unit bit is not set
-					|| unit->getMovementType() == MT_FLY)						// or the unit can fly
 				&& node->isAllocated() == false								// check if not allocated
-				&& !(node->getNodeType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that
+				&& isNodeType(node, unit)
+//				&& (!(node->getNodeType() & Node::TYPE_SMALL)				// the small unit bit is not set
+//					|| unit->getArmor()->getSize() == 1)						// or the unit is small
+//				&& (!(node->getNodeType() & Node::TYPE_FLYING)				// the flying unit bit is not set
+//					|| unit->getMovementType() == MT_FLY)						// or the unit can fly
+//				&& !(node->getNodeType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that
 				&& setUnitPosition(											// check if unit can be set at this node
 								unit,											// ie. it's big enough
 								node->getPosition(),							// and there's not already a unit there.
@@ -1761,13 +1763,13 @@ Node* SavedBattleGame::getPatrolNode(
 						--j)
 				{
 					scoutNodes.push_back(node);
-				}
 
-				if (scout == false
-					&& node->getNodeRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
-															[0])			// high-class node here.
-				{
-					rankedNodes.push_back(node);
+					if (scout == false
+						&& node->getNodeRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
+																[0])			// high-class node here.
+					{
+						rankedNodes.push_back(node);
+					}
 				}
 			}
 		}
@@ -1854,6 +1856,40 @@ Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 }
 
 /**
+ * Gets if a BattleUnit can use a particular Node.
+ * @note Small units are allowed to use Large nodes and flying units are
+ * allowed to use nonFlying nodes.
+ * @param node - pointer to a node
+ * @param unit - pointer to a unit trying to use the node
+ * @return, true if unit can use node
+ */
+bool SavedBattleGame::isNodeType(
+		const Node* const node,
+		const BattleUnit* const unit) const
+{
+	const int type = node->getNodeType();
+
+	if (type & Node::TYPE_DANGEROUS)
+		return false;
+
+	if (type == 0)
+		return true;
+
+
+	if (type & Node::TYPE_FLYING)
+		return unit->getMovementType() == MT_FLY
+			&& unit->getArmor()->getSize() == 1;
+
+	if (type & Node::TYPE_SMALL)
+		return unit->getArmor()->getSize() == 1;
+
+	if (type & Node::TYPE_LARGEFLYING)
+		return unit->getMovementType() == MT_FLY;
+
+	return true;
+}
+
+/**
  * Carries out new turn preparations such as fire and smoke spreading.
  * Also explodes any explosive tiles that get destroyed by fire.
  */
@@ -1894,7 +1930,7 @@ void SavedBattleGame::spreadFireSmoke()
 		{
 			for (int
 					dir = 0;
-					dir < 7;
+					dir != 8;
 					dir += 2)
 			{
 				Position spreadPos;
@@ -1961,7 +1997,7 @@ void SavedBattleGame::spreadFireSmoke()
 
 			for (int
 					dir = 0;
-					dir < 7;
+					dir != 8;
 					dir += 2)
 			{
 				if (RNG::percent(37) == true)

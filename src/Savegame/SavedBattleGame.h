@@ -295,6 +295,10 @@ private:
 				Node* fromNode);
 		/// Gets the node considered nearest to a BattleUnit.
 		Node* getNearestNode(const BattleUnit* const unit) const;
+		/// Gets if a BattleUnit can use a particular Node.
+		bool isNodeType(
+				const Node* const node,
+				const BattleUnit* const unit) const;
 
 		/// Carries out new turn preparations.
 		void spreadFireSmoke();
