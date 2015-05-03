@@ -77,6 +77,7 @@
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDiary.h"
 
 #include "../Ufopaedia/Ufopaedia.h"
 
@@ -1187,7 +1188,7 @@ void Ruleset::loadFiles(const std::string& dirname)
  * @param key	- reference the rule key name (default "type")
  * @return, pointer to new rule if one was created, or NULL if one was removed
  */
-template <typename T>
+template<typename T>
 T* Ruleset::loadRule(
 		const YAML::Node& node,
 		std::map<std::string, T*>* types,
@@ -1238,7 +1239,7 @@ T* Ruleset::loadRule(
  */
 SavedGame* Ruleset::newSave() const
 {
-	SavedGame* const save = new SavedGame(this);
+	SavedGame* const gameSave = new SavedGame(this);
 
 	// Add countries
 	for (std::vector<std::string>::const_iterator
@@ -1246,14 +1247,14 @@ SavedGame* Ruleset::newSave() const
 			i != _countriesIndex.end();
 			++i)
 	{
-		save->getCountries()->push_back(new Country(getCountry(*i)));
+		gameSave->getCountries()->push_back(new Country(getCountry(*i)));
 	}
 
 	// Adjust funding to total $6M
-//	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
+//	int missing = ((_initialFunding - gameSave->getCountryFunding()/1000) / (int)gameSave->getCountries()->size()) * 1000;
 	for (std::vector<Country*>::const_iterator
-			i = save->getCountries()->begin();
-			i != save->getCountries()->end();
+			i = gameSave->getCountries()->begin();
+			i != gameSave->getCountries()->end();
 			++i)
 	{
 //		int funding = (*i)->getFunding().back() + missing;
@@ -1264,7 +1265,7 @@ SavedGame* Ruleset::newSave() const
 		(*i)->setFunding(funding);
 	}
 
-	save->setFunds(save->getCountryFunding());
+	gameSave->setFunds(gameSave->getCountryFunding());
 
 	// Add regions
 	for (std::vector<std::string>::const_iterator
@@ -1272,14 +1273,14 @@ SavedGame* Ruleset::newSave() const
 			i != _regionsIndex.end();
 			++i)
 	{
-		save->getRegions()->push_back(new Region(getRegion(*i)));
+		gameSave->getRegions()->push_back(new Region(getRegion(*i)));
 	}
 
 	// Set up starting base
 	Base* const base = new Base(this);
 	base->load(
 			_startingBase,
-			save,
+			gameSave,
 			true);
 
 	// Correct IDs
@@ -1288,26 +1289,29 @@ SavedGame* Ruleset::newSave() const
 			i != base->getCrafts()->end();
 			++i)
 	{
-		save->getId((*i)->getRules()->getType());
+		gameSave->getId((*i)->getRules()->getType());
 	}
 
 	// Generate soldiers
-	const int soldiers = _startingBase["randomSoldiers"].as<int>(0);
+	Soldier* sol;
+	const int solQty = _startingBase["randomSoldiers"].as<int>(0);
 	for (int
 			i = 0;
-			i < soldiers;
+			i != solQty;
 			++i)
 	{
-		Soldier* const soldier = genSoldier(save);
-//kL	soldier->setCraft(base->getCrafts()->front());
-		base->getSoldiers()->push_back(soldier);
+		sol = genSoldier(gameSave);
+//		sol->setCraft(base->getCrafts()->front());
+		base->getSoldiers()->push_back(sol);
+
+		sol->getDiary()->awardOriginalEight();
 	}
 
-	save->getBases()->push_back(base);
-	save->getAlienStrategy().init(this); // Setup alien strategy
-	save->setTime(_startingTime);
+	gameSave->getBases()->push_back(base);
+	gameSave->getAlienStrategy().init(this); // Setup alien strategy
+	gameSave->setTime(_startingTime);
 
-	return save;
+	return gameSave;
 }
 
 /**

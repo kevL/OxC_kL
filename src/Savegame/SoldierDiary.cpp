@@ -1330,6 +1330,16 @@ void SoldierDiary::addMonthlyService()
 	++_monthsService;
 }
 
+/**
+ * Award special commendation to the original 8 soldiers.
+ */
+void SoldierDiary::awardOriginalEight()
+{
+	_awards.push_back(new SoldierCommendations(
+										"STR_MEDAL_ORIGINAL8_NAME",
+										"noNoun"));
+}
+
 
 /*___________________________________/*
 /*

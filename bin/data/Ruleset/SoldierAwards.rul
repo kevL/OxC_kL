@@ -234,6 +234,12 @@ ufopaedia:
     image_id: MIA
     text: STR_MEDAL_MIA_MEDAL_UFOPEDIA
     text_width: 182
+  - id: STR_MEDAL_ORIGINAL8_NAME
+    type_id: 18
+    section: STR_AWARDS
+    image_id: ORIGINAL8
+    text: STR_MEDAL_ORIGINAL8_UFOPEDIA
+    text_width: 182
 extraSprites:
   - type: MERIT_STAR
     singleImage: true
@@ -469,6 +475,12 @@ extraSprites:
     height: 200
     files:
       0: Resources/Commendations/UfoPaedia/138_MEDAL_MIA.png
+  - type: ORIGINAL8
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Commendations/UfoPaedia/139_MEDAL_ORIGINAL8.png
 extraStrings:
   - type: en-US
     strings:
@@ -515,3 +527,4 @@ extraStrings:
       STR_MEDAL_HEALER_UFOPEDIA: "Crito, we ought to offer a cock to Asclepius. See to it, and don't forget.{NEWLINE}   - Socrates{NEWLINE}{NEWLINE}{ALT}The Combat Medic is a vital part of every military unit. xCom soldiers care for their own and help keep their companions in arms in the fight." #{NEWLINE}{NEWLINE}This award is issued for every three wounds healed up to twelve wounds."
       STR_MEDAL_REVIVE_UFOPEDIA: "No, you're not going to die on my watch, said Doc. Just before the chopper arrived, his heart stopped. Doc revived him again by pounding on his chest and giving him mouth-to-mouth. The chopper finally arrived and we loaded him in.{NEWLINE}   - Stephen Paul Campos{NEWLINE}{NEWLINE}{ALT}When the soldier lies unconscious and bleeding on the battlefield, this trooper is their angel that knows what it takes to bring them back." #{NEWLINE}{NEWLINE}This award is issued every time a casualty is revived up to three times."
       STR_MEDAL_MIA_MEDAL_UFOPEDIA: "... we pay tribute to the men and women who have not returned from the battlefield ... we will never forget the sacrifices they made ... we will forever honor their memory.{NEWLINE}   - Barack-n-roll Obama-rama{NEWLINE}{NEWLINE}{ALT}The terrible expedience of the necessity of leaving a fallen comrade cannot be denied. xCom honors those who have given their all in such fashion.{NEWLINE}{NEWLINE}This order is awarded to soldiers who have gone missing in action. This medal honors those who did not return home."
+      STR_MEDAL_ORIGINAL8_UFOPEDIA: "The xCom Project is a top-secret project initiated by The Council of Funding Nations to counter a massive global aLien invasion after the world's conventional militaries could not stop them.{NEWLINE}{NEWLINE}A precious few individuals have met the requirements to be included in this Project - even fewer will survive.{NEWLINE}{NEWLINE}This award is presented to the original combat operatives in the xCom Project."

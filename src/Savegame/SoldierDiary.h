@@ -216,10 +216,11 @@ private:
 
 		/// Increment the soldier's service time.
 		void addMonthlyService();
+		/// Award special commendation to the original 8 soldiers.
+		void awardOriginalEight();
 
 		/// Gets the mission id list.
 		std::vector<int>& getMissionIdList();
-
 		/// Gets the kill list.
 		std::vector<BattleUnitKills*>& getKills();
 };

@@ -8534,7 +8534,7 @@
 1430149550 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1430151879 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1430692602 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8581,6 +8581,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
+	"../Savegame/SoldierDiary.h"
 	"../Ufopaedia/Ufopaedia.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
@@ -11008,7 +11009,7 @@
 	"BattleState.h"
 	"../Savegame/SavedGame.h"
 
-1430436894 f:\git\openxcom\src\savegame\soldierdiary.h
+1430692692 f:\git\openxcom\src\savegame\soldierdiary.h
 	"BattleUnit.h"
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
@@ -11096,7 +11097,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1430437260 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1430692837 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
