@@ -2652,7 +2652,7 @@ void BattlescapeGenerator::loadRMP( // private.
 
 		type,
 		nodeRank,
-		nodeFlags,
+		patrol,
 		destruct,
 		priority,
 
@@ -2681,7 +2681,7 @@ void BattlescapeGenerator::loadRMP( // private.
 
 			type		= static_cast<int>(array_RMP[19]);
 			nodeRank	= static_cast<int>(array_RMP[20]);
-			nodeFlags	= static_cast<int>(array_RMP[21]);
+			patrol		= static_cast<int>(array_RMP[21]);
 			destruct	= static_cast<int>(array_RMP[22]);
 			priority	= static_cast<int>(array_RMP[23]);
 
@@ -2691,7 +2691,7 @@ void BattlescapeGenerator::loadRMP( // private.
 						segment,
 						type,
 						nodeRank,
-						nodeFlags,
+						patrol,
 						destruct,
 						priority);
 

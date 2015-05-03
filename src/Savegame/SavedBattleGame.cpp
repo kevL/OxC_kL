@@ -1734,7 +1734,7 @@ Node* SavedBattleGame::getPatrolNode(
 				node = getNodes()->at(static_cast<size_t>(fromNode->getNodeLinks()->at(i)));
 
 			if ((node->getPatrol() > 0
-					|| node->getNodeRank() > 0
+					|| node->getNodeRank() > NR_SCOUT
 					|| scout == true)										// for non-scouts find a node with a desirability above 0
 				&& (!(node->getNodeType() & Node::TYPE_SMALL)				// the small unit bit is not set
 					|| unit->getArmor()->getSize() == 1)						// or the unit is small

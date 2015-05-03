@@ -118,7 +118,7 @@ public:
 	 */
 	bool operator() (const PathfindingNode* a, const PathfindingNode* b) const
 	{
-		return (a->getTUCost(false) < b->getTUCost(false));
+		return (a->getTUCost() < b->getTUCost());
 	}
 };
 

@@ -395,14 +395,14 @@ bool Pathfinding::bresenhamPath(
 		yd[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
 
 	int
-		x, x0, x1, delta_x, step_x,
-		y, y0, y1, delta_y, step_y,
-		z, z0, z1, delta_z, step_z,
+		x,x0,x1, delta_x, step_x,
+		y,y0,y1, delta_y, step_y,
+		z,z0,z1, delta_z, step_z,
 
 		swap_xy, swap_xz,
 		drift_xy, drift_xz,
 
-		cx, cy, cz,
+		cx,cy,cz,
 
 		dir,
 		lastTUCost = -1;
@@ -421,16 +421,16 @@ bool Pathfinding::bresenhamPath(
 	swap_xy = std::abs(y1 - y0) > std::abs(x1 - x0);
 	if (swap_xy)
 	{
-		std::swap(x0, y0);
-		std::swap(x1, y1);
+		std::swap(x0,y0);
+		std::swap(x1,y1);
 	}
 
 	// do same for xz
 	swap_xz = std::abs(z1 - z0) > std::abs(x1 - x0);
 	if (swap_xz)
 	{
-		std::swap(x0, z0);
-		std::swap(x1, z1);
+		std::swap(x0,z0);
+		std::swap(x1,z1);
 	}
 
 	// delta is Length in each plane
@@ -462,17 +462,15 @@ bool Pathfinding::bresenhamPath(
 			x += step_x)
 	{
 		// copy position
-		cx = x;
-		cy = y;
-		cz = z;
+		cx = x; cy = y; cz = z;
 
 		// unswap (in reverse)
-		if (swap_xz) std::swap(cx, cz);
-		if (swap_xy) std::swap(cx, cy);
+		if (swap_xz) std::swap(cx,cz);
+		if (swap_xy) std::swap(cx,cy);
 
 		if (x != x0 || y != y0 || z != z0)
 		{
-			Position realNextPoint = Position(cx, cy, cz);
+			Position realNextPoint = Position(cx,cy,cz);
 			nextPoint = realNextPoint;
 
 			// get direction
@@ -481,7 +479,7 @@ bool Pathfinding::bresenhamPath(
 					dir < 8;
 					++dir)
 			{
-				if (xd[dir] == cx - lastPoint.x
+				if (   xd[dir] == cx - lastPoint.x
 					&& yd[dir] == cy - lastPoint.y)
 				{
 					break;
@@ -512,7 +510,7 @@ bool Pathfinding::bresenhamPath(
 			if (nextPoint == realNextPoint
 				&& tuCost < 255
 				&& (tuCost == lastTUCost
-					|| (isDiagonal
+					|| (isDiagonal == true
 						&& tuCost == lastTUCostDiagonal)
 					|| (isDiagonal == false
 						&& tuCostDiagonal == lastTUCost)
@@ -535,7 +533,7 @@ bool Pathfinding::bresenhamPath(
 				_totalTUCost += tuCost;
 			}
 
-			lastPoint = Position(cx, cy, cz);
+			lastPoint = Position(cx,cy,cz);
 		}
 
 		// update progress in other planes
@@ -589,18 +587,25 @@ bool Pathfinding::aStarPath(
 		i->reset();
 	}
 
-	// start position is the first one in the "open" list
-	PathfindingNode* const start = getNode(origin);
-	start->linkNode(0,NULL,0, target);
+	PathfindingNode
+		* const startNode = getNode(origin), // start position is the first Node in the OpenSet
+		* currentNode,
+		* node,
+		* nextNode;
+
+	startNode->linkNode(0, NULL, 0, target);
 	PathfindingOpenSet openList;
-	openList.addNode(start);
+	openList.addNode(startNode);
+
+	Position nextPos;
+	int tuCost;
 
 	const bool missile = missileTarget != NULL
 					  && maxTUCost == -1;
 
 	while (openList.isNodeSetEmpty() == false) // if the openList is empty, reached the end
 	{
-		PathfindingNode* const currentNode = openList.getNode();
+		currentNode = openList.getNode();
 		const Position& currentPos = currentNode->getPosition();
 		currentNode->setChecked();
 
@@ -608,7 +613,7 @@ bool Pathfinding::aStarPath(
 		{
 			_path.clear();
 
-			const PathfindingNode* node = currentNode;
+			node = currentNode;
 			while (node->getPrevNode() != NULL)
 			{
 				_path.push_back(node->getPrevDir());
@@ -624,26 +629,24 @@ bool Pathfinding::aStarPath(
 				++dir)
 		{
 			//Log(LOG_INFO) << ". try dir ... " << dir;
-			Position nextPos;
-
-			int tuCost = getTUCost(
-								currentPos,
-								dir,
-								&nextPos,
-								_unit,
-								missileTarget,
-								missile);
+			tuCost = getTUCost(
+							currentPos,
+							dir,
+							&nextPos,
+							_unit,
+							missileTarget,
+							missile);
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
 
 			if (sneak == true
-				&& _save->getTile(nextPos)->getTileVisible())
+				&& _save->getTile(nextPos)->getTileVisible() == true)
 			{
 				tuCost *= 2; // avoid being seen
 			}
 
-			PathfindingNode* nextNode = getNode(nextPos);
+			nextNode = getNode(nextPos);
 			if (nextNode->isChecked() == true) // algorithm means this node is already at minimum cost
 			{
 				//Log(LOG_INFO) << ". node already Checked ... cont.";
@@ -2332,7 +2335,7 @@ bool Pathfinding::isPathPreviewed() const
 
 /**
  * Locates all tiles reachable to @a *unit with a TU cost no more than @a tuMax.
- * Uses Dijkstra's algorithm.
+ * @note Uses Dijkstra's algorithm.
  * @param unit	- pointer to a BattleUnit
  * @param tuMax	- the maximum cost of the path to each tile
  * @return, an array of reachable tiles, sorted in ascending order of cost; the first tile is the start location
@@ -2342,9 +2345,6 @@ std::vector<int> Pathfinding::findReachable(
 		int tuMax)
 {
 	//Log(LOG_INFO) << "Pathfinding::findReachable()";
-	const Position& start = unit->getPosition();
-	int energyMax = unit->getEnergy();
-
 	for (std::vector<PathfindingNode>::iterator
 			i = _nodes.begin();
 			i != _nodes.end();
@@ -2353,32 +2353,42 @@ std::vector<int> Pathfinding::findReachable(
 		i->reset();
 	}
 
-	PathfindingNode* startNode = getNode(start);
-	startNode->linkNode(0,NULL,0);
+	const Position& start = unit->getPosition();
+
+	PathfindingNode
+		* startNode = getNode(start),
+		* currentNode,
+		* nextNode;
+
+	startNode->linkNode(0, NULL, 0);
 	PathfindingOpenSet unvisited;
 	unvisited.addNode(startNode);
 
 	std::vector<PathfindingNode*> reachable;
 
+	Position nextPos;
+	int
+		tuCost,
+		totalTuCost,
+		energyMax = unit->getEnergy();
+
 	while (unvisited.isNodeSetEmpty() == false)
 	{
-		PathfindingNode* const currentNode = unvisited.getNode();
+		currentNode = unvisited.getNode();
 		const Position& currentPos = currentNode->getPosition();
 
 		for (int // Try all reachable neighbours.
 				dir = 0;
-				dir < 10;
+				dir != 10;
 				++dir)
 		{
-			Position nextPos;
-
-			const int tuCost = getTUCost(
-									currentPos,
-									dir,
-									&nextPos,
-									unit,
-									0,
-									false);
+			tuCost = getTUCost(
+							currentPos,
+							dir,
+							&nextPos,
+							unit,
+							0,
+							false);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
 
@@ -2389,11 +2399,11 @@ std::vector<int> Pathfinding::findReachable(
 				continue;
 			}
 
-			PathfindingNode* const nextNode = getNode(nextPos);
+			nextNode = getNode(nextPos);
 			if (nextNode->isChecked() == true) // the algorithm means this node is already at minimum cost.
 				continue;
 
-			const int totalTuCost = currentNode->getTUCost(false) + tuCost;
+			totalTuCost = currentNode->getTUCost(false) + tuCost;
 			if (nextNode->inOpenSet() == false
 				|| nextNode->getTUCost(false) > totalTuCost) // if this node is unvisited or visited from a better path.
 			{

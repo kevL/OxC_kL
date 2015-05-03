@@ -39,7 +39,7 @@ namespace OpenXcom
 	{2, 5, 3, 4, 6, 8, 0},	// terrorist1
 	{2, 5, 3, 4, 6, 8, 0}	// terrorist2
 }; */
-const int Node::nodeRank[8][8] = // kL_begin:
+/* const int Node::nodeRank[8][8] = // kL_begin:
 {
 	{4, 3, 5, 2, 7, 8, 6, 0},	// commander
 	{4, 3, 5, 2, 7, 8, 6, 0},	// leader
@@ -49,9 +49,8 @@ const int Node::nodeRank[8][8] = // kL_begin:
 	{2, 5, 3, 7, 4, 8, 6, 0},	// soldier
 	{6, 8, 2, 5, 3, 4, 7, 0},	// terrorist1
 	{8, 6, 2, 5, 3, 4, 7, 0}	// terrorist2
-}; // kL_end.
+}; // */
 // note: The 2nd dimension holds fallbacks:
-
 	// 0:Civ-Scout
 	// 1:XCom
 	// 2:Soldier
@@ -62,6 +61,18 @@ const int Node::nodeRank[8][8] = // kL_begin:
 	// 7:Medic
 	// 8:Misc2
 // see Node.h, enum NodeRank ->
+
+const int Node::nodeRank[8][8] =
+{
+	{ NR_LEADER,	NR_NAVIGATOR,	NR_ENGINEER,	NR_SOLDIER,		NR_MEDIC,		NR_MISC2,	NR_MISC1, NR_SCOUT },	// commander
+	{ NR_LEADER,	NR_NAVIGATOR,	NR_ENGINEER,	NR_SOLDIER,		NR_MEDIC,		NR_MISC2,	NR_MISC1, NR_SCOUT },	// leader
+	{ NR_ENGINEER,	NR_LEADER,		NR_NAVIGATOR,	NR_SOLDIER,		NR_MEDIC,		NR_MISC2,	NR_MISC1, NR_SCOUT },	// engineer
+	{ NR_MEDIC,		NR_NAVIGATOR,	NR_ENGINEER,	NR_LEADER,		NR_SOLDIER,		NR_MISC2,	NR_MISC1, NR_SCOUT },	// medic
+	{ NR_NAVIGATOR,	NR_LEADER,		NR_ENGINEER,	NR_SOLDIER,		NR_MEDIC,		NR_MISC2,	NR_MISC1, NR_SCOUT },	// navigator
+	{ NR_SOLDIER,	NR_ENGINEER,	NR_NAVIGATOR,	NR_MEDIC,		NR_LEADER,		NR_MISC2,	NR_MISC1, NR_SCOUT },	// soldier
+	{ NR_MISC1,		NR_MISC2,		NR_SOLDIER,		NR_ENGINEER,	NR_NAVIGATOR,	NR_LEADER,	NR_MEDIC, NR_SCOUT },	// terrorist1
+	{ NR_MISC2,		NR_MISC1,		NR_SOLDIER,		NR_ENGINEER,	NR_NAVIGATOR,	NR_LEADER,	NR_MEDIC, NR_SCOUT }	// terrorist2
+}; // kL_end.
 
 
 /**
