@@ -1663,7 +1663,7 @@ Node* SavedBattleGame::getSpawnNode(
 			++i)
 	{
 		if ((*i)->getPriority() > 0							// spawn-priority 0 is not spawnplace
-			&& (*i)->getRank() == unitRank					// ranks must match
+			&& (*i)->getNodeRank() == unitRank				// ranks must match
 			&& (!((*i)->getNodeType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
 				|| unit->getArmor()->getSize() == 1)			// or the unit is small
 			&& (!((*i)->getNodeType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
@@ -1711,7 +1711,7 @@ Node* SavedBattleGame::getPatrolNode(
 
 	std::vector<Node*>
 		scoutNodes,
-		rankNodes;
+		rankedNodes;
 	Node* node = NULL;
 
 	size_t nodeQty;
@@ -1726,16 +1726,16 @@ Node* SavedBattleGame::getPatrolNode(
 			++i)
 	{
 		if (scout == true
-			|| fromNode->getNodeLinks()->at(i) > 0) // non-scouts need Links to travel along.
+			|| fromNode->getNodeLinks()->at(i) > 0)							// non-scouts need Links to travel along.
 		{
 			if (scout == true)
 				node = getNodes()->at(i);
 			else
-				node = getNodes()->at(fromNode->getNodeLinks()->at(i));
+				node = getNodes()->at(static_cast<size_t>(fromNode->getNodeLinks()->at(i)));
 
-			if ((node->getFlags() > 0
-					|| node->getRank() > 0
-					|| scout == true)										// for non-scouts we find a node with a desirability above 0
+			if ((node->getPatrol() > 0
+					|| node->getNodeRank() > 0
+					|| scout == true)										// for non-scouts find a node with a desirability above 0
 				&& (!(node->getNodeType() & Node::TYPE_SMALL)				// the small unit bit is not set
 					|| unit->getArmor()->getSize() == 1)						// or the unit is small
 				&& (!(node->getNodeType() & Node::TYPE_FLYING)				// the flying unit bit is not set
@@ -1750,24 +1750,24 @@ Node* SavedBattleGame::getPatrolNode(
 				&& getTile(node->getPosition())->getFire() == 0				// you are not a firefighter; do not patrol into fire
 				&& (getTile(node->getPosition())->getDangerous() == false	// aliens don't run into a grenade blast
 					|| unit->getFaction() != FACTION_HOSTILE)					// but civies do!
-				&& (node != fromNode											// scouts push forward
+				&& (node != fromNode										// scouts push forward
 					|| scout == false)											// others can mill around.. ie, stand there
 				&& node->getPosition().x > -1								// x-pos valid
 				&& node->getPosition().y > -1)								// y-pos valid
 			{
 				for (int													// weight each eligible node by its Flags.
-						j = node->getFlags();
-						j != 0;
+						j = node->getPatrol();
+						j != -1;
 						--j)
 				{
 					scoutNodes.push_back(node);
 				}
 
 				if (scout == false
-					&& node->getRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
-														[0]) // high-class node here.
+					&& node->getNodeRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
+															[0])			// high-class node here.
 				{
-					rankNodes.push_back(node);
+					rankedNodes.push_back(node);
 				}
 			}
 		}
@@ -1794,7 +1794,7 @@ Node* SavedBattleGame::getPatrolNode(
 	size_t pick;
 
 	if (scout == true // picks a random destination
-		|| rankNodes.empty() == true
+		|| rankedNodes.empty() == true
 		|| RNG::percent(19) == true) // officers can go for a stroll ...
 	{
 		//Log(LOG_INFO) << " . scout";
@@ -1808,9 +1808,9 @@ Node* SavedBattleGame::getPatrolNode(
 
 	pick = static_cast<size_t>(RNG::generate(
 										0,
-										static_cast<int>(rankNodes.size()) - 1));
+										static_cast<int>(rankedNodes.size()) - 1));
 	//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
-	return rankNodes[pick];
+	return rankedNodes[pick];
 }
 
 /**

@@ -25,7 +25,7 @@ namespace OpenXcom
 
 // The following table presents the order in which aLien ranks choose nodes of
 // alternate ranks to spawn on ('_priority' here, "Spawn" in mapView) or path to
-// ('_flags' here, "Flags" or "Importance" in mapView).
+// ('_patrol' here, "Flags" or "Importance" in mapView).
 // NOTE: All aLiens can fall back to rank 0 nodes - which is civ-scout (outside ufo).
 // NOTE: node rank 1 is for XCOM spawning and hence is not used by aLiens.
 /* const int Node::nodeRank[8][7] = // stock table->
@@ -61,12 +61,6 @@ const int Node::nodeRank[8][8] = // kL_begin:
 	// 6:Misc1
 	// 7:Medic
 	// 8:Misc2
-const int test[2][3] =
-{
-	{1,2,3},
-	{4,5,6}
-};
-
 // see Node.h, enum NodeRank ->
 
 
@@ -79,7 +73,7 @@ Node::Node()
 		_segment(0),
 		_type(0),
 		_rank(0),
-		_flags(0),
+		_patrol(0),
 		_destruct(0),
 		_priority(0),
 		_allocated(false)
@@ -93,7 +87,7 @@ Node::Node()
  * @param segment	- for linking nodes
  * @param type		- size and movement type of allowable units
  * @param nodeRank	- rank of allowable units
- * @param nodeFlags	- preferability of the node for patrolling
+ * @param patrol	- preferability of the node for patrolling
  * @param destruct	- for BaseDefense objectives
  * @param priority	- preferability of the node for spawning
  */
@@ -103,7 +97,7 @@ Node::Node(
 		int segment,
 		int type,
 		int nodeRank,
-		int nodeFlags,
+		int patrol,
 		int destruct,
 		int priority)
 	:
@@ -112,7 +106,7 @@ Node::Node(
 		_segment(segment),
 		_type(type),
 		_rank(nodeRank),
-		_flags(nodeFlags),
+		_patrol(patrol),
 		_destruct(destruct),
 		_priority(priority),
 		_allocated(false)
@@ -134,7 +128,7 @@ void Node::load(const YAML::Node& node)
 	_pos		= node["position"]	.as<Position>(_pos);
 	_type		= node["type"]		.as<int>(_type);
 	_rank		= node["rank"]		.as<int>(_rank);
-	_flags		= node["flags"]		.as<int>(_flags);
+	_patrol		= node["patrol"]	.as<int>(_patrol);
 	_destruct	= node["destruct"]	.as<int>(_destruct);
 	_priority	= node["priority"]	.as<int>(_priority);
 	_allocated	= node["allocated"]	.as<bool>(_allocated);
@@ -154,7 +148,7 @@ YAML::Node Node::save() const
 	node["position"]	= _pos;
 	node["type"]		= _type;
 	node["rank"]		= _rank;
-	node["flags"]		= _flags;
+	node["patrol"]		= _patrol;
 	node["destruct"]	= _destruct;
 	node["priority"]	= _priority;
 	node["allocated"]	= _allocated;
@@ -177,7 +171,7 @@ int Node::getID() const
  * Gets the rank of units that can spawn on this Node.
  * @return, NodeRank enum
  */
-NodeRank Node::getRank() const
+NodeRank Node::getNodeRank() const
 {
 	return static_cast<NodeRank>(_rank);
 }
@@ -210,7 +204,7 @@ int Node::getSegment() const
 }
 
 /**
- * Gets this Node's paths.
+ * Gets this Node's linked Nodes for pathing.
  * @return, pointer to a vector of nodeIDs
  */
 std::vector<int>* Node::getNodeLinks()

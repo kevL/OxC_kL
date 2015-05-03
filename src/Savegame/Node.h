@@ -52,9 +52,9 @@ class Node
 private:
 	bool _allocated;
 	int
-		_flags,		// desirability of patrolling to.
+		_patrol,	// desirability of patrolling to - "flags" in .RMP
 		_id,		// unique identifier
-		_priority,	// 'Spawn' in .RMP
+		_priority,	// desirability of spawning at - "spawn" in .RMP
 		_rank,		// aLien rank that can spawn or path here
 		_destruct,	// something to do with shooting objectives in BaseDefense missions
 		_segment,	// something to do with nodeLinks; see BattlescapeGenerator::attachNodeLinks()
@@ -74,8 +74,7 @@ private:
 			TYPE_SMALL		= 0x02,	// large unit cannot spawn here when this bit is set
 			TYPE_DANGEROUS	= 0x04,	// an alien was shot here, stop patrolling to it like an idiot with a death wish
 
-			nodeRank[8][8], // maps node-ranks (.RMP) to aliens' ranks
-			test[2][3];
+			nodeRank[8][8]; // maps node-ranks (.RMP) to aliens' ranks
 
 		/// Creates a Node.
 		Node();
@@ -86,7 +85,7 @@ private:
 				int segment,
 				int type,
 				int nodeRank,
-				int nodeFlags,
+				int patrol,
 				int reserved,
 				int priority);
 		/// Cleans up the Node.
@@ -104,7 +103,7 @@ private:
 		std::vector<int>* getNodeLinks();
 
 		/// Gets node's rank.
-		NodeRank getRank() const;
+		NodeRank getNodeRank() const;
 
 		/// Gets node's priority.
 		int getPriority() const;
@@ -121,18 +120,18 @@ private:
 		int getNodeType() const;
 
 		/// Gets the 'flags' variable which is really the patrol-desirability value.
-		int getFlags()
-		{	return _flags; }
+		int getPatrol()
+		{	return _patrol; }
 
 		// kL_note: in SavedBattleGame::getPatrolNodes() I changed less-than to greater-than ...
 		// wonder if that matters here. So: REVERTED.
-		// correction: REMOVED. Just use getFlags() directly. Tks, anyway
+		// correction: REMOVED. Just use getPatrol() directly. Tks, anyway
 		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
 //		bool operator< (Node& b)
-//		{	return _flags < b.getFlags(); };
+//		{	return _patrol < b.getPatrol(); };
 		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
 //		bool operator> (Node& b)
-//		{	return _flags > b.getFlags(); };
+//		{	return _patrol > b.getPatrol(); };
 
 
 		/// Gets if this Node is allocated.

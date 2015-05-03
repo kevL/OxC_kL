@@ -65,12 +65,13 @@ void PathfindingOpenSet::removeDiscarded()
 PathfindingNode* PathfindingOpenSet::getNode()
 {
 	assert(isNodeSetEmpty() == false);
+
 	const OpenSetEntry* const entry = _queue.top();
 	PathfindingNode* const node = entry->_node;
 	_queue.pop();
 
 	delete entry;
-	node->_openentry = 0;
+	node->_openentry = NULL;
 
 	removeDiscarded(); // Discarded entries might be visible now.
 

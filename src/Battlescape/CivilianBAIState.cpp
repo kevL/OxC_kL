@@ -557,10 +557,9 @@ void CivilianBAIState::setupPatrol()
 		}
 	} */
 
-	// look for a new node to walk towards
-	int triesLeft = 5;
+	int triesLeft = 5; // look for a new node to walk towards
 	while (_toNode == NULL
-		&& triesLeft)
+		&& triesLeft != 0)
 	{
 		--triesLeft;
 

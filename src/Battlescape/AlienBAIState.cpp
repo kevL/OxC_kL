@@ -591,16 +591,16 @@ void AlienBAIState::setupPatrol()
 
 	Node* node;
 	const MapData* data;
+	bool scout;
 
 	int triesLeft = 5;
 	while (_toNode == NULL
 		&& triesLeft != 0)
 	{
 		--triesLeft;
+		scout = true; // look for a new node to walk towards
 
-		// look for a new node to walk towards
-		bool scout = true; // note: aLiens attacking XCOM Base are always on scout.
-
+		// note: aLiens attacking XCOM Base are always on scout.
 		if (_battleSave->getMissionType() != "STR_BASE_DEFENSE")
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
@@ -609,8 +609,8 @@ void AlienBAIState::setupPatrol()
 			// determines whether aliens come out of UFO to scout/search (attack, actually).
 
 			// also anyone standing in fire should also probably move
-			if (   _fromNode == NULL
-				|| _fromNode->getRank() == NR_SCOUT
+/*			if (   _fromNode == NULL
+				|| _fromNode->getNodeRank() == NR_SCOUT
 				|| (   _battleSave->getTile(_unit->getPosition()) != NULL
 					&& _battleSave->getTile(_unit->getPosition())->getFire() != 0)
 				|| (_battleSave->isCheating() == true
@@ -619,10 +619,19 @@ void AlienBAIState::setupPatrol()
 				scout = true;
 			}
 			else
+				scout = false; */
+			if (   _fromNode != NULL
+				&& _fromNode->getNodeRank() != NR_SCOUT
+				&& (   _battleSave->getTile(_unit->getPosition()) == NULL // <- shouldn't be necessary.
+					|| _battleSave->getTile(_unit->getPosition())->getFire() == 0)
+				&& (   _battleSave->isCheating() == false
+					|| RNG::percent(_unit->getAggression() * 25) == false)) // kL
+			{
 				scout = false;
+			}
 		}
 		else if (_unit->getArmor()->getSize() == 1)	// in base defense missions the non-large aliens walk towards
-		{											// target nodes -- or once there shoot objects thereabouts, so
+		{											// target nodes - or once there shoot objects thereabouts, so
 			if (_fromNode->isTarget() == true		// scan this room for objects to destroy
 				&& _unit->getMainHandWeapon() != NULL
 				&& _unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0 // TODO: this ought be expanded to include melee etc.

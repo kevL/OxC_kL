@@ -113,7 +113,7 @@ int PathfindingNode::getPrevDir() const
  * @param prevDir	- the direction FROM the previous node
  * @param target	- reference of the target position (used to update the '_tuGuess' cost)
 */
-void PathfindingNode::connect(
+void PathfindingNode::linkNode(
 		int tuCost,
 		PathfindingNode* prevNode,
 		int prevDir,
@@ -139,7 +139,7 @@ void PathfindingNode::connect(
  * @param prevNode	- pointer to the previous node along the path
  * @param prevDir	- the direction FROM the previous node
 */
-void PathfindingNode::connect(
+void PathfindingNode::linkNode(
 		int tuCost,
 		PathfindingNode* prevNode,
 		int prevDir)

@@ -98,7 +98,7 @@ Pathfinding::~Pathfinding()
  */
 PathfindingNode* Pathfinding::getNode(const Position& pos)
 {
-	return &_nodes[_save->getTileIndex(pos)];
+	return &_nodes[static_cast<size_t>(_save->getTileIndex(pos))];
 }
 
 /**
@@ -591,7 +591,7 @@ bool Pathfinding::aStarPath(
 
 	// start position is the first one in the "open" list
 	PathfindingNode* const start = getNode(origin);
-	start->connect(0,0,0, target);
+	start->linkNode(0,NULL,0, target);
 	PathfindingOpenSet openList;
 	openList.addNode(start);
 
@@ -608,11 +608,11 @@ bool Pathfinding::aStarPath(
 		{
 			_path.clear();
 
-			const PathfindingNode* pf = currentNode;
-			while (pf->getPrevNode() != NULL)
+			const PathfindingNode* node = currentNode;
+			while (node->getPrevNode() != NULL)
 			{
-				_path.push_back(pf->getPrevDir());
-				pf = pf->getPrevNode();
+				_path.push_back(node->getPrevDir());
+				node = node->getPrevNode();
 			}
 
 			return true;
@@ -620,7 +620,7 @@ bool Pathfinding::aStarPath(
 
 		for (int // try all reachable neighbours.
 				dir = 0;
-				dir < 10; // dir 0 thro 7, up/down
+				dir != 10; // dir 0 thro 7, up/down
 				++dir)
 		{
 			//Log(LOG_INFO) << ". try dir ... " << dir;
@@ -658,7 +658,7 @@ bool Pathfinding::aStarPath(
 				&& _totalTUCost <= maxTUCost)
 			{
 				//Log(LOG_INFO) << ". nodeChecked(dir) = " << dir << " totalCost = " << _totalTUCost;
-				nextNode->connect(
+				nextNode->linkNode(
 								_totalTUCost,
 								currentNode,
 								dir,
@@ -2354,26 +2354,27 @@ std::vector<int> Pathfinding::findReachable(
 	}
 
 	PathfindingNode* startNode = getNode(start);
-	startNode->connect(0,0,0);
+	startNode->linkNode(0,NULL,0);
 	PathfindingOpenSet unvisited;
 	unvisited.addNode(startNode);
+
 	std::vector<PathfindingNode*> reachable;
 
 	while (unvisited.isNodeSetEmpty() == false)
 	{
 		PathfindingNode* const currentNode = unvisited.getNode();
-		const Position &currentPos = currentNode->getPosition();
+		const Position& currentPos = currentNode->getPosition();
 
 		for (int // Try all reachable neighbours.
-				direction = 0;
-				direction < 10;
-				++direction)
+				dir = 0;
+				dir < 10;
+				++dir)
 		{
 			Position nextPos;
 
 			const int tuCost = getTUCost(
 									currentPos,
-									direction,
+									dir,
 									&nextPos,
 									unit,
 									0,
@@ -2382,24 +2383,24 @@ std::vector<int> Pathfinding::findReachable(
 				continue;
 
 			if (currentNode->getTUCost(false) + tuCost > tuMax
-//kL			|| (currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
+//				|| (currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // run out of TUs/Energy
 				|| (currentNode->getTUCost(false) + tuCost) > energyMax) // kL
 			{
 				continue;
 			}
 
 			PathfindingNode* const nextNode = getNode(nextPos);
-			if (nextNode->isChecked() == true) // Our algorithm means this node is already at minimum cost.
+			if (nextNode->isChecked() == true) // the algorithm means this node is already at minimum cost.
 				continue;
 
 			const int totalTuCost = currentNode->getTUCost(false) + tuCost;
 			if (nextNode->inOpenSet() == false
-				|| nextNode->getTUCost(false) > totalTuCost) // If this node is unvisited or visited from a better path.
+				|| nextNode->getTUCost(false) > totalTuCost) // if this node is unvisited or visited from a better path.
 			{
-				nextNode->connect(
+				nextNode->linkNode(
 								totalTuCost,
 								currentNode,
-								direction);
+								dir);
 
 				unvisited.addNode(nextNode);
 			}

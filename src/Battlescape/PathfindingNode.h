@@ -32,7 +32,7 @@ struct OpenSetEntry;
 
 
 /**
- * A class that holds pathfinding info for a certain node on the map.
+ * A class that holds pathfinding info for a node on the map.
  */
 class PathfindingNode
 {
@@ -85,18 +85,18 @@ private:
 		bool inOpenSet() const
 		{	return (_openentry != NULL); }
 
-#ifdef __MORPHOS__
-	#undef connect
-#endif
+//#ifdef __MORPHOS__
+//	#undef connect
+//#endif
 
 		/// Connects to previous Node along the path.
-		void connect(
+		void linkNode(
 				int tuCost,
 				PathfindingNode* prevNode,
 				int prevDir,
 				const Position& target);
 		/// Connects to previous Node along a visit.
-		void connect(
+		void linkNode(
 				int tuCost,
 				PathfindingNode* prevNode,
 				int prevDir);

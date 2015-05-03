@@ -2426,21 +2426,21 @@ int BattlescapeGenerator::loadMAP( // private.
 		throw Exception(file.str() + " not found");
 	}
 
-	char mapSize[3];
+	char array_Map[3];
 	mapFile.read(
-			(char*)&mapSize,
-			sizeof(mapSize));
+			(char*)&array_Map,
+			sizeof(array_Map));
 	const int
-		size_y = static_cast<int>(mapSize[0]), // note X-Y switch!
-		size_x = static_cast<int>(mapSize[1]), // note X-Y switch!
-		size_z = static_cast<int>(mapSize[2]);
+		size_x = static_cast<int>(array_Map[1]), // note X-Y switch!
+		size_y = static_cast<int>(array_Map[0]), // note X-Y switch!
+		size_z = static_cast<int>(array_Map[2]);
 
 	mapblock->setSizeZ(size_z);
 
 	std::stringstream ststr;
 	if (size_z > _battleSave->getMapSizeZ())
 	{
-		ststr <<"Height of map " + file.str() + " too big for this mission, block is " << size_z << ", expected: " << _battleSave->getMapSizeZ();
+		ststr << "Height of map " + file.str() + " too big for this mission, block is " << size_z << ", expected: " << _battleSave->getMapSizeZ();
 		throw Exception(ststr.str());
 	}
 
@@ -2448,7 +2448,7 @@ int BattlescapeGenerator::loadMAP( // private.
 	if (   size_x != mapblock->getSizeX()
 		|| size_y != mapblock->getSizeY())
 	{
-		ststr <<"Map block is not of the size specified " + file.str() + " is " << size_x << "x" << size_y << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
+		ststr << "Map block is not of the size specified " + file.str() + " is " << size_x << "x" << size_y << " , expected: " << mapblock->getSizeX() << "x" << mapblock->getSizeY();
 		throw Exception(ststr.str());
 	}
 
@@ -2484,65 +2484,66 @@ int BattlescapeGenerator::loadMAP( // private.
 	}
 
 
-	unsigned int objectID;
-	unsigned char value[4];
-	bool discoverDone;
+	unsigned int partId;
+	bool revealDone;
+
+	unsigned char array_Parts[4];
 
 	while (mapFile.read(
-					(char*)&value,
-					sizeof(value)) != NULL)
+					(char*)&array_Parts,
+					sizeof(array_Parts)) != NULL)
 	{
-		discoverDone = false;
+		revealDone = false;
 
 		for (int
 				part = 0;
 				part != 4;
 				++part)
 		{
-			objectID = static_cast<unsigned int>(value[static_cast<size_t>(part)]);
+			partId = static_cast<unsigned int>(array_Parts[static_cast<size_t>(part)]);
 
 			// kL_begin: Remove natural terrain that is inside Craft or Ufo. This mimics UFO:orig behavior.
 			if (part != 0			// not if it's a floor since Craft/Ufo part will overwrite it anyway
-				&& objectID == 0	// and only if no Craft/Ufo part would overwrite the part
-				&& value[0] != 0)	// but only if there *is* a floor-part to the Craft/Ufo, so it would (have) be(en) inside the Craft/Ufo
+				&& partId == 0	// and only if no Craft/Ufo part would overwrite the part
+				&& array_Parts[0] != 0)		// but only if there *is* a floor-part to the Craft/Ufo, so it would (have) be(en) inside the Craft/Ufo
 			{
-				_battleSave->getTile(Position(x,y,z))->setMapData(NULL,-1,-1, part);
+				_battleSave->getTile(Position(x,y,z))->setMapData(NULL, -1,-1, part);
 			} // kL_end.
 
 			// Then overwrite previous terrain with Craft or Ufo terrain.
 			// nb. See sequence of map-loading in generateMap() (1st terrain, 2nd Ufo, 3rd Craft) <- preMapScripting.
-			if (objectID > 0)
+			if (partId > 0)
 			{
-				unsigned int dataID = objectID;
-				int dataSetID = dataSetOffset;
+				unsigned int dataId = partId;
+				int dataSetId = dataSetOffset;
 
 				MapData* const data = terrainRule->getMapData(
-														&dataID,
-														&dataSetID);
+														&dataId,
+														&dataSetId);
 //				if (dataSetOffset > 0) // ie: ufo or craft.
 //					_battleSave->getTile(Position(x,y,z))->setMapData(NULL,-1,-1,3); // erase content-object
 
 				_battleSave->getTile(Position(x,y,z))->setMapData(
 																data,
-																static_cast<int>(dataID),
-																dataSetID,
+																static_cast<int>(dataId),
+																dataSetId,
 																part);
 			}
 
 /*			// If the part is not a floor and is empty, remove it; this prevents growing grass in UFOs.
 			// note: And outside UFOs. so remark it
 			if (part == 3
-				&& objectID == 0)
+				&& partId == 0)
 			{
 				_battleSave->getTile(Position(x,y,z))->setMapData(NULL,-1,-1, part);
 			} */
 
 			// kL_begin: Reveal only tiles inside the Craft.
 			if (craft == true
-				&& objectID != 0
+				&& partId != 0
 				&& z != _craftZ)
 			{
-				discoverDone = true;
+				revealDone = true;
 				_battleSave->getTile(Position(x,y,z))->setDiscovered(true, 2);
 			} // kL_end.
 		}
@@ -2559,7 +2560,7 @@ int BattlescapeGenerator::loadMAP( // private.
 			}
 		} */
 
-		if (discoverDone == false)
+		if (revealDone == false)
 			_battleSave->getTile(Position(x,y,z))->setDiscovered(
 															discovered == true
 																|| mapblock->isFloorRevealed(z) == true,
@@ -2618,7 +2619,7 @@ int BattlescapeGenerator::loadMAP( // private.
 }
 
 /**
- * Loads an XCom format RMP file into the spawnpoints of the battlegame.
+ * Loads an XCom format RMP file as battlefield Nodes.
  * @param mapblock	- pointer to MapBlock
  * @param xoff		- Mapblock offset in X direction
  * @param yoff		- Mapblock offset in Y direction
@@ -2631,7 +2632,7 @@ void BattlescapeGenerator::loadRMP( // private.
 		int yoff,
 		int segment)
 {
-	char value[24];
+	char array_RMP[24];
 
 	std::ostringstream file;
 	file << "ROUTES/" << mapblock->getType() << ".RMP";
@@ -2653,56 +2654,74 @@ void BattlescapeGenerator::loadRMP( // private.
 		nodeRank,
 		nodeFlags,
 		destruct,
-		priority;
+		priority,
+
+		linkId;
 
 	const int nodeOffset = static_cast<int>(_battleSave->getNodes()->size());
+	Node* node;
+	Position pos;
 
 	while (mapFile.read(
-					(char*)&value,
-					sizeof(value)) != NULL)
+					(char*)&array_RMP,
+					sizeof(array_RMP)) != NULL)
 	{
-		pos_x = static_cast<int>(value[1]); // note: Here is where x-y values get reversed
-		pos_y = static_cast<int>(value[0]); // vis-a-vis values in .RMP files vs. loaded values.
-		pos_z = static_cast<int>(value[2]);
+		pos_x = static_cast<int>(array_RMP[1]); // note: Here is where x-y values get reversed
+		pos_y = static_cast<int>(array_RMP[0]); // vis-a-vis values in .RMP files vs. loaded values.
+		pos_z = static_cast<int>(array_RMP[2]);
 
 		if (   pos_x < mapblock->getSizeX()
 			&& pos_y < mapblock->getSizeY()
 			&& pos_z < _mapsize_z)
 		{
-			const Position pos = Position(
-										xoff + pos_x,
-										yoff + pos_y,
-										mapblock->getSizeZ() - pos_z - 1);
+			pos = Position(
+						xoff + pos_x,
+						yoff + pos_y,
+						mapblock->getSizeZ() - pos_z - 1);
 
-			type		= static_cast<int>(value[19]);
-			nodeRank	= static_cast<int>(value[20]);
-			nodeFlags	= static_cast<int>(value[21]);
-			destruct	= static_cast<int>(value[22]);
-			priority	= static_cast<int>(value[23]);
+			type		= static_cast<int>(array_RMP[19]);
+			nodeRank	= static_cast<int>(array_RMP[20]);
+			nodeFlags	= static_cast<int>(array_RMP[21]);
+			destruct	= static_cast<int>(array_RMP[22]);
+			priority	= static_cast<int>(array_RMP[23]);
 
-			Node* const node = new Node(
-									_battleSave->getNodes()->size(),
-									pos,
-									segment,
-									type,
-									nodeRank,
-									nodeFlags,
-									destruct,
-									priority);
+			node = new Node(
+						_battleSave->getNodes()->size(),
+						pos,
+						segment,
+						type,
+						nodeRank,
+						nodeFlags,
+						destruct,
+						priority);
 
 			for (size_t
 					j = 0;
 					j != 5;
 					++j)
 			{
-				int connectId = static_cast<int>(value[(j * 3) + 4]);
+				linkId = static_cast<int>(array_RMP[(j * 3) + 4]);
 
-				if (connectId < 251) // don't touch special values
-					connectId += nodeOffset;
-				else // 255/-1 = unused, 254/-2 = north, 253/-3 = east, 252/-4 = south, 251/-5 = west
-					connectId -= 256;
+				if (linkId < 251) // don't touch special values; ie. links to N,S,E,West
+					linkId += nodeOffset;
+				else
+					linkId -= 256;
+					// 255 -> -1 = unused
+					// 254 -> -2 = north
+					// 253 -> -3 = east
+					// 252 -> -4 = south
+					// 251 -> -5 = west
 
-				node->getNodeLinks()->push_back(connectId);
+				std::vector<int>* nodeLinks = node->getNodeLinks();
+				if (std::find(
+							nodeLinks->rbegin(),
+							nodeLinks->rend(),
+							linkId) != nodeLinks->rend())
+				{
+					linkId = -1;	// <- for Expanded U_BASE, which seems to have multiple identical links on nodes.
+				}					// TODO: yeah i'm working on it but things like 'mapView' are involved ....
+
+				nodeLinks->push_back(linkId);
 			}
 
 			_battleSave->getNodes()->push_back(node);
@@ -3654,44 +3673,46 @@ void BattlescapeGenerator::loadNodes() // private.
  */
 void BattlescapeGenerator::attachNodeLinks() // private.
 {
-	Node* node;
 	for (std::vector<Node*>::const_iterator
 			i = _battleSave->getNodes()->begin();
 			i != _battleSave->getNodes()->end();
 			++i)
 	{
-		node = *i;
-
+		const size_t
+			segX = (*i)->getPosition().x / 10,
+			segY = (*i)->getPosition().y / 10;
 		const int
-			segmentX = node->getPosition().x / 10,
-			segmentY = node->getPosition().y / 10,
-			neighbourDirections[4]			= {-2,-3,-4,-5},
-			neighbourDirectionsInverted[4]	= {-4,-5,-2,-3};
-		int neighbourSegments[4];
+			borDirs[4]			= {-2,-3,-4,-5},
+			borDirs_invert[4]	= {-4,-5,-2,-3};
+		int borSegs[4];
 
-		if (segmentX == (_mapsize_x / 10) - 1)
-			neighbourSegments[0] = -1;
+		if (static_cast<int>(segX) == (_mapsize_x / 10) - 1)
+			borSegs[0] = -1;
 		else
-			neighbourSegments[0] = _segments[segmentX + 1][segmentY];
+			borSegs[0] = _segments[segX + 1]
+								  [segY];
 
-		if (segmentY == (_mapsize_y / 10) - 1)
-			neighbourSegments[1] = -1;
+		if (static_cast<int>(segY) == (_mapsize_y / 10) - 1)
+			borSegs[1] = -1;
 		else
-			neighbourSegments[1] = _segments[segmentX][segmentY + 1];
+			borSegs[1] = _segments[segX]
+								  [segY + 1];
 
-		if (segmentX == 0)
-			neighbourSegments[2] = -1;
+		if (segX == 0)
+			borSegs[2] = -1;
 		else
-			neighbourSegments[2] = _segments[segmentX - 1][segmentY];
+			borSegs[2] = _segments[segX - 1]
+								  [segY];
 
-		if (segmentY == 0)
-			neighbourSegments[3] = -1;
+		if (segY == 0)
+			borSegs[3] = -1;
 		else
-			neighbourSegments[3] = _segments[segmentX][segmentY - 1];
+			borSegs[3] = _segments[segX]
+								  [segY - 1];
 
 		for (std::vector<int>::iterator
-				j = node->getNodeLinks()->begin();
-				j != node->getNodeLinks()->end();
+				j = (*i)->getNodeLinks()->begin();
+				j != (*i)->getNodeLinks()->end();
 				++j)
 		{
 			for (size_t
@@ -3699,23 +3720,23 @@ void BattlescapeGenerator::attachNodeLinks() // private.
 					dir != 4;
 					++dir)
 			{
-				if (*j == neighbourDirections[dir])
+				if (*j == borDirs[dir])
 				{
 					for (std::vector<Node*>::const_iterator
 							k = _battleSave->getNodes()->begin();
 							k != _battleSave->getNodes()->end();
 							++k)
 					{
-						if ((*k)->getSegment() == neighbourSegments[dir])
+						if ((*k)->getSegment() == borSegs[dir])
 						{
 							for (std::vector<int>::iterator
 									l = (*k)->getNodeLinks()->begin();
 									l != (*k)->getNodeLinks()->end();
 									++l )
 							{
-								if (*l == neighbourDirectionsInverted[dir])
+								if (*l == borDirs_invert[dir])
 								{
-									*l = node->getID();
+									*l = (*i)->getID();
 									*j = (*k)->getID();
 								}
 							}
@@ -3815,11 +3836,11 @@ bool BattlescapeGenerator::selectPosition( // private.
 	if (valid.empty() == true)
 		return false;
 
-	std::pair<int, int> selection = valid.at(static_cast<size_t>(RNG::generate(
-																		0,
-																		static_cast<int>(valid.size()) - 1)));
-	X = selection.first;
-	Y = selection.second;
+	std::pair<int, int> sel = valid.at(static_cast<size_t>(RNG::generate(
+																	0,
+																	static_cast<int>(valid.size()) - 1)));
+	X = sel.first;
+	Y = sel.second;
 
 	return true;
 }
