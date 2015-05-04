@@ -11518,7 +11518,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestateaward.cpp
+1430689628 source:f:\git\openxcom\src\ufopaedia\articlestateaward.cpp
 	"ArticleStateAward.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
