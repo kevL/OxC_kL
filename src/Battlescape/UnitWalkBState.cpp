@@ -208,11 +208,12 @@ void UnitWalkBState::think()
 		else if (_onScreen == true) // still walking ... make sure the unit sprites are up to date
 		{
 			//Log(LOG_INFO) << ". _onScreen : still walking ...";
-			if (_pf->getStrafeMove() == true) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
+//			if (_pf->getStrafeMove() == true) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
+			if (_action.strafe == true)
 			{
 				//Log(LOG_INFO) << ". WALKING strafe, unitDir = " << _unit->getDirection();
 				//Log(LOG_INFO) << ". WALKING strafe, faceDir = " << _unit->getFaceDirection();
-				const int dirMove = _unit->getDirection(); // direction of travel
+				const int dirStrafe = _unit->getDirection(); // direction of travel
 				_unit->setDirection(
 								_unit->getFaceDirection(),
 								false);
@@ -220,7 +221,7 @@ void UnitWalkBState::think()
 //				_unit->setCache(NULL); // kL, might play around with Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
 				_unit->setDirection(
-								dirMove,
+								dirStrafe,
 								false);
 			}
 			else
@@ -378,7 +379,8 @@ bool UnitWalkBState::doStatusStand()
 	if (dir != -1)
 	{
 		//Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();
-		if (_pf->getStrafeMove() == true
+//		if (_pf->getStrafeMove() == true
+		if (_action.strafe == true
 			&& _pf->getPath().empty() == false) // <- don't bother with this if it's the end of movement/ State.
 		{
 			if (_unit->getGeoscapeSoldier() != NULL
@@ -389,104 +391,112 @@ bool UnitWalkBState::doStatusStand()
 			}
 			else
 			{
-				const int dirFace = (_dirStart + 4) %8;
-				_unit->setFaceDirection(dirFace);
-				//Log(LOG_INFO) << ". STANDING strafeTank, setFaceDirection() -> " << dirFace;
+				const int dirStrafe = (_dirStart + 4) % 8;
+				_unit->setFaceDirection(dirStrafe);
+				//Log(LOG_INFO) << ". STANDING strafeTank, setFaceDirection() -> " << dirStrafe;
 
 				if (_unit->getTurretType() != -1)
 				{
 					const int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
-					_unit->setTurretDirection((turretOffset + dirFace) %8); // might not need modulo there ... not sure. Occuppied w/ other things atm.
-					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirFace);
+					_unit->setTurretDirection((turretOffset + dirStrafe) % 8); // might not need modulo there ... not sure. Occuppied w/ other things atm.
+					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirStrafe);
 				}
 			}
 		}
 		//else Log(LOG_INFO) << ". STANDING no strafe.";
 
-		//Log(LOG_INFO) << ". getTUCost() & destination";
-		Position destination;
-		int costTU = _pf->getTUCost( // gets tu cost, but also sets the destination position.
-							_unit->getPosition(),
-							dir,
-							&destination,
-							_unit,
-							NULL,
-							false);
-		//Log(LOG_INFO) << ". costTU = " << costTU;
+		//Log(LOG_INFO) << ". getTUCost() & dest";
+		Position dest;
+		int
+			tuCost = _pf->getTUCost( // gets tu cost, but also sets the destination position.
+								_unit->getPosition(),
+								dir,
+								&dest,
+								_unit,
+								NULL,
+								false),
+			tuTest,
+			staCost;
+		//Log(LOG_INFO) << ". tuCost = " << tuCost;
 
-		const Tile* const tileDest = _parent->getSave()->getTile(destination);
+		const Tile* const destTile = _parent->getSave()->getTile(dest);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
-		if (tileDest != NULL
-			&& tileDest->getFire() > 0
-			&& (_unit->getUnitRules() == NULL
-				|| _unit->getUnitRules()->getType() != "STR_SILACOID_TERRORIST")
-			&& _unit->getFaction() != FACTION_PLAYER)
+		if (   destTile != NULL
+			&& destTile->getFire() > 0
+			&& _unit->getFaction() != FACTION_PLAYER
+			&& _unit->getArmor()->getDamageModifier(DT_IN) > 0.f)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
-			// The TU cost was artificially inflated by 32 points in getTUCost,
-			// under these conditions, so we have to deflate it here.
+			// The TU cost was artificially inflated by 32 points in getTUCost
+			// so it has to be deflated again here under the same conditions.
 			// See: Pathfinding::getTUCost(), where TU cost was inflated.
-			costTU -= 32;
+			tuCost -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
 
 		if (_falling == true)
 		{
-			//Log(LOG_INFO) << ". . falling, set costTU 0";
-			costTU = 0;
+			//Log(LOG_INFO) << ". . falling, set tuCost 0";
+			tuCost =
+			tuTest =
+			staCost = 0;
 		}
-
-		const int testTU = costTU;
-		int costEnergy = costTU;
-
-		if (_falling == false)
+//		const int tuTest = tuCost;
+//		int staCost = tuCost;
+		else //if (_falling == false)
 		{
+			tuTest =
+			staCost = tuCost;
+
 			if (gravLift == false)
 			{
 				if (_action.dash == true // allow dash when moving vertically 1 tile (or more).
 					|| (_action.strafe == true
 						&& dir >= _pf->DIR_UP))
 				{
-					costTU -= _pf->getOpenDoor();
-					costTU = (costTU * 3 / 4) + _pf->getOpenDoor();
+					//Log(LOG_INFO) << ". . dash OR up/down-strafe, tuCost[0] = " << tuCost;
+					tuCost -= _pf->getOpenDoor();
+					//Log(LOG_INFO) << ". . dash OR up/down-strafe, tuCost[1] = " << tuCost;
+					tuCost = (tuCost * 3 / 4) + _pf->getOpenDoor();
+					//Log(LOG_INFO) << ". . dash OR up/down-strafe, tuCost[2] = " << tuCost;
 
-					costEnergy -= _pf->getOpenDoor();
-					costEnergy = costEnergy * 3 / 2;
+					staCost -= _pf->getOpenDoor();
+					staCost = staCost * 3 / 2;
 				}
 
-				costEnergy -= _unit->getArmor()->getAgility();
+				staCost -= _unit->getArmor()->getAgility();
 /*				if (_unit->hasFlightSuit() == true
 					&& _pf->getMovementType() == MT_FLY)
 				{
-					costEnergy -= 2; // zippy.
+					staCost -= 2; // zippy.
 				}
 				else if (_unit->hasPowerSuit() == true
 					|| (_unit->hasFlightSuit() == true
 						&& _pf->getMovementType() == MT_WALK))
 				{
-					costEnergy -= 1; // good stuff
+					staCost -= 1; // good stuff
 				}
 				// else if (coveralls){} // normal energy expenditure
 				else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
-					costEnergy += 1; // *clunk*clunk* */
+					staCost += 1; // *clunk*clunk* */
 
-				if (costEnergy < 0) costEnergy = 0;
+				if (staCost < 0) staCost = 0;
 			}
 			else // gravLift
 			{
 				//Log(LOG_INFO) << ". . using GravLift";
-				costEnergy = 0;
+				staCost = 0;
 			}
 		}
 
-		//Log(LOG_INFO) << ". check costTU + stamina, etc. TU = " << costTU;
+		//Log(LOG_INFO) << ". check tuCost + stamina, etc. TU = " << tuCost;
 		//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();
-//		if (costTU > _unit->getTimeUnits())
-		if (costTU - _pf->getOpenDoor() > _unit->getTimeUnits())
+//		if (tuCost > _unit->getTimeUnits())
+		if (tuCost - _pf->getOpenDoor() > _unit->getTimeUnits())
 		{
-			//Log(LOG_INFO) << ". . costTU > _unit->TU()";
+			//Log(LOG_INFO) << ". . tuCost > _unit->TU()";
 			if (_parent->getPanicHandled() == true
-				&& testTU < 255)
+				&& tuTest < 255)
 			{
 				//Log(LOG_INFO) << ". send warning: not enough TU";
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
@@ -500,10 +510,10 @@ bool UnitWalkBState::doStatusStand()
 
 			return false;
 		}
-		else if (costEnergy > _unit->getEnergy())
+		else if (staCost > _unit->getEnergy())
 		{
-			//Log(LOG_INFO) << ". . costEnergy > _unit->getEnergy()";
-			if (_parent->getPanicHandled())
+			//Log(LOG_INFO) << ". . staCost > _unit->getEnergy()";
+			if (_parent->getPanicHandled() == true)
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
 
 			_unit->setCache(NULL);
@@ -515,9 +525,11 @@ bool UnitWalkBState::doStatusStand()
 			return false;
 		}
 		else if (_parent->getPanicHandled() == true
-			&& _parent->checkReservedTU(_unit, costTU) == false)
+			&& _parent->checkReservedTU(
+									_unit,
+									tuCost) == false)
 		{
-			//Log(LOG_INFO) << ". . checkReservedTU(_unit, costTU) == false";
+			//Log(LOG_INFO) << ". . checkReservedTU(_unit, tuCost) == false";
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -525,11 +537,12 @@ bool UnitWalkBState::doStatusStand()
 
 			return false;
 		}
-		// we are looking in the wrong way, turn first (unless strafing)
-		// we are not using the turn state, because turning during walking costs no tu
+		// unit is looking in the wrong way so turn first - unless strafe
+		// Do not use the turn state because turning during walking doesn't cost TU.
 		else if (dir != _unit->getDirection()
 			&& dir < _pf->DIR_UP
-			&& _pf->getStrafeMove() == false)
+			&& _action.strafe == false)
+//			&& _pf->getStrafeMove() == false)
 		{
 			//Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
 			_unit->lookAt(dir);
@@ -603,10 +616,10 @@ bool UnitWalkBState::doStatusStand()
 			{
 				//Log(LOG_INFO) << ". . check obstacle(unit)";
 				const BattleUnit
-					* const unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit(),
+					* const unitInMyWay = _parent->getSave()->getTile(dest + Position(x,y,0))->getUnit(),
 					* unitBelowMyWay = NULL;
 
-				const Tile* const belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
+				const Tile* const belowDest = _parent->getSave()->getTile(dest + Position(x,y,-1));
 				if (belowDest != NULL)
 					unitBelowMyWay = belowDest->getUnit();
 
@@ -646,15 +659,15 @@ bool UnitWalkBState::doStatusStand()
 		}
 		//Log(LOG_INFO) << ". dequeuePath() dir[1] = " << dir;
 
-		if (_unit->spendTimeUnits(costTU) == true		// These were checked above and don't really need to
-			&& _unit->spendEnergy(costEnergy) == true)	// be checked again here. Only subtract required.
+		if (_unit->spendTimeUnits(tuCost) == true	// These were checked above and don't really need to
+			&& _unit->spendEnergy(staCost) == true)	// be checked again here. Only subtract is required. but whatver
 		{
 			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
 			const Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
 							dir,
-							destination,
+							dest,
 							tileBelow);
 //							_onScreen);
 

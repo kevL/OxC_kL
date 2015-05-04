@@ -22,9 +22,12 @@
 /*
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
+
 #ifndef UINT64_MAX
 	#define UINT64_MAX 0xffffffffffffffffULL
 #endif */
+
 // Or:
 
 #include <cmath>
@@ -146,10 +149,10 @@ double generate(
  * @return, generated number
  */
 int seedless(
-		int min,
-		int max)
+		int minRand,
+		int maxRand)
 {
-	return (std::rand() % (max - min + 1) + min);
+	return (std::rand() % (maxRand - minRand + 1) + minRand);
 }
 
 /*

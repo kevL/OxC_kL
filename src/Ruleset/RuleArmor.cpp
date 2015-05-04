@@ -314,7 +314,7 @@ int RuleArmor::getSize() const
  */
 float RuleArmor::getDamageModifier(ItemDamageType dType) const
 {
-	return _damageModifier[static_cast<int>(dType)];
+	return _damageModifier[static_cast<size_t>(dType)];
 }
 
 /** Gets the Line Of Fire Template set.

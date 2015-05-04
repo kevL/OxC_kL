@@ -54,8 +54,8 @@ double generate(
 
 /// Generates a random integer number inclusive (non-seed version).
 int seedless(
-		int min,
-		int max);
+		int minRand,
+		int maxRand);
 
 /// Get normally distributed value.
 double boxMuller(
@@ -74,7 +74,7 @@ int generateEx(int maxRand);
  * Randomly changes the orders of the elements in a list.
  * @param container - the container to randomize
  */
-template <typename T>
+template<typename T>
 void shuffle(T& container)
 {
 	std::random_shuffle(

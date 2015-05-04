@@ -44,19 +44,20 @@ class Pathfinding
 
 private:
 	bool
-		_modALT,
-		_modCTRL,
-		_pathPreviewed,
-		_strafeMove;
+		_modifALT,
+		_modifCTRL,
+		_previewed,
+		_strafe;
 	int
 		_openDoor, // kL, to give accurate preview # when dashing through doors.
-		_size,
-		_totalTUCost;
+		_totalTuCost;
 
 	BattleUnit* _unit;
-	SavedBattleGame* _save;
+	SavedBattleGame* _battleSave;
 
-	MovementType _movementType;
+	BattleAction* _battleAction;
+
+	MovementType _moveType;
 
 	std::vector<int> _path;
 
@@ -125,15 +126,15 @@ private:
 
 
 		/// cTor
-		Pathfinding(SavedBattleGame* save);
+		Pathfinding(SavedBattleGame* battleSave);
 		/// Cleans up the Pathfinding.
 		~Pathfinding();
 
 		/// Calculates the shortest path.
 		void calculate(
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				Position destPos,
-				BattleUnit* missileTarget = NULL,
+				const BattleUnit* const missileTarget = NULL,
 				int maxTUCost = 1000,
 				bool strafeRejected = false);
 
@@ -169,9 +170,9 @@ private:
 				BattleUnit* const unit,
 				const BattleUnit* const missileTarget,
 				bool missile);
-		/// Gets _totalTUCost; finds out whether we can hike somewhere in this turn or not.
+		/// Gets _totalTuCost; finds out whether we can hike somewhere in this turn or not.
 		int getTotalTUCost() const
-		{ return _totalTUCost; }
+		{ return _totalTuCost; }
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
@@ -185,20 +186,17 @@ private:
 				int tuMax);
 
 		/// Previews the path.
-		bool previewPath(bool bRemove = false);
+		bool previewPath(bool discard = false);
 		/// Removes the path preview.
 		bool removePreview();
 		/// Gets the path preview setting.
 		bool isPathPreviewed() const;
 
 		/// Gets the strafe move setting.
-		bool getStrafeMove() const;
+//		bool getStrafeMove() const;
 
 		/// Sets _unit in order to abuse low-level pathfinding functions from outside the class.
 		void setUnit(BattleUnit* unit);
-
-		/// Determines whether the unit is going up a stairs.
-//		bool isOnStairs(const Position& startPosition, const Position& endPosition);
 
 		/// Gets the CTRL modifier setting.
 		bool isModCTRL() const;
@@ -215,6 +213,9 @@ private:
 		const std::vector<int>& getPath();
 		/// Makes a copy to the path.
 		std::vector<int> copyPath() const;
+
+		/// Determines whether the unit is going up a stairs.
+//		bool isOnStairs(const Position& startPosition, const Position& endPosition);
 };
 
 }

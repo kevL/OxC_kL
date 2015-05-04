@@ -2321,8 +2321,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
 	//if (_battleSave->getSelectedUnit()) Log(LOG_INFO) << ". ID " << _battleSave->getSelectedUnit()->getId();
-	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
-
 	_currentAction.actor = _battleSave->getSelectedUnit();
 	BattleUnit* const targetUnit = _battleSave->selectUnit(targetPos);
 
@@ -2536,9 +2534,11 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			// I imagine updateSoldierInfo() is done somewhere down the line....... It's done at the end of popState()
 		}
 	}
-	else // unit MOVE .......
+	else // select unit, or spin/ MOVE .......
 	{
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
+		bool allowPreview = (Options::battleNewPreviewPath != PATH_NONE);
+
 		if (targetUnit != NULL
 			&& targetUnit != _currentAction.actor
 			&& (targetUnit->getUnitVisible() == true
@@ -2559,22 +2559,22 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		{
 			Pathfinding* const pf = _battleSave->getPathfinding();
 			const bool
-				mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
-				mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
-				isTank = _currentAction.actor->getUnitRules() != NULL
+				modifCTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
+				modifALT = (SDL_GetModState() & KMOD_ALT) != 0,
+				isMech = _currentAction.actor->getUnitRules() != NULL
 					  && _currentAction.actor->getUnitRules()->isMechanical();
 
-			_currentAction.dash = false;
-			_currentAction.actor->setDashing(false);
+//			_currentAction.dash = false;
+//			_currentAction.actor->setDashing(false);
 
 			if (targetUnit != NULL // spin 180 degrees
 				&& targetUnit == _currentAction.actor
-				&& mod_CTRL == false
-				&& mod_ALT == false
-				&& isTank == false
+				&& modifCTRL == false
+				&& modifALT == false
+				&& isMech == false
 				&& _currentAction.actor->getArmor()->getSize() == 1) // small units only
 			{
-				if (bPreviewed == true)
+				if (allowPreview == true)
 					pf->removePreview();
 
 				Position screenPixel;
@@ -2587,15 +2587,15 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				getMap()->findMousePosition(mousePixel);
 
 				if (mousePixel.x > screenPixel.x + 16)
-					targetUnit->setTurnDirection(-1);
+					_currentAction.actor->setTurnDirection(-1);
 				else
-					targetUnit->setTurnDirection(1);
+					_currentAction.actor->setTurnDirection(1);
 
 				Pathfinding::directionToVector(
-											(targetUnit->getDirection() + 4) % 8,
+											(_currentAction.actor->getDirection() + 4) % 8,
 											&_currentAction.target);
 				_currentAction.target += targetPos;
-				_currentAction.strafe = false;
+//				_currentAction.strafe = false;
 
 				statePushBack(new UnitTurnBState(
 											this,
@@ -2603,19 +2603,20 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			}
 			else
 			{
-				if (bPreviewed == true
+				if (allowPreview == true
 					&& (_currentAction.target != targetPos
-						|| pf->isModCTRL() != mod_CTRL
-						|| pf->isModALT() != mod_ALT))
+						|| pf->isModCTRL() != modifCTRL
+						|| pf->isModALT() != modifALT))
 				{
 					pf->removePreview();
 				}
 
+/* Take care of this muck in Pathfinding:
 				_currentAction.strafe = (Options::strafe == true)
-									&& ((mod_CTRL == true		// soldier strafe
-											&& isTank == false)
-										|| (mod_ALT == true		// tank reverse gear, 1 tile only
-											&& isTank == true));
+									&& ((modifCTRL == true		// soldier strafe
+											&& isMech == false)
+										|| (modifALT == true	// tank reverse gear, 1 tile only
+											&& isMech == true));
 				//Log(LOG_INFO) << ". primary action: Strafe";
 
 				const Position
@@ -2625,44 +2626,56 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 								targetPos.y - actorPos.y,
 								0);
 				const int
-					dist = _battleSave->getTileEngine()->distance(
-																actorPos,
-																targetPos),
+//					dist = _battleSave->getTileEngine()->distance(
+//																actorPos,
+//																targetPos),
 					dirUnit = _currentAction.actor->getDirection();
+
 				int dir;
 				pf->vectorToDirection(pos, dir);
+
+				const size_t pathSize = pf->getPath().size();
+
+				//Log(LOG_INFO) << ". strafe = " << (int)_currentAction.strafe;
+				//Log(LOG_INFO) << ". isSoldier = " << (int)(_currentAction.actor->getGeoscapeSoldier() != NULL);
+				//Log(LOG_INFO) << ". diff_Z = " << (int)(actorPos.z != targetPos.z);
+				//Log(LOG_INFO) << ". dist = " << dist;
+				//Log(LOG_INFO) << ". pathSize = " << (int)pathSize;
+				//Log(LOG_INFO) << ". dirUnit = " << dirUnit;
+				//Log(LOG_INFO) << ". dir = " << dir;
 
 				if (_currentAction.strafe == true
 					&& _currentAction.actor->getGeoscapeSoldier() != NULL
 					&& (actorPos.z != targetPos.z
-						|| dist > 1
+//						|| dist > 1
+						|| pathSize > 1
 						|| (actorPos.z == targetPos.z
-							&& dist < 2
+//							&& dist < 2
+							&& pathSize == 1
 							&& dirUnit == dir)))
 				{
 					_currentAction.strafe = false;
 					_currentAction.dash = true;
 					_currentAction.actor->setDashing(true);
-				}
+				} */
+
 
 				_currentAction.target = targetPos;
-				pf->calculate( // GET the Path.
-						_currentAction.actor,
-						_currentAction.target);
+				pf->calculate( // CREATE the Path.
+							_currentAction.actor,
+							_currentAction.target);
 
-				// assumes both previewPath() & removePreview() don't change StartDirection
+
 				if (pf->getStartDirection() != -1)
 				{
-					if (bPreviewed == true
+					if (allowPreview == true
 						&& pf->previewPath() == false)
-//						&& pf->getStartDirection() != -1)
 					{
 						pf->removePreview();
-						bPreviewed = false;
+						allowPreview = false;
 					}
 
-					if (bPreviewed == false) // -= start walking =- //
-//						&& pf->getStartDirection() != -1)
+					if (allowPreview == false) // -= start walking =- //
 					{
 						getMap()->setCursorType(CT_NONE);
 						_parentState->getGame()->getCursor()->setVisible(false);
@@ -2675,6 +2688,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			}
 		}
 	}
+	//Log(LOG_INFO) << "bsg:primaryAction() EXIT w/ strafe = " << (int)_currentAction.strafe << " / dash = " << (int)_currentAction.dash;
 	//Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
 }
 

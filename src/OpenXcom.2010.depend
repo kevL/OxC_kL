@@ -5074,7 +5074,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1430173228 f:\git\openxcom\src\engine\rng.h
+1430760138 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
 	<cstdint>
 
@@ -5422,7 +5422,7 @@
 1430149550 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\battlescape\pathfinding.h
+1430759487 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5507,7 +5507,7 @@
 1430149550 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1430243803 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1430755804 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5581,7 +5581,7 @@
 1430149550 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	"BattleState.h"
 
-1430149550 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1430759321 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	"BattlescapeGame.h"
 	"BattleState.h"
 
@@ -6179,7 +6179,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1430625452 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1430763181 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6445,7 +6445,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1430759451 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -6652,10 +6652,11 @@
 1430343491 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 
-1430168895 source:f:\git\openxcom\src\engine\rng.cpp
+1430760123 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>
+	<stdlib.h>
 	<cmath>
 	<ctime>
 
@@ -11490,7 +11491,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1430739938 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
