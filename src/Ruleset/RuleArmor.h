@@ -91,7 +91,7 @@ private:
 	float _damageModifier[DAMAGE_TYPES];
 
 	ForcedTorso _forcedTorso;
-	MovementType _movementType;
+	MovementType _moveType;
 	UnitStats _stats;
 
 	std::vector<int>

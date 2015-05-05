@@ -2917,7 +2917,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
-			_btnVisibleUnit[i]->drawRect(0, 0, 15, 13, 15);
+			_btnVisibleUnit[i]->drawRect(0, 0, 15, 13, 10);
 			_btnVisibleUnit[i]->drawRect(1, 1, 13, 11, static_cast<Uint8>(color));
 		}
 	}

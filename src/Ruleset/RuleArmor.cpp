@@ -37,7 +37,7 @@ RuleArmor::RuleArmor(const std::string& type)
 		_rearArmor(0),
 		_underArmor(0),
 		_drawingRoutine(0),
-		_movementType(MT_WALK),
+		_moveType(MT_WALK),
 		_size(1),
 		_weight(0),
 		_deathFrames(3),
@@ -116,11 +116,11 @@ void RuleArmor::load(const YAML::Node& node)
 	_rearArmor		= node["rearArmor"]					.as<int>(_rearArmor);
 	_underArmor		= node["underArmor"]				.as<int>(_underArmor);
 	_drawingRoutine	= node["drawingRoutine"]			.as<int>(_drawingRoutine);
-	_movementType	= (MovementType)node["movementType"].as<int>(_movementType);
 	_size			= node["size"]						.as<int>(_size);
 	_weight			= node["weight"]					.as<int>(_weight);
 	_isBasic		= node["isBasic"]					.as<bool>(_isBasic);
 	_isSpacesuit	= node["isSpacesuit"]				.as<bool>(_isSpacesuit);
+	_moveType		= static_cast<MovementType>(node["movementType"].as<int>(_moveType));
 
 	_stats			.mergeStats(node["stats"]			.as<UnitStats>(_stats));
 
@@ -295,7 +295,7 @@ int RuleArmor::getDrawingRoutine() const
  */
 MovementType RuleArmor::getMoveTypeArmor() const
 {
-	return _movementType;
+	return _moveType;
 }
 
 /**

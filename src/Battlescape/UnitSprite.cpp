@@ -433,7 +433,7 @@ void UnitSprite::drawRoutine0()
 		isWalking = _unit->getStatus() == STATUS_WALKING,
 		isKneeled = _unit->isKneeled();
 
-	if (isWalking) // when walking, torso(fixed sprite) has to be animated up/down
+	if (isWalking == true) // when walking, torso(fixed sprite) has to be animated up/down
 	{
 //		//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
 		if (_drawingRoutine == 10)								// muton

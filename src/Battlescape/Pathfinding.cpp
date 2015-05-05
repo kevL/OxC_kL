@@ -121,12 +121,6 @@ void Pathfinding::calculate(
 	_path.clear();
 	_totalTuCost = 0;
 
-	_battleAction = _battleSave->getBattleGame()->getCurrentAction();	// Used only to set .strafe and .dash (along w/ Dashing flag) for Player-controlled units;
-																		// But also should safely ensure that nonPlayer-controlled units are flagged false.
-	_unit = unit;
-
-//	setInputModifiers(); // <- done in setMoveType()
-
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
 	if (   destPos.x < 0
@@ -137,16 +131,24 @@ void Pathfinding::calculate(
 		return;
 	}
 
+//	_unit = unit;
+//	_battleAction = _battleSave->getBattleGame()->getCurrentAction();	// Used only to set .strafe and .dash (along w/ Dashing flag) for Player-controlled units;
+																		// But also should safely ensure that nonPlayer-controlled units are flagged false.
+//	setInputModifiers(); // <- done in setMoveType() <- done in setPathingUnit()
+	setPathingUnit(unit);
+
+
 	if (missileTarget != NULL
 		&& maxTUCost == -1) // pathfinding for missile
 	{
 		maxTUCost = 10000;
 		_moveType = MT_FLY;
+
 		strafeRejected = true;
 	}
-	else
-	{
-		setMoveType();
+//	else
+//	{
+//		setMoveType();
 /*		_moveType = unit->getMoveTypeUnit();
 
 		if (_modifALT == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
@@ -162,7 +164,7 @@ void Pathfinding::calculate(
 			//Log(LOG_INFO) << ". MT_WALK";
 			_moveType = MT_WALK;
 		} */
-	}
+//	}
 
 	const Tile* destTile = _battleSave->getTile(destPos);
 
@@ -177,6 +179,7 @@ void Pathfinding::calculate(
 	{
 		return;
 	}
+
 
 	Position destPos2; // kL: for keeping things straight if strafeRejected happens.
 	if (strafeRejected == false)
@@ -2161,6 +2164,7 @@ std::vector<int> Pathfinding::findReachable(
 		i->reset();
 	}
 
+	setPathingUnit(unit);
 	const Position& origin = unit->getPosition();
 
 	PathfindingNode
@@ -2246,12 +2250,20 @@ std::vector<int> Pathfinding::findReachable(
 }
 
 /**
- * Sets unit in order to exploit low-level pathing functions.
+ * Sets unit etc in order to exploit pathing functions.
+ * @note This has evolved into an initialization routine.
  * @param unit - pointer to a BattleUnit
  */
 void Pathfinding::setPathingUnit(BattleUnit* const unit)
 {
 	_unit = unit;
+
+	// '_battleAction' is used only to set .strafe and .dash (along w/ Dashing
+	// flag) for Player-controlled units; but also should safely ensure that
+	// nonPlayer-controlled units are flagged false.
+	_battleAction = _battleSave->getBattleGame()->getCurrentAction();
+
+	setInputModifiers();
 
 	if (unit != NULL)
 //		_moveType = unit->getMoveTypeUnit();
@@ -2265,8 +2277,6 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
  */
 void Pathfinding::setMoveType() // private.
 {
-	setInputModifiers();
-
 	_moveType = _unit->getMoveTypeUnit();
 
 	if (_modifALT == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
@@ -2289,8 +2299,8 @@ void Pathfinding::setMoveType() // private.
  */
 void Pathfinding::setInputModifiers() // private.
 {
-	if (_battleSave->getSide() != FACTION_PLAYER)
-	{
+	if (_battleSave->getSide() != FACTION_PLAYER)	// this may need to be expanded to include things like panicking xCom;
+	{												// it depends on which faction-turn such things happen ....
 		_modifCTRL = false;
 		_modifALT = false;
 	}

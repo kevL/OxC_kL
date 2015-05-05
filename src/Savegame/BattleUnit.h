@@ -507,7 +507,7 @@ private:
 	Soldier* _geoscapeSoldier;
 	Unit* _unitRules;
 
-	MovementType _movementType;
+	MovementType _moveType;
 	SoldierGender _gender;
 	SpecialAbility _specab;
 

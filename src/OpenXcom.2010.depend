@@ -4593,7 +4593,7 @@
 	"MapData.h"
 	"Unit.h"
 
-1430784199 f:\git\openxcom\src\ruleset\mapdata.h
+1430834693 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1430149550 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -4648,7 +4648,7 @@
 1430778889 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1430772005 f:\git\openxcom\src\savegame\battleunit.h
+1430833641 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -6180,7 +6180,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1430798718 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1430836451 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6404,7 +6404,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1430800239 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1430833438 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -8683,7 +8683,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1430799839 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1430834429 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11492,11 +11492,11 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1430772034 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1430834562 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1430771993 f:\git\openxcom\src\ruleset\rulearmor.h
+1430834492 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
 	"Unit.h"
 

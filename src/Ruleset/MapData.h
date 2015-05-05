@@ -52,8 +52,8 @@ enum SpecialTileType
 enum MovementType
 {
 	MT_WALK,	// 0
-	MT_SLIDE,	// 1
-	MT_FLY,		// 2
+	MT_FLY,		// 1 note Fly & Slide should be switched here and in ruleset-armors
+	MT_SLIDE,	// 2 to conform to their order in MCD files. because.
 	MT_FLOAT	// 3
 };
 

@@ -146,14 +146,14 @@ BattleUnit::BattleUnit(
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
 
 	_loftempsSet	= _armor->getLoftempsSet();
-	_movementType	= _armor->getMoveTypeArmor();
+	_moveType		= _armor->getMoveTypeArmor();
 
-	if (_movementType == MT_FLOAT)
+	if (_moveType == MT_FLOAT)
 	{
 		if (depth > 0)
-			_movementType = MT_FLY;
+			_moveType = MT_FLY;
 		else
-			_movementType = MT_WALK;
+			_moveType = MT_WALK;
 	}
 
 	_standHeight	= soldier->getRules()->getStandHeight();
@@ -335,13 +335,13 @@ BattleUnit::BattleUnit(
 	else
 		_gender = GENDER_MALE;
 
-	_movementType = _armor->getMoveTypeArmor();
-	if (_movementType == MT_FLOAT)
+	_moveType = _armor->getMoveTypeArmor();
+	if (_moveType == MT_FLOAT)
 	{
 		if (depth > 0)
-			_movementType = MT_FLY;
+			_moveType = MT_FLY;
 		else
-			_movementType = MT_WALK;
+			_moveType = MT_WALK;
 	}
 
 	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
@@ -2516,7 +2516,7 @@ void BattleUnit::setTile(
 
 	if (_status == STATUS_WALKING
 		&& _tile->hasNoFloor(tileBelow)
-		&& _movementType == MT_FLY)
+		&& _moveType == MT_FLY)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -2530,7 +2530,7 @@ void BattleUnit::setTile(
 	}
 	else if (_status == STATUS_UNCONSCIOUS)
 	{
-		_floating = _movementType == MT_FLY
+		_floating = _moveType == MT_FLY
 				 && _tile->hasNoFloor(tileBelow);
 	}
 }
@@ -4294,7 +4294,7 @@ bool BattleUnit::getFloorAbove() const
  */
 MovementType BattleUnit::getMoveTypeUnit() const
 {
-	return _movementType;
+	return _moveType;
 }
 
 /**
