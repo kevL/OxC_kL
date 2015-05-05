@@ -688,7 +688,7 @@ void ProjectileFlyBState::think()
 			&& ((_parent->getSave()->getTile(_unit->getPosition()) != NULL
 					&& _parent->getSave()->getTile(_unit->getPosition())
 						->hasNoFloor(_parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1))) == false)
-				|| _unit->getMovementType() == MT_FLY))
+				|| _unit->getMoveTypeUnit() == MT_FLY))
 		{
 			createNewProjectile();
 

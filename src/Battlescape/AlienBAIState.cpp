@@ -752,9 +752,9 @@ void AlienBAIState::setupPatrol()
 /**
  * Try to set up an ambush action.
  * The idea is to check within a 11x11 tile square for a tile which is not seen by
- * our aggroTarget, but that can be reached by him. We then intuit where we will
- * see the target first from our covered position, and set that as our final facing.
- * Fills out the _ambushAction with useful data.
+ * the aggroTarget but that can be reached by him/her. Then intuit where AI will
+ * see that target first from a covered position and set that as the final facing.
+ * Also fills out '_ambushAction' with useful data.
  */
 void AlienBAIState::setupAmbush()
 {
@@ -775,13 +775,19 @@ void AlienBAIState::setupAmbush()
 		Position origin = _battleSave->getTileEngine()->getSightOriginVoxel(_aggroTarget);
 		Position target;
 
-		for (std::vector<Node*>::const_iterator	// use node positions for this, since it gives map makers a good
+		Position pos;
+		const Tile* tile;
+		Pathfinding* const pf = _battleSave->getPathfinding();
+
+
+		for (std::vector<Node*>::const_iterator			// use node positions for this since it gives map makers a good
 				i = _battleSave->getNodes()->begin();	// degree of control over how the units will use the environment.
 				i != _battleSave->getNodes()->end();
 				++i)
 		{
-			const Position pos = (*i)->getPosition();
-			Tile* const tile = _battleSave->getTile(pos);
+			pos = (*i)->getPosition();
+			tile = _battleSave->getTile(pos);
+
 			if (tile == NULL
 				|| _battleSave->getTileEngine()->distance(
 														pos,
@@ -802,7 +808,7 @@ void AlienBAIState::setupAmbush()
 				tile->setMarkerColor(13);
 			} */
 
-			if (countSpottingUnits(pos) == 0									// make sure we can't be seen here.
+			if (countSpottingUnits(pos) == 0										// make sure Unit can't be seen here.
 				&& _battleSave->getTileEngine()->canTargetUnit(
 															&origin,
 															tile,
@@ -810,26 +816,31 @@ void AlienBAIState::setupAmbush()
 															_aggroTarget,
 															_unit) == false)
 			{
-				_battleSave->getPathfinding()->calculate(_unit, pos);
-				const int ambushTUs = _battleSave->getPathfinding()->getTotalTUCost();
+				pf->calculate(														// make sure Unit can move here
+							_unit,
+							pos);
 
-				if (_battleSave->getPathfinding()->getStartDirection() != -1)			// make sure we can move here
+				const int ambushTUs = pf->getTotalTUCost();
+
+				if (pf->getStartDirection() != -1)
 //					&& ambushTUs <= _unit->getTimeUnits()
-//					- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))	// make sure we can still shoot
+//					- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))		// make sure Unit can still shoot
 				{
 					int score = BASE_SYSTEMATIC_SUCCESS;
 					score -= ambushTUs;
 
-					_battleSave->getPathfinding()->calculate(_aggroTarget, pos);		// make sure our enemy can reach here too.
+					pf->calculate(													// make sure Unit's target can reach here too.
+								_aggroTarget,
+								pos);
 
-					if (_battleSave->getPathfinding()->getStartDirection() != -1)
+					if (pf->getStartDirection() != -1)
 					{
-						if (_battleSave->getTileEngine()->faceWindow(pos) != -1)		// ideally we'd like to be behind some cover,
-							score += COVER_BONUS;								// like say a window or a low wall.
+						if (_battleSave->getTileEngine()->faceWindow(pos) != -1)	// ideally get behind some cover,
+							score += COVER_BONUS;									// like say a window or low wall.
 
 						if (score > bestScore)
 						{
-							path = _battleSave->getPathfinding()->copyPath();
+							path = pf->copyPath();
 
 							_ambushAction->target = pos;
 							if (pos == _unit->getPosition())
@@ -857,27 +868,25 @@ void AlienBAIState::setupAmbush()
 								- _battleSave->getTile(_ambushAction->target)->getTerrainLevel()
 								- 4); // -4, because -2 is eyes and -2 that is the rifle ( perhaps )
 
-			_battleSave->getPathfinding()->setUnit(_aggroTarget);
-			Position
-				currentPos = _aggroTarget->getPosition(),
-				nextPos;
+			pf->setPathingUnit(_aggroTarget);
+
+			pos = _aggroTarget->getPosition();
+			Position nextPos;
 
 			size_t tries = path.size();
 			while (tries > 0) // hypothetically walk the target through the path.
 			{
 				--tries;
 
-				_battleSave->getPathfinding()->getTUCost(
-													currentPos,
-													path.back(),
-													&nextPos,
-													_aggroTarget,
-													NULL,
-													false);
+				pf->getTUCostPath(
+								pos,
+								path.back(),
+								&nextPos);
+//								_aggroTarget);
 				path.pop_back();
-				currentPos = nextPos;
+				pos = nextPos;
 
-				const Tile* const tile = _battleSave->getTile(currentPos);
+				tile = _battleSave->getTile(pos);
 				if (_battleSave->getTileEngine()->canTargetUnit( // do a virtual fire calculation
 															&origin,
 															tile,
@@ -885,13 +894,14 @@ void AlienBAIState::setupAmbush()
 															_unit,
 															_aggroTarget) == true)
 				{
-					// if unit can virtually fire at the hypothetical target, it knows which way to face.
-					_ambushAction->finalFacing = _battleSave->getTileEngine()->getDirectionTo(
+					// if unit can virtually fire at the hypothetical target it knows which way to face.
+					_ambushAction->finalFacing = _battleSave->getTileEngine()->getDirectionTo( // kL: should origin & target be reversed like this
 																						_ambushAction->target,
-																						currentPos);
+																						pos);
 					break;
 				}
 			}
+
 			//if (_traceAI) Log(LOG_INFO) << "Ambush estimation will move to " << _ambushAction->target;
 			return;
 		}

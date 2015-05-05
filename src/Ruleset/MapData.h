@@ -52,8 +52,8 @@ enum SpecialTileType
 enum MovementType
 {
 	MT_WALK,	// 0
-	MT_FLY,		// 1
-	MT_SLIDE,	// 2
+	MT_SLIDE,	// 1
+	MT_FLY,		// 2
 	MT_FLOAT	// 3
 };
 
@@ -198,7 +198,7 @@ private:
 				int type);
 
 		/// Gets the TU cost to move over the object.
-		int getTUCost(MovementType movementType) const;
+		int getTUCostObject(MovementType moveType) const;
 		/// Sets the TU cost to move over the object.
 		void setTUCosts(
 				int walk,

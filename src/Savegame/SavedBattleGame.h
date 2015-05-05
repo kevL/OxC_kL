@@ -314,7 +314,7 @@ private:
 
 		/// Sets or tries to set a unit of a certain size on a certain position of the map.
 		bool setUnitPosition(
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				const Position& pos,
 				bool test = false);
 		/// Attempts to place a unit on or near Position pos.

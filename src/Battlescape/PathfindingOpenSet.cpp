@@ -88,7 +88,7 @@ void PathfindingOpenSet::addNode(PathfindingNode* node)
 {
 	OpenSetEntry* const entry = new OpenSetEntry;
 	entry->_node = node;
-	entry->_cost = node->getTUCost() + node->getTUGuess();
+	entry->_cost = node->getTUCostNode() + node->getTUGuess();
 
 	if (node->_openentry != NULL)
 		node->_openentry->_node = NULL;

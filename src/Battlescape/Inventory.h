@@ -171,7 +171,7 @@ private:
 		void setPrimeGrenade(int turn);
 
 		/// Gets the TU cost for moving items around.
-		int getTUCost() const;
+		int getTUCostInventory() const;
 };
 
 }

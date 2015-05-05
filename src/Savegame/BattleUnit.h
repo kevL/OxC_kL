@@ -1072,7 +1072,7 @@ private:
 		bool getFloorAbove() const;
 
 		/// Gets this unit's movement type.
-		MovementType getMovementType() const;
+		MovementType getMoveTypeUnit() const;
 
 		/// Gets if this unit is hiding or not.
 		bool isHiding() const

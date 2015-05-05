@@ -150,9 +150,9 @@ protected:
 				const bool checkSmoke = true) const;
 
 		/// Gets the TU cost to walk over a certain part of the tile.
-		int getTUCost(
+		int getTUCostTile(
 				int part,
-				MovementType movementType) const;
+				MovementType moveType) const;
 
 		/// Checks if this tile has a floor.
 		bool hasNoFloor(const Tile* const tileBelow) const;
@@ -173,11 +173,11 @@ protected:
 		/// Gets the floor object footstep sound.
 		int getFootstepSound(const Tile* const tileBelow) const;
 
-		/// Opens a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
+		/// Opens a door.
 		int openDoor(
-				int part,
-				BattleUnit* Unit = NULL,
-				BattleActionType reserve = BA_NONE);
+				const int part,
+				const BattleUnit* const unit = NULL,
+				const BattleActionType reserved = BA_NONE);
 		/**
 		 * Checks if the ufo door is open or opening. Used for visibility/light blocking checks.
 		 * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.

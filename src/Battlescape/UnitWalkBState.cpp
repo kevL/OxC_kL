@@ -405,16 +405,14 @@ bool UnitWalkBState::doStatusStand()
 		}
 		//else Log(LOG_INFO) << ". STANDING no strafe.";
 
-		//Log(LOG_INFO) << ". getTUCost() & dest";
+		//Log(LOG_INFO) << ". getTUCostPath() & dest";
 		Position dest;
 		int
-			tuCost = _pf->getTUCost( // gets tu cost, but also sets the destination position.
-								_unit->getPosition(),
-								dir,
-								&dest,
-								_unit,
-								NULL,
-								false),
+			tuCost = _pf->getTUCostPath( // gets tu cost, but also sets the destination position.
+									_unit->getPosition(),
+									dir,
+									&dest),
+//									_unit),
 			tuTest,
 			staCost;
 		//Log(LOG_INFO) << ". tuCost = " << tuCost;
@@ -427,9 +425,9 @@ bool UnitWalkBState::doStatusStand()
 			&& _unit->getArmor()->getDamageModifier(DT_IN) > 0.f)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
-			// The TU cost was artificially inflated by 32 points in getTUCost
+			// The TU cost was artificially inflated by 32 points in getTUCostPath
 			// so it has to be deflated again here under the same conditions.
-			// See: Pathfinding::getTUCost(), where TU cost was inflated.
+			// See: Pathfinding::getTUCostPath(), where TU cost was inflated.
 			tuCost -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
@@ -815,7 +813,7 @@ bool UnitWalkBState::doStatusWalk()
 
 		_falling = fallCheck
 				&& _unit->getPosition().z != 0
-				&& _pf->getMovementType() != MT_FLY;
+				&& _pf->getMoveTypePathing() != MT_FLY;
 
 		if (_falling == true)
 		{
@@ -1261,12 +1259,12 @@ void UnitWalkBState::playMovementSound()
 //		if (_falling == true) // This is STATUS_FLYING as well as below_
 		if (_unit->getStatus() == STATUS_FLYING
 			&& _unit->isFloating() == true
-			&& _unit->getMovementType() == MT_WALK)
+			&& _unit->getMoveTypeUnit() == MT_WALK)
 		{
 			if (_unit->getTrueWalkingPhase() == 1
 				&& groundCheck(1))
 			{
-				sound = ResourcePack::ITEM_DROP;		// thunk. Repeated below_
+				sound = ResourcePack::ITEM_DROP;				// thunk. Repeated below_
 			}
 		}
 		else if (_unit->getStatus() == STATUS_WALKING)
@@ -1339,7 +1337,7 @@ void UnitWalkBState::playMovementSound()
  */
 void UnitWalkBState::doFallCheck()
 {
-	if (_pf->getMovementType() == MT_FLY
+	if (_pf->getMoveTypePathing() == MT_FLY
 		|| _unit->getPosition().z == 0
 		|| groundCheck() == true)
 	{

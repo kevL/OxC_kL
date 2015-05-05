@@ -357,10 +357,12 @@ void CivilianBAIState::setupEscape()
 												_unit->getPosition(),
 												_aggroTarget->getPosition());
 
-	Tile* tile = NULL;
-	Position bestTile(0,0,0);
+	const Tile* tile;
+	Position bestTilePos(0,0,0);
 
-	std::vector<int> reachable = _battleSave->getPathfinding()->findReachable(_unit, tu);
+	std::vector<int> reachable = _battleSave->getPathfinding()->findReachable(
+																		_unit,
+																		tu);
 
 	std::vector<Position> randomTileSearch = _battleSave->getTileSearch();
 	RNG::shuffle(randomTileSearch);
@@ -471,14 +473,14 @@ void CivilianBAIState::setupEscape()
 			_battleSave->getPathfinding()->calculate(
 												_unit,
 												_escapeAction->target,
-												0,
+												NULL,
 												tu);
 
 			if (_escapeAction->target == _unit->getPosition()
 				|| _battleSave->getPathfinding()->getStartDirection() != -1)
 			{
 				bestTileScore = score;
-				bestTile = _escapeAction->target;
+				bestTilePos = _escapeAction->target;
 				_escapeTUs = _battleSave->getPathfinding()->getTotalTUCost();
 
 				if (_escapeAction->target == _unit->getPosition())
@@ -499,7 +501,7 @@ void CivilianBAIState::setupEscape()
 		}
 	}
 
-	_escapeAction->target = bestTile;
+	_escapeAction->target = bestTilePos;
 
 	//if (_traceAI) _battleSave->getTile(_escapeAction->target)->setMarkerColor(13);
 
@@ -512,7 +514,7 @@ void CivilianBAIState::setupEscape()
 	}
 	else
 	{
-		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << _battleSave->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away.";
+		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << _battleSave->getTileEngine()->distance(_unit->getPosition(), bestTilePos) << " squares or so away.";
 		_escapeAction->type = BA_WALK;
 	}
 }

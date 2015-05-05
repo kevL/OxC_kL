@@ -1504,7 +1504,7 @@ void Inventory::setPrimeGrenade(int turn)
  * Gets the TU cost for moving items around.
  * @return, time unit cost
  */
-int Inventory::getTUCost() const
+int Inventory::getTUCostInventory() const
 {
 	return _tuCost;
 }

@@ -1754,7 +1754,7 @@ void Map::drawTerrain(Surface* surface) // private.
 																|| tileSouthWest->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 															&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-//																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255 // <- maybe
+//																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) != 255 // <- maybe
 																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																	&& tileSouthWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)
 																|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE
@@ -1779,8 +1779,8 @@ void Map::drawTerrain(Surface* surface) // private.
 												&& (tile->getMapData(MapData::O_OBJECT) == NULL
 													|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 														&& tileWest->getTerrainLevel() - tile->getTerrainLevel() < 13 // positive means Tile is higher
-//														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)))
-														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
+//														&& tile->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) != 255)))
+														&& tile->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
 											{
 												const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
@@ -1810,8 +1810,8 @@ void Map::drawTerrain(Surface* surface) // private.
 																	|| tileSouthWest->isUfoDoorOpen(MapData::O_NORTHWALL) == true)
 																&& (tileSouthWest->getMapData(MapData::O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-//																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255
-																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) < 6
+//																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) != 255
+																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) < 6
 																		// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(MapData::O_OBJECT)->getSprite(0) != 42)
@@ -1825,7 +1825,7 @@ void Map::drawTerrain(Surface* surface) // private.
 															if ((tileSouthWest != NULL
 																	&& (tileSouthWest->getMapData(MapData::O_OBJECT) != NULL
 																	&& ((tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-																			&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255) // or terrainLevel < 0 perhaps
+																			&& tileSouthWest->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255) // or terrainLevel < 0 perhaps
 																		|| tileSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE)))
 																|| (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL)) // <- needs more ...
@@ -1940,7 +1940,7 @@ void Map::drawTerrain(Surface* surface) // private.
 												if (tile->getMapData(MapData::O_OBJECT) == NULL // exposed floor, basically.
 													|| (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 														&& std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()) < 13 // positive means Tile is higher
-														&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) != 255)
+														&& tile->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) != 255)
 													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
 													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S)
 												{
@@ -1957,7 +1957,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														|| (tileWest->getMapData(MapData::O_OBJECT) != NULL
 															&& ((tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																	&& tileWest->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-																|| tileWest->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
+																|| tileWest->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 																|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
@@ -1977,7 +1977,7 @@ void Map::drawTerrain(Surface* surface) // private.
 														|| (tileNorth->getMapData(MapData::O_OBJECT) != NULL
 															&& ((tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
 																	&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-																|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
+																|| tileNorth->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 																|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST
@@ -3113,8 +3113,8 @@ void Map::drawTerrain(Surface* surface) // private.
 												&& tileBelowSouthEast->getTerrainLevel() - tileBelow->getTerrainLevel() < 1 // positive -> Tile is higher
 												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT) != NULL
 												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NONE
-												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)	// generally only nonwalkable content-objects
-											{																						// rise high enough to cause an overblit.
+												&& tileBelowSouthEast->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255)	// generally only nonwalkable content-objects
+											{																							// rise high enough to cause an overblit.
 												srfSprite = tileBelowSouthEast->getSprite(MapData::O_OBJECT);
 //												srfSprite = NULL;
 												if (srfSprite)

@@ -460,13 +460,13 @@ void UnitSprite::drawRoutine0()
 	}
 	else
 	{
-		if (isKneeled)
+		if (isKneeled == true)
 		{
 //			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
 		}
-		else if (_unit->isFloating()
-			&& _unit->getMovementType() == MT_FLY)
+		else if (_unit->isFloating() == true
+			&& _unit->getMoveTypeUnit() == MT_FLY)
 		{
 //			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + unitDir);
@@ -488,7 +488,7 @@ void UnitSprite::drawRoutine0()
 		if (_unit->getStatus() == STATUS_AIMING // draw handob item
 			&& _itemA->getRules()->isTwoHanded())
 		{
-			int dir = (unitDir + 2) %8;
+			int dir = (unitDir + 2) % 8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 			itemA->setX(offX[unitDir]);
 			itemA->setY(offY[unitDir]);
@@ -1021,7 +1021,7 @@ void UnitSprite::drawRoutine2()
 	const int
 		offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0}, // hovertank offsets
 		offY[8] = {-1,-3,-4,-5,-4,-3,-1,-1},
-		hoverTank	= _unit->getMovementType() == MT_FLY? 32: 0,
+		hoverTank	= _unit->getMoveTypeUnit() == MT_FLY ? 32 : 0,
 		turret		= _unit->getTurretType();
 
 	Surface* srf = NULL;
@@ -1764,15 +1764,15 @@ void UnitSprite::drawRoutine11()
 	int
 		body,
 		animFrame;
-	if (_unit->getMovementType() == MT_FLY)
+	if (_unit->getMoveTypeUnit() == MT_FLY)
 	{
 		body = 128;
-		animFrame = _animationFrame %4;
+		animFrame = _animationFrame % 4;
 	}
 	else
 	{
 		body = 0;
-		animFrame = _unit->getWalkingPhase() %4;
+		animFrame = _unit->getWalkingPhase() % 4;
 	}
 
 	Surface* srf = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);

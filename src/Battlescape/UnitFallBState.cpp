@@ -129,7 +129,7 @@ void UnitFallBState::think()
 				tileBelow = _parent->getSave()->getTile((*fallUnit)->getPosition() + Position(x,y,-1));
 				if (_parent->getSave()->getTile((*fallUnit)->getPosition() + Position(x,y,0))
 												->hasNoFloor(tileBelow) == false
-					|| (*fallUnit)->getMovementType() == MT_FLY)
+					|| (*fallUnit)->getMoveTypeUnit() == MT_FLY)
 				{
 					//Log(LOG_INFO) << ". . fallCheck set FALSE";
 					fallCheck = false;
@@ -142,7 +142,7 @@ void UnitFallBState::think()
 		falling = fallCheck
 			   && (*fallUnit)->getPosition().z != 0
 			   && (*fallUnit)->getTile()->hasNoFloor(tileBelow)
-//			   && (*fallUnit)->getMovementType() != MT_FLY // done above in fallCheck
+//			   && (*fallUnit)->getMoveTypeUnit() != MT_FLY // done above in fallCheck
 			   && (*fallUnit)->getWalkingPhase() == 0;
 
 		if (falling == true)
@@ -318,7 +318,7 @@ void UnitFallBState::think()
 																							tile,
 																							dir,
 																							unitBelow),
-								unitCanFly = unitBelow->getMovementType() == MT_FLY,
+								unitCanFly = unitBelow->getMoveTypeUnit() == MT_FLY,
 								canMoveToTile = tile
 											 && alreadyOccupied == false
 											 && alreadyTaken == false

@@ -53,8 +53,8 @@ MapData::MapData(MapDataSet* dataSet)
 		_baseModule(false),
 		_yOffset(0),
 		_TUWalk(0),
-		_TUFly(0),
 		_TUSlide(0),
+		_TUFly(0),
 		_terrainLevel(0),
 		_footstepSound(0),
 		_dieMCD(0),
@@ -377,16 +377,16 @@ void MapData::setSpecialType(
 
 /**
  * Gets the TU cost to move over the object/wall/floor.
- * @param movementType - the movement type
+ * @param moveType - the movement type
  * @return, the TU cost
  */
-int MapData::getTUCost(MovementType movementType) const
+int MapData::getTUCostObject(MovementType moveType) const
 {
-	switch (movementType)
+	switch (moveType)
 	{
 		case MT_WALK:	return _TUWalk;
-		case MT_FLY:	return _TUFly;
 		case MT_SLIDE:	return _TUSlide;
+		case MT_FLY:	return _TUFly;
 	}
 
 	return 0;

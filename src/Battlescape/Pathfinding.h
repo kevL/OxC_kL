@@ -94,6 +94,12 @@ private:
 	bool canFallDown(
 			const Tile* const tile,
 			int unitSize) const;
+
+	/// Sets the movement type for the path.
+	void setMoveType();
+	/// Sets keyboard input modifiers.
+	void setInputModifiers();
+
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.
 //	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
@@ -163,20 +169,20 @@ private:
 		int dequeuePath();
 
 		/// Gets the TU cost to move from 1 tile to the other.
-		int getTUCost(
+		int getTUCostPath(
 				const Position& startPos,
 				const int dir,
 				Position* destPos,
-				BattleUnit* const unit,
-				const BattleUnit* const missileTarget,
-				bool missile);
+//				BattleUnit* const unit,
+				const BattleUnit* const missileTarget = NULL,
+				bool missile = false);
 		/// Gets _totalTuCost; finds out whether we can hike somewhere in this turn or not.
 		int getTotalTUCost() const
 		{ return _totalTuCost; }
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
-				const BattleUnit* const bu,
+				const BattleUnit* const unit,
 				Position startPos,
 				int const dir);
 
@@ -192,11 +198,8 @@ private:
 		/// Gets the path preview setting.
 		bool isPathPreviewed() const;
 
-		/// Gets the strafe move setting.
-//		bool getStrafeMove() const;
-
-		/// Sets _unit in order to abuse low-level pathfinding functions from outside the class.
-		void setUnit(BattleUnit* unit);
+		/// Sets unit in order to exploit low-level pathing functions.
+		void setPathingUnit(BattleUnit* const unit);
 
 		/// Gets the CTRL modifier setting.
 		bool isModCTRL() const;
@@ -204,7 +207,7 @@ private:
 		bool isModALT() const;
 
 		/// Gets the current movementType.
-		MovementType getMovementType() const;
+		MovementType getMoveTypePathing() const;
 
 		/// Gets TU cost for opening a door.
 		int getOpenDoor() const;

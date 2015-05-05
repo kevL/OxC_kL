@@ -293,7 +293,7 @@ int RuleArmor::getDrawingRoutine() const
  * For more information, see the BattleUnit constructor.
  * @return, MovementType enum
  */
-MovementType RuleArmor::getMovementType() const
+MovementType RuleArmor::getMoveTypeArmor() const
 {
 	return _movementType;
 }

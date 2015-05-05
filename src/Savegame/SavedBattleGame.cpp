@@ -1877,14 +1877,14 @@ bool SavedBattleGame::isNodeType(
 
 
 	if (type & Node::TYPE_FLYING)
-		return unit->getMovementType() == MT_FLY
+		return unit->getMoveTypeUnit() == MT_FLY
 			&& unit->getArmor()->getSize() == 1;
 
 	if (type & Node::TYPE_SMALL)
 		return unit->getArmor()->getSize() == 1;
 
 	if (type & Node::TYPE_LARGEFLYING)
-		return unit->getMovementType() == MT_FLY;
+		return unit->getMoveTypeUnit() == MT_FLY;
 
 	return true;
 }
@@ -2134,14 +2134,15 @@ void SavedBattleGame::removeCorpse(const BattleUnit* const unit)
 }
 
 /**
- * Places units on the map. Handles large units that are placed on multiple tiles.
+ * Places units on the map.
+ * @note Handles large units that are placed on multiple tiles.
  * @param unit	- pointer to a unit to be placed
  * @param pos	- reference the position to place the unit
  * @param test	- true only checks if unit can be placed at the position (default false)
  * @return, true if unit was placed successfully
  */
 bool SavedBattleGame::setUnitPosition(
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		const Position& pos,
 		bool test)
 {
@@ -2167,9 +2168,11 @@ bool SavedBattleGame::setUnitPosition(
 			if (tile == NULL
 				|| (tile->getUnit() != NULL
 					&& tile->getUnit() != unit)
-				|| tile->getTUCost(MapData::O_OBJECT, unit->getMovementType()) == 255
+				|| tile->getTUCostTile(
+									MapData::O_OBJECT,
+									unit->getMoveTypeUnit()) == 255
 				|| (tile->hasNoFloor(tileBelow) == true
-					&& unit->getMovementType() != MT_FLY)
+					&& unit->getMoveTypeUnit() != MT_FLY)
 				|| (tile->getMapData(MapData::O_OBJECT) != NULL
 					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
 					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
@@ -2186,7 +2189,7 @@ bool SavedBattleGame::setUnitPosition(
 
 	if (unitSize != 0)
 	{
-		_pathfinding->setUnit(unit);
+		_pathfinding->setPathingUnit(unit);
 
 		for (int
 				dir = 2;

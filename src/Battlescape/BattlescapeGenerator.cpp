@@ -1376,7 +1376,7 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile) // private.
 		&& tile->getMapData(MapData::O_FLOOR) != NULL								// has a floor
 		&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT		// is a 'start point', ie. cargo tile
 		&& tile->getMapData(MapData::O_OBJECT) == NULL								// no object content
-		&& tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255				// is walkable.
+		&& tile->getMapData(MapData::O_FLOOR)->getTUCostObject(MT_WALK) < 255		// is walkable.
 		&& tile->getUnit() == NULL)													// kL, and no unit on Tile.
 	{
 		// kL_note: ground inventory goes where the first xCom unit spawns
@@ -4189,7 +4189,7 @@ void BattlescapeGenerator::drillModules( // private.
 
 							const MapData* const obj = tile->getMapData(MapData::O_OBJECT);
 							if (obj != NULL
-								&& obj->getTUCost(MT_WALK) == 0)
+								&& obj->getTUCostObject(MT_WALK) == 0)
 							{
 								tile->setMapData(NULL,-1,-1, MapData::O_OBJECT);
 							}
@@ -4276,7 +4276,7 @@ void BattlescapeGenerator::drillModules( // private.
 
 							const MapData* const obj = tile->getMapData(MapData::O_OBJECT);
 							if (obj != NULL
-								&& obj->getTUCost(MT_WALK) == 0)
+								&& obj->getTUCostObject(MT_WALK) == 0)
 							{
 								tile->setMapData(NULL,-1,-1, MapData::O_OBJECT);
 							}

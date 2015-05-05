@@ -348,13 +348,13 @@ bool Tile::isVoid(
 
 /**
  * Gets the TU cost to move over a certain part of the tile.
- * @param part			- the part number
- * @param movementType	- the movement type
+ * @param part		- the part number
+ * @param moveType	- the movement type
  * @return, TU cost
  */
-int Tile::getTUCost(
+int Tile::getTUCostTile(
 		int part,
-		MovementType movementType) const
+		MovementType moveType) const
 {
 	const size_t i = static_cast<size_t>(part);
 
@@ -372,7 +372,7 @@ int Tile::getTUCost(
 			return 0;
 		}
 
-		return _objects[i]->getTUCost(movementType);
+		return _objects[i]->getTUCostObject(moveType);
 	}
 
 	return 0;
@@ -467,8 +467,8 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
 /**
  * Open a door on this tile.
  * @param part		- a tile part
- * @param unit		- pointer to a BattleUnit
- * @param reserve	- see BA_* enum for TU reserves
+ * @param unit		- pointer to a BattleUnit (default NULL)
+ * @param reserved	- see BA_* enum for TU reserves (default BA_NONE)
  * @return, -1 no door opened
  *			 0 normal door
  *			 1 ufo door
@@ -476,9 +476,9 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
  *			 4 not enough TUs
  */
 int Tile::openDoor(
-		int part,
-		BattleUnit* unit,
-		BattleActionType reserve)
+		const int part,
+		const BattleUnit* const unit,
+		const BattleActionType reserved)
 {
 	const size_t i = static_cast<size_t>(part);
 
@@ -494,9 +494,9 @@ int Tile::openDoor(
 			}
 
 			if (unit != NULL
-				&& unit->getTimeUnits() < _objects[i]->getTUCost(unit->getMovementType())
+				&& unit->getTimeUnits() < _objects[i]->getTUCostObject(unit->getMoveTypeUnit())
 											+ unit->getActionTUs(
-															reserve,
+															reserved,
 															unit->getMainHandWeapon(false)))
 			{
 				return 4;
@@ -520,9 +520,9 @@ int Tile::openDoor(
 			if (_curFrame[i] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
-					&& unit->getTimeUnits() < _objects[i]->getTUCost(unit->getMovementType())
+					&& unit->getTimeUnits() < _objects[i]->getTUCostObject(unit->getMoveTypeUnit())
 												+ unit->getActionTUs(
-																reserve,
+																reserved,
 																unit->getMainHandWeapon(false)))
 				{
 					return 4;

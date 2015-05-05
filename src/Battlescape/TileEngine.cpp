@@ -4237,7 +4237,8 @@ Tile* TileEngine::checkForTerrainExplosions()
 }
 
 /**
- * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
+ * Opens a door (if any) by rightclick or by walking through it.
+ * @note The unit has to face in the right direction.
  * @param unit		- pointer to a BattleUnit trying the door
  * @param rhtClick	- true if the player right-clicked (default false)
  * @param dir		- direction to check for a door (default -1)
@@ -4263,7 +4264,7 @@ int TileEngine::unitOpensDoor(
 		&& ((unit->getUnitRules() != NULL
 				&& unit->getUnitRules()->isMechanical() == true)
 			|| unit->getArmor()->getSize() != 1
-			|| dir %2 == 1)) // RMB works only for cardinal directions
+			|| dir % 2 == 1)) // RMB works only for cardinal directions
 	{
 		return door;
 	}
@@ -4279,13 +4280,13 @@ int TileEngine::unitOpensDoor(
 	const int unitSize = unit->getArmor()->getSize();
 	for (int
 			x = 0;
-			x < unitSize
+			x != unitSize
 				&& door == -1;
 			++x)
 	{
 		for (int
 				y = 0;
-				y < unitSize
+				y != unitSize
 					&& door == -1;
 				++y)
 		{
@@ -4438,17 +4439,17 @@ int TileEngine::unitOpensDoor(
 				else
 					part = MapData::O_WESTWALL;
 
-				tuCost = tile->getTUCost(
-									part,
-									unit->getMovementType());
+				tuCost = tile->getTUCostTile(
+										part,
+										unit->getMoveTypeUnit());
 				//Log(LOG_INFO) << ". normal door, RMB, part = " << part << ", TUcost = " << tuCost;
 			}
 			else if (door == 1
 				|| door == 4)
 			{
-				tuCost = tile->getTUCost(
-									part,
-									unit->getMovementType());
+				tuCost = tile->getTUCostTile(
+										part,
+										unit->getMoveTypeUnit());
 				//Log(LOG_INFO) << ". UFO door, part = " << part << ", TUcost = " << tuCost;
 			}
 		}
@@ -4475,7 +4476,7 @@ int TileEngine::unitOpensDoor(
 					const std::vector<BattleUnit*>* const visibleUnits = unit->getVisibleUnits();
 					for (size_t
 							i = 0;
-							i < visibleUnits->size();
+							i != visibleUnits->size();
 							++i)
 					{
 						calculateFOV(visibleUnits->at(i)); // calculate FoV for all units that are visible to this unit.
@@ -5054,7 +5055,7 @@ bool TileEngine::validateThrow(
 			|| targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
 //		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-//		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+//		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255)
 	{
 		return false; // prevent Grenades from landing on diagonal BigWalls.
 	}
@@ -5691,7 +5692,7 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 			}
 			else // if (!unit->isOut(true, true))
 			{
-				if (unit->getMovementType() == MT_FLY)
+				if (unit->getMoveTypeUnit() == MT_FLY)
 				{
 					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
 					unit->startWalking(

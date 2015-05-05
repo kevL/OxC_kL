@@ -146,7 +146,7 @@ BattleUnit::BattleUnit(
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
 
 	_loftempsSet	= _armor->getLoftempsSet();
-	_movementType	= _armor->getMovementType();
+	_movementType	= _armor->getMoveTypeArmor();
 
 	if (_movementType == MT_FLOAT)
 	{
@@ -335,7 +335,7 @@ BattleUnit::BattleUnit(
 	else
 		_gender = GENDER_MALE;
 
-	_movementType = _armor->getMovementType();
+	_movementType = _armor->getMoveTypeArmor();
 	if (_movementType == MT_FLOAT)
 	{
 		if (depth > 0)
@@ -4292,7 +4292,7 @@ bool BattleUnit::getFloorAbove() const
  * Use this instead of checking the rules of the armor.
  * @return, MovementType enum
  */
-MovementType BattleUnit::getMovementType() const
+MovementType BattleUnit::getMoveTypeUnit() const
 {
 	return _movementType;
 }
