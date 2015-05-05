@@ -246,14 +246,14 @@ void Pathfinding::calculate(
 					{
 						return;
 					}
-					else if (isBlocked(
+					else if (isBlockedPath(
 									destTile,
-									testTile,
+//									testTile,
 									dir[i],
 									unit) == true
-						&& isBlocked(
+						&& isBlockedPath(
 									destTile,
-									testTile,
+//									testTile,
 									dir[i],
 									missileTarget) == true)
 					{
@@ -493,9 +493,9 @@ bool Pathfinding::bresenhamPath(
 					|| (isDiagonal == false
 						&& tuCostDiagonal == lastTUCost)
 					|| lastTUCost == -1)
-				&& isBlocked(
+				&& isBlockedPath(
 						_battleSave->getTile(lastPoint),
-						_battleSave->getTile(nextPoint),
+//						_battleSave->getTile(nextPoint),
 						dir,
 						missileTarget) == false)
 			{
@@ -770,9 +770,9 @@ int Pathfinding::getTUCostPath(
 				&& startTile->getTerrainLevel() > -16) // lower than 2-thirds up.
 			{
 				// check if we can go this way
-				if (isBlocked(
+				if (isBlockedPath(
 							startTile,
-							destTile,
+//							destTile,
 							dir,
 							missileTarget) == true)
 				{
@@ -859,9 +859,9 @@ int Pathfinding::getTUCostPath(
 			if (dir < DIR_UP
 				&& destPos->z == startTile->getPosition().z)
 			{
-				if (isBlocked( // check if we can go this way
+				if (isBlockedPath( // check if we can go this way
 							startTile,
-							destTile,
+//							destTile,
 							dir,
 							missileTarget) == true)
 				{
@@ -884,7 +884,7 @@ int Pathfinding::getTUCostPath(
 			{
 				// check if we can go up or down through gravlift or fly
 				if (validateUpDown(
-								_unit,
+//								_unit,
 								startPos + unitOffset,
 								dir) < 1)
 				{
@@ -919,9 +919,9 @@ int Pathfinding::getTUCostPath(
 				&& partsGoingUp != 0)
 			{
 				// check if we can go this way
-				if (isBlocked(
+				if (isBlockedPath(
 							startTile,
-							destTile,
+//							destTile,
 							dir,
 							missileTarget) == true)
 				{
@@ -954,16 +954,16 @@ int Pathfinding::getTUCostPath(
 			if (dir < DIR_UP)
 			{
 				cost += destTile->getTUCostTile(
-										MapData::O_FLOOR,
-										_moveType);
+											MapData::O_FLOOR,
+											_moveType);
 
 				if (fellDown == false
 					&& triedStairs == false
 					&& destTile->getMapData(MapData::O_OBJECT) != NULL)
 				{
 					cost += destTile->getTUCostTile(
-											MapData::O_OBJECT,
-											_moveType);
+												MapData::O_OBJECT,
+												_moveType);
 				}
 
 				// climbing up a level costs one extra. Not
@@ -991,8 +991,8 @@ int Pathfinding::getTUCostPath(
 				{
 					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCostTile( // ( 'walkover' bigWalls not incl. -- none exists )
-											MapData::O_NORTHWALL,
-											_moveType);
+													MapData::O_NORTHWALL,
+													_moveType);
 					if (wallTU > 0)
 					{
 //						if (dir &1) // would use this to increase diagonal wall-crossing by +50%
@@ -1001,7 +1001,7 @@ int Pathfinding::getTUCostPath(
 						wallCost += wallTU;
 						++sides;
 
-						if (startTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
+						if (   startTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
 							|| startTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[N] = TRUE, wallTU = " << wallTU;
@@ -1023,15 +1023,15 @@ int Pathfinding::getTUCostPath(
 					if (startTile->getPosition().z <= destTile->getPosition().z) // don't count wallCost if it's on the floor below.
 					{
 						wallTU = destTile->getTUCostTile(
-												MapData::O_WESTWALL,
-												_moveType);
+													MapData::O_WESTWALL,
+													_moveType);
 						//Log(LOG_INFO) << ". . eastish, wallTU = " << wallTU;
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
 							++sides;
 
-							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
+							if (   destTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
 								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE, wallTU = " << wallTU;
@@ -1044,15 +1044,15 @@ int Pathfinding::getTUCostPath(
 						&& aboveDestTile->getMapData(MapData::O_WESTWALL) != NULL) // going downwards...
 					{
 						wallTU = aboveDestTile->getTUCostTile(
-													MapData::O_WESTWALL,
-													_moveType);
+															MapData::O_WESTWALL,
+															_moveType);
 						//Log(LOG_INFO) << ". . (down) eastish, wallTU = " << wallTU;
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
 							++sides;
 
-							if (aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
+							if (   aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
 								|| aboveDestTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down), wallTU = " << wallTU;
@@ -1082,7 +1082,7 @@ int Pathfinding::getTUCostPath(
 							wallCost += wallTU;
 							++sides;
 
-							if (destTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
+							if (   destTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
 								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE, wallTU = " << wallTU;
@@ -1095,15 +1095,15 @@ int Pathfinding::getTUCostPath(
 						&& aboveDestTile->getMapData(MapData::O_NORTHWALL) != NULL) // going downwards...
 					{
 						wallTU = aboveDestTile->getTUCostTile(
-														MapData::O_NORTHWALL,
-														_moveType);
+															MapData::O_NORTHWALL,
+															_moveType);
 
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
 							++sides;
 
-							if (aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
+							if (   aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
 								|| aboveDestTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down), wallTU = " << wallTU;
@@ -1120,14 +1120,14 @@ int Pathfinding::getTUCostPath(
 				{
 					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCostTile(
-												MapData::O_WESTWALL,
-												_moveType); // ( bigWalls not incl. yet )
+													MapData::O_WESTWALL,
+													_moveType); // ( bigWalls not incl. yet )
 					if (wallTU > 0)
 					{
 						wallCost += wallTU;
 						++sides;
 
-						if (startTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
+						if (   startTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
 							|| startTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[W] = TRUE, wallTU = " << wallTU;
@@ -1220,9 +1220,9 @@ int Pathfinding::getTUCostPath(
 		const Tile
 			* const ulTile = _battleSave->getTile(*destPos),
 			* const lrTile = _battleSave->getTile(*destPos + Position(1,1,0));
-		if (isBlocked(
+		if (isBlockedPath(
 					ulTile,
-					lrTile,
+//					lrTile,
 					3,
 					missileTarget) == true)
 		{
@@ -1234,9 +1234,9 @@ int Pathfinding::getTUCostPath(
 		const Tile
 			* const urTile = _battleSave->getTile(*destPos + Position(1,0,0)),
 			* const llTile = _battleSave->getTile(*destPos + Position(0,1,0));
-		if (isBlocked(
+		if (isBlockedPath(
 					urTile,
-					llTile,
+//					llTile,
 					5,
 					missileTarget) == true)
 		{
@@ -1375,214 +1375,16 @@ void Pathfinding::abortPath()
 }
 
 /**
- * Determines whether a certain part of a tile blocks movement.
- * @param tile				- pointer to a specified Tile, can be NULL
- * @param part				- part of the tile
- * @param missileTarget		- pointer to targeted BattleUnit (default NULL)
- * @param bigWallExclusion	- to exclude diagonal bigWalls (default -1)
- * @return, true if path is blocked
- */
-bool Pathfinding::isBlocked( // private
-		const Tile* const tile,
-		const int part,
-		const BattleUnit* const missileTarget,
-		const int bigWallExclusion) const
-{
-	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
-	if (tile == NULL) // probably outside the map here
-		return true;
-/*
-BIGWALL_NONE,	// 0
-BIGWALL_BLOCK,	// 1
-BIGWALL_NESW,	// 2
-BIGWALL_NWSE,	// 3
-BIGWALL_WEST,	// 4
-BIGWALL_NORTH,	// 5
-BIGWALL_EAST,	// 6
-BIGWALL_SOUTH,	// 7
-BIGWALL_E_S		// 8
-*/
-/*	// kL_begin:
-	if ((tile->getMapData(MapData::O_WESTWALL)
-			&& tile->getMapData(MapData::O_WESTWALL)->getBigWall() == BIGWALL_BLOCK)
-		|| (tile->getMapData(MapData::O_NORTHWALL)
-			&& tile->getMapData(MapData::O_NORTHWALL)->getBigWall() == BIGWALL_BLOCK))
-//		|| (tile->getMapData(MapData::O_OBJECT)
-//			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK))
-	{
-		return true;
-	} // kL_end. */
-
-	if (part == O_BIGWALL)
-	{
-		//Log(LOG_INFO) << ". part is Bigwall";
-		if (   tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != BIGWALL_NONE
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < BIGWALL_WEST) // block,NESW,NWSE
-		{
-			return true; // blocking part
-		}
-		else
-			return false;
-	}
-
-	if (part == MapData::O_WESTWALL)
-	{
-		//Log(LOG_INFO) << ". part is Westwall";
-		if (	   tile->getMapData(MapData::O_OBJECT)
-			&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST
-				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N))
-//				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
-		{
-			return true; // blocking part
-		}
-
-		const Tile* const tileWest = _battleSave->getTile(tile->getPosition() + Position(-1,0,0));
-		if (tileWest == NULL)
-			return true; // do not look outside of map
-
-		if (	   tileWest->getMapData(MapData::O_OBJECT)
-			&& (   tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_EAST
-				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
-//				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
-		{
-			return true; // blocking part
-		}
-	}
-
-	if (part == MapData::O_NORTHWALL)
-	{
-		//Log(LOG_INFO) << ". part is Northwall";
-		if (	   tile->getMapData(MapData::O_OBJECT)
-			&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH
-				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N))
-//				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
-		{
-			return true; // blocking part
-		}
-
-		const Tile* const tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1,0));
-		if (tileNorth == NULL)
-			return true; // do not look outside of map
-
-		if (	   tileNorth->getMapData(MapData::O_OBJECT)
-			&& (   tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_SOUTH
-				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
-//				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
-		{
-			return true; // blocking part
-		}
-	}
-
-	if (part == MapData::O_FLOOR)
-	{
-		//Log(LOG_INFO) << ". part is Floor";
-		const BattleUnit* tileUnit = tile->getUnit();
-
-		if (tileUnit != NULL)
-		{
-			if (   tileUnit == _unit
-				|| tileUnit == missileTarget
-				|| tileUnit->isOut(true, true) == true)
-			{
-				return false;
-			}
-
-			if (   _unit != NULL
-				&& _unit->getFaction() == FACTION_PLAYER
-				&& tileUnit->getUnitVisible() == true)
-			{
-				return true; // player knows about visible units only
-			}
-
-			if (   _unit != NULL
-				&& _unit->getFaction() == tileUnit->getFaction())
-			{
-				return true; // AI knows all allied units
-			}
-
-			if (   _unit != NULL
-				&& _unit->getFaction() == FACTION_HOSTILE
-				&& std::find(
-						_unit->getUnitsSpottedThisTurn().begin(),
-						_unit->getUnitsSpottedThisTurn().end(),
-						tileUnit) != _unit->getUnitsSpottedThisTurn().end())
-			{
-				return true; // AI knows only spotted xCom units.
-			}
-		}
-		else if (tile->hasNoFloor(NULL) == true	// this whole section is devoted to making large units
-			&& _moveType != MT_FLY)			// not take part in any kind of falling behaviour
-		{
-			Position pos = tile->getPosition();
-			while (pos.z >= 0)
-			{
-				const Tile* const testTile = _battleSave->getTile(pos);
-				tileUnit = testTile->getUnit();
-
-				if (   tileUnit != NULL
-					&& tileUnit != _unit)
-				{
-					// don't let large units fall on other units
-					if (   _unit != NULL
-						&& _unit->getArmor()->getSize() > 1)
-					{
-						return true;
-					}
-
-					// don't let any units fall on large units
-					if (//kL tileUnit != _unit &&
-						   tileUnit != missileTarget
-						&& tileUnit->isOut() == false
-						&& tileUnit->getArmor()->getSize() > 1)
-					{
-						return true;
-					}
-				}
-
-				// not gonna fall any further, so stop checking.
-				if (testTile->hasNoFloor(NULL) == false)
-					break;
-
-				--pos.z;
-			}
-		}
-	}
-
-	// missiles can't pathfind through closed doors. kL: neither can proxy mines.
-	if (missileTarget != NULL
-		&&  tile->getMapData(part) != NULL
-		&& (tile->getMapData(part)->isDoor() == true
-			|| (   tile->getMapData(part)->isUFODoor() == true
-				&& tile->isUfoDoorOpen(part) == false)))
-	{
-		return true;
-	}
-
-	if (tile->getTUCostTile( // blocking part
-						part,
-						_moveType) == 255)
-	{
-		//Log(LOG_INFO) << "isBlocked() EXIT true, part = " << part << " MT = " << (int)_moveType;
-		return true;
-	}
-
-	//Log(LOG_INFO) << "isBlocked() EXIT false, part = " << part << " MT = " << (int)_moveType;
-	return false;
-}
-
-/**
  * Determines whether going from one tile to another blocks movement.
  * @param startTile		- pointer to start Tile
- * @param endTile		- pointer to destination Tile
+// * @param endTile		- pointer to destination Tile
  * @param dir			- direction of movement
  * @param missileTarget	- pointer to targeted BattleUnit (default NULL)
  * @return, true if path is blocked
  */
-bool Pathfinding::isBlocked( // public
+bool Pathfinding::isBlockedPath( // public
 		const Tile* const startTile,
-		const Tile* /* endTile */,
+//		const Tile* /* endTile */,
 		const int dir,
 		const BattleUnit* const missileTarget) const
 {
@@ -1778,9 +1580,206 @@ bool Pathfinding::isBlocked( // public
 			{
 				return true;
 			}
-		break;
-	} // kL_end.
+	}
 
+	return false;
+}
+
+/**
+ * Determines whether a certain part of a tile blocks movement.
+ * @param tile				- pointer to a specified Tile, can be NULL
+ * @param part				- part of the tile
+ * @param missileTarget		- pointer to targeted BattleUnit (default NULL)
+ * @param bigWallExclusion	- to exclude diagonal bigWalls (default -1)
+ * @return, true if path is blocked
+ */
+bool Pathfinding::isBlocked( // private
+		const Tile* const tile,
+		const int part,
+		const BattleUnit* const missileTarget,
+		const int bigWallExclusion) const
+{
+	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
+	if (tile == NULL) // probably outside the map here
+		return true;
+/*
+BIGWALL_NONE,	// 0
+BIGWALL_BLOCK,	// 1
+BIGWALL_NESW,	// 2
+BIGWALL_NWSE,	// 3
+BIGWALL_WEST,	// 4
+BIGWALL_NORTH,	// 5
+BIGWALL_EAST,	// 6
+BIGWALL_SOUTH,	// 7
+BIGWALL_E_S		// 8
+*/
+/*	// kL_begin:
+	if ((tile->getMapData(MapData::O_WESTWALL)
+			&& tile->getMapData(MapData::O_WESTWALL)->getBigWall() == BIGWALL_BLOCK)
+		|| (tile->getMapData(MapData::O_NORTHWALL)
+			&& tile->getMapData(MapData::O_NORTHWALL)->getBigWall() == BIGWALL_BLOCK))
+//		|| (tile->getMapData(MapData::O_OBJECT)
+//			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK))
+	{
+		return true;
+	} // kL_end. */
+
+	if (part == O_BIGWALL)
+	{
+		//Log(LOG_INFO) << ". part is Bigwall";
+		if (   tile->getMapData(MapData::O_OBJECT)
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != BIGWALL_NONE
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < BIGWALL_WEST) // block,NESW,NWSE
+		{
+			return true; // blocking part
+		}
+		else
+			return false;
+	}
+
+	if (part == MapData::O_WESTWALL)
+	{
+		//Log(LOG_INFO) << ". part is Westwall";
+		if (	   tile->getMapData(MapData::O_OBJECT)
+			&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N))
+//				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		{
+			return true; // blocking part
+		}
+
+		const Tile* const tileWest = _battleSave->getTile(tile->getPosition() + Position(-1,0,0));
+		if (tileWest == NULL)
+			return true; // do not look outside of map
+
+		if (	   tileWest->getMapData(MapData::O_OBJECT)
+			&& (   tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_EAST
+				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
+//				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		{
+			return true; // blocking part
+		}
+	}
+
+	if (part == MapData::O_NORTHWALL)
+	{
+		//Log(LOG_INFO) << ". part is Northwall";
+		if (	   tile->getMapData(MapData::O_OBJECT)
+			&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N))
+//				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		{
+			return true; // blocking part
+		}
+
+		const Tile* const tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1,0));
+		if (tileNorth == NULL)
+			return true; // do not look outside of map
+
+		if (	   tileNorth->getMapData(MapData::O_OBJECT)
+			&& (   tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_SOUTH
+				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
+//				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		{
+			return true; // blocking part
+		}
+	}
+
+	if (part == MapData::O_FLOOR)
+	{
+		//Log(LOG_INFO) << ". part is Floor";
+		const BattleUnit* targetUnit = tile->getUnit();
+
+		if (targetUnit != NULL)
+		{
+			if (   targetUnit == _unit
+				|| targetUnit == missileTarget
+				|| targetUnit->isOut(true, true) == true)
+			{
+				return false;
+			}
+
+			if (   _unit != NULL
+				&& _unit->getFaction() == FACTION_PLAYER
+				&& targetUnit->getUnitVisible() == true)
+			{
+				return true; // player knows about visible units only
+			}
+
+			if (   _unit != NULL
+				&& _unit->getFaction() == targetUnit->getFaction())
+			{
+				return true; // AI knows all allied units
+			}
+
+			if (   _unit != NULL
+				&& _unit->getFaction() == FACTION_HOSTILE
+				&& std::find(
+						_unit->getUnitsSpottedThisTurn().begin(),
+						_unit->getUnitsSpottedThisTurn().end(),
+						targetUnit) != _unit->getUnitsSpottedThisTurn().end())
+			{
+				return true; // AI knows only spotted xCom units.
+			}
+		}
+		else if (tile->hasNoFloor(NULL) == true	// this whole section is devoted to making large units
+			&& _moveType != MT_FLY)				// not take part in any kind of falling behaviour
+		{
+			Position pos = tile->getPosition();
+			while (pos.z >= 0)
+			{
+				const Tile* const testTile = _battleSave->getTile(pos);
+				targetUnit = testTile->getUnit();
+
+				if (   targetUnit != NULL
+					&& targetUnit != _unit)
+				{
+					// don't let large units fall on other units
+					if (   _unit != NULL
+						&& _unit->getArmor()->getSize() > 1)
+					{
+						return true;
+					}
+
+					// don't let any units fall on large units
+					if (//kL targetUnit != _unit &&
+						   targetUnit != missileTarget
+						&& targetUnit->isOut() == false
+						&& targetUnit->getArmor()->getSize() > 1)
+					{
+						return true;
+					}
+				}
+
+				// not gonna fall any further so stop checking.
+				if (testTile->hasNoFloor(NULL) == false)
+					break;
+
+				--pos.z;
+			}
+		}
+	}
+
+	// missiles can't pathfind through closed doors. kL: neither can proxy mines.
+	if (missileTarget != NULL
+		&&  tile->getMapData(part) != NULL
+		&& (tile->getMapData(part)->isDoor() == true
+			|| (   tile->getMapData(part)->isUFODoor() == true
+				&& tile->isUfoDoorOpen(part) == false)))
+	{
+		return true;
+	}
+
+	if (tile->getTUCostTile( // blocking part
+						part,
+						_moveType) == 255)
+	{
+		//Log(LOG_INFO) << "isBlocked() EXIT true, part = " << part << " MT = " << (int)_moveType;
+		return true;
+	}
+
+	//Log(LOG_INFO) << "isBlocked() EXIT false, part = " << part << " MT = " << (int)_moveType;
 	return false;
 }
 
@@ -1830,18 +1829,18 @@ bool Pathfinding::canFallDown( // private
 
 /**
  * Checks if vertical movement is valid.
- * Either there is a grav lift or the unit can fly, and there are no obstructions.
- * @param unit		- pointer to a BattleUnit
+ * Either there is a grav lift or the unit can fly and there are no obstructions.
+// * @param unit		- pointer to a BattleUnit
  * @param startPos	- start Position
  * @param dir		- up or down
- * @return,	-2 can't fly
-			-1 kneeling (stop unless on gravLift)
+ * @return,	-1 can't fly
+//			-1 kneeling (stop unless on gravLift)
 			 0 blocked (stop)
 			 1 gravLift (go)
 			 2 flying (go unless blocked)
  */
 int Pathfinding::validateUpDown(
-		const BattleUnit* const unit,
+//		const BattleUnit* const unit,
 		Position startPos,
 		int const dir)
 {
@@ -1865,19 +1864,18 @@ int Pathfinding::validateUpDown(
 
 	if (gravLift == true)
 		return 1;
-	else if (unit->getMoveTypeUnit() == MT_FLY)
+	else if (_moveType == MT_FLY) //_unit->getMoveTypeUnit() == MT_FLY)
 	{
-		if (dir == DIR_UP
-			&& (SDL_GetModState() & KMOD_ALT) != 0) // for, BattlescapeState::btnUnitUpClick()
-		{
-			return -2;
-		}
+//		if (dir == DIR_UP
+//			&& (SDL_GetModState() & KMOD_ALT) != 0) // for, BattlescapeState::btnUnitUpClick()
+//		{
+//			return -2;
+//		}
 
-		const Tile* const belowStart = _battleSave->getTile(startPos + Position(0,0,-1));
 		if ((dir == DIR_UP
-				&& destTile->hasNoFloor(startTile)) // flying up only possible when there is no roof
+				&& destTile->hasNoFloor(startTile))
 			|| (dir == DIR_DOWN
-				&& startTile->hasNoFloor(belowStart))) // flying down only possible when there is no floor
+				&& startTile->hasNoFloor(_battleSave->getTile(startPos + Position(0,0,-1)))))
 		{
 			return 2; // flying.
 		}
@@ -1885,7 +1883,7 @@ int Pathfinding::validateUpDown(
 			return 0; // blocked.
 	}
 
-	return -2; // no flying suit.
+	return -1; // no flying suit.
 }
 
 /**

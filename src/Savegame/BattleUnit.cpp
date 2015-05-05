@@ -842,7 +842,7 @@ void BattleUnit::startWalking(
 	else
 	{
 		_status = STATUS_WALKING;
-		_floating = false;
+		_floating =
 		_kneeled = false;
 		_direction = dir;
 	}
@@ -876,12 +876,12 @@ void BattleUnit::keepWalking(
 	}
 	else // diagonal walking takes double the steps
 	{
-		midPhase = 4 + 4 * (_direction %2);
-		endPhase = 8 + 8 * (_direction %2);
+		midPhase = 4 + 4 * (_direction % 2);
+		endPhase = 8 + 8 * (_direction % 2);
 
 		if (_armor->getSize() > 1)
 		{
-			if (_direction < 1 || 5 < _direction) // dir = 0,7,6,5 (up x3 or left)
+			if (_direction < 1 || _direction > 5) // dir = 0,7,6,5 (up x3 or left)
 				midPhase = endPhase;
 			else if (_direction == 5)
 				midPhase = 12;
@@ -906,7 +906,7 @@ void BattleUnit::keepWalking(
 	if (_walkPhase >= endPhase) // officially reached the destination tile
 	{
 		_status = STATUS_STANDING;
-		_walkPhase = 0;
+		_walkPhase =
 		_verticalDirection = 0;
 
 		if (_floating == true
@@ -927,7 +927,7 @@ void BattleUnit::keepWalking(
 		else
 		{
 			// sectoids actually have less motion points but instead of creating
-			// yet another variable, use the height of the unit instead
+			// yet another variable use the height of the unit instead
 			if (getStandHeight() > 16)
 				_motionPoints += 4;
 			else
@@ -944,7 +944,7 @@ void BattleUnit::keepWalking(
  */
 int BattleUnit::getWalkingPhase() const
 {
-	return _walkPhase %8;
+	return _walkPhase % 8;
 }
 
 /**
@@ -1006,7 +1006,7 @@ void BattleUnit::lookAt(
 	}
 	else
 	{
-		if (direction < 0 || 7 < direction)
+		if (direction < 0 || direction > 7)
 			return;
 
 		_toDirection = direction;
@@ -1163,7 +1163,7 @@ void BattleUnit::setCache(
 		_cacheInvalid = true;
 	else
 	{
-		_cache[part] = cache;
+		_cache[static_cast<size_t>(part)] = cache;
 		_cacheInvalid = false;
 	}
 }
@@ -1183,7 +1183,7 @@ Surface* BattleUnit::getCache(
 
 	*invalid = _cacheInvalid;
 
-	return _cache[part];
+	return _cache[static_cast<size_t>(part)];
 }
 
 /**

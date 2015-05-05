@@ -1729,24 +1729,23 @@ void BattlescapeState::btnUnitUpClick(Action*)
 	if (playableUnitSelected() == false)
 		return;
 
-//	_battleSave->getPathfinding()->setKneelCheck();
+	_battleSave->getPathfinding()->setPathingUnit(_battleSave->getSelectedUnit());
+
 	const int valid = _battleSave->getPathfinding()->validateUpDown(
-																_battleSave->getSelectedUnit(),
+//																_battleSave->getSelectedUnit(),
 																_battleSave->getSelectedUnit()->getPosition(),
 																Pathfinding::DIR_UP);
 
-	if (valid > 0)			// gravLift or flying
+	if (valid > 0) // gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
 							_battleSave->getSelectedUnit(),
 							Pathfinding::DIR_UP);
 	}
-	else if (valid == -2)	// no flight suit
+	else if (valid == -1) // no flight suit
 		warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
-//	else if (valid == -1)	// kneeling
-//		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
-	else					// valid==0 : blocked by roof
+	else // valid==0 -> blocked by roof
 		warning("STR_ACTION_NOT_ALLOWED_ROOF");
 }
 
@@ -1759,19 +1758,21 @@ void BattlescapeState::btnUnitDownClick(Action*)
 	if (playableUnitSelected() == false)
 		return;
 
+	_battleSave->getPathfinding()->setPathingUnit(_battleSave->getSelectedUnit());
+
 	const int valid = _battleSave->getPathfinding()->validateUpDown(
-																_battleSave->getSelectedUnit(),
+//																_battleSave->getSelectedUnit(),
 																_battleSave->getSelectedUnit()->getPosition(),
 																Pathfinding::DIR_DOWN);
 
-	if (valid > 0)	// gravLift or flying
+	if (valid > 0) // gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
 							_battleSave->getSelectedUnit(),
 							Pathfinding::DIR_DOWN);
 	}
-	else			// blocked, floor
+	else // blocked, floor
 		warning("STR_ACTION_NOT_ALLOWED_FLOOR");
 }
 
@@ -4207,16 +4208,18 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 	{
 		++rows;
 
+		MovementType moveType = unit->getMoveTypeUnit();
+
 		tuCost = tile->getTUCostTile(
 								MapData::O_FLOOR,
-								unit->getMoveTypeUnit())
+								moveType)
 			   + tile->getTUCostTile(
 								MapData::O_OBJECT,
-								unit->getMoveTypeUnit());
+								moveType);
 		if (tuCost == 0)
 		{
-			if (unit->getMoveTypeUnit() == MT_FLY
-				|| unit->getMoveTypeUnit() == MT_FLOAT)
+			if (moveType == MT_FLY
+				|| moveType == MT_FLOAT)
 			{
 				tuCost = 4;
 			}

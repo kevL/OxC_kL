@@ -53,18 +53,22 @@ namespace OpenXcom
  * @param x			- X position in pixels
  * @param y			- Y position in pixels
  * @param helmet	- true if unit is wearing a helmet (TFTD)
+ * @param moveType	- the MovementType ()
  */
 UnitSprite::UnitSprite(
 		int width,
 		int height,
 		int x,
 		int y,
-		bool helmet)
+		bool helmet,
+		MovementType moveType)
 	:
 		Surface(
 			width,
 			height,
 			x,y),
+		_helmet(helmet),
+		_moveType(moveType),
 		_unit(NULL),
 		_itemA(NULL),
 		_itemB(NULL),
@@ -74,7 +78,6 @@ UnitSprite::UnitSprite(
 		_part(0),
 		_animationFrame(0),
 		_drawingRoutine(0),
-		_helmet(helmet),
 		_color(NULL),
 		_colorSize(0)
 {}
@@ -92,9 +95,9 @@ UnitSprite::~UnitSprite()
  * @param itemSurfaceB	- pointer to an item's SurfaceSet
  */
 void UnitSprite::setSurfaces(
-		SurfaceSet* unitSurface,
-		SurfaceSet* itemSurfaceA,
-		SurfaceSet* itemSurfaceB)
+		SurfaceSet* const unitSurface,
+		SurfaceSet* const itemSurfaceA,
+		SurfaceSet* const itemSurfaceB)
 {
 	_unitSurface = unitSurface;
 	_itemSurfaceA = itemSurfaceA;
@@ -109,7 +112,7 @@ void UnitSprite::setSurfaces(
  * @param part - part number for large units (default 0)
  */
 void UnitSprite::setBattleUnit(
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		int part)
 {
 	_drawingRoutine = unit->getArmor()->getDrawingRoutine();
@@ -466,7 +469,8 @@ void UnitSprite::drawRoutine0()
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
 		}
 		else if (_unit->isFloating() == true
-			&& _unit->getMoveTypeUnit() == MT_FLY)
+//			&& _unit->getMoveTypeUnit() == MT_FLY)
+			&& _moveType == MT_FLY) // kL, try it.
 		{
 //			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + unitDir);

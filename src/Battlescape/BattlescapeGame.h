@@ -331,7 +331,7 @@ private:
 		bool getKneelReserved();
 
 		/// Checks for and triggers proximity grenades.
-		bool checkForProximityGrenades(BattleUnit* unit);
+		bool checkForProximityGrenades(BattleUnit* const unit);
 
 		/// Cleans up all the deleted states. [Delete all battlestates that are queued for deletion.]
 		void cleanupDeleted();

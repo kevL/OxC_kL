@@ -22,6 +22,8 @@
 
 #include "../Engine/Surface.h"
 
+#include "../Ruleset/MapData.h"
+
 
 namespace OpenXcom
 {
@@ -56,6 +58,8 @@ private:
 		* _itemSurfaceA,
 		* _itemSurfaceB,
 		* _unitSurface;
+
+	MovementType _moveType;
 
 	const std::pair<Uint8, Uint8>* _color;
 
@@ -108,18 +112,19 @@ private:
 				int height,
 				int x,
 				int y,
-				bool helmet);
+				bool helmet,
+				MovementType moveType);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();
 
 		/// Sets surfacesets for rendering.
 		void setSurfaces(
-				SurfaceSet* unitSurface,
-				SurfaceSet* itemSurfaceA,
-				SurfaceSet* itemSurfaceB);
+				SurfaceSet* const unitSurface,
+				SurfaceSet* const itemSurfaceA,
+				SurfaceSet* const itemSurfaceB);
 		/// Sets the battleunit to be rendered.
 		void setBattleUnit(
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				int part = 0);
 		/// Sets the battleitem to be rendered.
 		void setBattleItem(

@@ -4240,7 +4240,7 @@ Tile* TileEngine::checkForTerrainExplosions()
  * Opens a door (if any) by rightclick or by walking through it.
  * @note The unit has to face in the right direction.
  * @param unit		- pointer to a BattleUnit trying the door
- * @param rhtClick	- true if the player right-clicked (default false)
+ * @param rtClick	- true if the player right-clicked (default false)
  * @param dir		- direction to check for a door (default -1)
  * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
  *			 0 normal door opened, make a squeaky sound and you can walk through;
@@ -4251,7 +4251,7 @@ Tile* TileEngine::checkForTerrainExplosions()
  */
 int TileEngine::unitOpensDoor(
 		BattleUnit* const unit,
-		const bool rhtClick,
+		const bool rtClick,
 		int dir)
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
@@ -4260,7 +4260,7 @@ int TileEngine::unitOpensDoor(
 	if (dir == -1)
 		dir = unit->getDirection();
 
-	if (rhtClick == true
+	if (rtClick == true
 		&& ((unit->getUnitRules() != NULL
 				&& unit->getUnitRules()->isMechanical() == true)
 			|| unit->getArmor()->getSize() != 1
@@ -4309,12 +4309,12 @@ int TileEngine::unitOpensDoor(
 				case 1: // north east
 						checkPos.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
 						checkPos.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));		// one tile north-east
-					if (rhtClick == true)
+					if (rtClick == true)
 					{
 						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));		// one tile east
 						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL));	// one tile east
 					}
-/*					if (rhtClick
+/*					if (rtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 1)) // kL
 					{
 						checkPos.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
@@ -4333,12 +4333,12 @@ int TileEngine::unitOpensDoor(
 						checkPos.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));		// one tile south-east
 					if (x == 0)
 						checkPos.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
-					if (rhtClick == true)
+					if (rtClick == true)
 					{
 						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));		// one tile east
 						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 					}
-/*					if (rhtClick
+/*					if (rtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 3)) // kL
 					{
 						checkPos.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));		// one tile east
@@ -4355,12 +4355,12 @@ int TileEngine::unitOpensDoor(
 				case 5: // south-west
 						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 						checkPos.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL));	// one tile south-west
-					if (rhtClick == true)
+					if (rtClick == true)
 					{
 						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL));		// one tile south
 						checkPos.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 					}
-/*					if (rhtClick
+/*					if (rtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 5)) // kL
 					{
 						checkPos.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
@@ -4383,12 +4383,12 @@ int TileEngine::unitOpensDoor(
 						checkPos.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_WESTWALL));	// one tile north
 					if (y != 0)
 						checkPos.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_NORTHWALL));	// one tile north
-					if (rhtClick == true)
+					if (rtClick == true)
 					{
 						checkPos.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
 						checkPos.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
 					}
-/*					if (rhtClick
+/*					if (rtClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 7)) // kL
 					{
 						//Log(LOG_INFO) << ". north-west";
@@ -4432,7 +4432,7 @@ int TileEngine::unitOpensDoor(
 			}
 
 			if (door == 0
-				&& rhtClick == true)
+				&& rtClick == true)
 			{
 				if (part == MapData::O_WESTWALL)
 					part = MapData::O_NORTHWALL;
@@ -4465,7 +4465,7 @@ int TileEngine::unitOpensDoor(
 			{
 //				tile->animate(); // ensures frame advances for ufo doors to update TU cost
 
-				if (rhtClick == true) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
+				if (rtClick == true) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
 					_battleSave->getBattleGame()->checkForProximityGrenades(unit); // kL
 

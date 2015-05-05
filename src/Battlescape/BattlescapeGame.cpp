@@ -2762,6 +2762,7 @@ void BattlescapeGame::psiButtonAction()
 
 /**
  * Moves a unit up or down.
+ * @note Used only by tactical icon buttons.
  * @param unit	- a unit
  * @param dir	- direction DIR_UP or DIR_DOWN
  */
@@ -2784,7 +2785,7 @@ void BattlescapeGame::moveUpDown(
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
 
-	_currentAction.strafe = false; // redundancy checks ......
+/*	_currentAction.strafe = false; // redundancy checks ......
 	_currentAction.dash = false;
 	_currentAction.actor->setDashing(false);
 
@@ -2794,15 +2795,15 @@ void BattlescapeGame::moveUpDown(
 	{
 		_currentAction.dash = true;
 		_currentAction.actor->setDashing(true);
-	}
+	} */
 
 	_battleSave->getPathfinding()->calculate(
 										_currentAction.actor,
 										_currentAction.target);
 
 	statePushBack(new UnitWalkBState(
-									this,
-									_currentAction));
+								this,
+								_currentAction));
 }
 
 /**
@@ -3489,7 +3490,7 @@ bool BattlescapeGame::getKneelReserved()
  * @param unit - pointer to a BattleUnit
  * @return, true if a proximity grenade was triggered
  */
-bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
+bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 {
 	int unitSize = unit->getArmor()->getSize() - 1;
 	for (int
@@ -3513,8 +3514,8 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 						++ty)
 				{
 					Tile* const tile = _battleSave->getTile(unit->getPosition()
-																+ Position( x, y, 0)
-																+ Position(tx,ty, 0));
+																+ Position( x, y,0)
+																+ Position(tx,ty,0));
 					if (tile != NULL)
 					{
 						for (std::vector<BattleItem*>::const_iterator
@@ -3527,15 +3528,15 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 							{
 								int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765
 								_battleSave->getPathfinding()->vectorToDirection(
-																			Position(tx,ty, 0),
+																			Position(tx,ty,0),
 																			dir);
 								//Log(LOG_INFO) << "dir = " << dir;
-								if (_battleSave->getPathfinding()->isBlocked(
-																		_battleSave->getTile(unit->getPosition() + Position(x,y,0)),
-																		NULL,
-																		dir,
-																		unit) == false)	// kL try passing in OBJECT_SELF as a missile target to kludge for closed doors.
-								{														// there *might* be a problem if the Proxy is on a non-walkable tile ....
+								if (_battleSave->getPathfinding()->isBlockedPath(
+																			_battleSave->getTile(unit->getPosition() + Position(x,y,0)),
+//																			NULL,
+																			dir,
+																			unit) == false)	// kL try passing in OBJECT_SELF as a missile target to kludge for closed doors.
+								{															// there *might* be a problem if the Proxy is on a non-walkable tile ....
 									Position pos;
 
 									pos.x = tile->getPosition().x * 16 + 8;

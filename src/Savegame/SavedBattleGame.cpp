@@ -2170,9 +2170,11 @@ bool SavedBattleGame::setUnitPosition(
 					&& tile->getUnit() != unit)
 				|| tile->getTUCostTile(
 									MapData::O_OBJECT,
-									unit->getMoveTypeUnit()) == 255
+//									unit->getMoveTypeUnit()) == 255
+									_pathfinding->getMoveTypePathing()) == 255
 				|| (tile->hasNoFloor(tileBelow) == true
-					&& unit->getMoveTypeUnit() != MT_FLY)
+//					&& unit->getMoveTypeUnit() != MT_FLY)
+					&& _pathfinding->getMoveTypePathing() != MT_FLY)
 				|| (tile->getMapData(MapData::O_OBJECT) != NULL
 					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
 					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
@@ -2196,10 +2198,10 @@ bool SavedBattleGame::setUnitPosition(
 				dir != 5;
 				++dir)
 		{
-			if (_pathfinding->isBlocked(
-									getTile(pos),
-									NULL,
-									dir) == true)
+			if (_pathfinding->isBlockedPath(
+										getTile(pos),
+//										NULL,
+										dir) == true)
 			{
 				return false;
 			}
@@ -2270,10 +2272,10 @@ bool SavedBattleGame::placeUnitNearPosition(
 
 		tile = getTile(pos + posOffset);
 		if (tile != NULL
-			&& getPathfinding()->isBlocked(
-										getTile(pos),
-										tile,
-										i) == false
+			&& getPathfinding()->isBlockedPath(
+											getTile(pos),
+//											tile,
+											i) == false
 			&& setUnitPosition(
 							unit,
 							pos + posOffset) == true)

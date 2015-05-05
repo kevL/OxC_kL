@@ -185,7 +185,7 @@ private:
 		/// Tries to open a door.
 		int unitOpensDoor(
 				BattleUnit* const unit,
-				const bool rhtClick = false,
+				const bool rtClick = false,
 				int dir = -1);
 		/// kL. Checks for a door connected to this wall at this position.
 /*		bool TileEngine::testAdjacentDoor( // kL

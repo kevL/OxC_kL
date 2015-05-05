@@ -145,9 +145,9 @@ private:
 				bool strafeRejected = false);
 
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
-		bool isBlocked(
+		bool isBlockedPath(
 				const Tile* const startTile,
-				const Tile* endTile,
+//				const Tile* endTile,
 				const int dir,
 				const BattleUnit* const missileTarget = NULL) const;
 
@@ -182,7 +182,7 @@ private:
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
-				const BattleUnit* const unit,
+//				const BattleUnit* const unit,
 				Position startPos,
 				int const dir);
 

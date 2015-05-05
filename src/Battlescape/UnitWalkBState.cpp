@@ -1259,7 +1259,8 @@ void UnitWalkBState::playMovementSound()
 //		if (_falling == true) // This is STATUS_FLYING as well as below_
 		if (_unit->getStatus() == STATUS_FLYING
 			&& _unit->isFloating() == true
-			&& _unit->getMoveTypeUnit() == MT_WALK)
+//			&& _unit->getMoveTypeUnit() == MT_WALK)
+			&& _pf->getMoveTypePathing() == MT_WALK)
 		{
 			if (_unit->getTrueWalkingPhase() == 1
 				&& groundCheck(1))
