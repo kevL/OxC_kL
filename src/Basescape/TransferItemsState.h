@@ -24,6 +24,7 @@
 //#include <vector>
 
 #include "../Engine/State.h"
+
 #include "../Savegame/Transfer.h"
 
 
@@ -56,12 +57,14 @@ private:
 		_persQty,
 		_totalCost;
 	size_t
-		_curRow,
-		_offset,
+		_rowDef,
+		_rowOffset,
 		_hasEng,
 		_hasSci,
 		_sel;
-	Uint8 _ammoColor;
+	Uint8
+		_ammoColor,
+		_colorArtefact;
 	double
 		_distance,
 		_storeSize;
@@ -103,9 +106,12 @@ private:
 	/// Gets distance between bases.
 	double getDistance() const;
 	/// Gets type of selected item.
-	enum TransferType getType(const size_t selected) const;
+	TransferType getType(const size_t selected) const;
 	/// Gets item Index.
 	size_t getItemIndex(const size_t selected) const;
+
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 
 
 	public:
@@ -118,7 +124,6 @@ private:
 
 		/// Initializes the Transfer menu, when cancelling TransferConfirmState.
 		void init();
-
 		/// Runs the timers.
 		void think();
 
@@ -153,9 +158,6 @@ private:
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
 		void decreaseByValue(int change);
-
-		/// Updates the quantity-strings of the selected item.
-		void updateItemStrings();
 
 		/// Gets the total cost of the transfer.
 		int getTotalCost() const;

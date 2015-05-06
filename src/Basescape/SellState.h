@@ -64,7 +64,7 @@ private:
 	size_t
 		_hasSci,
 		_hasEng,
-		_itemOffset,
+		_rowOffset,
 		_sel;
 	Uint8
 		_ammoColor,
@@ -93,7 +93,7 @@ private:
 		* _timerInc;
 	Window* _window;
 
-	std::vector<int> _qtys;
+	std::vector<int> _sellQty;
 	std::vector<std::string> _items;
 	std::vector<Craft*> _crafts;
 	std::vector<Soldier*> _soldiers;
@@ -103,11 +103,14 @@ private:
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Gets the Type of the selected item.
-	enum SellType getType(size_t selected) const;
+	SellType getType(const size_t selected) const;
 	/// Gets the index of selected item.
 	size_t getItemIndex(size_t selected) const;
 	/// Gets the index of the selected craft.
 	size_t getCraftIndex(size_t selected) const;
+
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 
 
 	public:
@@ -148,9 +151,6 @@ private:
 		void changeByValue(
 				int change,
 				int dir);
-
-		/// Updates the quantity-strings of the selected item.
-		void updateItemStrings();
 };
 
 }

@@ -66,13 +66,13 @@ PurchaseState::PurchaseState(Base* base)
 	:
 		_base(base),
 		_sel(0),
-		_itemOffset(0),
+		_rowOffset(0),
 		_totalCost(0),
 		_persQty(0),
 		_craftQty(0),
 		_storeSize(0.)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
@@ -172,42 +172,42 @@ PurchaseState::PurchaseState(Base* base)
 	_lstItems->onRightArrowClick((ActionHandler)& PurchaseState::lstItemsRightArrowClick);
 
 	std::wostringstream
-		ss1,
-		ss2,
-		ss3,
-		ss4,
-		ss5,
-		ss6,
-		ss7;
+		woststr1,
+		woststr2,
+		woststr3,
+		woststr4,
+		woststr5,
+		woststr6,
+		woststr7;
 
-	ss1 << _base->getTotalSoldiers();
+	woststr1 << _base->getTotalSoldiers();
 	_lstItems->addRow(
 					4,
 					tr("STR_SOLDIER").c_str(),
 					Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(),
-					ss1.str().c_str(),
+					woststr1.str().c_str(),
 					L"0");
 	_quantities.push_back(0);
 
-	ss2 << _base->getTotalScientists();
+	woststr2 << _base->getTotalScientists();
 	_lstItems->addRow(
 					4,
 					tr("STR_SCIENTIST").c_str(),
 					Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(),
-					ss2.str().c_str(),
+					woststr2.str().c_str(),
 					L"0");
 	_quantities.push_back(0);
 
-	ss3 << _base->getTotalEngineers();
+	woststr3 << _base->getTotalEngineers();
 	_lstItems->addRow(
 					4,
 					tr("STR_ENGINEER").c_str(),
 					Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(),
-					ss3.str().c_str(),
+					woststr3.str().c_str(),
 					L"0");
 	_quantities.push_back(0);
 
-	_itemOffset = 3;
+	_rowOffset = 3;
 
 
 	// Add craft-types to purchase list.
@@ -218,7 +218,7 @@ PurchaseState::PurchaseState(Base* base)
 			i != crafts.end();
 			++i)
 	{
-		ss4.str(L"");
+		woststr4.str(L"");
 
 		crftRule = _game->getRuleset()->getCraft(*i);
 		if (crftRule->getBuyCost() != 0
@@ -227,7 +227,7 @@ PurchaseState::PurchaseState(Base* base)
 			_quantities.push_back(0);
 			_crafts.push_back(*i);
 
-			++_itemOffset;
+			++_rowOffset;
 
 			int crafts = 0;
 			for (std::vector<Craft*>::const_iterator
@@ -239,12 +239,12 @@ PurchaseState::PurchaseState(Base* base)
 					++crafts;
 			}
 
-			ss4 << crafts;
+			woststr4 << crafts;
 			_lstItems->addRow(
 							4,
 							tr(*i).c_str(),
 							Text::formatFunding(crftRule->getBuyCost()).c_str(),
-							ss4.str().c_str(),
+							woststr4.str().c_str(),
 							L"0");
 		}
 	}
@@ -269,8 +269,8 @@ PurchaseState::PurchaseState(Base* base)
 			i != cwList.end();
 			++i)
 	{
-		ss5.str(L"");
-		ss6.str(L"");
+		woststr5.str(L"");
+		woststr6.str(L"");
 
 		// Special handling for treating craft weapons as items
 		cwRule = _game->getRuleset()->getCraftWeapon(*i);
@@ -302,12 +302,12 @@ PurchaseState::PurchaseState(Base* base)
 			if (clipSize > 0)
 				wst += (L" (" + Text::formatNumber(clipSize) + L")");
 
-			ss5 << tQty;
+			woststr5 << tQty;
 			_lstItems->addRow(
 							4,
 							wst.c_str(),
 							Text::formatFunding(laRule->getBuyCost()).c_str(),
-							ss5.str().c_str(),
+							woststr5.str().c_str(),
 							L"0");
 
 			for (std::vector<std::string>::const_iterator
@@ -352,13 +352,13 @@ PurchaseState::PurchaseState(Base* base)
 			if (clipSize > 1)
 				wst += (L"s (" + Text::formatNumber(clipSize) + L")");
 
-			ss6 << tQty;
+			woststr6 << tQty;
 			wst.insert(0, L"  ");
 			_lstItems->addRow(
 							4,
 							wst.c_str(),
 							Text::formatFunding(clRule->getBuyCost()).c_str(),
-							ss6.str().c_str(),
+							woststr6.str().c_str(),
 							L"0");
 			_lstItems->setRowColor(
 								_quantities.size() - 1,
@@ -391,7 +391,7 @@ PurchaseState::PurchaseState(Base* base)
 			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true
 			&& isExcluded(*i) == false)
 		{
-			ss7.str(L"");
+			woststr7.str(L"");
 			st = itRule->getType();
 
 			_quantities.push_back(0);
@@ -448,7 +448,7 @@ PurchaseState::PurchaseState(Base* base)
 				}
 			}
 
-			ss7 << totalQty;
+			woststr7 << totalQty;
 			wst = tr(*i);
 
 			if (itRule->getBattleType() == BT_AMMO			// #2, weapon clips & HWP rounds
@@ -468,7 +468,7 @@ PurchaseState::PurchaseState(Base* base)
 								4,
 								wst.c_str(),
 								Text::formatFunding(itRule->getBuyCost()).c_str(),
-								ss7.str().c_str(),
+								woststr7.str().c_str(),
 								L"0");
 				_lstItems->setRowColor(
 								_quantities.size() - 1,
@@ -489,7 +489,7 @@ PurchaseState::PurchaseState(Base* base)
 								4,
 								wst.c_str(),
 								Text::formatFunding(itRule->getBuyCost()).c_str(),
-								ss7.str().c_str(),
+								woststr7.str().c_str(),
 								L"0");
 			}
 		}
@@ -553,7 +553,7 @@ void PurchaseState::btnOkClick(Action*)
 
 	for (size_t
 			i = 0;
-			i < _quantities.size();
+			i != _quantities.size();
 			++i)
 	{
 		if (_quantities[i] > 0)
@@ -562,7 +562,7 @@ void PurchaseState::btnOkClick(Action*)
 			{
 				for (int
 						j = 0;
-						j < _quantities[i];
+						j != _quantities[i];
 						++j)
 				{
 					Transfer* const transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
@@ -590,8 +590,8 @@ void PurchaseState::btnOkClick(Action*)
 			{
 				for (int
 						j = 0;
-						j < _quantities[i];
-						j++)
+						j != _quantities[i];
+						++j)
 				{
 					RuleCraft* const crftRule = _game->getRuleset()->getCraft(_crafts[i - 3]);
 					Transfer* const transfer = new Transfer(crftRule->getTransferTime());
@@ -721,41 +721,6 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 }
 
 /**
- * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an Action
- */
-/*void PurchaseState::lstItemsMousePress(Action* action)
-{
-	if (Options::changeValueByMouseWheel < 1)
-		return;
-
-	_sel = _lstItems->getSelectedRow();
-
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-	{
-		_timerInc->stop();
-		_timerDec->stop();
-
-		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
-			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
-		{
-			increaseByValue(Options::changeValueByMouseWheel);
-		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		_timerInc->stop();
-		_timerDec->stop();
-
-		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
-			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
-		{
-			decreaseByValue(Options::changeValueByMouseWheel);
-		}
-	}
-} */
-
-/**
  * Gets the price of the currently selected item.
  * @return, the price of the currently selected item
  */
@@ -763,17 +728,20 @@ int PurchaseState::getPrice()
 {
 	if (_sel == 0)											// Soldier cost
 		return _game->getRuleset()->getSoldierCost() * 2;
-	else if (_sel == 1)										// Scientist cost
+
+	if (_sel == 1)											// Scientist cost
 		return _game->getRuleset()->getScientistCost() * 2;
-	else if (_sel == 2)										// Engineer cost
+
+	if (_sel == 2)											// Engineer cost
 		return _game->getRuleset()->getEngineerCost() * 2;
-	else if (_sel > 2										// Craft cost
+
+	if (_sel > 2											// Craft cost
 		&& _sel < 3 + _crafts.size())
 	{
 		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getBuyCost();
 	}
-	else													// Item cost
-		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost();
+
+	return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost(); // Item cost
 }
 
 /**
@@ -799,26 +767,26 @@ void PurchaseState::increaseByValue(int change)
 	if (change < 1)
 		return;
 
-	std::wstring errorMessage;
+	std::wstring wstError;
 	if (_totalCost + getPrice() > _game->getSavedGame()->getFunds())
-		errorMessage = tr("STR_NOT_ENOUGH_MONEY");
+		wstError = tr("STR_NOT_ENOUGH_MONEY");
 
 	else if (_sel < 3
 		&& _persQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 	{
-		errorMessage = tr("STR_NOT_ENOUGH_LIVING_SPACE");
+		wstError = tr("STR_NOT_ENOUGH_LIVING_SPACE");
 	}
 	else if (_sel > 2
 		&& _sel < 3 + _crafts.size()
 		&& _craftQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
 	{
-		errorMessage = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
+		wstError = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
 	}
 	else if (_sel >= 3 + _crafts.size()
 		&& _storeSize + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
 			> static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() + 0.05)
 	{
-		errorMessage = tr("STR_NOT_ENOUGH_STORE_SPACE");
+		wstError = tr("STR_NOT_ENOUGH_STORE_SPACE");
 	}
 	else
 	{
@@ -871,13 +839,13 @@ void PurchaseState::increaseByValue(int change)
 
 	_timerInc->stop();
 
-	RuleInterface* menuInterface = _game->getRuleset()->getInterface("buyMenu");
+	const RuleInterface* const uiRule = _game->getRuleset()->getInterface("buyMenu");
 	_game->pushState(new ErrorMessageState(
-										errorMessage,
+										wstError,
 										_palette,
-										menuInterface->getElement("errorMessage")->color,
+										uiRule->getElement("errorMessage")->color,
 										"BACK13.SCR",
-										menuInterface->getElement("errorPalette")->color));
+										uiRule->getElement("errorPalette")->color));
 }
 
 /**
@@ -930,49 +898,90 @@ void PurchaseState::decreaseByValue(int change)
 /**
  * Updates the quantity-strings of the selected item.
  */
-void PurchaseState::updateItemStrings()
+void PurchaseState::updateItemStrings() // private.
 {
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
 							.arg(Text::formatFunding(_totalCost)));
 
 	std::wostringstream
-		ss1,
-		ss2;
+		woststr1,
+		woststr2;
 
-	ss1 << _quantities[_sel];
+	woststr1 << _quantities[_sel];
 	_lstItems->setCellText(
 						_sel,
 						3,
-						ss1.str());
+						woststr1.str());
 
 	if (_quantities[_sel] > 0)
-		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
+		_lstItems->setRowColor(
+							_sel,
+							_lstItems->getSecondaryColor());
 	else
 	{
-		_lstItems->setRowColor(_sel, _lstItems->getColor());
+		_lstItems->setRowColor(
+							_sel,
+							_lstItems->getColor());
 
-		if (_sel > _itemOffset)
+		if (_sel > _rowOffset)
 		{
-			const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
-			if (rule->getBattleType() == BT_AMMO
-				|| (rule->getBattleType() == BT_NONE
-					&& rule->getClipSize() > 0))
+			const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel - _rowOffset]);
+			if (itRule->getBattleType() == BT_AMMO
+				|| (itRule->getBattleType() == BT_NONE
+					&& itRule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, _ammoColor);
+				_lstItems->setRowColor(
+									_sel,
+									_ammoColor);
 			}
 		}
 	}
 
-	ss2 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
+	woststr2 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	if (std::abs(_storeSize) > 0.05)
 	{
-		ss2 << "(";
-		if (_storeSize > 0.) ss2 << "+";
-		ss2 << std::fixed << std::setprecision(1) << _storeSize << ")";
+		woststr2 << "(";
+		if (_storeSize > 0.) woststr2 << "+";
+		woststr2 << std::fixed << std::setprecision(1) << _storeSize << ")";
 	}
-	_txtSpaceUsed->setText(ss2.str());
+	_txtSpaceUsed->setText(woststr2.str());
 
 	_btnOk->setVisible(_totalCost > 0);
 }
+
+/**
+ * Handles the mouse-wheels on the arrow-buttons.
+ * @param action - pointer to an Action
+ */
+/*void PurchaseState::lstItemsMousePress(Action* action)
+{
+	if (Options::changeValueByMouseWheel < 1)
+		return;
+
+	_sel = _lstItems->getSelectedRow();
+
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
+		_timerInc->stop();
+		_timerDec->stop();
+
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
+		{
+			increaseByValue(Options::changeValueByMouseWheel);
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_timerInc->stop();
+		_timerDec->stop();
+
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
+		{
+			decreaseByValue(Options::changeValueByMouseWheel);
+		}
+	}
+} */
 
 }

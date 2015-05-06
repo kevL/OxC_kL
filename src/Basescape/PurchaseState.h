@@ -52,7 +52,7 @@ private:
 		_persQty,
 		_totalCost;
 	size_t
-		_itemOffset,
+		_rowOffset,
 		_sel;
 	Uint8 _ammoColor;
 	double _storeSize;
@@ -85,6 +85,9 @@ private:
 	bool isExcluded(const std::string& item);
 	/// Gets selected price.
 	int getPrice();
+
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 
 
 	public:
@@ -123,9 +126,6 @@ private:
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
 		void decreaseByValue(int change);
-
-		/// Updates the quantity-strings of the selected item.
-		void updateItemStrings();
 };
 
 }

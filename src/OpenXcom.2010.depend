@@ -4467,13 +4467,13 @@
 1430208088 f:\git\openxcom\src\basescape\manufacturestate.h
 	"../Engine/State.h"
 
-1430149549 f:\git\openxcom\src\basescape\purchasestate.h
+1430932423 f:\git\openxcom\src\basescape\purchasestate.h
 	"../Engine/State.h"
 
 1430210899 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1430149549 f:\git\openxcom\src\basescape\sellstate.h
+1430935170 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
@@ -5029,7 +5029,7 @@
 1430149549 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1430932430 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5056,7 +5056,7 @@
 	<limits>
 	<cmath>
 
-1430149550 f:\git\openxcom\src\savegame\transfer.h
+1430928252 f:\git\openxcom\src\savegame\transfer.h
 
 1430149549 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
@@ -5133,7 +5133,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1430932483 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5304,11 +5304,11 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 f:\git\openxcom\src\basescape\transferitemsstate.h
+1430932944 f:\git\openxcom\src\basescape\transferitemsstate.h
 	"../Engine/State.h"
 	"../Savegame/Transfer.h"
 
-1430149550 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
+1430932773 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
 	"TransferConfirmState.h"
 	"TransferItemsState.h"
 	"../Engine/Game.h"
@@ -5322,7 +5322,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1430842889 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1430935091 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5446,7 +5446,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1430782089 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1430885281 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5681,7 +5681,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1430882043 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1430886349 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"

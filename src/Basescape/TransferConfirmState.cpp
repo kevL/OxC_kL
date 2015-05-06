@@ -97,9 +97,9 @@ TransferConfirmState::TransferConfirmState(
 	_txtCost->setText(tr("STR_COST"));
 
 	_txtTotal->setBig();
-	std::wostringstream ss;
-	ss << L'\x01' << Text::formatFunding(_state->getTotalCost());
-	_txtTotal->setText(ss.str().c_str());
+	std::wostringstream woststr;
+	woststr << L'\x01' << Text::formatFunding(_state->getTotalCost());
+	_txtTotal->setText(woststr.str().c_str());
 }
 
 /**
