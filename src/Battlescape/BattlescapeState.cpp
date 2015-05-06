@@ -2908,7 +2908,8 @@ void BattlescapeState::blinkVisibleUnitButtons()
 {
 	static int
 		delta = 1,
-		color = 34;
+		color = 34,			// lt.red
+		color_border = 15;	// dk.gray
 
 	for (size_t
 			i = 0;
@@ -2917,21 +2918,22 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
-			_btnVisibleUnit[i]->drawRect(0, 0, 15, 13, 10);
-			_btnVisibleUnit[i]->drawRect(1, 1, 13, 11, static_cast<Uint8>(color));
+			_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
+			_btnVisibleUnit[i]->drawRect(1,1, 13,11, static_cast<Uint8>(color));
 		}
 	}
 
-	if (color == 45)
-		delta = -1;
-	else if (color == 34)
+	if (color == 34)
 		delta = 1;
+	else if (color == 45)
+		delta = -1;
 
 	color += delta;
+	color_border -= delta;
 }
 
 /**
- * Animates map objects on the map, also smoke,fire, ...
+ * Animates map objects on the map - also smoke, fire, etc.
  */
 void BattlescapeState::animate()
 {
@@ -4216,9 +4218,15 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 			   + tile->getTUCostTile(
 								MapData::O_OBJECT,
 								moveType);
-		if (tuCost == 0)
+
+		if (   tile->getMapData(MapData::O_FLOOR) == NULL
+			&& tile->getMapData(MapData::O_OBJECT) != NULL)
 		{
-			if (moveType == MT_FLY
+			tuCost += 4;
+		}
+		else if (tuCost == 0)
+		{
+			if (   moveType == MT_FLY
 				|| moveType == MT_FLOAT)
 			{
 				tuCost = 4;

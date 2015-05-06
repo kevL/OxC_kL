@@ -183,7 +183,7 @@ Map::Map(
 
 	_numExposed = new NumberText(24,9);
 	_numExposed->setPalette(_game->getScreen()->getPalette());
-	_numExposed->setColor(Palette::blockOffset(13)+2); // blue
+	_numExposed->setColor(3); //Palette::blockOffset(11)+6); //(13)+3); // blue
 //	_numExposed->setBordered();
 }
 
@@ -198,6 +198,7 @@ Map::~Map()
 	delete _hidden;
 	delete _camera;
 	delete _numAccuracy;
+	delete _numExposed;
 }
 
 /**

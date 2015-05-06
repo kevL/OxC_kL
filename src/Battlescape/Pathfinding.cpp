@@ -242,9 +242,9 @@ void Pathfinding::calculate(
 				{
 					testTile = _battleSave->getTile(destPos + Position(x,y,0));
 					if (x && y
-						&& ((testTile->getMapData(MapData::O_NORTHWALL)
+						&& ((	   testTile->getMapData(MapData::O_NORTHWALL)
 								&& testTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true)
-							||  (testTile->getMapData(MapData::O_WESTWALL)
+							|| (   testTile->getMapData(MapData::O_WESTWALL)
 								&& testTile->getMapData(MapData::O_WESTWALL)->isDoor() == true)))
 					{
 						return;
@@ -265,7 +265,7 @@ void Pathfinding::calculate(
 					else if (testTile->getUnit() != NULL)
 					{
 						testUnit = testTile->getUnit();
-						if (testUnit != unit
+						if (   testUnit != unit
 							&& testUnit != missileTarget
 							&& testUnit->getUnitVisible() == true)
 						{
@@ -347,8 +347,16 @@ void Pathfinding::calculate(
 					&& _path.size() == 1
 					&& unit->getDirection() == _path.front())))
 		{
+			_strafe = false;
+
+			_battleAction->strafe = false;
 			_battleAction->dash = true;
 			_battleAction->actor->setDashing(true);
+		}
+		else // if (_strafe == false)
+		{
+			_battleAction->dash = false;
+			_battleAction->actor->setDashing(false);
 		}
 	}
 }
@@ -967,6 +975,9 @@ int Pathfinding::getTUCostPath(
 					cost += destTile->getTUCostTile(
 												MapData::O_OBJECT,
 												_moveType);
+
+					if (destTile->getMapData(MapData::O_FLOOR) == NULL)
+						cost += 4;
 				}
 
 				// climbing up a level costs one extra. Not

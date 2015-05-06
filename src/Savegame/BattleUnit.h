@@ -739,11 +739,11 @@ private:
 		/// Calculates firing accuracy.
 		double getFiringAccuracy(
 				BattleActionType actionType,
-				BattleItem* item);
+				BattleItem* item) const;
 		/// Calculates throwing accuracy.
-		double getThrowingAccuracy();
+		double getThrowingAccuracy() const;
 		/// Calculates this unit's accuracy modifier.
-		double getAccuracyModifier(const BattleItem* const item = NULL);
+		double getAccuracyModifier(const BattleItem* const item = NULL) const;
 
 		/// Sets this unit's armor value.
 		void setArmor(
@@ -762,7 +762,7 @@ private:
 		int getFatalWounds() const;
 
 		/// Gets this unit's current reaction score.
-		double getInitiative(int tuSpent = 0);
+		double getInitiative(const int tuSpent = 0) const;
 
 		/// Prepares this unit for a new turn.
 		void prepUnit();
@@ -975,7 +975,7 @@ private:
 		/// Sets the BattleUnits that this unit is charging towards.
 		void setCharging(BattleUnit* chargeTarget);
 		/// Gets the BattleUnits that this unit is charging towards.
-		BattleUnit* getCharging();
+		BattleUnit* getCharging() const;
 
 		/// Gets the carried weight in strength units.
 		int getCarriedWeight(const BattleItem* const dragItem = NULL) const;

@@ -1045,13 +1045,15 @@ int Tile::getSmoke() const
  * Gets if this Tile will accept '_smoke' or '_fire' value.
  * @note diag bigWalls take no smoke/fire. 'Cause I don't want it showing on both sides.
  * And I don't want it to creep through diagonal UFO hulls ....
- * @return, true if smoke possible
+ * @return, true if smoke/fire possible
  */
 bool Tile::canSmoke() const // private
 {
 	return _objects[MapData::O_OBJECT] == NULL
 		   || (    _objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NESW
-				&& _objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NWSE);
+				&& _objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NWSE
+				&& (_objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_BLOCK
+					|| _objects[MapData::O_OBJECT]->blockSmoke() == false)); // <- TODO: remove bias vs. Smoke; ie. include Fire later
 }
 
 /**

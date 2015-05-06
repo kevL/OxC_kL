@@ -180,10 +180,19 @@ bool MapData::isGravLift() const
 }
 
 /**
- * kL. Gets whether this blocks fire.
- * @return, true if this blocks fire
+ * Gets whether this tile part blocks smoke.
+ * @return, true if it blocks smoke
  */
-bool MapData::blockFire() const // kL
+bool MapData::blockSmoke() const
+{
+	return _blockSmoke;
+}
+
+/**
+ * Gets whether this tile part blocks fire.
+ * @return, true if it blocks fire
+ */
+bool MapData::blockFire() const
 {
 	return _blockFire;
 }

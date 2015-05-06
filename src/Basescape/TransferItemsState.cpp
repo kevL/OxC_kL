@@ -943,7 +943,7 @@ void TransferItemsState::increaseByValue(int change)
 
 	// ERRORS Start:
 	std::wstring errorMessage;
-	if ((type == TRANSFER_SOLDIER
+	if ((	   type == TRANSFER_SOLDIER
 			|| type == TRANSFER_SCIENTIST
 			|| type == TRANSFER_ENGINEER)
 		&& _persQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
@@ -997,7 +997,7 @@ void TransferItemsState::increaseByValue(int change)
 	// ERRORS Done.
 
 
-	if (type == TRANSFER_SOLDIER // personnel count
+	if (   type == TRANSFER_SOLDIER // personnel count
 		|| type == TRANSFER_SCIENTIST
 		|| type == TRANSFER_ENGINEER)
 	{
@@ -1110,7 +1110,7 @@ void TransferItemsState::decreaseByValue(int change)
 
 	const enum TransferType type = getType(_sel);
 
-	if (type == TRANSFER_SOLDIER
+	if (   type == TRANSFER_SOLDIER
 		|| type == TRANSFER_SCIENTIST
 		|| type == TRANSFER_ENGINEER) // personnel count
 	{
@@ -1153,20 +1153,20 @@ void TransferItemsState::decreaseByValue(int change)
 void TransferItemsState::updateItemStrings()
 {
 	std::wostringstream
-		ss1,
-		ss2,
-		ss3,
-		ss4,
-		ss5;
+		woststr1,
+		woststr2,
+		woststr3,
+		woststr4,
+		woststr5;
 
-	ss1 << _baseQty[_sel];
-	_lstItems->setCellText(_sel, 1, ss1.str());
+	woststr1 << _baseQty[_sel];
+	_lstItems->setCellText(_sel, 1, woststr1.str());
 
-	ss2 << _transferQty[_sel];
-	_lstItems->setCellText(_sel, 2, ss2.str());
+	woststr2 << _transferQty[_sel];
+	_lstItems->setCellText(_sel, 2, woststr2.str());
 
-	ss3 << _destQty[_sel];
-	_lstItems->setCellText(_sel, 3, ss3.str());
+	woststr3 << _destQty[_sel];
+	_lstItems->setCellText(_sel, 3, woststr3.str());
 
 	if (_transferQty[_sel] > 0)
 		_lstItems->setRowColor(_sel, _lstItems->getSecondaryColor());
@@ -1188,23 +1188,23 @@ void TransferItemsState::updateItemStrings()
 
 	_btnOk->setVisible(_totalCost > 0);
 
-	ss4 << _baseFrom->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseFrom->getUsedStores();
+	woststr4 << _baseFrom->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseFrom->getUsedStores();
 	if (std::abs(_storeSize) > 0.05)
 	{
-		ss4 << "(";
-		if (-(_storeSize) > 0.) ss4 << "+";
-		ss4 << std::fixed << std::setprecision(1) << -(_storeSize) << ")";
+		woststr4 << "(";
+		if (-(_storeSize) > 0.) woststr4 << "+";
+		woststr4 << std::fixed << std::setprecision(1) << -(_storeSize) << ")";
 	}
-	_txtSpaceFrom->setText(ss4.str());
+	_txtSpaceFrom->setText(woststr4.str());
 
-	ss5 << _baseTo->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseTo->getUsedStores();
+	woststr5 << _baseTo->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseTo->getUsedStores();
 	if (std::abs(_storeSize) > 0.05)
 	{
-		ss5 << "(";
-		if (_storeSize > 0.) ss5 << "+";
-		ss5 << std::fixed << std::setprecision(1) << _storeSize << ")";
+		woststr5 << "(";
+		if (_storeSize > 0.) woststr5 << "+";
+		woststr5 << std::fixed << std::setprecision(1) << _storeSize << ")";
 	}
-	_txtSpaceTo->setText(ss5.str());
+	_txtSpaceTo->setText(woststr5.str());
 }
 
 /**
@@ -1230,9 +1230,9 @@ double TransferItemsState::getDistance() const
 
 	const Base* base = _baseFrom;
 
-	for (int
+	for (size_t
 			i = 0;
-			i < 2;
+			i != 2;
 			++i)
 	{
 		x[i] = r *  std::cos(base->getLatitude()) * std::cos(base->getLongitude());

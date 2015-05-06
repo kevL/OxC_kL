@@ -493,7 +493,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 									&& unit->getFaction() == FACTION_HOSTILE
 									&& spottedUnit->getFaction() != FACTION_HOSTILE)
 								{
-									//Log(LOG_INFO) << "id " << unit->getId() << " spots " << spottedUnit->getId();
+									//Log(LOG_INFO) << "calculateFOV() id " << unit->getId() << " spots " << spottedUnit->getId();
 									spottedUnit->setExposed();	// note that xCom agents can be seen by enemies but *not* become Exposed.
 																// Only potential reactionFire should set them Exposed during xCom's turn.
 								}
@@ -1502,14 +1502,14 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
  */
 BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
-		BattleUnit* defender,
-		int tuSpent) const
+		BattleUnit* const defender,
+		const int tuSpent) const
 {
 	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
 	BattleUnit* nextReactor = NULL;
 	int
-		initHigh = -1,
+		init = -1,
 		initTest;
 
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1521,9 +1521,9 @@ BattleUnit* TileEngine::getReactor(
 		if ((*i)->isOut() == false)
 		{
 			initTest = static_cast<int>((*i)->getInitiative());
-			if (initTest > initHigh)
+			if (initTest > init)
 			{
-				initHigh = initTest;
+				init = initTest;
 				nextReactor = *i;
 			}
 		}
@@ -1536,7 +1536,7 @@ BattleUnit* TileEngine::getReactor(
 	// are not subtracted before getInitiative() is called.
 
 	if (nextReactor == NULL
-		|| initHigh <= static_cast<int>(defender->getInitiative(tuSpent)))
+		|| init <= static_cast<int>(defender->getInitiative(tuSpent)))
 	{
 		nextReactor = defender;
 	}
@@ -1544,10 +1544,11 @@ BattleUnit* TileEngine::getReactor(
 	if (nextReactor != defender
 		&& nextReactor->getFaction() == FACTION_HOSTILE)
 	{
+		//Log(LOG_INFO) << "getReactor() id " << nextReactor->getId() << " spots " << defender->getId();
 		defender->setExposed(); // defender has been spotted on Player turn.
 	}
 
-	//Log(LOG_INFO) << ". initHigh = " << initHigh;
+	//Log(LOG_INFO) << ". init = " << init;
 	return nextReactor;
 }
 

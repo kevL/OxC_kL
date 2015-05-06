@@ -74,7 +74,7 @@ private:
 		/// Draws the number text.
 		void draw();
 
-		/// sets this numbertext to have a border or not
+		/// Sets the number to have a border or not.
 		void setBordered(bool bordered = true);
 };
 

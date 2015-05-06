@@ -151,8 +151,10 @@ private:
 		bool isDoor() const;
 		/// Gets whether this is a grav lift.
 		bool isGravLift() const;
-		/// kL. Gets whether this blocks fire.
-		bool blockFire() const; // kL
+		/// Gets whether this blocks smoke.
+		bool blockSmoke() const;
+		/// Gets whether this blocks fire.
+		bool blockFire() const;
 
 		/// kL. Sets whether this stops LoS.
 		void setStopLOS(bool stopLOS = true); // kL

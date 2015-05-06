@@ -2084,7 +2084,7 @@ void BattleUnit::clearVisibleTiles()
  */
 double BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
-		BattleItem* item)
+		BattleItem* item) const
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy() ID " << getId();
 	if (actionType == BA_LAUNCH)
@@ -2135,7 +2135,7 @@ double BattleUnit::getFiringAccuracy(
  * Calculates this BattleUnit's throwing accuracy.
  * @return, throwing accuracy
  */
-double BattleUnit::getThrowingAccuracy()
+double BattleUnit::getThrowingAccuracy() const
 {
 	return static_cast<double>(getBaseStats()->throwing) * getAccuracyModifier() / 100.;
 }
@@ -2146,7 +2146,7 @@ double BattleUnit::getThrowingAccuracy()
  * @param item - pointer to a BattleItem (default NULL)
  * @return, modifier
  */
-double BattleUnit::getAccuracyModifier(const BattleItem* const item)
+double BattleUnit::getAccuracyModifier(const BattleItem* const item) const
 {
 	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
 	double ret = static_cast<double>(_health) / static_cast<double>(getBaseStats()->health);
@@ -2222,7 +2222,7 @@ int BattleUnit::getFatalWounds() const
  * @param tuSpent - (default 0)
  * @return, Reaction score; aka INITIATIVE
  */
-double BattleUnit::getInitiative(int tuSpent)
+double BattleUnit::getInitiative(const int tuSpent) const
 {
 	double ret = static_cast<double>(
 				 getBaseStats()->reactions * (getTimeUnits() - tuSpent))
@@ -3756,7 +3756,7 @@ void BattleUnit::setCharging(BattleUnit* chargeTarget)
  * Gets the unit this BattleUnit is charging towards.
  * @return, pointer to the charged BattleUnit
  */
-BattleUnit* BattleUnit::getCharging()
+BattleUnit* BattleUnit::getCharging() const
 {
 	return _charging;
 }
