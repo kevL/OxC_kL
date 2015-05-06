@@ -1250,7 +1250,7 @@ void BattlescapeState::mapOver(Action* action)
 		_map->getSelectorPosition(&pos);
 
 		Tile* const tile = _battleSave->getTile(pos);
-		if (tile != NULL
+		if (   tile != NULL
 			&& tile->isDiscovered(2) == true
 			&& tile->getInventory()->empty() == false)
 		{
@@ -1258,13 +1258,14 @@ void BattlescapeState::mapOver(Action* action)
 
 			size_t row = 0;
 			std::wostringstream
-				woss,	// test
-				woss1,	// Console #1
-				woss2;	// Console #2
+				woststr,	// test
+				woststr1,	// Console #1
+				woststr2;	// Console #2
 			std::wstring
-				ws1,
-				ws2,
-				ws3;
+				wst,
+				wst1,
+				wst2,
+				wst3;
 			int qty = 1;
 
 			for (size_t
@@ -1272,7 +1273,7 @@ void BattlescapeState::mapOver(Action* action)
 					i != tile->getInventory()->size() + 1;
 					++i)
 			{
-				ws1 = L"> ";
+				wst1 = L"> ";
 
 				if (i < tile->getInventory()->size())
 				{
@@ -1282,124 +1283,131 @@ void BattlescapeState::mapOver(Action* action)
 					{
 						if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0)
 						{
-							ws1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
-							ws1 +=  + L" (status doubtful)";
+							wst1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
+							wst1 +=  + L" (status doubtful)";
 						}
 						else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 						{
-							ws1 += item->getUnit()->getName(_game->getLanguage());
+							wst1 += item->getUnit()->getName(_game->getLanguage());
 
 							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
-								ws1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
+								wst1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
 						}
 						else
-							ws1 += tr(item->getRules()->getType());
+						{
+							wst1 += tr(item->getRules()->getType());
+
+							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+								wst1 += L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
+						}
 					}
 					else
 					{
-						ws1 += tr(item->getRules()->getType());
+						wst1 += tr(item->getRules()->getType());
 
 						if (item->getRules()->getBattleType() == BT_AMMO)
-							ws1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
+							wst1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
 						else if (item->getRules()->getBattleType() == BT_FIREARM
 							&& item->getAmmoItem() != NULL
 							&& item->getAmmoItem() != item)
 						{
-							std::wstring ws = tr(item->getAmmoItem()->getRules()->getType());
-							ws1 += L" | " + ws + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
+							wst = tr(item->getAmmoItem()->getRules()->getType());
+							wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 						}
 						else if ((item->getRules()->getBattleType() == BT_GRENADE
 								|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 							&& item->getFuseTimer() > -1)
 						{
-							ws1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
+							wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
 						}
 					}
 				}
 
 				if (i == 0)
 				{
-					ws3 = ws2 = ws1;
+					wst3 =
+					wst2 = wst1;
 					continue;
 				}
 
-				if (ws1 == ws3)
+				if (wst1 == wst3)
 				{
 					++qty;
 					continue;
 				}
 				else
-					ws3 = ws1;
+					wst3 = wst1;
 
 				if (qty > 1)
 				{
-					ws2 += L" * " + Text::formatNumber(qty);
+					wst2 += L" * " + Text::formatNumber(qty);
 					qty = 1;
 				}
 
-				ws2 += L"\n";
-				woss << ws2;
-				ws3 = ws2 = ws1;
+				wst2 += L"\n";
+				woststr << wst2;
+				wst3 =
+				wst2 = wst1;
 
 
 				if (row < 26) // Console #1
 				{
 					if (row == 24)
 					{
-						woss << L"> more >>>";
+						woststr << L"> more >>>";
 						++row;
 					}
 
-					woss1.str(L"");
-					woss1 << woss.str();
+					woststr1.str(L"");
+					woststr1 << woststr.str();
 
 					if (row == 25)
 					{
 						/* Log(LOG_INFO) << "row 25";
-						std::string s (ws1.begin(), ws1.end());
-						Log(LOG_INFO) << ". ws1 = " << s;
-						std::string t (ws2.begin(), ws2.end());
-						Log(LOG_INFO) << ". ws2 = " << t;
-						std::string u (ws3.begin(), ws3.end());
-						Log(LOG_INFO) << ". ws3 = " << u;
-						std::wstring wstr1 (woss1.str());
+						std::string s (wst1.begin(), wst1.end());
+						Log(LOG_INFO) << ". wst1 = " << s;
+						std::string t (wst2.begin(), wst2.end());
+						Log(LOG_INFO) << ". wst2 = " << t;
+						std::string u (wst3.begin(), wst3.end());
+						Log(LOG_INFO) << ". wst3 = " << u;
+						std::wstring wstr1 (woststr1.str());
 						std::string v (wstr1.begin(), wstr1.end());
-						Log(LOG_INFO) << ". woss1 = " << v;
-						std::wstring wstr2 (woss.str());
+						Log(LOG_INFO) << ". woststr1 = " << v;
+						std::wstring wstr2 (woststr.str());
 						std::string w (wstr2.begin(), wstr2.end());
-						Log(LOG_INFO) << ". woss = " << w; */
+						Log(LOG_INFO) << ". woststr = " << w; */
 
-						if (ws1 == L"> ")
+						if (wst1 == L"> ")
 						{
-							std::wstring wstr = woss1.str();
-							wstr.erase(wstr.length() - 8);
-							woss1.str(L"");
-							woss1 << wstr;
+							wst = woststr1.str();
+							wst.erase(wst.length() - 8);
+							woststr1.str(L"");
+							woststr1 << wst;
 						}
 
 						if (_showConsole == 1)
 							break;
 
-						woss.str(L"");
+						woststr.str(L"");
 					}
 				}
 
 				if (row > 26) // Console #2
 				{
 					if (row == 50)
-						woss << L"> more >>>";
+						woststr << L"> more >>>";
 
-					woss2.str(L"");
-					woss2 << woss.str();
+					woststr2.str(L"");
+					woststr2 << woststr.str();
 
 					if (row == 51)
 					{
-						if (ws1 == L"> ")
+						if (wst1 == L"> ")
 						{
-							std::wstring wstr = woss2.str();
-							wstr.erase(wstr.length() - 8);
-							woss2.str(L"");
-							woss2 << wstr;
+							wst = woststr2.str();
+							wst.erase(wst.length() - 8);
+							woststr2.str(L"");
+							woststr2 << wst;
 						}
 
 						break;
@@ -1409,8 +1417,8 @@ void BattlescapeState::mapOver(Action* action)
 				++row;
 			}
 
-			_txtConsole1->setText(woss1.str());
-			_txtConsole2->setText(woss2.str());
+			_txtConsole1->setText(woststr1.str());
+			_txtConsole2->setText(woststr2.str());
 		}
 
 		updateTileInfo(tile);

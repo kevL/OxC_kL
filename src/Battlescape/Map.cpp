@@ -183,8 +183,7 @@ Map::Map(
 
 	_numExposed = new NumberText(24,9);
 	_numExposed->setPalette(_game->getScreen()->getPalette());
-	_numExposed->setColor(3); //Palette::blockOffset(11)+6); //(13)+3); // blue
-//	_numExposed->setBordered();
+	_numExposed->setColor(3);
 }
 
 /**

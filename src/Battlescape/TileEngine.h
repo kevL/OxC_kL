@@ -116,7 +116,7 @@ private:
 		/// Gets the origin voxel of a unit's eyesight.
 		Position getSightOriginVoxel(const BattleUnit* const unit);
 		/// Checks a unit's % exposure on a tile.
-//kL	int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
+//		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				const Position* const originVoxel,
@@ -134,8 +134,8 @@ private:
 
 		/// Checks reaction fire.
 		bool checkReactionFire(
-							BattleUnit* unit,
-							int tuSpent = 0);
+				BattleUnit* unit,
+				int tuSpent = 0);
 		/// Creates a vector of units that can spot this unit.
 		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* const unit);
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
