@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_ALIENRACE_H
 #define OPENXCOM_ALIENRACE_H
 
-#include <string>
-#include <vector>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 
 enum AlienRank
@@ -44,7 +43,7 @@ namespace OpenXcom
 {
 
 /**
- * Represents a specific race "family", or a "main race" if you wish.
+ * Represents a specific race "family" or a "main race" if you wish.
  * Here is defined which ranks it contains and also which accompanying terror units.
  */
 class AlienRace

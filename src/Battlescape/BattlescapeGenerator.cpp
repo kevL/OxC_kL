@@ -2041,7 +2041,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		month = _alienItemLevel;
 
 
-	std::string alienName;
+	std::string aLien;
 	bool outside;
 	int qty;
 	size_t itemLevel;
@@ -2056,7 +2056,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 			data != deployRule->getDeploymentData()->end();
 			++data)
 	{
-		alienName = race->getMember((*data).alienRank);
+		aLien = race->getMember((*data).alienRank);
 
 		if (_gameSave->getDifficulty() < DIFF_VETERAN)
 			qty = (*data).lowQty
@@ -2097,7 +2097,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 			else
 				outside = false;
 
-			unitRule = _rules->getUnit(alienName);
+			unitRule = _rules->getUnit(aLien);
 			unit = addAlien(
 						unitRule,
 						(*data).alienRank,
@@ -2154,14 +2154,23 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 				}
 				else
 				{
-					itemLevel = static_cast<size_t>(_rules->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+					if ((*data).itemSets.size() == 0)
+					{
+						throw Exception("Unit generator encountered an error: item set not defined");
+					}
+
+					itemLevel = static_cast<size_t>(_rules->getAlienItemLevels().at(static_cast<size_t>(month)).at(RNG::generate(0,9)));
 					if (itemLevel > (*data).itemSets.size() - 1)
+						itemLevel = (*data).itemSets.size() - 1;
+					// Relax item level requirements
+					// <- Yankes; https://github.com/Yankes/OpenXcom/commit/4c252470aa2e261b0f449a56aaea5d5b0cb2229c
+/*					if (itemLevel > (*data).itemSets.size() - 1)
 					{
 						std::stringstream ststr;
 						ststr	<< "Unit generator encountered an error: not enough item sets defined, expected: "
 								<< (itemLevel+1) << " found: " << (*data).itemSets.size();
 						throw Exception(ststr.str());
-					}
+					} */
 
 					for (std::vector<std::string>::const_iterator
 							setItem = (*data).itemSets.at(itemLevel).items.begin();

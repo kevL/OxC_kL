@@ -25,37 +25,35 @@ namespace OpenXcom
 
 /**
  * Creates a blank alien race.
- * @param id String defining the id.
+ * @param id - reference the defining id.
  */
 AlienRace::AlienRace(const std::string& id)
 	:
 		_id(id),
 		_retaliation(true)
-{
-}
+{}
 
 /**
- *
+ * dTor.
  */
 AlienRace::~AlienRace()
-{
-}
+{}
 
 /**
  * Loads the alien race from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void AlienRace::load(const YAML::Node& node)
 {
-	_id				= node["id"].as<std::string>(_id);
-	_members		= node["members"].as< std::vector<std::string> >(_members);
-	_retaliation	= node["retaliation"].as<bool>(_retaliation);
+	_id				= node["id"]			.as<std::string>(_id);
+	_members		= node["members"]		.as<std::vector<std::string> >(_members);
+	_retaliation	= node["retaliation"]	.as<bool>(_retaliation);
 }
 
 /**
- * Returns the language string that names
- * this alien race. Each race has a unique name.
- * @return, Race name.
+ * Returns the language string that names this AlienRace.
+ * @note Each race has a unique name.
+ * @return, race name
  */
 std::string AlienRace::getId() const
 {
@@ -63,9 +61,9 @@ std::string AlienRace::getId() const
 }
 
 /**
- * Gets a certain member of this alien race family.
- * @param id The member's id.
- * @return The member's name.
+ * Gets a certain member of this AlienRace family.
+ * @param id - the member's id
+ * @return, the member's name
  */
 std::string AlienRace::getMember(int id) const
 {
@@ -73,8 +71,8 @@ std::string AlienRace::getMember(int id) const
 }
 
 /**
- * Returns if the race can participate in retaliation missions.
- * @return, True if it can retaliate.
+ * Returns if this AlienRace can participate in retaliation missions.
+ * @return, true if race can retaliate
  */
 bool AlienRace::canRetaliate() const
 {

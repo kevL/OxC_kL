@@ -5131,7 +5131,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1430967362 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1430974669 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5321,7 +5321,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1430974773 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1430975679 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5591,7 +5591,7 @@
 
 1430149550 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1430777134 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1430980373 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5648,10 +5648,7 @@
 1430149550 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 
-1430149550 f:\git\openxcom\src\ruleset\alienrace.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1430980062 f:\git\openxcom\src\ruleset\alienrace.h
 
 1430520911 f:\git\openxcom\src\ruleset\mapblock.h
 
@@ -7378,7 +7375,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1430958470 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1430972674 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -8455,7 +8452,7 @@
 1430389520 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\alienrace.cpp
+1430980245 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
 1427081762 source:f:\git\openxcom\src\ruleset\armor.cpp
@@ -8645,7 +8642,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1430959301 source:f:\git\openxcom\src\savegame\base.cpp
+1430972872 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
