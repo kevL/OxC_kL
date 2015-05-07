@@ -193,7 +193,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 
 						for (std::vector<Vehicle*>::const_iterator // check if it's ammo to reload a vehicle
-								l = (*k)->getVehicles()->begin();
+								l = (*k)->getVehicles()->begin();	// question: what happens to craft returning to base with vehicles that are low on ammo
 								l != (*k)->getVehicles()->end();
 								++l)
 						{
@@ -204,16 +204,16 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 							if (ammo != (*l)->getRules()->getCompatibleAmmo()->end()
 								&& (*l)->getAmmo() < itRule->getClipSize())
 							{
-								const int used = std::min(
+								const int toTank = std::min(
 														(*j)->getQuantity(),
 														itRule->getClipSize() - (*l)->getAmmo());
-								(*l)->setAmmo((*l)->getAmmo() + used);
+								(*l)->setAmmo((*l)->getAmmo() + toTank);
 
 								// Note that the items have already been delivered in Geoscape->Transfer::advance()
 								// so they are removed from the base, not the transfer.
 								(*i)->getItems()->removeItem(
 														itRule->getType(),
-														used);
+														toTank);
 							}
 						}
 					}

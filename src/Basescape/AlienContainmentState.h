@@ -78,6 +78,8 @@ private:
 
 	/// Gets selected quantity.
 	int getQuantity();
+	/// Updates the quantity-strings of the selected alien.
+	void updateStrings();
 
 
 	public:
@@ -118,9 +120,6 @@ private:
 		void decrease();
 		/// Decreases the quantity of an alien by the given value.
 		void decreaseByValue(int change);
-
-		/// Updates the quantity-strings of the selected alien.
-		void updateStrings();
 };
 
 }

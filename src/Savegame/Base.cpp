@@ -797,6 +797,15 @@ double Base::getUsedStores()
 				++j)
 		{
 			total += (*j)->getRules()->getSize();
+
+			if ((*j)->getRules()->getCompatibleAmmo()->empty() == false)
+			{
+				const RuleItem
+					* const vhclRule = _rules->getItem((*j)->getRules()->getType()),
+					* const ammoRule = _rules->getItem(vhclRule->getCompatibleAmmo()->front());
+
+				total += ammoRule->getSize() * (*j)->getAmmo();
+			}
 		}
 	}
 
@@ -810,9 +819,9 @@ double Base::getUsedStores()
 			total += _rules->getItem((*i)->getItems())->getSize()
 				   * static_cast<double>((*i)->getQuantity());
 		}
-		else if ((*i)->getType() == TRANSFER_CRAFT)
+/*		else if ((*i)->getType() == TRANSFER_CRAFT)
 		{
-			Craft* craft = (*i)->getCraft();
+			Craft* const craft = (*i)->getCraft();
 			total += craft->getItems()->getTotalSize(_rules);
 
 			for (std::vector<Vehicle*>::const_iterator
@@ -821,8 +830,17 @@ double Base::getUsedStores()
 					++j)
 			{
 				total += (*j)->getRules()->getSize();
+
+				if ((*j)->getRules()->getCompatibleAmmo()->empty() == false)
+				{
+					const RuleItem
+						* const vhclRule = _rules->getItem((*j)->getRules()->getType()),
+						* const ammoRule = _rules->getItem(vhclRule->getCompatibleAmmo()->front());
+
+					total += ammoRule->getSize() * (*j)->getAmmo();
+				}
 			}
-		}
+		} */
 	}
 
 //	total -= getIgnoredStores();
@@ -840,10 +858,10 @@ double Base::getUsedStores()
 bool Base::storesOverfull(double offset)
 {
 	const double
-		capacity = static_cast<double>(getAvailableStores()),
+		total = static_cast<double>(getAvailableStores()),
 		used = getUsedStores();
 
-	return (used + offset > capacity + 0.05);
+	return (used + offset > total + 0.05);
 }
 
 /**
@@ -1426,7 +1444,6 @@ void Base::removeResearch(
 		bool grantHelp,
 		bool goOffline)
 {
-	//Log(LOG_INFO) << "Base::removeResearch()";
 	_scientists += project->getAssigned();
 
 	std::vector<ResearchProject*>::const_iterator
@@ -1443,15 +1460,8 @@ void Base::removeResearch(
 		}
 		else
 		{
-			// kL_begin: Add Research Help here. aLien must be interrogated
-			// at the same Base that project-help applies to, for now.
 			if (grantHelp == true)
-			{
-				//Log(LOG_INFO) << ". . aLien = " << project->getRules()->getName();
-				// eg. Base::removeResearch() aLien = STR_REAPER_CORPSE
-
 				researchHelp(project->getRules()->getName());
-			} // kL_end.
 
 			_research.erase(i);
 		}
@@ -1459,10 +1469,10 @@ void Base::removeResearch(
 }
 
 /**
- * kL. Research Help ala XcomUtil.
+ * Research Help ala XcomUtil.
  * @param aLien - name of the alien that got prodded
  */
-void Base::researchHelp(const std::string& aLien) // kL
+void Base::researchHelp(const std::string& aLien)
 {
 	std::string rp;
 	double factor = 0.;

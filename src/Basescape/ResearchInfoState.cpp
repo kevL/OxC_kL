@@ -212,23 +212,23 @@ void ResearchInfoState::btnOkClick(Action*)
 }
 
 /**
- * Returns to the previous screen, removing the current project from the active
+ * Returns to the previous screen and removes the current project from the active
  * research list.
  * @param action - pointer to an Action
  */
 void ResearchInfoState::btnCancelClick(Action*)
 {
-	const RuleResearch* rule;
+	const RuleResearch* resRule;
 	if (_rule != NULL)
-		rule = _rule;
+		resRule = _rule;
 	else
-		rule = _project->getRules();
+		resRule = _project->getRules();
 
-	if (rule->needItem() == true
+	if (resRule->needItem() == true
 		&& (Options::spendResearchedItems == true
-			|| _game->getRuleset()->getUnit(rule->getName()) != NULL))
+			|| _game->getRuleset()->getUnit(resRule->getName()) != NULL))
 	{
-		_base->getItems()->addItem(rule->getName());
+		_base->getItems()->addItem(resRule->getName());
 	}
 
 	_base->removeResearch(

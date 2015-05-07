@@ -103,11 +103,11 @@ private:
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Gets the Type of the selected item.
-	SellType getType(const size_t selected) const;
+	SellType getType(const size_t sel) const;
 	/// Gets the index of selected item.
-	size_t getItemIndex(size_t selected) const;
+	size_t getItemIndex(const size_t sel) const;
 	/// Gets the index of the selected craft.
-	size_t getCraftIndex(size_t selected) const;
+	size_t getCraftIndex(const size_t sel) const;
 
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();

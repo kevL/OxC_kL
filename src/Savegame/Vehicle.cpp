@@ -27,28 +27,26 @@ namespace OpenXcom
 
 /**
  * Initializes a vehicle of the specified type.
- * kL_note: This describes a vehicle that has been loaded onto a Craft only.
- * @param rules		- pointer to RuleItem
+ * @note This describes a vehicle that has been loaded onto a Craft only.
+ * @param itRule	- pointer to RuleItem
  * @param ammo		- initial ammo
  * @param unitSize	- size in tiles
  */
 Vehicle::Vehicle(
-		RuleItem* rules,
+		RuleItem* itRule,
 		int ammo,
 		int unitSize)
 	:
-		_rules(rules),
+		_itRule(itRule),
 		_ammo(ammo),
 		_size(unitSize)
-{
-}
+{}
 
 /**
  * dTor.
  */
 Vehicle::~Vehicle()
-{
-}
+{}
 
 /**
  * Loads the vehicle from a YAML file.
@@ -68,7 +66,7 @@ YAML::Node Vehicle::save() const
 {
 	YAML::Node node;
 
-	node["type"] = _rules->getType();
+	node["type"] = _itRule->getType();
 	node["ammo"] = _ammo;
 	node["size"] = _size;
 
@@ -81,7 +79,7 @@ YAML::Node Vehicle::save() const
  */
 RuleItem* Vehicle::getRules() const
 {
-	return _rules;
+	return _itRule;
 }
 
 /**

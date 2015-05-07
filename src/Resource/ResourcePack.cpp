@@ -367,7 +367,8 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 		_musicAssignment[track] = std::map<std::string, std::vector<std::pair<std::string, int> > >();
 
 	if (_musicAssignment.at(track).find(terrainRule) == _musicAssignment.at(track).end())
-		_musicAssignment[track][terrainRule] = std::vector<std::pair<std::string, int> >();
+		_musicAssignment[track]
+						[terrainRule] = std::vector<std::pair<std::string, int> >();
 
 	for (size_t
 			i = 0;
@@ -377,7 +378,8 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 		const std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
 																				filenames.at(i),
 																				midiIndexes.at(i));
-		_musicAssignment[track][terrainRule].push_back(toAdd);
+		_musicAssignment[track]
+						[terrainRule].push_back(toAdd);
 	}
 }
 
@@ -511,6 +513,30 @@ Sound* ResourcePack::getSoundByDepth(
 const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
 {
 	return &_transparencyLUTs;
+}
+
+/**
+ * Gets a random background.
+ * @note This is mainly used in error messages.
+ * @return, reference to a random background screen (.SCR file)
+ */
+const std::string& ResourcePack::getRandomBackground() const
+{
+	static const std::string bg[10] =
+	{
+		"BACK01.SCR",	// main
+		"BACK02.SCR",	// bad boy
+		"BACK03.SCR",	// terror
+		"BACK04.SCR",	// shooter
+		"BACK05.SCR",	// research
+		"BACK12.SCR",	// craft in flight
+		"BACK13.SCR",	// cash
+		"BACK14.SCR",	// service craft
+		"BACK16.SCR",	// craft in hangar
+		"BACK17.SCR"	// manufacturing
+	};
+
+	return bg[static_cast<size_t>(RNG::generate(0,9))];
 }
 
 }

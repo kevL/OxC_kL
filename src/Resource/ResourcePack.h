@@ -179,6 +179,9 @@ private:
 
 			///
 			const std::vector<std::vector<Uint8> >* getLUTs() const;
+
+			/// Gets a random background.
+			const std::string& getRandomBackground() const;
 };
 
 }

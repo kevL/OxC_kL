@@ -57,7 +57,7 @@ private:
 		_persQty,
 		_totalCost;
 	size_t
-		_rowDef,
+		_rowDefault,
 		_rowOffset,
 		_hasEng,
 		_hasSci,
@@ -106,9 +106,9 @@ private:
 	/// Gets distance between bases.
 	double getDistance() const;
 	/// Gets type of selected item.
-	TransferType getType(const size_t selected) const;
+	TransferType getType(const size_t sel) const;
 	/// Gets item Index.
-	size_t getItemIndex(const size_t selected) const;
+	size_t getItemIndex(const size_t sel) const;
 
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();

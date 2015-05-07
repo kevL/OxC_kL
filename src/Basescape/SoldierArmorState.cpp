@@ -102,35 +102,35 @@ SoldierArmorState::SoldierArmorState(
 	_lstArmor->setSelectable();
 	_lstArmor->setMargin();
 
-	RuleArmor* armor;
-	const std::vector<std::string>& armors = _game->getRuleset()->getArmorsList();
+	RuleArmor* armorRule;
+	const std::vector<std::string>& armorList = _game->getRuleset()->getArmorsList();
 	for (std::vector<std::string>::const_iterator
-			i = armors.begin();
-			i != armors.end();
+			i = armorList.begin();
+			i != armorList.end();
 			++i)
 	{
-		armor = _game->getRuleset()->getArmor(*i);
-		if (_base->getItems()->getItem(armor->getStoreItem()) > 0)
+		armorRule = _game->getRuleset()->getArmor(*i);
+		if (_base->getItems()->getItem(armorRule->getStoreItem()) > 0)
 		{
-			_armors.push_back(armor);
+			_armors.push_back(armorRule);
 
-			std::wostringstream wosts;
+			std::wostringstream woststr;
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				wosts << _base->getItems()->getItem(armor->getStoreItem());
+				woststr << _base->getItems()->getItem(armorRule->getStoreItem());
 			else
-				wosts << L"-";
+				woststr << L"-";
 
 			_lstArmor->addRow(
 							2,
-							tr(armor->getType()).c_str(),
-							wosts.str().c_str());
+							tr(armorRule->getType()).c_str(),
+							woststr.str().c_str());
 		}
-		else if (armor->getStoreItem() == "STR_NONE")
+		else if (armorRule->getStoreItem() == "STR_NONE")
 		{
-			_armors.push_back(armor);
+			_armors.push_back(armorRule);
 			_lstArmor->addRow(
 							1,
-							tr(armor->getType()).c_str());
+							tr(armorRule->getType()).c_str());
 		}
 	}
 

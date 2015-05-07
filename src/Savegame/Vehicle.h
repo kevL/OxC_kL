@@ -20,9 +20,8 @@
 #ifndef OPENXCOM_VEHICLE_H
 #define OPENXCOM_VEHICLE_H
 
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -44,14 +43,14 @@ private:
 		_ammo,
 		_size;
 
-	RuleItem* _rules;
+	RuleItem* _itRule;
 
 
 	public:
 
 		/// Creates a vehicle of the specified type.
 		Vehicle(
-				RuleItem* rules,
+				RuleItem* itRule,
 				int ammo,
 				int unitSize);
 		/// Cleans up the vehicle.
@@ -64,10 +63,12 @@ private:
 
 		/// Gets the vehicle's ruleset.
 		RuleItem* getRules() const;
+
 		/// Gets the vehicle's ammo.
 		int getAmmo() const;
 		/// Sets the vehicle's ammo.
 		void setAmmo(int ammo);
+
 		/// Gets the vehicle's size.
 		int getSize() const;
 };

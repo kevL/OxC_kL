@@ -88,7 +88,7 @@ TransferItemsState::TransferItemsState(
 		_distance(0.),
 
 		_reset(true),
-		_rowDef(0)
+		_rowDefault(0)
 {
 	_window				= new Window(this, 320, 200);
 	_txtTitle			= new Text(300, 16, 10, 9);
@@ -396,7 +396,7 @@ void TransferItemsState::init()
 			{
 				if ((*j)->getRules()->getSoldiers() > 0) // is transport craft
 				{
-					for (std::map<std::string, int>::const_iterator // add items
+					for (std::map<std::string, int>::const_iterator // add items on craft
 							k = (*j)->getItems()->getContents()->begin();
 							k != (*j)->getItems()->getContents()->end();
 							++k)
@@ -408,13 +408,13 @@ void TransferItemsState::init()
 
 				if ((*j)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
 				{
-					for (std::vector<Vehicle*>::const_iterator // add vehicles & vehicle ammo
+					for (std::vector<Vehicle*>::const_iterator // add vehicles & vehicle ammo on craft
 							k = (*j)->getVehicles()->begin();
 							k != (*j)->getVehicles()->end();
 							++k)
 					{
 						if ((*k)->getRules()->getType() == itType)
-							destQty++;
+							++destQty;
 
 						if ((*k)->getAmmo() != 255)
 						{
@@ -534,8 +534,8 @@ void TransferItemsState::init()
 		_lstSoldiers->scrollTo(0);
 	}
 	else */
-	if (_rowDef > 0)
-		_lstItems->scrollTo(_rowDef);
+	if (_rowDefault > 0)
+		_lstItems->scrollTo(_rowDefault);
 
 
 	std::wostringstream
@@ -567,7 +567,7 @@ void TransferItemsState::think()
 void TransferItemsState::btnOkClick(Action*)
 {
 	_reset = false;
-	_rowDef = _lstItems->getScroll();
+	_rowDefault = _lstItems->getScroll();
 
 	_game->pushState(new TransferConfirmState(
 											_baseTo,
@@ -628,7 +628,7 @@ void TransferItemsState::completeTransfer()
 			{
 				Craft* const craft = _crafts[i - _soldiers.size()];
 
-				for (std::vector<Soldier*>::const_iterator // transfer soldiers inside craft
+/*				for (std::vector<Soldier*>::const_iterator // transfer soldiers inside craft
 						j = _baseFrom->getSoldiers()->begin();
 						j != _baseFrom->getSoldiers()->end();
 						)
@@ -651,6 +651,17 @@ void TransferItemsState::completeTransfer()
 					}
 					else
 						++j;
+				} */
+				if (craft->getRules()->getSoldiers() > 0) // is transport craft
+				{
+					for (std::vector<Soldier*>::const_iterator // unload Soldiers from craft
+							j = _baseFrom->getSoldiers()->begin();
+							j != _baseFrom->getSoldiers()->end();
+							)
+					{
+						if ((*j)->getCraft() == craft)
+							(*j)->setCraft(NULL);
+					}
 				}
 
 				for (std::vector<Craft*>::const_iterator // transfer craft
@@ -660,6 +671,43 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*j == craft)
 					{
+						if (craft->getRules()->getSoldiers() > 0) // is transport craft
+						{
+							for (std::map<std::string, int>::const_iterator // remove items from craft
+									k = craft->getItems()->getContents()->begin();
+									k != craft->getItems()->getContents()->end();
+									++k)
+							{
+								craft->getItems()->removeItem(
+															k->first,
+															k->second);
+
+								_baseFrom->getItems()->addItem(
+															k->first,
+															k->second);
+							}
+						}
+
+						if (craft->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+						{
+							for (std::vector<Vehicle*>::const_iterator // remove tanks + tankAmmo
+									k = craft->getVehicles()->begin();
+									k != craft->getVehicles()->end();
+									++k)
+							{
+								_baseFrom->getItems()->addItem((*k)->getRules()->getType());
+
+								const RuleItem* const ammoRule = _game->getRuleset()->getItem((*k)->getRules()->getCompatibleAmmo()->front());
+								_baseFrom->getItems()->addItem(
+															ammoRule->getType(),
+															(*k)->getAmmo());
+
+								delete *k;
+								craft->getVehicles()->erase(k);
+							}
+						}
+
+
 						if (craft->getStatus() == "STR_OUT")
 						{
 							_baseTo->getCrafts()->push_back(craft);
@@ -917,18 +965,18 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (type == TRANSFER_CRAFT)
 	{
-		const Craft* const craft = _crafts[_sel - _soldiers.size()];
+//		const Craft* const craft = _crafts[_sel - _soldiers.size()];
 
 		if (_craftQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 			wstError = tr("STR_NO_FREE_HANGARS_FOR_TRANSFER");
-		else if (_persQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
+/*		else if (_persQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 			wstError = tr("STR_NO_FREE_ACCOMODATION_CREW");
 		else if (Options::storageLimitsEnforced == true
 			&& _baseTo->storesOverfull(craft->getItems()->getTotalSize(_game->getRuleset()) + _storeSize))
 		{
 			wstError = tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT");
-		}
-		// kL_note: What about ITEMS on board craft
+		} */
+		// kL_note: What about TANKS + tankAmmo
 	}
 	else if (type == TRANSFER_ITEM)
 	{
@@ -982,8 +1030,8 @@ void TransferItemsState::increaseByValue(int change)
 		const Craft* const craft = _crafts[_sel - _soldiers.size()];
 
 		++_craftQty;
-		_persQty += craft->getNumSoldiers();
-		_storeSize += craft->getItems()->getTotalSize(_game->getRuleset());
+//		_persQty += craft->getNumSoldiers();
+//		_storeSize += craft->getItems()->getTotalSize(_game->getRuleset());
 
 		--_baseQty[_sel];
 		++_destQty[_sel];
@@ -1088,8 +1136,8 @@ void TransferItemsState::decreaseByValue(int change)
 		craft = _crafts[_sel - _soldiers.size()];
 
 		--_craftQty;
-		_persQty -= craft->getNumSoldiers();
-		_storeSize -= craft->getItems()->getTotalSize(_game->getRuleset());
+//		_persQty -= craft->getNumSoldiers();
+//		_storeSize -= craft->getItems()->getTotalSize(_game->getRuleset());
 	}
 	else if (type == TRANSFER_ITEM) // item count
 	{
@@ -1225,9 +1273,7 @@ double TransferItemsState::getDistance() const // private.
 {
 	const double r = 51.2; // kL_note: what's this conversion factor is it right
 	double
-		x[3],
-		y[3],
-		z[3];
+		x[3],y[3],z[3];
 
 	const Base* base = _baseFrom;
 
@@ -1252,23 +1298,23 @@ double TransferItemsState::getDistance() const // private.
 
 /**
  * Gets type of selected item.
- * @param selected - the selected item
+ * @param sel - the selected item
  * @return, the type of the selected item
  */
-TransferType TransferItemsState::getType(const size_t selected) const // private.
+TransferType TransferItemsState::getType(const size_t sel) const // private.
 {
 	size_t row = _soldiers.size();
 
-	if (selected < row)
+	if (sel < row)
 		return TRANSFER_SOLDIER;
 
-	if (selected < (row += _crafts.size()))
+	if (sel < (row += _crafts.size()))
 		return TRANSFER_CRAFT;
 
-	if (selected < (row += _hasSci))
+	if (sel < (row += _hasSci))
 		return TRANSFER_SCIENTIST;
 
-	if (selected < (row + _hasEng))
+	if (sel < (row + _hasEng))
 		return TRANSFER_ENGINEER;
 
 	return TRANSFER_ITEM;
@@ -1276,12 +1322,12 @@ TransferType TransferItemsState::getType(const size_t selected) const // private
 
 /**
  * Gets the index of the selected item.
- * @param selected - currently selected item
+ * @param sel - currently selected item
  * @return, index of the selected item
  */
-size_t TransferItemsState::getItemIndex(const size_t selected) const // private.
+size_t TransferItemsState::getItemIndex(const size_t sel) const // private.
 {
-	return selected
+	return sel
 		 - _soldiers.size()
 		 - _crafts.size()
 		 - _hasSci

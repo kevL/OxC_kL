@@ -38,7 +38,7 @@ class Window;
 
 
 /**
- * Equipment screen that lets the player pick the equipment to carry on a craft.
+ * Equipment screen that lets the player pick the equipment to load onto a Craft.
  */
 class CraftEquipmentState
 	:
@@ -47,7 +47,7 @@ class CraftEquipmentState
 
 private:
 	size_t
-		_craftID,
+		_craftId,
 		_equipUnit,
 		_sel;
 	Uint8 _ammoColor;
@@ -81,7 +81,7 @@ private:
 		/// Creates the Craft Equipment state.
 		CraftEquipmentState(
 				Base* base,
-				size_t craftID);
+				size_t craftId);
 		/// Cleans up the Craft Equipment state.
 		~CraftEquipmentState();
 

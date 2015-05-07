@@ -311,8 +311,8 @@ std::wstring CraftsState::formatTime(
 void CraftsState::btnOkClick(Action*)
 {
 	_game->popState();
-
-	if (_game->getSavedGame()->getMonthsPassed() != -1
+}
+/*	if (_game->getSavedGame()->getMonthsPassed() != -1
 		&& Options::storageLimitsEnforced == true
 		&& _base->storesOverfull() == true)
 	{
@@ -323,8 +323,7 @@ void CraftsState::btnOkClick(Action*)
 											_game->getRuleset()->getInterface("craftSelect")->getElement("errorMessage")->color,
 											"BACK01.SCR",
 											_game->getRuleset()->getInterface("craftSelect")->getElement("errorPalette")->color));
-	}
-}
+	} */
 
 /**
  * LMB shows the selected craft's info.

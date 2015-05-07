@@ -52,6 +52,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Transfer.h"
+#include "../Savegame/Vehicle.h"
 
 
 namespace OpenXcom
@@ -265,7 +266,7 @@ SellState::SellState(
 	{
 		int qty = _base->getItems()->getItem(*i);
 
-		if (Options::storageLimitsEnforced == true
+/*		if (Options::storageLimitsEnforced == true
 			&& origin == OPT_BATTLESCAPE)
 		{
 			for (std::vector<Transfer*>::const_iterator
@@ -284,7 +285,7 @@ SellState::SellState(
 			{
 				qty += (*j)->getItems()->getItem(*i);
 			}
-		}
+		} */
 
 		if (qty > 0
 			&& (Options::canSellLiveAliens == true
@@ -417,16 +418,6 @@ void SellState::think()
 }
 
 /**
- * Gets the index of selected craft.
- * @param selected - selected craft
- * @return, index of the selected craft
- */
-size_t SellState::getCraftIndex(size_t selected) const
-{
-	return selected - _soldiers.size();
-}
-
-/**
  * Sells the selected items.
  * @param action - pointer to an Action
  */
@@ -486,7 +477,25 @@ void SellState::btnOkClick(Action*)
 							j != craft->getItems()->getContents()->end();
 							++j)
 					{
-						_base->getItems()->addItem(j->first, j->second);
+						_base->getItems()->addItem(
+												j->first,
+												j->second);
+					}
+
+					for (std::vector<Vehicle*>::const_iterator
+							j = craft->getVehicles()->begin();
+							j != craft->getVehicles()->end();
+							++j)
+					{
+						_base->getItems()->addItem((*j)->getRules()->getType());
+
+						const RuleItem* const ammoRule = _game->getRuleset()->getItem((*j)->getRules()->getCompatibleAmmo()->front());
+						_base->getItems()->addItem(
+												ammoRule->getType(),
+												(*j)->getAmmo());
+
+						delete *j;
+//						craft->getVehicles()->erase(j);
 					}
 
 					for (std::vector<Soldier*>::const_iterator // remove soldiers from craft
@@ -534,7 +543,7 @@ void SellState::btnOkClick(Action*)
 				break;
 
 				case SELL_ITEM:
-					if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _sellQty[i])
+/*					if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _sellQty[i])
 					{
 						const std::string item = _items[getItemIndex(i)];
 						int toRemove = _sellQty[i] - _base->getItems()->getItem(item);
@@ -543,7 +552,7 @@ void SellState::btnOkClick(Action*)
 													item,
 													std::numeric_limits<int>::max());
 
-						// if we still need to remove any, remove them from the crafts first, and keep a running tally
+						// if you still need to remove any, remove them from the crafts first, and keep a running tally
 						for (std::vector<Craft*>::const_iterator
 								j = _base->getCrafts()->begin();
 								j != _base->getCrafts()->end()
@@ -595,10 +604,10 @@ void SellState::btnOkClick(Action*)
 								++j;
 						}
 					}
-					else
-						_base->getItems()->removeItem(
-													_items[getItemIndex(i)],
-													_sellQty[i]);
+					else */
+					_base->getItems()->removeItem(
+												_items[getItemIndex(i)],
+												_sellQty[i]);
 			}
 		}
 	}
@@ -998,23 +1007,23 @@ void SellState::updateItemStrings() // private.
 
 /**
  * Gets the Type of the selected item.
- * @param selected - currently selected item
+ * @param sel - currently selected item
  * @return, the type of the selected item
  */
-SellType SellState::getType(const size_t selected) const // private.
+SellType SellState::getType(const size_t sel) const // private.
 {
 	size_t cutoff = _soldiers.size();
 
-	if (selected < cutoff)
+	if (sel < cutoff)
 		return SELL_SOLDIER;
 
-	if (selected < (cutoff += _crafts.size()))
+	if (sel < (cutoff += _crafts.size()))
 		return SELL_CRAFT;
 
-	if (selected < (cutoff += _hasSci))
+	if (sel < (cutoff += _hasSci))
 		return SELL_SCIENTIST;
 
-	if (selected < (cutoff + _hasEng))
+	if (sel < (cutoff + _hasEng))
 		return SELL_ENGINEER;
 
 	return SELL_ITEM;
@@ -1022,16 +1031,26 @@ SellType SellState::getType(const size_t selected) const // private.
 
 /**
  * Gets the index of the selected item.
- * @param selected - currently selected item
+ * @param sel - currently selected item
  * @return, index of the selected item
  */
-size_t SellState::getItemIndex(size_t selected) const // private.
+size_t SellState::getItemIndex(const size_t sel) const // private.
 {
-	return selected
+	return sel
 		 - _soldiers.size()
 		 - _crafts.size()
 		 - _hasSci
 		 - _hasEng;
+}
+
+/**
+ * Gets the index of selected craft.
+ * @param sel - selected craft
+ * @return, index of the selected craft
+ */
+size_t SellState::getCraftIndex(const size_t sel) const // private.
+{
+	return sel - _soldiers.size();
 }
 
 /**

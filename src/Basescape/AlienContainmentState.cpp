@@ -257,27 +257,21 @@ void AlienContainmentState::btnOkClick(Action*)
 
 	_game->popState();
 
+
 	if (Options::storageLimitsEnforced == true
+		&& _origin == OPT_BATTLESCAPE
 		&& _base->storesOverfull() == true)
 	{
 		_game->pushState(new SellState(
 									_base,
 									_origin));
 
-		std::string st;
-		if (_origin == OPT_BATTLESCAPE)
-			st = "BACK01.SCR";
-		else
-			st = "BACK13.SCR";
-
-		const int color = _game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color;
-
 		_game->pushState(new ErrorMessageState(
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,
-											color,
-											st,
-											color));
+											_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
+											"BACK04.SCR",
+											_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
  	}
 }
 
@@ -379,38 +373,6 @@ void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
 }
 
 /**
- * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an Action
- */
-/*void AlienContainmentState::lstItemsMousePress(Action* action)
-{
-	_sel = _lstAliens->getSelectedRow();
-
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-	{
-		_timerInc->stop();
-		_timerDec->stop();
-
-		if (action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstAliens->getArrowsRightEdge())
-		{
-			increaseByValue(Options::changeValueByMouseWheel);
-		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		_timerInc->stop();
-		_timerDec->stop();
-
-		if (action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstAliens->getArrowsRightEdge())
-		{
-			decreaseByValue(Options::changeValueByMouseWheel);
-		}
-	}
-} */
-
-/**
  * Gets the quantity of the currently selected alien on the base.
  * @return, quantity of selected alien on the base
  */
@@ -486,15 +448,15 @@ void AlienContainmentState::decreaseByValue(int change)
  * Updates the row (quantity & color) of the selected aLien species.
  * Also determines if the OK button should be in/visible.
  */
-void AlienContainmentState::updateStrings()
+void AlienContainmentState::updateStrings() // private.
 {
 	std::wostringstream
-		ss,
-		ss2;
+		woststr1,
+		woststr2;
 
 	const int qty = getQuantity() - _qtys[_sel];
-	ss << qty;
-	ss2 << _qtys[_sel];
+	woststr1 << qty;
+	woststr2 << _qtys[_sel];
 
 	Uint8 color;
 	if (_qtys[_sel] != 0)
@@ -509,8 +471,8 @@ void AlienContainmentState::updateStrings()
 	}
 
 	_lstAliens->setRowColor(_sel, color);
-	_lstAliens->setCellText(_sel, 1, ss.str());  // # still in Containment
-	_lstAliens->setCellText(_sel, 2, ss2.str()); // # to torture
+	_lstAliens->setCellText(_sel, 1, woststr1.str()); // qty still in Containment
+	_lstAliens->setCellText(_sel, 2, woststr2.str()); // qty to torture
 
 
 	const int
@@ -524,5 +486,37 @@ void AlienContainmentState::updateStrings()
 	_btnOk->setVisible(_fishFood > 0
 					   && freeSpace > -1);
 }
+
+/**
+ * Handles the mouse-wheels on the arrow-buttons.
+ * @param action - pointer to an Action
+ */
+/*void AlienContainmentState::lstItemsMousePress(Action* action)
+{
+	_sel = _lstAliens->getSelectedRow();
+
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
+		_timerInc->stop();
+		_timerDec->stop();
+
+		if (action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstAliens->getArrowsRightEdge())
+		{
+			increaseByValue(Options::changeValueByMouseWheel);
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_timerInc->stop();
+		_timerDec->stop();
+
+		if (action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstAliens->getArrowsRightEdge())
+		{
+			decreaseByValue(Options::changeValueByMouseWheel);
+		}
+	}
+} */
 
 }

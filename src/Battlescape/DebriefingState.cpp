@@ -536,28 +536,20 @@ void DebriefingState::btnOkClick(Action*)
 			}
 
 			if (_missingItems.empty() == false)
-			{
-//				playAwardMusic = true;
 				_game->pushState(new CannotReequipState(_missingItems));
-			}
 
 			if (_noContainment == true)
-			{
-//				playAwardMusic = true;
 				_game->pushState(new NoContainmentState());
-			}
 			else if (_manageContainment == true)
 			{
-//				playAwardMusic = true;
 				_game->pushState(new AlienContainmentState(
 														_base,
-														OPT_BATTLESCAPE)); // Do not allow researchHelp!
+														OPT_BATTLESCAPE));
 				_game->pushState(new ErrorMessageState(
-													tr("STR_CONTAINMENT_EXCEEDED")
-														.arg(_base->getName()).c_str(),
+													tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(),
 													_palette,
 													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
-													"BACK01.SCR",
+													"BACK04.SCR",
 													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
@@ -565,16 +557,14 @@ void DebriefingState::btnOkClick(Action*)
 				&& Options::storageLimitsEnforced == true
 				&& _base->storesOverfull() == true)
 			{
-//				playAwardMusic = true;
 				_game->pushState(new SellState(
 											_base,
 											OPT_BATTLESCAPE));
 				_game->pushState(new ErrorMessageState(
-													tr("STR_STORAGE_EXCEEDED")
-														.arg(_base->getName()).c_str(),
+													tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 													_palette,
 													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
-													"BACK01.SCR",
+													_game->getResourcePack()->getRandomBackground(),
 													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 

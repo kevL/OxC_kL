@@ -353,6 +353,18 @@ void BasescapeState::init()
 		_game->getResourcePack()->fadeMusic(_game, 345);
 		_game->getResourcePack()->playMusic(track);
 	}
+
+	if (Options::storageLimitsEnforced == true // _game->getSavedGame()->getMonthsPassed() != -1 &&
+		&& _base->storesOverfull() == true)
+	{
+		_game->pushState(new SellState(_base));
+		_game->pushState(new ErrorMessageState(
+											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+											_palette,
+											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
+											_game->getResourcePack()->getRandomBackground(),
+											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
+	}
 }
 
 /**
@@ -545,13 +557,10 @@ void BasescapeState::btnGeoscapeClick(Action*)
  */
 void BasescapeState::viewLeftClick(Action*)
 {
-	bool bPop = false; // play "wha-wha" sound
-
 	const BaseFacility* const fac = _view->getSelectedFacility();
 
 	if (fac == NULL) // dirt.
 	{
-		bPop = true;
 		_game->pushState(new MonthlyCostsState(_base));
 //		_game->pushState(new BaseInfoState(_base, this));
 	}
@@ -567,7 +576,6 @@ void BasescapeState::viewLeftClick(Action*)
 			if (fac->getCraft() == NULL
 				|| fac->getCraft()->getStatus() == "STR_OUT")
 			{
-				bPop = true;
 				_game->pushState(new CraftsState(_base));
 				break;
 			}
@@ -576,52 +584,42 @@ void BasescapeState::viewLeftClick(Action*)
 				_game->pushState(new CraftInfoState(
 												_base,
 												i));
-				break;
+				return;
 			}
 		}
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{
-		bPop = true;
 		_game->pushState(new StoresState(_base));
 //		_game->pushState(new SellState(_base));
 	}
 	else if (fac->getRules()->getPersonnel() > 0
 		&& _base->getSoldiers()->empty() == false)
 	{
-		bPop = true;
 		_game->pushState(new SoldiersState(_base));
 	}
 	else if (fac->getRules()->getPsiLaboratories() > 0
 			&& Options::anytimePsiTraining == true)
 	{
-		bPop = true;
 		_game->pushState(new AllocatePsiTrainingState(_base));
 	}
 	else if (fac->getRules()->getLaboratories() > 0)
-	{
-		bPop = true;
 		_game->pushState(new ResearchState(
 										_base,
 										this));
-	}
 	else if (fac->getRules()->getWorkshops() > 0)
-	{
-		bPop = true;
 		_game->pushState(new ManufactureState(
 											_base,
 											this));
-	}
 	else if (fac->getRules()->getAliens() > 0)
-	{
-		bPop = true;
 		_game->pushState(new AlienContainmentState(
 												_base,
 												OPT_GEOSCAPE));
-	}
-	else if (fac->getRules()->isLift() == true) // Lift has radar range ... (cf. next)
+	else if (fac->getRules()->isLift() == true) // Lift has radar range (cf. next)
+	{
 		_game->pushState(new BaseDetectionState(_base));
-
+		return;
+	}
 /*	else if (fac->getRules()->getRadarRange() > 0
 		|| fac->getRules()->isMindShield() == true
 		|| fac->getRules()->isHyperwave() == true)
@@ -633,9 +631,7 @@ void BasescapeState::viewLeftClick(Action*)
 		_game->popState();
 	} */
 
-
-	if (bPop == true)
-		kL_soundPop->play(Mix_GroupAvailable(0));
+	kL_soundPop->play(Mix_GroupAvailable(0)); // play "wha-wha" sound
 }
 
 /**
@@ -652,14 +648,14 @@ void BasescapeState::viewRightClick(Action*)
 											tr("STR_FACILITY_IN_USE"),
 											_palette,
 											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
-											"BACK13.SCR",
+											_game->getResourcePack()->getRandomBackground(),
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else if (_base->getDisconnectedFacilities(fac).empty() == false)
 			_game->pushState(new ErrorMessageState(
 											tr("STR_CANNOT_DISMANTLE_FACILITY"),
 											_palette,
 											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
-											"BACK13.SCR",
+											_game->getResourcePack()->getRandomBackground(),
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else
 			_game->pushState(new DismantleFacilityState(

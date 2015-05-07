@@ -1622,7 +1622,7 @@ const std::vector<std::string>& Ruleset::getDeploymentsList() const
 /**
  * Returns the info about a specific armor.
  * @param name - reference the Armor type
- * @return, pointer to Rule for the Armor
+ * @return, pointer to RuleArmor
  */
 RuleArmor* Ruleset::getArmor(const std::string& name) const
 {

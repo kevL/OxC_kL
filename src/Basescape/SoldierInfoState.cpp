@@ -747,7 +747,7 @@ void SoldierInfoState::btnOkClick(Action*)
 //	_edtSoldier->setFocus(false); // kL
 	_game->popState();
 
-	if (_game->getSavedGame()->getMonthsPassed() != -1
+/*	if (_game->getSavedGame()->getMonthsPassed() != -1
 		&& Options::storageLimitsEnforced == true
 //		&& _base != NULL
 		&& _base->storesOverfull() == true)
@@ -759,7 +759,7 @@ void SoldierInfoState::btnOkClick(Action*)
 											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorMessage")->color,
 											"BACK01.SCR",
 											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorPalette")->color));
-	}
+	} */
 }
 
 /**
@@ -806,8 +806,7 @@ void SoldierInfoState::btnNextClick(Action*)
 void SoldierInfoState::btnArmorClick(Action*)
 {
 	if (_soldier->getCraft() == NULL
-		|| (_soldier->getCraft() != NULL
-			&& _soldier->getCraft()->getStatus() != "STR_OUT"))
+		|| _soldier->getCraft()->getStatus() != "STR_OUT")
 	{
 		_game->pushState(new SoldierArmorState(
 											_base,

@@ -139,7 +139,7 @@ int ItemContainer::getTotalQuantity() const
  * @param rule - pointer to Ruleset
  * @return, total item size
  */
-double ItemContainer::getTotalSize(const Ruleset* rule) const
+double ItemContainer::getTotalSize(const Ruleset* const rule) const
 {
 	double total = 0;
 
