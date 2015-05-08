@@ -1979,7 +1979,7 @@ bool AlienBAIState::explosiveEfficacy(
 		if (tacType == TCT_BASEASSAULT)
 			pct -= 23;
 		else if (tacType == TCT_BASEDEFENSE
-			|| tacType == TCT_TERRORSITE)
+			|| tacType == TCT_MISSIONSITE)
 		{
 			pct += 56;
 		} */
@@ -1990,7 +1990,7 @@ bool AlienBAIState::explosiveEfficacy(
 			break;
 
 			case TCT_BASEDEFENSE:
-			case TCT_TERRORSITE:
+			case TCT_MISSIONSITE:
 				pct += 56;
 		}
 

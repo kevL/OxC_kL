@@ -1013,7 +1013,7 @@ void DebriefingState::prepareDebriefing()
 
 	if (found == false)
 	{
-//		if (stType == "STR_ALIEN_BASE_ASSAULT")
+//		if (stType == "STR_ALIEN_BASE_ASSAULT") // probably redundant w/ (found==false)
 		if (tacType == TCT_BASEASSAULT) // alien base disappears (if not aborted)
 		{
 			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
@@ -1371,15 +1371,18 @@ void DebriefingState::prepareDebriefing()
 	}
 
 
+	std::string tacResult;
+
 	if (soldierLive > 0							// RECOVER UFO:
 		&& (aborted == false
 			|| missionAccomplished == true))	// Run through all tiles to recover UFO components and items.
 	{
+/*
 //		if (stType == "STR_BASE_DEFENSE")
 		if (tacType == TCT_BASEDEFENSE)
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
 //		else if (stType == "STR_TERROR_MISSION")
-		else if (tacType == TCT_TERRORSITE)
+		else if (tacType == TCT_MISSIONSITE)
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 //		else if (stType == "STR_ALIEN_BASE_ASSAULT"
 //			|| stType == "STR_MARS_CYDONIA_LANDING"
@@ -1391,7 +1394,28 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
 		else
-			_txtTitle->setText(tr("STR_UFO_IS_RECOVERED"));
+			_txtTitle->setText(tr("STR_UFO_IS_RECOVERED")); */
+
+		switch (tacType)
+		{
+			case TCT_BASEDEFENSE:
+				tacResult = "STR_BASE_IS_SAVED";
+			break;
+
+			case TCT_MISSIONSITE:
+				tacResult = "STR_ALIENS_DEFEATED";
+			break;
+
+			case TCT_BASEASSAULT:
+			case TCT_MARS1:
+			case TCT_MARS2:
+				tacResult = "STR_ALIEN_BASE_DESTROYED";
+			break;
+
+			default:
+				tacResult = "STR_UFO_IS_RECOVERED";
+		}
+		_txtTitle->setText(tr(tacResult));
 
 
 		if (aborted == false)
@@ -1446,6 +1470,7 @@ void DebriefingState::prepareDebriefing()
 	}
 	else // mission FAIL.
 	{
+/*
 //		if (stType == "STR_BASE_DEFENSE")
 		if (tacType == TCT_BASEDEFENSE)
 		{
@@ -1453,7 +1478,7 @@ void DebriefingState::prepareDebriefing()
 			_destroyXCOMBase = true;
 		}
 //		else if (stType == "STR_TERROR_MISSION")
-		else if (tacType == TCT_TERRORSITE)
+		else if (tacType == TCT_MISSIONSITE)
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
 //		else if (stType == "STR_ALIEN_BASE_ASSAULT"
 //			|| stType == "STR_MARS_CYDONIA_LANDING"
@@ -1465,7 +1490,30 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}
 		else
-			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED"));
+			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED")); */
+
+		switch (tacType)
+		{
+			case TCT_BASEDEFENSE:
+				tacResult = "STR_BASE_IS_LOST";
+				_destroyXCOMBase = true;
+			break;
+
+			case TCT_MISSIONSITE:
+				tacResult = "STR_TERROR_CONTINUES";
+			break;
+
+			case TCT_BASEASSAULT:
+			case TCT_MARS1:
+			case TCT_MARS2:
+				tacResult = "STR_ALIEN_BASE_STILL_INTACT";
+			break;
+
+			default:
+				tacResult = "STR_UFO_IS_NOT_RECOVERED";
+		}
+		_txtTitle->setText(tr(tacResult));
+
 
 		if (soldierLive > 0
 			&& _destroyXCOMBase == false)

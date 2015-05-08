@@ -2010,14 +2010,14 @@ bool BattlescapeGenerator::addItem( // private.
 
 /**
  * Deploys the aLiens according to the AlienDeployment rules.
- * @param deployRule - pointer to the AlienDeployment rule
+ * @param depRule - pointer to the AlienDeployment rule
  */
-void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // private.
+void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // private.
 {
-	if (deployRule->getRace().empty() == false
+	if (depRule->getRace().empty() == false
 		&& _alienRace.empty() == true) //&& month != -1
 	{
-		_alienRace = deployRule->getRace();
+		_alienRace = depRule->getRace();
 	}
 
 	if (_battleSave->getDepth() > 0
@@ -2031,7 +2031,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 	if (race == NULL)
 	{
 		throw Exception("Map generator encountered an error: Unknown race: "
-			  + _alienRace + " defined in deployRule: " + deployRule->getType());
+			  + _alienRace + " defined in depRule: " + depRule->getType());
 	}
 
 	int month = _gameSave->getMonthsPassed();
@@ -2056,8 +2056,8 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 	BattleUnit* unit;
 
 	for (std::vector<DeploymentData>::const_iterator
-			data = deployRule->getDeploymentData()->begin();
-			data != deployRule->getDeploymentData()->end();
+			data = depRule->getDeploymentData()->begin();
+			data != depRule->getDeploymentData()->end();
 			++data)
 	{
 		aLien = race->getMember((*data).alienRank);

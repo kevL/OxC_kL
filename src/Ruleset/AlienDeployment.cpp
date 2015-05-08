@@ -232,18 +232,18 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 
 /**
  * Gets dimensions.
- * @param width	- pointer to width
- * @param lengt - pointer to length
- * @param heigh	- pointer to height
+ * @param width		- pointer to width
+ * @param lenght	- pointer to length
+ * @param heigth	- pointer to height
  */
 void AlienDeployment::getDimensions(
 		int* width,
-		int* lengt,
-		int* heigh)
+		int* lenght,
+		int* heigth)
 {
 	*width = _width;
-	*lengt = _length;
-	*heigh = _height;
+	*lenght = _length;
+	*heigth = _height;
 }
 
 /**

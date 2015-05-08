@@ -42,13 +42,14 @@ struct ItemSet
 
 struct DeploymentData
 {
-	int alienRank;
 	int
+		alienRank,
 		lowQty,
 		highQty,
 		dQty,
-		extraQty;
-	int percentageOutsideUfo;
+		extraQty,
+		percentageOutsideUfo;
+
 	std::vector<ItemSet> itemSets;
 };
 
@@ -142,8 +143,8 @@ private:
 		/// Gets dimensions.
 		void getDimensions(
 				int* width,
-				int* lengt,
-				int* heigh);
+				int* lenght,
+				int* heigth);
 
 		/// Gets civilians.
 		int getCivilians() const;

@@ -3855,10 +3855,11 @@ void Map::drawTerrain(Surface* surface) // private.
 //							if (Options::battleUFOExtenderAccuracy == true) // kL_note: one less condition to check
 							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
-/*								// begin_TEST: superimpose targetUnit *over* cursor's front
+								// begin_TEST: superimpose targetUnit *over* cursor's front
 								if (unit != NULL
 									&& (unit->getUnitVisible() == true
-										|| _battleSave->getDebugMode() == true))
+										|| _battleSave->getDebugMode() == true)
+									&& tile->isDiscovered(2) == false)
 								{
 									quad = tile->getPosition().x - unit->getPosition().x
 										+ (tile->getPosition().y - unit->getPosition().y) * 2;
@@ -3890,7 +3891,7 @@ void Map::drawTerrain(Surface* surface) // private.
 //														0);
 //										}
 									}
-								} // end_TEST. */
+								} // end_TEST.
 
 								// kL_note: Use stuff from ProjectileFlyBState::init()
 								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()

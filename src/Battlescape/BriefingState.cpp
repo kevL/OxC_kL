@@ -81,6 +81,7 @@ BriefingState::BriefingState(
 		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
 
 	const TacticalType tacType = _game->getSavedGame()->getSavedBattle()->getTacticalType();
+
 	const std::string stType = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(stType); // check, Xcom1Ruleset->alienDeployments for a missionType
 

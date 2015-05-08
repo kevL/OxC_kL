@@ -853,8 +853,11 @@ void SavedBattleGame::setTacticalType(const std::string& missionType) // private
 		_tacType = TCT_BASEDEFENSE;
 	else if (missionType.compare("STR_ALIEN_BASE_ASSAULT") == 0)
 		_tacType = TCT_BASEASSAULT;
-	else if (missionType.compare("STR_TERROR_MISSION") == 0)
-		_tacType = TCT_TERRORSITE;
+	else if (missionType.compare("STR_TERROR_MISSION") == 0
+		|| missionType.compare("STR_PORT_ATTACK") == 0)
+	{
+		_tacType = TCT_MISSIONSITE;
+	}
 	else if (missionType.compare("STR_MARS_CYDONIA_LANDING") == 0)
 		_tacType = TCT_MARS1;
 	else if (missionType.compare("STR_MARS_THE_FINAL_ASSAULT") == 0)
@@ -884,6 +887,9 @@ void SavedBattleGame::setMissionType(const std::string& missionType)
 
 /**
  * Gets the mission type.
+ * @note This should return a const ref
+ * except perhaps when there's a nextStage that deletes this SavedBattleGame ...
+ * and creates a new one wherein the ref is no longer valid.
  * @return, the mission type
  */
 std::string SavedBattleGame::getMissionType() const

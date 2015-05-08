@@ -40,7 +40,7 @@ enum TacticalType
 	TCT_UFOLANDED,		//  1
 	TCT_BASEDEFENSE,	//  2
 	TCT_BASEASSAULT,	//  3
-	TCT_TERRORSITE,		//  4
+	TCT_MISSIONSITE,	//  4
 	TCT_MARS1,			//  5
 	TCT_MARS2			//  6
 };
