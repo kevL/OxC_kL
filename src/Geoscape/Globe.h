@@ -203,15 +203,15 @@ private:
 
 	public:
 		static const int // GlobeMarkers
-			GM_BASE			= 0,
-			GM_CRAFT		= 1,
-			GM_UFO_FLYING	= 2,
-			GM_UFO_LANDED	= 3,
-			GM_UFO_CRASHED	= 4,
-			GM_MISSIONSITE	= 5,
-			GM_WAYPOINT		= 6,
-			GM_ALIENBASE	= 7,
-			GM_CITY			= 8;
+			GLM_BASE		= 0,
+			GLM_CRAFT		= 1,
+			GLM_UFO_FLYING	= 2,
+			GLM_UFO_LANDED	= 3,
+			GLM_UFO_CRASHED	= 4,
+			GLM_MISSIONSITE	= 5,
+			GLM_WAYPOINT	= 6,
+			GLM_ALIENBASE	= 7,
+			GLM_CITY		= 8;
 
 		static Uint8
 			CLO_LABELBASE,

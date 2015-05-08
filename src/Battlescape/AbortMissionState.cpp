@@ -48,14 +48,14 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Abort Mission window.
- * @param battleGame	- pointer to the SavedBattleGame
+ * @param battleSave	- pointer to the SavedBattleGame
  * @param state			- pointer to the BattlescapeState
  */
 AbortMissionState::AbortMissionState(
-		SavedBattleGame* battleGame,
+		SavedBattleGame* battleSave,
 		BattlescapeState* state)
 	:
-		_battleGame(battleGame),
+		_battleSave(battleSave),
 		_state(state),
 		_inExitArea(0),
 		_outExitArea(0)
@@ -72,7 +72,7 @@ AbortMissionState::AbortMissionState(
 	_btnCancel		= new TextButton(134, 18, 16, 116);
 	_btnOk			= new TextButton(134, 18, 170, 116);
 
-	_battleGame->setPaletteByDepth(this);
+	_battleSave->setPaletteByDepth(this);
 
 	add(_window,			"messageWindowBorder",	"battlescape");
 	add(_txtInExit,			"messageWindows",		"battlescape");
@@ -85,15 +85,17 @@ AbortMissionState::AbortMissionState(
 
 
 	std::string nextStage;
-	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT"
-		&& _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+//	if (_battleSave->getMissionType() != "STR_UFO_GROUND_ASSAULT"
+//		&& _battleSave->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	if (_battleSave->getTacticalType() != TCT_UFOLANDED
+		&& _battleSave->getTacticalType() != TCT_UFOCRASHED)
 	{
-		nextStage = _game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
+		nextStage = _game->getRuleset()->getDeployment(_battleSave->getMissionType())->getNextStage();
 	}
 
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _battleGame->getUnits()->begin();
-			i != _battleGame->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
@@ -125,7 +127,8 @@ AbortMissionState::AbortMissionState(
 	_txtOutsideExit->setAlign(ALIGN_CENTER);
 	_txtOutsideExit->setHighContrast();
 
-	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
+//	if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
+	if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
 	{
 		_txtInExit->setVisible(false);
 		_txtOutsideExit->setVisible(false);
@@ -168,7 +171,7 @@ void AbortMissionState::btnOkClick(Action*)
 {
 	_game->popState();
 
-	_battleGame->setAborted(true);
+	_battleSave->setAborted(true);
 	_state->finishBattle(
 					true,
 					_inExitArea);

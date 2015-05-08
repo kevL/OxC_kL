@@ -1155,14 +1155,14 @@ void DogfightState::updateDogfight()
 
 		if (_ufo->isCrashed() == true) // End dogfight if UFO is crashed or destroyed.
 		{
-			_ufo->getMission()->ufoShotDown(*_ufo);
+			_ufo->getAlienMission()->ufoShotDown(*_ufo);
 
-			if (RNG::percent(4 + (_diff * 4)) == true)				// Check retaliation trigger.
+			if (RNG::percent(4 + (_diff * 4)) == true)						// Check retaliation trigger.
 			{
-				std::string targetRegion;							// Spawn retaliation mission.
+				std::string targetRegion;									// Spawn retaliation mission.
 				if (RNG::percent(50 - (_diff * 6)) == true)
-					targetRegion = _ufo->getMission()->getRegion();	// Attack on UFO's mission region.
-				else												// Try to find and attack the originating base.
+					targetRegion = _ufo->getAlienMission()->getRegion();	// Attack on UFO's mission region.
+				else														// Try to find and attack the originating base.
 					targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();
 																	// TODO: If the base is removed, the mission is cancelled.
 

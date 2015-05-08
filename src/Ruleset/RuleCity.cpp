@@ -24,7 +24,7 @@
 
 #include "../Engine/Language.h"
 
-#include "../Geoscape/Globe.h" // Globe::GM_CITY
+#include "../Geoscape/Globe.h" // Globe::GLM_CITY
 
 
 namespace OpenXcom
@@ -131,7 +131,7 @@ double RuleCity::getLongitude() const
  */
 int RuleCity::getMarker() const
 {
-	return Globe::GM_CITY;
+	return Globe::GLM_CITY;
 }
 
 /**

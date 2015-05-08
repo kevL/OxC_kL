@@ -24,6 +24,8 @@
 
 #include "../Ruleset/MapScript.h"
 
+//#include "../Savegame/SavedBattleGame.h" // TacticalType enum
+
 
 namespace OpenXcom
 {
@@ -102,9 +104,10 @@ private:
 	Tile* _tileEquipt;
 	Ufo* _ufo;
 
-	std::string
-		_alienRace,
-		_missionType;
+	std::string _alienRace;
+//		_missionType;
+
+//	TacticalType _tacType;
 
 
 	/// Sets the map size and associated vars.

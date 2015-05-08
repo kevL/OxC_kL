@@ -23,7 +23,7 @@
 
 #include "../Engine/Language.h"
 
-#include "../Geoscape/Globe.h" // Globe::GM_WAYPOINT
+#include "../Geoscape/Globe.h" // Globe::GLM_WAYPOINT
 
 
 namespace OpenXcom
@@ -114,7 +114,7 @@ std::wstring Waypoint::getName(Language* lang) const
  */
 int Waypoint::getMarker() const
 {
-	return Globe::GM_WAYPOINT;
+	return Globe::GLM_WAYPOINT;
 }
 
 }

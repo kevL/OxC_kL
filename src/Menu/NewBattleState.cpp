@@ -811,8 +811,8 @@ void NewBattleState::cbxTerrainChange(Action*)
 	const AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 
 	int
-		minDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth(),
-		maxDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
+		minDepth,
+		maxDepth;
 
 	if (ruleDeploy->getMaxDepth() > 0)
 	{
@@ -824,9 +824,16 @@ void NewBattleState::cbxTerrainChange(Action*)
 		minDepth = _rules->getTerrain(ruleDeploy->getDeployTerrains().front())->getMinDepth();
 		maxDepth = _rules->getTerrain(ruleDeploy->getDeployTerrains().front())->getMaxDepth();
 	}
+	else
+	{
+		minDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth();
+		maxDepth = _rules->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
+	}
 
-	_txtDepth->setVisible(minDepth != maxDepth && maxDepth != 0);
-	_slrDepth->setVisible(minDepth != maxDepth && maxDepth != 0);
+	_txtDepth->setVisible(minDepth != maxDepth
+						  && maxDepth != 0);
+	_slrDepth->setVisible(minDepth != maxDepth
+						  && maxDepth != 0);
 	_slrDepth->setRange(minDepth, maxDepth);
 	_slrDepth->setValue(minDepth);
 }

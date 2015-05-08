@@ -35,7 +35,7 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
 
-#include "../Geoscape/Globe.h" // Globe::GM_UFO_*
+#include "../Geoscape/Globe.h" // Globe::GLM_UFO_*
 
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/Ruleset.h"
@@ -194,11 +194,11 @@ void Ufo::load(
 
 	if (game.getMonthsPassed() != -1)
 	{
-		const int missionID = node["mission"].as<int>();
+		const int missionId = node["mission"].as<int>();
 		std::vector<AlienMission*>::const_iterator found = std::find_if(
 																	game.getAlienMissions().begin(),
 																	game.getAlienMissions().end(),
-																	matchMissionID(missionID));
+																	matchMissionID(missionId));
 		if (found == game.getAlienMissions().end())
 		{
 			throw Exception("Unknown mission, save file is corrupt.");
@@ -353,9 +353,9 @@ int Ufo::getMarker() const
 
 	switch (_status)
 	{
-		case Ufo::FLYING:	return Globe::GM_UFO_FLYING;
-		case Ufo::LANDED:	return Globe::GM_UFO_LANDED;
-		case Ufo::CRASHED:	return Globe::GM_UFO_CRASHED;
+		case Ufo::FLYING:	return Globe::GLM_UFO_FLYING;
+		case Ufo::LANDED:	return Globe::GLM_UFO_LANDED;
+		case Ufo::CRASHED:	return Globe::GLM_UFO_CRASHED;
 	}
 
 	return _rules->getMarker();
@@ -761,7 +761,7 @@ int Ufo::getDetectors() const
  * @param mission		- pointer to the actual mission object
  * @param trajectory	- pointer to the actual mission trajectory
  */
-void Ufo::setMissionInfo(
+void Ufo::setUfoMissionInfo(
 		AlienMission* mission,
 		const UfoTrajectory* trajectory)
 {
@@ -778,7 +778,7 @@ void Ufo::setMissionInfo(
  * Returns the mission type of this Ufo.
  * @return, address of the mission type
  */
-const std::string& Ufo::getMissionType() const
+const std::string& Ufo::getUfoMissionType() const
 {
 	return _mission->getRules().getType();
 }

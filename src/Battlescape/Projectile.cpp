@@ -670,85 +670,83 @@ void Projectile::applyAccuracy(
 			//Log(LOG_INFO) << ". x = " << target->x;
 			//Log(LOG_INFO) << ". y = " << target->y;
 			//Log(LOG_INFO) << ". z = " << target->z;
-			//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 		}
-
-		return;
+		//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 	}
-
-
-	// kL_note: *** This is for Throwing and AcidSpitt only ***
-	accuracy = accuracy * 50. + 68.5; // arbitrary adjustment.
-
-	double perfectToss = 100.;
-	const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
-	if (soldier != NULL)
-		perfectToss = static_cast<double>(soldier->getRules()->getStatCaps().throwing);
-
-	double deviation = perfectToss - accuracy;
-	deviation = std::max(
-					0.,
-					deviation * targetDist / 100.);
-
-	const double
-		dx = RNG::boxMuller(0., deviation) / 4.,
-		dy = RNG::boxMuller(0., deviation) / 4.,
-		dz = RNG::boxMuller(0., deviation) / 6.;
-
-	target->x += static_cast<int>(Round(dx));
-	target->y += static_cast<int>(Round(dy));
-	target->z += static_cast<int>(Round(dz));
-
-
-	if (extendLine == true)	// note: This is for aimed projectiles; always false outside RangedBased above
-							// - that is, this ought never run in this Build.
+	else // *** This is for Throwing and AcidSpitt only ***
 	{
-		//Log(LOG_INFO) << ". Projectile::applyAccuracy() ERROR : extendLine";
-/*		double maxDeviation = 2.5; // maxDeviation is the max angle deviation for accuracy 0% in degrees
-		double minDeviation = 0.4; // minDeviation is the min angle deviation for accuracy 100% in degrees
-		double dRot, dTilt;
-		double rotation, tilt;
-		double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
+		accuracy = accuracy * 50. + 69.3; // arbitrary adjustment.
 
-		// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-		if (RNG::generate(0., 1.) < accuracy) // check if we hit
-		{
-			dRot = 0.; // we hit, so no deviation
-			dTilt = 0.;
-		}
-		else
-		{
-			dRot = RNG::boxMuller(0., baseDeviation);
-			dTilt = RNG::boxMuller(0., baseDeviation / 2.); // tilt deviation is halved
-		}
-		rotation += dRot; // add deviations
-		tilt += dTilt; */
+		double perfectToss = 100.;
+		const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+		if (soldier != NULL)
+			perfectToss = static_cast<double>(soldier->getRules()->getStatCaps().throwing);
+
+		double deviation = perfectToss - accuracy;
+		deviation = std::max(
+						0.,
+						deviation * targetDist / 100.);
 
 		const double
-			rotation = std::atan2(
-								static_cast<double>(target->y - origin.y),
-								static_cast<double>(target->x - origin.x))
-							* 180. / M_PI,
-			tilt = std::atan2(
-							static_cast<double>(target->z - origin.z),
-							std::sqrt(
-								  static_cast<double>(target->x - origin.x) * static_cast<double>(target->x - origin.x)
-								+ static_cast<double>(target->y - origin.y) * static_cast<double>(target->y - origin.y)))
-							* 180. / M_PI;
+			dx = RNG::boxMuller(0., deviation) / 4.,
+			dy = RNG::boxMuller(0., deviation) / 4.,
+			dz = RNG::boxMuller(0., deviation) / 6.;
 
-		// calculate new target
-		// this new target can be very far out of the map, but we don't care about that right now
-		const double
-			cos_fi = std::cos(tilt * M_PI / 180.),
-			sin_fi = std::sin(tilt * M_PI / 180.),
-			cos_te = std::cos(rotation * M_PI / 180.),
-			sin_te = std::sin(rotation * M_PI / 180.);
+		target->x += static_cast<int>(Round(dx));
+		target->y += static_cast<int>(Round(dy));
+		target->z += static_cast<int>(Round(dz));
 
-		target->x = static_cast<int>(static_cast<double>(origin.x) + range * cos_te * cos_fi);
-		target->y = static_cast<int>(static_cast<double>(origin.y) + range * sin_te * cos_fi);
-		target->z = static_cast<int>(static_cast<double>(origin.z) + range * sin_fi);
+
+		if (extendLine == true)	// note: This is for aimed projectiles; always false outside RangedBased above
+								// - that is, this *OUGHT NEVER RUN* in this Build.
+		{
+			Log(LOG_INFO) << ". Projectile::applyAccuracy() ERROR : extendLine";
+/*			double maxDeviation = 2.5; // maxDeviation is the max angle deviation for accuracy 0% in degrees
+			double minDeviation = 0.4; // minDeviation is the min angle deviation for accuracy 100% in degrees
+			double dRot, dTilt;
+			double rotation, tilt;
+			double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
+
+			// the angle deviations are spread using a normal distribution between 0 and baseDeviation
+			if (RNG::generate(0., 1.) < accuracy) // check if we hit
+			{
+				dRot = 0.; // we hit, so no deviation
+				dTilt = 0.;
+			}
+			else
+			{
+				dRot = RNG::boxMuller(0., baseDeviation);
+				dTilt = RNG::boxMuller(0., baseDeviation / 2.); // tilt deviation is halved
+			}
+			rotation += dRot; // add deviations
+			tilt += dTilt; */
+
+			const double
+				rotation = std::atan2(
+									static_cast<double>(target->y - origin.y),
+									static_cast<double>(target->x - origin.x))
+								* 180. / M_PI,
+				tilt = std::atan2(
+								static_cast<double>(target->z - origin.z),
+								std::sqrt(
+									  static_cast<double>(target->x - origin.x) * static_cast<double>(target->x - origin.x)
+									+ static_cast<double>(target->y - origin.y) * static_cast<double>(target->y - origin.y)))
+								* 180. / M_PI;
+
+			// calculate new target
+			// this new target can be very far out of the map, but we don't care about that right now
+			const double
+				cos_fi = std::cos(tilt * M_PI / 180.),
+				sin_fi = std::sin(tilt * M_PI / 180.),
+				cos_te = std::cos(rotation * M_PI / 180.),
+				sin_te = std::sin(rotation * M_PI / 180.);
+
+			target->x = static_cast<int>(static_cast<double>(origin.x) + range * cos_te * cos_fi);
+			target->y = static_cast<int>(static_cast<double>(origin.y) + range * sin_te * cos_fi);
+			target->z = static_cast<int>(static_cast<double>(origin.z) + range * sin_fi);
+		}
+		//Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 	}
-	//Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 }
 
 /**

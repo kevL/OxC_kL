@@ -304,8 +304,8 @@ struct CreateShadow
  * @param cenY		- Y position of the center of the globe
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 Globe::Globe(
 		Game* game,
@@ -1119,7 +1119,7 @@ std::vector<Target*> Globe::getTargets(
 		if ((*i)->getDetected() == true)
 		{
 			if ((*i)->reachedDestination() == true // kL->
-				&& (*i)->getMission()->getRules().getObjective() == OBJECTIVE_SITE)
+				&& (*i)->getAlienMission()->getRules().getObjective() == OBJECTIVE_SITE)
 //				&& (*i)->getMissionType() == "STR_ALIEN_TERROR")
 			{
 				// kL_note: this is a kludge; the UFO should be / have been deleted before
@@ -1298,7 +1298,7 @@ void Globe::blink()
 			i != _markerSet->getTotalFrames();
 			++i)
 	{
-		if (i != GM_CITY)
+		if (i != GLM_CITY)
 			_markerSet->getFrame(static_cast<int>(i))->offset(_blink);
 	}
 

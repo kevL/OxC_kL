@@ -33,6 +33,19 @@
 namespace OpenXcom
 {
 
+enum TacticalType
+{
+	TCT_DEFAULT = -1,	// -1
+	TCT_UFOCRASHED,		//  0
+	TCT_UFOLANDED,		//  1
+	TCT_BASEDEFENSE,	//  2
+	TCT_BASEASSAULT,	//  3
+	TCT_TERRORSITE,		//  4
+	TCT_MARS1,			//  5
+	TCT_MARS2			//  6
+};
+
+
 class BattleItem;
 class BattlescapeState;
 class Game;
@@ -76,6 +89,7 @@ private:
 		_turn;
 
 	BattleActionType _batReserved;
+	TacticalType _tacType;
 	UnitFaction _side;
 
 	BattlescapeState* _battleState;
@@ -83,12 +97,13 @@ private:
 		* _selectedUnit,
 		* _lastSelectedUnit;
 	Pathfinding* _pathfinding;
-	Tile* _invBattle; // kL
-	Tile** _tiles;
+	Tile
+		* _invBattle,
+		** _tiles;
 	TileEngine* _tileEngine;
 
 	std::string
-		_alienRace, // kL
+		_alienRace,
 		_missionType,
 		_music,
 		_terrain; // sza_MusicRules
@@ -102,7 +117,7 @@ private:
 		_recoverGuaranteed,
 		_recoverConditional;
 	std::vector<BattleUnit*>
-//kL	_exposedUnits,
+//		_exposedUnits,
 		_units;
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<Node*> _nodes;
@@ -123,6 +138,9 @@ private:
 			bool checkReselect = false,
 			bool setDontReselect = false,
 			bool checkInventory = false);
+
+	/// Sets the TacticalType from the mission type.
+	void setTacticalType(const std::string& missionType);
 
 
 	public:
@@ -150,6 +168,8 @@ private:
 		/// Gets the game's mapdatafiles.
 		std::vector<MapDataSet*>* getMapDataSets();
 
+		/// Gets the TacticalType of this battle.
+		TacticalType getTacticalType() const;
 		/// Sets the mission type.
 		void setMissionType(const std::string& missionType);
 		/// Gets the mission type.

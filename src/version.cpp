@@ -52,7 +52,7 @@ std::string timeStamp()
 				timeInfo);
 
 	std::ostringstream stamp;
-	stamp << verDate << ":" << verTime;
+	stamp << verDate << "-" << verTime;
 
 	return stamp.str();
 }

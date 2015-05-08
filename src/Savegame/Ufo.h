@@ -191,11 +191,14 @@ private:
 		int getDetectors() const;
 
 		/// Sets the UFO's mission information.
-		void setMissionInfo(
+		void setUfoMissionInfo(
 				AlienMission* mission,
 				const UfoTrajectory* trajectory);
 		/// Gets the UFO's Mission type.
-		const std::string& getMissionType() const;
+		const std::string& getUfoMissionType() const;
+		/// Gets the UFO's mission object.
+		AlienMission* getAlienMission() const
+		{ return _mission; }
 
 		/// Gets the UFO's progress on the trajectory track.
 		size_t getTrajectoryPoint() const
@@ -206,10 +209,6 @@ private:
 		/// Gets the UFO's trajectory.
 		const UfoTrajectory& getTrajectory() const
 		{ return *_trajectory; }
-
-		/// Gets the UFO's mission object.
-		AlienMission* getMission() const
-		{ return _mission; }
 
 		/// Sets the UFO's destination.
 		void setDestination(Target* dest);

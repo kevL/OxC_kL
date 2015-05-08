@@ -23,7 +23,7 @@
 
 #include "../Engine/Language.h"
 
-#include "../Geoscape/Globe.h" // Globe::GM_MISSIONSITE
+#include "../Geoscape/Globe.h" // Globe::GLM_MISSIONSITE
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleAlienMission.h"
@@ -160,7 +160,7 @@ std::wstring MissionSite::getName(Language* lang) const
 int MissionSite::getMarker() const
 {
 	if (_deployment->getMarkerIcon() == -1)
-		return Globe::GM_MISSIONSITE;
+		return Globe::GLM_MISSIONSITE;
 
 	return _deployment->getMarkerIcon();
 }

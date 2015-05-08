@@ -1876,7 +1876,8 @@ BattleUnit* TileEngine::hit(
 			if (part == VOXEL_OBJECT
 				&& tile->getMapData(VOXEL_OBJECT)->isBaseModule() == true
 				&& power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
-				&& _battleSave->getMissionType() == "STR_BASE_DEFENSE")
+				&& _battleSave->getTacticalType() == TCT_BASEDEFENSE)
+//				&& _battleSave->getMissionType() == "STR_BASE_DEFENSE")
 			{
 				//Log(LOG_INFO) << ". . . vs Object hp  = " << tile->getMapData(MapData::O_OBJECT)->getArmor();
 				_battleSave->getModuleMap()
@@ -4126,7 +4127,8 @@ bool TileEngine::detonate(Tile* const tile)
 				diagWallDestroyed = true;
 			}
 
-			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
+//			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
+			if (_battleSave->getTacticalType() == TCT_BASEDEFENSE
 				&& tiles[i]->getMapData(part)->isBaseModule() == true)
 			{
 				_battleSave->getModuleMap()[tile->getPosition().x / 10]

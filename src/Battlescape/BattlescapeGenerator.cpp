@@ -108,6 +108,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftZ(0),
 		_baseEquipScreen(false),
 		_battleOrder(0)
+//		_tacType(TCT_DEFAULT)
 {
 //	_allowAutoLoadout = !Options::disableAutoEquip;
 }
@@ -362,8 +363,9 @@ void BattlescapeGenerator::nextStage()
 		++i;
 	}
 
-	_missionType = _battleSave->getMissionType();
-	AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionType);
+//	_missionType = _battleSave->getMissionType();
+//	AlienDeployment* const ruleDeploy = _rules->getDeployment(_missionType);
+	AlienDeployment* const ruleDeploy = _rules->getDeployment(_battleSave->getMissionType());
 	ruleDeploy->getDimensions(
 						&_mapsize_x,
 						&_mapsize_y,
@@ -537,13 +539,14 @@ void BattlescapeGenerator::run()
 {
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	_missionType = _battleSave->getMissionType();
+//	_missionType = _battleSave->getMissionType();
 
 	AlienDeployment* ruleDeploy;
 	if (_ufo != NULL)
 		ruleDeploy = _rules->getDeployment(_ufo->getRules()->getType());
 	else
-		ruleDeploy = _rules->getDeployment(_missionType);
+		ruleDeploy = _rules->getDeployment(_battleSave->getMissionType());
+//		ruleDeploy = _rules->getDeployment(_missionType);
 
 	ruleDeploy->getDimensions(
 						&_mapsize_x,
@@ -1253,7 +1256,8 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
 
 			return unit;
 		}
-		else if (_missionType != "STR_BASE_DEFENSE")
+//		else if (_missionType != "STR_BASE_DEFENSE")
+		else if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
 		{
 			//Log(LOG_INFO) << ". . spawnNode NOT valid - not baseDefense";
 			if (placeUnitNearFriend(unit) == true)
@@ -2702,7 +2706,8 @@ void BattlescapeGenerator::loadRMP( // private.
 			if		(unitType == 3) unitType = 4; // kL
 			else if (unitType == 4) unitType = 8; // kL
 
-			if (_missionType != "STR_BASE_DEFENSE")
+//			if (_missionType != "STR_BASE_DEFENSE")
+			if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
 				disBase = 0; // kL, ensure these get zero'd for nonBaseDefense battles; cf. Node::isTarget()
 
 			node = new Node(
@@ -2987,7 +2992,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 	// generate the map now and store it inside the tile objects
 
 	// this mission type is "hard-coded" in terms of map layout
-	if (_missionType == "STR_BASE_DEFENSE")
+//	if (_missionType == "STR_BASE_DEFENSE")
+	if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
 		generateBaseMap();
 
 	// process script
@@ -3248,7 +3254,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					break;
 
 					case MSC_RESIZE:
-						if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
+//						if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
+						if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
 						{
 							throw Exception("Map Generator encountered an error: Base defense map cannot be resized.");
 						}
@@ -3289,7 +3296,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 	loadNodes();
 
-	if (_missionType == "STR_ALIEN_BASE_ASSAULT")
+//	if (_missionType == "STR_ALIEN_BASE_ASSAULT")
+	if (_battleSave->getTacticalType() == TCT_BASEASSAULT)
 		placeXcomProperty();
 
 
@@ -4102,8 +4110,9 @@ bool BattlescapeGenerator::addBlock( // private.
 			 [yt + ySize] = MD_BOTH;
 	_blocks[xt][yt] = block;
 
-	const bool visible = (_battleSave->getMissionType() == "STR_BASE_DEFENSE");	// yes, i'm hard coding these.
-																				// & I've unhardcoded them, big whop; or perhaps that was just the abortion-in-action. /cheers (aka, Hah! fool)
+	const bool visible = (_battleSave->getTacticalType() == TCT_BASEDEFENSE);
+//	const bool visible = (_battleSave->getMissionType() == "STR_BASE_DEFENSE");	// yes, i'm hard coding these.
+// & I've unhardcoded them, big whop; or perhaps that was just the abortion-in-action. /cheers (aka, Hah! fool)
 	loadMAP(
 		_blocks[xt][yt],
 		x * 10,

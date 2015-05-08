@@ -80,8 +80,9 @@ BriefingState::BriefingState(
 		bg,		// default defined in Ruleset/AlienDeployment.h: "BACK16.SCR",
 		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
 
-	const std::string missionType = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(missionType); // check, Xcom1Ruleset->alienDeployments for a missionType
+	const TacticalType tacType = _game->getSavedGame()->getSavedBattle()->getTacticalType();
+	const std::string stType = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(stType); // check, Xcom1Ruleset->alienDeployments for a missionType
 
 	const Ufo* ufo = NULL;
 
@@ -106,9 +107,11 @@ BriefingState::BriefingState(
 		bg = dataBrief.background;
 		bgColor = dataBrief.palette;
 
-		if (missionType == "STR_UFO_CRASH_RECOVERY")
+//		if (stType == "STR_UFO_CRASH_RECOVERY")
+		if (tacType == TCT_UFOCRASHED)
 			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
-		else if (missionType == "STR_UFO_GROUND_ASSAULT")
+//		else if (stType == "STR_UFO_GROUND_ASSAULT")
+		else if (tacType == TCT_UFOLANDED)
 			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
 		else
 			music = dataBrief.music;	// note This currently conflicts w/ UFO Recovery/Assault.
@@ -146,7 +149,7 @@ BriefingState::BriefingState(
 					Options::keyCancel);
 
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(missionType));
+	_txtTitle->setText(tr(stType));
 
 	std::wstring craftLabel;
 	if (craft != NULL)
@@ -192,12 +195,13 @@ BriefingState::BriefingState(
 		brief << ufo->getRules()->getBriefingString();
 	}
 	else
-		brief << missionType.c_str() << "_BRIEFING";
+		brief << stType.c_str() << "_BRIEFING";
 
 	_txtBriefing->setText(tr(brief.str()));
 	_txtBriefing->setWordWrap();
 
-	if (missionType == "STR_BASE_DEFENSE")
+//	if (stType == "STR_BASE_DEFENSE")
+	if (tacType == TCT_BASEDEFENSE)
 		base->setIsRetaliationTarget(false);
 }
 

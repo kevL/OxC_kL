@@ -1529,7 +1529,7 @@ void BattlescapeState::mapClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 		&& _battleGame->cancelCurrentAction() == true)
 	{
-			return;
+		return;
 	}
 
 	// don't handle mouseclicks over the buttons (it overlaps with map surface)
@@ -3666,19 +3666,21 @@ void BattlescapeState::finishBattle(
 	_game->getResourcePack()->fadeMusic(_game, 975);
 
 
-	const std::string mission = _battleSave->getMissionType();
+	const std::string stType = _battleSave->getMissionType();
 
 	std::string nextStage;
-	if (mission != "STR_UFO_GROUND_ASSAULT"
-		&& mission != "STR_UFO_CRASH_RECOVERY")
+//	if (stType != "STR_UFO_GROUND_ASSAULT"
+//		&& stType != "STR_UFO_CRASH_RECOVERY")
+	if (_battleSave->getTacticalType() != TCT_UFOCRASHED
+		&& _battleSave->getTacticalType() != TCT_UFOLANDED)
 	{
-		nextStage = _rules->getDeployment(mission)->getNextStage();
+		nextStage = _rules->getDeployment(stType)->getNextStage();
 	}
 
 	if (nextStage.empty() == false	// if there is a next mission stage, and
 		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
 	{
-/*		std::string nextStageRace = _rules->getDeployment(mission)->getNextStageRace();
+/*		std::string nextStageRace = _rules->getDeployment(stType)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
 				ts = _gameSave->getTerrorSites()->begin();
@@ -3730,8 +3732,8 @@ void BattlescapeState::finishBattle(
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if (_rules->getDeployment(_battleSave->getMissionType()) != NULL
-				&& _rules->getDeployment(_battleSave->getMissionType())->isNoRetreat() == true
+			if (_rules->getDeployment(stType) != NULL
+				&& _rules->getDeployment(stType)->isNoRetreat() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{
 				_game->pushState(new DefeatState());
@@ -3743,8 +3745,8 @@ void BattlescapeState::finishBattle(
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (_rules->getDeployment(_battleSave->getMissionType()) != NULL
-				&& _rules->getDeployment(_battleSave->getMissionType())->isFinalMission() == true
+			if (_rules->getDeployment(stType) != NULL
+				&& _rules->getDeployment(stType)->isFinalMission() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{
 				_game->pushState(new VictoryState());
@@ -3752,9 +3754,6 @@ void BattlescapeState::finishBattle(
 			else
 				_game->pushState(new DebriefingState());
 		}
-
-//		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-//		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
 }
 

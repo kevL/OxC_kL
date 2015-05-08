@@ -1490,7 +1490,7 @@ void GeoscapeState::time5Seconds()
 						const size_t qtySites = _gameSave->getMissionSites()->size();
 						const bool detected = (*i)->getDetected();
 
-						AlienMission* const mission = (*i)->getMission();
+						AlienMission* const mission = (*i)->getAlienMission();
 
 						mission->ufoReachedWaypoint( // recomputes 'qtySites' & 'detected'; also sets ufo Status
 												**i,
@@ -1581,7 +1581,7 @@ void GeoscapeState::time5Seconds()
 
 				if ((*i)->getSecondsLeft() == 0)
 				{
-					AlienMission* const mission = (*i)->getMission();
+					AlienMission* const mission = (*i)->getAlienMission();
 					const bool detected = (*i)->getDetected();
 					mission->ufoLifting(**i);
 
@@ -1979,7 +1979,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;
 	}
-	else if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
+	else if (ufo->getUfoMissionType() != "STR_ALIEN_RETALIATION"
 		&& Options::aggressiveRetaliation == false)
 	{
 		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is TRUE";
@@ -2003,7 +2003,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 			const double detFactor = targetDist * 12. / ufoRange; // should use log() ...
 			int chance = static_cast<int>(
 						 static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / detFactor);
-			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
+			if (ufo->getUfoMissionType() == "STR_ALIEN_RETALIATION"
 				&& Options::aggressiveRetaliation == true)
 			{
 				//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";

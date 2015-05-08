@@ -304,8 +304,8 @@ void AlienMission::think(
 	{
 		const int spawnTime = static_cast<int>(_missionRule.getWave(_nextWave).spawnTimer) / 30;
 		_spawnTime = static_cast<size_t>((spawnTime / 2) + RNG::generate(
-																		0,
-																		spawnTime)) * 30;
+																	0,
+																	spawnTime)) * 30;
 	}
 }
 
@@ -344,9 +344,9 @@ Ufo* AlienMission::spawnUfo(
 			const UfoTrajectory& trajAssault = *rules.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
 
 			ufo = new Ufo(&battleshipRule);
-			ufo->setMissionInfo(
-							this,
-							&trajAssault);
+			ufo->setUfoMissionInfo(
+								this,
+								&trajAssault);
 
 			if (trajectory.getAltitude(0) == "STR_GROUND")
 				pos = getLandPoint(
@@ -382,9 +382,9 @@ Ufo* AlienMission::spawnUfo(
 
 		// destination is always an alien base.
 		ufo = new Ufo(&ufoRule);
-		ufo->setMissionInfo(
-						this,
-						&trajectory);
+		ufo->setUfoMissionInfo(
+							this,
+							&trajectory);
 		const RuleRegion& regRule = *rules.getRegion(_region);
 
 		if (trajectory.getAltitude(0) == "STR_GROUND")
@@ -430,9 +430,9 @@ Ufo* AlienMission::spawnUfo(
 
 	// Spawn according to sequence.
 	ufo = new Ufo(&ufoRule);
-	ufo->setMissionInfo(
-					this,
-					&trajectory);
+	ufo->setUfoMissionInfo(
+						this,
+						&trajectory);
 	const RuleRegion& regRule = *rules.getRegion(_region);
 
 	pos = getWaypoint(

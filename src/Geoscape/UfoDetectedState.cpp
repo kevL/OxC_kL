@@ -325,28 +325,28 @@ UfoDetectedState::UfoDetectedState(
 						2,
 						tr("STR_CRAFT_TYPE").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(0,1, Palette::blockOffset(8)+10);
 		woststr.str(L"");
 		woststr << L'\x01' << tr(_ufo->getAlienRace());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_RACE").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(1,1, Palette::blockOffset(8)+10);
 		woststr.str(L"");
-		woststr << L'\x01' << tr(_ufo->getMissionType());
+		woststr << L'\x01' << tr(_ufo->getUfoMissionType());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_MISSION").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(2,1, Palette::blockOffset(8)+10);
 		woststr.str(L"");
-		woststr << L'\x01' << tr(_ufo->getMission()->getRegion());
+		woststr << L'\x01' << tr(_ufo->getAlienMission()->getRegion());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_ZONE").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(3,1, Palette::blockOffset(8)+10);
 
 		if (contact == false
 			&& hyperBases != NULL) // safety.

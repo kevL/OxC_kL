@@ -54,14 +54,14 @@ private:
 	TextButton
 		* _btnCancel,
 		* _btnOk;
-	SavedBattleGame* _battleGame;
+	SavedBattleGame* _battleSave;
 	Window* _window;
 
 
 	public:
 		/// Creates the Abort Mission state.
 		AbortMissionState(
-				SavedBattleGame* battleGame,
+				SavedBattleGame* battleSave,
 				BattlescapeState* state);
 		/// Cleans up the Abort Mission state.
 		~AbortMissionState();

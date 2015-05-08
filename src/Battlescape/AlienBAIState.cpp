@@ -84,13 +84,12 @@ AlienBAIState::AlienBAIState(
 		_AIMode(AI_PATROL),
 		_closestDist(100),
 		_fromNode(node),
-		_toNode(NULL)
+		_toNode(NULL),
+		_reserve(BA_NONE),
+		_intelligence(unit->getIntelligence())
 {
 	//Log(LOG_INFO) << "Create AlienBAIState";
 //	_traceAI		= Options::traceAI; // kL_note: Can take this out of options & configs.
-
-	_reserve		= BA_NONE;
-	_intelligence	= _unit->getIntelligence();
 
 	_escapeAction	= new BattleAction();
 	_ambushAction	= new BattleAction();
@@ -601,7 +600,8 @@ void AlienBAIState::setupPatrol()
 		scout = true; // look for a new node to walk towards
 
 		// note: aLiens attacking XCOM Base are always on scout.
-		if (_battleSave->getMissionType() != "STR_BASE_DEFENSE")
+//		if (_battleSave->getMissionType() != "STR_BASE_DEFENSE")
+		if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
 
@@ -1708,7 +1708,8 @@ void AlienBAIState::evaluateAIMode()
 			ambushOdds = 0.f;
 
 		// factor in mission type
-		if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
+//		if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
+		if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
 		{
 			escapeOdds *= 0.8f; // was 0.75
 			ambushOdds *= 0.5f; // was 0.6
@@ -1924,11 +1925,11 @@ bool AlienBAIState::findFirePoint()
 
 /**
  * Decides if it's worthwhile to create an explosion.
- * @param targetPos	- target's position
- * @param attacker	- pointer to the attacking unit
+ * @param targetPos		- target's position
+ * @param attacker		- pointer to the attacking unit
  * @param explRadius	- radius of explosion in tile space
- * @param diff		- game difficulty
-// * @param grenade	- true if explosion will be from a grenade
+ * @param diff			- game difficulty
+// * @param grenade		- true if explosion will be from a grenade
  * @return, true if it's worthwile creating an explosion at the target position
  */
 bool AlienBAIState::explosiveEfficacy(
@@ -1966,13 +1967,31 @@ bool AlienBAIState::explosiveEfficacy(
 				pct -= 15;
 		}
 
-		std::string missionType = _battleSave->getMissionType();
+/*		std::string missionType = _battleSave->getMissionType();
 		if (missionType == "STR_ALIEN_BASE_ASSAULT")
 			pct -= 23;
 		else if (missionType == "STR_BASE_DEFENSE"
 			|| missionType == "STR_TERROR_MISSION")
 		{
 			pct += 56;
+		} */
+/*		TacticalType tacType = _battleSave->getTacticalType();
+		if (tacType == TCT_BASEASSAULT)
+			pct -= 23;
+		else if (tacType == TCT_BASEDEFENSE
+			|| tacType == TCT_TERRORSITE)
+		{
+			pct += 56;
+		} */
+		switch (_battleSave->getTacticalType())
+		{
+			case TCT_BASEASSAULT:
+				pct -= 23;
+			break;
+
+			case TCT_BASEDEFENSE:
+			case TCT_TERRORSITE:
+				pct += 56;
 		}
 
 		pct += diff * 2;

@@ -1008,11 +1008,13 @@ void DebriefingState::prepareDebriefing()
 	}
 
 
-	const std::string& mission = battleSave->getMissionType();
+//	const std::string& stType = battleSave->getMissionType();
+	const TacticalType tacType = battleSave->getTacticalType();
 
 	if (found == false)
 	{
-		if (mission == "STR_ALIEN_BASE_ASSAULT") // alien base disappears (if not aborted)
+//		if (stType == "STR_ALIEN_BASE_ASSAULT")
+		if (tacType == TCT_BASEASSAULT) // alien base disappears (if not aborted)
 		{
 			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 			bool destroyAlienBase = true;
@@ -1183,7 +1185,8 @@ void DebriefingState::prepareDebriefing()
 				if (aborted == false					// so game is not aborted
 					|| ((*i)->isInExitArea() == true	// or aborted and unit is on exit area
 						&& (missionAccomplished == true
-							|| mission != "STR_BASE_DEFENSE")))
+							|| tacType != TCT_BASEDEFENSE)))
+//							|| stType != "STR_BASE_DEFENSE")))
 				{
 					(*i)->postMissionProcedures(_gameSave);
 
@@ -1353,7 +1356,8 @@ void DebriefingState::prepareDebriefing()
 
 	if (aborted == true
 		&& base->getCrafts()->empty() == false
-		&& mission == "STR_BASE_DEFENSE")
+		&& tacType == TCT_BASEDEFENSE)
+//		&& stType == "STR_BASE_DEFENSE")
 	{
 		for (std::vector<Craft*>::const_iterator
 				i = base->getCrafts()->begin();
@@ -1371,13 +1375,18 @@ void DebriefingState::prepareDebriefing()
 		&& (aborted == false
 			|| missionAccomplished == true))	// Run through all tiles to recover UFO components and items.
 	{
-		if (mission == "STR_BASE_DEFENSE")
+//		if (stType == "STR_BASE_DEFENSE")
+		if (tacType == TCT_BASEDEFENSE)
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
-		else if (mission == "STR_TERROR_MISSION")
+//		else if (stType == "STR_TERROR_MISSION")
+		else if (tacType == TCT_TERRORSITE)
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
-		else if (mission == "STR_ALIEN_BASE_ASSAULT"
-			|| mission == "STR_MARS_CYDONIA_LANDING"
-			|| mission == "STR_MARS_THE_FINAL_ASSAULT")
+//		else if (stType == "STR_ALIEN_BASE_ASSAULT"
+//			|| stType == "STR_MARS_CYDONIA_LANDING"
+//			|| stType == "STR_MARS_THE_FINAL_ASSAULT")
+		else if (tacType == TCT_BASEASSAULT
+			|| tacType == TCT_MARS1
+			|| tacType == TCT_MARS2)
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
@@ -1437,16 +1446,21 @@ void DebriefingState::prepareDebriefing()
 	}
 	else // mission FAIL.
 	{
-		if (mission == "STR_BASE_DEFENSE")
+//		if (stType == "STR_BASE_DEFENSE")
+		if (tacType == TCT_BASEDEFENSE)
 		{
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyXCOMBase = true;
 		}
-		else if (mission == "STR_TERROR_MISSION")
+//		else if (stType == "STR_TERROR_MISSION")
+		else if (tacType == TCT_TERRORSITE)
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
-		else if (mission == "STR_ALIEN_BASE_ASSAULT"
-			|| mission == "STR_MARS_CYDONIA_LANDING"
-			|| mission == "STR_MARS_THE_FINAL_ASSAULT")
+//		else if (stType == "STR_ALIEN_BASE_ASSAULT"
+//			|| stType == "STR_MARS_CYDONIA_LANDING"
+//			|| stType == "STR_MARS_THE_FINAL_ASSAULT")
+		else if (tacType == TCT_BASEASSAULT
+			|| tacType == TCT_MARS1
+			|| tacType == TCT_MARS2)
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}
@@ -1499,7 +1513,8 @@ void DebriefingState::prepareDebriefing()
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->name)
 			{
 				int alloys;
-				if (mission == "STR_ALIEN_BASE_ASSAULT")
+//				if (stType == "STR_ALIEN_BASE_ASSAULT")
+				if (tacType == TCT_BASEASSAULT)
 					alloys = 150;
 				else
 					alloys = 10;
@@ -1533,7 +1548,8 @@ void DebriefingState::prepareDebriefing()
 					craft,
 					true);
 
-	if (mission == "STR_BASE_DEFENSE")
+//	if (stType == "STR_BASE_DEFENSE")
+	if (tacType == TCT_BASEDEFENSE)
 	{
 		if (_destroyXCOMBase == false)
 		{
@@ -1588,7 +1604,7 @@ void DebriefingState::prepareDebriefing()
 					i != _gameSave->getUfos()->end();
 					)
 			{
-				if ((*i)->getMission() == am) // dynamic_cast ?
+				if ((*i)->getAlienMission() == am) // dynamic_cast ?
 				{
 					delete *i;
 					i = _gameSave->getUfos()->erase(i);

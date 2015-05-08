@@ -23,7 +23,7 @@
 
 #include "../Engine/Language.h"
 
-#include "../Geoscape/Globe.h" // Globe::GM_ALIENBASE
+#include "../Geoscape/Globe.h" // Globe::GLM_ALIENBASE
 
 
 namespace OpenXcom
@@ -132,7 +132,7 @@ int AlienBase::getMarker() const
 	if (_discovered == false)
 		return -1;
 
-	return Globe::GM_ALIENBASE;
+	return Globe::GLM_ALIENBASE;
 }
 
 /**

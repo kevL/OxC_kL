@@ -116,7 +116,7 @@ BaseDestroyedState::BaseDestroyedState(
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*i)->getMission() == alienMission)
+		if ((*i)->getAlienMission() == alienMission)
 		{
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);

@@ -87,7 +87,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_kneelReserved(false),
 		_invBattle(NULL),
 		_ambience(-1),
-		_groundLevel(-1)
+		_groundLevel(-1),
+		_tacType(TCT_DEFAULT)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
@@ -294,6 +295,8 @@ void SavedBattleGame::load(
 			// prior to saving and updating builds will be counted as indestructible.
 //			calculateModuleMap();
 	}
+
+	setTacticalType(_missionType);
 
 	Log(LOG_INFO) << ". load nodes";
 	for (YAML::const_iterator
@@ -834,12 +837,49 @@ void SavedBattleGame::initUtilities(ResourcePack* res)
 }
 
 /**
+ * Sets the TacticalType based on the Mission Type.
+ * @note "missionType" is actually a misnomer and it should be "tacticalType" to distinguish it from the aLiens' mission(Type)s. Cf, "AlienDeployment" and "RuleAlienMission" (which should have just stayed as "RuleAlienTerror" for the sake of argument) and "AlienMission" but they're not the same ofc; Deployments can lead to aLien Missions but not vice versa.
+ * @note That is aLiens do 'deployments' or 'missions' but only xCom does 'tacticals'.
+ * @note They may overlap - terrorMission/terrorTactical as an example.
+ * @param missionType - reference the missionType
+ */
+void SavedBattleGame::setTacticalType(const std::string& missionType) // private.
+{
+	if (missionType.compare("STR_UFO_CRASH_RECOVERY") == 0)
+		_tacType = TCT_UFOCRASHED;
+	else if (missionType.compare("STR_UFO_GROUND_ASSAULT") == 0)
+		_tacType = TCT_UFOLANDED;
+	else if (missionType.compare("STR_BASE_DEFENSE") == 0)
+		_tacType = TCT_BASEDEFENSE;
+	else if (missionType.compare("STR_ALIEN_BASE_ASSAULT") == 0)
+		_tacType = TCT_BASEASSAULT;
+	else if (missionType.compare("STR_TERROR_MISSION") == 0)
+		_tacType = TCT_TERRORSITE;
+	else if (missionType.compare("STR_MARS_CYDONIA_LANDING") == 0)
+		_tacType = TCT_MARS1;
+	else if (missionType.compare("STR_MARS_THE_FINAL_ASSAULT") == 0)
+		_tacType = TCT_MARS2;
+	else
+		_tacType = TCT_DEFAULT;
+}
+
+/**
+ * Gets the TacticalType of this battle.
+ * @return, the TacticalType enum (SavedBattleGame.h)
+ */
+TacticalType SavedBattleGame::getTacticalType() const
+{
+	return _tacType;
+}
+
+/**
  * Sets the mission type.
  * @param missionType - reference a mission type
  */
 void SavedBattleGame::setMissionType(const std::string& missionType)
 {
 	_missionType = missionType;
+	setTacticalType(_missionType);
 }
 
 /**

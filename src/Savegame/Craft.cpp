@@ -39,7 +39,7 @@
 //#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
-#include "../Geoscape/Globe.h" // Globe::GM_CRAFT
+#include "../Geoscape/Globe.h" // Globe::GLM_CRAFT
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/AlienDeployment.h"
@@ -434,7 +434,7 @@ int Craft::getMarker() const
 		return -1;
 
 	if (_rules->getMarker() == -1)
-		return Globe::GM_CRAFT;
+		return Globe::GLM_CRAFT;
 
 	return _rules->getMarker();
 }

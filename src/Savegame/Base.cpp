@@ -45,7 +45,7 @@
 //#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
-#include "../Geoscape/Globe.h" // Globe::GM_BASE
+#include "../Geoscape/Globe.h" // Globe::GLM_BASE
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -442,7 +442,7 @@ int Base::getMarker() const
 	if (AreSame(_lon, 0.) && AreSame(_lat, 0.))
 		return -1;
 
-	return Globe::GM_BASE;
+	return Globe::GLM_BASE;
 }
 
 /**
