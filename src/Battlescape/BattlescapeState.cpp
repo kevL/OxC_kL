@@ -153,7 +153,7 @@ BattlescapeState::BattlescapeState()
 	_txtMissionLabel	= new Text(iconsWidth, 9, x, y - 10);
 	_txtOperationTitle	= new Text(screenWidth, 17, 0, 2);
 
-	// Create buttonbar - this should appear at the centerbottom of the screen
+	// Create buttonbar - this should appear at the bottom-center of the screen
 	_icons		= new InteractiveSurface(
 									iconsWidth,
 									iconsHeight,
@@ -2636,19 +2636,19 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
+	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
 
-	if (selectedUnit == NULL)
+	if (selUnit == NULL)
 		return;
 
 
 	if (calcFoV == true)
-		_battleSave->getTileEngine()->calculateFOV(selectedUnit);
+		_battleSave->getTileEngine()->calculateFOV(selUnit);
 
-	size_t j = 0;
+/*	size_t j = 0;
 	for (std::vector<BattleUnit*>::const_iterator
-			i = selectedUnit->getVisibleUnits()->begin();
-			i != selectedUnit->getVisibleUnits()->end()
+			i = selUnit->getVisibleUnits()->begin();
+			i != selUnit->getVisibleUnits()->end()
 				&& j != INDICATORS;
 			++i,
 				++j)
@@ -2657,15 +2657,31 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_numVisibleUnit[j]->setVisible();
 
 		_visibleUnit[j] = *i;
+	} */
+	size_t j = 0;
+	for (std::vector<BattleUnit*>::const_iterator
+		i = _battleSave->getUnits()->begin();
+		i != _battleSave->getUnits()->end()
+			&& j != INDICATORS;
+		++i)
+	{
+		if ((*i)->getUnitVisible() == true
+			&& (*i)->getFaction() == FACTION_HOSTILE)
+		{
+			_btnVisibleUnit[j]->setVisible();
+			_numVisibleUnit[j]->setVisible();
+
+			_visibleUnit[j++] = *i;
+		}
 	}
 
 
-	_txtName->setText(selectedUnit->getName(
-										_game->getLanguage(),
-										false));
+	_txtName->setText(selUnit->getName(
+									_game->getLanguage(),
+									false));
 
-//	Soldier* soldier = _gameSave->getSoldier(selectedUnit->getId());
-	const Soldier* const soldier = selectedUnit->getGeoscapeSoldier();
+//	Soldier* soldier = _gameSave->getSoldier(selUnit->getId());
+	const Soldier* const soldier = selUnit->getGeoscapeSoldier();
 	if (soldier != NULL)
 	{
 /*		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -2673,7 +2689,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 
-		if (selectedUnit->isKneeled() == true)
+		if (selUnit->isKneeled() == true)
 		{
 //			drawKneelIndicator();
 //			_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
@@ -2681,24 +2697,24 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		}
 
 		_txtOrder->setText(tr("STR_ORDER")
-							.arg(static_cast<int>(selectedUnit->getBattleOrder())));
+							.arg(static_cast<int>(selUnit->getBattleOrder())));
 	}
 
 	const int strength = static_cast<int>(Round(
-						 static_cast<double>(selectedUnit->getBaseStats()->strength) * (selectedUnit->getAccuracyModifier() / 2. + 0.5)));
-	if (selectedUnit->getCarriedWeight() > strength)
+						 static_cast<double>(selUnit->getBaseStats()->strength) * (selUnit->getAccuracyModifier() / 2. + 0.5)));
+	if (selUnit->getCarriedWeight() > strength)
 		_overWeight->setVisible();
 
-	_numDir->setValue(selectedUnit->getDirection());
+	_numDir->setValue(selUnit->getDirection());
 	_numDir->setVisible();
 
-	if (selectedUnit->getTurretType() != -1)
+	if (selUnit->getTurretType() != -1)
 	{
-		_numDirTur->setValue(selectedUnit->getTurretDirection());
+		_numDirTur->setValue(selUnit->getTurretDirection());
 		_numDirTur->setVisible();
 	}
 
-/*	int wounds = selectedUnit->getFatalWounds();
+/*	int wounds = selUnit->getFatalWounds();
 	_btnWounds->setVisible(wounds > 0);
 	_numWounds->setVisible(wounds > 0);
 	_numWounds->setValue(static_cast<unsigned>(wounds));
@@ -2707,7 +2723,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	else
 		_numWounds->setX(_icons->getX() + 10); */
 
-	const int wounds = selectedUnit->getFatalWounds();
+	const int wounds = selUnit->getFatalWounds();
 	if (wounds > 0)
 	{
 //		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
@@ -2731,36 +2747,36 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	double stat = static_cast<double>(selectedUnit->getBaseStats()->tu);
-	const int tu = selectedUnit->getTimeUnits();
+	double stat = static_cast<double>(selUnit->getBaseStats()->tu);
+	const int tu = selUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setValue(std::ceil(
 							static_cast<double>(tu) / stat * 100.));
 
-	stat = static_cast<double>(selectedUnit->getBaseStats()->stamina);
-	const int energy = selectedUnit->getEnergy();
+	stat = static_cast<double>(selUnit->getBaseStats()->stamina);
+	const int energy = selUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setValue(std::ceil(
 							static_cast<double>(energy) / stat * 100.));
 
-	stat = static_cast<double>(selectedUnit->getBaseStats()->health);
-	const int health = selectedUnit->getHealth();
+	stat = static_cast<double>(selUnit->getBaseStats()->health);
+	const int health = selUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_barHealth->setValue(std::ceil(
 							static_cast<double>(health) / stat * 100.));
 	_barHealth->setValue2(std::ceil(
-							static_cast<double>(selectedUnit->getStun()) / stat * 100.));
+							static_cast<double>(selUnit->getStun()) / stat * 100.));
 
-	const int morale = selectedUnit->getMorale();
+	const int morale = selUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
 	_barMorale->setValue(morale);
 
 
 	const BattleItem
-		* const rtItem = selectedUnit->getItem("STR_RIGHT_HAND"),
-		* const ltItem = selectedUnit->getItem("STR_LEFT_HAND");
+		* const rtItem = selUnit->getItem("STR_RIGHT_HAND"),
+		* const ltItem = selUnit->getItem("STR_LEFT_HAND");
 
-	const std::string activeHand = selectedUnit->getActiveHand();
+	const std::string activeHand = selUnit->getActiveHand();
 	if (activeHand.empty() == false)
 	{
 		int
@@ -2773,32 +2789,32 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
 				|| rtItem->getRules()->getBattleType() == BT_MELEE))
 		{
-			tuLaunch = selectedUnit->getActionTUs(BA_LAUNCH, rtItem);
-			tuAim = selectedUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
-			tuAuto = selectedUnit->getActionTUs(BA_AUTOSHOT, rtItem);
-			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
+			tuLaunch = selUnit->getActionTUs(BA_LAUNCH, rtItem);
+			tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
+			tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, rtItem);
+			tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, rtItem);
 			if (tuLaunch == 0
 				&& tuAim == 0
 				&& tuAuto == 0
 				&& tuSnap == 0)
 			{
-				tuSnap = selectedUnit->getActionTUs(BA_HIT, rtItem);
+				tuSnap = selUnit->getActionTUs(BA_HIT, rtItem);
 			}
 		}
 		else if (activeHand == "STR_LEFT_HAND"
 			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
 				|| ltItem->getRules()->getBattleType() == BT_MELEE))
 		{
-			tuLaunch = selectedUnit->getActionTUs(BA_LAUNCH, ltItem);
-			tuAim = selectedUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
-			tuAuto = selectedUnit->getActionTUs(BA_AUTOSHOT, ltItem);
-			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+			tuLaunch = selUnit->getActionTUs(BA_LAUNCH, ltItem);
+			tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
+			tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, ltItem);
+			tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, ltItem);
 			if (tuLaunch == 0
 				&& tuAim == 0
 				&& tuAuto == 0
 				&& tuSnap == 0)
 			{
-				tuSnap = selectedUnit->getActionTUs(BA_HIT, ltItem);
+				tuSnap = selUnit->getActionTUs(BA_HIT, ltItem);
 			}
 		}
 
@@ -2878,10 +2894,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 	showPsiButton(
-				selectedUnit->getOriginalFaction() == FACTION_HOSTILE
-				&& selectedUnit->getBaseStats()->psiSkill > 0);
-
-	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
+				selUnit->getOriginalFaction() == FACTION_HOSTILE
+				&& selUnit->getBaseStats()->psiSkill > 0);
 }
 
 /**
@@ -2917,27 +2931,96 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	static int
 		delta = 1,
 		color = 34,			// lt.red
-		color_border = 15;	// dk.gray
+		colorOther = 114,	// lt.blue
+		color_border = 15;	// dark.gray
 
-	for (size_t
-			i = 0;
-			i != INDICATORS;
-			++i)
+	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
+	if (selUnit != NULL)
 	{
-		if (_btnVisibleUnit[i]->getVisible() == true)
+		Uint8 doColor;
+		for (size_t
+				i = 0;
+				i != INDICATORS;
+				++i)
 		{
-			_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
-			_btnVisibleUnit[i]->drawRect(1,1, 13,11, static_cast<Uint8>(color));
+			if (_btnVisibleUnit[i]->getVisible() == true)
+			{
+				if (std::find(
+							selUnit->getVisibleUnits()->begin(),
+							selUnit->getVisibleUnits()->end(),
+							_visibleUnit[i]) != selUnit->getVisibleUnits()->end())
+				{
+					doColor = static_cast<Uint8>(color);
+				}
+				else
+					doColor = static_cast<Uint8>(colorOther);
+
+				_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
+				_btnVisibleUnit[i]->drawRect(1,1, 13,11, doColor);
+//				_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
+//				_btnVisibleUnit[i]->drawRect(1,1, 13,11, static_cast<Uint8>(color));
+			}
+		}
+
+		if (color == 34)
+			delta = 1;
+		else if (color == 45)
+			delta = -1;
+
+		color += delta;
+		color_border -= delta;
+	}
+}
+
+/**
+ * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
+ */
+void BattlescapeState::refreshVisUnits()
+{
+	if (playableUnitSelected() == true)
+	{
+		for (size_t // remove target indicators
+				i = 0;
+				i != INDICATORS;
+				++i)
+		{
+			_btnVisibleUnit[i]->setVisible(false);
+			_numVisibleUnit[i]->setVisible(false);
+
+			_visibleUnit[i] = NULL;
+		}
+
+/*		size_t j = 0;
+		BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
+		for (std::vector<BattleUnit*>::const_iterator
+				i = selectedUnit->getVisibleUnits()->begin();
+				i != selectedUnit->getVisibleUnits()->end()
+					&& j != INDICATORS;
+				++i,
+					++j)
+		{
+			_btnVisibleUnit[j]->setVisible();
+			_numVisibleUnit[j]->setVisible();
+
+			_visibleUnit[j] = *i;
+		} */
+		size_t j = 0;
+		for (std::vector<BattleUnit*>::const_iterator
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end()
+				&& j != INDICATORS;
+			++i)
+		{
+			if ((*i)->getUnitVisible() == true
+				&& (*i)->getFaction() == FACTION_HOSTILE)
+			{
+				_btnVisibleUnit[j]->setVisible();
+				_numVisibleUnit[j]->setVisible();
+
+				_visibleUnit[j++] = *i;
+			}
 		}
 	}
-
-	if (color == 34)
-		delta = 1;
-	else if (color == 45)
-		delta = -1;
-
-	color += delta;
-	color_border -= delta;
 }
 
 /**
@@ -3055,6 +3138,717 @@ void BattlescapeState::warning(
 		_warning->showMessage(tr(message));
 	else
 		_warning->showMessage(tr(message).arg(arg));
+}
+
+/**
+ * Adds a new popup window to the queue (this prevents popups from overlapping).
+ * @param state - pointer to popup State
+ */
+void BattlescapeState::popup(State* state)
+{
+	_popups.push_back(state);
+}
+
+/**
+ * Finishes up the current battle, shuts down the battlescape
+ * and presents the debriefing screen for the mission.
+ * @param abort			- true if the mission was aborted
+ * @param inExitArea	- number of soldiers in the exit area OR number of
+ *							survivors when battle finished due to either all
+ *							aliens or objective being destroyed
+ */
+void BattlescapeState::finishBattle(
+		const bool abort,
+		const int inExitArea)
+{
+	while (_game->isState(this) == false)
+		_game->popState();
+
+	_game->getCursor()->setVisible();
+
+	if (_battleSave->getAmbientSound() != -1)
+		_game->getResourcePack()->getSoundByDepth(
+												0,
+												_battleSave->getAmbientSound())
+											->stopLoop();
+
+	_game->getResourcePack()->fadeMusic(_game, 975);
+
+
+	const std::string stType = _battleSave->getMissionType();
+
+	std::string nextStage;
+//	if (stType != "STR_UFO_GROUND_ASSAULT"
+//		&& stType != "STR_UFO_CRASH_RECOVERY")
+	if (_battleSave->getTacticalType() != TCT_UFOCRASHED
+		&& _battleSave->getTacticalType() != TCT_UFOLANDED)
+	{
+		nextStage = _rules->getDeployment(stType)->getNextStage();
+	}
+
+	if (nextStage.empty() == false	// if there is a next mission stage, and
+		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
+	{
+/*		std::string nextStageRace = _rules->getDeployment(stType)->getNextStageRace();
+
+		for (std::vector<TerrorSite*>::const_iterator
+				ts = _gameSave->getTerrorSites()->begin();
+				ts != _gameSave->getTerrorSites()->end()
+					&& nextStageRace.empty() == true;
+				++ts)
+		{
+			if ((*ts)->isInBattlescape() == true)
+				nextStageRace = (*ts)->getAlienRace();
+		}
+
+		for (std::vector<AlienBase*>::const_iterator
+				ab = _gameSave->getAlienBases()->begin();
+				ab != _gameSave->getAlienBases()->end()
+					&& nextStageRace.empty() == true;
+				++ab)
+		{
+			if ((*ab)->isInBattlescape() == true)
+				nextStageRace = (*ab)->getAlienRace();
+		}
+
+		if (nextStageRace.empty() == true)
+			nextStageRace = "STR_MIXED";
+		else if (_rules->getAlienRace(nextStageRace) == NULL)
+		{
+			throw Exception(nextStageRace + " race not found.");
+		} */
+
+		_popups.clear();
+		_battleSave->setMissionType(nextStage);
+
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+//		bgen.setAlienRace("STR_MIXED");
+//		bgen.setAlienRace(nextStageRace);
+		bgen.nextStage();
+
+		_game->popState();
+		_game->pushState(new BriefingState());
+	}
+	else
+	{
+		_popups.clear();
+		_animTimer->stop();
+		_gameTimer->stop();
+		_game->popState();
+
+		if (abort == true
+			|| inExitArea == 0)
+		{
+			// abort was done or no player is still alive
+			// this concludes to defeat when in mars or mars landing mission
+			if (_rules->getDeployment(stType) != NULL
+				&& _rules->getDeployment(stType)->isNoRetreat() == true
+				&& _gameSave->getMonthsPassed() != -1)
+			{
+				_game->pushState(new DefeatState());
+			}
+			else
+				_game->pushState(new DebriefingState());
+		}
+		else
+		{
+			// no abort was done and at least a player is still alive
+			// this concludes to victory when in mars mission
+			if (_rules->getDeployment(stType) != NULL
+				&& _rules->getDeployment(stType)->isFinalMission() == true
+				&& _gameSave->getMonthsPassed() != -1)
+			{
+				_game->pushState(new VictoryState());
+			}
+			else
+				_game->pushState(new DebriefingState());
+		}
+	}
+}
+
+/**
+ * Shows the launch button.
+ * @param show - true to show launch button (default true)
+ */
+void BattlescapeState::showLaunchButton(bool show)
+{
+	_btnLaunch->setVisible(show);
+}
+
+/**
+ * Shows the PSI button.
+ * @param show - true to show PSI button (default true)
+ */
+void BattlescapeState::showPsiButton(bool show)
+{
+	_btnPsi->setVisible(show);
+}
+
+/**
+ * Clears mouse-scrolling state (isMouseScrolling).
+ */
+void BattlescapeState::clearMouseScrollingState()
+{
+	_isMouseScrolling = false;
+}
+
+/**
+ * Returns a pointer to the battlegame, in case we need its functions.
+ * @return, pointer to BattlescapeGame
+ */
+BattlescapeGame* BattlescapeState::getBattleGame()
+{
+	return _battleGame;
+}
+
+/**
+ * Handler for the mouse moving over the icons disabling the tile selection cube.
+ * @param action - pointer to an Action
+ */
+void BattlescapeState::mouseInIcons(Action*)
+{
+	_mouseOverIcons = true;
+
+	_txtConsole1->setText(L"");
+	_txtConsole2->setText(L"");
+//	_txtConsole3->setText(L"");
+//	_txtConsole4->setText(L"");
+
+	_txtTerrain->setVisible();
+	_txtShade->setVisible();
+	_txtTurn->setVisible();
+
+	_txtOrder->setVisible();
+	_lstSoldierInfo->setVisible();
+	_alienMark->setVisible(allowAlienMark());
+//	_txtHasKill->setVisible();
+	_showSoldierData = true;
+
+	_lstTileInfo->setVisible(false);
+}
+
+/**
+ * Handler for the mouse going out of the icons enabling the tile selection cube.
+ * @param action - pointer to an Action
+ */
+void BattlescapeState::mouseOutIcons(Action*)
+{
+	_mouseOverIcons = false;
+
+	_lstTileInfo->setVisible();
+}
+
+/**
+ * Checks if the mouse is over the icons.
+ * @return, true if the mouse is over the icons
+ */
+bool BattlescapeState::getMouseOverIcons() const
+{
+	return _mouseOverIcons;
+}
+
+/**
+ * Determines whether the player is allowed to press buttons.
+ * Buttons are disabled in the middle of a shot, during
+ * the alien turn,and while a player's units are panicking.
+ * The save button is an exception as we want to still be able to save if something
+ * goes wrong during the alien turn, and submit the save file for dissection.
+ * @param allowSaving - true if the help button was clicked
+ * @return, true if the player can still press buttons
+ */
+bool BattlescapeState::allowButtons(bool allowSaving) const
+{
+	return (
+			(allowSaving == true
+					|| _battleSave->getSide() == FACTION_PLAYER
+					|| _battleSave->getDebugMode() == true)
+				&& (_battleGame->getPanicHandled() == true
+					|| _firstInit == true)
+				&& _map->getProjectile() == NULL);
+}
+
+/**
+ * Updates the scale.
+ * @param dX - reference the delta of X
+ * @param dY - referenne the delta of Y
+ */
+void BattlescapeState::resize(
+		int& dX,
+		int& dY)
+{
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+
+	int divisor = 1;
+	double pixelRatioY = 1.;
+
+	if (Options::nonSquarePixelRatio)
+		pixelRatioY = 1.2;
+
+	switch (Options::battlescapeScale)
+	{
+		case SCALE_SCREEN_DIV_3:
+			divisor = 3;
+		break;
+		case SCALE_SCREEN_DIV_2:
+			divisor = 2;
+		break;
+		case SCALE_SCREEN:
+		break;
+
+		default:
+			dX = 0;
+			dY = 0;
+		return;
+	}
+
+	Options::baseXResolution = std::max(
+									Screen::ORIGINAL_WIDTH,
+									Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(
+									Screen::ORIGINAL_HEIGHT,
+									static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / static_cast<double>(divisor)));
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+
+	_map->setWidth(Options::baseXResolution);
+	_map->setHeight(Options::baseYResolution);
+	_map->getCamera()->resize();
+	_map->getCamera()->jumpXY(
+							dX / 2,
+							dY / 2);
+
+	for (std::vector<Surface*>::const_iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
+	{
+		if (   *i != _map
+			&& *i != _btnPsi
+			&& *i != _btnLaunch
+			&& *i != _txtDebug)
+		{
+			(*i)->setX((*i)->getX() + dX / 2);
+			(*i)->setY((*i)->getY() + dY);
+		}
+		else if (*i != _map
+			&& *i != _txtDebug)
+		{
+			(*i)->setX((*i)->getX() + dX);
+		}
+	}
+}
+
+/**
+ * Returns the TurnCounter used by the Battlescape.
+ * @return, pointer to TurnCounter
+ */
+/* TurnCounter* BattlescapeState::getTurnCounter() const
+{
+	return _turnCounter;
+} */
+
+/**
+ * Updates the turn text.
+ */
+void BattlescapeState::updateTurn()
+{
+	_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
+
+/*	std::wostringstream woStr;
+	woStr << L"turn ";
+	woStr << _battleSave->getTurn();
+	_txtTurn->setText(woStr.str()); */
+}
+
+/**
+ * Toggles the icons' surfaces' visibility for Hidden Movement.
+ * @param vis - true to show show icons and info
+ */
+void BattlescapeState::toggleIcons(bool vis)
+{
+	_icons->setVisible(vis);
+	_iconsLayer->setVisible(vis);
+	_numLayers->setVisible(vis);
+
+	_btnUnitUp->setVisible(vis);
+	_btnUnitDown->setVisible(vis);
+	_btnMapUp->setVisible(vis);
+	_btnMapDown->setVisible(vis);
+	_btnShowMap->setVisible(vis);
+	_btnKneel->setVisible(vis);
+	_btnInventory->setVisible(vis);
+	_btnCenter->setVisible(vis);
+	_btnNextSoldier->setVisible(vis);
+	_btnNextStop->setVisible(vis);
+	_btnShowLayers->setVisible(vis);
+	_btnOptions->setVisible(vis);
+	_btnEndTurn->setVisible(vis);
+	_btnAbort->setVisible(vis);
+
+	_txtOrder->setVisible(vis);
+	_lstSoldierInfo->setVisible(vis);
+	_alienMark->setVisible(vis && allowAlienMark());
+//	_txtHasKill->setVisible(vis);
+	_showSoldierData = vis;
+
+	_txtMissionLabel->setVisible(vis);
+	_lstTileInfo->setVisible(vis);
+}
+
+/**
+ * Animates primer warnings on all live grenades.
+ */
+void BattlescapeState::drawFuse()
+{
+	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
+	if (selectedUnit == NULL)
+		return;
+
+
+	static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
+											13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
+
+	if (_fuseFrame == PULSE_FRAMES)
+		_fuseFrame = 0;
+
+	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
+
+	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
+	if (item != NULL
+		&& ((item->getRules()->getBattleType() == BT_GRENADE
+				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			&& item->getFuseTimer() != -1))
+	{
+		_btnLeftHandItem->lock();
+		srf->blitNShade(
+					_btnLeftHandItem,
+					_btnLeftHandItem->getX() + 27,
+					_btnLeftHandItem->getY() - 1,
+					pulse[_fuseFrame],
+					false,
+					3); // red
+		_btnLeftHandItem->unlock();
+	}
+
+	item = selectedUnit->getItem("STR_RIGHT_HAND");
+	if (item != NULL
+		&& ((item->getRules()->getBattleType() == BT_GRENADE
+				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			&& item->getFuseTimer() != -1))
+	{
+		_btnRightHandItem->lock();
+		srf->blitNShade(
+					_btnRightHandItem,
+					_btnRightHandItem->getX() + 27,
+					_btnRightHandItem->getY() - 1,
+					pulse[_fuseFrame],
+					false,
+					3); // red
+		_btnRightHandItem->unlock();
+	}
+
+	++_fuseFrame;
+}
+
+/**
+ * Gets the TimeUnits field from icons.
+ * Note: these are for use in UnitWalkBState to update info when soldier walks.
+ * @return, pointer to time units NumberText
+ */
+NumberText* BattlescapeState::getTimeUnitsField() const
+{
+	return _numTimeUnits;
+}
+
+/**
+ * Gets the TimeUnits bar from icons.
+ * @return, pointer to time units Bar
+ */
+Bar* BattlescapeState::getTimeUnitsBar() const
+{
+	return _barTimeUnits;
+}
+
+/**
+ * Gets the Energy field from icons.
+ * @return, pointer to stamina NumberText
+ */
+NumberText* BattlescapeState::getEnergyField() const
+{
+	return _numEnergy;
+}
+
+/**
+ * Gets the Energy bar from icons.
+ * @return, pointer to stamina Bar
+ */
+Bar* BattlescapeState::getEnergyBar() const
+{
+	return _barEnergy;
+}
+
+/**
+ * Checks if it's okay to show a rookie's kill/stun alien icon.
+ * @return, true if okay to show icon
+ */
+bool BattlescapeState::allowAlienMark() const
+{
+	return _battleSave->getSelectedUnit() != NULL
+		&& _battleSave->getSelectedUnit()->getGeoscapeSoldier() != NULL
+		&& _battleSave->getSelectedUnit()->hasFirstKill();
+}
+
+/**
+ * Updates experience data for the currently selected soldier.
+ */
+void BattlescapeState::updateExperienceInfo()
+{
+	_lstSoldierInfo->clearList();
+	_alienMark->setVisible(false);
+
+	if (_showSoldierData == false)
+		return;
+
+
+	const BattleUnit* const unit = _battleSave->getSelectedUnit();
+	if (unit == NULL
+		|| unit->getGeoscapeSoldier() == NULL)
+	{
+		return;
+	}
+
+	if (unit->hasFirstKill() == true)
+		_alienMark->setVisible();
+
+
+	// keep this consistent ...
+	std::vector<std::wstring> xpType;
+	xpType.push_back(L"f "); // firing
+	xpType.push_back(L"t "); // throwing
+	xpType.push_back(L"m "); // melee
+	xpType.push_back(L"r "); // reactions
+	xpType.push_back(L"b "); // bravery
+	xpType.push_back(L"a "); // psiSkill attack
+	xpType.push_back(L"d "); // psiStrength defense
+
+	// ... consistent with this
+	const int xp[] =
+	{
+		unit->getExpFiring(),
+		unit->getExpThrowing(),
+		unit->getExpMelee(),
+		unit->getExpReactions(),
+		unit->getExpBravery(),
+		unit->getExpPsiSkill(),
+		unit->getExpPsiStrength()
+	};
+
+	for (size_t
+			i = 0;
+			i != sizeof(xp) / sizeof(xp[0]);
+			++i)
+	{
+		_lstSoldierInfo->addRow(
+							2,
+							xpType.at(i).c_str(),
+							Text::formatNumber(xp[i]).c_str());
+
+		if (xp[i] > 10)
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(5), true);		// lt.brown
+		else if (xp[i] > 5)
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true);	// brown
+		else if (xp[i] > 2)
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1), true);		// orange
+		else if (xp[i] > 0)
+			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3), true);		// green
+	}
+}
+
+/**
+ * Updates tile info for the tile under mouseover.
+ * @param tile - pointer to a Tile
+ */
+void BattlescapeState::updateTileInfo(const Tile* const tile)
+{
+	_lstTileInfo->clearList();
+
+	if (tile == NULL
+		|| tile->isDiscovered(2) == false)
+	{
+		return;
+	}
+
+
+	size_t rows = 3;
+	int tuCost = 0;
+
+	const BattleUnit* const unit = _battleSave->getSelectedUnit();
+	if (unit != NULL
+		&& unit->getFaction() == FACTION_PLAYER)
+	{
+		++rows;
+
+		MovementType moveType = unit->getMoveTypeUnit();
+
+		tuCost = tile->getTUCostTile(
+								MapData::O_FLOOR,
+								moveType)
+			   + tile->getTUCostTile(
+								MapData::O_OBJECT,
+								moveType);
+
+		if (   tile->getMapData(MapData::O_FLOOR) == NULL
+			&& tile->getMapData(MapData::O_OBJECT) != NULL)
+		{
+			tuCost += 4;
+		}
+		else if (tuCost == 0)
+		{
+			if (   moveType == MT_FLY
+				|| moveType == MT_FLOAT)
+			{
+				tuCost = 4;
+			}
+			else
+				tuCost = 255;
+		}
+	}
+
+
+	const int info[] =
+	{
+		static_cast<int>(tile->hasNoFloor(_battleSave->getTile(tile->getPosition() + Position(0,0,-1)))),
+		tile->getSmoke(),
+		tile->getFire(),
+		tuCost
+	};
+
+	std::vector<std::wstring> infoType;
+	infoType.push_back(L"F"); // Floor
+	infoType.push_back(L"S"); // smoke
+	infoType.push_back(L"I"); // fire
+	infoType.push_back(L"M"); // tuCost
+
+
+	Uint8 color;
+
+	for (size_t
+			i = 0;
+			i != rows;
+			++i)
+	{
+		if (i == 0) // Floor
+		{
+			std::wstring hasFloor;
+			if (info[i] == 0)
+			{
+				hasFloor = L"F";
+				color = Palette::blockOffset(3); // green, Floor
+			}
+			else
+			{
+				hasFloor = L"-";
+				color = Palette::blockOffset(1); // orange, NO Floor
+			}
+
+			_lstTileInfo->addRow(
+							2,
+							hasFloor.c_str(),
+							infoType.at(i).c_str());
+		}
+		else if (i < 3) // smoke & fire
+		{
+			if (i == 1)
+				color = Palette::blockOffset(5); // brown, smoke
+			else
+				color = Palette::blockOffset(2); // red, fire
+
+			std::wstring value;
+			if (info[i] != 0)
+				value = Text::formatNumber(info[i]).c_str();
+			else
+				value = L"";
+
+			_lstTileInfo->addRow(
+							2,
+							value.c_str(),
+							infoType.at(i).c_str());
+		}
+		else if (unit != NULL) // tuCost
+		{
+			color = Palette::blockOffset(8); // blue
+
+			std::wstring cost;
+			if (info[i] < 255)
+				cost = Text::formatNumber(info[i]).c_str();
+			else
+				cost = L"-";
+
+			_lstTileInfo->addRow(
+							2,
+							cost.c_str(),
+							infoType.at(i).c_str());
+		}
+
+		_lstTileInfo->setCellColor(
+								i,
+								0,
+								color,
+								true);
+	}
+}
+
+/**
+ * Animates a red cross icon when an injured soldier is selected.
+ */
+void BattlescapeState::flashMedic()
+{
+	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
+	if (selectedUnit != NULL
+		&& selectedUnit->getFatalWounds() > 0)
+	{
+		static int phase; // init's only once, to 0
+
+		Surface* const srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
+
+		_btnWounds->lock();
+		srfCross->blitNShade(
+						_btnWounds,
+						_btnWounds->getX() + 2,
+						_btnWounds->getY() + 1,
+						phase,
+						false,
+						3); // red
+		_btnWounds->unlock();
+
+		_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow shades
+
+
+		phase += 2;
+		if (phase == 16)
+			phase = 0;
+	}
+}
+
+/**
+ * Animates targeting cursor over hostile unit when visUnit indicator is clicked.
+ */
+void BattlescapeState::drawVisUnitTarget()
+{
+	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
+
+	if (_visUnitTarget->getVisible() == true)
+	{
+		Surface* const targetCursor = _game->getResourcePack()->getSurfaceSet("TARGET.PCK")->getFrame(cursorFrames[_visUnitTargetFrame]);
+		targetCursor->blit(_visUnitTarget);
+
+		++_visUnitTargetFrame;
+
+		if (_visUnitTargetFrame == TARGET_FRAMES)
+			_visUnitTarget->setVisible(false);
+	}
 }
 
 /**
@@ -3628,753 +4422,6 @@ void BattlescapeState::saveVoxelMap()
 
 		if (error != 0)
 			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
-	}
-}
-
-/**
- * Adds a new popup window to the queue (this prevents popups from overlapping).
- * @param state - pointer to popup State
- */
-void BattlescapeState::popup(State* state)
-{
-	_popups.push_back(state);
-}
-
-/**
- * Finishes up the current battle, shuts down the battlescape
- * and presents the debriefing screen for the mission.
- * @param abort			- true if the mission was aborted
- * @param inExitArea	- number of soldiers in the exit area OR number of
- *							survivors when battle finished due to either all
- *							aliens or objective being destroyed
- */
-void BattlescapeState::finishBattle(
-		const bool abort,
-		const int inExitArea)
-{
-	while (_game->isState(this) == false)
-		_game->popState();
-
-	_game->getCursor()->setVisible();
-
-	if (_battleSave->getAmbientSound() != -1)
-		_game->getResourcePack()->getSoundByDepth(
-												0,
-												_battleSave->getAmbientSound())
-											->stopLoop();
-
-	_game->getResourcePack()->fadeMusic(_game, 975);
-
-
-	const std::string stType = _battleSave->getMissionType();
-
-	std::string nextStage;
-//	if (stType != "STR_UFO_GROUND_ASSAULT"
-//		&& stType != "STR_UFO_CRASH_RECOVERY")
-	if (_battleSave->getTacticalType() != TCT_UFOCRASHED
-		&& _battleSave->getTacticalType() != TCT_UFOLANDED)
-	{
-		nextStage = _rules->getDeployment(stType)->getNextStage();
-	}
-
-	if (nextStage.empty() == false	// if there is a next mission stage, and
-		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
-	{
-/*		std::string nextStageRace = _rules->getDeployment(stType)->getNextStageRace();
-
-		for (std::vector<TerrorSite*>::const_iterator
-				ts = _gameSave->getTerrorSites()->begin();
-				ts != _gameSave->getTerrorSites()->end()
-					&& nextStageRace.empty() == true;
-				++ts)
-		{
-			if ((*ts)->isInBattlescape() == true)
-				nextStageRace = (*ts)->getAlienRace();
-		}
-
-		for (std::vector<AlienBase*>::const_iterator
-				ab = _gameSave->getAlienBases()->begin();
-				ab != _gameSave->getAlienBases()->end()
-					&& nextStageRace.empty() == true;
-				++ab)
-		{
-			if ((*ab)->isInBattlescape() == true)
-				nextStageRace = (*ab)->getAlienRace();
-		}
-
-		if (nextStageRace.empty() == true)
-			nextStageRace = "STR_MIXED";
-		else if (_rules->getAlienRace(nextStageRace) == NULL)
-		{
-			throw Exception(nextStageRace + " race not found.");
-		} */
-
-		_popups.clear();
-		_battleSave->setMissionType(nextStage);
-
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-//		bgen.setAlienRace("STR_MIXED");
-//		bgen.setAlienRace(nextStageRace);
-		bgen.nextStage();
-
-		_game->popState();
-		_game->pushState(new BriefingState());
-	}
-	else
-	{
-		_popups.clear();
-		_animTimer->stop();
-		_gameTimer->stop();
-		_game->popState();
-
-		if (abort == true
-			|| inExitArea == 0)
-		{
-			// abort was done or no player is still alive
-			// this concludes to defeat when in mars or mars landing mission
-			if (_rules->getDeployment(stType) != NULL
-				&& _rules->getDeployment(stType)->isNoRetreat() == true
-				&& _gameSave->getMonthsPassed() != -1)
-			{
-				_game->pushState(new DefeatState());
-			}
-			else
-				_game->pushState(new DebriefingState());
-		}
-		else
-		{
-			// no abort was done and at least a player is still alive
-			// this concludes to victory when in mars mission
-			if (_rules->getDeployment(stType) != NULL
-				&& _rules->getDeployment(stType)->isFinalMission() == true
-				&& _gameSave->getMonthsPassed() != -1)
-			{
-				_game->pushState(new VictoryState());
-			}
-			else
-				_game->pushState(new DebriefingState());
-		}
-	}
-}
-
-/**
- * Shows the launch button.
- * @param show - true to show launch button (default true)
- */
-void BattlescapeState::showLaunchButton(bool show)
-{
-	_btnLaunch->setVisible(show);
-}
-
-/**
- * Shows the PSI button.
- * @param show - true to show PSI button (default true)
- */
-void BattlescapeState::showPsiButton(bool show)
-{
-	_btnPsi->setVisible(show);
-}
-
-/**
- * Clears mouse-scrolling state (isMouseScrolling).
- */
-void BattlescapeState::clearMouseScrollingState()
-{
-	_isMouseScrolling = false;
-}
-
-/**
- * Returns a pointer to the battlegame, in case we need its functions.
- * @return, pointer to BattlescapeGame
- */
-BattlescapeGame* BattlescapeState::getBattleGame()
-{
-	return _battleGame;
-}
-
-/**
- * Handler for the mouse moving over the icons disabling the tile selection cube.
- * @param action - pointer to an Action
- */
-void BattlescapeState::mouseInIcons(Action*)
-{
-	_mouseOverIcons = true;
-
-	_txtConsole1->setText(L"");
-	_txtConsole2->setText(L"");
-//	_txtConsole3->setText(L"");
-//	_txtConsole4->setText(L"");
-
-	_txtTerrain->setVisible();
-	_txtShade->setVisible();
-	_txtTurn->setVisible();
-
-	_txtOrder->setVisible();
-	_lstSoldierInfo->setVisible();
-	_alienMark->setVisible(allowAlienMark());
-//	_txtHasKill->setVisible();
-	_showSoldierData = true;
-
-	_lstTileInfo->setVisible(false);
-}
-
-/**
- * Handler for the mouse going out of the icons enabling the tile selection cube.
- * @param action - pointer to an Action
- */
-void BattlescapeState::mouseOutIcons(Action*)
-{
-	_mouseOverIcons = false;
-
-	_lstTileInfo->setVisible();
-}
-
-/**
- * Checks if the mouse is over the icons.
- * @return, true if the mouse is over the icons
- */
-bool BattlescapeState::getMouseOverIcons() const
-{
-	return _mouseOverIcons;
-}
-
-/**
- * Determines whether the player is allowed to press buttons.
- * Buttons are disabled in the middle of a shot, during
- * the alien turn,and while a player's units are panicking.
- * The save button is an exception as we want to still be able to save if something
- * goes wrong during the alien turn, and submit the save file for dissection.
- * @param allowSaving - true if the help button was clicked
- * @return, true if the player can still press buttons
- */
-bool BattlescapeState::allowButtons(bool allowSaving) const
-{
-	return (
-			(allowSaving == true
-					|| _battleSave->getSide() == FACTION_PLAYER
-					|| _battleSave->getDebugMode() == true)
-				&& (_battleGame->getPanicHandled() == true
-					|| _firstInit == true)
-				&& _map->getProjectile() == NULL);
-}
-
-/**
- * Updates the scale.
- * @param dX - reference the delta of X
- * @param dY - referenne the delta of Y
- */
-void BattlescapeState::resize(
-		int& dX,
-		int& dY)
-{
-	dX = Options::baseXResolution;
-	dY = Options::baseYResolution;
-
-	int divisor = 1;
-	double pixelRatioY = 1.;
-
-	if (Options::nonSquarePixelRatio)
-		pixelRatioY = 1.2;
-
-	switch (Options::battlescapeScale)
-	{
-		case SCALE_SCREEN_DIV_3:
-			divisor = 3;
-		break;
-		case SCALE_SCREEN_DIV_2:
-			divisor = 2;
-		break;
-		case SCALE_SCREEN:
-		break;
-
-		default:
-			dX = 0;
-			dY = 0;
-		return;
-	}
-
-	Options::baseXResolution = std::max(
-									Screen::ORIGINAL_WIDTH,
-									Options::displayWidth / divisor);
-	Options::baseYResolution = std::max(
-									Screen::ORIGINAL_HEIGHT,
-									static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / static_cast<double>(divisor)));
-
-	dX = Options::baseXResolution - dX;
-	dY = Options::baseYResolution - dY;
-
-	_map->setWidth(Options::baseXResolution);
-	_map->setHeight(Options::baseYResolution);
-	_map->getCamera()->resize();
-	_map->getCamera()->jumpXY(
-							dX / 2,
-							dY / 2);
-
-	for (std::vector<Surface*>::const_iterator
-			i = _surfaces.begin();
-			i != _surfaces.end();
-			++i)
-	{
-		if (   *i != _map
-			&& *i != _btnPsi
-			&& *i != _btnLaunch
-			&& *i != _txtDebug)
-		{
-			(*i)->setX((*i)->getX() + dX / 2);
-			(*i)->setY((*i)->getY() + dY);
-		}
-		else if (*i != _map
-			&& *i != _txtDebug)
-		{
-			(*i)->setX((*i)->getX() + dX);
-		}
-	}
-}
-
-/**
- * Returns the TurnCounter used by the Battlescape.
- * @return, pointer to TurnCounter
- */
-/* TurnCounter* BattlescapeState::getTurnCounter() const
-{
-	return _turnCounter;
-} */
-
-/**
- * Updates the turn text.
- */
-void BattlescapeState::updateTurn()
-{
-	_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
-
-/*	std::wostringstream woStr;
-	woStr << L"turn ";
-	woStr << _battleSave->getTurn();
-	_txtTurn->setText(woStr.str()); */
-}
-
-/**
- * Toggles the icons' surfaces' visibility for Hidden Movement.
- * @param vis - true to show show icons and info
- */
-void BattlescapeState::toggleIcons(bool vis)
-{
-	_icons->setVisible(vis);
-	_iconsLayer->setVisible(vis);
-	_numLayers->setVisible(vis);
-
-	_btnUnitUp->setVisible(vis);
-	_btnUnitDown->setVisible(vis);
-	_btnMapUp->setVisible(vis);
-	_btnMapDown->setVisible(vis);
-	_btnShowMap->setVisible(vis);
-	_btnKneel->setVisible(vis);
-	_btnInventory->setVisible(vis);
-	_btnCenter->setVisible(vis);
-	_btnNextSoldier->setVisible(vis);
-	_btnNextStop->setVisible(vis);
-	_btnShowLayers->setVisible(vis);
-	_btnOptions->setVisible(vis);
-	_btnEndTurn->setVisible(vis);
-	_btnAbort->setVisible(vis);
-
-	_txtOrder->setVisible(vis);
-	_lstSoldierInfo->setVisible(vis);
-	_alienMark->setVisible(vis && allowAlienMark());
-//	_txtHasKill->setVisible(vis);
-	_showSoldierData = vis;
-
-	_txtMissionLabel->setVisible(vis);
-	_lstTileInfo->setVisible(vis);
-}
-
-/**
- * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
- */
-void BattlescapeState::refreshVisUnits()
-{
-	if (playableUnitSelected() == false)
-		return;
-
-
-	for (size_t // remove red target indicators
-			i = 0;
-			i != INDICATORS;
-			++i)
-	{
-		_btnVisibleUnit[i]->setVisible(false);
-		_numVisibleUnit[i]->setVisible(false);
-
-		_visibleUnit[i] = NULL;
-	}
-
-	size_t j = 0;
-	BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
-	for (std::vector<BattleUnit*>::const_iterator
-			i = selectedUnit->getVisibleUnits()->begin();
-			i != selectedUnit->getVisibleUnits()->end()
-				&& j != INDICATORS;
-			++i,
-				++j)
-	{
-		_btnVisibleUnit[j]->setVisible();
-		_numVisibleUnit[j]->setVisible();
-
-		_visibleUnit[j] = *i;
-	}
-}
-
-/**
- * Animates primer warnings on all live grenades.
- */
-void BattlescapeState::drawFuse()
-{
-	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
-	if (selectedUnit == NULL)
-		return;
-
-
-	static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
-											13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
-
-	if (_fuseFrame == PULSE_FRAMES)
-		_fuseFrame = 0;
-
-	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
-
-	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
-	if (item != NULL
-		&& ((item->getRules()->getBattleType() == BT_GRENADE
-				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-			&& item->getFuseTimer() != -1))
-	{
-		_btnLeftHandItem->lock();
-		srf->blitNShade(
-					_btnLeftHandItem,
-					_btnLeftHandItem->getX() + 27,
-					_btnLeftHandItem->getY() - 1,
-					pulse[_fuseFrame],
-					false,
-					3); // red
-		_btnLeftHandItem->unlock();
-	}
-
-	item = selectedUnit->getItem("STR_RIGHT_HAND");
-	if (item != NULL
-		&& ((item->getRules()->getBattleType() == BT_GRENADE
-				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-			&& item->getFuseTimer() != -1))
-	{
-		_btnRightHandItem->lock();
-		srf->blitNShade(
-					_btnRightHandItem,
-					_btnRightHandItem->getX() + 27,
-					_btnRightHandItem->getY() - 1,
-					pulse[_fuseFrame],
-					false,
-					3); // red
-		_btnRightHandItem->unlock();
-	}
-
-	++_fuseFrame;
-}
-
-/**
- * Gets the TimeUnits field from icons.
- * Note: these are for use in UnitWalkBState to update info when soldier walks.
- * @return, pointer to time units NumberText
- */
-NumberText* BattlescapeState::getTimeUnitsField() const
-{
-	return _numTimeUnits;
-}
-
-/**
- * Gets the TimeUnits bar from icons.
- * @return, pointer to time units Bar
- */
-Bar* BattlescapeState::getTimeUnitsBar() const
-{
-	return _barTimeUnits;
-}
-
-/**
- * Gets the Energy field from icons.
- * @return, pointer to stamina NumberText
- */
-NumberText* BattlescapeState::getEnergyField() const
-{
-	return _numEnergy;
-}
-
-/**
- * Gets the Energy bar from icons.
- * @return, pointer to stamina Bar
- */
-Bar* BattlescapeState::getEnergyBar() const
-{
-	return _barEnergy;
-}
-
-/**
- * Checks if it's okay to show a rookie's kill/stun alien icon.
- * @return, true if okay to show icon
- */
-bool BattlescapeState::allowAlienMark() const
-{
-	return _battleSave->getSelectedUnit() != NULL
-		&& _battleSave->getSelectedUnit()->getGeoscapeSoldier() != NULL
-		&& _battleSave->getSelectedUnit()->hasFirstKill();
-}
-
-/**
- * Updates experience data for the currently selected soldier.
- */
-void BattlescapeState::updateExperienceInfo()
-{
-	_lstSoldierInfo->clearList();
-	_alienMark->setVisible(false);
-
-	if (_showSoldierData == false)
-		return;
-
-
-	const BattleUnit* const unit = _battleSave->getSelectedUnit();
-	if (unit == NULL
-		|| unit->getGeoscapeSoldier() == NULL)
-	{
-		return;
-	}
-
-	if (unit->hasFirstKill() == true)
-		_alienMark->setVisible();
-
-
-	// keep this consistent ...
-	std::vector<std::wstring> xpType;
-	xpType.push_back(L"f "); // firing
-	xpType.push_back(L"t "); // throwing
-	xpType.push_back(L"m "); // melee
-	xpType.push_back(L"r "); // reactions
-	xpType.push_back(L"b "); // bravery
-	xpType.push_back(L"a "); // psiSkill attack
-	xpType.push_back(L"d "); // psiStrength defense
-
-	// ... consistent with this
-	const int xp[] =
-	{
-		unit->getExpFiring(),
-		unit->getExpThrowing(),
-		unit->getExpMelee(),
-		unit->getExpReactions(),
-		unit->getExpBravery(),
-		unit->getExpPsiSkill(),
-		unit->getExpPsiStrength()
-	};
-
-	for (size_t
-			i = 0;
-			i != sizeof(xp) / sizeof(xp[0]);
-			++i)
-	{
-		_lstSoldierInfo->addRow(
-							2,
-							xpType.at(i).c_str(),
-							Text::formatNumber(xp[i]).c_str());
-
-		if (xp[i] > 10)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(5), true);		// lt.brown
-		else if (xp[i] > 5)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true);	// brown
-		else if (xp[i] > 2)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1), true);		// orange
-		else if (xp[i] > 0)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3), true);		// green
-	}
-}
-
-/**
- * Updates tile info for the tile under mouseover.
- * @param tile - pointer to a Tile
- */
-void BattlescapeState::updateTileInfo(const Tile* const tile)
-{
-	_lstTileInfo->clearList();
-
-	if (tile == NULL
-		|| tile->isDiscovered(2) == false)
-	{
-		return;
-	}
-
-
-	size_t rows = 3;
-	int tuCost = 0;
-
-	const BattleUnit* const unit = _battleSave->getSelectedUnit();
-	if (unit != NULL
-		&& unit->getFaction() == FACTION_PLAYER)
-	{
-		++rows;
-
-		MovementType moveType = unit->getMoveTypeUnit();
-
-		tuCost = tile->getTUCostTile(
-								MapData::O_FLOOR,
-								moveType)
-			   + tile->getTUCostTile(
-								MapData::O_OBJECT,
-								moveType);
-
-		if (   tile->getMapData(MapData::O_FLOOR) == NULL
-			&& tile->getMapData(MapData::O_OBJECT) != NULL)
-		{
-			tuCost += 4;
-		}
-		else if (tuCost == 0)
-		{
-			if (   moveType == MT_FLY
-				|| moveType == MT_FLOAT)
-			{
-				tuCost = 4;
-			}
-			else
-				tuCost = 255;
-		}
-	}
-
-
-	const int info[] =
-	{
-		static_cast<int>(tile->hasNoFloor(_battleSave->getTile(tile->getPosition() + Position(0,0,-1)))),
-		tile->getSmoke(),
-		tile->getFire(),
-		tuCost
-	};
-
-	std::vector<std::wstring> infoType;
-	infoType.push_back(L"F"); // Floor
-	infoType.push_back(L"S"); // smoke
-	infoType.push_back(L"I"); // fire
-	infoType.push_back(L"M"); // tuCost
-
-
-	Uint8 color;
-
-	for (size_t
-			i = 0;
-			i != rows;
-			++i)
-	{
-		if (i == 0) // Floor
-		{
-			std::wstring hasFloor;
-			if (info[i] == 0)
-			{
-				hasFloor = L"F";
-				color = Palette::blockOffset(3); // green, Floor
-			}
-			else
-			{
-				hasFloor = L"-";
-				color = Palette::blockOffset(1); // orange, NO Floor
-			}
-
-			_lstTileInfo->addRow(
-							2,
-							hasFloor.c_str(),
-							infoType.at(i).c_str());
-		}
-		else if (i < 3) // smoke & fire
-		{
-			if (i == 1)
-				color = Palette::blockOffset(5); // brown, smoke
-			else
-				color = Palette::blockOffset(2); // red, fire
-
-			std::wstring value;
-			if (info[i] != 0)
-				value = Text::formatNumber(info[i]).c_str();
-			else
-				value = L"";
-
-			_lstTileInfo->addRow(
-							2,
-							value.c_str(),
-							infoType.at(i).c_str());
-		}
-		else if (unit != NULL) // tuCost
-		{
-			color = Palette::blockOffset(8); // blue
-
-			std::wstring cost;
-			if (info[i] < 255)
-				cost = Text::formatNumber(info[i]).c_str();
-			else
-				cost = L"-";
-
-			_lstTileInfo->addRow(
-							2,
-							cost.c_str(),
-							infoType.at(i).c_str());
-		}
-
-		_lstTileInfo->setCellColor(
-								i,
-								0,
-								color,
-								true);
-	}
-}
-
-/**
- * Animates a red cross icon when an injured soldier is selected.
- */
-void BattlescapeState::flashMedic()
-{
-	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
-	if (selectedUnit != NULL
-		&& selectedUnit->getFatalWounds() > 0)
-	{
-		static int phase; // init's only once, to 0
-
-		Surface* const srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
-
-		_btnWounds->lock();
-		srfCross->blitNShade(
-						_btnWounds,
-						_btnWounds->getX() + 2,
-						_btnWounds->getY() + 1,
-						phase,
-						false,
-						3); // red
-		_btnWounds->unlock();
-
-		_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow shades
-
-
-		phase += 2;
-		if (phase == 16)
-			phase = 0;
-	}
-}
-
-/**
- * Animates targeting cursor over hostile unit when visUnit indicator is clicked.
- */
-void BattlescapeState::drawVisUnitTarget()
-{
-	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
-
-	if (_visUnitTarget->getVisible() == true)
-	{
-		Surface* const targetCursor = _game->getResourcePack()->getSurfaceSet("TARGET.PCK")->getFrame(cursorFrames[_visUnitTargetFrame]);
-		targetCursor->blit(_visUnitTarget);
-
-		++_visUnitTargetFrame;
-
-		if (_visUnitTargetFrame == TARGET_FRAMES)
-			_visUnitTarget->setVisible(false);
 	}
 }
 

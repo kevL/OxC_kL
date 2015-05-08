@@ -111,14 +111,15 @@ private:
 
 	std::list<BattleUnit*> _fallingUnits;
 
+//	std::vector<int> _visUnitsAlienId;
+
 	std::vector<BattleItem*>
 		_deleted,
 		_items,
 		_recoverGuaranteed,
 		_recoverConditional;
-	std::vector<BattleUnit*>
-//		_exposedUnits,
-		_units;
+	std::vector<BattleUnit*> _units;
+//		_exposedUnits;
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<Node*> _nodes;
 	std::vector<Position>

@@ -322,6 +322,8 @@ private:
 		bool playableUnitSelected();
 		/// Updates soldier name/rank/tu/energy/health/morale.
 		void updateSoldierInfo(bool calcFoV = true);
+		/// Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
+		void refreshVisUnits();
 
 		/// Animates map objects on the map, also smoke,fire, ...
 		void animate();
@@ -366,13 +368,6 @@ private:
 		/// Returns a pointer to the battlegame, in case we need its functions.
 		BattlescapeGame* getBattleGame();
 
-		/// Saves a map as used by the AI.
-		void saveAIMap();
-		/// Saves each layer of voxels on the bettlescape as a png.
-		void saveVoxelMap();
-		/// Saves a first-person voxel view of the battlescape.
-		void saveVoxelView();
-
 		/// Handler for the mouse moving over the icons, disables the tile selection cube.
 		void mouseInIcons(Action* action);
 		/// Handler for the mouse going out of the icons, enabling the tile selection cube.
@@ -395,9 +390,6 @@ private:
 
 		/// Toggles the icons' surfaces' visibility for Hidden Movement.
 		void toggleIcons(bool vis);
-
-		/// Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
-		void refreshVisUnits();
 
 		/// Shows primer warnings on all live grenades. Adapted from Inventory.
 		void drawFuse();
@@ -422,6 +414,13 @@ private:
 		void flashMedic();
 		/// Animates targeting cursor over hostile unit when visUnit indicator is clicked.
 		void drawVisUnitTarget();
+
+		/// Saves a map as used by the AI.
+		void saveAIMap();
+		/// Saves each layer of voxels on the bettlescape as a png.
+		void saveVoxelMap();
+		/// Saves a first-person voxel view of the battlescape.
+		void saveVoxelView();
 };
 
 }

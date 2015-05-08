@@ -728,6 +728,8 @@ private:
 		std::vector<BattleUnit*>* getVisibleUnits();
 		/// Clears visible units.
 		void clearVisibleUnits();
+		/// Gets the vector of BattleUnits that this unit has seen this turn.
+		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
 		/// Adds unit to visible tiles.
 		bool addToVisibleTiles(Tile* tile);
@@ -991,9 +993,6 @@ private:
 		/// Gets this BattleUnit's rules.
 		Unit* getUnitRules() const
 		{ return _unitRules; }
-
-		/// Gets the vector of BattleUnits that this unit has seen this turn.
-		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
 		/// Sets this unit's rank integer.
 		void setRankInt(int ranks);

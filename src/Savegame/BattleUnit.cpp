@@ -1981,9 +1981,9 @@ bool BattleUnit::getUnitVisible() const
 /**
  * Adds a unit to this BattleUnits vector(s) of spotted and/or visible units;
  * visible units are currently seen - unitsSpottedThisTurn are just that.
- * @note Don't confuse either of these with the 'visible-to-player' flag.
+ * @note Don't confuse either of these with the '_visible' to Player flag.
  * @param unit - pointer to a seen BattleUnit
- * @return, true if the seen unit was NOT previously flagged as a 'visibleUnit'
+ * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this is not used)
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
@@ -2036,6 +2036,16 @@ std::vector<BattleUnit*>* BattleUnit::getVisibleUnits()
 void BattleUnit::clearVisibleUnits()
 {
 	_visibleUnits.clear();
+}
+
+/**
+ * Gets the other units spotted this turn by this unit.
+ * kL_Update: now has relevance only for aLien units.
+ * @return, reference to a vector of pointers to BattleUnits
+ */
+std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
+{
+	return _unitsSpottedThisTurn;
 }
 
 /**
@@ -3833,16 +3843,6 @@ void BattleUnit::invalidateCache()
 	}
 
 	_cacheInvalid = true;
-}
-
-/**
- * Gets the other units spotted this turn by this unit.
- * kL_Update: now has relevance only for aLien units.
- * @return, reference to a vector of pointers to BattleUnits
- */
-std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
-{
-	return _unitsSpottedThisTurn;
 }
 
 /**
