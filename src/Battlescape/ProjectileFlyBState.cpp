@@ -476,9 +476,6 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	_parent->getMap()->setProjectile(projectile); // else, add the projectile on the map
 
-	if (_unit->getArmor()->getShootFrames() != 0)
-		_parent->getMap()->setShowProjectile(false); // postpone showing the Celatid spit-blob till later
-
 
 	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 	int sound = -1;
@@ -644,6 +641,9 @@ bool ProjectileFlyBState::createNewProjectile()
 											->play(
 												-1,
 												_parent->getMap()->getSoundAngle(_unit->getPosition()));
+
+	if (_unit->getArmor()->getShootFrames() != 0)
+		_parent->getMap()->setShowProjectile(false); // postpone showing the Celatid spit-blob till later
 
 	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;

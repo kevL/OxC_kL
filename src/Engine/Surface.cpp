@@ -616,7 +616,7 @@ void Surface::blit(Surface* surface)
 
 /**
  * Copies the exact contents of another surface onto this one.
- * Only the content that would overlap both surfaces is copied, in
+ * Only the content that would overlap both surfaces is copied in
  * accordance with their positions. This is handy for applying
  * effects over another surface without modifying the original.
  * @param surface - pointer to a Surface to copy from
@@ -624,7 +624,7 @@ void Surface::blit(Surface* surface)
 void Surface::copy(Surface* surface)
 {
 /*	SDL_BlitSurface uses color matching, and is therefore unreliable
-	as a means to copy the contents of one surface to another instead
+	as a means to copy the contents of one surface to another; instead
 	we have to do this manually.
 
 	SDL_Rect from;

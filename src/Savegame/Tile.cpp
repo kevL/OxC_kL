@@ -1385,9 +1385,10 @@ void Tile::removeItem(BattleItem* const item)
 
 /**
  * Get the topmost item sprite to draw on the battlescape.
+ * @param primed - pointer to whether a proxy-grenade is primed or not
  * @return, sprite ID in floorob (-1 none)
  */
-int Tile::getTopItemSprite() const
+int Tile::getTopItemSprite(bool* ptrPrimed) const
 {
 	if (_inventory.empty() == true)
 		return -1;
@@ -1397,16 +1398,28 @@ int Tile::getTopItemSprite() const
 		* fuseGrenade = NULL,
 		* solCorpse = NULL;
 
+	if (ptrPrimed != NULL)
+		*ptrPrimed = false;
+
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+		if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
+			&& (*i)->getFuseTimer() > -1)
+		{
 			proxGrenade = *i;
 
-		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
+			if (ptrPrimed != NULL)
+				*ptrPrimed = true;
+		}
+
+		if ((*i)->getRules()->getBattleType() == BT_GRENADE
+			&& (*i)->getFuseTimer() > -1)
+		{
 			fuseGrenade = *i;
+		}
 
 		if ((*i)->getUnit() != NULL
 			&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)

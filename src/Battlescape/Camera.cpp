@@ -119,7 +119,7 @@ void Camera::minMaxInt(
 void Camera::mousePress(Action* action, State*)
 {
 	if (Options::battleDragScrollButton != SDL_BUTTON_MIDDLE
-		|| (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		|| (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 			down();
@@ -144,13 +144,15 @@ void Camera::mouseRelease(Action* action, State*)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		&& Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{
-		_scrollMouseX = 0;
+		_scrollMouseX =
 		_scrollMouseY = 0;
 		_scrollMouseTimer->stop();
 		_scrollTrigger = false;
 
-		int posX = action->getXMouse();
-		int posY = action->getYMouse();
+		int
+			posX = action->getXMouse(),
+			posY = action->getYMouse();
+
 		if ((posX > 0
 				&& posX < SCROLL_BORDER * action->getXScale())
 			|| posX > (_screenWidth - SCROLL_BORDER) * action->getXScale()
@@ -252,7 +254,7 @@ void Camera::mouseOver(Action* action, State*)
 				|| _scrollMouseY != 0)
 			&& _scrollMouseTimer->isRunning() == false
 			&& _scrollKeyTimer->isRunning() == false
-			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			_scrollMouseTimer->start();
 		}
@@ -287,17 +289,17 @@ void Camera::keyboardPress(Action* action, State*)
 	else if (key == Options::keyBattleDown)
 		_scrollKeyY = -scrollSpeed;
 
-	if ((_scrollKeyX
-			|| _scrollKeyY)
-		&& !_scrollKeyTimer->isRunning()
-		&& !_scrollMouseTimer->isRunning()
-		&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+	if ((_scrollKeyX != 0
+			|| _scrollKeyY != 0)
+		&& _scrollKeyTimer->isRunning() == false
+		&& _scrollMouseTimer->isRunning() == false
+		&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 	{
 		_scrollKeyTimer->start();
 	}
-	else if (_scrollKeyTimer->isRunning()
-		&& !_scrollKeyX
-		&& !_scrollKeyY)
+	else if (_scrollKeyTimer->isRunning() == true
+		&& _scrollKeyX == 0
+		&& _scrollKeyY == 0)
 	{
 		_scrollKeyTimer->stop();
 	}
@@ -323,17 +325,17 @@ void Camera::keyboardRelease(Action* action, State*)
 	else if (key == Options::keyBattleDown)
 		_scrollKeyY = 0;
 
-	if ((_scrollKeyX
-			|| _scrollKeyY)
-		&& !_scrollKeyTimer->isRunning()
-		&& !_scrollMouseTimer->isRunning()
-		&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+	if ((_scrollKeyX != 0
+			|| _scrollKeyY != 0)
+		&& _scrollKeyTimer->isRunning() == false
+		&& _scrollMouseTimer->isRunning() == false
+		&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 	{
 		_scrollKeyTimer->start();
 	}
-	else if (_scrollKeyTimer->isRunning()
-		&& !_scrollKeyX
-		&& !_scrollKeyY)
+	else if (_scrollKeyTimer->isRunning() == true
+		&& _scrollKeyX == 0
+		&& _scrollKeyY == 0)
 	{
 		_scrollKeyTimer->stop();
 	}
@@ -539,7 +541,6 @@ void Camera::centerOnPosition(
 Position Camera::getCenterPosition()
 {
 	_center.z = _mapOffset.z;
-
 	return _center;
 }
 
@@ -664,7 +665,7 @@ unsigned int Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 
-	return _showAllLayers? 2: 1;
+	return _showAllLayers ? 2 : 1;
 }
 
 /**
@@ -690,10 +691,14 @@ bool Camera::isOnScreen(const Position& mapPos) const
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-	return screenPos.x > -8 // kL_etc:
-		&& screenPos.x < _screenWidth + 8
-		&& screenPos.y > -12
-		&& screenPos.y < _screenHeight - 72; // <- icons.
+//	return screenPos.x > -8 // kL ->
+//		&& screenPos.x < _screenWidth + 8
+//		&& screenPos.y > -12
+//		&& screenPos.y < _screenHeight - 72; // <- icons.
+	return screenPos.x > 8 // kL -> try these
+		&& screenPos.x < _screenWidth - 8
+		&& screenPos.y > -16
+		&& screenPos.y < _screenHeight - 80; // <- icons.
 }
 /*
  * Checks if map coordinates X,Y,Z are on screen.

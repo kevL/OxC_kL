@@ -290,7 +290,7 @@ protected:
 		void removeItem(BattleItem* const item);
 
 		/// Gets top-most item-sprite
-		int getTopItemSprite() const;
+		int getTopItemSprite(bool* ptrPrimed = NULL) const;
 		/// Gets if the tile has an unconscious xCom unit in its inventory.
 		int getHasUnconsciousSoldier() const;
 

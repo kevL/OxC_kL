@@ -127,7 +127,7 @@ Map::Map(
 		_showProjectile(true),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
 		_res(game->getResourcePack()),
-		_fuseColor(111)
+		_fuseColor(31)
 {
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
@@ -1507,7 +1507,8 @@ void Map::drawTerrain(Surface* surface) // private.
 						}
 
 						// Draw Item on Floor (if any)
-						const int sprite = tile->getTopItemSprite();
+						bool primed;
+						const int sprite = tile->getTopItemSprite(&primed);
 						if (sprite != -1)
 						{
 							srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
@@ -1519,8 +1520,11 @@ void Map::drawTerrain(Surface* surface) // private.
 										screenPosition.y + tile->getTerrainLevel(),
 										tileShade);
 
-								if (sprite == 21) // standard proxy grenade
-									srfSprite->setPixelColor(16,28, _fuseColor); // 105 is the pixel's standard color
+								if (primed == true
+									&& sprite == 21) // standard proxy grenade
+								{
+									srfSprite->setPixelColor(16,28, _fuseColor); // 17 is the pixel's spritesheet color
+								}
 							}
 
 							if (tile->isDiscovered(2) == true)
@@ -4483,8 +4487,8 @@ void Map::animate(bool redraw)
 		_redraw = true;
 
 
-	if (--_fuseColor == 96)
-		_fuseColor = 111;
+	if (--_fuseColor == 15)
+		_fuseColor = 31;
 
 }
 
@@ -5071,6 +5075,7 @@ SavedBattleGame* Map::getSavedBattle() const
 
 /**
  * Tells the map to reveal because there's a waypoint action going down.
+ * @param wp - true if there is waypoint/missile action in progress (default true)
  */
 void Map::setWaypointAction(bool wp)
 {
@@ -5079,7 +5084,7 @@ void Map::setWaypointAction(bool wp)
 
 /**
  * Sets whether to draw the projectile on the Map.
- * @param show - true to show the projectile
+ * @param show - true to show the projectile (default true)
  */
 void Map::setShowProjectile(bool show)
 {
