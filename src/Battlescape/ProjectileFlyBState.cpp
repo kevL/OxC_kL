@@ -758,7 +758,7 @@ void ProjectileFlyBState::think()
 			_parent->popState();
 		}
 	}
-	else // projectile in motion -> ! impact !
+	else // projectile VALID in motion -> ! impact !
 	{
 		if (_action.type != BA_THROW
 			&& _ammo != NULL
@@ -768,7 +768,7 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
 
-		if (_parent->getMap()->getProjectile()->traceProjectile() == false)
+		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // missile pathing finished
 		{
 			if (_action.type == BA_THROW)
 			{
@@ -819,27 +819,30 @@ void ProjectileFlyBState::think()
 														_parent->getMap()->getSoundAngle(pos));
 			}
 			else if (_action.type == BA_LAUNCH
-				&& _action.waypoints.size() > 1
-				&& _projectileImpact == VOXEL_EMPTY)
+				&& _projectileImpact == VOXEL_EMPTY
+				&& _action.waypoints.size() > 1)
 			{
 				_origin = _action.waypoints.front();
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
 
 				// launch the next projectile in the waypoint cascade
-				ProjectileFlyBState* const nextWaypoint = new ProjectileFlyBState(
+				ProjectileFlyBState* const toNextWp = new ProjectileFlyBState(
 																			_parent,
 																			_action,
 																			_origin);
-				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // no (-1) -> tada, fixed.
 
+				Position originVoxel = _parent->getMap()->getProjectile()->getPosition();
+				toNextWp->setOriginVoxel(originVoxel); // !getPosition(-1) -> tada, fixed.
+				//Log(LOG_INFO) << "_origin = " << _origin; // -> tilePos
+				//Log(LOG_INFO) << "posProj = " << _parent->getMap()->getProjectile()->getPosition(); // -> voxlPos
 				// this follows BL as it hits through waypoints; screen flashes black at each though:
-				_parent->getMap()->getCamera()->centerOnPosition(_parent->getMap()->getProjectile()->getPosition());
+				_parent->getMap()->getCamera()->centerOnPosition(originVoxel);
 
 				if (_origin == _action.target)
-					nextWaypoint->targetFloor();
+					toNextWp->targetFloor();
 
-				_parent->statePushNext(nextWaypoint);
+				_parent->statePushNext(toNextWp);
 			}
 			else // shoot.
 			{
@@ -1187,10 +1190,11 @@ int ProjectileFlyBState::getMaxThrowDistance(
 }
 
 /**
- * Set the origin voxel. Used for the blaster launcher.
+ * Set the origin voxel.
+ * @note Used for the blaster launcher.
  * @param pos - the origin voxel
  */
-void ProjectileFlyBState::setOriginVoxel(const Position pos)
+void ProjectileFlyBState::setOriginVoxel(const Position pos) // private.
 {
 	_originVoxel = pos;
 }
@@ -1198,7 +1202,7 @@ void ProjectileFlyBState::setOriginVoxel(const Position pos)
 /**
  * Set the boolean flag to angle a blaster bomb towards the floor.
  */
-void ProjectileFlyBState::targetFloor()
+void ProjectileFlyBState::targetFloor() // private.
 {
 	_targetFloor = true;
 }

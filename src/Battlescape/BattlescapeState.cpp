@@ -1841,15 +1841,15 @@ void BattlescapeState::btnKneelClick(Action*)
 {
 	if (allowButtons() == true)
 	{
-		BattleUnit* const bu = _battleSave->getSelectedUnit();
-		if (bu != NULL)
+		BattleUnit* const unit = _battleSave->getSelectedUnit();
+		if (unit != NULL)
 		{
 			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
-			if (_battleGame->kneel(bu) == true)
+			if (_battleGame->kneel(unit) == true)
 			{
 				updateSoldierInfo(false); // kL
 
-				_battleGame->getTileEngine()->calculateFOV(bu->getPosition()); // kL
+				_battleGame->getTileEngine()->calculateFOV(unit->getPosition()); // kL
 					// need this here, so that my newVis algorithm works without
 					// false positives, or true negatives as it were, when a soldier
 					// stands up and walks in one go via UnitWalkBState. Because if
@@ -1860,7 +1860,7 @@ void BattlescapeState::btnKneelClick(Action*)
 					//
 					// Will check reactionFire in BattlescapeGame::kneel()
 					// no, no it won't.
-				_battleGame->getTileEngine()->checkReactionFire(bu); // kL
+				_battleGame->getTileEngine()->checkReactionFire(unit); // kL
 
 				if (_battleGame->getPathfinding()->isPathPreviewed() == true)
 				{
@@ -2257,60 +2257,47 @@ void BattlescapeState::btnRightHandRightClick(Action*)
  */
 void BattlescapeState::btnVisibleUnitPress(Action* action)
 {
-	size_t i;
-	for ( // find out which button was pressed
-			i = 0;
-			i != INDICATORS;
-			++i)
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		btnMapDownClick(NULL);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		btnMapUpClick(NULL);
+	else
 	{
-		if (_btnVisibleUnit[i] == action->getSender())
-			break;
-	}
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
-		_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
-
-		_visUnitTarget->setVisible();
-		_visUnitTargetFrame = 0;
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		BattleUnit* nextSpotter = NULL;
-		size_t curIter = 0;
-
-		for (std::vector<BattleUnit*>::const_iterator
-			j = _battleSave->getUnits()->begin();
-			j != _battleSave->getUnits()->end();
-			++j)
+		size_t i;
+		for ( // find out which button was pressed
+				i = 0;
+				i != INDICATORS;
+				++i)
 		{
-			++curIter;
-			if (*j == _battleSave->getSelectedUnit())
+			if (_btnVisibleUnit[i] == action->getSender())
 				break;
 		}
 
-		for (std::vector<BattleUnit*>::const_iterator
-			j = _battleSave->getUnits()->begin() + curIter;
-			j != _battleSave->getUnits()->end();
-			++j)
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			if ((*j)->getFaction() == FACTION_PLAYER
-				&& (*j)->isOut() == false
-				&& std::find(
-							(*j)->getVisibleUnits()->begin(),
-							(*j)->getVisibleUnits()->end(),
-							_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
-			{
-				nextSpotter = *j;
-				break;
-			}
-		}
+			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
 
-		if (nextSpotter == NULL)
+			_visUnitTarget->setVisible();
+			_visUnitTargetFrame = 0;
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
+			BattleUnit* nextSpotter = NULL;
+			size_t curIter = 0;
+
 			for (std::vector<BattleUnit*>::const_iterator
 				j = _battleSave->getUnits()->begin();
-				j != _battleSave->getUnits()->end() - _battleSave->getUnits()->size() + curIter;
+				j != _battleSave->getUnits()->end();
+				++j)
+			{
+				++curIter;
+				if (*j == _battleSave->getSelectedUnit())
+					break;
+			}
+
+			for (std::vector<BattleUnit*>::const_iterator
+				j = _battleSave->getUnits()->begin() + curIter;
+				j != _battleSave->getUnits()->end();
 				++j)
 			{
 				if ((*j)->getFaction() == FACTION_PLAYER
@@ -2324,21 +2311,46 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 					break;
 				}
 			}
-		}
 
-		if (nextSpotter != NULL
-			&& nextSpotter != _battleSave->getSelectedUnit())
-		{
-			_battleSave->setSelectedUnit(nextSpotter);
-			updateSoldierInfo();
+			if (nextSpotter == NULL)
+			{
+				for (std::vector<BattleUnit*>::const_iterator
+					j = _battleSave->getUnits()->begin();
+					j != _battleSave->getUnits()->end() - _battleSave->getUnits()->size() + curIter;
+					++j)
+				{
+					if ((*j)->getFaction() == FACTION_PLAYER
+						&& (*j)->isOut() == false
+						&& std::find(
+									(*j)->getVisibleUnits()->begin(),
+									(*j)->getVisibleUnits()->end(),
+									_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+					{
+						nextSpotter = *j;
+						break;
+					}
+				}
+			}
 
-			_battleGame->cancelCurrentAction();
-			_battleGame->getCurrentAction()->actor = nextSpotter;
-			_battleGame->setupCursor();
+			if (nextSpotter != NULL)
+			{
+				if (nextSpotter != _battleSave->getSelectedUnit())
+				{
+					_battleSave->setSelectedUnit(nextSpotter);
+					updateSoldierInfo();
 
-			Camera* const camera = _battleGame->getMap()->getCamera();
-			if (camera->isOnScreen(nextSpotter->getPosition()) == false)
-				camera->centerOnPosition(nextSpotter->getPosition());
+					_battleGame->cancelCurrentAction();
+					_battleGame->getCurrentAction()->actor = nextSpotter;
+					_battleGame->setupCursor();
+				}
+
+				Camera* const camera = _battleGame->getMap()->getCamera();
+				if (camera->isOnScreen(nextSpotter->getPosition()) == false
+					|| camera->getViewLevel() != nextSpotter->getPosition().z)
+				{
+					camera->centerOnPosition(nextSpotter->getPosition());
+				}
+			}
 		}
 	}
 

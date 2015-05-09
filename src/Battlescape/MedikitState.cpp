@@ -101,20 +101,20 @@ MedikitTitle::MedikitTitle(
 /**
  * Helper class for the medikit value.
  */
-class MedikitTxt
+class MedikitText
 	:
 		public Text
 {
 	public:
 		/// Creates a medikit text.
-		MedikitTxt(int y);
+		MedikitText(int y);
 };
 
 /**
  * Initializes a Medikit text.
  * @param y - the text's y origin
  */
-MedikitTxt::MedikitTxt(int y)
+MedikitText::MedikitText(int y)
 	:
 		Text(33, 17, 220, y)
 {
@@ -186,14 +186,13 @@ MedikitState::MedikitState(BattleAction* action)
 	_btnHeal	= new MedikitButton(120);
 	_btnClose	= new InteractiveSurface(7, 7, 222, 148);
 
-	_txtPain	= new MedikitTxt(51);
-	_txtStim	= new MedikitTxt(87);
-	_txtHeal	= new MedikitTxt(123);
+	_txtPain	= new MedikitText(51);
+	_txtStim	= new MedikitText(87);
+	_txtHeal	= new MedikitText(123);
 
 	_numHealth		= new NumberText(15, 5, 90, 8);
 	_numTotalHP		= new NumberText(15, 5, 225, 8);
 	_numStun		= new NumberText(15, 5, 105, 8);
-//	_barHealth		= new Bar(102, 3, 120, 9);
 	_barHealth		= new Bar(300, 5, 120, 8);
 
 	_numEnergy		= new NumberText(15, 5, 90, 15);
@@ -204,6 +203,8 @@ MedikitState::MedikitState(BattleAction* action)
 
 	_numTimeUnits	= new NumberText(15, 5, 90, 164);
 	_barTimeUnits	= new Bar(102, 3, 120, 165);
+
+	_txtUnit		= new Text(160, 9, 100, 171);
 
 	add(_numHealth);
 	add(_numStun,		"numStun",		"battlescape");
@@ -222,13 +223,6 @@ MedikitState::MedikitState(BattleAction* action)
 	const int hp = _action->targetUnit->getBaseStats()->health;
 	_numTotalHP->setValue(static_cast<unsigned>(hp));
 
-//	_numHealth->setBordered();
-//	_numStun->setBordered();
-//	_numEnergy->setBordered();
-//	_numMorale->setBordered();
-//	_numTimeUnits->setBordered();
-//	_numTotalHP->setBordered();
-
 	_barHealth->setScale();
 	_barEnergy->setScale();
 	_barMorale->setScale();
@@ -239,7 +233,6 @@ MedikitState::MedikitState(BattleAction* action)
 	_barTimeUnits->setMax(100.);
 
 	_barHealth->offsetSecond(-2);
-//	_barHealth->setBorderColor(Palette::blockOffset(2)+7);
 
 
 	add(_bg);
@@ -261,6 +254,7 @@ MedikitState::MedikitState(BattleAction* action)
 	add(_txtHeal,	"numHeal",		"medikit", _bg);
 	add(_txtPart,	"textPart",		"medikit", _bg);
 	add(_txtWound,	"numWounds",	"medikit", _bg);
+	add(_txtUnit);
 	add(_btnClose);
 
 	centerAllSurfaces();
@@ -274,6 +268,11 @@ MedikitState::MedikitState(BattleAction* action)
 
 	_txtPart->setHighContrast();
 	_txtWound->setHighContrast();
+
+	_txtUnit->setText(_action->targetUnit->getName(_game->getLanguage()));
+	_txtUnit->setColor(0); // white
+	_txtUnit->setHighContrast();
+	_txtUnit->setAlign(ALIGN_RIGHT);
 
 	_btnClose->onMouseClick((ActionHandler)& MedikitState::onCloseClick);
 	_btnClose->onKeyboardPress(
@@ -344,8 +343,7 @@ void MedikitState::onHealClick(Action*)
 			_mediView->autoSelectPart();
 			_mediView->invalidate();
 
-			// if the unit has revived quit this screen automatically
-			if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS
+			if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS // if the unit has revived quit this screen automatically
 				&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
 			{
 				_action->actor->getStatistics()->revivedSoldier += 2;
@@ -379,8 +377,7 @@ void MedikitState::onStimClick(Action*)
 
 			_action->weapon->setStimulantQuantity(stimQty - 1);
 
-			// if the unit has revived quit this screen automatically
-			if (_action->targetUnit->stimulant(
+			if (_action->targetUnit->stimulant( // if the unit has revived quit this screen automatically
 											itRule->getEnergyRecovery(),
 											itRule->getStunRecovery()) == true)
 			{
@@ -431,9 +428,7 @@ void MedikitState::onPainClick(Action*)
 				battleSave->getBattleGame()->getCurrentAction()->actor = _action->targetUnit;
 				battleSave->getBattleGame()->setupCursor();
 
-				Camera* const camera = battleSave->getBattleGame()->getMap()->getCamera();
-//				if (camera->isOnScreen(_action->targetUnit->getPosition()) == false)
-				camera->centerOnPosition(_action->targetUnit->getPosition());
+				battleSave->getBattleGame()->getMap()->getCamera()->centerOnPosition(_action->targetUnit->getPosition());
 
 				_game->popState();
 //				onCloseClick(NULL);

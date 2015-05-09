@@ -889,7 +889,7 @@ bool UnitWalkBState::doStatusStand_end()
 		// kL_add: Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
 
-		const Position pos = _unit->getPosition() * Position(16, 16, 24)
+		const Position pos = _unit->getPosition() * Position(16,16,24)
 						   + Position(
 									8,8,
 									-(_unit->getTile()->getTerrainLevel()));
@@ -1236,13 +1236,8 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
  */
 void UnitWalkBState::playMovementSound()
 {
-//	int size = _unit->getArmor()->getSize() - 1;
-//	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode()) || !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false)) return;
-
 	if (_unit->getUnitVisible() == false
 		&& _parent->getSave()->getDebugMode() == false)
-//		|| (!_walkCam->isOnScreen(_unit->getPosition())
-//			&& !_walkCam->isOnScreen(_unit->getDestination())))
 	{
 		return;
 	}
@@ -1256,10 +1251,8 @@ void UnitWalkBState::playMovementSound()
 	}
 	else
 	{
-//		if (_falling == true) // This is STATUS_FLYING as well as below_
 		if (_unit->getStatus() == STATUS_FLYING
 			&& _unit->isFloating() == true
-//			&& _unit->getMoveTypeUnit() == MT_WALK)
 			&& _pf->getMoveTypePathing() == MT_WALK)
 		{
 			if (_unit->getTrueWalkingPhase() == 1
@@ -1269,10 +1262,6 @@ void UnitWalkBState::playMovementSound()
 			}
 		}
 		else if (_unit->getStatus() == STATUS_WALKING)
-//			|| (_unit->getStatus() == STATUS_FLYING
-//				&& _unit->isFloating() == true
-//				&& _unit->getMovementType() == MT_WALK
-//				&& _falling == false))
 		{
 			const Tile
 				* const tile = _unit->getTile(),
@@ -1310,12 +1299,7 @@ void UnitWalkBState::playMovementSound()
 						sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
 					}
 					else
-					{
-						//Log(LOG_INFO) << ". NOT mech, flying_sound_HQ";
-						//Log(LOG_INFO) << ". float = " << (int)(_unit->isFloating());
-						//Log(LOG_INFO) << ". mt = " << (int)(_unit->getMovementType());
 						sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
-					}
 				}
 			}
 		}

@@ -145,7 +145,7 @@ private:
 
 		/// Centers map on a position.
 		void centerOnPosition(
-				const Position& pos,
+				const Position& posMap,
 				bool redraw = true);
 		/// Gets map's center position.
 		Position getCenterPosition();
@@ -154,6 +154,7 @@ private:
 		int getMapSizeX() const;
 		/// Gets the map size y.
 		int getMapSizeY() const;
+
 		/// Gets the map x/y screen offset.
 		Position getMapOffset();
 		/// Sets the map x/y screen offset.
@@ -166,7 +167,7 @@ private:
 
 		/// Checks if map coordinates X,Y,Z are on screen.
 		bool isOnScreen(
-				const Position& mapPos) const;
+				const Position& posMap) const;
 //kL			const bool unitWalking, const int unitSize, const bool boundary) const;
 
 		/// Resizes the viewable area.

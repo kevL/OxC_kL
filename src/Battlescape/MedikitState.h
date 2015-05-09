@@ -69,6 +69,7 @@ private:
 		* _txtPain,
 		* _txtPart,
 		* _txtStim,
+		* _txtUnit,
 		* _txtWound;
 
 	/// Handler for the end button.

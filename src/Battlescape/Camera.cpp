@@ -500,14 +500,14 @@ void Camera::setViewLevel(int viewLevel)
 
 /**
  * Centers map on a certain position.
- * @param mapPos - reference the Position to center on
+ * @param posMap - reference the Position to center on
  * @param redraw - true to redraw map (default true)
  */
 void Camera::centerOnPosition(
-		const Position& mapPos,
+		const Position& posMap,
 		bool redraw)
 {
-	_center = mapPos;
+	_center = posMap;
 
 	minMaxInt(
 			&_center.x,
@@ -679,14 +679,15 @@ bool Camera::getShowAllLayers() const
 
 /**
  * Checks if map coordinates XYZ are on screen.
- * @param mapPos - reference the coordinates to check
+ * @note This does not care about Map's Z-level; only whether @a posMap is on screen.
+ * @param posMap - reference the coordinates to check
  * @return, true if the map coordinates are on screen
  */
-bool Camera::isOnScreen(const Position& mapPos) const
+bool Camera::isOnScreen(const Position& posMap) const
 {
 	Position screenPos;
 	convertMapToScreen(
-					mapPos,
+					posMap,
 					&screenPos);
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
