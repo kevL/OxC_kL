@@ -213,7 +213,7 @@ void PrimeGrenadeState::handle(Action* action)
  */
 void PrimeGrenadeState::btnClick(Action* action)
 {
-	int btnID = -1;
+	int btnId = -1;
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -229,29 +229,29 @@ void PrimeGrenadeState::btnClick(Action* action)
 	}
 
 	if (action->getSender() == _isfBtn0)
-		btnID = 0;
+		btnId = 0;
 	else
 	{
 		for (size_t // got to find out which button was pressed
 				i = 0;
 				i != 16
-					&& btnID == -1;
+					&& btnId == -1;
 				++i)
 		{
 			if (action->getSender() == _isfBtn[i])
-				btnID = static_cast<int>(i) + 1;
+				btnId = static_cast<int>(i) + 1;
 		}
 	}
 
-	if (btnID != -1)
+	if (btnId != -1)
 	{
 		if (_inInventoryView == true)
 		{
-			_grenade->setFuseTimer(btnID);
-			_inventory->setPrimeGrenade(btnID);
+			_grenade->setFuseTimer(btnId);
+			_inventory->setPrimeGrenade(btnId);
 		}
 		else
-			_action->value = btnID;
+			_action->value = btnId;
 
 		_game->popState(); // get rid of the Set Timer menu
 

@@ -287,7 +287,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
-	size_t btnID = MENU_ITEMS;
+	size_t btnId = MENU_ITEMS;
 
 	for (size_t // find out which button was pressed
 			i = 0;
@@ -296,17 +296,17 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 	{
 		if (action->getSender() == _menuSelect[i])
 		{
-			btnID = i;
+			btnId = i;
 			break;
 		}
 	}
 
-	if (btnID != MENU_ITEMS)
+	if (btnId != MENU_ITEMS)
 	{
 		const RuleItem* const itRule = _action->weapon->getRules();
 
-		_action->TU = _menuSelect[btnID]->getTUs();
-		_action->type = _menuSelect[btnID]->getAction();
+		_action->TU = _menuSelect[btnId]->getTUs();
+		_action->type = _menuSelect[btnId]->getAction();
 
 		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0

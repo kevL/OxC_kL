@@ -723,7 +723,8 @@ private:
 		/// Gets whether this unit is visible.
 		bool getUnitVisible() const;
 		/// Adds unit to visible units.
-		bool addToVisibleUnits(BattleUnit* unit);
+		void addToVisibleUnits(BattleUnit* unit);
+//		bool addToVisibleUnits(BattleUnit* unit);
 		/// Gets the list of visible units.
 		std::vector<BattleUnit*>* getVisibleUnits();
 		/// Clears visible units.
@@ -1104,7 +1105,7 @@ private:
 		void setBattleGame(BattlescapeGame* const battleGame);
 
 		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
-		void setDown();
+		void putDown();
 
 		/// Sets this BattleUnit's turn direction when spinning 180 degrees.
 		void setTurnDirection(const int turnDir);

@@ -1048,12 +1048,12 @@ BattleUnit* SavedBattleGame::selectNextFactionUnit(
 /**
  * Selects the next player unit in a certain direction.
  * @param dir				- direction to select (1 for next and -1 for previous)
- * @param checkReselect		- true to check the reselectable flag
- * @param setDontReselect	- true to set the reselectable flag FALSE
- * @param checkInventory	- true to check if the unit has an inventory
+ * @param checkReselect		- true to check the reselectable flag (default false)
+ * @param setDontReselect	- true to set the reselectable flag FALSE (default false)
+ * @param checkInventory	- true to check if the unit has an inventory (default false)
  * @return, pointer to newly selected BattleUnit or NULL if none can be selected
  */
-BattleUnit* SavedBattleGame::selectFactionUnit(
+BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 		int dir,
 		bool checkReselect,
 		bool setDontReselect,
@@ -1142,8 +1142,8 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 {
 	BattleUnit* const bu = getTile(pos)->getUnit();
 
-	if (bu != NULL
-		&& bu->isOut(true, true) == true)
+	if (bu == NULL
+		|| bu->isOut(true, true) == true)
 	{
 		return NULL;
 	}

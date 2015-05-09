@@ -290,7 +290,7 @@ private:
 		void btnRightHandRightClick(Action* action);
 
 		/// Handler for clicking a visible unit button.
-		void btnVisibleUnitClick(Action* action);
+		void btnVisibleUnitPress(Action* action);
 		/// Handler for clicking the wounded unit button.
 		void btnWoundedClick(Action* action);
 

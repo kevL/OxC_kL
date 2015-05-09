@@ -22,6 +22,9 @@
 //#include <iostream>
 //#include <sstream>
 
+#include "BattlescapeState.h"	// control Civies
+#include "Camera.h"				// control Civies
+#include "Map.h"				// control Civies
 #include "MedikitView.h"
 
 #include "../Engine/Action.h"
@@ -43,7 +46,6 @@
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 
@@ -420,7 +422,19 @@ void MedikitState::onPainClick(Action*)
 				_action->targetUnit->convertToFaction(FACTION_PLAYER);
 				_action->targetUnit->initTU();
 
-				_game->getSavedGame()->getSavedBattle()->setSelectedUnit(_action->targetUnit);
+				SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+
+				battleSave->setSelectedUnit(_action->targetUnit);
+				battleSave->getBattleState()->updateSoldierInfo();
+
+				battleSave->getBattleGame()->cancelCurrentAction();
+				battleSave->getBattleGame()->getCurrentAction()->actor = _action->targetUnit;
+				battleSave->getBattleGame()->setupCursor();
+
+				Camera* const camera = battleSave->getBattleGame()->getMap()->getCamera();
+//				if (camera->isOnScreen(_action->targetUnit->getPosition()) == false)
+				camera->centerOnPosition(_action->targetUnit->getPosition());
+
 				_game->popState();
 //				onCloseClick(NULL);
 			}

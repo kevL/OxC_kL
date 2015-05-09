@@ -1983,9 +1983,10 @@ bool BattleUnit::getUnitVisible() const
  * visible units are currently seen - unitsSpottedThisTurn are just that.
  * @note Don't confuse either of these with the '_visible' to Player flag.
  * @param unit - pointer to a seen BattleUnit
- * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this is not used)
+// * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this is not used)
  */
-bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
+//bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
+void BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
 	bool addUnit = true;
 
@@ -2013,12 +2014,12 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 	{
 //		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		if (*i == unit)
-			return false;
+			return;
+//			return false;
 	}
 
 	_visibleUnits.push_back(unit);
-
-	return true;
+//	return true;
 }
 
 /**
@@ -4428,10 +4429,12 @@ void BattleUnit::setBattleGame(BattlescapeGame* const battleGame)
 /**
  * Sets this BattleUnit's parameters as down - collapsed/ unconscious/ dead.
  */
-void BattleUnit::setDown()
+void BattleUnit::putDown()
 {
 	_faction = _originalFaction;
 	_kneeled = false;	// don't get hunkerdown bonus against HE detonations
+//	_visible = false;	// don't do this: it mucks up convertUnit() respawning;
+						// ie, '_visible' flag is not transferred properly.
 
 	_turnsExposed = -1;	// don't risk aggro per the AI
 /*	// taken care of in SavedBattleGame::endBattlePhase()

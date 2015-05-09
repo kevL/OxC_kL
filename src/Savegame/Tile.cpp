@@ -1392,18 +1392,38 @@ int Tile::getTopItemSprite() const
 	if (_inventory.empty() == true)
 		return -1;
 
+	BattleItem
+		* proxGrenade = NULL,
+		* fuseGrenade = NULL,
+		* solCorpse = NULL;
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
+		if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			proxGrenade = *i;
+
+		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
+			fuseGrenade = *i;
+
 		if ((*i)->getUnit() != NULL
 			&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)
 		{
-			return (*i)->getRules()->getFloorSprite();
+			solCorpse = *i;
 		}
 	}
+
+	if (proxGrenade != NULL)
+		return proxGrenade->getRules()->getFloorSprite();
+
+	if (fuseGrenade != NULL)
+		return fuseGrenade->getRules()->getFloorSprite();
+
+	if (solCorpse != NULL)
+		return solCorpse->getRules()->getFloorSprite();
+
 
 	int
 		weight = -1,

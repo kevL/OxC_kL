@@ -269,7 +269,7 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 
-		_unit->setDown();
+		_unit->putDown();
 
 		if (_unit->getSpawnUnit().empty() == true)
 			convertToCorpse();

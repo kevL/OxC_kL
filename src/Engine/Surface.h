@@ -236,12 +236,12 @@ protected:
 				int* x,
 				int* y,
 				Uint8 color)
-		{	setPixelColor(*x, *y, color);
+		{	setPixelColor(*x,*y, color);
 
-			(*x)++;
+			++(*x);
 			if (*x == getWidth())
 			{
-				(*y)++;
+				++(*y);
 				*x = 0;
 			} }
 

@@ -162,7 +162,7 @@ void SurfaceSet::loadPck(
 
 		_frames[frame]->lock();
 		imgFile.read(
-				(char*)& value,
+				(char*)&value,
 				1);
 		for (Uint8
 				i = 0;
@@ -179,14 +179,14 @@ void SurfaceSet::loadPck(
 		}
 
 		while (imgFile.read(
-						(char*)& value,
+						(char*)&value,
 						1)
 			&& value != 255)
 		{
 			if (value == 254)
 			{
 				imgFile.read(
-						(char*)& value,
+						(char*)&value,
 						1);
 				for (Uint8
 						i = 0;
@@ -253,7 +253,7 @@ void SurfaceSet::loadDat(const std::string& filename)
 
 	_frames[frame]->lock();
 	while (imgFile.read(
-					(char*)& value,
+					(char*)&value,
 					1))
 	{
 		_frames[frame]->setPixelIterative(&x,&y, value);

@@ -126,8 +126,8 @@ Map::Map(
 		_noDraw(false),
 		_showProjectile(true),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
-		_res(game->getResourcePack())
-
+		_res(game->getResourcePack()),
+		_fuseColor(111)
 {
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
@@ -1070,7 +1070,7 @@ void Map::drawTerrain(Surface* surface) // private.
 								// Phase VI: redraw everything in the tile WEST (half-tile).
 								if (itX > 0)
 								{
-									const Tile* const tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
+									Tile* const tileWest = _battleSave->getTile(mapPosition + Position(-1,0,0));
 
 									if (tileWest != NULL)
 									{
@@ -1184,6 +1184,30 @@ void Map::drawTerrain(Surface* surface) // private.
 													screenPosition.y - 8 + tileWest->getTerrainLevel(),
 													shade,
 													true); // halfRight
+
+											if (tileWest->isDiscovered(2) == true) // -> maybe, maybe not.
+											{
+												for (std::vector<BattleItem*>::const_iterator
+														i = tileWest->getInventory()->begin();
+														i != tileWest->getInventory()->end();
+														++i)
+												{
+													if ((*i)->getUnit() != NULL
+														&& (*i)->getUnit()->getFireOnUnit() != 0)
+													{
+														// Draw SMOKE & FIRE if itemUnit is on Fire
+														frame = 4 + (_animFrame / 2);
+														srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+														if (srfSprite)
+															srfSprite->blitNShade(
+																	surface,
+																	screenPosition.x,
+																	screenPosition.y + tile->getTerrainLevel(),
+																	0);
+														break;
+													}
+												}
+											}
 										}
 
 										if (unitWest != NULL
@@ -1488,11 +1512,16 @@ void Map::drawTerrain(Surface* surface) // private.
 						{
 							srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
 							if (srfSprite)
+							{
 								srfSprite->blitNShade(
 										surface,
 										screenPosition.x,
 										screenPosition.y + tile->getTerrainLevel(),
 										tileShade);
+
+								if (sprite == 21) // standard proxy grenade
+									srfSprite->setPixelColor(16,28, _fuseColor); // 105 is the pixel's standard color
+							}
 
 							if (tile->isDiscovered(2) == true)
 							{
@@ -4424,8 +4453,7 @@ void Map::animate(bool redraw)
  	if (_animFrame == 8)
 		_animFrame = 0;
 
-	// animate tiles
-	for (size_t
+	for (size_t // animate tiles
 			i = 0;
 			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
 			++i)
@@ -4433,9 +4461,8 @@ void Map::animate(bool redraw)
 		_battleSave->getTiles()[i]->animate();
 	}
 
-	// animate certain units (large flying units have a propulsion animation)
-	for (std::vector<BattleUnit*>::const_iterator
-			i = _battleSave->getUnits()->begin();
+	for (std::vector<BattleUnit*>::const_iterator	// animate certain units
+			i = _battleSave->getUnits()->begin();	// (large flying units have a propulsion animation)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
@@ -4454,6 +4481,11 @@ void Map::animate(bool redraw)
 
 	if (redraw == true)
 		_redraw = true;
+
+
+	if (--_fuseColor == 96)
+		_fuseColor = 111;
+
 }
 
 /**
@@ -4895,7 +4927,7 @@ void Map::setButtonsPressed(
 
 /**
  * Sets the unitDying flag.
- * This reveals the dying unit during Hidden Movement.
+ * @note This reveals the dying unit during Hidden Movement.
  * @param flag - true if a unit is dying
  */
 void Map::setUnitDying(bool flag)
@@ -4923,7 +4955,7 @@ void Map::setHeight(int height)
 
 	_visibleMapHeight = height - _iconHeight;
 
-	_hidden->setHeight((_visibleMapHeight < 200)? _visibleMapHeight: 200);
+	_hidden->setHeight((_visibleMapHeight < 200) ? _visibleMapHeight : 200);
 	_hidden->setY((_visibleMapHeight - _hidden->getHeight()) / 2);
 }
 

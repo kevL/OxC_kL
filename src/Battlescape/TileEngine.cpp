@@ -418,6 +418,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 		* tile,
 		* tileEdge;
 
+	BattleUnit* spottedUnit;
+
 	if (unit->getHeight()
 				+ unit->getFloatHeight()
 				- _battleSave->getTile(posUnit)->getTerrainLevel() > 27)
@@ -464,7 +466,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 
 					if (_battleSave->getTile(posTest) != NULL)
 					{
-						BattleUnit* const spottedUnit = _battleSave->getTile(posTest)->getUnit();
+						spottedUnit = _battleSave->getTile(posTest)->getUnit();
 						if (spottedUnit != NULL
 							&& spottedUnit->isOut(true, true) == false
 							&& visible(

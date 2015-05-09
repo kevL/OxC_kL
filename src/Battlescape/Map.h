@@ -97,6 +97,8 @@ private:
 		_spriteWidth,
 		_spriteHeight,
 		_visibleMapHeight;
+	Uint8
+		_fuseColor;
 
 	PathPreview _previewSetting;
 

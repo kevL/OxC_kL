@@ -917,9 +917,9 @@ BattlescapeState::BattlescapeState()
 			i != INDICATORS;
 			++i)
 	{
-		_btnVisibleUnit[i]->onMouseClick((ActionHandler)& BattlescapeState::btnVisibleUnitClick);
+		_btnVisibleUnit[i]->onMousePress((ActionHandler)& BattlescapeState::btnVisibleUnitPress);
 		_btnVisibleUnit[i]->onKeyboardPress(
-						(ActionHandler)& BattlescapeState::btnVisibleUnitClick,
+						(ActionHandler)& BattlescapeState::btnVisibleUnitPress,
 						buttons[i]);
 
 //		std::ostringstream tooltip;
@@ -1950,7 +1950,7 @@ void BattlescapeState::btnNextSoldierClick(Action*)
 	if (allowButtons() == true)
 	{
 		selectNextFactionUnit(true);
-		_map->refreshSelectorPosition();
+//		_map->refreshSelectorPosition(); // -> done down the line in setupCursor()
 	}
 }
 
@@ -1983,15 +1983,15 @@ void BattlescapeState::btnPrevStopClick(Action*)
 	if (allowButtons() == true)
 	{
 		selectPreviousFactionUnit(true, true);
-		_map->refreshSelectorPosition();
+//		_map->refreshSelectorPosition(); // -> done down the line in setupCursor()
 	}
 }
 
 /**
  * Selects the next soldier.
- * @param checkReselect When true, don't select a unit that has been previously flagged.
- * @param setDontReselect When true, flag the current unit first.
- * @param checkInventory When true, don't select a unit that has no inventory.
+ * @param checkReselect		- don't select a unit that has been previously flagged
+ * @param setDontReselect	- flag the current unit first
+ * @param checkInventory	- don't select a unit that has no inventory
  */
 void BattlescapeState::selectNextFactionUnit(
 		bool checkReselect,
@@ -2020,9 +2020,9 @@ void BattlescapeState::selectNextFactionUnit(
 
 /**
  * Selects the previous soldier.
- * @param checkReselect When true, don't select a unit that has been previously flagged.
- * @param setDontReselect When true, flag the current unit first.
- * @param checkInventory When true, don't select a unit that has no inventory.
+ * @param checkReselect		- don't select a unit that has been previously flagged
+ * @param setDontReselect	- flag the current unit first
+ * @param checkInventory	- don't select a unit that has no inventory
  */
 void BattlescapeState::selectPreviousFactionUnit(
 		bool checkReselect,
@@ -2251,25 +2251,95 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 }
 
 /**
- * Centers on the unit corresponding to this button.
+ * LMB centers on the unit corresponding to this button.
+ * RMB cycles through spotters of the unit corresponding to this button.
  * @param action - pointer to an Action
  */
-void BattlescapeState::btnVisibleUnitClick(Action* action)
+void BattlescapeState::btnVisibleUnitPress(Action* action)
 {
-	for (size_t // find out which button was pressed
+	static size_t spots; // inits to 0
+
+	size_t i;
+	for ( // find out which button was pressed
 			i = 0;
 			i != INDICATORS;
 			++i)
 	{
 		if (_btnVisibleUnit[i] == action->getSender())
-		{
-			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
-
-			_visUnitTarget->setVisible();
-			_visUnitTargetFrame = 0;
-
 			break;
+	}
+
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
+
+		_visUnitTarget->setVisible();
+		_visUnitTargetFrame = 0;
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		if (spots == _battleSave->getUnits()->size())
+			spots = 0;
+
+		BattleUnit* spotter = NULL;
+
+		for (std::vector<BattleUnit*>::const_iterator
+			j = _battleSave->getUnits()->begin() + spots;
+			j != _battleSave->getUnits()->end();
+			++j)
+		{
+			if ((*j)->getFaction() == FACTION_PLAYER
+				&& (*j)->isOut() == false
+				&& std::find(
+							(*j)->getVisibleUnits()->begin(),
+							(*j)->getVisibleUnits()->end(),
+							_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+			{
+				spotter = *j;
+				break;
+			}
 		}
+
+		if (spotter == NULL)
+		{
+			for (std::vector<BattleUnit*>::const_iterator
+				j = _battleSave->getUnits()->begin();
+				j != _battleSave->getUnits()->end() - _battleSave->getUnits()->size() + spots;
+				++j)
+			{
+				if ((*j)->getFaction() == FACTION_PLAYER
+					&& (*j)->isOut() == false
+					&& std::find(
+								(*j)->getVisibleUnits()->begin(),
+								(*j)->getVisibleUnits()->end(),
+								_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+				{
+					spotter = *j;
+					break;
+				}
+			}
+		}
+
+		if (spotter != NULL)
+		{
+			++spots;
+
+			if (spotter != _battleSave->getSelectedUnit())
+			{
+				_battleSave->setSelectedUnit(spotter);
+				updateSoldierInfo();
+
+				_battleGame->cancelCurrentAction();
+				_battleGame->getCurrentAction()->actor = spotter;
+				_battleGame->setupCursor();
+
+				Camera* const cam = _battleGame->getMap()->getCamera();
+				if (cam->isOnScreen(spotter->getPosition()) == false)
+					cam->centerOnPosition(spotter->getPosition());
+			}
+		}
+		else
+			spots = 0;
 	}
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
@@ -2665,7 +2735,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			&& j != INDICATORS;
 		++i)
 	{
-		if ((*i)->getUnitVisible() == true
+		if ((*i)->isOut() == false
+			&& (*i)->getUnitVisible() == true
 			&& (*i)->getFaction() == FACTION_HOSTILE)
 		{
 			_btnVisibleUnit[j]->setVisible();
@@ -2968,6 +3039,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 			delta = -1;
 
 		color += delta;
+		colorOther += delta;
 		color_border -= delta;
 	}
 }
@@ -3011,7 +3083,8 @@ void BattlescapeState::refreshVisUnits()
 				&& j != INDICATORS;
 			++i)
 		{
-			if ((*i)->getUnitVisible() == true
+			if ((*i)->isOut() == false
+				&& (*i)->getUnitVisible() == true
 				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
 				_btnVisibleUnit[j]->setVisible();
