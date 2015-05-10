@@ -161,7 +161,12 @@ DebriefingState::DebriefingState()
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setText(tr("STR_OK"));
+	std::wstring wstOk;
+	if (_gameSave->getSavedBattle()->getOperation().empty() == false)
+		wstOk = _gameSave->getSavedBattle()->getOperation();
+	else
+		wstOk = tr("STR_OK");
+	_btnOk->setText(wstOk);
 	_btnOk->onMouseClick((ActionHandler)& DebriefingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DebriefingState::btnOkClick,

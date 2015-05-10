@@ -135,7 +135,8 @@ BattlescapeState::BattlescapeState()
 		_fuseFrame(0),
 		_showConsole(2),
 		_visUnitTargetFrame(0),
-		_showSoldierData(false)
+		_showSoldierData(false),
+		_iconsHidden(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	const int
@@ -147,11 +148,12 @@ BattlescapeState::BattlescapeState()
 		x					= screenWidth / 2 - iconsWidth / 2,
 		y					= screenHeight - iconsHeight;
 
-	_txtBaseLabel		= new Text(120, 9, screenWidth - 121, 0);
-	_txtRegion			= new Text(120, 9, screenWidth - 121, 10);
-	_lstTileInfo		= new TextList(18, 33, screenWidth - 19, 70);
-	_txtMissionLabel	= new Text(iconsWidth, 9, x, y - 10);
-	_txtOperationTitle	= new Text(screenWidth, 17, 0, 2);
+	_txtBaseLabel			= new Text(120, 9, screenWidth - 121, 0);
+	_txtRegion				= new Text(120, 9, screenWidth - 121, 10);
+	_lstTileInfo			= new TextList(18, 33, screenWidth - 19, 70);
+	_txtControlDestroyed	= new Text(iconsWidth, 9, x, y - 20);
+	_txtMissionLabel		= new Text(iconsWidth, 9, x, y - 10);
+	_txtOperationTitle		= new Text(screenWidth, 17, 0, 2);
 
 	// Create buttonbar - this should appear at the bottom-center of the screen
 	_icons		= new InteractiveSurface(
@@ -423,12 +425,13 @@ BattlescapeState::BattlescapeState()
 //	add(_txtTooltip, "textTooltip", "battlescape", _icons);
 //	_txtTooltip->setHighContrast();
 
-	add(_txtDebug,			"textName",			"battlescape");
-	add(_warning,			"warning",			"battlescape", _icons);
-	add(_txtOperationTitle,	"operationTitle",	"battlescape");
-	add(_txtBaseLabel,		"infoText",			"battlescape");
-	add(_txtRegion,			"infoText",			"battlescape");
-	add(_txtMissionLabel,	"infoText",			"battlescape");
+	add(_txtDebug,				"textName",			"battlescape");
+	add(_warning,				"warning",			"battlescape", _icons);
+	add(_txtOperationTitle,		"operationTitle",	"battlescape");
+	add(_txtBaseLabel,			"infoText",			"battlescape");
+	add(_txtRegion,				"infoText",			"battlescape");
+	add(_txtControlDestroyed,	"infoText",			"battlescape");
+	add(_txtMissionLabel,		"infoText",			"battlescape");
 
 	_txtDebug->setHighContrast();
 	_txtDebug->setAlign(ALIGN_RIGHT);
@@ -450,6 +453,11 @@ BattlescapeState::BattlescapeState()
 
 	_txtMissionLabel->setHighContrast();
 	_txtMissionLabel->setAlign(ALIGN_CENTER);
+
+	_txtControlDestroyed->setText(tr("STR_ALIEN_BASE_CONTROL_DESTROYED"));
+	_txtControlDestroyed->setHighContrast();
+	_txtControlDestroyed->setAlign(ALIGN_CENTER);
+	_txtControlDestroyed->setVisible(false);
 
 	const Target* target = NULL;
 
@@ -985,7 +993,7 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
-	//Log(LOG_INFO) << "BattlescapeState::init()";
+	Log(LOG_INFO) << "BattlescapeState::init()";
 	if (_battleSave->getAmbientSound() != -1)
 		_game->getResourcePack()->getSoundByDepth(
 												0,
@@ -1049,6 +1057,14 @@ void BattlescapeState::init()
 	}
 
 	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel()));
+
+	if (_iconsHidden == false
+		&& _battleSave->getDestroyed() == true)
+	{
+		_txtControlDestroyed->setVisible();
+	}
+	else
+		_txtControlDestroyed->setVisible(false);
 
 //	_txtTooltip->setText(L"");
 /*	if (_battleSave->getKneelReserved())
@@ -3501,6 +3517,8 @@ void BattlescapeState::updateTurn()
  */
 void BattlescapeState::toggleIcons(bool vis)
 {
+	_iconsHidden = !vis;
+
 	_icons->setVisible(vis);
 	_iconsLayer->setVisible(vis);
 	_numLayers->setVisible(vis);
@@ -3526,6 +3544,7 @@ void BattlescapeState::toggleIcons(bool vis)
 //	_txtHasKill->setVisible(vis);
 	_showSoldierData = vis;
 
+//	_txtControlDestroyed->setVisible(vis);
 	_txtMissionLabel->setVisible(vis);
 	_lstTileInfo->setVisible(vis);
 }

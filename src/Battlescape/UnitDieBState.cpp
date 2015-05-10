@@ -207,26 +207,26 @@ void UnitDieBState::think()
 		if (_unit->getGeoscapeSoldier() != NULL
 			&& _unit->getOriginalFaction() == FACTION_PLAYER)
 		{
-			std::string message;
+			std::string stInfo;
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
 				if (_damageType == DT_NONE
 					&& _unit->getSpawnUnit().empty() == true)
 				{
-					message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
+					stInfo = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
 				}
 				else if (Options::battleNotifyDeath == true)
-					message = "STR_HAS_BEEN_KILLED";
+					stInfo = "STR_HAS_BEEN_KILLED";
 			}
 			else
-				message = "STR_HAS_BECOME_UNCONSCIOUS";
+				stInfo = "STR_HAS_BECOME_UNCONSCIOUS";
 
-			if (message.empty() == false)
+			if (stInfo.empty() == false)
 			{
 				Game* const game = _parent->getSave()->getBattleState()->getGame();
 				const Language* const lang = game->getLanguage();
 				game->pushState(new InfoboxOKState(lang->getString(
-																message,
+																stInfo,
 																_unit->getGender())
 															.arg(_unit->getName(lang))));
 			}

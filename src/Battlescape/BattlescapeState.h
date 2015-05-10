@@ -68,6 +68,7 @@ private:
 
 	bool
 		_firstInit,
+		_iconsHidden,
 		_isMouseScrolled,
 		_isMouseScrolling,
 		_mouseOverIcons,
@@ -164,6 +165,7 @@ private:
 		* _txtConsole2,
 //		* _txtConsole3,
 //		* _txtConsole4,
+		* _txtControlDestroyed,
 		* _txtDebug,
 //		* _txtHasKill,
 		* _txtMissionLabel,

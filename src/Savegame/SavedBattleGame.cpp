@@ -88,7 +88,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_invBattle(NULL),
 		_ambience(-1),
 		_groundLevel(-1),
-		_tacType(TCT_DEFAULT)
+		_tacType(TCT_DEFAULT),
+		_controlDestroyed(false)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
@@ -494,6 +495,7 @@ void SavedBattleGame::load(
 	_ambience				= node["ambience"]								.as<int>(_ambience);
 	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
 	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
+	_controlDestroyed		= node["controlDestroyed"]						.as<bool>();
 
 	Log(LOG_INFO) << ". load conditional recovery";
 	for (YAML::const_iterator
@@ -723,12 +725,13 @@ YAML::Node SavedBattleGame::save() const
 		node["items"].push_back((*i)->save());
 	}
 
-	node["batReserved"]		= static_cast<int>(_batReserved);
-	node["kneelReserved"]	= _kneelReserved;
-	node["depth"]			= _depth;
-	node["ambience"]		= _ambience;
-	node["alienRace"]		= _alienRace;
-	node["operationTitle"]	= Language::wstrToUtf8(_operationTitle);
+	node["batReserved"]			= static_cast<int>(_batReserved);
+	node["kneelReserved"]		= _kneelReserved;
+	node["depth"]				= _depth;
+	node["ambience"]			= _ambience;
+	node["alienRace"]			= _alienRace;
+	node["operationTitle"]		= Language::wstrToUtf8(_operationTitle);
+	node["controlDestroyed"]	= _controlDestroyed;
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _recoverGuaranteed.begin();
@@ -2902,11 +2905,28 @@ int SavedBattleGame::getGroundLevel() const
 
 /**
  * Gets the operation title of the mission.
- * return, reference to the title
+ * @return, reference to the title
  */
 const std::wstring& SavedBattleGame::getOperation() const
 {
 	return _operationTitle;
+}
+
+/**
+ * Tells player that an aLienBase control has been destroyed.
+ */
+void SavedBattleGame::setDestroyed()
+{
+	_controlDestroyed = true;
+}
+
+/**
+ * Gets if an aLienBase control has been destroyed.
+ * @return, true if destroyed
+ */
+bool SavedBattleGame::getDestroyed() const
+{
+	return _controlDestroyed;
 }
 
 /**

@@ -1261,19 +1261,17 @@ void TextList::handle(Action* action, State* state)
 	_down->handle(action, state);
 	_scrollbar->handle(action, state);
 
-	if (_arrowPos != -1)
+	if (_arrowPos != -1
+		&& _rows.empty() == false)
 	{
-		if (_rows.empty() == false)
+		for (size_t
+				i = _rows[_scroll];
+				i < _texts.size()
+					&& i < _rows[_scroll] + _visibleRows;
+				++i)
 		{
-			for (size_t
-					i = _rows[_scroll];
-					i < _texts.size()
-						&& i < _rows[_scroll] + _visibleRows;
-					++i)
-			{
-				_arrowLeft[i]->handle(action, state);
-				_arrowRight[i]->handle(action, state);
-			}
+			_arrowLeft[i]->handle(action, state);
+			_arrowRight[i]->handle(action, state);
 		}
 	}
 }

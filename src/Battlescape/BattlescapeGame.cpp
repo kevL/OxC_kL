@@ -881,16 +881,17 @@ void BattlescapeGame::endTurnPhase()
 
 /**
  * Checks for casualties and adjusts morale accordingly.
- * @param weapon	- pointer to the weapon responsible
- * @param attacker	- pointer to credit the kill
- * @param hidden	- true for UFO Power Source explosions at the start of battlescape (default false)
- * @param terrain	- true for terrain explosions (default false)
+ * @note Also checks if Alien Base Control was destroyed in a BaseAssault tactical.
+ * @param weapon		- pointer to the weapon responsible
+ * @param attacker		- pointer to credit the kill
+ * @param hiddenExpl	- true for UFO Power Source explosions at the start of battlescape (default false)
+ * @param terrainExpl	- true for terrain explosions (default false)
  */
 void BattlescapeGame::checkForCasualties(
 		const BattleItem* const weapon,
 		BattleUnit* attacker,
-		bool hidden,
-		bool terrain)
+		bool hiddenExpl,
+		bool terrainExpl)
 {
 	// If the victim was killed by the attacker's death explosion,
 	// fetch who killed the attacker and make THAT the attacker!
@@ -1200,9 +1201,9 @@ void BattlescapeGame::checkForCasualties(
 												this,
 												*i,
 												weapon->getRules()->getDamageType()));
-				else // hidden or terrain explosion, or death by fatal wounds
+				else // hidden or terrain explosion or death by fatal wounds
 				{
-					if (hidden == true) // this is instant death from UFO powersources, without screaming sounds
+					if (hiddenExpl == true) // this is instant death from UFO powersources, without screaming sounds
 						statePushNext(new UnitDieBState(
 													this,
 													*i,
@@ -1210,12 +1211,12 @@ void BattlescapeGame::checkForCasualties(
 													true));
 					else
 					{
-						if (terrain == true)
+						if (terrainExpl == true)
 							statePushNext(new UnitDieBState(
 														this,
 														*i,
 														DT_HE));
-						else // no attacker, and no terrain explosion, must be fatal wounds
+						else // no attacker and no terrain explosion; must be fatal wounds
 							statePushNext(new UnitDieBState(
 														this,
 														*i,
@@ -1262,15 +1263,44 @@ void BattlescapeGame::checkForCasualties(
 		}
 	}
 
-	if (hidden == false // showPsiButton() ought already be false at mission start.
-		&& _battleSave->getSide() == FACTION_PLAYER)
+	if (hiddenExpl == false)
 	{
-		const BattleUnit* const unit = _battleSave->getSelectedUnit();
-		if (unit != NULL)
-			_parentState->showPsiButton(
-									unit->getOriginalFaction() == FACTION_HOSTILE
-									&& unit->getBaseStats()->psiSkill > 0
-									&& unit->isOut(true, true) == false);
+		if (_battleSave->getSide() == FACTION_PLAYER)
+		{
+			const BattleUnit* const unit = _battleSave->getSelectedUnit();
+			if (unit != NULL)
+				_parentState->showPsiButton(
+										unit->getOriginalFaction() == FACTION_HOSTILE
+										&& unit->getBaseStats()->psiSkill > 0
+										&& unit->isOut(true, true) == false);
+		}
+
+		if (_battleSave->getTacticalType() == TCT_BASEASSAULT
+			&& _battleSave->getDestroyed() == false)
+		{
+			bool controlDestroyed = true;
+
+			for (size_t
+					i = 0;
+					i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+					++i)
+			{
+				if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
+					&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+				{
+					controlDestroyed = false;
+					break;
+				}
+			}
+
+			if (controlDestroyed == true)
+			{
+				_battleSave->setDestroyed();
+
+				Game* const game = _parentState->getGame();
+				game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_ALIEN_BASE_CONTROL_DESTROYED")));
+			}
+		}
 	}
 }
 

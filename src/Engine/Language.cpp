@@ -619,7 +619,7 @@ std::wstring Language::getName() const
  * Returns the localized text with the specified ID.
  * @note If not found return the ID itself.
  * @param id - ID of the string
- * @return, reference to LocalizedText of the requested ID
+ * @return, reference to LocalizedText (widestring) of the requested ID
  */
 const LocalizedText& Language::getString(const std::string& id) const
 {
@@ -644,9 +644,9 @@ const LocalizedText& Language::getString(const std::string& id) const
  * Returns the localized text with the specified ID, in the proper form for @a n.
  * The substitution of @a n has already happened in the returned LocalizedText.
  * If it's not found, just returns the ID.
- * @param id ID of the string.
- * @param n Number to use to decide the proper form.
- * @return String with the requested ID.
+ * @param id	- ID of the string
+ * @param n		- number to use to decide the proper form
+ * @return, LocalizedText (widestring) with the requested ID
  */
 LocalizedText Language::getString(
 		const std::string& id,
@@ -688,10 +688,10 @@ LocalizedText Language::getString(
 
 /**
  * Returns the localized text with the specified ID, in the proper form for the gender.
- * If it's not found, just returns the ID.
- * @param id ID of the string.
- * @param gender Current soldier gender.
- * @return String with the requested ID.
+ * @note If it's not found, just returns the ID.
+ * @param id		- ID of the string
+ * @param gender	- current soldier gender
+ * @return, reference to LocalizedText (widestring) with the requested ID
  */
 const LocalizedText& Language::getString(
 		const std::string& id,
@@ -709,7 +709,7 @@ const LocalizedText& Language::getString(
 
 /**
  * Outputs all the language IDs and strings to an HTML table.
- * @param filename HTML file.
+ * @param filename - reference to HTML file
  */
 void Language::toHtml(const std::string& filename) const
 {

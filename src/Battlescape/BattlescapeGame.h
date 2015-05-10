@@ -225,8 +225,8 @@ private:
 		void checkForCasualties(
 				const BattleItem* const weapon,
 				BattleUnit* attacker,
-				bool hidden = false,
-				bool terrain = false);
+				bool hiddenExpl = false,
+				bool terrainExpl = false);
 		/// Checks if a unit panics.
 //		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.

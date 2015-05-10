@@ -71,6 +71,7 @@ class SavedBattleGame
 private:
 	bool
 		_aborted,
+		_controlDestroyed,
 		_debugMode,
 		_cheatAI,
 		_kneelReserved,
@@ -441,6 +442,11 @@ private:
 
 		/// Gets the operation title of the mission.
 		const std::wstring& getOperation() const;
+
+		/// Tells player that an aLienBase control has been destroyed.
+		void setDestroyed();
+		/// Gets if an aLienBase control has been destroyed.
+		bool getDestroyed() const;
 
 		/// Sets variables for what music to play in a particular terrain.
 		void calibrateMusic(
