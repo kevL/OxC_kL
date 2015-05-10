@@ -495,7 +495,9 @@ void SavedBattleGame::load(
 	_ambience				= node["ambience"]								.as<int>(_ambience);
 	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
 	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
-	_controlDestroyed		= node["controlDestroyed"]						.as<bool>();
+
+	if (node["controlDestroyed"])
+		_controlDestroyed = node["controlDestroyed"].as<bool>();
 
 	Log(LOG_INFO) << ". load conditional recovery";
 	for (YAML::const_iterator
@@ -731,7 +733,9 @@ YAML::Node SavedBattleGame::save() const
 	node["ambience"]			= _ambience;
 	node["alienRace"]			= _alienRace;
 	node["operationTitle"]		= Language::wstrToUtf8(_operationTitle);
-	node["controlDestroyed"]	= _controlDestroyed;
+
+	if (_controlDestroyed == true)
+		node["controlDestroyed"] = _controlDestroyed;
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _recoverGuaranteed.begin();
@@ -842,7 +846,7 @@ void SavedBattleGame::initUtilities(ResourcePack* res)
 /**
  * Sets the TacticalType based on the Mission Type.
  * @note "missionType" is actually a misnomer and it should be "tacticalType" to distinguish it from the aLiens' mission(Type)s. Cf, "AlienDeployment" and "RuleAlienMission" (which should have just stayed as "RuleAlienTerror" for the sake of argument) and "AlienMission" but they're not the same ofc; Deployments can lead to aLien Missions but not vice versa.
- * @note That is aLiens do 'deployments' or 'missions' but only xCom does 'tacticals'.
+ * @note That is aLiens do 'deployments' - which may be 'missions' - but only xCom does 'tacticals'.
  * @note They may overlap - terrorMission/terrorTactical as an example.
  * @param missionType - reference the missionType
  */
@@ -866,7 +870,7 @@ void SavedBattleGame::setTacticalType(const std::string& missionType) // private
 	else if (missionType.compare("STR_MARS_THE_FINAL_ASSAULT") == 0)
 		_tacType = TCT_MARS2;
 	else
-		_tacType = TCT_DEFAULT;
+		_tacType = TCT_DEFAULT; // <- the default should probly be TCT_UFOCRASHED.
 }
 
 /**

@@ -993,7 +993,7 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
-	Log(LOG_INFO) << "BattlescapeState::init()";
+	//Log(LOG_INFO) << "BattlescapeState::init()";
 	if (_battleSave->getAmbientSound() != -1)
 		_game->getResourcePack()->getSoundByDepth(
 												0,

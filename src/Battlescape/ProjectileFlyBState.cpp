@@ -725,7 +725,7 @@ void ProjectileFlyBState::think()
 //					_parent->getMap()->invalidate();
 					_parent->getMap()->draw();	// kL
 
-					SDL_Delay(336);				// kL
+					SDL_Delay(336);				// kL, screen-pause when shot hits target
 				}
 			}
 
@@ -830,14 +830,12 @@ void ProjectileFlyBState::think()
 				ProjectileFlyBState* const toNextWp = new ProjectileFlyBState(
 																			_parent,
 																			_action,
-																			_origin);
+																			_origin); // -> tilePos
 
-				Position originVoxel = _parent->getMap()->getProjectile()->getPosition();
-				toNextWp->setOriginVoxel(originVoxel); // !getPosition(-1) -> tada, fixed.
-				//Log(LOG_INFO) << "_origin = " << _origin; // -> tilePos
-				//Log(LOG_INFO) << "posProj = " << _parent->getMap()->getProjectile()->getPosition(); // -> voxlPos
-				// this follows BL as it hits through waypoints; screen flashes black at each though:
-				_parent->getMap()->getCamera()->centerOnPosition(originVoxel);
+				toNextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
+
+				// this follows BL as it hits through waypoints
+				_parent->getMap()->getCamera()->centerOnPosition(_origin);
 
 				if (_origin == _action.target)
 					toNextWp->targetFloor();
