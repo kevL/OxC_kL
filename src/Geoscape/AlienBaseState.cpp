@@ -92,8 +92,9 @@ AlienBaseState::AlienBaseState(
 		lat = _base->getLatitude();
 
 	std::wstring
-		region,
-		country;
+		wstRegion,
+		wstCountry,
+		wstLocation;
 
 	for (std::vector<Country*>::iterator
 			i = _game->getSavedGame()->getCountries()->begin();
@@ -104,7 +105,7 @@ AlienBaseState::AlienBaseState(
 										lon,
 										lat))
 		{
-			country = tr((*i)->getRules()->getType());
+			wstCountry = tr((*i)->getRules()->getType());
 			break;
 		}
 	}
@@ -118,22 +119,19 @@ AlienBaseState::AlienBaseState(
 										lon,
 										lat))
 		{
-			region = tr((*i)->getRules()->getType());
+			wstRegion = tr((*i)->getRules()->getType());
 			break;
 		}
 	}
 
-
-	std::wstring location;
-
-	if (country.empty() == false)
-		location = tr("STR_COUNTRIES_COMMA").arg(country).arg(region);
-	else if (region.empty() == false)
-		location = region;
+	if (wstCountry.empty() == false)
+		wstLocation = tr("STR_COUNTRIES_COMMA").arg(wstCountry).arg(wstRegion);
+	else if (wstRegion.empty() == false)
+		wstLocation = wstRegion;
 	else
-		location = tr("STR_UNKNOWN");
+		wstLocation = tr("STR_UNKNOWN");
 
-	_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(location));
+	_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(wstLocation));
 }
 
 /**

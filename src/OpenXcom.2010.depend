@@ -5506,7 +5506,7 @@
 1430149550 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1431230063 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1431236938 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5677,7 +5677,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1431234122 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1431280038 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5826,7 +5826,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1431194816 source:f:\git\openxcom\src\battlescape\camera.cpp
+1431280290 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -5863,7 +5863,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1431231826 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1431237085 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -5924,7 +5924,7 @@
 
 1430149550 f:\git\openxcom\src\ruleset\rulecountry.h
 
-1430176767 f:\git\openxcom\src\savegame\alienmission.h
+1431281176 f:\git\openxcom\src\savegame\alienmission.h
 
 1430149550 f:\git\openxcom\src\savegame\country.h
 
@@ -6037,7 +6037,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1431148021 source:f:\git\openxcom\src\battlescape\map.cpp
+1431280030 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6788,7 +6788,7 @@
 
 1430149550 f:\git\openxcom\src\engine\scalers\scalebit.h
 
-1430155075 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
+1431281578 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
 	"AlienBaseState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7150,7 +7150,7 @@
 1430149550 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1431050907 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1431281267 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8614,7 +8614,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1431050948 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1431281198 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"

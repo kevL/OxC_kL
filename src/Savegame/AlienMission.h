@@ -156,7 +156,8 @@ private:
 		/// Handles UFO reaching a waypoint.
 		void ufoReachedWaypoint(
 				Ufo& ufo,
-				const Ruleset& rules);
+				const Ruleset& rules,
+				const Globe& globe);
 		/// Handles UFO lifting from the ground.
 		void ufoLifting(Ufo& ufo);
 		/// Handles UFO shot down.

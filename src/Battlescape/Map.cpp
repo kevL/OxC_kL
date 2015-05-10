@@ -4372,6 +4372,10 @@ void Map::drawTerrain(Surface* surface) // private.
 		}
 //		}
 	}
+//	surface->drawRect( // TEST
+//				8,-16,
+//				static_cast<Sint16>(getWidth()) - 8 - 8, static_cast<Sint16>(getHeight()) - 80 + 16,
+//				3);
 	surface->unlock();
 }
 

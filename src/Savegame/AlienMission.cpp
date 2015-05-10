@@ -526,10 +526,12 @@ private:
  * way that the rest of the code understands what to do.
  * @param ufo	- reference the Ufo that reached its waypoint
  * @param rules	- reference the Ruleset
+ * @param globe	- the earth globe required to get access to land checks
  */
 void AlienMission::ufoReachedWaypoint(
 		Ufo& ufo,
-		const Ruleset& rules)
+		const Ruleset& rules,
+		const Globe& globe)
 {
 	const size_t
 		curWaypoint = ufo.getTrajectoryPoint(),
@@ -630,13 +632,20 @@ void AlienMission::ufoReachedWaypoint(
 		}
 		else // Set timer for UFO on the ground.
 		{
-			ufo.setSecondsLeft(trajectory.groundTimer() * 5);
-
-			if (ufo.getDetected() == true
-				&& ufo.getLandId() == 0)
+			if (globe.insideLand(
+							ufo.getLongitude(),
+							ufo.getLatitude()) == true)
 			{
-				ufo.setLandId(_savedGame.getId("STR_LANDING_SITE"));
+				ufo.setSecondsLeft(trajectory.groundTimer() * 5);
+
+				if (ufo.getDetected() == true
+					&& ufo.getLandId() == 0)
+				{
+					ufo.setLandId(_savedGame.getId("STR_LANDING_SITE"));
+				}
 			}
+			else // there's nothing to land on
+				ufo.setSecondsLeft(5);
 		}
 	}
 }

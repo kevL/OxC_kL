@@ -161,12 +161,12 @@ DebriefingState::DebriefingState()
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	std::wstring wstOk;
+	std::wstring wst;
 	if (_gameSave->getSavedBattle()->getOperation().empty() == false)
-		wstOk = _gameSave->getSavedBattle()->getOperation();
+		wst = _gameSave->getSavedBattle()->getOperation();
 	else
-		wstOk = tr("STR_OK");
-	_btnOk->setText(wstOk);
+		wst = tr("STR_OK");
+	_btnOk->setText(wst);
 	_btnOk->onMouseClick((ActionHandler)& DebriefingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DebriefingState::btnOkClick,
@@ -457,7 +457,6 @@ DebriefingState::DebriefingState()
 
 	_gameSave->getMissionStatistics()->push_back(_missionStatistics);
 	// Soldier Diary_end.
-
 
 	_game->getResourcePack()->playMusic(
 									music,

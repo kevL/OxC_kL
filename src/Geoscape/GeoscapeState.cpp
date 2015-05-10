@@ -1494,7 +1494,8 @@ void GeoscapeState::time5Seconds()
 
 						mission->ufoReachedWaypoint( // recomputes 'qtySites' & 'detected'; also sets ufo Status
 												**i,
-												*_rules);
+												*_rules,
+												*_globe);
 
 						if ((*i)->getAltitude() == "STR_GROUND")
 						{

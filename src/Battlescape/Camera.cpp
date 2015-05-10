@@ -44,7 +44,7 @@ namespace OpenXcom
  * @param mapsize_y			- current map size in Y axis
  * @param mapsize_z			- current map size in Z axis
  * @param battleMap			- pointer to Map
- * @param visibleMapHeight	- current height the view is at
+ * @param visibleMapHeight	- height of Map surface minus icons-height
  */
 Camera::Camera(
 		int spriteWidth,
@@ -55,24 +55,24 @@ Camera::Camera(
 		Map* battleMap,
 		int visibleMapHeight)
 	:
-		_scrollMouseTimer(0),
-		_scrollKeyTimer(0),
 		_spriteWidth(spriteWidth),
 		_spriteHeight(spriteHeight),
 		_mapsize_x(mapsize_x),
 		_mapsize_y(mapsize_y),
 		_mapsize_z(mapsize_z),
+		_map(battleMap),
+		_visibleMapHeight(visibleMapHeight),
 		_screenWidth(battleMap->getWidth()),
 		_screenHeight(battleMap->getHeight()),
 		_mapOffset(-250,250,0),
+		_scrollMouseTimer(0),
+		_scrollKeyTimer(0),
 		_scrollMouseX(0),
 		_scrollMouseY(0),
 		_scrollKeyX(0),
 		_scrollKeyY(0),
 		_scrollTrigger(false),
-		_visibleMapHeight(visibleMapHeight),
-		_showAllLayers(false),
-		_map(battleMap)
+		_showAllLayers(false)
 {}
 
 /**
@@ -687,19 +687,17 @@ bool Camera::isOnScreen(const Position& posMap) const
 {
 	Position screenPos;
 	convertMapToScreen(
-					posMap,
-					&screenPos);
+					posMap,			// tile Position
+					&screenPos);	// pixel Position
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-//	return screenPos.x > -8 // kL ->
-//		&& screenPos.x < _screenWidth + 8
-//		&& screenPos.y > -12
-//		&& screenPos.y < _screenHeight - 72; // <- icons.
-	return screenPos.x > 8 // kL -> try these
-		&& screenPos.x < _screenWidth - 8
-		&& screenPos.y > -16
-		&& screenPos.y < _screenHeight - 80; // <- icons.
+	static const int border = 28; // buffer the edges a bit.
+
+	return screenPos.x > 8 + border // -> try these
+		&& screenPos.x < _screenWidth - 8 - _spriteWidth - border
+		&& screenPos.y > -16 + border
+		&& screenPos.y < _screenHeight - 80 - border; // <- icons.
 }
 /*
  * Checks if map coordinates X,Y,Z are on screen.

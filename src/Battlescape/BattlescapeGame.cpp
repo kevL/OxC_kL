@@ -1279,7 +1279,6 @@ void BattlescapeGame::checkForCasualties(
 			&& _battleSave->getDestroyed() == false)
 		{
 			bool controlDestroyed = true;
-
 			for (size_t
 					i = 0;
 					i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
