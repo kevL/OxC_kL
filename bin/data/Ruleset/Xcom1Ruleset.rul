@@ -487,8 +487,8 @@ items:
 #    invHeight: 1
   - type: STR_TANK_ROCKET_LAUNCHER
     size: 5
-    costBuy: 325000
-    costSell: 64000
+    costBuy: 340000
+    costSell: 66500
     transferTime: 96
 #    weight: 1
     bigSprite: 42
@@ -5903,7 +5903,7 @@ extraStrings:
       STR_PER10MIN: "per 10 min"
       STR_SHOT_TYPE_LAUNCH: "launch"
       STR_CONSOLE: "toggle battlescape console"
-      STR_SOLDIER_NOT_AT_BASE: "Soldier Out on Mission"
+      STR_SOLDIER_NOT_AT_BASE: "Soldier on Mission"
       STR_TRANSIT_LC: "Transfers"
       STR_RESET_UC: "reset"
       STR_PSI_RESIST: "> RESIST <"

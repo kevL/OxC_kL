@@ -4,8 +4,8 @@
 items:
   - type: STR_COMBAT_KNIFE
     size: 0.1
-    costBuy: 100
-    costSell: 50
+    costBuy: 125
+    costSell: 45
     weight: 3
     bigSprite: 61
     floorSprite: 76

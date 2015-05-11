@@ -1,6 +1,6 @@
 items:
   - type: STR_DOGE
-    size: 5
+    size: 3.5
     costBuy: 5000
     costSell: 3500
     transferTime: 48
