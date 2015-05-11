@@ -107,7 +107,9 @@ ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::la
  * Deletes the ProjectileFlyBState.
  */
 ProjectileFlyBState::~ProjectileFlyBState()
-{}
+{
+	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+}
 
 /**
  * Initializes the sequence:

@@ -2223,8 +2223,8 @@ bool SavedBattleGame::setUnitPosition(
 					&& tile->getUnit() != unit)
 				|| tile->getTUCostTile(
 									MapData::O_OBJECT,
-//									unit->getMoveTypeUnit()) == 255
-									_pathfinding->getMoveTypePathing()) == 255
+									unit->getMoveTypeUnit()) == 255
+//									_pathfinding->getMoveTypePathing()) == 255 // <- crashes baseEquip
 				|| (tile->hasNoFloor(tileBelow) == true
 //					&& unit->getMoveTypeUnit() != MT_FLY)
 					&& _pathfinding->getMoveTypePathing() != MT_FLY)

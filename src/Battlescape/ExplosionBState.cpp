@@ -90,7 +90,7 @@ ExplosionBState::ExplosionBState(
  */
 ExplosionBState::~ExplosionBState()
 {
-	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
+	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
 }
 
 /**

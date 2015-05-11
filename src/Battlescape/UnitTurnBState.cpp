@@ -63,7 +63,9 @@ UnitTurnBState::UnitTurnBState(
  * Deletes the UnitTurnBState.
  */
 UnitTurnBState::~UnitTurnBState()
-{}
+{
+	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+}
 
 /**
  * Initializes the state.
@@ -82,10 +84,12 @@ void UnitTurnBState::init()
 	_action.TU = 0;
 	_unit->setStopShot(false);
 
+	Uint32 interval;
 	if (_unit->getFaction() == FACTION_PLAYER)
-		_parent->setStateInterval(Options::battleXcomSpeed);
+		interval = static_cast<Uint32>(Options::battleXcomSpeed);
 	else
-		_parent->setStateInterval(Options::battleAlienSpeed);
+		interval = static_cast<Uint32>(Options::battleAlienSpeed);
+	_parent->setStateInterval(interval);
 
 	// if the unit has a turret and we are turning during targeting then only the turret turns
 	_turret = _unit->getTurretType() != -1

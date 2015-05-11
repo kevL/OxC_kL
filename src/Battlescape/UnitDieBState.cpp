@@ -128,7 +128,9 @@ UnitDieBState::UnitDieBState(
  * Deletes the UnitDieBState.
  */
 UnitDieBState::~UnitDieBState()
-{}
+{
+	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+}
 
 /**
  * Initializes this state.

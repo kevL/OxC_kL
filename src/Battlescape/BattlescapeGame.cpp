@@ -2754,7 +2754,6 @@ void BattlescapeGame::secondaryAction(const Position& posTarget)
  */
 void BattlescapeGame::launchAction()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::launchAction()";
 	_parentState->showLaunchButton(false);
 
 	getMap()->getWaypoints()->clear();
@@ -2768,10 +2767,9 @@ void BattlescapeGame::launchAction()
 	_states.push_back(new ProjectileFlyBState(
 											this,
 											_currentAction));
-	statePushFront(new UnitTurnBState(
+	statePushFront(new UnitTurnBState( // first of all turn towards the target
 									this,
-									_currentAction)); // first of all turn towards the target
-	//Log(LOG_INFO) << "BattlescapeGame::launchAction() EXIT";
+									_currentAction));
 }
 
 /**
@@ -2779,7 +2777,6 @@ void BattlescapeGame::launchAction()
  */
 void BattlescapeGame::psiButtonAction()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::psiButtonAction()";
 	_currentAction.weapon = 0;
 	_currentAction.targeting = true;
 	_currentAction.type = BA_PANIC;
