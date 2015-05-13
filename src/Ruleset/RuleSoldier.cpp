@@ -67,6 +67,7 @@ RuleSoldier::RuleSoldier(const std::string& type)
 		_standHeight(0),
 		_kneelHeight(0),
 		_floatHeight(0)
+//		_genderRatio() <- need to init a struct here ...
 {}
 
 /**

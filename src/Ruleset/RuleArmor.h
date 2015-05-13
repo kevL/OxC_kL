@@ -105,7 +105,7 @@ private:
 
 	public:
 		/// Creates a blank armor ruleset.
-		RuleArmor(const std::string& type);
+		explicit RuleArmor(const std::string& type);
 		/// Cleans up the armor ruleset.
 		~RuleArmor();
 

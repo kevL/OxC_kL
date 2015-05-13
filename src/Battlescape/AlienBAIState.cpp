@@ -761,8 +761,6 @@ void AlienBAIState::setupAmbush()
 	_ambushAction->type = BA_RETHINK;
 	_ambushTUs = 0;
 
-	int bestScore = 0;
-
 	std::vector<int> path;
 
 	if (selectClosestKnownEnemy() == true)
@@ -772,13 +770,13 @@ void AlienBAIState::setupAmbush()
 			COVER_BONUS				= 25,
 			FAST_PASS_THRESHOLD		= 80;
 
-		Position origin = _battleSave->getTileEngine()->getSightOriginVoxel(_aggroTarget);
-		Position target;
-
-		Position pos;
+		Position
+			origin = _battleSave->getTileEngine()->getSightOriginVoxel(_aggroTarget),
+			target,
+			pos;
 		const Tile* tile;
 		Pathfinding* const pf = _battleSave->getPathfinding();
-
+		int bestScore = 0;
 
 		for (std::vector<Node*>::const_iterator			// use node positions for this since it gives map makers a good
 				i = _battleSave->getNodes()->begin();	// degree of control over how the units will use the environment.
@@ -1925,7 +1923,7 @@ bool AlienBAIState::findFirePoint()
 
 /**
  * Decides if it's worthwhile to create an explosion.
- * @param targetPos		- target's position
+ * @param targetPos		- reference the target's position
  * @param attacker		- pointer to the attacking unit
  * @param explRadius	- radius of explosion in tile space
  * @param diff			- game difficulty
@@ -1933,7 +1931,7 @@ bool AlienBAIState::findFirePoint()
  * @return, true if it's worthwile creating an explosion at the target position
  */
 bool AlienBAIState::explosiveEfficacy(
-		const Position targetPos,
+		const Position& targetPos,
 		const BattleUnit* const attacker,
 		const int explRadius,
 		const int diff) const

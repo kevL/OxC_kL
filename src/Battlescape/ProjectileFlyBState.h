@@ -61,7 +61,7 @@ private:
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();
 	/// Set the origin voxel, used for the blaster launcher.
-	void setOriginVoxel(const Position pos);
+	void setOriginVoxel(const Position& pos);
 	/// Set the boolean flag to angle a blaster bomb towards the floor.
 	void targetFloor();
 
@@ -89,7 +89,7 @@ private:
 		/// Validates the throwing range.
 		static bool validThrowRange(
 				const BattleAction* const action,
-				const Position origin,
+				const Position& origin,
 				const Tile* const target);
 		/// Calculates the maximum throwing range.
 		static int getMaxThrowDistance(

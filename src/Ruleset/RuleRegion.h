@@ -113,7 +113,7 @@ private:
 
 
 		/// Creates a blank region ruleset.
-		RuleRegion(const std::string& type);
+		explicit RuleRegion(const std::string& type);
 		/// Cleans up the region ruleset.
 		~RuleRegion();
 

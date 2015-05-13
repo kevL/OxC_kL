@@ -224,27 +224,27 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		if ((*i)->_mission == static_cast<int>(missionId))
 		{
 			std::wostringstream
-				wossRace,
-				wossRank,
-				wossWeapon,
-				wossUnit,
-				wossStatus;
-//				wossAmmo;
+				strRace,
+				strRank,
+				strWeapon,
+				strUnit,
+				strStatus;
+//				strAmmo;
 
-			wossRace << tr((*i)->_race.c_str());
-			wossRank << tr((*i)->_rank.c_str());
-			wossWeapon << tr((*i)->_weapon.c_str());
-			wossUnit << wossRace.str().c_str() << " " << wossRank.str().c_str();
+			strRace << tr((*i)->_race.c_str());
+			strRank << tr((*i)->_rank.c_str());
+			strWeapon << tr((*i)->_weapon.c_str());
+			strUnit << strRace.str().c_str() << " " << strRank.str().c_str();
 
 			if ((*i)->getUnitStatusString() == "STATUS_DEAD")
 			{
-				wossStatus << tr("STR_KILLED").c_str();
+				strStatus << tr("STR_KILLED").c_str();
 //				++killQty; // below_ Count both kills & stuns.
 //				stunOrKill = true;
 			}
 			else
 			{
-				wossStatus << tr("STR_STUNNED").c_str();
+				strStatus << tr("STR_STUNNED").c_str();
 //				stunOrKill = true;
 			}
 
@@ -253,9 +253,9 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 			_lstKills->addRow(
 							3,
-							wossStatus.str().c_str(),
-							wossUnit.str().c_str(),
-							wossWeapon.str().c_str());
+							strStatus.str().c_str(),
+							strUnit.str().c_str(),
+							strWeapon.str().c_str());
 			_lstKills->setCellColor(
 								row++,
 								0,

@@ -73,7 +73,7 @@ protected:
 
 	public:
 		/// Creates the Options state.
-		OptionsBaseState(OptionsOrigin origin);
+		explicit OptionsBaseState(OptionsOrigin origin);
 		/// Cleans up the Options state.
 		~OptionsBaseState();
 

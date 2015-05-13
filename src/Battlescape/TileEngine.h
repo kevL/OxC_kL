@@ -217,12 +217,12 @@ private:
 				std::vector<Position>* const trajectory,
 				const BattleUnit* const excludeUnit,
 				const double arc,
-				const Position delta = Position(0,0,0));
+				const Position& delta = Position(0,0,0));
 		/// Validates a throwing action.
 		bool validateThrow(
 				const BattleAction& action,
-				const Position originVoxel,
-				const Position targetVoxel,
+				const Position& originVoxel,
+				const Position& targetVoxel,
 				double* const arc = NULL,
 				int* const voxelType = NULL);
 
@@ -249,7 +249,7 @@ private:
 				const int dir);
 		/// Returns validity of a melee attack from a given position.
 		bool validMeleeRange(
-				const Position origin,
+				const Position& origin,
 				const int dir,
 				const BattleUnit* const attacker,
 				const BattleUnit* const targetUnit,
@@ -284,7 +284,7 @@ private:
 
 		/// mark a region of the map as "dangerous" for a turn.
 		void setDangerZone(
-				const Position pos,
+				const Position& pos,
 				const int radius,
 				const BattleUnit* const unit);
 };

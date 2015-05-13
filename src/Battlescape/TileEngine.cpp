@@ -1205,10 +1205,9 @@ bool TileEngine::canTargetTile(
 
 	int
 		* spiralArray,
-		spiralCount,
-
 		minZ = 0,
 		maxZ = 0;
+	size_t spiralCount;
 	bool
 		minZfound = false,
 		maxZfound = false;
@@ -1233,8 +1232,10 @@ bool TileEngine::canTargetTile(
 	{
 		spiralArray = sliceObjectSpiral;
 		spiralCount = 41;
-		minZfound = maxZfound = true;
-		minZ = maxZ = 0;
+		minZfound =
+		maxZfound = true;
+		minZ =
+		maxZ = 0;
 	}
 	else
 	{
@@ -1249,12 +1250,12 @@ bool TileEngine::canTargetTile(
 				j != 12;
 				++j)
 		{
-			if (minZfound)
+			if (minZfound == true)
 				break;
 
 			for (size_t
 					i = 0;
-					i != static_cast<size_t>(spiralCount);
+					i != spiralCount;
 					++i)
 			{
 				int
@@ -1291,11 +1292,12 @@ bool TileEngine::canTargetTile(
 				j != -1;
 				--j)
 		{
-			if (maxZfound) break;
+			if (maxZfound == true)
+				break;
 
 			for (size_t
 					i = 0;
-					i != static_cast<size_t>(spiralCount);
+					i != spiralCount;
 					++i)
 			{
 				int
@@ -1341,7 +1343,7 @@ bool TileEngine::canTargetTile(
 
 		for (size_t
 				i = 0;
-				i != static_cast<size_t>(spiralCount);
+				i != spiralCount;
 				++i)
 		{
 			scanVoxel->x = targetVoxel.x + spiralArray[i * 2];
@@ -4884,7 +4886,7 @@ int TileEngine::calculateLine(
  * @param excludeUnit		- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
  * @param arc				- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
  * @param acu				- the deviation of the angles that should be taken into account. 1.0 is perfection. // now superceded by @param delta...
- * @param delta				- the deviation of the angles that should be taken into account, (0,0,0) is perfection (default Position(0,0,0))
+ * @param delta				- reference the deviation of the angles that should be taken into account, (0,0,0) is perfection (default Position(0,0,0))
  * @return,  -1 hit nothing
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit
@@ -4904,7 +4906,7 @@ int TileEngine::calculateParabola(
 		std::vector<Position>* const trajectory,
 		const BattleUnit* const excludeUnit,
 		const double arc,
-		const Position delta)
+		const Position& delta)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
 	const double
@@ -4994,16 +4996,16 @@ int TileEngine::calculateParabola(
 /**
  * Validates a throw action.
  * @param action		- reference the action to validate
- * @param originVoxel	- the origin point of the action
- * @param targetVoxel	- the target point of the action
+ * @param originVoxel	- reference the origin point of the action
+ * @param targetVoxel	- reference the target point of the action
  * @param arc			- pointer to a curvature of the throw (default NULL)
  * @param voxelType		- pointer to a type of voxel at which this parabola terminates (default NULL)
  * @return, true if throw is valid
  */
 bool TileEngine::validateThrow(
 						const BattleAction& action,
-						const Position originVoxel,
-						const Position targetVoxel,
+						const Position& originVoxel,
+						const Position& targetVoxel,
 						double* const arc,
 						int* const voxelType)
 {
@@ -5793,7 +5795,7 @@ bool TileEngine::validMeleeRange(
 
 /**
  * Validates the melee range between a tile and a unit.
- * @param origin		- Position to check from
+ * @param origin		- reference the Position to check from
  * @param dir			- direction to check
  * @param attacker		- pointer to an attacking BattleUnit
  * @param targetUnit	- pointer to the BattleUnit to attack
@@ -5804,7 +5806,7 @@ bool TileEngine::validMeleeRange(
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
-		const Position origin,
+		const Position& origin,
 		const int dir,
 		const BattleUnit* const attacker,
 		const BattleUnit* const targetUnit,
@@ -6186,12 +6188,12 @@ Position TileEngine::getOriginVoxel(
 
 /**
  * Marks a region of the map as "dangerous" for a turn.
- * @param pos		- is the epicenter of the explosion in tilespace
+ * @param pos		- reference the epicenter of the explosion in tilespace
  * @param radius	- how far to spread out
  * @param unit		- pointer to the BattleUnit that is triggering this action
  */
 void TileEngine::setDangerZone(
-		const Position pos,
+		const Position& pos,
 		const int radius,
 		const BattleUnit* const unit)
 {

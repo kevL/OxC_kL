@@ -41,7 +41,7 @@ private:
 
 	public:
 		/// Creates an exception.
-		Exception(const std::string& msg) throw();
+		explicit Exception(const std::string& msg) throw();
 		/// Cleans up the exception.
 		~Exception() throw();
 

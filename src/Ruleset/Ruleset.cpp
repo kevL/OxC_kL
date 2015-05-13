@@ -1913,7 +1913,7 @@ const GameTime& Ruleset::getStartingTime() const
  * @param id - the ID of the MCDPatch
  * @return, pointer to the MCDPatch based on ID, or NULL if none defined
  */
-MCDPatch* Ruleset::getMCDPatch(const std::string id) const
+MCDPatch* Ruleset::getMCDPatch(const std::string& id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
 	if (i != _MCDPatches.end())

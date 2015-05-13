@@ -39,7 +39,7 @@ private:
 
 	public:
 		/// Creates the Load Game state.
-		ListLoadState(OptionsOrigin origin);
+		explicit ListLoadState(OptionsOrigin origin);
 		/// Cleans up the Load Game state.
 		~ListLoadState();
 

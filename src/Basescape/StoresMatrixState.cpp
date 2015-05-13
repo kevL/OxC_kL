@@ -139,9 +139,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		woststr6,
 		woststr7;
 	int qty[MTX_BASES] = {0,0,0,0,0,0,0,0};
-	size_t
-		ent = 0,
-		row = 0;
+	size_t row = 0;
 
 	for (size_t
 		i = 0;
@@ -224,6 +222,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 //		* launchRule,
 //		* clipRule;
 	const RuleCraftWeapon* cwRule;
+	size_t ent = 0;
 
 	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator

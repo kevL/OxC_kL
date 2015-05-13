@@ -528,22 +528,22 @@ void Language::load(
 			i != lang.end();
 			++i)
 	{
-		if (i->second.IsScalar()) // regular strings
+		if (i->second.IsScalar() == true) // regular strings
 			_strings[i->first.as<std::string>()] = loadString(i->second.as<std::string>());
-		else if (i->second.IsMap()) // strings with plurality
+		else if (i->second.IsMap() == true) // strings with plurality
 		{
 			for (YAML::const_iterator
 					j = i->second.begin();
 					j != i->second.end();
 					++j)
 			{
-				std::string s = i->first.as<std::string>() + "_" + j->first.as<std::string>();
-				_strings[s] = loadString(j->second.as<std::string>());
+				std::string st = i->first.as<std::string>() + "_" + j->first.as<std::string>();
+				_strings[st] = loadString(j->second.as<std::string>());
 			}
 		}
 	}
 
-	if (extras)
+	if (extras != NULL)
 	{
 		for (std::map<std::string, std::string>::const_iterator
 				i = extras->getStrings()->begin();
@@ -583,8 +583,8 @@ void Language::load(
 /**
 * Replaces all special string markers with the approriate characters
 * and converts the string encoding.
-* @param ist Original UTF-8 string.
-* @return New widechar string.
+* @param ist - original UTF-8 string
+* @return, new widechar string
 */
 std::wstring Language::loadString(const std::string& ist) const
 {
@@ -671,17 +671,17 @@ LocalizedText Language::getString(
 		return LocalizedText(utf8ToWstr(id));
 	}
 
-	std::wostringstream wost;
-	wost << n;
+	std::wostringstream woststr;
+	woststr << n;
 
 	std::wstring
 		txt(pst->second),
 		marker(L"{N}"),
-		val(wost.str());
+		val(woststr.str());
 	replace(
-			txt,
-			marker,
-			val);
+		txt,
+		marker,
+		val);
 
 	return txt;
 }
@@ -724,10 +724,10 @@ void Language::toHtml(const std::string& filename) const
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
 
-		const std::string s = wstrToUtf8(i->second);
+		const std::string st = wstrToUtf8(i->second);
 		for (std::string::const_iterator
-				j = s.begin();
-				j != s.end();
+				j = st.begin();
+				j != st.end();
 				++j)
 		{
 			if (*j == 2

@@ -52,7 +52,7 @@ private:
 
 	public:
 		/// Creates the Ufo Lost state.
-		UfoLostState(const std::wstring& id);
+		explicit UfoLostState(const std::wstring& id);
 		/// Cleans up the Ufo Lost state.
 		~UfoLostState();
 

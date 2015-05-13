@@ -45,7 +45,7 @@ protected:
 
 	public:
 		///
-		ArticleStateTFTD(ArticleDefinitionTFTD* defs);
+		explicit ArticleStateTFTD(ArticleDefinitionTFTD* defs);
 		///
 		virtual ~ArticleStateTFTD();
 };

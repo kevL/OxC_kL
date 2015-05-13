@@ -44,7 +44,6 @@ class CommendationDeadState
 private:
 	Text
 		* _txtMedalInfo,
-		* _txtName,
 		* _txtTitle;
 	TextButton* _btnOk;
 	TextList
@@ -57,7 +56,7 @@ private:
 
 	public:
 		/// Creates the Medals state.
-		CommendationDeadState(std::vector<SoldierDead*> soldiersLost);
+		explicit CommendationDeadState(std::vector<SoldierDead*> soldiersLost);
 		/// Cleans up the Medals state.
 		~CommendationDeadState();
 

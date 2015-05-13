@@ -106,6 +106,7 @@ Map::Map(
 			x,y),
 		_game(game),
 		_arrow(NULL),
+		_arrow_kneel(NULL),
 		_selectorX(0),
 		_selectorY(0),
 		_mouseX(0),
@@ -114,6 +115,7 @@ Map::Map(
 		_cursorSize(1),
 		_animFrame(0),
 		_projectile(NULL),
+		_projectileSet(NULL),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
 		_waypointAction(false),
@@ -502,7 +504,7 @@ void Map::drawTerrain(Surface* surface) // private.
 		// convert bullet position from voxelspace to tilespace
 		bulletLowX  /= 16;
 		bulletLowY  /= 16;
-		bulletLowZ  /= 24;
+//		bulletLowZ  /= 24;
 		bulletHighX /= 16;
 		bulletHighY /= 16;
 		bulletHighZ /= 24;
@@ -1936,11 +1938,11 @@ void Map::drawTerrain(Surface* surface) // private.
 
 								if (tileNorth != NULL)
 								{
-									const Tile* tileEast;
-									if (itY < endY)
-										tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
-									else
-										tileEast = NULL;
+//									const Tile* tileEast;
+//									if (itY < endY)
+//										tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
+//									else
+//										tileEast = NULL;
 
 //									if (tileNorth->getUnit() == NULL	// TODO: looks like these 'unit' checks should be done against LoFTs!!
 //										&& (tileEast == NULL			// note, started doing that below_

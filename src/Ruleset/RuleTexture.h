@@ -67,7 +67,7 @@ private:
 
 	public:
 		/// Creates a new texture with mission data.
-		RuleTexture(int id);
+		explicit RuleTexture(int id);
 		/// Cleans up the texture.
 		~RuleTexture();
 

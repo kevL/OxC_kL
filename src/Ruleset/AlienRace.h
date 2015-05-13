@@ -58,7 +58,7 @@ private:
 
 	public:
 		/// Creates a blank alien race ruleset.
-		AlienRace(const std::string& id);
+		explicit AlienRace(const std::string& id);
 		/// Cleans up the alien race ruleset.
 		~AlienRace();
 

@@ -59,7 +59,7 @@ private:
 
 	public:
 		/// Consructor.
-		RuleInterface(const std::string& type);
+		explicit RuleInterface(const std::string& type);
 		/// Destructor.
 		~RuleInterface();
 

@@ -12,13 +12,16 @@
 				<Option type="0" />
 				<Option compiler="msvc10" />
 				<Compiler>
+					<Add option="/Zi" />
 					<Add option="/DNDEBUG" />
 				</Compiler>
 				<Linker>
+					<Add option="/DEBUG" />
 					<Add option="/INCREMENTAL:NO" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="cmd /c copy /y F:\GIT\OpenXcom\bin\Win32\Release\OpenXcom.exe F:\openXcom" />
+					<Add after="cmd /c copy /y F:\GIT\OpenXcom\bin\Win32\Release\OpenXcom.pdb F:\openXcom" />
 					<Add after="cmd /c del F:\GIT\OpenXcom\obj\Win32\Release\src\version.obj" />
 				</ExtraCommands>
 			</Target>

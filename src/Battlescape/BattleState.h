@@ -49,7 +49,7 @@ protected:
 				BattlescapeGame* parent,
 				BattleAction action);
 		/// Creates a new BattleState linked to the game.
-		BattleState(BattlescapeGame* parent);
+		explicit BattleState(BattlescapeGame* parent);
 		/// Cleans up the BattleState.
 		virtual ~BattleState();
 

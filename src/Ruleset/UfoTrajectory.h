@@ -65,7 +65,7 @@ private:
 
 	public:
 		///
-		UfoTrajectory(const std::string& id);
+		explicit UfoTrajectory(const std::string& id);
 
 		/// Loads trajectory data from YAML.
 		void load(const YAML::Node &node);

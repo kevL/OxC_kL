@@ -58,7 +58,6 @@ private:
 	int
 		_debugCycle, // for debugging country areas.
 		_debugCycle_b,
-		_delaytime,
 		_timeUntilNextFrame;
 	unsigned int _timeOfLastFrame;
 
@@ -79,7 +78,7 @@ private:
 
 	public:
 		/// Creates a new game and initializes SDL.
-		Game(const std::string& title);
+		explicit Game(const std::string& title);
 		/// Cleans up all the game's resources and shuts down SDL.
 		~Game();
 

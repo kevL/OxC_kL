@@ -70,7 +70,7 @@ class SoldierNamePool;
  * Represents a soldier hired by the player.
  * Soldiers have a wide variety of stats that affect their performance during battles.
  */
-class Soldier
+class Soldier // no copy cTor.
 {
 
 private:

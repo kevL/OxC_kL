@@ -62,7 +62,7 @@ private:
 
 	public:
 		/// Creates the state.
-		NewManufactureListState(Base* base);
+		explicit NewManufactureListState(Base* base);
 		///
 		// kL_note: no dTor ...
 

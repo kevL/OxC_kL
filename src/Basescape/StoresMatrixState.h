@@ -64,7 +64,7 @@ private:
 
 	public:
 		/// Creates the Stores Matrix state.
-		StoresMatrixState(Base* base);
+		explicit StoresMatrixState(Base* base);
 		/// Cleans up the Stores Matrix state.
 		~StoresMatrixState();
 

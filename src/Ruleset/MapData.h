@@ -124,7 +124,7 @@ private:
 			O_OBJECT;
 
 		/// cTor.
-		MapData(MapDataSet* dataSet);
+		explicit MapData(MapDataSet* dataSet);
 		/// dTor.
 		~MapData();
 

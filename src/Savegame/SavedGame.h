@@ -175,7 +175,7 @@ struct MissionStatistics
 	}
 
 	/// cTor.
-	MissionStatistics(const YAML::Node& node)
+	explicit MissionStatistics(const YAML::Node& node)
 		:
 			time(0,0,0,0,0,0,0)
 	{
@@ -247,7 +247,7 @@ struct PromotionInfo
  * A saved game holds all the variable info in a game like funds,
  * game time, current bases and contents, world activities, score, etc.
  */
-class SavedGame
+class SavedGame // no copy cTor.
 {
 
 private:
@@ -326,7 +326,7 @@ private:
 			QUICKSAVE;
 
 		/// Creates a new saved game.
-		SavedGame(const Ruleset* const rules);
+		explicit SavedGame(const Ruleset* const rules);
 		/// Cleans up the saved game.
 		~SavedGame();
 
@@ -403,7 +403,7 @@ private:
 		/// Gets the current game time.
 		GameTime* getTime() const;
 		/// Sets the current game time.
-		void setTime(GameTime time);
+		void setTime(GameTime gt);
 
 		/// Gets the current ID for an object.
 		int getId(const std::string& objectType);
@@ -596,7 +596,7 @@ private:
 		/// Gets a debug argument from Globe.
 		std::string getDebugArg() const;
 		/// Gets if the debug argument has been set.
-		bool SavedGame::getDebugArgDone();
+		bool getDebugArgDone();
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();

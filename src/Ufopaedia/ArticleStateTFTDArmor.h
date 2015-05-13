@@ -30,7 +30,7 @@ namespace OpenXcom
 	class ArticleStateTFTDArmor : public ArticleStateTFTD
 	{
 	public:
-		ArticleStateTFTDArmor(ArticleDefinitionTFTD *defs);
+		explicit ArticleStateTFTDArmor(ArticleDefinitionTFTD *defs);
 		virtual ~ArticleStateTFTDArmor();
 
 	protected:

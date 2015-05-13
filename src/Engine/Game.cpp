@@ -525,9 +525,7 @@ void Game::setVolume(
  */
 double Game::volumeExponent(int volume)
 {
-	return (std::exp(
-				std::log(Game::VOLUME_GRADIENT + 1.) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME))
-			- 1.)
+	return (std::exp(std::log(Game::VOLUME_GRADIENT + 1.) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME)) - 1.)
 			/ Game::VOLUME_GRADIENT;
 }
 // VOLUME_GRADIENT   = 10.

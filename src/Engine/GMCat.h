@@ -22,6 +22,7 @@
 
 #include "CatFile.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,11 +39,10 @@ class GMCatFile
 
 public:
 	/// Inherit constructor.
-	GMCatFile(const char* path)
+	explicit GMCatFile(const char* path)
 		:
 			CatFile(path)
-	{
-	}
+	{}
 
 	/// Loads a stream as a MIDI file.
 	Music* loadMIDI(unsigned int i);

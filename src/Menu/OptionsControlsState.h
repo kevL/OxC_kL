@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_OPTIONSCONTROLSSTATE_H
 #define OPENXCOM_OPTIONSCONTROLSSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "OptionsBaseState.h"
 
@@ -66,7 +66,7 @@ private:
 
 	public:
 		/// Creates the Controls state.
-		OptionsControlsState(OptionsOrigin origin);
+		explicit OptionsControlsState(OptionsOrigin origin);
 		/// Cleans up the Controls state.
 		~OptionsControlsState();
 

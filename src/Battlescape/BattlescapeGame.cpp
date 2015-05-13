@@ -270,7 +270,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		// it should also hide units when they've killed the guy spotting them;
 		// it's also for good luck
 
-	const BattleAIState* ai = unit->getCurrentAIState();
+	const BattleAIState* const ai = unit->getCurrentAIState();
 	if (ai == NULL)
 	{
 		// for some reason the unit had no AI routine assigned..
@@ -285,8 +285,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 											_battleSave,
 											unit,
 											NULL));
-
-		ai = unit->getCurrentAIState();
+//		ai = unit->getCurrentAIState();
 	}
 
 	++_AIActionCounter;
@@ -297,7 +296,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		//if (Options::traceAI) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
 	}
 	//Log(LOG_INFO) << ". _AIActionCounter DONE";
-
 
 	// this cast only works when ai was already AlienBAIState at heart
 //	AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(ai);

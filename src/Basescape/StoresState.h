@@ -59,7 +59,7 @@ private:
 
 	public:
 		/// Creates the Stores state.
-		StoresState(Base* base);
+		explicit StoresState(Base* base);
 		/// Cleans up the Stores state.
 		~StoresState();
 

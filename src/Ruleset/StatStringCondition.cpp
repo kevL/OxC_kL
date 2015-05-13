@@ -27,26 +27,25 @@ namespace OpenXcom
 
 /**
  * Creates a blank StatStringCondition.
- * @param conditionName	- name of the condition
+ * @param conditionName	- reference the name of the condition
  * @param minVal		- minimum value
  * @param maxVal		- maximum value
  */
 StatStringCondition::StatStringCondition(
-		const std::string conditionName,
+		const std::string& conditionName,
 		int minVal,
 		int maxVal)
-{
-	_conditionName = conditionName;
-	_minVal = minVal;
-	_maxVal = maxVal;
-}
+	:
+		_conditionName(conditionName),
+		_minVal(minVal),
+		_maxVal(maxVal)
+{}
 
 /**
  * Cleans up the extra StatStringCondition.
  */
 StatStringCondition::~StatStringCondition()
-{
-}
+{}
 
 /**
  * Gets the condition string.

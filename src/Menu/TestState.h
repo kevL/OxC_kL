@@ -63,7 +63,7 @@ private:
 	Window* _window;
 
 	/// Creates a surface with every color in the palette.
-	SDL_Surface* testSurface();
+//	SDL_Surface* testSurface();
 
 
 	public:

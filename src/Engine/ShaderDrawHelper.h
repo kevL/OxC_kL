@@ -49,7 +49,7 @@ class Scalar
 {
 	public:
 		T& ref;
-		inline Scalar(T& t)
+		inline explicit Scalar(T& t)
 			:
 				ref(t)
 		{}
@@ -492,7 +492,7 @@ struct controler<Scalar<T> >
 {
 	T& ref;
 
-	inline controler(const Scalar<T>& s)
+	inline explicit controler(const Scalar<T>& s)
 		:
 			ref(s.ref)
 	{}
@@ -501,39 +501,23 @@ struct controler<Scalar<T> >
 //	inline GraphSubset get_range()
 
 	inline void mod_range(GraphSubset&)
-	{
-		// nothing
-	}
+	{}
 	inline void set_range(const GraphSubset&)
-	{
-		// nothing
-	}
+	{}
 
 	inline void mod_y(int&, int&)
-	{
-		// nothing
-	}
+	{}
 	inline void set_y(const int&, const int&)
-	{
-		// nothing
-	}
+	{}
 	inline void inc_y()
-	{
-		// nothing
-	}
+	{}
 
 	inline void mod_x(int&, int&)
-	{
-		// nothing
-	}
+	{}
 	inline void set_x(const int&, const int&)
-	{
-		// nothing
-	}
+	{}
 	inline void inc_x()
-	{
-		// nothing
-	}
+	{}
 
 	inline T& get_ref()
 	{
@@ -549,46 +533,29 @@ struct controler<Nothing>
 	inline controler(const Nothing&)
 		:
 			i(0)
-	{
-	}
+	{}
 
 	// can't use this function
 //	inline GraphSubset get_range()
 
 	inline void mod_range(GraphSubset&)
-	{
-		// nothing
-	}
+	{}
 	inline void set_range(const GraphSubset&)
-	{
-		// nothing
-	}
+	{}
 
 	inline void mod_y(int&, int&)
-	{
-		// nothing
-	}
+	{}
 	inline void set_y(const int&, const int&)
-	{
-		// nothing
-	}
+	{}
 	inline void inc_y()
-	{
-		// nothing
-	}
+	{}
 
 	inline void mod_x(int&, int&)
-	{
-		// nothing
-	}
+	{}
 	inline void set_x(const int&, const int&)
-	{
-		// nothing
-	}
+	{}
 	inline void inc_x()
-	{
-		// nothing
-	}
+	{}
 
 	inline const int& get_ref()
 	{

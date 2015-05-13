@@ -78,7 +78,7 @@ private:
 
 	public:
 		/// Creates a blank craft ruleset.
-		RuleCraft(const std::string& type);
+		explicit RuleCraft(const std::string& type);
 		/// Cleans up the craft ruleset.
 		~RuleCraft();
 

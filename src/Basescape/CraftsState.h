@@ -74,7 +74,7 @@ private:
 
 	public:
 		/// Creates the Crafts state.
-		CraftsState(Base* base);
+		explicit CraftsState(Base* base);
 		/// Cleans up the Crafts state.
 		~CraftsState();
 

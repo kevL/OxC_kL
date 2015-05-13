@@ -365,7 +365,7 @@ private:
 				int* texture,
 				int* shade) const;
 		/// Gets the polygon's texture at a given point.
-		void Globe::getPolygonTexture(
+		void getPolygonTexture(
 				double lon,
 				double lat,
 				int* texture) const;

@@ -634,7 +634,7 @@ private:
 
 	public:
 		/// Remembers the base.
-		ClearAlienBase(const AlienBase* base)
+		explicit ClearAlienBase(const AlienBase* base)
 			:
 				_base(base)
 		{}
@@ -1696,8 +1696,8 @@ void DebriefingState::reequipCraft(
 		bool vehicleDestruction)
 {
 	int
-		qty,
-		lost;
+		qtyBase,
+		qtyLost;
 //	int used; // kL
 
 	const std::map<std::string, int> craftItems = *craft->getItems()->getContents();
@@ -1706,9 +1706,9 @@ void DebriefingState::reequipCraft(
 			i != craftItems.end();
 			++i)
 	{
-		qty = base->getItems()->getItem(i->first);
+		qtyBase = base->getItems()->getItem(i->first);
 
-		if (qty >= i->second)
+		if (qtyBase >= i->second)
 		{
 			base->getItems()->removeItem(
 										i->first,
@@ -1719,19 +1719,19 @@ void DebriefingState::reequipCraft(
 		{
 			base->getItems()->removeItem(
 										i->first,
-										qty);
+										qtyBase);
 
-			lost = i->second - qty;
+			qtyLost = i->second - qtyBase;
 			craft->getItems()->removeItem(
 										i->first,
-										lost);
-//										i->second - qty); // kL
-//			used = lost; // kL
+										qtyLost);
+//										i->second - qtyBase); // kL
+//			used = qtyLost; // kL
 
 			const ReequipStat stat =
 			{
 				i->first,
-				lost,
+				qtyLost,
 				craft->getName(_game->getLanguage())
 			};
 
@@ -1745,8 +1745,8 @@ void DebriefingState::reequipCraft(
 		// runs. An independent vector of either base->Stores or craft->Stores
 		// is NOT maintained.
 
-//		used = i->second - qty;
-//		used = qty - i->second;
+//		used = i->second - qtyBase;
+//		used = qtyBase - i->second;
 //		if (used > 0)
 /*		{
 			ReequipStat stat =
@@ -1789,25 +1789,25 @@ void DebriefingState::reequipCraft(
 
 	craft->getVehicles()->clear();
 
-	int addTanks = 0;
+	int addTanks;
 
 	for (std::map<std::string, int>::const_iterator // Ok, now read those vehicles
 			i = craftVehicles.getContents()->begin();
 			i != craftVehicles.getContents()->end();
 			++i)
 	{
-		qty = base->getItems()->getItem(i->first);
+		qtyBase = base->getItems()->getItem(i->first);
 		addTanks = std::min(
-						qty,
+						qtyBase,
 						i->second);
 
-		if (qty < i->second)
+		if (qtyBase < i->second)
 		{
-			lost = i->second - qty; // missing tanks
+			qtyLost = i->second - qtyBase; // missing tanks
 			const ReequipStat stat =
 			{
 				i->first,
-				lost,
+				qtyLost,
 				craft->getName(_game->getLanguage())
 			};
 
@@ -1853,11 +1853,11 @@ void DebriefingState::reequipCraft(
 
 			if (baseQty < i->second * ammoPerVehicle)
 			{
-				lost = (i->second * ammoPerVehicle) - baseQty; // missing ammo
+				qtyLost = (i->second * ammoPerVehicle) - baseQty; // missing ammo
 				const ReequipStat stat =
 				{
 					ammoRule->getType(),
-					lost,
+					qtyLost,
 					craft->getName(_game->getLanguage())
 				};
 

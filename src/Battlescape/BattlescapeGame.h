@@ -147,7 +147,7 @@ struct BattleAction
 /**
  * Battlescape game - the core game engine of the battlescape game.
  */
-class BattlescapeGame
+class BattlescapeGame // * no copy cTor.
 {
 
 private:

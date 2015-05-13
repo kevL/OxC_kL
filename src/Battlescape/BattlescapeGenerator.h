@@ -222,7 +222,7 @@ private:
 
 	public:
 		/// Creates a new BattlescapeGenerator class
-		BattlescapeGenerator(Game* game);
+		explicit BattlescapeGenerator(Game* game);
 		/// Cleans up the BattlescapeGenerator.
 		~BattlescapeGenerator();
 

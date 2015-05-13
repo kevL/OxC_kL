@@ -55,13 +55,12 @@ private:
 //		* _txtTimePeriod,
 		* _txtTitle;
 	TextButton* _btnOk;
-	TextList* _lstDetection;
 	Window* _window;
 
 
 	public:
 		/// Creates the BaseDetection state.
-		BaseDetectionState(Base* base);
+		explicit BaseDetectionState(Base* base);
 		/// Cleans up the BaseDetection state.
 		~BaseDetectionState();
 

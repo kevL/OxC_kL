@@ -49,7 +49,8 @@ namespace OpenXcom
  */
 IntroState::IntroState(const bool wasLetterBoxed)
 	:
-		_wasLetterBoxed(wasLetterBoxed)
+		_wasLetterBoxed(wasLetterBoxed),
+		_flcPlayer(NULL)
 {
 //	_oldMusic = Options::musicVolume;
 //	_oldSound = Options::soundVolume;

@@ -76,6 +76,7 @@ void GameTime::load(const YAML::Node& node)
 
 /**
  * Saves the time to a YAML file.
+ * @param memorial - true if setting time of soldier death for the memorial (default false)
  * @return, YAML node
  */
 YAML::Node GameTime::save(bool memorial) const
@@ -203,7 +204,7 @@ int GameTime::getWeekday() const
  */
 std::string GameTime::getWeekdayString() const
 {
-	std::string weekdays[] =
+	static const std::string weekdays[] =
 	{
 		"STR_SUNDAY",
 		"STR_MONDAY",
@@ -214,7 +215,7 @@ std::string GameTime::getWeekdayString() const
 		"STR_SATURDAY"
 	};
 
-	return weekdays[_weekday - 1];
+	return weekdays[static_cast<size_t>(_weekday) - 1];
 }
 
 /**
@@ -235,7 +236,6 @@ int GameTime::getDay() const
 std::wstring GameTime::getDayString(Language* lang) const
 {
 	std::string st;
-
 	switch (_day)
 	{
 		case 1:
@@ -254,7 +254,6 @@ std::wstring GameTime::getDayString(Language* lang) const
 
 		default:
 			st = "STR_DATE_FOURTH";
-		break;
 	}
 
 	return lang->getString(st).arg(_day);
@@ -276,7 +275,7 @@ int GameTime::getMonth() const
  */
 std::string GameTime::getMonthString() const
 {
-	std::string months[] =
+	static const std::string months[] =
 	{
 		"STR_JAN",
 		"STR_FEB",

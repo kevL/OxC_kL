@@ -64,7 +64,7 @@ private:
 
 	public:
 		/// Creates the Geoscape Options state.
-		OptionsGeoscapeState(OptionsOrigin origin);
+		explicit OptionsGeoscapeState(OptionsOrigin origin);
 		/// Cleans up the Geoscape Options state.
 		~OptionsGeoscapeState();
 

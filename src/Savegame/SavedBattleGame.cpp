@@ -89,7 +89,11 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_ambience(-1),
 		_groundLevel(-1),
 		_tacType(TCT_DEFAULT),
-		_controlDestroyed(false)
+		_controlDestroyed(false),
+		_tiles(NULL),
+		_dragInvert(false),
+		_dragTimeTolerance(0),
+		_dragPixelTolerance(0)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);

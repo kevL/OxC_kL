@@ -73,7 +73,7 @@ private:
 
 	public:
 		/// Creates a blank facility ruleset.
-		RuleBaseFacility(const std::string& type);
+		explicit RuleBaseFacility(const std::string& type);
 		/// Cleans up the facility ruleset.
 		~RuleBaseFacility();
 

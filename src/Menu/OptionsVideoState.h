@@ -34,7 +34,7 @@ class ArrowButton;
 class ComboBox;
 class InteractiveSurface;
 class Text;
-class TextButton;
+//class TextButton;
 class TextEdit;
 class ToggleTextButton;
 
@@ -81,11 +81,11 @@ private:
 		* _txtBattleScale,
 		* _txtMode,
 		* _txtOptions;
-	TextButton
-		* _displayMode,
-		* _btnWindowed,
-		* _btnFullscreen,
-		* _btnBorderless;
+//	TextButton
+//		* _displayMode,
+//		* _btnWindowed,
+//		* _btnFullscreen,
+//		* _btnBorderless;
 	TextEdit
 		* _txtDisplayWidth,
 		* _txtDisplayHeight;
@@ -102,7 +102,7 @@ private:
 
 	public:
 		/// Creates the Options state.
-		OptionsVideoState(OptionsOrigin origin);
+		explicit OptionsVideoState(OptionsOrigin origin);
 		/// Cleans up the Options state.
 		~OptionsVideoState();
 
@@ -131,8 +131,8 @@ private:
 
 		/// Update the resolution settings, we just resized the window.
 		void resize(
-				int &,
-				int &);
+				int&,
+				int&);
 
 		/// Handles keypresses.
 		void handle(Action* action);

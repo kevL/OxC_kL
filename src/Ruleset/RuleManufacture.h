@@ -53,7 +53,7 @@ private:
 
 	public:
 		/// Creates a new manufacture.
-		RuleManufacture(const std::string& name);
+		explicit RuleManufacture(const std::string& name);
 
 		/// Loads the manufacture from YAML.
 		void load(

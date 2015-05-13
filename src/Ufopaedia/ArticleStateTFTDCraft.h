@@ -30,7 +30,7 @@ namespace OpenXcom
 	class ArticleStateTFTDCraft : public ArticleStateTFTD
 	{
 	public:
-		ArticleStateTFTDCraft(ArticleDefinitionTFTD *defs);
+		explicit ArticleStateTFTDCraft(ArticleDefinitionTFTD *defs);
 		virtual ~ArticleStateTFTDCraft();
 
 	protected:

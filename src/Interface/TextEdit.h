@@ -99,7 +99,7 @@ private:
 		/// Gets the text edit's string.
 		std::wstring getText() const;
 		/// Sets the original text's string.
-		void setTextStored(const std::wstring text);
+		void setTextStored(const std::wstring& text);
 		/// Gets the original text edit's string.
 		std::wstring getTextStored() const;
 

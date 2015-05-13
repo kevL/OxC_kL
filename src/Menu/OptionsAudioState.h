@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_OPTIONSAUDIOSTATE_H
 #define OPENXCOM_OPTIONSAUDIOSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "OptionsBaseState.h"
 
@@ -71,7 +71,7 @@ private:
 
 	public:
 		/// Creates the Audio Options state.
-		OptionsAudioState(OptionsOrigin origin);
+		explicit OptionsAudioState(OptionsOrigin origin);
 		/// Cleans up the Audio Options state.
 		~OptionsAudioState();
 

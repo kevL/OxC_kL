@@ -70,7 +70,7 @@ private:
 
 	public:
 		/// Constructs a MapBlock object.
-		MapBlock(const std::string& type);
+		explicit MapBlock(const std::string& type);
 		/// Destructs this MapBlock object.
 		~MapBlock();
 

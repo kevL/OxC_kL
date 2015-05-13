@@ -134,16 +134,20 @@ BattleUnit::BattleUnit(
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(0),
 		_breathing(false),
-		_floorAbove(false)
+		_floorAbove(false),
+
+		_name(soldier->getName()),
+		_id(soldier->getId()),
+		_rank(soldier->getRankString()),
+		_armor(soldier->getArmor()),
+		_standHeight(soldier->getRules()->getStandHeight()),
+		_kneelHeight(soldier->getRules()->getKneelHeight()),
+		_floatHeight(soldier->getRules()->getFloatHeight()),
+		_gender(soldier->getGender())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-	_name			= soldier->getName();
-	_id				= soldier->getId();
-	_rank			= soldier->getRankString();
-
-	_stats			= *soldier->getCurrentStats();
-	_armor			= soldier->getArmor();
-	_stats			+= *_armor->getStats();	// armors may modify effective stats
+	_stats	= *soldier->getCurrentStats();
+	_stats += *_armor->getStats(); // armors may modify effective stats
 
 	_loftempsSet	= _armor->getLoftempsSet();
 	_moveType		= _armor->getMoveTypeArmor();
@@ -155,12 +159,6 @@ BattleUnit::BattleUnit(
 		else
 			_moveType = MT_WALK;
 	}
-
-	_standHeight	= soldier->getRules()->getStandHeight();
-	_kneelHeight	= soldier->getRules()->getKneelHeight();
-	_floatHeight	= soldier->getRules()->getFloatHeight();
-
-	_gender			= soldier->getGender();
 
 	int rankValue;
 	switch (soldier->getRank())
@@ -198,8 +196,8 @@ BattleUnit::BattleUnit(
 
 	deriveRank(); // -> '_rankInt'
 
-	const int look = static_cast<int>(soldier->getLook()) * 2
-				   + static_cast<int>(soldier->getGender());
+	const int look = soldier->getLook() * 2
+				   + soldier->getGender();
 	setRecolor(
 			look,
 			look,
@@ -295,13 +293,27 @@ BattleUnit::BattleUnit(
 		_diedByFire(false),
 		_turnDir(0),
 
-		_statistics(NULL) // Soldier Diary
+		_statistics(NULL), // Soldier Diary
+
+		_type(unit->getType()),
+		_race(unit->getRace()),
+		_rank(unit->getRank()),
+		_standHeight(unit->getStandHeight()),
+		_kneelHeight(unit->getKneelHeight()),
+		_floatHeight(unit->getFloatHeight()),
+		_loftempsSet(armor->getLoftempsSet()),
+		_deathSound(unit->getDeathSound()),
+		_aggroSound(unit->getAggroSound()),
+		_moveSound(unit->getMoveSound()),
+		_intelligence(unit->getIntelligence()),
+		_aggression(unit->getAggression()),
+		_spawnUnit(unit->getSpawnUnit()),
+		_value(unit->getValue()),
+		_specab(static_cast<SpecialAbility>(unit->getSpecialAbility()))
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
-	_type	= unit->getType();
-	_race	= unit->getRace();
-	_rank	= unit->getRank();
 	_stats	= *unit->getStats();
+	_stats += *_armor->getStats(); // armors may modify effective stats (but not further modified by game difficulty or monthly progress)
 
 	if (faction == FACTION_HOSTILE)
 	{
@@ -311,24 +323,9 @@ BattleUnit::BattleUnit(
 				month);
 	}
 
-	_stats		+= *_armor->getStats();	// armors may modify effective stats (but not further modified by game difficulty or monthly progress)
-
-	_tu			= _stats.tu;
-	_energy		= _stats.stamina;
-	_health		= _stats.health;
-
-	_standHeight	= unit->getStandHeight();
-	_kneelHeight	= unit->getKneelHeight();
-	_floatHeight	= unit->getFloatHeight();
-	_loftempsSet	= _armor->getLoftempsSet();
-	_deathSound		= unit->getDeathSound();
-	_aggroSound		= unit->getAggroSound();
-	_moveSound		= unit->getMoveSound();
-	_intelligence	= unit->getIntelligence();
-	_aggression		= unit->getAggression();
-	_specab			= static_cast<SpecialAbility>(unit->getSpecialAbility());
-	_spawnUnit		= unit->getSpawnUnit();
-	_value			= unit->getValue();
+	_tu		= _stats.tu;
+	_energy	= _stats.stamina;
+	_health	= _stats.health;
 
 	if (unit->isFemale() == true)
 		_gender = GENDER_FEMALE;
@@ -361,7 +358,8 @@ BattleUnit::BattleUnit(
 //		_specWeapon[i] = 0;
 
 	_lastCover = Position(-1,-1,-1);
-
+	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
+}
 /*	int rankInt = 0;
 	if (faction == FACTION_HOSTILE)
 	{
@@ -377,10 +375,7 @@ BattleUnit::BattleUnit(
 			"STR_LIVE_TERRORIST",
 		};
 
-		for (size_t
-				i = 0;
-				i != ranks;
-				++i)
+		for (size_t i = 0; i != ranks; ++i)
 		{
 			if (_rank.compare(rankList[i]) == 0)
 			{
@@ -390,17 +385,11 @@ BattleUnit::BattleUnit(
 		}
 	}
 	else if (faction == FACTION_NEUTRAL)
-		rankInt = std::rand() %8;
+		rankInt = std::rand() % 8;
 
-	setRecolor(
-			std::rand() %8,
-			std::rand() %8,
-			rankInt); */
+	setRecolor(std::rand() % 8, std::rand() % 8, rankInt); */
 //	setRecolor(0,0,0);	// kL, just make the vector so something naughty doesn't happen ....
 						// On 2nd thought don't even do that.
-
-	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
-}
 
 /**
  * dTor.
@@ -3578,7 +3567,7 @@ int BattleUnit::getAggression() const
  * Gets this unit's special ability (SpecialAbility enum).
  * @return, SpecialAbility
  */
-int BattleUnit::getSpecialAbility() const
+SpecialAbility BattleUnit::getSpecialAbility() const
 {
 	return _specab;
 }

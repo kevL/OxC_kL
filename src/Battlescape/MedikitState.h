@@ -87,7 +87,7 @@ private:
 
 	public:
 		/// Creates the MedikitState.
-		MedikitState(BattleAction* action);
+		explicit MedikitState(BattleAction* action);
 
 		/// Handler for right-clicking anything.
 		void handle(Action* action);

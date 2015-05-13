@@ -72,7 +72,7 @@ struct DebriefingStat
 struct ReequipStat
 {
 	std::string item;
-	int qty;
+	int qtyLost;
 	std::wstring craft;
 };
 

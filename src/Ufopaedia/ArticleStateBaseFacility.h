@@ -51,7 +51,7 @@ protected:
 
 	public:
 		/// cTor.
-		ArticleStateBaseFacility(ArticleDefinitionBaseFacility* article_defs);
+		explicit ArticleStateBaseFacility(ArticleDefinitionBaseFacility* article_defs);
 		/// dTor.
 		virtual ~ArticleStateBaseFacility();
 };

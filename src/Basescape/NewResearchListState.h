@@ -66,7 +66,7 @@ private:
 
 	public:
 		/// Creates the NewResearchListState.
-		NewResearchListState(Base* base);
+		explicit NewResearchListState(Base* base);
 		///
 		// kL_note: no dTor ...
 

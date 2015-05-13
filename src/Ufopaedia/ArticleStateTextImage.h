@@ -47,7 +47,7 @@ protected:
 
 	public:
 		///
-		ArticleStateTextImage(ArticleDefinitionTextImage* defs);
+		explicit ArticleStateTextImage(ArticleDefinitionTextImage* defs);
 		///
 		virtual ~ArticleStateTextImage();
 };

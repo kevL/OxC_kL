@@ -107,7 +107,7 @@ protected:
 		} serializationKey;
 
 		/// Creates a tile.
-		Tile(const Position& pos);
+		explicit Tile(const Position& pos);
 		/// Cleans up a tile.
 		~Tile();
 

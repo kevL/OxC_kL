@@ -366,7 +366,7 @@ void NewBattleState::load(const std::string& filename)
 			else
 				initPlay();
 		}
-		catch (YAML::Exception e)
+		catch (YAML::Exception& e)
 		{
 			Log(LOG_WARNING) << e.what();
 			initPlay();

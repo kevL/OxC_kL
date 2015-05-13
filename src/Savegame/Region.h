@@ -50,7 +50,7 @@ private:
 
 	public:
 		/// Creates a new region of the specified type.
-		Region(RuleRegion* rules);
+		explicit Region(RuleRegion* rules);
 		/// Cleans up the region.
 		~Region();
 

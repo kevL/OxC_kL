@@ -28,6 +28,7 @@
 *.nsh
 *.bat
 *.*.user
+*.xml
 
 # -OpenXcom root
 *.ac

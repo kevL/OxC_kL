@@ -451,7 +451,7 @@ bool showHelp(
  * loading any existing ones.
  * @param argc - number of arguments
  * @param argv - array of argument strings
- * @return, true if initialized happened
+ * @return, true if initialization happened
  */
 bool init(
 		int argc,
@@ -469,11 +469,12 @@ bool init(
 	std::string st = getUserFolder();
 	st += "openxcom.log";
 	Logger::logFile() = st;
-	FILE* const file = fopen(
-							Logger::logFile().c_str(),
-							"w");
+	FILE* const file = std::fopen(
+								Logger::logFile().c_str(),
+								"w");
 	if (file == NULL)
 	{
+		std::fclose(file); // kL
 		throw Exception(st + " not found");
 	}
 
@@ -610,7 +611,7 @@ void load(const std::string& filename)
 		purchaseExclusions = doc["purchaseexclusions"].as<std::vector<std::string> >(purchaseExclusions);
 		rulesets = doc["rulesets"].as<std::vector<std::string> >(rulesets);
 	}
-	catch (YAML::Exception e)
+	catch (YAML::Exception& e)
 	{
 		Log(LOG_WARNING) << e.what();
 	}
@@ -653,7 +654,7 @@ void save(const std::string& filename)
 
 		save << output.c_str();
 	}
-	catch (YAML::Exception e)
+	catch (YAML::Exception& e)
 	{
 		Log(LOG_WARNING) << e.what();
 	}

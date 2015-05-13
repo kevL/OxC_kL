@@ -62,7 +62,7 @@ private:
 
 	public:
 		/// Creates the Transfer Base state.
-		TransferBaseState(Base* base);
+		explicit TransferBaseState(Base* base);
 		/// Cleans up the Transfer Base state.
 		~TransferBaseState();
 

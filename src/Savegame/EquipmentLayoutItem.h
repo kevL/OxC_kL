@@ -56,7 +56,7 @@ private:
 				const std::string& ammoItem,
 				int fuseTimer);
 		/// Creates a new soldier-equipment layout item and loads its contents from YAML.
-		EquipmentLayoutItem(const YAML::Node& node);
+		explicit EquipmentLayoutItem(const YAML::Node& node);
 		/// Cleans up the soldier-equipment layout item.
 		~EquipmentLayoutItem();
 

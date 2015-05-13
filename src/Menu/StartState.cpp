@@ -521,7 +521,7 @@ void StartState::addCursor_kL() // kL
  */
 int StartState::load(void* game_ptr)
 {
-	Game* const game = (Game*)game_ptr;
+	Game* const game = static_cast<Game*>(game_ptr);
 	try
 	{
 		Log(LOG_INFO) << "Loading ruleset ...";
@@ -544,14 +544,14 @@ int StartState::load(void* game_ptr)
 		else								// kL
 			kL_ready = true;				// kL
 	}
-	catch (Exception &e)
+	catch (Exception& e)
 	{
 		error = e.what();
 		Log(LOG_ERROR) << error;
 
 		loading = LOADING_FAILED;
 	}
-	catch (YAML::Exception &e)
+	catch (YAML::Exception& e)
 	{
 		error = e.what();
 		Log(LOG_ERROR) << error;

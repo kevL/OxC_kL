@@ -107,7 +107,7 @@ class MedikitText
 {
 	public:
 		/// Creates a medikit text.
-		MedikitText(int y);
+		explicit MedikitText(int y);
 };
 
 /**
@@ -133,7 +133,7 @@ class MedikitButton
 {
 	public:
 		/// Creates a medikit button.
-		MedikitButton(int y);
+		explicit MedikitButton(int y);
 };
 
 /**

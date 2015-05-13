@@ -85,10 +85,23 @@ enum PlayingState
  */
 FlcPlayer::FlcPlayer()
 	:
-		_fileBuf(0),
-		_mainScreen(0),
-		_realScreen(0),
-		_game(0)
+		_fileBuf(NULL),
+		_mainScreen(NULL),
+		_realScreen(NULL),
+		_game(NULL),
+		_videoFrameData(NULL),
+		_chunkData(NULL),
+		_audioFrameData(NULL),
+		_screenWidth(0),
+		_screenHeight(0),
+		_screenDepth(0),
+		_dx(0),
+		_dy(0),
+		_offset(0),
+		_playingState(0),
+		_hasAudio(false),
+		_videoDelay(0),
+		audioVideoSync(NULL)
 {}
 
 /**

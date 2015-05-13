@@ -28,16 +28,14 @@ namespace OpenXcom
  */
 SoldierDeath::SoldierDeath()
 	:
-		_time(0, 0, 0, 0, 0, 0, 0)
-{
-}
+		_time(0,0,0,0,0,0,0)
+{}
 
 /**
  * dTor.
  */
 SoldierDeath::~SoldierDeath()
-{
-}
+{}
 
 /**
  * Loads the death time from a YAML file.
@@ -72,11 +70,11 @@ const GameTime* SoldierDeath::getTime() const
 
 /**
  * Sets the time of death of a soldier.
- * @param time - the time of death
+ * @param gt - the time of death
  */
-void SoldierDeath::setTime(GameTime time)
+void SoldierDeath::setTime(GameTime gt)
 {
-	_time = time;
+	_time = gt;
 }
 
 }

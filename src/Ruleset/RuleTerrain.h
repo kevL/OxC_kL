@@ -64,7 +64,7 @@ private:
 
 	public:
 		/// Constructs a RuleTerrain object.
-		RuleTerrain(const std::string& type);
+		explicit RuleTerrain(const std::string& type);
 		/// Destructs this RuleTerrain object.
 		~RuleTerrain();
 

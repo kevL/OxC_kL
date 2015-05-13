@@ -50,7 +50,7 @@ private:
 		static const int INFOBOX_DELAY = 2500;
 
 		/// Creates the Infobox state.
-		InfoboxState(const std::wstring& msg);
+		explicit InfoboxState(const std::wstring& msg);
 		/// Cleans up the Infobox state.
 		~InfoboxState();
 

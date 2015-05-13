@@ -106,7 +106,7 @@ private:
 
 	public:
 		/// Creates the Soldier Dead Info state.
-		SoldierInfoDeadState(size_t soldierId);
+		explicit SoldierInfoDeadState(size_t soldierId);
 		/// Cleans up the Soldier Dead Info state.
 		~SoldierInfoDeadState();
 

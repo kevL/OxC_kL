@@ -107,7 +107,9 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftDeployed(false),
 		_craftZ(0),
 		_baseEquipScreen(false),
-		_battleOrder(0)
+		_battleOrder(0),
+		_blocksToDo(0),
+		_testBlock(NULL)
 //		_tacType(TCT_DEFAULT)
 {
 //	_allowAutoLoadout = !Options::disableAutoEquip;
@@ -314,9 +316,9 @@ void BattlescapeGenerator::nextStage()
 		* takeHomeConditional = _battleSave->getConditionalRecoveredItems(),
 		* toContainer,
 		takeToNextStage;
-	std::map<RuleItem*, int>
-		guaranteedRounds,
-		conditionalRounds;
+//	std::map<RuleItem*, int>
+//		guaranteedRounds,
+//		conditionalRounds;
 
 	Tile* tile;
 	for (std::vector<BattleItem*>::iterator

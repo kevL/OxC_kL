@@ -51,12 +51,12 @@ private:
 	TextEdit* _edtSave;
 
 	/// Hides textlike elements of this state.
-	void ListSaveState::hideElements();
+	void hideElements();
 
 
 	public:
 		/// Creates the Save Game state.
-		ListSaveState(OptionsOrigin origin);
+		explicit ListSaveState(OptionsOrigin origin);
 		/// Cleans up the Save Game state.
 		~ListSaveState();
 

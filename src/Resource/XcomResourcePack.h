@@ -96,7 +96,7 @@ private:
 
 	public:
 		/// Creates the X-Com Resource Pack.
-		XcomResourcePack(Ruleset* rules);
+		explicit XcomResourcePack(Ruleset* rules);
 		/// Cleans up the X-Com Resource Pack.
 		~XcomResourcePack();
 

@@ -128,7 +128,7 @@ private:
 
 	public:
 		/// Creates a blank Alien Deployment ruleset.
-		AlienDeployment(const std::string& type);
+		explicit AlienDeployment(const std::string& type);
 		/// Cleans up the Alien Deployment ruleset.
 		~AlienDeployment();
 

@@ -51,10 +51,10 @@ private:
 	public:
 		/// Creates a commendation of the specified type.
 		SoldierCommendations(
-				const std::string type,
-				const std::string noun = "noNoun");
+				const std::string& type,
+				const std::string& noun = "noNoun");
 		/// Creates a new commendation and loads its contents from YAML.
-		SoldierCommendations(const YAML::Node& node);
+		explicit SoldierCommendations(const YAML::Node& node);
 		/// Cleans up the commendation.
 		~SoldierCommendations();
 
@@ -145,14 +145,14 @@ private:
 			std::pair<std::string, int> statTotal,
 			int criteria); */
 	///
-	void awardCommendation(
-			const std::string type,
-			const std::string noun = "noNoun");
+/*	void awardCommendation(
+			const std::string& type,
+			const std::string& noun = "noNoun"); */
 
 
 	public:
 		/// Creates a new soldier-diary and loads its contents from YAML.
-		SoldierDiary(const YAML::Node& node);
+		explicit SoldierDiary(const YAML::Node& node);
 		/// Constructs a diary.
 		SoldierDiary();
 		/// Constructs a copy of a diary.

@@ -1077,13 +1077,13 @@ void ProjectileFlyBState::cancel()
 /**
  * Validates the throwing range.
  * @param action - pointer to BattleAction struct (BattlescapeGame.h)
- * @param origin - position of origin in voxelspace
+ * @param origin - reference the origin in voxelspace
  * @param target - pointer to the targeted Tile
  * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange(
 		const BattleAction* const action,
-		const Position origin,
+		const Position& origin,
 		const Tile* const target)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
@@ -1192,9 +1192,9 @@ int ProjectileFlyBState::getMaxThrowDistance(
 /**
  * Set the origin voxel.
  * @note Used for the blaster launcher.
- * @param pos - the origin voxel
+ * @param pos - reference the origin voxel
  */
-void ProjectileFlyBState::setOriginVoxel(const Position pos) // private.
+void ProjectileFlyBState::setOriginVoxel(const Position& pos) // private.
 {
 	_originVoxel = pos;
 }

@@ -62,7 +62,7 @@ protected:
 
 	public:
 		/// cTor.
-		UfopaediaStartState(bool battle = false);
+		explicit UfopaediaStartState(bool battle = false);
 		/// dTor.
 		virtual ~UfopaediaStartState();
 };

@@ -31,7 +31,7 @@ namespace OpenXcom
 	class ArticleStateTFTDItem : public ArticleStateTFTD
 	{
 	public:
-		ArticleStateTFTDItem(ArticleDefinitionTFTD *defs);
+		explicit ArticleStateTFTDItem(ArticleDefinitionTFTD *defs);
 		virtual ~ArticleStateTFTDItem();
 
 	protected:

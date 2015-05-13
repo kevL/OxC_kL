@@ -51,7 +51,7 @@ protected:
 
 	public:
 		/// cTor.
-		ArticleStateUfo(ArticleDefinitionUfo* article_defs);
+		explicit ArticleStateUfo(ArticleDefinitionUfo* article_defs);
 		/// dTor.
 		virtual ~ArticleStateUfo();
 };

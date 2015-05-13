@@ -38,7 +38,7 @@ class SoldierDeath;
  * Dead Soldiers have a wide variety of stats that affect
  * our memory of their heroic, and not so heroic battles.
  */
-class SoldierDead
+class SoldierDead // no copy cTor.
 {
 
 private:
@@ -63,7 +63,7 @@ private:
 	public:
 		/// Creates a new dead soldier. Used for Soldiers dying IG.
 		SoldierDead(
-				const std::wstring name,
+				const std::wstring& name,
 				const int id,
 				const SoldierRank unitRank,
 				const SoldierGender gender,
@@ -71,12 +71,12 @@ private:
 				const int missions,
 				const int kills,
 				SoldierDeath* const death,
-				const UnitStats initialStats,
-				const UnitStats currentStats,
+				const UnitStats& initialStats,
+				const UnitStats& currentStats,
 				SoldierDiary diary); // + Base if I want to...
 		/// Creates a new dead soldier without a diary. Used for loading a SaveGame.
 		SoldierDead(
-				const std::wstring name,
+				const std::wstring& name,
 				const int id,
 				const SoldierRank unitRank,
 				const SoldierGender gender,
@@ -84,8 +84,8 @@ private:
 				const int missions,
 				const int kills,
 				SoldierDeath* const death,
-				const UnitStats initialStats,
-				const UnitStats currentStats);
+				const UnitStats& initialStats,
+				const UnitStats& currentStats);
 		/// Cleans up the dead soldier.
 		~SoldierDead();
 

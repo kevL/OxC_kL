@@ -78,13 +78,6 @@ SoldierDiary::SoldierDiary()
 		_mediApplicationsTotal(0),
 		_revivedUnitTotal(0),
 		_MIA(0)
-//		_regionTotal(),
-//		_countryTotal(),
-//		_typeTotal(),
-//		_UFOTotal(),
-//		_missionIdList(),
-//		_awards(),
-//		_killList()
 {}
 
 /**
@@ -476,6 +469,9 @@ void SoldierDiary::load(const YAML::Node& node)
 	_allAliensKilledTotal			= node["allAliensKilledTotal"]			.as<int>(_allAliensKilledTotal);
 	_mediApplicationsTotal			= node["mediApplicationsTotal"]			.as<int>(_mediApplicationsTotal);
 	_revivedUnitTotal				= node["revivedUnitTotal"]				.as<int>(_revivedUnitTotal);
+
+	_KIA =
+	_MIA = 0;
 }
 
 /**
@@ -1085,12 +1081,12 @@ else
 
 /**
  * Awards commendations to the soldier.
- * @param type - string
- * @param noun - string (default "noNoun")
+ * @param type - reference the type
+ * @param noun - reference the noun (default "noNoun")
  */
-void SoldierDiary::awardCommendation(
-		const std::string type,
-		const std::string noun)
+/* void SoldierDiary::awardCommendation(
+		const std::string& type,
+		const std::string& noun)
 {
 	bool newAward = true;
 
@@ -1113,7 +1109,7 @@ void SoldierDiary::awardCommendation(
 		_awards.push_back(new SoldierCommendations(
 												type,
 												noun));
-}
+} */
 
 /**
  * Gets a vector of mission ids.
@@ -1347,12 +1343,12 @@ void SoldierDiary::awardOriginalEight()
 /*___________________________________*/
 /**
  * Initializes a SoldierCommendations.
- * @param type -
- * @param noun - (default "noNoun")
+ * @param type - reference the type
+ * @param noun - reference the noun (default "noNoun")
  */
 SoldierCommendations::SoldierCommendations(
-		const std::string type,
-		const std::string noun)
+		const std::string& type,
+		const std::string& noun)
 	:
 		_type(type),
 		_noun(noun),
@@ -1381,9 +1377,9 @@ SoldierCommendations::~SoldierCommendations()
  */
 void SoldierCommendations::load(const YAML::Node& node)
 {
-	_type		= node["type"]		.as<std::string>(_type);
-	_noun		= node["noun"]		.as<std::string>("noNoun");
-	_isNew		= node["isNew"]		.as<bool>(false);
+	_type		= node["type"]	.as<std::string>(_type);
+	_noun		= node["noun"]	.as<std::string>("noNoun");
+	_isNew		= node["isNew"]	.as<bool>(false);
 	_decorLevel	= static_cast<size_t>(node["decorLevel"].as<int>(_decorLevel));
 }
 

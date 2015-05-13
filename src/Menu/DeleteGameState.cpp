@@ -48,9 +48,9 @@ DeleteGameState::DeleteGameState(
 		OptionsOrigin origin,
 		const std::string& save)
 	:
-		_origin(origin)
+		_origin(origin),
+		_filename(Options::getUserFolder() + save)
 {
-	_filename = Options::getUserFolder() + save;
 	_screen = false;
 
 	_window		= new Window(this, 256, 100, 32, 50, POPUP_BOTH);

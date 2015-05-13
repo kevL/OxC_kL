@@ -30,7 +30,7 @@ namespace OpenXcom
 	class ArticleStateTFTDUso : public ArticleStateTFTD
 	{
 	public:
-		ArticleStateTFTDUso(ArticleDefinitionTFTD *defs);
+		explicit ArticleStateTFTDUso(ArticleDefinitionTFTD *defs);
 		virtual ~ArticleStateTFTDUso();
 
 	protected:

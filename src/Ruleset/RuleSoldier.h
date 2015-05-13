@@ -64,7 +64,7 @@ private:
 
 	public:
 		/// Creates a blank unit ruleset.
-		RuleSoldier(const std::string& type);
+		explicit RuleSoldier(const std::string& type);
 		/// Cleans up the unit ruleset.
 		~RuleSoldier();
 
@@ -91,8 +91,8 @@ private:
 		/// Gets the armor name.
 		std::string getArmor() const;
 
-		/// kL. Gets the gender ratio struct.
-		const RuleGender* const getGenderRatio() const; // kL
+		/// Gets the gender ratio struct.
+		const RuleGender* const getGenderRatio() const;
 		/// Gets the female appearance ratio.
 //		int getFemaleFrequency() const;
 };

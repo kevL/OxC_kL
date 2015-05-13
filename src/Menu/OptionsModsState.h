@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_OPTIONSMODSSTATE_H
 #define OPENXCOM_OPTIONSMODSSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "OptionsBaseState.h"
 
@@ -49,7 +49,7 @@ private:
 
 	public:
 		/// Creates the Advanced state.
-		OptionsModsState(OptionsOrigin origin);
+		explicit OptionsModsState(OptionsOrigin origin);
 		/// Cleans up the Advanced state.
 		~OptionsModsState();
 

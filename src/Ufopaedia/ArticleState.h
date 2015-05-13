@@ -55,7 +55,7 @@ protected:
 		* _btnPrev;
 
 	/// constructor (it can only be instantiated by derived classes)
-	ArticleState(const std::string& article_id);
+	explicit ArticleState(const std::string& article_id);
 	/// destructor
 	virtual ~ArticleState();
 

@@ -193,6 +193,7 @@ void InteractiveSurface::handle( // virtual
 			{
 				_isHovered = false;
 				mouseOut(action, state);
+
 				if (_listButton == true
 					&& action->getDetails()->type == SDL_MOUSEMOTION)
 				{

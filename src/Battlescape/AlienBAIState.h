@@ -153,7 +153,7 @@ protected:
 
 		/// Decides if we should throw a grenade/launch a missile to this position.
 		bool explosiveEfficacy(
-				const Position targetPos,
+				const Position& targetPos,
 				const BattleUnit* const attacker,
 				const int explRadius,
 				const int diff) const;

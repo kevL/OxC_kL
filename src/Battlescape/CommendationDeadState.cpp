@@ -131,7 +131,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 		modularAward;
 	size_t
 		row = 0,
-		titleRow = 0;
+		titleRow;
 
 	std::map<std::string, RuleCommendations*> awardList = _game->getRuleset()->getCommendations();
 	for (std::map<std::string, RuleCommendations*>::const_iterator
@@ -183,7 +183,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 					int
 						skip = 0,
 						lastInt = -2,
-						thisInt = -1;
+						thisInt; // = -1;
 					size_t j = 0;
 
 					for (std::vector<int>::const_iterator

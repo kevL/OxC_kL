@@ -75,7 +75,7 @@ struct findRuleResearch
 		public std::unary_function<ResearchProject*, bool>
 {
 	RuleResearch* _toFind;
-	findRuleResearch(RuleResearch* toFind);
+	explicit findRuleResearch(RuleResearch* toFind);
 
 	bool operator()(const ResearchProject* r) const;
 };
@@ -98,7 +98,7 @@ struct equalProduction
 		public std::unary_function<Production*, bool>
 {
 	RuleManufacture* _item;
-	equalProduction(RuleManufacture* item);
+	explicit equalProduction(RuleManufacture* item);
 
 	bool operator()(const Production* p) const;
 };
@@ -138,12 +138,14 @@ SavedGame::SavedGame(const Ruleset* const rules)
 //		_radarLines(false),
 		_monthsPassed(-1),
 		_curRowMatrix(0),		// kL
-		_curGraph(0)			// kL
+		_curGraph(0),			// kL
 //		_curGraphRowCountry(0)	// kL
 //		_selectedBase(0),
 //		_lastselectedArmor("STR_ARMOR_NONE_UC")
+		_debugArgDone(false),
+		_time(NULL)
 {
-	_time = new GameTime(6,1,1,1999,12,0,0);
+//	_time = new GameTime(6,1,1,1999,12,0,0);
 
 	_alienStrategy = new AlienStrategy();
 
@@ -1117,9 +1119,9 @@ GameTime* SavedGame::getTime() const
  * Changes the current time of the game.
  * @param time - GameTime
  */
-void SavedGame::setTime(GameTime time)
+void SavedGame::setTime(GameTime gt)
 {
-	_time = new GameTime(time);
+	_time = new GameTime(gt);
 }
 
 /**

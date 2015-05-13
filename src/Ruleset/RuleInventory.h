@@ -75,7 +75,7 @@ private:
 			HAND_H = 3;
 
 		/// Creates a blank inventory ruleset.
-		RuleInventory(const std::string& id);
+		explicit RuleInventory(const std::string& id);
 		/// Cleans up the inventory ruleset.
 		~RuleInventory();
 

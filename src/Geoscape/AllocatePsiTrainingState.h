@@ -64,7 +64,7 @@ private:
 
 	public:
 		/// Creates the Psi Training state.
-		AllocatePsiTrainingState(Base* base);
+		explicit AllocatePsiTrainingState(Base* base);
 		/// Cleans up the Psi Training state.
 		~AllocatePsiTrainingState();
 

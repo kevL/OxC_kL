@@ -43,7 +43,7 @@ namespace OpenXcom
  * @param diary			- copy of SoldierDiary from the recently deceased Soldier
  */
 SoldierDead::SoldierDead(
-		const std::wstring name,
+		const std::wstring& name,
 		const int id,
 		const SoldierRank unitRank,
 		const SoldierGender gender,
@@ -51,8 +51,8 @@ SoldierDead::SoldierDead(
 		const int missions,
 		const int kills,
 		SoldierDeath* const death,
-		const UnitStats initialStats,
-		const UnitStats currentStats,
+		const UnitStats& initialStats,
+		const UnitStats& currentStats,
 		SoldierDiary diary) // base if I want to...
 	:
 		_name(name),
@@ -74,7 +74,7 @@ SoldierDead::SoldierDead(
  * Creates a new dead soldier without a diary. Used for loading a SaveGame.
  */
 SoldierDead::SoldierDead(
-		const std::wstring name,
+		const std::wstring& name,
 		const int id,
 		const SoldierRank unitRank,
 		const SoldierGender gender,
@@ -82,8 +82,8 @@ SoldierDead::SoldierDead(
 		const int missions,
 		const int kills,
 		SoldierDeath* const death,
-		const UnitStats initialStats,
-		const UnitStats currentStats)
+		const UnitStats& initialStats,
+		const UnitStats& currentStats)
 	:
 		_name(name),
 		_id(id),

@@ -255,7 +255,7 @@ private:
 
 	public:
 		/// Creates a blank unit ruleset.
-		Unit(const std::string& type);
+		explicit Unit(const std::string& type);
 		/// Cleans up the unit ruleset.
 		~Unit();
 
@@ -299,7 +299,7 @@ private:
 		/// Gets the aggression. Determines an AI stance on the spectrum of taking revenge to taking cover.
 		int getAggression() const;
 		/// Gets the alien's special ability if any.
-		int getSpecialAbility() const;
+		SpecialAbility getSpecialAbility() const;
 		/// Gets the unit's spawn unit.
 		std::string getSpawnUnit() const;
 

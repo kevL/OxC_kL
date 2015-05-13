@@ -144,7 +144,7 @@ private:
 
 	public:
 		/// Creates a new battle save based on the current generic save.
-		SavedBattleGame(const std::vector<OperationPool*>* titles = NULL);
+		explicit SavedBattleGame(const std::vector<OperationPool*>* titles = NULL);
 		/// Cleans up the saved game.
 		~SavedBattleGame();
 

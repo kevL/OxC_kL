@@ -345,7 +345,7 @@ void CivilianBAIState::setupEscape()
 
 	int
 		bestTileScore = -100000,
-		score = -100000,
+		score,
 		tu = _unit->getTimeUnits() / 2,
 		unitsSpotting = countSpottingUnits(_unit->getPosition()),
 		currentTilePref = 15,

@@ -406,7 +406,8 @@ void ArticleDefinitionVehicle::load(
  */
 ArticleDefinitionAward::ArticleDefinitionAward()
 	:
-		ArticleDefinition(UFOPAEDIA_TYPE_AWARD)
+		ArticleDefinition(UFOPAEDIA_TYPE_AWARD),
+		text_width(0)
 {}
 
 /**

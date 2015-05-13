@@ -157,7 +157,7 @@ void TestState::blit()
  * testing 8bpp functionality, still useful for debugging palette issues.
  * @return Test surface.
  */
-SDL_Surface* TestState::testSurface()
+/* SDL_Surface* TestState::testSurface()
 {
 	SDL_Surface* surface;
 
@@ -189,6 +189,6 @@ SDL_Surface* TestState::testSurface()
 	SDL_UnlockSurface(surface);
 
 	return surface;
-}
+} */
 
 }

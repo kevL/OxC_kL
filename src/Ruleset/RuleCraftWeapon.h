@@ -60,7 +60,7 @@ private:
 
 	public:
 		/// Creates a blank craft weapon ruleset.
-		RuleCraftWeapon(const std::string& type);
+		explicit RuleCraftWeapon(const std::string& type);
 		/// Cleans up the craft weapon ruleset.
 		~RuleCraftWeapon();
 

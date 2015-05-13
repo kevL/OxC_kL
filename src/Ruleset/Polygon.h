@@ -49,7 +49,7 @@ private:
 
 	public:
 		/// Creates a polygon with a number of points.
-		Polygon(size_t points);
+		explicit Polygon(size_t points);
 		/// Creates a new polygon from an existing one.
 		Polygon(const Polygon& other);
 		/// Cleans up the polygon.

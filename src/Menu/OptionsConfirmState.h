@@ -58,7 +58,7 @@ private:
 
 	public:
 		/// Creates the Confirm Display Options state.
-		OptionsConfirmState(OptionsOrigin origin);
+		explicit OptionsConfirmState(OptionsOrigin origin);
 		/// Cleans up the Confirm Display Options state.
 		~OptionsConfirmState();
 

@@ -35,7 +35,6 @@ Unit::Unit(const std::string& type)
 		_standHeight(0),
 		_kneelHeight(0),
 		_floatHeight(0),
-
 		_value(0),
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -65,31 +64,31 @@ void Unit::load(
 		const YAML::Node& node,
 		int modIndex)
 {
-	_type			= node["type"]					.as<std::string>(_type);
-	_race			= node["race"]					.as<std::string>(_race);
-	_rank			= node["rank"]					.as<std::string>(_rank);
-	_stats			.mergeStats(node["stats"]		.as<UnitStats>(_stats));
-	_armor			= node["armor"]					.as<std::string>(_armor);
-	_standHeight	= node["standHeight"]			.as<int>(_standHeight);
-	_kneelHeight	= node["kneelHeight"]			.as<int>(_kneelHeight);
+	_type			= node["type"]				.as<std::string>(_type);
+	_race			= node["race"]				.as<std::string>(_race);
+	_rank			= node["rank"]				.as<std::string>(_rank);
+	_stats			.mergeStats(node["stats"]	.as<UnitStats>(_stats));
+	_armor			= node["armor"]				.as<std::string>(_armor);
+	_standHeight	= node["standHeight"]		.as<int>(_standHeight);
+	_kneelHeight	= node["kneelHeight"]		.as<int>(_kneelHeight);
 
-	_floatHeight	= node["floatHeight"]			.as<int>(_floatHeight);
+	_floatHeight	= node["floatHeight"]		.as<int>(_floatHeight);
 	if (_floatHeight + _standHeight > 24)
 	{
 		throw Exception("Error with unit " + _type + ": Unit height may not exceed 25");
 	}
 
-	_value			= node["value"]					.as<int>(_value);
-	_intelligence	= node["intelligence"]			.as<int>(_intelligence);
-	_aggression		= node["aggression"]			.as<int>(_aggression);
-	_energyRecovery	= node["energyRecovery"]		.as<int>(_energyRecovery);
-	_livingWeapon	= node["livingWeapon"]			.as<bool>(_livingWeapon);
-	_meleeWeapon	= node["meleeWeapon"]			.as<std::string>(_meleeWeapon);
-	_builtInWeapons	= node["builtInWeapons"]		.as<std::vector<std::string> >(_builtInWeapons);
-	_female			= node["female"]				.as<bool>(_female);
-	_mechanical		= node["mechanical"]			.as<bool>(_mechanical);
-	_psiImmune		= node["psiImmune"]				.as<bool>(_psiImmune);
-	_spawnUnit		= node["spawnUnit"]				.as<std::string>(_spawnUnit);
+	_value			= node["value"]				.as<int>(_value);
+	_intelligence	= node["intelligence"]		.as<int>(_intelligence);
+	_aggression		= node["aggression"]		.as<int>(_aggression);
+	_energyRecovery	= node["energyRecovery"]	.as<int>(_energyRecovery);
+	_livingWeapon	= node["livingWeapon"]		.as<bool>(_livingWeapon);
+	_meleeWeapon	= node["meleeWeapon"]		.as<std::string>(_meleeWeapon);
+	_builtInWeapons	= node["builtInWeapons"]	.as<std::vector<std::string> >(_builtInWeapons);
+	_female			= node["female"]			.as<bool>(_female);
+	_mechanical		= node["mechanical"]		.as<bool>(_mechanical);
+	_psiImmune		= node["psiImmune"]			.as<bool>(_psiImmune);
+	_spawnUnit		= node["spawnUnit"]			.as<std::string>(_spawnUnit);
 	_specab			= static_cast<SpecialAbility>(node["specab"].as<int>(_specab));
 
 	if (node["deathSound"])
@@ -244,9 +243,9 @@ int Unit::getAggression() const
  * Gets the unit's special ability.
  * @return, the unit's specab
  */
-int Unit::getSpecialAbility() const
+SpecialAbility Unit::getSpecialAbility() const
 {
-	return static_cast<int>(_specab);
+	return _specab;
 }
 
 /**

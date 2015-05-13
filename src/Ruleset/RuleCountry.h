@@ -54,7 +54,7 @@ private:
 
 	public:
 		/// Creates a blank country ruleset.
-		RuleCountry(const std::string& type);
+		explicit RuleCountry(const std::string& type);
 		/// Cleans up the country ruleset.
 		~RuleCountry();
 

@@ -31,8 +31,9 @@
 namespace OpenXcom
 {
 
-class Screen;
 class Game;
+class Screen;
+
 
 class FlcPlayer
 {

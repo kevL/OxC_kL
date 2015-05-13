@@ -190,7 +190,7 @@ struct BattleUnitKills
 	}
 
 	///
-	BattleUnitKills(const YAML::Node& node)
+	explicit BattleUnitKills(const YAML::Node& node)
 	{
 		load(node);
 	}
@@ -315,6 +315,10 @@ struct BattleUnitStatistics
 		medikitApplications		= node["medikitApplications"]	.as<int>(medikitApplications);
 		nikeCross				= node["nikeCross"]				.as<bool>(nikeCross);
 		revivedSoldier			= node["revivedSoldier"]		.as<int>(revivedSoldier);
+
+		KIA = false;
+		MIA = false;
+		daysWounded = 0;
 	}
 
 	///
@@ -354,7 +358,7 @@ struct BattleUnitStatistics
 	}
 
 	///
-	BattleUnitStatistics(const YAML::Node& node)
+	explicit BattleUnitStatistics(const YAML::Node& node)
 	{
 		load(node);
 	}
@@ -377,8 +381,8 @@ struct BattleUnitStatistics
 			nikeCross(false),
 			medikitApplications(0),
 			revivedSoldier(0),
-			MIA(false)
-//			kills()
+			MIA(false),
+			daysWounded(0)
 	{}
 
 	/// dTor.
@@ -391,7 +395,7 @@ struct BattleUnitStatistics
  * Represents a moving unit in the battlescape, player controlled or AI controlled.
  * It holds info about the unit's position, items carried, stats, etc.
  */
-class BattleUnit
+class BattleUnit // no copy cTor.
 {
 
 private:
@@ -932,7 +936,7 @@ private:
 		int getAggression() const;
 
 		/// Gets this unit's special ability.
-		int getSpecialAbility() const;
+		SpecialAbility getSpecialAbility() const;
 		/// Sets this unit's special ability.
 		void setSpecialAbility(const SpecialAbility specab);
 

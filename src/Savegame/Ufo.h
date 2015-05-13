@@ -97,7 +97,7 @@ private:
 
 	public:
 		/// Creates a UFO of the specified type.
-		Ufo(const RuleUfo* const rules);
+		explicit Ufo(const RuleUfo* const rules);
 		/// Cleans up the UFO.
 		~Ufo();
 

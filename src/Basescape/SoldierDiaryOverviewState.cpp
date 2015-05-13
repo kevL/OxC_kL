@@ -169,49 +169,42 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 						Options::keyBattleNextUnit);
 	}
 
-	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_LOCATION"));
+	_txtLocation->setColor(Palette::blockOffset(15)+1);
 
-	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(tr("STR_STATUS"));
+	_txtStatus->setColor(Palette::blockOffset(15)+1);
 
-	_txtDate->setColor(Palette::blockOffset(15)+1);
 	_txtDate->setText(tr("STR_DATE_MISSION"));
+	_txtDate->setColor(Palette::blockOffset(15)+1);
 
+	_lstDiary->setColumns(5, 94, 108, 25, 22, 30);
 	_lstDiary->setColor(Palette::blockOffset(13));
 	_lstDiary->setArrowColor(Palette::blockOffset(15)+1);
-	_lstDiary->setColumns(5, 94, 108, 25, 22, 30);
-	_lstDiary->setSelectable();
 	_lstDiary->setBackground(_window);
+	_lstDiary->setSelectable();
 	_lstDiary->setMargin();
 	_lstDiary->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::lstDiaryInfoClick);
 
 
-	_btnMissions->setColor(Palette::blockOffset(13)+10);
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
+	_btnMissions->setColor(Palette::blockOffset(13)+10);
 	_btnMissions->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnMissionsClick);
 
-	_btnKills->setColor(Palette::blockOffset(13)+10);
 	_btnKills->setText(tr("STR_KILLS_UC"));
+	_btnKills->setColor(Palette::blockOffset(13)+10);
 	_btnKills->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnKillsClick);
 
-	_btnAwards->setColor(Palette::blockOffset(13)+10);
 	_btnAwards->setText(tr("STR_AWARDS_UC"));
-//	if (_game->getRuleset()->getCommendations().empty() == false)
-//	{
+	_btnAwards->setColor(Palette::blockOffset(13)+10);
 	_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
-//		_btnAwards->setVisible();
-//	}
-//	else _btnAwards->setVisible(false);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiaryOverviewState::btnOkClick,
 					Options::keyCancel);
-
-//	init(); // Populate the list
 }
 
 /**
@@ -286,52 +279,35 @@ void SoldierDiaryOverviewState::init()
 			if (*j == missionId) // This mission is in the soldier's vector of missions.
 			{
 				std::wostringstream
-					wossSuccess,
-					wossRating,
-					wossScore,
-
-					wossRegion,
-					wossCountry,
-
-					wossHour,
-					wossMinute,
-					wossDay,
-					wossMonth,
-					wossYear;
-
-				if ((*i)->success == true)
-					wossSuccess << tr("STR_MISSION_WIN");
-				else
-					wossSuccess << tr("STR_MISSION_LOSS");
-
-				wossRating << tr((*i)->rating.c_str());
-				wossScore << (*i)->score;
-
-				wossRegion << tr((*i)->region.c_str());
-				wossCountry << tr((*i)->country.c_str());
-
-				wossMonth << tr((*i)->time.getMonthString().c_str());
-				wossDay << (*i)->time.getDayString(_game->getLanguage());
-				wossYear << (*i)->time.getYear();
-
-				std::wostringstream
-					wossStatus,
-					wossLocation;
+					strLocation,
+					strStatus,
+					strDay,
+					strMonth,
+					strYear;
 
 				if ((*i)->country == "STR_UNKNOWN")
-					wossLocation << wossRegion.str().c_str();
+					strLocation << tr((*i)->region.c_str());
 				else
-					wossLocation << wossCountry.str().c_str();
+					strLocation << tr((*i)->country.c_str());
 
-				wossStatus << wossSuccess.str().c_str() << " - " << wossRating.str().c_str();
+				if ((*i)->success == true)
+					strStatus << tr("STR_MISSION_WIN");
+				else
+					strStatus << tr("STR_MISSION_LOSS");
+
+				strStatus << " - " << tr((*i)->rating.c_str());
+
+				strDay << (*i)->time.getDayString(_game->getLanguage());
+				strMonth << tr((*i)->time.getMonthString().c_str());
+				strYear << (*i)->time.getYear();
 
 				_lstDiary->addRow(
 								5,
-								wossLocation.str().c_str(),
-								wossStatus.str().c_str(),
-								wossDay.str().c_str(),
-								wossMonth.str().c_str(),
-								wossYear.str().c_str());
+								strLocation.str().c_str(),
+								strStatus.str().c_str(),
+								strDay.str().c_str(),
+								strMonth.str().c_str(),
+								strYear.str().c_str());
 				break;
 			}
 		}

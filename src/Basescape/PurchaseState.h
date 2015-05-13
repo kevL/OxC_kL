@@ -92,7 +92,7 @@ private:
 
 	public:
 		/// Creates the Purchase state.
-		PurchaseState(Base* base);
+		explicit PurchaseState(Base* base);
 		/// Cleans up the Purchase state.
 		~PurchaseState();
 

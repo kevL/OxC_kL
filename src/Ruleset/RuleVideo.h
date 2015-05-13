@@ -38,7 +38,7 @@ private:
 
 	public:
 		///
-		RuleVideo(const std::string& type);
+		explicit RuleVideo(const std::string& type);
 		///
 		~RuleVideo();
 

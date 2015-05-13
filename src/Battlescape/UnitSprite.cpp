@@ -1756,7 +1756,7 @@ void UnitSprite::drawRoutine9()
 /**
  * Drawing routine for tftd tanks.
  */
-void UnitSprite::drawRoutine11()
+/* void UnitSprite::drawRoutine11()
 {
 	if (_unit->isOut() == true)
 		return; // unit is drawn as an item (ie. floorob)
@@ -1795,12 +1795,12 @@ void UnitSprite::drawRoutine11()
 			drawRecolored(srf);
 		}
 	}
-}
+} */
 
 /**
  * Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
  */
-void UnitSprite::drawRoutine12()
+/* void UnitSprite::drawRoutine12()
 {
 	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
@@ -1820,12 +1820,12 @@ void UnitSprite::drawRoutine12()
 	}
 
 	drawRecolored(srf);
-}
+} */
 
 /**
  * Drawing routine for tentaculats.
  */
-void UnitSprite::drawRoutine19()
+/* void UnitSprite::drawRoutine19()
 {
 	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
@@ -1851,12 +1851,12 @@ void UnitSprite::drawRoutine19()
 		srf = _unitSurface->getFrame(stand + _unit->getDirection());
 
 	drawRecolored(srf);
-}
+} */
 
 /**
  * Drawing routine for triscenes.
  */
-void UnitSprite::drawRoutine20()
+/* void UnitSprite::drawRoutine20()
 {
 	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
@@ -1869,12 +1869,12 @@ void UnitSprite::drawRoutine20()
 		srf = _unitSurface->getFrame(5 * (_part + 4 * _unit->getDirection()));
 
 	drawRecolored(srf);
-}
+} */
 
 /**
  * Drawing routine for xarquids.
  */
-void UnitSprite::drawRoutine21()
+/* void UnitSprite::drawRoutine21()
 {
 	if (_unit->isOut() == true)
 		return; // unit is drawn as an item
@@ -1885,7 +1885,7 @@ void UnitSprite::drawRoutine21()
 	_redraw = true;
 
 	drawRecolored(srf);
-}
+} */
 
 /**
  * Determines which weapons to display in the case of two-handed weapons.

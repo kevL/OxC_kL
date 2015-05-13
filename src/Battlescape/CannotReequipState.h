@@ -58,7 +58,7 @@ private:
 
 	public:
 		/// Creates the Cannot Reequip state.
-		CannotReequipState(std::vector<ReequipStat> missingItems);
+		explicit CannotReequipState(std::vector<ReequipStat> missingItems);
 		/// Cleans up the Cannot Reequip state.
 		~CannotReequipState();
 

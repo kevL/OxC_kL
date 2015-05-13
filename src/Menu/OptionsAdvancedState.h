@@ -60,7 +60,7 @@ private:
 
 	public:
 		/// Creates the Advanced state.
-		OptionsAdvancedState(OptionsOrigin origin);
+		explicit OptionsAdvancedState(OptionsOrigin origin);
 		/// Cleans up the Advanced state.
 		~OptionsAdvancedState();
 

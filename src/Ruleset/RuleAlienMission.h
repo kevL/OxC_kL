@@ -86,7 +86,7 @@ private:
 
 	public:
 		/// Creates an Alien Mission rule.
-		RuleAlienMission(const std::string& type);
+		explicit RuleAlienMission(const std::string& type);
 		/// Releases all resources held by the mission.
 		~RuleAlienMission();
 

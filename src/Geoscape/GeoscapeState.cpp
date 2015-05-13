@@ -1341,19 +1341,19 @@ void GeoscapeState::timeDisplay()
 
 
 	std::wostringstream
-		ss2,
-		ss3;
+		woststr1,
+		woststr2;
 
 	if (_timeSpeed != _btn5Secs)
 		_txtSec->setVisible();
 	else
-		_txtSec->setVisible(_gameSave->getTime()->getSecond() %15 == 0);
+		_txtSec->setVisible(_gameSave->getTime()->getSecond() % 15 == 0);
 
-	ss2 << std::setfill(L'0') << std::setw(2) << _gameSave->getTime()->getMinute();
-	_txtMin->setText(ss2.str());
+	woststr1 << std::setfill(L'0') << std::setw(2) << _gameSave->getTime()->getMinute();
+	_txtMin->setText(woststr1.str());
 
-	ss3 << std::setfill(L'0') << std::setw(2) << _gameSave->getTime()->getHour();
-	_txtHour->setText(ss3.str());
+	woststr2 << std::setfill(L'0') << std::setw(2) << _gameSave->getTime()->getHour();
+	_txtHour->setText(woststr2.str());
 
 	int date = _gameSave->getTime()->getDay();
 	if (_day != date)
@@ -1368,7 +1368,7 @@ void GeoscapeState::timeDisplay()
 		Surface* srfDate = digitSet->getFrame(date / 10);
 		srfDate->blit(_srfDay1);
 
-		srfDate = digitSet->getFrame(date %10);
+		srfDate = digitSet->getFrame(date % 10);
 		srfDate->blit(_srfDay2);
 
 		_srfDay1->offset(Palette::blockOffset(15)+3);
@@ -1386,14 +1386,14 @@ void GeoscapeState::timeDisplay()
 			srfDate = digitSet->getFrame(date / 10);
 			srfDate->blit(_srfMonth1);
 
-			srfDate = digitSet->getFrame(date %10);
+			srfDate = digitSet->getFrame(date % 10);
 			srfDate->blit(_srfMonth2);
 
 			_srfMonth1->offset(Palette::blockOffset(15)+3);
 			_srfMonth2->offset(Palette::blockOffset(15)+3);
 
 
-			date = _gameSave->getTime()->getYear() %100;
+			date = _gameSave->getTime()->getYear() % 100;
 			if (_year != date)
 			{
 				_srfYear1->clear();
@@ -1404,7 +1404,7 @@ void GeoscapeState::timeDisplay()
 				srfDate = digitSet->getFrame(date / 10);
 				srfDate->blit(_srfYear1);
 
-				srfDate = digitSet->getFrame(date %10);
+				srfDate = digitSet->getFrame(date % 10);
 				srfDate->blit(_srfYear2);
 
 				_srfYear1->offset(Palette::blockOffset(15)+3);

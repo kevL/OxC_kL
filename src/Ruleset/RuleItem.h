@@ -172,7 +172,7 @@ private:
 
 	public:
 		/// Creates a blank item ruleset.
-		RuleItem(const std::string& type);
+		explicit RuleItem(const std::string& type);
 		/// Cleans up the item ruleset.
 		~RuleItem();
 

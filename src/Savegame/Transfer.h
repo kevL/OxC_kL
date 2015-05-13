@@ -69,7 +69,7 @@ private:
 
 	public:
 		/// Creates a new transfer.
-		Transfer(int hours);
+		explicit Transfer(int hours);
 		/// Cleans up the transfer.
 		~Transfer();
 

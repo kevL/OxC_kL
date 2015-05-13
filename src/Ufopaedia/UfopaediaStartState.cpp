@@ -60,6 +60,7 @@ const std::string UfopaediaStartState::ped_TITLES[] =
 
 /**
  * cTor.
+ * @param battle - true if opening UfoPaedia from battlescape (default false)
  */
 UfopaediaStartState::UfopaediaStartState(bool battle)
 {

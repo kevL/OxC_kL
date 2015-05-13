@@ -639,7 +639,7 @@ en-US:
   STR_SMALL_RADAR_SYSTEM_UFOPEDIA: "A small detection system has an effective radar range of 1500 nautical miles and is linked to satellite systems for ground search. A small radar system has a 10% chance of detecting an aLien uFo every 30 minutes."
   STR_LARGE_RADAR_SYSTEM_UFOPEDIA: "A large detection system has an effective range of 2250 nautical miles and is linked to satellite systems for ground search. A large radar system has a 20% chance of detecting an aLien uFo every 30 minutes."
   STR_MISSILE_DEFENSES_UFOPEDIA: "Missile defenses provide some protection against incursion by hostile craft which are attempting to land near the base."
-  STR_GENERAL_STORES_UFOPEDIA: "All equipment, weapons systems, ordnance, recovered material and Heavy Weapons Platforms are placed in stores, which also reserves space for equipment that is assigned to craft."
+  STR_GENERAL_STORES_UFOPEDIA: "All equipment, weapons systems, ordnance, recovered material and Heavy Weapons Platforms are placed in stores, which also reserves space for equipment that is currently assigned to craft."
   STR_ALIEN_CONTAINMENT_UFOPEDIA: "Living aLiens are likely to require a special habitat to maintain their life systems. The containment facility can keep up to 10 aLien life forms in self-contained units."
   STR_LASER_DEFENSES_UFOPEDIA: "Laser defenses provide protection against incursion by hostile craft."
   STR_PLASMA_DEFENSES_UFOPEDIA: "Plasma beam defenses provide powerful and efficient protection against incursion by hostile craft."

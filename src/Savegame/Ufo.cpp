@@ -126,7 +126,7 @@ private:
 
 	public:
 		/// Store ID for later comparisons.
-		matchMissionID(int id)
+		explicit matchMissionID(int id)
 			:
 				_id(id)
 		{}

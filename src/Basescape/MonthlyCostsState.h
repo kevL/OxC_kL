@@ -49,8 +49,7 @@ private:
 		* _txtQuantity,
 		* _txtRental,
 		* _txtSalaries,
-		* _txtTitle,
-		* _txtTotal;
+		* _txtTitle;
 	TextButton* _btnOk;
 	TextList
 		* _lstBaseCost,
@@ -63,7 +62,7 @@ private:
 
 	public:
 		/// Creates the Monthly Costs state.
-		MonthlyCostsState(Base* base);
+		explicit MonthlyCostsState(Base* base);
 		/// Cleans up the Monthly Costs state.
 		~MonthlyCostsState();
 

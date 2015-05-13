@@ -31,7 +31,7 @@
 #include "../Interface/ArrowButton.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
-#include "../Interface/TextButton.h"
+//#include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/ToggleTextButton.h"
 #include "../Interface/Window.h"
@@ -42,9 +42,10 @@
 namespace OpenXcom
 {
 
-const std::string OptionsVideoState::GL_EXT		= "OpenGL.shader";
-const std::string OptionsVideoState::GL_FOLDER	= "Shaders/";
-const std::string OptionsVideoState::GL_STRING	= "*";
+const std::string
+	OptionsVideoState::GL_EXT		= "OpenGL.shader",
+	OptionsVideoState::GL_FOLDER	= "Shaders/",
+	OptionsVideoState::GL_STRING	= "*";
 
 
 /**
@@ -53,7 +54,12 @@ const std::string OptionsVideoState::GL_STRING	= "*";
  */
 OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	:
-		OptionsBaseState(origin)
+		OptionsBaseState(origin),
+		_gameCurrent(0)
+//		_displayMode(NULL),
+//		_btnWindowed(NULL),
+//		_btnFullscreen(NULL),
+//		_btnBorderless(NULL)
 {
 	setCategory(_btnVideo);
 
@@ -201,13 +207,12 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_cbxLanguage->setOptions(names);
 	for (size_t
 			i = 0;
-			i < names.size();
+			i != names.size();
 			++i)
 	{
 		if (_langs[i] == Options::language)
 		{
 			_cbxLanguage->setSelected(i);
-
 			break;
 		}
 	}
@@ -233,9 +238,10 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 			i != filters.end();
 			++i)
 	{
-		const std::string file = *i;
-		const std::string path = GL_FOLDER + file;
-		const std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
+		const std::string
+			file = *i,
+			path = GL_FOLDER + file,
+			name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
 		filterNames.push_back(Language::fsToWstr(name));
 		_filters.push_back(path);
 	}
@@ -248,7 +254,7 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 		const std::string path = Options::useOpenGLShader;
 		for (size_t
 				i = 0;
-				i < _filters.size();
+				i != _filters.size();
 				++i)
 		{
 			if (_filters[i] == path)
@@ -256,11 +262,11 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 		}
 #endif
 	}
-	else if (Options::useScaleFilter)
+	else if (Options::useScaleFilter == true)
 		selFilter = 1;
-	else if (Options::useHQXFilter)
+	else if (Options::useHQXFilter == true)
 		selFilter = 2;
-	else if (Options::useXBRZFilter)
+	else if (Options::useXBRZFilter == true)
 		selFilter = 3;
 
 	_txtFilter->setText(tr("STR_DISPLAY_FILTER"));
@@ -279,11 +285,11 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	displayModes.push_back("STR_RESIZABLE");
 
 	int displayMode;
-	if (Options::fullscreen)
+	if (Options::fullscreen == true)
 		displayMode = 1;
-	else if (Options::borderless)
+	else if (Options::borderless == true)
 		displayMode = 2;
-	else if (Options::allowResize)
+	else if (Options::allowResize == true)
 		displayMode = 3;
 	else
 		displayMode = 0;
@@ -385,20 +391,18 @@ void OptionsVideoState::updateDisplayResolution()
  */
 void OptionsVideoState::txtDisplayWidthChange(Action*)
 {
-	std::wstringstream ss;
 	int width = 0;
-	ss << std::dec << _txtDisplayWidth->getText();
-	ss >> std::dec >> width;
+	std::wstringstream woststr;
+	woststr << std::dec << _txtDisplayWidth->getText();
+	woststr >> std::dec >> width;
 	Options::newDisplayWidth = width;
 
 	// Update resolution mode
 	if (_res != (SDL_Rect**)-1
 		&& _res != (SDL_Rect**)0)
 	{
-		int i;
 		_resCurrent = -1;
-
-		for (
+		for (size_t
 				i = 0;
 				_res[i];
 				++i)
@@ -408,7 +412,7 @@ void OptionsVideoState::txtDisplayWidthChange(Action*)
 						&& _res[i]->h <= Options::newDisplayHeight)
 					|| _res[i]->w < Options::newDisplayWidth))
 			{
-				_resCurrent = i;
+				_resCurrent = static_cast<int>(i);
 			}
 		}
 	}
@@ -420,20 +424,18 @@ void OptionsVideoState::txtDisplayWidthChange(Action*)
  */
 void OptionsVideoState::txtDisplayHeightChange(Action*)
 {
-	std::wstringstream ss;
 	int height = 0;
-	ss << std::dec << _txtDisplayHeight->getText();
-	ss >> std::dec >> height;
+	std::wstringstream woststr;
+	woststr << std::dec << _txtDisplayHeight->getText();
+	woststr >> std::dec >> height;
 	Options::newDisplayHeight = height;
 
 	// Update resolution mode
 	if (_res != (SDL_Rect**)-1
 		&& _res != (SDL_Rect**)0)
 	{
-		int i;
 		_resCurrent = -1;
-
-		for (
+		for (size_t
 				i = 0;
 				_res[i];
 				++i)
@@ -443,7 +445,7 @@ void OptionsVideoState::txtDisplayHeightChange(Action*)
 						&& _res[i]->h <= Options::newDisplayHeight)
 					|| _res[i]->w < Options::newDisplayWidth))
 			{
-				_resCurrent = i;
+				_resCurrent = static_cast<int>(i);
 			}
 		}
 	}
@@ -497,7 +499,6 @@ void OptionsVideoState::cbxFilterChange(Action*)
 			Options::newXBRZFilter	= false;
 
 			Options::newOpenGLShader = _filters[_cbxFilter->getSelected()];
-		break;
 	}
 }
 
@@ -528,10 +529,6 @@ void OptionsVideoState::updateDisplayMode(Action*)
 			Options::fullscreen		= false;
 			Options::borderless		= false;
 			Options::allowResize	= true;
-		break;
-
-		default:
-		break;
 	}
 }
 
@@ -583,13 +580,13 @@ void OptionsVideoState::resize(
 {
 	OptionsBaseState::resize(dX, dY);
 
-	std::wostringstream ss;
-	ss << Options::displayWidth;
-	_txtDisplayWidth->setText(ss.str());
+	std::wostringstream woststr;
+	woststr << Options::displayWidth;
+	_txtDisplayWidth->setText(woststr.str());
 
-	ss.str(L"");
-	ss << Options::displayHeight;
-	_txtDisplayHeight->setText(ss.str());
+	woststr.str(L"");
+	woststr << Options::displayHeight;
+	_txtDisplayHeight->setText(woststr.str());
 }
 
 /**

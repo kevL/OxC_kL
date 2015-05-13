@@ -54,7 +54,7 @@ private:
 
 	public:
 		/// Creates a new PathfindingNode class.
-		PathfindingNode(Position pos);
+		explicit PathfindingNode(Position pos);
 		/// Cleans up the PathfindingNode.
 		~PathfindingNode();
 

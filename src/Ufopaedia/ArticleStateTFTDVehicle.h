@@ -30,7 +30,7 @@ namespace OpenXcom
 	class ArticleStateTFTDVehicle : public ArticleStateTFTD
 	{
 	public:
-		ArticleStateTFTDVehicle(ArticleDefinitionTFTD *defs);
+		explicit ArticleStateTFTDVehicle(ArticleDefinitionTFTD *defs);
 		virtual ~ArticleStateTFTDVehicle();
 
 	protected:

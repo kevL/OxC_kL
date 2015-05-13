@@ -53,7 +53,7 @@ private:
 
 	public:
 		/// Creates a blank music track.
-		AdlibMusic(float volume = 1.f);
+		explicit AdlibMusic(float volume = 1.f);
 		/// Cleans up the music track.
 		~AdlibMusic();
 

@@ -49,7 +49,7 @@ private:
 
 	public:
 		/// Creates the InfoboxOKState.
-		InfoboxOKState(const std::wstring& msg);
+		explicit InfoboxOKState(const std::wstring& msg);
 		/// Cleans up the InfoboxOKState.
 		~InfoboxOKState();
 

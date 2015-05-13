@@ -121,7 +121,7 @@ void FpsCounter::think()
  */
 void FpsCounter::update()
 {
-	int fps = static_cast<int>(floor(static_cast<double>(_frames * 1000 / _timer->getTime())));
+	const int fps = static_cast<int>(std::floor(static_cast<double>(_frames * 1000 / _timer->getTime())));
 	_text->setValue(fps);
 
 	_frames = 0;

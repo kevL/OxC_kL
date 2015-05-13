@@ -30,6 +30,7 @@ class NumberText;
 class Timer;
 class Action;
 
+
 /**
  * Counts the amount of frames each second and displays them in a NumberText surface.
  */

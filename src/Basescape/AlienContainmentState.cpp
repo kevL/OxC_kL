@@ -150,10 +150,10 @@ AlienContainmentState::AlienContainmentState(
 	_txtUsed->setText(tr("STR_SPACE_USED")
 						.arg(_base->getUsedContainment()));
 
-	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
 	_lstAliens->setColumns(3, 140, 66, 56);
-	_lstAliens->setSelectable();
+	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
 	_lstAliens->setBackground(_window);
+	_lstAliens->setSelectable();
 	_lstAliens->setMargin();
 //	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 //	_lstAliens->onMousePress((ActionHandler)& AlienContainmentState::lstItemsMousePress);

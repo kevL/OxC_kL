@@ -104,12 +104,12 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 			i != missingItems.end();
 			++i)
 	{
-		std::wostringstream ss;
-		ss << i->qty;
+		std::wostringstream woststr;
+		woststr << i->qtyLost;
 		_lstItems->addRow(
 						3,
 						tr(i->item).c_str(),
-						ss.str().c_str(),
+						woststr.str().c_str(),
 						i->craft.c_str());
 	}
 }

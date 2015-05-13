@@ -199,7 +199,7 @@ protected:
 
 	public:
 		/// Creates a blank ruleset.
-		Ruleset(Game* game);
+		explicit Ruleset(Game* game);
 		/// Cleans up the ruleset.
 		~Ruleset();
 
@@ -331,7 +331,7 @@ protected:
 		const GameTime& getStartingTime() const;
 
 		/// Gets an MCDPatch.
-		MCDPatch* getMCDPatch(const std::string name) const;
+		MCDPatch* getMCDPatch(const std::string& name) const;
 
 		/// Gets the music rules
 		std::vector<std::pair<std::string, RuleMusic*> > getMusic() const; // sza_MusicRules

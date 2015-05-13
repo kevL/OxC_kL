@@ -39,7 +39,7 @@ private:
 	public:
 		/// Creates a blank StatStringCondition.
 		StatStringCondition(
-				const std::string conditionName,
+				const std::string& conditionName,
 				int minVal,
 				int maxVal);
 		/// Cleans up the StatStringCondition.

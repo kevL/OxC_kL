@@ -54,7 +54,7 @@ private:
 		/// Gets the death time.
 		const GameTime* getTime() const;
 		/// Sets the death time.
-		void setTime(GameTime time);
+		void setTime(GameTime gt);
 };
 
 }

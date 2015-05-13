@@ -108,6 +108,7 @@ private:
 
 		/// Gets the ingame year.
 		int getYear() const;
+
 		/// Gets the position of the daylight according to the ingame time.
 		double getDaylight() const;
 };

@@ -48,7 +48,7 @@ protected:
 
 	public:
 		/// cTor.
-		ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* article_defs);
+		explicit ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* article_defs);
 		/// dTor.
 		virtual ~ArticleStateCraftWeapon();
 };

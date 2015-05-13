@@ -62,7 +62,7 @@ private:
 
 	public:
 		/// cTor.
-		RuleResearch(const std::string& name);
+		explicit RuleResearch(const std::string& name);
 
 		/// Loads the research from YAML.
 		void load(

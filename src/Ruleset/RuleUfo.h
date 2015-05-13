@@ -63,7 +63,7 @@ private:
 
 	public:
 		/// Creates a blank UFO ruleset.
-		RuleUfo(const std::string& type);
+		explicit RuleUfo(const std::string& type);
 		/// Cleans up the UFO ruleset.
 		~RuleUfo();
 

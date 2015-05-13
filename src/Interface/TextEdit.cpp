@@ -219,7 +219,7 @@ std::wstring TextEdit::getText() const
  * if/when an edit-operation is cancelled.
  * @param text - reference the text string
  */
-void TextEdit::setTextStored(const std::wstring text)
+void TextEdit::setTextStored(const std::wstring& text)
 {
 	_valueStored = text;
 }

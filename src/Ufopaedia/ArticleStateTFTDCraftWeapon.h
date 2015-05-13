@@ -30,7 +30,7 @@ namespace OpenXcom
 	class ArticleStateTFTDCraftWeapon : public ArticleStateTFTD
 	{
 	public:
-		ArticleStateTFTDCraftWeapon(ArticleDefinitionTFTD *defs);
+		explicit ArticleStateTFTDCraftWeapon(ArticleDefinitionTFTD *defs);
 		virtual ~ArticleStateTFTDCraftWeapon();
 
 	protected:

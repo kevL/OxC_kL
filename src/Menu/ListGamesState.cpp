@@ -56,9 +56,9 @@ struct compareSaveName
 	bool _reverse;
 
 	///
-	compareSaveName(bool reverse)
+	explicit compareSaveName(bool rev)
 		:
-			_reverse(reverse)
+			_reverse(rev)
 			{}
 
 	///
@@ -68,10 +68,10 @@ struct compareSaveName
 	{
 		if (a.reserved == b.reserved)
 			return CrossPlatform::naturalCompare(
-												a.displayName,
-												b.displayName);
+											a.displayName,
+											b.displayName);
 		else
-			return _reverse? b.reserved: a.reserved;
+			return _reverse ? b.reserved : a.reserved;
 	}
 };
 
@@ -85,9 +85,9 @@ struct compareSaveTimestamp
 	bool _reverse;
 
 	///
-	compareSaveTimestamp(bool reverse)
+	explicit compareSaveTimestamp(bool rev)
 		:
-			_reverse(reverse)
+			_reverse(rev)
 			{}
 
 	///
@@ -98,7 +98,7 @@ struct compareSaveTimestamp
 		if (a.reserved == b.reserved)
 			return a.timestamp < b.timestamp;
 		else
-			return _reverse? b.reserved: a.reserved;
+			return _reverse ? b.reserved : a.reserved;
 	}
 };
 

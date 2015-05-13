@@ -80,6 +80,7 @@ Inventory::Inventory(
 		_game(game),
 		_selUnit(NULL),
 		_selItem(NULL),
+		_mouseOverItem(NULL),
 		_tuMode(true),
 		_atBase(atBase),
 		_groundOffset(0),
@@ -670,7 +671,6 @@ void Inventory::mouseOver(Action* action, State* state)
 	RuleInventory* const slot = getSlotInPosition(&x,&y);
 	if (slot != NULL)
 	{
-		std::string warning; // kL_begin:
 		if (_tuMode == true
 			&& _selItem != NULL
 			&& fitItem(
@@ -682,7 +682,7 @@ void Inventory::mouseOver(Action* action, State* state)
 		}
 		else
 		{
-			_tuCost = -1; // kL_end.
+			_tuCost = -1;
 
 			if (slot->getType() == INV_GROUND)
 				x += _groundOffset;
@@ -693,7 +693,7 @@ void Inventory::mouseOver(Action* action, State* state)
 	}
 	else
 	{
-		_tuCost = -1; // kL
+		_tuCost = -1;
 		setMouseOverItem(NULL);
 	}
 
@@ -739,7 +739,6 @@ void Inventory::mouseClick(Action* action, State* state)
 						bool
 							placed = false,
 							toGround = true;
-						std::string warning;
 
 						RuleInventory* slotRule = NULL;
 
@@ -1198,7 +1197,6 @@ bool Inventory::unload()
 		RuleInventory* slotRule = NULL;
 		BattleUnit* toOwner = NULL;
 
-		std::string warning;
 		if (fitItem(
 				_game->getRuleset()->getInventory("STR_LEFT_HAND"),
 				ammo,
@@ -1255,13 +1253,12 @@ void Inventory::arrangeGround(bool alterOffset)
 {
 	RuleInventory* const ground = _game->getRuleset()->getInventory("STR_GROUND");
 
-	bool fit = false;
+	bool fit;
 	const int
 		slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W,
 		slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
 	int
-		x = 0,
-		y = 0,
+		x,y,
 		xMax = 0;
 
 	_stackLevel.clear();

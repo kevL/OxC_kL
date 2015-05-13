@@ -69,7 +69,7 @@ private:
 		{}
 
 		/// Return constant wide string.
-		operator std::wstring const &() const OX_REQUIRED_RESULT;
+		operator std::wstring const & () const OX_REQUIRED_RESULT;
 
 		/// Return the UTF-8 representation of this string.
 		std::string asUTF8() const OX_REQUIRED_RESULT;
@@ -203,7 +203,7 @@ LocalizedText& LocalizedText::arg(T val)
 
 
 /// Allow streaming of LocalizedText objects.
-inline std::wostream& operator << (
+inline std::wostream& operator<< (
 								std::wostream& wostr,
 								const LocalizedText& txt)
 {

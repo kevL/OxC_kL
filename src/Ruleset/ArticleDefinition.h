@@ -69,7 +69,7 @@ private:
 		UfopaediaTypeId _type_id;
 
 		/// Constructor (protected, so this class cannot be instantiated directly).
-		ArticleDefinition(UfopaediaTypeId type_id);
+		explicit ArticleDefinition(UfopaediaTypeId type_id);
 
 
 		public:

@@ -88,7 +88,7 @@ private:
 		static const size_t BASE_SIZE = 6;
 
 		/// Creates a new base.
-		Base(const Ruleset* rules);
+		explicit Base(const Ruleset* rules);
 		/// Cleans up the base.
 		~Base();
 

@@ -132,7 +132,7 @@ private:
 
 
 		/// cTor
-		Pathfinding(SavedBattleGame* battleSave);
+		explicit Pathfinding(SavedBattleGame* battleSave);
 		/// Cleans up the Pathfinding.
 		~Pathfinding();
 
