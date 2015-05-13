@@ -5505,7 +5505,7 @@
 1430149550 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1431473297 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1431545756 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5542,7 +5542,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1431191608 f:\git\openxcom\src\battlescape\camera.h
+1431546593 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1430581440 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -5825,7 +5825,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1431282152 source:f:\git\openxcom\src\battlescape\camera.cpp
+1431546608 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6036,7 +6036,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1431476556 source:f:\git\openxcom\src\battlescape\map.cpp
+1431546644 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6245,7 +6245,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1431473001 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1431547564 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8525,7 +8525,7 @@
 1430149550 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1430173308 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1431539338 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	"RuleCity.h"
 
@@ -10694,7 +10694,7 @@
 	"../Engine/Language.h"
 	"../Engine/State.h"
 
-1431487254 source:f:\git\openxcom\src\menu\introstate.cpp
+1431541748 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	"MainMenuState.h"
 	"../Engine/Game.h"

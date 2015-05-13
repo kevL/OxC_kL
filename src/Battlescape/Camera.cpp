@@ -72,7 +72,8 @@ Camera::Camera(
 		_scrollKeyX(0),
 		_scrollKeyY(0),
 		_scrollTrigger(false),
-		_showAllLayers(false)
+		_showAllLayers(false),
+		_pauseAfterShot(false)
 {}
 
 /**
@@ -773,6 +774,28 @@ void Camera::resize()
 void Camera::stopMouseScrolling()
 {
 	_scrollMouseTimer->stop();
+}
+
+/**
+ * Sets whether to pause the camera a moment before reverting to the position
+ * it originally had before following a shot per Map tracing.
+ * @sa BattleAction::cameraPosition
+ * @param pause - true to pause
+ */
+void Camera::setPauseAfterShot(bool pause)
+{
+	_pauseAfterShot = pause;
+}
+
+/**
+ * Gets whether to pause the camera a moment before reverting to the position
+ * it originally had before following a shot per Map tracing.
+ * @sa BattleAction::cameraPosition
+ * @return, true to pause
+ */
+bool Camera::getPauseAfterShot() const
+{
+	return _pauseAfterShot;
 }
 
 }

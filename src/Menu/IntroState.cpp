@@ -580,7 +580,7 @@ void IntroState::endVideo()
 
 	for (Uint8
 			i = 20;
-			i > 0;
+			i != 0;
 			--i)
 	{
 		SDL_Event event;
@@ -591,9 +591,9 @@ void IntroState::endVideo()
 			break;
 		}
 
-		for (int
+		for (size_t
 				color = 0;
-				color < 256;
+				color != 256;
 				++color)
 		{
 			pal2[color].r = pal[color].r * i / 20;

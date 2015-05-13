@@ -678,6 +678,7 @@ void ProjectileFlyBState::think()
 	}
 
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
+	Camera* const camera = _parent->getMap()->getCamera();
 
 	// TODO refactoring: Store the projectile in this state, instead of getting it from the map each time.
 	if (_parent->getMap()->getProjectile() == NULL)
@@ -696,7 +697,7 @@ void ProjectileFlyBState::think()
 
 			if (_action.cameraPosition.z != -1)
 			{
-				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+				camera->setMapOffset(_action.cameraPosition);
 //				_parent->getMap()->invalidate();
 				_parent->getMap()->draw(); // kL
 			}
@@ -714,7 +715,7 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_MINDCONTROL
 					|| _action.type == BA_PANIC)
 				{
-//					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset());
+//					camera->setMapOffset(camera->getMapOffset());
 				}
 				else */
 				if (   _action.type == BA_THROW // jump screen back to pre-shot position
@@ -723,11 +724,15 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_AIMEDSHOT)
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
-					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+					if (camera->getPauseAfterShot() == true)
+					{
+						camera->setPauseAfterShot(false);
+						SDL_Delay(336); // kL, screen-pause when shot hits target before reverting camera to shooter.
+					}
+
+					camera->setMapOffset(_action.cameraPosition);
 //					_parent->getMap()->invalidate();
 					_parent->getMap()->draw();	// kL
-
-					SDL_Delay(336);				// kL, screen-pause when shot hits target
 				}
 			}
 
@@ -741,7 +746,7 @@ void ProjectileFlyBState::think()
 				//	<< " action.type = " << _action.type
 				//	<< " action.TU = " << _action.TU;
 				_parent->getTileEngine()->checkReactionFire(			// note: I don't believe that smoke obscuration gets accounted
-														_unit,			// for by this call, if the current projectile caused cloud.
+														_unit,			// for by this call if the current projectile caused cloud.
 														_action.TU);	// But that's kinda ok.
 			}
 
@@ -837,7 +842,7 @@ void ProjectileFlyBState::think()
 				toNextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
 				// this follows BL as it hits through waypoints
-				_parent->getMap()->getCamera()->centerOnPosition(_origin);
+				camera->centerOnPosition(_origin);
 
 				if (_origin == _action.target)
 					toNextWp->targetFloor();

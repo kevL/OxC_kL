@@ -42,6 +42,7 @@ private:
 //	static const int SCROLL_INTERVAL = 50; // kL
 
 	bool
+		_pauseAfterShot,
 		_scrollTrigger,
 		_showAllLayers;
 	int
@@ -175,6 +176,11 @@ private:
 
 		/// Stops mouse scrolling.
 		void stopMouseScrolling();
+
+		/// Sets whether to pause the camera before reverting its position.
+		void setPauseAfterShot(bool pause);
+		/// Gets whether to pause the camera before reverting its position.
+		bool getPauseAfterShot() const;
 };
 
 }

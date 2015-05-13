@@ -548,6 +548,7 @@ void Map::drawTerrain(Surface* surface) // private.
 						|| bullet.y < 1
 						|| bullet.y > _visibleMapHeight - 1)
 					{
+						_camera->setPauseAfterShot(true);
 						_smoothingEngaged = true;
 					}
 				}
