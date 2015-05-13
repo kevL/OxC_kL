@@ -169,7 +169,8 @@ BattleUnit::BattleUnit(
 		case RANK_COLONEL:		rankValue =	30;	break; // was 6
 		case RANK_COMMANDER:	rankValue =	50;	break; // was 10
 
-		default:				rankValue =	 0;
+		default:
+			rankValue =	 0;
 	}
 
 //	_value		= 20 + soldier->getMissions() + rankValue;
@@ -309,7 +310,7 @@ BattleUnit::BattleUnit(
 		_aggression(unit->getAggression()),
 		_spawnUnit(unit->getSpawnUnit()),
 		_value(unit->getValue()),
-		_specab(static_cast<SpecialAbility>(unit->getSpecialAbility()))
+		_specab(unit->getSpecialAbility())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_stats	= *unit->getStats();

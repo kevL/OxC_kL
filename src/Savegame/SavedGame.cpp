@@ -142,10 +142,9 @@ SavedGame::SavedGame(const Ruleset* const rules)
 //		_curGraphRowCountry(0)	// kL
 //		_selectedBase(0),
 //		_lastselectedArmor("STR_ARMOR_NONE_UC")
-		_debugArgDone(false),
-		_time(NULL)
+		_debugArgDone(false)
 {
-//	_time = new GameTime(6,1,1,1999,12,0,0);
+	_time = new GameTime(6,1,1,1999,12,0,0);
 
 	_alienStrategy = new AlienStrategy();
 

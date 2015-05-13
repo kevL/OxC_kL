@@ -316,7 +316,7 @@ struct BattleUnitStatistics
 		nikeCross				= node["nikeCross"]				.as<bool>(nikeCross);
 		revivedSoldier			= node["revivedSoldier"]		.as<int>(revivedSoldier);
 
-		KIA = false;
+		KIA =
 		MIA = false;
 		daysWounded = 0;
 	}

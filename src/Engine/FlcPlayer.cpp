@@ -72,13 +72,6 @@ enum ChunkOpcodes
 	MASK = SKIP_LINES
 };
 
-enum PlayingState
-{
-	PLAYING,	// 0
-	FINISHED,	// 1
-	SKIPPED		// 2
-};
-
 
 /**
  * Creates and initializes FlcPlayer.
@@ -98,10 +91,10 @@ FlcPlayer::FlcPlayer()
 		_dx(0),
 		_dy(0),
 		_offset(0),
-		_playingState(0),
+		_playingState(PLAYING),
 		_hasAudio(false),
-		_videoDelay(0),
-		audioVideoSync(NULL)
+		_videoDelay(0)
+//		_audioVideoSync(NULL)
 {}
 
 /**

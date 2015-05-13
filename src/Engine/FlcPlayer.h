@@ -39,6 +39,14 @@ class FlcPlayer
 {
 
 private:
+
+	enum PlayingState
+	{
+		PLAYING,	// 0
+		FINISHED,	// 1
+		SKIPPED		// 2
+	};
+
 	Uint8* _fileBuf;
 	Uint32 _fileSize;
 	Uint8* _videoFrameData;
@@ -71,7 +79,7 @@ private:
 	int _screenDepth;
 	int _dx, _dy;
 	int _offset;
-	int _playingState;
+	PlayingState _playingState;
 	bool _hasAudio;
 	int _videoDelay;
 
@@ -100,7 +108,7 @@ private:
 
 	SDL_AudioSpec _requestedAudioSpec;
 	SDL_AudioSpec _returnedAudioSpec;
-	SDL_sem* audioVideoSync;
+//	SDL_sem* _audioVideoSync;
 
 	Game* _game;
 
