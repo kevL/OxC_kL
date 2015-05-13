@@ -242,7 +242,7 @@ struct CreateShadow
 			else
 				val = static_cast<Uint8>(temp.x);
 
-			if (d == Globe::CLO_OCEAN
+			if (   d == Globe::CLO_OCEAN
 				|| d == Globe::CLO_OCEAN + 16)
 			{
 				return Globe::CLO_OCEAN + val; // this pixel is ocean

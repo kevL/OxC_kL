@@ -4648,7 +4648,7 @@
 1431470539 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1431490947 f:\git\openxcom\src\savegame\battleunit.h
+1431504322 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -4752,8 +4752,7 @@
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
 
-1430149550 f:\git\openxcom\src\geoscape\cord.h
-	<cmath>
+1431538646 f:\git\openxcom\src\geoscape\cord.h
 	"../fmath.h"
 
 1430149550 f:\git\openxcom\src\engine\fastlineclip.h
@@ -5677,7 +5676,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1431475179 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1431540694 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -7286,7 +7285,7 @@
 
 1430258670 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1431050706 source:f:\git\openxcom\src\geoscape\globe.cpp
+1431538718 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8680,7 +8679,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1431490964 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1431504233 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11391,12 +11390,12 @@
 1431475608 f:\git\openxcom\src\battlescape\commendationdeadstate.h
 	"../Engine/State.h"
 
-1431479002 source:f:\git\openxcom\src\engine\flcplayer.cpp
+1431504877 source:f:\git\openxcom\src\engine\flcplayer.cpp
 	"FlcPlayer.h"
 	"Game.h"
 	"Surface.h"
 
-1431477613 f:\git\openxcom\src\engine\flcplayer.h
+1431504912 f:\git\openxcom\src\engine\flcplayer.h
 
 1430149550 source:f:\git\openxcom\src\ruleset\rulevideo.cpp
 	"RuleVideo.h"

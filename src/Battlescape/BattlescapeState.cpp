@@ -2989,8 +2989,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 } */
 
 /**
- * Shifts the red colors of the visible unit buttons' backgrounds.
- * kL: Also blinks the fatal wounds indicator.
+ * Shifts the colors of the visible unit buttons' backgrounds.
  */
 void BattlescapeState::blinkVisibleUnitButtons()
 {
@@ -2999,11 +2998,13 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	{
 		static int
 			delta = 1,
-			color = 34,			// lt.red
-			colorOther = 114,	// lt.blue -> stop this flashing if no soldier currently sees it!
+			colorRed = 34,		// currently selected unit sees other unit
+			colorBlue = 114,	// another unit can see other unit
 			color_border = 15;	// dark.gray
 
-		Uint8 doColor;
+		Uint8 color;
+		bool isSpotted;
+
 		for (size_t
 				i = 0;
 				i != INDICATORS;
@@ -3011,28 +3012,54 @@ void BattlescapeState::blinkVisibleUnitButtons()
 		{
 			if (_btnVisibleUnit[i]->getVisible() == true)
 			{
-				if (std::find(
-							selUnit->getVisibleUnits()->begin(),
-							selUnit->getVisibleUnits()->end(),
-							_visibleUnit[i]) != selUnit->getVisibleUnits()->end())
+				isSpotted = false;
+
+				for (std::vector<BattleUnit*>::const_iterator
+					j = _battleSave->getUnits()->begin();
+					j != _battleSave->getUnits()->end();
+					++j)
 				{
-					doColor = static_cast<Uint8>(color);
+					if ((*j)->isOut() == false
+						&& (*j)->getFaction() == FACTION_PLAYER)
+					{
+						if (std::find(
+									(*j)->getVisibleUnits()->begin(),
+									(*j)->getVisibleUnits()->end(),
+									_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+						{
+							isSpotted = true;
+							break;
+						}
+					}
+				}
+
+				if (isSpotted == true)
+				{
+					if (std::find(
+								selUnit->getVisibleUnits()->begin(),
+								selUnit->getVisibleUnits()->end(),
+								_visibleUnit[i]) != selUnit->getVisibleUnits()->end())
+					{
+						color = static_cast<Uint8>(colorRed);
+					}
+					else
+						color = static_cast<Uint8>(colorBlue);
 				}
 				else
-					doColor = static_cast<Uint8>(colorOther);
+					color = 114; // lt.blue <- hostile unit is visible but not currently viewed by friendly units; ergo do not cycle colors.
 
 				_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
-				_btnVisibleUnit[i]->drawRect(1,1, 13,11, doColor);
+				_btnVisibleUnit[i]->drawRect(1,1, 13,11, color);
 			}
 		}
 
-		if (color == 34)
+		if (colorRed == 34)
 			delta = 1;
-		else if (color == 45)
+		else if (colorRed == 45)
 			delta = -1;
 
-		color += delta;
-		colorOther += delta;
+		colorRed += delta;
+		colorBlue += delta;
 		color_border -= delta;
 	}
 }

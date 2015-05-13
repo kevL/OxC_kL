@@ -1056,14 +1056,16 @@ alienDeployments:
             - STR_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
+            - STR_ALIEN_GRENADE
           -
             - STR_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
+            - STR_ALIEN_GRENADE
       - alienRank: 2 #engineer
-        lowQty: 3
-        highQty: 5
+        lowQty: 1
+        highQty: 3
         dQty: 0
         percentageOutsideUfo: 0
         itemSets:
@@ -1073,6 +1075,7 @@ alienDeployments:
             - STR_ALIEN_GRENADE
           -
             - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
           -
@@ -1118,6 +1121,7 @@ alienDeployments:
           -
             - STR_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 5 #soldier
         lowQty: 8
         highQty: 10
@@ -1134,6 +1138,7 @@ alienDeployments:
             - STR_ALIEN_GRENADE
           -
             - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 6 #terrorist1
@@ -1236,12 +1241,11 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
           -
-            - STR_PLASMA_PISTOL
-            - STR_PLASMA_PISTOL_CLIP
-            - STR_BLASTER_LAUNCHER
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_ALIEN_GRENADE
       - alienRank: 2 #engineer
         lowQty: 1
         highQty: 2
@@ -1445,7 +1449,7 @@ alienDeployments:
             []
       - alienRank: 0 #commander
         lowQty: 2
-        highQty: 6
+        highQty: 5
         dQty: 2
         percentageOutsideUfo: 0
         itemSets:
@@ -1486,16 +1490,14 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
           -
-            - STR_PLASMA_PISTOL
-            - STR_PLASMA_PISTOL_CLIP
-            - STR_BLASTER_LAUNCHER
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
-            - STR_BLASTER_BOMB
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
             - STR_ALIEN_GRENADE
       - alienRank: 2 #engineer
-        lowQty: 3
-        highQty: 6
+        lowQty: 2
+        highQty: 4
         dQty: 2
         percentageOutsideUfo: 0
         itemSets:

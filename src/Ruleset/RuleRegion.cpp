@@ -242,26 +242,26 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 {
 	if (zone < _missionZones.size())
 	{
-		const size_t area = RNG::generate(
+		const size_t pick = RNG::generate(
 										0,
 										static_cast<int>(_missionZones[zone].areas.size()) - 1);
 
 		double
-			lonMin = _missionZones[zone].areas[area].lonMin,
-			lonMax = _missionZones[zone].areas[area].lonMax,
-			latMin = _missionZones[zone].areas[area].latMin,
-			latMax = _missionZones[zone].areas[area].latMax;
+			lonMin = _missionZones[zone].areas[pick].lonMin,
+			lonMax = _missionZones[zone].areas[pick].lonMax,
+			latMin = _missionZones[zone].areas[pick].latMin,
+			latMax = _missionZones[zone].areas[pick].latMax;
 
 		if (lonMin > lonMax)
 		{
-			lonMin = _missionZones[zone].areas[area].lonMax;
-			lonMax = _missionZones[zone].areas[area].lonMin;
+			lonMin = _missionZones[zone].areas[pick].lonMax;
+			lonMax = _missionZones[zone].areas[pick].lonMin;
 		}
 
 		if (latMin > latMax)
 		{
-			latMin = _missionZones[zone].areas[area].latMax;
-			latMax = _missionZones[zone].areas[area].latMin;
+			latMin = _missionZones[zone].areas[pick].latMax;
+			latMax = _missionZones[zone].areas[pick].latMin;
 		}
 
 		const double
