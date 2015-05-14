@@ -1,5 +1,15 @@
-# SHADICS_COLORED_ARMORS
+# SHADICS_COLORED_ARMORS + BetterPersonalArmor
 items:
+  - type: STR_CORPSE_ARMOR
+    name: STR_CORPSE
+    weight: 27
+    bigSprite: 28
+    floorSprite: 40
+    invWidth: 2
+    invHeight: 3
+    battleType: 11 #note is missing from Powered Armors below
+    armor: 30
+    recover: false
   - type: STR_BLACKSUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
@@ -12,6 +22,7 @@ items:
     floorSprite: 78
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_BLUESUIT_ARMOR
@@ -26,6 +37,7 @@ items:
     floorSprite: 79
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_GREENSUIT_ARMOR
@@ -40,6 +52,7 @@ items:
     floorSprite: 80
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_ORANGESUIT_ARMOR
@@ -54,6 +67,7 @@ items:
     floorSprite: 81
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_PINKSUIT_ARMOR
@@ -68,6 +82,7 @@ items:
     floorSprite: 82
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_PURPLESUIT_ARMOR
@@ -82,6 +97,7 @@ items:
     floorSprite: 83
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_REDSUIT_ARMOR
@@ -96,6 +112,7 @@ items:
     floorSprite: 84
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_BLACK_ARMOR
@@ -110,6 +127,7 @@ items:
     floorSprite: 78
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_BLUE_ARMOR
@@ -124,6 +142,7 @@ items:
     floorSprite: 79
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_GREEN_ARMOR
@@ -138,6 +157,7 @@ items:
     floorSprite: 80
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_ORANGE_ARMOR
@@ -152,6 +172,7 @@ items:
     floorSprite: 81
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_PINK_ARMOR
@@ -166,6 +187,7 @@ items:
     floorSprite: 82
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_PURPLE_ARMOR
@@ -180,6 +202,7 @@ items:
     floorSprite: 83
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_RED_ARMOR
@@ -194,6 +217,7 @@ items:
     floorSprite: 84
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
 armors:
@@ -888,6 +912,7 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
+      28: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/Corpse_PersonalArmor.png
       65: Resources/Colored_ARMOR/BLACK/Screens/BLACK_Corpse_Inv.png
       66: Resources/Colored_ARMOR/BLUE/Screens/BLUE_Corpse_Inv.png
       67: Resources/Colored_ARMOR/GREEN/Screens/GREEN_Corpse_Inv.png
@@ -897,6 +922,7 @@ extraSprites:
       71: Resources/Colored_ARMOR/RED/Screens/RED_Corpse_Inv.png
   - type: FLOOROB.PCK
     files:
+      40: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/Floor_PersonalArmor.png
       78: Resources/Colored_ARMOR/BLACK/Screens/BLACK_Corpse.png
       79: Resources/Colored_ARMOR/BLUE/Screens/BLUE_Corpse.png
       80: Resources/Colored_ARMOR/GREEN/Screens/GREEN_Corpse.png
@@ -904,6 +930,46 @@ extraSprites:
       82: Resources/Colored_ARMOR/PINK/Screens/PINK_Corpse.png
       83: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_Corpse.png
       84: Resources/Colored_ARMOR/RED/Screens/RED_Corpse.png
+# ---- BetterPersonalArmor ------
+  - type: XCOM_1.PCK
+    subX: 32
+    subY: 40
+    width: 256
+    height: 1400
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Personal_armor.png
+  - type: MAN_1F0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1f0.png
+  - type: MAN_1F1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1f1.png
+  - type: MAN_1F2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1f2.png
+  - type: MAN_1F3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1f3.png
+  - type: MAN_1M0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1m0.png
+  - type: MAN_1M1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1m1.png
+  - type: MAN_1M2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1m2.png
+  - type: MAN_1M3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BetterPersonalArmor/Screen/man_1m3.png
 # ---- Flight Suits ------
   - type: BLACKSUIT.PCK
     subX: 32

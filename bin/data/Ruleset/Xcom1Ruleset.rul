@@ -1092,7 +1092,7 @@ items:
     recover: false
   - type: STR_CORPSE_ARMOR
     name: STR_CORPSE
-    weight: 30
+    weight: 27
     bigSprite: 28
     floorSprite: 40
     invWidth: 2
