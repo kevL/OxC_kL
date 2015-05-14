@@ -215,7 +215,7 @@ Music* ResourcePack::getMusic(const std::string& track) const
 /**
  * Checks if a particular music track is playing.
  * @param track - the music to check for
- * @return, true if the track is playing
+ * @return, true if playing
  */
 bool ResourcePack::isMusicPlaying(std::string& track)
 {
@@ -234,10 +234,8 @@ void ResourcePack::playMusic(
 		const std::string& terrainRule, // kL: sza_MusicRules
 		int loops)
 {
-	if (Options::mute == true)
-		return;
-
-	if (_playingMusic != track)
+	if (Options::mute == false
+		&& _playingMusic != track)
 	{
 		_playingMusic = track;
 

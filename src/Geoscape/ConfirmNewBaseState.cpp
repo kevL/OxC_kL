@@ -69,8 +69,8 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	setInterface("geoscape");
 
 	add(_window,	"genericWindow",	"geoscape");
-	add(_txtCost,	"genericText",		"geoscape"); // color=239, was color2=138
-	add(_txtArea,	"genericText",		"geoscape"); // color=239, was color2=138
+	add(_txtCost,	"genericText",		"geoscape");
+	add(_txtArea,	"genericText",		"geoscape");
 	add(_btnCancel,	"genericButton2",	"geoscape");
 	add(_btnOk,		"genericButton2",	"geoscape");
 
@@ -78,8 +78,6 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-
-	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
 
 	std::wstring region;
 	for (std::vector<Region*>::const_iterator
@@ -97,6 +95,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 			break;
 		}
 	}
+	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
 	_txtArea->setText(tr("STR_AREA_").arg(region));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
@@ -127,13 +126,12 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 	if (_game->getSavedGame()->getFunds() >= _cost)
 	{
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
-		_base->setCashSpent(_cost); // kL
+		_base->setCashSpent(_cost);
 
 		_game->getSavedGame()->getBases()->push_back(_base);
 		_game->pushState(new BaseNameState(
 										_base,
-										_globe,
-										false));
+										_globe));
 	}
 	else
 		_game->pushState(new ErrorMessageState(

@@ -59,10 +59,10 @@ PlaceLiftState::PlaceLiftState(
 	:
 		_base(base),
 		_globe(globe),
-		_first(firstBase)
+		_firstBase(firstBase)
 {
 	_view		= new BaseView(192, 192, 0, 8);
-	_txtTitle	= new Text(320, 9, 0, 0);
+	_txtTitle	= new Text(320, 9);
 
 	setInterface("placeFacility");
 
@@ -119,7 +119,7 @@ void PlaceLiftState::viewClick(Action*)
 
 	_game->pushState(bState);
 
-	if (_first == true)
+	if (_firstBase == true)
 		_game->pushState(new SelectStartFacilityState(
 													_base,
 													bState,

@@ -56,11 +56,11 @@ private:
 
 	Base* _base;
 	Globe* _globe;
-//	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Text* _txtTitle;
 	TextButton* _btnCancel;
 	Timer* _hoverTimer;
 	Window* _window;
+//	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 
 
 	public:
@@ -68,7 +68,7 @@ private:
 		BuildNewBaseState(
 				Base* base,
 				Globe* globe,
-				bool firstBase);
+				bool firstBase = false);
 		/// Cleans up the Build New Base state.
 		~BuildNewBaseState();
 

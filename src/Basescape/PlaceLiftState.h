@@ -42,7 +42,7 @@ class PlaceLiftState
 {
 
 private:
-	bool _first;
+	bool _firstBase;
 
 	Base* _base;
 	BaseView* _view;

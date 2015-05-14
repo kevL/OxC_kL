@@ -354,7 +354,8 @@ void BasescapeState::init()
 		_game->getResourcePack()->playMusic(track);
 	}
 
-	if (Options::storageLimitsEnforced == true // _game->getSavedGame()->getMonthsPassed() != -1 &&
+	if (_game->getSavedGame()->getMonthsPassed() != -1
+		&& Options::storageLimitsEnforced == true
 		&& _base->storesOverfull() == true)
 	{
 		_game->pushState(new SellState(_base));
@@ -419,8 +420,7 @@ void BasescapeState::setBase(Base* base)
 	_game->popState();
 	_game->pushState(new BuildNewBaseState(
 										base,
-										_globe,
-										false));
+										_globe));
 } */
 
 /**
@@ -735,8 +735,7 @@ void BasescapeState::miniLeftClick(Action*)
 		_game->popState();
 		_game->pushState(new BuildNewBaseState(
 											base,
-											_globe,
-											false));
+											_globe));
 	}
 }
 

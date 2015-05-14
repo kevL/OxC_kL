@@ -47,7 +47,7 @@ class BaseNameState
 {
 
 private:
-	bool _first;
+	bool _firstBase;
 
 	Base* _base;
 	Globe* _globe;
@@ -62,7 +62,7 @@ private:
 		BaseNameState(
 				Base* base,
 				Globe* globe,
-				bool first);
+				bool firstBase = false);
 		/// Cleans up the Base Name state.
 		~BaseNameState();
 

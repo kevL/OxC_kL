@@ -54,7 +54,7 @@ namespace OpenXcom
  * Initializes all the elements in the Build New Base window.
  * @param base		- pointer to the Base to place
  * @param globe		- pointer to the geoscape Globe
- * @param firstBase	- true if this the first base in the game
+ * @param firstBase	- true if this the first base in the game (default false)
  */
 BuildNewBaseState::BuildNewBaseState(
 		Base* base,
@@ -85,7 +85,7 @@ BuildNewBaseState::BuildNewBaseState(
 	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
 
-	_window			= new Window(this, 256, 29, 0, 0);
+	_window			= new Window(this, 256, 29);
 	_window->setX(dx);
 	_window->setDY(0);
 
@@ -260,45 +260,45 @@ void BuildNewBaseState::hoverRedraw(void)
 void BuildNewBaseState::globeClick(Action* action)
 {
 	const int mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
-	if (mouseY < 30) // Ignore window clicks
-		return;
-
-	const int mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
-
-	double
-		lon,
-		lat;
-	_globe->cartToPolar(
-					static_cast<Sint16>(mouseX),
-					static_cast<Sint16>(mouseY),
-					&lon,
-					&lat);
-
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (mouseY > _window->getHeight())
 	{
-		if (_globe->insideLand(lon, lat)) // Click on land for a base location
+		const int mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
+
+		double
+			lon,
+			lat;
+		_globe->cartToPolar(
+						static_cast<Sint16>(mouseX),
+						static_cast<Sint16>(mouseY),
+						&lon,
+						&lat);
+
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			_base->setLongitude(lon);
-			_base->setLatitude(lat);
-
-			for (std::vector<Craft*>::const_iterator
-					i = _base->getCrafts()->begin();
-					i != _base->getCrafts()->end();
-					++i)
+			if (_globe->insideLand(lon, lat) == true)
 			{
-				(*i)->setLongitude(lon);
-				(*i)->setLatitude(lat);
-			}
+				_base->setLongitude(lon);
+				_base->setLatitude(lat);
 
-			if (_firstBase == true)
-				_game->pushState(new BaseNameState(
-												_base,
-												_globe,
-												true));
-			else
-				_game->pushState(new ConfirmNewBaseState(
+				for (std::vector<Craft*>::const_iterator
+						i = _base->getCrafts()->begin();
+						i != _base->getCrafts()->end();
+						++i)
+				{
+					(*i)->setLongitude(lon);
+					(*i)->setLatitude(lat);
+				}
+
+				if (_firstBase == true)
+					_game->pushState(new BaseNameState(
 													_base,
-													_globe));
+													_globe,
+													true));
+				else
+					_game->pushState(new ConfirmNewBaseState(
+														_base,
+														_globe));
+			}
 		}
 	}
 }

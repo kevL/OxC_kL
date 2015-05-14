@@ -32,7 +32,7 @@
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Geoscape/GeoscapeState.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 
 namespace OpenXcom
@@ -60,14 +60,6 @@ NewGameState::NewGameState()
 	_btnOk			= new TextButton(78, 16, 162, 164);
 
 	_difficulty = _btnBeginner;
-/*	_txtTitle		= new Text(192, 17, 64, 21);
-
-	_btnBeginner	= new TextButton(160, 18, 80, 42);
-	_btnExperienced	= new TextButton(160, 18, 80, 64);
-	_btnVeteran		= new TextButton(160, 18, 80, 86);
-	_btnGenius		= new TextButton(160, 18, 80, 108);
-	_btnSuperhuman	= new TextButton(160, 18, 80, 130);
-	_btnCancel		= new TextButton(160, 18, 80, 158); */ // kL
 
 	setInterface("newGameMenu");
 
@@ -117,12 +109,12 @@ NewGameState::NewGameState()
 					(ActionHandler)& NewGameState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setBig(); // kL
 	_txtTitle->setText(tr("STR_SELECT_DIFFICULTY_LEVEL"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
-	_txtIronman->setVerticalAlign(ALIGN_MIDDLE);
 	_txtIronman->setText(tr("STR_IRONMAN_DESC"));
+	_txtIronman->setVerticalAlign(ALIGN_MIDDLE);
 }
 
 /**
@@ -137,7 +129,7 @@ NewGameState::~NewGameState()
  */
 void NewGameState::btnOkClick(Action*)
 {
-	GameDifficulty diff = DIFF_BEGINNER;
+	GameDifficulty diff;
 
 	if (_difficulty == _btnBeginner)
 		diff = DIFF_BEGINNER;
@@ -150,18 +142,21 @@ void NewGameState::btnOkClick(Action*)
 	else if (_difficulty == _btnSuperhuman)
 		diff = DIFF_SUPERHUMAN;
 
-	SavedGame* const save = _game->getRuleset()->newSave();
-	save->setDifficulty(diff);
-	save->setIronman(_btnIronman->getPressed());
-	_game->setSavedGame(save);
+	SavedGame* const gameSave = _game->getRuleset()->newSave();
+	gameSave->setDifficulty(diff);
+	gameSave->setIronman(_btnIronman->getPressed());
+	_game->setSavedGame(gameSave);
 
-	GeoscapeState* const gs = new GeoscapeState();
-	_game->setState(gs);
-	gs->init();
+	GeoscapeState* const geo = new GeoscapeState();
+	_game->setState(geo);
+	geo->init();
+
+	_game->getResourcePack()->fadeMusic(_game, 1306);
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 
 	_game->pushState(new BuildNewBaseState(
 										_game->getSavedGame()->getBases()->back(),
-										gs->getGlobe(),
+										geo->getGlobe(),
 										true));
 }
 

@@ -5935,6 +5935,8 @@ extraStrings:
       STR_SQUAD_: "base> {0}"
       STR_2HAND: "2h"
       STR_LOST: "Lost Angels"
+      STR_SPACE_USED_SPACE_FREE_: "used:free> {ALT}{0}:{1}"
+      STR_INTERROGATION_: "Interrogation> {ALT}{0}"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

@@ -141,7 +141,7 @@ void SelectStartFacilityState::facilityBuilt()
 {
 	_facilities.erase(_facilities.begin() + _lstFacilities->getSelectedRow());
 
-	if (_facilities.empty()) // return to geoscape, force timer to start.
+	if (_facilities.empty() == true) // return to geoscape, force timer to start.
 	{
 		_game->popState();
 		_game->popState();

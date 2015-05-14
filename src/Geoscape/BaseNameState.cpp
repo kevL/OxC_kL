@@ -44,16 +44,16 @@ namespace OpenXcom
  * Initializes all the elements in a Base Name window.
  * @param base	- pointer to the Base to name
  * @param globe	- pointer to the Geoscape globe
- * @param first	- true if this is the first base in the game
+ * @param firstBase	- true if this is the first base in the game (default false)
  */
 BaseNameState::BaseNameState(
 		Base* base,
 		Globe* globe,
-		bool first)
+		bool firstBase)
 	:
 		_base(base),
 		_globe(globe),
-		_first(first)
+		_firstBase(firstBase)
 {
 	_globe->onMouseOver(0);
 
@@ -129,16 +129,16 @@ void BaseNameState::btnOkClick(Action*)
 		_game->popState();
 		_game->popState();
 
-		if (_first == false
+		if (_firstBase == false
 			|| Options::customInitialBase == true)
 		{
-			if (_first == false)
+			if (_firstBase == false)
 				_game->popState();
 
 			_game->pushState(new PlaceLiftState(
 											_base,
 											_globe,
-											_first));
+											_firstBase));
 		}
 	}
 }
