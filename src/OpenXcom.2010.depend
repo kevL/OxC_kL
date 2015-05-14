@@ -4389,7 +4389,7 @@
 
 1431489486 f:\git\openxcom\src\resource\resourcepack.h
 
-1431469313 f:\git\openxcom\src\savegame\base.h
+1431569448 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1430388627 f:\git\openxcom\src\savegame\target.h
@@ -4399,7 +4399,7 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1430951130 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1431571539 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4495,7 +4495,7 @@
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
 	"../Engine/State.h"
 
-1431469757 f:\git\openxcom\src\ruleset\rulebasefacility.h
+1431568353 f:\git\openxcom\src\ruleset\rulebasefacility.h
 
 1431469788 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
@@ -5200,7 +5200,7 @@
 1430393468 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
-1431489725 f:\git\openxcom\src\ruleset\rulesoldier.h
+1431561461 f:\git\openxcom\src\ruleset\rulesoldier.h
 	"../Ruleset/Unit.h"
 
 1430149550 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
@@ -8499,7 +8499,7 @@
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\rulebasefacility.cpp
+1431568842 source:f:\git\openxcom\src\ruleset\rulebasefacility.cpp
 	"RuleBaseFacility.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
@@ -8582,7 +8582,7 @@
 	"../Savegame/SoldierDiary.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1431501908 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
+1431561586 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
 1430170835 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
@@ -8642,7 +8642,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1431038517 source:f:\git\openxcom\src\savegame\base.cpp
+1431569440 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -11423,7 +11423,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1430945457 f:\git\openxcom\src\basescape\aliencontainmentstate.h
+1431574645 f:\git\openxcom\src\basescape\aliencontainmentstate.h
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 

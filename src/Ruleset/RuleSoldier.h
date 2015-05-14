@@ -38,7 +38,8 @@ struct RuleGender
 
 /**
  * Represents the creation data for a specific type of unit.
- * This info is copied to either Soldier for XCom soldiers or BattleUnit for aliens and civilians.
+ * @note This info is copied to either Soldier for XCom soldiers or BattleUnit
+ * for aliens and civilians.
  * @sa Soldier BattleUnit
  */
 class RuleSoldier

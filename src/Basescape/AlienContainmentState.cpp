@@ -66,38 +66,39 @@ AlienContainmentState::AlienContainmentState(
 		_base(base),
 		_origin(origin),
 		_sel(0),
-		_fishFood(0)
+		_fishFood(0),
+		_totalSpace(base->getAvailableContainment()),
+		_usedSpace(base->getUsedContainment())
 {
-	_overCrowded = Options::storageLimitsEnforced
-				&& _base->getAvailableContainment() < _base->getUsedContainment();
-
 	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 17, 10, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
-	_txtUsed		= new Text(144, 9, 16, 30);
-	_txtAvailable	= new Text(144, 9, 160, 30);
+	_txtSpace		= new Text(144, 9, 16, 30);
+	_txtResearch	= new Text(144, 9, 154, 30);
 
-	_txtItem		= new Text(144, 9, 16, 40);
-	_txtLiveAliens	= new Text(62, 9, 164, 40);
-	_txtDeadAliens	= new Text(66, 9, 230, 40);
+	_txtItem		= new Text(138, 9, 16, 40);
+	_txtLiveAliens	= new Text(50, 9, 154, 40);
+	_txtDeadAliens	= new Text(50, 9, 204, 40);
+	_txtInResearch	= new Text(47, 9, 254, 40);
+//	_lstAliens->setColumns(4, 130, 50, 50, 47);
 
 	_lstAliens		= new TextList(285, 121, 16, 50);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
-//	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
 
 	setInterface("manageContainment");
 
 	add(_window,		"window",	"manageContainment");
 	add(_txtTitle,		"text",		"manageContainment");
 	add(_txtBaseLabel,	"text",		"manageContainment");
-	add(_txtAvailable,	"text",		"manageContainment");
-	add(_txtUsed,		"text",		"manageContainment");
+	add(_txtSpace,		"text",		"manageContainment");
+	add(_txtResearch,	"text",		"manageContainment");
 	add(_txtItem,		"text",		"manageContainment");
 	add(_txtLiveAliens,	"text",		"manageContainment");
 	add(_txtDeadAliens,	"text",		"manageContainment");
+	add(_txtInResearch,	"text",		"manageContainment");
 	add(_lstAliens,		"list",		"manageContainment");
 	add(_btnCancel,		"button",	"manageContainment");
 	add(_btnOk,			"button",	"manageContainment");
@@ -105,8 +106,11 @@ AlienContainmentState::AlienContainmentState(
 	centerAllSurfaces();
 
 
+	_overCrowded = Options::storageLimitsEnforced
+				&& _totalSpace < _usedSpace;
+
 	std::string st;
-	if (origin == OPT_BATTLESCAPE)
+	if (_origin == OPT_BATTLESCAPE)
 	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 		st = "STR_EXECUTE";
@@ -116,6 +120,12 @@ AlienContainmentState::AlienContainmentState(
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 		st = "STR_REMOVE_SELECTED";
 	}
+	_btnOk->setText(tr(st));
+	_btnOk->onMouseClick((ActionHandler)& AlienContainmentState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& AlienContainmentState::btnOkClick,
+					Options::keyOk);
+	_btnOk->setVisible(false);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& AlienContainmentState::btnCancelClick);
@@ -125,33 +135,26 @@ AlienContainmentState::AlienContainmentState(
 	if (_overCrowded == true)
 		_btnCancel->setVisible(false);
 
-	_btnOk->setText(tr(st));
-	_btnOk->onMouseClick((ActionHandler)& AlienContainmentState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& AlienContainmentState::btnOkClick,
-					Options::keyOk);
-	_btnOk->setVisible(false);
-
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
+	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_FREE_")
+						.arg(_usedSpace)
+						.arg(_totalSpace - _usedSpace));
+
+	_txtResearch->setText(tr("STR_INTERROGATION_")
+							.arg(_base->getInterrogatedAliens()));
+
 	_txtItem->setText(tr("STR_ALIEN"));
-
 	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
-
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
+	_txtInResearch->setText(tr("STR_RESEARCH"));
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE")
-							.arg(_base->getAvailableContainment() - _base->getUsedContainment()));
-
-	_txtUsed->setText(tr("STR_SPACE_USED")
-						.arg(_base->getUsedContainment()));
-
-	_lstAliens->setColumns(3, 140, 66, 56);
-	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
+	_lstAliens->setColumns(4, 130, 50, 50, 47);
+	_lstAliens->setArrowColumn(158, ARROW_HORIZONTAL);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setSelectable();
 	_lstAliens->setMargin();
@@ -164,11 +167,27 @@ AlienContainmentState::AlienContainmentState(
 	_lstAliens->onRightArrowRelease((ActionHandler)& AlienContainmentState::lstItemsRightArrowRelease);
 	_lstAliens->onRightArrowClick((ActionHandler)& AlienContainmentState::lstItemsRightArrowClick);
 
-
-	int qty;
 	const RuleItem* itRule;
+	const RuleResearch* resRule;
+	int qtyAliens;
 	size_t row = 0;
 	Uint8 color;
+
+	std::vector<std::string> researchList;
+	for (std::vector<ResearchProject*>::const_iterator
+			i = _base->getResearch().begin();
+			i != _base->getResearch().end();
+			++i)
+	{
+		resRule = (*i)->getRules();
+		if (_game->getRuleset()->getUnit(resRule->getName()) != NULL)
+			researchList.push_back(resRule->getName());
+	}
+
+	if (researchList.empty() == false)
+		_txtInResearch->setVisible();
+	else
+		_txtInResearch->setVisible(false);
 
 	const std::vector<std::string>& itemList = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -176,20 +195,33 @@ AlienContainmentState::AlienContainmentState(
 			i != itemList.end();
 			++i)
 	{
-		qty = _base->getItems()->getItem(*i);						// get Qty of each item at this base
-		if (qty > 0													// if item exists at this base
+		qtyAliens = _base->getItems()->getItem(*i);					// get Qty of each item at this base
+		if (qtyAliens > 0											// if item exists at this base
 			&& _game->getRuleset()->getItem(*i)->isAlien() == true)	// and it's a live alien...
 		{
 			_qtys.push_back(0);		// put it in the _qtys<vector> as (int)
 			_aliens.push_back(*i);	// put its name in the _aliens<vector> as (string)
 
 			std::wostringstream woststr;
-			woststr << qty;
+			woststr << qtyAliens;
+
+			std::wstring rQty;
+			std::vector<std::string>::const_iterator j = std::find(
+																researchList.begin(),
+																researchList.end(),
+																*i);
+			if (j != researchList.end())
+			{
+				rQty = tr("STR_YES");
+				researchList.erase(j);
+			}
+
 			_lstAliens->addRow( // show its name on the list.
-							3,
+							4,
 							tr(*i).c_str(),
 							woststr.str().c_str(),
-							L"0");
+							L"0",
+							rQty.c_str());
 
 			itRule = _game->getRuleset()->getItem(*i);
 			if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
@@ -201,6 +233,25 @@ AlienContainmentState::AlienContainmentState(
 								row++,
 								color);
 		}
+	}
+
+	for (std::vector<std::string>::const_iterator // add research aLiens that are not in Containment.
+			i = researchList.begin();
+			i != researchList.end();
+			++i)
+	{
+		_aliens.push_back(*i);
+		_qtys.push_back(0);
+
+		_lstAliens->addRow(
+						4,
+						tr(*i).c_str(),
+						L"0",
+						L"0",
+						tr("STR_YES").c_str());
+		_lstAliens->setRowColor(
+							_qtys.size() - 1,
+							_lstAliens->getSecondaryColor());
 	}
 
 	_timerInc = new Timer(250);
@@ -257,8 +308,7 @@ void AlienContainmentState::btnOkClick(Action*)
 
 	_game->popState();
 
-
-	if (Options::storageLimitsEnforced == true
+	if (Options::storageLimitsEnforced == true // check if corpse overflows Base stores
 		&& _origin == OPT_BATTLESCAPE
 		&& _base->storesOverfull() == true)
 	{
@@ -267,11 +317,11 @@ void AlienContainmentState::btnOkClick(Action*)
 									_origin));
 
 		_game->pushState(new ErrorMessageState(
-											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-											_palette,
-											_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
-											"BACK04.SCR",
-											_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
+										tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+										_palette,
+										_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
+										"BACK04.SCR",
+										_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
  	}
 }
 
@@ -316,9 +366,6 @@ void AlienContainmentState::lstItemsRightArrowRelease(Action* action)
  */
 void AlienContainmentState::lstItemsRightArrowClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		increaseByValue(std::numeric_limits<int>::max());
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		increaseByValue(1);
@@ -326,6 +373,8 @@ void AlienContainmentState::lstItemsRightArrowClick(Action* action)
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
 	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		increaseByValue(std::numeric_limits<int>::max());
 }
 
 /**
@@ -360,9 +409,6 @@ void AlienContainmentState::lstItemsLeftArrowRelease(Action* action)
  */
 void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		decreaseByValue(std::numeric_limits<int>::max());
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		decreaseByValue(1);
@@ -370,11 +416,13 @@ void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
 	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		decreaseByValue(std::numeric_limits<int>::max());
 }
 
 /**
  * Gets the quantity of the currently selected alien on the base.
- * @return, quantity of selected alien on the base
+ * @return, quantity of alien
  */
 int AlienContainmentState::getQuantity()
 {
@@ -393,24 +441,24 @@ void AlienContainmentState::increase()
 }
 
 /**
- * Increases the quantity of the selected alien to exterminate by "change".
+ * Increases the quantity of the selected alien to exterminate.
  * @param change - how much to add
  */
 void AlienContainmentState::increaseByValue(int change)
 {
-	if (change < 1)
-		return;
-
-	const int qty = getQuantity() - _qtys[_sel];
-	if (qty > 0)
+	if (change > 0)
 	{
-		change = std::min(
-						change,
-						qty);
-		_qtys[_sel] += change;
-		_fishFood += change;
+		const int qtyType = getQuantity() - _qtys[_sel];
+		if (qtyType > 0)
+		{
+			change = std::min(
+							change,
+							qtyType);
+			_qtys[_sel] += change;
+			_fishFood += change;
 
-		updateStrings();
+			update();
+		}
 	}
 }
 
@@ -426,21 +474,21 @@ void AlienContainmentState::decrease()
 }
 
 /**
- * Decreases the quantity of the selected alien to exterminate by "change".
+ * Decreases the quantity of the selected alien to exterminate.
  * @param change - how much to remove
  */
 void AlienContainmentState::decreaseByValue(int change)
 {
-	if (change < 1)
-		return;
-
-	if (_qtys[_sel] > 0)
+	if (change > 0
+		&& _qtys[_sel] > 0)
 	{
-		change = std::min(_qtys[_sel], change);
+		change = std::min(
+						change,
+						_qtys[_sel]);
 		_qtys[_sel] -= change;
 		_fishFood -= change;
 
-		updateStrings();
+		update();
 	}
 }
 
@@ -448,7 +496,7 @@ void AlienContainmentState::decreaseByValue(int change)
  * Updates the row (quantity & color) of the selected aLien species.
  * Also determines if the OK button should be in/visible.
  */
-void AlienContainmentState::updateStrings() // private.
+void AlienContainmentState::update() // private.
 {
 	std::wostringstream
 		woststr1,
@@ -470,21 +518,19 @@ void AlienContainmentState::updateStrings() // private.
 			color = _lstAliens->getColor();
 	}
 
-	_lstAliens->setRowColor(_sel, color);
 	_lstAliens->setCellText(_sel, 1, woststr1.str()); // qty still in Containment
 	_lstAliens->setCellText(_sel, 2, woststr2.str()); // qty to torture
+	_lstAliens->setRowColor(_sel, color);
 
 
-	const int
-		freeSpace = _base->getAvailableContainment() - _base->getUsedContainment() + _fishFood,
-		aliens = _base->getUsedContainment() - _fishFood;
-
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(freeSpace));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
+	const int freeSpace = _totalSpace - _usedSpace + _fishFood;
+	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_FREE_")
+						.arg(_usedSpace - _fishFood)
+						.arg(freeSpace));
 
 	_btnCancel->setVisible(_overCrowded == false);
 	_btnOk->setVisible(_fishFood > 0
-					   && freeSpace > -1);
+					 && freeSpace > -1);
 }
 
 /**

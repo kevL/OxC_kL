@@ -50,20 +50,24 @@ class AlienContainmentState
 
 private:
 	bool _overCrowded;
-	int _fishFood;
+	int
+		_fishFood,
+		_totalSpace,
+		_usedSpace;
 	size_t _sel;
 
 	OptionsOrigin _origin;
 
 	Base* _base;
 	Text
-		* _txtAvailable,
 		* _txtBaseLabel,
 		* _txtDeadAliens,
+		* _txtResearch,
+		* _txtInResearch,
 		* _txtItem,
 		* _txtLiveAliens,
-		* _txtTitle,
-		* _txtUsed;
+		* _txtSpace,
+		* _txtTitle;
 	TextButton
 		* _btnCancel,
 		* _btnOk;
@@ -79,7 +83,7 @@ private:
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Updates the quantity-strings of the selected alien.
-	void updateStrings();
+	void update();
 
 
 	public:

@@ -30,7 +30,7 @@ namespace OpenXcom
 
 /**
  * Represents a specific type of base facility.
- * Contains constant info about a facility like costs, capacities, size, etc.
+ * @note Contains constant info about a facility - like costs capacities size etc.
  * @sa BaseFacility
  */
 class RuleBaseFacility

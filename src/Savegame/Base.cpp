@@ -1428,7 +1428,7 @@ const std::vector<ResearchProject*>& Base::getResearch() const
  * Add a new ResearchProject to Base
  * @param project - project to add
  */
-void Base::addResearch(ResearchProject* project)
+void Base::addResearch(ResearchProject* const project)
 {
 	_research.push_back(project);
 }
@@ -1440,7 +1440,7 @@ void Base::addResearch(ResearchProject* project)
  * @param goOffline	- true to hide project but not remove it from base's active ResearchProjects (default false)
  */
 void Base::removeResearch(
-		ResearchProject* project,
+		ResearchProject* const project,
 		bool grantHelp,
 		bool goOffline)
 {
@@ -1475,302 +1475,303 @@ void Base::removeResearch(
 void Base::researchHelp(const std::string& aLien)
 {
 	std::string rp;
-	double factor = 0.;
+	double factor;
 
 	for (std::vector<ResearchProject*>::const_iterator
 			i = _research.begin();
 			i != _research.end();
 			++i)
 	{
-		if ((*i)->getOffline())
-			continue;
+		if ((*i)->getOffline() == false)
+		{
+			rp = (*i)->getRules()->getName();
+			factor = 0.;
 
-		rp = (*i)->getRules()->getName();
+			if (aLien.find("_SOLDIER") != std::string::npos)
+			{
+				if (rp.compare("STR_ALIEN_GRENADE") == 0
+					|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0
+					|| rp.compare("STR_PERSONAL_ARMOR") == 0)
+				{
+					factor = 0.5;
+				}
+				else if (rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0)
+				{
+					factor = 0.4;
+				}
+				else if (rp.compare("STR_POWER_SUIT") == 0)
+				{
+					factor = 0.25;
+				}
+				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+				{
+					factor = 0.2;
+				}
+				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0
+					|| rp.compare("STR_HEAVY_PLASMA") == 0
+					|| rp.compare("STR_PLASMA_RIFLE") == 0
+					|| rp.compare("STR_PLASMA_PISTOL") == 0)
+				{
+					factor = 0.1;
+				}
+			}
+			else if (aLien.find("_NAVIGATOR") != std::string::npos)
+			{
+				if (rp.compare("STR_HYPER_WAVE_DECODER") == 0
+					|| rp.compare("STR_UFO_NAVIGATION") == 0)
+				{
+					factor = 0.8;
+				}
+				else if (rp.compare("STR_MOTION_SCANNER") == 0
+					|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
+				{
+					factor = 0.5;
+				}
+				else if (rp.compare("STR_GRAV_SHIELD") == 0
+					|| rp.compare("STR_ALIEN_ALLOYS") == 0)
+				{
+					factor = 0.4;
+				}
+				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+				{
+					factor = 0.35;
+				}
+				else if (rp.compare("STR_FLYING_SUIT") == 0)
+				{
+					factor = 0.3;
+				}
+				else if (rp.compare("STR_UFO_POWER_SOURCE") == 0
+					|| rp.compare("STR_UFO_CONSTRUCTION") == 0
+					|| rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+				{
+					factor = 0.25;
+				}
+				else if (rp == "STR_HEAVY_PLASMA"
+					|| rp == "STR_HEAVY_PLASMA_CLIP"
+					|| rp == "STR_PLASMA_RIFLE"
+					|| rp == "STR_PLASMA_RIFLE_CLIP"
+					|| rp == "STR_PLASMA_PISTOL"
+					|| rp == "STR_PLASMA_PISTOL_CLIP"
+					|| rp == "STR_NEW_FIGHTER_CRAFT"
+					|| rp == "STR_NEW_FIGHTER_TRANSPORTER"
+					|| rp == "STR_ULTIMATE_CRAFT"
+					|| rp == "STR_PLASMA_CANNON"
+					|| rp == "STR_FUSION_MISSILE")
+//					|| rp == "hovertank-plasma" // <-
+//					|| rp == "hovertank-fusion" // <-
+				{
+					factor = 0.2;
+				}
+				else if (rp.compare("STR_CYDONIA_OR_BUST") == 0
+					|| rp.compare("STR_POWER_SUIT") == 0)
+				{
+					factor = 0.15;
+				}
+			}
+			else if (aLien.find("_MEDIC") != std::string::npos)
+			{
+				if (rp.compare("STR_ALIEN_FOOD") == 0
+					|| rp.compare("STR_ALIEN_SURGERY") == 0
+					|| rp.compare("STR_EXAMINATION_ROOM") == 0
+					|| rp.compare("STR_ALIEN_REPRODUCTION") == 0)
+				{
+					factor = 0.8;
+				}
+				else if (rp.compare("STR_PSI_AMP") == 0
+					|| rp.compare("STR_SMALL_LAUNCHER") == 0
+					|| rp.compare("STR_STUN_BOMB") == 0
+					|| rp.compare("STR_MIND_PROBE") == 0
+					|| rp.compare("STR_MIND_SHIELD") == 0
+					|| rp.compare("STR_PSI_LAB") == 0)
+				{
+					factor = 0.6;
+				}
+				else if (rp.compare("STR_ETHEREAL_CORPSE") == 0
+					|| rp.compare("STR_SECTOPOD_CORPSE") == 0
+					|| rp.compare("STR_SECTOID_CORPSE") == 0
+					|| rp.compare("STR_CYBERDISC_CORPSE") == 0
+					|| rp.compare("STR_SNAKEMAN_CORPSE") == 0
+					|| rp.compare("STR_CHRYSSALID_CORPSE") == 0
+					|| rp.compare("STR_MUTON_CORPSE") == 0
+					|| rp.compare("STR_SILACOID_CORPSE") == 0
+					|| rp.compare("STR_CELATID_CORPSE") == 0
+					|| rp.compare("STR_FLOATER_CORPSE") == 0
+					|| rp.compare("STR_REAPER_CORPSE") == 0)
+				{
+					factor = 0.5;
+				}
+				else if (rp == "STR_MEDI_KIT")
+				{
+					factor = 0.4;
+				}
+				else if (rp.compare("STR_ALIEN_ORIGINS") == 0
+					|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
+				{
+					factor = 0.2;
+				}
+				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+				{
+					factor = 0.1;
+				}
+			}
+			else if (aLien.find("_ENGINEER") != std::string::npos)
+			{
+				if (rp.compare("STR_BLASTER_LAUNCHER") == 0
+					|| rp.compare("STR_BLASTER_BOMB") == 0)
+				{
+					factor = 0.7;
+				}
+				else if (rp.compare("STR_MOTION_SCANNER") == 0
+					|| rp.compare("STR_HEAVY_PLASMA") == 0
+					|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+					|| rp.compare("STR_PLASMA_RIFLE") == 0
+					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+					|| rp.compare("STR_PLASMA_PISTOL") == 0
+					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
+					|| rp.compare("STR_ALIEN_GRENADE") == 0
+					|| rp.compare("STR_ELERIUM_115") == 0
+					|| rp.compare("STR_UFO_POWER_SOURCE") == 0
+					|| rp.compare("STR_UFO_CONSTRUCTION") == 0
+					|| rp.compare("STR_ALIEN_ALLOYS") == 0
+					|| rp.compare("STR_PLASMA_CANNON") == 0
+					|| rp.compare("STR_FUSION_MISSILE") == 0
+					|| rp.compare("STR_PLASMA_DEFENSE") == 0
+					|| rp.compare("STR_FUSION_DEFENSE") == 0
+					|| rp.compare("STR_GRAV_SHIELD") == 0
+					|| rp.compare("STR_PERSONAL_ARMOR") == 0
+					|| rp.compare("STR_POWER_SUIT") == 0
+					|| rp.compare("STR_FLYING_SUIT") == 0)
+				{
+					factor = 0.5;
+				}
+				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
+					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+					|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
+				{
+					factor = 0.3;
+				}
+				else if (rp.compare("STR_ALIEN_ORIGINS") == 0
+					|| rp.compare("STR_SMALL_LAUNCHER") == 0
+					|| rp.compare("STR_STUN_BOMB") == 0)
+				{
+					factor = 0.2;
+				}
+				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+				{
+					factor = 0.1;
+				}
+			}
+			else if (aLien.find("_LEADER") != std::string::npos)
+			{
+				if (rp.compare("STR_EXAMINATION_ROOM") == 0)
+				{
+					factor = 0.8;
+				}
+				else if (rp.compare("STR_BLASTER_LAUNCHER") == 0)
+				{
+					factor = 0.6;
+				}
+				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+				{
+					factor = 0.5;
+				}
+				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+				{
+					factor = 0.3;
+				}
+				else if (rp.compare("STR_PSI_AMP") == 0)
+				{
+					factor = 0.25;
+				}
+				else if (rp.compare("STR_HEAVY_PLASMA") == 0
+					|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+					|| rp.compare("STR_PLASMA_RIFLE") == 0
+					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+					|| rp.compare("STR_PLASMA_PISTOL") == 0
+					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
+					|| rp.compare("STR_BLASTER_BOMB") == 0
+					|| rp.compare("STR_SMALL_LAUNCHER") == 0
+					|| rp.compare("STR_STUN_BOMB") == 0
+					|| rp.compare("STR_ELERIUM_115") == 0
+					|| rp.compare("STR_ALIEN_ALLOYS") == 0
+					|| rp.compare("STR_PLASMA_CANNON") == 0
+					|| rp.compare("STR_FUSION_MISSILE") == 0
+					|| rp.compare("STR_CYDONIA_OR_BUST") == 0
+					|| rp.compare("STR_PERSONAL_ARMOR") == 0
+					|| rp.compare("STR_POWER_SUIT") == 0
+					|| rp.compare("STR_FLYING_SUIT") == 0)
+				{
+					factor = 0.2;
+				}
+				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
+					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+					|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
+				{
+					factor = 0.1;
+				}
+			}
+			else if (aLien.find("_COMMANDER") != std::string::npos)
+			{
+				if (rp.compare("STR_BLASTER_LAUNCHER") == 0
+					|| rp.compare("STR_EXAMINATION_ROOM") == 0)
+				{
+					factor = 0.8;
+				}
+				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+				{
+					factor = 0.7;
+				}
+				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+				{
+					factor = 0.6;
+				}
+				else if (rp.compare("STR_PSI_AMP") == 0
+					|| rp.compare("STR_CYDONIA_OR_BUST") == 0)
+				{
+					factor = 0.5;
+				}
+				else if (rp.compare("STR_BLASTER_BOMB") == 0
+					|| rp.compare("STR_ELERIUM_115") == 0
+					|| rp.compare("STR_ALIEN_ALLOYS") == 0
+					|| rp.compare("STR_PERSONAL_ARMOR") == 0
+					|| rp.compare("STR_POWER_SUIT") == 0
+					|| rp.compare("STR_FLYING_SUIT") == 0)
+				{
+					factor = 0.25;
+				}
+				else if (rp.compare("STR_HEAVY_PLASMA") == 0
+					|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+					|| rp.compare("STR_PLASMA_RIFLE") == 0
+					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+					|| rp.compare("STR_PLASMA_PISTOL") == 0
+					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
+					|| rp.compare("STR_SMALL_LAUNCHER") == 0
+					|| rp.compare("STR_STUN_BOMB") == 0
+					|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
+					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+					|| rp.compare("STR_ULTIMATE_CRAFT") == 0
+					|| rp.compare("STR_PLASMA_CANNON") == 0
+					|| rp.compare("STR_FUSION_MISSILE") == 0)
+				{
+					factor = 0.2;
+				}
+			}
 
-		if (aLien.find("_SOLDIER") != std::string::npos)
-		{
-			if (rp.compare("STR_ALIEN_GRENADE") == 0
-				|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0
-				|| rp.compare("STR_PERSONAL_ARMOR") == 0)
+			if (AreSame(factor, 0.) == false)
 			{
-				factor = 0.5;
-			}
-			else if (rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0)
-			{
-				factor = 0.4;
-			}
-			else if (rp.compare("STR_POWER_SUIT") == 0)
-			{
-				factor = 0.25;
-			}
-			else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				factor = 0.2;
-			}
-			else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0
-				|| rp.compare("STR_HEAVY_PLASMA") == 0
-				|| rp.compare("STR_PLASMA_RIFLE") == 0
-				|| rp.compare("STR_PLASMA_PISTOL") == 0)
-			{
-				factor = 0.1;
-			}
-		}
-		else if (aLien.find("_NAVIGATOR") != std::string::npos)
-		{
-			if (rp.compare("STR_HYPER_WAVE_DECODER") == 0
-				|| rp.compare("STR_UFO_NAVIGATION") == 0)
-			{
-				factor = 0.8;
-			}
-			else if (rp.compare("STR_MOTION_SCANNER") == 0
-				|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
-			{
-				factor = 0.5;
-			}
-			else if (rp.compare("STR_GRAV_SHIELD") == 0
-				|| rp.compare("STR_ALIEN_ALLOYS") == 0)
-			{
-				factor = 0.4;
-			}
-			else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				factor = 0.35;
-			}
-			else if (rp.compare("STR_FLYING_SUIT") == 0)
-			{
-				factor = 0.3;
-			}
-			else if (rp.compare("STR_UFO_POWER_SOURCE") == 0
-				|| rp.compare("STR_UFO_CONSTRUCTION") == 0
-				|| rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				factor = 0.25;
-			}
-			else if (rp == "STR_HEAVY_PLASMA"
-				|| rp == "STR_HEAVY_PLASMA_CLIP"
-				|| rp == "STR_PLASMA_RIFLE"
-				|| rp == "STR_PLASMA_RIFLE_CLIP"
-				|| rp == "STR_PLASMA_PISTOL"
-				|| rp == "STR_PLASMA_PISTOL_CLIP"
-				|| rp == "STR_NEW_FIGHTER_CRAFT"
-				|| rp == "STR_NEW_FIGHTER_TRANSPORTER"
-				|| rp == "STR_ULTIMATE_CRAFT"
-				|| rp == "STR_PLASMA_CANNON"
-				|| rp == "STR_FUSION_MISSILE")
-//				|| rp == "hovertank-plasma" // <-
-//				|| rp == "hovertank-fusion" // <-
-			{
-				factor = 0.2;
-			}
-			else if (rp.compare("STR_CYDONIA_OR_BUST") == 0
-				|| rp.compare("STR_POWER_SUIT") == 0)
-			{
-				factor = 0.15;
-			}
-		}
-		else if (aLien.find("_MEDIC") != std::string::npos)
-		{
-			if (rp.compare("STR_ALIEN_FOOD") == 0
-				|| rp.compare("STR_ALIEN_SURGERY") == 0
-				|| rp.compare("STR_EXAMINATION_ROOM") == 0
-				|| rp.compare("STR_ALIEN_REPRODUCTION") == 0)
-			{
-				factor = 0.8;
-			}
-			else if (rp.compare("STR_PSI_AMP") == 0
-				|| rp.compare("STR_SMALL_LAUNCHER") == 0
-				|| rp.compare("STR_STUN_BOMB") == 0
-				|| rp.compare("STR_MIND_PROBE") == 0
-				|| rp.compare("STR_MIND_SHIELD") == 0
-				|| rp.compare("STR_PSI_LAB") == 0)
-			{
-				factor = 0.6;
-			}
-			else if (rp.compare("STR_ETHEREAL_CORPSE") == 0
-				|| rp.compare("STR_SECTOPOD_CORPSE") == 0
-				|| rp.compare("STR_SECTOID_CORPSE") == 0
-				|| rp.compare("STR_CYBERDISC_CORPSE") == 0
-				|| rp.compare("STR_SNAKEMAN_CORPSE") == 0
-				|| rp.compare("STR_CHRYSSALID_CORPSE") == 0
-				|| rp.compare("STR_MUTON_CORPSE") == 0
-				|| rp.compare("STR_SILACOID_CORPSE") == 0
-				|| rp.compare("STR_CELATID_CORPSE") == 0
-				|| rp.compare("STR_FLOATER_CORPSE") == 0
-				|| rp.compare("STR_REAPER_CORPSE") == 0)
-			{
-				factor = 0.5;
-			}
-			else if (rp == "STR_MEDI_KIT")
-			{
-				factor = 0.4;
-			}
-			else if (rp.compare("STR_ALIEN_ORIGINS") == 0
-				|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
-			{
-				factor = 0.2;
-			}
-			else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				factor = 0.1;
-			}
-		}
-		else if (aLien.find("_ENGINEER") != std::string::npos)
-		{
-			if (rp.compare("STR_BLASTER_LAUNCHER") == 0
-				|| rp.compare("STR_BLASTER_BOMB") == 0)
-			{
-				factor = 0.7;
-			}
-			else if (rp.compare("STR_MOTION_SCANNER") == 0
-				|| rp.compare("STR_HEAVY_PLASMA") == 0
-				|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| rp.compare("STR_PLASMA_RIFLE") == 0
-				|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| rp.compare("STR_PLASMA_PISTOL") == 0
-				|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-				|| rp.compare("STR_ALIEN_GRENADE") == 0
-				|| rp.compare("STR_ELERIUM_115") == 0
-				|| rp.compare("STR_UFO_POWER_SOURCE") == 0
-				|| rp.compare("STR_UFO_CONSTRUCTION") == 0
-				|| rp.compare("STR_ALIEN_ALLOYS") == 0
-				|| rp.compare("STR_PLASMA_CANNON") == 0
-				|| rp.compare("STR_FUSION_MISSILE") == 0
-				|| rp.compare("STR_PLASMA_DEFENSE") == 0
-				|| rp.compare("STR_FUSION_DEFENSE") == 0
-				|| rp.compare("STR_GRAV_SHIELD") == 0
-				|| rp.compare("STR_PERSONAL_ARMOR") == 0
-				|| rp.compare("STR_POWER_SUIT") == 0
-				|| rp.compare("STR_FLYING_SUIT") == 0)
-			{
-				factor = 0.5;
-			}
-			else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
-				|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-				|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
-			{
-				factor = 0.3;
-			}
-			else if (rp.compare("STR_ALIEN_ORIGINS") == 0
-				|| rp.compare("STR_SMALL_LAUNCHER") == 0
-				|| rp.compare("STR_STUN_BOMB") == 0)
-			{
-				factor = 0.2;
-			}
-			else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				factor = 0.1;
-			}
-		}
-		else if (aLien.find("_LEADER") != std::string::npos)
-		{
-			if (rp.compare("STR_EXAMINATION_ROOM") == 0)
-			{
-				factor = 0.8;
-			}
-			else if (rp.compare("STR_BLASTER_LAUNCHER") == 0)
-			{
-				factor = 0.6;
-			}
-			else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				factor = 0.5;
-			}
-			else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				factor = 0.3;
-			}
-			else if (rp.compare("STR_PSI_AMP") == 0)
-			{
-				factor = 0.25;
-			}
-			else if (rp.compare("STR_HEAVY_PLASMA") == 0
-				|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| rp.compare("STR_PLASMA_RIFLE") == 0
-				|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| rp.compare("STR_PLASMA_PISTOL") == 0
-				|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-				|| rp.compare("STR_BLASTER_BOMB") == 0
-				|| rp.compare("STR_SMALL_LAUNCHER") == 0
-				|| rp.compare("STR_STUN_BOMB") == 0
-				|| rp.compare("STR_ELERIUM_115") == 0
-				|| rp.compare("STR_ALIEN_ALLOYS") == 0
-				|| rp.compare("STR_PLASMA_CANNON") == 0
-				|| rp.compare("STR_FUSION_MISSILE") == 0
-				|| rp.compare("STR_CYDONIA_OR_BUST") == 0
-				|| rp.compare("STR_PERSONAL_ARMOR") == 0
-				|| rp.compare("STR_POWER_SUIT") == 0
-				|| rp.compare("STR_FLYING_SUIT") == 0)
-			{
-				factor = 0.2;
-			}
-			else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
-				|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-				|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
-			{
-				factor = 0.1;
-			}
-		}
-		else if (aLien.find("_COMMANDER") != std::string::npos)
-		{
-			if (rp.compare("STR_BLASTER_LAUNCHER") == 0
-				|| rp.compare("STR_EXAMINATION_ROOM") == 0)
-			{
-				factor = 0.8;
-			}
-			else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				factor = 0.7;
-			}
-			else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				factor = 0.6;
-			}
-			else if (rp.compare("STR_PSI_AMP") == 0
-				|| rp.compare("STR_CYDONIA_OR_BUST") == 0)
-			{
-				factor = 0.5;
-			}
-			else if (rp.compare("STR_BLASTER_BOMB") == 0
-				|| rp.compare("STR_ELERIUM_115") == 0
-				|| rp.compare("STR_ALIEN_ALLOYS") == 0
-				|| rp.compare("STR_PERSONAL_ARMOR") == 0
-				|| rp.compare("STR_POWER_SUIT") == 0
-				|| rp.compare("STR_FLYING_SUIT") == 0)
-			{
-				factor = 0.25;
-			}
-			else if (rp.compare("STR_HEAVY_PLASMA") == 0
-				|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| rp.compare("STR_PLASMA_RIFLE") == 0
-				|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| rp.compare("STR_PLASMA_PISTOL") == 0
-				|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-				|| rp.compare("STR_SMALL_LAUNCHER") == 0
-				|| rp.compare("STR_STUN_BOMB") == 0
-				|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
-				|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-				|| rp.compare("STR_ULTIMATE_CRAFT") == 0
-				|| rp.compare("STR_PLASMA_CANNON") == 0
-				|| rp.compare("STR_FUSION_MISSILE") == 0)
-			{
-				factor = 0.2;
-			}
-		}
+				const int cost = (*i)->getCost();
+				const double spent = static_cast<double>((*i)->getSpent());
 
-		if (AreSame(factor, 0.) == false)
-		{
-			const int cost = (*i)->getCost();
-			const double spent = static_cast<double>((*i)->getSpent());
+				(*i)->setSpent(static_cast<int>(Round(
+								spent + ((static_cast<double>(cost) - spent) * factor))));
 
-			(*i)->setSpent(static_cast<int>(Round(
-							spent + ((static_cast<double>(cost) - spent) * factor))));
+				if ((*i)->getSpent() > cost - 1)
+					(*i)->setSpent(cost - 1);
 
-			if ((*i)->getSpent() > cost - 1)
-				(*i)->setSpent(cost - 1);
-
-			break;
+				return;
+			}
 		}
 	}
 }
@@ -1879,6 +1880,26 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
+ * Returns the total amount of containment space available in this Base.
+ * @return, containment space
+ */
+int Base::getAvailableContainment() const
+{
+	int total = 0;
+
+	for (std::vector<BaseFacility*>::const_iterator
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+			total += (*i)->getRules()->getAliens();
+	}
+
+	return total;
+}
+
+/**
  * Returns the total amount of used containment space in this Base.
  * @return, containment space
  */
@@ -1908,39 +1929,31 @@ int Base::getUsedContainment() const
 	}
 
 	if (Options::storageLimitsEnforced == true)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end();
-				++i)
-		{
-			const RuleResearch* const resRule = (*i)->getRules();
-			if (resRule->needItem() == true
-				&& _rules->getUnit(resRule->getName()) != NULL)
-			{
-				++total;
-			}
-		}
-	}
+		total += getInterrogatedAliens();
 
 	return total;
 }
 
 /**
- * Returns the total amount of containment space available in this Base.
- * @return, containment space
+ * Gets the quantity of aLiens currently under interrogation.
+ * @return, qty of aliens
  */
-int Base::getAvailableContainment() const
+int Base::getInterrogatedAliens() const
 {
 	int total = 0;
+	const RuleResearch* resRule;
 
-	for (std::vector<BaseFacility*>::const_iterator
-			i = _facilities.begin();
-			i != _facilities.end();
+	for (std::vector<ResearchProject*>::const_iterator
+			i = _research.begin();
+			i != _research.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
-			total += (*i)->getRules()->getAliens();
+		resRule = (*i)->getRules();
+		if (resRule->needItem() == true
+			&& _rules->getUnit(resRule->getName()) != NULL)
+		{
+			++total;
+		}
 	}
 
 	return total;

@@ -213,10 +213,10 @@ private:
 		/// Gets the list of base's ResearchProject.
 		const std::vector<ResearchProject*>& getResearch() const;
 		/// Adds a new ResearchProject to the Base.
-		void addResearch(ResearchProject* project);
+		void addResearch(ResearchProject* const project);
 		/// Removes a ResearchProject from the Base.
 		void removeResearch(
-				ResearchProject* project,
+				ResearchProject* const project,
 				bool grantHelp = true,
 				bool goOffline = false);
 		/// Research Help ala XcomUtil.
@@ -247,6 +247,8 @@ private:
 		int getAvailableContainment() const;
 		/// Gets the total amount of used Containment Space.
 		int getUsedContainment() const;
+		/// Gets the quantity of aLiens currently under interrogation.
+		int getInterrogatedAliens() const;
 
 		/// Sets the craft's battlescape status.
 		void setInBattlescape(bool inTactical);

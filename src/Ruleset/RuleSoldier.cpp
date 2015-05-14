@@ -38,13 +38,18 @@ struct convert<OpenXcom::RuleGender>
 	}
 
 	///
-	static bool decode(const Node& node, OpenXcom::RuleGender& rhs)
+	static bool decode(
+			const Node& node,
+			OpenXcom::RuleGender& rhs)
 	{
-		if (!node.IsSequence() || node.size() != 2)
+		if (node.IsSequence() == false
+			|| node.size() != 2)
+		{
 			return false;
+		}
 
-		rhs.male = node[0].as<int>();
-		rhs.female = node[1].as<int>();
+		rhs.male	= node[0].as<int>();
+		rhs.female	= node[1].as<int>();
 
 		return true;
 	}
@@ -58,7 +63,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleunit for a certain type of soldier.
- * NOTE: only type is "XCOM".
+ * @note The only type is "XCOM".
  * @param type - reference defining a type
  */
 RuleSoldier::RuleSoldier(const std::string& type)
@@ -66,8 +71,8 @@ RuleSoldier::RuleSoldier(const std::string& type)
 		_type(type),
 		_standHeight(0),
 		_kneelHeight(0),
-		_floatHeight(0)
-//		_genderRatio() <- need to init a struct here ...
+		_floatHeight(0),
+		_genderRatio()
 {}
 
 /**
@@ -169,10 +174,10 @@ std::string RuleSoldier::getArmor() const
 }
 
 /**
- * kL. Gets the gender ratio struct.
+ * Gets the gender ratio struct.
  * @return, pointer to the RuleGender struct
  */
-const RuleGender* const RuleSoldier::getGenderRatio() const // kL
+const RuleGender* const RuleSoldier::getGenderRatio() const
 {
 	return &_genderRatio;
 }
