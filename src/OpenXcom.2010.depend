@@ -4550,7 +4550,7 @@
 1430149549 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1430151879 f:\git\openxcom\src\interface\textlist.h
+1431632297 f:\git\openxcom\src\interface\textlist.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -6896,7 +6896,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\basenamestate.cpp
+1431626980 source:f:\git\openxcom\src\geoscape\basenamestate.cpp
 	"BaseNameState.h"
 	"../Basescape/PlaceLiftState.h"
 	"../Engine/Action.h"
@@ -7006,7 +7006,7 @@
 1430149550 f:\git\openxcom\src\geoscape\confirmlandingstate.h
 	"../Engine/State.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\confirmnewbasestate.cpp
+1431627240 source:f:\git\openxcom\src\geoscape\confirmnewbasestate.cpp
 	"ConfirmNewBaseState.h"
 	"BaseNameState.h"
 	"../Engine/Game.h"
@@ -7676,7 +7676,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1431225460 source:f:\git\openxcom\src\interface\textlist.cpp
+1431632590 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -7832,7 +7832,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1430149550 source:f:\git\openxcom\src\menu\newgamestate.cpp
+1431629349 source:f:\git\openxcom\src\menu\newgamestate.cpp
 	"NewGameState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -7842,7 +7842,7 @@
 	"../Interface/Window.h"
 	"../Geoscape/BuildNewBaseState.h"
 	"../Geoscape/GeoscapeState.h"
-	"../Resource/ResourcePack.h"
+	"../Resource/XcomResourcePack.h"
 
 1430149550 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
