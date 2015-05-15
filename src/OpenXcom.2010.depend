@@ -7107,7 +7107,7 @@
 1430149550 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
+1431672911 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
 	"FundingState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -7676,7 +7676,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1431632590 source:f:\git\openxcom\src\interface\textlist.cpp
+1431632853 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -8382,7 +8382,7 @@
 1431494746 f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.h
 	"ArticleState.h"
 
-1431494712 f:\git\openxcom\src\ufopaedia\articlestatearmor.h
+1431677328 f:\git\openxcom\src\ufopaedia\articlestatearmor.h
 	"ArticleState.h"
 
 1431494810 f:\git\openxcom\src\ufopaedia\articlestatetext.h
@@ -8927,7 +8927,7 @@
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
+1431677332 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
 	"Ufopaedia.h"
 	"../Engine/CrossPlatform.h"
@@ -11488,7 +11488,7 @@
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1431469303 f:\git\openxcom\src\ruleset\rulearmor.h
+1431676432 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
 	"Unit.h"
 

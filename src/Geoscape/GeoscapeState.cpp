@@ -2829,7 +2829,7 @@ void GeoscapeState::time1Day()
 		{
 			(*base)->removeResearch(
 								*rp,
-								_rules->getUnit((*rp)->getRules()->getName()) != NULL); // kL, interrogation of aLien Unit complete.
+								_rules->getUnit((*rp)->getRules()->getName()) != NULL); // interrogation of aLien Unit complete.
 
 			RuleResearch* bonus = NULL;
 			const RuleResearch* const research = (*rp)->getRules();
@@ -3016,7 +3016,7 @@ void GeoscapeState::time1Day()
 
 
 		bool dead;
-		int pct;
+		int per;
 		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
 				sol = (*base)->getSoldiers()->begin();
 				sol != (*base)->getSoldiers()->end();
@@ -3024,17 +3024,20 @@ void GeoscapeState::time1Day()
 		{
 			dead = false;
 
-			pct = (*sol)->getWoundPCT(); // note this can go well over 100% in postMissionProcedures()
-			if (pct > 10)
+			per = (*sol)->getWoundPCT();	// note this can go well over 100% in postMissionProcedures()
+			if (per > 10)					// <- more than 10% wounded, calc per mil chance to die today
 			{
-				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pct;
-				pct = std::max(
+				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << per;
+				per = std::max(
 							1,
-							((pct * 10) / 4) / (*sol)->getRecovery()); // note potential divBy0
-				Log(LOG_INFO) << ". . pct = " << pct;
-				if (RNG::percent(pct) == true) // more than 10% wounded, %chance to die today
+							((per * 100) / 4) / (*sol)->getRecovery()); // note potential divBy0 (psst won't happen)
+				Log(LOG_INFO) << ". . permil = " << per;
+				if (RNG::generate(1,1000) < per)
+//				pct = std::max(
+//							1,
+//							((pct * 10) / 4) / (*sol)->getRecovery());
+//				if (RNG::percent(pct) == true)
 				{
-					dead = true;
 					Log(LOG_INFO) << ". . . he's dead, Jim!!";
 					timerReset();
 					if ((*sol)->getArmor()->getStoreItem() != "STR_NONE")
@@ -3054,6 +3057,8 @@ void GeoscapeState::time1Day()
 
 					delete *sol;
 					sol = (*base)->getSoldiers()->erase(sol);
+
+					dead = true;
 				}
 			}
 

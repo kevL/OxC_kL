@@ -80,7 +80,7 @@ FundingState::FundingState()
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr("STR_CANCEL"));
 	_btnOk->onMouseClick((ActionHandler)& FundingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& FundingState::btnOkClick,
@@ -112,59 +112,59 @@ FundingState::FundingState()
 			++i)
 	{
 		std::wostringstream
-			ss1,
-			ss2,
-			ss3,
-			ss4,
-			ss5;
+			woststr1,
+			woststr2,
+			woststr3,
+			woststr4,
+			woststr5;
 
 		const std::vector<int>
 			funds = (*i)->getFunding(),
 			actX = (*i)->getActivityXcom(),
 			actA = (*i)->getActivityAlien();
 
-		ss1 << L'\x01' << Text::formatFunding(funds.at(funds.size() - 1)) << L'\x01';
+		woststr1 << L'\x01' << Text::formatFunding(funds.at(funds.size() - 1)) << L'\x01';
 
 		if (funds.size() > 1)
 		{
 			int change = funds.back() - funds.at(funds.size() - 2);
 			if (change > 0)
-				ss2 << L'\x01' << L'+' << L'\x01';
+				woststr2 << L'\x01' << L'+' << L'\x01';
 			else if (change < 0)
 			{
-				ss2 << L'\x01' << L'-' << L'\x01';
+				woststr2 << L'\x01' << L'-' << L'\x01';
 				change = -change;
 			}
 			else
-				ss2 << L' ' << L' ';
+				woststr2 << L' ' << L' ';
 
-			ss3 << L'\x01' << Text::formatFunding(change) << L'\x01';
+			woststr3 << L'\x01' << Text::formatFunding(change) << L'\x01';
 		}
 		else
 		{
-			ss2 << L' ' << L' ';
-			ss3 << Text::formatFunding(0);
+			woststr2 << L' ' << L' ';
+			woststr3 << Text::formatFunding(0);
 		}
 
 		int score = actX.at(actX.size() - 1) - actA.at(actA.size() - 1);
 		if (score > -1)
-			ss4 << L' ' << L' ';
+			woststr4 << L' ' << L' ';
 		else
 		{
-			ss4 << L'\x01' << L'-' << L'\x01';
+			woststr4 << L'\x01' << L'-' << L'\x01';
 			score = -score;
 		}
 
-		ss5 << L'\x01' << score << L'\x01';
+		woststr5 << L'\x01' << score << L'\x01';
 
 		_lstCountries->addRow(
 							6,
 							tr((*i)->getRules()->getType()).c_str(),
-							ss1.str().c_str(),
-							ss2.str().c_str(),
-							ss3.str().c_str(),
-							ss4.str().c_str(),
-							ss5.str().c_str());
+							woststr1.str().c_str(),
+							woststr2.str().c_str(),
+							woststr3.str().c_str(),
+							woststr4.str().c_str(),
+							woststr5.str().c_str());
 	}
 
 
@@ -180,16 +180,16 @@ FundingState::FundingState()
 	}
 
 	std::wostringstream
-		wostr1,
-		wostr2;
+		woststr1,
+		woststr2;
 
-	wostr1 << L' ' << L' ';
+	woststr1 << L' ' << L' ';
 
 	if (net > -1)
-		wostr2 << L' ' << L' ';
+		woststr2 << L' ' << L' ';
 	else
 	{
-		wostr2 << L'-';
+		woststr2 << L'-';
 		net = -net;
 	}
 
@@ -200,13 +200,13 @@ FundingState::FundingState()
 					4,
 					"",
 					tr("STR_TOTAL_GROSS_UC").c_str(),
-					wostr1.str().c_str(),
+					woststr1.str().c_str(),
 					Text::formatFunding(gross).c_str());
 	_lstTotal->addRow(
 					4,
 					"",
 					tr("STR_TOTAL_NET_UC").c_str(),
-					wostr2.str().c_str(),
+					woststr2.str().c_str(),
 					Text::formatFunding(net).c_str());
 }
 

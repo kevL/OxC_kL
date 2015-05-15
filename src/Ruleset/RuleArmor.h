@@ -49,7 +49,7 @@ class RuleArmor
 {
 
 	public:
-		static const int DAMAGE_TYPES = 10;
+		static const size_t DAMAGE_TYPES = 10;
 
 
 private:

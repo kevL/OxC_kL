@@ -42,7 +42,7 @@ class ArticleStateArmor
 {
 
 protected:
-	int _row;
+	size_t _row;
 
 	Surface* _image;
 	Text
@@ -52,13 +52,13 @@ protected:
 
 	///
 	void addStat(
-			const std::string& label,
-			int stat,
-			bool addPlus = false);
+			const std::string& stLabel,
+			int iStat,
+			bool addSign = false);
 	///
 	void addStat(
-			const std::string& label,
-			const std::wstring& stat);
+			const std::string& stLabel,
+			const std::wstring& wstStat);
 
 
 	public:

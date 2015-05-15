@@ -69,7 +69,7 @@ RuleArmor::RuleArmor(const std::string& type)
 
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(DAMAGE_TYPES);
+			i != DAMAGE_TYPES;
 			++i)
 	{
 		_damageModifier[i] = 1.f;
@@ -95,51 +95,41 @@ void RuleArmor::load(const YAML::Node& node)
 	_spriteSheet	= node["spriteSheet"]	.as<std::string>(_spriteSheet);
 	_spriteInv		= node["spriteInv"]		.as<std::string>(_spriteInv);
 	_hasInventory	= node["allowInv"]		.as<bool>(_hasInventory);
+	_corpseBattle	= node["corpseBattle"]	.as<std::vector<std::string> >();
 
-	if (node["corpseItem"])
-	{
-		_corpseBattle.clear();
-		_corpseBattle.push_back(node["corpseItem"].as<std::string>());
-		_corpseGeo		= _corpseBattle[0];
-	}
-	else if (node["corpseBattle"])
-	{
-		_corpseBattle	= node["corpseBattle"]	.as<std::vector<std::string> >();
-		_corpseGeo		= _corpseBattle[0];
-	}
-	_corpseGeo		= node["corpseGeo"]			.as<std::string>(_corpseGeo);
+	if (node["corpseGeo"])
+		_corpseGeo	= node["corpseGeo"]		.as<std::string>(_corpseGeo);
+	else
+		_corpseGeo	= _corpseBattle[0];
 
-	_storeItem		= node["storeItem"]					.as<std::string>(_storeItem);
-//	_specWeapon		= node["specialWeapon"]				.as<std::string>(_specWeapon);
-	_frontArmor		= node["frontArmor"]				.as<int>(_frontArmor);
-	_sideArmor		= node["sideArmor"]					.as<int>(_sideArmor);
-	_rearArmor		= node["rearArmor"]					.as<int>(_rearArmor);
-	_underArmor		= node["underArmor"]				.as<int>(_underArmor);
-	_drawingRoutine	= node["drawingRoutine"]			.as<int>(_drawingRoutine);
-	_size			= node["size"]						.as<int>(_size);
-	_weight			= node["weight"]					.as<int>(_weight);
-	_isBasic		= node["isBasic"]					.as<bool>(_isBasic);
-	_isSpacesuit	= node["isSpacesuit"]				.as<bool>(_isSpacesuit);
+	_storeItem		= node["storeItem"]		.as<std::string>(_storeItem);
+//	_specWeapon		= node["specialWeapon"]	.as<std::string>(_specWeapon);
+	_frontArmor		= node["frontArmor"]	.as<int>(_frontArmor);
+	_sideArmor		= node["sideArmor"]		.as<int>(_sideArmor);
+	_rearArmor		= node["rearArmor"]		.as<int>(_rearArmor);
+	_underArmor		= node["underArmor"]	.as<int>(_underArmor);
+	_drawingRoutine	= node["drawingRoutine"].as<int>(_drawingRoutine);
+	_size			= node["size"]			.as<int>(_size);
+	_weight			= node["weight"]		.as<int>(_weight);
+	_isBasic		= node["isBasic"]		.as<bool>(_isBasic);
+	_isSpacesuit	= node["isSpacesuit"]	.as<bool>(_isSpacesuit);
 	_moveType		= static_cast<MovementType>(node["movementType"].as<int>(_moveType));
 
-	_stats			.mergeStats(node["stats"]			.as<UnitStats>(_stats));
+	_stats.mergeStats(node["stats"].as<UnitStats>(_stats));
 
 	if (const YAML::Node& vuln = node["damageModifier"])
 	{
 		for (size_t
 				i = 0;
 				i < vuln.size()
-					&& i < static_cast<size_t>(DAMAGE_TYPES);
+					&& i < DAMAGE_TYPES;
 				++i)
 		{
 			_damageModifier[i] = vuln[i].as<float>();
 		}
 	}
 
-	_loftempsSet = node["loftempsSet"]				.as<std::vector<int> >(_loftempsSet);
-	if (node["loftemps"])
-		_loftempsSet.push_back(node["loftemps"]		.as<int>());
-
+	_loftempsSet		= node["loftempsSet"]		.as<std::vector<int> >(_loftempsSet);
 	_deathFrames		= node["deathFrames"]		.as<int>(_deathFrames);
 	_shootFrames		= node["shootFrames"]		.as<int>(_shootFrames);
 	_firePhase			= node["firePhase"]			.as<int>(_firePhase);
@@ -151,12 +141,12 @@ void RuleArmor::load(const YAML::Node& node)
 		|| _drawingRoutine ==  1
 		|| _drawingRoutine ==  4
 		|| _drawingRoutine ==  6
-		|| _drawingRoutine == 10
-		|| _drawingRoutine == 13
-		|| _drawingRoutine == 14
-		|| _drawingRoutine == 15
-		|| _drawingRoutine == 17
-		|| _drawingRoutine == 18)
+		|| _drawingRoutine == 10)
+//		|| _drawingRoutine == 13 // TFTD->
+//		|| _drawingRoutine == 14
+//		|| _drawingRoutine == 15
+//		|| _drawingRoutine == 17
+//		|| _drawingRoutine == 18) // <-
 	{
 		_canHoldWeapon = true;
 	}

@@ -53,7 +53,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 		ArticleState(defs->id),
 		_row(0)
 {
-	const RuleArmor* const armor = _game->getRuleset()->getArmor(defs->id);
+	const RuleArmor* const armorRule = _game->getRuleset()->getArmor(defs->id);
 
 	_txtTitle = new Text(300, 17, 5, 24);
 
@@ -74,12 +74,12 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_image = new Surface(320, 200);
 	add(_image);
 
-	std::string look = armor->getSpriteInventory();
+	std::string look = armorRule->getSpriteInventory();
 	look += "M0.SPK";
 	if (CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) == false
 		&& _game->getResourcePack()->getSurface(look) == NULL)
 	{
-		look = armor->getSpriteInventory() + ".SPK";
+		look = armorRule->getSpriteInventory() + ".SPK";
 	}
 	_game->getResourcePack()->getSurface(look)->blit(_image);
 
@@ -97,18 +97,17 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_txtInfo->setWordWrap();
 
 
-	addStat("STR_FRONT_ARMOR", armor->getFrontArmor());
-	addStat("STR_LEFT_ARMOR", armor->getSideArmor());
-	addStat("STR_RIGHT_ARMOR", armor->getSideArmor());
-	addStat("STR_REAR_ARMOR", armor->getRearArmor());
-	addStat("STR_UNDER_ARMOR", armor->getUnderArmor());
+	addStat("STR_FRONT_ARMOR",	armorRule->getFrontArmor());
+	addStat("STR_LEFT_ARMOR",	armorRule->getSideArmor());
+	addStat("STR_RIGHT_ARMOR",	armorRule->getSideArmor());
+	addStat("STR_REAR_ARMOR",	armorRule->getRearArmor());
+	addStat("STR_UNDER_ARMOR",	armorRule->getUnderArmor());
 
 	_lstInfo->addRow(0);
-
 	++_row;
 
 
-	for (int
+	for (size_t
 			i = 0;
 			i != RuleArmor::DAMAGE_TYPES;
 			++i)
@@ -117,29 +116,28 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 		std::string st = getDamageTypeText(dType);
 		if (st != "STR_UNKNOWN")
 		{
-			int vulnera = static_cast<int>(Round(static_cast<double>(armor->getDamageModifier(dType)) * 100.));
+			int vulnr = static_cast<int>(Round(static_cast<double>(armorRule->getDamageModifier(dType)) * 100.));
 			addStat(
 				st,
-				Text::formatPercentage(vulnera));
+				Text::formatPercentage(vulnr));
 		}
 	}
 
 	_lstInfo->addRow(0);
-
 	++_row;
 
 	// Add unit stats
-	addStat("STR_TIME_UNITS", armor->getStats()->tu, true);
-	addStat("STR_STAMINA", armor->getStats()->stamina, true);
-	addStat("STR_HEALTH", armor->getStats()->health, true);
-	addStat("STR_BRAVERY", armor->getStats()->bravery, true);
-	addStat("STR_REACTIONS", armor->getStats()->reactions, true);
-	addStat("STR_FIRING_ACCURACY", armor->getStats()->firing, true);
-	addStat("STR_THROWING_ACCURACY", armor->getStats()->throwing, true);
-	addStat("STR_MELEE_ACCURACY", armor->getStats()->melee, true);
-	addStat("STR_STRENGTH", armor->getStats()->strength, true);
-	addStat("STR_PSIONIC_STRENGTH", armor->getStats()->psiStrength, true);
-	addStat("STR_PSIONIC_SKILL", armor->getStats()->psiSkill, true);
+	addStat("STR_TIME_UNITS",			armorRule->getStats()->tu,			true);
+	addStat("STR_STAMINA",				armorRule->getStats()->stamina,		true);
+	addStat("STR_HEALTH",				armorRule->getStats()->health,		true);
+	addStat("STR_BRAVERY",				armorRule->getStats()->bravery,		true);
+	addStat("STR_REACTIONS",			armorRule->getStats()->reactions,	true);
+	addStat("STR_FIRING_ACCURACY",		armorRule->getStats()->firing,		true);
+	addStat("STR_THROWING_ACCURACY",	armorRule->getStats()->throwing,	true);
+	addStat("STR_MELEE_ACCURACY",		armorRule->getStats()->melee,		true);
+	addStat("STR_STRENGTH",				armorRule->getStats()->strength,	true);
+	addStat("STR_PSIONIC_STRENGTH",		armorRule->getStats()->psiStrength,	true);
+	addStat("STR_PSIONIC_SKILL",		armorRule->getStats()->psiSkill,	true);
 
 	centerAllSurfaces();
 }
@@ -152,26 +150,28 @@ ArticleStateArmor::~ArticleStateArmor()
 
 /**
  *
+ * @param stLabel	-
+ * @param iStat		-
+ * @param addSign	-
  */
-void ArticleStateArmor::addStat(
-		const std::string& label,
-		int stat,
-		bool addPlus)
+void ArticleStateArmor::addStat( // private.
+		const std::string& stLabel,
+		int iStat,
+		bool addSign)
 {
-	if (stat != 0)
+	if (iStat != 0)
 	{
 		std::wostringstream woststr;
-
-		if (addPlus == true
-			&& stat > 0)
+		if (addSign == true
+			&& iStat > 0)
 		{
-			woststr << L"+";
+			woststr << L'+';
 		}
+		woststr << iStat;
 
-		woststr << stat;
 		_lstInfo->addRow(
 						2,
-						tr(label).c_str(),
+						tr(stLabel).c_str(),
 						woststr.str().c_str());
 		_lstInfo->setCellColor(
 						_row++,
@@ -182,15 +182,17 @@ void ArticleStateArmor::addStat(
 
 /**
  *
+ * @param stLabel -
+ * @param wstStat -
  */
-void ArticleStateArmor::addStat(
-		const std::string& label,
-		const std::wstring& stat)
+void ArticleStateArmor::addStat( // private.
+		const std::string& stLabel,
+		const std::wstring& wstStat)
 {
 	_lstInfo->addRow(
 					2,
-					tr(label).c_str(),
-					stat.c_str());
+					tr(stLabel).c_str(),
+					wstStat.c_str());
 	_lstInfo->setCellColor(
 					_row++,
 					1,
