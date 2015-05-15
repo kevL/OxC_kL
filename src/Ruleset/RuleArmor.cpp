@@ -95,12 +95,13 @@ void RuleArmor::load(const YAML::Node& node)
 	_spriteSheet	= node["spriteSheet"]	.as<std::string>(_spriteSheet);
 	_spriteInv		= node["spriteInv"]		.as<std::string>(_spriteInv);
 	_hasInventory	= node["allowInv"]		.as<bool>(_hasInventory);
-	_corpseBattle	= node["corpseBattle"]	.as<std::vector<std::string> >();
 
-	if (node["corpseGeo"])
-		_corpseGeo	= node["corpseGeo"]		.as<std::string>(_corpseGeo);
-	else
-		_corpseGeo	= _corpseBattle[0];
+	if (node["corpseBattle"])
+	{
+		_corpseBattle	= node["corpseBattle"]	.as<std::vector<std::string> >();
+		_corpseGeo		= _corpseBattle[0];
+	}
+	_corpseGeo		= node["corpseGeo"]			.as<std::string>(_corpseGeo);
 
 	_storeItem		= node["storeItem"]		.as<std::string>(_storeItem);
 //	_specWeapon		= node["specialWeapon"]	.as<std::string>(_specWeapon);

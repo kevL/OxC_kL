@@ -3032,7 +3032,7 @@ void GeoscapeState::time1Day()
 							1,
 							((per * 100) / 4) / (*sol)->getRecovery()); // note potential divBy0 (psst won't happen)
 				Log(LOG_INFO) << ". . permil = " << per;
-				if (RNG::generate(1,1000) < per)
+				if (RNG::generate(1,1000) <= per)
 //				pct = std::max(
 //							1,
 //							((pct * 10) / 4) / (*sol)->getRecovery());

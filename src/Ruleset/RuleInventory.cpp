@@ -91,13 +91,14 @@ void RuleInventory::load(
 		const YAML::Node &node,
 		int listOrder)
 {
-	_id			= node["id"]					.as<std::string>(_id);
-	_x			= node["x"]						.as<int>(_x);
-	_y			= node["y"]						.as<int>(_y);
-	_type		= (InventoryType)node["type"]	.as<int>(_type);
-	_slots		= node["slots"]					.as<std::vector<RuleSlot> >(_slots);
-	_costs		= node["costs"]					.as<std::map<std::string, int> >(_costs);
-	_listOrder	= node["listOrder"]				.as<int>(listOrder);
+	_id			= node["id"]		.as<std::string>(_id);
+	_x			= node["x"]			.as<int>(_x);
+	_y			= node["y"]			.as<int>(_y);
+	_slots		= node["slots"]		.as<std::vector<RuleSlot> >(_slots);
+	_costs		= node["costs"]		.as<std::map<std::string, int> >(_costs);
+	_listOrder	= node["listOrder"]	.as<int>(listOrder);
+
+	_type		= static_cast<InventoryType>(node["type"].as<int>(_type));
 }
 
 /**
@@ -196,9 +197,9 @@ bool RuleInventory::checkSlotInPosition(
 			&& mouseY < 200)
 		{
 			*x = static_cast<int>(std::floor(
-					static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
+				 static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
 			*y = static_cast<int>(std::floor(
-					static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
+				 static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
 
 			return true;
 		}
@@ -210,7 +211,7 @@ bool RuleInventory::checkSlotInPosition(
 				i != _slots.end();
 				++i)
 		{
-			if (mouseX >= _x + i->x * SLOT_W
+			if (   mouseX >= _x + i->x * SLOT_W
 				&& mouseX < _x + (i->x + 1) * SLOT_W
 				&& mouseY >= _y + i->y * SLOT_H
 				&& mouseY < _y + (i->y + 1) * SLOT_H)
@@ -263,7 +264,7 @@ bool RuleInventory::fitItemInSlot(
 				if (!
 						(  xx >= xOffset
 						&& xx < xOffset + width
-						&& yy >= 0
+						&& yy > -1
 						&& yy < height))
 				{
 					return false;
@@ -299,7 +300,7 @@ bool RuleInventory::fitItemInSlot(
 
 /**
  * Gets the time unit cost to place an item in this slot to another.
- * @param slot - the new section id
+ * @param slot - the new slot id
  * @return, the time unit cost
  */
 int RuleInventory::getCost(const RuleInventory* const slot) const
