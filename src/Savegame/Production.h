@@ -47,7 +47,7 @@ class Production
 {
 
 private:
-	const RuleManufacture* _rules;
+	const RuleManufacture* _prodRule;
 
 	bool
 		_infinite,
@@ -57,14 +57,16 @@ private:
 		_engineers,
 		_timeSpent;
 
+	///
 	bool enoughMoney(SavedGame* gameSave);
+	///
 	bool enoughMaterials(Base* base);
 
 
 	public:
 		///
 		Production(
-				const RuleManufacture* rules,
+				const RuleManufacture* prodRule,
 				int amount);
 		// no dTor !
 

@@ -223,23 +223,23 @@ void NewManufactureListState::fillProductionList()
 												_game->getRuleset(),
 												_base);
 
-	for (std::vector<RuleManufacture *>::iterator
-			it = _possibleProductions.begin();
-			it != _possibleProductions.end();
-			++it)
+	for (std::vector<RuleManufacture *>::const_iterator
+			i = _possibleProductions.begin();
+			i != _possibleProductions.end();
+			++i)
 	{
 		_lstManufacture->addRow(
 							2,
-							tr((*it)->getName()).c_str(),
-							tr((*it)->getCategory ()).c_str());
-/*		if ((*it)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]
+							tr((*i)->getName()).c_str(),
+							tr((*i)->getCategory ()).c_str());
+/*		if ((*i)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]
 			|| _catStrings[_cbxCategory->getSelected()] == "STR_ALL_ITEMS")
 		{
 			_lstManufacture->addRow(
 								2,
-								tr((*it)->getName()).c_str(),
-								tr((*it)->getCategory ()).c_str());
-			_displayedStrings.push_back((*it)->getName().c_str());
+								tr((*i)->getName()).c_str(),
+								tr((*i)->getCategory ()).c_str());
+			_displayedStrings.push_back((*i)->getName().c_str());
 		} */
 	}
 }

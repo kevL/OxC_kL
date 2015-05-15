@@ -223,10 +223,10 @@ void ManufactureState::fillProductionList()
 		woststr1 << (*i)->getAssignedEngineers();
 
 		if ((*i)->getSellItems() == true)
-			woststr2 << "$";
-		woststr2 << (*i)->getAmountProduced() << "/";
+			woststr2 << L"$";
+		woststr2 << (*i)->getAmountProduced() << L"/";
 		if ((*i)->getInfiniteAmount() == true)
-			woststr2 << "oo";
+			woststr2 << L"oo";
 		else
 			woststr2 << (*i)->getAmountTotal();
 
@@ -257,7 +257,7 @@ void ManufactureState::fillProductionList()
 
 			const int daysLeft = hoursLeft / 24;
 			hoursLeft %= 24;
-			woststr4 << daysLeft << "/" << hoursLeft;
+			woststr4 << daysLeft << L"/" << hoursLeft;
 		}
 		else
 			woststr4 << L"oo";
@@ -304,7 +304,6 @@ void ManufactureState::miniClick(Action*)
 		if (baseId < _baseList->size())
 		{
 			Base* const base = _baseList->at(baseId);
-
 			if (base != _base
 				&& base->hasProduction() == true)
 			{

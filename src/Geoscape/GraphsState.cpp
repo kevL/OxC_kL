@@ -17,7 +17,6 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-// touch
 #include "GraphsState.h"
 
 //#include <sstream>

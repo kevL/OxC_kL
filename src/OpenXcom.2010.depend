@@ -4817,7 +4817,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\researchproject.h
 
-1430149549 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1431727598 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4848,7 +4848,7 @@
 
 1431470578 f:\git\openxcom\src\ruleset\rulemanufacture.h
 
-1430149550 f:\git\openxcom\src\savegame\production.h
+1431728713 f:\git\openxcom\src\savegame\production.h
 
 1430149549 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
@@ -4868,7 +4868,7 @@
 1430149549 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1430238124 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1431728968 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4934,7 +4934,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1431727745 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureStartState.h"
 	"../Engine/Game.h"
@@ -7330,7 +7330,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1431715377 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1431725079 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -8760,7 +8760,7 @@
 1430624322 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1430149550 source:f:\git\openxcom\src\savegame\production.cpp
+1431728781 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	"Base.h"
 	"Craft.h"
@@ -8838,7 +8838,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1431721580 source:f:\git\openxcom\src\savegame\soldier.cpp
+1431724535 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

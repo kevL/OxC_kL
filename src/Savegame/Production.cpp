@@ -43,10 +43,10 @@ namespace OpenXcom
  * cTor.
  */
 Production::Production(
-		const RuleManufacture* rules,
+		const RuleManufacture* const prodRule,
 		int amount)
 	:
-		_rules(rules),
+		_prodRule(prodRule),
 		_amount(amount),
 		_infinite(false),
 		_timeSpent(0),
@@ -137,19 +137,19 @@ void Production::setSellItems(bool sell)
 /**
  *
  */
-bool Production::enoughMoney(SavedGame* gameSave)
+bool Production::enoughMoney(SavedGame* gameSave) // private.
 {
-	return (gameSave->getFunds() >= _rules->getManufactureCost());
+	return (gameSave->getFunds() >= _prodRule->getManufactureCost());
 }
 
 /**
  *
  */
-bool Production::enoughMaterials(Base* base)
+bool Production::enoughMaterials(Base* base) // private.
 {
 	for (std::map<std::string,int>::const_iterator
-			i = _rules->getRequiredItems().begin();
-			i != _rules->getRequiredItems().end();
+			i = _prodRule->getRequiredItems().begin();
+			i != _prodRule->getRequiredItems().end();
 			++i)
 	{
 		if (base->getItems()->getItem(i->first) < i->second)
@@ -174,7 +174,7 @@ ProductProgress Production::step(
 		&& done < getAmountProduced())
 	{
 		// enforce pre-TFTD manufacturing rules: extra hours are wasted
-		_timeSpent = (done + 1) * _rules->getManufactureTime();
+		_timeSpent = (done + 1) * _prodRule->getManufactureTime();
 	}
 
 	if (done < getAmountProduced())
@@ -192,11 +192,11 @@ ProductProgress Production::step(
 		do
 		{
 			for (std::map<std::string,int>::const_iterator
-					i = _rules->getProducedItems().begin();
-					i != _rules->getProducedItems().end();
+					i = _prodRule->getProducedItems().begin();
+					i != _prodRule->getProducedItems().end();
 					++i)
 			{
-				if (_rules->getCategory() == "STR_CRAFT")
+				if (_prodRule->getCategory() == "STR_CRAFT")
 				{
 					Craft* const craft = new Craft(
 												rules->getCraft(i->first),
@@ -340,7 +340,7 @@ ProductProgress Production::step(
  */
 int Production::getAmountProduced() const
 {
-	return _timeSpent / _rules->getManufactureTime();
+	return _timeSpent / _prodRule->getManufactureTime();
 }
 
 /**
@@ -348,7 +348,7 @@ int Production::getAmountProduced() const
  */
 const RuleManufacture* Production::getRules() const
 {
-	return _rules;
+	return _prodRule;
 }
 
 /**
@@ -358,13 +358,13 @@ void Production::startItem(
 		Base* base,
 		SavedGame* gameSave)
 {
-	const int cost = _rules->getManufactureCost();
+	const int cost = _prodRule->getManufactureCost();
 	gameSave->setFunds(gameSave->getFunds() - cost);
 	base->setCashSpent(cost);
 
 	for (std::map<std::string,int>::const_iterator
-			i = _rules->getRequiredItems().begin();
-			i != _rules->getRequiredItems().end();
+			i = _prodRule->getRequiredItems().begin();
+			i != _prodRule->getRequiredItems().end();
 			++i)
 	{
 		base->getItems()->removeItem(
@@ -392,7 +392,7 @@ YAML::Node Production::save() const
 {
 	YAML::Node node;
 
-	node["item"]		= _rules->getName();
+	node["item"]		= _prodRule->getName();
 	node["assigned"]	= _engineers;
 	node["spent"]		= _timeSpent;
 	node["amount"]		= _amount;
