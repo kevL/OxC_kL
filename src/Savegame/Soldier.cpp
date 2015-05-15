@@ -422,11 +422,13 @@ void Soldier::promoteRank()
 }
 
 /**
- * Adds a mission to this Soldier's mission counter.
+ * Adds kills and a mission to this Soldier's stats.
+ * @param kills - qty of kills
  */
-void Soldier::addMissionCount()
+void Soldier::postTactical(int kills)
 {
 	++_missions;
+	_kills += kills;
 }
 
 /**
@@ -436,15 +438,6 @@ void Soldier::addMissionCount()
 int Soldier::getMissions() const
 {
 	return _missions;
-}
-
-/**
- * Adds a kill to this Soldier's kill counter.
- * @param kills - quantity of kills to add
- */
-void Soldier::addKillCount(const int kills)
-{
-	_kills += kills;
 }
 
 /**
@@ -526,6 +519,16 @@ void Soldier::setRecovery(int recovery)
 }
 
 /**
+ * Gets this Soldier's woundage as a percent.
+ * @return, wounds as percent
+ */
+int Soldier::getRecoveryPCT() const
+{
+	return static_cast<int>(std::floor(
+		   static_cast<float>(_recovery) / static_cast<float>(_currentStats.health) * 100.f));
+}
+
+/**
  * Heals this Soldier's wounds a single day.
  */
 void Soldier::heal()
@@ -534,16 +537,6 @@ void Soldier::heal()
 
 	if (_recovery < 0)
 		_recovery = 0;
-}
-
-/**
- * Gets this Soldier's wounds as a percent.
- * @note This could be set as high as 150% in BattleUnit::postMissionProcedures()
- */
-int Soldier::getWoundPCT() const
-{
-	return static_cast<int>(std::floor(
-		   static_cast<float>(_recovery) / static_cast<float>(_currentStats.health) * 100.f));
 }
 
 /**

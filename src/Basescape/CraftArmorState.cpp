@@ -173,10 +173,10 @@ void CraftArmorState::init()
 
 		if ((*i)->getRecovery() > 0)
 		{
-			const int woundPct = (*i)->getWoundPCT();
-			if (woundPct > 50)
+			const int pct = (*i)->getRecoveryPCT();
+			if (pct > 50)
 				color = Palette::blockOffset(6); // orange
-			else if (woundPct > 10)
+			else if (pct > 10)
 				color = Palette::blockOffset(9); // yellow
 			else
 				color = Palette::blockOffset(3); // green

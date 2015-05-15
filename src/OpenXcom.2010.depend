@@ -4360,7 +4360,7 @@
 	<sstream>
 	<string>
 
-1431493818 f:\git\openxcom\src\savegame\soldier.h
+1431724525 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
 1431490896 f:\git\openxcom\src\ruleset\unit.h
@@ -4563,7 +4563,7 @@
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1430393957 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1431711315 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4648,7 +4648,7 @@
 1431470539 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1431504322 f:\git\openxcom\src\savegame\battleunit.h
+1431719091 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -4706,7 +4706,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1430149549 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1431711294 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -5170,7 +5170,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1430943583 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1431711269 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	"SoldierDiaryOverviewState.h"
 	"SackSoldierState.h"
@@ -5244,7 +5244,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1430149550 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1431711222 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5862,7 +5862,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1431476093 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1431720762 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -7149,7 +7149,7 @@
 1430149550 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1431678341 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1431722850 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7232,6 +7232,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
+	"../Savegame/SoldierDiary.h"
 	"../Savegame/Transfer.h"
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
@@ -7329,7 +7330,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1430345795 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1431715377 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -8512,7 +8513,7 @@
 1430149550 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
+1431679564 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
 	"RuleInventory.h"
 	"RuleItem.h"
 
@@ -8679,7 +8680,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1431504233 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1431719107 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8837,7 +8838,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1430393246 source:f:\git\openxcom\src\savegame\soldier.cpp
+1431721580 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11011,7 +11012,7 @@
 1430393957 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1431494409 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1431722248 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11484,7 +11485,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1431676464 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1431681707 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 

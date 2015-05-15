@@ -555,10 +555,10 @@ void SoldierInfoState::init()
 	if (recovery > 0)
 	{
 		Uint8 color;
-		const int woundPct = _soldier->getWoundPCT();
-		if (woundPct > 50)
+		const int pct = _soldier->getRecoveryPCT();
+		if (pct > 50)
 			color = Palette::blockOffset(6); // orange
-		else if (woundPct > 10)
+		else if (pct > 10)
 			color = Palette::blockOffset(9); // yellow
 		else
 			color = Palette::blockOffset(3); // green

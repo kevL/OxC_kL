@@ -367,10 +367,10 @@ DebriefingState::DebriefingState()
 			++i)
 	{
 		//Log(LOG_INFO) << ". iter BattleUnits";
-		Soldier* soldier = (*i)->getGeoscapeSoldier();
+		Soldier* sol = (*i)->getGeoscapeSoldier();
 		// NOTE: In the case of a dead soldier this pointer is Valid but points to garbage.
 		// Use that.
-		if (soldier != NULL)
+		if (sol != NULL)
 		{
 			//Log(LOG_INFO) << ". . id = " << (*i)->getId();
 			BattleUnitStatistics* const statistics = (*i)->getStatistics();
@@ -404,7 +404,7 @@ DebriefingState::DebriefingState()
 			if ((*i)->getStatus() == STATUS_DEAD)
 			{
 				//Log(LOG_INFO) << ". . . dead";
-				soldier = NULL;	// Zero out the BattleUnit from the geoscape Soldiers list
+				sol = NULL;	// Zero out the BattleUnit from the geoscape Soldiers list
 								// in this State; it's already gone from his/her former Base.
 								// This makes them ineligible for promotion.
 								// PS, there is no 'geoscape Soldiers list' really; it's
@@ -441,16 +441,15 @@ DebriefingState::DebriefingState()
 			else
 			{
 				//Log(LOG_INFO) << ". . . alive";
-				const int wounds = soldier->getRecovery();
 				statistics->daysWounded =
-				_missionStatistics->injuryList[soldier->getId()] = wounds;
+				_missionStatistics->injuryList[sol->getId()] = sol->getRecovery();
 
-				soldier->getDiary()->updateDiary(
+				sol->getDiary()->updateDiary(
 											statistics,
 											_missionStatistics,
 											_rules);
-				if (soldier->getDiary()->manageAwards(_rules) == true)
-					_soldiersMedalled.push_back(soldier);
+				if (sol->getDiary()->manageAwards(_rules) == true)
+					_soldiersMedalled.push_back(sol);
 			}
 		}
 	}
@@ -1109,14 +1108,14 @@ void DebriefingState::prepareDebriefing()
 
 
 		const int value = (*i)->getValue();
-		const UnitFaction origFaction = (*i)->getOriginalFaction();
+		const UnitFaction orgFaction = (*i)->getOriginalFaction();
 		const UnitStatus status = (*i)->getStatus();
 
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
 			Log(LOG_INFO) << ". unitDead " << (*i)->getId() << " type = " << (*i)->getType();
 
-			if (origFaction == FACTION_HOSTILE
+			if (orgFaction == FACTION_HOSTILE
 				&& (*i)->killedBy() == FACTION_PLAYER)
 			{
 				Log(LOG_INFO) << ". . killed by xCom";
@@ -1125,7 +1124,7 @@ void DebriefingState::prepareDebriefing()
 					"STR_ALIENS_KILLED",
 					value);
 			}
-			else if (origFaction == FACTION_PLAYER)
+			else if (orgFaction == FACTION_PLAYER)
 			{
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
@@ -1141,8 +1140,9 @@ void DebriefingState::prepareDebriefing()
 					{
 						if (*j == sol) // the specific soldier at Base..
 						{
-							(*i)->updateGeoscapeStats(*j);
-
+							(*i)->postMissionProcedures(
+													_gameSave,
+													true);
 							(*j)->die(_gameSave);
 
 							delete *j;
@@ -1158,7 +1158,7 @@ void DebriefingState::prepareDebriefing()
 						"STR_TANKS_DESTROYED",
 						-value);
 			}
-			else if (origFaction == FACTION_NEUTRAL)
+			else if (orgFaction == FACTION_NEUTRAL)
 			{
 				if ((*i)->killedBy() == FACTION_PLAYER)
 					addStat(
@@ -1182,7 +1182,7 @@ void DebriefingState::prepareDebriefing()
 			else
 				type = (*i)->getType();
 
-			if (origFaction == FACTION_PLAYER)
+			if (orgFaction == FACTION_PLAYER)
 			{
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 
@@ -1193,7 +1193,6 @@ void DebriefingState::prepareDebriefing()
 //							|| stType != "STR_BASE_DEFENSE")))
 				{
 					(*i)->postMissionProcedures(_gameSave);
-
 					++soldierExit;
 
 					if (sol != NULL)
@@ -1211,20 +1210,20 @@ void DebriefingState::prepareDebriefing()
 						base->getItems()->addItem(type);
 
 						const RuleItem* itRule;
-						const BattleItem* amItem;
+						const BattleItem* ammoItem;
 
 						if ((*i)->getItem("STR_RIGHT_HAND") != NULL)
 						{
 							itRule = _rules->getItem(type); // (*i)->getItem("STR_RIGHT_HAND")->getRules(), as below_
 							if (itRule->getCompatibleAmmo()->empty() == false)
 							{
-								amItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-								if (amItem != NULL
-									&& amItem->getAmmoQuantity() > 0)
+								ammoItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+								if (ammoItem != NULL
+									&& ammoItem->getAmmoQuantity() > 0)
 								{
 									base->getItems()->addItem(
 															itRule->getCompatibleAmmo()->front(),
-															amItem->getAmmoQuantity());
+															ammoItem->getAmmoQuantity());
 								}
 							}
 						}
@@ -1234,13 +1233,13 @@ void DebriefingState::prepareDebriefing()
 							itRule = (*i)->getItem("STR_LEFT_HAND")->getRules();
 							if (itRule->getCompatibleAmmo()->empty() == false)
 							{
-								amItem = (*i)->getItem("STR_LEFT_HAND")->getAmmoItem();
-								if (amItem != NULL
-									&& amItem->getAmmoQuantity() > 0)
+								ammoItem = (*i)->getItem("STR_LEFT_HAND")->getAmmoItem();
+								if (ammoItem != NULL
+									&& ammoItem->getAmmoQuantity() > 0)
 								{
 									base->getItems()->addItem(
 															itRule->getCompatibleAmmo()->front(),
-															amItem->getAmmoQuantity());
+															ammoItem->getAmmoQuantity());
 								}
 							}
 						}
@@ -1261,9 +1260,11 @@ void DebriefingState::prepareDebriefing()
 						{
 							if (*j == sol)
 							{
+								(*i)->postMissionProcedures(
+														_gameSave,
+														true);
 								(*i)->getStatistics()->MIA = true;
 								(*i)->instaKill();
-								(*i)->updateGeoscapeStats(*j);
 
 								(*j)->die(_gameSave);
 
@@ -1277,7 +1278,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (origFaction == FACTION_HOSTILE	// This section is for units still standing.
+			else if (orgFaction == FACTION_HOSTILE	// This section is for units still standing.
 				&& faction == FACTION_PLAYER		// ie, MC'd aLiens
 				&& (*i)->isOut() == false
 				&& (aborted == false
@@ -1305,7 +1306,7 @@ void DebriefingState::prepareDebriefing()
 							*i,
 							base);
 			}
-			else if (origFaction == FACTION_NEUTRAL)
+			else if (orgFaction == FACTION_NEUTRAL)
 			{
 				if (soldierLive == 0
 					|| (aborted == true						// if mission fails, all civilians die
@@ -1656,7 +1657,7 @@ void DebriefingState::prepareDebriefing()
 					i != _gameSave->getUfos()->end();
 					)
 			{
-				if ((*i)->getAlienMission() == am) // dynamic_cast ?
+				if ((*i)->getAlienMission() == am)
 				{
 					delete *i;
 					i = _gameSave->getUfos()->erase(i);

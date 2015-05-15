@@ -118,7 +118,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		diary = deadSoldier->getDiary();
 
 		missionId = diary->getMissionIdList().at(_rowEntry);
-		if (missionId > static_cast<int>(missionStatistics->size()))
+		if (missionId > missionStatistics->size())
 			missionId = 0;
 
 		daysWounded = missionStatistics->at(missionId)->injuryList[deadSoldier->getId()];
@@ -140,7 +140,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		diary = soldier->getDiary();
 
 		missionId = diary->getMissionIdList().at(_rowEntry);
-		if (missionId > static_cast<int>(missionStatistics->size()))
+		if (missionId > missionStatistics->size())
 			missionId = 0;
 
 		daysWounded = missionStatistics->at(missionId)->injuryList[soldier->getId()];

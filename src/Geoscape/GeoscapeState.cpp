@@ -123,6 +123,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Waypoint.h"
@@ -452,7 +453,7 @@ GeoscapeState::GeoscapeState()
 	std::fill_n(
 			_visibleUfo,
 			INDICATORS,
-			(Ufo*)(NULL));
+			static_cast<Ufo*>(NULL));
 
 	int
 		offset_x,
@@ -3016,7 +3017,7 @@ void GeoscapeState::time1Day()
 
 
 		bool dead;
-		int per;
+		int pct;
 		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
 				sol = (*base)->getSoldiers()->begin();
 				sol != (*base)->getSoldiers()->end();
@@ -3024,51 +3025,57 @@ void GeoscapeState::time1Day()
 		{
 			dead = false;
 
-			per = (*sol)->getWoundPCT();	// note this can go well over 100% in postMissionProcedures()
-			if (per > 10)					// <- more than 10% wounded, calc per mil chance to die today
+			if ((*sol)->getRecovery() > 0)
 			{
-				Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << per;
-				per = std::max(
-							1,
-							((per * 100) / 4) / (*sol)->getRecovery()); // note potential divBy0 (psst won't happen)
-				Log(LOG_INFO) << ". . permil = " << per;
-				if (RNG::generate(1,1000) <= per)
-//				pct = std::max(
-//							1,
-//							((pct * 10) / 4) / (*sol)->getRecovery());
-//				if (RNG::percent(pct) == true)
+				pct = (*sol)->getRecoveryPCT();
+				if (pct > 10)
 				{
-					Log(LOG_INFO) << ". . . he's dead, Jim!!";
-					timerReset();
-					if ((*sol)->getArmor()->getStoreItem() != "STR_NONE")
-						(*base)->getItems()->addItem((*sol)->getArmor()->getStoreItem()); // return soldier's armor to Stores
+					Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pct;
+					const int lastMissionId = (*sol)->getDiary()->getMissionIdList().back();
+					const std::vector<MissionStatistics*>* const missionStats = _gameSave->getMissionStatistics();
+					const int recoveryTotal = missionStats->at(lastMissionId)->injuryList[(*sol)->getId()]; // std::map<int, int> injuryList
 
-					popup(new SoldierDiedState(
-											(*sol)->getName(),
-											(*base)->getName()));
+					Log(LOG_INFO) << ". . recTotal = " << recoveryTotal;
+					if (recoveryTotal > 0) // safety.
+					{
+						pct = std::max(
+									1,
+									(pct * 25) / recoveryTotal); // (*sol)->getRecovery()); // note potential divBy0 (pst won't happen)
+						Log(LOG_INFO) << ". . permil = " << pct;
+						if (RNG::generate(1,1000) <= pct)
+						{
+							Log(LOG_INFO) << ". . . he's dead, Jim!!";
+							timerReset();
+//							if ((*sol)->getArmor()->getStoreItem() != "STR_NONE")
+							if ((*sol)->getArmor()->isBasic() == false)
+								(*base)->getItems()->addItem((*sol)->getArmor()->getStoreItem()); // return soldier's armor to Stores
 
-					(*sol)->die(_gameSave); // holy * This copies the Diary-object
-					// so to delete Soldier-instance I need to use a CopyConstructor
-					// on either or both of SoldierDiary and SoldierCommendations.
-					// Oh, and maybe an operator= assignment overload also.
-					// Learning C++ is like standing around while 20 people constantly
-					// throw cow's dung at you. (But don't mention "const" or they'll throw
-					// twice as fast.) i miss you, Alan Turing ....
+							popup(new SoldierDiedState(
+													(*sol)->getName(),
+													(*base)->getName()));
 
-					delete *sol;
-					sol = (*base)->getSoldiers()->erase(sol);
+							(*sol)->die(_gameSave); // holy * This copies the Diary-object
+							// so to delete Soldier-instance I need to use a CopyConstructor
+							// on either or both of SoldierDiary and SoldierCommendations.
+							// Oh, and maybe an operator= assignment overload also.
+							// Learning C++ is like standing around while 20 people constantly
+							// throw cow's dung at you. (But don't mention "const" or they'll throw
+							// twice as fast.) i miss you, Alan Turing ....
 
-					dead = true;
+							delete *sol;
+							sol = (*base)->getSoldiers()->erase(sol);
+
+							dead = true;
+						}
+					}
 				}
+
+				if (dead == false)
+					(*sol)->heal();
 			}
 
 			if (dead == false)
-			{
-				if ((*sol)->getRecovery() > 0)
-					(*sol)->heal();
-
 				++sol;
-			}
 		}
 
 		if ((*base)->getAvailablePsiLabs() > 0 // handle psionic training

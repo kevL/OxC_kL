@@ -125,7 +125,7 @@ struct BattleUnitKills
 	/// Checks to see if turn was on HOSTILE side.
 	bool hostileTurn() const
 	{
-		if ((_turn - 1) %3 == 0)
+		if ((_turn - 1) % 3 == 0)
 			return true;
 
 		return false;
@@ -868,11 +868,10 @@ private:
 		/// Adds qty to the melee exp counter.
 		void addMeleeExp(int qty = 1);
 
-		/// Updates the stats of a Geoscape soldier.
-		void updateGeoscapeStats(Soldier* soldier);
-
-		/// Check if this unit is eligible for squaddie promotion.
-		bool postMissionProcedures(const SavedGame* const savedGame);
+		/// Calculates experience and days wounded.
+		void postMissionProcedures(
+				const SavedGame* const gameSave,
+				const bool dead = false);
 
 		/// Gets the sprite index of this unit for the MiniMap.
 		int getMiniMapSpriteIndex() const;

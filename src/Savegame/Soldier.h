@@ -157,12 +157,10 @@ private:
 		/// Increase the soldier's military rank.
 		void promoteRank();
 
-		/// Add a mission to the counter.
-		void addMissionCount();
+		/// Adds kills and a mission to this Soldier's stats.
+		void postTactical(int kills);
 		/// Gets the soldier's missions.
 		int getMissions() const;
-		/// Add a kill to the counter.
-		void addKillCount(const int kills);
 		/// Gets the soldier's kills.
 		int getKills() const;
 
@@ -183,10 +181,10 @@ private:
 		int getRecovery() const;
 		/// Sets the soldier's wound recovery time.
 		void setRecovery(int recovery);
+		/// Gets a soldier's wounds as a percent.
+		int getRecoveryPCT() const;
 		/// Heals wound recoveries.
 		void heal();
-		/// Gets a soldier's wounds as a percent.
-		int getWoundPCT() const;
 
 		/// Gets the soldier's equipment-layout.
 		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();
