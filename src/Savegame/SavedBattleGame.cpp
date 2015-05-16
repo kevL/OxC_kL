@@ -513,10 +513,10 @@ void SavedBattleGame::load(
 		if (rule->getItem(type) != NULL)
 		{
 			id = (*i)["id"].as<int>(-1);
-			BattleItem* item = new BattleItem(
-										rule->getItem(type),
-										NULL,
-										id);
+			BattleItem* const item = new BattleItem(
+												rule->getItem(type),
+												NULL,
+												id);
 			item->load(*i);
 			_recoverConditional.push_back(item);
 		}
@@ -532,10 +532,10 @@ void SavedBattleGame::load(
 		if (rule->getItem(type) != NULL)
 		{
 			id = (*i)["id"].as<int>(-1);
-			BattleItem* item = new BattleItem(
-										rule->getItem(type),
-										NULL,
-										id);
+			BattleItem* const item = new BattleItem(
+												rule->getItem(type),
+												NULL,
+												id);
 			item->load(*i);
 			_recoverGuaranteed.push_back(item);
 		}

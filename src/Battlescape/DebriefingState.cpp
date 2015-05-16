@@ -595,12 +595,12 @@ void DebriefingState::btnOkClick(Action*)
 
 /**
  * Adds to the debriefing stats.
- * @param name		- reference the untranslated name of the stat
+ * @param type		- reference the untranslated name of the stat
  * @param score		- the score to add
  * @param quantity	- the quantity to add (default 1)
  */
 void DebriefingState::addStat(
-		const std::string& name,
+		const std::string& type,
 		int score,
 		int quantity)
 {
@@ -609,7 +609,7 @@ void DebriefingState::addStat(
 			i != _stats.end();
 			++i)
 	{
-		if ((*i)->item == name)
+		if ((*i)->item == type)
 		{
 			(*i)->score += score;
 			(*i)->qty += quantity;
@@ -621,7 +621,7 @@ void DebriefingState::addStat(
 
 
 /**
- * Clears the alien base from supply missions that use it.
+ * Clears any supply missions from an alien base.
  */
 class ClearAlienBase
 	:
@@ -639,17 +639,17 @@ private:
 		{}
 
 		/// Clears the base if required.
-		void operator()(AlienMission* am) const;
+		void operator() (AlienMission* mission) const;
 };
 
 /**
  * Removes the association between the alien mission and the alien base if one existed.
- * @param am - pointer to the AlienMission
+ * @param mission - pointer to the AlienMission
  */
-void ClearAlienBase::operator()(AlienMission* am) const
+void ClearAlienBase::operator() (AlienMission* mission) const
 {
-	if (am->getAlienBase() == _base)
-		am->setAlienBase(NULL);
+	if (mission->getAlienBase() == _base)
+		mission->setAlienBase(NULL);
 }
 
 
@@ -666,13 +666,14 @@ void DebriefingState::prepareDebriefing()
 			i != _rules->getItemsList().end();
 			++i)
 	{
-		if (_rules->getItem(*i)->getSpecialType() > 1)
+		const int type = _rules->getItem(*i)->getSpecialType();
+		if (type > 1)
 		{
-			SpecialType* const item = new SpecialType();
-			item->name = *i;
-			item->value = _rules->getItem(*i)->getRecoveryPoints();
+			SpecialType* const specialItem = new SpecialType();
+			specialItem->type = *i;
+			specialItem->value = _rules->getItem(*i)->getRecoveryPoints();
 
-			_specialTypes[_rules->getItem(*i)->getSpecialType()] = item;
+			_specialTypes[type] = specialItem;
 		}
 	}
 
@@ -696,10 +697,10 @@ void DebriefingState::prepareDebriefing()
 			++i)
 	{
 		_stats.push_back(new DebriefingStat(
-										(*i).second->name,
+										(*i).second->type,
 										true));
 	}
-/*	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
+/*	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true)); // ->> SpecialTileTypes <<-
 	_stats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
 	_stats.push_back(new DebriefingStat("STR_UFO_CONSTRUCTION", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_FOOD", true));
@@ -1443,11 +1444,11 @@ void DebriefingState::prepareDebriefing()
 				{
 					if (battleSave->getTiles()[i]->getMapData(part))
 					{
-						const size_t specialType = battleSave->getTiles()[i]->getMapData(part)->getSpecialType();
-						if (_specialTypes.find(specialType) != _specialTypes.end())
+						const SpecialTileType specialTilePart = battleSave->getTiles()[i]->getMapData(part)->getSpecialType();
+						if (_specialTypes.find(specialTilePart) != _specialTypes.end())
 							addStat(
-								_specialTypes[specialType]->name,
-								_specialTypes[specialType]->value);
+								_specialTypes[specialTilePart]->type,
+								_specialTypes[specialTilePart]->value);
 					}
 				}
 
@@ -1563,7 +1564,7 @@ void DebriefingState::prepareDebriefing()
 				++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->name)
+			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->type)
 			{
 				int alloys;
 //				if (stType == "STR_ALIEN_BASE_ASSAULT")
@@ -1649,15 +1650,15 @@ void DebriefingState::prepareDebriefing()
 
 		if (_region != NULL)
 		{
-			const AlienMission* const am = _game->getSavedGame()->findAlienMission(
-																			_region->getRules()->getType(),
-																			OBJECTIVE_RETALIATION);
+			const AlienMission* const mission = _game->getSavedGame()->findAlienMission(
+																					_region->getRules()->getType(),
+																					OBJECTIVE_RETALIATION);
 			for (std::vector<Ufo*>::const_iterator
 					i = _gameSave->getUfos()->begin();
 					i != _gameSave->getUfos()->end();
 					)
 			{
-				if ((*i)->getAlienMission() == am)
+				if ((*i)->getAlienMission() == mission)
 				{
 					delete *i;
 					i = _gameSave->getUfos()->erase(i);
@@ -1671,7 +1672,7 @@ void DebriefingState::prepareDebriefing()
 					i != _gameSave->getAlienMissions().end();
 					++i)
 			{
-				if (dynamic_cast<AlienMission*>(*i) == am)
+				if (dynamic_cast<AlienMission*>(*i) == mission)
 				{
 					delete *i;
 					_gameSave->getAlienMissions().erase(i);
@@ -1977,8 +1978,8 @@ void DebriefingState::recoverItems(
 									++_aliensStunned; // for Nike Cross determination.
 
 									recoverLiveAlien(
-											unit,
-											base);
+													unit,
+													base);
 								}
 								else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
 								{
@@ -2026,8 +2027,8 @@ void DebriefingState::recoverItems(
  * @param base - pointer to the Base to add corpse item
  */
 void DebriefingState::recoverLiveAlien(
-		BattleUnit* unit,
-		Base* base)
+		const BattleUnit* const unit,
+		Base* const base)
 {
 	if (base->getAvailableContainment() != 0)
 	{

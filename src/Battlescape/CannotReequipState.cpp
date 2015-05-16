@@ -108,7 +108,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 		woststr << i->qtyLost;
 		_lstItems->addRow(
 						3,
-						tr(i->item).c_str(),
+						tr(i->type).c_str(),
 						woststr.str().c_str(),
 						i->craft.c_str());
 	}

@@ -58,10 +58,10 @@ struct DebriefingStat
 
 	/// cTor.
 	DebriefingStat(
-			const std::string& _item,
+			const std::string& type,
 			bool recover = false)
 		:
-			item(_item),
+			item(type),
 			score(0),
 			qty(0),
 			recover(recover)
@@ -71,7 +71,7 @@ struct DebriefingStat
 
 struct ReequipStat
 {
-	std::string item;
+	std::string type;
 	int qtyLost;
 	std::wstring craft;
 };
@@ -79,7 +79,7 @@ struct ReequipStat
 
 struct SpecialType
 {
-	std::string name;
+	std::string type;
 	int value;
 };
 
@@ -138,7 +138,7 @@ private:
 
 	/// Adds to the debriefing stats.
 	void addStat(
-			const std::string& name,
+			const std::string& type,
 			int score,
 			int quantity = 1);
 	/// Prepares debriefing.
@@ -149,8 +149,8 @@ private:
 			Base* base);
 	/// Recovers an alien from the battlescape.
 	void recoverLiveAlien(
-			BattleUnit* unit,
-			Base* base);
+			const BattleUnit* const unit,
+			Base* const base);
 	/// Reequips a craft after a mission.
 	void reequipCraft(
 			Base* base,
