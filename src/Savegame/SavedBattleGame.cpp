@@ -1426,10 +1426,15 @@ bool SavedBattleGame::getDebugMode() const
 
 /**
  * Gets the BattlescapeGame.
+ * @note There can be cases when BattlescapeGame is valid but BattlescapeState
+ * is not; during battlescape generation for example -> CTD. So fix it ....
  * @return, pointer to the BattlescapeGame
  */
 BattlescapeGame* SavedBattleGame::getBattleGame() const
 {
+	if (_battleState == NULL)
+		return NULL;
+
 	return _battleState->getBattleGame();
 }
 

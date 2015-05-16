@@ -25,8 +25,8 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleState.
- * @param parent - pointer to the parent state
- * @param action - struct containing info about current action
+ * @param parent - pointer to parent BattlescapeGame
+ * @param action - struct containing info about current BattleAction
  */
 BattleState::BattleState(
 		BattlescapeGame* parent,
@@ -34,8 +34,7 @@ BattleState::BattleState(
 	:
 		_parent(parent),
 		_action(action)
-{
-}
+{}
 
 /**
  * Sets up a BattleState.
@@ -54,29 +53,25 @@ BattleState::BattleState(BattlescapeGame* parent)
  * Deletes the BattleState.
  */
 BattleState::~BattleState()
-{
-}
+{}
 
 /**
  * Start the current BattleState.
  */
 void BattleState::init()
-{
-}
+{}
 
 /**
  * Cancels the current BattleState.
  */
 void BattleState::cancel()
-{
-}
+{}
 
 /**
  * Runs any code the state needs to keep updating every game cycle.
  */
 void BattleState::think()
-{
-}
+{}
 
 /**
  * Gets the action result.

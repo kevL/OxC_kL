@@ -2272,7 +2272,10 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
 	// '_battleAction' is used only to set .strafe and .dash (along w/ Dashing
 	// flag) for Player-controlled units; but also should safely ensure that
 	// nonPlayer-controlled units are flagged false.
-	_battleAction = _battleSave->getBattleGame()->getCurrentAction();
+	if (_battleSave->getBattleState() != NULL) // safety for battlescape generation.
+		_battleAction = _battleSave->getBattleGame()->getCurrentAction();
+	else
+		_battleAction = NULL;
 
 	setInputModifiers();
 

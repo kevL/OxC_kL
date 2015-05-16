@@ -3372,7 +3372,7 @@ void BattlescapeState::clearMouseScrollingState()
 }
 
 /**
- * Returns a pointer to the battlegame, in case we need its functions.
+ * Returns a pointer to BattlescapeGame.
  * @return, pointer to BattlescapeGame
  */
 BattlescapeGame* BattlescapeState::getBattleGame()

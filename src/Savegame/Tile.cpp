@@ -773,7 +773,7 @@ int Tile::getExplosiveType() const
 }
 
 /**
- * Flammability of a tile is the flammability of its most flammable part.
+ * Flammability of a tile is the flammability of its most flammable tile-part.
  * @return, the lower the value the higher the chance the tile catches fire - BSZAAST!!!
  */
 int Tile::getFlammability() const
@@ -880,7 +880,7 @@ bool Tile::ignite(int power)
 			const int burn = getFlammability();
 			if (burn != 0)
 			{
-				power = (power * 2) + (burn + 1) / 2;
+				power = ((((power + 4) / 5) + ((burn + 7) / 8) + (fuel * 3) + 6) / 7);
 				if (RNG::percent(power) == true)
 				{
 					addFire(fuel + 1);

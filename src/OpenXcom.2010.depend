@@ -5474,8 +5474,7 @@
 1431472966 f:\git\openxcom\src\battlescape\projectileflybstate.h
 	"BattleState.h"
 
-1431472906 f:\git\openxcom\src\battlescape\battlestate.h
-	<string>
+1431757836 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
 1431142008 f:\git\openxcom\src\battlescape\map.h
@@ -5676,7 +5675,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1431540694 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1431757792 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5800,7 +5799,7 @@
 	<string>
 	"SavedGameState.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\battlestate.cpp
+1431757942 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
 1431054152 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
@@ -5862,7 +5861,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1431735493 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1431735577 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -6178,7 +6177,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1430882236 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1431759069 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -8783,7 +8782,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1431735280 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1431758945 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8870,7 +8869,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1431146000 source:f:\git\openxcom\src\savegame\tile.cpp
+1431768630 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"
