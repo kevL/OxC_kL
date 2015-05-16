@@ -2770,7 +2770,7 @@ void BattlescapeGenerator::fuelPowerSources() // private.
 {
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
@@ -2795,7 +2795,7 @@ void BattlescapeGenerator::explodePowerSources() // private.
 {
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
@@ -3418,7 +3418,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		for (int

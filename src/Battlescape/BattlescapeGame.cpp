@@ -647,7 +647,7 @@ void BattlescapeGame::endTurnPhase()
 //	{
 		for (size_t // check for hot grenades on the ground
 				i = 0;
-				i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+				i != _battleSave->getMapSizeXYZ();
 				++i)
 		{
 			for (std::vector<BattleItem*>::const_iterator
@@ -765,7 +765,7 @@ void BattlescapeGame::endTurnPhase()
 		{
 			for (size_t
 					i = 0;
-					i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+					i != _battleSave->getMapSizeXYZ();
 					++i)
 			{
 				tile = _battleSave->getTiles()[i];
@@ -1277,10 +1277,9 @@ void BattlescapeGame::checkForCasualties(
 			&& _battleSave->getDestroyed() == false)
 		{
 			bool controlDestroyed = true;
-			const size_t mapSize = static_cast<size_t>(_battleSave->getMapSizeXYZ());
 			for (size_t
 					i = 0;
-					i != mapSize;
+					i != _battleSave->getMapSizeXYZ();
 					++i)
 			{
 				if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL

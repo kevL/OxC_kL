@@ -68,6 +68,7 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_mapsize_x(0),
 		_mapsize_y(0),
 		_mapsize_z(0),
+		_mapSize(0),
 		_selectedUnit(NULL),
 		_lastSelectedUnit(NULL),
 		_pathfinding(NULL),
@@ -122,7 +123,7 @@ SavedBattleGame::~SavedBattleGame()
 	//Log(LOG_INFO) << "Delete SavedBattleGame";
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
+			i != _mapSize;
 			++i)
 	{
 		delete _tiles[i];
@@ -192,12 +193,12 @@ SavedBattleGame::~SavedBattleGame()
 /**
  * Loads the SavedBattleGame from a YAML file.
  * @param node		- reference a YAML node
- * @param rule		- pointer to the Ruleset
+ * @param rules		- pointer to the Ruleset
  * @param savedGame	- pointer to the SavedGame
  */
 void SavedBattleGame::load(
 		const YAML::Node& node,
-		Ruleset* rule,
+		Ruleset* rules,
 		SavedGame* savedGame)
 {
 	Log(LOG_INFO) << "SavedBattleGame::load()";
@@ -211,6 +212,8 @@ void SavedBattleGame::load(
 	_depth				= node["depth"]			.as<int>(_depth);
 	_terrain			= node["terrain"]		.as<std::string>(_terrain); // sza_MusicRules
 
+	setTacticalType(_missionType);
+
 	const int selectedUnit = node["selectedUnit"].as<int>();
 
 	Log(LOG_INFO) << ". load mapdatasets";
@@ -219,9 +222,10 @@ void SavedBattleGame::load(
 			i != node["mapdatasets"].end();
 			++i)
 	{
-		const std::string name = i->as<std::string>();
-		MapDataSet* const mds = rule->getMapDataSet(name);
-		_mapDataSets.push_back(mds);
+//		const std::string type = i->as<std::string>();
+//		MapDataSet* const mds = rules->getMapDataSet(type);
+//		_mapDataSets.push_back(mds);
+		_mapDataSets.push_back(rules->getMapDataSet(i->as<std::string>()));
 	}
 
 	Log(LOG_INFO) << ". init map";
@@ -271,7 +275,7 @@ void SavedBattleGame::load(
 		const YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8
-			* readBuffer = (Uint8*)binTiles.data(),
+			* readBuffer = (Uint8*)binTiles.data(), // <- static_cast prob. here
 			* const dataEnd = readBuffer + totalTiles * serKey.totalBytes;
 
 		while (readBuffer < dataEnd)
@@ -280,8 +284,8 @@ void SavedBattleGame::load(
 									&readBuffer,
 									serKey.index);
 			assert(
-				index >= 0
-				&& index < _mapsize_x * _mapsize_z * _mapsize_y);
+				index > -1
+				&& index < static_cast<int>(_mapSize));
 
 			_tiles[static_cast<size_t>(index)]->loadBinary( // loadBinary's privileges to advance *readBuffer have been revoked
 														readBuffer,
@@ -300,8 +304,6 @@ void SavedBattleGame::load(
 			// prior to saving and updating builds will be counted as indestructible.
 //			calculateModuleMap();
 	}
-
-	setTacticalType(_missionType);
 
 	Log(LOG_INFO) << ". load nodes";
 	for (YAML::const_iterator
@@ -348,10 +350,10 @@ void SavedBattleGame::load(
 				armor	= (*i)["genUnitArmor"]	.as<std::string>();
 
 			unit = new BattleUnit( // create a new Unit, not-soldier but Vehicle, Civie, or aLien.
-								rule->getUnit(type),
+								rules->getUnit(type),
 								originalFaction,
 								id,
-								rule->getArmor(armor),
+								rules->getArmor(armor),
 								diff,
 								_depth,
 								savedGame->getMonthsPassed());
@@ -407,18 +409,18 @@ void SavedBattleGame::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type) != NULL)
+		if (rules->getItem(type) != NULL)
 		{
 			id = (*i)["id"].as<int>(-1);
 			BattleItem* const item = new BattleItem(
-												rule->getItem(type),
+												rules->getItem(type),
 												NULL,
 												id);
 			item->load(*i);
 			type = (*i)["inventoryslot"].as<std::string>();
 
 			if (type != "NULL")
-				item->setSlot(rule->getInventory(type));
+				item->setSlot(rules->getInventory(type));
 
 			const int
 				owner		= (*i)["owner"]			.as<int>(),
@@ -454,7 +456,7 @@ void SavedBattleGame::load(
 				const Position pos = (*i)["position"].as<Position>();
 
 				if (pos.x != -1)
-					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+					getTile(pos)->addItem(item, rules->getInventory("STR_GROUND"));
 			}
 
 			_items.push_back(item);
@@ -469,7 +471,7 @@ void SavedBattleGame::load(
 			i != node["items"].end();
 			++i)
 	{
-		if (rule->getItem((*i)["type"].as<std::string>()) != NULL)
+		if (rules->getItem((*i)["type"].as<std::string>()) != NULL)
 		{
 			const int ammo = (*i)["ammoItem"].as<int>();
 			if (ammo != -1)
@@ -510,11 +512,11 @@ void SavedBattleGame::load(
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type) != NULL)
+		if (rules->getItem(type) != NULL)
 		{
 			id = (*i)["id"].as<int>(-1);
 			BattleItem* const item = new BattleItem(
-												rule->getItem(type),
+												rules->getItem(type),
 												NULL,
 												id);
 			item->load(*i);
@@ -529,11 +531,11 @@ void SavedBattleGame::load(
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type) != NULL)
+		if (rules->getItem(type) != NULL)
 		{
 			id = (*i)["id"].as<int>(-1);
 			BattleItem* const item = new BattleItem(
-												rule->getItem(type),
+												rules->getItem(type),
 												NULL,
 												id);
 			item->load(*i);
@@ -548,10 +550,9 @@ void SavedBattleGame::load(
 	Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
 
 	// TEST, reveal all tiles
-//	const size_t totalTiles = static_cast<size_t>(_mapsize_x * _mapsize_z * _mapsize_y);
 //	for (size_t
 //			i = 0;
-//			i != totalTiles;
+//			i != _mapSize;
 //			++i)
 //	{
 //		_tiles[i]->setDiscovered(true, 2);
@@ -583,7 +584,7 @@ void SavedBattleGame::loadMapResources(Game* game)
 
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
+			i != _mapSize;
 			++i)
 	{
 		for (int
@@ -651,7 +652,7 @@ YAML::Node SavedBattleGame::save() const
 #if 0
 	for (size_t
 			i = 0;
-			i != _mapsize_z * _mapsize_y * _mapsize_x;
+			i != _mapSize;
 			++i)
 	{
 		if (_tiles[i]->isVoid() == false)
@@ -668,15 +669,14 @@ YAML::Node SavedBattleGame::save() const
 	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetID;
 	node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
 
-	const size_t totalTiles = _mapsize_z * _mapsize_y * _mapsize_x;
-	size_t tileDataSize = static_cast<size_t>(Tile::serializationKey.totalBytes * static_cast<Uint32>(totalTiles));
+	size_t tilesDataSize = static_cast<size_t>(Tile::serializationKey.totalBytes) * _mapSize;
 	Uint8
-		* const tileData = (Uint8*)calloc(tileDataSize, 1),
-		* writeBuffer = tileData;
+		* const tilesData = static_cast<Uint8*>(calloc(tilesDataSize, 1)),
+		* writeBuffer = tilesData;
 
 	for (size_t
 			i = 0;
-			i != totalTiles;
+			i != _mapSize;
 			++i)
 	{
 		serializeInt( // kL <- save ALL Tiles. (Stop void tiles returning undiscovered postReload.)
@@ -693,15 +693,15 @@ YAML::Node SavedBattleGame::save() const
 			_tiles[i]->saveBinary(&writeBuffer);
 		}
 		else
-			tileDataSize -= Tile::serializationKey.totalBytes; */
+			tilesDataSize -= Tile::serializationKey.totalBytes; */
 	}
 
-	node["totalTiles"]	= tileDataSize / static_cast<size_t>(Tile::serializationKey.totalBytes); // not strictly necessary, just convenient
+	node["totalTiles"]	= tilesDataSize / static_cast<size_t>(Tile::serializationKey.totalBytes); // not strictly necessary, just convenient
 	node["binTiles"]	= YAML::Binary(
-									tileData,
-									tileDataSize);
+									tilesData,
+									tilesDataSize);
 
-	std::free(tileData);
+	std::free(tilesData);
 #endif
 
 	for (std::vector<Node*>::const_iterator
@@ -772,7 +772,7 @@ Tile** SavedBattleGame::getTiles() const
 }
 
 /**
- * Initializes the array of tiles and creates a pathfinding object.
+ * Deletes the old and initializes a new array of tiles.
  * @param mapsize_x -
  * @param mapsize_y -
  * @param mapsize_z -
@@ -782,13 +782,13 @@ void SavedBattleGame::initMap(
 		const int mapsize_y,
 		const int mapsize_z)
 {
-	size_t totalTiles = static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
-
+	// Delete old stuff
 	if (_nodes.empty() == false)
 	{
+		_mapSize = static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 		for (size_t
 				i = 0;
-				i != totalTiles;
+				i != _mapSize;
 				++i)
 		{
 			delete _tiles[i];
@@ -808,17 +808,17 @@ void SavedBattleGame::initMap(
 		_mapDataSets.clear();
 	}
 
-	// create tile objects
+	// Create tile objects
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
+	_mapSize = static_cast<size_t>(mapsize_z * mapsize_y * mapsize_x);
 
-	totalTiles = static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
-	_tiles = new Tile*[totalTiles];
+	_tiles = new Tile*[_mapSize];
 
 	for (size_t
 			i = 0;
-			i != totalTiles;
+			i != _mapSize;
 			++i)
 	{
 		Position pos;
@@ -954,12 +954,12 @@ int SavedBattleGame::getMapSizeZ() const
 }
 
 /**
- * Gets the map size in tiles.
- * @return, the map size
+ * Gets the qty of tiles on the battlefield.
+ * @return, the total map-size in tiles
  */
-int SavedBattleGame::getMapSizeXYZ() const
+size_t SavedBattleGame::getMapSizeXYZ() const
 {
-	return _mapsize_x * _mapsize_y * _mapsize_z;
+	return _mapSize;
 }
 
 /**
@@ -1408,7 +1408,7 @@ void SavedBattleGame::setDebugMode()
 
 	for (size_t // reveal tiles.
 			i = 0;
-			i != static_cast<size_t>(_mapsize_z * _mapsize_y * _mapsize_x);
+			i != _mapSize;
 			++i)
 	{
 		_tiles[i]->setDiscovered(true, 2);
@@ -1607,7 +1607,7 @@ void SavedBattleGame::removeItem(BattleItem* const item)
 
 	_deleted.push_back(item);
 
-/*	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+/*	for (int i = 0; i < _mapSize; ++i)
 	{
 		for (std::vector<BattleItem*>::const_iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
 		{
@@ -1957,7 +1957,6 @@ bool SavedBattleGame::isNodeType(
  */
 void SavedBattleGame::spreadFireSmoke()
 {
-	const size_t mapSize = static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 	std::vector<Tile*>
 		tilesFired,
 		tilesSmoked;
@@ -1967,7 +1966,7 @@ void SavedBattleGame::spreadFireSmoke()
 
 	for (size_t
 			i = 0;
-			i != mapSize;
+			i != _mapSize;
 			++i)
 	{
 		if (getTiles()[i]->getFire() != 0)
@@ -2648,7 +2647,7 @@ void SavedBattleGame::resetTiles()
 {
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(getMapSizeXYZ());
+			i != _mapSize;
 			++i)
 	{
 		_tiles[i]->setDiscovered(false, 0);
@@ -2736,7 +2735,7 @@ void SavedBattleGame::calculateModuleMap()
 												_mapsize_y / 10,
 												std::make_pair(-1,-1)));
 
-	for (int
+	for (int // need a bunch of size_t ->
 			x = 0;
 			x != _mapsize_x;
 			++x)
@@ -2747,8 +2746,7 @@ void SavedBattleGame::calculateModuleMap()
 				++y)
 		{
 			const Tile* const tile = getTile(Position(
-													x,
-													y,
+													x,y,
 													_mapsize_z - 1));
 
 			if (tile != NULL

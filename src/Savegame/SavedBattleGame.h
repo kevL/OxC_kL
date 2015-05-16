@@ -88,6 +88,7 @@ private:
 		_objectivesDestroyed,
 		_objectivesNeeded,
 		_turn;
+	size_t _mapSize;
 
 	BattleActionType _batReserved;
 	TacticalType _tacType;
@@ -195,8 +196,8 @@ private:
 		int getMapSizeY() const;
 		/// Gets terrain size z.
 		int getMapSizeZ() const;
-		/// Gets terrain x*y*z
-		int getMapSizeXYZ() const;
+		/// Gets terrain x*y*z.
+		size_t getMapSizeXYZ() const;
 
 		/// Sets the type of terrain for the mission.
 		void setBattleTerrain(const std::string& terrain);

@@ -80,6 +80,10 @@ NewGameState::NewGameState()
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
+	_txtTitle->setText(tr("STR_SELECT_DIFFICULTY_LEVEL"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+
 	_btnBeginner->setText(tr("STR_1_BEGINNER"));
 	_btnBeginner->setGroup(&_difficulty);
 
@@ -97,6 +101,9 @@ NewGameState::NewGameState()
 
 	_btnIronman->setText(tr("STR_IRONMAN"));
 
+	_txtIronman->setText(tr("STR_IRONMAN_DESC"));
+	_txtIronman->setVerticalAlign(ALIGN_MIDDLE);
+
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& NewGameState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -108,13 +115,6 @@ NewGameState::NewGameState()
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& NewGameState::btnCancelClick,
 					Options::keyCancel);
-
-	_txtTitle->setText(tr("STR_SELECT_DIFFICULTY_LEVEL"));
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setBig();
-
-	_txtIronman->setText(tr("STR_IRONMAN_DESC"));
-	_txtIronman->setVerticalAlign(ALIGN_MIDDLE);
 }
 
 /**
@@ -131,16 +131,16 @@ void NewGameState::btnOkClick(Action*)
 {
 	GameDifficulty diff;
 
-	if (_difficulty == _btnBeginner)
-		diff = DIFF_BEGINNER;
-	else if (_difficulty == _btnExperienced)
-		diff = DIFF_EXPERIENCED;
-	else if (_difficulty == _btnVeteran)
-		diff = DIFF_VETERAN;
+	if (_difficulty == _btnSuperhuman)
+		diff = DIFF_SUPERHUMAN;
 	else if (_difficulty == _btnGenius)
 		diff = DIFF_GENIUS;
-	else if (_difficulty == _btnSuperhuman)
-		diff = DIFF_SUPERHUMAN;
+	else if (_difficulty == _btnVeteran)
+		diff = DIFF_VETERAN;
+	else if (_difficulty == _btnExperienced)
+		diff = DIFF_EXPERIENCED;
+	else //if (_difficulty == _btnBeginner)
+		diff = DIFF_BEGINNER;
 
 	SavedGame* const gameSave = _game->getRuleset()->newSave();
 	gameSave->setDifficulty(diff);

@@ -4466,7 +4466,7 @@ void Map::animate(bool redraw)
 
 	for (size_t // animate tiles
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		_battleSave->getTiles()[i]->animate();

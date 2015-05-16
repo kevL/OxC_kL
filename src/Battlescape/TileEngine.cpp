@@ -106,7 +106,7 @@ void TileEngine::calculateSunShading()
 
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		_battleSave->getTiles()[i]->resetLight(layer);
@@ -180,7 +180,7 @@ void TileEngine::calculateTerrainLighting()
 
 	for (size_t // reset all light to 0 first
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		_battleSave->getTiles()[i]->resetLight(layer);
@@ -188,7 +188,7 @@ void TileEngine::calculateTerrainLighting()
 
 	for (size_t // add lighting of terrain
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		// only floors and objects can light up
@@ -242,7 +242,7 @@ void TileEngine::calculateUnitLighting()
 
 	for (size_t // reset all light to 0 first
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		_battleSave->getTiles()[i]->resetLight(layer);
@@ -4233,7 +4233,7 @@ Tile* TileEngine::checkForTerrainExplosions()
 {
 	for (size_t
 			i = 0;
-			i != static_cast<size_t>(_battleSave->getMapSizeXYZ());
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		if (_battleSave->getTiles()[i]->getExplosive() != 0)
@@ -4596,9 +4596,9 @@ int TileEngine::closeUfoDoors()
 {
 	int closed = 0;
 
-	for (int // prepare a list of tiles on fire/smoke & close any ufo doors
+	for (size_t // prepare a list of tiles on fire/smoke & close any ufo doors
 			i = 0;
-			i < _battleSave->getMapSizeXYZ();
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		if (_battleSave->getTiles()[i]->getUnit()

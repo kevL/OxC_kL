@@ -67,13 +67,12 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 		_moveType(MT_WALK),
 		_openDoor(0)
 {
-	const int mapSize = _battleSave->getMapSizeXYZ(); // getMapSizeXYZ() should return size_t someday .....
-	_nodes.reserve(static_cast<size_t>(mapSize)); // initialize one node per tile.
+	_nodes.reserve(_battleSave->getMapSizeXYZ()); // initialize one node per tile.
 
 	Position pos;
 	for (int
 			i = 0;
-			i != mapSize;
+			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		_battleSave->getTileCoords(
@@ -2272,10 +2271,10 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
 	// '_battleAction' is used only to set .strafe and .dash (along w/ Dashing
 	// flag) for Player-controlled units; but also should safely ensure that
 	// nonPlayer-controlled units are flagged false.
-	if (_battleSave->getBattleState() != NULL) // safety for battlescape generation.
-		_battleAction = _battleSave->getBattleGame()->getCurrentAction();
-	else
+	if (_battleSave->getBattleState() == NULL) // safety for battlescape generation.
 		_battleAction = NULL;
+	else
+		_battleAction = _battleSave->getBattleGame()->getCurrentAction();
 
 	setInputModifiers();
 

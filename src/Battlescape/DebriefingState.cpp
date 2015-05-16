@@ -220,8 +220,8 @@ DebriefingState::DebriefingState()
 				woststr2;
 
 			woststr1 << L'\x01' << (*i)->qty << L'\x01';	// quantity of recovered item Type
-			woststr2 << L'\x01' << (*i)->score;			// score for items of Type
-			total += (*i)->score;						// total score
+			woststr2 << L'\x01' << (*i)->score;				// score for items of Type
+			total += (*i)->score;							// total score
 
 			if ((*i)->recover == true)
 			{
@@ -723,7 +723,7 @@ void DebriefingState::prepareDebriefing()
 	Base* base = NULL;
 	Craft* craft = NULL;
 
-	std::vector<Craft*>::const_iterator craftIterator;
+	std::vector<Craft*>::const_iterator ptrCraft;
 
 
 	_missionStatistics->time = *_gameSave->getTime();
@@ -792,7 +792,7 @@ void DebriefingState::prepareDebriefing()
 
 				base = *i;
 				craft = *j;
-				craftIterator = j;
+				ptrCraft = j;
 				craft->returnToBase();
 				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
@@ -1012,14 +1012,12 @@ void DebriefingState::prepareDebriefing()
 	}
 
 
-//	const std::string& stType = battleSave->getMissionType();
 	const TacticalType tacType = battleSave->getTacticalType();
 
 	if (found == false)
 	{
-//		if (stType == "STR_ALIEN_BASE_ASSAULT") // probably redundant w/ (found==false)
-		if (tacType == TCT_BASEASSAULT) // alien base disappears (if not aborted)
-		{
+		if (tacType == TCT_BASEASSAULT)	// alien base disappears (if not aborted)
+		{								// probably redundant w/ (found==false)
 			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 			bool destroyAlienBase = true;
 
@@ -1028,7 +1026,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				for (size_t
 						i = 0;
-						i != static_cast<size_t>(battleSave->getMapSizeXYZ());
+						i != battleSave->getMapSizeXYZ();
 						++i)
 				{
 					if (   battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
@@ -1191,7 +1189,6 @@ void DebriefingState::prepareDebriefing()
 					|| ((*i)->isInExitArea() == true	// or aborted and unit is on exit area
 						&& (missionAccomplished == true
 							|| tacType != TCT_BASEDEFENSE)))
-//							|| stType != "STR_BASE_DEFENSE")))
 				{
 					(*i)->postMissionProcedures(_gameSave);
 					++soldierExit;
@@ -1348,22 +1345,22 @@ void DebriefingState::prepareDebriefing()
 				 ++i;
 		}
 
-		// Since this is not a base defense mission, we can safely erase the craft,
-		// without worrying its vehicles' destructor calling double (on base defense missions
-		// all vehicle objects in the craft are also referenced by base->getVehicles() !!)
+		// Since this is not a Base Defense tactical the Craft can safely be
+		// erased/deleted without worrying about its vehicles' destructor called
+		// twice (on base defense missions all vehicle objects in the craft are
+		// also referenced by base->getVehicles() !!).
 		delete craft;
 
 		craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
-		base->getCrafts()->erase(craftIterator);
+		base->getCrafts()->erase(ptrCraft);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 
 		return;
 	}
 
-	if (aborted == true
-		&& base->getCrafts()->empty() == false
-		&& tacType == TCT_BASEDEFENSE)
-//		&& stType == "STR_BASE_DEFENSE")
+	if (tacType == TCT_BASEDEFENSE
+		&& aborted == true
+		&& base->getCrafts()->empty() == false)
 	{
 		for (std::vector<Craft*>::const_iterator
 				i = base->getCrafts()->begin();
@@ -1383,25 +1380,6 @@ void DebriefingState::prepareDebriefing()
 		&& (aborted == false
 			|| missionAccomplished == true))	// Run through all tiles to recover UFO components and items.
 	{
-/*
-//		if (stType == "STR_BASE_DEFENSE")
-		if (tacType == TCT_BASEDEFENSE)
-			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
-//		else if (stType == "STR_TERROR_MISSION")
-		else if (tacType == TCT_MISSIONSITE)
-			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
-//		else if (stType == "STR_ALIEN_BASE_ASSAULT"
-//			|| stType == "STR_MARS_CYDONIA_LANDING"
-//			|| stType == "STR_MARS_THE_FINAL_ASSAULT")
-		else if (tacType == TCT_BASEASSAULT
-			|| tacType == TCT_MARS1
-			|| tacType == TCT_MARS2)
-		{
-			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
-		}
-		else
-			_txtTitle->setText(tr("STR_UFO_IS_RECOVERED")); */
-
 		switch (tacType)
 		{
 			case TCT_BASEDEFENSE:
@@ -1434,7 +1412,7 @@ void DebriefingState::prepareDebriefing()
 
 			for (size_t // get recoverable map data objects from the battlescape map
 					i = 0;
-					i != static_cast<size_t>(battleSave->getMapSizeXYZ());
+					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
 				for (int
@@ -1461,11 +1439,11 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (size_t
 					i = 0;
-					i != static_cast<size_t>(battleSave->getMapSizeXYZ());
+					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
-					&& (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+				if (   battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
+					&& battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 				{
 					recoverItems(
 							battleSave->getTiles()[i]->getInventory(),
@@ -1476,28 +1454,6 @@ void DebriefingState::prepareDebriefing()
 	}
 	else // mission FAIL.
 	{
-/*
-//		if (stType == "STR_BASE_DEFENSE")
-		if (tacType == TCT_BASEDEFENSE)
-		{
-			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
-			_destroyXCOMBase = true;
-		}
-//		else if (stType == "STR_TERROR_MISSION")
-		else if (tacType == TCT_MISSIONSITE)
-			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
-//		else if (stType == "STR_ALIEN_BASE_ASSAULT"
-//			|| stType == "STR_MARS_CYDONIA_LANDING"
-//			|| stType == "STR_MARS_THE_FINAL_ASSAULT")
-		else if (tacType == TCT_BASEASSAULT
-			|| tacType == TCT_MARS1
-			|| tacType == TCT_MARS2)
-		{
-			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
-		}
-		else
-			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED")); */
-
 		switch (tacType)
 		{
 			case TCT_BASEDEFENSE:
@@ -1526,7 +1482,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			for (size_t // recover items from the ground
 					i = 0;
-					i != static_cast<size_t>(battleSave->getMapSizeXYZ());
+					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
 				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
@@ -1567,7 +1523,6 @@ void DebriefingState::prepareDebriefing()
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->type)
 			{
 				int alloys;
-//				if (stType == "STR_ALIEN_BASE_ASSAULT")
 				if (tacType == TCT_BASEASSAULT)
 					alloys = 150;
 				else
@@ -1602,7 +1557,6 @@ void DebriefingState::prepareDebriefing()
 					craft,
 					true);
 
-//	if (stType == "STR_BASE_DEFENSE")
 	if (tacType == TCT_BASEDEFENSE)
 	{
 		if (_destroyXCOMBase == false)

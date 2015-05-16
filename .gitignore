@@ -29,6 +29,7 @@
 *.bat
 *.*.user
 *.xml
+*.out
 
 # -OpenXcom root
 *.ac

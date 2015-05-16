@@ -8,8 +8,8 @@
 	license: public domain
 */
 
-#ifndef OXC_OPENGL_H
-#define OXC_OPENGL_H
+#ifndef OPENXCOM_OPENGL_H
+#define OPENXCOM_OPENGL_H
 
 #ifndef __NO_OPENGL
 
