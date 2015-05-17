@@ -258,7 +258,7 @@ private:
 		void runInventory(
 				Craft* craft,
 				Base* base = NULL,
-				size_t equipUnit = 0);
+				size_t selUnit = 0);
 };
 
 }

@@ -70,12 +70,11 @@ class RuleAlienMission
 {
 
 private:
-	int
-		_points,		// The mission's points.
-		_specialZone;	// The mission zone to use for spawning.
+	int _points;			// The mission's points.
+	size_t _specialZone;	// The mission zone to use for spawning.
 	std::string
-		_specialUfo,	// The UFO to use for spawning.
-		_type;			// The mission's type ID.
+		_specialUfo,		// The UFO to use for spawning.
+		_type;				// The mission's type ID.
 
 	std::vector<MissionWave> _waves;										// The mission's waves.
 	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;	// The race distribution over game time.
@@ -120,7 +119,7 @@ private:
 		{ return _specialUfo; }
 		/// Gets the zone for spawning an alien site or base.
 		size_t getSpawnZone() const
-		{ return static_cast<size_t>(_specialZone); } // note: inits to -1
+		{ return _specialZone; } // note: inits to -1
 
 		/// Gets the chances of this mission based on the game time.
 		int getWeight(const size_t monthsPassed) const;

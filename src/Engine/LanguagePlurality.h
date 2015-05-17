@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_LANGUAGEPLURALITY_H
 #define OPENXCOM_LANGUAGEPLURALITY_H
 
-#include <map>
-#include <string>
+//#include <map>
+//#include <string>
 
 
 namespace OpenXcom
@@ -43,17 +43,13 @@ private:
 	protected:
 		///
 		LanguagePlurality()
-		{
-			/* Empty by design. */
-		}
+		{}
 
 
 		public:
 			/// Allow proper destruction through base pointer.
 			virtual ~LanguagePlurality()
-			{
-				/* Empty by design. */
-			}
+			{}
 
 			/// Get dictionary key suffix for value of @a n.
 			/**

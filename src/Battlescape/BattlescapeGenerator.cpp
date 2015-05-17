@@ -2845,12 +2845,12 @@ void BattlescapeGenerator::explodePowerSources() // private.
  * Kids, don't try this at home! yer tellin' me.
  * @param craft		- pointer to Craft to handle
  * @param base		- pointer to Base to handle (default NULL)
- * @param equipUnit	- soldier to display in battle pre-equip inventory (default 0)
+ * @param selUnit	- soldier to display in battle pre-equip inventory (default 0)
  */
 void BattlescapeGenerator::runInventory(
 		Craft* craft,
 		Base* base,
-		size_t equipUnit)
+		size_t selUnit)
 {
 	_baseEquipScreen = true;
 
@@ -2871,7 +2871,7 @@ void BattlescapeGenerator::runInventory(
 
 	MapDataSet* const dataSet = new MapDataSet(
 											"blank",
-											_game); // kL_add
+											_game);
 	MapData* const data = new MapData(dataSet);
 
 	for (size_t
@@ -2908,8 +2908,8 @@ void BattlescapeGenerator::runInventory(
 	deployXCOM();
 
 	if (craft != NULL
-		&& equipUnit != 0
-		&& static_cast<int>(equipUnit) <= qtySoldiers)
+		&& selUnit != 0
+		&& static_cast<int>(selUnit) <= qtySoldiers)
 	{
 		size_t j = 0;
 		for (std::vector<BattleUnit*>::const_iterator
@@ -2917,35 +2917,13 @@ void BattlescapeGenerator::runInventory(
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
-			++j;
-			if (j == equipUnit)
+			if (++j == selUnit)
 			{
 				_battleSave->setSelectedUnit(*i);
 				break;
 			}
 		}
 	}
-/*	// remove any vehicles that may have somehow ended up in battlescape
-	for (std::vector<BattleUnit*>::iterator
-			i = _battleSave->getUnits()->begin();
-			i != _battleSave->getUnits()->end();
-			)
-	{
-		if ((*i)->getGeoscapeSoldier())
-		{
-			if (_battleSave->getSelectedUnit() == 0)
-				_battleSave->setSelectedUnit(*i);
-			++i;
-		}
-		else
-		{
-			if (_battleSave->getSelectedUnit() == *i)
-				_battleSave->setSelectedUnit(0);
-
-			delete *i;
-			i = _battleSave->getUnits()->erase(i);
-		}
-	} */ // kL, they took this out.
 
 	delete data;
 	delete dataSet;

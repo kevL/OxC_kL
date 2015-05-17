@@ -75,7 +75,7 @@ RuleAlienMission::RuleAlienMission(const std::string& type)
 		_type(type),
 		_points(0),
 		_objective(OBJECTIVE_SCORE),
-		_specialZone(-1)
+		_specialZone(std::numeric_limits<size_t>::max())
 {}
 
 /**
@@ -102,7 +102,7 @@ void RuleAlienMission::load(const YAML::Node& node)
 	_points			= node["points"]		.as<int>(_points);
 	_waves			= node["waves"]			.as<std::vector<MissionWave> >(_waves);
 	_specialUfo		= node["specialUfo"]	.as<std::string>(_specialUfo);
-	_specialZone	= node["specialZone"]	.as<int>(_specialZone);
+	_specialZone	= node["specialZone"]	.as<size_t>(_specialZone);
 	_weights		= node["missionWeights"].as<std::map<size_t, int> >(_weights);
 	_objective		= static_cast<MissionObjective>(node["objective"].as<int>(_objective));
 

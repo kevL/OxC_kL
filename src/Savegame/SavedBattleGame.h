@@ -217,7 +217,7 @@ private:
 
 		/// Converts a tile index to its coordinates.
 		void getTileCoords(
-				int index,
+				size_t index,
 				int* x,
 				int* y,
 				int* z) const;

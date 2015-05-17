@@ -823,7 +823,7 @@ void SavedBattleGame::initMap(
 	{
 		Position pos;
 		getTileCoords(
-					static_cast<int>(i),
+					i,
 					&pos.x,
 					&pos.y,
 					&pos.z);
@@ -988,14 +988,16 @@ std::string SavedBattleGame::getBattleTerrain() const
  * @param z		- pointer to the Z coordinate
  */
 void SavedBattleGame::getTileCoords(
-		int index,
+		size_t index,
 		int* x,
 		int* y,
 		int* z) const
 {
-	*z =  index / (_mapsize_y * _mapsize_x);
-	*y = (index % (_mapsize_y * _mapsize_x)) / _mapsize_x;
-	*x = (index % (_mapsize_y * _mapsize_x)) % _mapsize_x;
+	const int idx = static_cast<int>(index);
+
+	*z =  idx / (_mapsize_y * _mapsize_x);
+	*y = (idx % (_mapsize_y * _mapsize_x)) / _mapsize_x;
+	*x = (idx % (_mapsize_y * _mapsize_x)) % _mapsize_x;
 }
 
 /**

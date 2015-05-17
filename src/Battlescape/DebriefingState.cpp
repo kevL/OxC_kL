@@ -1016,13 +1016,13 @@ void DebriefingState::prepareDebriefing()
 
 	if (found == false)
 	{
-		if (tacType == TCT_BASEASSAULT)	// alien base disappears (if not aborted)
+		if (tacType == TCT_BASEASSAULT)	// alien base disappears if not aborted
 		{								// probably redundant w/ (found==false)
 			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
-			bool destroyAlienBase = true;
+			missionAccomplished = true; // True unless a nav-console is found below_
 
-			if (aborted == true
-				|| soldierLive == 0)
+			if (soldierLive == 0
+				|| aborted == true)
 			{
 				for (size_t
 						i = 0;
@@ -1032,13 +1032,11 @@ void DebriefingState::prepareDebriefing()
 					if (   battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
 						&& battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
 					{
-						destroyAlienBase = false;
+						missionAccomplished = false;
 						break;
 					}
 				}
 			}
-
-			missionAccomplished = destroyAlienBase;
 
 			for (std::vector<AlienBase*>::const_iterator // Third search for AlienBase.
 					i = _gameSave->getAlienBases()->begin();
@@ -1047,7 +1045,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				if ((*i)->isInBattlescape() == true)
 				{
-					if (destroyAlienBase == true)
+					if (missionAccomplished == true)
 					{
 						const int pts = std::max(
 											50,
@@ -1056,7 +1054,7 @@ void DebriefingState::prepareDebriefing()
 							"STR_ALIEN_BASE_CONTROL_DESTROYED",
 							pts);
 
-						// Take care to remove supply missions for this base.
+						// Take care to remove supply missions for the aLien base.
 						std::for_each(
 								_gameSave->getAlienMissions().begin(),
 								_gameSave->getAlienMissions().end(),
@@ -1187,8 +1185,8 @@ void DebriefingState::prepareDebriefing()
 
 				if (aborted == false					// so game is not aborted
 					|| ((*i)->isInExitArea() == true	// or aborted and unit is on exit area
-						&& (missionAccomplished == true
-							|| tacType != TCT_BASEDEFENSE)))
+						&& (tacType != TCT_BASEDEFENSE
+							|| missionAccomplished == true)))
 				{
 					(*i)->postMissionProcedures(_gameSave);
 					++soldierExit;
@@ -1276,8 +1274,8 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (orgFaction == FACTION_HOSTILE	// This section is for units still standing.
-				&& faction == FACTION_PLAYER		// ie, MC'd aLiens
+			else if (faction == FACTION_PLAYER		// This section is for units still standing.
+				&& orgFaction == FACTION_HOSTILE	// ie, MC'd aLiens
 				&& (*i)->isOut() == false
 				&& (aborted == false
 					|| (*i)->isInExitArea() == true))
@@ -1307,8 +1305,8 @@ void DebriefingState::prepareDebriefing()
 			else if (orgFaction == FACTION_NEUTRAL)
 			{
 				if (soldierLive == 0
-					|| (aborted == true						// if mission fails, all civilians die
-						&& (*i)->isInExitArea() == false))	// unless they're on an Exit_Tile. kL
+					|| (aborted == true						// if mission fails all civilians die
+						&& (*i)->isInExitArea() == false))	// unless they're on an Exit_Tile.
 				{
 					addStat(
 						"STR_CIVILIANS_KILLED_BY_ALIENS",
@@ -1324,8 +1322,8 @@ void DebriefingState::prepareDebriefing()
 
 	if (craft != NULL // Craft lost.
 		&& (soldierLive == 0
-			|| (soldierExit == 0
-				&& aborted == true)))
+			|| (aborted == true
+				&& soldierExit == 0)))
 	{
 		addStat(
 			"STR_XCOM_CRAFT_LOST",
@@ -1561,7 +1559,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if (_destroyXCOMBase == false)
 		{
-			// reequip crafts (only those on the base) after a base defense mission;
+			// reequip the Base's crafts after a base defense mission
 			for (std::vector<Craft*>::const_iterator
 					i = base->getCrafts()->begin();
 					i != base->getCrafts()->end();

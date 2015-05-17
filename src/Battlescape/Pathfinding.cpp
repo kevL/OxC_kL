@@ -70,7 +70,7 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 	_nodes.reserve(_battleSave->getMapSizeXYZ()); // initialize one node per tile.
 
 	Position pos;
-	for (int
+	for (size_t
 			i = 0;
 			i != _battleSave->getMapSizeXYZ();
 			++i)

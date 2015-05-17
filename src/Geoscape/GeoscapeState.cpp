@@ -4042,9 +4042,9 @@ void GeoscapeState::setupLandMission() // private.
 				&& picked == false;
 			++i)
 	{
-		regRule = _rules->getRegion(regionsList[RNG::generate(
-														0,
-														static_cast<int>(regionsList.size()) - 1)]);
+		regRule = _rules->getRegion(regionsList[static_cast<size_t>(RNG::generate(
+																			0,
+																			static_cast<int>(regionsList.size()) - 1))]);
 		if (regRule->getMissionZones().size() > missionRule.getSpawnZone()
 			&& _game->getSavedGame()->findAlienMission(
 													regRule->getType(),

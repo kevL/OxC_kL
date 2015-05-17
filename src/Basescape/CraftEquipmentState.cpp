@@ -73,7 +73,7 @@ CraftEquipmentState::CraftEquipmentState(
 		_base(base),
 		_craftId(craftId),
 		_sel(0),
-		_equipUnit(0)
+		_selUnit(0)
 {
 	Craft* const craft = _base->getCrafts()->at(_craftId);
 
@@ -282,7 +282,7 @@ void CraftEquipmentState::init()
 	if (battleSave != NULL)
 	{
 		// set selected soldier
-		_equipUnit = battleSave->getSelectedUnit()->getBattleOrder();
+		_selUnit = battleSave->getSelectedUnit()->getBattleOrder();
 
 		_game->getSavedGame()->setBattleGame(NULL);
 		_base->getCrafts()->at(_craftId)->setInBattlescape(false);
@@ -748,11 +748,10 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	Craft* const craft = _base->getCrafts()->at(_craftId);
 	bgen.runInventory(
-					craft,
+					_base->getCrafts()->at(_craftId),
 					NULL,
-					_equipUnit);
+					_selUnit);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(
