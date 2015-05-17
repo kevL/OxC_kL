@@ -839,6 +839,7 @@ void Ruleset::loadFile(const std::string& filename)
 	_timePersonnel	= doc["timePersonnel"]	.as<int>(_timePersonnel);
 	_initialFunding	= doc["initialFunding"]	.as<int>(_initialFunding);
 	_alienFuel		= doc["alienFuel"]		.as<std::string>(_alienFuel);
+	_font			= doc["font"]			.as<std::string>(_font);
 	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);
 	_firstGrenade	= doc["firstGrenade"]	.as<int>(_firstGrenade);
 
@@ -2258,6 +2259,15 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 const std::string Ruleset::getAlienFuel() const
 {
 	return _alienFuel;
+}
+
+/**
+ * Gets the name of the font collection.
+ * @return, the name of font data file
+ */
+const std::string Ruleset::getFontName() const
+{
+	return _font;
 }
 
 /**

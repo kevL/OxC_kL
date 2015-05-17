@@ -86,7 +86,9 @@ class Ruleset
 {
 
 protected:
-	std::string _alienFuel;
+	std::string
+		_alienFuel,
+		_font;
 
 	int
 		_initialFunding,
@@ -347,16 +349,23 @@ protected:
 		/// Gets the list of StatStrings.
 		std::vector<StatString*> getStatStrings() const;
 
-		/// Sorts all our lists according to their weight.
+		/// Sorts all the lists according to their weight.
 		void sortLists();
+
 		/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 		std::vector<std::string> getPsiRequirements() const;
+
 		/// Returns the sorted list of inventories.
 		const std::vector<std::string>& getInvsList() const;
+
 		/// Generates a new soldier.
 		Soldier* genSoldier(SavedGame* save) const;
+
 		/// Gets the item to be used as fuel for ships.
 		const std::string getAlienFuel() const;
+
+		/// Gets the font name.
+		const std::string getFontName() const;
 
 		/// Gets the minimum radar's range.
 //		int getMinRadarRange() const;
