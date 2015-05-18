@@ -58,17 +58,19 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Soldiers screen.
- * @param base	- pointer to the Base to get info from
- * @param craft	- ID of the selected craft
+ * @param base		- pointer to the Base to get info from
+ * @param craftId	- ID of the selected craft
  */
 CraftSoldiersState::CraftSoldiersState(
 		Base* base,
-		size_t craftID)
+		size_t craftId)
 	:
 		_base(base),
-		_craftID(craftID)
+		_craftId(craftId)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
+
+	_txtCost		= new Text(150, 9, 24, -10);
 
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
@@ -89,6 +91,7 @@ CraftSoldiersState::CraftSoldiersState(
 	setInterface("craftSoldiers");
 
 	add(_window,		"window",	"craftSoldiers");
+	add(_txtCost,		"text",		"craftSoldiers");
 	add(_txtTitle,		"text",		"craftSoldiers");
 	add(_txtBaseLabel,	"text",		"craftSoldiers");
 	add(_txtSpace,		"text",		"craftSoldiers");
@@ -106,21 +109,19 @@ CraftSoldiersState::CraftSoldiersState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT")
-						.arg(_base->getCrafts()->at(_craftID)->getName(_game->getLanguage())));
+						.arg(_base->getCrafts()->at(_craftId)->getName(_game->getLanguage())));
+	_txtTitle->setBig();
 
-	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 	_txtName->setText(tr("STR_NAME_UC"));
-
 	_txtRank->setText(tr("STR_RANK"));
-
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 116, 85, 71);
+	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
@@ -163,7 +164,7 @@ void CraftSoldiersState::btnOkClick(Action*)
  */
 void CraftSoldiersState::btnUnloadClick(Action*)
 {
-	const Craft* const craft = _base->getCrafts()->at(_craftID);
+	const Craft* const craft = _base->getCrafts()->at(_craftId);
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
@@ -186,7 +187,7 @@ void CraftSoldiersState::init()
 {
 	State::init();
 
-	Craft* const craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftId);
 
 	// Reset stuff when coming back from pre-battle Inventory.
 	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
@@ -223,7 +224,9 @@ void CraftSoldiersState::init()
 				color = static_cast<Uint8>(_game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color);
 		}
 
-		_lstSoldiers->setRowColor(row, color);
+		_lstSoldiers->setRowColor(
+								row,
+								color);
 
 		if ((*i)->getRecovery() > 0)
 		{
@@ -269,6 +272,8 @@ void CraftSoldiersState::init()
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(craft->getLoadCapacity())
 					.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
+
+	calcCost();
 }
 
 /**
@@ -297,7 +302,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 			return;
 		}
 
-		Craft* const craft = _base->getCrafts()->at(_craftID);
+		Craft* const craft = _base->getCrafts()->at(_craftId);
 
 		Uint8 color;
 		if (soldier->getCraft() == NULL
@@ -326,7 +331,9 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 			}
 		}
 
-		_lstSoldiers->setRowColor(row, color);
+		_lstSoldiers->setRowColor(
+								row,
+								color);
 
 		_btnInventory->setVisible(
 								craft->getNumSoldiers() > 0
@@ -339,6 +346,8 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 						.arg(craft->getLoadCapacity())
 						.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
+
+		calcCost();
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -481,13 +490,25 @@ void CraftSoldiersState::btnInventoryClick(Action*)
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	Craft* const craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftId);
 	bgen.runInventory(craft);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(
 									false,
 									NULL));
+}
+
+/**
+ * Sets current cost to send the Craft on a mission.
+ */
+void CraftSoldiersState::calcCost() // private.
+{
+	const int cost = _game->getSavedGame()->calcSoldierCost(
+														_base,
+														_base->getCrafts()->at(_craftId));
+	_txtCost->setText(tr("STR_COST_")
+						.arg(Text::formatFunding(cost)));
 }
 
 }

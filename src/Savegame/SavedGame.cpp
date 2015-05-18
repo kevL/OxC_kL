@@ -323,7 +323,7 @@ std::vector<SaveInfo> SavedGame::getList(
  * @param lang - pointer to the loaded Language
  * @return, SaveInfo struct (SavedGame.h)
  */
-SaveInfo SavedGame::getSaveInfo(
+SaveInfo SavedGame::getSaveInfo( // private.
 		const std::string& file,
 		Language* lang)
 {
@@ -1694,7 +1694,7 @@ void SavedGame::getDependableResearch(
  * @param ruleset		- pointer to the game Ruleset
  * @param base			- pointer to a Base
  */
-void SavedGame::getDependableResearchBasic(
+void SavedGame::getDependableResearchBasic( // private.
 		std::vector<RuleResearch*>& dependables,
 		const RuleResearch* research,
 		const Ruleset* ruleset,
@@ -2508,6 +2508,50 @@ bool SavedGame::getDebugArgDone()
 std::vector<MissionStatistics*>* SavedGame::getMissionStatistics()
 {
 	return &_missionStatistics;
+}
+
+/**
+ * Calculates the bonus cost for soldiers by rank.
+ * @note If @a craft is specified this returns the cost for a tactical mission;
+ * if @a craft is NULL it returns a Base's monthly cost for Soldiers' bonus
+ * salaries.
+ * @note @a deceased is expense for a cheap funeral instead.
+ * @note Also adds cost to maintain Vehicles.
+ * @param base		- the Base to calc costs for
+ * @param craft		- the Craft for the sortie (default NULL)
+ * @param deceased	- true if a Soldier died while on tactical (default false)
+ * @return, the bonus cost (for the soldier not the Player)
+ */
+int SavedGame::calcSoldierCost(
+		Base* const base,
+		const Craft* const craft,
+		const bool deceased) const
+{
+	int
+		total = 0,
+		cost;
+
+	for (std::vector<Soldier*>::const_iterator
+			i = base->getSoldiers()->begin();
+			i != base->getSoldiers()->end();
+			++i)
+	{
+		if (craft == NULL)
+			total += (*i)->getRank() * 5000;
+		else if ((*i)->getCraft() == craft)
+		{
+			cost = (*i)->getRank() * 1500;
+			if (deceased == true)
+				cost /= 2;
+
+			total += cost;
+		}
+	}
+
+	if (craft != NULL)
+		total += craft->getNumVehicles(true) * 750;
+
+	return total;
 }
 
 /**

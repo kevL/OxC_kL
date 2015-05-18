@@ -65,10 +65,10 @@ namespace OpenXcom
  */
 CraftInfoState::CraftInfoState(
 		Base* base,
-		size_t craftID)
+		size_t craftId)
 	:
 		_base(base),
-		_craftID(craftID)
+		_craftId(craftId)
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 		_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -101,6 +101,8 @@ CraftInfoState::CraftInfoState(
 	_crew			= new Surface(220, 18, 85, 95);
 	_equip			= new Surface(220, 18, 85, 119);
 
+	_txtCost		= new Text(150, 9, 24, 165);
+
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setInterface("craftInfo");
@@ -127,6 +129,7 @@ CraftInfoState::CraftInfoState(
 	add(_weapon2);
 	add(_crew);
 	add(_equip);
+	add(_txtCost,		"text1",	"craftInfo");
 	add(_btnOk,			"button",	"craftInfo");
 
 	centerAllSurfaces();
@@ -181,21 +184,18 @@ void CraftInfoState::init()
 {
 	State::init();
 
-	_craft = _base->getCrafts()->at(_craftID);
+	_craft = _base->getCrafts()->at(_craftId);
 
 	// Reset stuff when coming back from pre-battle Inventory.
-	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
-	if (battleSave != NULL)
+	if (_game->getSavedGame()->getSavedBattle() != NULL)
 	{
 		_game->getSavedGame()->setBattleGame(NULL);
 		_craft->setInBattlescape(false);
 	}
 
 
-	const bool
-		crewOnboard = _craft->getNumSoldiers() > 0,
-		tacBattle = _game->getSavedGame()->getMonthsPassed() == -1;
-	_btnInventory->setVisible(crewOnboard
+	const bool tacBattle = _game->getSavedGame()->getMonthsPassed() == -1;
+	_btnInventory->setVisible(_craft->getNumSoldiers() > 0
 							  && tacBattle == false);
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
@@ -204,28 +204,22 @@ void CraftInfoState::init()
 	else
 		_txtStatus->setText(tr(_craft->getStatus()));
 
-	const RuleCraft* const craftRule = _craft->getRules();
 
-	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	const int graphic = craftRule->getSprite() + 33;
-	baseBits->getFrame(graphic)->setX(0);
-	baseBits->getFrame(graphic)->setY(0);
-	baseBits->getFrame(graphic)->blit(_sprite);
+	const RuleCraft* const crRule = _craft->getRules();
 
-
-	int hours = 0;
+	int hours;
 	std::wostringstream
 		woststr1, // fuel
 		woststr2; // hull
 
 	if (tacBattle == true)
-		_craft->setFuel(craftRule->getMaxFuel()); // top up Craft for insta-Battle mode.
+		_craft->setFuel(crRule->getMaxFuel()); // top up Craft for insta-Battle mode.
 
 	woststr1 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	if (craftRule->getMaxFuel() - _craft->getFuel() > 0)
+	if (crRule->getMaxFuel() - _craft->getFuel() > 0)
 	{
 		hours = static_cast<int>(std::ceil(
-				static_cast<double>(craftRule->getMaxFuel() - _craft->getFuel()) / static_cast<double>(craftRule->getRefuelRate())
+				static_cast<double>(crRule->getMaxFuel() - _craft->getFuel()) / static_cast<double>(crRule->getRefuelRate())
 				/ 2.)); // refuel every half-hour.
 		woststr1 << formatTime(
 						hours,
@@ -234,13 +228,13 @@ void CraftInfoState::init()
 	_txtFuel->setText(woststr1.str());
 
 	_txtRadar->setText(tr("STR_RADAR_RANGE")
-						.arg(Text::formatNumber(craftRule->getRadarRange())));
+						.arg(Text::formatNumber(crRule->getRadarRange())));
 
 	woststr2 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
 	if (_craft->getDamage() > 0)
 	{
 		hours = static_cast<int>(std::ceil(
-				static_cast<double>(_craft->getDamage()) / static_cast<double>(craftRule->getRepairRate())
+				static_cast<double>(_craft->getDamage()) / static_cast<double>(crRule->getRepairRate())
 				/ 2.)); // repair every half-hour.
 		woststr2 << formatTime(
 							hours,
@@ -249,9 +243,15 @@ void CraftInfoState::init()
 	_txtDamage->setText(woststr2.str());
 
 
-	Surface* bit = NULL;
+	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	const int sprite = crRule->getSprite() + 33;
+	baseBits->getFrame(sprite)->setX(0); // BaseView::draw() changes x&y
+	baseBits->getFrame(sprite)->setY(0);
+	baseBits->getFrame(sprite)->blit(_sprite);
 
-	if (craftRule->getSoldiers() > 0)
+	Surface* bit;
+
+	if (crRule->getSoldiers() > 0)
 	{
 		_crew->clear();
 		_equip->clear();
@@ -261,7 +261,7 @@ void CraftInfoState::init()
 		bit = baseBits->getFrame(38); // soldier graphic
 		for (int
 				i = 0;
-				i < _craft->getNumSoldiers();
+				i != _craft->getNumSoldiers();
 				++i,
 					x += 10)
 		{
@@ -274,7 +274,7 @@ void CraftInfoState::init()
 		x = 0;
 		for (int
 				i = 0;
-				i < _craft->getNumVehicles();
+				i != _craft->getNumVehicles();
 				++i,
 					x += 10)
 		{
@@ -304,17 +304,18 @@ void CraftInfoState::init()
 	}
 
 
-	const RuleCraftWeapon* cwRule = NULL;
+	const RuleCraftWeapon* cwRule;
+	const CraftWeapon* cw;
 
-	if (craftRule->getWeapons() > 0)
+	if (crRule->getWeapons() > 0)
 	{
-		const CraftWeapon* const cw1 = _craft->getWeapons()->at(0);
-		if (cw1 != NULL)
+		cw = _craft->getWeapons()->at(0);
+		if (cw != NULL)
 		{
-			cwRule = cw1->getRules();
+			cwRule = cw->getRules();
 
 			bit = baseBits->getFrame(cwRule->getSprite() + 48);
-			bit->setX(0);
+//			bit->setX(0);
 //			bit->setY(0);
 			bit->blit(_weapon1);
 
@@ -325,16 +326,16 @@ void CraftInfoState::init()
 
 			woststr.str(L"");
 
-			woststr << tr("STR_AMMO_").arg(cw1->getAmmo()) << L"\n\x01";
+			woststr << tr("STR_AMMO_").arg(cw->getAmmo()) << L"\n\x01";
 			woststr << tr("STR_MAX").arg(cwRule->getAmmoMax());
-			if (cw1->getAmmo() < cwRule->getAmmoMax())
+			if (cw->getAmmo() < cwRule->getAmmoMax())
 			{
-				hours = static_cast<int>(std::ceil(
-						static_cast<double>(cwRule->getAmmoMax() - cw1->getAmmo()) / static_cast<double>(cwRule->getRearmRate())
-						/ 2.)); // rearm every half-hour.
+				hours = static_cast<int>(std::ceil( // rearm every half-hour.
+						static_cast<double>(cwRule->getAmmoMax() - cw->getAmmo()) / static_cast<double>(cwRule->getRearmRate())
+						/ 2.));
 				woststr << formatTime(
 									hours,
-									cw1->getCantLoad());
+									cw->getCantLoad());
 			}
 			_txtW1Ammo->setText(woststr.str());
 		}
@@ -353,15 +354,15 @@ void CraftInfoState::init()
 		_txtW1Ammo->setVisible(false);
 	}
 
-	if (craftRule->getWeapons() > 1)
+	if (crRule->getWeapons() > 1)
 	{
-		const CraftWeapon* const cw2 = _craft->getWeapons()->at(1);
-		if (cw2 != NULL)
+		cw = _craft->getWeapons()->at(1);
+		if (cw != NULL)
 		{
-			cwRule = cw2->getRules();
+			cwRule = cw->getRules();
 
 			bit = baseBits->getFrame(cwRule->getSprite() + 48);
-			bit->setX(0);
+//			bit->setX(0);
 //			bit->setY(0);
 			bit->blit(_weapon2);
 
@@ -371,16 +372,16 @@ void CraftInfoState::init()
 			_txtW2Name->setText(woststr.str());
 
 			woststr.str(L"");
-			woststr << tr("STR_AMMO_").arg(cw2->getAmmo()) << L"\n\x01";
+			woststr << tr("STR_AMMO_").arg(cw->getAmmo()) << L"\n\x01";
 			woststr << tr("STR_MAX").arg(cwRule->getAmmoMax());
-			if (cw2->getAmmo() < cwRule->getAmmoMax())
+			if (cw->getAmmo() < cwRule->getAmmoMax())
 			{
-				hours = static_cast<int>(std::ceil(
-						static_cast<double>(cwRule->getAmmoMax() - cw2->getAmmo()) / static_cast<double>(cwRule->getRearmRate())
-						/ 2.)); // rearm every half-hour.
+				hours = static_cast<int>(std::ceil( // rearm every half-hour.
+						static_cast<double>(cwRule->getAmmoMax() - cw->getAmmo()) / static_cast<double>(cwRule->getRearmRate())
+						/ 2.));
 				woststr << formatTime(
 									hours,
-									cw2->getCantLoad());
+									cw->getCantLoad());
 			}
 			_txtW2Ammo->setText(woststr.str());
 		}
@@ -398,6 +399,8 @@ void CraftInfoState::init()
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
+
+	calcCost();
 }
 
 /**
@@ -410,30 +413,30 @@ std::wstring CraftInfoState::formatTime(
 		const int total,
 		const bool delayed) const
 {
-	std::wostringstream ss;
+	std::wostringstream woststr;
 	const int
-		days = total / 24,
-		hours = total %24;
+		dys = total / 24,
+		hrs = total % 24;
 
-	ss << L"\n(";
+	woststr << L"\n(";
 
-	if (days > 0)
+	if (dys != 0)
 	{
-		ss << tr("STR_DAY", days);
+		woststr << tr("STR_DAY", dys);
 
-		if (hours > 0)
-			ss << L" ";
+		if (hrs != 0)
+			woststr << L" ";
 	}
 
-	if (hours > 0)
-		ss << tr("STR_HOUR", hours);
+	if (hrs != 0)
+		woststr << tr("STR_HOUR", hrs);
 
 	if (delayed == true)
-		ss << L" +";
+		woststr << L" +";
 
-	ss << L")";
+	woststr << L")";
 
-	return ss.str();
+	return woststr.str();
 }
 
 /**
@@ -453,7 +456,7 @@ void CraftInfoState::btnW1Click(Action*)
 {
 	_game->pushState(new CraftWeaponsState(
 										_base,
-										_craftID,
+										_craftId,
 										0));
 }
 
@@ -465,7 +468,7 @@ void CraftInfoState::btnW2Click(Action*)
 {
 	_game->pushState(new CraftWeaponsState(
 										_base,
-										_craftID,
+										_craftId,
 										1));
 }
 
@@ -477,7 +480,7 @@ void CraftInfoState::btnCrewClick(Action*)
 {
 	_game->pushState(new CraftSoldiersState(
 										_base,
-										_craftID));
+										_craftId));
 }
 
 /**
@@ -488,7 +491,7 @@ void CraftInfoState::btnEquipClick(Action*)
 {
 	_game->pushState(new CraftEquipmentState(
 										_base,
-										_craftID));
+										_craftId));
 }
 
 /**
@@ -499,7 +502,7 @@ void CraftInfoState::btnArmorClick(Action*)
 {
 	_game->pushState(new CraftArmorState(
 									_base,
-									_craftID));
+									_craftId));
 }
 
 /**
@@ -512,7 +515,7 @@ void CraftInfoState::btnInventoryClick(Action*)
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	Craft* const craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftId);
 	bgen.runInventory(craft);
 
 	_game->getScreen()->clear();
@@ -534,6 +537,18 @@ void CraftInfoState::edtCraftChange(Action* action)
 	{
 		_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	}
+}
+
+/**
+ * Sets current cost to send the Craft on a mission.
+ */
+void CraftInfoState::calcCost() // private.
+{
+	const int cost = _game->getSavedGame()->calcSoldierCost(
+														_base,
+														_base->getCrafts()->at(_craftId));
+	_txtCost->setText(tr("STR_COST_")
+						.arg(Text::formatFunding(cost)));
 }
 
 }

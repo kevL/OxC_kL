@@ -44,7 +44,7 @@ class CraftInfoState
 {
 
 private:
-	size_t _craftID;
+	size_t _craftId;
 	std::wstring _defaultName;
 
 	Base* _base;
@@ -60,6 +60,7 @@ private:
 	TextEdit* _edtCraft;
 	Text
 		* _txtBaseLabel,
+		* _txtCost,
 		* _txtDamage,
 		* _txtFuel,
 		* _txtRadar,
@@ -80,13 +81,15 @@ private:
 	std::wstring formatTime(
 			const int time,
 			const bool delayed) const;
+	/// Sets current cost to send the Craft on a mission.
+	void calcCost();
 
 
 	public:
 		/// Creates the Craft Info state.
 		CraftInfoState(
 				Base* base,
-				size_t craftID);
+				size_t craftId);
 		/// Cleans up the Craft Info state.
 		~CraftInfoState();
 

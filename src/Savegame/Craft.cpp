@@ -58,17 +58,17 @@ namespace OpenXcom
 
 /**
  * Creates a Craft of the specified type and assigns it the latest craft ID available.
- * @param rules	- pointer to RuleCraft
- * @param base	- pointer to Base of origin
- * @param id	- ID to assign to the craft; 0 for no id (default 0)
+ * @param crRule	- pointer to RuleCraft
+ * @param base		- pointer to Base of origin
+ * @param id		- ID to assign to the craft; 0 for no id (default 0)
  */
 Craft::Craft(
-		RuleCraft* rules,
+		RuleCraft* crRule,
 		Base* base,
 		int id)
 	:
 		MovingTarget(),
-		_rules(rules),
+		_crRule(crRule),
 		_base(base),
 		_id(id),
 		_fuel(0),
@@ -82,13 +82,13 @@ Craft::Craft(
 		_inDogfight(false),
 		_loadCur(0),
 		_warning(CW_NONE),
-		_warned(false) // do not save-to-file; ie, warn player after reloading
+		_warned(false) // do not save-to-file; ie, re-warn player if reloading
 {
 	_items = new ItemContainer();
 
 	for (int
 			i = 0;
-			i != _rules->getWeapons();
+			i != _crRule->getWeapons();
 			++i)
 	{
 		_weapons.push_back(NULL);
@@ -97,7 +97,7 @@ Craft::Craft(
 	if (base != NULL)
 		setBase(base);
 
-	_loadCap = _rules->getMaxItems() + _rules->getSoldiers() * 10;
+	_loadCap = _crRule->getMaxItems() + _crRule->getSoldiers() * 10;
 }
 
 /**
@@ -126,14 +126,14 @@ Craft::~Craft()
 
 /**
  * Loads this Craft from a YAML file.
- * @param node	- reference a YAML node
- * @param rules	- pointer to Ruleset
- * @param save	- pointer to the SavedGame
+ * @param node		- reference a YAML node
+ * @param rules		- pointer to Ruleset
+ * @param gameSave	- pointer to the SavedGame
  */
 void Craft::load(
 		const YAML::Node& node,
 		const Ruleset* rules,
-		SavedGame* save)
+		SavedGame* gameSave)
 {
 	MovingTarget::load(node);
 
@@ -148,7 +148,7 @@ void Craft::load(
 			i != node["weapons"].end();
 			++i)
 	{
-		if (_rules->getWeapons() > static_cast<int>(j))
+		if (_crRule->getWeapons() > static_cast<int>(j))
 		{
 			const std::string type = (*i)["type"].as<std::string>();
 			if (type != "0"
@@ -158,12 +158,10 @@ void Craft::load(
 													rules->getCraftWeapon(type),
 													0);
 				cw->load(*i);
-				_weapons[j] = cw;
+				_weapons[j++] = cw;
 			}
 			else
-				_weapons[j] = 0;
-
-			++j;
+				_weapons[j++] = NULL;
 		}
 	}
 
@@ -178,7 +176,7 @@ void Craft::load(
 					rules->getItemsList().end(),
 					i->first) == rules->getItemsList().end())
 		{
-			_items->getContents()->erase(i++);
+			i = _items->getContents()->erase(i);
 		}
 		else
 			++i;
@@ -221,8 +219,8 @@ void Craft::load(
 		else if (type == "STR_UFO")
 		{
 			for (std::vector<Ufo*>::const_iterator
-					i = save->getUfos()->begin();
-					i != save->getUfos()->end();
+					i = gameSave->getUfos()->begin();
+					i != gameSave->getUfos()->end();
 					++i)
 			{
 				if ((*i)->getId() == id)
@@ -235,8 +233,8 @@ void Craft::load(
 		else if (type == "STR_WAYPOINT")
 		{
 			for (std::vector<Waypoint*>::const_iterator
-					i = save->getWaypoints()->begin();
-					i != save->getWaypoints()->end();
+					i = gameSave->getWaypoints()->begin();
+					i != gameSave->getWaypoints()->end();
 					++i)
 			{
 				if ((*i)->getId() == id)
@@ -249,8 +247,8 @@ void Craft::load(
 		else if (type == "STR_ALIEN_BASE")
 		{
 			for (std::vector<AlienBase*>::const_iterator
-					i = save->getAlienBases()->begin();
-					i != save->getAlienBases()->end();
+					i = gameSave->getAlienBases()->begin();
+					i != gameSave->getAlienBases()->end();
 					++i)
 			{
 				if ((*i)->getId() == id)
@@ -263,8 +261,8 @@ void Craft::load(
 		else // type = "STR_TERROR_SITE" (was "STR_ALIEN_TERROR")
 		{
 			for (std::vector<MissionSite*>::iterator
-					i = save->getMissionSites()->begin();
-					i != save->getMissionSites()->end();
+					i = gameSave->getMissionSites()->begin();
+					i != gameSave->getMissionSites()->end();
 					++i)
 			{
 				if ((*i)->getId() == id
@@ -293,7 +291,7 @@ YAML::Node Craft::save() const
 {
 	YAML::Node node = MovingTarget::save();
 
-	node["type"]	= _rules->getType();
+	node["type"]	= _crRule->getType();
 	node["id"]		= _id;
 	node["fuel"]	= _fuel;
 	node["damage"]	= _damage;
@@ -370,22 +368,22 @@ YAML::Node Craft::saveId() const
  */
 RuleCraft* Craft::getRules() const
 {
-	return _rules;
+	return _crRule;
 }
 
 /**
  * Sets the ruleset for this Craft's type.
- * @param rules - pointer to a different RuleCraft
+ * @param crRule - pointer to a different RuleCraft
  * @warning ONLY FOR NEW BATTLE USE!
  */
-void Craft::changeRules(RuleCraft* rules)
+void Craft::changeRules(RuleCraft* crRule)
 {
-	_rules = rules;
+	_crRule = crRule;
 	_weapons.clear();
 
 	for (int
 			i = 0;
-			i != _rules->getWeapons();
+			i != _crRule->getWeapons();
 			++i)
 	{
 		_weapons.push_back(NULL);
@@ -410,7 +408,7 @@ int Craft::getId() const
 std::wstring Craft::getName(Language* lang) const
 {
 	if (_name.empty() == true)
-		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_rules->getType())).arg(_id);
+		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_crRule->getType())).arg(_id);
 
 	return _name;
 }
@@ -433,10 +431,10 @@ int Craft::getMarker() const
 	if (_status != "STR_OUT")
 		return -1;
 
-	if (_rules->getMarker() == -1)
+	if (_crRule->getMarker() == -1)
 		return Globe::GLM_CRAFT;
 
-	return _rules->getMarker();
+	return _crRule->getMarker();
 }
 
 /**
@@ -451,7 +449,7 @@ Base* Craft::getBase() const
 /**
  * Sets the base this Craft belongs to.
  * @param base		- pointer to Base
- * @param transfer	- true to move the craft to the Base coordinates (true)
+ * @param transfer	- true to move the craft to the Base coordinates (default true)
  */
 void Craft::setBase(
 		Base* base,
@@ -544,9 +542,9 @@ void Craft::setDestination(Target* dest)
 		_takeoff = 75;
 
 	if (dest == NULL)
-		setSpeed(_rules->getMaxSpeed() / 2);
+		setSpeed(_crRule->getMaxSpeed() / 2);
 	else
-		setSpeed(_rules->getMaxSpeed());
+		setSpeed(_crRule->getMaxSpeed());
 
 	MovingTarget::setDestination(dest);
 }
@@ -557,7 +555,7 @@ void Craft::setDestination(Target* dest)
  */
 int Craft::getNumWeapons() const
 {
-	if (_rules->getWeapons() == 0)
+	if (_crRule->getWeapons() == 0)
 		return 0;
 
 	int ret = 0;
@@ -580,7 +578,7 @@ int Craft::getNumWeapons() const
  */
 int Craft::getNumSoldiers() const
 {
-	if (_rules->getSoldiers() == 0)
+	if (_crRule->getSoldiers() == 0)
 		return 0;
 
 	int ret = 0;
@@ -608,12 +606,12 @@ int Craft::getNumEquipment() const
 
 /**
  * Gets the amount of vehicles currently contained in this craft.
- * @param tileSpace - true to return tile-spaces used in a transport
+ * @param tiles - true to return tile-spaces used in a transport (default false)
  * @return, either number of vehicles or tile-space used
  */
-int Craft::getNumVehicles(bool tileSpace) const
+int Craft::getNumVehicles(bool tiles) const
 {
-	if (tileSpace == true)
+	if (tiles == true)
 	{
 		int ret = 0;
 
@@ -675,8 +673,8 @@ void Craft::setFuel(const int fuel)
 {
 	_fuel = fuel;
 
-	if (_fuel > _rules->getMaxFuel())
-		_fuel = _rules->getMaxFuel();
+	if (_fuel > _crRule->getMaxFuel())
+		_fuel = _crRule->getMaxFuel();
 	else if (_fuel < 0)
 		_fuel = 0;
 }
@@ -689,7 +687,7 @@ void Craft::setFuel(const int fuel)
 int Craft::getFuelPercentage() const
 {
 	return static_cast<int>(
-			std::floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel()))
+			std::floor((static_cast<double>(_fuel) / static_cast<double>(_crRule->getMaxFuel()))
 			* 100.));
 }
 
@@ -722,7 +720,7 @@ void Craft::setDamage(const int damage)
 int Craft::getDamagePercent() const
 {
 	return static_cast<int>(std::floor(
-		   static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100.));
+		   static_cast<double>(_damage) / static_cast<double>(_crRule->getMaxDamage()) * 100.));
 }
 
 /**
@@ -780,7 +778,7 @@ double Craft::getDistanceFromBase() const
  */
 int Craft::getFuelConsumption() const
 {
-	if (_rules->getRefuelItem().empty() == false) // Firestorm, Lightning, Avenger, etc.
+	if (_crRule->getRefuelItem().empty() == false) // Firestorm, Lightning, Avenger, etc.
 		return 1;
 
 //	return static_cast<int>(floor(
@@ -810,12 +808,12 @@ int Craft::getFuelLimit(Base* base) const
 
 	if (_dest != NULL)
 		distRads = getDistance(_dest) + _base->getDistance(_dest);
-	else if (_rules->getRefuelItem().empty() == true)
+	else if (_crRule->getRefuelItem().empty() == true)
 		patrol_factor = 2.;	// Elerium-powered Craft do not suffer this;
 							// they use 1 fuel per 10-min regardless of patrol speed:
 							// see getFuelConsumption() above^
 
-	const double speedRads = static_cast<double>(_rules->getMaxSpeed()) * unitToRads / 6.; // per 10-min.
+	const double speedRads = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.; // per 10-min.
 
 	return static_cast<int>(std::ceil(
 		   static_cast<double>(getFuelConsumption()) * distRads * patrol_factor / speedRads));
@@ -856,10 +854,10 @@ void Craft::think()
 }
 
 /**
- * Checks the condition of all the craft's systems to define its new status.
- * That is, when arriving at base by flight or transfer.
- * kL_Note: I now use this here and all over there too. Basically whenever
- * a status-phase completes somewhere ....
+ * Checks the condition of all the craft's systems to define its new status
+ * when arriving at Base by flight or transfer.
+ * @note This is actually used here and all over there too - basically whenever
+ * a status-phase completes a checkup is done.
  */
 void Craft::checkup()
 {
@@ -875,22 +873,22 @@ void Craft::checkup()
 			i != _weapons.end();
 			++i)
 	{
-		if (*i == NULL)
-			continue;
+		if (*i != NULL)
+		{
+			++cw;
 
-		++cw;
-
-		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-			++loaded;
-		else
-			(*i)->setRearming();
+			if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
+				++loaded;
+			else
+				(*i)->setRearming();
+		}
 	}
 
 	if (_damage > 0)
 		_status = "STR_REPAIRS";	// 1st
 	else if (cw > loaded)
 		_status = "STR_REARMING";	// 2nd
-	else if (_fuel < _rules->getMaxFuel())
+	else if (_fuel < _crRule->getMaxFuel())
 		_status = "STR_REFUELLING";	// 3rd
 	else
 		_status = "STR_READY";		// 4th Ready.
@@ -903,7 +901,7 @@ void Craft::checkup()
  */
 bool Craft::detect(Target* target) const
 {
-	const int radarRange = _rules->getRadarRange();
+	const int radarRange = _crRule->getRadarRange();
 
 	if (radarRange == 0)
 		return false;
@@ -935,7 +933,7 @@ void Craft::repair()
 	_warning = CW_NONE;
 	_warned = false;
 
-	setDamage(_damage - _rules->getRepairRate());
+	setDamage(_damage - _crRule->getRepairRate());
 
 	if (_damage == 0)
 		checkup();
@@ -1024,9 +1022,9 @@ void Craft::refuel()
 	_warning = CW_NONE;
 	_warned = false;
 
-	setFuel(_fuel + _rules->getRefuelRate());
+	setFuel(_fuel + _crRule->getRefuelRate());
 
-	if (_fuel == _rules->getMaxFuel())
+	if (_fuel == _crRule->getMaxFuel())
 		checkup();
 }
 
@@ -1058,7 +1056,7 @@ void Craft::setInBattlescape(const bool battle)
  */
 bool Craft::isDestroyed() const
 {
-	return (_damage >= _rules->getMaxDamage());
+	return (_damage >= _crRule->getMaxDamage());
 }
 
 /**
@@ -1067,7 +1065,7 @@ bool Craft::isDestroyed() const
  */
 int Craft::getSpaceAvailable() const
 {
-	return _rules->getSoldiers() - getSpaceUsed();
+	return _crRule->getSoldiers() - getSpaceUsed();
 }
 
 /**
@@ -1154,7 +1152,7 @@ void Craft::setInDogfight(const bool inDogfight)
 CraftId Craft::getUniqueId() const
 {
 	return std::make_pair(
-						_rules->getType(),
+						_crRule->getType(),
 						_id);
 }
 
@@ -1186,7 +1184,7 @@ int Craft::getLoadCapacity() const
 } */
 
 /**
- * Gets current load.
+ * Gets current load. Also recalculates '_loadCur' value.
  * @return, current load
  */
 int Craft::getLoadCurrent()
@@ -1232,7 +1230,7 @@ void Craft::setWarned(const bool warn)
 
 /**
  * Gets the amount of time this Craft will be repairing/rearming/refueling.
- * Note: Those are checked & try to happen every half hour.
+ * @note Those are checked & try to happen every half hour.
  * @param delayed - reference set true if this Craft's Base will run out of materiel
  * @return, hours before Craft can fly
  */
@@ -1245,7 +1243,7 @@ int Craft::getDowntime(bool& delayed)
 	{
 		hours += static_cast<int>(std::ceil(
 				 static_cast<double>(_damage)
-					/ static_cast<double>(_rules->getRepairRate())
+					/ static_cast<double>(_crRule->getRepairRate())
 				 / 2.));
 	}
 
@@ -1295,18 +1293,18 @@ int Craft::getDowntime(bool& delayed)
 		}
 	}
 
-	if (_fuel < _rules->getMaxFuel())
+	if (_fuel < _crRule->getMaxFuel())
 	{
-		const int reqQty = _rules->getMaxFuel() - _fuel;
+		const int reqQty = _crRule->getMaxFuel() - _fuel;
 
 		hours += static_cast<int>(std::ceil(
 				 static_cast<double>(reqQty)
-					/ static_cast<double>(_rules->getRefuelRate())
+					/ static_cast<double>(_crRule->getRefuelRate())
 				 / 2.));
 
 		if (delayed == false)
 		{
-			const std::string fuel = _rules->getRefuelItem();
+			const std::string fuel = _crRule->getRefuelItem();
 			if (fuel.empty() == false)
 			{
 				int baseQty = _base->getItems()->getItem(fuel);

@@ -83,7 +83,7 @@ private:
 
 	Base* _base;
 	ItemContainer* _items;
-	RuleCraft* _rules;
+	RuleCraft* _crRule;
 
 	std::vector<CraftWeapon*> _weapons;
 	std::vector<Vehicle*> _vehicles;
@@ -92,7 +92,7 @@ private:
 	public:
 		/// Creates a craft of the specified type.
 		Craft(
-				RuleCraft* rules,
+				RuleCraft* crRule,
 				Base* base,
 				int id = 0);
 		/// Cleans up the craft.
@@ -113,7 +113,7 @@ private:
 		/// Gets the craft's ruleset.
 		RuleCraft* getRules() const;
 		/// Sets the craft's ruleset.
-		void changeRules(RuleCraft* rules);
+		void changeRules(RuleCraft* crRule);
 
 		/// Gets the craft's ID.
 		int getId() const;
@@ -150,7 +150,7 @@ private:
 		/// Gets the craft's amount of equipment.
 		int getNumEquipment() const;
 		/// Gets the craft's amount of vehicles.
-		int getNumVehicles(bool tileSpace = false) const;
+		int getNumVehicles(bool tiles = false) const;
 
 		/// Gets the craft's weapons.
 		std::vector<CraftWeapon*>* getWeapons();

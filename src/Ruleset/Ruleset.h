@@ -205,7 +205,7 @@ protected:
 		/// Cleans up the ruleset.
 		~Ruleset();
 
-		/// kL. Reloads the country lines.
+		/// Reloads the country lines.
 		void reloadCountryLines();
 		/// Loads a ruleset from the given source.
 		void load(const std::string& source);

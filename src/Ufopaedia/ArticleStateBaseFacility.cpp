@@ -51,7 +51,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	:
 		ArticleState(defs->id)
 {
-	RuleBaseFacility* facility = _game->getRuleset()->getBaseFacility(defs->id);
+	RuleBaseFacility* facRule = _game->getRuleset()->getBaseFacility(defs->id);
 
 	_txtTitle = new Text(200, 17, 10, 24);
 
@@ -80,16 +80,17 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 						16);
 	add(_image);
 
-	SurfaceSet* const graphic = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	Surface* frame;
+	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	Surface* srfFac;
 	int
 		x_offset,
 		y_offset,
 		x_pos,
 		y_pos,
 		i = 0;
+	const size_t facSize = facRule->getSize();
 
-	if (facility->getSize() == 1)
+	if (facSize == 1)
 		x_offset =
 		y_offset = tile_size / 2;
 	else
@@ -99,26 +100,26 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	y_pos = y_offset;
 	for (size_t
 			y = 0;
-			y != facility->getSize();
+			y != facSize;
 			++y)
 	{
 		x_pos = x_offset;
 		for (size_t
 				x = 0;
-				x != facility->getSize();
+				x != facSize;
 				++x)
 		{
-			frame = graphic->getFrame(facility->getSpriteShape() + i);
-			frame->setX(x_pos);
-			frame->setY(y_pos);
-			frame->blit(_image);
+			srfFac = baseBits->getFrame(facRule->getSpriteShape() + i);
+			srfFac->setX(x_pos);
+			srfFac->setY(y_pos);
+			srfFac->blit(_image);
 
-			if (facility->getSize() == 1)
+			if (facSize == 1)
 			{
-				frame = graphic->getFrame(facility->getSpriteFacility() + i);
-				frame->setX(x_pos);
-				frame->setY(y_pos);
-				frame->blit(_image);
+				srfFac = baseBits->getFrame(facRule->getSpriteFacility() + i);
+				srfFac->setX(x_pos);
+				srfFac->setY(y_pos);
+				srfFac->blit(_image);
 			}
 
 			x_pos += tile_size;
@@ -146,11 +147,11 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	_lstInfo->addRow(
 				2,
 				tr("STR_CONSTRUCTION_TIME").c_str(),
-				tr("STR_DAY", facility->getBuildTime()).c_str());
+				tr("STR_DAY", facRule->getBuildTime()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
 
 	std::wostringstream woststr;
-	woststr << Text::formatFunding(facility->getBuildCost());
+	woststr << Text::formatFunding(facRule->getBuildCost());
 	_lstInfo->addRow(
 				2,
 				tr("STR_CONSTRUCTION_COST").c_str(),
@@ -159,18 +160,18 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 
 	woststr.str(L"");
 	woststr.clear();
-	woststr << Text::formatFunding(facility->getMonthlyCost());
+	woststr << Text::formatFunding(facRule->getMonthlyCost());
 	_lstInfo->addRow(
 				2,
 				tr("STR_MAINTENANCE_COST").c_str(),
 				woststr.str().c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
 
-	if (facility->getDefenseValue() != 0)
+	if (facRule->getDefenseValue() != 0)
 	{
 		woststr.str(L"");
 		woststr.clear();
-		woststr << facility->getDefenseValue();
+		woststr << facRule->getDefenseValue();
 		_lstInfo->addRow(
 					2,
 					tr("STR_DEFENSE_VALUE").c_str(),
@@ -179,7 +180,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 
 		woststr.str(L"");
 		woststr.clear();
-		woststr << Text::formatPercentage(facility->getHitRatio());
+		woststr << Text::formatPercentage(facRule->getHitRatio());
 		_lstInfo->addRow(
 					2,
 					tr("STR_HIT_RATIO").c_str(),

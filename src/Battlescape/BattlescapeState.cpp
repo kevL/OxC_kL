@@ -2175,7 +2175,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 }
 
 /**
- * Shows an action popup menu. When clicked, creates the action.
+ * Shows an action popup menu. Creates the action when clicked.
  * @param action - pointer to an Action
  */
 void BattlescapeState::btnLeftHandLeftClick(Action*)
@@ -2221,7 +2221,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
 }
 
 /**
- * Shows an action popup menu. When clicked, creates the action.
+ * Shows an action popup menu. Creates the action when clicked.
  * @param action - pointer to an Action
  */
 void BattlescapeState::btnRightHandLeftClick(Action*)
@@ -3315,12 +3315,10 @@ void BattlescapeState::finishBattle(
 		_gameTimer->stop();
 		_game->popState();
 
-		if (abort == true
-			|| inExitArea == 0)
+		if (abort == true		// abort was done or no player is still alive
+			|| inExitArea == 0)	// this concludes to defeat when in mars or mars landing mission
 		{
-			// abort was done or no player is still alive
-			// this concludes to defeat when in mars or mars landing mission
-			if (_rules->getDeployment(stType) != NULL
+			if (   _rules->getDeployment(stType) != NULL
 				&& _rules->getDeployment(stType)->isNoRetreat() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{
@@ -3329,11 +3327,9 @@ void BattlescapeState::finishBattle(
 			else
 				_game->pushState(new DebriefingState());
 		}
-		else
-		{
-			// no abort was done and at least a player is still alive
-			// this concludes to victory when in mars mission
-			if (_rules->getDeployment(stType) != NULL
+		else					// no abort was done and at least a player is still alive
+		{						// this concludes to victory when in mars mission
+			if (   _rules->getDeployment(stType) != NULL
 				&& _rules->getDeployment(stType)->isFinalMission() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{

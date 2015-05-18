@@ -30,16 +30,16 @@ namespace OpenXcom
  * @note This describes a vehicle that has been loaded onto a Craft only.
  * @param itRule	- pointer to RuleItem
  * @param ammo		- initial ammo
- * @param unitSize	- size in tiles
+ * @param vhclSize	- size in tiles
  */
 Vehicle::Vehicle(
 		RuleItem* itRule,
 		int ammo,
-		int unitSize)
+		int vhclSize)
 	:
 		_itRule(itRule),
 		_ammo(ammo),
-		_size(unitSize)
+		_size(vhclSize)
 {}
 
 /**

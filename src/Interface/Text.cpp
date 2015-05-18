@@ -70,7 +70,8 @@ Text::~Text()
 {}
 
 /**
- * Takes an integer value and formats it as number with separators (spacing the thousands).
+ * Takes an integer value and formats it as number with separators spacing the
+ * thousands.
  * @param value		- a value
  * @param space		- true to insert a space every 3 digits (default false)
  * @param currency	- reference a currency symbol (default L"")
@@ -126,8 +127,8 @@ std::wstring Text::formatNumber(
 }
 
 /**
- * Takes an integer value and formats it as currency by
- * spacing the thousands and adding a $ sign to the front.
+ * Takes an integer value and formats it as currency by spacing the thousands
+ * and adding a $ sign to the front.
  * @param funds - the funding value
  * @return, the formatted string
  */

@@ -5404,6 +5404,7 @@ initialFunding: 6000 # not used
 alienFuel: STR_ELERIUM_115
 radarCutoffRange: 1500
 firstGrenade: 0
+font: Font.dat
 cutscenes:
   - type: intro
     videos:

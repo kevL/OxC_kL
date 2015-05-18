@@ -601,6 +601,12 @@ private:
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();
 
+		/// Calculates the bonus cost for soldiers by rank.
+		int calcSoldierCost(
+				Base* const base,
+				const Craft* const craft = NULL,
+				const bool deceased = false) const;
+
 		/// Returns the craft corresponding to the specified unique id.
 //		Craft* findCraftByUniqueId(const CraftId& craftId) const;
 };

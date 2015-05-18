@@ -42,17 +42,18 @@ class CraftSoldiersState
 {
 
 private:
-	size_t _craftID;
+	size_t _craftId;
 
 	Base* _base;
 	Text
 		* _txtBaseLabel,
+		* _txtCost,
 		* _txtCraft,
+		* _txtLoad,
 		* _txtName,
 		* _txtRank,
 		* _txtTitle,
-		* _txtSpace,
-		* _txtLoad;
+		* _txtSpace;
 	TextButton
 		* _btnInventory,
 		* _btnOk,
@@ -60,12 +61,15 @@ private:
 	TextList* _lstSoldiers;
 	Window* _window;
 
+	/// Sets current cost to send the Craft on a mission.
+	void calcCost();
+
 
 	public:
 		/// Creates the Craft Soldiers state.
 		CraftSoldiersState(
 				Base* base,
-				size_t craftID);
+				size_t craftId);
 		/// Cleans up the Craft Soldiers state.
 		~CraftSoldiersState();
 

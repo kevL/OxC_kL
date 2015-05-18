@@ -33,7 +33,7 @@ class BaseFacility;
 class Font;
 class Language;
 class RuleBaseFacility;
-class Surface; // not needed, prob covered by SurfaceSet.
+class Surface;
 class SurfaceSet;
 class Timer;
 
@@ -73,7 +73,6 @@ private:
 		* _selector;
 	SurfaceSet* _texture;
 	Timer* _timer;
-
 
 	/// Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
 	void updateNeighborFacilityBuildTime(

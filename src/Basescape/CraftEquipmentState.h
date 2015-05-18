@@ -55,12 +55,13 @@ private:
 	Base* _base;
 	Text
 		* _txtBaseLabel,
+		* _txtCost,
 		* _txtItem,
+		* _txtLoad,
 		* _txtStores,
 		* _txtCraft,
 		* _txtTitle,
-		* _txtSpace,
-		* _txtLoad;
+		* _txtSpace;
 	TextButton
 		* _btnClear,
 		* _btnInventory,
@@ -75,6 +76,8 @@ private:
 
 	/// Updates quantities of item.
 	void updateQuantity();
+	/// Sets current cost to send the Craft on a mission.
+	void calcCost();
 
 
 	public:
