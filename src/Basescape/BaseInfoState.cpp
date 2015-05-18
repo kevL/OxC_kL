@@ -382,13 +382,13 @@ void BaseInfoState::init()
 	_barHangars->setMax(var);
 	_barHangars->setValue(var2);
 
-	var = _base->getDefenseValue();
+	var = _base->getDefenseTotal();
 	woststr10 << var;
 	_numDefense->setText(woststr10.str());
 	_barDefense->setMax(var);
 	_barDefense->setValue(var);
 
-	var = _base->getShortRangeValue();
+	var = _base->getShortRangeTotal();
 	woststr11 << var;
 	_numShortRange->setText(woststr11.str());
 	_barShortRange->setMax(var);
@@ -398,7 +398,7 @@ void BaseInfoState::init()
 	if (_base->getHyperDetection() == true)
 		_barLongRange->setColor(Palette::blockOffset(4)+4);
 
-	var = _base->getLongRangeValue();
+	var = _base->getLongRangeTotal();
 	woststr12 << var;
 	_numLongRange->setText(woststr12.str());
 	_barLongRange->setMax(var);

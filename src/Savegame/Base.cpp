@@ -84,7 +84,7 @@ Base::Base(const Ruleset* const rules)
 }
 
 /**
- * Deletes the contents of the base from memory.
+ * Deletes the contents of this Base from memory.
  */
 Base::~Base()
 {
@@ -494,8 +494,8 @@ ItemContainer* Base::getItems()
 }
 
 /**
- * Returns the amount of scientists currently in the base.
- * @return, Number of scientists.
+ * Returns the amount of scientists currently in this Base.
+ * @return, number of scientists
  */
 int Base::getScientists() const
 {
@@ -503,8 +503,8 @@ int Base::getScientists() const
 }
 
 /**
- * Changes the amount of scientists currently in the base.
- * @param scientists Number of scientists.
+ * Changes the amount of scientists currently in this Base.
+ * @param scientists - number of scientists
  */
 void Base::setScientists(int scientists)
 {
@@ -512,8 +512,8 @@ void Base::setScientists(int scientists)
 }
 
 /**
- * Returns the amount of engineers currently in the base.
- * @return, Number of engineers.
+ * Returns the amount of engineers currently in this Base.
+ * @return, number of engineers
  */
 int Base::getEngineers() const
 {
@@ -521,8 +521,8 @@ int Base::getEngineers() const
 }
 
 /**
- * Changes the amount of engineers currently in the base.
- * @param engineers Number of engineers.
+ * Changes the amount of engineers currently in this Base.
+ * @param engineers - number of engineers
  */
 void Base::setEngineers(int engineers)
 {
@@ -530,15 +530,15 @@ void Base::setEngineers(int engineers)
 }
 
 /**
- * Returns if a certain target is covered by the base's
- * radar range taking in account the range and chance.
+ * Returns if a certain Target is covered by this Base's radar range taking into
+ * account the range and chance.
  * @param target - pointer to a UFO to attempt detection against
  * @return,	0 undetected
  *			1 hyperdetected only
  *			2 detected
  *			3 detected & hyperdetected
  */
-int Base::detect(Target* target) const
+int Base::detect(Target* const target) const
 {
 	double targetDist = insideRadarRange(target);
 
@@ -553,7 +553,7 @@ int Base::detect(Target* target) const
 		targetDist = -targetDist;
 	}
 
-	int chance = 0;
+	int pct = 0;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -564,17 +564,17 @@ int Base::detect(Target* target) const
 		{
 			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (radarRange > targetDist)
-				chance += (*i)->getRules()->getRadarChance();
+				pct += (*i)->getRules()->getRadarChance();
 		}
 	}
 
 	const Ufo* const ufo = dynamic_cast<Ufo*>(target);
 	if (ufo != NULL)
 	{
-		chance += ufo->getVisibility();
-		chance = static_cast<int>(Round(static_cast<double>(chance) / 3.)); // per 10-min.
+		pct += ufo->getVisibility();
+		pct = static_cast<int>(Round(static_cast<double>(pct) / 3.)); // per 10-min.
 
-		if (RNG::percent(chance) == true)
+		if (RNG::percent(pct) == true)
 			ret += 2;
 	}
 
@@ -587,7 +587,7 @@ int Base::detect(Target* target) const
  * @param target - pointer to UFO
  * @return, great circle distance to UFO (negative if hyperdetected)
  */
-double Base::insideRadarRange(Target* target) const
+double Base::insideRadarRange(const Target* const target) const
 {
 	const double targetDist = getDistance(target) * earthRadius;
 	if (targetDist > static_cast<double>(_rules->getMaxRadarRange()) * greatCircleConversionFactor)
@@ -655,7 +655,7 @@ int Base::getAvailableSoldiers(const bool combatReady) const
 }
 
 /**
- * Returns the total amount of soldiers contained in the base.
+ * Returns the total amount of soldiers contained in this Base.
  * @return, number of soldiers
  */
 int Base::getTotalSoldiers() const
@@ -675,7 +675,7 @@ int Base::getTotalSoldiers() const
 }
 
 /**
- * Returns the amount of scientists contained in the base without any assignments.
+ * Returns the amount of scientists contained in this Base without any assignments.
  * @return, number of scientists
  */
 /* int Base::getAvailableScientists() const
@@ -684,7 +684,7 @@ int Base::getTotalSoldiers() const
 } */
 
 /**
- * Returns the total amount of scientists contained in the base.
+ * Returns the total amount of scientists contained in this Base.
  * @return, number of scientists
  */
 int Base::getTotalScientists() const
@@ -713,7 +713,7 @@ int Base::getTotalScientists() const
 }
 
 /**
- * Returns the amount of engineers contained in the base without any assignments.
+ * Returns the amount of engineers contained in this Base without any assignments.
  * @return, number of engineers
  */
 /* int Base::getAvailableEngineers() const
@@ -722,7 +722,7 @@ int Base::getTotalScientists() const
 } */
 
 /**
- * Returns the total amount of engineers contained in the base.
+ * Returns the total amount of engineers contained in this Base.
  * @return, number of engineers
  */
 int Base::getTotalEngineers() const
@@ -750,8 +750,8 @@ int Base::getTotalEngineers() const
 }
 
 /**
- * Returns the amount of living quarters used up by personnel in the base.
- * @return, living space
+ * Returns the amount of living quarters used up by personnel in this Base.
+ * @return, personnel space
  */
 int Base::getUsedQuarters() const
 {
@@ -759,8 +759,8 @@ int Base::getUsedQuarters() const
 }
 
 /**
- * Returns the total amount of living quarters available in the base.
- * @return, living space
+ * Returns the total amount of living quarters available in this Base.
+ * @return, personnel space
  */
 int Base::getAvailableQuarters() const
 {
@@ -868,7 +868,7 @@ bool Base::storesOverfull(double offset)
 }
 
 /**
- * Returns the total amount of stores available in the base.
+ * Returns the total amount of stores available in this Base.
  * @return, storage space
  */
 int Base::getAvailableStores() const
@@ -939,12 +939,12 @@ int Base::getAvailableStores() const
 } */
 
 /**
- * Returns the amount of laboratories used up by research projects in the base.
+ * Returns the amount of laboratories used up by research projects in this Base.
  * @return, laboratory space
  */
 int Base::getUsedLaboratories() const
 {
-	int usedLabSpace = 0;
+	int total = 0;
 
 	const std::vector<ResearchProject*>& research(getResearch());
 	for (std::vector<ResearchProject*>::const_iterator
@@ -952,14 +952,14 @@ int Base::getUsedLaboratories() const
 			i != research.end();
 			++i)
 	{
-		usedLabSpace += (*i)->getAssigned();
+		total += (*i)->getAssigned();
 	}
 
-	return usedLabSpace;
+	return total;
 }
 
 /**
- * Returns the total amount of laboratories available in the base.
+ * Returns the total amount of laboratories available in this Base.
  * @return, laboratory space
  */
 int Base::getAvailableLaboratories() const
@@ -979,26 +979,26 @@ int Base::getAvailableLaboratories() const
 }
 
 /**
- * Returns the amount of workshops used up by manufacturing projects in the base.
- * @return, storage space
+ * Returns the amount of workshops used up by manufacturing projects in this Base.
+ * @return, workshop space
  */
 int Base::getUsedWorkshops() const
 {
-	int usedWorkShop = 0;
+	int total = 0;
 
 	for (std::vector<Production*>::const_iterator
 			i = _productions.begin();
 			i != _productions.end();
 			++i)
 	{
-		usedWorkShop += (*i)->getAssignedEngineers() + (*i)->getRules()->getRequiredSpace();
+		total += (*i)->getAssignedEngineers() + (*i)->getRules()->getRequiredSpace();
 	}
 
-	return usedWorkShop;
+	return total;
 }
 
 /**
- * Returns the total amount of workshops available in the base.
+ * Returns the total amount of workshops available in this Base.
  * @return, workshop space
  */
 int Base::getAvailableWorkshops() const
@@ -1018,8 +1018,8 @@ int Base::getAvailableWorkshops() const
 }
 
 /**
- * Returns the amount of hangars used up by crafts in the base.
- * @return, storage space
+ * Returns the amount of hangars used up by crafts in this Base.
+ * @return, hangars
  */
 int Base::getUsedHangars() const
 {
@@ -1040,16 +1040,16 @@ int Base::getUsedHangars() const
 			++i)
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
-			// This should be fixed on the case when (*i)->getInfiniteAmount() == TRUE
 			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
+			// TODO: This should be fixed on the case when (*i)->getInfiniteAmount() == TRUE
 	}
 
 	return total;
 }
 
 /**
- * Returns the total amount of hangars available in the base.
- * @return, number of hangars
+ * Returns the total amount of hangars available in this Base.
+ * @return, hangars
  */
 int Base::getAvailableHangars() const
 {
@@ -1068,8 +1068,8 @@ int Base::getAvailableHangars() const
 }
 
 /**
- * Return laboratories space not used by a ResearchProject
- * @return, laboratories space not used by a ResearchProject
+ * Returns laboratories space not used by a ResearchProject.
+ * @return, lab space not used by a ResearchProject
 */
 int Base::getFreeLaboratories() const
 {
@@ -1077,7 +1077,7 @@ int Base::getFreeLaboratories() const
 }
 
 /**
- * Return workshop space not used by a Production
+ * Returns workshop space not used by a Production.
  * @return, workshop space not used by a Production
 */
 int Base::getFreeWorkshops() const
@@ -1086,7 +1086,7 @@ int Base::getFreeWorkshops() const
 }
 
 /**
- * Return psilab space not in use
+ * Returns psilab space not in use.
  * @return, psilab space not in use
 */
 int Base::getFreePsiLabs() const
@@ -1096,7 +1096,7 @@ int Base::getFreePsiLabs() const
 
 /**
  * Returns the amount of scientists currently in use.
- * @return, Amount of scientists.
+ * @return, amount of scientists
 */
 int Base::getAllocatedScientists() const
 {
@@ -1116,7 +1116,7 @@ int Base::getAllocatedScientists() const
 
 /**
  * Returns the amount of engineers currently in use.
- * @return, Amount of engineers.
+ * @return, amount of engineers
 */
 int Base::getAllocatedEngineers() const
 {
@@ -1134,10 +1134,11 @@ int Base::getAllocatedEngineers() const
 }
 
 /**
- * Returns the total defense value of all the facilities in the base.
+ * Returns the total defense value of all the facilities in this Base.
+ * @note Used for BaseInfoState bar.
  * @return, defense value
  */
-int Base::getDefenseValue() const
+int Base::getDefenseTotal() const
 {
 	int total = 0;
 
@@ -1154,10 +1155,10 @@ int Base::getDefenseValue() const
 }
 
 /**
- * Returns the total amount of short range detection facilities in the base.
- * @return, Short Range Detection value.
+ * Returns the total amount of short range detection facilities in this Base.
+ * @return, quantity of shortrange detection facilities
  */
-/*kL int Base::getShortRangeDetection() const
+/* int Base::getShortRangeDetection() const
 {
 	int
 		total = 0,
@@ -1190,11 +1191,11 @@ int Base::getDefenseValue() const
 } */
 
 /**
- * kL. Returns the total value of short range detection facilities at this base.
- * Used for BaseInfoState graphics.
- * @return, short range detection value (%)
+ * Returns the total value of short range detection facilities at this base.
+ * @note Used for BaseInfoState bar.
+ * @return, shortrange detection value as percent
  */
-int Base::getShortRangeValue() const // kL
+int Base::getShortRangeTotal() const
 {
 	int
 		total = 0,
@@ -1223,10 +1224,10 @@ int Base::getShortRangeValue() const // kL
 }
 
 /**
- * Returns the total amount of long range detection facilities in the base.
- * @return, Long Range Detection value.
+ * Returns the total amount of long range detection facilities in this Base.
+ * @return, quantity of longrange detection facilities
  */
-/*kL int Base::getLongRangeDetection() const
+/* int Base::getLongRangeDetection() const
 {
 	int total = 0;
 	int minRadarRange = _rules->getMinRadarRange();
@@ -1249,10 +1250,10 @@ int Base::getShortRangeValue() const // kL
 
 /**
  * Returns the total value of long range detection facilities at this base.
- * Used for BaseInfoState graphics.
- * @return, long range detection value (%)
+ * @note Used for BaseInfoState bar.
+ * @return, longrange detection value as percent
  */
-int Base::getLongRangeValue() const
+int Base::getLongRangeTotal() const
 {
 	int total = 0;
 
@@ -1275,16 +1276,17 @@ int Base::getLongRangeValue() const
 }
 
 /**
- * Returns the total amount of craft of a certain type stored at or being
- * tranferred to this base. Used for MonthlyCostsState.
- * @param craft - craft type
- * @return, quantity of craft type
+ * Returns the total amount of Craft of a certain type stored at or being
+ * transfered to this Base.
+ * @note Used by MonthlyCostsState.
+ * @param craft - reference the craft type
+ * @return, quantity of craft-type
  */
 int Base::getCraftCount(const std::string& craft) const
 {
 	int total = 0;
 
-	for (std::vector<Transfer*>::const_iterator // kL_begin:
+	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
 			i != _transfers.end();
 			++i)
@@ -1294,7 +1296,7 @@ int Base::getCraftCount(const std::string& craft) const
 		{
 			total += (*i)->getQuantity();
 		}
-	} // kL_end.
+	}
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
@@ -1302,29 +1304,29 @@ int Base::getCraftCount(const std::string& craft) const
 			++i)
 	{
 		if ((*i)->getRules()->getType() == craft)
-			total++;
+			++total;
 	}
 
 	return total;
 }
 
 /**
- * Returns the total amount of monthly costs for maintaining the craft in the base.
- * Used for month-end maintenance expenditure.
+ * Returns the total amount of monthly costs for maintaining the craft in this Base.
+ * @note Used for monthly maintenance expenditure.
  * @return, maintenance costs
  */
 int Base::getCraftMaintenance() const
 {
 	int total = 0;
 
-	for (std::vector<Transfer*>::const_iterator // kL_begin: craft-transfer bugfix.
+	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
 			i != _transfers.end();
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_CRAFT)
 			total += (*i)->getQuantity() * (*i)->getCraft()->getRules()->getRentCost();
-	} // kL_end.
+	}
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
@@ -1338,8 +1340,8 @@ int Base::getCraftMaintenance() const
 }
 
 /**
- * Returns the total amount of monthly costs for maintaining the personnel in the base.
- * Used for month-end maintenance expenditure.
+ * Returns the total amount of monthly costs for maintaining the personnel in this Base.
+ * @note Used for monthly maintenance expenditure.
  * @return, maintenance costs
  */
 int Base::getPersonnelMaintenance() const
@@ -1349,13 +1351,14 @@ int Base::getPersonnelMaintenance() const
 	total += getTotalSoldiers() * _rules->getSoldierCost();
 	total += getTotalEngineers() * _rules->getEngineerCost();
 	total += getTotalScientists() * _rules->getScientistCost();
+	total += calcSoldierBonuses();
 
 	return total;
 }
 
 /**
- * Returns the total amount of monthly costs for maintaining the facilities in the base.
- * Used for month-end maintenance expenditure.
+ * Returns the total amount of monthly costs for maintaining the facilities in this Base.
+ * @note Used for monthly maintenance expenditure.
  * @return, maintenance costs
  */
 int Base::getFacilityMaintenance() const
@@ -1375,9 +1378,9 @@ int Base::getFacilityMaintenance() const
 }
 
 /**
- * Returns the total amount of all the maintenance monthly costs in the base.
- * Used for month-end maintenance expenditure.
- * @return, Maintenance costs.
+ * Returns the total amount of all the maintenance monthly costs in this Base.
+ * @note Used for monthly maintenance expenditure.
+ * @return, maintenance costs
  */
 int Base::getMonthlyMaintenace() const
 {
@@ -1385,7 +1388,7 @@ int Base::getMonthlyMaintenace() const
 }
 
 /**
- * Add a new Production to the Base
+ * Adds a new Production to the Base
  * @param prod - pointer to a Production
  */
 void Base::addProduction(Production* prod)
@@ -1394,7 +1397,7 @@ void Base::addProduction(Production* prod)
 }
 
 /**
- * Remove a Production from the Base.
+ * Removes a Production from the Base.
  * @param prod - pointer to a Production
  */
 void Base::removeProduction(Production* prod)
@@ -1410,7 +1413,7 @@ void Base::removeProduction(Production* prod)
 }
 
 /**
- * Get the list of Base Productions.
+ * Gets the list of Base Productions.
  * @return, the list of Base Productions
  */
 const std::vector<Production*>& Base::getProductions() const
@@ -1428,7 +1431,7 @@ const std::vector<ResearchProject*>& Base::getResearch() const
 }
 
 /**
- * Add a new ResearchProject to Base
+ * Adds a new ResearchProject to Base
  * @param project - project to add
  */
 void Base::addResearch(ResearchProject* const project)
@@ -1437,8 +1440,8 @@ void Base::addResearch(ResearchProject* const project)
 }
 
 /**
- * Remove a ResearchProject from base.
- * @param project	- a project to remove
+ * Removes a ResearchProject from base.
+ * @param project	- pointer to a ResearchProject for removal
  * @param grantHelp	- true to apply researchHelp() (default true)
  * @param goOffline	- true to hide project but not remove it from base's active ResearchProjects (default false)
  */
@@ -1473,7 +1476,7 @@ void Base::removeResearch(
 
 /**
  * Research Help ala XcomUtil.
- * @param aLien - name of the alien that got prodded
+ * @param aLien - reference the name of the alien that got prodded
  */
 void Base::researchHelp(const std::string& aLien)
 {
@@ -1843,8 +1846,8 @@ bool Base::hasProduction() const
 }
 
 /**
- * Returns the total amount of PsiLab Space available in the base.
- * @return, PsiLab space
+ * Returns the total amount of PsiLab Space available in this Base.
+ * @return, psilab space
  */
 int Base::getAvailablePsiLabs() const
 {
@@ -1863,8 +1866,8 @@ int Base::getAvailablePsiLabs() const
 }
 
 /**
- * Returns the total amount of used PsiLab Space in the base.
- * @return, used PsiLab space
+ * Returns the total amount of used PsiLab Space in this Base.
+ * @return, used psilab space
  */
 int Base::getUsedPsiLabs() const
 {
@@ -1939,7 +1942,7 @@ int Base::getUsedContainment() const
 
 /**
  * Gets the quantity of aLiens currently under interrogation.
- * @return, qty of aliens
+ * @return, quantity of aliens
  */
 int Base::getInterrogatedAliens() const
 {
@@ -1973,7 +1976,7 @@ bool Base::isInBattlescape() const
 
 /**
  * Changes this Base's battlescape status.
- * @param inbattle - true if Base is the battlescape
+ * @param inbattle - true if in the battlescape
  */
 void Base::setInBattlescape(bool inTactical)
 {
@@ -1982,7 +1985,7 @@ void Base::setInBattlescape(bool inTactical)
 
 /**
  * Marks this Base as a valid alien retaliation target.
- * @param mark - Mark (if @c true) or unmark (if @c false) the base (default true)
+ * @param mark - mark (if @c true) or unmark (if @c false) the base (default true)
  */
 void Base::setIsRetaliationTarget(bool mark)
 {
@@ -1991,7 +1994,7 @@ void Base::setIsRetaliationTarget(bool mark)
 
 /**
  * Gets this Base's retaliation status.
- * @return, true if Base is a valid target for alien retaliation
+ * @return, true if valid target for alien retaliation
  */
 bool Base::getIsRetaliationTarget() const
 {
@@ -2047,7 +2050,7 @@ bool Base::getIsRetaliationTarget() const
 
 /**
  * Calculates the chance for aLiens to detect this base.
- * Big bases without mindshields are easier to detect.
+ * @note Big bases without mindshields are easier to detect.
  * @param diff - the game's difficulty setting
  * @return, detection chance
  */
@@ -2255,7 +2258,7 @@ std::vector<BaseFacility*>* Base::getDefenses()
 }
 
 /**
- * Returns the list of vehicles currently equipped in the base.
+ * Returns the list of vehicles currently equipped in this Base.
  * @return, pointer to a vector of pointers to Vehicle
  */
 std::vector<Vehicle*>* Base::getVehicles()
@@ -2264,7 +2267,7 @@ std::vector<Vehicle*>* Base::getVehicles()
 }
 
 /**
- * Destroys all disconnected facilities in the base.
+ * Destroys all disconnected facilities in this Base.
  */
 void Base::destroyDisconnectedFacilities()
 {
@@ -2490,8 +2493,8 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 }
 
 /**
- * Removes a base module, and deals with the ramifications thereof.
- * @param fac - an iterator reference to the facility to destroy and remove
+ * Removes a base module and deals with the ramifications thereof.
+ * @param fac - an iterator reference to the facility to destroy
  */
 void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 {
@@ -2863,7 +2866,7 @@ size_t Base::getCurrentSoldier() const
  * @param craft - pointer to the Craft for the sortie (default NULL)
  * @return, cost
  */
-int Base::calcSoldierCosts(const Craft* const craft) const
+int Base::calcSoldierBonuses(const Craft* const craft) const
 {
 	int total = 0;
 
@@ -2899,7 +2902,7 @@ void Base::soldierExpense(
 		cost /= 2;
 
 	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - cost);
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
 }
 
 /**
@@ -2917,7 +2920,7 @@ void Base::hwpExpense(
 		cost /= 2;
 
 	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - cost);
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
 }
 /*	switch (sol->getRank())
 	{

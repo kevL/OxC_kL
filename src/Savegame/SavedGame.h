@@ -394,7 +394,7 @@ private:
 		std::vector<int64_t>& getFundsList();
 
 		/// Returns a list of maintenance costs
-		std::vector<int64_t>& getMaintenances();
+		std::vector<int64_t>& getMaintenanceList();
 		/// Returns the list of monthly income values.
 		std::vector<int64_t>& getIncomeList();
 		/// Returns the list of monthly expenditure values.
@@ -422,7 +422,7 @@ private:
 		const std::vector<Base*>* getBases() const;
 
 		/// Gets the total base maintenance.
-		int getBaseMaintenance() const;
+		int getBaseMaintenances() const;
 
 		/// Gets the list of UFOs.
 		std::vector<Ufo*>* getUfos();

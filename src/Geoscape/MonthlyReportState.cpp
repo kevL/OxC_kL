@@ -24,8 +24,7 @@
 //#include <sstream>
 
 #include "DefeatState.h"
-#include "Globe.h"
-#include "PsiTrainingState.h"
+//#include "PsiTrainingState.h"
 
 #include "../Battlescape/CommendationState.h"
 
@@ -58,15 +57,12 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Monthly Report screen.
- * @param psi	- true to show psi training afterwards
- * @param globe	- pointer to Globe
+// * @param psi - true to show psi training afterwards
  */
-MonthlyReportState::MonthlyReportState(
-		bool psi,
-		Globe* globe)
+MonthlyReportState::MonthlyReportState()
+//		bool psi)
 	:
-		_psi(psi),
-		_globe(globe),
+//		_psi(psi),
 		_gameOver(false),
 		_ratingTotal(0),
 		_deltaFunds(0),
@@ -186,7 +182,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtIncome->setText(ss.str());
 
 	std::wostringstream ss2;
-	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenance());
+	ss2 << tr("STR_MAINTENANCE") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getBaseMaintenances());
 	_txtMaintenance->setText(ss2.str());
 
 	std::wostringstream ss3;
@@ -325,12 +321,11 @@ MonthlyReportState::~MonthlyReportState()
 {}
 
 /**
- * Update all activity counters, gather all scores,
- * get countries to sign pacts, adjust their fundings,
- * assess their satisfaction, and finally calculate overall
- * total score, with thanks to Volutar for the formulae.
+ * Update all activity counters, gather all scores, get countries to sign pacts,
+ * adjust their fundings, assess their satisfaction, and finally calculate
+ * overall total score, with thanks to Volutar for the formulae.
  */
-void MonthlyReportState::calculateChanges()
+void MonthlyReportState::calculateChanges() // private.
 {
 	_ratingLast = 0;
 
@@ -500,8 +495,8 @@ void MonthlyReportState::btnOkClick(Action*)
 		if (_soldiersMedalled.empty() == false)
 			_game->pushState(new CommendationState(_soldiersMedalled));
 
-		if (_psi == true)
-			_game->pushState(new PsiTrainingState());
+//		if (_psi == true)
+//			_game->pushState(new PsiTrainingState());
 
 		if (_gameSave->isIronman() == true)
 			_game->pushState(new SaveGameState(
@@ -552,7 +547,7 @@ void MonthlyReportState::btnOkClick(Action*)
  * @param singular	- reference a string to append if the returned string is singular
  * @param plural	- reference a string to append if the returned string is plural
  */
-std::wstring MonthlyReportState::countryList(
+std::wstring MonthlyReportState::countryList( // private.
 		const std::vector<std::string>& countries,
 		const std::string& singular,
 		const std::string& plural)

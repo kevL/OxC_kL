@@ -1785,9 +1785,8 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		balance[]		= {0,0,0,0,0,0,0,0,0,0,0,0},
 		score[]			= {0,0,0,0,0,0,0,0,0,0,0,0},
 
-		baseIncome = 0,
-		baseExpenditure = 0;
-//		maintenance[0] = _game->getSavedGame()->getBaseMaintenance() / 1000;
+		baseIncomes = 0,
+		baseExpenditures = 0;
 
 	// start filling those arrays with score values;
 	// determine which is the highest one being displayed, so we can adjust the scale
@@ -1799,8 +1798,6 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	{
 		rit = _game->getSavedGame()->getFundsList().size() - (itMonth + 1);
 
-//		expenditure[itMonth] = balance[itMonth + 1] + income[itMonth] - maintenance[itMonth] - balance[itMonth];
-
 		if (itMonth == 0)
 		{
 			for (std::vector<Base*>::const_iterator
@@ -1808,19 +1805,19 @@ void GraphsState::drawFinanceLines() // Council Analytics
 					i != _game->getSavedGame()->getBases()->end();
 					++i)
 			{
-				baseIncome += (*i)->getCashIncome();
-				baseExpenditure += (*i)->getCashSpent();
+				baseIncomes += (*i)->getCashIncome();
+				baseExpenditures += (*i)->getCashSpent();
 			}
 
-			income[itMonth] = baseIncome / 1000;			// kL, perhaps add Country funding
-			expenditure[itMonth] = baseExpenditure / 1000;	// kL
-			maintenance[itMonth] = _game->getSavedGame()->getBaseMaintenance() / 1000; // use current
+			income[itMonth] = baseIncomes / 1000; // perhaps add Country funding
+			expenditure[itMonth] = baseExpenditures / 1000;
+			maintenance[itMonth] = _game->getSavedGame()->getBaseMaintenances() / 1000; // use current
 		}
 		else
 		{
-			income[itMonth] = static_cast<int>(_game->getSavedGame()->getIncomeList().at(rit)) / 1000;				// kL, perhaps add Country funding
-			expenditure[itMonth] = static_cast<int>(_game->getSavedGame()->getExpenditureList().at(rit)) / 1000;	// kL
-			maintenance[itMonth] = static_cast<int>(_game->getSavedGame()->getMaintenances().at(rit)) / 1000;
+			income[itMonth] = static_cast<int>(_game->getSavedGame()->getIncomeList().at(rit)) / 1000; // perhaps add Country funding
+			expenditure[itMonth] = static_cast<int>(_game->getSavedGame()->getExpenditureList().at(rit)) / 1000;
+			maintenance[itMonth] = static_cast<int>(_game->getSavedGame()->getMaintenanceList().at(rit)) / 1000;
 		}
 
 		balance[itMonth] = static_cast<int>(_game->getSavedGame()->getFundsList().at(rit)) / 1000; // note: these (int)casts render int64_t useless.

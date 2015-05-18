@@ -139,8 +139,6 @@ private:
 
 
 	public:
-//		static Sound* soundPop;
-
 		/// Creates the Graphs state.
 		explicit GraphsState(int curGraph = 0);
 		/// Cleans up the Graphs state.

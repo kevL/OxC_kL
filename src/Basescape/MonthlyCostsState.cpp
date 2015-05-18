@@ -148,7 +148,8 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 						Text::formatFunding(_game->getRuleset()->getSoldierCost()).c_str(),
 						woststr1.str().c_str(),
 						Text::formatFunding(base->getSoldiers()->size()
-											* _game->getRuleset()->getSoldierCost()).c_str());
+											* _game->getRuleset()->getSoldierCost()
+											+ base->calcSoldierBonuses()).c_str());
 	woststr2 << base->getTotalEngineers();
 	_lstSalaries->addRow(
 						4,
@@ -189,7 +190,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_lstTotal->addRow(
 					2,
 					tr("STR_TOTAL").c_str(),
-					Text::formatFunding(_game->getSavedGame()->getBaseMaintenance()).c_str());
+					Text::formatFunding(_game->getSavedGame()->getBaseMaintenances()).c_str());
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& MonthlyCostsState::btnOkClick);

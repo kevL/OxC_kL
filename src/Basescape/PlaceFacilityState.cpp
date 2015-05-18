@@ -164,8 +164,8 @@ void PlaceFacilityState::viewClick(Action*)
 	else
 	{
 		BaseFacility* const fac = new BaseFacility(
-											_rule,
-											_base);
+												_rule,
+												_base);
 
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());
@@ -182,7 +182,7 @@ void PlaceFacilityState::viewClick(Action*)
 		}
 
 		const int cost = _rule->getBuildCost();
-		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - cost);
+		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
 		_base->setCashSpent(cost);
 
 		_game->popState();

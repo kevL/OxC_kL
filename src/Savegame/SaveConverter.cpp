@@ -288,7 +288,7 @@ SavedGame* SaveConverter::loadOriginal()
 
 	// Load graph data
 	_save->getExpenditureList().clear();
-	_save->getMaintenances().clear();
+	_save->getMaintenanceList().clear();
 	_save->getFundsList().clear();
 	_save->getResearchScores().clear();
 	loadDatLIGlob();
@@ -376,7 +376,7 @@ void SaveConverter::loadDatIGlob()
 	}
 	graphVector(_save->getIncomeList(), month, _year != _rule->getStartingTime().getYear());
 	graphVector(_save->getExpenditureList(), month, _year != _rule->getStartingTime().getYear());
-	graphVector(_save->getMaintenances(), month, _year != _rule->getStartingTime().getYear());
+	graphVector(_save->getMaintenanceList(), month, _year != _rule->getStartingTime().getYear());
 	graphVector(_save->getFundsList(), month, _year != _rule->getStartingTime().getYear());
 	graphVector(_save->getResearchScores(), month, _year != _rule->getStartingTime().getYear());
 	for (size_t
@@ -419,7 +419,7 @@ void SaveConverter::loadDatLIGlob()
 	for (size_t i = 0x34; i < 0x34 + 0x30; i += 4)
 	{
 		int maintenance = load<int>(data + i);
-		_save->getMaintenances().push_back(maintenance);
+		_save->getMaintenanceList().push_back(maintenance);
 	}
 	for (size_t i = 0x64; i < 0x64 + 0x30; i += 4)
 	{

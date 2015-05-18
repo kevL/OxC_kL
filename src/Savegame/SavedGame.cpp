@@ -1026,15 +1026,15 @@ void SavedGame::monthlyFunding()
 
 
 	// MAINTENANCE
-	const int baseMaintenance = getBaseMaintenance();
+	const int maintenance = getBaseMaintenances();
 
-	_maintenance.back() = baseMaintenance;
+	_maintenance.back() = maintenance;
 	_maintenance.push_back(0);
 	if (_maintenance.size() > 12)
 		_maintenance.erase(_maintenance.begin());
 
 	// BALANCE
-	_funds.back() += getCountryFunding() - baseMaintenance;
+	_funds.back() += getCountryFunding() - maintenance;
 	_funds.push_back(_funds.back());
 	if (_funds.size() > 12)
 		_funds.erase(_funds.begin());
@@ -1077,7 +1077,7 @@ std::vector<int64_t>& SavedGame::getFundsList()
  * Returns the list of monthly maintenance costs.
  * @return, reference a vector of maintenances
  */
-std::vector<int64_t>& SavedGame::getMaintenances()
+std::vector<int64_t>& SavedGame::getMaintenanceList()
 {
 	return _maintenance;
 }
@@ -1201,7 +1201,7 @@ const std::vector<Base*>* SavedGame::getBases() const
  * Adds up the monthly maintenance of all the bases.
  * @return, total maintenance
  */
-int SavedGame::getBaseMaintenance() const
+int SavedGame::getBaseMaintenances() const
 {
 	int total = 0;
 

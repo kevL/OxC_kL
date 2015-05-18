@@ -28,8 +28,6 @@
 namespace OpenXcom
 {
 
-class Base;
-class Globe;
 class SavedGame;
 class Soldier;
 class Text;
@@ -47,15 +45,13 @@ class MonthlyReportState
 
 private:
 	bool
-		_gameOver,
-		_psi;
+		_gameOver;
+//		_psi;
 	int
 		_deltaFunds,
 		_ratingLast,
 		_ratingTotal;
 
-	Base* _base;
-	Globe* _globe;
 	SavedGame* _gameSave;
 	Text
 		* _txtChange,
@@ -81,18 +77,17 @@ private:
 			const std::vector<std::string>& countries,
 			const std::string& singular,
 			const std::string& plural);
+	/// Calculates monthly scores.
+	void calculateChanges();
 
 
 	public:
 		/// Creates the Monthly Report state.
-		MonthlyReportState(
-				bool psi,
-				Globe* globe);
+		MonthlyReportState();
+//				bool psi,
+//				Globe* globe);
 		/// Cleans up the Monthly Report state.
 		~MonthlyReportState();
-
-		/// Calculate monthly scores.
-		void calculateChanges();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

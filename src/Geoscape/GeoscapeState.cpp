@@ -1163,18 +1163,16 @@ void GeoscapeState::init()
 
 	_globe->unsetNewBaseHover();
 
-	if (_gameSave->getMonthsPassed() == -1						// run once
-		&& _gameSave->getBases()->empty() == false				// as long as there's a base
-		&& _gameSave->getBases()->front()->getName() != L"")	// and it has a name (THIS prevents it from running prior to the base being placed.)
+	if (_gameSave->getMonthsPassed() == -1								// run once
+		&& _gameSave->getBases()->empty() == false						// as long as there's a base
+		&& _gameSave->getBases()->front()->getName().empty() == false)	// and it has a name (THIS prevents it from running prior to the base being placed.)
 	{
 		_gameSave->addMonth();
 
 		determineAlienMissions(true);
 		setupLandMission();
 
-		_gameSave->setFunds(_gameSave->getFunds()
-										- _gameSave->getBaseMaintenance()
-										- _gameSave->getBases()->front()->getPersonnelMaintenance());
+		_gameSave->setFunds(_gameSave->getFunds() - static_cast<int64_t>(_gameSave->getBases()->front()->getMonthlyMaintenace()));
 	}
 }
 
@@ -3262,13 +3260,13 @@ void GeoscapeState::time1Month()
 
 	bool newRetaliation = false;
 //	if (monthsPassed > 13 - static_cast<int>(_gameSave->getDifficulty())
-	if (RNG::percent(monthsPassed * diff + 3) == true
+	if (RNG::percent((monthsPassed * diff) + 3) == true
 		|| _gameSave->isResearched("STR_THE_MARTIAN_SOLUTION") == true)
 	{
 		newRetaliation = true;
 	}
 
-	bool psi = false;
+//	bool psi = false;
 
 	for (std::vector<Base*>::const_iterator // handle Psi-Training and initiate a new retaliation mission, if applicable
 			i = _gameSave->getBases()->begin();
@@ -3359,31 +3357,29 @@ void GeoscapeState::time1Month()
 
 	_gameSave->monthlyFunding(); // handle Funding
 	_game->getResourcePack()->fadeMusic(_game, 1232);
-	popup(new MonthlyReportState(
-								psi,
-								_globe));
+
+	popup(new MonthlyReportState());
 
 
-	// kL_note: Might want to change this to time1day() ...
-	const int rdiff = 20 - (diff * 5); // kL, Superhuman == 0%
+	// handle Xcom Operatives discovering bases
+	// NOTE: might want to change this to time1day() ...
+	const int rdiff = 20 - (diff * 5);
 
-//	if (RNG::percent(20)
-	if (RNG::percent(rdiff + 50) == true // kL
+	if (RNG::percent(rdiff + 50) == true
 		&& _gameSave->getAlienBases()->empty() == false)
 	{
-		for (std::vector<AlienBase*>::const_iterator // handle Xcom Operatives discovering bases
+		for (std::vector<AlienBase*>::const_iterator
 				i = _gameSave->getAlienBases()->begin();
 				i != _gameSave->getAlienBases()->end();
 				++i)
 		{
 			if ((*i)->isDiscovered() == false
-				&& RNG::percent(rdiff + 5) == true) // kL
+				&& RNG::percent(rdiff + 5) == true)
 			{
 				(*i)->setDiscovered(true);
-				popup(new AlienBaseState(
+				popup(new AlienBaseState( // NOTE: multiple popups are going to glitch
 									*i,
 									this));
-//kL			break;
 			}
 		}
 	}

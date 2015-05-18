@@ -504,7 +504,7 @@ void CraftSoldiersState::btnInventoryClick(Action*)
  */
 void CraftSoldiersState::calcCost() // private.
 {
-	const int cost = _base->calcSoldierCosts(_base->getCrafts()->at(_craftId));
+	const int cost = _base->calcSoldierBonuses(_base->getCrafts()->at(_craftId));
 	_txtCost->setText(tr("STR_COST_")
 						.arg(Text::formatFunding(cost)));
 }
