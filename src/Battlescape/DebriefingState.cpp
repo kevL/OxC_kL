@@ -94,6 +94,7 @@ DebriefingState::DebriefingState()
 		_diff(static_cast<int>(_game->getSavedGame()->getDifficulty())),
 		_region(NULL),
 		_country(NULL),
+		_base(NULL),
 		_noContainment(false),
 		_manageContainment(false),
 		_destroyXCOMBase(false),
@@ -599,7 +600,7 @@ void DebriefingState::btnOkClick(Action*)
  * @param score		- the score to add
  * @param quantity	- the quantity to add (default 1)
  */
-void DebriefingState::addStat(
+void DebriefingState::addStat( // private.
 		const std::string& type,
 		int score,
 		int quantity)
@@ -621,7 +622,7 @@ void DebriefingState::addStat(
 
 
 /**
- * Clears any supply missions from an alien base.
+ * Clears any supply missions from an aLien base.
  */
 class ClearAlienBase
 	:
@@ -629,16 +630,16 @@ class ClearAlienBase
 {
 
 private:
-	const AlienBase* _base;
+	const AlienBase* _aBase;
 
 	public:
-		/// Remembers the base.
-		explicit ClearAlienBase(const AlienBase* base)
+		/// Caches a pointer to the aLien base.
+		explicit ClearAlienBase(const AlienBase* aBase)
 			:
-				_base(base)
+				_aBase(aBase)
 		{}
 
-		/// Clears the base if required.
+		/// Clears the aLien Base if required.
 		void operator() (AlienMission* mission) const;
 };
 
@@ -648,7 +649,7 @@ private:
  */
 void ClearAlienBase::operator() (AlienMission* mission) const
 {
-	if (mission->getAlienBase() == _base)
+	if (mission->getAlienBase() == _aBase)
 		mission->setAlienBase(NULL);
 }
 
@@ -659,7 +660,7 @@ void ClearAlienBase::operator() (AlienMission* mission) const
  * Also calculates the soldiers' experience, and possible promotions.
  * If aborted, only the things on the exit area are recovered.
  */
-void DebriefingState::prepareDebriefing()
+void DebriefingState::prepareDebriefing() // private.
 {
 	for (std::vector<std::string>::const_iterator
 			i = _rules->getItemsList().begin();
@@ -1126,6 +1127,9 @@ void DebriefingState::prepareDebriefing()
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
 				{
+					base->soldierExpense(
+										sol,
+										true);
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
 						-value);
@@ -1151,9 +1155,14 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 				else // not soldier -> tank
+				{
+					base->hwpExpense(
+								(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
+								true);
 					addStat(
 						"STR_TANKS_DESTROYED",
 						-value);
+				}
 			}
 			else if (orgFaction == FACTION_NEUTRAL)
 			{
@@ -1171,13 +1180,13 @@ void DebriefingState::prepareDebriefing()
 		{
 			Log(LOG_INFO) << ". unitLive " << (*i)->getId() << " type = " << (*i)->getType();
 
-			const UnitFaction faction = (*i)->getFaction();
-
 			std::string type;
 			if ((*i)->getSpawnUnit().empty() == false)
 				type = (*i)->getSpawnUnit();
 			else
 				type = (*i)->getType();
+
+			const UnitFaction faction = (*i)->getFaction();
 
 			if (orgFaction == FACTION_PLAYER)
 			{
@@ -1196,6 +1205,9 @@ void DebriefingState::prepareDebriefing()
 						recoverItems(
 								(*i)->getInventory(),
 								base);
+
+						base->soldierExpense(sol);
+
 //						sol->calcStatString( // calculate new statString
 //										_rules->getStatStrings(),
 //										Options::psiStrengthEval
@@ -1204,6 +1216,7 @@ void DebriefingState::prepareDebriefing()
 					else // not soldier -> tank
 					{
 						base->getItems()->addItem(type);
+						base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
 						const RuleItem* itRule;
 						const BattleItem* ammoItem;
@@ -1644,7 +1657,7 @@ void DebriefingState::prepareDebriefing()
  * @param craft					- pointer to a Craft to reequip
  * @param vehicleDestruction	- true if vehicles on the craft can be destroyed
  */
-void DebriefingState::reequipCraft(
+void DebriefingState::reequipCraft( // private.
 		Base* base,
 		Craft* craft,
 		bool vehicleDestruction)
@@ -1864,7 +1877,7 @@ void DebriefingState::reequipCraft(
  * @param battleItems	- pointer to a vector of pointers to BattleItems on the battlescape
  * @param base			- base to add recovered items to
  */
-void DebriefingState::recoverItems(
+void DebriefingState::recoverItems( // private.
 		std::vector<BattleItem*>* battleItems,
 		Base* base)
 {
@@ -1978,7 +1991,7 @@ void DebriefingState::recoverItems(
  * @param unit - pointer to a BattleUnit to recover
  * @param base - pointer to the Base to add corpse item
  */
-void DebriefingState::recoverLiveAlien(
+void DebriefingState::recoverLiveAlien( // private.
 		const BattleUnit* const unit,
 		Base* const base)
 {

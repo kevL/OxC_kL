@@ -61,7 +61,6 @@ PlaceFacilityState::PlaceFacilityState(
 {
 	_screen = false;
 
-
 	_window			= new Window(this, 128, 160, 192, 40);
 
 	_view			= new BaseView(192, 192, 0, 8);
@@ -184,7 +183,7 @@ void PlaceFacilityState::viewClick(Action*)
 
 		const int cost = _rule->getBuildCost();
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - cost);
-		_base->setCashSpent(cost); // kL
+		_base->setCashSpent(cost);
 
 		_game->popState();
 	}

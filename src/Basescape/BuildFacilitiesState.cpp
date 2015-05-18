@@ -136,8 +136,7 @@ void BuildFacilitiesState::PopulateBuildList()
 }
 
 /**
- * The player can change the selected base
- * or change info on other screens.
+ * The player can change the selected base or change info on other screens.
  */
 void BuildFacilitiesState::init()
 {

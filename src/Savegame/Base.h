@@ -88,7 +88,7 @@ private:
 		static const size_t BASE_SIZE = 6;
 
 		/// Creates a new base.
-		explicit Base(const Ruleset* rules);
+		explicit Base(const Ruleset* const rules);
 		/// Cleans up the base.
 		~Base();
 
@@ -192,11 +192,11 @@ private:
 
 		/// Gets the base's short range detection.
 //		int getShortRangeDetection() const;
-		/// kL. Gets the base's short range detection value.
+		/// Gets the base's short range detection value.
 		int getShortRangeValue() const;
 		/// Gets the base's long range detection.
 //		int getLongRangeDetection() const;
-		/// kL. Gets the base's long range detection.
+		/// Gets the base's long range detection.
 		int getLongRangeValue() const;
 
 		/// Gets the base's crafts of a certain type.
@@ -301,6 +301,17 @@ private:
 		void setCurrentSoldier(const size_t row);
 		/// Gets the current row of Soldiers list.
 		size_t getCurrentSoldier() const;
+
+		/// Calculates the bonus cost for soldiers by rank.
+		int calcSoldierCosts(const Craft* const craft = NULL) const;
+		/// Calculates a soldier's bonus pay for doing a tactical mission.
+		void soldierExpense(
+				const Soldier* const sol,
+				const bool dead = false);
+		/// Calculates the expense of sending HWPs/doggies on a tactical mission.
+		void hwpExpense(
+				const int hwpSize,
+				const bool dead = false);
 };
 
 }

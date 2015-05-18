@@ -52,7 +52,7 @@ private:
 		* _blankTile,
 		* _scorchedTile;
 
-	Game* _game;
+	const Game* const _game;
 	SurfaceSet* _surfaceSet;
 
 	std::vector<MapData*> _objects;
@@ -62,7 +62,7 @@ private:
 		/// Constructs a MapDataSet.
 		MapDataSet(
 				const std::string& name,
-				Game* game);
+				const Game* const game);
 		/// Destructs a MapDataSet.
 		~MapDataSet();
 

@@ -89,7 +89,7 @@ namespace OpenXcom
  * Creates a ruleset with blank sets of rules.
  * @param game - pointer to the core Game
  */
-Ruleset::Ruleset(Game* game)
+Ruleset::Ruleset(const Game* const game)
 	:
 		_game(game),
 		_costSoldier(0),
@@ -2408,6 +2408,15 @@ const std::vector<MapScript*>* Ruleset::getMapScript(const std::string& id) cons
 const std::map<std::string, RuleVideo*>* Ruleset::getVideos() const
 {
 	return &_videos;
+}
+
+/**
+ * Gets the current Game.
+ * @return, pointer to Game
+ */
+const Game* const Ruleset::getGame() const
+{
+	return _game;
 }
 
 }

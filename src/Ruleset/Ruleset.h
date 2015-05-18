@@ -113,7 +113,7 @@ protected:
 	GameTime _startingTime;
 	YAML::Node _startingBase;
 
-	Game* _game;
+	const Game* const _game;
 	RuleGlobe* _globe;
 
 	std::vector<std::string>
@@ -201,7 +201,7 @@ protected:
 
 	public:
 		/// Creates a blank ruleset.
-		explicit Ruleset(Game* game);
+		explicit Ruleset(const Game* const game);
 		/// Cleans up the ruleset.
 		~Ruleset();
 
@@ -394,6 +394,9 @@ protected:
 
 		/// Gets the list of videos for intro/outro etc.
 		const std::map<std::string, RuleVideo*>* getVideos() const;
+
+		/// Gets the current Game.
+		const Game* const getGame() const;
 };
 
 }

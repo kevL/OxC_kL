@@ -991,13 +991,11 @@ void SavedGame::setDfZoom(size_t zoom)
 }
 
 /**
- * Gives the player his monthly funds, taking in account
- * all maintenance and profit costs. Also stores monthly
- * totals for GraphsState.
+ * Gives the player his monthly funds taking in account all maintenance and
+ * profit costs. Also stores monthly totals for GraphsState.
  */
 void SavedGame::monthlyFunding()
 {
-	// kL_begin: INCOME & EXPENDITURE
 	int
 		income = 0,
 		expenditure = 0;
@@ -1010,10 +1008,8 @@ void SavedGame::monthlyFunding()
 		income += (*i)->getCashIncome();
 		expenditure += (*i)->getCashSpent();
 
-		// zero each Base's cash income values.
-		(*i)->setCashIncome(-(*i)->getCashIncome());
-		// zero each Base's cash spent values.
-		(*i)->setCashSpent(-(*i)->getCashSpent());
+		(*i)->setCashIncome(-(*i)->getCashIncome());	// zero each Base's cash income values.
+		(*i)->setCashSpent(-(*i)->getCashSpent());		// zero each Base's cash spent values.
 	}
 
 	// INCOME
@@ -1027,7 +1023,6 @@ void SavedGame::monthlyFunding()
 	_expenditure.push_back(0);
 	if (_expenditure.size() > 12)
 		_expenditure.erase(_expenditure.begin());
-// kL_end.
 
 
 	// MAINTENANCE
@@ -1071,7 +1066,7 @@ int64_t SavedGame::getFunds() const
 
 /**
  * Returns the player's funds for the last 12 months.
- * @return, funds
+ * @return, reference a vector of funds
  */
 std::vector<int64_t>& SavedGame::getFundsList()
 {
@@ -1079,8 +1074,8 @@ std::vector<int64_t>& SavedGame::getFundsList()
 }
 
 /**
- * return the list of monthly maintenance costs
- * @return, reference to a vector of maintenances
+ * Returns the list of monthly maintenance costs.
+ * @return, reference a vector of maintenances
  */
 std::vector<int64_t>& SavedGame::getMaintenances()
 {
@@ -1088,19 +1083,19 @@ std::vector<int64_t>& SavedGame::getMaintenances()
 }
 
 /**
- * kL. Return the list of monthly income values.
- * @return, reference to a vector of incomes
+ * Returns the list of monthly income values.
+ * @return, reference a vector of incomes
  */
-std::vector<int64_t>& SavedGame::getIncomeList() // kL
+std::vector<int64_t>& SavedGame::getIncomeList()
 {
 	return _income;
 }
 
 /**
- * kL. Return the list of monthly expenditure values.
- * @return, reference to a vector of expenditures
+ * Returns the list of monthly expenditure values.
+ * @return, reference a vector of expenditures
  */
-std::vector<int64_t>& SavedGame::getExpenditureList() // kL
+std::vector<int64_t>& SavedGame::getExpenditureList()
 {
 	return _expenditure;
 }
@@ -1140,7 +1135,7 @@ int SavedGame::getId(const std::string& objectType)
 
 /**
  * Resets the list of unique object IDs.
- * @param ids - new ID list
+ * @param ids - new ID list as a reference to a map of strings & ints
  */
 void SavedGame::setIds(const std::map<std::string, int>& ids)
 {
@@ -2508,50 +2503,6 @@ bool SavedGame::getDebugArgDone()
 std::vector<MissionStatistics*>* SavedGame::getMissionStatistics()
 {
 	return &_missionStatistics;
-}
-
-/**
- * Calculates the bonus cost for soldiers by rank.
- * @note If @a craft is specified this returns the cost for a tactical mission;
- * if @a craft is NULL it returns a Base's monthly cost for Soldiers' bonus
- * salaries.
- * @note @a deceased is expense for a cheap funeral instead.
- * @note Also adds cost to maintain Vehicles.
- * @param base		- the Base to calc costs for
- * @param craft		- the Craft for the sortie (default NULL)
- * @param deceased	- true if a Soldier died while on tactical (default false)
- * @return, the bonus cost (for the soldier not the Player)
- */
-int SavedGame::calcSoldierCost(
-		Base* const base,
-		const Craft* const craft,
-		const bool deceased) const
-{
-	int
-		total = 0,
-		cost;
-
-	for (std::vector<Soldier*>::const_iterator
-			i = base->getSoldiers()->begin();
-			i != base->getSoldiers()->end();
-			++i)
-	{
-		if (craft == NULL)
-			total += (*i)->getRank() * 5000;
-		else if ((*i)->getCraft() == craft)
-		{
-			cost = (*i)->getRank() * 1500;
-			if (deceased == true)
-				cost /= 2;
-
-			total += cost;
-		}
-	}
-
-	if (craft != NULL)
-		total += craft->getNumVehicles(true) * 750;
-
-	return total;
 }
 
 /**

@@ -39,6 +39,7 @@
 #include "Ufo.h"
 #include "Vehicle.h"
 
+#include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
@@ -55,6 +56,8 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -675,7 +678,7 @@ int Base::getTotalSoldiers() const
  * Returns the amount of scientists contained in the base without any assignments.
  * @return, number of scientists
  */
-/*kL int Base::getAvailableScientists() const
+/* int Base::getAvailableScientists() const
 {
 	return getScientists();
 } */
@@ -713,7 +716,7 @@ int Base::getTotalScientists() const
  * Returns the amount of engineers contained in the base without any assignments.
  * @return, number of engineers
  */
-/*kL int Base::getAvailableEngineers() const
+/* int Base::getAvailableEngineers() const
 {
 	return getEngineers();
 } */
@@ -2728,8 +2731,8 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 }
 
 /**
- * Cleans up base defenses vector after a Ufo attack
- * and optionally reclaims the tanks and their ammo.
+ * Cleans up base defenses vector after a Ufo attack and optionally reclaims
+ * the tanks and their ammo.
  * @param reclaimItems - true to return the HWPs to storage
  */
 void Base::cleanupDefenses(bool reclaimItems)
@@ -2768,10 +2771,10 @@ void Base::cleanupDefenses(bool reclaimItems)
 
 			if (itRule->getCompatibleAmmo()->empty() == false)
 			{
-				const RuleItem* const amRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
-				const int ammoPerVehicle = amRule->getClipSize();
+				const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
+				const int ammoPerVehicle = ammoRule->getClipSize();
 				_items->addItem(
-							amRule->getType(),
+							ammoRule->getType(),
 							ammoPerVehicle);
 			}
 		}
@@ -2782,8 +2785,8 @@ void Base::cleanupDefenses(bool reclaimItems)
 }
 
 /**
- * Increase the Base's cash income amount by 'cash'.
- * @param cash, The amount to increase _cashIncome by
+ * Increases this Base's cash income amount by @a cash.
+ * @param cash - amount of income
  */
 void Base::setCashIncome(int cash)
 {
@@ -2791,8 +2794,8 @@ void Base::setCashIncome(int cash)
 }
 
 /**
- * Get the Base's current cash income value.
- * @return, The Base's current _cashIncome amount
+ * Gets this Base's current cash income value.
+ * @return, current income value
  */
 int Base::getCashIncome() const
 {
@@ -2800,8 +2803,8 @@ int Base::getCashIncome() const
 }
 
 /**
- * Increase the Base's cash spent amount by 'cash'.
- * @param cash, The amount to increase _cashSpent by
+ * Increases this Base's cash spent amount by @a cash.
+ * @param cash - amount of expenditure
  */
 void Base::setCashSpent(int cash)
 {
@@ -2809,8 +2812,8 @@ void Base::setCashSpent(int cash)
 }
 
 /**
- * Get the Base's current cash spent value.
- * @return, The Base's current _cashSpent amount
+ * Gets this Base's current cash spent value.
+ * @return, current cash spent value
  */
 int Base::getCashSpent() const
 {
@@ -2818,7 +2821,8 @@ int Base::getCashSpent() const
 }
 
 /**
- * Sets the effect of a base's defense against aLien attacks.
+ * Sets the effect of this Base's defense facilities before BaseDefense starts.
+ * @param result - the defense result
  */
 void Base::setDefenseResult(int result)
 {
@@ -2826,7 +2830,8 @@ void Base::setDefenseResult(int result)
 }
 
 /**
- * Gets the effect of a base's defense against aLien attacks.
+ * Gets the effect of this Base's defense facilities before BaseDefense starts.
+ * @return, the defense result
  */
 int Base::getDefenseResult() const
 {
@@ -2834,7 +2839,8 @@ int Base::getDefenseResult() const
 }
 
 /**
- * Sets the current row of Soldiers list.
+ * Sets the current row for all of this Base's soldier lists.
+ * @param row - current row
  */
 void Base::setCurrentSoldier(const size_t row)
 {
@@ -2842,11 +2848,92 @@ void Base::setCurrentSoldier(const size_t row)
 }
 
 /**
- * Gets the current row of Soldiers list.
+ * Gets the current row for any of this Base's soldier lists.
+ * @return, current row
  */
 size_t Base::getCurrentSoldier() const
 {
 	return _curSoldier;
 }
+
+/**
+ * Calculates the bonus cost for soldiers by rank. Also adds cost to maintain Vehicles.
+ * If @a craft is specified this returns the cost for a tactical mission;
+ * if @a craft is NULL it returns this Base's monthly cost for Soldiers' bonus salaries.
+ * @param craft - pointer to the Craft for the sortie (default NULL)
+ * @return, cost
+ */
+int Base::calcSoldierCosts(const Craft* const craft) const
+{
+	int total = 0;
+
+	for (std::vector<Soldier*>::const_iterator
+			i = _soldiers.begin();
+			i != _soldiers.end();
+			++i)
+	{
+		if (craft == NULL)
+			total += (*i)->getRank() * 5000;
+		else if ((*i)->getCraft() == craft)
+			total += (*i)->getRank() * 1500;
+	}
+
+	if (craft != NULL)
+		total += craft->getNumVehicles(true) * 750;
+
+	return total;
+}
+
+/**
+ * Calculates a Soldier's bonus pay for going on a tactical mission; subtracts
+ * the value from current funds.
+ * @param sol	- pointer to a Soldier
+ * @param dead	- true if soldier dies while on tactical (default false)
+ */
+void Base::soldierExpense(
+		const Soldier* const sol,
+		const bool dead)
+{
+	int cost = sol->getRank() * 1500;
+	if (dead == true)
+		cost /= 2;
+
+	_cashSpent += cost;
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - cost);
+}
+
+/**
+ * Calculates the expense of sending HWPs/doggies on a tactical mission;
+ * subtracts the value from current funds.
+ * @param hwpSize	- size of the HWP/doggie in tiles
+ * @param dead		- true if HWP got destroyed while on tactical (default false)
+ */
+void Base::hwpExpense(
+		const int hwpSize,
+		const bool dead)
+{
+	int cost = hwpSize * 750;
+	if (dead == true)
+		cost /= 2;
+
+	_cashSpent += cost;
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - cost);
+}
+/*	switch (sol->getRank())
+	{
+		case RANK_ROOKIE:
+		break;
+		case RANK_SQUADDIE:
+		break;
+		case RANK_SERGEANT:
+		break;
+		case RANK_CAPTAIN:
+		break;
+		case RANK_COLONEL:
+		break;
+		case RANK_COMMANDER:
+		break;
+		default:
+	} */
 
 }

@@ -49,7 +49,7 @@ MapData
  */
 MapDataSet::MapDataSet(
 		const std::string& name,
-		Game* game)
+		const Game* const game)
 	:
 		_name(name),
 		_game(game),

@@ -395,9 +395,9 @@ private:
 
 		/// Returns a list of maintenance costs
 		std::vector<int64_t>& getMaintenances();
-		/// kL. Returns the list of monthly income values.
+		/// Returns the list of monthly income values.
 		std::vector<int64_t>& getIncomeList();
-		/// kL. Returns the list of monthly expenditure values.
+		/// Returns the list of monthly expenditure values.
 		std::vector<int64_t>& getExpenditureList();
 
 		/// Gets the current game time.
@@ -600,12 +600,6 @@ private:
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();
-
-		/// Calculates the bonus cost for soldiers by rank.
-		int calcSoldierCost(
-				Base* const base,
-				const Craft* const craft = NULL,
-				const bool deceased = false) const;
 
 		/// Returns the craft corresponding to the specified unique id.
 //		Craft* findCraftByUniqueId(const CraftId& craftId) const;

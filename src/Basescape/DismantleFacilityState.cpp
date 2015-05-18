@@ -90,11 +90,11 @@ DismantleFacilityState::DismantleFacilityState(
 					(ActionHandler)& DismantleFacilityState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_DISMANTLE"));
+	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtFacility->setAlign(ALIGN_CENTER);
 	_txtFacility->setText(tr(_fac->getRules()->getType()));
+	_txtFacility->setAlign(ALIGN_CENTER);
 }
 
 /**
@@ -111,10 +111,14 @@ void DismantleFacilityState::btnOkClick(Action*)
 {
 	if (_fac->getRules()->isLift() == false)
 	{
-		if (_fac->getBuildTime() > _fac->getRules()->getBuildTime()) // Give refund if this is an unstarted, queued build.
-			_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _fac->getRules()->getBuildCost());
+		if (_fac->getBuildTime() > _fac->getRules()->getBuildTime()) // Give refund if this is an unfinished build.
+		{
+			const int refund = _fac->getRules()->getBuildCost();
+			_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + static_cast<int64_t>(refund));
+			_base->setCashSpent(-refund); // NOTE ... monthly rollover could play tricks with this
+		}
 
-		for (std::vector<BaseFacility*>::iterator
+		for (std::vector<BaseFacility*>::const_iterator
 				i = _base->getFacilities()->begin();
 				i != _base->getFacilities()->end();
 				++i)
@@ -125,7 +129,7 @@ void DismantleFacilityState::btnOkClick(Action*)
 				_view->resetSelectedFacility();
 				delete _fac;
 
-				if (Options::allowBuildingQueue)
+				if (Options::allowBuildingQueue == true)
 					_view->reCalcQueuedBuildings();
 
 				break;
@@ -134,7 +138,7 @@ void DismantleFacilityState::btnOkClick(Action*)
 	}
 	else // Remove whole base if it's the access lift
 	{
-		for (std::vector<Base*>::iterator
+		for (std::vector<Base*>::const_iterator
 				i = _game->getSavedGame()->getBases()->begin();
 				i != _game->getSavedGame()->getBases()->end();
 				++i)

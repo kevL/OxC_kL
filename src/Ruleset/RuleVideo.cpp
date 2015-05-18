@@ -19,6 +19,7 @@
 
 #include "RuleVideo.h"
 
+
 namespace OpenXcom
 {
 
