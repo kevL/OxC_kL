@@ -2769,7 +2769,7 @@ void Base::cleanupDefenses(bool reclaimItems)
 	{
 		if (reclaimItems == true)
 		{
-			RuleItem* const itRule = (*i)->getRules();
+			const RuleItem* const itRule = (*i)->getRules();
 			_items->addItem(itRule->getType());
 
 			if (itRule->getCompatibleAmmo()->empty() == false)

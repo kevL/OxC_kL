@@ -84,8 +84,7 @@ private:
 	public:
 		/// Creates the Monthly Report state.
 		MonthlyReportState();
-//				bool psi,
-//				Globe* globe);
+//				bool psi);
 		/// Cleans up the Monthly Report state.
 		~MonthlyReportState();
 

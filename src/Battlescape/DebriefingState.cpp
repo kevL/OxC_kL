@@ -202,8 +202,8 @@ DebriefingState::DebriefingState()
 	prepareDebriefing(); /*/ <- -- GATHER ALL DATA HERE <- < */
 
 
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
-	_txtBaseLabel->setText(_baseLabel);
 
 
 	int
@@ -733,8 +733,8 @@ void DebriefingState::prepareDebriefing() // private.
 	const bool aborted = battleSave->isAborted();
 	bool missionAccomplished = !aborted;
 
-	Base* base = NULL;
-	Craft* craft = NULL;
+//	Base* base = NULL;
+//	Craft* craft = NULL;
 
 	std::vector<Craft*>::const_iterator ptrCraft;
 
@@ -803,12 +803,13 @@ void DebriefingState::prepareDebriefing() // private.
 					}
 				}
 
-				base = *i;
-				craft = *j;
+				_base = *i;
+				_craft = *j;
 				ptrCraft = j;
-				craft->returnToBase();
-				craft->setMissionComplete(true);
-				craft->setInBattlescape(false);
+
+				_craft->returnToBase();
+				_craft->setMissionComplete(true);
+				_craft->setInBattlescape(false);
 			}
 			else if ((*j)->getDestination() != NULL)
 			{
@@ -823,11 +824,11 @@ void DebriefingState::prepareDebriefing() // private.
 
 		if ((*i)->isInBattlescape() == true) // in case this DON'T have a craft (ie. baseDefense)
 		{
-			base = *i;
+			_base = *i;
 
 			const double
-				baseLon = base->getLongitude(),
-				baseLat = base->getLatitude();
+				baseLon = _base->getLongitude(),
+				baseLat = _base->getLatitude();
 
 			for (std::vector<Region*>::const_iterator
 					k = _gameSave->getRegions()->begin();
@@ -863,37 +864,33 @@ void DebriefingState::prepareDebriefing() // private.
 				_destroyXCOMBase = true;
 			else
 			{
-				base->setInBattlescape(false);
-				base->cleanupDefenses(false);
+				_base->setInBattlescape(false);
+				_base->cleanupDefenses(false);
 
 				bool facDestroyed = false; // not in stockcode
 				for (std::vector<BaseFacility*>::const_iterator
-						k = base->getFacilities()->begin();
-						k != base->getFacilities()->end();
+						k = _base->getFacilities()->begin();
+						k != _base->getFacilities()->end();
 						)
 				{
 					if (battleSave->getModuleMap()[(*k)->getX()]
 												  [(*k)->getY()].second == 0) // this facility was demolished
 					{
 						facDestroyed = true; // not in stockcode
-						base->destroyFacility(k);
+						_base->destroyFacility(k);
 					}
 					else
 						++k;
 				}
 
 				if (facDestroyed == true) // kL_add <-
-					base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed; destroy the disconnected parts.
+					_base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed; destroy the disconnected parts.
 			}
 		}
 	}
 
-	_base = base;
-	_baseLabel = _base->getName(_game->getLanguage());
-
 
 	bool found = false;
-
 	for (std::vector<Ufo*>::const_iterator // First search for UFO.
 			i = _gameSave->getUfos()->begin();
 			i != _gameSave->getUfos()->end();
@@ -1139,7 +1136,7 @@ void DebriefingState::prepareDebriefing() // private.
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
 				{
-					_cost += base->soldierExpense(
+					_cost += _base->soldierExpense(
 												sol,
 												true);
 					addStat(
@@ -1147,8 +1144,8 @@ void DebriefingState::prepareDebriefing() // private.
 						-value);
 
 					for (std::vector<Soldier*>::const_iterator
-							j = base->getSoldiers()->begin();
-							j != base->getSoldiers()->end();
+							j = _base->getSoldiers()->begin();
+							j != _base->getSoldiers()->end();
 							++j)
 					{
 						if (*j == sol) // the specific soldier at Base..
@@ -1159,7 +1156,7 @@ void DebriefingState::prepareDebriefing() // private.
 							(*j)->die(_gameSave);
 
 							delete *j;
-							base->getSoldiers()->erase(j);
+							_base->getSoldiers()->erase(j);
 
 							// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
 							break;
@@ -1168,7 +1165,7 @@ void DebriefingState::prepareDebriefing() // private.
 				}
 				else // not soldier -> tank
 				{
-					_cost += base->hwpExpense(
+					_cost += _base->hwpExpense(
 										(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
 										true);
 					addStat(
@@ -1214,11 +1211,9 @@ void DebriefingState::prepareDebriefing() // private.
 
 					if (sol != NULL)
 					{
-						recoverItems(
-								(*i)->getInventory(),
-								base);
+						recoverItems((*i)->getInventory());
 
-						_cost += base->soldierExpense(sol);
+						_cost += _base->soldierExpense(sol);
 
 //						sol->calcStatString( // calculate new statString
 //										_rules->getStatStrings(),
@@ -1227,8 +1222,8 @@ void DebriefingState::prepareDebriefing() // private.
 					}
 					else // not soldier -> tank
 					{
-						base->getItems()->addItem(type);
-						_cost += base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
+						_base->getItems()->addItem(type);
+						_cost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
 						const RuleItem* itRule;
 						const BattleItem* ammoItem;
@@ -1242,7 +1237,7 @@ void DebriefingState::prepareDebriefing() // private.
 								if (ammoItem != NULL
 									&& ammoItem->getAmmoQuantity() > 0)
 								{
-									base->getItems()->addItem(
+									_base->getItems()->addItem(
 															itRule->getCompatibleAmmo()->front(),
 															ammoItem->getAmmoQuantity());
 								}
@@ -1258,7 +1253,7 @@ void DebriefingState::prepareDebriefing() // private.
 								if (ammoItem != NULL
 									&& ammoItem->getAmmoQuantity() > 0)
 								{
-									base->getItems()->addItem(
+									_base->getItems()->addItem(
 															itRule->getCompatibleAmmo()->front(),
 															ammoItem->getAmmoQuantity());
 								}
@@ -1275,8 +1270,8 @@ void DebriefingState::prepareDebriefing() // private.
 					if (sol != NULL)
 					{
 						for (std::vector<Soldier*>::const_iterator
-								j = base->getSoldiers()->begin();
-								j != base->getSoldiers()->end();
+								j = _base->getSoldiers()->begin();
+								j != _base->getSoldiers()->end();
 								++j)
 						{
 							if (*j == sol)
@@ -1290,7 +1285,7 @@ void DebriefingState::prepareDebriefing() // private.
 								(*j)->die(_gameSave);
 
 								delete *j;
-								base->getSoldiers()->erase(j);
+								_base->getSoldiers()->erase(j);
 
 								// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
 								break;
@@ -1323,9 +1318,7 @@ void DebriefingState::prepareDebriefing() // private.
 											_rules->getInventory("STR_GROUND"));
 				}
 
-				recoverLiveAlien(
-							*i,
-							base);
+				recoverLiveAlien(*i);
 			}
 			else if (orgFaction == FACTION_NEUTRAL)
 			{
@@ -1345,24 +1338,24 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 	}
 
-	if (craft != NULL // Craft lost.
+	if (_craft != NULL // Craft lost.
 		&& (soldierLive == 0
 			|| (aborted == true
 				&& soldierExit == 0)))
 	{
 		addStat(
 			"STR_XCOM_CRAFT_LOST",
-			-craft->getRules()->getScore());
+			-(_craft->getRules()->getScore()));
 
 		for (std::vector<Soldier*>::const_iterator
-				i = base->getSoldiers()->begin();
-				i != base->getSoldiers()->end();
+				i = _base->getSoldiers()->begin();
+				i != _base->getSoldiers()->end();
 				)
 		{
-			if ((*i)->getCraft() == craft)
+			if ((*i)->getCraft() == _craft)
 			{
 				delete *i;
-				i = base->getSoldiers()->erase(i);
+				i = _base->getSoldiers()->erase(i);
 			}
 			else
 				 ++i;
@@ -1372,10 +1365,10 @@ void DebriefingState::prepareDebriefing() // private.
 		// erased/deleted without worrying about its vehicles' destructor called
 		// twice (on base defense missions all vehicle objects in the craft are
 		// also referenced by base->getVehicles() !!).
-		delete craft;
+		delete _craft;
 
-		craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
-		base->getCrafts()->erase(ptrCraft);
+		_craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
+		_base->getCrafts()->erase(ptrCraft);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 
 		return;
@@ -1383,11 +1376,11 @@ void DebriefingState::prepareDebriefing() // private.
 
 	if (tacType == TCT_BASEDEFENSE
 		&& aborted == true
-		&& base->getCrafts()->empty() == false)
+		&& _base->getCrafts()->empty() == false)
 	{
 		for (std::vector<Craft*>::const_iterator
-				i = base->getCrafts()->begin();
-				i != base->getCrafts()->end();
+				i = _base->getCrafts()->begin();
+				i != _base->getCrafts()->end();
 				++i)
 		{
 			addStat(
@@ -1429,9 +1422,7 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			// if this was a 2-stage mission, and not aborted (ie: there's time to clean up)
 			// recover items from the earlier stages as well
-			recoverItems(
-					battleSave->getConditionalRecoveredItems(),
-					base);
+			recoverItems(battleSave->getConditionalRecoveredItems());
 
 			for (size_t // get recoverable map data objects from the battlescape map
 					i = 0;
@@ -1453,9 +1444,7 @@ void DebriefingState::prepareDebriefing() // private.
 					}
 				}
 
-				recoverItems( // recover items from the floor
-						battleSave->getTiles()[i]->getInventory(),
-						base);
+				recoverItems(battleSave->getTiles()[i]->getInventory()); // recover items from the floor
 			}
 		}
 		else
@@ -1468,9 +1457,7 @@ void DebriefingState::prepareDebriefing() // private.
 				if (   battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
 					&& battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 				{
-					recoverItems(
-							battleSave->getTiles()[i]->getInventory(),
-							base);
+					recoverItems(battleSave->getTiles()[i]->getInventory());
 				}
 			}
 		}
@@ -1511,9 +1498,7 @@ void DebriefingState::prepareDebriefing() // private.
 				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
 					&& battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 				{
-					recoverItems(
-							battleSave->getTiles()[i]->getInventory(),
-							base);
+					recoverItems(battleSave->getTiles()[i]->getInventory());
 				}
 			}
 		}
@@ -1529,7 +1514,7 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			const int total_clips = i->second / i->first->getClipSize();
 			if (total_clips > 0)
-				base->getItems()->addItem(
+				_base->getItems()->addItem(
 										i->first->getType(),
 										total_clips);
 		}
@@ -1542,7 +1527,7 @@ void DebriefingState::prepareDebriefing() // private.
 				i != _stats.end();
 				++i)
 		{
-			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
+			// alien alloys recovery values are divided by 10 or divided by 150 in case of an aLien base
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->type)
 			{
 				int alloys;
@@ -1559,7 +1544,7 @@ void DebriefingState::prepareDebriefing() // private.
 			if ((*i)->recover == true
 				&& (*i)->qty > 0)
 			{
-				base->getItems()->addItem(
+				_base->getItems()->addItem(
 										(*i)->item,
 										(*i)->qty);
 			}
@@ -1567,18 +1552,13 @@ void DebriefingState::prepareDebriefing() // private.
 
 		// assuming this was a multi-stage mission
 		// recover everything that was in the craft in the previous stage
-		recoverItems(
-				battleSave->getGuaranteedRecoveredItems(),
-				base);
+		recoverItems(battleSave->getGuaranteedRecoveredItems());
 	}
 
 	// reequip craft after a non-base-defense mission;
 	// of course only if it's not lost already, that case craft=0
-	if (craft != NULL)
-		reequipCraft(
-					base,
-					craft,
-					true);
+	if (_craft != NULL)
+		reequipCraft();
 
 	if (tacType == TCT_BASEDEFENSE)
 	{
@@ -1586,27 +1566,24 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			// reequip the Base's crafts after a base defense mission
 			for (std::vector<Craft*>::const_iterator
-					i = base->getCrafts()->begin();
-					i != base->getCrafts()->end();
+					i = _base->getCrafts()->begin();
+					i != _base->getCrafts()->end();
 					++i)
 			{
 				if ((*i)->getStatus() != "STR_OUT")
-					reequipCraft(
-								base,
-								*i,
-								false);
+					reequipCraft(*i);
 			}
 
 			// clear base->getVehicles() objects, they not needed anymore.
 			for (std::vector<Vehicle*>::const_iterator
-					i = base->getVehicles()->begin();
-					i != base->getVehicles()->end();
+					i = _base->getVehicles()->begin();
+					i != _base->getVehicles()->end();
 					++i)
 			{
 				delete *i;
 			}
 
-			base->getVehicles()->clear();
+			_base->getVehicles()->clear();
 		}
 		else if (_gameSave->getMonthsPassed() != -1)
 		{
@@ -1615,7 +1592,7 @@ void DebriefingState::prepareDebriefing() // private.
 					i != _gameSave->getBases()->end();
 					++i)
 			{
-				if (*i == base)
+				if (*i == _base)
 				{
 					delete *i;
 					_gameSave->getBases()->erase(i);
@@ -1665,15 +1642,19 @@ void DebriefingState::prepareDebriefing() // private.
 
 /**
  * Reequips a craft after a mission.
- * @param base					- pointer to a Base to reequip from
- * @param craft					- pointer to a Craft to reequip
- * @param vehicleDestruction	- true if vehicles on the craft can be destroyed
+ * @param craft - pointer to Craft (default NULL)
  */
-void DebriefingState::reequipCraft( // private.
-		Base* base,
-		Craft* craft,
-		bool vehicleDestruction)
+void DebriefingState::reequipCraft(Craft* craft) // private.
 {
+	bool vehicleDestruction;
+	if (craft != NULL)
+		vehicleDestruction = false;
+	else
+	{
+		craft = _craft;
+		vehicleDestruction = true;
+	}
+
 	int
 		qtyBase,
 		qtyLost;
@@ -1685,18 +1666,18 @@ void DebriefingState::reequipCraft( // private.
 			i != craftItems.end();
 			++i)
 	{
-		qtyBase = base->getItems()->getItem(i->first);
+		qtyBase = _base->getItems()->getItem(i->first);
 
 		if (qtyBase >= i->second)
 		{
-			base->getItems()->removeItem(
+			_base->getItems()->removeItem(
 										i->first,
 										i->second);
 //			used = i->second; // kL
 		}
 		else
 		{
-			base->getItems()->removeItem(
+			_base->getItems()->removeItem(
 										i->first,
 										qtyBase);
 
@@ -1775,7 +1756,7 @@ void DebriefingState::reequipCraft( // private.
 			i != craftVehicles.getContents()->end();
 			++i)
 	{
-		qtyBase = base->getItems()->getItem(i->first);
+		qtyBase = _base->getItems()->getItem(i->first);
 		addTanks = std::min(
 						qtyBase,
 						i->second);
@@ -1794,8 +1775,8 @@ void DebriefingState::reequipCraft( // private.
 		}
 
 
-		RuleItem* const tankRule = _rules->getItem(i->first);
-		const Unit* const tankUnit = _rules->getUnit(tankRule->getType());
+		const RuleItem* const itRule = _rules->getItem(i->first);
+		const Unit* const tankUnit = _rules->getUnit(itRule->getType());
 
 		int tankSize;
 		if (tankUnit != NULL)
@@ -1806,7 +1787,7 @@ void DebriefingState::reequipCraft( // private.
 		else
 			tankSize = 4; // safety.
 
-		if (tankRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
+		if (itRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
 		{
 			for (int
 					j = 0;
@@ -1814,21 +1795,21 @@ void DebriefingState::reequipCraft( // private.
 					++j)
 			{
 				craft->getVehicles()->push_back(new Vehicle(
-														tankRule,
-														tankRule->getClipSize(),
+														itRule,
+														itRule->getClipSize(),
 														tankSize));
 			}
 
-			base->getItems()->removeItem(
+			_base->getItems()->removeItem(
 									i->first,
 									addTanks);
 		}
 		else // so this tank requires ammo
 		{
-			const RuleItem* const ammoRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
+			const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
 			const int ammoPerVehicle = ammoRule->getClipSize();
 
-			const int baseQty = base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
+			const int baseQty = _base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
 
 			if (baseQty < i->second * ammoPerVehicle)
 			{
@@ -1855,16 +1836,16 @@ void DebriefingState::reequipCraft( // private.
 						++j)
 				{
 					craft->getVehicles()->push_back(new Vehicle(
-															tankRule,
+															itRule,
 															ammoPerVehicle,
 															tankSize));
 
-					base->getItems()->removeItem(
+					_base->getItems()->removeItem(
 											ammoRule->getType(),
 											ammoPerVehicle);
 				}
 
-				base->getItems()->removeItem(
+				_base->getItems()->removeItem(
 										i->first,
 										addTanks);
 			}
@@ -1886,12 +1867,9 @@ void DebriefingState::reequipCraft( // private.
 /**
  * Recovers items from the battlescape.
  * Converts the battlescape inventory into a geoscape itemcontainer.
- * @param battleItems	- pointer to a vector of pointers to BattleItems on the battlescape
- * @param base			- base to add recovered items to
+ * @param battleItems - pointer to a vector of pointers to BattleItems on the battlescape
  */
-void DebriefingState::recoverItems( // private.
-		std::vector<BattleItem*>* battleItems,
-		Base* base)
+void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // private.
 {
 	RuleItem* itRule;
 
@@ -1930,8 +1908,7 @@ void DebriefingState::recoverItems( // private.
 				{
 					case BT_CORPSE:
 					{
-						BattleUnit* unit = (*i)->getUnit();
-
+						const BattleUnit* const unit = (*i)->getUnit();
 						if (unit != NULL)
 						{
 							if (itRule->isRecoverable() == true
@@ -1944,7 +1921,7 @@ void DebriefingState::recoverItems( // private.
 									unit->getValue() / 3); // This should rather be the 'recoveryPoints' of the corpse item!
 
 								if (unit->getArmor()->getCorpseGeoscape().empty() == false) // safety.
-									base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
+									_base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
 							}
 							else if (unit->getStatus() == STATUS_UNCONSCIOUS)
 							{
@@ -1954,9 +1931,7 @@ void DebriefingState::recoverItems( // private.
 									// ADD STUNNED ALIEN COUNTING HERE_kL
 									++_aliensStunned; // for Nike Cross determination.
 
-									recoverLiveAlien(
-													unit,
-													base);
+									recoverLiveAlien(unit);
 								}
 								else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
 								{
@@ -1991,7 +1966,7 @@ void DebriefingState::recoverItems( // private.
 
 					default: // fall-through, recover the weapon/item itself
 						if (itRule->isRecoverable() == true)
-							base->getItems()->addItem(itRule->getType());
+							_base->getItems()->addItem(itRule->getType());
 				}
 			}
 		}
@@ -2001,13 +1976,10 @@ void DebriefingState::recoverItems( // private.
 /**
  * Recovers a live alien from the battlescape.
  * @param unit - pointer to a BattleUnit to recover
- * @param base - pointer to the Base to add corpse item
  */
-void DebriefingState::recoverLiveAlien( // private.
-		const BattleUnit* const unit,
-		Base* const base)
+void DebriefingState::recoverLiveAlien(const BattleUnit* const unit) // private.
 {
-	if (base->getAvailableContainment() != 0)
+	if (_base->getAvailableContainment() != 0)
 	{
 		Log(LOG_INFO) << ". . . alienLive = " << unit->getType();
 
@@ -2023,10 +1995,10 @@ void DebriefingState::recoverLiveAlien( // private.
 			"STR_LIVE_ALIENS_RECOVERED",
 			value);
 
-		base->getItems()->addItem(type);
+		_base->getItems()->addItem(type);
 
-		_manageContainment = base->getAvailableContainment()
-						   - (base->getUsedContainment() * _limitsEnforced) < 0;
+		_manageContainment = _base->getAvailableContainment()
+						   - (_base->getUsedContainment() * _limitsEnforced) < 0;
 	}
 	else
 	{
@@ -2047,7 +2019,7 @@ void DebriefingState::recoverLiveAlien( // private.
 			corpseItem = unit->getArmor()->getCorpseGeoscape();
 
 		if (corpseItem.empty() == false) // safety.
-			base->getItems()->addItem(corpseItem);
+			_base->getItems()->addItem(corpseItem);
 	}
 }
 

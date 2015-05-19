@@ -43,14 +43,14 @@ private:
 		_ammo,
 		_size;
 
-	RuleItem* _itRule;
+	const RuleItem* const _itRule;
 
 
 	public:
 
 		/// Creates a vehicle of the specified type.
 		Vehicle(
-				RuleItem* itRule,
+				const RuleItem* const itRule,
 				int ammo,
 				int unitSize);
 		/// Cleans up the vehicle.
@@ -62,7 +62,7 @@ private:
 		YAML::Node save() const;
 
 		/// Gets the vehicle's ruleset.
-		RuleItem* getRules() const;
+		const RuleItem* const getRules() const;
 
 		/// Gets the vehicle's ammo.
 		int getAmmo() const;

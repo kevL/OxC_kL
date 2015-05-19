@@ -105,8 +105,6 @@ private:
 		_diff,
 		_limitsEnforced;
 
-	std::wstring _baseLabel;
-
 	Base* _base;
 	Craft* _craft;
 	Country* _country;
@@ -147,18 +145,11 @@ private:
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.
-	void recoverItems(
-			std::vector<BattleItem*>* from,
-			Base* base);
+	void recoverItems(std::vector<BattleItem*>* from);
 	/// Recovers an alien from the battlescape.
-	void recoverLiveAlien(
-			const BattleUnit* const unit,
-			Base* const base);
+	void recoverLiveAlien(const BattleUnit* const unit);
 	/// Reequips a craft after a mission.
-	void reequipCraft(
-			Base* base,
-			Craft* craft,
-			bool vehicleDestruction);
+	void reequipCraft(Craft* craft = NULL);
 
 
 	public:

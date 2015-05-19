@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param vhclSize	- size in tiles
  */
 Vehicle::Vehicle(
-		RuleItem* itRule,
+		const RuleItem* const itRule,
 		int ammo,
 		int vhclSize)
 	:
@@ -77,7 +77,7 @@ YAML::Node Vehicle::save() const
  * Returns the ruleset for the vehicle's type.
  * @return, pointer to RuleItem
  */
-RuleItem* Vehicle::getRules() const
+const RuleItem* const Vehicle::getRules() const
 {
 	return _itRule;
 }
