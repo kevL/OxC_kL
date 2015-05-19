@@ -1063,20 +1063,29 @@ void InventoryState::setExtraInfo( // private.
 		std::wostringstream label;
 		bool isArt = false;
 
-		if (item->getUnit() != NULL
-			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		if (item->getUnit() != NULL)
 		{
-			label << item->getUnit()->getName(_game->getLanguage());
-		}
-		else
-		{
-			if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
-				label << tr(itRule->getName());
+			if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, BattlescapeState::mapOver()
+			{
+				label << tr("STR_FLOATER") // STR_FLOATER_CORPSE
+					  << L" (status doubtful)";
+			}
+			if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				label << item->getUnit()->getName(_game->getLanguage());
 			else
 			{
-				label << tr("STR_ALIEN_ARTIFACT");
-				isArt = true;
+				label << tr(itRule->getType());
+
+				if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+					label << L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
 			}
+		}
+		else if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+			label << tr(itRule->getType());
+		else
+		{
+			label << tr("STR_ALIEN_ARTIFACT");
+			isArt = true;
 		}
 
 		int weight = itRule->getWeight();
@@ -1086,7 +1095,7 @@ void InventoryState::setExtraInfo( // private.
 			weight += ammo->getRules()->getWeight();
 		}
 
-		label << " (" << weight << ")";
+		label << L" (" << weight << L")";
 		_txtItem->setText(label.str());
 
 

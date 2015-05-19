@@ -2892,8 +2892,9 @@ int Base::calcSoldierBonuses(const Craft* const craft) const
  * the value from current funds.
  * @param sol	- pointer to a Soldier
  * @param dead	- true if soldier dies while on tactical (default false)
+ * @return, the expense
  */
-void Base::soldierExpense(
+int Base::soldierExpense(
 		const Soldier* const sol,
 		const bool dead)
 {
@@ -2902,7 +2903,10 @@ void Base::soldierExpense(
 		cost /= 2;
 
 	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds()
+												- static_cast<int64_t>(cost));
+
+	return cost;
 }
 
 /**
@@ -2910,8 +2914,9 @@ void Base::soldierExpense(
  * subtracts the value from current funds.
  * @param hwpSize	- size of the HWP/doggie in tiles
  * @param dead		- true if HWP got destroyed while on tactical (default false)
+ * @return, the expense
  */
-void Base::hwpExpense(
+int Base::hwpExpense(
 		const int hwpSize,
 		const bool dead)
 {
@@ -2920,7 +2925,10 @@ void Base::hwpExpense(
 		cost /= 2;
 
 	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds()
+												- static_cast<int64_t>(cost));
+
+	return cost;
 }
 /*	switch (sol->getRank())
 	{

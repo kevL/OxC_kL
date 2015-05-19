@@ -30,7 +30,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleset for a certain type of item.
- * @param type String defining the type.
+ * @param type - string defining the type
  */
 RuleItem::RuleItem(const std::string& type)
 	:
@@ -279,20 +279,21 @@ void RuleItem::load(
 }
 
 /**
- * Gets the item type. Each item has a unique type.
+ * Gets the item type.
+ * @note Each item has a unique type.
  * @return, the item's type
  */
-
-std::string RuleItem::getType() const
+const std::string& RuleItem::getType() const
 {
 	return _type;
 }
 
 /**
- * Gets the language string that names this item. This is not necessarily unique.
+ * Gets the language string that names this item.
+ * @note This is not necessarily unique.
  * @return, the item's name
  */
-std::string RuleItem::getName() const
+const std::string& RuleItem::getName() const
 {
 	return _name;
 }
@@ -614,20 +615,19 @@ void RuleItem::drawHandSprite(
 		SurfaceSet* texture,
 		Surface* surface) const
 {
-	Surface* const frame = texture->getFrame(_bigSprite); //this->getBigSprite());
+	Surface* const frame = texture->getFrame(_bigSprite);
 	if (frame != NULL) // kL_safety.
 	{
 		frame->setX(
-				(RuleInventory::HAND_W - _invWidth) //this->getInventoryWidth())
-				* RuleInventory::SLOT_W / 2);
+				(RuleInventory::HAND_W - _invWidth)
+			   * RuleInventory::SLOT_W / 2);
 		frame->setY(
-				(RuleInventory::HAND_H - _invHeight) //this->getInventoryHeight())
-				* RuleInventory::SLOT_H / 2);
+				(RuleInventory::HAND_H - _invHeight)
+			   * RuleInventory::SLOT_H / 2);
 
-//		texture->getFrame(this->getBigSprite())->blit(surface);
 		texture->getFrame(_bigSprite)->blit(surface);
 	}
-	else Log(LOG_INFO) << "ERROR : bigob not found #" << _bigSprite; // kL
+	else Log(LOG_INFO) << "ERROR : bigob not found #" << _bigSprite;
 }
 
 /**

@@ -101,18 +101,21 @@ private:
 		_aliensControlled,
 		_aliensKilled,
 		_aliensStunned,
+		_cost,
 		_diff,
 		_limitsEnforced;
 
 	std::wstring _baseLabel;
 
 	Base* _base;
+	Craft* _craft;
 	Country* _country;
 	Region* _region;
 	Ruleset* _rules;
 	SavedGame* _gameSave;
 	Text
 		* _txtBaseLabel,
+		* _txtCost,
 		* _txtItem,
 		* _txtQuantity,
 		* _txtRating,

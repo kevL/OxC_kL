@@ -22,8 +22,8 @@
 //#include <sstream>
 
 #include "CannotReequipState.h"
-#include "CommendationState.h"
 #include "CommendationDeadState.h"
+#include "CommendationState.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
 
@@ -95,13 +95,15 @@ DebriefingState::DebriefingState()
 		_region(NULL),
 		_country(NULL),
 		_base(NULL),
+		_craft(NULL),
 		_noContainment(false),
 		_manageContainment(false),
 		_destroyXCOMBase(false),
 		_limitsEnforced(0),
 		_aliensControlled(0),
 		_aliensKilled(0),
-		_aliensStunned(0)
+		_aliensStunned(0),
+		_cost(0)
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
@@ -139,8 +141,9 @@ DebriefingState::DebriefingState()
 
 	_lstTotal		= new TextList(288, 9, 16, 12);
 
-	_btnOk			= new TextButton(176, 16, 16, 177);
-	_txtRating		= new Text(100, 9, 212, 180);
+	_txtCost		= new Text(76, 9, 16, 180);
+	_btnOk			= new TextButton(136, 16, 92, 177);
+	_txtRating		= new Text(76, 9, 228, 180);
 
 	setInterface("debriefing");
 
@@ -154,6 +157,7 @@ DebriefingState::DebriefingState()
 	add(_lstStats,		"list",		"debriefing");
 	add(_lstRecovery,	"list",		"debriefing");
 	add(_lstTotal,		"list",		"debriefing");
+	add(_txtCost,		"text",		"debriefing");
 	add(_btnOk,			"button",	"debriefing");
 	add(_txtRating,		"text",		"debriefing");
 
@@ -257,6 +261,8 @@ DebriefingState::DebriefingState()
 		}
 	}
 
+	_missionStatistics->score = total;
+
 	if (civiliansSaved > 0
 		&& civiliansDead == 0
 		&& _missionStatistics->success == true)
@@ -348,8 +354,14 @@ DebriefingState::DebriefingState()
 		_missionStatistics->rating = "STR_RATING_EXCELLENT";
 	}
 
-	_txtRating->setText(tr("STR_RATING").arg(rating));
-	_missionStatistics->score = total;
+//	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
+	_txtCost->setText(Text::formatFunding(_cost));
+	_txtCost->setAlign(ALIGN_CENTER);
+
+//	_txtRating->setText(tr("STR_RATING").arg(rating));
+	_txtRating->setText(rating);
+	_txtRating->setAlign(ALIGN_CENTER);
+
 
 	if (music.empty() == true)
 		music = OpenXcom::res_MUSIC_TAC_DEBRIEFING;
@@ -1127,9 +1139,9 @@ void DebriefingState::prepareDebriefing() // private.
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
 				{
-					base->soldierExpense(
-										sol,
-										true);
+					_cost += base->soldierExpense(
+												sol,
+												true);
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
 						-value);
@@ -1156,9 +1168,9 @@ void DebriefingState::prepareDebriefing() // private.
 				}
 				else // not soldier -> tank
 				{
-					base->hwpExpense(
-								(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
-								true);
+					_cost += base->hwpExpense(
+										(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
+										true);
 					addStat(
 						"STR_TANKS_DESTROYED",
 						-value);
@@ -1206,7 +1218,7 @@ void DebriefingState::prepareDebriefing() // private.
 								(*i)->getInventory(),
 								base);
 
-						base->soldierExpense(sol);
+						_cost += base->soldierExpense(sol);
 
 //						sol->calcStatString( // calculate new statString
 //										_rules->getStatStrings(),
@@ -1216,7 +1228,7 @@ void DebriefingState::prepareDebriefing() // private.
 					else // not soldier -> tank
 					{
 						base->getItems()->addItem(type);
-						base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
+						_cost += base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
 						const RuleItem* itRule;
 						const BattleItem* ammoItem;

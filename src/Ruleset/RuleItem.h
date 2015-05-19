@@ -159,7 +159,7 @@ private:
 
 	std::string
 		_name, // two types of objects can have the same name
-		_type,
+		_type, // but the types are always unique
 		_zombieUnit;
 
 	BattleType _battleType;
@@ -183,9 +183,9 @@ private:
 				int listIndex);
 
 		/// Gets the item's type.
-		std::string getType() const;
+		const std::string& getType() const;
 		/// Gets the item's name.
-		std::string getName() const;
+		const std::string& getName() const;
 
 		/// Gets the item's research requirements.
 		const std::vector<std::string>& getRequirements() const;

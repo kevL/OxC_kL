@@ -1294,13 +1294,14 @@ void BattlescapeState::mapOver(Action* action)
 				if (i < tile->getInventory()->size())
 				{
 					const BattleItem* const item = tile->getInventory()->at(i);
+					const RuleItem* const itRule = item->getRules();
 
 					if (item->getUnit() != NULL)
 					{
-						if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0)
+						if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, InventoryState::setExtraInfo()
 						{
-							wst1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
-							wst1 +=  + L" (status doubtful)";
+							wst1 += tr("STR_FLOATER");
+							wst1 += L" (status doubtful)";
 						}
 						else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 						{
@@ -1311,32 +1312,34 @@ void BattlescapeState::mapOver(Action* action)
 						}
 						else
 						{
-							wst1 += tr(item->getRules()->getType());
+							wst1 += tr(itRule->getType());
 
 							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
 								wst1 += L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
 						}
 					}
-					else
+					else if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 					{
-						wst1 += tr(item->getRules()->getType());
+						wst1 += tr(itRule->getType());
 
-						if (item->getRules()->getBattleType() == BT_AMMO)
+						if (itRule->getBattleType() == BT_AMMO)
 							wst1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
-						else if (item->getRules()->getBattleType() == BT_FIREARM
+						else if (itRule->getBattleType() == BT_FIREARM
 							&& item->getAmmoItem() != NULL
 							&& item->getAmmoItem() != item)
 						{
 							wst = tr(item->getAmmoItem()->getRules()->getType());
 							wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 						}
-						else if ((item->getRules()->getBattleType() == BT_GRENADE
-								|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+						else if ((itRule->getBattleType() == BT_GRENADE
+								|| itRule->getBattleType() == BT_PROXIMITYGRENADE)
 							&& item->getFuseTimer() > -1)
 						{
 							wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
 						}
 					}
+					else
+						wst1 += tr("STR_ALIEN_ARTIFACT");
 				}
 
 				if (i == 0)

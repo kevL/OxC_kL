@@ -135,6 +135,7 @@ void MediTargetState::init()
 		addToList,
 		firstPass = true;
 
+	// TODO: require aLien autopsies research before allowing Medikit to show info on a/the type of aLien.
 	const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator
 			i = units->begin();
@@ -160,9 +161,9 @@ void MediTargetState::init()
 					addToList = true;;
 				}
 				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																								_action->actor,
-																								*i,
-																								_action->actor->getDirection()) == true)
+																							_action->actor,
+																							*i,
+																							_action->actor->getDirection()) == true)
 				{
 					addToList = true;
 				}
@@ -177,15 +178,15 @@ void MediTargetState::init()
 					woststr1,
 					woststr2;
 
-				woststr1	<< _targetUnits.back()->getHealth()
-							<< L"|"
-							<< _targetUnits.back()->getBaseStats()->health
-							<< L"|"
-							<< _targetUnits.back()->getStun();
+				woststr1 << _targetUnits.back()->getHealth()
+						 << L"|"
+						 << _targetUnits.back()->getBaseStats()->health
+						 << L"|"
+						 << _targetUnits.back()->getStun();
 
-				woststr2	<< _targetUnits.back()->getEnergy()
-							<< L"|"
-							<< _targetUnits.back()->getBaseStats()->stamina;
+				woststr2 << _targetUnits.back()->getEnergy()
+						 << L"|"
+						 << _targetUnits.back()->getBaseStats()->stamina;
 
 				_lstTarget->addRow(
 								5,

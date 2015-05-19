@@ -305,11 +305,11 @@ private:
 		/// Calculates the bonus cost for soldiers by rank.
 		int calcSoldierBonuses(const Craft* const craft = NULL) const;
 		/// Calculates a soldier's bonus pay for doing a tactical mission.
-		void soldierExpense(
+		int soldierExpense(
 				const Soldier* const sol,
 				const bool dead = false);
 		/// Calculates the expense of sending HWPs/doggies on a tactical mission.
-		void hwpExpense(
+		int hwpExpense(
 				const int hwpSize,
 				const bool dead = false);
 };
