@@ -19,6 +19,7 @@
 
 #include "BasescapeState.h"
 
+#include "AlienContainmentState.h"
 #include "BaseDetectionState.h"
 #include "BaseInfoState.h"
 #include "BaseView.h"
@@ -26,13 +27,13 @@
 #include "CraftInfoState.h"
 #include "CraftsState.h"
 #include "DismantleFacilityState.h"
-#include "AlienContainmentState.h"
 #include "ManufactureState.h"
 #include "MiniBaseView.h"
 #include "MonthlyCostsState.h"
 #include "PurchaseState.h"
 #include "ResearchState.h"
 #include "SellState.h"
+#include "SoldierMemorialState.h"
 #include "StoresMatrixState.h"
 #include "StoresState.h"
 #include "SoldiersState.h"
@@ -94,14 +95,15 @@ BasescapeState::BasescapeState(
 	_txtRegion		= new Text(126, 9, 194, 15);
 	_txtFunds		= new Text(126, 9, 194, 24);
 
-	_btnBaseInfo	= new TextButton(128, 12, 192, 56);
-	_btnSoldiers	= new TextButton(128, 12, 192, 68);
-	_btnCrafts		= new TextButton(128, 12, 192, 80);
-	_btnAliens		= new TextButton(128, 12, 192, 92);
+	_btnBaseInfo	= new TextButton(128, 12, 192,  56);
+	_btnSoldiers	= new TextButton( 64, 12, 192,  68);
+	_btnMemorial	= new TextButton( 64, 12, 256,  68);
+	_btnCrafts		= new TextButton(128, 12, 192,  80);
+	_btnAliens		= new TextButton(128, 12, 192,  92);
 	_btnResearch	= new TextButton(128, 12, 192, 104);
 	_btnManufacture	= new TextButton(128, 12, 192, 116);
-	_btnPurchase	= new TextButton(64, 12, 192, 128);
-	_btnSell		= new TextButton(64, 12, 256, 128);
+	_btnPurchase	= new TextButton( 64, 12, 192, 128);
+	_btnSell		= new TextButton( 64, 12, 256, 128);
 	_btnDaMatrix	= new TextButton(128, 12, 192, 140);
 	_btnTransfer	= new TextButton(128, 12, 192, 152);
 	_btnIncTrans	= new TextButton(128, 12, 192, 164);
@@ -122,6 +124,7 @@ BasescapeState::BasescapeState(
 
 	add(_btnBaseInfo,		"button",		"basescape");
 	add(_btnSoldiers,		"button",		"basescape");
+	add(_btnMemorial,		"button",		"basescape");
 	add(_btnCrafts,			"button",		"basescape");
 	add(_btnAliens,			"button",		"basescape");
 	add(_btnResearch,		"button",		"basescape");
@@ -171,6 +174,9 @@ BasescapeState::BasescapeState(
 
 	_btnSoldiers->setText(tr("STR_SOLDIERS_UC"));
 	_btnSoldiers->onMouseClick((ActionHandler)& BasescapeState::btnSoldiersClick);
+
+	_btnMemorial->setText(tr("STR_MEMORIAL"));
+	_btnMemorial->onMouseClick((ActionHandler)& BasescapeState::btnMemorialClick);
 
 	_btnCrafts->setText(tr("STR_EQUIP_CRAFT"));
 	_btnCrafts->onMouseClick((ActionHandler)& BasescapeState::btnCraftsClick);
@@ -279,58 +285,47 @@ void BasescapeState::init()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getRules()->getPersonnel() > 0
-			&& (*i)->getBuildTime() == 0)
+		if ((*i)->getBuildTime() == 0)
 		{
-			hasQuarters = true;
-
-			if (_base->getSoldiers()->size() > 0)
-				hasSoldiers = true;
-
-			if (_base->getScientists() > 0
-				|| _base->getAllocatedScientists() > 0)
+			if ((*i)->getRules()->getPersonnel() > 0)
 			{
-				hasScientists = true;
+				hasQuarters = true;
+
+				if (_base->getSoldiers()->empty() == false)
+					hasSoldiers = true;
+
+				if (_base->getScientists() > 0
+					|| _base->getAllocatedScientists() > 0)
+				{
+					hasScientists = true;
+				}
+
+				if (_base->getEngineers() > 0
+					|| _base->getAllocatedEngineers() > 0)
+				{
+					hasEngineers = true;
+				}
 			}
 
-			if (_base->getEngineers() > 0
-				|| _base->getAllocatedEngineers() > 0)
+			if ((*i)->getRules()->getCrafts() > 0)
 			{
-				hasEngineers = true;
+				hasHangar = true;
+
+				if (_base->getCrafts()->empty() == false)
+					hasCraft = true;
 			}
-		}
 
-		if ((*i)->getRules()->getCrafts() > 0
-			&& (*i)->getBuildTime() == 0)
-		{
-			hasHangar = true;
+			if ((*i)->getRules()->getAliens() > 0)
+				hasAlienCont = true;
 
-			if (_base->getCrafts()->size() > 0)
-				hasCraft = true;
-		}
+			if ((*i)->getRules()->getLaboratories() > 0)
+				hasLabs = true;
 
-		if ((*i)->getRules()->getAliens() > 0
-			&& (*i)->getBuildTime() == 0)
-		{
-			hasAlienCont = true;
-		}
+			if ((*i)->getRules()->getWorkshops() > 0)
+				hasProd = true;
 
-		if ((*i)->getRules()->getLaboratories() > 0
-			&& (*i)->getBuildTime() == 0)
-		{
-			hasLabs = true;
-		}
-
-		if ((*i)->getRules()->getWorkshops() > 0
-			&& (*i)->getBuildTime() == 0)
-		{
-			hasProd = true;
-		}
-
-		if ((*i)->getRules()->getStorage() > 0
-			&& (*i)->getBuildTime() == 0)
-		{
-			hasStores = true;
+			if ((*i)->getRules()->getStorage() > 0)
+				hasStores = true;
 		}
 	}
 
@@ -345,6 +340,7 @@ void BasescapeState::init()
 	_btnFacilities->setVisible(hasFunds);
 
 	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false);
+	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
 
 	std::string track = OpenXcom::res_MUSIC_GEO_GLOBE;
@@ -441,6 +437,16 @@ void BasescapeState::btnBaseInfoClick(Action*)
 void BasescapeState::btnSoldiersClick(Action*)
 {
 	_game->pushState(new SoldiersState(_base));
+}
+
+/**
+ * Opens the Memorial screen.
+ * @param action - pointer to an Action
+ */
+void BasescapeState::btnMemorialClick(Action*)
+{
+	_game->getResourcePack()->fadeMusic(_game, 863);
+	_game->pushState(new SoldierMemorialState());
 }
 
 /**

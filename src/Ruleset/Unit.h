@@ -65,7 +65,7 @@ struct UnitStats
 	return *this;
 } */
 
-	public:
+	public: // note, struct members are by default public
 		UnitStats()
 			:
 				tu(0),
@@ -107,7 +107,7 @@ struct UnitStats
 				melee(melee_)
 		{};
 
-		UnitStats& operator+=(const UnitStats& stats)
+		UnitStats& operator+= (const UnitStats& stats)
 		{
 			if (this != &stats) // kL: cf. Position.h
 			{
@@ -127,7 +127,7 @@ struct UnitStats
 			return *this;
 		}
 
-		UnitStats operator+(const UnitStats& stats) const
+		UnitStats operator+ (const UnitStats& stats) const
 		{
 			return UnitStats(
 						tu			+ stats.tu,
@@ -143,7 +143,7 @@ struct UnitStats
 						melee		+ stats.melee);
 		}
 
-		UnitStats& operator-=(const UnitStats& stats)
+		UnitStats& operator-= (const UnitStats& stats)
 		{
 			if (this != &stats) // kL: cf. Position.h
 			{
@@ -163,7 +163,7 @@ struct UnitStats
 			return *this;
 		}
 
-		UnitStats operator-(const UnitStats& stats) const
+		UnitStats operator- (const UnitStats& stats) const
 		{
 			return UnitStats(
 						tu			- stats.tu,
@@ -179,7 +179,7 @@ struct UnitStats
 						melee		- stats.melee);
 		}
 
-		UnitStats operator-() const
+		UnitStats operator- () const
 		{
 			return UnitStats(
 						-tu,
@@ -197,17 +197,17 @@ struct UnitStats
 
 		void mergeStats(const UnitStats& stats)
 		{
-			tu			= (stats.tu? stats.tu: tu);
-			stamina		= (stats.stamina? stats.stamina: stamina);
-			health		= (stats.health? stats.health: health);
-			bravery		= (stats.bravery? stats.bravery: bravery);
-			reactions	= (stats.reactions? stats.reactions: reactions);
-			firing		= (stats.firing? stats.firing: firing);
-			throwing	= (stats.throwing? stats.throwing: throwing);
-			strength	= (stats.strength? stats.strength: strength);
-			psiStrength	= (stats.psiStrength? stats.psiStrength: psiStrength);
-			psiSkill	= (stats.psiSkill? stats.psiSkill: psiSkill);
-			melee		= (stats.melee? stats.melee: melee);
+			tu			= (stats.tu				? stats.tu			: tu);
+			stamina		= (stats.stamina		? stats.stamina		: stamina);
+			health		= (stats.health			? stats.health		: health);
+			bravery		= (stats.bravery		? stats.bravery		: bravery);
+			reactions	= (stats.reactions		? stats.reactions	: reactions);
+			firing		= (stats.firing			? stats.firing		: firing);
+			throwing	= (stats.throwing		? stats.throwing	: throwing);
+			strength	= (stats.strength		? stats.strength	: strength);
+			psiStrength	= (stats.psiStrength	? stats.psiStrength	: psiStrength);
+			psiSkill	= (stats.psiSkill		? stats.psiSkill	: psiSkill);
+			melee		= (stats.melee			? stats.melee		: melee);
 		};
 };
 

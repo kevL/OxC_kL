@@ -106,9 +106,7 @@ CraftArmorState::CraftArmorState(
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtName->setText(tr("STR_NAME_UC"));
-
 	_txtCraft->setText(tr("STR_CRAFT"));
-
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
@@ -190,18 +188,6 @@ void CraftArmorState::init()
 	}
 
 	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-/*	if (row > 0) // all taken care of in TextList
-	{
-		if (_lstSoldiers->getScroll() > row
-			|| _base->getCurrentSoldier() > row)
-		{
-			_lstSoldiers->scrollTo(0);
-			_base->setCurrentSoldier(0);
-		}
-		else if (_base->getCurrentSoldier() > 0)
-			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	} */
-
 	_lstSoldiers->draw();
 }
 
@@ -223,7 +209,7 @@ void CraftArmorState::btnOkClick(Action*)
 void CraftArmorState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+	if (   mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
@@ -303,7 +289,8 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+												- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -334,12 +321,11 @@ void CraftArmorState::lstRightArrowClick(Action* action)
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const size_t
-		numSoldiers = _base->getSoldiers()->size(),
+		qtySoldiers = _base->getSoldiers()->size(),
 		row = _lstSoldiers->getSelectedRow();
 
-	if (numSoldiers > 0
-		&& numSoldiers <= std::numeric_limits<size_t>::max()
-		&& row < numSoldiers - 1)
+	if (qtySoldiers > 0
+		&& row < qtySoldiers - 1)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(row);
 
@@ -352,7 +338,8 @@ void CraftArmorState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+												+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{

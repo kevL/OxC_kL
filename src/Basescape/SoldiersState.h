@@ -53,7 +53,7 @@ private:
 	TextButton
 		* _btnArmor,
 		* _btnEquip,
-		* _btnMemorial,
+		* _btnSort,
 		* _btnOk,
 		* _btnPsi;
 	TextList* _lstSoldiers;
@@ -71,12 +71,15 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-		/// Handler for clicking the PsiTraining button.
-		void btnPsiTrainingClick(Action* action);
+		/// Handler for clicking the Inventory button.
+		void btnEquipClick(Action* action);
 		/// Handler for clicking the Armor button.
 		void btnArmorClick(Action* action);
-		/// Handler for clicking the Memorial button.
-		void btnMemorialClick(Action* action);
+		/// Handler for clicking the PsiTraining button.
+		void btnPsiTrainingClick(Action* action);
+		/// Sorts the soldiers list.
+		void btnSortClick(Action* action);
+
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersPress(Action* action);
 
@@ -84,9 +87,6 @@ private:
 		void lstLeftArrowClick(Action* action);
 		/// Handler for clicking the Soldiers reordering button.
 		void lstRightArrowClick(Action* action);
-
-		/// Handler for clicking the Inventory button.
-		void btnEquipClick(Action* action);
 };
 
 }

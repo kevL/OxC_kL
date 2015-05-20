@@ -545,8 +545,7 @@ void CraftInfoState::edtCraftChange(Action* action)
 void CraftInfoState::calcCost() // private.
 {
 	const int cost = _base->calcSoldierBonuses(_base->getCrafts()->at(_craftId));
-	_txtCost->setText(tr("STR_COST_")
-						.arg(Text::formatFunding(cost)));
+	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
 }
 
 }

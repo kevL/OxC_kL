@@ -41,12 +41,17 @@ class PsiTrainingState
 {
 
 private:
-	Window* _window;
-	Text* _txtTitle;
-	TextButton* _btnOk;
-
 	std::vector<Base*> _bases;
 	std::vector<TextButton*> _btnBases;
+
+	Text* _txtTitle;
+	TextButton* _btnOk;
+	Window* _window;
+
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action* action);
+	/// Handler for clicking a Base button.
+	void btnBaseBtnClick(Action* action);
 
 
 	public:
@@ -54,11 +59,6 @@ private:
 		PsiTrainingState();
 		/// Cleans up the Psi Training state.
 		~PsiTrainingState();
-
-		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
-		/// Handler for clicking a Base button.
-		void btnBaseXClick(Action* action);
 };
 
 }

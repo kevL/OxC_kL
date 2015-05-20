@@ -1178,7 +1178,7 @@ en-US:
   STR_FLYING_SUIT_UFOPEDIA: "An enhanced power suit incorporating aLien anti-gravity navigation technology to allow full freedom of movement across, and over the battlefield."
   STR_ALL_ALIENS_KILLED_IN_CRASH: "All Aliens killed in crash.{NEWLINE}{NEWLINE}Recovery Initiated"
   STR_RESET: "Reset"
-  STR_MEMORIAL: ".eulogy"
+  STR_MEMORIAL: "eulogy"
   STR_DATE_UC: "Date"
   STR_SOLDIERS_RECRUITED: "fodder recruited> {ALT}{0}"
   STR_SOLDIERS_LOST: "fodder lost> {ALT}{0}"

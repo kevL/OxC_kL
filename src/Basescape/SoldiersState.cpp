@@ -72,18 +72,19 @@ SoldiersState::SoldiersState(Base* base)
 		_base(base)
 {
 	_window			= new Window(this, 320, 200);
-	_txtTitle		= new Text(300, 17, 10, 11);
-	_txtBaseLabel	= new Text(80, 9, 16, 11);
-	_txtSoldiers	= new Text(20, 9, 284, 11);
 
-	_txtName		= new Text(117, 9, 16, 31);
-	_txtRank		= new Text(92, 9, 133, 31);
-	_txtCraft		= new Text(82, 9, 226, 31);
+	_txtTitle		= new Text(300, 17,  10, 11);
+	_txtBaseLabel	= new Text( 80,  9,  16, 11);
+	_txtSoldiers	= new Text( 20,  9, 284, 11);
+
+	_txtName		= new Text(117, 9,  16, 31);
+	_txtRank		= new Text( 92, 9, 133, 31);
+	_txtCraft		= new Text( 82, 9, 226, 31);
 
 	_lstSoldiers	= new TextList(293, 129, 8, 42);
 
-	_btnMemorial	= new TextButton(56, 16, 10, 177);
-	_btnPsi			= new TextButton(56, 16, 71, 177);
+	_btnSort		= new TextButton(56, 16,  10, 177);
+	_btnPsi			= new TextButton(56, 16,  71, 177);
 	_btnArmor		= new TextButton(56, 16, 132, 177);
 	_btnEquip		= new TextButton(56, 16, 193, 177);
 	_btnOk			= new TextButton(56, 16, 254, 177);
@@ -99,7 +100,7 @@ SoldiersState::SoldiersState(Base* base)
 	add(_txtRank,		"text2",	"soldierList");
 	add(_txtCraft,		"text2",	"soldierList");
 	add(_lstSoldiers,	"list",		"soldierList");
-	add(_btnMemorial,	"button",	"soldierList");
+	add(_btnSort,		"button",	"soldierList");
 	add(_btnPsi,		"button",	"soldierList");
 	add(_btnArmor,		"button",	"soldierList");
 	add(_btnEquip,		"button",	"soldierList");
@@ -118,9 +119,8 @@ SoldiersState::SoldiersState(Base* base)
 
 	_txtSoldiers->setAlign(ALIGN_RIGHT);
 
-	_btnMemorial->setText(tr("STR_MEMORIAL"));
-	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
-	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
+	_btnSort->setText(tr("STR_SORT"));
+	_btnSort->onMouseClick((ActionHandler)& SoldiersState::btnSortClick);
 
 	_btnPsi->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsi->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
@@ -142,9 +142,7 @@ SoldiersState::SoldiersState(Base* base)
 					Options::keyCancel);
 
 	_txtName->setText(tr("STR_NAME_UC"));
-
 	_txtRank->setText(tr("STR_RANK"));
-
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_lstSoldiers->setColumns(3, 117, 93, 71);
@@ -226,18 +224,6 @@ void SoldiersState::init()
 	}
 
 	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-/*	if (row > 0) // all taken care of in TextList
-	{
-		if (_lstSoldiers->getScroll() > row
-			|| _base->getCurrentSoldier() > row)
-		{
-			_lstSoldiers->scrollTo(0);
-			_base->setCurrentSoldier(0);
-		}
-		else if (_base->getCurrentSoldier() > 0)
-			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	} */
-
 	_lstSoldiers->draw();
 }
 
@@ -249,16 +235,6 @@ void SoldiersState::btnOkClick(Action*)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 	_game->popState();
-}
-
-/**
- * Opens the Psionic Training screen.
- * @param action - pointer to an Action
- */
-void SoldiersState::btnPsiTrainingClick(Action*)
-{
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
 /**
@@ -274,15 +250,89 @@ void SoldiersState::btnArmorClick(Action*)
 }
 
 /**
- * Opens the Memorial screen.
+ * Displays the inventory screen for the soldiers at Base.
  * @param action - pointer to an Action
  */
-void SoldiersState::btnMemorialClick(Action*)
+void SoldiersState::btnEquipClick(Action*)
 {
-	_game->getResourcePack()->fadeMusic(_game, 863);
-
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-	_game->pushState(new SoldierMemorialState());
+
+	SavedBattleGame* battle = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battle);
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+
+	bgen.runInventory(NULL, _base);
+
+	_game->getScreen()->clear();
+	_game->pushState(new InventoryState(
+									false,
+									NULL));
+}
+
+/**
+ * Opens the Psionic Training screen.
+ * @param action - pointer to an Action
+ */
+void SoldiersState::btnPsiTrainingClick(Action*)
+{
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_game->pushState(new AllocatePsiTrainingState(_base));
+}
+
+/* EG, functor; http://stackoverflow.com/questions/26844983/sort-a-pair-vector-in-c
+// (see also, http://stackoverflow.com/questions/1380463/sorting-a-vector-of-custom-objects)
+struct sort_second
+{
+	inline const bool operator()(const std::pair<int,int>& left, const std::pair<int,int>& right) const
+	{
+		return left.second < right.second;
+	}
+};
+// call w/
+std::sort(vPair.begin(), vPair.end(), sort_second()); */
+
+/**
+ * Sorts the soldiers list.
+ */
+void SoldiersState::btnSortClick(Action*)
+{
+	std::multimap<int, Soldier*> soldiersOrdered;
+
+	for (std::vector<Soldier*>::const_iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i) // old values from CWXCED:
+	{
+		const int weight = (*i)->getCurrentStats()->tu			*  8
+						 + (*i)->getCurrentStats()->stamina		*  5
+						 + (*i)->getCurrentStats()->health		*  7
+						 + (*i)->getCurrentStats()->bravery		*  3
+						 + (*i)->getCurrentStats()->reactions	* 21
+						 + (*i)->getCurrentStats()->firing		* 19
+						 + (*i)->getCurrentStats()->throwing	*  1
+						 + (*i)->getCurrentStats()->strength	* 24
+						 + (*i)->getCurrentStats()->psiStrength	* 22
+						 + (*i)->getCurrentStats()->psiSkill	* 11
+						 + (*i)->getCurrentStats()->melee		*  2;
+
+		soldiersOrdered.insert(std::pair<int, Soldier*>(weight, *i));
+		// NOTE: unsure if multimap loses a player-preferred
+		// order of two soldiers with the same weight (to preserve that
+		// would have to use vector of key-weights, stable_sort'd,
+		// referenced back to a vector of <weight,Soldier> pairs,
+		// possibly using a comparoperator functor. /cheers)
+	}
+
+	size_t j = 0;
+	for (std::multimap<int, Soldier*>::const_iterator
+			i = soldiersOrdered.begin();
+			i != soldiersOrdered.end();
+			++i)
+	{
+		_base->getSoldiers()->at(j++) = (*i).second;
+	}
+
+	init();
 }
 
 /**
@@ -292,13 +342,13 @@ void SoldiersState::btnMemorialClick(Action*)
 void SoldiersState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (mx >= _lstSoldiers->getArrowsLeftEdge()
+	if (   mx >= _lstSoldiers->getArrowsLeftEdge()
 		&& mx < _lstSoldiers->getArrowsRightEdge())
 	{
 		return;
 	}
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+	if (   action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
@@ -331,7 +381,8 @@ void SoldiersState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+												- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -362,12 +413,11 @@ void SoldiersState::lstRightArrowClick(Action* action)
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const size_t
-		numSoldiers = _base->getSoldiers()->size(),
+		qtySoldiers = _base->getSoldiers()->size(),
 		row = _lstSoldiers->getSelectedRow();
 
-	if (numSoldiers > 0
-		&& numSoldiers <= std::numeric_limits<size_t>::max()
-		&& row < numSoldiers - 1)
+	if (qtySoldiers > 0
+		&& row < qtySoldiers - 1)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(row);
 
@@ -380,7 +430,8 @@ void SoldiersState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+												+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -398,26 +449,6 @@ void SoldiersState::lstRightArrowClick(Action* action)
 	}
 
 	init();
-}
-
-/**
-* Displays the inventory screen for the soldiers at Base.
-* @param action - pointer to an Action
-*/
-void SoldiersState::btnEquipClick(Action*)
-{
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
-	SavedBattleGame* battle = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(battle);
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-
-	bgen.runInventory(NULL, _base);
-
-	_game->getScreen()->clear();
-	_game->pushState(new InventoryState(
-									false,
-									NULL));
 }
 
 }

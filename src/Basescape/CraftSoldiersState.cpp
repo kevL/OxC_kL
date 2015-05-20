@@ -68,7 +68,7 @@ CraftSoldiersState::CraftSoldiersState(
 		_base(base),
 		_craftId(craftId)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200);
 
 	_txtCost		= new Text(150, 9, 24, -10);
 
@@ -247,18 +247,6 @@ void CraftSoldiersState::init()
 	}
 
 	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-/*	if (row > 0) // all taken care of in TextList
-	{
-		if (_lstSoldiers->getScroll() > row
-			|| _base->getCurrentSoldier() > row)
-		{
-			_lstSoldiers->scrollTo(0);
-			_base->setCurrentSoldier(0);
-		}
-		else if (_base->getCurrentSoldier() > 0)
-			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	} */
-
 	_lstSoldiers->draw();
 
 	_btnInventory->setVisible(
@@ -283,7 +271,7 @@ void CraftSoldiersState::init()
 void CraftSoldiersState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+	if (   mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
@@ -365,23 +353,9 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-/*	size_t row = _lstSoldiers->getSelectedRow();
-	if (row > 0)
-	{
-		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-			moveSoldierUp(action, row);
-		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-			moveSoldierUp(action, row, true);
-	} */
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
-
-/*	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		_lstSoldiers->scrollUp(false, true);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		_lstSoldiers->scrollDown(false, true);
-	else */
 	if (row > 0)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(row);
@@ -395,7 +369,8 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+												- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -423,29 +398,14 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-/*	size_t row = _lstSoldiers->getSelectedRow();
-	size_t numSoldiers = _base->getSoldiers()->size();
-	if (0 < numSoldiers && std::numeric_limits<int>::max() >= numSoldiers && row < (int)numSoldiers - 1)
-	{
-		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-			moveSoldierDown(action, row);
-		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-			moveSoldierDown(action, row, true);
-	} */
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const size_t
-		numSoldiers = _base->getSoldiers()->size(),
+		qtySoldiers = _base->getSoldiers()->size(),
 		row = _lstSoldiers->getSelectedRow();
 
-/*	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		_lstSoldiers->scrollUp(false, true);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		_lstSoldiers->scrollDown(false, true);
-	else */
-	if (numSoldiers > 0
-		&& numSoldiers <= std::numeric_limits<size_t>::max()
-		&& row < numSoldiers - 1)
+	if (qtySoldiers > 0
+		&& row < qtySoldiers - 1)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(row);
 
@@ -458,7 +418,8 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
+												+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -505,8 +466,7 @@ void CraftSoldiersState::btnInventoryClick(Action*)
 void CraftSoldiersState::calcCost() // private.
 {
 	const int cost = _base->calcSoldierBonuses(_base->getCrafts()->at(_craftId));
-	_txtCost->setText(tr("STR_COST_")
-						.arg(Text::formatFunding(cost)));
+	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
 }
 
 }

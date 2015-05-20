@@ -62,39 +62,35 @@ PsiTrainingState::PsiTrainingState()
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
+	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PsiTrainingState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
-
-
-	int buttons = 0;
-
+	int btn = 0;
 	for(std::vector<Base*>::const_iterator
-			b = _game->getSavedGame()->getBases()->begin();
-			b != _game->getSavedGame()->getBases()->end();
-			++b)
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		if ((*b)->getAvailablePsiLabs())
+		if ((*i)->getAvailablePsiLabs() != 0)
 		{
 			TextButton* btnBase = new TextButton(
 											160,14,
 											80,
-											40 + 16 * buttons);
-			btnBase->onMouseClick((ActionHandler)& PsiTrainingState::btnBaseXClick);
-			btnBase->setText((*b)->getName());
+											40 + 16 * btn++);
+			btnBase->onMouseClick((ActionHandler)& PsiTrainingState::btnBaseBtnClick);
+			btnBase->setText((*i)->getName());
+
 			add(btnBase, "button1", "psiTraining");
 
-			_bases.push_back(*b);
+			_bases.push_back(*i);
 			_btnBases.push_back(btnBase);
-
-			if (++buttons > 7)
-				break;
 		}
 	}
 
@@ -105,14 +101,13 @@ PsiTrainingState::PsiTrainingState()
  * dTor.
  */
 PsiTrainingState::~PsiTrainingState()
-{
-}
+{}
 
 /**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void PsiTrainingState::btnOkClick(Action*)
+void PsiTrainingState::btnOkClick(Action*) // private.
 {
 	_game->popState();
 }
@@ -121,7 +116,7 @@ void PsiTrainingState::btnOkClick(Action*)
  * Goes to the allocation screen for the corresponding base.
  * @param action - pointer to an Action
  */
-void PsiTrainingState::btnBaseXClick(Action* action)
+void PsiTrainingState::btnBaseBtnClick(Action* action) // private.
 {
 	for (size_t
 			i = 0;

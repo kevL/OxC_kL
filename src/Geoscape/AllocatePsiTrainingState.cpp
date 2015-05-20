@@ -99,27 +99,24 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
-	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(base->getName(_game->getLanguage()));
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
-	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
 	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
+	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtName->setText(tr("STR_NAME"));
-
 	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
-
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_IMPROVEMENT"));
-
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
@@ -154,8 +151,8 @@ void AllocatePsiTrainingState::init()
 		_soldiers.push_back(*i);
 
 		std::wostringstream
-			ssStr,
-			ssSkl;
+			woststr1, // strength
+			woststr2; // skill
 
 		const int minPsi = (*i)->getRules()->getMinStats().psiSkill;
 
@@ -163,15 +160,15 @@ void AllocatePsiTrainingState::init()
 			|| (Options::psiStrengthEval == true
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 		{
-			ssStr << ((*i)->getCurrentStats()->psiStrength);
+			woststr1 << ((*i)->getCurrentStats()->psiStrength);
 		}
 		else
-			ssStr << tr("STR_UNKNOWN").c_str();
+			woststr1 << tr("STR_UNKNOWN").c_str();
 
 		if ((*i)->getCurrentStats()->psiSkill >= minPsi)
-			ssSkl << (*i)->getCurrentStats()->psiSkill; // << "/+" << (*i)->getImprovement();
+			woststr2 << (*i)->getCurrentStats()->psiSkill; // << "/+" << (*i)->getImprovement();
 		else
-			ssSkl << tr("STR_UNKNOWN").c_str(); // ssSkl << "0/+0";
+			woststr2 << tr("STR_UNKNOWN").c_str(); // woststr2 << "0/+0";
 
 		std::wstring wst;
 		Uint8 color;
@@ -189,8 +186,8 @@ void AllocatePsiTrainingState::init()
 		_lstSoldiers->addRow(
 						4,
 						(*i)->getName().c_str(),
-						ssStr.str().c_str(),
-						ssSkl.str().c_str(),
+						woststr1.str().c_str(),
+						woststr2.str().c_str(),
 						wst.c_str());
 
 		_lstSoldiers->setRowColor(
@@ -199,18 +196,6 @@ void AllocatePsiTrainingState::init()
 	}
 
 	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-/*	if (row > 0) // all taken care of in TextList
-	{
-		if (_lstSoldiers->getScroll() > row
-			|| _base->getCurrentSoldier() > row)
-		{
-			_lstSoldiers->scrollTo(0);
-			_base->setCurrentSoldier(0);
-		}
-		else if (_base->getCurrentSoldier() > 0)
-			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	} */
-
 	_lstSoldiers->draw();
 }
 
@@ -232,7 +217,7 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
 void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+	if (   mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
@@ -307,7 +292,7 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
-											- static_cast<int>(8. * action->getYScale())));
+												- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -338,12 +323,11 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const size_t
-		numSoldiers = _base->getSoldiers()->size(),
+		qtySoldiers = _base->getSoldiers()->size(),
 		row = _lstSoldiers->getSelectedRow();
 
-	if (numSoldiers > 0
-		&& numSoldiers <= std::numeric_limits<size_t>::max()
-		&& row < numSoldiers - 1)
+	if (qtySoldiers > 0
+		&& row < qtySoldiers - 1)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(row);
 
@@ -357,7 +341,7 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
-											+ static_cast<int>(8. * action->getYScale())));
+												+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{

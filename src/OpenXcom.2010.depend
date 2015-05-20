@@ -240,7 +240,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1430943872 f:\git\openxcom\src\basescape\basescapestate.h
+1432065875 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1430213397 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4363,7 +4363,7 @@
 1431724525 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
-1431490896 f:\git\openxcom\src\ruleset\unit.h
+1432068221 f:\git\openxcom\src\ruleset\unit.h
 
 1430149550 f:\git\openxcom\src\engine\options.h
 	<string>
@@ -4399,8 +4399,9 @@
 	"GameTime.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1431626578 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1432072802 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
+	"AlienContainmentState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4408,13 +4409,13 @@
 	"CraftInfoState.h"
 	"CraftsState.h"
 	"DismantleFacilityState.h"
-	"AlienContainmentState.h"
 	"ManufactureState.h"
 	"MiniBaseView.h"
 	"MonthlyCostsState.h"
 	"PurchaseState.h"
 	"ResearchState.h"
 	"SellState.h"
+	"SoldierMemorialState.h"
 	"StoresMatrixState.h"
 	"StoresState.h"
 	"SoldiersState.h"
@@ -4477,7 +4478,7 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1431469883 f:\git\openxcom\src\basescape\soldiersstate.h
+1432157327 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
 
 1431469888 f:\git\openxcom\src\basescape\transferbasestate.h
@@ -4563,7 +4564,7 @@
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1431711315 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1432156375 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4690,7 +4691,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1431909517 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1432155313 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1430149549 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4706,7 +4707,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1431978645 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1432156356 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -4727,7 +4728,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1431912682 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1432156319 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
@@ -5244,7 +5245,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1431711222 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1432156409 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5861,7 +5862,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432011939 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1432015065 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6558,7 +6559,7 @@
 	"Language.h"
 	"Surface.h"
 
-1431479493 source:f:\git\openxcom\src\engine\game.cpp
+1432072958 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6824,7 +6825,7 @@
 1430332647 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1432156391 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
 	"PsiTrainingState.h"
@@ -6843,7 +6844,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1430149550 f:\git\openxcom\src\geoscape\psitrainingstate.h
+1432064076 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
 1430149550 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
@@ -7497,7 +7498,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Base.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\psitrainingstate.cpp
+1432065032 source:f:\git\openxcom\src\geoscape\psitrainingstate.cpp
 	"PsiTrainingState.h"
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"

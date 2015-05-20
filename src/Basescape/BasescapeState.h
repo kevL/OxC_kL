@@ -60,6 +60,7 @@ private:
 		* _btnGeoscape,
 		* _btnIncTrans,
 		* _btnManufacture,
+		* _btnMemorial,
 		* _btnPurchase,
 		* _btnResearch,
 		* _btnSell,
@@ -89,6 +90,8 @@ private:
 		void btnBaseInfoClick(Action* action);
 		/// Handler for clicking the Soldiers button.
 		void btnSoldiersClick(Action* action);
+		/// Handler for clicking the Memorial button.
+		void btnMemorialClick(Action* action);
 		/// Handler for clicking the Equip Craft button.
 		void btnCraftsClick(Action* action);
 		/// Handler for clicking the Alien Containment button.

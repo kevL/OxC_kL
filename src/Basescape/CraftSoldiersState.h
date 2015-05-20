@@ -34,7 +34,7 @@ class Window;
 
 
 /**
- * Select Squad screen that lets the player pick the soldiers to assign to a craft.
+ * Select Squad screen that lets the player pick the soldiers to assign to a Craft.
  */
 class CraftSoldiersState
 	:

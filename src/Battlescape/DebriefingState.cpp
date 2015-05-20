@@ -733,11 +733,7 @@ void DebriefingState::prepareDebriefing() // private.
 	const bool aborted = battleSave->isAborted();
 	bool missionAccomplished = !aborted;
 
-//	Base* base = NULL;
-//	Craft* craft = NULL;
-
 	std::vector<Craft*>::const_iterator ptrCraft;
-
 
 	_missionStatistics->time = *_gameSave->getTime();
 	_missionStatistics->type = battleSave->getMissionType();

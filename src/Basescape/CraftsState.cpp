@@ -105,17 +105,15 @@ CraftsState::CraftsState(Base* base)
 //	_txtBase->setText(_base->getName(_game->getLanguage()));
 
 	_txtName->setText(tr("STR_NAME_UC"));
-
 	_txtStatus->setText(tr("STR_STATUS"));
-
 	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
-/*	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
-	_txtCrew->setText(tr("STR_CREW"));
-	_txtHwp->setText(tr("STR_HWPS")); */
+//	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
+//	_txtCrew->setText(tr("STR_CREW"));
+//	_txtHwp->setText(tr("STR_HWPS"));
 
-	_lstCrafts->setArrowColumn(274, ARROW_VERTICAL);
 	_lstCrafts->setColumns(5, 91, 120, 25, 15, 14);
+	_lstCrafts->setArrowColumn(274, ARROW_VERTICAL);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setMargin();
@@ -149,35 +147,35 @@ void CraftsState::init()
 				++row)
 	{
 		std::wostringstream
-			ss1,
-			ss2,
-			ss3;
+			woststr1,
+			woststr2,
+			woststr3;
 
 		craftRule = (*i)->getRules();
 
 		if (craftRule->getWeapons() > 0)
-			ss1 << (*i)->getNumWeapons() << L"/" << craftRule->getWeapons();
+			woststr1 << (*i)->getNumWeapons() << L"/" << craftRule->getWeapons();
 		else
-			ss1 << L"-";
+			woststr1 << L"-";
 
 		if (craftRule->getSoldiers() > 0)
-			ss2 << (*i)->getNumSoldiers();
+			woststr2 << (*i)->getNumSoldiers();
 		else
-			ss2 << L"-";
+			woststr2 << L"-";
 
 		if (craftRule->getVehicles() > 0)
-			ss3 << (*i)->getNumVehicles();
+			woststr3 << (*i)->getNumVehicles();
 		else
-			ss3 << L"-";
+			woststr3 << L"-";
 
 		std::wstring status = getAltStatus(*i);
 		_lstCrafts->addRow(
 						5,
 						(*i)->getName(_game->getLanguage()).c_str(),
 						status.c_str(),
-						ss1.str().c_str(),
-						ss2.str().c_str(),
-						ss3.str().c_str());
+						woststr1.str().c_str(),
+						woststr2.str().c_str(),
+						woststr3.str().c_str());
 
 		_lstCrafts->setCellColor(
 								row,
@@ -282,19 +280,19 @@ std::wstring CraftsState::formatTime(
 	woststr << L"(";
 
 	const int
-		days = total / 24,
-		hours = total %24;
+		dys = total / 24,
+		hrs = total %24;
 
-	if (days > 0)
+	if (dys > 0)
 	{
-		woststr << tr("STR_DAY", days);
+		woststr << tr("STR_DAY", dys);
 
-		if (hours > 0)
+		if (hrs > 0)
 			woststr << L" ";
 	}
 
-	if (hours > 0)
-		woststr << tr("STR_HOUR", hours);
+	if (hrs > 0)
+		woststr << tr("STR_HOUR", hrs);
 
 	if (delayed == true)
 		woststr << L" +";
@@ -312,18 +310,6 @@ void CraftsState::btnOkClick(Action*)
 {
 	_game->popState();
 }
-/*	if (_game->getSavedGame()->getMonthsPassed() != -1
-		&& Options::storageLimitsEnforced == true
-		&& _base->storesOverfull() == true)
-	{
-		_game->pushState(new SellState(_base));
-		_game->pushState(new ErrorMessageState(
-											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-											_palette,
-											_game->getRuleset()->getInterface("craftSelect")->getElement("errorMessage")->color,
-											"BACK01.SCR",
-											_game->getRuleset()->getInterface("craftSelect")->getElement("errorPalette")->color));
-	} */
 
 /**
  * LMB shows the selected craft's info.
@@ -333,7 +319,7 @@ void CraftsState::btnOkClick(Action*)
 void CraftsState::lstCraftsPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (mx >= _lstCrafts->getArrowsLeftEdge()
+	if (   mx >= _lstCrafts->getArrowsLeftEdge()
 		&& mx < _lstCrafts->getArrowsRightEdge())
 	{
 		return;
@@ -380,7 +366,7 @@ void CraftsState::lstLeftArrowClick(Action* action)
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
-						- static_cast<int>(8. * action->getYScale())));
+												- static_cast<int>(8. * action->getYScale())));
 			}
 			else
 				_lstCrafts->scrollUp(false);
@@ -404,12 +390,11 @@ void CraftsState::lstLeftArrowClick(Action* action)
 void CraftsState::lstRightArrowClick(Action* action)
 {
 	const size_t
-		numCrafts = _base->getCrafts()->size(),
+		qtyCrafts = _base->getCrafts()->size(),
 		row = _lstCrafts->getSelectedRow();
 
-	if (numCrafts > 0
-		&& numCrafts <= std::numeric_limits<size_t>::max()
-		&& row < numCrafts - 1)
+	if (qtyCrafts > 0
+		&& row < qtyCrafts - 1)
 	{
 		Craft* const craft = _base->getCrafts()->at(row);
 
@@ -423,7 +408,7 @@ void CraftsState::lstRightArrowClick(Action* action)
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse()
-						+ static_cast<int>(8. * action->getYScale())));
+												+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
 				_lstCrafts->scrollDown(false);
