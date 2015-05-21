@@ -117,7 +117,7 @@ MissionDetectedState::~MissionDetectedState()
  */
 void MissionDetectedState::btnInterceptClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 
 	_game->popState();
 	_game->pushState(new InterceptState(
@@ -132,7 +132,7 @@ void MissionDetectedState::btnInterceptClick(Action*)
  */
 void MissionDetectedState::btnCenterClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_state->getGlobe()->center(
 							_mission->getLongitude(),
 							_mission->getLatitude());

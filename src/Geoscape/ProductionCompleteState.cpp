@@ -169,7 +169,7 @@ void ProductionCompleteState::btnOkClick(Action*)
  */
 void ProductionCompleteState::btnOk5SecsClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_game->popState();
 }
 
@@ -179,7 +179,7 @@ void ProductionCompleteState::btnOk5SecsClick(Action*)
  */
 void ProductionCompleteState::btnGotoBaseClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_game->popState();
 
 /*	if (_endType != PROGRESS_CONSTRUCTION)

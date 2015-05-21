@@ -467,7 +467,7 @@ void UfoDetectedState::init()
  */
 void UfoDetectedState::btnInterceptClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 //	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
 
 	_state->assessUfoPopups();
@@ -484,7 +484,7 @@ void UfoDetectedState::btnInterceptClick(Action*)
  */
 void UfoDetectedState::btnCentreClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_state->getGlobe()->center(
 							_ufo->getLongitude(),
 							_ufo->getLatitude());
@@ -507,7 +507,7 @@ void UfoDetectedState::btnCentreClick(Action*)
  */
 void UfoDetectedState::btn5SecClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 
 	_state->assessUfoPopups();
 	_game->popState();

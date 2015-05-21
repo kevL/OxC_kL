@@ -146,7 +146,7 @@ AlienBaseState::~AlienBaseState()
  */
 void AlienBaseState::btnOkClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_state->getGlobe()->center(
 							_base->getLongitude(),
 							_base->getLatitude());

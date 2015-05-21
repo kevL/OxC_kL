@@ -46,10 +46,11 @@ private:
 	Craft* _craft;
 	GeoscapeState* _geo;
 	Globe* _globe;
-	Text
-		* _txtDestination,
-		* _txtPatrolling;
+	Surface* _sprite;
+	Text* _txtDestination;
+//		* _txtPatrolling;
 	TextButton
+		* _btn5s,
 		* _btnBase,
 		* _btnCenter,
 		* _btnInfo,
@@ -69,6 +70,8 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+		/// Handler for clicking the OK button.
+		void btn5sClick(Action* action);
 		/// Handler for clicking the Craft Info button.
 		void btnInfoClick(Action* action);
 		/// Handler for clicking the Return To Base button.

@@ -555,6 +555,8 @@ DogfightState::DogfightState(
  */
 DogfightState::~DogfightState()
 {
+	_geo->resetTimer();
+
 	delete _craftDamageAnimTimer;
 
 	while (_projectiles.empty() == false)
@@ -936,13 +938,13 @@ void DogfightState::updateDogfight()
 				{
 					int stanceModifier;
 					if (_craftStance == _btnAggressive)
-						stanceModifier = 10;
+						stanceModifier = 15;
 					else if (_craftStance == _btnStandard)
-						stanceModifier = 20;
+						stanceModifier = 0;
 					else //if (_craftStance == _btnCautious)
-						stanceModifier = 30; // this should catch Disengaging also.
+						stanceModifier = -20; // this should catch Disengaging also.
 
-					if (RNG::percent((*i)->getAccuracy() - stanceModifier) == true) // decrease this by Craft stance <-
+					if (RNG::percent((*i)->getAccuracy() + stanceModifier) == true)
 					{
 						const int damage = RNG::generate(
 													(_ufo->getRules()->getWeaponPower() + 9) / 10, // Round up.

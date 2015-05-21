@@ -336,7 +336,7 @@ void InterceptState::btnCancelClick(Action*)
  */
 void InterceptState::btnGotoBaseClick(Action*)
 {
-	_geo->timerReset();
+	_geo->resetTimer();
 
 	_game->popState();
 	_game->pushState(new BasescapeState(

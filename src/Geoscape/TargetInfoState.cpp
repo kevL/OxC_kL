@@ -167,7 +167,7 @@ void TargetInfoState::edtTargetChange(Action*)
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_game->popState();
 	_game->pushState(new InterceptState(
 									_globe,

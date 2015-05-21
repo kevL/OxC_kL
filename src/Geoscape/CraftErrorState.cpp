@@ -115,7 +115,7 @@ void CraftErrorState::btnOkClick(Action*)
  */
 void CraftErrorState::btnOk5SecsClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_game->popState();
 }
 

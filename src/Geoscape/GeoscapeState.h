@@ -44,7 +44,6 @@ class Globe;
 class ImageButton;
 class InteractiveSurface;
 class MissionSite;
-//class NumberText;
 class Ruleset;
 class SavedGame;
 class Sound;
@@ -56,8 +55,7 @@ class Ufo;
 
 
 /**
- * Geoscape screen which shows an overview of
- * the world and lets the player manage the game.
+ * Geoscape screen shows an overview of the world.
  */
 class GeoscapeState
 	:
@@ -195,7 +193,7 @@ private:
 		void time1Month();
 
 		/// Resets the timer to minimum speed.
-		void timerReset();
+		void resetTimer();
 		/// Gets if time compression is set to 5 second intervals.
 		bool is5Sec() const;
 

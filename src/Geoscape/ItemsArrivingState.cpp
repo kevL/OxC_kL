@@ -266,7 +266,7 @@ void ItemsArrivingState::btnCancelClick(Action*)
  */
 void ItemsArrivingState::btnOk5SecsClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_game->popState();
 }
 
@@ -276,7 +276,7 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
  */
 /* void ItemsArrivingState::btnGotoBaseClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 
 	_game->popState();
 	_game->pushState(new BasescapeState(

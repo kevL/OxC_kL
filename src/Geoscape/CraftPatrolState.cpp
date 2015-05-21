@@ -30,12 +30,15 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
 
 #include "../Savegame/Craft.h"
 #include "../Savegame/Target.h"
@@ -63,22 +66,31 @@ CraftPatrolState::CraftPatrolState(
 
 	_window			= new Window(this, 224, 168, 16, 16, POPUP_BOTH);
 
-	_txtDestination	= new Text(224, 78, 16, 32);
-	_txtPatrolling	= new Text(224, 17, 16, 100);
+	_sprite			= new Surface(
+								32,38,
+								_window->getX() + _window->getWidth() - 16,
+								_window->getY() - 11);
 
-	_btnOk			= new TextButton(192, 16, 32, 121);
+	_txtDestination	= new Text(224, 78, 16, 40); // was 32 w/ _txtPatrolling
+//	_txtPatrolling	= new Text(224, 17, 16, 100);
+
+	_btnOk			= new TextButton(94, 16,  32, 121);
+	_btn5s			= new TextButton(94, 16, 130, 121);
+
 	_btnInfo		= new TextButton(192, 16, 32, 140);
 
-	_btnBase		= new TextButton(62, 16, 32, 159);
-	_btnCenter		= new TextButton(62, 16, 97, 159);
+	_btnBase		= new TextButton(62, 16,  32, 159);
+	_btnCenter		= new TextButton(62, 16,  97, 159);
 	_btnRedirect	= new TextButton(62, 16, 162, 159);
 
 	setInterface("geoCraftScreens");
 
 	add(_window,			"window",	"geoCraftScreens");
+	add(_sprite);
 	add(_txtDestination,	"text1",	"geoCraftScreens");
-	add(_txtPatrolling,		"text1",	"geoCraftScreens");
+//	add(_txtPatrolling,		"text1",	"geoCraftScreens");
 	add(_btnOk,				"button",	"geoCraftScreens");
+	add(_btn5s,				"button",	"geoCraftScreens");
 	add(_btnInfo,			"button",	"geoCraftScreens");
 	add(_btnBase,			"button",	"geoCraftScreens");
 	add(_btnCenter,			"button",	"geoCraftScreens");
@@ -89,22 +101,25 @@ CraftPatrolState::CraftPatrolState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_txtDestination->setBig();
-	_txtDestination->setAlign(ALIGN_CENTER);
-	_txtDestination->setWordWrap();
 	_txtDestination->setText(tr("STR_CRAFT_HAS_REACHED_DESTINATION")
 								 .arg(_craft->getName(_game->getLanguage()))
 								 .arg(_craft->getDestination()->getName(_game->getLanguage())));
+	_txtDestination->setAlign(ALIGN_CENTER);
+	_txtDestination->setBig();
+	_txtDestination->setWordWrap();
 
-	_txtPatrolling->setBig();
-	_txtPatrolling->setAlign(ALIGN_CENTER);
-	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
+//	_txtPatrolling->setBig();
+//	_txtPatrolling->setAlign(ALIGN_CENTER);
+//	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
 
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr("STR_PATROL"));
 	_btnOk->onMouseClick((ActionHandler)& CraftPatrolState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnOkClick,
 					Options::keyCancel);
+
+	_btn5s->setText(tr("STR_5_SECONDS"));
+	_btn5s->onMouseClick((ActionHandler)& CraftPatrolState::btn5sClick);
 
 	_btnInfo->setText(tr("STR_EQUIP_CRAFT"));
 	_btnInfo->onMouseClick((ActionHandler)& CraftPatrolState::btnInfoClick);
@@ -120,6 +135,11 @@ CraftPatrolState::CraftPatrolState(
 	_btnRedirect->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnRedirectClick,
 					Options::keyOk);
+
+
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
+	const int craftSprite = _craft->getRules()->getSprite();
+	srt->getFrame(craftSprite + 11)->blit(_sprite);
 }
 
 /**
@@ -138,11 +158,22 @@ void CraftPatrolState::btnOkClick(Action*)
 }
 
 /**
+ * Closes the window and slows time-compression to 5 sec.
+ * @param action - pointer to an Action
+ */
+void CraftPatrolState::btn5sClick(Action*)
+{
+	_geo->resetTimer();
+	_game->popState();
+}
+
+/**
  * Opens the craft info window.
  * @param action - pointer to an Action
  */
 void CraftPatrolState::btnInfoClick(Action*)
 {
+	_geo->resetTimer();
 	_game->popState();
 	_game->pushState(new GeoscapeCraftState(
 										_craft,
@@ -157,6 +188,7 @@ void CraftPatrolState::btnInfoClick(Action*)
  */
 void CraftPatrolState::btnBaseClick(Action*)
 {
+	_geo->resetTimer();
 	_game->popState();
 	_craft->returnToBase();
 }
@@ -167,6 +199,7 @@ void CraftPatrolState::btnBaseClick(Action*)
  */
 void CraftPatrolState::btnCenterClick(Action*)
 {
+	_geo->resetTimer();
 	_game->popState();
 	_globe->center(
 				_craft->getLongitude(),
@@ -179,6 +212,7 @@ void CraftPatrolState::btnCenterClick(Action*)
  */
 void CraftPatrolState::btnRedirectClick(Action*)
 {
+	_geo->resetTimer();
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
 											_craft,

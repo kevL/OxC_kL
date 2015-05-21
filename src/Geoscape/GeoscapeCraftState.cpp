@@ -78,7 +78,11 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_window			= new Window(this, 224, 176, 16, 8, POPUP_BOTH);
 	_txtTitle		= new Text(192, 17, 32, 15);
 
-	_sprite			= new Surface(32, 38, 224, -3);
+//	_sprite			= new Surface(32, 38, 224, -3);
+	_sprite			= new Surface(
+								32,38,
+								_window->getX() + _window->getWidth() - 16,
+								_window->getY() - 11);
 
 	_txtStatus		= new Text(192, 17, 32, 31);
 	_txtBase		= new Text(192, 9, 32, 43);
@@ -325,9 +329,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 
 
-	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 	const int craftSprite = _craft->getRules()->getSprite();
-	texture->getFrame(craftSprite + 11)->blit(_sprite);
+	srt->getFrame(craftSprite + 11)->blit(_sprite);
 }
 
 /**

@@ -154,7 +154,7 @@ void LowFuelState::btnOkClick(Action*)
  */
 void LowFuelState::btnOk5SecsClick(Action*)
 {
-	_state->timerReset();
+	_state->resetTimer();
 	_game->popState();
 }
 
