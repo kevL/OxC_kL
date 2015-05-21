@@ -4844,7 +4844,7 @@
 1430149550 f:\git\openxcom\src\interface\arrowbutton.h
 	"ImageButton.h"
 
-1430149550 f:\git\openxcom\src\interface\imagebutton.h
+1432240865 f:\git\openxcom\src\interface\imagebutton.h
 	"../Engine/InteractiveSurface.h"
 
 1431470578 f:\git\openxcom\src\ruleset\rulemanufacture.h
@@ -7065,7 +7065,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1432169070 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1432241635 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7098,7 +7098,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1432166497 f:\git\openxcom\src\geoscape\dogfightstate.h
+1432241116 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7640,7 +7640,7 @@
 1430149550 source:f:\git\openxcom\src\interface\frame.cpp
 	"Frame.h"
 
-1430149550 source:f:\git\openxcom\src\interface\imagebutton.cpp
+1432240805 source:f:\git\openxcom\src\interface\imagebutton.cpp
 	"ImageButton.h"
 	"../Engine/Action.h"
 

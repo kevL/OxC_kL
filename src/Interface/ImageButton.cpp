@@ -133,7 +133,7 @@ void ImageButton::mouseRelease(Action* action, State* state)
 }
 
 /**
- * Invert a button explicitly either ON or OFF and keep track of the state
+ * Inverts a button explicitly either ON or OFF and keeps track of the state
  * using internal variables.
  * @param press - true to set this button as pressed
  */

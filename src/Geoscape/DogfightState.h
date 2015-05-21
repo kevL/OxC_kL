@@ -121,8 +121,8 @@ private:
 		* _btnStandard,
 		* _btnAggressive,
 		* _btnDisengage,
-		* _btnUfo;
-	ImageButton* _mode;
+		* _btnUfo,
+		* _craftStance;
 	InteractiveSurface
 		* _btnMinimize,
 		* _preview,

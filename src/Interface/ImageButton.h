@@ -28,10 +28,9 @@ namespace OpenXcom
 
 /**
  * Regular image that works like a button.
- * Unlike the TextButton, this button doesn't draw
- * anything on its own. It takes an existing graphic and
- * treats it as a button, inverting colors when necessary.
- * This is necessary for special buttons like in the Geoscape.
+ * @note Unlike the TextButton this button doesn't draw anything on its own. It
+ * takes an existing graphic and treats it as a button, inverting colors when
+ * necessary. This is necessary for special buttons like in the Geoscape.
  */
 class ImageButton
 	:
@@ -66,10 +65,11 @@ protected:
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
+
 		/// Invert a button explicitly either ON or OFF.
 		void toggle(bool invert);
 
-		/// kL. Releases the _mode buttons in Geoscape::DogfightState
+		/// kL. Releases the _mode buttons in Geoscape::DogfightState.
 		void releaseDogfight();
 };
 
