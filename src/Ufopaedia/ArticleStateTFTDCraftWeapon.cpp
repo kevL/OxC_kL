@@ -50,7 +50,7 @@ namespace OpenXcom
 		_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), Text::formatPercentage(weapon->getAccuracy()).c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
-		_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
+		_lstInfo->addRow(2, tr("STR_RELOAD_TIME").c_str(), tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
 		centerAllSurfaces();

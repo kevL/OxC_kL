@@ -50,7 +50,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 	:
 		ArticleState(defs->id)
 {
-	const RuleCraftWeapon* const weapon = _game->getRuleset()->getCraftWeapon(defs->id);
+	const RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(defs->id);
 
 	_txtTitle = new Text(200, 32, 5, 24);
 
@@ -69,7 +69,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap();
+//	_txtTitle->setWordWrap();
 
 	_txtInfo = new Text(310, 32, 5, 160);
 	add(_txtInfo);
@@ -78,43 +78,56 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap();
 
-	_lstInfo = new TextList(250, 113, 5, 80);
+	_lstInfo = new TextList(310, 113, 5, 80);
 	add(_lstInfo);
 
-	_lstInfo->setColumns(2, 180, 70);
+	_lstInfo->setColumns(2, 180, 130);
 	_lstInfo->setColor(Palette::blockOffset(14)+15);
-	_lstInfo->setDot();
 	_lstInfo->setBig();
+	_lstInfo->setDot();
 
 	_lstInfo->addRow(
 				2,
 				tr("STR_DAMAGE").c_str(),
-				Text::formatNumber(weapon->getDamage()).c_str());
-	_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
+				Text::formatNumber(cwRule->getDamage()).c_str());
 
 	_lstInfo->addRow(
 				2,
 				tr("STR_RANGE").c_str(),
-				tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());
-	_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
+				tr("STR_KILOMETERS").arg(cwRule->getRange()).c_str());
 
 	_lstInfo->addRow(
 				2,
 				tr("STR_ACCURACY").c_str(),
-				Text::formatNumber(weapon->getAccuracy()).c_str());
-	_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
+				Text::formatNumber(cwRule->getAccuracy()).c_str());
+
+	std::wostringstream woststr;
+	woststr << cwRule->getAggressiveReload()	<< L" - "
+			<< cwRule->getStandardReload()		<< L" - "
+			<< cwRule->getCautiousReload();
 
 	_lstInfo->addRow(
 				2,
-				tr("STR_RE_LOAD_TIME").c_str(),
-				tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
-	_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
+				tr("STR_RELOAD_TIME").c_str(),
+				tr("STR_SECONDS").arg(woststr.str()).c_str());
+//				tr("STR_SECONDS").arg(cwRule->getStandardReload()).c_str());
 
 	_lstInfo->addRow(
 				2,
 				tr("STR_ROUNDS").c_str(),
-				Text::formatNumber(weapon->getAmmoMax()).c_str());
-	_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
+				Text::formatNumber(cwRule->getAmmoMax()).c_str());
+
+	const size_t rows = 5;
+	for (size_t
+			i = 0;
+			i != rows;
+			++i)
+	{
+		_lstInfo->setCellColor(
+							i,
+							1,
+							Palette::blockOffset(15)+4);
+	}
 
 	centerAllSurfaces();
 }

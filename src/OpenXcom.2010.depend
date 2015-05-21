@@ -4600,7 +4600,7 @@
 1432001041 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1431978645 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1432157523 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4664,7 +4664,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1431978645 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1432157510 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4701,7 +4701,7 @@
 1431470688 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
-1430149550 f:\git\openxcom\src\savegame\craftweaponprojectile.h
+1432164110 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 
 1430149550 f:\git\openxcom\src\savegame\craftweapon.h
 	<string>
@@ -5245,11 +5245,10 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1432156409 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1432159787 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
-	"SoldierMemorialState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
 	"../Engine/Action.h"
@@ -7066,7 +7065,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1431050881 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1432169070 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7099,7 +7098,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1430149550 f:\git\openxcom\src\geoscape\dogfightstate.h
+1432166497 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -8969,7 +8968,7 @@
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/Ruleset.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
+1432167779 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
 	"ArticleStateCraftWeapon.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -11246,7 +11245,7 @@
 1431494778 f:\git\openxcom\src\ufopaedia\articlestatetftdcraft.h
 	"ArticleStateTFTD.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestatetftdcraftweapon.cpp
+1432165101 source:f:\git\openxcom\src\ufopaedia\articlestatetftdcraftweapon.cpp
 	"ArticleStateTFTD.h"
 	"ArticleStateTFTDCraftWeapon.h"
 	"../Ruleset/ArticleDefinition.h"

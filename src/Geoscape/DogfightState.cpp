@@ -184,7 +184,7 @@ DogfightState::DogfightState(
 	_txtAmmo2				= new Text( 16, 9, _x +  64, _y + 70);
 	_txtDistance			= new Text( 40, 9, _x + 116, _y + 72);
 	_txtStatus				= new Text(150, 9, _x +   4, _y + 85);
-	_txtTitle				= new Text(160, 9, _x,       _y - 9);
+	_txtTitle				= new Text(160, 9, _x,       _y -  9);
 
 	_btnMinimizedIcon		= new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterception		= new Text(150, 9, _minimizedIconX + 15, _minimizedIconY + 6);
@@ -360,7 +360,7 @@ DogfightState::DogfightState(
 //	_txtInterception->setAlign(ALIGN_CENTER);
 
 	// Define the colors to be used. Note these have been further tweaked in Interfaces.rul
-	RuleInterface* dfInterface = _game->getRuleset()->getInterface("dogfight");
+	const RuleInterface* const dfInterface = _game->getRuleset()->getInterface("dogfight");
 	_colors[CRAFT_MIN]			= static_cast<Uint8>(dfInterface->getElement("craftRange")->color);			// 160 (10)slate gray
 	_colors[CRAFT_MAX]			= static_cast<Uint8>(dfInterface->getElement("craftRange")->color2);		// 176 (11)purple
 	_colors[RADAR_MIN]			= static_cast<Uint8>(dfInterface->getElement("radarRange")->color);			// 112 (7)green
@@ -746,9 +746,9 @@ void DogfightState::animate()
 }
 
 /**
- * Updates all the elements in the dogfight including ufo movement, weapons fire,
- * projectile movement, ufo escape conditions, craft and ufo destruction conditions,
- * and retaliation mission generation as applicable.
+ * Updates all the elements in the dogfight including ufo movement, weapons
+ * fire, projectile movement, ufo escape conditions, craft and ufo destruction
+ * conditions, and retaliation mission generation as applicable.
  */
 void DogfightState::updateDogfight()
 {
@@ -810,51 +810,59 @@ void DogfightState::updateDogfight()
 	bool projectileInFlight = false;
 	if (_minimized == false)
 	{
-		int distanceChange = 0;
-
-		if (_ufoBreakingOff == false) // Update distance.
+		int deltaDist; // Update distance.
+		if (_ufoBreakingOff == false)
 		{
-			if (_dist < _targetDist
-				&& _ufo->isCrashed() == false
-				&& _craft->isDestroyed() == false)
+			if (_dist != _targetDist)
 			{
-				distanceChange = 4;
-
-				if (_dist + distanceChange > _targetDist)
-					distanceChange = _targetDist - _dist;
-			}
-			else if (_dist > _targetDist
-				&& _ufo->isCrashed() == false
-				&& _craft->isDestroyed() == false)
-			{
-				distanceChange = -2;
-			}
-
-			// Don't let the interceptor mystically push or pull its fired projectiles.
-			for (std::vector<CraftWeaponProjectile*>::const_iterator
-					i = _projectiles.begin();
-					i != _projectiles.end();
-					++i)
-			{
-				if ((*i)->getGlobalType() != CWPGT_BEAM
-					&& (*i)->getDirection() == D_UP)
+				if (_ufo->isCrashed() == false
+					&& _craft->isDestroyed() == false)
 				{
-					(*i)->setPosition((*i)->getPosition() + distanceChange);
+					const int deltaAccel = _craft->getRules()->getAcceleration()
+										 - _ufo->getRules()->getAcceleration();
+
+					if (_dist < _targetDist)		// Craft vs UFO receding
+					{
+						deltaDist = std::max(
+										3,
+										5 + deltaAccel);
+						if (_dist + deltaDist > _targetDist)
+							deltaDist = _targetDist - _dist;
+					}
+					else if (_dist > _targetDist)	// Craft vs UFO closing
+						deltaDist = std::min(
+										-5,
+										-3 - deltaAccel);
+				}
+
+				// Don't let the interceptor mystically push or pull its fired projectiles.
+				for (std::vector<CraftWeaponProjectile*>::const_iterator
+						i = _projectiles.begin();
+						i != _projectiles.end();
+						++i)
+				{
+					if ((*i)->getGlobalType() != CWPGT_BEAM
+						&& (*i)->getDirection() == D_UP)
+					{
+						(*i)->setPosition((*i)->getPosition() + deltaDist);
+					}
 				}
 			}
+			else
+				deltaDist = 0;
 		}
-		else
+		else // _ufoBreakingOff==true
 		{
-			distanceChange = 4;
+			deltaDist = 5;
 			// UFOs can try to outrun the missiles, don't adjust projectile positions here.
 			// If UFOs ever fire anything but beams, those positions need to be adjusted here though.
 		}
 
-		_dist += distanceChange;
+		_dist += deltaDist;
 
-		std::wostringstream ss;
-		ss << _dist;
-		_txtDistance->setText(ss.str());
+		std::wostringstream woststr;
+		woststr << _dist;
+		_txtDistance->setText(woststr.str());
 
 		for (std::vector<CraftWeaponProjectile*>::const_iterator // Move projectiles and check for hits.
 				i = _projectiles.begin();
@@ -1329,9 +1337,9 @@ void DogfightState::fireWeapon1()
 		{
 			_w1FireCountdown = _w1FireInterval;
 
-			std::wostringstream wosts;
-			wosts << cw1->getAmmo();
-			_txtAmmo1->setText(wosts.str());
+			std::wostringstream woststr;
+			woststr << cw1->getAmmo();
+			_txtAmmo1->setText(woststr.str());
 
 			CraftWeaponProjectile* const proj = cw1->fire();
 			proj->setDirection(D_UP);
@@ -1357,9 +1365,9 @@ void DogfightState::fireWeapon2()
 		{
 			_w2FireCountdown = _w2FireInterval;
 
-			std::wostringstream wosts;
-			wosts << cw2->getAmmo();
-			_txtAmmo2->setText(wosts.str());
+			std::wostringstream woststr;
+			woststr << cw2->getAmmo();
+			_txtAmmo2->setText(woststr.str());
 
 			CraftWeaponProjectile* const proj = cw2->fire();
 			proj->setDirection(D_UP);
@@ -1570,7 +1578,7 @@ void DogfightState::btnAggressivePress(Action*)
 			_w2FireInterval = _craft->getWeapons()->at(1)->getRules()->getAggressiveReload();
 		}
 
-		_targetDist = 64;
+		_targetDist = DST_CLOSE;
 	}
 }
 
@@ -1769,7 +1777,7 @@ bool DogfightState::isMinimized() const
 
 /**
  * Draws the UFO blob on the radar screen.
- * Currently works only for original sized blobs 13 x 13 pixels.
+ * @note Currently works only for original sized blobs 13 x 13 pixels.
  */
 void DogfightState::drawUfo()
 {
@@ -1820,8 +1828,8 @@ void DogfightState::drawUfo()
 
 /**
  * Draws projectiles on the radar screen.
- * Depending on what type of projectile it is, its shape will be different.
- * Currently works for original sized blobs 3 x 6 pixels.
+ * @note Its shape will be different depending on what type of projectile it is.
+ * @note Currently works for original sized blobs 3 x 6 pixels.
  * @param proj - pointer to CraftWeaponProjectile
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
@@ -1897,7 +1905,9 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
 void DogfightState::weapon1Click(Action*)
 {
 	_weapon1Enabled = !_weapon1Enabled;
-	recolor(0, _weapon1Enabled);
+	recolor(
+		0,
+		_weapon1Enabled);
 }
 
 /**
@@ -1907,30 +1917,32 @@ void DogfightState::weapon1Click(Action*)
 void DogfightState::weapon2Click(Action*)
 {
 	_weapon2Enabled = !_weapon2Enabled;
-	recolor(1, _weapon2Enabled);
+	recolor(
+		1,
+		_weapon2Enabled);
 }
 
 /**
- * Changes the colors of craft's weapon icons, range indicators,
- * and ammo texts base on current weapon state.
- * @param weaponPod	- craft weapon to change colors of
+ * Changes the colors of craft's weapon icons, range indicators, and ammo texts
+ * based on current weapon state.
+ * @param hardPt	- craft weapon to change colors of
  * @param enabled	- true if weapon is enabled
  */
 void DogfightState::recolor(
-		const int weaponPod,
+		const int hardPt,
 		const bool enabled)
 {
-	InteractiveSurface* weapon = NULL;
-	Text* ammo = NULL;
-	Surface* range = NULL;
+	InteractiveSurface* weapon;
+	Text* ammo;
+	Surface* range;
 
-	if (weaponPod == 0)
+	if (hardPt == 0)
 	{
 		weapon = _weapon1;
 		ammo = _txtAmmo1;
 		range = _range1;
 	}
-	else if (weaponPod == 1)
+	else if (hardPt == 1)
 	{
 		weapon = _weapon2;
 		ammo = _txtAmmo2;
@@ -2066,7 +2078,7 @@ void DogfightState::calcPortPosition()
 
 /**
  * Relocates all dogfight window elements to calculated position.
- * This is used when multiple interceptions are running.
+ * @note This is used when multiple interceptions are running.
  */
 void DogfightState::placePort()
 {

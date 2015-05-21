@@ -87,9 +87,9 @@ private:
 
 
 	public:
-		///
+		/// cTor.
 		CraftWeaponProjectile();
-		///
+		/// dTor.
 		~CraftWeaponProjectile();
 
 		/// Sets projectile type. This determines its speed.

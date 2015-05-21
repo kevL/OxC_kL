@@ -25,7 +25,6 @@
 
 #include "CraftArmorState.h"
 #include "SoldierInfoState.h"
-#include "SoldierMemorialState.h"
 
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/InventoryState.h"
@@ -297,23 +296,27 @@ std::sort(vPair.begin(), vPair.end(), sort_second()); */
 void SoldiersState::btnSortClick(Action*)
 {
 	std::multimap<int, Soldier*> soldiersOrdered;
+	const UnitStats* stats;
+	int weight;
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i) // old values from CWXCED:
 	{
-		const int weight = (*i)->getCurrentStats()->tu			*  8
-						 + (*i)->getCurrentStats()->stamina		*  5
-						 + (*i)->getCurrentStats()->health		*  7
-						 + (*i)->getCurrentStats()->bravery		*  3
-						 + (*i)->getCurrentStats()->reactions	* 21
-						 + (*i)->getCurrentStats()->firing		* 19
-						 + (*i)->getCurrentStats()->throwing	*  1
-						 + (*i)->getCurrentStats()->strength	* 24
-						 + (*i)->getCurrentStats()->psiStrength	* 22
-						 + (*i)->getCurrentStats()->psiSkill	* 11
-						 + (*i)->getCurrentStats()->melee		*  2;
+		stats = (*i)->getCurrentStats();
+		weight = stats->tu			*  8
+			   + stats->stamina		*  5
+			   + stats->health		*  7
+			   + stats->bravery		*  3
+			   + stats->reactions	* 21
+			   + stats->firing		* 19
+			   + stats->throwing	*  1
+			   + stats->strength	* 24
+			   + stats->psiStrength	* 22
+			   + stats->psiSkill	* 11
+			   + stats->melee		*  2;
+		// also: rank, missions, kills
 
 		soldiersOrdered.insert(std::pair<int, Soldier*>(weight, *i));
 		// NOTE: unsure if multimap loses a player-preferred

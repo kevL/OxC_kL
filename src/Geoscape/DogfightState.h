@@ -32,6 +32,7 @@ namespace OpenXcom
 const int
 	DST_ENGAGE		= 635,
 	DST_STANDOFF	= 595,
+	DST_CLOSE		= 64,
 	MSG_TIMEOUT		= 45;
 
 enum ColorNames
@@ -220,9 +221,9 @@ private:
 		/// Toggles usage of weapon 2.
 		void weapon2Click(Action* action);
 
-		/// Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
+		/// Changes colors of weapon stuffs.
 		void recolor(
-				const int weaponPod,
+				const int hardPt,
 				const bool enabled);
 
 		/// Gets interception slot.
