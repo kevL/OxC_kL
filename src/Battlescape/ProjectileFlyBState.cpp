@@ -303,8 +303,8 @@ void ProjectileFlyBState::init()
 
 
 	if (_action.type == BA_LAUNCH
-		|| (_unit->getFaction() == FACTION_PLAYER // _parent->getSave()->getSide()
-			&& (SDL_GetModState() & KMOD_CTRL) != 0
+		|| (_unit->getFaction() == FACTION_PLAYER //_parent->getSave()->getSide() -> note: don't let ReactionFire in here by holding CRTL.
+			&& (SDL_GetModState() & KMOD_CTRL) != 0 // force fire by pressing CTRL but not SHIFT
 			&& (SDL_GetModState() & KMOD_SHIFT) == 0
 			&& Options::forceFire == true)
 		|| _parent->getPanicHandled() == false)
@@ -368,8 +368,8 @@ void ProjectileFlyBState::init()
 													&_targetVoxel,
 													_unit);
 		}
-		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL // bypass Content-Object when pressing SHIFT
-			&& (SDL_GetModState() & KMOD_SHIFT) == 0)
+		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
+			&& (SDL_GetModState() & KMOD_SHIFT) == 0)				// force vs. Object by using CTRL above^
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -385,9 +385,8 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != NULL // force Northwall when pressing SHIFT but not CTRL
-			|| ((SDL_GetModState() & KMOD_SHIFT) != 0
-				&& (SDL_GetModState() & KMOD_CTRL) == 0))
+		else if (targetTile->getMapData(MapData::O_NORTHWALL) != NULL	// force Northwall when pressing SHIFT but not CTRL
+			&& (SDL_GetModState() & KMOD_CTRL) == 0)
 		{
 			//Log(LOG_INFO) << ". targetTile has northwall";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -403,9 +402,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != NULL // force Westwall when pressing SHIFT+CTRL
-			|| ((SDL_GetModState() & KMOD_SHIFT) != 0
-				&& (SDL_GetModState() & KMOD_CTRL) != 0))
+		else if (targetTile->getMapData(MapData::O_WESTWALL) != NULL)	// force Westwall when pressing SHIFT+CTRL
 		{
 			//Log(LOG_INFO) << ". targetTile has westwall";
 			if (_parent->getTileEngine()->canTargetTile(
