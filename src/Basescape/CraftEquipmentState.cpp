@@ -697,7 +697,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 				LocalizedText msg(tr(
 								"STR_NO_MORE_EQUIPMENT_ALLOWED",
-								craft->getRules()->getMaxItems()));
+								craft->getLoadCapacity()));
+//								craft->getRules()->getMaxItems()));
 
 				_game->pushState(new ErrorMessageState(
 													msg,

@@ -1074,7 +1074,7 @@ int Craft::getSpaceAvailable() const
  */
 int Craft::getSpaceUsed() const
 {
-	int vehicleSpaceUsed = 0;
+	int vehicleSpaceUsed = 0; // <- could use getNumVehicles(true)
 
 	for (std::vector<Vehicle*>::const_iterator
 			i = _vehicles.begin();

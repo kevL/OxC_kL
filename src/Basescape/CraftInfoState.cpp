@@ -250,6 +250,7 @@ void CraftInfoState::init()
 	baseBits->getFrame(sprite)->blit(_sprite);
 
 	Surface* bit;
+	const int icon_width = 10;
 
 	if (crRule->getSoldiers() > 0)
 	{
@@ -263,7 +264,7 @@ void CraftInfoState::init()
 				i = 0;
 				i != _craft->getNumSoldiers();
 				++i,
-					x += 10)
+					x += icon_width)
 		{
 			bit->setX(x);
 			bit->blit(_crew);
@@ -276,7 +277,7 @@ void CraftInfoState::init()
 				i = 0;
 				i != _craft->getNumVehicles();
 				++i,
-					x += 10)
+					x += icon_width)
 		{
 			bit->setX(x);
 			bit->blit(_equip);
@@ -284,15 +285,23 @@ void CraftInfoState::init()
 
 		bit = baseBits->getFrame(39); // equip't gra'hic
 		bit->setY(0);
+
+		const int
+			totalIcons = ((_equip->getWidth() - x) + (icon_width - 1)) / icon_width,
+			loadCap = _craft->getLoadCapacity() - (_craft->getSpaceUsed() * 10),
+			qtyIcons = ((totalIcons * _craft->getNumEquipment()) + (loadCap - 1)) / loadCap;
+
 		for (int
 				i = 0;
-				i < _craft->getNumEquipment();
-				i += 4,
-					x += 10)
+				i != qtyIcons;
+				++i,
+					x += icon_width)
 		{
 			bit->setX(x);
 			bit->blit(_equip);
 		}
+
+		calcCost();
 	}
 	else
 	{
@@ -301,6 +310,7 @@ void CraftInfoState::init()
 		_btnCrew->setVisible(false);
 		_btnEquip->setVisible(false);
 		_btnArmor->setVisible(false);
+		_txtCost->setVisible(false);
 	}
 
 
@@ -399,8 +409,6 @@ void CraftInfoState::init()
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
-
-	calcCost();
 }
 
 /**

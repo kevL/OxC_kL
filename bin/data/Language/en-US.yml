@@ -1367,5 +1367,5 @@ en-US:
   STR_UNLOAD_WEAPON: "Unload weapon"
   STR_ALL_ITEMS: "All Items"
   STR_NO_MORE_EQUIPMENT_ALLOWED:
-    one: "NO MORE EQUIPMENT ALLOWED ON BOARD!{NEWLINE}{SMALLLINE}You are only allowed to take a maximum of {N} item on this craft."
-    other: "NO MORE EQUIPMENT ALLOWED ON BOARD!{NEWLINE}{SMALLLINE}You are only allowed to take a maximum of {N} items on this craft."
+    one: "NO MORE EQUIPMENT ALLOWED ON BOARD!{NEWLINE}{SMALLLINE}Capacity> {N} item{NEWLINE}(Soldiers and Vehicles cost 10 per tile)"
+    other: "NO MORE EQUIPMENT ALLOWED ON BOARD!{NEWLINE}{SMALLLINE}Capacity> {N} items{NEWLINE}(Soldiers and Vehicles cost 10 per tile)"

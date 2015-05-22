@@ -4600,7 +4600,7 @@
 1432001041 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1432157523 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1432259244 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4664,7 +4664,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1432157510 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1432259779 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -7032,7 +7032,7 @@
 1430149550 f:\git\openxcom\src\geoscape\crafterrorstate.h
 	"../Engine/State.h"
 
-1432249204 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1432249916 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -8702,7 +8702,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1431894115 source:f:\git\openxcom\src\savegame\craft.cpp
+1432258551 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
