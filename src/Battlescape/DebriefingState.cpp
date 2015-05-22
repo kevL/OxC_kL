@@ -436,9 +436,9 @@ DebriefingState::DebriefingState()
 					}
 				}
 
-				// note: Safety on *deadSoldier should not be needed.
 				statistics->daysWounded = 0;
 
+				// note: Safety on *deadSoldier should not be needed.
 				if (statistics->KIA == true)
 					_missionStatistics->injuryList[deadSoldier->getId()] = -1;
 				else // MIA
@@ -449,6 +449,7 @@ DebriefingState::DebriefingState()
 												_missionStatistics,
 												_rules);
 				deadSoldier->getDiary()->manageAwards(_rules);
+
 				_soldiersLost.push_back(deadSoldier);
 			}
 			else

@@ -185,11 +185,7 @@ void OpenGL::clear()
 //		0,
 //		iwidth * iheight * ibpp);
 
-	glClearColor(
-				0.0,
-				0.0,
-				0.0,
-				1.0);
+	glClearColor(0.f,0.f,0.f,1.f);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glFlush();
@@ -477,25 +473,25 @@ void OpenGL::init(
 	wglSwapIntervalEXT		= (Uint32 (APIENTRYP)(int))glGetProcAddress("wglSwapIntervalEXT");
 
 
-	shader_support = glCreateProgram
-					&& glUseProgram
-					&& glCreateShader
-					&& glDeleteShader
-					&& glShaderSource
-					&& glCompileShader
-					&& glAttachShader
-					&& glDetachShader
-					&& glLinkProgram
-					&& glGetUniformLocation
-					&& glUniform1i
-					&& glUniform2fv
-					&& glUniform4fv;
+	shader_support = &glCreateProgram
+				  && &glUseProgram
+				  && &glCreateShader
+				  && &glDeleteShader
+				  && &glShaderSource
+				  && &glCompileShader
+				  && &glAttachShader
+				  && &glDetachShader
+				  && &glLinkProgram
+				  && &glGetUniformLocation
+				  && &glUniform1i
+				  && &glUniform2fv
+				  && &glUniform4fv;
 
 	if (shader_support)
 		glprogram = glCreateProgram();
 
 	// create surface texture
-	resize(w, h);
+	resize(w,h);
 }
 
 /**

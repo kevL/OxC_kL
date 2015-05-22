@@ -19,7 +19,7 @@
 
 #include "GMCat.h"
 
-#include <vector>
+//#include <vector>
 
 #include "Music.h"
 
@@ -122,8 +122,8 @@ static inline void gmext_write_int16(
 		std::vector<unsigned char>& midi,
 		unsigned int n)
 {
-	midi.push_back(n >> 8);
-	midi.push_back(n);
+	midi.push_back(static_cast<unsigned char>(n >> 8));
+	midi.push_back(static_cast<unsigned char>(n));
 }
 
 /**
@@ -159,9 +159,9 @@ static inline void gmext_write_tempo_ev(
 	midi.push_back(0x51);
 	midi.push_back(3);
 	tempo = 60000000 / tempo;
-	midi.push_back(tempo >> 16);
-	midi.push_back(tempo >> 8);
-	midi.push_back(tempo);
+	midi.push_back(static_cast<unsigned char>(tempo >> 16));
+	midi.push_back(static_cast<unsigned char>(tempo >> 8));
+	midi.push_back(static_cast<unsigned char>(tempo));
 }
 
 /**
@@ -210,7 +210,7 @@ static int gmext_write_sequence(
 	const unsigned char* data = seq->data;
 	unsigned int left = seq->size;
 
-	unsigned char cmd = -1;
+	unsigned char cmd = static_cast<unsigned char>(-1);
 
 	while (left) {
 
@@ -278,9 +278,9 @@ static int gmext_write_sequence(
 				unsigned char data2 = *data++;
 				if (data2)
 					data2 = (unsigned int) data2 *
-						(channel==9 ? 80 : volume[status->patch]) >> 7;
+						(channel==9 ? 80 : static_cast<unsigned char>(volume[status->patch]) >> 7);
 				gmext_write_delta(midi, status->delta);
-				midi.push_back(cmd | channel);
+				midi.push_back(cmd | static_cast<unsigned char>(channel));
 				midi.push_back(data1);
 				midi.push_back(data2);
 				} break;
@@ -292,7 +292,7 @@ static int gmext_write_sequence(
 				if ((data1 == 0x57) || (data1 == 0x3F))
 					data1 = 0x3E;
 				gmext_write_delta(midi, status->delta);
-				midi.push_back(cmd | channel);
+				midi.push_back(cmd | static_cast<unsigned char>(channel));
 				midi.push_back(data1);
 				break;
 
@@ -312,7 +312,7 @@ static int gmext_write_sequence(
 				if (data1 == 0x5B)
 					data2 = 0x1E;
 				gmext_write_delta(midi, status->delta);
-				midi.push_back(cmd | channel);
+				midi.push_back(cmd | static_cast<unsigned char>(channel));
 				midi.push_back(data1);
 				midi.push_back(data2);
 				} break;
@@ -322,7 +322,7 @@ static int gmext_write_sequence(
 					return -1;
 				unsigned char data2 = *data++;
 				gmext_write_delta(midi, status->delta);
-				midi.push_back(cmd | channel);
+				midi.push_back(cmd | static_cast<unsigned char>(channel));
 				midi.push_back(data1);
 				midi.push_back(data2);
 				} break;
@@ -378,7 +378,7 @@ static int gmext_write_midi(
 		static const unsigned char midi_track_init[8] =
 			{ /* 0, 0xB0, */ 0x78, 0, 0, 0x79, 0, 0, 0x7B, 0 };
 		midi.push_back(0);
-		midi.push_back(0xB0 | stream->tracks[j].channel);
+		midi.push_back(0xB0 | static_cast<unsigned char>(stream->tracks[j].channel));
 		for (int i=0; i<8; ++i)
 			midi.push_back(midi_track_init[i]);
 
@@ -395,11 +395,11 @@ static int gmext_write_midi(
 
 		// rewrite track length
 		unsigned char* p = &midi[loffset];
-		size_t length = midi.size() - loffset - 4;
-		p[0] = length >> 24;
-		p[1] = length >> 16;
-		p[2] = length >> 8;
-		p[3] = length;
+		size_t lenght = midi.size() - loffset - 4;
+		p[0] = static_cast<unsigned char>(lenght >> 24);
+		p[1] = static_cast<unsigned char>(lenght >> 16);
+		p[2] = static_cast<unsigned char>(lenght >> 8);
+		p[3] = static_cast<unsigned char>(lenght);
 	}
 
 	return 0;

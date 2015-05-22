@@ -5,7 +5,6 @@
  */
 
 #ifndef ADLPLAYER_H
-
 #define ADLPLAYER_H
 
 //MAIN FUNCTION - instantly stops music

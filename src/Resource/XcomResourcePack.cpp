@@ -178,13 +178,11 @@ struct BodyXCOM2
 };
 
 /**
- * Recolor class used in TFTD
+ * Recolor class used in TFTD.
  */
 struct FallXCOM2
 {
-	static const Uint8
-		HairFall = 8 << 4,
-		RoguePixel = 151;
+	static const Uint8 RoguePixel = 151;
 
 	static inline void func(
 			Uint8& src,

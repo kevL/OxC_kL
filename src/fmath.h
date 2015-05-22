@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_FMATH_H
 #define OPENXCOM_FMATH_H
 
-#include <cmath>
-#include <limits>
+//#include <cmath>
+//#include <limits>
 
 
 /**

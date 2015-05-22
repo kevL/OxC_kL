@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_SOUNDDEF_H
 #define OPENXCOM_SOUNDDEF_H
 
-#include <string>
-#include <vector>
-
-#include <yaml-cpp/yaml.h>
+//#include <string>
+//#include <vector>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -48,6 +47,7 @@ private:
 
 		///
 		void load(const YAML::Node& node);
+
 		///
 		const std::vector<int>& getSoundList() const;
 		///

@@ -25,22 +25,22 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param type - reference the type
  */
 SoundDefinition::SoundDefinition(const std::string& type)
 	:
 		_type(type)
-{
-}
+{}
 
 /**
  * dTor.
  */
 SoundDefinition::~SoundDefinition()
-{
-}
+{}
 
 /**
  *
+ * @param node - reference a YAML node
  */
 void SoundDefinition::load(const YAML::Node& node)
 {
@@ -72,6 +72,7 @@ void SoundDefinition::load(const YAML::Node& node)
 
 /**
  *
+ * @return, reference to a vector of ints
  */
 const std::vector<int>& SoundDefinition::getSoundList() const
 {
@@ -80,6 +81,7 @@ const std::vector<int>& SoundDefinition::getSoundList() const
 
 /**
  *
+ * @return, string
  */
 const std::string SoundDefinition::getCATFile() const
 {

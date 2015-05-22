@@ -7,29 +7,16 @@
 
 // To check memory leaks in VS:
 //#define _CRTDBG_MAP_ALLOC
-//#include <stdlib.h>
+//#include <stdlib.h> // done below_
 //#include <crtdbg.h>
-
-#ifndef __NO_OPENGL
-	#ifdef __APPLE__
-		#include <OpenGL/gl.h>
-		#include <OpenGL/glu.h>
-		#include <OpenGL/glext.h>
-		#include <GLUT/glut.h>
-	#endif
-
-	#include <SDL_opengl.h>
-#endif
 
 #include <algorithm>
 #include <bitset>
 #include <cassert>
 #include <cctype>
 #include <climits>
-
 #define _USE_MATH_DEFINES
 #include <cmath>
-
 #include <cstdarg>
 #include <cstring>
 #include <cstdio>
@@ -45,19 +32,16 @@
 #include <limits>
 #include <list>
 #include <locale>
-
-#ifndef __APPLE__
-	#include <stdlib.h>
-#endif
-
 #include <map>
 #include <queue>
-
 #include <set>
 #include <sstream>
 #include <stack>
 #include <string>
 #include <stdint.h>
+#ifndef __APPLE__
+	#include <stdlib.h>
+#endif
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <typeinfo>
@@ -87,15 +71,28 @@
 	#undef Insert
 #endif
 
+
 #include <yaml-cpp/yaml.h>
 
+
+#ifndef __NO_OPENGL
+	#ifdef __APPLE__
+		#include <OpenGL/gl.h>
+		#include <OpenGL/glu.h>
+		#include <OpenGL/glext.h>
+		#include <GLUT/glut.h>
+	#endif
+
+	#include <SDL_opengl.h>
+#endif
+
+#include <SDL.h>
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
-//#include <SDL_opengl.h> // kL_seeAbove.
-#include <SDL.h>
+//#include <SDL_opengl.h> // done above^
 #include <SDL_syswm.h>
 #include <SDL_types.h>
 

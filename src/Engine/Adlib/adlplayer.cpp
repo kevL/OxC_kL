@@ -62,6 +62,7 @@ const int8_t adl_gv_detune_table[] = { // 9 * 12 -- pitch bend scale values depe
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5,
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5};
 
+/*
 const uint8_t percus_samples[] = { // 16 * 11  //there was another 13 bytes of 0
 	0x0F,0x42,0x3F,0x3F,0xFA,0xFA,0x41,0x44,2,3,0x0F,
 	0x0F,0x02,0x3F,0x3F,0xFA,0xFA,0x51,0x44,2,3,0x0F,
@@ -90,6 +91,7 @@ const uint8_t percus_mapping[] = { // 32 * 3 -- percussion channel 9 map of buil
 	0x00,0x41,0x64, 0x0B,0x0C,0x4D, 0x00,0x3E,0x64, 0xFF,0xFF,0xFF,
 	0x01,0x3F,0x4D, 0x0D,0x43,0x55, 0x0D,0x3D,0x55, 0x0E,0x3E,0x64,
 	0x0F,0x31,0x64, 0x0F,0x2C,0x55, 0x10,0x36,0x4D, 0x10,0x31,0x4D};
+*/
 
 const int8_t adl_gv_instr_order[] = {0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,9};
 
@@ -181,7 +183,7 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 		)) {
 		this->iFMReg[iRegister] = iValue;
 	}*/
-	iFMReg[iRegister] = iValue;
+	iFMReg[iRegister] = static_cast<Uint8>(iValue);
 
 	if ((iChannel >= 0)) {// && (i == 1)) {
 		UINT8  iBlock = (iFMReg[0xB0 + iChannel] >> 2) & 0x07;
@@ -249,8 +251,8 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 
 			if (iTweakedFMReg[0xA0 + iChannel] != (iNewFNum & 0xFF)) {
 				// Need to write out low bits
-				UINT8  iAdditionalReg = 0xA0 + iChannel;
-				UINT8  iAdditionalValue = iNewFNum & 0xFF;
+				UINT8 iAdditionalReg = static_cast<Uint8>(0xA0 + iChannel);
+				UINT8 iAdditionalValue = iNewFNum & 0xFF;
 				*reg3 = iAdditionalReg;
 				*val3 = iAdditionalValue;
 				iTweakedFMReg[iAdditionalReg] = iAdditionalValue;
@@ -261,13 +263,13 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 			iValue = iNewFNum & 0xFF;
 
 			// See if we need to update the block number, which is stored in a different register
-			UINT8  iNewB0Value = (iFMReg[0xB0 + iChannel] & ~0x1F) | (iNewBlock << 2) | ((iNewFNum >> 8) & 0x03);
+			UINT8 iNewB0Value = (iFMReg[0xB0 + iChannel] & ~0x1F) | (iNewBlock << 2) | ((iNewFNum >> 8) & 0x03);
 			if (
 				(iNewB0Value & 0x20) && // but only update if there's a note currently playing (otherwise we can just wait
 				(iTweakedFMReg[0xB0 + iChannel] != iNewB0Value)   // until the next noteon and update it then)
 			) {
 					// The note is already playing, so we need to adjust the upper bits too
-					UINT8  iAdditionalReg = 0xB0 + iChannel;
+					UINT8 iAdditionalReg = static_cast<Uint8>(0xB0 + iChannel);
 					*reg3 = iAdditionalReg;
 					*val3 = iNewB0Value;
 					iTweakedFMReg[iAdditionalReg] = iNewB0Value;
@@ -279,7 +281,7 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 
 	// Now write to the original register with a possibly modified value
 	*val2=iValue;
-	iTweakedFMReg[iRegister] = iValue;
+	iTweakedFMReg[iRegister] = static_cast<Uint8>(iValue);
 };
 
 /*
@@ -383,17 +385,17 @@ int get_pitched_freq_instr(int note, int instrument)
 // !!! probably should also apply pitch for CHORUS instrument !!!
 void adlib_set_instrument_pitch(int instrument, int pitch)
 {
-	instruments[instrument].cur_pitchbend = pitch;
+	instruments[instrument].cur_pitchbend = static_cast<short>(pitch);
 	for (int i=0; i<12; ++i) //search through active adlib channels
 	{
 		int note = adlib_channels[i].cur_note;
 		if (note != 0 && adlib_channels[i].cur_instrument == instrument)
 		{
 			int freq = get_pitched_freq_instr(note, instrument);
-			adlib_channels[i].cur_freq = freq;
+			adlib_channels[i].cur_freq = static_cast<unsigned char>(freq);
 			adlib_reg(0xA0+i, freq & 0xff);
 			int hf=((freq>>8) & 0x03) | (adl_gv_octave_table[note]<<2);
-			adlib_channels[i].hifreq = hf;
+			adlib_channels[i].hifreq = static_cast<unsigned char>(hf);
 			adlib_reg(0xB0+i, hf | 0x20);
 		}
 	}
@@ -427,7 +429,7 @@ int adlib_get_unused_channel(int sample_id, bool* same_sample)
 	if (adlib_channels[maxchan].cur_sample == sample_id)
 		*same_sample = true;
 	else
-		adlib_channels[maxchan].cur_sample = sample_id;
+		adlib_channels[maxchan].cur_sample = static_cast<unsigned char>(sample_id);
 	adlib_channels[maxchan].duration = 0;
 	return maxchan;
 }
@@ -470,9 +472,9 @@ void adlib_play_note(int note, int volume, int instrument)
 	}
 	if (volume>127) volume=127;
 	channel = adlib_get_unused_channel(sample_id, &same_sample);
-	adlib_channels[channel].cur_volume = volume;
-	adlib_channels[channel].cur_note = note;
-	adlib_channels[channel].cur_instrument = instrument;
+	adlib_channels[channel].cur_volume = static_cast<unsigned char>(volume);
+	adlib_channels[channel].cur_note = static_cast<unsigned char>(note);
+	adlib_channels[channel].cur_instrument = static_cast<unsigned char>(instrument);
 	op1 = adl_gv_operators1[channel];
 	if (!same_sample)
 	{
@@ -497,10 +499,10 @@ void adlib_play_note(int note, int volume, int instrument)
 	}
 
 	int freq = get_pitched_freq_instr(note, instrument);
-	adlib_channels[channel].cur_freq = freq;
+	adlib_channels[channel].cur_freq = static_cast<unsigned char>(freq);
 	adlib_reg(0xA0+channel, freq & 0xff);
 	int hf=(freq>>8) | (adl_gv_octave_table[note]<<2);
-	adlib_channels[channel].hifreq = hf;
+	adlib_channels[channel].hifreq = static_cast<unsigned char>(hf);
 	adlib_reg(0xB0+channel, hf | 0x20); //reinit note
 }
 

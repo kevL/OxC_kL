@@ -286,7 +286,7 @@ INLINE void OPL_STATUS_RESET(FM_OPL *OPL,int flag)
 /* IRQ mask set */
 INLINE void OPL_STATUSMASK_SET(FM_OPL *OPL,int flag)
 {
-	OPL->statusmask = flag;
+	OPL->statusmask = static_cast<Uint8>(flag);
 	/* IRQ handling check */
 	OPL_STATUS_SET(OPL,0);
 	OPL_STATUS_RESET(OPL,0);
@@ -374,9 +374,9 @@ INLINE void CALC_FCSLOT(OPL_CH *CH,OPL_SLOT *SLOT)
 	SLOT->Incr = CH->fc * SLOT->mul;
 	ksr = CH->kcode >> SLOT->KSR;
 
-	if( SLOT->ksr != ksr )
+	if (SLOT->ksr != static_cast<Uint8>(ksr))
 	{
-		SLOT->ksr = ksr;
+		SLOT->ksr = static_cast<Uint8>(ksr);
 		/* attack , decay rate recalcration */
 		SLOT->evsa = SLOT->AR[ksr];
 		SLOT->evsd = SLOT->DR[ksr];
@@ -406,7 +406,7 @@ INLINE void set_ksl_tl(FM_OPL *OPL,int slot,int v)
 	OPL_SLOT *SLOT = &CH->SLOT[slot&1];
 	int ksl = v>>6; /* 0 / 1.5 / 3 / 6 db/OCT */
 
-	SLOT->ksl = ksl ? 3-ksl : 31;
+	SLOT->ksl = ksl ? static_cast<Uint8>(3-ksl) : 31;
 	SLOT->TL  = static_cast<INT32>((v&0x3f)*(0.75/EG_STEP)); /* 0.75db step */
 
 	if( !(OPL->mode&0x80) )
@@ -890,7 +890,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 		case 0xbd:
 			/* amsep,vibdep,r,bd,sd,tom,tc,hh */
 			{
-			UINT8 rkey = OPL->rythm^v;
+			UINT8 rkey = OPL->rythm^static_cast<Uint8>(v);
 			OPL->ams_table = &AMS_TABLE[v&0x80 ? AMS_ENT : 0];
 			OPL->vib_table = &VIB_TABLE[v&0x40 ? VIB_ENT : 0];
 			OPL->rythm  = v&0x3f;
@@ -952,9 +952,9 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 		{	/* b0-b8 */
 			int keyon = (v>>5)&1;
 			block_fnum = ((v&0x1f)<<8) | (CH->block_fnum&0xff);
-			if(CH->keyon != keyon)
+			if (CH->keyon != keyon)
 			{
-				if( (CH->keyon=keyon) )
+				if (CH->keyon = static_cast<Uint8>(keyon))
 				{
 					CH->op1_out[0] = CH->op1_out[1] = 0;
 					OPL_KEYON(&CH->SLOT[SLOT1]);
@@ -968,7 +968,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 			}
 		}
 		/* update */
-		if(CH->block_fnum != block_fnum)
+		if (CH->block_fnum != block_fnum)
 		{
 			int blockRv = 7-(block_fnum>>10);
 			int fnum   = block_fnum&0x3ff;
@@ -976,7 +976,7 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 
 			CH->ksl_base = KSL_TABLE[block_fnum>>6];
 			CH->fc = OPL->FN_TABLE[fnum]>>blockRv;
-			CH->kcode = CH->block_fnum>>9;
+			CH->kcode = static_cast<Uint8>(CH->block_fnum>>9);
 			if( (OPL->mode&0x40) && CH->block_fnum&0x100) CH->kcode |=1;
 			CALC_FCSLOT(CH,&CH->SLOT[SLOT1]);
 			CALC_FCSLOT(CH,&CH->SLOT[SLOT2]);
@@ -984,11 +984,11 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 		return;
 	case 0xc0:
 		/* FB,C */
-		if( (r&0x0f) > 11) return;//8
+		if ((r&0x0f) > 11) return;//8
 		CH = &OPL->P_CH[r&0x0f];
 		{
 			int feedback = (v>>1)&7;
-			CH->FB   = feedback ? (8+1) - feedback : 0;
+			CH->FB = feedback ? static_cast<Uint8>((8+1) - feedback) : 0;
 			CH->CON = v&1;
 			set_algorythm(CH);
 		}
@@ -1231,9 +1231,9 @@ FM_OPL *OPLCreate(int type, int clock, int rate)
 	if(type&OPL_TYPE_ADPCM) OPL->deltat = (YM_DELTAT *)ptr; ptr+=sizeof(YM_DELTAT);
 #endif
 	/* set channel state pointer */
-	OPL->type  = type;
-	OPL->clock = clock;
-	OPL->rate  = rate;
+	OPL->type   = static_cast<Uint8>(type);
+	OPL->clock  = clock;
+	OPL->rate   = rate;
 	OPL->max_ch = max_ch;
 	/* init global tables */
 	OPL_initalize(OPL);

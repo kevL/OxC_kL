@@ -4664,7 +4664,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1432259779 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1432260316 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -6510,7 +6510,7 @@
 	<SDL_syswm.h>
 	<SDL_image.h>
 
-1398141830 f:\git\openxcom\src\dirent.h
+1432285042 f:\git\openxcom\src\dirent.h
 	<stdio.h>
 	<stdarg.h>
 	<windef.h>
@@ -8420,7 +8420,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1431883445 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1432274488 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Battlescape/Position.h"
 	"../Engine/Language.h"
@@ -10932,7 +10932,7 @@
 1431489878 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1430149550 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
+1432273337 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<math.h>
 	<memory.h>
 	<stdio.h>
@@ -10959,7 +10959,7 @@
 	<SDL_mixer.h>
 	"Music.h"
 
-1398655003 f:\git\openxcom\src\engine\adlib\adlplayer.h
+1432273168 f:\git\openxcom\src\engine\adlib\adlplayer.h
 
 1430149550 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
 	<stdio.h>
@@ -11180,13 +11180,10 @@
 1431469490 f:\git\openxcom\src\basescape\basedetectionstate.h
 	"../Engine/State.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\sounddefinition.cpp
+1432274450 source:f:\git\openxcom\src\ruleset\sounddefinition.cpp
 	"SoundDefinition.h"
 
-1430149550 f:\git\openxcom\src\ruleset\sounddefinition.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1432274331 f:\git\openxcom\src\ruleset\sounddefinition.h
 
 1430148461 f:\git\openxcom\src\engine\scalers\xbrz.h
 	<cstddef>

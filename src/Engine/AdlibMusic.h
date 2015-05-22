@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_ADLIBMUSIC_H
 #define OPENXCOM_ADLIBMUSIC_H
 
-#include <map>
-#include <string>
-
-#include <SDL_mixer.h>
+//#include <map>
+//#include <string>
+//#include <SDL_mixer.h>
 
 #include "Music.h"
 
@@ -33,7 +32,7 @@ namespace OpenXcom
 
 /**
  * Container for Adlib music tracks.
- * Uses a custom YM3812 music player passed to SDL_mixer.
+ * @note Uses a custom YM3812 music player passed to SDL_mixer.
  */
 class AdlibMusic
 	:

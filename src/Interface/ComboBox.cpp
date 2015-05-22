@@ -59,17 +59,14 @@ ComboBox::ComboBox(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_change(0),
 		_sel(0),
 		_state(state),
 		_lang(0),
 		_toggled(false)
 {
-	_button = new TextButton(width, height, x, y);
-	_button->setComboBox(this);
-
+	_button = new TextButton(width, height, x,y);
 	_arrow	= new Surface(
 						11,
 						8,
@@ -81,17 +78,20 @@ ComboBox::ComboBox(
 						(MAX_ITEMS * 8 + VERTICAL_MARGIN * 2) + 1,
 						x,
 						y + height);
-	_window->setThinBorder();
-
 	_list	= new TextList(
 						width - HORIZONTAL_MARGIN * 2 - BUTTON_WIDTH + 1,
 						(MAX_ITEMS * TEXT_HEIGHT) + 1,
 						x + HORIZONTAL_MARGIN,
 						y + height + VERTICAL_MARGIN);
+
+
+	_button->setComboBox(this);
+	_window->setThinBorder();
+
 	_list->setComboBox(this);
 	_list->setColumns(1, _list->getWidth());
-	_list->setSelectable();
 	_list->setBackground(_window);
+	_list->setSelectable();
 	_list->setAlign(ALIGN_CENTER);
 	_list->setScrollable();
 

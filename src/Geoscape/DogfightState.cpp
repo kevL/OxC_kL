@@ -833,6 +833,8 @@ void DogfightState::updateDogfight()
 					else if (_dist > _targetDist)	// Craft vs UFO closing
 						deltaDist = -deltaDist;
 				}
+				else
+					deltaDist = 0;
 
 				// Don't let the interceptor mystically push or pull its fired projectiles.
 				for (std::vector<CraftWeaponProjectile*>::const_iterator

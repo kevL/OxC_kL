@@ -24,12 +24,10 @@
 //#include <iostream>
 //#include <map>
 //#include <sstream>
-
 //#include <SDL.h>
 //#include <SDL_keysym.h>
 //#include <SDL_mixer.h>
 //#include <stdio.h>
-
 //#include <yaml-cpp/yaml.h>
 
 //#include "../version.h"
