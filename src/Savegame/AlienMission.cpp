@@ -163,7 +163,8 @@ YAML::Node AlienMission::save() const
 
 /**
  * Checks if a mission is over and can be safely removed from the game.
- * A mission is over if it will spawn no more UFOs and it has no UFOs still in the game.
+ * @note A mission is over if it will spawn no more UFOs and it has no UFOs
+ * still in the game.
  * @return, true if the mission can be safely removed
  */
 bool AlienMission::isOver() const
@@ -311,9 +312,9 @@ void AlienMission::think(
 
 /**
  * This function will spawn a UFO according the the mission rules.
- * Some code is duplicated between cases, that's ok for now. It's on different
- * code paths and the function is MUCH easier to read written this way.
- * @param rules		- reference the ruleset
+ * @note Some code is duplicated between cases but that's ok for now. It's on
+ * different code paths and the function is MUCH easier to read written this way.
+ * @param rules			- reference the ruleset
  * @param globe			- reference the globe, for land checks
  * @param wave			- reference the wave for the desired UFO
  * @param trajectory	- reference the rule for the desired trajectory
@@ -521,7 +522,8 @@ private:
 
 /**
  * This function is called when one of the mission's UFOs arrives at its current
- * destination. It takes care of sending the UFO to the next waypoint, landing
+ * destination.
+ * @note It takes care of sending the UFO to the next waypoint, landing
  * UFOs and marking them for removal as required. It must set the game data in a
  * way that the rest of the code understands what to do.
  * @param ufo	- reference the Ufo that reached its waypoint
@@ -688,8 +690,10 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 }
 
 /**
- * This function is called when one of the mission's UFOs is shot down (crashed or destroyed).
- * Currently the only thing that happens is delaying the next UFO in the mission sequence.
+ * This function is called when one of the mission's UFOs is shot down -
+ * crashed or destroyed.
+ * @note Currently the only thing that happens is delaying the next UFO in the
+ * mission sequence.
  * @param ufo - reference the Ufo that was shot down
  */
 void AlienMission::ufoShotDown(const Ufo& ufo)
@@ -709,9 +713,11 @@ void AlienMission::ufoShotDown(const Ufo& ufo)
 }
 
 /**
- * This function is called when one of the mission's UFOs has finished its time on the ground.
- * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
- * It must set the game data in a way that the rest of the code understands what to do.
+ * This function is called when one of the mission's UFOs has finished its time
+ * on the ground.
+ * @note It takes care of sending the UFO to the next waypoint and marking it
+ * for removal as required. It must set the game data in a way that the rest of
+ * the code understands what to do.
  * @param ufo - reference the Ufo that reached its waypoint
  */
 void AlienMission::ufoLifting(Ufo& ufo)
@@ -758,8 +764,8 @@ void AlienMission::ufoLifting(Ufo& ufo)
 }
 
 /**
- * The new time must be a multiple of 30 minutes and more than 0.
- * Calling this on a finished mission has no effect.
+ * @note The new time must be a multiple of 30 minutes and more than 0. Calling
+ * this on a finished mission has no effect.
  * @param minutes - the minutes until the next UFO wave will spawn
  */
 void AlienMission::setWaveCountdown(size_t minutes)
@@ -772,7 +778,7 @@ void AlienMission::setWaveCountdown(size_t minutes)
 
 /**
  * Assigns a unique ID to this mission.
- * It is an error to assign two IDs to the same mission.
+ * @note It is an error to assign two IDs to the same mission.
  * @param id - the ID to assign
  */
 void AlienMission::setId(int id)
@@ -793,7 +799,7 @@ int AlienMission::getId() const
 
 /**
  * Sets the alien base associated with this mission.
- * Only the alien supply missions care about this.
+ * @note Only alien supply missions care about this.
  * @param base - pointer to an AlienBase
  */
 void AlienMission::setAlienBase(const AlienBase* const base)
@@ -802,7 +808,8 @@ void AlienMission::setAlienBase(const AlienBase* const base)
 }
 
 /**
- * Only alien supply missions ever have a valid pointer.
+ * Gets the alien base associated with this mission.
+ * @note Only alien supply missions ever have a valid pointer.
  * @return, pointer to the AlienBase for this mission (possibly NULL)
  */
 const AlienBase* AlienMission::getAlienBase() const
@@ -886,10 +893,10 @@ void AlienMission::spawnAlienBase( // private.
 }
 
 /**
- * Sets the mission's region. If the region is incompatible with actually
- * carrying out an attack, use the "fallback" region as defined in the ruleset.
- * This is a slight difference from the original,
- * which just defaulted them to zone[0], North America.
+ * Sets the mission's region.
+ * @note If the region is incompatible with actually carrying out an attack use
+ * the fallback region as defined in the ruleset. This is a slight difference
+ * from the original which just defaulted to zone[0] North America.
  * @param region	- reference the region we want to try to set the mission to
  * @param rules		- reference the ruleset, in case we need to swap out the region
  */
@@ -920,7 +927,7 @@ std::pair<double, double> AlienMission::getWaypoint(
 
 /**
  * Gets a random point inside the given region zone.
- * The point will be used to land a UFO, so it HAS to be on land.
+ * @note The point will be used to land a UFO so it *has to be on land*.
  * @param globe		- reference the Globe
  * @param region	- reference RuleRegion
  * @param zone		- zone number in the region

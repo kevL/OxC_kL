@@ -145,8 +145,7 @@ BattlescapeGame::~BattlescapeGame()
 void BattlescapeGame::think()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::think()";
-
-	// nothing is happening - see if we need some alien AI or units panicking or what have you
+	// nothing is happening - see if they need some alien AI or units panicking or what have you
 	if (_states.empty() == true)
 	{
 		if (_battleSave->getSide() != FACTION_PLAYER) // it's a non player side (ALIENS or CIVILIANS)
@@ -181,7 +180,7 @@ void BattlescapeGame::think()
 				}
 			}
 		}
-		else // it's a player side && we have not handled all panicking units
+		else // it's a player side && not all panicking units have been handled
 		{
 			if (_playerPanicHandled == false)
 			{

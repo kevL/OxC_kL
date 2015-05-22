@@ -1178,9 +1178,9 @@ void DogfightState::updateDogfight()
 			if (RNG::percent(4 + (_diff * 4)) == true)						// Check retaliation trigger.
 			{
 				std::string targetRegion;									// Spawn retaliation mission.
-				if (RNG::percent(50 - (_diff * 6)) == true)
+				if (RNG::percent(62 - (_diff * 6)) == true)
 					targetRegion = _ufo->getAlienMission()->getRegion();	// Attack on UFO's mission region.
-				else														// Try to find and attack the originating base.
+				else														// or Try to find and attack the originating base.
 					targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();
 					// TODO: If the base is removed, the mission is cancelled.
 
@@ -1216,6 +1216,8 @@ void DogfightState::updateDogfight()
 					setStatus("STR_UFO_DESTROYED");
 					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_EXPLODE);
 
+					const int pts = _ufo->getRules()->getScore() * 2;
+
 					for (std::vector<Region*>::const_iterator
 							i = _gameSave->getRegions()->begin();
 							i != _gameSave->getRegions()->end();
@@ -1225,7 +1227,7 @@ void DogfightState::updateDogfight()
 														ufoLon,
 														ufoLat) == true)
 						{
-							(*i)->addActivityXcom(_ufo->getRules()->getScore() * 2);
+							(*i)->addActivityXcom(pts);
 							(*i)->recentActivityXCOM();
 
 							break;
@@ -1241,7 +1243,7 @@ void DogfightState::updateDogfight()
 														ufoLon,
 														ufoLat) == true)
 						{
-							(*i)->addActivityXcom(_ufo->getRules()->getScore() * 2);
+							(*i)->addActivityXcom(pts);
 							(*i)->recentActivityXCOM();
 
 							break;
@@ -1253,6 +1255,14 @@ void DogfightState::updateDogfight()
 			}
 			else
 			{
+				const bool overLand = _globe->insideLand(
+													ufoLon,
+													ufoLat);
+
+				int pts = _ufo->getRules()->getScore();
+				if (overLand == false)
+					pts *= 2;
+
 				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 				{
 					setStatus("STR_UFO_CRASH_LANDS");
@@ -1267,7 +1277,7 @@ void DogfightState::updateDogfight()
 														ufoLon,
 														ufoLat) == true)
 						{
-							(*i)->addActivityXcom(_ufo->getRules()->getScore());
+							(*i)->addActivityXcom(pts);
 							(*i)->recentActivityXCOM();
 
 							break;
@@ -1283,7 +1293,7 @@ void DogfightState::updateDogfight()
 														ufoLon,
 														ufoLat) == true)
 						{
-							(*i)->addActivityXcom(_ufo->getRules()->getScore());
+							(*i)->addActivityXcom(pts);
 							(*i)->recentActivityXCOM();
 
 							break;
@@ -1291,9 +1301,7 @@ void DogfightState::updateDogfight()
 					}
 				}
 
-				if (_globe->insideLand(
-									ufoLon,
-									ufoLat) == false)
+				if (overLand == false)
 				{
 					_ufo->setStatus(Ufo::DESTROYED);
 					_destroyUfo = true;
@@ -1665,6 +1673,8 @@ void DogfightState::previewPress(Action*)
  */
 void DogfightState::btnMinimizeClick(Action*)
 {
+	_geo->resetTimer();
+
 	if (_ufo->isCrashed() == false
 		&& _craft->isDestroyed() == false
 		&& _ufoBreakingOff == false)

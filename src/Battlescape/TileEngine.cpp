@@ -897,11 +897,11 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 
 /**
  * Checks for how exposed unit is for another unit.
- * @param originVoxel, Voxel of trace origin (eye or gun's barrel).
- * @param tile, The tile to check for.
- * @param excludeUnit, Is self (not to hit self).
- * @param excludeAllBut, [Optional] is unit which is the only one to be considered for ray hits.
- * @return, Degree of exposure (as percent).
+ * @param originVoxel	- voxel of trace origin (eye or gun's barrel)
+ * @param tile			- pointer to Tile to check for
+ * @param excludeUnit	- is self (not to hit self)
+ * @param excludeAllBut	- [optional] is unit which is the only one to be considered for ray hits
+ * @return, degree of exposure (as percent)
  */
 /*kL int TileEngine::checkVoxelExposure(
 		Position* originVoxel,
@@ -1008,7 +1008,8 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
  * @param tile			- pointer to Tile to check for
  * @param scanVoxel		- pointer to voxel that is returning coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @param unit			- pointer to a hypothetical unit to draw a virtual Line of Fire for AI; if left NULL this function behaves normally (default NULL)
+ * @param unit			- pointer to a hypothetical unit to draw a virtual LoF for AI;
+							if left NULL this function behaves normally (default NULL)
  * @return, true if a unit can be targeted
  */
 bool TileEngine::canTargetUnit(
@@ -1019,12 +1020,6 @@ bool TileEngine::canTargetUnit(
 		const BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
-	const Position targetVoxel = Position(
-										tile->getPosition().x * 16 + 8,
-										tile->getPosition().y * 16 + 8,
-										tile->getPosition().z * 24);
-
-	std::vector<Position> _trajectory;
 	const bool hypothetical = (unit != NULL);
 
 	if (unit == NULL)
@@ -1043,6 +1038,10 @@ bool TileEngine::canTargetUnit(
 		return false;
 	}
 
+	const Position targetVoxel = Position(
+										tile->getPosition().x * 16 + 8,
+										tile->getPosition().y * 16 + 8,
+										tile->getPosition().z * 24);
 	const int
 		targetMinHeight = targetVoxel.z
 						- tile->getTerrainLevel()
@@ -1088,6 +1087,8 @@ bool TileEngine::canTargetUnit(
 	heightRange /= 2;
 	if (heightRange > 10) heightRange = 10;
 	if (heightRange < 0) heightRange = 0;
+
+	std::vector<Position> _trajectory;
 
 	for (int // scan ray from top to bottom plus different parts of target cylinder
 			i = 0;
@@ -1171,7 +1172,7 @@ bool TileEngine::canTargetUnit(
  * @param part			- tile part to check for
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @return, true if tile can be targetted
+ * @return, true if tile can be targeted
  */
 bool TileEngine::canTargetTile(
 		const Position* const originVoxel,
@@ -1373,11 +1374,13 @@ bool TileEngine::canTargetTile(
 }
 
 /**
- * Checks if a 'sniper' from the opposing faction sees this unit. The unit with the
- * highest reaction score will be compared with the triggering unit's reaction score.
- * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
- * kL NOTE: the tuSpent parameter is needed because popState() doesn't
- * subtract TU until after the Initiative has been calculated or called from ProjectileFlyBState.
+ * Checks if a 'sniper' from the opposing faction sees this unit.
+ * @note The unit with the highest reaction score will be compared with the
+ * triggering unit's reaction score. If it's higher a shot is fired when enough
+ * time units plus a weapon and ammo are available.
+ * @note The tuSpent parameter is needed because popState() doesn't subtract TU
+ * until after the Initiative has been calculated or called from
+ * ProjectileFlyBState.
  * @param unit		- pointer to a unit to check reaction fire against
  * @param tuSpent	- the unit's triggering expenditure of TU if firing or throwing.
  * @return, true if reaction fire took place
