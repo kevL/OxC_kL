@@ -41,9 +41,9 @@ struct BattleAction;
 
 
 /**
- * A utility class that modifies tile properties on a battlescape map.
- * This includes lighting, destruction, smoke, fire, fog of war.
- * Note that this function does not handle any sounds or animations.
+ * A utility class that handles lighting and calculations in 3D-space on the
+ * battlefield - as well as opening and closing doors.
+ * @note This function does not handle any graphics or sounds.
  */
 class TileEngine
 {
@@ -120,15 +120,15 @@ private:
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				const Position* const originVoxel,
-				const Tile* const tile,
+				const Tile* const targetTile,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit,
-				const BattleUnit* unit = NULL);
+				const BattleUnit* targetUnit = NULL);
 		/// Check validity for targetting a tile.
 		bool canTargetTile(
 				const Position* const originVoxel,
-				const Tile* const tile,
-				const int part,
+				const Tile* const targetTile,
+				const int tilePart,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit);
 

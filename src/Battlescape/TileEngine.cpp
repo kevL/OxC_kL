@@ -896,14 +896,15 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 }
 
 /**
- * Checks for how exposed unit is for another unit.
+ * Checks for how exposed unit is to another unit.
  * @param originVoxel	- voxel of trace origin (eye or gun's barrel)
- * @param tile			- pointer to Tile to check for
+ * @param tile			- pointer to Tile to check against
  * @param excludeUnit	- is self (not to hit self)
  * @param excludeAllBut	- [optional] is unit which is the only one to be considered for ray hits
  * @return, degree of exposure (as percent)
  */
-/*kL int TileEngine::checkVoxelExposure(
+/*kL
+ int TileEngine::checkVoxelExposure(
 		Position* originVoxel,
 		Tile* tile,
 		BattleUnit* excludeUnit,
@@ -943,13 +944,13 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 	int relX = static_cast<int>(floor(static_cast<float>(relPos.y) * normal + 0.5f));
 	int relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f));
 
-	int sliceTargets[10] = // looks like [6] to me..
+	int targetSlices[10] = // looks like [6] to me..
 	{
 		0,		0,
 		relX,	relY,
 		-relX,	-relY
 	};
-/*	int sliceTargets[10] = // taken from "canTargetUnit()"
+/*	int targetSlices[10] = // taken from "canTargetUnit()"
 	{
 		0,		0,
 		relX,	relY,
@@ -979,8 +980,8 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 		scanVoxel.z = targetMinHeight + i;
 		for (int j = 0; j < 2; ++j)
 		{
-			scanVoxel.x = targetVoxel.x + sliceTargets[j * 2];
-			scanVoxel.y = targetVoxel.y + sliceTargets[j * 2 + 1];
+			scanVoxel.x = targetVoxel.x + targetSlices[j * 2];
+			scanVoxel.y = targetVoxel.y + targetSlices[j * 2 + 1];
 
 			_trajectory.clear();
 
@@ -1005,53 +1006,53 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 /**
  * Checks for another unit available for targeting and what particular voxel.
  * @param originVoxel	- pointer to voxel of trace origin (eg. gun's barrel)
- * @param tile			- pointer to Tile to check for
- * @param scanVoxel		- pointer to voxel that is returning coordinate of hit
+ * @param targetTile	- pointer to Tile to check against
+ * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @param unit			- pointer to a hypothetical unit to draw a virtual LoF for AI;
+ * @param targetUnit	- pointer to a hypothetical unit to draw a virtual LoF for AI;
 							if left NULL this function behaves normally (default NULL)
  * @return, true if a unit can be targeted
  */
 bool TileEngine::canTargetUnit(
 		const Position* const originVoxel,
-		const Tile* const tile,
+		const Tile* const targetTile,
 		Position* const scanVoxel,
 		const BattleUnit* const excludeUnit,
-		const BattleUnit* unit)
+		const BattleUnit* targetUnit)
 {
 	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
-	const bool hypothetical = (unit != NULL);
+	const bool hypothetical = (targetUnit != NULL);
 
-	if (unit == NULL)
+	if (targetUnit == NULL)
 	{
-		unit = tile->getUnit();
-		if (unit == NULL)
+		targetUnit = targetTile->getUnit();
+		if (targetUnit == NULL)
 		{
 			//Log(LOG_INFO) << ". no Unit, ret FALSE";
-			return false; // no unit in this tile, even if it's elevated and appearing in it.
+			return false; // no unit in this targetTile, even if it's elevated and appearing in it.
 		}
 	}
 
-	if (unit == excludeUnit) // skip self
+	if (targetUnit == excludeUnit) // skip self
 	{
 		//Log(LOG_INFO) << ". hit vs Self, ret FALSE";
 		return false;
 	}
 
 	const Position targetVoxel = Position(
-										tile->getPosition().x * 16 + 8,
-										tile->getPosition().y * 16 + 8,
-										tile->getPosition().z * 24);
+										targetTile->getPosition().x * 16 + 8,
+										targetTile->getPosition().y * 16 + 8,
+										targetTile->getPosition().z * 24);
 	const int
 		targetMinHeight = targetVoxel.z
-							- tile->getTerrainLevel()
-							+ unit->getFloatHeight(),
-		// if there is an other unit on target tile, assume check against that unit's height
-		xOffset = unit->getPosition().x - tile->getPosition().x,
-		yOffset = unit->getPosition().y - tile->getPosition().y,
-		targetSize = unit->getArmor()->getSize() - 1;
+							- targetTile->getTerrainLevel()
+							+ targetUnit->getFloatHeight(),
+		// if there is a unit on targetTile, assume check against that unit's height
+		xOffset = targetUnit->getPosition().x - targetTile->getPosition().x,
+		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,
+		targetSize = targetUnit->getArmor()->getSize() - 1;
 	int
-		unitRadius = unit->getLoftemps(), // width == LoFT in default LoFTemps set
+		unitRadius = targetUnit->getLoftemps(), // width = LoFT in default LoFTemps set
 		targetMaxHeight = targetMinHeight,
 		targetCenterHeight,
 		heightRange;
@@ -1059,7 +1060,7 @@ bool TileEngine::canTargetUnit(
 	if (targetSize > 0)
 		unitRadius = 3;
 
-	// vector manipulation to make scan work in voxelspace
+	// origin-to-target vector manipulation to make scan work in voxelspace
 	const Position relPos = targetVoxel - *originVoxel;
 	const float unitCenter = static_cast<float>(unitRadius)
 						   / std::sqrt(static_cast<float>((relPos.x * relPos.x) + (relPos.y * relPos.y)));
@@ -1068,7 +1069,7 @@ bool TileEngine::canTargetUnit(
 //		relY = static_cast<int>(std::floor(static_cast<float>(-relPos.x) * unitCenter + 0.5f)),
 		relX = static_cast<int>(Round(std::floor(static_cast<float>( relPos.y) * unitCenter))),
 		relY = static_cast<int>(Round(std::floor(static_cast<float>(-relPos.x) * unitCenter))),
-		sliceTargets[10] =
+		targetSlices[10] =
 		{
 			 0,		 0,
 			 relX,	 relY,
@@ -1077,8 +1078,8 @@ bool TileEngine::canTargetUnit(
 			-relY,	 relX
 		};
 
-	if (unit->isOut() == false)
-		heightRange = unit->getHeight();
+	if (targetUnit->isOut() == false)
+		heightRange = targetUnit->getHeight();
 	else
 		heightRange = 12;
 
@@ -1088,9 +1089,13 @@ bool TileEngine::canTargetUnit(
 	if (heightRange > 10) heightRange = 10;
 	if (heightRange < 0) heightRange = 0;
 
-	std::vector<Position> _trajectory;
+	std::vector<Position> trajectory;
+	std::vector<int>
+		targetable_x,
+		targetable_y,
+		targetable_z;
 
-	for (int // scan ray from top to bottom plus different parts of target cylinder
+	for (int // scan from center point up and down using heightFromCenter array
 			i = 0;
 			i <= heightRange;
 			++i)
@@ -1098,37 +1103,37 @@ bool TileEngine::canTargetUnit(
 		scanVoxel->z = targetCenterHeight + heightFromCenter[static_cast<size_t>(i)];
 		//Log(LOG_INFO) << ". iterate heightRange, i = " << i << ", scan.Z = " << scanVoxel->z;
 
-		for (size_t
+		for (size_t // scan from vertical centerline outwards left and right using targetSlices array
 				j = 0;
 				j != 5;
 				++j)
 		{
 			//Log(LOG_INFO) << ". . iterate j = " << j;
-			if (i < heightRange - 1
+			if (i < heightRange - 1 // looks like this gives an oval shape to target instead of an upright rectangle
 				&& j > 2)
 			{
 				//Log(LOG_INFO) << ". . . out of bounds, break (j)";
 				break; // skip unnecessary checks
 			}
 
-			scanVoxel->x = targetVoxel.x + sliceTargets[j * 2];
-			scanVoxel->y = targetVoxel.y + sliceTargets[j * 2 + 1];
+			scanVoxel->x = targetVoxel.x + targetSlices[j * 2];
+			scanVoxel->y = targetVoxel.y + targetSlices[j * 2 + 1];
 			//Log(LOG_INFO) << ". . scan.X = " << scanVoxel->x;
 			//Log(LOG_INFO) << ". . scan.Y = " << scanVoxel->y;
 
-			_trajectory.clear();
+			trajectory.clear();
 
 			const int test = calculateLine(
 										*originVoxel,
 										*scanVoxel,
 										false,
-										&_trajectory,
+										&trajectory,
 										excludeUnit);
 			//Log(LOG_INFO) << ". . testLine = " << test;
 
 			if (test == VOXEL_UNIT)
 			{
-				for (int // voxel of hit must be inside of scanned box
+				for (int // voxel of hit must be inside of scanned targetTile(s)
 						x = 0;
 						x <= targetSize;
 						++x)
@@ -1140,10 +1145,192 @@ bool TileEngine::canTargetUnit(
 							++y)
 					{
 						//Log(LOG_INFO) << ". . . iterate y-Size";
-						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
-							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
-							&& _trajectory.at(0).z >= targetMinHeight
-							&& _trajectory.at(0).z <= targetMaxHeight)
+						if (   trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
+							&& trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
+							&& trajectory.at(0).z >= targetMinHeight
+							&& trajectory.at(0).z <= targetMaxHeight)
+						{
+							//Log(LOG_INFO) << ". . . . Unit found @ voxel, ret TRUE";
+							//Log(LOG_INFO) << ". . . . scanVoxel " << (*scanVoxel);
+							targetable_x.push_back(scanVoxel->x);
+							targetable_y.push_back(scanVoxel->y);
+							targetable_z.push_back(scanVoxel->z);
+						}
+					}
+				}
+			}
+			else if (test == VOXEL_EMPTY
+				&& hypothetical == true
+				&& trajectory.empty() == false)
+			{
+				//Log(LOG_INFO) << ". . hypothetical Found, ret TRUE";
+				return true;
+			}
+		}
+	}
+
+	if (targetable_x.empty() == false)
+	{
+		int
+			minVal = *std::min_element(targetable_x.begin(), targetable_x.end()),
+			maxVal = *std::max_element(targetable_x.begin(), targetable_x.end()),
+			target_x = (minVal + maxVal) / 2,
+			target_y,
+			target_z;
+
+		minVal = *std::min_element(targetable_y.begin(), targetable_y.end()),
+		maxVal = *std::max_element(targetable_y.begin(), targetable_y.end());
+		target_y = (minVal + maxVal) / 2;
+
+		minVal = *std::min_element(targetable_z.begin(), targetable_z.end()),
+		maxVal = *std::max_element(targetable_z.begin(), targetable_z.end());
+		target_z = (minVal + maxVal) / 2;
+
+		*scanVoxel = Position(
+						target_x,
+						target_y,
+						target_z);
+
+		//Log(LOG_INFO) << ". scanVoxel RET " << (*scanVoxel);
+		return true;
+	}
+
+	//Log(LOG_INFO) << "TileEngine::canTargetUnit() exit FALSE";
+	return false;
+}
+/*
+bool TileEngine::canTargetUnit(
+		const Position* const originVoxel,
+		const Tile* const targetTile,
+		Position* const scanVoxel,
+		const BattleUnit* const excludeUnit,
+		const BattleUnit* targetUnit)
+{
+	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
+	const bool hypothetical = (targetUnit != NULL);
+
+	if (targetUnit == NULL)
+	{
+		targetUnit = targetTile->getUnit();
+		if (targetUnit == NULL)
+		{
+			//Log(LOG_INFO) << ". no Unit, ret FALSE";
+			return false; // no unit in this targetTile, even if it's elevated and appearing in it.
+		}
+	}
+
+	if (targetUnit == excludeUnit) // skip self
+	{
+		//Log(LOG_INFO) << ". hit vs Self, ret FALSE";
+		return false;
+	}
+
+	const Position targetVoxel = Position(
+										targetTile->getPosition().x * 16 + 8,
+										targetTile->getPosition().y * 16 + 8,
+										targetTile->getPosition().z * 24);
+	const int
+		targetMinHeight = targetVoxel.z
+							- targetTile->getTerrainLevel()
+							+ targetUnit->getFloatHeight(),
+		// if there is a unit on targetTile, assume check against that unit's height
+		xOffset = targetUnit->getPosition().x - targetTile->getPosition().x,
+		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,
+		targetSize = targetUnit->getArmor()->getSize() - 1;
+	int
+		unitRadius = targetUnit->getLoftemps(), // width = LoFT in default LoFTemps set
+		targetMaxHeight = targetMinHeight,
+		targetCenterHeight,
+		heightRange;
+
+	if (targetSize > 0)
+		unitRadius = 3;
+
+	// origin-to-target vector manipulation to make scan work in voxelspace
+	const Position relPos = targetVoxel - *originVoxel;
+	const float unitCenter = static_cast<float>(unitRadius)
+						   / std::sqrt(static_cast<float>((relPos.x * relPos.x) + (relPos.y * relPos.y)));
+	const int
+//		relX = static_cast<int>(std::floor(static_cast<float>( relPos.y) * unitCenter + 0.5f)),
+//		relY = static_cast<int>(std::floor(static_cast<float>(-relPos.x) * unitCenter + 0.5f)),
+		relX = static_cast<int>(Round(std::floor(static_cast<float>( relPos.y) * unitCenter))),
+		relY = static_cast<int>(Round(std::floor(static_cast<float>(-relPos.x) * unitCenter))),
+		targetSlices[10] =
+		{
+			 0,		 0,
+			 relX,	 relY,
+			-relX,	-relY,
+			 relY,	-relX,
+			-relY,	 relX
+		};
+
+	if (targetUnit->isOut() == false)
+		heightRange = targetUnit->getHeight();
+	else
+		heightRange = 12;
+
+	targetMaxHeight += heightRange;
+	targetCenterHeight = (targetMaxHeight + targetMinHeight) / 2;
+	heightRange /= 2;
+	if (heightRange > 10) heightRange = 10;
+	if (heightRange < 0) heightRange = 0;
+
+	std::vector<Position> trajectory;
+
+	for (int // scan from center point up and down using heightFromCenter array
+			i = 0;
+			i <= heightRange;
+			++i)
+	{
+		scanVoxel->z = targetCenterHeight + heightFromCenter[static_cast<size_t>(i)];
+		//Log(LOG_INFO) << ". iterate heightRange, i = " << i << ", scan.Z = " << scanVoxel->z;
+
+		for (size_t // scan from vertical centerline outwards left and right using targetSlices array
+				j = 0;
+				j != 5;
+				++j)
+		{
+			//Log(LOG_INFO) << ". . iterate j = " << j;
+			if (i < heightRange - 1 // looks like this gives an oval shape to target instead of an upright rectangle
+				&& j > 2)
+			{
+				//Log(LOG_INFO) << ". . . out of bounds, break (j)";
+				break; // skip unnecessary checks
+			}
+
+			scanVoxel->x = targetVoxel.x + targetSlices[j * 2];
+			scanVoxel->y = targetVoxel.y + targetSlices[j * 2 + 1];
+			//Log(LOG_INFO) << ". . scan.X = " << scanVoxel->x;
+			//Log(LOG_INFO) << ". . scan.Y = " << scanVoxel->y;
+
+			trajectory.clear();
+
+			const int test = calculateLine(
+										*originVoxel,
+										*scanVoxel,
+										false,
+										&trajectory,
+										excludeUnit);
+			//Log(LOG_INFO) << ". . testLine = " << test;
+
+			if (test == VOXEL_UNIT)
+			{
+				for (int // voxel of hit must be inside of scanned targetTile(s)
+						x = 0;
+						x <= targetSize;
+						++x)
+				{
+					//Log(LOG_INFO) << ". . . iterate x-Size";
+					for (int
+							y = 0;
+							y <= targetSize;
+							++y)
+					{
+						//Log(LOG_INFO) << ". . . iterate y-Size";
+						if (   trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
+							&& trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
+							&& trajectory.at(0).z >= targetMinHeight
+							&& trajectory.at(0).z <= targetMaxHeight)
 						{
 							//Log(LOG_INFO) << ". . . . Unit found @ voxel, ret TRUE";
 							return true;
@@ -1153,7 +1340,7 @@ bool TileEngine::canTargetUnit(
 			}
 			else if (test == VOXEL_EMPTY
 				&& hypothetical == true
-				&& _trajectory.empty() == false)
+				&& trajectory.empty() == false)
 			{
 				//Log(LOG_INFO) << ". . hypothetical Found, ret TRUE";
 				return true;
@@ -1163,21 +1350,21 @@ bool TileEngine::canTargetUnit(
 
 	//Log(LOG_INFO) << "TileEngine::canTargetUnit() exit FALSE";
 	return false;
-}
+} */
 
 /**
  * Checks for a tile part available for targeting and what particular voxel.
  * @param originVoxel	- pointer to the Position voxel of trace origin (eg. gun's barrel)
- * @param tile			- pointer to the Tile to check for
- * @param part			- tile part to check for
+ * @param targetTile	- pointer to the Tile to check against
+ * @param tilePart		- tile part to check for
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @return, true if tile can be targeted
+ * @return, true if targetTile can be targeted
  */
 bool TileEngine::canTargetTile(
 		const Position* const originVoxel,
-		const Tile* const tile,
-		const int part,
+		const Tile* const targetTile,
+		const int tilePart,
 		Position* const scanVoxel,
 		const BattleUnit* const excludeUnit)
 {
@@ -1198,9 +1385,9 @@ bool TileEngine::canTargetTile(
 		};
 
 	Position targetVoxel = Position(
-								tile->getPosition().x * 16,
-								tile->getPosition().y * 16,
-								tile->getPosition().z * 24);
+								targetTile->getPosition().x * 16,
+								targetTile->getPosition().y * 16,
+								targetTile->getPosition().z * 24);
 
 	std::vector<Position> _trajectory;
 
@@ -1214,22 +1401,22 @@ bool TileEngine::canTargetTile(
 		maxZfound = false;
 
 
-	if (part == MapData::O_OBJECT)
+	if (tilePart == MapData::O_OBJECT)
 	{
 		spiralArray = sliceObjectSpiral;
 		spiralCount = 41;
 	}
-	else if (part == MapData::O_NORTHWALL)
+	else if (tilePart == MapData::O_NORTHWALL)
 	{
 		spiralArray = northWallSpiral;
 		spiralCount = 7;
 	}
-	else if (part == MapData::O_WESTWALL)
+	else if (tilePart == MapData::O_WESTWALL)
 	{
 		spiralArray = westWallSpiral;
 		spiralCount = 7;
 	}
-	else if (part == MapData::O_FLOOR)
+	else if (tilePart == MapData::O_FLOOR)
 	{
 		spiralArray = sliceObjectSpiral;
 		spiralCount = 41;
@@ -1240,7 +1427,7 @@ bool TileEngine::canTargetTile(
 	}
 	else
 	{
-		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (part is not a tileObject)";
+		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (tilePart is not a tileObject)";
 		return false;
 	}
 
@@ -1269,7 +1456,7 @@ bool TileEngine::canTargetTile(
 									targetVoxel.y + tY,
 									targetVoxel.z + j * 2),
 							NULL,
-							true) == part) // bingo
+							true) == tilePart) // bingo
 				{
 					if (minZfound == false)
 					{
@@ -1311,7 +1498,7 @@ bool TileEngine::canTargetTile(
 									targetVoxel.y + tY,
 									targetVoxel.z + j * 2),
 							NULL,
-							true) == part) // bingo
+							true) == tilePart) // bingo
 				{
 					if (maxZfound == false)
 					{
@@ -1358,7 +1545,7 @@ bool TileEngine::canTargetTile(
 										false,
 										&_trajectory,
 										excludeUnit);
-			if (test == part) // bingo
+			if (test == tilePart) // bingo
 			{
 				if (   _trajectory.at(0).x / 16 == scanVoxel->x / 16
 					&& _trajectory.at(0).y / 16 == scanVoxel->y / 16
@@ -4561,7 +4748,7 @@ void TileEngine::openAdjacentDoors(
 			;
 			++i)
 	{
-		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
+		offset = westSide ? Position(0, i, 0) : Position(i, 0, 0);
 		Tile* const tile = _battleSave->getTile(pos + offset);
 		if (tile != NULL
 			&& tile->getMapData(part) != NULL
@@ -4578,7 +4765,7 @@ void TileEngine::openAdjacentDoors(
 			;
 			--i)
 	{
-		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
+		offset = westSide ? Position(0, i, 0) : Position(i, 0, 0);
 		Tile* const tile = _battleSave->getTile(pos + offset);
 		if (tile != NULL
 			&& tile->getMapData(part) != NULL
