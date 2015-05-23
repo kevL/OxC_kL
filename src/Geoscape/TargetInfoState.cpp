@@ -46,16 +46,13 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Target Info window.
  * @param target	- pointer to a Target to show info about
- * @param globe		- pointer to Globe
  * @param state		- pointer to GeoscapeState
  */
 TargetInfoState::TargetInfoState(
 		Target* target,
-		Globe* globe,
 		GeoscapeState* state)
 	:
 		_target(target),
-		_globe(globe),
 		_state(state),
 		_aBase(NULL)
 {
@@ -170,7 +167,6 @@ void TargetInfoState::btnInterceptClick(Action*)
 	_state->resetTimer();
 	_game->popState();
 	_game->pushState(new InterceptState(
-									_globe,
 									NULL,
 									_state));
 }

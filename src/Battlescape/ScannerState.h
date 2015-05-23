@@ -49,7 +49,7 @@ private:
 	Timer* _timerAnimate;
 
 	/// Updates scanner interface.
-	void update();
+//	void update();
 	/// Handles Minimap animation.
 	void animate();
 
@@ -57,7 +57,7 @@ private:
 	public:
 		/// Creates the ScannerState.
 		explicit ScannerState(BattleAction* action);
-		///
+		/// dTor.
 		~ScannerState();
 
 		/// Handler for right-clicking anything.

@@ -50,16 +50,13 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Craft Patrol window.
  * @param craft	- pointer to Craft
- * @param globe	- pointer to Globe
  * @param geo	- pointer to GeoscapeState
  */
 CraftPatrolState::CraftPatrolState(
 		Craft* craft,
-		Globe* globe,
 		GeoscapeState* geo)
 	:
 		_craft(craft),
-		_globe(globe),
 		_geo(geo)
 {
 	_screen = false;
@@ -177,9 +174,8 @@ void CraftPatrolState::btnInfoClick(Action*)
 	_game->popState();
 	_game->pushState(new GeoscapeCraftState(
 										_craft,
-										_globe,
-										NULL,
-										_geo));
+										_geo->getGlobe(),
+										NULL));
 }
 
 /**
@@ -201,9 +197,9 @@ void CraftPatrolState::btnCenterClick(Action*)
 {
 	_geo->resetTimer();
 	_game->popState();
-	_globe->center(
-				_craft->getLongitude(),
-				_craft->getLatitude());
+	_geo->getGlobe()->center(
+						_craft->getLongitude(),
+						_craft->getLatitude());
 }
 
 /**
@@ -216,8 +212,7 @@ void CraftPatrolState::btnRedirectClick(Action*)
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
 											_craft,
-											_globe,
-											_geo));
+											_geo->getGlobe()));
 }
 
 }

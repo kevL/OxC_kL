@@ -54,20 +54,14 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Intercept window.
- * @param globe		- pointer to the geoscape Globe
  * @param base		- pointer to Base to show contained crafts (default NULL to show all crafts)
-// * @param target	- pointer to Target to intercept (default NULL to ask user for target)
  * @param geo		- pointer to GeoscapeState (default NULL)
  */
 InterceptState::InterceptState(
-		Globe* globe,
 		Base* base,
-//		Target* target,
 		GeoscapeState* geo)
 	:
-		_globe(globe),
 		_base(base),
-//		_target(target),
 		_geo(geo)
 {
 	_screen = false;
@@ -341,7 +335,7 @@ void InterceptState::btnGotoBaseClick(Action*)
 	_game->popState();
 	_game->pushState(new BasescapeState(
 									_base,
-									_globe));
+									_geo->getGlobe()));
 }
 
 /**
@@ -353,9 +347,8 @@ void InterceptState::lstCraftsLeftClick(Action*)
 	Craft* const craft = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
 										craft,
-										_globe,
+										_geo->getGlobe(),
 										NULL,
-										_geo,
 										true));
 }
 
@@ -368,9 +361,9 @@ void InterceptState::lstCraftsRightClick(Action*)
 	_game->popState();
 
 	const Craft* const craft = _crafts[_lstCrafts->getSelectedRow()];
-	_globe->center(
-				craft->getLongitude(),
-				craft->getLatitude());
+	_geo->getGlobe()->center(
+						craft->getLongitude(),
+						craft->getLatitude());
 }
 
 /**

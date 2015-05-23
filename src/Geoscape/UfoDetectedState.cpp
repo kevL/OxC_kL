@@ -72,7 +72,7 @@ UfoDetectedState::UfoDetectedState(
 		_ufo(ufo),
 		_state(state),
 		_hyper(hyper),
-		_delay(true)
+		_delayPop(true)
 {
 	state->getGlobe()->rotateStop();
 
@@ -100,10 +100,14 @@ UfoDetectedState::UfoDetectedState(
 
 	_txtUfo			= new Text(102, 16, 20, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
+
 	_lstInfo		= new TextList(192, 33, 32, 85);
+
 	_btnCentre		= new TextButton(192, 16, 32, 124);
+
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btn5Sec		= new TextButton(88, 16, 136, 144);
+
 	_btnCancel		= new TextButton(192, 16, 32, 164);
 
 	_txtRegion		= new Text(114, 9, 122, 56);
@@ -468,12 +472,11 @@ void UfoDetectedState::init()
 void UfoDetectedState::btnInterceptClick(Action*)
 {
 	_state->resetTimer();
-//	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
-
 	_state->assessUfoPopups();
+
 	_game->popState();
+
 	_game->pushState(new InterceptState(
-									_state->getGlobe(),
 									NULL,
 									_state));
 }
@@ -484,20 +487,21 @@ void UfoDetectedState::btnInterceptClick(Action*)
  */
 void UfoDetectedState::btnCentreClick(Action*)
 {
-	_state->resetTimer();
 	_state->getGlobe()->center(
 							_ufo->getLongitude(),
 							_ufo->getLatitude());
 
-	if (_delay == true)
+	if (_delayPop == true)
 	{
-		_delay = false;
+		_delayPop = false;
 		transposeWindow();
 
 		return;
 	}
 
+	_state->resetTimer();
 	_state->assessUfoPopups();
+
 	_game->popState();
 }
 
@@ -536,7 +540,7 @@ void UfoDetectedState::transposeWindow() // private.
 	_lstInfo->setVisible(false);
 	_btnCentre->setVisible(false);
 //	_btnIntercept->setVisible(false);
-	_btn5Sec->setVisible(false);
+//	_btn5Sec->setVisible(false);
 //	_btnCancel->setVisible(false);
 	_btnCancel->setText(tr("STR_TERROR_CONTINUES").c_str());
 //	_txtRegion->setVisible(false);

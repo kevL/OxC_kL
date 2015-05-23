@@ -31,7 +31,6 @@ namespace OpenXcom
 class Base;
 class Craft;
 class GeoscapeState;
-class Globe;
 class Target;
 class Text;
 class TextButton;
@@ -59,7 +58,6 @@ private:
 
 	Base* _base;
 	GeoscapeState* _geo;
-	Globe* _globe;
 	Target* _target;
 	Text
 		* _txtBase,
@@ -88,9 +86,7 @@ private:
 	public:
 		/// Creates the Intercept state.
 		InterceptState(
-				Globe* globe,
 				Base* base = NULL,
-//				Target* target = NULL,
 				GeoscapeState* geo = NULL);
 		/// Cleans up the Intercept state.
 		~InterceptState();

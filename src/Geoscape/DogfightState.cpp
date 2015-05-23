@@ -1782,8 +1782,7 @@ void DogfightState::btnMinimizedIconPress(Action* action)
 		_game->pushState(new GeoscapeCraftState(
 											_craft,
 											_globe,
-											NULL,
-											_geo));
+											NULL));
 }
 
 /**

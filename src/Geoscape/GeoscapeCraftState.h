@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class Craft;
-class GeoscapeState;
 class Globe;
 class Text;
 class TextButton;
@@ -47,7 +46,6 @@ private:
 	bool _doublePop;
 
 	Craft* _craft;
-	GeoscapeState* _geo;
 	Globe* _globe;
 	Surface* _sprite;
 	Text
@@ -82,7 +80,6 @@ private:
 				Craft* craft,
 				Globe* globe,
 				Waypoint* waypoint,
-				GeoscapeState* geo,
 				bool doublePop = false);
 		/// Cleans up the Geoscape Craft state.
 		~GeoscapeCraftState();

@@ -53,7 +53,9 @@ ScannerView::ScannerView(
 		Game* game,
 		BattleUnit* unit)
 	:
-		InteractiveSurface(w, h, x, y),
+		InteractiveSurface(
+			w,h,
+			x,y),
 		_game(game),
 		_unit(unit),
 		_frame(0)
@@ -66,48 +68,50 @@ ScannerView::ScannerView(
  */
 void ScannerView::draw()
 {
-	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
-	Surface* surface = NULL;
+	SurfaceSet* srt = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
+	Surface* srf;
 
 	clear();
+
+	Tile* tile;
 
 	this->lock();
 	for (int
 			x = -9;
 			x < 10;
-			x++)
+			++x)
 	{
 		for (int
 				y = -9;
 				y < 10;
-				y++)
+				++y)
 		{
 			for (int
 					z = 0;
 					z < _game->getSavedGame()->getSavedBattle()->getMapSizeZ();
-					z++)
+					++z)
 			{
-				Tile* t = _game->getSavedGame()->getSavedBattle()->getTile(Position(x, y, z)
-						+ Position(
-								_unit->getPosition().x,
-								_unit->getPosition().y,
-								0));
-				if (t
-					&& t->getUnit()
-					&& t->getUnit()->getMotionPoints())
+				tile = _game->getSavedGame()->getSavedBattle()->getTile(Position(x,y,z)
+					 + Position(
+							_unit->getPosition().x,
+							_unit->getPosition().y,
+							0));
+				if (tile != NULL
+					&& tile->getUnit() != NULL
+					&& tile->getUnit()->getMotionPoints() != 0)
 				{
-					int frame = (t->getUnit()->getMotionPoints() / 5);
+					int frame = (tile->getUnit()->getMotionPoints() / 5);
 					if (frame > -1)
 					{
 						if (frame > 5)
 							frame = 5;
 
-						surface = set->getFrame(frame + _frame);
-						surface->blitNShade(
-										this,
-										Surface::getX() + ((9 + x) * 8) - 4,
-										Surface::getY() + ((9 + y) * 8) - 4,
-										0);
+						srf = srt->getFrame(frame + _frame);
+						srf->blitNShade(
+									this,
+									Surface::getX() + ((9 + x) * 8) - 4,
+									Surface::getY() + ((9 + y) * 8) - 4,
+									0);
 					}
 				}
 			}
@@ -115,15 +119,13 @@ void ScannerView::draw()
 	}
 
 	// the arrow of the direction the unit is pointed
-	surface = set->getFrame(7 + _unit->getDirection());
-	surface->blitNShade(
-					this,
-					Surface::getX() + (9 * 8) - 4,
-					Surface::getY() + (9 * 8) - 4,
-					0);
+	srf = srt->getFrame(7 + _unit->getDirection());
+	srf->blitNShade(
+				this,
+				Surface::getX() + (9 * 8) - 4,
+				Surface::getY() + (9 * 8) - 4,
+				0);
 	this->unlock();
-
-
 }
 
 /**
@@ -132,17 +134,16 @@ void ScannerView::draw()
  * @param state - state that the action handlers belong to
  */
 void ScannerView::mouseClick(Action*, State*)
-{
-}
+{}
 
 /**
  * Updates the scanner animation.
 */
 void ScannerView::animate()
 {
-	_frame++;
+	++_frame;
 
-	if (_frame > 1)
+	if (_frame == 2)
 		_frame = 0;
 
 	_redraw = true;

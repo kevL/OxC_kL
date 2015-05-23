@@ -58,21 +58,18 @@ namespace OpenXcom
  * Initializes all the elements in the Select Destination window.
  * @param craft	- pointer to the Craft
  * @param globe	- pointer to the Globe
- * @param geo	- pointer to the GeoscapeState
  */
 SelectDestinationState::SelectDestinationState(
 		Craft* craft,
-		Globe* globe, // kL_note: Globe is redudant here, use geo->getGlobe()
-		GeoscapeState* geo) // kL_add
+		Globe* globe)
 	:
 		_craft(craft),
-		_globe(globe),
-		_geo(geo) // kL_add
+		_globe(globe)
 {
 	_screen = false;
 
 	const int dx = _game->getScreen()->getDX();
-//kL	dy = _game->getScreen()->getDY();
+//		dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
@@ -161,9 +158,9 @@ SelectDestinationState::SelectDestinationState(
 
 	bool goCydonia = true; // if all Soldiers have Power or Flight suits .......
 
-	if (_craft->getRules()->getSpacecraft() == true
-		&& _craft->getNumSoldiers() > 0
-		&& _game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST") == true)
+	if (_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST") == true
+		&& _craft->getRules()->getSpacecraft() == true
+		&& _craft->getNumSoldiers() > 0)
 	{
 		for (std::vector<Soldier*>::const_iterator
 			i = _craft->getBase()->getSoldiers()->begin();
@@ -194,10 +191,7 @@ SelectDestinationState::SelectDestinationState(
  * dTor.
  */
 SelectDestinationState::~SelectDestinationState()
-{
-//	if (_error != NULL)
-//		delete _error;
-}
+{}
 
 /**
  * Stop the globe movement.
@@ -213,8 +207,8 @@ void SelectDestinationState::init()
  */
 /* void SelectDestinationState::think()
 {
-//	State::think();
-//	_globe->think();
+	State::think();
+	_globe->think();
 } */
 
 /**
@@ -228,14 +222,17 @@ void SelectDestinationState::handle(Action* action)
 }
 
 /**
- * Processes any left-clicks for picking a target, or right-clicks to scroll the globe.
+ * Processes any left-clicks for picking a target or right-clicks to scroll the globe.
  * @param action - pointer to an Action
  */
 void SelectDestinationState::globeClick(Action* action)
 {
-	const int
-		mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
-		mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+	const int mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+
+	if (mouseY < 30) // ignore window(this) clicks
+		return;
+
+	const int mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
 	double
 		lon,
 		lat;
@@ -245,45 +242,27 @@ void SelectDestinationState::globeClick(Action* action)
 					&lon,
 					&lat);
 
-	if (mouseY < 30) // Ignore window clicks
-		return;
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // set Waypoint
 	{
 		const RuleCraft* const craftRule = _craft->getRules();
-		int range = _craft->getFuel(); // - _craft->getFuelConsumption();
+		int range = _craft->getFuel();
 		if (craftRule->getRefuelItem().empty() == false)
 			range *= craftRule->getMaxSpeed();
-//		else
-//			range *= 100;
 
 		range /= 6; // six doses per hour on Geoscape.
-
-		//Log(LOG_INFO) << ". range = " << range;
 
 		Waypoint* const wp = new Waypoint();
 		wp->setLongitude(lon);
 		wp->setLatitude(lat);
 
-		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(wp) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(wp) * 3440.0);
-
-//		if (static_cast<double>(range) < (_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)
-		if (range < static_cast<int>(std::floor((_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
+		if (range < static_cast<int>(std::floor(
+								(_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
 		{
-			//Log(LOG_INFO) << ". . outside Range";
 			_txtError->setVisible();
-
 			delete wp;
-
-//			std::wstring msg = tr("STR_OUTSIDE_CRAFT_RANGE");
-//			_geo->popup(new CraftErrorState(
-//			_error = new CraftErrorState(
-//										_geo,
-//										msg);
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . inside Range";
 			_txtError->setVisible(false);
 
 			std::vector<Target*> targets = _globe->getTargets(
@@ -425,7 +404,6 @@ void SelectDestinationState::globeClick(Action* action)
  */
 void SelectDestinationState::btnCancelClick(Action*)
 {
-//	if (_error == NULL)
 	_game->popState();
 }
 
@@ -434,14 +412,11 @@ void SelectDestinationState::btnCancelClick(Action*)
  */
 void SelectDestinationState::btnCydoniaClick(Action*)
 {
-//	if (_error == NULL)
-//	{
 	if (_craft->getNumSoldiers() > 0)
 //		|| _craft->getNumVehicles() > 0)
 	{
 		_game->pushState(new ConfirmCydoniaState(_craft));
 	}
-//	}
 }
 
 /**

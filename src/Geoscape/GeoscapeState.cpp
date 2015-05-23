@@ -1710,8 +1710,7 @@ void GeoscapeState::time5Seconds()
 							popup(new GeoscapeCraftState(
 														*j,
 														_globe,
-														wp,
-														this));
+														wp));
 						}
 					}
 					else if (ufo->getStatus() == Ufo::DESTROYED
@@ -1821,7 +1820,6 @@ void GeoscapeState::time5Seconds()
 				{
 					popup(new CraftPatrolState(
 											*j,
-											_globe,
 											this));
 					(*j)->setDestination(NULL);
 				}
@@ -3489,7 +3487,6 @@ void GeoscapeState::globeClick(Action* action)
 void GeoscapeState::btnInterceptClick(Action*)
 {
 	_game->pushState(new InterceptState(
-									_globe,
 									NULL,
 									this));
 }

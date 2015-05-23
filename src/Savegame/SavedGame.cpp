@@ -76,7 +76,7 @@ struct findRuleResearch
 	RuleResearch* _toFind;
 	explicit findRuleResearch(RuleResearch* toFind);
 
-	bool operator()(const ResearchProject* r) const;
+	bool operator() (const ResearchProject* r) const;
 };
 
 ///
@@ -86,7 +86,7 @@ findRuleResearch::findRuleResearch(RuleResearch* toFind)
 {}
 
 ///
-bool findRuleResearch::operator()(const ResearchProject* r) const
+bool findRuleResearch::operator() (const ResearchProject* r) const
 {
 	return _toFind == r->getRules();
 }
@@ -99,7 +99,7 @@ struct equalProduction
 	RuleManufacture* _item;
 	explicit equalProduction(RuleManufacture* item);
 
-	bool operator()(const Production* p) const;
+	bool operator() (const Production* p) const;
 };
 
 ///
@@ -109,7 +109,7 @@ equalProduction::equalProduction(RuleManufacture* item)
 {}
 
 ///
-bool equalProduction::operator()(const Production* p) const
+bool equalProduction::operator() (const Production* p) const
 {
 	return p->getRules() == _item;
 }

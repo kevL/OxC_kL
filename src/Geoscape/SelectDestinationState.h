@@ -27,8 +27,6 @@ namespace OpenXcom
 {
 
 class Craft;
-//class CraftErrorState;
-class GeoscapeState; // kL
 class Globe;
 //class InteractiveSurface;
 class Text;
@@ -46,13 +44,11 @@ class SelectDestinationState
 
 private:
 	Craft* _craft;
-//	CraftErrorState* _error;
-	GeoscapeState* _geo;
 	Globe* _globe;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Window* _window;
-//	Text* _txtTitle;
 	Text* _txtError;
+//		* _txtTitle;
 	TextButton
 		* _btnCancel,
 		* _btnCydonia;
@@ -62,8 +58,7 @@ private:
 		/// Creates the Select Destination state.
 		SelectDestinationState(
 				Craft* craft,
-				Globe* globe,
-				GeoscapeState* geo); // kL_add.
+				Globe* globe);
 		/// Cleans up the Select Destination state.
 		~SelectDestinationState();
 

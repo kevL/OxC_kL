@@ -47,7 +47,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Soldier Armor window.
  * @param base		- pointer to the Base to get info from
- * @param soldier	- ID of the selected soldier
+ * @param soldierId	- ID of the selected Soldier
  */
 SoldierArmorState::SoldierArmorState(
 		Base* base,
@@ -169,8 +169,8 @@ void SoldierArmorState::lstArmorClick(Action*)
 	}
 
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
-//	SavedGame* save = _game->getSavedGame();
-//	save->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
+//	SavedGame* gameSave = _game->getSavedGame();
+//	gameSave->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
 
 	_game->popState();
 }

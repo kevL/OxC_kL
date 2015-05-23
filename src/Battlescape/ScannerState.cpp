@@ -57,8 +57,7 @@ ScannerState::ScannerState(BattleAction* action)
 	:
 		_action(action)
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
@@ -68,10 +67,8 @@ ScannerState::ScannerState(BattleAction* action)
 	_bg				= new InteractiveSurface(320, 200);
 	_scan			= new InteractiveSurface(320, 200);
 	_scannerView	= new ScannerView(
-									152,
-									152,
-									56,
-									24,
+									152,152,
+									56,24,
 									_game,
 									_action->actor);
 
@@ -85,6 +82,7 @@ ScannerState::ScannerState(BattleAction* action)
 	add(_bg);
 
 	centerAllSurfaces();
+
 
 	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_bg);
 	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_scan);
@@ -100,7 +98,7 @@ ScannerState::ScannerState(BattleAction* action)
 	_timerAnimate->onTimer((StateHandler)& ScannerState::animate);
 	_timerAnimate->start();
 
-	update();
+//	update();
 }
 
 /**
@@ -129,15 +127,15 @@ void ScannerState::handle(Action* action)
 /**
  * Updates scanner state.
  */
-void ScannerState::update()
+/*void ScannerState::update() // private.
 {
-//	_scannerView->draw();
-}
+	_scannerView->draw();
+} */
 
 /**
- * Animation handler. Updates the minimap view animation.
+ * Updates the minimap view animation.
 */
-void ScannerState::animate()
+void ScannerState::animate() // private.
 {
 	_scannerView->animate();
 }

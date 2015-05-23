@@ -50,7 +50,7 @@
 
 #include "../Resource/XcomResourcePack.h"
 
-#include "../Ruleset/RuleSoldier.h"
+//#include "../Ruleset/RuleSoldier.h" // minPsi in btnSortClick()
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"

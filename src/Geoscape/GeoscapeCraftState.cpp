@@ -21,7 +21,6 @@
 
 //#include <sstream>
 
-#include "GeoscapeState.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
@@ -57,20 +56,17 @@ namespace OpenXcom
  * @param craft		- pointer to a Craft for display
  * @param globe		- pointer to the geoscape Globe
  * @param waypoint	- pointer to the last UFO position if redirecting the craft
- * @param geo		- pointer to GeoscapeState
  * @param doublePop	- true if two windows need to pop on exit (default false)
  */
 GeoscapeCraftState::GeoscapeCraftState(
 		Craft* craft,
 		Globe* globe,
 		Waypoint* waypoint,
-		GeoscapeState* geo,
 		bool doublePop)
 	:
 		_craft(craft),
 		_globe(globe),
 		_waypoint(waypoint),
-		_geo(geo),
 		_doublePop(doublePop)
 {
 	_screen = false;
@@ -384,8 +380,7 @@ void GeoscapeCraftState::btnTargetClick(Action*)
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
 											_craft,
-											_globe,
-											_geo));
+											_globe));
 	delete _waypoint;
 }
 

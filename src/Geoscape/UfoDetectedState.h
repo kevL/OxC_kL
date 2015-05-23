@@ -46,7 +46,7 @@ class UfoDetectedState
 
 private:
 	bool
-		_delay,
+		_delayPop,
 		_hyper;
 
 	GeoscapeState* _state;

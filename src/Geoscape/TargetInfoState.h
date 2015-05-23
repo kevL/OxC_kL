@@ -28,7 +28,6 @@ namespace OpenXcom
 
 class AlienBase;
 class GeoscapeState;
-class Globe;
 class Target;
 class Text;
 class TextButton;
@@ -47,7 +46,6 @@ class TargetInfoState
 private:
 	AlienBase* _aBase;
 	GeoscapeState* _state;
-	Globe* _globe;
 	Target* _target;
 	Text
 		* _txtTitle,
@@ -64,7 +62,6 @@ private:
 		/// Creates the Target Info state.
 		TargetInfoState(
 				Target* target,
-				Globe* globe,
 				GeoscapeState* state);
 		/// Cleans up the Target Info state.
 		~TargetInfoState();

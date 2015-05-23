@@ -154,7 +154,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 
 		if (base != NULL)
 			_game->pushState(new InterceptState(
-											_state->getGlobe(),
 											base,
 											_state));
 		else if (craft != NULL)
@@ -162,7 +161,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 											craft,
 											_state->getGlobe(),
 											NULL,
-											_state,
 											false));
 		else if (ufo != NULL)
 			_game->pushState(new UfoDetectedState(
@@ -173,7 +171,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 		else
 			_game->pushState(new TargetInfoState(
 											target,
-											_state->getGlobe(),
 											_state));
 	}
 	else

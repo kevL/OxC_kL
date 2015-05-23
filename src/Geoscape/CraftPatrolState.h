@@ -28,7 +28,6 @@ namespace OpenXcom
 
 class Craft;
 class GeoscapeState;
-class Globe;
 class Text;
 class TextButton;
 class Window;
@@ -45,7 +44,6 @@ class CraftPatrolState
 private:
 	Craft* _craft;
 	GeoscapeState* _geo;
-	Globe* _globe;
 	Surface* _sprite;
 	Text* _txtDestination;
 //		* _txtPatrolling;
@@ -63,7 +61,6 @@ private:
 		/// Creates the Geoscape CraftPatrol state.
 		CraftPatrolState(
 				Craft* craft,
-				Globe* globe,
 				GeoscapeState* geo);
 		/// Cleans up the Geoscape CraftPatrol state.
 		~CraftPatrolState();

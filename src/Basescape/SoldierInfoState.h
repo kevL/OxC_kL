@@ -64,10 +64,10 @@ private:
 		* _barPsiStrength,
 		* _barPsiSkill;
 	Base* _base;
+	InteractiveSurface* _bg;
 	NumberText* _battleOrder;
 	Soldier* _soldier;
 	Surface
-		* _bg,
 		* _gender,
 		* _rank;
 	Text
@@ -113,10 +113,13 @@ private:
 		* _btnDiary;
 	TextEdit* _edtSoldier;
 
-	/// kL. Handles autoStat click.
-	void btnAutoStat(Action*);
-	/// kL. Handles autoStatAll click.
-	void btnAutoStatAll(Action*);
+	/// Handles autoStat click.
+	void btnAutoStat(Action* action);
+	/// Handles autoStatAll click.
+	void btnAutoStatAll(Action* action);
+
+	/// Handles RMB on lower part of screen.
+	void exitClick(Action* action);
 
 
 	public:
@@ -130,12 +133,12 @@ private:
 		/// Updates the soldier info.
 		void init();
 
-		/// Handler for pressing on the Name edit (disables editing).
-//kL	void edtSoldierPress(Action* action);
-		/// Set the soldier Id.
+		/// Sets the soldier Id.
 		void setSoldierID(size_t soldierId);
 		/// Handler for changing text on the Name edit.
 		void edtSoldierChange(Action* action);
+		/// Handler for pressing on the Name edit (disables editing).
+//		void edtSoldierPress(Action* action);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

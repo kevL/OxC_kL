@@ -23,7 +23,6 @@
 
 #include "SoldierDiaryOverviewState.h"
 #include "SackSoldierState.h"
-#include "SellState.h"
 #include "SoldierArmorState.h"
 
 #include "../Engine/Action.h"
@@ -31,7 +30,6 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Bar.h"
@@ -40,12 +38,9 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 
-#include "../Menu/ErrorMessageState.h"
-
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/Base.h"
@@ -61,8 +56,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldier Info screen.
- * @param base		- pointer to the base to get info from
- * @param soldierId	- ID of the selected soldier
+ * @param base		- pointer to the Base to get info from
+ * @param soldierId	- ID of the selected Soldier
  */
 SoldierInfoState::SoldierInfoState(
 		Base* base,
@@ -74,7 +69,7 @@ SoldierInfoState::SoldierInfoState(
 {
 	_list = _base->getSoldiers();
 
-	_bg				= new Surface(320, 200);
+	_bg				= new InteractiveSurface(320, 200);
 
 	_rank			= new Surface(26, 23, 4, 4);
 	_gender			= new Surface(7, 7, 240, 8);
@@ -237,6 +232,10 @@ SoldierInfoState::SoldierInfoState(
 
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
+	_bg->onMouseClick(
+					(ActionHandler)& SoldierInfoState::exitClick,
+					SDL_BUTTON_RIGHT);
+
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -367,7 +366,7 @@ void SoldierInfoState::init()
 	UnitStats armored (*current); // init.
 	armored += *(_soldier->getArmor()->getStats());
 
-	// kL: special handling for stats that could go below initial setting.
+	// Special handling for stats that could go below initial setting.
 	std::wostringstream woststr;
 
 	woststr << armored.tu;
@@ -700,6 +699,7 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 	}
 
 /*	// TEST: for updating Soldier Awards
+	// note that decorationLevels need to also be zero'd in the savedgame file.
 	for (std::vector<Base*>::const_iterator // Award medals for service time
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -716,17 +716,7 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 }
 
 /**
- * Disables the soldier input.
- * @param action - pointer to an Action
- */
-/* void SoldierInfoState::edtSoldierPress(Action* action)
-{
-	if (_base == NULL) // kL_note: This should never happen, because (base=NULL) is handled by SoldierInfoDeadState.
-		_edtSoldier->setFocus(false);
-} */
-
-/**
- * Set the soldier Id.
+ * Sets the soldier Id.
  */
 void SoldierInfoState::setSoldierID(size_t soldierId)
 {
@@ -743,30 +733,42 @@ void SoldierInfoState::edtSoldierChange(Action*)
 }
 
 /**
+ * Disables the soldier input.
+ * @param action - pointer to an Action
+ */
+/* void SoldierInfoState::edtSoldierPress(Action* action)
+{
+	// kL_note: This should never happen, because (base=NULL) is handled by SoldierInfoDeadState.
+	if (_base == NULL)
+		_edtSoldier->setFocus(false);
+} */
+
+/**
+ * Handles right-click exit.
+ * @param action - pointer to an Action
+ */
+void SoldierInfoState::exitClick(Action* /* action */)
+{
+//	const int mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+//	if (mouseY > 77)
+
+	// that no workie. cf, SelectDestinationState::globeClick()
+	//
+	// So if an RMB happens on btnAutoStatAll() the state pops also.
+	_game->popState();
+}
+
+/**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
 void SoldierInfoState::btnOkClick(Action*)
 {
-//	_edtSoldier->deFocus(); // kL
+//	_edtSoldier->deFocus();
 //	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
+//	_edtSoldier->setFocus(false);
 
-//	_edtSoldier->setFocus(false); // kL
 	_game->popState();
-
-/*	if (_game->getSavedGame()->getMonthsPassed() != -1
-		&& Options::storageLimitsEnforced == true
-//		&& _base != NULL
-		&& _base->storesOverfull() == true)
-	{
-		_game->pushState(new SellState(_base));
-		_game->pushState(new ErrorMessageState(
-											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-											_palette,
-											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorMessage")->color,
-											"BACK01.SCR",
-											_game->getRuleset()->getInterface("soldierInfo")->getElement("errorPalette")->color));
-	} */
 }
 
 /**
@@ -777,8 +779,7 @@ void SoldierInfoState::btnPrevClick(Action*)
 {
 //	_edtSoldier->deFocus();
 //	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
-
-//	_edtSoldier->setFocus(false); // kL
+//	_edtSoldier->setFocus(false);
 
 	if (_soldierId == 0)
 		_soldierId = _list->size() - 1;
@@ -796,8 +797,8 @@ void SoldierInfoState::btnNextClick(Action*)
 {
 //	_edtSoldier->deFocus();
 //	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
+//	_edtSoldier->setFocus(false);
 
-//	_edtSoldier->setFocus(false); // kL
 	++_soldierId;
 
 	if (_soldierId >= _list->size())

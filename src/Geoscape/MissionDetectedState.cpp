@@ -121,7 +121,6 @@ void MissionDetectedState::btnInterceptClick(Action*)
 
 	_game->popState();
 	_game->pushState(new InterceptState(
-									_state->getGlobe(),
 									NULL,
 									_state));
 }
