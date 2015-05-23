@@ -1538,20 +1538,6 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 }
 
 /**
- * Returns the info about a specific soldier.
- * @param name - reference a Soldier name
- * @return, pointer to Rule for the Soldier
- */
-RuleSoldier* Ruleset::getSoldier(const std::string& name) const
-{
-	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
-	if (i != _soldiers.end())
-		return i->second;
-
-	return NULL;
-}
-
-/**
  * Gets the list of commendations.
  * @return, map of commendations
  */
@@ -1561,13 +1547,27 @@ std::map<std::string, RuleCommendations*> Ruleset::getCommendations() const
 }
 
 /**
- * Returns the info about a specific unit (non-Soldier).
- * @param name - reference a Unit type
+ * Returns general info about Soldiers.
+ * @param type - reference a Soldier type
+ * @return, pointer to Rule for the Soldier
+ */
+RuleSoldier* Ruleset::getSoldier(const std::string& type) const
+{
+	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(type);
+	if (i != _soldiers.end())
+		return i->second;
+
+	return NULL;
+}
+
+/**
+ * Returns general info about non-Soldier units.
+ * @param type - reference a Unit type
  * @return, pointer to the Unit rules
  */
-Unit* Ruleset::getUnit(const std::string& name) const
+Unit* Ruleset::getUnit(const std::string& type) const
 {
-	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
+	std::map<std::string, Unit*>::const_iterator i = _units.find(type);
 	if (i != _units.end())
 		return i->second;
 

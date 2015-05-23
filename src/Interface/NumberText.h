@@ -28,7 +28,7 @@ namespace OpenXcom
 
 /**
  * Number digits displayed on the screen.
- * Takes a number and displays it using a simple hard-coded font.
+ * @note Takes a number and displays it using a simple hard-coded font.
  */
 class NumberText
 	:

@@ -259,14 +259,13 @@ protected:
 		/// Gets mapdatafile for battlescape games.
 		MapDataSet* getMapDataSet(const std::string& name);
 
-		/// Gets soldier unit rules.
-		RuleSoldier* getSoldier(const std::string& name) const;
-
 		/// Gets commendation rules.
 		std::map<std::string, RuleCommendations*> getCommendations() const;
 
-		/// Gets generated unit rules.
-		Unit* getUnit(const std::string& name) const;
+		/// Gets soldier unit rules.
+		RuleSoldier* getSoldier(const std::string& type) const;
+		/// Gets non-soldier unit rules.
+		Unit* getUnit(const std::string& type) const;
 
 		/// Gets alien race rules.
 		AlienRace* getAlienRace(const std::string& name) const;

@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class Bar;
 class Base;
+class NumberText;
 class Soldier;
 class Surface;
 class Text;
@@ -63,6 +64,7 @@ private:
 		* _barPsiStrength,
 		* _barPsiSkill;
 	Base* _base;
+	NumberText* _battleOrder;
 	Soldier* _soldier;
 	Surface
 		* _bg,

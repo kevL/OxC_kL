@@ -63,7 +63,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleunit for a certain type of soldier.
- * @note The only type is "XCOM".
+ * @note The only type is 'XCOM'.
  * @param type - reference defining a type
  */
 RuleSoldier::RuleSoldier(const std::string& type)
@@ -101,9 +101,8 @@ void RuleSoldier::load(const YAML::Node& node)
 }
 
 /**
- * Returns the language string that names this unit.
- * Each unit type has a unique name.
- * @return, name
+ * Returns the Soldier type.
+ * @return, type
  */
 std::string RuleSoldier::getType() const
 {
@@ -165,7 +164,7 @@ int RuleSoldier::getFloatHeight() const
 }
 
 /**
- * Gets the armor name.
+ * Gets the armor issued to this type of soldier.
  * @return, the armor name
  */
 std::string RuleSoldier::getArmor() const

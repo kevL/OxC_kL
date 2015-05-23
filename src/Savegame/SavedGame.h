@@ -28,6 +28,7 @@
 
 #include "CraftId.h"
 #include "GameTime.h"
+#include "Soldier.h"
 
 #include "../Ruleset/RuleAlienMission.h"
 
@@ -486,7 +487,7 @@ private:
 		Soldier* inspectSoldiers(
 				std::vector<Soldier*>& soldiers,
 				std::vector<Soldier*>& participants,
-				int soldierRank);
+				SoldierRank soldierRank);
 
 		///  Returns the list of alien bases.
 		std::vector<AlienBase*>* getAlienBases();

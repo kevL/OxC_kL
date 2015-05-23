@@ -39,7 +39,6 @@
 #include "ResearchProject.h"
 #include "SavedBattleGame.h"
 #include "SerializationHelper.h"
-#include "Soldier.h"
 #include "SoldierDead.h"
 #include "Transfer.h"
 #include "Ufo.h"
@@ -2001,27 +2000,29 @@ void SavedGame::processSoldier(
 Soldier* SavedGame::inspectSoldiers(
 		std::vector<Soldier*>& soldiers,
 		std::vector<Soldier*>& participants,
-		int soldierRank)
+		SoldierRank soldierRank)
 {
-	int high = 0;
 	Soldier* fragBait = NULL;
+	int
+		highScore = 0,
+		testScore;
 
 	for (std::vector<Soldier*>::const_iterator
 			i = soldiers.begin();
 			i != soldiers.end();
 			++i)
 	{
-		if ((*i)->getRank() == static_cast<SoldierRank>(soldierRank))
+		if ((*i)->getRank() == soldierRank)
 		{
-			const int score = getSoldierScore(*i);
-			if (score > high
+			testScore = getSoldierScore(*i);
+			if (testScore > highScore
 				&& (Options::fieldPromotions == false
 					|| std::find(
 							participants.begin(),
 							participants.end(),
 							*i) != participants.end()))
 			{
-				high = score;
+				highScore = testScore;
 				fragBait = *i;
 			}
 		}
@@ -2111,10 +2112,10 @@ private:
 		{}
 
 		/// Match against stored values.
-		bool operator()(const AlienMission* mis) const
+		bool operator() (const AlienMission* mission) const
 		{
-			return mis->getRegion() == _region
-				&& mis->getRules().getObjective() == _objective;
+			return mission->getRegion() == _region
+				&& mission->getRules().getObjective() == _objective;
 		}
 };
 
@@ -2130,11 +2131,11 @@ AlienMission* SavedGame::findAlienMission(
 {
 	std::vector<AlienMission*>::const_iterator
 			mission = std::find_if(
-							_activeMissions.begin(),
-							_activeMissions.end(),
-							matchRegionAndType(
-											region,
-											objective));
+								_activeMissions.begin(),
+								_activeMissions.end(),
+								matchRegionAndType(
+												region,
+												objective));
 	if (mission == _activeMissions.end())
 		return NULL;
 

@@ -89,7 +89,7 @@ private:
 		/// Gets the elevation of the soldier when it's flying.
 		int getFloatHeight() const;
 
-		/// Gets the armor name.
+		/// Gets the armor issued to this type of soldier.
 		std::string getArmor() const;
 
 		/// Gets the gender ratio struct.

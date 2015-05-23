@@ -35,6 +35,7 @@
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Bar.h"
+#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -77,6 +78,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_rank			= new Surface(26, 23, 4, 4);
 	_gender			= new Surface(7, 7, 240, 8);
+
+	_battleOrder	= new NumberText(15, 5, 4, -6);
 
 	_btnPrev		= new TextButton(29, 16, 0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
@@ -164,6 +167,8 @@ SoldierInfoState::SoldierInfoState(
 	add(_bg);
 	add(_rank);
 	add(_gender);
+	add(_battleOrder);
+
 	add(_btnOk,				"button",			"soldierInfo");
 	add(_btnPrev,			"button",			"soldierInfo");
 	add(_btnNext,			"button",			"soldierInfo");
@@ -338,10 +343,10 @@ void SoldierInfoState::init()
 	_soldier = _list->at(_soldierId);
 	_edtSoldier->setText(_soldier->getName());
 
-	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(_soldier->getRankSprite())->setX(0);
-	texture->getFrame(_soldier->getRankSprite())->setY(0);
-	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	srt->getFrame(_soldier->getRankSprite())->setX(0);
+	srt->getFrame(_soldier->getRankSprite())->setY(0);
+	srt->getFrame(_soldier->getRankSprite())->blit(_rank);
 
 	_gender->clear();
 	Surface* gender;
@@ -352,6 +357,8 @@ void SoldierInfoState::init()
 	if (gender != NULL)
 		gender->blit(_gender);
 
+	_battleOrder->setValue(_soldierId + 1);
+
 
 	const UnitStats
 		* const initial = _soldier->getInitStats(),
@@ -361,10 +368,10 @@ void SoldierInfoState::init()
 	armored += *(_soldier->getArmor()->getStats());
 
 	// kL: special handling for stats that could go below initial setting.
-	std::wostringstream ss;
+	std::wostringstream woststr;
 
-	ss << armored.tu;
-	_numTimeUnits->setText(ss.str());
+	woststr << armored.tu;
+	_numTimeUnits->setText(woststr.str());
 	_barTimeUnits->setValue(armored.tu);
 	if (initial->tu > current->tu)
 		_barTimeUnits->setMax(initial->tu);
@@ -381,9 +388,9 @@ void SoldierInfoState::init()
 			_barTimeUnits->setValue2(armored.tu);
 	}
 
-	ss.str(L"");
-	ss << armored.stamina;
-	_numStamina->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.stamina;
+	_numStamina->setText(woststr.str());
 	_barStamina->setValue(armored.stamina);
 	if (initial->stamina > current->stamina)
 		_barStamina->setMax(initial->stamina);
@@ -400,9 +407,9 @@ void SoldierInfoState::init()
 			_barStamina->setValue2(armored.stamina);
 	}
 
-	ss.str(L"");
-	ss << armored.health;
-	_numHealth->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.health;
+	_numHealth->setText(woststr.str());
 	_barHealth->setValue(armored.health);
 	if (initial->health > current->health)
 		_barHealth->setMax(initial->health);
@@ -419,9 +426,9 @@ void SoldierInfoState::init()
 			_barHealth->setValue2(armored.health);
 	}
 
-	ss.str(L"");
-	ss << armored.bravery;
-	_numBravery->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.bravery;
+	_numBravery->setText(woststr.str());
 	_barBravery->setValue(armored.bravery);
 	if (initial->bravery > current->bravery)
 		_barBravery->setMax(initial->bravery);
@@ -438,9 +445,9 @@ void SoldierInfoState::init()
 			_barBravery->setValue2(armored.bravery);
 	}
 
-	ss.str(L"");
-	ss << armored.reactions;
-	_numReactions->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.reactions;
+	_numReactions->setText(woststr.str());
 	_barReactions->setValue(armored.reactions);
 	if (initial->reactions > current->reactions)
 		_barReactions->setMax(initial->reactions);
@@ -457,9 +464,9 @@ void SoldierInfoState::init()
 			_barReactions->setValue2(armored.reactions);
 	}
 
-	ss.str(L"");
-	ss << armored.firing;
-	_numFiring->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.firing;
+	_numFiring->setText(woststr.str());
 	_barFiring->setValue(armored.firing);
 	if (initial->firing > current->firing)
 		_barFiring->setMax(initial->firing);
@@ -476,9 +483,9 @@ void SoldierInfoState::init()
 			_barFiring->setValue2(armored.firing);
 	}
 
-	ss.str(L"");
-	ss << armored.throwing;
-	_numThrowing->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.throwing;
+	_numThrowing->setText(woststr.str());
 	_barThrowing->setValue(armored.throwing);
 	if (initial->throwing > current->throwing)
 		_barThrowing->setMax(initial->throwing);
@@ -495,9 +502,9 @@ void SoldierInfoState::init()
 			_barThrowing->setValue2(armored.throwing);
 	}
 
-	ss.str(L"");
-	ss << armored.melee;
-	_numMelee->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.melee;
+	_numMelee->setText(woststr.str());
 	_barMelee->setValue(armored.melee);
 	if (initial->melee > current->melee)
 		_barMelee->setMax(initial->melee);
@@ -514,9 +521,9 @@ void SoldierInfoState::init()
 			_barMelee->setValue2(armored.melee);
 	}
 
-	ss.str(L"");
-	ss << armored.strength;
-	_numStrength->setText(ss.str());
+	woststr.str(L"");
+	woststr << armored.strength;
+	_numStrength->setText(woststr.str());
 	_barStrength->setValue(armored.strength);
 	if (initial->strength > current->strength)
 		_barStrength->setMax(initial->strength);
@@ -588,13 +595,13 @@ void SoldierInfoState::init()
 
 	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
 
-	if (current->psiSkill >= minPsi
-		|| (Options::psiStrengthEval == true
-			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
+	if (current->psiSkill >= minPsi)
+//		|| (Options::psiStrengthEval == true
+//			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 	{
-		ss.str(L"");
-		ss << armored.psiStrength;
-		_numPsiStrength->setText(ss.str());
+		woststr.str(L"");
+		woststr << armored.psiStrength;
+		_numPsiStrength->setText(woststr.str());
 		_barPsiStrength->setValue(armored.psiStrength);
 		if (initial->psiStrength > current->psiStrength)
 			_barPsiStrength->setMax(initial->psiStrength);
@@ -622,9 +629,9 @@ void SoldierInfoState::init()
 
 	if (current->psiSkill >= minPsi)
 	{
-		ss.str(L"");
-		ss << armored.psiSkill;
-		_numPsiSkill->setText(ss.str());
+		woststr.str(L"");
+		woststr << armored.psiSkill;
+		_numPsiSkill->setText(woststr.str());
 		_barPsiSkill->setValue(armored.psiSkill);
 		if (initial->psiSkill > current->psiSkill)
 			_barPsiSkill->setMax(initial->psiSkill);

@@ -418,10 +418,10 @@ DebriefingState::DebriefingState()
 			{
 				//Log(LOG_INFO) << ". . . dead";
 				sol = NULL;	// Zero out the BattleUnit from the geoscape Soldiers list
-								// in this State; it's already gone from his/her former Base.
-								// This makes them ineligible for promotion.
-								// PS, there is no 'geoscape Soldiers list' really; it's
-								// just a variable stored in each xCom-agent/BattleUnit ....
+							// in this State; it's already gone from his/her former Base.
+							// This makes them ineligible for promotion.
+							// PS, there is no 'geoscape Soldiers list' really; it's
+							// just a variable stored in each xCom-agent/BattleUnit ....
 				SoldierDead* deadSoldier;
 
 				for (std::vector<SoldierDead*>::const_iterator

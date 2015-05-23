@@ -50,6 +50,8 @@
 
 #include "../Resource/XcomResourcePack.h"
 
+#include "../Ruleset/RuleSoldier.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -299,13 +301,15 @@ void SoldiersState::btnSortClick(Action*)
 	const UnitStats* stats;
 	int weight;
 
+//	const int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
+
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
-			++i) // old values from CWXCED:
+			++i)
 	{
 		stats = (*i)->getCurrentStats();
-		weight = stats->tu			*  8
+		weight = stats->tu			*  8 // old values from CWXCED
 			   + stats->stamina		*  5
 			   + stats->health		*  7
 			   + stats->bravery		*  3
@@ -313,10 +317,13 @@ void SoldiersState::btnSortClick(Action*)
 			   + stats->firing		* 19
 			   + stats->throwing	*  1
 			   + stats->strength	* 24
-			   + stats->psiStrength	* 22
-			   + stats->psiSkill	* 11
 			   + stats->melee		*  2;
 		// also: rank, missions, kills
+
+//		if (stats->psiSkill >= minPsi)
+		if (stats->psiSkill != 0) // don't include Psi unless revealed.
+			weight += stats->psiStrength * 22
+					+ stats->psiSkill	 * 11;
 
 		soldiersOrdered.insert(std::pair<int, Soldier*>(weight, *i));
 		// NOTE: unsure if multimap loses a player-preferred
