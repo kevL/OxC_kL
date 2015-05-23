@@ -5157,7 +5157,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1430951464 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1432350976 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5172,26 +5172,22 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1432348901 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1432351220 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	"SoldierDiaryOverviewState.h"
 	"SackSoldierState.h"
-	"SellState.h"
 	"SoldierArmorState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Bar.h"
 	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextEdit.h"
-	"../Menu/ErrorMessageState.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleArmor.h"
-	"../Ruleset/RuleCraft.h"
 	"../Ruleset/RuleSoldier.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
@@ -7538,7 +7534,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedGame.h"
 
-1432346658 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1432351851 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -7576,7 +7572,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1432347805 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1432352085 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"

@@ -74,7 +74,7 @@ UfoDetectedState::UfoDetectedState(
 		_hyper(hyper),
 		_delayPop(true)
 {
-	state->getGlobe()->rotateStop();
+	_state->getGlobe()->rotateStop();
 
 	if (_ufo->getId() == 0) // generate UFO-ID
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
@@ -279,7 +279,7 @@ UfoDetectedState::UfoDetectedState(
 		int
 			texture,
 			shade;
-		state->getGlobe()->getPolygonTextureAndShade( // look up polygon's texture & shade
+		_state->getGlobe()->getPolygonTextureAndShade( // look up polygon's texture & shade
 												_ufo->getLongitude(),
 												_ufo->getLatitude(),
 												&texture,
