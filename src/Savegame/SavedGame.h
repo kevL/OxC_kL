@@ -118,7 +118,7 @@ struct MissionStatistics
 
 	std::map<int, int> injuryList;
 
-	GameTime time;
+	GameTime timeStat;
 
 
 	///
@@ -135,7 +135,7 @@ struct MissionStatistics
 	///
 	void load(const YAML::Node& node)
 	{
-		time.load(node["time"]);
+		timeStat.load(node["time"]);
 
 		id			= node["id"]			.as<int>(id);
 		region		= node["region"]		.as<std::string>(region);
@@ -157,7 +157,7 @@ struct MissionStatistics
 		YAML::Node node;
 
 		node["id"]			= id;
-		node["time"]		= time.save();
+		node["time"]		= timeStat.save();
 		node["region"]		= region;
 		node["country"]		= country;
 		node["type"]		= type;
@@ -178,7 +178,7 @@ struct MissionStatistics
 	/// cTor.
 	explicit MissionStatistics(const YAML::Node& node)
 		:
-			time(0,0,0,0,0,0,0)
+			timeStat(0,0,0,0,0,0,0)
 	{
 		load(node);
 	}
@@ -187,7 +187,7 @@ struct MissionStatistics
 	MissionStatistics()
 		:
 			id(0),
-			time(0,0,0,0,0,0,0),
+			timeStat(0,0,0,0,0,0,0),
 			region("STR_REGION_UNKNOWN"),
 			country("STR_UNKNOWN"),
 			ufo("NO_UFO"),

@@ -736,7 +736,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 	std::vector<Craft*>::const_iterator ptrCraft;
 
-	_missionStatistics->time = *_gameSave->getTime();
+	_missionStatistics->timeStat = *_gameSave->getTime();
 	_missionStatistics->type = battleSave->getMissionType();
 
 	if (_gameSave->getMonthsPassed() != -1) // Do all aLienRace types here for SoldierDiary stat.

@@ -297,9 +297,9 @@ void SoldierDiaryOverviewState::init()
 
 				strStatus << " - " << tr((*i)->rating.c_str());
 
-				strDay << (*i)->time.getDayString(_game->getLanguage());
-				strMonth << tr((*i)->time.getMonthString().c_str());
-				strYear << (*i)->time.getYear();
+				strDay << (*i)->timeStat.getDayString(_game->getLanguage());
+				strMonth << tr((*i)->timeStat.getMonthString().c_str());
+				strYear << (*i)->timeStat.getYear();
 
 				_lstDiary->addRow(
 								5,

@@ -1044,14 +1044,14 @@ bool TileEngine::canTargetUnit(
 										tile->getPosition().z * 24);
 	const int
 		targetMinHeight = targetVoxel.z
-						- tile->getTerrainLevel()
-						+ unit->getFloatHeight(),
+							- tile->getTerrainLevel()
+							+ unit->getFloatHeight(),
 		// if there is an other unit on target tile, assume check against that unit's height
 		xOffset = unit->getPosition().x - tile->getPosition().x,
 		yOffset = unit->getPosition().y - tile->getPosition().y,
 		targetSize = unit->getArmor()->getSize() - 1;
 	int
-		unitRadius = unit->getLoftemps(), // width == loft in default loftemps set
+		unitRadius = unit->getLoftemps(), // width == LoFT in default LoFTemps set
 		targetMaxHeight = targetMinHeight,
 		targetCenterHeight,
 		heightRange;
