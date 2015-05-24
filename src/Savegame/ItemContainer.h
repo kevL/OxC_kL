@@ -63,7 +63,7 @@ private:
 				int qty = 1);
 
 		/// Gets an item in the container.
-		int getItem(const std::string& type) const;
+		int getItemQty(const std::string& type) const;
 
 		/// Gets the total quantity of items in the container.
 		int getTotalQuantity() const;

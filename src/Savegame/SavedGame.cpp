@@ -1476,7 +1476,7 @@ void SavedGame::getAvailableResearchProjects(
 		}
 
 		if (resRule->needItem() == true
-			&& base->getItems()->getItem(resRule->getName()) == 0)
+			&& base->getItems()->getItemQty(resRule->getName()) == 0)
 		{
 			continue;
 		}

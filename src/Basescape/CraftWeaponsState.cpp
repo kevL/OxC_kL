@@ -133,24 +133,24 @@ CraftWeaponsState::CraftWeaponsState(
 			_weaponRules.push_back(cwRule);
 
 			std::wostringstream
-				ss,
-				ss2;
+				woststr1,
+				woststr2;
 
-			if (_base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
-				ss << _base->getItems()->getItem(cwRule->getLauncherItem());
+			if (_base->getItems()->getItemQty(cwRule->getLauncherItem()) != 0)
+				woststr1 << _base->getItems()->getItemQty(cwRule->getLauncherItem());
 			else
-				ss << L"-";
+				woststr1 << L"-";
 
 			if (cwRule->getClipItem().empty() == false)
-				ss2 << _base->getItems()->getItem(cwRule->getClipItem());
+				woststr2 << _base->getItems()->getItemQty(cwRule->getClipItem());
 			else
-				ss2 << tr("STR_NOT_AVAILABLE");
+				woststr2 << tr("STR_NOT_AVAILABLE");
 
 			_lstWeapons->addRow(
 								3,
 								tr(cwRule->getType()).c_str(),
-								ss.str().c_str(),
-								ss2.str().c_str());
+								woststr1.str().c_str(),
+								woststr2.str().c_str());
 		}
 	}
 
@@ -200,7 +200,7 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 	if (cwRule != NULL
 		&& (cw == NULL
 			|| cw->getRules() != cwRule)
-		&& _base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
+		&& _base->getItems()->getItemQty(cwRule->getLauncherItem()) > 0)
 	{
 		closeState = true;
 

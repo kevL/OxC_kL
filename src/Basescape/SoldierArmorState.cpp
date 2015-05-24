@@ -110,13 +110,13 @@ SoldierArmorState::SoldierArmorState(
 			++i)
 	{
 		armorRule = _game->getRuleset()->getArmor(*i);
-		if (_base->getItems()->getItem(armorRule->getStoreItem()) > 0)
+		if (_base->getItems()->getItemQty(armorRule->getStoreItem()) != 0)
 		{
 			_armors.push_back(armorRule);
 
 			std::wostringstream woststr;
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				woststr << _base->getItems()->getItem(armorRule->getStoreItem());
+				woststr << _base->getItems()->getItemQty(armorRule->getStoreItem());
 			else
 				woststr << L"-";
 

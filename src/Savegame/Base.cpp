@@ -2212,7 +2212,7 @@ void Base::setupDefenses()
 				const RuleItem* const ammoRule = _rules->getItem(itemRule->getCompatibleAmmo()->front());
 				const int ammoPerVehicle = ammoRule->getClipSize();
 
-				const int baseQty = _items->getItem(ammoRule->getType()) / ammoPerVehicle;
+				const int baseQty = _items->getItemQty(ammoRule->getType()) / ammoPerVehicle;
 				if (baseQty == 0)
 				{
 					++i;

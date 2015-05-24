@@ -195,7 +195,7 @@ AlienContainmentState::AlienContainmentState(
 			i != itemList.end();
 			++i)
 	{
-		qtyAliens = _base->getItems()->getItem(*i);					// get Qty of each item at this base
+		qtyAliens = _base->getItems()->getItemQty(*i);				// get Qty of each item at this base
 		if (qtyAliens > 0											// if item exists at this base
 			&& _game->getRuleset()->getItem(*i)->isAlien() == true)	// and it's a live alien...
 		{
@@ -426,7 +426,7 @@ void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
  */
 int AlienContainmentState::getQuantity()
 {
-	return _base->getItems()->getItem(_aliens[_sel]);
+	return _base->getItems()->getItemQty(_aliens[_sel]);
 }
 
 /**

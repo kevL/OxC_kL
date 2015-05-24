@@ -964,7 +964,7 @@ std::string Craft::rearm(const Ruleset* rules)
 			test.clear();
 
 			const std::string clip = (*i)->getRules()->getClipItem();
-			const int baseClips = _base->getItems()->getItem(clip);
+			const int baseClips = _base->getItems()->getItemQty(clip);
 
 			if (clip.empty() == true)
 				(*i)->rearm();
@@ -1267,7 +1267,7 @@ int Craft::getDowntime(bool& delayed)
 				const std::string clip = (*i)->getRules()->getClipItem();
 				if (clip.empty() == false)
 				{
-					int baseQty = _base->getItems()->getItem(clip);
+					int baseQty = _base->getItems()->getItemQty(clip);
 					if (baseQty < reqQty)
 					{
 						for (std::vector<Transfer*>::const_iterator // check Transfers
@@ -1307,7 +1307,7 @@ int Craft::getDowntime(bool& delayed)
 			const std::string fuel = _crRule->getRefuelItem();
 			if (fuel.empty() == false)
 			{
-				int baseQty = _base->getItems()->getItem(fuel);
+				int baseQty = _base->getItems()->getItemQty(fuel);
 				if (baseQty < reqQty) // check Transfers
 				{
 					for (std::vector<Transfer*>::const_iterator // check Transfers

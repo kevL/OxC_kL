@@ -264,7 +264,7 @@ SellState::SellState(
 			i != itemList.end();
 			++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
+		int qty = _base->getItems()->getItemQty(*i);
 
 /*		if (Options::storageLimitsEnforced == true
 			&& origin == OPT_BATTLESCAPE)
@@ -753,7 +753,7 @@ int SellState::getQuantity() // private.
 			return _base->getEngineers();
 
 		case SELL_ITEM:
-			qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
+			qty = _base->getItems()->getItemQty(_items[getItemIndex(_sel)]);
 
 			if (Options::storageLimitsEnforced == true
 				&& _origin == OPT_BATTLESCAPE)
@@ -772,7 +772,7 @@ int SellState::getQuantity() // private.
 						j != _base->getCrafts()->end();
 						++j)
 				{
-					qty += (*j)->getItems()->getItem(_items[getItemIndex(_sel)]);
+					qty += (*j)->getItems()->getItemQty(_items[getItemIndex(_sel)]);
 				}
 			}
 

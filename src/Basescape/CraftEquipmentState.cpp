@@ -194,13 +194,13 @@ CraftEquipmentState::CraftEquipmentState(
 		if (itRule->isFixed() == true)
 			craftQty = craft->getVehicleCount(*i);
 		else
-			craftQty = craft->getItems()->getItem(*i);
+			craftQty = craft->getItems()->getItemQty(*i);
 
 		if (itRule->getBigSprite() > -1
 			&& itRule->getBattleType() != BT_NONE
 			&& itRule->getBattleType() != BT_CORPSE
 			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true
-			&& (_base->getItems()->getItem(*i) > 0
+			&& (_base->getItems()->getItemQty(*i) > 0
 				|| craftQty > 0))
 		{
 			_items.push_back(*i);
@@ -209,7 +209,7 @@ CraftEquipmentState::CraftEquipmentState(
 			woststr2.str(L"");
 
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
-				woststr1 << _base->getItems()->getItem(*i);
+				woststr1 << _base->getItems()->getItemQty(*i);
 			else
 				woststr1 << "-";
 
@@ -408,14 +408,14 @@ void CraftEquipmentState::updateQuantity()
 	if (itemRule->isFixed() == true)
 		craftQty = craft->getVehicleCount(_items[_sel]);
 	else
-		craftQty = craft->getItems()->getItem(_items[_sel]);
+		craftQty = craft->getItems()->getItemQty(_items[_sel]);
 
 	std::wostringstream
 		woststr1,
 		woststr2;
 
 	if (_game->getSavedGame()->getMonthsPassed() > -1)
-		woststr1 << _base->getItems()->getItem(_items[_sel]);
+		woststr1 << _base->getItems()->getItemQty(_items[_sel]);
 	else
 		woststr1 << "-";
 
@@ -473,7 +473,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		if (itRule->isFixed() == true)
 			craftQty = craft->getVehicleCount(_items[_sel]);
 		else
-			craftQty = craft->getItems()->getItem(_items[_sel]);
+			craftQty = craft->getItems()->getItemQty(_items[_sel]);
 
 		if (craftQty == 0)
 			return;
@@ -587,7 +587,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			baseQty = change;
 		}
 		else
-			baseQty = _base->getItems()->getItem(_items[_sel]);
+			baseQty = _base->getItems()->getItemQty(_items[_sel]);
 
 		if (baseQty < 1)
 			return;
@@ -630,7 +630,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					if (_game->getSavedGame()->getMonthsPassed() == -1)
 						baseQty = 1;
 					else
-						baseQty = _base->getItems()->getItem(ammoRule->getType()) / clipSize;
+						baseQty = _base->getItems()->getItemQty(ammoRule->getType()) / clipSize;
 
 					change = std::min( // maximum number of Vehicles, w/ full Ammo.
 									change,

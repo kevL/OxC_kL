@@ -60,6 +60,7 @@ ManufactureStartState::ManufactureStartState(
 	_screen = false;
 
 	_window					= new Window(this, 320, 170, 0, 15);
+
 	_txtTitle				= new Text(300, 16, 10, 26);
 
 	_txtManHour				= new Text(280, 9, 20, 45);
@@ -68,13 +69,13 @@ ManufactureStartState::ManufactureStartState(
 
 	_txtRequiredItemsTitle	= new Text(280, 9, 20, 75);
 
-	_txtItemNameColumn		= new Text(60, 9, 40, 85);
+	_txtItemNameColumn		= new Text(60, 9,  40, 85);
 	_txtUnitRequiredColumn	= new Text(60, 9, 180, 85);
 	_txtUnitAvailableColumn	= new Text(60, 9, 240, 85);
 
 	_lstRequiredItems		= new TextList(240, 57, 40, 100);
 
-	_btnCancel				= new TextButton(130, 16, 20, 160);
+	_btnCancel				= new TextButton(130, 16,  20, 160);
 	_btnStart				= new TextButton(130, 16, 170, 160);
 
 	setInterface("allocateManufacture");
@@ -133,7 +134,7 @@ ManufactureStartState::ManufactureStartState(
 
 	_lstRequiredItems->setColumns(3, 140, 60, 40);
 
-	const ItemContainer* const itemContainer (base->getItems()); // init.
+	const ItemContainer* const baseItems (base->getItems()); // init.
 //	int row = 0;
 	for (std::map<std::string, int>::const_iterator
 			i = requiredItems.begin();
@@ -144,8 +145,8 @@ ManufactureStartState::ManufactureStartState(
 			woststr1,
 			woststr2;
 		woststr1 << L'\x01' << i->second;
-		woststr2 << L'\x01' << itemContainer->getItem(i->first);
-		productionPossible &= (itemContainer->getItem(i->first) >= i->second);
+		woststr2 << L'\x01' << baseItems->getItemQty(i->first);
+		productionPossible &= (baseItems->getItemQty(i->first) >= i->second);
 		_lstRequiredItems->addRow(
 								3,
 								tr(i->first).c_str(),

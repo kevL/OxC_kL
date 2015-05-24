@@ -368,7 +368,7 @@ void TransferItemsState::init()
 			i != itemList.end();
 			++i)
 	{
-		const int baseQty = _baseFrom->getItems()->getItem(*i);
+		const int baseQty = _baseFrom->getItems()->getItemQty(*i);
 		if (baseQty > 0)
 		{
 			_items.push_back(*i);
@@ -378,7 +378,7 @@ void TransferItemsState::init()
 			itRule = rules->getItem(*i);
 			std::string itType = itRule->getType();
 
-			int destQty = _baseTo->getItems()->getItem(*i);
+			int destQty = _baseTo->getItems()->getItemQty(*i);
 
 			for (std::vector<Transfer*>::const_iterator // add transfers
 					j = _baseTo->getTransfers()->begin();
@@ -911,11 +911,11 @@ int TransferItemsState::getQuantity() const // private.
 {
 	switch (getType(_sel))
 	{
-		case TRANSFER_SOLDIER:
-		case TRANSFER_CRAFT:		return 1;
+//		case TRANSFER_SOLDIER:
+//		case TRANSFER_CRAFT:		return 1;
 		case TRANSFER_SCIENTIST:	return _baseFrom->getScientists();
 		case TRANSFER_ENGINEER:		return _baseFrom->getEngineers();
-		case TRANSFER_ITEM:			return _baseFrom->getItems()->getItem(_items[getItemIndex(_sel)]);
+		case TRANSFER_ITEM:			return _baseFrom->getItems()->getItemQty(_items[getItemIndex(_sel)]);
 	}
 
 	return 1;

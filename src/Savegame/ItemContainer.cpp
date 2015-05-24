@@ -101,7 +101,7 @@ void ItemContainer::removeItem(
  * @param type - reference an item type
  * @return, item quantity
  */
-int ItemContainer::getItem(const std::string& type) const
+int ItemContainer::getItemQty(const std::string& type) const
 {
 	if (type.empty() == false)
 	{

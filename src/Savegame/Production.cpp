@@ -152,7 +152,7 @@ bool Production::enoughMaterials(Base* base) // private.
 			i != _prodRule->getRequiredItems().end();
 			++i)
 	{
-		if (base->getItems()->getItem(i->first) < i->second)
+		if (base->getItems()->getItemQty(i->first) < i->second)
 			return false;
 	}
 

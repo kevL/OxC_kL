@@ -145,7 +145,7 @@ StoresState::StoresState(Base* base)
 	{
 		if (rules->getItem(*i)->isAlien() == false)
 		{
-			qty = _base->getItems()->getItem(*i);
+			qty = _base->getItems()->getItemQty(*i);
 			if (qty > 0)
 			{
 				color = Palette::blockOffset(13)+10; // blue

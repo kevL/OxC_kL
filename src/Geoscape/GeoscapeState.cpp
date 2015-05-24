@@ -2487,7 +2487,7 @@ void GeoscapeState::time30Minutes()
 					(*j)->refuel();
 				else
 				{
-					if ((*i)->getItems()->getItem(refuelItem) > 0)
+					if ((*i)->getItems()->getItemQty(refuelItem) > 0)
 					{
 						(*j)->refuel();
 						(*i)->getItems()->removeItem(refuelItem);

@@ -283,7 +283,7 @@ PurchaseState::PurchaseState(Base* base)
 			_quantities.push_back(0);
 			_items.push_back(st);
 
-			int tQty = _base->getItems()->getItem(st);
+			int tQty = _base->getItems()->getItemQty(st);
 			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
@@ -333,7 +333,7 @@ PurchaseState::PurchaseState(Base* base)
 			_quantities.push_back(0);
 			_items.push_back(st);
 
-			int tQty = _base->getItems()->getItem(st);
+			int tQty = _base->getItems()->getItemQty(st);
 			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
@@ -397,7 +397,7 @@ PurchaseState::PurchaseState(Base* base)
 			_quantities.push_back(0);
 			_items.push_back(*i);
 
-			int totalQty = _base->getItems()->getItem(*i);
+			int totalQty = _base->getItems()->getItemQty(*i);
 
 			for (std::vector<Transfer*>::const_iterator // add transfer items
 					j = _base->getTransfers()->begin();
