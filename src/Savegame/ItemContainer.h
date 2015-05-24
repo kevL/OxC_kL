@@ -32,20 +32,17 @@ class Ruleset;
 
 
 /**
- * Represents the items contained by a certain entity,
- * like base stores, craft equipment, etc.
- * Handles all necessary item management tasks.
+ * Represents the items contained by a certain entity like base stores, craft equipment, etc.
+ * @note Handles all necessary item management tasks.
  */
 class ItemContainer
 {
 
 private:
-
-	std::map<std::string, int> _qty;
+	std::map<std::string, int> _contents;
 
 
 	public:
-
 		/// Creates an empty item container.
 		ItemContainer();
 		/// Cleans up the item container.

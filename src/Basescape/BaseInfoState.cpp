@@ -44,6 +44,7 @@
 #include "../Ruleset/RuleRegion.h"
 
 #include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 
@@ -310,7 +311,7 @@ void BaseInfoState::init()
 	}
 
 	_btnTransfers->setVisible(_base->getTransfers()->empty() == false);
-	_btnStores->setVisible(_base->getItems() != NULL);
+	_btnStores->setVisible(_base->getItems()->getTotalQuantity() != 0);
 
 	std::wostringstream
 		woststr1,

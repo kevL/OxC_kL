@@ -46,6 +46,8 @@ class NewManufactureListState
 {
 
 private:
+	size_t _scroll;
+
 	Base* _base;
 //	ComboBox* _cbxCategory;
 	Text

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1432458875 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1432461118 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -17,6 +17,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleRegion.h"
 	"../Savegame/Base.h"
+	"../Savegame/ItemContainer.h"
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
@@ -261,7 +262,7 @@
 1431470632 f:\git\openxcom\src\basescape\monthlycostsstate.h
 	"../Engine/State.h"
 
-1431469777 f:\git\openxcom\src\basescape\storesstate.h
+1432461263 f:\git\openxcom\src\basescape\storesstate.h
 	"../Engine/State.h"
 
 1431469781 f:\git\openxcom\src\basescape\transfersstate.h
@@ -4400,7 +4401,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1432308190 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1432458336 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4645,7 +4646,7 @@
 	<windows.h>
 	<time.h>
 
-1430954038 f:\git\openxcom\src\savegame\itemcontainer.h
+1432460736 f:\git\openxcom\src\savegame\itemcontainer.h
 
 1431829902 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
@@ -4888,7 +4889,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1431470585 f:\git\openxcom\src\basescape\newmanufactureliststate.h
+1432463517 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\engine\screen.h
@@ -4969,7 +4970,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1431495148 f:\git\openxcom\src\basescape\newresearchliststate.h
+1432463737 f:\git\openxcom\src\basescape\newresearchliststate.h
 	"../Engine/State.h"
 
 1430149549 f:\git\openxcom\src\basescape\researchinfostate.h
@@ -5269,7 +5270,7 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1432459285 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1432461768 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
@@ -7671,7 +7672,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1431632853 source:f:\git\openxcom\src\interface\textlist.cpp
+1432463399 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -8743,7 +8744,7 @@
 	"GameTime.h"
 	"../Engine/Language.h"
 
-1430954046 source:f:\git\openxcom\src\savegame\itemcontainer.cpp
+1432461002 source:f:\git\openxcom\src\savegame\itemcontainer.cpp
 	"ItemContainer.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"

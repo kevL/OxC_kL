@@ -44,7 +44,7 @@ ItemContainer::~ItemContainer()
  */
 void ItemContainer::load(const YAML::Node& node)
 {
-	_qty = node.as<std::map<std::string, int> >(_qty);
+	_contents = node.as<std::map<std::string, int> >(_contents);
 }
 
 /**
@@ -54,7 +54,7 @@ void ItemContainer::load(const YAML::Node& node)
 YAML::Node ItemContainer::save() const
 {
 	YAML::Node node;
-	node = _qty;
+	node = _contents;
 
 	return node;
 }
@@ -68,13 +68,13 @@ void ItemContainer::addItem(
 		const std::string& type,
 		int qty)
 {
-	if (type.empty() == true)
-		return;
+	if (type.empty() == false)
+	{
+		if (_contents.find(type) == _contents.end())
+			_contents[type] = 0;
 
-	if (_qty.find(type) == _qty.end())
-		_qty[type] = 0;
-
-	_qty[type] += qty;
+		_contents[type] += qty;
+	}
 }
 
 /**
@@ -86,16 +86,14 @@ void ItemContainer::removeItem(
 		const std::string& type,
 		int qty)
 {
-	if (type.empty() == true
-		|| _qty.find(type) == _qty.end())
+	if (type.empty() == false
+		&& _contents.find(type) != _contents.end())
 	{
-		return;
+		if (qty < _contents[type])
+			_contents[type] -= qty;
+		else
+			_contents.erase(type);
 	}
-
-	if (qty < _qty[type])
-		_qty[type] -= qty;
-	else
-		_qty.erase(type);
 }
 
 /**
@@ -105,14 +103,14 @@ void ItemContainer::removeItem(
  */
 int ItemContainer::getItem(const std::string& type) const
 {
-	if (type.empty() == true)
-		return 0;
+	if (type.empty() == false)
+	{
+		std::map<std::string, int>::const_iterator i = _contents.find(type);
+		if (i != _contents.end())
+			return i->second;
+	}
 
-	std::map<std::string, int>::const_iterator i = _qty.find(type);
-	if (i == _qty.end())
-		return 0;
-
-	return i->second;
+	return 0;
 }
 
 /**
@@ -124,8 +122,8 @@ int ItemContainer::getTotalQuantity() const
 	int total = 0;
 
 	for (std::map<std::string, int>::const_iterator
-			i = _qty.begin();
-			i != _qty.end();
+			i = _contents.begin();
+			i != _contents.end();
 			++i)
 	{
 		total += i->second;
@@ -144,8 +142,8 @@ double ItemContainer::getTotalSize(const Ruleset* const rule) const
 	double total = 0;
 
 	for (std::map<std::string, int>::const_iterator
-			i = _qty.begin();
-			i != _qty.end();
+			i = _contents.begin();
+			i != _contents.end();
 			++i)
 	{
 		total += rule->getItem(i->first)->getSize() * i->second;
@@ -160,7 +158,7 @@ double ItemContainer::getTotalSize(const Ruleset* const rule) const
  */
 std::map<std::string, int>* ItemContainer::getContents()
 {
-	return &_qty;
+	return &_contents;
 }
 
 }

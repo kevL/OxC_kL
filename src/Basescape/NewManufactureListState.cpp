@@ -55,15 +55,16 @@ namespace OpenXcom
 NewManufactureListState::NewManufactureListState(
 		Base* base)
 	:
-		_base(base)
+		_base(base),
+		_scroll(0)
 {
 	_screen = false;
 
 	_window			= new Window(this, 320, 156, 0, 22, POPUP_BOTH);
+
 	_txtTitle		= new Text(300, 16, 10, 30);
 
 //	_cbxCategory	= new ComboBox(this, 146, 16, 166, 46);
-
 	_txtItem		= new Text(80, 9, 16, 46);
 	_txtCategory	= new Text(80, 9, 172, 46);
 
@@ -87,16 +88,16 @@ NewManufactureListState::NewManufactureListState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setText(tr("STR_PRODUCTION_ITEMS"));
-	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
 	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
+	_lstManufacture->setColumns(2, 148, 129);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setSelectable();
-	_lstManufacture->setColumns(2, 148, 129);
 	_lstManufacture->setMargin(16);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
 
@@ -141,17 +142,19 @@ NewManufactureListState::NewManufactureListState(
 }
 
 /**
- * Initializes state (fills list of possible productions).
+ * Initializes state - fills list with possible productions.
  */
 void NewManufactureListState::init()
 {
 	State::init();
+
 	fillProductionList();
+	_lstManufacture->scrollTo(_scroll);
 }
 
 /**
  * Returns to the previous screen.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void NewManufactureListState::btnCancelClick(Action*)
 {
@@ -160,10 +163,12 @@ void NewManufactureListState::btnCancelClick(Action*)
 
 /**
  * Opens the Production settings screen.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
 */
 void NewManufactureListState::lstProdClick(Action*)
 {
+	_scroll = _lstManufacture->getScroll();
+
 /*	RuleManufacture* rule = NULL;
 	for (std::vector<RuleManufacture*>::iterator
 			it = _possibleProductions.begin();

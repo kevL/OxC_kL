@@ -47,6 +47,7 @@ class NewResearchListState
 
 private:
 	int _cutoff;
+	size_t _scroll;
 
 	Base* _base;
 	Text* _txtTitle;
@@ -59,7 +60,6 @@ private:
 
 	///
 	void onSelectProject(Action* action);
-
 	/// Fills the ResearchProject list with possible ResearchProjects.
 	void fillProjectList();
 

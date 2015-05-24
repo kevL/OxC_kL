@@ -54,7 +54,8 @@ NewResearchListState::NewResearchListState(
 		Base* base)
 	:
 		_base(base),
-		_cutoff(-1)
+		_cutoff(-1),
+		_scroll(0)
 {
 	_screen = false;
 
@@ -75,13 +76,13 @@ NewResearchListState::NewResearchListState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_NEW_RESEARCH_PROJECTS"));
+	_txtTitle->setAlign(ALIGN_CENTER);
 
+	_lstResearch->setColumns(1, 180);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setSelectable();
 	_lstResearch->setMargin();
-	_lstResearch->setColumns(1, 180);
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);
 
@@ -98,7 +99,9 @@ NewResearchListState::NewResearchListState(
 void NewResearchListState::init()
 {
 	State::init();
+
 	fillProjectList();
+	_lstResearch->scrollTo(_scroll);
 }
 
 /**
@@ -111,12 +114,14 @@ void NewResearchListState::btnCancelClick(Action*)
 }
 
 /**
- * Selects the RuleResearch to work on or restarts an old ResearchProject
- * in which case the spent & cost values are preserved.
+ * Selects the RuleResearch to work on.
+ * @note If an offline ResearchProject is selected the spent & cost values are preserved.
  * @param action - pointer to an Action
  */
 void NewResearchListState::onSelectProject(Action*) // private.
 {
+	_scroll = _lstResearch->getScroll();
+
 	if (static_cast<int>(_lstResearch->getSelectedRow()) > _cutoff)
 		_game->pushState(new ResearchInfoState( // brand new project
 											_base,

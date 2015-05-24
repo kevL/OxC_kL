@@ -47,9 +47,9 @@ private:
 		* _txtBaseLabel,
 		* _txtItem,
 		* _txtQuantity,
-		* _txtTotal,
 		* _txtSpaceUsed,
-		* _txtTitle;
+		* _txtTitle,
+		* _txtTotal;
 	TextButton
 		* _btnOk,
 		* _btnTransfers;

@@ -1557,17 +1557,17 @@ size_t TextList::getScroll()
  */
 void TextList::scrollTo(size_t scroll)
 {
-	if (_scrollable == false)
-		return;
+	if (_scrollable == true)
+	{
+		_scroll = static_cast<size_t>(std::max(
+											0,
+											std::min(
+													static_cast<int>(_rows.size() - _visibleRows),
+													static_cast<int>(scroll))));
 
-	_scroll = static_cast<size_t>(std::max(
-										0,
-										std::min(
-												static_cast<int>(_rows.size() - _visibleRows),
-												static_cast<int>(scroll))));
-
-	draw(); // can't just set _redraw here because Reasons
-	updateArrows();
+		draw(); // can't just set _redraw here because Reasons
+		updateArrows();
+	}
 }
 
 /**
