@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1432426618 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1432458875 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -5172,7 +5172,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1432428713 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1432455728 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	"SoldierDiaryOverviewState.h"
 	"SackSoldierState.h"
@@ -5269,7 +5269,7 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1432426618 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1432459285 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
@@ -6376,7 +6376,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432450006 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1432457078 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -8833,7 +8833,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1432449345 source:f:\git\openxcom\src\savegame\soldier.cpp
+1432457488 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11136,7 +11136,7 @@
 1431472248 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
 	"../Engine/State.h"
 
-1432426618 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
+1432455811 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
 	"SoldierInfoDeadState.h"
 	"SoldierDiaryOverviewState.h"
 	"../Engine/Action.h"

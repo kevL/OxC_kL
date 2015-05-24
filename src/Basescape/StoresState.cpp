@@ -99,6 +99,7 @@ StoresState::StoresState(Base* base)
 	_btnTransfers->onKeyboardPress(
 					(ActionHandler)& StoresState::btnIncTransClick,
 					Options::keyOk);
+	_btnTransfers->setVisible(_base->getTransfers()->empty() == false);
 
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_STORES"));
@@ -122,7 +123,7 @@ StoresState::StoresState(Base* base)
 	_lstStores->setMargin();
 
 
-	const SavedGame* const sg = _game->getSavedGame();
+	const SavedGame* const gameSave = _game->getSavedGame();
 	const Ruleset* const rules = _game->getRuleset();
 	const RuleItem
 		* itRule = NULL,
@@ -132,7 +133,9 @@ StoresState::StoresState(Base* base)
 
 	int
 		row = 0,
+		qty,
 		clipSize;
+	Uint8 color;
 
 	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -140,10 +143,10 @@ StoresState::StoresState(Base* base)
 			i != items.end();
 			++i)
 	{
-		const int qty = _base->getItems()->getItem(*i);
+		qty = _base->getItems()->getItem(*i);
 		if (qty > 0)
 		{
-			Uint8 color = Palette::blockOffset(13)+10; // blue
+			color = Palette::blockOffset(13)+10; // blue
 			itRule = rules->getItem(*i);
 
 			std::wstring item = tr(*i);
@@ -204,48 +207,47 @@ StoresState::StoresState(Base* base)
 				color = Palette::blockOffset(15)+6; // purple
 			}
 
-			if (sg->isResearched(itRule->getType()) == false				// not researched or is research exempt
-				&& (sg->isResearched(itRule->getRequirements()) == false	// and has requirements to use that have not been researched
-					|| rules->getItem(*i)->isAlien() == true					// or is an alien
-					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
-					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
-				&& craftOrdnance == false)									// and is not craft ordnance
-//				&& itRule->isResearchExempt() == false)						// and is not research exempt
+			if (gameSave->isResearched(itRule->getType()) == false				// not researched or is research exempt
+				&& (gameSave->isResearched(itRule->getRequirements()) == false	// and has requirements to use that have not been researched
+					|| rules->getItem(*i)->isAlien() == true						// or is an alien
+					|| itRule->getBattleType() == BT_CORPSE							// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)							// or is not a battlefield item
+				&& craftOrdnance == false)										// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow
 			}
 
-			std::wostringstream ss1;
-			ss1 << qty;
+			std::wostringstream woststr1;
+			woststr1 << qty;
 
 			if (rules->getItem(*i)->isAlien() == true)
 			{
 				_lstStores->addRow(
 								3,
 								item.c_str(),
-								ss1.str().c_str(),
+								woststr1.str().c_str(),
 								L"-");
 			}
 			else
 			{
-				std::wostringstream ss2;
-				ss2 << std::fixed << std::setprecision(1) << (static_cast<double>(qty) * itRule->getSize());
+				std::wostringstream woststr2;
+				woststr2 << std::fixed << std::setprecision(1) << (static_cast<double>(qty) * itRule->getSize());
 				_lstStores->addRow(
 								3,
 								item.c_str(),
-								ss1.str().c_str(),
-								ss2.str().c_str());
+								woststr1.str().c_str(),
+								woststr2.str().c_str());
 			}
-			_lstStores->setRowColor(row, color);
-
-			++row;
+			_lstStores->setRowColor(
+								row++,
+								color);
 		}
 	}
 
-	std::wostringstream ss;
-	ss << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
-	_txtTotal->setText(ss.str());
+	std::wostringstream woststr;
+	woststr << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
+	_txtTotal->setText(woststr.str());
 }
 
 /**

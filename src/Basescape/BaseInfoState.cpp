@@ -65,59 +65,69 @@ BaseInfoState::BaseInfoState(
 		_baseList(_game->getSavedGame()->getBases())
 {
 	_bg					= new Surface(320,200);
+
 	_mini				= new MiniBaseView(128, 16, 182, 8, MBV_INFO);
 
-	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
-	_btnTransfers		= new TextButton(72, 14, 86, 179);
+	_btnMonthlyCosts	= new TextButton(72, 14,  10, 179);
+	_btnTransfers		= new TextButton(72, 14,  86, 179);
 	_btnStores			= new TextButton(72, 14, 162, 179);
 	_btnOk				= new TextButton(72, 14, 238, 179);
 
 	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
-	_txtPersonnel		= new Text(171, 9, 8, 31);
-	_txtHoverBase		= new Text(73, 9, 179, 31);
-	_txtRegion			= new Text(60, 9, 252, 31);
+	_txtPersonnel		= new Text(171, 9,   8, 31);
+	_txtHoverBase		= new Text( 73, 9, 179, 31);
+	_txtRegion			= new Text( 60, 9, 252, 31);
 
-	_txtSoldiers		= new Text(114, 9, 8, 41);
-	_numSoldiers		= new Text(40, 9, 126, 42);
-	_barSoldiers		= new Bar(280, 5, 166, 43);
-	_txtScientists		= new Text(114, 9, 8, 51);
-	_numScientists		= new Text(40, 9, 126, 52);
-	_barScientists		= new Bar(280, 5, 166, 53);
-	_txtEngineers		= new Text(114, 9, 8, 61);
-	_numEngineers		= new Text(40, 9, 126, 62);
-	_barEngineers		= new Bar(280, 5, 166, 63);
+	_txtSoldiers		= new Text(114, 9,   8, 41);
+	_numSoldiers		= new Text( 40, 9, 126, 42);
+	_barSoldiers		= new Bar( 280, 5, 166, 43);
+
+	_txtScientists		= new Text(114, 9,   8, 51);
+	_numScientists		= new Text( 40, 9, 126, 52);
+	_barScientists		= new Bar( 280, 5, 166, 53);
+
+	_txtEngineers		= new Text(114, 9,   8, 61);
+	_numEngineers		= new Text( 40, 9, 126, 62);
+	_barEngineers		= new Bar( 280, 5, 166, 63);
 
 	_txtSpace			= new Text(300, 9, 8, 72);
 
-	_txtQuarters		= new Text(114, 9, 8, 83);
-	_numQuarters		= new Text(40, 9, 126, 84);
-	_barQuarters		= new Bar(280, 5, 166, 85);
-	_txtLaboratories	= new Text(114, 9, 8, 93);
-	_numLaboratories	= new Text(40, 9, 126, 94);
-	_barLaboratories	= new Bar(280, 5, 166, 95);
-	_txtWorkshops		= new Text(114, 9, 8, 103);
-	_numWorkshops		= new Text(40, 9, 126, 104);
-	_barWorkshops		= new Bar(280, 5, 166, 105);
-	_txtContainment		= new Text(114, 9, 8, 113);
-	_numContainment		= new Text(40, 9, 126, 114);
-	_barContainment		= new Bar(280, 5, 166, 115);
-	_txtStores			= new Text(114, 9, 8, 123);
-	_numStores			= new Text(40, 9, 126, 124);
-	_barStores			= new Bar(280, 5, 166, 125);
-	_txtHangars			= new Text(114, 9, 8, 133);
-	_numHangars			= new Text(40, 9, 126, 134);
-	_barHangars			= new Bar(280, 5, 166, 135);
+	_txtQuarters		= new Text(114, 9,   8, 83);
+	_numQuarters		= new Text( 40, 9, 126, 84);
+	_barQuarters		= new Bar( 280, 5, 166, 85);
 
-	_txtLongRange		= new Text(114, 9, 8, 147);
-	_numLongRange		= new Text(40, 9, 126, 148);
-	_barLongRange		= new Bar(280, 5, 166, 149);
-	_txtShortRange		= new Text(114, 9, 8, 157);
-	_numShortRange		= new Text(40, 9, 126, 158);
-	_barShortRange		= new Bar(280, 5, 166, 159);
-	_txtDefense			= new Text(114, 9, 8, 167);
-	_numDefense			= new Text(40, 9, 126, 168);
-	_barDefense			= new Bar(280, 5, 166, 169);
+	_txtLaboratories	= new Text(114, 9,   8, 93);
+	_numLaboratories	= new Text( 40, 9, 126, 94);
+	_barLaboratories	= new Bar( 280, 5, 166, 95);
+
+	_txtWorkshops		= new Text(114, 9,   8, 103);
+	_numWorkshops		= new Text( 40, 9, 126, 104);
+	_barWorkshops		= new Bar( 280, 5, 166, 105);
+
+	_txtContainment		= new Text(114, 9,   8, 113);
+	_numContainment		= new Text( 40, 9, 126, 114);
+	_barContainment		= new Bar( 280, 5, 166, 115);
+
+	_txtStores			= new Text(114, 9,   8, 123);
+	_numStores			= new Text( 40, 9, 126, 124);
+	_barStores			= new Bar( 280, 5, 166, 125);
+
+	_txtHangars			= new Text(114, 9,   8, 133);
+	_numHangars			= new Text( 40, 9, 126, 134);
+	_barHangars			= new Bar( 280, 5, 166, 135);
+
+	_txtLongRange		= new Text(114, 9,   8, 147);
+	_numLongRange		= new Text( 40, 9, 126, 148);
+	_barLongRange		= new Bar( 280, 5, 166, 149);
+
+	_txtShortRange		= new Text(114, 9,   8, 157);
+	_numShortRange		= new Text( 40, 9, 126, 158);
+	_barShortRange		= new Bar( 280, 5, 166, 159);
+
+	_txtDefense			= new Text(114, 9,   8, 167);
+	_numDefense			= new Text( 40, 9, 126, 168);
+	_barDefense			= new Bar( 280, 5, 166, 169);
 
 	setInterface("baseInfo");
 
@@ -299,6 +309,9 @@ void BaseInfoState::init()
 		}
 	}
 
+	_btnTransfers->setVisible(_base->getTransfers()->empty() == false);
+	_btnStores->setVisible(_base->getItems() != NULL);
+
 	std::wostringstream
 		woststr1,
 		woststr2,
@@ -313,7 +326,8 @@ void BaseInfoState::init()
 		woststr11,
 		woststr12;
 
-	int var,
+	int
+		var,
 		var2;
 
 	var = _base->getTotalSoldiers();

@@ -177,6 +177,7 @@ BasescapeState::BasescapeState(
 
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)& BasescapeState::btnMemorialClick);
+	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
 	_btnCrafts->setText(tr("STR_EQUIP_CRAFT"));
 	_btnCrafts->onMouseClick((ActionHandler)& BasescapeState::btnCraftsClick);
@@ -340,7 +341,6 @@ void BasescapeState::init()
 	_btnFacilities->setVisible(hasFunds);
 
 	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false);
-	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
 
 	std::string track = OpenXcom::res_MUSIC_GEO_GLOBE;

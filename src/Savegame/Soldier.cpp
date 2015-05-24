@@ -646,8 +646,8 @@ void Soldier::trainPsi()
 */ // kL_end.
 
 /**
- * Trains this Soldier's psychic abilities once per day - 'anytimePsiTraining'.
- * @note Called from GeoscapeState per 1-day.
+ * Trains this Soldier's psychic abilities once per day.
+ * @note Called from GeoscapeState::time1Day() if Options::anytimePsiTraining is enabled.
  * @return, true if Soldier's psi-stat(s) increased
  */
 bool Soldier::trainPsiDay()
@@ -667,12 +667,10 @@ bool Soldier::trainPsiDay()
 			if (RNG::percent(PSI_PCT) == true)
 			{
 				ret = true;
-				int gain = RNG::generate(
-									_rules->getMinStats().psiSkill,
-									_rules->getMaxStats().psiSkill);
-
 				_currentStats.psiSkill =
-				_initialStats.psiSkill = gain;
+				_initialStats.psiSkill = RNG::generate(
+												_rules->getMinStats().psiSkill,
+												_rules->getMaxStats().psiSkill);
 			}
 		}
 		else // Psi unlocked already.
@@ -687,19 +685,17 @@ bool Soldier::trainPsiDay()
 //				++_gainPsiSkl;
 			}
 
-			if (Options::allowPsiStrengthImprovement == true)
+			if (_currentStats.psiStrength < _rules->getStatCaps().psiStrength
+				&& Options::allowPsiStrengthImprovement == true)
 			{
-				if (_currentStats.psiStrength < _rules->getStatCaps().psiStrength)
+				pct = std::max(
+							1,
+							500 / _currentStats.psiStrength);
+				if (RNG::percent(pct) == true)
 				{
-					pct = std::max(
-								1,
-								500 / _currentStats.psiStrength);
-					if (RNG::percent(pct) == true)
-					{
-						ret = true;
-						++_currentStats.psiStrength;
-//						++_gainPsiStr;
-					}
+					ret = true;
+					++_currentStats.psiStrength;
+//					++_gainPsiStr;
 				}
 			}
 		}
