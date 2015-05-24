@@ -71,35 +71,35 @@ CraftInfoState::CraftInfoState(
 		_craftId(craftId)
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
-		_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+		_window		= new Window(this, 320,200, 0,0, POPUP_BOTH);
 	else
-		_window		= new Window(this, 320, 200, 0, 0, POPUP_NONE);
+		_window		= new Window(this, 320,200, 0,0, POPUP_NONE);
 
 	_edtCraft		= new TextEdit(this, 160, 16, 80, 10);
-	_txtBaseLabel	= new Text(80, 9, 16, 10);
+	_txtBaseLabel	= new Text(80, 9,  16, 10);
 	_txtStatus		= new Text(80, 9, 224, 10);
 
-	_txtFuel		= new Text(80, 17, 16, 28);
-	_txtRadar		= new Text(80, 9, 120, 28);
+	_txtFuel		= new Text(80, 17,  16, 28);
+	_txtRadar		= new Text(80,  9, 120, 28);
 	_txtDamage		= new Text(80, 17, 226, 28);
 
-	_btnW1			= new TextButton(24, 32, 16, 48);
+	_btnW1			= new TextButton(24, 32,  16, 48);
 	_btnW2			= new TextButton(24, 32, 282, 48);
-	_txtW1Name		= new Text(78, 9, 46, 48);
-	_txtW2Name		= new Text(78, 9, 204, 48);
-	_txtW1Ammo		= new Text(60, 25, 46, 64);
+	_txtW1Name		= new Text(78,  9,  46, 48);
+	_txtW2Name		= new Text(78,  9, 204, 48);
+	_txtW1Ammo		= new Text(60, 25,  46, 64);
 	_txtW2Ammo		= new Text(60, 25, 204, 64);
 
-	_btnCrew		= new TextButton(64, 16, 16, 96);
-	_btnEquip		= new TextButton(64, 16, 16, 120);
-	_btnArmor		= new TextButton(64, 16, 16, 144);
+	_btnCrew		= new TextButton( 64, 16, 16,  96);
+	_btnEquip		= new TextButton( 64, 16, 16, 120);
+	_btnArmor		= new TextButton( 64, 16, 16, 144);
 	_btnInventory	= new TextButton(220, 16, 84, 144);
 
-	_sprite			= new Surface(32, 38, 144, 50);
-	_weapon1		= new Surface(15, 17, 121, 63);
-	_weapon2		= new Surface(15, 17, 184, 63);
-	_crew			= new Surface(220, 18, 85, 95);
-	_equip			= new Surface(220, 18, 85, 119);
+	_sprite			= new Surface( 32, 38, 144,  50);
+	_weapon1		= new Surface( 15, 17, 121,  63);
+	_weapon2		= new Surface( 15, 17, 184,  63);
+	_crew			= new Surface(220, 18,  85,  95);
+	_equip			= new Surface(220, 18,  85, 119);
 
 	_txtCost		= new Text(150, 9, 24, 165);
 

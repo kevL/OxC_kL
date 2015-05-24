@@ -2350,12 +2350,12 @@ bool SavedBattleGame::placeUnitNearPosition(
 /*kL: uhh no.
 	if (unit->getMovementType() == MT_FLY)
 	{
-		Tile* tile = getTile(pos + Position(0, 0, 1));
+		Tile* tile = getTile(pos + Position(0,0,1));
 		if (tile
 			&& tile->hasNoFloor(getTile(pos))
 			&& setUnitPosition(
 							unit,
-							pos + Position(0, 0, 1)))
+							pos + Position(0,0,1)))
 		{
 			return true;
 		}

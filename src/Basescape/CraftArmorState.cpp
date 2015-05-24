@@ -64,7 +64,7 @@ CraftArmorState::CraftArmorState(
 		_base(base),
 		_craftID(craftID)
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 	_txtTitle		= new Text(300, 17, 11, 10);
 	_txtBaseLabel	= new Text(80, 9, 224, 10);
 

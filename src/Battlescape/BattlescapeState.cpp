@@ -2422,7 +2422,7 @@ void BattlescapeState::btnPsiClick(Action* action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0, 0, 0);
+		Action a = Action(&ev, 0.,0., 0,0);
 		action->getSender()->mousePress(&a, this);
 
 		if		(_reserve == _btnReserveNone)	_battleGame->setReservedAction(BA_NONE);
@@ -2451,7 +2451,7 @@ void BattlescapeState::btnPsiClick(Action* action)
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
 
-		Action a = Action(&ev, 0.0, 0.0, 0, 0);
+		Action a = Action(&ev, 0.,0., 0,0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 //		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
@@ -2979,7 +2979,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 //	square.h = 2;
 
 //	_kneel->drawRect(&square, Palette::blockOffset(5)+12);
-	_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
+	_kneel->drawRect(0,0, 2,2, Palette::blockOffset(5)+12);
 } */
 
 /**
@@ -2987,8 +2987,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
  */
 /* void BattlescapeState::drawWoundIndicator() // kL
 {
-	_btnWounds->drawRect(0, 0, 15, 12, 15);		// black border
-	_btnWounds->drawRect(1, 1, 13, 10, color);	// inner red square
+	_btnWounds->drawRect(0,0, 15,12, 15);		// black border
+	_btnWounds->drawRect(1,1, 13,10, color);	// inner red square
 } */
 
 /**

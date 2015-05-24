@@ -799,7 +799,7 @@ int Pathfinding::getTUCostPath(
 
 
 			// this will later be used to re-init the start Tile
-			Position vertOffset (0, 0, 0); // init.
+			Position vertOffset (0,0,0); // init.
 
 			belowDest = _battleSave->getTile(*destPos + unitOffset + Position(0,0,-1)),
 			aboveDest = _battleSave->getTile(*destPos + unitOffset + Position(0,0, 1));

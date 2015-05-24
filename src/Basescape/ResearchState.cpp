@@ -65,7 +65,7 @@ ResearchState::ResearchState(
 		_state(state),
 		_baseList(_game->getSavedGame()->getBases())
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 	_mini			= new MiniBaseView(128, 16, 180, 27, MBV_RESEARCH);
 
 	_txtTitle		= new Text(320, 17, 0, 10);

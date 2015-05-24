@@ -64,7 +64,7 @@ BaseInfoState::BaseInfoState(
 		_state(state),
 		_baseList(_game->getSavedGame()->getBases())
 {
-	_bg					= new Surface(320, 200);
+	_bg					= new Surface(320,200);
 	_mini				= new MiniBaseView(128, 16, 182, 8, MBV_INFO);
 
 	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);

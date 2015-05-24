@@ -65,8 +65,8 @@ Soldier::Soldier(
 		_missions(0),
 		_kills(0),
 		_recovery(0),
-		_gainPsiSkl(0),
-		_gainPsiStr(0),
+//		_gainPsiSkl(0),
+//		_gainPsiStr(0),
 		_psiTraining(false),
 		_recentlyPromoted(false)
 {
@@ -172,10 +172,10 @@ void Soldier::load(
 	_kills			= node["kills"]						.as<int>(_kills);
 	_recovery		= node["recovery"]					.as<int>(_recovery);
 	_psiTraining	= node["psiTraining"]				.as<bool>(_psiTraining);
-	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
-	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
+//	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
+//	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
 
-	RuleArmor* armor = rule->getArmor(node["armor"]		.as<std::string>());
+	RuleArmor* armor = rule->getArmor(node["armor"].as<std::string>());
 	if (armor == NULL)
 		armor = rule->getArmor("STR_ARMOR_NONE_UC");
 
@@ -227,8 +227,8 @@ YAML::Node Soldier::save() const
 	node["missions"]		= _missions;
 	node["kills"]			= _kills;
 	node["armor"]			= _armor->getType();
-	node["gainPsiSkl"]		= _gainPsiSkl;
-	node["gainPsiStr"]		= _gainPsiStr;
+//	node["gainPsiSkl"]		= _gainPsiSkl;
+//	node["gainPsiStr"]		= _gainPsiStr;
 
 	if (_craft != NULL)
 		node["craft"]		= _craft->saveId();
@@ -286,7 +286,7 @@ UnitStats* Soldier::getCurrentStats()
 
 /**
  * Gets this Soldier's unique ID.
- * Each soldier can be identified by its ID (not its name).
+ * @note Each soldier is uniquely identified by its ID.
  * @return, unique ID
  */
 int Soldier::getId() const
@@ -550,9 +550,10 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 
 /**
  * Trains this Soldier's psychic abilities after 1 month.
- * kL_note: called from GeoscapeState, per 1month
- * kL_note: I don't use this, btw.
+ * @note Called from GeoscapeState per 1month.
+ * kL_note: I don't use this.
  */
+/*
 void Soldier::trainPsi()
 {
 	const int
@@ -593,7 +594,7 @@ void Soldier::trainPsi()
 	_currentStats.psiStrength += _gainPsiStr;
 	if (_currentStats.psiStrength > capPsiStr)
 		_currentStats.psiStrength = capPsiStr;
-}
+} */
 /* kL_begin:
 // http://www.ufopaedia.org/index.php?title=Psi_Skill
 // -End of Month PsiLab Increase-
@@ -645,61 +646,62 @@ void Soldier::trainPsi()
 */ // kL_end.
 
 /**
- * Trains this Soldier's psychic abilities ('anytimePsiTraining' option) after 1 day.
- * Called from GeoscapeState per 1-day.
- * @return, true if Soldier's stat(s) increased
+ * Trains this Soldier's psychic abilities once per day - 'anytimePsiTraining'.
+ * @note Called from GeoscapeState per 1-day.
+ * @return, true if Soldier's psi-stat(s) increased
  */
 bool Soldier::trainPsiDay()
 {
-	_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
-
-	if (_psiTraining == false)
-		return false;
-
-//	if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill)	// hard cap. Note this auto-caps psiStrength also
-//		return false;												// REMOVED: Allow psi to train past cap in the PsiLabs.
-
 	bool ret = false;
 
-	const int rulesMin = _rules->getMinStats().psiSkill;
-	if (_currentStats.psiSkill >= rulesMin) // Psi unlocked.
+	if (_psiTraining == true)
 	{
-		int chance = std::max(
-							1,
-							500 / _currentStats.psiSkill);
-		if (RNG::percent(chance) == true)
-		{
-			ret = true;
-			++_gainPsiSkl;
-			++_currentStats.psiSkill;
-		}
+		static const int PSI_PCT = 5; // % per day per soldier to become psionic-active
 
-		if (Options::allowPsiStrengthImprovement == true)
+//		_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
+//		if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill)	// hard cap. Note this auto-caps psiStrength also
+//			return false;												// REMOVED: Allow psi to train past cap in PsiLabs.
+
+		if (_currentStats.psiSkill == 0)
 		{
-			if (_currentStats.psiStrength < _rules->getStatCaps().psiStrength)
+			if (RNG::percent(PSI_PCT) == true)
 			{
-				chance = std::max(
-								1,
-								500 / _currentStats.psiStrength);
-				if (RNG::percent(chance) == true)
-				{
-					ret = true;
-					++_gainPsiStr;
-					++_currentStats.psiStrength;
-				}
-			}
-		}
-	}
-	else // start here.
-	{
-		if (RNG::percent(5) == true) // 5% per day per soldier (to become psionic-active)
-		{
-			ret = true;
-			_gainPsiSkl = RNG::generate(
-									rulesMin,
+				ret = true;
+				int gain = RNG::generate(
+									_rules->getMinStats().psiSkill,
 									_rules->getMaxStats().psiSkill);
 
-			_currentStats.psiSkill =_initialStats.psiSkill = _gainPsiSkl;
+				_currentStats.psiSkill =
+				_initialStats.psiSkill = gain;
+			}
+		}
+		else // Psi unlocked already.
+		{
+			int pct = std::max(
+							1,
+							500 / _currentStats.psiSkill);
+			if (RNG::percent(pct) == true)
+			{
+				ret = true;
+				++_currentStats.psiSkill;
+//				++_gainPsiSkl;
+			}
+
+			if (Options::allowPsiStrengthImprovement == true)
+			{
+				if (_currentStats.psiStrength < _rules->getStatCaps().psiStrength)
+				{
+					pct = std::max(
+								1,
+								500 / _currentStats.psiStrength);
+					if (RNG::percent(pct) == true)
+					{
+						ret = true;
+						++_currentStats.psiStrength;
+//						++_gainPsiStr;
+					}
+				}
+			}
 		}
 	}
 
@@ -727,25 +729,25 @@ void Soldier::togglePsiTraining()
  * Gets this Soldier's psiSkill improvement during the current month.
  * @return, psi-skill improvement
  */
-int Soldier::getImprovement()
+/* int Soldier::getImprovement()
 {
 	return _gainPsiSkl;
-}
+} */
 
 /**
  * Gets this Soldier's psiStrength improvement during the current month.
  * @return, psi-strength improvement
  */
-int Soldier::getPsiStrImprovement()
+/* int Soldier::getPsiStrImprovement()
 {
 	return _gainPsiStr;
-}
+} */
 
 /**
  * Returns this Soldier's death time.
- * @return, pointer to death data, NULL if no death has occured
+ * @return, pointer to death data - NULL if no death has occured
  */
-/*kL SoldierDeath* Soldier::getDeath() const
+/* SoldierDeath* Soldier::getDeath() const
 {
 	return _death;
 } */
@@ -756,21 +758,21 @@ int Soldier::getPsiStrImprovement()
  */
 void Soldier::die(SavedGame* const gameSave)
 {
-	SoldierDeath* deathTime = new SoldierDeath();
+	SoldierDeath* const deathTime = new SoldierDeath();
 	deathTime->setTime(*gameSave->getTime());
 
-	SoldierDead* deadSoldier = new SoldierDead(
-											_name,
-											_id,
-											_rank,
-											_gender,
-											_look,
-											_missions,
-											_kills,
-											deathTime,
-											_initialStats,
-											_currentStats,
-											*_diary); // base if I want to...
+	SoldierDead* const deadSoldier = new SoldierDead(
+												_name,
+												_id,
+												_rank,
+												_gender,
+												_look,
+												_missions,
+												_kills,
+												deathTime,
+												_initialStats,
+												_currentStats,
+												*_diary); // base if I want to...
 
 	gameSave->getDeadSoldiers()->push_back(deadSoldier);
 }

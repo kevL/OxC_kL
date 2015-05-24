@@ -674,13 +674,13 @@ static int zoomSurface2X_SSE2(
 bool Zoom::haveSSE2()
 {
 #ifdef __GNUC__
-	unsigned int CPUInfo[4] = {0, 0, 0, 0};
+	unsigned int CPUInfo[4] = {0,0,0,0};
 	__get_cpuid(1, CPUInfo, CPUInfo+1, CPUInfo+2, CPUInfo+3);
 #elif _WIN32
 	int CPUInfo[4];
 	__cpuid(CPUInfo, 1);
 #else
-	unsigned int CPUInfo[4] = {0, 0, 0, 0};
+	unsigned int CPUInfo[4] = {0,0,0,0};
 #endif
 
 	return (CPUInfo[3] & 0x04000000) ? true : false;
@@ -732,7 +732,7 @@ void Zoom::flipWithZoom(
 	}
 	else if (topBlackBand <= 0 && bottomBlackBand <= 0 && leftBlackBand <= 0 && rightBlackBand <= 0)
 	{
-		_zoomSurfaceY(src, dst, 0, 0);
+		_zoomSurfaceY(src, dst, 0,0);
 	}
 	else if (dst->w - leftBlackBand - rightBlackBand == src->w && dst->h - topBlackBand - bottomBlackBand == src->h)
 	{
@@ -746,8 +746,8 @@ void Zoom::flipWithZoom(
 											dst->w - leftBlackBand - rightBlackBand,
 											dst->h - topBlackBand - bottomBlackBand,
 											dst->format->BitsPerPixel,
-											0, 0, 0, 0);
-		_zoomSurfaceY(src, tmp, 0, 0);
+											0,0,0,0);
+		_zoomSurfaceY(src, tmp, 0,0);
 		if (src->format->palette != NULL)
 		{
 			SDL_SetPalette(tmp, SDL_LOGPAL|SDL_PHYSPAL, src->format->palette->colors, 0, src->format->palette->ncolors);

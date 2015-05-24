@@ -54,7 +54,7 @@ namespace OpenXcom
  */
 SoldierMemorialState::SoldierMemorialState()
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtRecruited	= new Text(110, 9, 16, 25);
 	_txtLost		= new Text(110, 9, 210, 25);

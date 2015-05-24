@@ -69,7 +69,7 @@ MonthlyReportState::MonthlyReportState()
 		_ratingLast(0),
 		_gameSave(_game->getSavedGame())
 {
-	_window		= new Window(this, 320, 200);
+	_window		= new Window(this, 320,200);
 	_txtTitle	= new Text(300, 17, 10, 8);
 
 	_txtMonth	= new Text(110, 9, 16, 24);

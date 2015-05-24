@@ -57,7 +57,7 @@ ListLoadOriginalState::ListLoadOriginalState()
 {
 	_screen = false;
 
-	_window = new Window(this, 320, 200);
+	_window = new Window(this, 320,200);
 	_btnNew = new TextButton(80, 16, 60, 172);
 	_btnCancel = new TextButton(80, 16, 180, 172);
 	_txtTitle = new Text(310, 17, 5, 8);

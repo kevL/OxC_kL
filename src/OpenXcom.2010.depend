@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1431978156 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -4360,7 +4360,7 @@
 	<sstream>
 	<string>
 
-1431724525 f:\git\openxcom\src\savegame\soldier.h
+1432448877 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/Unit.h"
 
 1432068221 f:\git\openxcom\src\ruleset\unit.h
@@ -4565,7 +4565,7 @@
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1432156375 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4601,7 +4601,7 @@
 1432001041 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1432259244 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4658,14 +4658,14 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1431473351 f:\git\openxcom\src\battlescape\battlescapegame.h
+1432426840 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1430563619 f:\git\openxcom\src\battlescape\position.h
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1432260316 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1432426773 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4708,7 +4708,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1432156356 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -4729,7 +4729,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1432156319 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
@@ -4819,7 +4819,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\researchproject.h
 
-1431727598 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1432426820 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4870,7 +4870,7 @@
 1430149549 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1431729522 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4923,7 +4923,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1431982411 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
 	"MonthlyCostsState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5028,7 +5028,7 @@
 1430149549 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1430932430 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5077,7 +5077,7 @@
 	<algorithm>
 	<cstdint>
 
-1430237608 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"AlienContainmentState.h"
 	"BasescapeState.h"
@@ -5132,7 +5132,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1430974669 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5172,7 +5172,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1432351220 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1432428713 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	"SoldierDiaryOverviewState.h"
 	"SackSoldierState.h"
@@ -5180,13 +5180,14 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Sound.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Bar.h"
 	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextEdit.h"
-	"../Resource/ResourcePack.h"
+	"../Resource/XcomResourcePack.h"
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/RuleSoldier.h"
 	"../Savegame/Base.h"
@@ -5196,13 +5197,13 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1432350620 f:\git\openxcom\src\basescape\soldierinfostate.h
+1432425498 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
 1432339690 f:\git\openxcom\src\ruleset\rulesoldier.h
 	"../Ruleset/Unit.h"
 
-1430149550 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	"SoldierInfoDeadState.h"
 	"../Engine/Action.h"
@@ -5243,7 +5244,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1432343485 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5268,7 +5269,7 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1430149550 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
@@ -5318,7 +5319,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1430975679 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5502,7 +5503,7 @@
 1430149550 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1432309305 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1432426832 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5673,7 +5674,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1432003422 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1432426919 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5800,7 +5801,7 @@
 1431757942 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1431054152 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -5830,7 +5831,7 @@
 	"../Engine/Timer.h"
 	"../Savegame/SavedBattleGame.h"
 
-1431732506 source:f:\git\openxcom\src\battlescape\cannotreequipstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\cannotreequipstate.cpp
 	"CannotReequipState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5859,7 +5860,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432411670 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6002,7 +6003,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1432002116 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1432449742 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6075,7 +6076,7 @@
 	"../Engine/Surface.h"
 	"../Ruleset/MapData.h"
 
-1431476631 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6110,7 +6111,7 @@
 	"../Ruleset/RuleInterface.h"
 	"../Savegame/BattleUnit.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	"Camera.h"
 	"MiniMapView.h"
@@ -6145,7 +6146,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6166,7 +6167,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\nocontainmentstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\nocontainmentstate.cpp
 	"NoContainmentState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -6175,7 +6176,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1431830072 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1432426974 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6264,7 +6265,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\promotionsstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\promotionsstate.cpp
 	"PromotionsState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -6277,7 +6278,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1432348689 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
 	"ScannerState.h"
 	<iostream>
 	<sstream>
@@ -6314,7 +6315,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1432420282 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1432427150 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6375,7 +6376,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1432450006 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6441,7 +6442,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1431306795 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1432427191 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -6763,7 +6764,7 @@
 	"Game.h"
 	"Options.h"
 
-1430149550 source:f:\git\openxcom\src\engine\zoom.cpp
+1432427235 source:f:\git\openxcom\src\engine\zoom.cpp
 	"Zoom.h"
 	"Exception.h"
 	"Logger.h"
@@ -6781,7 +6782,7 @@
 
 1430149550 f:\git\openxcom\src\engine\scalers\scalebit.h
 
-1432248980 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
+1432426618 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
 	"AlienBaseState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -6821,7 +6822,7 @@
 1432347198 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
-1432156391 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1432450202 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
 	"PsiTrainingState.h"
@@ -6843,7 +6844,7 @@
 1432064076 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1432426618 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	"BaseDestroyedState.h"
 	"GeoscapeState.h"
@@ -7052,7 +7053,7 @@
 1432345932 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
+1432426586 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
 	"DefeatState.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
@@ -7103,7 +7104,7 @@
 1430149550 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
-1431672911 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
+1432427263 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
 	"FundingState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -7144,7 +7145,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1432348519 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1432427276 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7408,7 +7409,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1431983715 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1432426618 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"../Battlescape/CommendationState.h"
@@ -7495,7 +7496,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Base.h"
 
-1432065032 source:f:\git\openxcom\src\geoscape\psitrainingstate.cpp
+1432426618 source:f:\git\openxcom\src\geoscape\psitrainingstate.cpp
 	"PsiTrainingState.h"
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
@@ -7604,7 +7605,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1430149550 source:f:\git\openxcom\src\geoscape\victorystate.cpp
+1432426618 source:f:\git\openxcom\src\geoscape\victorystate.cpp
 	"VictoryState.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
@@ -7665,7 +7666,7 @@
 	"../Engine/Action.h"
 	"../Engine/Sound.h"
 
-1431469813 source:f:\git\openxcom\src\interface\textedit.cpp
+1432427318 source:f:\git\openxcom\src\interface\textedit.cpp
 	"TextEdit.h"
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
@@ -7793,7 +7794,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1431487478 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1432427408 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -7838,7 +7839,7 @@
 	"../Geoscape/GeoscapeState.h"
 	"../Resource/XcomResourcePack.h"
 
-1430149550 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
+1432427466 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -7852,7 +7853,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1430149550 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1432426618 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	"MainMenuState.h"
 	"OptionsAdvancedState.h"
@@ -7894,7 +7895,7 @@
 1431487517 f:\git\openxcom\src\menu\optionsbattlescapestate.h
 	"OptionsBaseState.h"
 
-1430149550 source:f:\git\openxcom\src\menu\optionscontrolsstate.cpp
+1432427496 source:f:\git\openxcom\src\menu\optionscontrolsstate.cpp
 	"OptionsControlsState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -8006,7 +8007,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1431489423 source:f:\git\openxcom\src\menu\startstate.cpp
+1432426618 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
@@ -8416,7 +8417,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1432274488 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1432427531 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Battlescape/Position.h"
 	"../Engine/Language.h"
@@ -8526,7 +8527,7 @@
 1430149550 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1432339799 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1432447000 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8778,7 +8779,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1431830038 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1432427542 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8832,7 +8833,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1431724535 source:f:\git\openxcom\src\savegame\soldier.cpp
+1432449345 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -8846,7 +8847,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
 
-1431471038 source:f:\git\openxcom\src\savegame\soldierdead.cpp
+1432446426 source:f:\git\openxcom\src\savegame\soldierdead.cpp
 	"SoldierDead.h"
 	"SoldierDeath.h"
 	"SoldierDiary.h"
@@ -8913,7 +8914,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1430256650 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1432426618 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -8922,7 +8923,7 @@
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"
 
-1431677332 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
+1432426618 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
 	"Ufopaedia.h"
 	"../Engine/CrossPlatform.h"
@@ -10634,7 +10635,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1431472345 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -10755,7 +10756,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1430149550 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
+1432427515 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
 	"OptionsModsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -10842,7 +10843,7 @@
 1431487428 f:\git\openxcom\src\menu\listsavestate.h
 	"ListGamesState.h"
 
-1431487400 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1432427368 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	"DeleteGameState.h"
 	"../Engine/Action.h"
@@ -10870,7 +10871,7 @@
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1430149550 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1432427379 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
@@ -11019,7 +11020,7 @@
 1430149549 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
 	"../Engine/State.h"
 
-1432411597 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	"SoldierDiaryMissionState.h"
 	"SoldierDiaryPerformanceState.h"
@@ -11046,7 +11047,7 @@
 
 1430149550 f:\git\openxcom\src\ruleset\rulecommendations.h
 
-1431475647 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11061,7 +11062,7 @@
 1431475683 f:\git\openxcom\src\battlescape\commendationstate.h
 	"../Engine/State.h"
 
-1430393957 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
@@ -11135,7 +11136,7 @@
 1431472248 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
 	"../Engine/State.h"
 
-1430400313 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
 	"SoldierInfoDeadState.h"
 	"SoldierDiaryOverviewState.h"
 	"../Engine/Action.h"
@@ -11361,7 +11362,7 @@
 
 1420130450 f:\git\openxcom\src\savegame\saveconverterxcom1.h
 
-1431475554 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
+1432426618 source:f:\git\openxcom\src\battlescape\commendationdeadstate.cpp
 	"CommendationDeadState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11389,7 +11390,7 @@
 
 1431968325 f:\git\openxcom\src\ruleset\rulevideo.h
 
-1431581375 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
+1432426618 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
 	"AlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"

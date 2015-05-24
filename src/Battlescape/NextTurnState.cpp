@@ -71,7 +71,7 @@ NextTurnState::NextTurnState(
 //		_timer(NULL)
 //		_turnCounter(NULL)
 {
-	_window = new Window(this, 320, 200);
+	_window = new Window(this, 320,200);
 
 	if (aliensPacified == false)
 	{
@@ -81,7 +81,7 @@ NextTurnState::NextTurnState(
 		_txtMessage	= new Text(320, 17, 0, 149);
 	}
 	else
-		_txtMessage	= new Text(320, 200);
+		_txtMessage	= new Text(320,200);
 //	_bg			= new Surface(
 //							_game->getScreen()->getWidth(),
 //							_game->getScreen()->getHeight(),

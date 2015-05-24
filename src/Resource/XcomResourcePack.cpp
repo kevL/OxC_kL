@@ -334,7 +334,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					i->end(),
 					i->begin(),
 					std::toupper);
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadScr(path);
 	}
 
@@ -352,7 +352,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					std::toupper);
 //		*i = (*i).substr(0, (*i).length() - 3);
 //		*i = *i + "PCK";
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadBdy(path);
 	}
 
@@ -467,7 +467,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					i->end(),
 					i->begin(),
 					std::toupper);
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadSpk(path);
 	}
 
@@ -486,7 +486,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						i->end(),
 						i->begin(),
 						std::toupper);
-			_surfaces[*i] = new Surface(320, 200);
+			_surfaces[*i] = new Surface(320,200);
 			_surfaces[*i]->loadImage(path);
 		}
 	}
@@ -949,7 +949,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				music = loadMusic(
 								priority[j],
 								musOptional[i],
-								0, 0, 0, 0, 0);
+								0,0,0,0,0);
 			}
 
 			if (music)
@@ -1402,7 +1402,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 												y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1)));
 
-	Surface* const altBack07 = new Surface(320, 200);
+	Surface* const altBack07 = new Surface(320,200);
 	altBack07->copy(_surfaces["BACK07.SCR"]);
 	for (int y = 172; y >= 152; --y)
 		for (int x = 5; x <= 314; ++x)
@@ -1677,7 +1677,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
 
-		_surfaces[scrs[i]] = new Surface(320, 200);
+		_surfaces[scrs[i]] = new Surface(320,200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
@@ -1751,7 +1751,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		s << "UFOGRAPH/" << spks[i];
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 		{
-			_surfaces[spks[i]] = new Surface(320, 200);
+			_surfaces[spks[i]] = new Surface(320,200);
 			_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 		}
 	}
@@ -1779,7 +1779,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		else
 			*i = *i + "PCK";
 
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadBdy(path);
 	}
 
@@ -1797,7 +1797,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					i->begin(),
 					std::toupper);
 
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadSpk(path);
 	}
 

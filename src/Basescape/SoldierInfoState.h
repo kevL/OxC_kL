@@ -47,6 +47,7 @@ class SoldierInfoState
 {
 
 private:
+	bool _allowExit;
 	size_t _soldierId;
 
 	std::vector<Soldier*>* _list;

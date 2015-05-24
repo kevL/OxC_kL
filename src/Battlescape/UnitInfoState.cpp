@@ -79,7 +79,8 @@ UnitInfoState::UnitInfoState(
 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
-	_bg			= new Surface(320, 200);
+	_bg			= new Surface(320,200);
+
 	_exit		= new InteractiveSurface(320, 180, 0, 20);
 	_txtName	= new Text(288, 17, 16, 4);
 
@@ -499,48 +500,51 @@ void UnitInfoState::init()
 {
 	State::init();
 
-	std::wostringstream ss;
+	std::wostringstream woststr;
 
-	int minPsi = 0;
+//	int minPsi;
 	if (_unit->getGeoscapeSoldier() != NULL)
 	{
-		ss << tr(_unit->getRankString());
-		ss << " ";
+		woststr << tr(_unit->getRankString());
+		woststr << " ";
 
-		minPsi = _unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill - 1;
+//		minPsi = _unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill;
 //		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
 	}
-	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
+//	else
+//		minPsi = 0;
+
+	woststr << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
 	_txtName->setBig();
-	_txtName->setText(ss.str());
+	_txtName->setText(woststr.str());
 
 	int stat = _unit->getTimeUnits();
-	ss.str(L"");
-	ss << stat;
-	_numTimeUnits->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numTimeUnits->setText(woststr.str());
 	_barTimeUnits->setMax(static_cast<double>(_unit->getBaseStats()->tu));
 	_barTimeUnits->setValue(static_cast<double>(stat));
 
 	stat = _unit->getEnergy();
-	ss.str(L"");
-	ss << stat;
-	_numEnergy->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numEnergy->setText(woststr.str());
 	_barEnergy->setMax(static_cast<double>(_unit->getBaseStats()->stamina));
 	_barEnergy->setValue(static_cast<double>(stat));
 
 	stat = _unit->getHealth();
-	ss.str(L"");
-	ss << stat;
-	_numHealth->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numHealth->setText(woststr.str());
 	_barHealth->setMax(static_cast<double>(_unit->getBaseStats()->health));
 	_barHealth->setValue(static_cast<double>(stat));
 	_barHealth->setValue2(static_cast<double>(_unit->getStun()));
 
-	ss.str(L"");
+	woststr.str(L"");
 	if (_unit->isWoundable() == true)
 	{
 		stat = _unit->getFatalWounds();
-		ss << stat;
+		woststr << stat;
 
 		_barFatalWounds->setMax(static_cast<double>(stat));
 		_barFatalWounds->setValue(static_cast<double>(stat));
@@ -548,22 +552,22 @@ void UnitInfoState::init()
 	}
 	else
 	{
-		ss << L"-";
+		woststr << L"-";
 		_barFatalWounds->setVisible(false);
 	}
-	_numFatalWounds->setText(ss.str());
+	_numFatalWounds->setText(woststr.str());
 
 	stat = _unit->getBaseStats()->bravery;
-	ss.str(L"");
-	ss << stat;
-	_numBravery->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numBravery->setText(woststr.str());
 	_barBravery->setMax(static_cast<double>(stat));
 	_barBravery->setValue(static_cast<double>(stat));
 
 	stat = _unit->getMorale();
-	ss.str(L"");
-	ss << stat;
-	_numMorale->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numMorale->setText(woststr.str());
 	_barMorale->setMax(100.);
 	_barMorale->setValue(static_cast<double>(stat));
 
@@ -574,58 +578,58 @@ void UnitInfoState::init()
 	arbitraryVariable *= acuModi;
 	_barReactions->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	ss.str(L"");
-	ss << stat;
-	_numReactions->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numReactions->setText(woststr.str());
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->firing);
 	_barFiring->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barFiring->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	ss.str(L"");
-	ss << stat;
-	_numFiring->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numFiring->setText(woststr.str());
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->throwing);
 	_barThrowing->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barThrowing->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	ss.str(L"");
-	ss << stat;
-	_numThrowing->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numThrowing->setText(woststr.str());
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->melee);
 	_barMelee->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barMelee->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	ss.str(L"");
-	ss << stat;
-	_numMelee->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numMelee->setText(woststr.str());
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->strength);
 	_barStrength->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi / 2. + 0.5;
 	_barStrength->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	ss.str(L"");
-	ss << stat;
-	_numStrength->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numStrength->setText(woststr.str());
 
 
-	if (_unit->getBaseStats()->psiSkill > minPsi
-		|| _unit->getGeoscapeSoldier() == NULL
-		|| (Options::psiStrengthEval
-			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (_unit->getBaseStats()->psiSkill > 0 // >= minPsi
+		|| _unit->getGeoscapeSoldier() == NULL)
+//		|| (Options::psiStrengthEval == true
+//			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
-		ss.str(L"");
+		woststr.str(L"");
 
 		if (_unit->isFearable() == true)
 		{
 			stat = _unit->getBaseStats()->psiStrength;
-			ss << stat;
+			woststr << stat;
 
 			_barPsiStrength->setMax(static_cast<double>(stat));
 			_barPsiStrength->setValue(static_cast<double>(stat));
@@ -633,11 +637,11 @@ void UnitInfoState::init()
 		}
 		else
 		{
-			ss << L"oo";
+			woststr << L"oo";
 			_barPsiStrength->setVisible(false);
 		}
 
-		_numPsiStrength->setText(ss.str());
+		_numPsiStrength->setText(woststr.str());
 		_numPsiStrength->setVisible();
 	}
 	else
@@ -646,12 +650,12 @@ void UnitInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-	if (_unit->getBaseStats()->psiSkill > minPsi)
+	if (_unit->getBaseStats()->psiSkill > 0) // >= minPsi)
 	{
 		stat = _unit->getBaseStats()->psiSkill;
-		ss.str(L"");
-		ss << stat;
-		_numPsiSkill->setText(ss.str());
+		woststr.str(L"");
+		woststr << stat;
+		_numPsiSkill->setText(woststr.str());
 		_barPsiSkill->setMax(static_cast<double>(stat));
 		_barPsiSkill->setValue(static_cast<double>(stat));
 
@@ -666,38 +670,38 @@ void UnitInfoState::init()
 
 
 	stat = _unit->getArmor(SIDE_FRONT);
-	ss.str(L"");
-	ss << stat;
-	_numFrontArmor->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numFrontArmor->setText(woststr.str());
 	_barFrontArmor->setMax(static_cast<double>(_unit->getArmor()->getFrontArmor()));
 	_barFrontArmor->setValue(static_cast<double>(stat));
 
 	arbitraryVariable = _unit->getArmor()->getSideArmor(); // haha!!
 	stat = _unit->getArmor(SIDE_LEFT);
-	ss.str(L"");
-	ss << stat;
-	_numLeftArmor->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numLeftArmor->setText(woststr.str());
 	_barLeftArmor->setMax(arbitraryVariable);
 	_barLeftArmor->setValue(static_cast<double>(stat));
 
 	stat = _unit->getArmor(SIDE_RIGHT);
-	ss.str(L"");
-	ss << stat;
-	_numRightArmor->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numRightArmor->setText(woststr.str());
 	_barRightArmor->setMax(arbitraryVariable);
 	_barRightArmor->setValue(static_cast<double>(stat));
 
 	stat = _unit->getArmor(SIDE_REAR);
-	ss.str(L"");
-	ss << stat;
-	_numRearArmor->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numRearArmor->setText(woststr.str());
 	_barRearArmor->setMax(_unit->getArmor()->getRearArmor());
 	_barRearArmor->setValue(static_cast<double>(stat));
 
 	stat = _unit->getArmor(SIDE_UNDER);
-	ss.str(L"");
-	ss << stat;
-	_numUnderArmor->setText(ss.str());
+	woststr.str(L"");
+	woststr << stat;
+	_numUnderArmor->setText(woststr.str());
 	_barUnderArmor->setMax(_unit->getArmor()->getUnderArmor());
 	_barUnderArmor->setValue(static_cast<double>(stat));
 }

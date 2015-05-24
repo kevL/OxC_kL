@@ -100,8 +100,8 @@ InventoryState::InventoryState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_bg			= new Surface(320, 200);
-	_soldier	= new Surface(320, 200);
+	_bg			= new Surface(320,200);
+	_soldier	= new Surface(320,200);
 
 	_txtName	= new Text(200, 17, 36, 6);
 	_gender		= new Surface(7, 7, 28, 1);
@@ -119,7 +119,7 @@ InventoryState::InventoryState(
 	_txtThrowTU	= new Text(40, 9, 245, 132);
 	_txtPsiTU	= new Text(40, 9, 245, 141);
 
-	_numOrder	= new NumberText(7, 5, 228, 4);
+	_numOrder	= new NumberText(7, 5, 228,  4);
 	_tuCost		= new NumberText(7, 5, 310, 60);
 
 	_txtItem	= new Text(160, 9, 128, 140);
@@ -128,8 +128,8 @@ InventoryState::InventoryState(
 	_btnPrev	= new BattlescapeButton(23, 23, 273, 0);
 	_btnNext	= new BattlescapeButton(23, 23, 297, 0);
 
-	_btnRank	= new BattlescapeButton(26, 23, 0, 0);
-	_btnUnload	= new BattlescapeButton(32, 25, 288, 32);
+	_btnRank	= new BattlescapeButton(26, 23,   0,   0);
+	_btnUnload	= new BattlescapeButton(32, 25, 288,  32);
 	_btnGround	= new BattlescapeButton(32, 15, 288, 137);
 
 /*	_btnCreateTemplate	= new BattlescapeButton(
@@ -520,7 +520,7 @@ void InventoryState::init()
  */
 void InventoryState::updateStats()
 {
-	BattleUnit* const unit = _battleGame->getSelectedUnit();
+	const BattleUnit* const unit = _battleGame->getSelectedUnit();
 
 	_numOrder->setValue(unit->getBattleOrder());
 	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
@@ -569,23 +569,35 @@ void InventoryState::updateStats()
 			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getBaseStats()->throwing));
 			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getBaseStats()->melee));
 
-			int minPsi = 0;
+			if (psiSkill > 0)
+			{
+				_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getBaseStats()->psiStrength));
+				_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(psiSkill));
+			}
+			else
+			{
+				_txtPStr->setText(L"");
+				_txtPSkill->setText(L"");
+			}
+/*			int minPsi;
 			if (unit->getGeoscapeSoldier() != NULL)
-				minPsi = unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill - 1;
+				minPsi = unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill;
+			else
+				minPsi = 0;
 
-			if (psiSkill > minPsi)
+			if (psiSkill >= minPsi)
 				_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(psiSkill));
 			else
 				_txtPSkill->setText(L"");
 
-			if (psiSkill > minPsi
-				|| (Options::psiStrengthEval == true
-					&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+			if (psiSkill >= minPsi
+//				|| (Options::psiStrengthEval == true
+//					&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 			{
 				_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getBaseStats()->psiStrength));
 			}
 			else
-				_txtPStr->setText(L"");
+				_txtPStr->setText(L""); */
 		}
 	}
 }

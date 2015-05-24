@@ -125,7 +125,7 @@ DebriefingState::DebriefingState()
 	if (Options::storageLimitsEnforced == true)
 		_limitsEnforced = 1;
 
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 
 	_txtTitle		= new Text(280, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 216, 8);

@@ -81,7 +81,7 @@ CraftEquipmentState::CraftEquipmentState(
 		hasCrew = craft->getNumSoldiers() > 0,
 		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 
 	_txtCost		= new Text(150, 9, 24, -10);
 

@@ -72,7 +72,7 @@ SoldiersState::SoldiersState(Base* base)
 	:
 		_base(base)
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 
 	_txtTitle		= new Text(300, 17,  10, 11);
 	_txtBaseLabel	= new Text( 80,  9,  16, 11);

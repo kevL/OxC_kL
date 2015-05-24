@@ -111,19 +111,27 @@ void OptionsControlsState::init()
 	_lstControls->clearList();
 
 	_lstControls->addRow(2, tr("STR_GENERAL").c_str(), L"");
-	_lstControls->setCellColor(0, 0, _colorGroup);
+	_lstControls->setCellColor(
+							0,0,
+							_colorGroup);
 
 	addControls(_controlsGeneral);
 
 	_lstControls->addRow(2, L"", L"");
 	_lstControls->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
-	_lstControls->setCellColor(_controlsGeneral.size() + 2, 0, _colorGroup);
+	_lstControls->setCellColor(
+							_controlsGeneral.size() + 2,
+							0,
+							_colorGroup);
 
 	addControls(_controlsGeo);
 
 	_lstControls->addRow(2, L"", L"");
 	_lstControls->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
-	_lstControls->setCellColor(_controlsGeneral.size() + 2 + _controlsGeo.size() + 2, 0, _colorGroup);
+	_lstControls->setCellColor(
+							_controlsGeneral.size() + 2 + _controlsGeo.size() + 2,
+							0,
+							_colorGroup);
 
 	addControls(_controlsBattle);
 }

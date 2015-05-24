@@ -60,7 +60,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierId)
 {
 	_list = _game->getSavedGame()->getDeadSoldiers();
 
-	_bg				= new Surface(320, 200);
+	_bg				= new Surface(320,200);
 
 	_rank			= new Surface(26, 23, 4, 4);
 	_gender			= new Surface(7, 7, 240, 8);
@@ -420,12 +420,11 @@ void SoldierInfoDeadState::init()
 	_txtMissions->setText(tr("STR_MISSIONS").arg(_soldier->getMissions()));
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
+//	const int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
+//		|| (Options::psiStrengthEval == true // for determination to show psiStrength
+//			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 
-	const int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
-
-	if (current->psiSkill >= minPsi
-		|| (Options::psiStrengthEval == true
-			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
+	if (current->psiSkill > 0) //>= minPsi)
 	{
 		woststr.str(L"");
 		woststr << current->psiStrength;
@@ -436,15 +435,7 @@ void SoldierInfoDeadState::init()
 
 		_numPsiStrength->setVisible();
 		_barPsiStrength->setVisible();
-	}
-	else
-	{
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-	}
 
-	if (current->psiSkill >= minPsi)
-	{
 		woststr.str(L"");
 		woststr << current->psiSkill;
 		_numPsiSkill->setText(woststr.str());
@@ -457,6 +448,9 @@ void SoldierInfoDeadState::init()
 	}
 	else
 	{
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}

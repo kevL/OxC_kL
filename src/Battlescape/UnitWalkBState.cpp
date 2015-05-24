@@ -1267,7 +1267,7 @@ void UnitWalkBState::playMovementSound()
 		{
 			const Tile
 				* const tile = _unit->getTile(),
-				* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
+				* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
 
 			const int stepSound = tile->getFootstepSound(belowTile);
 			if (stepSound > -1)

@@ -47,7 +47,7 @@ namespace OpenXcom
  */
 CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 
 	_txtTitle		= new Text(300, 69, 10, 9);
 

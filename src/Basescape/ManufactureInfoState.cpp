@@ -114,7 +114,7 @@ void ManufactureInfoState::buildUi() // private.
 	_txtAvailableSpace		= new Text(100, 9, 16, 57);
 	_txtMonthlyProfit		= new Text(160, 9, 16, 67);
 
-	_txtAllocatedEngineer	= new Text(84, 16, 16, 80);
+	_txtAllocatedEngineer	= new Text(84, 16,  16, 80);
 	_txtAllocated			= new Text(50, 16, 100, 80);
 
 	_txtUnitToProduce		= new Text(84, 16, 176, 80);
@@ -130,7 +130,7 @@ void ManufactureInfoState::buildUi() // private.
 	_txtUnitDown			= new Text(100, 16, 205, 135);
 	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 280, 135);
 
-	_btnStop				= new TextButton(135, 16, 10, 159);
+	_btnStop				= new TextButton(135, 16,  10, 159);
 	_btnOk					= new TextButton(135, 16, 175, 159);
 
 //	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);

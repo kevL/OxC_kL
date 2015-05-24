@@ -2189,15 +2189,21 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
 
 /**
  * Creates a new randomly-generated soldier.
- * @param save - pointer to SavedGame
+ * @param gameSave - pointer to SavedGame
  * @return, pointer to the newly generated Soldier
  */
-Soldier* Ruleset::genSoldier(SavedGame* save) const
+Soldier* Ruleset::genSoldier(SavedGame* gameSave) const
 {
-	Soldier* soldier = NULL;
+	return new Soldier(
+					getSoldier("XCOM"),
+					getArmor("STR_ARMOR_NONE_UC"),
+					&_names,
+					gameSave->getId("STR_SOLDIER"));
+}
+/*	Soldier* soldier = NULL;
 	int newId = save->getId("STR_SOLDIER");
 
-	// Original X-COM gives up after 10 tries so might as well do the same here
+	// Original X-COM gives up after 10 tries so they did the same here
 	bool duplicate = true;
 	for (int // Check for duplicates
 			i = 0;
@@ -2211,9 +2217,7 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 							getArmor("STR_ARMOR_NONE_UC"),
 							&_names,
 							newId);
-
 		duplicate = false;
-
 		for (std::vector<Base*>::const_iterator
 				i = save->getBases()->begin();
 				i != save->getBases()->end()
@@ -2243,14 +2247,14 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 				}
 			}
 		}
-	}
+	} */
 
 //	soldier->calcStatString( // calculate new statString
 //						getStatStrings(),
 //						(Options::psiStrengthEval
 //							&& save->isResearched(getPsiRequirements())));
-	return soldier;
-}
+
+//	return soldier;
 
 /**
  * Gets the name of the item to be used as alien fuel (elerium or zyrbite).

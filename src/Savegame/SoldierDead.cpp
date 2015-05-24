@@ -155,7 +155,7 @@ YAML::Node SoldierDead::save() const
 	node["death"]			= _death->save();
 
 	if (_diary != NULL
-		&& (_diary->getMissionIdList().empty() == false
+		&& (   _diary->getMissionIdList().empty() == false
 			|| _diary->getSoldierCommendations()->empty() == false))
 	{
 		node["diary"] = _diary->save();

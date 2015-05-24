@@ -48,8 +48,7 @@ TextEdit::TextEdit(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_blink(true),
 		_modal(true),
 		_ascii(L'A'),
@@ -60,11 +59,11 @@ TextEdit::TextEdit(
 {
 	_isFocused = false;
 
-	_text	= new Text(width, height, 0, 0);
+	_text	= new Text(width, height);
 	_timer	= new Timer(100);
 	_timer->onTimer((SurfaceHandler)& TextEdit::blink);
 
-	_caret	= new Text(17, 17, 0, 0);
+	_caret	= new Text(17,17);
 	_caret->setText(L"|");
 }
 

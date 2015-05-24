@@ -122,17 +122,18 @@ ListGamesState::ListGamesState(
 {
 	_screen = false;
 
-	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle	= new Text(310, 16, 5, 8);
+	_window		= new Window(this, 320,200, 0,0, POPUP_BOTH);
 
-	_txtDelete	= new Text(310, 9, 5, 24);
+	_txtTitle	= new Text(310, 16, 5,  8);
+	_txtDelete	= new Text(310,  9, 5, 24);
 
-	_txtName	= new Text(176, 9, 16, 33);
-	_txtDate	= new Text(84, 9, 204, 33);
-	_sortName	= new ArrowButton(ARROW_NONE, 11, 8, 16, 33);
+	_txtName	= new Text(176, 9,  16, 33);
+	_txtDate	= new Text( 84, 9, 204, 33);
+	_sortName	= new ArrowButton(ARROW_NONE, 11, 8,  16, 33);
 	_sortDate	= new ArrowButton(ARROW_NONE, 11, 8, 204, 33);
 
 	_lstSaves	= new TextList(285, 121, 16, 42);
+
 	_txtDetails = new Text(288, 9, 16, 165);
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);

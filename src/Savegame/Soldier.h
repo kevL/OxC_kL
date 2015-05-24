@@ -79,8 +79,8 @@ private:
 		_recentlyPromoted;
 	int
 		_id,
-		_gainPsiSkl,
-		_gainPsiStr,
+//		_gainPsiSkl,
+//		_gainPsiStr,
 		_kills,
 		_missions,
 		_recovery;
@@ -190,7 +190,7 @@ private:
 		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();
 
 		/// Trains a soldier's psychic stats.
-		void trainPsi();
+//		void trainPsi();
 		/// Trains a soldier's psionic abilities (anytimePsiTraining option).
 		bool trainPsiDay();
 		/// Returns whether the unit is in psi training or not
@@ -198,9 +198,9 @@ private:
 		/// Sets the psi training status
 		void togglePsiTraining();
 		/// Gets this soldier's psiSkill improvement score for this month.
-		int getImprovement();
+//		int getImprovement();
 		/// Gets this soldier's psiStrength improvement score for this month.
-		int getPsiStrImprovement();
+//		int getPsiStrImprovement();
 
 		/// Kills the soldier and sends it to the dead soldiers' bin.
 		void die(SavedGame* const gameSave);

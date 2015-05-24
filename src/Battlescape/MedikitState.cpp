@@ -162,7 +162,7 @@ MedikitState::MedikitState(BattleAction* action)
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_bg = new Surface(320, 200);
+	_bg = new Surface(320,200);
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 

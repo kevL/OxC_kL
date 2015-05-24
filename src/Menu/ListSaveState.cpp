@@ -50,7 +50,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 		_selectedRowPre(-1),
 		_selectedRow(-1)
 {
-	_edtSave		= new TextEdit(this, 168, 9, 0, 0);
+	_edtSave		= new TextEdit(this, 168, 9);
 	_btnSaveGame	= new TextButton(134, 16, 170, 177);
 //	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman()? 200: 80, 16, 60, 172);
 

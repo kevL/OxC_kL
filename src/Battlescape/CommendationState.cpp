@@ -47,7 +47,7 @@ namespace OpenXcom
  */
 CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 	_txtTitle		= new Text(300, 16, 10, 8);
 	_lstSoldiers	= new TextList(285, 121, 16, 28);
 	_txtMedalInfo	= new Text(280, 25, 20, 150);

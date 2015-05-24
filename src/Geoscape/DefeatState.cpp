@@ -72,7 +72,7 @@ DefeatState::DefeatState()
 	{
 		Surface* const screen = _game->getResourcePack()->getSurface(files[i]);
 
-		_bg[i] = new InteractiveSurface(320, 200);
+		_bg[i] = new InteractiveSurface(320,200);
 
 		setPalette(screen->getPalette());
 

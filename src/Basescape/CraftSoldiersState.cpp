@@ -68,7 +68,7 @@ CraftSoldiersState::CraftSoldiersState(
 		_base(base),
 		_craftId(craftId)
 {
-	_window			= new Window(this, 320, 200);
+	_window			= new Window(this, 320,200);
 
 	_txtCost		= new Text(150, 9, 24, -10);
 

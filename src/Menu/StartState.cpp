@@ -79,7 +79,7 @@ StartState::StartState()
 //		dy = (Options::baseYResolution - 200) / 2;	// kL
 		dx = 10,	// kL
 		dy = 20;	// kL
-//	_surface = new Surface(320, 200, dx, dy);		// kL
+//	_surface = new Surface(320,200, dx, dy);		// kL
 
 	loading = LOADING_STARTED;
 	_thread = NULL;

@@ -55,7 +55,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 	centerAllSurfaces();
 
 	// how much room do we need for YES/NO
-	Text text = Text(100, 9, 0, 0);
+	Text text = Text(100, 9);
 	text.initText(
 				_game->getResourcePack()->getFont("FONT_BIG"),
 				_game->getResourcePack()->getFont("FONT_SMALL"),

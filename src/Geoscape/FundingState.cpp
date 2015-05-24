@@ -50,16 +50,17 @@ FundingState::FundingState()
 {
 	_screen = false;
 
-	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_window			= new Window(this, 320,200, 0,0, POPUP_BOTH);
+
 	_txtTitle		= new Text(300, 17, 10, 9);
 
-	_txtCountry		= new Text(102, 9, 16, 25);
-	_txtFunding		= new Text(60, 9, 118, 25);
-	_txtChange		= new Text(60, 9, 178, 25);
-	_txtScore		= new Text(60, 9, 238, 25);
+	_txtCountry		= new Text(102, 9,  16, 25);
+	_txtFunding		= new Text( 60, 9, 118, 25);
+	_txtChange		= new Text( 60, 9, 178, 25);
+	_txtScore		= new Text( 60, 9, 238, 25);
 
-	_lstCountries	= new TextList(277, 121, 24, 34);
-	_lstTotal		= new TextList(285, 17, 16, 157);
+	_lstCountries	= new TextList(277, 121, 24,  34);
+	_lstTotal		= new TextList(285,  17, 16, 157);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

@@ -79,7 +79,7 @@ NewBattleState::NewBattleState()
 {
 	_rules = _game->getRuleset();
 
-	_window				= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_window				= new Window(this, 320,200, 0,0, POPUP_BOTH);
 	_txtTitle			= new Text(320, 17, 0, 9);
 
 	_txtMapOptions		= new Text(148, 9, 8, 68);
@@ -112,7 +112,7 @@ NewBattleState::NewBattleState()
 	_txtAlienTech		= new Text(120, 9, 178, 143);
 	_slrAlienTech		= new Slider(120, 16, 178, 153);
 
-	_btnCancel			= new TextButton(100, 16, 8, 176);
+	_btnCancel			= new TextButton(100, 16,   8, 176);
 	_btnRandom			= new TextButton(100, 16, 110, 176);
 	_btnOk				= new TextButton(100, 16, 212, 176);
 

@@ -60,7 +60,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 		_base(base),
 		_sel(0)
 {
-	_window			= new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320,200);
+
 	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtBaseLabel	= new Text(80, 9, 230, 8);
 
@@ -154,21 +155,27 @@ void AllocatePsiTrainingState::init()
 			woststr1, // strength
 			woststr2; // skill
 
-		const int minPsi = (*i)->getRules()->getMinStats().psiSkill;
+//		const int minPsi = (*i)->getRules()->getMinStats().psiSkill;
 
-		if ((*i)->getCurrentStats()->psiSkill >= minPsi
-			|| (Options::psiStrengthEval == true
-				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
+/*		if ((*i)->getCurrentStats()->psiSkill > 0) // >= minPsi
+//			|| (Options::psiStrengthEval == true
+//				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 		{
-			woststr1 << ((*i)->getCurrentStats()->psiStrength);
+			woststr1 << (*i)->getCurrentStats()->psiStrength;
 		}
 		else
-			woststr1 << tr("STR_UNKNOWN").c_str();
+			woststr1 << tr("STR_UNKNOWN").c_str(); */
 
-		if ((*i)->getCurrentStats()->psiSkill >= minPsi)
+		if ((*i)->getCurrentStats()->psiSkill > 0) // >= minPsi)
+		{
+			woststr1 << (*i)->getCurrentStats()->psiStrength;
 			woststr2 << (*i)->getCurrentStats()->psiSkill; // << "/+" << (*i)->getImprovement();
+		}
 		else
+		{
 			woststr2 << tr("STR_UNKNOWN").c_str(); // woststr2 << "0/+0";
+			woststr1 << tr("STR_UNKNOWN").c_str();
+		}
 
 		std::wstring wst;
 		Uint8 color;

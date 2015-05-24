@@ -2100,10 +2100,10 @@ BattleUnit* TileEngine::hit(
 			if (targetUnit == NULL)
 			{
 				//Log(LOG_INFO) << ". . . targetUnit NOT Valid, check tileBelow";
-				// it's possible we have a unit below the actual tile, when he
-				// stands on a stairs and sticks his head up into the above tile.
+				// it's possible we have a unit below the actual tile, when it
+				// stands on a stairs and sticks its head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				const Tile* const tileBelow = _battleSave->getTile(targetPos_tile + Position(0, 0,-1));
+				const Tile* const tileBelow = _battleSave->getTile(targetPos_tile + Position(0,0,-1));
 				if (tileBelow != NULL
 					&& tileBelow->getUnit() != NULL)
 				{
@@ -4798,8 +4798,8 @@ int TileEngine::closeUfoDoors()
 
 			const Tile
 				* const tile = _battleSave->getTiles()[i],
-				* const tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0)),
-				* const tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
+				* const tileNorth = _battleSave->getTile(tile->getPosition() + Position( 0,-1, 0)),
+				* const tileWest  = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
 			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL) == true
 					&& tileNorth != NULL
 					&& tileNorth->getUnit() != NULL // probly not needed.
@@ -6197,7 +6197,7 @@ int TileEngine::faceWindow(const Position& position)
 		}
 	}
 
-	tile = _battleSave->getTile(position + Position(1, 0, 0));
+	tile = _battleSave->getTile(position + Position(1,0,0));
 	if (tile != NULL
 		&& tile->getMapData(MapData::O_WESTWALL) != NULL
 		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
@@ -6205,7 +6205,7 @@ int TileEngine::faceWindow(const Position& position)
 		ret = 2;
 	}
 
-	tile = _battleSave->getTile(position + Position(0, 1, 0));
+	tile = _battleSave->getTile(position + Position(0,1,0));
 	if (tile != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL) != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)

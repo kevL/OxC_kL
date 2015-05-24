@@ -30,6 +30,7 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Bar.h"
@@ -38,7 +39,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 
-#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -65,21 +66,22 @@ SoldierInfoState::SoldierInfoState(
 	:
 		_base(base),
 		_soldierId(soldierId),
-		_soldier(NULL)
+		_soldier(NULL),
+		_allowExit(true)
 {
 	_list = _base->getSoldiers();
 
-	_bg				= new InteractiveSurface(320, 200);
+	_bg				= new InteractiveSurface(320,200);
 
-	_rank			= new Surface(26, 23, 4, 4);
-	_gender			= new Surface(7, 7, 240, 8);
+	_rank			= new Surface(26, 23,  4, 4);
+	_gender			= new Surface( 7, 7, 240, 8);
 
 	_battleOrder	= new NumberText(15, 5, 4, -6);
 
-	_btnPrev		= new TextButton(29, 16, 0, 32);
-	_btnOk			= new TextButton(49, 16, 30, 32);
-	_btnNext		= new TextButton(29, 16, 80, 32);
-	_btnAutoStat	= new TextButton(49, 16, 112, 32);
+	_btnOk			= new TextButton(49, 16,   0, 32);
+	_btnPrev		= new TextButton(29, 16,  50, 32);
+	_btnNext		= new TextButton(29, 16,  80, 32);
+	_btnAutoStat	= new TextButton(69, 16, 112, 32);
 
 	_txtArmor		= new Text(30, 9, 190, 36);
 	_btnArmor		= new TextButton(100, 16, 220, 32);
@@ -91,7 +93,7 @@ SoldierInfoState::SoldierInfoState(
 
 	_txtRank		= new Text(112, 9, 0, 49);
 	_txtCraft		= new Text(112, 9, 0, 57);
-	_txtPsionic		= new Text(75, 9, 6, 67);
+	_txtPsionic		= new Text( 75, 9, 6, 67);
 
 	_txtMissions	= new Text(80, 9, 112, 49);
 	_txtKills		= new Text(80, 9, 112, 57);
@@ -100,62 +102,62 @@ SoldierInfoState::SoldierInfoState(
 	_txtDay			= new Text(30, 9, 237, 57);
 
 
-	const int step = 11;
 	int yPos = 80;
+	const int step = 11;
 
-	_txtTimeUnits	= new Text(120, 9, 6, yPos);
-	_numTimeUnits	= new Text(18, 9, 131, yPos);
-	_barTimeUnits	= new Bar(234, 7, 150, yPos + 1);
-
-	yPos += step;
-	_txtStamina		= new Text(120, 9, 6, yPos);
-	_numStamina		= new Text(18, 9, 131, yPos);
-	_barStamina		= new Bar(234, 7, 150, yPos + 1);
+	_txtTimeUnits	= new Text(120, 9,   6, yPos);
+	_numTimeUnits	= new Text( 18, 9, 131, yPos);
+	_barTimeUnits	= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtHealth		= new Text(120, 9, 6, yPos);
-	_numHealth		= new Text(18, 9, 131, yPos);
-	_barHealth		= new Bar(234, 7, 150, yPos + 1);
+	_txtStamina		= new Text(120, 9,   6, yPos);
+	_numStamina		= new Text( 18, 9, 131, yPos);
+	_barStamina		= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtBravery		= new Text(120, 9, 6, yPos);
-	_numBravery		= new Text(18, 9, 131, yPos);
-	_barBravery		= new Bar(234, 7, 150, yPos + 1);
+	_txtHealth		= new Text(120, 9,   6, yPos);
+	_numHealth		= new Text( 18, 9, 131, yPos);
+	_barHealth		= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtReactions	= new Text(120, 9, 6, yPos);
-	_numReactions	= new Text(18, 9, 131, yPos);
-	_barReactions	= new Bar(234, 7, 150, yPos + 1);
+	_txtBravery		= new Text(120, 9,   6, yPos);
+	_numBravery		= new Text( 18, 9, 131, yPos);
+	_barBravery		= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtFiring		= new Text(120, 9, 6, yPos);
-	_numFiring		= new Text(18, 9, 131, yPos);
-	_barFiring		= new Bar(234, 7, 150, yPos + 1);
+	_txtReactions	= new Text(120, 9,   6, yPos);
+	_numReactions	= new Text( 18, 9, 131, yPos);
+	_barReactions	= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtThrowing	= new Text(120, 9, 6, yPos);
-	_numThrowing	= new Text(18, 9, 131, yPos);
-	_barThrowing	= new Bar(234, 7, 150, yPos + 1);
+	_txtFiring		= new Text(120, 9,   6, yPos);
+	_numFiring		= new Text( 18, 9, 131, yPos);
+	_barFiring		= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtMelee		= new Text(120, 9, 6, yPos);
-	_numMelee		= new Text(18, 9, 131, yPos);
-	_barMelee		= new Bar(234, 7, 150, yPos + 1);
+	_txtThrowing	= new Text(120, 9,   6, yPos);
+	_numThrowing	= new Text( 18, 9, 131, yPos);
+	_barThrowing	= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtStrength	= new Text(120, 9, 6, yPos);
-	_numStrength	= new Text(18, 9, 131, yPos);
-	_barStrength	= new Bar(234, 7, 150, yPos + 1);
+	_txtMelee		= new Text(120, 9,   6, yPos);
+	_numMelee		= new Text( 18, 9, 131, yPos);
+	_barMelee		= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtPsiStrength	= new Text(120, 9, 6, yPos);
-	_numPsiStrength	= new Text(18, 9, 131, yPos);
-	_barPsiStrength	= new Bar(234, 7, 150, yPos + 1);
+	_txtStrength	= new Text(120, 9,   6, yPos);
+	_numStrength	= new Text( 18, 9, 131, yPos);
+	_barStrength	= new Bar( 234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtPsiSkill	= new Text(120, 9, 6, yPos);
-	_numPsiSkill	= new Text(18, 9, 131, yPos);
-	_barPsiSkill	= new Bar(234, 7, 150, yPos + 1);
+	_txtPsiStrength	= new Text(120, 9,   6, yPos);
+	_numPsiStrength	= new Text( 18, 9, 131, yPos);
+	_barPsiStrength	= new Bar( 234, 7, 150, yPos + 1);
+
+	yPos += step;
+	_txtPsiSkill	= new Text(120, 9,   6, yPos);
+	_numPsiSkill	= new Text( 18, 9, 131, yPos);
+	_barPsiSkill	= new Bar( 234, 7, 150, yPos + 1);
 
 	setInterface("soldierInfo");
 
@@ -592,11 +594,11 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(_soldier->isInPsiTraining());
 
-	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
-
-	if (current->psiSkill >= minPsi)
-//		|| (Options::psiStrengthEval == true
+//	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
+//		|| (Options::psiStrengthEval == true // for determination to show psiStrength
 //			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
+
+	if (current->psiSkill > 0) // >= minPsi)
 	{
 		woststr.str(L"");
 		woststr << armored.psiStrength;
@@ -619,15 +621,7 @@ void SoldierInfoState::init()
 
 		_numPsiStrength->setVisible();
 		_barPsiStrength->setVisible();
-	}
-	else
-	{
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-	}
 
-	if (current->psiSkill >= minPsi)
-	{
 		woststr.str(L"");
 		woststr << armored.psiSkill;
 		_numPsiSkill->setText(woststr.str());
@@ -652,14 +646,17 @@ void SoldierInfoState::init()
 	}
 	else
 	{
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}
 
 	_btnSack->setVisible(!
-							(_soldier->getCraft() != NULL
-								&& _soldier->getCraft()->getStatus() == "STR_OUT")
-						&& _game->getSavedGame()->getMonthsPassed() != -1);
+						(_soldier->getCraft() != NULL
+							&& _soldier->getCraft()->getStatus() == "STR_OUT")
+					&& _game->getSavedGame()->getMonthsPassed() != -1);
 }
 
 /**
@@ -682,6 +679,8 @@ void SoldierInfoState::btnAutoStat(Action*)
  */
 void SoldierInfoState::btnAutoStatAll(Action*)
 {
+	_allowExit = false;
+
 	for (size_t
 			i = 0;
 			i != _list->size();
@@ -749,13 +748,13 @@ void SoldierInfoState::edtSoldierChange(Action*)
  */
 void SoldierInfoState::exitClick(Action* /* action */)
 {
-//	const int mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
-//	if (mouseY > 77)
-
-	// that no workie. cf, SelectDestinationState::globeClick()
-	//
-	// So if an RMB happens on btnAutoStatAll() the state pops also.
-	_game->popState();
+	if (_allowExit == true) // prevents RMB on btnAutoStatAll() from exiting state.
+	{
+		kL_soundPop->play(Mix_GroupAvailable(0));
+		_game->popState();
+	}
+	else
+		_allowExit = true;
 }
 
 /**

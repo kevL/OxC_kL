@@ -65,7 +65,7 @@ MiniMapState::MiniMapState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_bg			= new InteractiveSurface(320, 200);
+	_bg			= new InteractiveSurface(320,200);
 	_miniView	= new MiniMapView(
 								223, 150, 47, 15,
 								_game,

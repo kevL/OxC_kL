@@ -110,8 +110,7 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
  * dTor.
  */
 OptionsAdvancedState::~OptionsAdvancedState()
-{
-}
+{}
 
 /**
  * Fills the settings list based on category.
@@ -122,19 +121,27 @@ void OptionsAdvancedState::init()
 	_lstOptions->clearList();
 
 	_lstOptions->addRow(2, tr("STR_GENERAL").c_str(), L"");
-	_lstOptions->setCellColor(0, 0, _colorGroup);
+	_lstOptions->setCellColor(
+							0,0,
+							_colorGroup);
 
 	addSettings(_settingsGeneral);
 
 	_lstOptions->addRow(2, L"", L"");
 	_lstOptions->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
-	_lstOptions->setCellColor(_settingsGeneral.size() + 2, 0, _colorGroup);
+	_lstOptions->setCellColor(
+							_settingsGeneral.size() + 2,
+							0,
+							_colorGroup);
 
 	addSettings(_settingsGeo);
 
 	_lstOptions->addRow(2, L"", L"");
 	_lstOptions->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
-	_lstOptions->setCellColor(_settingsGeneral.size() + 2 + _settingsGeo.size() + 2, 0, _colorGroup);
+	_lstOptions->setCellColor(
+							_settingsGeneral.size() + 2 + _settingsGeo.size() + 2,
+							0,
+							_colorGroup);
 
 	addSettings(_settingsBattle);
 }
