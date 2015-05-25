@@ -168,23 +168,27 @@ AlienContainmentState::AlienContainmentState(
 	_lstAliens->onRightArrowClick((ActionHandler)& AlienContainmentState::lstItemsRightArrowClick);
 
 	const RuleItem* itRule;
-	const RuleResearch* resRule;
+	const RuleResearch* rpRule;
 	int qtyAliens;
 	size_t row = 0;
 	Uint8 color;
 
-	std::vector<std::string> researchList;
+	std::vector<std::string> baseProjects;
 	for (std::vector<ResearchProject*>::const_iterator
 			i = _base->getResearch().begin();
 			i != _base->getResearch().end();
 			++i)
 	{
-		resRule = (*i)->getRules();
-		if (_game->getRuleset()->getUnit(resRule->getName()) != NULL)
-			researchList.push_back(resRule->getName());
+		rpRule = (*i)->getRules();
+		itRule = _game->getRuleset()->getItem(rpRule->getName());
+		if (itRule != NULL
+			&& itRule->isAlien() == true)
+		{
+			baseProjects.push_back(rpRule->getName());
+		}
 	}
 
-	if (researchList.empty() == false)
+	if (baseProjects.empty() == false)
 		_txtInResearch->setVisible();
 	else
 		_txtInResearch->setVisible(false);
@@ -195,53 +199,55 @@ AlienContainmentState::AlienContainmentState(
 			i != itemList.end();
 			++i)
 	{
-		qtyAliens = _base->getItems()->getItemQty(*i);				// get Qty of each item at this base
-		if (qtyAliens > 0											// if item exists at this base
-			&& _game->getRuleset()->getItem(*i)->isAlien() == true)	// and it's a live alien...
+		if (_game->getRuleset()->getItem(*i)->isAlien() == true)	// it's a live alien...
 		{
-			_qtys.push_back(0);		// put it in the _qtys<vector> as (int)
-			_aliens.push_back(*i);	// put its name in the _aliens<vector> as (string)
-
-			std::wostringstream woststr;
-			woststr << qtyAliens;
-
-			std::wstring rQty;
-			std::vector<std::string>::const_iterator j = std::find(
-																researchList.begin(),
-																researchList.end(),
-																*i);
-			if (j != researchList.end())
+			qtyAliens = _base->getItems()->getItemQty(*i);			// get Qty of each aLien-type at this base
+			if (qtyAliens != 0)
 			{
-				rQty = tr("STR_YES");
-				researchList.erase(j);
+				_qtys.push_back(0);		// put it in the _qtys<vector> as (int)
+				_aliens.push_back(*i);	// put its name in the _aliens<vector> as (string)
+
+				std::wostringstream woststr;
+				woststr << qtyAliens;
+
+				std::wstring rpQty;
+				std::vector<std::string>::const_iterator j = std::find(
+																	baseProjects.begin(),
+																	baseProjects.end(),
+																	*i);
+				if (j != baseProjects.end())
+				{
+					rpQty = tr("STR_YES");
+					baseProjects.erase(j);
+				}
+
+				_lstAliens->addRow( // show its name on the list.
+								4,
+								tr(*i).c_str(),
+								woststr.str().c_str(),
+								L"0",
+								rpQty.c_str());
+
+				itRule = _game->getRuleset()->getItem(*i);
+				if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
+					color = Palette::blockOffset(13)+5; // yellow
+				else
+					color = _lstAliens->getColor();
+
+				_lstAliens->setRowColor(
+									row++,
+									color);
 			}
-
-			_lstAliens->addRow( // show its name on the list.
-							4,
-							tr(*i).c_str(),
-							woststr.str().c_str(),
-							L"0",
-							rQty.c_str());
-
-			itRule = _game->getRuleset()->getItem(*i);
-			if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
-				color = Palette::blockOffset(13)+5; // yellow
-			else
-				color = _lstAliens->getColor();
-
-			_lstAliens->setRowColor(
-								row++,
-								color);
 		}
 	}
 
 	for (std::vector<std::string>::const_iterator // add research aLiens that are not in Containment.
-			i = researchList.begin();
-			i != researchList.end();
+			i = baseProjects.begin();
+			i != baseProjects.end();
 			++i)
 	{
-		_aliens.push_back(*i);
 		_qtys.push_back(0);
+		_aliens.push_back(*i);
 
 		_lstAliens->addRow(
 						4,
@@ -307,22 +313,6 @@ void AlienContainmentState::btnOkClick(Action*)
 	}
 
 	_game->popState();
-
-	if (Options::storageLimitsEnforced == true // check if corpse overflows Base stores
-		&& _origin == OPT_BATTLESCAPE
-		&& _base->storesOverfull() == true)
-	{
-		_game->pushState(new SellState(
-									_base,
-									_origin));
-
-		_game->pushState(new ErrorMessageState(
-										tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-										_palette,
-										_game->getRuleset()->getInterface("manageContainment")->getElement("errorMessage")->color,
-										"BACK04.SCR",
-										_game->getRuleset()->getInterface("manageContainment")->getElement("errorPalette")->color));
- 	}
 }
 
 /**

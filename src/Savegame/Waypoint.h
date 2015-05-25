@@ -60,7 +60,7 @@ private:
 		void setId(int id);
 
 		/// Gets the waypoint's name.
-		std::wstring getName(Language* lang) const;
+		std::wstring getName(const Language* const lang) const;
 
 		/// Gets the waypoint's marker.
 		int getMarker() const;

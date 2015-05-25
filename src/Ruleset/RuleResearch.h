@@ -30,15 +30,17 @@ namespace OpenXcom
 
 /**
  * Represents one research project.
- * Dependency is the list of RuleResearchs which must be discovered before a RuleResearch became available.
- * Unlocks are used to immediately unlock a RuleResearch (even if not all the dependencies have been researched).
- *
- * Fake ResearchProjects: A RuleResearch is fake one, if its cost is 0. They are used to to create check points in the dependency tree.
- *
- * For example, if we have a Research E which needs either A & B or C & D, we create two fake research projects:
- *  - F which need A & B
- *  - G which need C & D
- * both F and G can unlock E.
+ * @note Dependency is the list of RuleResearchs which must be discovered before
+ * a RuleResearch became available.
+ * @note Unlocks are used to immediately unlock a RuleResearch even if not all
+ * the dependencies have been researched.
+ * @note Fake ResearchProjects: A RuleResearch is fake one if its cost is 0.
+ * They are used to to create check points in the dependency tree. For example
+ * if there is a Research E which needs either A & B or C & D two fake research
+ * projects can be created:
+ *		- F which needs A & B
+ *		- G which needs C & D
+ *		- both F and G can unlock E.
  */
 class RuleResearch
 {
@@ -78,7 +80,7 @@ private:
 		/// Gets the research dependencies.
 		const std::vector<std::string>& getDependencies() const;
 
-		/// Checks if this ResearchProject needs a corresponding Item to be researched.
+		/// Checks if this ResearchProject needs a corresponding Item for research.
 		bool needItem() const;
 
 		/// Gets the list of ResearchProjects unlocked by this research.
@@ -90,13 +92,13 @@ private:
 		/// Gets the list of ResearchProjects granted at random for free by this research.
 		const std::vector<std::string>& getGetOneFree() const;
 
-		/// Gets what to look up in the ufopedia.
+		/// Gets what to look up in the Ufopedia.
 		const std::string getLookup() const;
 
 		/// Gets the requirements for this ResearchProject.
 		const std::vector<std::string>& getRequirements() const;
 
-		/// Gets the list weight for this research item.
+		/// Gets the list weight for this ResearchProject.
 		int getListOrder() const;
 };
 

@@ -148,7 +148,7 @@ void MissionSite::setId(const int id)
  * @param lang - pointer to Language to get strings from
  * @return, full name
  */
-std::wstring MissionSite::getName(Language* lang) const
+std::wstring MissionSite::getName(const Language* const lang) const
 {
 	return lang->getString(_deployment->getMarkerName()).arg(_id);
 }

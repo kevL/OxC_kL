@@ -418,10 +418,10 @@ YAML::Node Base::saveId() const
 
 /**
  * Returns the custom name for this Base.
- * @param lang - pointer to Language to get strings from
+ * @param lang - pointer to Language to get strings from (default NULL)
  * @return, name string
  */
-std::wstring Base::getName(Language*) const
+std::wstring Base::getName(const Language* const) const
 {
 	return _name;
 }

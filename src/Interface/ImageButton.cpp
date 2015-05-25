@@ -88,8 +88,8 @@ void ImageButton::setGroup(ImageButton** group)
 }
 
 /**
- * Sets the button as the pressed button if it's part of a group
- * and inverts the colors when pressed.
+ * Sets the button as the pressed button if it's part of a group and inverts the
+ * colors when pressed.
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
  */
@@ -147,11 +147,10 @@ void ImageButton::toggle(bool press)
 }
 
 /**
- * kL. Releases the _mode buttons in Geoscape::DogfightState,
- * sets _btnStandoff as depressed (auto-disengage if damaged).
- * @note Uhh, do I even use ImageButtons for that .......
+ * Forces a group of buttons to automatically switch to this ImageButton.
+ * @note Does not require user input.
  */
-void ImageButton::releaseDogfight()
+void ImageButton::releaseButtonGroup()
 {
 	(*_group)->invert((*_group)->getColor() + 3);
 	*_group = this;

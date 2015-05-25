@@ -1451,7 +1451,7 @@ const std::vector<std::string>& Ruleset::getCraftWeaponsList() const
 /**
  * Returns the rules for the specified item.
  * @param id - reference an Item type
- * @return, pointer to Rule for the Item, or NULL if the item is not found
+ * @return, pointer to Rule for the Item or NULL if the item is not found
  */
 RuleItem* Ruleset::getItem(const std::string& id) const
 {

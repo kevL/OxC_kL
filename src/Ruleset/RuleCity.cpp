@@ -91,16 +91,17 @@ void RuleCity::load(const YAML::Node& node)
 
 /**
  * Returns this City's name as seen on the Globe.
- * @param lang - Language to get strings from
+ * @param lang - pointer to Language to get strings from
  * @return, the city's IG name
  */
-std::wstring RuleCity::getName(Language* lang) const
+std::wstring RuleCity::getName(const Language* const lang) const
 {
 	return lang->getString(_name);
 }
 
 /**
  * Returns this City's name as a raw string.
+ * @return, the city's ID string
  */
 std::string RuleCity::getName() const
 {

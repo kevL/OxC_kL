@@ -82,7 +82,8 @@ Craft::Craft(
 		_inDogfight(false),
 		_loadCur(0),
 		_warning(CW_NONE),
-		_warned(false) // do not save-to-file; ie, re-warn player if reloading
+		_warned(false), // do not save-to-file; ie, re-warn player if reloading
+		_kills(0)
 {
 	_items = new ItemContainer();
 
@@ -94,8 +95,8 @@ Craft::Craft(
 		_weapons.push_back(NULL);
 	}
 
-	if (base != NULL)
-		setBase(base);
+	if (_base != NULL)
+		setBase(_base);
 
 	_loadCap = _crRule->getMaxItems() + _crRule->getSoldiers() * 10;
 }
@@ -203,6 +204,7 @@ void Craft::load(
 	_status			= node["status"]		.as<std::string>(_status);
 	_lowFuel		= node["lowFuel"]		.as<bool>(_lowFuel);
 	_mission		= node["mission"]		.as<bool>(_mission);
+	_kills			= node["kills"]			.as<int>(_kills);
 //	_flightOrder	= node["flightOrder"]	.as<int>(_flightOrder);
 
 	if (const YAML::Node name = node["name"])
@@ -327,6 +329,7 @@ YAML::Node Craft::save() const
 	if (_lowFuel == true)		node["lowFuel"]		= _lowFuel;
 	if (_mission == true)		node["mission"]		= _mission;
 	if (_inTactical == true)	node["inTactical"]	= _inTactical;
+	if (_kills != 0)			node["kills"]		= _kills;
 //	if (_flightOrder != 0)		node["flightOrder"]	= _flightOrder;
 	if (_takeoff != 0)			node["takeoff"]		= _takeoff;
 	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
@@ -405,7 +408,7 @@ int Craft::getId() const
  * @param lang - pointer to a Language to get strings from
  * @return, full name of craft
  */
-std::wstring Craft::getName(Language* lang) const
+std::wstring Craft::getName(const Language* const lang) const
 {
 	if (_name.empty() == true)
 		return lang->getString("STR_CRAFTNAME").arg(lang->getString(_crRule->getType())).arg(_id);
@@ -899,7 +902,7 @@ void Craft::checkup()
  * @param target - pointer to target
  * @return, true if detected
  */
-bool Craft::detect(Target* target) const
+bool Craft::detect(const Target* const target) const
 {
 	const int radarRange = _crRule->getRadarRange();
 
@@ -1146,7 +1149,7 @@ void Craft::setInDogfight(const bool inDogfight)
 } */
 
 /**
- * Gets the craft's unique id.
+ * Gets this Craft's unique id.
  * @return, a tuple of the craft's type and per-type id
  */
 CraftId Craft::getUniqueId() const
@@ -1184,7 +1187,8 @@ int Craft::getLoadCapacity() const
 } */
 
 /**
- * Gets current load. Also recalculates '_loadCur' value.
+ * Gets current load.
+ * @note Also recalculates '_loadCur' value.
  * @return, current load
  */
 int Craft::getLoadCurrent()
@@ -1333,6 +1337,23 @@ int Craft::getDowntime(bool& delayed)
 	}
 
 	return hours;
+}
+
+/**
+ * Adds a dogfight kill.
+ */
+void Craft::addKill()
+{
+	++_kills;
+}
+
+/**
+ * Gets this Craft's dogfight kills.
+ * @return, kills
+ */
+int Craft::getKills() const
+{
+	return _kills;
 }
 
 }

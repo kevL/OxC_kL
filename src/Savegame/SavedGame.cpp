@@ -2527,7 +2527,6 @@ std::vector<MissionStatistics*>* SavedGame::getMissionStatistics()
 				return *craft;
 		}
 	}
-
 	return NULL;
 } */
 

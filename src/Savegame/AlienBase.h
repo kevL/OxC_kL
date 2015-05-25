@@ -67,7 +67,7 @@ private:
 		void setId(int id);
 
 		/// Gets the alien base's name.
-		std::wstring getName(Language* lang) const;
+		std::wstring getName(const Language* const lang) const;
 		/// Gets the alien base's marker.
 		int getMarker() const;
 

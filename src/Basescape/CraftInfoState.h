@@ -49,15 +49,12 @@ private:
 
 	Base* _base;
 	Craft* _craft;
-	TextButton
-		* _btnArmor,
-		* _btnCrew,
-		* _btnEquip,
-		* _btnInventory,
-		* _btnOk,
-		* _btnW1,
-		* _btnW2;
-	TextEdit* _edtCraft;
+	Surface
+		* _sprite,
+		* _weapon1,
+		* _weapon2,
+		* _crew,
+		* _equip;
 	Text
 		* _txtBaseLabel,
 		* _txtCost,
@@ -68,13 +65,17 @@ private:
 		* _txtW1Ammo,
 		* _txtW1Name,
 		* _txtW2Ammo,
-		* _txtW2Name;
-	Surface
-		* _sprite,
-		* _weapon1,
-		* _weapon2,
-		* _crew,
-		* _equip;
+		* _txtW2Name,
+		* _txtKills;
+	TextButton
+		* _btnArmor,
+		* _btnCrew,
+		* _btnEquip,
+		* _btnInventory,
+		* _btnOk,
+		* _btnW1,
+		* _btnW2;
+	TextEdit* _edtCraft;
 	Window* _window;
 
 	/// Formats an amount of time.

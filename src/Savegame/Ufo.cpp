@@ -324,7 +324,7 @@ int Ufo::getId() const
  * @param lang - pointer to Language to get strings from
  * @return, full name
  */
-std::wstring Ufo::getName(Language* lang) const
+std::wstring Ufo::getName(const Language* const lang) const
 {
 	switch (_status)
 	{

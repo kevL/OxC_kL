@@ -52,7 +52,7 @@ enum CraftWarning
 
 /**
  * Represents a Craft stored in a Base.
- * Contains variable info about a Craft like position, fuel, damage, etc.
+ * @note Contains variable info about a Craft like position, fuel, damage, etc.
  * @sa RuleCraft
  */
 class Craft
@@ -74,7 +74,9 @@ private:
 		_fuel,
 		_id,
 //		_flightOrder,
-		_takeoff;
+		_takeoff,
+
+		_kills;
 
 	std::string _status;
 	std::wstring _name;
@@ -118,7 +120,7 @@ private:
 		/// Gets the craft's ID.
 		int getId() const;
 		/// Gets the craft's name.
-		std::wstring getName(Language* lang) const;
+		std::wstring getName(const Language* const lang) const;
 		/// Sets the craft's name.
 		void setName(const std::wstring& newName);
 
@@ -204,7 +206,7 @@ private:
 		void checkup();
 
 		/// Checks if a target is detected by the craft's radar.
-		bool detect(Target* target) const;
+		bool detect(const Target* const target) const;
 
 		/// Consumes the craft's fuel.
 		void consumeFuel();
@@ -264,6 +266,11 @@ private:
 
 		/// Gets the amount of time this Craft will be repairing/rearming/refueling.
 		int getDowntime(bool& delayed);
+
+		/// Adds a dogfight kill.
+		void addKill();
+		/// Gets this Craft's dogfight kills.
+		int getKills() const;
 };
 
 }

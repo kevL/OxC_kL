@@ -68,9 +68,8 @@ protected:
 
 		/// Invert a button explicitly either ON or OFF.
 		void toggle(bool invert);
-
-		/// kL. Releases the _mode buttons in Geoscape::DogfightState.
-		void releaseDogfight();
+		/// Forces a group of buttons to automatically switch to this ImageButton.
+		void releaseButtonGroup();
 };
 
 }

@@ -873,6 +873,9 @@ void DogfightState::updateDogfight()
 				++i)
 		{
 			(*i)->moveProjectile();
+			int
+				hitprob,
+				damage;
 
 			if ((*i)->getDirection() == D_UP) // Projectiles fired by interceptor.
 			{
@@ -886,18 +889,23 @@ void DogfightState::updateDogfight()
 //					if (ufoSize > 4)
 //						ufoSize = 4;
 
-					const int hitprob = (*i)->getAccuracy() + (_ufoSize * 5) - (_diff * 5); // Could include UFO speed here ...
+					hitprob = (*i)->getAccuracy();
+					hitprob += _ufoSize * 4;
+					hitprob -= _diff * 5;
+					// Could include UFO speed here ...
+					hitprob += _craft->getKills() * 2;
 
 					if (RNG::percent(hitprob) == true)
 					{
-						const int damage = RNG::generate(
-													((*i)->getDamage() + 1) / 2, // Round up.
-													(*i)->getDamage());
+						damage = RNG::generate(
+											((*i)->getDamage() + 1) / 2, // Round up.
+											(*i)->getDamage());
 						_ufo->setDamage(_ufo->getDamage() + damage);
 
 						if (_ufo->isCrashed() == true)
 						{
 							_ufo->setShotDownByCraftId(_craft->getUniqueId());
+							_craft->addKill();
 							_ufoBreakingOff = false;
 							_ufo->setSpeed(0);
 						}
@@ -938,19 +946,24 @@ void DogfightState::updateDogfight()
 					|| ((*i)->getGlobalType() == CWPGT_BEAM
 						&& (*i)->toBeRemoved() == true))
 				{
-					int stanceModifier;
-					if (_craftStance == _btnAggressive)
-						stanceModifier = 15;
-					else if (_craftStance == _btnStandard)
-						stanceModifier = 0;
-					else //if (_craftStance == _btnCautious)
-						stanceModifier = -20; // this should catch Disengaging also.
+					hitprob = (*i)->getAccuracy();
 
-					if (RNG::percent((*i)->getAccuracy() + stanceModifier) == true)
+					if (   _craftStance == _btnCautious
+						|| _craftStance == _btnStandoff
+						|| _craftStance == _btnDisengage)
 					{
-						const int damage = RNG::generate(
-													(_ufo->getRules()->getWeaponPower() + 9) / 10, // Round up.
-													_ufo->getRules()->getWeaponPower());
+						hitprob -= 20;
+					}
+					else if (_craftStance == _btnAggressive)
+						hitprob += 15;
+
+					hitprob -= _craft->getKills();
+
+					if (RNG::percent(hitprob) == true)
+					{
+						damage = RNG::generate(
+											(_ufo->getRules()->getWeaponPower() + 9) / 10, // Round up.
+											_ufo->getRules()->getWeaponPower());
 						if (damage != 0)
 						{
 							_craft->setDamage(_craft->getDamage() + damage);
@@ -970,7 +983,7 @@ void DogfightState::updateDogfight()
 									&& _craft->isDestroyed() == false
 									&& _ufoBreakingOff == false)
 								{
-									_btnStandoff->releaseDogfight(); // kL_add
+									_btnStandoff->releaseButtonGroup();
 
 									_end = false;
 									setStatus("STR_STANDOFF");

@@ -63,7 +63,8 @@ private:
 		* _txtW1Ammo,
 		* _txtW1Name,
 		* _txtW2Ammo,
-		* _txtW2Name;
+		* _txtW2Name,
+		* _txtKills;
 	TextButton
 		* _btnBase,
 		* _btnCancel,

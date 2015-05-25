@@ -27,8 +27,7 @@ namespace OpenXcom
 {
 
 /**
- * Base class for moving targets on the globe
- * with a certain speed and destination.
+ * Base class for moving targets on the globe with a certain speed and destination.
  */
 class MovingTarget
 	:

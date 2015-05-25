@@ -64,7 +64,8 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the city's name.
-		std::wstring getName(Language* lang) const;
+		std::wstring getName(const Language* const lang) const;
+		/// Gets the city's name as a raw string.
 		std::string getName() const;
 
 		/// Gets the City's latitude.

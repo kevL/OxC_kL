@@ -118,7 +118,7 @@ void AlienBase::setId(int id)
  * @param lang - pointer to Language to get strings from
  * @return, full name
  */
-std::wstring AlienBase::getName(Language* lang) const
+std::wstring AlienBase::getName(const Language* const lang) const
 {
 	return lang->getString("STR_ALIEN_BASE_").arg(_id);
 }

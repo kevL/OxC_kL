@@ -73,7 +73,7 @@ CraftInfoState::CraftInfoState(
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 		_window		= new Window(this, 320,200, 0,0, POPUP_BOTH);
 	else
-		_window		= new Window(this, 320,200, 0,0, POPUP_NONE);
+		_window		= new Window(this, 320,200);
 
 	_edtCraft		= new TextEdit(this, 160, 16, 80, 10);
 	_txtBaseLabel	= new Text(80, 9,  16, 10);
@@ -89,6 +89,8 @@ CraftInfoState::CraftInfoState(
 	_txtW2Name		= new Text(78,  9, 204, 48);
 	_txtW1Ammo		= new Text(60, 25,  46, 64);
 	_txtW2Ammo		= new Text(60, 25, 204, 64);
+
+	_txtKills		= new Text(60, 9, 246, 83);
 
 	_btnCrew		= new TextButton( 64, 16, 16,  96);
 	_btnEquip		= new TextButton( 64, 16, 16, 120);
@@ -120,6 +122,7 @@ CraftInfoState::CraftInfoState(
 	add(_txtW2Name,		"text2",	"craftInfo");
 	add(_txtW1Ammo,		"text2",	"craftInfo");
 	add(_txtW2Ammo,		"text2",	"craftInfo");
+	add(_txtKills,		"text2",	"craftInfo");
 	add(_btnCrew,		"button",	"craftInfo");
 	add(_btnEquip,		"button",	"craftInfo");
 	add(_btnArmor,		"button",	"craftInfo");
@@ -151,6 +154,9 @@ CraftInfoState::CraftInfoState(
 
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
+
+	_txtKills->setText(tr("STR_KILLS_LC_").arg(_base->getCrafts()->at(_craftId)->getKills()));
+	_txtKills->setAlign(ALIGN_RIGHT);
 
 	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);

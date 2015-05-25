@@ -39,7 +39,7 @@ class UfoTrajectory;
 
 /**
  * Represents an alien UFO on the map.
- * Contains variable info about a UFO like position, damage, speed, etc.
+ * @note Contains variable info about a UFO like position, damage, speed, etc.
  * @sa RuleUfo
  */
 class Ufo
@@ -124,7 +124,7 @@ private:
 		/// Gets the UFO's ID.
 		int getId() const;
 		/// Gets the UFO's name.
-		std::wstring getName(Language* lang) const;
+		std::wstring getName(const Language* const lang) const;
 
 		/// Gets the UFO's marker.
 		int getMarker() const;
@@ -158,10 +158,10 @@ private:
 		std::string getDirection() const;
 
 		/// Gets the UFO status.
-		enum UfoStatus getStatus() const
+		UfoStatus getStatus() const
 		{ return _status; }
 		/// Set the UFO's status.
-		void setStatus(enum UfoStatus status)
+		void setStatus(UfoStatus status)
 		{ _status = status; }
 
 		/// Gets if the UFO has crashed.

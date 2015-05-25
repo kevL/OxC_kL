@@ -82,7 +82,7 @@ private:
 		void setId(const int id);
 
 		/// Gets this MissionSite's name.
-		std::wstring getName(Language* lang) const;
+		std::wstring getName(const Language* const lang) const;
 
 		/// Gets this MissionSite site's marker.
 		int getMarker() const;

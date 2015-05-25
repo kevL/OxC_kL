@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <vector>
-
 //#include <yaml-cpp/yaml.h>
 
 
@@ -71,7 +70,7 @@ protected:
 		void setLatitude(double lat);
 
 		/// Gets the target's name.
-		virtual std::wstring getName(Language* lang) const = 0;
+		virtual std::wstring getName(const Language* const lang) const = 0;
 
 		/// Gets the target's marker.
 		virtual int getMarker() const = 0;
@@ -80,7 +79,7 @@ protected:
 		std::vector<Target*>* getFollowers();
 
 		/// Gets the distance to another target.
-		double getDistance(const Target* target) const;
+		double getDistance(const Target* const target) const;
 
 		/// Gets the depth of the target.
 		int getSiteDepth() const;
