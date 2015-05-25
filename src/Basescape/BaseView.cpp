@@ -26,15 +26,14 @@
 #include "../Engine/Action.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
-#include "../Engine/Timer.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 
-#include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
@@ -238,7 +237,7 @@ int BaseView::getGridY() const
 void BaseView::setSelectable(size_t facSize)
 {
 	_selSize = facSize;
-	if (_selSize > 0)
+	if (_selSize != 0)
 	{
 		_selector = new Surface(
 							facSize * GRID_SIZE,
@@ -294,7 +293,7 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 				i != facSize;
 				++i)
 		{
-			if ((	   gridX > 0							// check left
+			if ((	   gridX != 0							// check left
 					&& gridY + i < Base::BASE_SIZE
 					&& _facilities[gridX - 1]
 								  [gridY + i] != NULL
@@ -304,7 +303,7 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 								->getBuildTime() == 0))
 
 				|| (   gridX + i < Base::BASE_SIZE			// check top
-					&& gridY > 0
+					&& gridY != 0
 					&& _facilities[gridX + i]
 								  [gridY - 1] != NULL
 					&& (allowQ == true
@@ -355,7 +354,7 @@ bool BaseView::isQueuedBuilding(const RuleBaseFacility* const facRule) const
 			i != facSize;
 			++i)
 	{
-		if ((	   gridX > 0							// check left
+		if ((	   gridX != 0							// check left
 				&& gridY + i < Base::BASE_SIZE
 				&& _facilities[gridX - 1]
 							  [gridY + i] != NULL
@@ -364,7 +363,7 @@ bool BaseView::isQueuedBuilding(const RuleBaseFacility* const facRule) const
 						->getBuildTime() == 0)
 
 			|| (   gridX + i < Base::BASE_SIZE			// check top
-				&& gridY > 0
+				&& gridY != 0
 				&& _facilities[gridX + i]
 							  [gridY - 1] != NULL
 				&& _facilities[gridX + i]
@@ -407,7 +406,7 @@ void BaseView::reCalcQueuedBuildings()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getBuildTime() > 0)
+		if ((*i)->getBuildTime() != 0)
 		{
 			// set all queued buildings to infinite.
 			if ((*i)->getBuildTime() > (*i)->getRules()->getBuildTime())
@@ -443,13 +442,13 @@ void BaseView::reCalcQueuedBuildings()
 				i != facSize;
 				++i)
 		{
-			if (x > 0)
+			if (x != 0)
 				updateNeighborFacilityBuildTime(
 											facility,
 											_facilities[x - 1]
 													   [y + i]);
 
-			if (y > 0)
+			if (y != 0)
 				updateNeighborFacilityBuildTime(
 											facility,
 											_facilities[x + i]
@@ -472,7 +471,7 @@ void BaseView::reCalcQueuedBuildings()
 
 /**
  * Updates the neighborFacility's build time.
- * This is for internal use only (reCalcQueuedBuildings()).
+ * @note This is for internal use only by reCalcQueuedBuildings().
  * @param facility - pointer to a BaseFacility
  * @param neighbor - pointer to a neighboring BaseFacility
  */
@@ -511,7 +510,7 @@ void BaseView::blink()
 {
 	_blink = !_blink;
 
-	if (_selSize > 0)
+	if (_selSize != 0)
 	{
 		SDL_Rect rect;
 
@@ -541,10 +540,10 @@ void BaseView::blink()
 }
 
 /**
- * Draws the view of all the facilities in the base,
- * connectors between them, and crafts based in hangars.
- * @note This does not draw large facilities that are under construction;
- * that is, only the dotted build-outline is shown.
+ * Draws the view of all the facilities in the base with connectors between
+ * them and crafts currently based in hangars.
+ * @note This does not draw large facilities that are under construction -
+ * that is only the dotted building-outline is shown.
  */
 void BaseView::draw()
 {
@@ -691,7 +690,7 @@ void BaseView::draw()
 		}
 
 		// draw time remaining
-		if ((*i)->getBuildTime() > 0)
+		if ((*i)->getBuildTime() != 0)
 		{
 			Text* const text = new Text(
 									GRID_SIZE * facSize,

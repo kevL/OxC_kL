@@ -66,6 +66,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 
@@ -564,11 +565,12 @@ void BasescapeState::btnGeoscapeClick(Action*)
 void BasescapeState::viewLeftClick(Action*)
 {
 	const BaseFacility* const fac = _view->getSelectedFacility();
+	bool bPop = false;
 
 	if (fac == NULL) // dirt.
 	{
 		_game->pushState(new MonthlyCostsState(_base));
-//		_game->pushState(new BaseInfoState(_base, this));
+		bPop = true;
 	}
 	else if (fac->getBuildTime() > 0)
 		return;
@@ -583,6 +585,8 @@ void BasescapeState::viewLeftClick(Action*)
 				|| fac->getCraft()->getStatus() == "STR_OUT")
 			{
 				_game->pushState(new CraftsState(_base));
+				bPop = true;
+
 				break;
 			}
 			else if (fac->getCraft() == _base->getCrafts()->at(i))
@@ -596,48 +600,76 @@ void BasescapeState::viewLeftClick(Action*)
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{
-		_game->pushState(new StoresState(_base));
-//		_game->pushState(new SellState(_base));
+		if (_base->getItems()->getTotalQuantity() != 0)
+		{
+			_game->pushState(new StoresState(_base));
+			bPop = true;
+		}
+		else
+			return;
 	}
-	else if (fac->getRules()->getPersonnel() > 0
-		&& _base->getSoldiers()->empty() == false)
+	else if (fac->getRules()->getPersonnel() > 0)
 	{
-		_game->pushState(new SoldiersState(_base));
+		if (_base->getSoldiers()->empty() == false)
+		{
+			_game->pushState(new SoldiersState(_base));
+			bPop = true;
+		}
+		else
+			return;
 	}
-	else if (fac->getRules()->getPsiLaboratories() > 0
-			&& Options::anytimePsiTraining == true)
+	else if (fac->getRules()->getPsiLaboratories() > 0)
 	{
-		_game->pushState(new AllocatePsiTrainingState(_base));
+		if (Options::anytimePsiTraining == true)
+		{
+			_game->pushState(new AllocatePsiTrainingState(_base));
+			bPop = true;
+		}
+		else
+			return;
 	}
 	else if (fac->getRules()->getLaboratories() > 0)
+	{
 		_game->pushState(new ResearchState(
 										_base,
 										this));
+		bPop = true;
+	}
 	else if (fac->getRules()->getWorkshops() > 0)
+	{
 		_game->pushState(new ManufactureState(
 											_base,
 											this));
+		bPop = true;
+	}
 	else if (fac->getRules()->getAliens() > 0)
+	{
 		_game->pushState(new AlienContainmentState(
 												_base,
 												OPT_GEOSCAPE));
+		bPop = true;
+	}
 	else if (fac->getRules()->isLift() == true) // Lift has radar range (cf. next)
 	{
 		_game->pushState(new BaseDetectionState(_base));
 		return;
 	}
-/*	else if (fac->getRules()->getRadarRange() > 0
+	else if (fac->getRules()->getRadarRange() > 0
 		|| fac->getRules()->isMindShield() == true
 		|| fac->getRules()->isHyperwave() == true)
 	{
+		_game->pushState(new BaseInfoState(
+										_base,
+										this));
 		bPop = true;
-		_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
+/*		_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(_base->getLatitude());
 		kL_reCenter = true;
-		_game->popState();
-	} */
+		_game->popState(); */
+	}
 
-	kL_soundPop->play(Mix_GroupAvailable(0)); // play "wha-wha" sound
+	if (bPop == true)
+		kL_soundPop->play(Mix_GroupAvailable(0)); // play "wha-wha" sound
 }
 
 /**

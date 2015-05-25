@@ -4401,7 +4401,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1432458336 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1432509282 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4441,10 +4441,11 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
+	"../Savegame/ItemContainer.h"
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1431916986 f:\git\openxcom\src\basescape\baseview.h
+1432507906 f:\git\openxcom\src\basescape\baseview.h
 	"../Engine/InteractiveSurface.h"
 	"../Savegame/Base.h"
 
@@ -4516,15 +4517,14 @@
 
 1431469792 f:\git\openxcom\src\savegame\region.h
 
-1432464809 source:f:\git\openxcom\src\basescape\baseview.cpp
+1432508343 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	"../Engine/Action.h"
-	"../Engine/Timer.h"
 	"../Engine/SurfaceSet.h"
+	"../Engine/Timer.h"
 	"../Interface/Text.h"
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/RuleCraft.h"
-	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 	"../Savegame/ItemContainer.h"
@@ -5765,10 +5765,10 @@
 	<iostream>
 	"lodepng.h"
 
-1430149550 f:\git\openxcom\src\geoscape\defeatstate.h
+1432509718 f:\git\openxcom\src\geoscape\defeatstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\victorystate.h
+1432509718 f:\git\openxcom\src\geoscape\victorystate.h
 	"../Engine/State.h"
 
 1431491378 f:\git\openxcom\src\interface\fpscounter.h
@@ -7054,7 +7054,7 @@
 1432345932 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
-1432426586 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
+1432510530 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
 	"DefeatState.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
@@ -7606,7 +7606,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1432426618 source:f:\git\openxcom\src\geoscape\victorystate.cpp
+1432510555 source:f:\git\openxcom\src\geoscape\victorystate.cpp
 	"VictoryState.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
@@ -8805,7 +8805,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1432349839 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1432465592 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

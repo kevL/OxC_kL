@@ -62,7 +62,7 @@ private:
 		/// Handler for waiting the screen.
 //		void screenTimer();
 		/// Handler for clicking the screen.
-		void screenClick(Action* action);
+		void screenPress(Action* action);
 };
 
 }

@@ -87,11 +87,12 @@ VictoryState::VictoryState()
 
 		screen->blit(_bg[i]);
 		_bg[i]->setVisible(false);
-		_bg[i]->onMouseClick((ActionHandler)& VictoryState::screenClick);
+		_bg[i]->onMousePress((ActionHandler)& VictoryState::screenPress);
+		_bg[i]->onKeyboardPress((ActionHandler)& VictoryState::screenPress);
 
-		std::ostringstream ss;
-		ss << "STR_VICTORY_" << static_cast<int>(i + 1);
-		_text[i]->setText(tr(ss.str()));
+		std::ostringstream oststr;
+		oststr << "STR_VICTORY_" << static_cast<int>(i + 1);
+		_text[i]->setText(tr(oststr.str()));
 		_text[i]->setWordWrap();
 		_text[i]->setVisible(false);
 	}
@@ -104,7 +105,7 @@ VictoryState::VictoryState()
 //	_timer->onTimer((StateHandler)& VictoryState::screenTimer);
 //	_timer->start();
 
-	screenClick(NULL);
+	screenPress(NULL);
 
 	if (_game->getSavedGame()->isIronman() == true) // Ironman is over, rambo
 	{
@@ -126,7 +127,7 @@ VictoryState::~VictoryState()
  */
 /*void VictoryState::screenTimer()
 {
-	screenClick(NULL);
+	screenPress(NULL);
 } */
 
 /**
@@ -141,7 +142,7 @@ VictoryState::~VictoryState()
  * Shows the next screen in the slideshow or goes back to the Main Menu.
  * @param action - pointer to an Action
  */
-void VictoryState::screenClick(Action*)
+void VictoryState::screenPress(Action*)
 {
 //	_timer->start();
 

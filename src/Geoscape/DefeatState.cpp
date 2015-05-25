@@ -81,11 +81,12 @@ DefeatState::DefeatState()
 
 		screen->blit(_bg[i]);
 		_bg[i]->setVisible(false);
-		_bg[i]->onMouseClick((ActionHandler)& DefeatState::screenClick);
+		_bg[i]->onMousePress((ActionHandler)& DefeatState::screenPress);
+		_bg[i]->onKeyboardPress((ActionHandler)& DefeatState::screenPress);
 
-		std::ostringstream ss;
-		ss << "STR_GAME_OVER_" << static_cast<int>(i + 1);
-		_text[i]->setText(tr(ss.str()));
+		std::ostringstream oststr;
+		oststr << "STR_GAME_OVER_" << static_cast<int>(i) + 1;
+		_text[i]->setText(tr(oststr.str()));
 		_text[i]->setWordWrap();
 		_text[i]->setVisible(false);
 	}
@@ -98,7 +99,7 @@ DefeatState::DefeatState()
 //	_timer->onTimer((StateHandler)& DefeatState::screenTimer);
 //	_timer->start();
 
-	screenClick(NULL);
+	screenPress(NULL);
 
 	if (_game->getSavedGame()->isIronman() == true) // Ironman is over, rambo
 	{
@@ -128,14 +129,14 @@ DefeatState::~DefeatState()
  */
 /* void DefeatState::screenTimer()
 {
-	screenClick(NULL);
+	screenPress(NULL);
 } */
 
 /**
  * Shows the next screen in the slideshow or goes back to the Main Menu.
  * @param action - pointer to an Action
  */
-void DefeatState::screenClick(Action*)
+void DefeatState::screenPress(Action*)
 {
 //	_timer->start();
 
