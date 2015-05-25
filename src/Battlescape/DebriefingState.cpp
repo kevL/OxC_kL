@@ -1773,7 +1773,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 
 
 		const RuleItem* const itRule = _rules->getItem(i->first);
-		const Unit* const tankUnit = _rules->getUnit(itRule->getType());
+		const RuleUnit* const tankUnit = _rules->getUnit(itRule->getType());
 
 		int tankSize;
 		if (tankUnit != NULL)

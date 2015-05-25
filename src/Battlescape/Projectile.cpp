@@ -29,25 +29,25 @@
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
-#include "../Engine/Game.h"
+//#include "../Engine/Game.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
-#include "../Engine/Surface.h"
+//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/MapData.h"
-#include "../Ruleset/RuleItem.h"
+//#include "../Ruleset/RuleArmor.h"
+//#include "../Ruleset/MapData.h"
+//#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
+//#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/BattleUnit.h"
+//#include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
 

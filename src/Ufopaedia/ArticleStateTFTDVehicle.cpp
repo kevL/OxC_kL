@@ -25,7 +25,7 @@
 #include "../Engine/Palette.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 
@@ -34,7 +34,7 @@ namespace OpenXcom
 
 	ArticleStateTFTDVehicle::ArticleStateTFTDVehicle(ArticleDefinitionTFTD *defs) : ArticleStateTFTD(defs)
 	{
-		Unit *unit = _game->getRuleset()->getUnit(defs->id);
+		RuleUnit *unit = _game->getRuleset()->getUnit(defs->id);
 		RuleArmor *armor = _game->getRuleset()->getArmor(unit->getArmor());
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 

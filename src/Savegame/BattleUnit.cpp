@@ -48,7 +48,7 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 
 namespace OpenXcom
@@ -220,7 +220,7 @@ BattleUnit::BattleUnit(
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
-		Unit* unit,
+		RuleUnit* unit,
 		const UnitFaction faction,
 		const int id,
 		RuleArmor* const armor,

@@ -24,7 +24,7 @@
 //#include <yaml-cpp/yaml.h>
 
 //#include "../Ruleset/StatString.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 
 namespace OpenXcom

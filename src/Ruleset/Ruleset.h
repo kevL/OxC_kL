@@ -66,6 +66,7 @@ class RuleResearch;
 class RuleSoldier;
 class RuleTerrain;
 class RuleUfo;
+class RuleUnit;
 class RuleVideo;
 class SavedGame;
 class Soldier;
@@ -73,7 +74,6 @@ class SoldierNamePool;
 class SoundDefinition;
 class StatString;
 class UfoTrajectory;
-class Unit;
 
 
 /**
@@ -173,7 +173,7 @@ protected:
 	std::map<std::string, RuleVideo*>			_videos;
 	std::map<std::string, SoundDefinition*>		_soundDefs;
 	std::map<std::string, UfoTrajectory*>		_ufoTrajectories;
-	std::map<std::string, Unit*> _units;
+	std::map<std::string, RuleUnit*>			_units;
 
 	std::map<std::string, std::vector<MapScript*> > _mapScripts;
 
@@ -265,7 +265,7 @@ protected:
 		/// Gets soldier unit rules.
 		RuleSoldier* getSoldier(const std::string& type) const;
 		/// Gets non-soldier unit rules.
-		Unit* getUnit(const std::string& type) const;
+		RuleUnit* getUnit(const std::string& type) const;
 
 		/// Gets alien race rules.
 		AlienRace* getAlienRace(const std::string& name) const;

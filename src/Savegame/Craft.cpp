@@ -47,7 +47,7 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Transfer.h"

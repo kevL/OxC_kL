@@ -54,7 +54,7 @@
 #include "../Ruleset/RuleTerrain.h"
 //#include "../Ruleset/RuleTexture.h"
 #include "../Ruleset/RuleUfo.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
@@ -1149,7 +1149,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 {
 	const std::string vehicle = tank->getRules()->getType();
-	Unit* const unitRule = _rules->getUnit(vehicle);
+	RuleUnit* const unitRule = _rules->getUnit(vehicle);
 
 	BattleUnit* const tankUnit = addXCOMUnit(new BattleUnit( // add Vehicle as a unit.
 														unitRule,
@@ -2054,7 +2054,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // priva
 
 	RuleItem* itRule;
 	BattleItem* item;
-	Unit* unitRule;
+	RuleUnit* unitRule;
 	BattleUnit* unit;
 
 	for (std::vector<DeploymentData>::const_iterator
@@ -2214,7 +2214,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // priva
  * @return, pointer to the created BattleUnit
  */
 BattleUnit* BattlescapeGenerator::addAlien( // private.
-		Unit* const unitRule,
+		RuleUnit* const unitRule,
 		int alienRank,
 		bool outside)
 {
@@ -2372,7 +2372,7 @@ void BattlescapeGenerator::deployCivilians(int civilians) // private.
  * @param rules - pointer to the Unit rule which holds info about civilians
  * @return, pointer to the created BattleUnit
  */
-BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules) // private.
+BattleUnit* BattlescapeGenerator::addCivilian(RuleUnit* rules) // private.
 {
 	BattleUnit* const unit = new BattleUnit(
 										rules,

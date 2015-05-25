@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Unit.h"
+#include "RuleUnit.h"
 
 //#include "../Engine/Exception.h"
 
@@ -26,10 +26,10 @@ namespace OpenXcom
 {
 
 /**
- * Creates a certain type of unit.
+ * Creates rules for a certain type of unit.
  * @param type - reference the Unit's type
  */
-Unit::Unit(const std::string& type)
+RuleUnit::RuleUnit(const std::string& type)
 	:
 		_type(type),
 		_standHeight(0),
@@ -52,7 +52,7 @@ Unit::Unit(const std::string& type)
 /**
  * dTor.
  */
-Unit::~Unit()
+RuleUnit::~RuleUnit()
 {}
 
 /**
@@ -60,7 +60,7 @@ Unit::~Unit()
  * @param node		- YAML node
  * @param modIndex	- a value that offsets the sounds and sprite values to avoid conflicts
  */
-void Unit::load(
+void RuleUnit::load(
 		const YAML::Node& node,
 		int modIndex)
 {
@@ -117,7 +117,7 @@ void Unit::load(
  * Returns the language string that names this unit. Each unit type has a unique name.
  * @return, the unit's name
  */
-std::string Unit::getType() const
+std::string RuleUnit::getType() const
 {
 	return _type;
 }
@@ -126,7 +126,7 @@ std::string Unit::getType() const
  * Returns the unit's stats data object.
  * @return, pointer to the unit's stats
  */
-UnitStats* Unit::getStats()
+UnitStats* RuleUnit::getStats()
 {
 	return &_stats;
 }
@@ -135,7 +135,7 @@ UnitStats* Unit::getStats()
  * Returns the unit's height at standing.
  * @return, the unit's height
  */
-int Unit::getStandHeight() const
+int RuleUnit::getStandHeight() const
 {
 	return _standHeight;
 }
@@ -144,7 +144,7 @@ int Unit::getStandHeight() const
  * Returns the unit's height at kneeling.
  * @return, the unit's kneeling height
  */
-int Unit::getKneelHeight() const
+int RuleUnit::getKneelHeight() const
 {
 	return _kneelHeight;
 }
@@ -153,7 +153,7 @@ int Unit::getKneelHeight() const
  * Returns the unit's floating elevation.
  * @return, the unit's floating height
  */
-int Unit::getFloatHeight() const
+int RuleUnit::getFloatHeight() const
 {
 	return _floatHeight;
 }
@@ -162,7 +162,7 @@ int Unit::getFloatHeight() const
  * Gets the unit's armor type.
  * @return, the unit's armor type
  */
-std::string Unit::getArmor() const
+std::string RuleUnit::getArmor() const
 {
 	return _armor;
 }
@@ -171,7 +171,7 @@ std::string Unit::getArmor() const
  * Gets the alien's race.
  * @return, the alien's race
  */
-std::string Unit::getRace() const
+std::string RuleUnit::getRace() const
 {
 	return _race;
 }
@@ -180,7 +180,7 @@ std::string Unit::getRace() const
  * Gets the unit's rank.
  * @return, the unit's rank
  */
-std::string Unit::getRank() const
+std::string RuleUnit::getRank() const
 {
 	return _rank;
 }
@@ -189,7 +189,7 @@ std::string Unit::getRank() const
  * Gets the unit's value - for scoring.
  * @return, the unit's value
  */
-int Unit::getValue() const
+int RuleUnit::getValue() const
 {
 	return _value;
 }
@@ -198,7 +198,7 @@ int Unit::getValue() const
  * Gets the unit's death sound.
  * @return, the ID of the unit's death sound
  */
-int Unit::getDeathSound() const
+int RuleUnit::getDeathSound() const
 {
 	return _deathSound;
 }
@@ -207,7 +207,7 @@ int Unit::getDeathSound() const
  * Gets the unit's move sound.
  * @return, the ID of the unit's movement sound
  */
-int Unit::getMoveSound() const
+int RuleUnit::getMoveSound() const
 {
 	return _moveSound;
 }
@@ -216,7 +216,7 @@ int Unit::getMoveSound() const
  * Gets the unit's war cry.
  * @return, the ID of the unit's aggro sound
  */
-int Unit::getAggroSound() const
+int RuleUnit::getAggroSound() const
 {
 	return _aggroSound;
 }
@@ -225,7 +225,7 @@ int Unit::getAggroSound() const
  * Gets the intelligence. This is the number of turns the AI remembers your troop positions.
  * @return, the unit's intelligence
  */
-int Unit::getIntelligence() const
+int RuleUnit::getIntelligence() const
 {
 	return _intelligence;
 }
@@ -234,7 +234,7 @@ int Unit::getIntelligence() const
  * Gets the aggression. Determines the chance of revenge and taking cover.
  * @return, the unit's aggression
  */
-int Unit::getAggression() const
+int RuleUnit::getAggression() const
 {
 	return _aggression;
 }
@@ -243,7 +243,7 @@ int Unit::getAggression() const
  * Gets the unit's special ability.
  * @return, the unit's specab
  */
-SpecialAbility Unit::getSpecialAbility() const
+SpecialAbility RuleUnit::getSpecialAbility() const
 {
 	return _specab;
 }
@@ -252,7 +252,7 @@ SpecialAbility Unit::getSpecialAbility() const
  * Gets the unit that is spawned when this one dies.
  * @return, the unit's spawn unit
  */
-std::string Unit::getSpawnUnit() const
+std::string RuleUnit::getSpawnUnit() const
 {
 	return _spawnUnit;
 }
@@ -261,7 +261,7 @@ std::string Unit::getSpawnUnit() const
  * Gets stamina recovery per turn as a percentage.
  * @return, rate of stamina recovery
  */
-const int Unit::getEnergyRecovery() const
+const int RuleUnit::getEnergyRecovery() const
 {
 	return _energyRecovery;
 }
@@ -272,7 +272,7 @@ const int Unit::getEnergyRecovery() const
  * its rank and uses the one associated with its race.
  * @return, true if this unit is a living weapon
  */
-const bool Unit::isLivingWeapon() const
+const bool RuleUnit::isLivingWeapon() const
 {
 	return _livingWeapon;
 }
@@ -281,7 +281,7 @@ const bool Unit::isLivingWeapon() const
  * Gets this unit's built in melee weapon if any.
  * @return, the name of the weapon
  */
-const std::string Unit::getMeleeWeapon() const
+const std::string RuleUnit::getMeleeWeapon() const
 {
 	return _meleeWeapon;
 }
@@ -294,7 +294,7 @@ const std::string Unit::getMeleeWeapon() const
  * living weapon item that may be defined.
  * @return, list of weapons that are integral to this unit.
  */
-const std::vector<std::string>& Unit::getBuiltInWeapons() const
+const std::vector<std::string>& RuleUnit::getBuiltInWeapons() const
 {
 	return _builtInWeapons;
 }
@@ -303,7 +303,7 @@ const std::vector<std::string>& Unit::getBuiltInWeapons() const
  * Gets if this Unit is female.
  * @return, true if female
  */
-const bool Unit::isFemale() const
+const bool RuleUnit::isFemale() const
 {
 	return _female;
 }
@@ -322,7 +322,7 @@ const bool Unit::isFemale() const
  * etc.
  * @return, true if this is a non-organic, purely mechanical unit on the battlefield
  */
-const bool Unit::isMechanical() const
+const bool RuleUnit::isMechanical() const
 {
 	return _mechanical;
 }
@@ -331,7 +331,7 @@ const bool Unit::isMechanical() const
  * Gets if this Unit is immune to psionic attacks.
  * @return, true if unit is immune to Psi
  */
-const bool Unit::isPsiImmune() const
+const bool RuleUnit::isPsiImmune() const
 {
 	return _psiImmune;
 }

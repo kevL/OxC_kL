@@ -299,7 +299,7 @@
 #include "./Ruleset/RuleUfo.h"
 #include "./Ruleset/RuleResearch.h"
 #include "./Ruleset/ArticleDefinition.h"
-#include "./Ruleset/Unit.h"
+#include "./Ruleset/RuleUnit.h"
 #include "./Ruleset/Ruleset.h"
 #include "./Ruleset/RuleCraftWeapon.h"
 #include "./Ruleset/MapData.h"

@@ -4361,8 +4361,8 @@
 	<sstream>
 	<string>
 
-1432448877 f:\git\openxcom\src\savegame\soldier.h
-	"../Ruleset/Unit.h"
+1432586518 f:\git\openxcom\src\savegame\soldier.h
+	"../Ruleset/RuleUnit.h"
 
 1432068221 f:\git\openxcom\src\ruleset\unit.h
 
@@ -4560,7 +4560,7 @@
 1430262701 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1432339808 f:\git\openxcom\src\ruleset\ruleset.h
+1432587719 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4632,7 +4632,7 @@
 1431908973 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
-1431836434 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1432587719 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
 1430149550 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -4651,18 +4651,18 @@
 1431829902 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1431719091 f:\git\openxcom\src\savegame\battleunit.h
+1432587720 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 	"../Ruleset/RuleItem.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 
 1432426840 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
-1430563619 f:\git\openxcom\src\battlescape\position.h
+1432586518 f:\git\openxcom\src\battlescape\position.h
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
@@ -5201,8 +5201,8 @@
 1432425498 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
-1432339690 f:\git\openxcom\src\ruleset\rulesoldier.h
-	"../Ruleset/Unit.h"
+1432586518 f:\git\openxcom\src\ruleset\rulesoldier.h
+	"../Ruleset/RuleUnit.h"
 
 1432426618 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
@@ -5589,7 +5589,7 @@
 
 1431472912 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1431836727 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1432587719 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5612,7 +5612,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 	"../Savegame/AlienBase.h"
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
@@ -5861,7 +5861,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432465495 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1432587719 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6221,27 +6221,19 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1431196574 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1432586784 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
 	"Particle.h"
 	"Pathfinding.h"
 	"TileEngine.h"
-	"../Engine/Game.h"
-	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
-	"../Ruleset/RuleArmor.h"
-	"../Ruleset/MapData.h"
-	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleSoldier.h"
-	"../Ruleset/Unit.h"
 	"../Savegame/BattleItem.h"
-	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
-	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
 1432319572 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
@@ -6340,7 +6332,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1431306760 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1432586518 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6354,7 +6346,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/Ruleset.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
 	"../Savegame/Node.h"
@@ -6377,7 +6369,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432457078 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1432586518 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6391,7 +6383,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/RuleSoldier.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 	"../Savegame/Base.h"
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
@@ -6401,7 +6393,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1431477287 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1432586518 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Battlescape/Position.h"
 	"../Engine/SurfaceSet.h"
@@ -6411,7 +6403,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
 	"../Savegame/Soldier.h"
@@ -7066,7 +7058,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1432584141 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1432584740 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -8528,7 +8520,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1432581429 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1432588108 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8564,7 +8556,7 @@
 	"SoundDefinition.h"
 	"StatString.h"
 	"UfoTrajectory.h"
-	"Unit.h"
+	"RuleUnit.h"
 	"../Resource/ResourcePack.h"
 	"../Savegame/AlienStrategy.h"
 	"../Savegame/Base.h"
@@ -8677,7 +8669,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1431719107 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1432587719 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8694,13 +8686,13 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 
 1430149550 source:f:\git\openxcom\src\savegame\country.cpp
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1432528896 source:f:\git\openxcom\src\savegame\craft.cpp
+1432586898 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8720,7 +8712,7 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
@@ -10883,8 +10875,8 @@
 	"../Interface/TextEdit.h"
 	"../Interface/TextList.h"
 
-1430149550 f:\git\openxcom\src\ruleset\statstring.h
-	"Unit.h"
+1432586518 f:\git\openxcom\src\ruleset\statstring.h
+	"RuleUnit.h"
 	"StatStringCondition.h"
 
 1431489805 f:\git\openxcom\src\ruleset\statstringcondition.h
@@ -11477,9 +11469,9 @@
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1431676432 f:\git\openxcom\src\ruleset\rulearmor.h
+1432586518 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
-	"Unit.h"
+	"RuleUnit.h"
 
 1431472459 f:\git\openxcom\src\battlescape\meditargetstate.h
 	"../Engine/State.h"
@@ -11514,4 +11506,9 @@
 
 1431494719 f:\git\openxcom\src\ufopaedia\articlestateaward.h
 	"ArticleState.h"
+
+1432587031 f:\git\openxcom\src\ruleset\ruleunit.h
+
+1432587154 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
+	"RuleUnit.h"
 

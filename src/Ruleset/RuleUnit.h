@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_UNIT_H
-#define OPENXCOM_UNIT_H
+#ifndef OPENXCOM_RULEUNIT_H
+#define OPENXCOM_RULEUNIT_H
 
 //#include <string>
 //#include <yaml-cpp/yaml.h>
@@ -217,7 +217,7 @@ struct UnitStats
  * the battlescape, this includes: HWPs, aliens and civilians.
  * @sa Soldier BattleUnit
  */
-class Unit
+class RuleUnit
 {
 
 private:
@@ -255,9 +255,9 @@ private:
 
 	public:
 		/// Creates a blank unit ruleset.
-		explicit Unit(const std::string& type);
+		explicit RuleUnit(const std::string& type);
 		/// Cleans up the unit ruleset.
-		~Unit();
+		~RuleUnit();
 
 		/// Loads the unit data from YAML.
 		void load(
@@ -313,12 +313,12 @@ private:
 		/// Gets a vector of integrated items this unit has available.
 		const std::vector<std::string>& getBuiltInWeapons() const;
 
-		/// Gets if this Unit is female.
+		/// Gets if this RuleUnit is female.
 		const bool isFemale() const;
 
-		/// Gets if this Unit is a mechanical apparatus.
+		/// Gets if this RuleUnit is a mechanical apparatus.
 		const bool isMechanical() const;
-		/// Gets if this Unit is immune to psionic attacks.
+		/// Gets if this RuleUnit is immune to psionic attacks.
 		const bool isPsiImmune() const;
 };
 

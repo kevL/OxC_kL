@@ -22,7 +22,7 @@
 
 //#include <string>
 
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 
 namespace OpenXcom

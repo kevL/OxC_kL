@@ -36,7 +36,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"

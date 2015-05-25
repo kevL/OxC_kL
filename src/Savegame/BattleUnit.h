@@ -31,7 +31,7 @@
 
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 
 namespace OpenXcom
@@ -46,11 +46,11 @@ class Language;
 class Node;
 class RuleArmor;
 class RuleInventory;
+class RuleUnit;
 class SavedGame;
 class Soldier;
 class Surface;
 class Tile;
-class Unit;
 
 
 enum UnitStatus
@@ -509,7 +509,7 @@ private:
 
 	RuleArmor* _armor;
 	Soldier* _geoscapeSoldier;
-	Unit* _unitRules;
+	RuleUnit* _unitRules;
 
 	MovementType _moveType;
 	SoldierGender _gender;
@@ -544,7 +544,7 @@ private:
 				BattlescapeGame* battleGame = NULL); // for playing sound when hit.
 		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
-				Unit* unit,
+				RuleUnit* unit,
 				const UnitFaction faction,
 				const int id,
 				RuleArmor* const armor,
@@ -995,7 +995,7 @@ private:
 		void invalidateCache();
 
 		/// Gets this BattleUnit's rules.
-		Unit* getUnitRules() const
+		RuleUnit* getUnitRules() const
 		{ return _unitRules; }
 
 		/// Sets this unit's rank integer.

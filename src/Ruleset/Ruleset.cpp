@@ -58,7 +58,7 @@
 #include "SoundDefinition.h"
 #include "StatString.h"
 #include "UfoTrajectory.h"
-#include "Unit.h"
+#include "RuleUnit.h"
 
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
@@ -252,7 +252,7 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, Unit*>::const_iterator
+	for (std::map<std::string, RuleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
@@ -677,7 +677,7 @@ void Ruleset::loadFile(const std::string& filename)
 			i != doc["units"].end();
 			++i)
 	{
-		Unit* const rule = loadRule(
+		RuleUnit* const rule = loadRule(
 								*i,
 								&_units);
 		if (rule != NULL)
@@ -1565,9 +1565,9 @@ RuleSoldier* Ruleset::getSoldier(const std::string& type) const
  * @param type - reference a Unit type
  * @return, pointer to the Unit rules
  */
-Unit* Ruleset::getUnit(const std::string& type) const
+RuleUnit* Ruleset::getUnit(const std::string& type) const
 {
-	std::map<std::string, Unit*>::const_iterator i = _units.find(type);
+	std::map<std::string, RuleUnit*>::const_iterator i = _units.find(type);
 	if (i != _units.end())
 		return i->second;
 

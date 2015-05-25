@@ -46,11 +46,11 @@ class RuleItem;
 class Ruleset;
 class RuleTerrain;
 //class RuleTexture;
+class RuleUnit;
 class SavedBattleGame;
 class SavedGame;
 class Tile;
 class Ufo;
-class Unit;
 class Vehicle;
 
 
@@ -140,7 +140,7 @@ private:
 	void deployAliens(AlienDeployment* const depRule);
 	/// Adds an alien to the game.
 	BattleUnit* addAlien(
-			Unit* const unitRule,
+			RuleUnit* const unitRule,
 			int alienRank,
 			bool outside);
 	/// Finds a spot near a friend to spawn at.
@@ -149,7 +149,7 @@ private:
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int civilians);
 	/// Adds a civlian to the game.
-	BattleUnit* addCivilian(Unit* rules);
+	BattleUnit* addCivilian(RuleUnit* rules);
 
 	/// Loads an XCom RMP file.
 	void loadRMP(

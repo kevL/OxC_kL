@@ -40,7 +40,7 @@
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BattleUnit.h"

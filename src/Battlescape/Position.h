@@ -63,7 +63,7 @@ public:
 
 	Position& operator= (const Position& pos)
 	{
-		if (this != &pos) // kL: cf. Unit.h
+		if (this != &pos) // kL: cf. RuleUnit.h
 		{
 			x = pos.x;
 			y = pos.y;

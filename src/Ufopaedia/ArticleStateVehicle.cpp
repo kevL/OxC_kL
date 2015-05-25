@@ -38,7 +38,7 @@
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Unit.h"
+#include "../Ruleset/RuleUnit.h"
 
 
 namespace OpenXcom
@@ -52,7 +52,7 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	:
 		ArticleState(defs->id)
 {
-	Unit* const unit = _game->getRuleset()->getUnit(defs->id);
+	RuleUnit* const unit = _game->getRuleset()->getUnit(defs->id);
 	const RuleArmor* const armor = _game->getRuleset()->getArmor(unit->getArmor());
 	const RuleItem* const itRule = _game->getRuleset()->getItem(defs->id);
 

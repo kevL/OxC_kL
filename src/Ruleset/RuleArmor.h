@@ -25,7 +25,7 @@
 //#include <yaml-cpp/yaml.h>
 
 #include "MapData.h"
-#include "Unit.h"
+#include "RuleUnit.h"
 
 
 namespace OpenXcom
