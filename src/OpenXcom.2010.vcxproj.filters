@@ -539,9 +539,6 @@
     <ClCompile Include="Battlescape\InfoboxOKState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\Unit.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\AlienDeployment.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -965,6 +962,7 @@
     <ClCompile Include="Ruleset\RuleArmor.cpp" />
     <ClCompile Include="Battlescape\MediTargetState.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateAward.cpp" />
+    <ClCompile Include="Ruleset\RuleUnit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1509,9 +1507,6 @@
     <ClInclude Include="Battlescape\InfoboxOKState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\Unit.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Ruleset\AlienDeployment.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
@@ -1959,6 +1954,7 @@
     <ClInclude Include="Ruleset\RuleArmor.h" />
     <ClInclude Include="Battlescape\MediTargetState.h" />
     <ClInclude Include="Ufopaedia\ArticleStateAward.h" />
+    <ClInclude Include="Ruleset\RuleUnit.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
