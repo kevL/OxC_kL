@@ -52,12 +52,13 @@ TransfersState::TransfersState(Base* base)
 	_screen = false;
 
 	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
-	_txtTitle		= new Text(288, 17, 16, 17);
-	_txtBaseLabel	= new Text(80, 9, 16, 17);
 
-	_txtItem		= new Text(114, 9, 16, 34);
-	_txtQuantity	= new Text(54, 9, 179, 34);
-	_txtArrivalTime	= new Text(28, 9, 254, 34);
+	_txtTitle		= new Text(288, 17, 16, 17);
+	_txtBaseLabel	= new Text( 80,  9, 16, 17);
+
+	_txtItem		= new Text(114, 9,  16, 34);
+	_txtQuantity	= new Text( 54, 9, 179, 34);
+	_txtArrivalTime	= new Text( 28, 9, 254, 34);
 
 	_lstTransfers	= new TextList(285, 121, 16, 45);
 

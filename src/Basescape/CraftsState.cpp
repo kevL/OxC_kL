@@ -37,8 +37,6 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Menu/ErrorMessageState.h"
-
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
@@ -281,7 +279,7 @@ std::wstring CraftsState::formatTime(
 
 	const int
 		dys = total / 24,
-		hrs = total %24;
+		hrs = total % 24;
 
 	if (dys > 0)
 	{

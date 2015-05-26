@@ -161,8 +161,11 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 	_txtTitle->setBig();
 
-	_txtKills->setText(tr("STR_KILLS_LC_").arg(_craft->getKills()));
-	_txtKills->setAlign(ALIGN_RIGHT);
+	if (_craft->getRules()->getWeapons() != 0)
+	{
+		_txtKills->setText(tr("STR_KILLS_LC_").arg(_craft->getKills()));
+		_txtKills->setAlign(ALIGN_RIGHT);
+	}
 
 
 	const std::string stat = _craft->getStatus();

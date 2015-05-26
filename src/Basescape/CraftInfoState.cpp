@@ -68,7 +68,8 @@ CraftInfoState::CraftInfoState(
 		size_t craftId)
 	:
 		_base(base),
-		_craftId(craftId)
+		_craftId(craftId),
+		_craft(base->getCrafts()->at(craftId))
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 		_window		= new Window(this, 320,200, 0,0, POPUP_BOTH);
@@ -155,8 +156,11 @@ CraftInfoState::CraftInfoState(
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
 
-	_txtKills->setText(tr("STR_KILLS_LC_").arg(_base->getCrafts()->at(_craftId)->getKills()));
-	_txtKills->setAlign(ALIGN_RIGHT);
+	if (_craft->getRules()->getWeapons() != 0)
+	{
+		_txtKills->setText(tr("STR_KILLS_LC_").arg(_craft->getKills()));
+		_txtKills->setAlign(ALIGN_RIGHT);
+	}
 
 	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);
@@ -184,13 +188,11 @@ CraftInfoState::~CraftInfoState()
 {}
 
 /**
- * The craft info can change after going into other screens.
+ * The craft's info can change after going into other screens.
  */
 void CraftInfoState::init()
 {
 	State::init();
-
-	_craft = _base->getCrafts()->at(_craftId);
 
 	// Reset stuff when coming back from pre-battle Inventory.
 	if (_game->getSavedGame()->getSavedBattle() != NULL)
@@ -529,8 +531,7 @@ void CraftInfoState::btnInventoryClick(Action*)
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	Craft* const craft = _base->getCrafts()->at(_craftId);
-	bgen.runInventory(craft);
+	bgen.runInventory(_craft);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(
@@ -558,7 +559,7 @@ void CraftInfoState::edtCraftChange(Action* action)
  */
 void CraftInfoState::calcCost() // private.
 {
-	const int cost = _base->calcSoldierBonuses(_base->getCrafts()->at(_craftId));
+	const int cost = _base->calcSoldierBonuses(_craft);
 	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
 }
 

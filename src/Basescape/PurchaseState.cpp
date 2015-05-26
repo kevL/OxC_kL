@@ -74,11 +74,11 @@ PurchaseState::PurchaseState(Base* base)
 {
 	_window			= new Window(this, 320,200);
 
-	_txtTitle		= new Text(310, 17, 5, 9);
-	_txtBaseLabel	= new Text(80, 9, 16, 9);
-	_txtSpaceUsed	= new Text(85, 9, 219, 9);
+	_txtTitle		= new Text(310, 17,  5, 9);
+	_txtBaseLabel	= new Text( 80, 9,  16, 9);
+	_txtSpaceUsed	= new Text( 85, 9, 219, 9);
 
-	_txtFunds		= new Text(140, 9, 16, 24);
+	_txtFunds		= new Text(140, 9,  16, 24);
 	_txtPurchases	= new Text(140, 9, 160, 24);
 
 /*	_txtSpaceUsed = new Text(150, 9, 160, 34);
@@ -87,14 +87,14 @@ PurchaseState::PurchaseState(Base* base)
 	_txtQuantity = new Text(60, 9, 256, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
 
-	_txtItem		= new Text(30, 9, 16, 33);
-//	_txtSpaceUsed	= new Text(85, 9, 70, 33);
+	_txtItem		= new Text( 30, 9,  16, 33);
+//	_txtSpaceUsed	= new Text( 85, 9,  70, 33);
 	_txtCost		= new Text(102, 9, 166, 33);
-	_txtQuantity	= new Text(48, 9, 267, 33);
+	_txtQuantity	= new Text( 48, 9, 267, 33);
 
 	_lstItems		= new TextList(285, 129, 16, 44);
 
-	_btnCancel		= new TextButton(134, 16, 16, 177);
+	_btnCancel		= new TextButton(134, 16,  16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	setInterface("buyMenu");
@@ -212,10 +212,10 @@ PurchaseState::PurchaseState(Base* base)
 
 	// Add craft-types to purchase list.
 	const RuleCraft* crftRule;
-	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
+	const std::vector<std::string>& craftList = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator
-			i = crafts.begin();
-			i != crafts.end();
+			i = craftList.begin();
+			i != craftList.end();
 			++i)
 	{
 		woststr4.str(L"");
@@ -250,9 +250,8 @@ PurchaseState::PurchaseState(Base* base)
 	}
 
 
-	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	std::vector<std::string> itemList = _game->getRuleset()->getItemsList();
 
-	// Add craft Weapon-types to purchase list.
 	const RuleCraftWeapon* cwRule;
 	const RuleItem
 		* itRule,
@@ -263,6 +262,7 @@ PurchaseState::PurchaseState(Base* base)
 	std::wstring wst;
 	int clipSize;
 
+	// Add craft Weapon-types to purchase list.
 	const std::vector<std::string>& cwList = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
 			i = cwList.begin();
@@ -311,13 +311,13 @@ PurchaseState::PurchaseState(Base* base)
 							L"0");
 
 			for (std::vector<std::string>::const_iterator
-					j = items.begin();
-					j != items.end();
+					j = itemList.begin();
+					j != itemList.end();
 					++j)
 			{
 				if (*j == st)
 				{
-					items.erase(j);
+					itemList.erase(j);
 					break;
 				}
 			}
@@ -365,13 +365,13 @@ PurchaseState::PurchaseState(Base* base)
 								_ammoColor);
 
 			for (std::vector<std::string>::const_iterator
-					j = items.begin();
-					j != items.end();
+					j = itemList.begin();
+					j != itemList.end();
 					++j)
 			{
 				if (*j == st)
 				{
-					items.erase(j);
+					itemList.erase(j);
 					break;
 				}
 			}
@@ -380,8 +380,8 @@ PurchaseState::PurchaseState(Base* base)
 
 
 	for (std::vector<std::string>::const_iterator // add items to purchase list.
-			i = items.begin();
-			i != items.end();
+			i = itemList.begin();
+			i != itemList.end();
 			++i)
 	{
 		itRule = _game->getRuleset()->getItem(*i);

@@ -3794,22 +3794,22 @@ bool BattlescapeGenerator::selectPosition( // private.
 			i != available.end();
 			++i)
 	{
-		if (   sizeX > (*i)->w
-			|| sizeY > (*i)->h)
+		if (   sizeX > static_cast<int>((*i)->w)
+			|| sizeY > static_cast<int>((*i)->h))
 		{
 			continue;
 		}
 
 		for (int
-				x = (*i)->x;
-				x + sizeX <= (*i)->x + (*i)->w
-					&& x + sizeX <= wholeMap.w;
+				x = static_cast<int>((*i)->x);
+				x + sizeX <= static_cast<int>((*i)->x) + static_cast<int>((*i)->w)
+					&& x + sizeX <= static_cast<int>(wholeMap.w);
 				++x)
 		{
 			for (int
-					y = (*i)->y;
-					y + sizeY <= (*i)->y + (*i)->h
-						&& y + sizeY <= wholeMap.h;
+					y = static_cast<int>((*i)->y);
+					y + sizeY <= static_cast<int>((*i)->y) + static_cast<int>((*i)->h)
+						&& y + sizeY <= static_cast<int>(wholeMap.h);
 					++y)
 			{
 				if (std::find(
@@ -3819,18 +3819,21 @@ bool BattlescapeGenerator::selectPosition( // private.
 				{
 					bool add = true;
 
-					for (size_t
-							xCheck = static_cast<size_t>(x);
-							xCheck != static_cast<size_t>(x + sizeX);
+					for (int
+							xCheck = x;
+							xCheck != x + sizeX;
 							++xCheck)
 					{
-						for (size_t
-								yCheck = static_cast<size_t>(y);
-								yCheck != static_cast<size_t>(y + sizeY);
+						for (int
+								yCheck = y;
+								yCheck != y + sizeY;
 								++yCheck)
 						{
-							if (_blocks[xCheck][yCheck] != NULL)
+							if (_blocks[static_cast<size_t>(xCheck)]
+									   [static_cast<size_t>(yCheck)] != NULL)
+							{
 								add = false;
+							}
 						}
 					}
 

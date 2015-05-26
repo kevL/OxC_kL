@@ -37,8 +37,6 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Menu/ErrorMessageState.h"
-
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"

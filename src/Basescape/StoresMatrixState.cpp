@@ -23,8 +23,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -58,8 +58,9 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		_base(base)
 {
 	_window			= new Window(this, 320,200);
-	_txtTitle		= new Text(300, 17, 10, 8);
-	_txtBaseLabel	= new Text(80, 9, 224, 8);
+
+	_txtTitle		= new Text(300, 17,  10, 8);
+	_txtBaseLabel	= new Text( 80,  9, 224, 8);
 
 	_txtItem		= new Text(100, 9, 16, 25);
 
@@ -98,11 +99,11 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	Uint8 color = Palette::blockOffset(13)+10; // blue
 
-	_window->setColor(color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setColor(color);
 
-	_btnOk->setColor(color);
 	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setColor(color);
 	_btnOk->onMouseClick((ActionHandler)& StoresMatrixState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
@@ -111,35 +112,26 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					(ActionHandler)& StoresMatrixState::btnOkClick,
 					Options::keyCancel);
 
+	_txtTitle->setText(tr("STR_MATRIX"));
 	_txtTitle->setColor(color);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_MATRIX"));
 
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 	_txtBaseLabel->setColor(color);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
-	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtItem->setColor(color);
 	_txtItem->setText(tr("STR_ITEM"));
+	_txtItem->setColor(color);
 
-	_lstMatrix->setColor(color);
 	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
+	_lstMatrix->setColor(color);
 	_lstMatrix->setBackground(_window);
 	_lstMatrix->setSelectable();
 
+
 	const SavedGame* const gameSave = _game->getSavedGame();
 	std::wstring wst;
-	std::wostringstream
-		woststr0,
-		woststr1,
-		woststr2,
-		woststr3,
-		woststr4,
-		woststr5,
-		woststr6,
-		woststr7;
 	int qty[MTX_BASES] = {0,0,0,0,0,0,0,0};
-	size_t row = 0;
 
 	for (size_t
 		i = 0;
@@ -155,35 +147,27 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			switch (i)
 			{
 				case 0:
-					_txtBase_0->setColor(color);
 					_txtBase_0->setText(wst);
 				break;
 				case 1:
-					_txtBase_1->setColor(color);
 					_txtBase_1->setText(wst);
 				break;
 				case 2:
-					_txtBase_2->setColor(color);
 					_txtBase_2->setText(wst);
 				break;
 				case 3:
-					_txtBase_3->setColor(color);
 					_txtBase_3->setText(wst);
 				break;
 				case 4:
-					_txtBase_4->setColor(color);
 					_txtBase_4->setText(wst);
 				break;
 				case 5:
-					_txtBase_5->setColor(color);
 					_txtBase_5->setText(wst);
 				break;
 				case 6:
-					_txtBase_6->setColor(color);
 					_txtBase_6->setText(wst);
 				break;
 				case 7:
-					_txtBase_7->setColor(color);
 					_txtBase_7->setText(wst);
 			}
 		}
@@ -191,30 +175,52 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			break;
 	}
 
+	_txtBase_0->setColor(color);
+	_txtBase_1->setColor(color);
+	_txtBase_2->setColor(color);
+	_txtBase_3->setColor(color);
+	_txtBase_4->setColor(color);
+	_txtBase_5->setColor(color);
+	_txtBase_6->setColor(color);
+	_txtBase_7->setColor(color);
+
+	std::wostringstream
+		woststr1,
+		woststr2,
+		woststr3,
+		woststr4,
+		woststr5,
+		woststr6,
+		woststr7,
+		woststr8;
+	size_t row = 0;
+
 	if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
 	{
-		if (qty[0] > 0) woststr0 << qty[0];
-		if (qty[1] > 0) woststr1 << qty[1];
-		if (qty[2] > 0) woststr2 << qty[2];
-		if (qty[3] > 0) woststr3 << qty[3];
-		if (qty[4] > 0) woststr4 << qty[4];
-		if (qty[5] > 0) woststr5 << qty[5];
-		if (qty[6] > 0) woststr6 << qty[6];
-		if (qty[7] > 0) woststr7 << qty[7];
+		if (qty[0] > 0) woststr1 << qty[0];
+		if (qty[1] > 0) woststr2 << qty[1];
+		if (qty[2] > 0) woststr3 << qty[2];
+		if (qty[3] > 0) woststr4 << qty[3];
+		if (qty[4] > 0) woststr5 << qty[4];
+		if (qty[5] > 0) woststr6 << qty[5];
+		if (qty[6] > 0) woststr7 << qty[6];
+		if (qty[7] > 0) woststr8 << qty[7];
 
 		_lstMatrix->addRow(
 						9,
 						tr("STR_SOLDIERS").c_str(),
-						woststr0.str().c_str(),
 						woststr1.str().c_str(),
 						woststr2.str().c_str(),
 						woststr3.str().c_str(),
 						woststr4.str().c_str(),
 						woststr5.str().c_str(),
 						woststr6.str().c_str(),
-						woststr7.str().c_str());
+						woststr7.str().c_str(),
+						woststr8.str().c_str());
 
-		_lstMatrix->setRowColor(row++, color);
+		_lstMatrix->setRowColor(
+							row++,
+							color);
 	}
 
 	const Ruleset* const rules = _game->getRuleset();
@@ -222,18 +228,19 @@ StoresMatrixState::StoresMatrixState(Base* base)
 //		* launchRule,
 //		* clipRule;
 	const RuleCraftWeapon* cwRule;
-	size_t ent = 0;
+	size_t baseId = 0;
+	std::string stTest;
 
-	const std::vector<std::string>& items = rules->getItemsList();
+
+	const std::vector<std::string>& itemList = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
-			i = items.begin();
-			i != items.end();
+			i = itemList.begin();
+			i != itemList.end();
 			++i)
 	{
 		itRule = rules->getItem(*i);
-		const std::string test = itRule->getType();
+		stTest = itRule->getType();
 
-		woststr0.str(L"");
 		woststr1.str(L"");
 		woststr2.str(L"");
 		woststr3.str(L"");
@@ -241,23 +248,25 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		woststr5.str(L"");
 		woststr6.str(L"");
 		woststr7.str(L"");
+		woststr8.str(L"");
 
-		ent = 0;
+		baseId = 0;
 
 		for (std::vector<Base*>::const_iterator
 				j = gameSave->getBases()->begin();
 				j != gameSave->getBases()->end();
-				++j)
+				++j,
+					++baseId)
 		{
-			qty[ent] = (*j)->getItems()->getItemQty(*i);
+			qty[baseId] = (*j)->getItems()->getItemQty(*i);
 
 			for (std::vector<Transfer*>::const_iterator // Add qty of items in transit to theMatrix.
 					k = (*j)->getTransfers()->begin();
 					k != (*j)->getTransfers()->end();
 					++k)
 			{
-				if ((*k)->getItems() == test)
-					qty[ent] += (*k)->getQuantity();
+				if ((*k)->getItems() == stTest)
+					qty[baseId] += (*k)->getQuantity();
 			}
 
 			for (std::vector<Craft*>::const_iterator // Add qty of items & vehicles on transport craft to da-Matrix.
@@ -272,8 +281,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 							l != (*k)->getItems()->getContents()->end();
 							++l)
 					{
-						if (l->first == test)
-							qty[ent] += l->second;
+						if (l->first == stTest)
+							qty[baseId] += l->second;
 					}
 				}
 
@@ -284,8 +293,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 							l != (*k)->getVehicles()->end();
 							++l)
 					{
-						if ((*l)->getRules()->getType() == test)
-							++qty[ent];
+						if ((*l)->getRules()->getType() == stTest)
+							++qty[baseId];
 
 						if ((*l)->getAmmo() != 255)
 						{
@@ -293,26 +302,24 @@ StoresMatrixState::StoresMatrixState(Base* base)
 																rules->getItem((*l)->getRules()->getType())
 															->getCompatibleAmmo()->front());
 
-							if (ammoRule->getType() == test)
-								qty[ent] += (*l)->getAmmo();
+							if (ammoRule->getType() == stTest)
+								qty[baseId] += (*l)->getAmmo();
 						}
 					}
 				}
 			}
-
-			++ent;
 		}
 
 		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
 		{
-			if (qty[0] > 0) woststr0 << qty[0];
-			if (qty[1] > 0) woststr1 << qty[1];
-			if (qty[2] > 0) woststr2 << qty[2];
-			if (qty[3] > 0) woststr3 << qty[3];
-			if (qty[4] > 0) woststr4 << qty[4];
-			if (qty[5] > 0) woststr5 << qty[5];
-			if (qty[6] > 0) woststr6 << qty[6];
-			if (qty[7] > 0) woststr7 << qty[7];
+			if (qty[0] > 0) woststr1 << qty[0];
+			if (qty[1] > 0) woststr2 << qty[1];
+			if (qty[2] > 0) woststr3 << qty[2];
+			if (qty[3] > 0) woststr4 << qty[3];
+			if (qty[4] > 0) woststr5 << qty[4];
+			if (qty[5] > 0) woststr6 << qty[5];
+			if (qty[6] > 0) woststr7 << qty[6];
+			if (qty[7] > 0) woststr8 << qty[7];
 
 
 			bool craftOrdnance = false;
@@ -383,7 +390,6 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					|| itRule->getBattleType() == BT_CORPSE							// or is a corpse
 					|| itRule->getBattleType() == BT_NONE)							// or is not a battlefield item
 				&& craftOrdnance == false)										// and is not craft ordnance
-//				&& itRule->isResearchExempt() == false)							// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow
@@ -392,29 +398,23 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			_lstMatrix->addRow(
 							9,
 							item.c_str(),
-							woststr0.str().c_str(),
 							woststr1.str().c_str(),
 							woststr2.str().c_str(),
 							woststr3.str().c_str(),
 							woststr4.str().c_str(),
 							woststr5.str().c_str(),
 							woststr6.str().c_str(),
-							woststr7.str().c_str());
+							woststr7.str().c_str(),
+							woststr8.str().c_str());
 
-			_lstMatrix->setRowColor(row++, color);
+			_lstMatrix->setRowColor(
+								row++,
+								color);
 		}
 	}
 
 	_lstMatrix->scrollTo(gameSave->getCurrentRowMatrix());
-/*	if (row > 0 // all taken care of in TextList
-		&& gameSave->getCurrentRowMatrix() >= row)
-	{
-		_lstMatrix->scrollTo(0);
-	}
-	else if (gameSave->getCurrentRowMatrix() > 0)
-		_lstMatrix->scrollTo(gameSave->getCurrentRowMatrix()); */
-
-//	_lstMatrix->draw(); // only needed when list changes while state is active. Eg, on re-inits
+//	_lstMatrix->draw(); // only needed if list changes while state is active. Eg, on re-inits
 }
 
 /**
