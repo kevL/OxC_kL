@@ -57,6 +57,38 @@ Production::Production(
 /**
  *
  */
+void Production::load(const YAML::Node& node)
+{
+	_engineers	= node["assigned"]	.as<int>(_engineers);
+	_timeSpent	= node["spent"]		.as<int>(_timeSpent);
+	_amount		= node["amount"]	.as<int>(_amount);
+	_infinite	= node["infinite"]	.as<bool>(_infinite);
+	_sell		= node["sell"]		.as<bool>(_sell);
+}
+
+/**
+ *
+ */
+YAML::Node Production::save() const
+{
+	YAML::Node node;
+
+	node["item"]		= _prodRule->getName();
+	node["assigned"]	= _engineers;
+	node["spent"]		= _timeSpent;
+	node["amount"]		= _amount;
+
+	if (_infinite == true)
+		node["infinite"]	= _infinite;
+	if (_sell == true)
+		node["sell"]		= _sell;
+
+	return node;
+}
+
+/**
+ *
+ */
 int Production::getAmountTotal() const
 {
 	return _amount;
@@ -371,38 +403,6 @@ void Production::startItem(
 								i->first,
 								i->second);
 	}
-}
-
-/**
- *
- */
-void Production::load(const YAML::Node& node)
-{
-	_engineers	= node["assigned"]	.as<int>(_engineers);
-	_timeSpent	= node["spent"]		.as<int>(_timeSpent);
-	_amount		= node["amount"]	.as<int>(_amount);
-	_infinite	= node["infinite"]	.as<bool>(_infinite);
-	_sell		= node["sell"]		.as<bool>(_sell);
-}
-
-/**
- *
- */
-YAML::Node Production::save() const
-{
-	YAML::Node node;
-
-	node["item"]		= _prodRule->getName();
-	node["assigned"]	= _engineers;
-	node["spent"]		= _timeSpent;
-	node["amount"]		= _amount;
-
-	if (_infinite == true)
-		node["infinite"]	= _infinite;
-	if (_sell == true)
-		node["sell"]		= _sell;
-
-	return node;
 }
 
 }

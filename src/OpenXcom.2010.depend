@@ -4666,7 +4666,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1432614323 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1432614919 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4819,7 +4819,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\researchproject.h
 
-1432426820 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1432671820 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -7113,7 +7113,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1432614436 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1432614874 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"Globe.h"
 	"SelectDestinationState.h"

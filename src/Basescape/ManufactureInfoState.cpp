@@ -193,7 +193,6 @@ void ManufactureInfoState::buildUi() // private.
 	_txtUnitToProduce->setBig();
 
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
-
 	_txtEngineerDown->setText(tr("STR_DECREASE_UC"));
 
 	_btnEngineerUp->onMousePress((ActionHandler)& ManufactureInfoState::moreEngineerPress);
@@ -205,7 +204,6 @@ void ManufactureInfoState::buildUi() // private.
 	_btnEngineerDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessEngineerClick, 0);
 
 	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
-
 	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
 	_btnUnitUp->onMousePress((ActionHandler)& ManufactureInfoState::moreUnitPress);
@@ -232,8 +230,8 @@ void ManufactureInfoState::buildUi() // private.
 	{
 		_btnOk->setVisible(false);
 		_production = new Production(
-									_manufRule,
-									0);
+								_manufRule,
+								0);
 		_base->addProduction(_production);
 	}
 
@@ -244,13 +242,13 @@ void ManufactureInfoState::buildUi() // private.
 
 
 	_timerMoreEngineer = new Timer(250);
-	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer = new Timer(250);
+	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)& ManufactureInfoState::onLessEngineer);
 
 	_timerMoreUnit = new Timer(250);
-	_timerMoreUnit->onTimer((StateHandler)& ManufactureInfoState::onMoreUnit);
 	_timerLessUnit = new Timer(250);
+	_timerMoreUnit->onTimer((StateHandler)& ManufactureInfoState::onMoreUnit);
 	_timerLessUnit->onTimer((StateHandler)& ManufactureInfoState::onLessUnit);
 }
 
@@ -340,7 +338,7 @@ int ManufactureInfoState::calcProfit() // private.
  */
 void ManufactureInfoState::btnSellRelease(Action* action) // private.
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+	if (   action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_production->setSellItems(_btnSell->getPressed() == true);
@@ -390,7 +388,7 @@ void ManufactureInfoState::exitState() // private.
  * @param woststr	- reference the output string
  * @return, true if profit else cost
  */
-static bool _formatProfit( // private.
+static bool _formatProfit( // static.
 		int profit,
 		std::wostringstream& woststr)
 {
@@ -464,7 +462,8 @@ void ManufactureInfoState::setAssignedEngineer() // private.
 	_txtMonthlyProfit->setText(tr(st)
 						.arg(woststr3.str()));
 
-	_btnOk->setVisible(_production->getAmountTotal() > 0);
+	_btnOk->setVisible(_production->getAmountTotal() > 0
+					|| _production->getInfiniteAmount() == true);
 
 	updateTimeTotal();
 }
@@ -497,9 +496,9 @@ void ManufactureInfoState::updateTimeTotal() // private.
 						engs,
 						_production->getRules()->getManufactureTime());
 
-//		hoursLeft = static_cast<int>(
-//						ceil(static_cast<double>(hoursLeft) / static_cast<double>(_production->getAssignedEngineers())));
-		// ensure this rounds up since it takes an entire hour to manufacture any part of that hour's capacity
+//		hoursLeft = static_cast<int>(ceil(
+//					static_cast<double>(hoursLeft) / static_cast<double>(_production->getAssignedEngineers())));
+		// Ensure this rounds up since it takes an entire hour to manufacture any part of that hour's capacity.
 		hoursLeft = (hoursLeft + engs - 1) / engs;
 
 		const int daysLeft = hoursLeft / 24;
@@ -786,7 +785,7 @@ void ManufactureInfoState::lessUnitClick(Action* action) // private.
 }
 
 /**
- * Assigns one more engineer (if possible).
+ * Assigns one more engineer if possible.
  */
 void ManufactureInfoState::onMoreEngineer() // private.
 {
@@ -795,7 +794,7 @@ void ManufactureInfoState::onMoreEngineer() // private.
 }
 
 /**
- * Removes one engineer (if possible).
+ * Removes one engineer if possible.
  */
 void ManufactureInfoState::onLessEngineer() // private.
 {
@@ -859,7 +858,7 @@ int ManufactureInfoState::getQty() const // private.
 } */
 
 /**
- * Runs state functionality every cycle (used to update the timer).
+ * Runs state functionality every cycle - updates the timer.
  */
 void ManufactureInfoState::think() // private.
 {
