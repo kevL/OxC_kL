@@ -1955,7 +1955,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				case 3:
 					reduction = static_cast<Sint16>(Round(static_cast<double>(balance[i]) / units));
 				break;
-				case 4:
+				default: //case 4:
 					reduction = static_cast<Sint16>(Round(static_cast<double>(score[i]) / units));
 			}
 

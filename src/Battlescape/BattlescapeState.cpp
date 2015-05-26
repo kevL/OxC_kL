@@ -3813,7 +3813,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 	infoType.push_back(L"M"); // tuCost
 
 
-	Uint8 color;
+	Uint8 color = Palette::blockOffset(8); // blue, avoid VC++ linker warning.
 
 	for (size_t
 			i = 0;

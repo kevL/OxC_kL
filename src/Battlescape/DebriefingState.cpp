@@ -422,7 +422,7 @@ DebriefingState::DebriefingState()
 							// This makes them ineligible for promotion.
 							// PS, there is no 'geoscape Soldiers list' really; it's
 							// just a variable stored in each xCom-agent/BattleUnit ....
-				SoldierDead* deadSoldier;
+				SoldierDead* deadSoldier = NULL; // avoid VC++ linker warning.
 
 				for (std::vector<SoldierDead*>::const_iterator
 						j = _gameSave->getDeadSoldiers()->begin();
@@ -438,7 +438,7 @@ DebriefingState::DebriefingState()
 
 				statistics->daysWounded = 0;
 
-				// note: Safety on *deadSoldier should not be needed.
+				// note: Safety on *deadSoldier should not be needed. see above^
 				if (statistics->KIA == true)
 					_missionStatistics->injuryList[deadSoldier->getId()] = -1;
 				else // MIA

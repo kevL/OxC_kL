@@ -696,7 +696,7 @@ void Map::drawTerrain(Surface* surface) // private.
 		frame,
 		tileShade,
 		wallShade,
-		shade,
+		shade = 16, // avoid VC++ linker warning.
 		shade2,
 		animOffset,
 		quad;		// The quadrant is 0 for small units; large units also have quadrants 1,2 & 3; the
@@ -710,7 +710,7 @@ void Map::drawTerrain(Surface* surface) // private.
 		hasObject,
 //		unitNorthValid,
 
-		halfRight,
+		halfRight = false, // avoid VC++ linker warning.
 		redraw,
 
 		kL_Debug_stand = false, // for debugging.

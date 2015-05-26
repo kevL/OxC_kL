@@ -952,9 +952,11 @@ static void OPLWriteReg(FM_OPL *OPL, int r, int v)
 		{	/* b0-b8 */
 			int keyon = (v>>5)&1;
 			block_fnum = ((v&0x1f)<<8) | (CH->block_fnum&0xff);
-			if (CH->keyon != keyon)
+			if (CH->keyon != static_cast<Uint8>(keyon))
 			{
-				if (CH->keyon = static_cast<Uint8>(keyon))
+				CH->keyon = static_cast<Uint8>(keyon);	// kL, avoid VC++ linker warning.
+				if (CH->keyon)							// kL
+//kL			if (CH->keyon = static_cast<Uint8>(keyon))
 				{
 					CH->op1_out[0] = CH->op1_out[1] = 0;
 					OPL_KEYON(&CH->SLOT[SLOT1]);
@@ -1082,7 +1084,8 @@ void YM3812UpdateOne(FM_OPL *OPL, INT16 *buffer, int length, int stripe, float v
 		/* limit check */
 		data = Limit( outd[0] , OPL_MAXOUT, OPL_MINOUT );
 		/* store to sound buffer */
-		buf[i] = data >> OPL_OUTSB;
+//kL	buf[i] = data >> OPL_OUTSB;
+		buf[i] = static_cast<INT16>(data) >> OPL_OUTSB; // kL
 	}
 
 	OPL->amsCnt = amsCnt;

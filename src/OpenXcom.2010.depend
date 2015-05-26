@@ -5675,7 +5675,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1432426919 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1432590555 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5861,7 +5861,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432587719 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1432590872 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6035,7 +6035,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1431797027 source:f:\git\openxcom\src\battlescape\map.cpp
+1432590436 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6221,7 +6221,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1432586784 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1432590203 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -7138,7 +7138,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1432465509 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1432590098 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7319,7 +7319,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1431982411 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1432590147 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -9024,7 +9024,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUfo.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
+1432587719 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
 	"ArticleStateVehicle.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -9038,7 +9038,7 @@
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 
 1430258708 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
@@ -10947,7 +10947,7 @@
 
 1432273168 f:\git\openxcom\src\engine\adlib\adlplayer.h
 
-1432276886 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
+1432591846 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -11285,7 +11285,7 @@
 1431494802 f:\git\openxcom\src\ufopaedia\articlestatetftduso.h
 	"ArticleStateTFTD.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestatetftdvehicle.cpp
+1432588198 source:f:\git\openxcom\src\ufopaedia\articlestatetftdvehicle.cpp
 	"../Ruleset/ArticleDefinition.h"
 	"ArticleStateTFTDVehicle.h"
 	<sstream>
@@ -11294,7 +11294,7 @@
 	"../Engine/Palette.h"
 	"../Interface/TextList.h"
 	"../Ruleset/Ruleset.h"
-	"../Ruleset/Unit.h"
+	"../Ruleset/RuleUnit.h"
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/RuleItem.h"
 

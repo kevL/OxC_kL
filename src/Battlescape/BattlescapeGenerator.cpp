@@ -3935,13 +3935,13 @@ bool BattlescapeGenerator::addLine( // private.
 	}
 
 	int tries = 0,
-		roadX,
-		roadY,
-		* i = &roadX,
-		limit = _mapsize_x / 10;
+		roadX = 0, // avoid VC++ linker warnings
+		roadY = 0,
+		* i,
+		limit;
 	MapBlockType
-		comparator = MBT_NSROAD,
-		typeToAdd = MBT_EWROAD;
+		comparator,
+		typeToAdd;
 
 	if (direction == MD_VERTICAL)
 	{
@@ -3949,6 +3949,13 @@ bool BattlescapeGenerator::addLine( // private.
 		comparator = MBT_EWROAD;
 		typeToAdd = MBT_NSROAD;
 		limit = _mapsize_y / 10;
+	}
+	else
+	{
+		i = &roadX;
+		comparator = MBT_NSROAD;
+		typeToAdd = MBT_EWROAD;
+		limit = _mapsize_x / 10;
 	}
 
 	bool placed = false;
@@ -3963,10 +3970,10 @@ bool BattlescapeGenerator::addLine( // private.
 
 		for (
 				*i = 0;
-				*i < limit;
+				*i != limit;
 				*i += 1)
 		{
-			if (_blocks[roadX][roadY] != NULL
+			if (   _blocks[roadX][roadY] != NULL
 				&& _blocks[roadX][roadY]->isInGroup(comparator) == false)
 			{
 				placed = false;
@@ -3979,7 +3986,7 @@ bool BattlescapeGenerator::addLine( // private.
 	}
 
 	*i = 0;
-	while (*i < limit)
+	while (*i != limit)
 	{
 		if (_blocks[roadX][roadY] == NULL)
 			addBlock(
@@ -3988,7 +3995,7 @@ bool BattlescapeGenerator::addLine( // private.
 					_terrain->getRandomMapBlock(
 											10,10,
 											typeToAdd));
-		else if (_blocks[roadX][roadY]->isInGroup(comparator))
+		else if (_blocks[roadX][roadY]->isInGroup(comparator) == true)
 		{
 			_blocks[roadX][roadY] = _terrain->getRandomMapBlock(
 															10,10,

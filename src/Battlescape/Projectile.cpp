@@ -618,8 +618,8 @@ void Projectile::applyAccuracy(
 
 
 			double
-				te,
-				fi,
+				te = 0., // avoid VC++ linker warnings
+				fi = 0.,
 				cos_fi;
 			bool
 				calcHori,

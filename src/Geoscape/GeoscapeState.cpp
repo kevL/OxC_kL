@@ -1272,14 +1272,14 @@ void GeoscapeState::drawUfoIndicators()
 			{
 				switch ((*i)->getStatus())
 				{
-					case Ufo::FLYING:
-						baseColor = 170;	// dark slate (10)+10
+					case Ufo::CRASHED:
+						baseColor = 53;		// brownish (3)
 					break;
 					case Ufo::LANDED:
 						baseColor = 112;	// green (7) goes down into (6) still green.
 					break;
-					case Ufo::CRASHED:
-						baseColor = 53;		// brownish (3)
+					default: //case Ufo::FLYING:
+						baseColor = 170;	// dark slate (10)+10
 				}
 			}
 
@@ -4024,7 +4024,7 @@ void GeoscapeState::setupLandMission() // private.
 																_game->getSavedGame()->getMonthsPassed());
 
 	// Determine a random region with a valid mission zone and no mission already running.
-	const RuleRegion* regRule;
+	const RuleRegion* regRule = NULL; // avoid VC++ linker warning.
 	bool picked = false;
 	const std::vector<std::string> regionsList = _rules->getRegionsList();
 
