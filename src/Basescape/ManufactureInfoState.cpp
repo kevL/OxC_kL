@@ -454,10 +454,10 @@ void ManufactureInfoState::setAssignedEngineer() // private.
 					calcProfit(),
 					woststr3) == true)
 	{
-		st = "STR_NET_PROFIT_PER_MONTH_UC";
+		st = "STR_NET_PROFIT_PER_MONTH_UC_";
 	}
 	else
-		st = "STR_NET_COST_PER_MONTH_UC";
+		st = "STR_NET_COST_PER_MONTH_UC_";
 
 	_txtMonthlyProfit->setText(tr(st)
 						.arg(woststr3.str()));

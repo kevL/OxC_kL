@@ -2051,7 +2051,8 @@ void GeoscapeState::time10Minutes()
 				c != (*b)->getCrafts()->end();
 				++c)
 		{
-			if ((*c)->getStatus() == "STR_OUT")
+			if ((*c)->getStatus() == "STR_OUT"
+				&& (*c)->getTakeoff() == true)
 			{
 				(*c)->consumeFuel();
 
@@ -2195,6 +2196,7 @@ void GeoscapeState::time10Minutes()
 							++c)
 					{
 						if ((*c)->getStatus() == "STR_OUT"
+							&& (*c)->getTakeoff() == true
 							&& (*c)->detect(*u) == true)
 						{
 							contact = true;
@@ -2253,6 +2255,7 @@ void GeoscapeState::time10Minutes()
 							++c)
 					{
 						if ((*c)->getStatus() == "STR_OUT"
+							&& (*c)->getTakeoff() == true
 							&& (*c)->detect(*u) == true)
 						{
 							contact = true;

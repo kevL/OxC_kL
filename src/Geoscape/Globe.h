@@ -69,7 +69,6 @@ private:
 		ROTATE_LATITUDE;
 
 	bool
-//		_blink, // they typed it to (int)
 		_hover,
 		_isMouseScrolled,
 		_isMouseScrolling,

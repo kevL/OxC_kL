@@ -1598,7 +1598,7 @@ void Globe::XuLine(
 }
 
 /**
- * Draws the radar ranges of player bases on the globe.
+ * Draws the radar ranges of player's Bases and Craft on the globe.
  * kL Rewrite!
  */
 void Globe::drawRadars()
@@ -1686,27 +1686,28 @@ void Globe::drawRadars()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			if ((*j)->getStatus()!= "STR_OUT")
-				continue;
-
-			range = static_cast<double>((*j)->getRules()->getRadarRange());
-			if (range > 0.)
+			if ((*j)->getStatus() == "STR_OUT"
+				&& (*j)->getTakeoff() == true)
 			{
-				lat = (*j)->getLatitude();
-				lon = (*j)->getLongitude();
+				range = static_cast<double>((*j)->getRules()->getRadarRange());
+				if (range > 0.)
+				{
+					lat = (*j)->getLatitude();
+					lon = (*j)->getLongitude();
 
-				polarToCart(
-						lon,
-						lat,
-						&x,&y);
-
-				range *= unitToRads;
-				drawGlobeCircle( // Craft radars.
-							lat,
+					polarToCart(
 							lon,
-							range,
-							24,
-							CLO_RADAR2);
+							lat,
+							&x,&y);
+
+					range *= unitToRads;
+					drawGlobeCircle( // Craft radars.
+								lat,
+								lon,
+								range,
+								24,
+								CLO_RADAR2);
+				}
 			}
 		}
 	}

@@ -74,7 +74,7 @@ Craft::Craft(
 		_fuel(0),
 		_damage(0),
 //		_flightOrder(0),
-		_takeoff(0),
+		_takeOff(0),
 		_status("STR_READY"),
 		_lowFuel(false),
 		_mission(false),
@@ -277,7 +277,7 @@ void Craft::load(
 		}
 	}
 
-	_takeoff	= node["takeoff"]	.as<int>(_takeoff);
+	_takeOff	= node["takeOff"]	.as<int>(_takeOff);
 	_inTactical	= node["inTactical"].as<bool>(_inTactical);
 	if (_inTactical == true)
 		setSpeed(0);
@@ -331,7 +331,7 @@ YAML::Node Craft::save() const
 	if (_inTactical == true)	node["inTactical"]	= _inTactical;
 	if (_kills != 0)			node["kills"]		= _kills;
 //	if (_flightOrder != 0)		node["flightOrder"]	= _flightOrder;
-	if (_takeoff != 0)			node["takeoff"]		= _takeoff;
+	if (_takeOff != 0)			node["takeOff"]		= _takeOff;
 	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
 
 	return node;
@@ -542,7 +542,7 @@ std::string Craft::getAltitude() const
 void Craft::setDestination(Target* dest)
 {
 	if (_status != "STR_OUT")
-		_takeoff = 75;
+		_takeOff = 75;
 
 	if (dest == NULL)
 		setSpeed(_crRule->getMaxSpeed() / 2);
@@ -835,10 +835,10 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	if (_takeoff == 0)
+	if (_takeOff == 0)
 		moveTarget();
 	else
-		--_takeoff;
+		--_takeOff;
 
 	if (reachedDestination() == true
 		&& _dest == dynamic_cast<Target*>(_base))
@@ -850,7 +850,7 @@ void Craft::think()
 		_lowFuel = false;
 		_mission = false;
 		_warning = CW_NONE;
-		_takeoff = 0;
+		_takeOff = 0;
 
 		checkup();
 	}
@@ -1354,6 +1354,15 @@ void Craft::addKill()
 int Craft::getKills() const
 {
 	return _kills;
+}
+
+/**
+ * Gets if this Craft has left the ground.
+ * @return, true if airborne
+ */
+bool Craft::getTakeoff() const
+{
+	return (_takeOff == 0);
 }
 
 }

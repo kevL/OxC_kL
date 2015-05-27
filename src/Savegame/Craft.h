@@ -74,7 +74,7 @@ private:
 		_fuel,
 		_id,
 //		_flightOrder,
-		_takeoff,
+		_takeOff,
 
 		_kills;
 
@@ -271,6 +271,9 @@ private:
 		void addKill();
 		/// Gets this Craft's dogfight kills.
 		int getKills() const;
+
+		/// Gets if the Craft has left the ground.
+		bool getTakeoff() const;
 };
 
 }
