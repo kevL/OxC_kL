@@ -79,7 +79,7 @@ UnitInfoState::UnitInfoState(
 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
-	_bg			= new Surface(320,200);
+	_bg			= new Surface(320, 200);
 
 	_exit		= new InteractiveSurface(320, 180, 0, 20);
 	_txtName	= new Text(288, 17, 16, 4);

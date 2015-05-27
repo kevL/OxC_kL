@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_MANUFACTURESTARTSTATE_H
-#define OPENXCOM_MANUFACTURESTARTSTATE_H
+#ifndef OPENXCOM_MANUFACTURECOSTSSTATE_H
+#define OPENXCOM_MANUFACTURECOSTSSTATE_H
 
 #include "../Engine/State.h"
 
@@ -26,8 +26,6 @@
 namespace OpenXcom
 {
 
-class Base;
-class RuleManufacture;
 class Text;
 class TextButton;
 class TextList;
@@ -35,46 +33,37 @@ class Window;
 
 
 /**
- * Screen which displays needed elements to start productions;
- * items/ required workshop space/ cost to build a unit, etc.
+ * Screen that displays a table of manufacturing costs.
  */
-class ManufactureStartState
+class ManufactureCostsState
 	:
 		public State
 {
 
 private:
-	Base* _base;
-	const RuleManufacture* const _manufRule;
 	Text
-		* _txtCost,
-		* _txtItemRequired,
-		* _txtManHour,
-		* _txtRequiredItems,
 		* _txtTitle,
-		* _txtWorkSpace,
-		* _txtUnitsAvailable,
-		* _txtUnitsRequired;
-	TextButton
-		* _btnCancel,
-		* _btnCostTable,
-		* _btnStart;
-	TextList* _lstRequiredItems;
+		* _txtItem,
+		* _txtManHours,
+		* _txtSpace,
+		* _txtCost,
+		* _txtRequired;
+	TextButton* _btnCancel;
+	TextList* _lstProduction;
 	Window* _window;
 
 
 	public:
 		/// Creates the State.
-		ManufactureStartState(
-				Base* base,
-				const RuleManufacture* const manufRule);
+		ManufactureCostsState();
+		/// dTor.
+		~ManufactureCostsState();
 
-		/// Handler for the Costs button.
-		void btnCostsClick(Action* action);
+		/// Populates the table with manufacture information.
+		void init();
+
 		/// Handler for the Cancel button.
 		void btnCancelClick(Action* action);
-		/// Handler for the start button.
-		void btnStartClick(Action* action);
 };
 
 }

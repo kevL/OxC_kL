@@ -35,10 +35,10 @@ class Surface;
 
 /**
  * Takes care of loading and storing each character in a sprite font.
- * Sprite fonts consist of a set of fixed-size characters all lined up
- * in one column in a surface.
- * @note The characters don't all need to be the same size, they can
- * have blank space and will be automatically lined up properly.
+ * @note Sprite fonts consist of a set of fixed-size characters all lined up in
+ * one column in a surface.
+ * @note The characters don't all need to be the same size - they can have blank
+ * space and will be automatically lined up properly.
  */
 class Font
 {

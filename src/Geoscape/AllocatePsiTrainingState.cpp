@@ -60,7 +60,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 		_base(base),
 		_sel(0)
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtBaseLabel	= new Text(80, 9, 230, 8);
@@ -112,7 +112,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtName->setText(tr("STR_NAME"));
-	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
+	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_IMPROVEMENT"));
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 

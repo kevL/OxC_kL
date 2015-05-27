@@ -228,7 +228,7 @@ void NewManufactureListState::fillProductionList()
 												_game->getRuleset(),
 												_base);
 
-	for (std::vector<RuleManufacture *>::const_iterator
+	for (std::vector<RuleManufacture*>::const_iterator
 			i = _possibleProductions.begin();
 			i != _possibleProductions.end();
 			++i)

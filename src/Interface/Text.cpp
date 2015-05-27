@@ -147,10 +147,10 @@ std::wstring Text::formatFunding(int64_t funds)
  */
 std::wstring Text::formatPercentage(int value)
 {
-	std::wostringstream wosts;
-	wosts << value << L"%";
+	std::wostringstream woststr;
+	woststr << value << L"%";
 
-	return wosts.str();
+	return woststr.str();
 }
 
 /**
@@ -182,8 +182,8 @@ Font* Text::getFont() const
 
 /**
  * Changes the various resources needed for text rendering.
- * The different fonts need to be passed in advance since the text size can
- * change mid-text, and the language affects how the text is rendered.
+ * @note The different fonts need to be passed in advance since the text size
+ * can change mid-text and the language affects how the text is rendered.
  * @param big	- pointer to large-size Font
  * @param small	- pointer to small-size Font
  * @param lang	- pointer to current Language
@@ -231,8 +231,8 @@ std::wstring Text::getText() const
 
 /**
  * Enables/disables text wordwrapping.
- * When enabled, lines of text are automatically split to ensure they
- * stay within the drawing area, otherwise they simply go off the edge.
+ * @note If enabled lines of text are automatically split to ensure they stay
+ * within the drawing area - otherwise they simply go off the edge.
  * @param wrap		- true to wrap text (default true)
  * @param indent	- true to indent wrapped text (default false)
  */
@@ -252,7 +252,7 @@ void Text::setWordWrap(
 
 /**
  * Enables/disables color inverting.
- * Mostly used to make button text look pressed along with the button.
+ * @note Mostly used to make button text look pressed along with the button.
  * @param invert - true to invert text (default true)
  */
 void Text::setInvert(const bool invert)
@@ -263,7 +263,7 @@ void Text::setInvert(const bool invert)
 
 /**
  * Enables/disables high contrast color.
- * Mostly used for Battlescape UI.
+ * @note Mostly used for Battlescape UI.
  * @param contrast - true to set high contrast (default true)
  */
 void Text::setHighContrast(const bool contrast)
@@ -312,7 +312,7 @@ void Text::setVerticalAlign(TextVAlign valign)
 
 /**
  * Changes the color used to render the text.
- * Unlike regular graphics fonts are greyscale so they need to be
+ * @note Unlike regular graphics fonts are greyscale so they need to be
  * assigned a specific position in the palette to be displayed.
  * @param color - color value
  */
@@ -334,8 +334,8 @@ Uint8 Text::getColor() const
 
 /**
  * Changes the secondary color used to render the text.
- * The text switches between the primary and secondary
- * color whenever there's a 0x01 in the string.
+ * @note The text switches between the primary and secondary color whenever
+ * there's a 0x01 in the string.
  * @param color - color value
  */
 void Text::setSecondaryColor(Uint8 color)
@@ -391,8 +391,9 @@ int Text::getTextWidth(int line) const
 }
 
 /**
- * Returns the rendered text's height. Useful to check if wordwrap applies.
- * @param line - line to get the height of, or -1 to get whole text height (default -1)
+ * Returns the rendered text's height.
+ * @note Useful to check if wordwrap applies.
+ * @param line - line to get the height of or -1 to get whole text height (default -1)
  * @return, height in pixels
  */
 int Text::getTextHeight(int line) const
@@ -425,8 +426,8 @@ void Text::addTextHeight(int pad)
 }
 
 /**
- * Takes care of any text post-processing like calculating
- * line metrics for alignment and wordwrapping if necessary.
+ * Takes care of any text post-processing like calculating line metrics for
+ * alignment and wordwrapping if necessary.
  */
 void Text::processText() // private.
 {
@@ -561,8 +562,8 @@ int Text::getLineX(int line) const // private.
 				case ALIGN_LEFT:
 				break;
 				case ALIGN_CENTER:
-					x = static_cast<int>(
-							std::ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.));
+					x = static_cast<int>(std::ceil(
+						static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.));
 				break;
 				case ALIGN_RIGHT:
 					x = getWidth() - 1 - _lineWidth[line];
@@ -576,8 +577,8 @@ int Text::getLineX(int line) const // private.
 					x = getWidth() - 1;
 				break;
 				case ALIGN_CENTER:
-					x = getWidth() - static_cast<int>(
-							std::ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.));
+					x = getWidth() - static_cast<int>(std::ceil(
+									 static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.));
 				break;
 				case ALIGN_RIGHT:
 					x = _lineWidth[line];
@@ -620,8 +621,8 @@ struct PaletteShift
 
 
 /**
- * Draws all the characters in the text with a really
- * nasty complex gritty text rendering algorithm logic stuff.
+ * Draws all the characters in the text with a really nasty complex gritty text
+ * rendering algorithm logic stuff.
  */
 void Text::draw()
 {

@@ -244,11 +244,11 @@ void ResearchInfoState::btnCancelClick(Action*)
  */
 void ResearchInfoState::setAssignedScientist()
 {
-	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC")
+	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC_")
 									.arg(_base->getScientists()));
-	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC")
+	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC_")
 									.arg(_base->getFreeLaboratories()));
-	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED")
+	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED_")
 									.arg(_project->getAssigned()));
 }
 

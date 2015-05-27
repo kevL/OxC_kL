@@ -71,7 +71,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 
-	_image = new Surface(320,200);
+	_image = new Surface(320, 200);
 	add(_image);
 
 	std::string look = armorRule->getSpriteInventory();

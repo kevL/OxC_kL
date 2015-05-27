@@ -1506,10 +1506,10 @@ void SavedGame::getAvailableResearchProjects(
 }
 
 /**
- * Get the list of RuleManufacture which can be manufacture in a Base.
- * @param productions the list of Productions which are available.
- * @param ruleset the Game Ruleset
- * @param base a pointer to a Base
+ * Get the list of RuleManufacture which can be manufactured in a Base.
+ * @param productions	- reference the list of Productions to be made available
+ * @param ruleset		- pointer to the Ruleset
+ * @param base			- pointer to a Base
  */
 void SavedGame::getAvailableProductions(
 		std::vector<RuleManufacture*>& productions,

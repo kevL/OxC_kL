@@ -65,7 +65,7 @@ ResearchState::ResearchState(
 		_state(state),
 		_baseList(_game->getSavedGame()->getBases())
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 	_mini			= new MiniBaseView(128, 16, 180, 27, MBV_RESEARCH);
 
 	_txtTitle		= new Text(320, 17, 0, 10);
@@ -217,11 +217,11 @@ void ResearchState::init()
 						daysLeft.c_str());
 	}
 
-	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")
+	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE_")
 							.arg(_base->getScientists()));
-	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED")
+	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED_")
 							.arg(_base->getAllocatedScientists()));
-	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE")
+	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_")
 							.arg(_base->getFreeLaboratories()));
 
 

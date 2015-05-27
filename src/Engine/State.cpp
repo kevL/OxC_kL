@@ -51,7 +51,7 @@ Game* State::_game = NULL;
 
 /**
  * Initializes a brand new state with no child elements.
- * By default states are full-screen.
+ * @note States are full-screen by default.
  */
 State::State()
 	:
@@ -83,7 +83,7 @@ State::~State()
 }
 
 /**
- * Sets interface data from the ruleset, also sets the palette for the state.
+ * Sets interface data from the ruleset - also sets the palette for the state.
  * @param category		- reference the name of the interface from the Interfaces ruleset
  * @param alterPal		- true to swap out the backpal colors (default false)
  * @param battlescape	- true to use battlescape palette (applies only to options screens) (default false)
@@ -134,12 +134,12 @@ void State::setInterface(
 }
 
 /**
- * Adds a new child surface for the state to take care of, giving
- * it the game's display palette. Once associated, the state handles
- * all of the surface's behaviour and management automatically.
- * @param surface - child surface
- * @note, Since visible elements can overlap one another they have to
+ * Adds a new child surface for the state to take care of, giving it the game's
+ * display palette. Once associated, the state handles all of the surface's
+ * behaviour and management automatically.
+ * @note Since visible elements can overlap one another they have to
  * be added in ascending Z-Order to be blitted correctly onto the screen.
+ * @param surface - child surface
  */
 void State::add(Surface* surface)
 {
@@ -158,7 +158,7 @@ void State::add(Surface* surface)
 }
 
 /**
- * As above, except this adds a surface based on an interface element defined in the ruleset.
+ * As above except this adds a surface based on an interface element defined in the ruleset.
  * @note that this function REQUIRES the ruleset to have been loaded prior to use.
  * @note if no parent is defined the element will not be moved.
  * @param surface	- pointer to child Surface
@@ -233,10 +233,9 @@ void State::add(
 
 /**
  * Returns whether this is a full-screen state.
- * This is used to optimize the state machine since full-screen
- * states automatically cover the whole screen, (whether they
- * actually use it all or not) so states behind them can be
- * safely ignored since they'd be covered up.
+ * @note This is used to optimize the state machine since full-screen states
+ * automatically cover the whole screen (whether they actually use it all or
+ * not) so states behind them can be safely ignored since they'd be covered up.
  * @return, true if full-screen
  */
 bool State::isScreen() const
@@ -245,8 +244,9 @@ bool State::isScreen() const
 }
 
 /**
- * Toggles the full-screen flag. Used by windows to keep the previous
- * screen in display while the window is still "popping up".
+ * Toggles the full-screen flag.
+ * @note Used by windows to keep the previous screen in display while the window
+ * is still "popping up".
  */
 void State::toggleScreen()
 {
@@ -254,11 +254,10 @@ void State::toggleScreen()
 }
 
 /**
- * Initializes the state and its child elements. This is
- * used for settings that have to be reset every time the
- * state is returned to focus (eg. palettes), so can't
- * just be put in the constructor (remember there's a stack
- * of states, so they can be created once while being
+ * Initializes the state and its child elements.
+ * @note This is used for settings that have to be reset every time the state is
+ * returned to focus (eg. palettes), so can't just be put in the constructor
+ * (remember there's a stack of states, so they can be created once while being
  * repeatedly switched back into focus).
  */
 void State::init() // virtual
@@ -278,8 +277,8 @@ void State::init() // virtual
 }
 
 /**
- * Runs any code the state needs to keep updating every
- * game cycle, like timers and other real-time elements.
+ * Runs any code the state needs to keep updating every game cycle, like timers
+ * and other real-time elements.
  */
 void State::think() // virtual
 {
@@ -293,8 +292,8 @@ void State::think() // virtual
 }
 
 /**
- * Blits all the visible Surface child elements onto the
- * display screen, by order of addition.
+ * Blits all the visible Surface child elements onto the display screen by order
+ * of addition.
  */
 void State::blit() // virtual
 {
@@ -308,8 +307,8 @@ void State::blit() // virtual
 }
 
 /**
- * Takes care of any events from the core game engine,
- * and passes them on to its InteractiveSurface child elements.
+ * Takes care of any events from the core game engine, and passes them on to its
+ * InteractiveSurface child elements.
  * @param action - pointer to an Action
  */
 void State::handle(Action* action) // virtual
@@ -379,7 +378,7 @@ void State::resetAll()
 
 /**
  * Gets the LocalizedText for dictionary key @a id.
- * This function forwards the call to Language::getString(const std::string&).
+ * @note This function forwards the call to Language::getString(const std::string&).
  * @param id - reference the dictionary key to search for
  * @return, a reference to the LocalizedText
  */
@@ -390,7 +389,7 @@ const LocalizedText& State::tr(const std::string& id) const
 
 /**
  * Gets a modifiable copy of the LocalizedText for dictionary key @a id.
- * This function forwards the call to Language::getString(const std::string&, unsigned).
+ * @note This function forwards the call to Language::getString(const std::string&, unsigned).
  * @param id	- reference the dictionary key to search for
  * @param n		- the number to use for the proper version
  * @return, a copy of the LocalizedLext
@@ -543,10 +542,9 @@ void State::redrawText()
 }
 
 /**
- * Changes the current modal surface. If a surface is modal
- * then only that surface can receive events. This is used
- * when an element needs to take priority over everything else
- * eg. focus.
+ * Changes the current modal surface.
+ * @note If a surface is modal then only that surface can receive events. This
+ * is used when an element needs to take priority over everything else, eg. focus.
  * @param surface - pointer to modal surface; NULL for no modal
  */
 void State::setModal(InteractiveSurface* surface)
@@ -632,8 +630,8 @@ SDL_Color* const State::getPalette()
 }
 
 /**
- * Each state will probably need its own resize handling
- * so this space intentionally left blank.
+ * Each state will probably need its own resize handling so this space
+ * intentionally left blank.
  * @param dX - reference the delta of X
  * @param dY - reference the delta of Y
  */
@@ -665,7 +663,7 @@ void State::recenter(
 
 /**
  * Sets a pointer to the Game object.
- * This pointer can be used universally by all child-States.
+ * @note This pointer can be used universally by all child-States.
  * @param game - THE pointer to Game
  */
 void State::setGamePtr(Game* game)

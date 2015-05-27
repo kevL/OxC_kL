@@ -79,7 +79,7 @@ BaseDefenseState::BaseDefenseState(
 		_stLen_initiate(0),
 		_stLen_repulsed(0)
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(288, 17, 16, 10);
 	_txtInit		= new Text(320, 9, 0, 30);

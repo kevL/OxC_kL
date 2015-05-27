@@ -5940,6 +5940,11 @@ extraStrings:
       STR_INTERROGATION_: "Interrogation> {ALT}{0}"
       STR_SORT: "sort"
       STR_KILLS_LC_: "ace> {ALT}{0}"
+      STR_COSTS_UC: "PRODUCTION COSTS"
+      STR_SPACE_LC: ""
+      STR_HOURS_PER: "hrs"
+      STR_REQUIRED_LC: "Items required"
+      STR_PRODUCTION_COSTS: "Production Costs"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

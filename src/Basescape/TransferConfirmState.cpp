@@ -55,12 +55,13 @@ TransferConfirmState::TransferConfirmState(
 	_screen = false;
 
 	_window		= new Window(this, 320, 80, 0, 60);
+
 	_txtTitle	= new Text(310, 17, 5, 72);
 
-	_txtCost	= new Text(60, 17, 110, 93);
+	_txtCost	= new Text( 60, 17, 110, 93);
 	_txtTotal	= new Text(100, 17, 170, 93);
 
-	_btnCancel	= new TextButton(134, 16, 16, 115);
+	_btnCancel	= new TextButton(134, 16,  16, 115);
 	_btnOk		= new TextButton(134, 16, 170, 115);
 
 	setInterface("transferConfirm");
@@ -94,7 +95,7 @@ TransferConfirmState::TransferConfirmState(
 	_txtTitle->setText(tr("STR_TRANSFER_ITEMS_TO").arg(_base->getName()));
 
 	_txtCost->setBig();
-	_txtCost->setText(tr("STR_COST"));
+	_txtCost->setText(tr("STR_COST_LC"));
 
 	_txtTotal->setBig();
 	std::wostringstream woststr;

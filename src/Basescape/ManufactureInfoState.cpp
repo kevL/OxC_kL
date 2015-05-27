@@ -104,30 +104,30 @@ void ManufactureInfoState::buildUi() // private.
 
 	_window					= new Window(this, 320, 170, 0, 15, POPUP_BOTH);
 
-	_txtTitle				= new Text(280, 16, 20, 25);
+	_txtTitle				= new Text(280, 17, 20, 25);
 
-	_txtTimeDescr			= new Text(30, 16, 244, 36);
-	_txtTimeTotal			= new Text(30, 16, 274, 36);
+	_txtTimeDescr			= new Text(30, 17, 244, 36);
+	_txtTimeTotal			= new Text(30, 17, 274, 36);
 	_btnSell				= new ToggleTextButton(60, 16, 244, 56);
 
 	_txtAvailableEngineer	= new Text(100, 9, 16, 47);
 	_txtAvailableSpace		= new Text(100, 9, 16, 57);
 	_txtMonthlyProfit		= new Text(160, 9, 16, 67);
 
-	_txtAllocatedEngineer	= new Text(84, 16,  16, 80);
-	_txtAllocated			= new Text(50, 16, 100, 80);
+	_txtAllocatedEngineer	= new Text(84, 17,  16, 80);
+	_txtAllocated			= new Text(50, 17, 100, 80);
 
-	_txtUnitToProduce		= new Text(84, 16, 176, 80);
-	_txtTodo				= new Text(50, 16, 260, 80);
+	_txtUnitToProduce		= new Text(84, 17, 176, 80);
+	_txtTodo				= new Text(50, 17, 260, 80);
 
-	_txtEngineerUp			= new Text(100, 16, 32, 111);
+	_txtEngineerUp			= new Text(100, 17, 32, 111);
 	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP, 14, 14, 145, 111);
-	_txtEngineerDown		= new Text(100, 16, 32, 135);
+	_txtEngineerDown		= new Text(100, 17, 32, 135);
 	_btnEngineerDown		= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 145, 135);
 
-	_txtUnitUp				= new Text(100, 16, 205, 111);
+	_txtUnitUp				= new Text(100, 17, 205, 111);
 	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP, 14, 14, 280, 111);
-	_txtUnitDown			= new Text(100, 16, 205, 135);
+	_txtUnitDown			= new Text(100, 17, 205, 135);
 	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 280, 135);
 
 	_btnStop				= new TextButton(135, 16,  10, 159);
@@ -182,7 +182,7 @@ void ManufactureInfoState::buildUi() // private.
 	_btnSell->onMouseRelease((ActionHandler)& ManufactureInfoState::btnSellRelease);
 //	_btnSell->onMouseClick((ActionHandler)& ManufactureInfoState::btnSellClick, 0);
 
-	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
+	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS_ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
 
 	_txtAllocated->setBig();
@@ -430,8 +430,8 @@ static bool _formatProfit( // static.
  */
 void ManufactureInfoState::setAssignedEngineer() // private.
 {
-	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers()));
-	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
+	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC_").arg(_base->getEngineers()));
+	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC_").arg(_base->getFreeWorkshops()));
 
 	std::wostringstream
 		woststr1,

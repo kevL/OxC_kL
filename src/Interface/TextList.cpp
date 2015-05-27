@@ -299,7 +299,6 @@ void TextList::setCellText(
 		const std::wstring& text)
 {
 	_texts[row][column]->setText(text);
-
 	_redraw = true;
 }
 
@@ -371,8 +370,8 @@ size_t TextList::getVisibleRows() const
 }
 
 /**
- * Adds a new row of text to the list, automatically creating
- * the required Text objects lined up where they need to be.
+ * Adds a new row of text to the list automatically creating the required Text
+ * objects lined up where they need to be.
  * @param cols	- number of columns
  * @param ...	- text for each cell in the new row
  */
@@ -417,9 +416,9 @@ void TextList::addRow(
 
 		txt->setText(va_arg(args, wchar_t*));
 
-		// grab this before enabling word wrap so it can be used
-		// to calculate the total row height below
-		int vertPad = _font->getHeight() - txt->getTextHeight();
+		// grab this before enabling word wrap so it can
+		// be used to calculate the total row height below
+		const int vertPad = _font->getHeight() - txt->getTextHeight();
 
 		if (_wrap == true // wordwrap text if necessary
 			&& txt->getTextWidth() > txt->getWidth())
@@ -528,8 +527,8 @@ void TextList::addRow(
 
 /**
  * Changes the columns that the list contains.
- * While rows can be unlimited, columns need to be specified
- * since they can have various widths for lining up the text.
+ * @note While rows can be unlimited, columns need to be specified since they
+ * can have various widths for lining up the text.
  * @param cols	- number of columns
  * @param ...	- width of each column
  */
@@ -552,8 +551,8 @@ void TextList::setColumns(
 }
 
 /**
- * Replaces a certain amount of colors in the palette of all
- * the text contained in the list.
+ * Replaces a certain amount of colors in the palette of all the text contained
+ * in the list.
  * @param colors		- pointer to the set of colors
  * @param firstcolor	- offset of the first color to replace (default 0)
  * @param ncolors		- amount of colors to replace (default 256)
@@ -628,8 +627,8 @@ void TextList::setPalette(
 }
 
 /**
- * Changes the resources for the text in the list
- * and calculates the selector and visible amount of rows.
+ * Changes the resources for the text in the list and calculates the selector
+ * and visible amount of rows.
  * @param big	- pointer to large-size font
  * @param small	- pointer to small-size font
  * @param lang	- pointer to current language
@@ -676,8 +675,9 @@ void TextList::setHeight(int height)
 }
 
 /**
- * Changes the color of the text in the list. This doesn't change
- * the color of existing text, just the color of text added from then on.
+ * Changes the color of the text in the list.
+ * @note This doesn't change the color of existing text - just the color of text
+ * added from then on.
  * @param color - color value
  */
 void TextList::setColor(Uint8 color)
@@ -757,8 +757,8 @@ void TextList::setHighContrast(bool contrast)
 
 /**
  * Enables/disables text wordwrapping.
- * When enabled, rows can take up multiple lines of the list
- * otherwise every row is restricted to one line.
+ * @note When enabled rows can take up multiple lines of the list otherwise
+ * every row is restricted to one line.
  * @param wrap - wordwrap setting (default true)
  */
 void TextList::setWordWrap(bool wrap)
@@ -768,8 +768,8 @@ void TextList::setWordWrap(bool wrap)
 
 /**
  * Changes the horizontal alignment of the text in the list.
- * This doesn't change the alignment of existing text
- * just the alignment of text added from then on.
+ * @note This doesn't change the alignment of existing text just the alignment
+ * of text added from then on.
  * @param align	- horizontal alignment
  * @param col	- the column to set the alignment for (defaults to -1 meaning "all")
  */
@@ -792,8 +792,8 @@ void TextList::setAlign(
 }
 
 /**
- * If enabled, the text in different columns will be separated by dots.
- * Otherwise it will only be separated by blank space.
+ * If enabled the text in different columns will be separated by dots.
+ * @note Otherwise it will only be separated by blank space.
  * @param dot - true for dots (default true)
  */
 void TextList::setDot(bool dot)
@@ -802,8 +802,8 @@ void TextList::setDot(bool dot)
 }
 
 /**
- * If enabled the list will respond to player input
- * highlighting selected rows and receiving clicks.
+ * If enabled the list will respond to player input highlighting selected rows
+ * and receiving clicks.
  * @param selectable - selectable setting (default true)
  */
 void TextList::setSelectable(bool selectable)

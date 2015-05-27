@@ -63,12 +63,13 @@ ManufactureState::ManufactureState(
 		_state(state),
 		_baseList(_game->getSavedGame()->getBases())
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
+
 	_mini			= new MiniBaseView(128, 16, 180, 27, MBV_PRODUCTION);
 
-	_txtTitle		= new Text(320, 17, 0, 10);
-	_txtBaseLabel	= new Text(80, 9, 16, 10);
-	_txtHoverBase	= new Text(80, 9, 224, 10);
+	_txtTitle		= new Text(320, 17,   0, 10);
+	_txtBaseLabel	= new Text( 80,  9,  16, 10);
+	_txtHoverBase	= new Text( 80,  9, 224, 10);
 
 	_txtAllocated	= new Text(60, 9, 16, 26);
 	_txtAvailable	= new Text(60, 9, 16, 35);
@@ -76,15 +77,15 @@ ManufactureState::ManufactureState(
 	_txtSpace		= new Text(100, 9, 80, 26);
 	_txtFunds		= new Text(100, 9, 80, 35);
 
-	_txtItem		= new Text(120, 9, 16, 53);
-	_txtEngineers	= new Text(45, 9, 145, 53);
-	_txtProduced	= new Text(40, 9, 174, 45);
-	_txtCost		= new Text(50, 17, 215, 45);
-	_txtTimeLeft	= new Text(25, 17, 271, 45);
+	_txtItem		= new Text(120,  9,  16, 53);
+	_txtEngineers	= new Text( 45,  9, 145, 53);
+	_txtProduced	= new Text( 40,  9, 174, 45);
+	_txtCost		= new Text( 50, 17, 215, 45);
+	_txtTimeLeft	= new Text( 25, 17, 271, 45);
 
 	_lstManufacture	= new TextList(285, 97, 16, 71);
 
-	_btnNew			= new TextButton(134, 16, 16, 177);
+	_btnNew			= new TextButton(134, 16,  16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	setInterface("manufactureMenu");
@@ -146,17 +147,13 @@ ManufactureState::ManufactureState(
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
-	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS_")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtItem->setText(tr("STR_ITEM"));
-
-	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
-
+	_txtEngineers->setText(tr("STR_ENGINEERS_ALLOCATED"));
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
-
-	_txtCost->setText(tr("STR_COST__PER__UNIT"));
-
+	_txtCost->setText(tr("STR_COST_PER_UNIT"));
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
 
 	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
@@ -271,11 +268,11 @@ void ManufactureState::fillProductionList()
 							woststr4.str().c_str());
 	}
 
-	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE")
+	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE_")
 							.arg(_base->getEngineers()));
-	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED")
+	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED_")
 							.arg(_base->getAllocatedEngineers()));
-	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE")
+	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_")
 							.arg(_base->getFreeWorkshops()));
 }
 

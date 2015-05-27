@@ -50,7 +50,7 @@ FundingState::FundingState()
 {
 	_screen = false;
 
-	_window			= new Window(this, 320,200, 0,0, POPUP_BOTH);
+	_window			= new Window(this, 320, 200, 0,0, POPUP_BOTH);
 
 	_txtTitle		= new Text(300, 17, 10, 9);
 

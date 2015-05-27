@@ -72,7 +72,7 @@ PurchaseState::PurchaseState(Base* base)
 		_craftQty(0),
 		_storeSize(0.)
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(310, 17,  5, 9);
 	_txtBaseLabel	= new Text( 80, 9,  16, 9);
@@ -139,10 +139,10 @@ PurchaseState::PurchaseState(Base* base)
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS_")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
+	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES_")
 						.arg(Text::formatFunding(_totalCost)));
 
 	_txtItem->setText(tr("STR_ITEM"));
@@ -900,7 +900,7 @@ void PurchaseState::decreaseByValue(int change)
  */
 void PurchaseState::updateItemStrings() // private.
 {
-	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
+	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES_")
 							.arg(Text::formatFunding(_totalCost)));
 
 	std::wostringstream

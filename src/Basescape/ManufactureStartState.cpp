@@ -21,6 +21,7 @@
 
 //#include <sstream>
 
+#include "ManufactureCostsState.h"
 #include "ManufactureInfoState.h"
 
 #include "../Engine/Game.h"
@@ -47,8 +48,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the productions start screen.
- * @param base - pointer to the Base to get info from
- * @param manufRule - pointer to RuleManufacture to produce
+ * @param base		- pointer to the Base to get info from
+ * @param manufRule	- pointer to RuleManufacture to produce
  */
 ManufactureStartState::ManufactureStartState(
 		Base* base,
@@ -59,24 +60,26 @@ ManufactureStartState::ManufactureStartState(
 {
 	_screen = false;
 
-	_window					= new Window(this, 320, 170, 0, 15);
+	_window				= new Window(this, 320, 170, 0, 15);
 
-	_txtTitle				= new Text(300, 16, 10, 26);
+	_txtTitle			= new Text(300, 16, 10, 26);
 
-	_txtManHour				= new Text(280, 9, 20, 45);
-	_txtCost				= new Text(280, 9, 20, 55);
-	_txtWorkSpace			= new Text(280, 9, 20, 65);
+	_txtManHour			= new Text(150, 9, 20, 45);
+	_txtCost			= new Text(150, 9, 20, 55);
+	_txtWorkSpace		= new Text(150, 9, 20, 65);
 
-	_txtRequiredItemsTitle	= new Text(280, 9, 20, 75);
+	_txtRequiredItems	= new Text(150, 9, 20, 75);
 
-	_txtItemNameColumn		= new Text(60, 9,  40, 85);
-	_txtUnitRequiredColumn	= new Text(60, 9, 180, 85);
-	_txtUnitAvailableColumn	= new Text(60, 9, 240, 85);
+	_txtItemRequired	= new Text(60, 9,  40, 85);
+	_txtUnitsRequired	= new Text(60, 9, 180, 85);
+	_txtUnitsAvailable	= new Text(60, 9, 240, 85);
 
-	_lstRequiredItems		= new TextList(240, 57, 40, 100);
+	_lstRequiredItems	= new TextList(240, 57, 40, 100);
 
-	_btnCancel				= new TextButton(130, 16,  20, 160);
-	_btnStart				= new TextButton(130, 16, 170, 160);
+	_btnCostTable		= new TextButton(130, 16, 170, 45);
+
+	_btnCancel			= new TextButton(130, 16,  20, 160);
+	_btnStart			= new TextButton(130, 16, 170, 160);
 
 	setInterface("allocateManufacture");
 
@@ -86,14 +89,15 @@ ManufactureStartState::ManufactureStartState(
 	add(_txtCost,		"text",		"allocateManufacture");
 	add(_txtWorkSpace,	"text",		"allocateManufacture");
 
-	add(_txtRequiredItemsTitle,		"text", "allocateManufacture");
-	add(_txtItemNameColumn,			"text", "allocateManufacture");
-	add(_txtUnitRequiredColumn,		"text", "allocateManufacture");
-	add(_txtUnitAvailableColumn,	"text", "allocateManufacture");
-	add(_lstRequiredItems,			"list", "allocateManufacture");
+	add(_txtRequiredItems,	"text", "allocateManufacture");
+	add(_txtItemRequired,	"text", "allocateManufacture");
+	add(_txtUnitsRequired,	"text", "allocateManufacture");
+	add(_txtUnitsAvailable,	"text", "allocateManufacture");
+	add(_lstRequiredItems,	"list", "allocateManufacture");
 
-	add(_btnCancel,	"button", "allocateManufacture");
-	add(_btnStart,	"button", "allocateManufacture");
+	add(_btnCostTable,	"button", "allocateManufacture");
+	add(_btnCancel,		"button", "allocateManufacture");
+	add(_btnStart,		"button", "allocateManufacture");
 
 	centerAllSurfaces();
 
@@ -104,33 +108,22 @@ ManufactureStartState::ManufactureStartState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT")
+	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT_")
 							.arg(_manufRule->getManufactureTime()));
-
 	_txtCost->setText(tr("STR_COST_PER_UNIT_")
 							.arg(Text::formatFunding(_manufRule->getManufactureCost())));
-
-	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED")
+	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED_")
 							.arg(_manufRule->getRequiredSpace()));
-
-	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)& ManufactureStartState::btnCancelClick);
-	_btnCancel->onKeyboardPress(
-							(ActionHandler)& ManufactureStartState::btnCancelClick,
-							Options::keyCancel);
 
 	const std::map<std::string, int>& requiredItems (_manufRule->getRequiredItems()); // init
 	const int availableWorkSpace = _base->getFreeWorkshops();
 	bool productionPossible (_game->getSavedGame()->getFunds() > _manufRule->getManufactureCost());	// init
 	productionPossible &= (availableWorkSpace > 0);													// nifty.
 
-	_txtRequiredItemsTitle->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
-
-	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));
-
-	_txtUnitRequiredColumn->setText(tr("STR_UNITS_REQUIRED"));
-
-	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
+	_txtRequiredItems->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
+	_txtItemRequired->setText(tr("STR_ITEM_REQUIRED"));
+	_txtUnitsRequired->setText(tr("STR_UNITS_REQUIRED"));
+	_txtUnitsAvailable->setText(tr("STR_UNITS_AVAILABLE"));
 
 	_lstRequiredItems->setColumns(3, 140, 60, 40);
 
@@ -156,11 +149,21 @@ ManufactureStartState::ManufactureStartState(
 	}
 
 	const bool vis = (requiredItems.empty() == false);
-	_txtRequiredItemsTitle->setVisible(vis);
-	_txtItemNameColumn->setVisible(vis);
-	_txtUnitRequiredColumn->setVisible(vis);
-	_txtUnitAvailableColumn->setVisible(vis);
+	_txtRequiredItems->setVisible(vis);
+	_txtItemRequired->setVisible(vis);
+	_txtUnitsRequired->setVisible(vis);
+	_txtUnitsAvailable->setVisible(vis);
 	_lstRequiredItems->setVisible(vis);
+
+
+	_btnCostTable->setText(tr("STR_PRODUCTION_COSTS"));
+	_btnCostTable->onMouseClick((ActionHandler)& ManufactureStartState::btnCostsClick);
+
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
+	_btnCancel->onMouseClick((ActionHandler)& ManufactureStartState::btnCancelClick);
+	_btnCancel->onKeyboardPress(
+							(ActionHandler)& ManufactureStartState::btnCancelClick,
+							Options::keyCancel);
 
 	_btnStart->setText(tr("STR_START_PRODUCTION"));
 	_btnStart->onMouseClick((ActionHandler)& ManufactureStartState::btnStartClick);
@@ -168,6 +171,15 @@ ManufactureStartState::ManufactureStartState(
 					(ActionHandler)& ManufactureStartState::btnStartClick,
 					Options::keyOk);
 	_btnStart->setVisible(productionPossible);
+}
+
+/**
+ * Go to the Costs table.
+ * @param action - pointer to an Action
+ */
+void ManufactureStartState::btnCostsClick(Action*)
+{
+	_game->pushState(new ManufactureCostsState());
 }
 
 /**

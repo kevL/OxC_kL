@@ -48,7 +48,7 @@ namespace OpenXcom
  */
 MonthlyCostsState::MonthlyCostsState(Base* base)
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(300, 17, 10, 8);
 
@@ -92,15 +92,12 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MONTHLY_COSTS_").arg(base->getName()));
+	_txtTitle->setBig();
 
 	_txtUnitCost->setText(tr("STR_COST_PER_UNIT"));
-
 	_txtQuantity->setText(tr("STR_QUANTITY"));
-
-	_txtCost->setText(tr("STR_COST"));
-
+	_txtCost->setText(tr("STR_COST_LC"));
 	_txtRental->setText(tr("STR_CRAFT_RENTAL"));
 
 	_lstCrafts->setColumns(4, 124, 62, 43, 56);

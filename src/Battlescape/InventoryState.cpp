@@ -100,8 +100,8 @@ InventoryState::InventoryState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_bg			= new Surface(320,200);
-	_soldier	= new Surface(320,200);
+	_bg			= new Surface(320, 200);
+	_soldier	= new Surface(320, 200);
 
 	_txtName	= new Text(200, 17, 36, 6);
 	_gender		= new Surface(7, 7, 28, 1);

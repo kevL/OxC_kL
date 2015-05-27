@@ -122,7 +122,7 @@ ListGamesState::ListGamesState(
 {
 	_screen = false;
 
-	_window		= new Window(this, 320,200, 0,0, POPUP_BOTH);
+	_window		= new Window(this, 320, 200, 0,0, POPUP_BOTH);
 
 	_txtTitle	= new Text(310, 16, 5,  8);
 	_txtDelete	= new Text(310,  9, 5, 24);

@@ -59,7 +59,7 @@ AlienBaseState::AlienBaseState(
 		_state(state),
 		_base(base)
 {
-	_window		= new Window(this, 320,200);
+	_window		= new Window(this, 320, 200);
 	_txtTitle	= new Text(308, 60, 6, 60);
 	_btnOk		= new TextButton(50, 12, 135, 180);
 

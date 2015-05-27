@@ -24,7 +24,7 @@
 1430206680 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\engine\state.h
+1432679417 f:\git\openxcom\src\engine\state.h
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleInterface.h"
 
@@ -4553,7 +4553,7 @@
 1430149549 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1431632297 f:\git\openxcom\src\interface\textlist.h
+1432688041 f:\git\openxcom\src\interface\textlist.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -4819,7 +4819,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\researchproject.h
 
-1432671820 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1432686480 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4852,8 +4852,9 @@
 
 1431728713 f:\git\openxcom\src\savegame\production.h
 
-1432465141 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
+1432707887 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
+	"ManufactureCostsState.h"
 	"ManufactureInfoState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -4867,10 +4868,10 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1430149549 f:\git\openxcom\src\basescape\manufacturestartstate.h
+1432678018 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1432426618 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1432686582 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4923,7 +4924,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1432426618 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
+1432678363 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
 	"MonthlyCostsState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -4936,7 +4937,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1432463778 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1432681021 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureStartState.h"
 	"../Engine/Game.h"
@@ -5028,7 +5029,7 @@
 1430149549 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1432613052 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1432686639 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5057,7 +5058,7 @@
 
 1431470699 f:\git\openxcom\src\savegame\transfer.h
 
-1430950603 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1432686679 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5077,7 +5078,7 @@
 	<algorithm>
 	<cstdint>
 
-1432426618 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1432686690 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"AlienContainmentState.h"
 	"BasescapeState.h"
@@ -5285,7 +5286,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
+1432686562 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
 	"TransferBaseState.h"
 	"StoresMatrixState.h"
 	"TransferItemsState.h"
@@ -5305,7 +5306,7 @@
 	"../Engine/State.h"
 	"../Savegame/Transfer.h"
 
-1430932773 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
+1432678389 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
 	"TransferConfirmState.h"
 	"TransferItemsState.h"
 	"../Engine/Game.h"
@@ -6720,7 +6721,7 @@
 	<map>
 	<string>
 
-1430149550 source:f:\git\openxcom\src\engine\state.cpp
+1432679737 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Game.h"
 	"InteractiveSurface.h"
@@ -6814,7 +6815,7 @@
 1432347198 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
-1432450202 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1432676551 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"GeoscapeState.h"
 	"PsiTrainingState.h"
@@ -7647,7 +7648,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1431896644 source:f:\git\openxcom\src\interface\text.cpp
+1432688984 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	"../Engine/Language.h"
 
@@ -7663,7 +7664,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1432463399 source:f:\git\openxcom\src\interface\textlist.cpp
+1432701034 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -8748,7 +8749,7 @@
 1430624322 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1432465575 source:f:\git\openxcom\src\savegame\production.cpp
+1432677243 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	"Base.h"
 	"Craft.h"
@@ -8796,7 +8797,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1432529106 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1432680380 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -9066,7 +9067,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1430256098 source:f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.cpp
+1432711000 source:f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.cpp
 	"UfopaediaSelectState.h"
 	"ArticleState.h"
 	"Ufopaedia.h"
@@ -10627,7 +10628,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1432610954 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1432712848 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11507,4 +11508,18 @@
 
 1432587154 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
 	"RuleUnit.h"
+
+1432713833 source:f:\git\openxcom\src\basescape\manufacturecostsstate.cpp
+	"ManufactureCostsState.h"
+	"../Engine/Game.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleManufacture.h"
+	"../Savegame/SavedGame.h"
+
+1432687933 f:\git\openxcom\src\basescape\manufacturecostsstate.h
+	"../Engine/State.h"
 

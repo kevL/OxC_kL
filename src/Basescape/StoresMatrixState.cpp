@@ -57,7 +57,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	:
 		_base(base)
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(300, 17,  10, 8);
 	_txtBaseLabel	= new Text( 80,  9, 224, 8);
@@ -97,7 +97,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	centerAllSurfaces();
 
 
-	Uint8 color = Palette::blockOffset(13)+10; // blue
+	Uint8 color = 218;			//Palette::blockOffset(13)+10; // blue -> Interface "allocateManufacture" eg.
+	const Uint8 color2 = 208;	//Palette::blockOffset(13)
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 	_window->setColor(color);
@@ -121,7 +122,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 	_txtItem->setText(tr("STR_ITEM"));
-	_txtItem->setColor(color);
+	_txtItem->setColor(color2);
 
 	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
 	_lstMatrix->setColor(color);
@@ -175,48 +176,48 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			break;
 	}
 
-	_txtBase_0->setColor(color);
-	_txtBase_1->setColor(color);
-	_txtBase_2->setColor(color);
-	_txtBase_3->setColor(color);
-	_txtBase_4->setColor(color);
-	_txtBase_5->setColor(color);
-	_txtBase_6->setColor(color);
-	_txtBase_7->setColor(color);
+	_txtBase_0->setColor(color2);
+	_txtBase_1->setColor(color2);
+	_txtBase_2->setColor(color2);
+	_txtBase_3->setColor(color2);
+	_txtBase_4->setColor(color2);
+	_txtBase_5->setColor(color2);
+	_txtBase_6->setColor(color2);
+	_txtBase_7->setColor(color2);
 
 	std::wostringstream
+		woststr0,
 		woststr1,
 		woststr2,
 		woststr3,
 		woststr4,
 		woststr5,
 		woststr6,
-		woststr7,
-		woststr8;
+		woststr7;
 	size_t row = 0;
 
 	if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
 	{
-		if (qty[0] > 0) woststr1 << qty[0];
-		if (qty[1] > 0) woststr2 << qty[1];
-		if (qty[2] > 0) woststr3 << qty[2];
-		if (qty[3] > 0) woststr4 << qty[3];
-		if (qty[4] > 0) woststr5 << qty[4];
-		if (qty[5] > 0) woststr6 << qty[5];
-		if (qty[6] > 0) woststr7 << qty[6];
-		if (qty[7] > 0) woststr8 << qty[7];
+		if (qty[0] > 0) woststr0 << qty[0];
+		if (qty[1] > 0) woststr1 << qty[1];
+		if (qty[2] > 0) woststr2 << qty[2];
+		if (qty[3] > 0) woststr3 << qty[3];
+		if (qty[4] > 0) woststr4 << qty[4];
+		if (qty[5] > 0) woststr5 << qty[5];
+		if (qty[6] > 0) woststr6 << qty[6];
+		if (qty[7] > 0) woststr7 << qty[7];
 
 		_lstMatrix->addRow(
 						9,
 						tr("STR_SOLDIERS").c_str(),
+						woststr0.str().c_str(),
 						woststr1.str().c_str(),
 						woststr2.str().c_str(),
 						woststr3.str().c_str(),
 						woststr4.str().c_str(),
 						woststr5.str().c_str(),
 						woststr6.str().c_str(),
-						woststr7.str().c_str(),
-						woststr8.str().c_str());
+						woststr7.str().c_str());
 
 		_lstMatrix->setRowColor(
 							row++,
@@ -241,6 +242,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		itRule = rules->getItem(*i);
 		stTest = itRule->getType();
 
+		woststr0.str(L"");
 		woststr1.str(L"");
 		woststr2.str(L"");
 		woststr3.str(L"");
@@ -248,7 +250,6 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		woststr5.str(L"");
 		woststr6.str(L"");
 		woststr7.str(L"");
-		woststr8.str(L"");
 
 		baseId = 0;
 
@@ -312,14 +313,14 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
 		{
-			if (qty[0] > 0) woststr1 << qty[0];
-			if (qty[1] > 0) woststr2 << qty[1];
-			if (qty[2] > 0) woststr3 << qty[2];
-			if (qty[3] > 0) woststr4 << qty[3];
-			if (qty[4] > 0) woststr5 << qty[4];
-			if (qty[5] > 0) woststr6 << qty[5];
-			if (qty[6] > 0) woststr7 << qty[6];
-			if (qty[7] > 0) woststr8 << qty[7];
+			if (qty[0] > 0) woststr0 << qty[0];
+			if (qty[1] > 0) woststr1 << qty[1];
+			if (qty[2] > 0) woststr2 << qty[2];
+			if (qty[3] > 0) woststr3 << qty[3];
+			if (qty[4] > 0) woststr4 << qty[4];
+			if (qty[5] > 0) woststr5 << qty[5];
+			if (qty[6] > 0) woststr6 << qty[6];
+			if (qty[7] > 0) woststr7 << qty[7];
 
 
 			bool craftOrdnance = false;
@@ -398,14 +399,14 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			_lstMatrix->addRow(
 							9,
 							item.c_str(),
+							woststr0.str().c_str(),
 							woststr1.str().c_str(),
 							woststr2.str().c_str(),
 							woststr3.str().c_str(),
 							woststr4.str().c_str(),
 							woststr5.str().c_str(),
 							woststr6.str().c_str(),
-							woststr7.str().c_str(),
-							woststr8.str().c_str());
+							woststr7.str().c_str());
 
 			_lstMatrix->setRowColor(
 								row++,

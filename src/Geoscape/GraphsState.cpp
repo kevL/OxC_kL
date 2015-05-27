@@ -107,7 +107,7 @@ GraphsState::GraphsState(int curGraph)
 		_vis(true),
 		_reset(false)
 {
-	_bg = new InteractiveSurface(320,200);
+	_bg = new InteractiveSurface(320, 200);
 	_bg->onMousePress(
 				(ActionHandler)& GraphsState::shiftButtons,
 				SDL_BUTTON_WHEELUP);
@@ -244,10 +244,10 @@ GraphsState::GraphsState(int curGraph)
 		}
 
 
-		_alienRegionLines.push_back(new Surface(320,200));
+		_alienRegionLines.push_back(new Surface(320, 200));
 		add(_alienRegionLines.at(offset));
 
-		_xcomRegionLines.push_back(new Surface(320,200));
+		_xcomRegionLines.push_back(new Surface(320, 200));
 		add(_xcomRegionLines.at(offset));
 
 
@@ -283,10 +283,10 @@ GraphsState::GraphsState(int curGraph)
 
 	add(_btnRegionTotal, "button", "graphs");
 
-	_alienRegionLines.push_back(new Surface(320,200));
+	_alienRegionLines.push_back(new Surface(320, 200));
 	add(_alienRegionLines.at(offset));
 
-	_xcomRegionLines.push_back(new Surface(320,200));
+	_xcomRegionLines.push_back(new Surface(320, 200));
 	add(_xcomRegionLines.at(offset));
 
 
@@ -361,13 +361,13 @@ GraphsState::GraphsState(int curGraph)
 		}
 
 
-		_alienCountryLines.push_back(new Surface(320,200));
+		_alienCountryLines.push_back(new Surface(320, 200));
 		add(_alienCountryLines.at(offset));
 
-		_xcomCountryLines.push_back(new Surface(320,200));
+		_xcomCountryLines.push_back(new Surface(320, 200));
 		add(_xcomCountryLines.at(offset));
 
-		_incomeLines.push_back(new Surface(320,200));
+		_incomeLines.push_back(new Surface(320, 200));
 		add(_incomeLines.at(offset));
 
 
@@ -403,13 +403,13 @@ GraphsState::GraphsState(int curGraph)
 
 	add(_btnCountryTotal, "button", "graphs");
 
-	_alienCountryLines.push_back(new Surface(320,200));
+	_alienCountryLines.push_back(new Surface(320, 200));
 	add(_alienCountryLines.at(offset));
 
-	_xcomCountryLines.push_back(new Surface(320,200));
+	_xcomCountryLines.push_back(new Surface(320, 200));
 	add(_xcomCountryLines.at(offset));
 
-	_incomeLines.push_back(new Surface(320,200));
+	_incomeLines.push_back(new Surface(320, 200));
 	add(_incomeLines.at(offset));
 
 
@@ -430,7 +430,7 @@ GraphsState::GraphsState(int curGraph)
 
 		add(_btnFinances.at(i), "button", "graphs");
 
-		_financeLines.push_back(new Surface(320,200));
+		_financeLines.push_back(new Surface(320, 200));
 		add(_financeLines.at(i));
 	}
 

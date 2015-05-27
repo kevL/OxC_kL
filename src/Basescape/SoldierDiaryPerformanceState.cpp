@@ -101,7 +101,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		_displayAwards = true;
 	}
 
-	_window				= new Window(this, 320,200);
+	_window				= new Window(this, 320, 200);
 	_txtTitle			= new Text(310, 16, 5, 8);
 	_txtBaseLabel		= new Text(310, 9, 5, 25);
 

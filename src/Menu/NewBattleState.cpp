@@ -79,7 +79,7 @@ NewBattleState::NewBattleState()
 {
 	_rules = _game->getRuleset();
 
-	_window				= new Window(this, 320,200, 0,0, POPUP_BOTH);
+	_window				= new Window(this, 320, 200, 0,0, POPUP_BOTH);
 	_txtTitle			= new Text(320, 17, 0, 9);
 
 	_txtMapOptions		= new Text(148, 9, 8, 68);

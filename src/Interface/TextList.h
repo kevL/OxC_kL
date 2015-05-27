@@ -45,8 +45,8 @@ class ScrollBar;
 
 /**
  * List of Text's split into columns.
- * Contains a set of Text's that are automatically lined up by rows
- * and columns, like a big table, making it easy to manage them together.
+ * @note Contains a set of Text's that are automatically lined up by rows and
+ * columns like a big table making it easy to manage them together.
  */
 class TextList
 	:
@@ -209,7 +209,6 @@ private:
 
 		/// Sets the text list's high contrast color setting.
 		void setHighContrast(bool contrast = true);
-
 		/// Sets the text list's wordwrap setting.
 		void setWordWrap(bool wrap = true);
 

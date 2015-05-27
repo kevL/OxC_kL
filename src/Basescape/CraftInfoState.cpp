@@ -72,9 +72,9 @@ CraftInfoState::CraftInfoState(
 		_craft(base->getCrafts()->at(craftId))
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
-		_window		= new Window(this, 320,200, 0,0, POPUP_BOTH);
+		_window		= new Window(this, 320, 200, 0,0, POPUP_BOTH);
 	else
-		_window		= new Window(this, 320,200);
+		_window		= new Window(this, 320, 200);
 
 	_edtCraft		= new TextEdit(this, 160, 16, 80, 10);
 	_txtBaseLabel	= new Text(80, 9,  16, 10);

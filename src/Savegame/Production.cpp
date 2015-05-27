@@ -55,7 +55,7 @@ Production::Production(
 {}
 
 /**
- *
+ * Loads from YAML.
  */
 void Production::load(const YAML::Node& node)
 {
@@ -67,7 +67,7 @@ void Production::load(const YAML::Node& node)
 }
 
 /**
- *
+ * Saves to YAML.
  */
 YAML::Node Production::save() const
 {

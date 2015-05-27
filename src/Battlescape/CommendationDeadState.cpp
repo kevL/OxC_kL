@@ -48,7 +48,7 @@ namespace OpenXcom
  */
 CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersLost)
 {
-	_window			= new Window(this, 320,200);
+	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 16, 10, 8);
 	_lstLost		= new TextList(285, 9, 16, 26);
 	_lstSoldiers	= new TextList(285, 113, 16, 36);

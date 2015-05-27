@@ -65,7 +65,7 @@ BaseInfoState::BaseInfoState(
 		_state(state),
 		_baseList(_game->getSavedGame()->getBases())
 {
-	_bg					= new Surface(320,200);
+	_bg					= new Surface(320, 200);
 
 	_mini				= new MiniBaseView(128, 16, 182, 8, MBV_INFO);
 
