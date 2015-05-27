@@ -1157,8 +1157,8 @@ void Inventory::mouseClick(Action* action, State* state)
 
 /**
  * Unloads the selected weapon placing the gun on the right hand and the ammo
- * on the left hand; unless tuMode is false then drop ammo on the ground.
- * @return, true if the weapon was successfully unloaded
+ * on the left hand - unless tuMode is false then drop its ammo on the ground.
+ * @return, true if a weapon was successfully unloaded
  */
 bool Inventory::unload()
 {

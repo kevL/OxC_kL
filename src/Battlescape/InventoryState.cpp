@@ -211,25 +211,15 @@ InventoryState::InventoryState(
 	_txtName->setHighContrast();
 
 	_txtWeight->setHighContrast();
-
 	_txtTUs->setHighContrast();
-
 	_txtFAcc->setHighContrast();
-
 	_txtReact->setHighContrast();
-
 	_txtThrow->setHighContrast();
-
 	_txtMelee->setHighContrast();
-
 	_txtPStr->setHighContrast();
-
 	_txtPSkill->setHighContrast();
-
 	_txtUseTU->setHighContrast();
-
 	_txtThrowTU->setHighContrast();
-
 	_txtPsiTU->setHighContrast();
 
 	_numOrder->setColor(1);
@@ -516,9 +506,9 @@ void InventoryState::init()
 }
 
 /**
- * Updates the soldier stats & TU usages.
+ * Updates the selected unit's info - weight, TU, etc.
  */
-void InventoryState::updateStats()
+void InventoryState::updateStats() // private.
 {
 	const BattleUnit* const unit = _battleGame->getSelectedUnit();
 
@@ -604,8 +594,9 @@ void InventoryState::updateStats()
 
 /**
  * Saves all Soldiers' equipment-layouts.
+ * @note Currently unused.
  */
-void InventoryState::saveEquipmentLayout()
+void InventoryState::saveAllEquiptLayouts() // private.
 {
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleGame->getUnits()->begin();
@@ -615,6 +606,8 @@ void InventoryState::saveEquipmentLayout()
 		if ((*i)->getGeoscapeSoldier() != NULL)
 		{
 			std::vector<EquipmentLayoutItem*>* const layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+
+			// clear Soldier's items
 			if (layoutItems->empty() == false)
 			{
 				for (std::vector<EquipmentLayoutItem*>::const_iterator
@@ -658,6 +651,60 @@ void InventoryState::saveEquipmentLayout()
 }
 
 /**
+ * Saves a soldier's equipment-layout.
+ * @note Called from btnUnloadClick().
+ */
+void InventoryState::saveEquiptLayout() // private.
+{
+	BattleUnit* const unit = _battleGame->getSelectedUnit();
+	if (unit->getGeoscapeSoldier() != NULL)
+	{
+		std::vector<EquipmentLayoutItem*>* const layoutItems = unit->getGeoscapeSoldier()->getEquipmentLayout();
+
+		// clear Soldier's items
+		if (layoutItems->empty() == false)
+		{
+			for (std::vector<EquipmentLayoutItem*>::const_iterator
+					i = layoutItems->begin();
+					i != layoutItems->end();
+					++i)
+			{
+				delete *i;
+			}
+
+			layoutItems->clear();
+		}
+
+		// save Soldier's items
+		// Note: when using getInventory() the loaded ammos are skipped because
+		// they're not owned by the unit; ammo is handled separately by the weapon.
+		for (std::vector<BattleItem*>::const_iterator
+				i = unit->getInventory()->begin();
+				i != unit->getInventory()->end();
+				++i)
+		{
+			std::string ammo;
+			if ((*i)->needsAmmo() == true
+				&& (*i)->getAmmoItem() != NULL)
+			{
+				ammo = (*i)->getAmmoItem()->getRules()->getType();
+			}
+			else
+				ammo = "NONE";
+
+			layoutItems->push_back(new EquipmentLayoutItem(
+													(*i)->getRules()->getType(),
+													(*i)->getSlot()->getId(),
+													(*i)->getSlotX(),
+													(*i)->getSlotY(),
+													ammo,
+													(*i)->getFuseTimer()));
+		}
+	}
+}
+
+
+/**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
@@ -670,7 +717,7 @@ void InventoryState::btnOkClick(Action*)
 
 	if (_tuMode == false) // pre-Battle inventory equip.
 	{
-		saveEquipmentLayout();
+//		saveAllEquiptLayouts();
 
 		if (_parent != NULL) // going into Battlescape!
 		{
@@ -748,7 +795,7 @@ void InventoryState::btnNextClick(Action*)
 }
 
 /**
- * Unloads the selected weapon.
+ * Unloads the selected weapon or saves soldier's equipment layout.
  * @param action - pointer to an Action
  */
 void InventoryState::btnUnloadClick(Action*)
@@ -767,6 +814,8 @@ void InventoryState::btnUnloadClick(Action*)
 											static_cast<unsigned>(ResourcePack::ITEM_UNLOAD_HQ))
 										->play();
 	}
+	else if (_tuMode == false)
+		saveEquiptLayout();
 }
 
 /**

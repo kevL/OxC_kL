@@ -100,6 +100,14 @@ private:
 	/// Update the visibility and icons for the template buttons.
 //	void _updateTemplateButtons(bool isVisible);
 
+	/// Saves all soldiers' equipment-layouts.
+	void saveAllEquiptLayouts();
+	/// Saves a soldier's equipment-layout.
+	void saveEquiptLayout();
+
+	/// Updates the selected unit's info - weight, TU, etc.
+	void updateStats();
+
 
 	public:
 		/// Creates the Inventory state.
@@ -111,11 +119,6 @@ private:
 
 		/// Updates all soldier info.
 		void init();
-		/// Updates the soldier info (Weight, TU).
-		void updateStats();
-
-		/// Saves the soldiers' equipment-layout.
-		void saveEquipmentLayout();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
