@@ -56,7 +56,6 @@ Ufo::Ufo(const RuleUfo* const rules)
 		_rules(rules),
 		_id(0),
 		_crashId(0),
-		_crashPower(0),
 		_landId(0),
 		_damage(0),
 		_direction("STR_NORTH"),
@@ -154,7 +153,6 @@ void Ufo::load(
 
 	_id				= node["id"]			.as<int>(_id);
 	_crashId		= node["crashId"]		.as<int>(_crashId);
-	_crashPower		= node["crashPower"]	.as<int>(_crashPower);
 	_landId			= node["landId"]		.as<int>(_landId);
 	_damage			= node["damage"]		.as<int>(_damage);
 	_altitude		= node["altitude"]		.as<std::string>(_altitude);
@@ -163,7 +161,7 @@ void Ufo::load(
 	_hyperDetected	= node["hyperDetected"]	.as<bool>(_hyperDetected);
 	_secondsLeft	= node["secondsLeft"]	.as<int>(_secondsLeft);
 	_inTactical		= node["inTactical"]	.as<bool>(_inTactical);
-	_terrain		= node["terrain"]		.as<std::string>(_terrain); // kL
+	_terrain		= node["terrain"]		.as<std::string>(_terrain);
 
 	double
 		lon = _lon,
@@ -230,13 +228,10 @@ YAML::Node Ufo::save(bool newBattle) const
 	node["id"]			= _id;
 
 	if (_terrain.empty() == false)
-		node["terrain"]	= _terrain; // kL
+		node["terrain"]	= _terrain;
 
 	if (_crashId != 0)
-	{
 		node["crashId"]		= _crashId;
-		node["crashPower"]	= _crashPower;
-	}
 	else if (_landId != 0)
 		node["landId"]	= _landId;
 

@@ -17,11 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MapBlock.h"
+#include "RuleTerrain.h"
 
+#include "MapBlock.h"
 #include "MapDataSet.h"
 #include "Ruleset.h"
-#include "RuleTerrain.h"
 
 //#include "../Engine/RNG.h"
 
@@ -215,12 +215,12 @@ MapBlock* RuleTerrain::getMapBlock(const std::string& type)
 /**
  * Gets a mapdata object.
  * @param id			- pointer to the ID of the terrain
- * @param mapDataSetID	- pointer to the ID of the MapDataSet
+ * @param mapDataSetId	- pointer to the ID of the MapDataSet
  * @return, pointer to MapData object
  */
 MapData* RuleTerrain::getMapData(
 		unsigned int* id,
-		int* mapDataSetID) const
+		int* mapDataSetId) const
 {
 	MapDataSet* dataSet = NULL;
 
@@ -236,7 +236,7 @@ MapData* RuleTerrain::getMapData(
 			break;
 
 		*id -= dataSet->getSize();
-		++(*mapDataSetID);
+		++(*mapDataSetId);
 	}
 
 	if (i == _mapDataSets.end())
@@ -245,7 +245,7 @@ MapData* RuleTerrain::getMapData(
 		// set this broken tile reference to BLANKS 0.
 		dataSet = _mapDataSets.front();
 		*id = 0;
-		*mapDataSetID = 0;
+		*mapDataSetId = 0;
 	}
 
 	return dataSet->getObjects()->at(*id);
@@ -307,8 +307,8 @@ const std::vector<std::string>& RuleTerrain::getMusic()
 
 /**
  * Gets the pyjama type.
- * @note Used in BattlescapeGenerator::setTacticalSprites()
- * to outfit soldiers in camo suitable for this Terrain.
+ * @note Used in BattlescapeGenerator::setTacticalSprites() to outfit soldiers
+ * in camo suitable for this Terrain.
  * @return, the pyjama type
  */
 const std::string& RuleTerrain::getPyjamaType() const

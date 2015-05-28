@@ -54,8 +54,8 @@ class Target;
 
 
 /**
- * Represents the relations between a Geoscape texture
- * and the corresponding Battlescape mission attributes.
+ * Represents the relations between a Geoscape texture and the corresponding
+ * Battlescape tactical attributes.
  */
 class RuleTexture
 {

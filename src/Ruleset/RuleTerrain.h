@@ -92,7 +92,7 @@ private:
 		/// Gets the mapdata object.
 		MapData* getMapData(
 				unsigned int* id,
-				int* mapDataSetID) const;
+				int* mapDataSetId) const;
 
 		/// Gets the civilian types to use.
 		std::vector<std::string> getCivilianTypes() const;

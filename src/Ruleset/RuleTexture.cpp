@@ -167,6 +167,7 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 				totalWeight += i->weight;
 				eligibleTerrains[totalWeight] = i->type;
 			}
+			else Log(LOG_INFO) << ". <- out of bounds";
 		}
 	}
 

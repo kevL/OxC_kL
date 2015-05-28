@@ -39,7 +39,7 @@ class UfoTrajectory;
 
 /**
  * Represents an alien UFO on the map.
- * @note Contains variable info about a UFO like position, damage, speed, etc.
+ * @note Contains variable info about a UFO.
  * @sa RuleUfo
  */
 class Ufo
@@ -67,7 +67,6 @@ private:
 		_damage,
 		_id,
 		_crashId,
-		_crashPower,
 		_escapeCountdown,
 		_fireCountdown,
 		_hitFrame,

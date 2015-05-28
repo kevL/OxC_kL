@@ -88,16 +88,16 @@ ConfirmLandingState::ConfirmLandingState(
 
 	_window			= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
 
-	_txtBase		= new Text(80, 9, 23, 29);
-	_txtTexture		= new Text(150, 9, 83, 29);
-	_txtShade		= new Text(60, 9, 173, 39);
+	_txtBase		= new Text( 80, 9,  23, 29);
+	_txtTexture		= new Text(150, 9,  83, 29);
+	_txtShade		= new Text( 60, 9, 173, 39);
 
 	_txtMessage		= new Text(206, 40, 25, 47);
 	_txtMessage2	= new Text(206, 43, 25, 87);
 
 	_txtBegin		= new Text(206, 17, 25, 130);
 
-	_btnNo			= new TextButton(80, 18, 40, 152);
+	_btnNo			= new TextButton(80, 18,  40, 152);
 	_btnYes			= new TextButton(80, 18, 136, 152);
 
 	setInterface("confirmLanding");
@@ -119,11 +119,8 @@ ConfirmLandingState::ConfirmLandingState(
 
 	_txtBase->setText(craft->getBase()->getName(_game->getLanguage()));
 
-	_txtShade->setAlign(ALIGN_RIGHT);
 	_txtShade->setText(tr("STR_SHADE_").arg(shade));
-
-	_txtTexture->setAlign(ALIGN_RIGHT);
-
+	_txtShade->setAlign(ALIGN_RIGHT);
 
 	// NOTE: the following terrain determination will fall through to
 	// BattlescapeGenerator for Base assault/defense and Cydonia missions;
@@ -278,12 +275,13 @@ ConfirmLandingState::ConfirmLandingState(
 				ufo->setUfoTerrainType(terrainType);
 			}
 		}
-		Log(LOG_INFO) << ". terrainType = " << terrainType;
+		Log(LOG_INFO) << ". chosen terrainType = " << terrainType;
 
 		if (_terrainRule == NULL) // '_terrainRule' can be set above^ if missionSite <-
 			_terrainRule = _game->getRuleset()->getTerrain(terrainType);
 
 		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(terrainType)));
+		_txtTexture->setAlign(ALIGN_RIGHT);
 	}
 	else // aLienBase assault (NOT defense nor Cydonia)
 	{
@@ -292,13 +290,10 @@ ConfirmLandingState::ConfirmLandingState(
 		_txtShade->setVisible(false);
 	}
 
-	_txtMessage->setBig();
-	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_AT")
 						 .arg(_craft->getName(_game->getLanguage())));
-
-	_txtMessage2->setBig();
-	_txtMessage2->setAlign(ALIGN_CENTER);
+	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setBig();
 
 	std::wostringstream woststr;
 //	woststr << L""; // blank if no UFO.
@@ -313,11 +308,12 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage2->setText(tr("STR_CRAFT_DESTINATION")
 						 .arg(_craft->getDestination()->getName(_game->getLanguage()))
 						 .arg(woststr.str()));
+	_txtMessage2->setBig();
+	_txtMessage2->setAlign(ALIGN_CENTER);
 
-
-	_txtBegin->setBig();
-	_txtBegin->setAlign(ALIGN_CENTER);
 	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
+	_txtBegin->setAlign(ALIGN_CENTER);
+	_txtBegin->setBig();
 
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
@@ -339,15 +335,89 @@ ConfirmLandingState::~ConfirmLandingState()
 {}
 
 /**
- * Make sure we aren't returning to base.
+ * Make sure Craft isn't simply returning to base.
  */
 void ConfirmLandingState::init()
 {
 	State::init();
 
-	const Base* const base = dynamic_cast<Base*>(_craft->getDestination());
-	if (base == _craft->getBase())
-		_game->popState();
+//	- note that Craft arriving at an xCom Base do not invoke this state, see GeoscapeState::time5Seconds()
+//	const Base* const base = dynamic_cast<Base*>(_craft->getDestination());
+//	if (base == _craft->getBase())
+//		_game->popState();
+}
+
+/**
+ * Enters the mission.
+ * @param action - pointer to an Action
+ */
+void ConfirmLandingState::btnYesClick(Action*)
+{
+	_game->getResourcePack()->fadeMusic(_game, 335);
+	_game->popState();
+
+	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	MissionSite* const missionSite = dynamic_cast<MissionSite*>(_craft->getDestination());
+	AlienBase* const alienBase = dynamic_cast<AlienBase*>(_craft->getDestination());
+
+	SavedBattleGame* battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
+	_game->getSavedGame()->setBattleGame(battleSave);
+
+	BattlescapeGenerator bGen (_game); // init.
+	bGen.setCraft(_craft);
+
+	if (ufo != NULL)
+	{
+		if (ufo->getStatus() == Ufo::CRASHED)
+			battleSave->setMissionType("STR_UFO_CRASH_RECOVERY");
+		else
+			battleSave->setMissionType("STR_UFO_GROUND_ASSAULT");
+
+		bGen.setUfo(ufo);
+		bGen.setAlienRace(ufo->getAlienRace());
+		bGen.setTacTerrain(_terrainRule); // kL
+		bGen.setTacShade(_shade);
+//		bGen.setTacTexture(_texRule); // was an INT <- !!!
+//		bGen.setIsCity(_city != NULL); // kL
+	}
+	else if (missionSite != NULL)
+	{
+		battleSave->setMissionType(missionSite->getDeployment()->getType());
+
+		bGen.setMissionSite(missionSite);
+		bGen.setAlienRace(missionSite->getAlienRace());
+		bGen.setTacTerrain(_terrainRule); // kL
+		bGen.setTacShade(_shade);
+//		bGen.setTacTexture(_texRule); // was an INT <- !!!
+	}
+	else if (alienBase != NULL)
+	{
+		battleSave->setMissionType("STR_ALIEN_BASE_ASSAULT");
+
+		bGen.setAlienBase(alienBase);
+		bGen.setAlienRace(alienBase->getAlienRace());
+//		bGen.setTacTexture(NULL); // was an INT <- !!! bGen default NULL
+	}
+	else
+	{
+		throw Exception("No mission available!");
+	}
+
+	bGen.run(); // <- DETERMINE ALL TACTICAL DATA. |<--
+
+	_game->pushState(new BriefingState(_craft));
+}
+
+/**
+ * Returns the craft to base and closes the window.
+ * kL CHANGE: the craft goes into Patrol mode.
+ * @param action - pointer to an Action
+ */
+void ConfirmLandingState::btnNoClick(Action*)
+{
+//	_craft->returnToBase();
+	_craft->setDestination(NULL); // kL
+	_game->popState();
 }
 
 /**
@@ -433,78 +503,5 @@ RuleTerrain* ConfirmLandingState::selectCityTerrain(const double lat)
 		Log(LOG_INFO) << ". south: switching from Dawn A to Native";
 		terrainRule = _game->getRuleset()->getTerrain("NATIVEURBAN");
 	} */
-
-/**
- * Enters the mission.
- * @param action - pointer to an Action
- */
-void ConfirmLandingState::btnYesClick(Action*)
-{
-	_game->getResourcePack()->fadeMusic(_game, 335);
-	_game->popState();
-
-	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	MissionSite* const missionSite = dynamic_cast<MissionSite*>(_craft->getDestination());
-	AlienBase* const alienBase = dynamic_cast<AlienBase*>(_craft->getDestination());
-
-	SavedBattleGame* battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
-	_game->getSavedGame()->setBattleGame(battleSave);
-
-	BattlescapeGenerator bGen (_game); // init.
-	bGen.setCraft(_craft);
-
-	if (ufo != NULL)
-	{
-		if (ufo->getStatus() == Ufo::CRASHED)
-			battleSave->setMissionType("STR_UFO_CRASH_RECOVERY");
-		else
-			battleSave->setMissionType("STR_UFO_GROUND_ASSAULT");
-
-		bGen.setUfo(ufo);
-		bGen.setAlienRace(ufo->getAlienRace());
-		bGen.setTacTerrain(_terrainRule); // kL
-		bGen.setTacShade(_shade);
-//		bGen.setTacTexture(_texRule); // was an INT <- !!!
-//		bGen.setIsCity(_city != NULL); // kL
-	}
-	else if (missionSite != NULL)
-	{
-		battleSave->setMissionType(missionSite->getDeployment()->getType());
-
-		bGen.setMissionSite(missionSite);
-		bGen.setAlienRace(missionSite->getAlienRace());
-		bGen.setTacTerrain(_terrainRule); // kL
-		bGen.setTacShade(_shade);
-//		bGen.setTacTexture(_texRule); // was an INT <- !!!
-	}
-	else if (alienBase != NULL)
-	{
-		battleSave->setMissionType("STR_ALIEN_BASE_ASSAULT");
-
-		bGen.setAlienBase(alienBase);
-		bGen.setAlienRace(alienBase->getAlienRace());
-//		bGen.setTacTexture(NULL); // was an INT <- !!! bGen default NULL
-	}
-	else
-	{
-		throw Exception("No mission available!");
-	}
-
-	bGen.run(); // <- DETERMINE ALL TACTICAL DATA. |<--
-
-	_game->pushState(new BriefingState(_craft));
-}
-
-/**
- * Returns the craft to base and closes the window.
- * kL CHANGE: the craft goes into Patrol mode.
- * @param action - pointer to an Action
- */
-void ConfirmLandingState::btnNoClick(Action*)
-{
-//	_craft->returnToBase();
-	_craft->setDestination(NULL); // kL
-	_game->popState();
-}
 
 }
