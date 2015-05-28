@@ -66,7 +66,7 @@ WarningMessage::WarningMessage(
 }
 
 /**
- * Deletes timers.
+ * Deletes text and timers.
  */
 WarningMessage::~WarningMessage()
 {
@@ -76,7 +76,7 @@ WarningMessage::~WarningMessage()
 
 /**
  * Changes the color for the message background.
- * @param color Color value.
+ * @param color - color value
  */
 void WarningMessage::setColor(Uint8 color)
 {
@@ -85,7 +85,7 @@ void WarningMessage::setColor(Uint8 color)
 
 /**
  * Changes the color for the message text.
- * @param color Color value.
+ * @param color - color value
  */
 void WarningMessage::setTextColor(Uint8 color)
 {
@@ -94,9 +94,8 @@ void WarningMessage::setTextColor(Uint8 color)
 
 /**
  * Changes the various resources needed for text rendering.
- * The different fonts need to be passed in advance since the
- * text size can change mid-text, and the language affects
- * how the text is rendered.
+ * @note The different fonts need to be passed in advance since the text size
+ * can change mid-text and the language affects how the text is rendered.
  * @param big	- pointer to large-size font
  * @param small	- pointer to small-size font
  * @param lang	- pointer to current language
@@ -126,7 +125,7 @@ void WarningMessage::setPalette(
 
 /**
  * Displays the warning message.
- * @param msg - reference to a message string
+ * @param msg - reference a message string
  */
 void WarningMessage::showMessage(const std::wstring& msg)
 {
@@ -176,6 +175,21 @@ void WarningMessage::draw()
 			0,0,
 			static_cast<Sint16>(getWidth()),
 			static_cast<Sint16>(getHeight()),
+			6);
+	drawRect(
+			1,1,
+			static_cast<Sint16>(getWidth()) - 2,
+			static_cast<Sint16>(getHeight()) - 2,
+			10);
+	drawRect(
+			2,2,
+			static_cast<Sint16>(getWidth()) - 3,
+			static_cast<Sint16>(getHeight()) - 3,
+			15);
+	drawRect(
+			2,2,
+			static_cast<Sint16>(getWidth()) - 4,
+			static_cast<Sint16>(getHeight()) - 4,
 			color);
 
 	_text->blit(this);

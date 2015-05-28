@@ -86,20 +86,16 @@ MediTargetState::MediTargetState(BattleAction* action)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast();
 
-//	_txtWounds->setText(tr("STR_FATAL_WOUNDS"));
-	_txtWounds->setText(L"fw");
+	_txtWounds->setText(L"fw"); // STR_FATAL_WOUNDS
 	_txtWounds->setHighContrast();
 
-//	_txtHealth->setText(tr("STR_HEALTH"));
-	_txtHealth->setText(L"health");
+	_txtHealth->setText(L"health"); // STR_HEALTH
 	_txtHealth->setHighContrast();
 
-//	_txtEnergy->setText(tr("STR_STAMINA"));
-	_txtEnergy->setText(L"sta");
+	_txtEnergy->setText(L"sta"); // STR_STAMINA
 	_txtEnergy->setHighContrast();
 
-//	_txtMorale->setText(tr("STR_MORALE"));
-	_txtMorale->setText(L"rl");
+	_txtMorale->setText(L"rl"); // STR_MORALE
 	_txtMorale->setHighContrast();
 
 	_lstTarget->setColumns(5, 108, 18, 47, 37, 18);
@@ -133,34 +129,31 @@ void MediTargetState::init()
 
 	bool
 		addToList,
-		firstPass = true;
+		actorFound = false; // adds actor to top of MediTargetList.
 
 	// TODO: require aLien autopsies research before allowing Medikit to show info on a/the type of aLien.
 	const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator
 			i = units->begin();
 			i != units->end();
-			++i)
+			)
 	{
 		if ((*i)->isFearable() == true) // isWoundable()
 		{
 			addToList = false;
 
-			if (firstPass == true
+			if (actorFound == false
 				&& *i == _action->actor)
 			{
 				addToList = true;
 			}
 
-			if (firstPass == false
+			if (actorFound == true
 				&& *i != _action->actor)
 			{
 				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-					&& (*i)->getPosition() == _action->actor->getPosition())
-				{
-					addToList = true;;
-				}
-				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+						&& (*i)->getPosition() == _action->actor->getPosition()
+					|| _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 																							_action->actor,
 																							*i,
 																							_action->actor->getDirection()) == true)
@@ -168,7 +161,6 @@ void MediTargetState::init()
 					addToList = true;
 				}
 			}
-
 
 			if (addToList == true)
 			{
@@ -196,25 +188,22 @@ void MediTargetState::init()
 								woststr2.str().c_str(),
 								Text::formatNumber(_targetUnits.back()->getMorale()).c_str());
 
-				if (firstPass == true)
-				{
-					firstPass = false;
-					i = units->begin();
-
+				if (actorFound == false)
 					_lstTarget->setRowColor(
 										0,
 										Palette::blockOffset(6), // orange
 										true);
-				}
 			}
 		}
 
-		if (firstPass == true // in case medikit user is not 'Fearable'
+		if (actorFound == false // in case medikit user is not 'Fearable'
 			&& *i == units->back())
 		{
-			firstPass = false;
+			actorFound = true;
 			i = units->begin();
 		}
+		else
+			++i;
 	}
 
 	if (_targetUnits.size() == 1)

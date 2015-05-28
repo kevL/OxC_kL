@@ -140,11 +140,13 @@ void UnitDieBState::init()
 
 /**
  * Runs state functionality every cycle.
- * Progresses the death, displays any messages, checks if the mission is over, etc.
+ * @note Progresses the death sequence, displays any messages, checks if the
+ * mission is over, etc.
  */
 void UnitDieBState::think()
 {
 	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
+// #0
 	if (_noSound == false
 		&& _doneScream == false)
 	{
@@ -196,7 +198,8 @@ void UnitDieBState::think()
 	}
 
 // #6
-	if (_extraTicks == 2)
+//	if (_extraTicks == 2)
+	if (_extraTicks != 0)
 	{
 		_parent->getMap()->setUnitDying(false);
 
@@ -256,8 +259,8 @@ void UnitDieBState::think()
 		}
 	}
 // #5
-	else if (_extraTicks == 1)
-		++_extraTicks;
+//	else if (_extraTicks == 1)
+//		++_extraTicks;
 // #4
 	else if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
 	{
@@ -265,7 +268,7 @@ void UnitDieBState::think()
 		++_extraTicks;
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
-			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+			&& (   _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
 				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			_unit->instaKill();
@@ -284,6 +287,7 @@ void UnitDieBState::think()
 		}
 	}
 
+	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }

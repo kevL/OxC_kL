@@ -1860,8 +1860,8 @@ bool TileEngine::reactionShot(
 		&& action.actor->spendTimeUnits(action.TU) == true)
 	{
 		action.TU = 0;
-		if (action.actor->getFaction() != FACTION_HOSTILE)
-			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
+//		if (action.actor->getFaction() != FACTION_HOSTILE)
+		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 
 		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState( // moved to ProjectileFlyBState, post-cosmetics
 																_battleSave->getBattleGame(),
@@ -2880,7 +2880,7 @@ void TileEngine::explode(
 							{
 								const int firePow = static_cast<int>(std::ceil(
 												   (static_cast<double>(_powerE) / static_cast<double>(power)) * 10.));
-								fireTile->addFire(firePow + fireTile->getFuel());
+								fireTile->addFire(firePow + fireTile->getFuel() + 1 / 2);
 								fireTile->addSmoke(std::max(
 														firePow + fireTile->getFuel(),
 														firePow + ((fireTile->getFlammability() + 9) / 10)));
@@ -5965,21 +5965,21 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 
 /**
  * Validates the melee range between two units.
- * @param attacker	- pointer to an attacking unit
- * @param target	- pointer to the unit to attack
- * @param dir		- direction to check
+ * @param attacker		- pointer to an attacking unit
+ * @param targetUnit	- pointer to the unit to attack
+ * @param dir			- direction to check
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
 		const BattleUnit* const attacker,
-		const BattleUnit* const target,
+		const BattleUnit* const targetUnit,
 		const int dir)
 {
 	return validMeleeRange(
 						attacker->getPosition(),
 						dir,
 						attacker,
-						target,
+						targetUnit,
 						NULL);
 }
 
@@ -6004,6 +6004,7 @@ bool TileEngine::validMeleeRange(
 //		const bool preferEnemy) // <- obsolete.
 {
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
+	//if (targetUnit != NULL) Log(LOG_INFO) << ". targetUnit ID " << targetUnit->getId();
 	if (dir < 0 || dir > 7)
 		return false;
 
@@ -6031,8 +6032,8 @@ bool TileEngine::validMeleeRange(
 				++y)
 		{
 			//Log(LOG_INFO) << ". . . iterate Size";
-			tileOrigin = _battleSave->getTile(Position(origin + Position(x,y, 0)));
-			tileTarget = _battleSave->getTile(Position(origin + Position(x,y, 0) + posTarget));
+			tileOrigin = _battleSave->getTile(Position(origin + Position(x,y,0)));
+			tileTarget = _battleSave->getTile(Position(origin + Position(x,y,0) + posTarget));
 
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
@@ -6113,11 +6114,11 @@ bool TileEngine::validMeleeRange(
 
 	if (dest != NULL)
 	{
-		//Log(LOG_INFO) << ". . set defender Pos " << defender->getPosition();
+		//Log(LOG_INFO) << ". . set targetUnit Pos " << targetUnit->getPosition();
 		*dest = targetUnits[pick]->getPosition();
 	}
 
-	//Log(LOG_INFO) << ". ret = " << (int)(defender != NULL);
+	//Log(LOG_INFO) << ". ret = " << (int)(targetUnit != NULL);
 	return true;
 }
 /*	const BattleUnit* defender = NULL;

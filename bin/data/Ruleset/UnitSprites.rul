@@ -43,13 +43,15 @@ extraSprites:
     files:
       0: Resources/Sprites/Units/cybam/cybam.png
   - type: SECTOID.PCK
-    width: 256 #512
-    height: 1360 #680
+    width: 512
+#    width: 256
+    height: 680
+#    height: 1360
     subX: 32
     subY: 40
     files:
-#      0: Resources/Sprites/Units/sectoid/sectoid.png
-      0: Resources/Sprites/Units/sectoid/sectoid_engineer.png #Mono-sunglasses
+      0: Resources/Sprites/Units/sectoid/sectoid.png
+#      0: Resources/Sprites/Units/sectoid/sectoid_engineer.png #Mono-sunglasses
   - type: TANKS.PCK
     width: 512
     height: 320

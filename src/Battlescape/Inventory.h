@@ -160,8 +160,8 @@ private:
 				bool test = false);
 		/// Checks if two items can be stacked on one another.
 		bool canBeStacked(
-				BattleItem* itemA,
-				BattleItem* itemB);
+				const BattleItem* const itemA,
+				const BattleItem* const itemB);
 
 		/// Shows a warning message.
 		void showWarning(const std::wstring& msg);

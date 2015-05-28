@@ -170,7 +170,8 @@ Projectile::~Projectile()
 
 /**
  * Calculates the trajectory for a straight path.
- * This is a wrapper for calculateTrajectory() below; it calculates and passes on an originVoxel.
+ * @note This is a wrapper for calculateTrajectory() below - it calculates and
+ * passes on an originVoxel.
  * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
  * @return,  -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / content)
@@ -195,7 +196,8 @@ int Projectile::calculateTrajectory(double accuracy)
 
 /**
  * Calculates the trajectory for a straight path.
- * First determines if there is LoF, then calculates & stores a modified trajectory that is actually pathed.
+ * @note First determines if there is LoF then calculates and stores a modified
+ * trajectory that is actually pathed.
  * @param accuracy		- accuracy of the projectile's trajectory (a BattleUnit's accuracy)
  * @param originVoxel	- for Blaster launch; ie trajectories that start at a position other than unit's
  * @return,  -1 nothing to hit / no line of fire

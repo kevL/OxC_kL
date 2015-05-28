@@ -232,8 +232,8 @@ void UnitSprite::setAnimationFrame(int frame)
 }
 
 /**
- * Draws a unit, using the drawing rules of the unit.
- * This function is called by Map for each unit on the screen.
+ * Draws a unit using the drawing rules of the unit.
+ * @note This function is called by Map for each unit on the screen.
  */
 void UnitSprite::draw()
 {
@@ -270,11 +270,12 @@ void UnitSprite::draw()
 }
 
 /**
- * Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
- * mutons (routine 10),
- * aquanauts (routine 13),
- * calcinites, deep ones, gill men, lobster men, tasoths (routine 14),
- * aquatoids (routine 15) (this one is no different, it just precludes breathing animations).
+ * Drawing routine for
+ *	- xCom soldiers in overalls/sectoids (routine 0)
+ *	- mutons (routine 10)
+ *	- aquanauts (routine 13)
+ *	- calcinites/deep ones/gill men/lobster men/tasoths (routine 14)
+ *	- aquatoids (routine 15) - this one is no different it just precludes breathing animations.
  */
 void UnitSprite::drawRoutine0()
 {
@@ -618,8 +619,8 @@ void UnitSprite::drawRoutine0()
 		leftArm->setY(offYKneel);
 		rightArm->setY(offYKneel);
 		torso->setY(offYKneel);
-		itemA? itemA->setY(itemA->getY() + offYKneel): void();
-		itemB? itemB->setY(itemB->getY() + offYKneel): void();
+		itemA ? itemA->setY(itemA->getY() + offYKneel) : void();
+		itemB ? itemB->setY(itemB->getY() + offYKneel) : void();
 	}
 	else if (isWalking == false)
 	{

@@ -1169,7 +1169,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
  * Loads the contents of all the rule files in the given directory.
  * @param dir - reference the name of an existing directory containing YAML ruleset files
  */
-void Ruleset::loadFiles(const std::string& dir)
+void Ruleset::loadFiles(const std::string& dir) // protected.
 {
 	std::vector<std::string> names = CrossPlatform::getFolderContents(dir, "rul");
 	for (std::vector<std::string>::const_iterator

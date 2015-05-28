@@ -5945,6 +5945,7 @@ extraStrings:
       STR_HOURS_PER: "hrs"
       STR_REQUIRED_LC: "Items required"
       STR_PRODUCTION_COSTS: "Production Costs"
+      STR_EQUIP_LAYOUT_SAVED: "Soldier Layout Saved"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

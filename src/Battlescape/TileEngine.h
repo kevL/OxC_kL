@@ -245,7 +245,7 @@ private:
 		/// Returns melee validity between two units.
 		bool validMeleeRange(
 				const BattleUnit* const attacker,
-				const BattleUnit* const target,
+				const BattleUnit* const targetUnit,
 				const int dir);
 		/// Returns validity of a melee attack from a given position.
 		bool validMeleeRange(

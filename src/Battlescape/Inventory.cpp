@@ -90,23 +90,22 @@ Inventory::Inventory(
 {
 	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 
-	_grid			= new Surface(width, height, x,y);
-	_items			= new Surface(width, height, x,y);
-	_selection		= new Surface(
-								RuleInventory::HAND_W * RuleInventory::SLOT_W,
-								RuleInventory::HAND_H * RuleInventory::SLOT_H,
-								x,y);
-	_warning		= new WarningMessage(224, 24, 48, 176);
-
-	_stackNumber	= new NumberText(15, 15);
-	_stackNumber->setBordered(true);
-
+	_grid		= new Surface(width, height, x,y);
+	_items		= new Surface(width, height, x,y);
+	_selection	= new Surface(
+							RuleInventory::HAND_W * RuleInventory::SLOT_W,
+							RuleInventory::HAND_H * RuleInventory::SLOT_H,
+							x,y);
+	_warning	= new WarningMessage(224, 24, 48, 176);
 	_warning->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
 	_warning->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color));
 	_warning->setColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2));
+
+	_stackNumber = new NumberText(15, 15);
+	_stackNumber->setBordered();
 
 	_animTimer = new Timer(80);
 	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);
@@ -1434,8 +1433,8 @@ bool Inventory::fitItem(
  * @return, true if the items can be stacked on one another
  */
 bool Inventory::canBeStacked(
-		BattleItem* itemA,
-		BattleItem* itemB)
+		const BattleItem* const itemA,
+		const BattleItem* const itemB)
 {
 	return (itemA != NULL && itemB != NULL																// both items actually exist
 		&& itemA->getRules() == itemB->getRules()														// both items have the same ruleset

@@ -706,6 +706,7 @@ void ProjectileFlyBState::think()
 			if (_action.cameraPosition.z != -1)
 			{
 				camera->setMapOffset(_action.cameraPosition);
+
 //				_parent->getMap()->invalidate();
 				_parent->getMap()->draw(); // kL
 			}
@@ -735,12 +736,16 @@ void ProjectileFlyBState::think()
 					if (camera->getPauseAfterShot() == true)
 					{
 						camera->setPauseAfterShot(false);
-						SDL_Delay(336); // kL, screen-pause when shot hits target before reverting camera to shooter.
+
+						if (_projectileImpact != VOXEL_OUTOFBOUNDS)
+							SDL_Delay(336); // screen-pause when shot hits target before reverting camera to shooter.
 					}
 
 					camera->setMapOffset(_action.cameraPosition);
+					_action.cameraPosition = Position(0,0,-1); // reset.
+
 //					_parent->getMap()->invalidate();
-					_parent->getMap()->draw();	// kL
+					_parent->getMap()->draw(); // kL
 				}
 			}
 

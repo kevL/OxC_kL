@@ -1955,7 +1955,7 @@ bool SavedBattleGame::isNodeType(
 
 /**
  * Carries out new turn preparations such as fire and smoke spreading.
- * Also explodes any explosive tiles that get destroyed by fire.
+ * @note Also explodes any explosive tiles that get destroyed by fire.
  */
 void SavedBattleGame::spreadFireSmoke()
 {
@@ -1977,8 +1977,11 @@ void SavedBattleGame::spreadFireSmoke()
 		if (getTiles()[i]->getSmoke() != 0)
 			tilesSmoked.push_back(getTiles()[i]);
 
-		getTiles()[i]->setDangerous(false);
+		getTiles()[i]->setDangerous(false); // reset.
 	}
+
+	//Log(LOG_INFO) << "tilesFired.size = " << tilesFired.size();
+	//Log(LOG_INFO) << "tilesSmoked.size = " << tilesSmoked.size();
 
 	for (std::vector<Tile*>::const_iterator
 			i = tilesFired.begin();
@@ -1987,7 +1990,7 @@ void SavedBattleGame::spreadFireSmoke()
 	{
 		(*i)->decreaseFire();
 
-		var = (*i)->getFire() / 2;
+		var = (*i)->getFire() * 16;
 
 		if (var != 0)
 		{
@@ -2366,9 +2369,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 
 /**
  * @brief Checks whether anyone on a particular faction is looking at the unit.
- *
  * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.
- *
  * @param faction Faction to check through.
  * @param unit Whom to spot.
  * @return True when the unit can be seen
