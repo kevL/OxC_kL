@@ -472,13 +472,13 @@ void Ruleset::load(const std::string& source)
 
 /**
  * Loads a ruleset's contents from a YAML file.
- * Rules that match pre-existing rules overwrite them.
- * @param filename - reference a YAML filename
+ * @note Rules that match pre-existing rules overwrite them.
+ * @param file - reference a YAML file
  */
-void Ruleset::loadFile(const std::string& filename)
+void Ruleset::loadFile(const std::string& file) // protected.
 {
-	//Log(LOG_INFO) << "Ruleset::loadFile( -> " << filename;
-	const YAML::Node doc = YAML::LoadFile(filename);
+	//Log(LOG_INFO) << "Ruleset::loadFile( -> " << file;
+	const YAML::Node doc = YAML::LoadFile(file);
 
 	for (YAML::const_iterator
 			i = doc["countries"].begin();
@@ -1167,27 +1167,27 @@ void Ruleset::loadFile(const std::string& filename)
 
 /**
  * Loads the contents of all the rule files in the given directory.
- * @param dirname - reference the name of an existing directory containing rule files
+ * @param dir - reference the name of an existing directory containing YAML ruleset files
  */
-void Ruleset::loadFiles(const std::string& dirname)
+void Ruleset::loadFiles(const std::string& dir)
 {
-	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
+	std::vector<std::string> names = CrossPlatform::getFolderContents(dir, "rul");
 	for (std::vector<std::string>::const_iterator
 			i = names.begin();
 			i != names.end();
 			++i)
 	{
-		loadFile(dirname + *i);
+		loadFile(dir + *i);
 	}
 }
 
 /**
- * Loads a rule element, adding/removing from vectors as necessary.
+ * Loads a rule element adding/removing from vectors as necessary.
  * @param node	- reference a YAML node
  * @param types	- pointer to a map associated to the rule type
  * @param index	- pointer to a vector of indices for the rule type (default NULL)
- * @param key	- reference the rule key name (default "type")
- * @return, pointer to new rule if one was created, or NULL if one was removed
+ * @param key	- reference the rule's key name (default "type")
+ * @return, pointer to new rule if one was created or NULL if one was removed
  */
 template<typename T>
 T* Ruleset::loadRule(

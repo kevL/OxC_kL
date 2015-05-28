@@ -659,6 +659,7 @@ void InventoryState::saveEquiptLayout() // private.
 	BattleUnit* const unit = _battleGame->getSelectedUnit();
 	if (unit->getGeoscapeSoldier() != NULL)
 	{
+		_inv->showWarning(tr("STR_EQUIP_LAYOUT_SAVED"));
 		std::vector<EquipmentLayoutItem*>* const layoutItems = unit->getGeoscapeSoldier()->getEquipmentLayout();
 
 		// clear Soldier's items

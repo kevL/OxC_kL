@@ -28,6 +28,8 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
 
 #include "../Savegame/SavedGame.h"
@@ -117,7 +119,7 @@ ManufactureCostsState::~ManufactureCostsState()
  */
 void ManufactureCostsState::init()
 {
-	std::vector<RuleManufacture*> productions;
+	std::vector<RuleManufacture*> prodRules;
 	RuleManufacture* prodRule;
 
 	const std::vector<std::string>& prodList = _game->getRuleset()->getManufactureList();
@@ -129,26 +131,39 @@ void ManufactureCostsState::init()
 		prodRule = _game->getRuleset()->getManufacture(*i);
 
 		if (_game->getSavedGame()->isResearched(prodRule->getRequirements()) == true)
-			productions.push_back(prodRule);
+			prodRules.push_back(prodRule);
 	}
 
 	size_t row = 0;
 	std::wostringstream woststr;
+	int
+		profit,
+		requiredCosts,
+		salesCost;
+	float profitAspect;
 
 	for (std::vector<RuleManufacture*>::const_iterator
-			i = productions.begin();
-			i != productions.end();
+			i = prodRules.begin();
+			i != prodRules.end();
 			++i,
-				++row)
+				row += 3)
 	{
+		woststr.str(L"");
+		woststr << L"> " << tr((*i)->getName());
+
 		_lstProduction->addRow(
 							5,
-							tr((*i)->getName()).c_str(),
+							woststr.str().c_str(),
 							Text::formatFunding((*i)->getManufactureCost()).c_str(),
 							Text::formatNumber((*i)->getManufactureTime()).c_str(),
 							Text::formatNumber((*i)->getRequiredSpace()).c_str(),
 							L"");
 //							tr((*i)->getCategory ()).c_str());
+		_lstProduction->setCellColor(
+								row,
+								0,
+								213); // yellow, Palette::blockOffset(13)+5
+		requiredCosts = 0;
 
 		std::map<std::string, int> required = (*i)->getRequiredItems();
 		for (std::map<std::string, int>::const_iterator
@@ -156,8 +171,10 @@ void ManufactureCostsState::init()
 				j != required.end();
 				++j)
 		{
+			requiredCosts += _game->getRuleset()->getItem((*j).first)->getSellCost() * (*j).second;
+
 			woststr.str(L"");
-			woststr << L"< " << tr((*j).first);
+			woststr << L"(" << (*j).second << L") " << tr((*j).first);
 
 			if (j == required.begin())
 				_lstProduction->setCellText(
@@ -168,11 +185,56 @@ void ManufactureCostsState::init()
 			{
 				_lstProduction->addRow(
 									5,
-									L"",L"",L"",L"",
+									L">",L"",L"",L"",
 									woststr.str());
 				++row;
 			}
 		}
+
+		profit = 0;
+
+		std::map<std::string, int> producedItems = (*i)->getProducedItems();
+		for (std::map<std::string, int>::const_iterator
+				j = producedItems.begin();
+				j != producedItems.end();
+				++j)
+		{
+			woststr.str(L"");
+			woststr << L"< " << tr((*j).first);
+
+			if ((*i)->getCategory() == "STR_CRAFT")
+				salesCost = _game->getRuleset()->getCraft((*j).first)->getSellCost();
+			else
+				salesCost = _game->getRuleset()->getItem((*j).first)->getSellCost();
+
+			salesCost *= (*j).second;
+
+			profit += salesCost;
+
+			_lstProduction->addRow(
+								5,
+								woststr.str().c_str(),
+								Text::formatFunding(salesCost).c_str(),
+								Text::formatNumber((*j).second).c_str(),
+								L"",L"");
+			++row;
+		}
+
+		profit -= (*i)->getManufactureCost();
+		profit -= requiredCosts;
+		profitAspect = static_cast<float>(profit) / static_cast<float>((*i)->getManufactureTime());
+
+		woststr.str(L"");
+		woststr << std::fixed << std::setprecision(2) << profitAspect;
+
+		_lstProduction->addRow(
+							5,
+							L"<",
+							woststr.str().c_str(),
+							L"",L"",
+							Text::formatFunding(profit).c_str());
+
+		_lstProduction->addRow(5, L"",L"",L"",L"",L"");
 	}
 }
 

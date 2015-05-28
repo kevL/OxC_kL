@@ -77,9 +77,7 @@ private:
 
 		/// Gets the list of items required to manufacture one object.
 		const std::map<std::string, int>& getRequiredItems() const;
-
-		/// Gets the list of items produced by completing "one object" of this project.
-		/// by default: it contains only the "name" item with a value of 1.
+		/// Gets the list of items produced by completing one object of this project.
 		const std::map<std::string, int>& getProducedItems() const;
 
 		/// Gets the list weight for this manufacture item.

@@ -4560,7 +4560,7 @@
 1430262701 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1432587719 f:\git\openxcom\src\ruleset\ruleset.h
+1432764467 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4635,7 +4635,7 @@
 1432587719 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
-1432757486 f:\git\openxcom\src\battlescape\inventorystate.h
+1432758379 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
@@ -4848,7 +4848,7 @@
 1432584753 f:\git\openxcom\src\interface\imagebutton.h
 	"../Engine/InteractiveSurface.h"
 
-1431470578 f:\git\openxcom\src\ruleset\rulemanufacture.h
+1432766016 f:\git\openxcom\src\ruleset\rulemanufacture.h
 
 1431728713 f:\git\openxcom\src\savegame\production.h
 
@@ -5974,7 +5974,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1431476300 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1432759003 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6004,7 +6004,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1432715019 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1432785104 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7248,8 +7248,7 @@
 1430149550 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\productioncompletestate.h
-	<string>
+1432769924 f:\git\openxcom\src\geoscape\productioncompletestate.h
 	"../Engine/State.h"
 	"../Savegame/Production.h"
 
@@ -7476,16 +7475,16 @@
 1404096023 source:f:\git\openxcom\src\geoscape\polyline.cpp
 	"Polyline.h"
 
-1432248980 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
+1432769854 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
 	"ProductionCompleteState.h"
 	"GeoscapeState.h"
+	"../Basescape/BasescapeState.h"
+	"../Basescape/ManufactureState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
-	"../Basescape/BasescapeState.h"
-	"../Basescape/ManufactureState.h"
 	"../Resource/ResourcePack.h"
 	"../Savegame/Base.h"
 
@@ -8510,7 +8509,7 @@
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
+1432765980 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
 1431539338 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
@@ -8520,7 +8519,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1432588108 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1432765155 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -11509,7 +11508,7 @@
 1432587154 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
 	"RuleUnit.h"
 
-1432714741 source:f:\git\openxcom\src\basescape\manufacturecostsstate.cpp
+1432783493 source:f:\git\openxcom\src\basescape\manufacturecostsstate.cpp
 	"ManufactureCostsState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -11517,6 +11516,8 @@
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleCraft.h"
+	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/SavedGame.h"
 

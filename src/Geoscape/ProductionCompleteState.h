@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_PRODUCTIONCOMPLETESTATE_H
 #define OPENXCOM_PRODUCTIONCOMPLETESTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 
@@ -38,8 +38,7 @@ class Window;
 
 
 /**
- * Window used to notify the player when
- * a production is completed.
+ * Window used to notify the player when a production is completed.
  */
 class ProductionCompleteState
 	:
@@ -50,13 +49,14 @@ private:
 	Base* _base;
 	GeoscapeState* _state;
 
-	ProductProgress _endType;
 	Text* _txtMessage;
 	TextButton
 		* _btnGotoBase,
 		* _btnOk,
 		* _btnOk5Secs;
 	Window* _window;
+
+	ProductProgress _endType;
 
 
 	public:

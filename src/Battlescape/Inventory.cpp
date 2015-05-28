@@ -105,8 +105,8 @@ Inventory::Inventory(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
-	_warning->setColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2));
 	_warning->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color));
+	_warning->setColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2));
 
 	_animTimer = new Timer(80);
 	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);
@@ -1157,7 +1157,7 @@ void Inventory::mouseClick(Action* action, State* state)
 
 /**
  * Unloads the selected weapon placing the gun on the right hand and the ammo
- * on the left hand - unless tuMode is false then drop its ammo on the ground.
+ * on the left hand - unless tuMode is false then drop its ammo to the ground.
  * @return, true if a weapon was successfully unloaded
  */
 bool Inventory::unload()

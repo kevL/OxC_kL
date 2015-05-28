@@ -186,9 +186,9 @@ protected:
 
 
 	/// Loads a ruleset from a YAML file.
-	void loadFile(const std::string& filename);
+	void loadFile(const std::string& file);
 	/// Loads all ruleset files from a directory.
-	void loadFiles(const std::string& dirname);
+	void loadFiles(const std::string& dir);
 
 	/// Loads a ruleset element.
 	template<typename T>

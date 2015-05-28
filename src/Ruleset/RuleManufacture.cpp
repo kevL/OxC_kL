@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Creates a new Manufacture.
- * @param name - reference the unique manufacture name
+ * @param name - reference a unique manufacture name
  */
 RuleManufacture::RuleManufacture(const std::string& name)
 	:
@@ -39,7 +39,7 @@ RuleManufacture::RuleManufacture(const std::string& name)
 }
 
 /**
- * Loads the manufacture project from a YAML file.
+ * Loads a RuleManufacture from a YAML file.
  * @param node		- reference a YAML node
  * @param listOrder	- the list weight for this manufacture
  */
@@ -47,6 +47,7 @@ void RuleManufacture::load(
 		const YAML::Node& node,
 		int listOrder)
 {
+	// why ->
 	bool same = _producedItems.size() == 1
 			 && _name == _producedItems.begin()->first;
 
@@ -57,7 +58,7 @@ void RuleManufacture::load(
 		const int qty = _producedItems.begin()->second;
 		_producedItems.clear();
 		_producedItems[_name] = qty;
-	}
+	} // end_why. Perhaps to overwrite a previous entry with a subsequently loaded ID-string, perhaps.
 
 	_category		= node["category"]		.as<std::string>(_category);
 	_requires		= node["requires"]		.as< std::vector<std::string> >(_requires);
@@ -137,6 +138,7 @@ const std::map<std::string, int>& RuleManufacture::getRequiredItems() const
 
 /**
  * Gets the list of items produced by completing one object of this project.
+ * @note By default it contains only the item's ID-string with a value of 1.
  * @return, reference to the list of items produced by completing one object of this project
 */
 const std::map<std::string, int>& RuleManufacture::getProducedItems() const
