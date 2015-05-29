@@ -3016,7 +3016,6 @@ void GeoscapeState::time1Day()
 
 
 		bool dead;
-		int pct;
 		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
 				sol = (*base)->getSoldiers()->begin();
 				sol != (*base)->getSoldiers()->end();
@@ -3026,28 +3025,31 @@ void GeoscapeState::time1Day()
 
 			if ((*sol)->getRecovery() > 0)
 			{
-				pct = (*sol)->getRecoveryPCT();
-				if (pct > 10)
+				int chanceDeath = (*sol)->getRecoveryPCT();
+				if (chanceDeath > 10)
 				{
-					Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundPct = " << pct;
+					//Log(LOG_INFO) << "\n";
+					//Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundsPCT = " << chanceDeath;
 					const int lastMissionId = (*sol)->getDiary()->getMissionIdList().back();
 					const std::vector<MissionStatistics*>* const missionStats = _gameSave->getMissionStatistics();
-					const int recoveryTotal = missionStats->at(lastMissionId)->injuryList[(*sol)->getId()]; // std::map<int, int> injuryList
+					const int daysTotal = missionStats->at(lastMissionId)->injuryList[(*sol)->getId()];
 
-					Log(LOG_INFO) << ". . recTotal = " << recoveryTotal;
-					if (recoveryTotal > 0) // safety.
+					//Log(LOG_INFO) << ". . daysTotal = " << daysTotal;
+					if (daysTotal > 0) // safety.
 					{
-						pct = std::max(
-									1,
-									(pct * 25) / recoveryTotal); // (*sol)->getRecovery()); // note potential divBy0 (pst won't happen)
-						Log(LOG_INFO) << ". . permil = " << pct;
-						if (RNG::generate(1,1000) <= pct)
+						const float healthFactor = static_cast<float>(daysTotal) / static_cast<float>((*sol)->getCurrentStats()->health);
+						//Log(LOG_INFO) << ". . healthFactor = " << healthFactor;
+						chanceDeath = static_cast<int>(std::ceil(
+									  static_cast<float>(chanceDeath) * healthFactor));
+
+						const int roll = RNG::generate(1,1000);
+						//Log(LOG_INFO) << ". . chance to Die = " << chanceDeath << " roll = " << roll;
+						if (roll <= chanceDeath)
 						{
-							Log(LOG_INFO) << ". . . he's dead, Jim!!";
+							//Log(LOG_INFO) << "he's dead, Jim!!";
 							resetTimer();
-//							if ((*sol)->getArmor()->getStoreItem() != "STR_NONE")
-							if ((*sol)->getArmor()->isBasic() == false)
-								(*base)->getItems()->addItem((*sol)->getArmor()->getStoreItem()); // return soldier's armor to Stores
+							if ((*sol)->getArmor()->isBasic() == false) // return soldier's armor to Stores
+								(*base)->getItems()->addItem((*sol)->getArmor()->getStoreItem());
 
 							popup(new SoldierDiedState(
 													(*sol)->getName(),
@@ -3077,7 +3079,7 @@ void GeoscapeState::time1Day()
 				++sol;
 		}
 
-		if ((*base)->getAvailablePsiLabs() > 0 // handle psionic training
+		if ((*base)->getAvailablePsiLabs() != 0 // handle psionic training
 			&& Options::anytimePsiTraining == true)
 		{
 			for (std::vector<Soldier*>::const_iterator

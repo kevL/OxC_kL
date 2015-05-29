@@ -4871,7 +4871,7 @@
 1432678018 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1432860532 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1432860623 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -6550,7 +6550,7 @@
 	"Language.h"
 	"Surface.h"
 
-1432072958 source:f:\git\openxcom\src\engine\game.cpp
+1432868112 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7138,7 +7138,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1432722211 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1432934229 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8825,7 +8825,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1432457488 source:f:\git\openxcom\src\savegame\soldier.cpp
+1432869229 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

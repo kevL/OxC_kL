@@ -519,7 +519,7 @@ void Soldier::setRecovery(int recovery)
 }
 
 /**
- * Gets this Soldier's woundage as a percent.
+ * Gets this Soldier's remaining woundage as a percent.
  * @return, wounds as percent
  */
 int Soldier::getRecoveryPCT() const
