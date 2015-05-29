@@ -4871,7 +4871,7 @@
 1432678018 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1432715019 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1432860532 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -6961,7 +6961,7 @@
 1432527783 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1430174618 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1432857581 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -6991,7 +6991,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1432853693 f:\git\openxcom\src\geoscape\confirmlandingstate.h
+1432857184 f:\git\openxcom\src\geoscape\confirmlandingstate.h
 	"../Engine/State.h"
 
 1431627240 source:f:\git\openxcom\src\geoscape\confirmnewbasestate.cpp
@@ -8572,11 +8572,11 @@
 1432339653 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1430170835 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1432856318 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+	"RuleTerrain.h"
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
-	"RuleTerrain.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
@@ -11447,7 +11447,7 @@
 	"Texture.h"
 	"../Savegame/Target.h"
 
-1432528150 f:\git\openxcom\src\ruleset\rulecity.h
+1432857412 f:\git\openxcom\src\ruleset\rulecity.h
 	"../Savegame/Target.h"
 
 1432855281 f:\git\openxcom\src\ruleset\ruletexture.h
@@ -11457,7 +11457,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1430176554 source:f:\git\openxcom\src\ruleset\ruletexture.cpp
+1432855945 source:f:\git\openxcom\src\ruleset\ruletexture.cpp
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 

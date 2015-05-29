@@ -205,22 +205,35 @@ void ManufactureState::fillProductionList()
 {
 	_lstManufacture->clearList();
 
-	const std::vector<Production*> productions(_base->getProductions());
+	const std::vector<Production*> baseProds(_base->getProductions());
 	for (std::vector<Production*>::const_iterator
-			i = productions.begin();
-			i != productions.end();
+			i = baseProds.begin();
+			i != baseProds.end();
 			++i)
 	{
 		std::wostringstream
+			woststr0,
 			woststr1,
 			woststr2,
 			woststr3,
 			woststr4;
 
+//		if ((*i)->getSellItems() == true)
+//			woststr0 << L"$";
+		woststr0 << tr((*i)->getRules()->getName());
+		if ((*i)->getSellItems() == true)
+		{
+			std::streamsize strSize = woststr0.tellp();
+			woststr0.str(L"$" + woststr0.str());
+			woststr0.seekp(strSize + 1); // lolc++
+
+			woststr0 << L"$";
+		}
+
 		woststr1 << (*i)->getAssignedEngineers();
 
-		if ((*i)->getSellItems() == true)
-			woststr2 << L"$";
+//		if ((*i)->getSellItems() == true)
+//			woststr2 << L"$";
 		woststr2 << (*i)->getAmountProduced() << L"/";
 		if ((*i)->getInfiniteAmount() == true)
 			woststr2 << L"oo";
@@ -261,7 +274,7 @@ void ManufactureState::fillProductionList()
 
 		_lstManufacture->addRow
 							(5,
-							tr((*i)->getRules()->getName()).c_str(),
+							woststr0.str().c_str(),
 							woststr1.str().c_str(),
 							woststr2.str().c_str(),
 							woststr3.str().c_str(),
@@ -282,10 +295,10 @@ void ManufactureState::fillProductionList()
  */
 void ManufactureState::lstManufactureClick(Action*)
 {
-	const std::vector<Production*> productions(_base->getProductions());
+	const std::vector<Production*> baseProds(_base->getProductions());
 	_game->pushState(new ManufactureInfoState(
 											_base,
-											productions[_lstManufacture->getSelectedRow()]));
+											baseProds[_lstManufacture->getSelectedRow()]));
 }
 
 /**

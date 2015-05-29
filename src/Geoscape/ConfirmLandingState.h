@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class Craft;
-class RuleCity;
+//class RuleCity;
 class RuleTerrain;
 class RuleTexture;
 class Text;
@@ -46,10 +46,10 @@ class ConfirmLandingState
 private:
 	int _shade;
 
-	RuleCity* _city;
+//	RuleCity* _city;
 	Craft* _craft;
 	RuleTerrain* _terrainRule;
-	RuleTexture* _texRule;
+//	RuleTexture* _texRule;
 	Text
 		* _txtBegin,
 		* _txtMessage,

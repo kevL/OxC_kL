@@ -76,10 +76,10 @@ ConfirmLandingState::ConfirmLandingState(
 		const int shade)
 	:
 		_craft(craft),
-		_texRule(texRule),
+//		_texRule(texRule),
 		_shade(shade),
-		_terrainRule(NULL),
-		_city(NULL)
+		_terrainRule(NULL)
+//		_city(NULL)
 {
 	Log(LOG_INFO) << "Create ConfirmLandingState()";
 	// TODO: show Country & Region
@@ -134,11 +134,13 @@ ConfirmLandingState::ConfirmLandingState(
 		double // Determine if Craft is landing at a City.
 			lon = _craft->getLongitude(),
 			lat = _craft->getLatitude();
+		bool city = false;
 
 		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
 				i != _game->getSavedGame()->getRegions()->end()
-					&& _city == NULL;
+					&& city == false;
+//					&& _city == NULL;
 				++i)
 		{
 			if ((*i)->getRules()->insideRegion(
@@ -148,14 +150,16 @@ ConfirmLandingState::ConfirmLandingState(
 				for (std::vector<RuleCity*>::const_iterator
 						j = (*i)->getRules()->getCities()->begin();
 						j != (*i)->getRules()->getCities()->end()
-							&& _city == NULL;
+							&& city == false;
+//							&& _city == NULL;
 						++j)
 				{
 					if (   AreSame((*j)->getLongitude(), lon)
 						&& AreSame((*j)->getLatitude(), lat))
 					{
-						_city = *j;
-						Log(LOG_INFO) << ". . . city found = " << _city->getName();
+//						_city = *j;
+						city = true;
+						Log(LOG_INFO) << ". . . city found = " << (*j)->getName();
 					}
 				}
 			}
@@ -243,7 +247,8 @@ ConfirmLandingState::ConfirmLandingState(
 			}
 			else // is UFO
 			{
-				if (_city != NULL) // UFO at a City (eg. Battleship on Infiltration trajectory)
+//				if (_city != NULL) // UFO at a City (eg. Battleship on Infiltration trajectory)
+				if (city == true)
 				{
 					Log(LOG_INFO) << ". . UFO at City";
 					// choose from texture(INT) #10, Urban w/ UFO types
@@ -268,7 +273,8 @@ ConfirmLandingState::ConfirmLandingState(
 				else // UFO not at City
 				{
 					Log(LOG_INFO) << ". . UFO not at City";
-					terrainType = _texRule->getRandomTerrain(_craft->getDestination());
+//					terrainType = _texRule->getRandomTerrain(_craft->getDestination());
+					terrainType = texRule->getRandomTerrain(_craft->getDestination());
 //->				_terrainRule = selectTerrain(lat);
 				}
 

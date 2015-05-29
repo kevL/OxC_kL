@@ -34,7 +34,7 @@ class Language;
 
 /**
  * Represents a city of the world.
- * Aliens target cities for certain missions.
+ * @note Aliens target cities for certain missions.
  */
 class RuleCity
 	:
