@@ -4599,7 +4599,7 @@
 1431836960 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1432001041 f:\git\openxcom\src\ruleset\ruleitem.h
+1432958845 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1432715018 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -4651,7 +4651,7 @@
 1431829902 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1432587720 f:\git\openxcom\src\savegame\battleunit.h
+1432966776 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -4659,7 +4659,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1432426840 f:\git\openxcom\src\battlescape\battlescapegame.h
+1432972083 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5444,7 +5444,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1431473045 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1432983833 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5464,12 +5464,12 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1431473029 f:\git\openxcom\src\battlescape\alienbaistate.h
+1432984595 f:\git\openxcom\src\battlescape\alienbaistate.h
 	"BattleAIState.h"
 	"Position.h"
 	"../Battlescape/BattlescapeGame.h"
 
-1430149550 f:\git\openxcom\src\battlescape\battleaistate.h
+1432984116 f:\git\openxcom\src\battlescape\battleaistate.h
 
 1431472966 f:\git\openxcom\src\battlescape\projectileflybstate.h
 	"BattleState.h"
@@ -5501,10 +5501,10 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
+1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1432426832 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1432983790 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5544,7 +5544,7 @@
 1431546593 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
-1430581440 f:\git\openxcom\src\battlescape\civilianbaistate.h
+1432984588 f:\git\openxcom\src\battlescape\civilianbaistate.h
 	"BattleAIState.h"
 	"Position.h"
 
@@ -5850,7 +5850,7 @@
 	"DebriefingState.h"
 	"../Engine/State.h"
 
-1431475358 source:f:\git\openxcom\src\battlescape\civilianbaistate.cpp
+1432984047 source:f:\git\openxcom\src\battlescape\civilianbaistate.cpp
 	"CivilianBAIState.h"
 	"BattlescapeState.h"
 	"Pathfinding.h"
@@ -5974,7 +5974,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1432788438 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1432955992 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6004,7 +6004,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1432785104 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1432955715 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6069,7 +6069,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1430149550 f:\git\openxcom\src\battlescape\projectile.h
+1432960155 f:\git\openxcom\src\battlescape\projectile.h
 	"BattlescapeGame.h"
 	"Position.h"
 
@@ -6177,7 +6177,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1432426974 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1432983859 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6192,15 +6192,15 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1431472463 f:\git\openxcom\src\battlescape\pathfindingnode.h
+1432973547 f:\git\openxcom\src\battlescape\pathfindingnode.h
 	"Position.h"
 
 1430565351 f:\git\openxcom\src\battlescape\pathfindingopenset.h
 
-1430778244 source:f:\git\openxcom\src\battlescape\pathfindingnode.cpp
+1432976044 source:f:\git\openxcom\src\battlescape\pathfindingnode.cpp
 	"PathfindingNode.h"
 
-1430778244 source:f:\git\openxcom\src\battlescape\pathfindingopenset.cpp
+1432973886 source:f:\git\openxcom\src\battlescape\pathfindingopenset.cpp
 	"PathfindingOpenSet.h"
 	"PathfindingNode.h"
 
@@ -6221,7 +6221,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1432795195 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1432963963 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6236,7 +6236,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1432802567 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1432960666 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6550,7 +6550,7 @@
 	"Language.h"
 	"Surface.h"
 
-1432868112 source:f:\git\openxcom\src\engine\game.cpp
+1432935092 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -8503,10 +8503,9 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1432001097 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1432958834 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
-	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 
 1432765980 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
@@ -8668,7 +8667,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1432587719 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1432984350 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8771,7 +8770,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1432807506 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1432983748 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8796,7 +8795,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1432680380 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1432983655 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

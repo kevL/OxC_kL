@@ -46,7 +46,7 @@ private:
 		_tuCost,
 		_tuGuess; // approximate cost to reach goal position
 
-	OpenSetEntry* _openentry; // invasive field needed by PathfindingOpenSet
+	OpenSetEntry* _openSetEntry; // invasive field needed by PathfindingOpenSet
 	PathfindingNode* _prevNode;
 
 	Position _pos;
@@ -83,7 +83,7 @@ private:
 
 		/// Gets if this Node is already in a PathfindingOpenSet.
 		bool inOpenSet() const
-		{	return (_openentry != NULL); }
+		{	return (_openSetEntry != NULL); }
 
 //#ifdef __MORPHOS__
 //	#undef connect

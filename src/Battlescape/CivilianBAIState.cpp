@@ -122,14 +122,12 @@ YAML::Node CivilianBAIState::save() const
 /**
  * Enters the current AI state.
  */
-void CivilianBAIState::enter()
-{}
+//void CivilianBAIState::enter(){}
 
 /**
  * Exits the current AI state.
  */
-void CivilianBAIState::exit()
-{}
+//void CivilianBAIState::exit(){}
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.
@@ -648,7 +646,7 @@ void CivilianBAIState::evaluateAIMode()
 		break;
 	}
 
-	if (_spottingEnemies)
+	if (_spottingEnemies != 0)
 		escapeOdds = 10. * escapeOdds * static_cast<double>(_spottingEnemies + 10) / 100.;
 	else
 		escapeOdds /= 2.;

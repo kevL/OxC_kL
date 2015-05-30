@@ -173,14 +173,14 @@ private:
 	std::vector<InfoboxOKState*> _infoboxQueue;
 
 
+	/// Determines whether there are any actions pending for the given unit.
+	bool noActionsPending(BattleUnit* bu);
 	/// Ends the turn.
 	void endTurnPhase();
 	/// Picks the first soldier that is panicking.
 	bool handlePanickingPlayer();
 	/// Common function for hanlding panicking units.
 	bool handlePanickingUnit(BattleUnit* unit);
-	/// Determines whether there are any actions pending for the given unit.
-	bool noActionsPending(BattleUnit* bu);
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
 
@@ -196,13 +196,10 @@ private:
 		/// Cleans up the BattlescapeGame state.
 		~BattlescapeGame();
 
-		/// Checks for units panicking or falling and so on.
-		void think();
 		/// Initializes the Battlescape game.
 		void init();
-
-		/// Determines whether a playable unit is selected.
-		bool playableUnitSelected();
+		/// Checks for units panicking or falling and so on.
+		void think();
 
 		/// Handles states timer.
 		void handleState();
@@ -212,14 +209,25 @@ private:
 		void statePushNext(BattleState* const battleState);
 		/// Pushes a state to the back of the list.
 		void statePushBack(BattleState* const battleState);
-
-		/// Handles the result of non target actions, like priming a grenade.
-		void handleNonTargetAction();
-
 		/// Removes current state.
 		void popState();
 		/// Sets state think interval.
 		void setStateInterval(Uint32 interval);
+
+		/// Handles unit AI.
+		void handleAI(BattleUnit* const unit);
+
+		/// Handles the result of non target actions, like priming a grenade.
+		void handleNonTargetAction();
+
+		/// Sets up the cursor taking into account the action.
+		void setupCursor();
+
+		/// Determines whether a playable unit is selected.
+		bool playableUnitSelected();
+
+		/// Handles kneeling action.
+		bool kneel(BattleUnit* const bu);
 
 		/// Checks for casualties in battle.
 		void checkForCasualties(
@@ -234,24 +242,6 @@ private:
 				BattleUnit* bu,
 				int tu,
 				bool test = false);
-
-		/// Handles unit AI.
-		void handleAI(BattleUnit* unit);
-
-		/// Drops an item and affects it with gravity.
-		void dropItem(
-				const Position& position,
-				BattleItem* item,
-				bool newItem = false,
-				bool removeItem = false);
-
-		/// Converts a unit into a unit of another type.
-		BattleUnit* convertUnit(
-				BattleUnit* unit,
-				const std::string& conType);
-
-		/// Handles kneeling action.
-		bool kneel(BattleUnit* bu);
 
 		/// Cancels the current action.
 		bool cancelCurrentAction(bool bForce = false);
@@ -278,8 +268,17 @@ private:
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 
-		/// Sets up the cursor taking into account the action.
-		void setupCursor();
+		/// Drops an item and affects it with gravity.
+		void dropItem(
+				const Position& position,
+				BattleItem* item,
+				bool newItem = false,
+				bool removeItem = false);
+
+		/// Converts a unit into a unit of another type.
+		BattleUnit* convertUnit(
+				BattleUnit* unit,
+				const std::string& conType);
 
 		/// Gets the map.
 		Map* getMap() const;

@@ -71,7 +71,7 @@ PathfindingNode* PathfindingOpenSet::getNode()
 	_queue.pop();
 
 	delete entry;
-	node->_openentry = NULL;
+	node->_openSetEntry = NULL;
 
 	removeDiscarded(); // Discarded entries might be visible now.
 
@@ -90,10 +90,10 @@ void PathfindingOpenSet::addNode(PathfindingNode* node)
 	entry->_node = node;
 	entry->_cost = node->getTUCostNode() + node->getTUGuess();
 
-	if (node->_openentry != NULL)
-		node->_openentry->_node = NULL;
+	if (node->_openSetEntry != NULL)
+		node->_openSetEntry->_node = NULL;
 
-	node->_openentry = entry;
+	node->_openSetEntry = entry;
 	_queue.push(entry);
 }
 

@@ -701,6 +701,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    bulletSpeed: -5
   - type: STR_HC_AP_AMMO
     size: 0.2
     costBuy: 470
@@ -1199,7 +1200,7 @@ items:
       - STR_PLASMA_PISTOL
     size: 0.2
     costSell: 26300 # 263000
-    weight: 6
+    weight: 5
     bigSprite: 32
     floorSprite: 31
     handSprite: 104

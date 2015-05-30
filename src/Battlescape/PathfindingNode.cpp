@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Sets up a PathfindingNode.
- * @param pos - Position
+ * @param pos - Position on the battlefield
  */
 PathfindingNode::PathfindingNode(Position pos)
 	:
@@ -37,7 +37,7 @@ PathfindingNode::PathfindingNode(Position pos)
 		_tuGuess(0),
 		_prevNode(NULL),
 		_prevDir(0),
-		_openentry(NULL)
+		_openSetEntry(NULL)
 {}
 
 /**
@@ -61,7 +61,7 @@ const Position& PathfindingNode::getPosition() const
 void PathfindingNode::reset()
 {
 	_checked = false;
-	_openentry = NULL;
+	_openSetEntry = NULL;
 }
 
 /**

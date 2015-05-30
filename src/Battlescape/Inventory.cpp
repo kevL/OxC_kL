@@ -1161,19 +1161,18 @@ void Inventory::mouseClick(Action* action, State* state)
  */
 bool Inventory::unload()
 {
-	if (_selItem == NULL)
-		return false;
-
-	BattleItem* const ammo = _selItem->getAmmoItem();
-	if (ammo == NULL
-		&& _selItem->getRules()->getCompatibleAmmo()->empty() == false)
-	{
-		_warning->showMessage(_game->getLanguage()->getString("STR_NO_AMMUNITION_LOADED"));
-	}
-
-	if (ammo == NULL
+	if (_selItem == NULL
 		|| _selItem->needsAmmo() == false)
 	{
+		return false;
+	}
+
+	BattleItem* const ammo = _selItem->getAmmoItem();
+	if (ammo == NULL)
+	{
+		if (_selItem->getRules()->getCompatibleAmmo()->empty() == false)
+			_warning->showMessage(_game->getLanguage()->getString("STR_NO_AMMUNITION_LOADED"));
+
 		return false;
 	}
 
@@ -1189,12 +1188,21 @@ bool Inventory::unload()
 			return false;
 		}
 	} */
+	if (fitItem(
+			_game->getRuleset()->getInventory("STR_RIGHT_HAND"),
+			_selItem,
+			true) == false)
+	{
+		_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
+		return false;
+	}
+
 
 	if (_tuMode == false
 		|| _selUnit->spendTimeUnits(10) == true) // should break out to Ruleset value. Also, reload TU ....
 	{
-		RuleInventory* slotRule = NULL;
-		BattleUnit* toOwner = NULL;
+		RuleInventory* slotRule;
+		BattleUnit* toOwner;
 
 		if (fitItem(
 				_game->getRuleset()->getInventory("STR_LEFT_HAND"),
@@ -1205,7 +1213,15 @@ bool Inventory::unload()
 			toOwner = _selUnit;
 		}
 		else if (_tuMode == false)
+		{
 			slotRule = _game->getRuleset()->getInventory("STR_GROUND");
+			toOwner = NULL;
+		}
+		else
+		{
+			slotRule = NULL;
+			toOwner = NULL;
+		}
 
 
 		if (_tuMode == true

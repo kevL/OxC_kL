@@ -61,15 +61,15 @@ namespace OpenXcom
  * @param action		- the BattleAction (BattlescapeGame.h)
  * @param origin		- position that this projectile originates at in tilespace
  * @param targetVoxel	- position that this projectile is targeted at in voxelspace
- * @param ammo			- pointer to the ammo that produced this projectile when applicable
+// * @param ammo			- pointer to the ammo that produced this projectile if applicable
  */
 Projectile::Projectile(
 		ResourcePack* res,
 		SavedBattleGame* save,
 		BattleAction action,
 		Position origin,
-		Position targetVoxel,
-		BattleItem* ammo)
+		Position targetVoxel)
+//		BattleItem* ammo) // -> 'bullet'
 	:
 		_res(res),
 		_save(save),
@@ -78,14 +78,18 @@ Projectile::Projectile(
 		_targetVoxel(targetVoxel),
 		_position(0),
 		_bulletSprite(-1),
-		_reversed(false),
-		_vaporColor(-1),
-		_vaporDensity(-1),
-		_vaporProbability(5)
+		_reversed(false)
+//		_vaporColor(-1),
+//		_vaporDensity(-1),
+//		_vaporProbability(5)
 {
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << "cTor origin = " << origin;
 	//Log(LOG_INFO) << "cTor target = " << targetVoxel << " tSpace " << (targetVoxel / Position(16,16,24));
+
+	//Log(LOG_INFO) << "Projectile";
+	//Log(LOG_INFO) << ". action.weapon = " << _action.weapon->getRules()->getType();
+	//Log(LOG_INFO) << ". bullet = " << _action.weapon->getAmmoItem()->getRules()->getType();
 
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
@@ -95,55 +99,65 @@ Projectile::Projectile(
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
 			_throwSprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
-			_speed = _speed * 4 / 7;
+			_speed = _speed * 3 / 7;
 		}
-		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
+		else // ba_SHOOT!! or hit, or spit
 		{
 			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
 			if (_action.weapon->getRules()->getArcingShot() == true)
-				_speed = _speed * 5 / 7;
+				_speed = _speed * 4 / 7;
 
-			if (ammo != NULL) // try to get all the required info from the ammo, if present
+			const BattleItem* const bullet = _action.weapon->getAmmoItem(); // the weapon itself if not-req'd. eg, lasers/melee
+			if (bullet != NULL) // try to get the required info from the bullet
 			{
-				_bulletSprite = ammo->getRules()->getBulletSprite();
+				_bulletSprite = bullet->getRules()->getBulletSprite();
 
-				_vaporColor = ammo->getRules()->getVaporColor();
-				_vaporDensity = ammo->getRules()->getVaporDensity();
-				_vaporProbability = ammo->getRules()->getVaporProbability();
+//				_speed = std::max(1, _speed + bullet->getRules()->getBulletSpeed());
+				_speed += bullet->getRules()->getBulletSpeed();
 
-				_speed = std::max(
-								1,
-								_speed + ammo->getRules()->getBulletSpeed());
+//				_vaporColor = bullet->getRules()->getVaporColor();
+//				_vaporDensity = bullet->getRules()->getVaporDensity();
+//				_vaporProbability = bullet->getRules()->getVaporProbability();
 			}
 
-			// no ammo, or the ammo didn't contain the info we wanted, see what the weapon has on offer.
+			// if no bullet or the bullet doesn't contain the required info see what the weapon has to offer.
 			if (_bulletSprite == -1)
 				_bulletSprite = _action.weapon->getRules()->getBulletSprite();
 
-			if (_vaporColor == -1)
-				_vaporColor = _action.weapon->getRules()->getVaporColor();
+			if (_speed == Options::battleFireSpeed)
+				_speed += _action.weapon->getRules()->getBulletSpeed();
 
-			if (_vaporDensity == -1)
-				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
+//			if (bullet == NULL
+//				|| bullet != _action.weapon)
+//				|| bullet->getRules()->getBulletSpeed() == 0)
+//			{
+//				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+//			}
 
-			if (_vaporProbability == 5) // uhhh why.
-				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
-
-			if (ammo == NULL
-				|| ammo != _action.weapon
-				|| ammo->getRules()->getBulletSpeed() == 0)
-			{
-				_speed = std::max(
-								1,
-								_speed + _action.weapon->getRules()->getBulletSpeed());
-			}
+//			if (_vaporColor == -1)
+//				_vaporColor = _action.weapon->getRules()->getVaporColor();
+//			if (_vaporDensity == -1)
+//				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
+//			if (_vaporProbability == 5) // uhhh why.
+//				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
 		}
 	}
 
-	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
-		_reversed = true;
-	/*
-	NE	 0	reversed
+	if (_speed < 1)
+		_speed = 1;
+
+	if (_bulletSprite == -1)
+	{
+		std::wostringstream woststr;
+		woststr << L"WARNING: no bullet sprite";
+		if (_action.weapon != NULL)
+			woststr << L" for " << _action.weapon->getRules()->getType().c_str();
+		if (_action.weapon->getAmmoItem() != NULL)
+			woststr << L" w/ " << _action.weapon->getAmmoItem()->getRules()->getType().c_str();
+		Log(LOG_INFO) << woststr.str().c_str();
+	}
+
+/*	NE	 0	reversed
 	ENE		reversed
 	E	 1	reversed
 	ESE		reversed
@@ -158,8 +172,9 @@ Projectile::Projectile(
 	NW	-2	not reversed
 	NNW		not reversed
 	N	-1	not reversed
-	NNE		not reversed
-	*/
+	NNE		not reversed */
+	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
+		_reversed = true;
 }
 
 /**
@@ -770,13 +785,13 @@ bool Projectile::traceProjectile()
 			return false;
 		}
 
-		if (_save->getDepth() > 0
+/*		if (_save->getDepth() > 0
 			&& _vaporColor != -1
 			&& _action.type != BA_THROW
 			&& RNG::percent(_vaporProbability) == true)
 		{
 			addVaporCloud();
-		}
+		} */
 	}
 
 	return true;
@@ -929,7 +944,7 @@ bool Projectile::isReversed() const
 /**
  * Adds a cloud of vapor at the projectile's current position.
  */
-void Projectile::addVaporCloud()
+/* void Projectile::addVaporCloud() // private.
 {
 	Tile* const tile = _save->getTile(_trajectory.at(_position) / Position(16,16,24));
 	if (tile != NULL)
@@ -960,7 +975,7 @@ void Projectile::addVaporCloud()
 			tile->addParticle(particle);
 		}
 	}
-}
+} */
 
 /**
  * Gets a pointer to the BattleAction actor directly.

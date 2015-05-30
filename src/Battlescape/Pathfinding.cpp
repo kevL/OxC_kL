@@ -67,6 +67,7 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 		_moveType(MT_WALK),
 		_openDoor(0)
 {
+	//Log(LOG_INFO) << "Create Pathfinding";
 	_nodes.reserve(_battleSave->getMapSizeXYZ()); // initialize one node per tile.
 
 	Position pos;
@@ -75,6 +76,7 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
+		//Log(LOG_INFO) << ". fill NodePosition #" << (int)i;
 		_battleSave->getTileCoords(
 								i,
 								&pos.x,
@@ -82,6 +84,7 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 								&pos.z);
 		_nodes.push_back(PathfindingNode(pos));
 	}
+	//Log(LOG_INFO) << "Create Pathfinding EXIT";
 }
 
 /**
@@ -110,7 +113,7 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
  * @param strafeRejected	- true if path needs to be recalculated w/out strafe (default false)
  */
 void Pathfinding::calculate(
-		BattleUnit* const unit,
+		BattleUnit* const unit, // -> should not need 'unit' here anymore; done in setPathingUnit() unless FACTION_PLAYER ...
 		Position destPos,
 		const BattleUnit* const missileTarget,
 		int maxTUCost,
@@ -134,11 +137,13 @@ void Pathfinding::calculate(
 //	_battleAction = _battleSave->getBattleGame()->getCurrentAction();	// Used only to set .strafe and .dash (along w/ Dashing flag) for Player-controlled units;
 																		// But also should safely ensure that nonPlayer-controlled units are flagged false.
 //	setInputModifiers(); // <- done in setMoveType() <- done in setPathingUnit()
-	setPathingUnit(unit);
-
-
-	if (missileTarget != NULL
-		&& maxTUCost == -1) // pathfinding for missile
+	if (missileTarget == NULL
+		&& unit->getFaction() == FACTION_PLAYER)
+	{
+		setPathingUnit(unit);	// <- done for aLiens & Civies in BattlescapeGame::handleAI()
+	}							// but not sure how 'missileTarget' affects initialization yet.
+	else if (missileTarget != NULL	// pathfinding for missile
+		&& maxTUCost == -1)			// TODO: figure how 'missileTarget' and 'maxTUCost' work together or not. -> are they redudant, and if so how redundant.
 	{
 		maxTUCost = 10000;
 		_moveType = MT_FLY;
@@ -164,6 +169,10 @@ void Pathfinding::calculate(
 			_moveType = MT_WALK;
 		} */
 //	}
+
+	if (unit->getFaction() != FACTION_PLAYER)
+		strafeRejected = true;
+
 
 	const Tile* destTile = _battleSave->getTile(destPos);
 
@@ -1606,7 +1615,7 @@ bool Pathfinding::isBlockedPath( // public
  * @param bigWallExclusion	- to exclude diagonal bigWalls (default -1)
  * @return, true if path is blocked
  */
-bool Pathfinding::isBlocked( // private
+bool Pathfinding::isBlocked( // private.
 		const Tile* const tile,
 		const int part,
 		const BattleUnit* const missileTarget,
@@ -2166,23 +2175,27 @@ std::vector<int> Pathfinding::findReachable(
 		int tuMax)
 {
 	//Log(LOG_INFO) << "Pathfinding::findReachable()";
+	//Log(LOG_INFO) << ". &nodes = " << &_nodes;
+	//if (_nodes.empty() == true) Log(LOG_INFO) << ". nodes is EMPTY";
+	//else Log(LOG_INFO) << ". nodes are VALID";
 	for (std::vector<PathfindingNode>::iterator
 			i = _nodes.begin();
 			i != _nodes.end();
 			++i)
 	{
+		//Log(LOG_INFO) << ". . iterating Nodes";
 		i->reset();
 	}
+	//Log(LOG_INFO) << ". nodes reset";
 
-	setPathingUnit(unit);
-	const Position& origin = unit->getPosition();
+//	setPathingUnit(unit); // <- done in BattlescapeGame::handleAI()
 
 	PathfindingNode
-		* const startNode = getNode(origin),
+		* const startNode = getNode(unit->getPosition()),
 		* currentNode,
 		* nextNode;
 
-	startNode->linkNode(0, NULL, 0);
+	startNode->linkNode(0,NULL,0);
 	PathfindingOpenSet unvisited;
 	unvisited.addNode(startNode);
 

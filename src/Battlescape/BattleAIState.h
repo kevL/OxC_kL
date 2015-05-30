@@ -66,9 +66,9 @@ protected:
 		virtual YAML::Node save() const;
 
 		/// Enters the state.
-		virtual void enter();
+//		virtual void enter();
 		/// Exits the state.
-		virtual void exit();
+//		virtual void exit();
 		/// Runs state functionality every AI cycle.
 		virtual void think(BattleAction* action);
 };

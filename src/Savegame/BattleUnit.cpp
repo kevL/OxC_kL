@@ -2254,7 +2254,7 @@ void BattleUnit::prepUnit()
 	if (_health == 0				// if unit is dead, AI state disappears
 		&& _currentAIState != NULL)
 	{
-		_currentAIState->exit();
+//		_currentAIState->exit();
 		delete _currentAIState;
 		_currentAIState = NULL;
 	}
@@ -2461,7 +2461,7 @@ std::vector<BattleItem*>* BattleUnit::getInventory()
  * Lets the AI do its thing.
  * @param action - current AI action
  */
-void BattleUnit::think(BattleAction* action)
+void BattleUnit::think(BattleAction* const action)
 {
 	//Log(LOG_INFO) << "BattleUnit::think()";
 	//Log(LOG_INFO) << ". checkAmmo()";
@@ -2475,17 +2475,16 @@ void BattleUnit::think(BattleAction* action)
  * Sets this BattleUnit's current AI state.
  * @param aiState - pointer to AI state
  */
-void BattleUnit::setAIState(BattleAIState* aiState)
+void BattleUnit::setAIState(BattleAIState* const aiState)
 {
-	if (_currentAIState)
+	if (_currentAIState != NULL)
 	{
-		_currentAIState->exit();
-
+//		_currentAIState->exit();
 		delete _currentAIState;
 	}
 
 	_currentAIState = aiState;
-	_currentAIState->enter();
+//	_currentAIState->enter();
 }
 
 /**

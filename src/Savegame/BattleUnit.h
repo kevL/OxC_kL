@@ -797,11 +797,11 @@ private:
 		std::vector<BattleItem*>* getInventory();
 
 		/// Lets AI do its thing.
-		void think(BattleAction* action);
+		void think(BattleAction* const action);
 		/// Gets current AI state.
 		BattleAIState* getCurrentAIState() const;
 		/// Sets next AI State.
-		void setAIState(BattleAIState* aiState);
+		void setAIState(BattleAIState* const aiState);
 
 		/// Sets the Tile this unit is standing on.
 		void setTile(

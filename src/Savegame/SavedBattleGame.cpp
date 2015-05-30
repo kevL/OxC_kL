@@ -201,8 +201,7 @@ void SavedBattleGame::load(
 		Ruleset* rules,
 		SavedGame* savedGame)
 {
-	Log(LOG_INFO) << "SavedBattleGame::load()";
-
+	//Log(LOG_INFO) << "SavedBattleGame::load()";
 	_mapsize_x			= node["width"]			.as<int>(_mapsize_x);
 	_mapsize_y			= node["length"]		.as<int>(_mapsize_y);
 	_mapsize_z			= node["height"]		.as<int>(_mapsize_z);
@@ -343,13 +342,13 @@ void SavedBattleGame::load(
 								_depth,
 								diff); // kL_add: For VictoryPts value per death.
 		}
-		else
+		else									// create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 		{
 			const std::string
 				type	= (*i)["genUnitType"]	.as<std::string>(),
 				armor	= (*i)["genUnitArmor"]	.as<std::string>();
 
-			unit = new BattleUnit( // create a new Unit, not-soldier but Vehicle, Civie, or aLien.
+			unit = new BattleUnit(
 								rules->getUnit(type),
 								originalFaction,
 								id,
@@ -547,7 +546,7 @@ void SavedBattleGame::load(
 
 	Log(LOG_INFO) << ". set item ID";
 	setNextItemId(); // kL
-	Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
+	//Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
 
 	// TEST, reveal all tiles
 //	for (size_t
@@ -2258,7 +2257,6 @@ bool SavedBattleGame::setUnitPosition(
 	if (unitSize != 0)
 	{
 		_pathfinding->setPathingUnit(unit);
-
 		for (int
 				dir = 2;
 				dir != 5;

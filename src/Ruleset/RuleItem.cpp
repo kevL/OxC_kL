@@ -21,7 +21,7 @@
 
 #include "RuleInventory.h"
 
-#include "../Engine/Surface.h"
+//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
 
@@ -107,10 +107,10 @@ RuleItem::RuleItem(const std::string& type)
 		_meleePower(0),
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
-		_specialType(-1),
-		_vaporColor(-1),
-		_vaporDensity(0),
-		_vaporProbability(15)
+		_specialType(-1)
+//		_vaporColor(-1),
+//		_vaporDensity(0),
+//		_vaporProbability(15)
 {}
 
 /**
@@ -270,9 +270,9 @@ void RuleItem::load(
 	_meleePower				= node["meleePower"]		.as<int>(_meleePower);
 	_underwaterOnly			= node["underwaterOnly"]	.as<bool>(_underwaterOnly);
 	_specialType			= node["specialType"]		.as<int>(_specialType);
-	_vaporColor				= node["vaporColor"]		.as<int>(_vaporColor);
-	_vaporDensity			= node["vaporDensity"]		.as<int>(_vaporDensity);
-	_vaporProbability		= node["vaporProbability"]	.as<int>(_vaporProbability);
+//	_vaporColor				= node["vaporColor"]		.as<int>(_vaporColor);
+//	_vaporDensity			= node["vaporDensity"]		.as<int>(_vaporDensity);
+//	_vaporProbability		= node["vaporProbability"]	.as<int>(_vaporProbability);
 
 	if (_listOrder == 0)
 		_listOrder = listOrder;
@@ -1018,28 +1018,28 @@ const int RuleItem::getSpecialType() const
  * Gets the color offset to use for the vapor trail.
  * @return, the color offset
  */
-const int RuleItem::getVaporColor() const
+/* const int RuleItem::getVaporColor() const
 {
 	return _vaporColor;
-}
+} */
 
 /**
  * Gets the vapor cloud density for the vapor trail.
  * @return, the vapor density
  */
-const int RuleItem::getVaporDensity() const
+/* const int RuleItem::getVaporDensity() const
 {
 	return _vaporDensity;
-}
+} */
 
 /**
  * Gets the vapor cloud probability for the vapor trail.
  * @return, the vapor probability
  */
-const int RuleItem::getVaporProbability() const
+/* const int RuleItem::getVaporProbability() const
 {
 	return _vaporProbability;
-}
+} */
 
 /**
  * Gets the item's default BattleAction.

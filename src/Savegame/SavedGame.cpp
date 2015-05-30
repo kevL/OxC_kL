@@ -404,8 +404,7 @@ void SavedGame::load(
 		const std::string& filename,
 		Ruleset* rule)
 {
-	Log(LOG_INFO) << "SavedGame::load()";
-
+	//Log(LOG_INFO) << "SavedGame::load()";
 	const std::string st = Options::getUserFolder() + filename;
 	const std::vector<YAML::Node> file = YAML::LoadAllFromFile(st);
 	if (file.empty() == true)

@@ -815,8 +815,11 @@ void InventoryState::btnUnloadClick(Action*)
 											static_cast<unsigned>(ResourcePack::ITEM_UNLOAD_HQ))
 										->play();
 	}
-	else if (_tuMode == false)
+	else if (_tuMode == false
+		&& _inv->getSelectedItem() == NULL)
+	{
 		saveEquiptLayout();
+	}
 }
 
 /**

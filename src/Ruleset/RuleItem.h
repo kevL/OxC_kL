@@ -149,11 +149,11 @@ private:
 		_bigSprite,
 		_floorSprite,
 		_handSprite,
-		_bulletSprite,
+		_bulletSprite;
 
-		_vaporColor,
-		_vaporDensity,
-		_vaporProbability;
+//		_vaporColor,
+//		_vaporDensity,
+//		_vaporProbability;
 
 	double _size;
 
@@ -376,11 +376,11 @@ private:
 		const int getSpecialType() const;
 
 		/// Gets the color offset to use for the vapor trail.
-		const int getVaporColor() const;
+//		const int getVaporColor() const;
 		/// Gets the vapor cloud density.
-		const int getVaporDensity() const;
+//		const int getVaporDensity() const;
 		/// Gets the vapor cloud probability.
-		const int getVaporProbability() const;
+//		const int getVaporProbability() const;
 
 		/// Gets the item's default BattleAction.
 		BattleActionType getDefaultAction(const bool isPrimed = false) const;

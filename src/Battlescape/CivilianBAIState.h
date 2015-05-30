@@ -33,7 +33,7 @@ class BattleUnit;
 class Node;
 class SavedBattleGame;
 
-struct BattleAction;
+//struct BattleAction;
 
 
 /**
@@ -80,9 +80,9 @@ private:
 			YAML::Node save() const;
 
 			/// Enters the state.
-			void enter();
+//			void enter();
 			/// Exits the state.
-			void exit();
+//			void exit();
 
 			/// Runs state functionality every AI cycle.
 			void think(BattleAction* action);

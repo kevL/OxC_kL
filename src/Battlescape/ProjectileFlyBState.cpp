@@ -481,8 +481,8 @@ bool ProjectileFlyBState::createNewProjectile()
 											_parent->getSave(),
 											_action,
 											_origin,
-											_targetVoxel,
-											_ammo);
+											_targetVoxel);
+//											_ammo);
 
 	_parent->getMap()->setProjectile(projectile); // else, add the projectile on the map
 
@@ -694,7 +694,7 @@ void ProjectileFlyBState::think()
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
 			&& _unit->isOut() == false
-			&& _ammo != NULL // kL
+//			&& _ammo != NULL // kL
 			&& _ammo->getAmmoQuantity() != 0
 			&& ((_parent->getSave()->getTile(_unit->getPosition()) != NULL
 					&& _parent->getSave()->getTile(_unit->getPosition())
@@ -930,8 +930,8 @@ void ProjectileFlyBState::think()
 																	_parent->getSave(),
 																	_action,
 																	_origin,
-																	_targetVoxel,
-																	_ammo);
+																	_targetVoxel);
+//																	_ammo);
 
 								_projectileImpact = proj->calculateTrajectory(
 																		std::max(

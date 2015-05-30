@@ -31,12 +31,11 @@
 namespace OpenXcom
 {
 
-class BattlescapeState;
 class BattleUnit;
 class Node;
-class Pathfinding;
 class SavedBattleGame;
-class TileEngine;
+
+//struct BattleAction;
 
 
 /**
@@ -97,7 +96,7 @@ protected:
 	public:
 		/// Creates a new AlienBAIState linked to the game and a certain unit.
 		AlienBAIState(
-				SavedBattleGame* save,
+				SavedBattleGame* battleSave,
 				BattleUnit* unit,
 				Node* node);
 		/// Cleans up the AlienBAIState.
@@ -109,9 +108,9 @@ protected:
 		YAML::Node save() const;
 
 		/// Enters the state.
-		void enter();
+//		void enter();
 		/// Exits the state.
-		void exit();
+//		void exit();
 		/// Runs state functionality every AI cycle.
 		void think(BattleAction* action);
 
@@ -132,7 +131,7 @@ protected:
 		/// count how many xcom/civilian units are known to this unit.
 		int countKnownTargets() const;
 		/// count how many known XCom units are able to see this unit.
-		int countSpottingUnits(Position pos) const;
+		int countSpottingUnits(const Position& pos) const;
 
 		/// Selects the nearest target we can see, and return the number of viable targets.
 		int selectNearestTarget();

@@ -61,14 +61,12 @@ YAML::Node BattleAIState::save() const
 /**
  * Enters the current AI state.
  */
-void BattleAIState::enter()
-{}
+//void BattleAIState::enter(){}
 
 /**
  * Exits the current AI state.
  */
-void BattleAIState::exit()
-{}
+//void BattleAIState::exit(){}
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.

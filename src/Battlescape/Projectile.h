@@ -49,10 +49,10 @@ private:
 	bool _reversed;
 	int
 		_bulletSprite,
-		_speed,
-		_vaporColor,
-		_vaporDensity,
-		_vaporProbability;
+		_speed;
+//		_vaporColor,
+//		_vaporDensity,
+//		_vaporProbability;
 	size_t _position;
 
 	BattleAction _action;
@@ -74,6 +74,9 @@ private:
 			const Tile* const targetTile = NULL,
 			const bool extendLine = true);
 
+	/// Adds a cloud of particles at the projectile's location.
+//	void addVaporCloud();
+
 
 	public:
 		/// Creates a new Projectile.
@@ -82,8 +85,8 @@ private:
 				SavedBattleGame* save,
 				BattleAction action,
 				Position origin,
-				Position target,
-				BattleItem* ammo);
+				Position target);
+//				BattleItem* ammo);
 		/// Cleans up the Projectile.
 		~Projectile();
 
@@ -121,9 +124,6 @@ private:
 
 		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
 		bool isReversed() const;
-
-		/// Adds a cloud of particles at the projectile's location.
-		void addVaporCloud();
 
 		/// Gets a pointer to the BattleAction actor directly.
 		BattleUnit* getActor() const;
