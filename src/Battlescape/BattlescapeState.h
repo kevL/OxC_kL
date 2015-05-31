@@ -69,6 +69,7 @@ private:
 	bool
 		_firstInit,
 		_iconsHidden,
+		_isKneeled,
 		_isMouseScrolled,
 		_isMouseScrolling,
 		_isOverweight,

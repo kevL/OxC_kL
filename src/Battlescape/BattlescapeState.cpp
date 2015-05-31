@@ -137,7 +137,8 @@ BattlescapeState::BattlescapeState()
 		_visUnitTargetFrame(0),
 		_showSoldierData(false),
 		_iconsHidden(false),
-		_isOverweight(false)
+		_isOverweight(false),
+		_isKneeled(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	const int
@@ -2675,9 +2676,11 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 //	_numFuseRight		->setVisible(false);
 //	_numFuseLeft		->setVisible(false);
 
+	_isKneeled =
+	_isOverweight = false;
+
 	_kneel		->setVisible(false);
 	_overWeight	->setVisible(false);
-	_isOverweight = false;
 	_numDir		->setVisible(false);
 	_numDirTur	->setVisible(false);
 
@@ -2740,7 +2743,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
+	BattleUnit* const selUnit = _battleSave->getSelectedUnit(); // <- not sure if this is FACTION_PLAYER only.
 
 	if (selUnit == NULL)
 		return;
@@ -2779,7 +2782,10 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 
 		if (selUnit->isKneeled() == true)
-			_kneel->setVisible();
+		{
+			_isKneeled = true;
+			_kneel->setVisible(); // this doesn't blink, unlike _overWeight mark
+		}
 
 		_txtOrder->setText(tr("STR_ORDER")
 							.arg(static_cast<int>(selUnit->getBattleOrder())));
@@ -2790,7 +2796,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	if (selUnit->getCarriedWeight() > strength)
 	{
 		_isOverweight = true;
-//		_overWeight->setVisible();
+//		_overWeight->setVisible(); // this needs to blink, unlike _kneel mark
 	}
 
 	_numDir->setValue(selUnit->getDirection());
@@ -3586,9 +3592,10 @@ void BattlescapeState::toggleIcons(bool vis)
 	_txtMissionLabel->setVisible(vis);
 	_lstTileInfo->setVisible(vis);
 
-	_overWeight->setVisible(vis);
+	// note: These two might not be necessary if selectedUnit is never aLien or Civie.
+	_overWeight->setVisible(vis && _isOverweight);
 	// no need for handling the kneel indicator i guess; do it anyway
-	_kneel->setVisible(vis);
+	_kneel->setVisible(vis && _isKneeled);
 }
 
 /**
