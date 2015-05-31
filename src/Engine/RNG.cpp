@@ -115,7 +115,7 @@ int generate(
 		std::swap(minRand, maxRand);
 
 	uint64_t r = next();
-	return (static_cast<int>(r %(maxRand - minRand + 1)) + minRand);
+	return (static_cast<int>(r % (maxRand - minRand + 1)) + minRand);
 }
 
 /**
@@ -143,7 +143,7 @@ double generate(
 
 /**
  * Generates a random integer number within a certain range.
- * Distinct from "generate" in that it doesn't touch the seed.
+ * @note Distinct from "generate" in that it doesn't touch the seed.
  * @param min - minimum number inclusive
  * @param max - maximum number inclusive
  * @return, generated number
@@ -152,6 +152,13 @@ int seedless(
 		int minRand,
 		int maxRand)
 {
+	//Log(LOG_INFO) << "rng:generate(int)";
+	if (minRand == maxRand)
+		return minRand;
+
+	if (minRand > maxRand)
+		std::swap(minRand, maxRand);
+
 	return (std::rand() % (maxRand - minRand + 1) + minRand);
 }
 

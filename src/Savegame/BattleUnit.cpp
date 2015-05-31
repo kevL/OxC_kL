@@ -132,8 +132,8 @@ BattleUnit::BattleUnit(
 		_stunLevel(0),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
-		_breathFrame(0),
-		_breathing(false),
+//		_breathFrame(0),
+//		_breathing(false),
 		_floorAbove(false),
 
 		_name(soldier->getName()),
@@ -287,8 +287,8 @@ BattleUnit::BattleUnit(
 		_morale(100),
 		_stunLevel(0),
 		_activeHand("STR_RIGHT_HAND"),
-		_breathFrame(-1),
-		_breathing(false),
+//		_breathFrame(-1),
+//		_breathing(false),
 		_floorAbove(false),
 //		_gender(GENDER_MALE),
 		_diedByFire(false),
@@ -342,8 +342,8 @@ BattleUnit::BattleUnit(
 			_moveType = MT_WALK;
 	}
 
-	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
-		_breathFrame = 0;
+//	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
+//		_breathFrame = 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -837,11 +837,11 @@ void BattleUnit::startWalking(
 		_direction = dir;
 	}
 
-	if (_breathFrame > -1)
-	{
-		_breathing = false;
-		_breathFrame = 0;
-	}
+//	if (_breathFrame > -1)
+//	{
+//		_breathing = false;
+//		_breathFrame = 0;
+//	}
 }
 
 /**
@@ -4202,18 +4202,18 @@ bool BattleUnit::hasInventory() const
  * Gets the bubble-animation frame.
  * @return, frame number
  */
-int BattleUnit::getBreathFrame() const
+/* int BattleUnit::getBreathFrame() const
 {
 	if (_floorAbove == true)
 		return 0;
 
 	return _breathFrame;
-}
+} */
 
 /**
  * Decides if bubbles should be produced and/or updates which bubble frame.
  */
-void BattleUnit::breathe()
+/* void BattleUnit::breathe()
 {
 	// _breathFrame of -1 means this unit doesn't produce bubbles
 	if (_breathFrame < 0
@@ -4246,7 +4246,7 @@ void BattleUnit::breathe()
 			_breathing = false;
 		}
 	}
-}
+} */
 
 /**
  * Sets the flag for "this unit is under cover" meaning don't draw bubbles.

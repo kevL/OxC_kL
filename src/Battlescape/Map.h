@@ -173,7 +173,7 @@ private:
 		void keyboardRelease(Action* action, State* state);
 
 		/// Cycles the frames for all tiles.
-		void animate(bool redraw);
+		void animateMap(bool redraw = true);
 
 		/// Sets the battlescape selector position relative to mouseposition.
 		void setSelectorPosition(

@@ -591,6 +591,7 @@ bool UnitWalkBState::doStatusStand()
 					return false; // don't start walking yet, wait for the ufo door to open
 				}
 			}
+			//Log(LOG_INFO) << ". door DONE";
 		}
 
 		// proxy blows up in face after door opens - copied doStatusStand_end()

@@ -2551,7 +2551,7 @@ void Map::drawTerrain(Surface* surface) // private.
 							} */
 
 
-							if (unit->getBreathFrame() > 0)
+/*							if (unit->getBreathFrame() > 0)
 							{
 								// kL_note: Don't throw my offsets off ...
 								int bubbleOffset_x;
@@ -2569,7 +2569,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											screenPosition.x + bubbleOffset_x,
 											screenPosition.y + bubbleOffset_y - 30,
 											tileShade);
-							}
+							} */
 
 							// Redraw northWall in tileSouthSouthWest
 							if (itX > 0 && itY < endY - 1				// Reaper sticks its righthind leg out through southerly wall
@@ -3330,7 +3330,7 @@ void Map::drawTerrain(Surface* surface) // private.
 					}
 					// end Smoke & Fire
 
-					for (std::list<Particle*>::const_iterator // draw particle clouds
+/*					for (std::list<Particle*>::const_iterator // draw particle clouds
 							i = tile->getParticleCloud()->begin();
 							i != tile->getParticleCloud()->end();
 							++i)
@@ -3377,7 +3377,7 @@ void Map::drawTerrain(Surface* surface) // private.
 																													vaporY)]);
 							}
 						}
-					}
+					} */
 
 					// Draw pathPreview
 					if (tile->getPreview() != -1
@@ -4458,9 +4458,9 @@ void Map::findMousePosition(Position& mousePos)
 
 /**
  * Handles animating tiles - 8 Frames per animation [0..7].
- * @param redraw - true to redraw the battlescape map
+ * @param redraw - true to redraw the battlescape map (default true)
  */
-void Map::animate(bool redraw)
+void Map::animateMap(bool redraw)
 {
 	++_animFrame;
  	if (_animFrame == 8)
@@ -4471,7 +4471,7 @@ void Map::animate(bool redraw)
 			i != _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		_battleSave->getTiles()[i]->animate();
+		_battleSave->getTiles()[i]->animateTile();
 	}
 
 	for (std::vector<BattleUnit*>::const_iterator	// animate certain units
@@ -4479,11 +4479,11 @@ void Map::animate(bool redraw)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if (_battleSave->getDepth() > 0
-			&& (*i)->getFloorAbove() == false)
-		{
-			(*i)->breathe();
-		}
+//		if (_battleSave->getDepth() > 0
+//			&& (*i)->getFloorAbove() == false)
+//		{
+//			(*i)->breathe();
+//		}
 
 		if ((*i)->getArmor()->getConstantAnimation() == true)
 		{

@@ -136,7 +136,8 @@ BattlescapeState::BattlescapeState()
 		_showConsole(2),
 		_visUnitTargetFrame(0),
 		_showSoldierData(false),
-		_iconsHidden(false)
+		_iconsHidden(false),
+		_isOverweight(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	const int
@@ -439,20 +440,15 @@ BattlescapeState::BattlescapeState()
 	_warning->setColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color2));
 	_warning->setTextColor(static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("warning")->color));
 
-	_txtOperationTitle->setHighContrast();
-	_txtOperationTitle->setAlign(ALIGN_CENTER);
-	_txtOperationTitle->setBig();
 	if (_battleSave->getOperation().empty() == false)
+	{
 		_txtOperationTitle->setText(_battleSave->getOperation().c_str());
+		_txtOperationTitle->setHighContrast();
+		_txtOperationTitle->setAlign(ALIGN_CENTER);
+		_txtOperationTitle->setBig();
+	}
 	else
 		_txtOperationTitle->setVisible(false);
-
-
-	_txtBaseLabel->setHighContrast();
-	_txtBaseLabel->setAlign(ALIGN_RIGHT);
-
-	_txtMissionLabel->setHighContrast();
-	_txtMissionLabel->setAlign(ALIGN_CENTER);
 
 	_txtControlDestroyed->setText(tr("STR_ALIEN_BASE_CONTROL_DESTROYED"));
 	_txtControlDestroyed->setHighContrast();
@@ -496,7 +492,8 @@ BattlescapeState::BattlescapeState()
 		}
 	}
 	_txtBaseLabel->setText(tr("STR_SQUAD_").arg(baseLabel.c_str())); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
-//	_txtBaseLabel->setText(baseLabel.c_str());
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setHighContrast();
 
 
 	if (missionLabel.empty() == true)
@@ -557,6 +554,8 @@ BattlescapeState::BattlescapeState()
 		missionLabel = tr(_battleSave->getMissionType());
 
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
+	_txtMissionLabel->setAlign(ALIGN_CENTER);
+	_txtMissionLabel->setHighContrast();
 
 
 	if (target != NULL)
@@ -595,8 +594,8 @@ BattlescapeState::BattlescapeState()
 		}
 
 		_txtRegion->setText(woststr.str()); // there'd better be a region ... or else. Pow! To the moon!!!
-		_txtRegion->setHighContrast();
 		_txtRegion->setAlign(ALIGN_RIGHT);
+		_txtRegion->setHighContrast();
 	}
 
 
@@ -667,7 +666,7 @@ BattlescapeState::BattlescapeState()
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
 	srfOverload->blit(_overWeight); */
-	_overWeight->drawRect(0,0,2,2, Palette::blockOffset(0)+1);
+	_overWeight->drawRect(0,0,2,2, Palette::blockOffset(2)+13); // dark.red
 	_overWeight->setVisible(false);
 
 	_btnWounds->setVisible(false);
@@ -2678,6 +2677,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	_kneel		->setVisible(false);
 	_overWeight	->setVisible(false);
+	_isOverweight = false;
 	_numDir		->setVisible(false);
 	_numDirTur	->setVisible(false);
 
@@ -2788,7 +2788,10 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	const int strength = static_cast<int>(Round(
 						 static_cast<double>(selUnit->getBaseStats()->strength) * (selUnit->getAccuracyModifier() / 2. + 0.5)));
 	if (selUnit->getCarriedWeight() > strength)
-		_overWeight->setVisible();
+	{
+		_isOverweight = true;
+//		_overWeight->setVisible();
+	}
 
 	_numDir->setValue(selUnit->getDirection());
 	_numDir->setVisible();
@@ -2994,7 +2997,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 /**
  * Shifts the colors of the visible unit buttons' backgrounds.
  */
-void BattlescapeState::blinkVisibleUnitButtons()
+void BattlescapeState::blinkVisibleUnitButtons() // private.
 {
 	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
 	if (selUnit != NULL)
@@ -3106,16 +3109,22 @@ void BattlescapeState::refreshVisUnits()
 }
 
 /**
- * Animates map objects on the map - also smoke, fire, etc.
+ * Animates things on the map and in the HUD.
  */
 void BattlescapeState::animate()
 {
-	_map->animate(_battleGame->isBusy() == false);
+	_map->animateMap(_battleGame->isBusy() == false);
 
 	blinkVisibleUnitButtons();
 	drawFuse();
 	flashMedic();
 	drawVisUnitTarget();
+
+	if (_isOverweight == true
+		&& RNG::seedless(0,3) > 2)
+	{
+		_overWeight->setVisible(!_overWeight->getVisible());
+	}
 }
 
 /**
@@ -3123,7 +3132,7 @@ void BattlescapeState::animate()
  * Some actions result in a change of gamestate.
  * @param item - pointer to BattleItem the user clicked on (righthand/lefthand)
  */
-void BattlescapeState::handleItemClick(BattleItem* item)
+void BattlescapeState::handleItemClick(BattleItem* const item) // private
 {
 	if (item != NULL						// make sure there is an item
 		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
@@ -3576,6 +3585,10 @@ void BattlescapeState::toggleIcons(bool vis)
 //	_txtControlDestroyed->setVisible(vis);
 	_txtMissionLabel->setVisible(vis);
 	_lstTileInfo->setVisible(vis);
+
+	_overWeight->setVisible(vis);
+	// no need for handling the kneel indicator i guess; do it anyway
+	_kneel->setVisible(vis);
 }
 
 /**

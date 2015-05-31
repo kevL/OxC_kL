@@ -116,14 +116,14 @@ Tile::~Tile()
 {
 	_inventory.clear();
 
-	for (std::list<Particle*>::const_iterator
+/*	for (std::list<Particle*>::const_iterator
 			i = _particles.begin();
 			i != _particles.end();
 			++i)
 	{
 		delete *i;
 	}
-	_particles.clear();
+	_particles.clear(); */
 }
 
 /**
@@ -541,20 +541,20 @@ int Tile::openDoor(
 
 /**
  * Closes a ufoDoor on this Tile.
- * @return, 1 if a door got closed
+ * @return, 1 if door got closed
  */
 int Tile::closeUfoDoor()
 {
 	int ret = 0;
 
 	for (size_t
-			part = 0;
-			part != PARTS;
-			++part)
+			i = 0;
+			i != PARTS;
+			++i)
 	{
-		if (isUfoDoorOpen(static_cast<int>(part)) == true)
+		if (isUfoDoorOpen(static_cast<int>(i)) == true)
 		{
-			_curFrame[part] = 0;
+			_curFrame[i] = 0;
 			ret = 1;
 		}
 	}
@@ -1233,11 +1233,12 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 }
 
 /**
- * Animate the tile - this means to advance the current frame for every part.
- * Ufo doors are a bit special; they animate only when triggered.
- * When ufo doors are on frame 0(closed) or frame 7(open) they are not animated further.
+ * Animate the tile.
+ * @note This means to advance the current frame for every part. Ufo doors are a
+ * bit special - they animate only when triggered. When ufo doors are on frame 0
+ * (closed) or frame 7 (open) they are not animated further.
  */
-void Tile::animate()
+void Tile::animateTile()
 {
 	int nextFrame;
 
@@ -1248,13 +1249,22 @@ void Tile::animate()
 	{
 		if (_objects[i] != NULL)
 		{
+			//const bool debug = _pos == Position(35,48,1) && i == 2;
+			//if (debug) Log(LOG_INFO) << "\n";
+			//if (debug) Log(LOG_INFO) << "Tile::animate()";
+
+			//if (debug) Log(LOG_INFO) << "part VALID = " << (int)i;
+			//if (debug) Log(LOG_INFO) << "curFrame = " << _curFrame[i];
+
 			const int isPsycho = _objects[i]->isPsychedelic();
 			if (isPsycho == 0)
 			{
+				//if (debug) Log(LOG_INFO) << ". isPsycho FALSE";
 				if (_objects[i]->isUFODoor() == true // ufo door is currently static
 					&& (   _curFrame[i] == 0
 						|| _curFrame[i] == 7))
 				{
+					//if (debug) Log(LOG_INFO) << ". . door is Static, continue, frame = " << _curFrame[i];
 					continue;
 				}
 
@@ -1264,31 +1274,35 @@ void Tile::animate()
 					&& _objects[i]->getSpecialType() == START_POINT
 					&& nextFrame == 3)
 				{
+					//if (debug) Log(LOG_INFO) << ". . door is on Frame 3, skip to Frame 7";
 					nextFrame = 7;
 				}
 
 				if (nextFrame == 8)
+				{
+					//if (debug) Log(LOG_INFO) << ". . door is on Frame 8, reset to Frame 0";
 					nextFrame = 0;
+				}
 
 				_curFrame[i] = nextFrame;
 			}
 			else
 			{
+				//if (debug) Log(LOG_INFO) << ". isPsycho TRUE";
 				if (isPsycho == 1)
 				{
-					if (std::rand() % 3 != 0)
-						_curFrame[i] = SDL_GetTicks() % 8;
+					if (RNG::seedless(0,2) != 0) //std::rand() % 3 != 0)
+						_curFrame[i] = RNG::seedless(0,7); //SDL_GetTicks() % 8;
 				}
-				else if (SDL_GetTicks() % 3 == 0) // isPsycho==2
-					_curFrame[i] = std::rand() % 8;
+				else if (RNG::seedless(0,2) == 0) //SDL_GetTicks() % 3 == 0) // isPsycho==2
+					_curFrame[i] = RNG::seedless(0,7); //std::rand() % 8;
 			}
 		}
 	}
 //	getMapData(MapData::O_WESTWALL)->getDataset()->getName() == "U_PODS"
 //	getMapData(MapData::O_WESTWALL)->getSprite(0) == 61
 
-
-	for (std::list<Particle*>::const_iterator
+/*	for (std::list<Particle*>::const_iterator
 			i = _particles.begin();
 			i != _particles.end();
 			)
@@ -1300,7 +1314,7 @@ void Tile::animate()
 		}
 		else
 			++i;
-	}
+	} */
 }
 
 /**
@@ -1594,18 +1608,18 @@ bool Tile::getDangerous() const
  * Adds a particle to this tile's internal storage buffer.
  * @param particle - pointer to a particle to add
  */
-void Tile::addParticle(Particle* particle)
+/* void Tile::addParticle(Particle* particle)
 {
 	_particles.push_back(particle);
-}
+} */
 
 /**
  * Gets a pointer to this tile's particle array.
  * @return, pointer to the internal array of particles
  */
-std::list<Particle*>* Tile::getParticleCloud()
+/* std::list<Particle*>* Tile::getParticleCloud()
 {
 	return &_particles;
-}
+} */
 
 }

@@ -71,6 +71,7 @@ private:
 		_iconsHidden,
 		_isMouseScrolled,
 		_isMouseScrolling,
+		_isOverweight,
 		_mouseOverIcons,
 		_mouseOverThreshold,
 		_showSoldierData;
@@ -194,7 +195,7 @@ private:
 		_mapOffsetBeforeDragScroll;
 
 	/// Popups a context sensitive list of actions the user can choose from.
-	void handleItemClick(BattleItem* item);
+	void handleItemClick(BattleItem* const item);
 
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();

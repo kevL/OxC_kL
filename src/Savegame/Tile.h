@@ -27,6 +27,7 @@
 #include "BattleUnit.h"
 
 #include "../Battlescape/Position.h"
+
 #include "../Ruleset/MapData.h"
 
 
@@ -36,7 +37,7 @@ namespace OpenXcom
 class BattleItem;
 class BattleUnit;
 class MapData;
-class Particle;
+//class Particle;
 class RuleInventory;
 class SavedBattleGame;
 class Surface;
@@ -82,7 +83,7 @@ protected:
 	Position _pos;
 
 	std::vector<BattleItem*> _inventory;
-	std::list<Particle*> _particles;
+//	std::list<Particle*> _particles;
 
 	/// Gets if this Tile will accept '_smoke' value.
 	bool canSmoke() const;
@@ -188,6 +189,7 @@ protected:
 		{	return _objects[part] != NULL
 				&& _objects[part]->isUFODoor() == true
 				&& _curFrame[part] != 0; }
+//				&& _curFrame[part] != 4; } // <- not sure if 4 is ever relevant. It's not, see Tile::animate()
 		/// Closes ufo door.
 		int closeUfoDoor();
 
@@ -264,7 +266,7 @@ protected:
 		void hitStuff(SavedBattleGame* const battleSave = NULL);
 
 		/// Animates the tile parts.
-		void animate();
+		void animateTile();
 		/// Gets fire and smoke animation offset.
 		int getAnimationOffset() const;
 
@@ -322,9 +324,9 @@ protected:
 		bool getDangerous() const;
 
 		/// Adds a particle to this tile's array.
-		void addParticle(Particle* particle);
+//		void addParticle(Particle* particle);
 		/// Gets a pointer to this tile's particle array.
-		std::list<Particle*>* getParticleCloud();
+//		std::list<Particle*>* getParticleCloud();
 };
 
 }

@@ -2685,7 +2685,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 40
-    intelligence: 5
+    intelligence: 4
     aggression: 1
     energyRecovery: 100
     specab: 1
@@ -3162,7 +3162,7 @@ units:
     value: 18
     deathSound: 9
     moveSound: 15
-    intelligence: 6
+    intelligence: 4
     aggression: 1
     energyRecovery: 100
   - type: STR_ETHEREAL_LEADER
@@ -3186,7 +3186,7 @@ units:
     value: 27
     deathSound: 9
     moveSound: 15
-    intelligence: 7
+    intelligence: 6
     aggression: 1
     energyRecovery: 100
   - type: STR_ETHEREAL_COMMANDER
@@ -3233,7 +3233,7 @@ units:
     kneelHeight: 16
     value: 27
     deathSound: 23
-    intelligence: 4
+    intelligence: 5
     aggression: 2
     energyRecovery: 100
     livingWeapon: true
@@ -3259,7 +3259,7 @@ units:
     kneelHeight: 18
     value: 15
     deathSound: 71
-    intelligence: 1
+    intelligence: 0
     aggression: 2
     energyRecovery: 40
     spawnUnit: STR_CHRYSSALID_TERRORIST

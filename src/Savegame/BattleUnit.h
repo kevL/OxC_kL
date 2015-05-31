@@ -479,14 +479,14 @@ private:
 	UnitStats _stats;
 
 	bool
-		_breathing,
+//		_breathing,
 		_floorAbove,
 		_hidingForTurn;
 //		_respawn;
 	int
 		_aggression,
 		_aggroSound,
-		_breathFrame,
+//		_breathFrame,
 		_deathSound,
 		_floatHeight,
 		_kneelHeight,
@@ -1065,9 +1065,9 @@ private:
 		bool hasInventory() const;
 
 		/// Gets if this unit is breathing and if so on what frame.
-		int getBreathFrame() const;
+//		int getBreathFrame() const;
 		/// Starts this unit breathing and/or updates its breathing frame.
-		void breathe();
+//		void breathe();
 
 		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
 		void setFloorAbove(const bool floorAbove);
