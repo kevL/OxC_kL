@@ -1515,6 +1515,7 @@ regions:
       - name: STR_BOSTON
         lon: 289.069
         lat: -42.4427
+        labelTop: true
         texture: -2
       - name: STR_CANCUN
         lon: 271.9

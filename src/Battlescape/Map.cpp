@@ -2698,7 +2698,9 @@ void Map::drawTerrain(Surface* surface) // private.
 															surface,
 															screenPosition.x + walkOffset.x + 21,
 															screenPosition.y + walkOffset.y + 5,
-															0);
+															0,
+															false,
+															12); // pinkish
 									}
 								}
 							} // kL_end.

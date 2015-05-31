@@ -2880,7 +2880,7 @@ void TileEngine::explode(
 							{
 								const int firePow = static_cast<int>(std::ceil(
 												   (static_cast<double>(_powerE) / static_cast<double>(power)) * 10.));
-								fireTile->addFire(firePow + fireTile->getFuel() + 1 / 2);
+								fireTile->addFire(firePow + fireTile->getFuel() + 2 / 3);
 								fireTile->addSmoke(std::max(
 														firePow + fireTile->getFuel(),
 														firePow + ((fireTile->getFlammability() + 9) / 10)));

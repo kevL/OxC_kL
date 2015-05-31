@@ -113,7 +113,7 @@ UfoDetectedState::UfoDetectedState(
 	_txtRegion		= new Text(114, 9, 122, 56);
 	_txtTexture		= new Text(114, 9, 122, 66);
 
-	_srfTarget		= new Surface(29, 29, 114, 70); // <- y-value needs adj.!
+	_srfTarget		= new Surface(29, 29, 114, 86);
 
 	if (_hyper == true)
 	{

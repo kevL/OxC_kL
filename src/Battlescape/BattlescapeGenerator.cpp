@@ -2285,6 +2285,11 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 			dir = RNG::generate(0,7);
 		unit->setDirection(dir);
 
+		int tu = unit->getTimeUnits();
+		tu = static_cast<int>(ceil(
+			 static_cast<double>(tu) * RNG::generate(0.,1.)));
+		unit->setTimeUnits(tu);
+
 		_battleSave->getUnits()->push_back(unit);
 	}
 	else

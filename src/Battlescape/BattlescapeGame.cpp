@@ -887,7 +887,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 											action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
-		if (action.type == BA_PANIC
+		if (   action.type == BA_PANIC
 			|| action.type == BA_MINDCONTROL)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
@@ -895,18 +895,22 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 			//Log(LOG_INFO) << ". . . success = " << success;
 			if (success == true)
 			{
-				std::string st;
-				if (action.type == BA_MINDCONTROL)
-					st = "STR_IS_UNDER_ALIEN_CONTROL";
-				else
-					st = "STR_MORALE_ATTACK_SUCCESSFUL";
-
 				const BattleUnit* const unit = _battleSave->getTile(action.target)->getUnit();
 				Game* const game = _parentState->getGame();
-				game->pushState(new InfoboxState(game->getLanguage()->getString(
-																			st,
-																			unit->getGender())
-																				.arg(unit->getName(game->getLanguage()))));
+				std::string st;
+				if (action.type == BA_MINDCONTROL)
+				{
+					st = "STR_IS_UNDER_ALIEN_CONTROL";
+					game->pushState(new InfoboxState(game->getLanguage()->getString(
+																				st,
+																				unit->getGender())
+																			.arg(unit->getName(game->getLanguage()))));
+				}
+				else
+				{
+					st = "STR_MORALE_ATTACK_SUCCESSFUL";
+					game->pushState(new InfoboxState(game->getLanguage()->getString(st)));
+				}
 			}
 			//Log(LOG_INFO) << ". . . done Psi.";
 		}

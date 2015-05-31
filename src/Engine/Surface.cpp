@@ -999,9 +999,10 @@ static inline void func(
 
 
 /**
- * Specific blit function to blit battlescape terrain data in different shades in a fast way.
- * Notice there is no surface locking here - you have to make sure you lock the surface yourself
- * at the start of blitting and unlock it when done.
+ * Specific blit function to blit battlescape terrain data in different shades
+ * in a fast way.
+ * @note There is no surface locking here - you have to make sure to lock the
+ * surface at the start of blitting and unlock it when done.
  * @param surface	- Surface to blit to
  * @param x			- X position of Surface blitted to
  * @param y			- Y position of Surface blitted to

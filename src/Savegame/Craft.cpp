@@ -1342,7 +1342,7 @@ int Craft::getDowntime(bool& delayed)
 /**
  * Adds a dogfight kill.
  */
-void Craft::addKill()
+void Craft::addKill() // <- cap this or do a log or an inverted exponential increase or ...
 {
 	++_kills;
 }
