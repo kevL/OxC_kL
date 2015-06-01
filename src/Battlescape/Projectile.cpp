@@ -140,22 +140,22 @@ Projectile::Projectile(
 //				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
 //			if (_vaporProbability == 5) // uhhh why.
 //				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
+
+			if (_bulletSprite == -1)
+			{
+				std::ostringstream oststr;
+				oststr << "WARNING: no bullet sprite";
+				if (_action.weapon != NULL)
+					oststr << " for " << _action.weapon->getRules()->getType().c_str();
+				if (_action.weapon->getAmmoItem() != NULL)
+					oststr << " w/ " << _action.weapon->getAmmoItem()->getRules()->getType().c_str();
+				Log(LOG_INFO) << oststr.str();
+			}
 		}
 	}
 
 	if (_speed < 1)
 		_speed = 1;
-
-	if (_bulletSprite == -1)
-	{
-		std::wostringstream woststr;
-		woststr << L"WARNING: no bullet sprite";
-		if (_action.weapon != NULL)
-			woststr << L" for " << _action.weapon->getRules()->getType().c_str();
-		if (_action.weapon->getAmmoItem() != NULL)
-			woststr << L" w/ " << _action.weapon->getAmmoItem()->getRules()->getType().c_str();
-		Log(LOG_INFO) << woststr.str().c_str();
-	}
 
 /*	NE	 0	reversed
 	ENE		reversed

@@ -111,7 +111,7 @@ private:
 			DIR_DOWN	=  9,
 			O_BIGWALL	= -1;
 
-		static int
+		static Uint8
 			red,
 			green,
 			yellow;
@@ -147,7 +147,6 @@ private:
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
 		bool isBlockedPath(
 				const Tile* const startTile,
-//				const Tile* endTile,
 				const int dir,
 				const BattleUnit* const missileTarget = NULL) const;
 
@@ -173,7 +172,6 @@ private:
 				const Position& startPos,
 				const int dir,
 				Position* destPos,
-//				BattleUnit* const unit,
 				const BattleUnit* const missileTarget = NULL,
 				bool missile = false);
 		/// Gets _totalTuCost; finds out whether we can hike somewhere in this turn or not.
@@ -182,7 +180,6 @@ private:
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
-//				const BattleUnit* const unit,
 				Position startPos,
 				int const dir);
 

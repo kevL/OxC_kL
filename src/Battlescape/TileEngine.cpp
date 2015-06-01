@@ -2276,7 +2276,8 @@ BattleUnit* TileEngine::hit(
 					&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 					&& attacker != NULL
 					&& attacker->getGeoscapeSoldier() != NULL
-					&& attacker->getFaction() == attacker->getOriginalFaction())
+					&& attacker->getFaction() == attacker->getOriginalFaction()
+					&& _battleSave->getBattleGame()->getPanicHandled() == true)
 				{
 					_battleSave->getBattleGame()->getCurrentAction()->takenXP = true;
 					attacker->addFiringExp();
@@ -3005,7 +3006,8 @@ void TileEngine::explode(
 								&& attacker->getGeoscapeSoldier() != NULL
 								&& attacker->getFaction() == attacker->getOriginalFaction()
 								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
-								&& dType != DT_SMOKE)
+								&& dType != DT_SMOKE
+								&& _battleSave->getBattleGame()->getPanicHandled() == true)
 							{
 								takenXP = true;
 

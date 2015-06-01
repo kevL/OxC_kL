@@ -286,9 +286,9 @@ void BattlescapeGame::statePushBack(BattleState* const battleState)
 
 /**
  * Removes the current state.
- * This is a very important function. It is called by a BattleState (walking,
- * projectile is flying, explosions, etc.) at the moment that state has
- * finished the current BattleAction. Here we check the result of that
+ * @note This is a very important function. It is called by a BattleState
+ * (walking, projectile is flying, explosions, etc.) at the moment that state
+ * has finished the current BattleAction. Here we check the result of that
  * BattleAction and do all the aftermath. The state is popped off the list.
  */
 void BattlescapeGame::popState()
@@ -700,7 +700,9 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 											unit,
 											NULL));
 	}
-	_battleSave->getPathfinding()->setPathingUnit(unit);
+//	_battleSave->getPathfinding()->setPathingUnit(unit);	// decided to do this in AI states;
+															// things might be changing the pathing
+															// unit or Pathfinding relevance .....
 
 	++_AIActionCounter;
 	if (_AIActionCounter == 1)
@@ -770,13 +772,15 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 //		ss << L"Walking to " << action.target;
 //		_parentState->debug(ss.str());
 
-		if (_battleSave->getTile(action.target) != NULL)
-			_battleSave->getPathfinding()->calculate(
-												action.actor,
-												action.target);
-//												_battleSave->getTile(action.target)->getUnit());
+		Pathfinding* const pf = _battleSave->getPathfinding();
+		pf->setPathingUnit(action.actor);
 
-		if (_battleSave->getPathfinding()->getStartDirection() != -1)
+		if (_battleSave->getTile(action.target) != NULL)
+			pf->calculate(
+						action.actor,
+						action.target);
+
+		if (pf->getStartDirection() != -1)
 			statePushBack(new UnitWalkBState(
 											this,
 											action));
@@ -2077,12 +2081,14 @@ bool BattlescapeGame::handlePanickingPlayer()
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
-	const UnitStatus status = unit->getStatus();
+	//Log(LOG_INFO) << "BattlescapeGame::handlePanickingUnit() " << unit->getId();
+//	const UnitStatus status = unit->getStatus();
+	UnitStatus status = unit->getStatus();
 
 	if (status == STATUS_PANICKING
 		|| status == STATUS_BERSERK)
 	{
-		//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
+		//Log(LOG_INFO) << "unit Panic/Berserk ID " << unit->getId() << " / " << unit->getMorale();
 		_parentState->getMap()->setCursorType(CT_NONE);
 		_battleSave->setSelectedUnit(unit);
 
@@ -2110,26 +2116,37 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 		BattleAction ba;
 		ba.actor = unit;
 
+		// TEST:
+		if (status == STATUS_PANICKING)
+			status = STATUS_BERSERK; // end_TEST.
+
 		switch (status)
 		{
 			case STATUS_PANICKING:
-				if (RNG::percent(50) == true) // 50:50 freeze or flee
+				if (RNG::percent(50) == true) // 50:50 flee or freeze
 				{
-					BattleItem* item = unit->getItem("STR_RIGHT_HAND");
-					if (item != NULL)
-						dropItem(
-								unit->getPosition(),
-								item,
-								false,
-								true);
+					BattleItem* item;
+					if (RNG::percent(75) == true)
+					{
+						item = unit->getItem("STR_RIGHT_HAND");
+						if (item != NULL)
+							dropItem(
+									unit->getPosition(),
+									item,
+									false,
+									true);
+					}
 
-					item = unit->getItem("STR_LEFT_HAND");
-					if (item != NULL)
-						dropItem(
-								unit->getPosition(),
-								item,
-								false,
-								true);
+					if (RNG::percent(75) == true)
+					{
+						item = unit->getItem("STR_LEFT_HAND");
+						if (item != NULL)
+							dropItem(
+									unit->getPosition(),
+									item,
+									false,
+									true);
+					}
 
 					unit->setCache(NULL);
 
@@ -2157,15 +2174,20 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 						if (_battleSave->getTile(ba.target) != NULL)
 						{
-							_battleSave->getPathfinding()->calculate(
-																ba.actor,
-																ba.target);
+							Pathfinding* const pf = _battleSave->getPathfinding();
+							pf->setPathingUnit(ba.actor);
+							pf->calculate(
+										ba.actor,
+										ba.target);
 
-							if (_battleSave->getPathfinding()->getStartDirection() != -1)
+							if (pf->getStartDirection() != -1)
 							{
 								statePushBack(new UnitWalkBState(
 																this,
 																ba));
+								// wait a sec, if there are two+ units doing panic-movement
+								// won't their paths need to be recalculated as their respective
+								// UnitWalkBStates get taken care of one after the next
 								break;
 							}
 						}
@@ -2175,9 +2197,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 			case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
 				ba.type = BA_TURN;	// towards an enemy unit or shoot towards random place
+
 				for (int
 						i = 0;
-						i != 4;
+						i != 5;
 						++i)
 				{
 					ba.target = Position(
@@ -2190,20 +2213,44 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 													false));
 				}
 
-				for (std::vector<BattleUnit*>::const_iterator
+/*				for (std::vector<BattleUnit*>::const_iterator
 						j = unit->getVisibleUnits()->begin();
 						j != unit->getVisibleUnits()->end();
 						++j)
 				{
+					//Log(LOG_INFO) << ". TARGET = visUnit = " << (*j)->getId();
 					ba.target = (*j)->getPosition(); // this should not attack a unit, but a random tile.
 					statePushBack(new UnitTurnBState(
 													this,
 													ba,
 													false));
-				}
+				} */ // so try this
+/*				const Position
+					originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
+																			*action,
+																			NULL),
+					targetVoxel = Position(
+										itX * 16 + 8,
+										itY * 16 + 8,
+										itZ * 24 + 2 - _battleSave->getTile(action->target)->getTerrainLevel()); */
 
+
+
+
+
+				const size_t mapSize = _battleSave->getMapSizeXYZ();
+				const int pick = RNG::generate(
+											0,
+											static_cast<int>(mapSize) - 1);
+				Tile* const targetTile = _battleSave->getTiles()[pick];
+				ba.target = targetTile->getPosition();
 				if (_battleSave->getTile(ba.target) != NULL)
 				{
+					statePushBack(new UnitTurnBState(
+													this,
+													ba,
+													false));
+
 					ba.weapon = unit->getMainHandWeapon();
 					if (ba.weapon == NULL)				// kL, this works.
 						ba.weapon = unit->getGrenade();	// kL
@@ -2217,6 +2264,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 					{
 						if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 						{
+							ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 							ba.type = BA_SNAPSHOT;
 							const int tu = ba.actor->getActionTUs(
 																ba.type,
@@ -2237,9 +2285,11 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 						}
 						else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 						{
+							Log(LOG_INFO) << "berserk Grenade";
 							if (ba.weapon->getFuseTimer() == -1)
 								ba.weapon->setFuseTimer(0);
 
+							ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 							ba.type = BA_THROW;
 							statePushBack(new ProjectileFlyBState(
 																this,
@@ -2254,8 +2304,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 		statePushBack(new UnitPanicBState( // Time units can only be reset after everything else occurs
 										this,
-										ba.actor));
-		unit->moraleChange(+15);
+										unit));
+		unit->moraleChange(10 + RNG::generate(0,10));
 
 		return true;
 	}
@@ -2270,8 +2320,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
-	if (_battleSave->getPathfinding()->removePreview() == true
-		&& Options::battleNewPreviewPath != PATH_NONE)
+	if (Options::battleNewPreviewPath != PATH_NONE
+		&& _battleSave->getPathfinding()->removePreview() == true)
 	{
 		return true;
 	}
@@ -2593,6 +2643,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		else if (playableUnitSelected() == true)
 		{
 			Pathfinding* const pf = _battleSave->getPathfinding();
+			pf->setPathingUnit(_currentAction.actor);
+
 			const bool
 				modifCTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
 				modifALT = (SDL_GetModState() & KMOD_ALT) != 0,
@@ -2700,7 +2752,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 							_currentAction.actor,
 							_currentAction.target);
 
-
 				if (pf->getStartDirection() != -1)
 				{
 					if (allowPreview == true
@@ -2799,7 +2850,7 @@ void BattlescapeGame::psiButtonAction()
  * @param dir	- direction DIR_UP or DIR_DOWN
  */
 void BattlescapeGame::moveUpDown(
-		BattleUnit* unit,
+		const BattleUnit* const unit,
 		int dir)
 {
 	_currentAction.target = unit->getPosition();
@@ -2817,21 +2868,11 @@ void BattlescapeGame::moveUpDown(
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
 
-/*	_currentAction.strafe = false; // redundancy checks ......
-	_currentAction.dash = false;
-	_currentAction.actor->setDashing(false);
-
-	if (Options::strafe == true
-		&& (SDL_GetModState() & KMOD_CTRL) != 0
-		&& unit->getGeoscapeSoldier() != NULL)
-	{
-		_currentAction.dash = true;
-		_currentAction.actor->setDashing(true);
-	} */
-
-	_battleSave->getPathfinding()->calculate(
-										_currentAction.actor,
-										_currentAction.target);
+	Pathfinding* const pf = _battleSave->getPathfinding();
+//	pf->setPathingUnit(_currentAction.actor); // set in BattlescapeState::btnUnitUp/DownClick()
+	pf->calculate(
+				_currentAction.actor,
+				_currentAction.target);
 
 	statePushBack(new UnitWalkBState(
 								this,
@@ -3565,7 +3606,6 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 								//Log(LOG_INFO) << "dir = " << dir;
 								if (_battleSave->getPathfinding()->isBlockedPath(
 																			_battleSave->getTile(unit->getPosition() + Position(x,y,0)),
-//																			NULL,
 																			dir,
 																			unit) == false)	// kL try passing in OBJECT_SELF as a missile target to kludge for closed doors.
 								{															// there *might* be a problem if the Proxy is on a non-walkable tile ....

@@ -59,7 +59,7 @@ namespace OpenXcom
  */
 UnitWalkBState::UnitWalkBState(
 		BattlescapeGame* parent,
-		BattleAction action)
+		BattleAction action) // these BattleActions had better be assignments/copies ... not references.
 	:
 		BattleState(
 			parent,
@@ -92,8 +92,12 @@ UnitWalkBState::~UnitWalkBState()
 void UnitWalkBState::init()
 {
 //	_unit = _action.actor;
+
 	//Log(LOG_INFO) << "\nUnitWalkBState::init() unitID = " << _unit->getId();
+
 //	_pf = _parent->getPathfinding();
+	_pf->setPathingUnit(_unit);
+
 //	_terrain = _parent->getTileEngine();
 //	_walkCam = _parent->getMap()->getCamera();
 
@@ -410,11 +414,10 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". getTUCostPath() & dest";
 		Position dest;
 		int
-			tuCost = _pf->getTUCostPath( // gets tu cost, but also sets the destination position.
+			tuCost = _pf->getTUCostPath( // gets tu cost but also sets the destination position.
 									_unit->getPosition(),
 									dir,
 									&dest),
-//									_unit),
 			tuTest,
 			staCost;
 		//Log(LOG_INFO) << ". tuCost = " << tuCost;

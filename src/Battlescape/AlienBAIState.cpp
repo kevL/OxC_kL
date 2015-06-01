@@ -212,7 +212,8 @@ void AlienBAIState::think(BattleAction* action)
 	_blaster = false;
 	_grenade = false; // kL
 
-	Pathfinding* pf = _battleSave->getPathfinding();
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
 	_reachable = pf->findReachable(
 								_unit,
 								_unit->getTimeUnits());
@@ -593,7 +594,8 @@ void AlienBAIState::setupPatrol()
 	Node* node;
 	const MapData* data;
 	bool scout;
-	Pathfinding* pf = _battleSave->getPathfinding();
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
 
 	int triesLeft = 5;
 	while (_toNode == NULL
@@ -623,11 +625,11 @@ void AlienBAIState::setupPatrol()
 			}
 			else
 				scout = false; */
-			if (   _fromNode != NULL
+			if (_fromNode != NULL
 				&& _fromNode->getNodeRank() != NR_SCOUT
-				&& (   _battleSave->getTile(_unit->getPosition()) == NULL // <- shouldn't be necessary.
+				&& (_battleSave->getTile(_unit->getPosition()) == NULL // <- shouldn't be necessary.
 					|| _battleSave->getTile(_unit->getPosition())->getFire() == 0)
-				&& (   _battleSave->isCheating() == false
+				&& (_battleSave->isCheating() == false
 					|| RNG::percent(_unit->getAggression() * 25) == false)) // kL
 			{
 				scout = false;
@@ -754,10 +756,11 @@ void AlienBAIState::setupPatrol()
 
 /**
  * Try to set up an ambush action.
- * The idea is to check within a 11x11 tile square for a tile which is not seen by
- * the aggroTarget but that can be reached by him/her. Then intuit where AI will
- * see that target first from a covered position and set that as the final facing.
- * Also fills out '_ambushAction' with useful data.
+ * @note The idea is to check within a 11x11 tile square for a tile which is not
+ * seen by the aggroTarget but that can be reached by him/her. Then intuit where
+ * AI will see that target first from a covered position and set that as the
+ * final facing.
+ * @note Also fills out '_ambushAction' with useful data.
  */
 void AlienBAIState::setupAmbush()
 {
@@ -779,7 +782,7 @@ void AlienBAIState::setupAmbush()
 			pos;
 		const Tile* tile;
 		int bestScore = 0;
-		Pathfinding* pf = _battleSave->getPathfinding();
+		Pathfinding* const pf = _battleSave->getPathfinding();
 
 		for (std::vector<Node*>::const_iterator			// use node positions for this since it gives map makers a good
 				i = _battleSave->getNodes()->begin();	// degree of control over how the units will use the environment.
@@ -805,19 +808,20 @@ void AlienBAIState::setupAmbush()
 
 /*			if (_traceAI) // colour all the nodes in range purple.
 			{
-				tile->setPreview(10);
+				tile->setPreviewDir(10);
 				tile->setMarkerColor(13);
 			} */
 
-			if (countSpottingUnits(pos) == 0										// make sure Unit can't be seen here.
-				&& _battleSave->getTileEngine()->canTargetUnit(
+			if (countSpottingUnits(pos) == 0
+				&& _battleSave->getTileEngine()->canTargetUnit( // make sure Unit can't be seen here.
 															&origin,
 															tile,
 															&target,
 															_aggroTarget,
 															_unit) == false)
 			{
-				pf->calculate(														// make sure Unit can move here
+				pf->setPathingUnit(_unit);
+				pf->calculate( // make sure Unit can move here
 							_unit,
 							pos);
 
@@ -825,12 +829,13 @@ void AlienBAIState::setupAmbush()
 
 				if (pf->getStartDirection() != -1)
 //					&& ambushTUs <= _unit->getTimeUnits()
-//					- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))		// make sure Unit can still shoot
+//					- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon)) // make sure Unit can still shoot
 				{
 					int score = BASE_SYSTEMATIC_SUCCESS;
 					score -= ambushTUs;
 
-					pf->calculate(													// make sure Unit's target can reach here too.
+					pf->setPathingUnit(_aggroTarget);
+					pf->calculate( // make sure Unit's target can reach here too.
 								_aggroTarget,
 								pos);
 
@@ -841,7 +846,7 @@ void AlienBAIState::setupAmbush()
 
 						if (score > bestScore)
 						{
-							path = pf->copyPath();
+							path = pf->copyPath(); // note this is copying the aggroTarget's path
 
 							_ambushAction->target = pos;
 							if (pos == _unit->getPosition())
@@ -862,7 +867,7 @@ void AlienBAIState::setupAmbush()
 		{
 			_ambushAction->type = BA_WALK;
 
-			origin = _ambushAction->target * Position(16,16,24) // i should really make a function for this
+			origin = _ambushAction->target * Position(16,16,24) // i should really make a function for this. But you didn't. gratz.
 				   + Position(
 							8,8,
 							_unit->getHeight() + _unit->getFloatHeight()
@@ -873,7 +878,7 @@ void AlienBAIState::setupAmbush()
 			Position nextPos;
 
 			size_t tries = path.size();
-			while (tries > 0) // hypothetically walk the target through the path.
+			while (tries > 0) // hypothetically walk the aggroTarget through the path.
 			{
 				--tries;
 
@@ -881,7 +886,6 @@ void AlienBAIState::setupAmbush()
 								pos,
 								path.back(),
 								&nextPos);
-//								_aggroTarget);
 				path.pop_back();
 				pos = nextPos;
 
@@ -1058,7 +1062,8 @@ void AlienBAIState::setupEscape()
 
 	Position bestTile(0,0,0);
 	const Tile* tile;
-	Pathfinding* pf = _battleSave->getPathfinding();
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
 
 	std::vector<Position> tileSearch = _battleSave->getTileSearch();
 	RNG::shuffle(tileSearch);
@@ -1162,7 +1167,7 @@ void AlienBAIState::setupEscape()
 /*			if (_traceAI)
 			{
 				tile->setMarkerColor(tileScore < 0? 3: (tileScore < FAST_PASS_THRESHOLD / 2? 8: (tileScore < FAST_PASS_THRESHOLD? 9: 5)));
-				tile->setPreview(10);
+				tile->setPreviewDir(10);
 				tile->setTUMarker(tileScore);
 			} */
 		}
@@ -1190,7 +1195,7 @@ void AlienBAIState::setupEscape()
 /*				if (_traceAI)
 				{
 					tile->setMarkerColor(tileScore < 0? 7:(tileScore < FAST_PASS_THRESHOLD / 2? 10:(tileScore < FAST_PASS_THRESHOLD? 4:5)));
-					tile->setPreview(10);
+					tile->setPreviewDir(10);
 					tile->setTUMarker(tileScore);
 				} */
 			}
@@ -1464,7 +1469,8 @@ bool AlienBAIState::selectPointNearTarget(
 		unitSize = _unit->getArmor()->getSize(),
 		targetSize = target->getArmor()->getSize();
 	size_t dist = 1000;
-	Pathfinding* pf = _battleSave->getPathfinding();
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
 
 	for (int
 			z = -1;
@@ -1851,7 +1857,8 @@ bool AlienBAIState::findFirePoint()
 	int
 		bestTileScore = 0,
 		tileScore;
-	Pathfinding* pf = _battleSave->getPathfinding();
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
 
 	for (std::vector<Position>::const_iterator
 			i = tileSearch.begin();
@@ -2164,8 +2171,7 @@ void AlienBAIState::meleeAction()
 }
 
 /**
- * Attempts to fire a waypoint projectile at an enemy that is seen by any aLien.
- * Waypoint targeting: pick from any units currently spotted by the aLiens.
+ * Attempts to trace a waypoint projectile to an enemy that is known by any aLien.
  */
 void AlienBAIState::wayPointAction()
 {
@@ -2178,7 +2184,9 @@ void AlienBAIState::wayPointAction()
 
 	if (_unit->getTimeUnits() >= _attackAction->TU)
 	{
-		Pathfinding* pf = _battleSave->getPathfinding();
+		Pathfinding* const pf = _battleSave->getPathfinding();
+		pf->setPathingUnit(_unit); // jic.
+
 		std::vector<BattleUnit*> targets;
 //		const int explRadius = _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getExplosionRadius();
 		const int explRadius = _attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius();
@@ -2247,7 +2255,8 @@ bool AlienBAIState::pathWaypoints() // private.
 	//Log(LOG_INFO) << "AlienBAIState::pathWaypoints() vs ID " << _aggroTarget->getId() << " pos " << _aggroTarget->getPosition();
 	//Log(LOG_INFO) << ". actor ID " << _unit->getId() << " pos " << _unit->getPosition();
 
-	Pathfinding* pf = _battleSave->getPathfinding();
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
 	pf->calculate(
 				_unit,
 				_aggroTarget->getPosition(),
@@ -2880,7 +2889,8 @@ void AlienBAIState::selectMeleeOrRanged()
 			const int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
 																		BA_HIT,
 																		meleeWeapon);
-			Pathfinding* pf = _battleSave->getPathfinding();
+			Pathfinding* const pf = _battleSave->getPathfinding();
+			pf->setPathingUnit(_unit);
 			_reachableWithAttack = pf->findReachable(
 													_unit,
 													preShotTU);

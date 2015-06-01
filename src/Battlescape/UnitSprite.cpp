@@ -53,22 +53,22 @@ namespace OpenXcom
  * @param x			- X position in pixels
  * @param y			- Y position in pixels
  * @param helmet	- true if unit is wearing a helmet (TFTD)
- * @param moveType	- the MovementType ()
+// * @param moveType	- the MovementType (MapData.h)
  */
 UnitSprite::UnitSprite(
 		int width,
 		int height,
 		int x,
 		int y,
-		bool helmet,
-		MovementType moveType)
+		bool helmet)
+//		MovementType moveType)
 	:
 		Surface(
 			width,
 			height,
 			x,y),
 		_helmet(helmet),
-		_moveType(moveType),
+//		_moveType(moveType),
 		_unit(NULL),
 		_itemA(NULL),
 		_itemB(NULL),
@@ -470,8 +470,8 @@ void UnitSprite::drawRoutine0()
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
 		}
 		else if (_unit->isFloating() == true
-//			&& _unit->getMoveTypeUnit() == MT_FLY)
-			&& _moveType == MT_FLY) // kL, try it.
+			&& _unit->getMoveTypeUnit() == MT_FLY)
+//			&& _moveType == MT_FLY) // kL, try it. Nope, try floating next time .......
 		{
 //			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + unitDir);

@@ -728,7 +728,7 @@ private:
 		/// Gets whether this unit is visible.
 		bool getUnitVisible() const;
 		/// Adds unit to visible units.
-		void addToVisibleUnits(BattleUnit* unit);
+		void addToVisibleUnits(BattleUnit* const unit);
 //		bool addToVisibleUnits(BattleUnit* unit);
 		/// Gets the list of visible units.
 		std::vector<BattleUnit*>* getVisibleUnits();

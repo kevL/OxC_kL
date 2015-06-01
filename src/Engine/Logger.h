@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_LOGGER_H
 #define OPENXCOM_LOGGER_H
 
-#include <sstream>
-#include <string>
-#include <stdio.h>
+//#include <sstream>
+//#include <string>
+//#include <stdio.h>
 
 #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
@@ -58,70 +58,78 @@ enum SeverityLevel
 };
 
 /**
- * A basic logging and debugging class, prints output to stdout/files
- * and can capture stack traces of fatal errors too.
- * @note Wasn't really satisfied with any of the libraries around
- * so I rolled my own. Based on http://www.drdobbs.com/cpp/logging-in-c/201804215
+ * A basic logging and debugging class.
+ * @note Prints output to stdout/files and can capture stack traces of fatal
+ * errors too. Wasn't really satisfied with any of the libraries around so I
+ * rolled my own. Based on http://www.drdobbs.com/cpp/logging-in-c/201804215
  */
 class Logger
 {
+
 private:
-	Logger (const Logger&);
+	///
+	Logger(const Logger&);
+	///
 	Logger& operator= (const Logger&);
 
 
 	protected:
-		std::ostringstream os;
+		std::ostringstream _oststr;
 
 
 		public:
+			///
 			Logger();
+			///
 			virtual ~Logger();
 
+			///
 			std::ostringstream& get(SeverityLevel level = LOG_INFO);
 
+			///
 			static SeverityLevel& reportingLevel();
+			///
 			static std::string& logFile();
+			///
 			static std::string toString(SeverityLevel level);
 };
 
 
 ///
 inline Logger::Logger()
-{
-}
+{}
 
 ///
 inline std::ostringstream& Logger::get(SeverityLevel level)
 {
-	os << "[" << toString(level) << "]" << "\t";
-	return os;
+	_oststr << "[" << toString(level) << "]" << "\t";
+	return _oststr;
 }
 
 ///
 inline Logger::~Logger()
 {
-	os << std::endl;
+	_oststr << std::endl;
 	if (reportingLevel() == LOG_DEBUG)
 	{
-		fprintf(
-			stderr,
-			"%s",
-			os.str().c_str());
+		std::fprintf(
+					stderr,
+					"%s",
+					_oststr.str().c_str());
 
-		fflush(stderr);
+		std::fflush(stderr);
 	}
 
-	std::ostringstream ss;
-	ss << "[" << now() << "]" << "\t" << os.str();
-	FILE* file = fopen(logFile().c_str(), "a");
-	fprintf(
-		file,
-		"%s",
-		ss.str().c_str());
+	std::ostringstream oststr;
+	oststr << "[" << now() << "]" << "\t" << _oststr.str();
+	FILE* file = std::fopen(logFile().c_str(), "a");
+	std::fprintf(
+				file,
+				"%s",
+				oststr.str().c_str());
 
-	fflush(file);
-	fclose(file);
+	std::fflush(file);
+	std::fclose(file);
 }
 
 ///
@@ -165,12 +173,11 @@ inline std::string now()
 #ifdef _WIN32
 	char
 		date[MAX_LEN],
-		time[MAX_LEN];
+		tyme[MAX_LEN];
 
 	if (GetDateFormatA(
 					LOCALE_INVARIANT,
-					0,
-					0,
+					0,0,
 					"dd'-'MM'-'yyyy",
 					date,
 					MAX_LEN) == 0)
@@ -183,31 +190,34 @@ inline std::string now()
 					TIME_FORCE24HOURFORMAT,
 					0,
 					"HH':'mm':'ss",
-					time,
+					tyme,
 					MAX_LEN) == 0)
 	{
 		return "Error in Now()";
 	}
 
 	char result[MAX_RESULT] = {0};
-	sprintf(
-			result,
-			"%s %s",
-			date,
-			time);
+	std::sprintf(
+				result,
+				"%s %s",
+				date,
+				tyme);
 #else
 	char buffer[MAX_LEN];
 	time_t rawtime;
 	struct tm* timeinfo;
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-	strftime(
-			buffer,
-			MAX_LEN,
-			"%d-%m-%Y %H:%M:%S",
-			timeinfo);
+	std::time(&rawtime);
+	timeinfo = std::localtime(&rawtime);
+	std::strftime(
+				buffer,
+				MAX_LEN,
+				"%d-%m-%Y %H:%M:%S",
+				timeinfo);
 	char result[MAX_RESULT] = {0};
-	sprintf(result, "%s", buffer);
+	std::sprintf(
+				result,
+				"%s",
+				buffer);
 #endif
 
 	return result;

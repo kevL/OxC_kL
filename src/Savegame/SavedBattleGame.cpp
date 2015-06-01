@@ -2211,94 +2211,94 @@ bool SavedBattleGame::setUnitPosition(
 		const Position& pos,
 		bool test)
 {
-	if (unit == NULL)
-		return false;
-
-	const int unitSize = unit->getArmor()->getSize() - 1;
-	for (int // first check if the tiles are occupied
-			x = unitSize;
-			x != -1;
-			--x)
-	{
-		for (int
-				y = unitSize;
-				y != -1;
-				--y)
-		{
-			const Tile
-				* const tile = getTile(pos + Position(x,y,0)),
-				* const tileBelow = getTile(pos + Position(x,y,-1)),
-				* const tileAbove = getTile(pos + Position(x,y, 1));
-
-			if (tile == NULL
-				|| (tile->getUnit() != NULL
-					&& tile->getUnit() != unit)
-				|| tile->getTUCostTile(
-									MapData::O_OBJECT,
-									unit->getMoveTypeUnit()) == 255
-//									_pathfinding->getMoveTypePathing()) == 255 // <- crashes baseEquip
-				|| (tile->hasNoFloor(tileBelow) == true
-//					&& unit->getMoveTypeUnit() != MT_FLY)
-					&& _pathfinding->getMoveTypePathing() != MT_FLY)
-				|| (tile->getMapData(MapData::O_OBJECT) != NULL
-					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
-					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
-				|| (tileAbove != NULL
-					&& tileAbove->getUnit() != NULL
-					&& tileAbove->getUnit() != unit
-					&& unit->getHeight(true) - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.
-				// note: no check for ceilings yet ....
-			{
-				return false;
-			}
-		}
-	}
-
-	if (unitSize != 0)
+	if (unit != NULL)
 	{
 		_pathfinding->setPathingUnit(unit);
-		for (int
-				dir = 2;
-				dir != 5;
-				++dir)
+
+		const int unitSize = unit->getArmor()->getSize() - 1;
+		for (int // first check if the tiles are occupied
+				x = unitSize;
+				x != -1;
+				--x)
 		{
-			if (_pathfinding->isBlockedPath(
-										getTile(pos),
-//										NULL,
-										dir) == true)
+			for (int
+					y = unitSize;
+					y != -1;
+					--y)
 			{
-				return false;
+				const Tile
+					* const tile = getTile(pos + Position(x,y,0)),
+					* const tileBelow = getTile(pos + Position(x,y,-1)),
+					* const tileAbove = getTile(pos + Position(x,y, 1));
+
+				if (tile == NULL
+					|| (tile->getUnit() != NULL
+						&& tile->getUnit() != unit)
+					|| tile->getTUCostTile(
+										MapData::O_OBJECT,
+										unit->getMoveTypeUnit()) == 255
+					|| (tile->hasNoFloor(tileBelow) == true
+						&& _pathfinding->getMoveTypePathing() != MT_FLY)
+					|| (tile->getMapData(MapData::O_OBJECT) != NULL
+						&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
+						&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
+					|| (tileAbove != NULL
+						&& tileAbove->getUnit() != NULL
+						&& tileAbove->getUnit() != unit
+						&& unit->getHeight(true) - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.
+					// note: no check for ceilings yet ....
+				{
+					return false;
+				}
 			}
 		}
-	}
 
-	if (test == true)
+		if (unitSize != 0)
+		{
+			for (int
+					dir = 2;
+					dir != 5;
+					++dir)
+			{
+				if (_pathfinding->isBlockedPath(
+											getTile(pos),
+											dir) == true)
+				{
+					return false;
+				}
+			}
+		}
+
+		if (test == true)
+			return true;
+
+
+		for (int // set the unit in position
+				x = unitSize;
+				x != -1;
+				--x)
+		{
+			for (int
+					y = unitSize;
+					y != -1;
+					--y)
+			{
+				if (   x == 0
+					&& y == 0)
+				{
+					unit->setPosition(pos);
+				}
+
+				getTile(pos + Position(x,y,0))->setUnit(
+													unit,
+													getTile(pos + Position(x,y,-1)));
+			}
+		}
+
 		return true;
-
-
-	for (int // set the unit in position
-			x = unitSize;
-			x != -1;
-			--x)
-	{
-		for (int
-				y = unitSize;
-				y != -1;
-				--y)
-		{
-			if (x == 0 && y == 0)
-			{
-				unit->setPosition(pos);
-//				unit->setTile(getTile(pos), getTile(pos - Position(0,0,1)));
-			}
-
-			getTile(pos + Position(x,y,0))->setUnit(
-												unit,
-												getTile(pos + Position(x,y,-1)));
-		}
 	}
 
-	return true;
+	return false;
 }
 
 /**
@@ -2338,7 +2338,6 @@ bool SavedBattleGame::placeUnitNearPosition(
 		if (tile != NULL
 			&& getPathfinding()->isBlockedPath(
 											getTile(pos),
-//											tile,
 											i) == false
 			&& setUnitPosition(
 							unit,

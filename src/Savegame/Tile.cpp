@@ -1515,24 +1515,6 @@ std::vector<BattleItem*>* Tile::getInventory()
 }
 
 /**
- * Sets the marker color on this tile.
- * @param color - color of marker
- */
-void Tile::setMarkerColor(int color)
-{
-	_markerColor = color;
-}
-
-/**
- * Gets the marker color on this tile.
- * @return, color of marker
- */
-int Tile::getMarkerColor() const
-{
-	return _markerColor;
-}
-
-/**
  * Sets the tile visible flag.
  * @param vis - true if visible (default true)
  */
@@ -1551,19 +1533,19 @@ bool Tile::getTileVisible() const
 }
 
 /**
- * Sets a direction used for path previewing.
+ * Sets the direction of path preview arrows.
  * @param dir - a direction
  */
-void Tile::setPreview(int dir)
+void Tile::setPreviewDir(int dir)
 {
 	_preview = dir;
 }
 
 /**
- * Gets the preview-direction stored by pathfinding.
+ * Gets the direction of path preview arrows.
  * @return, preview direction
  */
-int Tile::getPreview() const
+int Tile::getPreviewDir() const
 {
 	return _preview;
 }
@@ -1584,6 +1566,24 @@ void Tile::setTUMarker(int tu)
 int Tile::getTUMarker() const
 {
 	return _tuMarker;
+}
+
+/**
+ * Sets the marker color on this tile.
+ * @param color - color of marker
+ */
+void Tile::setMarkerColor(Uint8 color)
+{
+	_markerColor = color;
+}
+
+/**
+ * Gets the marker color on this tile.
+ * @return, color of marker
+ */
+int Tile::getMarkerColor() const
+{
+	return static_cast<int>(_markerColor);
 }
 
 /**

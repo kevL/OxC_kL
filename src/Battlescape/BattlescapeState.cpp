@@ -311,10 +311,9 @@ BattlescapeState::BattlescapeState()
 	if (_rules->getInterface("battlescape")->getElement("pathfinding"))
 	{
 		const Element* const pathing = _rules->getInterface("battlescape")->getElement("pathfinding");
-
-		Pathfinding::green = pathing->color;
-		Pathfinding::yellow = pathing->color2;
-		Pathfinding::red = pathing->border;
+		Pathfinding::green = static_cast<Uint8>(pathing->color);
+		Pathfinding::yellow = static_cast<Uint8>(pathing->color2);
+		Pathfinding::red = static_cast<Uint8>(pathing->border);
 	}
 
 	add(_map);
@@ -1753,27 +1752,26 @@ inline void BattlescapeState::handle(Action* action)
  */
 void BattlescapeState::btnUnitUpClick(Action*)
 {
-	if (playableUnitSelected() == false)
-		return;
-
-	_battleSave->getPathfinding()->setPathingUnit(_battleSave->getSelectedUnit());
-
-	const int valid = _battleSave->getPathfinding()->validateUpDown(
-//																_battleSave->getSelectedUnit(),
-																_battleSave->getSelectedUnit()->getPosition(),
-																Pathfinding::DIR_UP);
-
-	if (valid > 0) // gravLift or flying
+	if (playableUnitSelected() == true)
 	{
-		_battleGame->cancelCurrentAction();
-		_battleGame->moveUpDown(
-							_battleSave->getSelectedUnit(),
-							Pathfinding::DIR_UP);
+		Pathfinding* const pf = _battleSave->getPathfinding();
+		pf->setPathingUnit(_battleSave->getSelectedUnit());
+		const int valid = pf->validateUpDown(
+										_battleSave->getSelectedUnit()->getPosition(),
+										Pathfinding::DIR_UP);
+
+		if (valid > 0) // gravLift or flying
+		{
+			_battleGame->cancelCurrentAction();
+			_battleGame->moveUpDown(
+								_battleSave->getSelectedUnit(),
+								Pathfinding::DIR_UP);
+		}
+		else if (valid == -1) // no flight suit
+			warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
+		else // valid==0 -> blocked by roof
+			warning("STR_ACTION_NOT_ALLOWED_ROOF");
 	}
-	else if (valid == -1) // no flight suit
-		warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
-	else // valid==0 -> blocked by roof
-		warning("STR_ACTION_NOT_ALLOWED_ROOF");
 }
 
 /**
@@ -1782,25 +1780,24 @@ void BattlescapeState::btnUnitUpClick(Action*)
  */
 void BattlescapeState::btnUnitDownClick(Action*)
 {
-	if (playableUnitSelected() == false)
-		return;
-
-	_battleSave->getPathfinding()->setPathingUnit(_battleSave->getSelectedUnit());
-
-	const int valid = _battleSave->getPathfinding()->validateUpDown(
-//																_battleSave->getSelectedUnit(),
-																_battleSave->getSelectedUnit()->getPosition(),
-																Pathfinding::DIR_DOWN);
-
-	if (valid > 0) // gravLift or flying
+	if (playableUnitSelected() == true)
 	{
-		_battleGame->cancelCurrentAction();
-		_battleGame->moveUpDown(
-							_battleSave->getSelectedUnit(),
-							Pathfinding::DIR_DOWN);
+		Pathfinding* const pf = _battleSave->getPathfinding();
+		pf->setPathingUnit(_battleSave->getSelectedUnit());
+		const int valid = pf->validateUpDown(
+										_battleSave->getSelectedUnit()->getPosition(),
+										Pathfinding::DIR_DOWN);
+
+		if (valid > 0) // gravLift or flying
+		{
+			_battleGame->cancelCurrentAction();
+			_battleGame->moveUpDown(
+								_battleSave->getSelectedUnit(),
+								Pathfinding::DIR_DOWN);
+		}
+		else // blocked, floor
+			warning("STR_ACTION_NOT_ALLOWED_FLOOR");
 	}
-	else // blocked, floor
-		warning("STR_ACTION_NOT_ALLOWED_FLOOR");
 }
 
 /**
@@ -1881,13 +1878,15 @@ void BattlescapeState::btnKneelClick(Action*)
 					// no, no it won't.
 				_battleGame->getTileEngine()->checkReactionFire(unit); // kL
 
-				if (_battleGame->getPathfinding()->isPathPreviewed() == true)
+				Pathfinding* const pf = _battleGame->getPathfinding();
+				if (pf->isPathPreviewed() == true)
 				{
-					_battleGame->getPathfinding()->calculate(
-														_battleGame->getCurrentAction()->actor,
-														_battleGame->getCurrentAction()->target);
-					_battleGame->getPathfinding()->removePreview();
-					_battleGame->getPathfinding()->previewPath();
+					pf->setPathingUnit(_battleGame->getCurrentAction()->actor);
+					pf->calculate(
+								_battleGame->getCurrentAction()->actor,
+								_battleGame->getCurrentAction()->target);
+					pf->removePreview();
+					pf->previewPath();
 				}
 			}
 		}

@@ -358,9 +358,11 @@ void CivilianBAIState::setupEscape()
 	const Tile* tile;
 	Position bestTilePos(0,0,0);
 
-	std::vector<int> reachable = _battleSave->getPathfinding()->findReachable(
-																		_unit,
-																		tu);
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
+	std::vector<int> reachable = pf->findReachable(
+												_unit,
+												tu);
 
 	std::vector<Position> randomTileSearch = _battleSave->getTileSearch();
 	RNG::shuffle(randomTileSearch);
@@ -458,7 +460,7 @@ void CivilianBAIState::setupEscape()
 //			if (_traceAI)
 //			{
 //				tile->setMarkerColor(score < 0? 3: (score < FAST_PASS_THRESHOLD/2? 8: (score < FAST_PASS_THRESHOLD ?9: 5)));
-//				tile->setPreview(10);
+//				tile->setPreviewDir(10);
 //				tile->setTUMarker(score);
 //			}
 		}
@@ -467,19 +469,19 @@ void CivilianBAIState::setupEscape()
 			&& score > bestTileScore)
 		{
 			// calculate TUs to tile;
-			// we could be getting this from findReachable() somehow but that would break something for sure...
-			_battleSave->getPathfinding()->calculate(
-												_unit,
-												_escapeAction->target,
-												NULL,
-												tu);
+			// could be getting this from findReachable() somehow but that would break something for sure...
+			pf->calculate(
+						_unit,
+						_escapeAction->target,
+						NULL,
+						tu);
 
 			if (_escapeAction->target == _unit->getPosition()
-				|| _battleSave->getPathfinding()->getStartDirection() != -1)
+				|| pf->getStartDirection() != -1)
 			{
 				bestTileScore = score;
 				bestTilePos = _escapeAction->target;
-				_escapeTUs = _battleSave->getPathfinding()->getTotalTUCost();
+				_escapeTUs = pf->getTotalTUCost();
 
 				if (_escapeAction->target == _unit->getPosition())
 					_escapeTUs = 1;
@@ -487,12 +489,12 @@ void CivilianBAIState::setupEscape()
 //				if (_traceAI)
 //				{
 //					tile->setMarkerColor(score < 0? 7: (score < FAST_PASS_THRESHOLD / 2? 10: (score < FAST_PASS_THRESHOLD ?4: 5)));
-//					tile->setPreview(10);
+//					tile->setPreviewDir(10);
 //					tile->setTUMarker(score);
 //				}
 			}
 
-			_battleSave->getPathfinding()->abortPath();
+			pf->abortPath();
 
 			if (bestTileScore > FAST_PASS_THRESHOLD)
 				coverFound = true; // good enough, gogogo!!
@@ -557,6 +559,9 @@ void CivilianBAIState::setupPatrol()
 		}
 	} */
 
+	Pathfinding* const pf = _battleSave->getPathfinding();
+	pf->setPathingUnit(_unit);
+
 	int triesLeft = 5; // look for a new node to walk towards
 	while (_toNode == NULL
 		&& triesLeft != 0)
@@ -575,14 +580,14 @@ void CivilianBAIState::setupPatrol()
 
 		if (_toNode != NULL)
 		{
-			_battleSave->getPathfinding()->calculate(
-												_unit,
-												_toNode->getPosition());
+			pf->calculate(
+						_unit,
+						_toNode->getPosition());
 
-			if (_battleSave->getPathfinding()->getStartDirection() == -1)
+			if (pf->getStartDirection() == -1)
 				_toNode = NULL;
 
-			_battleSave->getPathfinding()->abortPath();
+			pf->abortPath();
 		}
 	}
 

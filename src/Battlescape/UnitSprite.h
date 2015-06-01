@@ -59,7 +59,7 @@ private:
 		* _itemSurfaceB,
 		* _unitSurface;
 
-	MovementType _moveType;
+//	MovementType _moveType;
 
 	const std::pair<Uint8, Uint8>* _color;
 
@@ -112,8 +112,8 @@ private:
 				int height,
 				int x,
 				int y,
-				bool helmet,
-				MovementType moveType);
+				bool helmet);
+//				MovementType moveType);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();
 

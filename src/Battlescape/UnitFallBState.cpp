@@ -303,8 +303,6 @@ void UnitFallBState::think()
 							tile = _parent->getSave()->getTile(startPos + unitVect);
 							tileBelow = _parent->getSave()->getTile(startPos + unitVect + Position(0,0,-1));
 
-//							_parent->getSave()->getPathfinding()->setPathingUnit(unitBelow); // kL
-
 							bool
 								aboutToBeOccupiedFromAbove = tile != NULL
 														  && std::find(
@@ -323,7 +321,6 @@ void UnitFallBState::think()
 										&& tile->hasNoFloor(tileBelow) == false,
 								blocked = _parent->getSave()->getPathfinding()->isBlockedPath(
 																						_parent->getSave()->getTile(startPos),
-//																						tile,
 																						dir,
 																						unitBelow),
 								unitCanFly = unitBelow->getMoveTypeUnit() == MT_FLY,

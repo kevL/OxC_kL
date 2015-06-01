@@ -262,7 +262,7 @@ private:
 
 		/// Moves a unit up or down.
 		void moveUpDown(
-				BattleUnit* unit,
+				const BattleUnit* const unit,
 				int dir);
 
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).

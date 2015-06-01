@@ -70,12 +70,12 @@ protected:
 		_light[LIGHTLAYERS],
 		_mapDataID[4],
 		_mapDataSetID[4],
-		_markerColor,
 		_overlapsINC,
 		_overlapsSMK,
 		_preview,
 		_smoke,
 		_tuMarker;
+	Uint8 _markerColor;
 
 	BattleUnit* _unit;
 	MapData* _objects[4];
@@ -299,24 +299,23 @@ protected:
 		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();
 
-		/// Sets the tile marker color.
-		void setMarkerColor(int color);
-		/// Gets the tile marker color.
-		int getMarkerColor() const;
-
 		/// Sets the tile visible flag.
 		void setTileVisible(bool vis = true);
 		/// Gets the tile visible flag.
 		bool getTileVisible() const;
 
-		/// Sets the direction (used for path previewing)
-		void setPreview(int dir);
-		/// Gets the direction stored by the pathfinding.
-		int getPreview() const;
-		/// Sets the number to be displayed for pathfinding preview.
+		/// Sets the direction of path preview arrows.
+		void setPreviewDir(int dir);
+		/// Gets the direction of path preview arrows.
+		int getPreviewDir() const;
+		/// Sets the number to be displayed for path preview.
 		void setTUMarker(int tu);
-		/// Gets the number to be displayed for pathfinding preview.
+		/// Gets the number to be displayed for path preview.
 		int getTUMarker() const;
+		/// Sets the tile marker color.
+		void setMarkerColor(Uint8 color);
+		/// Gets the tile marker color.
+		int getMarkerColor() const;
 
 		/// Sets the danger flag on this tile so the AI may avoid it.
 		void setDangerous(bool danger = true);

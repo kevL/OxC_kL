@@ -187,6 +187,8 @@ void ProjectileFlyBState::init()
 	{
 		_action.type = BA_SNAPSHOT;
 	}
+	// Except that Berserk tries to use SnapShot .... needs looking at.
+
 
 	// removed post-cosmetics
 	// snapshot defaults to "hit" if it's a melee weapon
@@ -248,20 +250,23 @@ void ProjectileFlyBState::init()
 
 		case BA_THROW:
 		{
-			//Log(LOG_INFO) << ". . BA_THROW";
-			const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
-																			_action,
-																			NULL);
-			if (validThrowRange(
-							&_action,
-							originVoxel,
-							destTile) == false)
+			Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
+			if (_parent->getPanicHandled() == true) // berserk makes STRONG throw.
 			{
-				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
-				_action.result = "STR_OUT_OF_RANGE";
+				const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
+																				_action,
+																				NULL);
+				if (validThrowRange(
+								&_action,
+								originVoxel,
+								destTile) == false)
+				{
+					//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
+					_action.result = "STR_OUT_OF_RANGE";
 
-				_parent->popState();
-				return;
+					_parent->popState();
+					return;
+				}
 			}
 
 			if (destTile != NULL
@@ -516,7 +521,8 @@ bool ProjectileFlyBState::createNewProjectile()
 			sound = ResourcePack::ITEM_THROW;
 
 			if (_unit->getGeoscapeSoldier() != NULL
-				&& _unit->getFaction() == _unit->getOriginalFaction())
+				&& _unit->getFaction() == _unit->getOriginalFaction()
+				&& _parent->getPanicHandled() == true)
 			{
 				_unit->addThrowingExp();
 			}
@@ -1099,7 +1105,7 @@ void ProjectileFlyBState::cancel()
  * @param target - pointer to the targeted Tile
  * @return, true if the range is valid
  */
-bool ProjectileFlyBState::validThrowRange(
+bool ProjectileFlyBState::validThrowRange( // static.
 		const BattleAction* const action,
 		const Position& origin,
 		const Tile* const target)
@@ -1162,13 +1168,13 @@ bool ProjectileFlyBState::validThrowRange(
 }
 
 /**
- * Validates the throwing range.
+ * Helper for validThrowRange().
  * @param weight	- the weight of the object
  * @param strength	- the strength of the thrower
  * @param level		- the difference in height between the thrower and the target
  * @return, the maximum throwing range
  */
-int ProjectileFlyBState::getMaxThrowDistance(
+int ProjectileFlyBState::getMaxThrowDistance( // static.
 		int weight,
 		int strength,
 		int level)

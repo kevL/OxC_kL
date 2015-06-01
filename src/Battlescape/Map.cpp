@@ -135,8 +135,8 @@ Map::Map(
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 
 	_previewSetting	= Options::battleNewPreviewPath;
-	if (Options::traceAI == true) // turn everything on because we want to see the markers.
-		_previewSetting = PATH_FULL;
+//	if (Options::traceAI == true) // turn everything on because we want to see the markers.
+//		_previewSetting = PATH_FULL;
 
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
@@ -621,9 +621,10 @@ void Map::drawTerrain(Surface* surface) // private.
 		// kL_note: Leave them the same color.
 		wpID = new NumberText(15, 15, 20, 30);
 		wpID->setPalette(getPalette());
+		wpID->setColor(1); // white
 
-		Uint8 wpColor;
-/*		if (_battleSave->getBattleTerrain() == "DESERT")
+/*		Uint8 wpColor;
+		if (_battleSave->getBattleTerrain() == "DESERT")
 			|| _battleSave->getBattleTerrain() == "DESERTMOUNT")
 		{
 			wpColor = Palette::blockOffset(0)+1; // white
@@ -634,10 +635,10 @@ void Map::drawTerrain(Surface* surface) // private.
 		{
 			wpColor = Palette::blockOffset(1)+4; // orange
 		}
-		else */
-		wpColor = Palette::blockOffset(0)+1; // white
+		else
+			wpColor = Palette::blockOffset(0)+1; // white
 
-		wpID->setColor(wpColor);
+		wpID->setColor(wpColor); */
 	}
 
 
@@ -3380,7 +3381,7 @@ void Map::drawTerrain(Surface* surface) // private.
 					} */
 
 					// Draw pathPreview
-					if (tile->getPreview() != -1
+					if (tile->getPreviewDir() != -1
 						&& (_previewSetting & PATH_ARROWS)
 						&& tile->isDiscovered(0) == true)
 					{
@@ -3398,7 +3399,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										tile->getMarkerColor());
 						}
 
-						srfSprite = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
+						srfSprite = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreviewDir());
 						if (srfSprite)
 							srfSprite->blitNShade(
 									surface,
@@ -3997,8 +3998,8 @@ void Map::drawTerrain(Surface* surface) // private.
 
 								const Position
 									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
-																					*action,
-																					NULL),
+																							*action,
+																							NULL),
 									targetVoxel = Position(
 														itX * 16 + 8,
 														itY * 16 + 8,
@@ -4191,7 +4192,8 @@ void Map::drawTerrain(Surface* surface) // private.
 
 	if (pathPreview == true)
 	{
-		if (wpID) wpID->setBordered(); // make a border for the pathfinding display
+		if (wpID != NULL)
+			wpID->setBordered(); // make a border for the pathfinding display
 
 		for (int
 				itZ = beginZ;
@@ -4227,7 +4229,7 @@ void Map::drawTerrain(Surface* surface) // private.
 
 						if (tile == NULL
 							|| tile->isDiscovered(0) == false
-							|| tile->getPreview() == -1)
+							|| tile->getPreviewDir() == -1)
 						{
 							continue;
 						}
@@ -4252,7 +4254,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											tile->getMarkerColor());
 							}
 
-							const int overlay = tile->getPreview() + 12;
+							const int overlay = tile->getPreviewDir() + 12;
 							srfSprite = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 							if (srfSprite)
 								srfSprite->blitNShade(
@@ -4267,9 +4269,11 @@ void Map::drawTerrain(Surface* surface) // private.
 						if ((_previewSetting & PATH_TU_COST)
 							&& tile->getTUMarker() > -1)
 						{
-							int offset_x = 2;
+							int offset_x;
 							if (tile->getTUMarker() > 9)
 								offset_x = 4;
+							else
+								offset_x = 2;
 
 							if (_battleSave->getSelectedUnit() != NULL
 								&& _battleSave->getSelectedUnit()->getArmor()->getSize() > 1)
@@ -4304,7 +4308,8 @@ void Map::drawTerrain(Surface* surface) // private.
 			}
 		}
 
-		if (wpID) wpID->setBordered(false); // remove the border in case it's used for missile waypoints.
+		if (wpID != NULL)
+			wpID->setBordered(false); // remove the border in case it's used for missile waypoints.
 	}
 
 	delete wpID;
@@ -4764,12 +4769,14 @@ void Map::cacheUnit(BattleUnit* const unit)
 	else
 		width = _spriteWidth;
 
+//	Pathfinding* const pf = _battleSave->getPathfinding();
+//	pf->setPathingUnit(unit);
 	UnitSprite* const unitSprite = new UnitSprite(
 												width,
 												_spriteHeight,
 												0,0,
-												_battleSave->getDepth() != 0,
-												_battleSave->getPathfinding()->getMoveTypePathing());
+												_battleSave->getDepth() != 0);
+//												pf->getMoveTypePathing());
 	unitSprite->setPalette(this->getPalette());
 
 	const int unitSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();

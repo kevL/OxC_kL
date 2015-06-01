@@ -962,7 +962,7 @@ int BattleUnit::getTrueWalkingPhase() const
 /**
  * Look at a point.
  * @param point		- reference to the position to look at
- * @param turret	- true to turn the turret, false to turn the unit
+ * @param turret	- true to turn the turret (default false to turn the unit)
  */
 void BattleUnit::lookAt(
 		const Position& point,
@@ -987,7 +987,7 @@ void BattleUnit::lookAt(
 /**
  * Look a direction.
  * @param direction	- direction to look
- * @param force		- true to instantly set the unit's direction, false to animate / visually turn to it
+ * @param force		- true to instantly set direction (default false to animate)
  */
 void BattleUnit::lookAt(
 		int direction,
@@ -1011,7 +1011,7 @@ void BattleUnit::lookAt(
 
 /**
  * Advances the turning towards the target direction.
- * @param turret - true to turn the turret, false to turn the unit
+ * @param turret - true to turn the turret (default false to turn the unit)
  */
 void BattleUnit::turn(bool turret)
 {
@@ -1239,7 +1239,7 @@ void BattleUnit::aim(bool aim)
 
 /**
  * Returns the direction from this unit to a given point.
- * kL_note: This function is almost identical to TileEngine::getDirectionTo().
+ * @note This function is almost identical to TileEngine::getDirectionTo().
  * @param point - reference to a given position
  * @return, direction from here to there
  */
@@ -1973,14 +1973,17 @@ bool BattleUnit::getUnitVisible() const
 }
 
 /**
- * Adds a unit to this BattleUnits vector(s) of spotted and/or visible units;
- * visible units are currently seen - unitsSpottedThisTurn are just that.
- * @note Don't confuse either of these with the '_visible' to Player flag.
+ * Adds an enemy unit to this BattleUnit's vector(s) of spotted and/or visible
+ * units.
+ * @note For aliens these are xCom and civies; for xCom these are aliens only.
+ * @note Visible units are currently seen - unitsSpottedThisTurn are just that.
+ * Don't confuse either of these with the '_visible' to Player flag.
+ * @note Called from TileEngine::calculateFOV().
  * @param unit - pointer to a seen BattleUnit
 // * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this is not used)
  */
 //bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
-void BattleUnit::addToVisibleUnits(BattleUnit* unit)
+void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 {
 	bool addUnit = true;
 
