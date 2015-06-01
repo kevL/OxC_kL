@@ -1196,7 +1196,7 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
 
 /**
  * Ends the turn.
- * This starts the switchover
+ * @note This starts the switchover
  *	- popState()
  *	- handleState()
  *	- statePushBack()
@@ -2062,6 +2062,8 @@ bool BattlescapeGame::handlePanickingPlayer()
 			&& (*j)->getOriginalFaction() == FACTION_PLAYER
 			&& handlePanickingUnit(*j) == true)
 		{
+			//Log(LOG_INFO) << "handlePanickingPlayer: setPanicking TRUE";
+			//(*j)->setPanicking();
 			return false;
 		}
 	}
@@ -2070,196 +2072,195 @@ bool BattlescapeGame::handlePanickingPlayer()
 }
 
 /**
- * Common function for handling panicking units.
- * @return, false when unit not in panicking mode
+ * Handles panicking units.
+ * @return, true if unit is panicking
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
 	const UnitStatus status = unit->getStatus();
 
-	if (status != STATUS_PANICKING
-		&& status != STATUS_BERSERK)
+	if (status == STATUS_PANICKING
+		|| status == STATUS_BERSERK)
 	{
-		return false;
-	}
+		//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
+		_parentState->getMap()->setCursorType(CT_NONE);
+		_battleSave->setSelectedUnit(unit);
 
-	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
-	_battleSave->setSelectedUnit(unit);
-//	unit->setUnitVisible(); // kL
+		if (unit->getUnitVisible() == true // show panicking message
+			|| Options::noAlienPanicMessages == false)
+		{
+			getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
-	_parentState->getMap()->setCursorType(CT_NONE);
+			Game* const game = _parentState->getGame();
+			std::string st;
+			if (status == STATUS_PANICKING)
+				st = "STR_HAS_PANICKED";
+			else
+				st = "STR_HAS_GONE_BERSERK";
 
-	// show a little infobox with the name of the unit and "... is panicking"
-	if (unit->getUnitVisible() == true
-		|| Options::noAlienPanicMessages == false)
-	{
-		getMap()->getCamera()->centerOnPosition(unit->getPosition());
+			game->pushState(new InfoboxState(
+										game->getLanguage()->getString(
+																	st,
+																	unit->getGender())
+																.arg(unit->getName(game->getLanguage()))));
+		}
 
-		Game* const game = _parentState->getGame();
-		if (status == STATUS_PANICKING)
-			game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
-																			.arg(unit->getName(game->getLanguage()))));
-		else
-			game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender())
-																			.arg(unit->getName(game->getLanguage()))));
-	}
+		unit->setStatus(STATUS_STANDING);
 
-//	unit->abortTurn(); // makes the unit go to status STANDING :p
-	unit->setStatus(STATUS_STANDING); // kL :P
+		BattleAction ba;
+		ba.actor = unit;
 
-	BattleAction ba;
-	ba.actor = unit;
+		switch (status)
+		{
+			case STATUS_PANICKING:
+				if (RNG::percent(50) == true) // 50:50 freeze or flee
+				{
+					BattleItem* item = unit->getItem("STR_RIGHT_HAND");
+					if (item != NULL)
+						dropItem(
+								unit->getPosition(),
+								item,
+								false,
+								true);
 
-	switch (status)
-	{
-		case STATUS_PANICKING:
-			if (RNG::percent(50) == true) // 50:50 freeze or flee.
-			{
-				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
-				if (item != NULL)
-					dropItem(
-							unit->getPosition(),
-							item,
-							false,
-							true);
+					item = unit->getItem("STR_LEFT_HAND");
+					if (item != NULL)
+						dropItem(
+								unit->getPosition(),
+								item,
+								false,
+								true);
 
-				item = unit->getItem("STR_LEFT_HAND");
-				if (item != NULL)
-					dropItem(
-							unit->getPosition(),
-							item,
-							false,
-							true);
+					unit->setCache(NULL);
 
-				unit->setCache(NULL);
+					for (int // try a few times to get a tile to run to.
+							i = 0;
+							i != 20;
+							++i)
+					{
+						ba.target = Position(
+										unit->getPosition().x + RNG::generate(-5,5),
+										unit->getPosition().y + RNG::generate(-5,5),
+										unit->getPosition().z);
 
-				for (int // try a few times to get a tile to run to.
+						if (ba.target.z > 0
+							&& i > 9)
+						{
+							--ba.target.z;
+
+							if (ba.target.z > 0
+								&& i > 14)
+							{
+								--ba.target.z;
+							}
+						}
+
+						if (_battleSave->getTile(ba.target) != NULL)
+						{
+							_battleSave->getPathfinding()->calculate(
+																ba.actor,
+																ba.target);
+
+							if (_battleSave->getPathfinding()->getStartDirection() != -1)
+							{
+								statePushBack(new UnitWalkBState(
+																this,
+																ba));
+								break;
+							}
+						}
+					}
+				}
+			break;
+
+			case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
+				ba.type = BA_TURN;	// towards an enemy unit or shoot towards random place
+				for (int
 						i = 0;
-						i != 20;
+						i != 4;
 						++i)
 				{
 					ba.target = Position(
 									unit->getPosition().x + RNG::generate(-5,5),
 									unit->getPosition().y + RNG::generate(-5,5),
 									unit->getPosition().z);
-
-					if (ba.target.z > 0
-						&& i > 9)
-					{
-						--ba.target.z;
-
-						if (ba.target.z > 0
-							&& i > 14)
-						{
-							--ba.target.z;
-						}
-					}
-
-					if (_battleSave->getTile(ba.target) != NULL)
-					{
-						_battleSave->getPathfinding()->calculate(
-															ba.actor,
-															ba.target);
-
-						if (_battleSave->getPathfinding()->getStartDirection() != -1)
-						{
-							statePushBack(new UnitWalkBState(
-															this,
-															ba));
-							break;
-						}
-					}
+					statePushBack(new UnitTurnBState(
+													this,
+													ba,
+													false));
 				}
-			}
-		break;
-		case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
-								// towards an enemy unit or shoot towards random place
-			ba.type = BA_TURN;
-			for (int
-					i = 0;
-					i != 4;
-					++i)
-			{
-				ba.target = Position(
-								unit->getPosition().x + RNG::generate(-5,5),
-								unit->getPosition().y + RNG::generate(-5,5),
-								unit->getPosition().z);
-				statePushBack(new UnitTurnBState(
-												this,
-												ba,
-												false));
-			}
 
-			for (std::vector<BattleUnit*>::const_iterator
-					j = unit->getVisibleUnits()->begin();
-					j != unit->getVisibleUnits()->end();
-					++j)
-			{
-				ba.target = (*j)->getPosition();
-				statePushBack(new UnitTurnBState(
-												this,
-												ba,
-												false));
-			}
-
-			if (_battleSave->getTile(ba.target) != NULL)
-			{
-				ba.weapon = unit->getMainHandWeapon();
-				if (ba.weapon == NULL)				// kL
-					ba.weapon = unit->getGrenade();	// kL
-
-				// TODO: run up to another unit and slug it with the Universal Fist.
-				// Or w/ an already-equipped melee weapon
-
-				if (ba.weapon != NULL
-					&& (_battleSave->getDepth() != 0
-						|| ba.weapon->getRules()->isWaterOnly() == false))
+				for (std::vector<BattleUnit*>::const_iterator
+						j = unit->getVisibleUnits()->begin();
+						j != unit->getVisibleUnits()->end();
+						++j)
 				{
-					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
+					ba.target = (*j)->getPosition(); // this should not attack a unit, but a random tile.
+					statePushBack(new UnitTurnBState(
+													this,
+													ba,
+													false));
+				}
+
+				if (_battleSave->getTile(ba.target) != NULL)
+				{
+					ba.weapon = unit->getMainHandWeapon();
+					if (ba.weapon == NULL)				// kL, this works.
+						ba.weapon = unit->getGrenade();	// kL
+
+					// TODO: run up to another unit and slug it with the Universal Fist.
+					// Or w/ an already-equipped melee weapon
+
+					if (ba.weapon != NULL)
+//						&& (_battleSave->getDepth() != 0
+//							|| ba.weapon->getRules()->isWaterOnly() == false))
 					{
-						ba.type = BA_SNAPSHOT;
-						const int tu = ba.actor->getActionTUs(
-															ba.type,
-															ba.weapon);
-
-						for (int // fire shots until unit runs out of TUs
-								i = 0;
-								i != 10;
-								++i)
+						if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 						{
-							if (ba.actor->spendTimeUnits(tu) == false)
-								break;
+							ba.type = BA_SNAPSHOT;
+							const int tu = ba.actor->getActionTUs(
+																ba.type,
+																ba.weapon);
 
+							for (int // fire shots until unit runs out of TUs
+									i = 0;
+									i != 10;
+									++i)
+							{
+								if (ba.actor->spendTimeUnits(tu) == false)
+									break;
+
+								statePushBack(new ProjectileFlyBState(
+																	this,
+																	ba));
+							}
+						}
+						else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
+						{
+							if (ba.weapon->getFuseTimer() == -1)
+								ba.weapon->setFuseTimer(0);
+
+							ba.type = BA_THROW;
 							statePushBack(new ProjectileFlyBState(
 																this,
 																ba));
 						}
 					}
-					else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
-					{
-						if (ba.weapon->getFuseTimer() == -1)
-							ba.weapon->setFuseTimer(0);
-
-						ba.type = BA_THROW;
-						statePushBack(new ProjectileFlyBState(
-															this,
-															ba));
-					}
 				}
-			}
 
-			unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting
-			ba.type = BA_NONE;
+				unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting
+				ba.type = BA_NONE;
+		}
+
+		statePushBack(new UnitPanicBState( // Time units can only be reset after everything else occurs
+										this,
+										ba.actor));
+		unit->moraleChange(+15);
+
+		return true;
 	}
 
-	statePushBack(new UnitPanicBState( // Time units can only be reset after everything else occurs
-									this,
-									ba.actor));
-
-	unit->moraleChange(+15);
-
-	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
-	return true;
+	return false;
 }
 
 /**

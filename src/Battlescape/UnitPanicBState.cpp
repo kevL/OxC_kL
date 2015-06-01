@@ -27,8 +27,8 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitPanicBState.
- * @param parent Pointer to the Battlescape.
- * @param unit Panicking unit.
+ * @param parent	- pointer to the BattlescapeGame
+ * @param unit		- pointer to a panicking unit
  */
 UnitPanicBState::UnitPanicBState(
 		BattlescapeGame* parent,
@@ -36,50 +36,48 @@ UnitPanicBState::UnitPanicBState(
 	:
 		BattleState(parent),
 		_unit(unit)
-{
-	// nothing to see here
-}
+{}
 
 /**
  * Deletes the UnitPanicBState.
  */
 UnitPanicBState::~UnitPanicBState()
-{
-}
+{}
 
+/**
+ *
+ */
 void UnitPanicBState::init()
-{
-}
+{}
 
 /**
  * Runs state functionality every cycle.
- * Ends the panicking when done.
+ * @note Ends the panicking when done.
  */
 void UnitPanicBState::think()
 {
-	//Log(LOG_INFO) << "UnitPanicBState::think()";
-
-	// reset the unit's time units when all panicking is done
-	if (_unit)
+	if (_unit != NULL)
 	{
-		if (!_unit->isOut())
-//kL		_unit->abortTurn(); // set the unit status to standing in case it wasn't otherwise changed from berserk/panicked
-			_unit->setStatus(STATUS_STANDING); // kL
+		if (_unit->isOut() == false)
+			_unit->setStatus(STATUS_STANDING);
 
 		_unit->setTimeUnits(0);
+
+//		if (_unit->getFaction() == FACTION_PLAYER)
+//		{
+//			Log(LOG_INFO) << "UnitPanicBState: setPanicking FALSE";
+//			_unit->setPanicking(false);
+//		}
 	}
 
 	_parent->popState();
-
 	_parent->setupCursor();
-	//Log(LOG_INFO) << "UnitPanicBState::think() EXIT";
 }
 
 /**
  * Panicking cannot be cancelled.
  */
 void UnitPanicBState::cancel()
-{
-}
+{}
 
 }

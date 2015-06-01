@@ -408,6 +408,7 @@ private:
 		_dontReselect,
 		_floating,
 		_kneeled,
+//		_panicking,
 		_revived,
 		_stopShot,	// to stop a unit from firing/throwing if it spots a new opponent during turning
 		_takenExpl,	// used to stop large units from taking damage for each part.
@@ -1115,6 +1116,11 @@ private:
 
 		/// Sets this BattleUnit as having just revived during a Turnover.
 		void setRevived(bool revived = true);
+
+		/// Sets if this BattleUnit is panicking.
+//		void setPanicking(bool panic = true);
+		/// Gets if this BattleUnit is panicking.
+//		bool getPanicking() const;
 };
 
 }

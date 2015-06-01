@@ -144,6 +144,8 @@ BattleUnit::BattleUnit(
 		_kneelHeight(soldier->getRules()->getKneelHeight()),
 		_floatHeight(soldier->getRules()->getFloatHeight()),
 		_gender(soldier->getGender())
+
+//		_panicking(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_stats	= *soldier->getCurrentStats();
@@ -311,6 +313,8 @@ BattleUnit::BattleUnit(
 		_spawnUnit(unit->getSpawnUnit()),
 		_value(unit->getValue()),
 		_specab(unit->getSpecialAbility())
+
+//		_panicking(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_stats	= *unit->getStats();
@@ -4448,5 +4452,23 @@ void BattleUnit::setRevived(bool revived)
 {
 	_revived = revived;
 }
+
+/**
+ * Sets if this BattleUnit is panicking.
+ * @param panic - true if panicking
+ */
+/* void BattleUnit::setPanicking(bool panic)
+{
+	_panicking = panic;
+} */
+
+/**
+ * Gets if this BattleUnit is panicking.
+ * @return, true if panicking
+ */
+/* bool BattleUnit::getPanicking() const
+{
+	return _panicking;
+} */
 
 }

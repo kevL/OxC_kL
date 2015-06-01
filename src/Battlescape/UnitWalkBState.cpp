@@ -1112,7 +1112,7 @@ void UnitWalkBState::postPathProcedures()
 
 		if (finalDir != -1)
 		{
-			_unit->lookAt(finalDir %8);
+			_unit->lookAt(finalDir % 8);
 
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
