@@ -125,6 +125,7 @@ Map::Map(
 		_reveal(0),
 		_smoothingEngaged(false),
 //		_flashScreen(false),
+		_mapIsHidden(false),
 		_noDraw(false),
 		_showProjectile(true),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
@@ -327,7 +328,7 @@ void Map::think()
 }
 
 /**
- * Draws the whole map, bit by bit.
+ * Draws the whole map blit by blit.
  */
 void Map::draw()
 {
@@ -389,7 +390,7 @@ void Map::draw()
 		}
 	}
 	else
-		_explosionInFOV = _battleSave->getDebugMode();
+		_explosionInFOV = _battleSave->getDebugMode(); // trick reveals Map in debugmode.
 
 
 	if (_noDraw == false) // don't draw if MiniMap is open.
@@ -403,6 +404,8 @@ void Map::draw()
 			|| _waypointAction == true // stop flashing the Hidden Movement screen between waypoints.
 			|| _explosionInFOV == true)
 		{
+			_mapIsHidden = false;
+
 			kL_noReveal = false;
 			drawTerrain(this);
 		}
@@ -413,6 +416,8 @@ void Map::draw()
 				kL_noReveal = true;
 				SDL_Delay(372);
 			}
+
+			_mapIsHidden = true;
 
 			_hidden->blit(this);
 		}
@@ -5078,6 +5083,15 @@ const int Map::getSoundAngle(Position pos)
 void Map::setNoDraw(bool noDraw)
 {
 	_noDraw = noDraw;
+}
+
+/**
+ * Gets if the Hidden Movement screen is displayed.
+ * @return, true if hidden
+ */
+bool Map::getMapHidden() const
+{
+	return _mapIsHidden;
 }
 
 /**

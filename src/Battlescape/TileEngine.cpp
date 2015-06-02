@@ -4160,15 +4160,15 @@ void TileEngine::setProjectileDirection(const int dir)
 
 /**
  * Applies the explosive power to tile parts.
- * This is where the actual destruction takes place; 9 parts are affected:
- * 2 walls, floors top & bottom, up to 4 bigWalls around the perimeter,
- * plus the content-object in the center.
+ * @note This is where the actual destruction takes place; 9 parts are affected:
+ * 2 walls, floors top & bottom, up to 4 bigWalls around the perimeter, plus the
+ * content-object in the center.
  * @param tile - pointer to Tile affected
  * @return, true if an objective was destroyed
  */
 bool TileEngine::detonate(Tile* const tile)
 {
-	int expl = tile->getExplosive();
+	int expl = tile->getExplosive(); // <- power that hit the Tile.
 	if (expl == 0) // no explosive applied to the Tile
 		return false;
 
@@ -4401,9 +4401,9 @@ bool TileEngine::detonate(Tile* const tile)
 	expl = ((expl + 29) / 30);
 
 	if (tile->ignite((expl + 1) / 2) == false)
-		tile->addSmoke(expl + vol);
+		tile->addSmoke((expl + vol + 1) / 2);
 
-	if (tile->getSmoke() != 0)
+	if (tile->getSmoke() != 0) // add smoke to tiles above
 	{
 		Tile* const tileAbove = _battleSave->getTile(tile->getPosition() + Position(0,0,1));
 		if (tileAbove != NULL

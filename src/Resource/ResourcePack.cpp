@@ -214,10 +214,10 @@ Music* ResourcePack::getMusic(const std::string& track) const
 
 /**
  * Checks if a particular music track is playing.
- * @param track - the music to check for
+ * @param track - reference the track to check for
  * @return, true if playing
  */
-bool ResourcePack::isMusicPlaying(std::string& track)
+bool ResourcePack::isMusicPlaying(const std::string& track) const
 {
 	return (_playingMusic == track);
 //	return _musics[_playingMusic]->isPlaying();

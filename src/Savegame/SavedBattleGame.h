@@ -27,7 +27,8 @@
 //#include <SDL.h>
 //#include <yaml-cpp/yaml.h>
 
-#include "BattleUnit.h"
+#include "BattleUnit.h" // UnitFaction
+//#include "../Battlescape/BattlescapeGame.h" // BattleActionType (included in BattleUnit.h)
 
 
 namespace OpenXcom
@@ -180,7 +181,7 @@ private:
 		/// Gets the global shade.
 		int getGlobalShade() const;
 
-		/// Gets a pointer to the tiles, a tile is the smallest component of battlescape.
+		/// Gets a pointer to the tiles.
 		Tile** getTiles() const;
 
 		/// Gets a pointer to the list of nodes.
@@ -421,11 +422,6 @@ private:
 		/// Gets the list of items that MIGHT get recovered.
 		std::vector<BattleItem*>* getConditionalRecoveredItems();
 
-		/// Get the name of the music track.
-//		std::string& getMusic();
-		/// Set the name of the music track.
-		void setMusic(std::string track);
-
 		/// Sets the inventory tile when BattlescapeGenerator runs.
 		void setBattleInventory(Tile* invBattle);
 		/// Gets the inventory tile for preBattle InventoryState OK click.
@@ -449,10 +445,14 @@ private:
 		/// Gets if an aLienBase control has been destroyed.
 		bool getDestroyed() const;
 
+		/// Get the name of the music track.
+//		std::string& getMusic();
+		/// Set the name of the music track.
+		void setMusic(std::string& track);
 		/// Sets variables for what music to play in a particular terrain.
 		void calibrateMusic(
 				std::string& music,
-				std::string& terrain);
+				std::string& terrain) const;
 };
 
 }

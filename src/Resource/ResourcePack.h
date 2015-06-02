@@ -131,7 +131,7 @@ private:
 			/// Gets a particular music.
 			Music* getMusic(const std::string& track) const;
 			/// Checks if a particular music track is playing.
-			bool isMusicPlaying(std::string& track);
+			bool isMusicPlaying(const std::string& track) const;
 			/// Plays a particular music.
 			void playMusic(
 					const std::string& track,

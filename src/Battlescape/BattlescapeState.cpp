@@ -296,7 +296,7 @@ BattlescapeState::BattlescapeState()
 	_txtShade		= new Text( 50, 9, 1, 10);
 	_txtTurn		= new Text( 50, 9, 1, 20);
 
-	_txtOrder		= new Text(45, 9, 1, 37);
+	_txtOrder		= new Text(55, 9, 1, 37);
 	_lstSoldierInfo	= new TextList(25, 57, 1, 47);
 //	_txtHasKill		= new Text(10, 9, 1, 105);
 	_alienMark		= new Surface(9, 11, 1, 105);
@@ -1867,16 +1867,16 @@ void BattlescapeState::btnKneelClick(Action*)
 				updateSoldierInfo(false);
 
 				_battleGame->getTileEngine()->calculateFOV(unit->getPosition());
-					// need this here, so that my newVis algorithm works without
-					// false positives, or true negatives as it were, when a soldier
-					// stands up and walks in one go via UnitWalkBState. Because if
-					// I calculate newVis in kneel() it says 'yeh you see something'
-					// but the soldier wouldn't stop - so newVis has to be calculated
-					// directly in UnitWalkBState.... yet by doing it here on the
-					// btn-press, the enemy visibility indicator should light up.
-					//
-					// Will check reactionFire in BattlescapeGame::kneel()
-					// no, no it won't.
+				// need this here, so that my newVis algorithm works without
+				// false positives, or true negatives as it were, when a soldier
+				// stands up and walks in one go via UnitWalkBState. Because if
+				// I calculate newVis in kneel() it says 'yeh you see something'
+				// but the soldier wouldn't stop - so newVis has to be calculated
+				// directly in UnitWalkBState.... yet by doing it here on the
+				// btn-press, the enemy visibility indicator should light up.
+				//
+				// Will check reactionFire in BattlescapeGame::kneel()
+				// no, no it won't.
 				_battleGame->getTileEngine()->checkReactionFire(unit);
 
 				Pathfinding* const pf = _battleGame->getPathfinding();
@@ -1896,7 +1896,7 @@ void BattlescapeState::btnKneelClick(Action*)
 
 /**
  * Goes to the inventory screen.
- * Additionally resets TUs for current side in debug mode.
+ * @note Additionally resets TUs for current side in debug mode.
  * @param action - pointer to an Action
  */
 void BattlescapeState::btnInventoryClick(Action*)
@@ -1909,16 +1909,11 @@ void BattlescapeState::btnInventoryClick(Action*)
 				++i)
 		{
 			if ((*i)->getFaction() == _battleSave->getSide())
-				(*i)->prepUnit();
+				(*i)->prepUnit(); // cheat for debugging.
 
 			updateSoldierInfo();
 		}
 	}
-
-//		&& (unit->getArmor()->getSize() == 1
-//			|| _battleSave->getDebugMode())
-//		&& (unit->getOriginalFaction() == FACTION_PLAYER
-//			|| unit->getRankString() != "STR_LIVE_TERRORIST"))
 
 	if (playableUnitSelected() == true)
 	{
@@ -1929,8 +1924,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 				|| (unit->getUnitRules()->isMechanical() == false
 					&& unit->getRankString() != "STR_LIVE_TERRORIST")))
 		{
-			// clean up the waypoints
-			if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+			if (_battleGame->getCurrentAction()->type == BA_LAUNCH) // clean up the waypoints
 			{
 				_battleGame->getCurrentAction()->waypoints.clear();
 				_map->getWaypoints()->clear();
@@ -1967,10 +1961,7 @@ void BattlescapeState::btnCenterClick(Action*)
 void BattlescapeState::btnNextSoldierClick(Action*)
 {
 	if (allowButtons() == true)
-	{
 		selectNextFactionUnit(true);
-//		_map->refreshSelectorPosition(); // -> done down the line in setupCursor()
-	}
 }
 
 /**
@@ -2138,9 +2129,9 @@ void BattlescapeState::btnStatsClick(Action* action)
 	{
 		bool edge = false;
 
-		if (SCROLL_TRIGGER == Options::battleEdgeScroll
-			&& SDL_MOUSEBUTTONUP == action->getDetails()->type
-			&& SDL_BUTTON_LEFT == action->getDetails()->button.button)
+		if (Options::battleEdgeScroll == SCROLL_TRIGGER
+			&& action->getDetails()->type == SDL_MOUSEBUTTONUP
+			&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
 			const int
 				posX = action->getXMouse(),
@@ -2152,14 +2143,11 @@ void BattlescapeState::btnStatsClick(Action* action)
 						&& posY > 0)
 				|| posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale())
 			{
-				// To avoid handling this event as a click on the stats
-				// button when the mouse is on the scroll-border
-				edge = true;
-			}
+				edge = true;	// To avoid handling this event as a click on the stats
+			}					// button when the mouse is on the scroll-border
 		}
 
-		// clean up the waypoints
-		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH) // clean up the waypoints
 		{
 			_battleGame->getCurrentAction()->waypoints.clear();
 			_map->getWaypoints()->clear();
@@ -2185,15 +2173,6 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
 {
 	if (playableUnitSelected() == true)
 	{
-		// concession for touch devices:
-		// click on the item to cancel action, and don't pop up a menu to select a new one
-		// TODO: wrap this in an IFDEF ?
-//kL		if (_battleGame->getCurrentAction()->targeting)
-//kL		{
-//kL			_battleGame->cancelCurrentAction();
-//kL			return;
-//kL		}
-
 		_battleGame->cancelCurrentAction();
 		_battleSave->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
 
@@ -2231,15 +2210,6 @@ void BattlescapeState::btnRightHandLeftClick(Action*)
 {
 	if (playableUnitSelected() == true)
 	{
-		// concession for touch devices:
-		// click on the item to cancel action, and don't pop up a menu to select a new one
-		// TODO: wrap this in an IFDEF ?
-//kL		if (_battleGame->getCurrentAction()->targeting)
-//kL		{
-//kL			_battleGame->cancelCurrentAction();
-//kL			return;
-//kL		}
-
 		_battleGame->cancelCurrentAction();
 		_battleSave->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 
@@ -2638,9 +2608,10 @@ void BattlescapeState::btnConsoleToggle(Action*)
 } */
 
 /**
- * Determines whether a playable unit is selected. Normally only player side
- * units can be selected, but in debug mode one can play with aliens too :)
- * Is used to see if stats can be displayed and action buttons will work.
+ * Determines whether a playable unit is selected.
+ * @note Normally only player side units can be selected but in debug mode one
+ * can play with aliens too :)
+ * @note Is used to see if stats can be displayed and action buttons will work.
  * @return, true if a playable unit is selected
  */
 bool BattlescapeState::playableUnitSelected()
@@ -3121,17 +3092,20 @@ void BattlescapeState::refreshVisUnits()
  */
 void BattlescapeState::animate()
 {
-	_map->animateMap(_battleGame->isBusy() == false);
-
-	blinkVisibleUnitButtons();
-	drawFuse();
-	flashMedic();
-	drawVisUnitTarget();
-
-	if (_isOverweight == true
-		&& RNG::seedless(0,3) > 2)
+	_map->animateMap(_battleGame->isBusy() == false);	// this needs to happen regardless so that UFO
+														// doors (&tc) do not stall walking units (&tc)
+	if (_map->getMapHidden() == false)
 	{
-		_overWeight->setVisible(!_overWeight->getVisible());
+		blinkVisibleUnitButtons();
+		drawFuse();
+		flashMedic();
+		drawVisUnitTarget();
+
+		if (_isOverweight == true
+			&& RNG::seedless(0,3) > 2)
+		{
+			_overWeight->setVisible(!_overWeight->getVisible());
+		}
 	}
 }
 
@@ -3444,10 +3418,10 @@ bool BattlescapeState::getMouseOverIcons() const
 
 /**
  * Determines whether the player is allowed to press buttons.
- * Buttons are disabled in the middle of a shot, during
- * the alien turn,and while a player's units are panicking.
- * The save button is an exception as we want to still be able to save if something
- * goes wrong during the alien turn, and submit the save file for dissection.
+ * @note Buttons are disabled in the middle of a shot, during the alien turn,
+ * and while a player's units are panicking. The save button is an exception to
+ * still be able to save if something goes wrong during the alien turn and
+ * submit the save file for dissection.
  * @param allowSaving - true if the help button was clicked
  * @return, true if the player can still press buttons
  */

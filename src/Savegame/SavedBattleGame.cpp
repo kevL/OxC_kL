@@ -2842,24 +2842,6 @@ std::vector<BattleItem*>* SavedBattleGame::getConditionalRecoveredItems()
 }
 
 /**
- * Gets the music track for the current battle.
- * @return, the name of the music track
- */
-/*std::string& SavedBattleGame::getMusic()
-{
-	return _music;
-} */
-
-/**
- * Sets the music track for this battle.
- * @param track - the track name
- */
-void SavedBattleGame::setMusic(std::string track)
-{
-	_music = track;
-}
-
-/**
  * Sets the battlescape inventory tile when BattlescapeGenerator runs.
  * For use in base missions to randomize item locations.
  * @param invBattle - pointer to the tile where battle inventory is created
@@ -2941,19 +2923,35 @@ bool SavedBattleGame::getDestroyed() const
 }
 
 /**
+ * Gets the music track for the current battle.
+ * @return, address of the title of the music track
+ */
+/*std::string& SavedBattleGame::getMusic()
+{
+	return _music;
+} */
+
+/**
+ * Sets the music track for this battle.
+ * @note The track-string is const but I don't want to deal with it.
+ * @param track - reference to the track's name
+ */
+void SavedBattleGame::setMusic(std::string& track)
+{
+	_music = track;
+}
+
+/**
  * Sets variables for what music to play in a particular terrain or lack thereof.
+ * @note The music-string and terrain-string are both const but I don't want to
+ * deal with it.
  * @param music		- address of the music category to play
  * @param terrain	- address of the terrain to choose music for
  */
 void SavedBattleGame::calibrateMusic(
 		std::string& music,
-		std::string& terrain)
+		std::string& terrain) const
 {
-/*	if (_save->getMusic() == "")
-		_game->getResourcePack()->playMusic("GMTACTIC", true);
-	else
-		_game->getResourcePack()->playMusic(_save->getMusic()); */
-
 	if (_music.empty() == false)
 		music = _music;
 	else if (_missionType == "STR_UFO_CRASH_RECOVERY")

@@ -344,7 +344,7 @@ void BasescapeState::init()
 	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false);
 
 
-	std::string track = OpenXcom::res_MUSIC_GEO_GLOBE;
+	const std::string track = OpenXcom::res_MUSIC_GEO_GLOBE;
 	if (_game->getResourcePack()->isMusicPlaying(track) == false) // stop Dogfight music, Pls.
 	{
 		_game->getResourcePack()->fadeMusic(_game, 345);

@@ -4388,7 +4388,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1433212809 f:\git\openxcom\src\resource\resourcepack.h
+1433247663 f:\git\openxcom\src\resource\resourcepack.h
 
 1432527859 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4401,7 +4401,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1432509282 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1433247720 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4645,10 +4645,10 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1433210608 f:\git\openxcom\src\savegame\savedbattlegame.h
+1433249097 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1433208936 f:\git\openxcom\src\savegame\battleunit.h
+1433253771 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5474,7 +5474,7 @@
 1431757836 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1433213048 f:\git\openxcom\src\battlescape\map.h
+1433240109 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5501,7 +5501,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1433210733 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1433224373 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5585,7 +5585,7 @@
 
 1431472912 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1433210972 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1433249446 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5671,7 +5671,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1433220566 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1433250275 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6031,7 +6031,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1433212716 source:f:\git\openxcom\src\battlescape\map.cpp
+1433240395 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6173,7 +6173,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1433172762 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1433225101 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6304,7 +6304,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1433210337 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1433252308 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -8380,7 +8380,7 @@
 1431494826 f:\git\openxcom\src\ufopaedia\articlestatevehicle.h
 	"ArticleState.h"
 
-1431494835 f:\git\openxcom\src\ufopaedia\ufopaediastartstate.h
+1433248653 f:\git\openxcom\src\ufopaedia\ufopaediastartstate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\ruleset\soldiernamepool.h
@@ -8388,7 +8388,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\serializationhelper.h
 
-1433212824 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1433247671 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Music.h"
@@ -8656,7 +8656,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1433210733 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1433253918 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8759,7 +8759,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1433209496 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1433248764 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -9069,7 +9069,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1431494871 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
+1433248718 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
 	"UfopaediaStartState.h"
 	"Ufopaedia.h"
 	"UfopaediaSelectState.h"

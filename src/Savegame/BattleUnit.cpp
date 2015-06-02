@@ -2090,8 +2090,8 @@ void BattleUnit::clearVisibleTiles()
  * @return, firing accuracy
  */
 double BattleUnit::getFiringAccuracy(
-		BattleActionType actionType,
-		BattleItem* item) const
+		const BattleActionType actionType,
+		const BattleItem* const item) const
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy() ID " << getId();
 	if (actionType == BA_LAUNCH)
@@ -2112,26 +2112,28 @@ double BattleUnit::getFiringAccuracy(
 	}
 	else
 	{
-		int acu = item->getRules()->getAccuracySnap();
-
+		int acu;
 		if (actionType == BA_AIMEDSHOT)
 			acu = item->getRules()->getAccuracyAimed();
 		else if (actionType == BA_AUTOSHOT)
 			acu = item->getRules()->getAccuracyAuto();
+		else
+			acu = item->getRules()->getAccuracySnap();
 
 		ret = static_cast<double>(acu * getBaseStats()->firing) / 10000.;
 
 		if (_kneeled == true)
 			ret *= 1.16;
 
-		if (item->getRules()->isTwoHanded() == true
-			&& getItem("STR_RIGHT_HAND") != NULL
-			&& getItem("STR_LEFT_HAND") != NULL)
-		{
-			ret *= 0.79;
-		}
-
 		ret *= getAccuracyModifier();
+	}
+
+
+	if (item->getRules()->isTwoHanded() == true
+		&& getItem("STR_RIGHT_HAND") != NULL
+		&& getItem("STR_LEFT_HAND") != NULL)
+	{
+		ret *= 0.79;
 	}
 
 	//Log(LOG_INFO) << ". fire ACU ret[0] = " << ret;
@@ -2148,7 +2150,8 @@ double BattleUnit::getThrowingAccuracy() const
 }
 
 /**
- * Calculates accuracy modifier. Takes health and fatal wounds into account.
+ * Calculates accuracy decrease as a result of wounds.
+ * @note Takes health and fatal wounds into account.
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
  * @param item - pointer to a BattleItem (default NULL)
  * @return, modifier

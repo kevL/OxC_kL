@@ -63,9 +63,11 @@ const std::string UfopaediaStartState::ped_TITLES[] =
  * @param battle - true if opening UfoPaedia from battlescape (default false)
  */
 UfopaediaStartState::UfopaediaStartState(bool battle)
+	:
+		_battle(battle)
 {
 	bool toggle;
-	if (battle == true)
+	if (_battle == true)
 		toggle = false;
 	else
 	{
@@ -138,7 +140,9 @@ void UfopaediaStartState::btnOkClick(Action*)
 	kL_geoMusic = false;
 
 	_game->popState();
-	_game->getResourcePack()->fadeMusic(_game, 228);
+
+	if (_battle == false)
+		_game->getResourcePack()->fadeMusic(_game, 228);
 }
 
 /**

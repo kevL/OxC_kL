@@ -78,6 +78,7 @@ private:
 		_launch,
 		_explosionInFOV,
 //		_flashScreen,
+		_mapIsHidden,
 		_noDraw,
 		_projectileInFOV,
 		_showProjectile,
@@ -253,6 +254,8 @@ private:
 
 		/// Sets whether to draw or not.
 		void setNoDraw(bool noDraw);
+		/// Gets if the Hidden Movement screen is displayed.
+		bool getMapHidden() const;
 
 		/// Gets the SavedBattleGame.
 		SavedBattleGame* getSavedBattle() const;

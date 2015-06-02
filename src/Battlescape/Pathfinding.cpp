@@ -137,6 +137,7 @@ void Pathfinding::calculate(
 //	_battleAction = _battleSave->getBattleGame()->getCurrentAction();	// Used only to set .strafe and .dash (along w/ Dashing flag) for Player-controlled units;
 																		// But also should safely ensure that nonPlayer-controlled units are flagged false.
 	setInputModifiers();
+	setMoveType(); // redundant in some cases ...
 /*	if (missileTarget == NULL)	// not sure how 'missileTarget' affects initialization yet.
 		setPathingUnit(unit);	// <- done for aLiens & Civies in BattlescapeGame::handleAI()
 	else */						// change to init behavior: these functions are called from all over by any faction so

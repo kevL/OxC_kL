@@ -746,8 +746,8 @@ private:
 
 		/// Calculates firing accuracy.
 		double getFiringAccuracy(
-				BattleActionType actionType,
-				BattleItem* item) const;
+				const BattleActionType actionType,
+				const BattleItem* const item) const;
 		/// Calculates throwing accuracy.
 		double getThrowingAccuracy() const;
 		/// Calculates this unit's accuracy modifier.

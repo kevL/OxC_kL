@@ -738,14 +738,14 @@ void BattlescapeGenerator::run()
 		}
 	} */
 
-	const std::vector<std::string> deployMusic = ruleDeploy->getMusic();
+	std::vector<std::string> deployMusic = ruleDeploy->getMusic(); // this is const but I don't want to deal with it.
 	if (deployMusic.empty() == false)
 		_battleSave->setMusic(deployMusic.at(static_cast<size_t>(RNG::generate(
 																			0,
 																			deployMusic.size() - 1))));
 	else
 	{
-		const std::vector<std::string> terrainMusic = _terrain->getMusic();
+		std::vector<std::string> terrainMusic = _terrain->getMusic(); // this is const but I don't want to deal with it.
 		if (terrainMusic.empty() == false)
 			_battleSave->setMusic(terrainMusic.at(static_cast<size_t>(RNG::generate(
 																				0,
