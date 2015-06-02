@@ -2762,42 +2762,30 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 		if (tuLeftHand >= tuRightHand)
 		{
 			if (quickest)
-			{
 				return weaponRightHand;
-			}
 			else if (_faction == FACTION_PLAYER)
-			{
 				return weaponCurrentHand;
-			}
 			else
-			{
 				return weaponLeftHand;
-			}
 		}
 		else
 		{
 			if (quickest)
-			{
 				return weaponLeftHand;
-			}
 			else if (_faction == FACTION_PLAYER)
-			{
 				return weaponCurrentHand;
-			}
 			else
-			{
 				return weaponRightHand;
-			}
 		}
 	} */
 
 /**
- * Get a grenade from hand or belt (used for AI).
+ * Get a grenade from hand or belt.
+ * @note Called by AI/panic.
  * @return, pointer to a grenade or NULL
  */
 BattleItem* BattleUnit::getGrenade() const
 {
-	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
 	BattleItem* grenade = getItem("STR_RIGHT_HAND");
 	if (grenade == NULL
 		|| grenade->getRules()->getBattleType() != BT_GRENADE)
@@ -2809,15 +2797,24 @@ BattleItem* BattleUnit::getGrenade() const
 		&& grenade->getRules()->getBattleType() == BT_GRENADE)
 	{
 		return grenade;
-	} // kL_end.
+	}
 
+	std::vector<BattleItem*> grenades;
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
 		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
-			return *i;
+			grenades.push_back(*i);
+	}
+
+	if (grenades.empty() == false)
+	{
+		const size_t pick = RNG::generate(
+										0,
+										grenades.size() - 1);
+		return grenades[pick];
 	}
 
 	return NULL;

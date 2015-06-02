@@ -5326,7 +5326,7 @@ bool TileEngine::validateThrow(
 										parabolicCoefficient2);
 		//Log(LOG_INFO) << ". . calculateParabola() = " << test;
 
-		if (test == VOXEL_OUTOFBOUNDS
+		if (   test == VOXEL_OUTOFBOUNDS
 			|| test == VOXEL_WESTWALL
 			|| test == VOXEL_NORTHWALL
 			|| (trajectory.at(0) / Position(16, 16, 24)) != targetPos)

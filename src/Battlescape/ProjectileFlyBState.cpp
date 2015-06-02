@@ -250,23 +250,20 @@ void ProjectileFlyBState::init()
 
 		case BA_THROW:
 		{
-			Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
-			if (_parent->getPanicHandled() == true) // berserk makes STRONG throw.
+			//Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
+			const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
+																			_action,
+																			NULL);
+			if (validThrowRange(
+							&_action,
+							originVoxel,
+							destTile) == false)
 			{
-				const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
-																				_action,
-																				NULL);
-				if (validThrowRange(
-								&_action,
-								originVoxel,
-								destTile) == false)
-				{
-					//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
-					_action.result = "STR_OUT_OF_RANGE";
+				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
+				_action.result = "STR_OUT_OF_RANGE";
 
-					_parent->popState();
-					return;
-				}
+				_parent->popState();
+				return;
 			}
 
 			if (destTile != NULL

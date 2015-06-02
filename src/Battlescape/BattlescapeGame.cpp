@@ -2082,8 +2082,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handlePanickingUnit() " << unit->getId();
-//	const UnitStatus status = unit->getStatus();
-	UnitStatus status = unit->getStatus();
+	const UnitStatus status = unit->getStatus();
 
 	if (status == STATUS_PANICKING
 		|| status == STATUS_BERSERK)
@@ -2115,10 +2114,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 		BattleAction ba;
 		ba.actor = unit;
-
-		// TEST:
-		if (status == STATUS_PANICKING)
-			status = STATUS_BERSERK; // end_TEST.
 
 		switch (status)
 		{
@@ -2197,10 +2192,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 			case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
 				ba.type = BA_TURN;	// towards an enemy unit or shoot towards random place
-
+				const int pivot = RNG::generate(2,5);
 				for (int
 						i = 0;
-						i != 5;
+						i != pivot;
 						++i)
 				{
 					ba.target = Position(
@@ -2225,45 +2220,32 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 													ba,
 													false));
 				} */ // so try this
-/*				const Position
-					originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
-																			*action,
-																			NULL),
-					targetVoxel = Position(
-										itX * 16 + 8,
-										itY * 16 + 8,
-										itZ * 24 + 2 - _battleSave->getTile(action->target)->getTerrainLevel()); */
+				ba.weapon = unit->getMainHandWeapon();
+				if (ba.weapon == NULL)
+					ba.weapon = unit->getGrenade();
 
+				// TODO: run up to another unit and slug it with the Universal Fist.
+				// Or w/ an already-equipped melee weapon
 
-
-
-
-				const size_t mapSize = _battleSave->getMapSizeXYZ();
-				const int pick = RNG::generate(
-											0,
-											static_cast<int>(mapSize) - 1);
-				Tile* const targetTile = _battleSave->getTiles()[pick];
-				ba.target = targetTile->getPosition();
-				if (_battleSave->getTile(ba.target) != NULL)
+				if (ba.weapon != NULL)
+//					&& (_battleSave->getDepth() != 0
+//						|| ba.weapon->getRules()->isWaterOnly() == false))
 				{
-					statePushBack(new UnitTurnBState(
-													this,
-													ba,
-													false));
-
-					ba.weapon = unit->getMainHandWeapon();
-					if (ba.weapon == NULL)				// kL, this works.
-						ba.weapon = unit->getGrenade();	// kL
-
-					// TODO: run up to another unit and slug it with the Universal Fist.
-					// Or w/ an already-equipped melee weapon
-
-					if (ba.weapon != NULL)
-//						&& (_battleSave->getDepth() != 0
-//							|| ba.weapon->getRules()->isWaterOnly() == false))
+					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{
-						if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
+						const size_t mapSize = _battleSave->getMapSizeXYZ();
+						const int pick = RNG::generate(
+													0,
+													static_cast<int>(mapSize) - 1);
+						Tile* const targetTile = _battleSave->getTiles()[pick];
+						ba.target = targetTile->getPosition();
+						if (_battleSave->getTile(ba.target) != NULL)
 						{
+							statePushBack(new UnitTurnBState(
+															this,
+															ba,
+															false));
+
 							ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 							ba.type = BA_SNAPSHOT;
 							const int tu = ba.actor->getActionTUs(
@@ -2283,26 +2265,60 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 																	ba));
 							}
 						}
-						else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
-						{
-							Log(LOG_INFO) << "berserk Grenade";
-							if (ba.weapon->getFuseTimer() == -1)
-								ba.weapon->setFuseTimer(0);
+					}
+					else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
+					{
+						if (ba.weapon->getFuseTimer() == -1)
+							ba.weapon->setFuseTimer(0); // yeh set timer even if throw is invalid.
 
-							ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
-							ba.type = BA_THROW;
-							statePushBack(new ProjectileFlyBState(
+						for (int // try a few times to get a tile to throw to.
+								i = 0;
+								i != 50;
+								++i)
+						{
+							ba.target = Position(
+											unit->getPosition().x + RNG::generate(-20,20),
+											unit->getPosition().y + RNG::generate(-20,20),
+											unit->getPosition().z);
+
+							if (_battleSave->getTile(ba.target) != NULL)
+							{
+								statePushBack(new UnitTurnBState(
 																this,
-																ba));
+																ba,
+																false));
+
+								const Position
+									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
+																							ba,
+																							NULL),
+									targetVoxel = Position(
+														ba.target.x * 16 + 8,
+														ba.target.y * 16 + 8,
+														ba.target.z * 24 - _battleSave->getTile(ba.target)->getTerrainLevel());
+
+								if (_battleSave->getTileEngine()->validateThrow(
+																			ba,
+																			originVoxel,
+																			targetVoxel) == true)
+								{
+									ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
+									ba.type = BA_THROW;
+									statePushBack(new ProjectileFlyBState(
+																		this,
+																		ba));
+									break;
+								}
+							}
 						}
 					}
 				}
 
-				unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting
+				unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting <- why
 				ba.type = BA_NONE;
 		}
 
-		statePushBack(new UnitPanicBState( // Time units can only be reset after everything else occurs
+		statePushBack(new UnitPanicBState( // TimeUnits can be reset only after everything else occurs
 										this,
 										unit));
 		unit->moraleChange(10 + RNG::generate(0,10));
