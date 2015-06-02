@@ -52,22 +52,22 @@ namespace OpenXcom
  * @param height	- height in pixels
  * @param x			- X position in pixels
  * @param y			- Y position in pixels
- * @param helmet	- true if unit is wearing a helmet (TFTD)
+// * @param helmet	- true if unit is wearing a helmet (TFTD)
 // * @param moveType	- the MovementType (MapData.h)
  */
 UnitSprite::UnitSprite(
 		int width,
 		int height,
 		int x,
-		int y,
-		bool helmet)
+		int y)
+//		bool helmet)
 //		MovementType moveType)
 	:
 		Surface(
 			width,
 			height,
 			x,y),
-		_helmet(helmet),
+//		_helmet(helmet),
 //		_moveType(moveType),
 		_unit(NULL),
 		_itemA(NULL),
@@ -410,8 +410,8 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (_drawingRoutine == 0
-		|| _helmet == true)
+	if (_drawingRoutine == 0)
+//		|| _helmet == true)
 	{
 		if (_unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE // STR_FLYING_SUIT_UC, the mod Colored Armors might muck w/ these.
 			|| (_unit->getGender() == GENDER_FEMALE

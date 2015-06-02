@@ -37,9 +37,9 @@ RuleTerrain::RuleTerrain(const std::string& type)
 	:
 		_type(type),
 		_script("DEFAULT"),
-		_minDepth(0),
-		_maxDepth(0),
-		_ambience(-1),
+//		_minDepth(0),
+//		_maxDepth(0),
+//		_ambience(-1),
 		_pyjamaType("STR_ARMOR_NONE_UC")
 {}
 
@@ -69,13 +69,13 @@ void RuleTerrain::load(
 {
 	_type		= node["type"]		.as<std::string>(_type);
 	_script		= node["script"]	.as<std::string>(_script);
-	_ambience	= node["ambience"]	.as<int>(_ambience);
+//	_ambience	= node["ambience"]	.as<int>(_ambience);
 
-	if (node["depth"])
+/*	if (node["depth"])
 	{
 		_minDepth = node["depth"][0].as<int>(_minDepth);
 		_maxDepth = node["depth"][1].as<int>(_maxDepth);
-	}
+	} */
 
 	if (const YAML::Node& mapDataSets = node["mapDataSets"])
 	{
@@ -264,28 +264,28 @@ std::vector<std::string> RuleTerrain::getCivilianTypes() const
  * Gets the minimum depth.
  * @return, min depth
  */
-const int RuleTerrain::getMinDepth() const
+/* const int RuleTerrain::getMinDepth() const
 {
 	return _minDepth;
-}
+} */
 
 /**
  * Gets the maximum depth.
  * @return, max depth
  */
-const int RuleTerrain::getMaxDepth() const
+/* const int RuleTerrain::getMaxDepth() const
 {
 	return _maxDepth;
-}
+} */
 
 /**
  * Gets The ambient sound effect.
  * @return, the ambient sound effect
  */
-const int RuleTerrain::getAmbience() const
+/* const int RuleTerrain::getAmbience() const
 {
 	return _ambience;
-}
+} */
 
 /**
  * Gets the generation script.

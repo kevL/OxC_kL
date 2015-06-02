@@ -117,7 +117,7 @@ private:
 				GMCatFile* gmcat); */
 
 		/// Creates a transparency lookup table for a given palette.
-		void createTransparencyLUT(Palette* pal);
+//		void createTransparencyLUT(Palette* pal);
 };
 
 }

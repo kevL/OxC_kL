@@ -582,11 +582,14 @@ bool UnitWalkBState::doStatusStand()
 
 			if (sound != -1)
 			{
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														sound)->play(
-																-1,
-																_parent->getMap()->getSoundAngle(_unit->getPosition()));
+//				_parent->getResourcePack()->getSoundByDepth(
+//														_parent->getDepth(),
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												sound)
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 				if (sound == ResourcePack::SLIDING_DOOR_OPEN)
 				{
@@ -1312,11 +1315,14 @@ void UnitWalkBState::playMovementSound()
 	}
 
 	if (sound != -1)
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												sound)->play(
-														-1,
-														_parent->getMap()->getSoundAngle(_unit->getPosition()));
+//		_parent->getResourcePack()->getSoundByDepth(
+//												_parent->getDepth(),
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play(
+										-1,
+										_parent->getMap()->getSoundAngle(_unit->getPosition()));
 }
 
 /**

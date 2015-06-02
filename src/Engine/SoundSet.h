@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_SOUNDSET_H
 #define OPENXCOM_SOUNDSET_H
 
-#include <map>
-#include <string>
+//#include <map>
+//#include <string>
 
 
 namespace OpenXcom
@@ -31,7 +31,7 @@ class Sound;
 
 /**
  * Container of a set of sounds.
- * Used to manage file sets that contain a pack of sounds inside.
+ * @note Used to manage file sets that contain a pack of sounds inside.
  */
 class SoundSet
 {
@@ -48,7 +48,7 @@ private:
 
 		/// Loads an X-Com CAT set of sound files.
 		void loadCat(
-				const std::string& filename,
+				const std::string& file,
 				bool wav = true);
 
 		/// Gets a particular sound from the set.
@@ -61,7 +61,7 @@ private:
 
 		/// Loads a specific entry from a CAT file into the soundset.
 		void loadCatbyIndex(
-				const std::string& filename,
+				const std::string& file,
 				int index);
 };
 

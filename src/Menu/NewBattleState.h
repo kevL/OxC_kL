@@ -61,8 +61,8 @@ private:
 	Ruleset* _rules;
 	Slider
 		* _slrDarkness,
-		* _slrAlienTech,
-		* _slrDepth;
+		* _slrAlienTech;
+//		* _slrDepth;
 	Text
 		* _txtTitle,
 		* _txtMapOptions,
@@ -73,8 +73,8 @@ private:
 		* _txtTerrain,
 		* _txtDifficulty,
 		* _txtAlienRace,
-		* _txtAlienTech,
-		* _txtDepth;
+		* _txtAlienTech;
+//		* _txtDepth;
 	TextButton
 		* _btnOk,
 		* _btnCancel,
@@ -117,7 +117,7 @@ private:
 		/// Handler for changing the Craft combobox.
 		void cbxCraftChange(Action* action);
 		/// Updates the depth slider accordingly when terrain selection changes.
-		void cbxTerrainChange(Action* action);
+//		void cbxTerrainChange(Action* action);
 };
 
 }

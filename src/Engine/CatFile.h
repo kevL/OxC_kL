@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_CATFILE_H
 #define OPENXCOM_CATFILE_H
 
-#include <fstream>
+//#include <fstream>
 
 
 namespace OpenXcom

@@ -77,8 +77,8 @@ private:
 		_kneelReserved,
 		_unitsFalling;
 	int
-		_ambience,
-		_depth,
+//		_ambience,
+//		_depth,
 		_globalShade,
 		_groundLevel,
 		_itemId,
@@ -409,12 +409,12 @@ private:
 		void setDepth(int depth);
 
 		/// Uses the depth variable to set a palette.
-		void setPaletteByDepth(State* state);
+//		void setPaletteByDepth(State* state);
 
 		/// Sets the ambient sound effect;
-		void setAmbientSound(int sound);
+//		void setAmbientSound(int sound);
 		/// Gets the ambient sound effect;
-		int getAmbientSound() const;
+//		int getAmbientSound() const;
 
 		/// Gets the list of items guaranteed to be recovered.
 		std::vector<BattleItem*>* getGuaranteedRecoveredItems();

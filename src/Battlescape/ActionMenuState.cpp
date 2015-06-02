@@ -67,7 +67,8 @@ ActionMenuState::ActionMenuState(
 {
 	_screen = false;
 
-	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	for (size_t
 			i = 0;
@@ -308,14 +309,15 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		_action->TU = _menuSelect[btnId]->getTUs();
 		_action->type = _menuSelect[btnId]->getAction();
 
-		if (_action->type != BA_THROW
+/*		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
 			&& itRule->isWaterOnly() == true)
 		{
 			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
 			_game->popState();
 		}
-		else if (_action->type == BA_PRIME)
+		else */
+		if (_action->type == BA_PRIME)
 		{
 			if (itRule->getBattleType() == BT_PROXIMITYGRENADE)
 			{

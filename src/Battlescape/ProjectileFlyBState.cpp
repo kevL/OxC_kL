@@ -648,12 +648,14 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 
 	if (sound != -1)
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(_unit->getPosition()));
+//		_parent->getResourcePack()->getSoundByDepth(
+//												_parent->getDepth(),
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play(
+										-1,
+										_parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 	if (_unit->getArmor()->getShootFrames() != 0)
 		_parent->getMap()->setShowProjectile(false); // postpone showing the Celatid spit-blob till later
@@ -834,12 +836,14 @@ void ProjectileFlyBState::think()
 					}
 				}
 
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														ResourcePack::ITEM_DROP)
-													->play(
-														-1,
-														_parent->getMap()->getSoundAngle(pos));
+//				_parent->getResourcePack()->getSoundByDepth(
+//														_parent->getDepth(),
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												ResourcePack::ITEM_DROP)
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(pos));
 			}
 			else if (_action.type == BA_LAUNCH
 				&& _projectileImpact == VOXEL_EMPTY
@@ -1295,12 +1299,14 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 
 	if (sound != -1)
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(_action.target));
+//		_parent->getResourcePack()->getSoundByDepth(
+//												_parent->getDepth(),
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play(
+										-1,
+										_parent->getMap()->getSoundAngle(_action.target));
 
 	if (_parent->getSave()->getDebugMode() == false
 		&& _action.weapon->getRules()->getBattleType() == BT_MELEE

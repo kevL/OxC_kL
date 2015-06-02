@@ -43,7 +43,7 @@ class UnitSprite
 {
 
 private:
-	bool _helmet;
+//	bool _helmet;
 	int
 		_animationFrame,
 		_colorSize,
@@ -111,8 +111,8 @@ private:
 				int width,
 				int height,
 				int x,
-				int y,
-				bool helmet);
+				int y);
+//				bool helmet);
 //				MovementType moveType);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();

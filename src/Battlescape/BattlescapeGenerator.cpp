@@ -624,7 +624,7 @@ void BattlescapeGenerator::run()
 
 
 	// new battle menu will have set the depth already
-	if (_battleSave->getDepth() == 0)
+/*	if (_battleSave->getDepth() == 0)
 	{
 		if (ruleDeploy->getMaxDepth() > 0)
 			_battleSave->setDepth(RNG::generate(
@@ -634,7 +634,7 @@ void BattlescapeGenerator::run()
 			_battleSave->setDepth(RNG::generate(
 											_terrain->getMinDepth(),
 											_terrain->getMaxDepth()));
-	}
+	} */
 
 	if (ruleDeploy->getShade() != -1)
 		_shade = ruleDeploy->getShade();
@@ -855,7 +855,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
 			BattleUnit* const unit = addXCOMUnit(new BattleUnit(
 															*i,
-															_battleSave->getDepth(),
+//															_battleSave->getDepth(),
 															static_cast<int>(_gameSave->getDifficulty()))); // kL_add: For VictoryPts value per death.
 
 			if (unit != NULL)
@@ -1156,8 +1156,8 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
 														FACTION_PLAYER,
 														_unitSequence++,
 														_rules->getArmor(unitRule->getArmor()),
-														0,
-														_battleSave->getDepth()));
+														0));
+//														_battleSave->getDepth()));
 	if (tankUnit != NULL)
 	{
 		tankUnit->setTurretType(tank->getRules()->getTurretType());
@@ -2022,11 +2022,11 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // priva
 		_alienRace = depRule->getRace();
 	}
 
-	if (_battleSave->getDepth() > 0
+/*	if (_battleSave->getDepth() > 0
 		&& _alienRace.find("_UNDERWATER") == std::string::npos)
 	{
 		_alienRace += "_UNDERWATER";
-	}
+	} */
 
 	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
 
@@ -2228,7 +2228,7 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 										_unitSequence++,
 										_rules->getArmor(unitRule->getArmor()),
 										diff,
-										_battleSave->getDepth(),
+//										_battleSave->getDepth(),
 										month);
 
 	// following data is the order in which certain alien ranks spawn on certain node ranks;
@@ -2384,8 +2384,8 @@ BattleUnit* BattlescapeGenerator::addCivilian(RuleUnit* rules) // private.
 										FACTION_NEUTRAL,
 										_unitSequence++,
 										_rules->getArmor(rules->getArmor()),
-										0,
-										_battleSave->getDepth());
+										0);
+//										_battleSave->getDepth());
 
 	Node* const node = _battleSave->getSpawnNode(
 													NR_SCOUT,
@@ -2941,7 +2941,7 @@ void BattlescapeGenerator::runInventory(
 void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const script) // private.
 {
 	// set ambient sound
-	_battleSave->setAmbientSound(_terrain->getAmbience());
+//	_battleSave->setAmbientSound(_terrain->getAmbience());
 
 	// set up map generation vars
 	_testBlock = new MapBlock("testBlock");

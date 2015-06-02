@@ -141,9 +141,9 @@ Map::Map(
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 
-	const size_t depth = static_cast<size_t>(_battleSave->getDepth());
-	if (_res->getLUTs()->size() > depth)
-		_transparencies = &_res->getLUTs()->at(depth);
+//	const size_t depth = static_cast<size_t>(_battleSave->getDepth());
+//	if (_res->getLUTs()->size() > depth)
+//		_transparencies = &_res->getLUTs()->at(depth);
 
 	_camera = new Camera(
 					_spriteWidth,
@@ -278,10 +278,10 @@ void Map::init()
 
 	_projectile = NULL;
 
-	if (_battleSave->getDepth() == 0)
-		_projectileSet = _res->getSurfaceSet("Projectiles");
-	else
-		_projectileSet = _res->getSurfaceSet("UnderwaterProjectiles");
+//	if (_battleSave->getDepth() == 0)
+	_projectileSet = _res->getSurfaceSet("Projectiles");
+//	else
+//		_projectileSet = _res->getSurfaceSet("UnderwaterProjectiles");
 
 /*	int // kL_begin: reveal map's border tiles.
 		size_x = _battleSave->getMapSizeX(),
@@ -1322,10 +1322,10 @@ void Map::drawTerrain(Surface* surface) // private.
 										{
 											if (tileWest->getFire() == 0)
 											{
-												if (_battleSave->getDepth() > 0)
-													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-												else
-													frame = ResourcePack::SMOKE_OFFSET;
+//												if (_battleSave->getDepth() > 0)
+//													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+//												else
+												frame = ResourcePack::SMOKE_OFFSET;
 
 												frame += (tileWest->getSmoke() + 1) / 2;
 											}
@@ -1400,10 +1400,10 @@ void Map::drawTerrain(Surface* surface) // private.
 													{
 														if (tileSouthWest->getFire() == 0)
 														{
-															if (_battleSave->getDepth() > 0)
-																frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-															else
-																frame = ResourcePack::SMOKE_OFFSET;
+//															if (_battleSave->getDepth() > 0)
+//																frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+//															else
+															frame = ResourcePack::SMOKE_OFFSET;
 
 															frame += (tileSouthWest->getSmoke() + 1) / 2;
 														}
@@ -3216,10 +3216,10 @@ void Map::drawTerrain(Surface* surface) // private.
 					{
 						if (tile->getFire() == 0)
 						{
-							if (_battleSave->getDepth() > 0)
-								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-							else
-								frame = ResourcePack::SMOKE_OFFSET;
+//							if (_battleSave->getDepth() > 0)
+//								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+//							else
+							frame = ResourcePack::SMOKE_OFFSET;
 
 							frame += (tile->getSmoke() + 1) / 2;
 							shade = tileShade;
@@ -3265,10 +3265,10 @@ void Map::drawTerrain(Surface* surface) // private.
 										{
 											if (tileWest->getFire() == 0)
 											{
-												if (_battleSave->getDepth() > 0)
-													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-												else
-													frame = ResourcePack::SMOKE_OFFSET;
+//												if (_battleSave->getDepth() > 0)
+//													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+//												else
+												frame = ResourcePack::SMOKE_OFFSET;
 
 												frame += (tileWest->getSmoke() + 1) / 2;
 												shade = tileWest->getShade();
@@ -3298,10 +3298,10 @@ void Map::drawTerrain(Surface* surface) // private.
 										{
 											if (tileNorth->getFire() == 0)
 											{
-												if (_battleSave->getDepth() > 0)
-													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-												else
-													frame = ResourcePack::SMOKE_OFFSET;
+//												if (_battleSave->getDepth() > 0)
+//													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+//												else
+												frame = ResourcePack::SMOKE_OFFSET;
 
 												frame += (tileNorth->getSmoke() + 1) / 2;
 												shade = tileNorth->getShade();
@@ -4563,8 +4563,8 @@ void Map::calculateWalkingOffset(
 		dir = unit->getDirection(),
 		unitSize = unit->getArmor()->getSize();
 	int
-		midphase = 4 + 4 * (dir %2),
-		endphase = 8 + 8 * (dir %2);
+		midphase = 4 + 4 * (dir % 2),
+		endphase = 8 + 8 * (dir % 2);
 
 
 	if (unitSize > 1)
@@ -4654,7 +4654,7 @@ void Map::calculateWalkingOffset(
 			offset->x = -16;
 		}
 
-		if (_battleSave->getDepth() > 0)
+/*		if (_battleSave->getDepth() > 0)
 		{
 			unit->setFloorAbove(false);
 
@@ -4678,7 +4678,7 @@ void Map::calculateWalkingOffset(
 					}
 				}
 			}
-		}
+		} */
 	}
 }
 
@@ -4774,8 +4774,8 @@ void Map::cacheUnit(BattleUnit* const unit)
 	UnitSprite* const unitSprite = new UnitSprite(
 												width,
 												_spriteHeight,
-												0,0,
-												_battleSave->getDepth() != 0);
+												0,0);
+//												_battleSave->getDepth() != 0);
 //												pf->getMoveTypePathing());
 	unitSprite->setPalette(this->getPalette());
 

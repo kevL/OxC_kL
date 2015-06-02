@@ -44,10 +44,10 @@ class RuleTerrain
 {
 
 private:
-	int
-		_ambience,
-		_minDepth,
-		_maxDepth;
+//	int
+//		_ambience,
+//		_minDepth,
+//		_maxDepth;
 
 	std::string
 		_pyjamaType,
@@ -98,12 +98,12 @@ private:
 		std::vector<std::string> getCivilianTypes() const;
 
 		/// Gets the minimum depth.
-		const int getMinDepth() const;
+//		const int getMinDepth() const;
 		/// Gets the maximum depth.
-		const int getMaxDepth() const;
+//		const int getMaxDepth() const;
 
 		/// Gets the ambient sound effect.
-		const int getAmbience() const;
+//		const int getAmbience() const;
 
 		/// Gets the generation script.
 		const std::string& getScript() const;

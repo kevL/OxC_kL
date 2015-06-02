@@ -86,8 +86,8 @@ private:
 		_recover,
 		_skillApplied,
 		_strengthApplied,
-		_twoHanded,
-		_underwaterOnly;
+		_twoHanded;
+//		_underwaterOnly;
 	int
 		_armor,
 		_attraction,
@@ -371,7 +371,7 @@ private:
 		/// Checks if LOS is required to use this item (only applies to psionic type items)
 		bool isLOSRequired() const;
 		/// Checks if this item is restricted to underwater usage.
-		const bool isWaterOnly() const;
+//		const bool isWaterOnly() const;
 		/// Gets the associated special type of this item.
 		const int getSpecialType() const;
 

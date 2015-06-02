@@ -84,10 +84,10 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_unitsFalling(false),
 		_cheatAI(false),
 		_batReserved(BA_NONE),
-		_depth(0),
+//		_depth(0),
 		_kneelReserved(false),
 		_invBattle(NULL),
-		_ambience(-1),
+//		_ambience(-1),
 		_groundLevel(-1),
 		_tacType(TCT_DEFAULT),
 		_controlDestroyed(false),
@@ -208,7 +208,7 @@ void SavedBattleGame::load(
 	_missionType		= node["missionType"]	.as<std::string>(_missionType);
 	_globalShade		= node["globalshade"]	.as<int>(_globalShade);
 	_turn				= node["turn"]			.as<int>(_turn);
-	_depth				= node["depth"]			.as<int>(_depth);
+//	_depth				= node["depth"]			.as<int>(_depth);
 	_terrain			= node["terrain"]		.as<std::string>(_terrain); // sza_MusicRules
 
 	setTacticalType(_missionType);
@@ -339,8 +339,8 @@ void SavedBattleGame::load(
 		{
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
-								_depth,
-								diff); // kL_add: For VictoryPts value per death.
+//								_depth,
+								diff);			// kL_add: For VictoryPts value per death.
 		}
 		else									// create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 		{
@@ -354,7 +354,7 @@ void SavedBattleGame::load(
 								id,
 								rules->getArmor(armor),
 								diff,
-								_depth,
+//								_depth,
 								savedGame->getMonthsPassed());
 		}
 
@@ -497,7 +497,7 @@ void SavedBattleGame::load(
 	_objectivesNeeded		= node["objectivesNeeded"]						.as<int>(_objectivesNeeded);
 	_batReserved			= (BattleActionType)node["batReserved"]			.as<int>(_batReserved);
 	_kneelReserved			= node["kneelReserved"]							.as<bool>(_kneelReserved);
-	_ambience				= node["ambience"]								.as<int>(_ambience);
+//	_ambience				= node["ambience"]								.as<int>(_ambience);
 	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
 	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
 
@@ -732,8 +732,8 @@ YAML::Node SavedBattleGame::save() const
 
 	node["batReserved"]			= static_cast<int>(_batReserved);
 	node["kneelReserved"]		= _kneelReserved;
-	node["depth"]				= _depth;
-	node["ambience"]			= _ambience;
+//	node["depth"]				= _depth;
+//	node["ambience"]			= _ambience;
 	node["alienRace"]			= _alienRace;
 	node["operationTitle"]		= Language::wstrToUtf8(_operationTitle);
 
@@ -2775,25 +2775,25 @@ SavedGame* SavedBattleGame::getGeoscapeSave() const
  * Gets the depth of the battlescape.
  * @return depth.
  */
-int SavedBattleGame::getDepth() const
+/* int SavedBattleGame::getDepth() const
 {
 	return _depth;
-}
+} */
 
 /**
  * Sets the depth of the battlescape game.
  * @param depth the intended depth 0-3.
  */
-void SavedBattleGame::setDepth(int depth)
+/* void SavedBattleGame::setDepth(int depth)
 {
 	_depth = depth;
-}
+} */
 
 /**
  * Uses the depth variable to choose a palette.
  * @param state the state to set the palette for.
  */
-void SavedBattleGame::setPaletteByDepth(State* state)
+/* void SavedBattleGame::setPaletteByDepth(State* state)
 {
 	if (_depth == 0)
 		state->setPalette("PAL_BATTLESCAPE");
@@ -2803,25 +2803,25 @@ void SavedBattleGame::setPaletteByDepth(State* state)
 		ss << "PAL_BATTLESCAPE_" << _depth;
 		state->setPalette(ss.str());
 	}
-}
+} */
 
 /**
  * Sets the ambient battlescape sound effect.
  * @param sound the intended sound.
  */
-void SavedBattleGame::setAmbientSound(int sound)
+/* void SavedBattleGame::setAmbientSound(int sound)
 {
 	_ambience = sound;
-}
+} */
 
 /**
  * Gets the ambient battlescape sound effect.
  * @return the intended sound.
  */
-int SavedBattleGame::getAmbientSound() const
+/* int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
-}
+} */
 
 /**
  * Gets the list of items that are guaranteed to be recovered (ie: items that were in the skyranger).

@@ -19,10 +19,10 @@
 
 #include "SoundSet.h"
 
-#include <sstream>
+//#include <sstream>
 
-#include "CatFile.h"
-#include "Exception.h"
+//#include "CatFile.h"
+//#include "Exception.h"
 #include "Sound.h"
 
 
@@ -33,8 +33,7 @@ namespace OpenXcom
  * Sets up a new empty sound set.
  */
 SoundSet::SoundSet()
-{
-}
+{}
 
 /**
  * Deletes the sounds from memory.
@@ -51,23 +50,22 @@ SoundSet::~SoundSet()
 }
 
 /**
- * Loads the contents of an X-Com CAT file which usually contains
- * a set of sound files. The CAT starts with an index of the offset
- * and size of every file contained within. Each file consists of a
- * filename followed by its contents.
- * @param filename Filename of the CAT set.
- * @param wav Are the sounds in WAV format?
+ * Loads the contents of an X-Com CAT file which usually contains a set of sound
+ * files. The CAT starts with an index of the offset and size of every file
+ * contained within. Each file consists of a filename followed by its contents.
+ * @param file	- reference filename of the CAT set
+ * @param wav	- true if sounds are in WAV format (default true)
  * @sa http://www.ufopaedia.org/index.php?title=SOUND
  */
 void SoundSet::loadCat(
-		const std::string& filename,
+		const std::string& file,
 		bool wav)
 {
 	// Load CAT file
-	CatFile sndFile (filename.c_str()); // init.
+	CatFile sndFile (file.c_str()); // init.
 	if (!sndFile)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	// Load each sound file
@@ -89,70 +87,69 @@ void SoundSet::loadCat(
 			{
 				char header[] =
 				{
-					 'R', 'I', 'F', 'F',
+					'R','I','F','F',
 					0x00,0x00,0x00,0x00,
-					 'W', 'A', 'V', 'E',
-					 'f', 'm', 't', ' ',
+					'W','A','V','E',
+					'f','m','t',' ',
 					0x10,0x00,0x00,0x00,
 					0x01,0x00,0x01,0x00,
 					0x11,0x2b,0x00,0x00,
 					0x11,0x2b,0x00,0x00,
 					0x01,0x00,0x08,0x00,
-					 'd', 'a', 't', 'a',
+					'd','a','t','a',
 					0x00,0x00,0x00,0x00
 				};
 
 				for (unsigned int
-						n = 0;
-						n < bytes;
-						++n)
+						j = 0;
+						j != bytes;
+						++j)
 				{
-					sound[n] *= 4; // scale to 8 bits
+					sound[j] *= 4; // scale to 8 bits
 				}
 
 				if (bytes > 5) // skip 5 garbage name bytes at beginning
 					bytes -= 5;
 
-				if (bytes) // omit trailing null byte
-					bytes--;
+				if (bytes > 0) // omit trailing null byte
+					--bytes;
 
 				int headersize = bytes + 36;
-				memcpy(
-					header + 4,
-					&headersize,
-					sizeof(headersize));
+				std::memcpy(
+						header + 4,
+						&headersize,
+						sizeof(headersize));
 
 				int soundsize = bytes;
-				memcpy(
-					header + 40,
-					&soundsize,
-					sizeof(soundsize));
+				std::memcpy(
+						header + 40,
+						&soundsize,
+						sizeof(soundsize));
 
 				newsound = new unsigned char[44 + bytes * 2];
-				memcpy(
-					newsound,
-					header,
-					44);
+				std::memcpy(
+						newsound,
+						header,
+						44);
 
-				if (bytes)
-					memcpy(
-						newsound + 44,
-						sound + 5,
-						bytes);
+				if (bytes > 0)
+					std::memcpy(
+							newsound + 44,
+							sound + 5,
+							bytes);
 
-				Uint32 step16 = (8000 << 16) / 11025;
-
-				Uint8* w = newsound + 44;
-
+				const Uint32 step16 = (8000 << 16) / 11025;
+				Uint8* wet = newsound + 44;
 				int newsize = 0;
+
 				for (Uint32
 						offset16 = 0;
 						(offset16 >> 16) < bytes;
 						offset16 += step16,
-							++w,
+							++wet,
 							++newsize)
 				{
-					*w = sound[5 + (offset16 >> 16)];
+					*wet = sound[5 + (offset16 >> 16)];
 				}
 
 				bytes = newsize + 44;
@@ -164,7 +161,7 @@ void SoundSet::loadCat(
 			&& 0x00 == sound[0x1B])
 		{
 			// so it's WAV, but in 8 khz, we have to convert it to 11 khz sound
-			unsigned char* sound2 = new unsigned char[bytes * 2];
+			unsigned char* const sound2 = new unsigned char[bytes * 2];
 
 			// rewrite the samplerate in the header to 11 khz
 			sound[0x18] = 0x11;
@@ -173,34 +170,32 @@ void SoundSet::loadCat(
 			sound[0x1D] = 0x2B;
 
 			// copy and do the conversion...
-			memcpy(
-				sound2,
-				sound,
-				bytes);
+			std::memcpy(
+					sound2,
+					sound,
+					bytes);
 
-			Uint32 step16 = (8000 << 16) / 11025;
-
-			Uint8* w = sound2 + 44;
-
+			const Uint32 step16 = (8000 << 16) / 11025;
+			Uint8* wet = sound2 + 44;
 			int newsize = 0;
 
 			for (Uint32
 					offset16 = 0;
 					(offset16 >> 16) < bytes - 44;
 					offset16 += step16,
-						++w,
+						++wet,
 						++newsize)
 			{
-				*w = sound[44 + (offset16 >> 16)];
+				*wet = sound[44 + (offset16 >> 16)];
 			}
 
 			bytes = newsize + 44;
 
 			// Rewrite the number of samples in the WAV file
-			memcpy(
-				sound2 + 0x28,
-				&newsize,
-				sizeof(newsize));
+			std::memcpy(
+					sound2 + 0x28,
+					&newsize,
+					sizeof(newsize));
 
 			// Ok, now replace the original with the converted:
 			delete[] sound;
@@ -208,7 +203,7 @@ void SoundSet::loadCat(
 			sound = sound2;
 		}
 
-		Sound* s = new Sound();
+		Sound* const ptrSound = new Sound();
 		try
 		{
 			if (bytes == 0)
@@ -216,31 +211,27 @@ void SoundSet::loadCat(
 				throw Exception("Invalid sound file");
 			}
 
-			if (wav)
-				s->load(sound, bytes);
+			if (wav == true)
+				ptrSound->load(sound, bytes);
 			else
-				s->load(newsound, bytes);
+				ptrSound->load(newsound, bytes);
 		}
 		catch (Exception)
-		{
-			// Ignore junk in the file
-		}
+		{ /* ignore junk in the file */ }
 
-		_sounds[i] = s;
+		_sounds[i] = ptrSound;
 
 		delete[] sound;
 
-		if (!wav)
-		{
+		if (wav == false)
 			delete[] newsound;
-		}
 	}
 }
 
 /**
  * Returns a particular wave from the sound set.
- * @param i Sound number in the set.
- * @return Pointer to the respective sound.
+ * @param i - sound number in the set
+ * @return, pointer to the respective sound
  */
 Sound* SoundSet::getSound(unsigned int i)
 {
@@ -253,8 +244,8 @@ Sound* SoundSet::getSound(unsigned int i)
 
 /**
  * Creates and returns a particular wave in the sound set.
- * @param i Sound number in the set.
- * @return Pointer to the respective sound.
+ * @param i - sound number in the set
+ * @return, pointer to the respective sound
  */
 Sound* SoundSet::addSound(unsigned int i)
 {
@@ -265,7 +256,7 @@ Sound* SoundSet::addSound(unsigned int i)
 
 /**
  * Returns the total amount of sounds currently stored in the set.
- * @return Number of sounds.
+ * @return, number of sounds
  */
 size_t SoundSet::getTotalSounds() const
 {
@@ -274,105 +265,115 @@ size_t SoundSet::getTotalSounds() const
 
 /**
  * Loads individual contents of a TFTD CAT file by index.
- * a set of sound files. The CAT starts with an index of the offset
- * and size of every file contained within. Each file consists of a
- * filename followed by its contents.
- * @param filename	- filename of the CAT set
- * @param index		- which index in the cat file to load
+ * @note A set of sound files. The CAT starts with an index of the offset and
+ * size of every file contained within. Each file consists of a filename
+ * followed by its contents.
+ * @param file	- reference filename of the CAT set
+ * @param index	- which index in the cat file to load
  * @sa http://www.ufopaedia.org/index.php?title=SOUND
  */
 void SoundSet::loadCatbyIndex(
-		const std::string& filename,
+		const std::string& file,
 		int index)
 {
 	// Load CAT file
-	CatFile sndFile (filename.c_str());
+	CatFile sndFile (file.c_str());
 	if (!sndFile)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	if (index >= sndFile.getAmount())
 	{
 		std::stringstream err;
-		err << filename << " does not contain " << index << " sound files.";
+		err << file << " does not contain " << index << " sound files.";
 		throw Exception(err.str());
 	}
 
 	// Read WAV chunk
-	unsigned char* sound = (unsigned char*) sndFile.load(index);
-	unsigned int size = sndFile.getObjectSize(index);
+	unsigned char* const sound = (unsigned char*)sndFile.load(index);
+	unsigned int bytes = sndFile.getObjectSize(index);
 
 	// there's no WAV header (44 bytes), add it
 	// sounds are 8-bit 11025Hz, signed
 	unsigned char* newsound = 0;
 
-	if (size != 0)
+	if (bytes != 0)
 	{
 		char header[] =
 		{
-			'R','I','F','F',0x00,0x00,0x00,0x00,'W','A','V','E','f','m','t',' ',
-			0x10,0x00,0x00,0x00,0x01,0x00,0x01,0x00,0x11,0x2b,0x00,0x00,0x11,0x2b,0x00,0x00,0x01,0x00,0x08,0x00,
-			'd','a','t','a',0x00,0x00,0x00,0x00
+			'R','I','F','F',
+			0x00,0x00,0x00,0x00,
+			'W','A','V','E',
+			'f','m','t',' ',
+			0x10,0x00,0x00,0x00,
+			0x01,0x00,0x01,0x00,
+			0x11,0x2b,0x00,0x00,
+			0x11,0x2b,0x00,0x00,
+			0x01,0x00,0x08,0x00,
+			'd','a','t','a',
+			0x00,0x00,0x00,0x00
 		};
 
-		if (size > 5) // skip 5 garbage name bytes at beginning
-			size -= 5;
-		if (size) // omit trailing null byte
-			size--;
+		if (bytes > 5) // skip 5 garbage name bytes at beginning
+			bytes -= 5;
 
-		int headersize = size + 36;
-		int soundsize = size;
-		memcpy(
+		if (bytes > 0) // omit trailing null byte
+			--bytes;
+
+		int
+			headersize = bytes + 36,
+			soundsize = bytes;
+		std::memcpy(
 			header + 4,
 			&headersize,
 			sizeof(headersize));
-		memcpy(
+		std::memcpy(
 			header + 40,
 			&soundsize,
 			sizeof(soundsize));
 
-		newsound = new unsigned char[44 + size];
-		memcpy(
+		newsound = new unsigned char[44 + bytes];
+		std::memcpy(
 			newsound,
 			header,
 			44);
 
-		// TFTD sounds are signed, so we need to convert them.
+		// TFTD sounds are signed so convert them.
 		for (unsigned int
-				n = 5;
-				n < size + 5;
-				++n)
+				i = 5;
+				i != bytes + 5;
+				++i)
 		{
-			int value = (int)sound[n] + 128;
-			sound[n] = (uint8_t)value;
+			int value = static_cast<int>(sound[i]) + 128;
+			sound[i] = static_cast<uint8_t>(value);
 		}
 
-		if (size)
-			memcpy(
-				newsound + 44,
-				sound + 5,
-				size);
+		if (bytes > 0)
+			std::memcpy(
+					newsound + 44,
+					sound + 5,
+					bytes);
 
-		size = size + 44;
+		bytes = bytes + 44;
 	}
 
-	Sound* s = new Sound();
+	Sound* const ptrSound = new Sound();
 	try
 	{
-		if (size == 0)
+		if (bytes == 0)
 		{
 			throw Exception("Invalid sound file");
 		}
 
-		s->load(newsound, size);
+		ptrSound->load(newsound, bytes);
 	}
 	catch (Exception)
 	{
 		// Ignore junk in the file
 	}
 
-	_sounds[getTotalSounds()] = s;
+	_sounds[getTotalSounds()] = ptrSound;
 
 	delete[] sound;
 	delete[] newsound;

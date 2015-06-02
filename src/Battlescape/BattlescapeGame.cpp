@@ -754,12 +754,14 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 			&& _playedAggroSound == false)
 		{
 			_playedAggroSound = true;
-			getResourcePack()->getSoundByDepth(
-											_battleSave->getDepth(),
-											unit->getAggroSound())
-										->play(
-											-1,
-											getMap()->getSoundAngle(unit->getPosition()));
+//			getResourcePack()->getSoundByDepth(
+//											_battleSave->getDepth(),
+			getResourcePack()->getSound(
+									"BATTLE.CAT",
+									unit->getAggroSound())
+								->play(
+									-1,
+									getMap()->getSoundAngle(unit->getPosition()));
 		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
@@ -1043,12 +1045,14 @@ void BattlescapeGame::handleNonTargetAction()
 				if (_currentAction.actor->getPosition().z > 0)
 					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
 
-				getResourcePack()->getSoundByDepth(
-												getDepth(),
-												ResourcePack::ITEM_DROP)
-											->play(
-												-1,
-												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+//				getResourcePack()->getSoundByDepth(
+//												getDepth(),
+				getResourcePack()->getSound(
+										"BATTLE.CAT",
+										ResourcePack::ITEM_DROP)
+									->play(
+										-1,
+										getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 			}
 		}
 
@@ -1256,10 +1260,12 @@ void BattlescapeGame::endTurnPhase()
 		if (_battleSave->getTileEngine()->closeUfoDoors() != 0
 			&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
 		{
-			getResourcePack()->getSoundByDepth( // ufo door closed
-											_battleSave->getDepth(),
-											ResourcePack::SLIDING_DOOR_CLOSE)
-										->play();
+//			getResourcePack()->getSoundByDepth(
+//											_battleSave->getDepth(),
+			getResourcePack()->getSound( // ufo door closed
+									"BATTLE.CAT",
+									ResourcePack::SLIDING_DOOR_CLOSE)
+								->play();
 		}
 //	}
 
@@ -2461,12 +2467,14 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 					{
 						if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == true)
 						{
-							_parentState->getGame()->getResourcePack()->getSoundByDepth(
-																					_battleSave->getDepth(),
-																					_currentAction.weapon->getRules()->getHitSound())
-																				->play(
-																					-1,
-																					getMap()->getSoundAngle(targetPos));
+//							getResourcePack()->getSoundByDepth(
+//															_battleSave->getDepth(),
+							getResourcePack()->getSound(
+													"BATTLE.CAT",
+													_currentAction.weapon->getRules()->getHitSound())
+												->play(
+													-1,
+													getMap()->getSoundAngle(targetPos));
 
 							_parentState->getGame()->pushState(new UnitInfoState(
 																			targetUnit,
@@ -3006,7 +3014,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 											_battleSave->getUnits()->back()->getId() + 1,
 											getRuleset()->getArmor(armorType.str()),
 											difficulty,
-											getDepth(),
+//											getDepth(),
 											month,
 											this);
 
@@ -3675,14 +3683,14 @@ void BattlescapeGame::cleanupDeleted()
  * Gets the depth of the battlescape.
  * @return, the depth of the battlescape
  */
-const int BattlescapeGame::getDepth() const
+/* const int BattlescapeGame::getDepth() const
 {
 	return _battleSave->getDepth();
-}
+} */
 
 /**
- * kL. Gets the BattlescapeState.
- * For turning on/off the visUnits indicators from UnitWalk/TurnBStates
+ * Gets the BattlescapeState.
+ * @note For turning on/off the visUnits indicators from UnitWalk/TurnBStates.
  * @return, pointer to BattlescapeState
  */
 BattlescapeState* BattlescapeGame::getBattlescapeState() const
@@ -3691,19 +3699,19 @@ BattlescapeState* BattlescapeGame::getBattlescapeState() const
 }
 
 /**
- * kL. Gets the universal fist.
+ * Gets the universal fist.
  * @return, the universal fist!!
  */
-BattleItem* BattlescapeGame::getFist() const // kL
+BattleItem* BattlescapeGame::getFist() const
 {
 	return _universalFist;
 }
 
 /**
- * kL. Gets the universal alienPsi weapon.
+ * Gets the universal alienPsi weapon.
  * @return, the alienPsi BattleItem
  */
-BattleItem* BattlescapeGame::getAlienPsi() const // kL
+BattleItem* BattlescapeGame::getAlienPsi() const
 {
 	return _alienPsi;
 }

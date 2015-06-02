@@ -57,13 +57,13 @@ namespace OpenXcom
 /**
  * Initializes a BattleUnit from a Soldier
  * @param soldier		- pointer to a geoscape Soldier
- * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
+// * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param diff			- for VictoryPts value at death
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
-		const int depth,
+//		const int depth,
 		const int diff,
 		BattlescapeGame* battleGame)
 	:
@@ -153,14 +153,13 @@ BattleUnit::BattleUnit(
 
 	_loftempsSet	= _armor->getLoftempsSet();
 	_moveType		= _armor->getMoveTypeArmor();
-
-	if (_moveType == MT_FLOAT)
+/*	if (_moveType == MT_FLOAT)
 	{
 		if (depth > 0)
 			_moveType = MT_FLY;
 		else
 			_moveType = MT_WALK;
-	}
+	} */
 
 	int rankValue;
 	switch (soldier->getRank())
@@ -217,7 +216,7 @@ BattleUnit::BattleUnit(
  * @param id			- the unit's unique ID
  * @param armor			- pointer to unit's armor
  * @param diff			- the current game's difficulty setting (for aLien stat adjustment)
- * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
+// * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param month			- the current month (default 0)
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
@@ -227,7 +226,7 @@ BattleUnit::BattleUnit(
 		const int id,
 		RuleArmor* const armor,
 		const int diff,
-		const int depth,
+//		const int depth,
 		const int month,
 		BattlescapeGame* const battleGame) // May be NULL
 	:
@@ -338,13 +337,13 @@ BattleUnit::BattleUnit(
 		_gender = GENDER_MALE;
 
 	_moveType = _armor->getMoveTypeArmor();
-	if (_moveType == MT_FLOAT)
+/*	if (_moveType == MT_FLOAT)
 	{
 		if (depth > 0)
 			_moveType = MT_FLY;
 		else
 			_moveType = MT_WALK;
-	}
+	} */
 
 //	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
 //		_breathFrame = 0;

@@ -146,11 +146,11 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_finalMission(false),
 		_markerIcon(-1),
 		_durationMin(0),
-		_durationMax(0),
-		_minDepth(0),
-		_maxDepth(0),
-		_minSiteDepth(0),
-		_maxSiteDepth(0)
+		_durationMax(0)
+//		_minDepth(0),
+//		_maxDepth(0),
+//		_minSiteDepth(0),
+//		_maxSiteDepth(0)
 {}
 
 /**
@@ -184,17 +184,16 @@ void AlienDeployment::load(const YAML::Node& node)
 	_markerName			= node["markerName"]		.as<std::string>(_markerName);
 	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
 
-	if (node["depth"])
+/*	if (node["depth"])
 	{
 		_minDepth = node["depth"][0].as<int>(_minDepth);
 		_maxDepth = node["depth"][1].as<int>(_maxDepth);
 	}
-
 	if (node["siteDepth"])
 	{
 		_minSiteDepth = node["siteDepth"][0].as<int>(_minSiteDepth);
 		_maxSiteDepth = node["siteDepth"][1].as<int>(_maxSiteDepth);
-	}
+	} */
 
 	if (node["duration"])
 	{
@@ -394,36 +393,36 @@ const std::vector<std::string>& AlienDeployment::getMusic()
  * Gets the minimum depth for this deployment.
  * @return, the minimum depth
  */
-int AlienDeployment::getMinDepth() const
+/* int AlienDeployment::getMinDepth() const
 {
 	return _minDepth;
-}
+} */
 
 /**
  * Gets the maximum depth for this deployment.
  * @return, the maximum depth
  */
-int AlienDeployment::getMaxDepth() const
+/* int AlienDeployment::getMaxDepth() const
 {
 	return _maxDepth;
-}
+} */
 
 /**
  * Gets the minimum depth for this deployment's mission site.
  * @return, the minimum depth
  */
-int AlienDeployment::getMinSiteDepth() const
+/* int AlienDeployment::getMinSiteDepth() const
 {
 	return _minSiteDepth;
-}
+} */
 
 /**
  * Gets the maximum depth for this deployment's mission site.
  * @return, the maximum depth
  */
-int AlienDeployment::getMaxSiteDepth() const
+/* int AlienDeployment::getMaxSiteDepth() const
 {
 	return _maxSiteDepth;
-}
+} */
 
 }

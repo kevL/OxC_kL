@@ -164,7 +164,8 @@ MedikitState::MedikitState(BattleAction* action)
 
 	_bg = new Surface(320, 200);
 
-	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	if (_game->getScreen()->getDY() > 50)
 	{

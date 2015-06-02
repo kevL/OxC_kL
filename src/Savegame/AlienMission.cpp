@@ -655,8 +655,8 @@ void AlienMission::ufoReachedWaypoint(
 /**
  * Attempts to spawn a Mission Site at a given location.
  * @param rules	- reference to the Ruleset
- * @param area	- reference the point on the globe at which to spawn a mission site
- * @return, pointer to the MissionSite
+ * @param area	- reference the point on the globe at which to spawn a site
+ * @return, pointer to the site
  */
 MissionSite* AlienMission::spawnMissionSite( // private.
 		const Ruleset& rules,
@@ -679,9 +679,9 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 		missionSite->setAlienRace(_race);
 		missionSite->setSiteTextureInt(area.texture);
 		missionSite->setCity(area.site);
-		missionSite->setSiteDepth(RNG::generate(
-											deployRule->getMinSiteDepth(),
-											deployRule->getMaxSiteDepth()));
+//		missionSite->setSiteDepth(RNG::generate(
+//											deployRule->getMinSiteDepth(),
+//											deployRule->getMaxSiteDepth()));
 
 		return missionSite;
 	}

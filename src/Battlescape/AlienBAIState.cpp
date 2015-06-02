@@ -245,63 +245,61 @@ void AlienBAIState::think(BattleAction* action)
 	{
 		const RuleItem* const itRule = action->weapon->getRules();
 		//Log(LOG_INFO) << ". weapon " << itRule->getType();
-		if (itRule->isWaterOnly() == false
-			|| _battleSave->getDepth() != 0)
+//		if (itRule->isWaterOnly() == false
+//			|| _battleSave->getDepth() != 0)
+//		{
+		if (itRule->getBattleType() == BT_FIREARM)
 		{
-			if (itRule->getBattleType() == BT_FIREARM)
+			//Log(LOG_INFO) << ". . weapon is Firearm";
+			if (itRule->isWaypoints() != 0
+				&& _targetsKnown > _targetsVisible) // else let BL fallback to aimed shot
 			{
-				//Log(LOG_INFO) << ". . weapon is Firearm";
-				if (itRule->isWaypoints() != 0
-					&& _targetsKnown > _targetsVisible) // else let BL fallback to aimed shot
-				{
-					//Log(LOG_INFO) << ". . . blaster TRUE";
-					_blaster = true;
-					const int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
-																					BA_LAUNCH,
-																					action->weapon);
-					_reachableWithAttack = pf->findReachable(
-															_unit,
-															preShotTU);
-				}
-				else
-				{
-					//Log(LOG_INFO) << ". . . rifle TRUE";
-					_rifle = true;
-					const int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs( // kL_note: this needs selectFireMethod() ...
-//																					BA_SNAPSHOT,
-																					itRule->getDefaultAction(),
-																					action->weapon);
-					_reachableWithAttack = pf->findReachable(
-															_unit,
-															preShotTU);
-				}
-			}
-			else if (itRule->getBattleType() == BT_MELEE)
-			{
-				//Log(LOG_INFO) << ". . weapon is Melee";
-				_melee = true;
+				//Log(LOG_INFO) << ". . . blaster TRUE";
+				_blaster = true;
 				const int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
-																				BA_HIT,
+																				BA_LAUNCH,
 																				action->weapon);
 				_reachableWithAttack = pf->findReachable(
 														_unit,
 														preShotTU);
 			}
-			else if (itRule->getBattleType() == BT_GRENADE)	// kL
+			else
 			{
-				//Log(LOG_INFO) << ". . weapon is Grenade";
-				_grenade = true;							// kL, this is no longer useful since I fixed
-															// getMainHandWeapon() to not return grenades.
+				//Log(LOG_INFO) << ". . . rifle TRUE";
+				_rifle = true;
+				const int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs( // kL_note: this needs selectFireMethod() ...
+																				itRule->getDefaultAction(), // BA_SNAPSHOT
+																				action->weapon);
+				_reachableWithAttack = pf->findReachable(
+														_unit,
+														preShotTU);
 			}
 		}
-		else
+		else if (itRule->getBattleType() == BT_MELEE)
 		{
-			//Log(LOG_INFO) << ". . weapon is NULL [1]";
-			action->weapon = NULL;
+			//Log(LOG_INFO) << ". . weapon is Melee";
+			_melee = true;
+			const int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
+																			BA_HIT,
+																			action->weapon);
+			_reachableWithAttack = pf->findReachable(
+													_unit,
+													preShotTU);
 		}
+		else if (itRule->getBattleType() == BT_GRENADE)	// kL
+		{
+			//Log(LOG_INFO) << ". . weapon is Grenade";
+			_grenade = true;							// kL, this is no longer useful since I fixed
+														// getMainHandWeapon() to not return grenades.
+		}
+//		}
+//		else
+//		{
+			//Log(LOG_INFO) << ". . weapon is NULL [1]";
+//			action->weapon = NULL;
+//		}
 	}
-	else
-		//Log(LOG_INFO) << ". . weapon is NULL [2]";
+	//else Log(LOG_INFO) << ". . weapon is NULL [2]";
 //	else if () // kL_add -> Give the invisible 'meleeWeapon' param a try ....
 //	{
 //	}

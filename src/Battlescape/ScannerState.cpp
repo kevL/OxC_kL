@@ -75,7 +75,8 @@ ScannerState::ScannerState(BattleAction* action)
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
 
-	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_scan);
 	add(_scannerView);

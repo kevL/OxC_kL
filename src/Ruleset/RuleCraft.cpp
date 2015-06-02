@@ -53,8 +53,8 @@ RuleCraft::RuleCraft(const std::string& type)
 		_battlescapeTerrainData(NULL),
 		_spacecraft(false),
 		_listOrder(0),
-		_maxItems(0),
-		_maxDepth(0)
+		_maxItems(0)
+//		_maxDepth(0)
 {}
 
 /**
@@ -125,7 +125,7 @@ void RuleCraft::load(
 		_listOrder = listOrder;
 
 	_maxItems = node["maxItems"].as<int>(_maxItems);
-	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
+//	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 }
 
 /**
@@ -368,9 +368,9 @@ int RuleCraft::getMaxItems() const
  * Gets the maximum depth this craft can dive to.
  * @return, max depth
  */
-int RuleCraft::getMaxDepth() const
+/* int RuleCraft::getMaxDepth() const
 {
 	return _maxDepth;
-}
+} */
 
 }

@@ -72,7 +72,8 @@ AbortMissionState::AbortMissionState(
 	_btnCancel		= new TextButton(134, 18, 16, 116);
 	_btnOk			= new TextButton(134, 18, 170, 116);
 
-	_battleSave->setPaletteByDepth(this);
+//	_battleSave->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_window,			"messageWindowBorder",	"battlescape");
 	add(_txtInExit,			"messageWindows",		"battlescape");

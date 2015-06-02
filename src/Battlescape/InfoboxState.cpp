@@ -47,7 +47,8 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 	_frame	= new Frame(260, 90, 30, 27);
 	_text	= new Text(250, 80, 35, 32);
 
-	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_frame,	"infoBox", "battlescape");
 	add(_text,	"infoBox", "battlescape");

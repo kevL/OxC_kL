@@ -215,8 +215,8 @@ void ExplosionBState::init()
 				qty = 1;
 			}
 
-			if (_parent->getDepth() > 0)
-				frameStart -= Explosion::FRAMES_EXPLODE;
+//			if (_parent->getDepth() > 0)
+//				frameStart -= Explosion::FRAMES_EXPLODE;
 
 			for (int
 					i = 0;
@@ -259,12 +259,14 @@ void ExplosionBState::init()
 				sound = ResourcePack::LARGE_EXPLOSION;
 
 			if (sound != -1)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														sound)
-													->play(
-														-1,
-														_parent->getMap()->getSoundAngle(targetPos));
+//				_parent->getResourcePack()->getSoundByDepth(
+//														_parent->getDepth(),
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												sound)
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(targetPos));
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
 			if (exploCam->isOnScreen(targetPos) == false
@@ -303,11 +305,14 @@ void ExplosionBState::init()
 		}
 
 		if (sound != -1)
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													sound)->play(
-															-1,
-															_parent->getMap()->getSoundAngle(targetPos));
+//			_parent->getResourcePack()->getSoundByDepth(
+//													_parent->getDepth(),
+			_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											sound)
+										->play(
+											-1,
+											_parent->getMap()->getSoundAngle(targetPos));
 
 //		if (_hitSuccess
 //			|| _hit == false)	// note: This would prevent map-reveal on aLien melee attacks.

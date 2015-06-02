@@ -1731,7 +1731,7 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->reachedDestination() == true)
 			{
-				if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
+/*				if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
 				{
 					(*j)->returnToBase(); // TODO: set Patrol ...
 
@@ -1739,7 +1739,7 @@ void GeoscapeState::time5Seconds()
 										this,
 										tr("STR_SITE_TOO_DEEP").arg((*j)->getName(_game->getLanguage()))));
 					continue;
-				}
+				} */
 
 				Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				const Waypoint* const wayPoint = dynamic_cast<Waypoint*>((*j)->getDestination());

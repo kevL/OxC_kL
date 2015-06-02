@@ -98,7 +98,7 @@ RuleItem::RuleItem(const std::string& type)
 		_strengthApplied(false),
 		_skillApplied(true),
 		_LOSRequired(false),
-		_underwaterOnly(false),
+//		_underwaterOnly(false),
 		_noReaction(false), // kL
 		_noResearch(false), // kL
 //kL	_meleeSound(39),	// screws with hit/miss sound-determination in ProjectileFlyBState;
@@ -268,7 +268,7 @@ void RuleItem::load(
 	_noReaction				= node["noReaction"]		.as<bool>(_noReaction);
 	_noResearch				= node["noResearch"]		.as<bool>(_noResearch);
 	_meleePower				= node["meleePower"]		.as<int>(_meleePower);
-	_underwaterOnly			= node["underwaterOnly"]	.as<bool>(_underwaterOnly);
+//	_underwaterOnly			= node["underwaterOnly"]	.as<bool>(_underwaterOnly);
 	_specialType			= node["specialType"]		.as<int>(_specialType);
 //	_vaporColor				= node["vaporColor"]		.as<int>(_vaporColor);
 //	_vaporDensity			= node["vaporDensity"]		.as<int>(_vaporDensity);
@@ -998,10 +998,10 @@ bool RuleItem::isLOSRequired() const
  * Checks if this item can be used on land or if it's it underwater only.
  * @return, true if this is an underwater weapon only
  */
-const bool RuleItem::isWaterOnly() const
+/* const bool RuleItem::isWaterOnly() const
 {
 	return _underwaterOnly;
-}
+} */
 
 /**
  * Gets the associated special type of this item.

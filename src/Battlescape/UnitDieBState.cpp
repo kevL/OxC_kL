@@ -422,12 +422,14 @@ void UnitDieBState::convertToCorpse() // private.
 						if (soundPlayed == false)
 						{
 							soundPlayed = true;
-							_parent->getResourcePack()->getSoundByDepth(
-																	_parent->getDepth(),
-																	ResourcePack::SMALL_EXPLOSION)
-																->play(
-																	-1,
-																	_parent->getMap()->getSoundAngle(_unit->getPosition()));
+//							_parent->getResourcePack()->getSoundByDepth(
+//																	_parent->getDepth(),
+							_parent->getResourcePack()->getSound(
+															"BATTLE.CAT",
+															ResourcePack::SMALL_EXPLOSION)
+														->play(
+															-1,
+															_parent->getMap()->getSoundAngle(_unit->getPosition()));
 						}
 					}
 				}
@@ -482,12 +484,14 @@ void UnitDieBState::playDeathSound() // private.
 
 
 	if (sound != -1)
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(_unit->getPosition()));
+//		_parent->getResourcePack()->getSoundByDepth(
+//												_parent->getDepth(),
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play(
+										-1,
+										_parent->getMap()->getSoundAngle(_unit->getPosition()));
 }
 
 }

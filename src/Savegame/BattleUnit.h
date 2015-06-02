@@ -540,7 +540,7 @@ private:
 		/// Creates a BattleUnit from a geoscape Soldier.
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
-				const int depth,
+//				const int depth,
 				const int diff, // for VictoryPts value per death.
 				BattlescapeGame* battleGame = NULL); // for playing sound when hit.
 		/// Creates a BattleUnit from Unit rule.
@@ -550,7 +550,7 @@ private:
 				const int id,
 				RuleArmor* const armor,
 				const int diff,
-				const int depth,
+//				const int depth,
 				const int month = 0, // for upping aLien stats as time progresses.
 				BattlescapeGame* const battleGame = NULL); // for playing sound when hit (only civies).
 		/// Cleans up the BattleUnit.

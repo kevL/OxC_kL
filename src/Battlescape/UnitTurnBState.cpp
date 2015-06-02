@@ -124,11 +124,14 @@ void UnitTurnBState::init()
 				_action.result = "STR_TUS_RESERVED";
 
 			if (sound != -1)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														sound)->play(
-																-1,
-																_parent->getMap()->getSoundAngle(_unit->getPosition()));
+//				_parent->getResourcePack()->getSoundByDepth(
+//														_parent->getDepth(),
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												sound)
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 
 		_unit->setTurnDirection(0);

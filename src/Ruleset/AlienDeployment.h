@@ -103,10 +103,10 @@ private:
 		_height,
 		_length,
 		_markerIcon,
-		_maxDepth,
-		_minDepth,
-		_maxSiteDepth,
-		_minSiteDepth,
+//		_maxDepth,
+//		_minDepth,
+//		_maxSiteDepth,
+//		_minSiteDepth,
 		_shade,
 		_width;
 
@@ -190,14 +190,14 @@ private:
 		const std::vector<std::string>& getMusic();
 
 		/// Gets the minimum depth.
-		int getMinDepth() const;
+//		int getMinDepth() const;
 		/// Gets the maximum depth.
-		int getMaxDepth() const;
+//		int getMaxDepth() const;
 
 		/// Gets the minimum site depth.
-		int getMinSiteDepth() const;
+//		int getMinSiteDepth() const;
 		/// Gets the maximum site depth.
-		int getMaxSiteDepth() const;
+//		int getMaxSiteDepth() const;
 };
 
 }

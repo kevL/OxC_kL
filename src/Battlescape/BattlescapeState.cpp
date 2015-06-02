@@ -306,7 +306,8 @@ BattlescapeState::BattlescapeState()
 //	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);
 //	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
 
-	_battleSave->setPaletteByDepth(this);
+//	_battleSave->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	if (_rules->getInterface("battlescape")->getElement("pathfinding"))
 	{
@@ -993,11 +994,11 @@ BattlescapeState::~BattlescapeState()
 void BattlescapeState::init()
 {
 	//Log(LOG_INFO) << "BattlescapeState::init()";
-	if (_battleSave->getAmbientSound() != -1)
-		_game->getResourcePack()->getSoundByDepth(
-												0,
-												_battleSave->getAmbientSound())
-											->loop();
+//	if (_battleSave->getAmbientSound() != -1)
+//		_game->getResourcePack()->getSoundByDepth(
+//												0,
+//												_battleSave->getAmbientSound())
+//											->loop();
 
 	State::init();
 
@@ -2474,12 +2475,14 @@ void BattlescapeState::btnReloadClick(Action*)
 	if (playableUnitSelected() == true
 		&& _battleSave->getSelectedUnit()->checkAmmo() == true)
 	{
-		_game->getResourcePack()->getSoundByDepth(
-												_battleSave->getDepth(),
-												ResourcePack::ITEM_RELOAD)
-											->play(
-												-1,
-												_map->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
+//		_game->getResourcePack()->getSoundByDepth(
+//												_battleSave->getDepth(),
+		_game->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										ResourcePack::ITEM_RELOAD)
+									->play(
+										-1,
+										_map->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
 
 		updateSoldierInfo();
 	}
@@ -3057,7 +3060,7 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 						color = static_cast<Uint8>(colorBlue);
 				}
 				else
-					color = 114; // lt.blue <- hostile unit is visible but not currently viewed by friendly units; ergo do not cycle colors.
+					color = 51; // green // 114; // lt.blue <- hostile unit is visible but not currently viewed by friendly units; ergo do not cycle colors.
 
 				_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
 				_btnVisibleUnit[i]->drawRect(1,1, 13,11, color);
@@ -3262,11 +3265,11 @@ void BattlescapeState::finishBattle(
 
 	_game->getCursor()->setVisible();
 
-	if (_battleSave->getAmbientSound() != -1)
-		_game->getResourcePack()->getSoundByDepth(
-												0,
-												_battleSave->getAmbientSound())
-											->stopLoop();
+//	if (_battleSave->getAmbientSound() != -1)
+//		_game->getResourcePack()->getSoundByDepth(
+//												0,
+//												_battleSave->getAmbientSound())
+//											->stopLoop();
 
 	_game->getResourcePack()->fadeMusic(_game, 975);
 

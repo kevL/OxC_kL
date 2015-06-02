@@ -78,7 +78,8 @@ MiniMapState::MiniMapState(
 
 	_txtLevel	= new Text(28, 16, 281, 73);
 
-	battleSave->setPaletteByDepth(this);
+//	battleSave->setPaletteByDepth(this);
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_miniView); // put miniView *under* the background.
 	add(_bg);

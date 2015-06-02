@@ -1538,84 +1538,84 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	// Load Battlescape ICONS
 	std::ostringstream
-		s,
-		s2;
+		oststr1,
+		oststr2;
 
-	s << "UFOGRAPH/" << "SPICONS.DAT";
+	oststr1 << "UFOGRAPH/" << "SPICONS.DAT";
 	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
-	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
+	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(oststr1.str()));
 
-	s.str("");
-	s << "UFOGRAPH/" << "CURSOR.PCK";
-	s2 << "UFOGRAPH/" << "CURSOR.TAB";
+	oststr1.str("");
+	oststr1 << "UFOGRAPH/" << "CURSOR.PCK";
+	oststr2 << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
 	_sets["CURSOR.PCK"]->loadPck(
-							CrossPlatform::getDataFile(s.str()),
-							CrossPlatform::getDataFile(s2.str()));
+							CrossPlatform::getDataFile(oststr1.str()),
+							CrossPlatform::getDataFile(oststr2.str()));
 
-	s.str("");
-	s2.str("");
-	s << "UFOGRAPH/" << "SMOKE.PCK";
-	s2 << "UFOGRAPH/" << "SMOKE.TAB";
+	oststr1.str("");
+	oststr2.str("");
+	oststr1 << "UFOGRAPH/" << "SMOKE.PCK";
+	oststr2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
 	_sets["SMOKE.PCK"]->loadPck(
-							CrossPlatform::getDataFile(s.str()),
-							CrossPlatform::getDataFile(s2.str()));
+							CrossPlatform::getDataFile(oststr1.str()),
+							CrossPlatform::getDataFile(oststr2.str()));
 
-	s.str("");
-	s2.str("");
-	s << "UFOGRAPH/" << "HIT.PCK";
-	s2 << "UFOGRAPH/" << "HIT.TAB";
+	oststr1.str("");
+	oststr2.str("");
+	oststr1 << "UFOGRAPH/" << "HIT.PCK";
+	oststr2 << "UFOGRAPH/" << "HIT.TAB";
 	_sets["HIT.PCK"] = new SurfaceSet(32, 40);
 	_sets["HIT.PCK"]->loadPck(
-							CrossPlatform::getDataFile(s.str()),
-							CrossPlatform::getDataFile(s2.str()));
+							CrossPlatform::getDataFile(oststr1.str()),
+							CrossPlatform::getDataFile(oststr2.str()));
 
-	s.str("");
-	s2.str("");
-	s << "UFOGRAPH/" << "X1.PCK";
-	s2 << "UFOGRAPH/" << "X1.TAB";
+	oststr1.str("");
+	oststr2.str("");
+	oststr1 << "UFOGRAPH/" << "X1.PCK";
+	oststr2 << "UFOGRAPH/" << "X1.TAB";
 	_sets["X1.PCK"] = new SurfaceSet(128, 64);
 	_sets["X1.PCK"]->loadPck(
-							CrossPlatform::getDataFile(s.str()),
-							CrossPlatform::getDataFile(s2.str()));
+							CrossPlatform::getDataFile(oststr1.str()),
+							CrossPlatform::getDataFile(oststr2.str()));
 
-	s.str("");
+	oststr1.str("");
 	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
-	s << "UFOGRAPH/" << "MEDIBITS.DAT";
-	_sets["MEDIBITS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
+	oststr1 << "UFOGRAPH/" << "MEDIBITS.DAT";
+	_sets["MEDIBITS.DAT"]->loadDat(CrossPlatform::getDataFile(oststr1.str()));
 
-	s.str("");
+	oststr1.str("");
 	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
-	s << "UFOGRAPH/" << "DETBLOB.DAT";
-	_sets["DETBLOB.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
+	oststr1 << "UFOGRAPH/" << "DETBLOB.DAT";
+	_sets["DETBLOB.DAT"]->loadDat(CrossPlatform::getDataFile(oststr1.str()));
 
 
 	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
-	const std::string bsets[] =
+	const std::string blanks[] =
 	{
 		"BLANKS.PCK"
 	};
 
 	for (size_t
 			i = 0;
-			i < sizeof(bsets) / sizeof(bsets[0]);
+			i < sizeof(blanks) / sizeof(blanks[0]);
 			++i)
 	{
 		std::ostringstream
-			s,
-			s2;
+			oststr3,
+			oststr4;
 
-		s << "TERRAIN/" << bsets[i];
+		oststr3 << "TERRAIN/" << blanks[i];
 
-		const std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
-		s2 << "TERRAIN/" << tab;
+		const std::string tab = CrossPlatform::noExt(blanks[i]) + ".TAB";
+		oststr4 << "TERRAIN/" << tab;
 
-		//Log(LOG_INFO) << ". bset = " << s;
-		_sets[bsets[i]] = new SurfaceSet(32, 40);
-		_sets[bsets[i]]->loadPck(
-							CrossPlatform::getDataFile(s.str()),
-							CrossPlatform::getDataFile(s2.str()));
+		//Log(LOG_INFO) << ". bset = " << oststr3;
+		_sets[blanks[i]] = new SurfaceSet(32, 40);
+		_sets[blanks[i]]->loadPck(
+							CrossPlatform::getDataFile(oststr3.str()),
+							CrossPlatform::getDataFile(oststr4.str()));
 	}
 
 
@@ -1652,16 +1652,17 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 
 	// TFTD uses the loftemps dat from the terrain folder, but still has enemy unknown's version in the geodata folder, which is short by 2 entries.
-	s.str("");
-	s << "TERRAIN/" << "LOFTEMPS.DAT";
-	if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == false)
-	{
-		s.str("");
-		s << "GEODATA/" << "LOFTEMPS.DAT";
-	}
+//	oststr1.str("");
+//	oststr1 << "TERRAIN/" << "LOFTEMPS.DAT";
+//	if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr1.str())) == false)
+//	{
+	oststr1.str("");
+	oststr1 << "GEODATA/LOFTEMPS.DAT";
+//	oststr1 << "GEODATA/" << "LOFTEMPS.DAT";
+//	}
 
 	MapDataSet::loadLOFTEMPS(
-						CrossPlatform::getDataFile(s.str()),
+						CrossPlatform::getDataFile(oststr1.str()),
 						&_voxelData);
 
 	const std::string scrs[] =
@@ -1674,14 +1675,14 @@ void XcomResourcePack::loadBattlescapeResources()
 			i < sizeof(scrs) / sizeof(scrs[0]);
 			++i)
 	{
-		std::ostringstream s;
-		s << "UFOGRAPH/" << scrs[i];
+		std::ostringstream oststr;
+		oststr << "UFOGRAPH/" << scrs[i];
 
 		_surfaces[scrs[i]] = new Surface(320, 200);
-		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
+		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(oststr.str()));
 	}
 
-	const std::string lbms[] =
+/*	const std::string lbms[] =
 	{
 		"D0.LBM",
 		"D1.LBM",
@@ -1710,26 +1711,26 @@ void XcomResourcePack::loadBattlescapeResources()
 			i < sizeof(lbms) / sizeof(lbms[0]);
 			++i)
 	{
-		std::ostringstream s;
-		s << "UFOGRAPH/" << lbms[i];
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
+		std::ostringstream oststr;
+		oststr << "UFOGRAPH/" << lbms[i];
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr.str())) == true)
 		{
 			if (i == 0)
 				delete _palettes["PAL_BATTLESCAPE"];
 
-			Surface* tempSurface = new Surface(1, 1);
-			tempSurface->loadImage(CrossPlatform::getDataFile(s.str()));
+			Surface* srfTemp = new Surface(1, 1);
+			srfTemp->loadImage(CrossPlatform::getDataFile(oststr.str()));
 
 			_palettes[pals[i]] = new Palette();
-			SDL_Color* colors = tempSurface->getPalette();
+			SDL_Color* const colors = srfTemp->getPalette();
 			colors[255] = backPal[i];
 			_palettes[pals[i]]->setColors(colors, 256);
 
-			createTransparencyLUT(_palettes[pals[i]]);
+//			createTransparencyLUT(_palettes[pals[i]]);
 
-			delete tempSurface;
+			delete srfTemp;
 		}
-	}
+	} */
 
 	const std::string spks[] =
 	{
@@ -1747,12 +1748,12 @@ void XcomResourcePack::loadBattlescapeResources()
 			i < sizeof(spks) / sizeof(spks[0]);
 			++i)
 	{
-		std::ostringstream s;
-		s << "UFOGRAPH/" << spks[i];
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
+		std::ostringstream oststr;
+		oststr << "UFOGRAPH/" << spks[i];
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr.str())) == true)
 		{
 			_surfaces[spks[i]] = new Surface(320, 200);
-			_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
+			_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(oststr.str()));
 		}
 	}
 
@@ -1803,11 +1804,11 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	if (Options::battleHairBleach == true) // "fix" of color index in original soldier sprites
 	{
-		std::string ent ("XCOM_1.PCK"); // init. personal armor
+		const std::string armorSheet ("XCOM_1.PCK"); // init. personal armor
 
-		if (_sets.find(ent) != _sets.end())
+		if (_sets.find(armorSheet) != _sets.end())
 		{
-			SurfaceSet* const xcom_1 = _sets[ent];
+			SurfaceSet* const xcom_1 = _sets[armorSheet];
 			Surface* srf;
 
 			for (int // chest frame
@@ -1833,7 +1834,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 			for (int // fall frame
 					i = 0;
-					i < 3;
+					i != 3;
 					++i)
 			{
 				srf = xcom_1->getFrame(264 + i);
@@ -1851,16 +1852,16 @@ void XcomResourcePack::loadBattlescapeResources()
 			}
 		}
 
-		ent = "TDXCOM_?.PCK"; // all TFTD armors
+/*		armorSheet = "TDXCOM_?.PCK"; // all TFTD armors
 		for (int
 				j = 0;
 				j != 3;
 				++j)
 		{
-			ent[7] = '0' + static_cast<char>(j);
-			if (_sets.find(ent) != _sets.end())
+			armorSheet[7] = '0' + static_cast<char>(j);
+			if (_sets.find(armorSheet) != _sets.end())
 			{
-				SurfaceSet* const xcom_2 = _sets[ent];
+				SurfaceSet* const xcom_2 = _sets[armorSheet];
 
 				for (int
 						i = 0;
@@ -1931,7 +1932,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					}
 				}
 			}
-		}
+		} */
 	}
 }
 
@@ -2077,7 +2078,7 @@ Music* XcomResourcePack::loadMusic(
 	return music;
 } */
 
-/**
+/*
  * Preamble:
  * This is the most horrible function i've ever written, and it makes me sad.
  * This is, however, a necessary evil, in order to save massive amounts of time in the draw function.
@@ -2089,7 +2090,7 @@ Music* XcomResourcePack::loadMusic(
  * but, since it runs only at start ....
  *
  * @param pal - the palette to base the lookup table on
- */
+ *
 void XcomResourcePack::createTransparencyLUT(Palette* pal)
 {
 	SDL_Color target;
@@ -2155,6 +2156,6 @@ void XcomResourcePack::createTransparencyLUT(Palette* pal)
 	}
 
 	_transparencyLUTs.push_back(lookUpTable);
-}
+} */
 
 }

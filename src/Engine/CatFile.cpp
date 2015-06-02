@@ -19,56 +19,56 @@
 
 #include "CatFile.h"
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom
 {
 
 /**
- * Creates a CAT file stream. A CAT file starts with an index of the
- * offset and size of every file contained within. Each file consists
- * of a filename followed by its contents.
- * @param path - full path to CAT file
+ * Creates a CAT file stream.
+ * @note A CAT file starts with an index of the offset and size of every file
+ * contained within. Each file consists of a filename followed by its contents.
+ * @param path - pointer to full path to CAT file
  */
 CatFile::CatFile(const char* path)
 	:
 		std::ifstream(
-			path,
-			std::ios::in | std::ios::binary),
+					path,
+					std::ios::in | std::ios::binary),
 		_amount(0),
 		_offset(0),
 		_size(0)
 {
 	// Get amount of files
-	read(
-		(char*)&_amount,
-		sizeof(_amount));
+	std::ifstream::read(
+					(char*)&_amount,
+					sizeof(_amount));
 
 	_amount = static_cast<unsigned>(SDL_SwapLE32(_amount));
 	_amount /= 2 * sizeof(_amount);
 
 	// Get object offsets
-	seekg(
-		0,
-		std::ios::beg);
+	std::ifstream::seekg(
+					0,
+					std::ios::beg);
 
 	_offset = new unsigned int[_amount];
 	_size = new unsigned int[_amount];
 
 	for (unsigned
 			i = 0;
-			i < _amount;
+			i != _amount;
 			++i)
 	{
-		read(
-			(char*)&_offset[i],
-			sizeof(*_offset));
+		std::ifstream::read(
+						(char*)&_offset[i],
+						sizeof(*_offset));
 		_offset[i] = static_cast<unsigned>(SDL_SwapLE32(_offset[i]));
 
-		read(
-			(char*)&_size[i],
-			sizeof(*_size));
+		std::ifstream::read(
+						(char*)&_size[i],
+						sizeof(*_size));
 		_size[i] = static_cast<unsigned>(SDL_SwapLE32(_size[i]));
 	}
 }
@@ -81,13 +81,13 @@ CatFile::~CatFile()
 	delete[] _offset;
 	delete[] _size;
 
-	close();
+	std::ifstream::close();
 }
 
 /**
  * Loads an object into memory.
- * @param i		- Object number to load.
- * @param name	- True to preserve internal file name.
+ * @param i		- object number to load
+ * @param name	- true to preserve internal file name
  * @return, pointer to the loaded object
  */
 char* CatFile::load(
@@ -97,9 +97,9 @@ char* CatFile::load(
 	if (i >= _amount)
 		return 0;
 
-	seekg(
-		_offset[i],
-		std::ios::beg);
+	std::ifstream::seekg(
+					_offset[i],
+					std::ios::beg);
 
 	unsigned char namesize = static_cast<unsigned char>(peek());
 
@@ -107,18 +107,18 @@ char* CatFile::load(
 	{
 		if (name == false)
 		{
-			seekg(
-				namesize + 1,
-				std::ios::cur);
+			std::ifstream::seekg(
+						namesize + 1,
+						std::ios::cur);
 		}
 		else
 			_size[i] += namesize + 1;
 	}
 
-	char* object = new char[_size[i]];
-	read(
-		object,
-		_size[i]);
+	char* const object = new char[_size[i]];
+	std::ifstream::read(
+					object,
+					_size[i]);
 
 	return object;
 }

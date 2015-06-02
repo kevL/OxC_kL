@@ -1784,8 +1784,8 @@ bool TileEngine::reactionShot(
 		|| action.weapon->getRules()->canReactionFire() == false
 		|| action.weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
 		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return 255
-		|| (_battleSave->getDepth() == 0
-			&& action.weapon->getRules()->isWaterOnly() == true)
+//		|| (_battleSave->getDepth() == 0
+//			&& action.weapon->getRules()->isWaterOnly() == true)
 		|| (action.actor->getOriginalFaction() != FACTION_HOSTILE	// is not an aLien and has unresearched weapon.
 			&& _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()) == false))
 	{

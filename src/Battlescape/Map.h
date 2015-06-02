@@ -122,7 +122,7 @@ private:
 	std::list<Explosion*> _explosions;
 	std::vector<Position> _waypoints;
 
-	const std::vector<Uint8>* _transparencies;
+//	const std::vector<Uint8>* _transparencies;
 
 	///
 	void drawTerrain(Surface* surface);

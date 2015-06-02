@@ -810,10 +810,12 @@ void InventoryState::btnUnloadClick(Action*)
 		_selAmmo->clear();
 
 		updateStats();
-		_game->getResourcePack()->getSoundByDepth(
-											0,
-											static_cast<unsigned>(ResourcePack::ITEM_UNLOAD_HQ))
-										->play();
+//		_game->getResourcePack()->getSoundByDepth(
+//											0,
+		_game->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										ResourcePack::ITEM_UNLOAD_HQ)
+									->play();
 	}
 	else if (_tuMode == false
 		&& _inv->getSelectedItem() == NULL)
@@ -910,10 +912,12 @@ void InventoryState::btnClearInventoryClick(Action*)
 	updateStats();
 	_refreshMouse();
 
-	_game->getResourcePack()->getSoundByDepth(
-										static_cast<unsigned>(_battleGame->getDepth()),
-										static_cast<unsigned>(ResourcePack::ITEM_DROP))
-									->play();
+//	_game->getResourcePack()->getSoundByDepth(
+//										_battleGame->getDepth(),
+	_game->getResourcePack()->getSound(
+									"BATTLE.CAT",
+									ResourcePack::ITEM_DROP)
+								->play();
 }
 
 /**
