@@ -3154,7 +3154,7 @@ units:
       throwing: 80
       strength: 48
       psiStrength: 99
-      psiSkill: 36
+      psiSkill: 35
       melee: 56
     armor: ETHEREAL_ARMOR0
     standHeight: 20
@@ -3178,7 +3178,7 @@ units:
       throwing: 80
       strength: 48
       psiStrength: 114
-      psiSkill: 37
+      psiSkill: 36
       melee: 66
     armor: ETHEREAL_ARMOR1
     standHeight: 20
@@ -3202,7 +3202,7 @@ units:
       throwing: 80
       strength: 48
       psiStrength: 133
-      psiSkill: 38
+      psiSkill: 37
       melee: 78
     armor: ETHEREAL_ARMOR2
     standHeight: 20

@@ -1864,9 +1864,9 @@ void BattlescapeState::btnKneelClick(Action*)
 			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			if (_battleGame->kneel(unit) == true)
 			{
-				updateSoldierInfo(false); // kL
+				updateSoldierInfo(false);
 
-				_battleGame->getTileEngine()->calculateFOV(unit->getPosition()); // kL
+				_battleGame->getTileEngine()->calculateFOV(unit->getPosition());
 					// need this here, so that my newVis algorithm works without
 					// false positives, or true negatives as it were, when a soldier
 					// stands up and walks in one go via UnitWalkBState. Because if
@@ -1877,7 +1877,7 @@ void BattlescapeState::btnKneelClick(Action*)
 					//
 					// Will check reactionFire in BattlescapeGame::kneel()
 					// no, no it won't.
-				_battleGame->getTileEngine()->checkReactionFire(unit); // kL
+				_battleGame->getTileEngine()->checkReactionFire(unit);
 
 				Pathfinding* const pf = _battleGame->getPathfinding();
 				if (pf->isPathPreviewed() == true)

@@ -2648,7 +2648,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
 		bool allowPreview = (Options::battleNewPreviewPath != PATH_NONE);
 
-		if (targetUnit != NULL
+		if (targetUnit != NULL // select unit
 			&& targetUnit != _currentAction.actor
 			&& (targetUnit->getUnitVisible() == true
 				|| _debugPlay == true))
@@ -2661,7 +2661,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				cancelCurrentAction();
 				setupCursor();
 
-				_currentAction.actor = targetUnit; // select unit
+				_currentAction.actor = targetUnit;
 			}
 		}
 		else if (playableUnitSelected() == true)
@@ -2712,7 +2712,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 											this,
 											_currentAction));
 			}
-			else
+			else // handle pathPreview and MOVE
 			{
 				if (allowPreview == true
 					&& (_currentAction.target != targetPos

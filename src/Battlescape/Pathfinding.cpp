@@ -136,7 +136,7 @@ void Pathfinding::calculate(
 //	_unit = unit;
 //	_battleAction = _battleSave->getBattleGame()->getCurrentAction();	// Used only to set .strafe and .dash (along w/ Dashing flag) for Player-controlled units;
 																		// But also should safely ensure that nonPlayer-controlled units are flagged false.
-//	setInputModifiers(); // <- done in setMoveType() <- done in setPathingUnit()
+	setInputModifiers();
 /*	if (missileTarget == NULL)	// not sure how 'missileTarget' affects initialization yet.
 		setPathingUnit(unit);	// <- done for aLiens & Civies in BattlescapeGame::handleAI()
 	else */						// change to init behavior: these functions are called from all over by any faction so
@@ -2069,8 +2069,8 @@ bool Pathfinding::previewPath(bool discard)
 }
 
 /**
- * Unmarks the tiles used for the path preview.
- * @return, true if preview was removed
+ * Unmarks the tiles used for path preview.
+ * @return, true if preview gets removed
  */
 bool Pathfinding::removePreview()
 {
@@ -2084,7 +2084,7 @@ bool Pathfinding::removePreview()
 
 /**
  * Gets the path preview setting.
- * @return, true if paths are previewed
+ * @return, true if path is previewed
  */
 bool Pathfinding::isPathPreviewed() const
 {
@@ -2216,7 +2216,7 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
 	else
 		_battleAction = _battleSave->getBattleGame()->getCurrentAction();
 
-	setInputModifiers();
+//	setInputModifiers();
 
 	if (unit != NULL)
 //		_moveType = unit->getMoveTypeUnit();
