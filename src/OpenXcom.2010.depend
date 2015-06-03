@@ -24,7 +24,7 @@
 1430206680 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1433334978 f:\git\openxcom\src\engine\state.h
+1433336868 f:\git\openxcom\src\engine\state.h
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleInterface.h"
 
@@ -4656,7 +4656,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1433333357 f:\git\openxcom\src\battlescape\battlescapegame.h
+1433337575 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5501,7 +5501,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1433335439 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1433337751 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5795,7 +5795,7 @@
 	<string>
 	"SavedGameState.h"
 
-1431757942 source:f:\git\openxcom\src\battlescape\battlestate.cpp
+1433335055 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
 1432715019 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
@@ -6173,7 +6173,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1433318493 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1433335447 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6385,7 +6385,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433124792 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
+1433335255 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
@@ -8654,7 +8654,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1433253918 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1433335395 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8757,7 +8757,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1433307683 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1433335326 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

@@ -596,7 +596,7 @@ void BattlescapeGame::popState()
  * @param unit - pointer to a BattleUnit
  * @return, true if there are no actions pending
  */
-bool BattlescapeGame::noActionsPending(const BattleUnit* const unit)
+bool BattlescapeGame::noActionsPending(const BattleUnit* const unit) const // private
 {
 	if (_states.empty() == false)
 	{
@@ -1209,7 +1209,7 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
  *	- handleState()
  *	- statePushBack()
  */
-void BattlescapeGame::endTurnPhase()
+void BattlescapeGame::endTurnPhase() // private.
 {
 	_debugPlay = false;
 	_AISecondMove = false;
@@ -1885,7 +1885,7 @@ void BattlescapeGame::checkForCasualties(
 /**
  * Shows the infoboxes in the queue if any.
  */
-void BattlescapeGame::showInfoBoxQueue()
+void BattlescapeGame::showInfoBoxQueue() // private.
 {
 	for (std::vector<InfoboxOKState*>::const_iterator
 			i = _infoboxQueue.begin();
@@ -2061,7 +2061,7 @@ bool BattlescapeGame::checkReservedTU(
  * Picks the first soldier that is panicking.
  * @return, true when all panicking is over
  */
-bool BattlescapeGame::handlePanickingPlayer()
+bool BattlescapeGame::handlePanickingPlayer() // private.
 {
 	for (std::vector<BattleUnit*>::const_iterator
 			j = _battleSave->getUnits()->begin();
@@ -2083,7 +2083,7 @@ bool BattlescapeGame::handlePanickingPlayer()
  * Handles panicking units.
  * @return, true if unit is panicking
  */
-bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit)
+bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 {
 	const UnitStatus status = unit->getStatus();
 
@@ -2154,7 +2154,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit)
 				pf->setPathingUnit(unit);
 
 				tu = RNG::generate(10, tu);
-				Log(LOG_INFO) << unit->getId() << " tu = " << tu;
 				std::vector<int> reachable = pf->findReachable(
 															unit,
 															tu);
@@ -2248,12 +2247,12 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit)
 									i != 10;
 									++i)
 							{
-								if (ba.actor->spendTimeUnits(actionTu) == false)
+								if (ba.actor->spendTimeUnits(actionTu) == true)
+									statePushBack(new ProjectileFlyBState(
+																		this,
+																		ba));
+								else
 									break;
-
-								statePushBack(new ProjectileFlyBState(
-																	this,
-																	ba));
 							}
 						}
 					}

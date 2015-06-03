@@ -174,7 +174,7 @@ private:
 
 
 	/// Determines whether there are any actions pending for the given unit.
-	bool noActionsPending(const BattleUnit* const unit);
+	bool noActionsPending(const BattleUnit* const unit) const;
 	/// Ends the turn.
 	void endTurnPhase();
 	/// Picks the first soldier that is panicking.

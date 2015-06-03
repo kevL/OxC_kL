@@ -19,8 +19,8 @@
 
 #include "AdlibMusic.h"
 
-#include <algorithm>
-#include <fstream>
+//#include <algorithm>
+//#include <fstream>
 
 #include "Exception.h"
 #include "Game.h"
@@ -45,7 +45,7 @@ std::map<int, int> AdlibMusic::delayRates;
 
 /**
  * Initializes a new music track.
- * @param volume Music volume modifier (1.0 = 100%).
+ * @param volume - music volume modifier (1.0 = 100%) (default 1.f)
  */
 AdlibMusic::AdlibMusic(float volume)
 	:
@@ -108,8 +108,8 @@ AdlibMusic::~AdlibMusic()
  */
 void AdlibMusic::load(const std::string& filename)
 {
-	std::ifstream file(filename.c_str(), std::ios::binary);
-	if (!file)
+	std::ifstream file (filename.c_str(), std::ios::binary);
+	if (file.fail() == true)
 	{
 		throw Exception(filename + " not found");
 	}
@@ -141,11 +141,12 @@ void AdlibMusic::load(
 
 /**
  * Plays the contained music track.
- * @param loop - not used. But needs to be here because of virtual function in
- * base class Music, which has a default set meaning this won't overload the
- * virtual function unless that default is removed. That ain't gonna happen ....
+ * @param loop - not used (default -1). But needs to be here because of virtual
+ * function in base class Music which has a default set - meaning this won't
+ * overload the virtual function unless that default is removed. That ain't
+ * gonna happen ....
  */
-void AdlibMusic::play(int loop) const
+void AdlibMusic::play(int /*loop*/) const
 {
 #ifndef __NO_MUSIC
 	if (Options::mute == false)
@@ -162,9 +163,9 @@ void AdlibMusic::play(int loop) const
 
 /**
  * Custom audio player.
- * @param udata User data to send to the player.
- * @param stream Raw audio to output.
- * @param len Length of audio to output.
+ * @param udata		- user data to send to the player
+ * @param stream	- raw audio to output
+ * @param len		- length of audio to output
  */
 void AdlibMusic::player(
 		void* udata,
