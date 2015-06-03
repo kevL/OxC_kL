@@ -91,22 +91,38 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_groundLevel(-1),
 		_tacType(TCT_DEFAULT),
 		_controlDestroyed(false),
-		_tiles(NULL),
-		_dragInvert(false),
-		_dragTimeTolerance(0),
-		_dragPixelTolerance(0)
+		_tiles(NULL)
+//		_dragInvert(false),
+//		_dragTimeTolerance(0),
+//		_dragPixelTolerance(0)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
-	_tileSearch.resize(11 * 11);
-
+//	static const size_t&
+//		SEARCH_DIST = 11,
+//		SEARCH_SIZE = SEARCH_DIST * SEARCH_DIST; // wtfn. It's c++!
+	_tileSearch.resize(SEARCH_SIZE);
 	for (size_t
 			i = 0;
-			i != 121;
+			i != SEARCH_SIZE;
 			++i)
 	{
-		_tileSearch[i].x = (static_cast<int>(i) % 11) - 5;
-		_tileSearch[i].y = (static_cast<int>(i) / 11) - 5;
+		_tileSearch[i].x = (static_cast<int>(i % SEARCH_DIST)) - 5; // ie. -5 to +5
+		_tileSearch[i].y = (static_cast<int>(i / SEARCH_DIST)) - 5; // ie. -5 to +5
 	}
+	/*	The '_tileSearch' array (Position):
+		0		1		2		3		4		5		6		7		8		9		10
+	[	-5,-5	-4,-5	-3,-5	-2,-5	-1,-5	0,-5	1,-5	2,-5	3,-5	4,-5	5,-5	//  0
+		-5,-4	-4,-4	-3,-4	-2,-4	-1,-4	0,-4	1,-4	2,-4	3,-4	4,-4	5,-4	//  1
+		-5,-3	-4,-3	-3,-3	-2,-3	-1,-3	0,-3	1,-3	2,-3	3,-3	4,-3	5,-3	//  2
+		-5,-2	-4,-2	-3,-2	-2,-2	-1,-2	0,-2	1,-2	2,-2	3,-2	4,-2	5,-2	//  3
+		-5,-1	-4,-1	-3,-1	-2,-1	-1,-1	0,-1	1,-1	2,-1	3,-1	4,-1	5,-1	//  4
+		-5, 0	-4, 0	-3, 0	-2, 0	-1, 0	0, 0	1, 0	2, 0	3, 0	4, 0	5, 0	//  5
+		-5, 1	-4, 1	-3, 1	-2, 1	-1, 1	0, 1	1, 1	2, 1	3, 1	4, 1	5, 1	//  6
+		-5, 2	-4, 2	-3, 2	-2, 2	-1, 2	0, 2	1, 2	2, 2	3, 2	4, 2	5, 2	//  7
+		-5, 3	-4, 3	-3, 3	-2, 3	-1, 3	0, 3	1, 3	2, 3	3, 3	4, 3	5, 3	//  8
+		-5, 4	-4, 4	-3, 4	-2, 4	-1, 4	0, 4	1, 4	2, 4	3, 4	4, 4	5, 4	//  9
+		-5, 5	-4, 5	-3, 5	-2, 5	-1, 5	0, 5	1, 5	2, 5	3, 5	4, 5	5, 5 ]	// 10
+	*/
 
 	if (titles != NULL)
 	{
@@ -1353,7 +1369,12 @@ bool SavedBattleGame::endBattlePhase()
 			i != _units.end();
 			++i)
 	{
-		(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
+		(*i)->setDashing(false);	// Safety. no longer dashing; dash is effective
+									// vs. Reaction Fire only and is/ought be
+									// reset/removed every time BattlescapeGame::primaryAction()
+									// uses the Pathfinding object. Other, more ideal
+									// places for this safety are UnitWalkBState dTor
+									// and/or BattlescapeGame::popState().
 
 		if ((*i)->getOriginalFaction() == _side)
 		{

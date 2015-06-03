@@ -56,7 +56,7 @@ class EntryCompare
 
 
 /**
- * A class that holds references to the nodes to be examined in pathfinding.
+ * A class that holds references to the nodes to be examined in Pathfinding.
  */
 class PathfindingOpenSet
 {
@@ -79,7 +79,7 @@ private:
 
 		/// Gets if the set is empty.
 		bool isNodeSetEmpty() const
-		{	return (_queue.empty() == true); }
+		{ return (_queue.empty() == true); }
 };
 
 }

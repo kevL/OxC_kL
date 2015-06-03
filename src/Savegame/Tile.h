@@ -309,13 +309,13 @@ protected:
 		/// Gets the direction of path preview arrows.
 		int getPreviewDir() const;
 		/// Sets the number to be displayed for path preview.
-		void setTUMarker(int tu);
+		void setPreviewTU(int tu);
 		/// Gets the number to be displayed for path preview.
-		int getTUMarker() const;
-		/// Sets the tile marker color.
-		void setMarkerColor(Uint8 color);
-		/// Gets the tile marker color.
-		int getMarkerColor() const;
+		int getPreviewTU() const;
+		/// Sets the preview tile marker color.
+		void setPreviewColor(Uint8 color);
+		/// Gets the preview tile marker color.
+		int getPreviewColor() const;
 
 		/// Sets the danger flag on this tile so the AI may avoid it.
 		void setDangerous(bool danger = true);

@@ -337,16 +337,16 @@ void CivilianBAIState::setupEscape()
 	const int
 		EXPOSURE_PENALTY		= 10,
 		FIRE_PENALTY			= 40,
-		BASE_SYSTEMATIC_SUCCESS	= 100,
-		BASE_DESPERATE_SUCCESS	= 110,
-		FAST_PASS_THRESHOLD		= 100; // a score that's good enough to quit the while-loop early
+		BASE_SUCCESS_SYSTEMATIC	= 100,
+		BASE_SUCCESS_DESPERATE	= 110,
+		FAST_PASS_THRESHOLD		= 100, // a score that's good enough to quit the while-loop early
+		CUR_TILE_PREF			= 15;
 
 	int
 		bestTileScore = -100000,
 		score,
 		tu = _unit->getTimeUnits() / 2,
 		unitsSpotting = countSpottingUnits(_unit->getPosition()),
-		currentTilePref = 15,
 		dist = 0;
 
 	countHostiles(); // sets an _aggroTarget
@@ -364,8 +364,8 @@ void CivilianBAIState::setupEscape()
 												_unit,
 												tu);
 
-	std::vector<Position> randomTileSearch = _battleSave->getTileSearch();
-	RNG::shuffle(randomTileSearch);
+	std::vector<Position> randTileSearch = _battleSave->getTileSearch();
+	RNG::shuffle(randTileSearch);
 
 	bool coverFound = false;
 	int tries = 0;
@@ -376,13 +376,13 @@ void CivilianBAIState::setupEscape()
 
 		score = 0;
 
-		if (tries < 121)
+		if (tries < _battleSave->SEARCH_SIZE) //121 // looking for cover
 		{
 			// looking for cover
-			_escapeAction->target.x += randomTileSearch[tries].x;
-			_escapeAction->target.y += randomTileSearch[tries].y;
+			_escapeAction->target.x += randTileSearch[tries].x;
+			_escapeAction->target.y += randTileSearch[tries].y;
 
-			score = BASE_SYSTEMATIC_SUCCESS;
+			score = BASE_SUCCESS_SYSTEMATIC;
 
 			if (_escapeAction->target == _unit->getPosition())
 			{
@@ -393,14 +393,14 @@ void CivilianBAIState::setupEscape()
 					_escapeAction->target.y += RNG::generate(-20,20);
 				}
 				else
-					score += currentTilePref;
+					score += CUR_TILE_PREF;
 			}
 		}
 		else
 		{
 			//if (_traceAI && tries == 121) Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 
-			score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
+			score = BASE_SUCCESS_DESPERATE; // ruuuuuuun
 
 			_escapeAction->target = _unit->getPosition();
 			_escapeAction->target.x += RNG::generate(-10,10);
@@ -459,9 +459,9 @@ void CivilianBAIState::setupEscape()
 
 //			if (_traceAI)
 //			{
-//				tile->setMarkerColor(score < 0? 3: (score < FAST_PASS_THRESHOLD/2? 8: (score < FAST_PASS_THRESHOLD ?9: 5)));
+//				tile->setPreviewColor(score < 0? 3: (score < FAST_PASS_THRESHOLD/2? 8: (score < FAST_PASS_THRESHOLD ?9: 5)));
 //				tile->setPreviewDir(10);
-//				tile->setTUMarker(score);
+//				tile->setPreviewTU(score);
 //			}
 		}
 
@@ -488,9 +488,9 @@ void CivilianBAIState::setupEscape()
 
 //				if (_traceAI)
 //				{
-//					tile->setMarkerColor(score < 0? 7: (score < FAST_PASS_THRESHOLD / 2? 10: (score < FAST_PASS_THRESHOLD ?4: 5)));
+//					tile->setPreviewColor(score < 0? 7: (score < FAST_PASS_THRESHOLD / 2? 10: (score < FAST_PASS_THRESHOLD ?4: 5)));
 //					tile->setPreviewDir(10);
-//					tile->setTUMarker(score);
+//					tile->setPreviewTU(score);
 //				}
 			}
 
@@ -503,7 +503,7 @@ void CivilianBAIState::setupEscape()
 
 	_escapeAction->target = bestTilePos;
 
-	//if (_traceAI) _battleSave->getTile(_escapeAction->target)->setMarkerColor(13);
+	//if (_traceAI) _battleSave->getTile(_escapeAction->target)->setPreviewColor(13);
 
 	if (bestTileScore <= -100000)
 	{

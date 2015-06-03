@@ -768,7 +768,7 @@ void Map::drawTerrain(Surface* surface) // private.
 
 					unit = tile->getUnit();
 
-//					tileColor = tile->getMarkerColor();
+//					tileColor = tile->getPreviewColor();
 					hasFloor = false;
 //					hasWestWall = false;
 //					hasNorthWall = false;
@@ -3401,7 +3401,7 @@ void Map::drawTerrain(Surface* surface) // private.
 										screenPosition.y + 2,
 										0,
 										false,
-										tile->getMarkerColor());
+										tile->getPreviewColor());
 						}
 
 						srfSprite = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreviewDir());
@@ -3412,7 +3412,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									screenPosition.y,
 									0,
 									false,
-									tile->getMarkerColor());
+									tile->getPreviewColor());
 					}
 
 
@@ -4256,7 +4256,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											screenPosition.y + 2,
 											0,
 											false,
-											tile->getMarkerColor());
+											tile->getPreviewColor());
 							}
 
 							const int overlay = tile->getPreviewDir() + 12;
@@ -4268,14 +4268,14 @@ void Map::drawTerrain(Surface* surface) // private.
 										screenPosition.y - offset_y,
 										0,
 										false,
-										tile->getMarkerColor());
+										tile->getPreviewColor());
 						}
 
 						if ((_previewSetting & PATH_TU_COST)
-							&& tile->getTUMarker() > -1)
+							&& tile->getPreviewTU() > -1)
 						{
 							int offset_x;
-							if (tile->getTUMarker() > 9)
+							if (tile->getPreviewTU() > 9)
 								offset_x = 4;
 							else
 								offset_x = 2;
@@ -4288,7 +4288,7 @@ void Map::drawTerrain(Surface* surface) // private.
 									offset_y += 7;
 							}
 
-							wpID->setValue(tile->getTUMarker());
+							wpID->setValue(tile->getPreviewTU());
 							wpID->draw();
 
 							if (!(_previewSetting & PATH_ARROWS))
@@ -4299,7 +4299,7 @@ void Map::drawTerrain(Surface* surface) // private.
 											screenPosition.y + 37 - offset_y, // kL
 											0,
 											false,
-											tile->getMarkerColor());
+											tile->getPreviewColor());
 							else
 								wpID->blitNShade(
 											surface,

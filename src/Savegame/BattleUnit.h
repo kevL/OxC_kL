@@ -1042,7 +1042,7 @@ private:
 		bool getStopShot() const;
 
 		/// Sets this unit as dashing.
-		void setDashing(bool dash);
+		void setDashing(bool dash = true);
 		/// Gets if this unit is dashing.
 		bool getDashing() const;
 

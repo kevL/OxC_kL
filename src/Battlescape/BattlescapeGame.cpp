@@ -306,9 +306,9 @@ void BattlescapeGame::popState()
 		return;
 	}
 
+	const BattleAction action = _states.front()->getAction();
 	bool actionFailed = false;
 
-	const BattleAction action = _states.front()->getAction();
 	if (action.actor != NULL
 		&& action.actor->getFaction() == FACTION_PLAYER
 		&& action.result.length() > 0 // kL_note: This queries the warning string message.
@@ -592,24 +592,24 @@ void BattlescapeGame::popState()
 }
 
 /**
- * Determines whether there are any actions pending for the given unit.
- * @param bu - pointer to a BattleUnit
+ * Determines whether there are any actions pending for a given unit.
+ * @param unit - pointer to a BattleUnit
  * @return, true if there are no actions pending
  */
-bool BattlescapeGame::noActionsPending(BattleUnit* bu)
+bool BattlescapeGame::noActionsPending(const BattleUnit* const unit)
 {
-	if (_states.empty() == true)
-		return true;
-
-	for (std::list<BattleState*>::const_iterator
-			i = _states.begin();
-			i != _states.end();
-			++i)
+	if (_states.empty() == false)
 	{
-		if (*i != NULL
-			&& (*i)->getAction().actor == bu)
+		for (std::list<BattleState*>::const_iterator
+				i = _states.begin();
+				i != _states.end();
+				++i)
 		{
-			return false;
+			if (*i != NULL
+				&& (*i)->getAction().actor == unit)
+			{
+				return false;
+			}
 		}
 	}
 
@@ -2072,8 +2072,6 @@ bool BattlescapeGame::handlePanickingPlayer()
 			&& (*j)->getOriginalFaction() == FACTION_PLAYER
 			&& handlePanickingUnit(*j) == true)
 		{
-			//Log(LOG_INFO) << "handlePanickingPlayer: setPanicking TRUE";
-			//(*j)->setPanicking();
 			return false;
 		}
 	}
@@ -2085,15 +2083,13 @@ bool BattlescapeGame::handlePanickingPlayer()
  * Handles panicking units.
  * @return, true if unit is panicking
  */
-bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
+bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::handlePanickingUnit() " << unit->getId();
 	const UnitStatus status = unit->getStatus();
 
 	if (status == STATUS_PANICKING
 		|| status == STATUS_BERSERK)
 	{
-		//Log(LOG_INFO) << "unit Panic/Berserk ID " << unit->getId() << " / " << unit->getMorale();
 		_parentState->getMap()->setCursorType(CT_NONE);
 		_battleSave->setSelectedUnit(unit);
 
@@ -2120,88 +2116,88 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 		BattleAction ba;
 		ba.actor = unit;
+		ba.type = BA_NONE;
+
+		int tu = unit->getBaseStats()->tu;
+		unit->setTimeUnits(tu); // start w/ fresh TUs
 
 		switch (status)
 		{
 			case STATUS_PANICKING:
-				if (RNG::percent(50) == true) // 50:50 flee or freeze
+			{
+				BattleItem* item;
+				if (RNG::percent(75) == true)
 				{
-					BattleItem* item;
-					if (RNG::percent(75) == true)
-					{
-						item = unit->getItem("STR_RIGHT_HAND");
-						if (item != NULL)
-							dropItem(
-									unit->getPosition(),
-									item,
-									false,
-									true);
-					}
-
-					if (RNG::percent(75) == true)
-					{
-						item = unit->getItem("STR_LEFT_HAND");
-						if (item != NULL)
-							dropItem(
-									unit->getPosition(),
-									item,
-									false,
-									true);
-					}
-
-					unit->setCache(NULL);
-
-					for (int // try a few times to get a tile to run to.
-							i = 0;
-							i != 20;
-							++i)
-					{
-						ba.target = Position(
-										unit->getPosition().x + RNG::generate(-5,5),
-										unit->getPosition().y + RNG::generate(-5,5),
-										unit->getPosition().z);
-
-						if (ba.target.z > 0
-							&& i > 9)
-						{
-							--ba.target.z;
-
-							if (ba.target.z > 0
-								&& i > 14)
-							{
-								--ba.target.z;
-							}
-						}
-
-						if (_battleSave->getTile(ba.target) != NULL)
-						{
-							Pathfinding* const pf = _battleSave->getPathfinding();
-							pf->setPathingUnit(ba.actor);
-							pf->calculate(
-										ba.actor,
-										ba.target);
-
-							if (pf->getStartDirection() != -1)
-							{
-								statePushBack(new UnitWalkBState(
-																this,
-																ba));
-								// wait a sec, if there are two+ units doing panic-movement
-								// won't their paths need to be recalculated as their respective
-								// UnitWalkBStates get taken care of one after the next
-								break;
-							}
-						}
-					}
+					item = unit->getItem("STR_RIGHT_HAND");
+					if (item != NULL)
+						dropItem(
+								unit->getPosition(),
+								item,
+								false,
+								true);
 				}
-			break;
+
+				if (RNG::percent(75) == true)
+				{
+					item = unit->getItem("STR_LEFT_HAND");
+					if (item != NULL)
+						dropItem(
+								unit->getPosition(),
+								item,
+								false,
+								true);
+				}
+
+				unit->setCache(NULL);
+
+				Pathfinding* const pf = _battleSave->getPathfinding();
+				pf->setPathingUnit(unit);
+
+				tu = RNG::generate(10, tu);
+				Log(LOG_INFO) << unit->getId() << " tu = " << tu;
+				std::vector<int> reachable = pf->findReachable(
+															unit,
+															tu);
+				const size_t
+					pick = static_cast<size_t>(RNG::generate(
+														0,
+														reachable.size() - 1)),
+					tileId = static_cast<size_t>(reachable[pick]);
+
+				_battleSave->getTileCoords(
+										tileId,
+										&ba.target.x,
+										&ba.target.y,
+										&ba.target.z);
+				pf->calculate(
+							ba.actor,
+							ba.target,
+							NULL,
+							tu);
+
+				if (pf->getStartDirection() != -1)
+				{
+					ba.actor->setDashing();
+					ba.dash = true;
+					ba.type = BA_WALK;
+					// wait a sec, if there are two+ units doing panic-movement
+					// won't their paths need to be recalculated as their respective
+					// UnitWalkBStates get taken care of one after the next ...
+					// guess not, they all get different ba-targets.
+					statePushBack(new UnitWalkBState(
+													this,
+													ba));
+				}
+			}
+			break; // End_case_PANICKING.
 
 			case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
-				ba.type = BA_TURN;	// towards an enemy unit or shoot towards random place
-				const int pivot = RNG::generate(2,5);
+			{						// towards an enemy unit or shoot towards random place
+				ba.type = BA_TURN;
+				const int pivotQty = RNG::generate(2,5);
 				for (int
 						i = 0;
-						i != pivot;
+						i != pivotQty;
 						++i)
 				{
 					ba.target = Position(
@@ -2214,18 +2210,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 													false));
 				}
 
-/*				for (std::vector<BattleUnit*>::const_iterator
-						j = unit->getVisibleUnits()->begin();
-						j != unit->getVisibleUnits()->end();
-						++j)
-				{
-					//Log(LOG_INFO) << ". TARGET = visUnit = " << (*j)->getId();
-					ba.target = (*j)->getPosition(); // this should not attack a unit, but a random tile.
-					statePushBack(new UnitTurnBState(
-													this,
-													ba,
-													false));
-				} */ // so try this
 				ba.weapon = unit->getMainHandWeapon();
 				if (ba.weapon == NULL)
 					ba.weapon = unit->getGrenade();
@@ -2239,10 +2223,11 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 				{
 					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{
-						const size_t mapSize = _battleSave->getMapSizeXYZ();
-						const int pick = RNG::generate(
-													0,
-													static_cast<int>(mapSize) - 1);
+						const size_t
+							mapSize = _battleSave->getMapSizeXYZ(),
+							pick = static_cast<size_t>(RNG::generate(
+																0,
+																static_cast<int>(mapSize) - 1));
 						Tile* const targetTile = _battleSave->getTiles()[pick];
 						ba.target = targetTile->getPosition();
 						if (_battleSave->getTile(ba.target) != NULL)
@@ -2254,16 +2239,16 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 							ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 							ba.type = BA_SNAPSHOT;
-							const int tu = ba.actor->getActionTUs(
-																ba.type,
-																ba.weapon);
+							const int actionTu = ba.actor->getActionTUs(
+																	ba.type,
+																	ba.weapon);
 
 							for (int // fire shots until unit runs out of TUs
 									i = 0;
 									i != 10;
 									++i)
 							{
-								if (ba.actor->spendTimeUnits(tu) == false)
+								if (ba.actor->spendTimeUnits(actionTu) == false)
 									break;
 
 								statePushBack(new ProjectileFlyBState(
@@ -2319,16 +2304,14 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 						}
 					}
 				}
-
-				unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting <- why
-				ba.type = BA_NONE;
+			} // End_case_BERSERK.
 		}
 
 		statePushBack(new UnitPanicBState( // TimeUnits can be reset only after everything else occurs
 										this,
 										unit));
-		unit->moraleChange(10 + RNG::generate(0,10));
 
+		unit->moraleChange(10 + RNG::generate(0,10));
 		return true;
 	}
 
@@ -2767,7 +2750,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				{
 					_currentAction.strafe = false;
 					_currentAction.dash = true;
-					_currentAction.actor->setDashing(true);
+					_currentAction.actor->setDashing();
 				} */
 
 

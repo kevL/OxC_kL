@@ -52,6 +52,8 @@ Uint8
 
 /**
  * Sets up a Pathfinding object.
+ * @note Calls to this object should usually be preceded w/ a call to
+ * setPathingUnit() in order to setup '_unit' and '_moveType'.
  * @param battleSave - pointer to SavedBattleGame.
  */
 Pathfinding::Pathfinding(SavedBattleGame* battleSave)
@@ -68,10 +70,10 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 		_openDoor(0)
 {
 	//Log(LOG_INFO) << "Create Pathfinding";
-	_nodes.reserve(_battleSave->getMapSizeXYZ()); // initialize one node per tile.
+	_nodes.reserve(_battleSave->getMapSizeXYZ()); // reserve one node per tile.
 
 	Position pos;
-	for (size_t
+	for (size_t // initialize one node per tile.
 			i = 0;
 			i != _battleSave->getMapSizeXYZ();
 			++i)
@@ -109,14 +111,14 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
  * @param unit				- pointer to a BattleUnit
  * @param destPos			- destination Position
  * @param missileTarget		- pointer to a targeted BattleUnit (default NULL)
- * @param maxTUCost			- maximum time units this path can cost (default 1000)
+ * @param maxTuCost			- maximum time units this path can cost (default 1000)
  * @param strafeRejected	- true if path needs to be recalculated w/out strafe (default false)
  */
 void Pathfinding::calculate(
 		BattleUnit* const unit, // -> should not need 'unit' here anymore; done in setPathingUnit() unless FACTION_PLAYER ...
 		Position destPos,
 		const BattleUnit* const missileTarget,
-		int maxTUCost,
+		int maxTuCost,
 		bool strafeRejected)
 {
 	//Log(LOG_INFO) << "Pathfinding::calculate()";
@@ -133,42 +135,16 @@ void Pathfinding::calculate(
 		return;
 	}
 
-//	_unit = unit;
-//	_battleAction = _battleSave->getBattleGame()->getCurrentAction();	// Used only to set .strafe and .dash (along w/ Dashing flag) for Player-controlled units;
-																		// But also should safely ensure that nonPlayer-controlled units are flagged false.
 	setInputModifiers();
 	setMoveType(); // redundant in some cases ...
-/*	if (missileTarget == NULL)	// not sure how 'missileTarget' affects initialization yet.
-		setPathingUnit(unit);	// <- done for aLiens & Civies in BattlescapeGame::handleAI()
-	else */						// change to init behavior: these functions are called from all over by any faction so
-								// always call setPathingUnit() immediately after creating a reference to this class-object.
-	if (missileTarget != NULL	// pathfinding for missile
-		&& maxTUCost == -1)			// TODO: figure how 'missileTarget' and 'maxTUCost' work together or not. -> are they redudant, and if so how redundant.
+
+	if (missileTarget != NULL	// pathfinding for missile; not sure how 'missileTarget' affects initialization yet.
+		&& maxTuCost == -1)		// TODO: figure how 'missileTarget' and 'maxTuCost' work together or not. -> are they redudant, and if so how redundant.
 	{
-		maxTUCost = 10000;
 		_moveType = MT_FLY;
-
 		strafeRejected = true;
+		maxTuCost = 1000;
 	}
-//	else
-//	{
-//		setMoveType();
-/*		_moveType = unit->getMoveTypeUnit();
-
-		if (_modifALT == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-			&& _moveType == MT_FLY
-			&& (unit->getGeoscapeSoldier() != NULL
-				|| unit->getUnitRules()->isMechanical() == false)	// hovertanks & cyberdiscs always hover.
-			&& unit->getRaceString() != "STR_FLOATER"				// floaters always float
-			&& unit->getRaceString() != "STR_CELATID")				// celatids always .. float.
-																	// Ethereals *can* walk, but they don't like to.
-																	// Should turn this into Ruleset param: 'alwaysFloat'
-																	// or use floatHeight > 0 or something-like-that
-		{
-			//Log(LOG_INFO) << ". MT_WALK";
-			_moveType = MT_WALK;
-		} */
-//	}
 
 	if (unit->getFaction() != FACTION_PLAYER)
 		strafeRejected = true;
@@ -312,7 +288,8 @@ void Pathfinding::calculate(
 					startPos,
 					destPos,
 					missileTarget,
-					sneak) == true)
+					sneak,
+					maxTuCost) == true)
 	{
 		std::reverse(
 				_path.begin(),
@@ -327,7 +304,7 @@ void Pathfinding::calculate(
 					destPos,
 					missileTarget,
 					sneak,
-					maxTUCost) == false)
+					maxTuCost) == false)
 		{
 			abortPath();
 		}
@@ -342,7 +319,7 @@ void Pathfinding::calculate(
 					unit,
 					destPos2,
 					missileTarget,
-					maxTUCost,
+					maxTuCost,
 					true); // <- sets '_strafe' FALSE so loop never gets back in here.
 		}
 		else if (Options::strafe == true
@@ -357,7 +334,7 @@ void Pathfinding::calculate(
 
 			_battleAction->strafe = false;
 			_battleAction->dash = true;
-			_battleAction->actor->setDashing(true);
+			_battleAction->actor->setDashing();
 		}
 		else // if (_strafe == false)
 		{
@@ -374,7 +351,7 @@ void Pathfinding::calculate(
  * @param target		- reference the Position to end at
  * @param missileTarget	- pointer to targeted BattleUnit
  * @param sneak			- true if unit is sneaking (default false)
- * @param maxTUCost		- maximum time units the path can cost (default 1000)
+ * @param maxTuCost		- maximum time units the path can cost (default 1000)
  * @return, true if a path is found
  */
 bool Pathfinding::bresenhamPath(
@@ -382,7 +359,7 @@ bool Pathfinding::bresenhamPath(
 		const Position& target,
 		const BattleUnit* const missileTarget,
 		bool sneak,
-		int maxTUCost)
+		int maxTuCost)
 {
 	//Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
 	const int
@@ -481,12 +458,12 @@ bool Pathfinding::bresenhamPath(
 				}
 			}
 
-			const int tuCost = getTUCostPath(
+			const int tuCost = getTUCostPF(
 										lastPoint,
 										dir,
 										&nextPoint,
 										missileTarget,
-										(missileTarget && maxTUCost == 10000));
+										missileTarget != NULL && maxTuCost == 1000);
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 
 			if (sneak == true
@@ -559,7 +536,7 @@ bool Pathfinding::bresenhamPath(
  * @param target		- reference the position to end at
  * @param missileTarget	- pointer to targeted BattleUnit
  * @param sneak			- true if the unit is sneaking (default false)
- * @param maxTUCost		- maximum time units this path can cost (default 1000)
+ * @param maxTuCost		- maximum time units this path can cost (default 1000)
  * @return, true if a path is found
  */
 bool Pathfinding::aStarPath(
@@ -567,7 +544,7 @@ bool Pathfinding::aStarPath(
 		const Position& target,
 		const BattleUnit* const missileTarget,
 		bool sneak,
-		int maxTUCost)
+		int maxTuCost)
 {
 	//Log(LOG_INFO) << "Pathfinding::aStarPath()";
 
@@ -586,7 +563,8 @@ bool Pathfinding::aStarPath(
 		* node,
 		* nextNode;
 
-	startNode->linkNode(0, NULL, 0, target);
+	startNode->linkNode(0,NULL,0, target);
+
 	PathfindingOpenSet openList;
 	openList.addNode(startNode);
 
@@ -594,7 +572,7 @@ bool Pathfinding::aStarPath(
 	int tuCost;
 
 	const bool missile = missileTarget != NULL
-					  && maxTUCost == -1;
+					  && maxTuCost == -1;
 
 	while (openList.isNodeSetEmpty() == false) // if the openList is empty, reached the end
 	{
@@ -622,12 +600,12 @@ bool Pathfinding::aStarPath(
 				++dir)
 		{
 			//Log(LOG_INFO) << ". try dir ... " << dir;
-			tuCost = getTUCostPath(
-								currentPos,
-								dir,
-								&nextPos,
-								missileTarget,
-								missile);
+			tuCost = getTUCostPF(
+							currentPos,
+							dir,
+							&nextPos,
+							missileTarget,
+							missile);
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
@@ -639,7 +617,7 @@ bool Pathfinding::aStarPath(
 			}
 
 			nextNode = getNode(nextPos);
-			if (nextNode->isChecked() == true) // algorithm means this node is already at minimum cost
+			if (nextNode->getChecked() == true) // algorithm means this node is already at minimum cost
 			{
 				//Log(LOG_INFO) << ". node already Checked ... cont.";
 				continue;
@@ -650,7 +628,7 @@ bool Pathfinding::aStarPath(
 			// if this node is unvisited or has only been visited from inferior paths...
 			if ((nextNode->inOpenSet() == false
 					|| nextNode->getTUCostNode(missile) > _totalTuCost)
-				&& _totalTuCost <= maxTUCost)
+				&& _totalTuCost <= maxTuCost)
 			{
 				//Log(LOG_INFO) << ". nodeChecked(dir) = " << dir << " totalCost = " << _totalTuCost;
 				nextNode->linkNode(
@@ -678,14 +656,14 @@ bool Pathfinding::aStarPath(
  * @param missile		- true if a guided missile (default false)
  * @return, TU cost or 255 if movement is impossible
  */
-int Pathfinding::getTUCostPath(
+int Pathfinding::getTUCostPF(
 		const Position& startPos,
 		int dir,
 		Position* destPos,
 		const BattleUnit* const missileTarget,
 		bool missile)
 {
-	//Log(LOG_INFO) << "Pathfinding::getTUCostPath() " << _unit->getId();
+	//Log(LOG_INFO) << "Pathfinding::getTUCostPF() " << _unit->getId();
 	directionToVector(
 					dir,
 					destPos);
@@ -1160,7 +1138,7 @@ int Pathfinding::getTUCostPath(
 						if (sides > 0)
 							wallCost /= sides; // average of the wall-sides crossed
 
-						if ((wallCost - sides) %2 == 1) // round wallCost up.
+						if ((wallCost - sides) % 2 == 1) // round wallCost up.
 							wallCost += 1;
 					}
 				}
@@ -1224,7 +1202,7 @@ int Pathfinding::getTUCostPath(
 
 	if (unitSize > 0) // for Large units ->
 	{
-		//Log(LOG_INFO) << "getTUCostPath() unitSize > 0 " << (*destPos);
+		//Log(LOG_INFO) << "getTUCostPF() unitSize > 0 " << (*destPos);
 		// - check the path between part 0,0 and part 1,1 at destination position
 		const Tile
 			* const ulTile = _battleSave->getTile(*destPos),
@@ -1281,15 +1259,15 @@ int Pathfinding::getTUCostPath(
 		}
 
 
-		totalCost = static_cast<int>(Round( // ok, round those tanks up!
-					std::ceil(static_cast<double>(totalCost) / static_cast<double>((unitSize + 1) * (unitSize + 1)))));
+		totalCost = static_cast<int>(Round(std::ceil( // ok, round those tanks up!
+					static_cast<double>(totalCost) / static_cast<double>((unitSize + 1) * (unitSize + 1)))));
 		//Log(LOG_INFO) << ". totalCost = " << totalCost;
 	}
 
 	if (missile == true)
 		return 0;
 
-	//Log(LOG_INFO) << "Pathfinding::getTUCostPath() ret = " << totalCost;
+	//Log(LOG_INFO) << "Pathfinding::getTUCostPF() ret = " << totalCost;
 	return totalCost;
 }
 
@@ -1912,8 +1890,8 @@ bool Pathfinding::previewPath(bool discard)
 		{
 			tile = _battleSave->getTiles()[i];
 			tile->setPreviewDir(-1);
-			tile->setTUMarker(-1);
-			tile->setMarkerColor(0);
+			tile->setPreviewTU(-1);
+			tile->setPreviewColor(0);
 		}
 	}
 	else
@@ -1954,10 +1932,10 @@ bool Pathfinding::previewPath(bool discard)
 				++i)
 		{
 			dir = *i;
-			tileTU = getTUCostPath( // gets tu cost but also gets the destination position.
-								start,
-								dir,
-								&dest);
+			tileTU = getTUCostPF( // gets tu cost but also gets the destination position.
+							start,
+							dir,
+							&dest);
 
 			energyLimit = unitEnergy;
 
@@ -2035,7 +2013,7 @@ bool Pathfinding::previewPath(bool discard)
 					if ((x && y)
 						|| unitSize == 0)
 					{
-						tile->setTUMarker(unitTU);
+						tile->setPreviewTU(unitTU);
 					}
 
 					if (tileAbove != NULL
@@ -2057,7 +2035,7 @@ bool Pathfinding::previewPath(bool discard)
 					else
 						color = Pathfinding::red;
 
-					tile->setMarkerColor(color);
+					tile->setPreviewColor(color);
 				}
 			}
 		}
@@ -2104,21 +2082,15 @@ std::vector<int> Pathfinding::findReachable(
 		BattleUnit* const unit,
 		int tuMax)
 {
-	//Log(LOG_INFO) << "Pathfinding::findReachable()";
-	//Log(LOG_INFO) << ". &nodes = " << &_nodes;
-	//if (_nodes.empty() == true) Log(LOG_INFO) << ". nodes is EMPTY";
-	//else Log(LOG_INFO) << ". nodes are VALID";
 	for (std::vector<PathfindingNode>::iterator
 			i = _nodes.begin();
 			i != _nodes.end();
 			++i)
 	{
-		//Log(LOG_INFO) << ". . iterating Nodes";
 		i->reset();
 	}
-	//Log(LOG_INFO) << ". nodes reset";
 
-//	setPathingUnit(unit); // <- done in BattlescapeGame::handleAI()
+//	setPathingUnit(unit); // <- done in BattlescapeGame::handleAI() as well as the AI states themselves.
 
 	PathfindingNode
 		* const startNode = getNode(unit->getPosition()),
@@ -2126,18 +2098,19 @@ std::vector<int> Pathfinding::findReachable(
 		* nextNode;
 
 	startNode->linkNode(0,NULL,0);
+
 	PathfindingOpenSet unvisited;
 	unvisited.addNode(startNode);
 
-	std::vector<PathfindingNode*> reachable;
-
+	std::vector<PathfindingNode*> reachable;	// note these are not route-nodes perse;
+												// *every Tile* is a PathfindingNode.
 	Position nextPos;
 	int
 		tuCost,
 		totalTuCost,
 		staMax = unit->getEnergy();
 
-	while (unvisited.isNodeSetEmpty() == false)
+	while (unvisited.isNodeSetEmpty() == false) // 'unvisited' -> 'openList'
 	{
 		currentNode = unvisited.getNode();
 		const Position& currentPos = currentNode->getPosition();
@@ -2147,33 +2120,32 @@ std::vector<int> Pathfinding::findReachable(
 				dir != 10;
 				++dir)
 		{
-			tuCost = getTUCostPath(
-								currentPos,
-								dir,
-								&nextPos);
-			if (tuCost == 255) // Skip unreachable / blocked
-				continue;
+			tuCost = getTUCostPF(
+							currentPos,
+							dir,
+							&nextPos);
 
-			totalTuCost = currentNode->getTUCostNode(false) + tuCost;
-			if (totalTuCost > tuMax
-				|| totalTuCost > staMax)
+			if (tuCost != 255) // Skip unreachable / blocked
 			{
-				continue;
-			}
+				totalTuCost = currentNode->getTUCostNode(false) + tuCost;
+				if (totalTuCost <= tuMax
+					&& totalTuCost <= staMax)
+				{
+					nextNode = getNode(nextPos);
+					if (nextNode->getChecked() == false) // the algorithm means this node is already at minimum cost.
+					{
+						if (nextNode->inOpenSet() == false
+							|| nextNode->getTUCostNode(false) > totalTuCost) // if this node is unvisited or visited from a better path.
+						{
+							nextNode->linkNode(
+											totalTuCost,
+											currentNode,
+											dir);
 
-			nextNode = getNode(nextPos);
-			if (nextNode->isChecked() == true) // the algorithm means this node is already at minimum cost.
-				continue;
-
-			if (nextNode->inOpenSet() == false
-				|| nextNode->getTUCostNode(false) > totalTuCost) // if this node is unvisited or visited from a better path.
-			{
-				nextNode->linkNode(
-								totalTuCost,
-								currentNode,
-								dir);
-
-				unvisited.addNode(nextNode);
+							unvisited.addNode(nextNode);
+						}
+					}
+				}
 			}
 		}
 
@@ -2186,18 +2158,18 @@ std::vector<int> Pathfinding::findReachable(
 			reachable.end(),
 			MinNodeCosts());
 
-	std::vector<int> tiles;
-	tiles.reserve(reachable.size());
+	std::vector<int> tileIndices;
+	tileIndices.reserve(reachable.size());
 
 	for (std::vector<PathfindingNode*>::const_iterator
 			i = reachable.begin();
 			i != reachable.end();
 			++i)
 	{
-		tiles.push_back(_battleSave->getTileIndex((*i)->getPosition()));
+		tileIndices.push_back(_battleSave->getTileIndex((*i)->getPosition()));
 	}
 
-	return tiles;
+	return tileIndices;
 }
 
 /**
@@ -2217,10 +2189,9 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
 	else
 		_battleAction = _battleSave->getBattleGame()->getCurrentAction();
 
-//	setInputModifiers();
+//	setInputModifiers(); // -> do that in calculate() so that modifiers remain current.
 
 	if (unit != NULL)
-//		_moveType = unit->getMoveTypeUnit();
 		setMoveType();
 	else
 		_moveType = MT_WALK;
@@ -2235,16 +2206,14 @@ void Pathfinding::setMoveType() // private.
 
 	if (_modifALT == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
 		&& _moveType == MT_FLY
-		&& (_unit->getGeoscapeSoldier() != NULL
-			|| _unit->getUnitRules()->isMechanical() == false)	// hovertanks & cyberdiscs always hover.
-		&& _unit->getRaceString() != "STR_FLOATER"				// floaters always float
-		&& _unit->getRaceString() != "STR_CELATID")				// celatids always .. float.
-																// Ethereals *can* walk, but they don't like to.
-																// Should turn this into Ruleset param: 'alwaysFloat'
-																// or use floatHeight > 0 or something-like-that
-	{
-		//Log(LOG_INFO) << ". MT_WALK";
-		_moveType = MT_WALK;
+		&& _unit->getGeoscapeSoldier() != NULL)
+//		&& (_unit->getGeoscapeSoldier() != NULL
+//			|| _unit->getUnitRules()->isMechanical() == false)	// hovertanks & cyberdiscs always hover.
+//		&& _unit->getRaceString() != "STR_FLOATER"				// floaters always float
+//		&& _unit->getRaceString() != "STR_CELATID"				// celatids always .. float.
+//		&& _unit->getRaceString() != "STR_ETHEREAL")			// Ethereals *can* walk, but they don't like to.
+	{															// Should turn this into Ruleset param: 'alwaysFloat'
+		_moveType = MT_WALK;									// or use floatHeight > 0 or something-like-that
 	}
 }
 
@@ -2253,8 +2222,9 @@ void Pathfinding::setMoveType() // private.
  */
 void Pathfinding::setInputModifiers() // private.
 {
-	if (_battleSave->getSide() != FACTION_PLAYER)	// this may need to be expanded to include things like panicking xCom;
-	{												// it depends on which faction-turn such things happen ....
+	if (_battleSave->getSide() != FACTION_PLAYER
+		|| _battleSave->getBattleGame()->getPanicHandled() == false)
+	{
 		_modifCTRL = false;
 		_modifALT = false;
 	}
@@ -2293,7 +2263,8 @@ MovementType Pathfinding::getMoveTypePathing() const
 }
 
 /**
- * Gets TU cost for opening a door. Used to conform TU costs in UnitWalkBState.
+ * Gets TU cost for opening a door.
+ * @note Used to conform TU costs in UnitWalkBState.
  * @return, TU cost for opening a specific door
  */
 int Pathfinding::getOpenDoor() const
@@ -2320,8 +2291,8 @@ std::vector<int> Pathfinding::copyPath() const
 }
 
 /**
- * Checks if going one step from start to destination in the
- * given direction requires going through a closed UFO door.
+ * Checks if going one step from start to destination in the given direction
+ * requires going through a closed UFO door.
  * @param direction The direction of travel.
  * @param start The starting position of the travel.
  * @param destination Where the travel ends.
@@ -2412,7 +2383,7 @@ std::vector<int> Pathfinding::copyPath() const
  * @param endPosition The position we wanna reach.
  * @return True if the unit is going up a stairs.
  */
-/*kL bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
+/* bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
 {
 	// condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
 	if (_battleSave->getTile(endPosition + Position(0, 1, 0))

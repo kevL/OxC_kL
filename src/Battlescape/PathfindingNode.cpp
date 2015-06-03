@@ -68,7 +68,7 @@ void PathfindingNode::reset()
  * Gets the checked status of this Node.
  * @return, true if node has been checked
  */
-bool PathfindingNode::isChecked() const
+bool PathfindingNode::getChecked() const
 {
 	return _checked;
 }

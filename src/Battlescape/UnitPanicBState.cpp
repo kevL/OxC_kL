@@ -62,6 +62,7 @@ void UnitPanicBState::think()
 			_unit->setStatus(STATUS_STANDING);
 
 		_unit->setTimeUnits(0);
+		_unit->setDashing(false);
 
 //		if (_unit->getFaction() == FACTION_PLAYER)
 //		{

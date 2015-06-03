@@ -4118,7 +4118,7 @@ bool BattleUnit::getStopShot() const
 
 /**
  * Sets this unit as dashing - reduces chance of getting hit.
- * @param dash - true to dash
+ * @param dash - true to dash (default true)
  */
 void BattleUnit::setDashing(bool dash)
 {

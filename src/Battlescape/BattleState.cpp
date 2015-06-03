@@ -38,7 +38,7 @@ BattleState::BattleState(
 
 /**
  * Sets up a BattleState.
- * @param parent Pointer to the parent state.
+ * @param parent - pointer to the parent state
  */
 BattleState::BattleState(BattlescapeGame* parent)
 	:
@@ -75,7 +75,7 @@ void BattleState::think()
 
 /**
  * Gets the action result.
- * Returns error messages or an empty string when everything went fine.
+ * @note Returns error messages or an empty string when everything went fine.
  * @return, a BattleAction struct (BattlescapeGame.h)
  */
 BattleAction BattleState::getAction() const

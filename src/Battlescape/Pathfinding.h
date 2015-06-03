@@ -79,14 +79,14 @@ private:
 			const Position& target,
 			const BattleUnit* const missileTarget,
 			bool sneak = false,
-			int maxTUCost = 1000);
+			int maxTuCost = 1000);
 	/// Tries to find a path between two positions.
 	bool aStarPath(
 			const Position& origin,
 			const Position& target,
 			const BattleUnit* const missileTarget,
 			bool sneak = false,
-			int maxTUCost = 1000);
+			int maxTuCost = 1000);
 
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(const Tile* const tile) const;
@@ -141,7 +141,7 @@ private:
 				BattleUnit* const unit,
 				Position destPos,
 				const BattleUnit* const missileTarget = NULL,
-				int maxTUCost = 1000,
+				int maxTuCost = 1000,
 				bool strafeRejected = false);
 
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
@@ -168,7 +168,7 @@ private:
 		int dequeuePath();
 
 		/// Gets the TU cost to move from 1 tile to the other.
-		int getTUCostPath(
+		int getTUCostPF(
 				const Position& startPos,
 				const int dir,
 				Position* destPos,

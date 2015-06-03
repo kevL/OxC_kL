@@ -30,8 +30,8 @@
 
 // Or:
 
-#include <cmath>
-#include <ctime>
+//#include <cmath>
+//#include <ctime>
 
 
 namespace OpenXcom

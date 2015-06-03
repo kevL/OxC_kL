@@ -65,16 +65,16 @@ private:
 		void reset();
 
 		/// Gets if this Node has been checked.
-		bool isChecked() const;
+		bool getChecked() const;
 		/// Marks this Node as checked.
 		void setChecked()
-		{	_checked = true; }
+		{ _checked = true; }
 
 		/// Gets this Node's TU cost.
 		int getTUCostNode(bool missile = false) const;
 		/// Gets the approximate cost to reach the target position.
 		int getTUGuess() const
-		{	return _tuGuess; }
+		{ return _tuGuess; }
 
 		/// Gets this Node's previous Node.
 		PathfindingNode* getPrevNode() const;
@@ -83,7 +83,7 @@ private:
 
 		/// Gets if this Node is already in a PathfindingOpenSet.
 		bool inOpenSet() const
-		{	return (_openSetEntry != NULL); }
+		{ return (_openSetEntry != NULL); }
 
 //#ifdef __MORPHOS__
 //	#undef connect

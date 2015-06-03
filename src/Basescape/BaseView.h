@@ -40,7 +40,7 @@ class Timer;
 
 /**
  * Interactive view of a base.
- * Takes a Base and displays all its facilities and status.
+ * @note Takes a Base and displays all its facilities and status.
  */
 class BaseView
 	:

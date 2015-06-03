@@ -280,7 +280,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			i != sizeof(gradient) / sizeof(gradient[0]);
 			++i)
 	{
-		SDL_Color* const colors = _palettes[st2]->getColors(Palette::backPos + 16 + i);
+		SDL_Color* const colors = _palettes[st2]->getColors(Palette::PAL_bgID + 16 + i);
 		*colors = gradient[i];
 	}
 

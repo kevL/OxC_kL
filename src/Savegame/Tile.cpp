@@ -1554,7 +1554,7 @@ int Tile::getPreviewDir() const
  * Sets a number to be displayed by pathfinding preview.
  * @param tu - # of TUs left if/when this tile is reached
  */
-void Tile::setTUMarker(int tu)
+void Tile::setPreviewTU(int tu)
 {
 	_tuMarker = tu;
 }
@@ -1563,25 +1563,25 @@ void Tile::setTUMarker(int tu)
  * Gets the number to be displayed for pathfinding preview.
  * @return, # of TUs left if/when this tile is reached
  */
-int Tile::getTUMarker() const
+int Tile::getPreviewTU() const
 {
 	return _tuMarker;
 }
 
 /**
- * Sets the marker color on this tile.
+ * Sets the path preview marker color on this tile.
  * @param color - color of marker
  */
-void Tile::setMarkerColor(Uint8 color)
+void Tile::setPreviewColor(Uint8 color)
 {
 	_markerColor = color;
 }
 
 /**
- * Gets the marker color on this tile.
+ * Gets the path preview marker color on this tile.
  * @return, color of marker
  */
-int Tile::getMarkerColor() const
+int Tile::getPreviewColor() const
 {
 	return static_cast<int>(_markerColor);
 }

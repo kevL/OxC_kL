@@ -64,12 +64,14 @@ class TileEngine;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
- * This holds all the variable info in a battlegame like mapdata, soldiers, items, etc.
+ * @note This holds all the variable info in a battlegame.
  */
 class SavedBattleGame
 {
 
 private:
+	static const size_t SEARCH_DIST = 11;
+
 	bool
 		_aborted,
 		_controlDestroyed,
@@ -127,11 +129,11 @@ private:
 		_storageSpace;
 	std::vector<std::vector<std::pair<int, int> > > _baseModules;
 
-	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
-	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
-	int
-		_dragTimeTolerance,		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
-		_dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
+//	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
+//	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
+//	int
+//		_dragTimeTolerance,		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
+//		_dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 
 	/// Selects a soldier.
 	BattleUnit* selectFactionUnit(
@@ -145,6 +147,8 @@ private:
 
 
 	public:
+		static const size_t SEARCH_SIZE = SEARCH_DIST * SEARCH_DIST;
+
 		/// Creates a new battle save based on the current generic save.
 		explicit SavedBattleGame(const std::vector<OperationPool*>* titles = NULL);
 		/// Cleans up the saved game.
@@ -214,7 +218,7 @@ private:
 		 * @return, the unique index
 		 */
 		inline int getTileIndex(const Position& pos) const
-		{ return (pos.z * _mapsize_y * _mapsize_x) + ((pos.y * _mapsize_x) + pos.x); }
+		{ return (pos.z * _mapsize_y * _mapsize_x) + (pos.y * _mapsize_x) + pos.x; }
 
 		/// Converts a tile index to its coordinates.
 		void getTileCoords(

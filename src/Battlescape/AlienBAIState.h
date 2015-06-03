@@ -61,13 +61,13 @@ protected:
 		_targetsKnown,
 		_targetsVisible,
 		_xcomSpotters,
-		_ambushTUs,
-		_escapeTUs;
+		_tuAmbush,
+		_tuEscape;
 //kL	_reserveTUs;
 
 	std::vector<int>
 		_reachable,
-		_reachableWithAttack;
+		_reachableAttack;
 //		_wasHitBy;
 
 	BattleUnit* _aggroTarget;

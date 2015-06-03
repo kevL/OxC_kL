@@ -33,7 +33,7 @@ class Timer;
 
 
 /**
- * Class handling camera movement, either by mouse or by events on the battlescape.
+ * Class handling camera movement either by mouse or by events on the battlescape.
  */
 class Camera
 {

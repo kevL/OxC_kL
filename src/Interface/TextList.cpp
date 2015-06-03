@@ -1516,9 +1516,9 @@ void TextList::mouseOver(Action* action, State* state)
 			if (_contrast == true)
 				_selector->offset(-10,1);
 			else if (_comboBox != NULL)
-				_selector->offset(1, Palette::backPos);
+				_selector->offset(1, Palette::PAL_bgID);
 			else
-				_selector->offset(-10, Palette::backPos);
+				_selector->offset(-10, Palette::PAL_bgID);
 
 			_selector->setVisible();
 		}

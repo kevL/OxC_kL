@@ -41,11 +41,10 @@ class Surface;
 
 /**
  * A game state that receives user input and reacts accordingly.
- * Game states typically represent a whole window or screen that
- * the user interacts with, making the game... well, interactive.
- * They automatically handle child elements used to transmit
- * information from/to the user, and are linked to the core game
- * engine which manages them.
+ * @note Game states typically represent a whole window or screen that the user
+ * interacts with, making the game... well, interactive. They automatically
+ * handle child elements used to transmit information from/to the user and are
+ * linked to the core game engine which manages them.
  */
 class State
 {

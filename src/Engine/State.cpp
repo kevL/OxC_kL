@@ -613,7 +613,7 @@ void State::setPalette(
 	if (backpal != -1)
 		setPalette(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(static_cast<int>(Palette::blockOffset(static_cast<Uint8>(backpal)))),
-				Palette::backPos,
+				Palette::PAL_bgID,
 				16,
 				false);
 

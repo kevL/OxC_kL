@@ -174,13 +174,13 @@ private:
 
 
 	/// Determines whether there are any actions pending for the given unit.
-	bool noActionsPending(BattleUnit* bu);
+	bool noActionsPending(const BattleUnit* const unit);
 	/// Ends the turn.
 	void endTurnPhase();
 	/// Picks the first soldier that is panicking.
 	bool handlePanickingPlayer();
 	/// Common function for hanlding panicking units.
-	bool handlePanickingUnit(BattleUnit* unit);
+	bool handlePanickingUnit(BattleUnit* const unit);
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
 

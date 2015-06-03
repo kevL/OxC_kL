@@ -116,7 +116,7 @@ void ErrorMessageState::create(
 		setPalette(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
 					static_cast<int>(Palette::blockOffset(static_cast<Uint8>(bgColor)))),
-				Palette::backPos,
+				Palette::PAL_bgID,
 				16);
 
 	add(_window);

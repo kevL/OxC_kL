@@ -42,7 +42,7 @@ private:
 
 	public:
 		/// Position of the background colors block in an X-Com palette (used for background images in screens).
-		static const int backPos = 224;
+		static const int PAL_bgID = 224;
 
 		/// Creates a blank palette.
 		Palette();
