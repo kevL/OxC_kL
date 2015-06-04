@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_UNITINFOSTATE_H
 #define OPENXCOM_UNITINFOSTATE_H
 
-
 #include "../Engine/State.h"
 
 
@@ -30,6 +29,7 @@ namespace OpenXcom
 class Bar;
 class BattlescapeState;
 class BattleUnit;
+class NumberText;
 class SavedBattleGame;
 class Surface;
 class Text;
@@ -70,10 +70,13 @@ private:
 		* _barRearArmor,
 		* _barUnderArmor;
 	BattlescapeState* _parent;
-	BattleUnit* _unit;
+	const BattleUnit* _unit;
 	InteractiveSurface* _exit;
+	NumberText* _numOrder;
 	SavedBattleGame *_battleGame;
-	Surface* _bg;
+	Surface
+		* _bg,
+		* _gender;
 	Text
 		* _txtName,
 
@@ -124,10 +127,10 @@ private:
 	public:
 		/// Creates the Unit Info state.
 		UnitInfoState(
-				BattleUnit* unit,
-				BattlescapeState* parent,
-				bool fromInventory,
-				bool mindProbe);
+				const BattleUnit* const unit,
+				BattlescapeState* const parent,
+				const bool fromInventory,
+				const bool mindProbe);
 		/// Cleans up the Unit Info state.
 		~UnitInfoState();
 

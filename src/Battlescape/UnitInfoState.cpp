@@ -33,6 +33,7 @@
 //#include "../Engine/Screen.h"
 
 #include "../Interface/Bar.h"
+#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -59,10 +60,10 @@ namespace OpenXcom
  * @param mindProbe		- true if player is using a Mind Probe
  */
 UnitInfoState::UnitInfoState(
-		BattleUnit* unit,
-		BattlescapeState* parent,
-		bool fromInventory,
-		bool mindProbe)
+		const BattleUnit* const unit,
+		BattlescapeState* const parent,
+		const bool fromInventory,
+		const bool mindProbe)
 	:
 		_unit(unit),
 		_parent(parent),
@@ -83,6 +84,9 @@ UnitInfoState::UnitInfoState(
 
 	_exit		= new InteractiveSurface(320, 180, 0, 20);
 	_txtName	= new Text(288, 17, 16, 4);
+
+	_gender		= new Surface(7, 7, 22, 4);
+	_numOrder	= new NumberText(7, 5, 0, 5); // x-value is set in init()
 
 	int
 		step = 9,
@@ -189,6 +193,9 @@ UnitInfoState::UnitInfoState(
 	add(_exit);
 	add(_txtName, "textName", "stats");
 
+	add(_gender);
+	add(_numOrder);
+
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
 	add(_barTimeUnits, "barTUs", "stats");
@@ -289,6 +296,8 @@ UnitInfoState::UnitInfoState(
 	_txtName->setBig();
 	_txtName->setHighContrast();
 
+	_numOrder->setColor(1);
+	_numOrder->setVisible(false);
 
 	_txtTimeUnits->setColor(color);
 	_txtTimeUnits->setHighContrast();
@@ -500,18 +509,41 @@ void UnitInfoState::init()
 {
 	State::init();
 
+	_gender->clear();
+
 	std::wostringstream woststr;
 
 //	int minPsi;
-	if (_unit->getGeoscapeSoldier() != NULL)
+	const Soldier* const soldier = _unit->getGeoscapeSoldier();
+	if (soldier != NULL)
 	{
 		woststr << tr(_unit->getRankString());
 		woststr << " ";
 
+		Surface* gender = NULL;
+		if (soldier->getGender() == GENDER_MALE)
+			gender = _game->getResourcePack()->getSurface("GENDER_M");
+		else
+			gender = _game->getResourcePack()->getSurface("GENDER_F");
+
+		if (gender != NULL)
+			gender->blit(_gender);
+
+		const size_t order = _unit->getBattleOrder();
+		if (order < 10)
+			_numOrder->setX(_btnNext->getX() - 6);
+		else
+			_numOrder->setX(_btnNext->getX() - 10);
+
+		_numOrder->setValue(order);
+		_numOrder->setVisible();
+//		_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
+
 //		minPsi = _unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill;
 //		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
 	}
-//	else
+	else
+		_numOrder->setVisible(false);
 //		minPsi = 0;
 
 	woststr << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);

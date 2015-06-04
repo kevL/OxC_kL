@@ -38,7 +38,7 @@
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
-#include "../Engine/Surface.h"
+//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/BattlescapeButton.h"
@@ -223,10 +223,9 @@ InventoryState::InventoryState(
 	_txtPsiTU->setHighContrast();
 
 	_numOrder->setColor(1);
-	_numOrder->setValue(0);
+	_numOrder->setVisible(false);
 
 	_tuCost->setColor(1);
-	_tuCost->setValue(0);
 	_tuCost->setVisible(false);
 
 	_txtItem->setHighContrast();
@@ -512,8 +511,14 @@ void InventoryState::updateStats() // private.
 {
 	const BattleUnit* const unit = _battleGame->getSelectedUnit();
 
-	_numOrder->setValue(unit->getBattleOrder());
-	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
+	if (unit->getGeoscapeSoldier() != NULL)
+	{
+		_numOrder->setValue(unit->getBattleOrder());
+		_numOrder->setVisible();
+//		_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
+	}
+	else
+		_numOrder->setVisible(false);
 
 	if (_tuMode == true)
 		_txtTUs->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));

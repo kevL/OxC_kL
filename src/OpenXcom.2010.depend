@@ -5372,7 +5372,7 @@
 1431047771 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1433051037 f:\git\openxcom\src\battlescape\battlescapestate.h
+1433381287 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5565,7 +5565,7 @@
 1431473377 f:\git\openxcom\src\battlescape\unitfallbstate.h
 	"BattleState.h"
 
-1430149550 f:\git\openxcom\src\battlescape\unitinfostate.h
+1433382149 f:\git\openxcom\src\battlescape\unitinfostate.h
 	"../Engine/State.h"
 
 1433124817 f:\git\openxcom\src\battlescape\unitpanicbstate.h
@@ -5671,7 +5671,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1433250275 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1433381281 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6000,7 +6000,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1433211925 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1433382785 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6014,7 +6014,6 @@
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
-	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/BattlescapeButton.h"
 	"../Interface/Text.h"
@@ -6031,13 +6030,12 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1433282549 source:f:\git\openxcom\src\battlescape\map.cpp
+1433378971 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
 	"Camera.h"
 	"Explosion.h"
-	"Particle.h"
 	"Pathfinding.h"
 	"Position.h"
 	"Projectile.h"
@@ -6065,7 +6063,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1432960155 f:\git\openxcom\src\battlescape\projectile.h
+1433384931 f:\git\openxcom\src\battlescape\projectile.h
 	"BattlescapeGame.h"
 	"Position.h"
 
@@ -6217,11 +6215,10 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433133783 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1433385089 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
-	"Particle.h"
 	"Pathfinding.h"
 	"TileEngine.h"
 	"../Engine/SurfaceSet.h"
@@ -6365,7 +6362,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432715019 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1433384747 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6374,6 +6371,7 @@
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
 	"../Interface/Bar.h"
+	"../Interface/NumberText.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"

@@ -57,22 +57,20 @@ namespace OpenXcom
 /**
  * Creates a Projectile on the battle map and calculates its movement.
  * @param res			- pointer to ResourcePack
- * @param save			- pointer to SavedBattleGame
+ * @param battleSave	- pointer to SavedBattleGame
  * @param action		- the BattleAction (BattlescapeGame.h)
  * @param origin		- position that this projectile originates at in tilespace
  * @param targetVoxel	- position that this projectile is targeted at in voxelspace
-// * @param ammo			- pointer to the ammo that produced this projectile if applicable
  */
 Projectile::Projectile(
-		ResourcePack* res,
-		SavedBattleGame* save,
-		BattleAction action,
-		Position origin,
-		Position targetVoxel)
-//		BattleItem* ammo) // -> 'bullet'
+		const ResourcePack* const res,
+		const SavedBattleGame* const battleSave,
+		const BattleAction action,
+		const Position origin,
+		const Position targetVoxel)
 	:
 		_res(res),
-		_save(save),
+		_battleSave(battleSave),
 		_action(action),
 		_origin(origin),
 		_targetVoxel(targetVoxel),
@@ -204,9 +202,9 @@ int Projectile::calculateTrajectory(double accuracy)
 {
 	return calculateTrajectory(
 							accuracy,
-							_save->getTileEngine()->getOriginVoxel(
+							_battleSave->getTileEngine()->getOriginVoxel(
 															_action,
-															_save->getTile(_origin)));
+															_battleSave->getTile(_origin)));
 }
 
 /**
@@ -232,19 +230,19 @@ int Projectile::calculateTrajectory(
 		Position originVoxel)
 {
 	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
-	const Tile* const targetTile = _save->getTile(_action.target);
+	const Tile* const targetTile = _battleSave->getTile(_action.target);
 	const BattleUnit* const targetUnit = targetTile->getUnit();
 
 	if (_action.actor->getFaction() == FACTION_PLAYER // kL_note: aLiens don't even get in here!
 		&& _action.autoShotCount == 1
 		&& _action.type != BA_LAUNCH
-		&& _save->getBattleGame()->getPanicHandled() == true
+		&& _battleSave->getBattleGame()->getPanicHandled() == true
 		&& (Options::forceFire == false
 			|| (SDL_GetModState() & KMOD_CTRL) == 0))
 	{
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
 		const VoxelType testVox = static_cast<VoxelType>(
-								  _save->getTileEngine()->calculateLine(
+								  _battleSave->getTileEngine()->calculateLine(
 																	originVoxel,
 																	_targetVoxel,
 																	false,
@@ -262,7 +260,7 @@ int Projectile::calculateTrajectory(
 
 			if (testVox == VOXEL_UNIT)
 			{
-				const Tile* const endTile = _save->getTile(testPos);
+				const Tile* const endTile = _battleSave->getTile(testPos);
 				if (endTile != NULL
 					&& endTile->getUnit() == NULL)
 				{
@@ -296,7 +294,7 @@ int Projectile::calculateTrajectory(
 				}
 				else if (testVox == VOXEL_UNIT)
 				{
-					const BattleUnit* const testUnit = _save->getTile(testPos)->getUnit();
+					const BattleUnit* const testUnit = _battleSave->getTile(testPos)->getUnit();
 					if (testUnit != targetUnit
 						&& testUnit->getUnitVisible() == true)
 					{
@@ -350,7 +348,7 @@ int Projectile::calculateTrajectory(
 		//Log(LOG_INFO) << ". postAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	}
 
-	const int ret = _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
+	const int ret = _battleSave->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
 													originVoxel,
 													_targetVoxel,
 													true,
@@ -362,7 +360,7 @@ int Projectile::calculateTrajectory(
 
 	return ret;
 
-/*	return _save->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
+/*	return _battleSave->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
 											originVoxel,
 											_targetVoxel,
 											true,
@@ -387,9 +385,9 @@ int Projectile::calculateTrajectory(
  */
 int Projectile::calculateThrow(double accuracy)
 {
-/*	BattleUnit* bu = _save->getTile(_origin)->getUnit();
+/*	BattleUnit* bu = _battleSave->getTile(_origin)->getUnit();
 	if (bu == NULL)
-		bu = _save->getTile(Position(
+		bu = _battleSave->getTile(Position(
 								_origin.x,
 								_origin.y,
 								_origin.z - 1))->getUnit(); */
@@ -397,16 +395,16 @@ int Projectile::calculateThrow(double accuracy)
 	Position targetVoxel = Position( // determine the target voxel, aim at the center of the floor
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 2 - _save->getTile(_action.target)->getTerrainLevel());
+								_action.target.z * 24 + 2 - _battleSave->getTile(_action.target)->getTerrainLevel());
 
 	if (_action.type != BA_THROW) // ie. celatid acid-spit
 	{
-		const BattleUnit* targetUnit = _save->getTile(_action.target)->getUnit();
+		const BattleUnit* targetUnit = _battleSave->getTile(_action.target)->getUnit();
 		if (targetUnit == NULL
 			&& _action.target.z > 0
-			&& _save->getTile(_action.target)->hasNoFloor(NULL))
+			&& _battleSave->getTile(_action.target)->hasNoFloor(NULL))
 		{
-			targetUnit = _save->getTile(Position(
+			targetUnit = _battleSave->getTile(Position(
 											_action.target.x,
 											_action.target.y,
 											_action.target.z - 1))->getUnit();
@@ -425,12 +423,12 @@ int Projectile::calculateThrow(double accuracy)
 	}
 
 
-	const Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
 																	_action,
 																	NULL);
 	int ret = static_cast<int>(VOXEL_OUTOFBOUNDS);
 	double arc;
-	if (_save->getTileEngine()->validateThrow(
+	if (_battleSave->getTileEngine()->validateThrow(
 										_action,
 										originVoxel,
 										targetVoxel,
@@ -447,14 +445,14 @@ int Projectile::calculateThrow(double accuracy)
 						&delta,
 						accuracy,
 						true,
-						_save->getTile(_action.target),
+						_battleSave->getTile(_action.target),
 						false);
 
 			delta -= targetVoxel;
 
 			_trajectory.clear();
 
-			test = static_cast<VoxelType>(_save->getTileEngine()->calculateParabola(
+			test = static_cast<VoxelType>(_battleSave->getTileEngine()->calculateParabola(
 																				originVoxel,
 																				targetVoxel,
 																				true,
@@ -468,7 +466,7 @@ int Projectile::calculateThrow(double accuracy)
 			// See also TileEngine::validateThrow()
 			if (_action.type == BA_THROW)
 			{
-				const Tile* const targetTile = _save->getTile(_trajectory.back() / Position(16,16,24)); // _trajectory.at(0) <- see TileEngine::validateThrow()
+				const Tile* const targetTile = _battleSave->getTile(_trajectory.back() / Position(16,16,24)); // _trajectory.at(0) <- see TileEngine::validateThrow()
 				if (targetTile != NULL
 					&& targetTile->getMapData(MapData::O_OBJECT) != NULL
 					&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
@@ -497,7 +495,7 @@ int Projectile::calculateThrow(double accuracy)
  * @param targetTile	- pointer to tile of the target (default = NULL)
  * @param extendLine	- true if this line should extend to maximum distance on the battle map (default = true)
  */
-void Projectile::applyAccuracy(
+void Projectile::applyAccuracy( // private.
 		const Position& origin,
 		Position* const target,
 		double accuracy,
@@ -589,7 +587,7 @@ void Projectile::applyAccuracy(
 				}
 			}
 			else if (_action.actor->getOriginalFaction() != FACTION_HOSTILE) // targeting tile-stuffs.
-				accuracy -= 0.01 * static_cast<double>(_save->getGlobalShade());
+				accuracy -= 0.01 * static_cast<double>(_battleSave->getGlobalShade());
 
 			if (_action.type == BA_AUTOSHOT)
 				accuracy -= static_cast<double>(_action.autoShotCount - 1) * 0.03;
@@ -694,10 +692,17 @@ void Projectile::applyAccuracy(
 	{
 		accuracy = accuracy * 50. + 69.3; // arbitrary adjustment.
 
-		double perfectToss = 100.;
-		const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+		double perfectToss;
+/*		const Soldier* const soldier = _battleSave->getGeoscapeSave()->getSoldier(_action.actor->getId());
 		if (soldier != NULL)
 			perfectToss = static_cast<double>(soldier->getRules()->getStatCaps().throwing);
+		else
+			perfectToss = 100.; */
+		if (_action.actor->getGeoscapeSoldier() != NULL)
+			perfectToss = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("XCOM")->getStatCaps().throwing);
+		else
+			perfectToss = 100.;
+
 
 		double deviation = perfectToss - accuracy;
 		deviation = std::max(
@@ -785,7 +790,7 @@ bool Projectile::traceProjectile()
 			return false;
 		}
 
-/*		if (_save->getDepth() > 0
+/*		if (_battleSave->getDepth() > 0
 			&& _vaporColor != -1
 			&& _action.type != BA_THROW
 			&& RNG::percent(_vaporProbability) == true)
@@ -929,7 +934,7 @@ void Projectile::storeProjectileDirection() const
 		Pathfinding::vectorToDirection(relPos, dir);
 	}
 
-	_save->getTileEngine()->setProjectileDirection(dir);
+	_battleSave->getTileEngine()->setProjectileDirection(dir);
 }
 
 /**
@@ -946,18 +951,18 @@ bool Projectile::isReversed() const
  */
 /* void Projectile::addVaporCloud() // private.
 {
-	Tile* const tile = _save->getTile(_trajectory.at(_position) / Position(16,16,24));
+	Tile* const tile = _battleSave->getTile(_trajectory.at(_position) / Position(16,16,24));
 	if (tile != NULL)
 	{
 		Position
 			tilePos,
 			voxelPos;
 
-		_save->getBattleGame()->getMap()->getCamera()->convertMapToScreen(
+		_battleSave->getBattleGame()->getMap()->getCamera()->convertMapToScreen(
 																	_trajectory.at(_position) / Position(16,16,24),
 																	&tilePos);
-		tilePos += _save->getBattleGame()->getMap()->getCamera()->getMapOffset();
-		_save->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(
+		tilePos += _battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset();
+		_battleSave->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(
 																	_trajectory.at(_position),
 																	&voxelPos);
 
