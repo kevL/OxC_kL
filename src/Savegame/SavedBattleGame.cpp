@@ -851,7 +851,7 @@ void SavedBattleGame::initMap(
  * Initializes the map utilities.
  * @param res - pointer to ResourcePack
  */
-void SavedBattleGame::initUtilities(ResourcePack* res)
+void SavedBattleGame::initUtilities(const ResourcePack* const res)
 {
 	delete _pathfinding;
 	delete _tileEngine;
@@ -2234,7 +2234,7 @@ bool SavedBattleGame::setUnitPosition(
 {
 	if (unit != NULL)
 	{
-		_pathfinding->setPathingUnit(unit);
+//		_pathfinding->setPathingUnit(unit); // <- this is not valid when doing base equip.
 
 		const int unitSize = unit->getArmor()->getSize() - 1;
 		for (int // first check if the tiles are occupied
@@ -2259,7 +2259,8 @@ bool SavedBattleGame::setUnitPosition(
 										MapData::O_OBJECT,
 										unit->getMoveTypeUnit()) == 255
 					|| (tile->hasNoFloor(tileBelow) == true
-						&& _pathfinding->getMoveTypePathing() != MT_FLY)
+						&& unit->getMoveTypeUnit() != MT_FLY) // <- so just use the unit's moveType.
+//						&& _pathfinding->getMoveTypePathing() != MT_FLY)
 					|| (tile->getMapData(MapData::O_OBJECT) != NULL
 						&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
 						&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
@@ -2274,8 +2275,10 @@ bool SavedBattleGame::setUnitPosition(
 			}
 		}
 
-		if (unitSize != 0)
+		if (unitSize != 0) // -> however, large units never use base equip, so _pathfinding is valid here.
 		{
+			_pathfinding->setPathingUnit(unit); // tentative.
+
 			for (int
 					dir = 2;
 					dir != 5;

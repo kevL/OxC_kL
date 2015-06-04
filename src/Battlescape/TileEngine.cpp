@@ -80,8 +80,8 @@ const int TileEngine::heightFromCenter[11] =
  * @param voxelData		- pointer to a vector of voxel data
  */
 TileEngine::TileEngine(
-		SavedBattleGame* battleSave,
-		std::vector<Uint16>* voxelData)
+		SavedBattleGame* const battleSave,
+		const std::vector<Uint16>* const voxelData)
 	:
 		_battleSave(battleSave),
 		_voxelData(voxelData),
@@ -5504,10 +5504,10 @@ int TileEngine::voxelCheck(
 		if (dataTarget != NULL)
 		{
 			const int
-				x = 15 - targetPos.x %16,	// x-direction is reversed
-				y = targetPos.y %16;		// y-direction is standard
+				x = 15 - targetPos.x % 16,	// x-direction is reversed
+				y = targetPos.y % 16;		// y-direction is standard
 
-			const int loftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y);
+			const int loftIdx = ((dataTarget->getLoftID((targetPos.z % 24) / 2) * 16) + y);
 			if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
 				&& _voxelData->at(loftIdx) & (1 << x))
 			{
@@ -5547,8 +5547,8 @@ int TileEngine::voxelCheck(
 			{
 				int ent = 0;
 				const int
-					x = targetPos.x %16, // where on the x-axis
-					y = targetPos.y %16; // where on the y-axis
+					x = targetPos.x % 16, // where on the x-axis
+					y = targetPos.y % 16; // where on the y-axis
 				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
 
 				if (targetUnit->getArmor()->getSize() > 1) // for large units...

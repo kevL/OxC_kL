@@ -174,7 +174,7 @@ private:
 					int ncolors = 256);
 
 			/// Gets list of voxel data.
-			std::vector<Uint16>* getVoxelData();
+			const std::vector<Uint16>* const getVoxelData() const;
 
 			///
 //			const std::vector<std::vector<Uint8> >* getLUTs() const;

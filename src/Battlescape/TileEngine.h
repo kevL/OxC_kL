@@ -66,7 +66,7 @@ private:
 
 	SavedBattleGame* _battleSave;
 
-	std::vector<Uint16>* _voxelData;
+	const std::vector<Uint16>* _voxelData;
 
 	///
 	void addLight(
@@ -86,8 +86,8 @@ private:
 	public:
 		/// Creates a new TileEngine class.
 		TileEngine(
-				SavedBattleGame* battleSave,
-				std::vector<Uint16>* voxelData);
+				SavedBattleGame* const battleSave,
+				const std::vector<Uint16>* const voxelData);
 		/// Cleans up the TileEngine.
 		~TileEngine();
 

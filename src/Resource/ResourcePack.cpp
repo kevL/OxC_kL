@@ -499,7 +499,7 @@ void ResourcePack::setPalette(
  * Returns the list of voxeldata in the resource set.
  * @return, pointer to a vector containing the voxeldata
  */
-std::vector<Uint16>* ResourcePack::getVoxelData()
+const std::vector<Uint16>* const ResourcePack::getVoxelData() const
 {
 	return &_voxelData;
 }

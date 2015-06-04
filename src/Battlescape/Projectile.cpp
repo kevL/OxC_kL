@@ -203,8 +203,8 @@ int Projectile::calculateTrajectory(double accuracy)
 	return calculateTrajectory(
 							accuracy,
 							_battleSave->getTileEngine()->getOriginVoxel(
-															_action,
-															_battleSave->getTile(_origin)));
+																	_action,
+																	_battleSave->getTile(_origin)));
 }
 
 /**
@@ -243,11 +243,11 @@ int Projectile::calculateTrajectory(
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
 		const VoxelType testVox = static_cast<VoxelType>(
 								  _battleSave->getTileEngine()->calculateLine(
-																	originVoxel,
-																	_targetVoxel,
-																	false,
-																	&_trajectory,
-																	_action.actor));
+																		originVoxel,
+																		_targetVoxel,
+																		false,
+																		&_trajectory,
+																		_action.actor));
 		//Log(LOG_INFO) << ". testVox = " << (int)testVox;
 
 		if (testVox != VOXEL_EMPTY
@@ -349,11 +349,11 @@ int Projectile::calculateTrajectory(
 	}
 
 	const int ret = _battleSave->getTileEngine()->calculateLine( // finally do a line calculation and store this trajectory.
-													originVoxel,
-													_targetVoxel,
-													true,
-													&_trajectory,
-													_action.actor);
+															originVoxel,
+															_targetVoxel,
+															true,
+															&_trajectory,
+															_action.actor);
 	//Log(LOG_INFO) << ". trajBegin = " << _trajectory.front() << " tSpace " << (_trajectory.front() / Position(16,16,24));
 	//Log(LOG_INFO) << ". trajFinal = " << _trajectory.back() << " tSpace " << (_trajectory.back() / Position(16,16,24));
 	//Log(LOG_INFO) << ". RET voxelType = " << ret;
@@ -405,9 +405,9 @@ int Projectile::calculateThrow(double accuracy)
 			&& _battleSave->getTile(_action.target)->hasNoFloor(NULL))
 		{
 			targetUnit = _battleSave->getTile(Position(
-											_action.target.x,
-											_action.target.y,
-											_action.target.z - 1))->getUnit();
+													_action.target.x,
+													_action.target.y,
+													_action.target.z - 1))->getUnit();
 		}
 
 		if (targetUnit != NULL)
@@ -429,11 +429,11 @@ int Projectile::calculateThrow(double accuracy)
 	int ret = static_cast<int>(VOXEL_OUTOFBOUNDS);
 	double arc;
 	if (_battleSave->getTileEngine()->validateThrow(
-										_action,
-										originVoxel,
-										targetVoxel,
-										&arc,
-										&ret) == true)
+												_action,
+												originVoxel,
+												targetVoxel,
+												&arc,
+												&ret) == true)
 	{
 		// Do a parabola calculation and store that trajectory - make sure it's valid.
 		VoxelType test = VOXEL_OUTOFBOUNDS;
@@ -453,13 +453,13 @@ int Projectile::calculateThrow(double accuracy)
 			_trajectory.clear();
 
 			test = static_cast<VoxelType>(_battleSave->getTileEngine()->calculateParabola(
-																				originVoxel,
-																				targetVoxel,
-																				true,
-																				&_trajectory,
-																				_action.actor,
-																				arc,
-																				delta));
+																					originVoxel,
+																					targetVoxel,
+																					true,
+																					&_trajectory,
+																					_action.actor,
+																					arc,
+																					delta));
 
 			// Don't let thrown items land on diagonal bigwalls.
 			// this prevents exploiting blast-propagation routine to both sides of a bigWall.diag
