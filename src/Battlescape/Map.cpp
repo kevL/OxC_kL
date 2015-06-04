@@ -27,7 +27,7 @@
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "Explosion.h"
-#include "Particle.h"
+//#include "Particle.h"
 #include "Pathfinding.h"
 #include "Position.h"
 #include "Projectile.h"

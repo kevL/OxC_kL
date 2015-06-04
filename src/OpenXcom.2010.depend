@@ -6468,7 +6468,7 @@
 
 1433206006 f:\git\openxcom\src\engine\catfile.h
 
-1432286801 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1433370906 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -10914,10 +10914,8 @@
 1400258761 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1430149550 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1433376187 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
-	<algorithm>
-	<fstream>
 	"Exception.h"
 	"Game.h"
 	"Logger.h"
@@ -10925,7 +10923,7 @@
 	"Adlib/adlplayer.h"
 	"Adlib/fmopl.h"
 
-1432275630 f:\git\openxcom\src\engine\adlibmusic.h
+1433376175 f:\git\openxcom\src\engine\adlibmusic.h
 	"Music.h"
 
 1432273168 f:\git\openxcom\src\engine\adlib\adlplayer.h

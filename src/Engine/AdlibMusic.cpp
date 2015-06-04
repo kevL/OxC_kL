@@ -104,22 +104,22 @@ AdlibMusic::~AdlibMusic()
 
 /**
  * Loads a music file from a specified filename.
- * @param filename Filename of the music file.
+ * @param file - reference the name of the music file
  */
-void AdlibMusic::load(const std::string& filename)
+void AdlibMusic::load(const std::string& file)
 {
-	std::ifstream file (filename.c_str(), std::ios::binary);
-	if (file.fail() == true)
+	std::ifstream ifstr (file.c_str(), std::ios::binary); // init.
+	if (ifstr.fail() == true)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
-	file.seekg(0, std::ifstream::end);
-	_size = static_cast<size_t>(file.tellg());
-	file.seekg(0);
+	ifstr.seekg(0, std::ifstream::end);
+	_size = static_cast<size_t>(ifstr.tellg());
+	ifstr.seekg(0);
 
 	_data = new char[_size];
-	file.read(_data, _size);
+	ifstr.read(_data, _size);
 }
 
 /**
@@ -141,10 +141,10 @@ void AdlibMusic::load(
 
 /**
  * Plays the contained music track.
- * @param loop - not used (default -1). But needs to be here because of virtual
- * function in base class Music which has a default set - meaning this won't
- * overload the virtual function unless that default is removed. That ain't
- * gonna happen ....
+ * @param loop - not used (default -1). But needs to be here because there is a
+ * virtual function in base class Music which has a default set - meaning this
+ * won't overload the virtual function unless that default is removed. But that
+ * ain't gonna happen ....
  */
 void AdlibMusic::play(int /*loop*/) const
 {

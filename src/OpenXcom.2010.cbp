@@ -922,7 +922,10 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Battlescape/Particle.cpp" />
+		<Unit filename="Battlescape/Particle.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="Battlescape/Particle.h" />
 		<Unit filename="Battlescape/Pathfinding.cpp">
 			<Option target="Debug Win32" />

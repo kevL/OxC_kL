@@ -57,7 +57,7 @@ private:
 		~AdlibMusic();
 
 		/// Loads music from the specified file.
-		void load(const std::string& filename);
+		void load(const std::string& file);
 		/// Loads music from a chunk of memory.
 		void load(
 				const void* data,
