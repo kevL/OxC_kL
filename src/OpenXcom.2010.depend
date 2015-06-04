@@ -5574,7 +5574,7 @@
 1430149550 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	"BattleState.h"
 
-1430759321 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1433456357 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	"BattlescapeGame.h"
 	"BattleState.h"
 
@@ -6429,7 +6429,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1433319935 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1433459035 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"

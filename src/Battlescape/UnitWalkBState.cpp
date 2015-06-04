@@ -117,8 +117,10 @@ void UnitWalkBState::init()
 		&& _dirStart > -1 && _dirStart < 8		// moving but not up or down
 		&& _dirStart != _unit->getDirection())	// not facing in direction of movement
 	{
-		// kL_note: if unit is not facing in the direction that it's about to walk toward...
-		// This makes the unit expend tu's if it spots a new alien when turning, but stops before actually walking.
+		// kL_note: if unit is not facing in the direction that it's about to
+		// walk toward... This makes the unit expend tu's if it spots a new
+		// alien when turning, but stops before actually walking. Also expends
+		// tu if cancel() is called before first step.
 		_preStepTurn = true;
 	}
 
@@ -300,6 +302,14 @@ void UnitWalkBState::cancel()
 	if (_parent->getSave()->getSide() == FACTION_PLAYER
 		&& _parent->getPanicHandled() == true)
 	{
+		if (_preStepTurn == true)
+		{
+			_unit->spendTimeUnits(_preStepCost);
+
+			_preStepCost = 0;
+			_preStepTurn = false;
+		}
+
 		_pf->abortPath();
 	}
 }
@@ -309,7 +319,7 @@ void UnitWalkBState::cancel()
  * Called from think()...
  * @return, true to continue moving, false to exit think()
  */
-bool UnitWalkBState::doStatusStand()
+bool UnitWalkBState::doStatusStand() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand() : " << _unit->getId();
 	int dir = _pf->getStartDirection();
@@ -468,21 +478,6 @@ bool UnitWalkBState::doStatusStand()
 				}
 
 				staCost -= _unit->getArmor()->getAgility();
-/*				if (_unit->hasFlightSuit() == true
-					&& _pf->getMovementType() == MT_FLY)
-				{
-					staCost -= 2; // zippy.
-				}
-				else if (_unit->hasPowerSuit() == true
-					|| (_unit->hasFlightSuit() == true
-						&& _pf->getMovementType() == MT_WALK))
-				{
-					staCost -= 1; // good stuff
-				}
-				// else if (coveralls){} // normal energy expenditure
-				else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
-					staCost += 1; // *clunk*clunk* */
-
 				if (staCost < 0) staCost = 0;
 			}
 			else // gravLift
@@ -711,7 +706,7 @@ bool UnitWalkBState::doStatusStand()
  * Called from think()...
  * @return, true to continue moving, false to exit think()
  */
-bool UnitWalkBState::doStatusWalk()
+bool UnitWalkBState::doStatusWalk() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusWalk() : " << _unit->getId();
 	const Tile* tileBelow;
@@ -868,7 +863,7 @@ bool UnitWalkBState::doStatusWalk()
  * Called from think()...
  * @return, true to continue moving, false to exit think()
  */
-bool UnitWalkBState::doStatusStand_end()
+bool UnitWalkBState::doStatusStand_end() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
 	_tileSwitchDone = false;
@@ -963,7 +958,7 @@ bool UnitWalkBState::doStatusStand_end()
  * This function turns unit during movement.
  * Called from think()
  */
-void UnitWalkBState::doStatusTurn()
+void UnitWalkBState::doStatusTurn() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusTurn() : " << _unit->getId();
 	if (_preStepTurn)	// turning during walking costs no tu
@@ -974,14 +969,19 @@ void UnitWalkBState::doStatusTurn()
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
-	// calculateFOV() is unreliable for setting the _newUnitSpotted bool,
-	// as it can be called from various other places in the code, ie:
-	// doors opening (& explosions/terrain destruction?), and that messes up the result.
-	// kL_note: But let's do it anyway!
+	// calculateFOV() is unreliable for setting the _newUnitSpotted bool as it
+	// can be called from various other places in the code, ie: doors opening
+	// (& explosions/terrain destruction) and that messes up the result.
+	// kL_note: But let's do it anyway! ps. Fixed
 	if (visForUnits() == true)
 	{
 		if (_preStepTurn == true)
+		{
 			_unit->spendTimeUnits(_preStepCost);
+
+			_preStepCost = 0;
+			_preStepTurn = false;
+		}
 
 		//Log(LOG_INFO) << "Egads! STATUS_TURNING reveals new units!!! I must pause!";
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path, popState";
@@ -1005,7 +1005,7 @@ void UnitWalkBState::doStatusTurn()
 /**
  * Handles some calculations when the path is finished.
  */
-void UnitWalkBState::postPathProcedures()
+void UnitWalkBState::postPathProcedures() // private.
 {
 	//Log(LOG_INFO) << "UnitWalkBState::postPathProcedures(), unit = " << _unit->getId();
 	_tileSwitchDone = false;
@@ -1153,7 +1153,7 @@ void UnitWalkBState::postPathProcedures()
  * Gets a suitable final facing direction for aLiens.
  * @return, direction to face
  */
-int UnitWalkBState::getFinalDirection() const
+int UnitWalkBState::getFinalDirection() const // private.
 {
 	const int
 		diff = static_cast<int>(_parent->getBattlescapeState()->getSavedGame()->getDifficulty()),
@@ -1196,7 +1196,7 @@ int UnitWalkBState::getFinalDirection() const
  * Checks visibility for new opponents.
  * @return, true if a new enemy is spotted
  */
-bool UnitWalkBState::visForUnits() const
+bool UnitWalkBState::visForUnits() const // private.
 {
 	if (_falling == true
 		|| _parent->getPanicHandled() == false)
@@ -1221,7 +1221,7 @@ bool UnitWalkBState::visForUnits() const
  * Sets the animation speed of units.
  * @param gravLift - true if moving up/down a gravLift
  */
-void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
+void UnitWalkBState::setNormalWalkSpeed(bool gravLift) const // private.
 {
 	int interval;
 	if (_unit->getFaction() == FACTION_PLAYER)
@@ -1243,7 +1243,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 /**
  * Handles walking/ flying/ other movement sounds.
  */
-void UnitWalkBState::playMovementSound()
+void UnitWalkBState::playMovementSound() const // private.
 {
 	if (_unit->getUnitVisible() == false
 		&& _parent->getSave()->getDebugMode() == false)
@@ -1332,7 +1332,7 @@ void UnitWalkBState::playMovementSound()
  * NOTE: This could get problematic if/when falling onto nonFloors like water,
  *		 and/or if there is another unit on tileBelow.
  */
-void UnitWalkBState::doFallCheck()
+void UnitWalkBState::doFallCheck() // private.
 {
 	if (_pf->getMoveTypePathing() == MT_FLY
 		|| _unit->getPosition().z == 0
@@ -1351,7 +1351,7 @@ void UnitWalkBState::doFallCheck()
  @param descent - how many levels below current to check for ground (default 0)
  @return, true if unit hits a Floor
  */
-bool UnitWalkBState::groundCheck(int descent)
+bool UnitWalkBState::groundCheck(int descent) const // private.
 {
 	const Tile* tileBelow;
 	Position pos;

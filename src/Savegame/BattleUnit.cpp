@@ -3093,8 +3093,8 @@ void BattleUnit::postMissionProcedures(
 		{
 			const int recovery = stats->health - _health;
 			sol->setRecovery(RNG::generate(
-											recovery / 2,
-											recovery));
+										recovery / 2,
+										recovery));
 		}
 
 		if (_expBravery != 0

@@ -78,15 +78,15 @@ private:
 	bool visForUnits() const;
 
 	/// Sets animation speed for the unit.
-	void setNormalWalkSpeed(bool gravLift);
+	void setNormalWalkSpeed(bool gravLift) const;
 
 	/// Handles the stepping sounds.
-	void playMovementSound();
+	void playMovementSound() const;
 
 	/// For determining if a flying unit turns flight off at start of movement.
 	void doFallCheck();
 	/// Checks if there is ground below when unit is falling.
-	bool groundCheck(int descent = 0);
+	bool groundCheck(int descent = 0) const;
 
 
 	public:
