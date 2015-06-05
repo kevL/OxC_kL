@@ -55,7 +55,7 @@ namespace OpenXcom
  * @param tile			- pointer to tile the explosion is on (default NULL)
  * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon (default false)
  * @param meleeSuccess	- true if the (melee) attack was succesful (default false)
- * @param forceCenter	- forces Camera to center on the explosion (default false)
+ * @param forceCamera	- forces Camera to center on the explosion (default false)
 // * @param cosmetic		- new undocumented parameter
  */
 ExplosionBState::ExplosionBState(
@@ -66,7 +66,7 @@ ExplosionBState::ExplosionBState(
 		Tile* tile,
 		bool lowerWeapon,
 		bool meleeSuccess,	// kL_add.
-		bool forceCenter)	// kL_add.
+		bool forceCamera)	// kL_add.
 //		bool cosmetic)
 	:
 		BattleState(parent),
@@ -76,7 +76,7 @@ ExplosionBState::ExplosionBState(
 		_tile(tile),
 		_lowerWeapon(lowerWeapon),
 		_hitSuccess(meleeSuccess),	// kL
-		_forceCenter(forceCenter),	// kL
+		_forceCamera(forceCamera),	// kL
 //		_cosmetic(cosmetic),
 		_power(0),
 		_areaOfEffect(false),
@@ -270,7 +270,7 @@ void ExplosionBState::init()
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
 			if (exploCam->isOnScreen(targetPos) == false
-				|| _forceCenter == true)
+				|| _forceCamera == true)
 			{
 				exploCam->centerOnPosition(
 										targetPos,
@@ -351,7 +351,7 @@ void ExplosionBState::init()
 
 		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics
 		if (exploCam->isOnScreen(targetPos) == false
-			|| _forceCenter == true
+			|| _forceCamera == true
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
@@ -635,7 +635,7 @@ void ExplosionBState::explode()
 												tile,
 												false,
 												false,
-												_forceCenter));
+												_forceCamera));
 	}
 }
 

@@ -140,6 +140,7 @@ struct BattleAction
 			finalAction = false;
 			number = 0;
 			takenXP = false;
+			waypoints.clear();
 		}
 };
 

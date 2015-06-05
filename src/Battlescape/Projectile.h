@@ -46,6 +46,9 @@ class Projectile
 {
 
 private:
+	static Position targetVoxel_cache;
+
+
 	bool _reversed;
 	int
 		_bulletSprite,
@@ -68,11 +71,11 @@ private:
 	///
 	void applyAccuracy(
 			const Position& origin,
-			Position* const target,
+			Position* target,
 			double accuracy,
 			const bool keepRange = false,
-			const Tile* const targetTile = NULL,
-			const bool extendLine = true);
+			const Tile* const targetTile = NULL);
+//			const bool extendLine = true);
 
 	/// Adds a cloud of particles at the projectile's location.
 //	void addVaporCloud();

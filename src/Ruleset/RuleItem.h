@@ -106,6 +106,7 @@ private:
 		_painKiller,
 		_stimulant,
 
+		_autoKick,
 		_autoShots,
 		_blastRadius,
 		_bulletSpeed,
@@ -319,13 +320,15 @@ private:
 		/// Gets the list weight for this item.
 		int getListOrder() const;
 
-		/// How fast does a projectile fired from this weapon travel?
+		/// How fast does a projectile fired from this weapon travel.
 		int getBulletSpeed() const;
-		/// How fast does the explosion animation play?
+		/// How fast does the explosion animation play.
 		int getExplosionSpeed() const;
 
 		/// How many auto shots does this weapon fire.
 		int getAutoShots() const;
+		/// How much kick does the weapon give on autoshot.
+		int getAutoKick() const;
 
 		/// is this item a 2 handed weapon?
 		bool isRifle() const;

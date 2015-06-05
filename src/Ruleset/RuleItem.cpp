@@ -94,6 +94,7 @@ RuleItem::RuleItem(const std::string& type)
 		_bulletSpeed(0),
 		_explosionSpeed(0),
 		_autoShots(3),
+		_autoKick(12),
 		_shotgunPellets(0),
 		_strengthApplied(false),
 		_skillApplied(true),
@@ -260,6 +261,7 @@ void RuleItem::load(
 	_bulletSpeed			= node["bulletSpeed"]		.as<int>(_bulletSpeed);
 	_explosionSpeed			= node["explosionSpeed"]	.as<int>(_explosionSpeed);
 	_autoShots				= node["autoShots"]			.as<int>(_autoShots);
+	_autoKick				= node["autoKick"]			.as<int>(_autoKick);
 	_shotgunPellets			= node["shotgunPellets"]	.as<int>(_shotgunPellets);
 	_zombieUnit				= node["zombieUnit"]		.as<std::string>(_zombieUnit);
 	_strengthApplied		= node["strengthApplied"]	.as<bool>(_strengthApplied);
@@ -879,6 +881,14 @@ int RuleItem::getExplosionSpeed() const
 int RuleItem::getAutoShots() const
 {
 	return _autoShots;
+}
+
+/**
+ * Gets the kick this weapon does on autoshot.
+ */
+int RuleItem::getAutoKick() const
+{
+	return _autoKick;
 }
 
 /**

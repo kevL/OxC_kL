@@ -459,14 +459,14 @@ void ProjectileFlyBState::init()
  * Calculate its trajectory.
  * @return, true if the projectile was successfully created
  */
-bool ProjectileFlyBState::createNewProjectile()
+bool ProjectileFlyBState::createNewProjectile() // private.
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
 	++_action.autoShotCount;
 
 	if (_unit->getGeoscapeSoldier() != NULL
-		&& (_action.type != BA_THROW
+		&& (   _action.type != BA_THROW
 			|| _action.type != BA_LAUNCH))
 	{
 		++_unit->getStatistics()->shotsFiredCounter;
@@ -484,7 +484,6 @@ bool ProjectileFlyBState::createNewProjectile()
 											_action,
 											_origin,
 											_targetVoxel);
-//											_ammo);
 
 	_parent->getMap()->setProjectile(projectile); // else, add the projectile on the map
 
@@ -1082,7 +1081,7 @@ void ProjectileFlyBState::think()
 }
 
 /**
- * Flying projectiles cannot be cancelled, but they can be skipped.
+ * Flying projectiles cannot be cancelled but they can be skipped.
  */
 void ProjectileFlyBState::cancel()
 {

@@ -48,7 +48,7 @@ private:
 	bool
 		_areaOfEffect,
 //		_cosmetic,
-		_forceCenter, // kL
+		_forceCamera, // kL
 		_hit,
 		_lowerWeapon,
 		_pistolWhip,
@@ -78,7 +78,7 @@ private:
 				Tile* tile = NULL,
 				bool lowerWeapon = false,
 				bool meleeSuccess = false,	// kL_add.
-				bool forceCenter = false);	// kL_add.
+				bool forceCamera = false);	// kL_add.
 //				bool cosmetic = false);
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();
