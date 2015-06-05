@@ -3136,7 +3136,7 @@ void BattleUnit::postMissionProcedures(
 			stats->psiSkill += improveStat(_expPsiSkill);
 		}
 
-		if (_expPsiStrength != 0
+		if ((_expPsiStrength /= 3) != 0
 			&& stats->psiStrength < caps.psiStrength)
 		{
 			stats->psiStrength += improveStat(_expPsiStrength);
