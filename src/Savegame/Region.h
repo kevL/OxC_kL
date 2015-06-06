@@ -31,12 +31,12 @@ class RuleRegion;
 
 /**
  * Represents a region of the world.
- * Contains variable info about a region like X-Com and alien activity in it.
+ * @note Contains variable info about a region like X-Com and alien activity.
  */
 class Region
 {
-private:
 
+private:
 	int
 		_activityRecent,
 		_activityRecentXCOM;

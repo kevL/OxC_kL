@@ -1200,7 +1200,7 @@ void DogfightState::updateDogfight()
 				// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
 				if (_game->getSavedGame()->findAlienMission(
 														targetRegion,
-														OBJECTIVE_RETALIATION) == false)
+														alm_RETAL) == false)
 				{
 					const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 					AlienMission* const mission = new AlienMission(
@@ -1272,12 +1272,12 @@ void DogfightState::updateDogfight()
 													ufoLon,
 													ufoLat);
 
-				int pts = _ufo->getRules()->getScore();
-				if (overLand == false)
-					pts *= 2;
-
 				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 				{
+					int pts = _ufo->getRules()->getScore();
+					if (overLand == false)
+						pts *= 2;
+
 					setStatus("STR_UFO_CRASH_LANDS");
 					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
 

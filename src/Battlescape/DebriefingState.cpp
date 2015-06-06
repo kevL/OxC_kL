@@ -1603,7 +1603,7 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			const AlienMission* const mission = _game->getSavedGame()->findAlienMission(
 																					_region->getRules()->getType(),
-																					OBJECTIVE_RETALIATION);
+																					alm_RETAL);
 			for (std::vector<Ufo*>::const_iterator
 					i = _gameSave->getUfos()->begin();
 					i != _gameSave->getUfos()->end();

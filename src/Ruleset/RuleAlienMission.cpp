@@ -74,7 +74,7 @@ RuleAlienMission::RuleAlienMission(const std::string& type)
 	:
 		_type(type),
 		_points(0),
-		_objective(OBJECTIVE_SCORE),
+		_objective(alm_SCORE),
 		_specialZone(std::numeric_limits<size_t>::max())
 {}
 

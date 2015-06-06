@@ -76,10 +76,10 @@ void RuleCountry::load(const YAML::Node& node)
 
 /**
  * Gets the language string that names this country.
- * Each country type has a unique name.
+ * @note Each country type has a unique name.
  * @return, the country's name
  */
-std::string RuleCountry::getType() const
+const std::string& RuleCountry::getType() const
 {
 	return _type;
 }
@@ -97,7 +97,7 @@ int RuleCountry::generateFunding() const
 
 /**
  * Gets the country's funding cap.
- * Country funding can never exceed this.
+ * @note Country funding can never exceed this.
  * @return, the funding cap in thousands
  */
 int RuleCountry::getFundingCap() const
@@ -135,7 +135,7 @@ bool RuleCountry::insideCountry(
 {
 	for (size_t
 			i = 0;
-			i < _lonMin.size();
+			i != _lonMin.size();
 			++i)
 	{
 		bool

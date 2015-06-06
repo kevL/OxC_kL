@@ -1113,6 +1113,7 @@ GameTime* SavedGame::getTime() const
  */
 void SavedGame::setTime(GameTime gt)
 {
+	delete _time;
 	_time = new GameTime(gt);
 }
 

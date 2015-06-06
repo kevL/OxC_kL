@@ -44,8 +44,8 @@ struct MissionWave;
 
 /**
  * Represents an ongoing AlienMission.
- * Contains variable info about the mission
- * such as spawn counter and target region and current wave.
+ * @note Contains variable info about the mission such as spawn counter and
+ * target region and current wave.
  * @sa RuleAlienMission
  */
 class AlienMission
@@ -56,7 +56,7 @@ private:
 	size_t
 		_liveUfos,
 		_ufoCount,
-		_nextWave,
+		_waveCount,
 		_spawnTime;
 
 	std::string
@@ -65,14 +65,20 @@ private:
 
 	const AlienBase* _base;
 	const RuleAlienMission& _missionRule;
-	SavedGame& _savedGame;
+	SavedGame& _gameSave;
 
-	/// Spawns a UFO, based on mission rules.
+	/// Calculates time remaining until the next wave spawns.
+	void calcSpawnTime(size_t nextWave);
+	/// Spawns a UFO based on mission rules.
 	Ufo* spawnUfo(
 			const Ruleset& rules,
 			const Globe& globe,
 			const MissionWave& wave,
 			const UfoTrajectory& trajectory);
+	/// Spawns a MissionSite at a specific location.
+	MissionSite* spawnMissionSite(
+			const Ruleset& rules,
+			const MissionArea& area);
 	/// Spawns an alien base
 	void spawnAlienBase(
 			const Globe& globe,
@@ -82,17 +88,13 @@ private:
 	void addScore(
 			const double lon,
 			const double lat);
-	/// Spawns a MissionSite at a specific location.
-	MissionSite* spawnMissionSite(
-			const Ruleset& rules,
-			const MissionArea& area);
 
 
 	public:
 		/// Creates a mission of the specified type.
 		AlienMission(
 				const RuleAlienMission& missionRule,
-				SavedGame& savedGame);
+				SavedGame& gameSave);
 		/// Cleans up the mission info.
 		~AlienMission();
 
@@ -104,6 +106,11 @@ private:
 		/// Gets the mission's ruleset.
 		const RuleAlienMission& getRules() const
 		{ return _missionRule; }
+
+		/// Sets the unique ID for this mission.
+		void setId(int id);
+		/// Gets the unique ID for this mission.
+		int getId() const;
 
 		/// Gets the mission's region.
 		const std::string& getRegion() const
@@ -126,26 +133,6 @@ private:
 		/// Sets the minutes until next wave spawns.
 		void setWaveCountdown(size_t minutes);
 
-		/// Sets the unique ID for this mission.
-		void setId(int id);
-		/// Gets the unique ID for this mission.
-		int getId() const;
-
-		/// Gets the alien base for this mission.
-		const AlienBase* getAlienBase() const;
-		/// Sets the alien base for this mission.
-		void setAlienBase(const AlienBase* const base);
-
-		/// Gets if this mission over.
-		bool isOver() const;
-
-		/// Handles UFO spawning for the mission.
-		void think(
-				Game& engine,
-				const Globe& globe);
-		/// Initializes with values from rules.
-		void start(size_t countdown = 0);
-
 		/// Increases number of live UFOs.
 		void increaseLiveUfos()
 		{ ++_liveUfos; }
@@ -153,11 +140,27 @@ private:
 		void decreaseLiveUfos()
 		{ --_liveUfos; }
 
+		/// Gets if this mission over.
+		bool isOver() const;
+		/// Initializes with values from rules.
+		void start(size_t countdown = 0);
+
+		/// Handles UFO spawning for the mission.
+		void think(
+				Game& engine,
+				const Globe& globe);
+
 		/// Handles UFO reaching a waypoint.
 		void ufoReachedWaypoint(
 				Ufo& ufo,
 				const Ruleset& rules,
 				const Globe& globe);
+
+		/// Gets the alien base for this mission.
+		const AlienBase* getAlienBase() const;
+		/// Sets the alien base for this mission.
+		void setAlienBase(const AlienBase* const base);
+
 		/// Handles UFO lifting from the ground.
 		void ufoLifting(Ufo& ufo);
 		/// Handles UFO shot down.

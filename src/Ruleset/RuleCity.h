@@ -66,7 +66,7 @@ private:
 		/// Gets the city's name.
 		std::wstring getName(const Language* const lang) const;
 		/// Gets the city's name as a raw string.
-		std::string getName() const;
+		const std::string& getName() const;
 
 		/// Gets the City's latitude.
 		double getLatitude() const;

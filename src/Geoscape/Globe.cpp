@@ -1119,7 +1119,7 @@ std::vector<Target*> Globe::getTargets(
 		if ((*i)->getDetected() == true)
 		{
 			if ((*i)->reachedDestination() == true // kL->
-				&& (*i)->getAlienMission()->getRules().getObjective() == OBJECTIVE_SITE)
+				&& (*i)->getAlienMission()->getRules().getObjective() == alm_SITE)
 //				&& (*i)->getMissionType() == "STR_ALIEN_TERROR")
 			{
 				// kL_note: this is a kludge; the UFO should be / have been deleted before

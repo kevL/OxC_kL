@@ -321,9 +321,9 @@ MonthlyReportState::~MonthlyReportState()
 {}
 
 /**
- * Update all activity counters, gather all scores, get countries to sign pacts,
- * adjust their fundings, assess their satisfaction, and finally calculate
- * overall total score, with thanks to Volutar for the formulae.
+ * Updates all activity counters, gathers all scores, gets countries to sign
+ * pacts, adjusts their fundings, assesses their satisfaction, and finally
+ * calculates overall total score, with thanks to Volutar for the formulae.
  */
 void MonthlyReportState::calculateChanges() // private.
 {

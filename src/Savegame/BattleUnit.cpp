@@ -143,12 +143,12 @@ BattleUnit::BattleUnit(
 		_standHeight(soldier->getRules()->getStandHeight()),
 		_kneelHeight(soldier->getRules()->getKneelHeight()),
 		_floatHeight(soldier->getRules()->getFloatHeight()),
-		_gender(soldier->getGender())
+		_gender(soldier->getGender()),
 
-//		_panicking(false)
+		_stats(*soldier->getCurrentStats())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-	_stats	= *soldier->getCurrentStats();
+//	_stats	= *soldier->getCurrentStats();
 	_stats += *_armor->getStats(); // armors may modify effective stats
 
 	_loftempsSet	= _armor->getLoftempsSet();
@@ -311,12 +311,12 @@ BattleUnit::BattleUnit(
 		_aggression(unit->getAggression()),
 		_spawnUnit(unit->getSpawnUnit()),
 		_value(unit->getValue()),
-		_specab(unit->getSpecialAbility())
+		_specab(unit->getSpecialAbility()),
 
-//		_panicking(false)
+		_stats(*unit->getStats())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
-	_stats	= *unit->getStats();
+//	_stats	= *unit->getStats();
 	_stats += *_armor->getStats(); // armors may modify effective stats (but not further modified by game difficulty or monthly progress)
 
 	if (faction == FACTION_HOSTILE)

@@ -32,7 +32,8 @@ namespace OpenXcom
 
 /**
  * Instantiates a City.
- * @note A City is a 1-pixel MissionArea within a MissionZone as defined in RuleRegion.
+ * @note A City is a 1-pixel MissionArea within a MissionZone as defined in
+ * RuleRegion.
  */
 RuleCity::RuleCity()
 	:
@@ -46,7 +47,8 @@ RuleCity::RuleCity()
 }
 
 /**
- * Alternate cTor for Cities. Used by TFTD-style rulesets.
+ * Alternate cTor for Cities.
+ * @note Used by TFTD-style rulesets.
  * @param name	- name of the city
  * @param lon	- longitude of the city
  * @param lat	- latitude of the city
@@ -103,7 +105,7 @@ std::wstring RuleCity::getName(const Language* const lang) const
  * Returns this City's name as a raw string.
  * @return, the city's ID string
  */
-std::string RuleCity::getName() const
+const std::string& RuleCity::getName() const
 {
 	return _name;
 }
@@ -136,7 +138,7 @@ int RuleCity::getMarker() const
 }
 
 /**
- * Returns the the minimal zoom level that is required to show name of this City on geoscape.
+ * Returns the the minimal zoom level that is required to show name of this City.
  * @return, required zoom level
  */
 size_t RuleCity::getZoomLevel() const

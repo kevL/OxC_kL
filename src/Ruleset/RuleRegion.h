@@ -121,7 +121,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the region's type.
-		std::string getType() const;
+		const std::string& getType() const;
 
 		/// Gets the region's base cost.
 		int getBaseCost() const;
@@ -156,18 +156,11 @@ private:
 		/// Gets a random mission area.
 		MissionArea getRandomMissionPoint(size_t zone) const;
 
-		/// Gets the maximum longitude.
-		const std::vector<double>& getLonMax() const
-		{ return _lonMax; }
-		/// Gets the minimum longitude.
-		const std::vector<double>& getLonMin() const
-		{ return _lonMin; }
-		/// Gets the maximum latitude.
-		const std::vector<double>& getLatMax() const
-		{ return _latMax; }
-		/// Gets the minimum latitude.
-		const std::vector<double>& getLatMin() const
-		{ return _latMin; }
+		/// Gets this Country's borders.
+		const std::vector<double>& getLonMax() const {return _lonMax;}
+		const std::vector<double>& getLonMin() const {return _lonMin;}
+		const std::vector<double>& getLatMax() const {return _latMax;}
+		const std::vector<double>& getLatMin() const {return _latMin;}
 };
 
 }

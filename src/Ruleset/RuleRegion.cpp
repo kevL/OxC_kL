@@ -44,7 +44,7 @@ RuleRegion::RuleRegion(const std::string& type)
 {}
 
 /**
- * Deletes the regions from memory.
+ * Deletes the region from memory.
  */
 RuleRegion::~RuleRegion()
 {
@@ -122,10 +122,10 @@ void RuleRegion::load(const YAML::Node& node)
 
 /**
  * Gets the language string that names this region.
- * Each region type has a unique name.
+ * @note Each region type has a unique name.
  * @return, the region type
  */
-std::string RuleRegion::getType() const
+const std::string& RuleRegion::getType() const
 {
 	return _type;
 }
@@ -216,7 +216,8 @@ std::vector<RuleCity*>* RuleRegion::getCities()
 
 /**
  * Gets the weight of the Region for mission selection.
- * @note This is only used when creating a new game since these weights change in the course of the game.
+ * @note This is only used when creating a new game since these weights change
+ * in the course of the game.
  * @return, the initial weight of this Region
  */
 size_t RuleRegion::getWeight() const

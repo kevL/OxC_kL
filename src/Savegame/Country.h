@@ -30,8 +30,8 @@ class RuleCountry;
 
 /**
  * Represents a country that funds the player.
- * Contains variable info about a country like
- * monthly funding and various activities.
+ * @note Contains variable info about a country like monthly funding and various
+ * activities.
  */
 class Country
 {
@@ -103,16 +103,16 @@ private:
 		/// Signs a pact w/ aLiens immediately!1
 		void setPact();
 
-		/// kL. Handles recent alien activity in this country for GraphsState blink.
-		bool recentActivity( // kL
+		/// Handles recent alien activity in this country for GraphsState blink.
+		bool recentActivity(
 				bool activity = true,
 				bool graphs = false);
-		/// kL. Handles recent XCOM activity in this country for GraphsState blink.
-		bool recentActivityXCOM( // kL
+		/// Handles recent XCOM activity in this country for GraphsState blink.
+		bool recentActivityXCOM(
 				bool activity = true,
 				bool graphs = false);
-		/// kL. Resets activity.
-		void resetActivity(); // kL
+		/// Resets activity.
+		void resetActivity();
 };
 
 }

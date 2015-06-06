@@ -29,8 +29,8 @@ namespace OpenXcom
 
 /**
  * Represents a specific funding country.
- * Contains constant info like its location in the
- * world and starting funding range.
+ * @note Contains constant info like its location in the world and starting
+ * funding range.
  */
 class RuleCountry
 {
@@ -62,7 +62,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the country's type.
-		std::string getType() const;
+		const std::string& getType() const;
 
 		/// Generates the country's starting funding.
 		int generateFunding() const;

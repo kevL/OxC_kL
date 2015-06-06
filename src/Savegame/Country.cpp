@@ -31,7 +31,7 @@ namespace OpenXcom
 /**
  * Initializes a country of the specified type.
  * @param rules		- pointer to RuleCountry
- * @param genFunds	- true to generate new funding
+ * @param genFunds	- true to generate new funding (default true)
  */
 Country::Country(
 		RuleCountry* rules,
@@ -185,13 +185,12 @@ std::vector<int>& Country::getActivityAlien()
 }
 
 /**
- * Resets all the counters, calculates monthly funding, and
- * sets the delta value for the month.
+ * Resets all the counters, calculates monthly funding, and sets the delta value
+ * for the month.
  * @param xcomTotal		- the council's xcom score
  * @param alienTotal	- the council's alien score
  * @param diff			- game difficulty
  */
-
 void Country::newMonth(
 		const int xcomTotal,
 		const int alienTotal,
@@ -201,15 +200,13 @@ void Country::newMonth(
 	_satisfaction = 2;
 
 	const int
+		xcomPts = (xcomTotal / 10) + _activityXcom.back(),
+		alienPts = (alienTotal / 20) + _activityAlien.back(),
 		funding = getFunding().back(),
-
-		xCom = (xcomTotal / 10) + _activityXcom.back(),
-		aLien = (alienTotal / 20) + _activityAlien.back(),
-
 		oldFunding = _funding.back() / 1000;
-	int newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
+	int newFunding = (oldFunding * RNG::generate(5,20) / 100) * 1000;
 
-	if (xCom > aLien + ((diff + 1) * 20)) // country auto. increases funding
+	if (xcomPts > alienPts + ((diff + 1) * 20)) // country auto. increases funding
 	{
 		//Log(LOG_INFO) << ". auto funding increase";
 		const int cap = getRules()->getFundingCap() * 1000;
@@ -217,13 +214,13 @@ void Country::newMonth(
 		if (funding + newFunding > cap)
 			newFunding = cap - funding;
 
-		if (newFunding)
+		if (newFunding != 0)
 			_satisfaction = 3;
 	}
-	else if (xCom - (diff * 20) > aLien) // 50-50 increase/decrease funding
+	else if (xcomPts - (diff * 20) > alienPts) // 50-50 increase/decrease funding
 	{
 		//Log(LOG_INFO) << ". possible funding increase/decrease";
-		if (RNG::generate(0, xCom) > aLien)
+		if (RNG::generate(0, xcomPts) > alienPts)
 		{
 			//Log(LOG_INFO) << ". . funding increase";
 			const int cap = getRules()->getFundingCap() * 1000;
@@ -231,10 +228,10 @@ void Country::newMonth(
 			if (funding + newFunding > cap)
 				newFunding = cap - funding;
 
-			if (newFunding)
+			if (newFunding != 0)
 				_satisfaction = 3;
 		}
-		else if (RNG::generate(0, aLien) > xCom
+		else if (RNG::generate(0, alienPts) > xcomPts
 			&& newFunding != 0)
 		{
 			//Log(LOG_INFO) << ". . funding decrease";
@@ -254,9 +251,9 @@ void Country::newMonth(
 	{
 		_newPact = false;
 		_pact = true;
-
-		addActivityAlien(100 + diff * 50); // should this be added to Region also
-	}
+//		addActivityAlien(100 + diff * 50);	// should this be added to Region also.
+	}										// Yes it should be .... or taken out here.
+											// Let AlienMission or something else take care of it.
 
 	// set the new funding and reset the activity meters
 	if (_pact == true)
@@ -298,8 +295,8 @@ void Country::setNewPact()
 
 /**
  * Gets if this country already has a pact with aLiens.
- * There is no setter for this one, since it gets set automatically at the end
- * of the month if _newPact is true.
+ * @note There is no setter for this one since it gets set automatically at the
+ * end of the month if @a _newPact is true.
  * @return, true if country has a pact with aLiens
  */
 bool Country::getPact() const

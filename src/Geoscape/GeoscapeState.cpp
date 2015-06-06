@@ -3167,7 +3167,7 @@ void GeoscapeState::time1Day()
 
 
 	const RuleAlienMission* missionRule = _rules->getRandomMission(
-																OBJECTIVE_BASE,
+																alm_BASE,
 																_game->getSavedGame()->getMonthsPassed());
 	const int aLienPts = (missionRule->getPoints() * (static_cast<int>(_gameSave->getDifficulty()) + 1)) / 100;
 	if (aLienPts > 0) // handle regional and country points for alien bases
@@ -3289,10 +3289,10 @@ void GeoscapeState::time1Month()
 				{
 					if (_gameSave->findAlienMission(
 												(*j)->getRules()->getType(),
-												OBJECTIVE_RETALIATION) == false)
+												alm_RETAL) == false)
 					{
 						const RuleAlienMission& missionRule = *_rules->getRandomMission(
-																					OBJECTIVE_RETALIATION,
+																					alm_RETAL,
 																					_game->getSavedGame()->getMonthsPassed());
 						AlienMission* const mission = new AlienMission(
 																	missionRule,
@@ -4025,7 +4025,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart) // private.
 void GeoscapeState::setupLandMission() // private.
 {
 	const RuleAlienMission& missionRule = *_rules->getRandomMission(
-																OBJECTIVE_SITE,
+																alm_SITE,
 																_game->getSavedGame()->getMonthsPassed());
 
 	// Determine a random region with a valid mission zone and no mission already running.
@@ -4046,7 +4046,7 @@ void GeoscapeState::setupLandMission() // private.
 		if (regRule->getMissionZones().size() > missionRule.getSpawnZone()
 			&& _game->getSavedGame()->findAlienMission(
 													regRule->getType(),
-													OBJECTIVE_SITE) == NULL)
+													alm_SITE) == NULL)
 		{
 			const MissionZone& zone = regRule->getMissionZones().at(missionRule.getSpawnZone());
 			for (std::vector<MissionArea>::const_iterator

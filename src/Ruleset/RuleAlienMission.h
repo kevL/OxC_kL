@@ -43,7 +43,7 @@ struct MissionWave
 							// The UFOs are generated sequentially, one every spawnTimer minutes.
 	std::string trajectory;	// The trajectory ID for this wave's UFOs.
 							// Trajectories control the way UFOs fly around the Geoscape.
-	size_t spawnTimer;		// Number of minutes between UFOs in the wave.
+	size_t spawnTimer;		// Number of minutes between UFOs in the wave. Or seconds.
 							// The actual value used is (spawnTimer*1/4) or (spawnTimer*3/4.)
 	bool objective;			// This wave performs the mission objective.
 							// The UFO executes a special action based on the mission objective.
@@ -52,19 +52,19 @@ struct MissionWave
 
 enum MissionObjective
 {
-	OBJECTIVE_SCORE,		// 0
-	OBJECTIVE_INFILTRATION,	// 1
-	OBJECTIVE_BASE,			// 2
-	OBJECTIVE_SITE,			// 3
-	OBJECTIVE_RETALIATION,	// 4
-	OBJECTIVE_SUPPLY		// 5
+	alm_SCORE,	// 0
+	alm_INFILT,	// 1
+	alm_BASE,	// 2
+	alm_SITE,	// 3
+	alm_RETAL,	// 4
+	alm_SUPPLY	// 5
 };
 
 
 /**
  * Stores fixed information about a mission type.
- * It stores the mission waves and the distribution of the races
- * that can undertake the mission based on game date.
+ * @note It stores the mission waves and the distribution of the races that can
+ * undertake the mission based on game date.
  */
 class RuleAlienMission
 {
@@ -100,6 +100,7 @@ private:
 		/// Gets the mission's type.
 		const std::string& getType() const
 		{ return _type; }
+
 		/// Gets the number of waves.
 		size_t getWaveTotal() const
 		{ return _waves.size(); }
@@ -119,7 +120,7 @@ private:
 		{ return _specialUfo; }
 		/// Gets the zone for spawning an alien site or base.
 		size_t getSpawnZone() const
-		{ return _specialZone; } // note: inits to -1
+		{ return _specialZone; } // note: inits to -1 -> now inits to size_t(max)
 
 		/// Gets the chances of this mission based on the game time.
 		int getWeight(const size_t monthsPassed) const;

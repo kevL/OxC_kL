@@ -1836,7 +1836,7 @@ alienMissions:
         trajectory: P7
         timer: 60
   - type: STR_ALIEN_BASE
-    points: 350
+    points: 300
     objective: 2
     specialZone: 4 #Mission zone for alien bases
     raceWeights:
