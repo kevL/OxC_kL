@@ -23,7 +23,7 @@
 namespace
 {
 
-const char* altitudeString[] =
+const char* stAltitude[] =
 {
 	"STR_GROUND",
 	"STR_VERY_LOW",
@@ -79,7 +79,7 @@ namespace OpenXcom
 {
 
 /**
- * cTor. Creates a UfoTrajectory.
+ * Creates a UfoTrajectory.
  * @param id - reference the ID
  */
 UfoTrajectory::UfoTrajectory(const std::string& id)
@@ -90,7 +90,7 @@ UfoTrajectory::UfoTrajectory(const std::string& id)
 
 /**
  * Overwrites trajectory data with the data stored in @a node.
- * Only the fields contained in the node will be overwritten.
+ * @note Only the fields contained in the node will be overwritten.
  * @param node - reference the node containing the new values
  */
 void UfoTrajectory::load(const YAML::Node& node)
@@ -103,11 +103,11 @@ void UfoTrajectory::load(const YAML::Node& node)
 /**
  * Gets the altitude at a waypoint.
  * @param wp - the waypoint ID
- * @return, altitude
+ * @return, reference to altitude string
  */
-std::string UfoTrajectory::getAltitude(size_t wp) const
+const std::string& UfoTrajectory::getAltitude(size_t wp) const
 {
-	return altitudeString[_waypoints[wp].altitude];
+	return stAltitude[_waypoints[wp].altitude];
 }
 
 }

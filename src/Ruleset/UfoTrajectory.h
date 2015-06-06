@@ -51,7 +51,8 @@ bool operator>> (
 
 /**
  * Holds information about a specific trajectory.
- * Ufo trajectories are a sequence of mission zones, altitudes and speed percentages.
+ * @note Ufo trajectories are a sequence of mission zones, altitudes, and speed
+ * percentages.
  */
 class UfoTrajectory
 {
@@ -93,7 +94,7 @@ private:
 		{ return _waypoints[wp].zone; }
 
 		/// Gets the altitude at a waypoint.
-		std::string getAltitude(size_t wp) const;
+		const std::string& getAltitude(size_t wp) const;
 
 		/**
 		 * Gets the speed percentage at a waypoint.

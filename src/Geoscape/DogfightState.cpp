@@ -1221,6 +1221,7 @@ void DogfightState::updateDogfight()
 			const double
 				ufoLon = _ufo->getLongitude(),
 				ufoLat = _ufo->getLatitude();
+			int xcomPts = 0;
 
 			if (_ufo->isDestroyed() == true)
 			{
@@ -1229,39 +1230,7 @@ void DogfightState::updateDogfight()
 					setStatus("STR_UFO_DESTROYED");
 					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_EXPLODE);
 
-					const int pts = _ufo->getRules()->getScore() * 2;
-
-					for (std::vector<Region*>::const_iterator
-							i = _gameSave->getRegions()->begin();
-							i != _gameSave->getRegions()->end();
-							++i)
-					{
-						if ((*i)->getRules()->insideRegion(
-														ufoLon,
-														ufoLat) == true)
-						{
-							(*i)->addActivityXcom(pts);
-							(*i)->recentActivityXCOM();
-
-							break;
-						}
-					}
-
-					for (std::vector<Country*>::const_iterator
-							i = _gameSave->getCountries()->begin();
-							i != _gameSave->getCountries()->end();
-							++i)
-					{
-						if ((*i)->getRules()->insideCountry(
-														ufoLon,
-														ufoLat) == true)
-						{
-							(*i)->addActivityXcom(pts);
-							(*i)->recentActivityXCOM();
-
-							break;
-						}
-					}
+					xcomPts = _ufo->getRules()->getScore() * 2;
 				}
 
 				_destroyUfo = true;
@@ -1274,50 +1243,18 @@ void DogfightState::updateDogfight()
 
 				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 				{
-					int pts = _ufo->getRules()->getScore();
-					if (overLand == false)
-						pts *= 2;
-
 					setStatus("STR_UFO_CRASH_LANDS");
 					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
 
-					for (std::vector<Region*>::const_iterator
-							i = _gameSave->getRegions()->begin();
-							i != _gameSave->getRegions()->end();
-							++i)
-					{
-						if ((*i)->getRules()->insideRegion(
-														ufoLon,
-														ufoLat) == true)
-						{
-							(*i)->addActivityXcom(pts);
-							(*i)->recentActivityXCOM();
-
-							break;
-						}
-					}
-
-					for (std::vector<Country*>::const_iterator
-							i = _gameSave->getCountries()->begin();
-							i != _gameSave->getCountries()->end();
-							++i)
-					{
-						if ((*i)->getRules()->insideCountry(
-														ufoLon,
-														ufoLat) == true)
-						{
-							(*i)->addActivityXcom(pts);
-							(*i)->recentActivityXCOM();
-
-							break;
-						}
-					}
+					xcomPts = _ufo->getRules()->getScore();
 				}
 
 				if (overLand == false)
 				{
 					_ufo->setStatus(Ufo::DESTROYED);
 					_destroyUfo = true;
+
+					xcomPts *= 2;
 				}
 				else // Set up Crash site.
 				{
@@ -1326,6 +1263,41 @@ void DogfightState::updateDogfight()
 
 					if (_ufo->getCrashId() == 0)
 						_ufo->setCrashId(_gameSave->getId("STR_CRASH_SITE"));
+				}
+			}
+
+			if (xcomPts != 0)
+			{
+				for (std::vector<Region*>::const_iterator
+						i = _gameSave->getRegions()->begin();
+						i != _gameSave->getRegions()->end();
+						++i)
+				{
+					if ((*i)->getRules()->insideRegion(
+													ufoLon,
+													ufoLat) == true)
+					{
+						(*i)->addActivityXcom(xcomPts);
+						(*i)->recentActivityXCOM();
+
+						break;
+					}
+				}
+
+				for (std::vector<Country*>::const_iterator
+						i = _gameSave->getCountries()->begin();
+						i != _gameSave->getCountries()->end();
+						++i)
+				{
+					if ((*i)->getRules()->insideCountry(
+													ufoLon,
+													ufoLat) == true)
+					{
+						(*i)->addActivityXcom(xcomPts);
+						(*i)->recentActivityXCOM();
+
+						break;
+					}
 				}
 			}
 

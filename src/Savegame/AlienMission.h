@@ -52,6 +52,8 @@ class AlienMission
 {
 
 private:
+	bool _success;	// Prevents infiltration missions taking multiple success points
+					// and creating multiple bases on the final 2xBattleship wave.
 	int _uniqueID;
 	size_t
 		_liveUfos,
@@ -162,7 +164,10 @@ private:
 		void setAlienBase(const AlienBase* const base);
 
 		/// Handles UFO lifting from the ground.
-		void ufoLifting(Ufo& ufo);
+		void ufoLifting(
+				Ufo& ufo,
+				Ruleset& rules,
+				const Globe& globe);
 		/// Handles UFO shot down.
 		void ufoShotDown(const Ufo& ufo);
 

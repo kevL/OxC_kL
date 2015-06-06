@@ -2572,7 +2572,7 @@ ufoTrajectories:
   - id: P0
     groundTimer: 3000
     waypoints:
-      - [5, 4, 100]
+      - [5, 4, 100] # zone, altitude, speed
       - [0, 3, 74]
       - [0, 1, 28]
       - [1, 1, 47]

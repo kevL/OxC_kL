@@ -5376,7 +5376,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1433211211 f:\git\openxcom\src\ruleset\aliendeployment.h
+1433612674 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1430149550 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5585,7 +5585,7 @@
 
 1431472912 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1433249446 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1433612616 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5857,7 +5857,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1432715019 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1433548801 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -5918,7 +5918,7 @@
 
 1433535945 f:\git\openxcom\src\ruleset\rulecountry.h
 
-1433555388 f:\git\openxcom\src\savegame\alienmission.h
+1433623389 f:\git\openxcom\src\savegame\alienmission.h
 
 1433536618 f:\git\openxcom\src\savegame\country.h
 
@@ -6063,7 +6063,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1433533759 f:\git\openxcom\src\battlescape\projectile.h
+1433612970 f:\git\openxcom\src\battlescape\projectile.h
 	"BattlescapeGame.h"
 	"Position.h"
 
@@ -6215,7 +6215,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433533883 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1433613034 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6670,7 +6670,7 @@
 
 1430149550 f:\git\openxcom\src\engine\scalers\scale2x.h
 
-1430149550 source:f:\git\openxcom\src\engine\scalers\scale3x.cpp
+1433613906 source:f:\git\openxcom\src\engine\scalers\scale3x.cpp
 	<config.h>
 	"scale3x.h"
 	<assert.h>
@@ -6850,7 +6850,7 @@
 1430149550 f:\git\openxcom\src\geoscape\basedestroyedstate.h
 	"../Engine/State.h"
 
-1431050843 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
+1433548801 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
 	"BaseDestroyedState.h"
 	"Globe.h"
 	"../Engine/Game.h"
@@ -7043,7 +7043,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1433552878 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1433616280 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7123,7 +7123,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1433211320 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1433617938 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7253,13 +7253,13 @@
 1425905399 f:\git\openxcom\src\ruleset\city.h
 	"../Savegame/Target.h"
 
-1433551424 f:\git\openxcom\src\ruleset\rulealienmission.h
+1433622926 f:\git\openxcom\src\ruleset\rulealienmission.h
 
-1431489908 f:\git\openxcom\src\ruleset\ufotrajectory.h
+1433622120 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
 1430258670 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1432721980 source:f:\git\openxcom\src\geoscape\globe.cpp
+1433548726 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8421,7 +8421,7 @@
 1430149550 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1433211288 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1433612651 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1430980245 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8467,7 +8467,7 @@
 	"MapData.h"
 	"MapDataSet.h"
 
-1431834741 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1433548726 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -8571,7 +8571,7 @@
 	"../Engine/Language.h"
 	"../Savegame/Soldier.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1433622190 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1431490878 source:f:\git\openxcom\src\ruleset\unit.cpp
@@ -10664,7 +10664,7 @@
 	"../Engine/Language.h"
 	"../Engine/State.h"
 
-1431541748 source:f:\git\openxcom\src\menu\introstate.cpp
+1433612308 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	"MainMenuState.h"
 	"../Engine/Game.h"
@@ -10952,7 +10952,7 @@
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1432284472 f:\git\openxcom\src\fmath.h
+1433614090 f:\git\openxcom\src\fmath.h
 
 1430149550 f:\git\openxcom\src\engine\dosfont.h
 

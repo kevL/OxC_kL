@@ -1457,7 +1457,7 @@ void GeoscapeState::timeAdvance()
 }
 
 /**
- * Takes care of any game logic that has to run every game second.
+ * Takes care of any game logic that has to run every 5 game seconds.
  */
 void GeoscapeState::time5Seconds()
 {
@@ -1583,7 +1583,10 @@ void GeoscapeState::time5Seconds()
 				{
 					AlienMission* const mission = (*i)->getAlienMission();
 					const bool detected = (*i)->getDetected();
-					mission->ufoLifting(**i);
+					mission->ufoLifting(
+									**i,
+									*_rules,
+									*_globe);
 
 					if (detected != (*i)->getDetected()
 						&& (*i)->getFollowers()->empty() == false)

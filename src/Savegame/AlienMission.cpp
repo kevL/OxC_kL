@@ -74,7 +74,8 @@ AlienMission::AlienMission(
 		_spawnTime(0),
 		_liveUfos(0),
 		_uniqueID(0),
-		_base(NULL)
+		_base(NULL),
+		_success(false)
 {}
 
 /**
@@ -120,6 +121,7 @@ void AlienMission::load(const YAML::Node& node)
 	_spawnTime	= node["spawnTime"]	.as<size_t>(_spawnTime);
 	_liveUfos	= node["liveUfos"]	.as<size_t>(_liveUfos);
 	_uniqueID	= node["uniqueID"]	.as<int>(_uniqueID);
+	_success	= node["success"]	.as<bool>(_success);
 
 	if (const YAML::Node& baseId = node["alienBase"])
 	{
@@ -153,6 +155,9 @@ YAML::Node AlienMission::save() const
 	node["spawnTime"]	= _spawnTime;
 	node["liveUfos"]	= _liveUfos;
 	node["uniqueID"]	= _uniqueID;
+
+	if (_success == true)
+		node["success"] = _success;
 
 	if (_base != NULL)
 		node["alienBase"] = _base->getId();
@@ -287,14 +292,15 @@ void AlienMission::think(
 	}
 
 
-	if (_waveCount == _missionRule.getWaveTotal())
+	// don't do these onSpawn; do them on ufoLifting() below_
+/*	if (_waveCount == _missionRule.getWaveTotal())
 	{
 		const MissionObjective object = _missionRule.getObjective();
 
 		if (object == alm_BASE
 			|| object == alm_INFILT)
 		{
-			spawnAlienBase(
+			spawnAlienBase( // adds alienPts.
 						globe,
 						rules,
 						_missionRule.getSpawnZone());
@@ -334,7 +340,7 @@ void AlienMission::think(
 				_waveCount = 0; // Infiltrations loop for ever.
 			}
 		}
-	}
+	} */ // moved to ufoLifting()
 
 	if (_waveCount != _missionRule.getWaveTotal()) // note that alm_INFILT sets '_waveCount' to 0 as it spawns its last wave.
 		calcSpawnTime(_waveCount);
@@ -807,9 +813,14 @@ const AlienBase* AlienMission::getAlienBase() const
  * @note It takes care of sending the UFO to the next waypoint and marking it
  * for removal as required. It must set the game data in a way that the rest of
  * the code understands what to do.
- * @param ufo - reference the Ufo that reached its waypoint
+ * @param ufo	- reference the Ufo that is lifting off
+ * @param rules	- reference the Ruleset
+ * @param globe	- reference the Globe
  */
-void AlienMission::ufoLifting(Ufo& ufo)
+void AlienMission::ufoLifting(
+		Ufo& ufo,
+		Ruleset& rules,
+		const Globe& globe)
 {
 	//Log(LOG_INFO) << "AlienMission::ufoLifting()";
 	switch (ufo.getStatus())
@@ -821,18 +832,69 @@ void AlienMission::ufoLifting(Ufo& ufo)
 
 		case Ufo::LANDED:
 			//Log(LOG_INFO) << ". mission complete, addScore() + getTrajectory()";
-			// base missions only get points when they are completed.
-			if (_missionRule.getPoints() > 0
-				&& _missionRule.getObjective() != alm_BASE)
+			if (   _missionRule.getPoints() > 0 // base & infiltration missions only get points when they are completed.
+				&& _missionRule.getObjective() != alm_BASE
+				&& _missionRule.getObjective() != alm_INFILT)
 //			if (_missionRule.getType() == "STR_ALIEN_HARVEST"
 //				|| _missionRule.getType() == "STR_ALIEN_ABDUCTION"
 //				|| _missionRule.getType() == "STR_ALIEN_TERROR")
 			{
-				addScore( // alm_SCORE, alm_INFILT, alm_SUPPLY -> Base handled elsewhere; Site doesn't do ufoLifting() at all; Retaliation has 0 pts.
+				addScore( // alm_SCORE, alm_SUPPLY -> Base & Infiltration handled below; Site doesn't do ufoLifting() at all; Retaliation has 0 pts.
 					ufo.getLongitude(),
 					ufo.getLatitude());
 			}
-			// TODO: This is where alienBase and Infiltration ought be for success ....
+			else if (_missionRule.getObjective() == alm_BASE		// This is where alienBase and Infiltration ought be for success ....
+				&& ufo.getRules()->getType() == "STR_BATTLESHIP")	// or could add and test for (objective=true) on the Battleship wave
+			{
+				spawnAlienBase( // adds alienPts.
+							globe,
+							rules,
+							_missionRule.getSpawnZone());
+			}
+			else if (_missionRule.getObjective() == alm_INFILT
+				&& ufo.getRules()->getType() == "STR_BATTLESHIP"	// or could add and test for (objective=true) on the Battleship wave
+				&& _success == false)
+			{
+				_success = true;	// only the first Battleship to take off after landing derogates mission success (sic).
+									// note this also means that only one Battleship needs to be successful.
+
+				spawnAlienBase( // adds alienPts.
+							globe,
+							rules,
+							_missionRule.getSpawnZone());
+
+				std::vector<Country*> countryList;
+
+				for (std::vector<Country*>::const_iterator
+						i = _gameSave.getCountries()->begin();
+						i != _gameSave.getCountries()->end();
+						++i)
+				{
+					if ((*i)->getPact() == false
+						&& (*i)->getNewPact() == false
+						&& rules.getRegion(_region)->insideRegion( // WARNING: The *label* of a Country must be inside its Region for aLiens to infiltrate!
+															(*i)->getRules()->getLabelLongitude(),
+															(*i)->getRules()->getLabelLatitude()) == true)
+					{
+						countryList.push_back(*i);
+					}
+				}
+
+				if (countryList.empty() == false)
+				{
+					//Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
+					const size_t pick = RNG::generate(
+												0,
+												countryList.size() - 1);
+					Country* const infiltrated = countryList.at(pick);
+					// kL_note: Ironically, this likely allows multiple alien
+					// bases in Russia solely because of infiltrations ...!!
+					if (infiltrated->getType() != "STR_RUSSIA") // heh.
+						infiltrated->setNewPact();
+				}
+
+				_waveCount = 0; // Infiltrations loop for ever.
+			}
 
 			ufo.setUfoTerrainType(""); // kL
 			ufo.setAltitude("STR_VERY_LOW");
@@ -943,7 +1005,7 @@ void AlienMission::addScore( // private.
 // objective types:
 //	alm_SCORE,	// 0
 //	alm_INFILT,	// 1
-//	alm_BASE,	// 2 -> Base handled elsewhere
+//	alm_BASE,	// 2
 //	alm_SITE,	// 3 -> Site doesn't do ufoLifting() at all
 //	alm_RETAL,	// 4 -> Retaliation has 0 pts.
 //	alm_SUPPLY	// 5
