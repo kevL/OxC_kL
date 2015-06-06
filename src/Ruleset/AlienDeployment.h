@@ -48,7 +48,7 @@ struct DeploymentData
 		highQty,
 		dQty,
 		extraQty,
-		percentageOutsideUfo;
+		pctOutsideUfo;
 
 	std::vector<ItemSet> itemSets;
 };

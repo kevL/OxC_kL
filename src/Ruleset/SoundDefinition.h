@@ -41,7 +41,7 @@ private:
 
 	public:
 		/// cTor.
-		SoundDefinition(const std::string& type);
+		explicit SoundDefinition(const std::string& type);
 		/// dTor.
 		~SoundDefinition();
 

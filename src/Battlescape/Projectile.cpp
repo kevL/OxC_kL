@@ -61,16 +61,16 @@ Position Projectile::targetVoxel_cache; // static across all Projectile invokati
  * Creates a Projectile on the battle map and calculates its movement.
  * @param res			- pointer to ResourcePack
  * @param battleSave	- pointer to SavedBattleGame
- * @param action		- the BattleAction (BattlescapeGame.h)
- * @param origin		- position that this projectile originates at in tilespace
- * @param targetVoxel	- position that this projectile is targeted at in voxelspace
+ * @param action		- reference the BattleAction (BattlescapeGame.h)
+ * @param origin		- reference position that this projectile originates at in tilespace
+ * @param targetVoxel	- reference position that this projectile is targeted at in voxelspace
  */
 Projectile::Projectile(
 		const ResourcePack* const res,
 		const SavedBattleGame* const battleSave,
-		const BattleAction action,
-		const Position origin,
-		const Position targetVoxel)
+		const BattleAction& action,
+		const Position& origin,
+		const Position& targetVoxel)
 	:
 		_res(res),
 		_battleSave(battleSave),

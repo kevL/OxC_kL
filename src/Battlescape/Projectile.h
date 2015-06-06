@@ -86,9 +86,9 @@ private:
 		Projectile(
 				const ResourcePack* const res,
 				const SavedBattleGame* const battleSave,
-				const BattleAction action,
-				const Position origin,
-				const Position target);
+				const BattleAction& action,
+				const Position& origin,
+				const Position& target);
 		/// Cleans up the Projectile.
 		~Projectile();
 

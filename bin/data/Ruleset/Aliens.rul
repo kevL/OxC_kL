@@ -6,7 +6,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 1
-        percentageOutsideUfo: 100
+        pctOutsideUfo: 100
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -29,7 +29,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 2
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -44,7 +44,7 @@ alienDeployments:
         lowQty: 2
         highQty: 4
         dQty: 4
-        percentageOutsideUfo: 70
+        pctOutsideUfo: 70
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -67,7 +67,7 @@ alienDeployments:
         lowQty: 0
         highQty: 0
         dQty: 1
-        percentageOutsideUfo: 100
+        pctOutsideUfo: 100
         itemSets:
           -
             []
@@ -79,7 +79,7 @@ alienDeployments:
         lowQty: 0
         highQty: 0
         dQty: 1
-        percentageOutsideUfo: 100
+        pctOutsideUfo: 100
         itemSets:
           -
             []
@@ -91,7 +91,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 35
+        pctOutsideUfo: 35
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -106,7 +106,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 25
+        pctOutsideUfo: 25
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -121,7 +121,7 @@ alienDeployments:
         lowQty: 2
         highQty: 5
         dQty: 4
-        percentageOutsideUfo: 75
+        pctOutsideUfo: 75
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -144,7 +144,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 1
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -162,7 +162,7 @@ alienDeployments:
         lowQty: 2
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 30
+        pctOutsideUfo: 30
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -177,7 +177,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 15
+        pctOutsideUfo: 15
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -198,7 +198,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -213,7 +213,7 @@ alienDeployments:
         lowQty: 5
         highQty: 10
         dQty: 5
-        percentageOutsideUfo: 80
+        pctOutsideUfo: 80
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -236,7 +236,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -254,7 +254,7 @@ alienDeployments:
         lowQty: 2
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 30
+        pctOutsideUfo: 30
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -269,7 +269,7 @@ alienDeployments:
         lowQty: 2
         highQty: 4
         dQty: 0
-        percentageOutsideUfo: 15
+        pctOutsideUfo: 15
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -290,7 +290,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 2
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -305,7 +305,7 @@ alienDeployments:
         lowQty: 3
         highQty: 6
         dQty: 5
-        percentageOutsideUfo: 80
+        pctOutsideUfo: 80
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -328,7 +328,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 60
+        pctOutsideUfo: 60
         itemSets:
           -
             []
@@ -340,7 +340,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 60
+        pctOutsideUfo: 60
         itemSets:
           -
             []
@@ -352,7 +352,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -370,7 +370,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 30
+        pctOutsideUfo: 30
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -385,7 +385,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 1
-        percentageOutsideUfo: 15
+        pctOutsideUfo: 15
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -406,7 +406,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -421,7 +421,7 @@ alienDeployments:
         lowQty: 4
         highQty: 7
         dQty: 3
-        percentageOutsideUfo: 80
+        pctOutsideUfo: 80
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -444,7 +444,7 @@ alienDeployments:
         lowQty: 0
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 55
+        pctOutsideUfo: 55
         itemSets:
           -
             []
@@ -456,7 +456,7 @@ alienDeployments:
         lowQty: 0
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 55
+        pctOutsideUfo: 55
         itemSets:
           -
             []
@@ -468,7 +468,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -493,7 +493,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_RIFLE
@@ -513,7 +513,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 25
+        pctOutsideUfo: 25
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -534,7 +534,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 2
-        percentageOutsideUfo: 15
+        pctOutsideUfo: 15
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -554,7 +554,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 2
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -573,7 +573,7 @@ alienDeployments:
         lowQty: 4
         highQty: 12
         dQty: 6
-        percentageOutsideUfo: 60
+        pctOutsideUfo: 60
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -599,7 +599,7 @@ alienDeployments:
         lowQty: 0
         highQty: 1
         dQty: 1
-        percentageOutsideUfo: 100
+        pctOutsideUfo: 100
         itemSets:
           -
             []
@@ -611,7 +611,7 @@ alienDeployments:
         lowQty: 0
         highQty: 1
         dQty: 1
-        percentageOutsideUfo: 100
+        pctOutsideUfo: 100
         itemSets:
           -
             []
@@ -623,7 +623,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 1
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -641,7 +641,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 25
+        pctOutsideUfo: 25
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -656,7 +656,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 15
+        pctOutsideUfo: 15
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -677,7 +677,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -692,7 +692,7 @@ alienDeployments:
         lowQty: 5
         highQty: 8
         dQty: 7
-        percentageOutsideUfo: 70
+        pctOutsideUfo: 70
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -715,7 +715,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             []
@@ -727,7 +727,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             []
@@ -739,7 +739,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -760,7 +760,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -778,7 +778,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -802,7 +802,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -820,7 +820,7 @@ alienDeployments:
         lowQty: 4
         highQty: 7
         dQty: 3
-        percentageOutsideUfo: 70
+        pctOutsideUfo: 70
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -869,7 +869,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             []
@@ -881,7 +881,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             []
@@ -893,7 +893,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -914,7 +914,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -932,7 +932,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -956,7 +956,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -974,7 +974,7 @@ alienDeployments:
         lowQty: 4
         highQty: 7
         dQty: 3
-        percentageOutsideUfo: 70
+        pctOutsideUfo: 70
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -1023,7 +1023,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1046,7 +1046,7 @@ alienDeployments:
         lowQty: 2
         highQty: 4
         dQty: 1
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_RIFLE
@@ -1067,7 +1067,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_RIFLE
@@ -1089,7 +1089,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 2
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -1110,7 +1110,7 @@ alienDeployments:
         lowQty: 2
         highQty: 2
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -1126,7 +1126,7 @@ alienDeployments:
         lowQty: 8
         highQty: 10
         dQty: 6
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -1145,7 +1145,7 @@ alienDeployments:
         lowQty: 2
         highQty: 3
         dQty: 3
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             []
@@ -1157,7 +1157,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 2
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             []
@@ -1180,7 +1180,7 @@ alienDeployments:
         lowQty: 0
         highQty: 2
         dQty: 2
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             []
@@ -1192,7 +1192,7 @@ alienDeployments:
         lowQty: 0
         highQty: 2
         dQty: 2
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             []
@@ -1204,7 +1204,7 @@ alienDeployments:
         lowQty: 1
         highQty: 1
         dQty: 0
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1229,7 +1229,7 @@ alienDeployments:
         lowQty: 1
         highQty: 3
         dQty: 1
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_RIFLE
@@ -1250,7 +1250,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_RIFLE
@@ -1272,7 +1272,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -1296,7 +1296,7 @@ alienDeployments:
         lowQty: 1
         highQty: 2
         dQty: 1
-        percentageOutsideUfo: 20
+        pctOutsideUfo: 20
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -1312,7 +1312,7 @@ alienDeployments:
         lowQty: 4
         highQty: 10
         dQty: 5
-        percentageOutsideUfo: 50
+        pctOutsideUfo: 50
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -1348,7 +1348,7 @@ alienDeployments:
         lowQty: 3
         highQty: 6
         dQty: 2
-        percentageOutsideUfo: 100
+        pctOutsideUfo: 100
         itemSets:
           -
             []
@@ -1360,7 +1360,7 @@ alienDeployments:
         lowQty: 4
         highQty: 6
         dQty: 2
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1382,7 +1382,7 @@ alienDeployments:
         lowQty: 4
         highQty: 8
         dQty: 3
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1400,7 +1400,7 @@ alienDeployments:
         lowQty: 6
         highQty: 10
         dQty: 4
-        percentageOutsideUfo: 60
+        pctOutsideUfo: 60
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1439,7 +1439,7 @@ alienDeployments:
         lowQty: 1
         highQty: 5
         dQty: 3
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             []
@@ -1451,7 +1451,7 @@ alienDeployments:
         lowQty: 2
         highQty: 5
         dQty: 2
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1477,7 +1477,7 @@ alienDeployments:
         lowQty: 1
         highQty: 4
         dQty: 2
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1499,7 +1499,7 @@ alienDeployments:
         lowQty: 2
         highQty: 4
         dQty: 2
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_PLASMA_PISTOL
@@ -1529,7 +1529,7 @@ alienDeployments:
         lowQty: 3
         highQty: 5
         dQty: 3
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_SMALL_LAUNCHER
@@ -1553,7 +1553,7 @@ alienDeployments:
         lowQty: 3
         highQty: 5
         dQty: 3
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA
@@ -1574,7 +1574,7 @@ alienDeployments:
         lowQty: 3
         highQty: 8
         dQty: 4
-        percentageOutsideUfo: 0
+        pctOutsideUfo: 0
         itemSets:
           -
             - STR_HEAVY_PLASMA

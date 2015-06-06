@@ -2099,7 +2099,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // priva
 				++i)
 		{
 			if (_ufo != NULL)
-				outside = RNG::percent((*data).percentageOutsideUfo);
+				outside = RNG::percent((*data).pctOutsideUfo);
 			else
 				outside = false;
 

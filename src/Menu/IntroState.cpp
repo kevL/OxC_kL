@@ -472,9 +472,10 @@ void IntroState::init()
 	Options::keepAspectRatio = _wasLetterBoxed;
 	const int videoFilesNum = _introFiles.size();
 
-	bool oldVideoFile = false;
 	if (videoFilesNum > 0)
 	{
+		bool oldVideoFile = false;
+
 		// Might be old video file
 		if (videoFilesNum == 1
 			&& (CrossPlatform::fileExists(_introSoundFileDOS) == true
