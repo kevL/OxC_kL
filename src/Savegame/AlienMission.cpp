@@ -221,7 +221,7 @@ void AlienMission::setWaveCountdown(size_t minutes)
  * Checks if a mission is over and can be safely removed from the game.
  * @note A mission is over if it will spawn no more UFOs and it has no UFOs
  * still in the game.
- * @return, true if the mission can be safely removed
+ * @return, true if this AlienMission can be deleted
  */
 bool AlienMission::isOver() const
 {
@@ -261,39 +261,42 @@ void AlienMission::think(
 		Game& engine,
 		const Globe& globe)
 {
-	if (_waveCount >= _missionRule.getWaveTotal())
-		return;
-
-	if (_spawnTime > 30)
+	if (_waveCount < _missionRule.getWaveTotal())
 	{
-		_spawnTime -= 30;
-		return;
+		if (_spawnTime > 30)
+			_spawnTime -= 30;
+		else
+		{
+			const Ruleset& rules = *engine.getRuleset();
+			const MissionWave& wave = _missionRule.getWave(_waveCount);
+			const UfoTrajectory& trajectory = *rules.getUfoTrajectory(wave.trajectory);
+
+			Ufo* const ufo = spawnUfo(
+									rules,
+									globe,
+									wave,
+									trajectory);
+
+			if (ufo != NULL) // Some missions may not spawn a UFO!
+				_gameSave.getUfos()->push_back(ufo);
+
+
+			++_ufoCount;
+			if (_ufoCount == wave.ufoTotal)
+			{
+				_ufoCount = 0;
+				++_waveCount;
+			}
+
+			if (_waveCount != _missionRule.getWaveTotal())
+				calcSpawnTime(_waveCount);
+			else if (_missionRule.getObjective() == alm_INFILT)	// Infiltrations loop for ever.
+				_waveCount = 0;
+		}
 	}
-
-	const Ruleset& rules = *engine.getRuleset();
-	const MissionWave& wave = _missionRule.getWave(_waveCount);
-	const UfoTrajectory& trajectory = *rules.getUfoTrajectory(wave.trajectory);
-
-	Ufo* const ufo = spawnUfo(
-							rules,
-							globe,
-							wave,
-							trajectory);
-
-	if (ufo != NULL) // Some missions may not spawn a UFO!
-		_gameSave.getUfos()->push_back(ufo);
-
-
-	++_ufoCount;
-	if (_ufoCount == wave.ufoTotal)
-	{
-		_ufoCount = 0;
-		++_waveCount;
-	}
-
-
-	// don't do these onSpawn; do them on ufoLifting() below_
-/*	if (_waveCount == _missionRule.getWaveTotal())
+}
+/*	// don't do these onSpawn; do them on ufoLifting() below_
+	if (_waveCount == _missionRule.getWaveTotal())
 	{
 		const MissionObjective object = _missionRule.getObjective();
 
@@ -340,11 +343,7 @@ void AlienMission::think(
 				_waveCount = 0; // Infiltrations loop for ever.
 			}
 		}
-	} */ // moved to ufoLifting()
-
-	if (_waveCount != _missionRule.getWaveTotal()) // note that alm_INFILT sets '_waveCount' to 0 as it spawns its last wave.
-		calcSpawnTime(_waveCount);
-}
+	} // moved to ufoLifting() */
 
 /**
  * Calculates time remaining until the next wave spawns.
@@ -826,7 +825,7 @@ void AlienMission::ufoLifting(
 	switch (ufo.getStatus())
 	{
 		case Ufo::FLYING:
-			ufo.setUfoTerrainType(""); // kL, safety i guess.
+			ufo.setUfoTerrainType(""); // safety i guess.
 			assert(0 && "Ufo is already on the air!");
 		break;
 
@@ -892,11 +891,9 @@ void AlienMission::ufoLifting(
 					if (infiltrated->getType() != "STR_RUSSIA") // heh.
 						infiltrated->setNewPact();
 				}
-
-				_waveCount = 0; // Infiltrations loop for ever.
 			}
 
-			ufo.setUfoTerrainType(""); // kL
+			ufo.setUfoTerrainType("");
 			ufo.setAltitude("STR_VERY_LOW");
 			ufo.setSpeed(static_cast<int>(std::ceil(
 						 static_cast<double>(ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint()))
