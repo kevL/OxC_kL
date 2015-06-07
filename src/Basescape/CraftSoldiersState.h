@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Craft;
 class Text;
 class TextButton;
 class TextList;
@@ -42,9 +43,8 @@ class CraftSoldiersState
 {
 
 private:
-	size_t _craftId;
-
 	Base* _base;
+	Craft* _craft;
 	Text
 		* _txtBaseLabel,
 		* _txtCost,

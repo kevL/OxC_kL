@@ -101,7 +101,7 @@ private:
 		_aliensControlled,
 		_aliensKilled,
 		_aliensStunned,
-		_cost,
+		_missionCost,
 		_diff,
 		_limitsEnforced;
 

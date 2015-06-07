@@ -103,7 +103,7 @@ DebriefingState::DebriefingState()
 		_aliensControlled(0),
 		_aliensKilled(0),
 		_aliensStunned(0),
-		_cost(0)
+		_missionCost(0)
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
@@ -354,8 +354,8 @@ DebriefingState::DebriefingState()
 		_missionStatistics->rating = "STR_RATING_EXCELLENT";
 	}
 
-//	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
-	_txtCost->setText(Text::formatFunding(_cost));
+//	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_missionCost)));
+	_txtCost->setText(Text::formatFunding(_missionCost));
 	_txtCost->setAlign(ALIGN_CENTER);
 
 //	_txtRating->setText(tr("STR_RATING").arg(rating));
@@ -766,6 +766,8 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			if ((*j)->isInBattlescape() == true)
 			{
+				_missionCost = (*i)->craftExpense(*j);// (*j)->getRules()->getSoldiers() * 1000;
+
 				const double
 					craftLon = (*j)->getLongitude(),
 					craftLat = (*j)->getLatitude();
@@ -1133,9 +1135,9 @@ void DebriefingState::prepareDebriefing() // private.
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
 				{
-					_cost += _base->soldierExpense(
-												sol,
-												true);
+					_missionCost += _base->soldierExpense(
+														sol,
+														true);
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
 						-value);
@@ -1162,9 +1164,9 @@ void DebriefingState::prepareDebriefing() // private.
 				}
 				else // not soldier -> tank
 				{
-					_cost += _base->hwpExpense(
-										(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
-										true);
+					_missionCost += _base->hwpExpense(
+												(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
+												true);
 					addStat(
 						"STR_TANKS_DESTROYED",
 						-value);
@@ -1210,7 +1212,7 @@ void DebriefingState::prepareDebriefing() // private.
 					{
 						recoverItems((*i)->getInventory());
 
-						_cost += _base->soldierExpense(sol);
+						_missionCost += _base->soldierExpense(sol);
 
 //						sol->calcStatString( // calculate new statString
 //										_rules->getStatStrings(),
@@ -1220,7 +1222,7 @@ void DebriefingState::prepareDebriefing() // private.
 					else // not soldier -> tank
 					{
 						_base->getItems()->addItem(type);
-						_cost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
+						_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
 						const RuleItem* itRule;
 						const BattleItem* ammoItem;

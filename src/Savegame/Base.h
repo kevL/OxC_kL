@@ -312,6 +312,8 @@ private:
 		int hwpExpense(
 				const int hwpSize,
 				const bool dead = false);
+		/// Calculates the expense of sending a transport craft on a tactical mission.
+		int craftExpense(const Craft* const craft);
 };
 
 }

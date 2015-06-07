@@ -2888,7 +2888,7 @@ int Base::calcSoldierBonuses(const Craft* const craft) const
 }
 
 /**
- * Calculates a Soldier's bonus pay for going on a tactical mission; subtracts
+ * Returns a Soldier's bonus pay for going on a tactical mission; subtracts
  * the value from current funds.
  * @param sol	- pointer to a Soldier
  * @param dead	- true if soldier dies while on tactical (default false)
@@ -2899,28 +2899,6 @@ int Base::soldierExpense(
 		const bool dead)
 {
 	int cost = sol->getRank() * 1500;
-	if (dead == true)
-		cost /= 2;
-
-	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds()
-												- static_cast<int64_t>(cost));
-
-	return cost;
-}
-
-/**
- * Calculates the expense of sending HWPs/doggies on a tactical mission;
- * subtracts the value from current funds.
- * @param hwpSize	- size of the HWP/doggie in tiles
- * @param dead		- true if HWP got destroyed while on tactical (default false)
- * @return, the expense
- */
-int Base::hwpExpense(
-		const int hwpSize,
-		const bool dead)
-{
-	int cost = hwpSize * 750;
 	if (dead == true)
 		cost /= 2;
 
@@ -2946,5 +2924,41 @@ int Base::hwpExpense(
 		break;
 		default:
 	} */
+
+/**
+ * Returns the expense of sending HWPs/doggies on a tactical mission;
+ * subtracts the value from current funds.
+ * @param hwpSize	- size of the HWP/doggie in tiles
+ * @param dead		- true if HWP got destroyed while on tactical (default false)
+ * @return, the expense
+ */
+int Base::hwpExpense(
+		const int hwpSize,
+		const bool dead)
+{
+	int cost = hwpSize * 750;
+	if (dead == true)
+		cost /= 2;
+
+	_cashSpent += cost;
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds()
+												- static_cast<int64_t>(cost));
+
+	return cost;
+}
+
+/**
+ * Returns the expense of sending a transport craft on a tactical mission;
+ * subtracts the value from current funds.
+ * @param craft - pointer to a Craft
+ * @return, the expense
+ */
+int Base::craftExpense(const Craft* const craft)
+{
+	int cost = craft->getRules()->getSoldiers() * 1000;
+	_cashSpent += cost;
+
+	return cost;
+}
 
 }

@@ -4390,7 +4390,7 @@
 
 1433391317 f:\git\openxcom\src\resource\resourcepack.h
 
-1432527859 f:\git\openxcom\src\savegame\base.h
+1433649161 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1433212243 f:\git\openxcom\src\savegame\target.h
@@ -4602,7 +4602,7 @@
 1433496406 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1432715018 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1433651843 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4629,7 +4629,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1431908973 f:\git\openxcom\src\basescape\craftequipmentstate.h
+1433651396 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
 1432587719 f:\git\openxcom\src\battlescape\battlescapegenerator.h
@@ -4663,7 +4663,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1432715019 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1433650444 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4690,7 +4690,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1432155313 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1433651002 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1430149549 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4706,7 +4706,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1432715019 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1433650968 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -5494,7 +5494,7 @@
 1430149550 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1432011319 f:\git\openxcom\src\battlescape\debriefingstate.h
+1433648171 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -5857,7 +5857,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1433548801 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1433650158 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -8613,7 +8613,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1432527859 source:f:\git\openxcom\src\savegame\base.cpp
+1433649038 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"

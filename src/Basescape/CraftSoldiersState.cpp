@@ -66,7 +66,7 @@ CraftSoldiersState::CraftSoldiersState(
 		size_t craftId)
 	:
 		_base(base),
-		_craftId(craftId)
+		_craft(base->getCrafts()->at(craftId))
 {
 	_window			= new Window(this, 320, 200);
 
@@ -110,7 +110,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT")
-						.arg(_base->getCrafts()->at(_craftId)->getName(_game->getLanguage())));
+						.arg(_craft->getName(_game->getLanguage())));
 	_txtTitle->setBig();
 
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
@@ -164,14 +164,12 @@ void CraftSoldiersState::btnOkClick(Action*)
  */
 void CraftSoldiersState::btnUnloadClick(Action*)
 {
-	const Craft* const craft = _base->getCrafts()->at(_craftId);
-
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i)
 	{
-		if ((*i)->getCraft() == craft)
+		if ((*i)->getCraft() == _craft)
 			(*i)->setCraft(NULL);
 	}
 
@@ -187,14 +185,12 @@ void CraftSoldiersState::init()
 {
 	State::init();
 
-	Craft* const craft = _base->getCrafts()->at(_craftId);
-
 	// Reset stuff when coming back from pre-battle Inventory.
 	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
 	if (battleSave != NULL)
 	{
 		_game->getSavedGame()->setBattleGame(NULL);
-		craft->setInBattlescape(false);
+		_craft->setInBattlescape(false);
 	}
 
 	_lstSoldiers->clearList();
@@ -218,7 +214,7 @@ void CraftSoldiersState::init()
 			color = _lstSoldiers->getColor();
 		else
 		{
-			if ((*i)->getCraft() == craft)
+			if ((*i)->getCraft() == _craft)
 				color = _lstSoldiers->getSecondaryColor();
 			else
 				color = static_cast<Uint8>(_game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color);
@@ -250,16 +246,16 @@ void CraftSoldiersState::init()
 	_lstSoldiers->draw();
 
 	_btnInventory->setVisible(
-							craft->getNumSoldiers() > 0
+							_craft->getNumSoldiers() > 0
 							&& _game->getSavedGame()->getMonthsPassed() != -1);
 
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
-					.arg(craft->getNumSoldiers())
-					.arg(craft->getNumVehicles())
-					.arg(craft->getSpaceAvailable()));
+					.arg(_craft->getNumSoldiers())
+					.arg(_craft->getNumVehicles())
+					.arg(_craft->getSpaceAvailable()));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
-					.arg(craft->getLoadCapacity())
-					.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
+					.arg(_craft->getLoadCapacity())
+					.arg(_craft->getLoadCapacity() - _craft->getLoadCurrent()));
 
 	calcCost();
 }
@@ -290,19 +286,17 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 			return;
 		}
 
-		Craft* const craft = _base->getCrafts()->at(_craftId);
-
 		Uint8 color;
 		if (soldier->getCraft() == NULL
-			&& craft->getSpaceAvailable() > 0
-			&& craft->getLoadCapacity() - craft->getLoadCurrent() > 9)
+			&& _craft->getSpaceAvailable() > 0
+			&& _craft->getLoadCapacity() - _craft->getLoadCurrent() > 9)
 		{
-			soldier->setCraft(craft);
+			soldier->setCraft(_craft);
 			color = _lstSoldiers->getSecondaryColor();
 			_lstSoldiers->setCellText(
 									row,
 									2,
-									craft->getName(_game->getLanguage()));
+									_craft->getName(_game->getLanguage()));
 		}
 		else
 		{
@@ -324,16 +318,16 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 								color);
 
 		_btnInventory->setVisible(
-								craft->getNumSoldiers() > 0
+								_craft->getNumSoldiers() > 0
 								&& _game->getSavedGame()->getMonthsPassed() != -1);
 
 		_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
-						.arg(craft->getNumSoldiers())
-						.arg(craft->getNumVehicles())
-						.arg(craft->getSpaceAvailable()));
+						.arg(_craft->getNumSoldiers())
+						.arg(_craft->getNumVehicles())
+						.arg(_craft->getSpaceAvailable()));
 		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
-						.arg(craft->getLoadCapacity())
-						.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
+						.arg(_craft->getLoadCapacity())
+						.arg(_craft->getLoadCapacity() - _craft->getLoadCurrent()));
 
 		calcCost();
 	}
@@ -451,8 +445,7 @@ void CraftSoldiersState::btnInventoryClick(Action*)
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	Craft* const craft = _base->getCrafts()->at(_craftId);
-	bgen.runInventory(craft);
+	bgen.runInventory(_craft);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState(
@@ -465,7 +458,8 @@ void CraftSoldiersState::btnInventoryClick(Action*)
  */
 void CraftSoldiersState::calcCost() // private.
 {
-	const int cost = _base->calcSoldierBonuses(_base->getCrafts()->at(_craftId));
+	const int cost = _base->calcSoldierBonuses(_craft)
+				   + _craft->getRules()->getSoldiers() * 1000;
 	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
 }
 

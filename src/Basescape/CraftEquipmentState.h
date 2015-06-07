@@ -30,6 +30,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Craft;
 class Text;
 class TextButton;
 class TextList;
@@ -47,12 +48,12 @@ class CraftEquipmentState
 
 private:
 	size_t
-		_craftId,
 		_sel,
 		_selUnit;
 	Uint8 _ammoColor;
 
 	Base* _base;
+	Craft* _craft;
 	Text
 		* _txtBaseLabel,
 		* _txtCost,
