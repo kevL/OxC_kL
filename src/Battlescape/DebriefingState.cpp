@@ -766,7 +766,7 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			if ((*j)->isInBattlescape() == true)
 			{
-				_missionCost = (*i)->craftExpense(*j);// (*j)->getRules()->getSoldiers() * 1000;
+				_missionCost = (*i)->craftExpense(*j);
 
 				const double
 					craftLon = (*j)->getLongitude(),

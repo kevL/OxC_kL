@@ -44,7 +44,7 @@ class MissionDetectedState
 private:
 
 	GeoscapeState* _state;
-	MissionSite* _mission;
+	const MissionSite* _mission;
 	TextButton
 		* _btnCancel,
 		* _btnCenter,
@@ -59,8 +59,8 @@ private:
 
 		/// Creates the Mission Detected state.
 		MissionDetectedState(
-				MissionSite* mission,
-				GeoscapeState* state);
+				const MissionSite* const mission,
+				GeoscapeState* const state);
 		/// Cleans up the Mission Detected state.
 		~MissionDetectedState();
 

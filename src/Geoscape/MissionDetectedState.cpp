@@ -49,15 +49,15 @@ namespace OpenXcom
  * @param state		- pointer to GeoscapeState
  */
 MissionDetectedState::MissionDetectedState(
-		MissionSite* mission,
-		GeoscapeState* state)
+		const MissionSite* const mission,
+		GeoscapeState* const state)
 	:
 		_mission(mission),
 		_state(state)
 {
 	_screen = false;
 
-	_window			= new Window(this, 256, 200, 0, 0, POPUP_BOTH);
+	_window			= new Window(this, 256, 200, 0,0, POPUP_BOTH);
 	_txtTitle		= new Text(246, 32, 5, 48);
 
 	_txtCity		= new Text(246, 17, 5, 80);

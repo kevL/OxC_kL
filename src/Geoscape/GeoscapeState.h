@@ -69,7 +69,8 @@ private:
 		_dfZoomInDone,
 		_dfZoomOutDone,
 		_dfZoomOut,
-		_pause;
+		_pause,
+		_pauseHard;
 	int
 		_day,
 		_month,
@@ -98,7 +99,9 @@ private:
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
-	InteractiveSurface* _btnVisibleUfo[INDICATORS];
+	InteractiveSurface
+		* _isfVisibleUfo[INDICATORS],
+		* _isfTime;
 //	NumberText* _numVisibleUfo[INDICATORS];
 	Ruleset* _rules;
 	SavedGame* _gameSave;
@@ -107,7 +110,6 @@ private:
 //		* _sidebar,
 		* _sideBarBlack,
 		* _srfSpace,
-		* _srfTime,
 		* _srfDay1,
 		* _srfDay2,
 		* _srfMonth1,
@@ -151,9 +153,11 @@ private:
 	void setupLandMission();
 
 	/// Handler for clicking the timer button.
-	void btnTimerClick(Action* action);
+	void btnTimerPress(Action* action);
+	/// Handler for clicking pause.
+	void btnPausePress(Action* action);
 	/// Handler for clicking a visible UFO button.
-	void btnVisibleUfoClick(Action* action);
+	void btnVisibleUfoPress(Action* action);
 
 
 	public:
@@ -176,7 +180,7 @@ private:
 		void drawUfoIndicators();
 
 		/// Displays the game time/date. (+Funds)
-		void timeDisplay();
+		void updateTimeDisplay();
 		/// Advances the game timer.
 		void timeAdvance();
 		/// Trigger whenever 5 seconds pass.

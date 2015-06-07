@@ -328,6 +328,7 @@ GeoscapeState::GeoscapeState()
 		_gameSave(_game->getSavedGame()),
 		_rules(_game->getRuleset()),
 		_pause(false),
+		_pauseHard(false),
 		_dfZoomInDone(false),
 		_dfZoomOutDone(false),
 		_dfZoomOut(true),
@@ -466,7 +467,7 @@ GeoscapeState::GeoscapeState()
 		offset_x = ((i % 4) * 13); // 4 UFOs per row only
 		offset_y = ((i / 4) * 13); // 4 rows going up
 
-		_btnVisibleUfo[i] = new InteractiveSurface(
+		_isfVisibleUfo[i] = new InteractiveSurface(
 												13,13,
 												_sideTop->getX() + offset_x + 3,
 												_sideTop->getY() + height - offset_y - 16);
@@ -484,7 +485,7 @@ GeoscapeState::GeoscapeState()
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
 
-	_srfTime	= new Surface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
+	_isfTime	= new InteractiveSurface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
 
 /*	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
 	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
@@ -582,21 +583,21 @@ GeoscapeState::GeoscapeState()
 			i != INDICATORS;
 			++i)
 	{
-		add(_btnVisibleUfo[i]);
+		add(_isfVisibleUfo[i]);
 
-		_btnVisibleUfo[i]->setVisible(false);
-		_btnVisibleUfo[i]->onMousePress(
-						(ActionHandler)& GeoscapeState::btnVisibleUfoClick,
+		_isfVisibleUfo[i]->setVisible(false);
+		_isfVisibleUfo[i]->onMousePress(
+						(ActionHandler)& GeoscapeState::btnVisibleUfoPress,
 						SDL_BUTTON_LEFT);
 
-//		_btnVisibleUfo[i]->onKeyboardPress(
-//						(ActionHandler)& GeoscapeState::btnVisibleUfoClick,
+//		_isfVisibleUfo[i]->onKeyboardPress(
+//						(ActionHandler)& GeoscapeState::btnVisibleUfoPress,
 //						buttons[i]);
 //		_numVisibleUfo[i]->setColor(color);
 //		_numVisibleUfo[i]->setValue(static_cast<unsigned>(i) + 1);
 	}
 
-	add(_srfTime); // kL
+	add(_isfTime);
 
 //	if (Options::showFundsOnGeoscape)
 	add(_txtFunds,		"text",		"geoscape");
@@ -694,7 +695,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Secs->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setText(tr("STR_5_SECONDS"));
 	_btn5Secs->setGroup(&_timeSpeed);
-	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed1);
+	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed1);
 	_btn5Secs->setGeoscapeButton(true);
 
 	_btn1Min->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -703,7 +704,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Min->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Min->setText(tr("STR_1_MINUTE"));
 	_btn1Min->setGroup(&_timeSpeed);
-	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed2);
+	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed2);
 	_btn1Min->setGeoscapeButton(true);
 
 	_btn5Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -712,7 +713,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setText(tr("STR_5_MINUTES"));
 	_btn5Mins->setGroup(&_timeSpeed);
-	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed3);
+	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed3);
 	_btn5Mins->setGeoscapeButton(true);
 
 	_btn30Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -721,7 +722,7 @@ GeoscapeState::GeoscapeState()
 //	_btn30Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setText(tr("STR_30_MINUTES"));
 	_btn30Mins->setGroup(&_timeSpeed);
-	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed4);
+	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed4);
 	_btn30Mins->setGeoscapeButton(true);
 
 	_btn1Hour->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -730,7 +731,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Hour->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setText(tr("STR_1_HOUR"));
 	_btn1Hour->setGroup(&_timeSpeed);
-	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed5);
+	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed5);
 	_btn1Hour->setGeoscapeButton(true);
 
 	_btn1Day->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -739,7 +740,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Day->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeSpeed);
-	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed6);
+	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true); */
 
 //	_sideBottom->setGeoscapeButton(true);
@@ -787,42 +788,47 @@ GeoscapeState::GeoscapeState()
 					Options::keyGeoFunding);
 
 
-	_srfTime->copy(geobord);
+	_isfTime->copy(geobord);
+	_isfTime->onMousePress((ActionHandler)& GeoscapeState::btnPausePress);
+//	_isfTime->onMouseClick((ActionHandler)& GeoscapeState::btnPausePress);
+//	_isfTime->onKeyboardPress(
+//					(ActionHandler)& GeoscapeState::btnPausePress,
+//					Options::key___); // <- check if spacebar is ok
 
 	_btn5Secs->copy(geobord);
 	_btn5Secs->setGroup(&_timeSpeed);
 	_btn5Secs->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed1);
 
 	_btn1Min->copy(geobord);
 	_btn1Min->setGroup(&_timeSpeed);
 	_btn1Min->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed2);
 
 	_btn5Mins->copy(geobord);
 	_btn5Mins->setGroup(&_timeSpeed);
 	_btn5Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed3);
 
 	_btn30Mins->copy(geobord);
 	_btn30Mins->setGroup(&_timeSpeed);
 	_btn30Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed4);
 
 	_btn1Hour->copy(geobord);
 	_btn1Hour->setGroup(&_timeSpeed);
 	_btn1Hour->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed5);
 
 	_btn1Day->copy(geobord);
 	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed6);
 
 
@@ -966,7 +972,7 @@ GeoscapeState::GeoscapeState()
 	_dfStartTimer->onTimer((StateHandler)& GeoscapeState::startDogfight);
 	_dfTimer->onTimer((StateHandler)& GeoscapeState::thinkDogfights);
 
-	timeDisplay();
+	updateTimeDisplay();
 }
 
 /**
@@ -1129,7 +1135,7 @@ void GeoscapeState::init()
 {
 	State::init();
 
-	timeDisplay();
+	updateTimeDisplay();
 
 	_globe->onMouseClick((ActionHandler)& GeoscapeState::globeClick);
 	_globe->onMouseOver(0);
@@ -1190,7 +1196,7 @@ void GeoscapeState::think()
 
 	if (Options::debug == true
 		&& _game->getSavedGame()->getDebugArgDone() == true // ie. do not write info until Globe actually sets it.
-		&& _debug.compare(0, 5, "DEBUG") == 0)
+		&& _debug.compare(0,5, "DEBUG") == 0)
 	{
 		const std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
 		_txtDebug->setText(Language::cpToWstr(debugStr));
@@ -1238,7 +1244,7 @@ void GeoscapeState::drawUfoIndicators()
 			i != INDICATORS;
 			++i)
 	{
-		_btnVisibleUfo[i]->setVisible(false);
+		_isfVisibleUfo[i]->setVisible(false);
 //		_numVisibleUfo[i]->setVisible(false);
 
 		_visibleUfo[i] = NULL;
@@ -1258,7 +1264,7 @@ void GeoscapeState::drawUfoIndicators()
 	{
 		if ((*i)->getDetected() == true)
 		{
-			_btnVisibleUfo[j]->setVisible();
+			_isfVisibleUfo[j]->setVisible();
 //			_numVisibleUfo[j]->setVisible();
 //getId()
 
@@ -1299,7 +1305,7 @@ void GeoscapeState::drawUfoIndicators()
 					if (color != 0)
 					{
 						color = baseColor - color;
-						_btnVisibleUfo[j]->setPixelColor(
+						_isfVisibleUfo[j]->setPixelColor(
 														x,y,
 														color);
 					}
@@ -1316,12 +1322,13 @@ void GeoscapeState::drawUfoIndicators()
 
 /**
  * Updates the Geoscape clock.
+ * @note Also updates the player's current score.
  */
-void GeoscapeState::timeDisplay()
+void GeoscapeState::updateTimeDisplay()
 {
 	_txtFunds->setText(Text::formatFunding(_gameSave->getFunds()));
 
-	if (_gameSave->getMonthsPassed() != -1)
+	if (_gameSave->getMonthsPassed() != -1) // also update Player's current score
 	{
 		const size_t ent = _gameSave->getFundsList().size() - 1; // use fundsList to determine which entries in other vectors to use for the current month.
 
@@ -1414,45 +1421,51 @@ void GeoscapeState::timeDisplay()
 }
 
 /**
- * Advances the game timer according to the timer speed set, and calls the respective
- * triggers. The timer always advances in "5 secs" cycles, regardless of the speed,
- * otherwise it might skip important steps. Instead, it just keeps advancing the
- * timer until the next speed step (eg. the next day on 1 Day speed) or until an
- * event occurs, since updating the screen on each step would become cumbersomely slow.
+ * Advances the game timer according to the set timer-speed and calls
+ * respective triggers.
+ * @note The game always advances in 5sec cycles regardless of the speed
+ * otherwise this will skip important steps. Instead it just keeps advancing the
+ * timer until the next compression step - eg. the next day on 1 Day speed - or
+ * until an event occurs. Updating the screen on each step would be
+ * cumbersomely slow.
  */
 void GeoscapeState::timeAdvance()
 {
-	int timeSpan;
-	if		(_timeSpeed == _btn5Secs)	timeSpan = 1;
-	else if (_timeSpeed == _btn1Min)	timeSpan = 12;
-	else if (_timeSpeed == _btn5Mins)	timeSpan = 12 * 5;
-	else if (_timeSpeed == _btn30Mins)	timeSpan = 12 * 5 * 6;
-	else if (_timeSpeed == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
-	else if (_timeSpeed == _btn1Day)	timeSpan = 12 * 5 * 6 * 2 * 24;
-	else
-		timeSpan = 0;
-
-	for (int
-			i = 0;
-			i < timeSpan
-				&& _pause == false;
-			++i)
+	if (_pauseHard == false)
 	{
-		const TimeTrigger trigger = _gameSave->getTime()->advance();
-		switch (trigger)
+		int timeSpan;
+		if		(_timeSpeed == _btn5Secs)	timeSpan = 1;
+		else if (_timeSpeed == _btn1Min)	timeSpan = 12;
+		else if (_timeSpeed == _btn5Mins)	timeSpan = 12 * 5;
+		else if (_timeSpeed == _btn30Mins)	timeSpan = 12 * 5 * 6;
+		else if (_timeSpeed == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
+		else if (_timeSpeed == _btn1Day)	timeSpan = 12 * 5 * 6 * 2 * 24;
+		else
+			timeSpan = 0;
+
+		for (int
+				i = 0;
+				i != timeSpan
+					&& _pause == false;
+				++i)
 		{
-			case TIME_1MONTH:	time1Month();
-			case TIME_1DAY:		time1Day();
-			case TIME_1HOUR:	time1Hour();
-			case TIME_30MIN:	time30Minutes();
-			case TIME_10MIN:	time10Minutes();
-			case TIME_5SEC:		time5Seconds();
+			const TimeTrigger trigger = _gameSave->getTime()->advance();
+			switch (trigger)
+			{
+				case TIME_1MONTH:	time1Month();
+				case TIME_1DAY:		time1Day();
+				case TIME_1HOUR:	time1Hour();
+				case TIME_30MIN:	time30Minutes();
+				case TIME_10MIN:	time10Minutes();
+				case TIME_5SEC:		time5Seconds();
+			}
 		}
+
+		_pause = (_dogfightsToStart.empty() == false);
+
+		updateTimeDisplay();
 	}
 
-	_pause = (_dogfightsToStart.empty() == false);
-
-	timeDisplay();
 	_globe->draw();
 }
 
@@ -1530,7 +1543,7 @@ void GeoscapeState::time5Seconds()
 						{
 							//Log(LOG_INFO) << ". create terrorSite";
 
-							MissionSite* const site = _gameSave->getMissionSites()->back();
+							const MissionSite* const site = _gameSave->getMissionSites()->back();
 //							const RuleCity* const city = _rules->locateCity(
 //																		site->getLongitude(),
 //																		site->getLatitude());
@@ -2711,7 +2724,7 @@ void GeoscapeState::time1Hour()
 
 /**
  * This class will attempt to generate a supply mission for a base.
- * Each alien base has a 4% chance to generate a supply mission.
+ * @note Each alien base has a 4% chance to generate a supply mission.
  */
 class GenerateSupplyMission
 	:
@@ -2738,7 +2751,7 @@ private:
 
 /**
  * Check and create supply mission for the given base.
- * There is a 4% chance of the mission spawning.
+ * @note There is a 4% chance of the mission spawning.
  * @param base A pointer to the alien base.
  */
 void GenerateSupplyMission::operator() (const AlienBase* base) const
@@ -3418,8 +3431,8 @@ bool GeoscapeState::is5Sec() const
 }
 
 /**
- * Adds a new popup window to the queue - this prevents popups from overlapping -
- * and pauses the game timer respectively.
+ * Adds a new popup window to the queue and pauses the game timer respectively.
+ * @note Doing it this way this prevents popups from overlapping.
  * @param state - pointer to popup state
  */
 void GeoscapeState::popup(State* state)
@@ -3579,7 +3592,7 @@ void GeoscapeState::btnFundingClick(Action*)
 
 /**
  * Handler for clicking the Detail area.
- * @param action, Pointer to an action.
+ * @param action - pointer to an Action
  */
 void GeoscapeState::btnDetailPress(Action* action)
 {
@@ -3954,9 +3967,10 @@ void GeoscapeState::handleBaseDefense(
 
 /**
  * Determine the alien missions to start each month.
- * In the vanilla game a terror mission and one other are started in random regions.
- * @note The very first mission is Sectoid Research in the region of player's first Base.
- * @param atGameStart - true if called at start
+ * @note In the vanilla game a terror mission plus one other are started in
+ * random regions. The very first mission is Sectoid Research in the region of
+ * player's first Base.
+ * @param atGameStart - true if called at start (default false)
  */
 void GeoscapeState::determineAlienMissions(bool atGameStart) // private.
 {
@@ -4083,10 +4097,10 @@ void GeoscapeState::setupLandMission() // private.
 }
 
 /**
- * Handler for clicking on a timer button.
+ * Handler for clicking a time-compression button.
  * @param action - pointer to the mouse Action
  */
-void GeoscapeState::btnTimerClick(Action* action) // private.
+void GeoscapeState::btnTimerPress(Action* action) // private.
 {
 	SDL_Event ev;
 	ev.type = SDL_MOUSEBUTTONDOWN;
@@ -4097,17 +4111,27 @@ void GeoscapeState::btnTimerClick(Action* action) // private.
 }
 
 /**
+ * Pauses and unpauses the Geoscape.
+ * @param action - pointer to the mouse Action
+ */
+void GeoscapeState::btnPausePress(Action* action) // private.
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		_pauseHard = !_pauseHard;
+}
+
+/**
  * Centers on the UFO corresponding to this button.
  * @param action - pointer to an Action
  */
-void GeoscapeState::btnVisibleUfoClick(Action* action) // private.
+void GeoscapeState::btnVisibleUfoPress(Action* action) // private.
 {
 	for (size_t // find out which button was pressed
 			i = 0;
 			i != INDICATORS;
 			++i)
 	{
-		if (_btnVisibleUfo[i] == action->getSender())
+		if (_isfVisibleUfo[i] == action->getSender())
 		{
 			_globe->center(
 						_visibleUfo[i]->getLongitude(),
@@ -4209,7 +4233,7 @@ void GeoscapeState::resize(
 
 /**
  * Examines the quantity of remaining UFO-detected popups.
- * Reduces the number by one and decides whether to show the value to player.
+ * @note Reduces the number by one and decides whether to display the value.
  */
 void GeoscapeState::assessUfoPopups()
 {
