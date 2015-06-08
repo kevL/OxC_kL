@@ -65,7 +65,7 @@ private:
 
 
 	public:
-		///
+		/// cTor.
 		explicit UfoTrajectory(const std::string& id);
 
 		/// Loads trajectory data from YAML.
@@ -90,19 +90,19 @@ private:
 		 * @param wp - the waypoint
 		 * @return, the zone index
 		 */
-		size_t getZone(size_t wp) const
-		{ return _waypoints[wp].zone; }
+		size_t getZone(size_t wpId) const
+		{ return _waypoints[wpId].zone; }
 
 		/// Gets the altitude at a waypoint.
-		const std::string& getAltitude(size_t wp) const;
+		const std::string getAltitude(size_t wpId) const; // does not like return &ref
 
 		/**
 		 * Gets the speed percentage at a waypoint.
 		 * @param wp - the waypoint
 		 * @return, the speed as a percentage
 		 */
-		float getSpeedPercentage(size_t wp) const
-		{ return _waypoints[wp].speed / 100.f; }
+		float getSpeedPercentage(size_t wpId) const
+		{ return _waypoints[wpId].speed / 100.f; }
 
 		/**
 		 * Gets the number of seconds UFOs should spend on the ground.

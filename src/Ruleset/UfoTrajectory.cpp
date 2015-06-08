@@ -80,7 +80,7 @@ namespace OpenXcom
 
 /**
  * Creates a UfoTrajectory.
- * @param id - reference the ID
+ * @param id - reference the ID string (eg. 'P0')
  */
 UfoTrajectory::UfoTrajectory(const std::string& id)
 	:
@@ -102,12 +102,12 @@ void UfoTrajectory::load(const YAML::Node& node)
 
 /**
  * Gets the altitude at a waypoint.
- * @param wp - the waypoint ID
+ * @param wpId - the waypoint ID
  * @return, reference to altitude string
  */
-const std::string& UfoTrajectory::getAltitude(size_t wp) const
+const std::string UfoTrajectory::getAltitude(size_t wpId) const // does not like return &ref
 {
-	return stAltitude[_waypoints[wp].altitude];
+	return stAltitude[_waypoints[wpId].altitude];
 }
 
 }
