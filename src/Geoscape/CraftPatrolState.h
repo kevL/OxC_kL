@@ -42,9 +42,13 @@ class CraftPatrolState
 {
 
 private:
+	bool _delayPop;
+
 	Craft* _craft;
 	GeoscapeState* _geo;
-	Surface* _sprite;
+	Surface
+		* _sprite,
+		* _srfTarget;
 	Text* _txtDestination;
 //		* _txtPatrolling;
 	TextButton
@@ -56,14 +60,20 @@ private:
 		* _btnRedirect;
 	Window* _window;
 
+	/// Hides various screen-elements to reveal the globe & Craft.
+	void transposeWindow();
+
 
 	public:
 		/// Creates the Geoscape CraftPatrol state.
 		CraftPatrolState(
-				Craft* craft,
-				GeoscapeState* geo);
+				Craft* const craft,
+				GeoscapeState* const geo);
 		/// Cleans up the Geoscape CraftPatrol state.
 		~CraftPatrolState();
+
+		/// Initializes the state.
+		void init();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

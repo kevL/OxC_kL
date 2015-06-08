@@ -54,8 +54,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Intercept window.
- * @param base		- pointer to Base to show contained crafts (default NULL to show all crafts)
- * @param geo		- pointer to GeoscapeState (default NULL)
+ * @param base	- pointer to Base to show contained crafts (default NULL to show all crafts)
+ * @param geo	- pointer to GeoscapeState (default NULL)
  */
 InterceptState::InterceptState(
 		Base* base,
@@ -347,7 +347,7 @@ void InterceptState::lstCraftsLeftClick(Action*)
 	Craft* const craft = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
 										craft,
-										_geo->getGlobe(),
+										_geo,
 										NULL,
 										true));
 }
@@ -372,18 +372,18 @@ void InterceptState::lstCraftsRightClick(Action*)
  */
 void InterceptState::lstCraftsMouseOver(Action*)
 {
-	if (_base != NULL)
-		return;
+	if (_base == NULL)
+	{
+		std::wstring wst;
 
-	std::wstring wst;
+		const size_t sel = _lstCrafts->getSelectedRow();
+		if (sel < _bases.size())
+			wst = _bases[sel];
+		else
+			wst = tr("STR_INTERCEPT");
 
-	const size_t sel = _lstCrafts->getSelectedRow();
-	if (sel < _bases.size())
-		wst = _bases[sel];
-	else
-		wst = tr("STR_INTERCEPT");
-
-	_txtBase->setText(wst);
+		_txtBase->setText(wst);
+	}
 }
 
 /**
@@ -392,10 +392,8 @@ void InterceptState::lstCraftsMouseOver(Action*)
  */
 void InterceptState::lstCraftsMouseOut(Action*)
 {
-	if (_base != NULL)
-		return;
-
-	_txtBase->setText(tr("STR_INTERCEPT"));
+	if (_base == NULL)
+		_txtBase->setText(tr("STR_INTERCEPT"));
 }
 
 }

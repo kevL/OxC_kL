@@ -21,6 +21,7 @@
 
 //#include <sstream>
 
+#include "GeoscapeState.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
@@ -54,20 +55,23 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the GeoscapeCraft window.
  * @param craft		- pointer to a Craft for display
- * @param globe		- pointer to the geoscape Globe
- * @param waypoint	- pointer to the last UFO position if redirecting the craft
+ * @param geo		- pointer to the Geoscape
+ * @param waypoint	- pointer to the last UFO position if redirecting the craft (default NULL)
  * @param doublePop	- true if two windows need to pop on exit (default false)
+ * @param transpose	- true to start the state transposed (default false)
  */
 GeoscapeCraftState::GeoscapeCraftState(
 		Craft* craft,
-		Globe* globe,
+		GeoscapeState* geo,
 		Waypoint* waypoint,
-		bool doublePop)
+		bool doublePop,
+		bool transpose)
 	:
 		_craft(craft),
-		_globe(globe),
+		_geo(geo),
 		_waypoint(waypoint),
-		_doublePop(doublePop)
+		_doublePop(doublePop),
+		_delayPop(true)
 {
 	_screen = false;
 
@@ -105,6 +109,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_btnBase		= new TextButton( 90, 16,  32, 158);
 	_btnCancel		= new TextButton( 90, 16, 134, 158);
 
+	_srfTarget		= new Surface(29, 29, 114, 86);
+
 	setInterface("geoCraftScreens");
 
 	add(_window,		"window",	"geoCraftScreens");
@@ -127,10 +133,12 @@ GeoscapeCraftState::GeoscapeCraftState(
 	add(_txtW2Ammo,		"text3",	"geoCraftScreens");
 
 	add(_btnTarget,		"button",	"geoCraftScreens");
-	add(_btnBase,		"button",	"geoCraftScreens");
-	add(_btnCenter,		"button",	"geoCraftScreens");
 	add(_btnPatrol,		"button",	"geoCraftScreens");
+	add(_btnCenter,		"button",	"geoCraftScreens");
+	add(_btnBase,		"button",	"geoCraftScreens");
 	add(_btnCancel,		"button",	"geoCraftScreens");
+
+	add(_srfTarget);
 
 	centerAllSurfaces();
 
@@ -298,9 +306,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 		_txtRedirect->setVisible(false);
 	else
 	{
-		_txtRedirect->setBig();
-		_txtRedirect->setAlign(ALIGN_CENTER);
 		_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
+		_txtRedirect->setAlign(ALIGN_CENTER);
+		_txtRedirect->setBig();
 
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
@@ -338,6 +346,12 @@ GeoscapeCraftState::GeoscapeCraftState(
 	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 	const int craftSprite = _craft->getRules()->getSprite();
 	srt->getFrame(craftSprite + 11)->blit(_sprite);
+
+	if (transpose == true)
+	{
+		_delayPop = false;
+		transposeWindow();
+	}
 }
 
 /**
@@ -347,24 +361,46 @@ GeoscapeCraftState::~GeoscapeCraftState()
 {}
 
 /**
- * Centers the craft on the globe.
+ * Centers the Craft on the globe.
  * @param action - pointer to an Action
  */
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
+	delete _waypoint;
+
+	_geo->getGlobe()->center(
+						_craft->getLongitude(),
+						_craft->getLatitude());
+
 	if (_doublePop == true)
+	{
+		_game->popState();
 		_game->popState();
 
-	_game->popState();
-	_globe->center(
-				_craft->getLongitude(),
-				_craft->getLatitude());
+		_game->pushState(new GeoscapeCraftState(
+											_craft,
+											_geo,
+											NULL,
+											false,
+											true));
+		return;
+	}
 
-	delete _waypoint;
+	if (_delayPop == true)
+	{
+		_delayPop = false;
+		transposeWindow();
+
+		return;
+	}
+
+	_geo->setPause();
+	_geo->resetTimer();
+	_game->popState();
 }
 
 /**
- * Returns the craft back to its base.
+ * Returns the Craft back to its base.
  * @param action - pointer to an Action
  */
 void GeoscapeCraftState::btnBaseClick(Action*)
@@ -379,7 +415,7 @@ void GeoscapeCraftState::btnBaseClick(Action*)
 }
 
 /**
- * Changes the craft's target.
+ * Changes the Craft's target.
  * @param action - pointer to an Action
  */
 void GeoscapeCraftState::btnTargetClick(Action*)
@@ -390,12 +426,12 @@ void GeoscapeCraftState::btnTargetClick(Action*)
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
 											_craft,
-											_globe));
+											_geo->getGlobe()));
 	delete _waypoint;
 }
 
 /**
- * Sets the craft to patrol the current location.
+ * Sets the Craft to patrol the current location.
  * @param action - pointer to an Action
  */
 void GeoscapeCraftState::btnPatrolClick(Action*)
@@ -411,6 +447,7 @@ void GeoscapeCraftState::btnPatrolClick(Action*)
 
 /**
  * Closes the window.
+ * @note The button doubles as the redirect Craft btn.
  * @param action - pointer to an Action
  */
 void GeoscapeCraftState::btnCancelClick(Action*)
@@ -423,6 +460,40 @@ void GeoscapeCraftState::btnCancelClick(Action*)
 	}
 
 	_game->popState(); // and Cancel.
+}
+
+/**
+ * Hides various screen-elements to reveal the globe & Craft.
+ */
+void GeoscapeCraftState::transposeWindow() // private.
+{
+	_window->setBackground(NULL);
+
+	_txtRedirect->setVisible(false);
+	_txtSpeed->setVisible(false);
+	_txtMaxSpeed->setVisible(false);
+	_txtSoldier->setVisible(false);
+	_txtAltitude->setVisible(false);
+	_txtHWP->setVisible(false);
+	_txtFuel->setVisible(false);
+	_txtDamage->setVisible(false);
+	_txtW1Name->setVisible(false);
+	_txtW1Ammo->setVisible(false);
+	_txtW2Name->setVisible(false);
+	_txtW2Ammo->setVisible(false);
+
+	if (_geo->getPause() == false)
+		_btnCenter->setText(tr("STR_PAUSE"));
+	else
+	{
+		_btnCenter->setVisible(false);
+
+		const int y = _btnCenter->getY();
+		_btnTarget->setY(y);
+		_btnPatrol->setY(y);
+	}
+
+	_game->getResourcePack()->getSurface("TARGET_UFO")->blit(_srfTarget);
 }
 
 }

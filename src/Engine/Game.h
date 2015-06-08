@@ -53,7 +53,6 @@ private:
 	bool
 		_init,
 		_inputActive,
-//		_pauseTillClick,
 		_quit;
 	int
 		_debugCycle, // for debugging country areas.
@@ -103,11 +102,20 @@ private:
 		FpsCounter* getFpsCounter() const;
 
 		/// Resets the state stack to a new state.
-		void setState(State* state);
+		void setState(State* const state);
 		/// Pushes a new state into the state stack.
-		void pushState(State* state);
+		void pushState(State* const state);
 		/// Pops the last state from the state stack.
 		void popState();
+		/// kL. Gets the current (top) state.
+//		State* getState() const;
+		/// Gets the quantity of currently running states.
+		int getQtyStates() const;
+		/// Returns whether current state is the param state
+		bool isState(State* const state) const;
+
+		/// Returns whether the game is shutting down.
+		bool isQuitting() const;
 
 		/// Gets the currently loaded language.
 		Language* getLanguage() const;
@@ -132,16 +140,6 @@ private:
 		/// Sets whether the mouse cursor is activated.
 		void setInputActive(bool active);
 
-		/// kL. Gets the current (top) state.
-//		State* getState() const;
-		/// Gets the quantity of currently running states.
-		int getQtyStates() const;
-		/// Returns whether current state is the param state
-		bool isState(State* state) const;
-
-		/// Returns whether the game is shutting down.
-		bool isQuitting() const;
-
 		/// Sets up the default language.
 		void defaultLanguage();
 
@@ -152,9 +150,6 @@ private:
 		int getDebugCycle() const;
 		/// Sets the country cycle for debugging country regions.
 		void setDebugCycle(const int cycle);
-
-		/// Sets the pause-till-click.
-//		void setPauseTillClick(const bool pause = true);
 };
 
 }

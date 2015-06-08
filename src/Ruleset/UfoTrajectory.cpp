@@ -103,7 +103,7 @@ void UfoTrajectory::load(const YAML::Node& node)
 /**
  * Gets the altitude at a waypoint.
  * @param wpId - the waypoint ID
- * @return, reference to altitude string
+ * @return, altitude string
  */
 const std::string UfoTrajectory::getAltitude(size_t wpId) const // does not like return &ref
 {

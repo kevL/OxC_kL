@@ -1764,10 +1764,10 @@ void DogfightState::btnMinimizedIconPress(Action* action)
 			_geo->getDfZoomInTimer()->start();
 	}
 	else //if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		// might want to resetTimer here ...
 		_game->pushState(new GeoscapeCraftState(
 											_craft,
-											_globe,
-											NULL));
+											_geo));
 }
 
 /**

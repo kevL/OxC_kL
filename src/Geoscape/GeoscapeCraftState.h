@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class Craft;
-class Globe;
+class GeoscapeState;
 class Text;
 class TextButton;
 class Waypoint;
@@ -43,11 +43,15 @@ class GeoscapeCraftState
 {
 
 private:
-	bool _doublePop;
+	bool
+		_delayPop,
+		_doublePop;
 
 	Craft* _craft;
-	Globe* _globe;
-	Surface* _sprite;
+	GeoscapeState* _geo;
+	Surface
+		* _sprite,
+		* _srfTarget;
 	Text
 		* _txtAltitude,
 		* _txtBase,
@@ -74,14 +78,18 @@ private:
 	Waypoint* _waypoint;
 	Window* _window;
 
+	/// Hides various screen-elements to reveal the globe & Craft.
+	void transposeWindow();
+
 
 	public:
 		/// Creates the Geoscape Craft state.
 		GeoscapeCraftState(
 				Craft* craft,
-				Globe* globe,
-				Waypoint* waypoint,
-				bool doublePop = false);
+				GeoscapeState* geo,
+				Waypoint* waypoint = NULL,
+				bool doublePop = false,
+				bool transpose = false);
 		/// Cleans up the Geoscape Craft state.
 		~GeoscapeCraftState();
 

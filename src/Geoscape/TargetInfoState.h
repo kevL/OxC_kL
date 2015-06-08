@@ -61,8 +61,8 @@ private:
 	public:
 		/// Creates the Target Info state.
 		TargetInfoState(
-				Target* target,
-				GeoscapeState* state);
+				Target* const target,
+				GeoscapeState* const state);
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
 

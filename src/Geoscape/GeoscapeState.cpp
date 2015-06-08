@@ -1725,7 +1725,7 @@ void GeoscapeState::time5Seconds()
 							resetTimer();
 							popup(new GeoscapeCraftState(
 														*j,
-														_globe,
+														this,
 														wp));
 						}
 					}
@@ -4244,6 +4244,22 @@ void GeoscapeState::assessUfoPopups()
 		if (_windowPops == 0)
 			_ufoDetected->setVisible(false);
 	}
+}
+
+/**
+ * Sets pause.
+ */
+void GeoscapeState::setPause()
+{
+	_pauseHard = true;
+}
+
+/**
+ * Gets pause.
+ */
+bool GeoscapeState::getPause() const
+{
+	return _pauseHard;
 }
 
 }

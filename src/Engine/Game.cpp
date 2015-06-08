@@ -83,7 +83,6 @@ Game::Game(const std::string& title)
 		_timeUntilNextFrame(0),
 		_debugCycle(-1),
 		_debugCycle_b(-1)
-//		_pauseTillClick(false)
 {
 	Options::reload = false;
 	Options::mute = false;
@@ -569,11 +568,11 @@ FpsCounter* Game::getFpsCounter() const
 
 /**
  * Pops all the states currently in stack and pushes in the new state.
- * A shortcut for cleaning up all the old states when they're not necessary
- * like in one-way transitions.
+ * @note A shortcut for cleaning up all the old states when they're not
+ * necessary like in one-way transitions.
  * @param state - pointer to the new State
  */
-void Game::setState(State* state)
+void Game::setState(State* const state)
 {
 	while (_states.empty() == false)
 		popState();
@@ -585,10 +584,10 @@ void Game::setState(State* state)
 
 /**
  * Pushes a new state into the top of the stack and initializes it.
- * The new state will be used once the next game cycle starts.
+ * @note The new state will be used once the next game cycle starts.
  * @param state - pointer to the new State
  */
-void Game::pushState(State* state)
+void Game::pushState(State* const state)
 {
 	_states.push_back(state);
 	_init = false;
@@ -596,8 +595,9 @@ void Game::pushState(State* state)
 
 /**
  * Pops the last state from the top of the stack.
- * Since states can't actually be deleted mid-cycle it's moved into a separate queue
- * which is cleared at the start of every cycle so the transition is seamless.
+ * @note Since states can't actually be deleted mid-cycle it's moved into a
+ * separate queue which is cleared at the start of every cycle so the transition
+ * is seamless.
  */
 void Game::popState()
 {
@@ -605,6 +605,47 @@ void Game::popState()
 	_states.pop_back();
 
 	_init = false;
+}
+
+/**
+ * kL. Gets the current (top) State.
+ * @return, current state
+ */
+/* State* Game::getState() const
+{
+	if (_states.empty() == false)
+		return _states.back();
+
+	return NULL;
+} */
+
+/**
+ * Gets the quantity of currently running states.
+ * @return, qty of states
+ */
+int Game::getQtyStates() const
+{
+	return _states.size();
+}
+
+/**
+ * Returns whether current state is *state
+ * @param state - pointer to a State to test against the stack state
+ * @return, true if *state is the current state
+ */
+bool Game::isState(State* const state) const
+{
+	return _states.empty() == false
+		&& _states.back() == state;
+}
+
+/**
+ * Checks if the game is currently quitting.
+ * @return, true if the game is in the process of shutting down
+ */
+bool Game::isQuitting() const
+{
+	return _quit;
 }
 
 /**
@@ -746,47 +787,6 @@ void Game::setInputActive(bool active)
 }
 
 /**
- * kL. Gets the current (top) State.
- * @return, current state
- */
-/* State* Game::getState() const
-{
-	if (_states.empty() == false)
-		return _states.back();
-
-	return NULL;
-} */
-
-/**
- * Gets the quantity of currently running states.
- * @return, qty of states
- */
-int Game::getQtyStates() const
-{
-	return _states.size();
-}
-
-/**
- * Returns whether current state is *state
- * @param state - pointer to a State to test against the stack state
- * @return, true if *state is the current state
- */
-bool Game::isState(State* state) const
-{
-	return _states.empty() == false
-		&& _states.back() == state;
-}
-
-/**
- * Checks if the game is currently quitting.
- * @return, true if the game is in the process of shutting down
- */
-bool Game::isQuitting() const
-{
-	return _quit;
-}
-
-/**
  * Loads the most appropriate language given current system and game options.
  */
 void Game::defaultLanguage()
@@ -883,14 +883,5 @@ void Game::setDebugCycle(const int cycle)
 {
 	_debugCycle = cycle;
 }
-
-/**
- * Sets the pause-till-click.
- * @param pause - true to pause think until a click is handled (default true)
- */
-/*void Game::setPauseTillClick(const bool pause)
-{
-	_pauseTillClick = pause;
-} */
 
 }

@@ -154,7 +154,7 @@ void Target::setLatitude(double lat)
 
 /**
  * Returns the list of crafts currently following this target.
- * @return, pointer to a vector of pointers to crafts
+ * @return, pointer to a vector of pointers to Crafts
  */
 std::vector<Target*>* Target::getFollowers()
 {

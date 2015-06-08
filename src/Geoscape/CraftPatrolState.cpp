@@ -41,7 +41,7 @@
 #include "../Ruleset/RuleCraft.h"
 
 #include "../Savegame/Craft.h"
-#include "../Savegame/Target.h"
+//#include "../Savegame/Target.h"
 
 
 namespace OpenXcom
@@ -53,11 +53,12 @@ namespace OpenXcom
  * @param geo	- pointer to GeoscapeState
  */
 CraftPatrolState::CraftPatrolState(
-		Craft* craft,
-		GeoscapeState* geo)
+		Craft* const craft,
+		GeoscapeState* const geo)
 	:
 		_craft(craft),
-		_geo(geo)
+		_geo(geo),
+		_delayPop(true)
 {
 	_screen = false;
 
@@ -80,6 +81,8 @@ CraftPatrolState::CraftPatrolState(
 	_btnCenter		= new TextButton(62, 16,  97, 159);
 	_btnRedirect	= new TextButton(62, 16, 162, 159);
 
+	_srfTarget		= new Surface(29, 29, 114, 86);
+
 	setInterface("geoCraftScreens");
 
 	add(_window,			"window",	"geoCraftScreens");
@@ -92,6 +95,8 @@ CraftPatrolState::CraftPatrolState(
 	add(_btnBase,			"button",	"geoCraftScreens");
 	add(_btnCenter,			"button",	"geoCraftScreens");
 	add(_btnRedirect,		"button",	"geoCraftScreens");
+
+	add(_srfTarget);
 
 	centerAllSurfaces();
 
@@ -146,6 +151,15 @@ CraftPatrolState::~CraftPatrolState()
 {}
 
 /**
+ * Initializes the state.
+ */
+void CraftPatrolState::init()
+{
+	State::init();
+	_btn5s->setVisible(_geo->is5Sec() == false);
+}
+
+/**
  * Closes the window.
  * @param action - pointer to an Action
  */
@@ -174,8 +188,7 @@ void CraftPatrolState::btnInfoClick(Action*)
 	_game->popState();
 	_game->pushState(new GeoscapeCraftState(
 										_craft,
-										_geo->getGlobe(),
-										NULL));
+										_geo));
 }
 
 /**
@@ -195,11 +208,21 @@ void CraftPatrolState::btnBaseClick(Action*)
  */
 void CraftPatrolState::btnCenterClick(Action*)
 {
-	_geo->resetTimer();
-	_game->popState();
 	_geo->getGlobe()->center(
 						_craft->getLongitude(),
 						_craft->getLatitude());
+
+	if (_delayPop == true)
+	{
+		_delayPop = false;
+		transposeWindow();
+
+		return;
+	}
+
+	_geo->setPause();
+	_geo->resetTimer();
+	_game->popState();
 }
 
 /**
@@ -213,6 +236,18 @@ void CraftPatrolState::btnRedirectClick(Action*)
 	_game->pushState(new SelectDestinationState(
 											_craft,
 											_geo->getGlobe()));
+}
+
+/**
+ * Hides various screen-elements to reveal the globe & Craft.
+ */
+void CraftPatrolState::transposeWindow() // private.
+{
+	_window->setBackground(NULL);
+	_txtDestination->setVisible(false);
+	_btnCenter->setText(tr("STR_PAUSE"));
+
+	_game->getResourcePack()->getSurface("TARGET_UFO")->blit(_srfTarget);
 }
 
 }

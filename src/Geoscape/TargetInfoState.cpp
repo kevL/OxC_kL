@@ -49,8 +49,8 @@ namespace OpenXcom
  * @param state		- pointer to GeoscapeState
  */
 TargetInfoState::TargetInfoState(
-		Target* target,
-		GeoscapeState* state)
+		Target* const target,
+		GeoscapeState* const state)
 	:
 		_target(target),
 		_state(state),

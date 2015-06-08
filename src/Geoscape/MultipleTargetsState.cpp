@@ -159,9 +159,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 		else if (craft != NULL)
 			_game->pushState(new GeoscapeCraftState(
 											craft,
-											_state->getGlobe(),
-											NULL,
-											false));
+											_state));
 		else if (ufo != NULL)
 			_game->pushState(new UfoDetectedState(
 											ufo,

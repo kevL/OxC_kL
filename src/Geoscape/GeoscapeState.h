@@ -292,6 +292,10 @@ private:
 
 		/// Examines the quantity of remaining UFO-detected popups.
 		void assessUfoPopups();
+		/// Sets pause.
+		void setPause();
+		/// Gets pause.
+		bool getPause() const;
 };
 
 }

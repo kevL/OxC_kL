@@ -499,9 +499,9 @@ void UfoDetectedState::btnCentreClick(Action*)
 		return;
 	}
 
-	_state->resetTimer();
 	_state->assessUfoPopups();
-
+	_state->setPause();
+	_state->resetTimer();
 	_game->popState();
 }
 
@@ -533,18 +533,11 @@ void UfoDetectedState::btnCancelClick(Action*)
 void UfoDetectedState::transposeWindow() // private.
 {
 	_window->setBackground(NULL);
-//	_window->setVisible(false);
 
-//	_txtUfo->setVisible(false);
 	_txtDetected->setVisible(false);
 	_lstInfo->setVisible(false);
-	_btnCentre->setVisible(false);
-//	_btnIntercept->setVisible(false);
-//	_btn5Sec->setVisible(false);
-//	_btnCancel->setVisible(false);
+	_btnCentre->setText(tr("STR_PAUSE").c_str());
 	_btnCancel->setText(tr("STR_TERROR_CONTINUES").c_str());
-//	_txtRegion->setVisible(false);
-//	_txtTexture->setVisible(false);
 
 	if (_hyper == true)
 	{
