@@ -978,7 +978,7 @@ BattlescapeState::BattlescapeState()
 }
 
 /**
- * Deletes the battlescapestate.
+ * Deletes this BattlescapeState.
  */
 BattlescapeState::~BattlescapeState()
 {
@@ -989,7 +989,7 @@ BattlescapeState::~BattlescapeState()
 }
 
 /**
- * Initilizes the battlescapestate.
+ * Initializes this BattlescapeState.
  */
 void BattlescapeState::init()
 {

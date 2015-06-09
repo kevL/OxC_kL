@@ -741,7 +741,7 @@ void Soldier::togglePsiTraining()
 
 /**
  * Returns this Soldier's death time.
- * @return, pointer to death data - NULL if no death has occured
+ * @return, pointer to death data - NULL if no death has occurred
  */
 /* SoldierDeath* Soldier::getDeath() const
 {

@@ -27,7 +27,7 @@ uint32_t
 
 HQX_API void HQX_CALLCONV hqxInit(void)
 {
-	// Initalize RGB to YUV lookup table
+	// Initialize RGB to YUV lookup table
 	uint32_t
 		c,
 		r,g,b,

@@ -37,8 +37,8 @@ class SavedBattleGame;
 
 
 /**
- * This is the initial AI state of civilian BattleUnits
- * walking around and looking to get killed.
+ * This is the initial AI state of civilian BattleUnits walking around and
+ * looking to get killed.
  */
 class CivilianBAIState
 	:

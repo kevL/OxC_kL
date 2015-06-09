@@ -1686,7 +1686,7 @@ void SavedBattleGame::addDestroyedObjective()
 }
 
 /**
- * Returns whether the objectives are detroyed.
+ * Returns whether the objectives are destroyed.
  * @return, true if the objectives are destroyed
  */
 bool SavedBattleGame::allObjectivesDestroyed() const
@@ -2736,9 +2736,10 @@ void SavedBattleGame::setKneelReserved(bool reserved)
 
 /**
  * Gets a reference to the base module destruction map.
- * This map contains information on how many destructible base modules
+ * @note This map contains information on how many destructible base modules
  * remain at any given grid reference in the basescape, using [x][y] format.
- * -1 for "no items" 0 for "destroyed" and any actual number represents how many left.
+ * -1 for "no items" 0 for "destroyed" and any actual number represents how many
+ * left.
  * @return, reference to a vector of vectors containing pairs of ints that make up base module damage maps
  */
 std::vector<std::vector<std::pair<int, int> > >& SavedBattleGame::getModuleMap()
@@ -2747,9 +2748,10 @@ std::vector<std::vector<std::pair<int, int> > >& SavedBattleGame::getModuleMap()
 }
 
 /**
- * Calculates the number of map modules remaining by counting the map objects
- * on the top floor who have the baseModule flag set. We store this data in the grid
- * as outlined in the comments above, in pairs representing intial and current values.
+ * Calculates the number of map modules remaining by counting the map objects on
+ * the top floor who have the baseModule flag set. We store this data in the
+ * grid as outlined in the comments above, in pairs representing initial and
+ * current values.
  */
 void SavedBattleGame::calculateModuleMap()
 {

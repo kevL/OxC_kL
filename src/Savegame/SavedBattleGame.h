@@ -167,7 +167,7 @@ private:
 				const int mapsize_x,
 				const int mapsize_y,
 				const int mapsize_z);
-		/// Initialises the pathfinding and tileengine.
+		/// Initialises the Pathfinding and TileEngine.
 		void initUtilities(const ResourcePack* const res);
 
 		/// Gets the game's mapdatafiles.

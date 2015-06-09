@@ -2561,7 +2561,7 @@ void Map::drawTerrain(Surface* surface) // private.
 							{
 								// kL_note: Don't throw my offsets off ...
 								int bubbleOffset_x;
-								if (unit->getStatus() == STATUS_AIMING)	// enlarge the unit sprite when aiming to accomodate the weapon
+								if (unit->getStatus() == STATUS_AIMING)	// enlarge the unit sprite when aiming to accommodate the weapon
 									bubbleOffset_x = 0;					// adjust as necessary
 								else
 									bubbleOffset_x = walkOffset.x;

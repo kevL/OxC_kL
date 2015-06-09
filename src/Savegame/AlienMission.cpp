@@ -182,7 +182,7 @@ void AlienMission::setId(int id)
  */
 int AlienMission::getId() const
 {
-	assert(_uniqueID != 0 && "Uninitalized mission!");
+	assert(_uniqueID != 0 && "Uninitialized mission!");
 	return _uniqueID;
 }
 
@@ -394,7 +394,7 @@ private:
 
 
 /**
- * This function will spawn a UFO according the the mission rules.
+ * This function will spawn a UFO according the mission rules.
  * @note Some code is duplicated between cases but that's ok for now. It's on
  * different code paths and the function is MUCH easier to read written this way.
  * @param rules			- reference the ruleset

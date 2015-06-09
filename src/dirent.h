@@ -497,7 +497,7 @@ static WIN32_FIND_DATAW* dirent_next(_WDIR* dirp)
             // Got a file
             p = &dirp->data;
         } else {
-            // The very last entry has been processed or an error occured
+            // The very last entry has been processed or an error occurred
             FindClose(dirp->handle);
             dirp->handle = INVALID_HANDLE_VALUE;
             p = NULL;
@@ -722,7 +722,7 @@ static int dirent_mbstowcs_s(
             wcstr[n] = 0;
         }
 
-        // Length of resuting multi-byte string WITH zero terminator
+        // Length of resulting multi-byte string WITH zero terminator
         if (pReturnValue) {
             *pReturnValue = n + 1;
         }

@@ -305,7 +305,7 @@ void Screen::setPalette(
 		&& _numColors != ncolors
 		&& _firstColor != firstcolor)
 	{
-		// an initial palette setup has not been comitted to the screen yet
+		// an initial palette setup has not been committed to the screen yet
 		// just update it with whatever colors are being sent now
 		memmove(
 			&(deferredPalette[firstcolor]),

@@ -210,9 +210,9 @@ private:
 //		static const int DEFAULT_ANIM_SPEED = 89; // for shaders Raw, Quillez, etc.
 		static const int DEFAULT_ANIM_SPEED = 79; // for shaders 4xHQX & above.
 
-		/// Creates the Battlescape state.
+		/// Creates a BattlescapeState.
 		BattlescapeState();
-		/// Cleans up the Battlescape state.
+		/// Cleans up the BattlescapeState.
 		~BattlescapeState();
 
 		/// Selects the next soldier.
@@ -226,7 +226,7 @@ private:
 				bool setDontReselect = false,
 				bool checkInventory = false);
 
-		/// Initilizes the battlescapestate.
+		/// Initializes this BattlescapeState.
 		void init();
 		/// Runs the timers and handles popups.
 		void think();

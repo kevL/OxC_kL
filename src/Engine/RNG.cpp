@@ -216,7 +216,7 @@ double boxMuller(
 }
 
 /**
- * Generates a random percent chance of an event occuring and returns the result.
+ * Generates a random percent chance of an event occurring and returns the result.
  * @param value - value percentage (0-100%)
  * @return, true if the chance succeeded
  */

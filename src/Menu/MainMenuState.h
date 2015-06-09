@@ -40,6 +40,9 @@ class MainMenuState
 {
 
 private:
+	Text
+		* _txtBuild,
+		* _txtTitle;
 	TextButton
 		* _btnStart,
 		* _btnTactical,
@@ -49,9 +52,6 @@ private:
 		* _btnQuit;
 	Window
 		* _window;
-	Text
-		* _txtBuild,
-		* _txtTitle;
 
 
 	public:
@@ -73,7 +73,7 @@ private:
 		/// Handler for clicking the Quit button.
 		void btnQuitClick(Action* action);
 
-		/// Update the resolution settings, we just resized the window.
+		/// Update the resolution settings - just resized the window.
 		void resize(
 				/*int& dX,
 				int& dY*/);

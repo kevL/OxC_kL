@@ -581,8 +581,8 @@ void Language::load(
 }
 
 /**
-* Replaces all special string markers with the approriate characters
-* and converts the string encoding.
+* Replaces all special string markers with the appropriate characters and
+* converts the string encoding.
 * @param ist - original UTF-8 string
 * @return, new widechar string
 */
@@ -590,9 +590,9 @@ std::wstring Language::loadString(const std::string& ist) const
 {
 	std::string st = ist;
 
-	replace(st, "{NEWLINE}", "\n");
-	replace(st, "{SMALLLINE}", "\x02");
-	replace(st, "{ALT}", "\x01");
+	replace(st, "{NEWLINE}",	"\n");
+	replace(st, "{SMALLLINE}",	"\x02");
+	replace(st, "{ALT}",		"\x01");
 
 	return utf8ToWstr(st);
 }

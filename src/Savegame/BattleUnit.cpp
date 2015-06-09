@@ -1590,9 +1590,10 @@ int BattleUnit::getStun() const
 }
 
 /**
- * Raises a unit's stun level sufficiently so that the unit is ready to become unconscious.
- * Used when another unit falls on top of this unit.
- * Zombified units first convert to their spawn unit.
+ * Raises a unit's stun level sufficiently so that the unit is ready to become
+ * unconscious.
+ * @note Used when another unit falls on top of this unit. Zombified units first
+ * convert to their spawn unit.
  * @param battleGame - pointer to BattlescapeGame
  */
 void BattleUnit::knockOut(BattlescapeGame* battleGame)
@@ -1615,7 +1616,8 @@ void BattleUnit::knockOut(BattlescapeGame* battleGame)
 }
 
 /**
- * Intialises the falling sequence. Occurs after death or stunned.
+ * Initializes the falling sequence.
+ * @note Occurs after death or stunned.
  */
 void BattleUnit::startFalling()
 {
