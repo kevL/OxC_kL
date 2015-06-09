@@ -90,13 +90,16 @@ Inventory::Inventory(
 {
 //	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
 
-	_grid		= new Surface(width, height, x,y);
-	_items		= new Surface(width, height, x,y);
-	_selection	= new Surface(
-							RuleInventory::HAND_W * RuleInventory::SLOT_W,
-							RuleInventory::HAND_H * RuleInventory::SLOT_H,
-							x,y);
-	_warning	= new WarningMessage(224, 24, 48, 176);
+	_grid			= new Surface(width, height, x,y);
+	_items			= new Surface(width, height, x,y);
+	_selection		= new Surface(
+								RuleInventory::HAND_W * RuleInventory::SLOT_W,
+								RuleInventory::HAND_H * RuleInventory::SLOT_H,
+								x,y);
+	_warning		= new WarningMessage(224, 24, 48, 176);
+	_stackNumber	= new NumberText(15, 15);
+	_animTimer		= new Timer(80);
+
 	_warning->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
@@ -104,10 +107,8 @@ Inventory::Inventory(
 	_warning->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color));
 	_warning->setColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2));
 
-	_stackNumber = new NumberText(15, 15);
 	_stackNumber->setBordered();
 
-	_animTimer = new Timer(80);
 	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);
 	_animTimer->start();
 }
@@ -307,38 +308,37 @@ void Inventory::drawItems()
 				i != _selUnit->getInventory()->end();
 				++i)
 		{
-			if (*i == _selItem)
-				continue;
-
-
-			Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			if (frame != NULL) // safety.
+			if (*i != _selItem)
 			{
-				if ((*i)->getSlot()->getType() == INV_SLOT)
+				Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
+				if (frame != NULL) // safety.
 				{
-					frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
-					frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
-				}
-				else if ((*i)->getSlot()->getType() == INV_HAND)
-				{
-					frame->setX(
-							(*i)->getSlot()->getX()
-									+ (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth())
-								* RuleInventory::SLOT_W / 2);
-					frame->setY(
-							(*i)->getSlot()->getY()
-									+ (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight())
-								* RuleInventory::SLOT_H / 2);
-				}
+					if ((*i)->getSlot()->getType() == INV_SLOT)
+					{
+						frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+						frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+					}
+					else if ((*i)->getSlot()->getType() == INV_HAND)
+					{
+						frame->setX(
+								(*i)->getSlot()->getX()
+										+ (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth())
+									* RuleInventory::SLOT_W / 2);
+						frame->setY(
+								(*i)->getSlot()->getY()
+										+ (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight())
+									* RuleInventory::SLOT_H / 2);
+					}
 
-				texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+					texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 
-				if ((*i)->getFuseTimer() > -1) // grenade primer indicators
-					_grenadeFuses.push_back(std::make_pair(
-														frame->getX(),
-														frame->getY()));
+					if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+						_grenadeFuses.push_back(std::make_pair(
+															frame->getX(),
+															frame->getY()));
+				}
+				else Log(LOG_INFO) << "ERROR: bigob not found #" << (*i)->getRules()->getBigSprite();
 			}
-			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite();
 		}
 
 		Surface* const stackLayer = new Surface(
@@ -1160,16 +1160,16 @@ void Inventory::mouseClick(Action* action, State* state)
 /*	int
 		x,
 		y;
-	SDL_GetMouseState(&x, &y);
+	SDL_GetMouseState(&x,&y);
 
 	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
-	SDL_WarpMouse(x, y);		// move the mouse back to avoid cursor creep */
+	SDL_WarpMouse(x,y);			// move the mouse back to avoid cursor creep */
 }
 
 /**
  * Unloads the selected weapon placing the gun on the right hand and the ammo
  * on the left hand - unless tuMode is false then drop its ammo to the ground.
- * @return, true if a weapon was successfully unloaded
+ * @return, true if a weapon is successfully unloaded
  */
 bool Inventory::unload()
 {

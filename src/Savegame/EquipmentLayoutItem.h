@@ -28,8 +28,8 @@ namespace OpenXcom
 {
 
 /**
- * Represents a soldier-equipment layout item which is used on the beginning
- * of the Battlescape.
+ * Represents a soldier-equipment layout item which is used to equip a Soldier
+ * for tactical.
  */
 class EquipmentLayoutItem
 {

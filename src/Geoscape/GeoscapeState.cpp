@@ -4256,6 +4256,7 @@ void GeoscapeState::setPause()
 
 /**
  * Gets pause.
+ * @return, true if state is paused
  */
 bool GeoscapeState::getPause() const
 {

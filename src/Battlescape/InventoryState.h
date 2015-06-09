@@ -22,7 +22,7 @@
 
 #include "../Engine/State.h"
 
-#include "../Savegame/EquipmentLayoutItem.h"
+//#include "../Savegame/EquipmentLayoutItem.h" // moved to .cpp file
 
 
 namespace OpenXcom
@@ -38,10 +38,11 @@ class RuleItem;
 class SavedBattleGame;
 class Surface;
 class Text;
+//class Tile;
 
 
 /**
- * Screen which displays soldier's inventory.
+ * Screen which displays a Battleunit's inventory.
  */
 class InventoryState
 	:
@@ -67,7 +68,7 @@ private:
 	NumberText
 		* _numOrder,
 		* _tuCost;
-	SavedBattleGame* _battleGame;
+	SavedBattleGame* _battleSave;
 	Surface
 		* _bg,
 		* _gender,
@@ -90,8 +91,22 @@ private:
 		* _txtPsiTU;
 //	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
 
+	/// Updates the selected unit's info - weight, TU, etc.
+	void updateStats();
 	/// Refresh the hover status of the mouse.
-	void _refreshMouse();
+	void refreshMouse();
+
+	/// Saves a soldier's equipment-layout.
+	bool saveLayout(BattleUnit* const unit) const;
+	/// Saves all soldiers' equipment-layouts.
+	bool saveAllLayouts() const;
+
+/*	/// Clears current unit's inventory. (was static)
+	void clearInventory(
+			Game* game,
+			std::vector<BattleItem*>* unitInv,
+			Tile* groundTile); */
+
 	/// Sets the extra-info fields on mouseover and mouseclicks.
 	void setExtraInfo(
 			const BattleItem* const item,
@@ -99,14 +114,6 @@ private:
 			const BattleItem* const ammo);
 	/// Update the visibility and icons for the template buttons.
 //	void _updateTemplateButtons(bool isVisible);
-
-	/// Saves all soldiers' equipment-layouts.
-	void saveAllEquiptLayouts();
-	/// Saves a soldier's equipment-layout.
-	void saveEquiptLayout();
-
-	/// Updates the selected unit's info - weight, TU, etc.
-	void updateStats();
 
 
 	public:
@@ -123,20 +130,23 @@ private:
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 
-		/// Handler for clicking the Previous soldier button.
+		/// Handler for clicking the Previous button.
 		void btnPrevClick(Action* action);
-		/// Handler for clicking the Next soldier button.
+		/// Handler for clicking the Next button.
 		void btnNextClick(Action* action);
 
-		/// Handler for clicking the Unload weapon button.
+		/// Handler for clicking the Unload button.
 		void btnUnloadClick(Action* action);
-		/// Handler for clicking on the Ground -> button.
+		/// Handler for right-clicking the Unload button.
+		void btnSaveLayouts(Action* action);
+
+		/// Handler for clicking the Ground button.
 		void btnGroundClick(Action* action);
+		/// Handler for right-clicking the Ground button.
+		void btnUnloadUnitClick(Action* action);
+
 		/// Handler for clicking the Rank button.
 		void btnRankClick(Action* action);
-
-		/// Handler for clicking the Clear Inventory button.
-		void btnClearInventoryClick(Action* action);
 
 		/// Handler for clicking on inventory items.
 		void invClick(Action* action);

@@ -33,7 +33,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain type of region.
+ * Creates a blank ruleset for a certain type of Region.
  * @param type - reference the string defining the type
  */
 RuleRegion::RuleRegion(const std::string& type)
@@ -44,7 +44,7 @@ RuleRegion::RuleRegion(const std::string& type)
 {}
 
 /**
- * Deletes the region from memory.
+ * Deletes the Region from memory.
  */
 RuleRegion::~RuleRegion()
 {
@@ -58,7 +58,7 @@ RuleRegion::~RuleRegion()
 }
 
 /**
- * Loads the region type from a YAML file.
+ * Loads the Region type from a YAML file.
  * @param node - reference a YAML node
  */
 void RuleRegion::load(const YAML::Node& node)
@@ -79,7 +79,15 @@ void RuleRegion::load(const YAML::Node& node)
 		_latMax.push_back(areas[i][3] * M_PI / 180.);
 	}
 
-	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
+
+	// TODO: if ["delete"] delete previous mission zones.
+
+//	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
+	std::vector<MissionZone> misZones = node["missionZones"].as<std::vector<MissionZone> >(misZones);
+	_missionZones.insert(
+					_missionZones.end(),
+					misZones.begin(),
+					misZones.end());
 
 	// kL_begin:
 	MissionArea area = *_missionZones.at(MZ_CITY).areas.begin();
@@ -121,8 +129,8 @@ void RuleRegion::load(const YAML::Node& node)
 }
 
 /**
- * Gets the language string that names this region.
- * @note Each region type has a unique name.
+ * Gets the language string that names this Region.
+ * @note Each Region type has a unique name.
  * @return, the region type
  */
 const std::string& RuleRegion::getType() const
@@ -131,7 +139,7 @@ const std::string& RuleRegion::getType() const
 }
 
 /**
- * Gets the cost of building a base inside this region.
+ * Gets the cost of building a base inside this Region.
  * @return, the construction cost
  */
 int RuleRegion::getBaseCost() const
@@ -140,7 +148,7 @@ int RuleRegion::getBaseCost() const
 }
 
 /**
- * Checks if a point is inside this region.
+ * Checks if a point is inside this Region.
  * @param lon - longitude in radians
  * @param lat - latitude in radians
  * @return, true if point is inside this region
@@ -181,7 +189,7 @@ bool RuleRegion::insideRegion(
 }
 
 /**
- * Gets the list of cities contained in this region.
+ * Gets the list of cities contained in this Region.
  * @note Build & cache a vector of all MissionAreas that are Cities.
  * @return, pointer to a vector of pointers to Cities
  */
