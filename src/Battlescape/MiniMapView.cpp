@@ -98,9 +98,6 @@ void MiniMapView::draw()
 {
 	InteractiveSurface::draw();
 
-	if (_set == NULL)
-		return;
-
 	const int
 		width = getWidth(),
 		height = getHeight(),
@@ -114,144 +111,167 @@ void MiniMapView::draw()
 		static_cast<Sint16>(height),
 		0);
 
-	this->lock();
-	for (int
-			lvl = 0;
-			lvl <= camera_Z;
-			++lvl)
+	if (_set != NULL)
 	{
-		int py = startY;
+		Position pos;
+		Tile* tile;
+		Surface* srf;
+		MapData* data;
+		const BattleUnit* unit;
 
+		this->lock();
 		for (int
-				y = Surface::getY();
-				y < height + Surface::getY();
-				y += CELL_HEIGHT)
+				lvl = 0;
+				lvl <= camera_Z;
+				++lvl)
 		{
-			int px = startX;
+			int py = startY;
 
 			for (int
-					x = Surface::getX();
-					x < width + Surface::getX();
-					x += CELL_WIDTH)
+					y = Surface::getY();
+					y < height + Surface::getY();
+					y += CELL_HEIGHT)
 			{
-				const Position pos (px, py, lvl); // init.
-				Tile* const tile = _battleGame->getTile(pos);
+				int px = startX;
 
-				if (tile == NULL)
+				for (int
+						x = Surface::getX();
+						x < width + Surface::getX();
+						x += CELL_WIDTH)
 				{
-					++px;
-					continue;
-				}
+					pos = Position(px, py, lvl);
+					tile = _battleGame->getTile(pos);
 
-
-				int
-					baseColor = 0,
-					tileShade;
-
-				if (px == 0
-					|| px == _battleGame->getMapSizeX() - 1
-					|| py == 0
-					|| py == _battleGame->getMapSizeY() - 1)
-				{
-					baseColor = 1; // greyscale
-					tileShade = 5;
-				}
-				else if (tile->isDiscovered(2) == true)
-					tileShade = tile->getShade();
-				else
-					tileShade = 16; // paint it ... black !
-
-				Surface* srf;
-				if (baseColor == 1									// is along the edge
-					&& lvl == 0										// is ground level
-					&& tile->getMapData(MapData::O_OBJECT) == NULL)	// but has no content-object
-				{
-					srf = _set->getFrame(377);
-					srf->blitNShade(
-								this,
-								x,y,
-								tileShade,
-								false,
-								baseColor);
-				}
-				else // draw tile parts
-				{
-					const MapData* data;
-					for (int
-							i = 0;
-							i != 4;
-							++i)
+					if (tile == NULL)
 					{
-						data = tile->getMapData(i);
-						if (data != NULL
-							&& data->getMiniMapIndex() != 0)
+						++px;
+						continue;
+					}
+
+
+					int
+						colorGroup,
+						colorOffset;
+
+					if (   px == 0
+						|| px == _battleGame->getMapSizeX() - 1
+						|| py == 0
+						|| py == _battleGame->getMapSizeY() - 1)
+					{
+						colorGroup = 1; // greyscale
+						colorOffset = 5;
+					}
+					else if (tile->isDiscovered(2) == true)
+					{
+						colorGroup = 0;
+						colorOffset = tile->getShade();
+					}
+					else
+					{
+						colorGroup = 0;
+						colorOffset = 15; // paint it ... black !
+					}
+
+					if (colorGroup == 1									// is along the edge
+						&& lvl == 0										// is ground level
+						&& tile->getMapData(MapData::O_OBJECT) == NULL)	// but has no content-object
+					{
+						srf = _set->getFrame(377);
+						srf->blitNShade(
+									this,
+									x,y,
+									colorOffset,
+									false,
+									colorGroup);
+					}
+					else // draw tile parts
+					{
+						for (int
+								i = 0;
+								i != 4;
+								++i)
 						{
-							srf = _set->getFrame(data->getMiniMapIndex() + 35);
-							if (srf != NULL)
-								srf->blitNShade(
-											this,
-											x,y,
-											tileShade,
-											false,
-											baseColor);
-							else Log(LOG_INFO) << "ERROR MiniMapView::draw() no data for Tile[" << i << "] pos " << tile->getPosition() << " frame = " << data->getMiniMapIndex() + 35;
+							data = tile->getMapData(i);
+							if (data != NULL
+								&& data->getMiniMapIndex() != 0)
+							{
+								srf = _set->getFrame(data->getMiniMapIndex() + 35);
+								if (srf != NULL)
+									srf->blitNShade(
+												this,
+												x,y,
+												colorOffset,
+												false,
+												colorGroup);
+								else Log(LOG_INFO) << "ERROR MiniMapView::draw() no data for Tile[" << i << "] pos " << tile->getPosition() << " frame = " << data->getMiniMapIndex() + 35;
+							}
 						}
 					}
-				}
 
-				const BattleUnit* const unit = tile->getUnit();
-				if (unit != NULL
-					&& unit->getUnitVisible() == true) // visible, alive units
-				{
-					const int
-						unitSize = unit->getArmor()->getSize(),
-						frame = unit->getMiniMapSpriteIndex()
-							  + tile->getPosition().x - unit->getPosition().x
-							  + (tile->getPosition().y - unit->getPosition().y) * unitSize
-							  + _frame * unitSize * unitSize;
-
-					srf = _set->getFrame(frame);
-
-					int baseColor = 0;
-
-					if (unit == _battleGame->getSelectedUnit())				// selected unit
-						baseColor = 4; // pale green
-					else if (unit->getFaction() == FACTION_PLAYER			// Mc'd aLien
-						&& unit->getOriginalFaction() == FACTION_HOSTILE)
+					unit = tile->getUnit();
+					if (unit != NULL
+						&& unit->getUnitVisible() == true) // alive visible units
 					{
-						baseColor = 11; // brown
+						const int
+							unitSize = unit->getArmor()->getSize(),
+							frame = unit->getMiniMapSpriteIndex()
+								  + tile->getPosition().x - unit->getPosition().x
+								  + (tile->getPosition().y - unit->getPosition().y) * unitSize
+								  + _frame * unitSize * unitSize;
+
+						srf = _set->getFrame(frame);
+
+						if (unit == _battleGame->getSelectedUnit()) // selected unit
+						{
+							colorGroup = 4; // pale green
+							colorOffset = 0;
+						}
+						else if (unit->getFaction() == FACTION_PLAYER // Mc'd aLien
+							&& unit->getOriginalFaction() == FACTION_HOSTILE)
+						{
+							colorGroup = 11; // brown
+							colorOffset = 1;
+						}
+						else if (unit->getFaction() == FACTION_HOSTILE // Mc'd xCom
+							&& unit->getOriginalFaction() == FACTION_PLAYER)
+						{
+							colorGroup = 8; // steel blue
+							colorOffset = 0;
+						}
+						else // alien.
+						{
+							colorGroup = 0;
+							colorOffset = 0;
+						}
+
+						srf->blitNShade(
+									this,
+									x,y,
+									colorOffset,
+									false,
+									colorGroup);
 					}
-					else if (unit->getFaction() == FACTION_HOSTILE			// Mc'd xCom
-						&& unit->getOriginalFaction() == FACTION_PLAYER)
+
+					if (tile->isDiscovered(2) == true
+						&& tile->getInventory()->empty() == false) // at least one item on this tile
 					{
-						baseColor = 8; // steel blue
+						const int frame = 9 + _frame;
+
+						srf = _set->getFrame(frame);
+						srf->blitNShade( // draw white cross
+									this,
+									x,y,0);
 					}
 
-					srf->blitNShade(
-								this,
-								x,y,0,
-								false,
-								baseColor);
+					++px;
 				}
 
-				if (tile->isDiscovered(2) == true
-					&& tile->getInventory()->empty() == false) // at least one item on this tile
-				{
-					const int frame = 9 + _frame;
-
-					srf = _set->getFrame(frame);
-					srf->blitNShade(
-								this,
-								x,y,0);
-				}
-
-				++px;
+				++py;
 			}
-
-			++py;
 		}
+		this->unlock();
 	}
-	this->unlock();
+	else Log(LOG_INFO) << "ERROR: MiniMapView SCANG.DAT not available";
 
 
 	// kL_note: looks like the crosshairs for the MiniMap
@@ -318,7 +338,7 @@ int MiniMapView::down()
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
  */
-void MiniMapView::mousePress(Action* action, State* state)
+void MiniMapView::mousePress(Action* action, State* state) // private.
 {
 	InteractiveSurface::mousePress(action, state);
 
@@ -358,7 +378,7 @@ void MiniMapView::mousePress(Action* action, State* state)
  * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
-void MiniMapView::mouseClick(Action* action, State* state)
+void MiniMapView::mouseClick(Action* action, State* state) // private.
 {
 	InteractiveSurface::mouseClick(action, state);
 
@@ -440,7 +460,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
  * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
-void MiniMapView::mouseOver(Action* action, State* state)
+void MiniMapView::mouseOver(Action* action, State* state) // private.
 {
 	InteractiveSurface::mouseOver(action, state);
 
@@ -621,7 +641,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
  * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
-void MiniMapView::mouseIn(Action* action, State* state)
+void MiniMapView::mouseIn(Action* action, State* state) // private.
 {
 	InteractiveSurface::mouseIn(action, state);
 
@@ -652,7 +672,7 @@ void MiniMapView::mouseIn(Action* action, State* state)
 } */
 
 /**
- * Updates the minimap animation.
+ * Animates the minimap.
  */
 void MiniMapView::animate()
 {

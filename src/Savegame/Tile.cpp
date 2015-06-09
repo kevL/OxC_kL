@@ -627,8 +627,10 @@ void Tile::addLight(
 }
 
 /**
- * Gets the tile's shade amount 0-15. It returns the brightest of all light layers.
- * Shade level is the inverse of light level. So a maximum amount of light (15) returns shade level 0.
+ * Gets the tile's shade amount 0-15.
+ * @note It returns the brightest of all light layers.
+ * @note Shade is the inverse of light level so a maximum amount of light (15)
+ * returns shade level 0.
  * @return, shade
  */
 int Tile::getShade() const
@@ -651,10 +653,10 @@ int Tile::getShade() const
 
 /**
  * Destroy a part on this tile.
- * First remove the old object then replace it with the destroyed one
- * because the object type of the old and new are not necessarily the same.
- * If the destroyed part is an explosive
- * set the tile's explosive value which will trigger a chained explosion.
+ * @note First remove the old object then replace it with the destroyed one
+ * because the object type of the old and new are not necessarily the same. If
+ * the destroyed part is an explosive set the tile's explosive value which will
+ * trigger a chained explosion.
  * @param part - this Tile's part for destruction
  * @return, true if an 'objective' was destroyed
  */
@@ -731,10 +733,11 @@ bool Tile::damage(
 }
 
 /**
- * Sets a "virtual" explosive on this tile. We mark a tile this way to
- * detonate it later, because the same tile can be visited multiple times
- * by "explosion rays". The explosive power that gets set on a tile is
- * that of the most powerful ray that passes through it -- see TileEngine::explode().
+ * Sets a "virtual" explosive on this tile.
+ * @note Mark a tile this way to detonate it later because the same tile can be
+ * visited multiple times by "explosion rays". The explosive power that gets set
+ * on a tile is that of the most powerful ray that passes through it -- see
+ * TileEngine::explode().
  * @param power		- how big the BOOM will be / how much tile-destruction
  * @param explType	- the type of this Tile's explosion (set in MCD; not the same as item damage types)
  * @param force		- forces value even if lower (default false)
@@ -754,8 +757,8 @@ void Tile::setExplosive(
 
 /**
  * Gets if & how powerfully this tile will explode.
- * Don't confuse this with a tile's inherent explosive power;
- * this value is set by explosions external to the tile itself.
+ * @note Don't confuse this with a tile's inherent explosive power. This value
+ * is set by explosions external to the tile itself.
  * @return, how big the BOOM will be / how much tile-destruction
  */
 int Tile::getExplosive() const

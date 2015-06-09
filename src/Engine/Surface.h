@@ -302,9 +302,9 @@ protected:
 				Surface* surface,
 				int x,
 				int y,
-				int offset,
+				int colorOffset,
 				bool half = false,
-				int baseColor = 0,
+				int colorGroup = 0,
 				bool halfLeft = false); // <-kL_add
 
 		/// Invalidate the surface: force it to be redrawn

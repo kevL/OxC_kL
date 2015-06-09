@@ -99,7 +99,7 @@ private:
 		/// Changes the displayed minimap level.
 		int down();
 
-		/// Updates the minimap animation.
+		/// Animates the minimap.
 		void animate();
 };
 

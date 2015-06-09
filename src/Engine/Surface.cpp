@@ -1003,22 +1003,22 @@ static inline void func(
  * in a fast way.
  * @note There is no surface locking here - you have to make sure to lock the
  * surface at the start of blitting and unlock it when done.
- * @param surface	- Surface to blit to
- * @param x			- X position of Surface blitted to
- * @param y			- Y position of Surface blitted to
- * @param offset	- color offset
- * @param half		- some tiles blit only the right half (default false)
- * @param baseColor	- Attention: the actual color + 1, because 0 is no new base color (default 0)
- * @param halfLeft	- kL_add: blits only the left half NOTE This conflicts w/ 'half' (default false)
- *					  but i am far too lazy to refactor a gajillion blitNShade calls!
+ * @param surface		- Surface to blit to
+ * @param x				- X position of Surface blitted to
+ * @param y				- Y position of Surface blitted to
+ * @param colorOffset	- color offset (generally 0-15)
+ * @param half			- some tiles blit only the right half (default false)
+ * @param colorGroup	- Attention: the actual colorblock + 1 because 0 is no new base color (default 0)
+ * @param halfLeft		- kL_add: blits only the left half NOTE This conflicts w/ 'half' (default false)
+ *						  but i am far too lazy to refactor a gajillion blitNShade calls!
  */
 void Surface::blitNShade(
 		Surface* surface,
 		int x,
 		int y,
-		int offset,
+		int colorOffset,
 		bool half,
-		int baseColor,
+		int colorGroup,
 		bool halfLeft)
 {
 	ShaderMove<Uint8> src (this, x, y); // init.
@@ -1036,21 +1036,21 @@ void Surface::blitNShade(
 		src.setDomain(graph);
 	}
 
-	if (baseColor != 0)
+	if (colorGroup != 0)
 	{
-		--baseColor;
-		baseColor <<= 4;
+		--colorGroup;
+		colorGroup <<= 4;
 		ShaderDraw<ColorReplace>(
 							ShaderSurface(surface),
 							src,
-							ShaderScalar(offset),
-							ShaderScalar(baseColor));
+							ShaderScalar(colorOffset),
+							ShaderScalar(colorGroup));
 	}
 	else
 		ShaderDraw<StandardShade>(
 							ShaderSurface(surface),
 							src,
-							ShaderScalar(offset));
+							ShaderScalar(colorOffset));
 }
 
 /**
