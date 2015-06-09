@@ -471,9 +471,8 @@ void UfoDetectedState::init()
  */
 void UfoDetectedState::btnInterceptClick(Action*)
 {
-	_geo->resetTimer();
 	_geo->assessUfoPopups();
-
+	_geo->resetTimer();
 	_game->popState();
 
 	_game->pushState(new InterceptState(
@@ -511,9 +510,8 @@ void UfoDetectedState::btnCentreClick(Action*)
  */
 void UfoDetectedState::btn5SecClick(Action*)
 {
-	_geo->resetTimer();
-
 	_geo->assessUfoPopups();
+	_geo->resetTimer();
 	_game->popState();
 }
 

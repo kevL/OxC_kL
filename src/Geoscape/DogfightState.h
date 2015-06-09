@@ -157,10 +157,10 @@ private:
 	public:
 		/// Creates the Dogfight state.
 		DogfightState(
-					Globe* globe,
-					Craft* craft,
-					Ufo* ufo,
-					GeoscapeState* geo);
+					Globe* const globe,
+					Craft* const craft,
+					Ufo* const ufo,
+					GeoscapeState* const geo);
 		/// Cleans up the Dogfight state.
 		~DogfightState();
 

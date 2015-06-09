@@ -114,10 +114,10 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param geo	- pointer to GeoscapeState
  */
 DogfightState::DogfightState(
-		Globe* globe,
-		Craft* craft,
-		Ufo* ufo,
-		GeoscapeState* geo)
+		Globe* const globe,
+		Craft* const craft,
+		Ufo* const ufo,
+		GeoscapeState* const geo)
 	:
 		_globe(globe),
 		_craft(craft),
@@ -320,6 +320,7 @@ DogfightState::DogfightState(
 	srf = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srf != NULL)
 		srf->blit(_texture);
+	else Log(LOG_INFO) << "ERROR: no texture icon for dogfight";
 
 	_txtDistance->setText(Text::formatNumber(DST_ENGAGE));
 
@@ -757,10 +758,10 @@ void DogfightState::updateDogfight()
 	bool outRun = false;
 
 	const Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	if (ufo != _ufo							// check that Craft's destination hasn't been changed when window minimized
-		|| _craft->getLowFuel() == true		// check if Craft is not low on fuel when window minimized
+	if (ufo != _ufo							// check if Craft's destination has changed
+		|| _craft->getLowFuel() == true		// check if Craft is low on fuel
 		|| (_minimized == true
-			&& _ufo->isCrashed() == true))	// chat if UFO hasn't been shot down when window minimized
+			&& _ufo->isCrashed() == true))	// check if UFO gets shot down while window minimized
 	{
 		if (_endDogfight == false)
 			endDogfight();
@@ -800,7 +801,7 @@ void DogfightState::updateDogfight()
 		outRun = true;
 		setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 	}
-	else // UFO cannot break off, because it's crappier than the crappy craft.
+	else // UFO cannot break off because it's crappier than the crappy craft.
 	{
 		_ufoBreakingOff = false;
 		_craft->setSpeed(_ufo->getSpeed());
@@ -1722,6 +1723,7 @@ void DogfightState::btnMinimizedIconPress(Action* action)
 		Surface* const srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
 		if (srfTexture != NULL)
 			srfTexture->blit(_texture);
+		else Log(LOG_INFO) << "ERROR: no texture icon for dogfight";
 
 		_minimized = false;
 
