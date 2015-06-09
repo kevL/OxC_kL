@@ -486,7 +486,10 @@ bool RuleArmor::hasInventory() const
 }
 
 /**
- * Gets if this RuleArmor is basic (lowest rank, standard issue wear).
+ * Gets if this RuleArmor is basic.
+ * @note True denotes armor of the lowest basic standard issue wear. It does not
+ * require space in Base Stores and is identical to Armors that have
+ * 'storeItem' = "STR_NONE". Its cost is zero.
  * @return, true if basic
  */
 bool RuleArmor::isBasic() const

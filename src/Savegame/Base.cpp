@@ -779,29 +779,30 @@ int Base::getAvailableQuarters() const
 }
 
 /**
- * Returns the amount of stores used up by equipment in this Base
- * including equipment on Craft and about to arrive in Transfers.
+ * Returns the amount of storage space used by equipment in this Base.
+ * @note This includes equipment on Craft and about to arrive in Transfers as
+ * well as any armor that this Base's Soldiers are currently wearing.
  * @return, storage space
  */
 double Base::getUsedStores()
 {
-	double total = _items->getTotalSize(_rules);
+	double total = _items->getTotalSize(_rules); // items
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
 			i != _crafts.end();
 			++i)
 	{
-		total += (*i)->getItems()->getTotalSize(_rules);
+		total += (*i)->getItems()->getTotalSize(_rules); // craft items
 
-		for (std::vector<Vehicle*>::const_iterator
+		for (std::vector<Vehicle*>::const_iterator // craft vehicles (vehicles are items if not on a craft)
 				j = (*i)->getVehicles()->begin();
 				j != (*i)->getVehicles()->end();
 				++j)
 		{
 			total += (*j)->getRules()->getSize();
 
-			if ((*j)->getRules()->getCompatibleAmmo()->empty() == false)
+			if ((*j)->getRules()->getCompatibleAmmo()->empty() == false) // craft vehicle ammo
 			{
 				const RuleItem
 					* const vhclRule = _rules->getItem((*j)->getRules()->getType()),
@@ -812,7 +813,7 @@ double Base::getUsedStores()
 		}
 	}
 
-	for (std::vector<Transfer*>::const_iterator
+	for (std::vector<Transfer*>::const_iterator // transfers
 			i = _transfers.begin();
 			i != _transfers.end();
 			++i)
@@ -822,6 +823,7 @@ double Base::getUsedStores()
 			total += _rules->getItem((*i)->getItems())->getSize()
 				   * static_cast<double>((*i)->getQuantity());
 		}
+	}
 /*		else if ((*i)->getType() == TRANSFER_CRAFT)
 		{
 			Craft* const craft = (*i)->getCraft();
@@ -844,6 +846,14 @@ double Base::getUsedStores()
 				}
 			}
 		} */
+
+	for (std::vector<Soldier*>::const_iterator // soldier armor
+			i = _soldiers.begin();
+			i != _soldiers.end();
+			++i)
+	{
+		if ((*i)->getArmor()->isBasic() == false)
+			total += _rules->getItem((*i)->getArmor()->getStoreItem())->getSize();
 	}
 
 //	total -= getIgnoredStores();
@@ -852,9 +862,10 @@ double Base::getUsedStores()
 
 /**
  * Checks if a base's stores are overfilled.
- * Supplying an offset will add/subtract to the used capacity before performing the check.
- * A positive offset simulates adding items to the stores, whereas a negative offset can be
- * used to check whether sufficient items have been removed to stop stores from overflowing.
+ * @note Supplying an offset will add/subtract to the used capacity before
+ * performing the check. A positive offset simulates adding items to the stores
+ * whereas a negative offset can be used to check whether sufficient items have
+ * been removed to stop stores from overflowing.
  * @param offset - adjusts used capacity (default 0.)
  * @return, true if this Base's stores are over their limit
  */
