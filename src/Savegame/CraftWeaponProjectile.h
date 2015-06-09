@@ -20,23 +20,18 @@
 #ifndef OPENXCOM_WEAPONPROJECTILE_H
 #define OPENXCOM_WEAPONPROJECTILE_H
 
-//#include <string>
-
 
 namespace OpenXcom
 {
 
-class Surface;
-
-
 // Do not change the order of these enums because they are related to blob order.
-enum CraftWeaponProjectileGlobalType
+enum CwpGlobal
 {
 	CWPGT_MISSILE,	// 0
 	CWPGT_BEAM		// 1
 };
 
-enum CraftWeaponProjectileType
+enum CwpType
 {
 	CWPT_STINGRAY_MISSILE,	// 0
 	CWPT_AVALANCHE_MISSILE,	// 1
@@ -82,8 +77,8 @@ private:
 		_speed,
 		_state;
 
-	CraftWeaponProjectileGlobalType _globalType;
-	CraftWeaponProjectileType _type;
+	CwpGlobal _globalType;
+	CwpType _type;
 
 
 	public:
@@ -93,13 +88,13 @@ private:
 		~CraftWeaponProjectile();
 
 		/// Sets projectile type. This determines its speed.
-		void setType(CraftWeaponProjectileType type);
+		void setType(CwpType type);
 		/// Returns projectile type.
-		CraftWeaponProjectileType getType() const;
+		CwpType getType() const;
 		/// Returns projectile global type.
-		CraftWeaponProjectileGlobalType getGlobalType() const;
+		CwpGlobal getGlobalType() const;
 
-		/// Sets projectile direction. This determines it's initial position.
+		/// Sets projectile direction. This determines its initial position.
 		void setDirection(const int& directon);
 		/// Gets projectile direction.
 		int getDirection() const;

@@ -307,7 +307,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     sound: 4
     damage: 9
     range: 19
-    accuracy: 22
+    accuracy: 23
     reloadCautious: 10
     reloadStandard: 8
     reloadAggressive: 6
@@ -316,13 +316,13 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     launcher: STR_CANNON
     clip: STR_CANNON_ROUNDS_X50
     projectileType: 2
-    projectileSpeed: 6
+    projectileSpeed: 8
   - type: STR_STINGRAY
     sprite: 0
     sound: 5
     damage: 66
     range: 32
-    accuracy: 73
+    accuracy: 68
     reloadCautious: 58
     reloadStandard: 42
     reloadAggressive: 26
@@ -331,13 +331,13 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     launcher: STR_STINGRAY_LAUNCHER
     clip: STR_STINGRAY_MISSILES
     projectileType: 0
-    projectileSpeed: 8
+    projectileSpeed: 9
   - type: STR_AVALANCHE
     sprite: 1
     sound: 5
     damage: 96
     range: 57
-    accuracy: 82
+    accuracy: 79
     reloadCautious: 102
     reloadStandard: 80
     reloadAggressive: 54
@@ -346,13 +346,13 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     launcher: STR_AVALANCHE_LAUNCHER
     clip: STR_AVALANCHE_MISSILES
     projectileType: 1
-    projectileSpeed: 9
+    projectileSpeed: 10
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
     damage: 175
     range: 33
-    accuracy: 56
+    accuracy: 57
     reloadCautious: 22
     reloadStandard: 16
     reloadAggressive: 10
@@ -366,7 +366,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     sound: 9
     damage: 65
     range: 46
-    accuracy: 46
+    accuracy: 49
     reloadCautious: 40
     reloadStandard: 28
     reloadAggressive: 16
@@ -380,7 +380,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     sound: 7
     damage: 222
     range: 69
-    accuracy: 103
+    accuracy: 100
     reloadCautious: 72
     reloadStandard: 54
     reloadAggressive: 36
@@ -389,7 +389,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
     projectileType: 3
-    projectileSpeed: 5
+    projectileSpeed: 7
 items:
   - type: STR_CANNON
     size: 1.5
@@ -3016,7 +3016,6 @@ units:
     aggression: 2
     energyRecovery: 80
     livingWeapon: true
-#    meleeWeapon: STR_FIST
   - type: STR_MUTON_SOLDIER
     race: STR_MUTON
     rank: STR_LIVE_SOLDIER
@@ -3265,7 +3264,6 @@ units:
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
     psiImmune: true
-#    meleeWeapon: STR_FIST
 research:
   - name: STR_LASER_WEAPONS
     cost: 50

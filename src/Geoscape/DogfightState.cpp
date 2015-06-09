@@ -891,11 +891,12 @@ void DogfightState::updateDogfight()
 //						ufoSize = 4;
 
 					hitprob = (*i)->getAccuracy();
-					hitprob += _ufoSize * 4;
+					hitprob += _ufoSize * 3;
 					hitprob -= _diff * 5;
 					// Could include UFO speed here ...
 					hitprob += _craft->getKills() * 2;
 
+					//Log(LOG_INFO) << "df: Craft pType = " << (*i)->getType() << " hp = " << hitprob;
 					if (RNG::percent(hitprob) == true)
 					{
 						damage = RNG::generate(
@@ -960,6 +961,7 @@ void DogfightState::updateDogfight()
 
 					hitprob -= _craft->getKills();
 
+					//Log(LOG_INFO) << "df: UFO pType = " << (*i)->getType() << " hp = " << hitprob;
 					if (RNG::percent(hitprob) == true)
 					{
 						damage = RNG::generate(

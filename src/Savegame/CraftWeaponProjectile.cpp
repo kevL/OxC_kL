@@ -19,14 +19,6 @@
 
 #include "CraftWeaponProjectile.h"
 
-//#include <iostream>
-
-//#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
-#include "../Engine/SurfaceSet.h"
-
-#include "../Ruleset/RuleCraftWeapon.h"
-
 
 namespace OpenXcom
 {
@@ -59,10 +51,10 @@ CraftWeaponProjectile::~CraftWeaponProjectile()
 
 /**
  * Sets the type of projectile according to the type of weapon it was shot from.
- * This is used for drawing the projectiles.
- * @param type - CraftWeaponProjectileType (CraftWeaponProjectile.h)
+ * @note This is used for drawing the projectiles.
+ * @param type - CwpType (CraftWeaponProjectile.h)
  */
-void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
+void CraftWeaponProjectile::setType(CwpType type)
 {
 	_type = type;
 
@@ -77,16 +69,16 @@ void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
  * Returns the type of projectile.
  * @return, projectile type as an integer value (CraftWeaponProjectile.h)
  */
-CraftWeaponProjectileType CraftWeaponProjectile::getType() const
+CwpType CraftWeaponProjectile::getType() const
 {
 	return _type;
 }
 
 /**
  * Returns the global type of projectile.
- * @return, 0 - if it's a missile, 1 if beam (CraftWeaponProjectile.h)
+ * @return, 0 if it's a missile, 1 if beam (CraftWeaponProjectile.h)
  */
-CraftWeaponProjectileGlobalType CraftWeaponProjectile::getGlobalType() const
+CwpGlobal CraftWeaponProjectile::getGlobalType() const
 {
 	return _globalType;
 }

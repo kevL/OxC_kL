@@ -59,34 +59,35 @@ void RuleCraftWeapon::load(
 		const YAML::Node& node,
 		int modIndex)
 {
-	_type				= node["type"].as<std::string>(_type);
+	_type = node["type"].as<std::string>(_type);
 
 	if (node["sprite"])
 	{
-		_sprite			= node["sprite"].as<int>(_sprite);
+		_sprite = node["sprite"].as<int>(_sprite);
 		if (_sprite > 5) // this one is an offset within INTICONS.PCK
 			_sprite += modIndex;
 	}
 
 	if (node["sound"])
 	{
-		_sound			= node["sound"].as<int>(_sound);
+		_sound = node["sound"].as<int>(_sound);
 		if (_sound > 13) // 14 entries in GEO.CAT
 			_sound += modIndex;
 	}
 
-	_damage				= node["damage"].as<int>(_damage);
-	_range				= node["range"].as<int>(_range);
-	_accuracy			= node["accuracy"].as<int>(_accuracy);
-	_reloadCautious		= node["reloadCautious"].as<int>(_reloadCautious);
-	_reloadStandard		= node["reloadStandard"].as<int>(_reloadStandard);
-	_reloadAggressive	= node["reloadAggressive"].as<int>(_reloadAggressive);
-	_ammoMax			= node["ammoMax"].as<int>(_ammoMax);
-	_rearmRate			= node["rearmRate"].as<int>(_rearmRate);
-	_projectileType		= (CraftWeaponProjectileType)node["projectileType"].as<int>(_projectileType);
-	_projectileSpeed	= node["projectileSpeed"].as<int>(_projectileSpeed);
-	_launcher			= node["launcher"].as<std::string>(_launcher);
-	_clip				= node["clip"].as<std::string>(_clip);
+	_damage				= node["damage"]			.as<int>(_damage);
+	_range				= node["range"]				.as<int>(_range);
+	_accuracy			= node["accuracy"]			.as<int>(_accuracy);
+	_reloadCautious		= node["reloadCautious"]	.as<int>(_reloadCautious);
+	_reloadStandard		= node["reloadStandard"]	.as<int>(_reloadStandard);
+	_reloadAggressive	= node["reloadAggressive"]	.as<int>(_reloadAggressive);
+	_ammoMax			= node["ammoMax"]			.as<int>(_ammoMax);
+	_rearmRate			= node["rearmRate"]			.as<int>(_rearmRate);
+	_projectileSpeed	= node["projectileSpeed"]	.as<int>(_projectileSpeed);
+	_launcher			= node["launcher"]			.as<std::string>(_launcher);
+	_clip				= node["clip"]				.as<std::string>(_clip);
+
+	_projectileType		= static_cast<CwpType>(node["projectileType"].as<int>(_projectileType));
 }
 
 /**
@@ -209,10 +210,10 @@ std::string RuleCraftWeapon::getClipItem() const
 }
 
 /**
- * Gets the CraftWeaponProjectileType the CraftWeapon will fire.
+ * Gets the CwpType the CraftWeapon will fire.
  * @return, the projectile type
  */
-CraftWeaponProjectileType RuleCraftWeapon::getProjectileType() const
+CwpType RuleCraftWeapon::getProjectileType() const
 {
 	return _projectileType;
 }

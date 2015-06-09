@@ -55,7 +55,7 @@ private:
 		_sound,
 		_sprite;
 
-	CraftWeaponProjectileType _projectileType;
+	CwpType _projectileType;
 
 
 	public:
@@ -101,7 +101,7 @@ private:
 		std::string getClipItem() const;
 
 		/// Gets the craft weapon's projectile's type.
-		CraftWeaponProjectileType getProjectileType() const;
+		CwpType getProjectileType() const;
 		/// Gets the craft weapon's projectile speed.
 		int getProjectileSpeed() const;
 };
