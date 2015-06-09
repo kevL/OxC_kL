@@ -76,14 +76,14 @@ void serializeInt(
 		break;
 		case 2:
 			assert(value < 65536);
-			*(Sint16*)*buffer = value; // VC++ says this is a spotty typecast (INT->SINT16).
+			*(Sint16*)*buffer = static_cast<Sint16>(value);
 		break;
 		case 3:
 			assert(false); // no.
 		break;
 		case 4:
 //			assert(value < 4294967296);
-			*(Uint32*)*buffer = value;
+			*(Uint32*)*buffer = static_cast<Uint32>(value);
 		break;
 
 		default:

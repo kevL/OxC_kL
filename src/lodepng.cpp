@@ -1332,7 +1332,8 @@ static void addLengthDistance(uivector* values, size_t length, size_t distance)
 
 static const unsigned HASH_BIT_MASK = 65535;
 static const unsigned HASH_NUM_VALUES = 65536;
-static const unsigned HASH_NUM_CHARACTERS = 3;
+//kL static const unsigned HASH_NUM_CHARACTERS = 3;
+static unsigned HASH_NUM_CHARACTERS = 3; // kL: See line 1390, getHash() "conditional expression is constant"
 static const unsigned HASH_SHIFT = 2;
 /*
 The HASH_NUM_CHARACTERS value is used to make encoding faster by using longer

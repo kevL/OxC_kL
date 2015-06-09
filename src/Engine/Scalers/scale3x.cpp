@@ -23,7 +23,7 @@
  */
 
 #if HAVE_CONFIG_H
-#include <config.h>
+	#include <config.h>
 #endif
 
 #include "scale3x.h"
@@ -31,16 +31,20 @@
 #include <assert.h>
 
 #if (_MSC_VER >= 1400)
-#define restrict __restrict
+	#define restrict __restrict
 #else
-#define restrict
+	#define restrict
 #endif
 
-#ifdef _WIN32
-#ifndef __GNUC__
-#pragma optimize("a", on)
-#endif
-#endif
+// kL_note: invalid parameter "a" according to VS2013 doc
+// Looks like it's for Visual Studio 6.0
+// I'm compiling on vc++ 2010, so .....
+// see also, 'scale2x.cpp'
+//#ifdef _WIN32
+//	#ifndef __GNUC__
+//		#pragma optimize("a", on)
+//	#endif
+//#endif
 
 
 /***************************************************************************/

@@ -36,11 +36,15 @@
 	#define restrict
 #endif
 
-#ifdef _WIN32
-	#ifndef __GNUC__
-		#pragma optimize("a", on) // kL_note: invalid parameter "a" according to VS2013 doc
-	#endif
-#endif
+// kL_note: invalid parameter "a" according to VS2013 doc
+// Looks like it's for Visual Studio 6.0
+// I'm compiling on vc++ 2010, so .....
+// see also, 'scale3x.cpp'
+//#ifdef _WIN32
+//	#ifndef __GNUC__
+//		#pragma optimize("a", on)
+//	#endif
+//#endif
 
 
 /***************************************************************************/
