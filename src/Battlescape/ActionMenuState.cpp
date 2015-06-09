@@ -102,108 +102,106 @@ ActionMenuState::ActionMenuState(
 				&id);
 	}
 
-	SavedGame* const gameSave = _game->getSavedGame();
-	if (gameSave->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
-		&& gameSave->isResearched(itRule->getRequirements()) == false)
+	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+//		|| _game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE
+	// just because it's been mind-controlled doesn't mean you know how to use it.
 	{
-		return;
-	}
-
-	if (itRule->getBattleType() == BT_GRENADE
-		|| itRule->getBattleType() == BT_PROXIMITYGRENADE)
-	{
-		if (_action->weapon->getFuseTimer() == -1) // canPrime
-			addItem(
-					BA_PRIME,
-					"STR_PRIME_GRENADE",
-					&id);
-		else
-			addItem(
-					BA_DEFUSE,
-					"STR_DEFUSE_GRENADE",
-					&id);
-	}
-
-	if (itRule->getTUMelee() != 0)
-	{
-		if (itRule->getBattleType() == BT_MELEE
-			&& itRule->getDamageType() == DT_STUN)
+		if (itRule->getBattleType() == BT_GRENADE
+			|| itRule->getBattleType() == BT_PROXIMITYGRENADE)
 		{
-			addItem( // stun rod
-					BA_HIT,
-					"STR_STUN",
-					&id);
-		}
-		else if (itRule->getType() == "STR_DOGE")
-			addItem( // doggie bite
-					BA_HIT,
-					"STR_DOGE_JAWS",
-					&id);
-		else
-			addItem( // melee weapon
-					BA_HIT,
-					"STR_HIT_MELEE",
-					&id);
-	}
-	else if (itRule->getBattleType() == BT_MEDIKIT) // special items
-		addItem(
-				BA_USE,
-				"STR_USE_MEDI_KIT",
-				&id);
-	else if (itRule->getBattleType() == BT_SCANNER)
-		addItem(
-				BA_USE,
-				"STR_USE_SCANNER",
-				&id);
-	else if (itRule->getBattleType() == BT_PSIAMP
-		&& _action->actor->getBaseStats()->psiSkill != 0)
-	{
-		addItem(
-				BA_MINDCONTROL,
-				"STR_MIND_CONTROL",
-				&id);
-		addItem(
-				BA_PANIC,
-				"STR_PANIC_UNIT",
-				&id);
-	}
-	else if (itRule->getBattleType() == BT_MINDPROBE)
-		addItem(
-				BA_USE,
-				"STR_USE_MIND_PROBE",
-				&id);
-
-	if (itRule->getBattleType() == BT_FIREARM)
-	{
-		if (_action->weapon->getAmmoItem() != NULL)
-		{
-			if (itRule->getAccuracySnap() != 0)
+			if (_action->weapon->getFuseTimer() == -1) // canPrime
 				addItem(
-						BA_SNAPSHOT,
-						"STR_SNAP_SHOT",
+						BA_PRIME,
+						"STR_PRIME_GRENADE",
 						&id);
-
-			if (itRule->getAccuracyAuto() != 0)
+			else
 				addItem(
-						BA_AUTOSHOT,
-						"STR_AUTO_SHOT",
-						&id);
-
-			if (itRule->getAccuracyAimed() != 0)
-				addItem(
-						BA_AIMEDSHOT,
-						"STR_AIMED_SHOT",
+						BA_DEFUSE,
+						"STR_DEFUSE_GRENADE",
 						&id);
 		}
 
-		if (itRule->isWaypoints() != 0
-			|| (_action->weapon->getAmmoItem() != NULL
-				&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
+		if (itRule->getTUMelee() != 0)
+		{
+			if (itRule->getBattleType() == BT_MELEE
+				&& itRule->getDamageType() == DT_STUN)
+			{
+				addItem( // stun rod
+						BA_HIT,
+						"STR_STUN",
+						&id);
+			}
+			else if (itRule->getType() == "STR_DOGE")
+				addItem( // doggie bite
+						BA_HIT,
+						"STR_DOGE_JAWS",
+						&id);
+			else
+				addItem( // melee weapon
+						BA_HIT,
+						"STR_HIT_MELEE",
+						&id);
+		}
+		else if (itRule->getBattleType() == BT_MEDIKIT) // special items
+			addItem(
+					BA_USE,
+					"STR_USE_MEDI_KIT",
+					&id);
+		else if (itRule->getBattleType() == BT_SCANNER)
+			addItem(
+					BA_USE,
+					"STR_USE_SCANNER",
+					&id);
+		else if (itRule->getBattleType() == BT_PSIAMP
+			&& _action->actor->getBaseStats()->psiSkill != 0)
 		{
 			addItem(
-					BA_LAUNCH,
-					"STR_LAUNCH_MISSILE",
+					BA_MINDCONTROL,
+					"STR_MIND_CONTROL",
 					&id);
+			addItem(
+					BA_PANIC,
+					"STR_PANIC_UNIT",
+					&id);
+		}
+		else if (itRule->getBattleType() == BT_MINDPROBE)
+			addItem(
+					BA_USE,
+					"STR_USE_MIND_PROBE",
+					&id);
+
+		if (itRule->getBattleType() == BT_FIREARM)
+		{
+			if (_action->weapon->getAmmoItem() != NULL)
+			{
+				if (itRule->getAccuracySnap() != 0)
+					addItem(
+							BA_SNAPSHOT,
+							"STR_SNAP_SHOT",
+							&id);
+
+				if (itRule->getAccuracyAuto() != 0)
+					addItem(
+							BA_AUTOSHOT,
+							"STR_AUTO_SHOT",
+							&id);
+
+				if (itRule->getAccuracyAimed() != 0)
+					addItem(
+							BA_AIMEDSHOT,
+							"STR_AIMED_SHOT",
+							&id);
+			}
+
+			if (itRule->isWaypoints() != 0
+				|| (_action->weapon->getAmmoItem() != NULL
+					&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
+			{
+				addItem(
+						BA_LAUNCH,
+						"STR_LAUNCH_MISSILE",
+						&id);
+			}
 		}
 	}
 }
