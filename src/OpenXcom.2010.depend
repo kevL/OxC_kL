@@ -5999,7 +5999,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1433814875 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1433815583 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -7239,7 +7239,7 @@
 1431486790 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1432347393 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1433818263 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1431486799 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7530,7 +7530,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Waypoint.h"
 
-1433731537 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
+1433817640 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
 	"TargetInfoState.h"
 	"GeoscapeState.h"
 	"InterceptState.h"
@@ -7546,7 +7546,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1433740958 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1433818276 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"

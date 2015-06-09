@@ -102,15 +102,15 @@ TargetInfoState::TargetInfoState(
 
 	_edtTarget->setVisible(false);
 	for (std::vector<AlienBase*>::const_iterator
-			aBase = _game->getSavedGame()->getAlienBases()->begin();
-			aBase != _game->getSavedGame()->getAlienBases()->end();
-			++aBase)
+			i = _game->getSavedGame()->getAlienBases()->begin();
+			i != _game->getSavedGame()->getAlienBases()->end();
+			++i)
 	{
-		if (_target == dynamic_cast<Target*>(*aBase))
+		if (_target == dynamic_cast<Target*>(*i))
 		{
-			_aBase = *aBase;
+			_aBase = *i;
 
-			const std::wstring edit = Language::utf8ToWstr((*aBase)->getLabel());
+			const std::wstring edit = Language::utf8ToWstr((*i)->getLabel());
 			_edtTarget->setText(edit);
 			_edtTarget->onChange((ActionHandler)& TargetInfoState::edtTargetChange);
 			_edtTarget->setVisible();

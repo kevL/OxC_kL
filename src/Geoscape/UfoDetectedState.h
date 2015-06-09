@@ -49,7 +49,7 @@ private:
 		_delayPop,
 		_hyper;
 
-	GeoscapeState* _state;
+	GeoscapeState* _geo;
 	Surface* _srfTarget;
 	Text
 		* _txtBases,
@@ -62,7 +62,7 @@ private:
 	TextButton
 		* _btn5Sec,
 		* _btnCancel,
-		* _btnCentre,
+		* _btnCenter,
 		* _btnIntercept;
 	TextList
 		* _lstInfo,

@@ -70,11 +70,11 @@ UfoDetectedState::UfoDetectedState(
 		std::vector<Base*>* hyperBases)
 	:
 		_ufo(ufo),
-		_state(state),
+		_geo(state),
 		_hyper(hyper),
 		_delayPop(true)
 {
-	_state->getGlobe()->rotateStop();
+	_geo->getGlobe()->rotateStop();
 
 	if (_ufo->getId() == 0) // generate UFO-ID
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
@@ -103,7 +103,7 @@ UfoDetectedState::UfoDetectedState(
 
 	_lstInfo		= new TextList(192, 33, 32, 85);
 
-	_btnCentre		= new TextButton(192, 16, 32, 124);
+	_btnCenter		= new TextButton(192, 16, 32, 124);
 
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btn5Sec		= new TextButton(88, 16, 136, 144);
@@ -120,7 +120,7 @@ UfoDetectedState::UfoDetectedState(
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
-		_btnCentre->setY(135);
+		_btnCenter->setY(135);
 		_btnIntercept->setY(155);
 		_btn5Sec->setY(155);
 		_btnCancel->setY(175);
@@ -132,8 +132,8 @@ UfoDetectedState::UfoDetectedState(
 
 		if (contact == false)
 		{
-			_btnCentre->setX(136);
-			_btnCentre->setWidth(88);
+			_btnCenter->setX(136);
+			_btnCenter->setWidth(88);
 		}
 	}
 
@@ -145,7 +145,7 @@ UfoDetectedState::UfoDetectedState(
 	add(_txtUfo,		"text",		"UFOInfo");
 	add(_txtDetected,	"text",		"UFOInfo");
 	add(_lstInfo,		"text",		"UFOInfo");
-	add(_btnCentre,		"button",	"UFOInfo");
+	add(_btnCenter,		"button",	"UFOInfo");
 	add(_btnIntercept,	"button",	"UFOInfo");
 	add(_btn5Sec,		"button",	"UFOInfo");
 	add(_btnCancel,		"button",	"UFOInfo");
@@ -256,9 +256,9 @@ UfoDetectedState::UfoDetectedState(
 	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
 	_btnIntercept->setVisible(contact);
 
-	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
-	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
-	_btnCentre->onKeyboardPress(
+	_btnCenter->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
+	_btnCenter->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
+	_btnCenter->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCentreClick,
 					Options::keyOk);
 
@@ -279,7 +279,7 @@ UfoDetectedState::UfoDetectedState(
 		int
 			texture,
 			shade;
-		_state->getGlobe()->getPolygonTextureAndShade( // look up polygon's texture & shade
+		_geo->getGlobe()->getPolygonTextureAndShade( // look up polygon's texture & shade
 												_ufo->getLongitude(),
 												_ufo->getLatitude(),
 												&texture,
@@ -462,7 +462,7 @@ UfoDetectedState::~UfoDetectedState()
 void UfoDetectedState::init()
 {
 	State::init();
-	_btn5Sec->setVisible(_state->is5Sec() == false);
+	_btn5Sec->setVisible(_geo->is5Sec() == false);
 }
 
 /**
@@ -471,14 +471,14 @@ void UfoDetectedState::init()
  */
 void UfoDetectedState::btnInterceptClick(Action*)
 {
-	_state->resetTimer();
-	_state->assessUfoPopups();
+	_geo->resetTimer();
+	_geo->assessUfoPopups();
 
 	_game->popState();
 
 	_game->pushState(new InterceptState(
 									NULL,
-									_state));
+									_geo));
 }
 
 /**
@@ -487,7 +487,7 @@ void UfoDetectedState::btnInterceptClick(Action*)
  */
 void UfoDetectedState::btnCentreClick(Action*)
 {
-	_state->getGlobe()->center(
+	_geo->getGlobe()->center(
 							_ufo->getLongitude(),
 							_ufo->getLatitude());
 
@@ -499,9 +499,9 @@ void UfoDetectedState::btnCentreClick(Action*)
 		return;
 	}
 
-	_state->assessUfoPopups();
-	_state->setPause();
-	_state->resetTimer();
+	_geo->assessUfoPopups();
+	_geo->setPause();
+	_geo->resetTimer();
 	_game->popState();
 }
 
@@ -511,9 +511,9 @@ void UfoDetectedState::btnCentreClick(Action*)
  */
 void UfoDetectedState::btn5SecClick(Action*)
 {
-	_state->resetTimer();
+	_geo->resetTimer();
 
-	_state->assessUfoPopups();
+	_geo->assessUfoPopups();
 	_game->popState();
 }
 
@@ -523,7 +523,7 @@ void UfoDetectedState::btn5SecClick(Action*)
  */
 void UfoDetectedState::btnCancelClick(Action*)
 {
-	_state->assessUfoPopups();
+	_geo->assessUfoPopups();
 	_game->popState();
 }
 
@@ -536,8 +536,11 @@ void UfoDetectedState::transposeWindow() // private.
 
 	_txtDetected->setVisible(false);
 	_lstInfo->setVisible(false);
-	_btnCentre->setText(tr("STR_PAUSE").c_str());
 	_btnCancel->setText(tr("STR_TERROR_CONTINUES").c_str());
+	if (_geo->getPause() == false)
+		_btnCenter->setText(tr("STR_PAUSE").c_str());
+	else
+		_btnCenter->setVisible(false);
 
 	if (_hyper == true)
 	{
