@@ -1057,8 +1057,7 @@ void UnitWalkBState::postPathProcedures() // private.
 
 					for (std::vector<BattleItem*>::const_iterator
 							i = _unit->getInventory()->begin();
-							i != _unit->getInventory()->end()
-								&& found == false;
+							i != _unit->getInventory()->end();
 							++i)
 					{
 						if ((*i)->getRules()->getType() == meleeWeapon)
@@ -1068,6 +1067,8 @@ void UnitWalkBState::postPathProcedures() // private.
 							// but for now just grab the meleeItem wherever it was equipped ...
 							found = true;
 							action.weapon = *i;
+
+							break;
 						}
 					}
 

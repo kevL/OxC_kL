@@ -32,7 +32,7 @@ class ActionMenuItem;
 
 
 /**
- * Window that allows the player to select a battlescape action.
+ * A menu popup that allows player to select a battlescape action.
  */
 class ActionMenuState
 	:
@@ -64,9 +64,11 @@ private:
 
 		/// Handler for right-clicking anything.
 		void handle(Action* action);
-		/// Handler for clicking a action menu item.
+
+		/// Handler for clicking an action menu item.
 		void btnActionMenuClick(Action* action);
-		/// Updates the resolution settings, just resized the window.
+
+		/// Updates the resolution settings - just resized the window.
 		void resize(
 				int& dX,
 				int& dY);

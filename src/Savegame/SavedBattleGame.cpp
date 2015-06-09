@@ -1544,8 +1544,8 @@ std::vector<Position>& SavedBattleGame::getStorageSpace()
 }
 
 /**
- * Move all the leftover items in base defense missions
- * to random locations in the storage facilities.
+ * Move all the leftover items in base defense missions to random locations in
+ * the storage facilities.
  * @param tile - pointer to a tile where all the goodies are initially stored
  */
 void SavedBattleGame::randomizeItemLocations(Tile* const tile)
@@ -1576,9 +1576,9 @@ void SavedBattleGame::randomizeItemLocations(Tile* const tile)
 
 /**
  * Removes an item from the game - when ammo item is depleted for example.
- * Due to strange design the item has to be removed
- * from the tile it is on too if it is on a tile.
- * @param item - item to remove
+ * @note Due to strange design the item has to be removed from the tile it is on
+ * too if it is on a tile.
+ * @param item - pointer to an item to remove
  */
 void SavedBattleGame::removeItem(BattleItem* const item)
 {
@@ -1599,17 +1599,17 @@ void SavedBattleGame::removeItem(BattleItem* const item)
 		}
 	}
 
-	BattleUnit* const bu = item->getOwner();
-	if (bu != NULL)
+	BattleUnit* const unit = item->getOwner();
+	if (unit != NULL)
 	{
 		for (std::vector<BattleItem*>::const_iterator
-				i = bu->getInventory()->begin();
-				i != bu->getInventory()->end();
+				i = unit->getInventory()->begin();
+				i != unit->getInventory()->end();
 				++i)
 		{
 			if (*i == item)
 			{
-				bu->getInventory()->erase(i);
+				unit->getInventory()->erase(i);
 				break;
 			}
 		}

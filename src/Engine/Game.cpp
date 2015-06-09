@@ -108,7 +108,11 @@ Game::Game(const std::string& title)
 	SDL_WM_GrabInput(Options::captureMouse);
 
 	// Set the window icon
-	CrossPlatform::setWindowIcon(103, "openxcom.png");
+#ifdef _WIN32
+	CrossPlatform::setWindowIcon(103);
+#else
+	CrossPlatform::setWindowIcon("openxcom.png");
+#endif
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), NULL);

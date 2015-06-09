@@ -267,9 +267,9 @@ const int RuleUnit::getEnergyRecovery() const
 }
 
 /**
- * Checks if this unit is a living weapon. (ie: chryssalid).
- * A living weapon ignores any loadout that may be available to
- * its rank and uses the one associated with its race.
+ * Checks if this unit is a living weapon - eg: chryssalid.
+ * @note A living weapon ignores any loadout that may be available to its rank
+ * and uses the one associated with its race.
  * @return, true if this unit is a living weapon
  */
 const bool RuleUnit::isLivingWeapon() const
@@ -281,17 +281,16 @@ const bool RuleUnit::isLivingWeapon() const
  * Gets this unit's built in melee weapon if any.
  * @return, the name of the weapon
  */
-const std::string RuleUnit::getMeleeWeapon() const
+const std::string& RuleUnit::getMeleeWeapon() const
 {
 	return _meleeWeapon;
 }
 
 /**
  * Gets what weapons this unit has built in.
- * This is a vector of strings representing any weapons that may be inherent
- * to this creature.
- * Note: unlike "livingWeapon" this is used in ADDITION to any loadout or
- * living weapon item that may be defined.
+ * @note This is a vector of strings representing any weapons that are inherent
+ * to this creature. Unlike '_livingWeapon' this is used in ADDITION to any
+ * loadout or living weapon item that may be defined.
  * @return, list of weapons that are integral to this unit.
  */
 const std::vector<std::string>& RuleUnit::getBuiltInWeapons() const
@@ -310,17 +309,15 @@ const bool RuleUnit::isFemale() const
 
 /**
  * Gets if this Unit is a mechanical apparatus.
- * NOTE about _mechanical:
- * This var subsumes several more detailed ideas:
+ * @note This var subsumes several more detailed ideas:
  * - isTrackedVehicle
  * - isPsiAttackable / isSentient <- DONE
  * - canRevive (from status_Unconscious)
  * - canChangeMorale (see isFearable())
  * - isInfectable (can have a spawnUnit string set on it)
  * - isMetal (cannot catch fire)
- * - canOpenDoors
- * etc.
- * @return, true if this is a non-organic, purely mechanical unit on the battlefield
+ * - canOpenDoors etc.
+ * @return, true if this is a non-organic purely mechanical unit
  */
 const bool RuleUnit::isMechanical() const
 {

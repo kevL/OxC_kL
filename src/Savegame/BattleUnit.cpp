@@ -4258,24 +4258,24 @@ bool BattleUnit::hasInventory() const
  * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
  * @param floorAbove - true if there is a floor
  */
-void BattleUnit::setFloorAbove(const bool floorAbove)
+/* void BattleUnit::setFloorAbove(const bool floorAbove)
 {
 	_floorAbove = floorAbove;
-}
+} */
 
 /**
  * Checks if the floorAbove flag has been set.
  * @return, true if this unit is under cover
  */
-bool BattleUnit::getFloorAbove() const
+/* bool BattleUnit::getFloorAbove() const
 {
 	return _floorAbove;
-}
+} */
 
 /**
  * Gets this unit's movement type.
- * Use this instead of checking the rules of the armor.
- * @return, MovementType enum
+ * @note Use this instead of checking the rules of the armor.
+ * @return, MovementType
  */
 MovementType BattleUnit::getMoveTypeUnit() const
 {
@@ -4283,8 +4283,7 @@ MovementType BattleUnit::getMoveTypeUnit() const
 }
 
 /**
- * Sets this unit to "time-out" status
- * meaning they will NOT take part in the current battle.
+ * Sets this unit to time-out meaning they will NOT take part in the current battle.
  */
 /* void BattleUnit::goToTimeOut()
 {
@@ -4298,11 +4297,14 @@ MovementType BattleUnit::getMoveTypeUnit() const
  * @param rule -
  * @return, pointer to BattleItem
  */
+// ps. this doesn't have to be and therefore shouldn't be static.
+// pps. inline functions don't have to be keyed as such if LTCG is enabled
+// and if it isn't they should be defined in the header.
 /* static inline BattleItem *createItem(SavedBattleGame *save, BattleUnit *unit, RuleItem *rule)
 {
 	BattleItem *item = new BattleItem(rule, save->getNextItemId());
 	item->setOwner(unit);
-	save->removeItem(item); //item outside inventory, deleted when game is shutdown.
+	save->removeItem(item); //item outside inventory, deleted when SavedBattleGame dTors.
 	return item;
 } */
 
@@ -4315,27 +4317,20 @@ MovementType BattleUnit::getMoveTypeUnit() const
 {
 	RuleItem *item = 0;
 	int i = 0;
-
 	if (getUnitRules())
 	{
 		item = rule->getItem(getUnitRules()->getMeleeWeapon());
 		if (item)
-		{
 			_specWeapon[i++] = createItem(save, this, item);
-		}
 	}
 	item = rule->getItem(getArmor()->getSpecialWeapon());
 	if (item)
-	{
 		_specWeapon[i++] = createItem(save, this, item);
-	}
 	if (getBaseStats()->psiSkill > 0 && getFaction() == FACTION_HOSTILE)
 	{
 		item = rule->getItem("ALIEN_PSI_WEAPON");
 		if (item)
-		{
 			_specWeapon[i++] = createItem(save, this, item);
-		}
 	}
 } */
 
@@ -4347,12 +4342,9 @@ MovementType BattleUnit::getMoveTypeUnit() const
 /* BattleItem *BattleUnit::getSpecialWeapon(BattleType type) const
 {
 	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
-	{
 		if (_specWeapon[i] && _specWeapon[i]->getRules()->getBattleType() == type)
-		{
 			return _specWeapon[i];
-		}
-	}
+
 	return 0;
 } */
 

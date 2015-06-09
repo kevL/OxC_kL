@@ -834,8 +834,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 					bool found = false;
 					for (std::vector<BattleItem*>::const_iterator
 							i = unit->getInventory()->begin();
-							i != unit->getInventory()->end()
-								&& found == false;
+							i != unit->getInventory()->end();
 							++i)
 					{
 						if ((*i)->getRules()->getType() == meleeWeapon)
@@ -845,6 +844,8 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 							// but for now just grab the meleeItem wherever it was equipped ...
 							found = true;
 							action.weapon = *i;
+
+							break;
 						}
 					}
 
@@ -2386,6 +2387,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 
 /**
  * Gets a pointer to access BattleAction struct members directly.
+ * @note This appears to be for Player's units only.
  * @return, pointer to BattleAction
  */
 BattleAction* BattlescapeGame::getCurrentAction()

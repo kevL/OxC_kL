@@ -995,7 +995,7 @@ private:
 		/// This call this after the default copy constructor deletes this unit's sprite-cache.
 		void invalidateCache();
 
-		/// Gets this BattleUnit's rules.
+		/// Gets this BattleUnit's rules if non-Soldier else NULL.
 		RuleUnit* getUnitRules() const
 		{ return _unitRules; }
 
@@ -1071,9 +1071,9 @@ private:
 //		void breathe();
 
 		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
-		void setFloorAbove(const bool floorAbove);
+//		void setFloorAbove(const bool floorAbove);
 		/// Gets the flag for "floor above me".
-		bool getFloorAbove() const;
+//		bool getFloorAbove() const;
 
 		/// Gets this unit's movement type.
 		MovementType getMoveTypeUnit() const;

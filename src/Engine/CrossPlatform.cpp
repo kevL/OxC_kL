@@ -1134,15 +1134,11 @@ std::string getDosPath()
 }
 
 /**
- * Sets the icon for the window.
- * @param winResource	-
- * @param unixPath		-
+ * Sets the window icon for _WIN32 build configuration.
+ * @param winResource -
  */
-void setWindowIcon(
-		int winResource,
-		const std::string& unixPath) // kL_note: vc++ regards this as an "unreferenced formal parameter" ...
+void setWindowIcon(int winResource)
 {
-#ifdef _WIN32
 	const HINSTANCE handle = GetModuleHandle(NULL);
 	const HICON icon = LoadIcon(
 							handle,
@@ -1159,17 +1155,23 @@ void setWindowIcon(
 					GCLP_HICON,
 					(LONG_PTR)icon);
 	}
-#else
+}
+
+/**
+ * Sets the window icon if not _WIN32 build.
+ * @param unixPath -
+ */
+void setWindowIcon(const std::string& unixPath)
+{
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
-	SDL_Surface* icon = IMG_Load(utf8.c_str());
-	if (icon != 0)
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
+	SDL_Surface* const icon = IMG_Load(utf8.c_str());
+	if (icon != NULL)
 	{
 		SDL_WM_SetIcon(icon, NULL);
 		SDL_FreeSurface(icon);
 	}
-#endif
 }
 
 }

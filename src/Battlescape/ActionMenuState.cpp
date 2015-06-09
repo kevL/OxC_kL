@@ -102,6 +102,28 @@ ActionMenuState::ActionMenuState(
 				&id);
 	}
 
+	if (itRule->getTUMelee() != 0)
+	{
+		if (itRule->getBattleType() == BT_MELEE
+			&& itRule->getDamageType() == DT_STUN)
+		{
+			addItem( // stun rod
+					BA_HIT,
+					"STR_STUN",
+					&id);
+		}
+		else if (itRule->getType() == "STR_DOGE")
+			addItem( // doggie bite
+					BA_HIT,
+					"STR_DOGE_JAWS",
+					&id);
+		else
+			addItem( // melee weapon
+					BA_HIT,
+					"STR_HIT_MELEE",
+					&id);
+	}
+
 	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 //		|| _game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE
 	// just because it's been mind-controlled doesn't mean you know how to use it.
@@ -118,28 +140,6 @@ ActionMenuState::ActionMenuState(
 				addItem(
 						BA_DEFUSE,
 						"STR_DEFUSE_GRENADE",
-						&id);
-		}
-
-		if (itRule->getTUMelee() != 0)
-		{
-			if (itRule->getBattleType() == BT_MELEE
-				&& itRule->getDamageType() == DT_STUN)
-			{
-				addItem( // stun rod
-						BA_HIT,
-						"STR_STUN",
-						&id);
-			}
-			else if (itRule->getType() == "STR_DOGE")
-				addItem( // doggie bite
-						BA_HIT,
-						"STR_DOGE_JAWS",
-						&id);
-			else
-				addItem( // melee weapon
-						BA_HIT,
-						"STR_HIT_MELEE",
 						&id);
 		}
 		else if (itRule->getBattleType() == BT_MEDIKIT) // special items
@@ -169,8 +169,7 @@ ActionMenuState::ActionMenuState(
 					BA_USE,
 					"STR_USE_MIND_PROBE",
 					&id);
-
-		if (itRule->getBattleType() == BT_FIREARM)
+		else if (itRule->getBattleType() == BT_FIREARM)
 		{
 			if (_action->weapon->getAmmoItem() != NULL)
 			{

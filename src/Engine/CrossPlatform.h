@@ -112,10 +112,10 @@ namespace CrossPlatform
 	/// Gets the DOS-style executable path.
 	std::string getDosPath();
 
-	/// Sets the window icon.
-	void setWindowIcon(
-			int winResource,
-			const std::string& unixPath);
+	/// Sets the window icon for _WIN32 build configuration.
+	void setWindowIcon(int winResource);
+	/// Sets the window icon if not _WIN32 build.
+	void setWindowIcon(const std::string& unixPath);
 }
 
 }

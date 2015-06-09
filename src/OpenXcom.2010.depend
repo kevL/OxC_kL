@@ -4647,7 +4647,7 @@
 1433391389 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1433335385 f:\git\openxcom\src\savegame\battleunit.h
+1433850897 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5371,7 +5371,7 @@
 1431047771 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1433381287 f:\git\openxcom\src\battlescape\battlescapestate.h
+1433848386 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5392,7 +5392,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1433836398 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1433845803 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"MedikitState.h"
@@ -5409,7 +5409,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1430149550 f:\git\openxcom\src\battlescape\actionmenustate.h
+1433845910 f:\git\openxcom\src\battlescape\actionmenustate.h
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
@@ -5670,7 +5670,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1433381281 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1433852010 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -8609,7 +8609,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1433651993 source:f:\git\openxcom\src\savegame\base.cpp
+1433844084 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -11439,7 +11439,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1431681707 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1433843734 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
@@ -11481,9 +11481,9 @@
 1431494719 f:\git\openxcom\src\ufopaedia\articlestateaward.h
 	"ArticleState.h"
 
-1432587031 f:\git\openxcom\src\ruleset\ruleunit.h
+1433847969 f:\git\openxcom\src\ruleset\ruleunit.h
 
-1432587154 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
+1433847978 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
 	"RuleUnit.h"
 
 1432783493 source:f:\git\openxcom\src\basescape\manufacturecostsstate.cpp

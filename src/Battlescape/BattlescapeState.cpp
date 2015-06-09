@@ -2179,8 +2179,8 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem* leftHandItem = _battleSave->getSelectedUnit()->getItem("STR_LEFT_HAND");
-		handleItemClick(leftHandItem);
+		BattleItem* const leftHandItem = _battleSave->getSelectedUnit()->getItem("STR_LEFT_HAND");
+		handClick(leftHandItem);
 	}
 }
 
@@ -2216,8 +2216,8 @@ void BattlescapeState::btnRightHandLeftClick(Action*)
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem* rightHandItem = _battleSave->getSelectedUnit()->getItem("STR_RIGHT_HAND");
-		handleItemClick(rightHandItem);
+		BattleItem* const rightHandItem = _battleSave->getSelectedUnit()->getItem("STR_RIGHT_HAND");
+		handClick(rightHandItem);
 	}
 }
 
@@ -3110,28 +3110,48 @@ void BattlescapeState::animate()
 }
 
 /**
- * Popups a context sensitive list of actions the user can choose from.
- * Some actions result in a change of gamestate.
- * @param item - pointer to BattleItem the user clicked on (righthand/lefthand)
+ * Pops up a context sensitive list of actions the player can choose from.
+ * @note Some actions result in a change of gamestate.
+ * @param item - pointer to the clicked BattleItem (righthand/lefthand)
  */
-void BattlescapeState::handleItemClick(BattleItem* const item) // private
+void BattlescapeState::handClick(BattleItem* const item) // private.
 {
-	if (item != NULL						// make sure there is an item
-		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
+	if (_battleGame->isBusy() == false) // battlescape is in an idle state
 	{
-//		if (_gameSave->isResearched(item->getRules()->getRequirements())
-//			|| _battleSave->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
-		//kL_note: do that in ActionMenu, to allow throwing artefacts.
-//		{
-		_battleGame->getCurrentAction()->weapon = item;
-		popup(new ActionMenuState(
-								_battleGame->getCurrentAction(),
-								_icons->getX(),
-								_icons->getY() + 16));
-//		}
-//		else warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
+		BattleAction* const action = _battleGame->getCurrentAction();
+		action->weapon = NULL; // safety.
+
+		if (item != NULL) // make sure there is an item
+			action->weapon = item;
+		else if (action->actor->getUnitRules() != NULL // so player can hit w/ MC'd melee aLiens that are not 'livingWeapons'
+			&& action->actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
+		{
+			// TODO: This can be generalized later; right now the only 'meleeWeapon' is "STR_FIST" - the Universal Fist!!
+//			const RuleItem* const itRule = _rules->getItem(action->actor->getUnitRules()->getMeleeWeapon());
+			action->weapon = _battleGame->getFist();
+		}
+
+		if (action->weapon != NULL)
+			popup(new ActionMenuState(
+									action,
+									_icons->getX(),
+									_icons->getY() + 16));
 	}
 }
+/*	if (_battleGame->isBusy() == false	// battlescape is in an idle state
+		&& item != NULL)				// make sure there is an item
+	{
+		if (_gameSave->isResearched(item->getRules()->getRequirements())
+			|| _battleSave->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
+		{
+			_battleGame->getCurrentAction()->weapon = item;
+			popup(new ActionMenuState(
+									_battleGame->getCurrentAction(),
+									_icons->getX(),
+									_icons->getY() + 16));
+		}
+		else warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
+	} */
 
 /**
  * Handles the battle game state.

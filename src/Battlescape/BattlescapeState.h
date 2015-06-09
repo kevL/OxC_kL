@@ -195,8 +195,8 @@ private:
 		_cursorPosition,
 		_mapOffsetBeforeDragScroll;
 
-	/// Popups a context sensitive list of actions the user can choose from.
-	void handleItemClick(BattleItem* const item);
+	/// Popups a context sensitive list of actions the player can choose from.
+	void handClick(BattleItem* const item);
 
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
