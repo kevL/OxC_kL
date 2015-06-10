@@ -367,7 +367,7 @@ void AlienMission::calcSpawnTime(size_t nextWave) // private.
  * Finds an XCOM base in this region that is marked for retaliation.
  * @note Helper for spawnUfo().
  */
-class FindMarkedXCOMBase
+/* class FindExposedXCOMBase
 	:
 		public std::unary_function<const Base*, bool>
 {
@@ -377,7 +377,7 @@ private:
 
 	public:
 		///
-		explicit FindMarkedXCOMBase(const RuleRegion& region)
+		explicit FindExposedXCOMBase(const RuleRegion& region)
 			:
 				_region(region)
 		{}
@@ -385,12 +385,12 @@ private:
 		///
 		bool operator() (const Base* base) const
 		{
-			return base->getIsRetaliationTarget() == true
+			return base->getBaseExposed() == true
 				&& _region.insideRegion(
 									base->getLongitude(),
 									base->getLatitude()) == true;
 		}
-};
+}; */
 
 
 /**
@@ -398,7 +398,7 @@ private:
  * @note Some code is duplicated between cases but that's ok for now. It's on
  * different code paths and the function is MUCH easier to read written this way.
  * @param rules			- reference the ruleset
- * @param globe			- reference the globe, for land checks
+ * @param globe			- reference the globe for land checks
  * @param wave			- reference the wave for the desired UFO
  * @param trajectory	- reference the rule for the desired trajectory
  * @return, pointer to the spawned UFO; if the mission does not spawn a UFO return NULL
@@ -418,16 +418,38 @@ Ufo* AlienMission::spawnUfo( // private.
 
 	if (object == alm_RETAL)
 	{
-		const RuleRegion& regionRule = *rules.getRegion(_region);
+/*		const RuleRegion& regionRule = *rules.getRegion(_region);
 		const std::vector<Base*>::const_iterator i = std::find_if(
 															_gameSave.getBases()->begin(),
 															_gameSave.getBases()->end(),
 															FindMarkedXCOMBase(regionRule));
-		if (i != _gameSave.getBases()->end())
+		if (i != _gameSave.getBases()->end()) */
+
+		std::vector<Base*> baseTargets;
+		for (std::vector<Base*>::const_iterator
+				i = _gameSave.getBases()->begin();
+				i != _gameSave.getBases()->end();
+				++i)
 		{
-			// Spawn a battleship straight for the XCOM base.
+			if ((*i)->getBaseExposed() == true
+				&& rules.getRegion(_region)->insideRegion(
+													(*i)->getLongitude(),
+													(*i)->getLatitude()) == true)
+			{
+				baseTargets.push_back(*i);
+			}
+		}
+
+		if (baseTargets.empty() == false)
+		{
+			const size_t pick = RNG::generate(
+										0,
+										baseTargets.size() - 1);
+
+			// Spawn a battleship straight for the XCOM Base.
 			const RuleUfo& battleshipRule = *rules.getUfo(_missionRule.getSpawnUfo());
 			const UfoTrajectory& trjBattleship = *rules.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
+			const RuleRegion& regionRule = *rules.getRegion(_region);
 
 			ufo = new Ufo(&battleshipRule);
 			ufo->setUfoMissionInfo(
@@ -450,8 +472,8 @@ Ufo* AlienMission::spawnUfo( // private.
 			ufo->setLatitude(coord.second);
 
 			wp = new Waypoint();
-			wp->setLongitude((*i)->getLongitude());
-			wp->setLatitude((*i)->getLatitude());
+			wp->setLongitude(baseTargets[pick]->getLongitude());
+			wp->setLatitude(baseTargets[pick]->getLatitude());
 
 			ufo->setDestination(wp);
 
@@ -514,8 +536,8 @@ Ufo* AlienMission::spawnUfo( // private.
 		return ufo;
 	}
 
-	// Spawn according to sequence.
-	ufo = new Ufo(&ufoRule);
+
+	ufo = new Ufo(&ufoRule); // else Spawn according to sequence
 	ufo->setUfoMissionInfo(
 						this,
 						&trajectory);

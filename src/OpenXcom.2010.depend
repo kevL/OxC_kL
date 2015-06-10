@@ -4390,7 +4390,7 @@
 
 1433391317 f:\git\openxcom\src\resource\resourcepack.h
 
-1433651962 f:\git\openxcom\src\savegame\base.h
+1433907169 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1433212243 f:\git\openxcom\src\savegame\target.h
@@ -5797,7 +5797,7 @@
 1433335055 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1432715019 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1433907287 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -7119,7 +7119,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1433742496 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1433907169 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8492,7 +8492,7 @@
 1432765980 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1433812330 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1433903960 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	"RuleCity.h"
 
@@ -8609,7 +8609,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1433844084 source:f:\git\openxcom\src\savegame\base.cpp
+1433907169 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"

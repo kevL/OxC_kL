@@ -56,7 +56,7 @@ class Base
 private:
 	bool
 		_inTactical,
-		_retaliationTarget;
+		_exposed;
 	int
 		_cashSpent,
 		_cashIncome,
@@ -256,9 +256,9 @@ private:
 		bool isInBattlescape() const;
 
 		/// Marks this base for alien retaliation.
-		void setIsRetaliationTarget(bool mark = true);
+		void setBaseExposed(bool exposed = true);
 		/// Gets the retaliation status of this base.
-		bool getIsRetaliationTarget() const;
+		bool getBaseExposed() const;
 
 		/// Gets the detection chance for this base.
 		int getDetectionChance(int diff) const;

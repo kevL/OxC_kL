@@ -201,9 +201,8 @@ BriefingState::BriefingState(
 	_txtBriefing->setText(tr(brief.str()));
 	_txtBriefing->setWordWrap();
 
-//	if (stType == "STR_BASE_DEFENSE")
-	if (tacType == TCT_BASEDEFENSE)
-		base->setIsRetaliationTarget(false);
+//	if (tacType == TCT_BASEDEFENSE)
+//		base->setBaseExposed(false);
 }
 
 /**

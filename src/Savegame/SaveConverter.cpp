@@ -1306,7 +1306,7 @@ void SaveConverter::loadDatXBases()
 			Base *base = dynamic_cast<Base*>(_targets[loc]);
 			if (base != 0)
 			{
-				base->setIsRetaliationTarget();
+				base->setBaseExposed();
 			}
 		}
 	}

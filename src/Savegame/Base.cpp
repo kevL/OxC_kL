@@ -74,7 +74,7 @@ Base::Base(const Ruleset* const rules)
 		_scientists(0),
 		_engineers(0),
 		_inTactical(false),
-		_retaliationTarget(false),
+		_exposed(false),
 		_cashIncome(0),
 		_cashSpent(0),
 		_defenseResult(0),
@@ -329,7 +329,7 @@ void Base::load(
 			_engineers += (*i)["assigned"].as<int>(0);
 	}
 
-	_retaliationTarget = node["retaliationTarget"].as<bool>(_retaliationTarget);
+	_exposed = node["retaliationTarget"].as<bool>(_exposed);
 }
 
 /**
@@ -397,7 +397,7 @@ YAML::Node Base::save() const
 		node["productions"].push_back((*i)->save());
 	}
 
-	node["retaliationTarget"] = _retaliationTarget;
+	node["retaliationTarget"] = _exposed;
 
 	return node;
 }
@@ -1996,20 +1996,20 @@ void Base::setInBattlescape(bool inTactical)
 
 /**
  * Marks this Base as a valid alien retaliation target.
- * @param mark - mark (if @c true) or unmark (if @c false) the base (default true)
+ * @param exposed - exposed (if @c true) or unexposed (if @c false) the base (default true)
  */
-void Base::setIsRetaliationTarget(bool mark)
+void Base::setBaseExposed(bool exposed)
 {
-	_retaliationTarget = mark;
+	_exposed = exposed;
 }
 
 /**
  * Gets this Base's retaliation status.
  * @return, true if valid target for alien retaliation
  */
-bool Base::getIsRetaliationTarget() const
+bool Base::getBaseExposed() const
 {
-	return _retaliationTarget;
+	return _exposed;
 }
 
 

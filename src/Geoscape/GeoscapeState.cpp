@@ -1969,64 +1969,64 @@ private:
 		{}
 
 		/// Attempt detection
-		bool operator()(const Ufo* ufo) const;
+		bool operator() (const Ufo* ufo) const;
 };
 
 /**
  * Only UFOs within detection range of the base have a chance to detect it.
  * @param ufo - pointer to the UFO attempting detection
- * @return, true if base is detected by the ufo
+ * @return, true if base detected
  */
 bool DetectXCOMBase::operator() (const Ufo* ufo) const
 {
 	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
-	bool ret = false;
-
 	if (ufo->isCrashed() == true)
 	{
 		//Log(LOG_INFO) << ". . Crashed UFOs can't detect!";
 		return false;
 	}
-	else if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
+
+	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;
 	}
-	else if (ufo->getUfoMissionType() != "STR_ALIEN_RETALIATION"
+
+	if (ufo->getUfoMissionType() != "STR_ALIEN_RETALIATION"
 		&& Options::aggressiveRetaliation == false)
 	{
 		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is TRUE";
 		return false;
 	}
-	else
+
+
+	const double
+		range = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor,
+		dist = _base.getDistance(ufo) * earthRadius;
+	//Log(LOG_INFO) << ". . range = " << (int)range;
+	//Log(LOG_INFO) << ". . dist = " << (int)dist;
+
+	if (dist > range)
 	{
-		const double
-			ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor,
-			targetDist = _base.getDistance(ufo) * earthRadius;
-		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
-		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
-
-		if (targetDist > ufoRange)
-		{
-			//Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
-			return false;
-		}
-		else
-		{
-			const double detFactor = targetDist * 12. / ufoRange; // should use log() ...
-			int chance = static_cast<int>(
-						 static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / detFactor);
-			if (ufo->getUfoMissionType() == "STR_ALIEN_RETALIATION"
-				&& Options::aggressiveRetaliation == true)
-			{
-				//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
-				chance += 5;
-			}
-
-			//Log(LOG_INFO) << ". . . chance = " << chance;
-			ret = RNG::percent(chance);
-		}
+		//Log(LOG_INFO) << ". . uFo's have a detection range of " << (int)range << " nautical miles.";
+		return false;
 	}
+
+
+	bool ret = false;
+
+	const double inverseFactor = dist * 12. / range; // should use log() ...
+	int chance = static_cast<int>(Round(
+				 static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / inverseFactor));
+	if (ufo->getUfoMissionType() == "STR_ALIEN_RETALIATION"
+		&& Options::aggressiveRetaliation == true)
+	{
+		//Log(LOG_INFO) << ". . uFo's on retaliation missions scan for bases 'aggressively'";
+		chance += 5;
+	}
+
+	//Log(LOG_INFO) << ". . . chance = " << chance;
+	ret = RNG::percent(chance);
 
 	//Log(LOG_INFO) << ". ret " << ret;
 	return ret;
@@ -2035,7 +2035,8 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 
 /**
  * Functor that marks an XCOM base for retaliation.
- * This is required because of the iterator type.
+ * @note This is required because of the iterator type.
+ * @note Only used if Aggressive Retaliation option is false.
  */
 struct SetRetaliationStatus
 	:
@@ -2044,7 +2045,7 @@ struct SetRetaliationStatus
 	/// Mark as a valid retaliation target.
 	void operator() (const argument_type& i) const
 	{
-		i.second->setIsRetaliationTarget();
+		i.second->setBaseExposed();
 	}
 };
 
@@ -2124,21 +2125,15 @@ void GeoscapeState::time10Minutes()
 				b != _gameSave->getBases()->end();
 				++b)
 		{
-			if ((*b)->getIsRetaliationTarget() == true) // kL_begin:
+			if ((*b)->getBaseExposed() == false)
 			{
-				//Log(LOG_INFO) << "base is already marked as RetaliationTarget";
-				continue;
-			} // kL_end.
-
-			std::vector<Ufo*>::const_iterator u = std::find_if( // find a UFO that detected this base, if any.
+				std::vector<Ufo*>::const_iterator u = std::find_if( // find a UFO that detected this base, if any.
 															_gameSave->getUfos()->begin(),
 															_gameSave->getUfos()->end(),
 															DetectXCOMBase(**b, diff));
 
-			if (u != _gameSave->getUfos()->end())
-			{
-				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
-				(*b)->setIsRetaliationTarget();
+				if (u != _gameSave->getUfos()->end())
+					(*b)->setBaseExposed();
 			}
 		}
 	}
@@ -2151,18 +2146,18 @@ void GeoscapeState::time10Minutes()
 				++b)
 		{
 			std::vector<Ufo*>::const_iterator u = std::find_if( // find a UFO that detected this base, if any.
-															_gameSave->getUfos()->begin(),
-															_gameSave->getUfos()->end(),
-															DetectXCOMBase(**b, diff));
+														_gameSave->getUfos()->begin(),
+														_gameSave->getUfos()->end(),
+														DetectXCOMBase(**b, diff));
 
 			if (u != _gameSave->getUfos()->end())
 				discovered[_gameSave->locateRegion(**b)] = *b;
 		}
 
 		std::for_each( // mark the bases as discovered.
-					discovered.begin(),
-					discovered.end(),
-					SetRetaliationStatus());
+				discovered.begin(),
+				discovered.end(),
+				SetRetaliationStatus());
 	}
 
 
