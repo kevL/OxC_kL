@@ -2159,9 +2159,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 		if (edge == false)
 			popup(new UnitInfoState(
 								_battleSave->getSelectedUnit(),
-								this,
-								false,
-								false));
+								this));
 	}
 }
 

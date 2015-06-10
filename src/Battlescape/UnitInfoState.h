@@ -47,7 +47,8 @@ class UnitInfoState
 private:
 	bool
 		_fromInventory,
-		_mindProbe;
+		_mindProbe,
+		_preBattle;
 
 	Bar
 		* _barTimeUnits,
@@ -123,14 +124,18 @@ private:
 		* _btnNext,
 		* _btnPrev;
 
+	/// Handler for exiting the state.
+	void exitClick(Action* action);
+
 
 	public:
 		/// Creates the Unit Info state.
 		UnitInfoState(
 				const BattleUnit* const unit,
 				BattlescapeState* const parent,
-				const bool fromInventory,
-				const bool mindProbe);
+				const bool fromInventory = false,
+				const bool mindProbe = false,
+				const bool preBattle = false);
 		/// Cleans up the Unit Info state.
 		~UnitInfoState();
 
@@ -139,13 +144,11 @@ private:
 
 		/// Handler for clicking the button.
 		void handle(Action* action);
+
 		/// Handler for clicking the Previous button.
 		void btnPrevClick(Action* action);
 		/// Handler for clicking the Next button.
 		void btnNextClick(Action* action);
-
-		/// Handler for exiting the state.
-		void exitClick(Action* action);
 };
 
 }

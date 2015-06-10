@@ -625,14 +625,12 @@ void InventoryState::refreshMouse() // private.
  */
 void InventoryState::btnOkClick(Action*)
 {
-	if (_inv->getSelectedItem() != NULL)
-		return;
-
-	_game->popState();
-
-	if (_tuMode == false) // pre-Battle
+	if (_inv->getSelectedItem() == NULL)
 	{
-		if (_parent != NULL) // going into Battlescape!
+		_game->popState();
+
+		if (_tuMode == false	// pre-Battle but
+			&& _parent != NULL)	// going into Battlescape!
 		{
 			_battleSave->resetUnitTiles();
 
@@ -646,7 +644,7 @@ void InventoryState::btnOkClick(Action*)
 				_battleSave->randomizeItemLocations(invTile);
 				if (invTile->getUnit())
 				{
-					// make sure we select the unit closest to the ramp.
+					// make sure the unit closest to the ramp is selected.
 					_battleSave->setSelectedUnit(invTile->getUnit());
 				}
 			} */
@@ -940,7 +938,8 @@ void InventoryState::btnRankClick(Action*)
 									_battleSave->getSelectedUnit(),
 									_parent,
 									true,
-									false));
+									false,
+									_tuMode == false));
 }
 
 /**

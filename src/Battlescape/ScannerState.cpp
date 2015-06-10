@@ -154,7 +154,7 @@ void ScannerState::think()
  * Exits the screen.
  * @param action - pointer to an Action
  */
-void ScannerState::exitClick(Action*)
+void ScannerState::exitClick(Action*) // private.
 {
 /*kL
 	if (Options::maximizeInfoScreens)

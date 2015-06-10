@@ -56,19 +56,22 @@ namespace OpenXcom
  * Initializes all the elements in the Unit Info screen.
  * @param unit			- pointer to the selected unit
  * @param parent		- pointer to parent Battlescape
- * @param fromInventory	- true if player is here from the inventory
- * @param mindProbe		- true if player is using a Mind Probe
+ * @param fromInventory	- true if player is here from the inventory (default false)
+ * @param mindProbe		- true if player is using a Mind Probe (default false)
+ * @param preBattle		- true if preEquip state; ie tuMode not tactical (default false)
  */
 UnitInfoState::UnitInfoState(
 		const BattleUnit* const unit,
 		BattlescapeState* const parent,
 		const bool fromInventory,
-		const bool mindProbe)
+		const bool mindProbe,
+		const bool preBattle)
 	:
 		_unit(unit),
 		_parent(parent),
 		_fromInventory(fromInventory),
-		_mindProbe(mindProbe)
+		_mindProbe(mindProbe),
+		_preBattle(preBattle)
 {
 /*kL
 	if (Options::maximizeInfoScreens)
@@ -815,7 +818,7 @@ void UnitInfoState::btnNextClick(Action* action)
  * Exits the screen.
  * @param action - pointer to an Action
  */
-void UnitInfoState::exitClick(Action*)
+void UnitInfoState::exitClick(Action*) // private.
 {
 /*	if (_fromInventory == false)
 	{
@@ -831,13 +834,18 @@ void UnitInfoState::exitClick(Action*)
 		}
 	} else */
 
-	if (_fromInventory == true
-		&& _unit->hasInventory() == false)
+	if (_mindProbe == true
+		|| _unit->hasInventory() == true)
 	{
-		_game->popState(); // tanks require double pop if from Inventory.
+		_game->popState();
 	}
+	else if (_preBattle == false)
+	{
+		if (_fromInventory == true)
+			_game->popState();
 
-	_game->popState();
+		_game->popState();
+	}
 }
 
 }

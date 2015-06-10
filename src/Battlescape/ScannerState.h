@@ -53,6 +53,9 @@ private:
 	/// Handles Minimap animation.
 	void animate();
 
+	/// Handler for exiting the state.
+	void exitClick(Action* action);
+
 
 	public:
 		/// Creates the ScannerState.
@@ -65,9 +68,6 @@ private:
 
 		/// Handles timers.
 		void think();
-
-		/// Handler for exiting the state.
-		void exitClick(Action* action);
 };
 
 }

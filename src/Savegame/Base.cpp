@@ -329,7 +329,7 @@ void Base::load(
 			_engineers += (*i)["assigned"].as<int>(0);
 	}
 
-	_exposed = node["retaliationTarget"].as<bool>(_exposed);
+	_exposed = node["exposed"].as<bool>(_exposed);
 }
 
 /**
@@ -397,7 +397,7 @@ YAML::Node Base::save() const
 		node["productions"].push_back((*i)->save());
 	}
 
-	node["retaliationTarget"] = _exposed;
+	node["exposed"] = _exposed;
 
 	return node;
 }

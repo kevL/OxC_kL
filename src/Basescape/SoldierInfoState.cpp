@@ -735,7 +735,7 @@ void SoldierInfoState::edtSoldierChange(Action*)
  * Disables the soldier input.
  * @param action - pointer to an Action
  */
-/* void SoldierInfoState::edtSoldierPress(Action* action)
+/* void SoldierInfoState::edtSoldierPress(Action*)
 {
 	// kL_note: This should never happen, because (base=NULL) is handled by SoldierInfoDeadState.
 	if (_base == NULL)
@@ -746,7 +746,7 @@ void SoldierInfoState::edtSoldierChange(Action*)
  * Handles right-click exit.
  * @param action - pointer to an Action
  */
-void SoldierInfoState::exitClick(Action* /* action */)
+void SoldierInfoState::exitClick(Action*)
 {
 	if (_allowExit == true) // prevents RMB on btnAutoStatAll() from exiting state.
 	{

@@ -2013,8 +2013,6 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 	}
 
 
-	bool ret = false;
-
 	const double inverseFactor = dist * 12. / range; // should use log() ...
 	int chance = static_cast<int>(Round(
 				 static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / inverseFactor));
@@ -2024,12 +2022,9 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 		//Log(LOG_INFO) << ". . uFo's on retaliation missions scan for bases 'aggressively'";
 		chance += 5;
 	}
-
 	//Log(LOG_INFO) << ". . . chance = " << chance;
-	ret = RNG::percent(chance);
 
-	//Log(LOG_INFO) << ". ret " << ret;
-	return ret;
+	return RNG::percent(chance);
 }
 
 
