@@ -81,13 +81,17 @@ void RuleRegion::load(const YAML::Node& node)
 
 
 	// TODO: if ["delete"] delete previous mission zones.
-
-//	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
-	std::vector<MissionZone> misZones = node["missionZones"].as<std::vector<MissionZone> >(misZones);
-	_missionZones.insert(
-					_missionZones.end(),
-					misZones.begin(),
-					misZones.end());
+	// NOTE: the next line replaces previous missionZones:
+	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
+	// NOTE: while the following lines add to missionZones:
+//	std::vector<MissionZone> misZones = node["missionZones"].as<std::vector<MissionZone> >(misZones);
+//	_missionZones.insert(
+//					_missionZones.end(),
+//					misZones.begin(),
+//					misZones.end());
+	// revert that until it gets worked out. FalcoOXC says,
+	/* So if two mods add missionZones how do the trajectory
+	references and negative texture entries remain in sync? */
 
 	// kL_begin:
 	MissionArea area = *_missionZones.at(MZ_CITY).areas.begin();
