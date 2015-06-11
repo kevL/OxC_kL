@@ -269,7 +269,9 @@ const int RuleUnit::getEnergyRecovery() const
 /**
  * Checks if this unit is a living weapon - eg: chryssalid.
  * @note A living weapon ignores any loadout that may be available to its rank
- * and uses the one associated with its race.
+ * and uses the one associated with its race. This is applied only to aLien
+ * terroristic units in BattlescapeGenerator::deployAliens() where the string
+ * "_WEAPON" is added to their type to get their weapon.
  * @return, true if this unit is a living weapon
  */
 const bool RuleUnit::isLivingWeapon() const

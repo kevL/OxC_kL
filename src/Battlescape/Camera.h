@@ -178,7 +178,7 @@ private:
 		void stopMouseScrolling();
 
 		/// Sets whether to pause the camera before reverting its position.
-		void setPauseAfterShot(bool pause);
+		void setPauseAfterShot(bool pause = true);
 		/// Gets whether to pause the camera before reverting its position.
 		bool getPauseAfterShot() const;
 };

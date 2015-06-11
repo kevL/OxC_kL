@@ -77,7 +77,7 @@ Projectile::Projectile(
 		_action(action),
 		_origin(origin),
 		_targetVoxel(targetVoxel),
-		_position(0),
+		_trjId(0),
 		_bulletSprite(-1),
 		_reversed(false)
 //		_vaporColor(-1),
@@ -801,11 +801,11 @@ bool Projectile::traceProjectile()
 			i != _speed;
 			++i)
 	{
-		++_position;
+		++_trjId;
 
-		if (_position == _trajectory.size())
+		if (_trjId == _trajectory.size())
 		{
-			--_position; // ie. don't pass the end of the _trajectory vector
+			--_trjId; // ie. don't pass the end of the _trajectory vector
 			return false;
 		}
 
@@ -828,14 +828,14 @@ bool Projectile::traceProjectile()
  */
 Position Projectile::getPosition(int offset) const
 {
-	offset += static_cast<int>(_position);
+	offset += static_cast<int>(_trjId);
 	if (offset > -1
 		&& offset < static_cast<int>(_trajectory.size()))
 	{
 		return _trajectory.at(static_cast<size_t>(offset));
 	}
 
-	return _trajectory.at(_position);
+	return _trajectory.at(_trjId);
 }
 
 /**
@@ -877,7 +877,7 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-//	_position = _trajectory.size() - 1; // old code
+//	_trjId = _trajectory.size() - 1; // old code
 	while (traceProjectile() == true);
 }
 
@@ -889,7 +889,7 @@ void Projectile::skipTrajectory()
  */
 Position Projectile::getOrigin()
 {
-	return _trajectory.front() / Position(16,16,24);
+	return _trajectory.front() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
 }
 
 /**
@@ -900,7 +900,7 @@ Position Projectile::getOrigin()
  */
 Position Projectile::getTarget() const
 {
-	return _action.target;
+	return _action.target; // returning this by const& might be okay
 }
 
 /**
@@ -911,26 +911,26 @@ Position Projectile::getTarget() const
  */
 Position Projectile::getFinalTarget() const
 {
-	return _trajectory.back() / Position(16,16,24);
+	return _trajectory.back() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
 }
 
 /**
  * Stores the final direction of a missile or thrown-object for use by
  * TileEngine blast propagation.
  * @note This is to prevent blasts from propagating on both sides of diagonal
- * BigWalls.
+ * BigWalls. TODO: the blast itself needs tweaking in TileEngine ....
  */
 void Projectile::storeProjectileDirection() const
 {
 	int dir = -1;
 
-	const size_t trajSize = _trajectory.size();
+	const size_t trjSize = _trajectory.size();
 
-	if (trajSize > 2)
+	if (trjSize > 2)
 	{
 		const Position
 			finalPos = _trajectory.back(),
-			prePos = _trajectory.at(trajSize - 3);
+			prePos = _trajectory.at(trjSize - 3);
 
 		int
 			x = 0,
@@ -953,7 +953,9 @@ void Projectile::storeProjectileDirection() const
 		}
 
 		const Position relPos = Position(x,y,0);
-		Pathfinding::vectorToDirection(relPos, dir);
+		Pathfinding::vectorToDirection(
+									relPos,
+									dir);
 	}
 
 	_battleSave->getTileEngine()->setProjectileDirection(dir);
@@ -973,7 +975,7 @@ bool Projectile::isReversed() const
  */
 /* void Projectile::addVaporCloud() // private.
 {
-	Tile* const tile = _battleSave->getTile(_trajectory.at(_position) / Position(16,16,24));
+	Tile* const tile = _battleSave->getTile(_trajectory.at(_trjId) / Position(16,16,24));
 	if (tile != NULL)
 	{
 		Position
@@ -981,11 +983,11 @@ bool Projectile::isReversed() const
 			voxelPos;
 
 		_battleSave->getBattleGame()->getMap()->getCamera()->convertMapToScreen(
-																	_trajectory.at(_position) / Position(16,16,24),
+																	_trajectory.at(_trjId) / Position(16,16,24),
 																	&tilePos);
 		tilePos += _battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset();
 		_battleSave->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(
-																	_trajectory.at(_position),
+																	_trajectory.at(_trjId),
 																	&voxelPos);
 
 		for (int
@@ -1008,9 +1010,9 @@ bool Projectile::isReversed() const
  * Gets a pointer to the BattleAction actor directly.
  * @return, pointer to the currently acting BattleUnit
  */
-BattleUnit* Projectile::getActor() const
+/* BattleUnit* Projectile::getActor() const
 {
 	return _action.actor;
-}
+} */
 
 }

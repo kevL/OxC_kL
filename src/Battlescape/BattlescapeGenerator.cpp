@@ -778,7 +778,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 
 			// add all vehicles that are in the craft - a vehicle is actually an item,
 			// which you will never see as it is converted to a unit;
-			// however the item itself becomes the weapon it "holds".
+			// however the item itself becomes the weapon it equips.
 			for (std::vector<Vehicle*>::const_iterator
 					i = _craft->getVehicles()->begin();
 					i != _craft->getVehicles()->end();
@@ -928,7 +928,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 					i != _base->getItems()->getContents()->end();
 					)
 			{
-				// add only items in the battlescape that make sense
+				// only add items in the battlescape that make sense
 				// (if the item has a sprite, it's probably ok)
 				const RuleItem* const rule = _rules->getItem(i->first);
 				if (   rule->getBigSprite() > -1
@@ -1146,7 +1146,7 @@ void BattlescapeGenerator::deployXCOM() // private.
  * @param tank - pointer to Vehicle
  * @return, pointer to the spawned unit; NULL if unable to create and equip
  */
-BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
+BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* const tank) // private.
 {
 	const std::string vehicle = tank->getRules()->getType();
 	RuleUnit* const unitRule = _rules->getUnit(vehicle);
@@ -1231,7 +1231,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank) // private.
  * @param unit - pointer to an xCom BattleUnit
  * @return, pointer to the spawned unit if successful else NULL
  */
-BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
+BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private.
 {
 	//Log(LOG_INFO) << "bsg:addXCOMUnit()";
 	if ((_craft == NULL
@@ -1258,7 +1258,6 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
 
 			return unit;
 		}
-//		else if (_missionType != "STR_BASE_DEFENSE")
 		else if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
 		{
 			//Log(LOG_INFO) << ". . spawnNode NOT valid - not baseDefense";
@@ -1374,7 +1373,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit) // private.
  * @param tile - the given tile
  * @return, true if unit can be placed on Tile
  */
-bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile) // private.
+bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* const tile) // private.
 {
 	// to spawn an xcom soldier, there has to be a tile, with a floor,
 	// with the starting point attribute and no objects in the way
@@ -1402,7 +1401,7 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile) // private.
  * Loads a weapon on the inventoryTile.
  * @param item - pointer to a BattleItem
  */
-void BattlescapeGenerator::loadGroundWeapon(BattleItem* item) // private.
+void BattlescapeGenerator::loadGroundWeapon(BattleItem* const item) // private.
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon()";
 	const RuleInventory* const ground = _rules->getInventory("STR_GROUND");

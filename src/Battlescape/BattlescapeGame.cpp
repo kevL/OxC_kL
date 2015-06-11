@@ -2914,7 +2914,7 @@ void BattlescapeGame::dropItem(
 		bool newItem,
 		bool removeItem)
 {
-	if (_battleSave->getTile(position) == NULL		// don't spawn anything outside of bounds
+	if (_battleSave->getTile(position) == NULL	// don't spawn anything outside of bounds
 		|| item->getRules()->isFixed() == true)	// don't ever drop fixed items
 	{
 		return;

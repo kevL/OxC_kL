@@ -75,7 +75,7 @@ private:
 	CursorType _cursorType;
 
 	bool
-		_launch,
+		_firstBulletFrame,
 		_explosionInFOV,
 //		_flashScreen,
 		_mapIsHidden,
@@ -103,7 +103,7 @@ private:
 
 	PathPreview _previewSetting;
 
-	BattlescapeMessage* _hidden;
+	BattlescapeMessage* _hiddenScreen;
 	Camera* _camera;
 	Game* _game;
 	NumberText
@@ -126,10 +126,10 @@ private:
 //	const std::vector<Uint8>* _transparencies;
 
 	///
-	void drawTerrain(Surface* surface);
+	void drawTerrain(Surface* const surface);
 	///
 	int getTerrainLevel(
-			Position pos,
+			const Position& pos,
 			int unitSize);
 
 
@@ -242,7 +242,7 @@ private:
 		const int getIconWidth();
 
 		/// Converts a map position to a sound angle.
-		const int getSoundAngle(Position pos);
+		const int getSoundAngle(const Position& pos);
 
 		/// Resets the camera smoothing bool.
 //		void resetCameraSmoothing();

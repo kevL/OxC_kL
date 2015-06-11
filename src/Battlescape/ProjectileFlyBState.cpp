@@ -485,7 +485,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 											_origin,
 											_targetVoxel);
 
-	_parent->getMap()->setProjectile(projectile); // else, add the projectile on the map
+	_parent->getMap()->setProjectile(projectile); // add projectile to Map.
 
 
 	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)

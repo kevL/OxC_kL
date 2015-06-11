@@ -116,13 +116,13 @@ private:
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
 	/// Adds a vehicle to the game.
-	BattleUnit* addXCOMVehicle(Vehicle* tank);
+	BattleUnit* addXCOMVehicle(Vehicle* const tank);
 	/// Adds a soldier to the game.
-	BattleUnit* addXCOMUnit(BattleUnit* unit);
+	BattleUnit* addXCOMUnit(BattleUnit* const unit);
 	/// Runs necessary checks before physically setting the position.
-	bool canPlaceXCOMUnit(Tile* tile);
+	bool canPlaceXCOMUnit(Tile* const tile);
 	/// Loads a weapon on the inventoryTile.
-	void loadGroundWeapon(BattleItem* item);
+	void loadGroundWeapon(BattleItem* const item);
 	/// Load all Xcom weapons.
 //	void loadWeapons();
 	/// Places an item on a soldier based on equipment layout.

@@ -119,7 +119,7 @@ Map::Map(
 		_projectileInFOV(false),
 		_explosionInFOV(false),
 		_waypointAction(false),
-		_launch(false),
+		_firstBulletFrame(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0),
@@ -155,13 +155,13 @@ Map::Map(
 					this,
 					visibleMapHeight);
 
-	_hidden = new BattlescapeMessage( // "Hidden Movement..." screen
-								320,
-								visibleMapHeight < 200 ? visibleMapHeight : 200);
-	_hidden->setX(_game->getScreen()->getDX());
-	_hidden->setY(_game->getScreen()->getDY());
-//	_hidden->setY((visibleMapHeight - _hidden->getHeight()) / 2);
-	_hidden->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color));
+	_hiddenScreen = new BattlescapeMessage( // "Hidden Movement..." screen
+										320,
+										visibleMapHeight < 200 ? visibleMapHeight : 200);
+	_hiddenScreen->setX(_game->getScreen()->getDX());
+	_hiddenScreen->setY(_game->getScreen()->getDY());
+//	_hiddenScreen->setY((visibleMapHeight - _hiddenScreen->getHeight()) / 2);
+	_hiddenScreen->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color));
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);
@@ -197,7 +197,8 @@ Map::~Map()
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
 	delete _arrow;
-	delete _hidden;
+	delete _arrow_kneel;
+	delete _hiddenScreen;
 	delete _camera;
 	delete _numAccuracy;
 	delete _numExposed;
@@ -418,8 +419,7 @@ void Map::draw()
 			}
 
 			_mapIsHidden = true;
-
-			_hidden->blit(this);
+			_hiddenScreen->blit(this);
 		}
 	}
 }
@@ -445,30 +445,31 @@ void Map::setPalette(
 		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
 	}
 
-	_hidden->setPalette(colors, firstcolor, ncolors);
-	_hidden->setBackground(_res->getSurface("TAC00.SCR"));
-	_hidden->initText(
+	_hiddenScreen->setPalette(colors, firstcolor, ncolors);
+	_hiddenScreen->setBackground(_res->getSurface("TAC00.SCR"));
+	_hiddenScreen->initText(
 					_res->getFont("FONT_BIG"),
 					_res->getFont("FONT_SMALL"),
 					_game->getLanguage());
-	_hidden->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
+	_hiddenScreen->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 
 /**
  * Draw the terrain.
- * Keep this function as optimised as possible. It's big so minimise overhead of function calls.
+ * @note Keep this function as optimised as possible. It's big so minimise
+ * overhead of function calls.
  * @param surface - the Surface to draw on
  */
-void Map::drawTerrain(Surface* surface) // private.
+void Map::drawTerrain(Surface* const surface) // private.
 {
 //	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 //	static const int arrowBob[10] = {0,2,3,3,2,0,-2,-3,-3,-2}; // DarkDefender
 
-	Position bullet;
+	Position bullet; // x-y position of bullet on screen.
 	int
 		bulletLowX	= 16000,
 		bulletLowY	= 16000,
-		bulletLowZ	= 16000,
+//		bulletLowZ	= 16000, // not used.
 		bulletHighX	= 0,
 		bulletHighY	= 0,
 		bulletHighZ	= 0;
@@ -476,8 +477,11 @@ void Map::drawTerrain(Surface* surface) // private.
 	if (_projectile != NULL // if there is a bullet get the highest x and y tiles to draw it on
 		&& _explosions.empty() == true)
 	{
-		int part;
-		if (_projectile->getItem() != NULL)
+		int
+			part,
+			trjOffset;
+
+		if (_projectile->getItem() != NULL) // thrown item
 			part = 0;
 		else
 			part = BULLET_SPRITES - 1;
@@ -487,23 +491,25 @@ void Map::drawTerrain(Surface* surface) // private.
 				i <= part;
 				++i)
 		{
-			if (_projectile->getPosition(1 - i).x < bulletLowX)
-				bulletLowX = _projectile->getPosition(1 - i).x;
+			trjOffset = 1 - i;
 
-			if (_projectile->getPosition(1 - i).y < bulletLowY)
-				bulletLowY = _projectile->getPosition(1 - i).y;
+			if (_projectile->getPosition(trjOffset).x < bulletLowX)
+				bulletLowX = _projectile->getPosition(trjOffset).x;
 
-			if (_projectile->getPosition(1 - i).z < bulletLowZ)
-				bulletLowZ = _projectile->getPosition(1 - i).z;
+			if (_projectile->getPosition(trjOffset).y < bulletLowY)
+				bulletLowY = _projectile->getPosition(trjOffset).y;
 
-			if (_projectile->getPosition(1 - i).x > bulletHighX)
-				bulletHighX = _projectile->getPosition(1 - i).x;
+//			if (_projectile->getPosition(trjOffset).z < bulletLowZ)
+//				bulletLowZ = _projectile->getPosition(trjOffset).z;
 
-			if (_projectile->getPosition(1 - i).y > bulletHighY)
-				bulletHighY = _projectile->getPosition(1 - i).y;
+			if (_projectile->getPosition(trjOffset).x > bulletHighX)
+				bulletHighX = _projectile->getPosition(trjOffset).x;
 
-			if (_projectile->getPosition(1 - i).z > bulletHighZ)
-				bulletHighZ = _projectile->getPosition(1 - i).z;
+			if (_projectile->getPosition(trjOffset).y > bulletHighY)
+				bulletHighY = _projectile->getPosition(trjOffset).y;
+
+			if (_projectile->getPosition(trjOffset).z > bulletHighZ)
+				bulletHighZ = _projectile->getPosition(trjOffset).z;
 		}
 
 		// convert bullet position from voxelspace to tilespace
@@ -514,24 +520,27 @@ void Map::drawTerrain(Surface* surface) // private.
 		bulletHighY /= 16;
 		bulletHighZ /= 24;
 
-		// if the projectile is outside the viewport - center it back on it
+		// if the projectile is outside the viewport - center back on it
 		_camera->convertVoxelToScreen(
 								_projectile->getPosition(),
 								&bullet);
 
 		if (_projectileInFOV == true)
 		{
+			//Log(LOG_INFO) << "projectile in FoV";
 			if (Options::battleSmoothCamera == true)
 			{
-				if (_launch == true)
+				if (_firstBulletFrame == true)
 				{
-					_launch = false;
+					//Log(LOG_INFO) << ". first Frame";
+					_firstBulletFrame = false;
 
-					if (   bullet.x < 1
+					if (   bullet.x < 0
 						|| bullet.x > surface->getWidth() - 1
-						|| bullet.y < 1
+						|| bullet.y < 0
 						|| bullet.y > _visibleMapHeight - 1)
 					{
+						//Log(LOG_INFO) << ". . center";
 						_camera->centerOnPosition(
 												Position(
 													bulletLowX,
@@ -544,8 +553,11 @@ void Map::drawTerrain(Surface* surface) // private.
 					}
 				}
 
+				const int posBullet_z = (_projectile->getPosition().z) / 24;
+
 				if (_smoothingEngaged == false)
 				{
+					//Log(LOG_INFO) << ". smoothing FALSE";
 					const Position target = _projectile->getFinalTarget();
 					if (_camera->isOnScreen(target) == false
 						|| bullet.x < 1
@@ -553,25 +565,27 @@ void Map::drawTerrain(Surface* surface) // private.
 						|| bullet.y < 1
 						|| bullet.y > _visibleMapHeight - 1)
 					{
-						_camera->setPauseAfterShot(true);
+						//Log(LOG_INFO) << ". . Engage smoothing";
+						_camera->setPauseAfterShot();
 						_smoothingEngaged = true;
 					}
+					else if (_projectile->getItem() != NULL) // thrown item
+						_camera->setPauseAfterShot();
 				}
 				else // smoothing Engaged
 				{
+					//Log(LOG_INFO) << ". smoothing TRUE";
 					_camera->jumpXY(
 								surface->getWidth() / 2 - bullet.x,
 								_visibleMapHeight / 2 - bullet.y);
-
-					const int posBullet_z = _projectile->getPosition().z / 24;
-					if (_camera->getViewLevel() != posBullet_z)
-					{
-						if (_camera->getViewLevel() > posBullet_z)
-							_camera->setViewLevel(posBullet_z);
-						else
-							_camera->setViewLevel(posBullet_z);
-					}
 				}
+
+				if (_camera->getViewLevel() != posBullet_z)
+				{
+					//Log(LOG_INFO) << ". . jump camera Z";
+					_camera->setViewLevel(posBullet_z);
+				}
+				//Log(LOG_INFO) << "EXIT fov.";
 			}
 			else // NOT smoothCamera
 			// kL_note: Camera remains stationary when xCom actively fires at target.
@@ -4689,13 +4703,14 @@ void Map::calculateWalkingOffset(
 
 /**
   * Terrainlevel goes from 0 to -24 (bottom to top).
-  * For a large sized unit pick the highest terrain level which is the lowest number.
-  * @param pos		- Position
+  * @note For a large sized unit pick the highest terrain level which is the
+  * lowest number.
+  * @param pos		- reference the Position
   * @param unitSize	- size of the unit at pos
   * @return, terrain height
   */
 int Map::getTerrainLevel( // private.
-		Position pos,
+		const Position& pos,
 		int unitSize)
 {
 	int
@@ -4882,7 +4897,7 @@ void Map::setProjectile(Projectile* projectile)
 	if (projectile != NULL
 		&& Options::battleSmoothCamera == true)
 	{
-		_launch = true;
+		_firstBulletFrame = true;
 	}
 }
 
@@ -4980,8 +4995,8 @@ void Map::setHeight(int height)
 
 	_visibleMapHeight = height - _iconHeight;
 
-	_hidden->setHeight((_visibleMapHeight < 200) ? _visibleMapHeight : 200);
-	_hidden->setY((_visibleMapHeight - _hidden->getHeight()) / 2);
+	_hiddenScreen->setHeight((_visibleMapHeight < 200) ? _visibleMapHeight : 200);
+	_hiddenScreen->setY((_visibleMapHeight - _hiddenScreen->getHeight()) / 2);
 }
 
 /**
@@ -4992,7 +5007,7 @@ void Map::setWidth(int width)
 {
 	Surface::setWidth(width);
 
-	_hidden->setX(_hidden->getX() + (width - getWidth()) / 2);
+	_hiddenScreen->setX(_hiddenScreen->getX() + (width - getWidth()) / 2);
 }
 
 /**
@@ -5001,7 +5016,7 @@ void Map::setWidth(int width)
  */
 const int Map::getMessageY()
 {
-	return _hidden->getY();
+	return _hiddenScreen->getY();
 }
 
 /**
@@ -5024,10 +5039,10 @@ const int Map::getIconWidth()
 
 /**
  * Returns the angle (left/right balance) of a sound effect based on a map position.
- * @param pos - the map position to calculate the sound angle from
+ * @param pos - reference the map position to calculate the sound angle from
  * @return, the angle of the sound (360 = 0 degrees center)
  */
-const int Map::getSoundAngle(Position pos)
+const int Map::getSoundAngle(const Position& pos)
 {
 	const int midPoint = getWidth() / 2;
 

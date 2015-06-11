@@ -1,26 +1,26 @@
 items:
-  - type: STR_DOGE
+  - type: STR_DOGE # weapon
     size: 3.5
-    costBuy: 5000
+    costBuy: 7500
     costSell: 3500
     transferTime: 48
-    weight: 20
+    weight: 0
     bigSprite: 210
 #    floorSprite: 0
 #    handSprite: 0
-    power: 35
-    damageType: 7
+    power: 23
+    damageType: 7 # melee
     meleeSound: 210
-    accuracyMelee: 95
-    tuMelee: 10
-    battleType: 3
+    accuracyMelee: 67
+    tuMelee: 11
+    battleType: 3 # melee
     fixedWeapon: true
     clipSize: -1
     invWidth: 2
     invHeight: 3
     listOrder: 1073
   - type: STR_DOGE_CORPSE
-    weight: 25
+    weight: 20
     bigSprite: 211
     floorSprite: 210
     invWidth: 2
@@ -39,7 +39,7 @@ units:
       reactions: 66
       firing: 0
       throwing: 0
-      strength: 5
+      strength: 6
       psiStrength: 40
       psiSkill: 0
       melee: 99
@@ -49,7 +49,7 @@ units:
     value: 8
     deathSound: 211
     energyRecovery: 80
-    livingWeapon: true
+#    livingWeapon: true
 armors:
   - type: DOGE_ARMOR
     spriteSheet: DOGE.PCK

@@ -402,7 +402,7 @@ int RuleItem::isWaypoints() const
 /**
  * Returns whether the Item is a fixed weapon.
  * You can't move/throw/drop fixed weapons - e.g. HWP turrets.
- * @return, true if Item is a fixed weapon
+ * @return, true if a fixed weapon
  */
 bool RuleItem::isFixed() const
 {

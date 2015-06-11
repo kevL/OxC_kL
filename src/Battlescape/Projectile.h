@@ -56,7 +56,7 @@ private:
 //		_vaporColor,
 //		_vaporDensity,
 //		_vaporProbability;
-	size_t _position;
+	size_t _trjId;
 
 	BattleAction _action;
 	Position
@@ -128,7 +128,7 @@ private:
 		bool isReversed() const;
 
 		/// Gets a pointer to the BattleAction actor directly.
-		BattleUnit* getActor() const;
+//		BattleUnit* getActor() const;
 };
 
 }

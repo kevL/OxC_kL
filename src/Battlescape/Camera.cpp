@@ -474,8 +474,8 @@ void Camera::down()
 }
 
 /**
- * Gets the displayed level.
- * @return, the displayed layer
+ * Gets the view level.
+ * @return, the displayed level
  */
 int Camera::getViewLevel() const
 {
@@ -780,7 +780,7 @@ void Camera::stopMouseScrolling()
  * Sets whether to pause the camera a moment before reverting to the position
  * it originally had before following a shot per Map tracing.
  * @sa BattleAction::cameraPosition
- * @param pause - true to pause
+ * @param pause - true to pause (default true)
  */
 void Camera::setPauseAfterShot(bool pause)
 {
