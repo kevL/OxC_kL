@@ -46,7 +46,7 @@ namespace OpenXcom
  * Initializes all the elements in the MediTargetState screen.
  * @param action - pointer to a BattleAction (BattlescapeGame.h)
  */
-MediTargetState::MediTargetState(BattleAction* action)
+MediTargetState::MediTargetState(BattleAction* const action)
 	:
 		_action(action)
 {
@@ -132,10 +132,10 @@ void MediTargetState::init()
 		actorFound = false; // adds actor to top of MediTargetList.
 
 	// TODO: require aLien autopsies research before allowing Medikit to show info on a/the type of aLien.
-	const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
+	const std::vector<BattleUnit*>* const targetUnits = _game->getSavedGame()->getSavedBattle()->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator
-			i = units->begin();
-			i != units->end();
+			i = targetUnits->begin();
+			i != targetUnits->end();
 			)
 	{
 		if ((*i)->isFearable() == true) // isWoundable()
@@ -153,10 +153,11 @@ void MediTargetState::init()
 			{
 				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
 						&& (*i)->getPosition() == _action->actor->getPosition()
-					|| _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+					|| ((*i)->getFaction() != FACTION_HOSTILE
+						&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 																							_action->actor,
 																							*i,
-																							_action->actor->getDirection()) == true)
+																							_action->actor->getDirection()) == true))
 				{
 					addToList = true;
 				}
@@ -197,10 +198,10 @@ void MediTargetState::init()
 		}
 
 		if (actorFound == false // in case medikit user is not 'Fearable'
-			&& *i == units->back())
+			&& *i == targetUnits->back())
 		{
 			actorFound = true;
-			i = units->begin();
+			i = targetUnits->begin();
 		}
 		else
 			++i;

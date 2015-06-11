@@ -119,7 +119,7 @@ struct BattleAction
 
 	public:
 		/// kL. heh This could cause problems.
-		/// NOTE: not used
+		/// @note This is not to be used unless instantiating a BattlescapeGame.
 		void clearAction() // kL
 		{
 			type = BA_NONE;
@@ -232,8 +232,8 @@ private:
 
 		/// Checks for casualties in battle.
 		void checkForCasualties(
-				const BattleItem* const weapon,
-				BattleUnit* attacker,
+				const BattleItem* const weapon = NULL,
+				BattleUnit* attacker = NULL,
 				bool hiddenExpl = false,
 				bool terrainExpl = false);
 		/// Checks if a unit panics.

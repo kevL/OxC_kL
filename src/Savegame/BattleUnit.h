@@ -451,7 +451,7 @@ private:
 
 	BattleAIState* _currentAIState;
 //	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
-	const BattlescapeGame* _battleGame;
+	BattlescapeGame* _battleGame;
 	BattleUnit* _charging;
 	Surface* _cache[5];
 	Tile* _tile;
@@ -541,8 +541,7 @@ private:
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
 //				const int depth,
-				const int diff, // for VictoryPts value per death.
-				BattlescapeGame* battleGame = NULL); // for playing sound when hit.
+				const int diff); // for VictoryPts value per death.
 		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
 				RuleUnit* unit,
@@ -552,7 +551,7 @@ private:
 				const int diff,
 //				const int depth,
 				const int month = 0, // for upping aLien stats as time progresses.
-				BattlescapeGame* const battleGame = NULL); // for playing sound when hit (only civies).
+				BattlescapeGame* const battleGame = NULL);
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
 
@@ -902,7 +901,7 @@ private:
 		/// Gets this unit's name.
 		std::wstring getName(
 				const Language* const lang,
-				bool debugAppendId = false) const;
+				bool debugId = false) const;
 
 		/// Gets this unit's stats.
 		const UnitStats* getBaseStats() const;
@@ -1106,7 +1105,7 @@ private:
 		size_t getBattleOrder() const;
 
 		/// Sets the BattleGame for this unit.
-		void setBattleGame(BattlescapeGame* const battleGame);
+		void setBattleForUnit(BattlescapeGame* const battleGame);
 
 		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
 		void putDown();

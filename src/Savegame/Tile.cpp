@@ -1402,8 +1402,8 @@ void Tile::removeItem(BattleItem* const item)
 
 /**
  * Get the topmost item sprite to draw on the battlescape.
- * @param primed - pointer to whether a proxy-grenade is primed or not
- * @return, sprite ID in floorob (-1 none)
+ * @param primed - pointer to primed bool (default NULL)
+ * @return, sprite ID in floorobs (-1 none)
  */
 int Tile::getTopItemSprite(bool* ptrPrimed) const
 {
@@ -1436,6 +1436,9 @@ int Tile::getTopItemSprite(bool* ptrPrimed) const
 			&& (*i)->getFuseTimer() > -1)
 		{
 			fuseGrenade = *i;
+
+			if (ptrPrimed != NULL) // try this although it was setup for proxies ... looks good for alien grenades ...
+				*ptrPrimed = true;
 		}
 
 		if ((*i)->getUnit() != NULL

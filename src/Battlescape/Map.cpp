@@ -527,12 +527,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 		if (_projectileInFOV == true)
 		{
-			//Log(LOG_INFO) << "projectile in FoV";
 			if (Options::battleSmoothCamera == true)
 			{
 				if (_firstBulletFrame == true)
 				{
-					//Log(LOG_INFO) << ". first Frame";
 					_firstBulletFrame = false;
 
 					if (   bullet.x < 0
@@ -540,7 +538,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 						|| bullet.y < 0
 						|| bullet.y > _visibleMapHeight - 1)
 					{
-						//Log(LOG_INFO) << ". . center";
 						_camera->centerOnPosition(
 												Position(
 													bulletLowX,
@@ -553,11 +550,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					}
 				}
 
-				const int posBullet_z = (_projectile->getPosition().z) / 24;
-
 				if (_smoothingEngaged == false)
 				{
-					//Log(LOG_INFO) << ". smoothing FALSE";
 					const Position target = _projectile->getFinalTarget();
 					if (_camera->isOnScreen(target) == false
 						|| bullet.x < 1
@@ -565,7 +559,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 						|| bullet.y < 1
 						|| bullet.y > _visibleMapHeight - 1)
 					{
-						//Log(LOG_INFO) << ". . Engage smoothing";
 						_camera->setPauseAfterShot();
 						_smoothingEngaged = true;
 					}
@@ -573,19 +566,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 						_camera->setPauseAfterShot();
 				}
 				else // smoothing Engaged
-				{
-					//Log(LOG_INFO) << ". smoothing TRUE";
 					_camera->jumpXY(
 								surface->getWidth() / 2 - bullet.x,
 								_visibleMapHeight / 2 - bullet.y);
-				}
 
+				const int posBullet_z = (_projectile->getPosition().z) / 24;
 				if (_camera->getViewLevel() != posBullet_z)
-				{
-					//Log(LOG_INFO) << ". . jump camera Z";
 					_camera->setViewLevel(posBullet_z);
-				}
-				//Log(LOG_INFO) << "EXIT fov.";
 			}
 			else // NOT smoothCamera
 			// kL_note: Camera remains stationary when xCom actively fires at target.
@@ -1197,7 +1184,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 										}
 
 										// draw an item on top of the floor (if any)
-										const int sprite = tileWest->getTopItemSprite();
+										bool primed;
+										const int sprite = tileWest->getTopItemSprite(&primed);
 										if (sprite != -1)
 										{
 											srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
@@ -1207,6 +1195,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 													screenPosition.y - 8 + tileWest->getTerrainLevel(),
 													shade,
 													true); // halfRight
+
+											if (primed == true)
+//												&& sprite == 21)					// standard proxy grenade
+											{
+												srfSprite->setPixelColor(			// cycles from 31 down to 16 and jumps to 31 again
+																	16,28,			// <- the pixel coords
+																	_fuseColor);	// 17 is the pixel's spritesheet color
+											}
 
 											if (tileWest->isDiscovered(2) == true) // -> maybe, maybe not.
 											{
@@ -1543,10 +1539,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 										screenPosition.y + tile->getTerrainLevel(),
 										tileShade);
 
-								if (primed == true
-									&& sprite == 21) // standard proxy grenade
+								if (primed == true)
+//									&& sprite == 21)					// standard proxy grenade
 								{
-									srfSprite->setPixelColor(16,28, _fuseColor); // 17 is the pixel's spritesheet color
+									srfSprite->setPixelColor(			// cycles from 31 down to 16 and jumps to 31 again
+														16,28,			// <- the pixel coords
+														_fuseColor);	// 17 is the pixel's spritesheet color
 								}
 							}
 
@@ -4516,13 +4514,12 @@ void Map::animateMap(bool redraw)
 		}
 	}
 
-	if (redraw == true)
-		_redraw = true;
-
 
 	if (--_fuseColor == 15)
 		_fuseColor = 31;
 
+	if (redraw == true)
+		_redraw = true;
 }
 
 /**

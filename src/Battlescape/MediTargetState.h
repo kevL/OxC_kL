@@ -62,7 +62,7 @@ private:
 
 	public:
 		/// Creates the Medi Target state.
-		explicit MediTargetState(BattleAction* action);
+		explicit MediTargetState(BattleAction* const action);
 		/// Cleans up the Medi Target state.
 		~MediTargetState();
 

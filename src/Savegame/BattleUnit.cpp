@@ -59,13 +59,11 @@ namespace OpenXcom
  * @param soldier		- pointer to a geoscape Soldier
 // * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param diff			- for VictoryPts value at death
- * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
 //		const int depth,
-		const int diff,
-		BattlescapeGame* battleGame)
+		const int diff)
 	:
 		_geoscapeSoldier(soldier),
 		_unitRules(NULL),
@@ -74,7 +72,7 @@ BattleUnit::BattleUnit(
 		_killedBy(FACTION_NONE),
 //		_killedBy(FACTION_PLAYER),
 		_murdererId(0),
-		_battleGame(battleGame),
+		_battleGame(NULL),
 		_rankInt(-1),
 		_turretType(-1),
 		_tile(NULL),
@@ -228,7 +226,7 @@ BattleUnit::BattleUnit(
 		const int diff,
 //		const int depth,
 		const int month,
-		BattlescapeGame* const battleGame) // May be NULL
+		BattlescapeGame* const battleGame) // for converted Units
 	:
 		_unitRules(unit),
 		_geoscapeSoldier(NULL),
@@ -1323,7 +1321,8 @@ int BattleUnit::getMorale() const
 }
 
 /**
- * Do an amount of damage.
+ * Does an amount of damage.
+ * TODO: This should be in Battlegame instead of each unit having its own damage routine.
  * @param relPos		- reference a position in voxelspace that defines which
  *						  part of armor and/or body gets hit
  * @param power			- the amount of damage to inflict
@@ -1355,7 +1354,7 @@ int BattleUnit::damage(
 			return 0;
 	}
 
-	UnitBodyPart bodypart = BODYPART_TORSO;
+	UnitBodyPart bodyPart = BODYPART_TORSO;
 
 	if (power > 0
 		&& ignoreArmor == false)
@@ -1394,7 +1393,7 @@ int BattleUnit::damage(
 			}
 
 			//Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _direction) %8);
-			switch ((relDir - _direction) %8)
+			switch ((relDir - _direction) % 8)
 			{
 				case 0:	side = SIDE_FRONT;									break;
 				case 1:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_RIGHT;	break;
@@ -1403,36 +1402,36 @@ int BattleUnit::damage(
 				case 4:	side = SIDE_REAR;									break;
 				case 5:	side = RNG::percent(50) ? SIDE_REAR : SIDE_LEFT; 	break;
 				case 6:	side = SIDE_LEFT;									break;
-				case 7:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_LEFT;	break;
+				case 7:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_LEFT;
 			}
 			//Log(LOG_INFO) << ". side = " << (int)side;
 
 			if (relPos.z > getHeight() - 4)
-				bodypart = BODYPART_HEAD;
+				bodyPart = BODYPART_HEAD;
 			else if (relPos.z > 5)
 			{
 				switch (side)
 				{
-					case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
-					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
+					case SIDE_LEFT:		bodyPart = BODYPART_LEFTARM;	break;
+					case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTARM;	break;
 
-					default:			bodypart = BODYPART_TORSO;
+					default:			bodyPart = BODYPART_TORSO;
 				}
 			}
 			else
 			{
 				switch (side)
 				{
-					case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
-					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
+					case SIDE_LEFT: 	bodyPart = BODYPART_LEFTLEG; 	break;
+					case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTLEG; 	break;
 
 					default:
-						bodypart = static_cast<UnitBodyPart>(RNG::generate(
+						bodyPart = static_cast<UnitBodyPart>(RNG::generate(
 																		BODYPART_RIGHTLEG,
 																		BODYPART_LEFTLEG));
 				}
 			}
-			//Log(LOG_INFO) << ". bodypart = " << (int)bodypart;
+			//Log(LOG_INFO) << ". bodyPart = " << (int)bodyPart;
 		}
 
 		const int armor = getArmor(side);
@@ -1448,12 +1447,14 @@ int BattleUnit::damage(
 
 	if (power > 0)
 	{
-		if (dType == DT_STUN
-			&& (_geoscapeSoldier != NULL
-				|| (_unitRules->isMechanical() == false
-					&& _race != "STR_ZOMBIE")))
+		if (dType == DT_STUN)
 		{
-			_stunLevel += power;
+			if (_geoscapeSoldier != NULL
+				|| (_unitRules->isMechanical() == false
+					&& _race != "STR_ZOMBIE"))
+			{
+				_stunLevel += power;
+			}
 		}
 		else
 		{
@@ -1478,7 +1479,6 @@ int BattleUnit::damage(
 				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
 					|| (_unitRules->isMechanical() == false		// or to non-mechanical units
 						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
-//				if (_armor->getDamageModifier(DT_STUN) > 0.f)	// <- but that defeats the point
 				{
 					_stunLevel += RNG::generate(0, power / 3);
 				}
@@ -1491,21 +1491,17 @@ int BattleUnit::damage(
 					{
 						if (RNG::generate(0,10) < power) // kL: refactor this.
 						{
-							_fatalWounds[bodypart] += wounds;
+							_fatalWounds[bodyPart] += wounds;
 //							moraleChange(-wounds * 3);
 						}
 					}
 //					setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
 				}
 
-				if (dType != DT_STUN)
-				{
-					if (dType == DT_IN)
-						wounds = power;
+				if (dType == DT_IN)
+					wounds = power;
 
-					//Log(LOG_INFO) << ". wounds = " << wounds;
-					moraleChange(-wounds * 3);
-				}
+				moraleChange(-wounds * 3);
 			}
 		}
 	}
@@ -1533,7 +1529,7 @@ int BattleUnit::damage(
  */
 void BattleUnit::playHitSound()
 {
-	int sound = -1;
+	int sound;
 
 	if (_type == "MALE_CIVILIAN")
 		sound = RNG::generate(41, 43);
@@ -1546,21 +1542,24 @@ void BattleUnit::playHitSound()
 		else // if (getGender() == GENDER_FEMALE)
 			sound = RNG::generate(121, 135);
 	}
+	else
+	{
+		if (_deathSound != -1)
+			_battleGame->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												_deathSound)
+											->play();
+		return;
+	}
 
-	if (sound != -1)
-		_battleGame->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											sound)
-										->play();
-//	else // note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
-//		_battleGame->getResourcePack()->getSound(
-//											"BATTLE.CAT",
-//											_unit->getDeathSound())
-//										->play();
+	_battleGame->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play();
 }
 
 /**
- * Do an amount of stun recovery.
+ * Does an amount of stun recovery.
  * @param power - stun to recover
  * @return, true if unit becomes conscious
  */
@@ -1659,7 +1658,7 @@ int BattleUnit::getFallingPhase() const
 }
 
 /**
- * Intialises the aiming sequence.
+ * Intializes the aiming sequence.
  */
 void BattleUnit::startAiming()
 {
@@ -1681,12 +1680,8 @@ void BattleUnit::startAiming()
  */
 void BattleUnit::keepAiming()
 {
-	//if (_id == 1000007) Log(LOG_INFO) << "keepAiming() _aimPhase = " << _aimPhase;
 	if (_aimPhase == _armor->getShootFrames() + 1)
-	{
-		//if (_id == 1000007) Log(LOG_INFO) << "keepAiming() END";
 		_status = STATUS_STANDING;
-	}
 
 	if (_visible == true)
 		_cacheInvalid = true;
@@ -1711,14 +1706,14 @@ void BattleUnit::setAimingPhase(int phase)
 }
 
 /**
- * Returns whether the unit is out of combat, ie dead or unconscious.
- * A unit that is Out, cannot perform any actions,
- * and cannot be selected, but it's still a unit.
+ * Returns whether the unit is out of combat - ie dead or unconscious.
+ * @note A unit that is Out cannot perform any actions and cannot be selected
+ * but it's still a unit.
  * @note checkHealth and checkStun are early returns and therefore
  * should generally not be used to test a negation: eg, !isOut()
- * @param checkHealth, Check if unit still has health
- * @param checkStun, Check if unit is stunned
- * @return bool, True if unable to function on the battlefield
+ * @param checkHealth	- check if unit still has health
+ * @param checkStun		- check if unit is stunned
+ * @return, true if this BattleUnit is unable to function on the battlefield
  */
 bool BattleUnit::isOut(
 		bool checkHealth,
@@ -1729,12 +1724,14 @@ bool BattleUnit::isOut(
 	{
 		return true;
 	}
-	else if (checkStun == true
+
+	if (checkStun == true
 		&& getStun() >= getHealth())
 	{
 		return true;
 	}
-	else if (_status == STATUS_DEAD
+
+	if (   _status == STATUS_DEAD
 		|| _status == STATUS_UNCONSCIOUS
 		|| _status == STATUS_TIME_OUT)
 	{
@@ -3312,6 +3309,14 @@ void BattleUnit::painKillers()
 						lostHealth - _moraleRestored + _morale);
 		_moraleRestored = lostHealth;
 	}
+
+	if (_geoscapeSoldier != NULL
+		|| (_unitRules->isMechanical() == false
+			&& _race != "STR_ZOMBIE"))
+	{
+		_stunLevel += 10;
+		_battleGame->checkForCasualties();
+	}
 }
 
 /**
@@ -3398,14 +3403,15 @@ bool BattleUnit::hasFlightSuit() const
 
 /**
  * Gets a unit's name.
- * An aLien's name is the translation of its race and rank; hence the language pointer needed.
- * @param lang			- pointer to Language
- * @param debugAppendId	- append unit ID to name for debug purposes (default false)
- * @return, name of the unit
+ * @note An aLien's name is the translation of its race and rank; hence the
+ * language pointer needed.
+ * @param lang		- pointer to Language
+ * @param debugId	- append unit ID to name for debug purposes (default false)
+ * @return, name of this BattleUnit
  */
 std::wstring BattleUnit::getName(
 		const Language* const lang,
-		bool debugAppendId) const
+		bool debugId) const
 {
 	if (_geoscapeSoldier == NULL
 		&& lang != NULL)
@@ -3417,7 +3423,7 @@ std::wstring BattleUnit::getName(
 		else
 			ret = lang->getString(_race);
 
-		if (debugAppendId == true)
+		if (debugId == true)
 		{
 			std::wostringstream woststr;
 			woststr << ret << L" " << _id;
@@ -3432,7 +3438,8 @@ std::wstring BattleUnit::getName(
 
 /**
  * Gets a pointer to this BattleUnit's stats.
- * NOTE: xCom Soldiers return their current statistics; aLiens & Units return rule statistics.
+ * @note xCom Soldiers return their unique statistics - aLiens & Units return
+ * rule statistics.
  * @return, pointer to UnitStats
  */
 const UnitStats* BattleUnit::getBaseStats() const
@@ -3469,9 +3476,9 @@ int BattleUnit::getFloatHeight() const
 
 /**
  * Gets this unit's LOFT id, one per unit tile.
- * This is one slice only, as it is repeated over the entire height of the unit;
- * that is, each tile has only one LOFT.
- * @param entry - an entry in LofTemps set
+ * @note This is one slice only as it is repeated over the entire height of the
+ * unit - each tile has only one LOFT.
+ * @param entry - an entry in LOFTemps set
  * @return, this unit's Line of Fire Template id
  */
 int BattleUnit::getLoftemps(int entry) const
@@ -3480,7 +3487,8 @@ int BattleUnit::getLoftemps(int entry) const
 }
 
 /**
- * Gets this unit's value. Used for score at debriefing.
+ * Gets this unit's value.
+ * @note Used for score at debriefing.
  * @return, value score
  */
 int BattleUnit::getValue() const
@@ -4399,7 +4407,7 @@ size_t BattleUnit::getBattleOrder() const
  * Sets the BattleGame for this BattleUnit.
  * @param battleGame - pointer to BattleGame
  */
-void BattleUnit::setBattleGame(BattlescapeGame* const battleGame)
+void BattleUnit::setBattleForUnit(BattlescapeGame* const battleGame)
 {
 	_battleGame = battleGame;
 }

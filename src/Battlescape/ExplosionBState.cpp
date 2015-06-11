@@ -425,8 +425,8 @@ void ExplosionBState::cancel()
 
 /**
  * Calculates the effects of an attack.
- * After the animation is done, the real explosion/hit takes place here!
- * kL_note: This function passes to TileEngine::explode() or TileEngine::hit()
+ * @note After the animation is done, the real explosion/hit takes place here!
+ * @note This function passes to TileEngine::explode() or TileEngine::hit()
  * depending on if it came from a bullet/psi/melee/spit or an actual explosion;
  * that is, "explode" here means "attack has happened". Typically called from
  * either ProjectileFlyBState::think() or BattlescapeGame::endTurnPhase()/checkForProximityGrenades()

@@ -102,9 +102,10 @@ BattlescapeGame::BattlescapeGame(
 					NULL,
 					true);
 
-	_currentAction.actor = NULL;
-	_currentAction.type = BA_NONE;
-	_currentAction.targeting = false;
+//	_currentAction.actor = NULL;
+//	_currentAction.type = BA_NONE;
+//	_currentAction.targeting = false;
+	_currentAction.clearAction();
 
 	_universalFist = new BattleItem(
 								getRuleset()->getItem("STR_FIST"),
@@ -113,13 +114,18 @@ BattlescapeGame::BattlescapeGame(
 							getRuleset()->getItem("ALIEN_PSI_WEAPON"),
 							battleSave->getNextItemId());
 
-	for (std::vector<BattleUnit*>::const_iterator // kL
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		(*i)->setBattleGame(this);
+		(*i)->setBattleForUnit(this);
 	}
+	// sequence of instantiations:
+	// - SavedBattleGame
+	// - BattlescapeGenerator
+	// - BattlescapeState
+	// - this.
 }
 
 /**
@@ -1411,9 +1417,7 @@ void BattlescapeGame::endTurnPhase() // private.
 	}
 
 
-	checkForCasualties(
-					NULL,
-					NULL);
+	checkForCasualties();
 
 	int // if all units from either faction are killed - the mission is over.
 		liveAliens,
@@ -1462,8 +1466,8 @@ void BattlescapeGame::endTurnPhase() // private.
 /**
  * Checks for casualties and adjusts morale accordingly.
  * @note Also checks if Alien Base Control was destroyed in a BaseAssault tactical.
- * @param weapon		- pointer to the weapon responsible
- * @param attacker		- pointer to credit the kill
+ * @param weapon		- pointer to the weapon responsible (default NULL)
+ * @param attacker		- pointer to credit the kill (default NULL)
  * @param hiddenExpl	- true for UFO Power Source explosions at the start of battlescape (default false)
  * @param terrainExpl	- true for terrain explosions (default false)
  */

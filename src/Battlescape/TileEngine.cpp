@@ -1968,7 +1968,7 @@ void TileEngine::selectFireMethod(BattleAction& action)
 
 /**
  * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
- * kL_note: called from ExplosionBState::explode()
+ * @note Called from ExplosionBState::explode().
  * @param targetPos_voxel	- reference the center of hit in voxelspace
  * @param power				- power of the hit/explosion
  * @param dType				- damage type of the hit (RuleItem.h)
@@ -2024,7 +2024,7 @@ BattleUnit* TileEngine::hit(
 								power / 4,
 								power * 3 / 4);
 			//Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
-			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
+			// kL_note: This is where to adjust damage based on effectiveness of weapon vs Terrain!
 			// DT_NONE,		// 0
 			// DT_AP,		// 1
 			// DT_IN,		// 2
@@ -2043,7 +2043,7 @@ BattleUnit* TileEngine::hit(
 
 				case DT_LASER:
 					if (tile->getMapData(part)->getSpecialType() != ALIEN_ALLOYS)
-						power = (power + 4) / 5;		// 20%
+						power = (power + 4) / 5;		// 20% // problem: Fusion Torch; fixed, heh.
 				break;
 
 				case DT_IN:
@@ -2051,11 +2051,11 @@ BattleUnit* TileEngine::hit(
 				break;
 
 				case DT_PLASMA:
-					power = (power + 2) / 3;			// 33% // problem: Fusion Torch; fixed, heh.
+					power = (power + 2) / 3;			// 33%
 				break;
 
 				case DT_MELEE:							// TODO: define 2 terrain types, Soft & Hard; so that edged weapons do good vs. Soft, blunt weapons do good vs. Hard
-					power = (power + 1) / 2;			// 50%
+					power = (power + 1) / 2;			// 50% TODO: allow melee attacks vs. objects.
 				break;
 
 				case DT_HE:								// question: do HE & IN ever get in here - hit() or explode() below
@@ -2069,11 +2069,10 @@ BattleUnit* TileEngine::hit(
 			}
 			//Log(LOG_INFO) << ". . power by Type = " << power;
 
-			if (part == VOXEL_OBJECT
+			if (_battleSave->getTacticalType() == TCT_BASEDEFENSE
+				&& part == VOXEL_OBJECT
 				&& tile->getMapData(VOXEL_OBJECT)->isBaseModule() == true
-				&& power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
-				&& _battleSave->getTacticalType() == TCT_BASEDEFENSE)
-//				&& _battleSave->getMissionType() == "STR_BASE_DEFENSE")
+				&& power >= tile->getMapData(MapData::O_OBJECT)->getArmor())
 			{
 				//Log(LOG_INFO) << ". . . vs Object hp  = " << tile->getMapData(MapData::O_OBJECT)->getArmor();
 				_battleSave->getModuleMap()
@@ -2243,10 +2242,9 @@ BattleUnit* TileEngine::hit(
 							|| targetUnit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 						&& (targetUnit->getHealth() == 0
 							|| targetUnit->getStun() >= targetUnit->getHealth()))
-//						&& !targetUnit->isOut(false, true))	// don't explode if stunned. Maybe... wrong!!!
 					{
 						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
-						if (   dType != DT_STUN		// don't explode if stunned. Maybe... see above.
+						if (   dType != DT_STUN	// don't explode if stunned. Maybe... see above.
 							&& dType != DT_SMOKE
 							&& dType != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
 						{

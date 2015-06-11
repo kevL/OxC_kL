@@ -2128,11 +2128,9 @@ void SavedBattleGame::spreadFireSmoke()
 
 /**
  * Checks for units that are unconscious and revives them if they shouldn't be.
- * kL, does this still need a check to see if the unit revives
- * *on a floor* (if not, drop him/her down to a floor tile) <- yes, it does. (also raise up onto terrainLevel)
- * Revived units need a tile to stand on. If the unit's current position is occupied, then
- * all directions around the tile are searched for a free tile to place the unit in.
- * If no free tile is found the unit stays unconscious.
+ * @note Revived units need a tile to stand on. If the unit's current position
+ * is occupied then all directions around the tile are searched for a free tile
+ * to place the unit in. If no free tile is found the unit stays unconscious.
  * @param atTurnOver - true if called from SavedBattleGame::endBattlePhase (default false)
  */
 void SavedBattleGame::reviveUnit(
