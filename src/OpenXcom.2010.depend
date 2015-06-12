@@ -5969,7 +5969,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433808657 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1434087191 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -8480,7 +8480,7 @@
 1433858629 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
-1431679564 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
+1434086350 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
 	"RuleInventory.h"
 	"RuleItem.h"
 

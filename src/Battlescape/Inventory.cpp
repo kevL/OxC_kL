@@ -1188,7 +1188,7 @@ bool Inventory::unload()
 		return false;
 	}
 
-/*	for (std::vector<BattleItem*>::const_iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _selUnit->getInventory()->begin();
 			i != _selUnit->getInventory()->end();
 			++i)
@@ -1199,67 +1199,43 @@ bool Inventory::unload()
 			_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
 			return false;
 		}
-	} */
-	if (fitItem(
-			_game->getRuleset()->getInventory("STR_RIGHT_HAND"),
-			_selItem,
-			true) == false)
-	{
-		_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
-		return false;
 	}
 
 
 	if (_tuMode == false
-		|| _selUnit->spendTimeUnits(10) == true) // should break out to Ruleset value. Also, reload TU ....
+		|| _selUnit->spendTimeUnits(12) == true) // should break out to Ruleset value. Also, reload TU ....
 	{
 		RuleInventory* slotRule;
 		BattleUnit* toOwner;
 
-		if (fitItem(
-				_game->getRuleset()->getInventory("STR_LEFT_HAND"),
-				ammo,
-				true) == true)
-		{
-			slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
-			toOwner = _selUnit;
-		}
-		else if (_tuMode == false)
+		if (_tuMode == false)
 		{
 			slotRule = _game->getRuleset()->getInventory("STR_GROUND");
 			toOwner = NULL;
 		}
 		else
 		{
-			slotRule = NULL;
-			toOwner = NULL;
+			slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+			toOwner = _selUnit;;
 		}
 
+		moveItem(
+				_selItem,
+				_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+		_selItem->moveToOwner(_selUnit);
 
-		if (_tuMode == true
-			&& slotRule == NULL)
-		{
-			_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
-			return false;
-		}
-		else if (slotRule != NULL)
-		{
-			moveItem(
-					ammo,
-					slotRule);
-			ammo->moveToOwner(toOwner);
+		_selItem->setAmmoItem(NULL);
+		setSelectedItem(NULL);
 
-			moveItem(
-					_selItem,
-					_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
-			_selItem->moveToOwner(_selUnit);
+		moveItem(
+				ammo,
+				slotRule);
+		ammo->moveToOwner(toOwner);
 
-			_selItem->setAmmoItem(NULL);
-			setSelectedItem(NULL);
-
-			if (ammo->getSlot()->getType() == INV_GROUND)
-				arrangeGround(false);
-		}
+		if (toOwner == NULL)
+			arrangeGround(false);
+		else
+			drawItems();
 	}
 	else
 	{
@@ -1272,8 +1248,8 @@ bool Inventory::unload()
 
 /**
  * Arranges items on the ground for the inventory display.
- * Since items on the ground aren't assigned to anyone
- * they don't actually have permanent slot positions.
+ * @note Since items on the ground aren't assigned to anyone they don't actually
+ * have permanent slot positions.
  * @param alterOffset - true to alter the ground offset (default true)
  */
 void Inventory::arrangeGround(bool alterOffset)

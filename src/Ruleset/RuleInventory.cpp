@@ -252,20 +252,20 @@ bool RuleInventory::fitItemInSlot(
 			xOffset += width;
 
 		for (int
-				xx = x;
-				xx < x + item->getInventoryWidth();
-				++xx)
+				find_x = x;
+				find_x != x + item->getInventoryWidth();
+				++find_x)
 		{
 			for (int
-					yy = y;
-					yy < y + item->getInventoryHeight();
-					++yy)
+					find_y = y;
+					find_y != y + item->getInventoryHeight();
+					++find_y)
 			{
 				if (!
-						(  xx >= xOffset
-						&& xx < xOffset + width
-						&& yy > -1
-						&& yy < height))
+						(  find_x >= xOffset
+						&& find_x < xOffset + width
+						&& find_y > -1
+						&& find_y < height))
 				{
 					return false;
 				}
