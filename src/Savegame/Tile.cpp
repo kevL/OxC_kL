@@ -22,22 +22,22 @@
 //#include <algorithm>
 
 #include "BattleItem.h"
-#include "BattleUnit.h"
+//#include "BattleUnit.h"
 #include "SerializationHelper.h"
 
 #include "../Battlescape/Pathfinding.h"
-#include "../Battlescape/Particle.h"
+//#include "../Battlescape/Particle.h"
 
 //#include "../Engine/Exception.h"
 //#include "../Engine/Logger.h"
 //#include "../Engine/RNG.h"
-#include "../Engine/Surface.h"
+//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Ruleset/MapData.h"
+//#include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/RuleItem.h"
+//#include "../Ruleset/RuleItem.h"
 
 #include "../Savegame/SavedBattleGame.h"
 
@@ -604,7 +604,8 @@ bool Tile::isDiscovered(int part) const
 }
 
 /**
- * Reset the light amount on the tile. This is done before a light level recalculation.
+ * Reset the light amount on the tile.
+ * @note This is done before a light level recalculation.
  * @param layer - light is separated in 3 layers: Ambient, Static and Dynamic
  */
 void Tile::resetLight(size_t layer)
@@ -614,7 +615,8 @@ void Tile::resetLight(size_t layer)
 }
 
 /**
- * Add the light amount on the tile. Only add light if the current light is lower.
+ * Add the light amount on the tile.
+ * @note Only add light if the current light is lower.
  * @param light - amount of light to add
  * @param layer - light is separated in 3 layers: Ambient, Static and Dynamic
  */
@@ -817,7 +819,7 @@ int Tile::getFlammability(int part) const
  */
 int Tile::convertBurnToPCT(int burn) const // private.
 {
-	if (burn == 255)
+	if (burn > 255)
 		return 0;
 
 	burn = 255 - burn;
@@ -832,36 +834,37 @@ int Tile::convertBurnToPCT(int burn) const // private.
 }
 
 /**
- * Fuel of a tile is the highest fuel of its parts/objects.
- * @note This is NOT the sum of the fuel of the objects!
- * @return, how many turns to burn
- */
-int Tile::getFuel() const
-{
-	int fuel = 0;
-
-	for (size_t
-			i = 0;
-			i != PARTS;
-			++i)
-	{
-		if (   _objects[i] != NULL
-			&& _objects[i]->getFuel() > fuel)
-		{
-			fuel = _objects[i]->getFuel();
-		}
-	}
-
-	return fuel;
-}
-
-/**
  * Gets the fuel of a tile-part.
- * @return, how many turns to burn
+ * @note Fuel of a tile is the highest fuel of its parts/objects.
+ * @note This is NOT the sum of the fuel of the objects!
+ * @param part - the part to check or -1 to check all parts (default -1)
+ * @return, turns to burn
  */
 int Tile::getFuel(int part) const
 {
-	return _objects[static_cast<size_t>(part)]->getFuel();
+	if (part < 0)
+	{
+		int fuel = 0;
+
+		for (size_t
+				i = 0;
+				i != PARTS;
+				++i)
+		{
+			if (   _objects[i] != NULL
+				&& _objects[i]->getFuel() > fuel)
+			{
+				fuel = _objects[i]->getFuel();
+			}
+		}
+
+		return fuel;
+	}
+
+	if (part < PARTS)
+		return _objects[static_cast<size_t>(part)]->getFuel();
+
+	return 0;
 }
 
 /**
@@ -938,7 +941,7 @@ void Tile::decreaseFire()
 
 /**
  * Gets the number of turns left for this tile to be on fire.
- * @return, number of turns left for this tile to burn
+ * @return, turns left
  */
 int Tile::getFire() const
 {
@@ -947,7 +950,7 @@ int Tile::getFire() const
 
 /**
  * Adds smoke to this Tile.
- * @param turns - turns to smoke
+ * @param turns - turns to smoke for
  */
 void Tile::addSmoke(int turns)
 {
@@ -972,7 +975,7 @@ void Tile::addSmoke(int turns)
  */
 void Tile::decreaseSmoke()
 {
-	_smoke -= (RNG::generate(1, _smoke) + 2) / 2;
+	_smoke -= (RNG::generate(1, _smoke) + 1) / 2;
 
 	if (_smoke < 1)
 	{
@@ -1047,7 +1050,7 @@ int Tile::getSmoke() const
 /**
  * Gets if this Tile will accept '_smoke' or '_fire' value.
  * @note diag bigWalls take no smoke/fire. 'Cause I don't want it showing on both sides.
- * And I don't want it to creep through diagonal UFO hulls ....
+ * And I don't want it creeping through diagonal UFO hulls ....
  * @return, true if smoke/fire possible
  */
 bool Tile::canSmoke() const // private
@@ -1061,10 +1064,10 @@ bool Tile::canSmoke() const // private
 
 /**
  * Ends this tile's turn. Units catch on fire.
- * Separated from resolveOverlaps() above so that units take damage before
+ * @note Separated from resolveOverlaps() above so that units take damage before
  * smoke/fire spreads to them; this is so that units would have to end their
- * turn on a tile before smoke/fire damages them. That is they get a chance
- * to get off the tile during their turn.
+ * turn on a tile before smoke/fire damages them. That is they get a chance to
+ * get off the tile during their turn.
  * @param battleSave - pointer to the current SavedBattleGame (default NULL Vs. units)
  */
 void Tile::hitStuff(SavedBattleGame* const battleSave)
@@ -1322,7 +1325,8 @@ void Tile::animateTile()
 
 /**
  * Get the number of frames the fire or smoke animation is off-sync.
- * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
+ * @note To void fire and smoke animations of different tiles moving nice in
+ * sync - it looks fake.
  * @return, offset
  */
 int Tile::getAnimationOffset() const

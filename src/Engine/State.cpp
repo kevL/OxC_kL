@@ -200,7 +200,7 @@ void State::add(
 
 //			if (tacBtn != NULL)
 //				tacBtn->setTftdMode(element->TFTDMode);
-			surface->setTFTDMode(element->TFTDMode);
+//			surface->setTFTDMode(element->TFTDMode);
 
 			if (element->color != -1)
 				surface->setColor(static_cast<Uint8>(element->color));

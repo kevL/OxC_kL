@@ -228,13 +228,11 @@ protected:
 
 		/// Gets flammability.
 		int getFlammability() const;
-		/// Get flammability of part.
+		/// Gets flammability of part.
 		int getFlammability(int part) const;
 
-		/// Gets turns to burn
-		int getFuel() const;
-		/// Get turns to burn of part
-		int getFuel(int part) const;
+		/// Gets turns to burn of part.
+		int getFuel(int part = -1) const;
 
 		/// Tries to start fire on this Tile.
 		bool ignite(int power);

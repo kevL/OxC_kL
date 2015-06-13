@@ -226,11 +226,11 @@ DogfightState::DogfightState(
 	_btnDisengage->invalidate(false);
 	_btnUfo->invalidate(false);
 
-	if (_txtDistance->isTFTDMode() == true)
-	{
-		_txtDistance->setY(_txtDistance->getY() + 1);
-		_txtDistance->setX(_txtDistance->getX() + 7);
-	}
+//	if (_txtDistance->isTFTDMode() == true)
+//	{
+//		_txtDistance->setY(_txtDistance->getY() + 1);
+//		_txtDistance->setX(_txtDistance->getX() + 7);
+//	}
 
 /*	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");

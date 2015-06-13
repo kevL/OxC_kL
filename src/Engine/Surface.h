@@ -316,19 +316,19 @@ protected:
 		void setTooltip(const std::string& tooltip);
 
 		/// Sets the color of the surface.
-		virtual void setColor(Uint8 color)
+		virtual void setColor(Uint8 /*color*/)
 		{};
 		/// Sets the secondary color of the surface.
-		virtual void setSecondaryColor(Uint8 color)
+		virtual void setSecondaryColor(Uint8 /*color*/)
 		{};
 		/// Sets the border colour of the surface.
-		virtual void setBorderColor(Uint8 color)
+		virtual void setBorderColor(Uint8 /*color*/)
 		{};
 
 		/// Sets this button to use a color lookup table instead of inversion for its alternate form.
-		virtual void setTFTDMode(bool mode);
+//		virtual void setTFTDMode(bool mode);
 		/// Checks if this is a TFTD mode surface.
-		bool isTFTDMode();
+//		bool isTFTDMode();
 };
 
 }

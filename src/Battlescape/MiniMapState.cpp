@@ -131,9 +131,9 @@ MiniMapState::MiniMapState(
 	_txtLevel->setBig();
 	_txtLevel->setHighContrast();
 	std::wostringstream level;
-	if (_txtLevel->isTFTDMode() == true)
-		level << tr("STR_LEVEL_SHORT");
-	level << camera->getViewLevel();
+//	if (_txtLevel->isTFTDMode() == true)
+//		level << tr("STR_LEVEL_SHORT");
+	level << (camera->getViewLevel() + 1);
 	_txtLevel->setText(level.str());
 
 	_timerAnimate = new Timer(125);
@@ -203,9 +203,9 @@ void MiniMapState::btnOkClick(Action*)
 void MiniMapState::btnLevelUpClick(Action*)
 {
 	std::wostringstream level;
-	if (_miniView->isTFTDMode() == true)
-		level << tr("STR_LEVEL_SHORT");
-	level << _miniView->up();
+//	if (_miniView->isTFTDMode() == true)
+//		level << tr("STR_LEVEL_SHORT");
+	level << (_miniView->up() + 1);
 	_txtLevel->setText(level.str());
 }
 
@@ -216,9 +216,9 @@ void MiniMapState::btnLevelUpClick(Action*)
 void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wostringstream level;
-	if (_miniView->isTFTDMode() == true)
-		level << tr("STR_LEVEL_SHORT");
-	level << _miniView->down();
+//	if (_miniView->isTFTDMode() == true)
+//		level << tr("STR_LEVEL_SHORT");
+	level << (_miniView->down() + 1);
 	_txtLevel->setText(level.str());
 }
 

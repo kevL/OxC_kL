@@ -412,7 +412,7 @@ void UnitDieBState::convertToCorpse() // private.
 					if (explTile != NULL // safety.
 						&& explTile->getFire() == 0)
 					{
-						explTile->addFire(explTile->getFuel() + RNG::generate(1,3)); // Could use a ruleset-factor in here.
+						explTile->addFire(explTile->getFuel() + RNG::generate(1,2)); // Could use a ruleset-factor in here.
 						explTile->addSmoke(std::max(
 												1,
 												std::min(

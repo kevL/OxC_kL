@@ -116,7 +116,7 @@ void MiniMapView::draw()
 		Position pos;
 		Tile* tile;
 		Surface* srf;
-		MapData* data;
+		const MapData* data;
 		const BattleUnit* unit;
 
 		this->lock();

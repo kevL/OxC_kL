@@ -1063,8 +1063,7 @@ void Surface::invalidate(bool redraw)
 }
 
 /**
- * Returns the help description of this surface,
- * for example for showing in tooltips.
+ * Returns the help description of this surface, for example for showing in tooltips.
  * @return String ID.
  */
 std::string Surface::getTooltip() const
@@ -1073,8 +1072,7 @@ std::string Surface::getTooltip() const
 }
 
 /**
-* Changes the help description of this surface,
-* for example for showing in tooltips.
+* Changes the help description of this surface, for example for showing in tooltips.
 * @param tooltip String ID.
 */
 void Surface::setTooltip(const std::string& tooltip)
@@ -1084,7 +1082,7 @@ void Surface::setTooltip(const std::string& tooltip)
 
 /**
  * Recreates the surface with a new size.
- * Old contents will not be altered, and may be cropped to fit the new size.
+ * @note Old contents will not be altered and may be cropped to fit the new size.
  * @param width Width in pixels.
  * @param height Height in pixels.
  */
@@ -1139,8 +1137,7 @@ void Surface::resize(
 
 /**
  * Changes the width of the surface.
- * @warning This is not a trivial setter!
- * It will force the surface to be recreated for the new size.
+ * @warning This is not a trivial setter! It will force the surface to be recreated for the new size.
  * @param width - new width in pixels
  */
 void Surface::setWidth(int width)
@@ -1154,8 +1151,7 @@ void Surface::setWidth(int width)
 
 /**
  * Changes the height of the surface.
- * @warning This is not a trivial setter!
- * It will force the surface to be recreated for the new size.
+ * @warning This is not a trivial setter! It will force the surface to be recreated for the new size.
  * @param height - new height in pixels
  */
 void Surface::setHeight(int height)
@@ -1168,21 +1164,21 @@ void Surface::setHeight(int height)
 }
 
 /**
- * TFTD mode: much like click inversion, but does a color swap rather than a palette shift.
+ * TFTD mode: much like click inversion but does a color swap rather than a palette shift.
  * @param mode - set TFTD mode to this
  */
-void Surface::setTFTDMode(bool mode)
+/* void Surface::setTFTDMode(bool mode)
 {
 	_tftdMode = mode;
-}
+} */
 
 /**
  * Checks TFTD mode.
  * @return, true if TFTD mode
  */
-bool Surface::isTFTDMode()
+/* bool Surface::isTFTDMode()
 {
 	return _tftdMode;
-}
+} */
 
 }
