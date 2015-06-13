@@ -1835,7 +1835,7 @@ void BattlescapeState::setLayerValue(int level)
 {
 	if (level < 0)
 		level = 0;
-	_numLayers->setValue(static_cast<unsigned int>(level));
+	_numLayers->setValue(static_cast<unsigned int>(level + 1));
 }
 
 /**

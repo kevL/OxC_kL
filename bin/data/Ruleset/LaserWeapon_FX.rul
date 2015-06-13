@@ -62,7 +62,8 @@ extraSprites:
 # Laser Pistol
   - type: BIGOBS.PCK
     files:
-      650: Resources/LaserWeapon_FX/LaserPistol_BIGOBS.PNG
+      650: Resources/LaserWeapon_FX/alt/Laser_Pistol_MiB.png #alt
+#      650: Resources/LaserWeapon_FX/LaserPistol_BIGOBS.PNG
       651: Resources/LaserWeapon_FX/LaserPistolClip_BIGOBS.PNG
   - type: FLOOROB.PCK
     files:
@@ -74,7 +75,8 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      650: Resources/LaserWeapon_FX/LaserPistol_HANDOB.PNG
+      650: Resources/LaserWeapon_FX/alt/HandOb_Laser_Pistol_MiB.png #alt
+#      650: Resources/LaserWeapon_FX/LaserPistol_HANDOB.PNG
 # Laser Rifle
   - type: BIGOBS.PCK
     files:
@@ -110,11 +112,13 @@ extraSprites:
 # Heavy Laser
   - type: BIGOBS.PCK
     files:
-      656: Resources/LaserWeapon_FX/HeavyLaser_BIGOBS.PNG
+      656: Resources/LaserWeapon_FX/alt/Heavy_Laser_MiB.png #alt
+#      656: Resources/LaserWeapon_FX/HeavyLaser_BIGOBS.PNG
       657: Resources/LaserWeapon_FX/HeavyLaserClip_BIGOBS.PNG
   - type: FLOOROB.PCK
     files:
-      656: Resources/LaserWeapon_FX/HeavyLaser_FLOOROB.PNG
+      656: Resources/LaserWeapon_FX/alt/Floor_Heavy_Laser_MiB.png #alt
+#      656: Resources/LaserWeapon_FX/HeavyLaser_FLOOROB.PNG
       657: Resources/LaserWeapon_FX/HeavyLaserClip_FLOOROB.PNG
   - type: HANDOB.PCK
     width: 256
@@ -122,7 +126,8 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      672: Resources/LaserWeapon_FX/HeavyLaser_HANDOB.PNG
+      672: Resources/LaserWeapon_FX/alt/HandOb_Heavy_Laser_MiB.png #alt
+#      672: Resources/LaserWeapon_FX/HeavyLaser_HANDOB.PNG
 # Laser Scatter
   - type: BIGOBS.PCK
     files:

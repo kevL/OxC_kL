@@ -70,12 +70,12 @@ void Screen::makeVideoFlags()
 		_flags |= SDL_RESIZABLE;
 
 	// Handle window positioning
-	if (Options::windowedModePositionX != -1
+	if (   Options::windowedModePositionX != -1
 		|| Options::windowedModePositionY != -1)
 	{
-		std::ostringstream ss;
-		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
-		SDL_putenv(const_cast<char*>(ss.str().c_str()));
+		std::ostringstream oststr;
+		oststr << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
+		SDL_putenv(const_cast<char*>(oststr.str().c_str()));
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 	}
 	else if (Options::borderless == true)
@@ -112,7 +112,7 @@ void Screen::makeVideoFlags()
 
 /**
  * Initializes a new display screen for the game to render contents to.
- * The screen is set up based on the current options.
+ * @note The screen is set up based on the current options.
  */
 Screen::Screen()
 	:
@@ -134,8 +134,8 @@ Screen::Screen()
 }
 
 /**
- * Deletes the buffer from memory. The display screen itself
- * is automatically freed once SDL shuts down.
+ * Deletes the buffer from memory.
+ * @note The display screen itself is automatically freed once SDL shuts down.
  */
 Screen::~Screen()
 {
@@ -143,14 +143,13 @@ Screen::~Screen()
 }
 
 /**
- * Returns the screen's internal buffer surface. Any
- * contents that need to be shown will be blitted to this.
- * @return Pointer to the buffer surface.
+ * Returns the screen's internal buffer surface.
+ * @note Any contents that need to be shown will be blitted to this.
+ * @return, pointer to the buffer surface
  */
 Surface* Screen::getSurface()
 {
 	_pushPalette = true;
-
 	return _surface;
 }
 
@@ -186,43 +185,42 @@ void Screen::handle(Action* action)
 	else if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == Options::keyScreenshot)
 	{
-		std::ostringstream osts;
+		std::ostringstream oststr;
 /*		int i = 0;
 		do
 		{
-			osts.str("");
-			osts << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << "_" << i << ".png";
+			oststr.str("");
+			oststr << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << "_" << i << ".png";
 
 			++i;
 		}
-		while (CrossPlatform::fileExists(osts.str()) == true); */
+		while (CrossPlatform::fileExists(oststr.str()) == true); */
 		// ... too slow to take & write more than one screenshot per second @ 1920x1080 ...
 		// Skip the do-while Loop:
-		osts << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << ".png";
-		screenshot(osts.str());
+		oststr << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << ".png";
+		screenshot(oststr.str());
 /*kL
-		std::ostringstream ss;
+		std::ostringstream oststr;
 		int i = 0;
 		do
 		{
-			ss.str("");
-			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
+			oststr.str("");
+			oststr << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
 			++i;
-		} while (CrossPlatform::fileExists(ss.str()) == true);
-		screenshot(ss.str()); */
+		} while (CrossPlatform::fileExists(oststr.str()) == true);
+		screenshot(oststr.str()); */
 	}
 }
 
 /**
- * Renders the buffer's contents onto the screen, applying
- * any necessary filters or conversions in the process.
- * If the scaling factor is bigger than 1, the entire contents
- * of the buffer are resized by that factor (eg. 2 = doubled)
- * before being put on screen.
+ * Renders the buffer's contents onto the screen applying any necessary filters
+ * or conversions in the process.
+ * @note If the scaling factor is bigger than 1 the entire contents of the
+ * buffer are resized by that factor (eg. 2 = doubled) before being put on screen.
  */
 void Screen::flip()
 {
-	if (getWidth() != _baseWidth
+	if (   getWidth() != _baseWidth
 		|| getHeight() != _baseHeight
 		|| isOpenGLEnabled() == true)
 	{
@@ -236,13 +234,11 @@ void Screen::flip()
 					&glOutput);
 	}
 	else
-	{
 		SDL_BlitSurface(
 				_surface->getSurface(),
 				NULL,
 				_screen,
 				NULL);
-	}
 
 	// perform any requested palette update
 	if (_pushPalette == true
@@ -290,10 +286,10 @@ void Screen::clear()
 
 /**
  * Changes the 8bpp palette used to render the screen's contents.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
- * @param immediately Apply palette changes immediately, otherwise wait for next blit.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
+ * @param immediately	- apply palette changes immediately otherwise wait for next blit
  */
 void Screen::setPalette(
 		SDL_Color* colors,
@@ -307,27 +303,27 @@ void Screen::setPalette(
 	{
 		// an initial palette setup has not been committed to the screen yet
 		// just update it with whatever colors are being sent now
-		memmove(
-			&(deferredPalette[firstcolor]),
-			colors,
-			sizeof(SDL_Color) * ncolors);
+		std::memmove(
+				&(deferredPalette[firstcolor]),
+				colors,
+				sizeof(SDL_Color) * ncolors);
 		_numColors = 256; // all the use cases are just a full palette with 16-color follow-ups
 		_firstColor = 0;
 	}
 	else
 	{
-		memmove(
-			&(deferredPalette[firstcolor]),
-			colors,
-			sizeof(SDL_Color) * ncolors);
+		std::memmove(
+				&(deferredPalette[firstcolor]),
+				colors,
+				sizeof(SDL_Color) * ncolors);
 		_numColors = ncolors;
 		_firstColor = firstcolor;
 	}
 
 	_surface->setPalette(
-						colors,
-						firstcolor,
-						ncolors);
+					colors,
+					firstcolor,
+					ncolors);
 
 	// defer actual update of screen until SDL_Flip()
 	if (immediately == true
@@ -359,7 +355,7 @@ void Screen::setPalette(
 
 /**
  * Returns the screen's 8bpp palette.
- * @return Pointer to the palette's colors.
+ * @return, pointer to the palette's colors
  */
 SDL_Color* Screen::getPalette() const
 {
@@ -368,7 +364,7 @@ SDL_Color* Screen::getPalette() const
 
 /**
  * Returns the width of the screen.
- * @return Width in pixels.
+ * @return, width in pixels
  */
 int Screen::getWidth() const
 {
@@ -377,7 +373,7 @@ int Screen::getWidth() const
 
 /**
  * Returns the height of the screen.
- * @return Height in pixels
+ * @return, height in pixels
  */
 int Screen::getHeight() const
 {
@@ -385,8 +381,8 @@ int Screen::getHeight() const
 }
 
 /**
- * Resets the screen surfaces based on the current display options
- * as they don't automatically take effect.
+ * Resets the screen surfaces based on the current display options as they don't
+ * automatically take effect.
  * @param resetVideo - true to reset display surface (default true)
  */
 void Screen::resetDisplay(bool resetVideo)
@@ -569,7 +565,7 @@ void Screen::resetDisplay(bool resetVideo)
 
 /**
  * Returns the screen's X scale.
- * @return Scale factor.
+ * @return, scale factor X
  */
 double Screen::getXScale() const
 {
@@ -578,7 +574,7 @@ double Screen::getXScale() const
 
 /**
  * Returns the screen's Y scale.
- * @return Scale factor.
+ * @return, scale factor Y
  */
 double Screen::getYScale() const
 {
@@ -587,7 +583,7 @@ double Screen::getYScale() const
 
 /**
  * Returns the screen's top black forbidden to cursor band's height.
- * @return Height in pixel.
+ * @return, height in pixels
  */
 int Screen::getCursorTopBlackBand() const
 {
@@ -596,7 +592,7 @@ int Screen::getCursorTopBlackBand() const
 
 /**
  * Returns the screen's left black forbidden to cursor band's width.
- * @return Width in pixel.
+ * @return, width in pixels
  */
 int Screen::getCursorLeftBlackBand() const
 {
@@ -654,7 +650,7 @@ void Screen::screenshot(const std::string& filename) const
 	unsigned error = lodepng::encode(
 								filename,
 								(const unsigned char*)(screenshot->pixels),
-								getWidth() - getWidth() %4,
+								getWidth() - getWidth() % 4,
 								getHeight(),
 								LCT_RGB);
 	if (error)
@@ -692,7 +688,7 @@ bool Screen::is32bitEnabled()
 
 /**
  * Check if OpenGL is enabled.
- * @return, True if if OpenGL is enabled
+ * @return, true if enabled
  */
 bool Screen::isOpenGLEnabled()
 {
@@ -704,8 +700,8 @@ bool Screen::isOpenGLEnabled()
 }
 
 /**
- * Gets the Horizontal offset from the mid-point of the screen, in pixels.
- * @return, The horizontal offset
+ * Gets the Horizontal offset from the mid-point of the screen in pixels.
+ * @return, horizontal offset
  */
 int Screen::getDX()
 {
@@ -714,7 +710,7 @@ int Screen::getDX()
 
 /**
  * Gets the Vertical offset from the mid-point of the screen, in pixels.
- * @return, The vertical offset.
+ * @return, vertical offset
  */
 int Screen::getDY()
 {
@@ -722,8 +718,8 @@ int Screen::getDY()
 }
 
 /**
-* Changes a given scale, and if necessary, switch the current base resolution.
-* @param type		- reference which scale option we are using, battlescape or geoscape
+* Changes a given scale and if necessary switches the current base resolution.
+* @param type		- reference which scale option is in use (Battlescape or Geoscape)
 * @param selection	- the new scale level
 * @param width		- reference which x scale to adjust
 * @param height		- reference which y scale to adjust

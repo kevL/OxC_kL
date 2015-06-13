@@ -498,7 +498,6 @@ void Camera::setViewLevel(int viewLevel)
 	_map->draw();
 }
 
-
 /**
  * Centers map on a certain position.
  * @param posMap - reference the Position to center on
@@ -525,7 +524,6 @@ void Camera::centerOnPosition(
 					&screenPos);
 
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) + 16);
-//	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
 	_mapOffset.z = _center.z;
 

@@ -398,7 +398,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 	size_t trajLength;
 
 	bool diag;
-	if (dir %2)
+	if (dir % 2)
 	{
 		diag = true;
 		y2 = MAX_VIEW_DISTANCE;
@@ -432,6 +432,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 		}
 	}
 
+	const int mapSize_z = _battleSave->getMapSizeZ();
 	for (int
 			x = 0; // does the unit itself really need checking ... Yes, marks own Tile as _visible.
 			x <= MAX_VIEW_DISTANCE;
@@ -450,7 +451,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 		{
 			for (int
 					z = 0;
-					z != _battleSave->getMapSizeZ();
+					z != mapSize_z;
 					++z)
 			{
 				posTest.z = z;
@@ -555,7 +556,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 
 										// walls to the east or south of a visible tile, we see that too
 										// kL_note: Yeh, IF there's walls or an appropriate BigWall object!
-										/*	parts:
+										/* parts:
 											#0 - floor
 											#1 - westwall
 											#2 - northwall
@@ -701,7 +702,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 
 /**
  * Calculates line of sight of all units within range of the Position.
- * Used when terrain has changed, which can reveal unseen units and/or parts of terrain.
+ * @note Used when a unit is walking or terrain has changed which can reveal
+ * unseen units and/or parts of terrain.
  * @param pos - reference the position of the changed terrain
  */
 void TileEngine::calculateFOV(const Position& pos)
@@ -760,15 +762,15 @@ bool TileEngine::visible(
 		return true;
 
 
-	const int distTiles = distance(
-								unit->getPosition(),
-								targetUnit->getPosition());
-	if (distTiles * distTiles > MAX_VIEW_DISTANCE_SQR)
+	const int dist = distance(
+							unit->getPosition(),
+							targetUnit->getPosition());
+	if (dist * dist > MAX_VIEW_DISTANCE_SQR)
 		return false;
 
 	if (unit->getFaction() == FACTION_PLAYER
 		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS
-		&& distTiles > 23 - _battleSave->getGlobalShade())
+		&& dist > 23 - _battleSave->getGlobalShade())
 	{
 		return false;
 	}
