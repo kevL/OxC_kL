@@ -430,7 +430,7 @@ void Inventory::moveItem( // private.
 		else
 			item->moveToOwner(NULL);
 
-		item->setSlot(NULL); // kL, bugfix <-
+		item->setSlot(NULL);
 	}
 	else
 	{
@@ -452,6 +452,11 @@ void Inventory::moveItem( // private.
 			else if (item->getSlot() == NULL					// unload a weapon clip to left hand
 				|| item->getSlot()->getType() == INV_GROUND)	// or pick up item.
 			{
+				if (item->getSlot()->getType() == INV_GROUND)	// if from Ground its weight becomes an extra tu-burden
+					_selUnit->setTimeUnits(std::max(			// This prevents units from picking up large objects and running round with nearly full TU on the same turn.
+												0,
+												_selUnit->getTimeUnits() - item->getRules()->getWeight()));
+
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);
 //				item->setTurnFlag(false);
@@ -479,7 +484,7 @@ void Inventory::moveItem( // private.
  * @param y		- Y position in slot (default 0)
  * @return, true if there's overlap
  */
-bool Inventory::overlapItems(
+bool Inventory::overlapItems( // static.
 		BattleUnit* unit,
 		BattleItem* item,
 		RuleInventory* slot,

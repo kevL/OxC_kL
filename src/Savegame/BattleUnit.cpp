@@ -1949,8 +1949,7 @@ void BattleUnit::setEnergy(int energy)
 }
 
 /**
- * Sets whether this unit is visible to the player;
- * that is should it be drawn on the Map.
+ * Sets whether this unit is visible to the player - that is should it be drawn.
  * @param flag - true if visible (default true)
  */
 void BattleUnit::setUnitVisible(bool flag)

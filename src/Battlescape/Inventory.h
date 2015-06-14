@@ -55,8 +55,8 @@ private:
 		_fuseFrame,
 //		_depth,
 		_groundOffset,
-		_tuCost,
-		_prime;
+		_prime,
+		_tuCost;
 
 	BattleItem
 		* _mouseOverItem,

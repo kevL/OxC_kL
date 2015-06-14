@@ -543,7 +543,6 @@ void InventoryState::updateStats() // private.
 		else
 			_txtWeight->setSecondaryColor(static_cast<Uint8>(
 							_game->getRuleset()->getInterface("inventory")->getElement("weight")->color));
-		// TODO: if item moves from ground to body, and it encumbers unit, subtract overweight amount from tu (till min=0)
 
 		const int psiSkill = unit->getBaseStats()->psiSkill;
 
