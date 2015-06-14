@@ -5544,7 +5544,7 @@
 	"BattleAIState.h"
 	"Position.h"
 
-1433460073 f:\git\openxcom\src\battlescape\explosionbstate.h
+1434249531 f:\git\openxcom\src\battlescape\explosionbstate.h
 	"BattleState.h"
 	"Position.h"
 
@@ -5921,13 +5921,13 @@
 
 1433536618 f:\git\openxcom\src\savegame\country.h
 
-1430149550 source:f:\git\openxcom\src\battlescape\explosion.cpp
+1434257045 source:f:\git\openxcom\src\battlescape\explosion.cpp
 	"Explosion.h"
 
-1430149550 f:\git\openxcom\src\battlescape\explosion.h
+1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1434056614 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1434256324 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -5969,7 +5969,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1434088393 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1434248349 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6026,7 +6026,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1434053204 source:f:\git\openxcom\src\battlescape\map.cpp
+1434256365 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6627,7 +6627,7 @@
 1430343491 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 
-1433863406 source:f:\git\openxcom\src\engine\rng.cpp
+1434170485 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>
@@ -8648,7 +8648,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1434059243 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1434246464 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

@@ -81,8 +81,8 @@ ExplosionBState::ExplosionBState(
 		_power(0),
 		_areaOfEffect(false),
 		_pistolWhip(false),
-		_hit(false),
-		_extend(3) // kL, extra think-cycles before this state is allowed to Pop.
+		_hit(false)
+//		_extend(3) // kL, extra think-cycles before this state is allowed to Pop.
 {}
 
 /**
@@ -290,13 +290,13 @@ void ExplosionBState::init()
 																// They took this out and use 'bool psi' instead ....
 																// supposedly to correct some cursor-stuff that was broke for them.
 		int
-			anim = _item->getRules()->getHitAnimation(),
+			startFrame = _item->getRules()->getHitAnimation(),
 			sound = _item->getRules()->getHitSound();
 
 //		if (_cosmetic == true)
 		if (_hit == true)
 		{
-			anim = _item->getRules()->getMeleeAnimation();
+			startFrame = _item->getRules()->getMeleeAnimation();
 
 			if (_item->getRules()->getBattleType() != BT_PSIAMP)
 				sound = -1; // kL, done in ProjectileFlyBState for melee hits.
@@ -318,7 +318,7 @@ void ExplosionBState::init()
 //			|| _hit == false)	// note: This would prevent map-reveal on aLien melee attacks.
 								// Because reveal depends if Explosions are queued ....
 //		{
-		int hitResult = 0;
+		int hitResult;
 		if (_hit == true)
 		{
 			if (_hitSuccess == true
@@ -329,16 +329,13 @@ void ExplosionBState::init()
 			else
 				hitResult = -1;
 		}
+		else
+			hitResult = 0;
 
-/*		Explosion(
-				Position _position,
-				int frameStart,
-				int frameDelay = 0,
-				bool big = false,
-				int hit = 0); */
+		//Log(LOG_INFO) << "ExplB:startFrame = " << startFrame;
 		Explosion* const explosion = new Explosion( // animation. Don't turn the tile
 												_center,
-												anim,
+												startFrame,
 												0,
 												false,
 												hitResult); // --> _cosmetic effect bleh.
@@ -365,9 +362,10 @@ void ExplosionBState::init()
 }
 
 /**
- * Animates explosion sprites. If their animation is finished remove them from the list.
- * If the list is empty, this state is finished and the actual calculations take place.
- * kL rewrite: Allow a few extra cycles for explosion animations to dissipate.
+ * Animates explosion sprites.
+ * @note If their animation is finished remove them from the list. If the list
+ * is empty this state is finished and the actual calculations take place.
+ * kL_rewrite: Allow a few extra cycles for explosion animations to dissipate.
  */
 void ExplosionBState::think()
 {
@@ -561,7 +559,7 @@ void ExplosionBState::explode()
 						_power / 10);
 		terrain = true;
 	}
-	else if (_item == NULL) // explosion not caused by terrain or an item, must be a cyberdisc
+	else if (_item == NULL) // explosion not caused by terrain or an item - must be a cyberdisc
 	{
 		int radius;
 		if (_unit != NULL
@@ -623,10 +621,10 @@ void ExplosionBState::explode()
 	Tile* const tile = tileEngine->checkForTerrainExplosions(); // check for more exploding tiles
 	if (tile != NULL)
 	{
-		Position pVoxel = Position(
-								tile->getPosition().x * 16 + 8,
-								tile->getPosition().y * 16 + 8,
-								tile->getPosition().z * 24 + 10);
+		const Position pVoxel = Position(
+									tile->getPosition().x * 16 + 8,
+									tile->getPosition().y * 16 + 8,
+									tile->getPosition().z * 24 + 10);
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
 												pVoxel,

@@ -4388,6 +4388,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 				}
 				else if ((*i)->isHit() == 0) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
 				{
+					//Log(LOG_INFO) << "Map:hitFrame = " << (*i)->getCurrentFrame();
 					srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 					srfSprite->blitNShade(
 							surface,

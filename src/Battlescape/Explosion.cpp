@@ -26,7 +26,8 @@ namespace OpenXcom
 const int
 	Explosion::FRAMES_BULLET	= 10,
 	Explosion::FRAMES_EXPLODE	= 8,
-	Explosion::FRAMES_HIT		= 4;
+	Explosion::FRAMES_HIT		= 4,
+	Explosion::FRAMES_TORCH		= 6;
 
 
 /**
@@ -50,9 +51,9 @@ Explosion::Explosion(
 		_position(position),
 		_frameStart(frameStart),
 		_frameDelay(frameDelay),
-		_frameCurrent(frameStart),
 		_big(big),
-		_hit(hit)
+		_hit(hit),
+		_frameCurrent(frameStart)
 {}
 
 /**
@@ -74,6 +75,27 @@ bool Explosion::animate()
 	}
 
 	++_frameCurrent;
+
+	if (_frameStart == 88) // special handling for Fusion Torch - it has 6 frames that cycle 6 times.
+	{
+		static int torchCycle; // inits to 0.
+
+		if (torchCycle == 7)
+		{
+			torchCycle = 0;
+			return false;
+		}
+		else
+		{
+			if (_frameCurrent == _frameStart + FRAMES_TORCH - 1)
+			{
+				_frameCurrent = 88;
+				++torchCycle;
+			}
+
+			return true;
+		}
+	}
 
 	if ((_hit != 0
 			&& _frameCurrent == _frameStart + FRAMES_HIT)		// melee or psiamp

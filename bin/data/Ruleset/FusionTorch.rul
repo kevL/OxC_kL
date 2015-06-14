@@ -8,7 +8,8 @@ items:
     bigSprite: 59
     floorSprite: 73
     handSprite: 128
-    fireSound: 52
+#    fireSound: 52
+    fireSound: 337
     battleType: 1
     accuracyAimed: 200
     tuAimed: 87
@@ -34,7 +35,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 1
-    hitSound: 337
+#    hitSound: 337
     hitAnimation: 88
     armor: 5
     listOrder: 3711
@@ -89,11 +90,11 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      88: Resources/FusionTorch/SMOKE/FusionTorch_hit.png
+      88: Resources/FusionTorch/SMOKE/FusionTorch_hit2.png
 extraSounds:
   - type: BATTLE.CAT
     files:
-      337: Resources/FusionTorch/kL_electricArc2.ogg
+      337: Resources/FusionTorch/kL_electricArc3.ogg
 extraStrings:
   - type: en-US
     strings:

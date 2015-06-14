@@ -28,8 +28,8 @@ namespace OpenXcom
 
 /**
  * This class represents an explode animation.
- * Map is the owner of an instance of this class during its short life.
- * It animates either a bullet or psi hit, or a big explosion animation.
+ * @note Map is the owner of an instance of this class during its short life.
+ * It animates a bullet or psi hit or a big explosion animation.
  */
 class Explosion
 {
@@ -49,7 +49,8 @@ private:
 		static const int
 			FRAMES_BULLET,
 			FRAMES_EXPLODE,
-			FRAMES_HIT;
+			FRAMES_HIT,
+			FRAMES_TORCH;
 
 		/// Creates a new Explosion.
 		Explosion(

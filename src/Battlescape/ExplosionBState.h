@@ -54,7 +54,7 @@ private:
 		_pistolWhip,
 		_hitSuccess; // kL
 	int
-		_extend, // kL
+//		_extend, // kL
 		_power;
 
 	BattleItem* _item;
