@@ -1364,13 +1364,13 @@ void Inventory::arrangeGround(bool alterOffset)
 
 /**
  * Attempts to place the item in the inventory slot.
- * @param newSlot	- pointer to where to place the item
- * @param item		- pointer to item to be placed
- * @param test		- true if only doing a test (no move happens) (default false)
+ * @param slot	- pointer to where to place the item
+ * @param item	- pointer to item to be placed
+ * @param test	- true if only doing a test (no move happens) (default false)
  * @return, true if the item was successfully placed in the inventory
  */
 bool Inventory::fitItem(
-		RuleInventory* newSlot,
+		RuleInventory* slot,
 		BattleItem* item,
 		bool test)
 {
@@ -1378,20 +1378,19 @@ bool Inventory::fitItem(
 
 	for (int
 			y2 = 0;
-			y2 <= newSlot->getY() / RuleInventory::SLOT_H
+			y2 <= slot->getY() / RuleInventory::SLOT_H
 				&& placed == false;
 			++y2)
 	{
 		for (int
 				x2 = 0;
-				x2 <= newSlot->getX() / RuleInventory::SLOT_W
+				x2 <= slot->getX() / RuleInventory::SLOT_W
 					&& placed == false;
 				++x2)
 		{
-			if (newSlot->fitItemInSlot(
-									item->getRules(),
-									x2,
-									y2))
+			if (slot->fitItemInSlot(
+								item->getRules(),
+								x2,y2))
 			{
 				if (_tuMode == true
 					&& test == true)
@@ -1399,20 +1398,20 @@ bool Inventory::fitItem(
 					placed = true;
 				}
 				else if (overlapItems(
-									_selUnit,
-									item,
-									newSlot,
-									x2,y2) == false)
+								_selUnit,
+								item,
+								slot,
+								x2,y2) == false)
 				{
 					if (_tuMode == false
-						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)) == true)
+						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(slot)) == true)
 					{
 						placed = true;
 
 						moveItem(
-								item,
-								newSlot,
-								x2,y2);
+							item,
+							slot,
+							x2,y2);
 
 //						_game->getResourcePack()->getSoundByDepth(
 //																_depth,

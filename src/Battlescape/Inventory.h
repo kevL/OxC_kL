@@ -155,7 +155,7 @@ private:
 		void arrangeGround(bool alterOffset = true);
 		/// Attempts to place an item in an inventory slot.
 		bool fitItem(
-				RuleInventory* newSlot,
+				RuleInventory* slot,
 				BattleItem* item,
 				bool test = false);
 		/// Checks if two items can be stacked on one another.

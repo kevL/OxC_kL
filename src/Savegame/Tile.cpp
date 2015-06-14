@@ -819,7 +819,7 @@ int Tile::getFlammability(int part) const
  */
 int Tile::convertBurnToPCT(int burn) const // private.
 {
-	if (burn > 255)
+	if (burn > 254)
 		return 0;
 
 	burn = 255 - burn;

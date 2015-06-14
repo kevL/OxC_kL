@@ -74,7 +74,7 @@ uint64_t next()
  */
 uint64_t getSeed()
 {
-	Log(LOG_INFO) << "rng:getSeed() " << x;
+	//Log(LOG_INFO) << "rng:getSeed() " << x;
 	return x;
 }
 
@@ -88,12 +88,12 @@ void setSeed(uint64_t seed)
 	if (seed == 0)
 	{
 		x = std::time(NULL);
-		Log(LOG_INFO) << ". reseed = " << x;
+		//Log(LOG_INFO) << ". reseed = " << x;
 	}
 	else
 	{
 		x = seed;
-		Log(LOG_INFO) << ". seed = " << x;
+		//Log(LOG_INFO) << ". seed = " << x;
 	}
 }
 

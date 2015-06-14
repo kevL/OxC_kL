@@ -83,14 +83,61 @@ protected:
 
 	BattleActionType _reserve;
 
+	/// setup a patrol objective.
+	void setupPatrol();
+	/// setup an ambush objective.
+	void setupAmbush();
+	/// setup a combat objective.
+	void setupAttack();
+	/// setup an escape objective.
+	void setupEscape();
+
+	/// count how many xcom/civilian units are known to this unit.
+	int countKnownTargets() const;
+	/// count how many known XCom units are able to see this unit.
+	int countSpottingUnits(const Position& pos) const;
+
+	/// Selects the nearest target we can see, and return the number of viable targets.
+	int selectNearestTarget();
+	/// Selects the closest known xcom unit for ambushing.
+	bool selectClosestKnownEnemy();
+	/// Selects a random known target.
+	bool selectRandomTarget();
+	/// Selects the nearest reachable point relative to a target.
+	bool selectPointNearTarget(
+			BattleUnit* target,
+			int maxTUs) const;
+
+	/// re-evaluate the situation and make a decision from available options.
+	void evaluateAIMode();
+	/// Selects a suitable position from which to attack.
+	bool findFirePoint();
+
+	/// Attempts to take a melee attack/charge an enemy we can see.
+	void meleeAction();
+	/// Performs a melee attack action.
+	void meleeAttack();
+	/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
+	void wayPointAction();
 	/// Constructs a waypoint path for weapons like Blaster Launcher.
 	bool pathWaypoints();
+	/// Attempts to fire at an enemy we can see.
+	void projectileAction();
+	/// Selects a fire method.
+	void selectFireMethod();
+	/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
+	void grenadeAction();
+	/// Performs a psionic attack.
+	bool psiAction();
 
 	/// Checks to make sure a target is valid given the parameters.
 	bool validTarget(
 			const BattleUnit* const unit,
 			bool assessDanger = false,
 			bool includeCivs = false) const;
+
+	/// Assuming the aLien has both a ranged and a melee weapon, select one.
+	void selectMeleeOrRanged();
 
 
 	public:
@@ -119,37 +166,6 @@ protected:
 		/// Gets whether the unit was hit.
 //		getWasHitBy(int attacker) const;
 
-		/// setup a patrol objective.
-		void setupPatrol();
-		/// setup an ambush objective.
-		void setupAmbush();
-		/// setup a combat objective.
-		void setupAttack();
-		/// setup an escape objective.
-		void setupEscape();
-
-		/// count how many xcom/civilian units are known to this unit.
-		int countKnownTargets() const;
-		/// count how many known XCom units are able to see this unit.
-		int countSpottingUnits(const Position& pos) const;
-
-		/// Selects the nearest target we can see, and return the number of viable targets.
-		int selectNearestTarget();
-		/// Selects the closest known xcom unit for ambushing.
-		bool selectClosestKnownEnemy();
-		/// Selects a random known target.
-		bool selectRandomTarget();
-		/// Selects the nearest reachable point relative to a target.
-		bool selectPointNearTarget(
-				BattleUnit* target,
-				int maxTUs) const;
-
-		/// re-evaluate our situation, and make a decision from our available options.
-		void evaluateAIMode();
-
-		/// Selects a suitable position from which to attack.
-		bool findFirePoint();
-
 		/// Decides if we should throw a grenade/launch a missile to this position.
 		bool explosiveEfficacy(
 				const Position& targetPos,
@@ -159,27 +175,8 @@ protected:
 //				bool grenade = false) const;
 //		bool getNodeOfBestEfficacy(BattleAction* action);
 
-		/// Attempts to take a melee attack/charge an enemy we can see.
-		void meleeAction();
-		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
-		void wayPointAction();
-		/// Attempts to fire at an enemy we can see.
-		void projectileAction();
-
-		/// Selects a fire method.
-		void selectFireMethod();
-
-		/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
-		void grenadeAction();
-		/// Performs a psionic attack.
-		bool psiAction();
-		/// Performs a melee attack action.
-		void meleeAttack();
-
 		/// Checks the alien's TU reservation setting.
 		BattleActionType getReservedAIAction() const;
-		/// Assuming the aLien has both a ranged and a melee weapon, select one.
-		void selectMeleeOrRanged();
 
 		/// Gets the current target-unit.
 //		BattleUnit* getTarget();

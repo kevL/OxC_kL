@@ -52,11 +52,12 @@ Uint8
 
 /**
  * Sets up a Pathfinding object.
- * @note Calls to this object should usually be preceded w/ a call to
- * setPathingUnit() in order to setup '_unit' and '_moveType'.
+ * @note There is only one Pathfinding object per tactical so calls to this
+ * object should generally be preceded w/ setPathingUnit() in order to setup
+ * '_unit' and '_moveType' etc.
  * @param battleSave - pointer to SavedBattleGame.
  */
-Pathfinding::Pathfinding(SavedBattleGame* battleSave)
+Pathfinding::Pathfinding(SavedBattleGame* const battleSave)
 	:
 		_battleSave(battleSave),
 		_unit(NULL),
@@ -70,7 +71,7 @@ Pathfinding::Pathfinding(SavedBattleGame* battleSave)
 		_openDoor(0)
 {
 	//Log(LOG_INFO) << "Create Pathfinding";
-	_nodes.reserve(_battleSave->getMapSizeXYZ()); // reserve one node per tile.
+	_nodes.reserve(_battleSave->getMapSizeXYZ()); // reserve one node per tactical tile.
 
 	Position pos;
 	for (size_t // initialize one node per tile.
@@ -101,13 +102,14 @@ Pathfinding::~Pathfinding()
  * @param pos - reference the Position
  * @return, pointer to PathfindingNode
  */
-PathfindingNode* Pathfinding::getNode(const Position& pos)
+PathfindingNode* Pathfinding::getNode(const Position& pos) // private.
 {
 	return &_nodes[static_cast<size_t>(_battleSave->getTileIndex(pos))];
 }
 
 /**
  * Calculates the shortest path; tries bresenham then A* paths.
+ * @note 'missileTarget' is required only when called by AlienBAIState::pathWaypoints().
  * @param unit				- pointer to a BattleUnit
  * @param destPos			- destination Position
  * @param missileTarget		- pointer to a targeted BattleUnit (default NULL)
@@ -140,6 +142,9 @@ void Pathfinding::calculate(
 
 	if (missileTarget != NULL	// pathfinding for missile; not sure how 'missileTarget' affects initialization yet.
 		&& maxTuCost == -1)		// TODO: figure how 'missileTarget' and 'maxTuCost' work together or not. -> are they redudant, and if so how redundant.
+								// ... Completely redundant, it seems ... in fact it seems like one of those things that was never thoroughly thought
+								// through: bresenham always uses its own default of 1000, while aStar never sets its missile=true boolean because it
+								// needs -1 passed in ...... plus it does further checks directly against maxTuCost.
 	{
 		_moveType = MT_FLY;
 		strafeRejected = true;
@@ -165,7 +170,7 @@ void Pathfinding::calculate(
 	}
 
 
-	Position destPos2; // kL: for keeping things straight if strafeRejected happens.
+	Position destPos2; // for keeping things straight if strafeRejected happens.
 	if (strafeRejected == false)
 		destPos2 = destPos;
 
@@ -173,7 +178,7 @@ void Pathfinding::calculate(
 	// if we click behind the stairs to make it go up the stairs.
 	// It only works if the unit is on one of the 2 tiles on the
 	// stairs, or on the tile right in front of the stairs.
-	// kL_note: I don't want this: ( the function, below, can be removed ).
+	// kL_note: I don't want this: ( the function, below, can be removed too ).
 /*kL
 	if (isOnStairs(startPos, destPos))
 	{
@@ -288,8 +293,8 @@ void Pathfinding::calculate(
 					startPos,
 					destPos,
 					missileTarget,
-					sneak,
-					maxTuCost) == true)
+					sneak
+					/*maxTuCost*/) == true)
 	{
 		std::reverse(
 				_path.begin(),
@@ -354,7 +359,7 @@ void Pathfinding::calculate(
  * @param maxTuCost		- maximum time units the path can cost (default 1000)
  * @return, true if a path is found
  */
-bool Pathfinding::bresenhamPath(
+bool Pathfinding::bresenhamPath( // private.
 		const Position& origin,
 		const Position& target,
 		const BattleUnit* const missileTarget,
@@ -539,7 +544,7 @@ bool Pathfinding::bresenhamPath(
  * @param maxTuCost		- maximum time units this path can cost (default 1000)
  * @return, true if a path is found
  */
-bool Pathfinding::aStarPath(
+bool Pathfinding::aStarPath( // private.
 		const Position& origin,
 		const Position& target,
 		const BattleUnit* const missileTarget,
@@ -2298,7 +2303,7 @@ std::vector<int> Pathfinding::copyPath() const
  * @param destination Where the travel ends.
  * @return The TU cost of opening the door. 0 if no UFO door opened.
  */
-/* int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination)
+/* int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination) // private.
 {
 	Tile* s = _battleSave->getTile(start);
 	Tile* d = _battleSave->getTile(destination);

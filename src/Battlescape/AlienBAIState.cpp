@@ -175,7 +175,7 @@ YAML::Node AlienBAIState::save() const
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.
- * @param action - pointer to AI BattleAction to execute after thinking is done
+ * @param action - pointer to AI BattleAction to execute
  */
 void AlienBAIState::think(BattleAction* action)
 {
@@ -555,10 +555,11 @@ void AlienBAIState::think(BattleAction* action)
 
 /**
  * Sets up a patrol action.
- * @note This is mainly going from node to node & moving about the map;
- * handles node selection and fills out '_patrolAction' with data.
+ * @note This is mainly going from node to node & moving about the map -
+ * handles node selection.
+ * @note Fills out the '_patrolAction' with useful data.
  */
-void AlienBAIState::setupPatrol()
+void AlienBAIState::setupPatrol() // private.
 {
 	//Log(LOG_INFO) << "AlienBAIState::setupPatrol()";
 	_patrolAction->TU = 0;
@@ -758,9 +759,9 @@ void AlienBAIState::setupPatrol()
  * seen by the aggroTarget but that can be reached by him/her. Then intuit where
  * AI will see that target first from a covered position and set that as the
  * final facing.
- * @note Also fills out '_ambushAction' with useful data.
+ * @note Fills out the '_ambushAction' with useful data.
  */
-void AlienBAIState::setupAmbush()
+void AlienBAIState::setupAmbush() // private.
 {
 	_ambushAction->type = BA_RETHINK;
 	_tuAmbush = 0;
@@ -915,11 +916,11 @@ void AlienBAIState::setupAmbush()
 
 /**
  * Try to set up a combat action.
- * This will either be a psionic, grenade, or weapon attack,
- * or potentially just moving to get a line of sight to a target.
- * Fills out the _attackAction with useful data.
+ * @note This will either be a psionic, grenade, or weapon attack or potentially
+ * just moving to get a line of sight to a target.
+ * @note Fills out the '_attackAction' with useful data.
  */
-void AlienBAIState::setupAttack()
+void AlienBAIState::setupAttack() // private.
 {
 	//Log(LOG_INFO) << "AlienBAIState::setupAttack()";
 	_attackAction->type = BA_RETHINK;
@@ -1027,10 +1028,10 @@ void AlienBAIState::setupAttack()
 /**
  * Attempts to find cover and move toward it.
  * @note The idea is to check within a 11x11 tile square for a tile that is not
- * seen by @a _aggroTarget. If there is no such tile run away from the target.
- * @note Fills out @a _escapeAction with useful data.
+ * seen by '_aggroTarget'. If there is no such tile run away from the target.
+ * @note Fills out the '_escapeAction' with useful data.
  */
-void AlienBAIState::setupEscape()
+void AlienBAIState::setupEscape() // private.
 {
 	bool coverFound = false;
 
@@ -1231,7 +1232,7 @@ void AlienBAIState::setupEscape()
  * Counts how many targets, both xcom and civilian are known to the unit.
  * @return, how many targets are known to it
  */
-int AlienBAIState::countKnownTargets() const
+int AlienBAIState::countKnownTargets() const // private.
 {
 	int ret = 0;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1256,7 +1257,7 @@ int AlienBAIState::countKnownTargets() const
  * @param pos - reference the Position to check for spotters
  * @return, spotters
  */
-int AlienBAIState::countSpottingUnits(const Position& pos) const
+int AlienBAIState::countSpottingUnits(const Position& pos) const // private.
 {
 	int ret = 0;
 
@@ -1300,12 +1301,12 @@ int AlienBAIState::countSpottingUnits(const Position& pos) const
 }
 
 /**
- * Selects the nearest known living target we can see/reach
- * and returns the number of visible enemies.
- * This function includes civilians as viable targets.
+ * Selects the nearest known living target we can see/reach and returns the
+ * number of visible enemies.
+ * @note This function includes civilians as viable targets.
  * @return, viable targets
  */
-int AlienBAIState::selectNearestTarget()
+int AlienBAIState::selectNearestTarget() // private.
 {
 	_aggroTarget = NULL;
 	_closestDist = 100;
@@ -1392,7 +1393,7 @@ int AlienBAIState::selectNearestTarget()
  * Selects the nearest known living Xcom unit - used for ambush calculations.
  * @return, true if it found one
  */
-bool AlienBAIState::selectClosestKnownEnemy()
+bool AlienBAIState::selectClosestKnownEnemy() // private.
 {
 	_aggroTarget = NULL;
 	int
@@ -1426,7 +1427,7 @@ bool AlienBAIState::selectClosestKnownEnemy()
  * Selects a random known living Xcom or civilian unit.
  * @return, true if it found one
  */
-bool AlienBAIState::selectRandomTarget()
+bool AlienBAIState::selectRandomTarget() // private.
 {
 	_aggroTarget = NULL;
 	int
@@ -1463,7 +1464,7 @@ bool AlienBAIState::selectRandomTarget()
  * @param maxTUs - maximum time units that the path to the target can cost
  * @return, true if a point was found
  */
-bool AlienBAIState::selectPointNearTarget(
+bool AlienBAIState::selectPointNearTarget( // private.
 		BattleUnit* target,
 		int maxTUs) const
 {
@@ -1553,7 +1554,7 @@ bool AlienBAIState::selectPointNearTarget(
  * Selects an AI mode based on a number of factors: RNG and the results of these
  * determinations.
  */
-void AlienBAIState::evaluateAIMode()
+void AlienBAIState::evaluateAIMode() // private.
 {
 	if (_unit->getCharging() != NULL
 		&& _attackAction->type != BA_RETHINK)
@@ -1838,7 +1839,7 @@ void AlienBAIState::evaluateAIMode()
  * Check the 11x11 grid for a position nearby from which actor can potentially target.
  * @return, true if a possible position was found
  */
-bool AlienBAIState::findFirePoint()
+bool AlienBAIState::findFirePoint() // private.
 {
 	if (selectClosestKnownEnemy() == false)
 		return false;
@@ -1940,6 +1941,7 @@ bool AlienBAIState::findFirePoint()
 
 /**
  * Decides if it's worthwhile to create an explosion.
+ * @note Also called from TileEngine::reactionShot().
  * @param targetPos		- reference the target's position
  * @param attacker		- pointer to the attacking unit
  * @param explRadius	- radius of explosion in tile space
@@ -2088,10 +2090,11 @@ bool AlienBAIState::explosiveEfficacy(
 }
 
 /**
- * Attempts to take a melee attack/charge an enemy we can see.
- * Melee targetting: we can see an enemy, we can move to it so we're charging blindly toward an enemy.
+ * Attempts to take a melee attack/charge a seen enemy.
+ * @note Melee targetting: can see an enemy, can move to it, so let's charge
+ * blindly at it.
  */
-void AlienBAIState::meleeAction()
+void AlienBAIState::meleeAction() // private.
 {
 	if (_aggroTarget != NULL
 		&& _aggroTarget->isOut() == false) // (true, true)
@@ -2108,13 +2111,13 @@ void AlienBAIState::meleeAction()
 		}
 	}
 
-	const int
-		attackCost = _unit->getActionTUs(
-										BA_HIT,
-										_unit->getMainHandWeapon()),
-		chargeReserve = _unit->getTimeUnits() - attackCost;
+	const int tuBeforeMelee = _unit->getTimeUnits()
+							- _unit->getActionTUs(
+											BA_HIT,
+											_attackAction->weapon);
+//											_unit->getMainHandWeapon());
 	int
-		dist = (chargeReserve / 4) + 1,
+		dist = (tuBeforeMelee / 4) + 1,
 		closestDist;
 
 	_aggroTarget = NULL;
@@ -2144,7 +2147,7 @@ void AlienBAIState::meleeAction()
 			if (closestDist == 1
 				|| selectPointNearTarget(
 									*i,
-									chargeReserve) == true)
+									tuBeforeMelee) == true)
 			{
 				_aggroTarget = (*i);
 				_attackAction->type = BA_WALK;
@@ -2175,9 +2178,28 @@ void AlienBAIState::meleeAction()
 }
 
 /**
+ * Performs a melee attack action.
+ */
+void AlienBAIState::meleeAttack() // private.
+{
+	_unit->lookAt(
+			_aggroTarget->getPosition() + Position(
+												_unit->getArmor()->getSize() - 1,
+												_unit->getArmor()->getSize() - 1,
+												0));
+
+	while (_unit->getStatus() == STATUS_TURNING)
+		_unit->turn();
+
+	//if (_traceAI) Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId();
+	_attackAction->target = _aggroTarget->getPosition();
+	_attackAction->type = BA_HIT;
+}
+
+/**
  * Attempts to trace a waypoint projectile to an enemy that is known by any aLien.
  */
-void AlienBAIState::wayPointAction()
+void AlienBAIState::wayPointAction() // private.
 {
 	//Log(LOG_INFO) << "AlienBAIState::wayPointAction() w/ " << _attackAction->weapon->getRules()->getType();
 	_attackAction->TU = _unit->getActionTUs(
@@ -2381,9 +2403,9 @@ bool AlienBAIState::pathWaypoints() // private.
 
 /**
  * Attempts to fire at an enemy we can see.
- * Regular targeting: we can see an enemy, we have a gun, let's try to shoot.
+ * @note Regular targeting: can see an enemy, have a gun, let's try to shoot it.
  */
-void AlienBAIState::projectileAction()
+void AlienBAIState::projectileAction() // private.
 {
 	_attackAction->target = _aggroTarget->getPosition();
 
@@ -2400,10 +2422,8 @@ void AlienBAIState::projectileAction()
 
 /**
  * Selects a fire method based on range, time units, and time units reserved for cover.
- * kL_note: Question: what should this set for BA_* if no FireMethod condition checks TRUE...?
- *			I'll leave it at BA_RETHINK for now......
  */
-void AlienBAIState::selectFireMethod()
+void AlienBAIState::selectFireMethod() // private.
 {
 	_attackAction->type = BA_RETHINK;
 
@@ -2491,7 +2511,7 @@ void AlienBAIState::selectFireMethod()
 /**
  * Evaluates whether to throw a grenade at a seen enemy or group of enemies.
  */
-void AlienBAIState::grenadeAction()
+void AlienBAIState::grenadeAction() // private.
 {
 	// do we have a grenade on our belt?
 	// kL_note: this is already checked in setupAttack()
@@ -2597,9 +2617,9 @@ void AlienBAIState::grenadeAction()
  * regardless of whether they can be seen or not because they're psycho.
  * @return, true if a psionic attack should be performed
  */
-bool AlienBAIState::psiAction()
+bool AlienBAIState::psiAction() // private.
 {
-	//Log(LOG_INFO) << "AlienBAIState::psiAction()";
+	Log(LOG_INFO) << "AlienBAIState::psiAction() ID = " << _unit->getId();
 	if (_didPsi == false									// didn't already do a psi action this round
 		&& _unit->getBaseStats()->psiSkill != 0				// has psiSkill
 		&& _unit->getOriginalFaction() == FACTION_HOSTILE)	// don't let any faction but HOSTILE mind-control others.
@@ -2610,11 +2630,11 @@ bool AlienBAIState::psiAction()
 		if (itRule->getFlatRate() == false)
 			tuCost = static_cast<int>(std::floor(
 					 static_cast<float>(_unit->getBaseStats()->tu * tuCost) / 100.f));
-		//Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
+		Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
 
 		if (_unit->getTimeUnits() < tuCost + _tuEscape) // check if aLien has the required TUs and can still make it to cover
 		{
-			//Log(LOG_INFO) << ". not enough Tu, EXIT";
+			Log(LOG_INFO) << ". not enough Tu, EXIT";
 			return false;
 		}
 		else // do it -> further evaluation req'd.
@@ -2624,7 +2644,7 @@ bool AlienBAIState::psiAction()
 				losFactor = 50, // increase chance of attack against a unit that is currently in LoS.
 				attackStr = static_cast<int>(std::floor(
 							static_cast<double>(_unit->getBaseStats()->psiStrength * _unit->getBaseStats()->psiSkill) / 50.));
-			//Log(LOG_INFO) << ". . attackStr = " << attackStr << " ID = " << _unit->getId();
+			Log(LOG_INFO) << ". . attackStr = " << attackStr;
 
 			bool losTrue = false;
 			int
@@ -2753,7 +2773,7 @@ bool AlienBAIState::psiAction()
 					_psiAction->target = _aggroTarget->getPosition();
 					_psiAction->type = BA_PANIC;
 
-					//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
+					Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
 					return true;
 				}
 			}
@@ -2761,32 +2781,13 @@ bool AlienBAIState::psiAction()
 			_psiAction->target = _aggroTarget->getPosition();
 			_psiAction->type = BA_MINDCONTROL;
 
-			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
+			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
 			return true;
 		}
 	}
 
-	//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False";
+	Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False";
 	return false;
-}
-
-/**
- * Performs a melee attack action.
- */
-void AlienBAIState::meleeAttack()
-{
-	_unit->lookAt(
-			_aggroTarget->getPosition() + Position(
-												_unit->getArmor()->getSize() - 1,
-												_unit->getArmor()->getSize() - 1,
-												0));
-
-	while (_unit->getStatus() == STATUS_TURNING)
-		_unit->turn();
-
-	//if (_traceAI) Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId();
-	_attackAction->target = _aggroTarget->getPosition();
-	_attackAction->type = BA_HIT;
 }
 
 /**
@@ -2802,11 +2803,6 @@ bool AlienBAIState::validTarget( // private.
 		bool includeCivs) const
 {
 	//Log(LOG_INFO) << "AlienBAIState::validTarget() ID " << unit->getId();
-	//Log(LOG_INFO) << ". isFactionHostile -> " << (unit->getFaction() == FACTION_HOSTILE);
-	//Log(LOG_INFO) << ". isOut -> " << (unit->isOut(true, true) == true);
-	//Log(LOG_INFO) << ". isExposed -> " << (_intelligence >= unit->getExposed());
-	//Log(LOG_INFO) << ". isDangerous -> " << (assessDanger == true && unit->getTile() != NULL && unit->getTile()->getDangerous() == true);
-
 	if (unit->getFaction() == FACTION_HOSTILE				// target must not be on aLien side
 		|| unit->isOut(true, true) == true					// ignore targets that are dead/unconscious
 		|| unit->getExposed() == -1
@@ -2826,7 +2822,7 @@ bool AlienBAIState::validTarget( // private.
 }
 
 /**
- * Checks the alien's reservation setting.
+ * Checks the alien's TU reservation setting.
  * @return, the reserve setting
  */
 BattleActionType AlienBAIState::getReservedAIAction() const
@@ -2835,10 +2831,10 @@ BattleActionType AlienBAIState::getReservedAIAction() const
 }
 
 /**
- * He has a dichotomy on his hands: it has a ranged weapon as well as melee ability
- * ... so, make a determination on which one to use this round.
+ * aLien has a dichotomy on its hands: has a ranged weapon as well as melee
+ * ability ... so make a determination on which to use this round.
  */
-void AlienBAIState::selectMeleeOrRanged()
+void AlienBAIState::selectMeleeOrRanged() // private.
 {
 	const BattleItem* const mainWeapon = _unit->getMainHandWeapon();
 	if (mainWeapon == NULL) // kL safety.
