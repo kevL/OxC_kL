@@ -1884,17 +1884,27 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL)) // <- needs more ...
 															{
-																halfRight = true;
-
 																if (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL // confusing .... re. needs more above^ (this seems to be for large units only)
 																	&& unitWest->getArmor()->getSize() == 2)
 																{
 																	redraw = false;
 																}
+																else
+																	halfRight = true;
 															}
 															else
-																halfRight = false;
+															{
+																if (tileSouthSouthWest != NULL
+																	&& (tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL
+																		|| (tileSouthSouthWest->getMapData(MapData::O_OBJECT) != NULL
+																			&& tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW)))
+																{
+																	redraw = false;
+																}
+																else
+																	halfRight = false;
+															}
 														}
 													}
 												}
