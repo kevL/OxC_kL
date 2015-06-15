@@ -1005,8 +1005,8 @@ private:
 		/// Derives a rank integer based on rank string (for xcom soldiers ONLY)
 		void deriveRank();
 
-		/// This function checks if a tile is visible, using maths.
-		bool checkViewSector(Position pos) const;
+		/// This function checks if a tile is visible using maths.
+		bool checkViewSector(const Position& pos) const;
 
 		/// Adjusts this unit's stats according to difficulty.
 		void adjustStats(
@@ -1016,7 +1016,7 @@ private:
 		void halveArmor();
 
 		/// Sets this unit's cover-reserve TU.
-		void setCoverReserve(int reserve);
+		void setCoverReserve(int tuReserve);
 		/// Gets this unit's cover-reserve TU.
 		int getCoverReserve() const;
 

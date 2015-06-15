@@ -1908,7 +1908,7 @@ void BattlescapeGame::showInfoBoxQueue() // private.
  * @param bu	- pointer to a unit
  * @param tu	- # of time units to check against
  * @param test	- true to suppress error messages (default false)
- * @return, true if unit has enough time units ( go! )
+ * @return, true if unit has enough time units - go!
  */
 bool BattlescapeGame::checkReservedTU(
 		BattleUnit* bu,
@@ -1931,7 +1931,7 @@ bool BattlescapeGame::checkReservedTU(
 		if (ai != NULL)
 			actReserved = ai->getReservedAIAction();
 
-		const int extraReserve = RNG::generate(0, 10); // kL, added in below ->
+		const int extraReserve = RNG::generate(0,10); // kL, added in below ->
 
 		// kL_note: This could use some tweaking, for the poor aLiens:
 		switch (actReserved) // aLiens reserve TUs as a percentage rather than just enough for a single action.

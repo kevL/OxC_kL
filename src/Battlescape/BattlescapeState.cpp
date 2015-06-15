@@ -1307,14 +1307,14 @@ void BattlescapeState::mapOver(Action* action)
 						{
 							wst1 += item->getUnit()->getName(_game->getLanguage());
 
-							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+							if (item->getUnit()->getGeoscapeSoldier() != NULL)
 								wst1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
 						}
 						else
 						{
 							wst1 += tr(itRule->getType());
 
-							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+							if (item->getUnit()->getGeoscapeSoldier() != NULL)
 								wst1 += L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
 						}
 					}

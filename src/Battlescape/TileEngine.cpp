@@ -1013,7 +1013,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
  * @param targetUnit	- pointer to a hypothetical unit to draw a virtual LoF for AI;
-							if left NULL this function behaves normally (default NULL)
+						  if left NULL this function behaves normally (default NULL)
  * @return, true if a unit can be targeted
  */
 bool TileEngine::canTargetUnit(
@@ -1655,7 +1655,7 @@ bool TileEngine::checkReactionFire(
 }
 
 /**
- * Creates a vector of BattleUnits that can spot 'unit'.
+ * Creates a vector of BattleUnits that can spot @a unit.
  * @param unit - pointer to a BattleUnit to spot
  * @return, vector of pointers to BattleUnits that can see the triggering unit
  */
@@ -1675,9 +1675,10 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
 			&& (*i)->getFaction() != FACTION_NEUTRAL
 			&& (*i)->isOut(true, true) == false)
 		{
-			if (((*i)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
-					|| ((*i)->getOriginalFaction() == FACTION_PLAYER	// but Mc'd aLiens won't RF on other aLiens ...
-						&& (*i)->checkViewSector(unit->getPosition()) == true))
+			if ((((*i)->getFaction() == FACTION_HOSTILE							// Mc'd xCom units will RF on loyal xCom units
+						&& (*i)->getOriginalFaction() != FACTION_PLAYER)		// but Mc'd aLiens won't RF on other aLiens ...
+					|| ((*i)->getOriginalFaction() == FACTION_PLAYER			// Also - aLiens get to see in all directions
+						&& (*i)->checkViewSector(unit->getPosition()) == true))	// but xCom must checkViewSector() even when MC'd
 				&& visible(*i, tile) == true)
 			{
 				spotters.push_back(*i);

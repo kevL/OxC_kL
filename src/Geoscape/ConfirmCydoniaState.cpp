@@ -27,7 +27,6 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
-//#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Text.h"

@@ -24,8 +24,6 @@
 #include "SavedGame.h"
 #include "WeightedOptions.h"
 
-//#include "../Engine/RNG.h"
-
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
 

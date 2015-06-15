@@ -19,8 +19,6 @@
 
 #include "AlienDeployment.h"
 
-//#include "../Engine/RNG.h"
-
 
 namespace YAML
 {

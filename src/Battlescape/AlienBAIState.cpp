@@ -1836,8 +1836,8 @@ void AlienBAIState::evaluateAIMode() // private.
 
 /**
  * Find a position where the target can be seen and move there.
- * Check the 11x11 grid for a position nearby from which actor can potentially target.
- * @return, true if a possible position was found
+ * @note Checks an 11x11 grid for a position nearby from which actor can target.
+ * @return, true if a possible position is found
  */
 bool AlienBAIState::findFirePoint() // private.
 {
@@ -2619,7 +2619,7 @@ void AlienBAIState::grenadeAction() // private.
  */
 bool AlienBAIState::psiAction() // private.
 {
-	Log(LOG_INFO) << "AlienBAIState::psiAction() ID = " << _unit->getId();
+	//Log(LOG_INFO) << "AlienBAIState::psiAction() ID = " << _unit->getId();
 	if (_didPsi == false									// didn't already do a psi action this round
 		&& _unit->getBaseStats()->psiSkill != 0				// has psiSkill
 		&& _unit->getOriginalFaction() == FACTION_HOSTILE)	// don't let any faction but HOSTILE mind-control others.
@@ -2630,11 +2630,11 @@ bool AlienBAIState::psiAction() // private.
 		if (itRule->getFlatRate() == false)
 			tuCost = static_cast<int>(std::floor(
 					 static_cast<float>(_unit->getBaseStats()->tu * tuCost) / 100.f));
-		Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
+		//Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
 
 		if (_unit->getTimeUnits() < tuCost + _tuEscape) // check if aLien has the required TUs and can still make it to cover
 		{
-			Log(LOG_INFO) << ". not enough Tu, EXIT";
+			//Log(LOG_INFO) << ". not enough Tu, EXIT";
 			return false;
 		}
 		else // do it -> further evaluation req'd.
@@ -2644,7 +2644,7 @@ bool AlienBAIState::psiAction() // private.
 				losFactor = 50, // increase chance of attack against a unit that is currently in LoS.
 				attackStr = static_cast<int>(std::floor(
 							static_cast<double>(_unit->getBaseStats()->psiStrength * _unit->getBaseStats()->psiSkill) / 50.));
-			Log(LOG_INFO) << ". . attackStr = " << attackStr;
+			//Log(LOG_INFO) << ". . attackStr = " << attackStr;
 
 			bool losTrue = false;
 			int
@@ -2773,7 +2773,7 @@ bool AlienBAIState::psiAction() // private.
 					_psiAction->target = _aggroTarget->getPosition();
 					_psiAction->type = BA_PANIC;
 
-					Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
+					//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
 					return true;
 				}
 			}
@@ -2781,12 +2781,12 @@ bool AlienBAIState::psiAction() // private.
 			_psiAction->target = _aggroTarget->getPosition();
 			_psiAction->type = BA_MINDCONTROL;
 
-			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
+			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
 			return true;
 		}
 	}
 
-	Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False";
+	//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False";
 	return false;
 }
 

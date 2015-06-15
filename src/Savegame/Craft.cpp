@@ -502,7 +502,7 @@ std::string Craft::getAltitude() const
 	}
 	else
 	{
-		switch (RNG::generate(0, 3))
+		switch (RNG::generate(0,3))
 		{
 			case 0: //return "STR_VERY_LOW";
 			case 1: return "STR_LOW_UC";

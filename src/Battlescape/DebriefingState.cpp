@@ -35,7 +35,6 @@
 #include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
-//#include "../Engine/RNG.h"
 //#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"

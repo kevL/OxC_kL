@@ -160,14 +160,14 @@ void LoadGameState::think()
 		_game->popState();
 		_game->getCursor()->setVisible();
 
-		SavedGame* const save = new SavedGame(_game->getRuleset());
+		SavedGame* const gameSave = new SavedGame(_game->getRuleset());
 		try
 		{
 			Log(LOG_INFO) << "LoadGameState: loading";
-			save->load(
-					_filename,
-					_game->getRuleset());
-			_game->setSavedGame(save);
+			gameSave->load(
+						_filename,
+						_game->getRuleset());
+			_game->setSavedGame(gameSave);
 
 			Options::baseXResolution = Options::baseXGeoscape;
 			Options::baseYResolution = Options::baseYGeoscape;
@@ -211,10 +211,10 @@ void LoadGameState::think()
 													"TAC00.SCR",
 													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
-			if (_game->getSavedGame() == save)
+			if (_game->getSavedGame() == gameSave)
 				_game->setSavedGame(NULL);
 			else
-				delete save;
+				delete gameSave;
 		}
 		catch (YAML::Exception& e)
 		{
@@ -237,10 +237,10 @@ void LoadGameState::think()
 													"TAC00.SCR",
 													_game->getRuleset()->getInterface("errorMessages")->getElement("battlescapePalette")->color));
 
-			if (_game->getSavedGame() == save)
+			if (_game->getSavedGame() == gameSave)
 				_game->setSavedGame(NULL);
 			else
-				delete save;
+				delete gameSave;
 		}
 
 		CrossPlatform::flashWindow();

@@ -3879,7 +3879,7 @@ void BattleUnit::deriveRank()
  * @param pos - the Position to check against
  * @return, whatever the maths decide
  */
-bool BattleUnit::checkViewSector(Position pos) const
+bool BattleUnit::checkViewSector(const Position& pos) const
 {
 	int
 		dx = pos.x - _pos.x,
@@ -3978,11 +3978,11 @@ void BattleUnit::adjustStats(
 
 /**
  * Sets the amount of TUs reserved for cover.
- * @param reserve - reserved time units
+ * @param tuReserve - reserved time units
  */
-void BattleUnit::setCoverReserve(int reserve)
+void BattleUnit::setCoverReserve(int tuReserve)
 {
-	_coverReserve = reserve;
+	_coverReserve = tuReserve;
 }
 
 /**

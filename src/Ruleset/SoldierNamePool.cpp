@@ -163,7 +163,8 @@ std::wstring SoldierNamePool::genName(SoldierGender* const gender) const
 }
 
 /**
- * Generates an int representing the index of the soldier's look, when passed the maximum index value.
+ * Generates an int representing the index of the soldier's look when passed the
+ * maximum index value.
  * @param qtyLooks - the maximum index
  * @return, the index of the soldier's look
  */

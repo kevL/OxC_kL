@@ -26,7 +26,6 @@
 #include "../Engine/Game.h"
 //#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
