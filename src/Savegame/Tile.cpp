@@ -379,7 +379,8 @@ int Tile::getTUCostTile(
 }
 
 /**
- * Gets whether this tile has a floor or not. If no object defined as floor it has no floor.
+ * Gets whether this tile has a floor or not.
+ * @note If no tile-part defined as floor then it has no floor.
  * @param tileBelow - the tile below this tile
  * @return, true if tile has no floor
  */

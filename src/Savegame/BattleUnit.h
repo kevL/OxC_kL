@@ -566,7 +566,7 @@ private:
 		/// Sets this unit's position.
 		void setPosition(
 				const Position& pos,
-				bool updateLastPos = true);
+				bool updateLast = true);
 		/// Gets this unit's position.
 		const Position& getPosition() const;
 		/// Gets this unit's position.
@@ -607,11 +607,9 @@ private:
 				const Tile* const tileBelow,
 				bool cache);
 		/// Gets the walking phase for animation and sound.
-		int getWalkingPhase() const;
+		int getWalkPhase() const;
 		/// Gets the walking phase for diagonal walking.
-		int getDiagonalWalkingPhase() const;
-		/// Gets the walking phase unadjusted.
-		int getTrueWalkingPhase() const;
+		int getDiagonalWalkPhase() const;
 
 		/// Gets this unit's destination when walking.
 		const Position& getDestination() const;

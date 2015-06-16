@@ -4584,7 +4584,7 @@ void Map::calculateWalkingOffset(
 		offsetX[8] = {1, 1, 1, 0,-1,-1,-1, 0},
 		offsetY[8] = {1, 0,-1,-1,-1, 0, 1, 1},
 
-		phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase(),
+		phase = unit->getWalkPhase() + unit->getDiagonalWalkPhase(),
 
 		dir = unit->getDirection(),
 		unitSize = unit->getArmor()->getSize();

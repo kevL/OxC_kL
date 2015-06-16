@@ -101,7 +101,7 @@ void UnitWalkBState::init()
 //	_terrain = _parent->getTileEngine();
 //	_walkCam = _parent->getMap()->getCamera();
 
-//	setNormalWalkSpeed();
+//	setWalkSpeed();
 
 
 	// kL_note: This is used only for aLiens
@@ -330,7 +330,7 @@ bool UnitWalkBState::doStatusStand() // private.
 					   && tile->getMapData(MapData::O_FLOOR) != NULL
 					   && tile->getMapData(MapData::O_FLOOR)->isGravLift();
 
-	setNormalWalkSpeed(gravLift);
+	setWalkSpeed(gravLift);
 
 	if (dir != -1
 		&& _kneelCheck == true				// check if unit is kneeled
@@ -676,8 +676,7 @@ bool UnitWalkBState::doStatusStand() // private.
 			if (_unit->getMoveSound() != -1)
 			{
 				//Log(LOG_INFO) << "doStatusStand() playSound";
-				//Log(LOG_INFO) << ". walkPhase = " << _unit->getWalkingPhase();
-				//Log(LOG_INFO) << ". True walkPhase = " << _unit->getTrueWalkingPhase();
+				//Log(LOG_INFO) << ". walkPhase = " << _unit->getWalkPhase();
 				//Log(LOG_INFO) << ". pos " << _unit->getPosition();
 				playMovementSound();
 			}
@@ -1099,8 +1098,8 @@ void UnitWalkBState::postPathProcedures() // private.
 
 //					_parent->statePushBack(new MeleeAttackBState(_parent, action));
 					_parent->statePushBack(new ProjectileFlyBState(
-															_parent,
-															action));
+																_parent,
+																action));
 
 					if (instaWeapon == true)
 						_parent->getSave()->removeItem(action.weapon);
@@ -1136,7 +1135,7 @@ void UnitWalkBState::postPathProcedures() // private.
 	_terrain->calculateUnitLighting();
 
 //	_terrain->calculateFOV(_unit);
-	_terrain->calculateFOV(_unit->getPosition()); // kL, in case unit opened a door and stopped without doing Status_WALKING
+	_terrain->calculateFOV(_unit->getPosition()); // in case unit opened a door and stopped without doing Status_WALKING
 
 
 	_unit->setCache(NULL);
@@ -1222,7 +1221,7 @@ bool UnitWalkBState::visForUnits() const // private.
  * Sets the animation speed of units.
  * @param gravLift - true if moving up/down a gravLift
  */
-void UnitWalkBState::setNormalWalkSpeed(bool gravLift) const // private.
+void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 {
 	int interval;
 	if (_unit->getFaction() == FACTION_PLAYER)
@@ -1256,61 +1255,58 @@ void UnitWalkBState::playMovementSound() const // private.
 
 	if (_unit->getMoveSound() != -1)
 	{
-		if (_unit->getWalkingPhase() == 0)
+		if (_unit->getWalkPhase() == 0)
 			sound = _unit->getMoveSound();
 	}
 	else
 	{
-		if (_unit->getStatus() == STATUS_FLYING
-			&& _unit->isFloating() == true
-			&& _pf->getMoveTypePathing() == MT_WALK)
+		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			if (_unit->getTrueWalkingPhase() == 1
-				&& groundCheck(1))
+			const int walkPhase = _unit->getWalkPhase();
+			if (walkPhase == 3
+				|| walkPhase == 7)
 			{
-				sound = ResourcePack::ITEM_DROP;				// thunk. Repeated below_
-			}
-		}
-		else if (_unit->getStatus() == STATUS_WALKING)
-		{
-			const Tile
-				* const tile = _unit->getTile(),
-				* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
+				const Tile
+					* const tile = _unit->getTile(),
+					* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
 
-			const int stepSound = tile->getFootstepSound(belowTile);
-			if (stepSound > -1)
-			{
-				const int walkPhase = _unit->getWalkingPhase();
-				if (walkPhase == 3)
-					sound = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
-				else if (walkPhase == 7)
-					sound = stepSound * 2 + ResourcePack::WALK_OFFSET;
+				const int stepSound = tile->getFootstepSound(belowTile);
+				if (stepSound > -1)
+				{
+					if (walkPhase == 3)
+						sound = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
+					else //if (walkPhase == 7)
+						sound = stepSound * 2 + ResourcePack::WALK_OFFSET;
+				}
 			}
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
 		{
-			if (_unit->getWalkingPhase() == 1)
+			if (_unit->getWalkPhase() == 1)
 			{
-				if (_falling == true)
+				if (_falling == false)
 				{
-					if (_unit->getTrueWalkingPhase() == 1
-						&& groundCheck(1))
-					{
-						sound = ResourcePack::ITEM_DROP;		// thunk. Repeated above^
-					}
-				}
-				else if (_unit->isFloating() == false)
-					sound = 40;									// GravLift
-				else // !_falling
-				{
-					if (_unit->getUnitRules() != NULL
-						&& _unit->getUnitRules()->isMechanical() == true)
-					{
-						sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
-					}
+					if (_unit->isFloating() == false) // GravLift note: isFloating() might be redundant w/ (_falling=false)
+						sound = 40;
 					else
-						sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
+					{
+						if (_unit->getUnitRules() != NULL
+							&& _unit->getUnitRules()->isMechanical() == true)
+						{
+							sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
+						}
+						else
+							sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
+					}
 				}
+			}
+			else if (_unit->getWalkPhase() == 7
+				&& groundCheck() == true
+				&& (_falling == true
+					|| (_unit->isFloating() == true
+						&& _pf->getMoveTypePathing() == MT_WALK)))
+			{
+				sound = ResourcePack::ITEM_DROP; // *thunk*
 			}
 		}
 	}
@@ -1328,10 +1324,10 @@ void UnitWalkBState::playMovementSound() const // private.
 
 /**
  * For determining if a flying unit turns flight off at start of movement.
- * NOTE: _falling should always be false when this is called in init().
- * NOTE: And unit must be capable of flight for this to be relevant.
- * NOTE: This could get problematic if/when falling onto nonFloors like water,
- *		 and/or if there is another unit on tileBelow.
+ * @note '_falling' should always be false when this is called in init().
+ * @note And unit must be capable of flight for this to be relevant.
+ * @note This could get problematic if/when falling onto nonFloors like water
+ * and/or if there is another unit on tileBelow.
  */
 void UnitWalkBState::doFallCheck() // private.
 {
@@ -1347,17 +1343,13 @@ void UnitWalkBState::doFallCheck() // private.
 
 /**
  * Checks if there is ground below when unit is falling.
- * NOTE: Pathfinding already has a function canFallDown() that could be used for
- * a couple places here in UnitWalkBState; does not have 'descent' though.
- @param descent - how many levels below current to check for ground (default 0)
+ * @note Pathfinding already has a function canFallDown() that could be used.
  @return, true if unit hits a Floor
  */
-bool UnitWalkBState::groundCheck(int descent) const // private.
+bool UnitWalkBState::groundCheck() const // private.
 {
 	const Tile* tileBelow;
 	Position pos;
-
-	descent = -descent;
 
 	const int unitSize = _unit->getArmor()->getSize() - 1;
 	for (int
@@ -1371,13 +1363,9 @@ bool UnitWalkBState::groundCheck(int descent) const // private.
 				--y)
 		{
 			pos = _unit->getPosition() + Position(x,y,0);
-
-			tileBelow = _parent->getSave()->getTile(pos + Position(
-																0,0,
-																descent - 1));
-			if (_parent->getSave()->getTile(pos + Position(
-														0,0,
-														descent))->hasNoFloor(tileBelow) == false)
+			tileBelow = _parent->getSave()->getTile(pos + Position(0,0,-1));
+			if (_parent->getSave()->getTile(pos + Position(0,0,0))
+										->hasNoFloor(tileBelow) == false)
 			{
 				return true;
 			}

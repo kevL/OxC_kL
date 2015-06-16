@@ -648,14 +648,14 @@ int BattleUnit::getId() const
 
 /**
  * Changes this BattleUnit's position.
- * @param pos			- new position
- * @param updateLastPos	- true to update old position (default true)
+ * @param pos			- reference to new position
+ * @param updateLast	- true to update old position (default true)
  */
 void BattleUnit::setPosition(
 		const Position& pos,
-		bool updateLastPos)
+		bool updateLast)
 {
-	if (updateLastPos == true)
+	if (updateLast == true)
 		_lastPos = _pos;
 
 	_pos = pos;
@@ -690,7 +690,7 @@ const Position& BattleUnit::getDestination() const
 
 /**
  * Sets this BattleUnit's horizontal direction.
- * Used for initial unit placement and positioning soldier when revived.
+ * @note Used for initial unit placement and for positioning soldier when revived.
  * @param dir		- new horizontal direction
  * @param turret	- true to set the turret direction also
  */
@@ -719,7 +719,7 @@ int BattleUnit::getDirection() const
 
 /**
  * Sets this BattleUnit's horizontal direction (facing).
- * Only used for strafing moves.
+ * @note Only used for strafing moves.
  * @param dir - new horizontal direction (facing)
  */
 void BattleUnit::setFaceDirection(int dir)
@@ -729,7 +729,7 @@ void BattleUnit::setFaceDirection(int dir)
 
 /**
  * Gets this BattleUnit's horizontal direction (facing).
- * Used only during strafing moves.
+ * @note Used only during strafing moves.
  * @return, horizontal direction (facing)
  */
 int BattleUnit::getFaceDirection() const
@@ -766,7 +766,7 @@ int BattleUnit::getTurretToDirection() const
 
 /**
  * Gets this BattleUnit's vertical direction.
- * This is when going up or down, doh!
+ * @note This is when going up or down, doh!
  * @return, vertical direction
  */
 int BattleUnit::getVerticalDirection() const
@@ -846,7 +846,7 @@ void BattleUnit::startWalking(
 }
 
 /**
- * This will increment the walking phase.
+ * This will increment '_walkPhase'.
  * @param tileBelow	- pointer to tile currently below this unit
  * @param cache		- true to refresh the unit cache / redraw this unit's sprite
  */
@@ -867,7 +867,6 @@ void BattleUnit::keepWalking(
 	}
 	else // diagonal walking takes double the steps
 	{
-		midPhase = 4 + 4 * (_direction % 2);
 		endPhase = 8 + 8 * (_direction % 2);
 
 		if (_armor->getSize() > 1)
@@ -881,6 +880,9 @@ void BattleUnit::keepWalking(
 			else
 				midPhase = 1;
 		}
+		else
+			midPhase = endPhase / 2;
+//			midPhase = 4 + 4 * (_direction % 2);
 	}
 
 	if (cache == false) // ie. not onScreen
@@ -919,7 +921,7 @@ void BattleUnit::keepWalking(
 		{
 			// sectoids actually have less motion points but instead of creating
 			// yet another variable use the height of the unit instead
-			if (getStandHeight() > 16)
+			if (_standHeight > 16)
 				_motionPoints += 4;
 			else
 				_motionPoints += 3;
@@ -933,7 +935,7 @@ void BattleUnit::keepWalking(
  * Gets the walking phase for animation and sound.
  * @return, phase will always go from 0-7
  */
-int BattleUnit::getWalkingPhase() const
+int BattleUnit::getWalkPhase() const
 {
 	return _walkPhase % 8;
 }
@@ -942,18 +944,9 @@ int BattleUnit::getWalkingPhase() const
  * Gets the walking phase for diagonal walking.
  * @return, phase will be 0 or 8 due to rounding ints down
  */
-int BattleUnit::getDiagonalWalkingPhase() const
+int BattleUnit::getDiagonalWalkPhase() const
 {
 	return (_walkPhase / 8) * 8;
-}
-
-/**
- * Gets the walking phase unadjusted.
- * @return, phase
- */
-int BattleUnit::getTrueWalkingPhase() const
-{
-	return _walkPhase;
 }
 
 /**

@@ -150,7 +150,7 @@ void UnitFallBState::think()
 			   && (*i)->getPosition().z != 0
 			   && (*i)->getTile()->hasNoFloor(tileBelow)
 //			   && (*i)->getMoveTypeUnit() != MT_FLY // done above in fallCheck
-			   && (*i)->getWalkingPhase() == 0;
+			   && (*i)->getWalkPhase() == 0;
 
 		if (falling == true)
 		{
@@ -203,7 +203,7 @@ void UnitFallBState::think()
 			   && (*i)->getPosition().z != 0
 			   && (*i)->getTile()->hasNoFloor(tileBelow)
 //			   && (*i)->getMovementType() != MT_FLY // done above in fallCheck
-			   && (*i)->getWalkingPhase() == 0;
+			   && (*i)->getWalkPhase() == 0;
 
 		//Log(LOG_INFO) << ". new fallCheck = " << fallCheck;
 

@@ -269,8 +269,8 @@ void ExplosionBState::init()
 												_parent->getMap()->getSoundAngle(targetPos));
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
-			if (exploCam->isOnScreen(targetPos) == false
-				|| _forceCamera == true)
+			if (_forceCamera == true
+				|| exploCam->isOnScreen(targetPos) == false)
 			{
 				exploCam->centerOnPosition(
 										targetPos,
@@ -347,8 +347,10 @@ void ExplosionBState::init()
 //		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics
-		if (exploCam->isOnScreen(targetPos) == false
-			|| _forceCamera == true
+		if (_forceCamera == true
+			|| (exploCam->isOnScreen(targetPos) == false
+				&& (_parent->getSave()->getSide() != FACTION_PLAYER
+					|| _item->getRules()->getBattleType() != BT_PSIAMP))
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{

@@ -1772,11 +1772,10 @@ BIGWALL_E_S		// 8
 
 /**
  * Determines whether a unit can fall down from this tile.
- * Can fall down here
- * if the current position is higher than 0 (the tileBelow does not exist)
+ * True if the current position is higher than 0 (the tileBelow does not exist)
  * or if the tile has no floor (and there is no unit standing below).
  * @param tile - the current tile
- * @return, true if a unit on tile can fall down
+ * @return, true if a unit on @a tile can fall to a lower level
  */
 bool Pathfinding::canFallDown(const Tile* const tile) const // private
 {
@@ -1790,7 +1789,7 @@ bool Pathfinding::canFallDown(const Tile* const tile) const // private
  * Wrapper for canFallDown() above.
  * @param tile		- pointer to the current Tile
  * @param unitSize	- the size of the unit
- * @return, true if a unit on tile can fall down
+ * @return, true if a unit on @a tile can fall to a lower level
  */
 bool Pathfinding::canFallDown( // private
 		const Tile* const tile,
