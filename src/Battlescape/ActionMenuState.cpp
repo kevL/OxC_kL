@@ -23,6 +23,7 @@
 //#include <sstream>
 
 #include "ActionMenuItem.h"
+#include "Map.h"
 #include "MedikitState.h"
 #include "MediTargetState.h"
 #include "Pathfinding.h"
@@ -35,10 +36,11 @@
 //#include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
 
 #include "../Interface/Text.h"
 
-//#include "../Resource/ResourcePack.h"
+#include "../Resource/ResourcePack.h"
 
 //#include "../Ruleset/RuleItem.h"
 
@@ -59,7 +61,7 @@ namespace OpenXcom
  * @param y			- position on the y-axis
  */
 ActionMenuState::ActionMenuState(
-		BattleAction* action,
+		BattleAction* const action,
 		int x,
 		int y)
 	:
@@ -113,10 +115,16 @@ ActionMenuState::ActionMenuState(
 					&id);
 		}
 		else if (itRule->getType() == "STR_DOGE")
+		{
 			addItem( // doggie bite
 					BA_HIT,
-					"STR_DOGE_JAWS",
+					"STR_DOGE_BITE",
 					&id);
+			addItem( // doggie bark
+					BA_NONE,
+					"STR_DOGE_BARK",
+					&id);
+		}
 		else
 			addItem( // melee weapon
 					BA_HIT,
@@ -213,12 +221,12 @@ ActionMenuState::~ActionMenuState()
 
 /**
  * Adds a new menu item for an action.
- * @param baType	- action type (BattlescapeGame.h)
+ * @param batType	- action type (BattlescapeGame.h)
  * @param desc		- reference the action description
  * @param id		- pointer to the new item-action ID
  */
-void ActionMenuState::addItem(
-		BattleActionType baType,
+void ActionMenuState::addItem( // private.
+		BattleActionType batType,
 		const std::string& desc,
 		size_t* id)
 {
@@ -226,30 +234,32 @@ void ActionMenuState::addItem(
 		wst1, // acu
 		wst2; // tu
 
-	if (baType == BA_THROW
-		|| baType == BA_AIMEDSHOT
-		|| baType == BA_SNAPSHOT
-		|| baType == BA_AUTOSHOT
-		|| baType == BA_HIT)
+	if (   batType == BA_THROW
+		|| batType == BA_AIMEDSHOT
+		|| batType == BA_SNAPSHOT
+		|| batType == BA_AUTOSHOT
+		|| batType == BA_HIT)
 	{
 		int acu;
-		if (baType == BA_THROW)
+		if (batType == BA_THROW)
 			acu = static_cast<int>(Round(_action->actor->getThrowingAccuracy() * 100.));
 		else
 			acu = static_cast<int>(Round(_action->actor->getFiringAccuracy(
-																		baType,
+																		batType,
 																		_action->weapon) * 100.));
 
 		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(acu);
 	}
 
 	const int tu = _action->actor->getActionTUs(
-											baType,
+											batType,
 											_action->weapon);
-	wst2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
+
+	if (batType != BA_NONE) // ie. everything but doggie bark
+		wst2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 
 	_menuSelect[*id]->setAction(
-							baType,
+							batType,
 							tr(desc),
 							wst1,
 							wst2,
@@ -299,6 +309,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		}
 	}
 
+
 	if (btnId != MENU_ITEMS)
 	{
 		const RuleItem* const itRule = _action->weapon->getRules();
@@ -314,7 +325,18 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			_game->popState();
 		}
 		else */
-		if (_action->type == BA_PRIME)
+		if (_action->type == BA_NONE) // doggie bark
+		{
+			_game->popState();
+			_game->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											itRule->getMeleeSound())
+										->play(
+											-1,
+											_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
+											->getSoundAngle(_action->actor->getPosition()));
+		}
+		else if (_action->type == BA_PRIME)
 		{
 			if (itRule->getBattleType() == BT_PROXYGRENADE)
 			{
@@ -353,24 +375,25 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 
 			_game->popState();
 		}
-		else if (_action->type == BA_USE
-			&& itRule->getBattleType() == BT_MEDIKIT)
+		else if (_action->type == BA_USE)
 		{
-			_game->popState();
-			_game->pushState(new MediTargetState(_action));
-		}
-		else if (_action->type == BA_USE
-			&& itRule->getBattleType() == BT_SCANNER)
-		{
-			if (_action->actor->spendTimeUnits(_action->TU) == true)
+			if (itRule->getBattleType() == BT_MEDIKIT)
 			{
 				_game->popState();
-				_game->pushState(new ScannerState(_action));
+				_game->pushState(new MediTargetState(_action));
 			}
-			else
+			else if (itRule->getBattleType() == BT_SCANNER)
 			{
-				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-				_game->popState();
+				if (_action->actor->spendTimeUnits(_action->TU) == true)
+				{
+					_game->popState();
+					_game->pushState(new ScannerState(_action));
+				}
+				else
+				{
+					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+					_game->popState();
+				}
 			}
 		}
 		else if (_action->type == BA_LAUNCH)

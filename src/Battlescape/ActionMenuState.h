@@ -48,7 +48,7 @@ private:
 
 	/// Adds a new menu item for an action.
 	void addItem(
-			BattleActionType baType,
+			BattleActionType batType,
 			const std::string& desc,
 			size_t* id);
 
@@ -56,7 +56,7 @@ private:
 	public:
 		/// Creates the Action Menu state.
 		ActionMenuState(
-				BattleAction* action,
+				BattleAction* const action,
 				int x,
 				int y);
 		/// Cleans up the Action Menu state.

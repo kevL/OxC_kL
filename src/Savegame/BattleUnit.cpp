@@ -1501,8 +1501,9 @@ int BattleUnit::damage(
 
 	// TODO: give a short "ugh" if hit causes no damage or perhaps stuns ( power must be > 0 though );
 	// a longer "uuuhghghgh" if hit causes damage ... and let DieBState handle deathscreams.
-	if (_health > 0
-		&& _visible == true
+	if (_visible == true
+		&& _health > 0
+		&& _health > _stunLevel
 		&& _status != STATUS_UNCONSCIOUS
 		&& dType != DT_STUN
 		&& (_geoscapeSoldier != NULL
@@ -1785,36 +1786,42 @@ bool BattleUnit::isOut(
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
- * @param actionType	- type of battle action (BattlescapeGame.h)
- * @param item			- pointer to BattleItem for TU-cost
+ * @param batType	- type of battle action (BattlescapeGame.h)
+ * @param item		- pointer to BattleItem for TU-cost
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		const BattleActionType actionType,
+		const BattleActionType batType,
 		const BattleItem* item) const
 {
-	if (item == NULL)
+	if (batType == BA_NONE
+		|| item == NULL)
+	{
 		return 0;
+	}
 
 	return getActionTUs(
-					actionType,
+					batType,
 					item->getRules());
 }
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
- * @param actionType	- type of battle action (BattlescapeGame.h)
- * @param item			- pointer to RuleItem for TU-cost (default NULL)
+ * @param batType	- type of battle action (BattlescapeGame.h)
+ * @param item		- pointer to RuleItem for TU-cost (default NULL)
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		const BattleActionType actionType,
+		const BattleActionType batType,
 		const RuleItem* rule) const
 {
 //	if (rule == NULL) return 0;
-	int cost = 0;
+	if (batType == BA_NONE)
+		return 0;
 
-	switch (actionType)
+	int cost;
+
+	switch (batType)
 	{
 		// note: Should put "tuPrime", "tuDefuse", & "tuThrow" yaml-entry in Xcom1Ruleset, under various grenade-types etc.
 		// note_note: "tuPrime" done
@@ -1894,10 +1901,10 @@ int BattleUnit::getActionTUs(
 	if (cost > 0
 		&& ((rule != NULL
 				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
-//			|| actionType == BA_PRIME
-			|| actionType == BA_THROW)
-		&& actionType != BA_DEFUSE
-		&& actionType != BA_DROP)
+//			|| batType == BA_PRIME
+			|| batType == BA_THROW)
+		&& batType != BA_DEFUSE
+		&& batType != BA_DROP)
 	{
 		cost = std::max(
 					1,

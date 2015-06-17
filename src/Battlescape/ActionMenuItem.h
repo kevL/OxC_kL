@@ -67,11 +67,11 @@ private:
 
 		/// Assigns an action to it.
 		void setAction(
-				BattleActionType action,
-				const std::wstring& description,
-				const std::wstring& accuracy,
-				const std::wstring& timeunits,
-				int tu);
+				BattleActionType batType,
+				const std::wstring& desc,
+				const std::wstring& acu,
+				const std::wstring& tu,
+				int tuCost);
 		/// Gets the assigned action.
 		BattleActionType getAction() const;
 

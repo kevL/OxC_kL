@@ -105,25 +105,25 @@ ActionMenuItem::~ActionMenuItem()
 
 /**
  * Links with an action and fills in the text fields.
- * @param action		- the battlescape action
- * @param description	- reference the action's description
- * @param accuracy		- reference the action's accuracy, including the 'acu' prefix
- * @param timeunits		- reference the timeunits string, including the 'tu' prefix
- * @param tu			- the timeunits value
+ * @param batType	- the battlescape action
+ * @param desc		- reference the action's description
+ * @param acu		- reference the action's accuracy including the 'acu' prefix
+ * @param tu		- reference the timeunits string including the 'tu' prefix
+ * @param tuCost	- the timeunits value that will get expended
  */
 void ActionMenuItem::setAction(
-		BattleActionType action,
-		const std::wstring& description,
-		const std::wstring& accuracy,
-		const std::wstring& timeunits,
-		int tu)
+		BattleActionType batType,
+		const std::wstring& desc,
+		const std::wstring& acu,
+		const std::wstring& tu,
+		int tuCost)
 {
-	_action = action;
-	_txtDesc->setText(description);
-	_txtAcc->setText(accuracy);
-	_txtTU->setText(timeunits);
+	_action = batType;
+	_txtDesc->setText(desc);
+	_txtAcc->setText(acu);
+	_txtTU->setText(tu);
 
-	_tu = tu;
+	_tu = tuCost;
 
 	_redraw = true;
 }

@@ -707,10 +707,10 @@ private:
 
 		/// Gets the number of time units a certain action takes.
 		int getActionTUs(
-				const BattleActionType actionType,
+				const BattleActionType batType,
 				const BattleItem* item) const;
 		int getActionTUs(
-				const BattleActionType actionType,
+				const BattleActionType batType,
 				const RuleItem* item = NULL) const;
 
 		/// Spends time units if possible.
