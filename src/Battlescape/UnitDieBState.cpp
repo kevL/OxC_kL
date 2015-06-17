@@ -268,7 +268,7 @@ void UnitDieBState::think()
 		++_extraTicks;
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
-			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+			&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
 //				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			_unit->instaKill();

@@ -1462,7 +1462,7 @@ int BattleUnit::damage(
 					_spawnUnit.clear();
 
 					if (_type == "STR_ZOMBIE")
-						_specab = SPECAB_EXPLODEONDEATH;
+						_specab = SPECAB_EXPLODE;
 					else
 						_specab = SPECAB_NONE;
 				}
@@ -2434,7 +2434,7 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFireOnUnit(int fire)
 {
-	if (_specab != SPECAB_BURNFLOOR)
+	if (_specab != SPECAB_BURN)
 //		&& _specab != SPECAB_BURN_AND_EXPLODE)
 	{
 		_fire = fire;

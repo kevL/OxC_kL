@@ -1318,7 +1318,7 @@ void ProjectileFlyBState::performMeleeAttack()
 			_action.weapon->setAmmoItem(NULL);
 	}
 
-	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+	if (_unit->getSpecialAbility() == SPECAB_BURN)
 //		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		_parent->getSave()->getTile(_action.target)->ignite(15);

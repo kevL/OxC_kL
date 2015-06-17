@@ -886,7 +886,7 @@ bool UnitWalkBState::doStatusStand_end() // private.
 											static_cast<double>(energy) / stat * 100.));
 	}
 
-	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
+	if (_unit->getSpecialAbility() == SPECAB_BURN) // if the unit burns floortiles, burn floortiles
 //		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		// kL_add: Put burnedBySilacoid() here! etc

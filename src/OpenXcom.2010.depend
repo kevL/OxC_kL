@@ -5927,7 +5927,7 @@
 1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1434509979 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1434513772 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6225,7 +6225,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434509676 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1434513747 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6297,7 +6297,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434468648 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1434513719 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -11473,7 +11473,7 @@
 1431494719 f:\git\openxcom\src\ufopaedia\articlestateaward.h
 	"ArticleState.h"
 
-1434461742 f:\git\openxcom\src\ruleset\ruleunit.h
+1434516152 f:\git\openxcom\src\ruleset\ruleunit.h
 
 1433986257 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
 	"RuleUnit.h"

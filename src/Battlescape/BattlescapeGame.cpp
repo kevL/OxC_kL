@@ -1487,7 +1487,7 @@ void BattlescapeGame::checkForCasualties(
 		if (attacker->getStatus() == STATUS_DEAD
 			&& attacker->getMurdererId() != 0
 //			&& attacker->getGeoscapeSoldier() == NULL
-			&& attacker->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+			&& attacker->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODE)
 //				|| attacker->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			for (std::vector<BattleUnit*>::const_iterator
@@ -1503,53 +1503,30 @@ void BattlescapeGame::checkForCasualties(
 			}
 		}
 
-		//Log(LOG_INFO) << ". check for spotters Qty = " << (int)attacker->getUnitSpotters()->size();
 		// attacker gets Exposed if a spotter is still conscious
-		// NOTE: Useful only after Melee attacks.
-		// Firearms & explosives handle things differently ... see note in TileEngine::checkReactionFire().
-		for (std::list<BattleUnit*>::const_iterator // -> not sure what happens if RF-trigger kills Cyberdisc that kills aLien .....
-				i = attacker->getUnitSpotters()->begin();
-				i != attacker->getUnitSpotters()->end();
-				++i)
+		// NOTE: Useful only after Melee attacks. Firearms & explosives handle
+		// things differently ... see note in TileEngine::checkReactionFire().
+		//Log(LOG_INFO) << ". check for spotters Qty = " << (int)attacker->getUnitSpotters()->size();
+		if (attacker->getUnitSpotters()->empty() == false)
 		{
-			//Log(LOG_INFO) << ". . iterate";
-			if ((*i)->getHealth() != 0
-				&& (*i)->getHealth() > (*i)->getStun())
+			for (std::list<BattleUnit*>::const_iterator // -> not sure what happens if RF-trigger kills Cyberdisc that kills aLien .....
+					i = attacker->getUnitSpotters()->begin();
+					i != attacker->getUnitSpotters()->end();
+					++i)
 			{
-				//Log(LOG_INFO) << ". . . spotter conscious";
-				attacker->setExposed(); // defender has been spotted on Player turn.
-				break;
-			}
-		}
-		//Log(LOG_INFO) << ". clear spotters vect.";
-		attacker->getUnitSpotters()->clear();
-	}
-	// kL_note: what about tile explosions
-
-/*	// other units get exposed if their spotter is still conscious
-	for (std::vector<BattleUnit*>::const_iterator
-			i = _battleSave->getUnits()->begin();
-			i != _battleSave->getUnits()->end();
-			++i)
-	{
-		if ((*i)->getHealth() != 0
-			&& (*i)->getHealth() > (*i)->getStun())
-		{
-			for (std::list<BattleUnit*>::const_iterator
-					j = (*i)->getUnitSpotters()->begin();
-					j != (*i)->getUnitSpotters()->end();
-					++j)
-			{
-				if ((*j)->getHealth() != 0
-					&& (*j)->getHealth() > (*j)->getStun())
+				if ((*i)->getHealth() != 0
+					&& (*i)->getHealth() > (*i)->getStun())
 				{
-					(*i)->setExposed(); // defender has been spotted on Player turn.
+					attacker->setExposed(); // defender has been spotted on Player turn.
+					break;
 				}
 			}
 
-			(*i)->getUnitSpotters()->clear();
+			attacker->getUnitSpotters()->clear();
 		}
-	} */
+	}
+	// kL_note: what about tile explosions
+
 
 	std::string
 		killStatRace = "STR_UNKNOWN",

@@ -147,7 +147,7 @@ void ExplosionBState::init()
 		_areaOfEffect = true;
 	}
 	else if (_unit != NULL // cyberdiscs!!! And ... ZOMBIES.
-		&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
 //			|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
@@ -565,7 +565,7 @@ void ExplosionBState::explode() // private.
 	{
 		int radius;
 		if (_unit != NULL
-			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+			&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
 //				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();

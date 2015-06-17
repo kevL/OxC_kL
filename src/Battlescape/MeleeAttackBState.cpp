@@ -140,7 +140,7 @@ void MeleeAttackBState::think()
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 
 	// if the unit burns floortiles, burn floortiles
-	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+	if (_unit->getSpecialAbility() == SPECAB_BURN || _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		_parent->getSave()->getTile(_action.target)->ignite(15);
 	}

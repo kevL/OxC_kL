@@ -2135,7 +2135,7 @@ BattleUnit* TileEngine::hit(
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
 				if (attacker != NULL
-					&& attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
+					&& attacker->getSpecialAbility() == SPECAB_BURN)
 //						|| attacker->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 				{
 					const float vulnerable = targetUnit->getArmor()->getDamageModifier(DT_IN);
@@ -2253,7 +2253,7 @@ BattleUnit* TileEngine::hit(
 					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
 					//Log(LOG_INFO) << ". . health = " << targetUnit->getHealth();
 					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
-					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs
 //							|| targetUnit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 						&& (targetUnit->getHealth() == 0
 							|| targetUnit->getStun() >= targetUnit->getHealth()))
