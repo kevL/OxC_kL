@@ -129,7 +129,7 @@ ActionMenuState::ActionMenuState(
 	// just because it's been mind-controlled doesn't mean you know how to use it.
 	{
 		if (itRule->getBattleType() == BT_GRENADE
-			|| itRule->getBattleType() == BT_PROXIMITYGRENADE)
+			|| itRule->getBattleType() == BT_PROXYGRENADE)
 		{
 			if (_action->weapon->getFuseTimer() == -1) // canPrime
 				addItem(
@@ -316,7 +316,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		else */
 		if (_action->type == BA_PRIME)
 		{
-			if (itRule->getBattleType() == BT_PROXIMITYGRENADE)
+			if (itRule->getBattleType() == BT_PROXYGRENADE)
 			{
 				_action->value = 0;
 				_game->popState();

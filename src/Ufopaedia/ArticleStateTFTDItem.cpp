@@ -164,7 +164,7 @@ namespace OpenXcom
 				break;
 			case BT_AMMO:
 			case BT_GRENADE:
-			case BT_PROXIMITYGRENADE:
+			case BT_PROXYGRENADE:
 			case BT_MELEE:
 				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 

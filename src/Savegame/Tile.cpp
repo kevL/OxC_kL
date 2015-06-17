@@ -1428,7 +1428,7 @@ int Tile::getTopItemSprite(bool* ptrPrimed) const
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
+		if ((*i)->getRules()->getBattleType() == BT_PROXYGRENADE
 			&& (*i)->getFuseTimer() > -1)
 		{
 			proxGrenade = *i;

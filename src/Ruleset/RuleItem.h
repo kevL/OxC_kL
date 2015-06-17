@@ -47,18 +47,18 @@ enum ItemDamageType
 
 enum BattleType
 {
-	BT_NONE,				// 0
-	BT_FIREARM,				// 1
-	BT_AMMO,				// 2
-	BT_MELEE,				// 3
-	BT_GRENADE,				// 4 -> includes SmokeGrenade, HE-Satchel, and AlienGrenade (see Ruleset)
-	BT_PROXIMITYGRENADE,	// 5
-	BT_MEDIKIT,				// 6
-	BT_SCANNER,				// 7
-	BT_MINDPROBE,			// 8
-	BT_PSIAMP,				// 9
-	BT_FLARE,				// 10
-	BT_CORPSE				// 11
+	BT_NONE,			// 0
+	BT_FIREARM,			// 1
+	BT_AMMO,			// 2
+	BT_MELEE,			// 3
+	BT_GRENADE,			// 4 -> includes SmokeGrenade, HE-Satchel, and AlienGrenade (see Ruleset)
+	BT_PROXYGRENADE,	// 5
+	BT_MEDIKIT,			// 6
+	BT_SCANNER,			// 7
+	BT_MINDPROBE,		// 8
+	BT_PSIAMP,			// 9
+	BT_FLARE,			// 10
+	BT_CORPSE			// 11
 };
 
 

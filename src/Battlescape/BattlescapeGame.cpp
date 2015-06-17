@@ -2980,7 +2980,7 @@ void BattlescapeGame::dropItem(
 	if (removeItem == true)
 		item->moveToOwner(NULL);
 	else if (item->getRules()->getBattleType() != BT_GRENADE
-		&& item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
+		&& item->getRules()->getBattleType() != BT_PROXYGRENADE)
 	{
 		item->setOwner(NULL);
 	}
@@ -3464,7 +3464,7 @@ bool BattlescapeGame::takeItem(
 		break;
 
 		case BT_GRENADE:
-		case BT_PROXIMITYGRENADE:
+		case BT_PROXYGRENADE:
 			for (int
 					i = 0;
 					i != 4;
@@ -3649,7 +3649,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 								i != tile->getInventory()->end();
 								++i)
 						{
-							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
+							if ((*i)->getRules()->getBattleType() == BT_PROXYGRENADE
 								&& (*i)->getFuseTimer() != -1)
 							{
 								int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765

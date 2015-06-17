@@ -65,8 +65,8 @@ ExplosionBState::ExplosionBState(
 		BattleUnit* unit,
 		Tile* tile,
 		bool lowerWeapon,
-		bool meleeSuccess,	// kL_add.
-		bool forceCamera)	// kL_add.
+		bool meleeSuccess,
+		bool forceCamera)
 //		bool cosmetic)
 	:
 		BattleState(parent),
@@ -75,14 +75,14 @@ ExplosionBState::ExplosionBState(
 		_unit(unit),
 		_tile(tile),
 		_lowerWeapon(lowerWeapon),
-		_hitSuccess(meleeSuccess),	// kL
-		_forceCamera(forceCamera),	// kL
+		_hitSuccess(meleeSuccess),
+		_forceCamera(forceCamera),
 //		_cosmetic(cosmetic),
 		_power(0),
-		_areaOfEffect(false),
+		_areaOfEffect(true),
 		_pistolWhip(false),
 		_hit(false)
-//		_extend(3) // kL, extra think-cycles before this state is allowed to Pop.
+//		_extend(3) // extra think-cycles before this state is allowed to Pop.
 {}
 
 /**
@@ -94,14 +94,17 @@ ExplosionBState::~ExplosionBState()
 }
 
 /**
- * Initializes the explosion. The animation and sound starts here.
- * If the animation is finished, the actual effect takes place.
+ * Initializes the explosion.
+ * @note The animation and sound starts here. If the animation is finished the
+ * actual effect takes place.
  */
 void ExplosionBState::init()
 {
 	if (_item != NULL)
 	{
-		if (_item->getRules()->getBattleType() != BT_PSIAMP) // kL: pass by. Let cTor initialization handle it.
+		if (_item->getRules()->getBattleType() == BT_PSIAMP) // pass by. Let cTor initialization handle it. Except '_areaOfEffect' value
+			_areaOfEffect = false;
+		else
 		{
 			_power = _item->getRules()->getPower();
 
@@ -136,36 +139,33 @@ void ExplosionBState::init()
 			// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
 			_areaOfEffect = _pistolWhip == false
 						 && _item->getRules()->getBattleType() != BT_MELEE
-//						 && _item->getRules()->getBattleType() != BT_PSIAMP
 						 && _item->getRules()->getExplosionRadius() > -1;
 //						 && _cosmetic == false // kL_note: foregoes _pistolwhip
 		}
 	}
 	else if (_tile != NULL)
-	{
 		_power = _tile->getExplosive();
-		_areaOfEffect = true;
-	}
 	else if (_unit != NULL // cyberdiscs!!! And ... ZOMBIES.
 		&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
 //			|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
+		const int
+			power1 = _power * 2 / 3,
+			power2 = _power * 3 / 2;
 		_power = (RNG::generate(
-							_power * 2 / 3,
-							_power * 3 / 2)
+							power1,
+							power2)
 				+ RNG::generate(
-							_power * 2 / 3,
-							_power * 3 / 2));
+							power1,
+							power2));
 		_power /= 2;
-		_areaOfEffect = true;
 	}
 	else // unhandled cyberdisc!!!
 	{
 		_power = (RNG::generate(67, 137)
 				+ RNG::generate(67, 137));
 		_power /= 2;
-		_areaOfEffect = true;
 	}
 
 
@@ -235,7 +235,7 @@ void ExplosionBState::init()
 				}
 
 				Explosion* const explosion = new Explosion( // animation
-														pos + Position(12,12,0), // jogg the anim down a few pixels. Tks.
+														pos + Position(10,10,0), // jogg the anim down a few pixels. Tks.
 														frameStart,
 														frameDelay,
 														true);
@@ -502,7 +502,7 @@ void ExplosionBState::explode() // private.
 							_item->getRules()->getExplosionRadius(),
 							_unit,
 							_item->getRules()->getBattleType() == BT_GRENADE
-								|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE);
+								|| _item->getRules()->getBattleType() == BT_PROXYGRENADE);
 
 			tileEngine->setProjectileDirection(-1);
 		}
@@ -605,7 +605,7 @@ void ExplosionBState::explode() // private.
 
 	if (_item != NULL
 		&& (_item->getRules()->getBattleType() == BT_GRENADE
-			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+			|| _item->getRules()->getBattleType() == BT_PROXYGRENADE))
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = _parent->getSave()->getItems()->begin();

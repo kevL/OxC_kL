@@ -1568,7 +1568,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item) // private.
 
 					if (Options::includePrimeStateInSavedLayout == true
 						&& (item->getRules()->getBattleType() == BT_GRENADE
-							|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+							|| item->getRules()->getBattleType() == BT_PROXYGRENADE))
 					{
 						item->setFuseTimer((*j)->getFuseTimer());
 					}
@@ -1775,7 +1775,7 @@ bool BattlescapeGenerator::addItem( // private.
 		break;
 
 		case BT_GRENADE: // includes AlienGrenades & SmokeGrenades & HE-Packs.
-		case BT_PROXIMITYGRENADE:
+		case BT_PROXYGRENADE:
 			for (int
 					i = 0;
 					i != 4;

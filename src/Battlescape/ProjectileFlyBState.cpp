@@ -504,7 +504,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
 				&& (   _projectileItem->getRules()->getBattleType() == BT_GRENADE
-					|| _projectileItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+					|| _projectileItem->getRules()->getBattleType() == BT_PROXYGRENADE))
 			{
 				//Log(LOG_INFO) << ". . auto-prime for AI, unitID " << _unit->getId();
 				_projectileItem->setFuseTimer(0);
@@ -1257,24 +1257,24 @@ void ProjectileFlyBState::performMeleeAttack()
 	//Log(LOG_INFO) << ". meleeAttack, weapon = " << _action.weapon->getRules()->getType();
 	//Log(LOG_INFO) << ". meleeAttack, ammo = " << _ammo->getRules()->getType();
 	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
-	bool success = false;
 	const int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
 																	BA_HIT,
 //																	_ammo) // Ammo is the weapon since (melee==true). Not necessarily ...
 																	_action.weapon) * 100.));
 	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << percent;
+	bool success;
 	if (RNG::percent(percent) == true)
 	{
 		//Log(LOG_INFO) << ". success";
 		success = true;
 	}
+	else
+		success = false;
 
 	int sound = -1;
 	if (success == false)
 	{
 		//Log(LOG_INFO) << ". meleeAttack MISS, unitID " << _unit->getId();
-		sound = ResourcePack::ITEM_THROW;
-
 		if (_ammo->getRules()->getBattleType() == BT_MELEE
 			&& _ammo->getRules()->getMeleeSound() != -1
 			&& _ammo->getRules()->getMeleeHitSound() != -1)	// if there is a hitSound play attackSound, else ITEM_THROW;
@@ -1282,12 +1282,12 @@ void ProjectileFlyBState::performMeleeAttack()
 		{
 			sound = _ammo->getRules()->getMeleeSound();
 		}
+		else
+			sound = ResourcePack::ITEM_THROW;
 	}
 	else
 	{
 		//Log(LOG_INFO) << ". meleeAttack HIT, unitID " << _unit->getId();
-		sound = ResourcePack::ITEM_DROP;
-
 		if (_ammo->getRules()->getBattleType() == BT_MELEE)
 		{
 			if (_ammo->getRules()->getMeleeHitSound() != -1)
@@ -1295,6 +1295,8 @@ void ProjectileFlyBState::performMeleeAttack()
 			else if (_ammo->getRules()->getMeleeSound() != -1)
 				sound = _ammo->getRules()->getMeleeSound();
 		}
+		else
+			sound = ResourcePack::ITEM_DROP;
 	}
 
 	if (sound != -1)

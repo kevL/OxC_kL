@@ -473,7 +473,7 @@ int Projectile::calculateThrow(double accuracy)
 					&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 						|| targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
 //					&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
-//						|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+//						|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
 //					&& _action.target->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255)
 				{
 					test = VOXEL_OUTOFBOUNDS; // prevent Grenades from landing on diagonal BigWalls.

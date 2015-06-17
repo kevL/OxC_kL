@@ -1332,7 +1332,7 @@ void BattlescapeState::mapOver(Action* action)
 							wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 						}
 						else if ((itRule->getBattleType() == BT_GRENADE
-								|| itRule->getBattleType() == BT_PROXIMITYGRENADE)
+								|| itRule->getBattleType() == BT_PROXYGRENADE)
 							&& item->getFuseTimer() > -1)
 						{
 							wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
@@ -3613,7 +3613,7 @@ void BattlescapeState::drawFuse()
 	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
 	if (item != NULL
 		&& ((item->getRules()->getBattleType() == BT_GRENADE
-				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+				|| item->getRules()->getBattleType() == BT_PROXYGRENADE)
 			&& item->getFuseTimer() != -1))
 	{
 		_btnLeftHandItem->lock();
@@ -3630,7 +3630,7 @@ void BattlescapeState::drawFuse()
 	item = selectedUnit->getItem("STR_RIGHT_HAND");
 	if (item != NULL
 		&& ((item->getRules()->getBattleType() == BT_GRENADE
-				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+				|| item->getRules()->getBattleType() == BT_PROXYGRENADE)
 			&& item->getFuseTimer() != -1))
 	{
 		_btnRightHandItem->lock();

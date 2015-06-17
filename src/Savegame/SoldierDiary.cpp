@@ -576,7 +576,7 @@ void SoldierDiary::updateDiary(
 			if ((*i)->hostileTurn() == true)
 			{
 				if (rules->getItem((*i)->_weapon)->getBattleType() == BT_GRENADE
-					|| rules->getItem((*i)->_weapon)->getBattleType() == BT_PROXIMITYGRENADE)
+					|| rules->getItem((*i)->_weapon)->getBattleType() == BT_PROXYGRENADE)
 				{
 					++_trapKillTotal;
 				}
@@ -918,7 +918,7 @@ else
 									"BT_AMMO",
 									"BT_MELEE",
 									"BT_GRENADE",
-									"BT_PROXIMITYGRENADE",
+									"BT_PROXYGRENADE",
 									"BT_MEDIKIT",
 									"BT_SCANNER",
 									"BT_MINDPROBE",

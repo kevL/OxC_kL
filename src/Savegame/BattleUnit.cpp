@@ -209,7 +209,7 @@ BattleUnit::BattleUnit(
 
 /**
  * Creates this BattleUnit from a (non-Soldier) Unit-rule object.
- * @param unit			- pointer to Unit rule
+ * @param unit			- pointer to RuleUnit
  * @param faction		- faction the unit belongs to
  * @param id			- the unit's unique ID
  * @param armor			- pointer to unit's armor

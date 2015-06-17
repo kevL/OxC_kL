@@ -48,13 +48,13 @@ private:
 	bool
 		_areaOfEffect,
 //		_cosmetic,
-		_forceCamera, // kL
+		_forceCamera,
 		_hit,
 		_lowerWeapon,
 		_pistolWhip,
-		_hitSuccess; // kL
+		_hitSuccess;
 	int
-//		_extend, // kL
+//		_extend,
 		_power;
 
 	BattleItem* _item;
@@ -77,8 +77,8 @@ private:
 				BattleUnit* unit,
 				Tile* tile = NULL,
 				bool lowerWeapon = false,
-				bool meleeSuccess = false,	// kL_add.
-				bool forceCamera = false);	// kL_add.
+				bool meleeSuccess = false,
+				bool forceCamera = false);
 //				bool cosmetic = false);
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();

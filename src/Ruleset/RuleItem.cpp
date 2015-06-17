@@ -1078,7 +1078,7 @@ BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 	}
 
 	if (_battleType == BT_GRENADE
-		|| _battleType == BT_PROXIMITYGRENADE)
+		|| _battleType == BT_PROXYGRENADE)
 	{
 		if (isPrimed == false)
 			return BA_PRIME;

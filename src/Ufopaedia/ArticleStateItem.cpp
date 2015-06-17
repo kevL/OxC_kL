@@ -282,7 +282,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 
 		case BT_AMMO:
 		case BT_GRENADE:
-		case BT_PROXIMITYGRENADE:
+		case BT_PROXYGRENADE:
 		case BT_MELEE:
 /*kL
 			_txtDamage = new Text(82, 10, 194, 7);

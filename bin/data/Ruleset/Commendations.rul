@@ -224,7 +224,7 @@ extraStrings:
 # The killCriteria can list any race, rank, weapon, ammo,
 # or one of these statuses: STATUS_DEAD and STATUS_UNCONSCIOUS,
 # or one of these factions: FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER
-# or one of these battle types: BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE
+# or one of these battle types: BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE
 # or one of these damage types: DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE
 # Use the strings from the ruleset to define them (mods can be used too).
 # For example, look at "STR_MEDAL_BOLTS_CROSS_NAME". It is awarded if a soldier
@@ -342,7 +342,7 @@ commendations:
       -
         3: ["FACTION_HOSTILE","STATUS_DEAD","BT_GRENADE"]
       -
-        3: ["FACTION_HOSTILE","STATUS_DEAD","BT_PROXIMITYGRENADE"]
+        3: ["FACTION_HOSTILE","STATUS_DEAD","BT_PROXYGRENADE"]
   - type: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME # Title swapped in extraStrings w/ Man of Steel
     description: STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION
     sprite: 15

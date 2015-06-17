@@ -2186,10 +2186,10 @@ BattleUnit* TileEngine::hit(
 					delta = 100.;
 
 				const int
-					low = static_cast<int>(std::floor(static_cast<double>(power) * (100. - delta) / 100.) + 1),
-					high = static_cast<int>(std::ceil(static_cast<double>(power) * (100. + delta) / 100.));
+					power1 = static_cast<int>(std::floor(static_cast<double>(power) * (100. - delta) / 100.) + 1),
+					power2 = static_cast<int>(std::ceil(static_cast<double>(power) * (100. + delta) / 100.));
 
-				int extraPow = 0;
+				int extraPower = 0;
 				if (attacker != NULL) // bonus to damage per Accuracy (TODO: use ranks also for xCom or aLien)
 				{
 					if (   dType == DT_AP
@@ -2197,17 +2197,19 @@ BattleUnit* TileEngine::hit(
 						|| dType == DT_PLASMA
 						|| dType == DT_ACID)
 					{
-						extraPow = static_cast<int>(std::ceil(static_cast<double>(power * attacker->getBaseStats()->firing) / 1000.));
+						extraPower = attacker->getBaseStats()->firing;
 					}
 					else if (dType == DT_MELEE)
-						extraPow = static_cast<int>(std::ceil(static_cast<double>(power * attacker->getBaseStats()->melee) / 1000.));
+						extraPower = attacker->getBaseStats()->melee;
+
+					extraPower = static_cast<int>(Round(static_cast<double>(power * extraPower) / 1000.));
 				}
 
-				power = RNG::generate(low, high) // bell curve
-					  + RNG::generate(low, high);
+				power = RNG::generate(power1, power2) // bell curve
+					  + RNG::generate(power1, power2);
 				power /= 2;
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
-				power += extraPow;
+				power += extraPower;
 
 				const bool ignoreArmor = dType == DT_STUN	// kL. stun ignores armor... does now! UHM....
 									  || dType == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
@@ -5276,7 +5278,7 @@ bool TileEngine::validateThrow(
 		&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 			|| targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
 //		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
-//			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+//			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
 //		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255)
 	{
 		return false; // prevent Grenades from landing on diagonal BigWalls.
