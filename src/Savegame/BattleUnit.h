@@ -466,6 +466,8 @@ private:
 		_killedBy;
 	UnitStatus _status;
 
+	std::list<BattleUnit*> _unitSpotters;
+
 	std::vector<BattleItem*> _inventory;
 	std::vector<BattleUnit*>
 		_visibleUnits,
@@ -767,7 +769,7 @@ private:
 		int getFatalWounds() const;
 
 		/// Gets this unit's current reaction score.
-		double getInitiative(const int tuSpent = 0) const;
+		int getInitiative(const int tuSpent = 0) const;
 
 		/// Prepares this unit for a new turn.
 		void prepUnit();
@@ -1113,6 +1115,9 @@ private:
 
 		/// Sets this BattleUnit as having just revived during a Turnover.
 		void setRevived(bool revived = true);
+
+		/// Gets all units in the battlescape that are valid RF-spotters of this BattleUnit.
+		std::list<BattleUnit*>* getUnitSpotters();
 
 		/// Sets if this BattleUnit is panicking.
 //		void setPanicking(bool panic = true);

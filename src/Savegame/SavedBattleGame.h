@@ -347,13 +347,13 @@ private:
 				BattleUnit* unit,
 				Position pos);
 
-		/// Adds this unit to the vector of falling units.
+		/// Adds this unit to the list of falling units.
 		bool addFallingUnit(BattleUnit* const unit);
-		/// Gets the vector of falling units.
+		/// Gets the list of falling units.
 		std::list<BattleUnit*>* getFallingUnits();
-		/// Toggles the switch that says "there are units falling, start the fall state".
+		/// Toggles the flag that says "there are units falling - start the fall state".
 		void setUnitsFalling(bool fall);
-		/// Checks the status of the switch that says "there are units falling".
+		/// Checks the status of the flag that says "there are units falling".
 		bool getUnitsFalling() const;
 
 		/// Gets a pointer to the BattlescapeGame.

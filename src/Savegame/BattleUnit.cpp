@@ -1704,8 +1704,8 @@ void BattleUnit::setAimingPhase(int phase)
  * but it's still a unit.
  * @note checkHealth and checkStun are early returns and therefore
  * should generally not be used to test a negation: eg, !isOut()
- * @param checkHealth	- check if unit still has health
- * @param checkStun		- check if unit is stunned
+ * @param checkHealth	- check if unit still has health (default false)
+ * @param checkStun		- check if unit is stunned (default false)
  * @return, true if this BattleUnit is unable to function on the battlefield
  */
 bool BattleUnit::isOut(
@@ -1713,13 +1713,13 @@ bool BattleUnit::isOut(
 		bool checkStun) const
 {
 	if (checkHealth == true
-		&& getHealth() == 0)
+		&& _health == 0)
 	{
 		return true;
 	}
 
 	if (checkStun == true
-		&& getStun() >= getHealth())
+		&& _stunLevel >= _health)
 	{
 		return true;
 	}
@@ -1732,28 +1732,56 @@ bool BattleUnit::isOut(
 	}
 
 	return false;
-/*	bool ret = false;
-
-	if (checkHealth)
+}
+	// here's how i'd like to have this implemented throughout code:
+	// Use parameter (int)checkMode:
+	// 		0 : check by Status
+	//		1 : check by health
+	//		2 : check by stunLevel
+	// pst. 'enum' that ... then use a switch()
+	/*	if (checkHealth == true)
 	{
-		if (getHealth() == 0)
-			ret = true;
+		if (_health == 0)
+			return true;
+		else
+			return false;
 	}
 
-	if (checkStun)
+	if (checkStun == true)
 	{
-		if (getStun() >= getHealth())
-			ret = true;
+		if (_stunLevel >= _health)
+			return true;
+		else
+			return false;
 	}
 
 	if (_status == STATUS_DEAD
 		|| _status == STATUS_UNCONSCIOUS)
 	{
-		ret = true;
+		return true;
 	}
 
+	return false; */
+
+/* old:
+	bool ret = false;
+
+	if (checkHealth == true)
+	{
+		if (_health == 0)
+			ret = true;
+	}
+	if (checkStun == true)
+	{
+		if (_stunLevel >= _health)
+			ret = true;
+	}
+	if (_status == STATUS_DEAD
+		|| _status == STATUS_UNCONSCIOUS)
+	{
+		ret = true;
+	}
 	return ret; */
-}
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
@@ -2219,11 +2247,11 @@ int BattleUnit::getFatalWounds() const
 
 /**
  * Little formula that calculates initiative/reaction score.
- * Reactions Stat * Current Time Units / Max TUs
+ * @note Reactions Stat * Current Time Units / Max TUs
  * @param tuSpent - (default 0)
- * @return, Reaction score; aka INITIATIVE
+ * @return, reaction score aka INITIATIVE
  */
-double BattleUnit::getInitiative(const int tuSpent) const
+int BattleUnit::getInitiative(const int tuSpent) const
 {
 	double ret = static_cast<double>(
 				 getBaseStats()->reactions * (getTimeUnits() - tuSpent))
@@ -2231,7 +2259,7 @@ double BattleUnit::getInitiative(const int tuSpent) const
 
 	ret *= getAccuracyModifier();
 
-	return ret;
+	return static_cast<int>(std::ceil(ret));
 }
 
 /**
@@ -2248,24 +2276,27 @@ void BattleUnit::prepUnit()
 	if (_fire > 0)
 		--_fire;
 
-	_health -= getFatalWounds();	// suffer from fatal wounds
-	if (_health < 0) _health = 0;
+	_health -= getFatalWounds(); // suffer from fatal wounds
 
-	if (_health == 0				// if unit is dead, AI state disappears
-		&& _currentAIState != NULL)
+	if (_health < 1)
 	{
-//		_currentAIState->exit();
-		delete _currentAIState;
-		_currentAIState = NULL;
+		_health = 0;
+
+		if (_currentAIState != NULL) // if unit is dead AI state disappears
+		{
+//			_currentAIState->exit(); // does nothing.
+			delete _currentAIState;
+			_currentAIState = NULL;
+		}
 	}
 
-	if (_stunLevel > 0				// note ... mechanical creatures should no longer be getting stunned.
+	if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
 		&& (_armor->getSize() == 1
 			|| isOut() == false)
 		&& (_geoscapeSoldier != NULL
 			|| _unitRules->isMechanical() == false))
 	{
-		healStun(1);				// recover stun 1pt/turn
+		healStun(RNG::generate(1,3)); // recover stun
 	}
 
 	if (isOut() == false)
@@ -2403,8 +2434,8 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFireOnUnit(int fire)
 {
-	if (_specab != SPECAB_BURNFLOOR
-		&& _specab != SPECAB_BURN_AND_EXPLODE)
+	if (_specab != SPECAB_BURNFLOOR)
+//		&& _specab != SPECAB_BURN_AND_EXPLODE)
 	{
 		_fire = fire;
 	}
@@ -4447,6 +4478,15 @@ void BattleUnit::setTurnDirection(const int turnDir)
 void BattleUnit::setRevived(bool revived)
 {
 	_revived = revived;
+}
+
+/**
+ * Gets all units in the battlescape that are valid RF-spotters of this BattleUnit.
+ * @return, pointer to a list of pointers to BattleUnits that are spotting
+ */
+std::list<BattleUnit*>* BattleUnit::getUnitSpotters()
+{
+	return &_unitSpotters;
 }
 
 /**

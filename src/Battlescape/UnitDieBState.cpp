@@ -268,8 +268,8 @@ void UnitDieBState::think()
 		++_extraTicks;
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
-			&& (   _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+//				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			_unit->instaKill();
 		}
@@ -300,7 +300,9 @@ void UnitDieBState::cancel()
 
 /**
  * Converts unit to a corpse-item.
- * Note that this is used also for units going unconscious.
+ * @note This is used also for units that go unconscious.
+ * @note Dead or Unconscious units get a NULL-Tile ptr but keep track of the
+ * Position of their death.
  */
 void UnitDieBState::convertToCorpse() // private.
 {
@@ -363,7 +365,7 @@ void UnitDieBState::convertToCorpse() // private.
 				i != _parent->getSave()->getItems()->end();
 				++i)
 		{
-			if ((*i)->getUnit() == _unit) // unit is in an inventory, so unit must be a 1x1 unit
+			if ((*i)->getUnit() == _unit) // unit is in an inventory so unit must be a 1x1 unit
 			{
 				(*i)->convertToCorpse(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]));
 				break;

@@ -770,7 +770,7 @@ bool InventoryState::saveLayout(BattleUnit* const unit) const // private.
 				++i)
 		{
 			std::string ammo;
-			if ((*i)->needsAmmo() == true
+			if ((*i)->usesAmmo() == true
 				&& (*i)->getAmmoItem() != NULL)
 			{
 				ammo = (*i)->getAmmoItem()->getRules()->getType();
@@ -968,7 +968,7 @@ void InventoryState::invClick(Action*)
 		std::wstring wst;
 
 		if (ammo != NULL
-			&& item->needsAmmo() == true)
+			&& item->usesAmmo() == true)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
@@ -994,7 +994,7 @@ void InventoryState::invClick(Action*)
 										_selAmmo);
 		}
 		else if (item->getAmmoQuantity() != 0
-			&& item->needsAmmo() == true)
+			&& item->usesAmmo() == true)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
@@ -1050,7 +1050,7 @@ void InventoryState::invMouseOver(Action*)
 		std::wstring wst;
 
 		if (ammo != NULL
-			&& item->needsAmmo() == true)
+			&& item->usesAmmo() == true)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
@@ -1081,7 +1081,7 @@ void InventoryState::invMouseOver(Action*)
 		}
 
 		if (item->getAmmoQuantity() != 0
-			&& item->needsAmmo() == true)
+			&& item->usesAmmo() == true)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
@@ -1317,7 +1317,7 @@ void InventoryState::setExtraInfo( // private.
 			++j)
 	{
 		std::string ammo;
-		if ((*j)->needsAmmo()
+		if ((*j)->usesAmmo()
 			&& (*j)->getAmmoItem())
 		{
 			ammo = (*j)->getAmmoItem()->getRules()->getType();
@@ -1378,7 +1378,7 @@ void InventoryState::setExtraInfo( // private.
 	{
 		// search for template item in ground inventory
 		std::vector<BattleItem*>::iterator groundItem;
-		const bool needsAmmo = !_game->getRuleset()->getItem((*templateIt)->getItemType())->getCompatibleAmmo()->empty();
+		const bool usesAmmo = !_game->getRuleset()->getItem((*templateIt)->getItemType())->getCompatibleAmmo()->empty();
 		bool
 			found = false,
 			rescan = true;
@@ -1399,7 +1399,7 @@ void InventoryState::setExtraInfo( // private.
 				// if we find the appropriate ammo, remember it for later for if we find
 				// the right weapon but with the wrong ammo
 				const std::string groundItemName = (*groundItem)->getRules()->getType();
-				if (needsAmmo
+				if (usesAmmo
 					&& targetAmmo == groundItemName)
 				{
 					matchedAmmo = *groundItem;
@@ -1410,10 +1410,10 @@ void InventoryState::setExtraInfo( // private.
 					// if the loaded ammo doesn't match the template item's,
 					// remember the weapon for later and continue scanning
 					BattleItem* loadedAmmo = (*groundItem)->getAmmoItem();
-					if ((needsAmmo
+					if ((usesAmmo
 							&& loadedAmmo
 							&& targetAmmo != loadedAmmo->getRules()->getType())
-						|| (needsAmmo
+						|| (usesAmmo
 							&& !loadedAmmo))
 					{
 						// remember the last matched weapon for simplicity (but prefer empty weapons if any are found)
@@ -1445,7 +1445,7 @@ void InventoryState::setExtraInfo( // private.
 			// the right weapon, unload the target weapon, load the right ammo, and use it
 			if (!found
 				&& matchedWeapon
-				&& (!needsAmmo
+				&& (!usesAmmo
 					|| matchedAmmo))
 			{
 				// unload the existing ammo (if any) from the weapon

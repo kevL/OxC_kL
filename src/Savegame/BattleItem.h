@@ -121,7 +121,7 @@ private:
 		/// Gets the item's ammo item.
 		BattleItem* getAmmoItem() const;
 		/// Determines if this item uses ammo.
-		bool needsAmmo() const;
+		bool usesAmmo() const;
 		/// Sets the item's ammo item.
 		int setAmmoItem(BattleItem* item);
 		/// Gets the item's tile.

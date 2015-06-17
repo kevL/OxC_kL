@@ -155,7 +155,7 @@ void ProjectileFlyBState::init()
 		popThis = true;
 	}
 	else if (_parent->getPanicHandled() == true
-		&& _action.type != BA_HIT // done in ActionMenuState -> Exactly. So do NOT re-consider it here.
+		&& _action.type != BA_HIT // done in ActionMenuState -> Exactly. So do NOT re-evaluate it here.
 		&& _unit->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
@@ -758,18 +758,19 @@ void ProjectileFlyBState::think()
 				&& _action.type != BA_MINDCONTROL
 				&& _parent->getSave()->getUnitsFalling() == false)
 			{
-				//Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
-				//	<< " ID " << _unit->getId()
+				//Log(LOG_INFO) << "ProjectileFlyBState::think() CALL te::checkReactionFire()"
+				//	<< " id-" << _unit->getId()
 				//	<< " action.type = " << _action.type
 				//	<< " action.TU = " << _action.TU;
-				_parent->getTileEngine()->checkReactionFire(			// note: I don't believe that smoke obscuration gets accounted
-														_unit,			// for by this call if the current projectile caused cloud.
-														_action.TU);	// But that's kinda ok.
+				_parent->getTileEngine()->checkReactionFire(		// note: I don't believe that smoke obscuration gets accounted
+														_unit,		// for by this call if the current projectile caused cloud.
+														_action.TU,	// But that's kinda ok.
+														_action.type != BA_HIT);
 			}
 
 			if (_unit->isOut() == false
-				&& _action.type != BA_HIT) // kL_note: huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
-			{
+				&& _action.type != BA_HIT)	// huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
+			{								// actually, Melee *does* get in here; but probably not Psi.
 				_unit->setStatus(STATUS_STANDING);
 			}
 
@@ -937,7 +938,6 @@ void ProjectileFlyBState::think()
 																	_action,
 																	_origin,
 																	_targetVoxel);
-//																	_ammo);
 
 								_projectileImpact = proj->calculateTrajectory(
 																		std::max(
@@ -1318,8 +1318,8 @@ void ProjectileFlyBState::performMeleeAttack()
 			_action.weapon->setAmmoItem(NULL);
 	}
 
-	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR
-		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+//		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		_parent->getSave()->getTile(_action.target)->ignite(15);
 	}

@@ -147,8 +147,8 @@ void ExplosionBState::init()
 		_areaOfEffect = true;
 	}
 	else if (_unit != NULL // cyberdiscs!!! And ... ZOMBIES.
-		&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-			|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+		&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+//			|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
 		_power = (RNG::generate(
@@ -425,13 +425,14 @@ void ExplosionBState::cancel()
 
 /**
  * Calculates the effects of an attack.
- * @note After the animation is done, the real explosion/hit takes place here!
+ * @note After the animation is done the real explosion/hit takes place here!
  * @note This function passes to TileEngine::explode() or TileEngine::hit()
  * depending on if it came from a bullet/psi/melee/spit or an actual explosion;
- * that is, "explode" here means "attack has happened". Typically called from
- * either ProjectileFlyBState::think() or BattlescapeGame::endTurnPhase()/checkForProximityGrenades()
+ * that is "explode" here means "attack has happened". Typically called from
+ * either ProjectileFlyBState::think() or
+ * BattlescapeGame::endTurnPhase()/checkForProximityGrenades()
  */
-void ExplosionBState::explode()
+void ExplosionBState::explode() // private.
 {
 	if (_item != NULL
 		&& _item->getRules()->getBattleType() == BT_PSIAMP)
@@ -440,16 +441,13 @@ void ExplosionBState::explode()
 		return;
 	}
 
-	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
+	// melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
 	const SavedBattleGame* const save = _parent->getSave();
 	TileEngine* const tileEngine = save->getTileEngine();
 
 	if (_hit == true)
 	{
-		// kL_note: Try moving this to TileEngine::hit()
-		// so I can tell whether Firing XP is to be awarded or not, there.
-		// dang, screws up multiple shot per turn.
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
 		if (_unit != NULL)
@@ -480,8 +478,8 @@ void ExplosionBState::explode()
 		if (_hitSuccess == false) // MISS.
 		{
 			_parent->getMap()->cacheUnits();
-
 			_parent->popState();
+
 			return;
 		}
 	}
@@ -496,6 +494,7 @@ void ExplosionBState::explode()
 
 		if (_areaOfEffect == true)
 		{
+			//Log(LOG_INFO) << "ExplosionBState::explode() AoE te::explode";
 			tileEngine->explode(
 							_center,
 							_power,
@@ -505,10 +504,11 @@ void ExplosionBState::explode()
 							_item->getRules()->getBattleType() == BT_GRENADE
 								|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE);
 
-			tileEngine->setProjectileDirection(-1); // kL
+			tileEngine->setProjectileDirection(-1);
 		}
 		else // -> if !_cosmetics
 		{
+			//Log(LOG_INFO) << "ExplosionBState::explode() point te::hit";
 			ItemDamageType dType = _item->getRules()->getDamageType();
 			if (_pistolWhip == true)
 				dType = DT_STUN;
@@ -565,8 +565,8 @@ void ExplosionBState::explode()
 	{
 		int radius;
 		if (_unit != NULL
-			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+//				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
 		}
@@ -582,6 +582,7 @@ void ExplosionBState::explode()
 	}
 
 
+	//Log(LOG_INFO) << "ExplosionBState::explode() CALL bg::checkForCasualties()";
 //	if (!_cosmetic)
 	_parent->checkForCasualties(
 							_item,

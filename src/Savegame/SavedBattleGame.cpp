@@ -2442,7 +2442,7 @@ std::list<BattleUnit*>* SavedBattleGame::getFallingUnits()
 
 /**
  * Toggles the switch that says "there are units falling, start the fall state".
- * @param fall, true if there are any units falling in the battlescap
+ * @param fall - true if there are any units falling in the battlescap
  */
 void SavedBattleGame::setUnitsFalling(bool fall)
 {

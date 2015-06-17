@@ -1179,7 +1179,7 @@ void Inventory::mouseClick(Action* action, State* state)
 bool Inventory::unload()
 {
 	if (_selItem == NULL
-		|| _selItem->needsAmmo() == false)
+		|| _selItem->usesAmmo() == false)
 	{
 		return false;
 	}

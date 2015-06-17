@@ -294,12 +294,12 @@ void BattlescapeGame::statePushBack(BattleState* const battleState)
  * Removes the current state.
  * @note This is a very important function. It is called by a BattleState
  * (walking, projectile is flying, explosions, etc.) at the moment that state
- * has finished the current BattleAction. Here we check the result of that
- * BattleAction and do all the aftermath. The state is popped off the list.
+ * has finished the current BattleAction. Check the result of that BattleAction
+ * here and do all the aftermath. The state is then popped off the list.
  */
 void BattlescapeGame::popState()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::popState()";
+	//Log(LOG_INFO) << "BattlescapeGame::popState() qtyStates = " << (int)_states.size();
 //	if (Options::traceAI)
 //	{
 //		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with "
@@ -317,7 +317,8 @@ void BattlescapeGame::popState()
 
 	if (action.actor != NULL
 		&& action.actor->getFaction() == FACTION_PLAYER
-		&& action.result.length() > 0 // kL_note: This queries the warning string message.
+//		&& action.result.length() > 0 // kL_note: This queries the warning string message.
+		&& action.result.empty() == false // kL
 		&& _playerPanicHandled == true
 		&& (_battleSave->getSide() == FACTION_PLAYER
 			|| _debugPlay == true))
@@ -432,7 +433,7 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_SNAPSHOT,
 																action.weapon)
-								|| (action.weapon->needsAmmo() == true
+								|| (action.weapon->usesAmmo() == true
 									&& (action.weapon->getAmmoItem() == NULL
 										|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 							{
@@ -444,7 +445,7 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_AUTOSHOT,
 																action.weapon)
-								|| (action.weapon->needsAmmo() == true
+								|| (action.weapon->usesAmmo() == true
 									&& (action.weapon->getAmmoItem() == NULL
 										|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 							{
@@ -456,7 +457,7 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_AIMEDSHOT,
 																action.weapon)
-								|| (action.weapon->needsAmmo() == true
+								|| (action.weapon->usesAmmo() == true
 									&& (action.weapon->getAmmoItem() == NULL
 										|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 							{
@@ -1477,29 +1478,78 @@ void BattlescapeGame::checkForCasualties(
 		bool hiddenExpl,
 		bool terrainExpl)
 {
+	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()"; if (attacker != NULL) Log(LOG_INFO) << ". id-" << attacker->getId();
+
 	// If the victim was killed by the attacker's death explosion,
 	// fetch who killed the attacker and make THAT the attacker!
-	if (attacker != NULL
-		&& attacker->getGeoscapeSoldier() == NULL
-		&& (attacker->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-			|| attacker->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
-		&& (attacker->getStatus() == STATUS_DEAD
-			|| attacker->getStatus() == STATUS_DISABLED) // not sure if this is needed.
-		&& attacker->getMurdererId() != 0)
+	if (attacker != NULL)
 	{
-		for (std::vector<BattleUnit*>::const_iterator
-				i = _battleSave->getUnits()->begin();
-				i != _battleSave->getUnits()->end();
+		if (attacker->getStatus() == STATUS_DEAD
+			&& attacker->getMurdererId() != 0
+//			&& attacker->getGeoscapeSoldier() == NULL
+			&& attacker->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+//				|| attacker->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+		{
+			for (std::vector<BattleUnit*>::const_iterator
+					i = _battleSave->getUnits()->begin();
+					i != _battleSave->getUnits()->end();
+					++i)
+			{
+				if ((*i)->getId() == attacker->getMurdererId())
+				{
+					attacker = *i;
+					break;
+				}
+			}
+		}
+
+		//Log(LOG_INFO) << ". check for spotters Qty = " << (int)attacker->getUnitSpotters()->size();
+		// attacker gets Exposed if a spotter is still conscious
+		// NOTE: Useful only after Melee attacks.
+		// Firearms & explosives handle things differently ... see note in TileEngine::checkReactionFire().
+		for (std::list<BattleUnit*>::const_iterator // -> not sure what happens if RF-trigger kills Cyberdisc that kills aLien .....
+				i = attacker->getUnitSpotters()->begin();
+				i != attacker->getUnitSpotters()->end();
 				++i)
 		{
-			if ((*i)->getId() == attacker->getMurdererId())
+			//Log(LOG_INFO) << ". . iterate";
+			if ((*i)->getHealth() != 0
+				&& (*i)->getHealth() > (*i)->getStun())
 			{
-				attacker = *i;
+				//Log(LOG_INFO) << ". . . spotter conscious";
+				attacker->setExposed(); // defender has been spotted on Player turn.
 				break;
 			}
 		}
+		//Log(LOG_INFO) << ". clear spotters vect.";
+		attacker->getUnitSpotters()->clear();
 	}
 	// kL_note: what about tile explosions
+
+/*	// other units get exposed if their spotter is still conscious
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
+	{
+		if ((*i)->getHealth() != 0
+			&& (*i)->getHealth() > (*i)->getStun())
+		{
+			for (std::list<BattleUnit*>::const_iterator
+					j = (*i)->getUnitSpotters()->begin();
+					j != (*i)->getUnitSpotters()->end();
+					++j)
+			{
+				if ((*j)->getHealth() != 0
+					&& (*j)->getHealth() > (*j)->getStun())
+				{
+					(*i)->setExposed(); // defender has been spotted on Player turn.
+				}
+			}
+
+			(*i)->getUnitSpotters()->clear();
+		}
+	} */
 
 	std::string
 		killStatRace = "STR_UNKNOWN",
@@ -1561,20 +1611,23 @@ void BattlescapeGame::checkForCasualties(
 
 
 	bool
-		death,
-		stun,
-		converted;
+		dead,
+		stunned,
+		converted,
+		bypass;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		death = ((*i)->getHealth() == 0),
-		stun = ((*i)->getHealth() <= (*i)->getStun());
-		converted = false;
+		dead = ((*i)->getHealth() == 0),
+		stunned = ((*i)->getHealth() <= (*i)->getStun());
 
-		if (death == false)
+		converted =
+		bypass = false;
+
+		if (dead == false) // for converting infected units that aren't dead.
 		{
 			if ((*i)->getSpawnUnit() == "STR_ZOMBIE") // human->zombie (nobody cares about zombie->chryssalid)
 			{
@@ -1583,269 +1636,280 @@ void BattlescapeGame::checkForCasualties(
 						*i,
 						(*i)->getSpawnUnit());
 			}
-			else if (stun == false)
-				continue;
+			else if (stunned == false)
+				bypass = true;
 		}
 
-		BattleUnit* const victim = *i; // kL
-
-		// Awards: decide victim race and rank
-		if (attacker != NULL
-			&& attacker->getGeoscapeSoldier() != NULL)
+		if (bypass == false)
 		{
-			killStatPoints = victim->getValue();
+			BattleUnit* const victim = *i; // kL
 
-			if (victim->getOriginalFaction() == FACTION_PLAYER)	// <- xCom DIED
-			{
-				killStatPoints = -killStatPoints;
-
-				if (victim->getGeoscapeSoldier() != NULL)	// Soldier
-				{
-					killStatRace = "STR_HUMAN";
-					killStatRank = victim->getGeoscapeSoldier()->getRankString();
-				}
-				else										// HWP
-				{
-					killStatRace = "STR_TANK";
-					killStatRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
-				}
-			}
-			else if (victim->getOriginalFaction() == FACTION_HOSTILE)	// <- aLien DIED
-			{
-				killStatRace = victim->getUnitRules()->getRace();
-				killStatRank = victim->getUnitRules()->getRank();
-			}
-			else if (victim->getOriginalFaction() == FACTION_NEUTRAL)	// <- Civilian DIED
-			{
-				killStatPoints = -killStatPoints * 2;
-				killStatRace = "STR_HUMAN";
-				killStatRank = "STR_CIVILIAN";
-			}
-		}
-
-
-		if ((death == true
-				&& victim->getStatus() != STATUS_DEAD
-				&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
-				&& victim->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
-				&& victim->getStatus() != STATUS_DISABLED)	// kL
-			|| converted == true)
-		{
-			if (converted == false)
-				(*i)->setStatus(STATUS_DISABLED);
-
-			// attacker's Morale Bonus & diary ->
-			if (attacker != NULL)
-			{
-				(*i)->killedBy(attacker->getFaction()); // used in DebriefingState.
-				Log(LOG_INFO) << "BSG::checkForCasualties() " << victim->getId() << " killedBy = " << (int)attacker->getFaction();
-
-				if (attacker->isFearable() == true)
-				{
-					if (attacker->getGeoscapeSoldier() != NULL)
-					{
-						attacker->getStatistics()->kills.push_back(new BattleUnitKills(
-																				killStatRank,
-																				killStatRace,
-																				killStatWeapon,
-																				killStatWeaponAmmo,
-																				victim->getFaction(),
-																				STATUS_DEAD,
-																				killStatMission,
-																				killStatTurn,
-																				killStatPoints));
-						victim->setMurdererId(attacker->getId());
-					}
-
-					int bonus;
-					if (attacker->getOriginalFaction() == FACTION_PLAYER)
-					{
-						attacker->addKillCount();
-						bonus = _battleSave->getMoraleModifier();
-					}
-					else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
-						bonus = _battleSave->getMoraleModifier(NULL, false);
-					else
-						bonus = 0;
-
-					// attacker's Valor
-					if ((attacker->getOriginalFaction() == FACTION_HOSTILE
-							&& victim->getOriginalFaction() == FACTION_PLAYER)
-						|| (attacker->getOriginalFaction() == FACTION_PLAYER
-							&& victim->getOriginalFaction() == FACTION_HOSTILE))
-					{
-						const int courage = 10 * bonus / 100;
-						attacker->moraleChange(courage); // double what rest of squad gets below
-					}
-					// attacker (mc'd or not) will get a penalty with friendly fire (mc'd or not)
-					// ... except aLiens, who don't care.
-					else if (attacker->getOriginalFaction() == FACTION_PLAYER
-						&& victim->getOriginalFaction() == FACTION_PLAYER)
-					{
-						int chagrin = 5000 / bonus; // huge chagrin!
-						if (victim->getUnitRules() != NULL
-							&& victim->getUnitRules()->isMechanical() == true)
-						{
-							chagrin /= 2;
-						}
-						attacker->moraleChange(-chagrin);
-					}
-					else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
-					{
-						if (attacker->getOriginalFaction() == FACTION_PLAYER)
-						{
-							const int dishonor = 2000 / bonus;
-							attacker->moraleChange(-dishonor);
-						}
-						else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
-							attacker->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
-					}
-				}
-			}
-
-			// cycle through units and do all faction
-//			if (victim->getFaction() != FACTION_NEUTRAL) // civie deaths now affect other Factions.
-//			{
-			// penalty for the death of a unit; civilians & MC'd aLien units return 100.
-			const int loss = _battleSave->getMoraleModifier(victim);
-			// These two are factions (aTeam & bTeam leaderships mitigate losses).
-			int
-				aTeam, // winners
-				bTeam; // losers
-
-			if (victim->getOriginalFaction() == FACTION_HOSTILE)
-			{
-				aTeam = _battleSave->getMoraleModifier();
-				bTeam = _battleSave->getMoraleModifier(NULL, false);
-			}
-			else // victim is xCom or civilian
-			{
-				aTeam = _battleSave->getMoraleModifier(NULL, false);
-				bTeam = _battleSave->getMoraleModifier();
-			}
-
-			for (std::vector<BattleUnit*>::const_iterator // do bystander FACTION changes:
-					j = _battleSave->getUnits()->begin();
-					j != _battleSave->getUnits()->end();
-					++j)
-			{
-				if ((*j)->isOut(true, true) == false
-					&& (*j)->isFearable() == true) // not mechanical. Or a ZOMBIE!!
-				{
-					if ((*j)->getOriginalFaction() == victim->getOriginalFaction()
-						|| (victim->getOriginalFaction() == FACTION_NEUTRAL			// for civie-death,
-							&& (*j)->getFaction() == FACTION_PLAYER						// non-Mc'd xCom takes hit
-							&& (*j)->getOriginalFaction() != FACTION_HOSTILE)			// but not Mc'd aLiens
-						|| (victim->getOriginalFaction() == FACTION_PLAYER			// for death of xCom unit,
-							&& (*j)->getOriginalFaction() == FACTION_NEUTRAL))			// civies take hit.
-					{
-						// losing team(s) all get a morale loss
-						// based on their individual Bravery & rank of unit that was killed
-						int moraleLoss = (110 - (*j)->getBaseStats()->bravery) / 10;
-						if (moraleLoss > 0) // pure safety, ain't gonna happen really.
-						{
-							moraleLoss = moraleLoss * loss * 2 / bTeam;
-							if (converted == true)
-								moraleLoss = (moraleLoss * 5 + 3) / 4; // extra loss if xCom or civie turns into a Zombie.
-							else if (victim->getUnitRules() != NULL
-								&& victim->getUnitRules()->isMechanical() == true)
-							{
-								moraleLoss /= 2;
-							}
-
-							(*j)->moraleChange(-moraleLoss);
-						}
-/*kL
-						if (attacker
-							&& attacker->getFaction() == FACTION_PLAYER
-							&& victim->getFaction() == FACTION_HOSTILE)
-						{
-							attacker->setExposed(); // interesting
-							//Log(LOG_INFO) << ". . . . attacker Exposed";
-						} */
-					}
-					else if ((((*j)->getOriginalFaction() == FACTION_PLAYER
-								|| (*j)->getOriginalFaction() == FACTION_NEUTRAL)
-							&& victim->getOriginalFaction() == FACTION_HOSTILE)
-						|| ((*j)->getOriginalFaction() == FACTION_HOSTILE
-							&& (victim->getOriginalFaction() == FACTION_PLAYER
-								|| victim->getOriginalFaction() == FACTION_NEUTRAL)))
-					{
-						// winning faction(s) all get a morale boost unaffected by rank of the dead unit
-						(*j)->moraleChange(aTeam / 10);
-					}
-				}
-			}
-//			}
-
-			if (converted == false)
-			{
-				if (weapon != NULL)
-					statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!
-												this,
-												*i,
-												weapon->getRules()->getDamageType()));
-				else // hidden or terrain explosion or death by fatal wounds
-				{
-					if (hiddenExpl == true) // this is instant death from UFO powersources, without screaming sounds
-						statePushNext(new UnitDieBState(
-													this,
-													*i,
-													DT_HE,
-													true));
-					else
-					{
-						if (terrainExpl == true)
-							statePushNext(new UnitDieBState(
-														this,
-														*i,
-														DT_HE));
-						else // no attacker and no terrain explosion; must be fatal wounds
-							statePushNext(new UnitDieBState(
-														this,
-														*i,
-														DT_NONE)); // DT_NONE -> STR_HAS_DIED_FROM_A_FATAL_WOUND
-					}
-				}
-			}
-		}
-		else if (stun == true
-			&& victim->getStatus() != STATUS_DEAD
-			&& victim->getStatus() != STATUS_UNCONSCIOUS
-			&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
-			&& victim->getStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
-			&& victim->getStatus() != STATUS_DISABLED)	// kL
-		{
-			(*i)->setStatus(STATUS_DISABLED); // kL
-
+			// Awards: decide victim race and rank
 			if (attacker != NULL
 				&& attacker->getGeoscapeSoldier() != NULL)
 			{
-				attacker->getStatistics()->kills.push_back(new BattleUnitKills(
-																		killStatRank,
-																		killStatRace,
-																		killStatWeapon,
-																		killStatWeaponAmmo,
-																		victim->getFaction(),
-																		STATUS_UNCONSCIOUS,
-																		killStatMission,
-																		killStatTurn,
-																		killStatPoints));
+				killStatPoints = victim->getValue();
+
+				if (victim->getOriginalFaction() == FACTION_PLAYER)	// <- xCom DIED
+				{
+					killStatPoints = -killStatPoints;
+
+					if (victim->getGeoscapeSoldier() != NULL)	// Soldier
+					{
+						killStatRace = "STR_HUMAN";
+						killStatRank = victim->getGeoscapeSoldier()->getRankString();
+					}
+					else										// HWP
+					{
+						killStatRace = "STR_TANK";
+						killStatRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
+					}
+				}
+				else if (victim->getOriginalFaction() == FACTION_HOSTILE)	// <- aLien DIED
+				{
+					killStatRace = victim->getUnitRules()->getRace();
+					killStatRank = victim->getUnitRules()->getRank();
+				}
+				else if (victim->getOriginalFaction() == FACTION_NEUTRAL)	// <- Civilian DIED
+				{
+					killStatPoints = -killStatPoints * 2;
+					killStatRace = "STR_HUMAN";
+					killStatRank = "STR_CIVILIAN";
+				}
 			}
 
-			if (victim != NULL
-				&& victim->getGeoscapeSoldier() != NULL)
+
+			if ((dead == true
+					&& victim->getStatus() != STATUS_DEAD
+					&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+					&& victim->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
+					&& victim->getStatus() != STATUS_DISABLED)	// kL
+					// STATUS_TIME_OUT
+				|| converted == true)
 			{
-				victim->getStatistics()->wasUnconscious = true;
-			}
+				if (converted == false)
+					(*i)->setStatus(STATUS_DISABLED);
 
-			statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
-										this,
-										*i,
-										DT_STUN,
-										true));
+				// attacker's Morale Bonus & diary ->
+				if (attacker != NULL)
+				{
+					(*i)->killedBy(attacker->getFaction()); // used in DebriefingState.
+					//Log(LOG_INFO) << "BSG::checkForCasualties() " << victim->getId() << " killedBy = " << (int)attacker->getFaction();
+
+					if (attacker->isFearable() == true)
+					{
+						if (attacker->getGeoscapeSoldier() != NULL)
+						{
+							attacker->getStatistics()->kills.push_back(new BattleUnitKills(
+																					killStatRank,
+																					killStatRace,
+																					killStatWeapon,
+																					killStatWeaponAmmo,
+																					victim->getFaction(),
+																					STATUS_DEAD,
+																					killStatMission,
+																					killStatTurn,
+																					killStatPoints));
+							victim->setMurdererId(attacker->getId());
+						}
+
+						int bonus;
+						if (attacker->getOriginalFaction() == FACTION_PLAYER)
+						{
+							bonus = _battleSave->getMoraleModifier();
+
+							if (attacker->getFaction() == FACTION_PLAYER	// not MC'd
+								&& attacker->getGeoscapeSoldier() != NULL)	// is Soldier
+							{
+								attacker->addKillCount();
+							}
+						}
+						else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
+							bonus = _battleSave->getMoraleModifier(NULL, false);
+						else
+							bonus = 0;
+
+						// attacker's Valor
+						if ((attacker->getOriginalFaction() == FACTION_HOSTILE
+								&& victim->getOriginalFaction() == FACTION_PLAYER)
+							|| (attacker->getOriginalFaction() == FACTION_PLAYER
+								&& victim->getOriginalFaction() == FACTION_HOSTILE))
+						{
+							const int courage = 10 * bonus / 100;
+							attacker->moraleChange(courage); // double what rest of squad gets below
+						}
+						// attacker (mc'd or not) will get a penalty with friendly fire (mc'd or not)
+						// ... except aLiens, who don't care.
+						else if (attacker->getOriginalFaction() == FACTION_PLAYER
+							&& victim->getOriginalFaction() == FACTION_PLAYER)
+						{
+							int chagrin = 5000 / bonus; // huge chagrin!
+							if (victim->getUnitRules() != NULL
+								&& victim->getUnitRules()->isMechanical() == true)
+							{
+								chagrin /= 2;
+							}
+							attacker->moraleChange(-chagrin);
+						}
+						else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
+						{
+							if (attacker->getOriginalFaction() == FACTION_PLAYER)
+							{
+								const int dishonor = 2000 / bonus;
+								attacker->moraleChange(-dishonor);
+							}
+							else if (attacker->getOriginalFaction() == FACTION_HOSTILE)
+								attacker->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
+						}
+					}
+				}
+
+				// cycle through units and do all faction
+//				if (victim->getFaction() != FACTION_NEUTRAL) // civie deaths now affect other Factions.
+//				{
+				// penalty for the death of a unit; civilians & MC'd aLien units return 100.
+				const int loss = _battleSave->getMoraleModifier(victim);
+				// These two are factions (aTeam & bTeam leaderships mitigate losses).
+				int
+					aTeam, // winners
+					bTeam; // losers
+
+				if (victim->getOriginalFaction() == FACTION_HOSTILE)
+				{
+					aTeam = _battleSave->getMoraleModifier();
+					bTeam = _battleSave->getMoraleModifier(NULL, false);
+				}
+				else // victim is xCom or civilian
+				{
+					aTeam = _battleSave->getMoraleModifier(NULL, false);
+					bTeam = _battleSave->getMoraleModifier();
+				}
+
+				for (std::vector<BattleUnit*>::const_iterator // do bystander FACTION changes:
+						j = _battleSave->getUnits()->begin();
+						j != _battleSave->getUnits()->end();
+						++j)
+				{
+					if ((*j)->isOut(true, true) == false
+						&& (*j)->isFearable() == true) // not mechanical. Or a ZOMBIE!!
+					{
+						if ((*j)->getOriginalFaction() == victim->getOriginalFaction()
+							|| (victim->getOriginalFaction() == FACTION_NEUTRAL			// for civie-death,
+								&& (*j)->getFaction() == FACTION_PLAYER						// non-Mc'd xCom takes hit
+								&& (*j)->getOriginalFaction() != FACTION_HOSTILE)			// but not Mc'd aLiens
+							|| (victim->getOriginalFaction() == FACTION_PLAYER			// for death of xCom unit,
+								&& (*j)->getOriginalFaction() == FACTION_NEUTRAL))			// civies take hit.
+						{
+							// losing team(s) all get a morale loss
+							// based on their individual Bravery & rank of unit that was killed
+							int moraleLoss = (110 - (*j)->getBaseStats()->bravery) / 10;
+							if (moraleLoss > 0) // pure safety, ain't gonna happen really.
+							{
+								moraleLoss = moraleLoss * loss * 2 / bTeam;
+								if (converted == true)
+									moraleLoss = (moraleLoss * 5 + 3) / 4; // extra loss if xCom or civie turns into a Zombie.
+								else if (victim->getUnitRules() != NULL
+									&& victim->getUnitRules()->isMechanical() == true)
+								{
+									moraleLoss /= 2;
+								}
+
+								(*j)->moraleChange(-moraleLoss);
+							}
+/*kL
+							if (attacker
+								&& attacker->getFaction() == FACTION_PLAYER
+								&& victim->getFaction() == FACTION_HOSTILE)
+							{
+								attacker->setExposed(); // interesting
+								//Log(LOG_INFO) << ". . . . attacker Exposed";
+							} */
+						}
+						else if ((((*j)->getOriginalFaction() == FACTION_PLAYER
+									|| (*j)->getOriginalFaction() == FACTION_NEUTRAL)
+								&& victim->getOriginalFaction() == FACTION_HOSTILE)
+							|| ((*j)->getOriginalFaction() == FACTION_HOSTILE
+								&& (victim->getOriginalFaction() == FACTION_PLAYER
+									|| victim->getOriginalFaction() == FACTION_NEUTRAL)))
+						{
+							// winning faction(s) all get a morale boost unaffected by rank of the dead unit
+							(*j)->moraleChange(aTeam / 10);
+						}
+					}
+				}
+//				}
+
+				if (converted == false)
+				{
+					if (weapon != NULL)
+						statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!
+													this,
+													*i,
+													weapon->getRules()->getDamageType()));
+					else // hidden or terrain explosion or death by fatal wounds
+					{
+						if (hiddenExpl == true) // this is instant death from UFO powersources, without screaming sounds
+							statePushNext(new UnitDieBState(
+														this,
+														*i,
+														DT_HE,
+														true));
+						else
+						{
+							if (terrainExpl == true)
+								statePushNext(new UnitDieBState(
+															this,
+															*i,
+															DT_HE));
+							else // no attacker and no terrain explosion; must be fatal wounds
+								statePushNext(new UnitDieBState(
+															this,
+															*i,
+															DT_NONE)); // DT_NONE -> STR_HAS_DIED_FROM_A_FATAL_WOUND
+						}
+					}
+				}
+			}
+			else if (stunned == true
+				&& victim->getStatus() != STATUS_DEAD
+				&& victim->getStatus() != STATUS_UNCONSCIOUS
+				&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+				&& victim->getStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
+				&& victim->getStatus() != STATUS_DISABLED)	// kL
+				// STATUS_TIME_OUT
+			{
+				(*i)->setStatus(STATUS_DISABLED); // kL
+
+				if (attacker != NULL
+					&& attacker->getGeoscapeSoldier() != NULL)
+				{
+					attacker->getStatistics()->kills.push_back(new BattleUnitKills(
+																			killStatRank,
+																			killStatRace,
+																			killStatWeapon,
+																			killStatWeaponAmmo,
+																			victim->getFaction(),
+																			STATUS_UNCONSCIOUS,
+																			killStatMission,
+																			killStatTurn,
+																			killStatPoints));
+				}
+
+				if (victim != NULL
+					&& victim->getGeoscapeSoldier() != NULL)
+				{
+					victim->getStatistics()->wasUnconscious = true;
+				}
+
+				statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
+											this,
+											*i,
+											DT_STUN,
+											true));
+			}
 		}
 	}
+
 
 	if (hiddenExpl == false)
 	{

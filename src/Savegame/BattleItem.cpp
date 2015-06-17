@@ -409,12 +409,11 @@ BattleItem* BattleItem::getAmmoItem() const
 }
 
 /**
- * Determines if the item uses (needs?) ammo.
- * No ammo is needed if the item has itself assigned as its ammoItem.
- * See set/getAmmoItem()
- * @return, true if ammo is used
+ * Determines if this BattleItem uses ammo.
+ * @note No ammo is needed if the item has itself assigned as its ammoItem.
+ * @return, true if the item uses ammo
  */
-bool BattleItem::needsAmmo() const
+bool BattleItem::usesAmmo() const
 {
 	return (_ammoItem != this);
 }
@@ -428,7 +427,7 @@ bool BattleItem::needsAmmo() const
  */
 int BattleItem::setAmmoItem(BattleItem* item)
 {
-	if (needsAmmo() == true)
+	if (usesAmmo() == true)
 	{
 		if (item == NULL)
 		{
@@ -555,10 +554,12 @@ int BattleItem::getStimulantQuantity() const
 }
 
 /**
- * Sets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
- * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
- * kL_note: well it may bear only on artefacts for a Base Defense mission ....
- * @param flag - true if it's XCom property
+ * Sets the XCom property flag.
+ * @note This is to determine at Debriefing what goes back into the base/craft.
+ * kL_note: no, actually it's not: In its current implementation it is
+ * fundamentally useless ... well it may bear only on artefacts for a Base
+ * Defense mission ....
+ * @param flag - true if xCom property
  */
 void BattleItem::setXCOMProperty(bool flag)
 {
@@ -566,9 +567,11 @@ void BattleItem::setXCOMProperty(bool flag)
 }
 
 /**
- * Gets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
- * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
- * @return, true if it's XCom property
+ * Gets the XCom property flag.
+ * @note This is to determine at Debriefing what goes back into the base/craft.
+ * kL_note: no, actually it's not: In its current implementation it is
+ * fundamentally useless.
+ * @return, true if xCom property
  */
 bool BattleItem::getXCOMProperty() const
 {
@@ -576,12 +579,13 @@ bool BattleItem::getXCOMProperty() const
 }
 
 /**
- * Gets the "dropped on non-player turn" flag. This is to determine whether or not aliens
- * should attempt to pick this item up, as items dropped by the player may be "honey traps".
- * kL_note: holy shit that's cynical. (or just fascits). Worse than 'honey traps' are
- * players, like me, who Mc aLiens and make them drop their weapons - on the xCom turn!
- * so, in a word or 25, TAKE THIS OUT.
- * @return. true if the aliens dropped the item
+ * Gets the "dropped on non-player turn" flag.
+ * @note This is to determine whether or not aliens should attempt to pick this
+ * item up since items dropped by the player may be "honey traps".
+ * kL_note: holy shit that's cynical. (or just fascits). Worse than 'honey traps'
+ * are players like me who Mc aLiens and make them drop their weapons - on the
+ * xCom turn! so in a word or 25 TAKE THIS OUT.
+ * @return, true if the aliens dropped the item
  */
 /* bool BattleItem::getTurnFlag() const
 {
@@ -589,8 +593,9 @@ bool BattleItem::getXCOMProperty() const
 } */
 
 /**
- * Sets the "dropped on non-player turn" flag. This is set when the item
- * is dropped in the battlescape or picked up in the inventory screen.
+ * Sets the "dropped on non-player turn" flag.
+ * @note This is set when the item is dropped in the battlescape or picked up in
+ * the inventory screen.
  * @param flag - true if the aliens dropped the item
  */
 /* void BattleItem::setTurnFlag(bool flag)
@@ -599,7 +604,7 @@ bool BattleItem::getXCOMProperty() const
 } */
 
 /**
- * Converts an unconscious body into a dead one.
+ * Converts a carried unconscious body into a battlefield corpse-item.
  * @param rules - pointer to rules of the corpse item to convert this item into
  */
 void BattleItem::convertToCorpse(RuleItem* const rules)

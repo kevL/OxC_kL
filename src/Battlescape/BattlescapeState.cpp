@@ -2900,7 +2900,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_btnRightHandItem->setVisible();
 
 		if (rtItem->getRules()->getBattleType() == BT_FIREARM
-			&& (rtItem->needsAmmo() == true
+			&& (rtItem->usesAmmo() == true
 				|| rtItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible();
@@ -2925,7 +2925,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_btnLeftHandItem->setVisible();
 
 		if (ltItem->getRules()->getBattleType() == BT_FIREARM
-			&& (ltItem->needsAmmo() == true
+			&& (ltItem->usesAmmo() == true
 				|| ltItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible();

@@ -1116,7 +1116,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 			&& (*i)->getAmmoItem() == NULL
 			&& ((*i)->getRules()->getBattleType() == BT_FIREARM
 				|| (*i)->getRules()->getBattleType() == BT_MELEE)) */
-		if ((*i)->needsAmmo() == true) // or do it My way.
+		if ((*i)->usesAmmo() == true) // or do it My way.
 			loadGroundWeapon(*i);
 	}
 	//Log(LOG_INFO) << ". loading DONE";

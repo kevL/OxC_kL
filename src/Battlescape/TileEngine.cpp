@@ -1573,31 +1573,34 @@ bool TileEngine::canTargetTile(
  * ProjectileFlyBState.
  * @param unit		- pointer to a unit to check reaction fire against
  * @param tuSpent	- the unit's triggering expenditure of TU if firing or throwing.
+ * @param autoSpot	- true if RF was not triggered by a Melee atk (default true)
  * @return, true if reaction fire took place
  */
 bool TileEngine::checkReactionFire(
-		BattleUnit* unit,
-		int tuSpent)
+		BattleUnit* const unit,
+		int tuSpent,
+		bool autoSpot)
 {
-	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
+	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs id-" << unit->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
-	if (_battleSave->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
-		return false;
-
-
-	// trigger reaction fire only when the spotted unit is of the
-	// currently playing side, and is still on the map, alive
-	if (unit->getFaction() != _battleSave->getSide()
-		|| unit->getTile() == NULL
-		|| unit->isOut(true, true) == true)
+	if (_battleSave->getSide() == FACTION_NEUTRAL		// no reaction on civilian turn.
+		|| unit->getFaction() != _battleSave->getSide()	// spotted unit must be current side's faction
+		|| unit->getTile() == NULL						// and must be on map
+		|| unit->isOut(true, true) == true)				// and must be conscious
 	{
 		return false;
 	}
 
+	// NOTE: If RF is triggered by melee (or walking/kneeling), a target that is
+	// a potential RF-spotter will not be damaged yet and hence the damage +
+	// checkForCasualties() happens later; but if RF is triggered by a firearm,
+	// a target that is a potential RF-spotter *will* be damaged when this runs
+	// since damage + checkForCasualties() has already been called. fucko*
+
 	bool ret = false;
 
-	if (unit->getFaction() == unit->getOriginalFaction()
-		|| unit->getFaction() == FACTION_PLAYER)
+	if (unit->getFaction() == unit->getOriginalFaction()	// not MC'd
+		|| unit->getFaction() == FACTION_PLAYER)			// or is xCom agent - MC'd aLiens do not RF.
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
 		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
@@ -1606,7 +1609,8 @@ bool TileEngine::checkReactionFire(
 		BattleUnit* reactor = getReactor( // get the first man up to bat.
 									spotters,
 									unit,
-									tuSpent);
+									tuSpent,
+									autoSpot);
 		// start iterating through the possible reactors until
 		// the current unit is the one with the highest score.
 		while (reactor != unit)
@@ -1644,7 +1648,8 @@ bool TileEngine::checkReactionFire(
 			reactor = getReactor( // nice shot. Get cocky, kid; you're a neurotic ass. Gratz!
 								spotters,
 								unit,
-								tuSpent);
+								tuSpent,
+								autoSpot);
 			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
 		}
 
@@ -1659,7 +1664,7 @@ bool TileEngine::checkReactionFire(
  * @param unit - pointer to a BattleUnit to spot
  * @return, vector of pointers to BattleUnits that can see the triggering unit
  */
-std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
+std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
 	const Tile* const tile = unit->getTile();
@@ -1691,19 +1696,22 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* const unit)
 
 /**
  * Gets the unit with the highest reaction score from the spotters vector.
- * NOTE: the tuSpent parameter is needed because popState() doesn't
- * subtract TU until after the Initiative has been calculated or called from ProjectileFlyBState.
+ * @note The tuSpent parameter is needed because popState() doesn't
+ * subtract TU until after the Initiative has been calculated or called from
+ * ProjectileFlyBState.
  * @param spotters	- vector of the pointers to spotting BattleUnits
  * @param defender	- pointer to the defending BattleUnit to check reaction scores against
  * @param tuSpent	- defending BattleUnit's expenditure of TU that had caused reaction checks
- * @return, pointer to BattleUnit with the initiative (next up!)
+ * @param autoSpot	- true if RF was not triggered by a Melee atk (default true)
+ * @return, pointer to the BattleUnit with initiative (next up!)
  */
 BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
 		BattleUnit* const defender,
-		const int tuSpent) const
+		const int tuSpent,
+		bool autoSpot) const
 {
-	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
+	//Log(LOG_INFO) << "TileEngine::getReactor() vs id-" << defender->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
 	BattleUnit* nextReactor = NULL;
 	int
@@ -1718,7 +1726,7 @@ BattleUnit* TileEngine::getReactor(
 		//Log(LOG_INFO) << ". . check nextReactor ID " << (*i)->getId();
 		if ((*i)->isOut() == false)
 		{
-			initTest = static_cast<int>((*i)->getInitiative());
+			initTest = (*i)->getInitiative();
 			if (initTest > init)
 			{
 				init = initTest;
@@ -1727,14 +1735,14 @@ BattleUnit* TileEngine::getReactor(
 		}
 	}
 
-	//Log(LOG_INFO) << ". ID " << defender->getId() << " initi = " << static_cast<int>(defender->getInitiative(tuSpent));
+	//Log(LOG_INFO) << ". ID " << defender->getId() << " initi = " << defender->getInitiative(tuSpent);
 
 	// nextReactor has to *best* defender.Init to get initiative
 	// Analysis: It appears that defender's tu for firing/throwing
 	// are not subtracted before getInitiative() is called.
 
 	if (nextReactor == NULL
-		|| init <= static_cast<int>(defender->getInitiative(tuSpent)))
+		|| init <= defender->getInitiative(tuSpent))
 	{
 		nextReactor = defender;
 	}
@@ -1743,9 +1751,12 @@ BattleUnit* TileEngine::getReactor(
 		&& nextReactor->getFaction() == FACTION_HOSTILE)
 //		&& defender->getPanicking() == false)
 	{
-		//Log(LOG_INFO) << "getReactor() id " << nextReactor->getId() << " spots " << defender->getId();
-		defender->setExposed(); // defender has been spotted on Player turn.
-	}
+		//Log(LOG_INFO) << "getReactor() id-" << nextReactor->getId() << " spots " << defender->getId();
+		if (autoSpot == true)
+			defender->setExposed();									// defender has been spotted on Player turn.
+		else
+			defender->getUnitSpotters()->push_back(nextReactor);	// let BG::checkForCasualties() figure it out
+	}																// this is so that if an aLien in the spotters-vector gets put down by the trigger-shot it won't tell its buds.
 
 	//Log(LOG_INFO) << ". init = " << init;
 	return nextReactor;
@@ -1761,6 +1772,7 @@ bool TileEngine::reactionShot(
 		BattleUnit* const unit,
 		const BattleUnit* const targetUnit)
 {
+	//Log(LOG_INFO) << "TileEngine::reactionShot() id-" << unit->getId();
 //	if (targetUnit->isOut(true, true) == true) return false; // not gonna stop shit.
 
 	BattleAction action;
@@ -1789,7 +1801,7 @@ bool TileEngine::reactionShot(
 		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return 255
 //		|| (_battleSave->getDepth() == 0
 //			&& action.weapon->getRules()->isWaterOnly() == true)
-		|| (action.actor->getOriginalFaction() != FACTION_HOSTILE	// is not an aLien and has unresearched weapon.
+		|| (action.actor->getFaction() != FACTION_HOSTILE			// is not an aLien and has unresearched weapon.
 			&& _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()) == false))
 	{
 		return false;
@@ -1890,75 +1902,75 @@ bool TileEngine::reactionShot(
  */
 void TileEngine::selectFireMethod(BattleAction& action)
 {
-	const RuleItem* const rule = action.weapon->getRules();
+	const RuleItem* const itRule = action.weapon->getRules();
 	const int dist = _battleSave->getTileEngine()->distance(
 														action.actor->getPosition(),
 														action.target);
-	if (dist > rule->getMaxRange()
-		|| dist < rule->getMinRange()) // this might not be what I think it is ...
+	if (dist > itRule->getMaxRange()
+		|| dist < itRule->getMinRange()) // this might not be what I think it is ...
 	{
 		return;
 	}
 
 	const int tu = action.actor->getTimeUnits();
 
-	if (dist <= rule->getAutoRange())
+	if (dist <= itRule->getAutoRange())
 	{
-		if (rule->getTUAuto()
+		if (itRule->getTUAuto() != 0
 			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
 			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
-		else if (rule->getTUSnap()
+		else if (itRule->getTUSnap() != 0
 			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
-		else if (rule->getTUAimed()
+		else if (itRule->getTUAimed() != 0
 			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 	}
-	else if (dist <= rule->getSnapRange())
+	else if (dist <= itRule->getSnapRange())
 	{
-		if (rule->getTUSnap()
+		if (itRule->getTUSnap() != 0
 			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
-		else if (rule->getTUAimed()
+		else if (itRule->getTUAimed() != 0
 			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
-		else if (rule->getTUAuto()
+		else if (itRule->getTUAuto() != 0
 			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
 			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
-	else // if (dist <= rule->getAimRange())
+	else // if (dist <= itRule->getAimRange())
 	{
-		if (rule->getTUAimed()
+		if (itRule->getTUAimed() != 0
 			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
-		else if (rule->getTUSnap()
+		else if (itRule->getTUSnap() != 0
 			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
-		else if (rule->getTUAuto()
+		else if (itRule->getTUAuto() != 0
 			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
@@ -2123,8 +2135,8 @@ BattleUnit* TileEngine::hit(
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
 				if (attacker != NULL
-					&& (attacker->getSpecialAbility() == SPECAB_BURNFLOOR
-						|| attacker->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
+					&& attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
+//						|| attacker->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 				{
 					const float vulnerable = targetUnit->getArmor()->getDamageModifier(DT_IN);
 					if (vulnerable > 0.f)
@@ -2215,7 +2227,7 @@ BattleUnit* TileEngine::hit(
 							|| targetUnit->getHealth() == 0)) // .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
 						targetUnit->killedBy(attacker->getFaction());
-						Log(LOG_INFO) << "TE::hit() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
+						//Log(LOG_INFO) << "TE::hit() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
 					}
 					// kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 					// I mean, shouldn't that be checking that the thing actually DIES?
@@ -2241,8 +2253,8 @@ BattleUnit* TileEngine::hit(
 					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
 					//Log(LOG_INFO) << ". . health = " << targetUnit->getHealth();
 					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
-					if ((targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
-							|| targetUnit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+//							|| targetUnit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 						&& (targetUnit->getHealth() == 0
 							|| targetUnit->getStun() >= targetUnit->getHealth()))
 					{
@@ -2750,7 +2762,7 @@ void TileEngine::explode(
 											if (attacker != NULL)
 											{
 												bu->killedBy(attacker->getFaction());
-												Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
+												//Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
 											}
 
 											if (Options::battleNotifyDeath // send Death notice.
@@ -2951,7 +2963,7 @@ void TileEngine::explode(
 											if (attacker != NULL)
 											{
 												bu->killedBy(attacker->getFaction());
-												Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
+												//Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
 											}
 
 											if (Options::battleNotifyDeath == true // send Death notice.
@@ -3000,7 +3012,7 @@ void TileEngine::explode(
 								|| targetUnit->getHealth() == 0) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 							{
 								targetUnit->killedBy(attacker->getFaction());
-								Log(LOG_INFO) << "TE::explode() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
+								//Log(LOG_INFO) << "TE::explode() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
 							}
 
 							if (takenXP == false
