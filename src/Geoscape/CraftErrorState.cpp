@@ -77,6 +77,9 @@ CraftErrorState::CraftErrorState(
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& CraftErrorState::btnOk5SecsClick,
 					Options::keyOk);
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& CraftErrorState::btnOk5SecsClick,
+					SDLK_KP_ENTER);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);

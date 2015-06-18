@@ -137,18 +137,21 @@ void ErrorMessageState::create(
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ErrorMessageState::btnOkClick,
+					SDLK_KP_ENTER);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ErrorMessageState::btnOkClick,
 					Options::keyCancel);
+
+	if (id.empty() == true)
+		_txtMessage->setText(msg);
+	else
+		_txtMessage->setText(tr(id));
 
 	_txtMessage->setColor(color);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap();
-
-	if (id.empty() == true)
-		_txtMessage->setText(msg);
-	else
-		_txtMessage->setText(tr(id));
 
 	if (bgColor == -1)
 	{

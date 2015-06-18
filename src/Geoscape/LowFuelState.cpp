@@ -66,7 +66,6 @@ LowFuelState::LowFuelState(
 	_blinkTimer->onTimer((StateHandler)& LowFuelState::blink);
 	_blinkTimer->start();
 
-
 	setInterface("lowFuel");
 
 	add(_window,		"window",	"lowFuel");
@@ -84,17 +83,20 @@ LowFuelState::LowFuelState(
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
+	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setVisible(false);
-	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& LowFuelState::btnOk5SecsClick,
 					Options::keyOk);
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& LowFuelState::btnOk5SecsClick,
+					SDLK_KP_ENTER);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
