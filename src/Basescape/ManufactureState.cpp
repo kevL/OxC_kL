@@ -323,6 +323,7 @@ void ManufactureState::miniClick(Action*)
 				_mini->setSelectedBase(baseId);
 				_state->setBase(_base);
 
+				_state->resetStoresWarning();
 				init();
 			}
 		}

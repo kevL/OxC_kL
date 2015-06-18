@@ -85,7 +85,8 @@ BasescapeState::BasescapeState(
 	:
 		_base(base),
 		_globe(globe),
-		_baseList(_game->getSavedGame()->getBases())
+		_baseList(_game->getSavedGame()->getBases()),
+		_allowStoresWarning(true)
 {
 	_view			= new BaseView(192, 192, 0, 8);
 	_mini			= new MiniBaseView(128, 22, 192, 33);
@@ -351,10 +352,12 @@ void BasescapeState::init()
 		_game->getResourcePack()->playMusic(track);
 	}
 
-	if (_game->getSavedGame()->getMonthsPassed() != -1
+	if (_allowStoresWarning == true
+		&& _base->storesOverfull() == true
 		&& Options::storageLimitsEnforced == true
-		&& _base->storesOverfull() == true)
+		&& _game->getSavedGame()->getMonthsPassed() != -1)
 	{
+		_allowStoresWarning = false;
 //		_game->pushState(new SellState(_base));
 		_game->pushState(new ErrorMessageState(
 										tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
@@ -759,6 +762,7 @@ void BasescapeState::miniLeftClick(Action*)
 		_base = _baseList->at(baseId);
 		_txtFacility->setText(L"");
 
+		_allowStoresWarning = true;
 		init();
 	}
 	else if (baseId == _baseList->size()
@@ -843,6 +847,14 @@ void BasescapeState::handleKeyPress(Action* action)
 void BasescapeState::edtBaseChange(Action*)
 {
 	_base->setName(_edtBase->getText());
+}
+
+/**
+ * Resets the '_allowStoresWarning' flag.
+ */
+void BasescapeState::resetStoresWarning()
+{
+	_allowStoresWarning = true;
 }
 
 }

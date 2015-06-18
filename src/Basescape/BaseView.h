@@ -138,9 +138,9 @@ private:
 		/// Special handling for mouse hovering out.
 		void mouseOut(Action* action, State* state);
 
-		///
+		/// Sets the primary color.
 		void setColor(Uint8 color);
-		///
+		/// Sets the secondary color.
 		void setSecondaryColor(Uint8 color);
 };
 

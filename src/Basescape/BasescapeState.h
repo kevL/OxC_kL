@@ -44,6 +44,8 @@ class BasescapeState
 {
 
 private:
+	bool _allowStoresWarning;
+
 	BaseView* _view;
 	MiniBaseView* _mini;
 	Text
@@ -129,12 +131,13 @@ private:
 		void miniLeftClick(Action* action);
 		/// Handler for right-clicking the MiniBase view.
 		void miniRightClick(Action* action);
-
+		/// Handler for pressing a base selection hotkey.
+		void handleKeyPress(Action* action);
 		/// Handler for changing the text on the Name edit.
 		void edtBaseChange(Action* action);
 
-		/// Handler for pressing a base selection hotkey.
-		void handleKeyPress(Action* action);
+		/// Resets the '_allowStoresWarning' flag.
+		void resetStoresWarning();
 };
 
 }

@@ -464,7 +464,9 @@ void BaseInfoState::handleKeyPress(Action* action)
 				_base = _baseList->at(i);
 				_state->setBase(_base);
 
+				_state->resetStoresWarning();
 				init();
+
 				break;
 			}
 		}
@@ -524,6 +526,7 @@ void BaseInfoState::miniClick(Action*)
 		_base = _baseList->at(baseId);
 		_state->setBase(_base);
 
+		_state->resetStoresWarning();
 		init();
 	}
 }

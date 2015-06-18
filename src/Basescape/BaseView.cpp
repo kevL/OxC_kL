@@ -102,8 +102,8 @@ BaseView::~BaseView()
 
 /**
  * Changes the various resources needed for text rendering.
- * The different fonts need to be passed in advance since the text size can change mid-text.
- * text size can change mid-text, and the language affects how the text is rendered.
+ * @note The different fonts need to be passed in advance since the text size can
+ * change mid-text and the language affects how text is rendered.
  * @param big	- pointer to large-size font
  * @param small	- pointer to small-size font
  * @param lang	- pointer to current language
@@ -201,8 +201,8 @@ BaseFacility* BaseView::getSelectedFacility() const
 }
 
 /**
- * Prevents any mouseover bugs on dismantling base facilities
- * before setBase has had time to update the base.
+ * Prevents any mouseover bugs on dismantling base facilities before setBase has
+ * had time to update the base.
  */
 void BaseView::resetSelectedFacility()
 {
@@ -859,7 +859,8 @@ void BaseView::mouseOut(Action* action, State* state)
 }
 
 /**
- *
+ * Sets the primary color.
+ * @param color - primary color
  */
 void BaseView::setColor(Uint8 color)
 {
@@ -867,7 +868,8 @@ void BaseView::setColor(Uint8 color)
 }
 
 /**
- *
+ * Sets the secondary color.
+ * @param color - secondary color
  */
 void BaseView::setSecondaryColor(Uint8 color)
 {

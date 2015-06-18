@@ -241,7 +241,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1432065875 f:\git\openxcom\src\basescape\basescapestate.h
+1434595028 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1430213397 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4445,7 +4445,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1433306258 f:\git\openxcom\src\basescape\baseview.h
+1434594570 f:\git\openxcom\src\basescape\baseview.h
 	"../Engine/InteractiveSurface.h"
 	"../Savegame/Base.h"
 
@@ -7097,7 +7097,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1434588128 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1434592639 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
