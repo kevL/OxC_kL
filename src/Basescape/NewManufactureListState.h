@@ -54,7 +54,9 @@ private:
 		* _txtTitle,
 		* _txtItem,
 		* _txtCategory;
-	TextButton* _btnCancel;
+	TextButton
+		* _btnCancel,
+		* _btnCostTable;
 	TextList* _lstManufacture;
 	Window* _window;
 
@@ -74,6 +76,8 @@ private:
 		/// Fills the list of possible productions.
 		void fillProductionList();
 
+		/// Handler for the Costs button.
+		void btnCostsClick(Action* action);
 		/// Handler for clicking the OK button.
 		void btnCancelClick(Action* action);
 		/// Handler for clicking on the list.

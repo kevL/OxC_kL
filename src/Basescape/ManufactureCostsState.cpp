@@ -159,10 +159,7 @@ void ManufactureCostsState::init()
 							Text::formatNumber((*i)->getRequiredSpace()).c_str(),
 							L"");
 //							tr((*i)->getCategory ()).c_str());
-		_lstProduction->setCellColor(
-								row,
-								0,
-								213); // yellow, Palette::blockOffset(13)+5
+
 		requiredCosts = 0;
 
 		std::map<std::string, int> required = (*i)->getRequiredItems();
@@ -177,10 +174,12 @@ void ManufactureCostsState::init()
 			woststr << L"(" << (*j).second << L") " << tr((*j).first);
 
 			if (j == required.begin())
+			{
 				_lstProduction->setCellText(
 										row,
 										4,
 										woststr.str());
+			}
 			else
 			{
 				_lstProduction->addRow(
@@ -189,6 +188,10 @@ void ManufactureCostsState::init()
 									woststr.str());
 				++row;
 			}
+
+			_lstProduction->setRowColor(
+									row,
+									213); // yellow
 		}
 
 		profit = 0;
@@ -208,16 +211,21 @@ void ManufactureCostsState::init()
 				salesCost = _game->getRuleset()->getItem((*j).first)->getSellCost();
 
 			salesCost *= (*j).second;
-
 			profit += salesCost;
+
+			std::wostringstream qty;
+			qty << L"*" << (*j).second;
 
 			_lstProduction->addRow(
 								5,
 								woststr.str().c_str(),
 								Text::formatFunding(salesCost).c_str(),
-								Text::formatNumber((*j).second).c_str(),
+								qty.str().c_str(),
 								L"",L"");
-			++row;
+			_lstProduction->setRowColor(
+									++row,
+									48, // green
+									true);
 		}
 
 		profit -= (*i)->getManufactureCost();
@@ -233,8 +241,12 @@ void ManufactureCostsState::init()
 							woststr.str().c_str(),
 							L"",L"",
 							Text::formatFunding(profit).c_str());
+		_lstProduction->setRowColor(
+								row + 1,
+								80, // lt.brown
+								true);
 
-		_lstProduction->addRow(5, L"",L"",L"",L"",L"");
+		_lstProduction->addRow(5, L"",L"",L"",L"",L""); // hori-spacer.
 	}
 }
 

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1434624197 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1434645922 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -4884,7 +4884,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1432463517 f:\git\openxcom\src\basescape\newmanufactureliststate.h
+1434649505 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\engine\screen.h
@@ -4932,12 +4932,12 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1432681021 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1434649592 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
+	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Interface/ComboBox.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -11479,7 +11479,7 @@
 1433986257 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
 	"RuleUnit.h"
 
-1432783493 source:f:\git\openxcom\src\basescape\manufacturecostsstate.cpp
+1434651083 source:f:\git\openxcom\src\basescape\manufacturecostsstate.cpp
 	"ManufactureCostsState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"

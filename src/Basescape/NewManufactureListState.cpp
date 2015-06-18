@@ -21,6 +21,7 @@
 
 //#include <algorithm>
 
+#include "ManufactureCostsState.h"
 #include "ManufactureStartState.h"
 
 #include "../Engine/Game.h"
@@ -28,7 +29,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 
-#include "../Interface/ComboBox.h"
+//#include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -65,12 +66,13 @@ NewManufactureListState::NewManufactureListState(
 	_txtTitle		= new Text(300, 16, 10, 30);
 
 //	_cbxCategory	= new ComboBox(this, 146, 16, 166, 46);
-	_txtItem		= new Text(80, 9, 16, 46);
+	_txtItem		= new Text(80, 9,  16, 46);
 	_txtCategory	= new Text(80, 9, 172, 46);
 
 	_lstManufacture	= new TextList(293, 97, 8, 55);
 
-	_btnCancel		= new TextButton(288, 16, 16, 154);
+	_btnCostTable	= new TextButton(142, 16,  16, 154);
+	_btnCancel		= new TextButton(142, 16, 162, 154);
 
 	setInterface("selectNewManufacture");
 
@@ -80,6 +82,7 @@ NewManufactureListState::NewManufactureListState(
 	add(_txtItem,			"text",		"selectNewManufacture");
 	add(_txtCategory,		"text",		"selectNewManufacture");
 	add(_lstManufacture,	"list",		"selectNewManufacture");
+	add(_btnCostTable,		"button",	"selectNewManufacture");
 	add(_btnCancel,			"button",	"selectNewManufacture");
 
 	centerAllSurfaces();
@@ -100,6 +103,9 @@ NewManufactureListState::NewManufactureListState(
 	_lstManufacture->setSelectable();
 	_lstManufacture->setMargin(16);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
+
+	_btnCostTable->setText(tr("STR_PRODUCTION_COSTS"));
+	_btnCostTable->onMouseClick((ActionHandler)& NewManufactureListState::btnCostsClick);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
@@ -153,6 +159,15 @@ void NewManufactureListState::init()
 }
 
 /**
+ * Go to the Costs table.
+ * @param action - pointer to an Action
+ */
+void NewManufactureListState::btnCostsClick(Action*)
+{
+	_game->pushState(new ManufactureCostsState());
+}
+
+/**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
@@ -187,19 +202,19 @@ void NewManufactureListState::lstProdClick(Action*)
 		&& _base->getAvailableHangars() - _base->getUsedHangars() < 1)
 	{
 		_game->pushState(new ErrorMessageState(
-											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
-											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
-											"BACK17.SCR",
-											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
+										tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
+										_palette,
+										_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
+										"BACK17.SCR",
+										_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	}
 	else if (manufRule->getRequiredSpace() > _base->getFreeWorkshops())
 		_game->pushState(new ErrorMessageState(
-											tr("STR_NOT_ENOUGH_WORK_SPACE"),
-											_palette,
-											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
-											"BACK17.SCR",
-											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
+										tr("STR_NOT_ENOUGH_WORK_SPACE"),
+										_palette,
+										_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
+										"BACK17.SCR",
+										_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	else
 		_game->pushState(new ManufactureStartState(
 												_base,
