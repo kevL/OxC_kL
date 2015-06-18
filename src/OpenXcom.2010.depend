@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1434595333 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1434624197 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -21,7 +21,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1430206680 f:\git\openxcom\src\basescape\baseinfostate.h
+1434623915 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
 1433336868 f:\git\openxcom\src\engine\state.h
@@ -4477,9 +4477,8 @@
 1430210899 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1430936829 f:\git\openxcom\src\basescape\sellstate.h
+1434619555 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
-	"../Menu/OptionsBaseState.h"
 
 1432157327 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
@@ -5129,7 +5128,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1432715018 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1434619759 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5151,7 +5150,6 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
-	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
 1432465320 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
@@ -6994,7 +6992,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1432248980 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
+1434596752 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
 	"CraftErrorState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7258,7 +7256,7 @@
 
 1430258670 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1433548726 source:f:\git\openxcom\src\geoscape\globe.cpp
+1434614219 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7373,7 +7371,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1432248980 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1434596891 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"

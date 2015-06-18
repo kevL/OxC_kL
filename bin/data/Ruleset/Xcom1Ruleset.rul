@@ -5947,6 +5947,7 @@ extraStrings:
       STR_EQUIP_LAYOUT_SAVED: "Soldier Layout Saved"
       STR_EQUIP_LAYOUTS_SAVED: "All Layouts Saved"
       STR_PAUSE: "pause"
+      STR_PSILABS: "PsiLabs"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

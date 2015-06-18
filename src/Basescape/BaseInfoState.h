@@ -37,7 +37,7 @@ class TextEdit;
 
 
 /**
- * Base Info screen that shows all the stats of a base from the Basescape.
+ * Base Info screen that shows all the stats of a Base.
  */
 class BaseInfoState
 	:
@@ -45,15 +45,18 @@ class BaseInfoState
 {
 
 private:
+	bool _psiResearched;
+
 	Base* _base;
 	BasescapeState* _state;
 	MiniBaseView* _mini;
 	Surface* _bg;
 	Text
-		* _txtHoverBase,
-		* _txtPersonnel,
 		* _txtRegion,
-		* _txtSpace;
+		* _txtHoverBase,
+		* _txtHoverRegion;
+//		* _txtPersonnel,
+//		* _txtSpace;
 	TextButton
 		* _btnMonthlyCosts,
 		* _btnOk,
@@ -72,6 +75,12 @@ private:
 		* _barSoldiers,
 		* _barEngineers,
 		* _barScientists;
+
+	Text
+		* _txtPsiLabs,
+		* _numPsiLabs;
+	Bar
+		* _barPsiLabs;
 
 	Text
 		* _txtQuarters,
@@ -112,8 +121,8 @@ private:
 	public:
 		/// Creates the Base Info state.
 		BaseInfoState(
-				Base* base,
-				BasescapeState* state);
+				Base* const base,
+				BasescapeState* const state);
 		/// Cleans up the Base Info state.
 		~BaseInfoState();
 

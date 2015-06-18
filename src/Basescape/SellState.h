@@ -25,7 +25,7 @@
 
 #include "../Engine/State.h"
 
-#include "../Menu/OptionsBaseState.h"
+//#include "../Menu/OptionsBaseState.h"
 
 
 namespace OpenXcom
@@ -71,7 +71,7 @@ private:
 		_colorArtefact;
 	double _spaceChange;
 
-	OptionsOrigin _origin;
+//	OptionsOrigin _origin;
 
 	Base* _base;
 	Text
@@ -115,9 +115,8 @@ private:
 
 	public:
 		/// Creates the Sell state.
-		SellState(
-				Base* base,
-				OptionsOrigin origin = OPT_GEOSCAPE);
+		SellState(Base* const base);
+//				OptionsOrigin origin = OPT_GEOSCAPE);
 		/// Cleans up the Sell state.
 		~SellState();
 

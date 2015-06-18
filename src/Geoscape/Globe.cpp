@@ -2369,36 +2369,36 @@ void Globe::drawPath(
 void Globe::drawFlights()
 {
 //	_radars->clear();
-	if (Options::globeFlightPaths == false)
-		return;
-
-	_radars->lock();
-	for (std::vector<Base*>::const_iterator
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
-			++i)
+	if (Options::globeFlightPaths == true)
 	{
-		for (std::vector<Craft*>::const_iterator
-				j = (*i)->getCrafts()->begin();
-				j != (*i)->getCrafts()->end();
-				++j)
+		_radars->lock();
+		for (std::vector<Base*>::const_iterator
+				i = _game->getSavedGame()->getBases()->begin();
+				i != _game->getSavedGame()->getBases()->end();
+				++i)
 		{
-			if ((*j)->getStatus() == "STR_OUT"
-				&& (*j)->getDestination() != NULL)
+			for (std::vector<Craft*>::const_iterator
+					j = (*i)->getCrafts()->begin();
+					j != (*i)->getCrafts()->end();
+					++j)
 			{
-				const double
-					lon1 = (*j)->getLongitude(),
-					lon2 = (*j)->getDestination()->getLongitude(),
-					lat1 = (*j)->getLatitude(),
-					lat2 = (*j)->getDestination()->getLatitude();
-				drawPath(
-						_radars,
-						lon1,lat1,
-						lon2,lat2);
+				if ((*j)->getStatus() == "STR_OUT"
+					&& (*j)->getDestination() != NULL)
+				{
+					const double
+						lon1 = (*j)->getLongitude(),
+						lon2 = (*j)->getDestination()->getLongitude(),
+						lat1 = (*j)->getLatitude(),
+						lat2 = (*j)->getDestination()->getLatitude();
+					drawPath(
+							_radars,
+							lon1,lat1,
+							lon2,lat2);
+				}
 			}
 		}
+		_radars->unlock();
 	}
-	_radars->unlock();
 }
 
 /**

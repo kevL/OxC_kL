@@ -51,7 +51,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Transfer.h"
+//#include "../Savegame/Transfer.h"
 #include "../Savegame/Vehicle.h"
 
 
@@ -61,14 +61,13 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Sell/Sack screen.
  * @param base		- pointer to the Base to get info from
- * @param origin	- game section that originated this state (default OPT_GEOSCAPE)
+// * @param origin	- game section that originated this state (default OPT_GEOSCAPE)
  */
-SellState::SellState(
-		Base* base,
-		OptionsOrigin origin)
+SellState::SellState(Base* const base)
+//		OptionsOrigin origin)
 	:
 		_base(base),
-		_origin(origin),
+//		_origin(origin),
 		_sel(0),
 		_rowOffset(0),
 		_total(0),
@@ -76,8 +75,8 @@ SellState::SellState(
 		_hasEng(0),
 		_spaceChange(0.)
 {
-	bool overfull = Options::storageLimitsEnforced == true
-				 && _base->storesOverfull() == true;
+//	bool overfull = Options::storageLimitsEnforced == true
+//				 && _base->storesOverfull() == true;
 
 	_window			= new Window(this, 320, 200);
 
@@ -134,8 +133,8 @@ SellState::SellState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SellState::btnCancelClick,
 					Options::keyCancel);
-	if (overfull == true)
-		_btnCancel->setVisible(false);
+//	if (overfull == true)
+//		_btnCancel->setVisible(false);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -754,8 +753,7 @@ int SellState::getQuantity() // private.
 
 		case SELL_ITEM:
 			qty = _base->getItems()->getItemQty(_items[getItemIndex(_sel)]);
-
-			if (Options::storageLimitsEnforced == true
+/*			if (Options::storageLimitsEnforced == true
 				&& _origin == OPT_BATTLESCAPE)
 			{
 				for (std::vector<Transfer*>::const_iterator
@@ -774,8 +772,7 @@ int SellState::getQuantity() // private.
 				{
 					qty += (*j)->getItems()->getItemQty(_items[getItemIndex(_sel)]);
 				}
-			}
-
+			} */
 			return qty;
 	}
 
@@ -963,16 +960,16 @@ void SellState::updateItemStrings() // private.
 						color);
 
 
-	bool okBtn = false;
+	bool ok = false;
 
 	if (_total > 0)
-		okBtn = true;
+		ok = true;
 	else // or craft, soldier, scientist, engineer.
 	{
 		for (size_t
 				i = 0;
 				i != _sellQty.size()
-					&& okBtn == false;
+					&& ok == false;
 				++i)
 		{
 			if (_sellQty[i] > 0)
@@ -983,7 +980,7 @@ void SellState::updateItemStrings() // private.
 					case SELL_SOLDIER:
 					case SELL_SCIENTIST:
 					case SELL_ENGINEER:
-						okBtn = true;
+						ok = true;
 				}
 			}
 		}
@@ -998,11 +995,10 @@ void SellState::updateItemStrings() // private.
 	}
 	_txtSpaceUsed->setText(woststr3.str());
 
-	if (Options::storageLimitsEnforced == true)
-		okBtn = okBtn
-			&& _base->storesOverfull(_spaceChange) == false;
-
-	_btnOk->setVisible(okBtn);
+//	if (Options::storageLimitsEnforced == true)
+//		ok = ok
+//			&& _base->storesOverfull(_spaceChange) == false;
+	_btnOk->setVisible(ok);
 }
 
 /**

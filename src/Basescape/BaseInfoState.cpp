@@ -58,12 +58,13 @@ namespace OpenXcom
  * @param state	- pointer to the BasescapeState
  */
 BaseInfoState::BaseInfoState(
-		Base* base,
-		BasescapeState* state)
+		Base* const base,
+		BasescapeState* const state)
 	:
 		_base(base),
 		_state(state),
-		_baseList(_game->getSavedGame()->getBases())
+		_baseList(_game->getSavedGame()->getBases()),
+		_psiResearched(_game->getSavedGame()->isResearched("STR_PSI_LAB"))
 {
 	_bg					= new Surface(320, 200);
 
@@ -76,9 +77,12 @@ BaseInfoState::BaseInfoState(
 
 	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
-	_txtPersonnel		= new Text(171, 9,   8, 31);
-	_txtHoverBase		= new Text( 73, 9, 179, 31);
-	_txtRegion			= new Text( 60, 9, 252, 31);
+	_txtRegion			= new Text( 60, 9,  16, 31);
+//	_txtRegion			= new Text( 60, 9, 252, 31);
+	_txtHoverBase		= new Text( 70, 9, 182, 31);
+	_txtHoverRegion		= new Text( 60, 9, 252, 31);
+//	_txtPersonnel		= new Text(171, 9,   8, 31);
+
 
 	_txtSoldiers		= new Text(114, 9,   8, 41);
 	_numSoldiers		= new Text( 40, 9, 126, 42);
@@ -92,43 +96,45 @@ BaseInfoState::BaseInfoState(
 	_numEngineers		= new Text( 40, 9, 126, 62);
 	_barEngineers		= new Bar( 280, 5, 166, 63);
 
-	_txtSpace			= new Text(300, 9, 8, 72);
 
-	_txtQuarters		= new Text(114, 9,   8, 83);
-	_numQuarters		= new Text( 40, 9, 126, 84);
-	_barQuarters		= new Bar( 280, 5, 166, 85);
+//	_txtSpace			= new Text(300, 9,   8, 72);
 
-	_txtLaboratories	= new Text(114, 9,   8, 93);
-	_numLaboratories	= new Text( 40, 9, 126, 94);
-	_barLaboratories	= new Bar( 280, 5, 166, 95);
+	_txtStores			= new Text(114, 9,   8, 83);
+	_numStores			= new Text( 40, 9, 126, 84);
+	_barStores			= new Bar( 280, 5, 166, 85);
 
-	_txtWorkshops		= new Text(114, 9,   8, 103);
-	_numWorkshops		= new Text( 40, 9, 126, 104);
-	_barWorkshops		= new Bar( 280, 5, 166, 105);
+	_txtQuarters		= new Text(114, 9,   8, 93);
+	_numQuarters		= new Text( 40, 9, 126, 94);
+	_barQuarters		= new Bar( 280, 5, 166, 95);
 
-	_txtContainment		= new Text(114, 9,   8, 113);
-	_numContainment		= new Text( 40, 9, 126, 114);
-	_barContainment		= new Bar( 280, 5, 166, 115);
+	_txtLaboratories	= new Text(114, 9,   8, 103);
+	_numLaboratories	= new Text( 40, 9, 126, 104);
+	_barLaboratories	= new Bar( 280, 5, 166, 105);
 
-	_txtStores			= new Text(114, 9,   8, 123);
-	_numStores			= new Text( 40, 9, 126, 124);
-	_barStores			= new Bar( 280, 5, 166, 125);
+	_txtWorkshops		= new Text(114, 9,   8, 113);
+	_numWorkshops		= new Text( 40, 9, 126, 114);
+	_barWorkshops		= new Bar( 280, 5, 166, 115);
+
+	_txtContainment		= new Text(114, 9,   8, 123);
+	_numContainment		= new Text( 40, 9, 126, 124);
+	_barContainment		= new Bar( 280, 5, 166, 125);
 
 	_txtHangars			= new Text(114, 9,   8, 133);
 	_numHangars			= new Text( 40, 9, 126, 134);
 	_barHangars			= new Bar( 280, 5, 166, 135);
 
-	_txtLongRange		= new Text(114, 9,   8, 147);
-	_numLongRange		= new Text( 40, 9, 126, 148);
-	_barLongRange		= new Bar( 280, 5, 166, 149);
+
+	_txtDefense			= new Text(114, 9,   8, 147);
+	_numDefense			= new Text( 40, 9, 126, 148);
+	_barDefense			= new Bar( 280, 5, 166, 149);
 
 	_txtShortRange		= new Text(114, 9,   8, 157);
 	_numShortRange		= new Text( 40, 9, 126, 158);
 	_barShortRange		= new Bar( 280, 5, 166, 159);
 
-	_txtDefense			= new Text(114, 9,   8, 167);
-	_numDefense			= new Text( 40, 9, 126, 168);
-	_barDefense			= new Bar( 280, 5, 166, 169);
+	_txtLongRange		= new Text(114, 9,   8, 167);
+	_numLongRange		= new Text( 40, 9, 126, 168);
+	_barLongRange		= new Bar( 280, 5, 166, 169);
 
 	setInterface("baseInfo");
 
@@ -140,33 +146,38 @@ BaseInfoState::BaseInfoState(
 	add(_btnMonthlyCosts,	"button",			"baseInfo");
 	add(_edtBase,			"text1",			"baseInfo");
 
-	add(_txtPersonnel,		"text1",			"baseInfo");
-	add(_txtHoverBase,		"numbers",			"baseInfo");
 	add(_txtRegion,			"text1",			"baseInfo");
+//	add(_txtPersonnel,		"text1",			"baseInfo");
+	add(_txtHoverBase,		"numbers",			"baseInfo");
+	add(_txtHoverRegion,	"numbers",			"baseInfo");
 
 	add(_txtSoldiers,		"text2",			"baseInfo");
 	add(_numSoldiers,		"numbers",			"baseInfo");
 	add(_barSoldiers,		"personnelBars",	"baseInfo");
-	add(_txtEngineers,		"text2",			"baseInfo");
-	add(_numEngineers,		"numbers",			"baseInfo");
-	add(_barEngineers,		"personnelBars",	"baseInfo");
 	add(_txtScientists,		"text2",			"baseInfo");
 	add(_numScientists,		"numbers",			"baseInfo");
 	add(_barScientists,		"personnelBars",	"baseInfo");
+	add(_txtEngineers,		"text2",			"baseInfo");
+	add(_numEngineers,		"numbers",			"baseInfo");
+	add(_barEngineers,		"personnelBars",	"baseInfo");
 
-	add(_txtSpace,			"text1",			"baseInfo");
-	add(_txtQuarters,		"text2",			"baseInfo");
-	add(_numQuarters,		"numbers",			"baseInfo");
-	add(_barQuarters,		"facilityBars",		"baseInfo");
+//	add(_txtSpace,			"text1",			"baseInfo");
+
 	add(_txtStores,			"text2",			"baseInfo");
 	add(_numStores,			"numbers",			"baseInfo");
 	add(_barStores,			"facilityBars",		"baseInfo");
+	add(_txtQuarters,		"text2",			"baseInfo");
+	add(_numQuarters,		"numbers",			"baseInfo");
+	add(_barQuarters,		"facilityBars",		"baseInfo");
 	add(_txtLaboratories,	"text2",			"baseInfo");
 	add(_numLaboratories,	"numbers",			"baseInfo");
 	add(_barLaboratories,	"facilityBars",		"baseInfo");
 	add(_txtWorkshops,		"text2",			"baseInfo");
 	add(_numWorkshops,		"numbers",			"baseInfo");
 	add(_barWorkshops,		"facilityBars",		"baseInfo");
+	add(_txtHangars,		"text2",			"baseInfo");
+	add(_numHangars,		"numbers",			"baseInfo");
+	add(_barHangars,		"facilityBars",		"baseInfo");
 
 	if (Options::storageLimitsEnforced == true)
 	{
@@ -174,10 +185,6 @@ BaseInfoState::BaseInfoState(
 		add(_numContainment, "numbers",			"baseInfo");
 		add(_barContainment, "facilityBars",	"baseInfo");
 	}
-
-	add(_txtHangars,	"text2",				"baseInfo");
-	add(_numHangars,	"numbers",				"baseInfo");
-	add(_barHangars,	"facilityBars",			"baseInfo");
 
 	add(_txtDefense,	"text2",				"baseInfo");
 	add(_numDefense,	"numbers",				"baseInfo");
@@ -188,6 +195,20 @@ BaseInfoState::BaseInfoState(
 	add(_txtLongRange,	"text2",				"baseInfo");
 	add(_numLongRange,	"numbers",				"baseInfo");
 	add(_barLongRange,	"detectionBars",		"baseInfo");
+
+	if (_psiResearched == true)
+	{
+		_txtPsiLabs = new Text(114, 9,   8, 72);
+		_numPsiLabs = new Text( 40, 9, 126, 73);
+		_barPsiLabs = new Bar( 280, 5, 166, 74);
+
+		add(_txtPsiLabs, "text1",			"baseInfo");
+		add(_numPsiLabs, "numbers",			"baseInfo");
+		add(_barPsiLabs, "facilityBars",	"baseInfo");
+
+		_txtPsiLabs->setText(tr("STR_PSILABS"));
+		_barPsiLabs->setScale();
+	}
 
 	centerAllSurfaces();
 
@@ -234,27 +255,27 @@ BaseInfoState::BaseInfoState(
 	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)& BaseInfoState::btnMonthlyCostsClick);
 
-	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
-
-	_txtRegion->setAlign(ALIGN_RIGHT);
+//	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
+//	_txtRegion->setAlign(ALIGN_RIGHT);
+	_txtHoverRegion->setAlign(ALIGN_RIGHT);
 
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
 	_barSoldiers->setScale();
 
-	_txtEngineers->setText(tr("STR_ENGINEERS"));
-	_barEngineers->setScale();
-
 	_txtScientists->setText(tr("STR_SCIENTISTS"));
 	_barScientists->setScale();
 
+	_txtEngineers->setText(tr("STR_ENGINEERS"));
+	_barEngineers->setScale();
 
-	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_AVAILABLE"));
 
-	_txtQuarters->setText(tr("STR_LIVING_QUARTERS_PLURAL"));
-	_barQuarters->setScale(0.5);
+//	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_AVAILABLE"));
 
 	_txtStores->setText(tr("STR_STORES"));
 	_barStores->setScale(0.25); //0.5
+
+	_txtQuarters->setText(tr("STR_LIVING_QUARTERS_PLURAL"));
+	_barQuarters->setScale(0.5);
 
 	_txtLaboratories->setText(tr("STR_LABORATORIES"));
 	_barLaboratories->setScale(0.5);
@@ -262,14 +283,15 @@ BaseInfoState::BaseInfoState(
 	_txtWorkshops->setText(tr("STR_WORK_SHOPS"));
 	_barWorkshops->setScale(0.5);
 
+	_txtHangars->setText(tr("STR_HANGARS"));
+	_barHangars->setScale(18.);
+
 	if (Options::storageLimitsEnforced == true)
 	{
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
 		_barContainment->setScale(); //0.5
 	}
 
-	_txtHangars->setText(tr("STR_HANGARS"));
-	_barHangars->setScale(18.);
 
 	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));
 	_barDefense->setScale(0.018); // 0.125
@@ -325,7 +347,8 @@ void BaseInfoState::init()
 		woststr9,
 		woststr10,
 		woststr11,
-		woststr12;
+		woststr12,
+		woststr13;
 
 	int
 		var,
@@ -338,13 +361,6 @@ void BaseInfoState::init()
 	_barSoldiers->setMax(var);
 	_barSoldiers->setValue(var2);
 
-	var = _base->getTotalEngineers();
-	var2 = _base->getEngineers();
-	woststr2 << var2 << ":" << var;
-	_numEngineers->setText(woststr2.str());
-	_barEngineers->setMax(var);
-	_barEngineers->setValue(var2);
-
 	var = _base->getTotalScientists();
 	var2 = _base->getScientists();
 	woststr3 << var2 << ":" << var;
@@ -352,12 +368,13 @@ void BaseInfoState::init()
 	_barScientists->setMax(var);
 	_barScientists->setValue(var2);
 
-	var = _base->getAvailableQuarters();
-	var2 = _base->getUsedQuarters();
-	woststr4 << var2 << ":" << var;
-	_numQuarters->setText(woststr4.str());
-	_barQuarters->setMax(var);
-	_barQuarters->setValue(var2);
+	var = _base->getTotalEngineers();
+	var2 = _base->getEngineers();
+	woststr2 << var2 << ":" << var;
+	_numEngineers->setText(woststr2.str());
+	_barEngineers->setMax(var);
+	_barEngineers->setValue(var2);
+
 
 	var = _base->getAvailableStores();
 	var2 = static_cast<int>(std::floor(_base->getUsedStores() + 0.05));
@@ -365,6 +382,13 @@ void BaseInfoState::init()
 	_numStores->setText(woststr5.str());
 	_barStores->setMax(var);
 	_barStores->setValue(var2);
+
+	var = _base->getAvailableQuarters();
+	var2 = _base->getUsedQuarters();
+	woststr4 << var2 << ":" << var;
+	_numQuarters->setText(woststr4.str());
+	_barQuarters->setMax(var);
+	_barQuarters->setValue(var2);
 
 	var = _base->getAvailableLaboratories();
 	var2 = _base->getUsedLaboratories();
@@ -380,6 +404,13 @@ void BaseInfoState::init()
 	_barWorkshops->setMax(var);
 	_barWorkshops->setValue(var2);
 
+	var = _base->getAvailableHangars();
+	var2 = _base->getUsedHangars();
+	woststr9 << var2 << ":" << var;
+	_numHangars->setText(woststr9.str());
+	_barHangars->setMax(var);
+	_barHangars->setValue(var2);
+
 	if (Options::storageLimitsEnforced)
 	{
 		var = _base->getAvailableContainment();
@@ -390,12 +421,6 @@ void BaseInfoState::init()
 		_barContainment->setValue(var2);
 	}
 
-	var = _base->getAvailableHangars();
-	var2 = _base->getUsedHangars();
-	woststr9 << var2 << ":" << var;
-	_numHangars->setText(woststr9.str());
-	_barHangars->setMax(var);
-	_barHangars->setValue(var2);
 
 	var = _base->getDefenseTotal();
 	woststr10 << var;
@@ -409,15 +434,24 @@ void BaseInfoState::init()
 	_barShortRange->setMax(var);
 	_barShortRange->setValue(var);
 
-
-	if (_base->getHyperDetection() == true)
-		_barLongRange->setColor(Palette::blockOffset(4)+4);
-
 	var = _base->getLongRangeTotal();
 	woststr12 << var;
 	_numLongRange->setText(woststr12.str());
 	_barLongRange->setMax(var);
 	_barLongRange->setValue(var);
+	if (_base->getHyperDetection() == true)
+		_barLongRange->setColor(Palette::blockOffset(4)+4);
+
+
+	if (_psiResearched == true)
+	{
+		var = _base->getAvailablePsiLabs();
+		var2 = _base->getUsedPsiLabs();
+		woststr13 << var2 << ":" << var;
+		_numPsiLabs->setText(woststr13.str());
+		_barPsiLabs->setMax(var);
+		_barPsiLabs->setValue(var2);
+	}
 }
 
 /**
@@ -459,6 +493,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 			if (key == baseKeys[i])
 			{
 				_txtHoverBase->setText(L"");
+				_txtHoverRegion->setText(L"");
 
 				_mini->setSelectedBase(i);
 				_base = _baseList->at(i);
@@ -521,6 +556,7 @@ void BaseInfoState::miniClick(Action*)
 		&& _base != _baseList->at(baseId))
 	{
 		_txtHoverBase->setText(L"");
+		_txtHoverRegion->setText(L"");
 
 		_mini->setSelectedBase(baseId);
 		_base = _baseList->at(baseId);
@@ -538,14 +574,32 @@ void BaseInfoState::miniClick(Action*)
 void BaseInfoState::viewMouseOver(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
+	const Base* const hoverBase = _baseList->at(baseId);
 
 	if (baseId < _baseList->size()
-		&& _base != _baseList->at(baseId))
+		&& hoverBase != _base)
 	{
-		_txtHoverBase->setText(_baseList->at(baseId)->getName(_game->getLanguage()).c_str());
+		_txtHoverBase->setText(hoverBase->getName(_game->getLanguage()).c_str());
+
+		for (std::vector<Region*>::const_iterator
+				i = _game->getSavedGame()->getRegions()->begin();
+				i != _game->getSavedGame()->getRegions()->end();
+				++i)
+		{
+			if ((*i)->getRules()->insideRegion(
+											hoverBase->getLongitude(),
+											hoverBase->getLatitude()))
+			{
+				_txtHoverRegion->setText(tr((*i)->getRules()->getType()));
+				break;
+			}
+		}
 	}
 	else
+	{
 		_txtHoverBase->setText(L"");
+		_txtHoverRegion->setText(L"");
+	}
 }
 
 /**
@@ -555,6 +609,7 @@ void BaseInfoState::viewMouseOver(Action*)
 void BaseInfoState::viewMouseOut(Action*)
 {
 	_txtHoverBase->setText(L"");
+	_txtHoverRegion->setText(L"");
 }
 
 }
