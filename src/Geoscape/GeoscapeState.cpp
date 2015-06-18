@@ -2684,12 +2684,12 @@ void GeoscapeState::time1Hour()
 		{
 			resetTimer();
 			popup(new ErrorMessageState(
-									tr("STR_STORAGE_EXCEEDED").arg((*base)->getName()).c_str(),
-									_palette,
-									_rules->getInterface("geoscape")->getElement("errorMessage")->color,
-									"BACK12.SCR", // "BACK13.SCR"
-									_rules->getInterface("geoscape")->getElement("errorPalette")->color));
-			popup(new SellState(*base));
+								tr("STR_STORAGE_EXCEEDED").arg((*base)->getName()).c_str(),
+								_palette,
+								_rules->getInterface("geoscape")->getElement("errorMessage")->color,
+								"BACK12.SCR", // "BACK13.SCR"
+								_rules->getInterface("geoscape")->getElement("errorPalette")->color));
+//			popup(new SellState(*base));
 		}
 
 		for (std::vector<ProductionCompleteInfo>::const_iterator // myk002_begin:

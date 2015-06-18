@@ -4401,7 +4401,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1433247720 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1434584726 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -5392,9 +5392,10 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1434532359 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1434550026 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
+	"Map.h"
 	"MedikitState.h"
 	"MediTargetState.h"
 	"Pathfinding.h"
@@ -5403,7 +5404,9 @@
 	"TileEngine.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
+	"../Engine/Sound.h"
 	"../Interface/Text.h"
+	"../Resource/ResourcePack.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
@@ -5856,7 +5859,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1434339660 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1434584867 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -7094,7 +7097,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1433741123 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1434588128 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7119,7 +7122,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1433911417 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1434584930 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7674,7 +7677,7 @@
 	"Engine/Game.h"
 	"Menu/StartState.h"
 
-1430149550 f:\git\openxcom\src\menu\startstate.h
+1434584973 f:\git\openxcom\src\menu\startstate.h
 	"../Engine/State.h"
 
 1430149550 source:f:\git\openxcom\src\menu\abandongamestate.cpp
@@ -7980,7 +7983,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1432715019 source:f:\git\openxcom\src\menu\startstate.cpp
+1434585217 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"

@@ -355,7 +355,7 @@ void BasescapeState::init()
 		&& Options::storageLimitsEnforced == true
 		&& _base->storesOverfull() == true)
 	{
-		_game->pushState(new SellState(_base));
+//		_game->pushState(new SellState(_base));
 		_game->pushState(new ErrorMessageState(
 										tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 										_palette,

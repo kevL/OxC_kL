@@ -89,11 +89,11 @@ private:
 		void animate();
 		/// Adds a line of text.
 		void addLine(const std::wstring& line);
-		/// kL.
+		///
 		void addLine_kL(); // kL
-		/// kL.
+		///
 		void addChar_kL(const size_t nextChar); // kL
-		/// kL.
+		///
 		void addCursor_kL(); // kL
 
 		/// Loads the game resources.

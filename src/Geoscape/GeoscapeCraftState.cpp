@@ -157,7 +157,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_btnPatrol->setText(tr("STR_PATROL"));
 	_btnPatrol->onMouseClick((ActionHandler)& GeoscapeCraftState::btnPatrolClick);
 
-	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& GeoscapeCraftState::btnCancelClick,
@@ -303,13 +302,15 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 
 	if (_waypoint == NULL)
+	{
 		_txtRedirect->setVisible(false);
+		_btnCancel->setText(tr("STR_CANCEL_UC"));
+	}
 	else
 	{
 		_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 		_txtRedirect->setAlign(ALIGN_CENTER);
 		_txtRedirect->setBig();
-
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
 
@@ -366,8 +367,6 @@ GeoscapeCraftState::~GeoscapeCraftState()
  */
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
-	delete _waypoint;
-
 	_geo->getGlobe()->center(
 						_craft->getLongitude(),
 						_craft->getLatitude());
@@ -383,6 +382,8 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 											NULL,
 											false,
 											true));
+		delete _waypoint;
+
 		return;
 	}
 
@@ -397,6 +398,8 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 	_geo->setPause();
 	_geo->resetTimer();
 	_game->popState();
+
+	delete _waypoint;
 }
 
 /**

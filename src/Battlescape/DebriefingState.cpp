@@ -558,30 +558,25 @@ void DebriefingState::btnOkClick(Action*)
 				_game->pushState(new NoContainmentState());
 			else if (_manageContainment == true)
 			{
-				_game->pushState(new AlienContainmentState(
-														_base,
-														OPT_BATTLESCAPE));
+				_game->pushState(new AlienContainmentState(_base, OPT_BATTLESCAPE));
 				_game->pushState(new ErrorMessageState(
-													tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(),
-													_palette,
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
-													"BACK04.SCR",
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
+												tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(),
+												_palette,
+												_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
+												"BACK04.SCR",
+												_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
-			if (_manageContainment == false
-				&& Options::storageLimitsEnforced == true
-				&& _base->storesOverfull() == true)
+			if (_base->storesOverfull() == true //_manageContainment == false &&
+				&& Options::storageLimitsEnforced == true)
 			{
-				_game->pushState(new SellState(
-											_base,
-											OPT_BATTLESCAPE));
+//				_game->pushState(new SellState(_base, OPT_BATTLESCAPE));
 				_game->pushState(new ErrorMessageState(
-													tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
-													_palette,
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
-													_game->getResourcePack()->getRandomBackground(),
-													_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
+												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+												_palette,
+												_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
+												_game->getResourcePack()->getRandomBackground(),
+												_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
 			if (playAwardMusic == true)

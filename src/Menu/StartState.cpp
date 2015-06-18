@@ -204,7 +204,7 @@ void StartState::init()
 }
 
 /**
- * If the loading fails, it shows an error, otherwise moves on to the game.
+ * If the loading fails it shows an error otherwise moves on to the game.
  */
 void StartState::think()
 {
@@ -312,18 +312,18 @@ void StartState::animate()
 {
 	++_anim;
 
-	if (_anim %15 == 0) // kL
+	if (_anim % 15 == 0) // kL
 		_cursor->setVisible(!_cursor->getVisible());
 
 	if (loading == LOADING_STARTED)
 	{
-		std::wostringstream wosts;
-		wosts << L"Loading " << Language::utf8ToWstr(OPENXCOM_VERSION_GIT); // kL
-//kL	wosts << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
+		std::wostringstream woststr;
+		woststr << L"Loading " << Language::utf8ToWstr(OPENXCOM_VERSION_GIT); // kL
+//kL	woststr << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
 		if (Options::reload == true)
 		{
 			if (_anim == 2)
-				addLine(wosts.str());
+				addLine(woststr.str());
 
 			// NOTE: may need to set this:
 //			if (kL_ready)
@@ -353,7 +353,7 @@ void StartState::animate()
 		} */
 		else
 		{
-			if (_anim == 1 // start.
+			if (   _anim == 1 // start.
 				|| _anim == 44
 				|| _anim == 91
 				|| _anim == 115
