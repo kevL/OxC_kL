@@ -77,7 +77,8 @@ BaseInfoState::BaseInfoState(
 
 	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
-	_txtRegion			= new Text( 60, 9,  16, 31);
+	_txtRegion			= new Text( 60, 9, 114,  8);
+//	_txtRegion			= new Text( 60, 9,  16, 31);
 //	_txtRegion			= new Text( 60, 9, 252, 31);
 	_txtHoverBase		= new Text( 70, 9, 182, 31);
 	_txtHoverRegion		= new Text( 60, 9, 252, 31);
@@ -148,8 +149,8 @@ BaseInfoState::BaseInfoState(
 
 	add(_txtRegion,			"text1",			"baseInfo");
 //	add(_txtPersonnel,		"text1",			"baseInfo");
-	add(_txtHoverBase,		"numbers",			"baseInfo");
-	add(_txtHoverRegion,	"numbers",			"baseInfo");
+	add(_txtHoverBase,		"text1",			"baseInfo");
+	add(_txtHoverRegion,	"text1",			"baseInfo");
 
 	add(_txtSoldiers,		"text2",			"baseInfo");
 	add(_numSoldiers,		"numbers",			"baseInfo");
@@ -256,7 +257,8 @@ BaseInfoState::BaseInfoState(
 	_btnMonthlyCosts->onMouseClick((ActionHandler)& BaseInfoState::btnMonthlyCostsClick);
 
 //	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
-//	_txtRegion->setAlign(ALIGN_RIGHT);
+
+	_txtRegion->setAlign(ALIGN_RIGHT);
 	_txtHoverRegion->setAlign(ALIGN_RIGHT);
 
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
@@ -353,104 +355,224 @@ void BaseInfoState::init()
 	int
 		var,
 		var2;
+	bool vis;
 
 	var = _base->getTotalSoldiers();
-	var2 = _base->getAvailableSoldiers(true);
-	woststr1 << var2 << ":" << var;
-	_numSoldiers->setText(woststr1.str());
-	_barSoldiers->setMax(var);
-	_barSoldiers->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getAvailableSoldiers(true);
+		woststr1 << var2 << ":" << var;
+		_numSoldiers->setText(woststr1.str());
+		_barSoldiers->setMax(var);
+		_barSoldiers->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numSoldiers->setVisible(vis);
+	_barSoldiers->setVisible(vis);
 
 	var = _base->getTotalScientists();
-	var2 = _base->getScientists();
-	woststr3 << var2 << ":" << var;
-	_numScientists->setText(woststr3.str());
-	_barScientists->setMax(var);
-	_barScientists->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getScientists();
+		woststr3 << var2 << ":" << var;
+		_numScientists->setText(woststr3.str());
+		_barScientists->setMax(var);
+		_barScientists->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numScientists->setVisible(vis);
+	_barScientists->setVisible(vis);
 
 	var = _base->getTotalEngineers();
-	var2 = _base->getEngineers();
-	woststr2 << var2 << ":" << var;
-	_numEngineers->setText(woststr2.str());
-	_barEngineers->setMax(var);
-	_barEngineers->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getEngineers();
+		woststr2 << var2 << ":" << var;
+		_numEngineers->setText(woststr2.str());
+		_barEngineers->setMax(var);
+		_barEngineers->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numEngineers->setVisible(vis);
+	_barEngineers->setVisible(vis);
 
 
 	var = _base->getAvailableStores();
-	var2 = static_cast<int>(std::floor(_base->getUsedStores() + 0.05));
-	woststr5 << var2 << ":" << var;
-	_numStores->setText(woststr5.str());
-	_barStores->setMax(var);
-	_barStores->setValue(var2);
+	if (var != 0)
+	{
+		var2 = static_cast<int>(std::floor(_base->getUsedStores() + 0.05));
+		woststr5 << var2 << ":" << var;
+		_numStores->setText(woststr5.str());
+		_barStores->setMax(var);
+		_barStores->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numStores->setVisible(vis);
+	_barStores->setVisible(vis);
 
 	var = _base->getAvailableQuarters();
-	var2 = _base->getUsedQuarters();
-	woststr4 << var2 << ":" << var;
-	_numQuarters->setText(woststr4.str());
-	_barQuarters->setMax(var);
-	_barQuarters->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getUsedQuarters();
+		woststr4 << var2 << ":" << var;
+		_numQuarters->setText(woststr4.str());
+		_barQuarters->setMax(var);
+		_barQuarters->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numQuarters->setVisible(vis);
+	_barQuarters->setVisible(vis);
 
 	var = _base->getAvailableLaboratories();
-	var2 = _base->getUsedLaboratories();
-	woststr6 << var2 << ":" << var;
-	_numLaboratories->setText(woststr6.str());
-	_barLaboratories->setMax(var);
-	_barLaboratories->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getUsedLaboratories();
+		woststr6 << var2 << ":" << var;
+		_numLaboratories->setText(woststr6.str());
+		_barLaboratories->setMax(var);
+		_barLaboratories->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numLaboratories->setVisible(vis);
+	_barLaboratories->setVisible(vis);
 
 	var = _base->getAvailableWorkshops();
-	var2 = _base->getUsedWorkshops();
-	woststr7 << var2 << ":" << var;
-	_numWorkshops->setText(woststr7.str());
-	_barWorkshops->setMax(var);
-	_barWorkshops->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getUsedWorkshops();
+		woststr7 << var2 << ":" << var;
+		_numWorkshops->setText(woststr7.str());
+		_barWorkshops->setMax(var);
+		_barWorkshops->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numWorkshops->setVisible(vis);
+	_barWorkshops->setVisible(vis);
 
 	var = _base->getAvailableHangars();
-	var2 = _base->getUsedHangars();
-	woststr9 << var2 << ":" << var;
-	_numHangars->setText(woststr9.str());
-	_barHangars->setMax(var);
-	_barHangars->setValue(var2);
+	if (var != 0)
+	{
+		var2 = _base->getUsedHangars();
+		woststr9 << var2 << ":" << var;
+		_numHangars->setText(woststr9.str());
+		_barHangars->setMax(var);
+		_barHangars->setValue(var2);
+		vis = true;
+	}
+	else
+		vis = false;
 
-	if (Options::storageLimitsEnforced)
+	_numHangars->setVisible(vis);
+	_barHangars->setVisible(vis);
+
+	if (Options::storageLimitsEnforced == true)
 	{
 		var = _base->getAvailableContainment();
-		var2 = _base->getUsedContainment();
-		woststr8 << var2 << ":" << var;
-		_numContainment->setText(woststr8.str());
-		_barContainment->setMax(var);
-		_barContainment->setValue(var2);
+		if (var != 0)
+		{
+			var2 = _base->getUsedContainment();
+			woststr8 << var2 << ":" << var;
+			_numContainment->setText(woststr8.str());
+			_barContainment->setMax(var);
+			_barContainment->setValue(var2);
+			vis = true;
+		}
+		else
+			vis = false;
+
+		_numContainment->setVisible(vis);
+		_barContainment->setVisible(vis);
 	}
 
 
 	var = _base->getDefenseTotal();
-	woststr10 << var;
-	_numDefense->setText(woststr10.str());
-	_barDefense->setMax(var);
-	_barDefense->setValue(var);
+	if (var != 0)
+	{
+		woststr10 << var;
+		_numDefense->setText(woststr10.str());
+		_barDefense->setMax(var);
+		_barDefense->setValue(var);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numDefense->setVisible(vis);
+	_barDefense->setVisible(vis);
 
 	var = _base->getShortRangeTotal();
-	woststr11 << var;
-	_numShortRange->setText(woststr11.str());
-	_barShortRange->setMax(var);
-	_barShortRange->setValue(var);
+	if (var != 0)
+	{
+		woststr11 << var;
+		_numShortRange->setText(woststr11.str());
+		_barShortRange->setMax(var);
+		_barShortRange->setValue(var);
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numShortRange->setVisible(vis);
+	_barShortRange->setVisible(vis);
 
 	var = _base->getLongRangeTotal();
-	woststr12 << var;
-	_numLongRange->setText(woststr12.str());
-	_barLongRange->setMax(var);
-	_barLongRange->setValue(var);
-	if (_base->getHyperDetection() == true)
-		_barLongRange->setColor(Palette::blockOffset(4)+4);
+	if (var != 0)
+	{
+		woststr12 << var;
+		_numLongRange->setText(woststr12.str());
+		_barLongRange->setMax(var);
+		_barLongRange->setValue(var);
+		if (_base->getHyperDetection() == true)
+			_barLongRange->setColor(68); // lavender
+		else
+			_barLongRange->setColor(128); // blue
+		vis = true;
+	}
+	else
+		vis = false;
+
+	_numLongRange->setVisible(vis);
+	_barLongRange->setVisible(vis);
 
 
 	if (_psiResearched == true)
 	{
 		var = _base->getAvailablePsiLabs();
-		var2 = _base->getUsedPsiLabs();
-		woststr13 << var2 << ":" << var;
-		_numPsiLabs->setText(woststr13.str());
-		_barPsiLabs->setMax(var);
-		_barPsiLabs->setValue(var2);
+		if (var != 0)
+		{
+			var2 = _base->getUsedPsiLabs();
+			woststr13 << var2 << ":" << var;
+			_numPsiLabs->setText(woststr13.str());
+			_barPsiLabs->setMax(var);
+			_barPsiLabs->setValue(var2);
+			vis = true;
+		}
+		else
+			vis = false;
+
+		_numPsiLabs->setVisible(vis);
+		_barPsiLabs->setVisible(vis);
 	}
 }
 
@@ -568,7 +690,7 @@ void BaseInfoState::miniClick(Action*)
 }
 
 /**
- * Displays the name of the Base the mouse is over.
+ * Displays the name and region of the Base the mouse is over.
  * @param action - pointer to an Action
  */
 void BaseInfoState::viewMouseOver(Action*)
@@ -603,7 +725,7 @@ void BaseInfoState::viewMouseOver(Action*)
 }
 
 /**
- * Clears the hovered Base name.
+ * Clears the hovered Base name and region.
  * @param action - pointer to an Action
  */
 void BaseInfoState::viewMouseOut(Action*)
