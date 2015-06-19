@@ -793,7 +793,7 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
 
-		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // missile pathing finished
+		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // projectile pathing finished
 		{
 			if (_action.type == BA_THROW)
 			{

@@ -271,8 +271,8 @@ private:
 
 		/// Drops an item and affects it with gravity.
 		void dropItem(
-				const Position& position,
-				BattleItem* item,
+				const Position& pos,
+				BattleItem* const item,
 				bool newItem = false,
 				bool removeItem = false);
 

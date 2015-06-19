@@ -193,6 +193,7 @@ void ManufactureCostsState::init()
 									row,
 									213); // yellow
 		}
+		// note: Productions that require items show as yellow; those that don't show as blue.
 
 		profit = 0;
 

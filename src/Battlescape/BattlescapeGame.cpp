@@ -2947,30 +2947,31 @@ void BattlescapeGame::requestEndTurn()
 }
 
 /**
- * Drops an item to the floor and affects it with gravity.
- * @param position		- reference position to place the item
+ * Drops an item to the floor and affects it with gravity then recalculates FoV
+ * if it's a light-source.
+ * @param pos			- reference position to place the item
  * @param item			- pointer to the item
- * @param newItem		- true if this is a new item
- * @param removeItem	- true to remove the item from the owner
+ * @param newItem		- true if this is a new item (default false)
+ * @param removeItem	- true to remove the item from the owner (default false)
  */
 void BattlescapeGame::dropItem(
-		const Position& position,
-		BattleItem* item,
+		const Position& pos,
+		BattleItem* const item,
 		bool newItem,
 		bool removeItem)
 {
-	if (_battleSave->getTile(position) == NULL	// don't spawn anything outside of bounds
+	if (_battleSave->getTile(pos) == NULL		// don't spawn anything outside of bounds
 		|| item->getRules()->isFixed() == true)	// don't ever drop fixed items
 	{
 		return;
 	}
 
-	_battleSave->getTile(position)->addItem(
-								item,
-								getRuleset()->getInventory("STR_GROUND"));
+	_battleSave->getTile(pos)->addItem(
+									item,
+									getRuleset()->getInventory("STR_GROUND"));
 
 	if (item->getUnit() != NULL)
-		item->getUnit()->setPosition(position);
+		item->getUnit()->setPosition(pos);
 
 	if (newItem == true)
 		_battleSave->getItems()->push_back(item);
@@ -2985,12 +2986,12 @@ void BattlescapeGame::dropItem(
 		item->setOwner(NULL);
 	}
 
-	getTileEngine()->applyGravity(_battleSave->getTile(position));
+	getTileEngine()->applyGravity(_battleSave->getTile(pos));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
 		getTileEngine()->calculateTerrainLighting();
-		getTileEngine()->calculateFOV(position);
+		getTileEngine()->recalculateFOV();
 	}
 }
 

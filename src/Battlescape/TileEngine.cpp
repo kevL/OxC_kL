@@ -2320,16 +2320,16 @@ BattleUnit* TileEngine::hit(
 
 /**
  * Handles explosions.
- * kL_note: called from ExplosionBState
- *
- * HE, smoke and fire explodes in a circular pattern on 1 level only.
+ * @note Called from ExplosionBState.
+ * @note
+ * HE/ smoke/ fire explodes in a circular pattern on 1 level only.
  * HE however damages floor tiles of the above level. Not the units on it.
- * HE destroys an object if its armor is lower than the explosive power,
- * then its HE blockage is applied for further propagation.
+ * HE destroys an object if its power is higher than the object's armor
+ * then HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
  * @param voxelTarget	- reference to the center of explosion in voxelspace
  * @param power			- power of explosion
- * @param dType			- damage type of explosion (enum ItemDamageType)
+ * @param dType			- damage type of explosion (RuleItem.h)
  * @param maxRadius		- maximum radius of explosion
  * @param attacker		- pointer to a unit that caused explosion (default NULL)
  * @param grenade		- true if explosion is caused by a grenade for throwing XP (default false)
@@ -2897,7 +2897,7 @@ void TileEngine::explode(
 							if (fireTile != NULL) // safety.
 							{
 								const int firePow = static_cast<int>(std::ceil(
-												   (static_cast<double>(_powerE) / static_cast<double>(power)) * 10.));
+												   (static_cast<double>(_powerE) / static_cast<double>(power)) * 8.));
 								fireTile->addFire(firePow + fireTile->getFuel() + 3 / 4);
 								fireTile->addSmoke(std::max(
 														firePow + fireTile->getFuel(),

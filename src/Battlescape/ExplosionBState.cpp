@@ -502,7 +502,7 @@ void ExplosionBState::explode() // private.
 							_item->getRules()->getExplosionRadius(),
 							_unit,
 							_item->getRules()->getBattleType() == BT_GRENADE
-								|| _item->getRules()->getBattleType() == BT_PROXYGRENADE);
+							|| _item->getRules()->getBattleType() == BT_PROXYGRENADE);
 
 			tileEngine->setProjectileDirection(-1);
 		}

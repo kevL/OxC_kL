@@ -446,7 +446,7 @@ int RuleItem::getHitAnimation() const
 }
 
 /**
- * Gets the item's damage power.
+ * Gets the item's damage-power or light-power if its BattleType is BT_FLARE.
  * @return, the power
  */
 int RuleItem::getPower() const
@@ -697,9 +697,9 @@ int RuleItem::getStunRecovery() const
 
 /**
  * Returns the item's max explosion radius.
- * Small explosions don't have a restriction. Larger explosions are restricted
- * using a formula, with a maximum of radius 10 no matter how large the explosion.
- * kL_note: nah...
+ * @note Small explosions don't have a restriction. Larger explosions are
+ * restricted using a formula with a maximum of radius 10 no matter how large
+ * the explosion. kL_note: nah...
  * @return, the radius (-1 if not explosive)
  */
 int RuleItem::getExplosionRadius() const
@@ -721,7 +721,7 @@ int RuleItem::getExplosionRadius() const
 
 /**
  * Returns the item's recovery points.
- * This is used during the battlescape debriefing score calculation.
+ * @note This is used during the battlescape debriefing score calculation.
  * @return, the recovery points
  */
 int RuleItem::getRecoveryPoints() const
@@ -731,7 +731,7 @@ int RuleItem::getRecoveryPoints() const
 
 /**
  * Returns the item's armor.
- * The item is destroyed when an explosion power bigger than its armor hits it.
+ * @note The item is destroyed when an explosion power bigger than its armor hits it.
  * @return, the armor
  */
 int RuleItem::getArmor() const
