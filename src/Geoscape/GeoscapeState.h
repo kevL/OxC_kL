@@ -109,13 +109,13 @@ private:
 //		* _bg,
 //		* _sidebar,
 		* _sideBarBlack,
-		* _srfSpace,
-		* _srfDay1,
-		* _srfDay2,
-		* _srfMonth1,
-		* _srfMonth2,
-		* _srfYear1,
-		* _srfYear2;
+		* _srfSpace;
+//		* _srfDay1,
+//		* _srfDay2,
+//		* _srfMonth1,
+//		* _srfMonth2,
+//		* _srfYear1,
+//		* _srfYear2;
 	Text
 		* _txtDebug,
 		* _txtFunds,
@@ -124,13 +124,13 @@ private:
 		* _txtHourSep,
 		* _txtMin,
 		* _txtSec,
-		* _ufoDetected;
+		* _ufoDetected,
 //		* _txtMinSep,
 //		* _txtDate;
 //		* _txtWeekday,
-//		* _txtDay,
-//		* _txtMonth,
-//		* _txtYear;
+		* _txtDay,
+		* _txtMonth,
+		* _txtYear;
 	TextButton
 		* _sideTop,
 		* _sideBottom;
@@ -181,6 +181,8 @@ private:
 
 		/// Displays the game time/date. (+Funds)
 		void updateTimeDisplay();
+		/// Converts the date to a month string.
+		std::wstring convertDateToMonth(int date);
 		/// Advances the game timer.
 		void timeAdvance();
 		/// Trigger whenever 5 seconds pass.

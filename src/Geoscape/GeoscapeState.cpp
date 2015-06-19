@@ -505,17 +505,22 @@ GeoscapeState::GeoscapeState()
 	_txtMonth	= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
 	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1); */
 //	_txtWeekday	= new Text(59,  8, screenWidth - 61, screenHeight / 2 - 13);
+
 //	_txtDay		= new Text(12, 16, screenWidth - 61, screenHeight / 2 - 5);
 //	_txtMonth	= new Text(21, 16, screenWidth - 49, screenHeight / 2 - 5);
 //	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
 //	_txtDate	= new Text(60,  8, screenWidth - 62, screenHeight / 2 - 5);
 
-	_srfDay1		= new Surface(3, 8, screenWidth - 45, screenHeight / 2 - 3);
-	_srfDay2		= new Surface(3, 8, screenWidth - 41, screenHeight / 2 - 3);
-	_srfMonth1		= new Surface(3, 8, screenWidth - 34, screenHeight / 2 - 3);
-	_srfMonth2		= new Surface(3, 8, screenWidth - 30, screenHeight / 2 - 3);
-	_srfYear1		= new Surface(3, 8, screenWidth - 23, screenHeight / 2 - 3);
-	_srfYear2		= new Surface(3, 8, screenWidth - 19, screenHeight / 2 - 3);
+	_txtDay		= new Text(11, 9, screenWidth - 57, screenHeight / 2 - 5);
+	_txtMonth	= new Text(17, 9, screenWidth - 45, screenHeight / 2 - 5);
+	_txtYear	= new Text(21, 9, screenWidth - 27, screenHeight / 2 - 5);
+
+//	_srfDay1		= new Surface(3, 8, screenWidth - 45, screenHeight / 2 - 3);
+//	_srfDay2		= new Surface(3, 8, screenWidth - 41, screenHeight / 2 - 3);
+//	_srfMonth1		= new Surface(3, 8, screenWidth - 34, screenHeight / 2 - 3);
+//	_srfMonth2		= new Surface(3, 8, screenWidth - 30, screenHeight / 2 - 3);
+//	_srfYear1		= new Surface(3, 8, screenWidth - 23, screenHeight / 2 - 3);
+//	_srfYear2		= new Surface(3, 8, screenWidth - 19, screenHeight / 2 - 3);
 
 	_txtFunds = new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110);
 	if (Options::showFundsOnGeoscape == true)
@@ -609,16 +614,21 @@ GeoscapeState::GeoscapeState()
 //	add(_txtMinSep,		"text",		"geoscape");
 	add(_txtSec);		//, "text", "geoscape");
 //	add(_txtDate,		"text",		"geoscape");
-	add(_srfDay1);
-	add(_srfDay2);
-	add(_srfMonth1);
-	add(_srfMonth2);
-	add(_srfYear1);
-	add(_srfYear2);
+
+//	add(_srfDay1);
+//	add(_srfDay2);
+//	add(_srfMonth1);
+//	add(_srfMonth2);
+//	add(_srfYear1);
+//	add(_srfYear2);
 //	add(_txtWeekday,	"text",		"geoscape");
+
 //	add(_txtDay,		"text",		"geoscape");
 //	add(_txtMonth,		"text",		"geoscape");
 //	add(_txtYear,		"text",		"geoscape");
+	add(_txtDay);
+	add(_txtMonth);
+	add(_txtYear);
 
 	add(_txtDebug,		"text",		"geoscape");
 
@@ -953,16 +963,16 @@ GeoscapeState::GeoscapeState()
 //	_txtWeekday->setAlign(ALIGN_CENTER);
 
 //	_txtDay->setBig();
-//	_txtDay->setColor(Palette::blockOffset(15)+2);
-//	_txtDay->setAlign(ALIGN_CENTER);
+	_txtDay->setColor(Palette::blockOffset(15)+2);
+	_txtDay->setAlign(ALIGN_RIGHT);
 
 //	_txtMonth->setBig();
-//	_txtMonth->setColor(Palette::blockOffset(15)+2);
-//	_txtMonth->setAlign(ALIGN_CENTER);
+	_txtMonth->setColor(Palette::blockOffset(15)+2);
+	_txtMonth->setAlign(ALIGN_CENTER);
 
 //	_txtYear->setBig();
-//	_txtYear->setColor(Palette::blockOffset(15)+2);
-//	_txtYear->setAlign(ALIGN_CENTER);
+	_txtYear->setColor(Palette::blockOffset(15)+2);
+	_txtYear->setAlign(ALIGN_LEFT);
 
 	_gameTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
 	_gameTimer->start();
@@ -1328,7 +1338,7 @@ void GeoscapeState::updateTimeDisplay()
 {
 	_txtFunds->setText(Text::formatFunding(_gameSave->getFunds()));
 
-	if (_gameSave->getMonthsPassed() != -1) // also update Player's current score
+	if (_gameSave->getMonthsPassed() != -1) // update Player's current score
 	{
 		const size_t ent = _gameSave->getFundsList().size() - 1; // use fundsList to determine which entries in other vectors to use for the current month.
 
@@ -1362,6 +1372,26 @@ void GeoscapeState::updateTimeDisplay()
 	_txtHour->setText(woststr2.str());
 
 	int date = _gameSave->getTime()->getDay();
+	if (_day != date)
+	{
+		_day = date;
+		_txtDay->setText(Text::formatNumber(_day));
+
+		date = _gameSave->getTime()->getMonth();
+		if (_month != date)
+		{
+			_month = date;
+			_txtMonth->setText(convertDateToMonth(_month));
+
+			date = _gameSave->getTime()->getYear();
+			if (_year != date)
+			{
+				_year = date;
+				_txtYear->setText(Text::formatNumber(_year));
+			}
+		}
+	}
+/*	int date = _gameSave->getTime()->getDay();
 	if (_day != date)
 	{
 		_srfDay1->clear();
@@ -1417,7 +1447,32 @@ void GeoscapeState::updateTimeDisplay()
 				_srfYear2->offset(Palette::blockOffset(15)+3);
 			}
 		}
+	} */
+}
+
+/**
+ * Converts the date to a month string.
+ * @param date - the date
+ */
+std::wstring GeoscapeState::convertDateToMonth(int date)
+{
+	switch (date)
+	{
+		case  1: return L"jan";
+		case  2: return L"feb";
+		case  3: return L"mar";
+		case  4: return L"apr";
+		case  5: return L"may";
+		case  6: return L"jun";
+		case  7: return L"jul";
+		case  8: return L"aug";
+		case  9: return L"sep";
+		case 10: return L"oct";
+		case 11: return L"nov";
+		case 12: return L"dec";
 	}
+
+	return L"error";
 }
 
 /**

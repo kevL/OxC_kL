@@ -302,9 +302,9 @@ UnitInfoState::UnitInfoState(
 	_numOrder->setColor(1);
 	_numOrder->setVisible(false);
 
+	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 	_txtTimeUnits->setColor(color);
 	_txtTimeUnits->setHighContrast();
-	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
 	_numTimeUnits->setColor(color2);
 	_numTimeUnits->setHighContrast();
@@ -312,9 +312,9 @@ UnitInfoState::UnitInfoState(
 	_barTimeUnits->setScale();
 
 
+	_txtEnergy->setText(tr("STR_ENERGY"));
 	_txtEnergy->setColor(color);
 	_txtEnergy->setHighContrast();
-	_txtEnergy->setText(tr("STR_ENERGY"));
 
 	_numEnergy->setColor(color2);
 	_numEnergy->setHighContrast();
@@ -322,9 +322,9 @@ UnitInfoState::UnitInfoState(
 	_barEnergy->setScale();
 
 
+	_txtHealth->setText(tr("STR_HEALTH"));
 	_txtHealth->setColor(color);
 	_txtHealth->setHighContrast();
-	_txtHealth->setText(tr("STR_HEALTH"));
 
 	_numHealth->setColor(color2);
 	_numHealth->setHighContrast();
@@ -332,9 +332,9 @@ UnitInfoState::UnitInfoState(
 	_barHealth->setScale();
 
 
+	_txtFatalWounds->setText(tr("STR_FATAL_WOUNDS"));
 	_txtFatalWounds->setColor(color);
 	_txtFatalWounds->setHighContrast();
-	_txtFatalWounds->setText(tr("STR_FATAL_WOUNDS"));
 
 	_numFatalWounds->setColor(color2);
 	_numFatalWounds->setHighContrast();
@@ -342,9 +342,9 @@ UnitInfoState::UnitInfoState(
 	_barFatalWounds->setScale();
 
 
+	_txtBravery->setText(tr("STR_BRAVERY"));
 	_txtBravery->setColor(color);
 	_txtBravery->setHighContrast();
-	_txtBravery->setText(tr("STR_BRAVERY"));
 
 	_numBravery->setColor(color2);
 	_numBravery->setHighContrast();
@@ -352,9 +352,9 @@ UnitInfoState::UnitInfoState(
 	_barBravery->setScale();
 
 
+	_txtMorale->setText(tr("STR_MORALE"));
 	_txtMorale->setColor(color);
 	_txtMorale->setHighContrast();
-	_txtMorale->setText(tr("STR_MORALE"));
 
 	_numMorale->setColor(color2);
 	_numMorale->setHighContrast();
@@ -362,9 +362,9 @@ UnitInfoState::UnitInfoState(
 	_barMorale->setScale();
 
 
+	_txtReactions->setText(tr("STR_REACTIONS"));
 	_txtReactions->setColor(color);
 	_txtReactions->setHighContrast();
-	_txtReactions->setText(tr("STR_REACTIONS"));
 
 	_numReactions->setColor(color2);
 	_numReactions->setHighContrast();
@@ -372,9 +372,9 @@ UnitInfoState::UnitInfoState(
 	_barReactions->setScale();
 
 
+	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 	_txtFiring->setColor(color);
 	_txtFiring->setHighContrast();
-	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
 	_numFiring->setColor(color2);
 	_numFiring->setHighContrast();
@@ -382,9 +382,9 @@ UnitInfoState::UnitInfoState(
 	_barFiring->setScale();
 
 
+	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 	_txtThrowing->setColor(color);
 	_txtThrowing->setHighContrast();
-	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
 	_numThrowing->setColor(color2);
 	_numThrowing->setHighContrast();
@@ -392,9 +392,9 @@ UnitInfoState::UnitInfoState(
 	_barThrowing->setScale();
 
 
+	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
 	_txtMelee->setColor(color);
 	_txtMelee->setHighContrast();
-	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
 
 	_numMelee->setColor(color2);
 	_numMelee->setHighContrast();
@@ -402,9 +402,9 @@ UnitInfoState::UnitInfoState(
 	_barMelee->setScale();
 
 
+	_txtStrength->setText(tr("STR_STRENGTH"));
 	_txtStrength->setColor(color);
 	_txtStrength->setHighContrast();
-	_txtStrength->setText(tr("STR_STRENGTH"));
 
 	_numStrength->setColor(color2);
 	_numStrength->setHighContrast();
@@ -412,9 +412,9 @@ UnitInfoState::UnitInfoState(
 	_barStrength->setScale();
 
 
+	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 	_txtPsiStrength->setColor(color);
 	_txtPsiStrength->setHighContrast();
-	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
 	_numPsiStrength->setColor(color2);
 	_numPsiStrength->setHighContrast();
@@ -422,9 +422,9 @@ UnitInfoState::UnitInfoState(
 	_barPsiStrength->setScale();
 
 
+	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 	_txtPsiSkill->setColor(color);
 	_txtPsiSkill->setHighContrast();
-	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 
 	_numPsiSkill->setColor(color2);
 	_numPsiSkill->setHighContrast();
@@ -432,9 +432,9 @@ UnitInfoState::UnitInfoState(
 	_barPsiSkill->setScale();
 
 
+	_txtFrontArmor->setText(tr("STR_FRONT_ARMOR_UC"));
 	_txtFrontArmor->setColor(color);
 	_txtFrontArmor->setHighContrast();
-	_txtFrontArmor->setText(tr("STR_FRONT_ARMOR_UC"));
 
 	_numFrontArmor->setColor(color2);
 	_numFrontArmor->setHighContrast();
@@ -442,9 +442,9 @@ UnitInfoState::UnitInfoState(
 	_barFrontArmor->setScale();
 
 
+	_txtLeftArmor->setText(tr("STR_LEFT_ARMOR_UC"));
 	_txtLeftArmor->setColor(color);
 	_txtLeftArmor->setHighContrast();
-	_txtLeftArmor->setText(tr("STR_LEFT_ARMOR_UC"));
 
 	_numLeftArmor->setColor(color2);
 	_numLeftArmor->setHighContrast();
@@ -452,9 +452,9 @@ UnitInfoState::UnitInfoState(
 	_barLeftArmor->setScale();
 
 
+	_txtRightArmor->setText(tr("STR_RIGHT_ARMOR_UC"));
 	_txtRightArmor->setColor(color);
 	_txtRightArmor->setHighContrast();
-	_txtRightArmor->setText(tr("STR_RIGHT_ARMOR_UC"));
 
 	_numRightArmor->setColor(color2);
 	_numRightArmor->setHighContrast();
@@ -462,9 +462,9 @@ UnitInfoState::UnitInfoState(
 	_barRightArmor->setScale();
 
 
+	_txtRearArmor->setText(tr("STR_REAR_ARMOR_UC"));
 	_txtRearArmor->setColor(color);
 	_txtRearArmor->setHighContrast();
-	_txtRearArmor->setText(tr("STR_REAR_ARMOR_UC"));
 
 	_numRearArmor->setColor(color2);
 	_numRearArmor->setHighContrast();
@@ -472,9 +472,9 @@ UnitInfoState::UnitInfoState(
 	_barRearArmor->setScale();
 
 
+	_txtUnderArmor->setText(tr("STR_UNDER_ARMOR_UC"));
 	_txtUnderArmor->setColor(color);
 	_txtUnderArmor->setHighContrast();
-	_txtUnderArmor->setText(tr("STR_UNDER_ARMOR_UC"));
 
 	_numUnderArmor->setColor(color2);
 	_numUnderArmor->setHighContrast();
@@ -521,7 +521,7 @@ void UnitInfoState::init()
 	if (soldier != NULL)
 	{
 		woststr << tr(_unit->getRankString());
-		woststr << " ";
+		woststr << L" ";
 
 		Surface* gender = NULL;
 		if (soldier->getGender() == GENDER_MALE)
