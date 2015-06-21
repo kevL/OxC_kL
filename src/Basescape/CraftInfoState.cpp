@@ -80,8 +80,10 @@ CraftInfoState::CraftInfoState(
 	_txtBaseLabel	= new Text(80, 9,  16, 10);
 	_txtStatus		= new Text(80, 9, 224, 10);
 
+	_txtRadar		= new Text(80, 9, 120, 28);
+	_txtKills		= new Text(60, 9, 130, 38);
+
 	_txtFuel		= new Text(80, 17,  16, 28);
-	_txtRadar		= new Text(80,  9, 120, 28);
 	_txtDamage		= new Text(80, 17, 226, 28);
 
 	_btnW1			= new TextButton(24, 32,  16, 48);
@@ -90,8 +92,6 @@ CraftInfoState::CraftInfoState(
 	_txtW2Name		= new Text(78,  9, 204, 48);
 	_txtW1Ammo		= new Text(60, 25,  46, 64);
 	_txtW2Ammo		= new Text(60, 25, 204, 64);
-
-	_txtKills		= new Text(60, 9, 246, 83);
 
 	_btnCrew		= new TextButton( 64, 16, 16,  96);
 	_btnEquip		= new TextButton( 64, 16, 16, 120);
@@ -114,8 +114,9 @@ CraftInfoState::CraftInfoState(
 	add(_edtCraft,		"text1",	"craftInfo");
 	add(_txtBaseLabel,	"text1",	"craftInfo");
 	add(_txtStatus,		"text2",	"craftInfo");
-	add(_txtFuel,		"text2",	"craftInfo");
 	add(_txtRadar,		"text2",	"craftInfo");
+	add(_txtKills,		"text2",	"craftInfo");
+	add(_txtFuel,		"text2",	"craftInfo");
 	add(_txtDamage,		"text2",	"craftInfo");
 	add(_btnW1,			"button",	"craftInfo");
 	add(_btnW2,			"button",	"craftInfo");
@@ -123,7 +124,6 @@ CraftInfoState::CraftInfoState(
 	add(_txtW2Name,		"text2",	"craftInfo");
 	add(_txtW1Ammo,		"text2",	"craftInfo");
 	add(_txtW2Ammo,		"text2",	"craftInfo");
-	add(_txtKills,		"text2",	"craftInfo");
 	add(_btnCrew,		"button",	"craftInfo");
 	add(_btnEquip,		"button",	"craftInfo");
 	add(_btnArmor,		"button",	"craftInfo");
@@ -147,7 +147,16 @@ CraftInfoState::CraftInfoState(
 
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 	_txtStatus->setAlign(ALIGN_RIGHT);
+
 	_txtRadar->setAlign(ALIGN_CENTER);
+
+	if (_craft->getRules()->getWeapons() != 0
+		&& _craft->getKills() != 0)
+	{
+		_txtKills->setText(tr("STR_KILLS_LC_").arg(_craft->getKills()));
+		_txtKills->setAlign(ALIGN_CENTER);
+	}
+
 	_txtDamage->setAlign(ALIGN_RIGHT);
 
 	_btnW1->setText(L"1");
@@ -155,12 +164,6 @@ CraftInfoState::CraftInfoState(
 
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
-
-	if (_craft->getRules()->getWeapons() != 0)
-	{
-		_txtKills->setText(tr("STR_KILLS_LC_").arg(_craft->getKills()));
-		_txtKills->setAlign(ALIGN_RIGHT);
-	}
 
 	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);

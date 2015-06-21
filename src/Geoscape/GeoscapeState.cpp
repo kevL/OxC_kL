@@ -479,17 +479,8 @@ GeoscapeState::GeoscapeState()
 //										y - 12 - (static_cast<int>(i) * 13));
 	}
 
-/*	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
-	_txtHourSep		= new Text(4, 17, screenWidth - 41, screenHeight / 2 - 26);
-	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
-	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
-	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
-
 	_isfTime	= new InteractiveSurface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
 
-/*	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
-	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
-	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26); */
 //	_txtHour	= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
 //	_txtHourSep	= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
 //	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
@@ -500,12 +491,7 @@ GeoscapeState::GeoscapeState()
 	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 22);
 	_txtSec		= new Text( 6,  9, screenWidth -  8, screenHeight / 2 - 26);
 
-/*	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
-	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
-	_txtMonth	= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
-	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1); */
 //	_txtWeekday	= new Text(59,  8, screenWidth - 61, screenHeight / 2 - 13);
-
 //	_txtDay		= new Text(12, 16, screenWidth - 61, screenHeight / 2 - 5);
 //	_txtMonth	= new Text(21, 16, screenWidth - 49, screenHeight / 2 - 5);
 //	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
@@ -529,7 +515,6 @@ GeoscapeState::GeoscapeState()
 		_txtHour->		setY(_txtHour->		getY() + 6);
 		_txtHourSep->	setY(_txtHourSep->	getY() + 6);
 		_txtMin->		setY(_txtMin->		getY() + 6);
-//		_txtMinSep->	setY(_txtMinSep->	getY() + 6);
 //		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
 //		_txtSec->		setX(_txtSec->		getX() - 10);
 	}
@@ -551,6 +536,7 @@ GeoscapeState::GeoscapeState()
 
 //	add(_bg);
 //	add(_sidebar);
+
 	add(_srfSpace);
 	add(_sideBarBlack);
 	add(_globe);
@@ -571,8 +557,7 @@ GeoscapeState::GeoscapeState()
 	add(_btn1Hour,		"button", "geoscape");
 	add(_btn1Day,		"button", "geoscape");
 
-/*kL
-	add(_btnRotateLeft);
+/*	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
 	add(_btnRotateDown);
@@ -632,12 +617,11 @@ GeoscapeState::GeoscapeState()
 
 	add(_txtDebug,		"text",		"geoscape");
 
-	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);
-//	_game->getResourcePack()->getSurface("Antares_BG")->blit(_srfSpace);
-
+//	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 //	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);
 //	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);
-//	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
+	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);
+
 
 /*	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
@@ -650,8 +634,7 @@ GeoscapeState::GeoscapeState()
 						static_cast<Sint16>(_sideBarBlack->getWidth()),
 						static_cast<Sint16>(_sideBarBlack->getHeight()),
 						15); // black
-/*kL
-	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
+/*	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 //	_btnIntercept->setColor(Palette::blockOffset(15)+6);
 //	_btnIntercept->setTextColor(Palette::blockOffset(15)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
@@ -934,24 +917,21 @@ GeoscapeState::GeoscapeState()
 
 	_txtScore->setAlign(ALIGN_CENTER);
 
-//	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
-
+//	if (Options::showFundsOnGeoscape == false) else _txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+2);
 	_txtHour->setAlign(ALIGN_RIGHT);
 
-//	if (Options::showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
+//	if (Options::showFundsOnGeoscape == false) _txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+2);
 	_txtHourSep->setText(L":");
 
-//	if (Options::showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
+//	if (Options::showFundsOnGeoscape == false) else _txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+2);
 
-//	if (Options::showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
+//	if (Options::showFundsOnGeoscape == false) _txtMinSep->setBig();
 //	_txtMinSep->setColor(Palette::blockOffset(15)+2);
 //	_txtMinSep->setText(L".");
 
-//	_txtSec->setSmall();
-//	_txtSec->setBig();
 	_txtSec->setColor(Palette::blockOffset(15)+2);
 	_txtSec->setText(L".");
 
@@ -972,7 +952,7 @@ GeoscapeState::GeoscapeState()
 
 //	_txtYear->setBig();
 	_txtYear->setColor(Palette::blockOffset(15)+2);
-	_txtYear->setAlign(ALIGN_LEFT);
+//	_txtYear->setAlign(ALIGN_LEFT);
 
 	_gameTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
 	_gameTimer->start();

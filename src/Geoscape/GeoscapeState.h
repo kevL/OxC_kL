@@ -120,17 +120,18 @@ private:
 		* _txtDebug,
 		* _txtFunds,
 		* _txtScore,
+
 		* _txtHour,
 		* _txtHourSep,
 		* _txtMin,
 		* _txtSec,
-		* _ufoDetected,
+		* _txtDay,
+		* _txtMonth,
+		* _txtYear,
 //		* _txtMinSep,
 //		* _txtDate;
 //		* _txtWeekday,
-		* _txtDay,
-		* _txtMonth,
-		* _txtYear;
+		* _ufoDetected;
 	TextButton
 		* _sideTop,
 		* _sideBottom;

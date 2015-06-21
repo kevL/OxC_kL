@@ -63,17 +63,18 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_txtBaseLabel	= new Text( 80,  9, 224, 8);
 
 	_txtItem		= new Text(100, 9, 16, 25);
+	_txtFreeStore	= new Text(100, 9, 16, 33);
 
-	_txtBase_0		= new Text(23, 9, 116, 25);
-	_txtBase_1		= new Text(23, 9, 139, 25);
-	_txtBase_2		= new Text(23, 9, 162, 25);
-	_txtBase_3		= new Text(23, 9, 185, 25);
-	_txtBase_4		= new Text(23, 9, 208, 25);
-	_txtBase_5		= new Text(23, 9, 231, 25);
-	_txtBase_6		= new Text(23, 9, 254, 25);
-	_txtBase_7		= new Text(23, 9, 277, 25);
+	_txtBase_0		= new Text(23, 17, 116, 25);
+	_txtBase_1		= new Text(23, 17, 139, 25);
+	_txtBase_2		= new Text(23, 17, 162, 25);
+	_txtBase_3		= new Text(23, 17, 185, 25);
+	_txtBase_4		= new Text(23, 17, 208, 25);
+	_txtBase_5		= new Text(23, 17, 231, 25);
+	_txtBase_6		= new Text(23, 17, 254, 25);
+	_txtBase_7		= new Text(23, 17, 277, 25);
 
-	_lstMatrix		= new TextList(285, 137, 16, 36);
+	_lstMatrix		= new TextList(285, 129, 16, 44);
 
 	_btnOk			= new TextButton(268, 16, 26, 177);
 
@@ -83,6 +84,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	add(_txtTitle);
 	add(_txtBaseLabel);
 	add(_txtItem);
+	add(_txtFreeStore);
 	add(_txtBase_0);
 	add(_txtBase_1);
 	add(_txtBase_2);
@@ -111,6 +113,9 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
+					SDLK_KP_ENTER);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& StoresMatrixState::btnOkClick,
 					Options::keyCancel);
 
 	_txtTitle->setText(tr("STR_MATRIX"));
@@ -123,6 +128,9 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	_txtItem->setText(tr("STR_ITEM"));
 	_txtItem->setColor(color2);
+
+	_txtFreeStore->setText(tr("STR_FREESTORE"));
+	_txtFreeStore->setColor(color2);
 
 	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
 	_lstMatrix->setColor(color);
@@ -145,31 +153,26 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			qty[i] = base->getTotalSoldiers();
 
 			wst = base->getName().substr(0,4);
+			int freeSpace = static_cast<int>(static_cast<double>(base->getAvailableStores()) - base->getUsedStores() + 0.5);
+
+			std::wostringstream woststr;
+			woststr	<< wst
+					<< L"\n"
+					<< freeSpace;
+//					<< std::fixed
+//					<< std::setprecision(1)
+//					<< static_cast<double>(base->getAvailableStores()) - base->getUsedStores() + 0.05;
+
 			switch (i)
 			{
-				case 0:
-					_txtBase_0->setText(wst);
-				break;
-				case 1:
-					_txtBase_1->setText(wst);
-				break;
-				case 2:
-					_txtBase_2->setText(wst);
-				break;
-				case 3:
-					_txtBase_3->setText(wst);
-				break;
-				case 4:
-					_txtBase_4->setText(wst);
-				break;
-				case 5:
-					_txtBase_5->setText(wst);
-				break;
-				case 6:
-					_txtBase_6->setText(wst);
-				break;
-				case 7:
-					_txtBase_7->setText(wst);
+				case 0: _txtBase_0->setText(woststr.str().c_str()); break;
+				case 1: _txtBase_1->setText(woststr.str().c_str()); break;
+				case 2: _txtBase_2->setText(woststr.str().c_str()); break;
+				case 3: _txtBase_3->setText(woststr.str().c_str()); break;
+				case 4: _txtBase_4->setText(woststr.str().c_str()); break;
+				case 5: _txtBase_5->setText(woststr.str().c_str()); break;
+				case 6: _txtBase_6->setText(woststr.str().c_str()); break;
+				case 7: _txtBase_7->setText(woststr.str().c_str());
 			}
 		}
 		else

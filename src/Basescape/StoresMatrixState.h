@@ -56,6 +56,7 @@ private:
 		* _txtBase_6,
 		* _txtBase_7,
 		* _txtItem,
+		* _txtFreeStore,
 		* _txtTitle;
 	TextButton* _btnOk;
 	TextList* _lstMatrix;

@@ -5939,15 +5939,16 @@ extraStrings:
       STR_INTERROGATION_: "Interrogation> {ALT}{0}"
       STR_SORT: "sort"
       STR_KILLS_LC_: "ace> {ALT}{0}"
-      STR_COSTS_UC: "PRODUCTION COSTS"
+      STR_COSTS_UC: "ECONOMIC ASPECT"
       STR_SPACE_LC: ""
       STR_HOURS_PER: "hrs"
       STR_REQUIRED_LC: "Items required"
-      STR_PRODUCTION_COSTS: "Production Costs"
+      STR_PRODUCTION_COSTS: "economic aspect"
       STR_EQUIP_LAYOUT_SAVED: "Soldier Layout Saved"
       STR_EQUIP_LAYOUTS_SAVED: "All Layouts Saved"
       STR_PAUSE: "pause"
       STR_PSILABS: "PsiLabs"
+      STR_FREESTORE: "free stores"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
