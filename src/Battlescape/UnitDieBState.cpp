@@ -157,11 +157,10 @@ void UnitDieBState::think()
 		{
 			// This was also done in cTor, but terrain Explosions can/do change camera before the turn/spin & collapse happen.
 			Camera* const deathCam = _parent->getMap()->getCamera();
-			if (deathCam->isOnScreen(_unit->getPosition()) == false
-				|| _unit->getPosition().z != deathCam->getViewLevel())
-			{
+			if (deathCam->isOnScreen(_unit->getPosition()) == false)
 				deathCam->centerOnPosition(_unit->getPosition());
-			}
+			else if (_unit->getPosition().z != deathCam->getViewLevel())
+				deathCam->setViewLevel(_unit->getPosition().z);
 		}
 	}
 

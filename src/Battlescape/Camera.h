@@ -119,6 +119,7 @@ private:
 		void jumpXY(
 				int x,
 				int y);
+
 		/// Moves map layer up.
 		void up();
 		/// Move map layer down.
@@ -159,7 +160,7 @@ private:
 		/// Gets the map x/y screen offset.
 		Position getMapOffset();
 		/// Sets the map x/y screen offset.
-		void setMapOffset(Position pos);
+		void setMapOffset(const Position& pos);
 
 		/// Toggles showing all map layers.
 		unsigned int toggleShowAllLayers();

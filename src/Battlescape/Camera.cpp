@@ -101,7 +101,7 @@ void Camera::setScrollTimer(
  * @param minValue	- the minimum value
  * @param maxValue	- the maximum value
  */
-void Camera::minMaxInt(
+void Camera::minMaxInt( // private.
 		int* value,
 		const int minValue,
 		const int maxValue) const
@@ -651,7 +651,7 @@ Position Camera::getMapOffset()
  * Sets the map offset.
  * @param pos - the map offset Position
  */
-void Camera::setMapOffset(Position pos)
+void Camera::setMapOffset(const Position& pos)
 {
 	_mapOffset = pos;
 }

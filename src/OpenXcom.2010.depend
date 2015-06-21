@@ -4661,7 +4661,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1433650444 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1434778980 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -5538,7 +5538,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1433999257 f:\git\openxcom\src\battlescape\camera.h
+1434855187 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1433862595 f:\git\openxcom\src\battlescape\civilianbaistate.h
