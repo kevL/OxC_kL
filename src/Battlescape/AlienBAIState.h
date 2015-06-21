@@ -159,7 +159,7 @@ protected:
 		/// Exits the state.
 //		void exit();
 		/// Runs state functionality every AI cycle.
-		void think(BattleAction* const action);
+		void think(BattleAction* action);
 
 		/// Sets the "unit was hit" flag true.
 //		void setWasHitBy(BattleUnit *attacker);

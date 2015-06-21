@@ -177,7 +177,7 @@ YAML::Node AlienBAIState::save() const
  * Runs any code the state needs to keep updating every AI cycle.
  * @param action - pointer to AI BattleAction to execute
  */
-void AlienBAIState::think(BattleAction* const action)
+void AlienBAIState::think(BattleAction* action)
 {
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId() << " pos " << _unit->getPosition();

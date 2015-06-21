@@ -112,13 +112,15 @@ BattleUnit::BattleUnit(
 		_hidingForTurn(false),
 //		_respawn(false),
 		_battleOrder(0),
+		_revived(false),
 		_stopShot(false),
 		_dashing(false),
 		_takenExpl(false),
 		_takenFire(false),
 		_diedByFire(false),
 		_turnDir(0),
-		_revived(false),
+		_mcStrength(0),
+		_mcSkill(0),
 
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -292,6 +294,8 @@ BattleUnit::BattleUnit(
 //		_gender(GENDER_MALE),
 		_diedByFire(false),
 		_turnDir(0),
+		_mcStrength(0),
+		_mcSkill(0),
 
 		_statistics(NULL), // Soldier Diary
 
@@ -4494,6 +4498,29 @@ void BattleUnit::setRevived(bool revived)
 std::list<BattleUnit*>* BattleUnit::getUnitSpotters()
 {
 	return &_unitSpotters;
+}
+
+/**
+ * Sets or Gets the Psi strength and skill of an aLien who successfully
+ * mind-controls this unit.
+ * @note These values are used if Player tries to re-control a hostile xCom unit.
+ * @param strength	- psi strength
+ * @param skill		- psi skill
+ */
+void BattleUnit::hostileMcParameters(
+		int& strength,
+		int& skill)
+{
+	if (skill == 0) // get params
+	{
+		strength = _mcStrength;
+		skill = _mcSkill;
+	}
+	else // set params
+	{
+		_mcStrength = strength;
+		_mcSkill = skill;
+	}
 }
 
 /**

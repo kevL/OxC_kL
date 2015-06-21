@@ -446,7 +446,9 @@ private:
 		_turnDir,	// used for determining 180 degree turn direction
 		_turnsExposed,
 		_verticalDirection,
-		_walkPhase;
+		_walkPhase,
+		_mcStrength,
+		_mcSkill;
 	size_t _battleOrder;
 
 	BattleAIState* _currentAIState;
@@ -1118,6 +1120,11 @@ private:
 
 		/// Gets all units in the battlescape that are valid RF-spotters of this BattleUnit.
 		std::list<BattleUnit*>* getUnitSpotters();
+
+		/// Sets the parameters of a successful mind-control psi attack.
+		void hostileMcParameters(
+				int& strength,
+				int& skill);
 
 		/// Sets if this BattleUnit is panicking.
 //		void setPanicking(bool panic = true);
