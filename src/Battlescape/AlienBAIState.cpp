@@ -177,7 +177,7 @@ YAML::Node AlienBAIState::save() const
  * Runs any code the state needs to keep updating every AI cycle.
  * @param action - pointer to AI BattleAction to execute
  */
-void AlienBAIState::think(BattleAction* action)
+void AlienBAIState::think(BattleAction* const action)
 {
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId() << " pos " << _unit->getPosition();
@@ -441,7 +441,7 @@ void AlienBAIState::think(BattleAction* action)
 			action->finalAction = true;		// end this unit's turn.
 			action->desperate = true;		// ignore new targets.
 
-			_unit->setHiding(true);			// spin 180 at the end of your route.
+			_unit->setHiding(true);			// spin 180 at the end of route.
 
 			// forget about reserving TUs, we need to get out of here.
 //			_battleSave->getBattleGame()->setReservedAction(BA_NONE, false); // kL
@@ -793,11 +793,11 @@ void AlienBAIState::setupAmbush() // private.
 			tile = _battleSave->getTile(pos);
 
 			if (tile == NULL
+				|| tile->getDangerous() == true
+				|| pos.z != _unit->getPosition().z
 				|| _battleSave->getTileEngine()->distance(
 														pos,
 														_unit->getPosition()) > 10
-				|| pos.z != _unit->getPosition().z
-				|| tile->getDangerous() == true
 				|| std::find(
 						_reachableAttack.begin(),
 						_reachableAttack.end(),

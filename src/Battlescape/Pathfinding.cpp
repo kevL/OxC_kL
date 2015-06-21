@@ -337,14 +337,22 @@ void Pathfinding::calculate(
 		{
 			_strafe = false;
 
-			_battleAction->strafe = false;
-			_battleAction->dash = true;
-			_battleAction->actor->setDashing();
+			if (_battleAction != NULL) // this is a safety.
+			{
+				_battleAction->strafe = false;
+				_battleAction->dash = true;
+				if (_battleAction->actor != NULL)		// but this sometimes happens via AlienBAIState::setupAmbush() at least
+					_battleAction->actor->setDashing();	// if end turn is done w/out a selected unit. (not sure)
+			}
 		}
 		else // if (_strafe == false)
 		{
-			_battleAction->dash = false;
-			_battleAction->actor->setDashing(false);
+			if (_battleAction != NULL) // this is a safety.
+			{
+				_battleAction->dash = false;
+				if (_battleAction->actor != NULL)				// but this sometimes happens via AlienBAIState::setupAmbush() at least.
+					_battleAction->actor->setDashing(false);	// if end turn is done w/out a selected unit. (for sure)
+			}
 		}
 	}
 }

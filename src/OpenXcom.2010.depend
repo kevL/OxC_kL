@@ -5441,7 +5441,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1434345861 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1434861518 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5820,7 +5820,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1434149471 source:f:\git\openxcom\src\battlescape\camera.cpp
+1434855220 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6168,7 +6168,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1434430167 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1434861325 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6322,7 +6322,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434516010 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1434855112 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
