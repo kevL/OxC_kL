@@ -87,8 +87,8 @@ TileEngine::TileEngine(
 		_voxelData(voxelData),
 		_unitLighting(true),
 		_powerE(-1),
-		_powerT(-1),
-		_missileDirection(-1)
+		_powerT(-1)
+//		_missileDirection(-1)
 {}
 
 /**
@@ -3935,7 +3935,7 @@ int TileEngine::blockage(
 								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)
 							|| (dType == DT_IN
 								&& tile->getMapData(part)->blockFire() == true))
-						&& (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
+						&& (   tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
 							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
 							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
 					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)	// all floors that block LoS should have their stopLOS flag set true, if not gravLift floor.
@@ -3961,20 +3961,22 @@ int TileEngine::blockage(
 
 			if (originTest == true)	// the ContentOBJECT already got hit as the previous endTile... but can still block LoS when looking down ...
 			{
-				bool diagStop = true;
+/*				bool diagStop = true; // <- superceded by ProjectileFlyBState::_prjVector ->
 				if (dType == DT_HE
 					&& _missileDirection != -1)
 				{
-					const int dirDelta = std::abs(8 + _missileDirection - dir) %8;
+					const int dirDelta = std::abs(8 + _missileDirection - dir) % 8;
 					diagStop = (dirDelta < 2 || dirDelta > 6);
 				}
+				else
+					diagStop = true; */
 
 				// this needs to check which side the *missile* is coming from,
 				// although grenades that land on a diagonal bigWall are exempt regardless!!!
 				if (bigWall == Pathfinding::BIGWALL_NONE // !visLike, if (only Content-part == true) -> all DamageTypes ok here (because, origin).
-					|| (diagStop == false
+/*					|| (diagStop == false
 						&& (bigWall == Pathfinding::BIGWALL_NESW
-							|| bigWall == Pathfinding::BIGWALL_NWSE))
+							|| bigWall == Pathfinding::BIGWALL_NWSE)) */
 					|| (dir == Pathfinding::DIR_DOWN
 						&& tile->getMapData(MapData::O_OBJECT)->stopLOS() == false // stopLOS() should join w/ DT_NONE ...
 						&& !(
@@ -4014,7 +4016,7 @@ int TileEngine::blockage(
 			switch (dir) // -> OBJECT part. ( BigWalls & content )
 			{
 				case 0: // north
-					if (bigWall == Pathfinding::BIGWALL_WEST
+					if (   bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_E_S)
@@ -4025,7 +4027,7 @@ int TileEngine::blockage(
 				break;
 
 				case 1: // north east
-					if (bigWall == Pathfinding::BIGWALL_WEST
+					if (   bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
 						|| ( //visLike &&
 							bigWall == Pathfinding::BIGWALL_NWSE
@@ -4037,7 +4039,7 @@ int TileEngine::blockage(
 				break;
 
 				case 2: // east
-					if (bigWall == Pathfinding::BIGWALL_NORTH
+					if (   bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_W_N)
@@ -4048,7 +4050,7 @@ int TileEngine::blockage(
 				break;
 
 				case 3: // south east
-					if (bigWall == Pathfinding::BIGWALL_NORTH
+					if (   bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_WEST
 						|| ( //visLike &&
 							bigWall == Pathfinding::BIGWALL_NESW
@@ -4061,7 +4063,7 @@ int TileEngine::blockage(
 				break;
 
 				case 4: // south
-					if (bigWall == Pathfinding::BIGWALL_WEST
+					if (   bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_W_N)
@@ -4072,7 +4074,7 @@ int TileEngine::blockage(
 				break;
 
 				case 5: // south west
-					if (bigWall == Pathfinding::BIGWALL_NORTH
+					if (   bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| ( //visLike &&
 							bigWall == Pathfinding::BIGWALL_NWSE
@@ -4084,7 +4086,7 @@ int TileEngine::blockage(
 				break;
 
 				case 6: // west
-					if (bigWall == Pathfinding::BIGWALL_NORTH
+					if (   bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_E_S)
@@ -4095,7 +4097,7 @@ int TileEngine::blockage(
 				break;
 
 				case 7: // north west
-					if (bigWall == Pathfinding::BIGWALL_SOUTH
+					if (   bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_E_S
 						|| ( //visLike &&
@@ -4168,10 +4170,10 @@ int TileEngine::blockage(
  * once ExplosionBState starts.
  * @param dir - the direction as calculated in Projectile
  */
-void TileEngine::setProjectileDirection(const int dir)
+/* void TileEngine::setProjectileDirection(const int dir)
 {
 	_missileDirection = dir;
-}
+} */
 
 /**
  * Applies the explosive power to tile parts.

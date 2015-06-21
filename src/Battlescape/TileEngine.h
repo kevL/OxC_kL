@@ -60,9 +60,9 @@ private:
 
 	bool _unitLighting;
 	int
-		_missileDirection,
-		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
-		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.
+//		_missileDirection,
+		_powerE, // effective power that actually explodes on a tile that's hit by HE.
+		_powerT; // test power that checks if _powerE actually makes it to the next tile.
 
 	SavedBattleGame* _battleSave;
 

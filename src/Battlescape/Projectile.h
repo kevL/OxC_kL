@@ -122,7 +122,9 @@ private:
 		/// Gets the ACTUAL target for this projectile.
 		Position getFinalTarget() const;
 		/// Stores the final direction of a missile or thrown-object.
-		void storeProjectileDirection() const;
+//		void storeProjectileDirection() const;
+		/// Gets the final vector of the Projectile's trajectory.
+		Position getFinalVector() const;
 
 		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
 		bool isReversed() const;

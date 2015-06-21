@@ -504,7 +504,7 @@ void ExplosionBState::explode() // private.
 							_item->getRules()->getBattleType() == BT_GRENADE
 							|| _item->getRules()->getBattleType() == BT_PROXYGRENADE);
 
-			tileEngine->setProjectileDirection(-1);
+//			tileEngine->setProjectileDirection(-1);
 		}
 		else // -> if !_cosmetics
 		{

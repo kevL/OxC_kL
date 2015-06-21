@@ -47,16 +47,17 @@ private:
 		_targetFloor;
 	int
 		_initUnitAnim,
-		_projectileImpact;
+		_prjImpact;
 
 	BattleItem
 		* _ammo,
-		* _projectileItem;
+		* _prjItem;
 	BattleUnit* _unit;
 	Position
 		_origin,
 		_originVoxel,
-		_targetVoxel;
+		_targetVoxel,
+		_prjVector;
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();

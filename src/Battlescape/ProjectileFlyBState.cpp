@@ -72,8 +72,8 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
 		_ammo(NULL),
-		_projectileItem(NULL),
-		_projectileImpact(0),
+		_prjItem(NULL),
+		_prjImpact(0),
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
@@ -96,8 +96,9 @@ ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::la
 		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
 		_ammo(NULL),
-		_projectileItem(NULL),
-		_projectileImpact(0),
+		_prjItem(NULL),
+		_prjImpact(0),
+		_prjVector(-1,-1,-1),
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
@@ -273,7 +274,7 @@ void ProjectileFlyBState::init()
 				_action.target.z += 1;
 			}
 
-			_projectileItem = _action.weapon;
+			_prjItem = _action.weapon;
 		}
 		break;
 
@@ -491,26 +492,26 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 	int sound = -1;
 
-	_projectileImpact = VOXEL_EMPTY; // let it calculate a trajectory
+	_prjImpact = VOXEL_EMPTY; // let it calculate a trajectory
 
 	if (_action.type == BA_THROW)
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
-		//Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
+		_prjImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		//Log(LOG_INFO) << ". BA_THROW, part = " << _prjImpact;
 
-		if (   _projectileImpact == VOXEL_FLOOR
-			|| _projectileImpact == VOXEL_UNIT
-			|| _projectileImpact == VOXEL_OBJECT)
+		if (   _prjImpact == VOXEL_FLOOR
+			|| _prjImpact == VOXEL_UNIT
+			|| _prjImpact == VOXEL_OBJECT)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
-				&& (   _projectileItem->getRules()->getBattleType() == BT_GRENADE
-					|| _projectileItem->getRules()->getBattleType() == BT_PROXYGRENADE))
+				&& (   _prjItem->getRules()->getBattleType() == BT_GRENADE
+					|| _prjItem->getRules()->getBattleType() == BT_PROXYGRENADE))
 			{
 				//Log(LOG_INFO) << ". . auto-prime for AI, unitID " << _unit->getId();
-				_projectileItem->setFuseTimer(0);
+				_prjItem->setFuseTimer(0);
 			}
 
-			_projectileItem->moveToOwner(NULL);
+			_prjItem->moveToOwner(NULL);
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -540,13 +541,13 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	}
 	else if (_action.weapon->getRules()->getArcingShot() == true) // special code for the "spit" trajectory
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
-																			_action.type,
-																			_action.weapon));
-		//Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
+		_prjImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
+																	_action.type,
+																	_action.weapon));
+		//Log(LOG_INFO) << ". acid spit, part = " << _prjImpact;
 
-		if (_projectileImpact != VOXEL_EMPTY
-			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
+		if (_prjImpact != VOXEL_EMPTY
+			 && _prjImpact != VOXEL_OUTOFBOUNDS)
 		{
 			_unit->startAiming();
 			_unit->setCache(NULL);
@@ -585,30 +586,39 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	{
 		if (_originVoxel != Position(-1,-1,-1)) // here, origin is a BL waypoint
 		{
-			_projectileImpact = projectile->calculateTrajectory(
-															_unit->getFiringAccuracy(
-																				_action.type,
-																				_action.weapon),
-															_originVoxel);
-			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << _projectileImpact;
+			_prjImpact = projectile->calculateTrajectory(
+													_unit->getFiringAccuracy(
+																		_action.type,
+																		_action.weapon),
+													_originVoxel);
+			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << _prjImpact;
 		}
 		else // this is non-BL weapon shooting
 		{
-			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
-																					_action.type,
-																					_action.weapon));
-			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << _projectileImpact;
+			_prjImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+																			_action.type,
+																			_action.weapon));
+			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << _prjImpact;
 		}
-		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << _projectileImpact;
+		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << _prjImpact;
 		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
 
-		projectile->storeProjectileDirection(); // kL
+		if (_prjImpact == VOXEL_OBJECT)
+		{
+			const Tile* const tile = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getFinalTarget());
+			if (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE)
+			{
+//				projectile->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
+				_prjVector = projectile->getFinalVector();	// ^supercedes above^
+			}
+		}
 
 
-		if (_projectileImpact != VOXEL_EMPTY
+		if (_prjImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
-			//Log(LOG_INFO) << ". . _projectileImpact AIM";
+			//Log(LOG_INFO) << ". . _prjImpact AIM";
 			if (_action.type == BA_LAUNCH)
 				_parent->getMap()->setWaypointAction(); // reveal the Map until waypoint action completes.
 
@@ -692,7 +702,7 @@ void ProjectileFlyBState::think()
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 	Camera* const camera = _parent->getMap()->getCamera();
 
-	// TODO refactoring: Store the projectile in this state, instead of getting it from the map each time.
+	// TODO refactoring: Store the projectile in this state instead of getting it from the map each time.
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		if (_action.type == BA_AUTOSHOT
@@ -741,7 +751,7 @@ void ProjectileFlyBState::think()
 					{
 						camera->setPauseAfterShot(false);
 
-						if (_projectileImpact != VOXEL_OUTOFBOUNDS)
+						if (_prjImpact != VOXEL_OUTOFBOUNDS)
 							SDL_Delay(336); // screen-pause when shot hits target before reverting camera to shooter.
 					}
 
@@ -827,7 +837,7 @@ void ProjectileFlyBState::think()
 									item);
 
 					if (_unit->getFaction() == FACTION_HOSTILE
-						&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+						&& _prjItem->getRules()->getBattleType() == BT_GRENADE)
 					{
 						_parent->getTileEngine()->setDangerZone(
 															pos,
@@ -846,7 +856,7 @@ void ProjectileFlyBState::think()
 												_parent->getMap()->getSoundAngle(pos));
 			}
 			else if (_action.type == BA_LAUNCH
-				&& _projectileImpact == VOXEL_EMPTY
+				&& _prjImpact == VOXEL_EMPTY
 				&& _action.waypoints.size() > 1)
 			{
 				_origin = _action.waypoints.front();
@@ -855,9 +865,9 @@ void ProjectileFlyBState::think()
 
 				// launch the next projectile in the waypoint cascade
 				ProjectileFlyBState* const toNextWp = new ProjectileFlyBState(
-																			_parent,
-																			_action,
-																			_origin); // -> tilePos
+																		_parent,
+																		_action,
+																		_origin); // -> tilePos
 
 				toNextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
@@ -869,12 +879,12 @@ void ProjectileFlyBState::think()
 
 				_parent->statePushNext(toNextWp);
 			}
-			else // shoot.
+			else // shoot -> impact.
 			{
 //				_parent->getMap()->resetCameraSmoothing();
 				if (_action.type == BA_LAUNCH) // kL: Launches explode at final waypoint.
 				{
-					_projectileImpact = VOXEL_OBJECT;
+					_prjImpact = VOXEL_OBJECT;
 					_parent->getMap()->setWaypointAction(false); // reveal the Map until waypoint action completes.
 				}
 
@@ -893,7 +903,7 @@ void ProjectileFlyBState::think()
 					_action.weapon->setAmmoItem(NULL);
 				}
 
-				if (_projectileImpact != VOXEL_OUTOFBOUNDS) // NOT out of map
+				if (_prjImpact != VOXEL_OUTOFBOUNDS) // NOT out of map
 				{
 					// explosions impact not inside the voxel but two steps back;
 					// projectiles generally move 2 voxels at a time
@@ -901,26 +911,33 @@ void ProjectileFlyBState::think()
 
 					if (_ammo != NULL
 						&& _ammo->getRules()->getExplosionRadius() > -1
-						&& _projectileImpact != VOXEL_UNIT)
+						&& _prjImpact != VOXEL_UNIT)
 					{
 						offset = -2; // step back a bit so tileExpl isn't behind a close wall.
 					}
 
+					Position explCenter = _parent->getMap()->getProjectile()->getPosition(offset);
+					if (_prjVector.z != -1)
+					{
+						explCenter.x += _prjVector.x * 16;
+						explCenter.y += _prjVector.y * 16;
+					}
+
 					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explCenter " << _parent->getMap()->getProjectile()->getPosition(offset);
 					//Log(LOG_INFO) << "projFlyB think() offset " << offset;
-					//Log(LOG_INFO) << "projFlyB think() projImpact voxelType " << _projectileImpact;
+					//Log(LOG_INFO) << "projFlyB think() projImpact voxelType " << _prjImpact;
 					//Log(LOG_INFO) << "projFlyB think() explCenter.x = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).x) / 16.f;
 					//Log(LOG_INFO) << "projFlyB think() explCenter.y = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).y) / 16.f;
 					//Log(LOG_INFO) << "projFlyB think() explCenter.z = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).z) / 24.f;
 					_parent->statePushFront(new ExplosionBState(
 															_parent,
-															_parent->getMap()->getProjectile()->getPosition(offset),
+															explCenter,
 															_ammo,
 															_unit,
 															NULL,
 															_action.type != BA_AUTOSHOT
-																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
-																|| _action.weapon->getAmmoItem() == NULL));
+															|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
+															|| _action.weapon->getAmmoItem() == NULL));
 
 					// special shotgun behaviour: trace extra projectile paths
 					// and add bullet hits at their termination points.
@@ -939,18 +956,18 @@ void ProjectileFlyBState::think()
 																	_origin,
 																	_targetVoxel);
 
-								_projectileImpact = proj->calculateTrajectory(
-																		std::max(
-																				0.,
-																				_unit->getFiringAccuracy(
-																									_action.type,
-																									_action.weapon)
-																								- i * 0.023)); // pellet spread.
-								if (_projectileImpact != VOXEL_EMPTY)
+								_prjImpact = proj->calculateTrajectory(
+																	std::max(
+																			0.,
+																			_unit->getFiringAccuracy(
+																								_action.type,
+																								_action.weapon)
+																							- i * 0.023)); // pellet spread.
+								if (_prjImpact != VOXEL_EMPTY)
 								{
 									proj->skipTrajectory(); // as above: skip the shot to the end of its path
 
-									if (_projectileImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
+									if (_prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 									{
 										Explosion* const expl = new Explosion(
 																			proj->getPosition(1),
@@ -975,7 +992,7 @@ void ProjectileFlyBState::think()
 					// Silacoid floorburn was here; moved down to PerformMeleeAttack()
 
 					if (_unit->getOriginalFaction() == FACTION_PLAYER	// This section is only for SoldierDiary mod.
-						&& _projectileImpact == VOXEL_UNIT)				// see below also; was also for setting aggroState
+						&& _prjImpact == VOXEL_UNIT)					// see below also; was also for setting aggroState
 					{
 						BattleUnit* const victim = _parent->getSave()->getTile(
 															_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))
@@ -1033,7 +1050,7 @@ void ProjectileFlyBState::think()
 					// kL_note: Could take this section out (i had removed it for a while ..)
 					// ... Let's try something
 /*kL
-					if (_projectileImpact == VOXEL_UNIT)
+					if (_prjImpact == VOXEL_UNIT)
 					{
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))

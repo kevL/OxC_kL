@@ -920,7 +920,7 @@ Position Projectile::getFinalTarget() const
  * @note This is to prevent blasts from propagating on both sides of diagonal
  * BigWalls. TODO: the blast itself needs tweaking in TileEngine ....
  */
-void Projectile::storeProjectileDirection() const
+/* void Projectile::storeProjectileDirection() const
 {
 	int dir = -1;
 
@@ -933,8 +933,7 @@ void Projectile::storeProjectileDirection() const
 			prePos = _trajectory.at(trjSize - 3);
 
 		int
-			x = 0,
-			y = 0;
+			x,y;
 
 		if (finalPos.x - prePos.x != 0)
 		{
@@ -943,6 +942,8 @@ void Projectile::storeProjectileDirection() const
 			else
 				x = -1;
 		}
+		else
+			x = 0;
 
 		if (finalPos.y - prePos.y != 0)
 		{
@@ -951,14 +952,60 @@ void Projectile::storeProjectileDirection() const
 			else
 				y = -1;
 		}
+		else
+			y = 0;
 
-		const Position relPos = Position(x,y,0);
 		Pathfinding::vectorToDirection(
-									relPos,
+									Position(x,y,0),
 									dir);
 	}
 
 	_battleSave->getTileEngine()->setProjectileDirection(dir);
+} */
+
+/**
+ * Gets the final vector of this Projectile's trajectory.
+ * @return, a unit vector
+ */
+Position Projectile::getFinalVector() const
+{
+	Position unitVect = Position(-1,-1,-1);
+
+	const size_t trjSize = _trajectory.size();
+
+	if (trjSize > 2)
+	{
+		const Position
+			finalPos = _trajectory.back(),
+			prePos = _trajectory.at(trjSize - 3);
+
+		int
+			x,y;
+
+		if (finalPos.x - prePos.x != 0)
+		{
+			if (finalPos.x - prePos.x > 0)
+				x = -1;
+			else
+				x = 1;
+		}
+		else
+			x = 0;
+
+		if (finalPos.y - prePos.y != 0)
+		{
+			if (finalPos.y - prePos.y > 0)
+				y = -1;
+			else
+				y = 1;
+		}
+		else
+			y = 0;
+
+		unitVect = Position(x,y,0);
+	}
+
+	return unitVect;
 }
 
 /**
