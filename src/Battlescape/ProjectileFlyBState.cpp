@@ -252,9 +252,7 @@ void ProjectileFlyBState::init()
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
-			const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
-																			_action,
-																			NULL);
+			const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action);
 			if (validThrowRange(
 							&_action,
 							originVoxel,
@@ -868,8 +866,8 @@ void ProjectileFlyBState::think()
 																		_parent,
 																		_action,
 																		_origin); // -> tilePos
-
-				toNextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
+				toNextWp->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
+//				toNextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
 				// this follows BL as it hits through waypoints
 				camera->centerOnPosition(_origin);
@@ -919,8 +917,8 @@ void ProjectileFlyBState::think()
 					Position explCenter = _parent->getMap()->getProjectile()->getPosition(offset);
 					if (_prjVector.z != -1)
 					{
-						explCenter.x += _prjVector.x * 16;
-						explCenter.y += _prjVector.y * 16;
+						explCenter.x -= _prjVector.x * 16; // note there is no safety on these.
+						explCenter.y -= _prjVector.y * 16;
 					}
 
 					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explCenter " << _parent->getMap()->getProjectile()->getPosition(offset);
@@ -1235,10 +1233,10 @@ int ProjectileFlyBState::getMaxThrowDistance( // static.
  * @note Used for the blaster launcher.
  * @param pos - reference the origin voxel
  */
-void ProjectileFlyBState::setOriginVoxel(const Position& pos) // private.
+/* void ProjectileFlyBState::setOriginVoxel(const Position& pos) // private.
 {
 	_originVoxel = pos;
-}
+} */
 
 /**
  * Set the boolean flag to angle a blaster bomb towards the floor.

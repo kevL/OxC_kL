@@ -239,7 +239,7 @@ private:
 				bool considerZ = true) const;
 
 		/// Attempts a panic or mind control action.
-		bool psiAttack(BattleAction* action); // removed, post-cosmetic
+		bool psiAttack(const BattleAction* const action); // removed, post-cosmetic
 
 		/// Applies gravity to anything that occupies this tile.
 		Tile* applyGravity(Tile* const tile);
@@ -282,7 +282,7 @@ private:
 		/// determine the origin voxel of a given action.
 		Position getOriginVoxel(
 				const BattleAction& action,
-				const Tile* tile);
+				const Tile* tile = NULL);
 
 		/// mark a region of the map as "dangerous" for a turn.
 		void setDangerZone(

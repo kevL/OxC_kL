@@ -1350,9 +1350,7 @@ int AlienBAIState::selectNearestTarget() // private.
 					action.weapon = _unit->getMainHandWeapon();
 					action.target = (*i)->getPosition();
 
-					Position origin = _battleSave->getTileEngine()->getOriginVoxel(
-																				action,
-																				NULL);
+					Position origin = _battleSave->getTileEngine()->getOriginVoxel(action);
 					valid = _battleSave->getTileEngine()->canTargetUnit(
 																	&origin,
 																	(*i)->getTile(),
@@ -2552,9 +2550,7 @@ void AlienBAIState::grenadeAction() // private.
 			action.type = BA_THROW;
 
 			const Position
-				originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
-																		action,
-																		NULL),
+				originVoxel = _battleSave->getTileEngine()->getOriginVoxel(action),
 				targetVoxel = action.target * Position(16,16,24)
 							+ Position(
 									8,8,

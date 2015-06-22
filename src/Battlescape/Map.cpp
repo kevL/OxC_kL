@@ -4023,9 +4023,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 														itZ);
 
 								const Position
-									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
-																							*action,
-																							NULL),
+									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(*action),
 									targetVoxel = Position(
 														itX * 16 + 8,
 														itY * 16 + 8,

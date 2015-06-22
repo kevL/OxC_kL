@@ -2979,7 +2979,7 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
  */
 int BattleUnit::getHeight(bool floating) const
 {
-	if (isKneeled() == true)
+	if (_kneeled == true)
 		return _kneelHeight;
 
 	int ret = _standHeight;

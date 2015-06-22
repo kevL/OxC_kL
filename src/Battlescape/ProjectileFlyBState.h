@@ -61,8 +61,8 @@ private:
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();
-	/// Set the origin voxel, used for the blaster launcher.
-	void setOriginVoxel(const Position& pos);
+	/// Set the origin voxel - used by the blaster launcher.
+//	void setOriginVoxel(const Position& pos);
 	/// Set the boolean flag to angle a blaster bomb towards the floor.
 	void targetFloor();
 

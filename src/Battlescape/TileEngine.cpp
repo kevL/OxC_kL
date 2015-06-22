@@ -863,39 +863,31 @@ bool TileEngine::visible(
 Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 {
 	// determine the origin (and target) voxels for calculations
-	Position originVoxel = Position(
-								unit->getPosition().x * 16 + 8,
-								unit->getPosition().y * 16 + 8,
-								unit->getPosition().z * 24);
+	Position posOrigin_voxel = Position(
+									unit->getPosition().x * 16 + 8,
+									unit->getPosition().y * 16 + 8,
+									unit->getPosition().z * 24);
+	posOrigin_voxel.z += unit->getHeight(true)
+					   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
+					   - 4; // kL_note: now equal to getOriginVoxel()
 
-	originVoxel.z += unit->getHeight()
-				   + unit->getFloatHeight()
-				   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
-				   - 2; // two voxels lower (nose level)
-		// kL_note: Can make this equivalent to LoF origin, perhaps.....
-		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
+	const int offset = unit->getArmor()->getSize() * 8;
+	posOrigin_voxel.x += offset;
+	posOrigin_voxel.y += offset;
 
-	const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0,0,1));
-
-	// kL_note: let's stop this. Tanks appear to make their FoV etc. Checks from all four quadrants anyway.
-/*	if (unit->getArmor()->getSize() > 1)
+	const int heightLimit = ((unit->getPosition().z + 1) * 24) - 1;
+	if (posOrigin_voxel.z > heightLimit)
 	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 1; // topmost voxel
-	} */
-
-	if (originVoxel.z >= (unit->getPosition().z + 1) * 24
-		&& (tileAbove == NULL
-			|| tileAbove->hasNoFloor(NULL) == false))
-	{
-		while (originVoxel.z >= (unit->getPosition().z + 1) * 24)
+		const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0,0,1));
+		if (tileAbove == NULL
+			|| tileAbove->hasNoFloor(NULL) == false)
 		{
-			--originVoxel.z; // careful with that ceiling, Eugene.
+			while (posOrigin_voxel.z > heightLimit)
+				--posOrigin_voxel.z; // careful with that ceiling, Eugene.
 		}
 	}
 
-	return originVoxel;
+	return posOrigin_voxel;
 }
 
 /**
@@ -5646,7 +5638,7 @@ int TileEngine::distanceSq(
  * @param action - pointer to a BattleAction (BattlescapeGame.h)
  * @return, true if attack succeeds
  */
-bool TileEngine::psiAttack(BattleAction* action)
+bool TileEngine::psiAttack(const BattleAction* const action)
 {
 	//Log(LOG_INFO) << "\nTileEngine::psiAttack() attackerID " << action->actor->getId();
 	const Tile* const tile = _battleSave->getTile(action->target);
@@ -5680,8 +5672,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			psiSkill = 0;
 
 		if (victim->getFaction() == FACTION_HOSTILE
-			&& (victim->getOriginalFaction() == FACTION_PLAYER
-				|| victim->getOriginalFaction() == FACTION_NEUTRAL))
+			&& victim->getOriginalFaction() != FACTION_HOSTILE)
 		{
 			victim->hostileMcParameters(
 									psiStrength,
@@ -6344,7 +6335,7 @@ int TileEngine::getDirectionTo(
 /**
  * Gets the origin-voxel of a shot or missile.
  * @param action	- reference the BattleAction
- * @param tile		- pointer to a start tile
+ * @param tile		- pointer to a start tile (default NULL)
  * @return, position of the origin in voxel-space
  */
 Position TileEngine::getOriginVoxel(
@@ -6358,77 +6349,87 @@ Position TileEngine::getOriginVoxel(
 		tile = action.actor->getTile();
 
 	Position
-		originTile = tile->getPosition(),
-		originVoxel = Position(
-							originTile.x * 16,
-							originTile.y * 16,
-							originTile.z * 24);
+		posOrigin_tile = tile->getPosition(),
+		posOrigin_voxel = Position(
+								posOrigin_tile.x * 16,
+								posOrigin_tile.y * 16,
+								posOrigin_tile.z * 24);
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
-	if (action.actor->getPosition() == originTile
-		|| action.type != BA_LAUNCH)
+	if (action.type != BA_LAUNCH
+		|| action.actor->getPosition() == posOrigin_tile)
 	{
 		// calculate vertical offset of the starting point of the projectile
-		originVoxel.z += action.actor->getHeight()
-					  + action.actor->getFloatHeight()
-					  - tile->getTerrainLevel();
-//					  - 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
-			// Ps. don't need luck - need precision.
+		posOrigin_voxel.z += action.actor->getHeight(true)
+						   - tile->getTerrainLevel();
+						   - 4; // for good luck. kL_note: now equal to getSightOriginVoxel()
+		// Ps. don't need luck - need precision.
 
+		// hey, here's an idea: make Autos shoot from hip, Snaps shoot from chest, & Aimed from shoulders or eyes.
 //		if (action.type == BA_THROW)	// kL
-//			originVoxel.z -= 4;			// kL
+//			posOrigin_voxel.z -= 4;		// kL
 /*		if (action.type == BA_THROW)
-			originVoxel.z -= 3;
+			posOrigin_voxel.z -= 3;
 		else
-			originVoxel.z -= 4; */
+			posOrigin_voxel.z -= 4; */
 
-		if (originVoxel.z >= (originTile.z + 1) * 24)
+		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
+		if (posOrigin_voxel.z > heightLimit)
 		{
-			const Tile* const tileAbove = _battleSave->getTile(originTile + Position(0,0,1));
+			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
+			if (tileAbove == NULL
+				|| tileAbove->hasNoFloor(NULL) == false)
+			{
+				while (posOrigin_voxel.z > heightLimit)
+					--posOrigin_voxel.z;
+			}
+		}
+/*		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
+		if (posOrigin_voxel.z > heightLimit)
+		{
+			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
 			if (tileAbove != NULL
 				&& tileAbove->hasNoFloor(NULL) == true)
 			{
-				++originTile.z;
+				++posOrigin_tile.z;
 			}
 			else
 			{
-				while (originVoxel.z >= (originTile.z + 1) * 24)
-				{
-					--originVoxel.z;
-				}
+				while (posOrigin_voxel.z > heightLimit)
+					--posOrigin_voxel.z;
 
-				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
+				posOrigin_voxel.z -= 4; // keep posOrigin_voxel 4 voxels below any ceiling.
 			}
-		}
+		} */
 
 		// kL_note: This is the old code that does not use the dirX/Yshift stuff...
 		//
 		// Originally used the dirXShift and dirYShift as detailed above;
 		// this however results in MUCH more predictable results.
-		// center Origin in the originTile (or the center of all four tiles for large units):
+		// center Origin in the posOrigin_tile (or the center of all four tiles for large units):
 		const int offset = action.actor->getArmor()->getSize() * 8;
-		originVoxel.x += offset;
-		originVoxel.y += offset;
-			// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
-			// MUCH more predictable results. <- I didn't write that; just iterating it.
-			// ... better now but still waiting on it.
+		posOrigin_voxel.x += offset;
+		posOrigin_voxel.y += offset;
+		// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
+		// MUCH more predictable results. <- I didn't write that; just iterating it.
+		// ... better now but still waiting on it.
 /*
 		int direction = getDirectionTo(
-									originTile,
+									posOrigin_tile,
 									action.target);
-		originVoxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
+		posOrigin_voxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
+		posOrigin_voxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
 	}
 	else // action.type == BA_LAUNCH
 	{
 		// don't take into account soldier height and terrain level if the
-		// projectile is not launched from a soldier (ie. from a waypoint)
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 16;
+		// projectile is not launched from a soldier (ie. is from a waypoint)
+		posOrigin_voxel.x += 8;
+		posOrigin_voxel.y += 8;
+		posOrigin_voxel.z += 16;
 	}
 
-	return originVoxel;
+	return posOrigin_voxel;
 }
 
 /**

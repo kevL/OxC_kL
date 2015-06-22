@@ -425,9 +425,7 @@ int Projectile::calculateThrow(double accuracy)
 	}
 
 
-	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
-																	_action,
-																	NULL);
+	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(_action);
 	int ret = static_cast<int>(VOXEL_OUTOFBOUNDS);
 	double arc;
 	if (_battleSave->getTileEngine()->validateThrow(
@@ -887,10 +885,10 @@ void Projectile::skipTrajectory()
  * to a tile position - this is a workaround for large units.
  * @return, origin as a tile position
  */
-Position Projectile::getOrigin()
+/* Position Projectile::getOrigin()
 {
 	return _trajectory.front() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
-}
+} */
 
 /**
  * Gets the INTENDED target for this projectile.
@@ -898,10 +896,10 @@ Position Projectile::getOrigin()
  * projectile here but rather the targeted tile.
  * @return, intended target as a tile position
  */
-Position Projectile::getTarget() const
+/* Position Projectile::getTarget() const
 {
 	return _action.target; // returning this by const& might be okay
-}
+} */
 
 /**
  * Gets the ACTUAL target for this projectile.
@@ -985,9 +983,9 @@ Position Projectile::getFinalVector() const
 		if (finalPos.x - prePos.x != 0)
 		{
 			if (finalPos.x - prePos.x > 0)
-				x = -1;
-			else
 				x = 1;
+			else
+				x = -1;
 		}
 		else
 			x = 0;
@@ -995,9 +993,9 @@ Position Projectile::getFinalVector() const
 		if (finalPos.y - prePos.y != 0)
 		{
 			if (finalPos.y - prePos.y > 0)
-				y = -1;
-			else
 				y = 1;
+			else
+				y = -1;
 		}
 		else
 			y = 0;

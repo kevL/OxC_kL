@@ -2325,9 +2325,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 																false));
 
 								const Position
-									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(
-																							ba,
-																							NULL),
+									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(ba),
 									targetVoxel = Position(
 														ba.target.x * 16 + 8,
 														ba.target.y * 16 + 8,

@@ -116,9 +116,9 @@ private:
 		void skipTrajectory();
 
 		/// Gets the Position of origin for the projectile.
-		Position getOrigin();
+//		Position getOrigin();
 		/// Gets the targetted tile for the projectile.
-		Position getTarget() const;
+//		Position getTarget() const;
 		/// Gets the ACTUAL target for this projectile.
 		Position getFinalTarget() const;
 		/// Stores the final direction of a missile or thrown-object.
