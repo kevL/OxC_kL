@@ -862,20 +862,20 @@ void ProjectileFlyBState::think()
 				_action.target = _action.waypoints.front();
 
 				// launch the next projectile in the waypoint cascade
-				ProjectileFlyBState* const toNextWp = new ProjectileFlyBState(
+				ProjectileFlyBState* const nextWp = new ProjectileFlyBState(
 																		_parent,
 																		_action,
 																		_origin); // -> tilePos
-				toNextWp->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
-//				toNextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
+				nextWp->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
+//				nextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
 				// this follows BL as it hits through waypoints
 				camera->centerOnPosition(_origin);
 
 				if (_origin == _action.target)
-					toNextWp->targetFloor();
+					nextWp->targetFloor();
 
-				_parent->statePushNext(toNextWp);
+				_parent->statePushNext(nextWp);
 			}
 			else // shoot -> impact.
 			{

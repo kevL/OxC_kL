@@ -5441,7 +5441,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1434905675 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1434948448 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5501,7 +5501,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1434685943 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1434948463 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -6027,7 +6027,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1434433884 source:f:\git\openxcom\src\battlescape\map.cpp
+1434948484 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6060,7 +6060,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1434914693 f:\git\openxcom\src\battlescape\projectile.h
+1434947098 f:\git\openxcom\src\battlescape\projectile.h
 	"BattlescapeGame.h"
 	"Position.h"
 
@@ -6212,7 +6212,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1434914705 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1434948499 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6226,7 +6226,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434914680 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1434953811 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6298,7 +6298,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434918131 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1434950882 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -8649,7 +8649,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1434906824 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1434949119 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

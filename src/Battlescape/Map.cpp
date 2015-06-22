@@ -1255,16 +1255,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 													if (itY < endY - 1)
 													{
-														if (   unitWest->getDirection() == 1 // Should these tie into STATUS_WALKING; they do, see below_
-															|| unitWest->getDirection() == 5
-															|| unitWest->getDirection() == 3
-															|| unitWest->getDirection() == 7) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
+														if (unitWest->getArmor()->getSize() == 2
+															&& (   unitWest->getDirection() == 1 // Should these tie into STATUS_WALKING; they do, see below_
+																|| unitWest->getDirection() == 5
+																|| unitWest->getDirection() == 3
+																|| unitWest->getDirection() == 7)) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
 														{
 															const Tile* const tileSouthSouthWest = _battleSave->getTile(mapPosition + Position(-1,2,0));
 
 															if (tileSouthSouthWest != NULL)
 															{
-																if (tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL // might want, only if unitWest is large.
+																if (tileSouthSouthWest->getMapData(MapData::O_NORTHWALL) != NULL
 																	|| (tileSouthSouthWest->getMapData(MapData::O_OBJECT) != NULL
 																		&& (tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
 																			|| tileSouthSouthWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH
@@ -1280,6 +1281,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 											if (redraw == true)
 											{
+												Log(LOG_INFO) << ". redraw";
 												quad = tileWest->getPosition().x - unitWest->getPosition().x
 													+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
 
