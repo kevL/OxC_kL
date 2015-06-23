@@ -59,9 +59,6 @@ protected:
 	/// destructor
 	virtual ~ArticleState();
 
-	/// converts damage type to string
-	std::string getDamageTypeText(ItemDamageType dType) const;
-
 	/// screen layout helpers
 	void initLayout(bool contrast = true);
 
@@ -74,6 +71,9 @@ protected:
 
 
 	public:
+		/// converts damage type to string
+		static std::string getDamageTypeText(ItemDamageType dType);
+
 		/// return the article id
 		std::string getId() const
 		{ return _id; }

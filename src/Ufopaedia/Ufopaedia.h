@@ -76,13 +76,13 @@ protected:
 	/// get index of the given article id in the visible list.
 //	static size_t getArticleIndex(Game* game, std::string& article_id);
 	static int getArticleIndex( // kL
-			SavedGame* save,
-			Ruleset* rule,
+			SavedGame* gameSave,
+			Ruleset* rules,
 			std::string& article_id);
 	/// get list of researched articles
 	static ArticleDefinitionList getAvailableArticles(
-			SavedGame* save,
-			Ruleset* rule);
+			SavedGame* gameSave,
+			Ruleset* rules);
 	/// create a new state object from article definition.
 	static ArticleState* createArticleState(ArticleDefinition* article);
 
@@ -90,7 +90,7 @@ protected:
 	public:
 		/// check if a specific article is currently available.
 		static bool isArticleAvailable(
-				const SavedGame* const save,
+				const SavedGame* const gameSave,
 				const ArticleDefinition* const article);
 		/// open Ufopaedia on a certain entry.
 		static void openArticle(
@@ -113,8 +113,8 @@ protected:
 
 		/// load a vector with article ids that are currently visible of a given section.
 		static void list(
-				SavedGame* save,
-				Ruleset* rule,
+				SavedGame* gameSave,
+				Ruleset* rules,
 				const std::string& section,
 				ArticleDefinitionList& data);
 };

@@ -19,6 +19,7 @@
 
 #include "ArticleStateTextImage.h"
 
+#include "ExtraAlienInfoState.h"
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
@@ -33,6 +34,8 @@
 
 #include "../Ruleset/ArticleDefinition.h"
 
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -43,7 +46,8 @@ namespace OpenXcom
  */
 ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	:
-		ArticleState(defs->id)
+		ArticleState(defs->id),
+		_defs(defs)
 {
 	_txtTitle = new Text(defs->text_width, 48, 5, 22);
 
@@ -71,6 +75,14 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	_txtInfo->setColor(Palette::blockOffset(15)-1);
 	_txtInfo->setWordWrap();
 
+	_btnExtraInfo = new TextButton(50, 16, 0, 184);
+	add(_btnExtraInfo);
+	_btnExtraInfo->setText(L"info");
+	_btnExtraInfo->setColor(Palette::blockOffset(15)+4);
+	_btnExtraInfo->setVisible(defs->section == UFOPAEDIA_ALIEN_LIFE_FORMS
+							&& showInfo() == true);
+	_btnExtraInfo->onMouseClick((ActionHandler)& ArticleStateTextImage::btnInfo);
+
 	centerAllSurfaces();
 }
 
@@ -79,5 +91,35 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
  */
 ArticleStateTextImage::~ArticleStateTextImage()
 {}
+
+/**
+ * Opens the ExtraAlienInfoState screen.
+ * @param action - pointer to an Action
+ */
+void ArticleStateTextImage::btnInfo(Action*) // private.
+{
+	_game->pushState(new ExtraAlienInfoState(_defs));
+}
+
+/**
+ * Finds if necessary research has been done before showing the extra info button.
+ * @note Player needs to have both the alien and its autopsy researched.
+ * @return, true if researches are done
+ */
+bool ArticleStateTextImage::showInfo() // private.
+{
+	const std::string st = _defs->id;
+
+	if (st.find("_AUTOPSY") != std::string::npos)
+	{
+		const std::string alienId = st.substr(0, st.length() - 8);
+		if (_game->getSavedGame()->isResearched(alienId) == true)
+			return true;
+	}
+	else if (_game->getSavedGame()->isResearched(st + "_AUTOPSY") == true)
+		return true;
+
+	return false;
+}
 
 }

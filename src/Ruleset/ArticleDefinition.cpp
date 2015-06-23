@@ -273,7 +273,7 @@ void ArticleDefinitionTFTD::load(
 						node,
 						listOrder);
 
-	_type_id	= static_cast<UfopaediaTypeId>((node["type_id"].as<int>(_type_id)));
+	_type_id	= static_cast<UfopaediaTypeId>(node["type_id"].as<int>(_type_id));
 	image_id	= node["image_id"]	.as<std::string>(image_id);
 	text		= node["text"]		.as<std::string>(text);
 	text_width	= node["text_width"].as<int>(150); // 95% of these won't need to be defined, so give it a default

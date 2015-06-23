@@ -55,8 +55,8 @@ enum UfopaediaTypeId
 
 /**
  * ArticleDefinition is the base class for all article types.
- * This class is used to store all information about articles
- * required to generate an ArticleState from.
+ * This class is used to store all information about articles required to
+ * generate an ArticleState from.
  */
 class ArticleDefinition
 {

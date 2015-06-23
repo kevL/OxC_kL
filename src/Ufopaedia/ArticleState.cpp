@@ -62,28 +62,19 @@ ArticleState::~ArticleState()
  * @param dType - the ItemDamageType (RuleItem.h)
  * @return, type string
  */
-std::string ArticleState::getDamageTypeText(ItemDamageType dType) const
+std::string ArticleState::getDamageTypeText(ItemDamageType dType) // static.
 {
 	switch (dType)
 	{
-		case DT_AP:
-			return "STR_DAMAGE_ARMOR_PIERCING";
-		case DT_IN:
-			return "STR_DAMAGE_INCENDIARY";
-		case DT_HE:
-			return "STR_DAMAGE_HIGH_EXPLOSIVE";
-		case DT_LASER:
-			return "STR_DAMAGE_LASER_BEAM";
-		case DT_PLASMA:
-			return "STR_DAMAGE_PLASMA_BEAM";
-		case DT_STUN:
-			return "STR_DAMAGE_STUN";
-		case DT_MELEE:
-			return "STR_DAMAGE_MELEE";
-		case DT_ACID:
-			return "STR_DAMAGE_ACID";
-		case DT_SMOKE:
-			return "STR_DAMAGE_SMOKE";
+		case DT_AP:		return "STR_DAMAGE_ARMOR_PIERCING";
+		case DT_IN:		return "STR_DAMAGE_INCENDIARY";
+		case DT_HE:		return "STR_DAMAGE_HIGH_EXPLOSIVE";
+		case DT_LASER:	return "STR_DAMAGE_LASER_BEAM";
+		case DT_PLASMA:	return "STR_DAMAGE_PLASMA_BEAM";
+		case DT_STUN:	return "STR_DAMAGE_STUN";
+		case DT_MELEE:	return "STR_DAMAGE_MELEE";
+		case DT_ACID:	return "STR_DAMAGE_ACID";
+		case DT_SMOKE:	return "STR_DAMAGE_SMOKE";
 	}
 
 	return "STR_UNKNOWN";

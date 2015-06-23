@@ -57,33 +57,35 @@ int Ufopaedia::_current_index = 0; // kL
 
 /**
  * Checks if an article has already been released.
- * @param save		- pointer to SavedGame
+ * @param gameSave	- pointer to SavedGame
  * @param article	- ArticleDefinition to release
  * @returns, true if the article is available
  */
 bool Ufopaedia::isArticleAvailable(
-		const SavedGame* const save,
+		const SavedGame* const gameSave,
 		const ArticleDefinition* const article)
 {
-	return save->isResearched(article->requires);
+	return gameSave->isResearched(article->requires);
 }
 
 /**
  * Gets the index of the selected article_id in the visible list.
- * If the id is not found returns -1.
- * @param save			- pointer to SavedGame
- * @param rule			- pointer to Ruleset
- * @param article_id	- reference the article id to find
- * @return, index of the given article id in the internal list, -1 if not found
+ * If the ID is not found returns -1.
+ * @param gameSave		- pointer to SavedGame
+ * @param rules			- pointer to Ruleset
+ * @param article_id	- reference the article ID to find
+ * @return, index of the given article ID in the internal list, -1 if not found
  */
 //size_t Ufopaedia::getArticleIndex(Game *game, std::string &article_id)
 int Ufopaedia::getArticleIndex( // kL
-		SavedGame* save,
-		Ruleset* rule,
+		SavedGame* gameSave,
+		Ruleset* rules,
 		std::string& article_id)
 {
 	const std::string UC_ID = article_id + "_UC";
-	const ArticleDefinitionList articles = getAvailableArticles(save, rule);
+	const ArticleDefinitionList articles = getAvailableArticles(
+															gameSave,
+															rules);
 
 	for (size_t
 			i = 0;
@@ -186,7 +188,7 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
 /**
  * Set UPSaved index and open the new state.
  * @param game		- pointer to actual Game
- * @param article	- pointer to ArticleCefinition of the article to open
+ * @param article	- pointer to ArticleDefinition of the article to open
  */
 void Ufopaedia::openArticle(
 		Game* game,
@@ -274,18 +276,20 @@ void Ufopaedia::prev(Game* game)
 
 /**
  * Fill an ArticleList with the currently visible ArticleIds of the given section.
- * @param save		- pointer to SavedGame
- * @param rule		- pointer to Ruleset
+ * @param gameSave	- pointer to SavedGame
+ * @param rules		- pointer to Ruleset
  * @param section	- reference the article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
  * @param data		- reference the article definition list object to fill data in
  */
 void Ufopaedia::list(
-		SavedGame* save,
-		Ruleset* rule,
+		SavedGame* gameSave,
+		Ruleset* rules,
 		const std::string& section,
 		ArticleDefinitionList& data)
 {
-	ArticleDefinitionList articles = getAvailableArticles(save, rule);
+	ArticleDefinitionList articles = getAvailableArticles(
+														gameSave,
+														rules);
 	for (ArticleDefinitionList::const_iterator
 			i = articles.begin();
 			i != articles.end();
@@ -298,15 +302,15 @@ void Ufopaedia::list(
 
 /**
  * Return an ArticleList with all the currently visible ArticleIds.
- * @param save - pointer to SavedGame
- * @param rule - pointer to Ruleset
+ * @param gameSave	- pointer to SavedGame
+ * @param rules		- pointer to Ruleset
  * @return, ArticleDefinitionList of visible articles
  */
 ArticleDefinitionList Ufopaedia::getAvailableArticles(
-		SavedGame* save,
-		Ruleset* rule)
+		SavedGame* gameSave,
+		Ruleset* rules)
 {
-	const std::vector<std::string>& pedList = rule->getUfopaediaList();
+	const std::vector<std::string>& pedList = rules->getUfopaediaList();
 	ArticleDefinitionList articles;
 
 	for (std::vector<std::string>::const_iterator
@@ -314,8 +318,10 @@ ArticleDefinitionList Ufopaedia::getAvailableArticles(
 			i != pedList.end();
 			++i)
 	{
-		ArticleDefinition* const article = rule->getUfopaediaArticle(*i);
-		if (isArticleAvailable(save, article) == true
+		ArticleDefinition* const article = rules->getUfopaediaArticle(*i);
+		if (isArticleAvailable(
+							gameSave,
+							article) == true
 			&& article->section != UFOPAEDIA_NOT_AVAILABLE)
 		{
 			articles.push_back(article);

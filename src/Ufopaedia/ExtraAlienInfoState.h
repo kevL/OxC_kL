@@ -17,48 +17,48 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_ARTICLESTATETEXTIMAGE_H
-#define OPENXCOM_ARTICLESTATETEXTIMAGE_H
+#ifndef OPENXCOM_EXTRAALIENINFOSTATE_H
+#define OPENXCOM_EXTRAALIENINFOSTATE_H
 
-#include "ArticleState.h"
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
 class ArticleDefinitionTextImage;
-class ArticleStateTextImage;
-class Text;
 class TextButton;
+class TextList;
+class Window;
 
 
 /**
- * ArticleStateTextImage has a title, text block and a background image.
+ * Displays alien properties such as resistances.
  */
-class ArticleStateTextImage
+class ExtraAlienInfoState
 	:
-		public ArticleState
+		public State
 {
 
-protected:
-	ArticleDefinitionTextImage* _defs;
+private:
+	TextButton* _btnExit;
+	TextList* _lstInfo;
+	Window* _window;
 
-	Text
-		* _txtInfo,
-		* _txtTitle;
-	TextButton* _btnExtraInfo;
+	/// Initializes the state.
+	void init();
+	/// Closes state.
+	void btnExit(Action* action);
 
-	/// Shows extra info on researched aliens w/ autopsy.
-	void btnInfo(Action* action);
-	/// Finds out if necessary research has been done.
-	bool showInfo();
+	/// Gets the id of a Soldier or Terrorist from a race-string.
+	std::string getBasicUnit(std::string alienId) const;
 
 
 	public:
 		/// cTor.
-		explicit ArticleStateTextImage(ArticleDefinitionTextImage* defs);
+		ExtraAlienInfoState(ArticleDefinitionTextImage* defs);
 		/// dTor.
-		virtual ~ArticleStateTextImage();
+		~ExtraAlienInfoState();
 };
 
 }

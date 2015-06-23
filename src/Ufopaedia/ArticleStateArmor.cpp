@@ -112,11 +112,11 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 			i != RuleArmor::DAMAGE_TYPES;
 			++i)
 	{
-		ItemDamageType dType = static_cast<ItemDamageType>(i);
-		std::string st = getDamageTypeText(dType);
+		const ItemDamageType dType = static_cast<ItemDamageType>(i);
+		const std::string st = getDamageTypeText(dType);
 		if (st != "STR_UNKNOWN")
 		{
-			int vulnr = static_cast<int>(Round(static_cast<double>(armorRule->getDamageModifier(dType)) * 100.));
+			const int vulnr = static_cast<int>(Round(static_cast<double>(armorRule->getDamageModifier(dType)) * 100.));
 			addStat(
 				st,
 				Text::formatPercentage(vulnr));

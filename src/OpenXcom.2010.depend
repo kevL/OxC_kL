@@ -6027,7 +6027,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1434948484 source:f:\git\openxcom\src\battlescape\map.cpp
+1434995855 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -7005,7 +7005,7 @@
 1430149550 f:\git\openxcom\src\geoscape\crafterrorstate.h
 	"../Engine/State.h"
 
-1433740925 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1435009884 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7254,7 +7254,7 @@
 
 1433726558 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
-1430258670 f:\git\openxcom\src\ufopaedia\ufopaedia.h
+1435005791 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
 1434614219 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
@@ -7496,7 +7496,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1431486783 f:\git\openxcom\src\ruleset\articledefinition.h
+1435003547 f:\git\openxcom\src\ruleset\articledefinition.h
 
 1430149550 source:f:\git\openxcom\src\geoscape\researchrequiredstate.cpp
 	"ResearchRequiredState.h"
@@ -8341,7 +8341,7 @@
 1431494724 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
 	"ArticleState.h"
 
-1431494707 f:\git\openxcom\src\ufopaedia\articlestate.h
+1435038656 f:\git\openxcom\src\ufopaedia\articlestate.h
 	"../Engine/State.h"
 	"../Ruleset/RuleItem.h"
 
@@ -8357,7 +8357,7 @@
 1431494810 f:\git\openxcom\src\ufopaedia\articlestatetext.h
 	"ArticleState.h"
 
-1431494818 f:\git\openxcom\src\ufopaedia\articlestatetextimage.h
+1435040060 f:\git\openxcom\src\ufopaedia\articlestatetextimage.h
 	"ArticleState.h"
 
 1431494822 f:\git\openxcom\src\ufopaedia\articlestateufo.h
@@ -8428,7 +8428,7 @@
 	"Armor.h"
 	"../Savegame/Soldier.h"
 
-1431489568 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1435004997 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1425905405 source:f:\git\openxcom\src\ruleset\city.cpp
@@ -8879,7 +8879,7 @@
 1430149550 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1432715019 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1435038563 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -8888,7 +8888,7 @@
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"
 
-1432715019 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
+1435002690 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
 	"Ufopaedia.h"
 	"../Engine/CrossPlatform.h"
@@ -8971,8 +8971,9 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1430149550 source:f:\git\openxcom\src\ufopaedia\articlestatetextimage.cpp
+1435040993 source:f:\git\openxcom\src\ufopaedia\articlestatetextimage.cpp
 	"ArticleStateTextImage.h"
+	"ExtraAlienInfoState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -8981,6 +8982,7 @@
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
+	"../Savegame/SavedGame.h"
 
 1430149550 source:f:\git\openxcom\src\ufopaedia\articlestateufo.cpp
 	"ArticleStateUfo.h"
@@ -9012,7 +9014,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUnit.h"
 
-1430258708 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1435005791 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"
@@ -11043,7 +11045,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1434532359 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1435002068 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
@@ -11493,5 +11495,36 @@
 	"../Savegame/SavedGame.h"
 
 1432687933 f:\git\openxcom\src\basescape\manufacturecostsstate.h
+	"../Engine/State.h"
+
+1435040253 source:f:\git\openxcom\src\ufopaedia\extraalieninfo.cpp
+	"ExtraAlienInfo.h"
+	"ArticleState.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/RuleArmor.h"
+
+1435040264 f:\git\openxcom\src\ufopaedia\extraalieninfo.h
+	"../Engine/State.h"
+
+1435048175 source:f:\git\openxcom\src\ufopaedia\extraalieninfostate.cpp
+	"ExtraAlienInfoState.h"
+	"ArticleState.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Resource/ResourcePack.h"
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/RuleArmor.h"
+
+1435047887 f:\git\openxcom\src\ufopaedia\extraalieninfostate.h
 	"../Engine/State.h"
 

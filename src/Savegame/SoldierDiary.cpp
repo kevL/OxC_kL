@@ -853,13 +853,13 @@ else
 						if (//criterion == "killsWithCriteriaTurn" || criterion == "killsWithCriteriaMission"
 							criterion != "killsWithCriteriaCareer")
 						{
-							++qty; // turns and missions start at 1 because of how thisTime and lastTime work
+							++qty; // turns and missions start at 1 because of how thisIteration and lastIteration work
 						}
 
-						bool goToNextTime = false;
+						bool goToNextIteration = false;
 						int // time, being a turn or a mission
-							thisTime = -1,
-							lastTime = -1;
+							thisIteration = -1,
+							lastIteration = -1;
 
 						for (std::vector<BattleUnitKills*>::const_iterator // loop over the KILLS
 								singleKill = _killList.begin();
@@ -868,37 +868,37 @@ else
 						{
 							if (criterion == "killsWithCriteriaMission")
 							{
-								thisTime = (*singleKill)->_mission;
+								thisIteration = (*singleKill)->_mission;
 								if (singleKill != _killList.begin())
 								{
 									--singleKill;
-									lastTime = (*singleKill)->_mission;
+									lastIteration = (*singleKill)->_mission;
 									++singleKill;
 								}
 							}
 							else if (criterion == "killsWithCriteriaTurn")
 							{
-								thisTime = (*singleKill)->_turn;
+								thisIteration = (*singleKill)->_turn;
 								if (singleKill != _killList.begin())
 								{
 									--singleKill;
-									lastTime = (*singleKill)->_turn;
+									lastIteration = (*singleKill)->_turn;
 									++singleKill;
 								}
 							}
 
 							// skip kill-groups that soldier already got an award for
 							// and skip kills that are inbetween turns
-							if (thisTime == lastTime
-								&& goToNextTime == true
+							if (thisIteration == lastIteration
+								&& goToNextIteration == true
 								&& criterion != "killsWithCriteriaCareer")
 							{
 								continue;
 							}
-							else if (thisTime != lastTime)
+							else if (thisIteration != lastIteration)
 							{
 								qty = 1; // reset.
-								goToNextTime = false;
+								goToNextIteration = false;
 
 								continue;
 							}
@@ -987,7 +987,7 @@ else
 							{
 								++qty;
 								if (qty == (*andCriteria).first)
-									goToNextTime = true; // criteria met, move to next mission/turn
+									goToNextIteration = true; // criteria met, move to next mission/turn
 							}
 						}
 
