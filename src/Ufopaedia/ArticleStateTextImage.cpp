@@ -104,19 +104,17 @@ void ArticleStateTextImage::btnInfo(Action*) // private.
 /**
  * Finds if necessary research has been done before showing the extra info button.
  * @note Player needs to have both the alien and its autopsy researched.
- * @return, true if researches are done
+ * @return, true if the researches have been done
  */
 bool ArticleStateTextImage::showInfo() // private.
 {
-	const std::string st = _defs->id;
-
-	if (st.find("_AUTOPSY") != std::string::npos)
+	if (_defs->id.find("_AUTOPSY") != std::string::npos)
 	{
-		const std::string alienId = st.substr(0, st.length() - 8);
+		const std::string alienId = _defs->id.substr(0, _defs->id.length() - 8);
 		if (_game->getSavedGame()->isResearched(alienId) == true)
 			return true;
 	}
-	else if (_game->getSavedGame()->isResearched(st + "_AUTOPSY") == true)
+	else if (_game->getSavedGame()->isResearched(_defs->id + "_AUTOPSY") == true)
 		return true;
 
 	return false;

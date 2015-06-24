@@ -537,7 +537,6 @@ const std::string& ResourcePack::getRandomBackground() const
 	};
 
 	return bg[static_cast<size_t>(RNG::seedless(0,9))];
-//	return bg[static_cast<size_t>(RNG::generate(0,9))];
 }
 
 }

@@ -65,11 +65,11 @@ Tile::SerializationKey Tile::serializationKey =
 */
 Tile::Tile(const Position& pos)
 	:
+		_pos(pos),
 		_smoke(0),
 		_fire(0),
 		_explosive(0),
 		_explosiveType(0),
-		_pos(pos),
 		_unit(NULL),
 		_animOffset(0),
 		_markerColor(0),
@@ -852,7 +852,7 @@ int Tile::getFuel(int part) const
 				i != PARTS;
 				++i)
 		{
-			if (   _objects[i] != NULL
+			if (_objects[i] != NULL
 				&& _objects[i]->getFuel() > fuel)
 			{
 				fuel = _objects[i]->getFuel();
@@ -871,8 +871,8 @@ int Tile::getFuel(int part) const
 /**
  * Tries to start fire on this Tile.
  * @note If true it will add its fuel as turns to burn.
- * @note Called only by floor-burning Silacoids and fire spreading @ turnovers.
- * @note Also used by TileEngine::detonate() after HE explosions.
+ * @note Called by floor-burning Silacoids and fire spreading @ turnovers and
+ * by TileEngine::detonate() after HE explosions.
  * @param power - rough chance to get things going
  * @return, true if tile catches fire
  */
@@ -890,8 +890,13 @@ bool Tile::ignite(int power)
 				power = ((((power + 4) / 5) + ((burn + 7) / 8) + (fuel * 3) + 6) / 7);
 				if (RNG::percent(power) == true)
 				{
-					addFire(fuel + 1);
 					addSmoke((burn + 15) / 16);
+
+					if (_pos.z == 0 // TODO: pass in tileBelow and check its terrainLevel for -24
+						|| _objects[MapData::O_FLOOR] != NULL) // drop fire through to tilesBelow ...
+					{
+						addFire(fuel + 1);
+					}
 
 					return true;
 				}
@@ -921,6 +926,9 @@ void Tile::addFire(int turns)
 
 		if (_fire > 12)
 			_fire = 12;
+
+		if (_smoke <= _fire)
+			_smoke = _fire + RNG::generate(1,5);
 	}
 }
 
@@ -1057,7 +1065,7 @@ int Tile::getSmoke() const
 bool Tile::canSmoke() const // private
 {
 	return _objects[MapData::O_OBJECT] == NULL
-		   || (    _objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NESW
+		   || (_objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NESW
 				&& _objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NWSE
 				&& (_objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_BLOCK
 					|| _objects[MapData::O_OBJECT]->blockSmoke() == false)); // <- TODO: remove bias vs. Smoke; ie. include Fire later
@@ -1502,7 +1510,7 @@ int Tile::getHasUnconsciousSoldier() const
 	{
 		const BattleUnit* const bu = (*i)->getUnit();
 
-		if (   bu != NULL
+		if (bu != NULL
 			&& bu->getOriginalFaction() == FACTION_PLAYER
 			&& bu->getStatus() == STATUS_UNCONSCIOUS)
 		{

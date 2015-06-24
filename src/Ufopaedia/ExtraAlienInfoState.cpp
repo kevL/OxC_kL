@@ -128,14 +128,6 @@ ExtraAlienInfoState::~ExtraAlienInfoState()
 {}
 
 /**
- * Initializes the state.
- */
-void ExtraAlienInfoState::init() // private.
-{
-//	State::init();
-}
-
-/**
  * Closes state.
  * @param action - pointer to an Action
  */

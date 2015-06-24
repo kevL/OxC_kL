@@ -192,10 +192,8 @@ void ProjectileFlyBState::init()
 
 
 	// removed post-cosmetics
-	// snapshot defaults to "hit" if it's a melee weapon
-	// (in case of reaction "shots" with a melee weapon),
-	// for Silacoid attack, etc.
-	// kL_note: not sure that melee reactionFire is properly implemented...
+	// snapshot defaults to "hit" if it's a melee weapon (in case of reaction
+	// "shots" with a melee weapon) for Silacoid attack etc.
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& (   _action.type == BA_SNAPSHOT
 			|| _action.type == BA_AUTOSHOT
@@ -206,9 +204,9 @@ void ProjectileFlyBState::init()
 	}
 
 	// reaction fire, added post-cosmetics
-//		_unit->lookAt(_action.target, _unit->getTurretType() != -1);
-//		while (_unit->getStatus() == STATUS_TURNING)
-//			_unit->turn();
+//	_unit->lookAt(_action.target, _unit->getTurretType() != -1);
+//	while (_unit->getStatus() == STATUS_TURNING)
+//		_unit->turn();
 
 	const Tile* const destTile = _parent->getSave()->getTile(_action.target);
 

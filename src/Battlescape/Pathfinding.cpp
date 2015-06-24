@@ -1323,7 +1323,7 @@ void Pathfinding::vectorToDirection(
 			i != 8;
 			++i)
 	{
-		if (   x[i] == unitVect.x
+		if (x[i] == unitVect.x
 			&& y[i] == unitVect.y)
 		{
 			dir = static_cast<int>(i);

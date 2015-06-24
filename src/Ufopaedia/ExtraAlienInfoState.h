@@ -45,8 +45,6 @@ private:
 	TextList* _lstInfo;
 	Window* _window;
 
-	/// Initializes the state.
-	void init();
 	/// Closes state.
 	void btnExit(Action* action);
 

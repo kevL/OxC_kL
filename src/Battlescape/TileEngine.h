@@ -237,6 +237,10 @@ private:
 				const Position& pos1,
 				const Position& pos2,
 				bool considerZ = true) const;
+		/// Checks the distance between two positions precisely.
+//		double distancePrecise(
+//				const Position& pos1,
+//				const Position& pos2) const;
 
 		/// Attempts a panic or mind control action.
 		bool psiAttack(const BattleAction* const action); // removed, post-cosmetic
