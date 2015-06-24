@@ -719,7 +719,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		halfRight = false, // avoid VC++ linker warning.
 		redraw,
 
-		kL_Debug_stand = false, // for debugging.
+		kL_Debug_stand = false, // for debugging ->
 		kL_Debug_walk = false,
 		kL_Debug_vert = false,
 		kL_Debug_main = false;
@@ -1281,7 +1281,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 											if (redraw == true)
 											{
-												Log(LOG_INFO) << ". redraw";
 												quad = tileWest->getPosition().x - unitWest->getPosition().x
 													+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
 
@@ -1613,7 +1612,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											}
 											else if (dir == 1 || dir == 5)
 											{
-												pixelOffset_x = 32;
+												pixelOffset_x = -32;
 												pixelOffset_y = 24;
 											}
 											else if (dir == 2 || dir == 6)

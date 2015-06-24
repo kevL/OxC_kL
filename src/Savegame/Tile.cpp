@@ -984,7 +984,8 @@ void Tile::addSmoke(int turns)
  */
 void Tile::decreaseSmoke()
 {
-	_smoke -= (RNG::generate(1, _smoke) + 1) / 2;
+//	_smoke -= (RNG::generate(1, _smoke) + 1) / 2;
+	_smoke -= (RNG::generate(1, _smoke) + 2) / 3;
 
 	if (_smoke < 1)
 	{
