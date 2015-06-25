@@ -36,30 +36,47 @@ UnitPanicBState::UnitPanicBState(
 	:
 		BattleState(parent),
 		_unit(unit)
-{}
+{
+	Log(LOG_INFO) << "Create UnitPanicBState";
+}
 
 /**
  * Deletes the UnitPanicBState.
  */
 UnitPanicBState::~UnitPanicBState()
-{}
+{
+	Log(LOG_INFO) << "destroy UnitPanicBState";
+}
 
 /**
  *
  */
-void UnitPanicBState::init()
-{}
+std::string UnitPanicBState::getClassIdentifier()
+{
+	return "UnitPanicBState";
+}
+
+/**
+ *
+ */
+/* void UnitPanicBState::init()
+{} */
 
 /**
  * Runs state functionality every cycle.
- * @note Ends the panicking when done.
+ * @note Ends panicking for '_unit'.
  */
 void UnitPanicBState::think()
 {
+	Log(LOG_INFO) << "UnitPanicBState::think()";
 	if (_unit != NULL)
 	{
+		Log(LOG_INFO) << ". end panic for " << _unit->getId();
 		if (_unit->isOut() == false)
+		{
 			_unit->setStatus(STATUS_STANDING);
+			_unit->moraleChange(10 + RNG::generate(0,10));
+		}
 
 		_unit->setTimeUnits(0);
 		_unit->setDashing(false);
@@ -78,7 +95,7 @@ void UnitPanicBState::think()
 /**
  * Panicking cannot be cancelled.
  */
-void UnitPanicBState::cancel()
-{}
+/* void UnitPanicBState::cancel()
+{} */
 
 }

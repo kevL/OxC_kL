@@ -5390,7 +5390,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1434550026 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1435161345 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"Map.h"
@@ -5471,7 +5471,7 @@
 1434946931 f:\git\openxcom\src\battlescape\projectileflybstate.h
 	"BattleState.h"
 
-1431757836 f:\git\openxcom\src\battlescape\battlestate.h
+1435256431 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
 1433996801 f:\git\openxcom\src\battlescape\map.h
@@ -5501,7 +5501,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1434948463 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1435254861 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5568,7 +5568,7 @@
 1433916325 f:\git\openxcom\src\battlescape\unitinfostate.h
 	"../Engine/State.h"
 
-1433124817 f:\git\openxcom\src\battlescape\unitpanicbstate.h
+1435210300 f:\git\openxcom\src\battlescape\unitpanicbstate.h
 	"BattleState.h"
 
 1430149550 f:\git\openxcom\src\battlescape\unitturnbstate.h
@@ -5662,16 +5662,15 @@
 1421694989 f:\git\openxcom\src\savegame\terrorsite.h
 	"Target.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
+1435174868 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
 	"BattlescapeMessage.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/Window.h"
 
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1434532359 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1435253200 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5948,7 +5947,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1433210793 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
+1435212200 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
 	"InfoboxOKState.h"
 	"Map.h"
 	"../Engine/Game.h"
@@ -6027,7 +6026,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1434995855 source:f:\git\openxcom\src\battlescape\map.cpp
+1435125082 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6138,7 +6137,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1433210827 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1435181557 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -6298,7 +6297,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1435117295 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1435171313 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6380,7 +6379,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433335255 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
+1435254620 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
@@ -6539,7 +6538,7 @@
 	"Language.h"
 	"Surface.h"
 
-1433863022 source:f:\git\openxcom\src\engine\game.cpp
+1435211102 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6583,7 +6582,7 @@
 	"InteractiveSurface.h"
 	"Action.h"
 
-1433863201 source:f:\git\openxcom\src\engine\language.cpp
+1435175586 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	"../Interface/TextList.h"
 	"../Ruleset/ExtraStrings.h"
@@ -8642,7 +8641,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1434460987 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1435164804 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -8749,7 +8748,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1434462695 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1435181287 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

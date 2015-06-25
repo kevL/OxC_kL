@@ -2705,84 +2705,97 @@ void TileEngine::explode(
 
 							//Log(LOG_INFO) << "\n";
 							BattleUnit* bu;
-							for (std::vector<BattleItem*>::const_iterator
-									i = destTile->getInventory()->begin();
-									i != destTile->getInventory()->end();
-									++i)
+							bool done = false;
+
+							while (done == false
+								&& destTile->getInventory()->empty() == false)
 							{
-								//Log(LOG_INFO) << "pos " << destTile->getPosition();
-								//Log(LOG_INFO) << ". . INVENTORY: Item = " << (*i)->getRules()->getType();
-								bu = (*i)->getUnit();
-
-								if (bu != NULL
-									&& bu->getStatus() == STATUS_UNCONSCIOUS
-									&& bu->getTakenExpl() == false)
+								for (std::vector<BattleItem*>::const_iterator
+										i = destTile->getInventory()->begin();
+										i != destTile->getInventory()->end();
+										)
 								{
-									//Log(LOG_INFO) << ". . . vs Unit unconscious";
-									bu->setTakenExpl();
+									//Log(LOG_INFO) << "pos " << destTile->getPosition();
+									//Log(LOG_INFO) << ". . INVENTORY: Item = " << (*i)->getRules()->getType();
+									bu = (*i)->getUnit();
 
-									const double
-										power0 = static_cast<double>(_powerE),
-										power1 = power0 * 0.5,
-										power2 = power0 * 1.5;
-
-									powerUnit = static_cast<int>(RNG::generate(power1, power2)) // bell curve
-											  + static_cast<int>(RNG::generate(power1, power2));
-									powerUnit /= 2;
-									//Log(LOG_INFO) << ". . . INVENTORY: power = " << powerUnit;
-									bu->damage(
-											Position(0,0,0),
-											powerUnit,
-											DT_HE);
-									//Log(LOG_INFO) << ". . . INVENTORY: damage = " << dam;
-
-									if (bu->getHealth() == 0)
+									if (bu != NULL
+										&& bu->getStatus() == STATUS_UNCONSCIOUS
+										&& bu->getTakenExpl() == false)
 									{
-										//Log(LOG_INFO) << ". . . . INVENTORY: instaKill";
-										bu->instaKill();
+										//Log(LOG_INFO) << ". . . vs Unit unconscious";
+										bu->setTakenExpl();
 
-										if (attacker != NULL)
+										const double
+											power0 = static_cast<double>(_powerE),
+											power1 = power0 * 0.5,
+											power2 = power0 * 1.5;
+
+										powerUnit = static_cast<int>(RNG::generate(power1, power2)) // bell curve
+												  + static_cast<int>(RNG::generate(power1, power2));
+										powerUnit /= 2;
+										//Log(LOG_INFO) << ". . . INVENTORY: power = " << powerUnit;
+										bu->damage(
+												Position(0,0,0),
+												powerUnit,
+												DT_HE);
+										//Log(LOG_INFO) << ". . . INVENTORY: damage = " << dam;
+
+										if (bu->getHealth() == 0)
 										{
-											bu->killedBy(attacker->getFaction()); // TODO: log the kill in Soldier's Diary.
-											//Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
-										}
+											//Log(LOG_INFO) << ". . . . INVENTORY: instaKill";
+											bu->instaKill();
 
-										if (bu->getGeoscapeSoldier() != NULL // send Death notice.
-											&& Options::battleNotifyDeath == true)
-										{
-											Game* const game = _battleSave->getBattleState()->getGame();
-											game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has exploded ..."
-																										"STR_HAS_BEEN_KILLED",
-																										bu->getGender())
-																									.arg(bu->getName(game->getLanguage()))));
+											if (attacker != NULL)
+											{
+												bu->killedBy(attacker->getFaction()); // TODO: log the kill in Soldier's Diary.
+												//Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
+											}
+
+											if (bu->getGeoscapeSoldier() != NULL // send Death notice.
+												&& Options::battleNotifyDeath == true)
+											{
+												Game* const game = _battleSave->getBattleState()->getGame();
+												game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has exploded ..."
+																											"STR_HAS_BEEN_KILLED",
+																											bu->getGender())
+																										.arg(bu->getName(game->getLanguage()))));
+											}
 										}
 									}
-								}
-								else if (_powerE > (*i)->getRules()->getArmor()
-									&& (bu == NULL
-										|| bu->getStatus() == STATUS_DEAD))
-								{
-									//Log(LOG_INFO) << ". . . vs Item armor";
-									if ((*i)->getFuseTimer() != -1)
+									else if (_powerE > (*i)->getRules()->getArmor()
+										&& (bu == NULL
+											|| (bu->getStatus() == STATUS_DEAD
+												&& bu->getTakenExpl() == false)))
 									{
-										//Log(LOG_INFO) << ". . . . INVENTORY: primed grenade";
-										(*i)->setFuseTimer(-1);
-										const Position pos = Position(
-																	destTile->getPosition().x * 16 + 8,
-																	destTile->getPosition().y * 16 + 8,
-																	destTile->getPosition().z * 24 + 2);
-										_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
-																									_battleSave->getBattleGame(),
-																									pos,
-																									*i,
-																									attacker));
+										//Log(LOG_INFO) << ". . . vs Item armor";
+										if ((*i)->getFuseTimer() > -1)
+										{
+											//Log(LOG_INFO) << ". . . . INVENTORY: primed grenade";
+											(*i)->setFuseTimer(-2);
+
+											const Position pos = Position(
+																		destTile->getPosition().x * 16 + 8,
+																		destTile->getPosition().y * 16 + 8,
+																		destTile->getPosition().z * 24 + 2);
+											_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
+																										_battleSave->getBattleGame(),
+																										pos,
+																										*i,
+																										attacker));
+										}
+										else if ((*i)->getFuseTimer() != -2)
+										{
+											//Log(LOG_INFO) << ". . . . INVENTORY: removeItem = " << (*i)->getRules()->getType();
+											_battleSave->removeItem(*i);
+											break;
+//											--i; // "vector iterator not decrementable" - yeesh.
+										}
 									}
-									else
-									{
-										//Log(LOG_INFO) << ". . . . INVENTORY: removeItem = " << (*i)->getRules()->getType();
-										_battleSave->removeItem(*i);
-										--i;
-									}
+									//else Log(LOG_INFO) << ". . . INVENTORY: bypass item = " << (*i)->getRules()->getType();
+
+									++i; // "vector iterator not incrementable" - yeesh.
+									done = (i == destTile->getInventory()->end());
 								}
 							}
 						}
@@ -2921,72 +2934,83 @@ void TileEngine::explode(
 							}
 
 							BattleUnit* bu;
-							for (std::vector<BattleItem*>::const_iterator
-									i = fireTile->getInventory()->begin();
-									i != fireTile->getInventory()->end();
-									++i)
+							bool done = false;
+
+							while (done == false
+								&& destTile->getInventory()->empty() == false)
 							{
-								bu = (*i)->getUnit();
-
-								if (bu != NULL
-									&& bu->getStatus() == STATUS_UNCONSCIOUS
-									&& bu->getTakenExpl() == false)
+								for (std::vector<BattleItem*>::const_iterator
+										i = fireTile->getInventory()->begin();
+										i != fireTile->getInventory()->end();
+										)
 								{
-									bu->setTakenExpl();
+									bu = (*i)->getUnit();
 
-									powerUnit = RNG::generate( // 25% - 75%
-															_powerE / 4,
-															_powerE * 3 / 4);
-									bu->damage(
-											Position(0,0,0),
-											powerUnit,
-											DT_IN,
-											true);
-
-									if (bu->getHealth() == 0)
+									if (bu != NULL
+										&& bu->getStatus() == STATUS_UNCONSCIOUS
+										&& bu->getTakenExpl() == false)
 									{
-										bu->instaKill();
+										bu->setTakenExpl();
 
-										if (attacker != NULL)
+										powerUnit = RNG::generate( // 25% - 75%
+																_powerE / 4,
+																_powerE * 3 / 4);
+										bu->damage(
+												Position(0,0,0),
+												powerUnit,
+												DT_IN,
+												true);
+
+										if (bu->getHealth() == 0)
 										{
-											bu->killedBy(attacker->getFaction()); // TODO: log the kill in Soldier's Diary.
-											//Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
-										}
+											bu->instaKill();
 
-										if (bu->getGeoscapeSoldier() != NULL // send Death notice.
-											&& Options::battleNotifyDeath == true)
+											if (attacker != NULL)
+											{
+												bu->killedBy(attacker->getFaction()); // TODO: log the kill in Soldier's Diary.
+												//Log(LOG_INFO) << "TE::explode() " << bu->getId() << " killedBy = " << (int)attacker->getFaction();
+											}
+
+											if (bu->getGeoscapeSoldier() != NULL // send Death notice.
+												&& Options::battleNotifyDeath == true)
+											{
+												Game* const game = _battleSave->getBattleState()->getGame();
+												game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
+																											"STR_HAS_BEEN_KILLED",
+																											bu->getGender())
+																										.arg(bu->getName(game->getLanguage()))));
+											}
+										}
+									}
+									else if (_powerE > (*i)->getRules()->getArmor()
+										&& (bu == NULL
+											|| (bu->getStatus() == STATUS_DEAD
+												&& bu->getTakenExpl() == false)))
+									{
+										if ((*i)->getFuseTimer() > -1)
 										{
-											Game* const game = _battleSave->getBattleState()->getGame();
-											game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
-																										"STR_HAS_BEEN_KILLED",
-																										bu->getGender())
-																									.arg(bu->getName(game->getLanguage()))));
+											(*i)->setFuseTimer(-2);
+
+											const Position pos = Position(
+																		destTile->getPosition().x * 16 + 8,
+																		destTile->getPosition().y * 16 + 8,
+																		destTile->getPosition().z * 24 + 2);
+											_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
+																										_battleSave->getBattleGame(),
+																										pos,
+																										*i,
+																										attacker));
+										}
+										else if ((*i)->getFuseTimer() != -2)
+										{
+											_battleSave->removeItem(*i);
+											break;
+//											--i; // "vector iterator not decrementable" - yeesh.
 										}
 									}
-								}
-								else if (_powerE > (*i)->getRules()->getArmor()
-									&& (bu == NULL
-										|| bu->getStatus() == STATUS_DEAD))
-								{
-									if ((*i)->getFuseTimer() != -1)
-									{
-										(*i)->setFuseTimer(-1);
 
-										const Position pos = Position(
-																	destTile->getPosition().x * 16 + 8,
-																	destTile->getPosition().y * 16 + 8,
-																	destTile->getPosition().z * 24 + 2);
-										_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
-																									_battleSave->getBattleGame(),
-																									pos,
-																									*i,
-																									attacker));
-									}
-									else
-									{
-										_battleSave->removeItem(*i);
-										--i;
-									}
+									++i; // "vector iterator not incrementable" - yeesh.
+									done = (i == destTile->getInventory()->end());
 								}
 							}
 						}

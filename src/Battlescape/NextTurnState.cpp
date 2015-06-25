@@ -247,7 +247,7 @@ void NextTurnState::nextTurn()
 			const int turn = _battleSave->getTurn();
 
 			if (turn == 1
-				|| (turn %Options::autosaveFrequency) == 0)
+				|| (turn % Options::autosaveFrequency) == 0)
 			{
 				if (_game->getSavedGame()->isIronman() == true)
 					_game->pushState(new SaveGameState(

@@ -395,6 +395,11 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 					_game->popState();
 				}
 			}
+			else if (itRule->getBattleType() == BT_MINDPROBE)
+			{
+				_action->targeting = true;
+				_game->popState();
+			}
 		}
 		else if (_action->type == BA_LAUNCH)
 		{
@@ -426,7 +431,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 
 			_game->popState();
 		}
-		else // shoot, throw, psi-attack, mind-probe
+		else // shoot, throw, psi-attack
 		{
 			_action->targeting = true;
 			_game->popState();

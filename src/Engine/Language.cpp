@@ -119,8 +119,7 @@ Language::~Language()
 }
 
 /**
- * Takes a wide-character string and converts it
- * to a 8-bit string encoded in UTF-8.
+ * Takes a wide-character string and converts it to a 8-bit string encoded in UTF-8.
  * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
  * @param src Wide-character string.
  * @return UTF-8 string.
@@ -207,8 +206,7 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 }
 
 /**
- * Takes a wide-character string and converts it to an
- * 8-bit string encoded in the current system codepage.
+ * Takes a wide-character string and converts it to an 8-bit string encoded in the current system codepage.
  * @param src Wide-character string.
  * @return Codepage string.
  */
@@ -259,8 +257,7 @@ std::string Language::wstrToCp(const std::wstring& src)
 }
 
 /**
- * Takes a wide-character string and converts it to an
- * 8-bit string with the filesystem encoding.
+ * Takes a wide-character string and converts it to an 8-bit string with the filesystem encoding.
  * @param src Wide-character string.
  * @return Filesystem string.
  */
@@ -274,8 +271,7 @@ std::string Language::wstrToFs(const std::wstring& src)
 }
 
 /**
- * Takes an 8-bit string encoded in UTF-8 and converts it
- * to a wide-character string.
+ * Takes an 8-bit string encoded in UTF-8 and converts it to a wide-character string.
  * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
  * @param src UTF-8 string.
  * @return Wide-character string.
@@ -361,8 +357,7 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 }
 
 /**
- * Takes an 8-bit string encoded in the current system codepage
- * and converts it to a wide-character string.
+ * Takes an 8-bit string encoded in the current system codepage and converts it to a wide-character string.
  * @param src Codepage string.
  * @return Wide-character string.
  */
@@ -411,8 +406,7 @@ std::wstring Language::cpToWstr(const std::string& src)
 }
 
 /**
- * Takes an 8-bit string with the filesystem encoding
- * and converts it to a wide-character string.
+ * Takes an 8-bit string with the filesystem encoding and converts it to a wide-character string.
  * @param src Filesystem string.
  * @return Wide-character string.
  */
@@ -476,8 +470,7 @@ void Language::replace(
 }
 
 /**
- * Gets all the languages found in the
- * Data folder and returns their properties.
+ * Gets all the languages found in the Data folder and returns their properties.
  * @param files List of language filenames.
  * @param names List of language human-readable names.
  */
@@ -508,8 +501,8 @@ void Language::getList(
 
 /**
  * Loads a language file in Ruby-on-Rails YAML format.
- * Not that this has anything to do with Ruby, but since it's a
- * widely-supported format and we already have YAML, it was convenient.
+ * @note Not that this has anything to do with Ruby but since it's a
+ * widely-supported format and we already have YAML it was convenient.
  * @param filename Filename of the YAML file.
  * @param extras Pointer to extra strings from ruleset.
  */
@@ -643,7 +636,7 @@ const LocalizedText& Language::getString(const std::string& id) const
 /**
  * Returns the localized text with the specified ID, in the proper form for @a n.
  * The substitution of @a n has already happened in the returned LocalizedText.
- * If it's not found, just returns the ID.
+ * @note If not found return the ID itself.
  * @param id	- ID of the string
  * @param n		- number to use to decide the proper form
  * @return, LocalizedText (widestring) with the requested ID
@@ -687,7 +680,7 @@ LocalizedText Language::getString(
 }
 
 /**
- * Returns the localized text with the specified ID, in the proper form for the gender.
+ * Returns the localized text with the specified ID in the proper form for the gender.
  * @note If it's not found, just returns the ID.
  * @param id		- ID of the string
  * @param gender	- current soldier gender

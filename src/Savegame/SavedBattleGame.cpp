@@ -1288,12 +1288,14 @@ bool SavedBattleGame::endBattlePhase()
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
 	{
+		//Log(LOG_INFO) << ". end Hostile phase -> NEUTRAL";
 		_side = FACTION_NEUTRAL;
 
 		// if there is no neutral team, skip this section
 		// and instantly prepare new turn for the player.
 		if (selectNextFactionUnit() == NULL) // else this will cycle through NEUTRAL units
 		{
+			//Log(LOG_INFO) << ". no neutral units to select ... -> PLAYER";
 			spreadFireSmoke(); // do Tile stuff
 			++_turn;
 			ret = true;
@@ -1301,22 +1303,31 @@ bool SavedBattleGame::endBattlePhase()
 			_side = FACTION_PLAYER;
 
 			if (_lastSelectedUnit != NULL
-				&& _lastSelectedUnit->isSelectable(FACTION_PLAYER))
+				&& _lastSelectedUnit->isSelectable(FACTION_PLAYER) == true)
 			{
+				//Log(LOG_INFO) << ". . last Selected = " << _lastSelectedUnit->getId();
 				_selectedUnit = _lastSelectedUnit;
 			}
 			else
+			{
+				//Log(LOG_INFO) << ". . select next";
 				selectNextFactionUnit();
+			}
 
 			while (_selectedUnit != NULL
 				&& _selectedUnit->getFaction() != FACTION_PLAYER)
 			{
+				//Log(LOG_INFO) << ". . select next loop";
 				selectNextFactionUnit(true);
 			}
+
+			//if (_selectedUnit != NULL) Log(LOG_INFO) << ". -> selected Unit = " << _selectedUnit->getId();
+			//else Log(LOG_INFO) << ". -> NO UNIT TO SELECT FOUND";
 		}
 	}
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
+		//Log(LOG_INFO) << ". end Neutral phase -> PLAYER";
 		spreadFireSmoke(); // do Tile stuff
 		++_turn;
 		ret = true;
@@ -1324,7 +1335,7 @@ bool SavedBattleGame::endBattlePhase()
 		_side = FACTION_PLAYER;
 
 		if (_lastSelectedUnit != NULL
-			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER))
+			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER) == true)
 		{
 			_selectedUnit = _lastSelectedUnit;
 		}

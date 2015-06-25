@@ -52,25 +52,25 @@ BattleState::BattleState(BattlescapeGame* parent)
 /**
  * Deletes the BattleState.
  */
-BattleState::~BattleState()
+BattleState::~BattleState() // virtual.
 {}
 
 /**
  * Start the current BattleState.
  */
-void BattleState::init()
+void BattleState::init() // virtual.
 {}
 
 /**
  * Cancels the current BattleState.
  */
-void BattleState::cancel()
+void BattleState::cancel() // virtual.
 {}
 
 /**
  * Runs any code the state needs to keep updating every game cycle.
  */
-void BattleState::think()
+void BattleState::think() // virtual.
 {}
 
 /**

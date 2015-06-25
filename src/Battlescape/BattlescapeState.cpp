@@ -1056,7 +1056,7 @@ void BattlescapeState::init()
 		_btnReserveAuto->setGroup(&_reserve); */
 	}
 
-	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel()));
+	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel() + 1));
 
 	if (_iconsHidden == false
 		&& _battleSave->getDestroyed() == true)
@@ -1099,15 +1099,15 @@ void BattlescapeState::think()
 
 			if (popped == true)
 			{
-				_battleGame->handleNonTargetAction();
 				popped = false;
+				_battleGame->handleNonTargetAction();
 			}
 		}
 		else // Handle popups
 		{
+			popped = true;
 			_game->pushState(*_popups.begin());
 			_popups.erase(_popups.begin());
-			popped = true;
 		}
 	}
 	//Log(LOG_INFO) << "BattlescapeState::think() EXIT";
@@ -1136,7 +1136,8 @@ void BattlescapeState::mapOver(Action* action)
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
 			}
 
-			_isMouseScrolled = _isMouseScrolling = false;
+			_isMouseScrolled =
+			_isMouseScrolling = false;
 //			stopScrolling(action); // newScroll
 
 			return;
@@ -1807,11 +1808,13 @@ void BattlescapeState::btnUnitDownClick(Action*)
  */
 void BattlescapeState::btnMapUpClick(Action*)
 {
-	if (_battleSave->getSide() == FACTION_PLAYER
+/*	if (_battleSave->getSide() == FACTION_PLAYER
 		|| _battleSave->getDebugMode() == true)
 	{
 		_map->getCamera()->up();
-	}
+	} */
+	if (allowButtons() == true)
+		_map->getCamera()->up();
 }
 
 /**
@@ -1820,11 +1823,13 @@ void BattlescapeState::btnMapUpClick(Action*)
  */
 void BattlescapeState::btnMapDownClick(Action*)
 {
-	if (_battleSave->getSide() == FACTION_PLAYER
+/*	if (_battleSave->getSide() == FACTION_PLAYER
 		|| _battleSave->getDebugMode() == true)
 	{
 		_map->getCamera()->down();
-	}
+	} */
+	if (allowButtons() == true)
+		_map->getCamera()->down();
 }
 
 /**
@@ -2066,14 +2071,17 @@ void BattlescapeState::btnShowLayersClick(Action*)
 {
 //	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 
-	const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2) ? true : false;
-
-	if (showLayers == false)
-		_iconsLayer->clear();
-	else
+	if (allowButtons() == true)
 	{
-		Surface* const iconsLayer = _game->getResourcePack()->getSurface("ICONS_LAYER");
-		iconsLayer->blit(_iconsLayer);
+		const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2) ? true : false;
+
+		if (showLayers == false)
+			_iconsLayer->clear();
+		else
+		{
+			Surface* const iconsLayer = _game->getResourcePack()->getSurface("ICONS_LAYER");
+			iconsLayer->blit(_iconsLayer);
+		}
 	}
 }
 

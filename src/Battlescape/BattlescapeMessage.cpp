@@ -19,7 +19,7 @@
 
 #include "BattlescapeMessage.h"
 
-#include "../Engine/Palette.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"

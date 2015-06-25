@@ -256,9 +256,9 @@ void State::toggleScreen()
 /**
  * Initializes the state and its child elements.
  * @note This is used for settings that have to be reset every time the state is
- * returned to focus (eg. palettes), so can't just be put in the constructor
- * (remember there's a stack of states, so they can be created once while being
- * repeatedly switched back into focus).
+ * returned to focus (eg. palettes) so can't just be put in the constructor.
+ * There's a stack of states so they can be created once but then repeatedly
+ * switched in and out of focus.
  */
 void State::init() // virtual
 {

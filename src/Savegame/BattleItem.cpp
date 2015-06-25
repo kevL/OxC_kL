@@ -123,46 +123,33 @@ YAML::Node BattleItem::save() const
 {
 	YAML::Node node;
 
-	node["id"]					= _id;
-	node["type"]				= _rules->getType();
+	node["id"]			= _id;
+	node["type"]		= _rules->getType();
+	node["inventoryX"]	= _inventoryX;
+	node["inventoryY"]	= _inventoryY;
+	node["ammoQty"]		= _ammoQty;
+	node["painKiller"]	= _painKiller;
+	node["heal"]		= _heal;
+	node["stimulant"]	= _stimulant;
 
-	if (_owner)
-		node["owner"]			= _owner->getId();
-	else
-		node["owner"]			= -1;
+	if (_owner != NULL)			node["owner"]			= _owner->getId();
+	else						node["owner"]			= -1;
 
-	if (_previousOwner)
-		node["previousOwner"]	= _previousOwner->getId();
+	if (_previousOwner != NULL)	node["previousOwner"]	= _previousOwner->getId();
 
-	if (_unit)
-		node["unit"]			= _unit->getId();
-	else
-		node["unit"]			= -1;
+	if (_unit != NULL)			node["unit"]			= _unit->getId();
+	else						node["unit"]			= -1;
 
-	if (_inventorySlot)
-		node["inventoryslot"]	= _inventorySlot->getId();
-	else
-		node["inventoryslot"]	= "NULL";
+	if (_inventorySlot != NULL)	node["inventoryslot"]	= _inventorySlot->getId();
+	else						node["inventoryslot"]	= "NULL";
 
-	node["inventoryX"]			= _inventoryX;
-	node["inventoryY"]			= _inventoryY;
+	if (_tile != NULL)			node["position"]		= _tile->getPosition();
+	else						node["position"]		= Position(-1,-1,-1);
 
-	if (_tile)
-		node["position"]		= _tile->getPosition();
-	else
-		node["position"]		= Position(-1,-1,-1);
+	if (_ammoItem != NULL)		node["ammoItem"]		= _ammoItem->getId();
+	else						node["ammoItem"]		= -1;
 
-	node["ammoQty"]				= _ammoQty;
-
-	if (_ammoItem)
-		node["ammoItem"]		= _ammoItem->getId();
-	else
-		node["ammoItem"]		= -1;
-
-	node["painKiller"]			= _painKiller;
-	node["heal"]				= _heal;
-	node["stimulant"]			= _stimulant;
-	node["fuseTimer"]			= _fuseTimer;
+	if (_fuseTimer != -1)		node["fuseTimer"]		= _fuseTimer;
 
 //	if (_droppedOnAlienTurn)
 //		node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;

@@ -33,7 +33,7 @@ class BattlescapeGame;
 
 /**
  * This class sets the battlescape in a certain sub-state.
- * These states can be triggered by the player or the AI.
+ * @note These states can be triggered by the player or the AI.
  */
 class BattleState
 {
