@@ -526,11 +526,15 @@ private:
 
 	/// Converts an amount of experience to a stat increase.
 	int improveStat(int xp);
+
 	/// Helper function initing recolor vector.
 	void setRecolor(
 			int basicLook,
 			int utileLook,
 			int rankLook);
+
+	/// Gets if a grenade is suitable for an AI or panic situation.
+	bool isGrenadeSuitable(const BattleItem* const grenade) const;
 
 
 	public:

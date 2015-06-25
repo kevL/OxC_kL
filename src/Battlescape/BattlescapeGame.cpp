@@ -2178,7 +2178,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 		{
 			case STATUS_PANICKING:
 			{
-				Log(LOG_INFO) << ". PANIC";
+				//Log(LOG_INFO) << ". PANIC";
 				BattleItem* item;
 				if (RNG::percent(75) == true)
 				{
@@ -2246,7 +2246,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 
 			case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
 			{						// towards an enemy unit or shoot towards random place
-				Log(LOG_INFO) << ". BERSERK";
+				//Log(LOG_INFO) << ". BERSERK";
 				ba.type = BA_TURN;
 				const int pivotQty = RNG::generate(2,5);
 				for (int

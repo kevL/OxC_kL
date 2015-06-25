@@ -2829,7 +2829,8 @@ BattleItem* BattleUnit::getGrenade() const
 	}
 
 	if (grenade != NULL
-		&& grenade->getRules()->getBattleType() == BT_GRENADE)
+		&& grenade->getRules()->getBattleType() == BT_GRENADE
+		&& isGrenadeSuitable(grenade) == true)
 	{
 		return grenade;
 	}
@@ -2840,8 +2841,11 @@ BattleItem* BattleUnit::getGrenade() const
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
+		if ((*i)->getRules()->getBattleType() == BT_GRENADE
+			&& isGrenadeSuitable(*i) == true)
+		{
 			grenades.push_back(*i);
+		}
 	}
 
 	if (grenades.empty() == false)
@@ -2853,6 +2857,21 @@ BattleItem* BattleUnit::getGrenade() const
 	}
 
 	return NULL;
+}
+
+/**
+ * Gets if a grenade is suitable for the required use.
+ * @return, true if item is suitable for AI/panic usage by faction.
+ */
+bool BattleUnit::isGrenadeSuitable(const BattleItem* const grenade) const // private.
+{
+	if (_battleGame->getPanicHandled() == true // -> is AI, only non-smoke grenades are usable.
+		&& grenade->getRules()->getDamageType() == DT_SMOKE)
+	{
+		return false;
+	}
+
+	return true; // -> is panic, allow smoke grenades too.
 }
 
 /**

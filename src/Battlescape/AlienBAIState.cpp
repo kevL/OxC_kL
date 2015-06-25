@@ -950,12 +950,12 @@ void AlienBAIState::setupAttack() // private.
 	{
 		//Log(LOG_INFO) << ". enemies visible = " << selectNearestTarget();
 		// if there are both types of weapon, make a determination on which to use.
-		if (_unit->getGrenade() != NULL)
-		{
+//		if (_unit->getGrenade() != NULL)
+//		{
 			//Log(LOG_INFO) << ". . getGrenade TRUE, grenadeAction()";
-			grenadeAction();
+		grenadeAction();
 			//Log(LOG_INFO) << ". . . . . . grenadeAction() DONE";
-		}
+//		}
 
 		if (_melee == true
 			&& _rifle == true)
@@ -2515,61 +2515,60 @@ void AlienBAIState::grenadeAction() // private.
 	// kL_note: this is already checked in setupAttack()
 	// Could use it to determine if grenade is already inHand though! ( see _grenade var.)
 	BattleItem* const grenade = _unit->getGrenade();
-
-	if (grenade == NULL)
-		return;
-
-	// distance must be more than X tiles, otherwise it's too dangerous to explode
-	if (explosiveEfficacy(
-					_aggroTarget->getPosition(),
-					_unit,
-					grenade->getRules()->getExplosionRadius(),
-					_attackAction->diff) == true)
-//					true))
+	if (grenade != NULL)
 	{
-//		if (_unit->getFaction() == FACTION_HOSTILE)
-//		{
-		const RuleInventory* const invRule = grenade->getSlot();
-		int tuCost = invRule->getCost(_battleSave->getBattleGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
-
-		if (grenade->getFuseTimer() == -1)
-			tuCost += _unit->getActionTUs(
-										BA_PRIME,
-										grenade);
-		// Prime is done in ProjectileFlyBState.
-		tuCost += _unit->getActionTUs(
-									BA_THROW,
-									grenade);
-
-		if (tuCost <= _unit->getTimeUnits())
+		// distance must be more than X tiles, otherwise it's too dangerous to explode
+		if (explosiveEfficacy(
+						_aggroTarget->getPosition(),
+						_unit,
+						grenade->getRules()->getExplosionRadius(),
+						_attackAction->diff) == true)
+	//					true))
 		{
-			BattleAction action;
-			action.actor = _unit;
-			action.target = _aggroTarget->getPosition();
-			action.weapon = grenade;
-			action.type = BA_THROW;
+	//		if (_unit->getFaction() == FACTION_HOSTILE)
+	//		{
+			const RuleInventory* const invRule = grenade->getSlot();
+			int tuCost = invRule->getCost(_battleSave->getBattleGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
-			const Position
-				originVoxel = _battleSave->getTileEngine()->getOriginVoxel(action),
-				targetVoxel = action.target * Position(16,16,24)
-							+ Position(
-									8,8,
-									2 - _battleSave->getTile(action.target)->getTerrainLevel());
+			if (grenade->getFuseTimer() == -1)
+				tuCost += _unit->getActionTUs(
+											BA_PRIME,
+											grenade);
+			// Prime is done in ProjectileFlyBState.
+			tuCost += _unit->getActionTUs(
+										BA_THROW,
+										grenade);
 
-			if (_battleSave->getTileEngine()->validateThrow(
-														action,
-														originVoxel,
-														targetVoxel) == true)
+			if (tuCost <= _unit->getTimeUnits())
 			{
-				_attackAction->target = action.target;
-				_attackAction->weapon = grenade;
-				_attackAction->type = BA_THROW;
+				BattleAction action;
+				action.actor = _unit;
+				action.target = _aggroTarget->getPosition();
+				action.weapon = grenade;
+				action.type = BA_THROW;
 
-				_rifle = false;
-				_melee = false;
+				const Position
+					originVoxel = _battleSave->getTileEngine()->getOriginVoxel(action),
+					targetVoxel = action.target * Position(16,16,24)
+								+ Position(
+										8,8,
+										2 - _battleSave->getTile(action.target)->getTerrainLevel());
+
+				if (_battleSave->getTileEngine()->validateThrow(
+															action,
+															originVoxel,
+															targetVoxel) == true)
+				{
+					_attackAction->target = action.target;
+					_attackAction->weapon = grenade;
+					_attackAction->type = BA_THROW;
+
+					_rifle = false;
+					_melee = false;
+				}
 			}
+	//		}
 		}
-//		}
 	}
 }
 /*	// do we have a grenade on our belt?
