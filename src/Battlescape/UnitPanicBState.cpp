@@ -36,25 +36,13 @@ UnitPanicBState::UnitPanicBState(
 	:
 		BattleState(parent),
 		_unit(unit)
-{
-	Log(LOG_INFO) << "Create UnitPanicBState";
-}
+{}
 
 /**
  * Deletes the UnitPanicBState.
  */
 UnitPanicBState::~UnitPanicBState()
-{
-	Log(LOG_INFO) << "destroy UnitPanicBState";
-}
-
-/**
- *
- */
-std::string UnitPanicBState::getClassIdentifier()
-{
-	return "UnitPanicBState";
-}
+{}
 
 /**
  *
@@ -68,10 +56,8 @@ std::string UnitPanicBState::getClassIdentifier()
  */
 void UnitPanicBState::think()
 {
-	Log(LOG_INFO) << "UnitPanicBState::think()";
 	if (_unit != NULL)
 	{
-		Log(LOG_INFO) << ". end panic for " << _unit->getId();
 		if (_unit->isOut() == false)
 		{
 			_unit->setStatus(STATUS_STANDING);

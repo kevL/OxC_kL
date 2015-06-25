@@ -44,7 +44,6 @@ namespace OpenXcom
  */
 InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 {
-	Log(LOG_INFO) << "Create InfoboxOKState";
 	_screen = false;
 
 	_frame		= new Frame(260, 90, 30, 27);
@@ -90,9 +89,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
  * dTor.
  */
 InfoboxOKState::~InfoboxOKState()
-{
-	Log(LOG_INFO) << "destroy InfoboxOKState";
-}
+{}
 
 /**
  * Returns to the previous screen.
@@ -106,7 +103,6 @@ void InfoboxOKState::btnOkClick(Action*)
 		_game->getCursor()->setVisible(false);
 	}
 
-	Log(LOG_INFO) << "InfoboxOKState::btnOkClick()";
 	_game->popState();
 }
 

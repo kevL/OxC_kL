@@ -610,21 +610,6 @@ void BattlescapeGame::popState()
  */
 bool BattlescapeGame::noActionsPending(const BattleUnit* const unit) const // private
 {
-/*	if (_states.empty() == true) return true;
-
-	for (std::list<BattleState*>::const_iterator
-			i = _states.begin();
-			i != _states.end();
-			++i)
-	{
-		if (*i != NULL
-			&& (*i)->getAction().actor == unit)
-		{
-			return false;
-		}
-	}
-
-	return true; */
 	if (_states.empty() == false)
 	{
 		for (std::list<BattleState*>::const_iterator

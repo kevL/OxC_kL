@@ -50,9 +50,6 @@ private:
 		/// Cleans up the UnitPanicBState.
 		~UnitPanicBState();
 
-		///
-		std::string getClassIdentifier();
-
 		/// Initializes the state.
 //		void init();
 		/// Handles a cancels request.
