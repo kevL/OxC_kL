@@ -5780,7 +5780,7 @@ int TileEngine::distanceSq(
  * @param action - pointer to a BattleAction (BattlescapeGame.h)
  * @return, true if attack succeeds
  */
-bool TileEngine::psiAttack(const BattleAction* const action)
+bool TileEngine::psiAttack(BattleAction* const action)
 {
 	//Log(LOG_INFO) << "\nTileEngine::psiAttack() attackerID " << action->actor->getId();
 	const Tile* const tile = _battleSave->getTile(action->target);
@@ -5858,17 +5858,7 @@ bool TileEngine::psiAttack(const BattleAction* const action)
 		attack /= 56.;
 
 		const int success = static_cast<int>(attack);
-
-		std::string info;
-		if (action->type == BA_PANIC)
-			info = "STR_PANIC";
-		else
-			info = "STR_CONTROL";
-
-		_battleSave->getBattleState()->warning(
-											info,
-											true,
-											success);
+		action->value = success;
 
 		//Log(LOG_INFO) << ". . . attack Success @ " << success;
 		if (RNG::percent(success) == true)
@@ -5969,14 +5959,28 @@ bool TileEngine::psiAttack(const BattleAction* const action)
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
-		else if (Options::allowPsiStrengthImprovement == true
-			&& victim->getOriginalFaction() == FACTION_PLAYER)
+		else
 		{
-			int resistXP = 1; // xCom resisted an xCom attempt
-			if (action->actor->getFaction() == FACTION_HOSTILE)
-				++resistXP; // xCom resisted an aLien
+			std::string info;
+			if (action->type == BA_PANIC)
+				info = "STR_PANIC";
+			else
+				info = "STR_CONTROL";
 
-			victim->addPsiStrengthExp(resistXP);
+			_battleSave->getBattleState()->warning(
+												info,
+												true,
+												success);
+
+			if (Options::allowPsiStrengthImprovement == true
+				&& victim->getOriginalFaction() == FACTION_PLAYER)
+			{
+				int resistXP = 1; // xCom resisted an xCom attempt
+				if (action->actor->getFaction() == FACTION_HOSTILE)
+					++resistXP; // xCom resisted an aLien
+
+				victim->addPsiStrengthExp(resistXP);
+			}
 		}
 	}
 	else if (action->actor->getFaction() == FACTION_PLAYER)

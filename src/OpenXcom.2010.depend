@@ -272,7 +272,7 @@
 
 1433738879 f:\git\openxcom\src\engine\game.h
 
-1430149550 f:\git\openxcom\src\engine\language.h
+1435317596 f:\git\openxcom\src\engine\language.h
 	"LocalizedText.h"
 	"../Savegame/Soldier.h"
 
@@ -5428,7 +5428,7 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1435302495 f:\git\openxcom\src\battlescape\tileengine.h
+1435313095 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5501,7 +5501,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1435264655 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1435316433 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5959,15 +5959,13 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433210804 source:f:\git\openxcom\src\battlescape\infoboxstate.cpp
+1435313202 source:f:\git\openxcom\src\battlescape\infoboxstate.cpp
 	"InfoboxState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Timer.h"
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
-	"../Savegame/SavedBattleGame.h"
-	"../Savegame/SavedGame.h"
 
 1434532359 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
@@ -6297,7 +6295,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1435303056 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1435317431 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6582,7 +6580,7 @@
 	"InteractiveSurface.h"
 	"Action.h"
 
-1435175586 source:f:\git\openxcom\src\engine\language.cpp
+1435317641 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	"../Interface/TextList.h"
 	"../Ruleset/ExtraStrings.h"

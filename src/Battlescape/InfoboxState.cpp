@@ -29,8 +29,8 @@
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
 
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
+//#include "../Savegame/SavedBattleGame.h"
+//#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -56,10 +56,11 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 	centerAllSurfaces();
 
 
-	_frame->setHighContrast();
 	_frame->setThickness(8);
+	_frame->setHighContrast();
 
 	_text->setText(msg);
+
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setHighContrast();

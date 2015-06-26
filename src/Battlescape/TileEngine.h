@@ -248,7 +248,7 @@ private:
 //				const Position& pos2) const;
 
 		/// Attempts a panic or mind control action.
-		bool psiAttack(const BattleAction* const action); // removed, post-cosmetic
+		bool psiAttack(BattleAction* const action); // removed, post-cosmetic
 
 		/// Applies gravity to anything that occupies this tile.
 		Tile* applyGravity(Tile* const tile);

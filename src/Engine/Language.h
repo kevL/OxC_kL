@@ -125,16 +125,16 @@ private:
 		/// Outputs the language to a HTML file.
 		void toHtml(const std::string& filename) const;
 
+		/// Get a gender-depended localized text.
+		const LocalizedText& getString(
+				const std::string& id,
+				SoldierGender gender) const;
 		/// Get a localized text.
 		const LocalizedText& getString(const std::string& id) const;
 		/// Get a quantity-depended localized text.
 		LocalizedText getString(
 				const std::string& id,
 				unsigned n) const;
-		/// Get a gender-depended localized text.
-		const LocalizedText& getString(
-				const std::string& id,
-				SoldierGender gender) const;
 
 		/// Gets the direction of text in this language.
 		TextDirection getTextDirection() const;

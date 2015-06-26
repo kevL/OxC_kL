@@ -609,6 +609,27 @@ std::wstring Language::getName() const
 }
 
 /**
+ * Returns the localized text with the specified ID in the proper form for the gender.
+ * @note If it's not found, just returns the ID.
+ * @param id		- ID of the string
+ * @param gender	- current soldier gender
+ * @return, reference to LocalizedText (widestring) with the requested ID
+ */
+const LocalizedText& Language::getString(
+		const std::string& id,
+		SoldierGender gender) const
+{
+	std::string genderId;
+
+	if (gender == GENDER_MALE)
+		genderId = id + "_MALE";
+	else
+		genderId = id + "_FEMALE";
+
+	return getString(genderId);
+}
+
+/**
  * Returns the localized text with the specified ID.
  * @note If not found return the ID itself.
  * @param id - ID of the string
@@ -659,7 +680,8 @@ LocalizedText Language::getString(
 
 	if (pst == _strings.end()) // Give up
 	{
-		Log(LOG_WARNING) << id << " not found in " << Options::language;
+//		Log(LOG_WARNING) << id << " not found in " << Options::language;
+		Log(LOG_INFO) << id << " not found in " << Options::language;
 
 		return LocalizedText(utf8ToWstr(id));
 	}
@@ -668,36 +690,15 @@ LocalizedText Language::getString(
 	woststr << n;
 
 	std::wstring
-		txt(pst->second),
+		wst(pst->second),
 		marker(L"{N}"),
 		val(woststr.str());
 	replace(
-		txt,
+		wst,
 		marker,
 		val);
 
-	return txt;
-}
-
-/**
- * Returns the localized text with the specified ID in the proper form for the gender.
- * @note If it's not found, just returns the ID.
- * @param id		- ID of the string
- * @param gender	- current soldier gender
- * @return, reference to LocalizedText (widestring) with the requested ID
- */
-const LocalizedText& Language::getString(
-		const std::string& id,
-		SoldierGender gender) const
-{
-	std::string genderId;
-
-	if (gender == GENDER_MALE)
-		genderId = id + "_MALE";
-	else
-		genderId = id + "_FEMALE";
-
-	return getString(genderId);
+	return wst;
 }
 
 /**

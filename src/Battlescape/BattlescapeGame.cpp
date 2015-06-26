@@ -904,30 +904,28 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 											action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
-		if (   action.type == BA_PANIC
+		if (action.type == BA_PANIC
 			|| action.type == BA_MINDCONTROL)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
-			const bool success = _battleSave->getTileEngine()->psiAttack(&action);
+//			const bool success = _battleSave->getTileEngine()->psiAttack(&action);
 			//Log(LOG_INFO) << ". . . success = " << success;
-			if (success == true)
+			if (_battleSave->getTileEngine()->psiAttack(&action) == true)
 			{
 				const BattleUnit* const unit = _battleSave->getTile(action.target)->getUnit();
 				Game* const game = _parentState->getGame();
-				std::string st;
+				std::wstring wst;
 				if (action.type == BA_MINDCONTROL)
-				{
-					st = "STR_IS_UNDER_ALIEN_CONTROL";
-					game->pushState(new InfoboxState(game->getLanguage()->getString(
-																				st,
-																				unit->getGender())
-																			.arg(unit->getName(game->getLanguage()))));
-				}
-				else
-				{
-					st = "STR_MORALE_ATTACK_SUCCESSFUL";
-					game->pushState(new InfoboxState(game->getLanguage()->getString(st)));
-				}
+					wst = game->getLanguage()->getString(
+													"STR_IS_UNDER_ALIEN_CONTROL",
+													unit->getGender())
+												.arg(unit->getName(game->getLanguage()))
+												.arg(action.value);
+				else // Panic Atk
+					wst = game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
+												.arg(action.value);
+
+				game->pushState(new InfoboxState(wst));
 			}
 			//Log(LOG_INFO) << ". . . done Psi.";
 		}
@@ -2581,17 +2579,31 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 							if (getTileEngine()->psiAttack(&_currentAction) == true)
 							{
 								//Log(LOG_INFO) << ". . . . . . Psi successful";
-								Game* const game = _parentState->getGame(); // show a little infobox if it's successful
+/*								Game* const game = _parentState->getGame(); // show a little infobox if it's successful
 								if (_currentAction.type == BA_PANIC)
 								{
 									//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
-									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
+																							.arg(_currentAction.value)));
 								}
 								else // BA_MINDCONTROL
 								{
 									//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
-									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
-								}
+									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
+																							.arg(_currentAction.value)));
+								} */
+								Game* const game = _parentState->getGame(); // show an infobox if successful
+
+								std::wstring wst;
+								if (_currentAction.type == BA_PANIC)
+									game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
+																.arg(_currentAction.value);
+								else // BA_MINDCONTROL
+									game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
+																.arg(_currentAction.value);
+
+								game->pushState(new InfoboxState(wst));
+
 
 								//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
 								_parentState->updateSoldierInfo(false);
