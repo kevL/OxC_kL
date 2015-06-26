@@ -113,10 +113,13 @@ private:
 		bool visible(
 				const BattleUnit* const unit,
 				const Tile* const tile);
+
 		/// Gets the origin voxel of a unit's eyesight.
 		Position getSightOriginVoxel(const BattleUnit* const unit);
-		/// Checks a unit's % exposure on a tile.
-//		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
+		/// Gets the origin voxel of a given action.
+		Position getOriginVoxel(
+				const BattleAction& action,
+				const Tile* tile = NULL);
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				const Position* const originVoxel,
@@ -131,6 +134,8 @@ private:
 				const int tilePart,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit);
+		/// Checks a unit's % exposure on a tile.
+//		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 
 		/// Checks reaction fire.
 		bool checkReactionFire(
@@ -282,11 +287,6 @@ private:
 		int getDirectionTo(
 				const Position& origin,
 				const Position& target) const;
-
-		/// determine the origin voxel of a given action.
-		Position getOriginVoxel(
-				const BattleAction& action,
-				const Tile* tile = NULL);
 
 		/// mark a region of the map as "dangerous" for a turn.
 		void setDangerZone(

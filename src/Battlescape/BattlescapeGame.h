@@ -245,7 +245,7 @@ private:
 				bool test = false);
 
 		/// Cancels the current action.
-		bool cancelCurrentAction(bool bForce = false);
+		bool cancelCurrentAction(bool force = false);
 		/// Gets a pointer to access action members directly.
 		BattleAction* getCurrentAction();
 

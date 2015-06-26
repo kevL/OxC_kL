@@ -1729,7 +1729,7 @@ bool BattleUnit::isOut(
 		return true;
 	}
 
-	if (   _status == STATUS_DEAD
+	if (_status == STATUS_DEAD
 		|| _status == STATUS_UNCONSCIOUS
 		|| _status == STATUS_TIME_OUT)
 	{
@@ -2009,7 +2009,7 @@ bool BattleUnit::getUnitVisible() const
  * Don't confuse either of these with the '_visible' to Player flag.
  * @note Called from TileEngine::calculateFOV().
  * @param unit - pointer to a seen BattleUnit
-// * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this is not used)
+// * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this return is never actually used)
  */
 //bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
@@ -2030,7 +2030,7 @@ void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 	}
 
 	if (addUnit == true)
-		_unitsSpottedThisTurn.push_back(unit);
+		_unitsSpottedThisTurn.push_back(unit); // <- don't think I even use this anymore .... Maybe for AI ....
 
 
 	for (std::vector<BattleUnit*>::const_iterator
@@ -2823,7 +2823,8 @@ BattleItem* BattleUnit::getGrenade() const
 {
 	BattleItem* grenade = getItem("STR_RIGHT_HAND");
 	if (grenade == NULL
-		|| grenade->getRules()->getBattleType() != BT_GRENADE)
+		|| grenade->getRules()->getBattleType() != BT_GRENADE
+		|| isGrenadeSuitable(grenade) == false)
 	{
 		grenade = getItem("STR_LEFT_HAND");
 	}

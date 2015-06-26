@@ -2375,10 +2375,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 
 /**
   * Cancels the current action the user had selected (firing, throwing, etc).
-  * @param bForce - force the action to be cancelled (default false)
+  * @param force - force the action to be cancelled (default false)
   * @return, true if action was cancelled
   */
-bool BattlescapeGame::cancelCurrentAction(bool bForce)
+bool BattlescapeGame::cancelCurrentAction(bool force)
 {
 	if (Options::battleNewPreviewPath != PATH_NONE
 		&& _battleSave->getPathfinding()->removePreview() == true)
@@ -2387,7 +2387,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 	}
 
 	if (_states.empty() == true
-		|| bForce == true)
+		|| force == true)
 	{
 		if (_currentAction.targeting == true)
 		{

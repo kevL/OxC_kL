@@ -468,8 +468,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 					if (_battleSave->getTile(posTest) != NULL)
 					{
 						spottedUnit = _battleSave->getTile(posTest)->getUnit();
+
 						if (spottedUnit != NULL
-							&& spottedUnit->isOut(true, true) == false
+							&& spottedUnit->isOut() == false
 							&& visible(
 									unit,
 									_battleSave->getTile(posTest)) == true)
@@ -740,8 +741,8 @@ void TileEngine::recalculateFOV()
 
 /**
  * Checks for an opposing unit on a tile.
- * @param unit - pointer a BattleUnit that's looking at tile
- * @param tile - pointer to a Tile that unit is looking at
+ * @param unit - pointer a BattleUnit that's looking at @a tile
+ * @param tile - pointer to a Tile that @a unit is looking at
  * @return, true if a unit is on that tile and is seen
  */
 bool TileEngine::visible(
@@ -864,8 +865,8 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 {
 	// determine the origin (and target) voxels for calculations
 	Position posOrigin_voxel = Position(
-									unit->getPosition().x * 16 + 8,
-									unit->getPosition().y * 16 + 8,
+									unit->getPosition().x * 16,
+									unit->getPosition().y * 16,
 									unit->getPosition().z * 24);
 	posOrigin_voxel.z += unit->getHeight(true)
 					   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
@@ -891,112 +892,104 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 }
 
 /**
- * Checks for how exposed unit is to another unit.
- * @param originVoxel	- voxel of trace origin (eye or gun's barrel)
- * @param tile			- pointer to Tile to check against
- * @param excludeUnit	- is self (not to hit self)
- * @param excludeAllBut	- [optional] is unit which is the only one to be considered for ray hits
- * @return, degree of exposure (as percent)
+ * Gets the origin-voxel of a shot or missile.
+ * @param action	- reference the BattleAction
+ * @param tile		- pointer to a start tile (default NULL)
+ * @return, position of the origin in voxel-space
  */
-/*kL
- int TileEngine::checkVoxelExposure(
-		Position* originVoxel,
-		Tile* tile,
-		BattleUnit* excludeUnit,
-		BattleUnit* excludeAllBut)
+Position TileEngine::getOriginVoxel(
+		const BattleAction& action,
+		const Tile* tile)
 {
-	Position targetVoxel = Position(
-			tile->getPosition().x * 16 + 7,
-			tile->getPosition().y * 16 + 8,
-			tile->getPosition().z * 24);
-	Position scanVoxel;
-	std::vector<Position> _trajectory;
+//	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
+//	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
 
-	BattleUnit* otherUnit = tile->getUnit();
+	if (tile == NULL)
+		tile = action.actor->getTile();
 
-	if (otherUnit == 0)
-		return 0; // no unit in this tile, even if it elevated and appearing in it.
+	Position
+		posOrigin_tile = tile->getPosition(),
+		posOrigin_voxel = Position(
+								posOrigin_tile.x * 16,
+								posOrigin_tile.y * 16,
+								posOrigin_tile.z * 24);
 
-	if (otherUnit == excludeUnit)
-		return 0; // skip self
-
-	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
-	if (otherUnit)
-		 targetMinHeight += otherUnit->getFloatHeight();
-
-	// if there is an other unit on target tile, we assume we want to check against this unit's height
-	int heightRange;
-
-	int unitRadius = otherUnit->getLoftemps(); // width == loft in default loftemps set
-	if (otherUnit->getArmor()->getSize() > 1)
+	// take into account soldier height and terrain level if the projectile is launched from a soldier
+	if (action.type != BA_LAUNCH
+		|| action.actor->getPosition() == posOrigin_tile)
 	{
-		unitRadius = 3;
-	}
+		// calculate vertical offset of the starting point of the projectile
+		posOrigin_voxel.z += action.actor->getHeight(true)
+						   - tile->getTerrainLevel();
+						   - 4; // for good luck. kL_note: now equal to getSightOriginVoxel()
+		// Ps. don't need luck - need precision.
 
-	// vector manipulation to make scan work in view-space
-	Position relPos = targetVoxel - *originVoxel;
-	float normal = static_cast<float>(unitRadius) / sqrt(static_cast<float>(relPos.x * relPos.x + relPos.y * relPos.y));
-	int relX = static_cast<int>(floor(static_cast<float>(relPos.y) * normal + 0.5f));
-	int relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f));
+		// hey, here's an idea: make Autos shoot from hip, Snaps shoot from chest, & Aimed from shoulders or eyes.
+//		if (action.type == BA_THROW)	// kL
+//			posOrigin_voxel.z -= 4;		// kL
+/*		if (action.type == BA_THROW)
+			posOrigin_voxel.z -= 3;
+		else
+			posOrigin_voxel.z -= 4; */
 
-	int targetSlices[10] = // looks like [6] to me..
-	{
-		0,		0,
-		relX,	relY,
-		-relX,	-relY
-	};
-/*	int targetSlices[10] = // taken from "canTargetUnit()"
-	{
-		0,		0,
-		relX,	relY,
-		-relX,	-relY,
-		relY,	-relX,
-		-relY,	relX
-	}; */
-
-/*	if (!otherUnit->isOut())
-	{
-		heightRange = otherUnit->getHeight();
-	}
-	else
-	{
-		heightRange = 12;
-	}
-
-	int targetMaxHeight = targetMinHeight+heightRange;
-	// scan ray from top to bottom plus different parts of target cylinder
-	int total = 0;
-	int visible = 0;
-
-	for (int i = heightRange; i >= 0; i -= 2)
-	{
-		++total;
-
-		scanVoxel.z = targetMinHeight + i;
-		for (int j = 0; j < 2; ++j)
+		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
+		if (posOrigin_voxel.z > heightLimit)
 		{
-			scanVoxel.x = targetVoxel.x + targetSlices[j * 2];
-			scanVoxel.y = targetVoxel.y + targetSlices[j * 2 + 1];
-
-			_trajectory.clear();
-
-			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, excludeAllBut);
-			if (test == VOXEL_UNIT)
+			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
+			if (tileAbove == NULL
+				|| tileAbove->hasNoFloor(NULL) == false)
 			{
-				// voxel of hit must be inside of scanned box
-				if (_trajectory.at(0).x / 16 == scanVoxel.x / 16
-					&& _trajectory.at(0).y / 16 == scanVoxel.y / 16
-					&& _trajectory.at(0).z >= targetMinHeight
-					&& _trajectory.at(0).z <= targetMaxHeight)
-				{
-					++visible;
-				}
+				while (posOrigin_voxel.z > heightLimit)
+					--posOrigin_voxel.z;
 			}
 		}
+/*		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
+		if (posOrigin_voxel.z > heightLimit)
+		{
+			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
+			if (tileAbove != NULL
+				&& tileAbove->hasNoFloor(NULL) == true)
+			{
+				++posOrigin_tile.z;
+			}
+			else
+			{
+				while (posOrigin_voxel.z > heightLimit)
+					--posOrigin_voxel.z;
+
+				posOrigin_voxel.z -= 4; // keep posOrigin_voxel 4 voxels below any ceiling.
+			}
+		} */
+
+		// kL_note: This is the old code that does not use the dirX/Yshift stuff...
+		//
+		// Originally used the dirXShift and dirYShift as detailed above;
+		// this however results in MUCH more predictable results.
+		// center Origin in the posOrigin_tile (or the center of all four tiles for large units):
+		const int offset = action.actor->getArmor()->getSize() * 8;
+		posOrigin_voxel.x += offset;
+		posOrigin_voxel.y += offset;
+		// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
+		// MUCH more predictable results. <- I didn't write that; just iterating it.
+		// ... better now but still waiting on it.
+/*
+		int direction = getDirectionTo(
+									posOrigin_tile,
+									action.target);
+		posOrigin_voxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
+		posOrigin_voxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
+	}
+	else // action.type == BA_LAUNCH
+	{
+		// don't take into account soldier height and terrain level if the
+		// projectile is not launched from a soldier (ie. is from a waypoint)
+		posOrigin_voxel.x += 8;
+		posOrigin_voxel.y += 8;
+		posOrigin_voxel.z += 16;
 	}
 
-	return visible * 100 / total;
-} */
+	return posOrigin_voxel;
+}
 
 /**
  * Checks for another unit available for targeting and what particular voxel.
@@ -1554,6 +1547,113 @@ bool TileEngine::canTargetTile(
 
 	return false;
 }
+
+/*
+ * Checks for how exposed unit is to another unit.
+ * @param originVoxel	- voxel of trace origin (eye or gun's barrel)
+ * @param tile			- pointer to Tile to check against
+ * @param excludeUnit	- is self (not to hit self)
+ * @param excludeAllBut	- [optional] is unit which is the only one to be considered for ray hits
+ * @return, degree of exposure (as percent)
+ */
+/*	int TileEngine::checkVoxelExposure(
+		Position* originVoxel,
+		Tile* tile,
+		BattleUnit* excludeUnit,
+		BattleUnit* excludeAllBut)
+{
+	Position targetVoxel = Position(
+			tile->getPosition().x * 16 + 7,
+			tile->getPosition().y * 16 + 8,
+			tile->getPosition().z * 24);
+	Position scanVoxel;
+	std::vector<Position> _trajectory;
+
+	BattleUnit* otherUnit = tile->getUnit();
+
+	if (otherUnit == 0)
+		return 0; // no unit in this tile, even if it elevated and appearing in it.
+
+	if (otherUnit == excludeUnit)
+		return 0; // skip self
+
+	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
+	if (otherUnit)
+		 targetMinHeight += otherUnit->getFloatHeight();
+
+	// if there is an other unit on target tile, we assume we want to check against this unit's height
+	int heightRange;
+
+	int unitRadius = otherUnit->getLoftemps(); // width == loft in default loftemps set
+	if (otherUnit->getArmor()->getSize() > 1)
+	{
+		unitRadius = 3;
+	}
+
+	// vector manipulation to make scan work in view-space
+	Position relPos = targetVoxel - *originVoxel;
+	float normal = static_cast<float>(unitRadius) / sqrt(static_cast<float>(relPos.x * relPos.x + relPos.y * relPos.y));
+	int relX = static_cast<int>(floor(static_cast<float>(relPos.y) * normal + 0.5f));
+	int relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f));
+
+	int targetSlices[10] = // looks like [6] to me..
+	{
+		0,		0,
+		relX,	relY,
+		-relX,	-relY
+	};
+/*	int targetSlices[10] = // taken from "canTargetUnit()"
+	{
+		0,		0,
+		relX,	relY,
+		-relX,	-relY,
+		relY,	-relX,
+		-relY,	relX
+	}; */
+
+/*	if (!otherUnit->isOut())
+	{
+		heightRange = otherUnit->getHeight();
+	}
+	else
+	{
+		heightRange = 12;
+	}
+
+	int targetMaxHeight = targetMinHeight+heightRange;
+	// scan ray from top to bottom plus different parts of target cylinder
+	int total = 0;
+	int visible = 0;
+
+	for (int i = heightRange; i >= 0; i -= 2)
+	{
+		++total;
+
+		scanVoxel.z = targetMinHeight + i;
+		for (int j = 0; j < 2; ++j)
+		{
+			scanVoxel.x = targetVoxel.x + targetSlices[j * 2];
+			scanVoxel.y = targetVoxel.y + targetSlices[j * 2 + 1];
+
+			_trajectory.clear();
+
+			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, excludeAllBut);
+			if (test == VOXEL_UNIT)
+			{
+				// voxel of hit must be inside of scanned box
+				if (_trajectory.at(0).x / 16 == scanVoxel.x / 16
+					&& _trajectory.at(0).y / 16 == scanVoxel.y / 16
+					&& _trajectory.at(0).z >= targetMinHeight
+					&& _trajectory.at(0).z <= targetMaxHeight)
+				{
+					++visible;
+				}
+			}
+		}
+	}
+
+	return visible * 100 / total;
+} */
 
 /**
  * Checks if a 'sniper' from the opposing faction sees this unit.
@@ -6372,106 +6472,6 @@ int TileEngine::getDirectionTo(
 		dir = 2;
 
 	return dir;
-}
-
-/**
- * Gets the origin-voxel of a shot or missile.
- * @param action	- reference the BattleAction
- * @param tile		- pointer to a start tile (default NULL)
- * @return, position of the origin in voxel-space
- */
-Position TileEngine::getOriginVoxel(
-		const BattleAction& action,
-		const Tile* tile)
-{
-//	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
-//	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
-
-	if (tile == NULL)
-		tile = action.actor->getTile();
-
-	Position
-		posOrigin_tile = tile->getPosition(),
-		posOrigin_voxel = Position(
-								posOrigin_tile.x * 16,
-								posOrigin_tile.y * 16,
-								posOrigin_tile.z * 24);
-
-	// take into account soldier height and terrain level if the projectile is launched from a soldier
-	if (action.type != BA_LAUNCH
-		|| action.actor->getPosition() == posOrigin_tile)
-	{
-		// calculate vertical offset of the starting point of the projectile
-		posOrigin_voxel.z += action.actor->getHeight(true)
-						   - tile->getTerrainLevel();
-						   - 4; // for good luck. kL_note: now equal to getSightOriginVoxel()
-		// Ps. don't need luck - need precision.
-
-		// hey, here's an idea: make Autos shoot from hip, Snaps shoot from chest, & Aimed from shoulders or eyes.
-//		if (action.type == BA_THROW)	// kL
-//			posOrigin_voxel.z -= 4;		// kL
-/*		if (action.type == BA_THROW)
-			posOrigin_voxel.z -= 3;
-		else
-			posOrigin_voxel.z -= 4; */
-
-		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
-		if (posOrigin_voxel.z > heightLimit)
-		{
-			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
-			if (tileAbove == NULL
-				|| tileAbove->hasNoFloor(NULL) == false)
-			{
-				while (posOrigin_voxel.z > heightLimit)
-					--posOrigin_voxel.z;
-			}
-		}
-/*		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
-		if (posOrigin_voxel.z > heightLimit)
-		{
-			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
-			if (tileAbove != NULL
-				&& tileAbove->hasNoFloor(NULL) == true)
-			{
-				++posOrigin_tile.z;
-			}
-			else
-			{
-				while (posOrigin_voxel.z > heightLimit)
-					--posOrigin_voxel.z;
-
-				posOrigin_voxel.z -= 4; // keep posOrigin_voxel 4 voxels below any ceiling.
-			}
-		} */
-
-		// kL_note: This is the old code that does not use the dirX/Yshift stuff...
-		//
-		// Originally used the dirXShift and dirYShift as detailed above;
-		// this however results in MUCH more predictable results.
-		// center Origin in the posOrigin_tile (or the center of all four tiles for large units):
-		const int offset = action.actor->getArmor()->getSize() * 8;
-		posOrigin_voxel.x += offset;
-		posOrigin_voxel.y += offset;
-		// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
-		// MUCH more predictable results. <- I didn't write that; just iterating it.
-		// ... better now but still waiting on it.
-/*
-		int direction = getDirectionTo(
-									posOrigin_tile,
-									action.target);
-		posOrigin_voxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
-		posOrigin_voxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
-	}
-	else // action.type == BA_LAUNCH
-	{
-		// don't take into account soldier height and terrain level if the
-		// projectile is not launched from a soldier (ie. is from a waypoint)
-		posOrigin_voxel.x += 8;
-		posOrigin_voxel.y += 8;
-		posOrigin_voxel.z += 16;
-	}
-
-	return posOrigin_voxel;
 }
 
 /**

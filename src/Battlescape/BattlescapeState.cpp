@@ -1516,7 +1516,8 @@ void BattlescapeState::mapClick(Action* action)
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
 			}
 
-			_isMouseScrolled = _isMouseScrolling = false;
+			_isMouseScrolled =
+			_isMouseScrolling = false;
 //			stopScrolling(action); // newScroll
 		}
 	}
@@ -1578,17 +1579,17 @@ void BattlescapeState::mapClick(Action* action)
 			_battleGame->primaryAction(pos);
 
 //		if (_battleSave->getDebugMode() == true)
-		{
-			std::wostringstream woststr;
-			if (_battleSave->getTile(pos)->getUnit() != NULL)
-				woststr	<< L"unit "
-						<< _battleSave->getTile(pos)->getUnit()->getId()
-						<< L" ";
+//		{
+		std::wostringstream woststr;
+		if (_battleSave->getTile(pos)->getUnit() != NULL)
+			woststr	<< L"unit "
+					<< _battleSave->getTile(pos)->getUnit()->getId()
+					<< L" ";
 
-			woststr << L"pos " << pos;
-			debug(woststr.str());
-		}
+		woststr << L"pos " << pos;
+		debug(woststr.str());
 	}
+//	}
 }
 
 /**
@@ -2268,33 +2269,50 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 				break;
 		}
 
-		if (i < INDICATORS) // safety.
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-			{
-				_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
+			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
 
-				_visUnitTarget->setVisible();
-				_visUnitTargetFrame = 0;
+			_visUnitTarget->setVisible();
+			_visUnitTargetFrame = 0;
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			BattleUnit* nextSpotter = NULL;
+			size_t curIter = 0;
+
+			for (std::vector<BattleUnit*>::const_iterator
+				j = _battleSave->getUnits()->begin();
+				j != _battleSave->getUnits()->end();
+				++j)
+			{
+				++curIter;
+				if (*j == _battleSave->getSelectedUnit())
+					break;
 			}
-			else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-			{
-				BattleUnit* nextSpotter = NULL;
-				size_t curIter = 0;
 
+			for (std::vector<BattleUnit*>::const_iterator
+				j = _battleSave->getUnits()->begin() + curIter;
+				j != _battleSave->getUnits()->end();
+				++j)
+			{
+				if ((*j)->getFaction() == FACTION_PLAYER
+					&& (*j)->isOut() == false
+					&& std::find(
+								(*j)->getVisibleUnits()->begin(),
+								(*j)->getVisibleUnits()->end(),
+								_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+				{
+					nextSpotter = *j;
+					break;
+				}
+			}
+
+			if (nextSpotter == NULL)
+			{
 				for (std::vector<BattleUnit*>::const_iterator
 					j = _battleSave->getUnits()->begin();
-					j != _battleSave->getUnits()->end();
-					++j)
-				{
-					++curIter;
-					if (*j == _battleSave->getSelectedUnit())
-						break;
-				}
-
-				for (std::vector<BattleUnit*>::const_iterator
-					j = _battleSave->getUnits()->begin() + curIter;
-					j != _battleSave->getUnits()->end();
+					j != _battleSave->getUnits()->end() - _battleSave->getUnits()->size() + curIter;
 					++j)
 				{
 					if ((*j)->getFaction() == FACTION_PLAYER
@@ -2308,45 +2326,25 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 						break;
 					}
 				}
+			}
 
-				if (nextSpotter == NULL)
+			if (nextSpotter != NULL)
+			{
+				if (nextSpotter != _battleSave->getSelectedUnit())
 				{
-					for (std::vector<BattleUnit*>::const_iterator
-						j = _battleSave->getUnits()->begin();
-						j != _battleSave->getUnits()->end() - _battleSave->getUnits()->size() + curIter;
-						++j)
-					{
-						if ((*j)->getFaction() == FACTION_PLAYER
-							&& (*j)->isOut() == false
-							&& std::find(
-										(*j)->getVisibleUnits()->begin(),
-										(*j)->getVisibleUnits()->end(),
-										_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
-						{
-							nextSpotter = *j;
-							break;
-						}
-					}
+					_battleSave->setSelectedUnit(nextSpotter);
+					updateSoldierInfo();
+
+					_battleGame->cancelCurrentAction();
+					_battleGame->getCurrentAction()->actor = nextSpotter;
+					_battleGame->setupCursor();
 				}
 
-				if (nextSpotter != NULL)
+				Camera* const camera = _battleGame->getMap()->getCamera();
+				if (camera->isOnScreen(nextSpotter->getPosition()) == false
+					|| camera->getViewLevel() != nextSpotter->getPosition().z)
 				{
-					if (nextSpotter != _battleSave->getSelectedUnit())
-					{
-						_battleSave->setSelectedUnit(nextSpotter);
-						updateSoldierInfo();
-
-						_battleGame->cancelCurrentAction();
-						_battleGame->getCurrentAction()->actor = nextSpotter;
-						_battleGame->setupCursor();
-					}
-
-					Camera* const camera = _battleGame->getMap()->getCamera();
-					if (camera->isOnScreen(nextSpotter->getPosition()) == false
-						|| camera->getViewLevel() != nextSpotter->getPosition().z)
-					{
-						camera->centerOnPosition(nextSpotter->getPosition());
-					}
+					camera->centerOnPosition(nextSpotter->getPosition());
 				}
 			}
 		}
@@ -3010,8 +3008,8 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 					j != _battleSave->getUnits()->end();
 					++j)
 				{
-					if ((*j)->isOut() == false
-						&& (*j)->getFaction() == FACTION_PLAYER)
+					if ((*j)->getFaction() == FACTION_PLAYER
+						&& (*j)->isOut() == false)
 					{
 						if (std::find(
 									(*j)->getVisibleUnits()->begin(),
