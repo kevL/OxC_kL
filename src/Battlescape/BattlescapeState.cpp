@@ -671,7 +671,7 @@ BattlescapeState::BattlescapeState()
 	_overWeight->setVisible(false);
 
 	_btnWounds->setVisible(false);
-	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
+	_btnWounds->onMousePress((ActionHandler)& BattlescapeState::btnWoundedPress);
 
 	_numWounds->setColor(Palette::blockOffset(9)); // yellow
 	_numWounds->setValue(0);
@@ -1462,10 +1462,8 @@ void BattlescapeState::mapOver(Action* action)
 void BattlescapeState::mapPress(Action* action)
 {
 	// don't handle mouseclicks over the buttons (it overlaps with map surface)
-	if (_mouseOverIcons == true)
-		return;
-
-	if (action->getDetails()->button.button == Options::battleDragScrollButton)
+	if (_mouseOverIcons == false
+		&& action->getDetails()->button.button == Options::battleDragScrollButton)
 	{
 		_isMouseScrolling = true;
 		_isMouseScrolled = false;
@@ -1486,7 +1484,7 @@ void BattlescapeState::mapPress(Action* action)
 			_cursorPosition.z = 1;
 		} */
 
-		_totalMouseMoveX = 0;
+		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 		_mouseOverThreshold = false;
 		_mouseScrollingStartTime = SDL_GetTicks();
@@ -1588,8 +1586,8 @@ void BattlescapeState::mapClick(Action* action)
 
 		woststr << L"pos " << pos;
 		debug(woststr.str());
+//		}
 	}
-//	}
 }
 
 /**
@@ -2340,7 +2338,7 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 					_battleGame->setupCursor();
 				}
 
-				Camera* const camera = _battleGame->getMap()->getCamera();
+				Camera* const camera = _map->getCamera();
 				if (camera->isOnScreen(nextSpotter->getPosition()) == false
 					|| camera->getViewLevel() != nextSpotter->getPosition().z)
 				{
@@ -2357,10 +2355,18 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
  * Centers on the currently wounded soldier.
  * @param action - pointer to an Action
  */
-void BattlescapeState::btnWoundedClick(Action* action)
+void BattlescapeState::btnWoundedPress(Action* action)
 {
-	if (playableUnitSelected() == true)
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		btnMapDownClick(NULL);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		btnMapUpClick(NULL);
+	else if ((action->getDetails()->button.button == SDL_BUTTON_LEFT
+			|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		&& playableUnitSelected() == true)
+	{
 		_map->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
+	}
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }

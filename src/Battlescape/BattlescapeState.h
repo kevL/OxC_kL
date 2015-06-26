@@ -296,7 +296,7 @@ private:
 		/// Handler for clicking a visible unit button.
 		void btnVisibleUnitPress(Action* action);
 		/// Handler for clicking the wounded unit button.
-		void btnWoundedClick(Action* action);
+		void btnWoundedPress(Action* action);
 
 		/// Handler for clicking the launch rocket button.
 		void btnLaunchClick(Action* action);
