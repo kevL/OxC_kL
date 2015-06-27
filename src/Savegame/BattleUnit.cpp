@@ -3861,7 +3861,7 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 /**
  * Sets how long since this unit was last exposed to a Hostile unit.
  * @note Use -1 for NOT exposed. Aliens are always exposed.
- * @param turns - # turns this unit has been exposed (default 0)
+ * @param turns - turns this unit has been exposed (default 0)
  */
 void BattleUnit::setExposed(int turns)
 {

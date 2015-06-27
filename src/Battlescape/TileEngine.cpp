@@ -5920,7 +5920,10 @@ bool TileEngine::psiAttack(BattleAction* const action)
 										0,
 										(_battleSave->getMoraleModifier(NULL, false) / 10) + (courage * 3 / 4) - 110);
 					else
-						courage /= 2; // xCom Morale gain for getting Mc'd back to xCom.
+					{
+						courage /= 2;			// xCom Morale gain for getting Mc'd back to xCom.
+						victim->setExposed(-1);	// remove Exposure.
+					}
 				}
 				victim->moraleChange(courage);
 				//Log(LOG_INFO) << ". . . victim morale[2] = " << victim->getMorale();

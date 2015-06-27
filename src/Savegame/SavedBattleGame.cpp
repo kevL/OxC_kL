@@ -2183,7 +2183,7 @@ void SavedBattleGame::reviveUnit(
 		bool largeUnit = tileCorpse != NULL
 					  && tileCorpse->getUnit() != NULL
 					  && tileCorpse->getUnit() != unit
-					  && tileCorpse->getUnit()->getArmor()->getSize() != 1;
+					  && tileCorpse->getUnit()->getArmor()->getSize() == 2;
 
 		if (placeUnitNearPosition(
 								unit,
