@@ -341,11 +341,12 @@ private:
 		bool setUnitPosition(
 				BattleUnit* const unit,
 				const Position& pos,
-				bool test = false);
+				bool test = false) const;
 		/// Attempts to place a unit on or near Position pos.
 		bool placeUnitNearPosition(
-				BattleUnit* unit,
-				Position pos);
+				BattleUnit* const unit,
+				const Position& pos,
+				bool largeFriend) const;
 
 		/// Adds this unit to the list of falling units.
 		bool addFallingUnit(BattleUnit* const unit);

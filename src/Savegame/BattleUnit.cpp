@@ -469,6 +469,8 @@ void BattleUnit::load(const YAML::Node& node)
 //	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
 //	_respawn			= node["respawn"]				.as<bool>(_respawn);
 	_activeHand			= node["activeHand"]			.as<std::string>(_activeHand);
+	_mcStrength			= node["mcStrength"]			.as<int>(_mcStrength);
+	_mcSkill			= node["mcSkill"]				.as<int>(_mcSkill);
 
 	for (size_t i = 0; i < 5; ++i)
 		_currentArmor[i]	= node["armor"][i]		.as<int>(_currentArmor[i]);
@@ -543,6 +545,13 @@ YAML::Node BattleUnit::save() const
 //	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand;
+
+	if (_originalFaction != FACTION_HOSTILE
+		&& _faction != _originalFaction)
+	{
+		node["mcStrength"]	= _mcStrength;
+		node["mcSkill"]		= _mcSkill;
+	}
 
 	for (size_t i = 0; i < 5; ++i)
 		node["armor"].push_back(_currentArmor[i]);
@@ -4538,8 +4547,11 @@ void BattleUnit::hostileMcParameters(
 	}
 	else // set params
 	{
-		_mcStrength = strength;
-		_mcSkill = skill;
+		_mcStrength = strength - ((_stats.psiStrength + 2) / 3);
+		_mcSkill = skill - ((_stats.psiSkill + 2) / 3);
+
+		if (_mcStrength < 0) _mcStrength = 0;
+		if (_mcSkill < 0) _mcSkill = 0;
 	}
 }
 

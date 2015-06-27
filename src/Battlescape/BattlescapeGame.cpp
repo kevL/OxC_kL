@@ -2579,28 +2579,15 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 							if (getTileEngine()->psiAttack(&_currentAction) == true)
 							{
 								//Log(LOG_INFO) << ". . . . . . Psi successful";
-/*								Game* const game = _parentState->getGame(); // show a little infobox if it's successful
-								if (_currentAction.type == BA_PANIC)
-								{
-									//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
-									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
-																							.arg(_currentAction.value)));
-								}
-								else // BA_MINDCONTROL
-								{
-									//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
-									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
-																							.arg(_currentAction.value)));
-								} */
 								Game* const game = _parentState->getGame(); // show an infobox if successful
 
 								std::wstring wst;
 								if (_currentAction.type == BA_PANIC)
-									game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
-																.arg(_currentAction.value);
-								else // BA_MINDCONTROL
-									game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
-																.arg(_currentAction.value);
+									wst = game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
+																	.arg(_currentAction.value);
+								else // Mind-control
+									wst = game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
+																	.arg(_currentAction.value);
 
 								game->pushState(new InfoboxState(wst));
 

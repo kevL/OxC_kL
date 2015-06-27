@@ -2586,7 +2586,8 @@ void TileEngine::explode(
 					if (dir != -1
 						&& (dir & 1) == 1)
 					{
-						_powerE = static_cast<int>(static_cast<float>(_powerE) * 0.70710678f);
+//						_powerE = static_cast<int>(static_cast<float>(_powerE) * 0.70710678f);
+						_powerE = static_cast<int>(static_cast<double>(_powerE) * RNG::generate(0.895,0.935));
 					}
 
 					if (maxRadius > 0)

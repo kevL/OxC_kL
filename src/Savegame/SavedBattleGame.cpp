@@ -2160,9 +2160,9 @@ void SavedBattleGame::reviveUnit(
 			unit->setExposed(-1);
 
 
-		Position pos = unit->getPosition();
+		Position posCorpse = unit->getPosition();
 
-		if (pos == Position(-1,-1,-1)) // if carried
+		if (posCorpse == Position(-1,-1,-1)) // if carried
 		{
 			for (std::vector<BattleItem*>::const_iterator
 					i = _items.begin();
@@ -2173,15 +2173,22 @@ void SavedBattleGame::reviveUnit(
 					&& (*i)->getUnit() == unit
 					&& (*i)->getOwner() != NULL)
 				{
-					pos = (*i)->getOwner()->getPosition();
+					posCorpse = (*i)->getOwner()->getPosition();
 					break;
 				}
 			}
 		}
 
+		Tile* tileCorpse = getTile(posCorpse);
+		bool largeUnit = tileCorpse != NULL
+					  && tileCorpse->getUnit() != NULL
+					  && tileCorpse->getUnit() != unit
+					  && tileCorpse->getUnit()->getArmor()->getSize() != 1;
+
 		if (placeUnitNearPosition(
 								unit,
-								pos) == true)
+								posCorpse,
+								largeUnit) == true)
 		{
 			unit->setStatus(STATUS_STANDING);
 
@@ -2239,7 +2246,7 @@ void SavedBattleGame::removeCorpse(const BattleUnit* const unit)
 bool SavedBattleGame::setUnitPosition(
 		BattleUnit* const unit,
 		const Position& pos,
-		bool test)
+		bool test) const
 {
 	if (unit != NULL)
 	{
@@ -2336,13 +2343,15 @@ bool SavedBattleGame::setUnitPosition(
 
 /**
  * Places a unit on or near a position.
- * @param unit	- pointer to a unit to place
- * @param pos	- the position around which to attempt to place the unit
+ * @param unit			- pointer to a BattleUnit to place
+ * @param pos			- reference the position around which to attempt to place @a unit
+ * @param largeFriend	- true if @a unit is large
  * @return, true if unit was successfully placed
  */
 bool SavedBattleGame::placeUnitNearPosition(
-		BattleUnit* unit,
-		Position pos)
+		BattleUnit* const unit,
+		const Position& pos,
+		bool largeFriend) const
 {
 	if (unit == NULL)
 		return false;
@@ -2355,23 +2364,37 @@ bool SavedBattleGame::placeUnitNearPosition(
 	}
 
 
+	int
+		size1 = 0 - unit->getArmor()->getSize(),
+		size2 = largeFriend ? 2 : 1,
+		xArray[8] = {    0, size2, size2, size2,     0, size1, size1, size1},
+		yArray[8] = {size1, size1,     0, size2, size2, size2,     0, size1};
+
 	const Tile* tile;
-	const int dir = RNG::generate(0,7);
+	const int dir = RNG::seedless(0,7);
 	for (int
 			i = dir;
 			i != dir + 8;
 			++i)
 	{
-		Position posOffset;
-		getPathfinding()->directionToVector(
-										i % 8,
-										&posOffset);
+		Position posOffset = Position(
+									xArray[i % 8],
+									yArray[i % 8],
+									0);
+//		getPathfinding()->directionToVector(
+//										i % 8,
+//										&posOffset);
 
-		tile = getTile(pos + posOffset);
+		tile = getTile(pos + (posOffset / 2));
+//		tile = getTile(pos + posOffset);
 		if (tile != NULL
 			&& getPathfinding()->isBlockedPath(
-											getTile(pos),
-											i) == false
+											tile,
+											dir,
+											NULL) == false
+//			&& getPathfinding()->isBlockedPath(
+//											getTile(pos),
+//											i) == false
 			&& setUnitPosition(
 							unit,
 							pos + posOffset) == true)
@@ -2380,7 +2403,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 		}
 	}
 
-/*kL: uhh no.
+/* uhh no.
 	if (unit->getMovementType() == MT_FLY)
 	{
 		Tile* tile = getTile(pos + Position(0,0,1));

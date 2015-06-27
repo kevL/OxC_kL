@@ -2305,39 +2305,51 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
  * @param unit - pointer to the BattleUnit in question
  * @return, true if the unit was successfully placed
  */
-bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit) // private.
+bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* const unit) // private.
 {
-	if (unit == NULL
-		|| _battleSave->getUnits()->empty() == true)
+	if (unit != NULL
+		&& _battleSave->getUnits()->empty() == false)
 	{
-		return false;
-	}
+		const BattleUnit* bu;
+		Position posEntry;
+		int tries;
+		bool largeUnit;
 
-	Position posEntry = Position(-1,-1,-1);
-
-	int tries = 100;
-	while (posEntry == Position(-1,-1,-1)
-		&& tries > 0)
-	{
-		const BattleUnit* const bu = _battleSave->getUnits()->at(RNG::generate(
-																			0,
-																			static_cast<int>(_battleSave->getUnits()->size()) - 1));
-		if (bu->getFaction() == unit->getFaction()
-			&& bu->getPosition() != Position(-1,-1,-1)
-			&& bu->getArmor()->getSize() >= unit->getArmor()->getSize())
+		for (int
+				i = 0;
+				i != 10;
+				++i)
 		{
-			posEntry = bu->getPosition();
+			posEntry = Position(-1,-1,-1);
+			tries = 100;
+			largeUnit = false;
+
+			while (posEntry == Position(-1,-1,-1)
+				&& tries > 0)
+			{
+				bu = _battleSave->getUnits()->at(RNG::generate(
+															0,
+															static_cast<int>(_battleSave->getUnits()->size()) - 1));
+				if (bu->getFaction() == unit->getFaction()
+					&& bu->getPosition() != Position(-1,-1,-1)
+					&& bu->getArmor()->getSize() >= unit->getArmor()->getSize())
+				{
+					posEntry = bu->getPosition();
+					largeUnit = (bu->getArmor()->getSize() == 2);
+				}
+
+				--tries;
+			}
+
+			if (tries > 0
+				&& _battleSave->placeUnitNearPosition(
+													unit,
+													posEntry,
+													largeUnit) == true)
+			{
+				return true;
+			}
 		}
-
-		--tries;
-	}
-
-	if (tries > 0
-		&& _battleSave->placeUnitNearPosition(
-											unit,
-											posEntry) == true)
-	{
-		return true;
 	}
 
 	return false;
