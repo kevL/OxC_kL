@@ -47,14 +47,14 @@ private:
 	Craft* _craft;
 	GeoscapeState* _state;
 
+	Text
+		* _txtTitle,
+		* _txtMessage;
 	TextButton
 		* _btnOk,
 		* _btnOk5Secs;
 	Timer* _blinkTimer;
 	Window* _window;
-	Text
-		* _txtTitle,
-		* _txtMessage;
 
 
 	public:
@@ -66,7 +66,7 @@ private:
 		~LowFuelState();
 
 		/// Initializes the state.
-		void init();
+//		void init();
 		/// Runs the blink timer.
 		void think();
 		/// Blinks the message text.

@@ -25,10 +25,10 @@
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
+#include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
@@ -62,6 +62,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	_txtShieldsVal		= new Text(15, 9, 136, 93);
 //	_txtDifficulty		= new Text(60, 9, 76, 103);
 //	_txtDifficultyVal	= new Text(15, 9, 136, 103);
+	_txtSpotted			= new Text(200, 9, 60, 109);
 
 	_txtExposure	= new Text(102, 9, 152, 79);
 	_txtExposureVal	= new Text(102, 16, 152, 90);
@@ -79,6 +80,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
 	add(_txtFacilitiesVal);
 	add(_txtShieldsVal);
 //	add(_txtDifficultyVal);
+	add(_txtSpotted);
 	add(_txtExposure);
 	add(_txtExposureVal);
 //	add(_txtTimePeriod);
@@ -86,78 +88,86 @@ BaseDetectionState::BaseDetectionState(Base* base)
 
 	centerAllSurfaces();
 
+	Uint8 color1 = Palette::blockOffset(15)+6; // purple
 
-	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setColor(color1);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_BASEDETECTION"));
+	_txtTitle->setColor(color1);
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
-	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setColor(color1);
 	_btnOk->onMouseClick((ActionHandler)& BaseDetectionState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDetectionState::btnOkClick,
+					Options::keyCancel);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDetectionState::btnOkClick,
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDetectionState::btnOkClick,
-					Options::keyCancel);
+					SDLK_KP_ENTER);
 
-	_txtFacilities->setColor(Palette::blockOffset(15)+6);
 	_txtFacilities->setText(tr("STR_FACILITIES"));
+	_txtFacilities->setColor(color1);
 
-	_txtShields->setColor(Palette::blockOffset(15)+6);
 	_txtShields->setText(tr("STR_MINDSHIELDS"));
+	_txtShields->setColor(color1);
 
-//	_txtDifficulty->setColor(Palette::blockOffset(15)+6);
+//	_txtDifficulty->setColor(color1);
 //	_txtDifficulty->setText(tr("STR_DIFFICULTY"));
 
-	_txtExposure->setColor(Palette::blockOffset(15)+6);
-	_txtExposure->setAlign(ALIGN_CENTER);
-	_txtExposure->setText(tr("STR_EXPOSURE"));
+	if (_base->getBaseExposed() == true)
+	{
+		_blinkTimer = new Timer(325);
+		_blinkTimer->onTimer((StateHandler)& BaseDetectionState::blink);
+		_blinkTimer->start();
 
-//	_txtTimePeriod->setColor(Palette::blockOffset(15)+6);
+		_txtSpotted->setText(tr("STR_SPOTTED"));
+		_txtSpotted->setColor(Palette::blockOffset(2)); // red
+		_txtSpotted->setHighContrast();
+		_txtSpotted->setAlign(ALIGN_CENTER);
+	}
+	_txtSpotted->setVisible(false); // wait for blink.
+
+	_txtExposure->setText(tr("STR_EXPOSURE"));
+	_txtExposure->setColor(color1);
+	_txtExposure->setAlign(ALIGN_CENTER);
+
+//	_txtTimePeriod->setColor(color1);
 //	_txtTimePeriod->setAlign(ALIGN_CENTER);
 //	_txtTimePeriod->setText(tr("STR_PER10MIN"));
 
 	// TODO: Add gravShield info. And baseDefense power.
-	int
-		facQty = 0,
-		shields = 0;
-	for (std::vector<BaseFacility*>::const_iterator
-			i = _base->getFacilities()->begin();
-			i != _base->getFacilities()->end();
-			++i)
-	{
-		if ((*i)->getBuildTime() == 0)
-		{
-			++facQty;
-
-			if ((*i)->getRules()->isMindShield() == true)
-				++shields;
-		}
-	}
-
 	std::wostringstream
-		val1,
-		val2,
-//		val3,
-		val4;
+		woststr1,
+		woststr2,
+//		woststr3,
+		woststr4;
 
-	_txtFacilitiesVal->setColor(Palette::blockOffset(15)+6);
-	val1 << facQty;
-	_txtFacilitiesVal->setText(val1.str());
+	int
+		facQty,
+		shields,
+		det = _base->getDetectionChance(
+									static_cast<int>(_game->getSavedGame()->getDifficulty()),
+									&facQty,
+									&shields);
+
+	_txtFacilitiesVal->setColor(color1);
+	woststr1 << facQty;
+	_txtFacilitiesVal->setText(woststr1.str());
 
 	if (_game->getSavedGame()->isResearched("STR_MIND_SHIELD") == true)
 	{
-		_txtShieldsVal->setColor(Palette::blockOffset(15)+6);
+		_txtShieldsVal->setColor(color1);
 		if (shields == 0)
-			val2 << L"-";
+			woststr2 << L"-";
 		else
-			val2 << shields;
-		_txtShieldsVal->setText(val2.str());
+			woststr2 << shields;
+		_txtShieldsVal->setText(woststr2.str());
 	}
 	else
 	{
@@ -165,27 +175,45 @@ BaseDetectionState::BaseDetectionState(Base* base)
 		_txtShieldsVal->setVisible(false);
 	}
 
-	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
-
-//	_txtDifficultyVal->setColor(Palette::blockOffset(15)+6);
-//	val3 << diff;
-//	_txtDifficultyVal->setText(val3.str());
+//	_txtDifficultyVal->setColor(color1);
+//	woststr3 << diff;
+//	_txtDifficultyVal->setText(woststr3.str());
 
 	_txtExposureVal->setColor(Palette::blockOffset(9));
 	_txtExposureVal->setHighContrast();
 	_txtExposureVal->setBig();
 	_txtExposureVal->setAlign(ALIGN_CENTER);
-	facQty = facQty / 6 + 9;
-	shields = shields * 2 + 1;
-	val4 << (facQty / shields + diff);
-	_txtExposureVal->setText(val4.str());
+	woststr4 << det;
+	_txtExposureVal->setText(woststr4.str());
 }
 
 /**
  * dTor.
  */
 BaseDetectionState::~BaseDetectionState()
-{}
+{
+	if (_base->getBaseExposed() == true)
+		delete _blinkTimer;
+}
+
+/**
+ * Runs the blink timer.
+ */
+void BaseDetectionState::think()
+{
+	if (_window->isPopupDone() == false)
+		_window->think();
+	else if (_base->getBaseExposed() == true)
+		_blinkTimer->think(this, NULL);
+}
+
+/**
+ * Blinks the message text.
+ */
+void BaseDetectionState::blink()
+{
+	_txtSpotted->setVisible(!_txtSpotted->getVisible());
+}
 
 /**
  * Returns to the previous screen.

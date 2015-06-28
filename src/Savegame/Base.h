@@ -261,7 +261,10 @@ private:
 		bool getBaseExposed() const;
 
 		/// Gets the detection chance for this base.
-		int getDetectionChance(int diff) const;
+		int getDetectionChance(
+				int diff,
+				int* facQty = NULL,
+				int* shields = NULL) const;
 
 		/// Gets how many Grav Shields this Base has.
 		size_t getGravShields() const;

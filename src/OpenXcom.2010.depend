@@ -4390,7 +4390,7 @@
 
 1433391317 f:\git\openxcom\src\resource\resourcepack.h
 
-1433907169 f:\git\openxcom\src\savegame\base.h
+1435467923 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1433212243 f:\git\openxcom\src\savegame\target.h
@@ -6295,7 +6295,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1435337466 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1435396632 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -7212,7 +7212,7 @@
 1431486771 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\lowfuelstate.h
+1435508893 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
 1432007607 f:\git\openxcom\src\geoscape\monthlyreportstate.h
@@ -7368,7 +7368,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1434596891 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1435509065 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -8607,7 +8607,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1433911706 source:f:\git\openxcom\src\savegame\base.cpp
+1435468400 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8646,7 +8646,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1435395094 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1435396507 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11114,13 +11114,13 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
+1435514525 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
 	"BaseDetectionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Timer.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
-	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleBaseFacility.h"
@@ -11128,7 +11128,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1431469490 f:\git\openxcom\src\basescape\basedetectionstate.h
+1435514260 f:\git\openxcom\src\basescape\basedetectionstate.h
 	"../Engine/State.h"
 
 1432274450 source:f:\git\openxcom\src\ruleset\sounddefinition.cpp

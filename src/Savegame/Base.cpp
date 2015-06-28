@@ -2062,15 +2062,41 @@ bool Base::getBaseExposed() const
 /**
  * Calculates the chance for aLiens to detect this base.
  * @note Big bases without mindshields are easier to detect.
- * @param diff - the game's difficulty setting
+ * @param diff		- the game's difficulty setting
+ * @param facQty	- pointer to the quantity of facilities
+ * @param shields	- pointer to the quantity of shield facilities
  * @return, detection chance
  */
-int Base::getDetectionChance(int diff) const
+int Base::getDetectionChance(
+		int diff,
+		int* facQty,
+		int* shields) const
 {
-	//Log(LOG_INFO) << "Base::getDetectionChance()";
+	if (facQty != NULL)
+	{
+		*facQty =
+		*shields = 0;
+
+		for (std::vector<BaseFacility*>::const_iterator
+				i = _facilities.begin();
+				i != _facilities.end();
+				++i)
+		{
+			if ((*i)->getBuildTime() == 0)
+			{
+				++(*facQty);
+
+				if ((*i)->getRules()->isMindShield() == true)
+					++(*shields);
+			}
+		}
+
+		return (*facQty / 6 + 9) / (*shields * 2 + 1) + diff;
+	}
+
 	int
-		facQty = 0,
-		shields = 0;
+		facQty0 = 0,
+		shields0 = 0;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -2079,23 +2105,14 @@ int Base::getDetectionChance(int diff) const
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			++facQty;
+			++facQty0;
 
 			if ((*i)->getRules()->isMindShield() == true)
-				++shields;
+				++shields0;
 		}
 	}
 
-	facQty = facQty / 6 + 9;
-	shields = shields * 2 + 1;
-	//Log(LOG_INFO) << ". facQty = " << facQty;
-	//Log(LOG_INFO) << ". shields = " << shields;
-	//Log(LOG_INFO) << ". diff = " << diff;
-
-	//int detchance = facQty / shields + diff;
-	//Log(LOG_INFO) << ". detchance = " << detchance;
-
-	return facQty / shields + diff;
+	return (facQty0 / 6 + 9) / (shields0 * 2 + 1) + diff;
 }
 
 /**

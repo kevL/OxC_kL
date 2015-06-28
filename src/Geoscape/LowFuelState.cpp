@@ -87,7 +87,7 @@ LowFuelState::LowFuelState(
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
-	_txtMessage->setVisible(false);
+	_txtMessage->setVisible(false); // wait for blink.
 
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
@@ -97,6 +97,7 @@ LowFuelState::LowFuelState(
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& LowFuelState::btnOk5SecsClick,
 					SDLK_KP_ENTER);
+	_btnOk5Secs->setVisible(_state->is5Sec() == false);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
@@ -116,11 +117,11 @@ LowFuelState::~LowFuelState()
 /**
  * Initializes the state.
  */
-void LowFuelState::init()
+/* void LowFuelState::init()
 {
 	State::init();
 	_btnOk5Secs->setVisible(_state->is5Sec() == false);
-}
+} */
 
 /**
  * Runs the blink timer.
@@ -138,7 +139,7 @@ void LowFuelState::think()
  */
 void LowFuelState::blink()
 {
-	_txtMessage->setVisible(_txtMessage->getVisible() == false);
+	_txtMessage->setVisible(!_txtMessage->getVisible());
 }
 
 /**

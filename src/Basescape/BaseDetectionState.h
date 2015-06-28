@@ -29,7 +29,7 @@ namespace OpenXcom
 class Base;
 class Text;
 class TextButton;
-class TextList;
+class Timer;
 class Window;
 
 
@@ -52,9 +52,11 @@ private:
 		* _txtFacilitiesVal,
 		* _txtShields,
 		* _txtShieldsVal,
+		* _txtSpotted,
 //		* _txtTimePeriod,
 		* _txtTitle;
 	TextButton* _btnOk;
+	Timer* _blinkTimer;
 	Window* _window;
 
 
@@ -63,6 +65,11 @@ private:
 		explicit BaseDetectionState(Base* base);
 		/// Cleans up the BaseDetection state.
 		~BaseDetectionState();
+
+		/// Runs the blink timer.
+		void think();
+		/// Blinks the message text.
+		void blink();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
