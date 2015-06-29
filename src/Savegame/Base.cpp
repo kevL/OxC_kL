@@ -2063,8 +2063,8 @@ bool Base::getBaseExposed() const
  * Calculates the chance for aLiens to detect this base.
  * @note Big bases without mindshields are easier to detect.
  * @param diff		- the game's difficulty setting
- * @param facQty	- pointer to the quantity of facilities
- * @param shields	- pointer to the quantity of shield facilities
+ * @param facQty	- pointer to the quantity of facilities (default NULL)
+ * @param shields	- pointer to the quantity of shield facilities (default NULL)
  * @return, detection chance
  */
 int Base::getDetectionChance(

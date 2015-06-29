@@ -1205,7 +1205,10 @@ void DogfightState::updateDogfight()
 														targetRegion,
 														alm_RETAL) == false)
 				{
-					const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+//					const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+					const RuleAlienMission& rule = *_game->getRuleset()->getRandomMission(
+																					alm_RETAL,
+																					_game->getSavedGame()->getMonthsPassed());
 					AlienMission* const mission = new AlienMission(
 																rule,
 																*_gameSave);

@@ -48,8 +48,8 @@ private:
 	GeoscapeState* _state;
 
 	Text
-		* _txtTitle,
-		* _txtMessage;
+		* _txtMessage,
+		* _txtTitle;
 	TextButton
 		* _btnOk,
 		* _btnOk5Secs;
