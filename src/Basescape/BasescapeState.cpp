@@ -558,6 +558,8 @@ void BasescapeState::btnFacilitiesClick(Action*)
 void BasescapeState::btnGeoscapeClick(Action*)
 {
 	kL_geoMusicPlaying = false;
+	kL_geoMusicReturnState = true;
+
 	_game->popState();
 }
 
@@ -769,6 +771,7 @@ void BasescapeState::miniLeftClick(Action*)
 		&& baseId < MiniBaseView::MAX_BASES - 1)
 	{
 		kL_geoMusicPlaying = false;
+		kL_geoMusicReturnState = true;
 
 		// aka: btnNewBaseClick();
 		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
@@ -795,7 +798,8 @@ void BasescapeState::miniRightClick(Action*)
 		_game->getSavedGame()->setGlobeLongitude(base->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(base->getLatitude());
 
-		kL_reCenter = true;
+		kL_reCenter =
+		kL_geoMusicReturnState = true;
 		kL_geoMusicPlaying = false;
 
 		_game->popState();

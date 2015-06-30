@@ -135,7 +135,9 @@ namespace OpenXcom
 {
 
 size_t kL_curBase = 0;
-bool kL_geoMusicPlaying = false;
+bool
+	kL_geoMusicPlaying = false,
+	kL_geoMusicReturnState = false;
 
 const double
 	earthRadius					= 3440., //.0647948164,			// nautical miles.
@@ -965,6 +967,7 @@ GeoscapeState::GeoscapeState()
 	updateTimeDisplay();
 
 	kL_geoMusicPlaying = false;
+	kL_geoMusicReturnState = false;
 }
 
 /**
@@ -1977,8 +1980,10 @@ void GeoscapeState::time5Seconds()
 
 	// This is ONLY for allowing _dogfights to fill (or not) before deciding whether
 	// to startMusic in init() -- and ONLY for Loading with a dogfight in progress:
-	if (initDfMusic == true
-		&& kL_geoMusicPlaying == false)
+	// But now it's also used for resuming Geoscape music on returning from another state ....
+	if (kL_geoMusicPlaying == false
+		&& (initDfMusic == true
+			|| kL_geoMusicReturnState == true))
 	{
 		kL_geoMusicPlaying = true;	// if there's a dogfight then dogfight music
 									// will play when a SavedGame is loaded

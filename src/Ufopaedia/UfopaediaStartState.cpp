@@ -138,6 +138,7 @@ UfopaediaStartState::~UfopaediaStartState()
 void UfopaediaStartState::btnOkClick(Action*)
 {
 	kL_geoMusicPlaying = false;
+	kL_geoMusicReturnState = true;
 
 	_game->popState();
 
