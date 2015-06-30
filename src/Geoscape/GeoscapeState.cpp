@@ -135,7 +135,7 @@ namespace OpenXcom
 {
 
 size_t kL_curBase = 0;
-bool kL_geoMusic = false;
+bool kL_geoMusicPlaying = false;
 
 const double
 	earthRadius					= 3440., //.0647948164,			// nautical miles.
@@ -963,6 +963,8 @@ GeoscapeState::GeoscapeState()
 	_dfTimer->onTimer((StateHandler)& GeoscapeState::thinkDogfights);
 
 	updateTimeDisplay();
+
+	kL_geoMusicPlaying = false;
 }
 
 /**
@@ -1139,7 +1141,7 @@ void GeoscapeState::init()
 		popup(new ListSaveState(OPT_GEOSCAPE));
 	}
 
-	if (kL_geoMusic == true)
+	if (kL_geoMusicPlaying == true)
 	{
 		std::string track;
 		if (_dogfights.empty() == true
@@ -1662,6 +1664,8 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Handle craft logic
+	bool initDfMusic = false;
+
 	for (std::vector<Base*>::const_iterator
 			i = _gameSave->getBases()->begin();
 			i != _gameSave->getBases()->end();
@@ -1828,13 +1832,18 @@ void GeoscapeState::time5Seconds()
 												(*j)->getLongitude(),
 												(*j)->getLatitude());
 
-									if (_dogfights.empty() == true) // first dogfight, start music
+									if (_dogfights.empty() == true // first dogfight, start music
+//										&& initDfMusic == false
+										&& _game->getResourcePack()->isMusicPlaying(OpenXcom::res_MUSIC_GEO_INTERCEPT) == false) // unless reloading to another dogfight ...
+									{
 										_game->getResourcePack()->fadeMusic(_game, 425);
+									}
 
 									startDogfight();
 									_dfStartTimer->start();
 								}
 
+								initDfMusic = true;
 								_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_INTERCEPT);
 							}
 						break;
@@ -1966,13 +1975,14 @@ void GeoscapeState::time5Seconds()
 	drawUfoIndicators();
 
 
-	// This is ONLY for allowing _dogfights to fill (or not)
-	// before deciding whether to startMusic in init() --
-	// and ONLY for Loading with a dogfight in progress:
-	if (kL_geoMusic == false)
+	// This is ONLY for allowing _dogfights to fill (or not) before deciding whether
+	// to startMusic in init() -- and ONLY for Loading with a dogfight in progress:
+	if (initDfMusic == true
+		&& kL_geoMusicPlaying == false)
 	{
-		kL_geoMusic = true;	// note, if there's a dogfight then dogfight
-							// music will play when a SavedGame is loaded
+		kL_geoMusicPlaying = true;	// if there's a dogfight then dogfight music
+									// will play when a SavedGame is loaded
+
 		if (_dogfights.empty() == true
 			&& _dfStartTimer->isRunning() == false)
 		{
@@ -3819,7 +3829,7 @@ size_t GeoscapeState::getMinimizedDfCount() const
  */
 void GeoscapeState::thinkDogfights()
 {
-	static bool resetPorts; // inits to false.
+	static bool resetPorts; // inits to false. WARNING: This might not work as expected when re-loading!
 
 	_minimizedDogfights = 0;
 
@@ -3881,8 +3891,10 @@ void GeoscapeState::startDogfight()
 	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
 	{
 		if (_dfZoomInTimer->isRunning() == false)
+		{
 			_dfZoomInTimer->start();
 //			_globe->rotateStop();
+		}
 	}
 	else
 	{

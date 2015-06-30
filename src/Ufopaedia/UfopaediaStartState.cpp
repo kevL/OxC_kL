@@ -29,7 +29,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 
-#include "../Geoscape/GeoscapeState.h"	// kL_geoMusic
+#include "../Geoscape/GeoscapeState.h"	// kL_geoMusicPlaying
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -137,7 +137,7 @@ UfopaediaStartState::~UfopaediaStartState()
  */
 void UfopaediaStartState::btnOkClick(Action*)
 {
-	kL_geoMusic = false;
+	kL_geoMusicPlaying = false;
 
 	_game->popState();
 

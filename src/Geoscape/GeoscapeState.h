@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 extern size_t kL_curBase;
-extern bool kL_geoMusic;
+extern bool kL_geoMusicPlaying;
 
 extern const double
 	earthRadius,

@@ -234,8 +234,8 @@ void ResourcePack::playMusic(
 		const std::string& terrainRule, // kL: sza_MusicRules
 		int loops)
 {
-	if (Options::mute == false
-		&& _playingMusic != track)
+	if (_playingMusic != track
+		&& Options::mute == false)
 	{
 		_playingMusic = track;
 

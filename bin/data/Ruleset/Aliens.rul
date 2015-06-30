@@ -2255,7 +2255,7 @@ armors:
       - 1.0 #he
       - 0.8 #laser
       - 1.0 #plasma
-      - 1.1 #stun
+      - 0.9 #stun
       - 1.0 #melee
       - 0.7 #acid
       - 0.5 #smoke
@@ -2276,7 +2276,7 @@ armors:
       - 1.0 #he
       - 0.8 #laser
       - 1.0 #plasma
-      - 1.1 #stun
+      - 0.9 #stun
       - 1.0 #melee
       - 0.7 #acid
       - 0.5 #smoke
@@ -2297,7 +2297,7 @@ armors:
       - 1.0 #he
       - 0.8 #laser
       - 1.0 #plasma
-      - 1.1 #stun
+      - 0.9 #stun
       - 1.0 #melee
       - 0.7 #acid
       - 0.5 #smoke
@@ -2318,7 +2318,7 @@ armors:
       - 1.0 #he
       - 0.8 #laser
       - 1.0 #plasma
-      - 1.1 #stun
+      - 0.9 #stun
       - 1.0 #melee
       - 0.7 #acid
       - 0.5 #smoke
@@ -2333,16 +2333,16 @@ armors:
     underArmor: 23
     drawingRoutine: 6
     damageModifier:
-      - 1.0
-      - 1.1
-      - 0.6
-      - 1.0
-      - 0.8
-      - 1.0
-      - 1.1
-      - 1.0
-      - 0.7
-      - 0.5
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.9 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
     loftempsSet: [3]
   - type: MUTON_ARMOR0 #soldier
     spriteSheet: MUTON.PCK

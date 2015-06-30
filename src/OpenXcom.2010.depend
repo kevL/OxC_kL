@@ -4401,7 +4401,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1434594983 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1435663391 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4492,7 +4492,7 @@
 1431626587 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1434773203 f:\git\openxcom\src\geoscape\geoscapestate.h
+1435663391 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
@@ -7037,7 +7037,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1435612695 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1435661304 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7118,7 +7118,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1435625221 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1435671203 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8379,7 +8379,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\serializationhelper.h
 
-1435049839 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1435670220 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Music.h"
@@ -8801,7 +8801,7 @@
 1433868731 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1435634774 source:f:\git\openxcom\src\savegame\soldier.cpp
+1435638968 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -9054,7 +9054,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1433248718 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
+1435663391 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
 	"UfopaediaStartState.h"
 	"Ufopaedia.h"
 	"UfopaediaSelectState.h"
