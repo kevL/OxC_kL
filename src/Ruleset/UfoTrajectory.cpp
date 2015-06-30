@@ -78,6 +78,9 @@ struct convert<OpenXcom::TrajectoryWaypoint>
 namespace OpenXcom
 {
 
+const std::string UfoTrajectory::RETALIATION_ASSAULT_RUN = "__RETALIATION_ASSAULT_RUN";
+
+
 /**
  * Creates a UfoTrajectory.
  * @param id - reference the ID string (eg. 'P0')

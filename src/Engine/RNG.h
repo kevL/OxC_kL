@@ -21,19 +21,18 @@
 #define OPENXCOM_RNG_H
 
 #include <algorithm>
+#include <cstdint>
 
 //#define __STDC_LIMIT_MACROS
 //#include <stdint.h>
-#include <cstdint>
 
 
 namespace OpenXcom
 {
 
 /**
- * Random Number Generator used throughout the game
- * for all your random needs. Uses a 64-bit xorshift
- * pseudorandom number generator.
+ * Random Number Generator used throughout the game for all your random needs.
+ @note Uses a 64-bit xorshift pseudorandom number generator.
  */
 namespace RNG
 {

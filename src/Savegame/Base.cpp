@@ -2091,7 +2091,10 @@ int Base::getDetectionChance(
 			}
 		}
 
-		return (*facQty / 6 + 9) / (*shields * 2 + 1) + diff;
+		return calcDetChance(
+						diff,
+						*facQty,
+						*shields);
 	}
 
 	int
@@ -2112,7 +2115,25 @@ int Base::getDetectionChance(
 		}
 	}
 
-	return (facQty0 / 6 + 9) / (shields0 * 2 + 1) + diff;
+	return calcDetChance(
+					diff,
+					facQty0,
+					shields0);
+}
+
+/**
+ * Calculates the chance that aLiens have to detect this Base.
+ * @note Helper for getDetectionChance() to ensure consistency.
+ * @param diff		- the game's difficulty setting
+ * @param facQty	- the quantity of facilities
+ * @param shields	- the quantity of shield facilities
+ */
+int Base::calcDetChance( // private.
+		int diff,
+		int facQty,
+		int shields) const
+{
+	return (facQty / 6 + 9) / (shields * 2 + 1) + diff;
 }
 
 /**

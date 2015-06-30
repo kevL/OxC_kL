@@ -68,7 +68,8 @@ class SoldierNamePool;
 
 /**
  * Represents a soldier hired by the player.
- * Soldiers have a wide variety of stats that affect their performance during battles.
+ * @note Soldiers have a wide variety of stats that affect their performance
+ * during battles.
  */
 class Soldier // no copy cTor.
 {

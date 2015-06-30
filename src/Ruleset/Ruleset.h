@@ -358,7 +358,7 @@ protected:
 		const std::vector<std::string>& getInvsList() const;
 
 		/// Generates a new soldier.
-		Soldier* genSoldier(SavedGame* save) const;
+		Soldier* genSoldier(SavedGame* const save) const;
 
 		/// Gets the item to be used as fuel for ships.
 		const std::string getAlienFuel() const;

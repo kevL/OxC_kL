@@ -1240,6 +1240,8 @@ T* Ruleset::loadRule(
  */
 SavedGame* Ruleset::newSave() const
 {
+	RNG::setSeed(0);
+
 	SavedGame* const gameSave = new SavedGame(this);
 
 	// Add countries
@@ -2192,7 +2194,7 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
  * @param gameSave - pointer to SavedGame
  * @return, pointer to the newly generated Soldier
  */
-Soldier* Ruleset::genSoldier(SavedGame* gameSave) const
+Soldier* Ruleset::genSoldier(SavedGame* const gameSave) const
 {
 	return new Soldier(
 					getSoldier("XCOM"),

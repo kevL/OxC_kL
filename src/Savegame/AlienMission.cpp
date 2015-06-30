@@ -448,7 +448,7 @@ Ufo* AlienMission::spawnUfo( // private.
 
 			// Spawn a battleship straight for the XCOM Base.
 			const RuleUfo& battleshipRule = *rules.getUfo(_missionRule.getSpawnUfo());
-			const UfoTrajectory& trjBattleship = *rules.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
+			const UfoTrajectory& trjBattleship = *rules.getUfoTrajectory(UfoTrajectory::RETALIATION_ASSAULT_RUN);
 			const RuleRegion& regionRule = *rules.getRegion(_region);
 
 			ufo = new Ufo(&battleshipRule);
@@ -700,7 +700,7 @@ void AlienMission::ufoReachedWaypoint(
 				}
 			}
 		}
-		else if (trajectory.getID() == "__RETALIATION_ASSAULT_RUN")	// remove UFO, replace with Base defense.
+		else if (trajectory.getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)	// remove UFO, replace with Base defense.
 		{															// Ignore what the trajectory might say, this is a base defense.
 			ufo.setDetected(false);
 

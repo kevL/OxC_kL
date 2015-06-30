@@ -83,6 +83,12 @@ private:
 	/// Determines space taken up by ammo clips about to rearm craft.
 //	double getIgnoredStores();
 
+	/// Calculates the chance that aLiens have to detect this Base.
+	int calcDetChance(
+			int diff,
+			int facQty,
+			int shields) const;
+
 
 	public:
 		static const size_t BASE_SIZE = 6;

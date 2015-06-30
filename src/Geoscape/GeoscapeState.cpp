@@ -1565,7 +1565,7 @@ void GeoscapeState::time5Seconds()
 							&& (*i)->getFollowers()->empty() == false)
 						{
 							if (!
-								((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
+								((*i)->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN
 									&& (*i)->getStatus() == Ufo::LANDED))
 							{
 								resetTimer();
@@ -1742,7 +1742,7 @@ void GeoscapeState::time5Seconds()
 					if (ufo->getDetected() == false	// lost radar contact
 						&& ufo != ufoExpired)		// <- ie. not just shot down while trying to outrun interceptor but it crashed into the sea instead Lol
 					{
-						if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" // note: this is where that targeting-terrorUfo/Site glitch should also be taken care of.
+						if (ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN // note: this is where that targeting-terrorUfo/Site glitch should also be taken care of.
 							&& (ufo->getStatus() == Ufo::LANDED
 								|| ufo->getStatus() == Ufo::DESTROYED))
 						{
@@ -2021,7 +2021,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 		return false;
 	}
 
-	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
+	if (ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)
 	{
 		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;

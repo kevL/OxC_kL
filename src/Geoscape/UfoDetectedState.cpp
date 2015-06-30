@@ -223,10 +223,7 @@ UfoDetectedState::UfoDetectedState(
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
 
 	woststr.str(L"");
-	std::string alt = _ufo->getAltitude();
-	if (alt == "STR_GROUND")
-		alt = "STR_GROUNDED";
-	woststr << L'\x01' << tr(alt);
+	woststr << L'\x01' << tr(_ufo->getAltitude());
 	_lstInfo->addRow(
 					2,
 					tr("STR_ALTITUDE").c_str(),

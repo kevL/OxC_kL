@@ -232,20 +232,20 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC")
 							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
-	std::string alt = _craft->getAltitude();
-	if (alt == "STR_GROUND"
-		|| stat == "STR_READY"
+	std::string alt;
+	if (   stat == "STR_READY"
 		|| stat == "STR_REPAIRS"
 		|| stat == "STR_REFUELLING"
 		|| stat == "STR_REARMING")
 	{
-		alt = "STR_GROUNDED";
+		alt = "STR_GROUND";
 	}
+	else
+		alt = _craft->getAltitude();
+
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(alt)));
 
-
 	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
-
 	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())));
 
 

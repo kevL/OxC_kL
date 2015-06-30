@@ -45,7 +45,7 @@ namespace OpenXcom
 /**
  * Initializes a new soldier, either blank or randomly generated.
  * @param rules	- pointer to RuleSoldier
- * @param armor	- pointer to Armor
+ * @param armor	- pointer to RuleArmor
  * @param names	- pointer to a vector of pointers to SoldierNamePool (default NULL)
  * @param id	- unique soldier ID for soldier generation (default 0)
  */
@@ -78,16 +78,16 @@ Soldier::Soldier(
 			minStats = _rules->getMinStats(),
 			maxStats = _rules->getMaxStats();
 
-		_initialStats.tu			= RNG::generate(minStats.tu, maxStats.tu);
-		_initialStats.stamina		= RNG::generate(minStats.stamina, maxStats.stamina);
-		_initialStats.health		= RNG::generate(minStats.health, maxStats.health);
-		_initialStats.bravery		= RNG::generate(minStats.bravery / 10, maxStats.bravery / 10) * 10;
-		_initialStats.reactions		= RNG::generate(minStats.reactions, maxStats.reactions);
-		_initialStats.firing		= RNG::generate(minStats.firing, maxStats.firing);
-		_initialStats.throwing		= RNG::generate(minStats.throwing, maxStats.throwing);
-		_initialStats.strength		= RNG::generate(minStats.strength, maxStats.strength);
-		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength, maxStats.psiStrength);
-		_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
+		_initialStats.tu			= RNG::generate(minStats.tu,			maxStats.tu);
+		_initialStats.stamina		= RNG::generate(minStats.stamina,		maxStats.stamina);
+		_initialStats.health		= RNG::generate(minStats.health,		maxStats.health);
+		_initialStats.bravery		= RNG::generate(minStats.bravery / 10,	maxStats.bravery / 10) * 10;
+		_initialStats.reactions		= RNG::generate(minStats.reactions,		maxStats.reactions);
+		_initialStats.firing		= RNG::generate(minStats.firing,		maxStats.firing);
+		_initialStats.throwing		= RNG::generate(minStats.throwing,		maxStats.throwing);
+		_initialStats.strength		= RNG::generate(minStats.strength,		maxStats.strength);
+		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength,	maxStats.psiStrength);
+		_initialStats.melee			= RNG::generate(minStats.melee,			maxStats.melee);
 
 //		_initialStats.psiSkill = minStats.psiSkill;
 		_initialStats.psiSkill = 0;

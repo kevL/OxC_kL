@@ -65,6 +65,9 @@ private:
 
 
 	public:
+		static const std::string RETALIATION_ASSAULT_RUN;
+
+
 		/// cTor.
 		explicit UfoTrajectory(const std::string& id);
 

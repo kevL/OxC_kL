@@ -91,6 +91,7 @@ DebriefingState::DebriefingState()
 		_rules(_game->getRuleset()),
 		_gameSave(_game->getSavedGame()),
 		_diff(static_cast<int>(_game->getSavedGame()->getDifficulty())),
+		_tacBattle(_game->getSavedGame()->getMonthsPassed() == -1),
 		_region(NULL),
 		_country(NULL),
 		_base(NULL),
@@ -117,7 +118,6 @@ DebriefingState::DebriefingState()
 	// when BattlescapeGame is really dTor'd, and not reLoaded ...... ) uh, i guess.
 //	if (_gameSave->getSavedBattle()->getBattleGame())
 	_gameSave->getSavedBattle()->getBattleGame()->cleanupDeleted();
-
 
 	_missionStatistics = new MissionStatistics();
 
@@ -353,9 +353,14 @@ DebriefingState::DebriefingState()
 		_missionStatistics->rating = "STR_RATING_EXCELLENT";
 	}
 
-//	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_missionCost)));
-	_txtCost->setText(Text::formatFunding(_missionCost));
-	_txtCost->setAlign(ALIGN_CENTER);
+	if (_tacBattle == false)
+	{
+//		_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_missionCost)));
+		_txtCost->setText(Text::formatFunding(_missionCost));
+		_txtCost->setAlign(ALIGN_CENTER);
+	}
+	else
+		_txtCost->setVisible(false);
 
 //	_txtRating->setText(tr("STR_RATING").arg(rating));
 	_txtRating->setText(rating);
@@ -525,7 +530,7 @@ void DebriefingState::btnOkClick(Action*)
 	_gameSave->setBattleGame(NULL);
 	_game->popState();
 
-	if (_gameSave->getMonthsPassed() == -1)
+	if (_tacBattle == true)
 		_game->setState(new MainMenuState());
 	else
 	{
@@ -733,7 +738,7 @@ void DebriefingState::prepareDebriefing() // private.
 	_missionStatistics->timeStat = *_gameSave->getTime();
 	_missionStatistics->type = battleSave->getMissionType();
 
-	if (_gameSave->getMonthsPassed() != -1) // Do all aLienRace types here for SoldierDiary stat.
+	if (_tacBattle == false) // Do all aLienRace types here for SoldierDiary stat.
 	{
 		if (battleSave->getAlienRace().empty() == false) // safety.
 			_missionStatistics->alienRace = battleSave->getAlienRace();
@@ -760,7 +765,8 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			if ((*j)->isInBattlescape() == true)
 			{
-				_missionCost = (*i)->craftExpense(*j);
+				if (_tacBattle == false)
+					_missionCost = (*i)->craftExpense(*j);
 
 				const double
 					craftLon = (*j)->getLongitude(),
@@ -1129,9 +1135,10 @@ void DebriefingState::prepareDebriefing() // private.
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
 				{
-					_missionCost += _base->soldierExpense(
-														sol,
-														true);
+					if (_tacBattle == false)
+						_missionCost += _base->soldierExpense(
+															sol,
+															true);
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
 						-value);
@@ -1158,9 +1165,10 @@ void DebriefingState::prepareDebriefing() // private.
 				}
 				else // not soldier -> tank
 				{
-					_missionCost += _base->hwpExpense(
-												(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
-												true);
+					if (_tacBattle == false)
+						_missionCost += _base->hwpExpense(
+													(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
+													true);
 					addStat(
 						"STR_TANKS_DESTROYED",
 						-value);
@@ -1206,7 +1214,8 @@ void DebriefingState::prepareDebriefing() // private.
 					{
 						recoverItems((*i)->getInventory());
 
-						_missionCost += _base->soldierExpense(sol);
+						if (_tacBattle == false)
+							_missionCost += _base->soldierExpense(sol);
 
 //						sol->calcStatString( // calculate new statString
 //										_rules->getStatStrings(),
@@ -1216,7 +1225,9 @@ void DebriefingState::prepareDebriefing() // private.
 					else // not soldier -> tank
 					{
 						_base->getItems()->addItem(type);
-						_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
+
+						if (_tacBattle == false)
+							_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
 						const RuleItem* itRule;
 						const BattleItem* ammoItem;
@@ -1578,7 +1589,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 			_base->getVehicles()->clear();
 		}
-		else if (_gameSave->getMonthsPassed() != -1)
+		else if (_tacBattle == false)
 		{
 			for (std::vector<Base*>::const_iterator
 					i = _gameSave->getBases()->begin();

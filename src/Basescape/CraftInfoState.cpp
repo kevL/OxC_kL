@@ -312,7 +312,10 @@ void CraftInfoState::init()
 			bit->blit(_equip);
 		}
 
-		calcCost();
+		if (tacBattle == false)
+			calcCost();
+		else
+			_txtCost->setVisible(false);
 	}
 	else
 	{

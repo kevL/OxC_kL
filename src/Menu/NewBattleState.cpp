@@ -263,14 +263,15 @@ void NewBattleState::init()
  */
 void NewBattleState::load(const std::string& filename)
 {
-	const std::string st = Options::getConfigFolder() + filename + ".cfg";
-	if (CrossPlatform::fileExists(st) == false)
+	const std::string config = Options::getConfigFolder() + filename + ".cfg";
+
+	if (CrossPlatform::fileExists(config) == false)
 		initPlay();
 	else
 	{
 		try
 		{
-			YAML::Node doc = YAML::LoadFile(st);
+			YAML::Node doc = YAML::LoadFile(config);
 
 			_cbxMission->setSelected(std::min(
 									doc["mission"].as<size_t>(0),
@@ -370,8 +371,9 @@ void NewBattleState::load(const std::string& filename)
  */
 void NewBattleState::save(const std::string& filename)
 {
-	const std::string st = Options::getConfigFolder() + filename + ".cfg";
-	std::ofstream save (st.c_str()); // init
+	const std::string config = Options::getConfigFolder() + filename + ".cfg";
+
+	std::ofstream save (config.c_str()); // init
 	if (save.fail() == true)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
@@ -400,8 +402,11 @@ void NewBattleState::save(const std::string& filename)
  */
 void NewBattleState::initPlay()
 {
-	SavedGame* const savedGame = new SavedGame(_rules);
+	RNG::setSeed(0);
+
+	SavedGame* const savedGame = new SavedGame(_rules); // uh do these get deleted anywhere
 	Base* const base = new Base(_rules);
+
 	const YAML::Node& startBase = _rules->getStartingBase();
 	base->load(
 			startBase,
@@ -440,33 +445,33 @@ void NewBattleState::initPlay()
 	// Generate soldiers
 	for (int
 			i = 0;
-			i < 30;
+			i != 30;
 			++i)
 	{
 		Soldier* const soldier = _rules->genSoldier(savedGame);
 
 		for (int
-				n = 0;
-				n < 5;
-				++n)
+				j = 0;
+				j != 5;
+				++j)
 		{
-			if (RNG::percent(70) == true)
-				continue;
+			if (RNG::percent(30) == true)
+			{
+				soldier->promoteRank();
 
-			soldier->promoteRank();
-
-			UnitStats* const stats = soldier->getCurrentStats();
-			stats->tu			+= RNG::generate(0,5);
-			stats->stamina		+= RNG::generate(0,5);
-			stats->health		+= RNG::generate(0,5);
-			stats->bravery		+= RNG::generate(0,5);
-			stats->reactions	+= RNG::generate(0,5);
-			stats->firing		+= RNG::generate(0,5);
-			stats->throwing		+= RNG::generate(0,5);
-			stats->strength		+= RNG::generate(0,5);
-			stats->melee		+= RNG::generate(0,5);
-			stats->psiStrength	+= RNG::generate(0,5);
-			stats->psiSkill		+= RNG::generate(0,20);
+				UnitStats* const stats = soldier->getCurrentStats();
+				stats->tu			+= RNG::generate(0,5);
+				stats->stamina		+= RNG::generate(0,5);
+				stats->health		+= RNG::generate(0,5);
+				stats->bravery		+= RNG::generate(0,5);
+				stats->reactions	+= RNG::generate(0,5);
+				stats->firing		+= RNG::generate(0,5);
+				stats->throwing		+= RNG::generate(0,5);
+				stats->strength		+= RNG::generate(0,5);
+				stats->melee		+= RNG::generate(0,5);
+				stats->psiStrength	+= RNG::generate(0,5);
+				stats->psiSkill		+= RNG::generate(0,20);
+			}
 		}
 
 		UnitStats* const stats = soldier->getCurrentStats();
@@ -747,7 +752,7 @@ void NewBattleState::cbxMissionChange(Action*)
 	{
 		Log(LOG_INFO) << ". . insert to _terrainTypes Option = " << *i;
 		_terrainTypes.push_back(*i);
-		terrainOptions.push_back("STR_" + *i);
+		terrainOptions.push_back("MAP_" + *i);
 	}
 
 	bool vis = ruleDeploy->getShade() == -1; // Hide controls that don't apply to mission

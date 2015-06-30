@@ -968,8 +968,8 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 }
 
 /**
- * Handles the result of non target actions
- * like priming a grenade or performing a melee attack or using a medikit.
+ * Handles the result of non target actions like priming a grenade or performing
+ * a melee attack or using a medikit.
  */
 void BattlescapeGame::handleNonTargetAction()
 {
@@ -977,12 +977,16 @@ void BattlescapeGame::handleNonTargetAction()
 	{
 		_currentAction.cameraPosition = Position(0,0,-1);
 
+		bool showWarning = false;
+
 		// NOTE: These actions are done partly in ActionMenuState::btnActionMenuClick() and
 		// this subsequently handles a greater or lesser proportion of the resultant niceties.
  		if (_currentAction.type == BA_PRIME
 			|| _currentAction.type == BA_DEFUSE)
 		{
-			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+			if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
+				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+			else
 			{
 				_currentAction.weapon->setFuseTimer(_currentAction.value);
 
@@ -996,16 +1000,11 @@ void BattlescapeGame::handleNonTargetAction()
 										true,
 										_currentAction.value);
 			}
-			else
-				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 		}
 		else if (_currentAction.type == BA_USE)
 		{
 			if (_currentAction.result.empty() == false)
-			{
-				_parentState->warning(_currentAction.result);
-				_currentAction.result.clear();
-			}
+				showWarning = true;
 
 			if (_currentAction.targetUnit != NULL)
 			{
@@ -1016,21 +1015,17 @@ void BattlescapeGame::handleNonTargetAction()
 		else if (_currentAction.type == BA_LAUNCH)
 		{
 			if (_currentAction.result.empty() == false)
-			{
-				_parentState->warning(_currentAction.result);
-				_currentAction.result.clear();
-			}
+				showWarning = true;
 		}
 		else if (_currentAction.type == BA_HIT)
 		{
 			if (_currentAction.result.empty() == false)
-			{
-				_parentState->warning(_currentAction.result);
-				_currentAction.result.clear();
-			}
+				showWarning = true;
 			else
 			{
-				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+				if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
+					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+				else
 				{
 //					statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
 					statePushBack(new ProjectileFlyBState(
@@ -1038,24 +1033,17 @@ void BattlescapeGame::handleNonTargetAction()
 														_currentAction));
 					return;
 				}
-				else
-					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 			}
 		}
 		else if (_currentAction.type == BA_DROP)
 		{
 			if (_currentAction.result.empty() == false)
-			{
-				_parentState->warning(_currentAction.result); // "STR_NOT_ENOUGH_TIME_UNITS"
-				_currentAction.result.clear();
-			}
+				showWarning = true;
 			else
 			{
 				if (_currentAction.actor->getPosition().z > 0)
 					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
 
-//				getResourcePack()->getSoundByDepth(
-//												getDepth(),
 				getResourcePack()->getSound(
 										"BATTLE.CAT",
 										ResourcePack::ITEM_DROP)
@@ -1063,6 +1051,12 @@ void BattlescapeGame::handleNonTargetAction()
 										-1,
 										getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 			}
+		}
+
+		if (showWarning == true)
+		{
+			_parentState->warning(_currentAction.result);
+			_currentAction.result.clear();
 		}
 
 		_currentAction.type = BA_NONE;

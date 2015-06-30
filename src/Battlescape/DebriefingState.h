@@ -96,7 +96,8 @@ private:
 	bool
 		_destroyXCOMBase,
 		_manageContainment,
-		_noContainment;
+		_noContainment,
+		_tacBattle;
 	int
 		_aliensControlled,
 		_aliensKilled,

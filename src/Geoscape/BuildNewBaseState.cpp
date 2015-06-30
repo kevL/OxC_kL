@@ -41,6 +41,8 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
+#include "../Menu/ErrorMessageState.h"
+
 #include "../Resource/ResourcePack.h"
 
 #include "../Savegame/Base.h"
@@ -299,6 +301,13 @@ void BuildNewBaseState::globeClick(Action* action)
 														_base,
 														_globe));
 			}
+			else
+				_game->pushState(new ErrorMessageState(
+												tr("STR_XCOM_BASE_CANNOT_BE_BUILT"),
+												_palette,
+												_game->getRuleset()->getInterface("geoscape")->getElement("genericWindow")->color,
+												_game->getResourcePack()->getRandomBackground(),
+												_game->getRuleset()->getInterface("geoscape")->getElement("palette")->color));
 		}
 	}
 }

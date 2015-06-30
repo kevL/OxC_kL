@@ -527,7 +527,7 @@ std::string Craft::getAltitude() const
 		|| getStatus() == "STR_REFUELLING"
 		|| getStatus() == "STR_REARMING")
 	{
-		return "STR_GROUNDED";
+		return "STR_GROUND";
 	}
 	// need to add: if xCom craft && inDogFight, return UFO altitude.
 	else

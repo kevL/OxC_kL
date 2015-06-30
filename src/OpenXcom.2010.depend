@@ -4361,7 +4361,7 @@
 	<sstream>
 	<string>
 
-1432586518 f:\git\openxcom\src\savegame\soldier.h
+1435633839 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/RuleUnit.h"
 
 1432068221 f:\git\openxcom\src\ruleset\unit.h
@@ -4390,7 +4390,7 @@
 
 1433391317 f:\git\openxcom\src\resource\resourcepack.h
 
-1435467923 f:\git\openxcom\src\savegame\base.h
+1435614069 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1433212243 f:\git\openxcom\src\savegame\target.h
@@ -4559,7 +4559,7 @@
 1430262701 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1432764467 f:\git\openxcom\src\ruleset\ruleset.h
+1435635244 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4661,7 +4661,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1434778980 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1435627650 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -5069,7 +5069,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1430760138 f:\git\openxcom\src\engine\rng.h
+1435636566 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
 	<cstdint>
 
@@ -5494,14 +5494,14 @@
 1430149550 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1433648171 f:\git\openxcom\src\battlescape\debriefingstate.h
+1435628008 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1435318824 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1435632867 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5856,7 +5856,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1434584867 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1435628954 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6880,7 +6880,7 @@
 	"../Engine/State.h"
 	"Globe.h"
 
-1431627946 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
+1435629776 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
 	"BuildNewBaseState.h"
 	"BaseNameState.h"
 	"ConfirmNewBaseState.h"
@@ -6893,6 +6893,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
+	"../Menu/ErrorMessageState.h"
 	"../Resource/ResourcePack.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
@@ -6940,7 +6941,7 @@
 1432527783 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1432857581 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1435629481 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -7092,7 +7093,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1434592639 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1435631551 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7117,7 +7118,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1435613195 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1435625221 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7249,7 +7250,7 @@
 
 1433622926 f:\git\openxcom\src\ruleset\rulealienmission.h
 
-1433726558 f:\git\openxcom\src\ruleset\ufotrajectory.h
+1435625024 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
 1435005791 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
@@ -7544,7 +7545,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1433819185 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1435631372 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7765,7 +7766,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1433211620 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1435638479 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8497,7 +8498,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1432786669 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1435637624 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8547,7 +8548,7 @@
 	"../Savegame/SoldierDiary.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1432339653 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
+1435634616 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
 1433211087 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
@@ -8565,7 +8566,7 @@
 	"../Engine/Language.h"
 	"../Savegame/Soldier.h"
 
-1433731198 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1435625434 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1431490878 source:f:\git\openxcom\src\ruleset\unit.cpp
@@ -8576,7 +8577,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1433910802 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1435625267 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8607,7 +8608,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1435515943 source:f:\git\openxcom\src\savegame\base.cpp
+1435614159 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8669,7 +8670,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1434340414 source:f:\git\openxcom\src\savegame\craft.cpp
+1435631087 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8800,7 +8801,7 @@
 1433868731 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1433864627 source:f:\git\openxcom\src\savegame\soldier.cpp
+1435634774 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
