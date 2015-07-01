@@ -96,10 +96,10 @@ private:
 	/// Refresh the hover status of the mouse.
 	void refreshMouse();
 
-	/// Saves a soldier's equipment-layout.
-	bool saveLayout(BattleUnit* const unit) const;
 	/// Saves all soldiers' equipment-layouts.
 	bool saveAllLayouts() const;
+	/// Saves a soldier's equipment-layout.
+	bool saveLayout(BattleUnit* const unit) const;
 
 /*	/// Clears current unit's inventory. (was static)
 	void clearInventory(

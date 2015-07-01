@@ -735,6 +735,40 @@ void InventoryState::btnUnloadClick(Action*)
 }
 
 /**
+ * Saves all Soldiers' equipment layouts in pre-battle.
+ * @param action - pointer to an Action
+ */
+void InventoryState::btnSaveLayouts(Action*)
+{
+	if (_tuMode == false
+		&& _inv->getSelectedItem() == NULL)
+	{
+		if (saveAllLayouts() == true)
+			_inv->showWarning(tr("STR_EQUIP_LAYOUTS_SAVED"));
+	}
+}
+
+/**
+ * Saves all Soldiers' equipment layouts.
+ * @return, true if a layout is saved
+ */
+bool InventoryState::saveAllLayouts() const // private.
+{
+	bool ret = false;
+
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
+	{
+		if (saveLayout(*i) == true)
+			ret = true;
+	}
+
+	return ret;
+}
+
+/**
  * Saves a Soldier's equipment layout.
  * @note Called from btnUnloadClick() if in pre-battle.
  * @param unit - pointer to a BattleUnit
@@ -742,11 +776,8 @@ void InventoryState::btnUnloadClick(Action*)
  */
 bool InventoryState::saveLayout(BattleUnit* const unit) const // private.
 {
-	bool ret = false;
-
 	if (unit->getGeoscapeSoldier() != NULL)
 	{
-		ret = true;
 		std::vector<EquipmentLayoutItem*>* const layoutItems = unit->getGeoscapeSoldier()->getEquipmentLayout();
 
 		if (layoutItems->empty() == false) // clear Soldier's items
@@ -786,43 +817,11 @@ bool InventoryState::saveLayout(BattleUnit* const unit) const // private.
 													ammo,
 													(*i)->getFuseTimer()));
 		}
+
+		return true;
 	}
 
-	return ret;
-}
-
-/**
- * Saves all Soldiers' equipment layouts in pre-battle.
- * @param action - pointer to an Action
- */
-void InventoryState::btnSaveLayouts(Action*) // private.
-{
-	if (_tuMode == false
-		&& _inv->getSelectedItem() == NULL)
-	{
-		if (saveAllLayouts() == true)
-			_inv->showWarning(tr("STR_EQUIP_LAYOUTS_SAVED"));
-	}
-}
-
-/**
- * Saves all Soldiers' equipment layouts.
- * @return, true if a layout is saved
- */
-bool InventoryState::saveAllLayouts() const // private.
-{
-	bool ret = false;
-
-	for (std::vector<BattleUnit*>::const_iterator
-			i = _battleSave->getUnits()->begin();
-			i != _battleSave->getUnits()->end();
-			++i)
-	{
-		if (saveLayout(*i) == true)
-			ret = true;
-	}
-
-	return ret;
+	return false;
 }
 
 /**
@@ -899,14 +898,14 @@ void InventoryState::btnUnloadUnitClick(Action*)
 									->play();
 	}
 } */
-/**
+/*
  * Clears unit's inventory - move everything to the ground.
  * @note Helper for btnUnloadUnitClick().
  * @param game			- pointer to the core Game to get the Ruleset
  * @param unitInv		- pointer to a vector of pointers to BattleItems
  * @param groundTile	- pointer to the ground Tile
- */
-/* void InventoryState::clearInventory( // private.
+ *
+void InventoryState::clearInventory( // private.
 		Game* game,
 		std::vector<BattleItem*>* unitInv,
 		Tile* groundTile)

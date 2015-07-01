@@ -2278,7 +2278,7 @@ BattleUnit* TileEngine::hit(
 					delta = 100.;
 
 				const int
-					power1 = static_cast<int>(std::floor(static_cast<double>(power) * (100. - delta) / 100.) + 1),
+					power1 = static_cast<int>(std::floor(static_cast<double>(power) * (100. - delta) / 100.)) + 1,
 					power2 = static_cast<int>(std::ceil(static_cast<double>(power) * (100. + delta) / 100.));
 
 				int extraPower = 0;

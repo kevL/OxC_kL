@@ -117,11 +117,11 @@ void ExplosionBState::init()
 			if (_pistolWhip == true)
 				_power = _item->getRules()->getMeleePower();
 
-			// since melee aliens don't use a conventional weapon type, use their strength instead.
+			// since melee aliens don't use a conventional weapon type use their strength instead.
 			if (_unit != NULL
-				&& (_pistolWhip == true
-					|| _item->getRules()->getBattleType() == BT_MELEE)
-				&& _item->getRules()->isStrengthApplied() == true)
+				&& _item->getRules()->isStrengthApplied() == true
+				&& (_item->getRules()->getBattleType() == BT_MELEE
+					|| _pistolWhip == true))
 			{
 				int extraPower = static_cast<int>(Round(
 								 static_cast<double>(_unit->getBaseStats()->strength) * (_unit->getAccuracyModifier() / 2. + 0.5)));
@@ -132,7 +132,9 @@ void ExplosionBState::init()
 				if (_unit->isKneeled() == true)
 					extraPower /= 2; // kneeled units further half extraPower.
 
-				_power += extraPower;
+				_power += RNG::generate( // add 10% to 100% of extPower
+									(extraPower + 9) / 10,
+									extraPower);
 			}
 
 			// HE, incendiary, smoke or stun bombs create AOE explosions;

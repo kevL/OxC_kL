@@ -1191,26 +1191,6 @@ void DogfightState::updateDogfight()
 		&& _ufoBreakingOff == true)
 	{
 		outRun = true;
-
-/*		Log(LOG_INFO) << "df:update() ufoBreakingOff";
-		int qtyCraftVsUfo = 0;
-		for (std::list<DogfightState*>::const_iterator
-				i = _geo->getDogfights().begin();
-				i != _geo->getDogfights().end();
-				++i)
-		{
-			if ((*i)->getUfo() == _ufo
-				&& (*i)->getCraft()->isDestroyed() == false)
-			{
-				++qtyCraftVsUfo;
-			}
-		}
-
-		Log(LOG_INFO) << ". qtyCraft = " << qtyCraftVsUfo;
-		if (qtyCraftVsUfo == 1)
-			_geo->setDfCCC(
-						_craft->getLongitude(),
-						_craft->getLatitude()); */
 	}
 
 	if (_end == false)
