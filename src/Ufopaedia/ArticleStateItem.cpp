@@ -25,18 +25,18 @@
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/Language.h"
 //#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
-#include "../Engine/SurfaceSet.h"
+//#include "../Engine/Surface.h"
+//#include "../Engine/SurfaceSet.h"
 
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
+//#include "../Ruleset/Ruleset.h"
 
-#include "../Interface/Text.h"
+//#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 
@@ -284,8 +284,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		case BT_GRENADE:
 		case BT_PROXYGRENADE:
 		case BT_MELEE:
-/*kL
-			_txtDamage = new Text(82, 10, 194, 7);
+/*			_txtDamage = new Text(82, 10, 194, 7);
 			add(_txtDamage);
 			_txtDamage->setColor(Palette::blockOffset(14)+15);
 			_txtDamage->setAlign(ALIGN_CENTER);

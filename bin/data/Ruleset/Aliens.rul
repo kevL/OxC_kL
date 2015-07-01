@@ -1340,7 +1340,7 @@ alienDeployments:
       palette: 0
       background: BACK01.SCR
       music: GEO_BRIEF_BASEDEFENSE
-#      showTarget: false
+#      showTargetText: false
 #      textOffset: -16
   - type: STR_MARS_CYDONIA_LANDING
     data:
@@ -1430,7 +1430,7 @@ alienDeployments:
     briefing:
       palette: 6
       music: GEO_BRIEF_MARS1
-      showTarget: false
+      showTargetText: false
 #      textOffset: -16
   - type: STR_MARS_THE_FINAL_ASSAULT
     script: BOSSBATTLE
@@ -1604,8 +1604,8 @@ alienDeployments:
       palette: 6
       music: GEO_BRIEF_MARS2
       background: BACK01.SCR
-#      showTarget: false
-#      showCraft: false
+#      showTargetText: false
+#      showCraftText: false
 #      textOffset: -16
 #Alien Tech Level, http://openxcom.org/forum/index.php?topic=1356.0
 #kaiser_bill,

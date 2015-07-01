@@ -95,8 +95,13 @@ BriefingState::BriefingState(
 			deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
 	}
 
+	std::string
+		title = stType,
+		desc = title + "_BRIEFING";
+
 	if (deployRule == NULL) // should never happen
 	{
+		Log(LOG_INFO) << "WARNING: no deployment rule for Briefing: " << stType;
 		bg = "BACK16.SCR";
 		bgColor = _game->getRuleset()->getInterface("briefing")->getElement("palette")->color;
 		music = OpenXcom::res_MUSIC_GEO_BRIEFING;
@@ -108,10 +113,8 @@ BriefingState::BriefingState(
 		bg = dataBrief.background;
 		bgColor = dataBrief.palette;
 
-//		if (stType == "STR_UFO_CRASH_RECOVERY")
 		if (tacType == TCT_UFOCRASHED)
 			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
-//		else if (stType == "STR_UFO_GROUND_ASSAULT")
 		else if (tacType == TCT_UFOLANDED)
 			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
 		else
@@ -120,8 +123,14 @@ BriefingState::BriefingState(
 
 //		_txtBriefing->setY(_txtBriefing->getY() + dataBrief.textOffset);
 //		_txtCraft->setY(_txtCraft->getY() + dataBrief.textOffset);
-//		_txtTarget->setVisible(dataBrief.showTarget);
-//		_txtCraft->setVisible(dataBrief.showCraft);
+//		_txtTarget->setVisible(dataBrief.showTargetText);
+//		_txtCraft->setVisible(dataBrief.showCraftText);
+
+		if (dataBrief.title.empty() == false)
+			title = dataBrief.title;
+
+		if (dataBrief.desc.empty() == false)
+			desc = dataBrief.desc;
 	}
 	_game->getResourcePack()->playMusic(music);
 
@@ -150,11 +159,16 @@ BriefingState::BriefingState(
 					Options::keyCancel);
 
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(stType));
+	_txtTitle->setText(tr(title));
+
+	_txtBriefing->setText(tr(desc));
+	_txtBriefing->setWordWrap();
 
 	std::wstring craftLabel;
 	if (craft != NULL)
 	{
+		craftLabel = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
+
 		if (craft->getDestination() != NULL)
 		{
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
@@ -162,8 +176,6 @@ BriefingState::BriefingState(
 		}
 		else
 			_txtTarget->setVisible(false);
-
-		craftLabel = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
 	else if (base != NULL)
 	{
@@ -179,7 +191,6 @@ BriefingState::BriefingState(
 	else
 		_txtCraft->setVisible(false);
 
-
 	if (_txtTarget->getVisible() == false)
 	{
 		_txtCraft->setY(_txtCraft->getY() - 16);
@@ -188,18 +199,6 @@ BriefingState::BriefingState(
 
 	if (_txtCraft->getVisible() == false)
 		_txtBriefing->setY(_txtBriefing->getY() - 16);
-
-	std::ostringstream brief;
-	if (ufo != NULL // if this UFO has a specific briefing use it
-		&& ufo->getRules()->getBriefingString().empty() == false)
-	{
-		brief << ufo->getRules()->getBriefingString();
-	}
-	else
-		brief << stType.c_str() << "_BRIEFING";
-
-	_txtBriefing->setText(tr(brief.str()));
-	_txtBriefing->setWordWrap();
 
 //	if (tacType == TCT_BASEDEFENSE)
 //		base->setBaseExposed(false);

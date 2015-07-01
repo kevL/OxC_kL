@@ -94,12 +94,14 @@ struct convert<OpenXcom::BriefingData>
 	{
 		Node node;
 
-		node["palette"]		= rhs.palette;
-		node["textOffset"]	= rhs.textOffset;
-		node["music"]		= rhs.music;
-		node["background"]	= rhs.background;
-		node["showCraft"]	= rhs.showCraft;
-		node["showTarget"]	= rhs.showTarget;
+		node["palette"]			= rhs.palette;
+		node["textOffset"]		= rhs.textOffset;
+		node["title"]			= rhs.title;
+		node["desc"]			= rhs.desc;
+		node["music"]			= rhs.music;
+		node["background"]		= rhs.background;
+		node["showCraftText"]	= rhs.showCraftText;
+		node["showTargetText"]	= rhs.showTargetText;
 
 		return node;
 	}
@@ -110,12 +112,14 @@ struct convert<OpenXcom::BriefingData>
 		if (node.IsMap() == false)
 			return false;
 
-		rhs.palette		= node["palette"]	.as<int>(rhs.palette);
-		rhs.textOffset	= node["textOffset"].as<int>(rhs.textOffset);
-		rhs.music		= node["music"]		.as<std::string>(rhs.music);
-		rhs.background	= node["background"].as<std::string>(rhs.background);
-		rhs.showCraft	= node["showCraft"]	.as<bool>(rhs.showCraft);
-		rhs.showTarget	= node["showTarget"].as<bool>(rhs.showTarget);
+		rhs.palette			= node["palette"]		.as<int>(rhs.palette);
+		rhs.textOffset		= node["textOffset"]	.as<int>(rhs.textOffset);
+		rhs.title			= node["title"]			.as<std::string>(rhs.title);
+		rhs.desc			= node["desc"]			.as<std::string>(rhs.desc);
+		rhs.music			= node["music"]			.as<std::string>(rhs.music);
+		rhs.background		= node["background"]	.as<std::string>(rhs.background);
+		rhs.showCraftText	= node["showCraftText"]	.as<bool>(rhs.showCraftText);
+		rhs.showTargetText	= node["showTargetText"].as<bool>(rhs.showTargetText);
 
 		return true;
 	}

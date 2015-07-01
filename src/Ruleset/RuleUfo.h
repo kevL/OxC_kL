@@ -53,12 +53,11 @@ private:
 		_speedMax,
 		_sprite;
 	std::string
-		_briefing,
 		_modSprite,
 		_size,
 		_type;
 
-	RuleTerrain* _battlescapeTerrainData;
+	RuleTerrain* _tacticalTerrainData;
 
 
 	public:
@@ -111,9 +110,6 @@ private:
 		std::string getModSprite() const;
 		/// Gets the UFO's radar range.
 		int getSightRange() const;
-
-		/// Gets the name of the briefing string.
-		std::string getBriefingString() const;
 };
 
 }

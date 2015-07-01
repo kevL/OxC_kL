@@ -44,7 +44,7 @@ RuleUfo::RuleUfo(const std::string& type)
 		_reload(0),
 		_breakOffTime(0),
 		_sightRange(600), // 268 // for detecting xCom bases
-		_battlescapeTerrainData(NULL)
+		_tacticalTerrainData(NULL)
 {}
 
 /**
@@ -52,7 +52,7 @@ RuleUfo::RuleUfo(const std::string& type)
  */
 RuleUfo::~RuleUfo()
 {
-	delete _battlescapeTerrainData;
+	delete _tacticalTerrainData;
 }
 
 /**
@@ -77,7 +77,6 @@ void RuleUfo::load(
 	_reload			= node["reload"]		.as<int>(_reload);
 	_breakOffTime	= node["breakOffTime"]	.as<int>(_breakOffTime);
 	_sightRange		= node["sightRange"]	.as<int>(_sightRange);
-	_briefing		= node["briefing"]		.as<std::string>(_briefing);
 	_modSprite		= node["modSprite"]		.as<std::string>(_modSprite);
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
@@ -86,7 +85,7 @@ void RuleUfo::load(
 		rule->load(
 				terrain,
 				ruleset);
-		_battlescapeTerrainData = rule;
+		_tacticalTerrainData = rule;
 	}
 
 }
@@ -210,7 +209,7 @@ int RuleUfo::getScore() const
  */
 RuleTerrain* RuleUfo::getBattlescapeTerrainData() const
 {
-	return _battlescapeTerrainData;
+	return _tacticalTerrainData;
 }
 
 /**
@@ -247,15 +246,6 @@ std::string RuleUfo::getModSprite() const
 int RuleUfo::getSightRange() const
 {
 	return _sightRange;
-}
-
-/**
- * Gets the UFO's custom briefing string.
- * @return, the string name
- */
-std::string RuleUfo::getBriefingString() const
-{
-	return _briefing;
 }
 
 }

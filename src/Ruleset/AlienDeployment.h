@@ -57,14 +57,16 @@ struct DeploymentData
 struct BriefingData
 {
 	bool
-		showCraft,
-		showTarget;
+		showCraftText,
+		showTargetText;
 	int
 		palette,
 		textOffset;
 	std::string
+		background,
+		desc,
 		music,
-		background;
+		title;
 
 	BriefingData()
 		:
@@ -72,8 +74,8 @@ struct BriefingData
 			textOffset(0),
 			music(OpenXcom::res_MUSIC_GEO_BRIEFING),
 			background("BACK16.SCR"),
-			showCraft(true),
-			showTarget(true)
+			showCraftText(true),
+			showTargetText(true)
 	{};
 };
 

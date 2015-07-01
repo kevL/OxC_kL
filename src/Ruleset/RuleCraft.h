@@ -34,8 +34,8 @@ class RuleTerrain;
 
 /**
  * Represents a specific type of craft.
- * Contains constant info about a craft like
- * costs, speed, capacities, consumptions, etc.
+ * @note Contains constant info about a craft like costs speed capacities
+ * consumptions etc.
  * @sa Craft
  */
 class RuleCraft
@@ -70,7 +70,7 @@ private:
 		_refuelItem,
 		_type;
 
-	RuleTerrain* _battlescapeTerrainData;
+	RuleTerrain* _tacticalTerrainData;
 
 	std::vector<std::vector<int> > _deployment;
 	std::vector<std::string> _requires;

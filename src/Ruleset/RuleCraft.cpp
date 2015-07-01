@@ -50,7 +50,7 @@ RuleCraft::RuleCraft(const std::string& type)
 		_sightRange(900), // 1696	// for detecting aLien bases
 		_transferTime(0),
 		_score(0),
-		_battlescapeTerrainData(NULL),
+		_tacticalTerrainData(NULL),
 		_spacecraft(false),
 		_listOrder(0),
 		_maxItems(0)
@@ -62,19 +62,19 @@ RuleCraft::RuleCraft(const std::string& type)
  */
 RuleCraft::~RuleCraft()
 {
-	delete _battlescapeTerrainData;
+	delete _tacticalTerrainData;
 }
 
 /**
  * Loads the craft from a YAML file.
  * @param node		- reference a YAML node
- * @param ruleset	- pointer to Ruleset
+ * @param rules		- pointer to Ruleset
  * @param modIndex	- a value that offsets the sounds and sprite values to avoid conflicts
  * @param listOrder	- the list weight for this craft
  */
 void RuleCraft::load(
 		const YAML::Node& node,
-		Ruleset* ruleset,
+		Ruleset* rules,
 		int modIndex,
 		int listOrder)
 {
@@ -111,8 +111,10 @@ void RuleCraft::load(
 	{
 		RuleTerrain* const rule = new RuleTerrain(terrain["name"].as<std::string>());
 
-		rule->load(terrain, ruleset);
-		_battlescapeTerrainData = rule;
+		rule->load(
+				terrain,
+				rules);
+		_tacticalTerrainData = rule;
 
 		if (const YAML::Node& deployment = node["deployment"])
 			_deployment = deployment.as<std::vector<std::vector<int> > >(_deployment);
@@ -325,7 +327,7 @@ int RuleCraft::getScore() const
  */
 RuleTerrain* RuleCraft::getBattlescapeTerrainData()
 {
-	return _battlescapeTerrainData;
+	return _tacticalTerrainData;
 }
 
 /**

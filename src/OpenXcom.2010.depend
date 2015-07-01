@@ -4401,7 +4401,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1435663391 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1435672949 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4534,7 +4534,7 @@
 
 1430149550 f:\git\openxcom\src\engine\surfaceset.h
 
-1433211113 f:\git\openxcom\src\ruleset\rulecraft.h
+1435731776 f:\git\openxcom\src\ruleset\rulecraft.h
 
 1431940002 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
@@ -5373,7 +5373,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1433612674 f:\git\openxcom\src\ruleset\aliendeployment.h
+1435730955 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1434547305 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5652,7 +5652,7 @@
 
 1433211030 f:\git\openxcom\src\ruleset\ruleterrain.h
 
-1431473601 f:\git\openxcom\src\ruleset\ruleufo.h
+1435731416 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1432527848 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -5797,7 +5797,7 @@
 1435256482 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1433907287 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1435730955 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -8416,7 +8416,7 @@
 1430149550 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1434340095 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1435731203 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1430980245 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8472,7 +8472,7 @@
 1433535945 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
 	"RuleCountry.h"
 
-1433211158 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1435731691 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -8557,7 +8557,7 @@
 	"MapDataSet.h"
 	"Ruleset.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1435731450 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
@@ -8943,18 +8943,13 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/Ruleset.h"
 
-1434532359 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
+1435733265 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
 	"ArticleStateItem.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
-	"../Engine/Language.h"
-	"../Engine/Surface.h"
-	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 	"../Ruleset/RuleItem.h"
-	"../Ruleset/Ruleset.h"
-	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
 
@@ -9054,7 +9049,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1435663391 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
+1435672868 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
 	"UfopaediaStartState.h"
 	"Ufopaedia.h"
 	"UfopaediaSelectState.h"
