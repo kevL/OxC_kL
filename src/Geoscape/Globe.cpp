@@ -2710,8 +2710,8 @@ void Globe::blit(Surface* surface)
 
 /**
  * Ignores any mouse hovers that are outside the globe.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Globe::mouseOver(Action* action, State* state)
 {
@@ -2776,7 +2776,7 @@ void Globe::mouseOver(Action* action, State* state)
 							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 
-		if (Options::geoDragScrollInvert) // scroll
+		if (Options::geoDragScrollInvert == true) // scroll
 		{
 			const double
 				newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.,
@@ -2831,8 +2831,8 @@ void Globe::mouseOver(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Globe::mousePress(Action* action, State* state)
 {
@@ -2873,8 +2873,8 @@ void Globe::mousePress(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Globe::mouseRelease(Action* action, State* state)
 {
@@ -2898,10 +2898,10 @@ void Globe::mouseRelease(Action* action, State* state)
 }
 
 /**
- * Ignores any mouse clicks that are outside the globe
- * and handles globe rotation and zooming.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * Ignores any mouse clicks that are outside the globe and handles globe
+ * rotation and zooming.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Globe::mouseClick(Action* action, State* state)
 {
@@ -2923,14 +2923,14 @@ void Globe::mouseClick(Action* action, State* state)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now another button is used)
-	if (_isMouseScrolling)
+	if (_isMouseScrolling == true)
 	{
 		if (action->getDetails()->button.button != Options::geoDragScrollButton
 			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseOverThreshold
+			if (_mouseOverThreshold == false
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				center(
@@ -2943,7 +2943,7 @@ void Globe::mouseClick(Action* action, State* state)
 		}
 	}
 
-	if (_isMouseScrolling) // DragScroll-Button release: release mouse-scroll-mode
+	if (_isMouseScrolling == true) // DragScroll-Button release: release mouse-scroll-mode
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == Options::geoDragScrollButton)
@@ -2955,7 +2955,7 @@ void Globe::mouseClick(Action* action, State* state)
 			return;
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if (!_mouseOverThreshold
+		if (_mouseOverThreshold == false
 			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
@@ -2964,7 +2964,7 @@ void Globe::mouseClick(Action* action, State* state)
 				_latBeforeMouseScrolling);
 		}
 
-		if (_isMouseScrolled)
+		if (_isMouseScrolled == true)
 			return;
 	}
 
@@ -2980,8 +2980,8 @@ void Globe::mouseClick(Action* action, State* state)
 
 /**
  * Handles globe keyboard shortcuts.
- * @param action, Pointer to an action.
- * @param state, State that the action handlers belong to.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Globe::keyboardPress(Action* action, State* state)
 {

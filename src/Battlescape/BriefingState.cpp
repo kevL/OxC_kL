@@ -85,19 +85,17 @@ BriefingState::BriefingState(
 	const std::string stType = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(stType); // check, Xcom1Ruleset->alienDeployments for a missionType
 
-	const Ufo* ufo = NULL;
-
 	if (deployRule == NULL // landing site or crash site -> define BG & Music by ufoType instead
 		&& craft != NULL)
 	{
-		ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL) // landing site or crash site.
 			deployRule = _game->getRuleset()->getDeployment(ufo->getRules()->getType()); // check, Xcom1Ruleset->alienDeployments for a ufoType
 	}
 
 	std::string
 		title = stType,
-		desc = title + "_BRIEFING";
+		desc = stType + "_BRIEFING";
 
 	if (deployRule == NULL) // should never happen
 	{

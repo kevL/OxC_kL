@@ -334,6 +334,9 @@ GeoscapeState::GeoscapeState()
 		_dfZoomInDone(false),
 		_dfZoomOutDone(false),
 		_dfZoomOut(true),
+		_dfCenterCurrentCoords(false),
+		_dfCCC_lon(0.),
+		_dfCCC_lat(0.),
 		_minimizedDogfights(0),
 		_day(-1),
 		_month(-1),
@@ -3790,9 +3793,17 @@ void GeoscapeState::dfZoomOut()
 		_dfZoomOutDone = true;
 		_dfZoomOutTimer->stop();
 
-		_globe->center(
-					_gameSave->getDfLongitude(),
-					_gameSave->getDfLatitude());
+		if (_dfCenterCurrentCoords == true)
+		{
+			_dfCenterCurrentCoords = false;
+			_globe->center(
+						_dfCCC_lon,
+						_dfCCC_lat);
+		}
+		else
+			_globe->center(
+						_gameSave->getDfLongitude(),
+						_gameSave->getDfLatitude());
 
 		init();
 	}
@@ -3807,6 +3818,30 @@ void GeoscapeState::storePreDfCoords()
 	_gameSave->setDfLatitude(_gameSave->getGlobeLatitude());
 
 	_gameSave->setDfZoom(_globe->getZoom());
+}
+
+/**
+ * Sets the zoom-out timer to ignore stored pre-Dogfight coordinates and use
+ * current coordinates of the Dogfight instead.
+ * @note Used only if UFO is breaking off from its last dogfight.
+ */
+void GeoscapeState::setDfCCC(
+		double lon,
+		double lat)
+{
+	_dfCenterCurrentCoords = true;
+	_dfCCC_lon = lon;
+	_dfCCC_lat = lat;
+}
+
+/**
+ * Gets whether the zoom-out timer should ignore stored pre-Dogfight coordinates
+ * and use current coordinates of the Dogfight instead.
+ * @return, true if UFO is set to break off from its dogfight
+ */
+bool GeoscapeState::getDfCCC() const
+{
+	return _dfCenterCurrentCoords;
 }
 
 /**
@@ -3922,8 +3957,8 @@ void GeoscapeState::startDogfight()
 }
 
 /**
- * Updates total current interceptions quantity in all Dogfights
- * and repositions their view windows accordingly.
+ * Updates total current interceptions quantity in all Dogfights and repositions
+ * their view windows accordingly.
  */
 void GeoscapeState::resetInterceptPorts()
 {

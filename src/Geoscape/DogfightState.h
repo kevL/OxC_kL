@@ -199,10 +199,10 @@ private:
 		void btnUfoClick(Action* action);
 		/// Handler for clicking the Preview graphic.
 		void previewPress(Action* action);
-		/// Handler for clicking the Minimize button.
-		void btnMinimizeClick(Action* action);
-		/// Handler for clicking the minimized interception window icon.
-		void btnMinimizedIconPress(Action* action);
+		/// Handler for clicking the Minimize dogfight button.
+		void btnMinimizeDfClick(Action* action);
+		/// Handler for clicking the Maximize dogfight icon.
+		void btnMaximizeDfPress(Action* action);
 
 		/// Returns true if state is minimized.
 		bool isMinimized() const;

@@ -289,7 +289,7 @@ DogfightState::DogfightState(
 					(ActionHandler)& DogfightState::previewPress,
 					SDL_BUTTON_RIGHT);
 
-	_btnMinimize->onMouseClick((ActionHandler)& DogfightState::btnMinimizeClick);
+	_btnMinimize->onMouseClick((ActionHandler)& DogfightState::btnMinimizeDfClick);
 
 	_btnUfo->copy(_window);
 	_btnUfo->onMouseClick((ActionHandler)& DogfightState::btnUfoClick);
@@ -334,9 +334,9 @@ DogfightState::DogfightState(
 //	srfFrame->setX(0);
 //	srfFrame->setY(0);
 	srfFrame->blit(_btnMinimizedIcon);
-	_btnMinimizedIcon->onMousePress((ActionHandler)& DogfightState::btnMinimizedIconPress);
+	_btnMinimizedIcon->onMousePress((ActionHandler)& DogfightState::btnMaximizeDfPress);
 	_btnMinimizedIcon->onKeyboardPress(
-					(ActionHandler)& DogfightState::btnMinimizedIconPress,
+					(ActionHandler)& DogfightState::btnMaximizeDfPress,
 					Options::keyOk); // was keyCancel
 	_btnMinimizedIcon->setVisible(false);
 
@@ -800,6 +800,27 @@ void DogfightState::updateDogfight()
 		_ufoBreakingOff = true;
 		outRun = true;
 		setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
+
+		if (_geo->getDfCCC() == false) // should need to run this only once per.
+		{
+			int qtyCraftVsUfo = 0;
+			for (std::list<DogfightState*>::const_iterator
+					i = _geo->getDogfights().begin();
+					i != _geo->getDogfights().end();
+					++i)
+			{
+				if ((*i)->getUfo() == _ufo
+					&& (*i)->getCraft()->isDestroyed() == false)
+				{
+					++qtyCraftVsUfo;
+				}
+			}
+
+			if (qtyCraftVsUfo == 1)
+				_geo->setDfCCC(
+							_craft->getLongitude(),
+							_craft->getLatitude());
+		}
 	}
 	else // UFO cannot break off because it's crappier than the crappy craft.
 	{
@@ -1170,6 +1191,26 @@ void DogfightState::updateDogfight()
 		&& _ufoBreakingOff == true)
 	{
 		outRun = true;
+
+/*		Log(LOG_INFO) << "df:update() ufoBreakingOff";
+		int qtyCraftVsUfo = 0;
+		for (std::list<DogfightState*>::const_iterator
+				i = _geo->getDogfights().begin();
+				i != _geo->getDogfights().end();
+				++i)
+		{
+			if ((*i)->getUfo() == _ufo
+				&& (*i)->getCraft()->isDestroyed() == false)
+			{
+				++qtyCraftVsUfo;
+			}
+		}
+
+		Log(LOG_INFO) << ". qtyCraft = " << qtyCraftVsUfo;
+		if (qtyCraftVsUfo == 1)
+			_geo->setDfCCC(
+						_craft->getLongitude(),
+						_craft->getLatitude()); */
 	}
 
 	if (_end == false)
@@ -1662,7 +1703,7 @@ void DogfightState::previewPress(Action*)
  * Minimizes the dogfight window.
  * @param action - pointer to an Action
  */
-void DogfightState::btnMinimizeClick(Action*)
+void DogfightState::btnMinimizeDfClick(Action*)
 {
 	_geo->resetTimer();
 
@@ -1718,7 +1759,7 @@ void DogfightState::btnMinimizeClick(Action*)
  * Maximizes the dogfight window.
  * @param action - pointer to an Action
  */
-void DogfightState::btnMinimizedIconPress(Action* action)
+void DogfightState::btnMaximizeDfPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{

@@ -4492,7 +4492,7 @@
 1431626587 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1435672714 f:\git\openxcom\src\geoscape\geoscapestate.h
+1435748337 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
@@ -5797,7 +5797,7 @@
 1435256482 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1435730955 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1435733669 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	"AliensCrashState.h"
 	"BattlescapeState.h"
@@ -7037,7 +7037,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1435661304 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1435747191 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7070,7 +7070,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1433820513 f:\git\openxcom\src\geoscape\dogfightstate.h
+1435736992 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7118,7 +7118,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1435672816 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1435746475 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7254,7 +7254,7 @@
 
 1435005791 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1434614219 source:f:\git\openxcom\src\geoscape\globe.cpp
+1435735120 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8852,7 +8852,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1432853135 source:f:\git\openxcom\src\savegame\ufo.cpp
+1435738345 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

@@ -68,6 +68,7 @@ private:
 	static const size_t INDICATORS = 16;
 
 	bool
+		_dfCenterCurrentCoords,
 		_dfZoomInDone,
 		_dfZoomOutDone,
 		_dfZoomOut,
@@ -79,6 +80,9 @@ private:
 		_year;
 	int64_t _windowPops;
 	size_t _minimizedDogfights;
+	double
+		_dfCCC_lon,
+		_dfCCC_lat;
 
 	std::string _debug;
 
@@ -268,6 +272,12 @@ private:
 		void dfZoomOut();
 		/// Stores current Globe coordinates and zoom before a dogfight.
 		void storePreDfCoords();
+		/// Tells Dogfight zoom-out to ignore stored DF coordinates.
+		void setDfCCC(
+				double lon,
+				double lat);
+		/// Gets whether Dogfight zoom-out should ignore stored DF coordinates.
+		bool getDfCCC() const;
 		/// Gets the number of minimized dogfights.
 		size_t getMinimizedDfCount() const;
 		/// Multi-dogfights logic handling.
