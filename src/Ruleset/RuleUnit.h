@@ -279,9 +279,9 @@ private:
 
 		/// Gets the armor type.
 		std::string getArmor() const;
-		/// Gets the alien race type.
+		/// Gets the race type.
 		std::string getRace() const;
-		/// Gets the alien rank.
+		/// Gets the rank.
 		std::string getRank() const;
 
 		/// Gets the value - for score calculation.

@@ -197,8 +197,7 @@ void UnitDieBState::think()
 	}
 
 // #6
-//	if (_extraTicks == 2)
-	if (_extraTicks != 0)
+	if (_extraTicks == 1)
 	{
 		_parent->getMap()->setUnitDying(false);
 
@@ -258,13 +257,13 @@ void UnitDieBState::think()
 		}
 	}
 // #5
-//	else if (_extraTicks == 1)
+//	else if (_extraTicks > 0)
 //		++_extraTicks;
 // #4
 	else if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-		++_extraTicks;
+		_extraTicks = 1;
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODE)

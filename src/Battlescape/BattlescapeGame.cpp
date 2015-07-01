@@ -758,21 +758,19 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	}
 	//Log(LOG_INFO) << ". findItem DONE";
 
-	if (unit->getCharging() != NULL)
+	if (unit->getCharging() != NULL
+		&& _playedAggroSound == false)
 	{
-		if (unit->getAggroSound() != -1
-			&& _playedAggroSound == false)
-		{
-			_playedAggroSound = true;
-//			getResourcePack()->getSoundByDepth(
-//											_battleSave->getDepth(),
+		_playedAggroSound = true;
+
+		const int sound = unit->getAggroSound();
+		if (sound != -1)
 			getResourcePack()->getSound(
 									"BATTLE.CAT",
-									unit->getAggroSound())
+									sound)
 								->play(
 									-1,
 									getMap()->getSoundAngle(unit->getPosition()));
-		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
 
@@ -3051,12 +3049,11 @@ BattleUnit* BattlescapeGame::convertUnit(
 											month,
 											this);
 
-	_battleSave->getTile(unit->getPosition())->setUnit(
-													conUnit,
-													_battleSave->getTile(unit->getPosition()
-																			+ Position(0,0,-1)));
-	conUnit->setPosition(unit->getPosition());
-
+	const Position posUnit = unit->getPosition();
+	_battleSave->getTile(posUnit)->setUnit(
+										conUnit,
+										_battleSave->getTile(posUnit + Position(0,0,-1)));
+	conUnit->setPosition(posUnit);
 	conUnit->setTimeUnits(0);
 
 	int dir;
@@ -3088,6 +3085,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	conUnit->setUnitVisible(visible);
 
 	getTileEngine()->applyGravity(conUnit->getTile());
+//	getTileEngine()->calculateUnitLighting(); // <- done in UnitDieBState
 	getTileEngine()->calculateFOV(conUnit->getPosition());
 
 //	conUnit->getCurrentAIState()->think();

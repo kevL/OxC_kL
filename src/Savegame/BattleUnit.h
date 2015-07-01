@@ -552,7 +552,7 @@ private:
 				const int diff); // for VictoryPts value per death.
 		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
-				RuleUnit* unit,
+				RuleUnit* unitRule,
 				const UnitFaction faction,
 				const int id,
 				RuleArmor* const armor,

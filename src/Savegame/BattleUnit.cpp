@@ -211,7 +211,7 @@ BattleUnit::BattleUnit(
 
 /**
  * Creates this BattleUnit from a (non-Soldier) Unit-rule object.
- * @param unit			- pointer to RuleUnit
+ * @param unitRule		- pointer to RuleUnit
  * @param faction		- faction the unit belongs to
  * @param id			- the unit's unique ID
  * @param armor			- pointer to unit's armor
@@ -221,7 +221,7 @@ BattleUnit::BattleUnit(
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
-		RuleUnit* unit,
+		RuleUnit* unitRule,
 		const UnitFaction faction,
 		const int id,
 		RuleArmor* const armor,
@@ -230,7 +230,7 @@ BattleUnit::BattleUnit(
 		const int month,
 		BattlescapeGame* const battleGame) // for converted Units
 	:
-		_unitRules(unit),
+		_unitRules(unitRule),
 		_geoscapeSoldier(NULL),
 		_id(id),
 		_faction(faction),
@@ -299,26 +299,26 @@ BattleUnit::BattleUnit(
 
 		_statistics(NULL), // Soldier Diary
 
-		_type(unit->getType()),
-		_race(unit->getRace()),
-		_rank(unit->getRank()),
-		_standHeight(unit->getStandHeight()),
-		_kneelHeight(unit->getKneelHeight()),
-		_floatHeight(unit->getFloatHeight()),
+		_type(unitRule->getType()),
+		_race(unitRule->getRace()),
+		_rank(unitRule->getRank()),
+		_standHeight(unitRule->getStandHeight()),
+		_kneelHeight(unitRule->getKneelHeight()),
+		_floatHeight(unitRule->getFloatHeight()),
 		_loftempsSet(armor->getLoftempsSet()),
-		_deathSound(unit->getDeathSound()),
-		_aggroSound(unit->getAggroSound()),
-		_moveSound(unit->getMoveSound()),
-		_intelligence(unit->getIntelligence()),
-		_aggression(unit->getAggression()),
-		_spawnUnit(unit->getSpawnUnit()),
-		_value(unit->getValue()),
-		_specab(unit->getSpecialAbility()),
+		_deathSound(unitRule->getDeathSound()),
+		_aggroSound(unitRule->getAggroSound()),
+		_moveSound(unitRule->getMoveSound()),
+		_intelligence(unitRule->getIntelligence()),
+		_aggression(unitRule->getAggression()),
+		_spawnUnit(unitRule->getSpawnUnit()),
+		_value(unitRule->getValue()),
+		_specab(unitRule->getSpecialAbility()),
 
-		_stats(*unit->getStats())
+		_stats(*unitRule->getStats())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
-//	_stats	= *unit->getStats();
+//	_stats	= *unitRule->getStats();
 	_stats += *_armor->getStats(); // armors may modify effective stats (but not further modified by game difficulty or monthly progress)
 
 	if (faction == FACTION_HOSTILE)
@@ -333,7 +333,7 @@ BattleUnit::BattleUnit(
 	_energy	= _stats.stamina;
 	_health	= _stats.health;
 
-	if (unit->isFemale() == true)
+	if (unitRule->isFemale() == true)
 		_gender = GENDER_FEMALE;
 	else
 		_gender = GENDER_MALE;

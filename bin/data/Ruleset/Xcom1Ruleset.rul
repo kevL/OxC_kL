@@ -3010,7 +3010,7 @@ units:
     standHeight: 21
     kneelHeight: 16
     value: 22
-    deathSound: 9
+    deathSound: 49
 #    aggroSound: 49
     intelligence: 2
     aggression: 2

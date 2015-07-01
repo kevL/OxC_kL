@@ -139,7 +139,7 @@ private:
 
 		/// Checks reaction fire.
 		bool checkReactionFire(
-				BattleUnit* const unit,
+				BattleUnit* const triggerUnit,
 				int tuSpent = 0,
 				bool autoSpot = true);
 		/// Creates a vector of units that can spot this unit.

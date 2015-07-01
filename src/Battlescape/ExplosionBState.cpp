@@ -524,11 +524,12 @@ void ExplosionBState::explode() // private.
 
 			if (_item->getRules()->getZombieUnit().empty() == false
 				&& victim != NULL
-				&& victim->getArmor()->getSize() == 1
+//				&& victim->getArmor()->getSize() == 1
 				&& (victim->getGeoscapeSoldier() != NULL
-					|| victim->getUnitRules()->isMechanical() == false)
-				&& victim->getSpawnUnit().empty() == true
-				&& victim->getOriginalFaction() != FACTION_HOSTILE)
+					|| victim->getUnitRules()->getRace() == "STR_CIVILIAN")
+//					|| victim->getUnitRules()->isMechanical() == false)
+				&& victim->getSpawnUnit().empty() == true)
+//				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << victim->getId() << " murderer has zombieUnit string";
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());

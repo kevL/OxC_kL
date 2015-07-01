@@ -168,8 +168,8 @@ std::string RuleUnit::getArmor() const
 }
 
 /**
- * Gets the alien's race.
- * @return, the alien's race
+ * Gets the unit's race.
+ * @return, the unit's race
  */
 std::string RuleUnit::getRace() const
 {

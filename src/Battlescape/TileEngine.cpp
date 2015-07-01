@@ -1663,22 +1663,22 @@ bool TileEngine::canTargetTile(
  * @note The tuSpent parameter is needed because popState() doesn't subtract TU
  * until after the Initiative has been calculated or called from
  * ProjectileFlyBState.
- * @param unit		- pointer to a unit to check reaction fire against
- * @param tuSpent	- the unit's triggering expenditure of TU if firing or throwing.
- * @param autoSpot	- true if RF was not triggered by a Melee atk (default true)
+ * @param triggerUnit	- pointer to a unit to check reaction fire against
+ * @param tuSpent		- the unit's triggering expenditure of TU if firing or throwing.
+ * @param autoSpot		- true if RF was not triggered by a Melee atk (default true)
  * @return, true if reaction fire took place
  */
 bool TileEngine::checkReactionFire(
-		BattleUnit* const unit,
+		BattleUnit* const triggerUnit,
 		int tuSpent,
 		bool autoSpot)
 {
-	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs id-" << unit->getId();
+	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs id-" << triggerUnit->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
-	if (_battleSave->getSide() == FACTION_NEUTRAL		// no reaction on civilian turn.
-		|| unit->getFaction() != _battleSave->getSide()	// spotted unit must be current side's faction
-		|| unit->getTile() == NULL						// and must be on map
-		|| unit->isOut(true, true) == true)				// and must be conscious
+	if (_battleSave->getSide() == FACTION_NEUTRAL				// no reaction on civilian turn.
+		|| triggerUnit->getFaction() != _battleSave->getSide()	// spotted unit must be current side's faction
+		|| triggerUnit->getTile() == NULL						// and must be on map
+		|| triggerUnit->isOut(true, true) == true)				// and must be conscious
 	{
 		return false;
 	}
@@ -1691,33 +1691,33 @@ bool TileEngine::checkReactionFire(
 
 	bool ret = false;
 
-	if (unit->getFaction() == unit->getOriginalFaction()	// not MC'd
-		|| unit->getFaction() == FACTION_PLAYER)			// or is xCom agent - MC'd aLiens do not RF.
+	if (triggerUnit->getFaction() == triggerUnit->getOriginalFaction()	// not MC'd
+		|| triggerUnit->getFaction() == FACTION_PLAYER)					// or is xCom agent - MC'd aLiens do not RF.
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
-		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
+		std::vector<BattleUnit*> spotters = getSpottingUnits(triggerUnit);
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
-		BattleUnit* reactor = getReactor( // get the first man up to bat.
-									spotters,
-									unit,
-									tuSpent,
-									autoSpot);
+		BattleUnit* reactorUnit = getReactor( // get the first man up to bat.
+										spotters,
+										triggerUnit,
+										tuSpent,
+										autoSpot);
 		// start iterating through the possible reactors until
 		// the current unit is the one with the highest score.
-		while (reactor != unit)
+		while (reactorUnit != triggerUnit)
 		{
 			// !!!!!SHOOT!!!!!!!!
-			if (reactionShot(reactor, unit) == false)
+			if (reactionShot(reactorUnit, triggerUnit) == false)
 			{
-				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
-				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
+				//Log(LOG_INFO) << ". . no Snap by : " << reactorUnit->getId();
+				// can't make a reaction snapshot for whatever reason then boot this guy from the vector.
 				for (std::vector<BattleUnit*>::const_iterator
 						i = spotters.begin();
 						i != spotters.end();
 						++i)
 				{
-					if (*i == reactor)
+					if (*i == reactorUnit)
 					{
 						spotters.erase(i);
 						break;
@@ -1726,23 +1726,23 @@ bool TileEngine::checkReactionFire(
 			}
 			else
 			{
-				if (reactor->getGeoscapeSoldier() != NULL
-					&& reactor->getFaction() == reactor->getOriginalFaction())
+				if (reactorUnit->getGeoscapeSoldier() != NULL
+					&& reactorUnit->getFaction() == reactorUnit->getOriginalFaction())
 				{
-					//Log(LOG_INFO) << ". . reactionXP to " << reactor->getId();
-					reactor->addReactionExp();
+					//Log(LOG_INFO) << ". . reactionXP to " << reactorUnit->getId();
+					reactorUnit->addReactionExp();
 				}
 
-				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+				//Log(LOG_INFO) << ". . Snap by : " << reactorUnit->getId();
 				ret = true;
 			}
 
-			reactor = getReactor( // nice shot. Get cocky, kid; you're a neurotic ass. Gratz!
+			reactorUnit = getReactor( // nice shot. Get cocky, kid; you're a neurotic ass. Gratz!
 								spotters,
-								unit,
+								triggerUnit,
 								tuSpent,
 								autoSpot);
-			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
+			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactorUnit->getId();
 		}
 
 		spotters.clear();
@@ -1980,8 +1980,8 @@ bool TileEngine::reactionShot(
 //			_save->getBattleGame()->statePushBack(new MeleeAttackBState(_save->getBattleGame(), action));
 
 		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
-																_battleSave->getBattleGame(),
-																action));
+																	_battleSave->getBattleGame(),
+																	action));
 		return true;
 	}
 
