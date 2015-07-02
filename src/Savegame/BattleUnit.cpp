@@ -2089,7 +2089,7 @@ std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
  * @param tile - pointer to a tile to add
  * @return, true or CTD
  */
-bool BattleUnit::addToVisibleTiles(Tile* tile)
+bool BattleUnit::addToVisibleTiles(Tile* const tile)
 {
 	_visibleTiles.push_back(tile);
 

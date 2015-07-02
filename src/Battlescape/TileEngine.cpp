@@ -465,7 +465,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 					posTest.x = posUnit.x + deltaPos_x;
 					posTest.y = posUnit.y + deltaPos_y;
 
-					if (_battleSave->getTile(posTest) != NULL)
+					if (_battleSave->getTile(posTest) != NULL) // spot units ->>
 					{
 						spottedUnit = _battleSave->getTile(posTest)->getUnit();
 

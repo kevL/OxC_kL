@@ -98,10 +98,11 @@ ActionMenuState::ActionMenuState(
 				"STR_DROP",
 				&id);
 
-		addItem(
-				BA_THROW,
-				"STR_THROW",
-				&id);
+		if (_action->actor->getBaseStats()->throwing != 0)
+			addItem(
+					BA_THROW,
+					"STR_THROW",
+					&id);
 	}
 
 	if (itRule->getTUMelee() != 0)
@@ -317,14 +318,6 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		_action->TU = _menuSelect[btnId]->getTUs();
 		_action->type = _menuSelect[btnId]->getAction();
 
-/*		if (_action->type != BA_THROW
-			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
-			&& itRule->isWaterOnly() == true)
-		{
-			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
-			_game->popState();
-		}
-		else */
 		if (_action->type == BA_NONE) // doggie bark
 		{
 			_game->popState();

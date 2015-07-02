@@ -743,7 +743,7 @@ private:
 		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
 		/// Adds unit to visible tiles.
-		bool addToVisibleTiles(Tile* tile);
+		bool addToVisibleTiles(Tile* const tile);
 		/// Gets the list of visible tiles.
 		std::vector<Tile*>* getVisibleTiles();
 		/// Clears this unit's visible tiles.

@@ -46,8 +46,7 @@ Cursor::Cursor(
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_color(0)
 {}
 
@@ -114,14 +113,11 @@ void Cursor::draw()
 			++i)
 	{
 		drawLine(
-				x1,
-				y1,
-				x1,
-				y2,
+				x1,y1,
+				x1,y2,
 				color);
 		drawLine(
-				x1,
-				y1,
+				x1,y1,
 				x2,
 				static_cast<Sint16>(getWidth() - 1),
 				color);

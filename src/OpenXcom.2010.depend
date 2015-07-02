@@ -5390,7 +5390,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1435161345 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1435835514 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"Map.h"
@@ -5501,7 +5501,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1435794943 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1435802076 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -11400,7 +11400,7 @@
 
 1430149550 f:\git\openxcom\src\ruleset\operationpool.h
 
-1435770446 source:f:\git\openxcom\src\ruleset\operationpool.cpp
+1435832949 source:f:\git\openxcom\src\ruleset\operationpool.cpp
 	"OperationPool.h"
 	"../Engine/Language.h"
 
