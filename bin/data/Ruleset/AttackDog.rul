@@ -48,6 +48,7 @@ units:
     kneelHeight: 10
     value: 8
     deathSound: 211
+    aggroSound: 210
     energyRecovery: 80
 #    livingWeapon: true
 armors:

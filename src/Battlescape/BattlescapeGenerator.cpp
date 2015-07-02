@@ -411,7 +411,7 @@ void BattlescapeGenerator::nextStage()
 			{
 				(*i)->convertToFaction(FACTION_PLAYER);
 				(*i)->setExposed(-1);
-				(*i)->getVisibleTiles()->clear();
+//				(*i)->getVisibleTiles()->clear();
 
 				if (selectedFirstSoldier == false
 					&& (*i)->getGeoscapeSoldier())

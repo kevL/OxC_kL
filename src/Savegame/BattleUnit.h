@@ -474,7 +474,7 @@ private:
 	std::vector<BattleUnit*>
 		_visibleUnits,
 		_unitsSpottedThisTurn;
-	std::vector<Tile*> _visibleTiles;
+//	std::vector<Tile*> _visibleTiles;
 
 	std::string
 		_activeHand,
@@ -742,12 +742,12 @@ private:
 		/// Gets the vector of BattleUnits that this unit has seen this turn.
 		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
-		/// Adds unit to visible tiles.
-		bool addToVisibleTiles(Tile* const tile);
-		/// Gets the list of visible tiles.
-		std::vector<Tile*>* getVisibleTiles();
+		/// Adds tile to visible tiles.
+//		bool addToVisibleTiles(Tile* const tile);
+		/// Gets this unit's list of visible tiles.
+//		std::vector<Tile*>* getVisibleTiles();
 		/// Clears this unit's visible tiles.
-		void clearVisibleTiles();
+//		void clearVisibleTiles();
 
 		/// Calculates firing accuracy.
 		double getFiringAccuracy(

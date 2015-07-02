@@ -46,6 +46,7 @@
 //#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -359,7 +360,7 @@ void TileEngine::addLight(
 bool TileEngine::calculateFOV(BattleUnit* const unit)
 {
 	unit->clearVisibleUnits();
-	unit->clearVisibleTiles();
+//	unit->clearVisibleTiles();
 
 	if (unit->isOut(true, true) == true)
 		return false;
@@ -482,6 +483,22 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 							{
 								spottedUnit->setUnitVisible();
 								spottedUnit->getTile()->setTileVisible();
+
+								if (unit->getOriginalFaction() == FACTION_PLAYER
+									&& spottedUnit->getFaction() == FACTION_HOSTILE)
+								{
+									const int sound = unit->getAggroSound();
+									if (sound != -1)
+									{
+										const BattlescapeGame* const battle = _battleSave->getBattleGame();
+										battle->getResourcePack()->getSound(
+																		"BATTLE.CAT",
+																		sound)
+																	->play(
+																		-1,
+																		battle->getMap()->getSoundAngle(unit->getPosition()));
+									}
+								}
 							}
 
 							if ((unit->getFaction() == FACTION_PLAYER
@@ -491,7 +508,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 							{
 								// adds spottedUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
 								unit->addToVisibleUnits(spottedUnit);
-								unit->addToVisibleTiles(spottedUnit->getTile());
+//								unit->addToVisibleTiles(spottedUnit->getTile());
 
 								if (_battleSave->getSide() == FACTION_HOSTILE
 									&& unit->getFaction() == FACTION_HOSTILE

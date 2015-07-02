@@ -2089,26 +2089,26 @@ std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
  * @param tile - pointer to a tile to add
  * @return, true or CTD
  */
-bool BattleUnit::addToVisibleTiles(Tile* const tile)
+/* bool BattleUnit::addToVisibleTiles(Tile* const tile)
 {
 	_visibleTiles.push_back(tile);
 
 	return true;
-}
+} */
 
 /**
  * Gets the pointer to the vector of visible tiles.
  * @return, pointer to a vector of pointers to visible tiles
  */
-std::vector<Tile*>* BattleUnit::getVisibleTiles()
+/* std::vector<Tile*>* BattleUnit::getVisibleTiles()
 {
 	return &_visibleTiles;
-}
+} */
 
 /**
  * Clears visible tiles.
  */
-void BattleUnit::clearVisibleTiles()
+/* void BattleUnit::clearVisibleTiles()
 {
 	for (std::vector<Tile*>::const_iterator
 			j = _visibleTiles.begin();
@@ -2119,7 +2119,7 @@ void BattleUnit::clearVisibleTiles()
 	}
 
 	_visibleTiles.clear();
-}
+} */
 
 /**
  * Calculates firing accuracy.

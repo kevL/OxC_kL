@@ -70,7 +70,7 @@ UnitDieBState::UnitDieBState(
 		_extraTicks(0)
 {
 	//Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
-	_unit->clearVisibleTiles();
+//	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
 	if (_noSound == false)			// pre-battle hidden explosion death; needed here to stop Camera CTD.
