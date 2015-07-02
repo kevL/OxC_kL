@@ -176,12 +176,14 @@ private:
 		/// Cycles the frames for all tiles.
 		void animateMap(bool redraw = true);
 
+		/// Refreshes the battlescape selector after scrolling.
+		void refreshSelectorPosition();
 		/// Sets the battlescape selector position relative to mouseposition.
 		void setSelectorPosition(
-				int mx,
-				int my);
+				int x,
+				int y);
 		/// Gets the currently selected position.
-		void getSelectorPosition(Position* pos) const;
+		void getSelectorPosition(Position* const pos) const;
 
 		/// Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
 		void calculateWalkingOffset(
@@ -214,8 +216,6 @@ private:
 		void scrollMouse();
 		/// Keyboard-scrolls the camera.
 		void scrollKey();
-		/// Refreshes the battlescape selector after scrolling.
-		void refreshSelectorPosition();
 
 		/// Gets waypoints vector.
 		std::vector<Position>* getWaypoints();

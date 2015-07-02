@@ -30,8 +30,8 @@ namespace OpenXcom
 
 /**
  * Sets up a cursor with the specified size and position and hides the system cursor.
- * @note The size and position don't really matter since
- * it's a 9x13 shape, they're just there for inheritance.
+ * @note The size and position don't really matter since it's a 9x13 shape.
+ * They're just for inheritance.
  * @param width		- width in pixels
  * @param height	- height in pixels
  * @param x			- X position in pixels (default 0)

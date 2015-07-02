@@ -75,6 +75,7 @@ private:
 		_pause,
 		_pauseHard;
 	int
+		_5secIterForMusic,
 		_day,
 		_month,
 		_year;

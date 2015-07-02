@@ -1995,10 +1995,7 @@ void BattlescapeState::btnPrevSoldierClick(Action*)
 void BattlescapeState::btnPrevStopClick(Action*)
 {
 	if (allowButtons() == true)
-	{
 		selectPreviousFactionUnit(true, true);
-//		_map->refreshSelectorPosition(); // -> done down the line in setupCursor()
-	}
 }
 
 /**
@@ -2095,19 +2092,18 @@ void BattlescapeState::btnHelpClick(Action*)
 }
 
 /**
- * Requests the end of turn. This will add a 0 to the end of the state queue,
- * so all ongoing actions, like explosions are finished first before really switching turn.
+ * Requests the end of turn.
+ * @note This will add a 0 to the end of the state queue so all ongoing actions
+ * like explosions are finished first before really switching turn.
  * @param action - pointer to an Action
  */
 void BattlescapeState::btnEndTurnClick(Action*)
 {
-	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick()";
 	if (allowButtons() == true)
 	{
 //		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
 	}
-	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick() EXIT";
 }
 
 /**
@@ -2117,13 +2113,9 @@ void BattlescapeState::btnEndTurnClick(Action*)
 void BattlescapeState::btnAbortClick(Action*)
 {
 	if (allowButtons() == true)
-	{
-		//Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
 		_game->pushState(new AbortMissionState(
 											_battleSave,
 											this));
-	}
-	//Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
 }
 
 /**

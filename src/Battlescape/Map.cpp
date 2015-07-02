@@ -889,7 +889,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _battleSave->getSide()))
 								{
-									frame = (_animFrame %2); // yellow box
+									frame = (_animFrame % 2); // yellow box
 								}
 								else
 									frame = 0; // red box
@@ -3893,7 +3893,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& (_cursorType != CT_PSI
 										|| unit->getFaction() != _battleSave->getSide()))
 								{
-									frame = 3 + (_animFrame %2);	// yellow flashing box
+									frame = 3 + (_animFrame % 2);	// yellow flashing box
 								}
 								else
 									frame = 3;						// red standard box
@@ -4417,8 +4417,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 /**
  * Handles mouse presses on the map.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Map::mousePress(Action* action, State* state)
 {
@@ -4428,8 +4428,8 @@ void Map::mousePress(Action* action, State* state)
 
 /**
  * Handles mouse releases on the map.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Map::mouseRelease(Action* action, State* state)
 {
@@ -4439,8 +4439,8 @@ void Map::mouseRelease(Action* action, State* state)
 
 /**
  * Handles keyboard presses on the map.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Map::keyboardPress(Action* action, State* state)
 {
@@ -4450,8 +4450,8 @@ void Map::keyboardPress(Action* action, State* state)
 
 /**
  * Handles keyboard releases on the map.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Map::keyboardRelease(Action* action, State* state)
 {
@@ -4461,8 +4461,8 @@ void Map::keyboardRelease(Action* action, State* state)
 
 /**
  * Handles mouse over events on the map.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Map::mouseOver(Action* action, State* state)
 {
@@ -4489,7 +4489,7 @@ void Map::findMousePosition(Position& mousePos)
 
 /**
  * Handles animating tiles - 8 Frames per animation [0..7].
- * @param redraw - true to redraw the battlescape map (default true)
+// * @param redraw - true to redraw the battlescape map (default true)
  */
 void Map::animateMap(bool redraw)
 {
@@ -4510,12 +4510,6 @@ void Map::animateMap(bool redraw)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-//		if (_battleSave->getDepth() > 0
-//			&& (*i)->getFloorAbove() == false)
-//		{
-//			(*i)->breathe();
-//		}
-
 		if ((*i)->getArmor()->getConstantAnimation() == true)
 		{
 			(*i)->setCache(NULL);
@@ -4532,26 +4526,36 @@ void Map::animateMap(bool redraw)
 }
 
 /**
+ * Updates the selector to the last-known mouse position.
+ */
+void Map::refreshSelectorPosition()
+{
+	setSelectorPosition(
+					_mouseX,
+					_mouseY);
+}
+
+/**
  * Sets the rectangular selector to a certain tile.
- * @param mx - mouse x position
- * @param my - mouse y position
+// * @param x - mouse x position
+// * @param y - mouse y position
  */
 void Map::setSelectorPosition(
-		int mx,
-		int my)
+		int x,
+		int y)
 {
 	const int
-		oldX = _selectorX,
-		oldY = _selectorY;
+		pre_X = _selectorX,
+		pre_Y = _selectorY;
 
 	_camera->convertScreenToMap(
-							mx,
-							my + _spriteHeight / 4,
+							x,
+							y + _spriteHeight / 4,
 							&_selectorX,
 							&_selectorY);
 
-	if (oldX != _selectorX
-		|| oldY != _selectorY)
+	if (   pre_X != _selectorX
+		|| pre_Y != _selectorY)
 	{
 		_redraw = true;
 	}
@@ -4561,7 +4565,7 @@ void Map::setSelectorPosition(
  * Gets the position of the rectangular selector.
  * @param pos - pointer to a Position
  */
-void Map::getSelectorPosition(Position* pos) const
+void Map::getSelectorPosition(Position* const pos) const
 {
 	pos->x = _selectorX;
 	pos->y = _selectorY;
@@ -4744,7 +4748,7 @@ int Map::getTerrainLevel( // private.
 
 /**
  * Sets the 3D cursor to selection/aim mode.
- * @param type			- CursorType
+ * @param type			- CursorType (Map.h)
  * @param cursorSize	- size of the cursor
  */
 void Map::setCursorType(
@@ -4979,16 +4983,6 @@ void Map::setButtonsPressed(
 void Map::setUnitDying(bool flag)
 {
 	_unitDying = flag;
-}
-
-/**
- * Updates the selector to the last-known mouse position.
- */
-void Map::refreshSelectorPosition()
-{
-	setSelectorPosition(
-					_mouseX,
-					_mouseY);
 }
 
 /**

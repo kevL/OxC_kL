@@ -341,7 +341,8 @@ GeoscapeState::GeoscapeState()
 		_day(-1),
 		_month(-1),
 		_year(-1),
-		_windowPops(0)
+		_windowPops(0),
+		_5secIterForMusic(0)
 {
 	const int
 		screenWidth		= Options::baseXGeoscape,
@@ -1984,17 +1985,22 @@ void GeoscapeState::time5Seconds()
 	// This is ONLY for allowing _dogfights to fill (or not) before deciding whether
 	// to startMusic in init() -- and ONLY for Loading with a dogfight in progress:
 	// But now it's also used for resuming Geoscape music on returning from another state ....
-	if (kL_geoMusicPlaying == false
-		&& (initDfMusic == true
-			|| kL_geoMusicReturnState == true))
+	if (kL_geoMusicPlaying == false)
 	{
-		kL_geoMusicPlaying = true;	// if there's a dogfight then dogfight music
-									// will play when a SavedGame is loaded
+		++_5secIterForMusic;
 
-		if (_dogfights.empty() == true
-			&& _dfStartTimer->isRunning() == false)
+		if (_5secIterForMusic > 3	// this is because initDfMusic takes uh 2+ passes before the _dogfight vector fills.
+			|| initDfMusic == true	// and if it doesn't fill by that time I want some music playing.
+			|| kL_geoMusicReturnState == true)
 		{
-			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+			kL_geoMusicPlaying = true;	// if there's a dogfight then dogfight music
+										// will play when a SavedGame is loaded
+
+			if (_dogfights.empty() == true
+				&& _dfStartTimer->isRunning() == false)
+			{
+				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
+			}
 		}
 	}
 }
