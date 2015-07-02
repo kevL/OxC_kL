@@ -2646,15 +2646,14 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		else
 		{
 			//Log(LOG_INFO) << ". . . . FIRING or THROWING";
-			getMap()->setCursorType(CT_NONE);
-
 			if (Options::battleConfirmFireMode == true)
 			{
 				_currentAction.waypoints.clear();
 				getMap()->getWaypoints()->clear();
 			}
 
-			_parentState->getGame()->getCursor()->setVisible(false);
+//			getMap()->setCursorType(CT_NONE);
+//			_parentState->getGame()->getCursor()->setVisible(false);
 
 			_currentAction.target = targetPos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
