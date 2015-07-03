@@ -720,7 +720,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		redraw,
 
 		kL_Debug_stand = false, // for debugging ->
-		kL_Debug_walk = false,
+		kL_Debug_walk = true,
 		kL_Debug_vert = false,
 		kL_Debug_main = false;
 
@@ -789,6 +789,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 						// kL_begin #1 of 3:
 						// This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
+						// ... unless there's also a floor directly above soldier
+						// Special case: crazy battleship tile+half floors; so check for content object diagonal wall directly above soldier also.
 						// Also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 						// ... should probably be a subfunction
 						if (itX < endX && itZ > 0)
@@ -796,7 +798,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 							const Tile* const tileEast = _battleSave->getTile(mapPosition + Position(1,0,0));
 
 							if (tileEast != NULL
-								&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
+								&& tileEast->getSprite(MapData::O_FLOOR) == NULL
+								&& (tileEast->getMapData(MapData::O_OBJECT) == NULL // special case ->
+									|| tileEast->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_NWSE))
 							{
 								const Tile* const tileEastBelow = _battleSave->getTile(mapPosition + Position(1,0,-1));
 
@@ -1677,7 +1681,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
-							if (tileNorth != NULL)
+							if (tileNorth != NULL
+								&& (tileNorth->getMapData(MapData::O_OBJECT) == NULL
+									|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALL_SOUTH))
 							{
 								BattleUnit* const unitNorth = tileNorth->getUnit();
 

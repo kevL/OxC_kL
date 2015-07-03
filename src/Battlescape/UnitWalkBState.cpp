@@ -577,8 +577,6 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			if (sound != -1)
 			{
-//				_parent->getResourcePack()->getSoundByDepth(
-//														_parent->getDepth(),
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												sound)
@@ -673,13 +671,13 @@ bool UnitWalkBState::doStatusStand() // private.
 							tileBelow);
 //							_onScreen);
 
-			if (_unit->getMoveSound() != -1)
-			{
+//			if (_unit->getMoveSound() != -1)
+//			{
 				//Log(LOG_INFO) << "doStatusStand() playSound";
 				//Log(LOG_INFO) << ". walkPhase = " << _unit->getWalkPhase();
 				//Log(LOG_INFO) << ". pos " << _unit->getPosition();
-				playMovementSound();
-			}
+//				playMovementSound();
+//			}
 			_preStepTurn = false;
 		}
 
@@ -718,8 +716,8 @@ bool UnitWalkBState::doStatusWalk() // private.
 		|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
-		if (_unit->getMoveSound() == -1)
-			playMovementSound();
+//		if (_unit->getMoveSound() == -1)
+		playMovementSound();
 
 //		bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
 //		_unit->keepWalking(tileBelow, onScreenBoundary); // advances the phase
@@ -1256,7 +1254,16 @@ void UnitWalkBState::playMovementSound() const // private.
 	if (_unit->getMoveSound() != -1)
 	{
 		if (_unit->getWalkPhase() == 0)
-			sound = _unit->getMoveSound();
+		{
+			if (_unit->getStatus() == STATUS_FLYING
+				&& _unit->isFloating() == false
+				&& _falling == false)
+			{
+				sound = 40; // GravLift note: isFloating() might be redundant w/ (_falling=false). See below_
+			}
+			else
+				sound = _unit->getMoveSound();
+		}
 	}
 	else
 	{
@@ -1282,11 +1289,11 @@ void UnitWalkBState::playMovementSound() const // private.
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
 		{
-			if (_unit->getWalkPhase() == 1)
+			if (_unit->getWalkPhase() == 0)
 			{
 				if (_falling == false)
 				{
-					if (_unit->isFloating() == false) // GravLift note: isFloating() might be redundant w/ (_falling=false)
+					if (_unit->isFloating() == false) // GravLift note: isFloating() might be redundant w/ (_falling=false). See above^
 						sound = 40;
 					else
 					{
@@ -1312,8 +1319,6 @@ void UnitWalkBState::playMovementSound() const // private.
 	}
 
 	if (sound != -1)
-//		_parent->getResourcePack()->getSoundByDepth(
-//												_parent->getDepth(),
 		_parent->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										sound)

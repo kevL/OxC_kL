@@ -806,9 +806,9 @@ void BattleUnit::setStatus(const UnitStatus status)
 }
 
 /**
- * Initialises variables to start walking.
+ * Initializes variables to start walking.
  * @param dir		- the direction to walk
- * @param dest		- reference the Position we should end up at
+ * @param dest		- reference the Position the unit should end up at
  * @param tileBelow	- pointer to the Tile below destination position
 // * @param cache	- true to redraw the unit's sprite ( not used. )
  */
