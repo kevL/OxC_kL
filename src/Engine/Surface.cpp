@@ -1117,7 +1117,7 @@ void Surface::resize(
 				surface,
 				getPalette(),
 				0,
-				255);
+				256);
 	SDL_BlitSurface(
 				_surface,
 				NULL,

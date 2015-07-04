@@ -653,8 +653,6 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	}
 
 	if (sound != -1)
-//		_parent->getResourcePack()->getSoundByDepth(
-//												_parent->getDepth(),
 		_parent->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										sound)
@@ -842,8 +840,6 @@ void ProjectileFlyBState::think()
 					}
 				}
 
-//				_parent->getResourcePack()->getSoundByDepth(
-//														_parent->getDepth(),
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												ResourcePack::ITEM_DROP)
@@ -1313,8 +1309,6 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 
 	if (sound != -1)
-//		_parent->getResourcePack()->getSoundByDepth(
-//												_parent->getDepth(),
 		_parent->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										sound)
