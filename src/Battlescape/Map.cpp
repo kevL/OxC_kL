@@ -720,7 +720,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		redraw,
 
 		kL_Debug_stand = false, // for debugging ->
-		kL_Debug_walk = true,
+		kL_Debug_walk = false,
 		kL_Debug_vert = false,
 		kL_Debug_main = false;
 

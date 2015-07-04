@@ -45,17 +45,17 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in a Production Complete window.
- * @param base					- pointer to Base the production belongs to
- * @param item					- reference the item that finished producing
- * @param state					- pointer to GeoscapeState
- * @param showGotoBaseButton	-
- * @param endType				- what ended the production (default PROGRESS_COMPLETE) (see Production.h)
+ * @param base			- pointer to Base the production belongs to
+ * @param item			- reference the item that finished producing
+ * @param state			- pointer to GeoscapeState
+ * @param gotoBaseBtn	-
+ * @param endType		- what ended the production (default PROGRESS_COMPLETE) (see Production.h)
  */
 ProductionCompleteState::ProductionCompleteState(
 		Base* base,
 		const std::wstring& item,
 		GeoscapeState* state,
-		bool showGotoBaseButton, // myk002_add.
+		bool gotoBaseBtn,
 		ProductProgress endType)
 	:
 		_base(base),
@@ -85,8 +85,7 @@ ProductionCompleteState::ProductionCompleteState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-//myk002	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setText(tr(showGotoBaseButton? "STR_OK": "STR_MORE")); // myk002
+	_btnOk->setText(tr(gotoBaseBtn ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnOkClick,
@@ -98,11 +97,8 @@ ProductionCompleteState::ProductionCompleteState(
 					(ActionHandler)& ProductionCompleteState::btnOk5SecsClick,
 					Options::keyGeoSpeed1);
 
-//	if (_endType == PROGRESS_CONSTRUCTION)			// <- construct facility done.
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
-//	else //if (_endType != PROGRESS_CONSTRUCTION)	// <- kL_note: i inverted those
-//		_btnGotoBase->setText(tr("STR_ALLOCATE_MANUFACTURE"));
-	_btnGotoBase->setVisible(showGotoBaseButton); // myk002
+	_btnGotoBase->setVisible(gotoBaseBtn);
 	_btnGotoBase->onMouseClick((ActionHandler)& ProductionCompleteState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,
@@ -183,9 +179,6 @@ void ProductionCompleteState::btnGotoBaseClick(Action*)
 	_state->resetTimer();
 	_game->popState();
 
-/*	if (_endType != PROGRESS_CONSTRUCTION)
-		_game->pushState(new ManufactureState(_base));
-	else // facility completed */
 	_game->pushState(new BasescapeState(
 									_base,
 									_state->getGlobe()));

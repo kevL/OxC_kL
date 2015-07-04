@@ -271,22 +271,26 @@ const int GeoscapeState::_ufoBlobs[8][13][13] =
 };
 
 
-// myk002_begin: struct definitions used when enqueuing notification events
+// myk002: struct definitions used when enqueuing notification events
 struct ProductionCompleteInfo
 {
-	bool showGotoBaseButton;
+	bool gotoBaseBtn;
 	std::wstring item;
+
+	Base* base;
 
 	ProductProgress endType;
 
 	/// cTor.
 	ProductionCompleteInfo(
+			Base* a_base,
 			const std::wstring& a_item,
-			bool a_showGotoBaseButton,
+			bool a_gotoBaseBtn,
 			ProductProgress a_endType)
 		:
+			base(a_base),
 			item(a_item),
-			showGotoBaseButton(a_showGotoBaseButton),
+			gotoBaseBtn(a_gotoBaseBtn),
 			endType(a_endType)
 	{}
 };
@@ -296,11 +300,15 @@ struct NewPossibleResearchInfo
 	bool showResearchButton;
 	std::vector<RuleResearch*> newPossibleResearch;
 
+	Base* base;
+
 	/// cTor.
 	NewPossibleResearchInfo(
+			Base* a_base,
 			const std::vector<RuleResearch*>& a_newPossibleResearch,
 			bool a_showResearchButton)
 		:
+			base(a_base),
 			newPossibleResearch(a_newPossibleResearch),
 			showResearchButton(a_showResearchButton)
 	{}
@@ -311,15 +319,19 @@ struct NewPossibleManufactureInfo
 	bool showManufactureButton;
 	std::vector<RuleManufacture*> newPossibleManufacture;
 
+	Base* base;
+
 	/// cTor.
 	NewPossibleManufactureInfo(
+			Base* a_base,
 			const std::vector<RuleManufacture*>& a_newPossibleManufacture,
 			bool a_showManufactureButton)
 		:
+			base(a_base),
 			newPossibleManufacture(a_newPossibleManufacture),
 			showManufactureButton(a_showManufactureButton)
 	{}
-}; // myk002_end.
+};
 
 
 /**
@@ -2650,21 +2662,21 @@ void GeoscapeState::time1Hour()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 	for (std::vector<Region*>::const_iterator
-			region = _gameSave->getRegions()->begin();
-			region != _gameSave->getRegions()->end();
-			++region)
+			i = _gameSave->getRegions()->begin();
+			i != _gameSave->getRegions()->end();
+			++i)
 	{
-		(*region)->recentActivity(false);
-		(*region)->recentActivityXCOM(false);
+		(*i)->recentActivity(false);
+		(*i)->recentActivityXCOM(false);
 	}
 
 	for (std::vector<Country*>::const_iterator
-			country = _gameSave->getCountries()->begin();
-			country != _gameSave->getCountries()->end();
-			++country)
+			i = _gameSave->getCountries()->begin();
+			i != _gameSave->getCountries()->end();
+			++i)
 	{
-		(*country)->recentActivity(false);
-		(*country)->recentActivityXCOM(false);
+		(*i)->recentActivity(false);
+		(*i)->recentActivityXCOM(false);
 	}
 
 
@@ -2672,18 +2684,18 @@ void GeoscapeState::time1Hour()
 	bool arrivals = false;
 
 	for (std::vector<Base*>::const_iterator // handle transfers
-			base = _gameSave->getBases()->begin();
-			base != _gameSave->getBases()->end();
-			++base)
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end();
+			++i)
 	{
 		for (std::vector<Transfer*>::const_iterator
-				transfer = (*base)->getTransfers()->begin();
-				transfer != (*base)->getTransfers()->end();
-				++transfer)
+				j = (*i)->getTransfers()->begin();
+				j != (*i)->getTransfers()->end();
+				++j)
 		{
-			(*transfer)->advance(*base);
+			(*j)->advance(*i);
 
-			if ((*transfer)->getHours() == 0)
+			if ((*j)->getHours() == 0)
 				arrivals = true;
 		}
 	}
@@ -2693,79 +2705,74 @@ void GeoscapeState::time1Hour()
 		popup(new ItemsArrivingState(this));
 
 
-	std::vector<ProductionCompleteInfo> events; // myk002
+	std::vector<ProductionCompleteInfo> events;
+	// Note that if transfers arrive at the same time Production(s) complete
+	// the gotoBase button handling below is obviated by RMB on transfers ....
 
 	for (std::vector<Base*>::const_iterator // handle Production
-			base = _gameSave->getBases()->begin();
-			base != _gameSave->getBases()->end();
-			++base)
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end();
+			++i)
 	{
-		std::map<Production*, ProductProgress> toRemove;
+		std::map<Production*, ProductProgress> progress;
 
 		for (std::vector<Production*>::const_iterator
-				product = (*base)->getProductions().begin();
-				product != (*base)->getProductions().end();
-				++product)
+				j = (*i)->getProductions().begin();
+				j != (*i)->getProductions().end();
+				++j)
 		{
-			toRemove[*product] = (*product)->step(
-												*base,
-												_gameSave,
-												_rules);
+			progress[*j] = (*j)->step(
+									*i,
+									_gameSave,
+									_rules);
 		}
 
 		for (std::map<Production*, ProductProgress>::const_iterator
-				product = toRemove.begin();
-				product != toRemove.end();
-				++product)
+				j = progress.begin();
+				j != progress.end();
+				++j)
 		{
-			if (product->second > PROGRESS_NOT_COMPLETE)
+			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
-				(*base)->removeProduction(product->first);
+				(*i)->removeProduction(j->first);
 
-				if (events.empty() == false) // myk002_begin: only show the action button for the last completion notification
-					events.back().showGotoBaseButton = false;
+				if (events.empty() == false) // set the previous event to NOT show btn.
+					events.back().gotoBaseBtn = false;
 
 				events.push_back(ProductionCompleteInfo(
-													tr(product->first->getRules()->getName()),
+													*i,
+													tr(j->first->getRules()->getName()),
 													true,
-													product->second)); // myk002_end.
-/*myk002
-				popup(new ProductionCompleteState(
-												*base,
-												tr(product->first->getRules()->getName()),
-												this,
-												product->second)); */
+													j->second));
 			}
 		}
 
 		if (Options::storageLimitsEnforced == true
-			&& (*base)->storesOverfull() == true)
+			&& (*i)->storesOverfull() == true)
 		{
 			resetTimer();
 			popup(new ErrorMessageState(
-								tr("STR_STORAGE_EXCEEDED").arg((*base)->getName()).c_str(),
+								tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(),
 								_palette,
 								_rules->getInterface("geoscape")->getElement("errorMessage")->color,
 								"BACK12.SCR", // "BACK13.SCR"
 								_rules->getInterface("geoscape")->getElement("errorPalette")->color));
-//			popup(new SellState(*base));
+//			popup(new SellState(*i));
 		}
+	}
 
-		for (std::vector<ProductionCompleteInfo>::const_iterator // myk002_begin:
-				event = events.begin();
-				event != events.end();
-//kL			++event
-				)
-		{
-			popup(new ProductionCompleteState(
-											*base,
-											event->item,
-											this,
-											event->showGotoBaseButton,
-											event->endType)); // myk002_end.
-
-			event = events.erase(event); // kL
-		}
+	for (std::vector<ProductionCompleteInfo>::const_iterator
+			j = events.begin();
+			j != events.end();
+			)
+	{
+		popup(new ProductionCompleteState(
+										j->base,
+										j->item,
+										this,
+										j->gotoBaseBtn,
+										j->endType));
+		j = events.erase(j);
 	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
 }
@@ -2831,116 +2838,191 @@ void GenerateSupplyMission::operator() (const AlienBase* base) const
 void GeoscapeState::time1Day()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Day()";
+	// myk002: Create a vector of pending events for this base so a slightly
+	// different dialog layout can be shown for the last event of each type.
+	std::vector<ProductionCompleteInfo> prodEvents;
+	std::vector<State*> resEvents;
+	std::vector<NewPossibleResearchInfo> newResEvents;
+	std::vector<NewPossibleManufactureInfo> newProdEvents;
+
 	for (std::vector<Base*>::const_iterator
-			base = _gameSave->getBases()->begin();
-			base != _gameSave->getBases()->end();
-			++base)
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end();
+			++i)
 	{
-		// myk002_begin: create list of pending events for this base so we can
-		// show a slightly different dialog layout for the last event of each type
-		std::vector<ProductionCompleteInfo> productionCompleteEvents; // myk002_end.
+		bool dead;
+		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
+				j = (*i)->getSoldiers()->begin();
+				j != (*i)->getSoldiers()->end();
+				)
+		{
+			dead = false;
+
+			if ((*j)->getRecovery() > 0)
+			{
+				int chanceDeath = (*j)->getRecoveryPCT();
+				if (chanceDeath > 10)
+				{
+					//Log(LOG_INFO) << "\n";
+					//Log(LOG_INFO) << ". Soldier = " << (*j)->getId() << " woundsPCT = " << chanceDeath;
+					const int lastMissionId = (*j)->getDiary()->getMissionIdList().back();
+					const std::vector<MissionStatistics*>* const missionStats = _gameSave->getMissionStatistics();
+					const int daysTotal = missionStats->at(lastMissionId)->injuryList[(*j)->getId()];
+
+					//Log(LOG_INFO) << ". . daysTotal = " << daysTotal;
+					if (daysTotal > 0) // safety.
+					{
+						const float healthFactor = static_cast<float>(daysTotal) / static_cast<float>((*j)->getCurrentStats()->health);
+						//Log(LOG_INFO) << ". . healthFactor = " << healthFactor;
+						chanceDeath = static_cast<int>(std::ceil(
+									  static_cast<float>(chanceDeath) * healthFactor));
+
+						const int roll = RNG::generate(1,1000);
+						//Log(LOG_INFO) << ". . chance to Die = " << chanceDeath << " roll = " << roll;
+						if (roll <= chanceDeath)
+						{
+							//Log(LOG_INFO) << "he's dead, Jim!!";
+							resetTimer();
+							if ((*j)->getArmor()->isBasic() == false) // return soldier's armor to Stores
+								(*i)->getItems()->addItem((*j)->getArmor()->getStoreItem());
+
+							popup(new SoldierDiedState(
+													(*j)->getName(),
+													(*i)->getName()));
+
+							(*j)->die(_gameSave); // holy * This copies the Diary-object
+							// so to delete Soldier-instance I need to use a CopyConstructor
+							// on either or both of SoldierDiary and SoldierCommendations.
+							// Oh, and maybe an operator= assignment overload also.
+							// Learning C++ is like standing around while 20 people constantly
+							// throw cow's dung at you. (But don't mention "const" or they'll throw
+							// twice as fast.) i miss you, Alan Turing ....
+
+							delete *j;
+							j = (*i)->getSoldiers()->erase(j);
+
+							dead = true;
+						}
+					}
+				}
+
+				if (dead == false)
+					(*j)->heal();
+			}
+
+			if (dead == false)
+				++j;
+		}
+
+		if ((*i)->getAvailablePsiLabs() != 0 // handle psionic training
+			&& Options::anytimePsiTraining == true)
+		{
+			for (std::vector<Soldier*>::const_iterator
+					j = (*i)->getSoldiers()->begin();
+					j != (*i)->getSoldiers()->end();
+					++j)
+			{
+				if ((*j)->trainPsiDay() == true)
+					(*j)->autoStat();
+
+//				(*j)->calcStatString(
+//								_rules->getStatStrings(),
+//								(Options::psiStrengthEval
+//									&& _gameSave->isResearched(_rules->getPsiRequirements())));
+			}
+		}
+
 
 		for (std::vector<BaseFacility*>::const_iterator // handle facility construction
-				f = (*base)->getFacilities()->begin();
-				f != (*base)->getFacilities()->end();
-				++f)
+				j = (*i)->getFacilities()->begin();
+				j != (*i)->getFacilities()->end();
+				++j)
 		{
-			if ((*f)->getBuildTime() > 0)
+			if ((*j)->getBuildTime() > 0)
 			{
-				(*f)->build();
+				(*j)->build();
 
-				if ((*f)->getBuildTime() == 0)
+				if ((*j)->getBuildTime() == 0)
 				{
-					if (productionCompleteEvents.empty() == false) // myk002_begin: only show the action button for the last completion notification
-						productionCompleteEvents.back().showGotoBaseButton = false;
+					if (prodEvents.empty() == false) // set the previous event to NOT show btn.
+						prodEvents.back().gotoBaseBtn = false;
 
-					productionCompleteEvents.push_back(
-													ProductionCompleteInfo(tr((*f)->getRules()->getType()),
-													true,
-													PROGRESS_CONSTRUCTION)); // myk002_end.
-/*myk002
-					popup(new ProductionCompleteState(
-													*base,
-													tr((*f)->getRules()->getType()),
-													this,
-													PROGRESS_CONSTRUCTION)); */
+					prodEvents.push_back(ProductionCompleteInfo(
+															*i,
+															tr((*j)->getRules()->getType()),
+															true,
+															PROGRESS_CONSTRUCTION));
 				}
 			}
 		}
 
-
-		std::vector<ResearchProject*> finished; // handle science projects
+		std::vector<ResearchProject*> resDone; // handle science projects
 
 		for (std::vector<ResearchProject*>::const_iterator
-				rp = (*base)->getResearch().begin();
-				rp != (*base)->getResearch().end();
-				++rp)
+				j = (*i)->getResearch().begin();
+				j != (*i)->getResearch().end();
+				++j)
 		{
-			if ((*rp)->step())
-				finished.push_back(*rp);
+			if ((*j)->step() == true)
+				resDone.push_back(*j);
 		}
 
-		if (finished.empty() == false)
+		if (resDone.empty() == false)
 			resetTimer();
 
-		std::vector<State*> researchCompleteEvents;								// myk002
-		std::vector<NewPossibleResearchInfo> newPossibleResearchEvents;			// myk002
-		std::vector<NewPossibleManufactureInfo> newPossibleManufactureEvents;	// myk002
 
 		for (std::vector<ResearchProject*>::const_iterator
-				rp = finished.begin();
-				rp != finished.end();
-				++rp)
+				j = resDone.begin();
+				j != resDone.end();
+				++j)
 		{
-			(*base)->removeResearch(
-								*rp,
-								_rules->getUnit((*rp)->getRules()->getName()) != NULL); // interrogation of aLien Unit complete.
+			(*i)->removeResearch(
+							*j,
+							_rules->getUnit((*j)->getRules()->getName()) != NULL); // interrogation of aLien Unit complete.
 
 			RuleResearch* bonus = NULL;
-			const RuleResearch* const research = (*rp)->getRules();
-			//if (research) Log(LOG_INFO) << ". research Valid";
-			//else Log(LOG_INFO) << ". research NOT valid"; // end_TEST
+			const RuleResearch* const research = (*j)->getRules();
 
-			if (Options::spendResearchedItems == true // if "researched" the live alien, his body sent to stores.
+			if (Options::spendResearchedItems == true // if "researched" the live alien his body sent to stores.
 				&& research->needItem() == true
 				&& _rules->getUnit(research->getName()) != NULL)
 			{
-				(*base)->getItems()->addItem(
+				(*i)->getItems()->addItem(
 									_rules->getArmor(
 												_rules->getUnit(
 															research->getName())->getArmor())
-									->getCorpseGeoscape());
+								->getCorpseGeoscape());
 				// ;) -> kL_note: heh i noticed that.
 			}
 
-			if ((*rp)->getRules()->getGetOneFree().empty() == false)
+			if ((*j)->getRules()->getGetOneFree().empty() == false)
 			{
 				std::vector<std::string> possibilities;
 
 				for (std::vector<std::string>::const_iterator
-						gof = (*rp)->getRules()->getGetOneFree().begin();
-						gof != (*rp)->getRules()->getGetOneFree().end();
-						++gof)
+						k = (*j)->getRules()->getGetOneFree().begin();
+						k != (*j)->getRules()->getGetOneFree().end();
+						++k)
 				{
 					bool oneFree = true;
 					for (std::vector<const RuleResearch*>::const_iterator
-							discovered = _gameSave->getDiscoveredResearch().begin();
-							discovered != _gameSave->getDiscoveredResearch().end();
-							++discovered)
+							l = _gameSave->getDiscoveredResearch().begin();
+							l != _gameSave->getDiscoveredResearch().end();
+							++l)
 					{
-						if (*gof == (*discovered)->getName())
+						if (*k == (*l)->getName())
 							oneFree = false;
 					}
 
 					if (oneFree == true)
-						possibilities.push_back(*gof);
+						possibilities.push_back(*k);
 				}
 
 				if (possibilities.empty() == false)
 				{
 					const size_t randFree = static_cast<size_t>(RNG::generate(
-																			0,
-																			static_cast<int>(possibilities.size() - 1)));
+																		0,
+																		static_cast<int>(possibilities.size() - 1)));
 					bonus = _rules->getResearch(possibilities.at(randFree));
 					_gameSave->addFinishedResearch(
 												bonus,
@@ -2954,19 +3036,13 @@ void GeoscapeState::time1Day()
 			}
 
 			const RuleResearch* newResearch = research;
-			//if (newResearch) Log(LOG_INFO) << ". newResearch Valid";
-			//else Log(LOG_INFO) << ". newResearch NOT valid"; // end_TEST
 
 			std::string name = research->getLookup();
 			if (name.empty() == true)
 				name = research->getName();
-			//Log(LOG_INFO) << ". Research = " << name;
 
 			if (_gameSave->isResearched(name) == true)
-			{
-				//Log(LOG_INFO) << ". newResearch NULL, already been researched";
 				newResearch = NULL;
-			}
 
 			_gameSave->addFinishedResearch( // this adds the actual research project to _discovered vector.
 										research,
@@ -2977,27 +3053,23 @@ void GeoscapeState::time1Day()
 											_rules->getResearch(research->getLookup()),
 											_rules);
 
-			researchCompleteEvents.push_back(new ResearchCompleteState( // myk002
-																	newResearch,
-																	bonus));
-/*myk002
-			popup(new ResearchCompleteState(
-										newResearch,
-										bonus)); */
+			resEvents.push_back(new ResearchCompleteState(
+													newResearch,
+													bonus));
 
 			std::vector<RuleResearch*> newPossibleResearch;
 			_gameSave->getDependableResearch(
 										newPossibleResearch,
-										(*rp)->getRules(),
+										(*j)->getRules(),
 										_rules,
-										*base);
+										*i);
 
 			std::vector<RuleManufacture*> newPossibleManufacture;
 			_gameSave->getDependableManufacture(
 											newPossibleManufacture,
-											(*rp)->getRules(),
+											(*j)->getRules(),
 											_rules,
-											*base);
+											*i);
 
 			if (newResearch != NULL) // check for possible researching weapon before clip
 			{
@@ -3019,223 +3091,125 @@ void GeoscapeState::time1Day()
 										amRule->getType()) != req.end()
 							&& _gameSave->isResearched(manufRule->getRequirements()) == false)
 						{
-							researchCompleteEvents.push_back(new ResearchRequiredState(itRule)); // myk002
-/*myk002
-							popup(new ResearchRequiredState(itRule)); */
+							resEvents.push_back(new ResearchRequiredState(itRule));
 						}
 					}
 				}
 			}
 
-			if (newPossibleResearch.empty() == false) // myk002_begin: only show the "allocate research" button for the last notification
+			if (newPossibleResearch.empty() == false) // only show the "allocate research" button for the last notification
 			{
-				if (newPossibleResearchEvents.empty() == false)
-					newPossibleResearchEvents.back().showResearchButton = false;
+				if (newResEvents.empty() == false)
+					newResEvents.back().showResearchButton = false;
 
-				newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
-																		newPossibleResearch,
-																		true));
-			} // myk002_end.
-/*myk002
-			popup(new NewPossibleResearchState(
-											*base,
-											newPossibleResearch)); */
+				newResEvents.push_back(NewPossibleResearchInfo(
+														*i,
+														newPossibleResearch,
+														true));
+			}
 
 			if (newPossibleManufacture.empty() == false)
 			{
-				if (newPossibleManufactureEvents.empty() == false) // myk002_begin: only show the "allocate production" button for the last notification
-					newPossibleManufactureEvents.back().showManufactureButton = false;
+				if (newProdEvents.empty() == false) // only show the "allocate production" button for the last notification
+					newProdEvents.back().showManufactureButton = false;
 
-				newPossibleManufactureEvents.push_back(NewPossibleManufactureInfo(
-																				newPossibleManufacture,
-																				true)); // myk002_end.
-/*myk002
-				popup(new NewPossibleManufactureState(
-													*base,
-													newPossibleManufacture)); */
+				newProdEvents.push_back(NewPossibleManufactureInfo(
+															*i,
+															newPossibleManufacture,
+															true));
 			}
 
-			for (std::vector<Base*>::const_iterator // now iterate through all the bases and remove this project from their labs
-					b2 = _gameSave->getBases()->begin();
-					b2 != _gameSave->getBases()->end();
-					++b2)
+			for (std::vector<Base*>::const_iterator // iterate through all the bases and remove this completed project from their labs
+					k = _gameSave->getBases()->begin();
+					k != _gameSave->getBases()->end();
+					++k)
 			{
 				for (std::vector<ResearchProject*>::const_iterator
-						rp2 = (*b2)->getResearch().begin();
-						rp2 != (*b2)->getResearch().end();
-						++rp2)
+						l = (*k)->getResearch().begin();
+						l != (*k)->getResearch().end();
+						++l)
 				{
-					if ((*rp)->getRules()->getName() == (*rp2)->getRules()->getName()
-						&& _rules->getUnit((*rp2)->getRules()->getName()) == NULL)
+					if ((*j)->getRules()->getName() == (*l)->getRules()->getName()
+						&& _rules->getUnit((*l)->getRules()->getName()) == NULL)
 					{
-						(*b2)->removeResearch(
-											*rp2,
-											false);
+						(*k)->removeResearch(
+										*l,
+										false);
 						break;
 					}
 				}
 			}
 
-			delete *rp; // DONE Research.
+			delete *j; // DONE Research.
 		}
+	}
 
+	// if research has been completed but no new research events are triggered
+	// show an empty NewPossibleResearchState so players have a chance to
+	// allocate the now-free scientists
+/*	if (resEvents.empty() == false
+		&& newResEvents.empty() == true)
+	{
+		newResEvents.push_back(NewPossibleResearchInfo(
+												std::vector<RuleResearch*>(),
+												true));
+	} */
 
-		bool dead;
-		for (std::vector<Soldier*>::const_iterator // handle soldiers in sickbay
-				sol = (*base)->getSoldiers()->begin();
-				sol != (*base)->getSoldiers()->end();
-				)
-		{
-			dead = false;
+	// show events
+	for (std::vector<ProductionCompleteInfo>::const_iterator
+			j = prodEvents.begin();
+			j != prodEvents.end();
+			)
+	{
+		popup(new ProductionCompleteState(
+									j->base,
+									j->item,
+									this,
+									j->gotoBaseBtn,
+									j->endType));
+		j = prodEvents.erase(j);
+	}
 
-			if ((*sol)->getRecovery() > 0)
-			{
-				int chanceDeath = (*sol)->getRecoveryPCT();
-				if (chanceDeath > 10)
-				{
-					//Log(LOG_INFO) << "\n";
-					//Log(LOG_INFO) << ". Soldier = " << (*sol)->getId() << " woundsPCT = " << chanceDeath;
-					const int lastMissionId = (*sol)->getDiary()->getMissionIdList().back();
-					const std::vector<MissionStatistics*>* const missionStats = _gameSave->getMissionStatistics();
-					const int daysTotal = missionStats->at(lastMissionId)->injuryList[(*sol)->getId()];
+	for (std::vector<State*>::const_iterator
+			j = resEvents.begin();
+			j != resEvents.end();
+			)
+	{
+		popup(*j);
+		j = resEvents.erase(j);
+	}
 
-					//Log(LOG_INFO) << ". . daysTotal = " << daysTotal;
-					if (daysTotal > 0) // safety.
-					{
-						const float healthFactor = static_cast<float>(daysTotal) / static_cast<float>((*sol)->getCurrentStats()->health);
-						//Log(LOG_INFO) << ". . healthFactor = " << healthFactor;
-						chanceDeath = static_cast<int>(std::ceil(
-									  static_cast<float>(chanceDeath) * healthFactor));
+	for (std::vector<NewPossibleResearchInfo>::const_iterator
+			j = newResEvents.begin();
+			j != newResEvents.end();
+			)
+	{
+		popup(new NewPossibleResearchState(
+									j->base,
+									j->newPossibleResearch,
+									j->showResearchButton));
+		j = newResEvents.erase(j);
+	}
 
-						const int roll = RNG::generate(1,1000);
-						//Log(LOG_INFO) << ". . chance to Die = " << chanceDeath << " roll = " << roll;
-						if (roll <= chanceDeath)
-						{
-							//Log(LOG_INFO) << "he's dead, Jim!!";
-							resetTimer();
-							if ((*sol)->getArmor()->isBasic() == false) // return soldier's armor to Stores
-								(*base)->getItems()->addItem((*sol)->getArmor()->getStoreItem());
-
-							popup(new SoldierDiedState(
-													(*sol)->getName(),
-													(*base)->getName()));
-
-							(*sol)->die(_gameSave); // holy * This copies the Diary-object
-							// so to delete Soldier-instance I need to use a CopyConstructor
-							// on either or both of SoldierDiary and SoldierCommendations.
-							// Oh, and maybe an operator= assignment overload also.
-							// Learning C++ is like standing around while 20 people constantly
-							// throw cow's dung at you. (But don't mention "const" or they'll throw
-							// twice as fast.) i miss you, Alan Turing ....
-
-							delete *sol;
-							sol = (*base)->getSoldiers()->erase(sol);
-
-							dead = true;
-						}
-					}
-				}
-
-				if (dead == false)
-					(*sol)->heal();
-			}
-
-			if (dead == false)
-				++sol;
-		}
-
-		if ((*base)->getAvailablePsiLabs() != 0 // handle psionic training
-			&& Options::anytimePsiTraining == true)
-		{
-			for (std::vector<Soldier*>::const_iterator
-					sol = (*base)->getSoldiers()->begin();
-					sol != (*base)->getSoldiers()->end();
-					++sol)
-			{
-				if ((*sol)->trainPsiDay() == true)
-					(*sol)->autoStat();
-
-//				(*sol)->calcStatString(
-//								_rules->getStatStrings(),
-//								(Options::psiStrengthEval
-//									&& _gameSave->isResearched(_rules->getPsiRequirements())));
-			}
-		}
-
-		// myk002_begin: if research has been completed but no new research
-		// events are triggered, show an empty NewPossibleResearchState so
-		// players have a chance to allocate the now-free scientists
-		if (researchCompleteEvents.empty() == false
-			&& newPossibleResearchEvents.empty() == true)
-		{
-			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
-																	std::vector<RuleResearch*>(),
-																	true));
-		}
-
-		// show events
-		for (std::vector<ProductionCompleteInfo>::const_iterator
-				pcEvent = productionCompleteEvents.begin();
-				pcEvent != productionCompleteEvents.end();
-//kL			++pcEvent
-				)
-		{
-			popup(new ProductionCompleteState(
-											*base,
-											pcEvent->item,
-											this,
-											pcEvent->showGotoBaseButton,
-											pcEvent->endType));
-
-			pcEvent = productionCompleteEvents.erase(pcEvent); // kL
-		}
-
-		for (std::vector<State*>::const_iterator
-				rcEvent = researchCompleteEvents.begin();
-				rcEvent != researchCompleteEvents.end();
-//kL			++rcEvent
-				)
-		{
-			popup(*rcEvent);
-
-			rcEvent = researchCompleteEvents.erase(rcEvent); // kL
-		}
-
-		for (std::vector<NewPossibleResearchInfo>::const_iterator
-				resEvent = newPossibleResearchEvents.begin();
-				resEvent != newPossibleResearchEvents.end();
-//kL			++resEvent
-				)
-		{
-			popup(new NewPossibleResearchState(
-											*base,
-											resEvent->newPossibleResearch,
-											resEvent->showResearchButton));
-
-			resEvent = newPossibleResearchEvents.erase(resEvent); // kL
-		}
-
-		for (std::vector<NewPossibleManufactureInfo>::const_iterator
-				manEvent = newPossibleManufactureEvents.begin();
-				manEvent != newPossibleManufactureEvents.end();
-//kL			++manEvent
-				)
-		{
-			popup(new NewPossibleManufactureState(
-												*base,
-												manEvent->newPossibleManufacture,
-												manEvent->showManufactureButton));
-
-			manEvent = newPossibleManufactureEvents.erase(manEvent); // kL
-		} // myk002_end.
+	for (std::vector<NewPossibleManufactureInfo>::const_iterator
+			j = newProdEvents.begin();
+			j != newProdEvents.end();
+			)
+	{
+		popup(new NewPossibleManufactureState(
+										j->base,
+										j->newPossibleManufacture,
+										j->showManufactureButton));
+		j = newProdEvents.erase(j);
 	}
 
 
-	const RuleAlienMission* missionRule = _rules->getRandomMission(
-																alm_BASE,
-																_game->getSavedGame()->getMonthsPassed());
+
+	const RuleAlienMission* const missionRule = _rules->getRandomMission( // handle regional and country points for alien bases
+																	alm_BASE,
+																	_game->getSavedGame()->getMonthsPassed());
 	const int aLienPts = (missionRule->getPoints() * (static_cast<int>(_gameSave->getDifficulty()) + 1)) / 100;
-	if (aLienPts > 0) // handle regional and country points for alien bases
+	if (aLienPts > 0)
 	{
 		for (std::vector<AlienBase*>::const_iterator
 				i = _gameSave->getAlienBases()->begin();
