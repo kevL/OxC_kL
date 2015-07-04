@@ -2694,6 +2694,8 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 void SavedBattleGame::resetTurnCounter()
 {
 	_turn = 1;
+	_cheatAI = false;
+	_side = FACTION_PLAYER;
 }
 
 /**

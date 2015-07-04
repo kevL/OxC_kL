@@ -2284,8 +2284,9 @@ int BattleUnit::getInitiative(const int tuSpent) const
 
 /**
  * Prepares this BattleUnit for its turn.
+ * @param fullProcess - true to do the full process (default true)
  */
-void BattleUnit::prepUnit()
+void BattleUnit::prepUnit(bool fullProcess)
 {
 	if (_status == STATUS_TIME_OUT)
 		return;
@@ -2293,59 +2294,65 @@ void BattleUnit::prepUnit()
 	_faction = _originalFaction;
 	_unitsSpottedThisTurn.clear();
 
-	if (_fire > 0)
-		--_fire;
+	_dontReselect = false;
+	_motionPoints = 0;
 
-	_health -= getFatalWounds(); // suffer from fatal wounds
 
-	if (_health < 1)
+	if (fullProcess == true) // transitioning between stages so don't do damage or panic
 	{
-		_health = 0;
+		if (_fire > 0)
+			--_fire;
 
-		if (_currentAIState != NULL) // if unit is dead AI state disappears
+		_health -= getFatalWounds(); // suffer from fatal wounds
+
+		if (_health < 1)
 		{
-//			_currentAIState->exit(); // does nothing.
-			delete _currentAIState;
-			_currentAIState = NULL;
-		}
-	}
+			_health = 0;
 
-	if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
-		&& (_armor->getSize() == 1
-			|| isOut() == false)
-		&& (_geoscapeSoldier != NULL
-			|| _unitRules->isMechanical() == false))
-	{
-		healStun(RNG::generate(1,3)); // recover stun
-	}
-
-	if (isOut() == false)
-	{
-		const int panic = 100 - (2 * getMorale());
-		if (RNG::percent(panic) == true)
-		{
-			_tu = _stats.tu * RNG::generate(0,100) / 100;
-			_energy = _stats.stamina;
-
-			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
-
-			if (RNG::percent(30) == true)
-				_status = STATUS_BERSERK;	// or shoot stuff.
-		}
-		else								// else successfully avoided Panic
-		{
-			initTU();
-
-			if (panic > 0
-				&& _geoscapeSoldier != NULL)
+			if (_currentAIState != NULL) // if unit is dead AI state disappears
 			{
-				++_expBravery;
+	//			_currentAIState->exit(); // does nothing.
+				delete _currentAIState;
+				_currentAIState = NULL;
+			}
+		}
+
+		if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
+			&& (_armor->getSize() == 1
+				|| isOut() == false)
+			&& (_geoscapeSoldier != NULL
+				|| _unitRules->isMechanical() == false))
+		{
+			healStun(RNG::generate(1,3)); // recover stun
+		}
+
+		if (isOut() == false)
+		{
+			const int panic = 100 - (2 * getMorale());
+			if (RNG::percent(panic) == true)
+			{
+				_tu = _stats.tu * RNG::generate(0,100) / 100;
+				_energy = _stats.stamina;
+
+				_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
+
+				if (RNG::percent(30) == true)
+					_status = STATUS_BERSERK;	// or shoot stuff.
+			}
+			else								// else successfully avoided Panic
+			{
+				initTU();
+
+				if (panic > 0
+					&& _geoscapeSoldier != NULL)
+				{
+					++_expBravery;
+				}
 			}
 		}
 	}
-
-	_dontReselect = false;
-	_motionPoints = 0;
+	else if (isOut() == false)
+		initTU();
 }
 
 /**

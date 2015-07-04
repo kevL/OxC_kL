@@ -778,7 +778,7 @@ private:
 		int getInitiative(const int tuSpent = 0) const;
 
 		/// Prepares this unit for a new turn.
-		void prepUnit();
+		void prepUnit(bool fullProcess = true);
 		/// Calculates and resets this BattleUnit's time units and energy.
 		void initTU(bool preBattle = false);
 

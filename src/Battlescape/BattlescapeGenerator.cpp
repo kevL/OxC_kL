@@ -301,8 +301,8 @@ void BattlescapeGenerator::nextStage()
 		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
 
-	while (_battleSave->getSide() != FACTION_PLAYER)
-		_battleSave->endBattlePhase();
+//	while (_battleSave->getSide() != FACTION_PLAYER)
+//		_battleSave->endBattlePhase();
 
 	_battleSave->resetTurnCounter();
 
@@ -443,10 +443,16 @@ void BattlescapeGenerator::nextStage()
 					if ((*i)->getId() > highestSoldierID)
 						highestSoldierID = (*i)->getId();
 
-					(*i)->prepUnit();
+					(*i)->prepUnit(false);
 				}
 			}
 		}
+	}
+
+	if (_battleSave->getSelectedUnit() == NULL
+		|| _battleSave->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+	{
+		_battleSave->selectNextFactionUnit();
 	}
 
 /*	// remove all items not belonging to the soldiers from the map
