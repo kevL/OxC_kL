@@ -394,15 +394,15 @@ void UnitDieBState::convertToCorpse() // private.
 				// This block is lifted from TileEngine::explode(), switch(DT_IN).
 				if (_unit->getUnitRules() != NULL
 					&& _unit->getUnitRules()->isMechanical() == true
-					&& RNG::percent(19) == true)
+					&& RNG::percent(16) == true)
 				{
 					explTile = tile;
 					explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
 
 					while (explTile != NULL // safety.
 						&& explTile->getPosition().z > 0
-						&& explTile->getMapData(MapData::O_OBJECT) == NULL // only floors & content can catch fire.
-						&& explTile->getMapData(MapData::O_FLOOR) == NULL
+						&& explTile->getMapData(O_OBJECT) == NULL // only floors & content can catch fire.
+						&& explTile->getMapData(O_FLOOR) == NULL
 						&& explTile->hasNoFloor(explTile_b) == true)
 					{
 						explTile = explTile_b;
@@ -422,8 +422,6 @@ void UnitDieBState::convertToCorpse() // private.
 						if (soundPlayed == false)
 						{
 							soundPlayed = true;
-//							_parent->getResourcePack()->getSoundByDepth(
-//																	_parent->getDepth(),
 							_parent->getResourcePack()->getSound(
 															"BATTLE.CAT",
 															ResourcePack::SMALL_EXPLOSION)
@@ -433,6 +431,8 @@ void UnitDieBState::convertToCorpse() // private.
 						}
 					}
 				}
+
+				tile->addSmoke(RNG::generate(0,2)); // more smoke ...
 
 				BattleItem* const corpse = new BattleItem(
 													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--part]),

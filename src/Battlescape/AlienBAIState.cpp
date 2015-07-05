@@ -657,7 +657,7 @@ void AlienBAIState::setupPatrol() // private.
 							j != y + 9;
 							++j)
 					{
-						data = _battleSave->getTile(Position(i,j,1))->getMapData(MapData::O_OBJECT);
+						data = _battleSave->getTile(Position(i,j,1))->getMapData(O_OBJECT);
 						if (data != NULL
 							&& data->isBaseModule() == true)
 //							&& data->getDieMCD()
@@ -2928,7 +2928,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
 			&& _battleSave->getTileEngine()->canTargetTile(
 														&originVoxel,
 														_battleSave->getTile((*i)->getPosition()),
-														MapData::O_FLOOR,
+														O_FLOOR,
 														&targetVoxel,
 														_unit))
 		{
@@ -2949,7 +2949,7 @@ bool AlienBAIState::getNodeOfBestEfficacy(BattleAction* action)
 					if (_battleSave->getTileEngine()->canTargetTile(
 																&targetOriginVoxel,
 																_battleSave->getTile((*i)->getPosition()),
-																MapData::O_FLOOR,
+																O_FLOOR,
 																&targetVoxel,
 																*j))
 					{

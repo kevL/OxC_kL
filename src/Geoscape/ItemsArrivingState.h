@@ -28,7 +28,7 @@
 namespace OpenXcom
 {
 
-class Base;
+//class Base;
 class GeoscapeState;
 class Text;
 class TextButton;
@@ -37,8 +37,7 @@ class Window;
 
 
 /**
- * Items Arriving window that displays all
- * the items that have arrived at bases.
+ * Items Arriving window that displays all the items that have arrived at bases.
  */
 class ItemsArrivingState
 	:

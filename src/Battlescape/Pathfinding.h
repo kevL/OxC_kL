@@ -36,6 +36,21 @@ class SavedBattleGame;
 class Tile;
 
 
+enum bigWallTypes
+{
+	BIGWALL_NONE,	// 0
+	BIGWALL_BLOCK,	// 1
+	BIGWALL_NESW,	// 2
+	BIGWALL_NWSE,	// 3
+	BIGWALL_WEST,	// 4
+	BIGWALL_NORTH,	// 5
+	BIGWALL_EAST,	// 6
+	BIGWALL_SOUTH,	// 7
+	BIGWALL_E_S,	// 8
+	BIGWALL_W_N		// 9
+};
+
+
 /**
  * A utility class that calculates the shortest path between two points on the battlescape map.
  */
@@ -115,20 +130,6 @@ private:
 			red,
 			green,
 			yellow;
-
-		enum bigWallTypes
-		{
-			BIGWALL_NONE,	// 0
-			BIGWALL_BLOCK,	// 1
-			BIGWALL_NESW,	// 2
-			BIGWALL_NWSE,	// 3
-			BIGWALL_WEST,	// 4
-			BIGWALL_NORTH,	// 5
-			BIGWALL_EAST,	// 6
-			BIGWALL_SOUTH,	// 7
-			BIGWALL_E_S,	// 8
-			BIGWALL_W_N		// 9
-		};
 
 
 		/// cTor

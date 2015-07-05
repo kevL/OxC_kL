@@ -961,7 +961,7 @@ void TransferItemsState::increaseByValue(int change)
 			|| type == TRANSFER_ENGINEER)
 		&& _persQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
-		wstError = tr("STR_NO_FREE_ACCOMODATION");
+		wstError = tr("STR_NO_FREE_ACCOMMODATION");
 	}
 	else if (type == TRANSFER_CRAFT)
 	{
@@ -970,7 +970,7 @@ void TransferItemsState::increaseByValue(int change)
 		if (_craftQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 			wstError = tr("STR_NO_FREE_HANGARS_FOR_TRANSFER");
 /*		else if (_persQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
-			wstError = tr("STR_NO_FREE_ACCOMODATION_CREW");
+			wstError = tr("STR_NO_FREE_ACCOMMODATION_CREW");
 		else if (Options::storageLimitsEnforced == true
 			&& _baseTo->storesOverfull(craft->getItems()->getTotalSize(_game->getRuleset()) + _storeSize))
 		{

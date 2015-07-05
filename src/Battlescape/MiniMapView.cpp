@@ -172,9 +172,9 @@ void MiniMapView::draw()
 						colorOffset = 15; // paint it ... black !
 					}
 
-					if (colorGroup == 1									// is along the edge
-						&& lvl == 0										// is ground level
-						&& tile->getMapData(MapData::O_OBJECT) == NULL)	// but has no content-object
+					if (colorGroup == 1							// is along the edge
+						&& lvl == 0								// is ground level
+						&& tile->getMapData(O_OBJECT) == NULL)	// but has no content-object
 					{
 						srf = _set->getFrame(377);
 						srf->blitNShade(

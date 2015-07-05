@@ -1903,8 +1903,8 @@ void BattlescapeGame::checkForCasualties(
 					i != _battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (   _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
-					&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+				if (   _battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
+					&& _battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
 				{
 					controlDestroyed = false;
 					break;

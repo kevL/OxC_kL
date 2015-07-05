@@ -828,8 +828,8 @@ void BattleUnit::startWalking(
 		_status = STATUS_FLYING; // controls walking sound in UnitWalkBState, what else
 		_verticalDirection = dir;
 
-		if (_tile->getMapData(MapData::O_FLOOR) != NULL
-			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
+		if (_tile->getMapData(O_FLOOR) != NULL
+			&& _tile->getMapData(O_FLOOR)->isGravLift() == true)
 		{
 			_floating = false;
 		}
@@ -3004,8 +3004,8 @@ bool BattleUnit::checkAmmo()
 bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
 	return _tile != NULL
-		&& _tile->getMapData(MapData::O_FLOOR) != NULL
-		&& _tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt;
+		&& _tile->getMapData(O_FLOOR) != NULL
+		&& _tile->getMapData(O_FLOOR)->getSpecialType() == stt;
 }
 
 /**

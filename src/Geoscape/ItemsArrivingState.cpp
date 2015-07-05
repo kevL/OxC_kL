@@ -192,7 +192,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 						}
 
 
-						for (std::vector<Vehicle*>::const_iterator // check if it's ammo to reload a vehicle
+						for (std::vector<Vehicle*>::const_iterator	// check if it's ammo to reload a vehicle
 								l = (*k)->getVehicles()->begin();	// question: what happens to craft returning to base with vehicles that are low on ammo
 								l != (*k)->getVehicles()->end();
 								++l)

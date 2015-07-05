@@ -467,12 +467,12 @@ int Projectile::calculateThrow(double accuracy)
 			{
 				const Tile* const targetTile = _battleSave->getTile(_trajectory.back() / Position(16,16,24)); // _trajectory.at(0) <- see TileEngine::validateThrow()
 				if (targetTile != NULL
-					&& targetTile->getMapData(MapData::O_OBJECT) != NULL
-					&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
-						|| targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+					&& targetTile->getMapData(O_OBJECT) != NULL
+					&& (targetTile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+						|| targetTile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
 //					&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //						|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
-//					&& _action.target->getMapData(MapData::O_OBJECT)->getTUCostObject(MT_WALK) == 255)
+//					&& _action.target->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) == 255)
 				{
 					test = VOXEL_OUTOFBOUNDS; // prevent Grenades from landing on diagonal BigWalls.
 				}

@@ -1038,8 +1038,8 @@ void DebriefingState::prepareDebriefing() // private.
 						i != battleSave->getMapSizeXYZ();
 						++i)
 				{
-					if (   battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
-						&& battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+					if (   battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
+						&& battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
 					{
 						missionAccomplished = false;
 						break;
@@ -1458,8 +1458,8 @@ void DebriefingState::prepareDebriefing() // private.
 					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (   battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
-					&& battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+				if (   battleSave->getTiles()[i]->getMapData(O_FLOOR) != NULL
+					&& battleSave->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
 				{
 					recoverItems(battleSave->getTiles()[i]->getInventory());
 				}
@@ -1499,8 +1499,8 @@ void DebriefingState::prepareDebriefing() // private.
 					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
-					&& battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+				if (battleSave->getTiles()[i]->getMapData(O_FLOOR) != NULL
+					&& battleSave->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
 				{
 					recoverItems(battleSave->getTiles()[i]->getInventory());
 				}

@@ -367,14 +367,14 @@ void ProjectileFlyBState::init()
 													&_targetVoxel,
 													_unit);
 		}
-		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
+		else if (targetTile->getMapData(O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
 			&& (SDL_GetModState() & KMOD_SHIFT) == 0)				// force vs. Object by using CTRL above^
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
-													MapData::O_OBJECT,
+													O_OBJECT,
 													&_targetVoxel,
 													_unit) == false)
 			{
@@ -384,14 +384,14 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != NULL	// force Northwall when pressing SHIFT but not CTRL
+		else if (targetTile->getMapData(O_NORTHWALL) != NULL	// force Northwall when pressing SHIFT but not CTRL
 			&& (SDL_GetModState() & KMOD_CTRL) == 0)
 		{
 			//Log(LOG_INFO) << ". targetTile has northwall";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
-													MapData::O_NORTHWALL,
+													O_NORTHWALL,
 													&_targetVoxel,
 													_unit) == false)
 			{
@@ -401,13 +401,13 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != NULL)	// force Westwall when pressing SHIFT+CTRL
+		else if (targetTile->getMapData(O_WESTWALL) != NULL)	// force Westwall when pressing SHIFT+CTRL
 		{
 			//Log(LOG_INFO) << ". targetTile has westwall";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
-													MapData::O_WESTWALL,
+													O_WESTWALL,
 													&_targetVoxel,
 													_unit) == false)
 			{
@@ -417,13 +417,13 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_FLOOR) != NULL) // CTRL+ALT forced-shot is handled above^
+		else if (targetTile->getMapData(O_FLOOR) != NULL) // CTRL+ALT forced-shot is handled above^
 		{
 			//Log(LOG_INFO) << ". targetTile has floor";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
-													MapData::O_FLOOR,
+													O_FLOOR,
 													&_targetVoxel,
 													_unit) == false)
 			{
@@ -602,8 +602,8 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		if (_prjImpact == VOXEL_OBJECT)
 		{
 			const Tile* const tile = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getFinalTarget());
-			if (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
-				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE)
+			if (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
 			{
 //				projectile->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
 				_prjVector = projectile->getFinalVector();	// ^supercedes above^

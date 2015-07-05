@@ -2048,24 +2048,24 @@ void SavedBattleGame::spreadFireSmoke()
 		}
 		else
 		{
-			if ((*i)->getMapData(MapData::O_OBJECT) != NULL)
+			if ((*i)->getMapData(O_OBJECT) != NULL)
 			{
-				if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255
-					&& (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
+				if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255
+					&& (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->destroy(MapData::O_OBJECT) == true)
+					if ((*i)->destroy(O_OBJECT) == true)
 						addDestroyedObjective();
 
-					if ((*i)->destroy(MapData::O_FLOOR) == true)
+					if ((*i)->destroy(O_FLOOR) == true)
 						addDestroyedObjective();
 				}
 			}
-			else if ((*i)->getMapData(MapData::O_FLOOR) != NULL)
+			else if ((*i)->getMapData(O_FLOOR) != NULL)
 			{
-				if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255
-					&& (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+				if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255
+					&& (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 				{
-					if ((*i)->destroy(MapData::O_FLOOR) == true)
+					if ((*i)->destroy(O_FLOOR) == true)
 						addDestroyedObjective();
 				}
 			}
@@ -2272,14 +2272,14 @@ bool SavedBattleGame::setUnitPosition(
 					|| (tile->getUnit() != NULL
 						&& tile->getUnit() != unit)
 					|| tile->getTUCostTile(
-										MapData::O_OBJECT,
+										O_OBJECT,
 										unit->getMoveTypeUnit()) == 255
 					|| (tile->hasNoFloor(tileBelow) == true
 						&& unit->getMoveTypeUnit() != MT_FLY) // <- so just use the unit's moveType.
 //						&& _pathfinding->getMoveTypePathing() != MT_FLY)
-					|| (tile->getMapData(MapData::O_OBJECT) != NULL
-						&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > Pathfinding::BIGWALL_NONE
-						&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < Pathfinding::BIGWALL_WEST)
+					|| (tile->getMapData(O_OBJECT) != NULL
+						&& tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NONE
+						&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST)
 					|| (tileAbove != NULL
 						&& tileAbove->getUnit() != NULL
 						&& tileAbove->getUnit() != unit
@@ -2810,8 +2810,8 @@ void SavedBattleGame::calculateModuleMap()
 													_mapsize_z - 1));
 
 			if (tile != NULL
-				&& tile->getMapData(MapData::O_OBJECT) != NULL
-				&& tile->getMapData(MapData::O_OBJECT)->isBaseModule() == true)
+				&& tile->getMapData(O_OBJECT) != NULL
+				&& tile->getMapData(O_OBJECT)->isBaseModule() == true)
 			{
 				_baseModules[x / 10]
 							[y / 10].first += _baseModules[x / 10][y / 10].first > 0 ? 1 : 2;

@@ -285,7 +285,7 @@ void MapDataSet::loadData()
 			i != _objects.end();
 			++i)
 	{
-		if ((*i)->getObjectType() == MapData::O_FLOOR
+		if ((*i)->getObjectType() == O_FLOOR
 			&& (*i)->getBlock(DT_HE) == 0)
 		{
 			const int armor = (*i)->getArmor();

@@ -129,9 +129,7 @@ protected:
 		 * @return, pointer to MapData
 		 */
 		MapData* getMapData(int part) const
-		{	if (part < 0 || part > 3)
-				return NULL;
-			return _objects[part]; }
+		{ return _objects[part]; }
 
 		/// Sets the pointer to the mapdata for a specific part of the tile.
 		void setMapData(

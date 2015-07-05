@@ -159,11 +159,11 @@ void Pathfinding::calculate(
 
 	if (isBlocked( // check if destination is blocked
 				destTile,
-				MapData::O_FLOOR,
+				O_FLOOR,
 				missileTarget) == true
 		|| isBlocked(
 				destTile,
-				MapData::O_OBJECT,
+				O_OBJECT,
 				missileTarget) == true)
 	{
 		return;
@@ -231,10 +231,10 @@ void Pathfinding::calculate(
 				{
 					testTile = _battleSave->getTile(destPos + Position(x,y,0));
 					if (x && y
-						&& ((	   testTile->getMapData(MapData::O_NORTHWALL)
-								&& testTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true)
-							|| (   testTile->getMapData(MapData::O_WESTWALL)
-								&& testTile->getMapData(MapData::O_WESTWALL)->isDoor() == true)))
+						&& ((	   testTile->getMapData(O_NORTHWALL)
+								&& testTile->getMapData(O_NORTHWALL)->isDoor() == true)
+							|| (   testTile->getMapData(O_WESTWALL)
+								&& testTile->getMapData(O_WESTWALL)->isDoor() == true)))
 					{
 						return;
 					}
@@ -756,10 +756,10 @@ int Pathfinding::getTUCostPF(
 			// don't let tanks phase through doors.
 			if (x && y)
 			{
-				if ((destTile->getMapData(MapData::O_NORTHWALL) != NULL
-						&& destTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true)
-					|| (destTile->getMapData(MapData::O_WESTWALL) != NULL
-						&& destTile->getMapData(MapData::O_WESTWALL)->isDoor() == true))
+				if ((destTile->getMapData(O_NORTHWALL) != NULL
+						&& destTile->getMapData(O_NORTHWALL)->isDoor() == true)
+					|| (destTile->getMapData(O_WESTWALL) != NULL
+						&& destTile->getMapData(O_WESTWALL)->isDoor() == true))
 				{
 					//if (debug) Log(LOG_INFO) << "door bisects";
 					return 255;
@@ -936,11 +936,11 @@ int Pathfinding::getTUCostPF(
 			// check if the destination tile can be walked over
 			if (isBlocked(
 						destTile,
-						MapData::O_FLOOR,
+						O_FLOOR,
 						missileTarget) == true
 				|| isBlocked(
 							destTile,
-							MapData::O_OBJECT,
+							O_OBJECT,
 							missileTarget) == true)
 			{
 				//if (debug) Log(LOG_INFO) << "just blocked";
@@ -951,18 +951,18 @@ int Pathfinding::getTUCostPF(
 			if (dir < DIR_UP)
 			{
 				cost += destTile->getTUCostTile(
-											MapData::O_FLOOR,
+											O_FLOOR,
 											_moveType);
 
 				if (fellDown == false
 					&& triedStairs == false
-					&& destTile->getMapData(MapData::O_OBJECT) != NULL)
+					&& destTile->getMapData(O_OBJECT) != NULL)
 				{
 					cost += destTile->getTUCostTile(
-												MapData::O_OBJECT,
+												O_OBJECT,
 												_moveType);
 
-					if (destTile->getMapData(MapData::O_FLOOR) == NULL)
+					if (destTile->getMapData(O_FLOOR) == NULL)
 						cost += 4;
 				}
 
@@ -991,7 +991,7 @@ int Pathfinding::getTUCostPF(
 				{
 					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCostTile( // ( 'walkover' bigWalls not incl. -- none exists )
-													MapData::O_NORTHWALL,
+													O_NORTHWALL,
 													_moveType);
 					if (wallTU > 0)
 					{
@@ -1001,8 +1001,8 @@ int Pathfinding::getTUCostPF(
 						wallCost += wallTU;
 						++sides;
 
-						if (   startTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
-							|| startTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
+						if (   startTile->getMapData(O_NORTHWALL)->isDoor() == true
+							|| startTile->getMapData(O_NORTHWALL)->isUFODoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[N] = TRUE, wallTU = " << wallTU;
 							if (wallTU > _openDoor) // don't let large unit parts reset _openDoor prematurely
@@ -1023,7 +1023,7 @@ int Pathfinding::getTUCostPF(
 					if (startTile->getPosition().z <= destTile->getPosition().z) // don't count wallCost if it's on the floor below.
 					{
 						wallTU = destTile->getTUCostTile(
-													MapData::O_WESTWALL,
+													O_WESTWALL,
 													_moveType);
 						//Log(LOG_INFO) << ". . eastish, wallTU = " << wallTU;
 						if (wallTU > 0)
@@ -1031,8 +1031,8 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   destTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
-								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
+							if (   destTile->getMapData(O_WESTWALL)->isDoor() == true
+								|| destTile->getMapData(O_WESTWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE, wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1041,10 +1041,10 @@ int Pathfinding::getTUCostPF(
 						}
 					}
 					else if (aboveDestTile != NULL // should be redundant, really
-						&& aboveDestTile->getMapData(MapData::O_WESTWALL) != NULL) // going downwards...
+						&& aboveDestTile->getMapData(O_WESTWALL) != NULL) // going downwards...
 					{
 						wallTU = aboveDestTile->getTUCostTile(
-															MapData::O_WESTWALL,
+															O_WESTWALL,
 															_moveType);
 						//Log(LOG_INFO) << ". . (down) eastish, wallTU = " << wallTU;
 						if (wallTU > 0)
@@ -1052,8 +1052,8 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
-								|| aboveDestTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
+							if (   aboveDestTile->getMapData(O_WESTWALL)->isDoor() == true
+								|| aboveDestTile->getMapData(O_WESTWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down), wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1075,15 +1075,15 @@ int Pathfinding::getTUCostPF(
 					if (startTile->getPosition().z <= destTile->getPosition().z) // don't count wallCost if it's on the floor below.
 					{
 						wallTU = destTile->getTUCostTile(
-													MapData::O_NORTHWALL,
+													O_NORTHWALL,
 													_moveType);
 						if (wallTU > 0)
 						{
 							wallCost += wallTU;
 							++sides;
 
-							if (   destTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
-								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
+							if (   destTile->getMapData(O_NORTHWALL)->isDoor() == true
+								|| destTile->getMapData(O_NORTHWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE, wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1092,10 +1092,10 @@ int Pathfinding::getTUCostPF(
 						}
 					}
 					else if (aboveDestTile != NULL // should be redundant, really
-						&& aboveDestTile->getMapData(MapData::O_NORTHWALL) != NULL) // going downwards...
+						&& aboveDestTile->getMapData(O_NORTHWALL) != NULL) // going downwards...
 					{
 						wallTU = aboveDestTile->getTUCostTile(
-															MapData::O_NORTHWALL,
+															O_NORTHWALL,
 															_moveType);
 
 						if (wallTU > 0)
@@ -1103,8 +1103,8 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor() == true
-								|| aboveDestTile->getMapData(MapData::O_NORTHWALL)->isUFODoor() == true)
+							if (   aboveDestTile->getMapData(O_NORTHWALL)->isDoor() == true
+								|| aboveDestTile->getMapData(O_NORTHWALL)->isUFODoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down), wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1120,15 +1120,15 @@ int Pathfinding::getTUCostPF(
 				{
 					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCostTile(
-													MapData::O_WESTWALL,
+													O_WESTWALL,
 													_moveType); // ( bigWalls not incl. yet )
 					if (wallTU > 0)
 					{
 						wallCost += wallTU;
 						++sides;
 
-						if (   startTile->getMapData(MapData::O_WESTWALL)->isDoor() == true
-							|| startTile->getMapData(MapData::O_WESTWALL)->isUFODoor() == true)
+						if (   startTile->getMapData(O_WESTWALL)->isDoor() == true
+							|| startTile->getMapData(O_WESTWALL)->isUFODoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[W] = TRUE, wallTU = " << wallTU;
 							if (wallTU > _openDoor)
@@ -1406,7 +1406,7 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try North";
 			if (isBlocked(
 						startTile,
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget))
 			{
 				return true;
@@ -1417,15 +1417,15 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try NorthEast";
 			if (isBlocked(
 						startTile,
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast),
@@ -1434,7 +1434,7 @@ bool Pathfinding::isBlockedPath( // public
 						BIGWALL_NESW)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast + tileNorth),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileNorth),
@@ -1450,7 +1450,7 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try East";
 			if (isBlocked(
 						_battleSave->getTile(pos + tileEast),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget))
 			{
 				return true;
@@ -1461,7 +1461,7 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try SouthEast";
 			if (isBlocked(
 						_battleSave->getTile(pos + tileEast),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast),
@@ -1470,15 +1470,15 @@ bool Pathfinding::isBlockedPath( // public
 						BIGWALL_NWSE)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast + tileSouth),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileEast + tileSouth),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileSouth),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileSouth),
@@ -1494,7 +1494,7 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try South";
 			if (isBlocked(
 						_battleSave->getTile(pos + tileSouth),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget))
 			{
 				return true;
@@ -1505,15 +1505,15 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try SouthWest";
 			if (isBlocked(
 						startTile,
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileSouth),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileSouth),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileSouth),
@@ -1522,7 +1522,7 @@ bool Pathfinding::isBlockedPath( // public
 						BIGWALL_NESW)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileSouth + tileWest),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileWest),
@@ -1538,7 +1538,7 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try West";
 			if (isBlocked(
 						startTile,
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget))
 			{
 				return true;
@@ -1549,15 +1549,15 @@ bool Pathfinding::isBlockedPath( // public
 			//Log(LOG_INFO) << ". try NorthWest";
 			if (isBlocked(
 						startTile,
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						startTile,
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileWest),
-						MapData::O_NORTHWALL,
+						O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileWest),
@@ -1566,7 +1566,7 @@ bool Pathfinding::isBlockedPath( // public
 						BIGWALL_NWSE)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileNorth),
-						MapData::O_WESTWALL,
+						O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
 						_battleSave->getTile(pos + tileNorth),
@@ -1610,12 +1610,12 @@ BIGWALL_SOUTH,	// 7
 BIGWALL_E_S		// 8
 */
 /*	// kL_begin:
-	if ((tile->getMapData(MapData::O_WESTWALL)
-			&& tile->getMapData(MapData::O_WESTWALL)->getBigWall() == BIGWALL_BLOCK)
-		|| (tile->getMapData(MapData::O_NORTHWALL)
-			&& tile->getMapData(MapData::O_NORTHWALL)->getBigWall() == BIGWALL_BLOCK))
-//		|| (tile->getMapData(MapData::O_OBJECT)
-//			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK))
+	if ((tile->getMapData(O_WESTWALL)
+			&& tile->getMapData(O_WESTWALL)->getBigWall() == BIGWALL_BLOCK)
+		|| (tile->getMapData(O_NORTHWALL)
+			&& tile->getMapData(O_NORTHWALL)->getBigWall() == BIGWALL_BLOCK))
+//		|| (tile->getMapData(O_OBJECT)
+//			&& tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK))
 	{
 		return true;
 	} // kL_end. */
@@ -1623,10 +1623,10 @@ BIGWALL_E_S		// 8
 	if (part == O_BIGWALL)
 	{
 		//Log(LOG_INFO) << ". part is Bigwall";
-		if (   tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != BIGWALL_NONE
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < BIGWALL_WEST) // block,NESW,NWSE
+		if (   tile->getMapData(O_OBJECT)
+			&& tile->getMapData(O_OBJECT)->getBigWall() != bigWallExclusion
+			&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NONE
+			&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST) // block,NESW,NWSE
 		{
 			return true; // blocking part
 		}
@@ -1634,13 +1634,13 @@ BIGWALL_E_S		// 8
 			return false;
 	}
 
-	if (part == MapData::O_WESTWALL)
+	if (part == O_WESTWALL)
 	{
 		//Log(LOG_INFO) << ". part is Westwall";
-		if (	   tile->getMapData(MapData::O_OBJECT)
-			&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST
-				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N))
-//				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		if (	   tile->getMapData(O_OBJECT)
+			&& (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
+				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
+//				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1649,22 +1649,22 @@ BIGWALL_E_S		// 8
 		if (tileWest == NULL)
 			return true; // do not look outside of map
 
-		if (	   tileWest->getMapData(MapData::O_OBJECT)
-			&& (   tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_EAST
-				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
-//				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		if (	   tileWest->getMapData(O_OBJECT)
+			&& (   tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
+				|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
+//				|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
 	}
 
-	if (part == MapData::O_NORTHWALL)
+	if (part == O_NORTHWALL)
 	{
 		//Log(LOG_INFO) << ". part is Northwall";
-		if (	   tile->getMapData(MapData::O_OBJECT)
-			&& (   tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH
-				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N))
-//				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		if (	   tile->getMapData(O_OBJECT)
+			&& (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
+				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
+//				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1673,16 +1673,16 @@ BIGWALL_E_S		// 8
 		if (tileNorth == NULL)
 			return true; // do not look outside of map
 
-		if (	   tileNorth->getMapData(MapData::O_OBJECT)
-			&& (   tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_SOUTH
-				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
-//				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+		if (	   tileNorth->getMapData(O_OBJECT)
+			&& (   tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH
+				|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
+//				|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
 	}
 
-	if (part == MapData::O_FLOOR)
+	if (part == O_FLOOR)
 	{
 		//Log(LOG_INFO) << ". part is Floor";
 		const BattleUnit* targetUnit = tile->getUnit();
@@ -1849,10 +1849,10 @@ int Pathfinding::validateUpDown(
 	if (destTile == NULL)
 		return 0;
 
-	const bool gravLift = startTile->getMapData(MapData::O_FLOOR) != NULL
-					   && startTile->getMapData(MapData::O_FLOOR)->isGravLift()
-					   && destTile->getMapData(MapData::O_FLOOR) != NULL
-					   && destTile->getMapData(MapData::O_FLOOR)->isGravLift();
+	const bool gravLift = startTile->getMapData(O_FLOOR) != NULL
+					   && startTile->getMapData(O_FLOOR)->isGravLift()
+					   && destTile->getMapData(O_FLOOR) != NULL
+					   && destTile->getMapData(O_FLOOR)->isGravLift();
 
 	if (gravLift == true)
 		return 1;
@@ -1958,8 +1958,8 @@ bool Pathfinding::previewPath(bool discard)
 			if (falling == false)
 			{
 				gravLift = dir >= DIR_UP
-						&& _battleSave->getTile(start)->getMapData(MapData::O_FLOOR) != NULL
-						&& _battleSave->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift() == true;
+						&& _battleSave->getTile(start)->getMapData(O_FLOOR) != NULL
+						&& _battleSave->getTile(start)->getMapData(O_FLOOR)->isGravLift() == true;
 				if (gravLift == false)
 				{
 					if (hathStood == false
@@ -2318,68 +2318,68 @@ std::vector<int> Pathfinding::copyPath() const
 	switch (direction)
 	{
 		case 0:
-			if (s->getMapData(MapData::O_NORTHWALL)
-				&& s->getMapData(MapData::O_NORTHWALL)->isUFODoor()
-				&& !s->isUfoDoorOpen(MapData::O_NORTHWALL))
-			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_moveType);
+			if (s->getMapData(O_NORTHWALL)
+				&& s->getMapData(O_NORTHWALL)->isUFODoor()
+				&& !s->isUfoDoorOpen(O_NORTHWALL))
+			return s->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 		break;
 		case 1:
-			if (s->getMapData(MapData::O_NORTHWALL)
-				&& s->getMapData(MapData::O_NORTHWALL)->isUFODoor()
-				&& !s->isUfoDoorOpen(MapData::O_NORTHWALL))
-			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_moveType);
-			if (d->getMapData(MapData::O_WESTWALL)
-				&& d->getMapData(MapData::O_WESTWALL)->isUFODoor()
-				&& !d->isUfoDoorOpen(MapData::O_WESTWALL))
-			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_moveType);
+			if (s->getMapData(O_NORTHWALL)
+				&& s->getMapData(O_NORTHWALL)->isUFODoor()
+				&& !s->isUfoDoorOpen(O_NORTHWALL))
+			return s->getMapData(O_NORTHWALL)->getTUCost(_moveType);
+			if (d->getMapData(O_WESTWALL)
+				&& d->getMapData(O_WESTWALL)->isUFODoor()
+				&& !d->isUfoDoorOpen(O_WESTWALL))
+			return d->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 2:
-			if (d->getMapData(MapData::O_WESTWALL)
-				&& d->getMapData(MapData::O_WESTWALL)->isUFODoor()
-				&& !d->isUfoDoorOpen(MapData::O_WESTWALL))
-			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_moveType);
+			if (d->getMapData(O_WESTWALL)
+				&& d->getMapData(O_WESTWALL)->isUFODoor()
+				&& !d->isUfoDoorOpen(O_WESTWALL))
+			return d->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 3:
-			if (d->getMapData(MapData::O_NORTHWALL)
-				&& d->getMapData(MapData::O_NORTHWALL)->isUFODoor()
-				&& !d->isUfoDoorOpen(MapData::O_NORTHWALL))
-			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_moveType);
-			if (d->getMapData(MapData::O_WESTWALL)
-				&& d->getMapData(MapData::O_WESTWALL)->isUFODoor()
-				&& !d->isUfoDoorOpen(MapData::O_WESTWALL))
-			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_moveType);
+			if (d->getMapData(O_NORTHWALL)
+				&& d->getMapData(O_NORTHWALL)->isUFODoor()
+				&& !d->isUfoDoorOpen(O_NORTHWALL))
+			return d->getMapData(O_NORTHWALL)->getTUCost(_moveType);
+			if (d->getMapData(O_WESTWALL)
+				&& d->getMapData(O_WESTWALL)->isUFODoor()
+				&& !d->isUfoDoorOpen(O_WESTWALL))
+			return d->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 4:
-			if (d->getMapData(MapData::O_NORTHWALL)
-				&& d->getMapData(MapData::O_NORTHWALL)->isUFODoor()
-				&& !d->isUfoDoorOpen(MapData::O_NORTHWALL))
-			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_moveType);
+			if (d->getMapData(O_NORTHWALL)
+				&& d->getMapData(O_NORTHWALL)->isUFODoor()
+				&& !d->isUfoDoorOpen(O_NORTHWALL))
+			return d->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 		break;
 		case 5:
-			if (d->getMapData(MapData::O_NORTHWALL)
-				&& d->getMapData(MapData::O_NORTHWALL)->isUFODoor()
-				&& !d->isUfoDoorOpen(MapData::O_NORTHWALL))
-			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_moveType);
-			if (s->getMapData(MapData::O_WESTWALL)
-				&& s->getMapData(MapData::O_WESTWALL)->isUFODoor()
-				&& !s->isUfoDoorOpen(MapData::O_WESTWALL))
-			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_moveType);
+			if (d->getMapData(O_NORTHWALL)
+				&& d->getMapData(O_NORTHWALL)->isUFODoor()
+				&& !d->isUfoDoorOpen(O_NORTHWALL))
+			return d->getMapData(O_NORTHWALL)->getTUCost(_moveType);
+			if (s->getMapData(O_WESTWALL)
+				&& s->getMapData(O_WESTWALL)->isUFODoor()
+				&& !s->isUfoDoorOpen(O_WESTWALL))
+			return s->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 6:
-			if (s->getMapData(MapData::O_WESTWALL)
-				&& s->getMapData(MapData::O_WESTWALL)->isUFODoor()
-				&& !s->isUfoDoorOpen(MapData::O_WESTWALL))
-			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_moveType);
+			if (s->getMapData(O_WESTWALL)
+				&& s->getMapData(O_WESTWALL)->isUFODoor()
+				&& !s->isUfoDoorOpen(O_WESTWALL))
+			return s->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 7:
-			if (s->getMapData(MapData::O_NORTHWALL)
-				&& s->getMapData(MapData::O_NORTHWALL)->isUFODoor()
-				&& !s->isUfoDoorOpen(MapData::O_NORTHWALL))
-			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_moveType);
-			if (s->getMapData(MapData::O_WESTWALL)
-				&& s->getMapData(MapData::O_WESTWALL)->isUFODoor()
-				&& !s->isUfoDoorOpen(MapData::O_WESTWALL))
-			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_moveType);
+			if (s->getMapData(O_NORTHWALL)
+				&& s->getMapData(O_NORTHWALL)->isUFODoor()
+				&& !s->isUfoDoorOpen(O_NORTHWALL))
+			return s->getMapData(O_NORTHWALL)->getTUCost(_moveType);
+			if (s->getMapData(O_WESTWALL)
+				&& s->getMapData(O_WESTWALL)->isUFODoor()
+				&& !s->isUfoDoorOpen(O_WESTWALL))
+			return s->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 
 		default:

@@ -70,6 +70,15 @@ enum VoxelType
 };
 
 
+enum MapDataType
+{
+	O_FLOOR,		// 0
+	O_WESTWALL,		// 1
+	O_NORTHWALL,	// 2
+	O_OBJECT		// 3
+};
+
+
 /**
  * MapData is the smallest piece of a Battlescape terrain,
  * holding info about a certain object, wall, floor, ...
@@ -117,12 +126,6 @@ private:
 
 
 	public:
-		static const int
-			O_FLOOR,
-			O_WESTWALL,
-			O_NORTHWALL,
-			O_OBJECT;
-
 		/// cTor.
 		explicit MapData(MapDataSet* dataSet);
 		/// dTor.

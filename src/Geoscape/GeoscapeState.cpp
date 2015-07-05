@@ -2701,13 +2701,13 @@ void GeoscapeState::time1Hour()
 	}
 	//Log(LOG_INFO) << ". arrivals DONE";
 
-	if (arrivals == true)
-		popup(new ItemsArrivingState(this));
-
 
 	std::vector<ProductionCompleteInfo> events;
 	// Note that if transfers arrive at the same time Production(s) complete
 	// the gotoBase button handling below is obviated by RMB on transfers ....
+	// But that's been amended by showing Transfers after ProdCompleted screens;
+	// now I'm not sure how this will all interact with time1Day()'s facility
+	// construction and research completed screens.
 
 	for (std::vector<Base*>::const_iterator // handle Production
 			i = _gameSave->getBases()->begin();
@@ -2742,7 +2742,7 @@ void GeoscapeState::time1Hour()
 				events.push_back(ProductionCompleteInfo(
 													*i,
 													tr(j->first->getRules()->getName()),
-													true,
+													(arrivals == false),
 													j->second));
 			}
 		}
@@ -2774,6 +2774,9 @@ void GeoscapeState::time1Hour()
 										j->endType));
 		j = events.erase(j);
 	}
+
+	if (arrivals == true)
+		popup(new ItemsArrivingState(this));
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
 }
 

@@ -3245,8 +3245,8 @@ void BattlescapeState::popup(State* state)
 }
 
 /**
- * Finishes up the current battle, shuts down the battlescape
- * and presents the debriefing screen for the mission.
+ * Finishes up the current battle, shuts down the battlescape and presents the
+ * debriefing screen for the mission.
  * @param abort			- true if the mission was aborted
  * @param inExitArea	- number of soldiers in the exit area OR number of
  *							survivors when battle finished due to either all
@@ -3792,14 +3792,14 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 		MovementType moveType = unit->getMoveTypeUnit();
 
 		tuCost = tile->getTUCostTile(
-								MapData::O_FLOOR,
+								O_FLOOR,
 								moveType)
 			   + tile->getTUCostTile(
-								MapData::O_OBJECT,
+								O_OBJECT,
 								moveType);
 
-		if (   tile->getMapData(MapData::O_FLOOR) == NULL
-			&& tile->getMapData(MapData::O_OBJECT) != NULL)
+		if (   tile->getMapData(O_FLOOR) == NULL
+			&& tile->getMapData(O_OBJECT) != NULL)
 		{
 			tuCost += 4;
 		}
@@ -4036,8 +4036,8 @@ void BattlescapeState::saveAIMap()
 			rect.x = static_cast<Sint16>(x) * static_cast<Sint16>(rect.w);
 			rect.y = static_cast<Sint16>(y) * static_cast<Sint16>(rect.h);
 
-			if (t->getTUCostTile(MapData::O_FLOOR, MT_FLY) != 255
-				&& t->getTUCostTile(MapData::O_OBJECT, MT_FLY) != 255)
+			if (t->getTUCostTile(O_FLOOR, MT_FLY) != 255
+				&& t->getTUCostTile(O_OBJECT, MT_FLY) != 255)
 			{
 				SDL_FillRect(
 						img,
@@ -4133,8 +4133,8 @@ void BattlescapeState::saveAIMap()
 				}
 			}
 
-			if (t->getMapData(MapData::O_NORTHWALL)
-				&& t->getMapData(MapData::O_NORTHWALL)->getTUCostObject(MT_FLY) == 255)
+			if (t->getMapData(O_NORTHWALL)
+				&& t->getMapData(O_NORTHWALL)->getTUCostObject(MT_FLY) == 255)
 			{
 				lineRGBA(
 						img,
@@ -4148,8 +4148,8 @@ void BattlescapeState::saveAIMap()
 						255);
 			}
 
-			if (t->getMapData(MapData::O_WESTWALL)
-				&& t->getMapData(MapData::O_WESTWALL)->getTUCostObject(MT_FLY) == 255)
+			if (t->getMapData(O_WESTWALL)
+				&& t->getMapData(O_WESTWALL)->getTUCostObject(MT_FLY) == 255)
 			{
 				lineRGBA(
 						img,

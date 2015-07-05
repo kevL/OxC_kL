@@ -326,10 +326,10 @@ bool Tile::isVoid(
 		const bool checkInv,
 		const bool checkSmoke) const
 {
-	bool ret = _objects[MapData::O_FLOOR] == NULL
-			&& _objects[MapData::O_WESTWALL] == NULL
-			&& _objects[MapData::O_NORTHWALL] == NULL
-			&& _objects[MapData::O_OBJECT] == NULL;
+	bool ret = _objects[O_FLOOR] == NULL
+			&& _objects[O_WESTWALL] == NULL
+			&& _objects[O_NORTHWALL] == NULL
+			&& _objects[O_OBJECT] == NULL;
 
 	if (checkInv == true)
 		ret = (ret && _inventory.empty() == true);
@@ -366,8 +366,8 @@ int Tile::getTUCostTile(
 			return 0;
 		}
 
-		if (part == MapData::O_OBJECT
-			&& _objects[i]->getBigWall() > Pathfinding::BIGWALL_NWSE)
+		if (part == O_OBJECT
+			&& _objects[i]->getBigWall() > BIGWALL_NWSE)
 		{
 			return 0;
 		}
@@ -392,8 +392,8 @@ bool Tile::hasNoFloor(const Tile* const tileBelow) const
 		return false;
 	}
 
-	if (_objects[MapData::O_FLOOR] != NULL)
-		return _objects[MapData::O_FLOOR]->isNoFloor();
+	if (_objects[O_FLOOR] != NULL)
+		return _objects[O_FLOOR]->isNoFloor();
 
 	return true;
 }
@@ -404,8 +404,8 @@ bool Tile::hasNoFloor(const Tile* const tileBelow) const
  */
 bool Tile::isBigWall() const
 {
-	if (_objects[MapData::O_OBJECT] != NULL)
-		return (_objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NONE);
+	if (_objects[O_OBJECT] != NULL)
+		return (_objects[O_OBJECT]->getBigWall() != BIGWALL_NONE);
 
 	return false;
 }
@@ -420,13 +420,13 @@ int Tile::getTerrainLevel() const
 {
 	int level = 0;
 
-	if (_objects[static_cast<size_t>(MapData::O_FLOOR)] != NULL)
-		level = _objects[static_cast<size_t>(MapData::O_FLOOR)]->getTerrainLevel();
+	if (_objects[static_cast<size_t>(O_FLOOR)] != NULL)
+		level = _objects[static_cast<size_t>(O_FLOOR)]->getTerrainLevel();
 
-	if (_objects[static_cast<size_t>(MapData::O_OBJECT)] != NULL)
+	if (_objects[static_cast<size_t>(O_OBJECT)] != NULL)
 		level = std::min(
 					level,
-					_objects[static_cast<size_t>(MapData::O_OBJECT)]->getTerrainLevel());
+					_objects[static_cast<size_t>(O_OBJECT)]->getTerrainLevel());
 
 	return level;
 }
@@ -447,19 +447,19 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
 {
 	int sound = -1;
 
-	if (   _objects[static_cast<size_t>(MapData::O_OBJECT)] != NULL
-		&& _objects[static_cast<size_t>(MapData::O_OBJECT)]->getBigWall() < Pathfinding::BIGWALL_NESW // ie. None or Block
-		&& _objects[static_cast<size_t>(MapData::O_OBJECT)]->getFootstepSound() > 0) // > -1
+	if (   _objects[static_cast<size_t>(O_OBJECT)] != NULL
+		&& _objects[static_cast<size_t>(O_OBJECT)]->getBigWall() < BIGWALL_NESW // ie. None or Block
+		&& _objects[static_cast<size_t>(O_OBJECT)]->getFootstepSound() > 0) // > -1
 	{
-		sound = _objects[static_cast<size_t>(MapData::O_OBJECT)]->getFootstepSound();
+		sound = _objects[static_cast<size_t>(O_OBJECT)]->getFootstepSound();
 	}
-	else if (_objects[static_cast<size_t>(MapData::O_FLOOR)] != NULL)
-		sound = _objects[static_cast<size_t>(MapData::O_FLOOR)]->getFootstepSound();
-	else if (_objects[static_cast<size_t>(MapData::O_OBJECT)] == NULL
+	else if (_objects[static_cast<size_t>(O_FLOOR)] != NULL)
+		sound = _objects[static_cast<size_t>(O_FLOOR)]->getFootstepSound();
+	else if (_objects[static_cast<size_t>(O_OBJECT)] == NULL
 		&& tileBelow != NULL
 		&& tileBelow->getTerrainLevel() == -24)
 	{
-		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
+		sound = tileBelow->getMapData(O_OBJECT)->getFootstepSound();
 	}
 
 	return sound;
@@ -703,14 +703,14 @@ bool Tile::destroy(int part)
 					origPart->getExplosiveType());
 	}
 
-	if (part == MapData::O_FLOOR // check if the floor on the lowest level is gone
+	if (part == O_FLOOR // check if the floor on the lowest level is gone
 		&& getPosition().z == 0
-		&& _objects[MapData::O_FLOOR] == 0)
+		&& _objects[O_FLOOR] == 0)
 	{
 		setMapData( // replace with scorched earth
 				MapDataSet::getScorchedEarthTile(),
 				1,0,
-				MapData::O_FLOOR);
+				O_FLOOR);
 	}
 
 	return _objective;
@@ -893,7 +893,7 @@ bool Tile::ignite(int power)
 					addSmoke((burn + 15) / 16);
 
 					if (_pos.z == 0 // TODO: pass in tileBelow and check its terrainLevel for -24
-						|| _objects[MapData::O_FLOOR] != NULL) // drop fire through to tilesBelow ...
+						|| _objects[O_FLOOR] != NULL) // drop fire through to tilesBelow ...
 					{
 						addFire(fuel + 1);
 					}
@@ -1065,11 +1065,11 @@ int Tile::getSmoke() const
  */
 bool Tile::canSmoke() const // private
 {
-	return _objects[MapData::O_OBJECT] == NULL
-		   || (_objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NESW
-				&& _objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_NWSE
-				&& (_objects[MapData::O_OBJECT]->getBigWall() != Pathfinding::BIGWALL_BLOCK
-					|| _objects[MapData::O_OBJECT]->blockSmoke() == false)); // <- TODO: remove bias vs. Smoke; ie. include Fire later
+	return _objects[O_OBJECT] == NULL
+		   || (_objects[O_OBJECT]->getBigWall() != BIGWALL_NESW
+				&& _objects[O_OBJECT]->getBigWall() != BIGWALL_NWSE
+				&& (_objects[O_OBJECT]->getBigWall() != BIGWALL_BLOCK
+					|| _objects[O_OBJECT]->blockSmoke() == false)); // <- TODO: remove bias vs. Smoke; ie. include Fire later
 }
 
 /**
@@ -1277,7 +1277,7 @@ void Tile::animateTile()
 			{
 				//if (debug) Log(LOG_INFO) << ". isPsycho FALSE";
 				if (_objects[i]->isUFODoor() == true // ufo door is currently static
-					&& (   _curFrame[i] == 0
+					&& (_curFrame[i] == 0
 						|| _curFrame[i] == 7))
 				{
 					//if (debug) Log(LOG_INFO) << ". . door is Static, continue, frame = " << _curFrame[i];
@@ -1286,7 +1286,7 @@ void Tile::animateTile()
 
 				nextFrame = _curFrame[i] + 1;
 
-				if (   _objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
+				if (_objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
 					&& _objects[i]->getSpecialType() == START_POINT
 					&& nextFrame == 3)
 				{
@@ -1315,8 +1315,8 @@ void Tile::animateTile()
 			}
 		}
 	}
-//	getMapData(MapData::O_WESTWALL)->getDataset()->getName() == "U_PODS"
-//	getMapData(MapData::O_WESTWALL)->getSprite(0) == 61
+//	getMapData(O_WESTWALL)->getDataset()->getName() == "U_PODS"
+//	getMapData(O_WESTWALL)->getSprite(0) == 61
 
 /*	for (std::list<Particle*>::const_iterator
 			i = _particles.begin();

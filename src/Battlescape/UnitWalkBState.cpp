@@ -327,8 +327,8 @@ bool UnitWalkBState::doStatusStand() // private.
 
 	const Tile* const tile = _parent->getSave()->getTile(_unit->getPosition());
 	const bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
-					   && tile->getMapData(MapData::O_FLOOR) != NULL
-					   && tile->getMapData(MapData::O_FLOOR)->isGravLift();
+					   && tile->getMapData(O_FLOOR) != NULL
+					   && tile->getMapData(O_FLOOR)->isGravLift();
 
 	setWalkSpeed(gravLift);
 
