@@ -5558,7 +5558,7 @@
 1430149550 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1436136585 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -5856,7 +5856,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1436116511 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1436123237 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6321,12 +6321,11 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1436083366 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1436136717 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
 	"InfoboxOKState.h"
-	"InfoboxState.h"
 	"Map.h"
 	"TileEngine.h"
 	"../Engine/Game.h"
@@ -7768,7 +7767,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1435638479 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1436118081 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"

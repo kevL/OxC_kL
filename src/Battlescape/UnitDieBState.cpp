@@ -22,7 +22,6 @@
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "InfoboxOKState.h"
-#include "InfoboxState.h"
 #include "Map.h"
 #include "TileEngine.h"
 
@@ -51,25 +50,24 @@ namespace OpenXcom
 
 /**
  * Creates a UnitDieBState.
- * @param parent		- pointer to BattlescapeGame
- * @param unit			- pointer to a dying BattleUnit
- * @param damageType	- type of damage that caused the death (RuleItem.h)
- * @param noSound		- true to disable the death sound for pre-battle powersource explosions as well as stun (default false)
+ * @param parent	- pointer to BattlescapeGame
+ * @param unit		- pointer to a dying BattleUnit
+ * @param dType		- type of damage that caused the death (RuleItem.h)
+ * @param noSound	- true to disable the death sound for pre-battle powersource explosions as well as stun (default false)
  */
 UnitDieBState::UnitDieBState(
-		BattlescapeGame* parent,
-		BattleUnit* unit,
-		ItemDamageType damageType,
-		bool noSound)
+		BattlescapeGame* const parent,
+		BattleUnit* const unit,
+		const ItemDamageType dType,
+		const bool noSound)
 	:
 		BattleState(parent),
 		_unit(unit),
-		_damageType(damageType),
+		_dType(dType),
 		_noSound(noSound),
 		_doneScream(false),
 		_extraTicks(0)
 {
-	//Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
 //	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
@@ -121,7 +119,6 @@ UnitDieBState::UnitDieBState(
 			}
 		}
 	}
-	//Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
 }
 
 /**
@@ -145,7 +142,6 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
 // #0
 	if (_noSound == false
 		&& _doneScream == false)
@@ -167,7 +163,6 @@ void UnitDieBState::think()
 // #1
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getSpinPhase() != -1)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
@@ -179,13 +174,11 @@ void UnitDieBState::think()
 // #3
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
-		//Log(LOG_INFO) << ". . STATUS_COLLAPSING";
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 // #2
 	else if (_unit->isOut() == false) // this ought be Status_Standing/Disabled also.
 	{
-		//Log(LOG_INFO) << ". . !isOut";
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
@@ -213,7 +206,7 @@ void UnitDieBState::think()
 			std::string stInfo;
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_damageType == DT_NONE
+				if (_dType == DT_NONE
 					&& _unit->getSpawnUnit().empty() == true)
 				{
 					stInfo = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
@@ -262,12 +255,10 @@ void UnitDieBState::think()
 // #4
 	else if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
 	{
-		//Log(LOG_INFO) << ". . unit isOut";
 		_extraTicks = 1;
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
-//				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			_unit->instaKill();
 		}
@@ -277,17 +268,13 @@ void UnitDieBState::think()
 		if (_unit->getSpawnUnit().empty() == true)
 			convertToCorpse();
 		else
-		{
-			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			_parent->convertUnit(
 							_unit,
 							_unit->getSpawnUnit());
-		}
 	}
 
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
-	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
 /**
@@ -484,8 +471,6 @@ void UnitDieBState::playDeathSound() // private.
 
 
 	if (sound != -1)
-//		_parent->getResourcePack()->getSoundByDepth(
-//												_parent->getDepth(),
 		_parent->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										sound)

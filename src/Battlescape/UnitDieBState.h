@@ -47,7 +47,7 @@ private:
 	int _extraTicks;
 
 	BattleUnit* _unit;
-	ItemDamageType _damageType;
+	ItemDamageType _dType;
 
 	/// Converts a unit to a corpse.
 	void convertToCorpse();
@@ -58,10 +58,10 @@ private:
 	public:
 		/// Creates a new UnitDieBState class
 		UnitDieBState(
-				BattlescapeGame* parent,
-				BattleUnit* unit,
-				ItemDamageType damageType,
-				bool noSound = false);
+				BattlescapeGame* const parent,
+				BattleUnit* const unit,
+				const ItemDamageType dType,
+				const bool noSound = false);
 		/// Cleans up the UnitDieBState.
 		~UnitDieBState();
 
