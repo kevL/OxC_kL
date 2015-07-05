@@ -355,7 +355,6 @@ void SavedBattleGame::load(
 		{
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
-//								_depth,
 								diff);			// kL_add: For VictoryPts value per death.
 		}
 		else									// create a new Unit, not-soldier but Vehicle, Civie, or aLien.
@@ -364,13 +363,18 @@ void SavedBattleGame::load(
 				type	= (*i)["genUnitType"]	.as<std::string>(),
 				armor	= (*i)["genUnitArmor"]	.as<std::string>();
 
+			if (rules->getUnit(type) == NULL // safeties.
+				|| rules->getArmor(armor) == NULL)
+			{
+				continue;
+			}
+
 			unit = new BattleUnit(
 								rules->getUnit(type),
 								originalFaction,
 								id,
 								rules->getArmor(armor),
 								diff,
-//								_depth,
 								savedGame->getMonthsPassed());
 		}
 
@@ -418,63 +422,86 @@ void SavedBattleGame::load(
 	resetUnitTiles();
 
 	Log(LOG_INFO) << ". load items";
-	for (YAML::const_iterator
-			i = node["items"].begin();
-			i != node["items"].end();
-			++i)
+	const size_t CONTAINERS = 3;
+	std::string fromContainer[CONTAINERS] =
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		if (rules->getItem(type) != NULL)
+		"items",
+		"recoverConditional",
+		"recoverGuaranteed"
+	};
+
+	std::vector<BattleItem*>* toContainer[CONTAINERS] =
+	{
+		&_items,
+		&_recoverConditional,
+		&_recoverGuaranteed
+	};
+
+	for (size_t
+			pass = 0;
+			pass != CONTAINERS;
+			++pass)
+	{
+		for (YAML::const_iterator
+				i = node[fromContainer[pass]].begin();
+				i != node[fromContainer[pass]].end();
+				++i)
 		{
-			id = (*i)["id"].as<int>(-1);
-			BattleItem* const item = new BattleItem(
-												rules->getItem(type),
-												NULL,
-												id);
-			item->load(*i);
-			type = (*i)["inventoryslot"].as<std::string>();
-
-			if (type != "NULL")
-				item->setSlot(rules->getInventory(type));
-
-			const int
-				owner		= (*i)["owner"]			.as<int>(),
-				prevOwner	= (*i)["previousOwner"]	.as<int>(-1),
-				unit		= (*i)["unit"]			.as<int>();
-
-			// match up items and units
-			for (std::vector<BattleUnit*>::const_iterator
-					bu = _units.begin();
-					bu != _units.end();
-					++bu)
+			std::string type = (*i)["type"].as<std::string>();
+			if (rules->getItem(type) != NULL)
 			{
-				if ((*bu)->getId() == owner)
-					item->moveToOwner(*bu);
+				id = (*i)["id"].as<int>(-1);
+				BattleItem* item = new BattleItem(
+											rules->getItem(type),
+											NULL,
+											id);
 
-				if ((*bu)->getId() == unit)
-					item->setUnit(*bu);
+				item->load(*i);
+				type = (*i)["inventoryslot"].as<std::string>();
+
+				if (type != "NULL")
+					item->setSlot(rules->getInventory(type));
+
+				const int
+					owner		= (*i)["owner"]			.as<int>(),
+					prevOwner	= (*i)["previousOwner"]	.as<int>(-1),
+					unit		= (*i)["unit"]			.as<int>();
+
+				for (std::vector<BattleUnit*>::const_iterator // match up items and units
+						bu = _units.begin();
+						bu != _units.end();
+						++bu)
+				{
+					if ((*bu)->getId() == owner)
+						item->moveToOwner(*bu);
+
+					if ((*bu)->getId() == unit)
+						item->setUnit(*bu);
+				}
+
+				for (std::vector<BattleUnit*>::const_iterator
+						bu = _units.begin();
+						bu != _units.end();
+						++bu)
+				{
+					if ((*bu)->getId() == prevOwner)
+						item->setPreviousOwner(*bu);
+				}
+
+
+				if (item->getSlot() != NULL // match up items and tiles
+					&& item->getSlot()->getType() == INV_GROUND)
+				{
+					const Position pos = (*i)["position"].as<Position>();
+
+					if (pos.x != -1)
+						getTile(pos)->addItem(
+											item,
+											rules->getInventory("STR_GROUND"));
+				}
+
+				toContainer[pass]->push_back(item);
 			}
-
-			for (std::vector<BattleUnit*>::iterator
-					bu = _units.begin();
-					bu != _units.end();
-					++bu)
-			{
-				if ((*bu)->getId() == prevOwner)
-					item->setPreviousOwner(*bu);
-			}
-
-			// match up items and tiles
-			if (item->getSlot() != NULL
-				&& item->getSlot()->getType() == INV_GROUND)
-			{
-				const Position pos = (*i)["position"].as<Position>();
-
-				if (pos.x != -1)
-					getTile(pos)->addItem(item, rules->getInventory("STR_GROUND"));
-			}
-
-			_items.push_back(item);
 		}
 	}
 
@@ -513,55 +540,17 @@ void SavedBattleGame::load(
 	_objectivesNeeded		= node["objectivesNeeded"]						.as<int>(_objectivesNeeded);
 	_batReserved			= (BattleActionType)node["batReserved"]			.as<int>(_batReserved);
 	_kneelReserved			= node["kneelReserved"]							.as<bool>(_kneelReserved);
-//	_ambience				= node["ambience"]								.as<int>(_ambience);
 	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
 	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
 
 	if (node["controlDestroyed"])
 		_controlDestroyed = node["controlDestroyed"].as<bool>();
 
-	Log(LOG_INFO) << ". load conditional recovery";
-	for (YAML::const_iterator
-			i = node["recoverConditional"].begin();
-			i != node["recoverConditional"].end();
-			++i)
-	{
-		const std::string type = (*i)["type"].as<std::string>();
-		if (rules->getItem(type) != NULL)
-		{
-			id = (*i)["id"].as<int>(-1);
-			BattleItem* const item = new BattleItem(
-												rules->getItem(type),
-												NULL,
-												id);
-			item->load(*i);
-			_recoverConditional.push_back(item);
-		}
-	}
-
-	Log(LOG_INFO) << ". load guaranteed recovery";
-	for (YAML::const_iterator
-			i = node["recoverGuaranteed"].begin();
-			i != node["recoverGuaranteed"].end();
-			++i)
-	{
-		const std::string type = (*i)["type"].as<std::string>();
-		if (rules->getItem(type) != NULL)
-		{
-			id = (*i)["id"].as<int>(-1);
-			BattleItem* const item = new BattleItem(
-												rules->getItem(type),
-												NULL,
-												id);
-			item->load(*i);
-			_recoverGuaranteed.push_back(item);
-		}
-	}
 
 	_music = node["music"].as<std::string>(_music);
 
 	Log(LOG_INFO) << ". set item ID";
-	setNextItemId(); // kL
+	setNextItemId();
 	//Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
 
 	// TEST, reveal all tiles

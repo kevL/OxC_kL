@@ -50,6 +50,7 @@
 
 #include "../Resource/XcomResourcePack.h"
 
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
@@ -184,7 +185,6 @@ DebriefingState::DebriefingState()
 	_txtItem->setText(tr("STR_LIST_ITEM"));
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 	_txtScore->setText(tr("STR_SCORE"));
-	_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 
 	_lstStats->setColumns(3, 176, 60, 36);
 	_lstStats->setDot();
@@ -317,40 +317,42 @@ DebriefingState::DebriefingState()
 		}
 	}
 
-	std::string music;
-
 	std::wstring rating; // Calculate rating
 	if (total < -99)
 	{
 		rating = tr("STR_RATING_TERRIBLE");
 		_missionStatistics->rating = "STR_RATING_TERRIBLE";
-
-		music = OpenXcom::res_MUSIC_TAC_DEBRIEFING_BAD;
-	}
-	else if (total < 101)
-	{
-		rating = tr("STR_RATING_POOR");
-		_missionStatistics->rating = "STR_RATING_POOR";
-	}
-	else if (total < 351)
-	{
-		rating = tr("STR_RATING_OK");
-		_missionStatistics->rating = "STR_RATING_OK";
-	}
-	else if (total < 751)
-	{
-		rating = tr("STR_RATING_GOOD");
-		_missionStatistics->rating = "STR_RATING_GOOD";
-	}
-	else if (total < 1251)
-	{
-		rating = tr("STR_RATING_EXCELLENT");
-		_missionStatistics->rating = "STR_RATING_EXCELLENT";
+		_music = OpenXcom::res_MUSIC_TAC_DEBRIEFING_BAD;
 	}
 	else
 	{
-		rating = tr("STR_RATING_STUPENDOUS");
-		_missionStatistics->rating = "STR_RATING_EXCELLENT";
+		_music = OpenXcom::res_MUSIC_TAC_DEBRIEFING;
+
+		if (total < 101)
+		{
+			rating = tr("STR_RATING_POOR");
+			_missionStatistics->rating = "STR_RATING_POOR";
+		}
+		else if (total < 351)
+		{
+			rating = tr("STR_RATING_OK");
+			_missionStatistics->rating = "STR_RATING_OK";
+		}
+		else if (total < 751)
+		{
+			rating = tr("STR_RATING_GOOD");
+			_missionStatistics->rating = "STR_RATING_GOOD";
+		}
+		else if (total < 1251)
+		{
+			rating = tr("STR_RATING_EXCELLENT");
+			_missionStatistics->rating = "STR_RATING_EXCELLENT";
+		}
+		else
+		{
+			rating = tr("STR_RATING_STUPENDOUS");
+			_missionStatistics->rating = "STR_RATING_EXCELLENT";
+		}
 	}
 
 	if (_tacBattle == false)
@@ -365,10 +367,6 @@ DebriefingState::DebriefingState()
 //	_txtRating->setText(tr("STR_RATING").arg(rating));
 	_txtRating->setText(rating);
 	_txtRating->setAlign(ALIGN_CENTER);
-
-
-	if (music.empty() == true)
-		music = OpenXcom::res_MUSIC_TAC_DEBRIEFING;
 
 
 	// Soldier Diary ->
@@ -474,11 +472,6 @@ DebriefingState::DebriefingState()
 
 	_gameSave->getMissionStatistics()->push_back(_missionStatistics);
 	// Soldier Diary_end.
-
-	_game->getResourcePack()->playMusic(
-									music,
-									"",
-									1);
 }
 
 /**
@@ -507,6 +500,19 @@ DebriefingState::~DebriefingState()
 	_specialTypes.clear();
 
 	_rounds.clear();
+}
+
+/**
+ * Initializes the state.
+ */
+void DebriefingState::init()
+{
+	State::init();
+
+	_game->getResourcePack()->playMusic(
+									_music,
+									"",
+									1);
 }
 
 /**
@@ -669,8 +675,8 @@ void ClearAlienBase::operator() (AlienMission* mission) const
 /**
  * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
  * Adds the items to the craft.
- * Also calculates the soldiers' experience, and possible promotions.
- * If aborted, only the things on the exit area are recovered.
+ * @note Also calculates the soldiers' experience and possible promotions. If
+ * aborted only the things on the exit area are recovered.
  */
 void DebriefingState::prepareDebriefing() // private.
 {
@@ -890,7 +896,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 
 	bool found = false;
-	for (std::vector<Ufo*>::const_iterator // First search for UFO.
+	for (std::vector<Ufo*>::const_iterator // First - search for UFO.
 			i = _gameSave->getUfos()->begin();
 			i != _gameSave->getUfos()->end();
 			++i)
@@ -900,6 +906,7 @@ void DebriefingState::prepareDebriefing() // private.
 			found = true;
 			(*i)->setInBattlescape(false);
 
+			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 			_missionStatistics->ufo = (*i)->getRules()->getType();
 
 			if (aborted == true
@@ -920,7 +927,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 	if (found == false)
 	{
-		for (std::vector<MissionSite*>::const_iterator // Second search for MissionSite.
+		for (std::vector<MissionSite*>::const_iterator // Second - search for MissionSite.
 				i = _gameSave->getMissionSites()->begin();
 				i != _gameSave->getMissionSites()->end();
 				++i)
@@ -1021,66 +1028,66 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
-	const TacticalType tacType = battleSave->getTacticalType();
-
-	if (found == false)
+	if (found == false) // alien base disappears if not aborted
 	{
-		if (tacType == TCT_BASEASSAULT)	// alien base disappears if not aborted
-		{								// probably redundant w/ (found==false)
-			_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
-			missionAccomplished = true; // True unless a nav-console is found below_
-
-			if (soldierLive == 0
-				|| aborted == true)
+		for (std::vector<AlienBase*>::const_iterator // Third - search for AlienBase.
+				i = _gameSave->getAlienBases()->begin();
+				i != _gameSave->getAlienBases()->end();
+				++i)
+		{
+			if ((*i)->isInBattlescape() == true)
 			{
-				for (size_t
-						i = 0;
-						i != battleSave->getMapSizeXYZ();
-						++i)
+				_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
+
+				missionAccomplished = true; // True unless a nav-console is found below_
+
+				if (_rules->getDeployment(battleSave->getMissionType())->getNextStage().empty() == false)
+					missionAccomplished = false;
+				else if (aborted == true
+					|| soldierLive == 0)
 				{
-					if (   battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
-						&& battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+					for (size_t
+							i = 0;
+							i != battleSave->getMapSizeXYZ();
+							++i)
 					{
-						missionAccomplished = false;
-						break;
+						if (battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
+							&& battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
+						{
+							missionAccomplished = false;
+							break;
+						}
 					}
 				}
-			}
 
-			for (std::vector<AlienBase*>::const_iterator // Third search for AlienBase.
-					i = _gameSave->getAlienBases()->begin();
-					i != _gameSave->getAlienBases()->end();
-					++i)
-			{
-				if ((*i)->isInBattlescape() == true)
+				if (missionAccomplished == true)
 				{
-					if (missionAccomplished == true)
-					{
-						const int pts = std::max(
-											50,
-											500 - (_diff * 50));
-						addStat(
-							"STR_ALIEN_BASE_CONTROL_DESTROYED",
-							pts);
+					const int pts = std::max(
+										50,
+										500 - (_diff * 50));
+					addStat(
+						"STR_ALIEN_BASE_CONTROL_DESTROYED",
+						pts);
 
-						// Take care to remove supply missions for the aLien base.
-						std::for_each(
-								_gameSave->getAlienMissions().begin(),
-								_gameSave->getAlienMissions().end(),
-								ClearAlienBase(*i));
+					// Take care to remove supply missions for the aLien base.
+					std::for_each(
+							_gameSave->getAlienMissions().begin(),
+							_gameSave->getAlienMissions().end(),
+							ClearAlienBase(*i));
 
-						delete *i;
-						_gameSave->getAlienBases()->erase(i);
-					}
-					else
-						(*i)->setInBattlescape(false);
-
-					break;
+					delete *i;
+					_gameSave->getAlienBases()->erase(i);
 				}
+				else
+					(*i)->setInBattlescape(false);
+
+				break;
 			}
 		}
 	}
 
+
+	const TacticalType tacType = battleSave->getTacticalType();
 
 	// time to care about units.
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1396,9 +1403,9 @@ void DebriefingState::prepareDebriefing() // private.
 
 	std::string tacResult;
 
-	if (soldierLive > 0							// RECOVER UFO:
-		&& (aborted == false
-			|| missionAccomplished == true))	// Run through all tiles to recover UFO components and items.
+	if ((aborted == false					// Run through all tiles to recover UFO components and items.
+			|| missionAccomplished == true)	// RECOVER UFO:
+		&& soldierLive > 0)
 	{
 		switch (tacType)
 		{
@@ -1458,7 +1465,7 @@ void DebriefingState::prepareDebriefing() // private.
 					i != battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (   battleSave->getTiles()[i]->getMapData(O_FLOOR) != NULL
+				if (battleSave->getTiles()[i]->getMapData(O_FLOOR) != NULL
 					&& battleSave->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
 				{
 					recoverItems(battleSave->getTiles()[i]->getInventory());
@@ -1480,7 +1487,7 @@ void DebriefingState::prepareDebriefing() // private.
 			break;
 
 			case TCT_BASEASSAULT:
-			case TCT_MARS1:
+			case TCT_MARS1: // note these Mars tacticals are really Lose GAME.
 			case TCT_MARS2:
 				tacResult = "STR_ALIEN_BASE_STILL_INTACT";
 			break;
@@ -1531,17 +1538,17 @@ void DebriefingState::prepareDebriefing() // private.
 				i != _stats.end();
 				++i)
 		{
-			// alien alloys recovery values are divided by 10 or divided by 150 in case of an aLien base
+			// alien alloys recovery values are divided by 15 or divided by 150 in case of an aLien base
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->type)
 			{
-				int alloys;
+				int alloyDivisor;
 				if (tacType == TCT_BASEASSAULT)
-					alloys = 150;
+					alloyDivisor = 150;
 				else
-					alloys = 10;
+					alloyDivisor = 15;
 
-				(*i)->qty = (*i)->qty / alloys;
-				(*i)->score = (*i)->score / alloys;
+				(*i)->qty = (*i)->qty / alloyDivisor;
+				(*i)->score = (*i)->score / alloyDivisor;
 			}
 
 			// recoverable battlescape tiles are now converted to items and put in base inventory

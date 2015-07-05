@@ -481,20 +481,15 @@ void SellState::btnOkClick(Action*)
 												j->second);
 					}
 
-					for (std::vector<Vehicle*>::const_iterator
+					for (std::vector<Vehicle*>::const_iterator // remove vehicles and their ammo from craft
 							j = craft->getVehicles()->begin();
 							j != craft->getVehicles()->end();
 							++j)
 					{
 						_base->getItems()->addItem((*j)->getRules()->getType());
-
-						const RuleItem* const ammoRule = _game->getRuleset()->getItem((*j)->getRules()->getCompatibleAmmo()->front());
 						_base->getItems()->addItem(
-												ammoRule->getType(),
+												(*j)->getRules()->getCompatibleAmmo()->front(),
 												(*j)->getAmmo());
-
-						delete *j;
-//						craft->getVehicles()->erase(j);
 					}
 
 					for (std::vector<Soldier*>::const_iterator // remove soldiers from craft

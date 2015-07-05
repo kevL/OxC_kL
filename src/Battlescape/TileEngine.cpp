@@ -4357,10 +4357,10 @@ bool TileEngine::detonate(Tile* const tile)
 	static const int parts[9] =
 	{
 		O_FLOOR,		// 0 - in tileAbove
-		O_WESTWALL,	// 1 - in tileEast
+		O_WESTWALL,		// 1 - in tileEast
 		O_NORTHWALL,	// 2 - in tileSouth
 		O_FLOOR,		// 3 - in tile
-		O_WESTWALL,	// 4 - in tile
+		O_WESTWALL,		// 4 - in tile
 		O_NORTHWALL,	// 5 - in tile
 		O_OBJECT,		// 6 - in tile
 		O_OBJECT,		// 7 - in tileNorth

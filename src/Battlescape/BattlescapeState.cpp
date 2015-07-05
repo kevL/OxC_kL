@@ -3260,21 +3260,12 @@ void BattlescapeState::finishBattle(
 		_game->popState();
 
 	_game->getCursor()->setVisible();
-
-//	if (_battleSave->getAmbientSound() != -1)
-//		_game->getResourcePack()->getSoundByDepth(
-//												0,
-//												_battleSave->getAmbientSound())
-//											->stopLoop();
-
 	_game->getResourcePack()->fadeMusic(_game, 975);
 
 
 	const std::string stType = _battleSave->getMissionType();
-
 	std::string nextStage;
-//	if (stType != "STR_UFO_GROUND_ASSAULT"
-//		&& stType != "STR_UFO_CRASH_RECOVERY")
+
 	if (_battleSave->getTacticalType() != TCT_UFOCRASHED
 		&& _battleSave->getTacticalType() != TCT_UFOLANDED)
 	{
@@ -3334,7 +3325,7 @@ void BattlescapeState::finishBattle(
 		if (abort == true		// abort was done or no player is still alive
 			|| inExitArea == 0)	// this concludes to defeat when in mars or mars landing mission
 		{
-			if (   _rules->getDeployment(stType) != NULL
+			if (_rules->getDeployment(stType) != NULL
 				&& _rules->getDeployment(stType)->isNoRetreat() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{
@@ -3345,7 +3336,7 @@ void BattlescapeState::finishBattle(
 		}
 		else					// no abort was done and at least a player is still alive
 		{						// this concludes to victory when in mars mission
-			if (   _rules->getDeployment(stType) != NULL
+			if (_rules->getDeployment(stType) != NULL
 				&& _rules->getDeployment(stType)->isFinalMission() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{

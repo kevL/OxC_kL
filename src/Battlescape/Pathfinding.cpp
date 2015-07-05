@@ -231,9 +231,9 @@ void Pathfinding::calculate(
 				{
 					testTile = _battleSave->getTile(destPos + Position(x,y,0));
 					if (x && y
-						&& ((	   testTile->getMapData(O_NORTHWALL)
+						&& ((testTile->getMapData(O_NORTHWALL)
 								&& testTile->getMapData(O_NORTHWALL)->isDoor() == true)
-							|| (   testTile->getMapData(O_WESTWALL)
+							|| (testTile->getMapData(O_WESTWALL)
 								&& testTile->getMapData(O_WESTWALL)->isDoor() == true)))
 					{
 						return;

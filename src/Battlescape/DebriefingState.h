@@ -106,6 +106,8 @@ private:
 		_diff,
 		_limitsEnforced;
 
+	std::string _music;
+
 	Base* _base;
 	Craft* _craft;
 	Country* _country;
@@ -158,6 +160,9 @@ private:
 		DebriefingState();
 		/// Cleans up the Debriefing state.
 		~DebriefingState();
+
+		/// Initializes the state.
+		void init();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

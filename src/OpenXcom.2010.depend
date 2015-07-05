@@ -5128,7 +5128,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1434619759 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1436122197 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5314,7 +5314,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1432715019 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1436081150 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5494,7 +5494,7 @@
 1430149550 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1435628008 f:\git\openxcom\src\battlescape\debriefingstate.h
+1436122864 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -5670,7 +5670,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1436082355 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1436107560 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5856,7 +5856,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1436082376 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1436116511 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -5878,6 +5878,7 @@
 	"../Menu/MainMenuState.h"
 	"../Menu/SaveGameState.h"
 	"../Resource/XcomResourcePack.h"
+	"../Ruleset/AlienDeployment.h"
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/RuleCountry.h"
 	"../Ruleset/RuleCraft.h"
@@ -6165,7 +6166,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1436082480 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1436105722 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6295,7 +6296,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1436084227 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1436106012 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6320,7 +6321,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1435839604 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1436083366 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -8748,7 +8749,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1436084283 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1436121813 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
