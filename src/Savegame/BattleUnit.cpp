@@ -26,7 +26,7 @@
 
 #include "BattleItem.h"
 #include "SavedGame.h"
-//#include "SavedBattleGame.h"
+#include "SavedBattleGame.h"
 #include "Soldier.h"
 #include "Tile.h"
 
@@ -57,12 +57,10 @@ namespace OpenXcom
 /**
  * Initializes a BattleUnit from a Soldier
  * @param soldier		- pointer to a geoscape Soldier
-// * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param diff			- for VictoryPts value at death
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
-//		const int depth,
 		const int diff)
 	:
 		_geoscapeSoldier(soldier),
@@ -132,8 +130,6 @@ BattleUnit::BattleUnit(
 		_stunLevel(0),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
-//		_breathFrame(0),
-//		_breathing(false),
 		_floorAbove(false),
 
 		_name(soldier->getName()),
@@ -153,13 +149,6 @@ BattleUnit::BattleUnit(
 
 	_loftempsSet	= _armor->getLoftempsSet();
 	_moveType		= _armor->getMoveTypeArmor();
-/*	if (_moveType == MT_FLOAT)
-	{
-		if (depth > 0)
-			_moveType = MT_FLY;
-		else
-			_moveType = MT_WALK;
-	} */
 
 	int rankValue;
 	switch (soldier->getRank())
@@ -288,10 +277,7 @@ BattleUnit::BattleUnit(
 		_morale(100),
 		_stunLevel(0),
 		_activeHand("STR_RIGHT_HAND"),
-//		_breathFrame(-1),
-//		_breathing(false),
 		_floorAbove(false),
-//		_gender(GENDER_MALE),
 		_diedByFire(false),
 		_turnDir(0),
 		_mcStrength(0),
@@ -472,9 +458,9 @@ void BattleUnit::load(const YAML::Node& node)
 	_mcStrength			= node["mcStrength"]			.as<int>(_mcStrength);
 	_mcSkill			= node["mcSkill"]				.as<int>(_mcSkill);
 
-	for (size_t i = 0; i < 5; ++i)
+	for (size_t i = 0; i != 5; ++i)
 		_currentArmor[i]	= node["armor"][i]		.as<int>(_currentArmor[i]);
-	for (size_t i = 0; i < 6; ++i)
+	for (size_t i = 0; i != 6; ++i)
 		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
 
 	if (_geoscapeSoldier != NULL)
@@ -493,20 +479,51 @@ void BattleUnit::load(const YAML::Node& node)
 		_expMelee		= node["expMelee"]		.as<int>(_expMelee);
 	}
 
+
+	std::vector<int> spottedId;
+	spottedId = node["spottedUnitsId"].as<std::vector<int> >(spottedId);
+	for (size_t
+			i = 0;
+			i != spottedId.size();
+			++i)
+	{
+		_spottedId.push_back(spottedId.at(i));
+	}
+	// Convert those (int)id's into pointers to BattleUnits during
+	// SavedBattleGame loading *after* all BattleUnits have loaded.
+	// Note: '_spottedId' can just hang around meaninglessly using up RAM after that ....
+
 /*	if (const YAML::Node& p = node["recolor"])
 	{
 		_recolor.clear();
-
-		for (size_t
-				i = 0;
-				i != p.size();
-				++i)
-		{
-			_recolor.push_back(std::make_pair(
-										p[i][0].as<uint8_t>(),
-										p[i][1].as<uint8_t>()));
-		}
+		for (size_t i = 0; i != p.size(); ++i)
+			_recolor.push_back(std::make_pair(p[i][0].as<uint8_t>(), p[i][1].as<uint8_t>()));
 	} */
+}
+
+/**
+ * Loads the vector of units spotted this turn during SavedBattleGame load.
+ * @param battleSave - pointer to the SavedBattleGame
+ */
+void BattleUnit::loadSpotted(SavedBattleGame* const battleSave)
+{
+	for (size_t
+			i = 0;
+			i != _spottedId.size();
+			++i)
+	{
+		for (std::vector<BattleUnit*>::const_iterator
+				j = battleSave->getUnits()->begin();
+				j != battleSave->getUnits()->end();
+				++j)
+		{
+			if ((*j)->getId() == _spottedId.at(i))
+			{
+				_unitsSpottedThisTurn.push_back(*j);
+				break;
+			}
+		}
+	}
 }
 
 /**
@@ -518,8 +535,8 @@ YAML::Node BattleUnit::save() const
 	YAML::Node node;
 
 	node["id"]				= _id;
+//	node["soldierId"]		= _id;
 	node["faction"]			= static_cast<int>(_faction);
-	node["soldierId"]		= _id;
 	node["genUnitType"]		= _type;
 	node["genUnitArmor"]	= _armor->getType();
 	node["name"]			= Language::wstrToUtf8(getName(NULL));
@@ -600,6 +617,17 @@ YAML::Node BattleUnit::save() const
 
 		node["recolor"].push_back(p);
 	} */
+
+	int spottedId;
+	for (size_t
+			i = 0;
+			i != _unitsSpottedThisTurn.size();
+			++i)
+	{
+		spottedId = _unitsSpottedThisTurn.at(i)->getId();
+		node["spottedUnitsId"].push_back(spottedId);
+	}
+
 
 	return node;
 		// kL_note: This doesn't save/load such things as
@@ -2076,7 +2104,6 @@ void BattleUnit::clearVisibleUnits()
 
 /**
  * Gets the other units spotted this turn by this unit.
- * kL_Update: now has relevance only for aLien units.
  * @return, reference to a vector of pointers to BattleUnits
  */
 std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()

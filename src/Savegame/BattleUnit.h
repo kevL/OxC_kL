@@ -47,6 +47,7 @@ class Node;
 class RuleArmor;
 class RuleInventory;
 class RuleUnit;
+class SavedBattleGame;
 class SavedGame;
 class Soldier;
 class Surface;
@@ -470,6 +471,8 @@ private:
 
 	std::list<BattleUnit*> _unitSpotters;
 
+	std::vector<int> _spottedId; // for loading '_unitsSpottedThisTurn'
+
 	std::vector<BattleItem*> _inventory;
 	std::vector<BattleUnit*>
 		_visibleUnits,
@@ -484,14 +487,12 @@ private:
 	UnitStats _stats;
 
 	bool
-//		_breathing,
 		_floorAbove,
 		_hidingForTurn;
 //		_respawn;
 	int
 		_aggression,
 		_aggroSound,
-//		_breathFrame,
 		_deathSound,
 		_floatHeight,
 		_kneelHeight,
@@ -565,6 +566,8 @@ private:
 
 		/// Loads this unit from YAML.
 		void load(const YAML::Node& node);
+		/// Loads the vector of units spotted this turn during SavedBattleGame load.
+		void loadSpotted(SavedBattleGame* const battleSave);
 		/// Saves this unit to YAML.
 		YAML::Node save() const;
 

@@ -224,7 +224,6 @@ void SavedBattleGame::load(
 	_missionType		= node["missionType"]	.as<std::string>(_missionType);
 	_globalShade		= node["globalshade"]	.as<int>(_globalShade);
 	_turn				= node["turn"]			.as<int>(_turn);
-//	_depth				= node["depth"]			.as<int>(_depth);
 	_terrain			= node["terrain"]		.as<std::string>(_terrain); // sza_MusicRules
 
 	setTacticalType(_missionType);
@@ -345,7 +344,8 @@ void SavedBattleGame::load(
 			i != node["units"].end();
 			++i)
 	{
-		id				= (*i)["soldierId"]									.as<int>();
+//		id				= (*i)["soldierId"]									.as<int>();
+		id				= (*i)["id"]										.as<int>();
 		faction			= static_cast<UnitFaction>((*i)["faction"]			.as<int>());
 		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(faction));
 
@@ -416,6 +416,17 @@ void SavedBattleGame::load(
 			}
 		}
 	}
+
+	// load _unitsSpottedThisTurn here:
+	// convert unitID's into pointers to BattleUnit
+	for (size_t
+			i = 0;
+			i != _units.size();
+			++i)
+	{
+		_units.at(i)->loadSpotted(this);
+	}
+
 
 	// matches up tiles and units
 	Log(LOG_INFO) << ". reset tiles";
