@@ -1609,14 +1609,19 @@ void Map::drawTerrain(Surface* const surface) // private.
 												pixelOffset_x, // sprites: 32x40
 												pixelOffset_y;
 
-											if (dir == 0 || dir == 4)
+											if (dir == 0 || dir == 4) // THESE NEED EFFORTS.
 											{
 												pixelOffset_x = 16;
 												pixelOffset_y = 16;
 											}
-											else if (dir == 1 || dir == 5)
+											else if (dir == 5)
 											{
 												pixelOffset_x = -32;
+												pixelOffset_y = 24;
+											}
+											else if (dir == 1)
+											{
+												pixelOffset_x = 32;
 												pixelOffset_y = 24;
 											}
 											else if (dir == 2 || dir == 6)

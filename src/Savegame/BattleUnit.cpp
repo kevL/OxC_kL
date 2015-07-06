@@ -2039,7 +2039,7 @@ void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 	}
 
 	if (addUnit == true)
-		_unitsSpottedThisTurn.push_back(unit); // <- don't think I even use this anymore .... Maybe for AI ....
+		_unitsSpottedThisTurn.push_back(unit); // <- don't think I even use this anymore .... Maybe for AI .... doggie barks.
 
 
 	for (std::vector<BattleUnit*>::const_iterator

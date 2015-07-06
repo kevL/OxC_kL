@@ -88,6 +88,7 @@ units:
     value: 22
     deathSound: 23
     moveSound: 87
+    aggroSound: 86
     energyRecovery: 100
     mechanical: true
     psiImmune: true
@@ -109,6 +110,7 @@ extraStrings:
 extraSounds:
   - type: BATTLE.CAT
     files:
+      86: Resources/Scoutdrone/gunidle.ogg
       87: Resources/Scoutdrone/move_tank.ogg
       88: Resources/Scoutdrone/Fire.wav
 extraSprites:

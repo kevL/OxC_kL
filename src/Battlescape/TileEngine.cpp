@@ -484,19 +484,27 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 								spottedUnit->setUnitVisible();
 								spottedUnit->getTile()->setTileVisible();
 
-								if (unit->getOriginalFaction() == FACTION_PLAYER
+								if (ret == true // play aggro sound if non-MC'd xCom unit spots a not-previously-visible hostile.
+									&& unit->getOriginalFaction() == FACTION_PLAYER
 									&& spottedUnit->getFaction() == FACTION_HOSTILE)
 								{
-									const int sound = unit->getAggroSound();
-									if (sound != -1)
+									const std::vector<BattleUnit*> spottedUnits = unit->getUnitsSpottedThisTurn();
+									if (std::find(
+												spottedUnits.begin(),
+												spottedUnits.end(),
+												spottedUnit) == spottedUnits.end())
 									{
-										const BattlescapeGame* const battle = _battleSave->getBattleGame();
-										battle->getResourcePack()->getSound(
-																		"BATTLE.CAT",
-																		sound)
-																	->play(
-																		-1,
-																		battle->getMap()->getSoundAngle(unit->getPosition()));
+										const int sound = unit->getAggroSound();
+										if (sound != -1)
+										{
+											const BattlescapeGame* const battle = _battleSave->getBattleGame();
+											battle->getResourcePack()->getSound(
+																			"BATTLE.CAT",
+																			sound)
+																		->play(
+																			-1,
+																			battle->getMap()->getSoundAngle(unit->getPosition()));
+										}
 									}
 								}
 							}
@@ -3017,8 +3025,10 @@ void TileEngine::explode(
 
 							if (fireTile != NULL) // safety.
 							{
-								const int firePower = static_cast<int>(std::ceil(
-													 (static_cast<double>(_powerE) / static_cast<double>(power)) * 8.));
+								const int firePower = std::max(
+															1,
+															static_cast<int>(std::ceil(
+														   (static_cast<double>(_powerE) / static_cast<double>(power)) * 11.)));
 								fireTile->addFire(firePower + fireTile->getFuel() + 3 / 4);
 								fireTile->addSmoke(std::max(
 														firePower + fireTile->getFuel(),
