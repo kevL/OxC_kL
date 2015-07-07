@@ -192,7 +192,20 @@ void UnitDieBState::think()
 // #6
 	if (_extraTicks == 1)
 	{
-		_parent->getMap()->setUnitDying(false);
+		bool moreDead = false;
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _parent->getSave()->getUnits()->begin();
+				i != _parent->getSave()->getUnits()->end();
+				++i)
+		{
+			if ((*i)->getAboutToDie() == true)
+			{
+				moreDead = true;
+				break;
+			}
+		}
+		if (moreDead == false)
+			_parent->getMap()->setUnitDying(false);
 
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();

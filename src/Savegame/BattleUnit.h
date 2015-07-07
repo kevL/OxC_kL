@@ -393,8 +393,8 @@ struct BattleUnitStatistics
 
 
 /**
- * Represents a moving unit in the battlescape, player controlled or AI controlled.
- * It holds info about the unit's position, items carried, stats, etc.
+ * This holds info about a mobile object in the battlescape whether controlled
+ * by player or AI.
  */
 class BattleUnit // no copy cTor.
 {
@@ -403,6 +403,7 @@ private:
 //	static const int SPEC_WEAPON_MAX = 3;
 
 	bool
+		_aboutToDie,
 		_cacheInvalid,
 		_dashing,
 		_diedByFire,
@@ -1116,6 +1117,8 @@ private:
 		/// Sets the BattleGame for this unit.
 		void setBattleForUnit(BattlescapeGame* const battleGame);
 
+		/// Gets if this unit is about to die.
+		bool getAboutToDie();
 		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
 		void putDown();
 

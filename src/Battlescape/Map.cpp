@@ -346,58 +346,57 @@ void Map::draw()
 //	Surface::draw();
 	clear(15); // black
 
-	const Tile* tile;
-
-	if (_projectile != NULL)
-//		&& _battleSave->getSide() == FACTION_PLAYER)
-	{
-		tile = _battleSave->getTile(Position(
-										_projectile->getPosition(0).x / 16,
-										_projectile->getPosition(0).y / 16,
-										_projectile->getPosition(0).z / 24));
-		if (tile != NULL
-			&& (tile->getTileVisible() == true
-				|| _battleSave->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
-		{
-			_projectileInFOV = true;
-		}
-	}
-	else
-		_projectileInFOV = _battleSave->getDebugMode();
-
-
-	if (_explosions.empty() == false)
-	{
-		for (std::list<Explosion*>::const_iterator
-				i = _explosions.begin();
-				i != _explosions.end();
-				++i)
-		{
-			tile = _battleSave->getTile(Position(
-											(*i)->getPosition().x / 16,
-											(*i)->getPosition().y / 16,
-											(*i)->getPosition().z / 24));
-			if (tile != NULL
-				&& (tile->getTileVisible() == true
-					|| (tile->getUnit() != NULL
-						&& tile->getUnit()->getUnitVisible() == true)
-					|| (*i)->isBig() == true
-					|| _battleSave->getSide() != FACTION_PLAYER))	// shows hit-explosion during aLien berserk
-			{
-				_explosionInFOV = true;
-				break;
-			}
-		}
-	}
-	else
-		_explosionInFOV = _battleSave->getDebugMode(); // trick reveals Map in debugmode.
-
-
 	if (_noDraw == false) // don't draw if MiniMap is open.
 	{
+		const Tile* tile;
+
+		if (_projectile != NULL)
+//			&& _battleSave->getSide() == FACTION_PLAYER)
+		{
+			tile = _battleSave->getTile(Position(
+											_projectile->getPosition(0).x / 16,
+											_projectile->getPosition(0).y / 16,
+											_projectile->getPosition(0).z / 24));
+			if (tile != NULL
+				&& (tile->getTileVisible() == true
+					|| _battleSave->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
+			{
+				_projectileInFOV = true;
+			}
+		}
+		else
+			_projectileInFOV = _battleSave->getDebugMode();
+
+
+		if (_explosions.empty() == false)
+		{
+			for (std::list<Explosion*>::const_iterator
+					i = _explosions.begin();
+					i != _explosions.end();
+					++i)
+			{
+				tile = _battleSave->getTile(Position(
+												(*i)->getPosition().x / 16,
+												(*i)->getPosition().y / 16,
+												(*i)->getPosition().z / 24));
+				if (tile != NULL
+					&& (tile->getTileVisible() == true
+						|| (tile->getUnit() != NULL
+							&& tile->getUnit()->getUnitVisible() == true)
+						|| (*i)->isBig() == true
+						|| _battleSave->getSide() != FACTION_PLAYER))	// shows hit-explosion during aLien berserk
+				{
+					_explosionInFOV = true;
+					break;
+				}
+			}
+		}
+		else
+			_explosionInFOV = _battleSave->getDebugMode(); // trick reveals Map in debugmode.
+
+
 		if (_battleSave->getSelectedUnit() == NULL
-			|| (_battleSave->getSelectedUnit() != NULL
-				&& _battleSave->getSelectedUnit()->getUnitVisible() == true)
+			|| _battleSave->getSelectedUnit()->getUnitVisible() == true
 			|| _unitDying == true
 			|| _battleSave->getDebugMode() == true
 			|| _projectileInFOV == true
@@ -4989,7 +4988,7 @@ void Map::setButtonsPressed(
 /**
  * Sets the unitDying flag.
  * @note This reveals the dying unit during Hidden Movement.
- * @param flag - true if a unit is dying
+ * @param flag - true if a unit is dying (default true)
  */
 void Map::setUnitDying(bool flag)
 {

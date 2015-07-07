@@ -440,7 +440,6 @@ void SavedBattleGame::load(
 		"recoverConditional",
 		"recoverGuaranteed"
 	};
-
 	std::vector<BattleItem*>* toContainer[CONTAINERS] =
 	{
 		&_items,

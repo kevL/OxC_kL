@@ -128,6 +128,7 @@ BattleUnit::BattleUnit(
 		_specab(SPECAB_NONE),
 		_morale(100),
 		_stunLevel(0),
+		_aboutToDie(false),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
 		_floorAbove(false),
@@ -276,6 +277,7 @@ BattleUnit::BattleUnit(
 
 		_morale(100),
 		_stunLevel(0),
+		_aboutToDie(false),
 		_activeHand("STR_RIGHT_HAND"),
 		_floorAbove(false),
 		_diedByFire(false),
@@ -491,7 +493,6 @@ void BattleUnit::load(const YAML::Node& node)
 	}
 	// Convert those (int)id's into pointers to BattleUnits during
 	// SavedBattleGame loading *after* all BattleUnits have loaded.
-	// Note: '_spottedId' can just hang around meaninglessly using up RAM after that ....
 
 /*	if (const YAML::Node& p = node["recolor"])
 	{
@@ -524,6 +525,8 @@ void BattleUnit::loadSpotted(SavedBattleGame* const battleSave)
 			}
 		}
 	}
+
+	_spottedId.clear();
 }
 
 /**
@@ -618,21 +621,28 @@ YAML::Node BattleUnit::save() const
 		node["recolor"].push_back(p);
 	} */
 
-	int spottedId;
-	for (size_t
-			i = 0;
-			i != _unitsSpottedThisTurn.size();
-			++i)
+	if (_faction == FACTION_PLAYER
+		&& _originalFaction == FACTION_PLAYER)
 	{
-		spottedId = _unitsSpottedThisTurn.at(i)->getId();
-		node["spottedUnitsId"].push_back(spottedId);
+		int spottedId;
+		for (size_t
+				i = 0;
+				i != _unitsSpottedThisTurn.size();
+				++i)
+		{
+			spottedId = _unitsSpottedThisTurn.at(i)->getId();
+			node["spottedUnitsId"].push_back(spottedId);
+		}
 	}
 
 
 	return node;
 		// kL_note: This doesn't save/load such things as
-		// _visibleUnits, _unitsSpottedThisTurn, _visibleTiles;
-		// AI is saved, but loaded someplace else -> SavedBattleGame
+		// _visibleUnits (no need),
+		// _unitsSpottedThisTurn (done),
+		// _visibleTiles (removed).
+		// AI is saved, but loaded someplace else -> SavedBattleGame ->
+		// so are _unitsSpottedThisTurn
 }
 
 /**
@@ -1538,6 +1548,9 @@ int BattleUnit::damage(
 				moraleChange(-wounds * 3);
 			}
 		}
+
+		if (isOut(true, true) == true)
+			_aboutToDie = true;
 	}
 
 	// TODO: give a short "ugh" if hit causes no damage or perhaps stuns ( power must be > 0 though );
@@ -4510,10 +4523,22 @@ void BattleUnit::setBattleForUnit(BattlescapeGame* const battleGame)
 }
 
 /**
+ * Gets if this unit is in the limbo phase between getting killed or stunned and
+ * the end of its collapse sequence.
+ * @return, true if about to die
+ */
+bool BattleUnit::getAboutToDie()
+{
+	return _aboutToDie;
+}
+
+/**
  * Sets this BattleUnit's parameters as down - collapsed/ unconscious/ dead.
  */
 void BattleUnit::putDown()
 {
+	_aboutToDie = false;
+
 	_faction = _originalFaction;
 	_kneeled = false;	// don't get hunkerdown bonus against HE detonations
 //	_visible = false;	// don't do this: it mucks up convertUnit() respawning;
