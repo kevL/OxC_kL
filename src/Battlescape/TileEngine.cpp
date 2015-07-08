@@ -4894,7 +4894,7 @@ int TileEngine::unitOpensDoor(
 	const Tile* const tile = _battleSave->getTile(pos + offset);
 	if (tile != NULL
 		&& tile->getMapData(part) != NULL
-		&& tile->getMapData(part)->isUFODoor() == true)
+		&& tile->getMapData(part)->isUfoDoor() == true)
 	{
 		return true;
 	}
@@ -4924,7 +4924,7 @@ void TileEngine::openAdjacentDoors(
 		Tile* const tile = _battleSave->getTile(pos + offset);
 		if (tile != NULL
 			&& tile->getMapData(part) != NULL
-			&& tile->getMapData(part)->isUFODoor() == true)
+			&& tile->getMapData(part)->isUfoDoor() == true)
 		{
 			tile->openDoor(part);
 		}
@@ -4941,7 +4941,7 @@ void TileEngine::openAdjacentDoors(
 		Tile* const tile = _battleSave->getTile(pos + offset);
 		if (tile != NULL
 			&& tile->getMapData(part) != NULL
-			&& tile->getMapData(part)->isUFODoor() == true)
+			&& tile->getMapData(part)->isUfoDoor() == true)
 		{
 			tile->openDoor(part);
 		}

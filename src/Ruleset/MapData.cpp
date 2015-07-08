@@ -110,7 +110,7 @@ void MapData::setSprite(
  * Gets whether this is an animated ufo door.
  * @return, true if this is an animated ufo door
  */
-bool MapData::isUFODoor() const
+bool MapData::isUfoDoor() const
 {
 	return _isUfoDoor;
 }

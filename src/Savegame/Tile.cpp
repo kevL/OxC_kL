@@ -360,7 +360,7 @@ int Tile::getTUCostTile(
 
 	if (_objects[i] != NULL)
 	{
-		if (_objects[i]->isUFODoor() == true
+		if (_objects[i]->isUfoDoor() == true
 			&& _curFrame[i] > 1)
 		{
 			return 0;
@@ -516,7 +516,7 @@ int Tile::openDoor(
 
 			return 0;
 		}
-		else if (_objects[i]->isUFODoor() == true)
+		else if (_objects[i]->isUfoDoor() == true)
 		{
 			if (_curFrame[i] == 0) // ufo door part 0 - door is closed
 			{
@@ -1276,7 +1276,7 @@ void Tile::animateTile()
 			if (isPsycho == 0)
 			{
 				//if (debug) Log(LOG_INFO) << ". isPsycho FALSE";
-				if (_objects[i]->isUFODoor() == true // ufo door is currently static
+				if (_objects[i]->isUfoDoor() == true // ufo door is currently static
 					&& (_curFrame[i] == 0
 						|| _curFrame[i] == 7))
 				{
@@ -1286,7 +1286,7 @@ void Tile::animateTile()
 
 				nextFrame = _curFrame[i] + 1;
 
-				if (_objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
+				if (_objects[i]->isUfoDoor() == true // special handling for Avenger & Lightning doors
 					&& _objects[i]->getSpecialType() == START_POINT
 					&& nextFrame == 3)
 				{

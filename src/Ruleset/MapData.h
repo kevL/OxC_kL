@@ -143,7 +143,7 @@ private:
 				int value);
 
 		/// Gets whether this is an animated ufo door.
-		bool isUFODoor() const;
+		bool isUfoDoor() const;
 		/// kL. Gets whether this stops LoS.
 		bool stopLOS() const; // kL
 		/// Gets whether this is a floor.

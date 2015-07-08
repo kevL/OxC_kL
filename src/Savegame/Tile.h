@@ -185,7 +185,7 @@ protected:
 		 */
 		bool isUfoDoorOpen(int part) const
 		{	return _objects[part] != NULL
-				&& _objects[part]->isUFODoor() == true
+				&& _objects[part]->isUfoDoor() == true
 				&& _curFrame[part] != 0; }
 //				&& _curFrame[part] != 4; } // <- not sure if 4 is ever relevant. It's not, see Tile::animate()
 		/// Closes ufo door.

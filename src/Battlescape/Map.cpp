@@ -960,10 +960,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 								{
 									if (itX > 0 && itY < endY)
 									{
-										const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0)); // Reaper sticks its righthind leg out through south wall if dir=1
+//										const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0)); // Reaper sticks its righthind leg out through south wall if dir=1
 
-										if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
-											|| tileSouthWest->getMapData(O_NORTHWALL) == NULL) // or do this check specifically for Reapers
+//										if (tileSouthWest == NULL // hopefully Draw Main Unit will keep things covered if this fails.
+//											|| tileSouthWest->getMapData(O_NORTHWALL) == NULL) // or do this check specifically for Reapers
 										{
 //											unitNorthValid = true;
 
@@ -1108,7 +1108,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											{
 												if (tileWest->isDiscovered(0) == true
 													&& (tileWest->getMapData(O_WESTWALL)->isDoor() == true
-														|| tileWest->getMapData(O_WESTWALL)->isUFODoor() == true))
+														|| tileWest->getMapData(O_WESTWALL)->isUfoDoor() == true))
 												{
 													wallShade = tileWest->getShade();
 												}
@@ -1130,7 +1130,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										{
 											if (tileWest->isDiscovered(1) == true
 												&& (tileWest->getMapData(O_NORTHWALL)->isDoor() == true
-													|| tileWest->getMapData(O_NORTHWALL)->isUFODoor() == true))
+													|| tileWest->getMapData(O_NORTHWALL)->isUfoDoor() == true))
 											{
 												wallShade = tileWest->getShade();
 											}
@@ -1469,7 +1469,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 							if (tile->isDiscovered(0) == true
 								&& (tile->getMapData(O_WESTWALL)->isDoor() == true
-									|| tile->getMapData(O_WESTWALL)->isUFODoor() == true))
+									|| tile->getMapData(O_WESTWALL)->isUfoDoor() == true))
 							{
 								wallShade = tile->getShade();
 							}
@@ -1491,7 +1491,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 							if (tile->isDiscovered(1) == true
 								&& (tile->getMapData(O_NORTHWALL)->isDoor() == true
-									|| tile->getMapData(O_NORTHWALL)->isUFODoor() == true))
+									|| tile->getMapData(O_NORTHWALL)->isUfoDoor() == true))
 							{
 								wallShade = tile->getShade();
 							}
@@ -1679,7 +1679,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						// end hilltop Redraw.
 
 
-						// Redraw unitNorth when it's on a reverse slope. Or level slope. Or moving NS along westerly wall
+						// Redraw unitNorth when it's on a reverse slope. Or level slope. Or moving NS along westerly wall. Or if it's a snake ... with a long tail.
 						if (itY > 0
 							&& tile->getMapData(O_NORTHWALL) == NULL)
 						{
@@ -1718,8 +1718,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 //										srfSprite = NULL;
 										if (srfSprite)
 										{
-											if (kL_Debug_stand) Log(LOG_INFO) << ". drawUnit [40]";
-											if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [45]";
+											if (kL_Debug_stand && unitNorth->getStatus() == STATUS_STANDING) Log(LOG_INFO) << ". drawUnit [40]";
+											if (kL_Debug_walk && unitNorth->getStatus() == STATUS_WALKING) Log(LOG_INFO) << ". drawUnit [45]";
 											if (tileNorth->isDiscovered(2) == true)
 												shade = tileNorth->getShade();
 											else
@@ -1757,7 +1757,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						// Redraw westerly units that are moving easterly-westerly.
 						if (itX > 0
 							&& unit == NULL
-							&& (hasFloor == true									// special handling for moving units concealed by current floorTile.
+							&& (hasFloor == true						// special handling for moving units concealed by current floorTile.
 								|| tile->getMapData(O_OBJECT) != NULL))	// non-bigWall content-object might act as flooring
 						{
 							// If not unitSouth, unitSouthWest, (or unit).
@@ -1787,17 +1787,21 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&& tileWest->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK
 											&& tileWest->getMapData(O_OBJECT)->getBigWall() != BIGWALL_E_S))
 									{
+										//Log(LOG_INFO) << "tileWest Object NULL";
 										if (unitWest->getDirection() == 2
 											|| unitWest->getDirection() == 6)
 										{
-											if ((tile->getMapData(O_WESTWALL) == NULL				// redundant, due to
-													|| tile->isUfoDoorOpen(O_WESTWALL) == true)	// this. <- checks if westWall is valid
+											//Log(LOG_INFO) << ". dir 2 / 6";
+											if ((tile->getMapData(O_WESTWALL) == NULL			// redundant, due to
+//													|| tile->isUfoDoorOpen(O_WESTWALL) == true)	// this. <- checks if westWall is valid
+													|| tile->getMapData(O_WESTWALL)->getTUCostObject(MT_WALK) != 255)
 												&& (tile->getMapData(O_OBJECT) == NULL
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& std::abs(tileWest->getTerrainLevel() - tile->getTerrainLevel()) < 13) // positive means Tile is higher
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST))
 											{
+												//Log(LOG_INFO) << ". . tile No westwall OR object";
 												const Tile* const tileSouth = _battleSave->getTile(mapPosition + Position(0,1,0));
 
 												if (tileSouth == NULL
@@ -1810,21 +1814,27 @@ void Map::drawTerrain(Surface* const surface) // private.
 																&& tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_W_N))))
 //														&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 												{
+													//Log(LOG_INFO) << ". . . tileSouth No northwall OR object";
 													const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 													if (tileSouthWest == NULL
 														|| (tileSouthWest->getUnit() == NULL
 															&& (tileSouthWest->getMapData(O_NORTHWALL) == NULL
-																|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true)
+																|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true
+																|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 															&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255 // <- maybe
+																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) < 6 // from Dir=1/5
+																	// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																	&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																	&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
 																|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE
 																|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
 																|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH)))
 													{
+														//Log(LOG_INFO) << ". . . . tileSouthWest No northwall OR object";
+														//Log(LOG_INFO) << ". . . . REDRAW halfRight";
 														redraw = true;
 														halfRight = true;
 													}
@@ -1836,6 +1846,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&& (unitWest->getDirection() == 1
 												|| unitWest->getDirection() == 5))
 										{
+											//Log(LOG_INFO) << ". dir 1 / 5";
 											if ((tile->getMapData(O_WESTWALL) == NULL		// or tu != 255, ie. isWalkable rubble that lets sight pass over it
 													|| tile->isUfoDoorOpen(O_WESTWALL) == true)
 												&& (tile->getMapData(O_NORTHWALL) == NULL	// or tu != 255, ie. isWalkable rubble that lets sight pass over it
@@ -1846,6 +1857,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 //														&& tile->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255)))
 														&& tile->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
 											{
+												//Log(LOG_INFO) << ". . tile No westwall OR object";
 												const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
 
 												if (tileNorth == NULL
@@ -1854,6 +1866,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 														&& std::abs(tileWest->getTerrainLevel() - tileNorth->getTerrainLevel()) < 13	// positive means tileNorth is higher
 														&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() < 13))				// positive means Tile is higher
 												{
+													//Log(LOG_INFO) << ". . . tileNorth No object";
 													const Tile* const tileSouth = _battleSave->getTile(mapPosition + Position(0,1,0));
 
 													if (tileSouth == NULL
@@ -1866,12 +1879,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 																	&& tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_W_N))))
 //															&& tileSouth->getUnit() == NULL)) // unless unit is short and lets sight pass overtop. DOES NOT BLOCK!
 													{
+														//Log(LOG_INFO) << ". . . . tileSouth No northwall OR object";
 														const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 														if (tileSouthWest == NULL
 															|| (tileSouthWest->getUnit() == NULL
 																&& (tileSouthWest->getMapData(O_NORTHWALL) == NULL
-																	|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true)
+																	|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true
+																	|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 																&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255
@@ -1882,6 +1897,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE
 																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST)))
 														{
+															//Log(LOG_INFO) << ". . . . . tileSouthWest No northwall OR object";
+															//Log(LOG_INFO) << ". . . . . REDRAW";
 															redraw = true;
 
 															const Tile* const tileSouthSouthWest = _battleSave->getTile(mapPosition + Position(-1,2,0));
@@ -1894,26 +1911,38 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL)) // <- needs more ...
 															{
+																//Log(LOG_INFO) << ". . . . . . tileSouthWest object OR tileSouthSouthWest northwall";
 																if (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL // confusing .... re. needs more above^ (this seems to be for large units only)
 																	&& unitWest->getArmor()->getSize() == 2)
 																{
+																	//Log(LOG_INFO) << ". . . . . . . large unit, Cancel redraw [1]";
 																	redraw = false;
 																}
 																else
+																{
+																	//Log(LOG_INFO) << ". . . . . . . halfRight TRUE";
 																	halfRight = true;
+																}
 															}
 															else
 															{
+																//Log(LOG_INFO) << ". . . . . . tileSouthWest No object AND tileSouthSouthWest No northwall";
 																if (tileSouthSouthWest != NULL
-																	&& (tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL
-																		|| (tileSouthSouthWest->getMapData(O_OBJECT) != NULL
-																			&& tileSouthSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW)))
+																		&& (tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL
+																			|| (tileSouthSouthWest->getMapData(O_OBJECT) != NULL
+																				&& tileSouthSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW)))
 																{
+																	//Log(LOG_INFO) << ". . . . . . . tileSouthSouthWest northwall OR diagBigWall, Cancel redraw [2]";
 																	redraw = false;
 																}
-																else
+																else if (tileSouthWest->getMapData(O_NORTHWALL) == NULL)
+																{
+																	//Log(LOG_INFO) << ". . . . . . . halfRight FALSE";
 																	halfRight = false;
+																}
+																else
+																	halfRight = true;
 															}
 														}
 													}
@@ -1924,6 +1953,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 									if (redraw == true)
 									{
+										//Log(LOG_INFO) << "Redraw unitWest";
 										quad = tileWest->getPosition().x - unitWest->getPosition().x
 											+ (tileWest->getPosition().y - unitWest->getPosition().y) * 2;
 
@@ -2011,6 +2041,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 														&& tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& tile->getTerrainLevel() < tileNorthWest->getTerrainLevel())))
 											{
+												//Log(LOG_INFO) << "unitNorthWest walk";
 												if (tile->getMapData(O_OBJECT) == NULL // exposed floor, basically.
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()) < 13 // positive means Tile is higher
@@ -2018,6 +2049,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S)
 												{
+													//Log(LOG_INFO) << ". tile No object";
 													// if tileWest is blocking sight, draw unit halfRight
 													// if tileNorth is blocking sight, draw unit halfLeft
 													// else draw Full
@@ -2041,13 +2073,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 														|| (tileWest->getUnit() != NULL
 															&& tileWest->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
 													{
+														//Log(LOG_INFO) << ". . tileWest object, halfRight TRUE";
 														halfRight = true;
 													}
 
 													if ((tile->getMapData(O_NORTHWALL) != NULL			// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 															&& tile->isUfoDoorOpen(O_NORTHWALL) == false)
 														|| (tileNorth->getMapData(O_WESTWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
-															&& tileNorth->isUfoDoorOpen(O_WESTWALL) == false)
+															&& ((tileNorth->getMapData(O_WESTWALL)->isUfoDoor() == true
+																	&& tileNorth->isUfoDoorOpen(O_WESTWALL) == false)
+																|| tileNorth->getMapData(O_WESTWALL)->getTUCostObject(MT_WALK) == 255))
 														|| (tileNorth->getMapData(O_OBJECT) != NULL
 															&& ((tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 																	&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
@@ -2061,6 +2096,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 														|| (tileNorth->getUnit() != NULL
 															&& tileNorth->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
 													{
+														//Log(LOG_INFO) << ". . tileNorth object, halfLeft TRUE";
 														halfLeft = true;
 													}
 
@@ -2070,6 +2106,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 															|| (tileWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																&& tileWest->getMapData(O_OBJECT)->getSprite(0) != 42)))
 													{
+														//Log(LOG_INFO) << ". . REDRAW";
 														quad = tileNorthWest->getPosition().x - unitNorthWest->getPosition().x
 															+ (tileNorthWest->getPosition().y - unitNorthWest->getPosition().y) * 2;
 
@@ -2588,26 +2625,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 								}
 							} */
 
-
-/*							if (unit->getBreathFrame() > 0)
-							{
-								// kL_note: Don't throw my offsets off ...
-								int bubbleOffset_x;
-								if (unit->getStatus() == STATUS_AIMING)	// enlarge the unit sprite when aiming to accommodate the weapon
-									bubbleOffset_x = 0;					// adjust as necessary
-								else
-									bubbleOffset_x = walkOffset.x;
-
-								const int bubbleOffset_y = walkOffset.y + (22 - unit->getHeight()); // lower the bubbles for shorter or kneeling units
-
-								srfSprite = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
-								if (srfSprite)
-									srfSprite->blitNShade(
-											surface,
-											screenPosition.x + bubbleOffset_x,
-											screenPosition.y + bubbleOffset_y - 30,
-											tileShade);
-							} */
 
 							// Redraw northWall in tileSouthSouthWest
 							if (itX > 0 && itY < endY - 1				// Reaper sticks its righthind leg out through southerly wall

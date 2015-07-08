@@ -1002,7 +1002,7 @@ int Pathfinding::getTUCostPF(
 						++sides;
 
 						if (   startTile->getMapData(O_NORTHWALL)->isDoor() == true
-							|| startTile->getMapData(O_NORTHWALL)->isUFODoor() == true)
+							|| startTile->getMapData(O_NORTHWALL)->isUfoDoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[N] = TRUE, wallTU = " << wallTU;
 							if (wallTU > _openDoor) // don't let large unit parts reset _openDoor prematurely
@@ -1032,7 +1032,7 @@ int Pathfinding::getTUCostPF(
 							++sides;
 
 							if (   destTile->getMapData(O_WESTWALL)->isDoor() == true
-								|| destTile->getMapData(O_WESTWALL)->isUFODoor() == true)
+								|| destTile->getMapData(O_WESTWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE, wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1053,7 +1053,7 @@ int Pathfinding::getTUCostPF(
 							++sides;
 
 							if (   aboveDestTile->getMapData(O_WESTWALL)->isDoor() == true
-								|| aboveDestTile->getMapData(O_WESTWALL)->isUFODoor() == true)
+								|| aboveDestTile->getMapData(O_WESTWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down), wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1083,7 +1083,7 @@ int Pathfinding::getTUCostPF(
 							++sides;
 
 							if (   destTile->getMapData(O_NORTHWALL)->isDoor() == true
-								|| destTile->getMapData(O_NORTHWALL)->isUFODoor() == true)
+								|| destTile->getMapData(O_NORTHWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE, wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1104,7 +1104,7 @@ int Pathfinding::getTUCostPF(
 							++sides;
 
 							if (   aboveDestTile->getMapData(O_NORTHWALL)->isDoor() == true
-								|| aboveDestTile->getMapData(O_NORTHWALL)->isUFODoor() == true)
+								|| aboveDestTile->getMapData(O_NORTHWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down), wallTU = " << wallTU;
 								if (wallTU > _openDoor)
@@ -1128,7 +1128,7 @@ int Pathfinding::getTUCostPF(
 						++sides;
 
 						if (   startTile->getMapData(O_WESTWALL)->isDoor() == true
-							|| startTile->getMapData(O_WESTWALL)->isUFODoor() == true)
+							|| startTile->getMapData(O_WESTWALL)->isUfoDoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[W] = TRUE, wallTU = " << wallTU;
 							if (wallTU > _openDoor)
@@ -1760,7 +1760,7 @@ BIGWALL_E_S		// 8
 	if (missileTarget != NULL
 		&& tile->getMapData(part) != NULL
 		&& (tile->getMapData(part)->isDoor() == true
-			|| (tile->getMapData(part)->isUFODoor() == true
+			|| (tile->getMapData(part)->isUfoDoor() == true
 				&& tile->isUfoDoorOpen(part) == false)))
 	{
 		return true;
@@ -2319,65 +2319,65 @@ std::vector<int> Pathfinding::copyPath() const
 	{
 		case 0:
 			if (s->getMapData(O_NORTHWALL)
-				&& s->getMapData(O_NORTHWALL)->isUFODoor()
+				&& s->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_NORTHWALL))
 			return s->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 		break;
 		case 1:
 			if (s->getMapData(O_NORTHWALL)
-				&& s->getMapData(O_NORTHWALL)->isUFODoor()
+				&& s->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_NORTHWALL))
 			return s->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 			if (d->getMapData(O_WESTWALL)
-				&& d->getMapData(O_WESTWALL)->isUFODoor()
+				&& d->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_WESTWALL))
 			return d->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 2:
 			if (d->getMapData(O_WESTWALL)
-				&& d->getMapData(O_WESTWALL)->isUFODoor()
+				&& d->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_WESTWALL))
 			return d->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 3:
 			if (d->getMapData(O_NORTHWALL)
-				&& d->getMapData(O_NORTHWALL)->isUFODoor()
+				&& d->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_NORTHWALL))
 			return d->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 			if (d->getMapData(O_WESTWALL)
-				&& d->getMapData(O_WESTWALL)->isUFODoor()
+				&& d->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_WESTWALL))
 			return d->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 4:
 			if (d->getMapData(O_NORTHWALL)
-				&& d->getMapData(O_NORTHWALL)->isUFODoor()
+				&& d->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_NORTHWALL))
 			return d->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 		break;
 		case 5:
 			if (d->getMapData(O_NORTHWALL)
-				&& d->getMapData(O_NORTHWALL)->isUFODoor()
+				&& d->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_NORTHWALL))
 			return d->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 			if (s->getMapData(O_WESTWALL)
-				&& s->getMapData(O_WESTWALL)->isUFODoor()
+				&& s->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_WESTWALL))
 			return s->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 6:
 			if (s->getMapData(O_WESTWALL)
-				&& s->getMapData(O_WESTWALL)->isUFODoor()
+				&& s->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_WESTWALL))
 			return s->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;
 		case 7:
 			if (s->getMapData(O_NORTHWALL)
-				&& s->getMapData(O_NORTHWALL)->isUFODoor()
+				&& s->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_NORTHWALL))
 			return s->getMapData(O_NORTHWALL)->getTUCost(_moveType);
 			if (s->getMapData(O_WESTWALL)
-				&& s->getMapData(O_WESTWALL)->isUFODoor()
+				&& s->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_WESTWALL))
 			return s->getMapData(O_WESTWALL)->getTUCost(_moveType);
 		break;

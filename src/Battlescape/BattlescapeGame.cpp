@@ -3612,10 +3612,10 @@ bool BattlescapeGame::getKneelReserved()
 
 /**
  * Checks if a unit has moved next to a proximity grenade.
- * Checks one tile around the unit in every direction.
- * For a large unit we check every tile it occupies.
+ * @note Checks one tile around the unit in every direction. For a large unit
+ * check every tile the unit occupies.
  * @param unit - pointer to a BattleUnit
- * @return, true if a proximity grenade was triggered
+ * @return, true if a proximity grenade is triggered
  */
 bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 {
