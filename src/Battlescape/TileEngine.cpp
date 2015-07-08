@@ -88,7 +88,8 @@ TileEngine::TileEngine(
 		_voxelData(voxelData),
 		_unitLighting(true),
 		_powerE(-1),
-		_powerT(-1)
+		_powerT(-1),
+		_spotSound(true)
 //		_missileDirection(-1)
 {}
 
@@ -484,7 +485,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 								spottedUnit->setUnitVisible();
 								spottedUnit->getTile()->setTileVisible();
 
-								if (ret == true // play aggro sound if non-MC'd xCom unit spots a not-previously-visible hostile.
+								if (_spotSound == true
+									&& ret == true // play aggro sound if non-MC'd xCom unit spots a not-previously-visible hostile.
 									&& unit->getOriginalFaction() == FACTION_PLAYER
 									&& spottedUnit->getFaction() == FACTION_HOSTILE)
 								{
@@ -751,9 +753,11 @@ void TileEngine::calculateFOV(const Position& pos)
 
 /**
  * Recalculates FOV of all conscious units on the battlefield.
+ * @param spotSound - true to play new-unit-spotted aggro sound (default true, false to stop aggro sound during turn rollovers)
  */
-void TileEngine::recalculateFOV()
+void TileEngine::recalculateFOV(bool spotSound)
 {
+	_spotSound = spotSound;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -762,6 +766,7 @@ void TileEngine::recalculateFOV()
 		if ((*i)->getTile() != NULL)
 			calculateFOV(*i);
 	}
+	_spotSound = true;
 }
 
 /**

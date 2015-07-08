@@ -237,7 +237,7 @@ void ExplosionBState::init()
 				}
 
 				Explosion* const explosion = new Explosion( // animation
-														pos + Position(10,10,0), // jogg the anim down a few pixels. Tks.
+														pos + Position(11,11,0), // jogg the anim down a few pixels. Tks.
 														frameStart,
 														frameDelay,
 														true);
@@ -261,8 +261,6 @@ void ExplosionBState::init()
 				sound = ResourcePack::LARGE_EXPLOSION;
 
 			if (sound != -1)
-//				_parent->getResourcePack()->getSoundByDepth(
-//														_parent->getDepth(),
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												sound)
@@ -307,8 +305,6 @@ void ExplosionBState::init()
 		}
 
 		if (sound != -1)
-//			_parent->getResourcePack()->getSoundByDepth(
-//													_parent->getDepth(),
 			_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
 											sound)
@@ -334,8 +330,7 @@ void ExplosionBState::init()
 		else
 			hitResult = 0;
 
-		//Log(LOG_INFO) << "ExplB:startFrame = " << startFrame;
-		Explosion* const explosion = new Explosion( // animation. Don't turn the tile
+		Explosion* const explosion = new Explosion( // animation.
 												_center,
 												startFrame,
 												0,

@@ -43,7 +43,8 @@ struct BattleAction;
 /**
  * A utility class that handles lighting and calculations in 3D-space on the
  * battlefield - as well as opening and closing doors.
- * @note This function does not handle any graphics or sounds.
+ * @note This function does not handle any graphics or sounds - except doggie
+ * bark in calculateFOV().
  */
 class TileEngine
 {
@@ -58,7 +59,9 @@ private:
 
 		heightFromCenter[11];
 
-	bool _unitLighting;
+	bool
+		_spotSound,
+		_unitLighting;
 	int
 //		_missileDirection,
 		_powerE, // effective power that actually explodes on a tile that's hit by HE.
@@ -107,7 +110,7 @@ private:
 		/// Calculates Field of View, including line of sight of all units within range of the Position
 		void calculateFOV(const Position& pos);
 		/// Recalculates FOV of all units in-game.
-		void recalculateFOV();
+		void recalculateFOV(bool spotSound = true);
 
 		/// Checks visibility of a unit on this tile.
 		bool visible(

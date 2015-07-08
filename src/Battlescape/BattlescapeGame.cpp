@@ -3641,8 +3641,8 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 						++ty)
 				{
 					Tile* const tile = _battleSave->getTile(unit->getPosition()
-																+ Position( x, y,0)
-																+ Position(tx,ty,0));
+																   + Position(x,y,0)
+																   + Position(tx,ty,0));
 					if (tile != NULL)
 					{
 						for (std::vector<BattleItem*>::const_iterator
@@ -3674,8 +3674,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 																	pos,
 																	*i,
 																	(*i)->getPreviousOwner()));
-
-									_battleSave->removeItem(*i);
+									_battleSave->removeItem(*i); // does/should this even be done (also done at end of ExplosionBState) -> causes a double-explosion if remarked here.
 
 									unit->setCache(NULL);
 									getMap()->cacheUnit(unit);

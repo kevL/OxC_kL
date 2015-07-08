@@ -1423,7 +1423,7 @@ bool SavedBattleGame::endBattlePhase()
 
 	// redo calculateFOV() *after* aliens & civies have been set
 	// notVisible -> AND *only* after a calcLighting has been done !
-	_tileEngine->recalculateFOV();
+	_tileEngine->recalculateFOV(false);
 
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
@@ -1586,8 +1586,12 @@ void SavedBattleGame::randomizeItemLocations(Tile* const tile)
 
 /**
  * Removes an item from the game - when ammo item is depleted for example.
- * @note Due to strange design the item has to be removed from the tile it is on
- * too if it is on a tile.
+ * @note Items need to be checked for removal from three vectors:
+ *		- tile inventory
+ *		- battleunit inventory
+ *		- battlegame-items container
+ * Upon removal the pointer to the item is kept in the '_deleted' vector that is
+ * flushed and destroyed in the SavedBattleGame dTor.
  * @param item - pointer to an item to remove
  */
 void SavedBattleGame::removeItem(BattleItem* const item)
@@ -1633,25 +1637,22 @@ void SavedBattleGame::removeItem(BattleItem* const item)
 		if (*i == item)
 		{
 			_items.erase(i);
-			return;
+			break;
 		}
 	}
 
 	_deleted.push_back(item);
-
+}
 /*	for (int i = 0; i < _mapSize; ++i)
-	{
-		for (std::vector<BattleItem*>::const_iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
-		{
-			if ((*it) == item)
+		for (std::vector<BattleItem*>::const_iterator j = _tiles[i]->getInventory()->begin(); j != _tiles[i]->getInventory()->end();)
+			if ((*j) == item)
 			{
-				it = _tiles[i]->getInventory()->erase(it);
+				j = _tiles[i]->getInventory()->erase(j);
 				return;
 			}
-			++it;
+			++j;
 		}
 	} */
-}
 
 /**
  * Sets whether the mission was aborted or successful.

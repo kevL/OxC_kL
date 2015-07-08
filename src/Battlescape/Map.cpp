@@ -1929,9 +1929,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 															{
 																//Log(LOG_INFO) << ". . . . . . tileSouthWest No object AND tileSouthSouthWest No northwall";
 																if (tileSouthSouthWest != NULL
-																		&& (tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL
-																			|| (tileSouthSouthWest->getMapData(O_OBJECT) != NULL
-																				&& tileSouthSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW)))
+																	&& (tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL
+																		|| (tileSouthSouthWest->getMapData(O_OBJECT) != NULL
+																			&& tileSouthSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW)))
 																{
 																	//Log(LOG_INFO) << ". . . . . . . tileSouthSouthWest northwall OR diagBigWall, Cancel redraw [2]";
 																	redraw = false;
