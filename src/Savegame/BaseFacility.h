@@ -34,7 +34,7 @@ class Ruleset;
 
 /**
  * Represents a base facility placed in a base.
- * Contains variable info about a facility like position and build time.
+ * @note Contains variable info about a facility like position and build time.
  * @sa RuleBaseFacility
  */
 class BaseFacility
@@ -46,16 +46,16 @@ private:
 		_x,
 		_y;
 
-	Base* _base;
+	const Base* _base;
 	const Craft* _craft;
-	RuleBaseFacility* _rules;
+	const RuleBaseFacility* _facRule;
 
 
 	public:
 		/// Creates a base facility of the specified type.
 		BaseFacility(
-				RuleBaseFacility* rules,
-				Base* base);
+				const RuleBaseFacility* const facRule,
+				const Base* const base);
 		/// Cleans up the base facility.
 		~BaseFacility();
 
@@ -65,7 +65,7 @@ private:
 		YAML::Node save() const;
 
 		/// Gets the facility's ruleset.
-		RuleBaseFacility* getRules() const;
+		const RuleBaseFacility* getRules() const;
 
 		/// Gets the facility's X position.
 		int getX() const;

@@ -37,8 +37,7 @@ class Window;
 
 
 /**
- * Window shown with all the facilities
- * available to build.
+ * Window shown with all the facilities available to build.
  */
 class BuildFacilitiesState
 	:

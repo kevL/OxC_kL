@@ -74,7 +74,7 @@ PlaceStartFacilityState::~PlaceStartFacilityState()
  */
 void PlaceStartFacilityState::viewClick(Action*)
 {
-	if (_view->isPlaceable(_rule) == false)
+	if (_view->isPlaceable(_facRule) == false)
 	{
 		_game->popState();
 		_game->pushState(new ErrorMessageState(
@@ -87,7 +87,7 @@ void PlaceStartFacilityState::viewClick(Action*)
 	else
 	{
 		BaseFacility* const fac = new BaseFacility(
-												_rule,
+												_facRule,
 												_base);
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());

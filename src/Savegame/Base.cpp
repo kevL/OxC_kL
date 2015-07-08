@@ -784,7 +784,7 @@ int Base::getAvailableQuarters() const
  * well as any armor that this Base's Soldiers are currently wearing.
  * @return, storage space
  */
-double Base::getUsedStores()
+double Base::getUsedStores() const
 {
 	double total = _items->getTotalSize(_rules); // items
 
@@ -869,7 +869,7 @@ double Base::getUsedStores()
  * @param offset - adjusts used capacity (default 0.)
  * @return, true if this Base's stores are over their limit
  */
-bool Base::storesOverfull(double offset)
+bool Base::storesOverfull(double offset) const
 {
 	const double
 		total = static_cast<double>(getAvailableStores()),

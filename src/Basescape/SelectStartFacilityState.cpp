@@ -30,16 +30,16 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Interface/Window.h"
+//#include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
+//#include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Savegame/SavedGame.h"
+//#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -48,8 +48,8 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Build Facilities window.
  * @param base	- pointer to the Base to get info from
- * @param state	- pointer to the base state to refresh
- * @param globe	- pointer to the Blobe to refresh
+ * @param state	- pointer to the base State to refresh
+ * @param globe	- pointer to the Globe to refresh
  */
 SelectStartFacilityState::SelectStartFacilityState(
 		Base* base,
@@ -79,9 +79,9 @@ SelectStartFacilityState::~SelectStartFacilityState()
 {}
 
 /**
- * Populates the build list from the current "available" facilities.
+ * Populates the build list from the currently available facilities.
  */
-void SelectStartFacilityState::populateBuildList()
+void SelectStartFacilityState::populateBuildList() // virtual. Cf, BuildFacilitiesState::PopulateBuildList()
 {
 	_lstFacilities->clearList();
 
@@ -135,7 +135,7 @@ void SelectStartFacilityState::lstFacilitiesClick(Action*)
 
 /**
  * Callback from PlaceStartFacilityState.
- * Removes placed facility from the list.
+ * @note Removes placed facility from the list.
  */
 void SelectStartFacilityState::facilityBuilt()
 {

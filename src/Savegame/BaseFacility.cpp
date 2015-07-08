@@ -29,14 +29,14 @@ namespace OpenXcom
 
 /**
  * Initializes a base facility of the specified type.
- * @param rules	- pointer to RuleBaseFacility
+ * @param facRule	- pointer to RuleBaseFacility
  * @param base	- pointer to the Base of this facility
  */
 BaseFacility::BaseFacility(
-		RuleBaseFacility* rules,
-		Base* base)
+		const RuleBaseFacility* const facRule,
+		const Base* const base)
 	:
-		_rules(rules),
+		_facRule(facRule),
 		_base(base),
 		_x(-1),
 		_y(-1),
@@ -70,7 +70,7 @@ YAML::Node BaseFacility::save() const
 {
 	YAML::Node node;
 
-	node["type"]	= _rules->getType();
+	node["type"]	= _facRule->getType();
 	node["x"]		= _x;
 	node["y"]		= _y;
 
@@ -84,9 +84,9 @@ YAML::Node BaseFacility::save() const
  * Returns the ruleset for this BaseFacility's type.
  * @return, pointer to RuleBaseFacility
  */
-RuleBaseFacility* BaseFacility::getRules() const
+const RuleBaseFacility* BaseFacility::getRules() const
 {
-	return _rules;
+	return _facRule;
 }
 
 /**
@@ -160,20 +160,20 @@ bool BaseFacility::inUse() const
 	if (_buildTime != 0)
 		return false;
 
-	return (_rules->getPersonnel() > 0
-			&& _base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters())
-		|| (_rules->getStorage() > 0
-			&& _base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores())
-		|| (_rules->getLaboratories() > 0
-			&& _base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories())
-		|| (_rules->getWorkshops() > 0
-			&& _base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops())
-		|| (_rules->getCrafts() > 0
-			&& _base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars())
-		|| (_rules->getPsiLaboratories() > 0
-			&& _base->getAvailablePsiLabs() - _rules->getPsiLaboratories() < _base->getUsedPsiLabs())
-		|| (_rules->getAliens() > 0
-			&& _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment());
+	return (_facRule->getPersonnel() > 0
+			&& _base->getAvailableQuarters() - _facRule->getPersonnel() < _base->getUsedQuarters())
+		|| (_facRule->getStorage() > 0
+			&& _base->getAvailableStores() - _facRule->getStorage() < _base->getUsedStores())
+		|| (_facRule->getLaboratories() > 0
+			&& _base->getAvailableLaboratories() - _facRule->getLaboratories() < _base->getUsedLaboratories())
+		|| (_facRule->getWorkshops() > 0
+			&& _base->getAvailableWorkshops() - _facRule->getWorkshops() < _base->getUsedWorkshops())
+		|| (_facRule->getCrafts() > 0
+			&& _base->getAvailableHangars() - _facRule->getCrafts() < _base->getUsedHangars())
+		|| (_facRule->getPsiLaboratories() > 0
+			&& _base->getAvailablePsiLabs() - _facRule->getPsiLaboratories() < _base->getUsedPsiLabs())
+		|| (_facRule->getAliens() > 0
+			&& _base->getAvailableContainment() - _facRule->getAliens() < _base->getUsedContainment());
 }
 
 /**

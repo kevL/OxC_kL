@@ -62,7 +62,6 @@ BuildFacilitiesState::BuildFacilitiesState(
 								POPUP_VERTICAL);
 	_txtTitle		= new Text(118, 17, 197, 43);
 	_lstFacilities	= new TextList(101, 113, 200, 59);
-
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
 	setInterface("selectFacility");
@@ -107,7 +106,7 @@ BuildFacilitiesState::~BuildFacilitiesState()
 /**
  * Populates the build list from the current "available" facilities.
  */
-void BuildFacilitiesState::PopulateBuildList()
+void BuildFacilitiesState::PopulateBuildList() // virtual. Cf, SelectStartFacilityState::populateBuildList()
 {
 	const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
 	for (std::vector<std::string>::const_iterator

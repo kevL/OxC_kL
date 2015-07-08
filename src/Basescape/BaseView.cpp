@@ -61,7 +61,7 @@ BaseView::BaseView(
 			x,y),
 		_base(NULL),
 		_texture(NULL),
-		_dog(NULL),
+		_srfDog(NULL),
 		_selFacility(NULL),
 		_big(NULL),
 		_small(NULL),
@@ -186,9 +186,9 @@ void BaseView::setTexture(SurfaceSet* texture)
  * Changes the dog to use for drawing the at the base.
  * @param texture - pointer to Surface to use
  */
-void BaseView::setDog(Surface* dog)
+void BaseView::setDog(Surface* const dog)
 {
-	_dog = dog;
+	_srfDog = dog;
 }
 
 /**
@@ -760,7 +760,7 @@ void BaseView::draw()
 				}
 
 				if (hasDog == true
-					&& (   fac->getCraft() == NULL
+					&& (fac->getCraft() == NULL
 						|| fac->getCraft()->getStatus() == "STR_OUT"))
 				{
 					const int facSize = static_cast<int>(fac->getRules()->getSize());
@@ -782,9 +782,9 @@ void BaseView::draw()
 		const size_t i = RNG::generate(
 									0,
 									dogPosition.size() - 1);
-		_dog->setX(dogPosition[i].first);
-		_dog->setY(dogPosition[i].second);
-		_dog->blit(this);
+		_srfDog->setX(dogPosition[i].first);
+		_srfDog->setY(dogPosition[i].second);
+		_srfDog->blit(this);
 	}
 }
 

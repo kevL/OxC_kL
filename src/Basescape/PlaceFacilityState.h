@@ -35,8 +35,7 @@ class Window;
 
 
 /**
- * Window shown when the player tries to
- * build a facility.
+ * Window shown when the player tries to build a facility.
  */
 class PlaceFacilityState
 	:
@@ -46,7 +45,7 @@ class PlaceFacilityState
 protected:
 	Base* _base;
 	BaseView* _view;
-	RuleBaseFacility* _rule;
+	const RuleBaseFacility* _facRule;
 	Text
 		* _txtFacility,
 		* _txtCost,
@@ -62,8 +61,8 @@ protected:
 	public:
 		/// Creates the Place Facility state.
 		PlaceFacilityState(
-				Base* base,
-				RuleBaseFacility* rule);
+				Base* const base,
+				const RuleBaseFacility* const facRule);
 		/// Cleans up the Place Facility state.
 		~PlaceFacilityState();
 

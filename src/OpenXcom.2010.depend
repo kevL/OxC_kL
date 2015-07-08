@@ -4390,7 +4390,7 @@
 
 1433391317 f:\git\openxcom\src\resource\resourcepack.h
 
-1435614069 f:\git\openxcom\src\savegame\base.h
+1436388161 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1433212243 f:\git\openxcom\src\savegame\target.h
@@ -4445,11 +4445,11 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1434594570 f:\git\openxcom\src\basescape\baseview.h
+1436384861 f:\git\openxcom\src\basescape\baseview.h
 	"../Engine/InteractiveSurface.h"
 	"../Savegame/Base.h"
 
-1430149549 f:\git\openxcom\src\basescape\buildfacilitiesstate.h
+1436387299 f:\git\openxcom\src\basescape\buildfacilitiesstate.h
 	"../Engine/State.h"
 
 1432530531 f:\git\openxcom\src\basescape\craftinfostate.h
@@ -4505,7 +4505,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\weightedoptions.h
 
-1430149550 f:\git\openxcom\src\savegame\basefacility.h
+1436388140 f:\git\openxcom\src\savegame\basefacility.h
 
 1432721785 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
@@ -4516,7 +4516,7 @@
 
 1433537351 f:\git\openxcom\src\savegame\region.h
 
-1434594536 source:f:\git\openxcom\src\basescape\baseview.cpp
+1436386447 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -4536,7 +4536,7 @@
 
 1435731776 f:\git\openxcom\src\ruleset\rulecraft.h
 
-1431940002 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
+1436387363 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
 	"PlaceFacilityState.h"
 	"../Engine/Game.h"
@@ -4549,7 +4549,7 @@
 	"../Ruleset/RuleBaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1430149549 f:\git\openxcom\src\basescape\placefacilitystate.h
+1436388109 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
 1432688041 f:\git\openxcom\src\interface\textlist.h
@@ -4971,7 +4971,7 @@
 1430149549 f:\git\openxcom\src\basescape\researchinfostate.h
 	"../Engine/State.h"
 
-1431978166 source:f:\git\openxcom\src\basescape\placefacilitystate.cpp
+1436387409 source:f:\git\openxcom\src\basescape\placefacilitystate.cpp
 	"PlaceFacilityState.h"
 	"BaseView.h"
 	"../Engine/Game.h"
@@ -5008,7 +5008,7 @@
 1430149549 f:\git\openxcom\src\basescape\selectstartfacilitystate.h
 	"BuildFacilitiesState.h"
 
-1430149549 source:f:\git\openxcom\src\basescape\placestartfacilitystate.cpp
+1436386809 source:f:\git\openxcom\src\basescape\placestartfacilitystate.cpp
 	"PlaceStartFacilityState.h"
 	"BaseView.h"
 	"SelectStartFacilityState.h"
@@ -5021,7 +5021,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1430149549 f:\git\openxcom\src\basescape\placestartfacilitystate.h
+1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
 1432715019 source:f:\git\openxcom\src\basescape\purchasestate.cpp
@@ -5111,7 +5111,7 @@
 1430149549 f:\git\openxcom\src\basescape\sacksoldierstate.h
 	"../Engine/State.h"
 
-1431628515 source:f:\git\openxcom\src\basescape\selectstartfacilitystate.cpp
+1436387263 source:f:\git\openxcom\src\basescape\selectstartfacilitystate.cpp
 	"SelectStartFacilityState.h"
 	"PlaceLiftState.h"
 	"PlaceStartFacilityState.h"
@@ -5120,13 +5120,10 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
-	"../Interface/Window.h"
-	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
-	"../Savegame/SavedGame.h"
 
 1436122197 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
@@ -6224,7 +6221,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1436375897 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1436377499 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8609,7 +8606,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1435614159 source:f:\git\openxcom\src\savegame\base.cpp
+1436385640 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8636,7 +8633,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 source:f:\git\openxcom\src\savegame\basefacility.cpp
+1436385548 source:f:\git\openxcom\src\savegame\basefacility.cpp
 	"BaseFacility.h"
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"

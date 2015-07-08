@@ -30,8 +30,7 @@ class SelectStartFacilityState;
 
 
 /**
- * Window shown when the player tries to
- * build a facility.
+ * Window shown when the player tries to build a facility.
  */
 class PlaceStartFacilityState
 	:

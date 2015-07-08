@@ -46,7 +46,7 @@ class Vehicle;
 
 /**
  * Represents a player base on the globe.
- * Bases can contain facilities, personnel, crafts and equipment.
+ * @note Bases can contain facilities, personnel, crafts and equipment.
  */
 class Base
 	:
@@ -161,9 +161,9 @@ private:
 		int getAvailableQuarters() const;
 
 		/// Gets this Base's used storage space.
-		double getUsedStores();
+		double getUsedStores() const;
 		/// Checks if this Base's stores are overfull.
-		bool storesOverfull(double offset = 0.);
+		bool storesOverfull(double offset = 0.) const;
 
 		/// Gets this Base's available storage space.
 		int getAvailableStores() const;

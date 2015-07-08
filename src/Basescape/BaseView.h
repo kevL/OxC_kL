@@ -69,7 +69,7 @@ private:
 		* _small;
 	Language* _lang;
 	Surface
-		* _dog,
+		* _srfDog,
 		* _selector;
 	SurfaceSet* _texture;
 	Timer* _timer;
@@ -102,7 +102,7 @@ private:
 		/// Sets the texture for this base view.
 		void setTexture(SurfaceSet* texture);
 		/// Sets the dog for this base view.
-		void setDog(Surface* dog);
+		void setDog(Surface* const dog);
 
 		/// Gets the currently selected facility.
 		BaseFacility* getSelectedFacility() const;
