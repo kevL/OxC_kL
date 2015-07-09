@@ -41,21 +41,21 @@ enum UfopaediaTypeId
 	UFOPAEDIA_TYPE_TEXTIMAGE,			//  7
 	UFOPAEDIA_TYPE_TEXT,				//  8
 	UFOPAEDIA_TYPE_UFO,					//  9
-	UFOPAEDIA_TYPE_TFTD,				// 10
-	UFOPAEDIA_TYPE_TFTD_CRAFT,			// 11
-	UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON,	// 12
-	UFOPAEDIA_TYPE_TFTD_VEHICLE,		// 13
-	UFOPAEDIA_TYPE_TFTD_ITEM,			// 14
-	UFOPAEDIA_TYPE_TFTD_ARMOR,			// 15
-	UFOPAEDIA_TYPE_TFTD_BASE_FACILITY,	// 16
-	UFOPAEDIA_TYPE_TFTD_USO,			// 17
+//	UFOPAEDIA_TYPE_TFTD,				// 10
+//	UFOPAEDIA_TYPE_TFTD_CRAFT,			// 11
+//	UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON,	// 12
+//	UFOPAEDIA_TYPE_TFTD_VEHICLE,		// 13
+//	UFOPAEDIA_TYPE_TFTD_ITEM,			// 14
+//	UFOPAEDIA_TYPE_TFTD_ARMOR,			// 15
+//	UFOPAEDIA_TYPE_TFTD_BASE_FACILITY,	// 16
+//	UFOPAEDIA_TYPE_TFTD_USO,			// 17
 	UFOPAEDIA_TYPE_AWARD				// 18
 };
 
 
 /**
  * ArticleDefinition is the base class for all article types.
- * This class is used to store all information about articles required to
+ * @note This class is used to store all information about articles required to
  * generate an ArticleState from.
  */
 class ArticleDefinition
@@ -118,7 +118,8 @@ class ArticleDefinitionRect
 
 /**
  * ArticleDefinitionCraft defines articles for craft, e.g. SKYRANGER.
- * They have a large background image, a stats block and a description positioned differently.
+ * @note They have a large background image, a stats block and a description
+ * positioned differently.
  */
 class ArticleDefinitionCraft
 	:
@@ -144,7 +145,7 @@ class ArticleDefinitionCraft
 
 /**
  * ArticleDefinitionCraftWeapon defines articles for craft weapons, e.g. STINGRAY, AVALANCHE.
- * They have a large background image and a stats block.
+ * @note They have a large background image and a stats block.
  */
 class ArticleDefinitionCraftWeapon
 	:
@@ -206,10 +207,9 @@ class ArticleDefinitionTextImage
 };
 
 
-/**
- * ArticleDefinitionTextImage defines articles with text on the left and
- * an image on the right side of the screen, e.g. ALIEN LIFEFORMS, UFO COMPONENTS.
- */
+/*
+ * ArticleDefinitionTFTD
+ *
 class ArticleDefinitionTFTD
 	:
 		public ArticleDefinition
@@ -227,7 +227,7 @@ class ArticleDefinitionTFTD
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-};
+}; */
 
 /**
  * ArticleDefinitionBaseFacility defines articles for base facilities, e.g. Access lift.

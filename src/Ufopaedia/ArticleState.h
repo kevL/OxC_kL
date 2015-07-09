@@ -37,7 +37,7 @@ class TextButton;
 
 /**
  * UfopaediaArticle is the base class for all articles of various types.
- * It encapsulates the common characteristics.
+ * @note It encapsulates the common characteristics.
  */
 
 class ArticleState

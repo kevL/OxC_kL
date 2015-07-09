@@ -28,14 +28,14 @@
 #include "ArticleStateItem.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
-#include "ArticleStateTFTD.h"
-#include "ArticleStateTFTDArmor.h"
-#include "ArticleStateTFTDVehicle.h"
-#include "ArticleStateTFTDItem.h"
-#include "ArticleStateTFTDFacility.h"
-#include "ArticleStateTFTDCraft.h"
-#include "ArticleStateTFTDCraftWeapon.h"
-#include "ArticleStateTFTDUso.h"
+//#include "ArticleStateTFTD.h"
+//#include "ArticleStateTFTDArmor.h"
+//#include "ArticleStateTFTDVehicle.h"
+//#include "ArticleStateTFTDItem.h"
+//#include "ArticleStateTFTDFacility.h"
+//#include "ArticleStateTFTDCraft.h"
+//#include "ArticleStateTFTDCraftWeapon.h"
+//#include "ArticleStateTFTDUso.h"
 #include "ArticleStateUfo.h"
 #include "ArticleStateVehicle.h"
 #include "UfopaediaStartState.h"
@@ -154,7 +154,7 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
 		case UFOPAEDIA_TYPE_UFO:
 			return new ArticleStateUfo(dynamic_cast<ArticleDefinitionUfo*>(article));
 
-		case UFOPAEDIA_TYPE_TFTD:
+/*		case UFOPAEDIA_TYPE_TFTD:
 			return new ArticleStateTFTD(dynamic_cast<ArticleDefinitionTFTD*>(article));
 
 		case UFOPAEDIA_TYPE_TFTD_CRAFT:
@@ -176,7 +176,7 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
 			return new ArticleStateTFTDFacility(dynamic_cast<ArticleDefinitionTFTD*>(article));
 
 		case UFOPAEDIA_TYPE_TFTD_USO:
-			return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD*>(article));
+			return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD*>(article)); */
 
 		case UFOPAEDIA_TYPE_AWARD:
 			return new ArticleStateAward(dynamic_cast<ArticleDefinitionAward*>(article));

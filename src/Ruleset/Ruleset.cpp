@@ -777,14 +777,14 @@ void Ruleset::loadFile(const std::string& file) // protected.
 					case UFOPAEDIA_TYPE_TEXTIMAGE:			rule = new ArticleDefinitionTextImage();	break;
 					case UFOPAEDIA_TYPE_TEXT:				rule = new ArticleDefinitionText();			break;
 					case UFOPAEDIA_TYPE_UFO:				rule = new ArticleDefinitionUfo();			break;
-					case UFOPAEDIA_TYPE_TFTD:
+/*					case UFOPAEDIA_TYPE_TFTD:
 					case UFOPAEDIA_TYPE_TFTD_CRAFT:
 					case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
 					case UFOPAEDIA_TYPE_TFTD_VEHICLE:
 					case UFOPAEDIA_TYPE_TFTD_ITEM:
 					case UFOPAEDIA_TYPE_TFTD_ARMOR:
 					case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
-					case UFOPAEDIA_TYPE_TFTD_USO:			rule = new ArticleDefinitionTFTD();			break;
+					case UFOPAEDIA_TYPE_TFTD_USO:			rule = new ArticleDefinitionTFTD();			break; */
 					case UFOPAEDIA_TYPE_AWARD:				rule = new ArticleDefinitionAward();		break;
 
 					default:

@@ -251,20 +251,20 @@ void ArticleDefinitionTextImage::load(
 	text_width	= node["text_width"].as<int>(text_width);
 }
 
-/**
+/*
  * Constructor (only setting type of base class).
- */
+ *
 ArticleDefinitionTFTD::ArticleDefinitionTFTD()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_TFTD),
 		text_width(0)
-{}
+{} */
 
-/**
+/*
  * Loads the article definition from a YAML file.
  * @param node		- reference a YAML node
  * @param listOrder	- the list weight for this article
- */
+ *
 void ArticleDefinitionTFTD::load(
 		const YAML::Node& node,
 		int listOrder)
@@ -278,7 +278,7 @@ void ArticleDefinitionTFTD::load(
 	text		= node["text"]		.as<std::string>(text);
 	text_width	= node["text_width"].as<int>(150); // 95% of these won't need to be defined, so give it a default
 	weapon		= node["weapon"]	.as<std::string>(weapon);
-}
+} */
 
 /**
  * Constructor (only setting type of base class).

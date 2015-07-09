@@ -157,10 +157,10 @@ bool ResearchProject::getOffline() const
  */
 void ResearchProject::load(const YAML::Node& node)
 {
-	_assigned	= node["assigned"].as<int>(_assigned);
-	_spent		= node["spent"]	.as<int>(_spent);
-	_cost		= node["cost"]	.as<int>(_cost);
-	_offline	= node["offline"].as<bool>(_offline);
+	_assigned	= node["assigned"]	.as<int>(_assigned);
+	_spent		= node["spent"]		.as<int>(_spent);
+	_cost		= node["cost"]		.as<int>(_cost);
+	_offline	= node["offline"]	.as<bool>(_offline);
 
 }
 

@@ -101,7 +101,6 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
  * dTor.
  */
 ArticleStateTFTD::~ArticleStateTFTD()
-{
-}
+{}
 
 }

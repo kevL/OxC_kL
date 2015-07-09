@@ -177,7 +177,7 @@ void BaseView::setBase(Base* base)
  * Changes the texture to use for drawing the various base elements.
  * @param texture - pointer to SurfaceSet to use
  */
-void BaseView::setTexture(SurfaceSet* texture)
+void BaseView::setTexture(SurfaceSet* const texture)
 {
 	_texture = texture;
 }

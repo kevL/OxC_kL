@@ -100,7 +100,7 @@ private:
 		void setBase(Base* base);
 
 		/// Sets the texture for this base view.
-		void setTexture(SurfaceSet* texture);
+		void setTexture(SurfaceSet* const texture);
 		/// Sets the dog for this base view.
 		void setDog(Surface* const dog);
 
