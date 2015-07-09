@@ -9,6 +9,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_LASER_WEAPONS
     cost: 500
     points: 10
+    dependencies:
+      - STR_ELERIUM_115
   - name: STR_LASER_PISTOL
     cost: 1000
     points: 10
@@ -23,6 +25,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     cost: 4600
     points: 10
     dependencies:
+      - STR_ALIEN_ALLOYS
       - STR_LASER_RIFLE
   - name: STR_LASER_CANNON
     cost: 4200
@@ -246,7 +249,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_WASPITE_SOLDIER
       - STR_CYBERMITE_TERRORIST
   - name: STR_LEADER_PLUS
-    cost: 0
     requires:
       - STR_ALIEN_ORIGINS
     dependencies:
@@ -266,9 +268,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     dependencies:
       - STR_ALIEN_ORIGINS
       - STR_LEADER_PLUS
-  - name: STR_CYDONIA_DEP
-    cost: 0
-    points: 0
+  - name: STR_COMMANDER_PLUS
     unlocks:
       - STR_CYDONIA_OR_BUST
     requires:
@@ -283,7 +283,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     cost: 60000
     points: 60
     dependencies:
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
   - name: STR_HYPER_WAVE_DECODER
     cost: 67000
     points: 25
@@ -473,10 +473,9 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
   - name: STR_WASPITE
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERMITE_TERRORIST
@@ -487,22 +486,19 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CYBERMITE
-    cost: 0
     points: 50
     needItem: true
   - name: STR_WASPITE_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CYBERMITE_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
     unlocks:
       - STR_ALIEN_CONTAINMENT
-  - name: STR_ZOMBIE_CORPSE
+  - name: STR_ZOMBIE_CORPSE #note Can't get one of these
     cost: 1800
     points: 50
     lookup: STR_ZOMBIE_AUTOPSY
@@ -628,6 +624,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
+      - STR_WASPITE
+      - STR_CYBERMITE
       - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
       - STR_MUTON_CORPSE
@@ -639,6 +637,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_SILACOID_CORPSE
       - STR_CELATID_CORPSE
       - STR_REAPER_CORPSE
+      - STR_WASPITE_CORPSE
+      - STR_CYBERMITE_CORPSE
   - name: STR_FLOATER_LEADER
     cost: 192
     points: 50
@@ -670,7 +670,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_SOLDIER
     cost: 192
@@ -696,7 +696,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_ALIEN_TERROR
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
-  - name: STR_SNAKEMAN_MEDIC
+  - name: STR_SNAKEMAN_MEDIC # These don't exist in stock.
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
@@ -714,6 +714,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
+      - STR_WASPITE
+      - STR_CYBERMITE
       - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
       - STR_MUTON_CORPSE
@@ -725,6 +727,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_SILACOID_CORPSE
       - STR_CELATID_CORPSE
       - STR_REAPER_CORPSE
+      - STR_WASPITE_CORPSE
+      - STR_CYBERMITE_CORPSE
   - name: STR_SNAKEMAN_LEADER
     cost: 192
     points: 50
@@ -756,7 +760,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
   - name: STR_MUTON_SOLDIER
     cost: 192
@@ -840,6 +844,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
+      - STR_WASPITE
+      - STR_CYBERMITE
       - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
       - STR_MUTON_CORPSE
@@ -851,6 +857,8 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_SILACOID_CORPSE
       - STR_CELATID_CORPSE
       - STR_REAPER_CORPSE
+      - STR_WASPITE_CORPSE
+      - STR_CYBERMITE_CORPSE
   - name: STR_SECTOID_LEADER
     cost: 192
     points: 50
@@ -862,6 +870,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     lookup: STR_SECTOID
   - name: STR_SECTOID_ENGINEER
     cost: 192
+    points: 50
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -882,7 +891,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     lookup: STR_SECTOID
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_ETHEREAL_SOLDIER
@@ -909,27 +918,22 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_SECTOID
-    cost: 0
     points: 50
     needItem: true
   - name: STR_FLOATER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SNAKEMAN
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MUTON
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ETHEREAL
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERDISC_TERRORIST
@@ -940,7 +944,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CYBERDISC
-    cost: 0
     points: 50
     needItem: true
   - name: STR_REAPER_TERRORIST
@@ -951,7 +954,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_REAPER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_TERRORIST
@@ -962,7 +964,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SILACOID_TERRORIST
@@ -973,7 +974,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SILACOID
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CELATID_TERRORIST
@@ -984,7 +984,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CELATID
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOPOD_TERRORIST
@@ -995,114 +994,86 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SNAKEMAN_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_FLOATER_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MUTON_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ETHEREAL_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CYBERDISC_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_REAPER_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_CELATID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SILACOID_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SECTOPOD_AUTOPSY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_RESEARCH
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_HARVEST
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_ABDUCTION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_INFILTRATION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_BASE
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_TERROR
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_RETALIATION
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ALIEN_SUPPLY
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SMALL_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_MEDIUM_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_LARGE_SCOUT
-    cost: 0
     points: 50
     needItem: true
   - name: STR_HARVESTER
-    cost: 0
     points: 50
     needItem: true
   - name: STR_ABDUCTOR
-    cost: 0
     points: 50
     needItem: true
   - name: STR_TERROR_SHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_BATTLESHIP
-    cost: 0
     points: 50
     needItem: true
   - name: STR_SUPPLY_SHIP
-    cost: 0
     points: 50
     needItem: true
