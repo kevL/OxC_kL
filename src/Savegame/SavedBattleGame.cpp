@@ -1027,7 +1027,7 @@ BattleUnit* SavedBattleGame::getSelectedUnit() const
  * Sets the currently selected unit.
  * @param unit - pointer to a BattleUnit
  */
-void SavedBattleGame::setSelectedUnit(BattleUnit* unit)
+void SavedBattleGame::setSelectedUnit(BattleUnit* const unit)
 {
 	_selectedUnit = unit;
 }
@@ -1690,7 +1690,8 @@ void SavedBattleGame::addDestroyedObjective()
 	if (Options::battleAutoEnd == true
 		&& allObjectivesDestroyed() == true)
 	{
-		setSelectedUnit(NULL);
+//		setSelectedUnit(NULL);
+		_selectedUnit = NULL;
 		_battleState->getBattleGame()->cancelCurrentAction(true);
 		_battleState->getBattleGame()->requestEndTurn();
 	}

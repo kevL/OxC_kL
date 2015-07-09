@@ -251,7 +251,7 @@ private:
 		/// Gets the currently selected unit.
 		BattleUnit* getSelectedUnit() const;
 		/// Sets the currently selected unit.
-		void setSelectedUnit(BattleUnit* unit);
+		void setSelectedUnit(BattleUnit* const unit);
 		/// Selects the previous soldier.
 		BattleUnit* selectPreviousFactionUnit(
 				bool checkReselect = false,

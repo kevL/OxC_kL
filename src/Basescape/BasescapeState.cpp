@@ -106,8 +106,8 @@ BasescapeState::BasescapeState(
 	_btnManufacture	= new TextButton(128, 12, 192, 116);
 	_btnPurchase	= new TextButton( 64, 12, 192, 128);
 	_btnSell		= new TextButton( 64, 12, 256, 128);
-	_btnDaMatrix	= new TextButton(128, 12, 192, 140);
-	_btnTransfer	= new TextButton(128, 12, 192, 152);
+	_btnTransfer	= new TextButton(128, 12, 192, 140);
+	_btnDaMatrix	= new TextButton(128, 12, 192, 152);
 	_btnIncTrans	= new TextButton(128, 12, 192, 164);
 	_btnFacilities	= new TextButton(128, 12, 192, 176);
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);

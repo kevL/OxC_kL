@@ -97,6 +97,14 @@ enum UnitBodyPart
 	BODYPART_LEFTLEG	// 5
 };
 
+enum OutCheck
+{
+	OUT_STAT,	// 0
+	OUT_EITHER,	// 1
+	OUT_DEAD,	// 2
+	OUT_STUNNED	// 3
+};
+
 
 /**
  * SoldierDiary container for battle unit kills statistics.
@@ -714,6 +722,7 @@ private:
 		bool isOut(
 				bool checkHealth = false,
 				bool checkStun = false) const;
+		const bool isOut_t(const OutCheck test = OUT_STAT) const;
 
 		/// Gets the number of time units a certain action takes.
 		int getActionTUs(

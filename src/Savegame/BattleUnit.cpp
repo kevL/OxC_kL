@@ -1788,55 +1788,49 @@ bool BattleUnit::isOut(
 
 	return false;
 }
-	// here's how i'd like to have this implemented throughout code:
-	// Use parameter (int)checkMode:
-	// 		0 : check by Status
-	//		1 : check by health
-	//		2 : check by stunLevel
-	// pst. 'enum' that ... then use a switch()
-	/*	if (checkHealth == true)
+/**
+ *
+ * @param test - what to check for (default OUT_STAT)
+ *				0 dead or unconscious
+ *				1 health or stun
+ *				2 health
+ *				3 stun
+ * @return, true if unit is incapacitated
+ */
+const bool BattleUnit::isOut_t(const OutCheck test) const
+{
+	switch (test)
 	{
-		if (_health == 0)
-			return true;
-		else
-			return false;
+		default:
+		case OUT_STAT:
+			if (_status == STATUS_DEAD
+				|| _status == STATUS_UNCONSCIOUS
+				|| _status == STATUS_TIME_OUT)
+			{
+				return true;
+			}
+		break;
+
+		case OUT_EITHER:
+			if (_health == 0
+				|| _stunLevel >= _health)
+			{
+				return true;
+			}
+		break;
+
+		case OUT_DEAD:
+			if (_health == 0)
+				return true;
+		break;
+
+		case OUT_STUNNED:
+			if (_stunLevel >= _health)
+				return true;
 	}
 
-	if (checkStun == true)
-	{
-		if (_stunLevel >= _health)
-			return true;
-		else
-			return false;
-	}
-
-	if (_status == STATUS_DEAD
-		|| _status == STATUS_UNCONSCIOUS)
-	{
-		return true;
-	}
-
-	return false; */
-
-/* old:
-	bool ret = false;
-
-	if (checkHealth == true)
-	{
-		if (_health == 0)
-			ret = true;
-	}
-	if (checkStun == true)
-	{
-		if (_stunLevel >= _health)
-			ret = true;
-	}
-	if (_status == STATUS_DEAD
-		|| _status == STATUS_UNCONSCIOUS)
-	{
-		ret = true;
-	}
-	return ret; */
+	return false;
+}
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.

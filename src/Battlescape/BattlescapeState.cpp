@@ -2719,236 +2719,231 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 
 	BattleUnit* const selUnit = _battleSave->getSelectedUnit(); // <- not sure if this is FACTION_PLAYER only.
-
-	if (selUnit == NULL)
-		return;
-
-
-	if (calcFoV == true)
-		_battleSave->getTileEngine()->calculateFOV(selUnit);
-
-	size_t j = 0;
-	for (std::vector<BattleUnit*>::const_iterator
-		i = _battleSave->getUnits()->begin();
-		i != _battleSave->getUnits()->end()
-			&& j != INDICATORS;
-		++i)
+	if (selUnit != NULL)
 	{
-		if ((*i)->isOut() == false
-			&& (*i)->getUnitVisible() == true
-			&& (*i)->getFaction() == FACTION_HOSTILE)
+		if (calcFoV == true)
+			_battleSave->getTileEngine()->calculateFOV(selUnit);
+
+		size_t j = 0;
+		for (std::vector<BattleUnit*>::const_iterator
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end()
+				&& j != INDICATORS;
+			++i)
 		{
-			_btnVisibleUnit[j]->setVisible();
-			_numVisibleUnit[j]->setVisible();
-
-			_visibleUnit[j++] = *i;
-		}
-	}
-
-
-	_txtName->setText(selUnit->getName(
-									_game->getLanguage(),
-									false));
-
-	const Soldier* const soldier = selUnit->getGeoscapeSoldier();
-	if (soldier != NULL)
-	{
-		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
-		texture->getFrame(20 + soldier->getRank())->blit(_rank);
-
-		if (selUnit->isKneeled() == true)
-		{
-			_isKneeled = true;
-			_kneel->setVisible(); // this doesn't blink, unlike _overWeight mark
-		}
-
-		_txtOrder->setText(tr("STR_ORDER")
-							.arg(static_cast<int>(selUnit->getBattleOrder())));
-	}
-
-	const int strength = static_cast<int>(Round(
-						 static_cast<double>(selUnit->getBaseStats()->strength) * (selUnit->getAccuracyModifier() / 2. + 0.5)));
-	if (selUnit->getCarriedWeight() > strength)
-	{
-		_isOverweight = true;
-//		_overWeight->setVisible(); // this needs to blink, unlike _kneel mark
-	}
-
-	_numDir->setValue(selUnit->getDirection());
-	_numDir->setVisible();
-
-	if (selUnit->getTurretType() != -1)
-	{
-		_numDirTur->setValue(selUnit->getTurretDirection());
-		_numDirTur->setVisible();
-	}
-
-	const int wounds = selUnit->getFatalWounds();
-	if (wounds > 0)
-	{
-		Surface* srfStatus = _game->getResourcePack()->getSurface("RANK_ROOKIE");
-		if (srfStatus != NULL)
-		{
-			srfStatus->blit(_btnWounds); // red heart icon
-			_btnWounds->setVisible();
-		}
-
-		_numWounds->setX(_btnWounds->getX() + 7);
-
-		_numWounds->setValue(static_cast<unsigned>(wounds));
-		_numWounds->setVisible();
-	}
-
-
-	double stat = static_cast<double>(selUnit->getBaseStats()->tu);
-	const int tu = selUnit->getTimeUnits();
-	_numTimeUnits->setValue(static_cast<unsigned>(tu));
-	_barTimeUnits->setValue(std::ceil(
-							static_cast<double>(tu) / stat * 100.));
-
-	stat = static_cast<double>(selUnit->getBaseStats()->stamina);
-	const int energy = selUnit->getEnergy();
-	_numEnergy->setValue(static_cast<unsigned>(energy));
-	_barEnergy->setValue(std::ceil(
-							static_cast<double>(energy) / stat * 100.));
-
-	stat = static_cast<double>(selUnit->getBaseStats()->health);
-	const int health = selUnit->getHealth();
-	_numHealth->setValue(static_cast<unsigned>(health));
-	_barHealth->setValue(std::ceil(
-							static_cast<double>(health) / stat * 100.));
-	_barHealth->setValue2(std::ceil(
-							static_cast<double>(selUnit->getStun()) / stat * 100.));
-
-	const int morale = selUnit->getMorale();
-	_numMorale->setValue(static_cast<unsigned>(morale));
-	_barMorale->setValue(morale);
-
-
-	const BattleItem
-		* const rtItem = selUnit->getItem("STR_RIGHT_HAND"),
-		* const ltItem = selUnit->getItem("STR_LEFT_HAND");
-
-	const std::string activeHand = selUnit->getActiveHand();
-	if (activeHand.empty() == false)
-	{
-		int
-			tuLaunch = 0,
-			tuAim = 0,
-			tuAuto = 0,
-			tuSnap = 0;
-
-		if (activeHand == "STR_RIGHT_HAND"
-			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
-				|| rtItem->getRules()->getBattleType() == BT_MELEE))
-		{
-			tuLaunch = selUnit->getActionTUs(BA_LAUNCH, rtItem);
-			tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
-			tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, rtItem);
-			tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, rtItem);
-			if (tuLaunch == 0
-				&& tuAim == 0
-				&& tuAuto == 0
-				&& tuSnap == 0)
+			if ((*i)->isOut() == false
+				&& (*i)->getUnitVisible() == true
+				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
-				tuSnap = selUnit->getActionTUs(BA_HIT, rtItem);
-			}
-		}
-		else if (activeHand == "STR_LEFT_HAND"
-			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
-				|| ltItem->getRules()->getBattleType() == BT_MELEE))
-		{
-			tuLaunch = selUnit->getActionTUs(BA_LAUNCH, ltItem);
-			tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
-			tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, ltItem);
-			tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, ltItem);
-			if (tuLaunch == 0
-				&& tuAim == 0
-				&& tuAuto == 0
-				&& tuSnap == 0)
-			{
-				tuSnap = selUnit->getActionTUs(BA_HIT, ltItem);
+				_btnVisibleUnit[j]->setVisible();
+				_numVisibleUnit[j]->setVisible();
+
+				_visibleUnit[j++] = *i;
 			}
 		}
 
-		if (tuLaunch != 0)
+
+		_txtName->setText(selUnit->getName(
+										_game->getLanguage(),
+										false));
+
+		const Soldier* const soldier = selUnit->getGeoscapeSoldier();
+		if (soldier != NULL)
 		{
-			_numTULaunch->setValue(tuLaunch);
-			_numTULaunch->setVisible();
+			SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+			texture->getFrame(20 + soldier->getRank())->blit(_rank);
+
+			if (selUnit->isKneeled() == true)
+			{
+				_isKneeled = true;
+				_kneel->setVisible();
+			}
+
+			_txtOrder->setText(tr("STR_ORDER")
+								.arg(static_cast<int>(selUnit->getBattleOrder())));
 		}
 
-		if (tuAim != 0)
+		const int strength = static_cast<int>(Round(
+							 static_cast<double>(selUnit->getBaseStats()->strength) * (selUnit->getAccuracyModifier() / 2. + 0.5)));
+		if (selUnit->getCarriedWeight() > strength)
+			_isOverweight = true;
+
+		_numDir->setValue(selUnit->getDirection());
+		_numDir->setVisible();
+
+		if (selUnit->getTurretType() != -1)
 		{
-			_numTUAim->setValue(tuAim);
-			_numTUAim->setVisible();
+			_numDirTur->setValue(selUnit->getTurretDirection());
+			_numDirTur->setVisible();
 		}
 
-		if (tuAuto != 0)
+		const int wounds = selUnit->getFatalWounds();
+		if (wounds > 0)
 		{
-			_numTUAuto->setValue(tuAuto);
-			_numTUAuto->setVisible();
+			Surface* srfStatus = _game->getResourcePack()->getSurface("RANK_ROOKIE");
+			if (srfStatus != NULL)
+			{
+				srfStatus->blit(_btnWounds); // red heart icon
+				_btnWounds->setVisible();
+			}
+
+			_numWounds->setX(_btnWounds->getX() + 7);
+
+			_numWounds->setValue(static_cast<unsigned>(wounds));
+			_numWounds->setVisible();
 		}
 
-		if (tuSnap != 0)
+
+		double stat = static_cast<double>(selUnit->getBaseStats()->tu);
+		const int tu = selUnit->getTimeUnits();
+		_numTimeUnits->setValue(static_cast<unsigned>(tu));
+		_barTimeUnits->setValue(std::ceil(
+								static_cast<double>(tu) / stat * 100.));
+
+		stat = static_cast<double>(selUnit->getBaseStats()->stamina);
+		const int energy = selUnit->getEnergy();
+		_numEnergy->setValue(static_cast<unsigned>(energy));
+		_barEnergy->setValue(std::ceil(
+								static_cast<double>(energy) / stat * 100.));
+
+		stat = static_cast<double>(selUnit->getBaseStats()->health);
+		const int health = selUnit->getHealth();
+		_numHealth->setValue(static_cast<unsigned>(health));
+		_barHealth->setValue(std::ceil(
+								static_cast<double>(health) / stat * 100.));
+		_barHealth->setValue2(std::ceil(
+								static_cast<double>(selUnit->getStun()) / stat * 100.));
+
+		const int morale = selUnit->getMorale();
+		_numMorale->setValue(static_cast<unsigned>(morale));
+		_barMorale->setValue(morale);
+
+
+		const BattleItem
+			* const rtItem = selUnit->getItem("STR_RIGHT_HAND"),
+			* const ltItem = selUnit->getItem("STR_LEFT_HAND");
+
+		const std::string activeHand = selUnit->getActiveHand();
+		if (activeHand.empty() == false)
 		{
-			_numTUSnap->setValue(tuSnap);
-			_numTUSnap->setVisible();
+			int
+				tuLaunch = 0,
+				tuAim = 0,
+				tuAuto = 0,
+				tuSnap = 0;
+
+			if (activeHand == "STR_RIGHT_HAND"
+				&& (rtItem->getRules()->getBattleType() == BT_FIREARM
+					|| rtItem->getRules()->getBattleType() == BT_MELEE))
+			{
+				tuLaunch = selUnit->getActionTUs(BA_LAUNCH, rtItem);
+				tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
+				tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, rtItem);
+				tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, rtItem);
+				if (tuLaunch == 0
+					&& tuAim == 0
+					&& tuAuto == 0
+					&& tuSnap == 0)
+				{
+					tuSnap = selUnit->getActionTUs(BA_HIT, rtItem);
+				}
+			}
+			else if (activeHand == "STR_LEFT_HAND"
+				&& (ltItem->getRules()->getBattleType() == BT_FIREARM
+					|| ltItem->getRules()->getBattleType() == BT_MELEE))
+			{
+				tuLaunch = selUnit->getActionTUs(BA_LAUNCH, ltItem);
+				tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
+				tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, ltItem);
+				tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+				if (tuLaunch == 0
+					&& tuAim == 0
+					&& tuAuto == 0
+					&& tuSnap == 0)
+				{
+					tuSnap = selUnit->getActionTUs(BA_HIT, ltItem);
+				}
+			}
+
+			if (tuLaunch != 0)
+			{
+				_numTULaunch->setValue(tuLaunch);
+				_numTULaunch->setVisible();
+			}
+
+			if (tuAim != 0)
+			{
+				_numTUAim->setValue(tuAim);
+				_numTUAim->setVisible();
+			}
+
+			if (tuAuto != 0)
+			{
+				_numTUAuto->setValue(tuAuto);
+				_numTUAuto->setVisible();
+			}
+
+			if (tuSnap != 0)
+			{
+				_numTUSnap->setValue(tuSnap);
+				_numTUSnap->setVisible();
+			}
 		}
+
+		if (rtItem != NULL)
+		{
+			rtItem->getRules()->drawHandSprite(
+											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+											_btnRightHandItem);
+			_btnRightHandItem->setVisible();
+
+			if (rtItem->getRules()->getBattleType() == BT_FIREARM
+				&& (rtItem->usesAmmo() == true
+					|| rtItem->getRules()->getClipSize() > 0))
+			{
+				_numAmmoRight->setVisible();
+				if (rtItem->getAmmoItem() != NULL)
+					_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoItem()->getAmmoQuantity()));
+				else
+					_numAmmoRight->setValue(0);
+			}
+			else if (rtItem->getRules()->getBattleType() == BT_GRENADE
+				&& rtItem->getFuseTimer() > 0)
+			{
+				_numAmmoRight->setVisible();
+				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuseTimer()));
+			}
+		}
+
+		if (ltItem != NULL)
+		{
+			ltItem->getRules()->drawHandSprite(
+											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+											_btnLeftHandItem);
+			_btnLeftHandItem->setVisible();
+
+			if (ltItem->getRules()->getBattleType() == BT_FIREARM
+				&& (ltItem->usesAmmo() == true
+					|| ltItem->getRules()->getClipSize() > 0))
+			{
+				_numAmmoLeft->setVisible();
+				if (ltItem->getAmmoItem() != NULL)
+					_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoItem()->getAmmoQuantity()));
+				else
+					_numAmmoLeft->setValue(0);
+			}
+			else if (ltItem->getRules()->getBattleType() == BT_GRENADE
+				&& ltItem->getFuseTimer() > 0)
+			{
+				_numAmmoLeft->setVisible();
+				_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuseTimer()));
+			}
+		}
+
+		showPsiButton(
+					selUnit->getOriginalFaction() == FACTION_HOSTILE
+					&& selUnit->getBaseStats()->psiSkill > 0);
 	}
-
-	if (rtItem != NULL)
-	{
-		rtItem->getRules()->drawHandSprite(
-										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-										_btnRightHandItem);
-		_btnRightHandItem->setVisible();
-
-		if (rtItem->getRules()->getBattleType() == BT_FIREARM
-			&& (rtItem->usesAmmo() == true
-				|| rtItem->getRules()->getClipSize() > 0))
-		{
-			_numAmmoRight->setVisible();
-			if (rtItem->getAmmoItem() != NULL)
-				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoItem()->getAmmoQuantity()));
-			else
-				_numAmmoRight->setValue(0);
-		}
-		else if (rtItem->getRules()->getBattleType() == BT_GRENADE
-			&& rtItem->getFuseTimer() > 0)
-		{
-			_numAmmoRight->setVisible();
-			_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuseTimer()));
-		}
-	}
-
-	if (ltItem != NULL)
-	{
-		ltItem->getRules()->drawHandSprite(
-										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-										_btnLeftHandItem);
-		_btnLeftHandItem->setVisible();
-
-		if (ltItem->getRules()->getBattleType() == BT_FIREARM
-			&& (ltItem->usesAmmo() == true
-				|| ltItem->getRules()->getClipSize() > 0))
-		{
-			_numAmmoLeft->setVisible();
-			if (ltItem->getAmmoItem() != NULL)
-				_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoItem()->getAmmoQuantity()));
-			else
-				_numAmmoLeft->setValue(0);
-		}
-		else if (ltItem->getRules()->getBattleType() == BT_GRENADE
-			&& ltItem->getFuseTimer() > 0)
-		{
-			_numAmmoLeft->setVisible();
-			_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuseTimer()));
-		}
-	}
-
-	showPsiButton(
-				selUnit->getOriginalFaction() == FACTION_HOSTILE
-				&& selUnit->getBaseStats()->psiSkill > 0);
 }
 
 /**

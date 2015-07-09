@@ -498,35 +498,39 @@ void BattlescapeGame::popState()
 					&& _debugPlay == false)
 				{
 					 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-					if (_AIActionCounter > 2
-						|| _battleSave->getSelectedUnit() == NULL
-						|| _battleSave->getSelectedUnit()->isOut(true, true) == true)
+					if (_AIActionCounter > 2)
 					{
-						if (_battleSave->getSelectedUnit() != NULL)
+						BattleUnit* selUnit = _battleSave->getSelectedUnit();
+						if (selUnit == NULL
+							|| selUnit->isOut_t() == true)
 						{
-							_battleSave->getSelectedUnit()->setCache(NULL);
-							getMap()->cacheUnit(_battleSave->getSelectedUnit());
-						}
-
-						_AIActionCounter = 0;
-
-						if (_states.empty() == true
-							&& _battleSave->selectNextFactionUnit(true) == NULL)
-						{
-							if (_battleSave->getDebugMode() == false)
+							if (selUnit != NULL)
 							{
-								_endTurnRequested = true;
-								statePushBack(NULL); // end AI turn
+								selUnit->setCache(NULL);
+								getMap()->cacheUnit(selUnit);
 							}
-							else
-							{
-								_battleSave->selectNextFactionUnit();
-								_debugPlay = true;
-							}
-						}
 
-						if (_battleSave->getSelectedUnit() != NULL)
-							getMap()->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
+							_AIActionCounter = 0;
+
+							if (_states.empty() == true
+								&& _battleSave->selectNextFactionUnit(true) == NULL)
+							{
+								if (_battleSave->getDebugMode() == false)
+								{
+									_endTurnRequested = true;
+									statePushBack(NULL); // end AI turn
+								}
+								else
+								{
+									_battleSave->selectNextFactionUnit();
+									_debugPlay = true;
+								}
+							}
+
+							selUnit = _battleSave->getSelectedUnit();
+							if (selUnit != NULL)
+								getMap()->getCamera()->centerOnPosition(selUnit->getPosition());
+						}
 					}
 				}
 				else if (_debugPlay == true)
@@ -577,7 +581,7 @@ void BattlescapeGame::popState()
 
 		// the currently selected unit died or became unconscious or disappeared inexplicably
 		if (_battleSave->getSelectedUnit() == NULL
-			|| _battleSave->getSelectedUnit()->isOut(true, true) == true)
+			|| _battleSave->getSelectedUnit()->isOut_t() == true)
 		{
 			//Log(LOG_INFO) << ". unit incapacitated: cancelAction & deSelect)";
 			cancelCurrentAction();
@@ -1482,7 +1486,6 @@ void BattlescapeGame::checkForCasualties(
 			&& attacker->getMurdererId() != 0
 			&& attacker->getUnitRules() != NULL
 			&& attacker->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODE)
-//				|| attacker->getUnitRules()->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			for (std::vector<BattleUnit*>::const_iterator
 					i = _battleSave->getUnits()->begin();
@@ -1508,8 +1511,7 @@ void BattlescapeGame::checkForCasualties(
 					i != attacker->getUnitSpotters()->end();
 					++i)
 			{
-				if ((*i)->getHealth() != 0
-					&& (*i)->getHealth() > (*i)->getStun())
+				if ((*i)->isOut(OUT_EITHER) == false)
 				{
 					attacker->setExposed(); // defender has been spotted on Player turn.
 					break;
@@ -1592,8 +1594,10 @@ void BattlescapeGame::checkForCasualties(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		dead = ((*i)->getHealth() == 0),
-		stunned = ((*i)->getHealth() <= (*i)->getStun());
+//		dead = ((*i)->getHealth() == 0);
+//		stunned = ((*i)->getHealth() <= (*i)->getStun());
+		dead = (*i)->isOut_t(OUT_DEAD);
+		stunned = (*i)->isOut_t(OUT_STUNNED);
 
 		converted =
 		bypass = false;
@@ -1658,7 +1662,7 @@ void BattlescapeGame::checkForCasualties(
 					// STATUS_TIME_OUT
 				|| converted == true)
 			{
-				if (converted == false)
+				if (dead == true)
 					(*i)->setStatus(STATUS_DISABLED);
 
 				// attacker's Morale Bonus & diary ->
@@ -1761,7 +1765,7 @@ void BattlescapeGame::checkForCasualties(
 						j != _battleSave->getUnits()->end();
 						++j)
 				{
-					if ((*j)->isOut(true, true) == false
+					if ((*j)->isOut_t() == false
 						&& (*j)->isFearable() == true) // not mechanical. Or a ZOMBIE!!
 					{
 						if ((*j)->getOriginalFaction() == victim->getOriginalFaction()
@@ -1787,8 +1791,7 @@ void BattlescapeGame::checkForCasualties(
 
 								(*j)->moraleChange(-moraleLoss);
 							}
-/*kL
-							if (attacker
+/*							if (attacker
 								&& attacker->getFaction() == FACTION_PLAYER
 								&& victim->getFaction() == FACTION_HOSTILE)
 							{
@@ -1888,10 +1891,11 @@ void BattlescapeGame::checkForCasualties(
 		{
 			const BattleUnit* const unit = _battleSave->getSelectedUnit();
 			if (unit != NULL)
-				_parentState->showPsiButton(
-										unit->getOriginalFaction() == FACTION_HOSTILE
-										&& unit->getBaseStats()->psiSkill > 0
-										&& unit->isOut(true, true) == false);
+				_parentState->showPsiButton(unit->getOriginalFaction() == FACTION_HOSTILE
+										 && unit->getBaseStats()->psiSkill > 0
+										 && unit->isOut_t(OUT_EITHER) == false);
+			else
+				_parentState->showPsiButton(false);
 		}
 
 		if (_battleSave->getTacticalType() == TCT_BASEASSAULT
@@ -1903,7 +1907,7 @@ void BattlescapeGame::checkForCasualties(
 					i != _battleSave->getMapSizeXYZ();
 					++i)
 			{
-				if (   _battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
+				if (_battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
 					&& _battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
 				{
 					controlDestroyed = false;

@@ -32,7 +32,6 @@ enum SpecialAbility
 	SPECAB_NONE,	// 0
 	SPECAB_EXPLODE,	// 1
 	SPECAB_BURN		// 2
-//	SPECAB_BURN_AND_EXPLODE	// 3
 };
 
 
