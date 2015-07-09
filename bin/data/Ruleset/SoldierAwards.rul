@@ -1,241 +1,241 @@
 # Medals & Awards by Ivan Dogovich.
 ufopaedia:
   - id: STR_MEDAL_MERIT_STAR_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: MERIT_STAR
     text: STR_MEDAL_MERIT_STAR_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_MILITARY_CROSS_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: MILITARY_CROSS
     text: STR_MEDAL_MILITARY_CROSS_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_ORDER_OF_RESTRAINT_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: ORDER_OF_RESTRAINT
     text: STR_MEDAL_ORDER_OF_RESTRAINT_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_DEFENDER_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: DEFENDER
     text: STR_MEDAL_DEFENDER_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_LONGEST_NIGHT_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: LONGEST_NIGHT
     text: STR_MEDAL_LONGEST_NIGHT_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: WEAPON_PROFICIENCY
     text: STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_SERVICE_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: SERVICE
     text: STR_MEDAL_SERVICE_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_HONOR_CROSS_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: HONOR_CROSS
     text: STR_MEDAL_HONOR_CROSS_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: CAMPAIGN_RIBBON
     text: STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: XENOCIDE
     text: STR_MEDAL_XENOCIDE_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_MEDAL_OF_HEROISM_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: MEDAL_OF_HEROISM
     text: STR_MEDAL_MEDAL_OF_HEROISM_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_HELLRAISER_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: HELLRAISER
     text: STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: DISTINGUISHED_SERVICE
     text: STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_BOLTS_CROSS_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: BOLTS_CROSS
     text: STR_MEDAL_BOLTS_CROSS_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_GRENADIERS_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: GRENADIERS_MEDAL
     text: STR_MEDAL_GRENADIERS_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: STAR_OF_ASCLEPIUS
     text: STR_MEDAL_STAR_OF_ASCLEPIUS_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_MAN_OF_STEEL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: MAN_OF_STEEL
     text: STR_MEDAL_MAN_OF_STEEL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_BLACK_CROSS_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: BLACK_CROSS
     text: STR_MEDAL_BLACK_CROSS_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_STAR_OF_VALOR_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: STAR_OF_VALOR
     text: STR_MEDAL_STAR_OF_VALOR_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_IRON_MAN_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: IRON_MAN
     text: STR_MEDAL_IRON_MAN_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_ORDER_OF_EARTH_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: ORDER_OF_EARTH
     text: STR_MEDAL_ORDER_OF_EARTH_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_SNIPER_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: SNIPER
     text: STR_MEDAL_SNIPER_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_LUCKYSHOT_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: LUCKYSHOT
     text: STR_MEDAL_LUCKYSHOT_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_DBLKILL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: DBLKILL
     text: STR_MEDAL_DBLKILL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_REACTIONFIRE_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: REACTIONFIRE
     text: STR_MEDAL_REACTIONFIRE_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_PURPLE_HEART_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: PURPLE_HEART
     text: STR_MEDAL_PURPLE_HEART_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_CRIMSON_HEART_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: CRIMSON_HEART
     text: STR_MEDAL_CRIMSON_HEART_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_ORDER_OF_GLORY_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: ORDER_OF_GLORY
     text: STR_MEDAL_ORDER_OF_GLORY_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_VALIANT_CRUX_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: VALIANT_CRUX
     text: STR_MEDAL_VALIANT_CRUX_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_FALLEN_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: FALLEN
     text: STR_MEDAL_FALLEN_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_TRAP_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: TRAP
     text: STR_MEDAL_TRAP_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_ALIEN_BASE_ASSAULT_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: ALIEN_BASE_ASSAULT
     text: STR_MEDAL_ALIEN_BASE_ASSAULT_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_NIKE_CROSS_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: NIKE_CROSS
     text: STR_MEDAL_NIKE_CROSS_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_SAPPER_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: SAPPER
     text: STR_MEDAL_SAPPER_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_MELEE_KILL_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: MELEE_KILL
     text: STR_MEDAL_MELEE_KILL_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_SECTOPOD_KILL_MEDAL_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: SECTOPOD_KILL
     text: STR_MEDAL_SECTOPOD_KILL_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_HEALER_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: HEALER
     text: STR_MEDAL_HEALER_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_REVIVE_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: REVIVE
     text: STR_MEDAL_REVIVE_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_MIA_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: MIA
     text: STR_MEDAL_MIA_MEDAL_UFOPEDIA
     text_width: 182
   - id: STR_MEDAL_ORIGINAL8_NAME
-    type_id: 18
+    type_id: 10
     section: STR_AWARDS
     image_id: ORIGINAL8
     text: STR_MEDAL_ORIGINAL8_UFOPEDIA

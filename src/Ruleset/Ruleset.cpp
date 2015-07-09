@@ -756,27 +756,33 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			i != doc["ufopaedia"].end();
 			++i)
 	{
+		//Log(LOG_INFO) << "uFoPed rul entry++";
 		if ((*i)["id"])
 		{
 			const std::string id = (*i)["id"].as<std::string>();
+			//Log(LOG_INFO) << ". id = " << id;
 
-			ArticleDefinition* rule;
+			ArticleDefinition* articleRule;
 			if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
-				rule = _ufopaediaArticles[id];
+			{
+				articleRule = _ufopaediaArticles[id];
+				//Log(LOG_INFO) << ". . article Found";
+			}
 			else
 			{
 				const UfopaediaTypeId type = static_cast<UfopaediaTypeId>((*i)["type_id"].as<int>());
+				//Log(LOG_INFO) << ". . type = " << (int)type;
 				switch (type)
 				{
-					case UFOPAEDIA_TYPE_CRAFT:				rule = new ArticleDefinitionCraft();		break;
-					case UFOPAEDIA_TYPE_CRAFT_WEAPON:		rule = new ArticleDefinitionCraftWeapon();	break;
-					case UFOPAEDIA_TYPE_VEHICLE:			rule = new ArticleDefinitionVehicle();		break;
-					case UFOPAEDIA_TYPE_ITEM:				rule = new ArticleDefinitionItem();			break;
-					case UFOPAEDIA_TYPE_ARMOR:				rule = new ArticleDefinitionArmor();		break;
-					case UFOPAEDIA_TYPE_BASE_FACILITY:		rule = new ArticleDefinitionBaseFacility();	break;
-					case UFOPAEDIA_TYPE_TEXTIMAGE:			rule = new ArticleDefinitionTextImage();	break;
-					case UFOPAEDIA_TYPE_TEXT:				rule = new ArticleDefinitionText();			break;
-					case UFOPAEDIA_TYPE_UFO:				rule = new ArticleDefinitionUfo();			break;
+					case UFOPAEDIA_TYPE_CRAFT:				articleRule = new ArticleDefinitionCraft();			break;
+					case UFOPAEDIA_TYPE_CRAFT_WEAPON:		articleRule = new ArticleDefinitionCraftWeapon();	break;
+					case UFOPAEDIA_TYPE_VEHICLE:			articleRule = new ArticleDefinitionVehicle();		break;
+					case UFOPAEDIA_TYPE_ITEM:				articleRule = new ArticleDefinitionItem();			break;
+					case UFOPAEDIA_TYPE_ARMOR:				articleRule = new ArticleDefinitionArmor();			break;
+					case UFOPAEDIA_TYPE_BASE_FACILITY:		articleRule = new ArticleDefinitionBaseFacility();	break;
+					case UFOPAEDIA_TYPE_TEXTIMAGE:			articleRule = new ArticleDefinitionTextImage();		break;
+					case UFOPAEDIA_TYPE_TEXT:				articleRule = new ArticleDefinitionText();			break;
+					case UFOPAEDIA_TYPE_UFO:				articleRule = new ArticleDefinitionUfo();			break;
 /*					case UFOPAEDIA_TYPE_TFTD:
 					case UFOPAEDIA_TYPE_TFTD_CRAFT:
 					case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
@@ -784,36 +790,38 @@ void Ruleset::loadFile(const std::string& file) // protected.
 					case UFOPAEDIA_TYPE_TFTD_ITEM:
 					case UFOPAEDIA_TYPE_TFTD_ARMOR:
 					case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
-					case UFOPAEDIA_TYPE_TFTD_USO:			rule = new ArticleDefinitionTFTD();			break; */
-					case UFOPAEDIA_TYPE_AWARD:				rule = new ArticleDefinitionAward();		break;
+					case UFOPAEDIA_TYPE_TFTD_USO:			articleRule = new ArticleDefinitionTFTD();			break; */
+					case UFOPAEDIA_TYPE_AWARD:				articleRule = new ArticleDefinitionAward();			break;
 
 					default:
-						rule = NULL;
+						articleRule = NULL;
 				}
 
-				_ufopaediaArticles[id] = rule;
+				_ufopaediaArticles[id] = articleRule;
 				_ufopaediaIndex.push_back(id);
 			}
 
 			_ufopaediaListOrder += 100;
 			//Log(LOG_INFO) << id << " uPed listOrder = " << _ufopaediaListOrder;
-			rule->load(
-					*i,
-					_ufopaediaListOrder);
+			//Log(LOG_INFO) << ". . . load...";
+			articleRule->load(
+						*i,
+						_ufopaediaListOrder);
 		}
 		else if ((*i)["delete"])
 		{
 			const std::string type = (*i)["delete"].as<std::string>();
+			//Log(LOG_INFO) << ". delete: " << type;
 			const std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(type);
 			if (i != _ufopaediaArticles.end())
 				_ufopaediaArticles.erase(i);
 
-			const std::vector<std::string>::const_iterator idx = std::find(
-																		_ufopaediaIndex.begin(),
-																		_ufopaediaIndex.end(),
-																		type);
-			if (idx != _ufopaediaIndex.end())
-				_ufopaediaIndex.erase(idx);
+			const std::vector<std::string>::const_iterator j = std::find(
+																	_ufopaediaIndex.begin(),
+																	_ufopaediaIndex.end(),
+																	type);
+			if (j != _ufopaediaIndex.end())
+				_ufopaediaIndex.erase(j);
 		}
 	}
 

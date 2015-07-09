@@ -7492,7 +7492,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1436410395 f:\git\openxcom\src\ruleset\articledefinition.h
+1436417182 f:\git\openxcom\src\ruleset\articledefinition.h
 
 1430149550 source:f:\git\openxcom\src\geoscape\researchrequiredstate.cpp
 	"ResearchRequiredState.h"
@@ -8496,7 +8496,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1436410850 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1436416613 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8740,7 +8740,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1430149550 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1436412104 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
@@ -8876,14 +8876,13 @@
 1430149550 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1435038563 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1436410608 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Surface.h"
 	"../Interface/TextButton.h"
-	"../Resource/ResourcePack.h"
 
 1435002690 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
@@ -9006,7 +9005,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUnit.h"
 
-1435005791 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1436410763 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"
@@ -9017,14 +9016,6 @@
 	"ArticleStateItem.h"
 	"ArticleStateText.h"
 	"ArticleStateTextImage.h"
-	"ArticleStateTFTD.h"
-	"ArticleStateTFTDArmor.h"
-	"ArticleStateTFTDVehicle.h"
-	"ArticleStateTFTDItem.h"
-	"ArticleStateTFTDFacility.h"
-	"ArticleStateTFTDCraft.h"
-	"ArticleStateTFTDCraftWeapon.h"
-	"ArticleStateTFTDUso.h"
 	"ArticleStateUfo.h"
 	"ArticleStateVehicle.h"
 	"UfopaediaStartState.h"

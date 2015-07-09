@@ -844,9 +844,6 @@
     <ClCompile Include="Menu\OptionsNoAudioState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\RuleInterface.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -897,27 +894,6 @@
     </ClCompile>
     <ClCompile Include="Ruleset\MapScript.cpp">
       <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDFacility.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraft.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDUso.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDArmor.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDItem.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDCraftWeapon.cpp">
-      <Filter>Ufopaedia</Filter>
-    </ClCompile>
-    <ClCompile Include="Ufopaedia\ArticleStateTFTDVehicle.cpp">
-      <Filter>Ufopaedia</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\SaveConverter.cpp">
       <Filter>Savegame</Filter>
@@ -1831,9 +1807,6 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
     <ClInclude Include="Ruleset\RuleInterface.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
@@ -1887,27 +1860,6 @@
     </ClInclude>
     <ClInclude Include="Ruleset\MapScript.h">
       <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDFacility.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraft.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDUso.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDArmor.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDItem.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDCraftWeapon.h">
-      <Filter>Ufopaedia</Filter>
-    </ClInclude>
-    <ClInclude Include="Ufopaedia\ArticleStateTFTDVehicle.h">
-      <Filter>Ufopaedia</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\SaveConverter.h">
       <Filter>Savegame</Filter>
