@@ -245,7 +245,6 @@ private:
 			{
 				return NULL;
 			}
-
 			return _tiles[getTileIndex(pos)]; }
 
 		/// Gets the currently selected unit.

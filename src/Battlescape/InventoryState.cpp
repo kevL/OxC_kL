@@ -654,7 +654,7 @@ void InventoryState::btnOkClick(Action*)
 					++i)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
-					(*i)->initTU(true);
+					(*i)->initTu(true);
 			}
 		}
 	}

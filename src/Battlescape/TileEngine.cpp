@@ -1740,7 +1740,7 @@ bool TileEngine::checkReactionFire(
 			// !!!!!SHOOT!!!!!!!!
 			if (reactionShot(reactorUnit, triggerUnit) == false)
 			{
-				//Log(LOG_INFO) << ". . no Snap by : " << reactorUnit->getId();
+				//Log(LOG_INFO) << ". . no Snap by id-" << reactorUnit->getId();
 				// can't make a reaction snapshot for whatever reason then boot this guy from the vector.
 				for (std::vector<BattleUnit*>::const_iterator
 						i = spotters.begin();
@@ -1763,7 +1763,7 @@ bool TileEngine::checkReactionFire(
 					reactorUnit->addReactionExp();
 				}
 
-				//Log(LOG_INFO) << ". . Snap by : " << reactorUnit->getId();
+				//Log(LOG_INFO) << ". . Snap by id-" << reactorUnit->getId();
 				ret = true;
 			}
 
@@ -1772,7 +1772,7 @@ bool TileEngine::checkReactionFire(
 								triggerUnit,
 								tuSpent,
 								autoSpot);
-			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactorUnit->getId();
+			//Log(LOG_INFO) << ". . NEXT AT BAT id-" << reactorUnit->getId();
 		}
 
 		spotters.clear();
@@ -1788,7 +1788,7 @@ bool TileEngine::checkReactionFire(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const unit)
 {
-	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
+	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. id-" << unit->getId();
 	const Tile* const tile = unit->getTile();
 	std::vector<BattleUnit*> spotters;
 
@@ -1797,17 +1797,21 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
+		//Log(LOG_INFO) << ". spotCheck id-" << (*i)->getId();
 		if ((*i)->getTimeUnits() != 0
 			&& (*i)->getFaction() != _battleSave->getSide()
 			&& (*i)->getFaction() != FACTION_NEUTRAL
-			&& (*i)->isOut(true, true) == false)
+			&& (*i)->isOut_t() == false)
 		{
 			if ((((*i)->getFaction() == FACTION_HOSTILE							// Mc'd xCom units will RF on loyal xCom units
 						&& (*i)->getOriginalFaction() != FACTION_PLAYER)		// but Mc'd aLiens won't RF on other aLiens ...
 					|| ((*i)->getOriginalFaction() == FACTION_PLAYER			// Also - aLiens get to see in all directions
 						&& (*i)->checkViewSector(unit->getPosition()) == true))	// but xCom must checkViewSector() even when MC'd
-				&& visible(*i, tile) == true)
+				&& visible(
+						*i,
+						tile) == true)
 			{
+				//Log(LOG_INFO) << ". . Add spotter.";
 				spotters.push_back(*i);
 			}
 		}
@@ -1845,7 +1849,7 @@ BattleUnit* TileEngine::getReactor(
 			i != spotters.end();
 			++i)
 	{
-		//Log(LOG_INFO) << ". . check nextReactor ID " << (*i)->getId();
+		//Log(LOG_INFO) << ". . check nextReactor id-" << (*i)->getId();
 		if ((*i)->isOut() == false)
 		{
 			initTest = (*i)->getInitiative();
@@ -1857,7 +1861,7 @@ BattleUnit* TileEngine::getReactor(
 		}
 	}
 
-	//Log(LOG_INFO) << ". ID " << defender->getId() << " initi = " << defender->getInitiative(tuSpent);
+	//Log(LOG_INFO) << ". id-" << defender->getId() << " initi = " << defender->getInitiative(tuSpent);
 
 	// nextReactor has to *best* defender.Init to get initiative
 	// Analysis: It appears that defender's tu for firing/throwing
@@ -5960,7 +5964,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				//Log(LOG_INFO) << ". . . victim morale[2] = " << victim->getMorale();
 
 				victim->convertToFaction(action->actor->getFaction());
-				victim->initTU();
+				victim->initTu();
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);
 

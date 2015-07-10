@@ -497,40 +497,38 @@ void BattlescapeGame::popState()
 				if (_battleSave->getSide() != FACTION_PLAYER
 					&& _debugPlay == false)
 				{
+					BattleUnit* selUnit = _battleSave->getSelectedUnit();
 					 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-					if (_AIActionCounter > 2)
+					if (_AIActionCounter > 2
+						|| selUnit == NULL
+						|| selUnit->isOut_t() == true)
 					{
-						BattleUnit* selUnit = _battleSave->getSelectedUnit();
-						if (selUnit == NULL
-							|| selUnit->isOut_t() == true)
+						if (selUnit != NULL)
 						{
-							if (selUnit != NULL)
-							{
-								selUnit->setCache(NULL);
-								getMap()->cacheUnit(selUnit);
-							}
-
-							_AIActionCounter = 0;
-
-							if (_states.empty() == true
-								&& _battleSave->selectNextFactionUnit(true) == NULL)
-							{
-								if (_battleSave->getDebugMode() == false)
-								{
-									_endTurnRequested = true;
-									statePushBack(NULL); // end AI turn
-								}
-								else
-								{
-									_battleSave->selectNextFactionUnit();
-									_debugPlay = true;
-								}
-							}
-
-							selUnit = _battleSave->getSelectedUnit();
-							if (selUnit != NULL)
-								getMap()->getCamera()->centerOnPosition(selUnit->getPosition());
+							selUnit->setCache(NULL);
+							getMap()->cacheUnit(selUnit);
 						}
+
+						_AIActionCounter = 0;
+
+						if (_states.empty() == true
+							&& _battleSave->selectNextFactionUnit(true) == NULL)
+						{
+							if (_battleSave->getDebugMode() == false)
+							{
+								_endTurnRequested = true;
+								statePushBack(NULL); // end AI turn
+							}
+							else
+							{
+								_battleSave->selectNextFactionUnit();
+								_debugPlay = true;
+							}
+						}
+
+						selUnit = _battleSave->getSelectedUnit();
+						if (selUnit != NULL)
+							getMap()->getCamera()->centerOnPosition(selUnit->getPosition());
 					}
 				}
 				else if (_debugPlay == true)
@@ -1230,49 +1228,47 @@ void BattlescapeGame::endTurnPhase() // private.
 
 //	if (_endTurnProcessed == false)
 //	{
-		for (size_t // check for hot grenades on the ground
-				i = 0;
-				i != _battleSave->getMapSizeXYZ();
-				++i)
+	for (size_t // check for hot grenades on the ground
+			i = 0;
+			i != _battleSave->getMapSizeXYZ();
+			++i)
+	{
+		for (std::vector<BattleItem*>::const_iterator
+				j = _battleSave->getTiles()[i]->getInventory()->begin();
+				j != _battleSave->getTiles()[i]->getInventory()->end();
+				)
 		{
-			for (std::vector<BattleItem*>::const_iterator
-					j = _battleSave->getTiles()[i]->getInventory()->begin();
-					j != _battleSave->getTiles()[i]->getInventory()->end();
-					)
+			if ((*j)->getRules()->getBattleType() == BT_GRENADE
+				&& (*j)->getFuseTimer() != -1
+				&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
 			{
-				if ((*j)->getRules()->getBattleType() == BT_GRENADE
-					&& (*j)->getFuseTimer() != -1
-					&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
-				{
-					pos.x = _battleSave->getTiles()[i]->getPosition().x * 16 + 8;
-					pos.y = _battleSave->getTiles()[i]->getPosition().y * 16 + 8;
-					pos.z = _battleSave->getTiles()[i]->getPosition().z * 24 - _battleSave->getTiles()[i]->getTerrainLevel();
+				pos.x = _battleSave->getTiles()[i]->getPosition().x * 16 + 8;
+				pos.y = _battleSave->getTiles()[i]->getPosition().y * 16 + 8;
+				pos.z = _battleSave->getTiles()[i]->getPosition().z * 24 - _battleSave->getTiles()[i]->getTerrainLevel();
 
-					statePushNext(new ExplosionBState(
-													this,
-													pos,
-													*j,
-													(*j)->getPreviousOwner()));
-					_battleSave->removeItem(*j);
+				statePushNext(new ExplosionBState(
+												this,
+												pos,
+												*j,
+												(*j)->getPreviousOwner()));
+				_battleSave->removeItem(*j);
 
-					statePushBack(NULL);
-					return;
-				}
-
-				++j;
+				statePushBack(NULL);
+				return;
 			}
-		}
 
-		if (_battleSave->getTileEngine()->closeUfoDoors() != 0
-			&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
-		{
-//			getResourcePack()->getSoundByDepth(
-//											_battleSave->getDepth(),
-			getResourcePack()->getSound( // ufo door closed
-									"BATTLE.CAT",
-									ResourcePack::SLIDING_DOOR_CLOSE)
-								->play();
+			++j;
 		}
+	}
+
+	if (_battleSave->getTileEngine()->closeUfoDoors() != 0
+		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
+	{
+		getResourcePack()->getSound( // ufo door closed
+								"BATTLE.CAT",
+								ResourcePack::SLIDING_DOOR_CLOSE)
+							->play();
+	}
 //	}
 
 	// check for terrain explosions
@@ -1309,74 +1305,74 @@ void BattlescapeGame::endTurnPhase() // private.
 
 //	if (_endTurnProcessed == false)
 //	{
-		if (_battleSave->getSide() != FACTION_NEUTRAL) // tick down grenade timers
+	if (_battleSave->getSide() != FACTION_NEUTRAL) // tick down grenade timers
+	{
+		for (std::vector<BattleItem*>::const_iterator
+				i = _battleSave->getItems()->begin();
+				i != _battleSave->getItems()->end();
+				++i)
 		{
-			for (std::vector<BattleItem*>::const_iterator
-					i = _battleSave->getItems()->begin();
-					i != _battleSave->getItems()->end();
-					++i)
+			if ((*i)->getOwner() == NULL
+				&& (*i)->getRules()->getBattleType() == BT_GRENADE
+				&& (*i)->getFuseTimer() > 1)
 			{
-				if ((*i)->getOwner() == NULL
-					&& (*i)->getRules()->getBattleType() == BT_GRENADE
-					&& (*i)->getFuseTimer() > 1)
-				{
-					(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
-				}
+				(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
+			}
+		}
+	}
+
+	// THE NEXT 3 BLOCKS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
+	{
+		if ((*i)->getFaction() == _battleSave->getSide()
+			&& (*i)->isOut() == false)
+		{
+			tile = (*i)->getTile();
+			if (tile != NULL
+				&& (tile->getSmoke() != 0
+					|| tile->getFire() != 0))
+//				&& (*i)->getHealth() > 0
+//				&& ((*i)->getGeoscapeSoldier() != NULL
+//					|| (*i)->getUnitRules()->isMechanical() == false))
+			{
+				tile->hitStuff(); // Damage tile's unit w/ Smoke & Fire at end of unit's faction's Turn-phase.
+			}
+		}
+	}
+
+
+	if (_battleSave->endBattlePhase() == true) // <- This rolls over Faction-turns. TRUE means FullTurn has ended.
+	{
+		for (size_t
+				i = 0;
+				i != _battleSave->getMapSizeXYZ();
+				++i)
+		{
+			tile = _battleSave->getTiles()[i];
+			if ((tile->getSmoke() != 0
+					|| tile->getFire() != 0)
+				&& tile->getInventory()->empty() == false)
+			{
+				tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
 			}
 		}
 
-		// THE NEXT 3 BLOCKS could get Quirky. (ie: tiles vs. units, tallyUnits, tiles vs. ground-items)
-		for (std::vector<BattleUnit*>::const_iterator
+		for (std::vector<BattleUnit*>::const_iterator // reset the takenExpl(smoke) and takenFire flags on every unit.
 				i = _battleSave->getUnits()->begin();
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getFaction() == _battleSave->getSide()
-				&& (*i)->isOut() == false)
-			{
-				tile = (*i)->getTile();
-				if (tile != NULL
-					&& (tile->getSmoke() != 0
-						|| tile->getFire() != 0))
-//					&& (*i)->getHealth() > 0
-//					&& ((*i)->getGeoscapeSoldier() != NULL
-//						|| (*i)->getUnitRules()->isMechanical() == false))
-				{
-					tile->hitStuff(); // Damage tile's unit w/ Smoke & Fire at end of unit's faction's Turn-phase.
-				}
-			}
+			(*i)->setTakenExpl(false); // even if Status_Dead, just do it.
+			(*i)->setTakenFire(false);
 		}
-
-
-		if (_battleSave->endBattlePhase() == true) // <- This rolls over Faction-turns. TRUE means FullTurn has ended.
-		{
-			for (size_t
-					i = 0;
-					i != _battleSave->getMapSizeXYZ();
-					++i)
-			{
-				tile = _battleSave->getTiles()[i];
-				if ((tile->getSmoke() != 0
-						|| tile->getFire() != 0)
-					&& tile->getInventory()->empty() == false)
-				{
-					tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
-				}
-			}
-
-			for (std::vector<BattleUnit*>::const_iterator // reset the takenExpl(smoke) and takenFire flags on every unit.
-					i = _battleSave->getUnits()->begin();
-					i != _battleSave->getUnits()->end();
-					++i)
-			{
-				(*i)->setTakenExpl(false); // even if Status_Dead, just do it.
-				(*i)->setTakenFire(false);
-			}
-		}
-		// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
-		// -> SavedBattleGame::spreadFireSmoke()
-		// Or here
-		// ... done it in NextTurnState.
+	}
+	// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
+	// -> SavedBattleGame::spreadFireSmoke()
+	// Or here
+	// ... done it in NextTurnState.
 
 		// check AGAIN for terrain explosions
 /*		tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
@@ -1511,7 +1507,7 @@ void BattlescapeGame::checkForCasualties(
 					i != attacker->getUnitSpotters()->end();
 					++i)
 			{
-				if ((*i)->isOut(OUT_EITHER) == false)
+				if ((*i)->isOut_t(OUT_HLTH_STUN) == false)
 				{
 					attacker->setExposed(); // defender has been spotted on Player turn.
 					break;
@@ -1893,7 +1889,7 @@ void BattlescapeGame::checkForCasualties(
 			if (unit != NULL)
 				_parentState->showPsiButton(unit->getOriginalFaction() == FACTION_HOSTILE
 										 && unit->getBaseStats()->psiSkill > 0
-										 && unit->isOut_t(OUT_EITHER) == false);
+										 && unit->isOut_t() == false);
 			else
 				_parentState->showPsiButton(false);
 		}

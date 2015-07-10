@@ -99,10 +99,11 @@ enum UnitBodyPart
 
 enum OutCheck
 {
-	OUT_STAT,	// 0
-	OUT_EITHER,	// 1
-	OUT_DEAD,	// 2
-	OUT_STUNNED	// 3
+	OUT_ALL,		// 0
+	OUT_STAT,		// 1
+	OUT_DEAD,		// 2
+	OUT_STUNNED,	// 3
+	OUT_HLTH_STUN	// 4
 };
 
 
@@ -722,7 +723,7 @@ private:
 		bool isOut(
 				bool checkHealth = false,
 				bool checkStun = false) const;
-		const bool isOut_t(const OutCheck test = OUT_STAT) const;
+		const bool isOut_t(const OutCheck test = OUT_ALL) const;
 
 		/// Gets the number of time units a certain action takes.
 		int getActionTUs(
@@ -791,9 +792,11 @@ private:
 		int getInitiative(const int tuSpent = 0) const;
 
 		/// Prepares this unit for a new turn.
-		void prepUnit(bool fullProcess = true);
+		void prepUnit(bool full = true);
 		/// Calculates and resets this BattleUnit's time units and energy.
-		void initTU(bool preBattle = false);
+		void initTu(
+				bool preBattle = false,
+				bool lowMorale = false);
 
 		/// Changes this unit's morale.
 		void moraleChange(int change);

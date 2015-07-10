@@ -1790,7 +1790,7 @@ bool BattleUnit::isOut(
 }
 /**
  *
- * @param test - what to check for (default OUT_STAT)
+ * @param test - what to check for (default OUT_ALL)
  *				0 dead or unconscious
  *				1 health or stun
  *				2 health
@@ -1802,18 +1802,21 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 	switch (test)
 	{
 		default:
-		case OUT_STAT:
-			if (_status == STATUS_DEAD
+		case OUT_ALL:
+			if (   _status == STATUS_DEAD
 				|| _status == STATUS_UNCONSCIOUS
-				|| _status == STATUS_TIME_OUT)
+				|| _status == STATUS_TIME_OUT
+				|| _health == 0
+				|| _stunLevel >= _health)
 			{
 				return true;
 			}
 		break;
 
-		case OUT_EITHER:
-			if (_health == 0
-				|| _stunLevel >= _health)
+		case OUT_STAT:
+			if (   _status == STATUS_DEAD
+				|| _status == STATUS_UNCONSCIOUS
+				|| _status == STATUS_TIME_OUT)
 			{
 				return true;
 			}
@@ -1827,6 +1830,14 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 		case OUT_STUNNED:
 			if (_stunLevel >= _health)
 				return true;
+		break;
+
+		case OUT_HLTH_STUN:
+			if (_health == 0
+				|| _stunLevel >= _health)
+			{
+				return true;
+			}
 	}
 
 	return false;
@@ -2318,21 +2329,30 @@ int BattleUnit::getInitiative(const int tuSpent) const
 
 /**
  * Prepares this BattleUnit for its turn.
- * @param fullProcess - true to do the full process (default true)
+ * @param full - true to do the full process (default true)
  */
-void BattleUnit::prepUnit(bool fullProcess)
+void BattleUnit::prepUnit(bool full)
 {
 	if (_status == STATUS_TIME_OUT)
 		return;
 
-	_faction = _originalFaction;
+	bool revertMc; // reverting from Mind Control at start of MC-ing faction's turn
+	if (_faction != _originalFaction)
+	{
+		_faction = _originalFaction;
+		revertMc = true;
+	}
+	else
+		revertMc = false;
+
 	_unitsSpottedThisTurn.clear();
 
 	_dontReselect = false;
 	_motionPoints = 0;
 
+	bool lowMorale = false;
 
-	if (fullProcess == true) // transitioning between stages so don't do damage or panic
+	if (full == true) // don't do damage or panic when transitioning between stages
 	{
 		if (_fire > 0)
 			--_fire;
@@ -2345,7 +2365,7 @@ void BattleUnit::prepUnit(bool fullProcess)
 
 			if (_currentAIState != NULL) // if unit is dead AI state disappears
 			{
-	//			_currentAIState->exit(); // does nothing.
+//				_currentAIState->exit(); // does nothing.
 				delete _currentAIState;
 				_currentAIState = NULL;
 			}
@@ -2360,90 +2380,97 @@ void BattleUnit::prepUnit(bool fullProcess)
 			healStun(RNG::generate(1,3)); // recover stun
 		}
 
-		if (isOut() == false)
+		if (isOut_t() == false)
 		{
-			const int panic = 100 - (2 * getMorale());
-			if (RNG::percent(panic) == true)
+			const int pctPanic = 100 - (2 * getMorale());
+			if (RNG::percent(pctPanic) == true)
 			{
-				_tu = _stats.tu * RNG::generate(0,100) / 100;
-				_energy = _stats.stamina;
+				lowMorale = true;
 
-				_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
-
-				if (RNG::percent(30) == true)
-					_status = STATUS_BERSERK;	// or shoot stuff.
-			}
-			else								// else successfully avoided Panic
-			{
-				initTU();
-
-				if (panic > 0
-					&& _geoscapeSoldier != NULL)
+				if (revertMc == false)
 				{
-					++_expBravery;
+					if (RNG::percent(30) == true)
+						_status = STATUS_BERSERK;	// shoot stuff.
+					else
+						_status = STATUS_PANICKING;	// panic is either flee or freeze (determined later)
 				}
+			}
+			else if (pctPanic > 0 // else successfully avoided Panic
+				&& _geoscapeSoldier != NULL)
+			{
+				++_expBravery;
 			}
 		}
 	}
-	else if (isOut() == false)
-		initTU();
+
+	if (isOut_t() == false)
+		initTu(
+			false,
+			lowMorale);
 }
 
 /**
  * Calculates and resets this BattleUnit's time units and energy.
  * @param preBattle - true for pre-battle initialization (default false)
+ * @param lowMorale - true if unit is reverting from mind-control (default false)
  */
-void BattleUnit::initTU(bool preBattle)
+void BattleUnit::initTu(
+		bool preBattle,
+		bool lowMorale)
 {
 	if (_revived == true)
 	{
+		//Log(LOG_INFO) << ". . revived";
 		_revived = false;	// also done at the beginning of SavedBattleGame::endBattlePhase(), ie round rollover.
 							// Together these should account for prepping the unit
 							// at round start, or getting MC'd - both/either.
 		_tu = 0;
 		_energy = 0;
-
-		return;
 	}
-
-	int tu = _stats.tu;
-	double underLoad = static_cast<double>(_stats.strength) / static_cast<double>(getCarriedWeight());
-	underLoad *= getAccuracyModifier() / 2. + 0.5;
-	if (underLoad < 1.)
-		tu = static_cast<int>(Round(static_cast<double>(tu) * underLoad));
-
-	// Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
-	if (preBattle == false
-		&& _geoscapeSoldier != NULL)
+	else
 	{
-		tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
-	}
+		int tu = _stats.tu;
+		double underLoad = static_cast<double>(_stats.strength) / static_cast<double>(getCarriedWeight());
+		underLoad *= getAccuracyModifier() / 2. + 0.5;
+		if (underLoad < 1.)
+			tu = static_cast<int>(Round(static_cast<double>(tu) * underLoad));
 
-	_tu = std::max(12, tu);
-
-	if (preBattle == false)
-	{
-		int energy = _stats.stamina; // advanced Energy recovery
-		if (_geoscapeSoldier != NULL)
+		// Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
+		if (preBattle == false
+			&& _geoscapeSoldier != NULL)
 		{
-			if (_kneeled == true)
-				energy /= 2;
-			else
-				energy /= 3;
+			tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
 		}
-		else // aLiens & Tanks.
-			energy = energy * _unitRules->getEnergyRecovery() / 100;
 
-		energy = static_cast<int>(Round(static_cast<double>(energy) * getAccuracyModifier()));
+		if (lowMorale == true)
+			tu = _stats.tu * RNG::generate(0,100) / 100;
 
-		// Each fatal wound to the body reduces a Soldier's
-		// energy recovery by 10% of his/her current energy.
-		// note: only xCom Soldiers get fatal wounds, atm
-		if (_geoscapeSoldier != NULL)
-			energy -= _energy * getFatalWound(BODYPART_TORSO) * 10 / 100;
+		_tu = std::max(12, tu);
 
-		energy += _energy;
-		setEnergy(std::max(12, energy));
+		if (preBattle == false)
+		{
+			int energy = _stats.stamina; // advanced Energy recovery
+			if (_geoscapeSoldier != NULL)
+			{
+				if (_kneeled == true)
+					energy /= 2;
+				else
+					energy /= 3;
+			}
+			else // aLiens & Tanks.
+				energy = energy * _unitRules->getEnergyRecovery() / 100;
+
+			energy = static_cast<int>(Round(static_cast<double>(energy) * getAccuracyModifier()));
+
+			// Each fatal wound to the body reduces a Soldier's
+			// energy recovery by 10% of his/her current energy.
+			// note: only xCom Soldiers get fatal wounds, atm
+			if (_geoscapeSoldier != NULL)
+				energy -= _energy * getFatalWound(BODYPART_TORSO) * 10 / 100;
+
+			energy += _energy;
+			setEnergy(std::max(12, energy));
+		}
 	}
 }
 

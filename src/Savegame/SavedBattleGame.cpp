@@ -1258,7 +1258,7 @@ int SavedBattleGame::getTurn() const
 bool SavedBattleGame::endBattlePhase()
 {
 	//Log(LOG_INFO) << "sbg:endBattlePhase()";
-	for (std::vector<BattleUnit*>::const_iterator
+	for (std::vector<BattleUnit*>::const_iterator // -> would it be safe to exclude Dead & Unconscious units
 			i = _units.begin();
 			i != _units.end();
 			++i)
@@ -1374,7 +1374,7 @@ bool SavedBattleGame::endBattlePhase()
 	}
 
 	//Log(LOG_INFO) << ". side = " << (int)_side;
-	for (std::vector<BattleUnit*>::const_iterator
+	for (std::vector<BattleUnit*>::const_iterator // -> would it be safe to exclude Dead & Unconscious units
 			i = _units.begin();
 			i != _units.end();
 			++i)
@@ -1690,7 +1690,6 @@ void SavedBattleGame::addDestroyedObjective()
 	if (Options::battleAutoEnd == true
 		&& allObjectivesDestroyed() == true)
 	{
-//		setSelectedUnit(NULL);
 		_selectedUnit = NULL;
 		_battleState->getBattleGame()->cancelCurrentAction(true);
 		_battleState->getBattleGame()->requestEndTurn();
