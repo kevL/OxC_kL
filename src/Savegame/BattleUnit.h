@@ -797,9 +797,9 @@ private:
 		/// Gets this unit's armor value on a particular side.
 		int getArmor(UnitSide side) const;
 		/// Checks if this unit is wearing a PowerSuit.
-		bool hasPowerSuit() const;
+//		bool hasPowerSuit() const;
 		/// Checks if this unit is wearing a FlightSuit.
-		bool hasFlightSuit() const;
+//		bool hasFlightSuit() const;
 
 		/// Gets this unit's total number of fatal wounds.
 		int getFatalWounds() const;
@@ -938,7 +938,7 @@ private:
 
 		/// Gets this unit's name.
 		std::wstring getName(
-				const Language* const lang,
+				const Language* const lang = NULL,
 				bool debugId = false) const;
 
 		/// Gets this unit's stats.

@@ -1694,7 +1694,7 @@ bool TileEngine::canTargetTile(
  * until after the Initiative has been calculated or called from
  * ProjectileFlyBState.
  * @param triggerUnit	- pointer to a unit to check reaction fire against
- * @param tuSpent		- the unit's triggering expenditure of TU if firing or throwing.
+ * @param tuSpent		- the unit's triggering expenditure of TU if firing or throwing
  * @param autoSpot		- true if RF was not triggered by a Melee atk (default true)
  * @return, true if reaction fire took place
  */
@@ -1802,6 +1802,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 			&& (*i)->getFaction() != _battleSave->getSide()
 			&& (*i)->getFaction() != FACTION_NEUTRAL
 			&& (*i)->isOut_t() == false)
+//			&& (*i)->isOut(true, true) == false)
 		{
 			if ((((*i)->getFaction() == FACTION_HOSTILE							// Mc'd xCom units will RF on loyal xCom units
 						&& (*i)->getOriginalFaction() != FACTION_PLAYER)		// but Mc'd aLiens won't RF on other aLiens ...
@@ -5971,7 +5972,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				calculateUnitLighting();
 				calculateFOV(victim->getPosition());
 
-				// if all units from either faction are mind controlled - auto-end the mission.
+/*				// if all units from either faction are mind controlled - auto-end the mission.
 				if (Options::allowPsionicCapture == true
 					&& Options::battleAutoEnd == true
 					&& _battleSave->getSide() == FACTION_PLAYER)
@@ -5992,7 +5993,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 
 						_battleSave->getBattleGame()->requestEndTurn();
 					}
-				}
+				} */
 				//Log(LOG_INFO) << ". . . tallyUnits DONE";
 			}
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";

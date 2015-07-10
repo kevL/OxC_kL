@@ -502,6 +502,7 @@ void BattlescapeGame::popState()
 					if (_AIActionCounter > 2
 						|| selUnit == NULL
 						|| selUnit->isOut_t() == true)
+//						|| selUnit->isOut(true, true) == true)
 					{
 						if (selUnit != NULL)
 						{
@@ -580,6 +581,7 @@ void BattlescapeGame::popState()
 		// the currently selected unit died or became unconscious or disappeared inexplicably
 		if (_battleSave->getSelectedUnit() == NULL
 			|| _battleSave->getSelectedUnit()->isOut_t() == true)
+//			|| _battleSave->getSelectedUnit()->isOut(true, true) == true)
 		{
 			//Log(LOG_INFO) << ". unit incapacitated: cancelAction & deSelect)";
 			cancelCurrentAction();
@@ -1429,30 +1431,31 @@ void BattlescapeGame::endTurnPhase() // private.
 		return;
 	}
 
-	if (liveAliens != 0
-		&& liveSoldiers != 0)
+	const bool battleComplete = liveAliens == 0
+							 || liveSoldiers == 0;
+
+	if (battleComplete == false)
 	{
 		showInfoBoxQueue();
 		_parentState->updateSoldierInfo();
 
-		if (playableUnitSelected() == true) // <- only Faction_Player (or Debug-mode)
+		if (playableUnitSelected() == true) // <- only Faction_Player or Debug-mode
 		{
 			getMap()->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
 			setupCursor();
 		}
 	}
 
-	const bool battleComplete = liveAliens == 0
-							 || liveSoldiers == 0;
-
-	if (_endTurnRequested == true
-		&& (_battleSave->getSide() != FACTION_NEUTRAL
-			|| battleComplete == true))
+	if (_endTurnRequested == true)
 	{
-		_parentState->getGame()->pushState(new NextTurnState(
-														_battleSave,
-														_parentState,
-														pacified));
+		if (_battleSave->getSide() != FACTION_NEUTRAL
+			|| battleComplete == true)
+		{
+			_parentState->getGame()->pushState(new NextTurnState(
+															_battleSave,
+															_parentState,
+															pacified));
+		}
 	}
 
 	_endTurnRequested = false;
@@ -1507,6 +1510,8 @@ void BattlescapeGame::checkForCasualties(
 					i != attacker->getUnitSpotters()->end();
 					++i)
 			{
+//				if ((*i)->getHealth() != 0
+//					&& (*i)->getHealth() > (*i)->getStun())
 				if ((*i)->isOut_t(OUT_HLTH_STUN) == false)
 				{
 					attacker->setExposed(); // defender has been spotted on Player turn.
@@ -1761,6 +1766,7 @@ void BattlescapeGame::checkForCasualties(
 						j != _battleSave->getUnits()->end();
 						++j)
 				{
+//					if ((*j)->isOut(true, true) == false
 					if ((*j)->isOut_t() == false
 						&& (*j)->isFearable() == true) // not mechanical. Or a ZOMBIE!!
 					{
@@ -1890,6 +1896,7 @@ void BattlescapeGame::checkForCasualties(
 				_parentState->showPsiButton(unit->getOriginalFaction() == FACTION_HOSTILE
 										 && unit->getBaseStats()->psiSkill > 0
 										 && unit->isOut_t() == false);
+//										 && unit->isOut(true, true) == false);
 			else
 				_parentState->showPsiButton(false);
 		}

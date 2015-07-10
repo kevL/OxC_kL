@@ -177,7 +177,8 @@ void UnitDieBState::think()
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 // #2
-	else if (_unit->isOut() == false) // this ought be Status_Standing/Disabled also.
+//	else if (_unit->isOut() == false) // this ought be Status_Standing/Disabled also.
+	else if (_unit->isOut_t(OUT_STAT) == false) // this ought be Status_Standing/Disabled also.
 	{
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
@@ -240,10 +241,9 @@ void UnitDieBState::think()
 															.arg(_unit->getName(lang))));
 			}
 		}
-
-		// if all units from either faction are killed - auto-end the mission.
-		if (_parent->getSave()->getSide() == FACTION_PLAYER
-			&& Options::battleAutoEnd == true)
+/*		// if all units from either faction are killed - auto-end the mission.
+		if (Options::battleAutoEnd == true
+			&& _parent->getSave()->getSide() == FACTION_PLAYER)
 		{
 			int
 				liveAliens,
@@ -260,13 +260,14 @@ void UnitDieBState::think()
 
 				_parent->requestEndTurn();
 			}
-		}
+		} */
 	}
 // #5
 //	else if (_extraTicks > 0)
 //		++_extraTicks;
 // #4
-	else if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
+//	else if (_unit->isOut() == true)
+	else if (_unit->isOut_t(OUT_STAT) == true) // and this ought be Status_Dead OR _Unconscious.
 	{
 		_extraTicks = 1;
 

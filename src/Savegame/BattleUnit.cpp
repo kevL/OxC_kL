@@ -539,11 +539,17 @@ YAML::Node BattleUnit::save() const
 	YAML::Node node;
 
 	node["id"]				= _id;
-//	node["soldierId"]		= _id;
-	node["faction"]			= static_cast<int>(_faction);
+
+	if (getName().empty() == false)
+		node["name"]		= Language::wstrToUtf8(getName());
+
 	node["genUnitType"]		= _type;
 	node["genUnitArmor"]	= _armor->getType();
-	node["name"]			= Language::wstrToUtf8(getName(NULL));
+
+	node["faction"]			= static_cast<int>(_faction);
+	if (_originalFaction != _faction)
+		node["originalFaction"]	= static_cast<int>(_originalFaction);
+
 	node["status"]			= static_cast<int>(_status);
 	node["position"]		= _pos;
 	node["direction"]		= _direction;
@@ -562,39 +568,51 @@ YAML::Node BattleUnit::save() const
 	node["moraleRestored"]	= _moraleRestored;
 	node["killedBy"]		= static_cast<int>(_killedBy);
 	node["motionPoints"]	= _motionPoints;
+	node["activeHand"]		= _activeHand;
 //	node["specab"]			= (int)_specab;
 //	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
-	node["activeHand"]		= _activeHand;
 
-	if (_originalFaction != FACTION_HOSTILE
-		&& _faction != _originalFaction)
+	if (_faction != _originalFaction
+		&& _originalFaction != FACTION_HOSTILE)
 	{
 		node["mcStrength"]	= _mcStrength;
 		node["mcSkill"]		= _mcSkill;
 	}
 
-	for (size_t i = 0; i < 5; ++i)
-		node["armor"].push_back(_currentArmor[i]);
-	for (size_t i = 0; i < 6; ++i)
-		node["fatalWounds"].push_back(_fatalWounds[i]);
-
 	if (getCurrentAIState() != NULL)
 		node["AI"]				= getCurrentAIState()->save();
-	if (_originalFaction != _faction)
-		node["originalFaction"]	= static_cast<int>(_originalFaction);
+
 	if (_kills != 0)
 		node["kills"]			= _kills;
+
 	if (_faction == FACTION_PLAYER
 		&& _dontReselect == true)
 	{
 		node["dontReselect"]	= _dontReselect;
 	}
+
 	if (_spawnUnit.empty() == false)
 		node["spawnUnit"]		= _spawnUnit;
 
+	for (size_t
+			i = 0;
+			i != 5;
+			++i)
+	{
+		node["armor"].push_back(_currentArmor[i]);
+	}
+
 	if (_geoscapeSoldier != NULL)
 	{
+		for (size_t
+				i = 0;
+				i != 6;
+				++i)
+		{
+			node["fatalWounds"].push_back(_fatalWounds[i]);
+		}
+
 		if (_statistics->statsDefault() == false)
 			node["diaryStatistics"]	= _statistics->save();
 
@@ -2382,6 +2400,7 @@ void BattleUnit::prepUnit(bool full)
 			healStun(RNG::generate(1,3)); // recover stun
 		}
 
+//		if (isOut() == false)
 		if (isOut_t() == false)
 		{
 			const int pctPanic = 100 - (2 * getMorale());
@@ -2405,6 +2424,7 @@ void BattleUnit::prepUnit(bool full)
 		}
 	}
 
+//	if (isOut() == false)
 	if (isOut_t() == false)
 		initTu(
 			false,
@@ -3488,10 +3508,10 @@ RuleArmor* BattleUnit::getArmor() const
 	return _armor;
 }
 
-/**
+/*
  * Checks if unit is wearing a PowerSuit.
  * @return, true if this unit is wearing a PowerSuit of some sort
- */
+ *
 bool BattleUnit::hasPowerSuit() const
 {
 	std::string armorType = _armor->getType();
@@ -3509,12 +3529,12 @@ bool BattleUnit::hasPowerSuit() const
 	}
 
 	return false;
-}
+} */
 
-/**
+/*
  * Checks if unit is wearing a FlightSuit.
  * @return, true if this unit is wearing a FlightSuit of some sort
- */
+ *
 bool BattleUnit::hasFlightSuit() const
 {
 	std::string armorType = _armor->getType();
@@ -3532,13 +3552,13 @@ bool BattleUnit::hasFlightSuit() const
 	}
 
 	return false;
-}
+} */
 
 /**
  * Gets a unit's name.
  * @note An aLien's name is the translation of its race and rank; hence the
  * language pointer needed.
- * @param lang		- pointer to Language
+ * @param lang		- pointer to Language (default NULL)
  * @param debugId	- append unit ID to name for debug purposes (default false)
  * @return, name of this BattleUnit
  */

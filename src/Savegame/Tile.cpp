@@ -667,7 +667,7 @@ bool Tile::destroy(int part)
 {
 	const size_t i = static_cast<size_t>(part);
 
-	bool _objective = false;
+	bool objective = false;
 
 	if (_objects[i])
 	{
@@ -677,7 +677,7 @@ bool Tile::destroy(int part)
 			return false;
 		}
 
-		_objective = (_objects[i]->getSpecialType() == MUST_DESTROY);
+		objective = (_objects[i]->getSpecialType() == MUST_DESTROY);
 
 		const MapData* const origPart = _objects[i];
 		const int origMapDataSetID = _mapDataSetID[i];
@@ -713,7 +713,7 @@ bool Tile::destroy(int part)
 				O_FLOOR);
 	}
 
-	return _objective;
+	return objective;
 }
 
 /**

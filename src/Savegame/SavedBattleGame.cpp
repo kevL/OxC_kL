@@ -1674,6 +1674,7 @@ bool SavedBattleGame::isAborted() const
 
 /**
  * Increments the objectives-needed counter.
+ * @note 'Objectives' are tile-parts marked w/ MUST_DESTROY in their MCD.
  */
 void SavedBattleGame::addToObjectiveCount()
 {
@@ -1686,14 +1687,13 @@ void SavedBattleGame::addToObjectiveCount()
 void SavedBattleGame::addDestroyedObjective()
 {
 	++_objectivesDestroyed;
-
-	if (Options::battleAutoEnd == true
+/*	if (Options::battleAutoEnd == true
 		&& allObjectivesDestroyed() == true)
 	{
 		_selectedUnit = NULL;
 		_battleState->getBattleGame()->cancelCurrentAction(true);
 		_battleState->getBattleGame()->requestEndTurn();
-	}
+	} */
 }
 
 /**
