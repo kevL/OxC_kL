@@ -344,13 +344,12 @@ struct BattleUnitStatistics
 		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
 		medikitApplications		= node["medikitApplications"]	.as<int>(medikitApplications);
 		revivedSoldier			= node["revivedSoldier"]		.as<int>(revivedSoldier);
-
-		ironMan =
+/*		ironMan =
 		loneSurvivor =
 		nikeCross =
 		KIA =
 		MIA = false;
-		daysWounded = 0;
+		daysWounded = 0; */
 	}
 
 	///

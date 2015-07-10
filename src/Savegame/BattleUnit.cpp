@@ -195,7 +195,7 @@ BattleUnit::BattleUnit(
 			look,
 			_rankInt);
 
-	_statistics = new BattleUnitStatistics();
+	_statistics = new BattleUnitStatistics(); // Soldier Diary
 	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 }
 
