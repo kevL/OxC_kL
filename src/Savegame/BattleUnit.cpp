@@ -467,7 +467,8 @@ void BattleUnit::load(const YAML::Node& node)
 
 	if (_geoscapeSoldier != NULL)
 	{
-		_statistics->load(node["diaryStatistics"]);
+		if (node["diaryStatistics"])
+			_statistics->load(node["diaryStatistics"]);
 
 		_battleOrder	= node["battleOrder"]	.as<size_t>(_battleOrder);
 		_kneeled		= node["kneeled"]		.as<bool>(_kneeled);
@@ -594,7 +595,8 @@ YAML::Node BattleUnit::save() const
 
 	if (_geoscapeSoldier != NULL)
 	{
-		node["diaryStatistics"]	= _statistics->save();
+		if (_statistics->statsDefault() == false)
+			node["diaryStatistics"]	= _statistics->save();
 
 		node["battleOrder"]		= _battleOrder;
 		node["kneeled"]			= _kneeled;

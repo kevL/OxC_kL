@@ -297,6 +297,28 @@ struct BattleUnitStatistics
 		return false;
 	}
 
+	/// Checks if these statistics are default.
+	bool statsDefault() const
+	{
+		if (kills.empty() == true
+			&& wasUnconscious == false
+			&& shotAtCounter == 0
+			&& hitCounter == 0
+			&& shotByFriendlyCounter == 0
+			&& shotFriendlyCounter == 0
+			&& longDistanceHitCounter == 0
+			&& lowAccuracyHitCounter == 0
+			&& shotsFiredCounter == 0
+			&& shotsLandedCounter == 0
+			&& medikitApplications == 0
+			&& revivedSoldier == 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	///
 	void load(const YAML::Node& node)
 	{
@@ -316,16 +338,16 @@ struct BattleUnitStatistics
 		hitCounter				= node["hitCounter"]			.as<int>(hitCounter);
 		shotByFriendlyCounter	= node["shotByFriendlyCounter"]	.as<int>(shotByFriendlyCounter);
 		shotFriendlyCounter		= node["shotFriendlyCounter"]	.as<int>(shotFriendlyCounter);
-		loneSurvivor			= node["loneSurvivor"]			.as<bool>(loneSurvivor);
-		ironMan					= node["ironMan"]				.as<bool>(ironMan);
 		longDistanceHitCounter	= node["longDistanceHitCounter"].as<int>(longDistanceHitCounter);
 		lowAccuracyHitCounter	= node["lowAccuracyHitCounter"]	.as<int>(lowAccuracyHitCounter);
 		shotsFiredCounter		= node["shotsFiredCounter"]		.as<int>(shotsFiredCounter);
 		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
 		medikitApplications		= node["medikitApplications"]	.as<int>(medikitApplications);
-		nikeCross				= node["nikeCross"]				.as<bool>(nikeCross);
 		revivedSoldier			= node["revivedSoldier"]		.as<int>(revivedSoldier);
 
+		ironMan =
+		loneSurvivor =
+		nikeCross =
 		KIA =
 		MIA = false;
 		daysWounded = 0;
@@ -347,22 +369,17 @@ struct BattleUnitStatistics
 			}
 		}
 
-		node["wasUnconscious"]			= wasUnconscious;
-		node["shotAtCounter"]			= shotAtCounter;
-		node["hitCounter"]				= hitCounter;
-		node["shotByFriendlyCounter"]	= shotByFriendlyCounter;
-		node["shotFriendlyCounter"]		= shotFriendlyCounter;
-		node["loneSurvivor"]			= loneSurvivor;
-		node["ironMan"]					= ironMan;
-		node["longDistanceHitCounter"]	= longDistanceHitCounter;
-		node["lowAccuracyHitCounter"]	= lowAccuracyHitCounter;
-		node["shotsFiredCounter"]		= shotsFiredCounter;
-		node["shotsLandedCounter"]		= shotsLandedCounter;
-		node["medikitApplications"]		= medikitApplications;
-		node["revivedSoldier"]			= revivedSoldier;
-
-		if (nikeCross == true)
-			node["nikeCross"]			= nikeCross;
+		if (wasUnconscious != false)		node["wasUnconscious"]			= wasUnconscious;
+		if (shotAtCounter != 0)				node["shotAtCounter"]			= shotAtCounter;
+		if (hitCounter != 0)				node["hitCounter"]				= hitCounter;
+		if (shotByFriendlyCounter != 0)		node["shotByFriendlyCounter"]	= shotByFriendlyCounter;
+		if (shotFriendlyCounter != 0)		node["shotFriendlyCounter"]		= shotFriendlyCounter;
+		if (longDistanceHitCounter != 0)	node["longDistanceHitCounter"]	= longDistanceHitCounter;
+		if (lowAccuracyHitCounter != 0)		node["lowAccuracyHitCounter"]	= lowAccuracyHitCounter;
+		if (shotsFiredCounter != 0)			node["shotsFiredCounter"]		= shotsFiredCounter;
+		if (shotsLandedCounter != 0)		node["shotsLandedCounter"]		= shotsLandedCounter;
+		if (medikitApplications != 0)		node["medikitApplications"]		= medikitApplications;
+		if (revivedSoldier != 0)			node["revivedSoldier"]			= revivedSoldier;
 
 		return node;
 	}
@@ -381,16 +398,16 @@ struct BattleUnitStatistics
 			hitCounter(0),
 			shotByFriendlyCounter(0),
 			shotFriendlyCounter(0),
-			loneSurvivor(false),
-			ironMan(false),
 			longDistanceHitCounter(0),
 			lowAccuracyHitCounter(0),
 			shotsFiredCounter(0),
 			shotsLandedCounter(0),
-			KIA(false),
-			nikeCross(false),
 			medikitApplications(0),
 			revivedSoldier(0),
+			ironMan(false), // ->> calculated at end of Tactical, do not save ->
+			loneSurvivor(false),
+			nikeCross(false),
+			KIA(false),
 			MIA(false),
 			daysWounded(0)
 	{}
