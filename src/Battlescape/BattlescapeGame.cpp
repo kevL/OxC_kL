@@ -1423,7 +1423,7 @@ void BattlescapeGame::endTurnPhase() // private.
 								liveAliens,
 								liveSoldiers);
 
-	if (_battleSave->allObjectivesDestroyed() == true)
+	if (_battleSave->allObjectivesDestroyed() == true) // brain death.
 	{
 		_parentState->finishBattle(
 								false,
@@ -1446,16 +1446,14 @@ void BattlescapeGame::endTurnPhase() // private.
 		}
 	}
 
-	if (_endTurnRequested == true)
+	if (_endTurnRequested == true
+		&& (_battleSave->getSide() != FACTION_NEUTRAL
+			|| battleComplete == true))
 	{
-		if (_battleSave->getSide() != FACTION_NEUTRAL
-			|| battleComplete == true)
-		{
-			_parentState->getGame()->pushState(new NextTurnState(
-															_battleSave,
-															_parentState,
-															pacified));
-		}
+		_parentState->getGame()->pushState(new NextTurnState(
+														_battleSave,
+														_parentState,
+														pacified));
 	}
 
 	_endTurnRequested = false;

@@ -426,6 +426,9 @@ class BattleUnit // no copy cTor.
 
 private:
 //	static const int SPEC_WEAPON_MAX = 3;
+	static const size_t
+			PARTS_ARMOR		= 5, // doubles as both armorValues and sprites' cache
+			PARTS_WOUNDS	= 6;
 
 	bool
 		_aboutToDie,
@@ -444,7 +447,7 @@ private:
 	int
 		_aimPhase,
 		_coverReserve,
-		_currentArmor[5],
+		_armorHp[5],
 		_direction,
 		_directionTurret,
 		_energy,
@@ -512,9 +515,8 @@ private:
 	// static data
 	UnitStats _stats;
 
-	bool
-		_floorAbove,
-		_hidingForTurn;
+	bool _hidingForTurn;
+//		_floorAbove,
 //		_respawn;
 	int
 		_aggression,
@@ -1146,7 +1148,7 @@ private:
 		void setBattleForUnit(BattlescapeGame* const battleGame);
 
 		/// Gets if this unit is about to die.
-		bool getAboutToDie();
+		bool getAboutToDie() const;
 		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
 		void putDown();
 

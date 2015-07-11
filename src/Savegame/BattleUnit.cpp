@@ -131,7 +131,7 @@ BattleUnit::BattleUnit(
 		_aboutToDie(false),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
-		_floorAbove(false),
+//		_floorAbove(false),
 
 		_name(soldier->getName()),
 		_id(soldier->getId()),
@@ -148,8 +148,8 @@ BattleUnit::BattleUnit(
 //	_stats	= *soldier->getCurrentStats();
 	_stats += *_armor->getStats(); // armors may modify effective stats
 
-	_loftempsSet	= _armor->getLoftempsSet();
-	_moveType		= _armor->getMoveTypeArmor();
+	_loftempsSet = _armor->getLoftempsSet();
+	_moveType = _armor->getMoveTypeArmor();
 
 	int rankValue;
 	switch (soldier->getRank())
@@ -164,23 +164,35 @@ BattleUnit::BattleUnit(
 			rankValue =	 0;
 	}
 
-//	_value		= 20 + soldier->getMissions() + rankValue;
-	_value		= 20 + (soldier->getMissions() * (diff + 1)) + (rankValue * (diff + 1)); // kL, heheheh
+//	_value = 20 + soldier->getMissions() + rankValue;
+	_value = 20 + (soldier->getMissions() * (diff + 1)) + (rankValue * (diff + 1)); // kL, heheheh
 
-	_tu			= _stats.tu;
-	_energy		= _stats.stamina;
-	_health		= _stats.health;
+	_tu = _stats.tu;
+	_energy = _stats.stamina;
+	_health = _stats.health;
 
-	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
-	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
-	_currentArmor[SIDE_RIGHT]	= _armor->getSideArmor();
-	_currentArmor[SIDE_REAR]	= _armor->getRearArmor();
-	_currentArmor[SIDE_UNDER]	= _armor->getUnderArmor();
+	_armorHp[SIDE_FRONT]	= _armor->getFrontArmor();
+	_armorHp[SIDE_LEFT]		=
+	_armorHp[SIDE_RIGHT]	= _armor->getSideArmor();
+	_armorHp[SIDE_REAR]		= _armor->getRearArmor();
+	_armorHp[SIDE_UNDER]	= _armor->getUnderArmor();
 
-	for (size_t i = 0; i < 6; ++i)
+	for (size_t
+			i = 0;
+			i != PARTS_ARMOR;
+			++i)
+	{
+		_cache[i] = NULL;
+	}
+
+	for (size_t
+			i = 0;
+			i != PARTS_WOUNDS;
+			++i)
+	{
 		_fatalWounds[i] = 0;
-	for (size_t i = 0; i < 5; ++i)
-		_cache[i] = 0;
+	}
+
 //	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
 //		_specWeapon[i] = 0;
 
@@ -279,7 +291,7 @@ BattleUnit::BattleUnit(
 		_stunLevel(0),
 		_aboutToDie(false),
 		_activeHand("STR_RIGHT_HAND"),
-		_floorAbove(false),
+//		_floorAbove(false),
 		_diedByFire(false),
 		_turnDir(0),
 		_mcStrength(0),
@@ -306,7 +318,7 @@ BattleUnit::BattleUnit(
 		_stats(*unitRule->getStats())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
-//	_stats	= *unitRule->getStats();
+//	_stats = *unitRule->getStats();
 	_stats += *_armor->getStats(); // armors may modify effective stats (but not further modified by game difficulty or monthly progress)
 
 	if (faction == FACTION_HOSTILE)
@@ -317,9 +329,9 @@ BattleUnit::BattleUnit(
 				month);
 	}
 
-	_tu		= _stats.tu;
-	_energy	= _stats.stamina;
-	_health	= _stats.health;
+	_tu = _stats.tu;
+	_energy = _stats.stamina;
+	_health = _stats.health;
 
 	if (unitRule->isFemale() == true)
 		_gender = GENDER_FEMALE;
@@ -338,16 +350,28 @@ BattleUnit::BattleUnit(
 //	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
 //		_breathFrame = 0;
 
-	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
-	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
-	_currentArmor[SIDE_RIGHT]	= _armor->getSideArmor();
-	_currentArmor[SIDE_REAR]	= _armor->getRearArmor();
-	_currentArmor[SIDE_UNDER]	= _armor->getUnderArmor();
+	_armorHp[SIDE_FRONT]	= _armor->getFrontArmor();
+	_armorHp[SIDE_LEFT]		=
+	_armorHp[SIDE_RIGHT]	= _armor->getSideArmor();
+	_armorHp[SIDE_REAR]		= _armor->getRearArmor();
+	_armorHp[SIDE_UNDER]	= _armor->getUnderArmor();
 
-	for (size_t i = 0; i < 6; ++i)
-		_fatalWounds[i] = 0;
-	for (size_t i = 0; i < 5; ++i)
+	for (size_t
+			i = 0;
+			i != PARTS_ARMOR;
+			++i)
+	{
 		_cache[i] = 0;
+	}
+
+	for (size_t
+			i = 0;
+			i != PARTS_WOUNDS;
+			++i)
+	{
+		_fatalWounds[i] = 0;
+	}
+
 //	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
 //		_specWeapon[i] = 0;
 
@@ -393,10 +417,10 @@ BattleUnit::~BattleUnit()
 	//Log(LOG_INFO) << "Delete BattleUnit";
 	for (size_t
 			i = 0;
-			i != 5;
+			i != PARTS_ARMOR;
 			++i)
 	{
-		if (_cache[i])
+		if (_cache[i] != NULL)
 			delete _cache[i];
 	}
 
@@ -460,10 +484,21 @@ void BattleUnit::load(const YAML::Node& node)
 	_mcStrength			= node["mcStrength"]			.as<int>(_mcStrength);
 	_mcSkill			= node["mcSkill"]				.as<int>(_mcSkill);
 
-	for (size_t i = 0; i != 5; ++i)
-		_currentArmor[i]	= node["armor"][i]		.as<int>(_currentArmor[i]);
-	for (size_t i = 0; i != 6; ++i)
-		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
+	for (size_t
+			i = 0;
+			i != PARTS_ARMOR;
+			++i)
+	{
+		_armorHp[i] = node["armor"][i].as<int>(_armorHp[i]);
+	}
+
+	for (size_t
+			i = 0;
+			i != PARTS_WOUNDS;
+			++i)
+	{
+		_fatalWounds[i] = node["fatalWounds"][i].as<int>(_fatalWounds[i]);
+	}
 
 	if (_geoscapeSoldier != NULL)
 	{
@@ -504,7 +539,7 @@ void BattleUnit::load(const YAML::Node& node)
 }
 
 /**
- * Loads the vector of units spotted this turn during SavedBattleGame load.
+ * Loads the vector of units-spotted-this-turn during SavedBattleGame load.
  * @param battleSave - pointer to the SavedBattleGame
  */
 void BattleUnit::loadSpotted(SavedBattleGame* const battleSave)
@@ -548,7 +583,15 @@ YAML::Node BattleUnit::save() const
 
 	node["faction"]			= static_cast<int>(_faction);
 	if (_originalFaction != _faction)
+	{
 		node["originalFaction"]	= static_cast<int>(_originalFaction);
+
+		if (_originalFaction != FACTION_HOSTILE)
+		{
+			node["mcStrength"]	= _mcStrength;
+			node["mcSkill"]		= _mcSkill;
+		}
+	}
 
 	node["status"]			= static_cast<int>(_status);
 	node["position"]		= _pos;
@@ -573,41 +616,34 @@ YAML::Node BattleUnit::save() const
 //	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
 
-	if (_faction != _originalFaction
-		&& _originalFaction != FACTION_HOSTILE)
-	{
-		node["mcStrength"]	= _mcStrength;
-		node["mcSkill"]		= _mcSkill;
-	}
-
 	if (getCurrentAIState() != NULL)
-		node["AI"]				= getCurrentAIState()->save();
+		node["AI"] = getCurrentAIState()->save();
 
 	if (_kills != 0)
-		node["kills"]			= _kills;
+		node["kills"] = _kills;
 
 	if (_faction == FACTION_PLAYER
 		&& _dontReselect == true)
 	{
-		node["dontReselect"]	= _dontReselect;
+		node["dontReselect"] = _dontReselect;
 	}
 
 	if (_spawnUnit.empty() == false)
-		node["spawnUnit"]		= _spawnUnit;
+		node["spawnUnit"] = _spawnUnit;
 
 	for (size_t
 			i = 0;
-			i != 5;
+			i != PARTS_ARMOR;
 			++i)
 	{
-		node["armor"].push_back(_currentArmor[i]);
+		node["armor"].push_back(_armorHp[i]);
 	}
 
 	if (_geoscapeSoldier != NULL)
 	{
 		for (size_t
 				i = 0;
-				i != 6;
+				i != PARTS_WOUNDS;
 				++i)
 		{
 			node["fatalWounds"].push_back(_fatalWounds[i]);
@@ -698,7 +734,7 @@ void BattleUnit::setRecolor(
 			i != qtyGroups;
 			++i)
 	{
-		if (   colors[i].first > 0
+		if (colors[i].first > 0
 			&& colors[i].second > 0)
 		{
 			_recolor.push_back(std::make_pair(
@@ -1569,7 +1605,8 @@ int BattleUnit::damage(
 			}
 		}
 
-		if (isOut(true, true) == true)
+//		if (isOut(true, true) == true)
+		if (isOut_t(OUT_HLTH_STUN) == true)
 			_aboutToDie = true;
 	}
 
@@ -2299,7 +2336,7 @@ void BattleUnit::setArmor(
 		UnitSide side)
 {
 	if (armor < 0) armor = 0;
-	_currentArmor[side] = armor;
+	_armorHp[side] = armor;
 }
 
 /**
@@ -2309,7 +2346,7 @@ void BattleUnit::setArmor(
  */
 int BattleUnit::getArmor(UnitSide side) const
 {
-	return _currentArmor[side];
+	return _armorHp[side];
 }
 
 /**
@@ -2318,16 +2355,16 @@ int BattleUnit::getArmor(UnitSide side) const
  */
 int BattleUnit::getFatalWounds() const
 {
-	int wounds = 0;
+	int ret = 0;
 	for (size_t
 			i = 0;
-			i != 6;
+			i != PARTS_WOUNDS;
 			++i)
 	{
-		wounds += _fatalWounds[i];
+		ret += _fatalWounds[i];
 	}
 
-	return wounds;
+	return ret;
 }
 
 /**
@@ -2502,15 +2539,15 @@ void BattleUnit::initTu(
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (isFearable() == false)
-		return;
+	if (isFearable() == true)
+	{
+		_morale += change;
 
-	_morale += change;
-
-	if (_morale > 100)
-		_morale = 100;
-	else if (_morale < 0)
-		_morale = 0;
+		if (_morale > 100)
+			_morale = 100;
+		else if (_morale < 0)
+			_morale = 0;
+	}
 }
 
 /**
@@ -2545,10 +2582,7 @@ bool BattleUnit::reselectAllowed() const
 void BattleUnit::setFireOnUnit(int fire)
 {
 	if (_specab != SPECAB_BURN)
-//		&& _specab != SPECAB_BURN_AND_EXPLODE)
-	{
 		_fire = fire;
-	}
 }
 
 /**
@@ -2749,7 +2783,7 @@ BattleItem* BattleUnit::getItem(
 		{
 			if ((*i)->getSlot() != NULL
 				&& (*i)->getSlot()->getId() == slot
-				&& (*i)->occupiesSlot(x, y))
+				&& (*i)->occupiesSlot(x,y))
 			{
 				return *i;
 			}
@@ -2763,7 +2797,7 @@ BattleItem* BattleUnit::getItem(
 				++i)
 		{
 			if ((*i)->getSlot() != NULL
-				&& (*i)->occupiesSlot(x, y))
+				&& (*i)->occupiesSlot(x,y))
 			{
 				return *i;
 			}
@@ -3018,65 +3052,65 @@ std::string BattleUnit::getMeleeWeapon() const
 } */
 
 /**
- * Check if we have ammo and reload if needed (used for the AI).
+ * Check if this BattleUnit has ammo and if so reload weapon (used by the AI).
  * @return, true if unit has a loaded weapon or has just loaded it.
  */
 bool BattleUnit::checkAmmo()
 {
-	if (getTimeUnits() < 15) // should go to Ruleset.
-		return false;
-
-	BattleItem* weapon = getItem("STR_RIGHT_HAND");
-	if (weapon == NULL
-		|| weapon->getAmmoItem() != NULL
-		|| weapon->getRules()->getBattleType() == BT_MELEE)
+	if (_tu > 14) // should go to Ruleset.
 	{
-		weapon = getItem("STR_LEFT_HAND");
+		BattleItem* weapon = getItem("STR_RIGHT_HAND");
 		if (weapon == NULL
 			|| weapon->getAmmoItem() != NULL
 			|| weapon->getRules()->getBattleType() == BT_MELEE)
 		{
-			return false;
-		}
-	}
-
-	// we have a non-melee weapon with no ammo and 15 or more TUs,
-	// we might need to look for ammo then ...
-	bool wrongAmmo = true;
-
-	BattleItem* ammo = NULL;
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = getInventory()->begin();
-			i != getInventory()->end();
-			++i)
-	{
-		ammo = *i;
-		for (std::vector<std::string>::const_iterator
-				j = weapon->getRules()->getCompatibleAmmo()->begin();
-				j != weapon->getRules()->getCompatibleAmmo()->end();
-				++j)
-		{
-			if (*j == ammo->getRules()->getType())
+			weapon = getItem("STR_LEFT_HAND");
+			if (weapon == NULL
+				|| weapon->getAmmoItem() != NULL
+				|| weapon->getRules()->getBattleType() == BT_MELEE)
 			{
-				wrongAmmo = false;
-				break;
+				return false;
 			}
 		}
 
-		if (wrongAmmo == false)
-			break;
+		// if it's a non-melee weapon with no ammo and 15 or more TUs might need to look for ammo ...
+		BattleItem* ammo = NULL;
+
+		bool wrong = true;
+		for (std::vector<BattleItem*>::const_iterator
+				i = getInventory()->begin();
+				i != getInventory()->end()
+					&& wrong == true;
+				++i)
+		{
+			for (std::vector<std::string>::const_iterator
+					j = weapon->getRules()->getCompatibleAmmo()->begin();
+					j != weapon->getRules()->getCompatibleAmmo()->end()
+						&& wrong == true;
+					++j)
+			{
+				if (*j == (*i)->getRules()->getType())
+				{
+					wrong = false;
+					ammo = *i;
+				}
+			}
+		}
+
+		if (wrong == false)
+		{
+			_tu -= 15;
+			weapon->setAmmoItem(ammo);
+			ammo->moveToOwner(NULL);
+
+			return true;
+		}
 	}
 
-	if (wrongAmmo == true)
-		return false; // didn't find any compatible ammo in inventory
-
-	spendTimeUnits(15);
-	weapon->setAmmoItem(ammo);
-	ammo->moveToOwner(NULL);
-
-	//Log(LOG_INFO) << "BattleUnit::checkAmmo() EXIT";
-	return true;
+	// didn't find any compatible ammo in inventory
+	// or weapon is loaded/ doesn't require ammo
+	// or not enough Tu to reload anyway.
+	return false;
 }
 
 /**
@@ -3824,19 +3858,20 @@ void BattleUnit::setActiveHand(const std::string& slot)
 }
 
 /**
- * Gets unit's active hand. Must have an item in that hand.
- * Else, switch to other hand or use righthand as default.
+ * Gets unit's active hand.
+ @note Must have an item in that hand else switch to other hand or use righthand
+ * as default.
  * @return, the active hand
  */
 std::string BattleUnit::getActiveHand() const
 {
-	if (getItem(_activeHand)) // has an item in the already active Hand.
+	if (getItem(_activeHand) != NULL) // has an item in the already active Hand.
 		return _activeHand;
 
-	if (getItem("STR_RIGHT_HAND"))
+	if (getItem("STR_RIGHT_HAND") != NULL)
 		return "STR_RIGHT_HAND";
 
-	if (getItem("STR_LEFT_HAND"))
+	if (getItem("STR_LEFT_HAND") != NULL)
 		return "STR_LEFT_HAND";
 
 	return "";
@@ -3876,10 +3911,10 @@ void BattleUnit::halveArmor()
 {
 	for (size_t
 			i = 0;
-			i != 5;
+			i != PARTS_ARMOR;
 			++i)
 	{
-		_currentArmor[i] /= 2;
+		_armorHp[i] /= 2;
 	}
 }
 
@@ -3984,7 +4019,7 @@ void BattleUnit::invalidateCache()
 {
 	for (size_t
 			i = 0;
-			i != 5;
+			i != PARTS_ARMOR;
 			++i)
 	{
 		_cache[i] = NULL;
@@ -4035,7 +4070,7 @@ void BattleUnit::deriveRank()
  */
 bool BattleUnit::checkViewSector(const Position& pos) const
 {
-	int
+	const int
 		dx = pos.x - _pos.x,
 		dy = _pos.y - pos.y;
 
@@ -4347,7 +4382,8 @@ bool BattleUnit::isSelectable(
 		bool checkInventory) const
 {
 	return _faction == faction
-		&& isOut() == false
+//		&& isOut() == false
+		&& isOut_t(OUT_STAT) == false
 		&& (checkReselect == false
 			|| reselectAllowed() == true)
 		&& (checkInventory == false
@@ -4356,13 +4392,13 @@ bool BattleUnit::isSelectable(
 
 /**
  * Checks if this unit has an inventory.
- * Large units and/or terror units don't have inventories generally.
+ * @note Large units and/or terror units shouldn't show inventories generally.
  * @return, true if an inventory is available
  */
 bool BattleUnit::hasInventory() const
 {
 	return _armor->hasInventory() == true
-		&& (_geoscapeSoldier != NULL // kL_>
+		&& (_geoscapeSoldier != NULL
 			|| (_unitRules->isMechanical() == false
 				&& _rank != "STR_LIVE_TERRORIST"));
 }
@@ -4570,7 +4606,7 @@ void BattleUnit::setBattleForUnit(BattlescapeGame* const battleGame)
  * the end of its collapse sequence.
  * @return, true if about to die
  */
-bool BattleUnit::getAboutToDie()
+bool BattleUnit::getAboutToDie() const
 {
 	return _aboutToDie;
 }
