@@ -1100,40 +1100,40 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 	//Log(LOG_INFO) << ". pSmoke = " << pSmoke;
 	//Log(LOG_INFO) << ". pFire " << pFire;
 
-	float vuln;
+	float vulnr;
 
 	if (battleSave == NULL)	// damage standing units (at end of faction's turn-phases). Notice this hits only the primary quadrant!
 //		&& _unit != NULL)	// safety. call from BattlescapeGame::endTurnPhase() checks only Tiles w/ units, but that could change ....
 	{
 		//Log(LOG_INFO) << ". . hit Unit";
 		if (pSmoke != 0
-			&& _unit->isFearable() == true)
+			&& _unit->isHealable() == true)
 		{
-			vuln = _unit->getArmor()->getDamageModifier(DT_SMOKE);
-			if (vuln > 0.f) // try to knock _unit out.
+			vulnr = _unit->getArmor()->getDamageModifier(DT_SMOKE);
+			if (vulnr > 0.f) // try to knock _unit out.
 				_unit->damage(
 							Position(0,0,0),
-							static_cast<int>(Round(static_cast<float>(pSmoke) * vuln)),
+							static_cast<int>(Round(static_cast<float>(pSmoke) * vulnr)),
 							DT_SMOKE, // -> DT_STUN
 							true);
 		}
 
 		if (pFire != 0)
 		{
-			vuln = _unit->getArmor()->getDamageModifier(DT_IN);
-			if (vuln > 0.f)
+			vulnr = _unit->getArmor()->getDamageModifier(DT_IN);
+			if (vulnr > 0.f)
 			{
 				_unit->damage(
 							Position(0,0,0),
-							static_cast<int>(Round(static_cast<float>(pFire) * vuln)),
+							static_cast<int>(Round(static_cast<float>(pFire) * vulnr)),
 							DT_IN,
 							true);
 
-				if (RNG::percent(static_cast<int>(Round(40.f * vuln))) == true) // try to set _unit on fire. Do damage from fire here, too.
+				if (RNG::percent(static_cast<int>(Round(40.f * vulnr))) == true) // try to set _unit on fire. Do damage from fire here, too.
 				{
 					const int dur = RNG::generate(
 												1,
-												static_cast<int>(Round(5.f * vuln)));
+												static_cast<int>(Round(5.f * vulnr)));
 					if (dur > _unit->getFireOnUnit())
 						_unit->setFireOnUnit(dur);
 				}
@@ -1161,11 +1161,11 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 					//Log(LOG_INFO) << ". . unConsc unit (smoke) " << unit->getId();
 					unit->setTakenExpl();
 
-					vuln = unit->getArmor()->getDamageModifier(DT_SMOKE);
-					if (vuln > 0.f)
+					vulnr = unit->getArmor()->getDamageModifier(DT_SMOKE);
+					if (vulnr > 0.f)
 						unit->damage(
 								Position(0,0,0),
-								static_cast<int>(Round(static_cast<float>(pSmoke) * vuln)),
+								static_cast<int>(Round(static_cast<float>(pSmoke) * vulnr)),
 								DT_SMOKE,
 								true);
 				}
@@ -1195,12 +1195,12 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 						//Log(LOG_INFO) << ". . unConsc unit (fire) " << unit->getId();
 						unit->setTakenFire();
 
-						vuln = unit->getArmor()->getDamageModifier(DT_IN);
-						if (vuln > 0.f)
+						vulnr = unit->getArmor()->getDamageModifier(DT_IN);
+						if (vulnr > 0.f)
 						{
 							unit->damage(
 									Position(0,0,0),
-									static_cast<int>(static_cast<float>(pFire) * vuln),
+									static_cast<int>(static_cast<float>(pFire) * vulnr),
 									DT_IN,
 									true);
 

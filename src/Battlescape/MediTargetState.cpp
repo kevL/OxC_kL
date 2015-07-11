@@ -138,7 +138,7 @@ void MediTargetState::init()
 			i != targetUnits->end();
 			)
 	{
-		if ((*i)->isFearable() == true) // isWoundable()
+		if ((*i)->isHealable() == true)
 		{
 			addToList = false;
 

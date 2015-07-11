@@ -437,6 +437,7 @@ private:
 		_diedByFire,
 		_dontReselect,
 		_floating,
+		_hidingForTurn,
 		_kneeled,
 //		_panicking,
 		_revived,
@@ -447,7 +448,7 @@ private:
 	int
 		_aimPhase,
 		_coverReserve,
-		_armorHp[5],
+		_armorHp[PARTS_ARMOR],
 		_direction,
 		_directionTurret,
 		_energy,
@@ -460,7 +461,7 @@ private:
 		_expThrowing,
 		_faceDirection, // used only during strafing moves
 		_fallPhase,
-		_fatalWounds[6],
+		_fatalWounds[PARTS_WOUNDS],
 		_fire,
 		_health,
 		_id,
@@ -515,9 +516,6 @@ private:
 	// static data
 	UnitStats _stats;
 
-	bool _hidingForTurn;
-//		_floorAbove,
-//		_respawn;
 	int
 		_aggression,
 		_aggroSound,
@@ -577,7 +575,6 @@ private:
 		/// Creates a BattleUnit from a geoscape Soldier.
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
-//				const int depth,
 				const int diff); // for VictoryPts value per death.
 		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
@@ -586,7 +583,6 @@ private:
 				const int id,
 				RuleArmor* const armor,
 				const int diff,
-//				const int depth,
 				const int month = 0, // for upping aLien stats as time progresses.
 				BattlescapeGame* const battleGame = NULL);
 		/// Cleans up the BattleUnit.
@@ -640,7 +636,6 @@ private:
 				int dir,
 				const Position& dest,
 				const Tile* const tileBelow);
-//				bool cache);
 		/// Advances the walkingPhase.
 		void keepWalking(
 				const Tile* const tileBelow,
@@ -766,7 +761,6 @@ private:
 		bool getUnitVisible() const;
 		/// Adds unit to visible units.
 		void addToVisibleUnits(BattleUnit* const unit);
-//		bool addToVisibleUnits(BattleUnit* unit);
 		/// Gets the list of visible units.
 		std::vector<BattleUnit*>* getVisibleUnits();
 		/// Clears visible units.
@@ -968,6 +962,8 @@ private:
 		bool isWoundable() const;
 		/// Gets whether this unit is affected by fear.
 		bool isFearable() const;
+		/// Gets whether this unit can be accessed with the Medikit.
+		bool isHealable() const;
 
 		/// Gets this unit's intelligence.
 		int getIntelligence() const;
@@ -1103,16 +1099,6 @@ private:
 
 		/// Returns true if this unit has an inventory.
 		bool hasInventory() const;
-
-		/// Gets if this unit is breathing and if so on what frame.
-//		int getBreathFrame() const;
-		/// Starts this unit breathing and/or updates its breathing frame.
-//		void breathe();
-
-		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
-//		void setFloorAbove(const bool floorAbove);
-		/// Gets the flag for "floor above me".
-//		bool getFloorAbove() const;
 
 		/// Gets this unit's movement type.
 		MovementType getMoveTypeUnit() const;

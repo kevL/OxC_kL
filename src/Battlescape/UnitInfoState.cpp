@@ -655,7 +655,7 @@ void UnitInfoState::init()
 
 
 	const int psiSkill = _unit->getBaseStats()->psiSkill;
-	if (psiSkill > 0 // >= minPsi
+	if (psiSkill > 0
 		|| _unit->getGeoscapeSoldier() == NULL)
 //		|| (Options::psiStrengthEval == true
 //			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
@@ -680,14 +680,13 @@ void UnitInfoState::init()
 		_numPsiStrength->setText(woststr.str());
 		_numPsiStrength->setVisible();
 
-		if (psiSkill > 0) // >= minPsi)
+		if (psiSkill > 0)
 		{
-			stat = psiSkill;
 			woststr.str(L"");
-			woststr << stat;
+			woststr << psiSkill;
 			_numPsiSkill->setText(woststr.str());
-			_barPsiSkill->setMax(static_cast<double>(stat));
-			_barPsiSkill->setValue(static_cast<double>(stat));
+			_barPsiSkill->setMax(static_cast<double>(psiSkill));
+			_barPsiSkill->setValue(static_cast<double>(psiSkill));
 
 			_numPsiSkill->setVisible();
 			_barPsiSkill->setVisible();

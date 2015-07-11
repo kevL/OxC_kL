@@ -4646,7 +4646,7 @@
 1436468790 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1436576599 f:\git\openxcom\src\savegame\battleunit.h
+1436648873 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -6221,7 +6221,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1436377499 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1436635024 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8645,7 +8645,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1436576470 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1436648957 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8832,7 +8832,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1436571242 source:f:\git\openxcom\src\savegame\tile.cpp
+1436650094 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"
@@ -11428,7 +11428,7 @@
 1434060310 f:\git\openxcom\src\battlescape\meditargetstate.h
 	"../Engine/State.h"
 
-1434060493 source:f:\git\openxcom\src\battlescape\meditargetstate.cpp
+1436649015 source:f:\git\openxcom\src\battlescape\meditargetstate.cpp
 	"MediTargetState.h"
 	"MediKitState.h"
 	"TileEngine.h"

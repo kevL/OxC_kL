@@ -56,8 +56,8 @@ namespace OpenXcom
 
 /**
  * Initializes a BattleUnit from a Soldier
- * @param soldier		- pointer to a geoscape Soldier
- * @param diff			- for VictoryPts value at death
+ * @param soldier	- pointer to a geoscape Soldier
+ * @param diff		- for VictoryPts value at death
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
@@ -67,8 +67,7 @@ BattleUnit::BattleUnit(
 		_unitRules(NULL),
 		_faction(FACTION_PLAYER),
 		_originalFaction(FACTION_PLAYER),
-		_killedBy(FACTION_NONE),
-//		_killedBy(FACTION_PLAYER),
+		_killedBy(FACTION_NONE), // was, FACTION_PLAYER
 		_murdererId(0),
 		_battleGame(NULL),
 		_rankInt(-1),
@@ -131,7 +130,6 @@ BattleUnit::BattleUnit(
 		_aboutToDie(false),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
-//		_floorAbove(false),
 
 		_name(soldier->getName()),
 		_id(soldier->getId()),
@@ -145,8 +143,7 @@ BattleUnit::BattleUnit(
 		_stats(*soldier->getCurrentStats())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-//	_stats	= *soldier->getCurrentStats();
-	_stats += *_armor->getStats(); // armors may modify effective stats
+	_stats += *_armor->getStats(); // armors may modify tactical stats
 
 	_loftempsSet = _armor->getLoftempsSet();
 	_moveType = _armor->getMoveTypeArmor();
@@ -164,8 +161,7 @@ BattleUnit::BattleUnit(
 			rankValue =	 0;
 	}
 
-//	_value = 20 + soldier->getMissions() + rankValue;
-	_value = 20 + (soldier->getMissions() * (diff + 1)) + (rankValue * (diff + 1)); // kL, heheheh
+	_value = 20 + ((soldier->getMissions() + rankValue) * (diff + 1));
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -218,7 +214,6 @@ BattleUnit::BattleUnit(
  * @param id			- the unit's unique ID
  * @param armor			- pointer to unit's armor
  * @param diff			- the current game's difficulty setting (for aLien stat adjustment)
-// * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param month			- the current month (default 0)
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
@@ -228,7 +223,6 @@ BattleUnit::BattleUnit(
 		const int id,
 		RuleArmor* const armor,
 		const int diff,
-//		const int depth,
 		const int month,
 		BattlescapeGame* const battleGame) // for converted Units
 	:
@@ -237,8 +231,7 @@ BattleUnit::BattleUnit(
 		_id(id),
 		_faction(faction),
 		_originalFaction(faction),
-		_killedBy(FACTION_NONE),
-//		_killedBy(faction),
+		_killedBy(FACTION_NONE), // was, faction
 		_murdererId(0),
 		_armor(armor),
 		_battleGame(battleGame),
@@ -291,7 +284,6 @@ BattleUnit::BattleUnit(
 		_stunLevel(0),
 		_aboutToDie(false),
 		_activeHand("STR_RIGHT_HAND"),
-//		_floorAbove(false),
 		_diedByFire(false),
 		_turnDir(0),
 		_mcStrength(0),
@@ -318,8 +310,7 @@ BattleUnit::BattleUnit(
 		_stats(*unitRule->getStats())
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
-//	_stats = *unitRule->getStats();
-	_stats += *_armor->getStats(); // armors may modify effective stats (but not further modified by game difficulty or monthly progress)
+	_stats += *_armor->getStats(); // armors may modify tactical stats (but not further modified by game difficulty or monthly progress)
 
 	if (faction == FACTION_HOSTILE)
 	{
@@ -339,16 +330,6 @@ BattleUnit::BattleUnit(
 		_gender = GENDER_MALE;
 
 	_moveType = _armor->getMoveTypeArmor();
-/*	if (_moveType == MT_FLOAT)
-	{
-		if (depth > 0)
-			_moveType = MT_FLY;
-		else
-			_moveType = MT_WALK;
-	} */
-
-//	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
-//		_breathFrame = 0;
 
 	_armorHp[SIDE_FRONT]	= _armor->getFrontArmor();
 	_armorHp[SIDE_LEFT]		=
@@ -904,18 +885,15 @@ void BattleUnit::setStatus(const UnitStatus status)
  * @param dir		- the direction to walk
  * @param dest		- reference the Position the unit should end up at
  * @param tileBelow	- pointer to the Tile below destination position
-// * @param cache	- true to redraw the unit's sprite ( not used. )
  */
 void BattleUnit::startWalking(
 		int dir,
 		const Position& dest,
 		const Tile* const tileBelow)
-//		bool cache)
 {
 	_walkPhase = 0;
 	_destination = dest;
 	_lastPos = _pos;
-//	_cacheInvalid = cache; // there's no movement here, This not needed.
 
 	if (dir >= Pathfinding::DIR_UP)
 	{
@@ -944,12 +922,6 @@ void BattleUnit::startWalking(
 		_kneeled = false;
 		_direction = dir;
 	}
-
-//	if (_breathFrame > -1)
-//	{
-//		_breathing = false;
-//		_breathFrame = 0;
-//	}
 }
 
 /**
@@ -989,7 +961,6 @@ void BattleUnit::keepWalking(
 		}
 		else
 			midPhase = endPhase / 2;
-//			midPhase = 4 + 4 * (_direction % 2);
 	}
 
 	if (cache == false) // ie. not onScreen
@@ -1242,7 +1213,7 @@ UnitFaction BattleUnit::getFaction() const
 
 /**
  * Sets the unit's cache flag.
- * Set to true when the unit has to be redrawn from scratch.
+ * @note Set to true when the unit has to be redrawn from scratch.
  * @param cache	- pointer to cache surface to use, NULL to redraw from scratch
  * @param part	- unit part to cache (default 0)
  */
@@ -1261,7 +1232,7 @@ void BattleUnit::setCache(
 
 /**
  * Check if the unit is still cached in the Map cache.
- * When the unit needs to animate it needs to be re-cached.
+ * @note When the unit needs to animate it needs to be re-cached.
  * @param invalid	- pointer to true if the cache is invalid
  * @param part		- unit part to check (default 0)
  * @return, pointer to the cache Surface used
@@ -1279,8 +1250,8 @@ Surface* BattleUnit::getCache(
 
 /**
  * Gets values used for recoloring sprites.
- * @return, pairs of values where first is the colorgroup to
- * replace and the second is the new colorgroup with a shade.
+ * @return, pairs of values where first is the colorgroup to replace and the
+ * second is the new colorgroup with a shade
  */
 const std::vector<std::pair<Uint8, Uint8> >& BattleUnit::getRecolor() const
 {
@@ -1327,11 +1298,8 @@ void BattleUnit::aim(bool aim)
 	else
 		_status = STATUS_STANDING;
 
-	if (_visible == true
-		|| _faction == FACTION_PLAYER)
-	{
+	if (_visible == true)
 		_cacheInvalid = true;
-	}
 }
 
 /**
@@ -1380,7 +1348,6 @@ int BattleUnit::directionTo(const Position& point) const
 	else
 		dir = 2;
 
-	//Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
 	return dir;
 }
 
@@ -1640,11 +1607,11 @@ void BattleUnit::playHitSound()
 		sound = RNG::generate(41, 43);
 	else if (_type == "FEMALE_CIVILIAN")
 		sound = RNG::generate(44, 46);
-	else if (_originalFaction == FACTION_PLAYER) // getType() == "SOLDIER")
+	else if (_originalFaction == FACTION_PLAYER) // _type == "SOLDIER"
 	{
 		if (_gender == GENDER_MALE)
 			sound = RNG::generate(141, 151);
-		else // if (getGender() == GENDER_FEMALE)
+		else
 			sound = RNG::generate(121, 135);
 	}
 	else
@@ -1860,7 +1827,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 	{
 		default:
 		case OUT_ALL:
-			if (   _status == STATUS_DEAD
+			if (_status == STATUS_DEAD
 				|| _status == STATUS_UNCONSCIOUS
 				|| _status == STATUS_TIME_OUT
 				|| _health == 0
@@ -1871,7 +1838,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 		break;
 
 		case OUT_STAT:
-			if (   _status == STATUS_DEAD
+			if (_status == STATUS_DEAD
 				|| _status == STATUS_UNCONSCIOUS
 				|| _status == STATUS_TIME_OUT)
 			{
@@ -1947,7 +1914,6 @@ int BattleUnit::getActionTUs(
 				* const handRule = _battleGame->getRuleset()->getInventory("STR_RIGHT_HAND"), // might be leftHand Lol ...
 				* const groundRule = _battleGame->getRuleset()->getInventory("STR_GROUND");
 			cost = handRule->getCost(groundRule);
-//			cost = 2;
 		}
 		break;
 
@@ -1956,7 +1922,6 @@ int BattleUnit::getActionTUs(
 		break;
 
 		case BA_PRIME:
-//			cost = 45;
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUPrime();
@@ -2017,7 +1982,6 @@ int BattleUnit::getActionTUs(
 	if (cost > 0
 		&& ((rule != NULL
 				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
-//			|| batType == BA_PRIME
 			|| batType == BA_THROW)
 		&& batType != BA_DEFUSE
 		&& batType != BA_DROP)
@@ -2072,9 +2036,6 @@ void BattleUnit::setTimeUnits(int tu)
 		_tu = 0;
 	else
 		_tu = tu;
-
-//	if (_tu > getBaseStats()->tu) // This definitely screws up TU refunds.
-//		_tu = getBaseStats()->tu;
 }
 
 /**
@@ -2107,9 +2068,6 @@ void BattleUnit::setUnitVisible(bool flag)
  */
 bool BattleUnit::getUnitVisible() const
 {
-	if (_faction == FACTION_PLAYER)
-		return true;
-
 	return _visible;
 }
 
@@ -2121,9 +2079,7 @@ bool BattleUnit::getUnitVisible() const
  * Don't confuse either of these with the '_visible' to Player flag.
  * @note Called from TileEngine::calculateFOV().
  * @param unit - pointer to a seen BattleUnit
-// * @return, true if the seen unit was NOT previously flagged as a '_visibleUnit' (this return is never actually used)
  */
-//bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 {
 	bool addUnit = true;
@@ -2153,11 +2109,9 @@ void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 //		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		if (*i == unit)
 			return;
-//			return false;
 	}
 
 	_visibleUnits.push_back(unit);
-//	return true;
 }
 
 /**
@@ -2809,7 +2763,7 @@ BattleItem* BattleUnit::getItem(
 
 /**
  * Gets the 'main hand weapon' of this BattleUnit.
- * Ought alter AI so this Returns firearms only.
+ * TODO: Ought alter AI so this Returns firearms only.
  * @param quickest - true to choose the quickest weapon (default true)
  * @return, pointer to a BattleItem or NULL
  */
@@ -3295,13 +3249,12 @@ void BattleUnit::postMissionProcedures(
 		{
 			stats->firing += improveStat(_expFiring);
 
-			// kL_begin: add a touch of reactions if good firing .....
+			// add a touch of reactions if good firing .....
 			if (_expFiring - 2 > 0
 				&& stats->reactions < caps.reactions)
 			{
 				_expReactions += _expFiring / 3;
-	//			stats->reactions += improveStat(_expFiring - 2);
-			} // kL_end.
+			}
 		}
 
 		if (_expReactions != 0
@@ -3394,7 +3347,8 @@ int BattleUnit::improveStat(int xp) // private.
 }
 
 /**
- * Get the unit's minimap sprite index. Used to display the unit on the minimap
+ * Get the unit's minimap sprite index.
+ * @note Used to display the unit on the minimap.
  * @return, the unit minimap index
  */
 int BattleUnit::getMiniMapSpriteIndex() const
@@ -3406,22 +3360,23 @@ int BattleUnit::getMiniMapSpriteIndex() const
 	// * 9-11  : Item
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
-	if (isOut(true, true) == true)
+//	if (isOut(true, true) == true)
+	if (isOut_t(OUT_STAT) == true)
 		return 9;
 
-	switch (getFaction())
+	switch (_faction)
 	{
 		case FACTION_HOSTILE:
 			if (_armor->getSize() == 1)
 				return 3;
 			else
 				return 24;
-		break;
+
 		case FACTION_NEUTRAL:
 			return 6;
-		break;
 
 		default:
+		case FACTION_PLAYER:
 			if (_armor->getSize() == 1)
 				return 0;
 			else
@@ -3708,10 +3663,11 @@ int BattleUnit::getMoveSound() const
  */
 bool BattleUnit::isWoundable() const
 {
-	return _geoscapeSoldier != NULL
-		|| (Options::alienBleeding == true
-			&& _unitRules->isMechanical() == false
-			&& _race != "STR_ZOMBIE");
+	return _status != STATUS_DEAD
+		&& (_geoscapeSoldier != NULL
+			|| (Options::alienBleeding == true
+				&& _unitRules->isMechanical() == false
+				&& _race != "STR_ZOMBIE"));
 }
 
 /**
@@ -3721,20 +3677,22 @@ bool BattleUnit::isWoundable() const
 bool BattleUnit::isFearable() const
 {
 	return _status != STATUS_DEAD
+		&& _status != STATUS_UNCONSCIOUS
 		&& (_geoscapeSoldier != NULL
 			|| (_unitRules->isMechanical() == false
 				&& _race != "STR_ZOMBIE"));
+}
 
-/*	if (_geoscapeSoldier != NULL)
-		return true;
-
-	if (_unitRules->isMechanical() == false
-		&& _race != "STR_ZOMBIE")
-	{
-		return true;
-	}
-
-	return false; */
+/**
+ * Gets whether this unit can be accessed with the Medikit.
+ * @return, true if unit can be treated
+ */
+bool BattleUnit::isHealable() const
+{
+	return _status != STATUS_DEAD
+		&& (_geoscapeSoldier != NULL
+			|| (_unitRules->isMechanical() == false
+				&& _race != "STR_ZOMBIE"));
 }
 
 /**

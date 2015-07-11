@@ -1266,13 +1266,13 @@ void ProjectileFlyBState::performMeleeAttack()
 	//Log(LOG_INFO) << ". meleeAttack, weapon = " << _action.weapon->getRules()->getType();
 	//Log(LOG_INFO) << ". meleeAttack, ammo = " << _ammo->getRules()->getType();
 	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
-	const int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
-																	BA_HIT,
-//																	_ammo) // Ammo is the weapon since (melee==true). Not necessarily ...
-																	_action.weapon) * 100.));
-	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << percent;
+	const int pct = static_cast<int>(Round(_unit->getFiringAccuracy(
+																BA_HIT,
+//																_ammo) // Ammo is the weapon since (melee==true). Not necessarily ...
+																_action.weapon) * 100.));
+	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << pct;
 	bool success;
-	if (RNG::percent(percent) == true)
+	if (RNG::percent(pct) == true)
 	{
 		//Log(LOG_INFO) << ". success";
 		success = true;
@@ -1328,10 +1328,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 
 	if (_unit->getSpecialAbility() == SPECAB_BURN)
-//		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
-	{
 		_parent->getSave()->getTile(_action.target)->ignite(15);
-	}
 
 	_parent->getMap()->setCursorType(CT_NONE);
 
