@@ -336,8 +336,8 @@ bool Tile::isVoid(
 
 	if (testVolatiles == true)
 		ret = ret
-		   && _smoke == 0
-		   && _fire == 0;
+		   && _smoke == 0;
+//		   && _fire == 0; // -> fireTiles always have smoke.
 
 	return ret;
 }

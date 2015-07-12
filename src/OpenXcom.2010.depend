@@ -4812,7 +4812,7 @@
 
 1432579370 f:\git\openxcom\src\ruleset\ruleresearch.h
 
-1430149550 f:\git\openxcom\src\savegame\researchproject.h
+1436730035 f:\git\openxcom\src\savegame\researchproject.h
 
 1432719063 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
@@ -8746,7 +8746,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1436571324 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1436718163 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8832,7 +8832,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1436683818 source:f:\git\openxcom\src\savegame\tile.cpp
+1436719312 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"

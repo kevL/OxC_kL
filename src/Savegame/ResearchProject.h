@@ -32,7 +32,8 @@ class Ruleset;
 
 /**
  * Represents a ResearchProject.
- * Contains information about assigned scientists, time already spent and cost of the project.
+ * @note Contains information about assigned scientists, time already spent and
+ * cost of the project.
 */
 class ResearchProject
 {

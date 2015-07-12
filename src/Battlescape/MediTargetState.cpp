@@ -131,14 +131,15 @@ void MediTargetState::init()
 		addToList,
 		actorFound = false; // adds actor to top of MediTargetList.
 
-	// TODO: require aLien autopsies research before allowing Medikit to show info on a/the type of aLien.
 	const std::vector<BattleUnit*>* const targetUnits = _game->getSavedGame()->getSavedBattle()->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator
 			i = targetUnits->begin();
 			i != targetUnits->end();
 			)
 	{
-		if ((*i)->isHealable() == true)
+		if ((*i)->isHealable() == true
+			&& ((*i)->getOriginalFaction() != FACTION_HOSTILE
+				|| _game->getSavedGame()->isResearched((*i)->getRaceString() + "_AUTOPSY")))
 		{
 			addToList = false;
 
@@ -197,7 +198,7 @@ void MediTargetState::init()
 			}
 		}
 
-		if (actorFound == false // in case medikit user is not 'Fearable'
+		if (actorFound == false // in case medikit user is not 'Healable'
 			&& *i == targetUnits->back())
 		{
 			actorFound = true;
