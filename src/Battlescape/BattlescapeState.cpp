@@ -993,13 +993,6 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
-	//Log(LOG_INFO) << "BattlescapeState::init()";
-//	if (_battleSave->getAmbientSound() != -1)
-//		_game->getResourcePack()->getSoundByDepth(
-//												0,
-//												_battleSave->getAmbientSound())
-//											->loop();
-
 	State::init();
 
 	_animTimer->start();
@@ -2447,15 +2440,12 @@ void BattlescapeState::btnReloadClick(Action*)
 	if (playableUnitSelected() == true
 		&& _battleSave->getSelectedUnit()->checkAmmo() == true)
 	{
-//		_game->getResourcePack()->getSoundByDepth(
-//												_battleSave->getDepth(),
 		_game->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										ResourcePack::ITEM_RELOAD)
 									->play(
 										-1,
 										_map->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
-
 		updateSoldierInfo();
 	}
 }

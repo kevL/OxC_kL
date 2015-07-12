@@ -784,8 +784,6 @@ void Inventory::mouseClick(Action* action, State* state)
 
 								arrangeGround(false);
 
-//								_game->getResourcePack()->getSoundByDepth(
-//																		_depth,
 								_game->getResourcePack()->getSound(
 																"BATTLE.CAT",
 																ResourcePack::ITEM_DROP)
@@ -895,8 +893,6 @@ void Inventory::mouseClick(Action* action, State* state)
 										   [static_cast<size_t>(y)] += 1;
 
 							setSelectedItem(NULL);
-//							_game->getResourcePack()->getSoundByDepth(
-//																	_depth,
 							_game->getResourcePack()->getSound(
 															"BATTLE.CAT",
 															ResourcePack::ITEM_DROP)
@@ -924,8 +920,6 @@ void Inventory::mouseClick(Action* action, State* state)
 							_stackLevel[static_cast<size_t>(item->getSlotX())]
 									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
-//							_game->getResourcePack()->getSoundByDepth(
-//																	_depth,
 							_game->getResourcePack()->getSound(
 															"BATTLE.CAT",
 															ResourcePack::ITEM_DROP)
@@ -969,7 +963,7 @@ void Inventory::mouseClick(Action* action, State* state)
 //							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 						else if (_tuMode == false
-							|| _selUnit->spendTimeUnits(15) == true)
+							|| _selUnit->spendTimeUnits(item->getRules()->getTUReload()) == true)
 						{
 							_tuCost = -1;
 
@@ -981,8 +975,6 @@ void Inventory::mouseClick(Action* action, State* state)
 							_selItem->moveToOwner(NULL);
 							setSelectedItem(NULL);
 
-//							_game->getResourcePack()->getSoundByDepth(
-//																	_depth,
 							_game->getResourcePack()->getSound(
 															"BATTLE.CAT",
 															ResourcePack::ITEM_RELOAD)
@@ -1030,8 +1022,6 @@ void Inventory::mouseClick(Action* action, State* state)
 									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
 
-//							_game->getResourcePack()->getSoundByDepth(
-//																	_depth,
 							_game->getResourcePack()->getSound(
 															"BATTLE.CAT",
 															ResourcePack::ITEM_DROP)
@@ -1114,8 +1104,6 @@ void Inventory::mouseClick(Action* action, State* state)
 
 								arrangeGround(false);
 
-//								_game->getResourcePack()->getSoundByDepth(
-//																		_depth,
 								_game->getResourcePack()->getSound(
 																"BATTLE.CAT",
 																ResourcePack::ITEM_DROP)
@@ -1208,7 +1196,7 @@ bool Inventory::unload()
 
 
 	if (_tuMode == false
-		|| _selUnit->spendTimeUnits(12) == true) // should break out to Ruleset value. Also, reload TU ....
+		|| _selUnit->spendTimeUnits(_selItem->getRules()->getTUUnload()) == true)
 	{
 		RuleInventory* slotRule;
 		BattleUnit* toOwner;
@@ -1418,8 +1406,6 @@ bool Inventory::fitItem(
 							slot,
 							x2,y2);
 
-//						_game->getResourcePack()->getSoundByDepth(
-//																_depth,
 						_game->getResourcePack()->getSound(
 														"BATTLE.CAT",
 														ResourcePack::ITEM_DROP)

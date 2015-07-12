@@ -66,6 +66,8 @@ RuleItem::RuleItem(const std::string& type)
 		_tuAuto(0),
 		_tuMelee(0),
 		_tuUse(0),
+		_tuReload(15),
+		_tuUnload(12),
 		_tuPrime(0),
 		_clipSize(0),
 		_blastRadius(-1),
@@ -99,19 +101,13 @@ RuleItem::RuleItem(const std::string& type)
 		_strengthApplied(false),
 		_skillApplied(true),
 		_LOSRequired(false),
-//		_underwaterOnly(false),
-		_noReaction(false), // kL
-		_noResearch(false), // kL
-//kL	_meleeSound(39),	// screws with hit/miss sound-determination in ProjectileFlyBState;
-							// defaults are set there, else specify it in a Ruleset. Thanks!!
-		_meleeSound(-1),	// kL
+		_noReaction(false),
+		_noResearch(false),
+		_meleeSound(-1),
 		_meleePower(0),
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
 		_specialType(-1)
-//		_vaporColor(-1),
-//		_vaporDensity(0),
-//		_vaporProbability(15)
 {}
 
 /**
@@ -212,20 +208,22 @@ void RuleItem::load(
 	}
 
 	_power					= node["power"]				.as<int>(_power);
-	_compatibleAmmo			= node["compatibleAmmo"]	.as< std::vector<std::string> >(_compatibleAmmo);
 	_damageType				= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
+	_clipSize				= node["clipSize"]			.as<int>(_clipSize);
+	_compatibleAmmo			= node["compatibleAmmo"]	.as< std::vector<std::string> >(_compatibleAmmo);
 	_accuracyAuto			= node["accuracyAuto"]		.as<int>(_accuracyAuto);
 	_accuracySnap			= node["accuracySnap"]		.as<int>(_accuracySnap);
 	_accuracyAimed			= node["accuracyAimed"]		.as<int>(_accuracyAimed);
+	_accuracyMelee			= node["accuracyMelee"]		.as<int>(_accuracyMelee);
 	_tuAuto					= node["tuAuto"]			.as<int>(_tuAuto);
 	_tuSnap					= node["tuSnap"]			.as<int>(_tuSnap);
 	_tuAimed				= node["tuAimed"]			.as<int>(_tuAimed);
 	_tuLaunch				= node["tuLaunch"]			.as<int>(_tuLaunch);
 	_tuUse					= node["tuUse"]				.as<int>(_tuUse);
 	_tuPrime				= node["tuPrime"]			.as<int>(_tuPrime);
-	_clipSize				= node["clipSize"]			.as<int>(_clipSize);
-	_accuracyMelee			= node["accuracyMelee"]		.as<int>(_accuracyMelee);
 	_tuMelee				= node["tuMelee"]			.as<int>(_tuMelee);
+	_tuReload				= node["tuReload"]			.as<int>(_tuReload);
+	_tuUnload				= node["tuUnload"]			.as<int>(_tuUnload);
 	_battleType				= static_cast<BattleType>(node["battleType"].as<int>(_battleType));
 	_twoHanded				= node["twoHanded"]			.as<bool>(_twoHanded);
 	_waypoint				= node["waypoint"]			.as<int>(_waypoint);
@@ -244,14 +242,10 @@ void RuleItem::load(
 	_turretType				= node["turretType"]		.as<int>(_turretType);
 	_recover				= node["recover"]			.as<bool>(_recover);
 	_liveAlien				= node["liveAlien"]			.as<bool>(_liveAlien);
-
-//	if (node["blastRadius"])
 	_blastRadius			= node["blastRadius"]		.as<int>(_blastRadius);
-
 	_attraction				= node["attraction"]		.as<int>(_attraction);
 	_flatRate				= node["flatRate"]			.as<bool>(_flatRate);
 	_arcingShot				= node["arcingShot"]		.as<bool>(_arcingShot);
-	_listOrder				= node["listOrder"]			.as<int>(_listOrder);
 	_maxRange				= node["maxRange"]			.as<int>(_maxRange);
 	_aimRange				= node["aimRange"]			.as<int>(_aimRange);
 	_snapRange				= node["snapRange"]			.as<int>(_snapRange);
@@ -270,12 +264,9 @@ void RuleItem::load(
 	_noReaction				= node["noReaction"]		.as<bool>(_noReaction);
 	_noResearch				= node["noResearch"]		.as<bool>(_noResearch);
 	_meleePower				= node["meleePower"]		.as<int>(_meleePower);
-//	_underwaterOnly			= node["underwaterOnly"]	.as<bool>(_underwaterOnly);
 	_specialType			= node["specialType"]		.as<int>(_specialType);
-//	_vaporColor				= node["vaporColor"]		.as<int>(_vaporColor);
-//	_vaporDensity			= node["vaporDensity"]		.as<int>(_vaporDensity);
-//	_vaporProbability		= node["vaporProbability"]	.as<int>(_vaporProbability);
 
+	_listOrder				= node["listOrder"]			.as<int>(_listOrder);
 	if (_listOrder == 0)
 		_listOrder = listOrder;
 }
@@ -542,6 +533,24 @@ int RuleItem::getTUMelee() const
 int RuleItem::getTUUse() const
 {
 	return _tuUse;
+}
+
+/**
+ * Gets the number of Time Units needed to reload this item.
+ * @return, the number of TU needed to reload this item
+ */
+int RuleItem::getTUReload() const
+{
+	return _tuReload;
+}
+
+/**
+ * Gets the number of Time Units needed to unload this item.
+ * @return, the number of TU needed to unload this item
+ */
+int RuleItem::getTUUnload() const
+{
+	return _tuUnload;
 }
 
 /**
@@ -1005,15 +1014,6 @@ bool RuleItem::isLOSRequired() const
 }
 
 /**
- * Checks if this item can be used on land or if it's it underwater only.
- * @return, true if this is an underwater weapon only
- */
-/* const bool RuleItem::isWaterOnly() const
-{
-	return _underwaterOnly;
-} */
-
-/**
  * Gets the associated special type of this item.
  * Note that type 14 is the alien brain, and types 0 and 1 are "regular tile"
  * and "starting point" so try not to use those ones.
@@ -1023,33 +1023,6 @@ const int RuleItem::getSpecialType() const
 {
 	return _specialType;
 }
-
-/**
- * Gets the color offset to use for the vapor trail.
- * @return, the color offset
- */
-/* const int RuleItem::getVaporColor() const
-{
-	return _vaporColor;
-} */
-
-/**
- * Gets the vapor cloud density for the vapor trail.
- * @return, the vapor density
- */
-/* const int RuleItem::getVaporDensity() const
-{
-	return _vaporDensity;
-} */
-
-/**
- * Gets the vapor cloud probability for the vapor trail.
- * @return, the vapor probability
- */
-/* const int RuleItem::getVaporProbability() const
-{
-	return _vaporProbability;
-} */
 
 /**
  * Gets the item's default BattleAction.

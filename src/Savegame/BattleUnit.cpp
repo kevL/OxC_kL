@@ -3006,54 +3006,56 @@ std::string BattleUnit::getMeleeWeapon() const
 } */
 
 /**
- * Check if this BattleUnit has ammo and if so reload weapon (used by the AI).
+ * Check if this BattleUnit has ammo and if so reload weapon.
+ * @note Used by the AI as well as player's reload hotkey.
  * @return, true if unit has a loaded weapon or has just loaded it.
  */
 bool BattleUnit::checkAmmo()
 {
-	if (_tu > 14) // should go to Ruleset.
+	BattleItem* weapon = getItem("STR_RIGHT_HAND");
+	if (weapon == NULL
+		|| weapon->getAmmoItem() != NULL
+		|| weapon->getRules()->getBattleType() == BT_MELEE)
 	{
-		BattleItem* weapon = getItem("STR_RIGHT_HAND");
+		weapon = getItem("STR_LEFT_HAND");
 		if (weapon == NULL
 			|| weapon->getAmmoItem() != NULL
 			|| weapon->getRules()->getBattleType() == BT_MELEE)
 		{
-			weapon = getItem("STR_LEFT_HAND");
-			if (weapon == NULL
-				|| weapon->getAmmoItem() != NULL
-				|| weapon->getRules()->getBattleType() == BT_MELEE)
-			{
-				return false;
-			}
+			return false;
 		}
+	}
 
+	const int reloadTu = weapon->getRules()->getTUReload();
+	if (_tu >= reloadTu)
+	{
 		// if it's a non-melee weapon with no ammo and 15 or more TUs might need to look for ammo ...
 		BattleItem* ammo = NULL;
 
-		bool wrong = true;
+		bool found = false;
 		for (std::vector<BattleItem*>::const_iterator
 				i = getInventory()->begin();
 				i != getInventory()->end()
-					&& wrong == true;
+					&& found == false;
 				++i)
 		{
 			for (std::vector<std::string>::const_iterator
 					j = weapon->getRules()->getCompatibleAmmo()->begin();
 					j != weapon->getRules()->getCompatibleAmmo()->end()
-						&& wrong == true;
+						&& found == false;
 					++j)
 			{
 				if (*j == (*i)->getRules()->getType())
 				{
-					wrong = false;
+					found = true;
 					ammo = *i;
 				}
 			}
 		}
 
-		if (wrong == false)
+		if (found == true)
 		{
-			_tu -= 15;
+			_tu -= reloadTu;
 			weapon->setAmmoItem(ammo);
 			ammo->moveToOwner(NULL);
 

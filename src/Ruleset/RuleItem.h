@@ -130,9 +130,11 @@ private:
 		_tuAimed,
 		_tuAuto,
 		_tuLaunch,
-		_tuPrime,
 		_tuMelee,
+		_tuPrime,
+		_tuReload,
 		_tuSnap,
+		_tuUnload,
 		_tuUse,
 
 		_maxRange,
@@ -151,10 +153,6 @@ private:
 		_floorSprite,
 		_handSprite,
 		_bulletSprite;
-
-//		_vaporColor,
-//		_vaporDensity,
-//		_vaporProbability;
 
 	double _size;
 
@@ -249,9 +247,13 @@ private:
 		int getTULaunch() const;
 		/// Gets the item's melee TU cost.
 		int getTUMelee() const;
-		/// Gets the Time Unit use.
+		/// Gets the item's use TU.
 		int getTUUse() const;
-		/// Gets the Time Units for priming.
+		/// Gets the item's reload TU.
+		int getTUReload() const;
+		/// Gets the item's unload TU.
+		int getTUUnload() const;
+		/// Gets the item's prime TU.
 		int getTUPrime() const;
 
 		/// Gets list of compatible ammo.
@@ -373,17 +375,8 @@ private:
 
 		/// Checks if LOS is required to use this item (only applies to psionic type items)
 		bool isLOSRequired() const;
-		/// Checks if this item is restricted to underwater usage.
-//		const bool isWaterOnly() const;
 		/// Gets the associated special type of this item.
 		const int getSpecialType() const;
-
-		/// Gets the color offset to use for the vapor trail.
-//		const int getVaporColor() const;
-		/// Gets the vapor cloud density.
-//		const int getVaporDensity() const;
-		/// Gets the vapor cloud probability.
-//		const int getVaporProbability() const;
 
 		/// Gets the item's default BattleAction.
 		BattleActionType getDefaultAction(const bool isPrimed = false) const;

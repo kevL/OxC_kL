@@ -60,14 +60,14 @@ private:
 		* _previousOwner,
 		* _unit;
 	RuleInventory* _inventorySlot;
-	RuleItem* _rules;
+	RuleItem* _itRule;
 	Tile* _tile;
 
 
 	public:
 		/// Creates a item of the specified type.
 		BattleItem(
-				RuleItem* const rules,
+				RuleItem* const itRule,
 				int* pId,
 				int id = -1);
 		/// Cleans up the item.
@@ -155,7 +155,7 @@ private:
 		/// Sets the flag representing "not dropped on player turn"
 //		void setTurnFlag(bool flag);
 		/// Sets the item's ruleset.
-		void convertToCorpse(RuleItem* const rules);
+		void convertToCorpse(RuleItem* const itRule);
 };
 
 }

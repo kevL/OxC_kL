@@ -719,8 +719,6 @@ void InventoryState::btnUnloadClick(Action*)
 		_selAmmo->clear();
 
 		updateStats();
-//		_game->getResourcePack()->getSoundByDepth(
-//											0,
 		_game->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										ResourcePack::ITEM_UNLOAD_HQ)
@@ -864,8 +862,6 @@ void InventoryState::btnUnloadUnitClick(Action*)
 		updateStats();
 		refreshMouse();
 
-//		_game->getResourcePack()->getSoundByDepth(
-//											_battleSave->getDepth(),
 		_game->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										ResourcePack::ITEM_DROP)
@@ -890,8 +886,6 @@ void InventoryState::btnUnloadUnitClick(Action*)
 		updateStats();
 		refreshMouse();
 
-//		_game->getResourcePack()->getSoundByDepth(
-//											_battleSave->getDepth(),
 		_game->getResourcePack()->getSound(
 										"BATTLE.CAT",
 										ResourcePack::ITEM_DROP)

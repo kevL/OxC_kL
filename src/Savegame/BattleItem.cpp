@@ -31,17 +31,16 @@ namespace OpenXcom
 
 /**
  * Initializes a item of the specified type.
- * @param rules	- pointer to RuleItem
- * @param pId	- pointer to an integer ID for this item
- * @param id	- value for ID when loading a saved game
+ * @param itRule	- pointer to RuleItem
+ * @param pId		- pointer to an integer ID for this item
+ * @param id		- value for ID when loading a saved game (default -1)
  */
 BattleItem::BattleItem(
-		RuleItem* const rules,
+		RuleItem* const itRule,
 		int* pId,
 		int id)
 	:
-		_rules(rules),
-//		_id(*id),
+		_itRule(itRule),
 		_owner(NULL),
 		_previousOwner(NULL),
 		_unit(NULL),
@@ -50,45 +49,37 @@ BattleItem::BattleItem(
 		_inventoryX(0),
 		_inventoryY(0),
 		_ammoItem(NULL),
+		_ammoQty(itRule->getClipSize()),
 		_fuseTimer(-1),
-		_ammoQty(0),
 		_painKiller(0),
 		_heal(0),
 		_stimulant(0),
 		_XCOMProperty(false)
-//		_droppedOnAlienTurn(false)
 {
-//	++(*id); // <- this is for SavedBattleGame only to keep track of
-	if (pId != NULL) // brand new item on the battlefield
-	{
+	if (pId != NULL)	// <- this is for SavedBattleGame only to keep
+	{					// track of brand new item on the battlefield
 		_id = *pId;
 		++(*pId);
 	}
-	else // loading item from saved game
+	else				// load item from saved game
 		_id = id;
 
 
-	if (_rules != NULL)
+	if (_itRule->getBattleType() == BT_MEDIKIT)
 	{
-//		if (_rules->getBattleType() == BT_AMMO)
-		setAmmoQuantity(_rules->getClipSize());
-//		else
-		if (_rules->getBattleType() == BT_MEDIKIT)
-		{
-			setHealQuantity(_rules->getHealQuantity());
-			setPainKillerQuantity(_rules->getPainKillerQuantity());
-			setStimulantQuantity(_rules->getStimulantQuantity());
-		}
-		else if (_rules->getCompatibleAmmo()->empty() == true
-			&& (_rules->getBattleType() == BT_FIREARM		// These weapons do not need ammo;
-				|| _rules->getBattleType() == BT_MELEE))	// (ammo)item points to weapon itself.
-		{
-//			setAmmoQuantity(_rules->getClipSize()); // melee, lasers, etc have clipsize(-1).
-//			setAmmoQuantity(-1);	// needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
-									// But it creates problems w/ TANKS returning to Base. So do it in Ruleset:
-									// melee items need "clipSize: -1" to do reactionFire.
-			_ammoItem = this;
-		}
+		_heal = _itRule->getHealQuantity();
+		_painKiller = _itRule->getPainKillerQuantity();
+		_stimulant = _itRule->getStimulantQuantity();
+	}
+	else if (_itRule->getCompatibleAmmo()->empty() == true
+		&& (_itRule->getBattleType() == BT_FIREARM		// These weapons do not need ammo;
+			|| _itRule->getBattleType() == BT_MELEE))	// (ammo)item points to weapon itself.
+	{
+		// melee, lasers, etc have clipsize(-1).
+//		setAmmoQuantity(-1);	// needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
+								// But it creates problems w/ TANKS returning to Base. So do it in Ruleset:
+								// melee items need "clipSize: -1" to do reactionFire.
+		_ammoItem = this;
 	}
 }
 
@@ -124,7 +115,7 @@ YAML::Node BattleItem::save() const
 	YAML::Node node;
 
 	node["id"]			= _id;
-	node["type"]		= _rules->getType();
+	node["type"]		= _itRule->getType();
 	node["inventoryX"]	= _inventoryX;
 	node["inventoryY"]	= _inventoryY;
 	node["ammoQty"]		= _ammoQty;
@@ -163,7 +154,7 @@ YAML::Node BattleItem::save() const
  */
 RuleItem* BattleItem::getRules() const
 {
-	return _rules;
+	return _itRule;
 }
 
 /**
@@ -192,7 +183,7 @@ void BattleItem::setFuseTimer(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if (_rules->getClipSize() == -1) // is Laser, melee, etc. This could be taken out
+	if (_itRule->getClipSize() == -1) // is Laser, melee, etc. This could be taken out
 //		|| _ammoQty == -1)	// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary. BLEH !
 							// This should iron out some ( rare ) reaction & AI problems ....
 							// But it creates problems w/ TANKS returning to Base.
@@ -373,14 +364,14 @@ bool BattleItem::occupiesSlot(
 
 	if (item == NULL)
 		return (   x >= _inventoryX
-				&& x < _inventoryX + _rules->getInventoryWidth()
+				&& x < _inventoryX + _itRule->getInventoryWidth()
 				&& y >= _inventoryY
-				&& y < _inventoryY + _rules->getInventoryHeight());
+				&& y < _inventoryY + _itRule->getInventoryHeight());
 	else
 		return !(
-				   x >= _inventoryX + _rules->getInventoryWidth()
+				   x >= _inventoryX + _itRule->getInventoryWidth()
 				|| x + item->getRules()->getInventoryWidth() <= _inventoryX
-				|| y >= _inventoryY + _rules->getInventoryHeight()
+				|| y >= _inventoryY + _itRule->getInventoryHeight()
 				|| y + item->getRules()->getInventoryHeight() <= _inventoryY);
 }
 
@@ -426,8 +417,8 @@ int BattleItem::setAmmoItem(BattleItem* item)
 			return -1;
 
 		for (std::vector<std::string>::const_iterator
-				i = _rules->getCompatibleAmmo()->begin();
-				i != _rules->getCompatibleAmmo()->end();
+				i = _itRule->getCompatibleAmmo()->begin();
+				i != _itRule->getCompatibleAmmo()->end();
 				++i)
 		{
 			if (*i == item->getRules()->getType())
@@ -592,15 +583,15 @@ bool BattleItem::getXCOMProperty() const
 
 /**
  * Converts a carried unconscious body into a battlefield corpse-item.
- * @param rules - pointer to rules of the corpse item to convert this item into
+ * @param itRule - pointer to rules of the corpse item to convert this item into
  */
-void BattleItem::convertToCorpse(RuleItem* const rules)
+void BattleItem::convertToCorpse(RuleItem* const itRule)
 {
 	if (_unit != NULL
-		&& _rules->getBattleType() == BT_CORPSE
-		&& rules->getBattleType() == BT_CORPSE)
+		&& _itRule->getBattleType() == BT_CORPSE
+		&& itRule->getBattleType() == BT_CORPSE)
 	{
-		_rules = rules;
+		_itRule = itRule;
 	}
 }
 

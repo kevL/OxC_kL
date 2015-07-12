@@ -128,7 +128,6 @@ AbortMissionState::AbortMissionState(
 	_txtOutsideExit->setAlign(ALIGN_CENTER);
 	_txtOutsideExit->setHighContrast();
 
-//	if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
 	if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
 	{
 		_txtInExit->setVisible(false);
