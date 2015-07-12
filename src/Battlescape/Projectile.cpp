@@ -25,7 +25,6 @@
 
 #include "Map.h"
 #include "Camera.h"
-//#include "Particle.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
@@ -80,9 +79,6 @@ Projectile::Projectile(
 		_trjId(0),
 		_bulletSprite(-1),
 		_reversed(false)
-//		_vaporColor(-1),
-//		_vaporDensity(-1),
-//		_vaporProbability(5)
 {
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << "cTor origin = " << origin;
@@ -113,12 +109,7 @@ Projectile::Projectile(
 			{
 				_bulletSprite = bullet->getRules()->getBulletSprite();
 
-//				_speed = std::max(1, _speed + bullet->getRules()->getBulletSpeed());
 				_speed += bullet->getRules()->getBulletSpeed();
-
-//				_vaporColor = bullet->getRules()->getVaporColor();
-//				_vaporDensity = bullet->getRules()->getVaporDensity();
-//				_vaporProbability = bullet->getRules()->getVaporProbability();
 			}
 
 			// if no bullet or the bullet doesn't contain the required info see what the weapon has to offer.
@@ -127,20 +118,6 @@ Projectile::Projectile(
 
 			if (_speed == Options::battleFireSpeed)
 				_speed += _action.weapon->getRules()->getBulletSpeed();
-
-//			if (bullet == NULL
-//				|| bullet != _action.weapon)
-//				|| bullet->getRules()->getBulletSpeed() == 0)
-//			{
-//				_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
-//			}
-
-//			if (_vaporColor == -1)
-//				_vaporColor = _action.weapon->getRules()->getVaporColor();
-//			if (_vaporDensity == -1)
-//				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
-//			if (_vaporProbability == 5) // uhhh why.
-//				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
 
 			if (_bulletSprite == -1)
 			{
@@ -241,8 +218,8 @@ int Projectile::calculateTrajectory(
 		&& _action.autoShotCount == 1
 		&& _action.type != BA_LAUNCH
 		&& _battleSave->getBattleGame()->getPanicHandled() == true
-		&& (Options::forceFire == false
-			|| (SDL_GetModState() & KMOD_CTRL) == 0))
+		&& ((SDL_GetModState() & KMOD_CTRL) == 0
+			|| Options::forceFire == false))
 	{
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
 		const VoxelType testVox = static_cast<VoxelType>(
@@ -268,7 +245,6 @@ int Projectile::calculateTrajectory(
 				if (endTile != NULL
 					&& endTile->getUnit() == NULL)
 				{
-//					testPos += (Position(0,0,-1));
 					testPos = Position( // must be poking head up from tileBelow
 									testPos.x,
 									testPos.y,
@@ -320,7 +296,7 @@ int Projectile::calculateTrajectory(
 //	bool extendLine = true;
 	// even guided missiles drift, but how much is based on
 	// the shooter's faction, rather than accuracy.
-/*kL	if (_action.type == BA_LAUNCH)
+/*	if (_action.type == BA_LAUNCH)
 	{
 		extendLine = _action.waypoints.size() < 2;
 
@@ -416,8 +392,6 @@ int Projectile::calculateThrow(double accuracy)
 		{
 			targetVoxel.z += targetUnit->getHeight() / 2
 						   + targetUnit->getFloatHeight();
-//kL					   - 2;
-//						   + 2; // kL: midriff +2 voxels
 
 			if (targetUnit->getDashing() == true)
 				accuracy -= 0.16; // acid-spit, arcing shot.
@@ -595,6 +569,9 @@ void Projectile::applyAccuracy( // private.
 
 				if (_action.actor->getFaction() == _action.actor->getOriginalFaction()) // if not MC'd take a morale hit to accuracy
 					accuracy -= static_cast<double>(10 - ((_action.actor->getMorale() + 9) / 10)) / 100.;
+
+				const double elevation = static_cast<double>((origin.z - target->z) / 6);
+				accuracy += elevation; // height modification (+1 per 6 voxels rounded down).
 			}
 
 			accuracy = std::max(
@@ -806,14 +783,6 @@ bool Projectile::traceProjectile()
 			--_trjId; // ie. don't pass the end of the _trajectory vector
 			return false;
 		}
-
-/*		if (_battleSave->getDepth() > 0
-			&& _vaporColor != -1
-			&& _action.type != BA_THROW
-			&& RNG::percent(_vaporProbability) == true)
-		{
-			addVaporCloud();
-		} */
 	}
 
 	return true;
@@ -1014,50 +983,5 @@ bool Projectile::isReversed() const
 {
 	return _reversed;
 }
-
-/**
- * Adds a cloud of vapor at the projectile's current position.
- */
-/* void Projectile::addVaporCloud() // private.
-{
-	Tile* const tile = _battleSave->getTile(_trajectory.at(_trjId) / Position(16,16,24));
-	if (tile != NULL)
-	{
-		Position
-			tilePos,
-			voxelPos;
-
-		_battleSave->getBattleGame()->getMap()->getCamera()->convertMapToScreen(
-																	_trajectory.at(_trjId) / Position(16,16,24),
-																	&tilePos);
-		tilePos += _battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset();
-		_battleSave->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(
-																	_trajectory.at(_trjId),
-																	&voxelPos);
-
-		for (int
-				i = 0;
-				i != _vaporDensity;
-				++i)
-		{
-			Particle* const particle = new Particle(
-												static_cast<float>(voxelPos.x - tilePos.x + RNG::seedless(0,4) - 2),
-												static_cast<float>(voxelPos.y - tilePos.y + RNG::generate(0,4) - 2),
-												static_cast<float>(RNG::seedless(48,224)),
-												static_cast<Uint8>(_vaporColor),
-												static_cast<Uint8>(RNG::seedless(32,44)));
-			tile->addParticle(particle);
-		}
-	}
-} */
-
-/**
- * Gets a pointer to the BattleAction actor directly.
- * @return, pointer to the currently acting BattleUnit
- */
-/* BattleUnit* Projectile::getActor() const
-{
-	return _action.actor;
-} */
 
 }

@@ -53,9 +53,6 @@ private:
 	int
 		_bulletSprite,
 		_speed;
-//		_vaporColor,
-//		_vaporDensity,
-//		_vaporProbability;
 	size_t _trjId;
 
 	BattleAction _action;
@@ -76,9 +73,6 @@ private:
 			const bool keepRange = false,
 			const Tile* const targetTile = NULL);
 //			const bool extendLine = true);
-
-	/// Adds a cloud of particles at the projectile's location.
-//	void addVaporCloud();
 
 
 	public:
@@ -128,9 +122,6 @@ private:
 
 		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
 		bool isReversed() const;
-
-		/// Gets a pointer to the BattleAction actor directly.
-//		BattleUnit* getActor() const;
 };
 
 }

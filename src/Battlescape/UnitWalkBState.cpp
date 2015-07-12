@@ -884,7 +884,8 @@ bool UnitWalkBState::doStatusStand_end() // private.
 											static_cast<double>(energy) / stat * 100.));
 	}
 
-	if (_unit->getSpecialAbility() == SPECAB_BURN) // if the unit burns floortiles, burn floortiles
+	if (_falling == false
+		&& _unit->getSpecialAbility() == SPECAB_BURN) // if the unit burns floortiles, burn floortiles
 //		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		// kL_add: Put burnedBySilacoid() here! etc
@@ -1030,9 +1031,9 @@ void UnitWalkBState::postPathProcedures() // private.
 			// and bool TileEngine::calculateFOV(BattleUnit *unit)
 
 			if (_parent->getTileEngine()->validMeleeRange(
-														_unit,
-														_action.actor->getCharging(),
-														finalDir))
+													_unit,
+													_action.actor->getCharging(),
+													finalDir))
 			{
 				BattleAction action;
 				action.actor = _unit;

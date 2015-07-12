@@ -394,46 +394,48 @@ void UnitDieBState::convertToCorpse() // private.
 
 				// This block is lifted from TileEngine::explode(), switch(DT_IN).
 				if (_unit->getUnitRules() != NULL
-					&& _unit->getUnitRules()->isMechanical() == true
-					&& RNG::percent(16) == true)
+					&& _unit->getUnitRules()->isMechanical() == true)
 				{
-					explTile = tile;
-					explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
-
-					while (explTile != NULL // safety.
-						&& explTile->getPosition().z > 0
-						&& explTile->getMapData(O_OBJECT) == NULL // only floors & content can catch fire.
-						&& explTile->getMapData(O_FLOOR) == NULL
-						&& explTile->hasNoFloor(explTile_b) == true)
+					if (RNG::percent(16) == true)
 					{
-						explTile = explTile_b;
+						explTile = tile;
 						explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
-					}
 
-					if (explTile != NULL // safety.
-						&& explTile->getFire() == 0)
-					{
-						explTile->addFire(explTile->getFuel() + RNG::generate(1,2)); // Could use a ruleset-factor in here.
-						explTile->addSmoke(std::max(
-												1,
-												std::min(
-													6,
-													explTile->getFlammability() / 10)));
-
-						if (soundPlayed == false)
+						while (explTile != NULL // safety.
+							&& explTile->getPosition().z > 0
+							&& explTile->getMapData(O_OBJECT) == NULL // only floors & content can catch fire.
+							&& explTile->getMapData(O_FLOOR) == NULL
+							&& explTile->hasNoFloor(explTile_b) == true)
 						{
-							soundPlayed = true;
-							_parent->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::SMALL_EXPLOSION)
-														->play(
-															-1,
-															_parent->getMap()->getSoundAngle(_unit->getPosition()));
+							explTile = explTile_b;
+							explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
+						}
+
+						if (explTile != NULL // safety.
+							&& explTile->getFire() == 0)
+						{
+							explTile->addFire(explTile->getFuel() + RNG::generate(1,2)); // Could use a ruleset-factor in here.
+							explTile->addSmoke(std::max(
+													1,
+													std::min(
+														6,
+														explTile->getFlammability() / 10)));
+
+							if (soundPlayed == false)
+							{
+								soundPlayed = true;
+								_parent->getResourcePack()->getSound(
+																"BATTLE.CAT",
+																ResourcePack::SMALL_EXPLOSION)
+															->play(
+																-1,
+																_parent->getMap()->getSoundAngle(_unit->getPosition()));
+							}
 						}
 					}
-				}
 
-				tile->addSmoke(RNG::generate(0,2)); // more smoke ...
+					tile->addSmoke(RNG::generate(0,2)); // more smoke ...
+				}
 
 				BattleItem* const corpse = new BattleItem(
 													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--part]),

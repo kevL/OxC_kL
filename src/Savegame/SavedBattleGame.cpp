@@ -1360,16 +1360,30 @@ bool SavedBattleGame::endBattlePhase()
 											liveAliens,
 											liveSoldiers);
 
-	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.
-	if (_side == FACTION_HOSTILE
-		&& _cheatAI == false)
+	// pseudo the Turn-20 / less-than-3-aliens-left Reveal rule.
+	if (_cheatAI == false
+		&& _side == FACTION_HOSTILE
+		&& _turn > 5)
 	{
-		const int delta = RNG::generate(0,5);
-		if (_turn > 17 + delta
-			|| (_turn > 5
-				&& liveAliens < delta - 1))
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _units.begin();
+				i != _units.end();
+				++i)
 		{
-			_cheatAI = true;
+			if ((*i)->isOut_t(OUT_STAT) == false // a conscious non-MC'd aLien ...
+				&& (*i)->getOriginalFaction() == FACTION_HOSTILE
+				&& (*i)->getFaction() == FACTION_HOSTILE)
+			{
+				const int delta = RNG::generate(0,5);
+				if (_turn > 17 + delta
+					|| (_turn > 5
+						&& liveAliens < delta - 1))
+				{
+					_cheatAI = true;
+				}
+
+				break;
+			}
 		}
 	}
 

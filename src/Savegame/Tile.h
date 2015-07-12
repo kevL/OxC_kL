@@ -145,8 +145,8 @@ protected:
 
 		/// Gets whether this tile has no objects
 		bool isVoid(
-				const bool checkInv = true,
-				const bool checkSmoke = true) const;
+				const bool testInventory = true,
+				const bool testVolatiles = true) const;
 
 		/// Gets the TU cost to walk over a certain part of the tile.
 		int getTUCostTile(
