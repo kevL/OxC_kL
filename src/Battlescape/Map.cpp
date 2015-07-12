@@ -2069,7 +2069,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S
-																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
+																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N)
+															&& tileWest->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE)
 														|| (tileWest->getUnit() != NULL
 															&& tileWest->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
 													{
@@ -2092,7 +2093,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S
-																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
+																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N)
+															&& tileNorth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE)
 														|| (tileNorth->getUnit() != NULL
 															&& tileNorth->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
 													{

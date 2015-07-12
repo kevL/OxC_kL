@@ -5498,7 +5498,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1436571619 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1436648568 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -6354,7 +6354,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1434748034 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1436649771 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
