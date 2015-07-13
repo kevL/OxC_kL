@@ -5349,7 +5349,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1433210758 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
+1436739627 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
 	"AbortMissionState.h"
 	"BattlescapeState.h"
 	"../Engine/Action.h"
@@ -8481,7 +8481,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1436739156 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1436739397 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"

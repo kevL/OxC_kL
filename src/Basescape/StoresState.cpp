@@ -75,7 +75,7 @@ StoresState::StoresState(Base* base)
 	add(_window,		"window",	"storesInfo");
 	add(_txtTitle,		"text",		"storesInfo");
 	add(_txtBaseLabel,	"text",		"storesInfo");
-	add(_txtTotal,		"text",		"storesInfo");
+	add(_txtTotal);//,		"text",		"storesInfo");
 	add(_txtItem,		"text",		"storesInfo");
 	add(_txtQuantity,	"text",		"storesInfo");
 	add(_txtSpaceUsed,	"text",		"storesInfo");
@@ -108,6 +108,7 @@ StoresState::StoresState(Base* base)
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtTotal->setText(tr("STR_QUANTITY_UC"));
+	_txtTotal->setColor(208); // white
 	_txtTotal->setAlign(ALIGN_RIGHT);
 
 	_txtItem->setText(tr("STR_ITEM"));
