@@ -1729,6 +1729,8 @@ void DogfightState::btnMinimizeDfClick(Action*)
 				if (_geo->getDfZoomOutTimer()->isRunning() == false)
 					_geo->getDfZoomOutTimer()->start();
 			}
+			else
+				_geo->resetInterceptPorts();
 		}
 		else
 			setStatus("STR_MINIMISE_AT_STANDOFF_RANGE_ONLY");
@@ -1776,6 +1778,8 @@ void DogfightState::btnMaximizeDfPress(Action* action)
 		_btnMinimizedIcon->setVisible(false);
 		_txtInterception->setVisible(false);
 		_preview->setVisible(false);
+
+		_geo->resetInterceptPorts();
 
 		if (_geo->getDfZoomOutTimer()->isRunning() == true)
 			_geo->getDfZoomOutTimer()->stop();
@@ -1996,7 +2000,7 @@ void DogfightState::recolor(
 }
 
 /**
- * Gets interception slot.
+ * Gets this Dogfight's interception slot.
  * @return, interception number
  */
 size_t DogfightState::getInterceptSlot() const
@@ -2005,7 +2009,7 @@ size_t DogfightState::getInterceptSlot() const
 }
 
 /**
- * Sets interception slot.
+ * Sets this Dogfight's interception slot.
  * @param intercept - #ID
  */
 void DogfightState::setInterceptSlot(const size_t intercept)
@@ -2014,7 +2018,8 @@ void DogfightState::setInterceptSlot(const size_t intercept)
 }
 
 /**
- * Sets total interceptions count. Used to properly position the window.
+ * Sets total interceptions count.
+ * @note Used to properly position the window.
  * @param intercepts - amount of interception windows
  */
 void DogfightState::setTotalIntercepts(const size_t intercepts)
@@ -2023,94 +2028,104 @@ void DogfightState::setTotalIntercepts(const size_t intercepts)
 }
 
 /**
- * Calculates and positions this interception's view window.
- */
-void DogfightState::resetInterceptPort()
-{
-	calcPortPosition();
-	placePort();
-}
-
-/**
  * Calculates dogfight window position according to number of active interceptions.
+ * @param dfOpen		- current iteration
+ * @param dfOpenTotal	- total quantity of open dogfight windows
  */
-void DogfightState::calcPortPosition()
+void DogfightState::resetInterceptPort(
+		size_t dfOpen,
+		size_t dfOpenTotal)
 {
+	//Log(LOG_INFO) << "_slot = " << (int)_slot;
 	if (_slot > _totalIntercepts)
-		_slot = _geo->getOpenDfSlot();
+		_slot = _geo->getOpenDfSlot(); // not sure what this is doing anymore ...
 
 	_minimizedIconX = 5;
 	_minimizedIconY = (5 * _slot) + (16 * (_slot - 1));
 
-	if (_totalIntercepts == 1)
+	if (_minimized == false)
 	{
-		_x = 80;
-		_y = 52;
-	}
-	else if (_totalIntercepts == 2)
-	{
-		if (_slot == 1)
+	//	if (_totalIntercepts == 1)
+		if (dfOpenTotal == 1)
 		{
 			_x = 80;
-			_y = 0;
+			_y = 52;
 		}
-		else // 2
+	//	else if (_totalIntercepts == 2)
+		else if (dfOpenTotal == 2)
 		{
-			_x = 80;
-			_y = 200 - _window->getHeight(); // 96;
+	//		if (_slot == 1)
+			if (dfOpen == 1)
+			{
+				_x = 80;
+				_y = 0;
+			}
+			else // 2
+			{
+				_x = 80;
+				_y = 200 - _window->getHeight(); // 96;
+			}
 		}
-	}
-	else if (_totalIntercepts == 3)
-	{
-		if (_slot == 1)
+	//	else if (_totalIntercepts == 3)
+		else if (dfOpenTotal == 3)
 		{
-			_x = 80;
-			_y = 0;
+	//		if (_slot == 1)
+			if (dfOpen == 1)
+			{
+				_x = 80;
+				_y = 0;
+			}
+	//		else if (_slot == 2)
+			else if (dfOpen == 2)
+			{
+				_x = 0;
+				_y = 200 - _window->getHeight(); // 96;
+			}
+			else // 3
+			{
+				_x = 320 - _window->getWidth(); // 160;
+				_y = 200 - _window->getHeight(); // 96;
+			}
 		}
-		else if (_slot == 2)
+		else
 		{
-			_x = 0;
-			_y = 200 - _window->getHeight(); // 96;
+	//		if (_slot == 1)
+			if (dfOpen == 1)
+			{
+				_x =
+				_y = 0;
+			}
+	//		else if (_slot == 2)
+			else if (dfOpen == 2)
+			{
+				_x = 320 - _window->getWidth(); // 160;
+				_y = 0;
+			}
+	//		else if (_slot == 3)
+			else if (dfOpen == 3)
+			{
+				_x = 0;
+				_y = 200 - _window->getHeight(); // 96;
+			}
+			else // 4
+			{
+				_x = 320 - _window->getWidth(); // 160;
+				_y = 200 - _window->getHeight(); // 96;
+			}
 		}
-		else // 3
-		{
-			_x = 320 - _window->getWidth(); // 160;
-			_y = 200 - _window->getHeight(); // 96;
-		}
-	}
-	else
-	{
-		if (_slot == 1)
-		{
-			_x =
-			_y = 0;
-		}
-		else if (_slot == 2)
-		{
-			_x = 320 - _window->getWidth(); // 160;
-			_y = 0;
-		}
-		else if (_slot == 3)
-		{
-			_x = 0;
-			_y = 200 - _window->getHeight(); // 96;
-		}
-		else // 4
-		{
-			_x = 320 - _window->getWidth(); // 160;
-			_y = 200 - _window->getHeight(); // 96;
-		}
-	}
 
-	_x += _game->getScreen()->getDX();
-	_y += _game->getScreen()->getDY();
+		_x += _game->getScreen()->getDX();
+		_y += _game->getScreen()->getDY();
+
+		placePort();
+	}
 }
 
 /**
  * Relocates all dogfight window elements to calculated position.
  * @note This is used when multiple interceptions are running.
  */
-void DogfightState::placePort()
+void DogfightState::placePort() // private.
 {
 	const int
 		x = _window->getX() - _x,
@@ -2130,6 +2145,17 @@ void DogfightState::placePort()
 
 	_txtInterception->setX(_minimizedIconX + 18);
 	_txtInterception->setY(_minimizedIconY + 6);
+}
+
+/**
+ * Ends the dogfight.
+ */
+void DogfightState::endDogfight() // private.
+{
+	_endDogfight = true;
+
+	if (_craft != NULL)
+		_craft->setInDogfight(false);
 }
 
 /**
@@ -2166,17 +2192,6 @@ Craft* DogfightState::getCraft() const
 int DogfightState::getDistance() const
 {
 	return _dist;
-}
-
-/**
- * Ends the dogfight.
- */
-void DogfightState::endDogfight() // private.
-{
-	_endDogfight = true;
-
-	if (_craft != NULL)
-		_craft->setInDogfight(false);
 }
 
 /**

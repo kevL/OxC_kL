@@ -147,6 +147,8 @@ private:
 	Timer* _craftDamageAnimTimer;
 	Ufo* _ufo;
 
+	/// Moves window to new position.
+	void placePort();
 	/// Ends the dogfight.
 	void endDogfight();
 
@@ -230,15 +232,12 @@ private:
 		size_t getInterceptSlot() const;
 		/// Sets interception slot.
 		void setInterceptSlot(const size_t intercept);
-
 		/// Sets total interceptions in progress.
 		void setTotalIntercepts(const size_t intercepts);
 		/// Calculates and positions this interception's view window.
-		void resetInterceptPort();
-		/// Calculates window position according to opened interception windows.
-		void calcPortPosition();
-		/// Moves window to new position.
-		void placePort();
+		void resetInterceptPort(
+				size_t dfOpen,
+				size_t dfOpenTotal);
 
 		/// Checks if the dogfight should be ended.
 		bool dogfightEnded() const;

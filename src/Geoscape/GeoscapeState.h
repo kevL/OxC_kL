@@ -80,7 +80,7 @@ private:
 		_month,
 		_year;
 	int64_t _windowPops;
-	size_t _minimizedDogfights;
+	size_t _dfMinimized;
 	double
 		_dfCCC_lon,
 		_dfCCC_lat;
@@ -154,6 +154,9 @@ private:
 	std::list<DogfightState*>
 		_dogfights,
 		_dogfightsToStart;
+
+	/// Starts a new dogfight.
+	void startDogfight();
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
@@ -283,8 +286,6 @@ private:
 		size_t getMinimizedDfCount() const;
 		/// Multi-dogfights logic handling.
 		void thinkDogfights();
-		/// Starts a new dogfight.
-		void startDogfight();
 		/// Updates interceptions windows for all Dogfights.
 		void resetInterceptPorts();
 		/// Gets first free dogfight slot.

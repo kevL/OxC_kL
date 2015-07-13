@@ -349,7 +349,7 @@ GeoscapeState::GeoscapeState()
 		_dfCenterCurrentCoords(false),
 		_dfCCC_lon(0.),
 		_dfCCC_lat(0.),
-		_minimizedDogfights(0),
+		_dfMinimized(0),
 		_day(-1),
 		_month(-1),
 		_year(-1),
@@ -1058,7 +1058,7 @@ void GeoscapeState::blit()
  */
 void GeoscapeState::handle(Action* action)
 {
-	if (_dogfights.size() == _minimizedDogfights)
+	if (_dogfights.size() == _dfMinimized)
 		State::handle(action);
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
@@ -1134,7 +1134,7 @@ void GeoscapeState::handle(Action* action)
 			(*i)->handle(action);
 		}
 
-		_minimizedDogfights = getMinimizedDfCount();
+		_dfMinimized = getMinimizedDfCount();
 	}
 }
 
@@ -1225,9 +1225,9 @@ void GeoscapeState::think()
 	else
 	{
 		if (_dogfights.empty() == false
-			|| _minimizedDogfights != 0)
+			|| _dfMinimized != 0)
 		{
-			if (_dogfights.size() == _minimizedDogfights) // if all dogfights are minimized rotate the globe, etc.
+			if (_dogfights.size() == _dfMinimized) // if all dogfights are minimized rotate the globe, etc.
 			{
 				_pause = false;
 				_gameTimer->think(this, NULL);
@@ -3852,39 +3852,39 @@ size_t GeoscapeState::getMinimizedDfCount() const
  */
 void GeoscapeState::thinkDogfights()
 {
-	static bool resetPorts; // inits to false. WARNING: This might not work as expected when re-loading!
-
-	_minimizedDogfights = 0;
-
-	std::list<DogfightState*>::const_iterator df = _dogfights.begin();
+	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
 	for (
 			;
-			df != _dogfights.end();
-			++df)
+			i != _dogfights.end();
+			++i)
 	{
-		(*df)->getUfo()->setEngaged(false); // huh
+		(*i)->getUfo()->setEngaged(false); // huh
 	}
 
-	df = _dogfights.begin();
-	while (df != _dogfights.end())
+
+	_dfMinimized = 0;
+	bool resetPorts = false;
+
+	i = _dogfights.begin();
+	while (i != _dogfights.end())
 	{
-		if ((*df)->isMinimized() == true)
-			++_minimizedDogfights;
+		if ((*i)->isMinimized() == true)
+			++_dfMinimized;
 //		else _globe->rotateStop();
 
-		(*df)->think();
+		(*i)->think();
 
-		if ((*df)->dogfightEnded() == true)
+		if ((*i)->dogfightEnded() == true)
 		{
-			if ((*df)->isMinimized() == true)
-				--_minimizedDogfights;
+			if ((*i)->isMinimized() == true)
+				--_dfMinimized;
 
-			delete *df;
-			df = _dogfights.erase(df);
+			delete *i;
+			i = _dogfights.erase(i);
 			resetPorts = true;
 		}
 		else
-			++df;
+			++i;
 	}
 
 	if (_dogfights.empty() == true)
@@ -3902,14 +3902,13 @@ void GeoscapeState::thinkDogfights()
 	else if (resetPorts == true)
 		resetInterceptPorts();
 
-	resetPorts = false;
 	_dfZoomOut = true;
 }
 
 /**
  * Starts a new dogfight.
  */
-void GeoscapeState::startDogfight()
+void GeoscapeState::startDogfight() // private.
 {
 	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
 	{
@@ -3945,20 +3944,28 @@ void GeoscapeState::startDogfight()
  */
 void GeoscapeState::resetInterceptPorts()
 {
+	const size_t dfQty = _dogfights.size();
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->setTotalIntercepts(_dogfights.size());
+		(*i)->setTotalIntercepts(dfQty);
 	}
 
+	const size_t dfOpenTotal = dfQty - getMinimizedDfCount(); // _dfMinimized; // <- might have to use getMinimizedDfCount()
+	size_t dfOpen = 0;
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->resetInterceptPort(); // set window position for each dogfight
+		if ((*i)->isMinimized() == false)
+			++dfOpen;
+
+		(*i)->resetInterceptPort( // set window position for dogfight
+							dfOpen,
+							dfOpenTotal);
 	}
 }
 

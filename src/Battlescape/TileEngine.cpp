@@ -3813,7 +3813,7 @@ int TileEngine::horizontalBlockage(
 					endTile,
 					O_OBJECT,
 					dType,
-					(dir + 4) %8) // opposite direction
+					(dir + 4) % 8) // opposite direction
 				!= 0) // should always be, < 1; ie. this conditions checks [if -1]
 		{
 			if (dType == DT_NONE)
