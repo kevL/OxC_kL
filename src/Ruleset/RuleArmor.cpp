@@ -112,6 +112,7 @@ void RuleArmor::load(const YAML::Node& node)
 	_drawingRoutine	= node["drawingRoutine"].as<int>(_drawingRoutine);
 	_size			= node["size"]			.as<int>(_size);
 	_weight			= node["weight"]		.as<int>(_weight);
+	_agility		= node["agility"]		.as<int>(_agility);
 	_isBasic		= node["isBasic"]		.as<bool>(_isBasic);
 	_isSpacesuit	= node["isSpacesuit"]	.as<bool>(_isSpacesuit);
 	_moveType		= static_cast<MovementType>(node["movementType"].as<int>(_moveType));
@@ -143,11 +144,6 @@ void RuleArmor::load(const YAML::Node& node)
 		|| _drawingRoutine ==  4
 		|| _drawingRoutine ==  6
 		|| _drawingRoutine == 10)
-//		|| _drawingRoutine == 13 // TFTD->
-//		|| _drawingRoutine == 14
-//		|| _drawingRoutine == 15
-//		|| _drawingRoutine == 17
-//		|| _drawingRoutine == 18) // <-
 	{
 		_canHoldWeapon = true;
 	}
@@ -162,8 +158,6 @@ void RuleArmor::load(const YAML::Node& node)
 	_hairColor			= node["spriteHairColor"]	.as<std::vector<int> >(_hairColor);
 	_rankColor			= node["spriteRankColor"]	.as<std::vector<int> >(_rankColor);
 	_utileColor			= node["spriteUtileColor"]	.as<std::vector<int> >(_utileColor);
-
-	_agility			= node["agility"]			.as<int>(_agility);
 }
 
 /**

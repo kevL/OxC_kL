@@ -761,7 +761,7 @@ void Game::loadRuleset()
 			_rules->load(*i);
 			++i;
 		}
-		catch (YAML::Exception &e)
+		catch (YAML::Exception& e)
 		{
 			Log(LOG_WARNING) << e.what();
 
@@ -782,7 +782,8 @@ void Game::loadRuleset()
 
 /**
  * Sets whether SDL input is activated.
- * All input events are processed if true, otherwise only mouse motion is handled.
+ * @note All input events are processed if true otherwise only mouse motion is
+ * handled.
  * @param active - true if SDL input is active
  */
 void Game::setInputActive(bool active)

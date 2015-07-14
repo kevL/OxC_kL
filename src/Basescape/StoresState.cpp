@@ -145,6 +145,7 @@ StoresState::StoresState(Base* base)
 			i != items.end();
 			++i)
 	{
+		//Log(LOG_INFO) << *i << " listOrder = " << rules->getItem(*i)->getListOrder();
 		if (rules->getItem(*i)->isAlien() == false)
 		{
 			qty = _base->getItems()->getItemQty(*i);

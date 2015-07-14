@@ -54,18 +54,18 @@ SoldierArmorState::SoldierArmorState(
 		size_t soldierId)
 	:
 		_base(base),
-		_soldierId(soldierId)
+		_soldier(base->getSoldiers()->at(soldierId))
 {
 	_screen = false;
 
-	_window			= new Window(this, 192, 147, 64, 27, POPUP_BOTH);
+	_window			= new Window(this, 192, 157, 64, 17, POPUP_BOTH);
 
-	_txtSoldier		= new Text(182, 9, 69, 38);
+	_txtSoldier		= new Text(182, 9, 69, 28);
 
-	_txtType		= new Text(102, 9, 84, 53);
-	_txtQuantity	= new Text(42, 9, 194, 53);
+	_txtType		= new Text(102, 9,  84, 43);
+	_txtQuantity	= new Text( 42, 9, 194, 43);
 
-	_lstArmor		= new TextList(160, 81, 76, 64);
+	_lstArmor		= new TextList(160, 89, 76, 54);
 
 	_btnCancel		= new TextButton(152, 16, 84, 150);
 
@@ -89,24 +89,23 @@ SoldierArmorState::SoldierArmorState(
 					(ActionHandler)& SoldierArmorState::btnCancelClick,
 					Options::keyCancel);
 
-
+	_txtSoldier->setText(_soldier->getName());
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName());
 
 	_txtType->setText(tr("STR_TYPE"));
 
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_lstArmor->setBackground(_window);
 	_lstArmor->setColumns(2, 110, 35);
+	_lstArmor->setBackground(_window);
 	_lstArmor->setSelectable();
 	_lstArmor->setMargin();
 
 	RuleArmor* armorRule;
 	const std::vector<std::string>& armorList = _game->getRuleset()->getArmorsList();
-	for (std::vector<std::string>::const_iterator
-			i = armorList.begin();
-			i != armorList.end();
+	for (std::vector<std::string>::const_reverse_iterator
+			i = armorList.rbegin();
+			i != armorList.rend();
 			++i)
 	{
 		armorRule = _game->getRuleset()->getArmor(*i);
@@ -158,17 +157,16 @@ void SoldierArmorState::btnCancelClick(Action*)
  */
 void SoldierArmorState::lstArmorClick(Action*)
 {
-	Soldier* const soldier = _base->getSoldiers()->at(_soldierId);
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		if (soldier->getArmor()->getStoreItem() != "STR_NONE")
-			_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+		if (_soldier->getArmor()->getStoreItem() != "STR_NONE")
+			_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
 
 		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
 			_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
 	}
 
-	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
+	_soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
 //	SavedGame* gameSave = _game->getSavedGame();
 //	gameSave->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
 

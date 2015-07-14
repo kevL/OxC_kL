@@ -4588,7 +4588,7 @@
 1430149549 f:\git\openxcom\src\basescape\craftarmorstate.h
 	"../Engine/State.h"
 
-1430393957 f:\git\openxcom\src\basescape\soldierarmorstate.h
+1436901502 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
 1427081721 f:\git\openxcom\src\ruleset\armor.h
@@ -4654,7 +4654,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1435264670 f:\git\openxcom\src\battlescape\battlescapegame.h
+1436909404 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5149,7 +5149,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1432465320 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1436904748 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5261,7 +5261,7 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1436741783 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1436912528 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
@@ -6293,7 +6293,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1436808690 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1436849592 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -6534,7 +6534,7 @@
 	"Language.h"
 	"Surface.h"
 
-1435255946 source:f:\git\openxcom\src\engine\game.cpp
+1436907363 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7116,7 +7116,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1436816530 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1436817581 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8496,7 +8496,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1436417430 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1436911061 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -11417,7 +11417,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1433843734 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1436909435 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 

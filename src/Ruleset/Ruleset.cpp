@@ -653,9 +653,9 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			++i)
 	{
 		RuleArmor* const rule = loadRule(
-								*i,
-								&_armors,
-								&_armorsIndex);
+									*i,
+									&_armors,
+									&_armorsIndex);
 		if (rule != NULL)
 			rule->load(*i);
 	}
@@ -678,8 +678,8 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			++i)
 	{
 		RuleUnit* const rule = loadRule(
-								*i,
-								&_units);
+									*i,
+									&_units);
 		if (rule != NULL)
 			rule->load(
 					*i,
@@ -1230,12 +1230,12 @@ T* Ruleset::loadRule(
 
 		if (index != NULL)
 		{
-			const std::vector<std::string>::const_iterator idx = std::find(
-																		index->begin(),
-																		index->end(),
-																		type);
-			if (idx != index->end())
-				index->erase(idx);
+			const std::vector<std::string>::const_iterator j = std::find(
+																	index->begin(),
+																	index->end(),
+																	type);
+			if (j != index->end())
+				index->erase(j);
 		}
 	}
 
@@ -1995,12 +1995,12 @@ struct compareRule
 		public std::binary_function<const std::string&, const std::string&, bool>
 {
 	Ruleset* _ruleset;
-	typedef T*(Ruleset::*RuleLookup)(const std::string &id);
+	typedef T*(Ruleset::*RuleLookup)(const std::string& id);
 	RuleLookup _lookup;
 
 	compareRule(
-			Ruleset* ruleset,
-			RuleLookup lookup)
+			Ruleset* const ruleset,
+			const RuleLookup lookup)
 		:
 			_ruleset(ruleset),
 			_lookup(lookup)
@@ -2047,7 +2047,7 @@ struct compareRule<RuleCraftWeapon>
 
 /**
  * Armor uses the list order of their store item.
- * Itemless armor comes before all else.
+ * @note Itemless armor comes before all else.
  */
 template <>
 struct compareRule<RuleArmor>
@@ -2056,7 +2056,7 @@ struct compareRule<RuleArmor>
 {
 	Ruleset* _ruleset;
 
-	compareRule(Ruleset* ruleset)
+	compareRule(Ruleset* const ruleset)
 		:
 			_ruleset(ruleset)
 	{}
@@ -2066,22 +2066,29 @@ struct compareRule<RuleArmor>
 			const std::string& r2) const
 	{
 		const RuleArmor
-			* const armor1 = _ruleset->getArmor(r1),
-			* const armor2 = _ruleset->getArmor(r2);
+			* const armorRule1 = _ruleset->getArmor(r1),
+			* const armorRule2 = _ruleset->getArmor(r2);
 		const RuleItem
-			* const rule1 = _ruleset->getItem(armor1->getStoreItem()),
-			* const rule2 = _ruleset->getItem(armor2->getStoreItem());
+			* const itRule1 = _ruleset->getItem(armorRule1->getStoreItem()),
+			* const itRule2 = _ruleset->getItem(armorRule2->getStoreItem());
 
-		if (rule1 == NULL && rule2 == NULL)
-			return (armor1 < armor2); // tiebreaker, don't care about order, pointers are as good as any
+/*		if (itRule1 == NULL && itRule2 == NULL)
+//			return (armorRule1 < armorRule2); // tiebreaker, don't care about order, pointers are good as any.
+			return false; // just return true, no false.
 
-		if (rule1 == NULL)
+		if (itRule1 == NULL)
 			return true;
 
-		if (rule2 == NULL)
+		if (itRule2 == NULL)
+			return false; */
+
+		if (itRule2 == NULL)
 			return false;
 
-		return (rule1->getListOrder() < rule2->getListOrder());
+		if (itRule1 == NULL)
+			return true;
+
+		return (itRule1->getListOrder() < itRule2->getListOrder());
 	}
 };
 
@@ -2096,7 +2103,7 @@ struct compareRule<ArticleDefinition>
 	Ruleset* _ruleset;
 	static std::map<std::string, int> _sections;
 
-	compareRule(Ruleset* ruleset)
+	compareRule(Ruleset* const ruleset)
 		:
 			_ruleset(ruleset)
 	{

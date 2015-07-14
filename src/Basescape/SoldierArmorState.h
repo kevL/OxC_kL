@@ -29,11 +29,12 @@ namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class RuleArmor;
+class Soldier;
+class Text;
+class TextButton;
+class TextList;
+class Window;
 
 
 /**
@@ -45,9 +46,8 @@ class SoldierArmorState
 {
 
 private:
-	size_t _soldierId;
-
 	Base* _base;
+	Soldier* _soldier;
 	Text
 		* _txtQuantity,
 		* _txtSoldier,

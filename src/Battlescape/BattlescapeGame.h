@@ -61,7 +61,8 @@ enum BattleActionType
 	BA_PANIC,		// 12
 	BA_RETHINK,		// 13
 	BA_DEFUSE,		// 14, kL_add.
-	BA_DROP			// 15, kL_add.
+	BA_DROP,		// 15, kL_add.
+	BA_FRAY			// 16, kL_add. reduces victim's TU by (skill/2)
 };
 
 
