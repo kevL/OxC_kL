@@ -3953,7 +3953,7 @@ void GeoscapeState::resetInterceptPorts()
 		(*i)->setTotalIntercepts(dfQty);
 	}
 
-	const size_t dfOpenTotal = dfQty - getMinimizedDfCount(); // _dfMinimized; // <- might have to use getMinimizedDfCount()
+	const size_t dfOpenTotal = dfQty - getMinimizedDfCount();
 	size_t dfOpen = 0;
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();

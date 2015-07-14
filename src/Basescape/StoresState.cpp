@@ -57,17 +57,18 @@ StoresState::StoresState(Base* base)
 	_window			= new Window(this, 320, 200);
 
 	_txtTitle		= new Text(300, 17, 10, 8);
+
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtTotal		= new Text(50, 9, 200, 18);
 
-	_txtItem		= new Text(162, 9, 16, 25);
-	_txtQuantity	= new Text(84, 9, 178, 25);
-	_txtSpaceUsed	= new Text(26, 9, 262, 25);
+	_txtItem		= new Text(162, 9,  16, 25);
+	_txtQuantity	= new Text( 84, 9, 178, 25);
+	_txtSpaceUsed	= new Text( 26, 9, 262, 25);
 
 	_lstStores		= new TextList(285, 137, 16, 36);
 
-	_btnTransfers	= new TextButton(142, 16, 16, 177);
+	_btnTransfers	= new TextButton(142, 16,  16, 177);
 	_btnOk			= new TextButton(142, 16, 162, 177);
 
 	setInterface("storesInfo");

@@ -3255,16 +3255,6 @@ int TileEngine::horizontalBlockage(
 		const ItemDamageType dType)
 {
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage()";
-/*	DT_NONE,	// 0
-	DT_AP,		// 1
-	DT_IN,		// 2
-	DT_HE,		// 3
-	DT_LASER,	// 4
-	DT_PLASMA,	// 5
-	DT_STUN,	// 6
-	DT_MELEE,	// 7
-	DT_ACID,	// 8
-	DT_SMOKE	// 9 */
 	bool visLike = dType == DT_NONE
 				|| dType == DT_IN
 				|| dType == DT_STUN
@@ -3277,11 +3267,8 @@ int TileEngine::horizontalBlockage(
 		return 0;
 	}
 
-	// debug:
-	//bool debug = dType == DT_HE;
-
 	int dir;
-	Pathfinding::vectorToDirection( // Set&Get direction by reference
+	Pathfinding::vectorToDirection(
 							endTile->getPosition() - startTile->getPosition(),
 							dir);
 	if (dir == -1) // startTile == endTile
@@ -3793,9 +3780,6 @@ int TileEngine::horizontalBlockage(
 								4) / 2;
 			}
 		break;
-
-		default:
-		break;
 	}
 
 	if (visLike == true)
@@ -3847,11 +3831,6 @@ int TileEngine::verticalBlockage(
 		const ItemDamageType dType)
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
-/*	bool visLike = dType == DT_NONE
-				|| dType == DT_IN
-				|| dType == DT_STUN
-				|| dType == DT_SMOKE; */
-
 	if (startTile == NULL // safety check
 		|| endTile == NULL
 		|| startTile == endTile)
@@ -3859,7 +3838,7 @@ int TileEngine::verticalBlockage(
 		return 0;
 	}
 
-	int dirZ = endTile->getPosition().z - startTile->getPosition().z;
+	const int dirZ = endTile->getPosition().z - startTile->getPosition().z;
 	if (dirZ == 0)
 		return 0;
 
@@ -5093,7 +5072,7 @@ int TileEngine::calculateLine(
 			x != x1 + step_x;
 			x += step_x)
 	{
-/*		if (x < 0 || y < 0 || z < 0 // kL->
+/*		if (x < 0 || y < 0 || z < 0
 			|| x > _battleSave->getMapSizeX() * 16
 			|| y > _battleSave->getMapSizeY() * 16
 			|| z > _battleSave->getMapSizeZ() * 24)
@@ -5134,11 +5113,11 @@ int TileEngine::calculateLine(
 				* const startTile = _battleSave->getTile(lastPoint),
 				* const endTile = _battleSave->getTile(Position(cx,cy,cz));
 
-//			if (_battleSave->getSelectedUnit()->getId() == 389)
-//			{
-//				int dist = distance(origin, Position(cx, cy, cz));
-//				Log(LOG_INFO) << "unitID = " << _battleSave->getSelectedUnit()->getId() << " dist = " << dist;
-//			}
+/*			if (_battleSave->getSelectedUnit()->getId() == 389)
+			{
+				int dist = distance(origin, Position(cx, cy, cz));
+				Log(LOG_INFO) << "unitID = " << _battleSave->getSelectedUnit()->getId() << " dist = " << dist;
+			} */
 
 			horiBlock = horizontalBlockage(
 										startTile,
@@ -5151,20 +5130,15 @@ int TileEngine::calculateLine(
 			// kL_TEST:
 /*			BattleUnit* selUnit = _battleSave->getSelectedUnit();
 			if (selUnit
-//				&& selUnit->getFaction() == FACTION_PLAYER
 				&& selUnit->getId() == 389
 				&& startTile != endTile)
-//				&& _battleSave->getDebugMode())
-//				&& _battleSave->getTurn() > 1)
 			{
 //				Position posUnit = selUnit->getPosition();
-//				if ( //(posUnit.x == cx))
+//				if ((posUnit.x == cx
 //						&& std::abs(posUnit.y - cy) > 4) ||
-//					(posUnit.y == cy))
+//					(posUnit.y == cy
 //						&& std::abs(posUnit.x - cx) > 4))
 				{
-					//kL_debug = true;
-
 					Log(LOG_INFO) << ". start " << lastPoint << " hori = " << horiBlock;
 					Log(LOG_INFO) << ". . end " << Position(cx,cy,cz) << " vert = " << vertBlock;
 				}
@@ -5179,8 +5153,7 @@ int TileEngine::calculateLine(
 			}
 
 			horiBlock += vertBlock;
-//			if (horiBlock > 0)
-			if (horiBlock != 0)
+			if (horiBlock != 0) // horiBlock > 0)
 				return horiBlock;
 
 			lastPoint = Position(cx,cy,cz);
