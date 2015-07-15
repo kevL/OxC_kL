@@ -57,12 +57,12 @@ enum BattleActionType
 	BA_HIT,			//  8
 	BA_USE,			//  9
 	BA_LAUNCH,		// 10
-	BA_MINDCONTROL,	// 11
-	BA_PANIC,		// 12
+	BA_PSICONTROL,	// 11
+	BA_PSIPANIC,	// 12
 	BA_RETHINK,		// 13
-	BA_DEFUSE,		// 14, kL_add.
-	BA_DROP,		// 15, kL_add.
-	BA_FRAY			// 16, kL_add. reduces victim's TU by (skill/2)
+	BA_DEFUSE,		// 14, kL_add ->>
+	BA_DROP,		// 15
+	BA_PSIFRAY		// 16 reduces victim's TU by (skill/3)
 };
 
 

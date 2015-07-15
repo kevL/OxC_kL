@@ -4654,7 +4654,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1436909404 f:\git\openxcom\src\battlescape\battlescapegame.h
+1436937468 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5261,7 +5261,7 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1436912528 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1436913119 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
@@ -5387,7 +5387,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1435835514 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1436986681 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"Map.h"
@@ -5438,7 +5438,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1436082248 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1436936609 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"ProjectileFlyBState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -5995,7 +5995,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1436734873 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1436936609 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -8481,7 +8481,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1436739397 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1436937973 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"
@@ -8645,7 +8645,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1436738957 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1436988234 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11417,7 +11417,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1436909435 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1436911879 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 

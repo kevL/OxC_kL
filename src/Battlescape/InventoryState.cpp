@@ -555,7 +555,7 @@ void InventoryState::updateStats() // private.
 			{
 				_txtPsiTU->setVisible();
 				_txtPsiTU->setText(tr("STR_PSI_").arg(unit->getActionTUs(
-																	BA_PANIC,
+																	BA_PSIPANIC,
 																	_parent->getBattleGame()->getAlienPsi())));
 			}
 			else
@@ -1212,7 +1212,7 @@ void InventoryState::setExtraInfo( // private.
 					case BA_PRIME:		actionType = "STR_PRIME_";	break;
 					case BA_DEFUSE:		actionType = "STR_DEFUSE_";	break;
 					case BA_USE:		actionType = "STR_USE_";	break;
-					case BA_PANIC:		actionType = "STR_PSI_";	break;
+					case BA_PSIPANIC:	actionType = "STR_PSI_";	break;
 					case BA_HIT:		actionType = "STR_ATTACK_";
 				}
 

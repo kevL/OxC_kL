@@ -1962,8 +1962,9 @@ int BattleUnit::getActionTUs(
 		break;
 
 		case BA_USE:
-		case BA_MINDCONTROL:
-		case BA_PANIC:
+		case BA_PSICONTROL:
+		case BA_PSIPANIC:
+		case BA_PSIFRAY:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUUse();
@@ -1995,7 +1996,7 @@ int BattleUnit::getActionTUs(
 }
 
 /**
- * Spends time units if it can. Return false if it can't.
+ * Spends time units if it can. Returns false if it can't.
  * @param tu - the TU to check & spend
  * @return, true if this unit could spend the time units
  */

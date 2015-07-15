@@ -342,8 +342,9 @@ void BattlescapeGame::popState()
 					case BA_SNAPSHOT:
 					case BA_AIMEDSHOT:
 					case BA_AUTOSHOT:
-					case BA_PANIC:
-					case BA_MINDCONTROL:
+					case BA_PSIPANIC:
+					case BA_PSIFRAY:
+					case BA_PSICONTROL:
 						cancelCurrentAction(true);
 					break;
 
@@ -462,17 +463,17 @@ void BattlescapeGame::popState()
 									cancelCurrentAction(true);
 								}
 							break;
-	/*						case BA_PANIC:
-								if (curTU < action.actor->getActionTUs(BA_PANIC, action.weapon))
+	/*						case BA_PSIPANIC:
+								if (curTU < action.actor->getActionTUs(BA_PSIPANIC, action.weapon))
 									cancelCurrentAction(true);
 							break;
-							case BA_MINDCONTROL:
-								if (curTU < action.actor->getActionTUs(BA_MINDCONTROL, action.weapon))
+							case BA_PSICONTROL:
+								if (curTU < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
 	/*						case BA_USE:
 								if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE
-									&& curTU < action.actor->getActionTUs(BA_MINDCONTROL, action.weapon))
+									&& curTU < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
 						}
@@ -807,8 +808,8 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 		|| action.type == BA_AIMEDSHOT
 		|| action.type == BA_THROW
 		|| action.type == BA_HIT
-		|| action.type == BA_MINDCONTROL
-		|| action.type == BA_PANIC
+		|| action.type == BA_PSICONTROL
+		|| action.type == BA_PSIPANIC
 		|| action.type == BA_LAUNCH)
 	{
 //		ss.clear();
@@ -818,8 +819,8 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 //		_parentState->debug(ss.str());
 
 		//Log(LOG_INFO) << ". . in action.type";
-		if (action.type == BA_MINDCONTROL
-			|| action.type == BA_PANIC)
+		if (action.type == BA_PSICONTROL
+			|| action.type == BA_PSIPANIC)
 		{
 //			statePushBack(new PsiAttackBState(this, action)); // post-cosmetic
 			//Log(LOG_INFO) << ". . do Psi";
@@ -906,8 +907,8 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 											action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
-		if (action.type == BA_PANIC
-			|| action.type == BA_MINDCONTROL)
+		if (action.type == BA_PSIPANIC
+			|| action.type == BA_PSICONTROL)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
 //			const bool success = _battleSave->getTileEngine()->psiAttack(&action);
@@ -917,7 +918,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 				const BattleUnit* const unit = _battleSave->getTile(action.target)->getUnit();
 				Game* const game = _parentState->getGame();
 				std::wstring wst;
-				if (action.type == BA_MINDCONTROL)
+				if (action.type == BA_PSICONTROL)
 					wst = game->getLanguage()->getString(
 													"STR_IS_UNDER_ALIEN_CONTROL",
 													unit->getGender())
@@ -1079,8 +1080,9 @@ void BattlescapeGame::setupCursor()
 	{
 		if (_currentAction.type == BA_THROW)
 			getMap()->setCursorType(CT_THROW);
-		else if (_currentAction.type == BA_MINDCONTROL
-			|| _currentAction.type == BA_PANIC
+		else if (_currentAction.type == BA_PSICONTROL
+			|| _currentAction.type == BA_PSIPANIC
+			|| _currentAction.type == BA_PSIFRAY
 			|| _currentAction.type == BA_USE)
 		{
 			getMap()->setCursorType(CT_PSI);
@@ -2531,10 +2533,11 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				cancelCurrentAction();
 			}
 		}
-		else if (_currentAction.type == BA_PANIC
-			|| _currentAction.type == BA_MINDCONTROL)
+		else if (_currentAction.type == BA_PSIPANIC
+			|| _currentAction.type == BA_PSICONTROL
+			|| _currentAction.type == BA_PSIFRAY)
 		{
-			//Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
+			//Log(LOG_INFO) << ". . . . BA_PSIPANIC or BA_PSICONTROL or BA_PSIFRAY";
 			if (targetUnit != NULL
 				&& targetUnit->getFaction() != _currentAction.actor->getFaction()
 				&& targetUnit->getUnitVisible() == true)
@@ -2579,11 +2582,14 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 								Game* const game = _parentState->getGame(); // show an infobox if successful
 
 								std::wstring wst;
-								if (_currentAction.type == BA_PANIC)
+								if (_currentAction.type == BA_PSIPANIC)
 									wst = game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
 																	.arg(_currentAction.value);
-								else // Mind-control
+								else if (_currentAction.type == BA_PSICONTROL)
 									wst = game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
+																	.arg(_currentAction.value);
+								else // Psi-Fray
+									wst = game->getLanguage()->getString("STR_FRAY_ATTACK_SUCCESSFUL")
 																	.arg(_currentAction.value);
 
 								game->pushState(new InfoboxState(wst));
@@ -2893,7 +2899,7 @@ void BattlescapeGame::psiButtonAction()
 {
 	_currentAction.weapon = 0;
 	_currentAction.targeting = true;
-	_currentAction.type = BA_PANIC;
+	_currentAction.type = BA_PSIPANIC;
 	_currentAction.TU = 25;	// kL_note: this is just a default i guess;
 							// otherwise it should be getActionTUs().
 							// It gets overridden later ...

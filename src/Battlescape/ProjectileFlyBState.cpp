@@ -281,9 +281,10 @@ void ProjectileFlyBState::init()
 		return;
 
 		// removed post-cosmetics
-		case BA_PANIC:
-		case BA_MINDCONTROL:
-			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
+		case BA_PSIPANIC:
+		case BA_PSICONTROL:
+		case BA_PSIFRAY:
+			//Log(LOG_INFO) << ". . BA_PSIPANIC/MINDCONTROL/FRAY, new ExplosionBState, EXIT";
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
 													Position(
@@ -729,8 +730,9 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_HIT
 					|| _action.type == BA_USE
 					|| _action.type == BA_LAUNCH
-					|| _action.type == BA_MINDCONTROL
-					|| _action.type == BA_PANIC)
+					|| _action.type == BA_PSICONTROL
+					|| _action.type == BA_PSIPANIC
+					|| _action.type == BA_PSIFRAY)
 				{
 //					camera->setMapOffset(camera->getMapOffset());
 				}
@@ -758,8 +760,9 @@ void ProjectileFlyBState::think()
 			}
 
 			if (_unit->getFaction() == _parent->getSave()->getSide()
-				&& _action.type != BA_PANIC
-				&& _action.type != BA_MINDCONTROL
+				&& _action.type != BA_PSIPANIC
+				&& _action.type != BA_PSIFRAY
+				&& _action.type != BA_PSICONTROL
 				&& _parent->getSave()->getUnitsFalling() == false)
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think() CALL te::checkReactionFire()"

@@ -127,146 +127,147 @@ void RuleItem::load(
 		int modIndex,
 		int listOrder)
 {
-	_type					= node["type"]			.as<std::string>(_type);
-	_name					= node["name"]			.as<std::string>(_name);
-	_requires				= node["requires"]		.as<std::vector<std::string> >(_requires);
-	_size					= node["size"]			.as<double>(_size);
-	_costBuy				= node["costBuy"]		.as<int>(_costBuy);
-	_costSell				= node["costSell"]		.as<int>(_costSell);
-	_transferTime			= node["transferTime"]	.as<int>(_transferTime);
-	_weight					= node["weight"]		.as<int>(_weight);
+	_type			= node["type"]			.as<std::string>(_type);
+	_name			= node["name"]			.as<std::string>(_name);
+	_requires		= node["requires"]		.as<std::vector<std::string> >(_requires);
+	_size			= node["size"]			.as<double>(_size);
+	_costBuy		= node["costBuy"]		.as<int>(_costBuy);
+	_costSell		= node["costSell"]		.as<int>(_costSell);
+	_transferTime	= node["transferTime"]	.as<int>(_transferTime);
+	_weight			= node["weight"]		.as<int>(_weight);
 
 	if (node["bigSprite"])
 	{
-		_bigSprite			= node["bigSprite"].as<int>(_bigSprite);
+		_bigSprite = node["bigSprite"].as<int>(_bigSprite);
 		if (_bigSprite > 56) // BIGOBS.PCK: 57 entries
-			_bigSprite		+= modIndex;
+			_bigSprite += modIndex;
 	}
 
 	if (node["floorSprite"])
 	{
-		_floorSprite		= node["floorSprite"].as<int>(_floorSprite);
+		_floorSprite = node["floorSprite"].as<int>(_floorSprite);
 		if (_floorSprite > 72) // FLOOROB.PCK: 73 entries
-			_floorSprite	+= modIndex;
+			_floorSprite += modIndex;
 	}
 
 	if (node["handSprite"])
 	{
-		_handSprite			= node["handSprite"].as<int>(_handSprite);
+		_handSprite = node["handSprite"].as<int>(_handSprite);
 		if (_handSprite > 127) // HANDOBS.PCK: 128 entries
-			_handSprite		+= modIndex;
+			_handSprite += modIndex;
 	}
 
 	if (node["bulletSprite"])
 	{
 		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-		_bulletSprite		= node["bulletSprite"].as<int>(_bulletSprite) * 35;
+		_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite) * 35;
 		if (_bulletSprite >= 385)
-			_bulletSprite	+= modIndex;
+			_bulletSprite += modIndex;
 	}
 
 	if (node["fireSound"])
 	{
-		_fireSound			= node["fireSound"].as<int>(_fireSound);
+		_fireSound = node["fireSound"].as<int>(_fireSound);
 		if (_fireSound > 54) // BATTLE.CAT: 55 entries
-			_fireSound		+= modIndex;
+			_fireSound += modIndex;
 	}
 
 	if (node["hitSound"])
 	{
-		_hitSound			= node["hitSound"].as<int>(_hitSound);
+		_hitSound = node["hitSound"].as<int>(_hitSound);
 		if (_hitSound > 54) // BATTLE.CAT: 55 entries
-			_hitSound		+= modIndex;
+			_hitSound += modIndex;
 	}
 
 	if (node["meleeSound"])
 	{
-		_meleeSound			= node["meleeSound"].as<int>(_meleeSound);
+		_meleeSound = node["meleeSound"].as<int>(_meleeSound);
 		if (_meleeSound > 54) // BATTLE.CAT: 55 entries
-			_meleeSound		+= modIndex;
+			_meleeSound += modIndex;
 	}
 
 	if (node["hitAnimation"])
 	{
-		_hitAnimation		= node["hitAnimation"].as<int>(_hitAnimation);
+		_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
 		if (_hitAnimation > 55) // SMOKE.PCK: 56 entries
-			_hitAnimation	+= modIndex;
+			_hitAnimation += modIndex;
 	}
 
 	if (node["meleeAnimation"])
 	{
-		_meleeAnimation		= node["meleeAnimation"].as<int>(_meleeAnimation);
+		_meleeAnimation = node["meleeAnimation"].as<int>(_meleeAnimation);
 		if (_meleeAnimation > 3) // HIT.PCK: 4 entries
-			_meleeAnimation	+= modIndex;
+			_meleeAnimation += modIndex;
 	}
 
 	if (node["meleeHitSound"])
 	{
-		_meleeHitSound		= node["meleeHitSound"].as<int>(_meleeHitSound);
+		_meleeHitSound = node["meleeHitSound"].as<int>(_meleeHitSound);
 		if (_meleeHitSound > 54) // BATTLE.CAT: 55 entries
-			_meleeHitSound	+= modIndex;
+			_meleeHitSound += modIndex;
 	}
 
-	_power					= node["power"]				.as<int>(_power);
-	_damageType				= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
-	_clipSize				= node["clipSize"]			.as<int>(_clipSize);
-	_compatibleAmmo			= node["compatibleAmmo"]	.as< std::vector<std::string> >(_compatibleAmmo);
-	_accuracyAuto			= node["accuracyAuto"]		.as<int>(_accuracyAuto);
-	_accuracySnap			= node["accuracySnap"]		.as<int>(_accuracySnap);
-	_accuracyAimed			= node["accuracyAimed"]		.as<int>(_accuracyAimed);
-	_accuracyMelee			= node["accuracyMelee"]		.as<int>(_accuracyMelee);
-	_tuAuto					= node["tuAuto"]			.as<int>(_tuAuto);
-	_tuSnap					= node["tuSnap"]			.as<int>(_tuSnap);
-	_tuAimed				= node["tuAimed"]			.as<int>(_tuAimed);
-	_tuLaunch				= node["tuLaunch"]			.as<int>(_tuLaunch);
-	_tuUse					= node["tuUse"]				.as<int>(_tuUse);
-	_tuPrime				= node["tuPrime"]			.as<int>(_tuPrime);
-	_tuMelee				= node["tuMelee"]			.as<int>(_tuMelee);
-	_tuReload				= node["tuReload"]			.as<int>(_tuReload);
-	_tuUnload				= node["tuUnload"]			.as<int>(_tuUnload);
-	_battleType				= static_cast<BattleType>(node["battleType"].as<int>(_battleType));
-	_twoHanded				= node["twoHanded"]			.as<bool>(_twoHanded);
-	_waypoint				= node["waypoint"]			.as<int>(_waypoint);
-	_fixedWeapon			= node["fixedWeapon"]		.as<bool>(_fixedWeapon);
-	_invWidth				= node["invWidth"]			.as<int>(_invWidth);
-	_invHeight				= node["invHeight"]			.as<int>(_invHeight);
-	_painKiller				= node["painKiller"]		.as<int>(_painKiller);
-	_heal					= node["heal"]				.as<int>(_heal);
-	_stimulant				= node["stimulant"]			.as<int>(_stimulant);
-	_woundRecovery			= node["woundRecovery"]		.as<int>(_woundRecovery);
-	_healthRecovery			= node["healthRecovery"]	.as<int>(_healthRecovery);
-	_stunRecovery			= node["stunRecovery"]		.as<int>(_stunRecovery);
-	_energyRecovery			= node["energyRecovery"]	.as<int>(_energyRecovery);
-	_recoveryPoints			= node["recoveryPoints"]	.as<int>(_recoveryPoints);
-	_armor					= node["armor"]				.as<int>(_armor);
-	_turretType				= node["turretType"]		.as<int>(_turretType);
-	_recover				= node["recover"]			.as<bool>(_recover);
-	_liveAlien				= node["liveAlien"]			.as<bool>(_liveAlien);
-	_blastRadius			= node["blastRadius"]		.as<int>(_blastRadius);
-	_attraction				= node["attraction"]		.as<int>(_attraction);
-	_flatRate				= node["flatRate"]			.as<bool>(_flatRate);
-	_arcingShot				= node["arcingShot"]		.as<bool>(_arcingShot);
-	_maxRange				= node["maxRange"]			.as<int>(_maxRange);
-	_aimRange				= node["aimRange"]			.as<int>(_aimRange);
-	_snapRange				= node["snapRange"]			.as<int>(_snapRange);
-	_autoRange				= node["autoRange"]			.as<int>(_autoRange);
-	_minRange				= node["minRange"]			.as<int>(_minRange);
-	_dropoff				= node["dropoff"]			.as<int>(_dropoff);
-	_bulletSpeed			= node["bulletSpeed"]		.as<int>(_bulletSpeed);
-	_explosionSpeed			= node["explosionSpeed"]	.as<int>(_explosionSpeed);
-	_autoShots				= node["autoShots"]			.as<int>(_autoShots);
-	_autoKick				= node["autoKick"]			.as<int>(_autoKick);
-	_shotgunPellets			= node["shotgunPellets"]	.as<int>(_shotgunPellets);
-	_zombieUnit				= node["zombieUnit"]		.as<std::string>(_zombieUnit);
-	_strengthApplied		= node["strengthApplied"]	.as<bool>(_strengthApplied);
-	_skillApplied			= node["skillApplied"]		.as<bool>(_skillApplied);
-	_LOSRequired			= node["LOSRequired"]		.as<bool>(_LOSRequired);
-	_noReaction				= node["noReaction"]		.as<bool>(_noReaction);
-	_noResearch				= node["noResearch"]		.as<bool>(_noResearch);
-	_meleePower				= node["meleePower"]		.as<int>(_meleePower);
-	_specialType			= node["specialType"]		.as<int>(_specialType);
+	_damageType			= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
+	_battleType			= static_cast<BattleType>(node["battleType"]	.as<int>(_battleType));
 
-	_listOrder				= node["listOrder"]			.as<int>(_listOrder);
+	_power				= node["power"]				.as<int>(_power);
+	_clipSize			= node["clipSize"]			.as<int>(_clipSize);
+	_compatibleAmmo		= node["compatibleAmmo"]	.as< std::vector<std::string> >(_compatibleAmmo);
+	_accuracyAuto		= node["accuracyAuto"]		.as<int>(_accuracyAuto);
+	_accuracySnap		= node["accuracySnap"]		.as<int>(_accuracySnap);
+	_accuracyAimed		= node["accuracyAimed"]		.as<int>(_accuracyAimed);
+	_accuracyMelee		= node["accuracyMelee"]		.as<int>(_accuracyMelee);
+	_tuAuto				= node["tuAuto"]			.as<int>(_tuAuto);
+	_tuSnap				= node["tuSnap"]			.as<int>(_tuSnap);
+	_tuAimed			= node["tuAimed"]			.as<int>(_tuAimed);
+	_tuLaunch			= node["tuLaunch"]			.as<int>(_tuLaunch);
+	_tuUse				= node["tuUse"]				.as<int>(_tuUse);
+	_tuPrime			= node["tuPrime"]			.as<int>(_tuPrime);
+	_tuMelee			= node["tuMelee"]			.as<int>(_tuMelee);
+	_tuReload			= node["tuReload"]			.as<int>(_tuReload);
+	_tuUnload			= node["tuUnload"]			.as<int>(_tuUnload);
+	_twoHanded			= node["twoHanded"]			.as<bool>(_twoHanded);
+	_waypoint			= node["waypoint"]			.as<int>(_waypoint);
+	_fixedWeapon		= node["fixedWeapon"]		.as<bool>(_fixedWeapon);
+	_invWidth			= node["invWidth"]			.as<int>(_invWidth);
+	_invHeight			= node["invHeight"]			.as<int>(_invHeight);
+	_painKiller			= node["painKiller"]		.as<int>(_painKiller);
+	_heal				= node["heal"]				.as<int>(_heal);
+	_stimulant			= node["stimulant"]			.as<int>(_stimulant);
+	_woundRecovery		= node["woundRecovery"]		.as<int>(_woundRecovery);
+	_healthRecovery		= node["healthRecovery"]	.as<int>(_healthRecovery);
+	_stunRecovery		= node["stunRecovery"]		.as<int>(_stunRecovery);
+	_energyRecovery		= node["energyRecovery"]	.as<int>(_energyRecovery);
+	_recoveryPoints		= node["recoveryPoints"]	.as<int>(_recoveryPoints);
+	_armor				= node["armor"]				.as<int>(_armor);
+	_turretType			= node["turretType"]		.as<int>(_turretType);
+	_recover			= node["recover"]			.as<bool>(_recover);
+	_liveAlien			= node["liveAlien"]			.as<bool>(_liveAlien);
+	_blastRadius		= node["blastRadius"]		.as<int>(_blastRadius);
+	_attraction			= node["attraction"]		.as<int>(_attraction);
+	_flatRate			= node["flatRate"]			.as<bool>(_flatRate);
+	_arcingShot			= node["arcingShot"]		.as<bool>(_arcingShot);
+	_maxRange			= node["maxRange"]			.as<int>(_maxRange);
+	_aimRange			= node["aimRange"]			.as<int>(_aimRange);
+	_snapRange			= node["snapRange"]			.as<int>(_snapRange);
+	_autoRange			= node["autoRange"]			.as<int>(_autoRange);
+	_minRange			= node["minRange"]			.as<int>(_minRange);
+	_dropoff			= node["dropoff"]			.as<int>(_dropoff);
+	_bulletSpeed		= node["bulletSpeed"]		.as<int>(_bulletSpeed);
+	_explosionSpeed		= node["explosionSpeed"]	.as<int>(_explosionSpeed);
+	_autoShots			= node["autoShots"]			.as<int>(_autoShots);
+	_autoKick			= node["autoKick"]			.as<int>(_autoKick);
+	_shotgunPellets		= node["shotgunPellets"]	.as<int>(_shotgunPellets);
+	_zombieUnit			= node["zombieUnit"]		.as<std::string>(_zombieUnit);
+	_strengthApplied	= node["strengthApplied"]	.as<bool>(_strengthApplied);
+	_skillApplied		= node["skillApplied"]		.as<bool>(_skillApplied);
+	_LOSRequired		= node["LOSRequired"]		.as<bool>(_LOSRequired);
+	_noReaction			= node["noReaction"]		.as<bool>(_noReaction);
+	_noResearch			= node["noResearch"]		.as<bool>(_noResearch);
+	_meleePower			= node["meleePower"]		.as<int>(_meleePower);
+	_specialType		= node["specialType"]		.as<int>(_specialType);
+
+	_listOrder			= node["listOrder"]			.as<int>(_listOrder);
 	if (_listOrder == 0)
 		_listOrder = listOrder;
 }
@@ -1067,7 +1068,7 @@ BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 	}
 
 	if (_battleType == BT_PSIAMP)
-		return BA_PANIC;
+		return BA_PSIPANIC;
 
 	if (_tuMelee != 0)				// getTUMelee()
 		return BA_HIT;

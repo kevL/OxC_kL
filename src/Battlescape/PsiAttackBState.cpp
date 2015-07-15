@@ -135,7 +135,7 @@ void PsiAttackBState::psiAttack()
 	attackStrength -= dist;
 	attackStrength += RNG::generate(0,55);
 
-	if (_action.type == BA_MINDCONTROL)
+	if (_action.type == BA_PSICONTROL)
 	{
 		defenseStrength += 20;
 	}
@@ -147,7 +147,7 @@ void PsiAttackBState::psiAttack()
 		Game *game = _parent->getSave()->getBattleState()->getGame();
 		_action.actor->addPsiSkillExp();
 		_action.actor->addPsiSkillExp();
-		if (_action.type == BA_PANIC)
+		if (_action.type == BA_PSIPANIC)
 		{
 			int moraleLoss = (110-_target->getBaseStats()->bravery);
 			if (moraleLoss > 0)
@@ -157,7 +157,7 @@ void PsiAttackBState::psiAttack()
 				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
 			}
 		}
-		else if (_action.type == BA_MINDCONTROL)
+		else if (_action.type == BA_PSICONTROL)
 		{
 			_target->convertToFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());

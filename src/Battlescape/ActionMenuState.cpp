@@ -165,12 +165,16 @@ ActionMenuState::ActionMenuState(
 			&& _action->actor->getBaseStats()->psiSkill != 0)
 		{
 			addItem(
-					BA_MINDCONTROL,
+					BA_PSICONTROL,
 					"STR_MIND_CONTROL",
 					&id);
 			addItem(
-					BA_PANIC,
+					BA_PSIPANIC,
 					"STR_PANIC_UNIT",
+					&id);
+			addItem(
+					BA_PSIFRAY,
+					"STR_FRAY_UNIT",
 					&id);
 		}
 		else if (itRule->getBattleType() == BT_MINDPROBE)

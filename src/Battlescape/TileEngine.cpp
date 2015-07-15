@@ -5859,7 +5859,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 		attack -= dist * 2.;
 		attack -= defense;
 
-		if (action->type == BA_MINDCONTROL)
+		if (action->type == BA_PSICONTROL)
 			attack += 15.;
 		else
 			attack += 45.;
@@ -5883,9 +5883,9 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			}
 
 			//Log(LOG_INFO) << ". . victim morale[0] = " << victim->getMorale();
-			if (action->type == BA_PANIC)
+			if (action->type == BA_PSIPANIC)
 			{
-				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
+				//Log(LOG_INFO) << ". . . action->type == BA_PSIPANIC";
 				const int moraleLoss = 105
 								 - statsVictim->bravery * 3 / 2
 								 + statsActor->psiStrength * 2 / 3;
@@ -5895,9 +5895,17 @@ bool TileEngine::psiAttack(BattleAction* const action)
 
 				//Log(LOG_INFO) << ". . . victim morale[1] = " << victim->getMorale();
 			}
-			else // BA_MINDCONTROL
+			else if (action->type == BA_PSIFRAY)
 			{
-				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
+				//Log(LOG_INFO) << ". . . action->type == BA_PSIFRAY";
+				const int tuLoss = (statsActor->psiSkill + 2) / 3;
+				//Log(LOG_INFO) << ". . . tuLoss = " << tuLoss;
+				if (tuLoss > 0)
+					victim->setTimeUnits(victim->getTimeUnits() - tuLoss);
+			}
+			else // BA_PSICONTROL
+			{
+				//Log(LOG_INFO) << ". . . action->type == BA_PSICONTROL";
 //				if (action->actor->getFaction() == FACTION_PLAYER &&
 				if (victim->getOriginalFaction() == FACTION_HOSTILE // aLiens should be reduced to 50- Morale before MC.
 //					&& victim->getMorale() > 50)
@@ -5975,8 +5983,10 @@ bool TileEngine::psiAttack(BattleAction* const action)
 		else
 		{
 			std::string info;
-			if (action->type == BA_PANIC)
+			if (action->type == BA_PSIPANIC)
 				info = "STR_PANIC";
+			else if (action->type == BA_PSIFRAY)
+				info = "STR_FRAY";
 			else
 				info = "STR_CONTROL";
 
@@ -5985,8 +5995,8 @@ bool TileEngine::psiAttack(BattleAction* const action)
 												true,
 												success);
 
-			if (Options::allowPsiStrengthImprovement == true
-				&& victim->getOriginalFaction() == FACTION_PLAYER)
+			if (victim->getOriginalFaction() == FACTION_PLAYER
+				&& Options::allowPsiStrengthImprovement == true)
 			{
 				int resistXP = 1; // xCom resisted an xCom attempt
 				if (action->actor->getFaction() == FACTION_HOSTILE)

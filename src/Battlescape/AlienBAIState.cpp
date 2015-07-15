@@ -983,22 +983,23 @@ void AlienBAIState::setupAttack() // private.
 /*	std::string st;
 	switch (_attackAction->type)
 	{
-		case  0: BA_NONE;			st = "none";		break;
-		case  1: BA_TURN,			st = "turn";		break;
-		case  2: BA_WALK,			st = "walk";		break;
-		case  3: BA_PRIME,			st = "prime";		break;
-		case  4: BA_THROW,			st = "throw";		break;
-		case  5: BA_AUTOSHOT,		st = "autoshot";	break;
-		case  6: BA_SNAPSHOT,		st = "snapshot";	break;
-		case  7: BA_AIMEDSHOT,		st = "aimedshot";	break;
-		case  8: BA_HIT,			st = "hit";			break;
-		case  9: BA_USE,			st = "use";			break;
-		case 10: BA_LAUNCH,			st = "launch";		break;
-		case 11: BA_MINDCONTROL,	st = "mindcontrol";	break;
-		case 12: BA_PANIC,			st = "panic";		break;
-		case 13: BA_RETHINK,		st = "rethink";		break;
-		case 14: BA_DEFUSE,			st = "defuse";		break;
-		case 15: BA_DROP,			st = "drop";
+		case  0: BA_NONE;		st = "none";		break;
+		case  1: BA_TURN,		st = "turn";		break;
+		case  2: BA_WALK,		st = "walk";		break;
+		case  3: BA_PRIME,		st = "prime";		break;
+		case  4: BA_THROW,		st = "throw";		break;
+		case  5: BA_AUTOSHOT,	st = "autoshot";	break;
+		case  6: BA_SNAPSHOT,	st = "snapshot";	break;
+		case  7: BA_AIMEDSHOT,	st = "aimedshot";	break;
+		case  8: BA_HIT,		st = "hit";			break;
+		case  9: BA_USE,		st = "use";			break;
+		case 10: BA_LAUNCH,		st = "launch";		break;
+		case 11: BA_PSICONTROL,	st = "mindcontrol";	break;
+		case 12: BA_PSIPANIC,	st = "panic";		break;
+		case 13: BA_RETHINK,	st = "rethink";		break;
+		case 14: BA_DEFUSE,		st = "defuse";		break;
+		case 15: BA_DROP,		st = "drop";		break;
+		case 15: BA_PSIFRAY,	st = "fray";
 	} */
 	//Log(LOG_INFO) << ". bat = " << st;
 
@@ -2766,7 +2767,7 @@ bool AlienBAIState::psiAction() // private.
 				if (RNG::percent(panicOdds) == true)
 				{
 					_psiAction->target = _aggroTarget->getPosition();
-					_psiAction->type = BA_PANIC;
+					_psiAction->type = BA_PSIPANIC;
 
 					//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
 					return true;
@@ -2774,7 +2775,7 @@ bool AlienBAIState::psiAction() // private.
 			}
 
 			_psiAction->target = _aggroTarget->getPosition();
-			_psiAction->type = BA_MINDCONTROL;
+			_psiAction->type = BA_PSICONTROL;
 
 			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
 			return true;
