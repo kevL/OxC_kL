@@ -1885,8 +1885,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 														const Tile* const tileSouthWest = _battleSave->getTile(mapPosition + Position(-1,1,0));
 
 														if (tileSouthWest == NULL
-															|| (tileSouthWest->getUnit() == NULL
-																&& (tileSouthWest->getMapData(O_NORTHWALL) == NULL
+															|| //(tileSouthWest->getUnit() == NULL &&
+																(tileSouthWest->getMapData(O_NORTHWALL) == NULL
 																	|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true
 																	|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 																&& (tileSouthWest->getMapData(O_OBJECT) == NULL
@@ -1897,7 +1897,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 																		&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
 																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE
-																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST)))
+																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST))
 														{
 															//Log(LOG_INFO) << "[1] . . . . . tileSouthWest No northwall OR object";
 															//Log(LOG_INFO) << "[1] . . . . . REDRAW";
