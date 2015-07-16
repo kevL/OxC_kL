@@ -4891,7 +4891,7 @@ extraStrings:
       STR_ACTION_NOT_ALLOWED_PSIONIC: "> psionic <"
       STR_TIME_UNITS_RESERVED: "tu Reserved"
       STR_PANIC: "panic> {0}"
-      STR_FRAY: "fray> {0}"
+      STR_CONFUSE: "confuse> {0}"
       STR_CONTROL: "control> {0}"
       STR_GRENADE_IS_ACTIVATED_: "{0} > ACTIVATED < {0}"
       STR_SOLDIER_DIED: "died"
@@ -5091,8 +5091,8 @@ extraStrings:
       STR_SPOTTED: "detected"
       STR_TRUE: "true"
       STR_FALSE: "false"
-      STR_FRAY_UNIT: "fray"
-      STR_FRAY_ATTACK_SUCCESSFUL: "< fray Attack >{SMALLLINE}{NEWLINE}> {0} <"
+      STR_CONFUSE_UNIT: "confuse"
+      STR_CONFUSE_ATTACK_SUCCESSFUL: "< confuse Attack >{SMALLLINE}{NEWLINE}> {0} <"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
