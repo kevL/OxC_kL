@@ -283,8 +283,8 @@ void ProjectileFlyBState::init()
 		// removed post-cosmetics
 		case BA_PSIPANIC:
 		case BA_PSICONTROL:
-		case BA_PSIFRAY:
-			//Log(LOG_INFO) << ". . BA_PSIPANIC/MINDCONTROL/FRAY, new ExplosionBState, EXIT";
+		case BA_PSICONFUSE:
+			//Log(LOG_INFO) << ". . BA_PSIPANIC/CONTROL/CONFUSE, new ExplosionBState, EXIT";
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
 													Position(
@@ -732,12 +732,12 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_LAUNCH
 					|| _action.type == BA_PSICONTROL
 					|| _action.type == BA_PSIPANIC
-					|| _action.type == BA_PSIFRAY)
+					|| _action.type == BA_PSICONFUSE)
 				{
 //					camera->setMapOffset(camera->getMapOffset());
 				}
 				else */
-				if (   _action.type == BA_THROW // jump screen back to pre-shot position
+				if (_action.type == BA_THROW // jump screen back to pre-shot position
 					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)
@@ -761,7 +761,7 @@ void ProjectileFlyBState::think()
 
 			if (_unit->getFaction() == _parent->getSave()->getSide()
 				&& _action.type != BA_PSIPANIC
-				&& _action.type != BA_PSIFRAY
+				&& _action.type != BA_PSICONFUSE
 				&& _action.type != BA_PSICONTROL
 				&& _parent->getSave()->getUnitsFalling() == false)
 			{

@@ -173,8 +173,8 @@ ActionMenuState::ActionMenuState(
 					"STR_PANIC_UNIT",
 					&id);
 			addItem(
-					BA_PSIFRAY,
-					"STR_FRAY_UNIT",
+					BA_PSICONFUSE,
+					"STR_CONFUSE_UNIT",
 					&id);
 		}
 		else if (itRule->getBattleType() == BT_MINDPROBE)

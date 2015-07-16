@@ -343,7 +343,7 @@ void BattlescapeGame::popState()
 					case BA_AIMEDSHOT:
 					case BA_AUTOSHOT:
 					case BA_PSIPANIC:
-					case BA_PSIFRAY:
+					case BA_PSICONFUSE:
 					case BA_PSICONTROL:
 						cancelCurrentAction(true);
 					break;
@@ -1082,7 +1082,7 @@ void BattlescapeGame::setupCursor()
 			getMap()->setCursorType(CT_THROW);
 		else if (_currentAction.type == BA_PSICONTROL
 			|| _currentAction.type == BA_PSIPANIC
-			|| _currentAction.type == BA_PSIFRAY
+			|| _currentAction.type == BA_PSICONFUSE
 			|| _currentAction.type == BA_USE)
 		{
 			getMap()->setCursorType(CT_PSI);
@@ -2535,9 +2535,9 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		}
 		else if (_currentAction.type == BA_PSIPANIC
 			|| _currentAction.type == BA_PSICONTROL
-			|| _currentAction.type == BA_PSIFRAY)
+			|| _currentAction.type == BA_PSICONFUSE)
 		{
-			//Log(LOG_INFO) << ". . . . BA_PSIPANIC or BA_PSICONTROL or BA_PSIFRAY";
+			//Log(LOG_INFO) << ". . . . BA_PSIPANIC or BA_PSICONTROL or BA_PSICONFUSE";
 			if (targetUnit != NULL
 				&& targetUnit->getFaction() != _currentAction.actor->getFaction()
 				&& targetUnit->getUnitVisible() == true)
@@ -2588,8 +2588,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 								else if (_currentAction.type == BA_PSICONTROL)
 									wst = game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
 																	.arg(_currentAction.value);
-								else // Psi-Fray
-									wst = game->getLanguage()->getString("STR_FRAY_ATTACK_SUCCESSFUL")
+								else // Psi-Confuse
+									wst = game->getLanguage()->getString("STR_CONFUSE_ATTACK_SUCCESSFUL")
 																	.arg(_currentAction.value);
 
 								game->pushState(new InfoboxState(wst));

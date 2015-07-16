@@ -5861,8 +5861,10 @@ bool TileEngine::psiAttack(BattleAction* const action)
 
 		if (action->type == BA_PSICONTROL)
 			attack += 15.;
-		else
+		else if (action->type == BA_PSIPANIC)
 			attack += 45.;
+		else // Psi-Confuse
+			attack += 55.;
 
 		attack *= 100.;
 		attack /= 56.;
@@ -5886,7 +5888,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			if (action->type == BA_PSIPANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PSIPANIC";
-				const int moraleLoss = 105
+				const int moraleLoss = 100
 								 - statsVictim->bravery * 3 / 2
 								 + statsActor->psiStrength * 2 / 3;
 				//Log(LOG_INFO) << ". . . moraleLoss reduction = " << moraleLoss;
@@ -5895,9 +5897,9 @@ bool TileEngine::psiAttack(BattleAction* const action)
 
 				//Log(LOG_INFO) << ". . . victim morale[1] = " << victim->getMorale();
 			}
-			else if (action->type == BA_PSIFRAY)
+			else if (action->type == BA_PSICONFUSE)
 			{
-				//Log(LOG_INFO) << ". . . action->type == BA_PSIFRAY";
+				//Log(LOG_INFO) << ". . . action->type == BA_PSICONFUSE";
 				const int tuLoss = (statsActor->psiSkill + 2) / 3;
 				//Log(LOG_INFO) << ". . . tuLoss = " << tuLoss;
 				if (tuLoss > 0)
@@ -5985,8 +5987,8 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			std::string info;
 			if (action->type == BA_PSIPANIC)
 				info = "STR_PANIC";
-			else if (action->type == BA_PSIFRAY)
-				info = "STR_FRAY";
+			else if (action->type == BA_PSICONFUSE)
+				info = "STR_CONFUSE";
 			else
 				info = "STR_CONTROL";
 

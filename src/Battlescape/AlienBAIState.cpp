@@ -999,7 +999,7 @@ void AlienBAIState::setupAttack() // private.
 		case 13: BA_RETHINK,	st = "rethink";		break;
 		case 14: BA_DEFUSE,		st = "defuse";		break;
 		case 15: BA_DROP,		st = "drop";		break;
-		case 15: BA_PSIFRAY,	st = "fray";
+		case 15: BA_PSICONFUSE,	st = "confuse";
 	} */
 	//Log(LOG_INFO) << ". bat = " << st;
 
