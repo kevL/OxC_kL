@@ -210,7 +210,7 @@ void UnitWalkBState::think()
 				//Log(LOG_INFO) << ". . doStatusStand_end() FALSE return";
 				return;
 			}
-			else
+			else if (_parent->getPanicHandled() == true)
 				_parent->getBattlescapeState()->refreshVisUnits();
 		}
 		else if (_onScreen == true) // still walking ... make sure the unit sprites are up to date
@@ -996,7 +996,7 @@ void UnitWalkBState::doStatusTurn() // private.
 
 		_parent->popState();
 	}
-	else
+	else if (_parent->getPanicHandled() == true)
 		_parent->getBattlescapeState()->refreshVisUnits();
 }
 

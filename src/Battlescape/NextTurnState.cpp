@@ -75,8 +75,8 @@ NextTurnState::NextTurnState(
 
 	if (aliensPacified == false)
 	{
-		_txtTitle	= new Text(320, 17, 0, 68);
-		_txtTurn	= new Text(320, 17, 0, 93);
+		_txtTitle	= new Text(320, 17, 0,  68);
+		_txtTurn	= new Text(320, 17, 0,  93);
 		_txtSide	= new Text(320, 17, 0, 109);
 		_txtMessage	= new Text(320, 17, 0, 149);
 	}
@@ -246,7 +246,7 @@ void NextTurnState::nextTurn()
 
 			const int turn = _battleSave->getTurn();
 
-			if (turn == 1
+/*			if (turn == 1
 				|| (turn % Options::autosaveFrequency) == 0)
 			{
 				if (_game->getSavedGame()->isIronman() == true)
@@ -259,7 +259,9 @@ void NextTurnState::nextTurn()
 													OPT_BATTLESCAPE,
 													SAVE_AUTO_BATTLESCAPE,
 													_palette));
-			}
+			} */
+			if (turn != 1)
+				_battleSave->getBattleGame()->setPlayerPanic();
 
 			if (turn != 1
 				&& switchMusic == true)
@@ -298,7 +300,7 @@ void NextTurnState::nextTurn()
 																			true));
 			}
 		}
-		else
+		else // start non-Player turn
 		{
 			if (_aliensPacified == false)
 			{

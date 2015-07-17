@@ -150,11 +150,14 @@ BattlescapeGame::~BattlescapeGame()
  */
 void BattlescapeGame::init()
 {
-	if (_battleSave->getSide() == FACTION_PLAYER
+	//Log(LOG_INFO) << "bg: init()";
+	_battleSave->getTileEngine()->recalculateFOV(false);
+
+/*	if (_battleSave->getSide() == FACTION_PLAYER
 		&& _battleSave->getTurn() > 1)
 	{
 		_playerPanicHandled = false;
-	}
+	} */ // -> moved to NextTurnState::nextTurn()
 }
 
 /**
@@ -199,17 +202,25 @@ void BattlescapeGame::think()
 				}
 			}
 		}
-		else // it's a player side && not all panicking units have been handled
+		else // it's a player side
 		{
-			if (_playerPanicHandled == false)
+			if (_playerPanicHandled == false) // not all panicking units have been handled
 			{
 				//Log(LOG_INFO) << "bg:think() . panic Handled is FALSE";
 				_playerPanicHandled = handlePanickingPlayer();
-				_battleSave->getBattleState()->updateSoldierInfo();
-			}
-			//else Log(LOG_INFO) << "bg:think() . panic Handled is TRUE";
+				//Log(LOG_INFO) << "bg:think() . panic Handled = " << _playerPanicHandled;
 
-			_parentState->updateExperienceInfo(); // kL
+				if (_playerPanicHandled == true)
+				{
+					_battleSave->getTileEngine()->recalculateFOV(false);
+					_battleSave->getBattleState()->updateSoldierInfo();
+				}
+			}
+			else
+			{
+				//Log(LOG_INFO) << "bg:think() . panic Handled is TRUE";
+				_parentState->updateExperienceInfo();
+			}
 		}
 
 		if (_battleSave->getUnitsFalling() == true)
@@ -2144,8 +2155,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 		_parentState->getMap()->setCursorType(CT_NONE);
 		_battleSave->setSelectedUnit(unit);
 
-		if (unit->getUnitVisible() == true // show panicking message
-			|| Options::noAlienPanicMessages == false)
+		if (Options::alienPanicMessages == true // show panicking message
+			|| unit->getUnitVisible() == true)
 		{
 			getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
@@ -2269,8 +2280,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 				// Or w/ an already-equipped melee weapon
 
 				if (ba.weapon != NULL)
-//					&& (_battleSave->getDepth() != 0
-//						|| ba.weapon->getRules()->isWaterOnly() == false))
 				{
 					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{

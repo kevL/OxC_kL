@@ -467,67 +467,69 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 					posTest.x = posUnit.x + deltaPos_x;
 					posTest.y = posUnit.y + deltaPos_y;
 
-					if (_battleSave->getTile(posTest) != NULL) // spot units ->>
+					if (_battleSave->getTile(posTest) != NULL)
 					{
-						spottedUnit = _battleSave->getTile(posTest)->getUnit();
-
-						if (spottedUnit != NULL
-							&& spottedUnit->isOut() == false
-							&& visible(
-									unit,
-									_battleSave->getTile(posTest)) == true)
+						if (_battleSave->getBattleGame()->getPanicHandled() == true) // spot units ->>
 						{
-							if (spottedUnit->getUnitVisible() == false)
-								ret = true;
+							spottedUnit = _battleSave->getTile(posTest)->getUnit();
 
-							if (unit->getFaction() == FACTION_PLAYER)
+							if (spottedUnit != NULL
+//								&& spottedUnit->isOut() == false
+								&& spottedUnit->isOut_t(OUT_STAT) == false
+								&& visible(
+										unit,
+										_battleSave->getTile(posTest)) == true)
 							{
-								spottedUnit->setUnitVisible();
-								spottedUnit->getTile()->setTileVisible();
+								if (spottedUnit->getUnitVisible() == false)
+									ret = true;
 
-								if (_spotSound == true
-									&& ret == true // play aggro sound if non-MC'd xCom unit spots a not-previously-visible hostile.
-									&& unit->getOriginalFaction() == FACTION_PLAYER
-									&& spottedUnit->getFaction() == FACTION_HOSTILE)
+								if (unit->getFaction() == FACTION_PLAYER)
 								{
-									const std::vector<BattleUnit*> spottedUnits = unit->getUnitsSpottedThisTurn();
-									if (std::find(
-												spottedUnits.begin(),
-												spottedUnits.end(),
-												spottedUnit) == spottedUnits.end())
+									spottedUnit->setUnitVisible();
+									spottedUnit->getTile()->setTileVisible();
+
+									if (_spotSound == true
+										&& ret == true // play aggro sound if non-MC'd xCom unit spots a not-previously-visible hostile.
+										&& unit->getOriginalFaction() == FACTION_PLAYER
+										&& spottedUnit->getFaction() == FACTION_HOSTILE)
 									{
-										const int sound = unit->getAggroSound();
-										if (sound != -1)
+										const std::vector<BattleUnit*> spottedUnits = unit->getUnitsSpottedThisTurn();
+										if (std::find(
+													spottedUnits.begin(),
+													spottedUnits.end(),
+													spottedUnit) == spottedUnits.end())
 										{
-											const BattlescapeGame* const battle = _battleSave->getBattleGame();
-											battle->getResourcePack()->getSound(
-																			"BATTLE.CAT",
-																			sound)
-																		->play(
-																			-1,
-																			battle->getMap()->getSoundAngle(unit->getPosition()));
+											const int sound = unit->getAggroSound();
+											if (sound != -1)
+											{
+												const BattlescapeGame* const battle = _battleSave->getBattleGame();
+												battle->getResourcePack()->getSound(
+																				"BATTLE.CAT",
+																				sound)
+																			->play(
+																				-1,
+																				battle->getMap()->getSoundAngle(unit->getPosition()));
+											}
 										}
 									}
 								}
-							}
 
-							if ((unit->getFaction() == FACTION_PLAYER
-									&& spottedUnit->getFaction() == FACTION_HOSTILE)
-								|| (unit->getFaction() == FACTION_HOSTILE
-									&& spottedUnit->getFaction() != FACTION_HOSTILE))
-							{
-								// adds spottedUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
-								unit->addToVisibleUnits(spottedUnit);
-//								unit->addToVisibleTiles(spottedUnit->getTile());
-
-								if (_battleSave->getSide() == FACTION_HOSTILE
-									&& unit->getFaction() == FACTION_HOSTILE
-									&& spottedUnit->getFaction() != FACTION_HOSTILE)
-//									&& spottedUnit->getPanicking() == false) // <- not here. In reaction fire ...
+								if ((unit->getFaction() == FACTION_PLAYER
+										&& spottedUnit->getFaction() == FACTION_HOSTILE)
+									|| (unit->getFaction() == FACTION_HOSTILE
+										&& spottedUnit->getFaction() != FACTION_HOSTILE))
 								{
-									//Log(LOG_INFO) << "calculateFOV() id " << unit->getId() << " spots " << spottedUnit->getId();
-									spottedUnit->setExposed();	// note that xCom agents can be seen by enemies but *not* become Exposed.
-																// Only potential reactionFire should set them Exposed during xCom's turn.
+									// adds spottedUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
+									unit->addToVisibleUnits(spottedUnit);
+//									unit->addToVisibleTiles(spottedUnit->getTile());
+
+									if (_battleSave->getSide() == FACTION_HOSTILE
+										&& unit->getFaction() == FACTION_HOSTILE)
+									{
+										//Log(LOG_INFO) << "calculateFOV() id " << unit->getId() << " spots " << spottedUnit->getId();
+										spottedUnit->setExposed();	// note that xCom agents can be seen by enemies but *not* become Exposed.
+																	// Only potential reactionFire should set them Exposed during xCom's turn.
+									}
 								}
 							}
 						}

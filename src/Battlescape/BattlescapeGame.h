@@ -295,9 +295,12 @@ private:
 		/// Gets the ruleset.
 		const Ruleset* const getRuleset() const;
 
-		/// Returns whether panic has been handled.
-		bool getPanicHandled()
+		/// Returns whether player panic has been handled.
+		bool getPanicHandled() const
 		{ return _playerPanicHandled; }
+		/// Sets var to start handling panic for Player.
+		void setPlayerPanic()
+		{ _playerPanicHandled = false; }
 
 		/// Tries to find an item and pick it up if possible.
 		void findItem(BattleAction* action);

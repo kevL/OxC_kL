@@ -577,10 +577,8 @@ void SavedBattleGame::load(
  * Loads the resources required by the map in the battle save.
  * @param game - pointer to Game
  */
-void SavedBattleGame::loadMapResources(Game* game)
+void SavedBattleGame::loadMapResources(const Game* const game)
 {
-	ResourcePack* const res = game->getResourcePack();
-
 	for (std::vector<MapDataSet*>::const_iterator
 			i = _mapDataSets.begin();
 			i != _mapDataSets.end();
@@ -623,13 +621,12 @@ void SavedBattleGame::loadMapResources(Game* game)
 		}
 	}
 
-	initUtilities(res);
+	initUtilities(game->getResourcePack());
 
 	_tileEngine->calculateSunShading();
 	_tileEngine->calculateTerrainLighting();
 	_tileEngine->calculateUnitLighting();
-
-	_tileEngine->recalculateFOV();
+//	_tileEngine->recalculateFOV(); // -> moved to BattlescapeGame::init()
 }
 
 /**
@@ -1393,42 +1390,47 @@ bool SavedBattleGame::endBattlePhase()
 			i != _units.end();
 			++i)
 	{
-		(*i)->setDashing(false);	// Safety. no longer dashing; dash is effective
-									// vs. Reaction Fire only and is/ought be
-									// reset/removed every time BattlescapeGame::primaryAction()
-									// uses the Pathfinding object. Other, more ideal
-									// places for this safety are UnitWalkBState dTor
-									// and/or BattlescapeGame::popState().
-
-		if ((*i)->getOriginalFaction() == _side)
+		if ((*i)->isOut_t(OUT_DEAD) == false)
 		{
-			reviveUnit(*i, true);
-			(*i)->takeFire();
+			(*i)->setDashing(false);	// Safety. no longer dashing; dash is effective
+										// vs. Reaction Fire only and is/ought be
+										// reset/removed every time BattlescapeGame::primaryAction()
+										// uses the Pathfinding object. Other, more ideal
+										// places for this safety are UnitWalkBState dTor
+										// and/or BattlescapeGame::popState().
+
+			if ((*i)->getOriginalFaction() == _side)
+			{
+				reviveUnit(*i, true);
+				(*i)->takeFire();
+			}
+
+			if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
+				(*i)->prepUnit();				// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
+
+			// if newSide=XCOM, xCom agents DO NOT revert to xCom; MC'd aLiens revert to aLien.
+			// if newSide=Alien, xCom agents revert to xCom; MC'd aLiens DO NOT revert to aLien.
+
+
+//			if ((*i)->isOut(true, true) == true)
+//			if ((*i)->isOut_t(OUT_STAT) == true)	// safety.
+//				(*i)->setExposed(-1);				// That got done when unit went down.
+//			else
+			if ((*i)->getFaction() == FACTION_HOSTILE
+				|| (*i)->getOriginalFaction() == FACTION_HOSTILE
+				|| _cheatAI == true) // aLiens know where xCom is when cheating ~turn20
+			{
+				(*i)->setExposed(); // aLiens always know where their buddies are, Mc'd or not.
+			}
+			else if ((*i)->getExposed() != -1
+				&& _side == FACTION_PLAYER)
+			{
+				(*i)->setExposed((*i)->getExposed() + 1);
+			}
+
+			if ((*i)->getFaction() != FACTION_PLAYER)
+				(*i)->setUnitVisible(false);
 		}
-
-		if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
-			(*i)->prepUnit();				// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
-
-		// if newSide=XCOM, xCom agents DO NOT revert to xCom; MC'd aLiens revert to aLien.
-		// if newSide=Alien, xCom agents revert to xCom; MC'd aLiens DO NOT revert to aLien.
-
-
-		if ((*i)->isOut(true, true) == true)	// safety.
-			(*i)->setExposed(-1);				// That got done when unit went down.
-		else if ((*i)->getFaction() == FACTION_HOSTILE
-			|| (*i)->getOriginalFaction() == FACTION_HOSTILE
-			|| _cheatAI == true) // aLiens know where xCom is when cheating ~turn20
-		{
-			(*i)->setExposed(); // aLiens always know where their buddies are, Mc'd or not.
-		}
-		else if ((*i)->getExposed() != -1
-			&& _side == FACTION_PLAYER)
-		{
-			(*i)->setExposed((*i)->getExposed() + 1);
-		}
-
-		if ((*i)->getFaction() != FACTION_PLAYER)
-			(*i)->setUnitVisible(false);
 	}
 
 	_tileEngine->calculateSunShading();

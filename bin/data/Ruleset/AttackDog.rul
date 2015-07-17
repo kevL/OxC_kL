@@ -12,7 +12,7 @@ items:
     damageType: 7 # melee
     meleeSound: 210
     accuracyMelee: 67
-    tuMelee: 11
+    tuMelee: 16
     battleType: 3 # melee
     fixedWeapon: true
     clipSize: -1

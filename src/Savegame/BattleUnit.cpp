@@ -118,6 +118,7 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_mcStrength(0),
 		_mcSkill(0),
+//		_panicking(false),
 
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -288,6 +289,7 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_mcStrength(0),
 		_mcSkill(0),
+//		_panicking(false),
 
 		_statistics(NULL), // Soldier Diary
 
@@ -2385,7 +2387,8 @@ void BattleUnit::prepUnit(bool full)
 
 		if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
 			&& (_armor->getSize() == 1
-				|| isOut() == false)
+				|| isOut_t() == false)
+//				|| isOut() == false)
 			&& (_geoscapeSoldier != NULL
 				|| _unitRules->isMechanical() == false))
 		{
@@ -4656,7 +4659,7 @@ void BattleUnit::hostileMcParameters(
 
 /**
  * Sets if this BattleUnit is panicking.
- * @param panic - true if panicking
+ * @param panic - true if panicking (default true)
  */
 /* void BattleUnit::setPanicking(bool panic)
 {

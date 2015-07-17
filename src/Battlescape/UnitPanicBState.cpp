@@ -58,7 +58,8 @@ void UnitPanicBState::think()
 {
 	if (_unit != NULL)
 	{
-		if (_unit->isOut() == false)
+//		if (_unit->isOut() == false)
+		if (_unit->isOut_t(OUT_STAT) == false)
 		{
 			_unit->setStatus(STATUS_STANDING);
 			_unit->moraleChange(10 + RNG::generate(0,10));
@@ -69,7 +70,7 @@ void UnitPanicBState::think()
 
 //		if (_unit->getFaction() == FACTION_PLAYER)
 //		{
-//			Log(LOG_INFO) << "UnitPanicBState: setPanicking FALSE";
+			//Log(LOG_INFO) << "UnitPanicBState: setPanicking FALSE";
 //			_unit->setPanicking(false);
 //		}
 	}

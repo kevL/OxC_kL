@@ -2230,8 +2230,8 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 }
 
 /**
- * LMB centers on the unit corresponding to this button.
- * RMB cycles through spotters of the unit corresponding to this button.
+ * LMB centers on the unit corresponding to the button.
+ * RMB cycles through spotters of the unit corresponding to the button.
  * @param action - pointer to an Action
  */
 void BattlescapeState::btnVisibleUnitPress(Action* action)
@@ -3038,12 +3038,13 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 
 /**
  * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
+ * @note Should not run when player's units are panicking.
  */
 void BattlescapeState::refreshVisUnits()
 {
 	if (playableUnitSelected() == true)
 	{
-		for (size_t // remove target indicators
+		for (size_t // hide target indicators & clear targets
 				i = 0;
 				i != INDICATORS;
 				++i)
@@ -3061,7 +3062,7 @@ void BattlescapeState::refreshVisUnits()
 				&& j != INDICATORS;
 			++i)
 		{
-			if ((*i)->isOut() == false
+			if ((*i)->isOut_t(OUT_STAT) == false
 				&& (*i)->getUnitVisible() == true
 				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{

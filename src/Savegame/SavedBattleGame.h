@@ -284,7 +284,7 @@ private:
 		bool getDebugMode() const;
 
 		/// Load map resources.
-		void loadMapResources(Game* game);
+		void loadMapResources(const Game* const game);
 		/// Resets tiles units are standing on
 		void resetUnitTiles();
 

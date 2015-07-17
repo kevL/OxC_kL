@@ -43,7 +43,7 @@ namespace OpenXcom
  * Sets up an UnitTurnBState.
  * @param parent	- pointer to BattlescapeGame
  * @param action	- the current BattleAction
- * @param chargeTUs	- true if there is TU cost, false for reaction fire (default true)
+ * @param chargeTUs	- true if there is TU cost, false for reaction fire and panic (default true)
  */
 UnitTurnBState::UnitTurnBState(
 		BattlescapeGame* parent,
@@ -54,7 +54,8 @@ UnitTurnBState::UnitTurnBState(
 			parent,
 			action),
 		_chargeTUs(chargeTUs),
-		_unit(NULL),
+		_unit(action.actor),
+//		_unit(NULL),
 		_turret(false)
 {}
 
@@ -71,8 +72,9 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	_unit = _action.actor;
-	if (_unit->isOut(true, true))
+//	_unit = _action.actor;
+//	if (_unit->isOut(true, true))
+	if (_unit->isOut_t(OUT_STAT) == true)
 	{
 		_unit->setTurnDirection(0);
 		_parent->popState();
@@ -104,7 +106,7 @@ void UnitTurnBState::init()
 	}
 
 
-	if (_chargeTUs
+	if (_chargeTUs == true
 		&& _unit->getStatus() != STATUS_TURNING) // try to open a door
 	{
 		if (_action.type == BA_NONE)
@@ -123,8 +125,6 @@ void UnitTurnBState::init()
 				_action.result = "STR_TUS_RESERVED";
 
 			if (sound != -1)
-//				_parent->getResourcePack()->getSoundByDepth(
-//														_parent->getDepth(),
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												sound)
@@ -143,33 +143,22 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
-	const bool
-		playerTurn = _unit->getFaction() == FACTION_PLAYER,
-		onSide = _unit->getFaction() == _parent->getSave()->getSide();
-
-	int tu = 1;								// one tu per facing change
-
-	if (onSide == false)					// reaction fire permits free turning
+	int tu;
+	if (_chargeTUs == false)				// reaction fire & panic permit free turning
 		tu = 0;
 	else if (_unit->getTurretType() > -1	// if turreted vehicle
 		&& _action.strafe == false			// but not swivelling turret
-		&& _action.targeting == false)		// or not taking a shot at something...
+		&& _action.targeting == false)		// and not taking a shot at something...
 	{
 		if (_unit->getMoveTypeUnit() == MT_FLY)
-			tu = 2; // hover vehicles cost 2 per facing change
+			tu = 2;							// hover vehicles cost 2 per facing change
 		else
-			tu = 3; // large tracked vehicles cost 3 per facing change
+			tu = 3;							// large tracked vehicles cost 3 per facing change
 	}
-
-	if (tu == 0
-		&& _chargeTUs == true)
-	{
-		tu = 1;
-	}
+	else
+		tu = 1;								// one tu per facing change
 
 	if (_chargeTUs == true
-		&& onSide == true
-		&& _parent->getPanicHandled() == true
 		&& _action.targeting == false
 		&& _parent->checkReservedTU(
 								_unit,
@@ -181,32 +170,30 @@ void UnitTurnBState::think()
 	}
 	else if (_unit->spendTimeUnits(tu) == true)
 	{
-		const size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
-
-		_unit->turn(_turret); // -> STATUS_STANDING
-		const bool newVis = _parent->getTileEngine()->calculateFOV(_unit);
-
+		_unit->turn(_turret); // -> STATUS_STANDING if done
 		_unit->setCache(NULL);
 		_parent->getMap()->cacheUnit(_unit);
 
-		if ((newVis == true
-				&& playerTurn == true)
-			|| (_chargeTUs == true
-				&& onSide == true
-				&& playerTurn == false
-				&& _action.type == BA_NONE
-				&& _parent->getPanicHandled() == true
-				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))
+		const size_t preSpots = _unit->getUnitsSpottedThisTurn().size();
+		const bool vis = _parent->getTileEngine()->calculateFOV(_unit);
+
+		if (_unit->getFaction() == FACTION_PLAYER)
+		{
+			if (_chargeTUs == true
+				&& vis == true)
+			{
+				_unit->setStatus(STATUS_STANDING);
+
+				// keep this for Faction_Player only till I figure out the AI better:
+				if (_action.targeting == true)
+					_unit->setStopShot();
+			}
+		}
+		else if (_chargeTUs == true
+			&& _action.type == BA_NONE
+			&& _unit->getUnitsSpottedThisTurn().size() > preSpots)
 		{
 			_unit->setStatus(STATUS_STANDING);
-
-			// keep this for Faction_Player only, till I figure out the AI better:
-			if (playerTurn == true
-				&& onSide == true
-				&& _action.targeting == true)
-			{
-				_unit->setStopShot();
-			}
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
@@ -214,10 +201,10 @@ void UnitTurnBState::think()
 			_unit->setTurnDirection(0);
 			_parent->popState();
 		}
-		else
+		else if (_chargeTUs == true)
 			_parent->getBattlescapeState()->refreshVisUnits();
 	}
-	else if (_parent->getPanicHandled() == true)
+	else
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 

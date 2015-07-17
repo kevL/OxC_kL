@@ -303,8 +303,8 @@ void ProjectileFlyBState::init()
 
 
 	if (_action.type == BA_LAUNCH
-		|| (_unit->getFaction() == FACTION_PLAYER //_parent->getSave()->getSide() -> note: don't let ReactionFire in here by holding CRTL.
-			&& (SDL_GetModState() & KMOD_CTRL) != 0 // force fire by pressing CTRL but not SHIFT
+		|| (_unit->getFaction() == FACTION_PLAYER	//_parent->getSave()->getSide() -> note: don't let ReactionFire in here by holding CRTL.
+			&& (SDL_GetModState() & KMOD_CTRL) != 0	// force fire by pressing CTRL but not SHIFT
 			&& (SDL_GetModState() & KMOD_SHIFT) == 0
 			&& Options::forceFire == true)
 		|| _parent->getPanicHandled() == false)
@@ -343,12 +343,21 @@ void ProjectileFlyBState::init()
 		//		- the floor
 		// if there is no LOF to the center try elsewhere (more outward).
 		// Store that target voxel.
+		//
+		// Force Fire keyboard modifiers:
+		// none			- See above^
+		// CTRL			- center
+		// CTRL+ALT		- floor
+		// SHIFT		- northwall
+		// SHIFT+CTRL	- westwall
 		const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
 																		_parent->getSave()->getTile(_origin));
 		const Tile* const targetTile = _parent->getSave()->getTile(_action.target);
 
-		if (targetTile->getUnit() != NULL)
+		if (targetTile->getUnit() != NULL
+			&& (SDL_GetModState() & KMOD_SHIFT) == 0
+			&& (SDL_GetModState() & KMOD_CTRL) == 0)
 		{
 			//Log(LOG_INFO) << ". targetTile has unit";
 			if (_origin == _action.target
@@ -369,7 +378,7 @@ void ProjectileFlyBState::init()
 													_unit);
 		}
 		else if (targetTile->getMapData(O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
-			&& (SDL_GetModState() & KMOD_SHIFT) == 0)				// force vs. Object by using CTRL above^
+			&& (SDL_GetModState() & KMOD_SHIFT) == 0)		// force vs. Object by using CTRL above^
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -385,7 +394,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(O_NORTHWALL) != NULL	// force Northwall when pressing SHIFT but not CTRL
+		else if (targetTile->getMapData(O_NORTHWALL) != NULL // force Northwall when pressing SHIFT but not CTRL
 			&& (SDL_GetModState() & KMOD_CTRL) == 0)
 		{
 			//Log(LOG_INFO) << ". targetTile has northwall";
@@ -402,7 +411,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(O_WESTWALL) != NULL)	// force Westwall when pressing SHIFT+CTRL
+		else if (targetTile->getMapData(O_WESTWALL) != NULL) // force Westwall when pressing SHIFT+CTRL
 		{
 			//Log(LOG_INFO) << ". targetTile has westwall";
 			if (_parent->getTileEngine()->canTargetTile(
