@@ -5092,7 +5092,9 @@ extraStrings:
       STR_TRUE: "true"
       STR_FALSE: "false"
       STR_CONFUSE_UNIT: "confuse"
+      STR_ENCOURAGE_UNIT: "courage"
       STR_CONFUSE_ATTACK_SUCCESSFUL: "< confuse Attack >{SMALLLINE}{NEWLINE}> {0} <"
+      STR_PSI_COURAGE_SUCCESSFUL: "< encourage >{SMALLLINE}{NEWLINE}> {0} <"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

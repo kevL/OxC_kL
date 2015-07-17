@@ -62,7 +62,8 @@ enum BattleActionType
 	BA_RETHINK,		// 13
 	BA_DEFUSE,		// 14, kL_add ->>
 	BA_DROP,		// 15
-	BA_PSICONFUSE	// 16 reduces victim's TU by (skill/3)
+	BA_PSICONFUSE,	// 16 reduces victim's TU
+	BA_PSICOURAGE	// 17 increases morale of ally
 };
 
 

@@ -69,7 +69,6 @@ ActionMenuState::ActionMenuState(
 {
 	_screen = false;
 
-//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	for (size_t
@@ -175,6 +174,10 @@ ActionMenuState::ActionMenuState(
 			addItem(
 					BA_PSICONFUSE,
 					"STR_CONFUSE_UNIT",
+					&id);
+			addItem(
+					BA_PSICOURAGE,
+					"STR_ENCOURAGE_UNIT",
 					&id);
 		}
 		else if (itRule->getBattleType() == BT_MINDPROBE)

@@ -355,6 +355,7 @@ void BattlescapeGame::popState()
 					case BA_AUTOSHOT:
 					case BA_PSIPANIC:
 					case BA_PSICONFUSE:
+					case BA_PSICOURAGE:
 					case BA_PSICONTROL:
 						cancelCurrentAction(true);
 					break;
@@ -1094,6 +1095,7 @@ void BattlescapeGame::setupCursor()
 		else if (_currentAction.type == BA_PSICONTROL
 			|| _currentAction.type == BA_PSIPANIC
 			|| _currentAction.type == BA_PSICONFUSE
+			|| _currentAction.type == BA_PSICOURAGE
 			|| _currentAction.type == BA_USE)
 		{
 			getMap()->setCursorType(CT_PSI);
@@ -2544,12 +2546,16 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		}
 		else if (_currentAction.type == BA_PSIPANIC
 			|| _currentAction.type == BA_PSICONTROL
-			|| _currentAction.type == BA_PSICONFUSE)
+			|| _currentAction.type == BA_PSICONFUSE
+			|| _currentAction.type == BA_PSICOURAGE)
 		{
-			//Log(LOG_INFO) << ". . . . BA_PSIPANIC or BA_PSICONTROL or BA_PSICONFUSE";
+			//Log(LOG_INFO) << ". . . . BA_PSIPANIC or BA_PSICONTROL or BA_PSICONFUSE or BA_PSICOURAGE";
 			if (targetUnit != NULL
-				&& targetUnit->getFaction() != _currentAction.actor->getFaction()
-				&& targetUnit->getUnitVisible() == true)
+				&& targetUnit->getUnitVisible() == true
+				&& ((_currentAction.type == BA_PSICOURAGE
+						&& targetUnit->getFaction() != FACTION_HOSTILE)
+					|| (_currentAction.type != BA_PSICOURAGE
+						&& targetUnit->getFaction() != FACTION_PLAYER)))
 			{
 				bool aLienPsi = (_currentAction.weapon == NULL);
 				if (aLienPsi == true)
@@ -2597,8 +2603,11 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 								else if (_currentAction.type == BA_PSICONTROL)
 									wst = game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
 																	.arg(_currentAction.value);
-								else // Psi-Confuse
+								else if (_currentAction.type == BA_PSICONFUSE)
 									wst = game->getLanguage()->getString("STR_CONFUSE_ATTACK_SUCCESSFUL")
+																	.arg(_currentAction.value);
+								else if (_currentAction.type == BA_PSICOURAGE)
+									wst = game->getLanguage()->getString("STR_PSI_COURAGE_SUCCESSFUL")
 																	.arg(_currentAction.value);
 
 								game->pushState(new InfoboxState(wst));

@@ -890,7 +890,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& (unit->getUnitVisible() == true
 										|| _battleSave->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
-										|| unit->getFaction() != _battleSave->getSide()))
+										|| ((_battleSave->getBattleGame()->getCurrentAction()->type == BA_PSICOURAGE
+												&& unit->getFaction() != FACTION_HOSTILE)
+											|| (_battleSave->getBattleGame()->getCurrentAction()->type != BA_PSICOURAGE
+												&& unit->getFaction() != FACTION_PLAYER))))
 								{
 									frame = (_animFrame % 2); // yellow box
 								}
@@ -3926,7 +3929,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& (unit->getUnitVisible() == true
 										|| _battleSave->getDebugMode() == true)
 									&& (_cursorType != CT_PSI
-										|| unit->getFaction() != _battleSave->getSide()))
+										|| ((_battleSave->getBattleGame()->getCurrentAction()->type == BA_PSICOURAGE
+												&& unit->getFaction() != FACTION_HOSTILE)
+											|| (_battleSave->getBattleGame()->getCurrentAction()->type != BA_PSICOURAGE
+												&& unit->getFaction() != FACTION_PLAYER))))
 								{
 									frame = 3 + (_animFrame % 2);	// yellow flashing box
 								}

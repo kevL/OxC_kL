@@ -715,7 +715,7 @@ int RuleItem::getStunRecovery() const
 int RuleItem::getExplosionRadius() const
 {
 	if (_blastRadius == -1
-		&& (   _damageType == DT_HE
+		&& (_damageType == DT_HE
 			|| _damageType == DT_STUN
 			|| _damageType == DT_SMOKE
 			|| _damageType == DT_IN))

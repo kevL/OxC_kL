@@ -5783,9 +5783,8 @@ int TileEngine::distanceSq(
 } */
 
 /**
- * Attempts a panic or mind-control BattleAction.
+ * Performs a psi-encourage BattleAction.
  * @param action - pointer to a BattleAction (BattlescapeGame.h)
- * @return, true if attack succeeds
  */
 bool TileEngine::psiAttack(BattleAction* const action)
 {
@@ -5804,6 +5803,15 @@ bool TileEngine::psiAttack(BattleAction* const action)
 						&& victim->getUnitRules()->isPsiImmune() == true;
 	if (psiImmune == false)
 	{
+		if (action->type == BA_PSICOURAGE)
+		{
+			const int moraleGain = 10 + RNG::generate(0,20);
+			action->value = moraleGain;
+			victim->moraleChange(moraleGain);
+
+			return true;
+		}
+
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
 			action->actor->addPsiSkillExp();
 		else if (victim->getOriginalFaction() == FACTION_PLAYER
@@ -5997,11 +6005,13 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			if (victim->getOriginalFaction() == FACTION_PLAYER
 				&& Options::allowPsiStrengthImprovement == true)
 			{
-				int resistXP = 1; // xCom resisted an xCom attempt
+				int resistXp;
 				if (action->actor->getFaction() == FACTION_HOSTILE)
-					++resistXP; // xCom resisted an aLien
+					resistXp = 2; // xCom resisted an aLien
+				else
+					resistXp = 1; // xCom resisted an xCom attempt
 
-				victim->addPsiStrengthExp(resistXP);
+				victim->addPsiStrengthExp(resistXp);
 			}
 		}
 	}

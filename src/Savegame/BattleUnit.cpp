@@ -1965,6 +1965,7 @@ int BattleUnit::getActionTUs(
 		case BA_PSICONTROL:
 		case BA_PSIPANIC:
 		case BA_PSICONFUSE:
+		case BA_PSICOURAGE:
 			if (rule == NULL)
 				return 0;
 			cost = rule->getTUUse();

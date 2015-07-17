@@ -284,7 +284,8 @@ void ProjectileFlyBState::init()
 		case BA_PSIPANIC:
 		case BA_PSICONTROL:
 		case BA_PSICONFUSE:
-			//Log(LOG_INFO) << ". . BA_PSIPANIC/CONTROL/CONFUSE, new ExplosionBState, EXIT";
+		case BA_PSICOURAGE:
+			//Log(LOG_INFO) << ". . BA_PSIPANIC/CONTROL/CONFUSE/ENCOURAGE, new ExplosionBState, EXIT";
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
 													Position(
@@ -505,12 +506,12 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		_prjImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
 		//Log(LOG_INFO) << ". BA_THROW, part = " << _prjImpact;
 
-		if (   _prjImpact == VOXEL_FLOOR
+		if (_prjImpact == VOXEL_FLOOR
 			|| _prjImpact == VOXEL_UNIT
 			|| _prjImpact == VOXEL_OBJECT)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
-				&& (   _prjItem->getRules()->getBattleType() == BT_GRENADE
+				&& (_prjItem->getRules()->getBattleType() == BT_GRENADE
 					|| _prjItem->getRules()->getBattleType() == BT_PROXYGRENADE))
 			{
 				//Log(LOG_INFO) << ". . auto-prime for AI, unitID " << _unit->getId();
@@ -555,6 +556,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		if (_prjImpact != VOXEL_EMPTY
 			 && _prjImpact != VOXEL_OUTOFBOUNDS)
 		{
+			//Log(LOG_INFO) << ". . spit";
 			_unit->startAiming();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -735,17 +737,6 @@ void ProjectileFlyBState::think()
 //				&& _action.waypoints.size() < 2)
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: cameraPosition was Set";
-/*				if (   _action.type == BA_STUN // kL, don't jump screen after these.
-					|| _action.type == BA_HIT
-					|| _action.type == BA_USE
-					|| _action.type == BA_LAUNCH
-					|| _action.type == BA_PSICONTROL
-					|| _action.type == BA_PSIPANIC
-					|| _action.type == BA_PSICONFUSE)
-				{
-//					camera->setMapOffset(camera->getMapOffset());
-				}
-				else */
 				if (_action.type == BA_THROW // jump screen back to pre-shot position
 					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
@@ -771,6 +762,7 @@ void ProjectileFlyBState::think()
 			if (_unit->getFaction() == _parent->getSave()->getSide()
 				&& _action.type != BA_PSIPANIC
 				&& _action.type != BA_PSICONFUSE
+				&& _action.type != BA_PSICOURAGE
 				&& _action.type != BA_PSICONTROL
 				&& _parent->getSave()->getUnitsFalling() == false)
 			{
