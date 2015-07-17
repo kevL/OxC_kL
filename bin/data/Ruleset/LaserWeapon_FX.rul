@@ -62,8 +62,8 @@ extraSprites:
 # Laser Pistol
   - type: BIGOBS.PCK
     files:
-      650: Resources/LaserWeapon_FX/alt/Laser_Pistol_MiB.png #alt
-#      650: Resources/LaserWeapon_FX/LaserPistol_BIGOBS.PNG
+#      650: Resources/LaserWeapon_FX/alt/Laser_Pistol_MiB.png #alt
+      650: Resources/LaserWeapon_FX/LaserPistol_BIGOBS.PNG
       651: Resources/LaserWeapon_FX/LaserPistolClip_BIGOBS.PNG
   - type: FLOOROB.PCK
     files:
@@ -75,8 +75,8 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      650: Resources/LaserWeapon_FX/alt/HandOb_Laser_Pistol_MiB.png #alt
-#      650: Resources/LaserWeapon_FX/LaserPistol_HANDOB.PNG
+#      650: Resources/LaserWeapon_FX/alt/HandOb_Laser_Pistol_MiB.png #alt
+      650: Resources/LaserWeapon_FX/LaserPistol_HANDOB.PNG
 # Laser Rifle
   - type: BIGOBS.PCK
     files:
@@ -145,14 +145,14 @@ extraSprites:
     files:
       680: Resources/LaserWeapon_FX/LaserScatter_HANDOB.PNG
 # INITIAL ROCKET LAUNCHER and AUTO-CANNON - overwrites original indices #
-  - type: BIGOBS.PCK
-    files:
-      7: Resources/Matching_Colors/auto_cannon.png
-      15: Resources/Matching_Colors/rocket_launcher.png
+#  - type: BIGOBS.PCK
+#    files:
+#      7: Resources/Matching_Colors/auto_cannon.png
+#      15: Resources/Matching_Colors/rocket_launcher.png
   - type: FLOOROB.PCK
     files:
       7: Resources/Matching_Colors/floorob_auto_cannon.png
-      15: Resources/Matching_Colors/floorob_rocket_launcher.png
+#      15: Resources/Matching_Colors/floorob_rocket_launcher.png
   - type: HANDOB.PCK
     width: 256
     height: 40

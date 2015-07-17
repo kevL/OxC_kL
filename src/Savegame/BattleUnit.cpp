@@ -129,6 +129,7 @@ BattleUnit::BattleUnit(
 		_stunLevel(0),
 		_aboutToDie(false),
 		_type("SOLDIER"),
+//		_race("STR_HUMAN"), // not used.
 		_activeHand("STR_RIGHT_HAND"),
 
 		_name(soldier->getName()),

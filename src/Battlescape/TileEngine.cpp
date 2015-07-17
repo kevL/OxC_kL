@@ -734,10 +734,14 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
  * Calculates line of sight of all units within range of the Position.
  * @note Used when a unit is walking or terrain has changed which can reveal
  * unseen units and/or parts of terrain.
- * @param pos - reference the position of the changed terrain
+ * @param pos		- reference the position of the changed terrain
+ * @param spotSound	- true to play aggro sound (default false)
  */
-void TileEngine::calculateFOV(const Position& pos)
+void TileEngine::calculateFOV(
+		const Position& pos,
+		bool spotSound)
 {
+	_spotSound = spotSound;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -751,11 +755,12 @@ void TileEngine::calculateFOV(const Position& pos)
 			calculateFOV(*i);
 		}
 	}
+	_spotSound = true;
 }
 
 /**
  * Recalculates FOV of all conscious units on the battlefield.
- * @param spotSound - true to play new-unit-spotted aggro sound (default true, false to stop aggro sound during turn rollovers)
+ * @param spotSound - true to play aggro sound (default false)
  */
 void TileEngine::recalculateFOV(bool spotSound)
 {
@@ -2430,7 +2435,9 @@ BattleUnit* TileEngine::hit(
 		calculateTerrainLighting();	// fires could have been started
 //		calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
 
-		calculateFOV(targetPos_tile);
+		calculateFOV(
+				targetPos_tile,
+				true);
 
 		//if (targetUnit) Log(LOG_INFO) << "TileEngine::hit() EXIT, return targetUnit";
 		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[0]";
@@ -3231,7 +3238,7 @@ void TileEngine::explode(
 	calculateTerrainLighting();	// fires could have been started
 //	calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
 
-	recalculateFOV();
+	recalculateFOV(true);
 	//Log(LOG_INFO) << "TileEngine::explode() EXIT";
 }
 
@@ -4812,12 +4819,13 @@ int TileEngine::unitOpensDoor(
 			if (unit->spendTimeUnits(tuCost) == true)
 			{
 //				tile->animate(); // ensures frame advances for ufo doors to update TU cost
-
-				if (rtClick == true) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
+				if (rtClick == true) // try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
-					_battleSave->getBattleGame()->checkForProximityGrenades(unit); // kL
+					_battleSave->getBattleGame()->checkForProximityGrenades(unit);
 
-					calculateFOV(unit->getPosition()); // calculate FoV for everyone within sight-range, incl. unit.
+					calculateFOV( // calculate FoV for everyone within sight-range, incl. unit.
+							unit->getPosition(),
+							true);
 
 					// look from the other side (may need check reaction fire)
 					// kL_note: This seems redundant, but hey maybe it removes now-unseen units from a unit's visible-units vector ....
@@ -5783,7 +5791,7 @@ int TileEngine::distanceSq(
 } */
 
 /**
- * Performs a psi-encourage BattleAction.
+ * Performs a psionic BattleAction.
  * @param action - pointer to a BattleAction (BattlescapeGame.h)
  */
 bool TileEngine::psiAttack(BattleAction* const action)
@@ -5958,7 +5966,9 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				victim->setStatus(STATUS_STANDING);
 
 				calculateUnitLighting();
-				calculateFOV(victim->getPosition());
+				calculateFOV(
+						victim->getPosition(),
+						true);
 
 /*				// if all units from either faction are mind controlled - auto-end the mission.
 				if (Options::allowPsionicCapture == true

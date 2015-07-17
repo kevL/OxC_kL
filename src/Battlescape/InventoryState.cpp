@@ -83,8 +83,8 @@ InventoryState::InventoryState(
 		_parent(parent)
 {
 	_battleSave = _game->getSavedGame()->getSavedBattle();
-/*kL
-	if (Options::maximizeInfoScreens)
+
+/*	if (Options::maximizeInfoScreens)
 	{
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
@@ -372,7 +372,7 @@ InventoryState::~InventoryState()
 
 		tileEngine->applyGravity(_battleSave->getSelectedUnit()->getTile());
 		tileEngine->calculateTerrainLighting();
-		tileEngine->recalculateFOV();
+//		tileEngine->recalculateFOV(); // <- done in BattlescapeGame::init()
 	} // kL_end.
 }
 //	if (_battleSave->getTileEngine())
@@ -666,20 +666,20 @@ void InventoryState::btnOkClick(Action*)
  */
 void InventoryState::btnPrevClick(Action*)
 {
-	if (_inv->getSelectedItem() != NULL)
-		return;
-
-	if (_parent != NULL)
-		_parent->selectPreviousFactionUnit(
-										false,
-										false,
-										true);
-	else
-		_battleSave->selectPreviousFactionUnit(
+	if (_inv->getSelectedItem() == NULL)
+	{
+		if (_parent != NULL)
+			_parent->selectPreviousFactionUnit(
 											false,
 											false,
 											true);
-	init();
+		else
+			_battleSave->selectPreviousFactionUnit(
+												false,
+												false,
+												true);
+		init();
+	}
 }
 
 /**
@@ -688,20 +688,20 @@ void InventoryState::btnPrevClick(Action*)
  */
 void InventoryState::btnNextClick(Action*)
 {
-	if (_inv->getSelectedItem() != NULL)
-		return;
-
-	if (_parent != NULL)
-		_parent->selectNextFactionUnit(
-									false,
-									false,
-									true);
-	else
-		_battleSave->selectNextFactionUnit(
+	if (_inv->getSelectedItem() == NULL)
+	{
+		if (_parent != NULL)
+			_parent->selectNextFactionUnit(
 										false,
 										false,
 										true);
-	init();
+		else
+			_battleSave->selectNextFactionUnit(
+											false,
+											false,
+											true);
+		init();
+	}
 }
 
 /**
@@ -926,12 +926,13 @@ void InventoryState::clearInventory( // private.
  */
 void InventoryState::btnRankClick(Action*)
 {
-	_game->pushState(new UnitInfoState(
-									_battleSave->getSelectedUnit(),
-									_parent,
-									true,
-									false,
-									_tuMode == false));
+	if (_inv->getSelectedItem() == NULL)
+		_game->pushState(new UnitInfoState(
+										_battleSave->getSelectedUnit(),
+										_parent,
+										true,
+										false,
+										_tuMode == false));
 }
 
 /**
@@ -1146,85 +1147,85 @@ void InventoryState::setExtraInfo( // private.
 		const RuleItem* const itRule,
 		const BattleItem* const ammo)
 {
-		std::wostringstream label;
-		bool isArt = false;
+	std::wostringstream label;
+	bool isArt = false;
 
-		if (item->getUnit() != NULL)
+	if (item->getUnit() != NULL)
+	{
+		if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, BattlescapeState::mapOver()
 		{
-			if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, BattlescapeState::mapOver()
-			{
-				label << tr("STR_FLOATER") // STR_FLOATER_CORPSE
-					  << L" (status doubtful)";
-			}
-			if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-				label << item->getUnit()->getName(_game->getLanguage());
-			else
-			{
-				label << tr(itRule->getType());
-
-				if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
-					label << L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
-			}
+			label << tr("STR_FLOATER") // STR_FLOATER_CORPSE
+				  << L" (status doubtful)";
 		}
-		else if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+		if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+			label << item->getUnit()->getName(_game->getLanguage());
+		else
+		{
 			label << tr(itRule->getType());
-		else
-		{
-			label << tr("STR_ALIEN_ARTIFACT");
-			isArt = true;
+
+			if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+				label << L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
 		}
+	}
+	else if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+		label << tr(itRule->getType());
+	else
+	{
+		label << tr("STR_ALIEN_ARTIFACT");
+		isArt = true;
+	}
 
-		int weight = itRule->getWeight();
-		if (ammo != NULL
-			&& ammo != item)
+	int weight = itRule->getWeight();
+	if (ammo != NULL
+		&& ammo != item)
+	{
+		weight += ammo->getRules()->getWeight();
+	}
+
+	label << L" (" << weight << L")";
+	_txtItem->setText(label.str());
+
+
+	const BattleUnit* const unit = _battleSave->getSelectedUnit();
+	const BattleActionType bat = itRule->getDefaultAction(item->getFuseTimer() > -1);
+
+	if (unit != NULL
+		&& isArt == false
+		&& (bat != BA_NONE
+			|| itRule->getBattleType() == BT_AMMO))
+	{
+		std::string actionType;
+		int tuUse;
+
+		if (itRule->getBattleType() == BT_AMMO)
 		{
-			weight += ammo->getRules()->getWeight();
-		}
-
-		label << L" (" << weight << L")";
-		_txtItem->setText(label.str());
-
-
-		const BattleUnit* const unit = _battleSave->getSelectedUnit();
-		const BattleActionType bat = itRule->getDefaultAction(item->getFuseTimer() > -1);
-
-		if (unit != NULL
-			&& isArt == false
-			&& (bat != BA_NONE
-				|| itRule->getBattleType() == BT_AMMO))
-		{
-			std::string actionType;
-			int tuUse;
-
-			if (itRule->getBattleType() == BT_AMMO)
-			{
-				actionType = "STR_RELOAD_";
-				tuUse = 15;
-			}
-			else
-			{
-				switch (bat)
-				{
-					case BA_LAUNCH:		actionType = "STR_LAUNCH_";	break;
-					case BA_SNAPSHOT:	actionType = "STR_SNAP_";	break;
-					case BA_AUTOSHOT:	actionType = "STR_BURST_";	break;
-					case BA_AIMEDSHOT:	actionType = "STR_SCOPE_";	break;
-					case BA_PRIME:		actionType = "STR_PRIME_";	break;
-					case BA_DEFUSE:		actionType = "STR_DEFUSE_";	break;
-					case BA_USE:		actionType = "STR_USE_";	break;
-					case BA_PSIPANIC:	actionType = "STR_PSI_";	break;
-					case BA_HIT:		actionType = "STR_ATTACK_";
-				}
-
-				tuUse = unit->getActionTUs(
-										bat,
-										item);
-			}
-
-			_txtUseTU->setText(tr(actionType).arg(tuUse));
+			actionType = "STR_RELOAD_";
+			tuUse = 15;
 		}
 		else
-			_txtUseTU->setText(L"");
+		{
+			switch (bat)
+			{
+				case BA_LAUNCH:		actionType = "STR_LAUNCH_";	break;
+				case BA_SNAPSHOT:	actionType = "STR_SNAP_";	break;
+				case BA_AUTOSHOT:	actionType = "STR_BURST_";	break;
+				case BA_AIMEDSHOT:	actionType = "STR_SCOPE_";	break;
+				case BA_PRIME:		actionType = "STR_PRIME_";	break;
+				case BA_DEFUSE:		actionType = "STR_DEFUSE_";	break;
+				case BA_USE:		actionType = "STR_USE_";	break;
+				case BA_PSIPANIC:	actionType = "STR_PSI_";	break;
+				case BA_HIT:		actionType = "STR_ATTACK_";
+			}
+
+			tuUse = unit->getActionTUs(
+									bat,
+									item);
+		}
+
+		_txtUseTU->setText(tr(actionType).arg(tuUse));
+	}
+	else
+		_txtUseTU->setText(L"");
 }
 
 }

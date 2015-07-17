@@ -1439,7 +1439,7 @@ bool SavedBattleGame::endBattlePhase()
 
 	// redo calculateFOV() *after* aliens & civies have been set
 	// notVisible -> AND *only* after a calcLighting has been done !
-	_tileEngine->recalculateFOV(false);
+	_tileEngine->recalculateFOV();
 
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
@@ -2219,8 +2219,9 @@ void SavedBattleGame::reviveUnit(
 			unit->setRevived();
 
 			_tileEngine->calculateUnitLighting();
-			_tileEngine->calculateFOV(unit->getPosition());
-
+			_tileEngine->calculateFOV(
+									unit->getPosition(),
+									true);
 			removeCorpse(unit);
 		}
 	}

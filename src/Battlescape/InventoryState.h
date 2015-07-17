@@ -38,11 +38,10 @@ class RuleItem;
 class SavedBattleGame;
 class Surface;
 class Text;
-//class Tile;
 
 
 /**
- * Screen which displays a Battleunit's inventory.
+ * Screen that displays a Battleunit's inventory.
  */
 class InventoryState
 	:

@@ -911,7 +911,9 @@ bool UnitWalkBState::doStatusStand_end() // private.
 
 	// This calculates or 'refreshes' the Field of View
 	// of all units within maximum distance (20 tiles) of current unit.
-	_terrain->calculateFOV(_unit->getPosition());
+	_terrain->calculateFOV(
+						_unit->getPosition(),
+						true);
 
 	if (_parent->checkForProximityGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
 	{
@@ -1134,7 +1136,9 @@ void UnitWalkBState::postPathProcedures() // private.
 	_terrain->calculateUnitLighting();
 
 //	_terrain->calculateFOV(_unit);
-	_terrain->calculateFOV(_unit->getPosition()); // in case unit opened a door and stopped without doing Status_WALKING
+	_terrain->calculateFOV( // in case unit opened a door and stopped without doing Status_WALKING
+						_unit->getPosition(),
+						true);
 
 
 	_unit->setCache(NULL);

@@ -151,7 +151,7 @@ BattlescapeGame::~BattlescapeGame()
 void BattlescapeGame::init()
 {
 	//Log(LOG_INFO) << "bg: init()";
-	_battleSave->getTileEngine()->recalculateFOV(false);
+	_battleSave->getTileEngine()->recalculateFOV();
 
 /*	if (_battleSave->getSide() == FACTION_PLAYER
 		&& _battleSave->getTurn() > 1)
@@ -212,7 +212,7 @@ void BattlescapeGame::think()
 
 				if (_playerPanicHandled == true)
 				{
-					_battleSave->getTileEngine()->recalculateFOV(false);
+					_battleSave->getTileEngine()->recalculateFOV();
 					_battleSave->getBattleState()->updateSoldierInfo();
 				}
 			}
@@ -3020,7 +3020,7 @@ void BattlescapeGame::dropItem(
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
 		getTileEngine()->calculateTerrainLighting();
-		getTileEngine()->recalculateFOV();
+		getTileEngine()->recalculateFOV(true);
 	}
 }
 
@@ -3114,7 +3114,9 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	getTileEngine()->applyGravity(conUnit->getTile());
 //	getTileEngine()->calculateUnitLighting(); // <- done in UnitDieBState
-	getTileEngine()->calculateFOV(conUnit->getPosition());
+	getTileEngine()->calculateFOV(
+							conUnit->getPosition(),
+							true);
 
 //	conUnit->getCurrentAIState()->think();
 

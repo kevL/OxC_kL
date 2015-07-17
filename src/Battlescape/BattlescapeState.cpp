@@ -1863,7 +1863,9 @@ void BattlescapeState::btnKneelClick(Action*)
 			{
 				updateSoldierInfo(false);
 
-				_battleGame->getTileEngine()->calculateFOV(unit->getPosition());
+				_battleGame->getTileEngine()->calculateFOV(
+														unit->getPosition(),
+														true);
 				// need this here, so that my newVis algorithm works without
 				// false positives, or true negatives as it were, when a soldier
 				// stands up and walks in one go via UnitWalkBState. Because if

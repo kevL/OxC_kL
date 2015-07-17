@@ -102,15 +102,18 @@ private:
 		void calculateTerrainLighting();
 		/// Recalculates lighting of the battlescape for units.
 		void calculateUnitLighting();
+
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
 
-		/// Calculates the field of view from a units view point.
+		/// Calculates Field of Vision from a unit's view point.
 		bool calculateFOV(BattleUnit* const unit);
-		/// Calculates Field of View, including line of sight of all units within range of the Position
-		void calculateFOV(const Position& pos);
-		/// Recalculates FOV of all units in-game.
-		void recalculateFOV(bool spotSound = true);
+		/// Calculates Field of Vision including for all units within range of Position.
+		void calculateFOV(
+				const Position& pos,
+				bool spotSound = false);
+		/// Recalculates Field of Vision of all units.
+		void recalculateFOV(bool spotSound = false);
 
 		/// Checks visibility of a unit on this tile.
 		bool visible(
@@ -250,7 +253,7 @@ private:
 //				const Position& pos1,
 //				const Position& pos2) const;
 
-		/// Attempts a panic or mind control action.
+		/// Performs a psionic action.
 		bool psiAttack(BattleAction* const action); // removed, post-cosmetic
 
 		/// Applies gravity to anything that occupies this tile.

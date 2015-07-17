@@ -456,7 +456,9 @@ void UnitDieBState::convertToCorpse() // private.
 		}
 
 		// expose any units that were hiding behind dead unit
-		_parent->getTileEngine()->calculateFOV(pos);
+		_parent->getTileEngine()->calculateFOV(
+											pos,
+											true);
 	}
 }
 
