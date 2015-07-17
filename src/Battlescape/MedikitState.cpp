@@ -378,7 +378,7 @@ void MedikitState::onStimClick(Action*)
 
 			_action->weapon->setStimulantQuantity(stimQty - 1);
 
-			if (_action->targetUnit->stimulant( // if the unit has revived quit this screen automatically
+			if (_action->targetUnit->amphetamine( // if the unit has revived quit this screen automatically
 											itRule->getEnergyRecovery(),
 											itRule->getStunRecovery()) == true)
 			{
@@ -413,7 +413,7 @@ void MedikitState::onPainClick(Action*)
 			++_action->actor->getStatistics()->medikitApplications;
 
 			_action->weapon->setPainKillerQuantity(painQty - 1);
-			_action->targetUnit->painKillers();
+			_action->targetUnit->morphine();
 
 			if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
 			{

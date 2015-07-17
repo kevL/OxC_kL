@@ -1769,7 +1769,7 @@ bool TileEngine::checkReactionFire(
 				ret = true;
 			}
 
-			reactorUnit = getReactor( // nice shot. Get cocky, kid; you're a neurotic ass. Gratz!
+			reactorUnit = getReactor( // nice shot.
 								spotters,
 								triggerUnit,
 								tuSpent,
@@ -1878,7 +1878,6 @@ BattleUnit* TileEngine::getReactor(
 
 	if (nextReactor != defender
 		&& nextReactor->getFaction() == FACTION_HOSTILE)
-//		&& defender->getPanicking() == false)
 	{
 		//Log(LOG_INFO) << "getReactor() id-" << nextReactor->getId() << " spots " << defender->getId();
 		if (autoSpot == true)
@@ -1902,8 +1901,6 @@ bool TileEngine::reactionShot(
 		const BattleUnit* const targetUnit)
 {
 	//Log(LOG_INFO) << "TileEngine::reactionShot() id-" << unit->getId();
-//	if (targetUnit->isOut(true, true) == true) return false; // not gonna stop shit.
-
 	BattleAction action;
 	action.actor = unit;
 
@@ -1928,8 +1925,6 @@ bool TileEngine::reactionShot(
 		|| action.weapon->getRules()->canReactionFire() == false
 		|| action.weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
 		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return 255
-//		|| (_battleSave->getDepth() == 0
-//			&& action.weapon->getRules()->isWaterOnly() == true)
 		|| (action.actor->getFaction() != FACTION_HOSTILE			// is not an aLien and has unresearched weapon.
 			&& _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()) == false))
 	{

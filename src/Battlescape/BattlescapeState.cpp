@@ -2992,7 +2992,8 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 					++j)
 				{
 					if ((*j)->getFaction() == FACTION_PLAYER
-						&& (*j)->isOut() == false)
+						&& (*j)->isOut_t(OUT_STAT) == false)
+//						&& (*j)->isOut() == false)
 					{
 						if (std::find(
 									(*j)->getVisibleUnits()->begin(),
@@ -3062,6 +3063,7 @@ void BattlescapeState::refreshVisUnits()
 				&& j != INDICATORS;
 			++i)
 		{
+//			if ((*i)->isOut() == false
 			if ((*i)->isOut_t(OUT_STAT) == false
 				&& (*i)->getUnitVisible() == true
 				&& (*i)->getFaction() == FACTION_HOSTILE)

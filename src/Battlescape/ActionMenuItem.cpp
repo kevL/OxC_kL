@@ -67,9 +67,9 @@ ActionMenuItem::ActionMenuItem(
 	_frame		= new Frame(
 						getWidth(),
 						getHeight());
-	_txtDesc	= new Text(160, 20, 10, 13);
-	_txtAcc		= new Text(63, 20, 151, 13);
-	_txtTU		= new Text(50, 20, 214, 13);
+	_txtDesc	= new Text(160, 20,  10, 13);
+	_txtAcc		= new Text( 63, 20, 151, 13);
+	_txtTU		= new Text( 50, 20, 214, 13);
 
 	_frame->setColor(static_cast<Uint8>(actionMenu->border));
 	_frame->setSecondaryColor(static_cast<Uint8>(actionMenu->color2));

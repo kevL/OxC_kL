@@ -67,12 +67,6 @@ void UnitPanicBState::think()
 
 		_unit->setTimeUnits(0);
 		_unit->setDashing(false);
-
-//		if (_unit->getFaction() == FACTION_PLAYER)
-//		{
-			//Log(LOG_INFO) << "UnitPanicBState: setPanicking FALSE";
-//			_unit->setPanicking(false);
-//		}
 	}
 
 	_parent->popState();

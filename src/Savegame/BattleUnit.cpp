@@ -118,7 +118,6 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_mcStrength(0),
 		_mcSkill(0),
-//		_panicking(false),
 
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -289,7 +288,6 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_mcStrength(0),
 		_mcSkill(0),
-//		_panicking(false),
 
 		_statistics(NULL), // Soldier Diary
 
@@ -1635,7 +1633,7 @@ void BattleUnit::playHitSound()
 /**
  * Does an amount of stun recovery.
  * @param power - stun to recover
- * @return, true if unit becomes conscious
+ * @return, true if unit revives
  */
 bool BattleUnit::healStun(int power)
 {
@@ -2383,12 +2381,14 @@ void BattleUnit::prepUnit(bool full)
 				delete _currentAIState;
 				_currentAIState = NULL;
 			}
+
+			return;
 		}
 
-		if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
-			&& (_armor->getSize() == 1
+/*			&& (_armor->getSize() == 1 // note ... mechanical creatures should no longer be getting stunned.
 				|| isOut_t() == false)
-//				|| isOut() == false)
+//				|| isOut() == false) */
+		if (_stunLevel > 0
 			&& (_geoscapeSoldier != NULL
 				|| _unitRules->isMechanical() == false))
 		{
@@ -2420,7 +2420,7 @@ void BattleUnit::prepUnit(bool full)
 	}
 
 //	if (isOut() == false)
-	if (isOut_t() == false)
+	if (isOut_t(OUT_STUNNED) == false)
 		initTu(
 			false,
 			lowMorale);
@@ -3447,7 +3447,7 @@ void BattleUnit::heal(
 /**
  * Restores soldier morale.
  */
-void BattleUnit::painKillers()
+void BattleUnit::morphine()
 {
 	const int lostHealth = getBaseStats()->health - _health;
 	if (lostHealth > _moraleRestored)
@@ -3473,7 +3473,7 @@ void BattleUnit::painKillers()
  * @param stun		- the amount of stun level to reduce
  * @return, true if unit regains consciousness
  */
-bool BattleUnit::stimulant(
+bool BattleUnit::amphetamine(
 		int energy,
 		int stun)
 {
@@ -4656,23 +4656,5 @@ void BattleUnit::hostileMcParameters(
 		if (_mcSkill < 0) _mcSkill = 0;
 	}
 }
-
-/**
- * Sets if this BattleUnit is panicking.
- * @param panic - true if panicking (default true)
- */
-/* void BattleUnit::setPanicking(bool panic)
-{
-	_panicking = panic;
-} */
-
-/**
- * Gets if this BattleUnit is panicking.
- * @return, true if panicking
- */
-/* bool BattleUnit::getPanicking() const
-{
-	return _panicking;
-} */
 
 }

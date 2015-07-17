@@ -439,7 +439,6 @@ private:
 		_floating,
 		_hidingForTurn,
 		_kneeled,
-//		_panicking,
 		_revived,
 		_stopShot,	// to stop a unit from firing/throwing if it spots a new opponent during turning
 		_takenExpl,	// used to stop large units from taking damage for each part.
@@ -923,9 +922,9 @@ private:
 				int wounds,
 				int health);
 		/// Gives pain killers to this unit.
-		void painKillers();
+		void morphine();
 		/// Gives stimulants to this unit.
-		bool stimulant(
+		bool amphetamine(
 				int energy,
 				int stun);
 
@@ -1151,11 +1150,6 @@ private:
 		void hostileMcParameters(
 				int& strength,
 				int& skill);
-
-		/// Sets if this BattleUnit is panicking.
-//		void setPanicking(bool panic = true);
-		/// Gets if this BattleUnit is panicking.
-//		bool getPanicking() const;
 };
 
 }

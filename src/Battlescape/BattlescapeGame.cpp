@@ -337,7 +337,7 @@ void BattlescapeGame::popState()
 			_parentState->warning(action.result);
 
 			// remove action.Cursor if error.Message (eg, not enough tu's)
-			if (   action.result.compare("STR_NOT_ENOUGH_TIME_UNITS") == 0
+			if (action.result.compare("STR_NOT_ENOUGH_TIME_UNITS") == 0
 				|| action.result.compare("STR_NO_AMMUNITION_LOADED") == 0
 				|| action.result.compare("STR_NO_ROUNDS_LEFT") == 0)
 			{
