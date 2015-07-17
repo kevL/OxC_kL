@@ -372,7 +372,7 @@ InventoryState::~InventoryState()
 
 		tileEngine->applyGravity(_battleSave->getSelectedUnit()->getTile());
 		tileEngine->calculateTerrainLighting();
-//		tileEngine->recalculateFOV(); // <- done in BattlescapeGame::init()
+		tileEngine->recalculateFOV(true); // <- done in BattlescapeGame::init() -> but without 'spotSound'
 	} // kL_end.
 }
 //	if (_battleSave->getTileEngine())
