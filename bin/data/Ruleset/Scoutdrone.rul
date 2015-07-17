@@ -12,7 +12,7 @@ items:
     accuracySnap: 100
     tuSnap: 23
     battleType: 1
-    maxRange: 0
+    maxRange: 1
     arcingShot: true
     fixedWeapon: true
     noReaction: true

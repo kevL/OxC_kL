@@ -5733,8 +5733,8 @@ int TileEngine::distance(
 		y = pos1.y - pos2.y,
 		z = pos1.z - pos2.z; // kL
 
-//	return static_cast<int>(Round(
-	return static_cast<int>(std::ceil(
+//	return static_cast<int>(std::ceil(
+	return static_cast<int>(Round(
 		   std::sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
 }
 

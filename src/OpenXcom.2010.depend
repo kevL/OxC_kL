@@ -5373,7 +5373,7 @@
 1435730955 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
-1434547305 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1437114790 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
 	"../Interface/Frame.h"
@@ -5498,7 +5498,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1437110183 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1437114935 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -6063,7 +6063,7 @@
 	"../Engine/Surface.h"
 	"../Ruleset/MapData.h"
 
-1436490618 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1437115406 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6375,7 +6375,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1437105166 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
+1437115838 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
@@ -8645,7 +8645,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1437107818 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1437116119 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

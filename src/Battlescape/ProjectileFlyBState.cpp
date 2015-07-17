@@ -195,7 +195,7 @@ void ProjectileFlyBState::init()
 	// snapshot defaults to "hit" if it's a melee weapon (in case of reaction
 	// "shots" with a melee weapon) for Silacoid attack etc.
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
-		&& (   _action.type == BA_SNAPSHOT
+		&& (_action.type == BA_SNAPSHOT
 			|| _action.type == BA_AUTOSHOT
 			|| _action.type == BA_AIMEDSHOT))
 	{
