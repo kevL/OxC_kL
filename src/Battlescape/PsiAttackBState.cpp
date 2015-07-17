@@ -154,7 +154,7 @@ void PsiAttackBState::psiAttack()
 			_target->moraleChange(-moraleLoss);
 			if (_parent->getSave()->getSide() == FACTION_PLAYER)
 			{
-				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_PSI_PANIC_SUCCESS")));
 			}
 		}
 		else if (_action.type == BA_PSICONTROL)
@@ -180,7 +180,7 @@ void PsiAttackBState::psiAttack()
 						_parent->requestEndTurn();
 					}
 				}
-				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+				game->pushState(new InfoboxState(game->getLanguage()->getString("STR_PSI_CONTROL_SUCCESS")));
 				_parent->getSave()->getBattleState()->updateSoldierInfo();
 			}
 			else

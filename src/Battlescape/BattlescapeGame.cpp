@@ -937,7 +937,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 												.arg(unit->getName(game->getLanguage()))
 												.arg(action.value);
 				else // Panic Atk
-					wst = game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
+					wst = game->getLanguage()->getString("STR_PSI_PANIC_SUCCESS")
 												.arg(action.value);
 
 				game->pushState(new InfoboxState(wst));
@@ -2598,16 +2598,16 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 
 								std::wstring wst;
 								if (_currentAction.type == BA_PSIPANIC)
-									wst = game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")
+									wst = game->getLanguage()->getString("STR_PSI_PANIC_SUCCESS")
 																	.arg(_currentAction.value);
 								else if (_currentAction.type == BA_PSICONTROL)
-									wst = game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")
+									wst = game->getLanguage()->getString("STR_PSI_CONTROL_SUCCESS")
 																	.arg(_currentAction.value);
 								else if (_currentAction.type == BA_PSICONFUSE)
-									wst = game->getLanguage()->getString("STR_CONFUSE_ATTACK_SUCCESSFUL")
+									wst = game->getLanguage()->getString("STR_PSI_CONFUSE_SUCCESS")
 																	.arg(_currentAction.value);
 								else if (_currentAction.type == BA_PSICOURAGE)
-									wst = game->getLanguage()->getString("STR_PSI_COURAGE_SUCCESSFUL")
+									wst = game->getLanguage()->getString("STR_PSI_COURAGE_SUCCESS")
 																	.arg(_currentAction.value);
 
 								game->pushState(new InfoboxState(wst));
