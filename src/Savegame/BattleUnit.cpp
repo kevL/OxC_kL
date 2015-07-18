@@ -1423,6 +1423,7 @@ int BattleUnit::damage(
 	}
 
 	UnitBodyPart bodyPart = BODYPART_TORSO;
+	const bool woundable = isWoundable();
 
 	if (power > 0
 		&& ignoreArmor == false)
@@ -1474,29 +1475,32 @@ int BattleUnit::damage(
 			}
 			//Log(LOG_INFO) << ". side = " << (int)side;
 
-			if (relPos.z > getHeight() - 4)
-				bodyPart = BODYPART_HEAD;
-			else if (relPos.z > 5)
+			if (woundable == true)
 			{
-				switch (side)
+				if (relPos.z > getHeight() - 4)
+					bodyPart = BODYPART_HEAD;
+				else if (relPos.z > 5)
 				{
-					case SIDE_LEFT:		bodyPart = BODYPART_LEFTARM;	break;
-					case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTARM;	break;
+					switch (side)
+					{
+						case SIDE_LEFT:		bodyPart = BODYPART_LEFTARM;	break;
+						case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTARM;	break;
 
-					default:			bodyPart = BODYPART_TORSO;
+						default:			bodyPart = BODYPART_TORSO;
+					}
 				}
-			}
-			else
-			{
-				switch (side)
+				else
 				{
-					case SIDE_LEFT: 	bodyPart = BODYPART_LEFTLEG; 	break;
-					case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTLEG; 	break;
+					switch (side)
+					{
+						case SIDE_LEFT: 	bodyPart = BODYPART_LEFTLEG; 	break;
+						case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTLEG; 	break;
 
-					default:
-						bodyPart = static_cast<UnitBodyPart>(RNG::generate(
-																		BODYPART_RIGHTLEG,
-																		BODYPART_LEFTLEG));
+						default:
+							bodyPart = static_cast<UnitBodyPart>(RNG::generate(
+																			BODYPART_RIGHTLEG,
+																			BODYPART_LEFTLEG));
+					}
 				}
 			}
 			//Log(LOG_INFO) << ". bodyPart = " << (int)bodyPart;
@@ -1521,6 +1525,7 @@ int BattleUnit::damage(
 				|| (_unitRules->isMechanical() == false
 					&& _race != "STR_ZOMBIE"))
 			{
+				//Log(LOG_INFO) << ". . stun = " << power;
 				_stunLevel += power;
 			}
 		}
@@ -1555,7 +1560,7 @@ int BattleUnit::damage(
 
 				if (ignoreArmor == false)// Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
 				{
-					if (isWoundable() == true) // fatal wounds
+					if (woundable == true) // fatal wounds
 					{
 						if (RNG::generate(0,10) < power) // kL: refactor this.
 						{
@@ -1569,6 +1574,7 @@ int BattleUnit::damage(
 				if (dType == DT_IN)
 					wounds = power;
 
+				//Log(LOG_INFO) << ". moraleChange = " << (-wounds * 3);
 				moraleChange(-wounds * 3);
 			}
 		}
@@ -2501,6 +2507,7 @@ void BattleUnit::moraleChange(int change)
 {
 	if (isFearable() == true)
 	{
+		//Log(LOG_INFO) << "moraleChange() isFearable TRUE " << change;
 		_morale += change;
 
 		if (_morale > 100)

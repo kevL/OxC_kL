@@ -666,7 +666,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
 void BattlescapeGame::handleAI(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
-	if (unit->getTimeUnits() == 0) // kL, was <6
+	if (unit->getTimeUnits() == 0) // was <6
 		unit->dontReselect();
 
 	if (_AIActionCounter > 1
@@ -820,7 +820,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	//Log(LOG_INFO) << ". BA_WALK DONE";
 
 
-	if (   action.type == BA_SNAPSHOT
+	if (action.type == BA_SNAPSHOT
 		|| action.type == BA_AUTOSHOT
 		|| action.type == BA_AIMEDSHOT
 		|| action.type == BA_THROW
@@ -1349,8 +1349,9 @@ void BattlescapeGame::endTurnPhase() // private.
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getFaction() == _battleSave->getSide()
-			&& (*i)->isOut() == false)
+		if ((*i)->getOriginalFaction() == _battleSave->getSide()
+			&& (*i)->isOut_t(OUT_STAT) == false)
+//			&& (*i)->isOut() == false)
 		{
 			tile = (*i)->getTile();
 			if (tile != NULL
@@ -1374,9 +1375,9 @@ void BattlescapeGame::endTurnPhase() // private.
 				++i)
 		{
 			tile = _battleSave->getTiles()[i];
-			if ((tile->getSmoke() != 0
-					|| tile->getFire() != 0)
-				&& tile->getInventory()->empty() == false)
+			if (tile->getInventory()->empty() == false
+				&& (tile->getSmoke() != 0
+					|| tile->getFire() != 0))
 			{
 				tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
 			}
@@ -1392,7 +1393,7 @@ void BattlescapeGame::endTurnPhase() // private.
 		}
 	}
 	// best just to do another call to checkForTerrainExplosions()/ ExplosionBState in there ....
-	// -> SavedBattleGame::spreadFireSmoke()
+	// -> SavedBattleGame::tileVolatiles()
 	// Or here
 	// ... done it in NextTurnState.
 

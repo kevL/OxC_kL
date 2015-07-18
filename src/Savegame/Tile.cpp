@@ -894,8 +894,9 @@ bool Tile::ignite(int power)
 				{
 					addSmoke((burn + 15) / 16);
 
-					if (_pos.z == 0 // TODO: pass in tileBelow and check its terrainLevel for -24
-						|| _objects[O_FLOOR] != NULL) // drop fire through to tilesBelow ...
+					if (_pos.z == 0						// TODO: pass in tileBelow and check its terrainLevel for -24
+						|| _objects[O_FLOOR] != NULL	// drop fire through to tilesBelow ...
+						|| _objects[O_OBJECT] != NULL)
 					{
 						addFire(fuel + 1);
 					}
@@ -986,8 +987,10 @@ void Tile::addSmoke(int turns)
  */
 void Tile::decreaseSmoke()
 {
-//	_smoke -= (RNG::generate(1, _smoke) + 1) / 2;
-	_smoke -= (RNG::generate(1, _smoke) + 2) / 3;
+	if (_fire != 0) // don't let smoke deplete faster than fire depletes.
+		--_smoke;
+	else
+		_smoke -= (RNG::generate(1, _smoke) + 2) / 3;
 
 	if (_smoke < 1)
 	{
@@ -1100,7 +1103,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 	else
 		pFire = 0;
 	//Log(LOG_INFO) << ". pSmoke = " << pSmoke;
-	//Log(LOG_INFO) << ". pFire " << pFire;
+	//Log(LOG_INFO) << ". pFire = " << pFire;
 
 	float vulnr;
 
@@ -1111,13 +1114,17 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 		if (pSmoke != 0
 			&& _unit->isHealable() == true)
 		{
+			//Log(LOG_INFO) << ". . . healable TRUE";
 			vulnr = _unit->getArmor()->getDamageModifier(DT_SMOKE);
 			if (vulnr > 0.f) // try to knock _unit out.
+			{
 				_unit->damage(
 							Position(0,0,0),
 							static_cast<int>(Round(static_cast<float>(pSmoke) * vulnr)),
 							DT_SMOKE, // -> DT_STUN
 							true);
+				//Log(LOG_INFO) << ". . . . smoke Dam = " << d;
+			}
 		}
 
 		if (pFire != 0)
@@ -1211,7 +1218,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 								//Log(LOG_INFO) << ". . . dead";
 								unit->instaKill();
 								unit->killedBy(unit->getFaction()); // killed by self ....
-								Log(LOG_INFO) << "Tile::hitStuff() " << unit->getId() << " killedBy = " << (int)unit->getFaction();
+								//Log(LOG_INFO) << "Tile::hitStuff() " << unit->getId() << " killedBy = " << (int)unit->getFaction();
 
 								// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
 /*								if (Options::battleNotifyDeath == true // send Death notice.

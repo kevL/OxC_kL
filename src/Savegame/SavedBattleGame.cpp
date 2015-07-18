@@ -1292,7 +1292,7 @@ bool SavedBattleGame::endBattlePhase()
 		if (selectNextFactionUnit() == NULL) // else this will cycle through NEUTRAL units
 		{
 			//Log(LOG_INFO) << ". no neutral units to select ... -> PLAYER";
-			spreadFireSmoke(); // do Tile stuff
+			tileVolatiles(); // do Tile stuff
 			++_turn;
 			ret = true;
 
@@ -1324,7 +1324,7 @@ bool SavedBattleGame::endBattlePhase()
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
 		//Log(LOG_INFO) << ". end Neutral phase -> PLAYER";
-		spreadFireSmoke(); // do Tile stuff
+		tileVolatiles(); // do Tile stuff
 		++_turn;
 		ret = true;
 
@@ -2004,7 +2004,7 @@ bool SavedBattleGame::isNodeType(
  * Carries out new turn preparations such as fire and smoke spreading.
  * @note Also explodes any explosive tiles that get destroyed by fire.
  */
-void SavedBattleGame::spreadFireSmoke()
+void SavedBattleGame::tileVolatiles()
 {
 	std::vector<Tile*>
 		tilesFired,

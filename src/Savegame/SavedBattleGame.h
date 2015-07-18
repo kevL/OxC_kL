@@ -325,7 +325,7 @@ private:
 				const BattleUnit* const unit) const;
 
 		/// Carries out new turn preparations.
-		void spreadFireSmoke();
+		void tileVolatiles();
 
 		/// Revives unconscious units of @a faction.
 //		void reviveUnits(const UnitFaction faction);
