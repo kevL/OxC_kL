@@ -130,12 +130,12 @@ private:
 		/// Gets the currently selected item.
 		BattleItem* getSelectedItem() const;
 		/// Sets the currently selected item.
-		void setSelectedItem(BattleItem* item);
+		void setSelectedItem(BattleItem* const item);
 
 		/// Gets the mouse over item.
 		BattleItem* getMouseOverItem() const;
 		/// Sets the mouse over item.
-		void setMouseOverItem(BattleItem* item);
+		void setMouseOverItem(BattleItem* const item);
 
 		/// Handles timers.
 		void think();

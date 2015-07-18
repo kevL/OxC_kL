@@ -363,7 +363,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 	unit->clearVisibleUnits();
 //	unit->clearVisibleTiles();
 
-	if (unit->isOut(true, true) == true)
+//	if (unit->isOut(true, true) == true)
+	if (unit->isOut_t() == true)
 		return false;
 
 //	if (unit->getFaction() == FACTION_PLAYER)
@@ -397,7 +398,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 		y2 = 0,
 		unitSize,
 		block;
-	size_t trajLength;
+	size_t trjLength;
 
 	bool diag;
 	if (dir % 2)
@@ -408,13 +409,13 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 	else
 		diag = false;
 
-	std::vector<Position> _trajectory;
+	std::vector<Position> trj;
 
 	Position
 		posUnit = unit->getPosition(),
 		posTest,
 		pos,
-		posTraj;
+		posTrj;
 
 	Tile
 		* tile,
@@ -550,7 +551,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 										size_y != unitSize;
 										++size_y)
 								{
-									_trajectory.clear();
+									trj.clear();
 
 									pos = posUnit + Position(
 															size_x,
@@ -560,27 +561,27 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 														pos,
 														posTest,
 														true,
-														&_trajectory,
+														&trj,
 														unit,
 														false);
 
-									trajLength = _trajectory.size();
+									trjLength = trj.size();
 
 //kL								if (block > 127) // last tile is blocked thus must be cropped
 									if (block > 0)	// kL: -1 - do NOT crop trajectory (ie. hit content-object)
 													//		0 - expose Tile ( should never return this, unless out-of-bounds )
 													//		1 - crop the trajectory ( hit regular wall )
-										--trajLength;
+										--trjLength;
 
 									for (size_t
 											i = 0;
-											i != trajLength;
+											i != trjLength;
 											++i)
 									{
-										posTraj = _trajectory.at(i);
+										posTrj = trj.at(i);
 
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
-										tile = _battleSave->getTile(posTraj);
+										tile = _battleSave->getTile(posTrj);
 										tile->setTileVisible();
 										tile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
@@ -596,9 +597,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 											#1 - northwall
 											#2 - floor + content (reveals both walls also) */
 										tileEdge = _battleSave->getTile(Position(
-																			posTraj.x + 1,
-																			posTraj.y,
-																			posTraj.z));
+																			posTrj.x + 1,
+																			posTrj.y,
+																			posTrj.z));
 										if (tileEdge != NULL) // show Tile EAST
 //kL										tileEdge->setDiscovered(true, 0);
 										{
@@ -630,9 +631,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 										}
 
 										tileEdge = _battleSave->getTile(Position(
-																			posTraj.x,
-																			posTraj.y + 1,
-																			posTraj.z));
+																			posTrj.x,
+																			posTrj.y + 1,
+																			posTrj.z));
 										if (tileEdge != NULL) // show Tile SOUTH
 //kL										tileEdge->setDiscovered(true, 1);
 										{
@@ -664,9 +665,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 										}
 
 										tileEdge = _battleSave->getTile(Position(
-																			posTraj.x - 1,
-																			posTraj.y,
-																			posTraj.z));
+																			posTrj.x - 1,
+																			posTrj.y,
+																			posTrj.z));
 										if (tileEdge != NULL) // show Tile WEST
 										{
 											if (tile->getMapData(O_WESTWALL) == NULL
@@ -685,9 +686,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 										}
 
 										tileEdge = _battleSave->getTile(Position(
-																			posTraj.x,
-																			posTraj.y - 1,
-																			posTraj.z));
+																			posTrj.x,
+																			posTrj.y - 1,
+																			posTrj.z));
 										if (tileEdge != NULL) // show Tile NORTH
 										{
 											if (tile->getMapData(O_NORTHWALL) == NULL
@@ -2321,7 +2322,7 @@ BattleUnit* TileEngine::hit(
 				int extraPower = 0;
 				if (attacker != NULL) // bonus to damage per Accuracy (TODO: use ranks also for xCom or aLien)
 				{
-					if (   dType == DT_AP
+					if (dType == DT_AP
 						|| dType == DT_LASER
 						|| dType == DT_PLASMA
 						|| dType == DT_ACID)
@@ -2390,7 +2391,7 @@ BattleUnit* TileEngine::hit(
 							|| targetUnit->getStun() >= targetUnit->getHealth()))
 					{
 						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
-						if (   dType != DT_STUN	// don't explode if stunned. Maybe... see above.
+						if (dType != DT_STUN	// don't explode if stunned. Maybe... see above.
 							&& dType != DT_SMOKE
 							&& dType != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
 						{
@@ -2429,12 +2430,11 @@ BattleUnit* TileEngine::hit(
 			}
 		}
 
-		applyGravity(tile);
 
+		applyGravity(tile);
 		calculateSunShading();		// roofs could have been destroyed
 		calculateTerrainLighting();	// fires could have been started
 //		calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
-
 		calculateFOV(
 				targetPos_tile,
 				true);
@@ -3237,7 +3237,6 @@ void TileEngine::explode(
 	calculateSunShading();		// roofs could have been destroyed
 	calculateTerrainLighting();	// fires could have been started
 //	calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
-
 	recalculateFOV(true);
 	//Log(LOG_INFO) << "TileEngine::explode() EXIT";
 }

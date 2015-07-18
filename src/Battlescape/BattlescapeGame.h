@@ -158,6 +158,7 @@ private:
 		_AISecondMove,
 //		_endTurnProcessed,
 		_endTurnRequested,
+		_firstInit,
 		_playedAggroSound,
 		_playerPanicHandled;
 	int _AIActionCounter;

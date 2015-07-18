@@ -80,7 +80,8 @@ InventoryState::InventoryState(
 		BattlescapeState* parent)
 	:
 		_tuMode(tuMode),
-		_parent(parent)
+		_parent(parent),
+		_flarePower(0)
 {
 	_battleSave = _game->getSavedGame()->getSavedBattle();
 
@@ -368,11 +369,29 @@ InventoryState::~InventoryState()
 	// kL_begin:
 	if (_parent != NULL)
 	{
-		TileEngine* const tileEngine = _battleSave->getTileEngine();
+		Tile* const tile = _battleSave->getSelectedUnit()->getTile();
 
-		tileEngine->applyGravity(_battleSave->getSelectedUnit()->getTile());
-		tileEngine->calculateTerrainLighting();
-		tileEngine->recalculateFOV(true); // <- done in BattlescapeGame::init() -> but without 'spotSound'
+		int flarePower = 0;
+		for (std::vector<BattleItem*>::const_iterator
+				i = tile->getInventory()->begin();
+				i != tile->getInventory()->end();
+				++i)
+		{
+			if ((*i)->getRules()->getBattleType() == BT_FLARE
+				&& (*i)->getRules()->getPower() > flarePower)
+			{
+				flarePower = (*i)->getRules()->getPower();
+			}
+		}
+
+		TileEngine* const tileEngine = _battleSave->getTileEngine();
+		tileEngine->applyGravity(tile);
+
+		if (flarePower > _flarePower)
+		{
+			tileEngine->calculateTerrainLighting();
+			tileEngine->recalculateFOV(true); // <- done in BattlescapeGame::init() -> but without 'spotSound'
+		}
 	} // kL_end.
 }
 //	if (_battleSave->getTileEngine())
@@ -454,6 +473,20 @@ void InventoryState::init()
 	_txtName->setText(unit->getName(_game->getLanguage()));
 
 	_inv->setSelectedUnit(unit);
+
+	_flarePower = 0;
+	for (std::vector<BattleItem*>::const_iterator
+			i = unit->getTile()->getInventory()->begin();
+			i != unit->getTile()->getInventory()->end();
+			++i)
+	{
+		if ((*i)->getRules()->getBattleType() == BT_FLARE
+			&& (*i)->getRules()->getPower() > _flarePower)
+		{
+			_flarePower = (*i)->getRules()->getPower();
+		}
+	}
+
 
 	const Soldier* const soldier = unit->getGeoscapeSoldier();
 	if (soldier != NULL)

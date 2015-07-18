@@ -49,8 +49,10 @@ class InventoryState
 {
 
 private:
-	const bool _tuMode;
 //	std::string _currentTooltip;
+	const bool _tuMode;
+
+	int _flarePower;
 
 	BattlescapeButton
 		* _btnGround,

@@ -555,7 +555,7 @@ BattleItem* Inventory::getSelectedItem() const
  * Changes the item currently grabbed by the player.
  * @param item - pointer to selected BattleItem or NULL if none
  */
-void Inventory::setSelectedItem(BattleItem* item)
+void Inventory::setSelectedItem(BattleItem* const item)
 {
 	if (item != NULL
 		&& item->getRules()->isFixed() == false)
@@ -592,7 +592,7 @@ BattleItem* Inventory::getMouseOverItem() const
  * Changes the item currently under mouse cursor.
  * @param item - pointer to a BattleItem or NULL if none
  */
-void Inventory::setMouseOverItem(BattleItem* item)
+void Inventory::setMouseOverItem(BattleItem* const item)
 {
 	if (item != NULL
 		&& item->getRules()->isFixed() == false)
@@ -1116,26 +1116,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					}
 				}
 				else
-				{
 					_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
-
-/*kL: now done in InventoryState::dTor()
-					// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
-					SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
-					TileEngine* tileEngine = battleGame->getTileEngine();
-
-					tileEngine->applyGravity(battleGame->getSelectedUnit()->getTile());
-					tileEngine->calculateTerrainLighting(); // dropping / picking up flares
-					tileEngine->recalculateFOV(); */
-/*
-					// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
-					// could figure it out via what's on Ground but meh.
-					if (item->getRules()->getBattleType() == BT_FLARE)
-					{
-						getTileEngine()->calculateTerrainLighting();
-						getTileEngine()->calculateFOV(position);
-					} */
-				}
 			}
 		}
 		else
@@ -1151,8 +1132,7 @@ void Inventory::mouseClick(Action* action, State* state)
 	InteractiveSurface::mouseClick(action, state);
 
 /*	int
-		x,
-		y;
+		x,y;
 	SDL_GetMouseState(&x,&y);
 
 	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
@@ -1261,7 +1241,7 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	if (_selUnit != NULL) // kL_note: That should never happen.
 	{
-		// first move all items out of the way - a big number in X direction
+		// first move all items out of the way -> a big number in X direction to right
 		for (std::vector<BattleItem*>::const_iterator
 				i = _selUnit->getTile()->getInventory()->begin();
 				i != _selUnit->getTile()->getInventory()->end();
@@ -1272,7 +1252,7 @@ void Inventory::arrangeGround(bool alterOffset)
 			(*i)->setSlotY(0);
 		}
 
-		// now for each item, find the most topleft position that is not occupied and will fit
+		// for each item find the most topleft position that is not occupied and will fit
 		for (std::vector<BattleItem*>::const_iterator
 				i = _selUnit->getTile()->getInventory()->begin();
 				i != _selUnit->getTile()->getInventory()->end();
@@ -1284,14 +1264,14 @@ void Inventory::arrangeGround(bool alterOffset)
 			fit = false;
 			while (fit == false)
 			{
-				fit = true; // assume we can put the item here, if one of the following checks fails, we can't.
+				fit = true; // assume the item can be put here, if one of the following checks fails it can't
 				for (int
 						xd = 0;
 						xd < (*i)->getRules()->getInventoryWidth()
 							&& fit;
 						++xd)
 				{
-					if ((x + xd) %slotsX < x %slotsX)
+					if ((x + xd) % slotsX < x % slotsX)
 						fit = false;
 					else
 					{

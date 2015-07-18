@@ -90,7 +90,8 @@ BattlescapeGame::BattlescapeGame(
 		_AIActionCounter(0),
 		_AISecondMove(false),
 		_playedAggroSound(false),
-		_endTurnRequested(false)
+		_endTurnRequested(false),
+		_firstInit(true)
 //		_endTurnProcessed(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
@@ -151,7 +152,11 @@ BattlescapeGame::~BattlescapeGame()
 void BattlescapeGame::init()
 {
 	//Log(LOG_INFO) << "bg: init()";
-	_battleSave->getTileEngine()->recalculateFOV();
+	if (_firstInit == true)
+	{
+		_firstInit = false;
+		_battleSave->getTileEngine()->recalculateFOV();
+	}
 
 /*	if (_battleSave->getSide() == FACTION_PLAYER
 		&& _battleSave->getTurn() > 1)
@@ -708,7 +713,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	_battleSave->getTileEngine()->calculateFOV(unit->getPosition());
 		// it might also help chryssalids realize they've zombified someone and need to move on;
 		// it should also hide units when they've killed the guy spotting them;
-		// it's also for good luck
+		// it's also for good luck and prosperity.
 
 	BattleAIState* ai = unit->getCurrentAIState();
 //	const BattleAIState* const ai = unit->getCurrentAIState();
