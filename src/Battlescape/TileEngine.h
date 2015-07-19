@@ -68,6 +68,7 @@ private:
 		_powerT; // test power that checks if _powerE actually makes it to the next tile.
 
 	SavedBattleGame* _battleSave;
+	Tile* _trueTile;
 
 	const std::vector<Uint16>* _voxelData;
 
@@ -289,16 +290,19 @@ private:
 				const bool onlyVisible = false,
 				const BattleUnit* const excludeAllBut = NULL) const;
 
-		/// Get direction to a target-point
+		/// Gets direction to a target-point.
 		int getDirectionTo(
 				const Position& origin,
 				const Position& target) const;
 
-		/// mark a region of the map as "dangerous" for a turn.
+		/// Marks a region of the map as "dangerous to aliens" for a turn.
 		void setDangerZone(
 				const Position& pos,
 				const int radius,
 				const BattleUnit* const unit);
+
+		/// Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
+		void setTrueTile(Tile* const tile);
 };
 
 }

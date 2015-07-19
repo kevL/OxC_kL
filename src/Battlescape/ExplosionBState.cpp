@@ -106,8 +106,6 @@ void ExplosionBState::init()
 			_areaOfEffect = false;
 		else
 		{
-			_power = _item->getRules()->getPower();
-
 			// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
 			_pistolWhip = _unit != NULL
 					   && _unit->getFaction() == FACTION_PLAYER
@@ -116,6 +114,8 @@ void ExplosionBState::init()
 
 			if (_pistolWhip == true)
 				_power = _item->getRules()->getMeleePower();
+			else
+				_power = _item->getRules()->getPower();
 
 			// since melee aliens don't use a conventional weapon type use their strength instead.
 			if (_unit != NULL

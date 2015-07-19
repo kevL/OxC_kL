@@ -611,10 +611,11 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << _prjImpact;
 		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
 
-		if (_prjImpact == VOXEL_OBJECT)
+		if (_prjImpact == VOXEL_OBJECT
+			&& _ammo->getRules()->getExplosionRadius() > 0)
 		{
 			const Tile* const tile = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getFinalTarget());
-			if (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+			if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
 			{
 //				projectile->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
@@ -913,11 +914,22 @@ void ProjectileFlyBState::think()
 					}
 
 					Position explCenter = _parent->getMap()->getProjectile()->getPosition(offset);
+
+					Tile* trueTile;
 					if (_prjVector.z != -1)
 					{
+						Position pos = Position(
+											explCenter.x / 16,
+											explCenter.y / 16,
+											explCenter.z / 24);
+						trueTile = _parent->getBattlescapeState()->getSavedBattleGame()->getTile(pos);
+						_parent->getTileEngine()->setTrueTile(trueTile);
+
 						explCenter.x -= _prjVector.x * 16; // note there is no safety on these.
 						explCenter.y -= _prjVector.y * 16;
 					}
+					else
+						trueTile = NULL;
 
 					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explCenter " << _parent->getMap()->getProjectile()->getPosition(offset);
 					//Log(LOG_INFO) << "projFlyB think() offset " << offset;

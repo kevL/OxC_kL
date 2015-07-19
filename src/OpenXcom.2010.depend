@@ -5425,7 +5425,7 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1437195926 f:\git\openxcom\src\battlescape\tileengine.h
+1437267666 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5498,7 +5498,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1437254540 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1437255268 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5542,7 +5542,7 @@
 	"BattleAIState.h"
 	"Position.h"
 
-1434520164 f:\git\openxcom\src\battlescape\explosionbstate.h
+1437267737 f:\git\openxcom\src\battlescape\explosionbstate.h
 	"BattleState.h"
 	"Position.h"
 
@@ -5925,7 +5925,7 @@
 1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1436377070 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1437267816 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6221,7 +6221,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1437157703 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1437267711 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6293,7 +6293,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1437243719 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1437267881 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -8645,7 +8645,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1437254518 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1437255053 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8746,7 +8746,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1437170916 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1437255268 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8832,7 +8832,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1437253433 source:f:\git\openxcom\src\savegame\tile.cpp
+1437255107 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"

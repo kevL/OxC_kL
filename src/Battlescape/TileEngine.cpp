@@ -89,7 +89,8 @@ TileEngine::TileEngine(
 		_unitLighting(true),
 		_powerE(-1),
 		_powerT(-1),
-		_spotSound(true)
+		_spotSound(true),
+		_trueTile(NULL)
 //		_missileDirection(-1)
 {}
 
@@ -3224,6 +3225,12 @@ void TileEngine::explode(
 			if (detonate(*i) == true)
 				_battleSave->addDestroyedObjective();
 
+			if (*i == _trueTile		// '_trueTile' can only be a diagonal bigwall
+				&& (*i)->getMapData(O_OBJECT) == NULL)
+			{
+				_trueTile = NULL;	// the explosion punched through the diagonal bigwall
+			}						// so bypass the direct hit below_
+
 			applyGravity(*i);
 
 			Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0,0,1));
@@ -3231,6 +3238,15 @@ void TileEngine::explode(
 				applyGravity(tileAbove);
 		}
 		//Log(LOG_INFO) << ". explode Tiles DONE";
+	}
+
+	if (_trueTile != NULL)	// special case for when a diagonal bigwall is directly targetted.
+	{						// The explosion is moved out a tile so give a full-power hit to the true target-tile.
+		_trueTile->setExplosive(
+							power,
+							0);
+		detonate(_trueTile);	// I doubt this needs any *further* consideration ...
+		_trueTile = NULL;		// although it would be nice to have the explosion 'kick in' a bit.
 	}
 
 
@@ -4477,7 +4493,6 @@ bool TileEngine::detonate(Tile* const tile)
 				diagWallDestroyed = true;
 			}
 
-//			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
 			if (_battleSave->getTacticalType() == TCT_BASEDEFENSE
 				&& tiles[i]->getMapData(part)->isBaseModule() == true)
 			{
@@ -4496,11 +4511,11 @@ bool TileEngine::detonate(Tile* const tile)
 				objectiveDestroyed = true;
 
 			part = partTemp;
-			if (tiles[i]->getMapData(part) != NULL) // update values
-			{
+//			if (tiles[i]->getMapData(part) != NULL) // update values
+//			{
 //				burn = tiles[i]->getFlammability(part);
 //				fuel = tiles[i]->getFuel(part) + 1;
-			}
+//			}
 		}
 
 
@@ -6520,7 +6535,7 @@ int TileEngine::getDirectionTo(
 }
 
 /**
- * Marks a region of the map as "dangerous" for a turn.
+ * Marks a region of the map as "dangerous to aliens" for a turn.
  * @param pos		- reference the epicenter of the explosion in tilespace
  * @param radius	- how far to spread out
  * @param unit		- pointer to the BattleUnit that is triggering this action
@@ -6590,6 +6605,14 @@ void TileEngine::setDangerZone(
 			}
 		}
 	}
+}
+
+/**
+ * Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
+ */
+void TileEngine::setTrueTile(Tile* const tile)
+{
+	_trueTile = tile;
 }
 
 }
