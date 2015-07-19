@@ -50,7 +50,7 @@ units:
     deathSound: 211
     aggroSound: 210
     energyRecovery: 80
-#    livingWeapon: true
+    canOpenDoor: false
 armors:
   - type: DOGE_ARMOR
     spriteSheet: DOGE.PCK

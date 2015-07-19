@@ -46,7 +46,8 @@ RuleUnit::RuleUnit(const std::string& type)
 		_livingWeapon(false),
 		_female(false),
 		_mechanical(false), // kL: these two should perhaps go to Armor class.
-		_psiImmune(false)
+		_psiImmune(false),
+		_canOpenDoor(true)
 {}
 
 /**
@@ -88,6 +89,7 @@ void RuleUnit::load(
 	_female			= node["female"]			.as<bool>(_female);
 	_mechanical		= node["mechanical"]		.as<bool>(_mechanical);
 	_psiImmune		= node["psiImmune"]			.as<bool>(_psiImmune);
+	_canOpenDoor	= node["canOpenDoor"]		.as<bool>(_canOpenDoor);
 	_spawnUnit		= node["spawnUnit"]			.as<std::string>(_spawnUnit);
 	_specab			= static_cast<SpecialAbility>(node["specab"].as<int>(_specab));
 
@@ -333,6 +335,16 @@ const bool RuleUnit::isMechanical() const
 const bool RuleUnit::isPsiImmune() const
 {
 	return _psiImmune;
+}
+
+/**
+ * Gets if this unit can open a door w/ RMB click.
+ * @note Units can always open doors by moving through them if space permits.
+ * @return, true if this unit can open doors
+ */
+const bool RuleUnit::canOpenDoor() const
+{
+	return _canOpenDoor;
 }
 
 }

@@ -221,6 +221,7 @@ class RuleUnit
 
 private:
 	bool
+		_canOpenDoor,
 		_female,
 		_livingWeapon,
 		_mechanical,
@@ -319,6 +320,9 @@ private:
 		const bool isMechanical() const;
 		/// Gets if this RuleUnit is immune to psionic attacks.
 		const bool isPsiImmune() const;
+
+		/// Gets if this unit can open a door w/ RMB click.
+		const bool canOpenDoor() const;
 };
 
 }

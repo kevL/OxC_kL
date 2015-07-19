@@ -4625,10 +4625,12 @@ int TileEngine::unitOpensDoor(
 
 	if (rtClick == true
 		&& (dir % 2 == 1 // RMB works only for cardinal directions
-			|| unit->getArmor()->getSize() != 1
-			|| (unit->getUnitRules() != NULL
-				&& (unit->getUnitRules()->isMechanical() == true
-					|| unit->getType() == "STR_DOGE"))))
+			|| unit->getGeoscapeSoldier() == NULL
+			|| unit->getUnitRules()->canOpenDoor() == false))
+//			|| unit->getArmor()->getSize() != 1
+//			|| (unit->getUnitRules() != NULL
+//				&& (unit->getUnitRules()->isMechanical() == true
+//					|| unit->getType() == "STR_DOGE"))))
 	{
 		return -1;
 	}
