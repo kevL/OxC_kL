@@ -4607,10 +4607,10 @@ Tile* TileEngine::checkForTerrainExplosions()
  * @param unit		- pointer to a BattleUnit trying the door
  * @param rtClick	- true if the player right-clicked (default false)
  * @param dir		- direction to check for a door (default -1)
- * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
- *			 0 normal door opened, make a squeaky sound and you can walk through;
- *			 1 ufo door is starting to open, make a whoosh sound, don't walk through;
- *			 3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
+ * @return, -1 there is no door or you're a tank and can't do sweet shit except blast the fuck out of it
+ *			 0 normal door opened so make a squeaky sound and walk through
+ *			 1 ufo door is starting to open so make a whoosh sound but don't walk through yet
+ *			 3 ufo door is still opening so don't walk through it yet (have patience futuristic technology)
  *			 4 not enough TUs
  *			 5 would contravene fire reserve
  */
@@ -4620,28 +4620,31 @@ int TileEngine::unitOpensDoor(
 		int dir)
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
-	int door = -1;
-
 	if (dir == -1)
 		dir = unit->getDirection();
 
 	if (rtClick == true
-		&& ((unit->getUnitRules() != NULL
-				&& unit->getUnitRules()->isMechanical() == true)
+		&& (dir % 2 == 1 // RMB works only for cardinal directions
 			|| unit->getArmor()->getSize() != 1
-			|| dir % 2 == 1)) // RMB works only for cardinal directions
+			|| (unit->getUnitRules() != NULL
+				&& (unit->getUnitRules()->isMechanical() == true
+					|| unit->getType() == "STR_DOGE"))))
 	{
-		return door;
+		return -1;
 	}
+
 
 	Tile* tile;
 	Position posUnit;
 	int
+		door = -1,
 		tuCost = 0,
-		z = 0;
+		z;
 
 	if (unit->getTile()->getTerrainLevel() < -12)
-		z = 1; // if standing on stairs, check the tile above instead
+		z = 1; // if standing on stairs check the tile above instead
+	else
+		z = 0;
 
 	const int unitSize = unit->getArmor()->getSize();
 	for (int
@@ -5912,9 +5915,14 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			if (action->type == BA_PSIPANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PSIPANIC";
-				const int moraleLoss = 100
-								 - statsVictim->bravery * 3 / 2
-								 + statsActor->psiStrength * 2 / 3;
+				int moraleLoss = 100;
+				if (action->actor->getOriginalFaction() == FACTION_PLAYER)
+					moraleLoss += statsActor->psiStrength * 2 / 3;
+				else
+					moraleLoss += statsActor->psiStrength / 2; // reduce aLiens' panic-effect
+
+				moraleLoss -= statsVictim->bravery * 3 / 2;
+
 				//Log(LOG_INFO) << ". . . moraleLoss reduction = " << moraleLoss;
 				if (moraleLoss > 0)
 					victim->moraleChange(-moraleLoss);
@@ -6008,7 +6016,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
-		else
+		else // psi Fail.
 		{
 			std::string info;
 			if (action->type == BA_PSIPANIC)
