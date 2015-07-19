@@ -3216,38 +3216,35 @@ void TileEngine::explode(
 
 	if (dType == DT_HE) // detonate tiles affected with HE
 	{
+		if (_trueTile != NULL)	// special case for when a diagonal bigwall is directly targetted.
+		{						// The explosion is moved out a tile so give a full-power hit to the true target-tile.
+			_trueTile->setExplosive(
+								power,
+								0);
+			detonate(_trueTile);	// I doubt this needs any *further* consideration ...
+		}							// although it would be nice to have the explosion 'kick in' a bit.
+
 		//Log(LOG_INFO) << ". explode Tiles, size = " << tilesAffected.size();
 		for (std::set<Tile*>::const_iterator
 				i = tilesAffected.begin();
 				i != tilesAffected.end();
 				++i)
 		{
-			if (detonate(*i) == true)
-				_battleSave->addDestroyedObjective();
-
-			if (*i == _trueTile		// '_trueTile' can only be a diagonal bigwall
-				&& (*i)->getMapData(O_OBJECT) == NULL)
+			if (*i != _trueTile)
 			{
-				_trueTile = NULL;	// the explosion punched through the diagonal bigwall
-			}						// so bypass the direct hit below_
+				if (detonate(*i) == true)
+					_battleSave->addDestroyedObjective();
 
-			applyGravity(*i);
+				applyGravity(*i);
 
-			Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0,0,1));
-			if (tileAbove != NULL)
-				applyGravity(tileAbove);
+				Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0,0,1));
+				if (tileAbove != NULL)
+					applyGravity(tileAbove);
+			}
 		}
 		//Log(LOG_INFO) << ". explode Tiles DONE";
 	}
-
-	if (_trueTile != NULL)	// special case for when a diagonal bigwall is directly targetted.
-	{						// The explosion is moved out a tile so give a full-power hit to the true target-tile.
-		_trueTile->setExplosive(
-							power,
-							0);
-		detonate(_trueTile);	// I doubt this needs any *further* consideration ...
-		_trueTile = NULL;		// although it would be nice to have the explosion 'kick in' a bit.
-	}
+	_trueTile = NULL;
 
 
 	calculateSunShading();		// roofs could have been destroyed
