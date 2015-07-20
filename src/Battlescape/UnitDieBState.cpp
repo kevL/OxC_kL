@@ -396,7 +396,7 @@ void UnitDieBState::convertToCorpse() // private.
 				if (_unit->getUnitRules() != NULL
 					&& _unit->getUnitRules()->isMechanical() == true)
 				{
-					if (RNG::percent(16) == true)
+					if (RNG::percent(6) == true)
 					{
 						explTile = tile;
 						explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));

@@ -2099,7 +2099,7 @@ void SavedBattleGame::tileVolatiles()
 
 		var = (*i)->getSmoke() / 2;
 
-		if (var != 0)
+		if (var > 1)
 		{
 			tile = getTile((*i)->getPosition() + Position(0,0,1));
 			if (tile != NULL
@@ -2113,7 +2113,7 @@ void SavedBattleGame::tileVolatiles()
 					dir != 8;
 					dir += 2)
 			{
-				if (RNG::percent(37) == true)
+				if (RNG::percent(var * 8) == true)
 				{
 					Position spreadPos;
 					Pathfinding::directionToVector(

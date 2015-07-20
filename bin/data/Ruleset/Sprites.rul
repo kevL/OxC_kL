@@ -204,7 +204,7 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      8: Resources/Sprites/ufograph/smoke/smoke_cloud.png
+      8: Resources/Sprites/ufograph/smoke/smoke_cloud_kL.png
   - type: RANK_ROOKIE
     width: 9
     height: 7

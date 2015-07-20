@@ -4625,8 +4625,8 @@ int TileEngine::unitOpensDoor(
 
 	if (rtClick == true
 		&& (dir % 2 == 1 // RMB works only for cardinal directions
-			|| unit->getGeoscapeSoldier() == NULL
-			|| unit->getUnitRules()->canOpenDoor() == false))
+			|| (unit->getUnitRules() != NULL
+				&& unit->getUnitRules()->canOpenDoor() == false)))
 //			|| unit->getArmor()->getSize() != 1
 //			|| (unit->getUnitRules() != NULL
 //				&& (unit->getUnitRules()->isMechanical() == true

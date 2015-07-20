@@ -1343,11 +1343,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										{
 											if (tileWest->getFire() == 0)
 											{
-//												if (_battleSave->getDepth() > 0)
-//													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-//												else
 												frame = ResourcePack::SMOKE_OFFSET;
-
 												frame += (tileWest->getSmoke() + 1) / 2;
 											}
 											else
@@ -1421,11 +1417,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													{
 														if (tileSouthWest->getFire() == 0)
 														{
-//															if (_battleSave->getDepth() > 0)
-//																frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-//															else
 															frame = ResourcePack::SMOKE_OFFSET;
-
 															frame += (tileSouthWest->getSmoke() + 1) / 2;
 														}
 														else
@@ -3281,12 +3273,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 					{
 						if (tile->getFire() == 0)
 						{
-//							if (_battleSave->getDepth() > 0)
-//								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-//							else
 							frame = ResourcePack::SMOKE_OFFSET;
-
 							frame += (tile->getSmoke() + 1) / 2;
+
 							shade = tileShade;
 						}
 						else

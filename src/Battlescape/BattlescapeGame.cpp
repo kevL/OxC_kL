@@ -1140,6 +1140,7 @@ bool BattlescapeGame::playableUnitSelected()
 
 /**
  * Toggles the kneel/stand status of a unit.
+ * TODO: allow Civilian units to kneel when controlled by medikit or by AI.
  * @param bu - pointer to a BattleUnit
  * @return, true if the action succeeded
  */
@@ -1218,10 +1219,11 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
 			return true;
 		}
 	}
-	else // MOB has Unit-rules
+	else if (bu->getFaction() == FACTION_PLAYER
+		&& bu->getOriginalFaction() == FACTION_HOSTILE)
+//		&& bu->getUnitRules()->isMechanical() == false) // MOB has Unit-rules
 	{
-		if (bu->getUnitRules()->isMechanical() == false)
-			_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN");
+		_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN");
 	}
 
 	return false;
@@ -2520,8 +2522,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 					{
 						if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == true)
 						{
-//							getResourcePack()->getSoundByDepth(
-//															_battleSave->getDepth(),
 							getResourcePack()->getSound(
 													"BATTLE.CAT",
 													_currentAction.weapon->getRules()->getHitSound())
@@ -2558,10 +2558,10 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			//Log(LOG_INFO) << ". . . . BA_PSIPANIC or BA_PSICONTROL or BA_PSICONFUSE or BA_PSICOURAGE";
 			if (targetUnit != NULL
 				&& targetUnit->getUnitVisible() == true
-				&& ((_currentAction.type == BA_PSICOURAGE
-						&& targetUnit->getFaction() != FACTION_HOSTILE)
-					|| (_currentAction.type != BA_PSICOURAGE
-						&& targetUnit->getFaction() != FACTION_PLAYER)))
+				&& ((_currentAction.type != BA_PSICOURAGE
+						&& targetUnit->getFaction() != FACTION_PLAYER)
+					|| (_currentAction.type == BA_PSICOURAGE
+						&& targetUnit->getFaction() != FACTION_HOSTILE)))
 			{
 				bool aLienPsi = (_currentAction.weapon == NULL);
 				if (aLienPsi == true)
@@ -2687,7 +2687,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				getMap()->getWaypoints()->clear();
 			}
 
-//			getMap()->setCursorType(CT_NONE);
+//			getMap()->setCursorType(CT_NONE); // remove these because box-cursor doesn't refresh properly.
 //			_parentState->getGame()->getCursor()->setVisible(false);
 
 			_currentAction.target = targetPos;
@@ -2903,8 +2903,8 @@ void BattlescapeGame::launchAction()
 	getMap()->getWaypoints()->clear();
 	_currentAction.target = _currentAction.waypoints.front();
 
-	getMap()->setCursorType(CT_NONE);
-	_parentState->getGame()->getCursor()->setVisible(false);
+//	getMap()->setCursorType(CT_NONE); // remove these because box-cursor doesn't refresh properly.
+//	_parentState->getGame()->getCursor()->setVisible(false);
 
 //	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
@@ -2921,12 +2921,11 @@ void BattlescapeGame::launchAction()
  */
 void BattlescapeGame::psiButtonAction()
 {
-	_currentAction.weapon = 0;
+	_currentAction.weapon = NULL;
 	_currentAction.targeting = true;
 	_currentAction.type = BA_PSIPANIC;
-	_currentAction.TU = 25;	// kL_note: this is just a default i guess;
-							// otherwise it should be getActionTUs().
-							// It gets overridden later ...
+//	_currentAction.TU = 25;	// kL_note: this is just a default i guess; otherwise it
+							// should be getActionTUs(). It gets overridden later ...
 	setupCursor();
 }
 

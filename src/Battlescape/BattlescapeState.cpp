@@ -1849,7 +1849,7 @@ void BattlescapeState::btnShowMapClick(Action*)
 
 /**
  * Toggles the current unit's kneel/standup status.
- * @param action, Pointer to an action.
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnKneelClick(Action*)
 {
