@@ -365,8 +365,6 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 	}
 
-	_tileSwitchDone = false;
-
 	if (visForUnits() == true)
 	{
 		//if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
@@ -383,6 +381,8 @@ bool UnitWalkBState::doStatusStand() // private.
 		postPathProcedures();
 		return false;
 	}
+
+	_tileSwitchDone = false;
 
 	//Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
 
@@ -863,7 +863,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 bool UnitWalkBState::doStatusStand_end() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
-	_tileSwitchDone = false;
+//	_tileSwitchDone = false;
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 		_unit->setUnitVisible(false);
@@ -1008,7 +1008,7 @@ void UnitWalkBState::doStatusTurn() // private.
 void UnitWalkBState::postPathProcedures() // private.
 {
 	//Log(LOG_INFO) << "UnitWalkBState::postPathProcedures(), unit = " << _unit->getId();
-	_tileSwitchDone = false;
+//	_tileSwitchDone = false;
 	_action.TU = 0;
 
 	if (_unit->getFaction() != FACTION_PLAYER)
