@@ -5106,6 +5106,8 @@ extraStrings:
       STR_ENCOURAGE_UNIT: "courage"
       STR_PSI_CONFUSE_SUCCESS: "< confuse Attack >{SMALLLINE}{NEWLINE}> {0} <"
       STR_PSI_COURAGE_SUCCESS: "< encourage >{SMALLLINE}{NEWLINE}> {0} <"
+      STR_WEAPON: "weapon"
+      STR_VARIABLE: "str"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

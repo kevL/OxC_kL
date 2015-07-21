@@ -44,7 +44,8 @@ namespace OpenXcom
 
 /**
  * Represents a specific race "family" or a "main race" if you wish.
- * Here is defined which ranks it contains and also which accompanying terror units.
+ * @note Here is defined which ranks it contains and also which accompanying
+ * terror units.
  */
 class AlienRace
 {
@@ -68,7 +69,7 @@ private:
 		/// Gets the alien race's id.
 		std::string getId() const;
 		/// Gets a certain member of this alien race family.
-		std::string getMember(int id) const;
+		std::string getMember(int rankId) const;
 
 		/// Gets if the race can retaliate.
 		bool canRetaliate() const;

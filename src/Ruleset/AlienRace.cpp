@@ -62,12 +62,12 @@ std::string AlienRace::getId() const
 
 /**
  * Gets a certain member of this AlienRace family.
- * @param id - the member's id
+ * @param rankId - the member's rank
  * @return, the member's name
  */
-std::string AlienRace::getMember(int id) const
+std::string AlienRace::getMember(int rankId) const
 {
-	return _members[id];
+	return _members[rankId];
 }
 
 /**

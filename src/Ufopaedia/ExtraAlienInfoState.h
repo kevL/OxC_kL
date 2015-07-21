@@ -42,15 +42,13 @@ class ExtraAlienInfoState
 
 private:
 	TextButton* _btnExit;
-	TextList* _lstInfo;
+	TextList
+		* _lstInfo,
+		* _lstWeapon;
 	Window* _window;
 
 	/// Closes state.
 	void btnExit(Action* action);
-
-	/// Gets the id of a Soldier or Terrorist from a race-string.
-	std::string getBasicUnit(std::string alienId) const;
-
 
 	public:
 		/// cTor.

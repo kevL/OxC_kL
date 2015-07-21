@@ -48,23 +48,25 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 
 	_window		= new Window(this, 224, 168, 48, 16, POPUP_VERTICAL);
 	_btnExit	= new TextButton(62, 16, 129, 159);
-	_lstInfo	= new TextList(150, 129, 64, 30);
+	_lstInfo	= new TextList(150, 73, 84, 28);
+	_lstWeapon	= new TextList(150, 9, 84, 110);
 
 	setPalette("PAL_UFOPAEDIA");
 
 	add(_window);
 	add(_btnExit);
 	add(_lstInfo);
+	add(_lstWeapon);
 
 	centerAllSurfaces();
 
 
 	const ResourcePack* const rp = _game->getResourcePack();
 	_window->setBackground(rp->getSurface(rp->getRandomBackground()));
-	_window->setColor(Palette::blockOffset(10)+1); // brown
+	_window->setColor(Palette::blockOffset(10)+1); // lt.brown
 
 	_btnExit->setText(tr("STR_OK"));
-	_btnExit->setColor(Palette::blockOffset(15)+4); // bluish
+	_btnExit->setColor(Palette::blockOffset(15)+4); // cyan
 	_btnExit->onMouseClick((ActionHandler)& ExtraAlienInfoState::btnExit);
 	_btnExit->onKeyboardPress(
 					(ActionHandler)& ExtraAlienInfoState::btnExit,
@@ -77,8 +79,12 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 					SDLK_KP_ENTER);
 
 	_lstInfo->setColumns(2, 125, 25);
-	_lstInfo->setColor(Palette::blockOffset(14)+15); // bluish purple
+	_lstInfo->setColor(Palette::blockOffset(14)+15); // lavender
 	_lstInfo->setDot();
+
+	_lstWeapon->setColumns(3, 100, 25, 25);
+	_lstWeapon->setColor(Palette::blockOffset(14)+15); // lavender
+	_lstWeapon->setDot();
 
 
 	std::string alienId;
@@ -87,9 +93,17 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 	else
 		alienId = defs->id;
 
-	alienId = getBasicUnit(alienId);
+	const RuleUnit* unitRule;
+	if (_game->getRuleset()->getUnit(alienId + "_SOLDIER") != NULL)
+		unitRule = _game->getRuleset()->getUnit(alienId + "_SOLDIER");
+	else if (_game->getRuleset()->getUnit(alienId + "_TERRORIST") != NULL)
+		unitRule = _game->getRuleset()->getUnit(alienId + "_TERRORIST");
+	else
+	{
+		unitRule = NULL;
+		Log(LOG_INFO) << "ERROR: rules not found for unit - " << alienId;
+	}
 
-	const RuleUnit* const unitRule = _game->getRuleset()->getUnit(alienId);
 	if (unitRule != NULL)
 	{
 		const std::string stArmor = unitRule->getArmor();
@@ -112,13 +126,43 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 								tr(st).c_str(),
 								Text::formatPercentage(vulnr).c_str());
 				_lstInfo->setCellColor(
-								row++,
-								1,
-								Palette::blockOffset(15)+4); // bluish
+									row++,
+									1,
+									Palette::blockOffset(15)+4); // cyan
+			}
+		}
+
+		if (unitRule->isLivingWeapon() == true)
+		{
+			std::string terrorWeapon = unitRule->getRace().substr(4) + "_WEAPON";
+			const RuleItem* const itRule = _game->getRuleset()->getItem(terrorWeapon);
+			if (itRule != NULL)
+			{
+				const ItemDamageType dType = itRule->getDamageType();
+				const std::string stType = ArticleState::getDamageTypeText(dType);
+				if (stType != "STR_UNKNOWN")
+				{
+					std::wstring wstPower;
+					if (itRule->isStrengthApplied() == true)
+						wstPower = tr("STR_VARIABLE");
+					else
+						wstPower = Text::formatNumber(itRule->getPower());
+
+					_lstWeapon->addRow(
+									3,
+									tr("STR_WEAPON").c_str(),
+									wstPower.c_str(),
+									tr(stType).c_str());
+					_lstWeapon->setCellColor(
+										0,1,
+										Palette::blockOffset(15)+4); // cyan
+					_lstWeapon->setCellColor(
+										0,2,
+										Palette::blockOffset(15)+4); // cyan
+				}
 			}
 		}
 	}
-	else Log(LOG_INFO) << "ERROR: rules not found for unit - " << alienId;
 }
 
 /**
@@ -134,28 +178,6 @@ ExtraAlienInfoState::~ExtraAlienInfoState()
 void ExtraAlienInfoState::btnExit(Action*) // private.
 {
 	_game->popState();
-}
-
-/**
- * Gets the id of a Soldier or Terrorist from a race-string.
- * @note Terrorists are sometimes considered members of the race they belong to. *quirgk
- * @param alienId - the alien race
- * @return, basic unit id
- */
-std::string ExtraAlienInfoState::getBasicUnit(std::string alienId) const // private.
-{
-	if (   alienId == "STR_CYBERDISC"
-		|| alienId == "STR_REAPER"
-		|| alienId == "STR_CHRYSSALID"
-		|| alienId == "STR_SILACOID"
-		|| alienId == "STR_CELATID"
-		|| alienId == "STR_SECTOPOD"
-		|| alienId == "STR_CYBERMITE")
-	{
-		return alienId + "_TERRORIST";
-	}
-
-	return alienId + "_SOLDIER";
 }
 
 }
