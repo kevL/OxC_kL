@@ -581,7 +581,10 @@ void InventoryState::updateStats() // private.
 
 		if (_tuMode == true)
 		{
-			_txtThrowTU->setText(tr("STR_THROW_").arg(unit->getActionTUs(BA_THROW)));
+			if (unit->getBaseStats()->throwing != 0)
+				_txtThrowTU->setText(tr("STR_THROW_").arg(unit->getActionTUs(BA_THROW)));
+			else
+				_txtThrowTU->setVisible(false);
 
 			if (unit->getOriginalFaction() == FACTION_HOSTILE
 				&& psiSkill > 0)

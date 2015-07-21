@@ -1913,8 +1913,7 @@ int BattleUnit::getActionTUs(
 
 	switch (batType)
 	{
-		// note: Should put "tuPrime", "tuDefuse", & "tuThrow" yaml-entry in Xcom1Ruleset, under various grenade-types etc.
-		// note_note: "tuPrime" done
+		// note: Should put "tuDefuse" & "tuThrow" yaml-entry in Xcom1Ruleset under various grenade-types etc.
 		case BA_DROP:
 		{
 			const RuleInventory
