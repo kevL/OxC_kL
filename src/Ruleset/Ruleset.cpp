@@ -846,7 +846,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	_costScientist	= doc["costScientist"]	.as<int>(_costScientist);
 	_timePersonnel	= doc["timePersonnel"]	.as<int>(_timePersonnel);
 	_initialFunding	= doc["initialFunding"]	.as<int>(_initialFunding);
-	_alienFuel		= doc["alienFuel"]		.as<std::string>(_alienFuel);
+	_alienFuel		= doc["alienFuel"]		.as<std::pair<std::string, int> >(_alienFuel);
 	_font			= doc["font"]			.as<std::string>(_font);
 	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);
 	_firstGrenade	= doc["firstGrenade"]	.as<int>(_firstGrenade);
@@ -2277,9 +2277,18 @@ Soldier* Ruleset::genSoldier(SavedGame* const gameSave) const
  * Gets the name of the item to be used as alien fuel (elerium or zyrbite).
  * @return, the name of the fuel
  */
-const std::string Ruleset::getAlienFuel() const
+const std::string Ruleset::getAlienFuelType() const
 {
-	return _alienFuel;
+	return _alienFuel.first;
+}
+
+/**
+ * Gets the amount of alien fuel to recover.
+ * @return, the amount to recover
+ */
+const int Ruleset::getAlienFuelQuantity() const
+{
+	return _alienFuel.second;
 }
 
 /**

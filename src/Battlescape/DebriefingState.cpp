@@ -731,7 +731,7 @@ void DebriefingState::prepareDebriefing() // private.
 	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true)); */
 
 	_stats.push_back(new DebriefingStat(
-									_rules->getAlienFuel(),
+									_rules->getAlienFuelType(),
 									true));
 
 	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
@@ -1893,13 +1893,13 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 
 		if (itRule->isFixed() == false)
 		{
-			if (itRule->getName() == _rules->getAlienFuel())
+			if (itRule->getName() == _rules->getAlienFuelType())
 			{
 				if (itRule->isRecoverable() == true)
 					addStat( // special case of an item counted as a stat
-						_rules->getAlienFuel(),
+						_rules->getAlienFuelType(),
 						100,
-						50);
+						_game->getRuleset()->getAlienFuelQuantity());
 			}
 			else //if (*i)->getXCOMProperty() == false
 			{

@@ -4549,7 +4549,7 @@ costEngineer: 40000
 costScientist: 50000
 timePersonnel: 72
 initialFunding: 6000 # not used
-alienFuel: STR_ELERIUM_115
+alienFuel: [STR_ELERIUM_115,50]
 radarCutoffRange: 1500
 firstGrenade: 0
 font: Font.dat

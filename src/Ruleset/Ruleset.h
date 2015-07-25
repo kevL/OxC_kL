@@ -86,10 +86,6 @@ class Ruleset
 {
 
 protected:
-	std::string
-		_alienFuel,
-		_font;
-
 	int
 		_initialFunding,
 		_firstGrenade,
@@ -115,6 +111,8 @@ protected:
 
 	const Game* const _game;
 	RuleGlobe* _globe;
+
+	std::string _font;
 
 	std::vector<std::string>
 		_alienMissionsIndex,
@@ -184,6 +182,7 @@ protected:
 
 	std::vector<SDL_Color> _transparencies;
 
+	std::pair<std::string, int> _alienFuel;
 
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string& file);
@@ -361,7 +360,9 @@ protected:
 		Soldier* genSoldier(SavedGame* const save) const;
 
 		/// Gets the item to be used as fuel for ships.
-		const std::string getAlienFuel() const;
+		const std::string getAlienFuelType() const;
+		/// Gets the amount of alien fuel to recover
+		const int getAlienFuelQuantity() const;
 
 		/// Gets the font name.
 		const std::string getFontName() const;

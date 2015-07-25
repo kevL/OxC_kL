@@ -2799,7 +2799,7 @@ void BattlescapeGenerator::fuelPowerSources() // private.
 			&& _battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem* const alienFuel = new BattleItem(
-													_rules->getItem(_rules->getAlienFuel()),
+													_rules->getItem(_rules->getAlienFuelType()),
 													_battleSave->getNextItemId());
 
 			_battleSave->getItems()->push_back(alienFuel);
