@@ -77,7 +77,7 @@ namespace OpenXcom
  */
 InventoryState::InventoryState(
 		bool tuMode,
-		BattlescapeState* parent)
+		BattlescapeState* const parent)
 	:
 		_tuMode(tuMode),
 		_parent(parent),

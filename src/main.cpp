@@ -68,6 +68,9 @@ int main(
 		if (Options::init(argc, argv) == false)
 			return EXIT_SUCCESS;
 
+		if (Options::verboseLogging == true)
+			Logger::reportingLevel() = LOG_VERBOSE;
+
 //		Options::baseXResolution = Options::displayWidth;
 //		Options::baseYResolution = Options::displayHeight;
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;	// kL
@@ -84,7 +87,7 @@ int main(
 		game->run();
 #ifndef _DEBUG
 	}
-	catch (std::exception &e)
+	catch (std::exception& e)
 	{
 		CrossPlatform::showError(e.what());
 		exit(EXIT_FAILURE);
