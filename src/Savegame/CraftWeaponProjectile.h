@@ -75,7 +75,7 @@ private:
 		_horizontalPosition,
 		_range,
 		_speed,
-		_state;
+		_beamState;
 
 	CwpGlobal _globalType;
 	CwpType _type;
@@ -99,7 +99,7 @@ private:
 		/// Gets projectile direction.
 		int getDirection() const;
 
-		/// Moves projectile in _direction with _speed.
+		/// Moves projectile in '_direction' with '_speed'.
 		void moveProjectile();
 
 		/// Gets projectile position.
@@ -117,7 +117,7 @@ private:
 		bool toBeRemoved() const;
 
 		/// Returns state of the beam.
-		int getState() const;
+		int getBeamState() const;
 
 		/// Sets power of the projectile.
 		void setDamage(const int& damage);

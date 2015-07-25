@@ -35,7 +35,7 @@
 //#include "../Engine/RNG.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
-#include "../Engine/Surface.h"
+//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
@@ -51,16 +51,16 @@
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/CraftWeapon.h"
-#include "../Savegame/Ufo.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/CraftWeaponProjectile.h"
-#include "../Savegame/Country.h"
-#include "../Savegame/Region.h"
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/AlienStrategy.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/CraftWeapon.h"
+#include "../Savegame/CraftWeaponProjectile.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom
@@ -570,7 +570,7 @@ DogfightState::~DogfightState()
 		_craft->setInDogfight(false);
 
 	if (_ufo != NULL) // frees the ufo for the next engagement
-		_ufo->setEngaged(false);
+		_ufo->setTimerTicked(false);
 }
 
 /**
@@ -773,14 +773,14 @@ void DogfightState::updateDogfight()
 	{
 		animate();
 
-		int escapeTicks = _ufo->getEscapeCountdown();
+/*		int escapeTicks = _ufo->getEscapeCountdown();
 		if (_ufo->isCrashed() == false
 			&& _craft->isDestroyed() == false)
 		{
-			if (_ufo->getEngaged() == false
+			if (_ufo->getTimerTicked() == false
 				&& escapeTicks > 0)
 			{
-				_ufo->setEngaged();
+				_ufo->setTimerTicked();
 				_geo->drawUfoIndicators();
 
 				if (_dist < DST_STANDOFF)
@@ -790,8 +790,30 @@ void DogfightState::updateDogfight()
 					_ufo->setFireCountdown(_ufo->getFireCountdown() - 1);
 			}
 
-			if (escapeTicks == 0) // Check if UFO is breaking off.
+			if (escapeTicks == 0) // UFO is breaking off.
 				_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
+		} */
+		if (_ufo->isCrashed() == false
+			&& _craft->isDestroyed() == false
+			&& _ufo->getTimerTicked() == false)
+		{
+			_ufo->setTimerTicked();
+
+			int escapeTicks = _ufo->getEscapeCountdown();
+			if (escapeTicks > 0)
+			{
+				_geo->drawUfoIndicators();
+
+				if (_dist < DST_STANDOFF)
+					_ufo->setEscapeCountdown(--escapeTicks);
+
+				if (escapeTicks == 0) // UFO is breaking off.
+					_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
+			}
+
+			const int fireTicks = _ufo->getFireCountdown();
+			if (fireTicks > 0)
+				_ufo->setFireCountdown(fireTicks - 1);
 		}
 	}
 
@@ -1864,19 +1886,19 @@ void DogfightState::drawUfo()
  * Draws projectiles on the radar screen.
  * @note Its shape will be different depending on what type of projectile it is.
  * @note Currently works for original sized blobs 3 x 6 pixels.
- * @param proj - pointer to CraftWeaponProjectile
+ * @param prj - pointer to CraftWeaponProjectile
  */
-void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
+void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 {
-	int posX = _battle->getWidth() / 2 + proj->getHorizontalPosition();
+	int posX = _battle->getWidth() / 2 + prj->getHorizontalPosition();
 	Uint8
 		color,
 		offset;
 
-	if (proj->getGlobalType() == CWPGT_MISSILE) // Draw missiles.
+	if (prj->getGlobalType() == CWPGT_MISSILE) // Draw missiles.
 	{
 		--posX;
-		const int posY = _battle->getHeight() - proj->getPosition() / 8;
+		const int posY = _battle->getHeight() - prj->getPosition() / 8;
 		for (int
 				x = 0;
 				x != 3;
@@ -1887,7 +1909,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
 					y != 6;
 					++y)
 			{
-				offset = static_cast<Uint8>(_projectileBlobs[proj->getType()]
+				offset = static_cast<Uint8>(_projectileBlobs[prj->getType()]
 															[static_cast<size_t>(y)]
 															[static_cast<size_t>(x)]);
 				if (offset != 0)
@@ -1906,12 +1928,12 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* proj)
 			}
 		}
 	}
-	else if (proj->getGlobalType() == CWPGT_BEAM) // Draw beams.
+	else if (prj->getGlobalType() == CWPGT_BEAM) // Draw beams.
 	{
 		const int
 			stop = _battle->getHeight() - 2,
 			start = _battle->getHeight() - (_dist / 8);
-		offset = static_cast<Uint8>(proj->getState());
+		offset = static_cast<Uint8>(prj->getBeamState());
 
 		for (int
 				y = stop;
@@ -2045,16 +2067,16 @@ void DogfightState::resetInterceptPort(
 
 	if (_minimized == false)
 	{
-	//	if (_totalIntercepts == 1)
+//		if (_totalIntercepts == 1)
 		if (dfOpenTotal == 1)
 		{
 			_x = 80;
 			_y = 52;
 		}
-	//	else if (_totalIntercepts == 2)
+//		else if (_totalIntercepts == 2)
 		else if (dfOpenTotal == 2)
 		{
-	//		if (_slot == 1)
+//			if (_slot == 1)
 			if (dfOpen == 1)
 			{
 				_x = 80;
@@ -2066,16 +2088,16 @@ void DogfightState::resetInterceptPort(
 				_y = 200 - _window->getHeight(); // 96;
 			}
 		}
-	//	else if (_totalIntercepts == 3)
+//		else if (_totalIntercepts == 3)
 		else if (dfOpenTotal == 3)
 		{
-	//		if (_slot == 1)
+//			if (_slot == 1)
 			if (dfOpen == 1)
 			{
 				_x = 80;
 				_y = 0;
 			}
-	//		else if (_slot == 2)
+//			else if (_slot == 2)
 			else if (dfOpen == 2)
 			{
 				_x = 0;
@@ -2089,19 +2111,19 @@ void DogfightState::resetInterceptPort(
 		}
 		else
 		{
-	//		if (_slot == 1)
+//			if (_slot == 1)
 			if (dfOpen == 1)
 			{
 				_x =
 				_y = 0;
 			}
-	//		else if (_slot == 2)
+//			else if (_slot == 2)
 			else if (dfOpen == 2)
 			{
 				_x = 320 - _window->getWidth(); // 160;
 				_y = 0;
 			}
-	//		else if (_slot == 3)
+//			else if (_slot == 3)
 			else if (dfOpen == 3)
 			{
 				_x = 0;

@@ -240,9 +240,9 @@ private:
 		/// Gets the time left before this Ufo attempts to escape a Dogfight.
 		int getEscapeCountdown() const;
 		/// Sets whether or not this Ufo has had Dogfight info processed.
-		void setEngaged(bool processed = true);
+		void setTimerTicked(bool done = true);
 		/// Gets whether or not this Ufo has had Dogfight info processed.
-		bool getEngaged() const;
+		bool getTimerTicked() const;
 
 		/// Sets a crashed or landed UFO's terrainType.
 		void setUfoTerrainType(const std::string& terrain);

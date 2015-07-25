@@ -38,19 +38,17 @@ CraftWeapon::CraftWeapon(
 		RuleCraftWeapon* rules,
 		int ammo)
 	:
-		_rules(rules),
+		_cwRule(rules),
 		_ammo(ammo),
 		_rearming(false),
 		_cantLoad(false)
-{
-}
+{}
 
 /**
  * dTor.
  */
 CraftWeapon::~CraftWeapon()
-{
-}
+{}
 
 /**
  * Loads the craft weapon from a YAML file.
@@ -71,7 +69,7 @@ YAML::Node CraftWeapon::save() const
 {
 	YAML::Node node;
 
-	node["type"]			= _rules->getType();
+	node["type"]			= _cwRule->getType();
 	node["ammo"]			= _ammo;
 	if (_rearming)
 		node["rearming"]	= _rearming;
@@ -87,7 +85,7 @@ YAML::Node CraftWeapon::save() const
  */
 RuleCraftWeapon* CraftWeapon::getRules() const
 {
-	return _rules;
+	return _cwRule;
 }
 
 /**
@@ -115,8 +113,8 @@ bool CraftWeapon::setAmmo(int ammo)
 		return false;
 	}
 
-	if (_ammo > _rules->getAmmoMax())
-		_ammo = _rules->getAmmoMax();
+	if (_ammo > _cwRule->getAmmoMax())
+		_ammo = _cwRule->getAmmoMax();
 
 	return true;
 }
@@ -150,32 +148,34 @@ int CraftWeapon::rearm(
 		const int clipSize)
 {
 	const int
-		fullQty = _rules->getAmmoMax(),
-		rateQty = _rules->getRearmRate();
+		fullQty = _cwRule->getAmmoMax(),
+		rateQty = _cwRule->getRearmRate();
 
-	int clipsRequest = 0;
+	int
+		ret,
+		loadQty,
+		clipsRequested;
+
 	if (clipSize > 0)
-	{
-		clipsRequest = std::min( // (+clipSize-1) <- round up int
+		clipsRequested = std::min( // round up int ->
 							rateQty + clipSize - 1,
 							fullQty - _ammo + clipSize - 1)
 						/ clipSize;
-	}
+	else
+		clipsRequested = 0;
 
-	int loadQty = 0;
-	if (baseClips >= clipsRequest)
+	if (baseClips >= clipsRequested)
 	{
 		_cantLoad = false;
 
 		if (clipSize == 0)
 			loadQty = rateQty;
 		else
-			loadQty = clipsRequest * clipSize;
+			loadQty = clipsRequested * clipSize;
 	}
-	else // baseClips < clipsRequest
+	else // baseClips < clipsRequested
 	{
 		_cantLoad = true;
-
 		loadQty = baseClips * clipSize;
 	}
 
@@ -185,8 +185,8 @@ int CraftWeapon::rearm(
 	if (clipSize == 0)
 		return 0;
 
-	int ret = (loadQty + clipSize - 1) / clipSize;
-	if (clipsRequest > baseClips)
+	ret = (loadQty + clipSize - 1) / clipSize;
+	if (clipsRequested > baseClips)
 		ret = -ret; // trick to tell Craft there isn't enough clips at Base.
 
 	return ret;
@@ -216,15 +216,15 @@ void CraftWeapon::setCantLoad(const bool cantLoad)
  */
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
-	CraftWeaponProjectile* const proj = new CraftWeaponProjectile();
+	CraftWeaponProjectile* const prj = new CraftWeaponProjectile();
 
-	proj->setType(this->getRules()->getProjectileType());
-	proj->setSpeed(this->getRules()->getProjectileSpeed());
-	proj->setAccuracy(this->getRules()->getAccuracy());
-	proj->setDamage(this->getRules()->getDamage());
-	proj->setRange(this->getRules()->getRange());
+	prj->setType(this->getRules()->getProjectileType());
+	prj->setSpeed(this->getRules()->getProjectileSpeed());
+	prj->setAccuracy(this->getRules()->getAccuracy());
+	prj->setDamage(this->getRules()->getDamage());
+	prj->setRange(this->getRules()->getRange());
 
-	return proj;
+	return prj;
 }
 
 /**
@@ -232,20 +232,18 @@ CraftWeaponProjectile* CraftWeapon::fire() const
  * @param ruleset - pointer to the core Ruleset
  * @return, the number of clips loaded
  */
-int CraftWeapon::getClipsLoaded(Ruleset* ruleset)
+int CraftWeapon::getClipsLoaded(const Ruleset* const rules) const
 {
-	int ret = static_cast<int>(
-					floor(static_cast<float>(_ammo) / static_cast<float>(_rules->getRearmRate())));
-
-	RuleItem* clip = ruleset->getItem(_rules->getClipItem());
-	if (clip
+	const RuleItem* const clip = rules->getItem(_cwRule->getClipItem());
+	if (clip != NULL
 		&& clip->getClipSize() > 0)
 	{
-		ret = static_cast<int>(
-					floor(static_cast<float>(_ammo) / static_cast<float>(clip->getClipSize())));
+		return static_cast<int>(floor(
+			   static_cast<float>(_ammo) / static_cast<float>(clip->getClipSize())));
 	}
 
-	return ret;
+	return static_cast<int>(floor(
+		   static_cast<float>(_ammo) / static_cast<float>(_cwRule->getRearmRate())));
 }
 
 }

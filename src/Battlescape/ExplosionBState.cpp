@@ -184,8 +184,8 @@ void ExplosionBState::init()
 			int
 				frameStart = ResourcePack::EXPLOSION_OFFSET,
 				frameDelay = 0,
-				radius = 0,
 				qty = _power,
+				radius,
 				offset;
 
 			if (_item != NULL)
@@ -589,7 +589,7 @@ void ExplosionBState::explode() // private.
 							terrain);
 
 
-	if (_unit != NULL // if this hit/explosion was caused by a unit, now put the weapon down
+	if (_unit != NULL // if this hit/explosion was caused by a unit put the weapon down
 		&& _unit->isOut() == false
 		&& _lowerWeapon == true)
 	{

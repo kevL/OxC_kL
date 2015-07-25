@@ -212,7 +212,7 @@ private:
 		/// Draws UFO.
 		void drawUfo();
 		/// Draws projectiles.
-		void drawProjectile(const CraftWeaponProjectile* proj);
+		void drawProjectile(const CraftWeaponProjectile* const prj);
 		/// Animates craft damage.
 		void animateCraftDamage();
 		/// Updates craft damage.

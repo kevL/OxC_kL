@@ -35,7 +35,7 @@ class Ruleset;
 
 /**
  * Represents a craft weapon equipped by a craft.
- * Contains variable info about a craft weapon like ammo.
+ * @note Contains variable info about a craft weapon like ammo.
  * @sa RuleCraftWeapon
  */
 class CraftWeapon
@@ -47,7 +47,7 @@ private:
 		_rearming;
 	int _ammo;
 
-	RuleCraftWeapon* _rules;
+	RuleCraftWeapon* _cwRule;
 
 
 	public:
@@ -87,7 +87,7 @@ private:
 		CraftWeaponProjectile* fire() const;
 
 		/// Gets how many clips are loaded into this weapon.
-		int getClipsLoaded(Ruleset* ruleset);
+		int getClipsLoaded(const Ruleset* const rules) const;
 };
 
 }

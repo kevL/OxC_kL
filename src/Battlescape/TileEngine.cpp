@@ -2149,8 +2149,10 @@ BattleUnit* TileEngine::hit(
 
 		BattleUnit* targetUnit = tile->getUnit();
 
-		int part = VOXEL_UNIT;
-		if (melee == false)
+		int part;
+		if (melee == true)
+			part = VOXEL_UNIT;
+		else
 		{
 			part = voxelCheck(
 							targetPos_voxel,
@@ -2260,6 +2262,7 @@ BattleUnit* TileEngine::hit(
 			}
 
 			if (targetUnit != NULL)
+//				&& targetUnit->isOut_t(OUT_HLTH_STUN) == false)
 			{
 				//Log(LOG_INFO) << ". . . targetUnit Valid ID = " << targetUnit->getId();
 				const int wounds = targetUnit->getFatalWounds();
@@ -2267,7 +2270,6 @@ BattleUnit* TileEngine::hit(
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
 				if (attacker != NULL
 					&& attacker->getSpecialAbility() == SPECAB_BURN)
-//						|| attacker->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 				{
 					const float vulnerable = targetUnit->getArmor()->getDamageModifier(DT_IN);
 					if (vulnerable > 0.f)
@@ -2357,7 +2359,8 @@ BattleUnit* TileEngine::hit(
 				{
 					if (attacker != NULL
 						&& (wounds < targetUnit->getFatalWounds()
-							|| targetUnit->getHealth() == 0)) // .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
+							|| targetUnit->isOut_t(OUT_DEAD) == true))
+//							|| targetUnit->getHealth() == 0)) // .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
 						targetUnit->killedBy(attacker->getFaction());
 						//Log(LOG_INFO) << "TE::hit() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
@@ -2366,35 +2369,40 @@ BattleUnit* TileEngine::hit(
 					// I mean, shouldn't that be checking that the thing actually DIES?
 					// And, probly don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
-					if (targetUnit->getHealth() > 0)
+//					if (targetUnit->getHealth() > 0)
+/*					if (targetUnit->isOut_t(OUT_DEAD) == false // -> moved to BattleUnit::damage()
+						&& targetUnit->isFearable() == true)
 					{
-						const int loss = (110 - targetUnit->getBaseStats()->bravery) / 10;
-						if (loss > 0)
+						int moraleLoss = (110 - targetUnit->getBaseStats()->bravery) / 10;
+						if (moraleLoss > 0)
 						{
-							int leadership = 100;
+							int leadership = 100; // <- for civilians
 							if (targetUnit->getOriginalFaction() == FACTION_PLAYER)
 								leadership = _battleSave->getMoraleModifier();
 							else if (targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 								leadership = _battleSave->getMoraleModifier(NULL, false);
 
-							const int moraleLoss = -(power * loss * 10 / leadership);
+							moraleLoss = moraleLoss * power * 10 / leadership;
 							//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
-							targetUnit->moraleChange(moraleLoss);
+							targetUnit->moraleChange(-moraleLoss);
 						}
-					}
+					} */
 
 					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
 					//Log(LOG_INFO) << ". . health = " << targetUnit->getHealth();
 					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
 					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs
-//							|| targetUnit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
-						&& (targetUnit->getHealth() == 0
-							|| targetUnit->getStun() >= targetUnit->getHealth()))
+//						&& targetUnit->isOut_t(OUT_STAT) == false
+						&& targetUnit->isOut_t(OUT_HLTH_STUN) == true)
+//						&& (targetUnit->getHealth() == 0
+//							|| targetUnit->getStun() >= targetUnit->getHealth()))
 					{
 						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
 						if (dType != DT_STUN	// don't explode if stunned. Maybe... see above.
 							&& dType != DT_SMOKE
-							&& dType != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
+							&& dType != DT_HE	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
+							&& dType != DT_IN)
+//							&& dType != DT_MELEE)
 						{
 							//Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
 							// kL_note: wait a second. hit() creates an ExplosionBState,
@@ -2882,7 +2890,8 @@ void TileEngine::explode(
 												DT_HE);
 										//Log(LOG_INFO) << ". . . INVENTORY: damage = " << dam;
 
-										if (bu->getHealth() == 0)
+//										if (bu->getHealth() == 0)
+										if (bu->isOut_t(OUT_DEAD) == true)
 										{
 											//Log(LOG_INFO) << ". . . . INVENTORY: instaKill";
 											bu->instaKill();
@@ -3104,7 +3113,8 @@ void TileEngine::explode(
 												DT_IN,
 												true);
 
-										if (bu->getHealth() == 0)
+//										if (bu->getHealth() == 0)
+										if (bu->isOut_t(OUT_DEAD) == true)
 										{
 											bu->instaKill();
 
@@ -3169,7 +3179,8 @@ void TileEngine::explode(
 						// kL_note: See Above^
 						if (attacker != NULL)
 						{
-							if (targetUnit->getHealth() == 0
+//							if (targetUnit->getHealth() == 0
+							if (targetUnit->isOut_t(OUT_DEAD) == true
 								|| wounds < targetUnit->getFatalWounds())
 							{
 								targetUnit->killedBy(attacker->getFaction()); // kL .. just do this here and bDone with it. Normally done in BattlescapeGame::checkForCasualties()

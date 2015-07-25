@@ -903,18 +903,18 @@ int Ufo::getFireCountdown() const
  * @note Prevents multiple interceptions from decrementing or resetting an
  * already running timer. This flag is reset in advance each time the geoscape
  * processes the dogfights.
- * @param processed - true if the timers have been processed (default true)
+ * @param done - true if the timers have been processed (default true)
  */
-void Ufo::setEngaged(bool processed)
+void Ufo::setTimerTicked(bool done)
 {
-	_processedIntercept = processed;
+	_processedIntercept = done;
 }
 
 /**
  * Gets if the ufo has had its timers decremented on this cycle of interception updates.
  * @return, true if this ufo has already been processed
  */
-bool Ufo::getEngaged() const
+bool Ufo::getTimerTicked() const
 {
 	return _processedIntercept;
 }

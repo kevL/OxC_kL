@@ -34,7 +34,7 @@ CraftWeaponProjectile::CraftWeaponProjectile()
 		_direction(D_NONE),
 		_currentPosition(0),
 		_horizontalPosition(0),
-		_state(0),
+		_beamState(0),
 		_accuracy(0),
 		_damage(0),
 		_range(0),
@@ -61,7 +61,7 @@ void CraftWeaponProjectile::setType(CwpType type)
 	if (type >= CWPT_LASER_BEAM)
 	{
 		_globalType = CWPGT_BEAM;
-		_state = 8;
+		_beamState = 8;
 	}
 }
 
@@ -111,17 +111,18 @@ void CraftWeaponProjectile::moveProjectile()
 {
 	if (_globalType == CWPGT_MISSILE)
 	{
-		int positionChange = _speed;
-
 		// Check if projectile would reach its maximum range this tick.
-		if ((_distanceCovered / 8) < getRange()
-			&& ((_distanceCovered + _speed) / 8) >= getRange())
+		int positionChange;
+		if (_range > (_distanceCovered / 8)
+			&& _range <= ((_distanceCovered + _speed) / 8))
 		{
-			positionChange = getRange() * 8 - _distanceCovered;
+			positionChange = _range * 8 - _distanceCovered;
 		}
+		else
+			positionChange = _speed;
 
 		// Check if projectile passed its maximum range on previous tick.
-		if ((_distanceCovered / 8) >= getRange())
+		if (_range <= (_distanceCovered / 8))
 			setMissed(true);
 
 		if (_direction == D_UP)
@@ -133,9 +134,9 @@ void CraftWeaponProjectile::moveProjectile()
 	}
 	else if (_globalType == CWPGT_BEAM)
 	{
-		_state /= 2;
+		_beamState /= 2;
 
-		if (_state == 1)
+		if (_beamState == 1)
 			_toBeRemoved = true;
 	}
 }
@@ -198,9 +199,9 @@ bool CraftWeaponProjectile::toBeRemoved() const
  * Returns animation state of a beam.
  * @return, the state of the beam
  */
-int CraftWeaponProjectile::getState() const
+int CraftWeaponProjectile::getBeamState() const
 {
-	return _state;
+	return _beamState;
 }
 
 /**

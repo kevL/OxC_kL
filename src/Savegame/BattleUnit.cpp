@@ -32,6 +32,7 @@
 
 #include "../Battlescape/BattleAIState.h"
 #include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/Pathfinding.h"
 
 #include "../Engine/Language.h"
@@ -1519,11 +1520,14 @@ int BattleUnit::damage(
 
 	if (power > 0)
 	{
+		const bool isSelfAware = _geoscapeSoldier != NULL
+							  || (_unitRules->isMechanical() == false
+									&& _race != "STR_ZOMBIE");
+		int wounds = 0;
+
 		if (dType == DT_STUN)
 		{
-			if (_geoscapeSoldier != NULL
-				|| (_unitRules->isMechanical() == false
-					&& _race != "STR_ZOMBIE"))
+			if (isSelfAware == true)
 			{
 				//Log(LOG_INFO) << ". . stun = " << power;
 				_stunLevel += power;
@@ -1549,14 +1553,10 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
-					|| (_unitRules->isMechanical() == false		// or to non-mechanical units
-						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
-				{
+				if (isSelfAware == true)
 					_stunLevel += RNG::generate(0, power / 3);
-				}
 
-				int wounds = RNG::generate(1,3);
+				wounds = RNG::generate(1,3);
 
 				if (ignoreArmor == false)// Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
 				{
@@ -1575,20 +1575,41 @@ int BattleUnit::damage(
 					wounds = power;
 
 				//Log(LOG_INFO) << ". moraleChange = " << (-wounds * 3);
-				moraleChange(-wounds * 3);
+//				moraleChange(-wounds * 3);
 			}
 		}
 
 //		if (isOut(true, true) == true)
 		if (isOut_t(OUT_HLTH_STUN) == true)
 			_aboutToDie = true;
+
+		if (isOut_t(OUT_DEAD) == false
+			&& isSelfAware == true)
+		{
+			moraleChange(-wounds * 3);
+
+			int moraleLoss = (110 - _stats.bravery) / 10;
+			if (moraleLoss > 0)
+			{
+				int leadership = 100; // <- for civilians
+				if (_originalFaction == FACTION_PLAYER)
+					leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier();
+				else if (_originalFaction == FACTION_HOSTILE)
+					leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier(NULL, false);
+
+				moraleLoss = moraleLoss * power * 10 / leadership;
+				//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
+				moraleChange(-moraleLoss);
+			}
+		}
 	}
 
 	// TODO: give a short "ugh" if hit causes no damage or perhaps stuns ( power must be > 0 though );
 	// a longer "uuuhghghgh" if hit causes damage ... and let DieBState handle deathscreams.
 	if (_visible == true
-		&& _health > 0
-		&& _health > _stunLevel
+		&& _aboutToDie == false
+//		&& _health > 0
+//		&& _health > _stunLevel
 		&& _status != STATUS_UNCONSCIOUS
 		&& dType != DT_STUN
 		&& (_geoscapeSoldier != NULL

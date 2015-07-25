@@ -1283,7 +1283,7 @@ void GeoscapeState::drawUfoIndicators()
 
 			ufoSize = (*i)->getRadius();
 
-			if ((*i)->getEngaged() == true)
+			if ((*i)->getTimerTicked() == true)
 				baseColor = 133;			// red (8), all red. TODO: blink
 			else
 			{
@@ -3858,7 +3858,7 @@ void GeoscapeState::thinkDogfights()
 			i != _dogfights.end();
 			++i)
 	{
-		(*i)->getUfo()->setEngaged(false); // huh
+		(*i)->getUfo()->setTimerTicked(false);
 	}
 
 
