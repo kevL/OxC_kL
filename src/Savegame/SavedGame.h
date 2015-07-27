@@ -245,8 +245,8 @@ struct PromotionInfo
 
 /**
  * The game data that gets written to disk when the game is saved.
- * A saved game holds all the variable info in a game like funds,
- * game time, current bases and contents, world activities, score, etc.
+ * @note A saved game holds all the variable info in a game like funds, game
+ * time, current bases and contents, world activities, score, etc.
  */
 class SavedGame // no copy cTor.
 {

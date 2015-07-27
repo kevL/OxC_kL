@@ -4395,7 +4395,7 @@
 
 1433212243 f:\git\openxcom\src\savegame\target.h
 
-1433864584 f:\git\openxcom\src\savegame\savedgame.h
+1437996150 f:\git\openxcom\src\savegame\savedgame.h
 	"CraftId.h"
 	"GameTime.h"
 	"Soldier.h"
@@ -4534,7 +4534,7 @@
 
 1430149550 f:\git\openxcom\src\engine\surfaceset.h
 
-1435731776 f:\git\openxcom\src\ruleset\rulecraft.h
+1437993221 f:\git\openxcom\src\ruleset\rulecraft.h
 
 1436387363 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
@@ -4634,10 +4634,10 @@
 1435394111 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
-1437195299 f:\git\openxcom\src\battlescape\inventorystate.h
+1437861855 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
-1433133989 f:\git\openxcom\src\engine\logger.h
+1437862126 f:\git\openxcom\src\engine\logger.h
 	<windows.h>
 	<time.h>
 
@@ -4695,7 +4695,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1433859109 f:\git\openxcom\src\ruleset\rulecraftweapon.h
+1437993330 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
 1437508927 f:\git\openxcom\src\savegame\craftweaponprojectile.h
@@ -5647,9 +5647,9 @@
 
 1430489699 f:\git\openxcom\src\ruleset\mcdpatch.h
 
-1433211030 f:\git\openxcom\src\ruleset\ruleterrain.h
+1437992761 f:\git\openxcom\src\ruleset\ruleterrain.h
 
-1435731416 f:\git\openxcom\src\ruleset\ruleufo.h
+1437994515 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1432527848 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -5995,7 +5995,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1437456717 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1437861863 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -6613,7 +6613,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1437079490 source:f:\git\openxcom\src\engine\options.cpp
+1437862211 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
@@ -7035,7 +7035,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1437776747 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1437995209 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7115,7 +7115,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1437776843 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1437992936 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7666,7 +7666,7 @@
 	<stdlib.h>
 	<fstream>
 
-1430149550 source:f:\git\openxcom\src\main.cpp
+1437862658 source:f:\git\openxcom\src\main.cpp
 	"Engine/Game.h"
 	"Menu/StartState.h"
 
@@ -8469,7 +8469,7 @@
 1433535945 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
 	"RuleCountry.h"
 
-1435731691 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1437993283 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -8548,13 +8548,13 @@
 1435634616 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1433211087 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1437992761 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"RuleTerrain.h"
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
 
-1435731450 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1437994515 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
@@ -8771,7 +8771,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1436730732 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1437997683 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -10621,7 +10621,7 @@
 
 1430149550 f:\git\openxcom\src\engine\optioninfo.h
 
-1437079567 f:\git\openxcom\src\engine\options.inc.h
+1437862491 f:\git\openxcom\src\engine\options.inc.h
 
 1432287660 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
