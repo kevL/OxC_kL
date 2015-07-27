@@ -187,7 +187,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     costRent: 295000
     refuelRate: 5000
     radarRange: 400
-    sightRange: 600
+    reconRange: 600
     transferTime: 72
     score: 250
     battlescapeTerrainData:
@@ -210,7 +210,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     costRent: 520000
     refuelRate: 5000
     radarRange: 600
-    sightRange: 900
+    reconRange: 900
     transferTime: 96
     score: 300
   - type: STR_FIRESTORM
@@ -228,7 +228,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     refuelRate: 5
     repairRate: 2
     radarRange: 800
-    sightRange: 1200
+    reconRange: 1200
     score: 350
   - type: STR_LIGHTNING
     requires:
@@ -247,7 +247,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     refuelRate: 5
     repairRate: 3
     radarRange: 800
-    sightRange: 1200
+    reconRange: 1200
     score: 355
     battlescapeTerrainData:
       name: LIGHTNIN
@@ -289,7 +289,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     refuelRate: 5
     repairRate: 5
     radarRange: 1000
-    sightRange: 1500
+    reconRange: 1500
     score: 475
     spacecraft: true
     battlescapeTerrainData:

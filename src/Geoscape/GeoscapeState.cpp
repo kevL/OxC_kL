@@ -2072,7 +2072,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 
 
 	const double
-		range = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor,
+		range = static_cast<double>(ufo->getRules()->getReconRange()) * greatCircleConversionFactor,
 		dist = _base.getDistance(ufo) * earthRadius;
 	//Log(LOG_INFO) << ". . range = " << (int)range;
 	//Log(LOG_INFO) << ". . dist = " << (int)dist;
@@ -2162,7 +2162,7 @@ void GeoscapeState::time10Minutes()
 						continue;
 
 					const double
-						craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor,
+						craftRadar = static_cast<double>((*c)->getRules()->getReconRange()) * greatCircleConversionFactor,
 						targetDist = (*c)->getDistance(*ab) * earthRadius;
 					//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
 					//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;

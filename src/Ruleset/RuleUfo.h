@@ -42,14 +42,14 @@ class RuleUfo
 private:
 	int
 		_accel,
-		_breakOffTime,
 		_damageMax,
+		_escape,
 		_marker,
 		_power,
 		_range,
+		_reconRange,
 		_reload,
 		_score,
-		_sightRange,
 		_speedMax,
 		_sprite;
 	std::string
@@ -69,7 +69,7 @@ private:
 		/// Loads UFO data from YAML.
 		void load(
 				const YAML::Node& node,
-				Ruleset* ruleset);
+				Ruleset* const rules);
 
 		/// Gets the UFO's type.
 		std::string getType() const;
@@ -104,12 +104,12 @@ private:
 		/// Gets the reload time of the UFO's weapon.
 		int getWeaponReload() const;
 		/// Gets the UFO's escape time.
-		int getBreakOffTime() const;
+		int getEscapeTime() const;
 
 		/// Gets the name of the surface that represents this UFO.
 		std::string getModSprite() const;
 		/// Gets the UFO's radar range.
-		int getSightRange() const;
+		int getReconRange() const;
 };
 
 }

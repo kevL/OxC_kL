@@ -46,15 +46,14 @@ RuleCraft::RuleCraft(const std::string& type)
 		_costSell(0),
 		_repairRate(1),
 		_refuelRate(1),
-		_radarRange(600), // 672	// for detecting UFOs
-		_sightRange(900), // 1696	// for detecting aLien bases
+		_radarRange(600),
+		_reconRange(900),
 		_transferTime(0),
 		_score(0),
 		_tacticalTerrainData(NULL),
 		_spacecraft(false),
 		_listOrder(0),
 		_maxItems(0)
-//		_maxDepth(0)
 {}
 
 /**
@@ -74,7 +73,7 @@ RuleCraft::~RuleCraft()
  */
 void RuleCraft::load(
 		const YAML::Node& node,
-		Ruleset* rules,
+		Ruleset* const rules,
 		int modIndex,
 		int listOrder)
 {
@@ -103,31 +102,28 @@ void RuleCraft::load(
 	_repairRate		= node["repairRate"]	.as<int>(_repairRate);
 	_refuelRate		= node["refuelRate"]	.as<int>(_refuelRate);
 	_radarRange		= node["radarRange"]	.as<int>(_radarRange);
-	_sightRange		= node["sightRange"]	.as<int>(_sightRange);
+	_reconRange		= node["reconRange"]	.as<int>(_reconRange);
 	_transferTime	= node["transferTime"]	.as<int>(_transferTime);
 	_score			= node["score"]			.as<int>(_score);
+	_spacecraft		= node["spacecraft"]	.as<bool>(_spacecraft);
+	_maxItems		= node["maxItems"]		.as<int>(_maxItems);
+
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
-		RuleTerrain* const rule = new RuleTerrain(terrain["name"].as<std::string>());
-
-		rule->load(
-				terrain,
-				rules);
-		_tacticalTerrainData = rule;
+		RuleTerrain* const terrainRule = new RuleTerrain(terrain["name"].as<std::string>());
+		terrainRule->load(
+						terrain,
+						rules);
+		_tacticalTerrainData = terrainRule;
 
 		if (const YAML::Node& deployment = node["deployment"])
 			_deployment = deployment.as<std::vector<std::vector<int> > >(_deployment);
 	}
 
-	_spacecraft	= node["spacecraft"].as<bool>(_spacecraft);
-	_listOrder	= node["listOrder"]	.as<int>(_listOrder);
-
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (_listOrder == 0)
 		_listOrder = listOrder;
-
-	_maxItems = node["maxItems"].as<int>(_maxItems);
-//	_maxDepth = node["maxDepth"].as<int>(_maxDepth);
 }
 
 /**
@@ -298,9 +294,9 @@ int RuleCraft::getRadarRange() const
  * Gets the craft's sight range for detecting bases.
  * @return, the range in nautical miles
  */
-int RuleCraft::getSightRange() const
+int RuleCraft::getReconRange() const
 {
-	return _sightRange;
+	return _reconRange;
 }
 
 /**
@@ -365,14 +361,5 @@ int RuleCraft::getMaxItems() const
 {
 	return _maxItems;
 }
-
-/**
- * Gets the maximum depth this craft can dive to.
- * @return, max depth
- */
-/* int RuleCraft::getMaxDepth() const
-{
-	return _maxDepth;
-} */
 
 }

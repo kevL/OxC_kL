@@ -44,11 +44,6 @@ class RuleTerrain
 {
 
 private:
-//	int
-//		_ambience,
-//		_minDepth,
-//		_maxDepth;
-
 	std::string
 		_pyjamaType,
 		_type,
@@ -71,7 +66,7 @@ private:
 		/// Loads the terrain from YAML.
 		void load(
 				const YAML::Node& node,
-				Ruleset* ruleset);
+				Ruleset* const rules);
 
 		/// Gets the terrain's type (used for MAP generation).
 		std::string getType() const;
@@ -96,14 +91,6 @@ private:
 
 		/// Gets the civilian types to use.
 		std::vector<std::string> getCivilianTypes() const;
-
-		/// Gets the minimum depth.
-//		const int getMinDepth() const;
-		/// Gets the maximum depth.
-//		const int getMaxDepth() const;
-
-		/// Gets the ambient sound effect.
-//		const int getAmbience() const;
 
 		/// Gets the generation script.
 		const std::string& getScript() const;

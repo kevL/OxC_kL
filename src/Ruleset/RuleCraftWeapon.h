@@ -31,7 +31,8 @@ namespace OpenXcom
 
 /**
  * Represents a specific type of craft weapon.
- * Contains constant info about a craft weapon like damage, range, accuracy, items used, etc.
+ * @note Contains constant info about a craft weapon like damage, range,
+ * accuracy, items used, etc.
  * @sa CraftWeapon
  */
 class RuleCraftWeapon

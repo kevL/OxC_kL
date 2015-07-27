@@ -188,7 +188,6 @@ DogfightState::DogfightState(
 
 	_btnMinimizedIcon		= new InteractiveSurface(32, 20, _minimizedIconX, _minimizedIconY);
 	_txtInterception		= new Text(150, 9, _minimizedIconX + 15, _minimizedIconY + 6);
-//	_txtInterception		= new Text(16, 9, _minimizedIconX + 18, _minimizedIconY + 6);
 
 	_craftDamageAnimTimer	= new Timer(500);
 
@@ -430,9 +429,9 @@ DogfightState::DogfightState(
 					x += 2)
 			{
 				range->setPixelColor(
-									x,
-									rangeY,
-									_colors[RANGE_METER]);
+								x,
+								rangeY,
+								_colors[RANGE_METER]);
 			}
 
 			minY =
@@ -455,9 +454,9 @@ DogfightState::DogfightState(
 					++y)
 			{
 				range->setPixelColor(
-									x1 + x2,
-									y,
-									_colors[RANGE_METER]);
+								x1 + x2,
+								y,
+								_colors[RANGE_METER]);
 			}
 
 			for (int
@@ -466,9 +465,9 @@ DogfightState::DogfightState(
 					++x)
 			{
 				range->setPixelColor(
-									x,
-									connectY,
-									_colors[RANGE_METER]);
+								x,
+								connectY,
+								_colors[RANGE_METER]);
 			}
 			range->unlock();
 		}
@@ -480,19 +479,18 @@ DogfightState::DogfightState(
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
 
-	if (_ufo->getEscapeCountdown() == 0) // UFO is *not* already engaged in a different dogfight/Intercept slot.
+	if (_ufo->getEscapeCountdown() == 0) // UFO is *not* engaged already in a different dogfight/Intercept slot.
 	{
-		_ufo->setFireCountdown(0); // UFO is ready to Fire.
+		_ufo->setFireCountdown(0); // UFO is ready to Fire pronto.
 
-		int escape = _ufo->getRules()->getBreakOffTime();
+		int escape = _ufo->getRules()->getEscapeTime();
 		escape += RNG::generate(
 							0,
 							escape);
-//							escape / 10);
-		escape -= _diff * 30;
-//		escape -= _diff * 10;
+//		escape -= _diff * 30;
+		escape /= _diff + 1;
 
-		if (escape < 50) escape = 50;
+		if (escape < 1) escape = 1;
 
 		_ufo->setEscapeCountdown(escape);
 	}
@@ -993,7 +991,7 @@ void DogfightState::updateDogfight()
 				{
 					hitprob = (*i)->getAccuracy();
 
-					if (   _craftStance == _btnCautious
+					if (_craftStance == _btnCautious
 						|| _craftStance == _btnStandoff
 						|| _craftStance == _btnDisengage)
 					{
@@ -1066,44 +1064,44 @@ void DogfightState::updateDogfight()
 				++i)
 		{
 			const CraftWeapon* const cw = _craft->getWeapons()->at(i);
-			if (cw == NULL)
-				continue;
-
-			int wTimer;
-			if (i == 0)
-				wTimer = _w1FireCountdown;
-			else
-				wTimer = _w2FireCountdown;
-
-			if (wTimer == 0 // Handle weapon firing.
-				&& _dist <= cw->getRules()->getRange() * 8
-				&& cw->getAmmo() > 0
-				&& _craftStance != _btnStandoff
-				&& _craftStance != _btnDisengage
-				&& _ufo->isCrashed() == false
-				&& _craft->isDestroyed() == false)
+			if (cw != NULL)
 			{
+				int wTimer;
 				if (i == 0)
-					fireWeapon1();
+					wTimer = _w1FireCountdown;
 				else
-					fireWeapon2();
-			}
-			else if (wTimer > 0)
-			{
-				if (i == 0)
-					--_w1FireCountdown;
-				else
-					--_w2FireCountdown;
-			}
+					wTimer = _w2FireCountdown;
 
-			if (cw->getAmmo() == 0 // Handle craft distance according to option set by user and available ammo.
-				&& projectileInFlight == false
-				&& _craft->isDestroyed() == false)
-			{
-				if (_craftStance == _btnCautious)
-					maximumDistance();
-				else if (_craftStance == _btnStandard)
-					minimumDistance();
+				if (wTimer == 0 // Handle weapon firing.
+					&& _dist <= cw->getRules()->getRange() * 8
+					&& cw->getAmmo() > 0
+					&& _craftStance != _btnStandoff
+					&& _craftStance != _btnDisengage
+					&& _ufo->isCrashed() == false
+					&& _craft->isDestroyed() == false)
+				{
+					if (i == 0)
+						fireWeapon1();
+					else
+						fireWeapon2();
+				}
+				else if (wTimer > 0)
+				{
+					if (i == 0)
+						--_w1FireCountdown;
+					else
+						--_w2FireCountdown;
+				}
+
+				if (cw->getAmmo() == 0 // Handle craft distance according to option set by user and available ammo.
+					&& projectileInFlight == false
+					&& _craft->isDestroyed() == false)
+				{
+					if (_craftStance == _btnCautious)
+						maximumDistance();
+					else if (_craftStance == _btnStandard)
+						minimumDistance();
+				}
 			}
 		}
 
@@ -1388,6 +1386,7 @@ void DogfightState::fireWeapon1()
 		if (cw1->setAmmo(cw1->getAmmo() - 1))
 		{
 			_w1FireCountdown = _w1FireInterval;
+			if (_w1FireCountdown < 1) _w1FireCountdown = 1;
 
 			std::wostringstream woststr;
 			woststr << cw1->getAmmo();
@@ -1416,6 +1415,7 @@ void DogfightState::fireWeapon2()
 		if (cw2->setAmmo(cw2->getAmmo() - 1))
 		{
 			_w2FireCountdown = _w2FireInterval;
+			if (_w2FireCountdown < 1) _w2FireCountdown = 1;
 
 			std::wostringstream woststr;
 			woststr << cw2->getAmmo();
@@ -1455,16 +1455,12 @@ void DogfightState::ufoFireWeapon()
 
 
 	int reload = _ufo->getRules()->getWeaponReload();
-/*	reload -= _diff * 2;
-	reload += RNG::generate(
-						0,
-						reload); */
 	reload += RNG::generate(
 						0,
 						reload / 2);
 	reload -= _diff * 2;
 
-	if (reload < 10) reload = 10;
+	if (reload < 1) reload = 1;
 
 	_ufo->setFireCountdown(reload);
 }

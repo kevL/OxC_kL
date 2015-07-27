@@ -37,9 +37,6 @@ RuleTerrain::RuleTerrain(const std::string& type)
 	:
 		_type(type),
 		_script("DEFAULT"),
-//		_minDepth(0),
-//		_maxDepth(0),
-//		_ambience(-1),
 		_pyjamaType("STR_ARMOR_NONE_UC")
 {}
 
@@ -60,22 +57,15 @@ RuleTerrain::~RuleTerrain()
 
 /**
  * Loads the terrain from a YAML file.
- * @param node		- reference a YAML node
- * @param ruleset	- game's Ruleset
+ * @param node	- reference a YAML node
+ * @param rules	- game's Ruleset
  */
 void RuleTerrain::load(
 		const YAML::Node& node,
-		Ruleset* ruleset)
+		Ruleset* const rules)
 {
-	_type		= node["type"]		.as<std::string>(_type);
-	_script		= node["script"]	.as<std::string>(_script);
-//	_ambience	= node["ambience"]	.as<int>(_ambience);
-
-/*	if (node["depth"])
-	{
-		_minDepth = node["depth"][0].as<int>(_minDepth);
-		_maxDepth = node["depth"][1].as<int>(_maxDepth);
-	} */
+	_type	= node["type"]	.as<std::string>(_type);
+	_script	= node["script"].as<std::string>(_script);
 
 	if (const YAML::Node& mapDataSets = node["mapDataSets"])
 	{
@@ -86,7 +76,7 @@ void RuleTerrain::load(
 				i != mapDataSets.end();
 				++i)
 		{
-			_mapDataSets.push_back(ruleset->getMapDataSet(i->as<std::string>()));
+			_mapDataSets.push_back(rules->getMapDataSet(i->as<std::string>()));
 		}
 	}
 
@@ -244,7 +234,7 @@ MapData* RuleTerrain::getMapData(
 		// oops! someone at microprose made an error in the map!
 		// set this broken tile reference to BLANKS 0.
 		dataSet = _mapDataSets.front();
-		*id = 0;
+		*id =
 		*mapDataSetId = 0;
 	}
 
@@ -259,33 +249,6 @@ std::vector<std::string> RuleTerrain::getCivilianTypes() const
 {
 	return _civilianTypes;
 }
-
-/**
- * Gets the minimum depth.
- * @return, min depth
- */
-/* const int RuleTerrain::getMinDepth() const
-{
-	return _minDepth;
-} */
-
-/**
- * Gets the maximum depth.
- * @return, max depth
- */
-/* const int RuleTerrain::getMaxDepth() const
-{
-	return _maxDepth;
-} */
-
-/**
- * Gets The ambient sound effect.
- * @return, the ambient sound effect
- */
-/* const int RuleTerrain::getAmbience() const
-{
-	return _ambience;
-} */
 
 /**
  * Gets the generation script.

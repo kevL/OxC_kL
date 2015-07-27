@@ -40,6 +40,7 @@ class RuleTerrain;
  */
 class RuleCraft
 {
+
 private:
 	bool _spacecraft;
 	int
@@ -48,13 +49,12 @@ private:
 		_costSell,
 		_listOrder,
 		_marker,
-//		_maxDepth,
 		_maxItems,
 		_radarRange,
+		_reconRange,
 		_refuelRate,
 		_repairRate,
 		_score,
-		_sightRange,
 		_sprite,
 		_transferTime,
 
@@ -85,7 +85,7 @@ private:
 		/// Loads craft data from YAML.
 		void load(
 				const YAML::Node& node,
-				Ruleset* ruleset,
+				Ruleset* const rules,
 				int modIndex,
 				int nextCraftIndex);
 
@@ -133,7 +133,7 @@ private:
 		/// Gets the craft's radar range.
 		int getRadarRange() const;
 		/// Gets the craft's sight range.
-		int getSightRange() const;
+		int getReconRange() const;
 		/// Gets the craft's transfer time.
 		int getTransferTime() const;
 
@@ -154,9 +154,6 @@ private:
 
 		/// Gets the item limit for this type of craft.
 		int getMaxItems() const;
-
-		/// Gets how deep this craft can go.
-//		int getMaxDepth() const;
 };
 
 }

@@ -11,7 +11,7 @@ crafts:
     costRent: 335000
     refuelRate: 7500
     radarRange: 1000
-    sightRange: 1500
+    reconRange: 1500
 #    radarChance: 40
     transferTime: 96
     score: 200
@@ -26,7 +26,7 @@ crafts:
     costRent: 465000
     refuelRate: 7500
     radarRange: 1200
-    sightRange: 1800
+    reconRange: 1800
 #    radarChance: 40
     transferTime: 96
     score: 225
@@ -43,7 +43,7 @@ crafts:
     costRent: 20000
     refuelRate: 10000
     radarRange: 1400
-    sightRange: 2100
+    reconRange: 2100
 #    radarChance: 60
     transferTime: 96
     score: 150

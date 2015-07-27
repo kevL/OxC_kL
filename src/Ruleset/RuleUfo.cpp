@@ -42,8 +42,8 @@ RuleUfo::RuleUfo(const std::string& type)
 		_range(0),
 		_score(0),
 		_reload(0),
-		_breakOffTime(0),
-		_sightRange(600), // 268 // for detecting xCom bases
+		_escape(0),
+		_reconRange(600),
 		_tacticalTerrainData(NULL)
 {}
 
@@ -57,37 +57,36 @@ RuleUfo::~RuleUfo()
 
 /**
  * Loads the UFO from a YAML file.
- * @param node		- reference a YAML node
- * @param ruleset	- pointer to Ruleset
+ * @param node	- reference a YAML node
+ * @param rules	- pointer to Ruleset
  */
 void RuleUfo::load(
 		const YAML::Node& node,
-		Ruleset* ruleset)
+		Ruleset* const rules)
 {
-	_type			= node["type"]			.as<std::string>(_type);
-	_size			= node["size"]			.as<std::string>(_size);
-	_sprite			= node["sprite"]		.as<int>(_sprite);
-	_marker			= node["marker"]		.as<int>(_marker);
-	_damageMax		= node["damageMax"]		.as<int>(_damageMax);
-	_speedMax		= node["speedMax"]		.as<int>(_speedMax);
-	_accel			= node["accel"]			.as<int>(_accel);
-	_power			= node["power"]			.as<int>(_power);
-	_range			= node["range"]			.as<int>(_range);
-	_score			= node["score"]			.as<int>(_score);
-	_reload			= node["reload"]		.as<int>(_reload);
-	_breakOffTime	= node["breakOffTime"]	.as<int>(_breakOffTime);
-	_sightRange		= node["sightRange"]	.as<int>(_sightRange);
-	_modSprite		= node["modSprite"]		.as<std::string>(_modSprite);
+	_type			= node["type"]		.as<std::string>(_type);
+	_size			= node["size"]		.as<std::string>(_size);
+	_sprite			= node["sprite"]	.as<int>(_sprite);
+	_marker			= node["marker"]	.as<int>(_marker);
+	_damageMax		= node["damageMax"]	.as<int>(_damageMax);
+	_speedMax		= node["speedMax"]	.as<int>(_speedMax);
+	_accel			= node["accel"]		.as<int>(_accel);
+	_power			= node["power"]		.as<int>(_power);
+	_range			= node["range"]		.as<int>(_range);
+	_score			= node["score"]		.as<int>(_score);
+	_reload			= node["reload"]	.as<int>(_reload);
+	_escape			= node["escape"]	.as<int>(_escape);
+	_reconRange		= node["reconRange"].as<int>(_reconRange);
+	_modSprite		= node["modSprite"]	.as<std::string>(_modSprite);
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
-		RuleTerrain* const rule = new RuleTerrain(terrain["name"].as<std::string>());
-		rule->load(
-				terrain,
-				ruleset);
-		_tacticalTerrainData = rule;
+		RuleTerrain* const terrainRule = new RuleTerrain(terrain["name"].as<std::string>());
+		terrainRule->load(
+						terrain,
+						rules);
+		_tacticalTerrainData = terrainRule;
 	}
-
 }
 
 /**
@@ -213,8 +212,8 @@ RuleTerrain* RuleUfo::getBattlescapeTerrainData() const
 }
 
 /**
- * Gets the weapon reload for UFO ships.
- * @return, the UFO weapon reload time
+ * Gets the UFO's weapon reload time.
+ * @return, ticks
  */
 int RuleUfo::getWeaponReload() const
 {
@@ -223,16 +222,16 @@ int RuleUfo::getWeaponReload() const
 
 /**
  * Gets the UFO's break off time.
- * @return, the UFO's break off time in game seconds
+ * @return, ticks
  */
-int RuleUfo::getBreakOffTime() const
+int RuleUfo::getEscapeTime() const
 {
-	return _breakOffTime;
+	return _escape;
 }
 
 /**
- * For user-defined UFOs, use a surface for the "preview" image.
- * @return, the name of the surface that represents the UFO
+ * For user-defined UFOs use a surface for the preview image.
+ * @return, the string-ID of the surface that represents the UFO
  */
 std::string RuleUfo::getModSprite() const
 {
@@ -243,9 +242,9 @@ std::string RuleUfo::getModSprite() const
  * Gets the UFO's radar range for detecting bases.
  * @return, the range in nautical miles
  */
-int RuleUfo::getSightRange() const
+int RuleUfo::getReconRange() const
 {
-	return _sightRange;
+	return _reconRange;
 }
 
 }
