@@ -439,7 +439,11 @@ void SavedGame::load(
 
 //	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
 	int diff = doc["difficulty"].as<int>(_difficulty);
-	if (diff < 0) diff = 0; // safety.
+	if (diff < 0) // safety.
+	{
+		diff = 0;
+		Log(LOG_WARNING) << "Difficulty in the save file is negative ... loading as ZERO.";
+	}
 	_difficulty = static_cast<GameDifficulty>(diff);
 
 	_monthsPassed			= doc["monthsPassed"]		.as<int>(_monthsPassed);
