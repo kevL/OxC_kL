@@ -49,7 +49,6 @@
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 
@@ -397,22 +396,22 @@ SaveInfo SavedGame::getSaveInfo( // private.
 /**
  * Loads a saved game's contents from a YAML file.
  * @note Assumes the saved game is blank.
- * @param filename	- reference a YAML filename
- * @param rule		- pointer to Ruleset
+ * @param file	- reference a YAML file
+ * @param rules	- pointer to Ruleset
  */
 void SavedGame::load(
-		const std::string& filename,
-		Ruleset* rule)
+		const std::string& file,
+		Ruleset* const rules)
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
-	const std::string st = Options::getUserFolder() + filename;
-	const std::vector<YAML::Node> file = YAML::LoadAllFromFile(st);
-	if (file.empty() == true)
+	const std::string st = Options::getUserFolder() + file;
+	const std::vector<YAML::Node> nodes = YAML::LoadAllFromFile(st);
+	if (nodes.empty() == true)
 	{
-		throw Exception(filename + " is not a valid save file");
+		throw Exception(file + " is not a valid save file");
 	}
 
-	YAML::Node brief = file[0]; // Get brief save info
+	YAML::Node brief = nodes[0]; // Get brief save info
 
 /*	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
@@ -424,9 +423,9 @@ void SavedGame::load(
 	if (brief["name"])
 		_name = Language::utf8ToWstr(brief["name"].as<std::string>());
 	else
-		_name = Language::fsToWstr(filename);
+		_name = Language::fsToWstr(file);
 
-	YAML::Node doc = file[1]; // Get full save data
+	YAML::Node doc = nodes[1]; // Get full save data
 
 	if (doc["rng"]
 		&& (Options::newSeedOnLoad == false
@@ -472,10 +471,10 @@ void SavedGame::load(
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
-		if (rule->getCountry(type))
+		if (rules->getCountry(type))
 		{
 			Country* const c = new Country(
-										rule->getCountry(type),
+										rules->getCountry(type),
 										false);
 			c->load(*i);
 			_countries.push_back(c);
@@ -489,9 +488,9 @@ void SavedGame::load(
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
-		if (rule->getRegion(type))
+		if (rules->getRegion(type))
 		{
-			Region* const r = new Region(rule->getRegion(type));
+			Region* const r = new Region(rules->getRegion(type));
 			r->load(*i);
 			_regions.push_back(r);
 		}
@@ -518,7 +517,7 @@ void SavedGame::load(
 			++i)
 	{
 		const std::string missionType = (*i)["type"].as<std::string>();
-		const RuleAlienMission& missionRule = *rule->getAlienMission(missionType);
+		const RuleAlienMission& missionRule = *rules->getAlienMission(missionType);
 		std::auto_ptr<AlienMission> mission (new AlienMission( // init.
 															missionRule,
 															*this));
@@ -533,12 +532,12 @@ void SavedGame::load(
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
-		if (rule->getUfo(type))
+		if (rules->getUfo(type))
 		{
-			Ufo* const u = new Ufo(rule->getUfo(type));
+			Ufo* const u = new Ufo(rules->getUfo(type));
 			u->load(
 					*i,
-					*rule,
+					*rules,
 					*this);
 			_ufos.push_back(u);
 		}
@@ -565,8 +564,8 @@ void SavedGame::load(
 			type = (*i)["type"].as<std::string>(),
 			deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
 		MissionSite* const ms = new MissionSite(
-											rule->getAlienMission(type),
-											rule->getDeployment(deployment));
+											rules->getAlienMission(type),
+											rules->getDeployment(deployment));
 		ms->load(*i);
 		_missionSites.push_back(ms);
 	}
@@ -579,8 +578,8 @@ void SavedGame::load(
 			++it)
 	{
 		const std::string research = it->as<std::string>();
-		if (rule->getResearch(research))
-			_discovered.push_back(rule->getResearch(research));
+		if (rules->getResearch(research))
+			_discovered.push_back(rules->getResearch(research));
 	}
 
 	Log(LOG_INFO) << ". load xcom bases";
@@ -589,7 +588,7 @@ void SavedGame::load(
 			i != doc["bases"].end();
 			++i)
 	{
-		Base* const b = new Base(rule);
+		Base* const b = new Base(rules);
 		b->load(
 				*i,
 				this,
@@ -605,13 +604,13 @@ void SavedGame::load(
 			++it)
 	{
 		const std::string research = it->as<std::string>();
-		if (rule->getResearch(research))
-			_poppedResearch.push_back(rule->getResearch(research));
+		if (rules->getResearch(research))
+			_poppedResearch.push_back(rules->getResearch(research));
 	}
 
 	Log(LOG_INFO) << ". load alien strategy";
 	_alienStrategy->load(
-						rule,
+						rules,
 						doc["alienStrategy"]);
 
 	Log(LOG_INFO) << ". load dead soldiers";
@@ -653,7 +652,7 @@ void SavedGame::load(
 		_battleGame = new SavedBattleGame();
 		_battleGame->load(
 						battle,
-						rule,
+						rules,
 						this);
 		Log(LOG_INFO) << "SavedGame: loading battlegame DONE";
 	}
@@ -661,15 +660,15 @@ void SavedGame::load(
 
 /**
  * Saves a saved game's contents to a YAML file.
- * @param filename - reference to a YAML filename
+ * @param file - reference to a YAML file
  */
-void SavedGame::save(const std::string& filename) const
+void SavedGame::save(const std::string& file) const
 {
-	const std::string st = Options::getUserFolder() + filename;
-	std::ofstream save(st.c_str());
-	if (save.fail() == true)
+	const std::string st = Options::getUserFolder() + file;
+	std::ofstream ofstr (st.c_str()); // init.
+	if (ofstr.fail() == true)
 	{
-		throw Exception("Failed to save " + filename);
+		throw Exception("Failed to save " + file);
 	}
 
 	YAML::Emitter emit;
@@ -827,8 +826,8 @@ void SavedGame::save(const std::string& filename) const
 		node["battleGame"] = _battleGame->save();
 
 	emit << node;
-	save << emit.c_str();
-	save.close();
+	ofstr << emit.c_str();
+	ofstr.close();
 }
 
 /**

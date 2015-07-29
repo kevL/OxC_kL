@@ -60,6 +60,7 @@ class RuleInterface;
 class RuleInventory;
 class RuleItem;
 class RuleManufacture;
+class RuleMissionScript;
 class RuleMusic; // sza_MusicRules
 class RuleRegion;
 class RuleResearch;
@@ -78,9 +79,9 @@ class UfoTrajectory;
 
 /**
  * Set of rules and stats for a game.
- * A ruleset holds all the constant info that never changes
- * throughout a game, like stats of all the in-game items,
- * countries, research tree, soldier names, starting base, etc.
+ * @note A ruleset holds all the constant info that never changes throughout a
+ * game, like stats of all the in-game items, countries, research tree, soldier
+ * names, starting base, etc.
  */
 class Ruleset
 {
@@ -175,19 +176,20 @@ protected:
 
 	std::map<std::string, std::vector<MapScript*> > _mapScripts;
 
-//	std::vector<std::pair<std::string, ExtraMusic*> >	_extraMusic; // sza_ExtraMusic
-	std::vector<std::pair<std::string, ExtraSounds*> >	_extraSounds;
-	std::vector<std::pair<std::string, ExtraSprites*> >	_extraSprites;
-	std::vector<std::pair<std::string, RuleMusic*> >	_music; // sza_MusicRules
+//	std::vector<std::pair<std::string, ExtraMusic*> >			_extraMusic; // sza_ExtraMusic
+	std::vector<std::pair<std::string, ExtraSounds*> >			_extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites*> >			_extraSprites;
+	std::vector<std::pair<std::string, RuleMissionScript*> >	_missionScripts;
+	std::vector<std::pair<std::string, RuleMusic*> >			_music; // sza_MusicRules
 
-	std::vector<SDL_Color> _transparencies;
+//	std::vector<SDL_Color> _transparencies;
 
 	std::pair<std::string, int> _alienFuel;
 
-	/// Loads a ruleset from a YAML file.
-	void loadFile(const std::string& file);
 	/// Loads all ruleset files from a directory.
 	void loadFiles(const std::string& dir);
+	/// Loads a ruleset from a YAML file.
+	void loadFile(const std::string& file);
 
 	/// Loads a ruleset element.
 	template<typename T>
@@ -205,7 +207,11 @@ protected:
 		~Ruleset();
 
 		/// Reloads the country lines.
-		void reloadCountryLines();
+		void reloadCountryLines() const;
+
+		/// Checks to ensure Mission scripts are okay.
+		void validateMissionScripts() const;
+
 		/// Loads a ruleset from the given source.
 		void load(const std::string& source);
 
@@ -387,13 +393,16 @@ protected:
 		const std::map<std::string, SoundDefinition*>* getSoundDefinitions() const;
 
 		/// Gets the list of transparency colors.
-		const std::vector<SDL_Color>* getTransparencies() const;
+//		const std::vector<SDL_Color>* getTransparencies() const;
 
 		/// Gets the list of MapScripts.
 		const std::vector<MapScript*>* getMapScript(const std::string& id) const;
 
 		/// Gets the list of videos for intro/outro etc.
 		const std::map<std::string, RuleVideo*>* getVideos() const;
+
+		/// Gets the list of mission scripts.
+		const std::vector<std::pair<std::string, RuleMissionScript*> >* getMissionScripts() const;
 
 		/// Gets the current Game.
 		const Game* const getGame() const;

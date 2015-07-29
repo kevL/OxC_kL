@@ -38,15 +38,16 @@ class AlienStrategy
 {
 
 private:
-	/// The chances of each region to be targeted for a mission.
-	WeightedOptions _regionChances;
-	/// The chances of each mission type for each region.
-	std::map<std::string, WeightedOptions*> _regionMissions;
+	WeightedOptions _regionChances; // The chances of each region to be targeted for a mission.
+	std::map<std::string, WeightedOptions*> _regionMissions; // The chances of each mission type for each region.
+
+	std::map<std::string, int> _missionRuns;
+	std::map<std::string, std::vector<std::pair<std::string, int> > > _missionLocations;
 
 	/// Disable copy and assignments.
 	AlienStrategy(const AlienStrategy&);
 	///
-	AlienStrategy& operator = (const AlienStrategy&);
+	AlienStrategy& operator= (const AlienStrategy&);
 
 
 	public:
@@ -62,7 +63,7 @@ private:
 		void init(const Ruleset* const rules);
 		/// Loads the data from YAML.
 		void load(
-				const Ruleset* rules,
+				const Ruleset* rules, // not used.
 				const YAML::Node& node);
 
 		/// Chooses a random region for a regular mission.
@@ -74,6 +75,24 @@ private:
 		bool removeMission(
 				const std::string& region,
 				const std::string& mission);
+
+		/// Checks the number of missions labelled 'id' that have run.
+		int getMissionsRun(const std::string& id);
+		/// Increments the number of missions labelled 'id' that have run.
+		void addMissionRun(const std::string& id);
+		/// Adds a mission location to the storage array.
+		void addMissionLocation(
+				const std::string& id,
+				const std::string& region,
+				int zone,
+				size_t track);
+		/// Checks if a given mission location has been attacked already.
+		bool validMissionLocation(
+				const std::string& id,
+				const std::string& region,
+				int zone);
+		/// Checks that a given region appears in the strategy table.
+		bool validMissionRegion(const std::string& region) const;
 };
 
 }

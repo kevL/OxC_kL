@@ -22,9 +22,7 @@
 //#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <sstream>
-//#include <typeinfo>
 
-#include "AbortMissionState.h"
 #include "AlienBAIState.h"
 #include "BattlescapeState.h"
 #include "BattleState.h"

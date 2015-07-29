@@ -27,9 +27,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
 #include "../Interface/Bar.h"
@@ -43,7 +42,6 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/RuleUnit.h"
 
-#include "../Savegame/Base.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"

@@ -17,21 +17,19 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Zoom.h"
+//#include "Zoom.h"
 
-#include "Exception.h"
-#include "Logger.h"
-#include "Options.h"
-#include "Screen.h"
+//#include "Logger.h"
+//#include "Options.h"
+//#include "Screen.h"
 #include "Surface.h"
 
-#include "OpenGL.h"
+//#include "OpenGL.h"
 
 // Scale2X
 #include "Scalers/scalebit.h"
 
 // HQX
-#include "Scalers/common.h"
 #include "Scalers/hqx.h"
 
 // xBRZ

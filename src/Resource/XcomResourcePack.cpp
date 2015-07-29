@@ -25,8 +25,6 @@
 
 //#include "../Basescape/BasescapeState.h" // kL: soundPop
 
-#include "../Battlescape/Position.h"
-
 //#include "../Engine/AdlibMusic.h"
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
@@ -34,7 +32,7 @@
 //#include "../Engine/GMCat.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
-#include "../Engine/Music.h"
+//#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h" // kL
@@ -42,7 +40,6 @@
 //#include "../Engine/ShaderMove.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
-#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
 //#include "../Geoscape/GeoscapeState.h" // kL: soundPop
@@ -58,10 +55,6 @@
 #include "../Ruleset/RuleMusic.h" // sza_MusicRules
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/SoundDefinition.h"
-
-#include "../Savegame/Node.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom

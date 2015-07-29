@@ -24,15 +24,13 @@
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/TextList.h"
 #include "../Interface/ToggleTextButton.h"
 #include "../Interface/Window.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/Language.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Menu/ErrorMessageState.h"

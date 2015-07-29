@@ -20,7 +20,6 @@
 #include "CraftEquipmentState.h"
 
 //#include <algorithm>
-//#include <climits>
 //#include <sstream>
 
 #include "../Battlescape/BattlescapeGenerator.h"
@@ -28,14 +27,11 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
-#include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -54,7 +50,6 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/Vehicle.h"
 
 

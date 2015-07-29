@@ -19,17 +19,14 @@
 
 #include "CraftPatrolState.h"
 
-//#include <string>
-
 #include "GeoscapeCraftState.h"
 #include "GeoscapeState.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Text.h"
@@ -41,7 +38,6 @@
 #include "../Ruleset/RuleCraft.h"
 
 #include "../Savegame/Craft.h"
-//#include "../Savegame/Target.h"
 
 
 namespace OpenXcom

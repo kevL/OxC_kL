@@ -20,8 +20,6 @@
 #include "SavedBattleGame.h"
 
 //#include <vector>
-//#include <deque>
-//#include <queue>
 //#include <assert.h>
 
 #include "BattleItem.h"
@@ -41,7 +39,6 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 
@@ -214,7 +211,7 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(
 		const YAML::Node& node,
-		Ruleset* rules,
+		Ruleset* const rules,
 		SavedGame* savedGame)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::load()";
@@ -2822,18 +2819,22 @@ void SavedBattleGame::calculateModuleMap()
 				y != _mapsize_y;
 				++y)
 		{
-			const Tile* const tile = getTile(Position(
-													x,y,
-													_mapsize_z - 1));
-
-			if (tile != NULL
-				&& tile->getMapData(O_OBJECT) != NULL
-				&& tile->getMapData(O_OBJECT)->isBaseModule() == true)
+			for (int
+					z = 0;
+					z != _mapsize_z;
+					++z)
 			{
-				_baseModules[x / 10]
-							[y / 10].first += _baseModules[x / 10][y / 10].first > 0 ? 1 : 2;
-				_baseModules[x / 10]
-							[y / 10].second = _baseModules[x / 10][y / 10].first;
+				const Tile* const tile = getTile(Position(x,y,z));
+
+				if (tile != NULL
+					&& tile->getMapData(O_OBJECT) != NULL
+					&& tile->getMapData(O_OBJECT)->isBaseModule() == true)
+				{
+					_baseModules[x / 10]
+								[y / 10].first += _baseModules[x / 10][y / 10].first > 0 ? 1 : 2;
+					_baseModules[x / 10]
+								[y / 10].second = _baseModules[x / 10][y / 10].first;
+				}
 			}
 		}
 	}

@@ -24,9 +24,7 @@
 #include "Explosion.h"
 #include "Map.h"
 #include "TileEngine.h"
-#include "UnitDieBState.h"
 
-#include "../Engine/Game.h"
 //#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
@@ -39,7 +37,6 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 
 

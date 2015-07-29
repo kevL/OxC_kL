@@ -25,7 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Music.h"
+//#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
@@ -103,8 +103,8 @@ DefeatState::DefeatState()
 
 	if (_game->getSavedGame()->isIronman() == true) // Ironman is over, rambo
 	{
-		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
-		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+		const std::string file = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+		CrossPlatform::deleteFile(Options::getUserFolder() + file);
 	}
 }
 

@@ -27,13 +27,10 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Palette.h"
+//#include "../Engine/LocalizedText.h"
 
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
-
-#include "../Resource/ResourcePack.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"

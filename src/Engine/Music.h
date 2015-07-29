@@ -21,7 +21,6 @@
 #define OPENXCOM_MUSIC_H
 
 //#include <string>
-
 //#include <SDL_mixer.h>
 
 
@@ -30,7 +29,7 @@ namespace OpenXcom
 
 /**
  * Container for music tracks.
- * Handles loading and playing various formats through SDL_mixer.
+ * @note Handles loading and playing various formats through SDL_mixer.
  */
 class Music
 {

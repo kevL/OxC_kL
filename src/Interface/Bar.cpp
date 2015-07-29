@@ -19,7 +19,6 @@
 
 #include "Bar.h"
 
-//#include <cmath>
 //#include <SDL.h>
 
 

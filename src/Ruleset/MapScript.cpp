@@ -19,7 +19,6 @@
 
 #include "MapScript.h"
 
-//#include <sstream>
 //#include <yaml-cpp/yaml.h>
 
 #include "MapBlock.h"

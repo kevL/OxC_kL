@@ -19,8 +19,6 @@
 
 #include "Timer.h"
 
-//#include <assert.h>
-
 #include "Game.h"
 #include "Options.h"
 

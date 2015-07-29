@@ -19,8 +19,6 @@
 
 #include "AlienBase.h"
 
-//#include <sstream>
-
 #include "../Engine/Language.h"
 
 #include "../Geoscape/Globe.h" // Globe::GLM_ALIENBASE

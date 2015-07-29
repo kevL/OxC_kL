@@ -24,20 +24,17 @@
 #include "ErrorMessageState.h"
 #include "MainMenuState.h"
 
-#include "../Engine/Action.h"
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 
-#include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 
 

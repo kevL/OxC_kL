@@ -19,18 +19,14 @@
 
 #include "ListGamesState.h"
 
-//#include <utility>
-
 #include "DeleteGameState.h"
 
 #include "../Engine/Action.h"
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"

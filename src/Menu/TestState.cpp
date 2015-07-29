@@ -24,9 +24,8 @@
 //#include <SDL.h>
 
 //#include "../Engine/Exception.h"
-//#include "../Engine/Font.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Surface.h"

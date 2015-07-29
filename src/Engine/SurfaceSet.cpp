@@ -20,7 +20,6 @@
 #include "SurfaceSet.h"
 
 //#include <fstream>
-//#include <SDL_endian.h>
 
 #include "Surface.h"
 //#include "Exception.h"

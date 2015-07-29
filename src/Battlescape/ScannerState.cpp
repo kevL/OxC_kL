@@ -19,28 +19,18 @@
 
 #include "ScannerState.h"
 
-#include <iostream>
-#include <sstream>
-
 #include "ScannerView.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/LocalizedText.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
-
-#include "../Interface/Text.h"
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/RuleItem.h"
-
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -75,7 +65,6 @@ ScannerState::ScannerState(BattleAction* action)
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
 
-//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_scan);

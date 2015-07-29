@@ -19,19 +19,16 @@
 
 #include "ResourcePack.h"
 
-//#include <SDL_mixer.h>
-
 //#include "../Engine/Adlib/adlplayer.h" // kL: func_fade()
 //#include "../Engine/Font.h"
 #include "../Engine/Game.h" // fadeMusic()
 //#include "../Engine/Logger.h"
-#include "../Engine/Music.h"
+//#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
-#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
 //#include "../Interface/Cursor.h"

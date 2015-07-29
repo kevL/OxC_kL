@@ -19,9 +19,7 @@
 
 #include "CraftSoldiersState.h"
 
-//#include <climits>
-//#include <sstream>
-//#include <string>
+//#include <algorithm>
 
 #include "SoldierInfoState.h"
 
@@ -31,10 +29,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/XcomResourcePack.h"

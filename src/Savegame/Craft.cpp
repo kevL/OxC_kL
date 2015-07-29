@@ -21,8 +21,6 @@
 
 //#define _USE_MATH_DEFINES
 //#include <cmath>
-//#include <sstream>
-//#include "../fmath.h"
 
 #include "AlienBase.h"
 #include "Base.h"
@@ -35,8 +33,6 @@
 #include "Waypoint.h"
 
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
-//#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/Globe.h" // Globe::GLM_CRAFT

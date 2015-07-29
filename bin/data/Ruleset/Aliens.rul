@@ -1938,7 +1938,13 @@ alienMissions:
     points: 0
     objective: 4
     specialUfo: STR_BATTLESHIP #Spawned for the final retaliation run
-    raceWeights: {} #Special case, race comes from trigger UFO.
+    raceWeights: # In the case of a shootdown, race comes from the UFO that triggered the mission.
+      0:
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 20
+        STR_ETHEREAL: 20
+        STR_MUTON: 20
+        STR_FLOATER: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1

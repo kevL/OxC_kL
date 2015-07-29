@@ -28,6 +28,7 @@ namespace OpenXcom
 {
 
 class AlienBase;
+class AlienDeployment;
 class Game;
 class Globe;
 class MissionSite;
@@ -59,13 +60,14 @@ private:
 		_liveUfos,
 		_ufoCount,
 		_waveCount,
+		_siteZone,
 		_spawnTime;
 
 	std::string
 		_race,
 		_region;
 
-	const AlienBase* _base;
+	const AlienBase* _aBase;
 	const RuleAlienMission& _missionRule;
 	SavedGame& _gameSave;
 
@@ -79,7 +81,7 @@ private:
 			const UfoTrajectory& trajectory);
 	/// Spawns a MissionSite at a specific location.
 	MissionSite* spawnMissionSite(
-			const Ruleset& rules,
+			const AlienDeployment* const deployment,
 			const MissionArea& area);
 	/// Spawns an alien base
 	void spawnAlienBase(
@@ -181,6 +183,9 @@ private:
 				const Globe& globe,
 				const RuleRegion& region,
 				const size_t zone);
+
+		/// Tracks the target site.
+		void setMissionSiteZone(size_t zone);
 };
 
 }

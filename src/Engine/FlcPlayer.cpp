@@ -27,15 +27,12 @@
 //#include <math.h>
 //#include <string.h>
 //#include <SDL_mixer.h>
-//#include "../fmath.h"
 
-//#include "Exception.h"
 #include "Game.h"
 //#include "Logger.h"
 //#include "Options.h"
 //#include "Screen.h"
 #include "Surface.h"
-//#include "Zoom.h"
 
 
 namespace OpenXcom

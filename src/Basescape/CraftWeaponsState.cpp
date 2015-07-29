@@ -19,14 +19,11 @@
 
 #include "CraftWeaponsState.h"
 
-//#include <cmath>
 //#include <sstream>
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -113,8 +110,8 @@ CraftWeaponsState::CraftWeaponsState(
 	_lstWeapons->setSelectable();
 	_lstWeapons->setMargin();
 	_lstWeapons->addRow(
-						1,
-						tr("STR_NONE_UC").c_str());
+					1,
+					tr("STR_NONE_UC").c_str());
 	_weaponRules.push_back(NULL);
 
 	const std::vector<std::string>& weapons = _game->getRuleset()->getCraftWeaponsList();
@@ -147,10 +144,10 @@ CraftWeaponsState::CraftWeaponsState(
 				woststr2 << tr("STR_NOT_AVAILABLE");
 
 			_lstWeapons->addRow(
-								3,
-								tr(cwRule->getType()).c_str(),
-								woststr1.str().c_str(),
-								woststr2.str().c_str());
+							3,
+							tr(cwRule->getType()).c_str(),
+							woststr1.str().c_str(),
+							woststr2.str().c_str());
 		}
 	}
 

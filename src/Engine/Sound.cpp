@@ -19,8 +19,6 @@
 
 #include "Sound.h"
 
-//#include <SDL.h>
-
 //#include "Exception.h"
 #include "Language.h"
 //#include "Logger.h"

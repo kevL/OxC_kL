@@ -24,7 +24,7 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"

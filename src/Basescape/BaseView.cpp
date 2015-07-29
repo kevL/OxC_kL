@@ -25,7 +25,6 @@
 
 #include "../Engine/Action.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
@@ -807,10 +806,10 @@ void BaseView::blit(Surface* surface)
  */
 void BaseView::mouseOver(Action* action, State* state)
 {
-	_gridX = static_cast<int>(
-			 std::floor(action->getRelativeXMouse() / (static_cast<double>(GRID_SIZE) * action->getXScale())));
-	_gridY = static_cast<int>(
-			 std::floor(action->getRelativeYMouse() / (static_cast<double>(GRID_SIZE) * action->getYScale())));
+	_gridX = static_cast<int>(std::floor(
+			 action->getRelativeXMouse() / (static_cast<double>(GRID_SIZE) * action->getXScale())));
+	_gridY = static_cast<int>(std::floor(
+			 action->getRelativeYMouse() / (static_cast<double>(GRID_SIZE) * action->getYScale())));
 
 	if (   _gridX > -1
 		&& _gridX < static_cast<int>(Base::BASE_SIZE)

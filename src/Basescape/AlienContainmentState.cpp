@@ -20,16 +20,14 @@
 #include "AlienContainmentState.h"
 
 //#include <sstream>
-//#include <climits>
-//#include <cmath>
+//#include <algorithm>
 
 #include "SellState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"

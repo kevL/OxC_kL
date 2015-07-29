@@ -19,21 +19,15 @@
 
 #include "InventoryState.h"
 
-//#include <sstream>
-
 #include "BattlescapeState.h"
-//#include "Camera.h"
 #include "Inventory.h"
-//#include "Map.h"
-//#include "Pathfinding.h"
 #include "TileEngine.h"
 #include "UnitInfoState.h"
 
 #include "../Engine/Action.h"
-//#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 //#include "../Engine/InteractiveSurface.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"

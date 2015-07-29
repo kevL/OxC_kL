@@ -26,8 +26,6 @@
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/FlcPlayer.h"
 #include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
-#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"

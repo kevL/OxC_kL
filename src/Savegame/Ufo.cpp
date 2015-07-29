@@ -19,7 +19,6 @@
 
 #include "Ufo.h"
 
-//#include <sstream>
 //#include <algorithm>
 //#include <assert.h>
 //#define _USE_MATH_DEFINES

@@ -338,10 +338,10 @@ private:
 
 		/// Loads a saved game from YAML.
 		void load(
-				const std::string& filename,
-				Ruleset* rule);
+				const std::string& file,
+				Ruleset* const rules);
 		/// Saves a saved game to YAML.
-		void save(const std::string& filename) const;
+		void save(const std::string& file) const;
 
 		/// Gets the game name.
 		std::wstring getName() const;

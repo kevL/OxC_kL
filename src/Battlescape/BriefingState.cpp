@@ -19,18 +19,14 @@
 
 #include "BriefingState.h"
 
-//#include <sstream>
-
 #include "AliensCrashState.h"
 #include "BattlescapeState.h"
 #include "InventoryState.h"
 #include "NextTurnState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Music.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"

@@ -2652,6 +2652,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleMissionScript.cpp" />
+		<Unit filename="Ruleset/RuleMissionScript.h" />
 		<Unit filename="Ruleset/RuleMusic.cpp" />
 		<Unit filename="Ruleset/RuleMusic.h" />
 		<Unit filename="Ruleset/RuleRegion.cpp">

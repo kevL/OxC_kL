@@ -21,7 +21,6 @@
 
 //#include <algorithm>
 //#include <fstream>
-//#include "../fmath.h"
 
 #include "AlienRace.h"
 #include "AlienDeployment.h"
@@ -37,7 +36,6 @@
 #include "RuleAlienMission.h"
 #include "RuleArmor.h"
 #include "RuleBaseFacility.h"
-#include "RuleCity.h"
 #include "RuleCommendations.h"
 #include "RuleCountry.h"
 #include "RuleCraft.h"
@@ -47,6 +45,7 @@
 #include "RuleInventory.h"
 #include "RuleItem.h"
 #include "RuleManufacture.h"
+#include "RuleMissionScript.h"
 #include "RuleMusic.h" // sza_MusicRules
 #include "RuleRegion.h"
 #include "RuleResearch.h"
@@ -393,7 +392,7 @@ Ruleset::~Ruleset()
 			i != _mapScripts.end();
 			++i)
 	{
-		for (std::vector<MapScript*>::iterator
+		for (std::vector<MapScript*>::const_iterator
 				j = (*i).second.begin();
 				j != (*i).second.end();
 				)
@@ -416,7 +415,7 @@ Ruleset::~Ruleset()
  * Reloads the country lines from Geography rulefile.
  * @note Used in Geoscape's debugmode.
  */
-void Ruleset::reloadCountryLines()
+void Ruleset::reloadCountryLines() const
 {
 	for (std::vector<std::string>::const_iterator
 			i = _countriesIndex.begin();
@@ -455,19 +454,81 @@ void Ruleset::reloadCountryLines()
 }
 
 /**
+ * Checks to ensure that Mission scripts don't buttfuck reapers w/out using ky.
+ */
+void Ruleset::validateMissionScripts() const
+{
+	// these need to be validated, otherwise we're gonna get into some serious trouble down the line.
+	// it may seem like a somewhat arbitrary limitation, but there is a good reason behind it.
+	// i'd need to know what results are going to be before they are formulated, and there's a heirarchical structure to
+	// the order in which variables are determined for a mission, and the order is DIFFERENT for regular missions vs
+	// missions that spawn a mission site. where normally we pick a region, then a mission based on the weights for that region.
+	// a terror-type mission picks a mission type FIRST, then a region based on the criteria defined by the mission.
+	// there is no way i can conceive of to reconcile this difference to allow mixing and matching,
+	// short of knowing the results of calls to the RNG before they're determined.
+	// the best solution i can come up with is to disallow it, as there are other ways to acheive what this would amount to anyway,
+	// and they don't require time travel. - Warboy
+	for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator
+			i = _missionScripts.begin();
+			i != _missionScripts.end();
+			++i)
+	{
+		RuleMissionScript* const scriptRule = (*i).second;
+
+		const std::set<std::string> missions = scriptRule->getAllMissionTypes();
+		if (missions.empty() == false)
+		{
+			std::set<std::string>::const_iterator j = missions.begin();
+
+			const bool isSiteType = getAlienMission(*j)
+								 && getAlienMission(*j)->getObjective() == alm_SITE;
+			scriptRule->setSiteType(isSiteType);
+
+			for (
+					;
+					j != missions.end();
+					++j)
+			{
+				if (getAlienMission(*j) != NULL
+					&& (getAlienMission(*j)->getObjective() == alm_SITE) != isSiteType)
+				{
+					throw Exception("Error with MissionScript: " + (*i).first + " cannot mix terror/non-terror missions in a single command, so sayeth the wise Alfonso.");
+				}
+			}
+		}
+	}
+}
+
+/**
  * Loads a ruleset's contents from the given source.
  * @param source - reference the source to use
  */
 void Ruleset::load(const std::string& source)
 {
-	const std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
+	const std::string dir = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
 
-	if (CrossPlatform::folderExists(dirname) == false)
+	if (CrossPlatform::folderExists(dir) == false)
 		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
-		loadFiles(dirname);
+		loadFiles(dir);
 
 //	_modIndex += 1000;
+}
+
+/**
+ * Loads the contents of all the rule files in the given directory.
+ * @param dir - reference the name of an existing directory containing YAML ruleset files
+ */
+void Ruleset::loadFiles(const std::string& dir) // protected.
+{
+	std::vector<std::string> files = CrossPlatform::getFolderContents(dir, "rul");
+	for (std::vector<std::string>::const_iterator
+			i = files.begin();
+			i != files.end();
+			++i)
+	{
+		loadFile(dir + *i);
+	}
 }
 
 /**
@@ -1097,7 +1158,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		ResourcePack::GRAPHS_CURSOR			= (*i)["graphsCursor"]		.as<int>(ResourcePack::GRAPHS_CURSOR);
 	}
 
-	for (YAML::const_iterator
+/*	for (YAML::const_iterator
 			i = doc["transparencyLUTs"].begin();
 			i != doc["transparencyLUTs"].end();
 			++i)
@@ -1116,7 +1177,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 
 			_transparencies.push_back(color);
 		}
-	}
+	} */
 
 	for (YAML::const_iterator
 			i = doc["mapScripts"].begin();
@@ -1147,6 +1208,47 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		}
 	}
 
+	for (YAML::const_iterator
+			i = doc["missionScripts"].begin();
+			i != doc["missionScripts"].end();
+			++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		const bool fart = (*i)["delete"].as<bool>(false);
+
+		RuleMissionScript* rule = NULL;
+
+		for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator
+				j = _missionScripts.begin();
+				j != _missionScripts.end();
+				++j)
+		{
+			if ((*j).first == type)
+			{
+				if (fart == true)
+				{
+					delete (*j).second;
+					_missionScripts.erase(j);
+				}
+				else
+					rule = (*j).second;
+
+				break;
+			}
+		}
+
+		if (fart == false)
+		{
+			if (rule == NULL)
+				rule = new RuleMissionScript(type);
+
+			rule->load(*i);
+			_missionScripts.push_back(std::make_pair(
+													type,
+													rule));
+		}
+	}
+
 	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
 			i = _facilitiesIndex.begin();
 			i != _facilitiesIndex.end();
@@ -1170,22 +1272,6 @@ void Ruleset::loadFile(const std::string& file) // protected.
 									&_videos);
 		if (rule != NULL)
 			rule->load(*i);
-	}
-}
-
-/**
- * Loads the contents of all the rule files in the given directory.
- * @param dir - reference the name of an existing directory containing YAML ruleset files
- */
-void Ruleset::loadFiles(const std::string& dir) // protected.
-{
-	std::vector<std::string> names = CrossPlatform::getFolderContents(dir, "rul");
-	for (std::vector<std::string>::const_iterator
-			i = names.begin();
-			i != names.end();
-			++i)
-	{
-		loadFile(dir + *i);
 	}
 }
 
@@ -2412,10 +2498,10 @@ const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() co
  * Gets the transparency look-up table.
  * @return, vector of pointers to SDL_Color
  */
-const std::vector<SDL_Color>* Ruleset::getTransparencies() const
+/* const std::vector<SDL_Color>* Ruleset::getTransparencies() const
 {
 	return &_transparencies;
-}
+} */
 
 /**
  * Gets the list of MapScripts.
@@ -2441,8 +2527,17 @@ const std::map<std::string, RuleVideo*>* Ruleset::getVideos() const
 }
 
 /**
+ * Gets the mission scripts.
+ * @return, pointer to a vector of pairs of strings & pointers to RuleMissionScripts
+ */
+const std::vector<std::pair<std::string, RuleMissionScript*> >* Ruleset::getMissionScripts() const
+{
+	return &_missionScripts;
+}
+
+/**
  * Gets the current Game.
- * @return, pointer to Game
+ * @return, pointer to GAME
  */
 const Game* const Ruleset::getGame() const
 {

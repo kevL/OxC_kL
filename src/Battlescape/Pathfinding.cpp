@@ -25,17 +25,9 @@
 #include "PathfindingOpenSet.h"
 
 #include "../Battlescape/BattlescapeGame.h"
-#include "../Battlescape/BattlescapeState.h"
-#include "../Battlescape/TileEngine.h"
-
-#include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
-//#include "../Engine/Options.h"
 
 #include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/Ruleset.h"
 
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"

@@ -28,14 +28,11 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Music.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h" // in PCH.
-//#include "../Engine/Palette.h"
 //#include "../Engine/RNG.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
-//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 

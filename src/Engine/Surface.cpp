@@ -29,7 +29,6 @@
 //#include "Exception.h"
 #include "Language.h"
 //#include "Palette.h"
-//#include "Screen.h"
 //#include "ShaderDraw.h"
 //#include "ShaderMove.h"
 

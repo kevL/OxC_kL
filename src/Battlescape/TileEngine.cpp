@@ -22,7 +22,6 @@
 //#define _USE_MATH_DEFINES
 //#include <climits>
 //#include <cmath>
-//#include <functional>
 //#include <set>
 //#include <assert.h>
 //#include <SDL.h>
@@ -30,7 +29,6 @@
 //#include "../fmath.h"
 
 #include "AlienBAIState.h"
-#include "BattleAIState.h"
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "ExplosionBState.h"
@@ -43,7 +41,6 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"

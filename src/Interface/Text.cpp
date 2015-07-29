@@ -19,7 +19,6 @@
 
 #include "Text.h"
 
-//#include <cctype>
 //#include <cmath>
 //#include <sstream>
 

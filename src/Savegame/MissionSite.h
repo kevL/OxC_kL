@@ -42,7 +42,9 @@ class MissionSite
 {
 
 private:
-	bool _inTactical;
+	bool
+		_detected,
+		_inTactical;
 	int
 		_id,
 		_secondsLeft,
@@ -52,15 +54,15 @@ private:
 		_race,
 		_terrain;
 
-	const AlienDeployment* _deployment;
+	const AlienDeployment* _deployRule;
 	const RuleAlienMission* _missionRule;
 
 
 	public:
 		/// Creates this MissionSite.
 		MissionSite(
-				const RuleAlienMission* rules,
-				const AlienDeployment* deployment);
+				const RuleAlienMission* const missionRule,
+				const AlienDeployment* const deployRule);
 		/// Cleans up this MissionSite.
 		~MissionSite();
 
@@ -116,6 +118,11 @@ private:
 		std::string getCity() const;
 		/// Sets this MissionSite's city.
 		void setCity(const std::string& city);
+
+		/// Gets the mission site's detected state.
+		bool getDetected() const;
+		/// Sets the mission site's detected state.
+		void setDetected(bool detected = true);
 };
 
 }

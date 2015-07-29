@@ -27,17 +27,14 @@
 #include "../Basescape/CraftInfoState.h"
 
 #include "../Battlescape/BattlescapeGenerator.h"
-#include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BriefingState.h"
 
 #include "../Engine/Action.h"
 //#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Logger.h"
-#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/RNG.h"
 
 #include "../Interface/ComboBox.h"

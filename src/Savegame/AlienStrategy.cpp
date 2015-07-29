@@ -21,7 +21,6 @@
 
 //#include <assert.h>
 
-#include "SavedGame.h"
 #include "WeightedOptions.h"
 
 #include "../Ruleset/RuleRegion.h"
@@ -116,6 +115,9 @@ void AlienStrategy::load(
 											region,
 											options.release()));
 	}
+
+	_missionLocations = node["missionLocations"].as<std::map<std::string, std::vector<std::pair<std::string, int> > > >(_missionLocations);
+	_missionRuns = node["missionsRun"].as<std::map<std::string, int> >(_missionRuns);
 }
 
 /**
@@ -141,6 +143,9 @@ YAML::Node AlienStrategy::save() const
 		node["possibleMissions"].push_back(subnode);
 	}
 
+	node["missionLocations"]	= _missionLocations;
+	node["missionsRun"]			= _missionRuns;
+
 	return node;
 }
 
@@ -154,9 +159,24 @@ const std::string AlienStrategy::chooseRandomRegion(const Ruleset* const rules)
 	std::string chosen = _regionChances.choose();
 	if (chosen.empty() == true)
 	{
-		init(rules);
-		chosen = _regionChances.choose();
+		// no more missions to choose from, refresh
+		// First free allocated memory.
+		for (MissionsByRegion::const_iterator
+				i = _regionMissions.begin();
+				i != _regionMissions.end();
+				++i)
+		{
+			delete i->second;
+		}
+
+		_regionMissions.clear();
+
+		// re-initialize the list
+ 		init(rules);
+		// now try that again:
+ 		chosen = _regionChances.choose();
 	}
+
 	assert(chosen != "");
 
 	return chosen;
@@ -186,16 +206,107 @@ bool AlienStrategy::removeMission(
 		const std::string& mission)
 {
 	MissionsByRegion::const_iterator found = _regionMissions.find(region);
-	assert(found != _regionMissions.end());
-	found->second->setWeight(mission, 0);
-
-	if (found->second->hasNoWeight() == true)
+	if (found != _regionMissions.end())
 	{
-		_regionMissions.erase(found);
-		_regionChances.setWeight(region, 0);
+		found->second->setWeight(mission, 0);
+
+//		if (found->second->empty() == true)
+		if (found->second->hasNoWeight() == true)
+		{
+			_regionMissions.erase(found);
+			_regionChances.setWeight(region, 0);
+		}
 	}
 
 	return (_regionMissions.empty() == true);
+}
+
+/**
+ * Checks the number of missions labelled 'id' that have run.
+ * @return, the number of missions already run
+ */
+int AlienStrategy::getMissionsRun(const std::string& id)
+{
+	if (_missionRuns.find(id) != _missionRuns.end())
+		return _missionRuns[id];
+
+	return 0;
+}
+
+/**
+ * Increments the number of missions labelled 'id' that have run.
+ * @param id - the variable name to use to keep track of runs
+ */
+void AlienStrategy::addMissionRun(const std::string& id)
+{
+	if (id.empty() == true)
+		return;
+
+	++_missionRuns[id];
+}
+
+/**
+ * Adds a mission location to the storage array.
+ * @param id		- name of the variable under which to store this info
+ * @param region	- name of the region
+ * @param zone		- number of the zone within the region
+ * @param track 	- maximum size of the list to maintain
+ */
+void AlienStrategy::addMissionLocation(
+		const std::string& id,
+		const std::string& region,
+		int zone,
+		size_t track)
+{
+	if (track == 0)
+		return;
+
+	_missionLocations[id].push_back(std::make_pair(
+												region,
+												zone));
+	if (_missionLocations[id].size() > track)
+		_missionLocations.erase(_missionLocations.begin());
+}
+
+/**
+ * Checks that a given mission location (city or whatever) isn't stored in the
+ * list of previously attacked locations.
+ * @param id		- name of the variable under which this info is stored
+ * @param region	- name of the region
+ * @param zone		- number of the region to check
+ * @return, true if the region is valid (it's not in the table)
+ */
+bool AlienStrategy::validMissionLocation(
+		const std::string& id,
+		const std::string& region,
+		int zone)
+{
+	if (_missionLocations.find(id) != _missionLocations.end())
+	{
+		for (std::vector<std::pair<std::string, int> >::const_iterator
+				i = _missionLocations[id].begin();
+				i != _missionLocations[id].end();
+				++i)
+		{
+			if ((*i).first == region
+				&& (*i).second == zone)
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+/**
+ * Checks that a given region appears in the strategy table.
+ * @param region - region to check for validity
+ * @return, true if the region appears in the table
+ */
+bool AlienStrategy::validMissionRegion(const std::string& region) const
+{
+	std::map<std::string, WeightedOptions*>::const_iterator i = _regionMissions.find(region);
+	return (i != _regionMissions.end());
 }
 
 }

@@ -22,21 +22,16 @@
 //#define _USE_MATH_DEFINES
 //#include <cmath>
 
-#include "../Battlescape/Position.h"
+//#include "../Battlescape/Position.h"
 
 //#include "../Engine/Options.h"
 //#include "../Engine/ShaderDraw.h"
 //#include "../Engine/ShaderMove.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Resource/ResourcePack.h"
-
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"

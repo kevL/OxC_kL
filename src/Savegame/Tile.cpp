@@ -28,8 +28,6 @@
 #include "../Battlescape/Pathfinding.h"
 //#include "../Battlescape/Particle.h"
 
-//#include "../Engine/Exception.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/RNG.h"
 //#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"

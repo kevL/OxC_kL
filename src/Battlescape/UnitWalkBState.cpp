@@ -19,7 +19,6 @@
 
 #include "UnitWalkBState.h"
 
-#include "BattleAIState.h"
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "Map.h"
@@ -29,7 +28,6 @@
 #include "UnitFallBState.h"
 #include "TileEngine.h"
 
-#include "../Engine/Game.h"
 //#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h" // for turning on/off visUnit indicators.
@@ -40,7 +38,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
-#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"

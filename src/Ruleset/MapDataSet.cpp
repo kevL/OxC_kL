@@ -20,7 +20,6 @@
 #include "MapDataSet.h"
 
 //#include <fstream>
-//#include <sstream>
 //#include <SDL_endian.h>
 
 #include "MapData.h"

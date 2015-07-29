@@ -26,14 +26,8 @@
 
 //#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
-//#include "../Engine/RNG.h"
-#include "../Engine/Surface.h"
-
-#include "../Geoscape/GeoscapeState.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -42,7 +36,6 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleRegion.h"

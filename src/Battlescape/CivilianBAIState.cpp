@@ -22,15 +22,11 @@
 //#define _USE_MATH_DEFINES
 //#include <cmath>
 
-#include "BattlescapeState.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
-
-#include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Node.h"

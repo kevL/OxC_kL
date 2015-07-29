@@ -21,7 +21,7 @@
 
 //#include "CrossPlatform.h"
 #include "DosFont.h"
-#include "Language.h"
+//#include "Language.h"
 //#include "Logger.h"
 #include "Surface.h"
 

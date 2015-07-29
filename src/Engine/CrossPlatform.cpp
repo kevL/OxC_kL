@@ -17,24 +17,21 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CrossPlatform.h"
+//#include "CrossPlatform.h"
 
-#include <algorithm>
-#include <iostream>
-#include <locale>
-#include <set>
-#include <sstream>
-#include <stdint.h>
-#include <string>
+//#include <algorithm>
+//#include <locale>
+//#include <sstream>
+//#include <stdint.h>
+//#include <string>
+//#include <sys/stat.h>
 
-#include <sys/stat.h>
+//#include "../dirent.h"
 
-#include "../dirent.h"
-
-#include "Exception.h"
+//#include "Exception.h"
 #include "Language.h"
-#include "Logger.h"
-#include "Options.h"
+//#include "Logger.h"
+//#include "Options.h"
 
 #ifdef _WIN32 // kL_note: see pch.h ... & Language.cpp
 	#ifndef NOMINMAX
@@ -58,6 +55,9 @@
 		#pragma comment(lib, "shlwapi.lib")
 	#endif
 #else
+//	#include "Language.h"
+//	#include <iostream>
+//	#include <SDL_image.h>
 	#include <cstdio>
 	#include <cstdlib>
 	#include <cstring>
@@ -68,9 +68,8 @@
 	#include <sys/types.h>
 #endif
 
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <SDL_image.h>
+//#include <SDL.h>
+//#include <SDL_syswm.h>
 
 
 namespace OpenXcom

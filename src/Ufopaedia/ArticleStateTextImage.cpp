@@ -23,7 +23,7 @@
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 

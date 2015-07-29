@@ -26,11 +26,9 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
-#include "../Engine/Music.h"
+//#include "../Engine/LocalizedText.h"
+//#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -55,13 +53,16 @@ namespace OpenXcom
 SoldierMemorialState::SoldierMemorialState()
 {
 	_window			= new Window(this, 320, 200);
-	_txtTitle		= new Text(310, 17, 5, 9);
-	_txtRecruited	= new Text(110, 9, 16, 25);
-	_txtLost		= new Text(110, 9, 210, 25);
-	_txtName		= new Text(132, 9, 16, 36);
-	_txtRank		= new Text(70, 9, 148, 36);
-	_txtDate		= new Text(86, 9, 218, 36);
+
+	_txtTitle		= new Text(310, 17,   5,  9);
+	_txtRecruited	= new Text(110,  9,  16, 25);
+	_txtLost		= new Text(110,  9, 210, 25);
+	_txtName		= new Text(132,  9,  16, 36);
+	_txtRank		= new Text( 70,  9, 148, 36);
+	_txtDate		= new Text( 86,  9, 218, 36);
+
 	_lstSoldiers	= new TextList(285, 129, 16, 44);
+
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setInterface("soldierMemorial");
@@ -135,12 +136,12 @@ SoldierMemorialState::SoldierMemorialState()
 		year << death->getTime()->getYear();
 
 		_lstSoldiers->addRow(
-							5,
-							(*i)->getName().c_str(),
-							tr((*i)->getRankString()).c_str(),
-							day.str().c_str(),
-							month.str().c_str(),
-							year.str().c_str());
+						5,
+						(*i)->getName().c_str(),
+						tr((*i)->getRankString()).c_str(),
+						day.str().c_str(),
+						month.str().c_str(),
+						year.str().c_str());
 	}
 }
 

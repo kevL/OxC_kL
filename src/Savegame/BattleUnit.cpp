@@ -22,7 +22,6 @@
 //#define _USE_MATH_DEFINES
 //#include <cmath>
 //#include <sstream>
-//#include <typeinfo>
 
 #include "BattleItem.h"
 #include "SavedGame.h"
@@ -37,7 +36,6 @@
 
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 

@@ -24,16 +24,14 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 
 #include "../Interface/ComboBox.h"
 #include "../Interface/Slider.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
 

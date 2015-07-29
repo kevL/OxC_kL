@@ -159,9 +159,12 @@ private:
 	void startDogfight();
 
 	/// Handle alien mission generation.
-	void determineAlienMissions(bool atGameStart = false);
-	/// Handle land mission generation.
-	void setupLandMission();
+	void determineAlienMissions();
+//	void determineAlienMissions(bool atGameStart = false);
+//	/// Handle land mission generation.
+//	void setupLandMission();
+	/// Process each individual mission script command.
+	bool processCommand(RuleMissionScript* command);
 
 	/// Handler for clicking the timer button.
 	void btnTimerPress(Action* action);

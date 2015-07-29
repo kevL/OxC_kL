@@ -29,7 +29,6 @@
 namespace OpenXcom
 {
 
-class Palette;
 class Surface;
 
 

@@ -24,18 +24,12 @@
 //#include <climits>
 //#include <cmath>
 
-#include "ProjectileFlyBState.h"
-
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/Map.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
 
 #include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
-//#include "../Engine/RNG.h"
-
-#include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"

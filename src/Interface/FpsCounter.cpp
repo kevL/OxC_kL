@@ -25,7 +25,6 @@
 
 #include "../Engine/Action.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 

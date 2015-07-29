@@ -23,7 +23,6 @@
 
 #include "BattlescapeGame.h"			// kL, for terrain explosions
 #include "BattlescapeState.h"
-#include "DebriefingState.h"
 #include "ExplosionBState.h"			// kL, for terrain explosions
 #include "Map.h"						// kL, extern 'kL_noReveal'
 #include "TileEngine.h"					// kL, for terrain explosions
@@ -31,7 +30,7 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"

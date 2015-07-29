@@ -23,7 +23,6 @@
 
 #include <math.h>
 #include <memory.h>
-#include <stdio.h>
 #include <stdint.h>
 
 #include "fmopl.h"

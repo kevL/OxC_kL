@@ -23,8 +23,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Interface/Text.h"
-
 #include "../Resource/ResourcePack.h"
 
 #include "../Savegame/BattleUnit.h"

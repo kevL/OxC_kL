@@ -21,14 +21,12 @@
 
 //#define _USE_MATH_DEFINES
 //#include <cmath>
-//#include "../fmath.h"
 
 #include "Map.h"
 #include "Camera.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
-//#include "../Engine/Game.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 //#include "../Engine/Surface.h"
@@ -36,11 +34,9 @@
 
 #include "../Resource/ResourcePack.h"
 
-//#include "../Ruleset/RuleArmor.h"
 //#include "../Ruleset/MapData.h"
 //#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleSoldier.h"
-//#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/BattleItem.h"
 //#include "../Savegame/BattleUnit.h"

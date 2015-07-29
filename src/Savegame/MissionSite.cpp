@@ -19,8 +19,6 @@
 
 #include "MissionSite.h"
 
-//#include <sstream>
-
 #include "../Engine/Language.h"
 
 #include "../Geoscape/Globe.h" // Globe::GLM_MISSIONSITE
@@ -36,16 +34,17 @@ namespace OpenXcom
  * Initializes a mission site.
  */
 MissionSite::MissionSite(
-		const RuleAlienMission* rules,
-		const AlienDeployment* deployment)
+		const RuleAlienMission* const missionRule,
+		const AlienDeployment* const deployRule)
 	:
 		Target(),
-		_missionRule(rules),
-		_deployment(deployment),
+		_missionRule(missionRule),
+		_deployRule(deployRule),
 		_id(0),
 		_texture(-1),
 		_secondsLeft(0),
-		_inTactical(false)
+		_inTactical(false),
+		_detected(false)
 {}
 
 /**
@@ -62,12 +61,14 @@ void MissionSite::load(const YAML::Node& node)
 {
 	Target::load(node);
 
-	// NOTE: "type" & "deployment" loaded by SavedGame and passed into cTor.
 	_id				= node["id"]			.as<int>(_id);
 	_texture		= node["texture"]		.as<int>(_texture);
 	_secondsLeft	= node["secondsLeft"]	.as<int>(_secondsLeft);
 	_race			= node["race"]			.as<std::string>(_race);
 	_inTactical		= node["inTactical"]	.as<bool>(_inTactical);
+	_detected		= node["detected"]		.as<bool>(_detected);
+
+	// NOTE: "type" & "deployment" loaded by SavedGame and passed into cTor.
 }
 
 /**
@@ -78,17 +79,20 @@ YAML::Node MissionSite::save() const
 {
 	YAML::Node node = Target::save();
 
-	node["type"]			= _missionRule->getType();
-	node["deployment"]		= _deployment->getType();
+	node["id"]			= _id;
+	node["race"]		= _race;
+	node["texture"]		= _texture;
+	node["type"]		= _missionRule->getType();
+	node["deployment"]	= _deployRule->getType();
 
-	node["id"]				= _id;
-	node["texture"]			= _texture;
-	node["race"]			= _race;
+	if (_detected == true)
+		node["detected"] = _detected;
 
 	if (_secondsLeft != 0)
-		node["secondsLeft"]	= _secondsLeft;
+		node["secondsLeft"] = _secondsLeft;
+
 	if (_inTactical == true)
-		node["inTactical"]	= _inTactical;
+		node["inTactical"] = _inTactical;
 
 	return node;
 }
@@ -101,7 +105,7 @@ YAML::Node MissionSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
 
-	node["type"]	= _deployment->getMarkerName();
+	node["type"]	= _deployRule->getMarkerName();
 	node["id"]		= _id;
 
 	return node;
@@ -122,7 +126,7 @@ const RuleAlienMission* MissionSite::getRules() const
  */
 const AlienDeployment* MissionSite::getDeployment() const
 {
-	return _deployment;
+	return _deployRule;
 }
 
 /**
@@ -150,7 +154,7 @@ void MissionSite::setId(const int id)
  */
 std::wstring MissionSite::getName(const Language* const lang) const
 {
-	return lang->getString(_deployment->getMarkerName()).arg(_id);
+	return lang->getString(_deployRule->getMarkerName()).arg(_id);
 }
 
 /**
@@ -159,10 +163,13 @@ std::wstring MissionSite::getName(const Language* const lang) const
  */
 int MissionSite::getMarker() const
 {
-	if (_deployment->getMarkerIcon() == -1)
+	if (_detected == false)
+		return -1;
+
+	if (_deployRule->getMarkerIcon() == -1)
 		return Globe::GLM_MISSIONSITE;
 
-	return _deployment->getMarkerIcon();
+	return _deployRule->getMarkerIcon();
 }
 
 /**
@@ -271,6 +278,25 @@ std::string MissionSite::getCity() const
 void MissionSite::setCity(const std::string& city)
 {
 	_city = city;
+}
+
+/**
+ * Gets the detection state for this mission site.
+ * @note Used for popups of sites spawned directly rather than by UFOs.
+ * @return, true if this site has been detected
+ */
+bool MissionSite::getDetected() const
+{
+	return _detected;
+}
+
+/**
+ * Sets the mission site's detection state.
+ * @param detected - true to show on the geoscape (default true)
+ */
+void MissionSite::setDetected(bool detected)
+{
+	_detected = detected;
 }
 
 }

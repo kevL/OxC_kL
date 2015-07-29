@@ -12,16 +12,12 @@
 
 #include "OpenGL.h"
 
-#include <cstdlib>
-#include <fstream>
-#include <iostream>
+//#include <fstream>
+//#include <SDL.h>
+//#include <SDL_opengl.h>
+//#include <yaml-cpp/yaml.h>
 
-#include <SDL.h>
-#include <SDL_opengl.h>
-
-#include <yaml-cpp/yaml.h>
-
-#include "Logger.h"
+//#include "Logger.h"
 #include "Surface.h"
 
 
@@ -473,19 +469,19 @@ void OpenGL::init(
 	wglSwapIntervalEXT		= (Uint32 (APIENTRYP)(int))glGetProcAddress("wglSwapIntervalEXT");
 
 
-	shader_support = &glCreateProgram
-				  && &glUseProgram
-				  && &glCreateShader
-				  && &glDeleteShader
-				  && &glShaderSource
-				  && &glCompileShader
-				  && &glAttachShader
-				  && &glDetachShader
-				  && &glLinkProgram
-				  && &glGetUniformLocation
-				  && &glUniform1i
-				  && &glUniform2fv
-				  && &glUniform4fv;
+	shader_support = glCreateProgram
+				  && glUseProgram
+				  && glCreateShader
+				  && glDeleteShader
+				  && glShaderSource
+				  && glCompileShader
+				  && glAttachShader
+				  && glDetachShader
+				  && glLinkProgram
+				  && glGetUniformLocation
+				  && glUniform1i
+				  && glUniform2fv
+				  && glUniform4fv;
 
 	if (shader_support)
 		glprogram = glCreateProgram();

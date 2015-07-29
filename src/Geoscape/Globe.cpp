@@ -28,13 +28,10 @@
 
 #include "../Engine/Action.h"
 //#include "../Engine/FastLineClip.h"
-//#include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
-//#include "../Engine/LocalizedText.h" huh
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 //#include "../Engine/ShaderMove.h"
 //#include "../Engine/ShaderRepeat.h"
@@ -53,7 +50,6 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleGlobe.h"
-#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
 

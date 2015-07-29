@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Music.h"
+//#include "Music.h"
 
 //#include "Exception.h"
 #include "Language.h"
@@ -51,15 +51,15 @@ Music::~Music()
 }
 
 /**
- * Loads this Music track from a specified filename.
- * @param filename - reference the filename to load
+ * Loads this Music track from a specified file.
+ * @param file - reference the file to load
  */
-void Music::load(const std::string& filename)
+void Music::load(const std::string& file)
 {
 #ifndef __NO_MUSIC
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(file));
 
 	_music = Mix_LoadMUS(utf8.c_str());
 	if (_music == NULL)

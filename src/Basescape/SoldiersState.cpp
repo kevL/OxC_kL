@@ -31,18 +31,12 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
-//#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 
-#include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -53,12 +47,9 @@
 //#include "../Ruleset/RuleSoldier.h" // minPsi in btnSortClick()
 
 #include "../Savegame/Base.h"
-#include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-
-#include "../Ruleset/RuleCraft.h"
 
 
 namespace OpenXcom
@@ -193,10 +184,10 @@ void SoldiersState::init()
 				++row)
 	{
 		_lstSoldiers->addRow(
-							3,
-							(*i)->getName().c_str(),
-							tr((*i)->getRankString()).c_str(),
-							(*i)->getCraftString(_game->getLanguage()).c_str());
+						3,
+						(*i)->getName().c_str(),
+						tr((*i)->getRankString()).c_str(),
+						(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		if ((*i)->getCraft() == NULL)
 		{

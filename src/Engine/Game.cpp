@@ -31,17 +31,12 @@
 //#include <sstream>
 //#include <SDL_mixer.h>
 
-//#include "Adlib/adlplayer.h"
-
 #include "Action.h"
 //#include "CrossPlatform.h"
 //#include "Exception.h"
-#include "InteractiveSurface.h"
 #include "Language.h"
-//#include "Logger.h"
-#include "Music.h"
+//#include "Music.h"
 //#include "Options.h"
-//#include "Palette.h"
 //#include "Screen.h"
 #include "Sound.h"
 #include "State.h"
@@ -777,6 +772,7 @@ void Game::loadRuleset()
 		throw Exception("Failed to load ruleset");
 	}
 
+	_rules->validateMissionScripts();
 	_rules->sortLists();
 }
 
@@ -849,7 +845,7 @@ void Game::initAudio()
 	if (Mix_OpenAudio(
 				Options::audioSampleRate,
 				audioFormat,
-				2,1024) != 0) // TODO: Options::audioBufferSize
+				2,2048) != 0) // TODO: Options::audioBufferSize
 	{
 		Log(LOG_ERROR) << Mix_GetError();
 		Log(LOG_WARNING) << "No sound device detected, audio disabled.";

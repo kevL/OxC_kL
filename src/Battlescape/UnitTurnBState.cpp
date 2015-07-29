@@ -23,8 +23,6 @@
 #include "Map.h"
 #include "TileEngine.h"
 
-#include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
 

@@ -19,15 +19,12 @@
 
 #include "NewManufactureListState.h"
 
-//#include <algorithm>
-
 #include "ManufactureCostsState.h"
 #include "ManufactureStartState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 
 //#include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
@@ -42,7 +39,6 @@
 #include "../Ruleset/RuleManufacture.h"
 
 #include "../Savegame/Base.h"
-#include "../Savegame/Production.h"
 #include "../Savegame/SavedGame.h"
 
 

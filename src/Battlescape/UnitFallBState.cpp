@@ -19,20 +19,13 @@
 
 #include "UnitFallBState.h"
 
-#include "BattleAIState.h"
 #include "BattlescapeState.h"
 #include "Camera.h"
-//#include "ExplosionBState.h"
 #include "Map.h"
 #include "Pathfinding.h"
-#include "ProjectileFlyBState.h"
 #include "TileEngine.h"
 
-#include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
-
-#include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
 

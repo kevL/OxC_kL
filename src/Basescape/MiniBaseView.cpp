@@ -22,7 +22,6 @@
 //#include <cmath>
 
 #include "../Engine/Action.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 

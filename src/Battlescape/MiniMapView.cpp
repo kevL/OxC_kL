@@ -20,11 +20,9 @@
 #include "MiniMapView.h"
 
 //#include <cmath>
-//#include <sstream>
 //#include "../fmath.h"
 
 #include "Camera.h"
-#include "Map.h"
 #include "MiniMapState.h"
 
 #include "../Engine/Action.h"

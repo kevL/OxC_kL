@@ -637,10 +637,13 @@ const LocalizedText& Language::getString(
  */
 const LocalizedText& Language::getString(const std::string& id) const
 {
-	static LocalizedText hack(L""); // init.
+	static LocalizedText hack (L""); // init.
 
 	if (id.empty() == true)
+	{
+		hack = LocalizedText(L""); // what, don't the static 'hack' above work
 		return hack;
+	}
 
 	const std::map<std::string, LocalizedText>::const_iterator pst = _strings.find(id);
 	if (pst == _strings.end())
@@ -655,9 +658,9 @@ const LocalizedText& Language::getString(const std::string& id) const
 }
 
 /**
- * Returns the localized text with the specified ID, in the proper form for @a n.
- * The substitution of @a n has already happened in the returned LocalizedText.
- * @note If not found return the ID itself.
+ * Returns the localized text with the specified ID in the proper form for @a n.
+ * @note The substitution of @a n has already happened in the returned
+ * LocalizedText. If not found return the ID itself.
  * @param id	- ID of the string
  * @param n		- number to use to decide the proper form
  * @return, LocalizedText (widestring) with the requested ID

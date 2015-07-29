@@ -22,6 +22,7 @@
 
 //#include <string>
 //#include <map>
+//#include <vector>
 //#include <yaml-cpp/yaml.h>
 
 
@@ -30,14 +31,14 @@ namespace OpenXcom
 
 /**
  * Holds pairs of relative weights and IDs.
- * It is used to store options and make a random choice between them.
+ * @note It is used to store options and make a random choice between them.
  */
 class WeightedOptions
 {
 
 private:
-	std::map<std::string, size_t> _choices;	// Options and weights
 	size_t _totalWeight;					// The total weight of all options.
+	std::map<std::string, size_t> _choices;	// Options and weights
 
 
 	public:
@@ -46,6 +47,11 @@ private:
 			:
 				_totalWeight(0)
 		{}
+
+		/// Updates the list with data from YAML.
+		void load(const YAML::Node& node);
+		/// Stores the list in YAML.
+		YAML::Node save() const;
 
 		/// Selects from the items by probability.
 		const std::string choose() const;
@@ -66,10 +72,8 @@ private:
 		{	_totalWeight = 0;
 			_choices.clear(); }
 
-		/// Updates the list with data from YAML.
-		void load(const YAML::Node& node);
-		/// Stores the list in YAML.
-		YAML::Node save() const;
+		/// Gets the list of strings associated with these weights.
+		std::vector<std::string> getNames() const;
 };
 
 }

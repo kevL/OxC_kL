@@ -28,9 +28,8 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -50,7 +49,6 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Vehicle.h"
 

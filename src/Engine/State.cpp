@@ -19,7 +19,6 @@
 
 #include "State.h"
 
-//#include "Font.h"
 #include "Game.h"
 #include "InteractiveSurface.h"
 #include "Language.h"

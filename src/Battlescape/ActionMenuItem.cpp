@@ -20,7 +20,6 @@
 #include "ActionMenuItem.h"
 
 #include "../Engine/Game.h"
-//#include "../Engine/Palette.h"
 
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"

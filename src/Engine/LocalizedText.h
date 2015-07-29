@@ -20,16 +20,16 @@
 #ifndef OPENXCOM_LOCALIZEDTEXT_H
 #define OPENXCOM_LOCALIZEDTEXT_H
 
-#include <sstream>
-#include <string>
+//#include <sstream>
+//#include <string>
 
 
 /// @file
 
 /** @def OX_REQUIRED_RESULT
- * This is used to enable warning of unused results, to warn the user of costly function calls.
+ * This is used to enable warning of unused results to warn the user of costly
+ * function calls.
  */
-
 #ifndef OX_REQUIRED_RESULT
 #	if defined(__GNUC_) && !defined(__INTEL_COMPILER) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
 #		define OX_REQUIRED_RESULT __attribute__ ((warn_unused_result))
@@ -44,7 +44,7 @@ namespace OpenXcom
 
 /**
  * A string that is already translated.
- * Using this class allows argument substitution in the translated strings.
+ * @note Using this class allows argument substitution in the translated strings.
  */
 class LocalizedText
 {
@@ -60,34 +60,34 @@ private:
 
 
 	public:
-		/// Create from existing unicode string.
+		/// Creates from existing unicode string.
 		LocalizedText(const std::wstring&);
-		/// Create the empty string.
+		/// Creates the empty string.
 		LocalizedText()
 			:
 				_nextArg(1)
 		{}
 
-		/// Return constant wide string.
+		/// Returns constant wide string.
 		operator std::wstring const & () const OX_REQUIRED_RESULT;
 
-		/// Return the UTF-8 representation of this string.
+		/// Returns the UTF-8 representation of this string.
 		std::string asUTF8() const OX_REQUIRED_RESULT;
 
-		/// Get a pointer to underlying wchar_t data.
+		/// Gets a pointer to underlying wchar_t data.
 		const wchar_t* c_str() const OX_REQUIRED_RESULT
 		{ return _text.c_str(); }
 
 		// Argument substitution.
-		/// Replace next argument.
+		/// Replaces next argument.
 		LocalizedText arg(const std::wstring&) const OX_REQUIRED_RESULT;
-		/// Replace next argument.
+		/// Replaces next argument.
 		LocalizedText& arg(const std::wstring&) OX_REQUIRED_RESULT;
 
-		/// Replace next argument.
+		/// Replaces next argument.
 		template <typename T>
 		LocalizedText arg(T) const OX_REQUIRED_RESULT;
-		/// Replace next argument.
+		/// Replaces next argument.
 		template <typename T>
 		LocalizedText& arg(T) OX_REQUIRED_RESULT;
 };
@@ -115,7 +115,7 @@ inline LocalizedText::LocalizedText(
 
 /**
  * Typecast to constant std::wstring reference.
- * This is used to avoid copying when the string will not change.
+ * @note This is used to avoid copying when the string will not change.
  */
 inline LocalizedText::operator std::wstring const & () const
 { return _text; }
@@ -123,9 +123,9 @@ inline LocalizedText::operator std::wstring const & () const
 
 /**
  * Replace the next argument placeholder with @a val.
- * @tparam T, The type of the replacement value. It should be streamable to std::wostringstream.
- * @param val, The value to place in the next placeholder's position.
- * @return, A translated string with all occurrences of the marker replaced by @a val.
+ * @tparam T	- the type of the replacement value; it should be streamable to std::wostringstream
+ * @param val	- the value to place in the next placeholder's position
+ * @return, translated string with all occurrences of the marker replaced by @a val
  */
 template <typename T>
 LocalizedText LocalizedText::arg(T val) const
@@ -164,9 +164,9 @@ LocalizedText LocalizedText::arg(T val) const
 
 /**
  * Replace the next argument placeholder with @a val.
- * @tparam T The type of the replacement value. It should be streamable to std::wostringstream.
- * @param val The value to place in the next placeholder's position.
- * @return The translated string with all occurrences of the marker replaced by @a val.
+ * @tparam T	- the type of the replacement value; it should be streamable to std::wostringstream
+ * @param val	- the value to place in the next placeholder's position
+ * @return, translated string with all occurrences of the marker replaced by @a val
  */
 template <typename T>
 LocalizedText& LocalizedText::arg(T val)

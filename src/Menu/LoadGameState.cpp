@@ -25,15 +25,12 @@
 
 #include "../Battlescape/BattlescapeState.h"
 
-#include "../Engine/Action.h"
 //#include "../Engine/CrossPlatform.h"
 //#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
-//#include "../Engine/Screen.h"
 
 #include "../Geoscape/GeoscapeState.h"
 

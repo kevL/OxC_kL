@@ -20,9 +20,8 @@
 #include "SackSoldierState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -34,7 +33,6 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 
 

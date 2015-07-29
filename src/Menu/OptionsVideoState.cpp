@@ -21,11 +21,8 @@
 
 #include "../Engine/Action.h"
 //#include "../Engine/CrossPlatform.h"
-#include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
 #include "../Interface/ArrowButton.h"
@@ -34,9 +31,6 @@
 //#include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/ToggleTextButton.h"
-#include "../Interface/Window.h"
-
-#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom

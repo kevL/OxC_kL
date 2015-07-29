@@ -19,7 +19,6 @@
 
 #include "ManufactureState.h"
 
-//#include <limits>
 //#include <sstream>
 
 #include "BasescapeState.h"
@@ -28,10 +27,8 @@
 #include "NewManufactureListState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/Language.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
-//#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -91,10 +88,10 @@ ManufactureState::ManufactureState(
 	setInterface("manufactureMenu");
 
 	add(_window,			"window",	"manufactureMenu");
-	add(_mini,				"miniBase",	"basescape"); // <-
+	add(_mini,				"miniBase",	"basescape");		// <-
 	add(_txtTitle,			"text1",	"manufactureMenu");
 	add(_txtBaseLabel,		"text1",	"manufactureMenu");
-	add(_txtHoverBase,		"numbers",	"baseInfo");
+	add(_txtHoverBase,		"numbers",	"baseInfo");		// <-
 	add(_txtAvailable,		"text1",	"manufactureMenu");
 	add(_txtAllocated,		"text1",	"manufactureMenu");
 	add(_txtSpace,			"text1",	"manufactureMenu");

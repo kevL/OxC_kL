@@ -29,9 +29,8 @@
 #include "../Battlescape/CommendationState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 
 #include "../Menu/SaveGameState.h"
 
@@ -43,7 +42,6 @@
 
 #include "../Ruleset/RuleCountry.h"
 
-#include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/GameTime.h"

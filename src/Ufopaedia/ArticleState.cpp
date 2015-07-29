@@ -19,19 +19,14 @@
 
 #include "ArticleState.h"
 
-//#include <sstream>
-
 #include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/TextButton.h"
-
-//#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom

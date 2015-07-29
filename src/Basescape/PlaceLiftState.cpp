@@ -19,15 +19,12 @@
 
 #include "PlaceLiftState.h"
 
-//#include <sstream>
-
 #include "BasescapeState.h"
 #include "BaseView.h"
 #include "SelectStartFacilityState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-//#include "../Engine/Palette.h"
+//#include "../Engine/LocalizedText.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -103,16 +100,16 @@ PlaceLiftState::~PlaceLiftState()
  */
 void PlaceLiftState::viewClick(Action*)
 {
-	BaseFacility* fac = new BaseFacility(
-									_lift,
-									_base);
+	BaseFacility* const fac = new BaseFacility(
+											_lift,
+											_base);
 	fac->setX(_view->getGridX());
 	fac->setY(_view->getGridY());
 
 	_base->getFacilities()->push_back(fac);
 
 	_game->popState();
-	BasescapeState* bState = new BasescapeState(
+	BasescapeState* const bState = new BasescapeState(
 											_base,
 											_globe);
 //	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);

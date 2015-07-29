@@ -26,8 +26,6 @@
 #include "Craft.h"
 #include "SerializationHelper.h"
 
-//#include "../Engine/Language.h"
-
 
 namespace OpenXcom
 {

@@ -19,19 +19,12 @@
 
 #include "BaseDefenseState.h"
 
-//#include <sstream>
-
-#include "BaseDestroyedState.h"
 #include "GeoscapeState.h"
-
-#include "../Battlescape/BattlescapeGenerator.h"
-#include "../Battlescape/BriefingState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
@@ -47,7 +40,6 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
 
 

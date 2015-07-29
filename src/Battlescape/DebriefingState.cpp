@@ -31,14 +31,11 @@
 #include "../Basescape/SellState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/Music.h"
+//#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/Palette.h"
 //#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -54,7 +51,7 @@
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleInventory.h"
+//#include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
@@ -100,7 +97,6 @@ DebriefingState::DebriefingState()
 		_noContainment(false),
 		_manageContainment(false),
 		_destroyXCOMBase(false),
-		_limitsEnforced(0),
 		_aliensControlled(0),
 		_aliensKilled(0),
 		_aliensStunned(0),
@@ -124,6 +120,8 @@ DebriefingState::DebriefingState()
 
 	if (Options::storageLimitsEnforced == true)
 		_limitsEnforced = 1;
+	else
+		_limitsEnforced = 0;
 
 	_window			= new Window(this, 320, 200);
 
@@ -511,8 +509,7 @@ void DebriefingState::init()
 
 	_game->getResourcePack()->playMusic(
 									_music,
-									"",
-									1);
+									"",1);
 }
 
 /**
