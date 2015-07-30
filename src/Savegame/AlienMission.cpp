@@ -122,7 +122,7 @@ void AlienMission::load(const YAML::Node& node)
 	_liveUfos	= node["liveUfos"]	.as<size_t>(_liveUfos);
 	_uniqueID	= node["uniqueID"]	.as<int>(_uniqueID);
 	_success	= node["success"]	.as<bool>(_success);
-	_siteZone	= node["siteZone"]	.as<int>(_siteZone);
+	_siteZone	= node["siteZone"]	.as<size_t>(_siteZone);
 
 	if (const YAML::Node& baseId = node["alienBase"])
 	{

@@ -471,6 +471,7 @@
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
     <ClCompile Include="Ruleset\RuleArmor.cpp" />
     <ClCompile Include="Ruleset\RuleCity.cpp" />
+    <ClCompile Include="Ruleset\RuleMissionScript.cpp" />
     <ClCompile Include="Ruleset\RuleTexture.cpp" />
     <ClCompile Include="Ruleset\MapScript.cpp" />
     <ClCompile Include="Ruleset\MCDPatch.cpp" />
@@ -810,6 +811,7 @@
     <ClInclude Include="Ruleset\ExtraStrings.h" />
     <ClInclude Include="Ruleset\RuleArmor.h" />
     <ClInclude Include="Ruleset\RuleCity.h" />
+    <ClInclude Include="Ruleset\RuleMissionScript.h" />
     <ClInclude Include="Ruleset\RuleTexture.h" />
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />

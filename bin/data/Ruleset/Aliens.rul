@@ -1945,6 +1945,7 @@ alienMissions:
         STR_ETHEREAL: 20
         STR_MUTON: 20
         STR_FLOATER: 20
+        STR_WASPITE: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1

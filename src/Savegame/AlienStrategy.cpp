@@ -80,12 +80,9 @@ void AlienStrategy::init(const Ruleset* const rules)
 
 /**
  * Loads the data from a YAML file.
- * @param rules	- pointer to the Ruleset (not used)
  * @param node	- reference a YAML node
  */
-void AlienStrategy::load(
-		const Ruleset*,
-		const YAML::Node& node)
+void AlienStrategy::load(const YAML::Node& node)
 {
 	for (MissionsByRegion::iterator
 			i = _regionMissions.begin();

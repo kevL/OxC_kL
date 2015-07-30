@@ -6322,21 +6322,8 @@
 
 1433206006 f:\git\openxcom\src\engine\catfile.h
 
-1433853287 source:f:\git\openxcom\src\engine\crossplatform.cpp
-	"CrossPlatform.h"
-	<algorithm>
-	<iostream>
-	<locale>
-	<set>
-	<sstream>
-	<stdint.h>
-	<string>
-	<sys/stat.h>
-	"../dirent.h"
-	"Exception.h"
+1438174753 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"Language.h"
-	"Logger.h"
-	"Options.h"
 	<shlobj.h>
 	<shlwapi.h>
 	<cstdio>
@@ -6346,9 +6333,6 @@
 	<unistd.h>
 	<sys/param.h>
 	<sys/types.h>
-	<SDL.h>
-	<SDL_syswm.h>
-	<SDL_image.h>
 
 1433864700 f:\git\openxcom\src\dirent.h
 	<stdio.h>
@@ -6889,7 +6873,7 @@
 1437509221 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
-1438141244 f:\git\openxcom\src\savegame\alienstrategy.h
+1438208986 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
 1438169685 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
@@ -8358,7 +8342,7 @@
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
 
-1438174565 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
+1438208977 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
 	"AlienStrategy.h"
 	"WeightedOptions.h"
 	"../Ruleset/RuleRegion.h"
@@ -8529,7 +8513,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1438172508 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1438209001 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -10587,10 +10571,9 @@
 1431489878 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1433862792 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
+1438168125 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<math.h>
 	<memory.h>
-	<stdio.h>
 	<stdint.h>
 	"fmopl.h"
 

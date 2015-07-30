@@ -51,7 +51,6 @@
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
-//#include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"

@@ -114,26 +114,26 @@ private:
 		const int getMinDifficulty() const;
 		/// Gets the maximum number of times to run a command with this varName
 		const int getMaxRuns() const;
-		/// Gets how many previous mission sites to keep track of (to avoid using them again)
+		/// Gets how many previous mission sites to track.
 		const int getRepeatAvoidance() const;
-		/// Gets the number of minutes to delay spawning of the first wave of this mission, overrides the spawn delay defined in the mission waves.
+		/// Gets the number of minutes to delay spawning the first wave.
 		const int getDelay() const;
 
 		/// Gets the list of conditions this command requires in order to run.
 		const std::vector<int>& getConditionals() const;
 
-		/// Does this command have raceWeights?
+		/// Checks if this command has race weights.
 		const bool hasRaceWeights() const;
-		/// Does this command have mission weights?
+		/// Checks if this command has mission weights.
 		const bool hasMissionWeights() const;
-		/// Does this command have region weights?
+		/// Checks if this command has region weights.
 		const bool hasRegionWeights() const;
 
 		/// Gets the research triggers that may apply to this command.
 		const std::map<std::string, bool>& getResearchTriggers() const;
 
-		/// Delete this mission from the table? stops it coming up again in random selection, but NOT if a missionScript calls it by name.
-		const bool getUseTable() const;
+		/// Checks if this mission uses the table.
+		const bool usesTable() const;
 
 		/// Generates either a region, a mission, or a race based on the month.
 		const std::string generate(

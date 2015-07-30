@@ -62,9 +62,7 @@ private:
 		/// Initializes values according to the rules.
 		void init(const Ruleset* const rules);
 		/// Loads the data from YAML.
-		void load(
-				const Ruleset* rules, // not used.
-				const YAML::Node& node);
+		void load(const YAML::Node& node);
 
 		/// Chooses a random region for a regular mission.
 		const std::string chooseRandomRegion(const Ruleset* const rules);

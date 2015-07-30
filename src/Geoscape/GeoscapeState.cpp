@@ -4513,7 +4513,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* command)
 	_gameSave->getAlienMissions().push_back(mission);
 
 	// if this flag is set delete it from the table so it won't show up until the schedule resets
-	if (command->getUseTable() == true)
+	if (command->usesTable() == true)
 		strategy.removeMission(targetRegion, missionType);
 
 	return true;

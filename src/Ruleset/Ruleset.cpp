@@ -402,6 +402,8 @@ Ruleset::~Ruleset()
 		}
 	}
 
+	// TODO: delete RuleMissionScripts
+
 	for (std::map<std::string, RuleVideo*>::const_iterator
 			i = _videos.begin();
 			i != _videos.end();
@@ -480,9 +482,9 @@ void Ruleset::validateMissionScripts() const
 		{
 			std::set<std::string>::const_iterator j = missions.begin();
 
-			const bool isSiteType = getAlienMission(*j)
-								 && getAlienMission(*j)->getObjective() == alm_SITE;
-			scriptRule->setSiteType(isSiteType);
+			const bool isSite = getAlienMission(*j)
+							 && getAlienMission(*j)->getObjective() == alm_SITE;
+			scriptRule->setSiteType(isSite);
 
 			for (
 					;
@@ -490,7 +492,7 @@ void Ruleset::validateMissionScripts() const
 					++j)
 			{
 				if (getAlienMission(*j) != NULL
-					&& (getAlienMission(*j)->getObjective() == alm_SITE) != isSiteType)
+					&& (getAlienMission(*j)->getObjective() == alm_SITE) != isSite)
 				{
 					throw Exception("Error with MissionScript: " + (*i).first + " cannot mix terror/non-terror missions in a single command, so sayeth the wise Alfonso.");
 				}

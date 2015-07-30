@@ -609,9 +609,7 @@ void SavedGame::load(
 	}
 
 	Log(LOG_INFO) << ". load alien strategy";
-	_alienStrategy->load(
-						rules,
-						doc["alienStrategy"]);
+	_alienStrategy->load(doc["alienStrategy"]);
 
 	Log(LOG_INFO) << ". load dead soldiers";
 	for (YAML::const_iterator

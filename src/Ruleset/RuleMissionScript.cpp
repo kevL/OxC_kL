@@ -48,7 +48,8 @@ RuleMissionScript::RuleMissionScript(const std::string type)
 
 /**
  * Destructor.
- * @note Cleans up the mess Warboy left in RAM.
+ * @note Cleans up the mess Warboy left in RAM. oh yah ->
+ * TODO: delete RuleMissionScripts in Ruleset dTor ......
  */
 RuleMissionScript::~RuleMissionScript()
 {
@@ -227,7 +228,7 @@ const int RuleMissionScript::getMaxRuns() const
 }
 
 /**
- * Gets the number of sites to avoid repeating missions against.
+ * Gets the number of sites to avoid repeating missions.
  * @return, repeat avoidance
  */
 const int RuleMissionScript::getRepeatAvoidance() const
@@ -236,8 +237,9 @@ const int RuleMissionScript::getRepeatAvoidance() const
 }
 
 /**
- * Gets the fixed delay on spawning the first wave (if any) to override
- * whatever's written in the mission definition.
+ * Gets the fixed delay on spawning the first wave if any to override what's
+ * written in the mission definition.
+ * @note Overrides the spawn delay defined in the mission waves.
  * @return, delay
  */
 const int RuleMissionScript::getDelay() const
@@ -293,9 +295,11 @@ const std::map<std::string, bool>& RuleMissionScript::getResearchTriggers() cons
 /**
  * Gets if this command should remove the mission it generates from the strategy
  * table.
+ * @note Stops it coming up again in random selection but NOT if a missionScript
+ * calls it by name.
  * @return, true to use table
  */
-const bool RuleMissionScript::getUseTable() const
+const bool RuleMissionScript::usesTable() const
 {
 	return _useTable;
 }
